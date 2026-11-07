@@ -694,6 +694,8 @@ Q_STRAY = re.compile(r"(_v\d+\b|_old\b|_draft\b|_final\b|_hardened\b| copy\b|\(\
 Q_META = re.compile(r"python-docx|python-pptx|openpyxl|xlsxwriter|pandas|reportlab|matplotlib|fpdf|pymupdf|claude|\bgpt|openai|"
                     r"gemini|chatgpt|copilot|steve canny|un-named|\bunnamed\b|\buntitled\b|\banonymous\b|\(unspecified\)|"
                     r"2013-12-23|handshake|\bsulfur\b|\bsulphur\b|\bwhitney\b|project mark", re.I)
+Q_PDF_LIB = re.compile(r"reportlab", re.I)
+Q_META_LIB = re.compile(Q_META.pattern.replace("reportlab|", ""), re.I)
 Q_CONTENT = [
     (r"\bsynthetic data\b|\bdummy data\b|\bmade-up\b|\bsimulated for\b|\bgenerated with\b|\bfor this (task|exercise|benchmark)\b|"
      r"\bscenario document\b|\btest scenario\b", "LEAK"),
@@ -728,6 +730,20 @@ def pdf_meta(path):
     return first + "\n" + "\n".join(k.decode("latin-1", "ignore") for k in keys)
 
 
+def pdf_meta_split(path):
+    """A PDF's Title, Author, Subject and Keywords apart from its Creator, Producer and header comment, which keep
+    the library that wrote the file (reduce-house-fixes H1)."""
+    try:
+        head = path.read_bytes()
+    except OSError:
+        return "", ""
+    own = re.findall(rb"/(?:Title|Author|Subject|Keywords)\s*\(([^)]{0,200})\)", head)
+    lib = re.findall(rb"/(?:Creator|Producer)\s*\(([^)]{0,200})\)", head)
+    first = head[:400].decode("latin-1", "ignore")
+    return ("\n".join(k.decode("latin-1", "ignore") for k in own),
+            first + "\n" + "\n".join(k.decode("latin-1", "ignore") for k in lib))
+
+
 def sweep_quality(target, files, rep):
     allp = [p for p in sorted(target.rglob("*")) if p.is_file()]
     junk = [p for p in allp if Q_JUNK.search(str(p.relative_to(target)))]
@@ -751,8 +767,15 @@ def sweep_quality(target, files, rep):
             rep.add("12 client quality check", "LEAK", f["rel"], "build-residue file name")
         if Q_STRAY.search(name):
             rep.add("12 client quality check", "LEAK", f["rel"], "stray working-copy file name")
-        meta = office_meta(f["path"]) if f["ext"] in (".docx", ".xlsx", ".pptx") else (pdf_meta(f["path"]) if f["ext"] == ".pdf" else "")
-        m = Q_META.search(meta)
+        if f["ext"] == ".pdf":
+            # H1: the library stays in Creator, Producer and the header comment; everything else is read strictly
+            own, lib = pdf_meta_split(f["path"])
+            m = Q_META.search(own) or Q_META_LIB.search(lib)
+            if Q_PDF_LIB.search(lib):
+                rep.add("12 client quality check", "INFO", f["rel"], "PDF keeps the library that wrote it in Creator, Producer or its header (H1)")
+        else:
+            meta = office_meta(f["path"]) if f["ext"] in (".docx", ".xlsx", ".pptx") else ""
+            m = Q_META.search(meta)
         if m:
             rep.add("12 client quality check", "LEAK", f["rel"], "document metadata carries %r" % m.group(0))
         t = f["text"] or ""
