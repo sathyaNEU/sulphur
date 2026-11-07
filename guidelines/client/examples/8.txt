@@ -1,0 +1,56 @@
+Designate the 80 heating-oil depots whose price moves other depots follow, saving eur 13.7 Million
+Economics and Quantitative Social Science
+Spillover & pass-through estimation
+hard
+Economics & Econometrics. The two graded runs averaged 0.40.
+
+What makes this task strong
+The deciding step is a spillover nobody labeled: 592 of the 1,200 depots move their posted price one week after one particular depot in their delivery region, by about 0.65 of its move. No register field marks these pairs, so they have to be found in the weekly price changes before the designation started.
+It takes a chain of dependent inferences: find the leader and follower pairs from lagged, region-demeaned price changes; estimate the share carried (0.654); measure the designation cut against depots that do not follow a designated depot, because followers' prices fell too; confirm in March 2025 that designated depots following a designated depot fell by the cut plus the share (EUR 30.53); then rank undesignated depots by own litres plus 0.654 times their followers' litres.
+The comparison group is the real judgment: measured against all undesignated depots, the cut absorbs the EUR 12.08 per 1,000 litres fall at followers of designated depots and comes out too small. The clean control gives EUR 17.77.
+It is not rule application or a reading stump: undertakings 6.2 defines the estimand (each depot's fall in price times its litres, each depot counted once) but says nothing about followers, lags or control groups. Telling the solver one fact does not make it routine, because the pairs, the share and the clean cut all still have to be estimated.
+The shallow path is a careful analysis that ranks depots by their own volume. On the same reckoning the 80 largest depots save about EUR 9.7 million (EUR 8.7 million on their own litres), and 46 of them are not on the right list, because most large depots have no followers.
+Note: the follower structure separates very cleanly (best one-week correlation about 0.66 for the pairs against at most 0.34 for every other depot), which makes it easier to find than it would be in real posted-price data once someone looks for it.
+Prompt
+Stakeholder ask
+I am the head of retail fuels at the Tolvenmark Competition Office.
+
+300 heating-oil depots in the first designation started posting their prices under the margin undertakings on 3 March 2025, and the undertakings allow us to designate another 80 depots starting from 1 January 2027. We would like the 80 that minimize household expenditure on heating-oil in 2027, and an estimate of the resulting reduction that we can be confident in.
+
+The folder contains the undertakings, the depot register, all posted depot prices since January 2021 on a weekly basis, the wholesale price at the terminals, the degree-days by region and the list of depots in the first designation.
+
+Please submit three files: designation_2027.csv as specified in the template listing the 80 depots, ranked by your expected reduction in 2027 when designating each depot; a python script that produces the above .csv file using the files in the folder; and a one-page note in Markdown with your total expected reduction in 2027, how you selected the depots and how confident you are.
+
+Deliverables
+Every file is prescribed by name. Nothing is optional, and no single file carries the whole answer.
+
+designation_2027.csv
+rebuild_designation_2027.py
+designation_note_2027.md
+Input files
+A competition authority's heating-oil pack: the posting portal extract of weekly depot prices from January 2021 to October 2026 (352,381 rows, with holiday weeks missing, a five-week outage for twelve depots and one operator's double posting), the depot register with 2025 domestic litres and a notes sheet of operator and name changes (XLSX), the first designation list, the margin undertakings (PDF), a data dictionary (MD), and context files that do not decide the answer: terminal rack prices, weekly terminal dispatch by operator, regional degree-days, duty rates and the operator returns calendar.
+
+Final recommendation
+Designate the 80 depots in designation_2027.csv from 1 January 2027. Together they should take about EUR 13,728,052 off what households pay for heating oil in 2027: EUR 6,569,567 at the 80 depots and EUR 7,158,485 (52 percent) at the 201 depots whose prices move with them. The list leads with Ebbstad Brickworks (2704, EUR 426,715), Velmhaug Station Yard (3589) and Pirrby Quay (3016). The cut has a standard error of about EUR 0.77 per 1,000 litres, about EUR 0.6 million on the total.
+
+Step-by-step solution
+Load the weekly prices, keep the later of the two postings for the duplicated week of 13 November 2023 (undertakings 5.4) and leave missing weeks without a price.
+Build one column per Monday from 4 January 2021 to 26 October 2026; take weekly changes before 3 March 2025, each less its delivery region's mean change that week, with changes that touch a missing week set to zero.
+For every depot, find the depot whose change a week earlier correlates best with its own. A two-means split on those best correlations gives 592 pairs, each within one region, none the nearest depot and none the same operator.
+Estimate the share carried as the median over the pairs of the slope of the follower's change on the leader's change a week before: 0.654.
+Measure the cut (6.2) as each depot's mean posted price over the 52 weeks from 3 March 2025 less its mean over the 52 weeks before, comparing designated depots that do not follow a designated depot with undesignated depots that do not follow one: EUR 17.77 per 1,000 litres.
+Rank undesignated depots by own 2025 domestic litres plus 0.654 times the litres of every depot that follows them, and take the top 80.
+Write each row as the cut times that combined volume divided by 1,000, in whole euros, in order of selection; the rows sum to EUR 13,728,052.
+State the confidence: the standard error of the cut (EUR 0.77), one sensitivity at half the share (14 of the 80 change and the total is about EUR 10.4 million), and the marginal depots (ranks 78 to 80, 2931, 1752 and 2721, against the first two not listed, 1653 and 1841, all within about 3 percent).
+Where the runs went wrong
+Method shortcut. The review of the runs records a total of about EUR 8.68 million with no follower spillover credited. Ranking by own volume alone gives the 80 largest depots, about EUR 9.7 million on the same reckoning, with 46 depots that should not be on the list.
+Looking for the spillover in the wrong place. The pairs are never the nearest depot and never the same operator (median distance 56 km), so a test for geographic or same-operator spillovers finds nothing and the analyst concludes there is none.
+Contaminated control group. Comparing designated depots with all undesignated depots folds in followers whose prices fell by EUR 12.08 per 1,000 litres in March 2025, which shrinks the measured cut below EUR 17.77.
+Stopping at the list. The note also has to carry the uncertainty: the EUR 0.77 standard error, the half-share sensitivity (about EUR 10.4 million) and the depots at the margin of the cut-off.
+Justification
+The office wants the set of 80 that lowers total household spending, and 6.2 counts each depot's price fall once. Because about half the depots copy a particular leader a week later, designating a leader lowers prices at its followers too, so a depot's value is its own litres plus the share times its followers' litres. Measuring the cut against followers would understate it, so the control group has to exclude them.
+
+Browsing worked examples. Back to the example library
+
+Previous example
+Next example

@@ -1,0 +1,63 @@
+Back the bus service recovery fund: Restoring 2014 service wins back about 45% Of lost riders on a rider-weighted elasticity of 0.55
+Economics and Quantitative Social Science
+Causal identification
+hard
+Economics & Econometrics. Frontier-model runs averaged 0.55 across 8 runs (0.34 to 0.90); 2 of the 8 concluded that the fund clears the bar.
+
+What makes this task strong
+Measured difficulty: 6 of the 8 runs failed the fund. In the readable rollouts every run chose the right instrument (state operating-aid cuts) and still called it wrong, so the causal step is not where the task is lost.
+The deciding step is an aggregation judgment tied to the decision's unit. The Secretary's bar counts riders, so the response that matters is the causal, long-run elasticity weighted by where riders are. The simple agency average (about 0.30) implies only about 22% won back and fails the fund; the rider-weighted figure (about 0.55) gives about 45% and clears it. The call flips only below about 0.42.
+Four dependent inferences: (1) service is endogenous, because agencies cut where demand was already weakening, so the effect has to be identified from the FY2016-17 general-fund cuts to state operating aid in 11 states; (2) the response builds over about 30 months, so same-month estimates understate it; (3) the response differs sharply by system size: about 0.85 at the 50 largest systems (47% of 2014 trips), 0.38 at the next 120 and 0.15 at the remaining 250; (4) weighting by 2014 ridership and applying each band's elasticity to each agency's gap to 2014 service gives about 340 million of the 750 million lost trips.
+Not a surface stump: there is no planted defect or special reading. The rider framing of the bar is plain in the prompt, and runs that saw that big systems respond more still made the call on the pooled figure, so the loss sits in carrying heterogeneity through to the decision, not in spotting a fact. The decline decomposition adds a second modeling judgment: a static two-way fixed-effects ride-hailing coefficient is near zero, while an event-time estimate builds to about -15% after five years.
+The shallow path passes its own checks: a pooled instrumented elasticity is properly identified, a sensitivity grid around it only moves one number up and down, and dropping the largest agencies reads as a robustness check rather than as the heterogeneity signal it is.
+Prompt
+Stakeholder ask
+Bus ridership at the agencies we fund fell about 19% between 2014 and 2019, and the Secretary wants a three-year fund that pays agencies to restore their service to 2014 levels. Her bar is that by the time it ends, the restored service has won back at least a third of the riders lost since 2014. Tell me whether it clears. The data’s in the shared folder.
+
+I need a two-page decision memo, PDF, that leads with the call and the share of lost riders that restoring 2014 service would win back. Give the elasticity of ridership with respect to service that you relied on, decompose the 2014-2019 decline into its drivers with the points each one explains, and close with what would have to be true for the call to go the other way.
+
+Also a chart, PNG, that walks ridership from 2014 to 2019 by driver, with the main one highlighted and its points in the title.
+
+Deliverables
+Every file is prescribed by name. Nothing is optional, and no single file carries the whole answer.
+
+Bus_Service_Recovery_Fund_Decision_Memo.pdf
+bus_ridership_bridge_2014_2019.png
+Input files
+A transit funding office's agency panel: monthly bus ridership and monthly service for 420 agencies over 96 months, an agency table, fare changes, monthly gasoline prices, annual metro economy and operating funding tables, and ride-hailing launch months by metro (all CSV), plus the state transit assistance report for FY2015 to FY2018 and a 2016 transit association brief (PDF) and the draft fund paper (DOCX).
+
+bus_ridership_monthly.csv
+bus_service_monthly.csv
+agencies.csv
+fare_changes.csv
+gasoline_prices_monthly.csv
+metro_economy_annual.csv
+operating_funding_annual.csv
+ride_hailing_launch.csv
+State_Transit_Assistance_FY2015-FY2018.pdf
+Transit_Association_Brief_2016.pdf
+Bus_Service_Recovery_Fund_Draft.docx
+Final recommendation
+Back the fund: restoring each agency's bus service to its 2014 level wins back about 45% of the riders lost since 2014, roughly 340 million of the 750 million annual trips, clearing the one-third bar. The estimate relies on a rider-weighted long-run service elasticity of about 0.55. Ride-hailing, not service cuts, is the largest driver of the decline (-9.9 of -19.3 points).
+
+Step-by-step solution
+Join monthly ridership and service with agencies, fare changes, fiscal-year funding, metro employment, gasoline prices and ride-hailing launch months: a 420-agency by 96-month panel.
+Measure the decline: annual trips fell from 3,890m in 2014 to 3,140m in 2019 (-19.3%); revenue miles fell at 329 agencies.
+Treat service as endogenous and use state operating assistance as the instrument, because the FY2016-17 cuts in 11 states were general-fund reductions. Local dedicated tax revenue moves with the local economy and is not used.
+Instrument service with state aid, with agency and month effects and controls for fares, gas, employment and time since ride-hailing launch. The response builds over about 30 months and is much larger at large systems: about 0.85, 0.38 and 0.15 by size band, about 0.55 weighted by 2014 ridership, about 0.30 unweighted.
+Apply the size-specific long-run elasticities to each agency's gap to 2014 service: about 340m trips, 45% of the 750m lost, which clears the bar.
+Estimate the ride-hailing effect by event time relative to each metro's launch against not-yet and never-launched metros: it builds to about -15% after five years, while a static two-way fixed-effects coefficient is near zero.
+Decompose the decline: ride-hailing -9.9, service -8.7, fares -2.0, gas -2.0, jobs +1.9, other +1.4 points.
+State the flip condition: the call reverses if the rider-weighted response is below about 0.42.
+Where the runs went wrong
+Unfinished chain. One run kept the plain service and ridership correlation out of the estimate, then took the simplest version of every later step: a same-month elasticity of 0.29, pooled across agencies, and a straight-line ride-hailing term that left service at 3.7 points. Dropping the 21 largest agencies cut its elasticity from 0.295 to 0.257, which is what larger response at big systems looks like; it filed that as robustness and called 19% won back.
+Dismissed own evidence. The run that came closest computed the instrumented, rider-weighted elasticity at 0.49, already above the 0.42 flip point, and correctly diagnosed that the gap from 0.28 came from heterogeneity across systems, not bias. It then wrote the memo on the unweighted figure, about 0.3, and reported 24%: do not establish the fund.
+Dismissed own evidence. Another run let the response build (0.31 rising to 0.38) and estimated by system size, then anchored on the pooled 0.38 and landed at 32%, one point under the bar. Its own numbers said otherwise: the large systems held 593 million of the 750 million lost trips and recovered 36.5% on their own, its interval for the share ran to 37.5%, and its breakeven of 0.44 sat inside its own elasticity interval.
+Self-confirming check. A run with a pooled elasticity of 0.33 (24% won back, close to the reference's wrong answer of 22%) built a sensitivity grid that moved only that single pooled number, so it never reached the 0.42 where the call flips.
+Justification
+The fund is judged on riders, so the relevant elasticity is the exogenously identified, long-run response weighted by where riders are, and that response is strong at the large networks that carried nearly half of 2014 trips. On that basis restored service recovers about 45% of lost riders. Service cuts are the second-largest cause of the decline, but they are the one the fund can reverse, and the call changes only if the rider-weighted response is about a quarter smaller than estimated.
+
+Browsing worked examples. Back to the example library
+
+Previous example
+Next example

@@ -1,0 +1,55 @@
+Keep burst flighting and do not fund always-on acquisition media in 2026
+Product Analytics
+Media mix & incrementality
+hard
+Marketing & Consumer Research. The two graded runs averaged 0.45.
+
+What makes this task strong
+The extra money is mostly paid search: always-on adds USD 1,613,483.73 of 2026 media, 89.9 percent of it paid search, against about 31 percent of 2024-25 spend. Paid search spends up to a monthly ceiling and stops, so its weekly spend is highest when more people are joining anyway.
+Models on spend levels, including the agency's readout, credit search with the demand its spend follows, and they say fund (the readout's curves put the cost at about USD 60 per member). The history holds the test that settles it, unlabeled: 15 of the 30 markets ran paid search in 299 of their 312 off weeks in 2024 and in none of their 2025 off weeks.
+It takes a chain of dependent inferences: build the member margin from CE Interview microdata (USD 132.31); size the extra spend; recognize that search spend follows demand; find the 2024 test; read it as a difference in differences with market resampling (about -0.03 of an average week, upper bound under +0.07); convert the break-even into the same units (about 12,195 members, about 0.25 of an average week); then bound the cost.
+The bound is a real modeling judgment: every spend-level model that funds implies those 15 markets' off-week new members should have fallen by at least about 0.10 of an average week when search left, above the test's upper bound, so fit elsewhere cannot rescue them.
+It is not rule application or a reading stump: the committee's rule (cost per additional member no more than the margin) is the decision threshold, and nothing tells the solver where to find the effect.
+The shallow path is to trust a fitted response curve that matches two years of data well and approves always-on.
+Prompt
+Stakeholder ask
+Our growth committee is deciding how to run member-acquisition media in our 30 markets in 2026. Each market now advertises in bursts, three weeks on and then two weeks off. The alternative is always-on. Our 2026 media plan already sets each market's budget for every week, and always-on spends it in the off weeks too. The committee will approve always-on only if each additional new member it brings in during 2026 costs no more in media than a member's first-year gross margin.
+
+That margin is 30 percent of what a household in our program audience spends on pet care in a year, on average. Marketing splits the audience into twelve segments by income band, home tenure and age band, so the average weights each segment by its share. Pet care covers the spending codes on our category crosswalk, and the household figures come from the 2024 Consumer Expenditure Interview Survey.
+
+The committee will make the decision from a short PowerPoint deck at its next meeting. It needs your recommendation, the cost per additional member against the margin, and how the number of new members changes under always-on. A chart of 2026 weekly new members under each schedule belongs in it too. Our media agency has already read out the last two years of weekly media spend and new members by market. Say plainly whether your cost agrees with that readout and, if the two differ, why, and finish on what these data can and cannot settle.
+
+Whatever the committee decides, our planning system then loads weekly forecasts from a CSV file. It needs one row for each market, week of 2026 and schedule, with that week's planned media spend and the new members you expect.
+
+Deliverables
+Every file is prescribed by name. Nothing is optional, and no single file carries the whole answer.
+
+always_on_committee_deck.pptx
+forecast_2026_weekly.csv
+Input files
+A membership program's media pack plus public survey microdata: weekly acquisition spend by market and channel (with folded channel names, two date formats and invoices posted in two parts), weekly new members by market, the 2026 media plan, the agency's readout (XLSX), the program audience profile and the category crosswalk (XLSX), a file roles index, and the 2024 BLS Consumer Expenditure Interview public-use files (five household files, five monthly expenditure files, the dictionary, plus contact-history paradata and a utilities topical file that do not decide the answer).
+
+Final recommendation
+Keep bursts and do not fund always-on. It adds USD 1,613,483.73 of 2026 media, and paying that back at the USD 132.31 first-year margin needs about 12,195 additional members. The 2024 test puts the gain at most about 5,600 members (about 7,900 even scaled to the plan's 1.4 times larger off-week search budgets), so each additional member costs no less than about USD 200. The cost does not agree with the agency readout, whose spend-level curves credit paid search with the demand its spend follows.
+
+Step-by-step solution
+Compute the margin from the CE microdata as the prompt defines it, weighting the twelve audience segments: USD 441.02 a year, margin USD 132.31 (USD 132.36 if home-tenure codes 5 and 6 are left out; the call does not move).
+Price the switch from the 2026 plan's off-week rows: USD 1,613,483.73, 89.9 percent paid search.
+Clean the spend history by market, week and channel.
+Show that paid search follows demand: it spends up to a monthly ceiling, and inside a month the 246 burst weeks where search stops while social and mail run show no fall in new members. Spend-level fits read the co-movement as search's effect (the readout implies about USD 60 per member).
+Find the 2024 test: 15 markets ran search in 299 of 312 off weeks in 2024 (about USD 1,640 a week, against the plan's USD 2,340) and in none in 2025.
+Scale each market-week by the market's average week. Off-week new members in the 15 went from about 0.896 to 0.932, against 0.916 to 0.918 elsewhere: about -0.03, 95 percent upper bound under +0.07 from resampling markets. Within market and month the change is about +0.03 (upper bound under +0.10); within market and year about +0.06 (under +0.12).
+Break-even needs about 0.25 of an average week in every 2026 off week. Even the highest upper bound gives at most about 5,600 members, so the cost is no less than about USD 200, above the margin under every reading.
+Build the deck (recommendation, cost against margin, member change, weekly chart, disagreement with the readout, what the data cannot settle) and the forecast CSV with one row per market, 2026 week and schedule.
+Where the runs went wrong
+Method shortcut. Applying the agency's fitted channel curves to the 2026 change puts the cost at about USD 60 per member and funds always-on, because the curves credit search with the demand its spend follows.
+Self-confirming check. Refitting spend-level models with market-by-month effects, per-channel carry-over and linear, log or flattening search responses can still fund; varying the form only reshuffles the same confounded variation.
+Dismissed evidence. The 15 test markets cut paid search by about USD 486,000 against the others and gained about 3.5 average weeks of new members each (95 percent interval about -0.5 to +7.1), while every funding model implies they lost at least about one.
+Unfinished chain. The break-even has to be stated in the same units as the test (about 0.25 of an average week against upper bounds under 0.12) before the cost bound follows.
+Justification
+The only place the history shows paid search in the weeks always-on would add is the 2024 test, and there removing it did not reduce new members. Spend-level models that fund the switch all predict a fall in those markets that did not happen. Against the break-even requirement, every reading of the test leaves the cost per additional member above the margin.
+
+Browsing worked examples. Back to the example library
+
+Previous example
+Next example

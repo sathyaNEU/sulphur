@@ -1,0 +1,48 @@
+Do not recommend the training voucher statewide, because the wage test is not met
+Economics and Quantitative Social Science
+Sample selection in experiments
+hard
+Economics & Econometrics. The two graded runs averaged 0.45.
+
+What makes this task strong
+The offer changed who has a wage: 4,233 of 7,000 voucher claimants (60.5%) have a reemployment wage in the outcome window against 5,090 of 7,000 standard claimants (72.7%). The working voucher claimants are not a like-for-like group with the working standard claimants, so a wage comparison among workers mixes the offer's effect with who is working.
+The selection is invisible to adjustment: prior wages of the two working groups are the same ($29.52 against $29.60), so controlling for baseline covariates moves the difference only from +$1.92 to +$1.96. An analyst who checks balance on observables sees nothing wrong.
+It takes a chain of dependent inferences: build the outcome window and hourly wage per the plan; compare employment by arm; recognize that the 12.2-point gap breaks comparability; choose an estimator that rests on random assignment alone (Lee trimming bounds under monotonicity, trimming 16.8% of the standard arm's workers); bootstrap the bounds for an Imbens-Manski interval; then apply the test.
+It is not rule application: the evaluation plan defines the window, the wage and the test (at least $1.00 with a 95% interval excluding zero), but says nothing about selection into employment or how to handle it.
+The shallow path is the natural experimental readout, the difference in mean wage among working claimants, +$1.92 (95% +$1.37 to +$2.47), which passes the test and recommends expansion.
+Note: the resolving move is a single well-known estimator, so once the solver sees the selection problem the rest of the chain is short. The depth is in seeing it when balance checks pass.
+Prompt
+Stakeholder ask
+I'm a research economist in the Employment Security Department's labor market research unit. In the first half of 2024 we randomized 14,000 unemployment insurance claimants at their first reemployment services appointment: half were offered a training voucher of up to $6,000, with Training Benefits while in training, and half got the usual services. The 2027 Legislature wants to know whether to fund the voucher statewide, and our evaluation plan ties the Department's recommendation to one test: the offer has to raise the hourly wage claimants return to by at least $1.00, with a 95% interval that excludes zero. The plan, in the pack, defines the outcome window and how the wage is computed from the UI wage records. Make one committed call: the wage test is met or it is not.
+
+The pack has the randomizer export, the claimant baseline file, the UI wage records for 2022 to 2025 with hours, the training system enrollments, the weekly UI payment history, the approved program list, the data dictionary and the evaluation plan.
+
+Three things back. A two-page memo for the Legislature's labor committees, tvp24_wage_test.docx: the call and the recommendation that follows from it under the plan, the estimated effect on the hourly wage with its 95% interval, and how the estimate was built. A workbook, tvp24_wage_analysis.xlsx, with one row per randomized claimant (claimant, arm, quarter randomized, outcome window, reemployment hourly wage if any) and a sheet with the estimates. And a chart, wage_effect.png, showing the estimate and its interval against the $1.00 line.
+
+Deliverables
+Every file is prescribed by name. Nothing is optional, and no single file carries the whole answer.
+
+tvp24_wage_test.docx
+tvp24_wage_analysis.xlsx
+wage_effect.png
+Input files
+A state workforce agency's randomized pilot pack: the randomizer log (with TEST rows from a test office and rows re-sent in July), the claimant baseline file, quarterly UI wage records for 2022 to 2025 with hours (6.8 MB, with exact repeats and records missing hours), weekly UI payments (8.2 MB), training enrollments and the approved program list (XLSX), the data dictionary (XLSX) and the evaluation plan (DOCX). The payments and enrollment files describe take-up and do not decide the call.
+
+Final recommendation
+The wage test is not met. The voucher offer's effect on the reemployment hourly wage of claimants who would be working in either arm lies between -$1.22 and +$6.57 an hour (Lee bounds; 95% interval -$1.80 to +$7.11). Under plan section 5.3 the Department does not recommend statewide expansion in the 2027 session and continues the pilot to the 24-month follow-up.
+
+Step-by-step solution
+Read the plan: arms as randomized, outcome window in the fifth and sixth calendar quarters after the quarter of randomization (3.1), hourly wage as total wages over total hours with records lacking hours left out and exact repeats counted once (3.2), and the wage test (5.3).
+Clean the randomizer export: drop the four TEST rows and 23 exact repeats (14,027 rows to 14,000), 7,000 per arm.
+Build each claimant's wage: drop 651 exact repeats in the wage records, keep window records with hours above zero and divide wages by hours. 4,233 voucher and 5,090 standard claimants have one.
+Compare employment: 60.5% against 72.7%. The mean wage difference among workers is +$1.92, +$1.96 adjusted, but the prior wages of the two working groups match, so adjustment cannot detect the selection.
+Bound the effect for claimants working in either arm, assuming the offer can only delay covered work within six quarters: trim 16.8% ((72.7% - 60.5%) / 72.7%) of the standard arm's workers from the bottom and top of the wage distribution: -$1.22 to +$6.57.
+Bootstrap the bounds (standard errors 0.35 and 0.33) for an Imbens-Manski 95% interval of -$1.80 to +$7.11. Within prior-wage quartiles the bounds are -$0.72 to +$5.65; within quartile by education cells -$0.57 to +$5.65.
+The interval includes zero, so the test is not met. Write the memo, the 14,000-row workbook (wage blank for the 4,677 claimants without one) and the chart.
+Where the runs went wrong
+Method shortcut. The difference in mean wage among working claimants, +$1.92 (95% +$1.37 to +$2.47), clears both parts of the test and recommends expansion; the rubric's heaviest weights sit on the call, the bounds and an interval reaching below zero.
+Self-confirming check. Adjusting for prior wage and baseline gives +$1.96 (or +7.1% in logs), which looks like confirmation but cannot see selection that the baseline does not capture.
+Assumption with no support in the files. Principal-score or inverse-probability weighting on baseline covariates gives about +$1.85, and a Heckman correction with office, separation reason or benefit amount excluded from the wage equation gives +$4.0 to +$6.6; both assume something about the claimants the offer kept out of work that nothing in the pack supports.
+Hedging the call. The plan asks for one committed answer, and the recommendation follows mechanically from it under 5.3.
+Justification
+Random assignment makes the arms comparable, but not the subsets of each arm that happen to be working. The offer kept 12.2 points more claimants out of covered work in the window, and nothing in the files says who they were. Bounds that rest only on the randomization leave zero inside the interval, so the plan's test cannot be met on this evidence.

@@ -1,0 +1,155 @@
+{
+  "task": "task198",
+  "architecture": "v4",
+  "drawn": "2026-10-18",
+  "slot_note": "Architecture 4, assigned 2026-10-18 on healthcare-delivery-health-economics / payment-claims-health-plan-analytics, the one AD-serving task type this lane had never drawn. Architectures 1, 2 and 3 are spent, all three on a variance lever; this one takes a bias in a point estimate the whole book measures, which is the shape their three results leave open. Case two of the pincer. Completion and development (task194) and two capture channels with dependence (task196) were screened against at the draw and are not in it.",
+  "domain": "healthcare-delivery-health-economics",
+  "subdomain": "payment-claims-health-plan-analytics",
+  "client_domain": "healthcare-delivery-health-economics",
+  "niche": "the adjudication pricing of a self-funded plan's physician-group contracts: which group's contract goes to renegotiation, when every claim line is priced as the lesser of the group's billed charge and its contracted rate, so a group that bills conservatively never shows the price its contract entitles it to",
+  "objective": "anomaly-detection",
+  "shape": "07",
+  "decision_type": "pick_one_of_n",
+  "answer_unit": "named_option",
+  "answer": "",
+  "answer_source": "",
+  "gap": [
+    "objective",
+    "population"
+  ],
+  "pattern": [
+    "none"
+  ],
+  "generators": [
+    "G1",
+    "G3"
+  ],
+  "gate_g": "method_or_model_selection",
+  "calibration_form": "settled_transaction_ledger",
+  "stump_strategy": "other",
+  "decisive_rule_filed": true,
+  "official_decoy": false,
+  "validated_decoy": false,
+  "context_artifact": "capacity_report",
+  "stakeholder_role": "Director of Provider Contracting",
+  "role_family": "finance_controller",
+  "scoring_unit": "per accepted item",
+  "spine": {
+    "file": "claim_lines_2025_2026.csv",
+    "rows": 0,
+    "entity": "one adjudicated claim line",
+    "grain": "claim line x procedure code x group",
+    "source": "synthetic"
+  },
+  "forum": "trustees_or_governors",
+  "forcing_event": "budget_or_appropriation",
+  "org_family": "cooperative_or_member_body",
+  "world": {
+    "geography": "United States, a fictional state",
+    "currency": "USD",
+    "org_type": "a member-governed employers health purchasing cooperative running a self-funded medical plan, eight contracted multi-specialty physician groups",
+    "invented_names": [
+      "Keewatin Valley Health Trust"
+    ],
+    "people": [
+      "Nathaniel Lawson",
+      "Wendy Camacho",
+      "Jerry Sosa"
+    ]
+  },
+  "deliverables": [],
+  "opening_move": "question-first",
+  "question_form": "which",
+  "driver": "The value a record reports for each unit of work is the lesser of what the supplier asked and what its agreement entitles it to, so for a supplier that asks modestly the reported value is its own ask and not its entitlement, and a decision about which agreement is dear ranks suppliers on what they were paid while the entitlement sits recoverable in the record, because across many units the reported value piles up exactly at the entitlement wherever the ask exceeded it.",
+  "driver_concrete": "Every claim line is priced as the lesser of the group's billed charge and its contracted rate, so the group that bills near the reference schedule shows a low allowed amount while holding the dearest contract; its contracted percentage of the schedule is recovered exactly from the codes it does bill above, where the allowed amounts plateau at the rate.",
+  "stump": "A competent solver standardises every group's allowed amounts to one common service mix, rules out the mix as an explanation, ranks the groups on allowed per standardised line and commits the group with the highest observed price, because that figure is what the plan paid and the group holding the dearest contract bills so far below it that the adjudication's lesser-of pricing never lets its contract show.",
+  "stump_class": "analytical",
+  "analyst_test": "A strong analyst who reconciles every claim version, nets reversals, standardises the service mix across groups and reads every field correctly ranks the groups on allowed per standardised line and commits the highest, because the allowed amount is the price the plan paid.",
+  "domain_test": "The quantity that decides is the contracted percentage of a reference fee schedule, which health plan analytics recovers from its own book because adjudication prices each line as the lesser of the charge and the contracted rate, so the allowed amounts plateau at the rate wherever the charge exceeds it; swap the nouns to megawatt-hours or school places and there is no adjudication, no billed ask against a contracted entitlement and no plateau, so the reported value simply is the price and the task stops existing.",
+  "mechanism_source": "design_note",
+  "differentiation": {
+    "task107": "task107's architecture 2, spent on the portal, shares the shape of a property of who handled each unit, but there the handler delivered an intervention and crossed from the treated arm into the comparison arm, so the quantity is a treatment effect scaled by receipt and the mechanism is contamination reached by joining a timetable to a staff directory to a certification register. Here nobody delivers anything: the interviewer records the respondent, the quantity is a prevalence difference between places with no arms and no intervention, and the identification is the recorder's portability, her own differential reproducing in the other places she worked.",
+    "task192": "task192's self-measuring quantity is a validation subsample's error rates and whether they transport outside the window they were measured in, so its decisive step is about the reach of a measurement already made. Mine is the interviewer component of the measurement itself, measured by the random allocation of addresses among the interviewers working an area, and the decisive step is attribution across units rather than transport across time.",
+    "task194": "task194's self-measuring quantity is two vintages of one series measuring their own coding lag, which is a property of when records arrive. Mine is a property of who collected them, and nothing in it turns on records arriving late or on a period being incomplete.",
+    "task195": "task195's self-measuring quantity is shared specimens making two screens' calls dependent, so its decisive step is the uncertainty of a paired difference. Mine moves a point estimate rather than an interval, and the paired structure is one measurer across places rather than two measurements of one unit.",
+    "task125": "task125 is the nearest build in this domain and it is why the rotation-group family was ruled out before design: it separates a fieldwork artifact from a real labour market move in a national household labour survey, where the artifact comes from what happens at the point units are recruited and builds through the waves a unit stays in. Mine carries no panel, no waves and no recruitment effect; the artifact is the identity of the interviewer and is identified across places in one quarter.",
+    "task184": "task184's architecture 1, spent, also recovered an arm the record does not report, but there the missing arm was a counterfactual read from what a site does unaided and the lever was a filed plan the site never meets. Here nothing is counterfactual: the quantity the decision needs is a contracted entitlement that exists and is reported, censored by the adjudication's lesser-of pricing, and it is recovered exactly from the plateau the allowed amounts form wherever the billed charge exceeded it. task184's live driver is an event's unrecorded hour, which shares nothing with this."
+  },
+  "lineage": [
+    {
+      "architecture": "v1",
+      "drawn": "2026-10-17",
+      "fate": "spent at stage 4 on 2026-10-18: determinism judge NOT_DETERMINISTIC, SEND_BACK, underspecified_objective on Gates C and E with Gate H reading the decisive step as rule application, and the isolated leak reader reached the same finding independently. The pack itself passed every free gate (19 files, four formats, a 42,481-row spine, byte-identical rebuilds, pair ceiling 39.5, mirror leakage 12.0) and the world, the pack architecture and the Layer 1 mess are kept for architecture 2.",
+      "why": "Framework clause 4.2 filed the comparison, a queue's share against its own earlier quarters 'which carried the same offered load', which was correct and mandatory because the comparison is one of the five parts of the WHAT. The residue left open was how closely 'the same' must match, which is a knob rather than a method: Contribution queries wins under the nearest one to four quarters pooled or a load band of 0.05 to 0.2, Investment switches (the plain highest-share answer) under a band of 0.22 to 0.3 or load rounded to whole positions-equivalents, and Member data corrections under five or more nearest quarters pooled or no matching. Pinning the tolerance closes C and E and finishes F, because with the comparison filed and the tolerance filed nothing analytical is left. The rule it earned is now in determinism-check section 1.",
+      "gate_g": "method_or_model_selection",
+      "stump_strategy": "other",
+      "layer2_family": "allocation_constraints",
+      "layer2_pattern": "own:queue-scale-service-level",
+      "gap": [
+        "objective",
+        "time"
+      ],
+      "shape": "08",
+      "decision_type": "pick_one_of_n",
+      "driver": "The outcome a unit is judged on falls steeply with the number of parallel servers it runs at an unchanged load per server, so an expectation built on that ratio alone sits above every small unit and below every large one, and the unit whose outcome genuinely exceeds what its own load and server count imply sits mid-pack on any ratio-based residual while the smallest unit tops it.",
+      "driver_concrete": "The share of member-service cases answered outside target that a queue's own offered load and staffed positions imply is read off the queue's own earlier quarters, and matching those quarters on the load divided by the staffed positions instead of on the load itself reads Member data corrections' five-position FY2026 quarters against the fourteen-position quarters it ran at the same occupancy while a remediation programme carried nearly three times the caseload, so it reports a 16.0 point gap there and only 10.2 for Contribution queries, whose load and roster never moved.",
+      "stump": "A competent solver rebuilds every queue's FY2026 breach share correctly across both case systems on the financial year with the clock rules and the unanswered cases applied, compares each queue with its own FY2023 to FY2025 quarters at the same load per staffed position, and commits Member data corrections at 25.8 per cent, because that queue carried fourteen positions through the two years its own history is read from and five in FY2026.",
+      "answer": "Contribution queries (MS-CQ) takes the one process re-engineering review in the first half of 2027; its FY2026 breach share is 12.4 per cent, on the 6,480 cases it received between 1 April 2025 and 31 March 2026.",
+      "world": "Ireland, a third-party pensions administrator's nine member-service case queues",
+      "replaced_by": "architecture 2 moves to a new world because the pensions pack cannot carry a different mechanism: every mechanism inside 'which of nine queues stands furthest above what its own conditions imply' is either the comparison, a convention the closure table must close, or architecture 1's own driver. Fourteen screened mechanisms are recorded in the design note."
+    },
+    {
+      "architecture": "v2",
+      "drawn": "2026-10-18",
+      "fate": "spent at stage 2 measurement on 2026-10-18, twice, with no data cut. The drawn decisive step (attribute a region's change to its interviewers through a measurer's portability across regions) died on Gate C: the golden was named in 2 of 12 seeds, because a per-interviewer differential carries a 6.96-point standard error at a realistic 33-dwelling out-of-region workload against a 3.0-point golden rise, and both ends of the persistence dial fail for opposite reasons. The approved repair (the interviewer design effect, a variance component the whole workforce estimates) fixed the precision problem, 4.1 per cent relative standard error against about 100 per cent, a factor of 24, with the estimator family closed to one name at 6.73 ANOVA / 6.74 REML / 6.73 MoM, and died on name stability: the golden named in 2 of 14 seeds and the intended loud region in 4 of 14, with intended rises of 0.4 to 5.5 points against realised changes of +17.1 to -17.2, because the interviewer-induced spread that flips the ranking in the denominator (HHI 0.642 giving 1.13 sigma_b against 0.38, a ratio of three whatever sigma_b is) is the same variance that randomises the measured change in the numerator. corr(decisive measure, region size) -0.076 did hold.",
+      "why": "A decisive step that moves a variance cannot carry a ranking: the lever and the ranked quantity's noise are one number, so the dial fails at both ends and the two ends are the same end. Filed in stumping Part 3. Architecture 3 keeps the world, the pack and the variance component and moves the decision from a pick of one region to a characterisation of one named region's move, which puts the lever on a threshold.",
+      "gate_g": "decomposition_attribution",
+      "stump_strategy": "other",
+      "layer2_family": "estimand_identification",
+      "layer2_pattern": "own:measurer-portability-across-units",
+      "gap": [
+        "objective",
+        "population"
+      ],
+      "shape": "07",
+      "decision_type": "pick_one_of_n",
+      "driver": "A measured difference between places is produced by the few people who did the measuring there rather than by the places themselves, and because most measurers work one place only the measurer and the place are collinear, so holding the comparison to the measurer absorbs the place as well; the difference is attributed only through the minority of measurers whose workload crosses places, where the same measurer's own differential reproduces away from the place that looks worst.",
+      "stump": "A competent solver weights the person records to the design, reads every classification and filed rule correctly, ranks the regions on their quarter-on-quarter change in the probed prevalence item and files the region whose rise is largest, because that rise is a correct measurement of what its own interviewers collected and most of it is one interviewer's differential that reproduces in the other regions she worked.",
+      "world": "New Zealand, a survey research institute's continuous household survey, nine to twelve regions"
+    },
+    {
+      "architecture": "v3",
+      "drawn": "2026-10-18",
+      "fate": "spent at stage 3 on 2026-10-18 with nothing cut. The ten listed reflexes all landed wrong at z 2.95 to 4.60 and the golden sat at z 1.25 with the estimator family closed to 0.08 per cent, but an eleventh reflex found while writing checks.py reached the golden verdict: judging the rise against the region's own historical quarter-to-quarter variation gave five consecutive changes with a standard deviation of 9.15 points against a 7.64 rise, so z 0.83, and it reached the golden verdict in 5 of 5 seeds where the design worked. A ten-to-four panel consolidation left the history's own change spread at 9.06 and broke rung 2 (supplied route to z 1.775) instead of closing it.",
+      "why": "A variance-correcting step cannot be silent on a call about a change while the unit's own history is in the pack: a component redrawn each period inflates the change's variance and shows in the series, and a persistent one is invisible in the series and cancels out of the difference, so there is no setting where the correction matters and the series does not show it. Filed in stumping Part 3. Architecture 4 therefore takes a bias in a point estimate rather than a variance, which is the shape those three deaths leave open: a bias persists, so it is invisible in the series, and it still moves the level.",
+      "gate_g": "signal_vs_noise_or_hold",
+      "stump_strategy": "uncertainty_hold",
+      "layer2_family": "estimation_fit",
+      "layer2_pattern": "own:replication-groups-miss-the-error-source",
+      "gap": [
+        "objective",
+        "population"
+      ],
+      "shape": "18",
+      "decision_type": "structural_verdict",
+      "driver": "The uncertainty a record ships with is computed over replication groups formed on the sampling structure, and the error source that produced the move being judged acts on groups the record never replicates over, so every interval the pack supplies understates that move's spread by a factor set by how concentrated the work was; the move clears the supplied interval and fails the one whose groups span the source, which the record identifies only through a workload log kept for operations.",
+      "stump": "A competent solver rebuilds the named region's two quarters correctly across both questionnaire layouts, rules out every rival explanation the pack carries, applies the survey's own supplied replicate weights as the design documentation directs, finds the rise clears that interval by a wide margin and files the rise as a real population change, because every replicate the pack supplies is formed on primary sampling units and no replicate ever varies the interviewer composition of the quarter, so the supplied interval cannot see the source that produced the move.",
+      "world": "New Zealand, a survey research institute's continuous household survey"
+    }
+  ],
+  "notes": "stump_strategy other: grain_or_unit was tried and is not the honest key, because neither the row grain nor the unit of analysis is wrong, the claim line and the group are both right; what is wrong is the VALUE on the row, the reported allowed amount being the lesser of an ask and an entitlement rather than the entitlement the decision is about. G1 unit-of-value swap carries that as a generator, and no stump_strategy key names it, which is what other is for. The strategy_risk WARN on grain_or_unit disappearing is a consequence of the correction and not its motive: the analyst test still names the easy route that fails with every field read correctly and the lesser-of pricing applied. Not composition_mix, uncertainty_hold or population_selection, all three banned against the last three builds and all three untrue here: the service mix is standardised to one common mix for every group and asserted, nothing turns on an interval, and the population is every adjudicated line. Not maturity_censoring: both years are closed, every line is final, and completion is task194's live driver. Not two capture channels: there is one record of each line, task196's driver. G1 unit-of-value swap is decisive. The five screens were run on the clean truth before any design and are in the design note. org_family redrawn from university_or_school to cooperative_or_member_body on 2026-10-18: the re-check against the REGISTERED card fired ban.org_family against task199, because registering v4 pushed this slot own v3 out of the three-build window and pulled task199 into it. A member-governed purchasing cooperative with trustees is a better fit for the world than a university system in any case, and it keeps the forum trustees_or_governors honest. Avoided the multiemployer framing deliberately, because task451 is a multiemployer health and welfare fund. Architecture spent: this card's own draw is dead and the slot has moved past it, so it holds no axis ban (guard.py card_is_spent). Its driver, stump and lineage are still screened against. Reason: architecture 4's driver was screened dead and architectures 5 to 7 landed no registrable draw.",
+  "layer2_family": "field_method",
+  "layer2_pattern": "own:contracted-price-behind-a-lesser-of-plateau",
+  "layer1": [
+    "a continuous survey whose quarterly person file changes layout at a questionnaire revision, so two layouts span the comparison period",
+    "face-to-face and telephone collection running side by side with different field periods inside the quarter",
+    "the sample management log held at issued-address grain while the person file is at person grain, with households resolving to several persons",
+    "interviewer identifiers recycled when field staff leave and are re-engaged, so one identifier covers two people across the series",
+    "a territorial authority amalgamation mid-series, so the published regional breakdown changes base",
+    "design weights and calibrated weights both present in the person file",
+    "management system stamps in UTC against New Zealand local time across a daylight saving change",
+    "the quarterly release carrying a provisional and a revised figure for the same quarter"
+  ],
+  "registered": "2026-10-18T06:28:12Z",
+  "architecture_spent": true
+}

@@ -1,0 +1,69 @@
+Give the four reading partnership places to het anker, de meidoorn, de esch and de paddestoel, leaving credibly-below de springplank out by 0.15
+Other
+Variance components & shrinkage
+hard
+Education & Learning Sciences. Frontier-model runs averaged 0.50 across 8 runs (0.15 to 1.00); 5 of the 8 gave the places to the right four schools, and only 1 also reproduced the school-level estimates behind them.
+
+What makes this task strong
+Measured difficulty: three runs scored 0.15, missing the places and never marking De Akker, a school with a single cohort, as not credibly below. The four runs that scored 0.63 got the places right but reported none of the bottom five schools' estimates, or the 0.15 gap, within tolerance. One run reproduced the full answer.
+The deciding step is variance beyond sampling noise. The standard defines a school's persistent effect as the long-run mean of its cohort effects, and within schools those cohort effects vary with variance 7.69 against a mean sampling variance of 1.95. A cohort-to-cohort term (5.742) is needed. Leaving it out gives a between-school variance of 6.26 and 8 credibly-below schools, and hands single-cohort De Akker (HV642) the place that belongs to De Paddestoel (HV446).
+Four dependent inferences: (1) rebuild the three Grade 5 cohorts (3,177, 3,210 and 3,200 pupils) and fit each cohort's expected-score line on true Grade 4 attainment using that cohort's own reliability (0.788, 0.774 and 0.783, not the published 0.84, which would swap HV477 out for HV326); (2) recognize that cohort effects differ from the persistent effect by a cohort-specific shift as well as sampling error, and estimate that variance from the within-school spread; (3) estimate the variance of persistent effects with that term in place (4.23); (4) compute every school's posterior with each cohort entering at 5.742 plus its sampling variance, which leaves five schools credibly below and De Akker's upper limit at 0.67.
+Not a surface stump: the standard never mentions a cohort-to-cohort term, so careful reading does not reveal it; it takes a variance-components judgment checked against the data. The runs got the heavy data work right, including the measurement-error correction the task card calls the binding constraint, and one correctly traced a missing cohort to annulled sittings.
+The shallow path passes its own checks: a standard random-effects model with sampling noise only is a reasonable default, and robustness checks that vary the sample divisor or which schools enter the variance all keep that model, so they agree with each other and confirm the assumption.
+Prompt
+Stakeholder ask
+I'm allocating the four Reading Partnership places for 2026/27, and the allocation has to follow Standard RPM-4 and the September notice.
+
+Please build partnership_places_2026-27.xlsx. Start with the variance of persistent effects across schools, to two decimal places. Then, for every school assessed, give its estimated persistent effect with the 95 percent interval, both to two decimal places, say whether its progress is credibly below the authority, and mark the schools that get places. For each school that is credibly below, also give the posterior probability that its persistent effect is below zero, to three decimal places.
+
+If more schools are credibly below than there are places, name the one left without a place and how far its estimate sits above the last school placed, to two decimal places. If fewer are, tell me how many places go unused.
+
+I'd also like persistent_effects_2026-27.png showing every school's estimate and interval from lowest to highest, with a line at zero, the placed schools highlighted and the number of credibly-below schools in the title.
+
+Deliverables
+Every file is prescribed by name. Nothing is optional, and no single file carries the whole answer.
+
+partnership_places_2026-27.xlsx
+persistent_effects_2026-27.png
+Input files
+A school authority's reading progress pack: two platform exports of reading results with different conventions (groep against grade), item statistics, review outcomes, pupil roll spells, a staffing census and a sources list (CSV); paper test returns from 2023 to 2025 and the school directory (XLSX); temporary pupil number replacements (JSON); school year calendars (ICS); the reading test technical report and Standard RPM-4 (PDF); the September notice (DOCX); and a data dictionary (MD).
+
+leesmeter_export_2023_2024.csv
+leesmeter_platform_results_2025_2026.csv
+leesmeter_item_statistics_2026.csv
+leesmeter_review_outcomes_2024-2026.csv
+leesmeter_paper_returns_2023-2025.xlsx
+pupilbase_roll_spells_2023-2026.csv
+pupil_number_replacements.json
+school_directory_2026-09.xlsx
+school_staffing_census_2025-10.csv
+school_year_calendars_2023-2026.ics
+leesmeter_technical_report_2025.pdf
+RPM-4_reading_progress_measure_standard.pdf
+reading_partnership_notice_2026-27.docx
+data_dictionary.md
+SOURCES.csv
+Final recommendation
+Give the four places to Het Anker (HV327), De Meidoorn (HV945), De Esch (HV477) and De Paddestoel (HV446). Five schools are credibly below the authority; the fifth, De Springplank (HV326), is left without a place because its estimate (-2.90) sits 0.15 above the last school placed (HV446, -3.05). The variance of persistent effects across schools is 4.23.
+
+Step-by-step solution
+Build the three Grade 5 cohorts: read both platform exports and convert groep to grade, keep re-sent rows once, replace temporary pupil numbers, convert paper raw marks with the technical report's table for the grade and form sat, apply review outcomes, and drop absent, disapplied and annulled sittings (HV994's May 2024 Grade 5 sitting was annulled): 3,177, 3,210 and 3,200 pupils.
+Fit each cohort's expected-score line on true Grade 4 attainment, with error variance equal to the mean squared CSEM of the cohort's own Grade 4 scores (reliability 0.788, 0.774 and 0.783): slopes 0.968, 0.940 and 0.896.
+Form cohort effects as day-weighted mean progress over 154, 155 and 153 teaching days, counting pupils who moved at each school for their time on its roll, and counting days at HV503 at its successor HV484.
+Estimate the cohort-to-cohort variance by the method of moments from the within-school spread of cohort effects (7.69) less their mean sampling variance (1.95): 5.742.
+Estimate the variance of persistent effects by the method of moments from the schools' mean cohort effects, each with variance 5.742/K plus the summed sampling variances over K squared: 4.23.
+Compute each school's posterior with prior N(0, 4.23) and each cohort effect entering with variance 5.742 plus its sampling variance, giving estimates, intervals and probabilities below zero for the 47 schools open on 21 September 2026.
+Apply the allocation: five schools have an upper limit below zero (HV327 p = 0.997, HV945 0.996, HV477 0.995, HV446 0.993, HV326 0.991). The four lowest estimates take the places and HV326 is left out by 0.15. HV642 (one cohort, upper limit 0.67) and HV994 (upper limit 0.55) are not credibly below.
+Draw the chart with all 47 schools ordered by estimate, a zero line, the four placed schools highlighted and "5 credibly below" in the title.
+Where the runs went wrong
+Dismissed own evidence. One run saw exactly the right evidence: several credibly-below schools were there because of one bad cohort, one (HV642) had only a single cohort, and the prompt expected far fewer schools to qualify. It tested only whether the bad years were data bugs and, when they proved real, bent its reading of the prompt to fit the result: variance 6.41, eight schools credibly below, De Akker placed.
+Dismissed own evidence. Another run found a school (HV344) whose pupils started at the authority average and fell about eight points behind in a single year, asked only "is this a data bug?", and kept the cohort as plain evidence about the school's long-run level. One of its own variants reproduced 6.26, the figure the reference gives for the model without the cohort-to-cohort term.
+Self-confirming check. A run whose slopes and reliabilities matched the reference never checked whether cohort effects varied more than sampling error allows. Its variants all shared one variance model, so their agreement confirmed the assumption; HV327's upper limit came out at -3.72 instead of -0.99.
+Method shortcut. A run reported variance 8.33 and fifteen credibly-below schools, with intervals as narrow as -5.63 to -3.21 for HV327 against the reference's -5.80 to -0.99, and accepted a result in which credibly below was common rather than rare, although the prompt speaks of "the one left without a place".
+Justification
+The persistent effect is the long-run mean of a school's cohort effects, so each cohort differs from it by a cohort-specific shift as well as by sampling error, and the records show that shift is large. Including it widens intervals appropriately and shrinks single-cohort schools, which keeps De Akker out of the credibly-below group. Correcting the expected-score line with the cohorts' own reliabilities and counting movers by teaching days are both needed to reproduce the order of the bottom five, and the notice gives the places to the lowest four.
+
+Browsing worked examples. Back to the example library
+
+Previous example
+Next example

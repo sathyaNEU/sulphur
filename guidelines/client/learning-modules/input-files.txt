@@ -1,0 +1,101 @@
+What a strong package contains
+▾
+Clear every line below.
+
+Multiple input files. At least 10 real, usable files, usually 10 to 30. System files such as .DS_Store, __MACOSX folders and empty placeholders do not count.
+Diverse files. At least 2 distinct file categories. Archives do not count toward diversity, but the files they contain do.
+Spreadsheet: .csv, .xlsx, etc.
+Database: .db, .access, etc.
+Text: .txt, .md, .docx, .pdf, .html, etc.
+Image: .pptx, .png, etc.
+Code: .py, .cs, etc.
+Large, messy files. At least 2 input files must be large and messy, for example a CSV with 20,000+ rows and a long multi-page report or spreadsheet. Both carry realistic mess (see Realistic messiness below) that the model has to explore, clean, and reconcile.
+Cross-referencing. The task should require understanding across files.
+Realistic messiness. Input files should include realistic noise, such as missing values, inconsistent formats or timestamps, ambiguous column names, or duplicates. Do not pre-clean files to the point where analysis is trivial, and do not make the noise so extreme that no deterministic recommendation can be derived. Cleaning is texture: it must never be what decides the answer.
+Distractor files. Include at least 2 distractor files. A distractor is not needed or used in your solution but looks like it might be useful, so the model has to consider whether it is useful. A completely unrelated file is not a distractor; it must look relevant. Never label a distractor, in its file name or anywhere else inside the ZIP.
+Fragmented data. Data can be spread across files and include template files, historical reports, and so on, that the model has to explore to understand. Real packages often hold the same report at different dates; that is fine as texture, but picking the right version must not be what decides the answer.
+Nothing that gives the build away. No LLM-generated files, no notes on how the task was made, and no file whose only purpose is to carry a trap.
+The data sets up the problem. What decides the answer is the analysis on top of it: see Deep reasoning.
+
+Design your distractor
+▾
+A distractor is an input file that is not needed or used in your solution but looks like it might be useful. The model has to consider whether it is useful before deciding.
+
+Looks relevant. It reads like it belongs to the task.
+Is not used. Nothing in your solution depends on it.
+Makes the model decide. The model has to consider whether it is useful.
+Is not unrelated. A completely unrelated file you threw in does not count.
+Check your distractor
+
+Which file counts as a distractor?
+
+
+A file that looks like it could help, but your solution never uses it
+
+A completely unrelated file added to the folder
+
+A file your solution relies on
+Check answer
+Record your files
+▾
+Record your evidence package
+One row per counted file. Nothing is uploaded and no file contents are stored: only the text you type here is saved in this browser.
+
+Package name
+e.g. Regional carrier reconciliation
+Total files
+e.g. 8
+Load-bearing files
+e.g. 6
+Formats in the package
+e.g. CSV, XLSX, PDF, DOCX
+Files in the package
+No files recorded yet. Add one row per file you intend to count.
+
+
+Add a file
+Resolve missing evidence
+▾
+Does the current package support the answer?
+Yes
+Stop. Do not add decorative files. File count is not difficulty.
+
+No
+Step 1. Identify exactly what is missing: a definition, a piece of evidence, or context.
+Step 2. Find one authoritative source that supplies it, and add only that file.
+Common gaps worth filling
+Definitions
+Historical context
+Methodology
+Policy constraints
+Targets
+Predictors
+Revisions
+Crosswalks
+Confirm the package
+▾
+Package checklist
+The one authoritative test for this package. It updates as you record files above, but each line is yours to confirm. A file count on its own is not readiness.
+
+Recorded so far: 0 files.
+
+
+Necessary files: ten or more counted files, and removing any counted file breaks the answer
+From your record: 0 files recorded, ten or more needed
+
+Recoverable joins or relationships: the files connect through keys or references an analyst can recover
+From your record: 0 of 0 have a stated analytical role
+
+Sufficient signal: the data supports the analysis the prompt actually requests
+
+Definitions and governing rules are supplied inside the package, not assumed
+
+Reproducibility: every figure in the golden output comes back out of the shipped workspace
+
+No padding: no decorative or deletable files are counted
+From your record: 0 marked necessary to the answer
+
+No fabricated or corrupted complexity: complications are authentic, and nothing is machine-generated, padded, or broken on purpose
+From your record: 0 of 0 have source, pull date, and license recorded
+Confirm input package ready
+Input files: 0 of 7 confirmed. Ready needs all 7.

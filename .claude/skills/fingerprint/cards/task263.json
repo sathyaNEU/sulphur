@@ -1,0 +1,97 @@
+{
+  "task": "task263",
+  "architecture": "v1",
+  "drawn": "2026-10-16",
+  "slot_note": "seed DA13 (PFAS treatment-design grants down a priority list under a $36 million fund): world, decision and quantity kept; the seed's mechanism rows not read; the pitfall re-found from the data as the unmixing of entry-point blends into the wells' own levels",
+  "domain": "physical-environmental-sciences",
+  "subdomain": "emissions-inventory",
+  "niche": "a state drinking water revolving fund's 2027 PFAS treatment-design grants, sized on the wells whose own water carries PFOA or PFOS above 4.0 ng/L, when compliance sampling sees only entry-point blends of the wells pumping at collection",
+  "objective": "descriptive-distribution",
+  "shape": "01",
+  "decision_type": "ranked_slate_under_cap",
+  "answer_unit": "count",
+  "answer": "The $36 million reaches 16 of the 20 systems on the 2027 PFAS priority list, Torvik Water Utility through Valdahl Sanitary District; the Village of Nordvold is the first it cannot reach, and $451,200 is left.",
+  "answer_source": "task263/submission.md (block 1), from generator/figures.json",
+  "gap": [
+    "population"
+  ],
+  "pattern": [
+    "none"
+  ],
+  "generators": [
+    "G2",
+    "G3"
+  ],
+  "gate_g": "decomposition_attribution",
+  "calibration_form": "none",
+  "stump_strategy": "composition_mix",
+  "decisive_rule_filed": false,
+  "official_decoy": false,
+  "validated_decoy": false,
+  "context_artifact": "register",
+  "stakeholder_role": "the revolving-fund manager at the state's Water Infrastructure Finance Authority, which lends and grants the drinking water revolving fund with the environmental department, who takes the 2027 PFAS design-grant allocation to the Authority's board of directors on 18 November 2026",
+  "role_family": "portfolio_manager",
+  "scoring_unit": "other",
+  "spine": {
+    "file": "pfas_entry_point_results_2024-2026.csv",
+    "rows": 36414,
+    "entity": "one analyte result of one compliance or confirmation sample at one entry point",
+    "grain": "sample x analyte",
+    "source": "synthetic (constructed in the layout of a state PFAS compliance-monitoring export under EPA Method 533)"
+  },
+  "forum": "board_of_directors",
+  "forcing_event": "budget_or_appropriation",
+  "org_family": "financial_institution",
+  "world": {
+    "geography": "United States, an unnamed Upper Midwest state (invented state drinking water program, revolving fund and twenty water systems)",
+    "currency": "USD",
+    "org_type": "a state water infrastructure finance authority administering the drinking water revolving fund with the state's environmental department",
+    "invented_names": [
+      "Water Infrastructure Finance Authority",
+      "Granlund, Engvall, Hedstrom, Sandholm, Mittelfeld and Brunnfeld counties",
+      "Torvik Water Utility",
+      "City of Halvorsen Water Department",
+      "Lindvik Lake Municipal Water",
+      "Village of Nordvold",
+      "Valdahl Sanitary District",
+      "Tolvanen Analytical, Inc.",
+      "Kestrel Environmental Testing"
+    ],
+    "people": [
+      "Judy Carey",
+      "Lynn Whitaker"
+    ]
+  },
+  "deliverables": [
+    "pfas_design_grants_2027.xlsx",
+    "well_pfas_2027.png"
+  ],
+  "opening_move": "question-first",
+  "question_form": "how-many",
+  "driver": "The decisive quantity is each source's own level when the level is measured only in mixtures of the sources running at the moment of measurement, in proportions that change from one measurement to the next; giving every source in an over-the-line mixture the mixture's level, or giving each source the average of the mixtures it ran in, credits clean sources with their partners' level and over-sizes the funded need, and only solving the mass balance across mixtures separates the sources.",
+  "driver_concrete": "Each well's own PFOA and PFOS has to be recovered from entry-point samples that blend the wells pumping at collection, in proportions set by their pump rates and shifted as operators rotate the wells, by a mass balance across a system's samples; counting every well at an entry point with a result above 4.0 ng/L, or giving each well the average of the samples it ran in, counts clean wells as over the line, inflates each grant and stops the list short.",
+  "stump": "A strong analyst gives each well the average of the entry-point samples taken while it pumped, so the clean wells that run beside a well over the line take on its water, the grants swell and the $36 million funds 7 systems (stopping at Nesvold), when each sample is the flow-weighted blend of the wells pumping and solving every entry point's samples as a mass balance leaves only the wells whose own water is over 4.0 ng/L, so the fund reaches 16 systems (stopping at Nordvold).",
+  "stump_class": "analytical",
+  "analyst_test": "An analyst who reads every rule and field correctly attributes each entry-point sample to the wells the collection record shows pumping, gives each well the average PFOA and PFOS of the samples it ran in, sizes each grant at $2.4 million per MGD of the wells over 4.0 ng/L capped at $6 million and walks the list to 7 systems, when the mass balance of the blends leaves the clean partners out and the fund reaches 16.",
+  "domain_test": "The deciding quantity is each well's own PFAS level apportioned from entry-point samples that blend the wells pumping at collection, the environmental field's mass-balance source apportionment (an inversion of mixtures of known proportions, the top-down step of a contaminant source inventory); with another field's nouns there are no flow-weighted blends of sources with recorded proportions to invert, and the call no longer reads the same.",
+  "mechanism_source": "design_note",
+  "differentiation": {
+    "task187": "task187 reads each grid unit's output shortfall at matched input spread, a curved, capped response averaged over a spread of inputs; task263 inverts flow-weighted mixtures of sources with recorded proportions into each source's own level by a linear mass balance across samples: no response curve, no spread, no cap",
+    "task48": "task48 recovers a population invisible at the monitor's grain by aggregating transactions up to a pair grain; task263 disaggregates measured blends down to their sources by solving the mass balance across many samples whose proportions differ, the opposite move"
+  },
+  "lineage": [],
+  "notes": "Drawn 2026-10-16 by sathay3012 (wave 3, Descriptive). Seed DA13 keeps the world (a state revolving fund's $36 million of PFAS treatment-design grants for 2027), the decision (how far the fund reaches down its priority list) and the quantity (treatment capacity at the sources whose own water is over 4.0 ng/L); its mechanism rows were not read. overuse.org_family WARN answered: a state drinking water program is a government agency, the honest key; the forcing event is the 2027 intended use plan the state files for its capitalization grant. Re-drawn 2026-10-16 before any data was cut, once the other builds registered earlier that evening (task233, task463, task152) were pulled: the organisation is the state's Water Infrastructure Finance Authority (a public lender, financial_institution) whose board of directors allocates the 2027 set-aside (budget_or_appropriation), the context artifact is the state's system register, and the stump strategy is keyed composition_mix: each entry-point sample's level is set by the mix of wells pumping, which shifts from sample to sample, so a well's average over its samples is confounded by its partners and the mass balance takes the mix out. decomposition_attribution (the Gate G key, kept) is the closest strategy key and grain_or_unit the next; both repeat a build registered earlier that evening (task152, task233), so the third honest key is used and the Gate G repeat is answered here. Role family keyed portfolio_manager (the Authority's revolving-fund manager runs the fund's portfolio of loans and grants), programme_officer repeating task189, registered earlier that evening and pulled after the re-draw; the png+xlsx deliverable pair repeats task189 (WARN): a workbook and a chart are what a fund manager takes to a board. Wave 3 audit (2026-10-18): cracker.py, run on the strict battery, followed the purchase chains and landed Ask B in all four counties; Ask B is now held by four buyers, one in each county, still on the wholesale connections under the id the register holds as inactive beside the active system of the same name and county (cracker 0 of 8, pair ceiling 31.0); ask 6 reworded to the people living in each county; the call and every listed row unchanged.",
+  "layer2_family": "field_method",
+  "layer2_pattern": "own:mass-balance unmixing of blended samples",
+  "layer1": [
+    "a statewide export filtered to the listed systems",
+    "censored lab results with qualifiers (less-than values at the laboratories' reporting limits)",
+    "a laboratory on another method with its own analyte list",
+    "QC samples among field results (field reagent blanks and field duplicates)",
+    "provisional and approved records overlap (reissued reports loaded beside the results they replace)",
+    "free-text sources in service in each sampler's hand, some blank",
+    "mixed date formats across two systems",
+    "mixed units and bases (the national survey in micrograms per litre)"
+  ],
+  "registered": "2026-10-16T22:32:11Z"
+}

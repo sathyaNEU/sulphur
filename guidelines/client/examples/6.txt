@@ -1,0 +1,73 @@
+Roll out the additional rapid response car: 3.24 Points of category 2 performance per 10 staff hours, 0.58 Ahead of pre-alert dispatch
+Biomedical and Health Sciences
+Program evaluation
+hard
+Healthcare Delivery & Health Economics. Frontier-model runs averaged 0.57 across 8 runs (0.19 to 1.00); 2 of the 8 recommended Option 5, and the other 6 did not.
+
+What makes this task strong
+Measured difficulty: 6 of the 8 runs did not recommend Option 5. Every run got each option's staff hours right, so the gap is entirely in how the performance lift was estimated.
+The deciding step is building a fair comparison for a staggered trial. The start log shows that at each start decision the area started was the one whose performance had fallen most, or risen least, against a year earlier. An area picked after a bad patch improves on its own, so its own pre-start months and its year-earlier level are biased baselines.
+Three linked judgments: (1) use only a concurrent comparison with usual-practice areas, because of how starts were chosen; (2) make that comparison within size band and calendar month, because usual practice differs sharply by band (59.5% small, 71.8% medium, 76.2% large) and falls each winter; (3) weight the band effects to the Service's category 2 mix (23.2% small, 33.0% medium, 43.8% large) rather than to the trial areas' own incidents. Only then does dividing by each option's own staff hours give the Board's measure: Option 5 at 3.24 points per 10 staff hours, Option 1 at 2.66.
+Not a surface stump: no single fix rescues a run, and the four readable rollouts failed in four different ways rather than falling for one trap. Ranking on lift alone would pick Option 4 (10.0 points), which returns only 2.50 per 10 staff hours.
+The shallow path passes its own checks: a difference in differences on each area's year-earlier level looks seasonal and rigorous, and a pooled usual-practice comparison gives a tidy ranking with a plausible option on top.
+Note: the analysis plan pins the decision measure (lift per 10 staff hours a day, taken from the fourth running month and weighted to the whole Service), so the Service weighting is partly specified. What the plan leaves to the analyst, and what decided the runs, is the comparison: the selection built into the start log and the size and month matching.
+Prompt
+Stakeholder ask
+I work in the Performance and Evaluation team at Veldmaren Ambulance Service. Last year we trialed ten ways of reaching category 2 patients faster, each in three of our 33 dispatch areas. On 25 November 2026 the Board decides which one option to roll out across the whole Service from April 2027. What they want to know is how much each option would lift the Service's category 2 performance once it has bedded in, if it ran in every area, set against the staff time it takes, and which one gives the most for that time.
+
+The folder has two years of dispatch system extracts, the duty records, the trial plan and allocation, the national standard and code set, and the Board's notice.
+
+I need a short deck, c2_options_decision.pptx, for the Chief Executive to present to the Board. It should open with the recommendation, show for all ten options what each would do for performance across the Service and the staff time it takes, with a chart comparing them, and explain why the recommended option comes ahead of the one we'd pick if it were out of the running, and by how much.
+
+Please also send c2_options_results.csv with one row per option carrying the same figures as the deck, so the Board's performance committee can check each option's figures before the meeting.
+
+Performance figures to one decimal place, staff hours a day to one decimal place, and the lift per 10 staff hours to two decimal places.
+
+Deliverables
+Every file is prescribed by name. Nothing is optional, and no single file carries the whole answer.
+
+c2_options_decision.pptx
+c2_options_results.csv
+Input files
+An ambulance service's trial pack: two years of dispatch incidents (CSV) and the two control rooms' event logs (SQLite databases), dispatch sectors whose codes need normalizing, duty lines and hospital handovers (CSV), the trial area allocation, option schedule and start log and a patient experience survey (XLSX), the trial analysis plan, the national response standard and the edition 6 dispatch code set (PDF), the Board notice (DOCX), a data dictionary (MD) and a sources list.
+
+cad_incidents_2024-26.csv
+cad_event_log_haverlo.db
+cad_event_log_ruisdam.db
+dispatch_sectors.csv
+duty_lines_2025-26.csv
+hospital_handover_2025-26.csv
+trial_area_allocation.xlsx
+trial_option_schedule.xlsx
+trial_start_log.xlsx
+patient_experience_survey_2025-26.xlsx
+dispatch_options_trial_analysis_plan_v2.pdf
+national_ambulance_response_standard_2024.pdf
+emergency_dispatch_code_set_ed6.pdf
+board_notice_BN-26-14.docx
+data_dictionary.md
+SOURCES.csv
+Final recommendation
+Adopt Option 5, the additional rapid response car. Once established in every area it would lift the Service's category 2 performance by 5.5 points for 17.0 staff hours a day per area, 3.24 points per 10 staff hours, the highest of the ten options. Without it the Board would pick Option 1, pre-alert dispatch, which lifts the Service more (7.1 points) but takes 26.5 staff hours a day, 2.66 per 10 staff hours; Option 5 leads by 0.58.
+
+Step-by-step solution
+Set the follow-up from the Board notice (1 April 2025 to 30 June 2026), the 18-minute category 2 standard measured from clock start to first arrival, and category by dispatch code from the edition 6 code set.
+Place each incident in its dispatch area through the sector table after normalizing sector codes, take its first arrival from the two control rooms' event logs, and take each option area's start date from the start log.
+Keep each option area's established months, from its fourth calendar month of running (the start month counts as the first) to 30 June 2026.
+Estimate each option's established effect in each size band by comparing each established incident with the usual-practice area of the same band in the same calendar month. Option 5: 2.3, 4.2 and 8.2 points.
+Weight each option's band effects by the Service's category 2 mix in the follow-up (small 23.2%, medium 33.0%, large 43.8%): lifts run from 1.9 points (Option 2) to 10.0 (Option 4); Option 5 is 5.5 and Option 1 is 7.1.
+Measure staff hours from each option's own duty lines per area-day running, leaving out the standing rapid response car lines every area keeps: from 10.0 hours a day (Option 2) to 40.0 (Option 4); Option 5 17.0, Option 1 26.5.
+Rank by lift per 10 staff hours: Option 5 3.24, Option 1 2.66, Option 8 2.60, Option 4 2.50, Option 9 2.07, Option 3 2.03, Option 2 1.88, Option 6 1.83, Option 7 1.55, Option 10 1.11.
+Build the deck and the CSV from the same table.
+Where the runs went wrong
+Method shortcut. One run measured from the fourth month, compared in the same calendar months and reweighted to the Service mix, but adjusted each area by its own year-earlier baseline. The start log says those areas were started just after a drop against a year earlier, so the adjustment mixed each option's effect with recovery from a bad patch. It also set aside November 2025 because one control area did badly, and recommended Option 3 at 2.77 per 10 hours.
+Unfinished chain. Another run read the start log properly, avoided before-and-after baselines and compared only with usual practice in the same months, then pooled the three usual-practice areas into one rate instead of matching by size band and reported the trial areas' own mix as the Service lift. Option 1 rose to 10.6 points against a reference 7.1 (3.99 per 10 hours) and went to the top.
+Dismissed own evidence. A run computed a size-and-month version that put Option 5 at 5.54 points and 3.26 per 10 hours, almost exactly the reference. That version still had Option 1 first (9.60, 3.62) because incidents were pooled in the trial areas' own mix. Instead of taking the last step, it treated its versions as a menu and settled on the plainest because it looked closest to the plan's wording: Option 1.
+Self-confirming check. A run noticed the staggered, worst-first starts early, then spent its checking effort on presentation details (patient counts, wording, chart labels) and never tested whether its comparison was like for like. It put Option 5 near the bottom at 2.1 points and 1.24 per 10 hours and recommended Option 3.
+Justification
+The trial staggered starts toward areas that had just done worst, so only a concurrent comparison with usual-practice areas of the same size in the same month isolates each option's effect, and only established months reflect the option once bedded in. Weighting band effects to the Service's own incident mix gives the lift the Board would actually see, and dividing by each option's staff time gives the measure the Board decides on, where Option 5 leads Option 1 by 0.58.
+
+Browsing worked examples. Back to the example library
+
+Previous example
+Next example

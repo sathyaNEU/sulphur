@@ -1,0 +1,67 @@
+Learning modules
+·
+Two-layer task design
+Two-layer task design
+Real messy data for realism, then the deep analytical step that decides the answer. Every task is built and reviewed against this standard.
+
+Every task has two layers. Layer 1 (Data messiness) is the data work: real data that has to be parsed, joined, reshaped and reconciled before any analysis can start. Layer 2 (Stumping strategies) is the analysis: the deep analytical step that decides the main recommendation. A strong task needs both. Layer 1 makes the task realistic. Layer 2 decides it, and Layer 1 mess must never be what decides the answer.
+
+Why the standard exists
+These tasks are training data. A task is only useful if getting it right teaches a model something it does not already know. Catching a planted copied block, backing out an unstated rule, applying a written procedure or ignoring a staff draft are lessons a model learns after a few examples. Deep analytical judgment does not saturate the same way, because every field has many distinct ways to stop an analysis too early.
+
+Layer 1: Realistic data work
+The data should be hard to use for the reasons real data is hard to use. The solver has to put it in order before the analysis can start. That costs time and care, but it should not hide the answer. Techniques for every field, and eight for each domain, are on Data messiness.
+
+Native formats. Multi-sheet workbooks with header blocks and footnotes, files whose layout changes across years, tables inside PDFs, codebooks that must be applied, wide releases that must be reshaped.
+Imperfect joins. Codes against names, identifiers that change between systems, crosswalks between vintages and classification revisions, many-to-many links that need a documented rule.
+Genuine overlap. Two extracts that cover overlapping periods, a revised release that supersedes a preliminary one, the same entity under several spellings, resubmitted records.
+Units, time and scale. Fiscal and calendar years, local time and UTC, nominal and real values, rates on different bases.
+Real coverage gaps. Suppressed cells, survey skip codes, partial years, entities that enter and exit.
+Layer 1 never decides the answer
+Every model run should be able to clean the data correctly and still get the answer wrong. If catching one piece of mess flips the recommendation, the task is a send-back. That includes a planted duplicate, test rows, a timezone error, a hidden file, a mislabeled column, a wrong denominator, a copied or backfilled block, a swapped series, a hidden year-to-date column, and a decoy memo, staff draft or stakeholder figure written to carry the wrong answer. If you would never see it in the real source, leave it out. If it is real, it is texture, not the stump.
+
+Layer 2: Deep analysis decides
+The recommendation turns on doing the analysis correctly. The plausible wrong answer comes from a reasonable but insufficient analysis by a capable analyst, not from a misreading or a hidden trick. The deciding step takes three or more dependent inferences, and at least one is a statistical or modeling judgment the analyst has to justify from the data. Typical deep judgments:
+
+An uncontaminated comparison group. Spillover into the controls, a concurrent change, a trend that started before the intervention.
+Heterogeneity that pooling hides. Subgroups responding in opposite directions, mix shift, Simpson-type reversals.
+Uncertainty matched to the design. Clustered or grouped randomization, correlated samples, the delta method for ratios.
+Variance beyond sampling noise. Random effects, cohort-to-cohort variation, overdispersion, shrinkage.
+Competing explanations for one pattern. Composition against behavior, selection against treatment.
+Measurement and observation limits. Measurement error, censoring, immature cohorts, truncation, regression to the mean.
+Out-of-sample forecasting. A predictive model that has to be justified on held-out data, not just fitted.
+A chain carried through. Projecting immature outcomes, using them in a second model, then sizing the decision.
+Every domain group on Stumping strategies has its own strategies, and Deep reasoning shows real tasks that meet the bar. Use them to see what a deep judgment looks like in your field, then build your own version.
+
+Banned as the deciding stump
+The step that flips the recommendation cannot be any of these, alone or several side by side. (1) Rule application: a procedure, standard, precedence rule or policy in the materials that already spells out the decisive calculation. (2) Data semantics: reading one field, definition, clause, window or population a particular way. (3) A planted defect or decoy. (4) Replay: re-deriving a published figure, or a stated number that is simply wrong. (5) A single-fact surface stump. (6) Unpinned ambiguity, where two defensible readings give different answers.
+
+Two tests. If the solver followed the written procedure literally, would the answer follow with no further analytical judgment? Then it is rule application. If telling the solver one fact would make the task routine, it is a surface stump. A deep task survives both.
+
+Keeping the answer deterministic without a plant
+A deep task still has exactly one defensible answer. What pins it is the question and the structure of the data, not a planted clue and not a written procedure.
+
+Pin the decision, not the method. The prompt states the business question, the decision it feeds, the outcome or threshold that decides it, and the deliverables. It never names the method, the comparison group, the confounder or the adjustment.
+Let the design imply the method. A randomized design implies an intention-to-treat difference on the randomized unit. A staggered rollout implies comparisons against units not yet treated. Censored durations imply a survival estimate at the stated day.
+Rule out reasonable alternatives with the data's own structure, not with a decoy document that argues for the wrong one and not with a manual that spells out the right one.
+Do not pin the method with replay or a rulebook
+Shipping published or certified figures that only one reading reproduces is replay, and shipping a standard that lays out the decisive calculation is rule application. Both are send-backs. The analysis should be the hard part, and the data's structure should make one method the only defensible one.
+
+Quick check before you submit
+Work through each item.
+
+Checklist
+0 of 6 complete
+
+
+The inputs take real work to put in order, and none of that work decides the answer.
+
+The step that flips the recommendation is a deep analytical judgment, not catching something planted, reading a field a particular way, or applying a written procedure.
+
+The prompt pins the question, the decision and the deciding outcome or threshold, and the data's structure makes only one method defensible.
+
+There is no decoy memo, staff draft or briefing written to carry the wrong answer, and no manual that spells out the deciding calculation.
+
+The method is not hidden and then recovered by reproducing certified or published figures.
+
+Telling the solver any one fact would not make the task routine.

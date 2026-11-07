@@ -1,0 +1,166 @@
+{
+  "task": "task479",
+  "architecture": "v6",
+  "drawn": "2026-10-21",
+  "slot_note": "re-root of seed ET36 after architectures 1 to 5 were spent at stage 4; a small-employer health trust's 2027 renewal, where each member employer's expected 2027 retained claims are read from three years of experience whose noise, for the small employers, is larger than the differences between employers",
+  "domain": "healthcare-delivery-health-economics",
+  "client_domain": "healthcare-delivery-health-economics",
+  "subdomain": "payment-claims-health-plan-analytics",
+  "niche": "a chamber of commerce's small-employer health trust deciding at its November 2026 trustees' meeting which member employers' expected 2027 retained claims per member per month exceed the claims component of the 2027 contribution each employer elected, from the 2023 to 2025 plan years' experience, when most employers cover fewer than three hundred members",
+  "objective": "etl",
+  "shape": "15",
+  "decision_type": "designation_set",
+  "answer_unit": "set_of_items",
+  "answer": "CR113, CR118, CR131, CR149, CR167 and CR176 surcharged",
+  "answer_source": "generator/figures.json",
+  "gap": [
+    "time"
+  ],
+  "pattern": [
+    "none"
+  ],
+  "generators": [
+    "G16",
+    "G17"
+  ],
+  "gate_g": "signal_vs_noise_or_hold",
+  "calibration_form": "existing_book_actuals",
+  "stump_strategy": "uncertainty_hold",
+  "decisive_rule_filed": false,
+  "official_decoy": false,
+  "validated_decoy": false,
+  "context_artifact": "register",
+  "stump_class": "analytical",
+  "analyst_test": "With every file conformed and every rule read, the easy route trends each employer's own 2023 to 2025 retained claims per member per month to 2027 and compares it with the employer's claims component; but a small employer's three years carry mostly the luck of a few members' claims, so its expected 2027 claims sit much nearer the trust's level than its own experience, and the easy route raises small employers that were unlucky and spares small employers that were lucky.",
+  "domain_test": "Experience rating with credibility, worked the way a health plan actuary rates a small group: the expected claims of a group are its own experience weighted by its credibility and the pool's experience for the rest, the credibility set by how much of the group's year-to-year spread is noise against how much the groups truly differ; with another field's nouns there is no member claim distribution capped by a specific deductible and no pool that underwrites the groups.",
+  "layer2_family": "forecast_uncertainty",
+  "layer2_pattern": "own:each unit's expected level read as its own short noisy history weighted against the pool by the share of its spread that is signal",
+  "layer1": [
+    "the claims lag report in two layouts across the June 2026 platform move",
+    "the carrier's specific stop-loss reimbursements per contract year netted from plan-paid claims",
+    "member ids reissued at the July 2026 eligibility migration",
+    "policy numbers rewritten at the 2026 renewal"
+  ],
+  "stakeholder_role": "underwriting manager of a small-employer health trust",
+  "role_family": "finance_controller",
+  "scoring_unit": "other",
+  "spine": {
+    "file": "hallam_eligibility_member_months_2023-01_to_2026-09.csv",
+    "rows": 179535,
+    "entity": "one member's enrollment in one month",
+    "grain": "member x month",
+    "source": "synthetic"
+  },
+  "forum": "trustees_or_governors",
+  "forcing_event": "vote_or_meeting",
+  "org_family": "cooperative_or_member_body",
+  "world": {
+    "geography": "United States (a fictional county region)",
+    "currency": "USD",
+    "org_type": "chamber of commerce small-employer health trust",
+    "invented_names": [
+      "Corbel Ridge Business Health Trust",
+      "Hallam Benefit Administrators",
+      "Westerby Specialty Insurance Company"
+    ],
+    "people": [
+      "Steven Coleman",
+      "Michelle Patrick"
+    ]
+  },
+  "deliverables": [
+    "crbht_2027_renewal_surcharges.xlsx"
+  ],
+  "opening_move": "question-first",
+  "question_form": "which",
+  "driver": "A unit's expected next-period level is read from a few periods of its own record, and for small units the record's spread is mostly chance, larger than the true differences between units; taking each unit's record at face value ranks the lucky small units low and the unlucky ones high, while the expected level weighs the unit's record against the pool by how much of its spread is signal.",
+  "driver_concrete": "A twelve-person shop whose 2024 included one member's $140,000 claim has a three-year average far over the trust's, but its expected 2027 claims are only a little over the trust's level; a sixty-member employer with three quiet years is expected to cost nearly the trust's level too; the easy route raises the first and spares the second.",
+  "stump": "The default path trends each employer's own 2023 to 2025 retained claims to 2027 and files CR104, CR109, CR136, CR167 and CR176 surcharged, because it never asks how much of a small employer's three years is chance: one member's large claim moves a forty-member employer's year by more than the employers truly differ, so the small employers with high experience are expected near the trust's level and under their claims components, and the small employers with low experience, whose claims components sit well under the trust's level, are expected over them.",
+  "mechanism_source": "design_note",
+  "differentiation": {
+    "task130": "task130's later architecture forecasts a group chosen for an extreme value in one period by carrying its value forward; here no group is chosen by its value and no period is extreme by selection: every employer's expected level is weighed against the pool by the signal share of its own three-year spread, which depends on its size.",
+    "task479v3": "architecture 3 trended a group's large claimants under a fixed specific deductible; here the deductible only caps the experience and the step is weighting each employer's experience by its credibility.",
+    "task148": "task148 models a queue drained by units that give up, the patience seen fully only for leavers; here nothing waits or leaves: each employer's expected claims are its noisy experience weighed against the pool's.",
+    "task241": "task241 reads a sensor's error against a reference displaced by movement of the medium; here no reference is displaced: the pool's own experience is the complement each small employer's chance-heavy record is weighed against."
+  },
+  "lineage": [
+    {
+      "architecture": "v1",
+      "drawn": "2026-10-20",
+      "fate": "spent 2026-10-21 at stage 4: a reader landed the call by reading guidelines 3.1's 'would bring ... as they stand' literally and replaying each claim's water on the present floor; judge FIX_NOW on ask B",
+      "driver": "A record of past events on units is carried to the units as they now stand, and some units were raised after their events, so a past event counts again on a raised unit only where the event's recorded level stood above the unit's new threshold; dropping a raised unit's earlier events, keeping them all, or giving it the later rate of units in its present class each misstates the expected rate.",
+      "stump": "The default path drops every claim a building filed before it was elevated and puts the two riverine counties elevated after 2016 in the pilot, because it never asks whether the 2016 water would still have reached the raised floors.",
+      "gap": [
+        "population",
+        "time"
+      ],
+      "pattern": [
+        "none"
+      ],
+      "gate_g": "etl_conformance",
+      "niche": "a regional flood authority's 2027 private flood placement pilot, set on each member county's expected paid building claims per 1,000 insured buildings for the buildings insured today as they now stand, built from the NFIP claims history, the policy terms and the authority's own elevation and acquisition projects, where the 2016 flood rose above the floors the post-flood elevations were built to"
+    },
+    {
+      "architecture": "v2",
+      "drawn": "2026-10-21",
+      "fate": "spent 2026-10-21 at stage 4: both scored readers (target.zip 7d73c6a44d3464b7) landed the call (score_reader exit 1, 50 and 54 of 80 ask figures) by computing each county's Department-to-Monitor ratio for every published year and extrapolating its visible linear drift; both also found the register county and the crosswalk gaps",
+      "driver": "A total for a period not yet counted is carried from the last complete count by the movement of a fixed sample, and the sample covers a shrinking share of the whole because new members join only the whole, at a pace that differs by area and has held steady through every counted period; carrying the last count by the sample's movement, or scaling the sample by the last count's ratio to it, drops one more period of that drift, so the ratio must be carried forward on its own path.",
+      "stump": "The default path moves each county's 2024 Department receipts by its member panel's 2025 growth and qualifies Arvenne, Brisholt, Corrigan Bay and Delvane, because it never asks how the panel's growth has tracked the Department's in the years both are known.",
+      "gap": [
+        "time"
+      ],
+      "pattern": [
+        "none"
+      ],
+      "gate_g": "forecasting",
+      "niche": "a state lodging association's 2027 Rising Destinations co-op marketing match, a fixed fund split equally across the counties whose taxable lodging receipts grew at least six per cent from 2024 to 2025, where 2025 must be restated from the association's fixed monthly member panel onto the Department of Revenue's annual county basis two months before the Department publishes it"
+    },
+    {
+      "architecture": "v3",
+      "drawn": "2026-10-21",
+      "fate": "spent 2026-10-21 at stage 4: reader 2 of 2 (target.zip d879fa0e89b65b9e) landed the call (score_reader exit 1, 22 of 80) by re-applying the fixed $250,000 deductible to each large claimant's trended claims; reader 1 missed on the default path (exit 0, 9 of 80); both missed both ask devices",
+      "driver": "A total kept below a fixed per-unit ceiling is carried to a later period on a growth rate that applies to the uncapped amounts, so each unit's amount grows first and is capped after: a unit already above the ceiling adds nothing to the kept total and a unit just below it adds only what it gains up to the ceiling, so growing the kept total by the rate overstates it most where units sit at or near the ceiling.",
+      "stump": "The default path trends each group's 2025 retained claims per member per month by the 2027 trend assumption and sends true-up notices to the groups it puts over their funding rates, because it never asks how much of the trend lands above the attachment for the members already at or near it.",
+      "gap": [
+        "time"
+      ],
+      "pattern": [
+        "none"
+      ],
+      "gate_g": "forecasting",
+      "niche": "a third-party administrator's 2027 funding true-up notices: which of its self-funded employer groups' expected 2027 retained medical claims per member per month, the claims the plan itself pays after specific stop-loss at the unchanged $250,000 attachment, exceed the 2027 funding rates the employers set in September"
+    },
+    {
+      "architecture": "v4",
+      "drawn": "2026-10-21",
+      "fate": "spent 2026-10-21 at stage 4: judge DETERMINISTIC but SEND_BACK on Gate G (planted_defect_flip, surface_read_rejection, sole_data_defect: removing rapid-guessed responses is cleaning contaminated data, and the vendor's score report ranks the campuses wrongly); both scored readers missed the call on the vendor's scores (exit 1 on the asks at 85.7 per cent: the temporary id register and the rosters' names documented both devices)",
+      "driver": "Each unit's level is estimated from its answers to a set of items through a known response model, and in some sittings part of the answers were given too fast to have been read, at the chance rate, so they carry no information; estimating every unit from all its answers pulls the units of those sittings toward the floor, and only the answers given with effort, scored by the same model, recover each unit's level.",
+      "stump": "The default path takes the vendor's reported scale scores and designates the campuses with 35 per cent or more of students below Basic, because it never asks whether every response it scores was a real attempt.",
+      "gap": [
+        "population"
+      ],
+      "pattern": [
+        "none"
+      ],
+      "gate_g": "etl_conformance",
+      "niche": "a charter network's 2026-27 high-dosage math tutoring designation: the campuses where 35 per cent or more of the students tested on the spring 2026 benchmark score below Basic on the vendor's scale, from the item responses, the response times and the vendor's item bank, where some sessions were tested when students were not trying"
+    },
+    {
+      "architecture": "v5",
+      "drawn": "2026-10-21",
+      "fate": "spent 2026-10-21 at stage 4: both scored readers landed the call (exit 1, call hit, 32 of 64 figures each): each completed every district's first half by the 2025 plan-year factor of its 2026 plan, naming deductible leveraging unprompted; completing a part year by the destination design's seasonal pattern is textbook to a strong reader once the design history and per-district lag data sit side by side. Both asks held on ask B (latest per claimant number double counts); reader 7 resolved ask A's reissued ids by person attributes",
+      "driver": "A period's total is completed from its first months by the share those months carry, and the share is set by a design that resets each period and can change between periods: for units whose design changed, their own earlier period's share belongs to the old design, so the share has to come from units already on the new one.",
+      "stump": "The default path completes each district's January to June 2026 plan-paid claims by its own 2025 and files MV03, MV25 and MV36 raised, because it never asks whether a plan year's claims fall the same way under a different deductible: Brantmoor, Farrowdale and Northam Vale moved from the $500 plan to the $3,000 plan in 2026, whose first half carries less of the year, and they are short of their claims components.",
+      "gap": [
+        "time"
+      ],
+      "pattern": [
+        "none"
+      ],
+      "gate_g": "forecasting",
+      "niche": "a school employees' health cooperative's October 2026 mid-year contribution review: which member districts' expected full 2026 plan-year plan-paid claims per member per month exceed the claims component of their 2026 contribution rate, from January to June 2026 claims, when members pay their deductibles first in the plan year and four districts moved to a $3,000 deductible on 1 January 2026"
+    }
+  ],
+  "notes": "stump_strategy composition_mix: the plan year's paid share depends on the benefit design mix the history does not carry for the changed districts.",
+  "registered": "2026-10-21T02:09:25Z"
+}

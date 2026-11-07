@@ -1,0 +1,62 @@
+Hold the dallas units: Austin's short-term rental rule on its own removed about 158 entire-home listings, 2.4% Of pre-rule supply
+Other
+Policy impact evaluation
+hardest
+Urban & Regional Science. Frontier-model runs averaged 0.44 across 8 runs (0.26 to 0.52), and none of the 8 told the committee to hold.
+
+What makes this task strong
+Measured difficulty: the 8 runs averaged 0.44, and not one earned the Hold criterion, the rule-only count or the rule-only share. Every run used Dallas as the comparison and caught the broken March scrape, so the loss is not in setup.
+The deciding step is a causal comparison, not a count. The committee's test is what the rule did "on its own", and the obvious counterfactual (scale Austin by Dallas's growth) assumes the two cities were on parallel paths. They were not: the Austin to Dallas ratio was already sliding from about 2.7 in 2023 to about 2.2 in the first half of 2025, before the rule existed.
+Three dependent inferences: (1) establish the pre-rule divergence from monthly review activity, which rules out a scaled count comparison; (2) switch to a listing cohort and follow each active September 2025 listing to June 2026 in both cities, so new-listing growth and normal turnover drop out (Austin lost 26.3%, Dallas 27.0%); (3) split exits into delisting and switching to 30+ night minimums and attribute only Austin's excess (2.4 points of switching, about 158 listings) to the rule, then hold that against the 5% line.
+Not a surface stump: the one planted defect, an Austin March 2026 scrape missing about 2,533 listings, was caught by every run and decides nothing. No field or clause has to be read a special way, and the "on its own" test is plain in the prompt. The runs understood the question and lost by preferring a dramatic aggregate over a like-for-like comparison.
+The shallow path passes its own checks: the raw comparison has Austin trailing Dallas by about 16.5 points (roughly 1,300 listings), and gross loss among pre-rule listings is about 26%. Both clear 5% by a wide margin, so log-scale variants and intervals around the count gap only confirm a convert call.
+Prompt
+Stakeholder ask
+We own about 40 entire home rentals in Dallas, and the council there is floating a copy of the short-term rental rule Austin put into effect in October 2025. Our investment committee's standing policy is that we start converting units to long-term leases if a rule like this, on its own, takes at least 5% of a city's active entire-home short-term supply off the short-term market otherwise we hold. I need to know which side of that line Austin's rule landed on, separate from whatever would have happened there anyway. Everything I've pulled is in the folder. Give me a two-page PDF memo that tells me whether to start converting, puts a number on how many entire-home short-term listings the rule itself removed in Austin and what share of pre-rule active supply that represents, and tells me how much of the entire-home supply still operating there is actually licensed with the city. Include a chart of entire-home listings in both cities over time with the October 2025 effective date marked.
+
+Deliverables
+Every file is prescribed by name. Nothing is optional, and no single file carries the whole answer.
+
+Austin_STR_Rule_Impact_Memo.pdf
+Input files
+Inside Airbnb listing snapshots for Austin (the city with the rule) and Dallas (the comparison), four scrapes per city from September 2025 to June 2026 as large gzipped CSVs, each city's full review history, the City of Austin's active short-term rental license list (JSON, 3,048 records), the city's April 2026 program update memo to Mayor and Council (PDF) and a sources note. The data is real and messy: Austin's March 2026 scrape is incomplete, and listing license numbers are free text with Exempt and blank entries.
+
+austin_listings_2025-09-16.csv.gz
+austin_listings_2025-12-22.csv.gz
+austin_listings_2026-03-25.csv.gz
+austin_listings_2026-06-22.csv.gz
+dallas_listings_2025-09-21.csv.gz
+dallas_listings_2025-12-25.csv.gz
+dallas_listings_2026-03-26.csv.gz
+dallas_listings_2026-06-15.csv.gz
+austin_reviews_2026-06-22.csv.gz
+dallas_reviews_2026-06-15.csv.gz
+austin_active_STR_licenses.json
+austin_STR_program_update_memo_2026-04-30.pdf
+SOURCES.txt
+Final recommendation
+Hold: do not start converting the Dallas units. Austin's rule on its own removed about 158 entire-home short-term listings, 2.4% of its 6,542 active pre-rule listings, below the committee's 5% threshold. Only 17.9% of Austin's still-operating entire-home supply is licensed with the city, and platform delisting starts after the last snapshot.
+
+Step-by-step solution
+Filter all eight snapshots to entire-home listings with minimum nights under 30 and mark a listing active if it has at least one review in the prior 12 months: Austin 8,050 in September 2025 (6,542 active), Dallas 4,457 (3,582 active).
+Match listing IDs across snapshots: Austin's March 2026 scrape is missing about 2,533 listings present in December and June, including nearly all 30+ night listings (1 against 929), so exclude March from the estimate and flag it on the chart.
+Count unique entire-home listings reviewed each month from 2022 to May 2026 in both cities: the Austin to Dallas ratio falls from about 2.7 (2023) to about 2.2 (first half of 2025) before the rule, and Austin's year-over-year growth is about the same before and after October 2025 (25.5% and 25.9%).
+Run the naive comparison as the benchmark to reject: Austin trails Dallas by about 16.5 points (roughly 1,300 listings), mostly the pre-existing trend.
+Follow each active September 2025 listing to June 2026: Austin lost 26.3% (23.4% delisted, 2.9% switched to 30+ nights), Dallas 27.0% (26.5%, 0.5%). There is no excess delisting in Austin.
+Apply Austin's 2.4-point excess switching rate to its 6,542 active pre-rule listings: about 158 listings, 2.4% of supply.
+Match June 2026 Austin license numbers to the city's active list on digits: 1,455 of 8,131 (17.9%) licensed, with Exempt and blank treated as unlicensed.
+Chart monthly activity for both cities with the October 1, 2025 marker and the snapshot counts, then apply the committee rule: 2.4% is below 5%, so hold.
+Where the runs went wrong
+Method shortcut. One run applied Dallas's growth to Austin's aggregate count, got a counterfactual of 10,026 listings and called the 1,344-listing shortfall the rule's effect: 15.4%, "exceeding the 5% trigger by about 3x". Its own review-growth table had already shown Dallas outgrowing Austin before the rule (February 2025: Austin +18.5%, Dallas +50.5%), which is exactly the parallel-paths assumption failing.
+Self-confirming check. The same run re-estimated the count gap on a log scale (-13.4%, interval -17.6% to -9.0%), which re-ran the parallel-paths assumption instead of testing it. Its December check put Austin about 437 listings above the Dallas-based expectation, the opposite sign, and the conclusion did not move.
+Dismissed own evidence. Another run did the decisive cohort test, found Austin listings survived at 71.3% against Dallas's 68.8%, and then based the call on the aggregate gap: about 750 listings, 8.4%, convert.
+Unfinished chain. A third run computed cohort exit rates of 32.0% in Austin and 31.9% in Dallas and even split Austin's exits into delisting and switching, the path to the right answer. It then went back to a proportional comparison of totals that counted Dallas's faster new-listing growth (42.6% against 29.5%) as listings the rule removed: 1,773 listings, 22.2%.
+What carrying the chain through looks like. In a separate set of rollouts, the one run that trusted the same cohort result (31.9% exits in each city), checked the pre-rule ratio and separated switching to long-stay minimums reached Hold at about 290 listings, 3.7% of supply.
+Justification
+The policy turns on what the rule did on its own, so Austin has to be compared with Dallas over the same months and with its own pre-rule path. Austin was already losing ground to Dallas well before October 2025, its pre-rule hosts left the short-term market at no higher a rate than Dallas hosts, and the only excess is a small shift to 30+ night minimums. That puts the rule's effect at about 2.4%, under the 5% line; the raw comparisons that exceed it measure the earlier trend and normal turnover.
+
+Browsing worked examples. Back to the example library
+
+
+Previous example
+Next example

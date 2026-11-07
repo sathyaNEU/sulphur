@@ -1,0 +1,121 @@
+{
+  "task": "task131",
+  "architecture": "v2",
+  "drawn": "2026-10-13",
+  "slot_note": "Experiment & Causal rework in perssathya's wave 1. Architecture 1 (a Swiss consumer co-operative's card-randomised member offers, household interference) shipped 2026-10-10 and failed to stump on the portal; its crm-loyalty-retention task type serves no objective in the client taxonomy. Architecture 2 is redrawn into Energy Systems & Utilities, tariff-demand-response-evaluation, a pairing never built, with a new world, decision and quantity.",
+  "domain": "energy-systems-utilities",
+  "subdomain": "tariff-demand-response-evaluation",
+  "client_domain": "energy-systems-utilities",
+  "niche": "a State-owned regional power corporation running an isolated inland town system choosing which of three peak-window residential tariff designs, if any, its flat-rate households default onto from 1 July 2027, from a summer trial its load research team randomised household by household, judged on the 2027-28 summer 50% POE maximum demand",
+  "objective": "experiment-causal",
+  "shape": "11",
+  "decision_type": "pick_one_of_n",
+  "answer_unit": "named_option",
+  "answer": "Move every flat-rate residential customer onto Design C (Stepped) from 1 July 2027: it lowers the 2027-28 summer 50% POE maximum demand by 11 MW (its maximum the half-hour from 8 p.m.); Design A would raise it by 5 MW (9 p.m.) and Design B by 20 MW (8 p.m.).",
+  "answer_source": "golden: task131/submission.md block 1, recomputed by generator/verify.py from the bundle",
+  "gap": [
+    "time",
+    "population"
+  ],
+  "pattern": [
+    "none"
+  ],
+  "generators": [
+    "G14",
+    "G13",
+    "G7"
+  ],
+  "gate_g": "forecasting",
+  "calibration_form": "none",
+  "stump_strategy": "other",
+  "decisive_rule_filed": true,
+  "official_decoy": false,
+  "validated_decoy": false,
+  "context_artifact": "capacity_report",
+  "stakeholder_role": "the power corporation's pricing and tariffs manager, who advises the Minister for Energy which design, if any, flat-rate households default onto in the 2027-28 tariff schedule",
+  "role_family": "policy_adviser",
+  "scoring_unit": "other",
+  "spine": {
+    "file": "interval data in NEM12 files, one per month (November 2025 to February 2026)",
+    "rows": 335892,
+    "entity": "one NEM12 300 record: one meter register's 48 half-hourly kWh reads for one day (96 at the 15-minute meters)",
+    "grain": "meter x day",
+    "source": "synthetic"
+  },
+  "forum": "minister_or_cabinet",
+  "forcing_event": "season_or_peak",
+  "org_family": "utility_or_infrastructure",
+  "world": {
+    "geography": "Australia, Western Australia (a fictional inland town on its own isolated power system, no daylight saving)",
+    "currency": "AUD",
+    "org_type": "State-owned regional power corporation (generation, network and retail on one isolated system)",
+    "invented_names": [
+      "Murrandi",
+      "Murrandi Regional Power"
+    ],
+    "people": [
+      "Pamela Crawford",
+      "Peter Huang",
+      "Craig Jackson",
+      "Nathaniel Maxwell"
+    ]
+  },
+  "deliverables": [
+    "tariff_default_advice_2027-28.pdf",
+    "tariff_trial_tables_2025-26.xlsx"
+  ],
+  "opening_move": "question-first",
+  "question_form": "whether",
+  "driver": "The decisive quantity is the change in the maximum of a summed daily curve when a randomised treatment moves part of each unit's load out of a window: the moved load returns as a synchronised surge when the window closes, and on the target day's stress that surge outgrows the cut it repays, so the effect has to be estimated for every interval at the target day's conditions and added to the whole target curve, where the maximum can leave the window and rise; the cut inside the window on an average day, or the target-day cut read at the old maximum, ranks the treatments in another order.",
+  "driver_concrete": "Each trialled peak design's effect on the 2027-28 50% POE maximum demand is the design day's highest half-hour once every half-hour's household response at the design day's heat is added to the forecast curve; the cooling households put off past the peak price comes back as one pull-down when the price falls, and on 44-degree days that pull-down outgrows the cut, so B's maximum moves to the half-hour after 8 p.m. and A's to the half-hour after 9 p.m., both above today's, and only the stepped design C, whose shoulders split the return, lowers it; the window cut on an average trial day files B and the average day's whole profile files A.",
+  "stump": "A competent solver takes each design's treatment-minus-control drop in household demand over its peak window across the trial's workdays, scales it to the 2027-28 flat-rate residential customers and files Design B as lowering the 50% POE maximum demand by about 15 MW; the step that lands it there is reading a design's effect as its cut inside the window on an average trial day, when the cooling put off past the peak price comes back as one pull-down when the price falls and on the design day's heat outgrows the cut, so B's maximum moves to 8 p.m. and rises, A's moves to 9 p.m., and only the stepped design C lowers it.",
+  "stump_class": "analytical",
+  "analyst_test": "A strong analyst who parses every interval read, keeps the trial workdays, takes the intention-to-treat difference against the control arm and scales it to the forecast's flat-rate customers subtracts each design's peak-window cut from the 50% POE maximum demand and files Design B (about 15 MW lower), or with the average trial day's whole half-hourly profile files Design A; neither is what B or A does to the design day's highest half-hour, which both raise.",
+  "domain_test": "The deciding quantity is a tariff's ex-ante load impact on the planning maximum demand (the 50% POE design day's highest half-hour), estimated from a randomised tariff trial half-hour by half-hour at the design day's weather, the core work of tariff and demand-response evaluation; with another field's nouns there is no design day, no deferred cooling pulled down at the price step in a way that grows with heat, and no half-hourly maximum against firm generation, so the task stops making sense.",
+  "layer2_family": "field_method",
+  "layer2_pattern": "own:tariff-rebound-moves-design-day-maximum",
+  "layer1": [
+    "NEM12 interval files (100, 200, 300, 400, 900 records) with A, S, E, F and V quality, 400 records splitting a day's reads by quality, 15-minute meters at the premises households moved to within the town, and days re-sent in a later file with actual reads replacing estimates",
+    "the trial register keyed by customer account while meter data is keyed by NMI, with move-outs changing the account at an NMI during the trial",
+    "the gazetted tariff schedule in GST-inclusive cents against the trial plan's GST-exclusive price table",
+    "interval-ending meter timestamps against tariff windows stated in clock time and a forecast labelled by trading interval",
+    "Bureau-format daily and half-hourly weather with quality flags and a gap filled from a second station",
+    "public holidays charged off-peak all day"
+  ],
+  "mechanism_source": "design_note",
+  "differentiation": {
+    "task122": "task122 attributes outcomes logged after a session closed back to the exposures that produced them on one guardrail; here a randomised tariff's effect is a signed half-hourly profile whose after-window pull-down, at the design day's heat, sets a new maximum on the whole design-day curve",
+    "task229": "task229 (all architectures) is a monitoring call on data health (a node-level standard error, a checked-state rate, a rating bias); here the call is a causal tariff effect on a planning maximum, estimated from a randomised trial half-hour by half-hour at the design day's weather",
+    "task124": "task124's dispatch architectures recovered a curtailed group's unintervened peak by heat-conditioning analogs; here nothing is curtailed by the organisation: a randomised tariff's own effect profile is carried to the design day, and the decisive move is the maximum of the whole curve after the pull-down at the price step",
+    "task183": "task183 carries each part's own failure history into a feeder's forward event count; here a randomised tariff's half-hourly effect is conditioned on the design day's heat and added to the whole design-day curve, where the pull-down after the price window sets a new maximum",
+    "task134": "task134 reads an inflow hazard by time since entry for a forward utilisation count; here a randomised tariff's half-hourly effect on the hottest workdays is added to the design-day curve, where the pull-down after the window sets a new maximum",
+    "task136": "task136 carries a bulk-buy's PV installations to a new suburb per eligible owner-occupied house; here a randomised tariff's half-hourly effect at the design day's heat sets a new system maximum after the price window",
+    "task130": "task130 costs a claims-made window that catches only quick, cheap claims; here a randomised tariff's response is read on the hottest workdays and over the whole design-day curve"
+  },
+  "lineage": [
+    {
+      "architecture": "v1",
+      "drawn": "2026-10-10",
+      "fate": "spent 2026-10-13: shipped 2026-10-10 and left off the portal's approved list (FAILED_TO_STUMP: the portal solved the household-interference read); its task type, crm-loyalty-retention, is not in the client taxonomy, and with app or subscription nouns the card-test question read the same, so the domain was a backdrop under the 10/10 rules",
+      "domain": "marketing-consumer-research",
+      "subdomain": "crm-loyalty-retention",
+      "objective": "experiment-causal",
+      "gap": [
+        "population",
+        "objective"
+      ],
+      "pattern": [
+        "none"
+      ],
+      "generators": [
+        "G10",
+        "G4"
+      ],
+      "gate_g": "method_or_model_selection",
+      "stump_strategy": "causal_design",
+      "decision_type": "pick_one_of_n",
+      "driver": "The treatment was randomised at a sub-unit that shares one budget with its sibling sub-units inside a parent unit, so each treated sub-unit's measured lift carries outcomes moved onto it from differently assigned siblings, which nets to zero once every sub-unit is treated; the at-scale effect is read only on parent units whose sub-units all drew the same arm, and the lift read at the randomisation unit ranks the options in a different order."
+    }
+  ],
+  "notes": "Architecture 2, drawn 2026-10-13 under the 10/10 rules. The deciding quantity is a field quantity (a tariff's ex-ante impact on the planning maximum demand) and the decisive step is the field's own method (impacts estimated for every half-hour at the design day's weather, added to the design-day curve, the maximum taken over the whole day). Stump strategy 'other': the trial's effect is a signed half-hourly profile whose post-window lobe grows with heat, and the decision is scored on the maximum of the design day's whole curve; no listed family names an ex-ante impact at design conditions on a non-linear planning quantity. Gate G forecasting: the trial's figures, read correctly over its workdays, do not pin the design day's change; the decision turns on carrying the trial's response to the 2027-28 design day, which the trial's hottest workdays pin. Decisive G14 (the response on days as hot as the design day), then G13 (every half-hour of the design day) and G7 (the deferred load returns when the price falls): the final flip, from A to C, is the heat; the whole curve takes B to A. No calibration corpus, no certified record, no decoy; the trial's own report is not shipped."
+}

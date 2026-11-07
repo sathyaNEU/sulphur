@@ -1,0 +1,89 @@
+Glossary
+The words this handbook uses in a specific way, and what each one means when you are building a task.
+
+Everything here is a working definition. If a term is used loosely somewhere else, this page wins.
+
+Deep reasoning
+The kind of difficulty every task needs. The deciding step takes three or more dependent analytical inferences, and at least one of them is a real statistical or modeling judgment the analyst has to justify from the data: an uncontaminated comparison group, heterogeneity that pooling hides, uncertainty matched to the design, variance beyond sampling noise, competing explanations for one pattern, censoring or immature outcomes, or a forecast justified out of sample. The plausible wrong answer comes from a reasonable but insufficient analysis, not from a misreading.
+
+Why it matters: it is the only kind of stump that counts. See Deep reasoning and Stumping strategies.
+
+Method shortcut
+A valid way for a run to fail. The run uses the right data but a simpler method, and the simpler method moves the deciding figure. For example, a pooled before and after comparison where the design calls for a comparison against units not yet treated.
+
+Why it matters: it shows the task is decided by analytical judgment, not by a trick.
+
+Unfinished chain
+A valid way for a run to fail. The early steps are right, but the run does not carry the inference through to the decision. For example, it projects immature cohorts correctly and then sizes the decision on the raw figures.
+
+Why it matters: deep tasks are chains, and a run that fixes one link without the rest still lands on the wrong answer.
+
+Dismissed own evidence
+A valid way for a run to fail. The run's own output shows the signal, and it sets the signal aside. For example, it prints subgroup effects that point in opposite directions and then recommends on the pooled average.
+
+Why it matters: it shows the run saw the key issue and lost on judgment, which is exactly what the task should test.
+
+Self-confirming check
+A valid way for a run to fail. The run tests robustness only by varying nearby choices, so the check can never overturn its first answer. For example, it reruns the same naive model on a different window instead of testing the assumption the answer depends on.
+
+Why it matters: a check that cannot fail is not evidence, and a run that relies on one is a genuine analytical shortfall.
+
+Rule application
+A banned stump. The deciding step is applying a procedure the materials already spell out: a standard, manual, methodology or policy that lays out the decisive calculation; combination or precedence rules ("apply A then B, if both use the lower", "if the top option breaks the cap, move to the next one that fits"); a decision rule where the only work is choosing which metric to plug in; or a clause justified only by citing a real regulation. The test: if the solver followed the written procedure literally, would the answer follow with no further analytical judgment?
+
+Why it matters: models learn to follow written procedures quickly, so these tasks teach nothing new. They are sent back however many steps the procedure has.
+
+Data semantics stump
+A banned stump. The task is won or lost on reading one field, definition, clause, window or population a particular way, such as "active means a purchase in 30 days, not a login".
+
+Why it matters: reading fields correctly is required care in every task, but it cannot be what decides the answer.
+
+Surface stump (One-fact test)
+A banned stump. If telling the solver one fact ("that file is a sample", "exclude the test rows", "use fiscal quarters") would make the task routine, the stump is on the surface. A deep task survives the one-fact test: even a solver told every fact still has to make and justify the analytical judgment.
+
+Why it matters: it is the fastest way to check whether your stump is deep before you submit.
+
+Planted defect
+A banned stump. Something added to the files so that catching it decides the answer: a planted duplicate, test rows, a timezone error, a hidden file, a mislabeled column, a wrong denominator, or a decoy memo or staff draft written to carry the wrong answer. Real mess belongs in every task for realism (Layer 1), but cleaning it must never decide the answer.
+
+Why it matters: a task decided by finding one planted defect is a send-back. See Data messiness.
+
+Replay
+A banned stump. The task asks the solver to re-derive a published figure, or its only twist is that a stated number is wrong. A replay-style task needs an independent second analytical step that flips the answer.
+
+Why it matters: reproducing a known figure tests patience, not judgment.
+
+Distractor
+A real, relevant-looking input file that a careful analyst would set aside, such as a chart of data that is also supplied numerically, or an older release superseded by a revised one. Every task needs at least 2. A distractor adds realism; it is not a decoy written to carry the wrong answer, and it never decides the task.
+
+Why it matters: real analysts work through more material than they use. See Input files.
+
+Critical components
+The 2 to 5 findings in your answer that the recommendation cannot stand without, including the deep analytical step that decides it. The auto-generated rubric leans on them most.
+
+Why it matters: picking the few findings that actually decide the answer keeps the rubric focused on the analysis. See Writing the golden solution.
+
+Deterministic
+One defensible conclusion follows from the shipped files. Ten competent analysts working independently would land on the same recommendation, even if they take different routes to get there. If two defensible readings or methods give different answers, the task is not deterministic.
+
+Why it matters: a task without a deterministic conclusion cannot be graded, so it cannot be used. See Writing the prompt.
+
+Reinforcement learning environment, or rle
+The harness that hands a model your prompt and your input files, collects its responses, and scores them. Your task becomes an RLE once it is accepted: the prompt is the instruction, the files are the environment, and the solution defines what a correct answer is.
+
+Why it matters: you are not writing a quiz, you are building an environment a model gets trained and evaluated against.
+
+Rubric
+The grading criteria for your task, generated automatically from your prompt and your answer. You do not write it, and you do not edit it unless a criterion is clearly wrong or missing.
+
+Why it matters: the two model runs are scored against it, so your answer and critical components need to state the deciding findings clearly.
+
+Reward
+The score a model run earns, on a 0 to 1 scale (shown as a percentage), against the rubric. Lower reward means the task stumped the run harder.
+
+Why it matters: rewards are the evidence that your task is hard. See the reward tables on any worked example.
+
+The bar
+The difficulty gate. Two model runs are generated from your prompt, and the average of the two must score below 60% against the rubric. Exactly 60% is too easy. One run can score higher as long as the average is under 60%. The runs must also fall short for the right reason, a genuine analytical shortfall such as a method shortcut or an unfinished chain, not formatting, trivia or a banned stump.
+
+Why it matters: it is the primary gate your task has to clear. See Task walkthrough.

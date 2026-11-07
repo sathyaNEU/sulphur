@@ -1,0 +1,145 @@
+{
+  "task": "task173",
+  "architecture": "v3",
+  "drawn": "2026-10-23",
+  "slot_note": "rebuild of a number marked RETIRED on 2026-10-22 and reopened by the author; v2 (load forecasting) spent at Gate F, two later cells died at stage 1 uncarded",
+  "domain": "energy-systems-utilities",
+  "subdomain": "asset-condition-maintenance",
+  "client_domain": "energy-systems-utilities",
+  "niche": "a Texas clay-soil city's water utility forecasting the utility-side service leaks its crews will repair in calendar 2027, the year its AMI contractor exchanges about two thirds of the city's meters in six months, for the estimated quantities of its 2027 service repair and restoration term contract",
+  "objective": "forecasting",
+  "shape": "02",
+  "decision_type": "quantity_figure",
+  "answer_unit": "count",
+  "answer": "Enter 3,000 water service leak repairs as the Item 101 estimated quantity for 2027 (2,977.6 expected: about 1,900 without exchange visits and about 1.0 added repair per 100 of the 108,398 AMI meter exchanges).",
+  "answer_source": "task173/submission.md block 1; task173/golden/service_leak_forecast_2027.xlsx; task173/generator/figures.json (call.service_leak_repairs_2027)",
+  "gap": [
+    "time",
+    "population"
+  ],
+  "pattern": [
+    "none"
+  ],
+  "generators": [
+    "G2",
+    "G7",
+    "G6"
+  ],
+  "gate_g": "forecasting",
+  "calibration_form": "none",
+  "stump_strategy": "causal_design",
+  "decisive_rule_filed": false,
+  "official_decoy": false,
+  "validated_decoy": false,
+  "context_artifact": "other",
+  "stump_class": "analytical",
+  "analyst_test": "A strong analyst who stitches the legacy and EAM work orders, counts one repair per leak, reads Item 101's scope and the AMI schedule's work types correctly and carries the last two years' 1,936 service leak repairs a year (or the same rate by material and zone, or the 2016 to 2025 trend at 1,998) to 2027 files 2,000 against 3,000, because an exchange closes and reopens an old angle valve and remakes the setter's couplings and the record shows about one added repair per 100 exchanges in the weeks after, while the 2027 AMI contract exchanges 108,398 meters in six months.",
+  "domain_test": "The deciding quantity is the expected count of service failures in 2027, a buried-asset failure hazard estimated per service from its own repair history with each service's own exposure to a work-induced risk window after a meter exchange; with another field's nouns there is no meter setter operated on an old service, no exchange visit that disturbs it and no risk window after it, so the task stops making sense.",
+  "layer2_family": "estimand_identification",
+  "layer2_pattern": "own:work-induced-failure-risk-window-carried-to-a-mass-meter-exchange",
+  "layer1": [
+    "two work order systems either side of a 2021 CMMS cutover, the legacy one keyed by street address and the new one by GIS service ID",
+    "one leak carried on several work orders (investigation, repair, restoration)",
+    "a premise-to-service crosswalk that is not one to one (multi-unit premises on one service)",
+    "meter history as separate remove and install rows in the CIS",
+    "material codes from two GIS conversions",
+    "a fiscal year from October to September in the utility's budget against calendar-year counts"
+  ],
+  "stakeholder_role": "distribution maintenance planner in the city water utility, sizing the 2027 service repair and restoration term contract",
+  "role_family": "operations_director",
+  "scoring_unit": "other",
+  "spine": {
+    "file": "cis_meter_events_2012_2026.csv",
+    "rows": 141859,
+    "entity": "one meter set or removal on a premise in the CIS",
+    "grain": "premise x meter event",
+    "source": "synthetic (constructed in the layout of a utility CIS meter history extract)"
+  },
+  "forum": "council_or_assembly",
+  "forcing_event": "purchase_order_or_contract",
+  "org_family": "local_government",
+  "world": {
+    "geography": "United States, Texas (a fictional clay-soil city of about 380,000)",
+    "currency": "USD",
+    "org_type": "city-owned water utility",
+    "invented_names": [
+      "Hollis Bend",
+      "Hollis Bend Water Utilities",
+      "Mabry-Teague Utility Constructors",
+      "Halvorsen Metering Services",
+      "Arredondo Field Services"
+    ],
+    "people": [
+      "Mario Barnett"
+    ]
+  },
+  "deliverables": [
+    "service_leak_forecast_2027.xlsx",
+    "service_leaks_by_month.png"
+  ],
+  "opening_move": "question-first",
+  "question_form": "how-many",
+  "driver": "Work done on a unit raises the chance that a part attached to it fails in the weeks that follow, and the record spreads such work thinly across every year, so a failure rate read per unit-year carries only the thin history's share of work-induced failures into a window in which most units are worked on at once; the window's failures are each unit's own rate plus each scheduled visit's induced chance, read from the history's visits on each unit's own record.",
+  "driver_concrete": "An old curb stop or meter setter that is operated when a meter is exchanged leaks within weeks about one time in a hundred, and the record's routine exchanges touch about four meters in a hundred a year, so the service leaks per service-year the history shows carry almost none of the leaks the 2027 AMI exchange of two thirds of the meters will set off; the forecast adds to each service's own rate the induced chance per exchange, read from the leaks on each service in the weeks after its own past exchanges.",
+  "stump": "A competent solver carries the record's service leak repairs per year (1,936, or its trend at 1,998) to 2027 and files 2,000 against 3,000, because it never reads a service's failures on its own meter exchange visits, which add about one repair per 100 exchanges in the weeks after the new meter is set and which the 2027 AMI contract multiplies to 108,398.",
+  "mechanism_source": "design_note",
+  "differentiation": {
+    "task125": "task125 re-estimates an aggregate on each period's mix of filtered and unfiltered intakes after a recruitment change; task173 adds to each service's own failure rate the induced chance per scheduled meter exchange, a transient risk window after work on the unit itself, with no intake, filter or recruitment",
+    "task150": "task150 projects a unit's count from its own members, steady outside arrivals and sibling transfers; task173 forecasts failures as each unit's own rate plus a risk window opened by work done on it, read from each unit's own past work",
+    "task501": "task501 reads a transmission matrix's eigenvalue under the season's mixing regime; task173 has no transmission or threshold: failures are independent per service, raised for weeks after an exchange visit",
+    "task132": "task132 resets a wear-out curve when a failed item is replaced in its position; task173's exchanged meter is not the failing part: the visit disturbs the old setter and service it sits on, which fail in the weeks after",
+    "task183": "task183 carries each part's own prior failures forward as a frailty; task173's raised risk comes from work done on the unit, not from its failure history, and lasts weeks",
+    "task149": "task149 reads a hazard per unit of working time against how fast engineered work is done; task173's hazard is per service-day, raised in a window after a discrete visit",
+    "task480": "task480 v1 read old meters' under-registration at their exchange (what the meter had recorded); task173 reads the service leaks the exchange visit sets off on the old setter and service, nothing about what the meter recorded",
+    "task177": "task177 v3 read a default almost only through an exit whose forward hazard a second register shows (a behaviour, estimated per sector); task173's trigger is the organisation's own scheduled visit, its forward count filed, the failures it sets off a few per cent of the record's, and the decisive estimate is the transient excess over each service's own baseline in the weeks after its own past visits"
+  },
+  "lineage": [
+    {
+      "architecture": "v1",
+      "drawn": "2026-10-18",
+      "fate": "abandoned unregistered on 2026-10-22 (the guard's window blocked it three days; the author chose a fresh draw), then the number was retired after two redraw cells died on code, and reopened by the author on 2026-10-23",
+      "gap": [
+        "population",
+        "time"
+      ],
+      "pattern": [
+        "none"
+      ],
+      "generators": [
+        "G14",
+        "G6",
+        "G16"
+      ],
+      "gate_g": "forecasting",
+      "decision_type": "quantity_figure",
+      "driver": "The forward load on a pooled service desk is set by how often a case comes back, which is set by who took its first contact and how long they had been on the desk, so a coming bench far from the record's mix of first-contact takers needs the comeback chance conditioned on each opener's group and tenure."
+    },
+    {
+      "architecture": "v2",
+      "drawn": "2026-10-23",
+      "fate": "spent 2026-10-23 at stage 4 on Gate F (zip be677673): a blind reader fitted each combined plant's river lift and well per service and landed the call; the next two cells (psychology decision-making, human reliability) died at stage 1 with no card",
+      "gap": [
+        "population",
+        "time"
+      ],
+      "pattern": [
+        "none"
+      ],
+      "generators": [
+        "G2",
+        "G5",
+        "G14",
+        "G6"
+      ],
+      "gate_g": "forecasting",
+      "decision_type": "quantity_figure",
+      "driver": "A group cut for the first time replaces the lost volume from a second source that shares one meter with the first, so its added draw is the volume times the second source's own cost per unit less the first's, a pair each unit yields only when its metered total is fitted to its own two recorded volumes; reading the meter as one source, or carrying the cost per unit measured on the units cut before, whose second source costs several times as much, misstates the draw several fold.",
+      "domain": "energy-systems-utilities",
+      "subdomain": "load-forecasting",
+      "stump_strategy": "decomposition_attribution"
+    }
+  ],
+  "notes": "Architecture 3 of a reopened number. Coding: decisive gap time (the record holds meter exchanges thinly, the forward year massively), population second (the 2027 service-months sit mostly inside the post-exchange window). G2 decisive (the unit the failure rate is read on is each service's own exchange visit and the weeks after it, not the service-year, its route or its street), G7 second (when the induced failures can happen is pinned by an operations file, the AMI deployment schedule), G6 third (the forward year's service-months move to the post-exchange state). Layer 2 family estimand_identification: which exposure the failure rate is read on; Energy carries no client cards, so own: pattern. Architecture 3 spent 2026-10-23 at stage 4 on Gate F (zip c3223db0): blind reader A joined each meter set to the same service's leak repairs within 90 days (about 1 per cent), took that effect out of the history and added it for the 108,398 AMI exchanges, landing 3,000; the AMI schedule's only use was the decisive step, and a file that exists only to carry the forward change is joined to the outcome on sight.",
+  "registered": "2026-10-23T11:00:40Z",
+  "architecture_spent": true
+}

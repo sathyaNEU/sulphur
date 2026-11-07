@@ -1,0 +1,55 @@
+Keep the decreasing win condition, which flags 30.3% Of adults once the boards are estimated from the data
+Economics and Quantitative Social Science
+Latent-structure estimation
+hard
+Psychology & Behavioral Science. The two graded runs averaged 0.36.
+
+What makes this task strong
+The deciding quantity is never stated: each round's probability depends on how the game deals its boards, and no file says. The standard formula for this game treats every unopened box as either color with probability 1/2, and these boards were not dealt that way.
+It takes a chain of dependent inferences: count the picked-color and other-color boxes uncovered at each choice from the click log; fit the board distribution (the majority color's count out of 25) by EM over all 10,440 scored rounds, which is valid because when people stop depends only on what they have uncovered; check the fit on boards no stopping choice selected; compute each round's posterior; average per adult; bootstrap over adults.
+The validation needs a selection judgment: the 28 adults who opened every box in every Fixed Win round show 280 full boards with the majority at 13 to 17 boxes (57, 55, 54, 60, 54) and none above, where the 1/2-per-box formula expects 12 above 17. The 1,418 pooled fully uncovered rounds cannot be used, because people keep opening close boards, so those rounds lean toward 13.
+It is not rule application: the prompt fixes the flag (average below 0.70) and the keep range (one fifth to one third), and the decision standard fixes the base and the 90% interval, but neither says how the probability is computed.
+The shallow path is the published formula, a reasonable choice that flags 45.6% (42.0% to 49.0%) and drops the condition.
+Note: the depth sits in one latent quantity. Once the board distribution (13 to 17 about equally often, never more) is known, the rest is a routine Bayes calculation, so the chain is shorter than it looks.
+Prompt
+Stakeholder ask
+Should the box-opening game keep its Decreasing Win condition? The condition stays only if it flags at least one fifth and at most one third of adults. Each Decreasing Win round has a probability that the color the adult picked was really the majority color given the boxes they had uncovered when they chose. An adult is flagged when this probability averages below 0.70 over their Decreasing Win rounds.
+
+Please send two files.
+
+The first is condition_decision.docx. Put keep or drop at the top with the share of adults flagged and its 90% interval. Say how many adults and rounds the share is based on and explain how the probability was found. Include a histogram of the adults' averages with 0.70 marked.
+
+The second is choice_probabilities.xlsx. Its first sheet lists every combination of uncovered boxes seen in at least 100 Decreasing Win choices, counted as boxes of the picked color and boxes of the other color. Give the number of choices and the probability for each. Its second sheet gives each adult's average.
+
+Everything is in the attached folder.
+
+Deliverables
+Every file is prescribed by name. Nothing is optional, and no single file carries the whole answer.
+
+condition_decision.docx
+choice_probabilities.xlsx
+Input files
+An adult assessment battery's box-opening game data: a box-level click log (4.9 MB), three monthly round exports to stack, the participant file and codebook (XLSX), the data quality review, the game setup (JSON) giving each adult's block order, a one-page battery decision standard (DOCX) and short game notes (PDF). Nothing in the pack describes how boards are dealt.
+
+Final recommendation
+Keep the Decreasing Win condition. 158 of the 522 adults who passed the data quality review are flagged, 30.3% (90% interval 27.0% to 33.5%), inside the keep range of 20.0% to 33.3%, over 5,220 Decreasing Win rounds. The probability uses a board distribution estimated from the data, with the majority color behind 13 to 17 of the 25 boxes about equally often and never more.
+
+Step-by-step solution
+Build the base: stack the three monthly exports, drop the practice round, keep the 522 adults marked pass (38 failed) and take each adult's Decreasing Win block from game_setup.json, giving 5,220 Decreasing Win rounds.
+Join the click log to the rounds and count picked-color and other-color boxes uncovered before each choice: 15 combinations appear in at least 100 Decreasing Win choices, 2,915 choices in all (0-0 364, 3-2 351, 4-1 334, 3-1 247).
+Fit the majority count by EM over the uncovered boxes of all 10,440 scored rounds: about 0.2 each at 13 to 17 (0.199, 0.198, 0.195, 0.201, 0.207) and nothing above 17, with a log-likelihood 324 higher than the 1/2-per-box formula.
+Check it on the 280 full boards of the 28 adults who opened every box in every Fixed Win round: 57, 55, 54, 60 and 54 boards at 13 to 17, none above. Do not use the pooled fully uncovered rounds, which are selected toward close boards.
+Compute each round's posterior that the picked color is the majority: 0.5 with nothing uncovered, 1 once a color reaches 13; 4-1 gives 0.799 (against 0.748 under the 1/2-per-box formula), 3-1 0.709, 6-3 0.828, 3-0 0.786.
+Average each adult's 10 Decreasing Win probabilities and flag averages below 0.70: 158 of 522, 30.3% (mean 0.748, median 0.747).
+Bootstrap over adults (20,000 resamples): 27.0% to 33.5% (Wilson 27.1% to 33.7%).
+Apply the range: 30.3% is between 20% and 33.3%, so keep. Robustness readings (failed adults included, Decreasing Win first group, an exact even 13 to 17 spread) all keep at 30.1% to 32.2%.
+Write the decision file with the histogram (a line at 0.70, a small spike at 0.50 from adults who never opened a box) and the workbook with 15 combination rows and 522 adult rows.
+Where the runs went wrong
+Method shortcut. The 1/2-per-box formula from the literature understates the probability in every common evidence state (4-1 at 0.748 instead of 0.799) and flags 45.6%, a drop.
+Self-confirming check. Validating on the 1,418 pooled fully uncovered rounds looks like using the full boards, but those rounds are selected toward close boards and give 46.9%, also a drop.
+Wrong prior by assumption. Treating every split of the 25 boxes as equally likely gives 11.5%, below the keep range and also a drop.
+Interval at the wrong unit. The share is a proportion of adults, so the interval has to resample adults, not rounds.
+Justification
+The probability that a pick was the majority depends on the prior over boards, and the data reject the textbook prior decisively. The stopping rule makes the uncovered boxes a valid basis for estimating that prior, and the boards seen in full by adults who never stopped early confirm it. Under the estimated prior 30.3% of adults are flagged, which is inside the keep range.
+
+Browsing worked examples. Back to the example library

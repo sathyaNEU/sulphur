@@ -1,0 +1,69 @@
+Renew the text-to-pay contract: A 3.0-Point cure lift once spillover state-months leave the comparison, net usd 124,016
+Quantitative Finance and Trading
+Causal inference
+hardest
+Banking, Credit & Financial Risk. Frontier-model runs averaged 0.24 across 8 runs (0.20 to 0.28), and none of the 8 recommended renewal.
+
+What makes this task strong
+Measured difficulty: no run earned the renew criterion, the 3.0-point lift, the qualifying states, the extra cures or the net value. In the readable rollouts the runs matched the reference's 78,716 entries and 36,457 cures exactly (or an accepted variant) and still concluded do not renew at a 1.5-point lift.
+The deciding step is choosing an uncontaminated comparison group. The nine Core states share one collections floor. As each wave went live, the floor states still waiting stepped up against Missouri and Iowa (Illinois and Wisconsin 2.0, 2.6 and 4.1 points above expected after the three waves), while Maryland, on Core but worked by an agency, did not move. The floor's hours per account fell from 0.86 before April 2025 to 0.74 in the first half of 2026, while the agency's (0.85, 0.85) and the Drybrook team's (0.94, 0.93) stayed flat: collector time freed in live states went to the waiting ones.
+Dependent inferences: (1) compare the waiting floor states with Missouri, Iowa and Maryland wave by wave; (2) tie the step-ups to freed collector time through hours per account by team; (3) recognize that the send month, April 2025, is itself affected, so the floor's unaffected months end in March 2025; (4) refit the state-plus-month model on the 231 unaffected state-months and predict the 42 treated ones. The lift doubles to 3.0 (3.0164 unrounded) and the call flips.
+Not rule application: the collections standard (CS-4 7.9) fixes the form of the fit, a state level plus a month level weighted by entries on every state-month the program has not affected, but not which state-months those are. Following the written procedure with every not-yet-live state-month gives about 1.5 and the wrong call, so the procedure alone does not deliver the answer; showing contamination takes a wave-by-wave comparison and a workload calculation.
+The shallow path passes its own checks: it fits exactly the model the standard prescribes, and the August MIS pack's small live versus not-live gaps seem to agree with it. Those gaps compare groups whose membership changes month to month and whose levels differed before any texts, so they cannot back either call.
+Note: entry construction (latest run per account and statement date, state of residence from the address file, the fixed-width second-platform extract, cure codes) is heavy plumbing, but the runs did it correctly, so it decided nothing.
+Prompt
+Stakeholder ask
+I run collections strategy at Tamsworth Bank. Our text-to-pay contract with Nudgeline renews on 30 November and notice is due by the 15th. The Collections Strategy Committee decides on Wednesday 4 November whether we keep it. We keep it if text-to-pay lifted the 30-day cure rate by at least 2.0 points over a state's first six months live. Count every account that reached 30 days past due in those months, with entries and cures as our collections standard defines them. Measure the lift against what the same states would have cured in those months without text-to-pay. Use the seven states that have had six full months live. Should we renew?
+
+Write the committee a memo of two pages or less as text_to_pay_contract_memo.docx. Open with the call and the lift. Then say which of the seven states cleared 2.0 on their own and give the extra cures behind the lift. Finance wants the net value in USD after Nudgeline's fees on the same accounts. The August MIS pack sets live states against the rest every month. Say whether it backs the call.
+
+Put the figures in text_to_pay_lift_by_state_and_month.xlsx so the committee's analyst can check them. It needs the expected cure rate behind each state's months 0 to 5, the lift by state and by month, and the net value.
+
+Lastly, make text_to_pay_lift_months_0_to_5.png with the lift in each of months 0 to 5 after go-live and the 2.0 line on it. Cure rates and lifts in points to one decimal. The 2.0 line applies to the unrounded lift. Cures as whole numbers and money in whole USD, both worked from unrounded figures
+
+Deliverables
+Every file is prescribed by name. Nothing is optional, and no single file carries the whole answer.
+
+text_to_pay_contract_memo.docx
+text_to_pay_lift_by_state_and_month.xlsx
+text_to_pay_lift_months_0_to_5.png
+Input files
+A bank's collections pack: core collections entries from January 2024 to August 2026, customer address changes, the vendor's consent log and a state code reference (CSV); a second platform's fixed-width delinquency cycle extract with its layout file (TXT); collections hours by team, the August 2026 MIS pack and the state rollout tracker (XLSX); collections standard CS-4 rev 6 and the vendor's services agreement schedules (PDF); the vendor's Q2 2026 business review (PPTX); and a finance email on the value of a 30-day cure (EML).
+
+core_collections_entries_2024-01_to_2026-08.csv
+customer_address_changes_20261005.csv
+nudgeline_consent_log_20261002.csv
+state_code_reference.csv
+drybrook_delq_cycle_extract_20261005.txt
+drybrook_delq_cycle_extract_layout.txt
+collections_hours_by_team_2024-2026.xlsx
+collections_mis_pack_august_2026.xlsx
+text_to_pay_state_rollout_tracker.xlsx
+collections_standard_cs-4_rev6.pdf
+nudgeline_services_agreement_schedules.pdf
+nudgeline_quarterly_business_review_q2_2026.pptx
+finance_value_of_a_30_day_cure.eml
+Final recommendation
+Renew. Over each state's first six months live, text-to-pay lifted the 30-day cure rate by 3.0 points in the seven states, above the 2.0-point line. Six states clear 2.0 on their own (Ohio, Indiana, Kentucky, Michigan, Pennsylvania, West Virginia); Tennessee does not (1.4). The lift represents 2,374 extra cures, worth USD 368,036 at USD 155 each, for a net value of USD 124,016 after USD 244,020 of fees. The August MIS pack does not measure the lift.
+
+Step-by-step solution
+Build entries and cures per CS-4: latest Core run per account and statement date, state on the statement date, the Drybrook extract read by its layout, CUR and C as cures, calendar month of the statement date.
+Fix the estimand: seven states, months 0 to 5 from the first full month after texts were first sent; every entry counts, consented or not.
+Decide which state-months are unaffected: Missouri, Iowa and Maryland in every month, and the floor states before April 2025. The waiting floor states carry the program's freed collector time and are affected.
+Fit a state level and a month level by entry-weighted least squares on the 231 unaffected state-months and predict the 42 treated state-months.
+Compute the lift as actual minus expected, pooled over entries: 3.0 (3.0164); by state 3.6, 3.8, 2.6, 1.4, 3.2, 2.6, 4.0; by month 2.0 to 3.7.
+Count extra cures: 36,457 against 34,083 expected, 2,374. Value them at USD 155 (USD 368,036) less USD 3.10 on 78,716 entries (USD 244,020): net USD 124,016.
+Read the MIS pack's program view: its live and not-live groups change membership month to month and differ in level before texts, so it does not back the call either way.
+Write the memo, the workbook and the monthly lift chart.
+Where the runs went wrong
+Self-confirming check. One run verified that its regression matched the form CS-4 prescribes and checked confounders that do not move the answer (product mix, the Kentucky pause), but never tested which state-months the program "has not affected". It concluded a 1.5-point lift (1.54) and a net loss of USD 55,988, with Michigan at 1.997 unrounded.
+Dismissed own evidence. Another run saw its lift fall from 1.54 to 0.62 when it changed controls and named the right hypothesis, spillover into Illinois and Wisconsin. It then settled an empirical question by re-reading the standard, and its hours check looked for a break in total hours rather than hours per account before and after launch. Do not renew, net minus USD 55,905.
+Method shortcut. A run that framed the task as a standard difference in differences took every not-yet-live state-month as untreated. All its checks compared outputs with its own pipeline, so they confirmed arithmetic but not design; it reported 1.5 points and minus USD 55,988, even while correctly judging that the MIS view does not measure the lift.
+Self-confirming check. A run reproduced the MIS pack's live versus not-live gaps and treated their small size as confirmation of its 1.5-point lift. It had printed the hours file, which holds floor hours and accounts by month, and moved on without computing hours per account.
+Justification
+A fair counterfactual needs state-months the program did not touch, and the floor states still waiting were touched: the collector time live states no longer needed went to them, and their cure rates rose with each wave while the agency-worked state on the same platform did not move. Excluding them gives a lift of 3.0 points, comfortably above the line and positive in every state, with a net gain after fees.
+
+Browsing worked examples. Back to the example library
+
+Previous example
+Next example

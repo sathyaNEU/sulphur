@@ -1,0 +1,49 @@
+Approve the meadowfield offer for a chain wide run at 69 incremental purchases per 1,000 Members reached
+Product Analytics
+Incrementality measurement
+hard
+Marketing & Consumer Research. The two graded runs averaged 0.46.
+
+What makes this task strong
+The comparison group is contaminated by a concurrent change: the offer card exists only on app build 7.4.0, which also broke push delivery for the whole window (delivery fell from about 96.5% of sends to about 49.6%). The 7.3 cohort is therefore the 7.4 cohort without the offer and without the push outage, so the raw cohort contrast nets the two effects against each other.
+It takes a chain of dependent inferences: fix cohorts by build from the 1 March device registry and confirm they were level before the window (11.2 offered-line purchases per 100 in each); size the release effect on lines not on offer; choose members the card could not reach for that calibration; carry the effect as a ratio rather than a difference; then build the counterfactual and scale to members reached.
+The calibration population is a real judgment: reached members bought more of everything during the window (lines not on offer up 7.7% against 0.5% for 7.3 Home openers), so calibrating on all cohort members measures a ratio of 0.958 instead of 0.813. Members with no Home screen session in either cohort are the only group the card never touched.
+The functional form is justified from the data: the clean calibration returns the same ratio on lines whose base rates differ five-fold (0.813 on all lines not on offer, 0.813 on Meadowfield cat food, 0.801 on other dog food), so the release effect is proportional.
+It is not rule application: the guidelines define incremental purchases against the window "as it actually was" and set the 40 and 25 bands, but say nothing about cohorts, the outage or calibration.
+The shallow path is a careful cohort comparison: 6,784 against 6,465 purchases, 10 per 1,000 reached, which closes the offer.
+Prompt
+Stakeholder ask
+We ran a 20% off offer on Meadowfield dog food in the Rewards app from March 2 to April 12, and marketing wants to run it again for everyone in the autumn. I have to review it under our Offer Evaluation Guidelines (version 3) and tell the Trading Committee what we should do with it. Everything is attached. Can you go through it and tell me which outcome the guidelines give?
+
+I need the write up in meadowfield_offer_review.pdf, two pages at most, laid out the way the guidelines say. Put the decision first, with the headline number, which is incremental purchases per 1,000 members reached (whole number). Then the basics: how many members we reached, how many Meadowfield dog food purchases they made while the offer was on, their purchase rate to one decimal, and how many coupons got redeemed. I also want you to spell out how you arrived at the incremental number and why you think that is the right way to measure this offer, how the result compares with the threshold in purchases, whether it clears or misses and by how much, and the incremental number for iOS and Android separately. One chart is enough.
+
+On top of that, please give me offer_review_workings.xlsx with three sheets: reach and purchases, the incremental number with the counts behind it, and the iOS versus Android split. I want to be able to rebuild every rate in the note from the counts in the workbook.
+
+Deliverables
+Every file is prescribed by name. Nothing is optional, and no single file carries the whole answer.
+
+meadowfield_offer_review.pdf
+offer_review_workings.xlsx
+Input files
+A pet retailer's loyalty offer pack: store sales lines (25 MB, local time) and web order lines (Pacific dates) for January to April, app sessions with entry screens (21 MB), the offer card event log (JSONL), the 1 March push device registry and member roster, the loyalty card crosswalk (TSV), weekly push campaign sends, the product master (XLSX), the campaign configuration (JSON), app release notes (MD), the store directory and the Offer Evaluation Guidelines v3 (PDF). A brand tracker wave, its codebook and a category share panel are distractors.
+
+Final recommendation
+Approve the Meadowfield offer for a chain wide run in the autumn. It produced 69 incremental purchases per 1,000 members reached against the threshold of 40: about 1,440 incremental purchases against the 837 required at a reach of 20,910, clearing it by about 600. Reached members made 4,796 Meadowfield dog food purchases (22.9 percent) and the coupon was applied on 2,771 sales lines. iOS 65 per 1,000 (11,734 reached), Android 73 (9,176 reached).
+
+Step-by-step solution
+Read the guidelines: incremental purchases are those that would not have happened without the offer, with everything else about the window, the app and the members as it actually was; 40 or more is a chain wide run, 25 to below 40 a retest, below 25 closed.
+Fix each member's build from the 1 March push device registry: 60,516 members on 7.4.0 and 59,484 on earlier builds. The card exists only on 7.4.0 and the staged release was held at about half of devices for the whole window.
+Build the offered line (Meadowfield brand with dog food category, 13 SKUs), join store lines through the crosswalk and web lines by account, date each channel correctly and drop purchases fully returned within fourteen days. Reach 20,910, purchases 4,796, rate 22.9 percent, redemptions 2,771.
+Compare the cohorts: level before the window (6,768 and 6,667), 6,784 against 6,465 in it, only 10 per 1,000 reached.
+Read the 7.4.1 release note and the push sends file: 7.4.0 devices got no push in the window, so the cohort contrast has to be netted of the release's own effect.
+Calibrate that effect on lines not on offer among members with no Home screen session in either cohort: 22,012 to 17,813 on 7.4.0 (39,606 members), 21,840 to 21,522 on earlier builds (38,908 members), ratio 0.813.
+Apply the ratio to the 7.3 cohort's offered-line rate: counterfactual 0.10868 times 0.813 = 0.08837 per member against an observed 0.11210, about 1,440 incremental purchases, 69 per 1,000 reached (72 calibrating on other dog food, 69 on cat food).
+Confirm there is no same-build control: every 7.4.0 Home screen session carried an impression, and the 1,214 members on 7.4.0 with only deep-link sessions are mid-purchase traffic.
+Repeat within platform, compare with the threshold and write the two-page note with one chart and the three-sheet workbook.
+Where the runs went wrong
+Method shortcut. The raw cohort contrast gives 10 per 1,000 reached and closes the offer, because the push outage cancels most of the offer effect.
+Contaminated calibration. Measuring the release effect on all cohort members gives a ratio of 0.958 and 23 per 1,000 on all lines not on offer (24 on cat food, 28 on other dog food): closed or retest. Excluding baskets with the offered line does not repair it, because the extra trips are separate transactions.
+Wrong functional form. Carrying the release effect as a rate difference from members whose base rate is about a third of Home openers' removes only a third of it and lands at 28 to 35 per 1,000, a retest.
+Selection read as effect. Reached against not reached gives 136 per 1,000 and redemptions give 133; both count purchases that would have happened anyway, and reached against 7.3 Home openers gives 20 because the push loss sits on one side only.
+Justification
+The guidelines' counterfactual keeps the app as it actually was, including the push outage, so the earlier-build cohort has to be adjusted for the outage before it can stand in for 7.4.0 members without the offer. The outage's size can only be read cleanly from members the card never reached, and it behaves as a proportion across lines. Netted that way the offer clears the threshold under every clean calibration.

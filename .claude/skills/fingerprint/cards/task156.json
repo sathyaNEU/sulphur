@@ -1,0 +1,171 @@
+{
+  "task": "task156",
+  "architecture": "v2 (re-root in batch 1: a New Zealand district council's wastewater pump station, whether a subdivision can connect in 2027 within the station's consented overflows, the infiltration each storm and each dry day drives read from the length of sewer below the water table)",
+  "drawn": "2026-10-31",
+  "slot_note": "re-root of task156 in the same objective (Forecasting), batch 1; architecture 1 in lineage",
+  "domain": "physical-environmental-sciences",
+  "subdomain": "hydrology-flood-frequency",
+  "client_domain": "physical-environmental-sciences",
+  "niche": "a district council's wastewater pump station whose discharge consent caps its average wet-weather overflows a year, a subdivision asking to connect in 2027 ahead of the station's storage upgrade, the infiltration a storm and a dry day drive read per kilometre of sewer lying below the water table",
+  "objective": "forecasting",
+  "shape": "other",
+  "decision_type": "go_hold_or_stop",
+  "answer_unit": "named_option",
+  "answer": "Hold the Ngaio Road connection until the PS03 storage upgrade is commissioned: replayed through 2004 to 2023 each day as it occurred, PS03 overflows about 3 times a year with the subdivision (3.20) against the consent's limit of 2, 3 without it and 1 after the upgrade",
+  "answer_source": "submission.md block 1; generator/figures.json (call)",
+  "gap": [
+    "population",
+    "time"
+  ],
+  "pattern": [
+    "none"
+  ],
+  "generators": [
+    "G14",
+    "G16",
+    "G13"
+  ],
+  "gate_g": "forecasting",
+  "calibration_form": "realised_outcome_roster",
+  "stump_strategy": "forecast_method_backtest",
+  "decisive_rule_filed": false,
+  "official_decoy": false,
+  "validated_decoy": false,
+  "context_artifact": "monitoring_export",
+  "stump_class": "analytical",
+  "analyst_test": "A strong analyst who reads every file and rule correctly separates the dry-weather flow, fits the station's rainfall-derived infiltration and inflow as one unit-hydrograph response per millimetre of rain on the 2024 to 2026 storms (one set per season if they look for seasonality), carries the meter's base flow into the consent's 2004 to 2023 replay with the subdivision's flow added, and finds the station inside its consented two overflows a year, so the connection proceeds; the meter's storms fell while the water table mostly stood below the low terrace's sewers, and the replay's wet years, when it stood above most of them, overflow far more often.",
+  "domain_test": "The deciding quantity is the station's average overflows a year under the consent's continuous simulation, worked the way urban hydrology works rainfall-derived infiltration and inflow and groundwater infiltration: the infiltration a storm and a dry day drive scales with the length of sewer below the water table, read from the bore's groundwater level against the pipes' invert levels, and the model is chosen on storms it was not fitted on; with another field's nouns there is no water table, no pipe invert and no infiltration through joints, so the task stops reading the same.",
+  "layer2_family": "forecast_uncertainty",
+  "layer2_pattern": "own:submerged-length-conditioned-infiltration-chosen-out-of-sample",
+  "layer1": [
+    "utc-local",
+    "datum-mismatch",
+    "sensor-gaps",
+    "duplicate-alarm-events",
+    "unit-mismatch",
+    "layout-change-across-years"
+  ],
+  "stakeholder_role": "the district council's three waters operations manager, whose report to the elected council recommends whether the subdivision connects in 2027 or waits for the station's storage upgrade",
+  "role_family": "capacity_planner",
+  "scoring_unit": "other",
+  "spine": {
+    "file": "pump_station_inflow_2024-2026.csv",
+    "rows": 99360,
+    "entity": "one row is the station's inflow in one 15-minute interval",
+    "grain": "station x 15 minutes",
+    "source": "constructed for task156, no real dataset"
+  },
+  "forum": "council_or_assembly",
+  "forcing_event": "other",
+  "org_family": "local_government",
+  "world": {
+    "geography": "New Zealand (a fictional river terrace town, Rauwhero, in a fictional Kahuwera region)",
+    "currency": "NZD",
+    "org_type": "district council three waters unit",
+    "invented_names": [
+      "Rauwhero District Council",
+      "Kahuwera Regional Council",
+      "Kahuwera River",
+      "Ngaio Road subdivision",
+      "Riverbank Road pump station",
+      "Kahuwera Lines"
+    ],
+    "people": [
+      "Aaliyah Beattie",
+      "Benjamin Gilbert",
+      "Anaru Boyce"
+    ]
+  },
+  "deliverables": [
+    "ps03_ngaio_road_connection_2027.xlsx",
+    "council_report_ngaio_road_2027.docx",
+    "replay_overflows_2004-2023.png"
+  ],
+  "opening_move": "question-first",
+  "question_form": "whether",
+  "driver": "The decisive quantity is how often a fixed capacity is exceeded once a steady load is added, when both the standing load and the response each driving event adds scale with how much of a fixed network lies below a fluctuating level read from a separate record, so one response and one standing load read off a short record whose level mostly stayed low understate a long record whose level often rose past most of the network.",
+  "driver_concrete": "The infiltration reaching the pump station on a dry day and in a storm scales with the length of the catchment's sewers whose inverts lie below the water table that day, read from the regional bore's level against the asset register's invert levels; the 2024 to 2026 meter ran through years when the water table mostly stood below the low terrace's sewers, while the consent's 2004 to 2023 replay holds wet years with it above most of them, so one response per millimetre and the meter's base flow carried into the replay understate the overflows the subdivision's added flow takes past the consent.",
+  "stump": "Fitting one unit-hydrograph response per millimetre and the meter's own dry weather flow on 2024 to 2026 and replaying 2004 to 2023 files about 1 overflow a year with the subdivision (0.70), inside the consent's two, and connects it; the step that lands it there is reading the station's response as fixed when its infiltration rises 4.2 L/s for every kilometre of sewer below the water table, which stood a median 0.2 km over the meter and 2.1 km over the replay.",
+  "mechanism_source": "design_note",
+  "differentiation": {
+    "task134": "task134 conditions a rebuild chance on whether an option's payoff beats the standing use, a threshold on each unit's economics; here the condition is a daily physical exposure, the length of network below a moving level, built from two records that share no key and carried by the forecast years far past the measured range.",
+    "task146": "task146 releases a pool at each period turn weighed by when within the period each unit was refused; here no pool or timing within a period enters: a dry day's and a storm's response is a fixed part plus a part proportional to a network length below a level that the replay rebuilds day by day from a separate twenty-year record.",
+    "task165": "task165 conditions an upgrade's gain on the share of each site the old level left untreated, read from each site's own record; here the units are days and storms, not sites, and the conditioning state is in no record of theirs but is constructed from a level series against fixed asset elevations.",
+    "task173": "task173 v1 conditions a comeback chance on who opened the case and their tenure, a mix of people the bench changes; here no population of agents is re-mixed: the state is a continuous physical exposure, network length under a water level, which the forecast window carries past the measured range and which only the physics of infiltration through joints extrapolates.",
+    "task130": "task130 v5 conditions an inspector's mark on how often that inspector has visited the establishment before, a judge's criterion re-read for a redrawn assignment of people to units; here no judge, mark or assignment exists: a station's physical inflow is conditioned on a constructed exposure, the length of sewer below a water level, built from a level record against asset elevations, and the forecast years are replayed hour by hour through the station's storage."
+  },
+  "lineage": [
+    {
+      "domain": "product-analytics",
+      "subdomain": "retention-cohort-lifetime-value-modeling",
+      "objective": "forecasting",
+      "shape": "other",
+      "decision_type": "quantity_figure",
+      "answer_unit": "count",
+      "gap": [
+        "population",
+        "time"
+      ],
+      "pattern": [
+        "none"
+      ],
+      "generators": [
+        "G9",
+        "G6",
+        "G16"
+      ],
+      "gate_g": "forecasting",
+      "driver": "Members of a pool leave at their own steady rates, which differ widely, so the fast leavers go first and the pool's overall leaving rate falls as its members age; while new members kept arriving the overall rate held high, and once admission stops the closed pool sheds its newest members and then slows, so carrying the open pool's rate overstates the forward losses, and because the record opens part-way through most members' lives, the rate by tenure has to count each member from when the record first sees them.",
+      "stump_strategy": "forecast_method_backtest",
+      "forum": "council_or_assembly",
+      "forcing_event": "vote_or_meeting",
+      "org_family": "software_or_platform",
+      "role_family": "operations_director",
+      "architecture": "v1 loop 3 (Millrind's 2027 paid moderation pool, nine sites behind a closing volunteer review community, the 2027 pool carried on survival by tenure)",
+      "drawn": "2026-10-17",
+      "stump": "Carrying each site's reviewer pool from September 2026 at its own lapse rate of the last two years, with no new reviewers since access became invitation-only, files 41 FTE (40 on the last twelve months' rate, 38 on the last three); the step that lands it there is reading one stop rate off a pool that was still taking in newcomers, when reviewers stop at about 9 per cent a month in their first year and under one per cent from their fourth: carried on the stop rate of each reviewer's own tenure, counted from when the roster first sees them, the 10,607 active reviewers average about 8,800 a month in 2027 and the request is 32 FTE (27 with the tenure curve read from each grant date).",
+      "fate": "spent 2026-10-31 at the batch 1 triage: loop 3 was reshipped 10-27 after the portal's FAILED_TO_STUMP on loops 1 and 2 (both responses filed the then golden), keeping the world, the prompt and the asks the portal had already solved once; re-rooted in a new world before any portal result on loop 3"
+    },
+    {
+      "architecture": "v1 (loops 1 and 2)",
+      "drawn": "2026-10-17",
+      "fate": "solved, FAILED_TO_STUMP on the portal (2026-10-27): both responses filed 35 FTE, the then golden, by building each site's capacity against its inbox at the saturated pace and carrying each pool at its own lapse rate with almost no new reviewers; the capacity framing was the strong solver's default, so loop 3 moved the decisive step to how the pool is carried",
+      "driver": "Work reaches a paid tier only when a volunteer tier falls short, and the volunteer tier's capacity shows only in the periods it fell short, since in every other period it handled everything that arrived; with almost no new volunteers arriving, each pool shrinks at a steady exit rate, so units whose records show almost nothing reaching the paid tier cross below their arrivals inside the forward window, while a share of arrivals carried forward, a trend in the paid work, or capacity read from recent throughput each misses the crossing.",
+      "driver_concrete": "Every community review item at Millrind goes first to the volunteer reviewers and reaches the paid moderators only if no volunteer has reviewed it 72 hours after it entered the inbox; volunteers review at their own pace when the inbox is full and below it when it runs dry, so their pace shows only in months when items were routed (most sites in 2022, Security, Embedded & Hardware and Scientific Computing since 2025), and since almost no member has been granted review access after autumn 2024 every site's pool shrinks by about two per cent a month, which takes Data & ML, Databases, Infrastructure & DevOps and Game Development, with almost nothing routed since January 2024, below their 2027 inbox arrivals.",
+      "stump": "Carrying each site's paid queue hours per question over the last twelve months onto the 2027 question plan files a request of 23 FTE (25 to 28 with each site's routed share or its monthly paid hours trended forward), inside finance's 26-FTE envelope; the step that lands it there is treating routed items as a share of arrivals, when they are the arrivals each site's shrinking reviewer pool cannot review at the pace reviewers keep when the inbox is full, which puts four sites that have routed almost nothing since January 2024 short of their 2027 inbox and files 35 (31 with the pool trended over the platform's whole record, 53 with the pace read from 2026 throughput).",
+      "gate_g": "binding_constraint",
+      "gap": [
+        "time",
+        "population"
+      ],
+      "pattern": [
+        "none"
+      ],
+      "generators": [
+        "G5",
+        "G13",
+        "G16"
+      ],
+      "decision_type": "quantity_figure",
+      "stump_strategy": "binding_constraint",
+      "layer2_family": "allocation_constraints",
+      "layer2_pattern": "own:volunteer-review-capacity-projected-from-reviewer-retention-against-inbox-arrivals"
+    }
+  ],
+  "lineage_shells": [
+    {
+      "question form": "how-many",
+      "second-sentence opener": "put",
+      "rounding opener": "give",
+      "deliverable set": "pptx+xlsx"
+    }
+  ],
+  "notes": "forcing_event other: the developer's request, under the subdivision's development agreement, to connect stage 1 from March 2027, which consent condition 8 makes the council assess before it accepts the connection. Redrawn in place on 2026-10-31 after the window moved under the registered card (task191 re-registered after this draw, task250's role family changed): vote_or_meeting met task306 and operations_director met task250; capacity_planner is the honester label for an assessment of a station's capacity for growth.",
+  "registered": "2026-10-31T18:27:04Z",
+  "shell": {
+    "question form": "whether",
+    "second-sentence opener": "the",
+    "rounding opener": "overflows",
+    "deliverable set": "docx+png+xlsx"
+  }
+}

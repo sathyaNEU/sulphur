@@ -1,0 +1,80 @@
+Examples
+These five worked examples are accepted submissions, each built to the current task contract: one deterministic recommendation, one to three prescribed deliverables that prioritize a visual where it helps, and multi-dimensional, hard supplementary asks. Their difficulty comes from the prompt shape rather than a long ask list, which is where the 25-plus rubric criteria are drawn from. Use them to study reasoning, deliverable shape, and validation patterns, not as templates.
+
+One published library across domains
+Every example below is labelled with the domain it was actually published in, and none has been relabelled. Forecasting and predictive modeling is encouraged wherever the data supports it. The seven domains you can build in, and their secondary domains, are on Domains.
+
+Reference, not a template
+These are real accepted tasks shown in full, including their golden deliverables and their model scores. Do not reuse a prompt, dataset, or answer path. Build your own domain facts and your own input pack.
+
+Browse the library
+Search first, then narrow by domain. More filters opens the rest: Axis 1 objective, reasoning phase, decision pattern, trap family, difficulty, evidence format, and required output. Every card links to the full build, where the recommendation, the golden files, and the model scores sit behind a single reveal so you can attempt the reasoning first.
+
+Read every example against the current task contract: one deterministic main recommendation, the supplementary asks the prompt names, and every prescribed output file produced by name. Each page opens with a Task contract panel showing the recommendation, the supplementary count and buckets, the deliverables, the golden file, and the rubric weight split. The input packs are listed by filename so you can see the file bar these tasks cleared; the inputs themselves are not hosted.
+
+Search examples
+Search by title, summary, or trap id
+Domain
+Product Analytics (9)
+Quantitative Finance and Trading (2)
+Machine Learning Research (10)
+Biomedical and Health Sciences (2)
+Economics and Quantitative Social Science (10)
+Engineering and Physical Sciences (4)
+Other (12)
+More filters
+
+Domain: Product Analytics
+×
+Remove filter
+Clear all
+Showing 1 to 9 of 9 examples
+
+Re-run XP-61: a +1.33% basket lift at free delivery from $25 is neither Launch nor Stop
+hardest
+
+Re-run XP-61. On the launched free delivery from $25 basis the rail lifts average basket value +1.33% ($43.04 vs $43.61, 95% CI +0.19% to +2.46%): below the +2.0% minimum worthwhile effect, upper end above it.
+
+Put the engineering quarter into answering capacity, not onboarding or acquisition
+hardest
+
+Put the quarter into answering capacity: answers per question fell from 0.998 to 0.780 and the censoring-safe 7-day answered share from 0.62 to 0.48; 62.8% of the retention drop is composition and never-posting is back to 85.9%.
+
+Deploy BG/BB for one-day and BG/NBD for repeat customers on 1 November 2011
+hardest
+
+Deploy daily BG/BB for one-day and BG/NBD for repeat customers: mean joint NLL 27.263773 vs 27.289558 for the runner-up; November week means 288.724 and 288.145, covariance 6.427, 14-day mean 576.869 (537 to 617).
+
+Commit USD 6,749,000 of leverage by placing all 24 coaching engagements with pipeline holders
+hardest
+
+Commit USD 6,749,000 (24 engagements x USD 281,218, all to pipeline holders), clearing the USD 6,000,000 target; 0.97 per grant dollar, 90% interval USD 5.7M to 7.8M; the finance basis of USD 20,555,000 overstates.
+
+No-Go on the mandatory Save for Later tutorial: the causal lift interval of -14.7 to +17.0 points includes zero
+hardest
+
+No-Go: forcing the click lifts 90-day retention +1.4 pp (bootstrap 95% CI -14.7 to +17.0) from the EMEA instrument (F = 178.6), so the lower bound fails the rule; fund a test of about 9,800 users per arm.
+
+Fund Product Academy for every field rep from July
+hardest
+
+Fund Product Academy: it added about $3.9M to company sales in 2025 (95% range 3.4 to 4.6), against $2.2M for Quote Desk, $1.1M for Site Stock and $0.5M for Stretch Commission, once sales moved inside the company are netted out.
+
+Activate the additional 600-case staffing block for the October intake
+hardest
+
+Activate the 600-case block: the October intake is expected to produce 2,015 additional withdrawal cases in days 29 to 84 (2,014.53 unrounded), 214.53 above the 1,800 reserve, bringing capacity to 2,400.
+
+Fix the approval-gated connection stall in three scoped parts and keep the listing, setup and enablement plan as they are
+standard
+
+Fix the Connect v3 approval stall in three scoped parts: restore the legacy token connection for the 9.7 percent of approval-gated trials where it is still permitted, issue quill push service tokens to the 71.0 percent on Forgeline...
+
+M8
+Open a purchase-funnel incident for July 26, 2015 at view-to-cart (1.40% vs 2.11% same-weekday benchmark)
+hardest
+
+Open an incident for July 26, 2015 at view-to-cart: 244 of 17,489 viewers (1.40%) vs a 2.11% Sunday benchmark, confirmed after depth and category adjustment; the August 6 cart-to-purchase drop is weaker.
+
+Previous
+Next

@@ -1,0 +1,339 @@
+Build a rigorous analytical task with one defensible answer.
+You write analytical tasks that stump frontier models: a precise decision over messy, multi-source real files, with one deterministic answer.
+
+Welcome
+Welcome to Project Sulfur! Your task is to write a realistic analytical task: a request from a stakeholder who has to make one decision, built on real, messy files that point to one defensible answer. You write the prompt, gather the input files, and prepare the golden output that answers it.
+
+Your goal
+Write a task that is hard enough that the average of the two model runs scores below 60% against the rubric, and the runs lose for a genuine analytical reason. The difficulty has to come from deep reasoning: a chain of dependent inferences that includes a real statistical or modeling judgment. It can never come from a planted defect, a field read one particular way, or a procedure the files already spell out. Every task ends in one deterministic recommendation that careful analysts would all reach from the files.
+
+Domains
+You are assigned one of 21 domains. Your task has to need that field's own reasoning, not just carry its labels.
+
+
+Show the domains
+Analytical objectives
+Each task is built around one primary analytical objective, the kind of work the decision calls for. Forecasting and predictive modeling are especially welcome wherever the data supports a deterministic answer. Whatever the objective, the deciding step is an analytical judgment, never cleaning the data or reading a definition.
+
+
+Show the analytical objectives
+Where to go next
+Work through the pages in the same order as the menu.
+
+Latest updates: what changed in the current version of the task.
+Program details: compensation, approval criteria, task limits, and policy.
+Key Requirements: the current task requirements.
+Office hours: drop-in help when you are stuck.
+Task walkthrough: every block of the task, in order.
+Deep reasoning: the kind of difficulty a task must rest on, and the stumps that are banned.
+Starter data kits: claim a starter data package.
+Examples: tasks that stumped the models for reasoning reasons.
+Domains: the 21 domains in seven groups.
+Then complete the learning modules.
+
+Program details
+Compensation, approval, throttles, timing, and sourcing policy for Project Sulfur. The authoring guidance lives in the handbook; this page holds the program rules.
+
+On this page
+
+How long this takes
+Compensation
+Approval criteria
+Throttles and promotions
+How long this takes
+How long this takes
+Roughly seven hours the first time, around five after that
+Most fellows spend about seven hours on their first task, because you are learning the shape of the work at the same time as doing it. Later tasks often land near five hours once sourcing and validation become familiar.
+These are estimates, not deadlines and not performance thresholds. Taking longer or needing revisions on a submission will not cause offboarding. Revisions are a normal part of the process, and there is no limit on how many rounds a task can take.
+Compensation
+Incentive structure
+How your work is compensated
+Base pay
+Per approved task
+$800
+Once you submit a task, our team will review it. If it's approved, you'll receive the payout the following Wednesday. If it's not approved, you may get notes explaining what to fix, so you can revise and resubmit. It doesn't matter how many revisions. As long as it gets approved before the end of the project, you will be eligible for the payout.
+How it shows up in your Payments dashboard: each approved task pays a flat $800, posted the Wednesday after approval.
+Approval criteria
+Approval criteria
+How your task gets approved
+Every submission is reviewed within 24-48 hours. To be approved, it has to clear all of the following.
+The two runs average below 60% against the rubric
+Two model runs are generated from your prompt, and a rubric is generated automatically from your prompt and your answer. The average of the two run scores must be below 60%; exactly 60% does not pass, and one run may score higher as long as the average is under 60%. You edit the rubric only when a criterion is clearly wrong or missing.
+The solution is deterministic
+One unambiguous conclusion that domain experts would independently agree on, with every term that could move it pinned by the prompt or forced by the data.
+The task fits its assigned domain
+The deciding step needs your assigned domain's own reasoning, not just its vocabulary. If swapping the nouns for another field leaves the task unchanged, the domain is only a backdrop.
+The runs fail for a deep-reasoning reason
+The deciding step takes three or more dependent inferences, at least one a real statistical or modeling judgment, and the runs lose on that judgment (see Deep reasoning). The task cannot be won or lost on a banned stump: rule application, data semantics, a planted defect or decoy, a replayed or flipped number, a single fact, or an unpinned ambiguity. Formatting slips, alternative wording, a broken golden, a missing file or a grader failure never count as difficulty.
+The golden solution is correct
+Every number and step must be reproducible from the prompt and the shipped input files.
+The input files clear the bar
+At least 10 real, usable files (system files such as .DS_Store do not count) in at least 2 file categories, including at least 2 large, messy files and at least 2 distractor files. Nothing LLM generated, and no file that reveals how the task was built. Cleaning the mess must never be what decides the answer.
+The output deliverables clear the bar
+The prompt asks for one deterministic main recommendation and one to three files in realistic formats, with a few hard, multi-part asks rather than a long list of easy ones. The golden solution is one ZIP with the same number of files the prompt requests, one consistent set of numbers, and nothing that looks LLM generated.
+The prompt is original
+It cannot closely resemble another fellow's task or one you have already submitted.
+Throttles and promotions
+Throttles & promotions
+How your task limit grows
+Your task limit grows as your approved work builds trust. Everyone follows the same four steps.
+Tier 1: Sulfur Batch 1
+You start here. Get your first task approved to move up.
+1 task at a time
+Tier 2: Sulfur Batch 1 Good
+Unlocked after your first approved task.
+3 tasks at a time
+Tier 3: Sulfur Batch 1 Great
+Unlocks after data quality proves to be trusted and high.
+6 tasks at a time
+Tier 4: Sulfur Batch 1 Excellent
+Unlocked after 6 approved tasks. Throttle lifted.
+Unlimited
+Consistently poor-quality submissions can move you back down a tier. Throttles and promotions rules are subject to change.
+
+Key requirements
+The current task requirements and where to find the details
+
+The requirements at a glance
+Requirement	The rule	Details
+Input files	10+ real, license-clean files in at least 2 file categories, with at least 2 messy, complicated, large files (a 10 to 20 page CSV and a 20,000+ row CSV) and at least 2 distractor files. No LLM-generated files.	Input files
+Deliverables and asks	One deterministic recommendation. One to three deliverables in formats that fit the task. No cap on asks, and each ask is hard. A visual is optional, and recommended when it makes the decision easier to understand.	Writing the prompt
+Rubric	Generated for you from your prompt and your answer. Edit it only if a criterion is clearly wrong or missing.	Writing the golden output
+Pass bar	The average of the two runs is below 60% against the rubric, and the runs fail for a genuine analytical reason.	Deep reasoning
+Not allowed as the decisive stump	Rule application (following a procedure, precedence or tie-break rule the documents spell out); data semantics (reading a field, clause or definition a particular way); a planted defect or decoy; replay or "flip the wrong number"; any single fact that would make the task routine once told. The answer must turn on the analysis itself.	Deep reasoning
+Larger, messier datasets
+The input package needs real depth:
+
+At least 10 usable files, usually 10 to 30, in at least 2 file categories. System files such as .DS_Store or __MACOSX do not count.
+At least 2 messy, complicated, large files: one CSV that runs 10 to 20 pages, and one CSV with 20,000+ rows. Both must carry realistic mess that has to be cleaned and reconciled.
+At least 2 distractor files. A distractor is not needed or used in your solution but looks like it might be useful. A completely unrelated file is not a distractor.
+Files must be real and license-clean, with source, date, and license recorded.
+Do not use obviously LLM-generated files. Tasks with clearly synthetic source documents will be rejected.
+The complete, checkable rules are on Input files.
+
+Deliverables and asks
+One to three deliverables. You are not assigned a required format family. Choose the files a real analyst would actually produce for the decision, and match the format to the work: a forecast may need a runnable script, a certification may call for a CSV, and a board decision may be best as a short memo. Do not default to analysis_report.pdf for every task.
+A visual is optional. Use one when it makes the decision easier to communicate or understand. A chart, waterfall, matrix, heatmap, or table can give the stakeholder the main read first. A table does not need to be a separate file; it can appear inside a memo, workbook, or script output.
+No cap on asks, and each one is hard. There is no target number you need to hit. Each ask should do real analytical work and be multi-dimensional: one ask can cover many rows, periods, segments, or calculations. The task still resolves to one deterministic recommendation.
+
+Show the four format families
+
+Show an example of how deliverables and asks are written
+Give the answer real structure
+A concise prompt can still ask for a rich answer. The work should come from the structure of the answer and a few demanding asks, not from a long list of simple requirements: a ranked list under a budget, a bridge between two totals, a grid of cells, a forecast across many periods. The rubric is generated from that structure, so a well-shaped answer gives the runs many places to show whether they did the analysis.
+
+The shapes below are examples, not a fixed menu. Use a different structure if it fits your data and decision better. Whatever shape you choose, the deciding step must still be an analytical judgment, not a procedure the documents spell out.
+
+Open any shape to see what it means, then read prompts for every domain on Example prompts.
+
+
+01
+Ranked list under a cap
+You rank every candidate on one score and fill the list from the top until a cap runs out. The result is the set that makes the cut, the first candidate left below the line, and the margin. The shape earns its place when building the score takes judgment, for example shrinking noisy small-sample rates or adjusting for case mix, so a simpler score reorders the list near the line.
+
+Often Anomaly Detection & Diagnostics
+Example prompts
+
+02
+Forecast across many periods
+You forecast a value for each of many periods, then commit to one level for the whole series. The result is one committed level. The hard part should be the model itself: justifying it out of sample against a naive baseline, handling immature recent periods, and carrying the forecast uncertainty into the committed level.
+
+Often Forecasting & Predictive Modeling
+Example prompts
+
+03
+Bridge between two totals
+You walk one total across to another, one reconciling item at a time, until the two sides meet: two systems, two periods, or plan against actual. The answer is the figure you adopt and the item that moves the total most. Keep the bridge analytical, such as separating a mix shift from a rate change, rather than a hunt for one planted discrepancy.
+
+Often Data Extraction & Conformation (ETL / Pipeline Build)
+Example prompts
+
+04
+Setting one dial
+You test one dial at every allowed setting and pick the lowest setting that clears a fixed bar, with the setting just below it shown falling short. The judgment lives in estimating the outcome at each setting, for example with an interval that matches the design, so the call does not rest on a single point estimate.
+
+Often Forecasting & Predictive Modeling
+Example prompts
+
+05
+Allocation to a fixed total
+You spread a fixed total across buckets so the amounts add back to the total exactly. The answer is the single parameter (a rate, a cap or a share) that makes the sum land. The estimate behind each bucket should take judgment, such as pooling across small units or projecting immature outcomes, not a formula the folder already spells out.
+
+Often Descriptive & Distribution Analysis
+Example prompts
+
+06
+Sequenced schedule under capacity
+You put items in an order that respects a capacity limit, blackout dates and one dependency. The answer is the run order with each item's finish period. Make the inputs to the schedule, such as forecast demand or durations with real variance, the part that needs analysis, so the sequencing is not a mechanical rule.
+
+Often Forecasting & Predictive Modeling
+Example prompts
+
+07
+Grid of cells
+You fill a grid of rows against columns, like segments against options, with one measured value in each cell. The answer is the best pick for each row or the one column you adopt everywhere. The grid works when the cells disagree for a reason the analyst has to explain, such as subgroups responding in opposite directions that a pooled figure hides.
+
+Often Experiment & Causal Analysis
+Example prompts
+
+08
+Rule replayed on history
+You replay a decided rule across every period of a labeled history to see how it would have done, then size what it frees up for the coming year. A replay on its own is banned as the deciding stump. It works only when an independent second analytical step, such as projecting the coming year out of sample or separating real change from drift in the history, is what flips the answer.
+
+Often Experiment & Causal Analysis
+Example prompts
+
+09
+Funnel or chain of stages
+You follow an ordered chain of stages, each with its starting volume, pass-through rate and unit cost. The answer is the one stage where a fixed budget buys the most finished output. The depth comes from estimating each stage's response honestly, for example separating selection from a real effect, and carrying it through the chain.
+
+Often Root-Cause Analysis
+Example prompts
+
+10
+Scorecard against thresholds
+You compute several metrics for each segment and compare each against a threshold to reach one go or no-go. If the folder already spells out every metric and the pass-fail test, the task is rule application, which is banned. Use this shape when the hard part is estimating the metrics, for example with uncertainty matched to the design, so the comparison needs judgment.
+
+Often Descriptive & Distribution Analysis
+Example prompts
+
+11
+Before and after with a control
+You measure each treated unit's change against matched comparison units, after checking that the comparison group tracked it beforehand. The answer is the keep, extend or revert call. This shape suits deep reasoning well: choosing an uncontaminated comparison group, testing pre-trends, and matching the uncertainty to how units were assigned.
+
+Often Experiment & Causal Analysis
+Example prompts
+
+12
+Drill-down to one leaf
+You break one overall movement down level by level, separating a shift in mix from a real change in rate before ranking any branch. The answer is the single leaf the drill lands on and the team that owns it. It turns on composition versus behavior, and on whether a leaf's movement is beyond normal noise.
+
+Often Root-Cause Analysis
+Example prompts
+
+13
+Scenarios and the flip point
+You score one A-or-B decision across a grid of two crossed uncertainties and find the input levels where the base case flips. The answer is the committed choice. The judgment is in estimating the base inputs and their plausible ranges from the data, not in a range someone hands you.
+
+Often Forecasting & Predictive Modeling
+Example prompts
+
+14
+Cuts of a distribution
+You cut one weighted distribution at several percentiles across a few segments. The answer is the set of band boundaries that meets the committed coverage. It needs judgment when weights, tails or censoring change where the cuts fall, not when the folder dictates every scaling and rounding step.
+
+Often Descriptive & Distribution Analysis
+Example prompts
+
+15
+Fields conformed to one schema
+You map many source columns into one target schema and adopt an entity-matching rule as the key. Conforming data is realism work, never the deciding stump. Use this shape only when the conformed data then feeds an analytical judgment that decides the answer, such as an estimate whose uncertainty depends on match quality.
+
+Often Data Extraction & Conformation (ETL / Pipeline Build)
+Example prompts
+
+16
+Indicators into one score
+You combine several indicators into one composite score behind an eligibility screen. The answer is the unit the score selects. It earns depth when the indicators need estimation, such as shrinkage for small units or an adjustment for measurement error, so a naive composite selects a different unit.
+
+Often Anomaly Detection & Diagnostics
+Example prompts
+
+17
+Periods around a change point
+You line up the periods around a suspected change, check each later period against a baseline, and find where the excess sits. The answer is the go or no-go call and the amount it unlocks. The judgment is whether the shift is real once seasonality, autocorrelation and regression to the mean are accounted for.
+
+Often Anomaly Detection & Diagnostics
+Example prompts
+
+18
+Hypotheses versus evidence
+You lay out candidate causes against lines of evidence and mark each cell as consistent or not with the figure behind it. The answer is the one cause you act on and the movement it explains. It suits separating competing explanations, such as composition versus behavior or selection versus treatment.
+
+Often Root-Cause Analysis
+Example prompts
+Pick the shape that fits your data and your decision. Real prompts from accepted examples, grouped by domain, are on Example prompts, filterable by topic and domain.
+
+The difficulty bar: The two runs average below 60%
+A task passes when the average of the two runs is below 60% against the rubric. Exactly 60% is too easy. One run can score higher as long as the average stays under. You record both scores and the average in the Reward step.
+
+Low scores are necessary, not sufficient. Reviewers read where each run first went wrong. A run that took a reasonable method that does not go far enough, stopped a chain of inference short, or set aside its own evidence is a fair stump. A run that missed one planted detail, misread a clause or misapplied a written rule is not, and the task goes back even under 60%. See Deep reasoning.
+
+
+Show how the rubric is built
+The rubric is generated from your prompt, your final recommendation, your supplementary answers and your critical components. Do not edit it unless a criterion is clearly wrong or missing.
+
+Part of the rubric	What it covers
+Recommendation and critical components	The deterministic call and the load-bearing figures it rests on. These carry the most weight.
+Supplementary questions and asks	Each hard ask you wrote. A wrong analytical path should get them wrong.
+Instruction-following	The requested files and their output shape: file present and named, the rows and columns asked for, page length. A small share of the weight.
+Not allowed: the "flip the wrong number" trap
+The difficulty has to come from honest data. The reported numbers in the task should be correct, and the challenge should come from the analysis: the comparison, the model, the uncertainty, the projection.
+
+
+Show six banned stumps and a deep version of each
+Each row shows a stump that is not allowed and a deep version in the same setting.
+
+Mechanism	Not allowed	Deep version
+Hidden subgroup	Mobile sessions secretly include background wakes; removing them reverses the result. The data were made misleading on purpose.	Mobile and desktop users respond to a feature in opposite directions. The pooled lift is near zero, and the decision depends on weighting each segment to next year's traffic mix.
+Definition swap	The ranking flips once you notice the offer is paid per seat, not per logo.	Both metrics are measured correctly, and the decision turns on whether the per-seat lift persists past the novelty period, which needs a model of how usage decays by cohort.
+Coverage gap	Half the period is hidden in a third extract; finding it changes the answer.	All data are present, but recent cohorts have not matured. The ranking holds only after projecting their outcomes from older cohorts' curves.
+Capacity rule	The top-ranked option breaks a written cap, so the answer moves to the next one that fits. Following the memo is the whole task.	The options' benefits were estimated in pilot areas chosen after a bad spell. Correcting for regression to the mean changes which option leads.
+Clock artifact	Timestamps are secretly UTC; fixing the clock removes the before-and-after change.	Timestamps are correct, but the change rolled out in waves and the not-yet-treated areas were affected by spillover, so the comparison has to drop the contaminated periods.
+Wrong denominator	One extract uses the wrong denominator; correcting it changes the winner.	Rates are correct, but whole sites were randomized. With site-level uncertainty, the apparent winner's interval crosses the bar and the call changes.
+Previous
+Next
+
+Task walkthrough
+The Project Sulfur task, block by block, in the order the blocks appear on the platform.
+
+
+Watch the video walkthrough
+Your first task
+Step 1 of 3
+
+Understand
+Learn what shape of decision counts as a valid task.
+
+Output: A chosen task type and domain.
+
+Step 2 of 3
+
+Build
+Assemble the real files, write the prompt they answer, ship the golden output, and prove models miss the answer.
+
+Output: A ZIP of real input files, a prompt, a golden output file, and a recorded model run.
+
+Step 3 of 3
+
+See examples
+Compare your task against worked examples, then submit it yourself on Handshake.
+
+Output: A task submitted on Handshake, awaiting review.
+
+The blocks in order
+Every task has the same fifteen blocks. Two model runs are generated from your prompt, a rubric is generated from your prompt and your answer, and the task passes when the average of the two runs is below 60% against that rubric, with both runs losing for a genuine analytical reason. See Deep reasoning for what that reason looks like.
+
+Set up
+
+Welcome. The goal and the bar: two runs that average below 60% and fail for analytical reasons. Pay is per approved task.
+Domain. Your assigned domain, one of 21. The deciding step must need that field's reasoning, not just its labels (Domains).
+Stumped Understanding. Confirm the number one goal: stump the models fairly, on method or analysis, never on semantics, a planted defect or a written rule.
+Write a Prompt and Upload Input Files. A natural prompt asking for one main recommendation, 1 to 3 realistic files and a few hard, multi-part asks. One ZIP with 10+ real, usable files in 2+ categories, including 2+ large messy files and 2+ distractors (Prompt, Input files).
+Model runs
+
+Model Response Generation Notice. Two responses are about to be generated and can take more than 20 minutes. Keep working on the blocks below.
+RLE Multi-Model Rollout. The two runs execute on your prompt and ZIP. Nothing to configure.
+Your answer
+
+Final Recommendation. Your one deterministic answer to the main recommendation only.
+Supplementary Questions. A numbered list answering every other ask, one number per sub-ask, describing how each requested file should look.
+Updated Critical Components. The 2 to 5 figures or facts any valid method must compute to reach the recommendation.
+Updated Step-by-Step. A short numbered path from raw files to the recommendation and supplementary answers: the method and the figure at each step (Golden output).
+Grade and submit
+
+Rubric. A rubric is generated for you. You do not edit it unless a criterion is clearly wrong or missing.
+Model responses. Read both runs against your answer and confirm they lost on judgment, not on formatting or a misread.
+Rubric Output. Review the generated criteria, then press "Run evaluation" to grade both responses.
+Reward. Record both run scores and the average. The average must be below 60%; exactly 60% does not pass.
+Golden Solution. One ZIP with your finished answer files, the same number of files the prompt requests, business-realistic and not LLM-looking.

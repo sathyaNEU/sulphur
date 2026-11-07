@@ -1,0 +1,63 @@
+Switch try first off in germany and the netherlands: Repeat use drives the cm2 fall, and switching off recovers about eur 135.5M in 12 months
+Product Analytics
+Root cause analysis
+hardest
+Product Analytics. Frontier-model runs averaged 0.26 across 8 runs (0.16 to 0.39); 1 of the 8 recommended switching Try First off, and none sized the recovery in range.
+
+What makes this task strong
+Measured difficulty: 7 of the 8 runs did not recommend switching off, and no run put the 12-month recovery from switching off in the accepted range. In the readable rollouts every run matured September's open returns correctly, so the first trap did not decide anything.
+The deciding step is separating composition from behavior. CM2 at each Try First use count is steady from month to month while the order mix shifts toward habitual users: EUR 31.68 per order on a first use, EUR 6.84 on the fifth and EUR -10.67 from the tenth, and by September 56% of Try First orders were a fourth or later use (March: 1%). The cause is repeat use, not basket shape, markdowns or label rates.
+A long dependent chain: (1) project open returns to maturity with separate Try First and pay-now development curves (September is EUR 17.71, not the reported EUR 26.37); (2) carry each customer's use count across the 1 July system migration and break CM2 down by use count; (3) rule out the basket rule as sufficient, since at the same use count single-size returns rise from about 31% to 50% and B or C grades from 14% to 38%; (4) measure Try First's order lift from eligible versus Lumio-declined customers (about 2.5%, 90% interval -1.2% to +6.6%) instead of assuming an order loss; (5) run every customer forward 12 months from their current use count, since about 43% of future Try First orders are tenth-or-later uses.
+Not a surface stump: the planted defect (the order system restarting each customer's Try First count on 1 July) decided nothing, because no run built per-customer use counts at all. The runs chose a plausible but shallower explanation, and the one run with the right action shows that fixing one link does not repair the chain.
+The shallow path passes its own checks: bracketing is real (multi-size baskets do return more), so segmenting by basket shape gives a clean margin gradient that points at a one-size-per-style rule, and sizing every option on today's order mix with an assumed order loss produces a self-consistent ranking with the basket rule on top.
+Prompt
+Stakeholder ask
+I manage Hallbeck's trade for their web and app business in Germany and the Netherlands. The CM2 (contribution margin after returns) per order has been dropping since spring: FP&A reports €26.89 in March, €17.11 in August. The last figure is €26.37 in September, which merchandising reads as clearing out of the summer sale. Everyone has their theories about what is causing the issue. The finance department would like us to disable the Try First option that was introduced to the customer when Lumio launched it in March. The merchandising department blames the End-of-Summer Sale and would like us to limit markdowns to 30% during the next sale. The logistics department has been blaming the new return-label rates in July and wants the carrier contract reopened. Lumio's risk department suggests restricting Try First to the customers whose return rate in 2025 does not exceed 45%. There are many other suggestions to consider. The trading committee will meet on 14 October, and I need to understand what is really causing the drop of CM2 per order and which single action will get us the biggest amount of CM2 recovered over the next year. In case there is no clear answer based on the evidence, report HOLD.
+
+Based solely on the data provided in the files, prepare a memo explaining the root cause and the proposed action, cm2_root_cause_memo.pdf, in two pages or less. Include one graph with the breakdown of the change in CM2 per order since March to September. Specify the CM2 that will be recovered as a result of the proposed action in the next 12 months in DE and NL, give a range, discuss how certain we are, and state the best alternative to your suggestion and explain whether and why it replaces your recommendation.
+
+Include a formula-driven model that shows the breakdown, the return assumptions, and the calculation of the 12-month CM2 recovery in the file cm2_root_cause_model.xlsx.
+
+Deliverables
+Every file is prescribed by name. Nothing is optional, and no single file carries the whole answer.
+
+cm2_root_cause_memo.pdf
+cm2_root_cause_model.xlsx
+Input files
+A fashion retailer's Germany and Netherlands pack: a legacy order export for the first half of 2026 and an order-management export for Q3 that follow different conventions (UTC against shop time, and a Try First count that restarts on 1 July), the returns warehouse scan log with duplicate re-scans and a CRM customer panel (CSV); a style and EAN catalog and the markdown campaign calendar (JSON); FY26 finance unit economics (XLSX); the September FP&A trading pack and the Try First launch brief and changelog (PDF); and data notes (TXT).
+
+orders_2026H1_legacy_export.csv
+orders_2026Q3_oms_export.csv
+weserport_returns_scan_log.csv
+crm_panel_customers.csv
+catalog_styles_ean.json
+markdown_campaign_calendar_2026.json
+finance_unit_economics_FY26.xlsx
+fpa_trading_pack_2026-09.pdf
+tryfirst_launch_brief_and_changelog.pdf
+data_notes.txt
+Final recommendation
+Switch Try First off in Germany and the Netherlands. The root cause is Try First repeat use; switching off recovers about EUR 135.5m of CM2 over the next 12 months (range EUR 103.7m to EUR 171.4m; DE about EUR 98.0m, NL about EUR 37.5m). The best alternative, a one-size-per-style basket rule (EUR 87.1m), does not replace it.
+
+Step-by-step solution
+Combine the legacy and order-management exports: convert legacy UTC times to shop time, drop canceled lines and carry each customer's Try First use count across the 1 July migration: 102,006 valid panel orders. Restarting the count would mislabel 74% of Q3 Try First orders.
+Match warehouse return scans to order lines through normalized order references and EAN to SKU, removing 1,874 duplicate re-scans: 120,184 returned units.
+Build separate return development curves: about 69% of pay-now returns are back within 14 days against 32% of Try First returns.
+Project open returns to maturity by use count, bracketing and category, and compute CM2 from net revenue, COGS, handling, refurbishment, write-offs, shipping, return labels and payment fees: September is EUR 17.71 per order, not EUR 26.37 (Try First units project to a 63% return rate against the 43.1% provision).
+Bridge March to September (EUR 26.97 to EUR 17.71): repeat-use mix -11.08, adoption +1.49, markdowns -2.46, FY26 cost card +0.58, category mix and other +2.20. Without the sale markdowns September is EUR 20.16, still well below March.
+Break Try First CM2 down by use count: EUR 31.68 on the first use, EUR 6.84 on the fifth and EUR -10.67 from the tenth; by September 56% of Try First orders were a fourth or later use (March: 1%).
+Compare single-size orders at the same use count: style returns rise from about 31% to 50% and B or C grades from 14% to 38%, so extra sizes explain only part of the decline.
+Model the one-size-per-style basket rule at item level: about EUR 87.1m over 12 months (EUR 71.5m to EUR 104.3m), with Try First orders still below the pay-now benchmark from the fifth use on.
+Estimate Try First's incremental demand from eligible versus Lumio-declined customers before and after launch: order-frequency lift about 2.5% (90% interval -1.2% to +6.6%), so almost all Try First orders would still be placed and paid at checkout.
+Run each eligible customer forward 12 months from their current use count and order rate: about 43% of future Try First orders are tenth-or-later uses, so a flat September run rate understates the loss.
+Value every option the same way: switch-off EUR 135.5m (EUR 103.7m to EUR 171.4m; DE EUR 98.0m, NL EUR 37.5m), basket rule EUR 87.1m, 45% eligibility rule EUR 36.7m, markdown cap EUR 2.8m before volume loss, label rates EUR 2.2m.
+Stress test lift, repeat uptake and order rates: switch-off leads the basket rule in all 27 cases, by EUR 32.2m to EUR 67.1m.
+Where the runs went wrong
+Method shortcut. One run correctly found September overstated (EUR 20.02 against the reported 26.37) and cleared the sale and label rates, then explained the fall through bracketing without ever building a per-customer use count. It valued switch-off with a flat recent gap of EUR 6.75 per order and a tested 10% order loss, about EUR 42.6m at best, and recommended the basket rule at EUR 31m to EUR 48m.
+Dismissed own evidence. Another run wrote that the problem was still growing ("trend is +4pp styles/month, so stable understates") and held the September mix flat anyway. It sized switch-off on a "realistic 15% abandon" rate it never measured, a central EUR 22m, and recommended the basket rule at EUR 60m to 80m.
+Method shortcut. A third run compared multi-size and single-size Try First baskets, concluded extra sizes were the problem, and sized options as fixed per-order savings times current annual volumes, so a habit that keeps worsening could not show up. Its switch-off base case was EUR 33.5m, about a quarter of the reference.
+Unfinished chain. The one run with the right action got there by checking order rates and finding conversion to paid checkout essentially one to one, close to the reference's 2.5% lift. It still framed the cause as bracketing, measured margin by basket shape rather than use count, and held the order mix flat, so it sized the recovery at EUR 38.6m, about a third of EUR 135.5m, and named the 45% return-rate restriction as the best alternative.
+Justification
+CM2 at each Try First use count is steady month to month while the order mix moves toward habitual users, which pins the cause on repeat use rather than markdowns (a finished sale) or label rates (more than offset by cheaper handling). Switching off acts on the whole habit at the cost of only about 2.5% of orders, while the basket rule and the eligibility screen leave the habit in place. Confidence is high in the cause and the choice of action and moderate in the size of the recovery, which rests on forward uptake and order rates.
+
+Browsing worked examples. Back to the example library

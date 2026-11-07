@@ -1,0 +1,128 @@
+{
+  "task": "task146",
+  "architecture": "v3 (re-root 2026-11-01: Hvidore Biologics' phase 3 dose for its anti-IL-23 antibody in plaque psoriasis, each candidate dose's expected week-16 PASI 75 response in the phase 3 population, carried from the phase 2b trial through the antibody's exposure, whose clearance rises with body weight)",
+  "drawn": "2026-11-01",
+  "slot_note": "third root of task146 (batch 1 re-root, 2026-11-01): v1's claims-week refiling call retired by the batch audit; v2's structural hedge spent on paper by the rule-application lines of 19c4263b and 273af233; a new client domain (biomedical-clinical-research), task type, world and dataset under the same objective, the decisive step an estimate no shipped source lists",
+  "domain": "biomedical-clinical-research",
+  "client_domain": "biomedical-clinical-research",
+  "subdomain": "dose-response-pk-pd-modeling",
+  "niche": "a Copenhagen biotech choosing the dose its anti-IL-23 antibody takes into phase 3 in plaque psoriasis, by each candidate dose's expected week-16 PASI 75 response in the phase 3 population, which is recruited in North America and weighs more than the Nordic phase 2b population the dose-response was measured on, while the antibody's clearance rises with body weight",
+  "objective": "forecasting",
+  "shape": "13",
+  "decision_type": "pick_one_of_n",
+  "answer_unit": "named_option",
+  "answer": "200 mg: the expected week-16 PASI 75 in the VELA-3 population is 39.3 at 50 mg, 63.7 at 100 mg and 82.8 at 200 mg, so 200 mg is the lowest dose at or above 70 per cent; the VELA-2 arms (46.0, 81.0, 85.0) would have filed 100 mg",
+  "answer_source": "task146/generator/figures.json",
+  "gap": [
+    "population"
+  ],
+  "pattern": [
+    "none"
+  ],
+  "generators": [
+    "G16",
+    "G17"
+  ],
+  "gate_g": "forecasting",
+  "calibration_form": "none",
+  "stump_strategy": "other",
+  "decisive_rule_filed": false,
+  "official_decoy": false,
+  "validated_decoy": false,
+  "context_artifact": "planning_thread",
+  "stump_class": "analytical",
+  "analyst_test": "A strong analyst who conforms the phase 2b data (the central laboratory's concentrations in micrograms per litre against the Lund site's in nanograms per millilitre, the samples below the limit of quantification, the visit windows, the patients who took rescue treatment counted as non-responders under the SAP) and reads the clinical development plan's dose rule correctly takes each arm's week-16 PASI 75 rate, or the Emax curve fitted on dose, the field's dose-response method, and files 100 mg, whose arm cleared the 70 per cent bar in phase 2b; the call is wrong because the phase 3 population weighs more and the antibody's clearance rises with body weight, so at 100 mg its patients run lower trough concentrations and, response following exposure, only 200 mg clears 70 per cent there.",
+  "domain_test": "The deciding quantity is the expected PASI 75 response of a dose in a target population, worked the way clinical pharmacology works a dose choice: a population model of exposure on body weight fitted to the trough concentrations, an exposure-response model fitted to the responses, and the target population's weights carried through both; put into another field's nouns (a school's pupils, a retailer's stores) there is no clearance, no trough concentration and no dose, and the quantity stops making sense.",
+  "layer2_family": "estimand_identification",
+  "layer2_pattern": "own:exposure transport across a covariate shift",
+  "layer1": [
+    "trough concentrations in micrograms per mL from the central laboratory and in nanograms per mL from the Lund site laboratory",
+    "samples below the lower limit of quantification written as text",
+    "PASI recorded as integers at some sites and with one decimal at others",
+    "dd.mm.yyyy dates at the Finnish and Norwegian sites",
+    "the Finnish eCRF build labelling the screening assessment Baseline and the first-dose one Day 1",
+    "first doses a few days after randomisation at the Norwegian sites",
+    "diary entries in UTC, after-midnight entries belonging to the evening before",
+    "the diary keyed by handheld, replacements recorded only in the device log",
+    "rescue phototherapy written as NB-UVB and PUVA",
+    "US candidates' weights in pounds"
+  ],
+  "stakeholder_role": "the HB-231 programme lead",
+  "role_family": "programme_officer",
+  "scoring_unit": "other",
+  "spine": {
+    "file": "hb231_epro_daily_diary.csv",
+    "rows": 51900,
+    "entity": "one patient's daily itch and sleep entry",
+    "grain": "patient x day",
+    "source": "synthetic"
+  },
+  "forum": "board_of_directors",
+  "forcing_event": "launch_or_rollout",
+  "org_family": "other",
+  "world": {
+    "geography": "Denmark and Sweden (the phase 2b sites) and North America (the phase 3 sites)",
+    "currency": "EUR",
+    "org_type": "a clinical-stage biotech developing a monoclonal antibody",
+    "invented_names": [
+      "Hvidore Biologics",
+      "HB-231",
+      "VELA-2"
+    ],
+    "people": [
+      "Helle Carlsen",
+      "Villads Kjær",
+      "Bodil Lauritsen"
+    ]
+  },
+  "deliverables": [
+    "hb231_phase3_dose_recommendation.docx",
+    "hb231_phase2b_tables.csv"
+  ],
+  "opening_move": "question-first",
+  "question_form": "what",
+  "driver": "A response measured at each level of an input in one population is carried to a second population in which every unit takes up less of the same input, because uptake falls with a property the second population carries more of; the response follows the uptake rather than the input level, so the level that cleared a bar in the first population falls short in the second, and only a model of uptake on that property, fitted where uptake was measured, joined to a model of response on uptake, carries the response across.",
+  "driver_concrete": "The antibody's clearance rises with body weight, so the heavier phase 3 patients run lower trough concentrations at each dose; PASI 75 response follows the trough concentration, so the 100 mg dose that cleared 70 per cent in the Nordic phase 2b falls short of it in the North American phase 3 population and only 200 mg clears it.",
+  "stump": "A competent solver reads the phase 2b dose-response, the arms' week-16 PASI 75 rates or an Emax curve fitted on dose, and takes 100 mg, which cleared the 70 per cent bar in phase 2b; the phase 3 population weighs more and the antibody's clearance rises with weight, so at 100 mg its patients run lower troughs and the expected response falls under 70 per cent; carried through the weight-clearance relation and the exposure-response fitted on phase 2b, only 200 mg clears the bar.",
+  "mechanism_source": "design_note",
+  "lineage": [
+    {
+      "architecture": "v1",
+      "fate": "retired 2026-11-01 by the batch 1 audit before any portal result: designed before the survivor anatomy gate, its note carries no Actor, Link or Reflex line and precut.py fails it (no Measured by: line); the claims week's refiling pool sized region by region",
+      "driver": "A step a weekly count takes each time a calendar period turns is not a fixed seasonal share of the count: it is released by the turn from a pool the closing period built, units refused at their first attempt because their qualifying record had not caught up and admitted once the period moves. The share that comes back differs several-fold between the pool's segments and, within the segments that come back at all, falls steeply with the time from the refusal to the turn, since units refused early have mostly moved on by then, steady within each across past turns; so the step is each segment's pool weighed by when within the period each unit was refused, at the segment's own rates. When the closing period's refusals in the segments that come back most fell late in the period, the segments' pools taken whole at their average rates understate the step, and so do the pool taken whole at the pooled rate and every seasonal forecast."
+    },
+    {
+      "architecture": "v2",
+      "fate": "spent 2026-11-01 on paper at stage 2, before any reader or judge: its decisive step (following each member's money across a same-day close and open between instant-access issues) is an inclusion over a second source, which policy 7.3 files and the event log lists (a rule executed, task445 v2) and which, unfiled, leaves the account cohort as the literal reading (task468 v5); Trentmoor Building Society's structural hedge",
+      "driver": "The stable part of a stock held in containers is the money that stays, and a holder moves the money into a new container of the same kind by closing one and opening another on the same day at the same amount, so run-off measured container by container books every move as a loss and a new arrival, and only matching each closing payment to the opening it funded keeps the moved money in the stable part."
+    }
+  ],
+  "lineage_shells": [
+    {
+      "question form": "how-many",
+      "second-sentence opener": "put",
+      "rounding opener": "give",
+      "deliverable set": "docx+xlsx"
+    },
+    {
+      "question form": "how-much",
+      "second-sentence opener": "for",
+      "rounding opener": "balances",
+      "deliverable set": "pdf+xlsx"
+    }
+  ],
+  "differentiation": {
+    "task171": "task171 v5 corrects an exposure-response read on levels the response itself changed (responders lose the input more slowly), read before the response began; task146 v3's exposure-response is unconfounded and the decisive step carries it to a target population whose body weight lowers every patient's exposure at a given dose",
+    "task168": "task168 completes capped units from uncapped ones of another season; task146 v3 has no cap and nothing to complete: it moves a measured response across a covariate shift through a model of the input's uptake",
+    "task260": "task260 sets an interval that must resample both raters and items; task146 v3 sets no interval: it carries a dose's expected response to a heavier population through the exposure the dose produces there",
+    "task464": "task464 v8 inverts classification hit rates to recover a composition; task146 v3 classifies nothing: it carries a dose's response to a population whose exposure at that dose is lower"
+  },
+  "notes": "Axes redrawn at the draw-time checks on a freshly pulled tree (2026-11-01): the role family research_desk and the forum executive_team were held by task445 v3, the context artifact filed_standard and the pattern G1 by task468 v6, the pattern G6 and the forum committee_or_panel by task231 v2, and the organisation family manufacturer by task456 v2; the HB-231 programme lead carries the call to Hvidore's board, which approves the phase 3 plan, on the programme's planning thread, and a clinical-stage biotech that makes no product yet files as other.",
+  "shell": {
+    "question form": "what",
+    "second-sentence opener": "the",
+    "rounding opener": "rates",
+    "deliverable set": "docx+csv"
+  },
+  "registered": "2026-11-01T01:22:51Z"
+}

@@ -1,0 +1,40 @@
+Latest updates
+What changed in the current version of the Project Sulfur task. Read this before you build your next task.
+
+1. The bar: Two runs, average below 60%
+Two model runs are generated from your prompt. Both are graded against the rubric, and you record both scores and their average in the Reward block. The task passes when the average is below 60%.
+
+Runs at 72% and 40% average 56%: this passes, even though one run scored high.
+Runs at 60% and 60% average exactly 60%: this does not pass.
+Runs at 55% and 50% average 52.5%, but both lost on a formatting slip: this does not pass. The runs must fail for a genuine analytical reason.
+2. The rubric is generated
+The rubric is generated automatically from your prompt and your answer (final recommendation, supplementary answers, critical components and step-by-step). You do not write it. Edit it only when a criterion is clearly wrong or missing, then run the evaluation.
+
+3. Banned stumps
+None of these can be what wins or loses the task. Several of them side by side are still banned. Messy data is still required for realism, but cleaning it or reading it correctly must never decide the answer.
+
+Banned as the deciding stump
+A task decided by any of these is sent back, even when it is deterministic and correct.
+
+Rule application. The answer follows from applying a procedure the files spell out. Example: a "grant standard" lists the scoring steps and a tie-break rule, and the answer is whatever the steps produce.
+Data semantics. The answer flips on reading one field, definition or window a particular way. Example: the call turns on noticing that "active" means a purchase in the last 30 days, not a login.
+Planted defects and decoys. The answer flips once a single inserted problem is caught. Example: a week of meter readings copied from the week before, and finding the copy is what changes the ranking.
+Replay or flip-the-wrong-number. The task re-derives a published figure, or its only twist is that a stated number is wrong. Example: a memo quotes a 4.1% rate, the files give 3.6%, and spotting the gap decides the call.
+Single-fact surface stumps. One sentence of help would make the task routine. Example: telling the solver "that file is a 10% sample" is all it takes to get the right answer.
+Unpinned ambiguity is also a send-back: if two defensible readings or methods give different answers, the task is not deterministic.
+
+The test
+Suppose the solver cleans the data perfectly and reads every instruction correctly. Can it still reach the wrong answer by doing a reasonable but insufficient analysis? If yes, the stump is analytical. If no, it is one of the banned kinds.
+
+4. New: Deep reasoning and the example library
+Deep reasoning is a new page that explains what we want instead. The deciding step takes three or more dependent inferences, at least one of them a real statistical or modeling judgment the analyst has to justify from the data, and the plausible wrong answer comes from a reasonable analysis that does not go far enough. Typical examples: choosing a comparison group that a concurrent change has not contaminated, finding subgroups that respond in opposite directions when pooled, and matching the uncertainty to a design where whole schools rather than pupils were randomized.
+
+The example library has been rebuilt from tasks that stumped the models for reasoning reasons. In each one the runs cleaned the data and read the instructions correctly, often noticed the key issue, and then lost on judgment. Read two or three in or near your domain before you design your own.
+
+5. Example prompts and stumping strategies for all 21 domains
+Example prompts and Stumping strategies have been rewritten for all 21 domains, and Domains now describes, for each one, the kind of judgment that makes a task deep and what domain fit means there. Use them for direction, not as templates: two tasks built on the same pattern with the same data structure are treated as duplicates.
+
+Reminders that have not changed
+Input files: 10+ real, usable files in at least 2 file categories, including at least 2 large, messy files and at least 2 distractors. No LLM-generated files and no file that reveals how the task was built. See Input files.
+One deterministic main recommendation, 1 to 3 deliverables in realistic formats, and a golden solution ZIP with the same number of files the prompt requests.
+The prompt pins only the question, the decision, the deciding outcome or threshold and the deliverables. It never names the method, the trap or the adjustment. See Prompt.

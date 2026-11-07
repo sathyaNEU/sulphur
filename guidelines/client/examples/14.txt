@@ -1,0 +1,68 @@
+Approve lexo partners, fjala reading and shkronja online: School-clustered intervals keep zani volunteers off the tutoring list
+Other
+Randomized & quasi-experimental program evaluation
+hard
+Education & Learning Sciences. Frontier-model runs averaged 0.59 across 8 runs (0.46 to 0.76): 4 of the 8 approved the right three models, and the other 4 did not, none of them ruling Zani Volunteers out on its interval.
+
+What makes this task strong
+Measured difficulty: half the runs approved the wrong list, and no run reported the reference effects and intervals for Lexo Partners, Fjala Reading, Shkronja Online, Zani Volunteers or Libri Club within tolerance, so even the runs with the right list did not reproduce the interval work.
+The deciding step is matching uncertainty to the design. The trial allocated 84 schools, not pupils, and the data shows the clustering plainly: school-mean residuals spread far more than independent pupils allow (SD 2.42 against 1.32). Pupil-level intervals put Zani Volunteers above zero (0.21 to 2.34) and onto the list at £54.50 a mark; clustered on schools its interval is -0.57 to 3.12 and it fails.
+Dependent inferences: (1) fix the trial population as allocated, from each school's last reading-support list before allocation (1,921 pupils); (2) put the June Form B on Form A's scale by chained linear equating through the 15 common questions (a Form B 20 equals a Form A 22.40); (3) take comparison schools' spend of £86.41 per trial pupil off each model's spend; (4) cluster standard errors on the 84 allocated schools; then the standard's tests leave four qualifying models, the three cheapest per additional mark take the places, and Mesuesi Plus misses by £19.94.
+Not a surface stump: the runs cleared both planted traps, the harder June form and the comparison-spend netting, and matched the reference spend to the penny. The approval standard asks only for a 95 percent interval and states that schools were allocated; it does not spell out the variance method, so getting there is a statistical judgment, not a reading.
+The shallow path passes its own checks: the default regression interval is a correct output of the method chosen, heteroskedasticity-robust errors barely move it, and because Zani Volunteers is by far the cheapest model, keeping it in the qualifying set moves it to first place with a clean-looking cost per mark.
+Note: of the four chain steps, only the clustering decided the runs, which makes this closer to a single-insight task than the others in the set. That insight is a judgment about correlated outcomes, and the data contains the evidence for it.
+Prompt
+Stakeholder ask
+The School Improvement Service needs my recommendation for the places on the Approved Tutoring List in the current round, decided under the Tutoring Approval Standard from the reading tutoring trial. Write it up as tutoring_list_recommendation.docx, two pages at most.
+
+The paper should name the models to approve. For each of the six models, give its effect on the Reading Check in marks with its 95 percent confidence interval, its additional spend per trial pupil, its cost per additional mark, and whether it qualifies, with the reason when it doesn't. Report the comparison group's spend per trial pupil too.
+
+If more models qualify than there are places, say which one misses out and how much higher its cost per additional mark is than the last model approved.
+
+Alongside the paper, send tutoring_effects_2026.png showing every model's effect and interval against a line at zero, with the approved models picked out and each model's cost per additional mark printed beside it.
+
+Deliverables
+Every file is prescribed by name. Nothing is optional, and no single file carries the whole answer.
+
+tutoring_list_recommendation.docx
+tutoring_effects_2026.png
+Input files
+A local education authority's tutoring trial pack: the tutoring approval standard (DOCX), the round notice and the June Reading Check administration and form report (PDF), the trial allocation register, the tutoring rate schedule and an assessment center directory (XLSX), the pupil register (SQLite database), and CSVs for the autumn screen, the reading-support lists, tutoring sessions, pupil Reading Check results and a second center-level results file.
+
+tutoring_approval_standard_TAS-2026-1.docx
+approved_list_round_notice_VEA-ATL-2026-04.pdf
+y4rc_2026_administration_and_form_report.pdf
+vrtt_allocation_register.xlsx
+tutoring_rate_schedule_2025-26.xlsx
+assessment_centre_directory_2025-26.xlsx
+valbreg_pupil_register.db
+fillim_autumn_screen_2025.csv
+reading_support_lists_2025.csv
+tutoring_sessions_2025-26.csv
+y4rc_2026_pupil_results.csv
+y4mc_2026_centre_results.csv
+Final recommendation
+Approve Lexo Partners (LXP), Fjala Reading (FJL) and Shkronja Online (SKR) for the three places, at £76.40, £85.62 and £88.31 per additional mark. Mesuesi Plus (MSU) qualifies but misses the third place by £19.94 per additional mark; Zani Volunteers and Libri Club do not qualify because their intervals include zero.
+
+Step-by-step solution
+Set the decision frame from the approval standard and the round notice: six candidate models, three places, a ceiling of £120.00 per additional mark.
+Fix the trial population as allocated: each school's latest reading-support list sent before allocation (10:30 on 13 October 2025), linked to pupils through the register, with every pupil kept in their school's allocated group: 1,921 trial pupils (LXP 238, FJL 263, SKR 291, MSU 288, ZNV 265, LBR 299, comparison 277).
+Keep the latest record per candidate and link results and screens through current and earlier pupil numbers.
+Put the outcome on one scale: June pupils scored higher on the 15 common questions (10.44 against 9.57) with almost equal totals (27.15 against 27.07), so Form B is harder. Chained linear equating on all 25,538 pupils who sat maps a Form B 20 to 22.40 on Form A; Tucker, Levine and equipercentile equating give the same list.
+Take each pupil's first autumn screen as baseline: 1,840 trial pupils have both outcome and baseline.
+Estimate effects with one least-squares regression of the outcome on the baseline and six model indicators: LXP 2.70, FJL 3.51, SKR 2.38, MSU 4.11, ZNV 1.28, LBR 0.49.
+School-mean residuals spread far more than independent pupils allow (SD 2.42 against 1.32), so cluster standard errors on the 84 allocated schools: SKR 0.51 to 4.26, ZNV -0.57 to 3.12, LBR -1.45 to 2.43.
+Price Year 4 tutoring at each group's schools from 3 November 2025 to 15 May 2026 at the rate schedule: comparison schools spend £86.41 per trial pupil, so additional spend is LXP £206.26, FJL £300.36, SKR £210.29, MSU £444.49, ZNV £69.53, LBR £82.75.
+Apply the zero and ceiling tests: four models qualify; the three lowest costs per additional mark take the places (LXP £76.40, FJL £85.62, SKR £88.31) and MSU (£108.25) misses by £19.94.
+Where the runs went wrong
+Method shortcut. One run got the population, the equating and the spend netting right, then used the regression's default standard errors, treating 1,840 pupils as independent even though it had read the allocation register school by school. It approved Zani Volunteers, Lexo Partners and Fjala Reading and said Shkronja Online "marginally misses out at £1.61 per mark above Fjala Reading."
+Self-confirming check. Another run tested whether its intervals were sensitive to the standard error formula, but only swapped in heteroskedasticity-robust (HC1) errors, which still treat every pupil as independent. The intervals barely moved, it felt reassured, and it approved the same wrong list, with Shkronja Online missing by £1.67 per mark. It had counted 12 schools per group.
+Unfinished chain. A third run stated in plain words that allocation was 12 schools per group and verified every printed number against its own computation, but never connected the unit of randomization to the unit of inference. Zani Volunteers' pupil-level lower limit of 0.20 would have been -0.57 clustered; instead it took first place at £54.95 per mark.
+Unfinished chain. A fourth run worked with schools throughout (pupils per school, spend by school, groups by school) and still estimated intervals as if each pupil were an independent draw, producing the same three approvals and Shkronja Online out by £1.56.
+Justification
+The trial allocated schools, so both the population and the uncertainty have to follow the school: every listed pupil counts in the allocated group and intervals are clustered on the 84 schools, which removes Zani Volunteers. The two Reading Check forms differ in difficulty, so only equated marks compare the groups fairly, and spend has to be measured over what the comparison schools bought anyway. With all three handled, four models clear the tests and the three cheapest per additional mark take the places.
+
+Browsing worked examples. Back to the example library
+
+Previous example
+Next example

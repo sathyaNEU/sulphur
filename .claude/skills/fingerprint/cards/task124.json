@@ -1,0 +1,195 @@
+{
+ "task": "task124",
+ "architecture": "v6 (architecture 2, round 3)",
+ "drawn": "2026-10-12",
+ "slot_note": "Re-root of task124 in the same objective (Forecasting & Predictive Modeling). Architecture 1, the Texas retail electricity provider's summer firm-capacity block split (harden loops 0 to 2, carried in lineage as v1 to v3), is spent: a validated decoy the guard now blocks, two in-house solves on the default path, and two hardenings that stacked rungs above solved steps. Architecture 2 draws a new world, a new domain and a new decisive step; nothing of architecture 1's pack, prompt or asks is reused.",
+ "domain": "energy-systems-utilities",
+ "subdomain": "asset-condition-maintenance",
+ "client_domain": "energy-systems-utilities",
+ "niche": "a regional water district owned by its member municipalities, testing whether its lead service line replacement plan's annual capital finishes every zone by the federal deadline, and in which year each zone finishes, when the cost of each zone turns on how many of its unknown-material service lines prove to be lead or galvanized-requiring-replacement and every verification route and surviving tap card sits on the streets the district serviced in lead or galvanized",
+ "objective": "forecasting",
+ "shape": "06",
+ "decision_type": "schedule_or_sequence",
+ "answer_unit": "date_or_period",
+ "answer": "At $25.4 million a year from 2027 every zone in the plan is finished inside the deadline: the last, RZ-06 Wexley, is finished in programme year 2037, before 1 November 2037.",
+ "answer_source": "task124/submission.md, 1. Final Recommendation, first sentence (bold markers removed); figures in task124/generator/figures.json (call, zones), recomputed by task124/generator/verify.py from target/",
+ "gap": [
+  "population"
+ ],
+ "pattern": [
+  "none"
+ ],
+ "generators": [
+  "G6",
+  "G14",
+  "G2"
+ ],
+ "gate_g": "forecasting",
+ "calibration_form": "physical_verification",
+ "stump_strategy": "composition_mix",
+ "decisive_rule_filed": false,
+ "official_decoy": false,
+ "validated_decoy": false,
+ "context_artifact": "capacity_report",
+ "stakeholder_role": "the district's lead service line programme manager, who brings the replacement schedule to the board with the capital plan",
+ "role_family": "programme_officer",
+ "scoring_unit": "per accepted item",
+ "spine": {
+  "file": "hfrwd_service_line_inventory_20270108.csv",
+  "rows": 90652,
+  "entity": "one service line (the connection from a water main to one premise) in the authority's lead and copper inventory, with its records, its classification and the main segment it taps",
+  "grain": "service line",
+  "source": "synthetic, shaped on public lead service line inventories filed by Ohio community water systems"
+ },
+ "forum": "board_of_directors",
+ "forcing_event": "budget_or_appropriation",
+ "org_family": "cooperative_or_member_body",
+ "world": {
+  "geography": "United States, Ohio (fictional authority, city, townships and zones)",
+  "currency": "USD",
+  "org_type": "a regional water district owned by a mid-size Ohio city and two townships, serving about 88,000 service connections",
+  "invented_names": [
+   "Hollins Ford Regional Water District",
+   "Hollins Ford",
+   "Darrow Township",
+   "Kittering Township",
+   "Brannigan Excavating",
+   "Tri-County Underground",
+   "Kestrel Pipe and Utility",
+   "Orchard Ridge",
+   "Canal Street",
+   "Southgate",
+   "North Linden",
+   "Burkhart",
+   "Foundry Hill",
+   "Depot Square",
+   "Kittering Village",
+   "Millrace",
+   "Elm Park",
+   "Lakeview Terrace",
+   "Wexley",
+   "Darrow Meadows",
+   "Kittering North"
+  ],
+  "people": [
+   "Gregory Sheppard",
+   "Craig Stewart",
+   "Bethany Davidson",
+   "Seth Sullivan"
+  ]
+ },
+ "deliverables": [
+  "lslr_2027_programme.xlsx",
+  "lslr_2027_board_paper.pdf"
+ ],
+ "opening_move": "question-first",
+ "question_form": "when",
+ "driver": "An unexamined unit belongs to a group laid down together in one kind, and the surviving records of the group's other members say which kind; every sample that measured the outcome (the targeted checks, the groups examined whole, the surviving records themselves) was drawn toward the groups the records flag, so any rate taken across a whole period misstates the unexamined units, and only the rate within each kind of group and each cohort it was laid in, carried to the kinds of group and cohorts the unexamined units sit in, prices them; one rate per kind across the cohorts is refuted by the record.",
+ "driver_concrete": "Hollins Ford Regional Water District's plan carries every Lead Status Unknown service line at the share of lead or GRR expected among the district's unknown lines of its construction era; a street's services were laid when its main went in, and the tap cards on the other services of a main record its kind; the verified no-tap-card lines prove lead or GRR at 99.2, 95.0 and 60.6 per cent by era on mains whose cards read lead or galvanized (who laid the services changed with the decades) and at 1 of 1,014, 2 of 1,123 and none of 1,666 on copper or plastic mains, alike on the 316 mains renewed whole and on single-line visits, while the verified lines, the renewed mains and the surviving cards sit on lead or galvanized mains far more than the unknown lines do (74, 65 and 75 per cent before 1930 against 47), so the unknown lines carry 0.47, 0.26 and 0.01 and at $25.4 million a year the last zone finishes in 2037, not 2039 (every verification), 2040 (tap cards) or 2041 (the renewed mains); one rate per kind across the eras keeps 2037 but changes nine zones' lines.",
+ "stump": "A competent solver joins the verification log to the inventory through the migration crosswalk, keeps the verified lines with no tap card and prices each zone's unknown lines at the share found lead or GRR in each construction era, filing the last zone in 2039; the step that lands it there is carrying an era-wide rate to lines that sit on other streets, and the careful solver who takes the 316 mains verified whole (2041, with or without the lead already found taken out), the share of tap cards that read lead or galvanized (2040) or the verified lines on each unknown line's own main (2039) still misses the deadline, because every one of those samples sits on lead or galvanized mains far more often than the unknown lines; within each kind of main, read from the cards on the other services of a line's main, the share differs by era (99.2, 95.0 and 60.6 per cent on lead or galvanized mains, a few in a thousand and then none on copper ones), and carried kind by kind and era by era to the unknown lines' own mix it finishes the last zone in 2037; one rate per kind across the eras keeps the year but changes nine zones' lines.",
+ "stump_class": "analytical",
+ "analyst_test": "A strong analyst who joins the verification log through the migration crosswalk, normalises every code and keeps the no-tap-card lines files 2039 (every verification by era, a logistic on era, year and zone fitted on them, or the verified lines on each unknown line's own main); one who finds the 316 mains verified whole files 2041 (2043 under the judge's own definition of whole mains), with or without the depletion accounting, and one who takes the share of tap cards that read lead or galvanized files 2040; every one misses the deadline the share built within each kind of main and era meets, the nearest 1.95 programme years past.",
+ "domain_test": "What decides the call is a water utility's estimate of how many of its Lead Status Unknown service lines are lead or galvanized-requiring-replacement, made the way inventory practice infers an unknown service from the records of the services laid with it on the same main and the era it was laid in, and transported from verification samples drawn street by street toward lead to the unknown lines' own streets; with another field's nouns there are no mains whose services were laid together, no tap cards on the other services of a main, no change in who laid the services across the decades and no renewal or ranking that chose streets by their lead records, and the task does not read the same.",
+ "layer2_family": "estimand_identification",
+ "layer2_pattern": "own:installation-cohort-transport",
+ "layer1": [
+  "a field verification log keyed by the customer system's legacy premise number before the March 2023 GIS migration and by the GIS service line id after it, joined through the migration crosswalk with its eight-digit padding",
+  "material result codes that differ by recording route (customer system LEAD, GALV-R; district crews L, GRR; contractor forms PB, FE-R), resolved through the result code list",
+  "re-verifications of one line on separate rows, with dates in two formats either side of the migration",
+  "the county assessor's year built carried onto the inventory, zero on non-residential parcels",
+  "a contract-management completions export that repeats each change order's total on every site it covers",
+  "work orders re-closed after a restoration correction, both closings kept in the export",
+  "completion times exported in UTC against the district's local quarters",
+  "a contractor's vendor number changed by an acquisition mid-year under an unchanged contract number",
+  "property access agreements keyed by the unpadded legacy premise number before the migration and carrying the zone printed on the form when it was signed",
+  "one owner's agreement signed twice, on paper and on the customer portal, and agreements later withdrawn",
+  "portal right-of-entry forms the agreement system's nightly import refused, present only as E-SIGNED in the programme office's outreach tracker, which records no withdrawal"
+ ],
+ "mechanism_source": "design_note",
+ "differentiation": {
+  "task132": "task132 carries a wear-out hazard over a horizon and restarts it when an item is replaced; here no hazard runs: a share measured on samples drawn toward one kind of main is carried to unknown lines that sit on the other kind, and the share holds only within the kind of main the other services' tap cards record",
+  "task125": "task125 follows a recruitment protocol's selection of hard-to-reach units through a rotating panel's later waves and re-rakes a survey estimator; here nothing is recruited or rotated: a share measured on verification samples drawn toward one kind of water main is carried to unknown service lines that sit on the other kind, and it holds only within the kind of main the tap cards on the other services of the main record",
+  "task144": "task144 forecasts a cascade through a follow graph whose ratio is a per-view rate times the seeds' reach; here nothing branches or spreads: a share measured on verification samples drawn toward one kind of water main, at the rate for the era each service was laid, is carried to unknown service lines that sit mostly on the other kind"
+ },
+ "lineage": [
+  {
+   "architecture": "v1 (harden loop 0): the analogs' uncalled draw on ordinary weekdays as the decisive rung",
+   "fate": "solved by the in-house plain solver in round 1 (2026-10-10), through the credit dates beside the peak list and the programme terms' baseline; kept as rung 4 of loop 1",
+   "domain": "business-operations-analytics",
+   "objective": "forecasting",
+   "gap": [
+    "population",
+    "time"
+   ],
+   "pattern": [
+    "E"
+   ],
+   "gate_g": "forecasting",
+   "decision_type": "allocation_to_total",
+   "driver": "The newcomers' share of a capped peak is priced from the only analogs on file, and every analog's measured value at the deciding hour was held down by the organisation's own dispatch, which a unit cannot join until it has a full season of metered history; carrying the analogs' measured value files the newcomers at the held-down level, the closed record cannot object because the newcomers were never in it and the analogs stay dispatched, and only the analogs' undispatched level, read from their own records outside the dispatch windows, prices the newcomers."
+  },
+  {
+   "architecture": "v2 (harden loop 1): the analogs' uncalled draw conditioned on design-day heat, with uncalled full load (0.98) visible in the peak days' own hours around the window",
+   "fate": "solved by the in-house plain solver in round 2 (2026-10-10), by reading the members' hours ending 11-14 and 19-20 on the system-peak days themselves; the heat-conditioned construction is kept and the peak days' other hours now read pre-cool and recovery",
+   "domain": "business-operations-analytics",
+   "objective": "forecasting",
+   "gap": [
+    "population",
+    "time"
+   ],
+   "pattern": [
+    "E"
+   ],
+   "gate_g": "forecasting",
+   "decision_type": "allocation_to_total",
+   "driver": "The newcomers' share of a capped peak is priced from the only analogs on file, whose measured value at every deciding hour was held down by the organisation's own intervention, which the newcomers cannot join; the intervention's own counterfactual, an average of recent ordinary days that reproduces every settlement record, restores the analogs only to their ordinary level, and only conditioning the analogs' unintervened records on the deciding hour's own extreme condition, read from a separately joined condition file, recovers the saturated level the newcomers will run at."
+  },
+  {
+   "architecture": "v3 (harden loop 2): the analogs' uncalled draw on uncalled weekdays as hot as a closed peak, with the peak days' own hours around the window reading pre-cool and recovery",
+   "fate": "spent 2026-10-12 at the wave-1 resume, never solved: the card carried validated_decoy true (the closed replay table and the members' metered peaks reproduce every wrong rung and only the newcomers' 2027 summer breaks it), which the guard blocks outright since 2026-10-11; loops 1 and 2 each stacked a rung above a decisive step the in-house solver had walked to the golden (round 1 by the programme baseline, round 2 by the peak days' shoulder hours), which the current rules forbid, so the default path reached the golden twice and the architecture re-roots",
+   "domain": "business-operations-analytics",
+   "objective": "forecasting",
+   "gap": [
+    "population",
+    "time"
+   ],
+   "pattern": [
+    "E"
+   ],
+   "gate_g": "forecasting",
+   "decision_type": "allocation_to_total",
+   "driver": "The newcomers' share of a capped peak is priced from the only analogs on file, whose measured value at every deciding hour was held down by the organisation's own intervention, which the newcomers cannot join; on the deciding days the hours either side of the intervention show the analogs pre-loading and recovering at their own maximum, and the intervention's own counterfactual averages ordinary days, so the same-day read overshoots and the counterfactual undershoots, and only the analogs' unintervened records on days matching the deciding hour's extreme condition, read from a separately joined condition file, recover the level the newcomers will run at."
+  },
+  {
+   "architecture": "v4 (architecture 2, loop 0): the whole-segment shares as the answer",
+   "fate": "solved on the portal (2026-10-13): the top response filed 2037; the field notes announced the replaced mains' exposures and coverage separated their segments cleanly, so the decisive step ran as a work order; the author asked for a hardening loop, and loop 1 keeps the whole-segment shares as a rung and moves the decisive step to the depleted pool",
+   "domain": "energy-systems-utilities",
+   "objective": "forecasting",
+   "gap": [
+    "population"
+   ],
+   "pattern": [
+    "none"
+   ],
+   "gate_g": "forecasting",
+   "decision_type": "schedule_or_sequence",
+   "driver": "A rate measured on units that were examined because they showed signs of the outcome is carried to a population every unit of which will be examined; only the groups examined exhaustively, recognisable by complete coverage rather than by any code, give the population's rate within each visible stratum, and every pooling, stratification, reweighting or model fitted on the full set of examinations keeps the selection."
+  },
+  {
+   "architecture": "v5 (architecture 2, harden loop 1): the remainder accounting as the decisive step",
+   "fate": "superseded 2026-10-14 at round 2: the 10/10 audit (COMPLIANT_WEAK) found loop 1 had demoted the solved whole-segment step to a rung and added a step above it, the field notes still announcing the replaced mains, the call resting on one 0.2-year step, plan 4.3 and 6.1 close enough to the remainder that a literal reader reached it, a generic arithmetic and Ask B's form zone cracked by an inventory join; never on the portal",
+   "domain": "energy-systems-utilities",
+   "objective": "forecasting",
+   "gap": [
+    "population"
+   ],
+   "pattern": [
+    "none"
+   ],
+   "gate_g": "forecasting",
+   "decision_type": "schedule_or_sequence",
+   "driver": "The units still unexamined are what examinations that chose units by signs of the outcome left behind, so their rate is the population's expected count, taken from the only groups examined exhaustively, less the outcomes the examinations found, over the units left; carrying the exhaustive groups' rate itself to the unexamined units, or any rate fitted on the examinations, overstates them and moves the decision."
+  }
+ ],
+ "notes": "Architecture 2 of task124, drawn 2026-10-12 at the wave-1 resume; round 2 (2026-10-14) replaces the decisive step after the 10/10 audit: the share among the unknown lines is built within each kind of main (the class the tap cards on the other services of a main record) and carried to the unknown lines' own mix of mains; loop 0's whole-segment shares and loop 1's depleted-pool accounting are wrong rivals, not rungs of the golden. G6 decisive (the population shifted under the rate); the card is edited in place with loop 1 in lineage as v5. Round 3 (2026-10-16, realism rework after a rule 3 PASS): the share within each kind of main was exactly 13 in 14 and 1 in 19 in every cell; the record is now drawn line by line with a real era effect (who laid the services changed with the decades), one rate per kind across the eras is refuted by the record, and the verification sample is enlarged (316 mains renewed whole from 2021) so that every defensible construction within kind and era files the same figures; the decisive step is unchanged. Round 3 reshipped 2026-10-16 on the cut 8ef783ab336726f5: leak reader round 3 clean (Q1 to Q4 none, Q6 analytical, the decisive step read as the selection of the verified sample); judge DETERMINISTIC, APPROVE, every figure reproduced; submission block 1 names each rival and says it misses the deadline without a rival year (the judge's own definition of mains verified whole gave 2043 against the build's 2041)."
+}

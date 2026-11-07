@@ -1,0 +1,55 @@
+mostly learn how to write prompt from mark because we are getting good and concise prmpts from mark repo i guess which are short, sweet and crisp
+
+Writing the prompt
+A natural request with one deterministic recommendation, 1 to 3 realistic deliverables and a few hard asks, silent on method
+
+The prompt states what has to be decided and what would settle it. The input files supply the evidence. Your golden solution is the answer that evidence forces, in the files the prompt asks for. You reach this page after choosing your domain and building your input files.
+
+Part 1: The prompt contract
+Check your finished prompt against every line below. If one fails, fix the prompt before you go on.
+
+A natural request. Written in your own words, the way the request would really arrive: a forwarded message, a formal letter, a blunt question. No persona opener, no file list up front, no numbered steps, no closing list of documents. See Templated Tasks.
+One main recommendation, deterministic. Pin the business outcome and the threshold that decides it ("it stays if lifetime losses avoided exceed the margin given up", "flag a break if the change moved the rate by 0.3 points or more"). Ten domain experts working from the bundle should land on the same answer. If two defensible readings or methods give different answers, the task is not deterministic: pin the business outcome that decides between them, or build the data so it rules one out.
+Method left to the solver. Never name the method, the trap, the comparison group, the confounder, the adjustment or the file that matters, and never warn ("watch out for", "be careful", "make sure to account for"). No standard, manual or policy in the bundle that spells out the deciding calculation.
+1 to 3 realistic deliverables. A memo, a workbook, a short deck, a script, a CSV a team would load. Describe each by who uses it and what they need from it; name a file only when that is natural.
+A few hard, multi-part asks. Two or three asks that each take real analysis beat eight that each take a lookup. Every ask stays in the same data universe as the recommendation and supports it, tests it, or extends it.
+Tailored to your assigned domain. The task needs that domain's own reasoning (a reserving judgment, a causal design, a survey estimate), not just its vocabulary.
+Hard for the right reason. The models should fail by doing a reasonable analysis that does not go far enough, not by missing one hidden detail. See Deep reasoning.
+What gets sent back
+A prompt that names the method or the trap, warns the solver, rests on a written procedure, allows a hedged answer, needs outside knowledge, pulls in a separate dataset or decision, or asks for more than three files.
+
+Topic	Good	Neutral	Bad
+The threshold	"It pays for itself if it added more than $2,400 of gross margin per store-week."	"Tell me whether it was worth it." (No pinned bar, so two analysts can disagree on the answer.)	"Compute margin per the Program Evaluation Standard, section 4." (The rulebook decides, not the analysis.)
+The comparison	Not mentioned. The solver decides what the treated stores should be compared with.	"The pilot started in 14 stores in March." (A plain fact the solver needs, stated as history.)	"Compare against the control group rather than last year." (Hands over the deciding judgment.)
+The messy data	Not mentioned. Cleaning it is expected and never decides the answer.	"Not everything the regional offices forwarded will be relevant." (True, and points at nothing.)	"Strip out the beta test stores first." (Names the planted defect.)
+The deliverables	"A short memo with a chart, plus a line on whether the answer differs for the smaller-format stores."	"A memo and a spreadsheet." (Fine, but says nothing about who reads them.)	"Provide a memo that opens with the decision, a CSV with these seven columns, and a bar chart sorted high to low." (A template that describes the answer.)
+Part 2: The kinds of asks
+Each ask is either a question or a requirement about what a file must contain. Use a few, and make each one carry real analysis. Across the prompt, reach for more than one kind:
+
+Supporting. The figure the recommendation rests on, with its uncertainty. "Missed court dates avoided per hundred cases, with an honest range."
+Testing. Something that would break the recommendation if it were wrong. "Explain where your estimate departs from the annual reports and why."
+Extending. The same analysis carried somewhere the data does not hand you directly. "Would misdemeanor cases alone clear $180?" or "Would the program be worth extending to the rural districts?"
+File content. What the file must let its reader do. "A workbook the reserving team can follow from the claims data to each loss ratio."
+The rubric is generated automatically from your prompt and your answer, so every ask you write becomes something the runs are graded on. Ask for what the decision really needs, and the rubric follows from that.
+
+Part 3: A prompt that holds up
+Good
+Sales and credit risk have been going back and forth for two months about the score cutoff we tightened in March 2025. Sales says it turned away close to a third of small-business applicants and bought us nothing. Risk points to the books since then and says they're the cleanest we've had in years. Neither side has put a lifetime number on it, and that's what I'm after: a memo, and the model file behind it, that either team could check line by line. The test is whether the cutoff will avoid more in credit losses over the life of the loans than we give up in margin on the applicants it declined. If it does, it stays. If it doesn't, we go back to the old cutoff in January. I'd also like to know which industries, if any, should keep the tighter cutoff even if everyone else goes back.
+
+Bad
+Using the attached loan tape and the Credit Policy Manual, evaluate the March 2025 cutoff. First, compute 12-month default rates for each vintage. Next, apply the manual's seasoning factors to project lifetime losses, making sure to exclude the test applications flagged in column Q. Then compare to the pre-change vintages. Provide a memo, a CSV of vintages, and a chart.
+
+The good version pins one test (lifetime losses avoided against margin given up) and stops there. It never mentions vintages, seasoning, the declined applicants or the test rows. The bad version is templated (files up front, numbered steps, a document list) and also hands over the method through the manual's seasoning factors, which turns the deciding step into rule application.
+
+
+Why the good version holds up
+Part 4: Order of work
+Design the deep step first: the judgment a careful analyst would make and a reasonable but shallower analysis would miss. Build the input files so the data forces that judgment. Write the prompt last, on top of it, saying only what the person asking would really say.
+
+Then read it once more as the solver. If any sentence tells you how to do the analysis, what to exclude, or what to watch for, cut it.
+
+Check it twice
+Run the LLM Prompt Test for templating signals, then check by hand that nothing gives away the method or the trap. The test only covers the first.
+
+
+

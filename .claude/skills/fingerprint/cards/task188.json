@@ -1,0 +1,101 @@
+{
+  "task": "task188",
+  "architecture": "v1",
+  "drawn": "2026-10-13",
+  "slot_note": "Lane AD, wave 2, seed AD11. The seed's world (route-origin paging at a cloud platform) has no client task type serving Anomaly Detection, so under the 10/10 domain rule the draw keeps the seed's decision shape (one scarce engagement for one of eight candidates this week) and moves to epidemiology's surveillance task type.",
+  "domain": "epidemiology-public-health",
+  "subdomain": "disease-surveillance-outbreak-anomaly-detection",
+  "client_domain": "epidemiology-public-health",
+  "niche": "a county vector control district choosing the week's one aerial adulticide zone from CO2 and gravid trap collections and pooled RT-PCR results for West Nile virus",
+  "objective": "anomaly-detection",
+  "shape": "01",
+  "decision_type": "pick_one_of_n",
+  "answer_unit": "named_option",
+  "answer": "Westbrook, 2.3 estimated West Nile virus-infected Culex females per CO2 trap-night in week 32 (runner-up South Prairie 1.8; flip below 18 per 1,000)",
+  "answer_source": "task188/submission.md block 1; generator/figures.json call, call_figure, runner_up, runner_up_figure, flip_rate_per_1000",
+  "gap": [
+    "rule",
+    "population"
+  ],
+  "pattern": [
+    "none"
+  ],
+  "generators": [
+    "G14",
+    "G16"
+  ],
+  "gate_g": "method_or_model_selection",
+  "calibration_form": "none",
+  "stump_strategy": "composition_mix",
+  "decisive_rule_filed": false,
+  "official_decoy": false,
+  "validated_decoy": false,
+  "context_artifact": "capacity_report",
+  "stakeholder_role": "the district's operations manager, who books the week's one aerial adulticide application with the contract applicator",
+  "role_family": "field_unit_lead",
+  "scoring_unit": "index points",
+  "spine": {
+    "file": "rcvcd_surveillance_2024_2026.sqlite (tables trap_nights, catches, pools, pool_tests)",
+    "rows": 57074,
+    "entity": "one species and sex count from one trap-night at one trap site (catches)",
+    "grain": "trap site x trap-night x species x sex",
+    "source": "synthetic"
+  },
+  "forum": "operations_desk",
+  "forcing_event": "shift_or_daily_cycle",
+  "org_family": "local_government",
+  "world": {
+    "geography": "United States (North Dakota, Red River Valley: a fictional county vector control district)",
+    "currency": "USD",
+    "org_type": "county vector control district",
+    "invented_names": [
+      "Rindal County",
+      "Rindal County Vector Control District",
+      "Fjelstad",
+      "Ostby Aviation",
+      "Westbrook",
+      "South Prairie",
+      "Old Town",
+      "Riverside South",
+      "North Bottoms",
+      "Maple Ridge",
+      "Coulee Hills",
+      "Airport East"
+    ],
+    "people": [
+      "Kristine Kirby",
+      "Philip Orr",
+      "Paige Watkins",
+      "Ethan Ramirez",
+      "Kyle Blair"
+    ]
+  },
+  "deliverables": [
+    "aerial_spray_recommendation.pdf",
+    "zone_season_2026.xlsx",
+    "human_cases_by_zone.png"
+  ],
+  "opening_move": "question-first",
+  "question_form": "which",
+  "driver": "The decisive quantity is a density of affected individuals estimated from grouped tests, where reading each positive group as a single affected individual understates the rate exactly where groups are large and the rate is high, and where the rate measured on individuals sampled by one collection method is carried onto the individuals another method collects, whose members have had more exposure; only the likelihood estimate from the groups drawn from the same collection as the counts ranks the units correctly.",
+  "driver_concrete": "Each zone's infected Culex females per CO2 trap-night is its CO2 catch per trap-night times the infection among the females those CO2 traps caught, estimated by maximum likelihood from pools of up to fifty, not by counting each positive pool as one infected mosquito and not by folding in the gravid-trap pools, which hold only females that have already taken a blood meal.",
+  "stump": "The natural index, each zone's Culex females per CO2 trap-night times the minimum infection rate of all its Culex pools, names Riverside South for the aerial application, because counting one infected mosquito in every positive pool understates the infection in Westbrook's pools of fifty, where more than half are positive, and because the gravid-trap pools of the two town zones carry the infection of females that have already fed into an index of the females the CO2 traps catch.",
+  "stump_class": "analytical",
+  "analyst_test": "A strong analyst reads every field and the protocol correctly and takes the infection rate as the field states it, positive pools over mosquitoes tested, on the CO2-trap pools the question's wording points at: that files South Prairie (1.71 against Westbrook's 1.47). Taken across every pool the zone sent it files Riverside South (2.28), and the likelihood estimate across every pool files Old Town (2.98). Only the likelihood estimate on the CO2-trap pools files Westbrook.",
+  "domain_test": "The deciding quantity is the vector index estimated the way arbovirus surveillance estimates it, the infection of host-seeking Culex females by maximum likelihood from pools of varying size times their CO2-trap abundance, separated from gravid-trap females by their feeding history; with schools or megawatt-hours in place of mosquitoes there are no pools, trap-nights or blood meals, so the task stops making sense.",
+  "layer2_family": "estimation_fit",
+  "layer2_pattern": "own:pooled_test_likelihood_on_the_sampled_population",
+  "layer1": [
+    "native formats: the county laboratory's pool results as tables in a PDF report",
+    "several sources: district laboratory, county laboratory, field database, site register",
+    "imperfect keys: site codes migrated in June 2026, species codes differing between field sheet and laboratory",
+    "units and time: trap set date against collection date",
+    "genuine overlap: inconclusive pools retested with the final result in a later row",
+    "coverage: trap-nights lost to fan, CO2 and battery failures",
+    "documentation: surveillance protocol and data dictionary"
+  ],
+  "mechanism_source": "design_note",
+  "differentiation": {},
+  "lineage": [],
+  "notes": ""
+}

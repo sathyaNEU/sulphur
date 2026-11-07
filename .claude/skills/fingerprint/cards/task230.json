@@ -1,0 +1,144 @@
+{
+  "task": "task230",
+  "architecture": "v3",
+  "drawn": "2026-10-14",
+  "slot_note": "architecture 3 of task230, re-rooted at the author's request: architecture 2 (human factors, shipped 2026-10-12) sat in a task type that serves Forecasting, not Data Quality; this draw keeps the lane (Data Quality Monitoring & Alerting) and moves to Survey Research & Official Statistics, census-register-administrative-data-quality, with two analytical layers on the main call",
+  "domain": "survey-research-official-statistics",
+  "subdomain": "census-register-administrative-data-quality",
+  "client_domain": "survey-research-official-statistics",
+  "niche": "census occupation coding quality: which ISCO-08 sub-major groups carry the coding quality warning in the census's first occupation release, judged on each group's coding bias in the release, while the late follow-up returns (mostly proxy reports) are still to be coded and the autocoder's acceptance score is lowered for that last stretch",
+  "objective": "data-quality-monitoring",
+  "shape": "10",
+  "decision_type": "designation_set",
+  "answer_unit": "set_of_items",
+  "answer": "24, 25, 35, 41, 71 and 93",
+  "answer_source": "task230/submission.md block 1; golden/occupation_coding_warnings_2026.xlsx",
+  "gap": [
+    "time",
+    "population"
+  ],
+  "pattern": [
+    "none"
+  ],
+  "generators": [
+    "G14",
+    "G13",
+    "G6"
+  ],
+  "gate_g": "forecasting",
+  "calibration_form": "none",
+  "stump_strategy": "maturity_censoring",
+  "decisive_rule_filed": false,
+  "official_decoy": false,
+  "validated_decoy": false,
+  "context_artifact": "capacity_report",
+  "stakeholder_role": "the deputy registrar general for census outputs, who signs the processing plan's recode list with the head of census coding",
+  "role_family": "statistical_office_head",
+  "scoring_unit": "per certified output",
+  "spine": {
+    "file": "census2026_coding_quality_study.csv",
+    "rows": 101947,
+    "entity": "one occupation write-in selected for the coding quality study, with its production code, the autocoder's suggestion and score, and the adjudicated reference code",
+    "grain": "person write-in",
+    "source": "synthetic"
+  },
+  "forum": "executive_team",
+  "forcing_event": "statutory_or_regulatory_filing",
+  "org_family": "government_agency",
+  "world": {
+    "geography": "fictional country (Aldmere), an English-speaking island state",
+    "currency": "none in the pack",
+    "org_type": "the Office of the Registrar General, which runs the 2026 Census of Population and Housing",
+    "invented_names": [
+      "Aldmere",
+      "Office of the Registrar General of Aldmere"
+    ],
+    "people": [
+      "Timothy Taggart",
+      "Lesley Ahearne",
+      "Tracey Brien",
+      "Erica Phayre"
+    ]
+  },
+  "layer2_family": "forecast_uncertainty",
+  "layer2_pattern": "own:late-channel-coding-bias-under-a-changed-acceptance-rule",
+  "layer1": [
+    "write-ins captured three ways (typed online, ICR-recognised paper, enumerator-keyed follow-up) with their own spelling, case and abbreviation habits",
+    "questionnaire numbers in the field system against CODA document numbers, joined through the receipt register",
+    "four-digit ISCO-08 codes on the automatic path beside five-digit AOC 2026 codes on the clerical path",
+    "coding weeks (Monday to Sunday from 4 May) against calendar dates",
+    "a proxy questionnaire withdrawn when a later household-member interview replaced it",
+    "late self-responses closing follow-up cases administratively (outcome 60)"
+  ],
+  "deliverables": [
+    "occupation_coding_warnings_2026.xlsx",
+    "occupation_coding_bias_2026.png"
+  ],
+  "opening_move": "question-first",
+  "question_form": "which",
+  "driver": "The decisive quantity is a category count's net classification bias in an output whose last part is still to be processed: that part comes from a late channel whose inputs are vaguer and move items out of specific categories into default ones, and it will be processed under a looser acceptance rule than the part already checked, so the bias measured on the checked part, or carried by channel under the old rule, understates the output's bias in the categories the late channel feeds and drains.",
+  "driver_concrete": "Each sub-major group's coding bias in the release (count coded to the group against the count the adjudicated reference coding puts there) is built by response route, because the non-response follow-up's proxy write-ins ('works at the hospital', 'office', 'labourer') are coded into default groups and out of specific ones, and the remaining follow-up returns are mostly proxies; and for the returns still to be coded, records the autocoder scores from 0.80 to 0.90 will take its suggestion instead of a clerical code, so their production code is the stored suggestion, not the clerical code the quality-control sample recorded.",
+  "stump": "A competent solver estimates each sub-major group's coding bias from the coding quality study with its selection weights and takes it as the release's, warning only 35 (Information and communications technicians) and 93 (Labourers in mining, construction, manufacturing and transport); the step that lands them there is treating the coded-so-far study as the release, when the 103,367 write-ins still to code are 54 per cent follow-up proxy returns against 18 per cent of the coded follow-up ones, whose vague write-ins drain specific groups into default ones, and they will be coded with the autocoder's suggestion wherever it scores 0.80 to 0.90; built route by route on the release's own route mix under the rule in force, the release also warns 24 (Business and administration professionals), 25 (ICT professionals), 41 (General and keyboard clerks) and 71 (Building and related trades workers).",
+  "stump_class": "analytical",
+  "analyst_test": "A strong analyst who joins the coding records to the receipt register, reads the output quality standard and the processing plan correctly and estimates every group's net coding bias from the study with its selection weights, taken as the release's, warns only groups 35 and 93, the default path's answer (checks.py R3a on the clean truth).",
+  "domain_test": "The deciding quantity is each occupation group's coding bias in the census release, which census processing quality assurance estimates from independently recoded and adjudicated samples by response route, because proxy reporting in non-response follow-up yields vague write-ins that coding moves into default groups, and the bias of the release is the route-weighted bias of a workload whose late part is mostly proxy and will be coded under the processing plan's own rules; with another field's nouns there is no follow-up proxy reporting and no published census count whose bias the release carries, so the task stops making sense.",
+  "mechanism_source": "design_note",
+  "differentiation": {
+    "task131": "task131 projects a randomised tariff trial's household load response onto a design day's heat; this build carries a recoded quality sample's classification bias to the late part of a census coding workload by report route and by the processing rule in force, with no trial, load or weather.",
+    "task183": "task183 forecasts repeat failures from each part's failure history; this build estimates the net classification bias of published category counts from an adjudicated recode sample, and the late workload's route and acceptance rule decide it, not any unit's history."
+  },
+  "lineage": [
+    {
+      "architecture": "v1 (architecture 1 as hardened at loop 1 and cut for round 2; spent at hardening loop 2 of 3)",
+      "fate": "spent 2026-10-11 and re-rooted: solver rounds 1 and 2 landed the call (proxy 80.7 and 79.7), the solver holding the comparison pool to the CRM engagement segment and then to phones that can take 7.0; hardening loop 2 found on paper no rung that deepens the analysis away from the comparison pool, plants nothing and is forced to one flag set (DESIGN_NOTE.md, Hardening loop 2, on paper); the world was not kept because its organisation family (hospital_or_health_provider) repeats task181",
+      "domain": "product-analytics",
+      "subdomain": "metric-definition-measurement-science",
+      "objective": "data-quality-monitoring",
+      "decision_type": "designation_set",
+      "gap": [
+        "population",
+        "time"
+      ],
+      "pattern": [
+        "none"
+      ],
+      "generators": [
+        "G6",
+        "G17"
+      ],
+      "gate_g": "method_or_model_selection",
+      "stump_strategy": "causal_design",
+      "layer2_pattern": "own:not-yet-switched-pool-held-to-units-able-to-switch",
+      "driver": "A staggered switch reaches heavy users first and only reaches units whose equipment meets its minimum, so its effect is read against units of the same usage band that have not switched yet; but inside each band that pool fills week by week with units that never can switch, whose own seasonal trend runs harder than the switched units' would have, so a counterfactual taken within the band alone books part of their trend as the switch's doing, and only a pool held to units able to switch, inside the band, reads the switch alone, which moves units across the tolerance in both directions.",
+      "driver_concrete": "The 7.0 build swaps the analytics SDK, reaches frequent patients first through the update prompt at sign-in, and needs iOS 16 or Android 10, so the 13 per cent of patients on older phones stay on 6.8; inside every engagement segment the patients still on 6.8 in a settled week are more and more those older handsets, whose appointment, change-request, results and notification traffic climbs 10 to 21 points faster into the winter than other patients' of the same segment. Differenced within segment alone the new SDK looks to lose appointment change requests and notification opens it does not lose and to leave appointment views and test result views flat when they rise five per cent; held within segment and to phones that can take 7.0, five series break: appointment views, test result views, clinic letter views, waiting list checks and digital check-ins.",
+      "stump": "A competent solver maps each patient's handover week and carries each switched patient's reference level by the movement of patients still on 6.8 in the same CRM engagement segment, confirmed by a never-switched control and a group-rate index; inside every segment that pool fills week by week with phones below 7.0's minimum (iOS 16, Android 10), whose winter appointment, change-request, results and notification traffic climbs 10 to 21 points faster, so it flags appointment change requests (-6.0) and notification opens (-4.0) and clears appointment views (+1.0) and test result views (+0.5); held within segment and to phones that can take 7.0, the flags are appointment views, test result views, clinic letter views, waiting list checks and digital check-ins.",
+      "answer": "Flag five series in the Q4 return, appointment views, test result views, clinic letter views, waiting list checks and digital check-ins, and notify the other five as continuous."
+    },
+    {
+      "architecture": "v1 loop 0 (architecture 1 as cut for round 1, before hardening loop 1)",
+      "fate": "hardened 2026-10-11: round 1 landed the call on the solver's step 6, each switched patient's reference level carried by the week-by-week movement of patients still on 6.8 in the same CRM engagement segment, checked against never-switched patients and a group-rate index; that step is now a lower rung that completes and returns the wrong set, because inside every segment the pool still on 6.8 drifts toward phones below 7.0's minimum OS",
+      "driver": "A switch reaches heavy users first, so its effect has to be read against users who have not switched yet in the same weeks, but those users are a lighter mix whose seasonal trend runs harder than the switched users' own; taking the whole not-yet-switched pool as the counterfactual books part of the season as the switch's doing, and only a counterfactual built within each usage band, or reweighted to the switched users' band mix, reads the switch alone, which moves units across the tolerance in both directions.",
+      "layer2_pattern": "product-analytics/observational-causal-inference/1"
+    },
+    {
+      "architecture": "v2",
+      "fate": "retired 2026-10-14 at the author's request after shipping (SHIPPED 2026-10-12, pending review): the task type human-reliability-assessment serves Forecasting in the client taxonomy, not Data Quality, so the domain read as a backdrop for a DQ call; re-rooted into official statistics",
+      "domain": "human-factors-ergonomics",
+      "subdomain": "human-reliability-assessment",
+      "gap": [
+        "time",
+        "population"
+      ],
+      "pattern": [
+        "A"
+      ],
+      "gate_g": "method_or_model_selection",
+      "stump_strategy": "causal_design",
+      "decision_type": "designation_set",
+      "driver": "A unit's forward residual depends on a detection step whose hit rate is not a fixed property of the detector, the unit or the shift but falls as targets become rarer in the shared pool the detector works, so a near-clean source joining the pool lowers detection on every other unit's items and a target-rich unit leaving one pool for another raises detection there; every route that carries each unit's measured hit rate forward, stratified by unit, shift, detector or tenure, or ties detection to the unit's own target share, clears units that will breach and keeps units that will not.",
+      "stump": "A competent solver dedupes the timeout re-verifications, measures each stream's first-pass misses from the blind re-key audit, models detection on verifier, stream, field type, tenure, shift, time on shift, workload and day of week, takes the best-fitting of those models on a clean month-by-month back-test, and applies it to the November plan (the motor claims on nights, Hollings & Pryce on days, the roster moves), keeping Kessington's two streams, Northgate, Brightmoor, Harbison and the motor claims on second pass and the day streams off; the step that lands it there is treating detection as a property of the verifier, stream, shift or day when it rises and falls with the error rate of the shift's whole pool, which the plan cuts on the day queue (about 4.3 to 1.9 per cent) and raises on the night queue (about 2.5 to 5.0)."
+    }
+  ],
+  "notes": "Re-root at the author's request (2026-10-14). Org family government_agency: the census is run by a registrar general's office, not the statistics office. Built ladder: default 35, 93; the 0.80 rule on the coded-so-far mix 35, 41, 93; follow-up batches as one 24, 35, 41, 93; routes under 0.90 24, 35, 71, 93; golden 24, 25, 35, 41, 71, 93; every rung at least 0.22 points from the 2.0 line, and all 40 published biases inside their one-decimal bins under six estimator variants. Shipped 2026-10-14: judge pass 2 DETERMINISTIC, APPROVE (Gate G analytical_non_defect, Gate H pass); four isolated leak reads, questions 1 to 4 none; 121 generator checks; OQ-4 3.3 estimates both counts from the same studied write-ins (SF14).",
+  "registered": "2026-10-14T00:22:54Z"
+}

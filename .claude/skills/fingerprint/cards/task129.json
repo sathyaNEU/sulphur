@@ -1,0 +1,117 @@
+{
+  "task": "task129",
+  "architecture": "v2",
+  "drawn": "2026-10-14",
+  "slot_note": "architecture 2 of task129, re-rooted at the author's request (2026-10-14): architecture 1 sat in a house domain (business operations, client domain General Statistics) though its decisive method was web performance engineering; this draw moves to Energy Systems & Utilities, grid reliability outage analysis, and keeps Root-Cause Analysis",
+  "domain": "energy-systems-utilities",
+  "subdomain": "grid-reliability-outage-analysis",
+  "client_domain": "energy-systems-utilities",
+  "niche": "vegetation outage root cause on a rural electric cooperative's overhead primary lines: which driver raised each district's tree-caused outages in 2025 (trimming left past its cycle, the trimming contractor taken on at a handover, the year's storms, or trees falling in from beyond the cleared right-of-way), and so which programme each district's 2027 right-of-way budget funds",
+  "objective": "root-cause",
+  "shape": "07",
+  "decision_type": "root_cause_named",
+  "answer_unit": "named_option",
+  "answer": "Fund hazard-tree removal beyond the right-of-way with the 2027 right-of-way budget increase: the rise in tree-caused outages, from 11.2 per 100 miles of overhead primary on average over 2021 to 2023 to 21.9 in 2025, is mostly ash beyond North's right-of-way falling onto the line.",
+  "answer_source": "task129/submission.md block 1; task129/generator/figures.json (call, rate_2025, rate_base)",
+  "gap": [
+    "population",
+    "time"
+  ],
+  "pattern": [
+    "none"
+  ],
+  "generators": [
+    "G4",
+    "G14"
+  ],
+  "gate_g": "decomposition_attribution",
+  "calibration_form": "none",
+  "stump_strategy": "decomposition_attribution",
+  "decisive_rule_filed": false,
+  "official_decoy": false,
+  "validated_decoy": false,
+  "context_artifact": "filed_standard",
+  "stakeholder_role": "Manager of Right-of-Way and Vegetation Management",
+  "role_family": "operations_director",
+  "scoring_unit": "other",
+  "spine": {
+    "file": "row_trim_completions_2012-2025.csv",
+    "rows": 29820,
+    "entity": "one completed trim of one trim unit",
+    "grain": "trim unit x trim",
+    "source": "synthetic"
+  },
+  "forum": "line_manager_or_team",
+  "forcing_event": "budget_or_appropriation",
+  "org_family": "cooperative_or_member_body",
+  "world": {
+    "geography": "United States, a fictional rural county (Vessey County)",
+    "currency": "USD (none in the pack)",
+    "org_type": "member-owned rural electric cooperative: overhead primary distribution in three districts, right-of-way trimmed on a four-year cycle by contract crews",
+    "invented_names": [
+      "Vessey County Electric Cooperative"
+    ],
+    "people": [
+      "Lori Rodriguez",
+      "Dennis Garcia",
+      "Wesley Thomas",
+      "Brian Montgomery"
+    ]
+  },
+  "deliverables": [
+    "tree_outage_root_cause_2025.docx",
+    "tree_outage_workings_2025.xlsx"
+  ],
+  "opening_move": "question-first",
+  "question_form": "what",
+  "driver": "A rise is booked to the provider that took over a region's maintenance because it shows on the units that provider serviced, but it arises outside the zone the maintenance touches and scales with a property of each unit's surroundings, so units the outgoing provider serviced in the same months fail alike; read at the same time since servicing and the same surroundings it is a shift no servicing removes, while a second region's rise is servicing that fell behind at its own handover and a third's is weather.",
+  "driver_concrete": "In the North district the tree-outage rise lands on the circuits the new trimming contractor trimmed after taking over on 1 January 2024, but the outages come from ash dying beyond the cleared right-of-way and rise with the ash standing within falling distance of each trim unit by the same amount at every time since trim, so the units the outgoing contractor trimmed in the same months under its open work orders fail at the same rate and each contractor's units fail at North's rate for their time since trim; the East district's smaller rise sits on units its April 2025 handover left past the four-year cycle, and the South district's on a windier year.",
+  "stump": "A competent solver counts each district's tree-caused outages per 100 miles of overhead primary, finds North's rise (most of the cooperative's) beginning with its trimming-contract handover on 1 January 2024 and East's with its own on 1 April 2025, and files a re-bid of the trimming contract; the step that lands it there is booking North's rise to the contractor whose freshly trimmed units carry it, when the outages come from ash dying beyond the right-of-way, the rise is as large on units trimmed within two years as on units late in their cycle, and each contractor's units fail at North's rate for their time since trim.",
+  "stump_class": "analytical",
+  "analyst_test": "A strong analyst who counts outages (one per device interruption, not restoration steps or storm-mode tickets), drops the IEEE 1366 major event days, rates each district per 100 miles of overhead primary in service, reads the rise against the trimming contract register and checks the storms, files a re-bid of the trimming contract: North carries most of the rise and it began with North's handover.",
+  "domain_test": "The deciding quantity is each district's tree-outage rate read the way utility vegetation management reads it, on the regrowth clock (time since each trim unit was last trimmed) and on the trees within falling distance of the line, with the new contractor's work compared against the outgoing contractor's work of the same months; with another field's nouns there is no regrowth since a trim, no cleared right-of-way with trees standing beyond it, and no ash mortality to fall in from outside it.",
+  "layer2_family": "estimand_identification",
+  "layer2_pattern": "own:handover-rise-read-against-the-outgoing-provider's-concurrent-work-at-the-same-time-since-servicing",
+  "layer1": [
+    "an outage management export at restoration-step grain, several rows an outage, local time across daylight-saving changes",
+    "a trimming completions register keyed by trim unit with completion and acceptance dates and the contractor, units renumbered where a line was rebuilt",
+    "a span-level right-of-way survey counting trees within falling distance by species group, keyed by span and trim unit",
+    "overhead primary mileage that changes as units are converted to underground, held in a trim-unit register with in-service and retirement dates",
+    "daily peak gusts from three weather stations in UTC",
+    "the IEEE 1366 major event day rule (2.5 beta) applied to each year from the five years before it",
+    "contractor invoices with credit memos and re-issued invoice numbers"
+  ],
+  "mechanism_source": "design_note",
+  "differentiation": {},
+  "lineage": [
+    {
+      "architecture": "v1 (house domain business-operations-analytics / service-operations-sla, client domain General Statistics; shipped 2026-10-13)",
+      "fate": "re-rooted 2026-10-14 at the author's request: the decisive method was web performance engineering, which no client domain carries, so the domain read as a backdrop; nothing was learned against the stump (no portal result)",
+      "domain": "business-operations-analytics",
+      "subdomain": "service-operations-sla",
+      "objective": "root-cause",
+      "decision_type": "root_cause_named",
+      "gap": [
+        "population",
+        "objective",
+        "time"
+      ],
+      "pattern": [
+        "E",
+        "D"
+      ],
+      "generators": [
+        "G14",
+        "G6",
+        "G1"
+      ],
+      "gate_g": "decomposition_attribution",
+      "stump_strategy": "composition_mix",
+      "layer2_pattern": "own:separating-group-effects-carried-within-a-state-built-from-record-order",
+      "driver": "Two causes that only ever switched on together are separated by two groups that each received one of them, but each cause's per-record effect is a switch on a state no column carries, whether a record is its unit's first after the latest version change or a reuse that follows it, recovered only by ordering each unit's records against the version changes; both separating groups are mostly reuse records while the population the decision acts on is mostly first records, and the two causes act on opposite states, so reweighting each cause's state-conditioned effect to that population moves the joint effect from one cause to the other while every total, and every split on a visible column, ties under both readings.",
+      "stump": "A competent solver aligns the redesign's cohort-by-cohort switch-on for the joint effect of the ad stack and the framework, separates them with the puzzles pages, which took the header-bidding wrapper alone on one date, and subscribers' ad-free views of the redesigned templates (found through the subscription register), standardises both groups to the ad-supported views' phone mix through the device registry, which closes the joint ramp exactly, and names the ad stack; the step that lands it there is reading each change's cost as one figure per phone class, when the framework costs a view mostly on a device's first load after each release-train deploy and the ad stack mostly on reloads of the cached bundle, and the daily players and daily readers who make up both separating groups are mostly cached reloads while most ad-supported views are first loads, so reweighted to the ad-supported views' first-load share the framework fix brings back the most views a month."
+    }
+  ],
+  "notes": "Re-root at the author's request (2026-10-14). Personas drawn with guard.py names --locale en_US --seed 129. The decisive rung is North's: the rise read against the outgoing contractor's concurrent transitional work and the ash within falling distance at the same time since cut; East's backlog and South's storms are the lower rungs a careful analyst also needs. Reshipped 2026-10-14 (architecture 2): seed 129227 drawn from a scan of forty against every check; judge pass 1 FIX_NOW on ask B (ticket fold, closed by policy 2.1's one-outage-at-a-time WHAT), pass 2 DETERMINISTIC; leak reader two reads, question 1 none.",
+  "registered": "2026-10-14T04:07:32Z"
+}

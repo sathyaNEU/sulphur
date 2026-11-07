@@ -1,0 +1,52 @@
+Enroll the 125 year 3 children whose answer times grow with each number they count
+Economics and Quantitative Social Science
+Missing data, censoring & measurement error
+hard
+Psychology & Behavioral Science. The two graded runs averaged 0.43.
+
+What makes this task strong
+The estimand is a pattern in each child's answer time: a child who counts on slows down as the smaller number of the pair grows (or the total, for a child who counts all), while a child who recalls is flat and faster on doubles. The list depends on measuring that slope per child, not on being slow overall.
+The core judgment is censoring: in six classes all practice ran as quick rounds that close a question after 2.5 seconds (3.5 in reader mode), giving 7,571 first-attempt timeouts. A counting child times out on large facts because counting takes longer, so the timeouts are right-censored answers, not missing data.
+It takes a chain of dependent inferences: treat quick timeouts as censored at their limit; leave the 20 second practice timeouts out (108 of them, 0.4% to 0.7% at every fact size, unrelated to the count); fit a censored regression per child on the smaller number and on the total; decide which records can identify a slope at all (at least 3 correct first answers); and read the 24 children seen only on the level 1 facts from their 3 + 3 against 2 + 3 contrast.
+It is not a reading stump: the export guide states how quick rounds work, but nothing tells the solver that the timeouts carry information, or that the practice timeouts do not. Telling the solver "timeouts are censored" would still leave the practice-timeout distinction, the identification floor and the level 1 children.
+The shallow path fits only the answered questions. For the 58 children whose evidence is mainly quick rounds, that gives slopes from -23 to 444 ms a step and misses about 26 counters at a 200 ms cut.
+Note: the key fact sits in the export guide's quick rounds section, so part of the task is noticing a documented mechanic. The 3-answer floor and the 150 ms cut are the author's choices, though the same 125 children join for any cut from 120 to 200 ms.
+Prompt
+Stakeholder ask
+Kinmoor Learning Trust has bought a small-group fluency course for Year 3 that starts next January. It is meant for children who rely on count to work out single-digit additions. The provider's brief describes the details. Our six schools need to know by 10 December which of their children should join.
+
+Every Year 3 child did the addition practice in Sumwise this term, and the export has each question they answered and when. With it are the Sumwise export guide, the teachers' math tracker, our pupil roster, the license invoice, the provider's brief, my plan for the course and the head teachers' email.
+
+Generate a list fluency_course_list.xlsx, with a sheet for each school naming the children who should join and why. The head teachers also want a one page note, course_booking.docx. It should include who we chose at each school and how we judged that a child still counts.
+
+Deliverables
+Every file is prescribed by name. Nothing is optional, and no single file carries the whole answer.
+
+fluency_course_list.xlsx
+course_booking.docx
+Input files
+A school trust's arithmetic practice pack: the app's event-level export for the term (6.6 MB, one row per shown, answered, changed, skipped or timeout event, with reissued accounts carrying last year's history, a merged second account, demo accounts and leavers), the export guide (MD), the pupil roster and the teachers' math tracker (XLSX), the provider's course brief and the license invoice (PDF), the trust's plan for the course (DOCX) and the head teachers' email (EML). The tracker grades and app levels are tempting but do not decide who counts.
+
+Final recommendation
+Enroll 125 of the 383 Year 3 pupils on roll in 24 groups of up to six: Kinmoor 27 children (5 groups), Hollin Lane 16 (3), Moorside 25 (5), Fellgate 19 (4), Cragview 23 (4) and Tarnbeck 15 (3), costing 10,080 pounds of the 13,000 pound budget. Each child's answer time rises by at least 235 ms per extra number counted once quick round timeouts are read as answers slower than their limit; no modeled child left off rises by more than 105 ms. The 30 children with fewer than 3 correct first answers have no usable answer time and are not on the list.
+
+Step-by-step solution
+Clean the export: merge the second account, cut the 8 reissued accounts back to this term, remove 3 demo accounts and 3 leavers, keep first attempts, drop retries after the answer is shown and take about 1 second off reader mode times. 383 pupils remain.
+Separate the two kinds of timeout: 7,571 quick round timeouts at 2.5 seconds, concentrated in six classes, against 108 practice timeouts at 20 seconds spread evenly over fact sizes.
+For each child with at least 3 correct first answers, fit a right-censored normal regression of first answer time on the smaller number and on the total, entering each quick timeout at its limit and leaving practice timeouts out.
+Join at 150 ms a step or more on either: all 125 chosen children show at least 235 ms and no other modeled child more than 105 ms, so the list holds for any cut from 120 to 200 ms.
+Children seen only on the level 1 facts (24): the fit puts them all on the list; the readable reason is that 3 + 3 takes them 303 to 763 ms longer than 2 + 3, while recalling children answer the double about 200 ms faster.
+Thin quick round records: 13 children with 4 to 10 correct first answers against 40 to 100 timeouts show at least 295 ms a step and join; 6 similar children show at most 76 and stay off; 30 children with fewer than 3 correct first answers (20 never answered in time) cannot be modeled.
+Write one sheet per school with each child's reason from their own evidence (43 through ordinary practice, 24 through the level 1 doubles contrast, 58 mainly through quick rounds), and the one-page note with counts, groups, cost and the single rule.
+Where the runs went wrong
+Dismissed evidence. Dropping quick round timeouts keeps only the fast answers on small facts and flattens the slope: answered-only fits miss about 26 counters at a 200 ms cut.
+Over-correcting. Censoring the 20 second practice timeouts too hands recalling children (K10616, K10566, K10684) spurious slopes near 230 ms a step and changes the list.
+Evidence floor set by caution, not identification. Requiring wide practice coverage and 10 clean answers gives 78 children in 16 groups and misses 47 (the 24 level 1 children, the 13 thin records and 10 more quick round counters). Dropping thin records gives 112 in 22 groups.
+Booking what cannot be measured. Putting every thin record on the list gives 160 children in 29 groups; fitting K10949 on one correct answer and 98 timeouts rests a place on a slope anywhere from 190 to 320 ms.
+Justification
+The brief wants children whose records show they still count, even if that means fewer places, and the heads make the lists final. The counting signature is a slope in answer time, and in quick rounds the slowest answers are exactly the ones recorded as timeouts. Treating them as censored recovers the slope; treating the unrelated 20 second timeouts the same way would invent slopes for children who recall.
+
+Browsing worked examples. Back to the example library
+
+Previous example
+Next example

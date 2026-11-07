@@ -1,0 +1,66 @@
+Learning modules
+·
+Golden output
+Writing the golden solution
+Your own answer to the task (recommendation, supplementary answers, 2 to 5 critical components, step-by-step solution) plus one ZIP of golden files matching what the prompt requests
+
+The solution is the last step of the build. The prompt commits the analyst to one recommendation and asks for 1 to 3 deliverables, the input files carry the evidence, and the solution is what a fully correct analyst would hand back. It has two parts: your own answer, entered in the task fields, and the golden solution files, uploaded as one ZIP.
+
+Required
+Your answer. The final recommendation, an answer to every supplementary question, 2 to 5 critical components, and a step-by-step solution.
+
+One golden ZIP with the same number of files the prompt requests. If the prompt asks for a memo and a CSV, the ZIP holds exactly those two files, in those formats. A missing file, an extra file or a mismatched format blocks confirmation.
+
+One set of numbers everywhere. The recommendation, every answer, the critical components and every table and chart in the golden files agree exactly. A grader will diff them against each other.
+
+Nothing extra. No answers to asks the prompt did not make, no AI disclaimers, no placeholders.
+
+Your answer
+Work through each item.
+
+Checklist
+0 of 5 complete
+
+
+The final recommendation in one or two sentences, stated first, naming what it rejects
+
+One clearly labeled answer per supplementary question
+
+2 to 5 critical components: the findings the recommendation cannot stand without, including the deep analytical step that decides it
+
+A step-by-step solution from the raw files to the decision, showing the deep step and the reasonable but insufficient analysis it rejects
+
+A short closing passage on why no other conclusion survives the prompt, the files and standard domain knowledge
+The recommendation carries the most weight, so it goes first and stands alone. The critical components are what the auto-generated rubric leans on most, so pick the few findings that actually decide the answer, not a list of everything you computed. The step-by-step solution should make the deciding judgment explicit: which comparison group, which model, which adjustment, and why the data rules out the simpler route.
+
+For a finished example with its files and prompt, read Freight Rail Infrastructure Siting.
+
+Structure of the golden files
+
+Text files (PDF, DOCX)
+
+Data files (CSV, JSON, XLSX)
+
+Visual files (PPTX, PNG, HTML)
+
+Code files (PY)
+Traceability
+Every claim and every number must trace back to a shipped input file. If a figure appears that no step of your analysis produced, or a claim rests on knowledge that is not in the workspace, the chain is broken and the solution is not ready. Numbers that disagree between your answer and the golden files are the most common defect, so reconcile them before you upload.
+
+Run the checks below against your draft before you upload. This surface is the only thing that sets the Golden deliverable status in your task workspace.
+
+Golden output
+The ideal set of deliverables a fully correct analyst would submit, every requested file in the requested format.
+
+Not started
+No requested deliverables yet. Name them in the prompt contract on the Prompt page, then come back.
+
+Manual QC checklist
+
+Answers the recommendation question and every supplementary question in the prompt
+
+Contains no placeholders, TODOs, or unfinished sections
+
+No chat-style introduction, AI disclaimer, invented citation, or generic filler
+
+Reads and looks like a normal professional deliverable in this format

@@ -1,0 +1,58 @@
+Reserve the optional 600-Hour december block: Customer-level release forecasts put expected releases at 4,272 Hours, above the 3,850-Hour capacity
+Machine Learning Research
+Forecasting & forecast evaluation
+hardest
+General Statistics & Data Science (operations capacity forecasting). Frontier-model runs averaged 0.45 across 8 runs (0.44 to 0.47), and none of the 8 reserved the block.
+
+What makes this task strong
+Measured difficulty: every run scored between 0.44 and 0.47, and none recommended the block or forecast releases in the accepted range. The readable rollouts forecast 3,583 to 3,689 hours against a reference of 4,272.
+The deciding step is a predictive model that has to be justified out of sample. Customers respond to their own industry's conditions in opposite directions, so a shared market coefficient averages the signal away: the common model underpredicts historically stronger customer conditions by 24.7 points and overpredicts weaker ones by 27.4 points.
+Four dependent inferences: (1) build three-month industry growth from the market snapshot available at each planning cut, so the model only sees what planners saw; (2) fit release probability with customer intercepts and customer-specific market responses, and quantities conditional on release; (3) show, refitting chronologically for 59 months, that this beats the shared alternatives (MAE 153 hours against 237 for the common response and 194 for customer intercepts), including with response directions frozen from 2017 to 2019 and tested on 2020 to 2024, and with 2020 excluded (163 against 235); (4) apply it to December's actual mix, where 34.4% of nominal hours face historically stronger conditions and 3.0% weaker, which pushes the expectation to 4,271.643 hours.
+Not a surface stump: in the readable rollouts every run applied the memo's capacity rule, the 600-hour block and the data rules correctly, measured hours the right way and kept all 423 December lines. There is no single fact to spot; finding opposite-direction responses is a modeling judgment that the chronological backtest then confirms.
+The shallow path passes its own checks: a pooled model backtests respectably (around 6% MAPE), and because opposite responses cancel, a shared market term looks weak or even harmful in the very backtest used to judge it. Bootstrap and sensitivity intervals built on the same pooled structure agree with each other and sit below 3,850.
+Prompt
+Stakeholder ask
+Forecast the December 2024 machine hours that will be released from the attached nomination book and advise whether we should reserve the optional capacity described in planning_memo.pdf. Return a short PDF with the forecast, capacity recommendation and a chart supporting the assessment, plus a runnable notebook showing the calculations and historical checks. Explain material data choices. Use only the supplied files. Do not retrieve or use external data.
+
+Deliverables
+Every file is prescribed by name. Nothing is optional, and no single file carries the whole answer.
+
+capacity_review.pdf
+capacity_analysis.ipynb
+Input files
+A contract manufacturer's planning pack: the nomination book with historical lines, release outcomes and the release transaction ledger to reconcile against them, customer accounts, part routings with setup and run times, monthly market history by industry, book control totals and the capacity calendar (all CSV), a market catalog (JSON) and the planning memo that sets the capacity rule and describes the optional block (PDF).
+
+order_book.csv
+release_outcomes.csv
+release_transactions.csv
+customer_accounts.csv
+part_routings.csv
+market_history.csv
+book_control_totals.csv
+capacity_calendar.csv
+market_catalog.json
+planning_memo.pdf
+Final recommendation
+Reserve the optional 600-hour block: December's 423 nominations are expected to release 4,272 standard machine hours (4,271.643 unrounded), 422 hours above the 3,850-hour regular capacity, leaving 178 hours of headroom within the 4,450-hour expanded allocation.
+
+Step-by-step solution
+Join nominations, customer accounts, routings and release outcomes, and reconcile release transactions to released quantities. Measure hours as one setup per released line plus standard run time per released unit, keeping zero and partial releases: 46,852 historical lines and 423 December nominations totaling 6,866 nominal hours.
+Match each nomination to its industry's market snapshot for that planning month and build three-month percentage growth within the snapshot.
+Estimate release probability with customer intercepts and customer-specific responses to three-month growth, alongside booking, size, repeat-part and calendar terms; estimate quantities conditional on release; convert to standard hours.
+Refit chronologically for every month from January 2020 to November 2024 using earlier outcomes only: 59 assessments, MAE 153 hours, RMSE 190 hours, annual MAEs 114, 152, 149, 196 and 152.
+Compare baselines on the same window: pooled common-response model 237 hours MAE; customer intercepts with shared responses 194 hours.
+Classify customers' response direction from 2017 to 2019 only and test the frozen groups on 2020 to 2024: the common model's bias is -24.7 and +27.4 points in stronger and weaker conditions, against -0.8 and +0.3 for the customer-response model. Excluding 2020, MAE is 163 against 235 hours.
+Apply the model to December's actual nominations: 34.4% of nominal hours face historically stronger conditions and 3.0% weaker; expected releases are 4,271.643 hours.
+Apply the memo's rule to the unrounded expectation: above 3,850, so reserve the 600-hour block; shortfall 422 hours, capacity 4,450 hours, headroom 178 hours.
+Where the runs went wrong
+Method shortcut. One run looked at release rates by industry, saw only a modest spread and moved on to a market adjustment shared by every customer. It forecast 3,583 hours (3,583.2), 267 below capacity, backed by a 5.9% backtest MAPE over all 59 months, and never fitted a separate response per customer or industry.
+Dismissed own evidence. Another run did test market conditions, but only as one pooled coefficient. The overlay helped during the 2020 shock and looked slightly harmful otherwise, so it dropped market data entirely and forecast 3,689 hours (bootstrap 3,614 to 3,758). Its own industry statistics showed conversion swinging widely within each industry over time, a hint of what the averages hid.
+Self-confirming check. A run reduced the market to one aggregate growth number and one coefficient (MAE 232 hours) and forecast 3,586 hours. Every alternative it tried kept the same pooled structure, so their agreement said nothing about the missing customer-level effect, and its 20% chance of overrunning capacity came from the same blind model.
+Unfinished chain. A run improved its backtest from 276 to 222 hours MAE with a vintage aggregate market adjustment and stopped well short of the 153 that customer-specific responses reach. It noticed its forecast was "just below" the threshold and that actual releases had topped 3,850 in about a third of recent months, but its stress tests stayed inside the pooled structure: 3,651.9 hours, do not reserve.
+Justification
+The capacity rule turns on expected releases, so the forecast has to reflect how these particular customers release work under current industry conditions. History shows persistent, opposite-signed customer responses that a shared market coefficient averages away; the customer-response model removes that bias and validates better out of sample, including outside the 2020 disruption. December's book is weighted heavily toward customers in historically strong release conditions, which puts the expectation above regular capacity.
+
+Browsing worked examples. Back to the example library
+
+Previous example
+Next example

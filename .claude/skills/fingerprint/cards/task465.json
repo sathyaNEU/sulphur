@@ -1,0 +1,154 @@
+{
+  "task": "task465",
+  "architecture": "v2",
+  "drawn": "2026-10-17",
+  "slot_note": "re-rooted 2026-10-17 at stage 4 after architecture 1's SEND_BACK (Gate H rule_application); seed ET22's drought-cover world was spent across the v1 draft and architecture 1, so the slot is drawn afresh in the ETL objective on a data-integration task: two surveys that each measured one eligibility trait, fused with a screening pilot that measured both",
+  "domain": "general-statistics-data-science",
+  "subdomain": "data-integration-record-linkage-entity-resolution",
+  "client_domain": "general-statistics-data-science",
+  "niche": "an electric utility's 2027 caseworker staffing by service division for a medical energy assistance programme, its eligible households (high energy burden and someone relying on powered medical equipment at home) counted by fusing the state's energy affordability survey and its health survey, which each measured one of the two traits, with the utility's screening pilot, which measured both",
+  "objective": "etl",
+  "shape": "07",
+  "decision_type": "quantity_figure",
+  "answer_unit": "count",
+  "answer": "Staff 38 Home Energy Medical Assistance caseworkers for 2027: Northern 2, Lakeshore 3, River Valley 4, High Plains 4, Central 4, Southern Hills 3, Southwest 7, North Metro 6 and South Metro 5.",
+  "answer_source": "submission.md block 1; golden hema_caseworkers_2027.xlsx (Caseworkers 2027 sheet)",
+  "gap": [
+    "population"
+  ],
+  "pattern": [
+    "none"
+  ],
+  "generators": [
+    "G14",
+    "G16"
+  ],
+  "gate_g": "method_or_model_selection",
+  "calibration_form": "gold_standard_subsample",
+  "stump_strategy": "composition_mix",
+  "decisive_rule_filed": false,
+  "official_decoy": false,
+  "validated_decoy": false,
+  "context_artifact": "capacity_report",
+  "stakeholder_role": "the manager of an electric utility's Home Energy Medical Assistance programme, who sets each service division's 2027 caseworkers in the programme plan the utility files with the state utility commission",
+  "role_family": "capacity_planner",
+  "scoring_unit": "units served",
+  "spine": {
+    "file": "medical_baseline_enrolment_2026.csv",
+    "rows": 38848,
+    "entity": "one utility account's enrolment spell in a medical baseline (powered medical equipment) rate",
+    "grain": "utility account x enrolment spell",
+    "source": "synthetic"
+  },
+  "forum": "regulator_or_inspector",
+  "forcing_event": "statutory_or_regulatory_filing",
+  "org_family": "utility_or_infrastructure",
+  "world": {
+    "geography": "an unnamed state of the United States: an electric utility's nine invented service divisions and their invented counties",
+    "currency": "USD",
+    "org_type": "an electric utility running a medical energy assistance programme under the state utility commission",
+    "invented_names": [
+      "Home Energy Medical Assistance",
+      "Callowmere Electric Company",
+      "Household Energy Affordability Survey",
+      "North Metro",
+      "South Metro",
+      "River Valley",
+      "High Plains",
+      "Southern Hills",
+      "Kestrelmere",
+      "Pellingmere",
+      "Vetchmere",
+      "Quillholme",
+      "Tarnholme"
+    ],
+    "people": [
+      "Stacy Williams",
+      "Shawn Taylor"
+    ]
+  },
+  "deliverables": [
+    "hema_caseworkers_2027.xlsx",
+    "hema_eligible_households_2025.csv"
+  ],
+  "opening_move": "question-first",
+  "question_form": "how-many",
+  "driver": "The decisive quantity is how many units carry two traits that no large source records together: one source measures the first trait and the shared attributes, another the second trait and the same attributes, and a small third source records both; within every cell of the shared attributes the two traits go together, so the second source's rate is not the rate among the units carrying the first, and joining the large sources on their shared attributes and multiplying the rates counts too few, while only the small source's within-cell association, carried into a table that keeps both large sources' rates, counts the units that carry both.",
+  "driver_concrete": "Each service division's 2027 caseworkers are set at one for every 400 eligible households, or part of 400 (income under $50,000, energy costs above 6 per cent of income and someone at home relying on electrically powered medical equipment), and no survey measured both traits: the energy affordability survey measured costs and income, the state health survey the equipment, both weighted to the demographer's household estimates by county and income band, and the 2025 screening pilot asked both at random addresses in the two metropolitan divisions; the equipment raises the household's electricity bill, so inside every income band high-burden homes report it about three times as often, the product of the two surveys' shares counts 8,200 eligible households and staffs 26, and only the pilot's within-band odds ratio carried into each division and band, the cell keeping both surveys' shares, counts 13,300 and staffs 38.",
+  "stump": "The default path aligns the two surveys on service division and income band, applies their weights and multiplies each cell's burden share by its equipment share, treating the two traits as independent inside the cell, so it counts 8,200 eligible households where the fused table holds 13,300 and staffs 26 caseworkers where the programme needs 38; carrying the screening pilot's within-band association into each cell, with both surveys' shares kept, counts them, while the pilot's own shares (42), one survey's share times the pilot's conditional rate (51 and 33) and the pilot's dependence ratio (41) each break a survey's share in some cell.",
+  "stump_class": "analytical",
+  "analyst_test": "A strong analyst who maps both surveys' counties to the nine service divisions through the division register, nests the health survey's income categories into the plan's two eligible bands, annualises monthly electricity bills, uses the final and household weights, leaves out don't-know and refused answers and applies the plan's caseload standard multiplies each division and band's burden share by its equipment share, as if the two traits were independent inside the cell, counting 8,200 eligible households and staffing 26 caseworkers; the pilot's own shares (42), one survey's share times the pilot's conditional rate (51 and 33) and the pilot's dependence ratio (41) each break a survey's share in some cell; only the pilot's within-band odds ratio carried into cells that keep both surveys' shares staffs the programme's 38.",
+  "domain_test": "General statistics, so the swap is of the method: the deciding quantity is a joint distribution rebuilt by statistical matching, two surveys' marginal rates fused with an auxiliary sample's within-cell association (the match's identifying assumption); replacing it with the product of the margins (conditional independence) or with the auxiliary sample's own joint shares changes most divisions' staffing.",
+  "layer2_family": "estimation_fit",
+  "layer2_pattern": "own:statistical matching beyond conditional independence (an auxiliary sample's within-band association carried into cells calibrated to two surveys)",
+  "layer1": [
+    "two surveys on different geographies: planning regions and county names in one, county codes and public health districts in the other",
+    "income measured two ways: dollars (top-coded) in the energy survey and the pilot, eight income categories in the health survey nesting into the programme's four bands",
+    "energy costs reported as annual totals by some respondents and monthly averages by others",
+    "two weights in each survey (a base and a final or a person and a household weight)",
+    "don't-know and refused codes in the equipment item",
+    "pilot screens duplicated where an address answered by mail and by phone",
+    "household estimates published with region subtotals and a state total among the county rows"
+  ],
+  "mechanism_source": "design_note",
+  "differentiation": {
+    "task233": "task233 carries a departure measured on a follow-up onto every unit on the scale where it transports; here nothing is transported across levels: two surveys each measured one trait, and the move is refusing to treat the traits as independent within the cells the surveys share, carrying the pilot's association into tables that keep both surveys' rates",
+    "task448": "task448 completes a register through capture rates measured on the producers both lists hold; here nothing is captured or missed: both surveys are complete for what they measure, and the error is the joint built from their margins",
+    "task454": "task454 imputes uncovered items' costs within presentation cells; here no value is imputed: the joint count is fused from two surveys' rates and a third source's association",
+    "task447": "task447 conditions a redirect share on payer terms; here the conditioning is a second trait measured in another survey, and the fusion keeps both surveys' estimates",
+    "task456": "task456 estimates one state's prevalence from three imperfect records; here each survey measures its trait without error and the question is the joint of two traits no survey measured together",
+    "task256": "task256 carries a reference survey's conditional distribution to each member of a population given two recorded measurements, moved by a selective sample's departure; here nothing is carried to members: two surveys each measured one trait on the same population, and the move is refusing to multiply their cell rates when a pilot shows the traits go together inside the cells, with both surveys' rates kept",
+    "task262": "task262 corrects a slope for measurement error with a subsample's noise variance; here no slope or reliability enters: the count of households carrying two traits is fused from two surveys' rates and a pilot's within-cell association",
+    "task54": "task54 multiplies an exposure integral over a re-sequenced plan with a recovered rule; here no rule is recovered and nothing is sequenced: two surveys' rates are fused with a pilot's association",
+    "task134": "task134 v3 prices a raised allowance by each unit's chance of rebuilding past a cost step; here there is no option value: the count of households with two traits is fused from two surveys and a pilot",
+    "task146": "task146 reads a weekly count's step as admissions released from a pool the closing period built; here there is no time structure: the joint of two traits in each region and income band is fused from two surveys' rates and a pilot's association"
+  },
+  "lineage": [
+    {
+      "gap": [
+        "objective",
+        "population"
+      ],
+      "pattern": [
+        "none"
+      ],
+      "generators": [
+        "G16",
+        "G12"
+      ],
+      "gate_g": "forecasting",
+      "decision_type": "designation_set",
+      "stump_strategy": "other",
+      "layer2_pattern": "own:payout-averaged-over-reconstruction-error",
+      "driver": "The decisive quantity is the long-run average of a payoff that is zero on one side of a threshold and rises to a cap on the other, and in the periods the target series was not observed its value is known only through a correlated series; a prediction is the conditional mean, so the payoff of the prediction is not the expected payoff, which has to be averaged over the prediction's error: predictions just short of the threshold pay nothing while their expectation pays, and predictions near the cap pay more than their expectation.",
+      "driver_concrete": "Each county's cover pays between its trigger and exit on the June to August rainfall at the county's cooperative-observer gauge, each day capped at 40 mm; several gauges went dormant for whole seasons when their observers left, among them two of the region's dry seasons; rebuilding those seasons from the airport station and replaying the cover on the rebuilt totals pays almost nothing for them, while the expected payout given the airport's record, averaged over the rebuilding's error, pays a material share of the limit, and the technical premium of some counties' covers then exceeds the cooperative's offer.",
+      "stump": "The default path rebuilds each dormant season from the airport station through the regression their shared seasons show and replays the cover on the rebuilt totals, so the dry seasons rebuild just above the triggers and pay nothing, and it writes covers whose technical premium, with each rebuilt season's payout averaged over the rebuilding's error, exceeds the cooperative's offer.",
+      "architecture": "v1 draft (rainfall index, dormant gauge seasons)",
+      "fate": "superseded 2026-10-17 before any data was cut: the decisive move (a kinked payout averaged over a reconstruction's error instead of paid on the reconstructed value) is the expectation-of-a-nonlinear-payout lesson task151, task187 and task229 already carry, and the rainfall world's other cruxes (a short gauge carried through an airport's overlap, a gauge's own change, a network's averaging) are task461's, task464 v1's and too small; redrawn on an area-yield index whose published history withholds the bad years"
+    },
+    {
+      "gap": [
+        "population",
+        "objective"
+      ],
+      "pattern": [
+        "none"
+      ],
+      "generators": [
+        "G6",
+        "G12"
+      ],
+      "gate_g": "forecasting",
+      "decision_type": "designation_set",
+      "stump_strategy": "population_selection",
+      "layer2_pattern": "own:area-yield burn on a history whose withheld years are recovered from the district totals",
+      "driver": "The decisive quantity is the long-run average loss of a cover paid on a unit's annual value, and the published history withholds the unit's value in the years too few contributors report, which are the years the value collapses; each withheld value is fixed by the published total of the group it sits in less the group's published members, so a burn over the published years, or with the withheld years filled from the group's average, misstates the loss the cover must be priced on.",
+      "driver_concrete": "Each county cover pays on the county's official dryland sorghum yield against a trigger at 90 per cent of its expected 2027 yield; the state's statistics service does not publish a county estimate resting on fewer than five reports, which in the region's drought years (abandoned fields) is exactly when the sandy counties' yields collapse, and builds each district's estimates up from all its county estimates; the district's acres and production less its published counties' give each withheld county-year, so the burn over the published years leaves out three covers' worst losses and every fill from the district or the published years dilutes them.",
+      "stump": "The default path prices each county's cover by burn analysis over the years its yield is published, treating withheld years as missing, so the sandy counties whose drought years were withheld look safe, their quoted rates look several times their expected loss, and it buys none of the five covers; with each withheld year recovered from the district's totals less its published counties, three covers' expected losses rise and the board's rule buys them, while a fourth stays dear even with its years back.",
+      "architecture": "v1 (architecture 1: area-yield covers with withheld drought years)",
+      "fate": "spent 2026-10-17 at stage 4: the determinism judge returned DETERMINISTIC but SEND_BACK on Gate H, decisive_step rule_application: the withheld county-years are recovered by an identity the service's methods note files (district totals of all county estimates, published or not), and with the cells restored the call is the policy's filed expected-loss formula, so the stump sat in Layer 1 (suppressed cells); re-rooted on a new world and a decisive step the field estimates"
+    }
+  ],
+  "notes": "Architecture 2 (re-root 2026-10-17). Gap population (the eligible households are the joint of two traits; the default path counts independent coincidences). Pattern none. Generators G14 (the equipment rate measured on the whole cell is not the rate among burdened households, decisive) and G16 (which fusion the data entitles: the pilot refutes independence within the cells, and only an association-preserving fusion keeps both surveys' rates). Gate G method_or_model_selection (how the joint is fused). Strategy composition_mix (F5: a correct stratum rate does not fit the burdened pool; the pool's rate is rebuilt from the pilot, which observes both traits).",
+  "registered": "2026-10-17T06:52:59Z"
+}

@@ -1,0 +1,115 @@
+{
+  "task": "task164",
+  "architecture": "v1",
+  "drawn": "2026-10-18",
+  "slot_note": "wave 6, new; seed FC35 (world, decision and quantity only; the pilot-reproduction mechanism is not used)",
+  "domain": "energy-systems-utilities",
+  "subdomain": "load-forecasting",
+  "client_domain": "energy-systems-utilities",
+  "niche": "a California investor-owned electric utility's compliance filing that splits the 400 proactive service-transformer replacements the Commission approved for 2027 across its twelve districts in proportion to each district's forecast count of transformers whose summer 2027 4 to 9 pm peak, built from the 2026 recorded peak and the plug-in vehicles registered at the record date, exceeds 1.2 times nameplate, when a vehicle at a default-rate premise adds to a small pole-top transformer's peak most of its charger's draw although its average evening demand is a fraction of a kilowatt, and EV-rate premises charge after midnight",
+  "objective": "forecasting",
+  "shape": "05",
+  "decision_type": "allocation_to_total",
+  "answer_unit": "count",
+  "answer": "Allocate the 400 replacements as Foothill 79, Railyard 68, Canal 49, Mission 23, West Bluff 16, Crestview 4, Lakeside 4, Sunrise 3, Sandhill 72, Kingsley 26, Highland 8 and Brookside 48.",
+  "answer_source": "submission.md, ## 1. Final Recommendation (generator/figures.json call)",
+  "gap": [
+    "time",
+    "population"
+  ],
+  "pattern": [
+    "D"
+  ],
+  "generators": [
+    "G2",
+    "G14",
+    "G7"
+  ],
+  "gate_g": "method_or_model_selection",
+  "calibration_form": "none",
+  "stump_strategy": "grain_or_unit",
+  "decisive_rule_filed": false,
+  "official_decoy": false,
+  "validated_decoy": false,
+  "stump_class": "analytical",
+  "layer2_family": "field_method",
+  "layer2_pattern": "own:coincident-peak-increment-by-rate-schedule",
+  "layer1": [
+    "season runs in two layouts (TLM 4.2 to TLM 5: interval beginnings, zero-padded location numbers, district names)",
+    "identifiers across systems (GIS T-prefixed locations against TLM integers)",
+    "registrations against service points (DMV address strings, about 3 percent left blank by the utility's matcher)",
+    "records after the record date (DMV notifications of 1 to 4 April 2027 in the 5 April feed)",
+    "out-of-scope records (notifications at addresses on no residential single-phase service)",
+    "tariffs with request and effective dates (rate schedule change log)",
+    "interval reads with gaps (load study EVSE kWh intervals) and partial AMI read shares (TLM)",
+    "sentinel dates (GIS unit_installed 1900-01-01)"
+  ],
+  "context_artifact": "register",
+  "stakeholder_role": "the manager of the utility's proactive transformer replacement program, who files the district allocation in the compliance filing",
+  "role_family": "programme_officer",
+  "scoring_unit": "other",
+  "spine": {
+    "file": "tlm_summer_peaks_2024.csv, tlm_summer_peaks_2025.csv, tlm_summer_peaks_2026.csv",
+    "rows": 155445,
+    "entity": "one service transformer location's recorded 4 to 9 pm peak for one summer, summed from its premises' AMI interval reads",
+    "grain": "transformer location x summer",
+    "source": "synthetic (constructed in the layout of a utility transformer load management extract)"
+  },
+  "forum": "regulator_or_inspector",
+  "forcing_event": "statutory_or_regulatory_filing",
+  "org_family": "utility_or_infrastructure",
+  "world": {
+    "geography": "United States, California (a fictional investor-owned electric utility in the Central Valley and Sierra foothills; the utility, districts, systems, programs and people are fictional)",
+    "currency": "USD",
+    "org_type": "investor-owned electric distribution utility",
+    "invented_names": [
+      "Calloway Valley Power Company",
+      "Brookside",
+      "Calloway",
+      "Canal",
+      "Cedar Gap",
+      "Copper Flat",
+      "Cottrell",
+      "Crestview",
+      "Foothill",
+      "Garnet Wells",
+      "Highland",
+      "Juniper Springs",
+      "Kingsley",
+      "Lake Vardon",
+      "Lakeside",
+      "Loma Pardo",
+      "Mission",
+      "Pine Hollow",
+      "Railyard",
+      "Sandhill",
+      "Sunrise",
+      "Tule Bend",
+      "West Bluff"
+    ],
+    "people": [
+      "Megan Stewart",
+      "Christopher Richardson",
+      "Katelyn Duarte",
+      "Antonio Morgan"
+    ]
+  },
+  "deliverables": [
+    "ptr_2027_district_allocation.xlsx",
+    "summer_2026_transformer_failures.png"
+  ],
+  "opening_move": "question-first",
+  "question_form": "how-many",
+  "driver": "The rise in a shared asset's seasonal peak from one more intermittent load is that load's draw at the moments the peak is set, and because a peak sits where the asset's load is highest, a load joining an asset few others share adds most of its full draw while its average draw over the peak window is a small fraction of that; a forecast that adds each new load's window average, its full rating, or one figure for loads on every tariff misclassifies the assets near the limit, and the assets' own recorded peaks before and after a load joins give the effect by tariff.",
+  "driver_concrete": "Each plug-in vehicle registered since a transformer's 2026 recorded peak moves its 2027 4 to 9 pm peak by the expected effect of one vehicle on its premise's schedule, one figure per schedule as the Commission files it, which the transformers' own recorded peaks put at about 4.9 kVA a default-rate vehicle and 0.9 kVA an R-EV2 one, not the 0.6 kVA the load study's vehicles draw on average between 4 and 9 pm nor the charger's rating.",
+  "stump": "A competent solver takes each schedule's per-vehicle figure from the load study's average 4 to 9 pm EVSE demand (0.61 kVA a default-rate vehicle, 0.008 kVA an R-EV2 one), adds it to each transformer's recorded 2026 peak for every change in vehicles since that peak, finds 1,591 transformers at risk and gives Foothill 59 of the 400 against the golden 79; the step that lands it there is pricing a vehicle at its average evening draw when a small transformer's recorded peak is set on an evening its vehicle charges, which the 2024 to 2026 panel shows as a 4.9 kVA expected effect for a default-rate vehicle and 0.9 kVA for an R-EV2 one.",
+  "analyst_test": "A strong analyst who matches every registration to its premise and transformer, reads the decision, the tariffs and the load management runs correctly, applies OP 4's one figure per schedule and takes each figure from the load study's average 4 to 9 pm demand files Foothill 59 of the 400 (1,591 at risk) against 79; pricing a default-rate vehicle at its charging rate with R-EV2 nil, or one recorded-peak rise for every vehicle whatever its schedule, files other wrong splits (Foothill 82 and 66), and only each schedule's expected effect measured on the recorded peaks files the golden.",
+  "domain_test": "The quantity that decides the call is each service transformer's forecast summer 4 to 9 pm peak, built the way distribution planning builds diversified demand on a transformer: an added vehicle contributes its coincident draw at the moments the transformer's peak is set, which on a small transformer serving few vehicles is most of its charger's draw and shrinks on larger transformers and with each further vehicle, measured from the transformers' own recorded peaks; swap the transformer for a clinic and the vehicle for a patient and the task no longer reads the same, because nothing makes one added patient raise a small clinic's busiest hour by nearly a full appointment slot while a large clinic's barely moves.",
+  "mechanism_source": "design_note",
+  "differentiation": {
+    "task453": "surface proximity only: a labour force survey's questionnaire-redesign effect read from the incoming rotation groups of a panel; here a plug-in vehicle's effect on a service transformer's recorded summer maximum, read from the transformers' own peaks, with no panel rotation, no redesign and another domain and decision"
+  },
+  "lineage": [],
+  "notes": "Seed FC35's decisive mechanism (pilot determinations reproducing only under one charging-start method) is not used: there is no pilot reproduction requirement and no certified record to fit. The 2024 to 2026 recorded peaks are the transformers' own history, which a forecaster tests the increment on out of sample. Stage 4 repair: OP 4 now files the effect's granularity (one expected effect per schedule), never its measurement; the size-by-position golden (Foothill 77) gave way to the per-schedule means (Foothill 79).",
+  "registered": "2026-10-18T01:34:28Z"
+}

@@ -1,0 +1,70 @@
+# OS and Python noise
+.DS_Store
+__pycache__/
+*.pyc
+*.tmp
+
+# Derived caches. guard.py and the clone fingerprinter rebuild them on demand and seed them from the tracked
+# baselines under fingerprint/corpus/ and fingerprint/clone/, so no build ever commits one.
+.claude/skills/*/.cache/
+
+# Packs and goldens are rebuilt by each task's generator. From READY on a build tracks target.zip, golden.zip
+# and its golden/ files only, added with `git add -f` in the READY commit; nothing else under these paths.
+task*/target/
+task*/golden/
+task*/gd/
+task*/deliverables/
+task*/*.zip
+# the same anywhere deeper in a task folder: old iteration snapshots and nested packs are not repo content
+task*/**/target/
+task*/**/golden/
+task*/**/*.zip
+task*/**/_staged/
+task*/**/*.bak
+
+# Raw downloads, source caches and large intermediates never go in git (GitHub refuses files over 100 MB).
+task*/raw/
+task*/source/
+task*/sources/
+task*/over50mb/
+task*/data/
+task*/dirty/
+task*/clean/
+task*/wwi/
+task*/input-assets/
+task*/Brazilian*/
+task*/.git/
+task*/generator/cache/
+task*/generator/src/
+task*/generator/out/
+task*/generator/sources/
+task*/generator/downloads/
+task*/**/*.pkl
+task*/**/*.parquet.tmp
+
+# The client's export as the author saved it at the root; the tracked copy is guidelines/client/
+/overview.txt
+/latest_update.txt
+/deep-reasoning.txt
+/domains.txt
+/prompt.txt
+/learning-modules/
+/examples/
+/quality-checks/
+
+# Root-level archives and scratch from local machines
+/*.zip
+/dot_claude_setup*
+task*/.vendor/
+task*/**/.venv/
+task*/**/venv/
+task*/**/site-packages/
+task*/**/node_modules/
+task*/**/.ipynb_checkpoints/
+
+# Repair snapshots (freeze.py), local to the run
+task*/.freeze.json
+
+
+# The harness's agent worktrees (one per isolated fork), runtime only
+.claude/worktrees/

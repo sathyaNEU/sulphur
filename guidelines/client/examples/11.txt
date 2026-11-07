@@ -1,0 +1,52 @@
+Study equal pay, not the dream act, once district sampling noise is removed from the support shares
+Economics and Quantitative Social Science
+Measurement error & attenuation
+hardest
+Political Science & Public Policy. The two graded runs averaged 0.28.
+
+What makes this task strong
+The prompt asks about the share of each district's adults who support a proposal, but the CES gives only an estimate of it from about 140 respondents per district. Part of the spread between districts is sampling noise, and a regression on the noisy share understates the slope by the share of the spread that is real.
+The noise differs sharply by proposal, which is what flips the pick: equal pay has near-universal support (district mean 89.3%), so only 0.22 of its district spread is real, against 0.55 to 0.82 for the others. Raw slopes rank proposals partly by how noisy each share is.
+It takes a chain of dependent inferences: build weighted district shares with Kish effective sizes; fit the raw slopes; notice from split halves that equal pay's district shares barely replicate (correlation 0.10 against 0.34 to 0.68); estimate each proposal's real share of spread from the observed variance less the mean sampling variance; correct each slope; confirm with split-half and instrumented versions.
+It is not a reading stump: the estimand is stated plainly, and nothing in the files says the shares are noisy or how to correct them. The solver has to recognize errors-in-variables from the design.
+The shallow path is a clean regression on the survey shares, which picks the DREAM Act at 0.033 with equal pay near the bottom at 0.021.
+Note: one correction concept (attenuation from measurement error) carries the whole task, and the input pack has only five files, below Sulfur's 10-file minimum.
+Prompt
+Stakeholder ask
+We're choosing one of the seven roll-call proposals in the 2020 CES for a study of how closely House members' voting records reflect their constituents' views. Please use the attached files to make the determination.
+
+Pick the proposal for which, across the districts of the 116th House, a member's DW-NOMINATE first-dimension score changes most steeply, in either direction, with the share of the district's adults who support the proposal: the size of the change in the score per percentage point of that share. Name the proposal and give its figure as well.
+
+Please prepare a one-page note in representation_note.docx that starts with the proposal and its figure, then explains how you arrived at it.
+
+I also need representation_slopes.xlsx, with the figure for every proposal, a row for each district showing the support shares used, and a chart. Please also tell me whether Voteview's party file changes the pick.
+
+Deliverables
+Every file is prescribed by name. Nothing is optional, and no single file carries the whole answer.
+
+representation_note.docx
+representation_slopes.xlsx
+Input files
+Public political science data: the 2020 Cooperative Election Study common content with validated vote (188 MB CSV) and its guide (PDF), Voteview's 116th House members file with DW-NOMINATE scores, Voteview's member data help page (HTML), and Voteview's party file, which summarizes the chamber by party and does not change the pick.
+
+Final recommendation
+Study equal pay for women and men (CC20_350d). Across the 435 districts of the 116th House, a member's DW-NOMINATE first-dimension score falls by 0.10 units per percentage point of the district's adult support for equal pay (primary figure 0.098), more steeply than for any other proposal; no other proposal exceeds 0.074 under any construction. Voteview's party file gives chamber-level party summaries, not district members, so it does not change the pick.
+
+Step-by-step solution
+Read the CES fields: state, 116th district, commonweight, and the seven roll-call items CC20_350a to CC20_350g (1 support, 2 oppose).
+Match districts to Voteview's 116th members by state and district (at-large coded 0 in Voteview and 1 in the CES), keep the member with the most votes cast, drop DC and the delegates: 435 districts.
+Compute weighted support per proposal and district among respondents answering 1 or 2, with respondent counts and Kish effective sizes.
+Regress each member's first-dimension score on the district share: DREAM Act 0.033 steepest, equal pay 0.021 near the bottom.
+Check whether the shares measure the district: two random halves of each district's respondents correlate at only 0.10 for equal pay, 0.34 to 0.68 for the others.
+Estimate the real share of each proposal's spread as (observed variance less the mean of p(1 - p)/n_eff) divided by observed variance: equal pay 0.22, DREAM Act 0.55, LGBT protections 0.59, Kavanaugh 0.62, minimum wage 0.75, the removal votes 0.81.
+Divide each raw slope by that share: equal pay 0.098, DREAM Act 0.060, LGBT protections 0.054, Kavanaugh 0.050, minimum wage 0.038, removal votes 0.030.
+Confirm: split-half reliability gives equal pay 0.122; instrumenting each half with the other gives 0.150 and 0.104; five random splits and unweighted shares keep equal pay first, with nothing else above 0.074.
+Answer the party-file question and write the note and workbook.
+Where the runs went wrong
+Method shortcut. Both graded runs took the raw-share slopes and picked the DREAM Act (0.032756 and 0.032888 under their member rules), with equal pay at 0.021.
+Treating noise as signal. The raw ranking (DREAM Act 0.033, LGBT protections 0.032, Kavanaugh 0.031) mostly tracks how reliable each share is, not how steeply members follow it.
+A check that cannot catch it. Changing the member rule for districts that changed hands moves the raw slopes by less than 0.0002, so robustness checks on matching choices pass while the pick stays wrong.
+Justification
+The question is about district adults, and the survey share is a noisy measure of that. Because the noise is largest relative to the real spread for equal pay, the raw regression flattens its slope the most. Correcting each slope for its own reliability reverses the ranking, and every independent construction agrees.
+
+Browsing worked examples. Back to the example library

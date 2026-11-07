@@ -1,0 +1,81 @@
+Four reminders from review
+What reviewers send back most often in prompts, to check before you submit
+
+Prompts that need a rewrite slow down your task. These four reminders cover most of what reviewers send back.
+
+Write a natural request, yourself. Write it the way the request would really reach you: a forwarded message, a formal letter, a blunt question. No persona opener, no file list up front, no First/Next/Finally, no closing list of documents. LLM-written prompts are rejected.
+Pin the outcome, never the method. Say what has to be decided and the threshold that settles it, so the answer is deterministic. Never name the method, the trap, the comparison group, the confounder or the adjustment, and never warn ("watch out for", "be careful", "make sure to account for"). A standard or manual that spells out the deciding calculation counts as naming the method.
+Make the deep step the hard part. The models should fail by doing a reasonable analysis that does not go far enough, not by missing one hidden detail. If telling the solver one fact would make the task routine, the task is a surface stump. See Deep reasoning.
+One recommendation, a few hard asks, 1 to 3 real deliverables. Two or three multi-part asks that each take analysis, in your assigned domain, and files described by who will use them.
+LLM-generated prompts are rejected
+Take this seriously. LLM-generated prompts are rejected, and repeated use can lead to offboarding.
+
+Practice the reminders
+Try these two activities before you write your prompt.
+
+Activity 1: Spot the giveaways
+This prompt reads naturally and would pass the LLM Prompt Test. Highlight the phrases that give away the method or the trap.
+
+Highlight the phrases that tell the solver how to do the analysis or what to watch for.
+
+The after-school tutoring program ran in nine of our 30 schools last year, and the superintendent wants to know whether it raised spring math scores by at least 0.15 standard deviations before we fund it districtwide. Be careful: the nine schools were picked because their scores were the lowest. Compare them with similar schools rather than with their own history. Drop the duplicate spring file for Lincoln Middle. Cluster by school when you work out the uncertainty. A short memo for the school board and a table by grade would help.
+Check my highlights
+Good
+The after-school tutoring program ran in nine of our 30 schools last year, and the superintendent wants to know whether it raised spring math scores by at least 0.15 standard deviations before we fund it districtwide. A short memo for the school board would help, with a table showing whether the answer holds in each grade.
+
+Bad
+The after-school tutoring program ran in nine of our 30 schools last year, and the superintendent wants to know whether it raised spring math scores by at least 0.15 standard deviations before we fund it districtwide. Be careful: the nine schools were picked because their scores were the lowest. Compare them with similar schools rather than with their own history. Drop the duplicate spring file for Lincoln Middle. Cluster by school when you work out the uncertainty. A short memo for the school board and a table by grade would help.
+
+Same decision, same threshold. The second version does the solver's thinking for it, so the runs will follow the instructions and pass. The first leaves the selection problem, the comparison, the cleaning and the uncertainty to the solver, which is where a reasonable but shallow analysis falls short.
+
+Activity 2: Be the reviewer
+Review six prompts the way a reviewer would, using the four reminders.
+
+Context
+
+This checks the prompt only. A real review also checks the input files, the golden solution and how the two runs failed.
+
+Review each prompt as a reviewer would. Send back any prompt that breaks one of the four reminders, and approve the rest.
+
+0 / 6 decided
+Our county's eviction diversion program has been running in the two busiest housing courts since last spring, and the housing authority will keep funding it only if it prevented at least 120 completed evictions a year. Did it? Put the answer in a memo the authority's finance staff can check, with the workbook behind the estimate.
+
+Prompt 1
+
+Approve
+Send back
+Apply the Facility Allocation Standard in the bundle: rank the candidate sites by weighted need score, remove any site above the 12% cost cap, and if the top two are within 2 points, choose the one with the larger catchment. Which site gets the new clinic?
+
+Prompt 2
+
+Approve
+Send back
+Online orders fell 9% in the third quarter and the merchandising team blames the new site search. Make sure you account for the June price increase, since that's really what's behind it, and use the second quarter as the baseline. Tell us whether search cost us more than $200k in margin, in a short memo.
+
+Prompt 3
+
+Approve
+Send back
+I'm a senior analyst at a regional hospital network. Using the attached admissions, staffing and finance files, first calculate readmission rates by unit, then compare them to the national benchmark, and finally identify the unit that needs intervention. Provide a memo, a CSV and a chart.
+
+Prompt 4
+
+Approve
+Send back
+We redesigned onboarding in April. Tell me whether it improved retention, with a chart and a short write-up.
+
+Prompt 5
+
+Approve
+Send back
+Our panel's response rate dropped from 61% to 48% after we cut the incentive in 2025, and the survey director needs to know whether the household income estimates we published that year still meet the 2-point accuracy target. A methods note she can circulate, and the code behind it.
+
+Prompt 6
+
+Approve
+Send back
+Check my work
+You can submit now; 6 blank items will count as incorrect.
+
+Previous
+Next
