@@ -1,0 +1,55 @@
+{
+  "task": "task601",
+  "status": "DESIGN",
+  "domain": "product-analytics",
+  "subdomain": "retention-cohort-lifetime-value-modeling",
+  "objective": "forecasting",
+  "stage": 2,
+  "stage_name": "design",
+  "updated": "2026-11-07",
+  "call": "",
+  "stump": "A competent solver projects the AUT26 members on the paid-retention curve by membership month, validated on SPR25 and last autumn's joiners, files about EUR 625 per twelfth-month member (0.36 paying a twelfth charge) and books the re-run, when four in five AUT26 members sit with tutors in their first teaching months, just short of the months in which tutors stop at their highest rates.",
+  "architecture": 1,
+  "loops": 0,
+  "precut": {
+    "exit": null,
+    "date": ""
+  },
+  "leak": {
+    "leak_py": "",
+    "reader": ""
+  },
+  "duplicate_check": {
+    "heart": "",
+    "nearest": ""
+  },
+  "judge": {
+    "verdict": "",
+    "disposition": "",
+    "gate_h": "",
+    "report": ""
+  },
+  "paper_pair": null,
+  "runs": {
+    "run1": null,
+    "run2": null,
+    "average": null,
+    "counterfactual_average": null,
+    "first_wrong_step": {
+      "run1": "",
+      "run2": ""
+    },
+    "triage": "",
+    "recorded": "",
+    "history": []
+  },
+  "returned": [],
+  "resume": "stage 2: generator (world.py written), pack builder, golden, checks, ceiling; then precut",
+  "approved": null,
+  "submitted": null,
+  "portal": {
+    "status": "",
+    "date": "",
+    "note": ""
+  }
+}
