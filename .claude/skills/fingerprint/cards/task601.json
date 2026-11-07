@@ -11,8 +11,8 @@
   "shape": "02",
   "decision_type": "go_hold_or_stop",
   "answer_unit": "currency",
-  "answer": "",
-  "answer_source": "",
+  "answer": "Do not book the January and February re-run of AUT26 on the same terms: about EUR 900 per twelfth-month member (about 950 paying a twelfth charge, 80 per cent range EUR 850 to 975) against the EUR 800 bar.",
+  "answer_source": "task601/submission.md block 1; task601/generator/figures.json (call, exp12, cost_per_12m_eur, range80_cost_eur)",
   "gap": [
     "population",
     "time"
@@ -33,7 +33,7 @@
   "validated_decoy": false,
   "context_artifact": "close_out_summary",
   "stump_class": "analytical",
-  "analyst_test": "A strong analyst who cleans the billing ledger (retries, refunds, replayed rows), applies the growth review standard's definitions, builds the members' paid-retention curve by membership month from every 2024 to 2026 membership, checks it against the spring 2025 campaign and projects each autumn member to the twelfth charge files about EUR 560 per twelfth-month member and books the re-run; the call is wrong because the autumn members sit with tutors in their first teaching months, tutors stop teaching at their highest rates between their fourth and eighth months, and a member whose tutor stops cancels about half the time, so the expected twelfth-month members are about a sixth fewer and the cost is about EUR 670.",
+  "analyst_test": "A strong analyst who cleans the billing ledger (retries, refunds, replayed rows), applies the growth review standard's definitions, builds the members' paid-retention curve by membership month from every 2022 to 2026 membership, checks it against the spring 2025 campaign and last autumn's joiners and projects each autumn member to the twelfth charge files about EUR 725 per twelfth-month member (about 1,200 paying a twelfth charge) and books the re-run; the call is wrong because 91.5 per cent of the autumn members still paying sit with tutors in their first two teaching months, tutors stop at 21 to 26 per cent a month after four to six months of teaching against 0.8 past their first year, and a member whose tutor stops cancels 61.7 per cent of the time in the first month without the tutor and 26.7 the month after, so about 950 pay a twelfth charge and the cost is about EUR 900.",
   "domain_test": "The deciding quantity is a campaign cohort's expected twelfth-month paid retention, projected from immature membership histories, the retention and lifetime-value task type's own estimate; what decides it is how a two-sided tutoring marketplace's supply churn carries into member churn through each member's tutor, so with another field's nouns the monthly billing clock, the campaign payback rule and the surge matching of new members to new tutors stop making sense.",
   "layer2_family": "estimation_fit",
   "layer2_pattern": "own:supply-linked-member-retention",
@@ -43,7 +43,6 @@
     "webhook replays writing the same charge twice",
     "an amount column renamed and moved to minor units in the 2025 billing export",
     "plan codes renamed at the April 2025 price change",
-    "tutor ids written with and without their T- prefix across two lesson-log exports",
     "campaign codes in several cases and with channel suffixes in the attribution export",
     "agency invoices in EUR and GBP, net and VAT lines, one credit note"
   ],
@@ -51,10 +50,10 @@
   "role_family": "product_manager",
   "scoring_unit": "per active unit per period",
   "spine": {
-    "file": "billing_charges_2024-01_2026-12.csv",
-    "rows": 0,
-    "entity": "one membership charge attempt",
-    "grain": "member x charge attempt",
+    "file": "billing_events_2022-01_2026-10.csv",
+    "rows": 203776,
+    "entity": "one billing event: a charge attempt, retry, refund or replayed webhook",
+    "grain": "member x billing event",
     "source": "synthetic"
   },
   "forum": "line_manager_or_team",
@@ -81,11 +80,11 @@
   "opening_move": "question-first",
   "question_form": "whether",
   "driver": "A unit's chance of reaching a milestone is set largely by whether the provider it is attached to keeps operating, providers stop at a rate that peaks a few months into their own tenure, and the forward group was attached almost wholly to providers in their first months, so an exit curve by the unit's own tenure, which validates on closed groups, overstates how many reach the milestone.",
-  "driver_concrete": "Each autumn 2026 campaign member's chance of paying a twelfth monthly charge is projected through their tutor: tutors stop teaching at about 13 to 18 per cent a month in their fourth to eighth teaching months against about 1 per cent after a year, a member whose tutor stops cancels about half the time within two charges, and 4 in 5 autumn members were matched to tutors who began teaching in September to November 2026, so the expected twelfth-month members fall about a sixth below the membership-month curve and the cost per twelfth-month member rises from about EUR 560 to about EUR 670.",
-  "stump": "A competent solver projects the autumn campaign's members on the platform's paid-retention curve by membership month, validated on the spring 2025 campaign, and files about EUR 560 per twelfth-month member, inside the EUR 610 bar, and books the re-run; the step that lands it there is projecting each member on their own tenure when the member's cancellation rides on their tutor, and the autumn members' tutors are about to cross the months in which new tutors stop teaching.",
-  "deep_chain": "(1) rebuild each member's current tutor and each tutor's teaching months from the lesson log, which holds no tenure; (2) measure from every past tutor stop that a member whose tutor stops teaching cancels about half the time within two charges, net of their own baseline; (3) estimate tutors' stopping by teaching month from every tutor's history, a hump in months four to eight; (4) recognise that the autumn members sit with tutors in their first three teaching months, unlike any earlier group bar part of the spring 2025 campaign; (5) project each member to the twelfth charge through their tutor's stopping odds and their own cancellation curve estimated on months with an active tutor, so stops are not counted twice; (6) check the linked projection out of sample against the membership-month curve; (7) cost per twelfth-month member against EUR 610.",
+  "driver_concrete": "Each autumn 2026 campaign member's chance of paying a twelfth monthly charge is projected through their tutor: tutors stop at 21 to 26 per cent a month after four to six months of teaching against 0.8 per cent past their first year, a member whose tutor stops cancels 61.7 per cent of the time in the first month without the tutor and 26.7 the month after, and 91.5 per cent of the autumn members still paying are with tutors who began teaching in September or October 2026, so the expected twelfth-month members fall from about 1,200 on the membership-month curve to about 950 and the cost per twelfth-month member rises from about EUR 725 to about EUR 900.",
+  "stump": "A competent solver projects the autumn campaign's members on the platform's paid-retention curve by membership month, validated on the spring 2025 campaign and last autumn's joiners, and files about EUR 725 per twelfth-month member, inside the EUR 800 bar, and books the re-run; the step that lands it there is projecting each member on their own tenure when the member's cancellation rides on their tutor, and the autumn members' tutors are about to cross the months in which new tutors stop teaching.",
+  "deep_chain": "(1) rebuild each member's current tutor and each tutor's teaching months from the lesson log, which holds no tenure; (2) measure from every past tutor stop that a member whose tutor stops teaching cancels 61.7 per cent in the first month without the tutor and 26.7 the month after, against 5.5 in an ordinary month; (3) estimate tutors' stopping by months taught from every tutor's history, a hump after four to seven months; (4) recognise that 91.5 per cent of the autumn members still paying sit with tutors in their first two teaching months, a mix no earlier group had; (5) project each member to the twelfth charge through their tutor's stopping odds and their own cancellation curve estimated on months with an active tutor, so stops are not counted twice; (6) check the projection against the membership-month curve where they disagree (members of young tutors over six-month windows); (7) cost per twelfth-month member against EUR 800.",
   "judgment": "That a member's retention is a function of their tutor's survival rather than of their own tenure alone, carried as a two-level projection; the data justify it through the cancellation spike after every tutor stop, the tutor stopping hump by teaching month, and the membership-month curve's miscalibration for members of young tutors on held-out 2026 months.",
-  "one_fact_test": "The likeliest hint is that members often leave when their tutor stops teaching; told that, a run still has to see that stopping depends on the tutor's teaching month and that the autumn tutors are new (the pooled tutor stop rate files about EUR 575 and the re-run), estimate the members' own curve on active-tutor months so stops are not counted twice, and carry each member through the projection.",
+  "one_fact_test": "The likeliest hint is that members often leave when their tutor stops teaching; told that, a run still has to see that stopping depends on the tutor's months taught and that the autumn tutors are new (the member-weighted stop rate files about EUR 625 and the tutor-month rate EUR 739, both the re-run), estimate the members' own curve on active-tutor months so stops are not counted twice, and carry each member through the projection.",
   "strategy_label": "WORKS IN FORM: heterogeneity decides through weighting to the forward group (the autumn members' tutor teaching months), the property rebuilt from the lesson log, never read off a column; outcomes not finished (the tutors' stops still to come)",
   "mechanism_source": "design_note",
   "differentiation": {

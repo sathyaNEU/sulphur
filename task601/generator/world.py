@@ -26,11 +26,11 @@ CURRENCY = {'GB': 'GBP', 'CH': 'CHF'}
 P = dict(
     mbase={1: .13, 2: .085, 3: .065, 4: .055, 5: .05, 6: .045}, m712=.038, m1324=.030, m25=.025,
     eng_mult=(1.6, 1.0, 0.7), eng_p=(.25, .55, .20),
-    season={7: 1.12, 8: 1.15, 12: 1.05, 1: .97},
-    dep1=.60, dep2=.22, post_mult=1.3, post_len=3,
+    season={},
+    dep1=.60, dep2=.22, post_mult=1.0, post_len=0,
     tdep={1: .02, 2: .03, 3: .08, 4: .21, 5: .27, 6: .24, 7: .17, 8: .11, 9: .07},
     t1012=.03, t1324=.010, t25=.007,
-    pend_quit=.08, cap_lo=10, cap_hi=16, grow_lo=16, grow_hi=26,
+    pend_quit=.08, cap_lo=18, cap_hi=30, grow_lo=12, grow_hi=22,
     starter_share=.10, starter_max=8, slack=.30,
     lean=(50, 55),
     acq_season={1: 1.45, 2: 1.15, 3: 1.05, 4: .95, 5: .90, 6: .75, 7: .65, 8: .80, 9: 1.35, 10: 1.20, 11: 1.00, 12: .75},
@@ -181,7 +181,7 @@ class World:
                 open_ = sum(max(0, self._cap(i) - T['load'][i]) for i in self._active(lang))
                 need = int(P['slack'] * act_by.get(lang, 0) + 1.1 * exp_new) + 6
                 if open_ < need:
-                    for _ in range(int(np.ceil((need - open_) / 13))):
+                    for _ in range(int(np.ceil((need - open_) / 24))):
                         self._hire(t, lang)
         # new members
         flags = np.array([1] * n_camp + [0] * n_org); rng.shuffle(flags)

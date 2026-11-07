@@ -3,9 +3,9 @@
 Corvane, a Berlin subscription platform that matches each member with a dedicated freelance language tutor for
 weekly one-to-one video lessons, must decide by 20 November 2026 whether to book Fenwright Media's January and
 February 2027 flight, a re-run of the autumn 2026 acquisition campaign (AUT26, 1 September to 31 October 2026) at the
-same cost per paid member. The exports are cut at 31 October 2026 and pulled on 3 November 2026. Its growth review standard
-re-runs a campaign only when the campaign's cost per member still paying in their twelfth month is within a bar.
-
+same cost per paid member. The exports are cut at 31 October 2026 and pulled on 3 November 2026. Its growth
+review standard re-runs a campaign only when the campaign's cost per member still paying in their twelfth month is
+within the bar the growth lead sets, here EUR 800. 
 ## Draw
 
 - **Card:** `.claude/skills/fingerprint/cards/task601.json`, architecture 1. `guard.py check` PASS (nearest driver
@@ -54,37 +54,39 @@ re-runs a campaign only when the campaign's cost per member still paying in thei
 
 ## Default path
 
-1. Read `growth_review_standard_v3.pdf`: AUT26 members are paid members whose first membership charge falls from
-   1 September to 31 October 2026 and whose signup carries the campaign code; a twelfth-month member pays a twelfth
-   monthly membership charge (collected, retries included, not refunded in full); cost is the agency's media net of
-   VAT in EUR (GBP invoices at the ECB reference rate of the invoice date) plus the first-month discounts given.
-2. Clean `billing_charges_2024-01_2026-12.csv`: collapse webhook replays on `charge_id`, keep the collected attempt
-   of each retried month, drop charges refunded in full inside the cooling-off period, reconcile the 2025 amount
-   rename; count each member's paid months to 31 October 2026.
-3. Join `campaign_attribution_export.csv` (codes in several cases, channel suffixes) to identify the AUT26 paid
-   members (about 3,700) and sum the cost from `aut26_closeout_and_invoices.xlsx` and the discounted first charges
-   (about EUR 0.83 million, about EUR 225 per paid member).
-4. Build the platform's paid-retention curve by membership month from every 2022 to 2026 membership, censored at
-   31 October 2026 (the field's method: a Kaplan-Meier or life-table curve, or a chain ladder over joining cohorts,
-   or a shifted-beta-geometric fit), optionally with plan, engagement band and calendar month.
-5. Validate it: project the spring 2025 campaign (SPR25) and the September to October 2025 joiners from their third
-   membership month and compare with what they actually kept to the twelfth charge (within about 2 per cent each).
-6. Project each AUT26 member still paying at 31 October 2026 from their current membership month to the twelfth
-   charge: about 0.36 of the paid members, about 1,340 twelfth-month members.
-7. Cost per twelfth-month member about EUR 625, inside the bar (about EUR 700, set on the cut pack); book the re-run.
+1. Read `growth_review_standard.pdf`: AUT26 members are paid members whose first membership charge was collected
+   from 1 September to 31 October 2026 (Berlin days) and whose sign-up carries the AUT26 code; a twelfth-month member
+   pays a twelfth monthly charge (collected, retries counted once, not refunded in full); cost is the agency's media
+   net of VAT and credit notes (GBP at the ECB rate of the issue date) plus the first-month discounts against list
+   price; where members have not reached the twelfth charge the review uses the expected number.
+2. Clean `billing_events_2022-01_2026-10.csv`: drop webhook replays on `event_id`, keep the collected attempt of each
+   retried month, remove charges refunded in full, read `amount` and `amount_minor` across the 2025 schema change;
+   count each member's collected charges to 31 October 2026.
+3. Join `signup_attribution_2022-01_2026-10.csv` (codes in several cases, channel suffixes): 3,534 AUT26 members;
+   cost EUR 868,162.22 from `fenwright_aut26_closeout_and_invoices.xlsx`, the ECB file and the discounted first
+   charges (EUR 245.66 per paid member).
+4. Build the platform's paid-retention curve by membership month from every 2022 to 2026 membership, censored at the
+   cut (the field's method: a Kaplan-Meier or life-table curve, a chain ladder over joining cohorts, or a
+   shifted-beta-geometric fit), optionally with calendar month or engagement.
+5. Validate it on the two earlier groups a growth analyst would pick: projected from June 2025, the spring 2025
+   campaign (SPR25) comes out at 28.7 per cent against 33.3 kept; projected from December 2025, last September and
+   October's joiners at 30.6 against 33.5. The curve has not been optimistic.
+6. Project each AUT26 member still paying at 31 October from their current membership month to the twelfth charge:
+   1,194.4 expected twelfth-month members (33.8 per cent).
+7. Cost per twelfth-month member EUR 726.89, inside the EUR 800 bar: book the re-run.
 
-Ends on: book the re-run at about EUR 625 per twelfth-month member (0.36 of AUT26 members paying a twelfth charge)
+Ends on: book the re-run at about EUR 725 per twelfth-month member (about 1,200 AUT26 members paying a twelfth charge)
 
-Golden: do not re-run; about EUR 770 per twelfth-month member (about 0.29 paying a twelfth charge, about 1,080 members)
+Golden: do not re-run; about EUR 900 per twelfth-month member (about 950 paying a twelfth charge, 80 per cent range EUR 850 to 975)
 
 ## Stump sentence
 
-A competent solver projects the AUT26 members on the platform's paid-retention curve by membership month, validated
-on the spring 2025 campaign and last autumn's joiners, files about EUR 625 per twelfth-month member (about 0.36 paying
-a twelfth charge), inside the bar, and books the re-run; the step that lands it there is projecting each member on their own tenure,
-when a member's cancellation rides on whether their tutor keeps teaching and four in five AUT26 members sit with
-tutors in their first teaching months, just short of the fourth to eighth months in which tutors stop at their
-highest rates.
+A competent solver projects the AUT26 members on the platform's paid-retention curve by membership month, checks it
+against the spring 2025 campaign and last autumn's joiners, files about EUR 725 per twelfth-month member (about 1,200
+paying a twelfth charge), inside the EUR 800 bar, and books the re-run; the step that lands it there is projecting each
+member on their own tenure, when a member's cancellation rides on whether their tutor keeps teaching and nine in ten
+AUT26 members still paying sit with tutors in their first two teaching months, just short of the fourth to seventh
+months in which tutors stop at their highest rates.
 
 ## Deep reasoning
 
@@ -92,206 +94,328 @@ highest rates.
 - **Domain test:** the deciding quantity is the AUT26 cohort's expected twelfth-month paid retention, projected from
   immature membership histories, which the field builds as a retention curve by membership month (Kaplan-Meier, a
   life table, a chain ladder over joining cohorts or a shifted-beta-geometric fit) and turns into a cost per retained
-  member for a payback decision.
-- **Swap:** "do not re-run the campaign, because the members' twelfth-month retention runs through their tutors'
-  survival" with hospital nouns becomes "do not repeat the patient drive because patients leave when their
-  physician does": the monthly billing clock, the charge-based retention rule, the cooling-off refunds, the campaign
-  payback bar and the surge matching of new members to freshly onboarded tutors have no counterpart, and the
-  decision (a re-run of a paid acquisition flight at the same cost per paid member) stops making sense.
-- **Layer 1:** card charges retried inside the dunning window (the billing system's retry scheduler); first charges
-  refunded in full inside the fourteen-day cooling-off period (EU distance-selling rules, the payments desk);
-  webhook replays duplicating charge rows (the payment provider's at-least-once delivery); an amount column renamed
-  and moved to minor units in the 2025 export (a billing schema migration); plan codes renamed at the April 2025
-  price change (the catalogue); tutor ids with and without their `T-` prefix across the two lesson-log exports (a
-  lesson-platform migration in 2025); campaign codes in several cases with channel suffixes (the ad platforms' UTM
-  templates); GBP and EUR invoices with net and VAT lines and a credit note (the agency's finance system). None is
-  placed to be caught; each is handled the same way by every careful run (`dataset-generation` §7.1 R2 asserts it).
-- **Layer 2:** `estimation_fit`, own pattern `supply-linked-member-retention`: the member's retention is a function
-  of the attached tutor's survival, and the tutor's stopping depends on the tutor's teaching month; the choice that
-  flips the call is carrying each member through that second survival instead of through their own tenure alone.
-- **Decisive step:** carry each AUT26 member to the twelfth charge through whether their tutor keeps teaching:
-  tutors stop at about 13 to 18 per cent a month in their fourth to eighth teaching months against about 1 per cent
-  after their first year, read from every tutor's run of months in the lesson log, and a member whose tutor stops
-  cancels about half the time within two charges, so the AUT26 group, matched to tutors who began teaching in
-  September to November, keeps about a sixth fewer twelfth-month members than its own tenure predicts.
-- **Not semantics:** every field, code, unit and definition read correctly (the standard's twelfth-charge rule,
-  retries, refunds, codes, the GBP conversion) gives the same 3,7xx paid members, the same EUR 0.83 million cost and
-  the same paid-month counts; the call still depends on how the unobserved charges are projected, which no field
-  holds.
+  member for a campaign payback decision.
+- **Swap:** "do not re-run the campaign, because its members' twelfth-month retention runs through their tutors'
+  staying" with hospital nouns becomes "do not repeat the patient drive because patients leave when their physician
+  does": the monthly billing clock, the charge-based twelfth-month rule, the cooling-off refunds, the campaign payback
+  bar against a media flight and the surge matching of new members to freshly started tutors have no counterpart, and
+  the decision (re-booking a paid acquisition flight at the same cost per paid member) stops making sense.
+- **Layer 1:** card charges retried in the dunning window (the payment provider's retry scheduler); first charges
+  refunded in full in the cooling-off period (the payments desk); webhook replays writing a charge twice (the
+  provider's at-least-once delivery); `amount` moved to `amount_minor` in May 2025 (a billing schema migration); plan
+  codes renamed at the April 2025 price change (the catalogue); campaign codes in several cases with channel suffixes
+  (the ad platforms' UTM templates); six AUT26 sign-ups after midnight Berlin on 31 October (UTC timestamps); GBP and
+  EUR invoices with net and VAT lines and a credit note (the agency's finance system). None is placed to be caught;
+  each is handled alike by every careful run, and `checks.py` R2 asserts the call holds under each mishandling.
+- **Layer 2:** `estimation_fit`, own pattern `supply-linked-member-retention`: the member's retention is a function of
+  the attached tutor's survival, and the tutor's stopping depends on the tutor's teaching month; the choice that flips
+  the call is carrying each member through that second survival instead of through their own tenure alone.
+- **Decisive step:** carry each AUT26 member to the twelfth charge through whether their tutor keeps teaching: tutors
+  stop at 21 to 26 per cent a month in their fourth to sixth teaching months against under 1 per cent after their
+  first year, read from every tutor's run of months in the lesson log, and a member whose tutor stops cancels 62 per
+  cent of the time that month and 27 per cent the next, so the AUT26 group, matched to tutors who began teaching in
+  September and October, keeps about a fifth fewer twelfth-month members than its own tenure predicts.
+- **Not semantics:** every field, code, unit and definition read correctly (the twelfth-charge rule, retries, refunds,
+  codes, the Berlin window, the GBP conversion, the discounts) gives the same 3,534 members, the same EUR 868,162.22
+  and the same charge counts; the call still depends on how the unobserved charges are projected, which no field holds.
 - **Not rule application:** no filed rule projects anything: the standard says to use the expected number of
-  twelfth-month members where members have not reached the twelfth charge and nothing else. Enumerated family (every
-  construction a competent analyst reaches for, priced on the generator's clean truth, seed 602): 0.255 to 0.443
-  paying a twelfth charge. Standing family (the projections that carry members through their tutors' stopping by
-  teaching month, with the members' own curve on active-tutor months): 0.293 to 0.298, against 0.357 to 0.443 for every
-  construction that leaves the tutors out; the cut pack re-measures both. Loudness of the ruling-out: a member whose
-  tutor stopped cancelled at 0.62 that month against 0.06 on active-tutor months (several thousand member-stops);
-  tutors stop at 0.02 to 0.03 a month in their first two teaching months, 0.21 to 0.27 in months four to six and under
-  0.01 after a year (over a thousand tutors); and over six-month windows the membership-month curve under-predicts the
-  cancellations of members whose tutor is in teaching months 0 to 2 by 29 per cent and 3 to 8 by 23 per cent while
-  over-predicting established tutors' members by 16 to 28 per cent (tens of thousands of member snapshots).
+  twelfth-month members and nothing about how. Enumerated family (every construction a competent analyst reaches for,
+  measured on the cut pack): 622 to 1,388 expected twelfth-month members, EUR 625 to 1,395 per twelfth-month member.
+  Standing family (the projections that carry members through their tutors' stopping by teaching month, the members'
+  own curve on active-tutor months, with or without calendar-month factors, smoothing, a post-rematch term or inputs
+  estimated from 2023, 2024 or 2025 on): 947.6 to 966.3, EUR 898 to 916, every one a hold, against EUR 625 to 739 for
+  every construction without the tutors' stopping by months taught. Loudness of the ruling-out: 7,900 member months
+  with a tutor stop cancel at 61.7 per cent against 5.5 in ordinary months; 798 tutors stop at 2 per cent a month in
+  their first two teaching months, 21 to 26 after four to six months and 0.8 past their first year; over six-month
+  windows the membership-month curve under-predicts the cancellations of members whose tutor is in their first three
+  teaching months by a factor of 1.22 (2,064 snapshots) and their fourth to ninth by 1.19 (8,452), and over-predicts
+  members of established tutors (0.74 and 0.85).
 - **Analyst test:** a strong analyst who cleans the ledger, applies the standard, builds the paid-retention curve by
-  membership month from every 2022 to 2026 membership, validates it on SPR25 and last autumn's joiners and projects
-  each AUT26 member files about EUR 625 per twelfth-month member (0.36 paying a twelfth charge) and books the re-run;
-  the answer is wrong because the AUT26 members sit with tutors about to cross the months in which tutors stop, so the
-  cost is about EUR 770.
-- **Estimand:** `growth_review_standard_v3.pdf` section 3 files the population (paid members whose first membership
-  charge falls from 1 September to 31 October 2026 and whose signup carries the AUT26 code, including members not
-  paying at the review date), the outcome (a twelfth monthly membership charge collected and not refunded in full),
-  the window (each member's own twelfth charge, the last falling in September 2027), the unit (EUR per twelfth-month
-  member, net of VAT, GBP at the ECB reference rate of the invoice date) and the comparison (the bar in the prompt;
-  for members who have not reached the twelfth charge, the expected number).
-- **No decoy:** nothing is planted: no copied block, hidden rule, memo, draft or briefing argues a figure; the
-  agency's close-out reports what it delivered (impressions, clicks, signups, paid members by channel) correctly and
+  membership month from every 2022 to 2026 membership, checks it on SPR25 and last autumn's joiners and projects each
+  AUT26 member files about EUR 725 per twelfth-month member (about 1,200 paying a twelfth charge) and books the
+  re-run; the answer is wrong because the AUT26 members sit with tutors about to cross the months in which tutors
+  stop, so the cost is about EUR 900.
+- **Estimand:** `growth_review_standard.pdf` section 3 files the population (paid members whose first charge was
+  collected on or between 1 September and 31 October 2026, Berlin days, with the AUT26 code on the sign-up, members not
+  paying at the review included), the outcome (a twelfth monthly membership charge collected and not refunded in
+  full), the window (each member's own twelfth charge, the last in September 2027), the unit (EUR per twelfth-month
+  member, net of VAT, GBP at the ECB rate of the issue date) and the comparison (the bar the prompt states; for
+  members short of the twelfth charge, the expected number).
+- **No decoy:** nothing is planted: no copied block, hidden rule, memo, draft or briefing argues a figure; the agency's
+  close-out reports what it delivered (impressions, clicks, pixel conversions) correctly on its own definitions and
   ranks nothing on the decision; the onboarding pause and the autumn tutor surge are the operations the platform ran.
-- **No certified replay:** no shipped figure is reproduced to recover the method; SPR25's actual twelfth-month
-  members are an outcome the pack records, and the default path's validation on it passes.
-- **Chain:** (1) rebuild each member's current tutor and each tutor's teaching months from the lesson log, which holds
-  no tenure; (2) measure from every past tutor stop that a member whose tutor stops teaching cancels about half the
-  time within two charges, net of their own baseline; (3) estimate tutors' stopping by teaching month from every
-  tutor's history, a hump in months four to eight; (4) recognise that the AUT26 members sit with tutors in their
-  first three teaching months, unlike any earlier group bar part of SPR25; (5) project each member month by month to
-  the twelfth charge through their tutor's stopping odds and their own cancellation curve estimated on months with
-  an active tutor, so stops are not counted twice; (6) check the linked projection out of sample against the
-  membership-month curve; (7) set the expected twelfth-month members against the cost and the bar.
+- **No certified replay:** no shipped figure is reproduced to recover the method; the earlier groups' twelfth-month
+  outcomes are records the pack holds, and the curve's back-test on them runs low rather than high.
+- **Chain:** (1) rebuild each member's current tutor and each tutor's run of teaching months from the lesson log,
+  which holds no tenure; (2) measure from every past tutor stop that a member whose tutor stops cancels 62 per cent of
+  the time that month and 27 per cent the next, against 5.5 in an ordinary month; (3) estimate tutors' stopping by
+  teaching month from every tutor's history, a hump in months four to seven; (4) recognise that nine in ten AUT26
+  members still paying sit with tutors in their first two teaching months, a mix no earlier group had; (5) project each
+  member month by month to the twelfth charge through their tutor's stopping odds and their own cancellation curve
+  estimated on months with an active tutor, so stops are not counted twice; (6) check the projection against the
+  membership-month curve where they disagree (members of young tutors over six-month windows); (7) set the expected
+  twelfth-month members against the cost and the EUR 800 bar.
 - **Judgment:** that a member's twelfth-month chance is a function of their tutor's survival rather than of their own
-  tenure alone, carried as a two-level projection with the members' own curve re-estimated on active-tutor months;
-  the data justify it through the cancellation spike after every tutor stop, the tutors' stopping hump by teaching
-  month, and the membership-month curve's miscalibration for members of young tutors on held-out months.
-- **One-fact test:** the strongest single sentence a reviewer would write is "four in five AUT26 members were matched
-  to tutors who had just started teaching, and new tutors mostly stop within their first year"; told it, a run still
-  has to measure how often a member cancels when the tutor stops (about 0.62 in that month and 0.27 the next, net of
-  the member's own curve), estimate the stopping by teaching month rather than read "mostly" as a rate, re-estimate the
-  members' own curve on active-tutor months so the stops are not counted twice (counting them twice files about 0.26),
-  and carry every member to the twelfth charge; a run told it can land the call and still miss the figures. The weaker
-  hint ("members often leave when their tutor stops") leaves the stopping rate open: a member-weighted stop rate
-  (0.034 a month) files 0.402 and the re-run, a tutor-weighted one (about 0.05) files about 0.32 and a hold, so the
-  hint alone does not decide the call either way.
+  tenure alone, carried as a two-level projection with the members' own curve re-estimated on active-tutor months; the
+  data justify it through the cancellation spike after every tutor stop, the stopping hump by teaching month, and the
+  membership-month curve's miscalibration for members of young tutors on six-month windows.
+- **One-fact test:** the strongest single sentence a reviewer would write is "nine in ten AUT26 members are with tutors
+  who just started, and new tutors mostly stop within their first year"; told it, a run still has to measure how often
+  a member cancels when the tutor stops (62 per cent that month and 27 the next, net of the member's own curve),
+  estimate the stopping by teaching month rather than read "mostly" as a rate, re-estimate the members' own curve on
+  active-tutor months so stops are not counted twice (counting them twice files 622 members), and carry every member
+  to the twelfth charge; a run told it can land the call and still miss the figures. The weaker hint ("members often
+  leave when their tutor stops") leaves the stopping rate open: the member-weighted rate (4.6 per cent a month) files
+  EUR 625 and the re-run, the tutor-month rate (7.6) EUR 739 and the re-run, so the hint alone does not rescue the call.
 - **No replay:** the call re-derives no published figure and no stated number is wrong; the close-out's figures are
-  correct and answer another question.
-- **Pinned:** every rival a careful analyst would run, priced on the generator's clean truth (seed 602; re-measured on
-  the cut pack and asserted in `checks.py` R6): the membership-month curve on all history (0.361), on 2026 transitions
-  (0.381), with calendar month (0.365), with engagement (0.357), times AUT26's own observed-to-expected ratio (0.376),
-  a shifted-beta-geometric fit (0.360), the linked projection with a member-weighted pooled stop rate (0.402): each
-  files the re-run. The linked projection by teaching month (0.293), smoothed (0.293), without the post-rematch uplift
-  (0.293), with one shocked charge only (0.316, ruled out by the second month's cancellation rate of 0.27 against
-  0.06), a snapshot logit with the tutor's teaching month in bands (0.278) or log form (0.255), stratification on the
-  tutor's teaching month at match (0.268): each files a hold. Two members sit near the bar and are ruled out by named
-  data: the linked projection with a tutor-weighted pooled stop rate (0.319, ruled out by the stopping hump, 0.02 to
-  0.27 by teaching month) and a snapshot logit linear in the tutor's teaching month (0.311, ruled out by its fit: a
-  likelihood ratio of 692 on 3 degrees of freedom against the banded form, which it misses by 0.13 in the youngest
-  band).
-- **Run forecast:** run 1, method shortcut at rung 0: builds the membership-month curve, validates it on SPR25 and
-  last autumn's joiners and books the re-run; run 2, unfinished chain at rung 2: joins tutors, adjusts the members
-  whose tutor has already stopped or applies a member-weighted pooled stop rate, and books the re-run; the
-  dismissed-own-evidence route is AUT26's months so far running slightly below the curve (observed to expected 0.95),
-  read as a strong cohort.
-- **Strategy label:** WORKS IN FORM (Heterogeneity that pooling hides: the decision weights the tutors' teaching
-  months to the forward group, rebuilt from the lesson log, never read off a column; with Outcomes that have not
-  finished happening: the tutors' stops still to come).
+  correct on its own pixel definitions and answer another question.
+- **Pinned:** every rival a careful analyst would run, measured on the cut pack and asserted in `checks.py` R6 and
+  SF12: the membership-month curve on all history (EUR 726.89), on 2026 months (634.75), with calendar month (725.09),
+  with engagement (723.88), times AUT26's own observed-to-expected ratio (652.20), a shifted-beta-geometric fit
+  (662.02), members whose tutor already stopped (727.42), the tutor link with a member-weighted stop rate (625.32) or a
+  tutor-month stop rate (739.21): each files the re-run. The tutor-linked projection by teaching month (905.64), with
+  calendar-month factors (899.18), smoothed (903.69), with a post-rematch term (909.01), on months from 2023, 2024 or
+  2025 (902.74, 905.15, 898.43), on tutors from 2024 (903.75) or tutors and months from 2024 or 2025 (903.27,
+  905.18): each files the hold at EUR 900 to the nearest 25. Dropping the 2022 launch tutors (916.19, or 913.24 with
+  months from 2023) files the hold at EUR 925 and is ruled out by named data: the launch tutors stop like later ones
+  (likelihood ratio 4.69 on 5 degrees of freedom, p 0.46), so dropping them discards data and removes no difference.
+  One shocked charge only (811.73) is ruled out by the second month's 26.7 per cent against 5.5 and files the hold;
+  the all-cause curve plus the shocks counts stops twice (1,394.75, hold). Classifiers of the twelfth charge on the
+  tutor's teaching month at a snapshot, and the stratification at match, file the hold at EUR 839 to 1,077 by form and
+  training years (banded 976.41 on every completed member, 910.75 from 2023 joiners, 873.86 from 2024 joiners; log and
+  linear forms worse by fit at every window): they learn only from members who joined by November 2025, so they carry
+  the 2022 launch months, when 57.4 per cent of members whose tutor stopped were moved to a tutor in its first nine
+  teaching months against 0.6 per cent since 2023, their answer moves with the years they are fitted on, and they
+  cannot give the monthly figures the workbook needs (whose August and September 2027 cells are the twelfth charges).
+- **Run forecast:** run 1, method shortcut at rung 0: builds the membership-month curve, checks it on SPR25 and last
+  autumn's joiners and books the re-run; run 2, unfinished chain at rung 2: joins tutors, shocks the members whose
+  tutor has already stopped or applies one pooled stop rate, and books the re-run; the dismissed-own-evidence route is
+  AUT26's months so far running below the curve (observed to expected 0.89), read as a strong cohort.
+- **Strategy label:** WORKS IN FORM (Heterogeneity that pooling hides: the decision weights the tutors' teaching months
+  to the forward group, rebuilt from the lesson log, never read off a column; with Outcomes that have not finished
+  happening: the tutors' stops still to come).
 - **Lesson:** a cohort's retention is not always a function of its own tenure: where members are attached to a
   provider, the provider's survival is part of the member's, and a surge that pairs new members with new providers
-  hides a churn wave the members' own months cannot show; no build on file projects a unit through the survival of
-  the provider it is attached to.
+  hides a churn wave the members' own months cannot show; no build on file projects a unit through the survival of the
+  provider it is attached to.
 
 ## Survivor anatomy
 
-- **Actor:** the property that decides (whether a member's tutor will stop teaching before the member's twelfth
-  charge) has no column: the lesson log carries member, tutor and month, the tutor directory carries profile fields
-  and a status word with no dates, and a tutor's teaching months exist only as the run of months the tutor appears.
+- **Actor:** the property that decides (whether a member's tutor will stop teaching before the member's twelfth charge)
+  has no column: the lesson log carries member, tutor and month, the tutor directory carries profile fields and a
+  status word with no dates, and a tutor's teaching months exist only as the run of months in which the tutor appears.
 - **Link:** the signal is read by joining each member's latest lesson tutor to that tutor's own run of months and to
   every other tutor's stopping history, a cross-unit comparison the field's retention method never asks for (the
-  member curve is built from billing alone).
+  member curve is built from billing alone, and the member export names no tutor).
 - **Reflex:** the field's method for the deciding quantity, the paid-retention curve by membership month (Kaplan-Meier,
-  life table, chain ladder, shifted-beta-geometric), sits at rung 0 and files the re-run at about EUR 625.
-- **Back-test:** the textbook route validates on every campaign-level test a solver would run: projected from their
-  third month, SPR25 (280 members) comes out within about 1 per cent of what it kept and the September to October 2025
-  joiners within about 2 per cent. The campaign back-tests cannot discriminate the models (SPR25's tutor-clustered
-  standard error is about 0.03 of retention); the discriminating validation is member-level: over six-month windows
-  the curve misses members of young tutors by 23 to 29 per cent, which the linked projection does not.
+  life table, chain ladder, shifted-beta-geometric), sits at rung 0 and files the re-run at about EUR 725.
+- **Back-test:** the textbook route validates on the campaign-level tests a solver would run: projected from June
+  2025 SPR25 comes out at 28.7 per cent against 33.3 kept, and last autumn's joiners at 30.6 against 33.5, so the curve
+  looks conservative. Those groups started 45.1 and 10.3 per cent of their members with tutors in their first three
+  teaching months, against 91.7 for AUT26; the discriminating validation is member-level, where the curve misses members of young tutors by a factor of 1.19 to 1.22 over six months.
 - **Second use:** the lesson log exists for lessons delivered, engagement and tutor pay; the tutor directory for
-  matching and operations; the billing ledger for receipts; none is in the pack for the decisive step alone.
+  matching and operations; the billing export for receipts; none is in the pack for the decisive step alone.
 - **Shock:** the tutor onboarding pause (March to August 2026) and the autumn surge read as ordinary operations
-  (capacity cut, then hiring for a campaign); AUT26's own months so far run slightly better than the curve.
+  (capacity held, then hiring for a campaign); AUT26's own months so far run below the curve (0.89 observed to
+  expected), so nothing about the cohort looks wrong at the cut.
 - **Pins:** the standard files the WHAT (campaign member, cost, twelfth-month member, the expected number); no sentence
   names tutors, teaching months, stopping or matching, and the prompt names none of them.
 
 ## Readability screen
 
-Draft; completed at stage 2.
-
 | Rung | 1 Filed sentence | 2 Schema | 3 Reflex | 4 Control bench | 5 Hygiene | 6 Linear | 7 Dedicated organ | Verdict |
 |---|---|---|---|---|---|---|---|---|
-| R0 membership-month curve | the standard asks for the expected number | billing has paid months | the field's method | none | yes | no | no | readable |
-| R3 (decisive) tutor-linked projection by teaching month | no sentence names tutors | no tenure or stop-date column | not the retention method | none | no | no | lesson log and directory have other uses | silent |
+| R0 membership-month curve | the standard asks for the expected number | billing holds paid months | the field's method | none | yes | no | no | readable |
+| R1 curve with engagement or calendar month | none | lesson counts are columns | a common refinement | none | no | no | no | readable |
+| R2 members whose tutor already stopped | none | tutor id in the lesson log, status word in the directory | a join a careful run makes | none | no | no | no | readable |
+| R2b and R2c one pooled stop rate | none | none | the first rate after the join | none | no | one ratio | no | readable |
+| R3 (decisive) stopping by teaching month, carried member by member | no sentence names tutors, stopping or teaching months | no tenure or stop-date column; months rebuilt from the lesson log | not the retention method | none | no | no | lesson log and directory have their own uses | silent |
 
 ## Semantic fork table
 
-Drafted at stage 2.
-
 | SF | Term or convention | Golden reading | Alternatives | Call under each | Ruled out by |
 |---|---|---|---|---|---|
-| SF1 | AUT26 member | paid, first charge 1 Sep to 30 Nov 2026, AUT26 code | signup date in window; any code variant | same call | standard s3.1 |
+| SF1 | AUT26 member: the window | first charge 1 September to 31 October, Berlin days | UTC days (six late sign-ups move in) | same call, same rounding | standard 3.2 ("calendar days in Berlin") |
+| SF2 | paid member | a collected charge not refunded in full | cooling-off refunds counted | same call (moves only the cost per paid member) | standard 3.1 |
+| SF3 | a monthly charge | collected, a retry counted once, partial refunds still count | each attempt a charge | same call | standard 3.3 |
+| SF4 | campaign cost | media net of VAT and credit notes, GBP at the ECB rate of the issue date, plus discounts | gross of VAT; credit note kept; GBP at the agency's 1.17 | same call | standard 3.4 |
+| SF5 | first-month discounts | list price of the plan charged less the amount collected | left out | same call (at least 5 per cent outside the bar) | standard 3.4 |
+| SF6 | expected number | the mean of the projection | the median | same call | standard 3.6 ("expected number") |
+| SF7 | members paying in a month | a collected charge in that calendar month | an active status that month | same call; November cannot exceed the live members | prompt ("expect to pay") with standard 3.3 |
+| SF8 | the 80 and 90 per cent ranges | central intervals of the projection's predictive distribution, tutor stops shared by their members and the inputs redrawn from their sampling error | one-sided bounds; inputs held fixed (the stopping table, the shocks and the members' curve taken as known) | same call; held-fixed inputs give the same 80 per cent range and EUR 825 to 975 at 90 per cent | prompt ("80 and 90 per cent ranges"); a forecast's range carries its inputs' estimation error, and the stopping table rests on 798 tutors; `checks.py` SF8 and R7 |
+| SF9 | the month a member joined | the month of the first collected charge | sign-up month | same call (sign-up and first charge share a day) | standard 3.2 |
+| SF10 | cost per twelfth-month member | cost over the expected count | the expectation of the ratio | same call, within the rounding | standard 3.5 |
+| SF11 | the bar | at or below EUR 800 | strictly below | same call (the cost is EUR 106 above it) | prompt |
+| SF12 | rounding | once, members to the nearest 50 and euros to the nearest 25 | rounding each month first | same figures for every standing route that keeps all tutors (dropping the 2022 launch tutors files EUR 925, ruled out in Pinned) | prompt |
+| SF13 | the cost per paid member that meets EUR 800 exactly | EUR 800 times the expected twelfth-charge share, a level rounded to the nearest 25 (217.01 to 225) | read as the highest cost that still clears, a bound floored to 200 | same call | prompt ("met EUR 800 exactly") |
+| SF14 | one continuous membership | an account's charges run unbroken until its last collected charge | a billing period whose attempts all failed read as a break that starts a new membership | same call (2,893 such periods, none followed by a later collected one) | standard 3.3 with the data, `checks.py` SF14 |
 
 ## Ladder
 
-Priced on the generator's clean truth (`generator/world.py`, seed 602, four continuations for the truth); every figure
-is re-measured on the cut pack by `generator/golden.py` and asserted in `checks.py`. Cost per paid member about
-EUR 225; the bar is set on the cut pack between the shallow family's lowest member and the standing family's
-highest, at least 8 per cent from each.
+Measured on the cut pack by `generator/rivals.py` (cost EUR 868,162.22, 3,534 members) and asserted in `checks.py`.
 
-| Rung | Construction | Paying a twelfth charge | Call |
-|---|---|---|---|
-| 0 | membership-month curve, all memberships | 0.361 | re-run |
-| 0b | shifted-beta-geometric fit to the pooled curve | 0.360 | re-run |
-| 0r | membership-month curve on 2026 transitions only | 0.381 | re-run |
-| 0f | curve times AUT26's own observed-to-expected ratio (0.95) | 0.376 | re-run |
-| 1 | curve with engagement band | 0.357 | re-run |
-| 1s | curve by membership month and calendar month | 0.365 | re-run |
-| 2 | members whose tutor already stopped, shocked | about 0.36 | re-run |
-| 2b | tutor-linked, member-weighted pooled stop rate (0.034) | 0.402 | re-run |
-| 2c | tutor-linked, tutor-weighted pooled stop rate (about 0.05) | 0.319 | ruled out by the hump |
-| 3 (decisive) | tutor-linked, stopping by teaching month, members' curve on active-tutor months | 0.293 | hold |
-| 3r | snapshot logit with the tutor's teaching month in bands | 0.278 | hold |
-| truth | the process continued, four draws | 0.285 | hold |
+| Rung | Construction | Expected twelfth-month members | EUR per twelfth-month member | Call |
+|---|---|---|---|---|
+| 0 | membership-month curve, every membership | 1,194.4 | 726.89 | re-run |
+| 0b | shifted-beta-geometric fit to the pooled curve | 1,311.4 | 662.02 | re-run |
+| 0r | membership-month curve on 2026 months | 1,367.7 | 634.75 | re-run |
+| 0f | curve times AUT26's own observed-to-expected (0.89) | 1,331.1 | 652.20 | re-run |
+| 1 | curve with engagement band | 1,199.3 | 723.88 | re-run |
+| 1s | curve by membership month and calendar month | 1,197.3 | 725.09 | re-run |
+| 2 | members whose tutor already stopped, shocked | 1,193.5 | 727.42 | re-run |
+| 2b | tutor link, member-weighted stop rate (4.6 per cent a month) | 1,388.3 | 625.32 | re-run |
+| 2c | tutor link, tutor-month stop rate (7.6 per cent a month) | 1,174.4 | 739.21 | re-run |
+| 3 (decisive) | tutor link, stopping by teaching month, members' own curve on active-tutor months | 958.6 | 905.64 | hold |
+| 3s | the same with calendar-month factors, smoothed, a post-rematch term or inputs from later years | 947.6 to 966.3 | 898.43 to 916.19 | hold |
 
-- **Position and margins:** the shallow family's lowest member is 0.357 and the standing family's highest 0.298; a
-  bar at about 0.33 paying a twelfth charge (about EUR 680 to 700 per twelfth-month member at EUR 225 a paid member)
-  sits 8 per cent from the first and 10 per cent from the second; set and asserted on the cut pack.
-- **Dominance:** the decisive move is worth 0.068 of retention against a standing-family spread of 0.005 and a
-  tutor-clustered sampling interval of about 0.012 (80 per cent half-width): (a) > (b) + (c) about four to one.
+- **Position and margins:** every shallow rung files the re-run at least 9.1 per cent inside the EUR 800 bar (the
+  closest, R2, at EUR 727.42); every standing route files the hold at least 12.4 per cent outside it (the closest,
+  calendar-month factors, at EUR 899.18). Asserted at 8 and 10 per cent.
+- **Dominance:** the decisive move is worth 236 expected twelfth-month members (R0 against R3) against a standing
+  spread of 10.4 and an 80 per cent half-width of about 70: (a) > (b) + (c) about three to one.
 - **Pricing sequence:** (1) residue the WHAT leaves: the projection of unobserved charges, a method; (2) ceiling: the
-  move needs about 0.03 of retention to cross the bar and the affected members (about four in five AUT26 members) can
-  move it by up to about 0.15; (3) the one-group-by route (cancellation by whether the tutor is still teaching this
-  month) is rung 2 and files the re-run; (4) the step's estimates (the stop shock from several thousand member-stops,
-  the stopping curve from over a thousand tutors) carry standard errors under a tenth of the move; (5) the lever is
-  not the ranked quantity's noise (a verdict on one cohort far from its boundary); (6) no variance is corrected;
-  (7) no subset of rows prints the quantity; (8) the reflex sweep above runs as code in `checks.py`.
-- **Seeds:** across seven seeds the curve files 0.339 to 0.361 and the linked projection 0.264 to 0.308, the gap 0.046
-  to 0.075; the build ships seed 602.
+  move needs about 109 members to cross the bar and the exposed members (2,757 live AUT26 members with tutors in
+  their first two teaching months) can move it by several hundred; (3) the one-group-by route (cancellation by whether
+  the tutor taught this month) is rung 2 and files the re-run; (4) the step's estimates (7,900 member stops, 798
+  tutors) carry standard errors under a tenth of the move; (5) the lever is not the ranked quantity's noise (one
+  cohort far from its bar); (6) no variance is corrected for the call; (7) no subset of rows prints the quantity;
+  (8) the reflex sweep runs as code in `checks.py`.
+- **Seeds:** the world is seed 602 of `generator/world.py`; across seven seeds the curve files 0.339 to 0.361 of
+  members to the twelfth charge and the linked projection 0.264 to 0.308.
 
 ## Closure table
 
-Drafted at stage 2.
-
 | Axis | Reading | Closure |
 |---|---|---|
-| 1 Population | AUT26 paid members, first charge 1 Sep to 30 Nov 2026 | standard s3.1, C1 |
+| 1 Population | AUT26 paid members, first charge in the Berlin window, AUT26 code | standard 3.2; C1 (SF1 asserted) |
+| 2 Unit of account | the member account | standard 3.1; C1 |
+| 3 Attribution window | 1 September to 31 October 2026, Berlin days | standard 3.2; SF1 |
+| 4 As-of dating | exports cut 31 October, pulled 3 November; live means active with an October charge | C1 (October cancellations are cancelled at the pull) |
+| 5 Version basis | plan codes renamed at the April 2025 price change; list price by the code charged | plan catalogue; C1 |
+| 6 Denominator | cost over the expected twelfth-month members | standard 3.5; SF10 |
+| 7 Weighting | each member counted once | C1 |
+| 8 Window length | the curves and the stopping table use all history; recent-only variants keep their call | C3 (R0r re-run; standing variants hold) |
+| 9 Boundary inclusivity | on or between the first and last day; at or below the bar | standard 3.2; SF11 |
+| 10 Rounding path | once, at the end | prompt; SF12 |
+| 11 Tie-break | none needed | the cost is EUR 106 from the bar |
+| 12 Maturity and censoring | the expected number for members short of the twelfth charge | standard 3.6; the projection is the method |
+| 13 Order of operations | cost, then the ratio | SF10 |
+| 14 Row order | files sorted by time; nothing depends on order | C1 |
+| 15 Duplicate resolution | webhook replays share an event id | C1 (R2 asserted) |
+| 16 Identity normalisation | member and tutor ids carry one format each | C1 (asserted) |
+| 17 Netting against gross | partial refunds keep the charge; full refunds remove it | standard 3.3; SF2, SF3 |
+| 18 Dimensional units | EUR, GBP and CHF converted at the ECB rate of the date | standard 3.4; SF4 |
+| 19 Code and status semantics | campaign codes in any case; tutor status read with the lesson months | C1 (R2 case-sensitive asserted) |
+| 20 Integerisation | expected counts kept real until the final rounding | C1 |
+| 21 Clause scope | the standard covers agency-booked campaigns with a code | standard 1 and 2 |
+| 22 Forward window contents | November 2026 to September 2027; no member joins AUT26 after the cut | C1 (the campaign closed 31 October) |
 
 ## Literal reader
 
-Drafted at stage 2.
+Executed word for word, the prompt and `growth_review_standard.pdf` give 3,534 campaign members, a cost of
+EUR 868,162.22 and a cost per twelfth-month member equal to that cost over the expected number of twelfth-month
+members; the expected number is the one quantity the text leaves to the analyst, and every literal alternative in the
+fork table (UTC days, refunds kept, VAT gross, the agency's rate, discounts out, the median) files the hold once the
+members are carried through their tutors, and the re-run on the membership-month curve, so no reading moves the call.
 
 ## Oracles
 
-Drafted at stage 2.
+- The agency close-out: pixel conversions (about 7 to 16 per cent above Corvane's count) and its own EUR conversion at
+  1.17; it answers what the agency delivered and ties to no basis of the decision.
+- The earlier groups' twelfth-month outcomes (SPR25, last autumn's joiners): they bless the membership-month curve (it
+  ran low on both), so they confirm the shallow route rather than the golden, by design.
+- The member-level calibration by tutor teaching month is computed by the solver from the lesson log and billing; no
+  shipped file prints it.
+- Nothing ties only under the golden; the NPS responses and the Eurostat table are distractors.
 
 ## Ask sheet
 
-Drafted at stage 2.
+- **A1 expected twelfth-month members** (950, nearest 50): reads the projection; second judgment none; files billing,
+  lesson log, directory, attribution; shallow 1,200.
+- **A2 cost per twelfth-month member** (EUR 900, nearest 25) with **80 per cent** (EUR 850 to 975) and **90 per cent**
+  (EUR 825 to 1,000) ranges: reads the projection and the cost; second judgment: the members of one tutor share that
+  tutor's stop, so the ranges are drawn tutor by tutor with the inputs redrawn (members drawn one at a time give EUR
+  875 to 950 and 850 to 975); shallow EUR 725 with narrow ranges around it.
+- **A3 cost per paid member that meets the bar exactly** (EUR 225, nearest 25, a level: EUR 800 times 27.1 per cent is 217.01): EUR 800 times the expected share;
+  shallow EUR 275.
+- **A4 chart**: the expected share of September and October joiners paying each month to September 2027 (ending at
+  25.8 and 27.0 per cent); shallow a curve ending near 34.
+- **A5 workbook**: AUT26 members paying each month, November 2026 to September 2027, by joining month: the
+  projection's own path to the call, whose August 2027 (September joiners) and September 2027 (October joiners) cells
+  are the twelfth charges; shallow cells run low through March and high from April.
+- **Mess on the paths:** replays, retries, refunds, the amount column change, campaign-code variants and the Berlin
+  window, each handled alike by careful runs (`checks.py` R2).
+
+| Ask | Weight | Shallow run | Cracker (landed run) |
+|---|---|---|---|
+| A1 expected twelfth-month members (nearest 50) | 7.00 | miss | keep |
+| A2 cost per twelfth-month member (nearest 25) | 7.00 | miss | keep |
+| A2r 80% range, cost per twelfth-month member, low | 3.00 | miss | miss |
+| A2r 80% range, cost per twelfth-month member, high | 3.00 | miss | miss |
+| A2r 90% range, cost per twelfth-month member, low | 3.00 | miss | miss |
+| A2r 90% range, cost per twelfth-month member, high | 3.00 | miss | miss |
+| A3 cost per paid member that meets the bar exactly (nearest 25) | 5.00 | miss | keep |
+| A4 chart: September and October joiners end near 26 to 27 per cent paying | 3.00 | miss | keep |
+| A5 workbook, all AUT26 members paying in 2026-11 | 0.73 | keep | keep |
+| A5 workbook, all AUT26 members paying in 2026-12 | 0.73 | miss | keep |
+| A5 workbook, all AUT26 members paying in 2027-01 | 0.73 | miss | keep |
+| A5 workbook, all AUT26 members paying in 2027-02 | 0.73 | miss | keep |
+| A5 workbook, all AUT26 members paying in 2027-03 | 0.73 | keep | keep |
+| A5 workbook, all AUT26 members paying in 2027-04 | 0.73 | miss | keep |
+| A5 workbook, all AUT26 members paying in 2027-05 | 0.73 | miss | keep |
+| A5 workbook, all AUT26 members paying in 2027-06 | 0.73 | miss | keep |
+| A5 workbook, all AUT26 members paying in 2027-07 | 0.73 | miss | keep |
+| A5 workbook, all AUT26 members paying in 2027-08 | 0.73 | miss | keep |
+| A5 workbook, all AUT26 members paying in 2027-09 | 0.73 | miss | keep |
+
+Shallow keep: 3.5
+Pair ceiling: 48.1
+Measured by: generator/ceiling.py (on the cut pack; landed run 84.3, shallow run 11.9)
 
 ## Prompt contract
 
-Drafted at stage 2.
+A voice rewrite may not drop or change: the decision (book Fenwright Media's January and February re-run of AUT26 at
+the same cost per paid member); the bar (a campaign is re-run only if it cost no more than EUR 800 for each member still
+paying in their twelfth month); `aut26_rerun_memo.docx` with the expected number of AUT26 members who will pay a twelfth
+monthly charge, the cost per twelfth-month member with 80 and 90 per cent ranges, the cost per paid member at which
+members like these would have met EUR 800 exactly, and one chart of the expected share paying each month to
+September 2027 for September and October joiners; `aut26_member_forecast.xlsx` with the AUT26 members expected to pay
+in each month from November 2026 to September 2027 by joining month; member counts to the nearest 50 and euro amounts to the nearest 25. The rewrite keeps one question and names each file
+only in the sentence that gives its reason.
+
+## Pre-ship check
+
+- **The Sulfur standard on the built pack.** The call turns on carrying each AUT26 member through their tutor's
+  stopping by months taught (`checks.py` R3b: the easy route with only that step changed files the golden), a chain of
+  dependent inferences from the lesson log (tutor runs rebuilt, the stop shock measured at 61.7 and 26.7 per cent
+  against 5.5, the stopping hump after four to six months, the AUT26 exposure at 91.5 per cent, the member projection
+  on active-tutor months) with one modeling judgment, the two-level projection, which the data justify on six-month
+  windows (1.22 and 1.19 against 0.74 and 0.85). No field reading, filed rule, planted row or replayed figure decides
+  it: every mess item handled either way files the same call (`checks.py` R2), the standard files the WHAT only, and
+  the one-fact hint executed literally files the re-run (EUR 625 or 739).
+- **The clean truth.** The generator's own world, run forward ten times from the cut, averages 994.6 twelfth-month
+  members (EUR 872.9 each, inside the golden's 80 per cent range); the default path's EUR 726.9 lies outside it.
+- **Gates on the final cut.** Two rebuilds (`generator/build.py`, then `generator/deliverables.py`) byte-identical
+  over 13 files; `checks.py` 110 assertions, 0 failed; `verify.py` 0 failed; `figures_check.py` PASS; `leak.py`
+  REVIEW with no LEAK (as-of 3 November 2026); `guard.py heart` PASS (nearest driver task129 at 0.06) and `surface`
+  0 promoted; `precut.py` 72 checks, 0 FAIL; `voice-check.py` PASS; pair ceiling 48.1, shallow keep 3.5.
+- **House fixes taken in this pass.** H29: the break-even cost per paid member is a level (217.01 to the nearest 25 is
+  225) and the ask says "met EUR 800 exactly"; H6: the memo and the call no longer say past groups were matched
+  mostly with established tutors (SPR25 started 45.1 per cent of its members with tutors in their first three
+  teaching months, last autumn's joiners 10.3, AUT26 91.7); H13: the standard's revision table wraps inside the page;
+  H25: a strict reader and two independent extractors read the standard alike (both asserted in `checks.py`); the
+  "95 per cent" range was the 5th to 95th percentile, and the ask is now 80 and 90 per cent.
+- **Residual risks.** The cost per twelfth-month member at the nearest 25: every variant that keeps all tutors files
+  EUR 900, the two that drop the 2022 launch tutors file EUR 925 and are ruled out by the homogeneity test. A
+  classifier of the twelfth charge files the hold at EUR 839 to 1,077 and misses the graded figures; the closing
+  passage names why it is not the method. The 80 and 90 per cent cost ranges rest on 4,000 draws with both ends of
+  each range over EUR 4 inside their rounding (`checks.py` R7); a run that draws tutor by tutor but holds the inputs
+  fixed files the same 80 per cent range and EUR 825 to 975 at 90 per cent, one bin short at the top (`checks.py` SF8).
+- **Stage 4.** The leak reader quoted nothing for question 1 and named an analytical choice for question 6 (its two
+  forks closed as SF1 and SF14); the determinism judge returned DETERMINISTIC, APPROVE, Gate G method or model
+  selection, Gate H analytical. The judge named the tutor-clustered ranges as the modeling judgment where this note
+  names the two-level projection; both are analytical and the chain carries both, so the two readings do not split on
+  the kind of step.
 
 ## Tried and rejected
 
@@ -306,8 +430,25 @@ Drafted at stage 2.
   exposure as AUT26 and the curve missed it by 17 to 22 per cent on back-test, a search signal; established now means
   nine or more teaching months.
 - A spring 2025 campaign of 680 members (simulator v7 to v10): either it carried most of the effect (the textbook
-  route failed its own back-test) or it was too small to tell the models apart; SPR25 is now 280 members absorbed by
-  established tutors, the textbook route validates on it, and the discriminating evidence is member-level.
+  route failed its own back-test) or it was too small to tell the models apart; SPR25 is now 264 members, too few to
+  separate the routes on its own, the textbook route validates on it, and the discriminating evidence is member-level.
 - Tutor capacity fixed at hire (generator v1 and v2): established tutors stayed full, so surge and growth overflow
   went to tutors inside the hump in ordinary months, history carried AUT26's exposure and the curve landed near the
   truth (0.301 against 0.303); established tutors now open more slots once past their first nine teaching months.
+- A post-rematch uplift and calendar-month seasonality in the process (generator v3 to v6): neither decided anything,
+  and between them they moved the graded cost per twelfth-month member by about 1.3 per cent across defensible
+  variants, a fork at any useful rounding; both left the process.
+- A 50 per cent first-month offer: the discounts were a quarter of the cost, so a deep run that misread the cost rule
+  and left them out filed the re-run; the offer is now 10 per cent and leaving it out stays 5 per cent outside the bar.
+- Tutor ids rewritten at a 2025 lesson-platform migration: left unnormalised they split tutors, flattened the stopping
+  hump and flipped the call (1,274 twelfth-month members), so cleaning decided the answer; ids keep one format.
+- A range on the twelfth-month members as an ask: tutor-clustered and member-independent ranges coincide at the
+  nearest 50, so it graded no judgment; the cost ranges at the nearest 25 separate at every endpoint.
+- Fuller new-tutor rosters to widen the clustered range (caps 26 to 36): one endpoint separated and the shallow routes
+  moved to within 6 per cent of the bar; reverted.
+- A 95 per cent range on the cost per twelfth-month member: its upper end sat on its rounding line at 4,000 draws
+  and its lower end moved with the draw, so the figure was a coin at the nearest 25; the 90 per cent range keeps both
+  ends inside their rounding (`checks.py` R7) and members drawn one at a time move both ends.
+- An 80 per cent band on each month's total in the workbook: several of its 22 ends changed between seeds at 4,000
+  draws at the nearest 50, and at the nearest 100 it no longer told tutor-by-tutor draws from member-by-member ones;
+  the workbook carries the monthly expectations only.
