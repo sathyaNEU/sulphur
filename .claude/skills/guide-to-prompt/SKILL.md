@@ -155,6 +155,16 @@ rather than "Put ... in" every time; the rounding sentence opened on the figures
 the chart's species varied. `voice-check.py` holds corpus quotas (no question form over 30 per cent of prompts on
 file, no second-sentence opener, rounding opener or deliverable set over 20 per cent) as a WARN.
 
+**The client's templating checker.** The portal's pattern checker counts seven signals and marks a prompt
+templated at three, borderline at two: files listed up front; steps ("First... Then... Finally"); three or
+more stacked questions (two question-sentences in the opening already count); a closing one-sentence list of
+documents; a dictated method ("according to the standard"); lists inside the prompt; UK spelling. Write one
+question, name each deliverable file only in the sentence that gives its reason, never close on a list of
+documents, and keep every ask's definition and rounding in flowing prose. Fold a second quantity into the one
+question ("judged on the bed-days each hospital's share would free") rather than asking it; prefer neutral
+wording to a UK-only spelling ("with every bar showing its value", not "labelled"). Mark's task127 scored four
+of seven. `voice-check.py` counts the signals and fails at two.
+
 **The call and the asks.** The call is one quotable sentence with its unit. Every ask is a component, qualifier (a
 range, a sensitivity, the best alternative and whether it replaces the call) or audit trail of it, multi-dimensional
 (many rows, periods, segments), and hard because the deep step feeds it; an ask a person could act on with the call

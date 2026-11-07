@@ -130,6 +130,57 @@ SOLVER_WARNING = [r"\bbe careful\b", r"\bwatch out\b", r"\bbeware\b", r"\bmake s
                   r"\bdo not forget\b", r"\bkeep in mind\b", r"\bbear in mind\b", r"\bnote that\b", r"\bbe aware\b",
                   r"\bpay (close )?attention\b", r"\btricky\b", r"\btraps?\b", r"\bpitfalls?\b", r"\bgotchas?\b",
                   r"\bmisleading\b", r"\bdon'?t be fooled\b", r"\bat face value\b"]
+# The client's templating checker (portal, 2026-11-07): seven signals, templated at three, borderline at two. The
+# gate counts them and FAILs at two in both modes, because the portal reads the rewrite the same way.
+UP_FRONT_FILES = r"\b(?:using|with|from|in|see) (?:the )?(?:attached|enclosed|supplied|provided) (?:files?|data|pack|documents?)\b"
+DICTATED = [r"\baccording to (?:the|our) (?:standard|manual|policy|procedure|guidelines?|method\w*)\b",
+            r"\b(?:by|following|per|under) (?:the|our) (?:manual|procedure|methodology|playbook)\b",
+            r"\bthe way (?:the|our) (?:standard|manual|policy|procedure|guidelines?) (?:sets? out|says|lays? out)\b"]
+INLINE_LIST = r"(?:^|[\s;:,])(?:\(?[0-9]{1,2}\)|\(?[a-hA-H]\)|\(?(?:i|ii|iii|iv|v)\))\s+\w|\u2022|(?:^|\s)[-*]\s+\w"
+UK_SPELLING = [r"\blabell(?:ed|ing)\b", r"\bcolour\w*\b", r"\borganis\w*\b",
+               r"\b(?:recognis|realis|prioritis|summaris|minimis|maximis|optimis|categoris|standardis|normalis|"
+               r"finalis|utilis|characteris|emphasis|apologis|authoris|capitalis)(?:e|es|ed|ing|ation)\b",
+               r"\banalys(?:e|es|ed|ing)\b(?<!analyses)", r"\bbehaviour\w*\b", r"\bfavour\w*\b", r"\bcentre\w*\b",
+               r"\bprogramme\w*\b", r"\bmodell(?:ed|ing)\b", r"\bcatalogue\w*\b", r"\blicence\b"]
+DOC_NOUNS = r"\b(?:memo|note|report|deck|slides?|workbook|spreadsheet|csv|chart|table|summary|brief|notebook|script|file|files|document|documents)\b"
+
+
+def templating_signals(text):
+    """The client's seven templating signals found in a prompt, each with its evidence."""
+    sents = sentences(text)
+    found = []
+    head = " ".join(sents[:2])
+    if len(FILE_TOKEN.findall(head)) >= 2 or re.search(UP_FRONT_FILES, head, re.I):
+        found.append("files listed up front (%s)" % (", ".join(FILE_TOKEN.findall(head)) or "attached files"))
+    seq = [m.group(1) for m in re.finditer(SEQUENCING, re.sub(r"\s+", " ", text))]
+    if seq:
+        found.append("requests laid out as steps (%s)" % ", ".join(seq))
+    qs = [s for s in sents if "?" in s]
+    opening_qs = [s for s in sents[:2] if "?" in s]
+    if len(qs) >= 3 or len(opening_qs) >= 2:
+        found.append("stacked questions (%d question sentences, %d in the opening)" % (len(qs), len(opening_qs)))
+    if sents:
+        last = sents[-1]
+        nfiles = len(FILE_TOKEN.findall(last)); ndocs = len(re.findall(DOC_NOUNS, FILE_TOKEN.sub(" ", last), re.I))
+        words = len(re.findall(r"[A-Za-z]+", FILE_TOKEN.sub(" ", last)))
+        if nfiles >= 2 or (nfiles + ndocs >= 3 and words <= 18):
+            found.append("a closing list of documents (%r)" % last[:80])
+    for pat in DICTATED:
+        m = re.search(pat, text, re.I)
+        if m:
+            found.append("a dictated method (%r)" % m.group(0)); break
+    if re.search(INLINE_LIST, FILE_TOKEN.sub(" FILE ", text)):
+        found.append("a list inside the prompt")
+    uk = []
+    for pat in UK_SPELLING:
+        m = re.search(pat, text, re.I)
+        if m:
+            uk.append(m.group(0))
+    if uk:
+        found.append("UK spelling (%s)" % ", ".join(dict.fromkeys(uk)))
+    return found
+
+
 # The rules a rewrite turns into WARNs: voice and shape, which the author owns.
 VOICE_RULES = {"one paragraph", "question first", "under 1,000 characters", "no persona or title", "no sequencing",
                "no LLM tells", "no roll call", "rounding at the close", "shell quota"}
@@ -412,6 +463,12 @@ def _gate(text, task=None, legacy=False):
     rows.append(("shell quota", "WARN" if over else "PASS",
                  "; ".join(over) + "; reword at the role level, not the verb" if over else
                  "question form, second-sentence opener, rounding opener and deliverable set all under their corpus caps"))
+
+    sig = templating_signals(text)
+    rows.append(("templating signals", "FAIL" if len(sig) >= 2 else ("WARN" if sig else "PASS"),
+                 ("%d of seven: " % len(sig) + "; ".join(sig) + " (the portal marks two as borderline and three as "
+                  "templated: one question, each file named in the sentence that gives its reason, no closing list)")
+                 if sig else "none of the client's seven templating signals"))
 
     files = deliverables(text)
     if not files:
