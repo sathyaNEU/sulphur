@@ -1,33 +1,62 @@
 {
  "task": "task3",
- "status": "READY",
+ "status": "DESIGN",
  "domain": "physical-environmental-sciences",
+ "subdomain": "hydrology-flood-frequency",
  "objective": "forecasting",
- "stage": 5,
- "stage_name": "ready",
+ "stage": 2,
+ "stage_name": "design",
  "updated": "2026-11-08",
- "stump": "A strong analyst fits Bulletin 17C to the 70 annual peaks, finds no trend (p = 0.79) and files Alternative A at 5,090 cfs; only setting each flood against its storm and rebuilding the record on today's watershed files Alternative B at 10,570 cfs.",
- "architecture": 5,
+ "call": "",
+ "stump": "",
+ "architecture": 6,
  "loops": 0,
  "precut": {
-  "exit": 1,
-  "date": "2026-11-08",
-  "note": "75 checks, 1 FAIL: pair ceiling 56.0 against the paper target of 50; every other check passes"
+  "exit": null,
+  "date": ""
  },
  "leak": {
-  "leak_py": "REVIEW (standing vocabulary and the deliverable-set quota)",
-  "reader": "2026-11-08 isolated reader: no step named, no ranking or helper file, Q6 analytical; three realism notes fixed"
+  "leak_py": "",
+  "reader": ""
  },
  "duplicate_check": {
-  "heart": "WARN after the strategy relabel (objective overuse; gate_g repeat against task8 v18)",
-  "surface": "clean"
+  "heart": "",
+  "nearest": ""
  },
  "judge": {
-  "verdict": "DETERMINISTIC",
-  "disposition": "APPROVE (both optional fixes applied, the second confirmed in submission.md after the rebuild)",
-  "gate_g": "decomposition_attribution with statistical_rigor, analytical_non_defect, surface_read_dependency no, sole_data_defect no",
-  "gate_h": "domain pass, layers pass, decisive step analytical, chain 5, one-fact none",
-  "report": "task3/determinism_check_report.md"
+  "verdict": "",
+  "disposition": "",
+  "gate_h": "",
+  "report": ""
+ },
+ "paper_pair": null,
+ "runs": {
+  "run1": null,
+  "run2": null,
+  "average": null,
+  "counterfactual_average": null,
+  "first_wrong_step": {
+   "run1": "",
+   "run2": ""
+  },
+  "triage": "",
+  "recorded": "",
+  "history": [
+   {
+    "architecture": 2,
+    "date": "2026-11-08",
+    "run1": "on the golden",
+    "run2": "on the golden",
+    "triage": "REDESIGN"
+   },
+   {
+    "architecture": 3,
+    "date": "2026-11-08",
+    "run1": "on the golden",
+    "run2": "on the golden",
+    "triage": "REDESIGN"
+   }
+  ]
  },
  "returned": [
   {
@@ -98,24 +127,13 @@
    "commit": ""
   }
  ],
- "resume": "upload prompt.txt (after the author's voice pass against ## Prompt contract), target.zip, the four blocks in submission.md and golden.zip; then /triage-runs task3",
+ "resume": "architecture 6 drawn (DESIGN_NOTE ## Draw, card v6 registered 2026-11-08T16:30:28Z); next: the generator world (snow-line hydrology, both basins, stations) to calibrate the rungs, the rivals on the clean truth, the stage-2 sections of the design note, precut exit 0",
  "approved": null,
- "delivered": "2026-11-07",
- "portal": "landed by one response (R1 2,200 t at 100 per cent, R2 2,600 t at 70 per cent), reported 2026-11-07",
- "portal_id": "",
- "portal_status": "",
- "portal_status_date": "",
- "wave": "wave 6 (new), seed FC36 (world, decision and quantity kept; the seed's planning-tool ranking, usage-model back-tests and route-register field reading not shipped)",
- "guard": "PASS at registration (2026-10-18T14:10:39Z) after waiting out bans on honest keys; the forum redrawn in the build to council_or_assembly when line_manager_or_team was banned against task247",
- "stage3": {
-  "generator_checks": "64 PASS",
-  "verify": "PASS",
-  "byte_identical": true,
-  "figures_check": "PASS (85)",
-  "voice_check": "PASS",
-  "ceiling": "pair 39.9, mirror leakage 20.8, worst single crack 46.1 (generator/ceiling.py)",
-  "zip": "335646722e258718311dfd1d0bb4607f01aa20295d74e27d8a25c4bee5552b9d",
-  "freeze": "rubric PASS (main call, stump, every main-call figure unchanged)"
+ "submitted": null,
+ "portal": {
+  "status": "",
+  "date": "",
+  "note": ""
  },
  "history": [
   {
@@ -153,15 +171,12 @@
   {
    "date": "2026-11-08",
    "event": "rolled back at the author's word to architecture 3 (Reidel Road) exactly as READY at ad49abe: prompt, pack (target.zip identical to the author's upload), goldens, submission, generator and card; architecture 4 (Corlinden nitrate plant) stays in git history at 0931661; the platform runs under runs/ kept"
+  },
+  {
+   "date": "2026-11-08",
+   "event": "architecture 5 (READY at a19fc6c from a parallel session, never uploaded) superseded and architecture 6 drawn (the Durrow Creek bridge) at the author's word: a total rework of the slot"
   }
  ],
- "migrated_from": {
-  "project": "Mark",
-  "task": "task165",
-  "status_in_mark": "SHIPPED",
-  "date": "2026-11-08",
-  "note": "moved from Project Mark unstumped on the Mark portal; carried on here for the Sulfur bar"
- },
  "architectures": [
   {
    "architecture": 2,
@@ -171,43 +186,24 @@
   {
    "architecture": 3,
    "drawn": "2026-11-08",
+   "fate": "spent 2026-11-08 on the platform: both runs fitted the leaky strip with the plate's walls and took the remote wells as the control, landing 1,000 gpm and every ask"
+  },
+  {
+   "architecture": 5,
+   "drawn": "2026-11-08",
+   "fate": "built to READY by a parallel session (a19fc6c), never uploaded; superseded 2026-11-08 at the author's word (total rework)"
+  },
+  {
+   "architecture": 6,
+   "drawn": "2026-11-08",
    "fate": null
   }
  ],
- "subdomain": "hydrology-flood-frequency",
- "call": "Build Alternative B (capacity 13,380 cfs): the design flow is about 10,570 cfs once the record's storms run through today's watershed",
- "gates": {
-  "checks": "132 of 132",
-  "verify": "PASS",
-  "byte_identical": true,
-  "figures_check": "67 of 67",
-  "precut": "72 checks, 0 FAIL",
-  "voice_check": "PASS (WARN shell quota)",
-  "pair_ceiling": 46.8,
-  "shallow_keep": 0.0,
-  "target_zip_sha256": "109b4ebf9580c12184d4fcbe4cc2e22294043eca9a7fb9a01d7a943a47051699"
- },
- "runs": {
-  "run1": null,
-  "run2": null,
-  "average": null,
-  "counterfactual_average": null,
-  "first_wrong_step": {
-   "run1": "",
-   "run2": ""
-  },
-  "triage": "",
-  "recorded": "",
-  "history": [
-   {
-    "architecture": 2,
-    "date": "2026-11-08",
-    "run1": "on the golden",
-    "run2": "on the golden",
-    "triage": "REDESIGN"
-   }
-  ]
- },
- "zip_md5": "9efaf3be6223908a845ce3edaa911b5c",
- "golden_zip_md5": "0ae536a5846bd361f4036ab04e578771"
+ "migrated_from": {
+  "project": "Mark",
+  "task": "task165",
+  "status_in_mark": "SHIPPED",
+  "date": "2026-11-08",
+  "note": "moved from Project Mark unstumped on the Mark portal; carried on here for the Sulfur bar"
+ }
 }

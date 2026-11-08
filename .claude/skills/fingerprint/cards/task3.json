@@ -1,22 +1,22 @@
 {
   "task": "task3",
   "project": "sulfur",
-  "architecture": "v5",
+  "architecture": "v6",
   "drawn": "2026-11-08",
-  "slot_note": "re-root after architecture 3's platform round landed both runs (REDESIGN); one architecture per world, so a new world (a suburban Piedmont creek's culvert crossing), dataset (a stream gauge's 1956 to 2025 record beside a rain gauge's) and shell (docx and csv, a which-question); architecture 4 (nitrate) was rolled back unrun and is not reused",
+  "slot_note": "re-root at the author's word (total rework, the swap test and the difficulty named): architecture 5 superseded unbuilt; one architecture per world, so a new world (a Sierra Nevada foothill creek with no gauge beside a high gauged river), dataset (a river gauge's 1951 to 2025 record with valley and SNOTEL station records and both basins' elevation bands) and shell",
   "domain": "physical-environmental-sciences",
   "subdomain": "hydrology-flood-frequency",
   "client_domain": "physical-environmental-sciences",
-  "niche": "a county roads division sizing a replacement culvert at a creek crossing to pass the 1 per cent annual exceedance flood of its first ten years of service, from a gauge record spanning the watershed's suburban build-out (Sulfur task type: extreme-value and environmental-hazard return-period analysis)",
+  "niche": "a county public works department sizing a bridge span over an ungauged foothill creek to pass its 1 per cent annual exceedance flood, transferred from a neighbouring high Sierra river's gauge whose floods drain only the part of its basin below each storm's snow line (Sulfur task type: extreme-value and environmental-hazard return-period analysis)",
   "objective": "forecasting",
   "shape": "04",
   "decision_type": "pick_one_of_n",
   "answer_unit": "named_option",
-  "answer": "Build Alternative B, the triple 10 ft x 9 ft box (capacity 13,380 cfs): the design flow at Kinnard Road is about 10,570 cfs once the record's storms are run through today's watershed.",
-  "answer_source": "task3/submission.md Final Recommendation and generator/figures.json pick",
+  "answer": "",
+  "answer_source": "",
   "gap": [
     "population",
-    "time"
+    "objective"
   ],
   "pattern": [
     "none"
@@ -24,74 +24,73 @@
   "generators": [
     "G6",
     "G14",
-    "G13"
+    "G1"
   ],
-  "gate_g": "decomposition_attribution",
+  "gate_g": "method_or_model_selection",
   "calibration_form": "none",
-  "stump_strategy": "causal_design",
+  "stump_strategy": "composition_mix",
   "decisive_rule_filed": false,
   "official_decoy": false,
   "validated_decoy": false,
   "context_artifact": "published_series",
   "stump_class": "analytical",
-  "analyst_test": "A strong analyst fits the gauge's 70 annual peaks under Bulletin 17C, finds no significant trend (Kendall p 0.79) and no low outliers, confirms the fit against the plotting positions and picks Alternative A at 5,090 cfs; truncating to the developed years or regressing the peaks on the paved fraction keeps it there, because the lighter storms since 1990 offset the faster runoff.",
-  "domain_test": "The deciding quantity is the 1 per cent annual exceedance peak flow at a crossing for the coming decade, worked the way flood hydrology works it: a frequency curve fitted to annual peak flows, which assumes the record is homogeneous; here the watershed's rainfall-runoff response changed through the record while its storm climate changed the other way, so the record must be put on today's watershed by pairing each storm with the flood it made; swap the nouns and there is no rainfall forcing, no runoff response, no lag shortened by storm drains and no exceedance probability of a peak flow.",
-  "layer2_family": "forecast_uncertainty",
-  "layer2_pattern": "own:a-flood-record-whose-response-rose-while-its-storms-weakened",
+  "analyst_test": "A strong analyst fits Bulletin 17C to the Coyner River gauge's 75 annual peaks, transfers the 1 per cent flood to Durrow Creek by the drainage-area ratio, finds the state's regional equation agrees and the transfer validates between the region's other gauges, and files the 140 ft span.",
+  "domain_test": "The deciding quantity is an ungauged creek's 1 per cent annual exceedance peak flow, worked the way flood hydrology works it (a gauged frequency curve transferred by drainage area or a regional equation); here the gauged river's floods drain only the part of its high basin below each storm's snow line while the creek's low basin drains whole, so the transfer must be rebuilt storm by storm from the station temperatures and both basins' elevation bands; swap the nouns and there is no snow line, no rain over a contributing area, no lapse rate and no exceedance probability of a peak flow.",
+  "layer2_family": "estimation_fit",
+  "layer2_pattern": "own:a-flood-transfer-by-each-storm's-rain-contributing-area",
   "layer1": [
-    "a gauge record with provisional and approved periods, ice and equipment-malfunction estimates and a datum shift on the staff gage",
-    "a rain gauge moved 0.4 mile in 1987 with a short overlap, accumulated multi-day totals after missed readings and trace codes",
-    "the peak file's qualification codes (estimated, discharge greater than shown, affected by regulation for a construction diversion)",
-    "development records keyed to tax parcels renumbered at a 2004 reassessment",
-    "flows in cfs and a few years exported in cubic metres per second"
+    "a gauge's daily record with provisional and approved periods, estimated days after a 1997 washout, ice-affected winter codes and a gap",
+    "the peak file's qualification codes (estimated, discharge greater than indicated, peak time missing in early years)",
+    "COOP daily records with accumulated multi-day totals after missed readings, trace codes, a station moved in 1988 with a short overlap and temperature observed at a 17:00 reset",
+    "SNOTEL records from 1981 with sensor resets, a precipitation gauge undercatching snow and temperatures in Fahrenheit and Celsius across a vendor change",
+    "basin elevation bands in feet for one basin and metres for another, and a land-cover sheet keyed to a different basin name spelling"
   ],
-  "stakeholder_role": "the county's hydraulics engineer in the roads division, filing the crossing's hydraulic design with the state floodplain review before the board funds it",
+  "stakeholder_role": "the county's bridge engineer in public works, filing the replacement bridge's hydraulic report for the state's local-assistance structures review",
   "role_family": "capacity_planner",
   "scoring_unit": "other",
   "spine": {
-    "file": "ollery_creek_daily_discharge_1956-2025.csv beside tamsett_rain_gauge_daily_1956-2025.csv",
-    "rows": 25720,
+    "file": "coyner_r_nr_tessel_daily_discharge_1950-2025.csv",
+    "rows": 27394,
     "entity": "one gauge day",
     "grain": "daily",
-    "source": "constructed for this task (seeded simulation)"
+    "source": "constructed for this task (seeded hydrometeorological simulation)"
   },
   "forum": "regulator_or_inspector",
   "forcing_event": "statutory_or_regulatory_filing",
   "org_family": "local_government",
   "world": {
-    "geography": "United States, North Carolina Piedmont (Tamsett County, a fictional county; Pellsboro, a fictional town)",
+    "geography": "United States, California, Sierra Nevada west slope (Pelton County, a fictional county; Tessel, a fictional town)",
     "currency": "USD",
-    "org_type": "a county roads division and its board of commissioners",
+    "org_type": "a county department of public works and the state's local-assistance structures office",
     "invented_names": [
-      "Tamsett County",
-      "Pellsboro",
-      "Ollery Creek",
-      "Kinnard Road",
-      "Tamsett County Roads Division"
+      "Pelton County",
+      "Tessel",
+      "Coyner River",
+      "Durrow Creek",
+      "Pelton County Department of Public Works"
     ],
     "people": [
-      "Lisa Horne",
-      "James Reynolds"
+      "Amy Rasmussen",
+      "Frederick Hess"
     ]
   },
   "deliverables": [
-    "kinnard_road_culvert_design_flow.docx",
-    "ollery_creek_design_peak_table.csv"
+    "durrow_creek_bridge_hydrology_report.pdf",
+    "durrow_creek_flood_frequency.csv"
   ],
   "opening_move": "question-first",
   "question_form": "which",
-  "driver": "The decisive quantity is a rare-event level for a coming window, estimated from a record whose response to its driver rose gradually while the driver itself weakened, so the two offset in the record's maxima and every check on the maxima passes; only pairing each event with its driver separates them, and re-running the whole driver record through today's response gives the level.",
-  "driver_concrete": "Ollery Creek's annual peaks look stationary because the paved fraction rose from 6 to 30 per cent (storm drains halving the time to peak) while the storms since 1990 ran about a quarter lighter; paired with the rain gauge's storm totals, the same storm now makes a far larger flood, and putting all 70 years of storms through today's watershed moves the 1 per cent flood from about 7,000 to about 10,000 cfs.",
-  "stump": "A strong analyst fits Bulletin 17C to the 70 annual peaks, finds no trend (p = 0.79) and picks Alternative A at 5,090 cfs; truncating to the developed years or regressing the peaks on the paved fraction keeps it there; only setting each flood against its storm and rebuilding the record on today's watershed files Alternative B at 10,570 cfs.",
-  "deep_chain": "(1) the test's Theis fit is exact but blind to the far field, shown by its hindcast of the Mill Street record; (2) the record's drawdown is the reading's fall below its natural level, and the natural level must come from confined-aquifer wells beyond the cone (CV-02, CV-11), not CV-07 or a trend; (3) the leakage factor calibrated on that drawdown with the plate's walls; (4) the 2027 to 2046 superposition at OW-S under each schedule and the town's projection",
-  "judgment": "which reference wells carry the natural level (CV-07's record steps down with each Mill Street increase and cycles with the summer pumping, CV-02 and CV-11 agree with each other and with OW-S before 2009), and the far-field model that reproduces the separated drawdown out of the test's window",
-  "one_fact_test": "'the aquifer leaks' rescues nothing: the leakage must be calibrated, and on the raw or CV-07-referenced record it calibrates to 1,300 gpm",
+  "driver": "The decisive quantity is a rare-event level at an unmeasured unit transferred from a measured neighbour whose events each drew on only the part of it below a threshold that moved from event to event, while the unmeasured unit lies almost wholly below that threshold: transferring by size undersizes it, a ratio read at a typical event oversizes it because the largest events drew on nearly all of the neighbour, and only transferring every event at its own threshold lands the level.",
+  "driver_concrete": "The Coyner River's floods drain only the part of its high basin below each storm's snow line (about two fifths in an ordinary storm, most of it in the warmest), while Durrow Creek's foothill basin lies below the snow line in almost every storm; the drainage-area transfer of the river's 1 per cent flood undersizes the creek, a contributing-area ratio read at the river's median flood storm oversizes it, and only each storm's rain-contributing area, from the station temperatures and both basins' elevation bands, sizes it.",
+  "stump": "A strong analyst fits Bulletin 17C to the river's 75 annual peaks, transfers its 1 per cent flood to the creek by drainage area (the regional equation agrees and the transfer validates between the region's other gauges) and files the 140 ft span; only transferring each storm at the rain-contributing area its own snow line leaves in each basin files the 185 ft span, and a single ratio read at a typical flood storm files the 240 ft span.",
+  "deep_chain": "(1) the river's floods drain only the area below each storm's snow line, placed storm by storm from the valley and SNOTEL temperatures with the storm lapse rate; (2) the creek's basin lies below that line in nearly every storm, so its rain-contributing area per storm is a different function of the snow line from the river's; (3) the transfer factor varies by storm and is smallest for the warm storms behind the river's largest floods, so every storm is transferred at its own snow line, never at a typical one; (4) the frequency curve of the creek's transferred annual series gives its 1 per cent flood and the span",
+  "judgment": "the response model linking each storm's flood to its rain-contributing volume (rain over the area below the snow line, with the orographic gradient the stations show), fitted on the river's events against the drainage-area model, and the snow line itself (the storm lapse rate from valley and SNOTEL pairs, the rain-snow temperature from the SNOTEL record's rain and snow days)",
+  "one_fact_test": "'the creek is rain-dominated' rescues nothing: the transfer must still be built storm by storm from the station temperatures, a lapse rate and both basins' elevation bands, and the single representative ratio that sentence invites files the 240 ft span",
   "strategy_label": "WORKS IN FORM",
   "mechanism_source": "design_note",
   "differentiation": {
-    "mark308": "mark308 v1 rebuilds unmet requests the record never stored from supply movements; here every reading is stored and the decisive step is which reference wells carry the aquifer's natural level, so the far field calibrated on an existing cone is not credited with the region's wet years",
-    "mark166": "mark166 v3 forecasts next year's arrivals through departures linked across groups; here nothing arrives or departs: a sustained pumping response is calibrated on an existing well field's cone against natural levels from reference wells outside it",
-    "mark247": "mark247 rebuilds a running sum from a record whose gaps were filled by decay toward normal; here no record is filled: the natural level is carried from reference wells beyond the cone because the nearest one sits inside it"
+    "task3": "architecture 5 (lineage) offset a rising response against weaker storms inside one gauge's record and re-ran the storms through today's watershed; here nothing changes through time: two basins answer the same storms differently because each storm's snow line leaves a different share of each basin draining rain, and the decisive step is the transfer between them storm by storm",
+    "mark253": "mark253 v1 adjusts a population count for nonresponse within classes of a frame attribute; here nothing is sampled or missing: every storm is observed, and the decisive step transfers each storm's flood between two basins at the share of each basin its own snow line leaves draining rain, so the flood population the creek draws differs from the river's"
   },
   "lineage": [
     {
@@ -266,9 +265,44 @@
         "deliverable set": "pdf+png+xlsx"
       },
       "fate": "built to READY 2026-11-08 (0931661), then rolled back to v3 at the author's word before any platform round; the nitrate world is not reused"
+    },
+    {
+      "domain": "physical-environmental-sciences",
+      "subdomain": "hydrology-flood-frequency",
+      "objective": "forecasting",
+      "shape": "04",
+      "decision_type": "pick_one_of_n",
+      "answer_unit": "named_option",
+      "gap": [
+        "population",
+        "time"
+      ],
+      "pattern": [
+        "none"
+      ],
+      "generators": [
+        "G6",
+        "G14",
+        "G13"
+      ],
+      "gate_g": "decomposition_attribution",
+      "driver": "The decisive quantity is a rare-event level for a coming window, estimated from a record whose response to its driver rose gradually while the driver itself weakened, so the two offset in the record's maxima and every check on the maxima passes; only pairing each event with its driver separates them, and re-running the whole driver record through today's response gives the level.",
+      "stump_strategy": "causal_design",
+      "forum": "regulator_or_inspector",
+      "forcing_event": "statutory_or_regulatory_filing",
+      "org_family": "local_government",
+      "role_family": "capacity_planner",
+      "drawn": "2026-11-08",
+      "stump": "A strong analyst fits Bulletin 17C to the 70 annual peaks, finds no trend (p = 0.79) and picks Alternative A at 5,090 cfs; truncating to the developed years or regressing the peaks on the paved fraction keeps it there; only setting each flood against its storm and rebuilding the record on today's watershed files Alternative B at 10,570 cfs.",
+      "layer2_family": "forecast_uncertainty",
+      "layer2_pattern": "own:a-flood-record-whose-response-rose-while-its-storms-weakened",
+      "driver_concrete": "Ollery Creek's annual peaks look stationary because the paved fraction rose from 6 to 30 per cent (storm drains halving the time to peak) while the storms since 1990 ran about a quarter lighter; paired with the rain gauge's storm totals, the same storm now makes a far larger flood, and putting all 70 years of storms through today's watershed moves the 1 per cent flood from about 7,000 to about 10,000 cfs.",
+      "answer": "Build Alternative B, the triple 10 ft x 9 ft box (capacity 13,380 cfs): the design flow at Kinnard Road is about 10,570 cfs once the record's storms are run through today's watershed.",
+      "architecture": "v5",
+      "fate": "built to READY 2026-11-08 by a parallel session (a19fc6c: Alternative B at Kinnard Road, about 10,570 cfs; judge DETERMINISTIC, APPROVE), never uploaded; superseded the same day at the author's word, a total rework of the slot"
     }
   ],
-  "notes": "Architecture 5, re-root 2026-11-08 at the author's word after architecture 3 landed (both runs). Prototype (scratch proto3.py): Mann-Kendall p 0.13 to 0.70 on most seeds; the stationary rungs 5,800 to 8,000 cfs; the deep-step family 9,800 to 13,000 cfs across thresholds, regression forms and LP3 against GEV; the seed is chosen in the build so both families clear their culvert's rating by 1.15. Stump strategy relabelled decomposition_attribution to causal_design on 2026-11-08 after task7 and task9 re-registered and moved task8 v18 into this card's window (ban.strategy): the decisive step is the effect of the paved fraction on the flood at a fixed storm, a like-for-like comparison holding the storm climate fixed, which causal_design names as truly; gate_g stays decomposition_attribution.",
+  "notes": "Architecture 6, re-root 2026-11-08 at the author's word (total rework). Event prototype (scratch proto2.py): true creek 1 per cent about 5,700 cfs on the prototype's scale; the drainage-area transfer 2,800 to 3,500; a ratio at the river's median flood storm 6,400 to 9,000; every storm transferred at its own snow line 5,100 to 6,400; an elevation regression over the high gauges extrapolated to the creek 7,000 to 11,300. Figures are rescaled in the build.",
   "lineage_shells": [
     {
       "question form": "how-much",
@@ -287,14 +321,20 @@
       "second-sentence opener": "corlinden's",
       "rounding opener": "nitrate",
       "deliverable set": "pdf+png+xlsx"
+    },
+    {
+      "question form": "whether",
+      "second-sentence opener": "the",
+      "rounding opener": "drawdowns",
+      "deliverable set": "pdf+xlsx"
     }
   ],
-  "shell": {
-    "question form": "whether",
-    "second-sentence opener": "the",
-    "rounding opener": "drawdowns",
-    "deliverable set": "pdf+xlsx"
-  },
   "architecture_spent": false,
-  "registered": "2026-11-08T15:48:08Z"
+  "registered": "2026-11-08T16:34:09Z",
+  "shell": {
+    "question form": "which",
+    "second-sentence opener": "durrow",
+    "rounding opener": "flows",
+    "deliverable set": "csv+pdf"
+  }
 }
