@@ -1,32 +1,34 @@
 {
  "task": "task7",
- "status": "DESIGN",
+ "status": "READY",
  "domain": "energy-systems-utilities",
  "objective": "experiment-causal",
- "stage": 2,
- "stage_name": "design",
+ "stage": 5,
+ "stage_name": "ready",
  "updated": "2026-11-08",
- "stump": null,
+ "stump": "The plain lottery comparison (the works buildings against every owner the draw passed over, each against its own 2018/19 season) files 13, 2 and below zero and funds insulation alone, heating optimisation at EUR 280 a tonne; service visits reached most passed-over buildings district by district from August 2019, each followed by normal-weather use about 7 per cent lower, and no works building had one, so against passed-over buildings not yet visited, each dropped from its visit season, the rates are 16, 6 and 2 and heating optimisation is funded at EUR 90 a tonne.",
  "architecture": 6,
  "loops": 0,
  "precut": {
-  "exit": null,
-  "date": ""
+  "exit": 0,
+  "date": "2026-11-08",
+  "checks": 75,
+  "note": "final cut, 0 FAIL, 0 WARN"
  },
  "leak": {
-  "leak_py": "",
-  "reader": ""
+  "leak_py": "REVIEW, no LEAK (2026-11-08, --asof 2026-06-15, final cut): the measures named in the plan, rules and federal overview, generic stump terms; ruled in the solver's-eye read",
+  "reader": "2026-11-08 isolated reader twice (Sonnet, medium): no step named, no ranking or helper file, Q6 analytical; the plan's 4.2 averaging sentence reworded to each building's saving, averaged"
  },
  "duplicate_check": {
-  "heart": "",
-  "surface": "",
-  "nearest": ""
+  "heart": "BLOCK (2026-11-08, final cut, corpus at 8607c7e): ban.strategy causal_design and ban.org_family utility_or_infrastructure against task10 v5, which registered both axes at 17:16:44Z after this architecture drew them at 16:17:59Z (DRAWN 0a705d3); kept as the honest labels, the only unbanned pair being a relabel, and handed to the author at sign-off (reduce-house-fixes H27 and H31)",
+  "surface": "exit 0 (2026-11-08, final cut); personas Magda Peukert, Torben Roemer"
  },
  "judge": {
-  "verdict": "",
-  "disposition": "",
-  "gate_g": "",
-  "report": ""
+  "verdict": "DETERMINISTIC",
+  "disposition": "first pass NOT_DETERMINISTIC (the saving-rate construction unfiled), fixed by filing plan 4.2's construction; re-judge DETERMINISTIC, FIX_NOW on the solution text (the service-visit wording, the draw-balance figure, why the visit season is dropped), fixed in the generator; the one targeted re-judge of that FIX_NOW DETERMINISTIC, its refinements applied (balance within 1.5 per cent, the visit season 3 to 6 per cent below, step 9's reason stated from the data); pack and prompt untouched by both fixes",
+  "gate_g": "statistical_rigor (a comparison contaminated by a concurrent change), analytical_non_defect, surface_read_dependency no, sole_data_defect no",
+  "gate_h": "domain pass, layers pass, decisive_step analytical, chain 5 inferences, judgment comparison-group contamination and response timing by measure",
+  "report": "task7/determinism_check_report.md"
  },
  "returned": [
   {
@@ -75,7 +77,7 @@
    "note": "round 2 on the re-sited asks: both runs landed the call; architecture 4 spent with its world (Ruahine Bank); every file of architectures 1 to 4 removed at the author's word"
   }
  ],
- "resume": "stage 2: prototype the world (buildings, heating limits, yearly use with persistence, the benchmarking notices, grants recruited from them, mild winters after the works), price the ladder, write Default path to Prompt contract, run precut.py to exit 0",
+ "resume": "stage 5 READY: the author uploads prompt.txt and target.zip; when the two runs come back, /triage-runs task7",
  "approved": null,
  "delivered": "2026-11-08",
  "portal": null,
@@ -238,6 +240,23 @@
  },
  "paper_pair": null,
  "subdomain": "efficiency-savings-verification",
- "call": null,
- "gates": {}
+ "call": "Fund insulation and heating optimisation in the 2026 round, not heating controls: 16, 6 and 2 per cent, EUR 90, 90 and 220 of grant a tonne against the EUR 120 limit; about EUR 8 million and 90,000 lifetime tonnes once the offer closes; about 3,500 tonnes of CO2 saved in 2025/26.",
+ "gates": {
+  "date": "2026-11-08",
+  "checks": "79 of 79",
+  "figures_check": "100 of 100",
+  "precut": "exit 0, 75 checks",
+  "voice_check": "exit 0 (shell quota WARN: pptx+xlsx at 30 per cent)",
+  "leak_py": "REVIEW, no LEAK",
+  "surface": "exit 0",
+  "heart": "BLOCK, later-card collision recorded above",
+  "audit_containers": "exit 0, 0 FAIL, 0 WARN",
+  "byte_identical": "make.py --twice: target, golden, both zips, submission, metadata, figures.json SAME"
+ },
+ "build": {
+  "checks": "79 of 79 (generator/checks.py on the cut pack)",
+  "figures_check": "100 of 100",
+  "byte_identical": "make.py --twice: target, golden, both zips, submission, metadata, figures.json SAME",
+  "ceiling": "pair 45.8 (landed run 79.0, default path 12.5), shallow keep 9.9 per cent; one second judgment taken 52.3, both 56.2"
+ }
 }
