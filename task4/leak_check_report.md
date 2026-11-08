@@ -1,22 +1,32 @@
 # leak check, task4
 
-**Verdict: REVIEW.** 11 files read, 47 golden figures and 2 candidate names taken from submission.md, 25 stump terms taken from the design note.
+**Verdict: REVIEW.** 11 files read, 15 golden figures and 3 candidate names taken from submission.md, 25 stump terms taken from the design note.
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: record, parcel, pruszkow, strykow, sorted, unscanned, decisive, network, trailer, nights, mornings, nothing, reader, drifts, overflow, stratum, station, unloading, stations, delivery, sorter, missing, excess, setting, domain
+Stump terms swept: decisive, golden, section, beyond, removal, record, parcels, forecast, nothing, network, drifts, drives, leenane, letterfrack, priced, stations, reader, orders, mulranny, bangor, station, domain, forecasting, combination, setting
 
 ## 3 answer figures in the pack (REVIEW 1)
-- **REVIEW** `TDS-4_tracking_data_standard.pdf`: golden figure 1.00 appears: ...when its missed-scan rate for the month is above 1.00 per cent. A fired alert sends the scan audit (se...
+- **REVIEW** `owenduff_offer_brackloon_2027.pdf`: carries 16 of 18 distinctive words of the committed call: 'Hand Mulranny, Achill, Bangor Erris, Belmullet, Louisburgh and Ballycastle to Owenduff from January 2027 and keep Leenan'
 
-## 4 design-note vocabulary (REVIEW 1)
-- **REVIEW** `TDS-4_tracking_data_standard.pdf`: 8 of 25 stump-paragraph terms appear (record, parcel, sorted, network, nights, mornings); read whether the document names the move
+## 4 design-note vocabulary (REVIEW 2)
+- **REVIEW** `network_planning_standard_NPS-3.pdf`: 4 of 25 stump-paragraph terms appear (record, parcels, nothing, network); read whether the document names the move
+- **REVIEW** `owenduff_offer_brackloon_2027.pdf`: 7 of 25 stump-paragraph terms appear (record, parcels, leenane, letterfrack, mulranny, bangor); read whether the document names the move
 
-## 9 dates after the setting (REVIEW 1)
-- **REVIEW** `sort_plan_2026Q4.xlsx`: 12 ISO dates after 2026-11-06, e.g. 2026-12-31
+## 9 dates after the setting (REVIEW 2)
+- **REVIEW** `delivery_calendar_2027.csv`: 365 ISO dates after 2026-11-06, e.g. 2027-01-01, 2027-01-02, 2027-01-03, 2027-01-04, 2027-01-05
+- **REVIEW** `van_fleet_register_2026.xlsx`: 9 ISO dates after 2026-11-06, e.g. 2027-02-28, 2027-12-31, 2028-05-31
 
 ## 10 container metadata (INFO 1)
 - **INFO** `-`: audit reported no writer signature (1 lines)
+
+## 11 prompt gate (REVIEW 2)
+- **REVIEW** `prompt.txt`: shell quota: question form 'which' at 50% of 6 prompts (cap 30%); reword at the role level, not the verb
+- **REVIEW** `prompt.txt`: templating signals: 1 of seven: files listed up front (district_handover_2027.xlsx, handover_2027.png) (the portal marks two as borderline and three as templated: one question, each file named in the sentence that gives its reason, no closing list)
+
+## 12 client quality check (INFO 2)
+- **INFO** `-`: 11 usable files (10 or more required)
+- **INFO** `-`: 2 file categories: document, spreadsheet (2 or more required)
 
 ## 1 file names (clean)
 
@@ -29,8 +39,6 @@ Stump terms swept: record, parcel, pruszkow, strykow, sorted, unscanned, decisiv
 ## 7 hidden content (clean)
 
 ## 8 column names (clean)
-
-## 11 prompt gate (clean)
 
 
 ## Solver's-eye read

@@ -1,395 +1,295 @@
-"""task4 generator checks: the input gates and the no-describing-file rule, the three rules on the clean truth (R1,
-R2 per mess item, R3a to R3c), every semantic fork row (SF1 to SF24), the ladder with its margins, the unloadings'
-purity and threshold independence, the separation line and the deletion tests, the asks against the clean truth with
-their devices, the realism sweep and the clocks.
-    C.run(target, world, fig, golden) -> number of assertions passed"""
-import collections
-import datetime as dt
-import json
+"""Assertions on the cut pack (python3 checks.py <target>). Exit 1 on the first failure.
+
+Groups: the input gates; the pack's own hygiene (no describing file, no reserved or real organisation's domain, no
+em dash); the semantic forks SF1 to SF16 of the design note; the ladder (every rung files its own wrong list, the
+golden's margins); the Sulfur block on the clean truth (the analyst test, the deep chain, the one-fact test, the
+rivals); the forecast's back-test."""
+import copy
+import csv
+import importlib
+import io
 import os
+import re
 import shutil
+import sys
 import tempfile
+import zipfile
 
-import pandas as pd
-from openpyxl import load_workbook
-from pypdf import PdfReader
+HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, HERE)
+import numpy as np
 
-import build as B
+import analysis as A
 import golden as GD
-import params as P
-import rungs as R
-import sim
 
 N = [0]
-FAILS = []
 
 
 def ok(cond, msg):
-    if cond:
-        N[0] += 1
-    else:
-        FAILS.append(msg)
+    N[0] += 1
+    if not cond:
+        print("FAIL", msg)
+        sys.exit(1)
 
 
-def alerts_of(r):
-    return sorted(h for h, v in r.items() if v["rate"] > GD.TOLERANCE)
+def text_of(path):
+    if path.endswith(".pdf"):
+        from pypdf import PdfReader
+        r = PdfReader(path)
+        return "\n".join(p.extract_text() for p in r.pages) + str(r.metadata)
+    if path.endswith(".xlsx"):
+        z = zipfile.ZipFile(path)
+        return "\n".join(z.read(n).decode("utf-8", "replace") for n in z.namelist())
+    return open(path, encoding="utf-8").read()
 
 
-def run(target, w, fig, golden):
-    N[0] = 0
-    FAILS.clear()
-    F = {k: os.path.join(target, v) for k, v in B.FILES.items()}
-    d = GD.load(target, B.FILES)
-    gold_set = sorted(x["hub_code"] for x in fig["hubs"] if x["fires"])
-    ok(gold_set == ["HKTW", "HLDZ", "HWAW"], "golden alert set %s" % gold_set)
+def gates(target):
+    import pack
+    files = sorted(os.listdir(target))
+    ok(len(files) >= 10, "10 or more usable files (%d)" % len(files))
+    cats = {f.rsplit(".", 1)[1] for f in files}
+    ok(len({"spreadsheet" if c in ("csv", "xlsx") else "text" for c in cats}) >= 2, "2 or more file categories")
+    rows = {f: sum(1 for _ in open(os.path.join(target, f), encoding="utf-8")) - 1 for f in files if f.endswith(".csv")}
+    ok(rows[pack.FILES["stops"]] >= 20000, "stop log 20,000 rows or more")
+    ok(rows[pack.FILES["rundays"]] * 12 / 55 >= 15, "run log 10 to 20 printed pages or more")
+    for f in files:
+        ok(not re.search(r"readme|dictionary|notes|manifest|schema", f, re.I), "no describing file by name: " + f)
+        t = text_of(os.path.join(target, f))
+        ok(chr(0x2014) not in t and chr(0x2013) not in t, "no em or en dash in " + f)
+        ok(not re.search(r"\.(example|test|invalid|localhost)\b|example\.(com|net|org)", t), "no reserved domain in " + f)
+        for dom in re.findall(r"[\w.-]+@([\w.-]+)", t):
+            ok(dom in ("brackloondirect.ie", "owenduffcouriers.ie"), "only the two invented domains: " + dom)
+    for k in pack.DISTRACTORS:
+        ok(pack.FILES[k] not in A.FILES.values(), "distractor never read by the golden: " + k)
+    offer = re.sub(r"\s+", " ", text_of(os.path.join(target, pack.FILES["offer"])))
+    ok("EUR 12.60 per parcel delivered" in offer, "the offer's price is the one analysis uses")
+    import params as P
+    for c in A.offered(None):
+        ok(P.D[c][0] in offer and c in offer, "offered district in the letter: " + c)
+    std = re.sub(r"\s+", " ", text_of(os.path.join(target, pack.FILES["standard"])))
+    for phrase in ("takes off Brackloon's runs", "lowers the year's delivery cost most", "depot out to depot in"):
+        ok(phrase in std, "NPS-3 files the WHAT: " + phrase)
+    for bad in ("road", "drive", "through", "beyond", "combination", "end of the run", "skipped", "sequence"):
+        ok(bad not in std.lower(), "NPS-3 names nothing the deep step rides on: " + bad)
 
-    # ------------------------------------------------------------ input gates and no describing file
-    names = sorted(os.listdir(target))
-    ok(len(names) >= 10, "files %d" % len(names))
-    fmts = {n.rsplit(".", 1)[1] for n in names}
-    ok(len(fmts) >= 3, "formats %s" % fmts)
-    ok(len(d["courier"]) >= 25000 and len(d["depot"]) >= 25000, "a 25,000-row file")
-    meta = json.load(open(os.path.join(os.path.dirname(target), "metadata.json")))
-    ok(len(meta["distractor_files"]) >= 2 and all(x in names for x in meta["distractor_files"]), "two distractors named")
-    bad = [n for n in names if any(k in n.lower() for k in ("readme", "dictionary", "notes", "manifest", "schema", "field"))]
-    ok(not bad, "a describing file by name %s" % bad)
-    for k in ("plan", "register"):
-        sheets = load_workbook(F[k], read_only=True).sheetnames
-        ok(not [s for s in sheets if any(x in s.lower() for x in ("note", "readme", "dictionary", "about", "column"))],
-           "a describing sheet in %s: %s" % (k, sheets))
-    std = " ".join(p.extract_text() for p in PdfReader(F["standard"]).pages).lower()
-    for word in ("column", "field", "trailer", "unload order", "door", "overflow", "manual", "plan", "utc", "minute",
-                 "clock", "tc51", "tc52", "suffix", "prefix", "characters", "imput", "share"):
-        ok(word not in std, "TDS-4 carries %r" % word)
-    req = open(F["request"], encoding="utf-8").read().lower()
-    for word in ("trailer", "overflow", "strykow", "pruszkow", "sosnowiec", "manual", "door", "plan", "duplicate",
-                 "column", "file", "extract shows"):
-        ok(word not in req, "the request carries %r" % word)
-    ok(len(PdfReader(F["standard"]).pages) <= 4, "the standard runs over four pages")
 
-    # ------------------------------------------------------------ the clean truth and the golden
-    ps = [p for p in w["parcels"] if P.MONTH_FIRST <= p["arr_day"] <= P.MONTH_LAST]
-    ok(len(ps) == fig["n_parcels"] == len(w["parcels"]), "population %d %d" % (len(ps), fig["n_parcels"]))
-    arr = GD.arrivals(d["depot"])
-    sh = GD.sort_hub(d["hub"])
-    gold, impure, blind, n_unl = GD.golden_assign(arr, sh)
-    truth = {p["label"]: p["hub"] for p in ps}
-    ok(all(gold[t] == truth[t] for t in gold) and len(gold) == len(truth), "R3c: the golden hub is the hub that sorted it")
-    tr = collections.Counter(p["hub"] for p in ps)
-    tm = collections.Counter(p["hub"] for p in ps if not p["scanned"])
-    for x in fig["hubs"]:
-        h = x["hub_code"]
-        ok(x["parcels"] == tr[h] and x["missed"] == tm[h], "R3c truth figures %s" % h)
-    ok(set(sh) == {p["label"] for p in ps if p["scanned"]}, "the sort feed holds exactly the scanned parcels")
-    ok(impure == 0 and blind == 0, "every unloading pure and with a sorted parcel (%d, %d)" % (impure, blind))
-
-    # ------------------------------------------------------------ the three rules, executed
-    cols = set()
-    for k in ("depot", "hub", "courier", "pre"):
-        cols |= set(d[k].columns)
-    ok("hub_code" not in d["depot"].columns and "sort_hub" not in d["depot"].columns,
-       "R1: the deciding property has no column on the arrivals")
-    ok(not [c for c in cols if "trailer" in c or "unload" in c or "route" in c], "R1: no trailer or route column")
-    ok(d["depot"]["scanned_at"].str.len().eq(19).all(), "R1: arrival scans carry the second")
-    M, arr2, sh2, gold2 = R.main_rungs(d)
-    r0 = alerts_of(M["R0 plan"])
-    ok(r0 != gold_set and r0 == ["HKTW", "HWAW"], "R3a: the default path files %s" % r0)
-    # R3b: the decisive step alone moves the default path onto the golden
-    plan_rows = R.plan_lookup(d["plan"])
-    step = {}
-    for t, dep, ts in zip(arr["tracking_no"], arr["depot_code"], arr["scanned_at"]):
-        step[t] = sh[t] if t in sh else gold[t]
-    ok(alerts_of(GD.hub_rates(step, arr, sh)) == gold_set, "R3b: the unloading's hub alone lands the golden")
-    # truth-side analyst test on the clean world
-    plan_truth = collections.Counter()
-    miss_truth = collections.Counter()
-    for p in ps:
-        h = p["hub"] if p["scanned"] else p["plan_hub"]
-        plan_truth[h] += 1
-        miss_truth[h] += 0 if p["scanned"] else 1
-    r0t = sorted(h for h in plan_truth if 100.0 * miss_truth[h] / plan_truth[h] > GD.TOLERANCE)
-    ok(r0t == r0, "R3a on the clean truth %s" % r0t)
-
-    # ------------------------------------------------------------ the ladder
-    margins = {}
-    for k, r in M.items():
-        a = alerts_of(r)
-        if k == "golden":
-            ok(a == gold_set, "golden rung")
+def forks(pk, res):
+    g = sorted(res["set"])
+    gs = GD.r5000(res["saving"])
+    # SF14 the fit and forecast variants converge on the list and the rounded figures
+    for kw in ({"years": (2025,)}, {"years": (2026,)}, {"stat": np.median}, {"annual": True}):
+        v = A.golden(pk, **kw)
+        ok(sorted(v["set"]) == g, "SF14 same list under %s" % kw)
+        ok(GD.r5000(v["saving"]) == gs, "SF14 same rounded net saving under %s (%.0f)" % (kw, v["saving"]))
+        for r, rr in v["runs"].items():
+            for key in ("hours", "base_h", "after_h"):
+                ok(GD.r50(rr[key]) == GD.r50(res["runs"][r][key]), "SF14 same rounded %s on %s under %s" % (key, r, kw))
+    ok(abs(res["saving"] - gs) < 1500, "SF12 the net saving sits mid-bin (%.0f)" % res["saving"])
+    for r, rr in res["runs"].items():
+        if not rr["cand"]:
             continue
-        ok(a != gold_set, "rung %s lands the golden" % k)
-        wrong = sorted(set(a) ^ set(gold_set))
-        dist = {h: max(r[h]["rate"] / GD.TOLERANCE, GD.TOLERANCE / r[h]["rate"]) for h in r}
-        if k == "R0 plan, first issue":
-            m = max(dist[h] for h in wrong)          # a hazard rung: wrong whichever side its nearest hub falls
-        else:
-            m = min(dist.values())                   # an analytical rung: every verdict it files stands clear
-        margins[k] = m
-        ok(m >= 1.15, "rung %s margin %.3f" % (k, m))
-    g = M["golden"]
-    gm = min(max(v["rate"] / GD.TOLERANCE, GD.TOLERANCE / v["rate"]) for v in g.values())
-    ok(gm >= 1.2, "golden margin %.3f" % gm)
-    ok(len({tuple(alerts_of(r)) for r in M.values()}) >= 4, "the rungs name at least four different sets")
+        for lab, v in (("saved", rr["hours"]), ("before", rr["base_h"]), ("after", rr["after_h"])):
+            ok(v == 0 or abs(v - GD.r50(v)) < 17, "SF12 run %s %s hours mid-bin (%.1f)" % (r, lab, v))
+    # SF9 each district on its own merit moves Mulranny and Bangor Erris (ruled out by NPS-3 4.3)
+    one = A.removal_one(pk, res)
+    one_set = sorted(c for c in one if one[c][2] > 0)
+    ok(one_set != g and "MUL" not in one_set and "BAN" not in one_set, "SF9 one-at-a-time keeps Mulranny and Bangor Erris")
+    # SF10 time in district moves Leenane and Letterfrack (ruled out by NPS-3 4.1 and 3.2)
+    for incl in (False, True):
+        tid = A.time_in_district(pk, incl)
+        ts = sorted(c for c in A.offered(pk) if tid[c][1] > tid[c][2])
+        ok("LEE" in ts and "LET" in ts and ts != g, "SF10 time in district (exit leg %s) hands over Leenane and Letterfrack" % incl)
+        ok(min(tid["LEE"][1] / tid["LEE"][2], tid["LET"][1] / tid["LET"][2]) >= 1.15, "SF10 by a margin of 1.15x")
+    al = A.allocation_by_stops(pk)
+    ok(sorted(c for c in A.offered(pk) if al[c][0] > al[c][1]) != g, "allocation by stops files another list")
+    # SF11 the proportional carry moves the rounded net saving
+    ok(GD.r5000(A.proportional_carry(pk, res)) != gs, "SF11 the proportional carry rounds elsewhere")
+    # SF16 weekdays as delivery days instead of the calendar's
+    pk2 = copy.copy(pk)
+    pk2.days27 = [sum(1 for d in range(1, 32) if _wd(2027, m, d)) for m in range(1, 13)]
+    v = A.golden(pk2)
+    ok(sorted(v["set"]) == g, "SF16 same list on weekdays")
+    # SF4 the year's parcels read as the last twelve months' parcels instead of the plan's: same list
+    pk3 = copy.copy(pk)
+    plan = {}
+    for c in pk.plan:
+        m = [0] * 12
+        for (d, r), lst in pk.rundays.items():
+            if d >= "2025-11-01":
+                for x in lst:
+                    if x["district_code"] == c:
+                        m[int(d[5:7]) - 1] += int(x["parcels_delivered"])
+        plan[c] = m
+    pk3.plan = plan
+    ok(sorted(A.golden(pk3)["set"]) == g, "SF4 same list on the last twelve months' parcels")
+    # SF2 van-hours depot out to depot in: the fitted run (drives, door, local, break) reproduces the run log's hours
+    model, per = res["model"], res["per"]
+    for run in pk.runs:
+        cnt = {}
+        days = [0] * 12
+        tot = 0.0
+        for (d, r), lst in pk.rundays.items():
+            if r != run or not d.startswith("2026"):
+                continue
+            m = int(d[5:7]) - 1
+            days[m] += 1
+            t0, t1 = pk.runlog[(d, r)]
+            tot += t1 - t0
+            for x in lst:
+                if x["stop_type"] != "BREAK":
+                    cnt.setdefault(x["district_code"], [0] * 12)[m] += 1
+        mus = {c2: [cnt.get(c2, [0] * 12)[k] / days[k] if days[k] else 0 for k in range(12)] for c2 in model[run]["chain"]}
+        mus["__days__"] = days
+        fit_h = A.run_hours(model, per, run, mus)
+        ok(abs(fit_h - tot) / tot < 0.03, "SF2 the fitted run reproduces the run log's 2026 hours on %s (%.0f against %.0f)" % (run, fit_h, tot))
+    # SF1 the year is the calendar year 2027 of the delivery calendar
+    ok(sum(pk.days27) == 251, "SF1 2027 has 251 delivery days in the calendar")
+    # SF7 Castlebar town's two new codes belong to a run that serves no offered district
+    ok(not res["runs"]["R01"]["cand"], "SF7 the split district's run serves no offered district")
+    # SF13 the runs that serve an offered district
+    ok(sorted(r for r, rr in res["runs"].items() if rr["cand"]) == ["R03", "R04", "R05", "R06", "R07", "R08", "R09"],
+       "SF13 seven runs serve an offered district")
+    # SF8 Owenduff charges per parcel delivered: the plan counts deliveries, and no plan row is a collection
+    ok(all(sum(v) > 0 for c, v in pk.plan.items() if c in A.offered(pk)), "SF8 every offered district has plan parcels")
+    for S, (hrs, ch, val) in res["runs"]["R05"]["table"].items():
+        if S:
+            ok(hrs * pk.rate / ch <= 0.87, "Connemara: no combination saves (%s %.2f)" % (S, hrs * pk.rate / ch))
+    for run, rr in res["runs"].items():
+        S = set(rr["set"])
+        for c in rr["cand"]:
+            w = tuple(x for x in rr["cand"] if x in S | {c})
+            wo = tuple(x for x in rr["cand"] if x in S - {c})
+            marg = (rr["table"][w][0] - rr["table"][wo][0]) * pk.rate / (sum(pk.plan[c]) * A.PRICE)
+            ok(marg >= 1.15 if c in S else marg <= 0.87, "golden margin %s %.2f" % (c, marg))
 
-    # ------------------------------------------------------------ the unloadings: pure and threshold-free
-    for gap in (1, 2, 5, 20, 29):
-        a2, i2, b2, _ = GD.golden_assign(arr, sh, gap)
-        ok(a2 == gold and i2 == 0 and b2 == 0, "unloadings at a %d-minute gap" % gap)
-    u = GD.unloadings(arr)
-    u["dt"] = u.groupby("unloading")["t"].diff().dt.total_seconds()
-    ok(u["dt"].max() < 60, "a pause inside an unloading %.0f s" % u["dt"].max())
-    st = u.groupby("unloading").agg(dep=("depot_code", "first"), door=("scanner_id", "first"), a=("t", "min"),
-                                    b=("t", "max")).sort_values(["dep", "door", "a"])
-    st["gap"] = (st["a"] - st.groupby(["dep", "door"])["b"].shift()).dt.total_seconds() / 60
-    ok(st["gap"].min() > 30, "two unloadings at a door %.1f minutes apart" % st["gap"].min())
-    on_plan = R.assign_plan(arr, sh, d["plan"])
-    diff = [t for t in gold if t not in sh and gold[t] != on_plan[t]]
-    ok(len(diff) >= 100, "parcels whose sort hub differs from the plan's %d" % len(diff))
-    mixed = R.mixed_days(arr, sh)
-    ok(all(dep in ("D-WAW1", "D-WAW2") for dep, _ in mixed) and len(mixed) >= 15, "mixed mornings %d" % len(mixed))
-    # Pruszkow's own rate rises on its heavy nights (the excess route's base rate is not the night's)
-    nights = w["nights"]
-    heavy = [n for n in nights if nights[n]["flex"] > 0]
-    ok(min(nights[n]["waw_rate"] for n in heavy) > 1.2 * sum(nights[n]["waw_rate"] for n in nights if n not in heavy)
-       / max(1, len(nights) - len(heavy)), "Pruszkow's rate on its heavy nights")
 
-    # ------------------------------------------------------------ the semantic fork rows
-    hub_rows = d["hub"].copy()
-    hub_rows["night_local"] = (pd.to_datetime(hub_rows["event_time_utc"]).dt.tz_convert("Europe/Warsaw")
-                               - pd.Timedelta(hours=12)).dt.strftime("%Y-%m-%d")
-    by_sort = set(hub_rows.loc[(hub_rows["night_local"] >= "2026-10-01"), "tracking_no"])
-    a_sort = arr[[t in by_sort or (t not in sh and ts[:10] >= "2026-10-02") for t, ts in
-                  zip(arr["tracking_no"], arr["scanned_at"])]]
-    ok(alerts_of(GD.hub_rates(gold, a_sort, sh)) == gold_set, "SF1 October by sort night")
-    rows_n = collections.Counter(d["hub"]["hub_code"])
-    alt = {}
-    for h in rows_n:
-        x = [v for v in fig["hubs"] if v["hub_code"] == h][0]
-        alt[h] = {"rate": 100.0 * x["missed"] / (rows_n[h] + x["missed"])}
-    ok(alerts_of(alt) == gold_set, "SF2 sort rows for parcels")
-    ok(pd.to_datetime(d["hub"]["received_at_utc"]).max() < pd.Timestamp("2026-11-06 06:40:00", tz="UTC"),
-       "SF3 every sort event before the extract")
-    alt = {x["hub_code"]: {"rate": 100.0 * x["missed"] / (x["parcels"] - x["missed"])} for x in fig["hubs"]}
-    ok(alerts_of(alt) == gold_set, "SF4 the rate over sorted parcels")
-    ok(min(abs(x["rate_exact"] - GD.TOLERANCE) for x in fig["hubs"]) > 0.2, "SF5 no hub within 0.2 of the line")
-    # SF24: the 90 per cent interval, each parcel handled an independent chance of a miss; every standard binomial
-    # interval and a parcel bootstrap put each hub on the same side of the tolerance, at least 0.05 points clear
-    from scipy import stats as _st
-    import numpy as _np
-    z, a = GD.Z90, 1 - GD.LEVEL
-    rng = _np.random.default_rng(250)
-    for x in fig["hubs"]:
-        m, n = x["missed"], x["parcels"]
-        p = m / n
-        ac_n, ac_p = n + z * z, (m + z * z / 2) / (n + z * z)
-        ivs = {"wilson": GD.interval(m, n),
-               "wald": (100 * (p - z * (p * (1 - p) / n) ** 0.5), 100 * (p + z * (p * (1 - p) / n) ** 0.5)),
-               "clopper-pearson": (100 * _st.beta.ppf(a / 2, m, n - m + 1), 100 * _st.beta.ppf(1 - a / 2, m + 1, n - m)),
-               "jeffreys": (100 * _st.beta.ppf(a / 2, m + .5, n - m + .5), 100 * _st.beta.ppf(1 - a / 2, m + .5, n - m + .5)),
-               "agresti-coull": (100 * (ac_p - z * (ac_p * (1 - ac_p) / ac_n) ** 0.5),
-                                 100 * (ac_p + z * (ac_p * (1 - ac_p) / ac_n) ** 0.5))}
-        boot = 100 * rng.binomial(n, p, 20000) / n
-        ivs["parcel bootstrap"] = tuple(_np.quantile(boot, [a / 2, 1 - a / 2]))
-        bands = {k: GD.band(lo, hi) for k, (lo, hi) in ivs.items()}
-        ok(set(bands.values()) == {x["band"]}, "SF24 %s interval side moves with the method %s" % (x["hub_code"], bands))
-        gap = min(min(abs(lo - GD.TOLERANCE), abs(hi - GD.TOLERANCE)) for lo, hi in ivs.values())
-        ok(gap >= 0.05, "SF24 %s interval within 0.05 of the line (%.3f)" % (x["hub_code"], gap))
-        ok(x["band"] == ("above" if x["fires"] else "below"), "SF24 %s band against its alert" % x["hub_code"])
-    ptxt = open(os.path.join(os.path.dirname(target), "prompt.txt")).read()
-    mail = " ".join(open(F["request"], encoding="utf-8").read().split())
-    ok("90 per cent interval" in ptxt, "SF24 the prompt asks for the 90 per cent interval")
-    ok("90 per cent interval" in mail and "independent chance of a missed sort scan" in mail
-       and "wholly above the tolerance, across it or wholly below it" in mail,
-       "SF24 the request files the interval's level, model and reading")
-    ok(sorted(x["hub_code"] for x in fig["hubs"] if x["rate"] > GD.TOLERANCE) == gold_set, "SF6 rounded rates")
-    raw = d["depot"][(d["depot"]["scanned_at"].str[:7] == "2026-10")]
-    ok(len(raw) > len(arr), "the re-sent batch ships")
-    cnt = collections.Counter(raw["tracking_no"])
-    alt = collections.Counter()
-    altm = collections.Counter()
-    for t, c in cnt.items():
-        alt[gold[t]] += c
-        altm[gold[t]] += 0 if t in sh else c
-    ok(alerts_of({h: {"rate": 100.0 * altm[h] / alt[h]} for h in alt}) == gold_set, "SF7 the re-sent batch counted")
-    ok(raw.duplicated().sum() == len(raw) - len(arr) and not raw.drop_duplicates()["tracking_no"].duplicated().any(),
-       "SF7 the re-sent rows are the same rows")
-    a_m = arr.copy()
-    a_m["depot_code"] = a_m["depot_code"].replace({"D-KRK3": "D-KRK1"})
-    g_m, i_m, b_m, _ = GD.golden_assign(a_m, sh)
-    ok(g_m == gold, "SF8 Krakow's two codes as one depot")
-    hrs = pd.to_datetime(arr["scanned_at"]).dt.hour
-    ok(hrs.min() >= 3 and hrs.max() <= 8, "SF9 unloadings between 03:00 and 09:00 local (%d to %d)" % (hrs.min(), hrs.max()))
-    ok(all(alerts_of(GD.hub_rates(gold, arr, sh)) == gold_set for _ in (0,)), "SF10 hub times never read by the call")
-    ok(set(d["hubs"]["hub_code"]) == set(x["hub_code"] for x in fig["hubs"]) and len(d["hubs"]) == 6,
-       "SF12 the register's hubs")
-    for k in ("depot", "hub", "courier"):
-        ok(pd.to_datetime(d[k]["received_at_utc"]).max() < pd.Timestamp("2026-11-06 06:40:00", tz="UTC"),
-           "SF13 %s records before the extract" % k)
-    master = {}
-    for p in ps:
-        master[p["label"]] = p["label"][:13] if p["kind"] == "b2b" else p["label"]
-    cons_n, cons_m = collections.Counter(), collections.Counter()
-    seen_c = set()
-    for t in arr["tracking_no"]:
-        key = (master[t], gold[t])
-        if key in seen_c:
-            continue
-        seen_c.add(key)
-        cons_n[gold[t]] += 1
-        cons_m[gold[t]] += 0 if t in sh else 1
-    ok(alerts_of({h: {"rate": 100.0 * cons_m[h] / cons_n[h]} for h in cons_n}) == gold_set, "SF14 consignments as parcels")
-    ok(R.alerts(M["R0 plan"]) != gold_set, "SF11 the plan's hub is another call (closed by TDS-4 2.1)")
-    ok(fig["fired"] == [x["hub_name"] for x in fig["hubs"] if x["fires"]] and
-       all(isinstance(x["fires"], bool) for x in fig["hubs"]), "SF15 one verdict per hub")
-    a_d = arr.copy()
-    a_d["scanner_id"] = a_d["depot_code"]
-    g_d, i_d, b_d, _ = GD.golden_assign(a_d, sh)
-    ok(g_d == gold and i_d == 0 and b_d == 0, "SF16 the depot's arrivals without the door give the same unloadings")
-
-    # ------------------------------------------------------------ separation line and deletion tests
-    tmp = tempfile.mkdtemp(dir=os.environ.get("TMPBUILD"))
+def _wd(y, m, d):
+    import datetime as dt
     try:
-        for k in B.FILES:
-            if k not in ("claims", "sorters", "request"):
-                shutil.copy(F[k], os.path.join(tmp, B.FILES[k]))
-        f2 = GD.figures(tmp, B.FILES)
-        ok(f2 == fig, "deleting the distractors and the request moves a figure")
-        keep = ("depot", "hub", "plan", "register", "standard")
-        for k in B.FILES:
-            if k not in keep and os.path.exists(os.path.join(tmp, B.FILES[k])):
-                os.remove(os.path.join(tmp, B.FILES[k]))
-        d3 = {"depot": pd.read_csv(os.path.join(tmp, B.FILES["depot"]), dtype=str),
-              "hub": pd.read_parquet(os.path.join(tmp, B.FILES["hub"]))}
-        a3 = GD.arrivals(d3["depot"])
-        s3 = GD.sort_hub(d3["hub"])
-        g3, _, _, _ = GD.golden_assign(a3, s3)
-        ok(alerts_of(GD.hub_rates(g3, a3, s3)) == gold_set, "the call from the arrivals and the sorts alone")
+        return dt.date(y, m, d).weekday() < 5
+    except ValueError:
+        return False
+
+
+def neutral(target, res):
+    """SF5, SF6, SF15: the mess moves nothing; SF3 the break is never saved"""
+    g = sorted(res["set"])
+    tmp = tempfile.mkdtemp(prefix="task4-neutral-")
+    try:
+        for f in os.listdir(target):
+            shutil.copy(os.path.join(target, f), tmp)
+        p = os.path.join(tmp, A.FILES["stops"])
+        rows = list(csv.reader(open(p, encoding="utf-8")))
+        # SF6 the re-synced copies: Pack drops them; kept as stops they would add door time only (asserted below)
+        # SF5 failed attempts and collections dropped as if they were not stops
+        hdr = rows[0]
+        keep = [hdr] + [r for r in rows[1:] if r[hdr.index("stop_type")] not in ("FAILED_ATTEMPT", "COLLECTION")]
+        with open(p, "w", newline="", encoding="utf-8") as fh:
+            csv.writer(fh).writerows(keep)
+        v = A.golden(A.Pack(tmp))
+        ok(sorted(v["set"]) == g, "SF5 same list with failed attempts and collections dropped")
+        # SF15 the stops with no departure scan: dropping their run-days from the fit moves nothing
+        rows2 = list(csv.reader(open(os.path.join(target, A.FILES["stops"]), encoding="utf-8")))
+        bad = {(r[0], r[1]) for r in rows2[1:] if r[hdr.index("departed_local")] == "" and r[hdr.index("stop_type")] != "BREAK"}
+        with open(p, "w", newline="", encoding="utf-8") as fh:
+            csv.writer(fh).writerows([hdr] + [r for r in rows2[1:] if (r[0], r[1]) not in bad])
+        v = A.golden(A.Pack(tmp))
+        ok(sorted(v["set"]) == g and GD.r5000(v["saving"]) == GD.r5000(res["saving"]), "SF15 same list without those run-days")
+        # SF6 with every re-synced copy kept as a stop of its own
+        with open(p, "w", newline="", encoding="utf-8") as fh:
+            csv.writer(fh).writerows(rows2)
+        pk6 = A.Pack(tmp)
+        ok(len(pk6.rundays) == len(A.Pack(target).rundays), "SF6 the copies sit on existing run-days")
     finally:
         shutil.rmtree(tmp)
+    pk = A.Pack(target)
+    breaks = sum(1 for lst in pk.rundays.values() if sum(1 for x in lst if x["stop_type"] == "BREAK") == 1)
+    ok(breaks == len(pk.rundays), "SF3 every run-day carries exactly one break, never saved")
 
-    # ------------------------------------------------------------ ask A: courier events sent twice
-    A, Bk = R.ask_rungs(d)
-    deps = list(d["depots"]["depot_code"])
-    cop = [e for e in w["courier"]["events"] if e["copy"]]
-    ta = collections.Counter(sim.depot_code(e["depot"], e["day"]) for e in cop)
-    ok(all(x["sent_twice"] == ta[x["depot_code"]] for x in fig["depots"]), "ask A against the clean truth")
-    t51 = collections.Counter(sim.depot_code(e["depot"], e["day"]) for e in cop if e["model"] == "TC51")
-    t52 = collections.Counter(sim.depot_code(e["depot"], e["day"]) for e in cop if e["model"] == "TC52")
-    ok(min(t51[c] for c in deps) >= 20 and min(t52[c] for c in deps) >= 20,
-       "both handheld models re-send at every depot (%d, %d)" % (min(t51[c] for c in deps), min(t52[c] for c in deps)))
-    for k, v in A.items():
-        if k == "golden":
+
+def sulfur(res_pack):
+    """the clean truth: a pack built with no mess, the analyst test and the rivals executed on it"""
+    import params as P
+    import pack as PK
+    import sim
+    saved = (P.DUP_RATE, P.MISSING_DEP)
+    P.DUP_RATE, P.MISSING_DEP = 0.0, 0.0
+    tmp = tempfile.mkdtemp(prefix="task4-clean-")
+    try:
+        w = sim.world()
+        PK.write_tables(w, tmp)
+        pk = A.Pack(tmp)
+        res = A.golden(pk)
+        ok(sorted(res["set"]) == sorted(res_pack["set"]), "R1 the clean truth's golden list is the pack's")
+        tid = A.time_in_district(pk)
+        ts = sorted(c for c in A.offered(pk) if tid[c][1] > tid[c][2])
+        ok("LEE" in ts and "LET" in ts, "R2 the analyst test on the clean truth hands over Leenane and Letterfrack")
+        one = A.removal_one(pk, res)
+        ok(sorted(c for c in one if one[c][2] > 0) != sorted(res["set"]), "R3 one-at-a-time on the clean truth files another list")
+        # R4 the one-fact test: told the through-road fact alone (removal), the solver still keeps Mulranny and
+        # Bangor Erris; told the spur fact alone with time in district, it still hands over Leenane and Letterfrack
+        ok("MUL" not in [c for c in one if one[c][2] > 0], "R4 the through-road hint alone leaves the spur wrong")
+        # R5 the truth: the generator's own expected run times put the same list (checked through the fitted model's
+        # recovery of the generator's sections)
+        for r in ("R04", "R05", "R07"):
+            for c in pk.chain[r]:
+                e_true = sim.edge_h(c)
+                ok(abs(res["model"][r]["e"][c] - e_true) / e_true < 0.08 or c == pk.chain[r][-1],
+                   "R5 fitted section %s within 8 per cent of the truth" % c)
+    finally:
+        shutil.rmtree(tmp)
+        P.DUP_RATE, P.MISSING_DEP = saved
+
+
+def backtest(pk):
+    """the forecast earns its place: fitted on 2025, the visit model forecasts 2026's run hours (January to October)
+    from 2026's stops better than 2025's hours carried in proportion to stops"""
+    model, per = A.fit(pk, (2025,))
+    err_v, err_p = [], []
+    for run in pk.runs:
+        if not [c for c in model[run]["chain"] if c in A.offered(pk)]:
             continue
-        hits = [c for c in deps if v.get(c, 0) == A["golden"].get(c, 0)]
-        if k.startswith("A4"):
-            ok(len(hits) <= 1, "ask A stop %s keeps %s" % (k, hits))
-        else:
-            ok(not hits, "ask A stop %s keeps %s" % (k, hits))
-    reload_dep = collections.Counter(sim.depot_code(p["dest"], p["arr_day"]) for p in ps if p["reload_min"] is not None)
-    ok(min(reload_dep[c] for c in deps) >= 20, "a second loop at every depot")
-    late51 = collections.Counter(sim.depot_code(e["depot"], e["day"]) for e in cop
-                                 if e["model"] == "TC51" and e["day"] >= P.SUMMER_END)
-    ok(sum(1 for c in deps if late51[c] > 0) >= 12, "TC51 re-sends after the clocks went back")
-
-    # ------------------------------------------------------------ ask B: pre-advised, never picked up
-    latest = {}
-    for r in d["pre"].itertuples():
-        if r.consignment_id not in latest or int(r.version) > int(latest[r.consignment_id].version):
-            latest[r.consignment_id] = r
-    lines = {ln["cons"]: ln for ln in w["preadvice"]}
-    tb = collections.Counter()
-    for c, r in latest.items():
-        if not ("2026-10-01" <= r.collection_date <= "2026-10-31"):
-            continue
-        dep = r.collection_depot
-        if dep == "D-KRK1" and r.collection_date >= "2026-10-12":
-            dep = "D-KRK3"
-        ln = lines[c]
-        tb[dep] += ln["short"] if ln["collected"] else ln["pieces"]
-    ok(all(x["never_picked"] == tb[x["depot_code"]] for x in fig["depots"]), "ask B against the clean truth")
-    for k, v in Bk.items():
-        if k in ("golden", "B4b every courier event but a failed pickup"):
-            continue
-        hits = [c for c in deps if v.get(c, 0) == Bk["golden"].get(c, 0)]
-        lim = 2 if k.startswith("B4c") else 0
-        ok(len(hits) <= lim, "ask B stop %s keeps %s" % (k, hits))
-    ok(Bk["B4b every courier event but a failed pickup"] == Bk["golden"], "the golden route through the delivery events")
-    bulk_dep = collections.Counter(p["origin"] for p in w["parcels"] if p["bulk"])
-    ok(min(bulk_dep[x] for x in sim.DEPOTS) >= 100, "trailer collections at every depot")
-    failed = d["courier"][d["courier"]["event_code"] == "PICKUP_FAILED"]
-    ok(failed["depot_code"].nunique() == 13, "failed pickups at every depot")
-    ok(not set(failed["tracking_no"]) & set(sh) and not set(failed["tracking_no"]) & set(arr["tracking_no"]),
-       "a failed pickup never travels")
-    shortp = sum(ln["short"] for ln in w["preadvice"] if ln["collected"])
-    ok(shortp >= 100, "short consignments %d" % shortp)
-    refs = [ln["ref"] for ln in w["preadvice"] if ln["kind"] == "marketplace"]
-    grp = collections.Counter(r[:20] for r in refs)
-    ok(sum(v for v in grp.values() if v > 1) >= 1000, "order numbers sharing their first 20 characters")
-    ok(d["courier"]["customer_ref"].dropna().str.len().max() == 20, "the handheld keeps 20 characters")
-    pre_v = d["pre"].groupby("consignment_id")["version"].nunique()
-    ok((pre_v > 1).sum() >= 1000, "later versions ship")
-    moved_out = [c for c, r in latest.items() if r.collection_date > "2026-10-31" and int(r.version) == 2]
-    ok(len(moved_out) >= 1, "pre-advices moved out of October %d" % len(moved_out))
-    krk_old = d["pre"][(d["pre"]["collection_depot"] == "D-KRK1") & (d["pre"]["collection_date"] >= "2026-10-12")]
-    ok(len(krk_old) >= 200, "the replaced code after the move %d" % len(krk_old))
-    ok(len(d["pre"][d["pre"]["collection_date"] < "2026-10-01"]) >= 500, "September collections ship")
-    ok(not [k for k in cols if k in ("is_copy", "resent", "duplicate", "copy", "trailer_collection")],
-       "no marker column")
-    # SF17 to SF22
-    cp = GD.sent_twice(d["courier"], d["handhelds"])
-    ok(len(cp) == sum(x["sent_twice"] for x in fig["depots"]), "SF17 events equal records")
-    oct_only = cp[cp["event_time"].str[:7] == "2026-10"] if hasattr(cp, "columns") else [x for x in cp if x["event_time"][:7] == "2026-10"]
-    ok(len(oct_only) != len(cp), "SF23 the extract's events, not October's alone (the October-only count moves the column)")
-    hh_dep = dict(zip(d["handhelds"]["device_id"], d["handhelds"]["depot_code"]))
-    alt = collections.Counter(hh_dep[x] for x in cp["device_id"])
-    ok(alt["D-KRK1"] == 0 and alt["D-KRK3"] > A["golden"]["D-KRK3"], "SF18 the register's depot moves Krakow")
-    ok(Bk["B6 the cracker on every version"] != Bk["B3 pieces and references counted, pickups only"], "SF19 versions move B")
-    ok(Bk["B5 the cracker without the replaced code"] != Bk["B3 pieces and references counted, pickups only"],
-       "SF20 the replaced code moves B")
-    cons = R.b_route(d, events=("PICKED_UP", "OUT_FOR_DELIVERY", "DELIVERY_ATTEMPTED", "DELIVERED"), pieces=False)
-    ok(all(cons.get(c, 0) != Bk["golden"].get(c, 0) for c in sim.B2B_DEPOTS),
-       "SF21 consignments for parcels moves every contract depot")
-    ok(all(Bk["B3 pieces and references counted, pickups only"].get(c, 0) != Bk["golden"].get(c, 0) for c in deps),
-       "SF22 a pickup scan for a collection moves every depot")
-
-    # ------------------------------------------------------------ realism sweep and clocks
-    H = fig["hubs"]
-    ok(len({x["parcels"] for x in H}) == 6 and len({x["missed"] for x in H}) == 6, "identical hub counts")
-    ok(len({x["sent_twice"] for x in fig["depots"]}) >= 12 and len({x["never_picked"] for x in fig["depots"]}) >= 12,
-       "identical depot counts")
-    ok(all(round(x["rate"] * 100) % 50 != 0 for x in H), "a round rate")
-    for who in ("Inga Blaut", "Krzysztof Konieczek", "Aurelia Pieczyrak"):
-        ok(who in open(F["request"], encoding="utf-8").read(), "persona %s" % who)
-    hu = d["hub"].drop_duplicates("tracking_no").set_index("tracking_no")["event_time_utc"]
-    au = arr.set_index("tracking_no")["scanned_at"]
-    loc = pd.to_datetime(au.loc[hu.index]).dt.tz_localize("Europe/Warsaw").dt.tz_convert("UTC")
-    lead = (loc - pd.to_datetime(hu)).dt.total_seconds() / 3600
-    ok(lead.min() > 0.5 and lead.max() < 12, "sort before arrival (%.1f to %.1f h)" % (lead.min(), lead.max()))
-    rec = pd.to_datetime(d["hub"]["received_at_utc"]) - pd.to_datetime(d["hub"]["event_time_utc"])
-    ok(rec.dt.total_seconds().min() >= 0 and rec.dt.total_seconds().max() < 15, "hub receipt lag")
-    pre = d["pre"]
-    sent = pd.to_datetime(pre["sent_at_utc"]).dt.tz_convert("Europe/Warsaw").dt.strftime("%Y-%m-%d")
-    ok((sent[pre["version"] == "1"] < pre.loc[pre["version"] == "1", "collection_date"]).all(),
-       "a first pre-advice sent on or after its collection day")
-    orig = d["courier"][~d["courier"]["event_id"].isin(set(cp["event_id"]))]
-    ou = pd.to_datetime(orig["event_time"]).dt.tz_localize("Europe/Warsaw").dt.tz_convert("UTC")
-    lag = (pd.to_datetime(orig["received_at_utc"]) - ou).dt.total_seconds()
-    ok(lag.min() >= 0, "a courier event received before it happened (%.0f s)" % lag.min())
-    ok(d["courier"]["event_id"].is_unique and d["hub"]["event_id"].is_unique, "event ids")
-    ok(len(set(d["handhelds"]["device_id"])) == len(d["handhelds"]), "handheld ids")
-    ok(set(d["courier"]["device_id"]) <= set(d["handhelds"]["device_id"]), "every handheld in the register")
-    ok(set(arr["scanner_id"]) <= set(_sheet_col(F["register"], "Door scanners", "scanner_id")), "every door reader registered")
-    ok(set(d["courier"]["event_code"]) == {"PICKED_UP", "PICKUP_FAILED", "OUT_FOR_DELIVERY", "DELIVERY_ATTEMPTED",
-                                           "DELIVERED"}, "event codes")
-    for gpath in (os.path.join(golden, GD.XLSX), os.path.join(golden, GD.PPTX)):
-        ok(os.path.exists(gpath), "golden %s" % gpath)
-    if FAILS:
-        raise AssertionError("%d checks failed:\n  " % len(FAILS) + "\n  ".join(FAILS))
-    return N[0]
+        hrs = {y: 0.0 for y in (2025, 2026)}
+        stops = {y: [0] * 12 for y in (2025, 2026)}
+        cnt = {y: {c: [0] * 12 for c in model[run]["chain"]} for y in (2025, 2026)}
+        days = {y: [0] * 12 for y in (2025, 2026)}
+        for (d, r), lst in pk.rundays.items():
+            if r != run:
+                continue
+            y, m = int(d[:4]), int(d[5:7]) - 1
+            if m > 9:
+                continue
+            t0, t1 = pk.runlog[(d, r)]
+            hrs[y] += t1 - t0
+            days[y][m] += 1
+            for x in lst:
+                if x["stop_type"] != "BREAK":
+                    cnt[y][x["district_code"]][m] += 1
+        mus = {c: [cnt[2026][c][m] / days[2026][m] for m in range(12) if m < 10] + [0, 0] for c in model[run]["chain"]}
+        mus["__days__"] = days[2026][:10] + [0, 0]
+        fv = A.run_hours(model, per, run, mus) - 0.0
+        tot25 = sum(sum(v) for v in cnt[2025].values())
+        tot26 = sum(sum(v) for v in cnt[2026].values())
+        fp = hrs[2025] * tot26 / tot25
+        err_v.append(abs(fv - hrs[2026]))
+        err_p.append(abs(fp - hrs[2026]))
+    ok(sum(err_v) < sum(err_p), "the visit model beats the proportional carry out of sample (%.0f against %.0f h)"
+       % (sum(err_v), sum(err_p)))
+    return sum(err_v), sum(err_p)
 
 
-def _sheet_col(path, sheet, col):
-    wb = load_workbook(path, read_only=True)
-    rows = list(wb[sheet].iter_rows(values_only=True))
-    i = rows[0].index(col)
-    return [r[i] for r in rows[1:]]
+def main(target):
+    gates(target)
+    pk = A.Pack(target)
+    res = A.golden(pk)
+    ok(sorted(res["set"]) == sorted(["ACH", "BAN", "BCA", "BLM", "LOU", "MUL"]), "the golden list is the designed one")
+    forks(pk, res)
+    neutral(target, res)
+    sulfur(res)
+    ev, ep = backtest(pk)
+    print("checks: %d assertions passed; back-test absolute error %.0f h (visit model) against %.0f h (proportional)"
+          % (N[0], ev, ep))
+
+
+if __name__ == "__main__":
+    main(sys.argv[1] if len(sys.argv) > 1 else os.path.join(os.path.dirname(HERE), "target"))

@@ -1,145 +1,115 @@
-"""task4 documents: the tracking data standard TDS-4 (pdf) and the director of network operations' request (eml)."""
+"""task4 documents: Owenduff's offer letter and Brackloon's network planning standard NPS-3, both PDFs written the way
+the two offices write them (a Word document exported by LibreOffice Writer)."""
+import datetime as dt
+
 from reportlab.lib import colors
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
-from reportlab.lib.units import mm
 from reportlab.platypus import Paragraph, Spacer, Table, TableStyle
-
-import datetime as dt
 
 import officepdf as O
 import params as P
 
-CET = dt.timezone(dt.timedelta(hours=1))
-
-DOMAIN = "kurierwarta.pl"
-HEAD = ("Inga Blaut", "i.blaut")
-LINEHAUL = ("Krzysztof Konieczek", "k.konieczek")
-INTEGRATION = ("Aurelia Pieczyrak", "a.pieczyrak")
+IE = dt.timezone(dt.timedelta(hours=1))
+IE_W = dt.timezone(dt.timedelta(hours=0))
 
 
 def _styles():
     ss = getSampleStyleSheet()
-    body = ParagraphStyle("body", parent=ss["Normal"], fontName="Helvetica", fontSize=9.6, leading=13.4, spaceAfter=5)
+    body = ParagraphStyle("body", parent=ss["Normal"], fontName="Helvetica", fontSize=9.8, leading=13.6, spaceAfter=6)
     h1 = ParagraphStyle("h1", parent=ss["Heading1"], fontName="Helvetica-Bold", fontSize=13.5, leading=17, spaceAfter=4)
     h2 = ParagraphStyle("h2", parent=ss["Heading2"], fontName="Helvetica-Bold", fontSize=10.5, leading=14,
                         spaceBefore=8, spaceAfter=4, keepWithNext=1)
-    small = ParagraphStyle("small", parent=body, fontSize=8, leading=10.5, textColor=colors.HexColor("#444444"))
-    cell = ParagraphStyle("cell", fontName="Helvetica", fontSize=8.0, leading=9.8)
+    small = ParagraphStyle("small", parent=body, fontSize=8.2, leading=10.8, textColor=colors.HexColor("#444444"))
+    cell = ParagraphStyle("cell", fontName="Helvetica", fontSize=8.4, leading=10.2)
     return body, h1, h2, small, cell
 
 
 def _grid(rows, widths, cell):
     t = Table([[Paragraph(str(c), cell) for c in r] for r in rows], colWidths=widths, repeatRows=1)
     t.setStyle(TableStyle([("GRID", (0, 0), (-1, -1), 0.4, colors.HexColor("#9AA0AB")),
-                           ("VALIGN", (0, 0), (-1, -1), "TOP"),
-                           ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#E3E8EF"))]))
+                           ("VALIGN", (0, 0), (-1, -1), "TOP")]))
     return t
+
+
+def offer(path):
+    body, h1, h2, small, cell = _styles()
+    rows = [["District", "Brackloon code"]] + [[P.D[c][0], c] for c in P.OFFER]
+    s = [Paragraph("Owenduff Couriers, Unit 7, Lannagh Business Park, Castlebar Road, Westport, Co. Mayo F28 X2K4", small),
+         Paragraph("Tel. 098 52 714 | accounts@%s" % P.PARTNER_DOMAIN, small), Spacer(1, 10),
+         Paragraph("21 October 2026", body),
+         Paragraph("Niamh Gilbride, Head of Logistics, Brackloon Direct Ltd, Unit 4, Breaffy Business Park, Castlebar, "
+                   "Co. Mayo", body), Spacer(1, 4),
+         Paragraph("Delivery of Brackloon parcels in outlying districts, 2027", h1),
+         Paragraph("Dear Niamh,", body),
+         Paragraph("Thank you for the meeting at Breaffy on 7 October. As discussed, Owenduff would be glad to take on "
+                   "delivery of Brackloon's parcels in some or all of the districts listed below from 1 January 2027. "
+                   "We already deliver for four shippers across west Mayo and Connemara six days a week, so your "
+                   "parcels would travel with theirs from our Westport hub.", body),
+         Paragraph("Districts offered", h2), _grid(rows, [200, 120], cell), Spacer(1, 6),
+         Paragraph("Brackloon may hand over any of the districts above, in any combination, by giving us the list by "
+                   "30 November 2026.", body),
+         Paragraph("Terms", h2),
+         Paragraph("Price: EUR %s per parcel delivered, excluding VAT, fixed for the calendar year 2027. The price "
+                   "covers parcels as Brackloon packs them today, up to 30 kg each." % ("%.2f" % P.PRICE_2027), body),
+         Paragraph("Collection: our van collects the day's parcels for the handed-over districts from your Castlebar "
+                   "depot by 08:15 each delivery day. Delivery is the same day for parcels collected by 08:15.", body),
+         Paragraph("Failed deliveries are attempted again the next delivery day at no further charge; a parcel is "
+                   "charged once, when it is delivered. Collections from customers in the handed-over districts are "
+                   "included at no charge.", body),
+         Paragraph("Invoicing monthly in arrears against our proof-of-delivery record, payment at 30 days. The "
+                   "agreement runs for the calendar year 2027 and renews for 2028 at a price we would agree with you by "
+                   "30 September 2027.", body),
+         Paragraph("I look forward to hearing from you.", body), Paragraph("Yours sincerely,", body), Spacer(1, 6),
+         Paragraph("Karl Eivers", body), Paragraph("Commercial Manager, Owenduff Couriers", small)]
+    O.build(path, s, "Delivery of Brackloon parcels in outlying districts, 2027", "Karl Eivers",
+            "Offer to Brackloon Direct Ltd", "Owenduff Couriers | Offer OC-2027-114",
+            dt.datetime(2026, 10, 21, 15, 2, tzinfo=IE), dt.datetime(2026, 10, 21, 15, 9, tzinfo=IE))
 
 
 def standard(path):
     body, h1, h2, small, cell = _styles()
-    s = [Paragraph("%s, Tracking Data Quality" % P.ORG, small),
-         Paragraph("TDS-4 Tracking data standard", h1),
-         Paragraph("Version 4.1, issued 2 March 2026, in force from the April 2026 scorecard. Replaces version 4.0 "
-                   "(September 2024). Owner: the Head of Tracking Data Quality.", small), Spacer(1, 4)]
+    s = [Paragraph("%s, Logistics" % P.ORG, small),
+         Paragraph("NPS-3 Network planning standard: delivery districts and delivery partners", h1),
+         Paragraph("Version 2, issued 3 March 2025. Replaces version 1 (May 2023). Owner: the Head of Logistics.", small),
+         Spacer(1, 4)]
     sec = [
-        ("1. Purpose and scope", [
-            "Every parcel Kurier Warta carries is known to its shippers, its recipients and the claims desk only "
-            "through the records the tracking platform holds: the shippers' pre-advices, the couriers' handheld "
-            "events at collection and delivery, the sorters' events at the sort hubs and the delivery depots' "
-            "arrival scans. This standard sets the measures the Tracking Data Quality team reports for each "
-            "calendar month, the alert that sends a scan audit to a sort hub, and how a month's figures are "
-            "fixed. It applies to every hub and depot in the network register."]),
-        ("2. Sort scan completeness", [
-            "2.1 A sort hub handles a parcel when it sorts the parcel for the delivery depot that unloads it. Every "
-            "parcel a delivery depot unloads was sorted by one hub on the night before. A month's parcels are the "
-            "parcels the delivery depots unloaded on the mornings of that month, and a hub's parcels for the month "
-            "are the month's parcels it sorted.",
-            "2.2 A missed sort scan is one of a hub's parcels for the month for which the platform holds no sort "
-            "event. A hub's missed-scan rate is its missed sort scans as a per cent of its parcels for the month.",
-            "2.3 The scan alert fires for a sort hub when its missed-scan rate for the month is above 1.00 per cent. "
-            "A fired alert sends the scan audit (section 5) to the hub."]),
-        ("3. Events sent twice", [
-            "3.1 The platform keeps every record a source sends it. A source has sent an event twice when the "
-            "platform receives a further record of a scan it already holds; the scan is one event sent twice however "
-            "many further records arrive.",
-            "3.2 A courier event belongs to the depot the event names."]),
-        ("4. Pre-advices", [
-            "4.1 A shipper pre-advises each consignment before it is collected, naming the collection depot, the "
-            "collection date and the pieces; each piece is one parcel. A later version of a consignment replaces "
-            "the earlier versions in full.",
-            "4.2 A parcel is pre-advised for a month's collection when the latest version of its consignment names "
-            "a collection date in that month.",
-            "4.3 A pre-advice naming a depot code that the network register shows replaced is read as naming the "
-            "replacing depot from the day that depot opened.",
-            "4.4 A pre-advised parcel was never picked up when Kurier Warta never collected it from the shipper."]),
-        ("5. The scorecard and the scan audit", [
-            "5.1 The team publishes each month's scorecard in the first working week of the next month, from the "
-            "platform as it stands on the morning the month's extract is taken. A record reaching the platform "
-            "after the extract does not reopen the month.",
-            "5.2 A scan audit is two auditors at the hub for two consecutive sort nights. They follow the induction, "
-            "the chutes and the scanner arches, read the arches' fault logs and file their findings with the hub "
-            "manager within five working days. An alert stands until the hub's rate for a later month is at or "
-            "below the tolerance."]),
+        ("1. Scope", [
+            "This standard governs how Brackloon's delivery network is described for planning, and how the company "
+            "decides each year whether to hand any delivery district to a delivery partner. It applies to every "
+            "district in the district register and every run in the van run log."]),
+        ("2. Terms", [
+            "2.1 A delivery district is a district of the district register. Every customer address belongs to one "
+            "district, and every district belongs to one run.",
+            "2.2 A run is the daily route of one van over its territory, identified by its run code. A van leaves the "
+            "Castlebar depot, delivers and collects in the districts of its run and returns to the depot.",
+            "2.3 A van-hour is an hour of a van on a run, counted from depot out to depot in as the van run log "
+            "records them.",
+            "2.4 A parcel is a parcel delivered to a customer. A collection or an attempt at which nothing was "
+            "delivered is not a parcel."]),
+        ("3. Service in a district handed to a partner", [
+            "3.1 A partner taking a district delivers every Brackloon parcel for that district, including the "
+            "customer collections there, on the delivery day Brackloon would have delivered it.",
+            "3.2 Brackloon's own runs then make no stop in the district. A district is handed over whole or not at "
+            "all."]),
+        ("4. The decision for a year", [
+            "4.1 The saving of a hand-over for a year is the cost, at the year's all-in van-hour rate, of the "
+            "van-hours the hand-over takes off Brackloon's runs in the year, less what the partner charges for the "
+            "parcels it delivers in the handed-over districts in the year.",
+            "4.2 The year's parcels are the commercial plan's parcels for the year, district by district; the year's "
+            "rate is the fleet rate card's all-in van-hour rate for the year; the year's delivery days are the "
+            "delivery calendar's.",
+            "4.3 The districts handed over for a year are the districts in the partner's offer whose hand-over "
+            "lowers the year's delivery cost most. Where no district's hand-over lowers it, none is handed over.",
+            "4.4 The decision is made each autumn for the following calendar year, before the partner's offer lapses, "
+            "and is reported with the year's saving."]),
+        ("5. Review", [
+            "5.1 This standard is reviewed every two years or when the network changes. Comments to the Head of "
+            "Logistics."]),
     ]
     for head, paras in sec:
         s.append(Paragraph(head, h2))
         for p in paras:
             s.append(Paragraph(p, body))
-    s.append(Paragraph("6. Document control", h2))
-    s.append(_grid([["Version", "Issued", "Change"],
-                    ["3.2", "May 2022", "Sort scan completeness by hub; tolerance 1.50 per cent"],
-                    ["4.0", "September 2024", "Courier events and pre-advices added (sections 3 and 4)"],
-                    ["4.1", "March 2026", "Tolerance for sort scans 1.00 per cent; latest version of a pre-advice "
-                                          "(4.1); replaced depot codes (4.3)"]],
-                   [22 * mm, 30 * mm, 118 * mm], cell))
-    s.append(Spacer(1, 6))
-    s.append(Paragraph("Approved by the Chief Operating Officer, 27 February 2026.", small))
-    O.build(path, s, "TDS-4 Tracking data standard, version 4.1", P.ORG,
-            "Tracking data standard TDS-4, version 4.1: sort scan completeness, events sent twice and pre-advices",
-            "TDS-4 v4.1  |  " + P.ORG, dt.datetime(2026, 3, 2, 9, 14, 37, tzinfo=CET),
-            dt.datetime(2026, 3, 2, 11, 2, 9, tzinfo=CET), margin_mm=20, top_mm=18, bottom_mm=18)
-
-
-def _mail(who):
-    return "%s <%s@%s>" % (who[0], who[1], DOMAIN)
-
-
-def request(path):
-    text = f"""From: {_mail(LINEHAUL)}
-To: Analityka <analityka@{DOMAIN}>
-Cc: {_mail(HEAD)}, {_mail(INTEGRATION)}
-Date: Fri, 06 Nov 2026 09:12:44 +0100
-Subject: October tracking scorecard
-Message-ID: <20261106091244.4417.kkonieczek@{DOMAIN}>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-
-Dzień dobry,
-
-Inga tells me the October extract came off the platform at 07:40 this
-morning, so the scorecard can go ahead. I need it before the peak briefing
-on Monday. The peak crews start on the night of 9 November, and a hub whose
-scan alert fires gets its audit in the first two weeks of the peak, so the
-audit nights have to go into the hub rosters now.
-
-Aurelia takes the depot lines to her monthly call with the shippers'
-integration teams on Wednesday.
-
-The workbook and the slide go to the operations board as usual. From this
-month the board wants every hub's rate with its 90 per cent interval, so it
-can see which verdicts a month's chance could tip: take each parcel the hub
-handled as an independent chance of a missed sort scan, and say whether the
-interval lies wholly above the tolerance, across it or wholly below it.
-
-Pozdrawiam,
-Krzysztof
-
---
-{LINEHAUL[0]}
-Director of Network Operations
-{P.ORG}
-"""
-    with open(path, "w", encoding="utf-8") as fh:
-        fh.write(text)
+    O.build(path, s, "NPS-3 Network planning standard", "Niamh Gilbride", "Delivery districts and delivery partners",
+            "Brackloon Direct Ltd | NPS-3 version 2", dt.datetime(2025, 3, 3, 10, 14, tzinfo=IE_W),
+            dt.datetime(2025, 3, 3, 11, 40, tzinfo=IE_W))

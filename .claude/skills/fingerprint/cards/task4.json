@@ -1,192 +1,192 @@
 {
-  "task": "task4",
-  "project": "sulfur",
-  "architecture": "v4 (re-root into an online farm, pet and garden retailer's own van fleet in the west of Ireland: which outlying delivery districts to hand to a regional courier for 2027, each district's saving read as the drive and stops its vans would no longer make)",
-  "drawn": "2026-11-08",
-  "slot_note": "re-root of task4 after architecture 3 was landed by both platform runs; new world (Ireland, an e-retailer's own last-mile fleet), new dataset (run-day stop sequences), new shell (which | xlsx+png)",
-  "domain": "supply-chain-logistics",
-  "client_domain": "urban-regional-science",
-  "subdomain": "transportation-network",
-  "niche": "last-mile route economics of an e-retailer's own van runs: handing outlying delivery districts on through-roads and spurs to a regional courier",
-  "objective": "forecasting",
-  "shape": "other",
-  "decision_type": "designation_set",
-  "answer_unit": "set_of_items",
-  "answer": "Hand Achill, Belmullet, Bangor Erris, Clifden, Ballycastle and Louisburgh to Owenduff from January 2027 and keep the through-road districts (to be confirmed by the generator)",
-  "answer_source": "design (to be confirmed by the generator)",
-  "gap": [
-    "objective",
+ "task": "task4",
+ "project": "sulfur",
+ "architecture": "v4 (re-root into an online farm, pet and garden retailer's own van fleet in the west of Ireland: which outlying delivery districts to hand to a regional courier for 2027, each district's saving read as the drive and stops its vans would no longer make)",
+ "drawn": "2026-11-08",
+ "slot_note": "re-root of task4 after architecture 3 was landed by both platform runs; new world (Ireland, an e-retailer's own last-mile fleet), new dataset (run-day stop sequences), new shell (which | xlsx+png)",
+ "domain": "supply-chain-logistics",
+ "client_domain": "urban-regional-science",
+ "subdomain": "transportation-network",
+ "niche": "last-mile route economics of an e-retailer's own van runs: handing outlying delivery districts on through-roads and spurs to a regional courier",
+ "objective": "forecasting",
+ "shape": "other",
+ "decision_type": "designation_set",
+ "answer_unit": "set_of_items",
+ "answer": "Hand Mulranny, Achill, Bangor Erris, Belmullet, Louisburgh and Ballycastle to Owenduff from January 2027 and keep Leenane, Letterfrack, Clifden, Cong and Charlestown: about EUR 50,000 net saving in 2027",
+ "answer_source": "generator/figures.json (call_set, net_saving_rounded)",
+ "gap": [
+  "objective",
+  "population"
+ ],
+ "pattern": [
+  "none"
+ ],
+ "generators": [
+  "G5",
+  "G8",
+  "G16"
+ ],
+ "gate_g": "forecasting",
+ "calibration_form": "none",
+ "stump_strategy": "decomposition_attribution",
+ "decisive_rule_filed": false,
+ "official_decoy": false,
+ "validated_decoy": false,
+ "context_artifact": "register",
+ "stump_class": "analytical",
+ "analyst_test": "A strong analyst who cleans the handheld stop log and reads the courier's offer and the planning standard correctly prices each offered district at the van time its stops take (the drive in from the stop before, the drives between its stops and the door time, the field's cost-to-serve build), carries it to 2027 by plan parcels and hands Leenane and Letterfrack over with the remote ends, where the Connemara van drives through both on its way to Clifden, which stays, so the golden keeps them; pricing districts one at a time instead keeps Mulranny and Bangor Erris, which the golden hands over with Achill and Belmullet.",
+ "domain_test": "The deciding quantity is each set of districts' 2027 avoidable van-hours, a route-network quantity: the drive a van run no longer makes when the set's stops leave it, which for a district on a through-road is only its stops beyond the drive between its neighbours and for districts on a spur depends on which of them go together, estimated from the run-days that skipped them and a leg-time model; put wards and nurses in place of districts and vans and there is no run that drives through one ward to reach the next and no spur, so the inference that decides has nothing to stand on.",
+ "layer2_family": "estimand_identification",
+ "layer2_pattern": "own:avoidable-drive-on-shared-runs",
+ "layer1": [
+  "handheld re-sync duplicating stop rows",
+  "stop times in local time across the October and March clock changes",
+  "failed attempts and collection-only stops",
+  "a district code split mid-history with a crosswalk",
+  "missing departure scans",
+  "run splits on peak days"
+ ],
+ "stakeholder_role": "the retailer's head of logistics, who takes the district list to the 2027 budget committee that approves the courier contract in November",
+ "role_family": "operations_director",
+ "scoring_unit": "other",
+ "spine": {
+  "file": "delivery_stops_2025-2026.csv",
+  "rows": 106641,
+  "entity": "one delivery stop on a van run",
+  "grain": "run-day x stop",
+  "source": "synthetic"
+ },
+ "forum": "committee_or_panel",
+ "forcing_event": "vote_or_meeting",
+ "org_family": "retailer_or_ecommerce",
+ "world": {
+  "geography": "Ireland (Mayo and west Galway)",
+  "currency": "EUR",
+  "org_type": "an online farm, pet and garden supplies retailer with its own van fleet from one depot",
+  "invented_names": [
+   "Brackloon Direct Ltd",
+   "Owenduff Couriers"
+  ],
+  "people": [
+   "Niamh Gilbride",
+   "Aislinn Duffin",
+   "Karl Eivers"
+  ]
+ },
+ "deliverables": [
+  "district_handover_2027.xlsx",
+  "handover_2027.png"
+ ],
+ "opening_move": "question-first",
+ "question_form": "which",
+ "driver": "The decisive quantity is what handing a set of members of shared sequences to an outside provider saves, the time the sequences would no longer take: a member the sequence passes through on its way to others saves only its own stops beyond the direct run between its neighbours, and on a branch the near member saves the branch only when the members beyond it go too, so pricing each member at the time its own stops and the run into them take credits passed-through members with travel the sequences still make and, member by member, keeps the near member of a branch.",
+ "driver_concrete": "Each offered district's 2027 saving is the run time its hand-over takes off its run: Leenane and Letterfrack sit on the road the Connemara van drives anyway to reach Clifden, which stays, so they save only their own stops, while Mulranny and Bangor Erris save their run's far end only once Achill and Belmullet beyond them go; read from road sections fitted on the stop log's drives, the run-days that skipped a district, and a 2027 forecast that drives each section on the days a district beyond it has a stop.",
+ "stump": "A competent solver prices each offered district at the van time its stops take and hands Leenane and Letterfrack to the courier with Mulranny, Achill, Bangor Erris, Belmullet, Louisburgh and Ballycastle, claiming about EUR 20,000; the Connemara van drives through Leenane and Letterfrack to reach Clifden, which stays, so they save only their own stops, and the solver who prices the run without them but one district at a time keeps Mulranny and Bangor Erris, which end the Achill and Erris runs once Achill and Belmullet go: only every combination priced on the run hands over Mulranny, Achill, Bangor Erris, Belmullet, Louisburgh and Ballycastle, about EUR 50,000 net in 2027.",
+ "deep_chain": "(1) a district's saving is the van time its run would no longer take, not the time its stops take; (2) on a through-road the van still drives between the stops either side, so the counterfactual leg is estimated from the run-days that skipped the district and a leg-time model on the observed legs; (3) on a spur the near district's saving depends on whether the districts beyond it go too, so sets are evaluated run by run; (4) carried to the 2027 plan's parcels and the 2027 van-hour rate against the courier's charges, the set and the year's saving",
+ "judgment": "the counterfactual run time without a set's stops, a leg-time model fitted on observed inter-district legs and checked against the run-days that skipped the set, out of sample",
+ "one_fact_test": "the likeliest hint ('the van still drives through a district to reach the next') leaves the counterfactual legs to estimate, the spur sets to evaluate together and the 2027 carry; the spur hint alone leaves time-in-district on the through-roads",
+ "strategy_label": "WORKS IN FORM",
+ "mechanism_source": "design_note",
+ "differentiation": {
+  "mark106": "mark106 sizes suppliers against a shared finite pool of spare return-leg time and the double booking it causes; here no capacity is shared or rationed: the quantity is the counterfactual run time when stops leave a run, through-road districts costing only their stops and a spur's near district saving the spur only with the far one",
+  "mark67": "mark67 re-prices a denser period from a stem-plus-drop split recovered exactly from a shipped field; here no period is re-priced and nothing is recovered from a field: the decisive step is the counterfactual drive between neighbours and the spur sets"
+ },
+ "lineage": [
+  {
+   "architecture": "v1",
+   "driver": "The decisive quantity is a count of alerts each unit raises when its departure from an estimate built from its nearest other units passes a limit set from that departure's past spread; when some units leave, the remaining units' estimates come from farther units and their departures spread wider while their limits stay at the spread measured with the old neighbours, so the alerts rise even as the units fall.",
+   "fate": "spent 2026-10-20 at stage 4: reader 1 re-ran the quality control with the 34 closing stations out of the neighbour pool and landed the call (4.0 at 9 a year, every setting within one of the golden 61/25/9/3); reader 2 replayed the record and filed 3.5 at 9; judge DETERMINISTIC APPROVE. The network re-run is now the first rung of architecture 2."
+  },
+  {
+   "architecture": "v2",
+   "domain": "physical-environmental-sciences",
+   "subdomain": "sensor-calibration-measurement",
+   "objective": "data-quality-monitoring",
+   "shape": "04",
+   "decision_type": "dial_setting",
+   "gap": [
+    "time",
     "population"
-  ],
-  "pattern": [
+   ],
+   "pattern": [
     "none"
-  ],
-  "generators": [
-    "G5",
-    "G8",
-    "G16"
-  ],
-  "gate_g": "forecasting",
-  "calibration_form": "none",
-  "stump_strategy": "decomposition_attribution",
-  "decisive_rule_filed": false,
-  "official_decoy": false,
-  "validated_decoy": false,
-  "context_artifact": "register",
-  "stump_class": "analytical",
-  "analyst_test": "A strong analyst who cleans the handheld stop log and reads the courier's offer and the planning standard correctly prices each outlying district at the van time its stops take (the drive in from the stop before, the drive between its stops and the time at each door, the field's cost-to-serve build), sets it district by district against the courier's 2027 per-parcel charges and hands Mulranny, Leenane, Letterfrack and Killala over with the remote ends, where the runs drive through those districts anyway to reach Achill, Clifden and Ballycastle, so the golden keeps them.",
-  "domain_test": "The deciding quantity is each set of districts' 2027 avoidable van-hours, a route-network quantity: the drive a van run no longer makes when the set's stops leave it, which for a district on a through-road is only its stops beyond the drive between its neighbours and for districts on a spur depends on which of them go together, estimated from the run-days that skipped them and a leg-time model; put wards and nurses in place of districts and vans and there is no run that drives through one ward to reach the next and no spur, so the inference that decides has nothing to stand on.",
-  "layer2_family": "estimand_identification",
-  "layer2_pattern": "own:avoidable-drive-on-shared-runs",
-  "layer1": [
-    "handheld re-sync duplicating stop rows",
-    "stop times in local time across the October and March clock changes",
-    "failed attempts and collection-only stops",
-    "a district code split mid-history with a crosswalk",
-    "missing departure scans",
-    "run splits on peak days"
-  ],
-  "stakeholder_role": "the retailer's head of logistics, who takes the district list to the executive meeting that approves the 2027 courier contract",
-  "role_family": "operations_director",
-  "scoring_unit": "other",
-  "spine": {
-    "file": "delivery_stops_2025-2026.csv",
-    "rows": 0,
-    "entity": "one delivery stop on a van run",
-    "grain": "run-day x stop",
-    "source": "synthetic"
-  },
-  "forum": "executive_team",
-  "forcing_event": "vote_or_meeting",
-  "org_family": "retailer_or_ecommerce",
-  "world": {
-    "geography": "Ireland (Mayo and west Galway)",
-    "currency": "EUR",
-    "org_type": "an online farm, pet and garden supplies retailer with its own van fleet from one depot",
-    "invented_names": [
-      "Brackloon Direct Ltd",
-      "Owenduff Couriers"
-    ],
-    "people": [
-      "Niamh Gilbride",
-      "Aislinn Duffin",
-      "Karl Eivers"
-    ]
-  },
-  "deliverables": [
-    "district_handover_2027.xlsx",
-    "handover_2027.png"
-  ],
-  "opening_move": "question-first",
-  "question_form": "which",
-  "driver": "The decisive quantity is what handing a set of members of shared sequences to an outside provider saves, the time the sequences would no longer take: a member the sequence passes through on its way to others saves only its own stops beyond the direct run between its neighbours, and on a branch the near member saves the branch only when the members beyond it go too, so pricing each member at the time its own stops and the run into them take credits passed-through members with travel the sequences still make and, member by member, keeps the near member of a branch.",
-  "driver_concrete": "Each outlying district's 2027 saving is the van time its run would no longer take: Newport, Mulranny and Leenane sit on through-roads the runs drive anyway to reach Achill, Erris and Clifden, so they save only their stops' own time, while Bangor Erris saves the whole Erris spur only once Belmullet beyond it is handed over too; read from the run-days that skipped them and the leg times between the stops either side.",
-  "stump": "A competent solver prices each outlying district at the van time its stops take, the drive in from the stop before, the drive between its stops and the time at the door, and hands Mulranny, Leenane, Letterfrack and Killala to the courier with the remote ends; the runs drive through those districts anyway to reach Achill, Clifden and Ballycastle, so the time they would no longer take is only their stops' own, and only pricing each set of districts at the run time it removes keeps them and hands Bangor Erris over with Belmullet, the end of the Erris spur once Belmullet goes.",
-  "deep_chain": "(1) a district's saving is the van time its run would no longer take, not the time its stops take; (2) on a through-road the van still drives between the stops either side, so the counterfactual leg is estimated from the run-days that skipped the district and a leg-time model on the observed legs; (3) on a spur the near district's saving depends on whether the districts beyond it go too, so sets are evaluated run by run; (4) carried to the 2027 plan's parcels and the 2027 van-hour rate against the courier's charges, the set and the year's saving",
-  "judgment": "the counterfactual run time without a set's stops, a leg-time model fitted on observed inter-district legs and checked against the run-days that skipped the set, out of sample",
-  "one_fact_test": "the likeliest hint ('the van still drives through a district to reach the next') leaves the counterfactual legs to estimate, the spur sets to evaluate together and the 2027 carry; the spur hint alone leaves time-in-district on the through-roads",
-  "strategy_label": "WORKS IN FORM",
-  "mechanism_source": "design_note",
-  "differentiation": {
-    "mark106": "mark106 sizes suppliers against a shared finite pool of spare return-leg time and the double booking it causes; here no capacity is shared or rationed: the quantity is the counterfactual run time when stops leave a run, through-road districts costing only their stops and a spur's near district saving the spur only with the far one",
-    "mark67": "mark67 re-prices a denser period from a stem-plus-drop split recovered exactly from a shipped field; here no period is re-priced and nothing is recovered from a field: the decisive step is the counterfactual drive between neighbours and the spur sets"
-  },
-  "lineage": [
-    {
-      "architecture": "v1",
-      "driver": "The decisive quantity is a count of alerts each unit raises when its departure from an estimate built from its nearest other units passes a limit set from that departure's past spread; when some units leave, the remaining units' estimates come from farther units and their departures spread wider while their limits stay at the spread measured with the old neighbours, so the alerts rise even as the units fall.",
-      "fate": "spent 2026-10-20 at stage 4: reader 1 re-ran the quality control with the 34 closing stations out of the neighbour pool and landed the call (4.0 at 9 a year, every setting within one of the golden 61/25/9/3); reader 2 replayed the record and filed 3.5 at 9; judge DETERMINISTIC APPROVE. The network re-run is now the first rung of architecture 2."
-    },
-    {
-      "architecture": "v2",
-      "domain": "physical-environmental-sciences",
-      "subdomain": "sensor-calibration-measurement",
-      "objective": "data-quality-monitoring",
-      "shape": "04",
-      "decision_type": "dial_setting",
-      "gap": [
-        "time",
-        "population"
-      ],
-      "pattern": [
-        "none"
-      ],
-      "generators": [
-        "G12",
-        "G3",
-        "G17"
-      ],
-      "gate_g": "forecasting",
-      "calibration_form": "none",
-      "stump_strategy": "maturity_censoring",
-      "context_artifact": "monitoring_export",
-      "driver": "The decisive quantity is a count of alerts a less sensitive limit will raise, read from a record the current limit produced: every fault the current limit caught was repaired within days, so the record holds those faults cut short below the higher limit they would otherwise have reached, and the count is the record re-run on the units and estimate sources the next period will have plus one alert for every caught fault the re-run never alerted before its repair.",
-      "stump": "A competent solver re-runs the quality control on the 2025 to 2027 export with the 131 stations the network keeps and files 3.5 at 23 drift alerts a year, inside the field plan's 28 visits (22 with the cut-short drifts added to the record as it ran, 12 on the record replayed); 30 of the 35 drifts the sensor history shows repaired at kept stations never reached the 3.5 limit before their repair and would have kept growing until they did, which puts 3.5 at 33 and files 4.0 at 18.",
-      "forum": "line_manager_or_team",
-      "forcing_event": "cutover_or_migration",
-      "org_family": "cooperative_or_member_body",
-      "role_family": "capacity_planner",
-      "deliverables": [
-        "drift_alert_setting_2028.xlsx",
-        "alerts_by_setting_2028.png"
-      ],
-      "question_form": "which",
-      "fate": "spent 2026-10-31 at the batch 1 repair: the determinism judge sent it back (NOT_DETERMINISTIC, SEND_BACK): the 4.0 call counted every repaired drift the re-run never reached as one later alert, which no shipped file forces; a rate model from the sensor history (onset at the previous clean check) gives 14 to 16 a year at 4.0, not 18, and the new contractor's visit day rested on an inference",
-      "shell": {
-        "question form": "how-many",
-        "second-sentence opener": "in",
-        "deliverable set": "png+xlsx"
-      }
-    },
-    {
-      "domain": "supply-chain-logistics",
-      "subdomain": "transportation-network",
-      "objective": "data-quality-monitoring",
-      "shape": "10",
-      "decision_type": "designation_set",
-      "gap": [
-        "time",
-        "population"
-      ],
-      "pattern": [
-        "none"
-      ],
-      "generators": [
-        "G17",
-        "G3",
-        "G12"
-      ],
-      "gate_g": "decomposition_attribution",
-      "calibration_form": "none",
-      "stump_strategy": "population_selection",
-      "context_artifact": "operations_log",
-      "forum": "committee_or_panel",
-      "forcing_event": "season_or_peak",
-      "org_family": "logistics_or_3pl",
-      "role_family": "operations_director",
-      "deliverables": [
-        "tracking_scorecard_2026-10.xlsx",
-        "scan_alerts_2026-10.pptx"
-      ],
-      "question_form": "whether",
-      "driver": "The decisive quantity is each node's share of the units that passed through it unrecorded, when which node an unrecorded unit passed is itself unrecorded: the plan of record assigns every unit a node, but on the nights one node overflowed part of its flow went through a second node and was handled there by hand, so that night's unrecorded units belong partly to each and only the batch a unit was unloaded in at its destination, whose recorded members all passed one node, says which; charged by the plan the overflowing node carries the second node's misses, and charged by the nights' excess over its usual rate the overflowing node sheds the misses its own overload caused.",
-      "stump": "A competent solver takes each parcel's hub from its sort scan or, where it has none, from the sort plan of its night and fires Sosnowiec and Pruszkow; Strykow sorted Pruszkow's overflow by hand on the heavy nights and sent it to the Warsaw depots on its own trailers, so the unscanned overflow parcels that route charges to Pruszkow came off Strykow's trailers, and only the trailer each unscanned parcel came off at its delivery depot fires Strykow as well.",
-      "shell": {
-        "question form": "whether",
-        "second-sentence opener": "the",
-        "rounding opener": "rates",
-        "deliverable set": "pptx+xlsx"
-      },
-      "architecture": "v3",
-      "fate": "spent 2026-11-08 on the platform: both runs reached the golden's call (alerts at HKTW, HLDZ and HWAW) and every graded figure, so the platform returned not stumped before any rubric; each read the Warsaw overflow off the observed hub within each delivery-depot, door and night cohort by a plan-against-observed cross-check, a work order rather than a judgment"
-    }
-  ],
-  "notes": "re-rooted 2026-11-08 by the task4 thread after architecture 3 was landed by both platform runs; card architecture_spent for v3 moved into lineage",
-  "registered": "2026-11-08T01:52:14Z",
-  "shell": {
-    "question form": "which",
-    "second-sentence opener": "i'd",
-    "rounding opener": "van",
+   ],
+   "generators": [
+    "G12",
+    "G3",
+    "G17"
+   ],
+   "gate_g": "forecasting",
+   "calibration_form": "none",
+   "stump_strategy": "maturity_censoring",
+   "context_artifact": "monitoring_export",
+   "driver": "The decisive quantity is a count of alerts a less sensitive limit will raise, read from a record the current limit produced: every fault the current limit caught was repaired within days, so the record holds those faults cut short below the higher limit they would otherwise have reached, and the count is the record re-run on the units and estimate sources the next period will have plus one alert for every caught fault the re-run never alerted before its repair.",
+   "stump": "A competent solver re-runs the quality control on the 2025 to 2027 export with the 131 stations the network keeps and files 3.5 at 23 drift alerts a year, inside the field plan's 28 visits (22 with the cut-short drifts added to the record as it ran, 12 on the record replayed); 30 of the 35 drifts the sensor history shows repaired at kept stations never reached the 3.5 limit before their repair and would have kept growing until they did, which puts 3.5 at 33 and files 4.0 at 18.",
+   "forum": "line_manager_or_team",
+   "forcing_event": "cutover_or_migration",
+   "org_family": "cooperative_or_member_body",
+   "role_family": "capacity_planner",
+   "deliverables": [
+    "drift_alert_setting_2028.xlsx",
+    "alerts_by_setting_2028.png"
+   ],
+   "question_form": "which",
+   "fate": "spent 2026-10-31 at the batch 1 repair: the determinism judge sent it back (NOT_DETERMINISTIC, SEND_BACK): the 4.0 call counted every repaired drift the re-run never reached as one later alert, which no shipped file forces; a rate model from the sensor history (onset at the previous clean check) gives 14 to 16 a year at 4.0, not 18, and the new contractor's visit day rested on an inference",
+   "shell": {
+    "question form": "how-many",
+    "second-sentence opener": "in",
     "deliverable set": "png+xlsx"
+   }
+  },
+  {
+   "domain": "supply-chain-logistics",
+   "subdomain": "transportation-network",
+   "objective": "data-quality-monitoring",
+   "shape": "10",
+   "decision_type": "designation_set",
+   "gap": [
+    "time",
+    "population"
+   ],
+   "pattern": [
+    "none"
+   ],
+   "generators": [
+    "G17",
+    "G3",
+    "G12"
+   ],
+   "gate_g": "decomposition_attribution",
+   "calibration_form": "none",
+   "stump_strategy": "population_selection",
+   "context_artifact": "operations_log",
+   "forum": "committee_or_panel",
+   "forcing_event": "season_or_peak",
+   "org_family": "logistics_or_3pl",
+   "role_family": "operations_director",
+   "deliverables": [
+    "tracking_scorecard_2026-10.xlsx",
+    "scan_alerts_2026-10.pptx"
+   ],
+   "question_form": "whether",
+   "driver": "The decisive quantity is each node's share of the units that passed through it unrecorded, when which node an unrecorded unit passed is itself unrecorded: the plan of record assigns every unit a node, but on the nights one node overflowed part of its flow went through a second node and was handled there by hand, so that night's unrecorded units belong partly to each and only the batch a unit was unloaded in at its destination, whose recorded members all passed one node, says which; charged by the plan the overflowing node carries the second node's misses, and charged by the nights' excess over its usual rate the overflowing node sheds the misses its own overload caused.",
+   "stump": "A competent solver takes each parcel's hub from its sort scan or, where it has none, from the sort plan of its night and fires Sosnowiec and Pruszkow; Strykow sorted Pruszkow's overflow by hand on the heavy nights and sent it to the Warsaw depots on its own trailers, so the unscanned overflow parcels that route charges to Pruszkow came off Strykow's trailers, and only the trailer each unscanned parcel came off at its delivery depot fires Strykow as well.",
+   "shell": {
+    "question form": "whether",
+    "second-sentence opener": "the",
+    "rounding opener": "rates",
+    "deliverable set": "pptx+xlsx"
+   },
+   "architecture": "v3",
+   "fate": "spent 2026-11-08 on the platform: both runs reached the golden's call (alerts at HKTW, HLDZ and HWAW) and every graded figure, so the platform returned not stumped before any rubric; each read the Warsaw overflow off the observed hub within each delivery-depot, door and night cohort by a plan-against-observed cross-check, a work order rather than a judgment"
   }
+ ],
+ "notes": "re-rooted 2026-11-08 by the task4 thread after architecture 3 was landed by both platform runs; card architecture_spent for v3 moved into lineage; 2026-11-08 at the heart screen the forum executive_team BLOCKed against task6 (registered after this draw); redrawn to committee_or_panel, the 2027 budget committee that approves the courier contract, the honest body",
+ "registered": "2026-11-08T01:52:14Z",
+ "shell": {
+  "question form": "which",
+  "second-sentence opener": "i'd",
+  "rounding opener": "van",
+  "deliverable set": "png+xlsx"
+ }
 }

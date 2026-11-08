@@ -9,120 +9,284 @@ architectures 1 and 2). One architecture per world: a new world (the west of Ire
 sequences), a new organisation family (an online retailer's own fleet) and a new shell (which | i'd | png+xlsx against
 whether | the | pptx+xlsx and how-many | in | png+xlsx).
 
-Guard `check` on the registered card: WARN only. `repeat.gate_g` (forecasting after task1): task1 projects a member's
-paid twelfth month through their tutor's stopping; here the forward quantity is a route network's 2027 avoidable
-van-hours, a different construction under the same mechanism key, which is the honest one because the call rests on a
-2027 figure the 2025 and 2026 runs pin down. Two axes redrawn at the draw: the forcing event (purchase_order_or_contract
-BLOCKed against task1 and task3; budget_or_appropriation BLOCKed against mark456) is now the executive meeting that
-approves the 2027 courier contract, which is where the list is decided; the second persona (a first name in mark39)
-redrawn from the same seed. Heart: nearest driver or stump 0.05 (mark171, mark472, mark106's stump 0.04).
+Guard on the registered card (`heart`, the last act before stage 3): WARN only, `repeat.decision` (designation_set
+after task6 v6): task6 designates a different kind of set in another domain; the honest decision type here is a set
+of districts. Axes redrawn: the forcing event at the draw (purchase_order_or_contract BLOCKed against task1 and task3,
+budget_or_appropriation against mark456; now the November meeting that approves the courier contract, vote_or_meeting),
+the second persona (a first name in mark39), and at the heart screen the forum (executive_team BLOCKed against task6,
+registered after this draw; now committee_or_panel, the 2027 budget committee that approves the contract, the body
+that actually decides). Heart nearest 0.06 (mark171), mark106's stump 0.04. `surface` exit 0, one pair promoted for
+the author: task4 against task5's re-draw (same decisive gap, objective, and decision type, designation_set, back to
+back); both builds are in flight and each label is the honest one for its own build.
 
 - **Pairing.** Supply Chain & Logistics (house domain) in its client domain Urban & Regional Science, task type
   forecasting (demand, load and capacity prediction), which serves Forecasting & Predictive Modeling. The deciding
-  quantity is a 2027 capacity figure: the van-hours the retailer's runs would no longer drive in 2027 if a set of
-  outlying districts went to a regional courier, worked from the run records' stop sequences.
-- **Niche.** Brackloon Direct Ltd, an online farm, pet and garden supplies retailer delivering heavy orders (feed,
-  bedding, fencing, garden goods) across Mayo and west Galway from one depot at Castlebar with its own vans, each run a
-  territory swept in road order with the day's stops. Owenduff Couriers, a regional courier already delivering for
-  other shippers in the west, offers to take Brackloon's parcels in named outlying districts from 1 January 2027 at a
-  per-parcel price, collected at the depot.
-- **The call.** Which districts in Owenduff's offer go to Owenduff from January 2027, and what the hand-over saves over
-  2027: the planning standard sets the saving as the 2027 cost of the van-hours the runs would no longer drive, at the
-  2027 van-hour rate, less Owenduff's 2027 charges for those districts' parcels, and the set as the one that lowers the
-  year's cost most. Forward facing: a contract for a year not yet run, decided at the November executive meeting.
-- **Shape.** other: a per-district verdict grid with a predicted figure per district (the 2027 van-hours no longer
-  driven, their cost, Owenduff's charge, in or out), the set, the year's saving, the district nearest the line and the
-  van-hours each run sheds, with the chart of saving against charge. Decision designation_set, answer set_of_items,
-  question form which.
-- **Strategy.** decomposition_attribution: a run's time belongs to the districts on it only through what each set of
-  them would take off it. Gap objective (decisive: the time a district's stops take is a correct measure and not what
-  the decision is scored on) then population (the set, not the district, is the unit a spur prices); generators G5
-  (provision elsewhere: the drive through a district is needed for the districts beyond it) decisive, G8
-  (reachability: a spur's near district is the end of the run only once the far one goes), G16 (method selection: the
-  counterfactual leg times from a model the skipped run-days check out of sample); Gate G forecasting; calibration none;
-  context artifact register (the district register); Layer 2 family estimand_identification, pattern
-  own:avoidable-drive-on-shared-runs.
-- **Forum, event, organisation.** executive_team (the meeting that approves the 2027 courier contract), vote_or_meeting,
-  retailer_or_ecommerce. Role operations_director (the head of logistics, who takes the list to that meeting).
-- **People** (`guard.py names --geo Ireland --seed 404`, locale en_IE): Niamh Gilbride, head of logistics, who asks;
-  Aislinn Duffin, transport planner, who pulled the run records; Karl Eivers, Owenduff's commercial manager, who signs
-  the offer. None appears in the prompt.
-- **Deliverables.** The hand-over workbook (the district grid and the runs) and one chart (each district's in-house
-  saving against Owenduff's charge, the ones that go marked): xlsx and png.
-- **Data-native sentence.** A Brackloon van sweeps its territory in road order, so on the Achill, Clifden and
-  Ballycastle runs it drives through Mulranny, Leenane, Letterfrack and Killala to reach the far end, and on the Erris
-  run it drives through Bangor Erris to Belmullet and back the same road: the time a through-road district's stops take
-  includes drive the run makes anyway, and Bangor Erris costs the run little only while Belmullet stays.
+  quantity is a 2027 capacity figure: the van-hours Brackloon's runs would no longer take in 2027 if a set of outlying
+  districts went to a regional courier.
+- **Niche.** Brackloon Direct Ltd, an online farm, pet and garden supplies retailer delivering heavy orders across Mayo
+  and west Galway from one depot at Castlebar with its own vans. Nine runs, each a van's territory swept outward in
+  road order with the day's stops and driven back from the farthest district it served. Owenduff Couriers, a regional
+  courier already carrying other shippers' rural parcels, offers eleven outlying districts from 1 January 2027 at
+  EUR 12.60 a parcel delivered, in any combination.
+- **The call.** Which districts go to Owenduff and what the hand-over saves over 2027. NPS-3 section 4 files the WHAT:
+  the saving is the cost, at the 2027 all-in van-hour rate (EUR 58.00), of the van-hours the hand-over takes off the
+  runs, less Owenduff's charges for the districts' plan parcels; the districts handed over are those whose hand-over
+  lowers the year's delivery cost most. Forward facing: a contract for a year not yet run.
+- **Shape.** other: the list of offered districts going and staying, the van-hours each run that serves one saves in
+  2027 (seven runs, to the nearest 50), the year's net saving (to the nearest EUR 5,000) and a chart of each of those
+  runs' 2027 van-hours before and after the hand-over (fourteen values). Decision designation_set, answer
+  set_of_items, question form which.
+- **Strategy.** decomposition_attribution: a run's time belongs to its districts only through what each set of them
+  takes off it. Gap objective (decisive: the time a district's stops take is a correct measure and not what NPS-3 4.1
+  scores) then population (the set, not the district, is what a run's far end prices); generators G5 (provision
+  elsewhere: the road through a district is driven for the districts beyond it) decisive, G8 (reachability: a
+  district ends its run only once the districts beyond it go), G16 (method selection: the 2027 year forecast from the
+  plan's stops, chosen by a back-test); Gate G forecasting; calibration none; context artifact register; Layer 2
+  family estimand_identification, pattern own:avoidable-drive-on-shared-runs.
+- **Forum, event, organisation.** committee_or_panel (the 2027 budget committee), vote_or_meeting (its November
+  meeting, before the offer lapses on 30 November), retailer_or_ecommerce. Role operations_director (the head of
+  logistics, who takes the list to the committee).
+- **People** (`guard.py names --geo Ireland --seed 404`, locale en_IE): Niamh Gilbride, head of logistics, who asks
+  and owns NPS-3; Aislinn Duffin, transport planner, whose workbook the golden is; Karl Eivers, Owenduff's commercial
+  manager, who signs the offer. None appears in the prompt.
+- **Deliverables.** district_handover_2027.xlsx (the districts, the runs, the net saving) and handover_2027.png (each
+  run's 2027 van-hours before and after): xlsx and png.
+- **Data-native sentence.** A Brackloon van sweeps its territory outward and drives back from the farthest district it
+  served, so the Connemara van drives the road through Leenane and Letterfrack every day to reach Clifden, which a
+  handful of hotels and shops make cheap to keep, while on the Achill and Erris runs Mulranny and Bangor Erris cost
+  little only as long as Achill and Belmullet stay beyond them.
 - **Abstraction sentence** (the one a reviewer holding this build beside its nearest approved build would say is the
   same, without domain nouns): none writable. Against mark106 (candidates sized against a shared finite pool of spare
-  return-leg time, which double-books the pool) nothing here is shared or rationed; against mark67 (a denser period
-  re-priced from a stem-and-drop split recovered from a shipped field) nothing is re-priced from a field; against
+  return-leg time, which double-books the pool) nothing is shared or rationed; against mark67 (a denser period
+  re-priced from a stem-and-drop split recovered from a shipped field) nothing is recovered from a field; against
   mark162 and mark151 (history replayed through a setting) nothing is replayed through a setting. The quantity is the
-  counterfactual run time when a set of stops leaves a run.
+  counterfactual run time when a set of stops leaves a run, priced set by set.
 - **Same-puzzle and library tests.** Gap objective, decisive pattern G5 and designation_set repeat no build in the last
-  twelve (`check`); the stump is no named correction applied as a card states it: no rigor card carries a district's
-  saving as the counterfactual run time without it, with a spur's districts priced together.
-- **Sources.** Last-mile cost-to-serve practice (van time charged to stops by the drive in and the time at the door);
-  the planning standard's avoidable-cost definition in the organisation's genre; territory runs swept in road order;
-  regional couriers consolidating several shippers' rural parcels; the client's two-layer standard.
+  twelve (`check`); the stump is no named correction applied as a card states it.
+- **Sources.** Last-mile cost-to-serve practice (van time charged to stops by the drive in and the door time);
+  territory runs swept in road order; regional couriers consolidating rural parcels; avoidable-cost reasoning in the
+  organisation's own standard; the client's two-layer standard. All files constructed (`metadata.json`), real place
+  names on approximate public centroids.
 
 ## Default path
 
-1. Read Owenduff's offer (the districts, the 2027 price per parcel), the planning standard (the saving's definition, the
-   2027 rate), the 2027 volume plan (parcels by district) and the 2027 rate card (the all-in van-hour rate).
-2. Clean the handheld stop log (re-synced duplicate stops dropped, local times across the clock changes, failed attempts
-   and collection-only stops kept as stops) and give each outlying district its van time on each run-day: the drive in
-   from the stop before, the drives between its stops and the time at each door (the field's cost-to-serve build,
-   which reconciles each run-day's time to the minute with the depot legs).
-3. Carry each district's 2026 van time to 2027 by its plan parcels, price it at the 2027 rate, set it against
-   Owenduff's charges and hand over every district whose in-house cost is the higher.
+1. Read Owenduff's offer (eleven districts, EUR 12.60 a parcel delivered in 2027, any combination), NPS-3 section 4, the
+   2027 rate card (EUR 58.00 a van-hour), the 2027 plan (parcels by district and month) and the 2027 calendar.
+2. Clean the stop log (re-synced copies dropped, CBN and CBS mapped back to Castlebar town, failed attempts and
+   collections kept as stops) and give each offered district its van time on each run-day of the last twelve months:
+   the drive in from the stop before, the drives between its stops and the door time (the field's cost-to-serve
+   build, which reconciles every run-day to the minute with the depot legs and the break).
+3. Carry each district's van time to 2027 by its plan parcels, price it at EUR 58.00, set it against Owenduff's
+   charges and hand over every district whose van time costs more.
 
-Ends on: hand over Mulranny, Leenane, Letterfrack and Killala with Achill, Clifden, Ballycastle, Belmullet and Louisburgh
-(the through-road districts priced at drive the runs make anyway).
+Ends on: hand over Leenane and Letterfrack with Mulranny, Achill, Bangor Erris, Belmullet, Louisburgh and Ballycastle,
+claiming about EUR 20,000.
 
-Golden: hand over Achill, Belmullet, Bangor Erris, Clifden, Ballycastle and Louisburgh and keep the through-road
-districts, each set of districts priced at the run time it removes (sets and figures to be fixed by the generator).
+Golden: hand over Mulranny, Achill, Bangor Erris, Belmullet, Louisburgh and Ballycastle and keep Leenane, Letterfrack,
+Clifden, Cong and Charlestown, about EUR 50,000 net in 2027.
 
 ## Stump sentence
 
-A competent solver prices each outlying district at the van time its stops take, the drive in from the stop before, the
-drive between its stops and the time at the door, and hands Mulranny, Leenane, Letterfrack and Killala to the courier
-with the remote ends; the runs drive through those districts anyway to reach Achill, Clifden and Ballycastle, so the
-time they would no longer take is only their stops' own, and only pricing each set of districts at the run time it
-removes keeps them and hands Bangor Erris over with Belmullet, the end of the Erris spur once Belmullet goes.
+A competent solver prices each offered district at the van time its stops take and hands Leenane and Letterfrack to
+the courier with Mulranny, Achill, Bangor Erris, Belmullet, Louisburgh and Ballycastle, claiming about EUR 20,000; the
+Connemara van drives through Leenane and Letterfrack to reach Clifden, which stays, so they save only their own stops,
+and the solver who prices the run without them but one district at a time keeps Mulranny and Bangor Erris, which end
+the Achill and Erris runs once Achill and Belmullet go: only every combination priced on the run hands over Mulranny,
+Achill, Bangor Erris, Belmullet, Louisburgh and Ballycastle, about EUR 50,000 net in 2027.
 
 ## Deep reasoning
 
-Task type: forecasting (Urban & Regional Science: demand, load and capacity prediction), the client domain the house domain supply-chain-logistics sits in, a task type the taxonomy tags for Forecasting & Predictive Modeling; the forecast is the network's 2027 van-hours with and without each set of districts.
-Domain test: the quantity that decides is each set of districts' 2027 avoidable van-hours, the route network's own capacity measure, estimated as the run time the van runs would no longer take: the counterfactual run built from the stop sequences with the set's stops removed, its replacement legs taken from a leg-time model on the observed inter-district legs and checked against the run-days that skipped the set.
-Swap: "which of our outlying wards should go to an agency nurse service from January, and what will it save" keeps a cost comparison but loses the van run that drives through one district to reach the next and the spur a far district hangs on, so nothing ties a ward's saving to the wards beyond it and the call stops reading the same.
-Layer 1: the retailer's handheld and depot systems produce it: stop rows duplicated when a handheld re-syncs after a dead spot, stop times in local time across the March and October clock changes, failed attempts and collection-only stops, a district split in the register in 2026 with a crosswalk, missing departure scans, peak-day runs split across two vans; each is neutral on the call (to be asserted) and none is placed to be caught.
-Layer 2: estimand_identification: the planning standard files the saving as the cost of the van-hours the runs would no longer drive; the methodological choice is how a district's or a set's share of a run is valued: by stops or parcels (allocation), by the time its stops take (cost-to-serve), by the run time its removal takes off one district at a time, or by the run time each set removes, spur districts together.
-Decisive step: the 2027 van-hours a set of districts would take off the runs, the counterfactual run with the set's stops removed and the drive between the stops either side put back, evaluated set by set on each run because a spur's near district ends the run only once the districts beyond it go.
-Not semantics: every field read right (the sequence numbers, the clock changes, the district crosswalk, failed and collection stops, the plan's parcels, the rate card) still leaves a solver pricing a district at the time its stops take: no field of a stop says which drive the run would make without it, and the time-in-district build reconciles every run-day to the minute.
-Not rule application: the planning standard files the WHAT (the saving is the 2027 cost of the van-hours no longer driven, at the 2027 rate, less Owenduff's charges; the set is the one that lowers the year's cost most) and nothing filed says how a district's removal is valued; the enumerated family (allocation by stops, by parcels, by time; time in district with or without the exit leg; removal one district at a time; removal set by set) names four different sets; the standing family after a literal read of "no longer drive" keeps the time-in-district builds and the one-at-a-time removal, because nothing filed or in the schema rules them out; what rules them out is quiet: the run-days that skipped a district, which look like any other run-day (measured spreads to be asserted in checks.py once the generator exists).
-Analyst test: a strong analyst who cleans the stop log and reads the offer, the standard, the plan and the rate card correctly prices each district at the time its stops take, carries it to 2027 and hands Mulranny, Leenane, Letterfrack and Killala over with the remote ends, the default path's Ends on, where the golden keeps them; on the generator's clean truth the same route files the same set (to be executed in checks.py).
-Estimand: the planning standard (Brackloon's network planning standard, the section on handing districts to partners): the 2027 saving of a set of districts is the cost at the 2027 van-hour rate of the van-hours the runs would no longer drive in 2027 without those districts' stops, less the partner's 2027 charges for their parcels; the set handed over is the one that lowers the year's cost most; population the districts in the partner's offer, outcome the year's cost, window 1 January to 31 December 2027, unit EUR and van-hours.
-No decoy: nothing is planted: the offer and the plan are ordinary commercial documents, the register is the planning team's own, no memo, earlier cost-to-serve report, draft or stakeholder figure ranks the districts, and no file is shipped to carry the wrong answer.
+Task type: forecasting (Urban & Regional Science: demand, load and capacity prediction), the client domain the house domain supply-chain-logistics sits in, a task type the taxonomy tags for Forecasting & Predictive Modeling; the forecast is each run's 2027 van-hours with and without each set of offered districts.
+Domain test: the quantity that decides is each set of districts' 2027 avoidable van-hours, the route network's own capacity measure, estimated as the run time the runs would no longer take: each run's road sections and district access times fitted by least squares on the stop log's observed drives, door and local times measured per district, and a 2027 year in which a section is driven on the days some district beyond it has a stop.
+Swap: "which of our outlying wards should go to an agency nurse service from January, and what will that save" keeps a cost comparison but loses the van run that drives through one district to reach the next and the run's far end a district inherits when the one beyond it goes, so nothing ties a ward's saving to the wards beyond it and the call stops reading the same.
+Layer 1: the retailer's handhelds and fleet app produce it: stop rows sent again when a handheld re-synced (same stop and times, a later sync time), departure scans missing, failed attempts and collection-only stops, the Castlebar town district split in the register on 1 April 2026 with a crosswalk, the fleet app re-exporting some run-days twice, blank closing odometers, run names re-keyed with an ampersand after the March 2026 upgrade, a handheld swapped at the summer service; each is neutral on the call (SF5, SF6, SF7, SF15 asserted) and none is placed to be caught.
+Layer 2: estimand_identification: NPS-3 4.1 files the saving as the cost of the van-hours the hand-over takes off the runs; the methodological choice is how a district's share of a run is valued: by stops or parcels (allocation), by the time its stops take (cost-to-serve), by the run time its removal takes off one district at a time, or by the run time each combination takes off, priced set by set, with the 2027 year carried by parcels or forecast from the plan's stops.
+Decisive step: the run time a set of districts takes off its run, the road sections a run must still drive to reach the districts beyond them put back, priced over every combination on the run, because a district ends its run only once the districts beyond it go.
+Not semantics: every field read right (sequence numbers, the break rows, the crosswalk, failed and collection stops, the plan's parcels, the calendar, the rate card) still leaves a solver pricing a district at the time its stops take: no field says which road a run would drive without a district, and the time-in-district build reconciles every run-day to the minute.
+Not rule application: NPS-3 files the WHAT (4.1 the saving, 4.2 the year's parcels, rate and days, 4.3 the districts whose hand-over lowers the year's cost most) and nothing filed says how a district's removal is valued; the enumerated family (allocation by stops; time in district with and without the exit leg; removal one district at a time; removal set by set; each with the year carried by parcels or forecast) names four different lists (the golden; the golden plus Leenane and Letterfrack; the golden plus Leenane, Letterfrack and Cong; the golden less Mulranny and Bangor Erris, with allocation adding Leenane and Letterfrack and dropping Louisburgh) and spreads the net saving from EUR 20,000 to EUR 55,000; the standing family after a literal read of 4.1 and 4.3 keeps time in district (the time the stops take reads as the time the hand-over takes off) and one-at-a-time removal, and what rules them out is quiet: run-days that skipped a district, which look like any other run-day.
+Analyst test: a strong analyst who cleans the stop log and reads the offer, NPS-3, the plan, the rate card and the calendar correctly prices each district at the time its stops take, carries it to 2027 and and hands over Leenane and Letterfrack with Mulranny, Achill, Bangor Erris, Belmullet, Louisburgh and Ballycastle, claiming about EUR 20,000, the default path's Ends on; on the generator's clean truth (no mess) the same route files the same list (checks.py R2).
+Estimand: NPS-3 4.1 to 4.3 (network_planning_standard_NPS-3.pdf), with 2.3 and 3.2: population the districts in Owenduff's offer, outcome the 2027 delivery cost (van-hours depot out to depot in at the 2027 all-in rate, plus Owenduff's charges), window the calendar year 2027 at the delivery calendar's days, unit EUR and van-hours, comparison the year's cost with and without the hand-over.
+No decoy: nothing is planted: the offer, the plan and the rate card are ordinary commercial documents, the register is the planning team's own, no memo, earlier cost-to-serve report, draft or stakeholder figure ranks the districts, and no file is shipped to carry the wrong answer.
 No certified replay: the method is not recovered by reproducing a published figure: no file states a district's van time, cost to serve or saving, and nothing filed is reproduced to recover the valuation.
-Chain: (1) a district's saving is the run time its removal takes off the runs, not the time its stops take, so (2) on a through-road the drive between the stops either side is put back, estimated from a leg-time model on the observed inter-district legs and checked against the run-days that skipped the district, which (3) on a spur makes the near district's saving depend on whether the districts beyond it go, so the sets are evaluated run by run together, and (4) carried to the 2027 plan's parcels at the 2027 rate against Owenduff's charges, the set and the year's saving follow.
-Judgment: the counterfactual run time without a set's stops is a model, not a lookup: replacement legs between stops that were never consecutive while the set was visited come from a leg-time model fitted on the observed inter-district legs (time against the register's centroid distance and road class), justified out of sample by predicting the run-days that skipped the set, where the counterfactual run was actually driven.
-One-fact test: the likeliest hint ("the van still drives through a through-road district to reach the next one") leaves the replacement legs to estimate and check against the skipped run-days, the spur sets to evaluate together and the 2027 carry; the other hint ("Bangor Erris is the end of the spur once Belmullet goes") leaves the through-road districts priced at time in district; no one sentence makes the rest routine.
+Chain: (1) a district's saving is the run time its hand-over takes off its run, not the time its stops take, so (2) the road sections a run still drives to reach the districts beyond it are put back, estimated by least squares on the observed drives and checked on the run-days that skipped the district, which (3) makes a district's saving depend on whether the districts beyond it go, so every combination on each run is priced, and (4) the 2027 year is forecast from the plan's stops month by month with each section driven on the days a district beyond it has a stop, which the 2025 to 2026 back-test chooses over carrying the hours in proportion, giving the list and the year's saving.
+Judgment: the counterfactual run time is a fitted model of the run, not a lookup: road sections and access times from least squares on 2025 and 2026 drives (each section within 8 per cent of the truth, checks.py R5), and the 2027 year forecast with a section driven with the Poisson probability that some district beyond it has a stop; fitted on 2025 and forecasting 2026, it errs by 21 hours across the seven runs against 177 for the proportional carry (checks.py back-test).
+One-fact test: the likeliest hint ("the van still drives through a district to reach the next one") leaves the sections to fit, the combinations to price and the 2027 year to forecast, and the one-at-a-time pricing it invites still keeps Mulranny and Bangor Erris; the other hint ("a district at the end of a run saves the drive to it") leaves Leenane and Letterfrack priced at their time in district; no one sentence makes the rest routine.
 No replay: the call does not re-derive any published figure, and no stated number in the pack is wrong.
-Pinned: the rivals to run on the clean truth at stage 2: allocation by stops, parcels and time; time in district with and without the exit leg; removal one district at a time; removal set by set with replacement legs from skipped run-days, from the leg-time model, and from a run-day regression on district visits with spur interactions; and the 2027 carry by parcels against by visit days; each must land on the golden's set or be ruled out by named data (to be asserted).
-Run forecast: method shortcut at rung 1 (the field's cost-to-serve time in district, validated by its own reconciliation); a run that reaches removal stops one inference short at rung 2 (one district at a time, keeping Bangor Erris), an unfinished chain; either files a set the golden does not.
-Strategy label: WORKS IN FORM (Urban 03, net, not gross: the drive the runs make anyway is estimated, never filed, in the live form; with Part A's separating-explanations form for the spur, where only a like-for-like run rebuilt from the run-days separates the two).
-Lesson: a district's saving from leaving a route network is the run time its removal takes off, which for a through-road district is only its own stops and for a spur depends on the districts beyond it; no build on file prices a set of route members at the counterfactual run time.
+Pinned: run on the cut pack and the clean truth: the fit on 2025 alone, on 2026 alone, with median drives, with annual instead of monthly stops, and a regression of run-day hours on the sections reached, the districts entered and their stops (verify.py) all give the golden list, a net saving that rounds to EUR 50,000 (49,171 to 50,798) and every run figure at its rounding; time in district with or without the exit leg, allocation by stops and one-at-a-time removal each file another list (SF9, SF10); the proportional carry rounds to EUR 55,000 (SF11).
+Run forecast: method shortcut at rung 1 (the field's cost-to-serve time in district, validated by its own reconciliation); a run that reaches removal stops one inference short at rung 2 (one district at a time, keeping Mulranny and Bangor Erris), an unfinished chain; a run that lands the list and carries the year in proportion files EUR 55,000, an unfinished chain on the forecast.
+Strategy label: WORKS IN FORM (Urban 03, net not gross: the drive the runs make anyway is estimated, never filed, in the live form; with Part A's separating-explanations form for the run's far end, where only the run priced without the set, rebuilt from the fitted run, separates the district's own cost from the road it sits on).
+Lesson: a district's saving from leaving a route network is the run time its removal takes off, which for a district the run drives through is only its own stops and for a district near the end depends on the districts beyond it, forecast for the year from the days each road section is needed; no build on file prices a set of route members at the counterfactual run time.
 
 ## Survivor anatomy
 
-Actor: which drive a run would make without a district has no column in any file; it is a relation between the stops either side of the district's stops in the sequence, and between run-days that did and did not visit it.
-Link: each district's saving is tied to the leg between the stops either side of it and to the run-days that skipped it, a relation no key offers (no field carries a replacement leg, a through-road or a spur) and no sentence invites.
-Reflex: the field's cost-to-serve build (each district's van time: the drive in, the drives between its stops, the time at each door) and the allocation builds sit at rungs 0 and 1 and file the default set (Ends on), not the golden.
-Back-test: the time-in-district build reconciles every run-day's time to the minute with the depot legs, so it passes the only check the records offer a cost allocation; one-district-at-a-time removal matches every single skipped run-day.
-Second use: every file the step reads sits in the pack for its own reason: the stop log is the population every figure is over, the run-day log gives the runs' hours for the run ask, the register gives the districts and their centroids for the chart and the joins, the offer, the plan and the rate card price the call.
-Shock: the movement the step recovers reads as ordinary: through-road districts look costly per parcel on any statistic, and sorted on any shipped statistic (distance from the depot, parcels, stops, time in district) the golden set is not an interval (to be asserted).
-Pins: the planning standard files the WHAT (the saving's definition, the 2027 window and rate, the set that lowers the year's cost most) in the organisation's own standard; no filed sentence names a through-road, a spur, a replacement leg, a skipped run-day or how a district's removal is valued.
+Actor: which road a run would drive without a district has no column in any file; it is a relation between a district's place in the stop sequences, the drives either side of it and the run-days that skipped it.
+Link: each district's saving is tied to the road sections beyond it and to the run-days that skipped it, a relation no key offers (no field carries a road section, a through-road or a run's far end) and no sentence invites.
+Reflex: the field's cost-to-serve build (each district's drive in, the drives between its stops, its door time) and the allocation builds sit at rungs 0 and 1 and file the default list (Ends on), not the golden.
+Back-test: the time-in-district build reconciles every run-day's time to the minute with the depot legs and the break, so it passes the only check the records offer a cost allocation; one-district-at-a-time removal reproduces every single skipped run-day.
+Second use: every file the step reads sits in the pack for its own reason: the stop log is the population every figure is over, the run log gives depot out and in for the van-hours NPS-3 2.3 counts, the register gives the districts and runs, the offer, plan, rate card and calendar price the year.
+Shock: the movement the step recovers reads as ordinary: Leenane and Letterfrack look costly per parcel on every shipped statistic, and sorted on distance from the depot, parcels, stops or time in district the golden list is not an interval (Louisburgh goes at 33 km while Leenane stays at 45 km; Clifden, the farthest, stays).
+Pins: NPS-3 files the WHAT (the saving, the year's figures, the list that lowers the year's cost most, van-hours depot out to depot in, a district handed over whole) in the organisation's own standard; no filed sentence names a road, a drive, a run's far end, a skipped run-day, a combination or how a district's removal is valued (asserted: checks.py searches the standard's text).
+
+## Readability screen
+
+Seven tests per rung: 1 a filed sentence names the decisive quantity or sends the solver to it; 2 a column, key or
+marker makes it a row predicate or a header-found join; 3 an opponent reflex reaches it; 4 a control or corpus scores
+the rules or refutes the naive read; 5 the hygiene battery finds it; 6 one subtraction, ratio or half of a reported
+figure; 7 a file the step alone reads.
+
+| Rung | 1 Filed | 2 Schema | 3 Reflex | 4 Bench | 5 Hygiene | 6 Linear | 7 Second use | Verdict |
+|---|---|---|---|---|---|---|---|---|
+| 0 allocation by stops: golden less Louisburgh plus Leenane and Letterfrack | NPS-3 2.3 counts van-hours by run | run-day hours over stops | yes, pro-rata cost | none | no | a share | none | readable |
+| 1 (default) time in district: golden plus Leenane and Letterfrack | 4.1's "van-hours the hand-over takes off" read as the time its stops take | the stop times | yes, the field's cost-to-serve | none refutes it | no | a sum | none | readable |
+| 2 removal one district at a time: golden less Mulranny and Bangor Erris | none | the sequences | yes, avoidable cost | none | no | a difference per district | none | readable |
+| 3 (decisive) every combination priced on the fitted run, the year forecast from the plan's stops | no sentence names a road section, a far end, a combination or a skipped run-day; 4.3 names only the outcome (lowers the year's cost most) | no column holds a section or a far end | no: the reflexes are cost-to-serve and avoidable cost per district | nothing scores it | no | not linear: a fitted run priced over subsets and a Poisson year | the stop log is the population file | silent |
+
+**Condition 1 (the review's Gate F risk), measured on the wording.** The prompt asks for "the van-hours it saves" and
+"van-hours before and after the hand-over"; NPS-3 4.1 says "the van-hours the hand-over takes off Brackloon's runs".
+Nothing in the pack computes run time with a district removed: the stop log records the stops made, the run log
+depot out and in, the register districts and runs, and no file holds a road section, a distance between districts or
+a run planned without a district (checks.py asserts the standard names no road, drive, through-road, combination or
+skipped run-day). From a stop-level log the direct build of "what a district's hand-over saves" is the time its stops
+take, which is rung 1, and the evidence against it sits only in ordinary run-days on which a district had no stop.
+The asking sentence was cut from "the van-hours our runs would no longer drive" and "the van-hours each run would
+shed" (the draw's draft) to "the van-hours it saves", which names the outcome and no counterfactual.
+
+**Condition 2, the forecasting objective.** The 2027 year is a forecast judgment that moves graded figures: the
+plan's monthly parcels become stops at each district's own stops a parcel, and a road section is driven on a
+delivery day with the probability that some district beyond it has a stop; the proportional carry of the last twelve
+months' hours files EUR 55,000 against the golden EUR 50,000, and every run's before and after figures differ (the
+landed run misses 16 of 23 ask figures, ceiling.py). The back-test chooses the model: fitted on 2025, it forecasts
+2026 January to October within 21 van-hours across the seven runs against 177 for the proportional carry. The tag
+stays Forecasting & Predictive Modeling.
+
+## Semantic fork table
+
+| ID | Term or convention | Golden reading | Alternative | Call under it | Ruled out by |
+|---|---|---|---|---|---|
+| SF1 | 2027 | the calendar year at the delivery calendar's 251 delivery days | weekdays | same call | NPS-3 4.2; same call (asserted, SF16) |
+| SF2 | a van-hour | depot out to depot in as the run log records, the break inside | the stop log's drives and door times only | same list and figures | NPS-3 2.3; the verifier regresses run-log hours (verify.py) |
+| SF3 | the break | taken once on every run-day and never saved | saved with a district | same call | every run-day carries one break (asserted); NPS-3 3.2 removes stops, not the break |
+| SF4 | the year's parcels | the commercial plan's 2027 parcels | the last twelve months' parcels | same list | NPS-3 4.2; same list (asserted) |
+| SF5 | failed attempts and collections | stops the run makes | dropped | same list | NPS-3 2.4 and 3.1; same list (asserted) |
+| SF6 | a stop sent again at re-sync | one stop | two | same call | the same stop and times with a later sync time; the copies sit on existing run-days (asserted) |
+| SF7 | CBN and CBS | Castlebar town, split in the register | separate districts | same call | the register's Code changes; Castlebar town's run serves no offered district (asserted) |
+| SF8 | Owenduff's charge | EUR 12.60 a parcel delivered | per stop, or per attempt | same call | the offer (a parcel is charged once, when delivered) |
+| SF9 | the districts handed over | the combination that lowers the year's cost most, run by run | each district on its own merit | moves Mulranny and Bangor Erris | NPS-3 4.3 and the offer's "any combination" (asserted) |
+| SF10 | the van-hours a hand-over takes off | the run's time with the set's stops removed, the road to the districts beyond still driven | the time the set's stops take | moves Leenane and Letterfrack | NPS-3 4.1 and 3.2 (the runs make no stop in the district and still serve the districts beyond it); run-days that skipped a district (asserted) |
+| SF11 | the 2027 hours | forecast from the plan's stops month by month, each section driven on the days a district beyond it has a stop | the last twelve months' hours carried by parcels | net saving EUR 55,000 | the 2025 to 2026 back-test (21 against 177 van-hours, asserted) |
+| SF12 | rounding | van-hours to the nearest 50, the net saving to the nearest EUR 5,000, every figure mid-bin | finer | same figures | the prompt; every figure at least 8 hours or EUR 800 from its bin edge under every variant (asserted) |
+| SF13 | the runs that serve an offered district | R03 to R09 | all nine runs | same figures | the prompt ("each run that serves one"); asserted |
+| SF14 | the fit | 2025 and 2026 drives, least squares on the mean of each from-to pair | 2025 alone, 2026 alone, medians, annual stops, a run-day regression | same list and rounded figures | asserted for each, and verify.py |
+| SF15 | a stop with no departure scan | its drive to the next stop left out of the fit | the run-day dropped | same list and saving | asserted |
+| SF16 | delivery days | the 2027 calendar | weekdays | same list | asserted |
+
+## Ladder
+
+| Rung | Construction | Answer | Dies to |
+|---|---|---|---|
+| 0 | allocation by stops: each run-day's hours shared over its stops, carried by parcels | Mulranny, Achill, Bangor Erris, Belmullet, Leenane, Letterfrack and Ballycastle | NPS-3 4.1: the van-hours taken off the run, not the run's average; Louisburgh's run drives 2 x 0.6 h for it alone |
+| 1 (default) | time in district (drive in, between its stops, door time), carried by parcels | the golden plus Leenane and Letterfrack (ratios 1.48 and 1.42), EUR 20,000; with the exit leg also Cong | the run-days that skipped Leenane or Letterfrack: the Connemara van drove the same road to Clifden |
+| 2 | removal one district at a time on the fitted run | the golden less Mulranny and Bangor Erris (0.58 and 0.66), EUR 35,000 | NPS-3 4.3: with Achill and Belmullet gone, Mulranny and Bangor Erris end their runs (marginal 1.78 and 2.37) |
+| 2b | every combination, the year carried in proportion to parcels | the golden list, EUR 55,000 | the back-test (177 against 21 van-hours) |
+| 3 (golden) | every combination on the fitted run, the year forecast from the plan's stops | the golden list, EUR 50,000 (50,020 before rounding) | |
+
+- **Margins.** Every handed-over district's marginal saving within the golden list is at least 1.78 times its charge
+  (Louisburgh 1.90, Achill 2.64, Belmullet 2.75, Bangor Erris 2.37, Ballycastle 1.86, Mulranny 1.78); every kept
+  district's at most 0.67 (Cong), and the largest Connemara combination 0.78 (asserted at 1.15 and 0.87). Rung 1's
+  wrong cells, Leenane and Letterfrack, sit at 1.48 and 1.42; rung 2's at 0.58 and 0.66.
+- **Position.** Three different wrong lists on rungs 0 to 2; the decisive move reverses the direction of rung 1 on
+  Connemara and of rung 2 on Achill and Erris.
+- **Worth.** The decisive step moves four districts and the net saving from EUR 20,000 (rung 1) or EUR 35,000 (rung 2)
+  to EUR 50,000.
+- **Pricing on the clean truth** (a pack with no mess, checks.py R1 to R5): the same golden list, the default on
+  Leenane and Letterfrack, the one-at-a-time list another, the fitted sections within 8 per cent of the generator's.
+
+## Closure table
+
+| Axis | Reading here | Move |
+|---|---|---|
+| 1 Population | the districts in Owenduff's offer | filed, the offer and NPS-3 4.3 |
+| 2 Unit of account | a district, handed over whole | filed, NPS-3 3.2 |
+| 3 Attribution window | the calendar year 2027 | filed, NPS-3 4.2 (SF1) |
+| 4 As-of dating | the extract to 30 October 2026, the plan of 19 October | C1: the call reads no later record |
+| 5 Version basis | NPS-3 version 2, the offer OC-2027-114 | filed |
+| 6 Denominator | none: euros and van-hours | n/a |
+| 7 Weighting | the plan's parcels by month | filed, NPS-3 4.2 (SF4) |
+| 8 Window length | one year | filed |
+| 9 Boundary inclusivity | a hand-over that lowers the cost; none at equal | C1, no combination within 13 per cent of break-even (asserted) |
+| 10 Rounding path | figures unrounded to the end, van-hours to 50, net to EUR 5,000 | the prompt; C1 (SF12) |
+| 11 Tie-break | none | no two combinations tie (asserted by the margins) |
+| 12 Maturity and censoring | none: the history is complete to its last day | n/a |
+| 13 Order of operations | copies dropped, then drives timed, then fitted | C1 (SF6) |
+| 14 Row order | stops ordered by sequence number | C1 |
+| 15 Duplicate resolution | a re-synced stop once; a re-exported run-day once | C1 (SF6) |
+| 16 Identity normalisation | district codes through the crosswalk | C1 (SF7) |
+| 17 Netting against gross | net saving after Owenduff's charges | filed, NPS-3 4.1 |
+| 18 Dimensional units | hours and euros | the rate card |
+| 19 Code and status semantics | a parcel delivered; failed attempts and collections are stops | filed, NPS-3 2.4 (SF5, SF8) |
+| 20 Integerisation | none before the rounding | n/a |
+| 21 Clause scope | NPS-3 section 4 for the call, 2.3 and 3.2 for the hours | filed |
+| 22 Forward window contents | the plan's 2027 parcels, the calendar, the rate card | filed (SF11 the forecast's form, chosen by the back-test) |
+
+## Literal reader
+
+Executed word for word, NPS-3 4.1 to 4.3 price each combination of offered districts at the cost of the van-hours the
+hand-over takes off the runs, depot out to depot in, less Owenduff's charges, and hand over the combination that
+lowers the year's cost most; the one step the text leaves open is how the runs' 2027 hours without the combination are
+estimated, and every route that rebuilds the run without the combination's stops (the fit on observed drives, the
+run-day regression on sections reached, each on either year) gives the golden list, while the time the stops take,
+allocation and one-at-a-time pricing are not the hours taken off the runs. SF1 to SF16 close every term and
+convention.
+
+## Oracles
+
+None. No file states a district's van time, cost to serve, saving or a run's hours without a district; the fuel card
+statement, the customer contact log and the van fleet register (distractors) rank nothing on the decision basis; the
+offer names no saving.
+
+## Ask sheet
+
+Four asks, 23 figures, every one computed from the deep step's output: the list (1, the call itself), the van-hours
+each run that serves an offered district saves (7), the year's net saving (1), and the chart's before and after
+figures for those runs (14). Each ask's second judgment is the 2027 forecast (SF11): a run that lands the list and
+carries the year in proportion files other before, after and net figures.
+
+| Ask | Figures | Deep-step output it reads | Second judgment | Shallow run against the golden | Landed run's risk | Mess on its path |
+|---|---|---|---|---|---|---|
+| 1 the list | 1 | the combinations priced | none | Leenane and Letterfrack added | none | the copies, the crosswalk |
+| 2 van-hours saved per run | 7 | the hours each run's combination takes off | the 2027 forecast | 5 of 7 differ (R06 and R09 zero both ways) | R07 and R08 move a bin under the proportional carry | the break, missing departures |
+| 3 net saving | 1 | the list and its hours | the 2027 forecast | EUR 20,000 | EUR 55,000 | none |
+| 4 before and after per run | 14 | each run's 2027 hours with and without | the 2027 forecast | 12 of 14 differ | 12 of 14 differ | the break in depot out to in |
+
+| Ask figure | Golden | Shallow (the default path) | Cracker (lands the list, carries the year in proportion) |
+|---|---|---|---|
+| 1 the list | the golden six | miss | keep |
+| 2 van-hours saved, R03, R04, R05, R06 and R09 | 300, 650, 0, 0, 0 | miss | keep |
+| 2 van-hours saved, R07 and R08 | 600, 200 | miss | miss |
+| 3 the net saving | EUR 50,000 | miss | miss |
+| 4 before and after, R06 | 1,200 and 1,200 | keep | keep |
+| 4 before and after, R03, R04, R05, R07, R08 and R09 | 12 figures | miss | miss |
+
+- **Span:** the stop log, the run log, the register, the plan, the rate card and the calendar; no ask reads a file the
+  call does not.
+- **Realism:** the depot-out-to-in hours with the break inside, the plan's months and the calendar's holidays are what
+  a transport planner works from.
+- Shallow keep: 8.7 per cent of ask weight (2 of 23 figures).
+- Pair ceiling: 39.3 (the landed run C = 38 + 7 + 55 x 0.304 = 61.7, the shallow run S = 5 + 7 + 55 x 0.087 = 16.8).
+- Measured by: generator/ceiling.py on the cut pack (pack digest printed with the sheet).
+
+## Prompt contract
+
+What the author's voice rewrite may not drop or change:
+- The question: which of the offered outlying delivery districts go to Owenduff Couriers from January 2027 under their
+  offer, and what that saves over 2027.
+- The hold option is implicit in "which" and NPS-3 4.3 (none may go); keep "which" open, never "which four".
+- Deliverables: district_handover_2027.xlsx (every district in the offer marked going or staying; for each run that
+  serves one, the van-hours it saves in 2027; the year's net saving after Owenduff's charges) and handover_2027.png
+  (each of those runs' 2027 van-hours before and after the hand-over).
+- Units and rounding: van-hours to the nearest fifty; the net saving to the nearest five thousand euros.
+- Never add: a district or run count, a road, a drive, "through", "beyond", "combination", "on its own", "no longer
+  drive", "shed", "cost to serve", or any method word.
 
 ## Tried and rejected
 
@@ -240,3 +404,16 @@ Architecture 2 and earlier, carried from the agro-climatic note:
   exposes and so a work order, and executed every texture device and the interval the request named. The world is left
   (one architecture per world); the next deep step has to move both runs' Final Recommendation, since a landed call
   never reaches the asks.
+- 2026-11-08, stage 2 pricing, Killala as a through-road district: its approach from Ballina is too short for time in
+  district to clear 1.15 of the line once removal keeps it (1.47 against 1.24); it left the offer and stays on the
+  Ballina run.
+- 2026-11-08, stage 2 pricing, the first set-by-set pricing: handing over a run's far end makes every through-road
+  district before it the new end, so a corridor whose end goes takes its through-roads with it and the default and the
+  golden agreed on them; the deep step bites only where the far end stays (Clifden, whose hotels and shops take
+  several parcels a stop) or where removal is priced one district at a time (Mulranny, Bangor Erris).
+- 2026-11-08, stage 2, the draft prompt's "the van-hours our runs would no longer drive" and "the van-hours each of our
+  runs would shed": counterfactual words pointing at removal (the review's condition 1); cut to "the van-hours it
+  saves" and "before and after the hand-over".
+- 2026-11-08, stage 3, the golden's run hours without the driver's break: NPS-3 2.3 counts depot out to depot in, so
+  the before and after figures were short by the break; the model now carries the break (never saved), found by the
+  ceiling script against the run log.

@@ -1,61 +1,42 @@
-# task4 submission
-
 ## Tags
 
-**Domain:** General Statistics & Data Science (missing data, censoring and measurement error: a parcel carrier's sort-scan completeness, where the hub an unscanned parcel passed through is itself missing and is recovered from the unloading it arrived in at its delivery depot).
-**Analytical objective:** Data Quality Monitoring & Alerting (whether the TDS-4 scan alert fires at any of Kurier Warta's sort hubs for October 2026, and at which).
+**Domain:** Other, Urban & Regional Science (supply chain and logistics: last-mile route economics of a retailer's own van fleet).  
+**Task type:** forecasting (demand, load and capacity prediction).  
+**Analytical objective:** Forecasting & Predictive Modeling.
 
-## 1. Final Recommendation
+## Final Recommendation
 
-**Fire the October 2026 scan alerts at Sosnowiec, Strykow and Pruszkow, and at no other hub.**
+**Hand Mulranny, Achill, Bangor Erris, Belmullet, Louisburgh and Ballycastle to Owenduff from January 2027 and keep Leenane, Letterfrack, Clifden, Cong and Charlestown: the hand-over saves about EUR 50,000 net in 2027.** Pricing each district at the van time its own stops take hands Leenane and Letterfrack over too and claims EUR 20,000, but the Connemara van drives through both on its way to Clifden, which stays, so they save only their own stops; and pricing districts one at a time keeps Mulranny and Bangor Erris, which become the end of the Achill and Erris runs once Achill and Belmullet go.
 
-Sosnowiec missed 1.34 per cent of its sort scans, Strykow 1.55 and Pruszkow 1.23, against the 1.00 per cent tolerance; the nearest hub under it is Bielany Wroclawskie at 0.79. On 24 mornings the Warsaw depots unloaded a second trailer from Strykow, which had sorted 1,440 parcels of Pruszkow's flow by hand; 130 of their sort scans are missing, against 205 missing from Pruszkow's own trailers on those mornings, so a parcel without a sort scan is charged to the hub whose trailer it came off, read from its unloading. Not the sort plan's hub, which charges Strykow's misses to Pruszkow (Pruszkow 1.76, Strykow 0.49) and leaves Strykow under the line. Not each depot morning's split of its sorted parcels, which assumes the two hubs missed alike (Strykow 0.77). Not the mornings with two hubs left out (Pruszkow 0.86, Strykow 0.55), nor the excess over Pruszkow's rate on its other mornings charged to Strykow (Strykow 2.30, Pruszkow 0.86): Pruszkow's own sorter missed more on the same heavy nights, so both clear Pruszkow.
+## Supplementary Questions
 
-Taking each parcel a hub handled as an independent chance of a missed sort scan, the 90 per cent interval on each of the three rates lies wholly above the tolerance, and each other hub's lies wholly below it, so no verdict rests on a rate the month's chance variation could carry across the line.
+### district_handover_2027.xlsx
 
-## 2. Critical Components
+1. A Districts sheet with one row per district in Owenduff's offer, in the offer's order, giving the code, the district, its run, its 2027 plan parcels, Owenduff's 2027 charge and the decision: Mulranny, Achill, Bangor Erris, Belmullet, Louisburgh and Ballycastle go; Leenane, Letterfrack, Clifden, Cong and Charlestown stay.
+2. A Runs sheet with one row per run that serves an offered district, giving the districts it hands over, its 2027 van-hours as things stand and after the hand-over, and the van-hours saved, to the nearest 50: R03 Westport and Louisburgh 300; R04 Newport and Achill 650; R05 Connemara 0; R06 Ballinrobe and Cong 0; R07 Crossmolina and Erris 600; R08 Ballina and the north coast 200; R09 East Mayo 0.
+3. The sheet ends on the year's net saving after Owenduff's charges: EUR 50,000 (to the nearest EUR 5,000).
 
-1. Missed-scan rate by hub: Komorniki **0.48** per cent; Bielany Wroclawskie **0.79** per cent; Sosnowiec **1.34** per cent; Modlniczka **0.63** per cent; Strykow **1.55** per cent; Pruszkow **1.23** per cent
-2. Parcels handled and missed sort scans at the three hubs that fire: Sosnowiec **16,530** and **222**; Strykow **12,178** and **189**; Pruszkow **24,425** and **301**
-3. The mornings with two trailers: **24** depot mornings at Warszawa-Okecie and Warszawa-Targowek; **1,440** parcels off Strykow's trailers, **130** of them without a sort scan
-4. The 90 per cent interval against the tolerance: Komorniki **wholly below the tolerance**; Bielany Wroclawskie **wholly below the tolerance**; Sosnowiec **wholly above the tolerance**; Modlniczka **wholly below the tolerance**; Strykow **wholly above the tolerance**; Pruszkow **wholly above the tolerance**
+### handover_2027.png
 
-## 3. Step-by-Step Solution
+4. Paired bars for each of those runs, 2027 van-hours as things stand beside 2027 after the hand-over, each bar labelled with its value to the nearest 50 (R03 1,300 to 1,000; R04 1,550 to 900; R05 1,700 to 1,700; R06 1,200 to 1,200; R07 1,600 to 1,000; R08 1,550 to 1,350; R09 1,600 to 1,600), with the title stating the districts that go and the net saving of about EUR 50,000.
 
-1. Took October's parcels from depot_scan_events_2026-10.csv, one per tracking number unloaded on the mornings of 1 to 31 October (TDS-4 s.2.1; the rows re-sent on 21 October are the same rows again): 91,324 parcels.
-2. Took each parcel's hub from hub_sort_events_2026-10.parquet where it has a sort event (one hub per parcel; a second read on the sorter loop is the same sort); a parcel with none is a missed sort scan (s.2.2).
-3. Split each depot door's arrival scans into unloadings wherever the door stood idle for more than ten minutes (any pause from one to 29 minutes gives the same 300 unloadings), and found every unloading's sorted parcels carrying one hub.
-4. Charged each parcel without a sort scan to its unloading's hub, then counted each hub's parcels, missed sort scans and rate, and fired the alert above 1.00 per cent (s.2.3).
-5. Put a 90 per cent interval on each hub's rate, its parcels handled taken as independent chances of a missed sort scan as october_scorecard_request.eml asks (the Wilson score interval; the normal, Clopper-Pearson, Jeffreys and Agresti-Coull intervals place every hub on the same side of the tolerance), and read whether it lies wholly above the tolerance, across it or wholly below it.
-6. Courier events sent twice (TDS-4 s.3): a later-received record of the same parcel, event, courier and handheld carrying the first record's time cut to the minute, as local time from a TC52 and as UTC from a TC51 (two hours behind local until 25 October, one after); a second loop or the afternoon wave is a new scan; counted under the depot the event names.
-7. Pre-advised parcels never picked up (TDS-4 s.4): each consignment's latest version with an October collection date, D-KRK1 read as D-KRK3 from 12 October, its pieces as parcels; a parcel the platform holds a pickup, sort, arrival or delivery record for was collected (trailer collections carry no pickup scan) and a failed pickup is not a collection; a piece label is the consignment number plus a three-digit piece number, and a marketplace order is matched on its first 20 characters, the orders sharing them counted against their pickups.
+## Critical Components
 
-## 4. Deliverable Answers
+1. On the Connemara run, Leenane and Letterfrack together take only **110 van-hours** off 2027, **EUR 6,300** at the van-hour rate against Owenduff's **EUR 12,200**, because the van drives through both to reach Clifden; the whole run beyond Aghagower costs EUR 50,800 against Owenduff's EUR 65,400, so the run keeps all three.
+2. Bangor Erris on its own takes **70 van-hours** off the Erris run (EUR 4,100 against Owenduff's EUR 6,300), but with Belmullet gone it is the end of the run, and the two together take **600 van-hours** off it.
+3. Mulranny on its own takes **80 van-hours** off the Achill run (EUR 4,500 against Owenduff's EUR 7,800); with Achill gone, Mulranny and Achill together take **650 van-hours** off it.
+4. The 2027 van-hours are a forecast of road sections driven on the days a district beyond them has a stop, from the plan's stops month by month; carrying the last twelve months' hours forward in proportion to parcels overstates the year's net saving at **EUR 55,000**, against **EUR 50,000**.
 
-### tracking_scorecard_2026-10.xlsx
+## Step-by-Step
 
-1. Each hub's parcels handled, missed sort scans, missed-scan rate, where its 90 per cent interval lies against the tolerance, and alert:
-   - Komorniki (HPOZ): 12,600 parcels, 61 missed, 0.48 per cent, interval wholly below the tolerance, does not fire
-   - Bielany Wroclawskie (HWRO): 11,963 parcels, 95 missed, 0.79 per cent, interval wholly below the tolerance, does not fire
-   - Sosnowiec (HKTW): 16,530 parcels, 222 missed, 1.34 per cent, interval wholly above the tolerance, fires
-   - Modlniczka (HKRK): 13,628 parcels, 86 missed, 0.63 per cent, interval wholly below the tolerance, does not fire
-   - Strykow (HLDZ): 12,178 parcels, 189 missed, 1.55 per cent, interval wholly above the tolerance, fires
-   - Pruszkow (HWAW): 24,425 parcels, 301 missed, 1.23 per cent, interval wholly above the tolerance, fires
-2. Each depot's courier events sent twice and pre-advised parcels never picked up:
-   - D-POZ1 Poznan-Gluszyna: 581 sent twice, 106 never picked up
-   - D-POZ2 Leszno: 125 sent twice, 257 never picked up
-   - D-WRO1 Wroclaw-Pracze: 600 sent twice, 162 never picked up
-   - D-WRO2 Opole: 272 sent twice, 139 never picked up
-   - D-KTW1 Katowice-Zaleze: 324 sent twice, 110 never picked up
-   - D-KTW2 Bielsko-Biala: 375 sent twice, 195 never picked up
-   - D-KRK1 Krakow-Zablocie: 97 sent twice, 43 never picked up
-   - D-KRK3 Krakow-Rybitwy: 200 sent twice, 86 never picked up
-   - D-KRK2 Tarnow: 127 sent twice, 170 never picked up
-   - D-LDZ1 Lodz-Olechow: 599 sent twice, 189 never picked up
-   - D-LDZ2 Piotrkow Trybunalski: 292 sent twice, 309 never picked up
-   - D-WAW1 Warszawa-Okecie: 942 sent twice, 145 never picked up
-   - D-WAW2 Warszawa-Targowek: 736 sent twice, 346 never picked up
+1. Read Owenduff's offer (the offered districts, EUR 12.60 a parcel delivered in 2027, any combination) and NPS-3 section 4 (the saving is the cost at the 2027 all-in rate of the van-hours the hand-over takes off the runs, less Owenduff's charges; the districts handed over are those whose hand-over lowers the year's cost most); took EUR 58.00 a van-hour from the 2027 rate card and the delivery days from the 2027 calendar.
+2. Cleaned the stop log: dropped the stop rows a handheld sent again when it re-synced (same stop and times, later sync), mapped CBN and CBS back to Castlebar town through the register's code changes, kept failed attempts and collections as stops, and timed each drive from the previous stop's departure, the break or depot out in the van run log.
+3. Read each run's road order from the stop sequences: every run sweeps its districts outward and drives back from the farthest one it served that day.
+4. The field's cost-to-serve build, each district's drive in from the stop before, the drives between its stops and its door time over November 2025 to October 2026 carried to 2027 by plan parcels, hands over Mulranny, Achill, Bangor Erris, Belmullet, Louisburgh, Leenane, Letterfrack and Ballycastle and claims EUR 20,000; it prices Leenane at EUR 7,500 and Letterfrack at EUR 10,200 against Owenduff's EUR 5,000 and EUR 7,200.
+5. That build charges a district with drive its run makes anyway: on the run-days when Leenane or Letterfrack had no stop the Connemara van still drove the road through them to Clifden, so their saving is the run time without their stops, not the time their stops take.
+6. Fitted each run's road sections and district access times by least squares on the observed drives between districts and to and from the depot (2025 and 2026), and each district's door time and drive between its own stops; the fit reproduces the drives on the run-days that skipped a district.
+7. Priced districts one at a time on that model: it hands over only Achill, Belmullet, Louisburgh and Ballycastle (EUR 35,000), because Mulranny and Bangor Erris save little while Achill and Belmullet stay beyond them.
+8. Evaluated every combination of offered districts on each run, since handing over a district at the end makes the one before it the end: Mulranny with Achill and Bangor Erris with Belmullet take 650 and 600 van-hours off their runs, more than Owenduff charges, while no combination on the Connemara, Cong or East Mayo runs saves money.
+9. Forecast 2027: each district's stops a delivery day month by month from the plan's parcels at its own stops a parcel, each road section driven with the probability that some district beyond it has a stop; the year's net saving is EUR 50,000, where carrying the last twelve months' hours in proportion to parcels gives EUR 55,000.
 
-### scan_alerts_2026-10.pptx
-
-3. One slide: a horizontal bar chart of each hub's missed-scan rate with its 90 per cent interval against the 1.00 per cent tolerance line, the bars of Sosnowiec, Strykow and Pruszkow marked as firing and their intervals clear of the line, the other three under it, beside the six hubs' parcels, missed sort scans, rates, intervals and alerts.
+No other list survives: NPS-3 4.1 counts the van-hours a hand-over takes off the runs, so time in district (which counts the road through Leenane and Letterfrack the Connemara van still drives) and allocation by stops or parcels are out; NPS-3 4.3 asks for the districts whose hand-over together lowers the year's cost most, so one-at-a-time pricing is out on the Achill and Erris runs; the fit on 2025 alone, on 2026 alone, with median drives, with annual rather than monthly stops, or a regression of run-day hours on the districts reached all give the same list and a net saving that rounds to EUR 50,000.

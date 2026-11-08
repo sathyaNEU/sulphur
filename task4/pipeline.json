@@ -1,25 +1,27 @@
 {
  "task": "task4",
- "status": "DESIGN",
+ "status": "BUILD",
  "domain": "supply-chain-logistics",
  "objective": "forecasting",
- "stage": 2,
- "stage_name": "design",
+ "stage": 3,
+ "stage_name": "build",
  "updated": "2026-11-08",
- "stump": "A competent solver prices each outlying district at the van time its stops take, the drive in from the stop before, the drive between its stops and the time at the door, and hands Mulranny, Leenane, Letterfrack and Killala to the courier with the remote ends; the runs drive through those districts anyway to reach Achill, Clifden and Ballycastle, so the time they would no longer take is only their stops' own, and only pricing each set of districts at the run time it removes keeps them and hands Bangor Erris over with Belmullet, the end of the Erris spur once Belmullet goes.",
+ "stump": "A competent solver prices each offered district at the van time its stops take and hands Leenane and Letterfrack to the courier with Mulranny, Achill, Bangor Erris, Belmullet, Louisburgh and Ballycastle, claiming about EUR 20,000; the Connemara van drives through Leenane and Letterfrack to reach Clifden, which stays, so they save only their own stops, and the solver who prices the run without them but one district at a time keeps Mulranny and Bangor Erris, which end the Achill and Erris runs once Achill and Belmullet go: only every combination priced on the run hands over Mulranny, Achill, Bangor Erris, Belmullet, Louisburgh and Ballycastle, about EUR 50,000 net in 2027.",
  "architecture": 4,
  "loops": 0,
  "precut": {
-  "exit": null,
-  "date": ""
+  "exit": 0,
+  "date": "2026-11-08",
+  "checks": "72 of 72"
  },
  "leak": {
-  "leak_py": "",
+  "leak_py": "REVIEW, no LEAK (2026-11-08, target.zip 20a4d41e): the offer names the offered districts (the candidate list), NPS-3 and the offer share generic words with the stump paragraph, the 2027 calendar and lease end dates run past the as-of, the prompt's which-quota and files-up-front WARNs",
   "reader": ""
  },
  "duplicate_check": {
-  "check": "WARN 2026-11-08 on the registered card (repeat.gate_g only)",
-  "heart": "WARN 2026-11-08, nearest 0.05"
+  "check": "WARN 2026-11-08 (repeat.gate_g at the draw)",
+  "heart": "WARN 2026-11-08 after the forum redraw (executive_team BLOCKed against task6, now committee_or_panel): repeat.decision against task6",
+  "surface": "exit 0 2026-11-08; one pair promoted for the author: task4 against task5's re-draw (decisive gap objective and designation_set back to back), both in flight"
  },
  "judge": {
   "verdict": "",
@@ -28,7 +30,7 @@
   "report": ""
  },
  "returned": [],
- "resume": "stage 2 of architecture 4 on the main thread's go-ahead: stumping screen, ladder and pricing on a prototype world, fork and closure tables, asks, prompt contract, then precut.py exit 0 before any data is cut; the arch 3 generator, pack, goldens and submission are still on disk and are replaced in stage 3",
+ "resume": "stage 4 owed (main thread): the leak reader and the determinism judge together on target.zip 20a4d41e320c9c26; then one fix pass in the generator, stage-3 gates re-run, stage 5 (READY)",
  "approved": null,
  "delivered": null,
  "portal": null,
@@ -115,7 +117,7 @@
    "event": "DRAWN architecture 4: an Irish online farm, pet and garden retailer's own van runs from Castlebar, which outlying districts go to a regional courier for 2027 (supply-chain-logistics in urban-regional-science, forecasting); guard WARN only (repeat.gate_g)"
   }
  ],
- "zip_sha256_16": "",
+ "zip_sha256_16": "20a4d41e320c9c26",
  "migrated_from": {
   "project": "Mark",
   "task": "task250",
@@ -125,7 +127,7 @@
  },
  "subdomain": "transportation-network",
  "client_domain": "urban-regional-science",
- "call": "which outlying districts go to Owenduff Couriers from January 2027, and the 2027 saving (to be fixed by the generator)",
+ "call": "Hand Mulranny, Achill, Bangor Erris, Belmullet, Louisburgh and Ballycastle to Owenduff from January 2027 and keep Leenane, Letterfrack, Clifden, Cong and Charlestown: about EUR 50,000 net saving in 2027",
  "runs": {
   "run1": null,
   "run2": null,
@@ -146,5 +148,22 @@
     "texts": "runs/run1.md, runs/run2.md"
    }
   ]
- }
+ },
+ "gates": {
+  "checks": "262 assertions",
+  "verify": "PASS (run-day regression: same list, EUR 50,000, every run's saved and before hours)",
+  "byte_identical": "two builds",
+  "figures_check": "56 of 56",
+  "voice_check": "PASS, 555 characters, WARN which-quota and files up front",
+  "precut": "72 of 72",
+  "ceiling": {
+   "shallow_keep": 8.7,
+   "landed_keep": 30.4,
+   "pair": 39.3,
+   "script": "generator/ceiling.py"
+  },
+  "backtest": "fit 2025, forecast 2026 Jan to Oct: 21 van-hours against 177 for the proportional carry",
+  "container": "clean (scrub audit, target and golden)"
+ },
+ "golden_zip_sha256_16": "ac28d0edad7c5f78"
 }
