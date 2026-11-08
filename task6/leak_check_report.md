@@ -1,28 +1,32 @@
 # leak check, task6
 
-**Verdict: REVIEW.** 15 files read, 49 golden figures and 1 candidate names taken from submission.md, 25 stump terms taken from the design note.
+**Verdict: REVIEW.** 15 files read, 16 golden figures and 1 candidate names taken from submission.md, 25 stump terms taken from the design note.
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: balancer, decisive, partner-gateway, december, requests, asserted, request, golden, reading, probability, counts, architecture, rejected, population, survey, sample, export, hourly, weighted, gullhaven, method, inclusion, weights, carries, pr-slo-
+Stump terms swept: balancer, partner-gateway, decisive, counts, request, asserted, export, golden, probability, population, hourly, default, reading, sample, sentence, weights, architecture, rejected, pr-slo-, weighted, survey, points, method, inclusion, traces
 
 ## 1 file names (REVIEW 1)
 - **REVIEW** `capacity_review_2026-Q4.md`: a text file in the pack: confirm it is the organisation's own record (a thread, a log, a letter) and does not describe the data
 
 ## 3 answer figures in the pack (REVIEW 4)
-- **REVIEW** `PR-SLO-3_service_level_objectives_2026.docx`: golden figure 0.5 appears: ...booking 1 3,000 0.5% payments 1 2,000...
-- **REVIEW** `PR-SLO-3_service_level_objectives_2026.docx`: golden figure 2.0 appears: ...ner-gateway 2 1,000 2.0% notifications 2...
 - **REVIEW** `PR-SLO-3_service_level_objectives_2026.docx`: golden figure 1.0 appears: ...rney-search 1 1,300 1.0% fares 1 300...
+- **REVIEW** `PR-SLO-3_service_level_objectives_2026.docx`: golden figure 2.0 appears: ...ner-gateway 2 1,000 2.0% notifications 2...
+- **REVIEW** `PR-SLO-3_service_level_objectives_2026.docx`: golden figure 0.5 appears: ...booking 1 3,000 0.5% payments 1 2,000...
 - **REVIEW** `PR-SLO-3_service_level_objectives_2026.docx`: carries 16 of 17 distinctive words of the committed call: 'Five internal services ran over their 2026 latency error budget and each gets a reliability engineer for the first half '
 
 ## 4 design-note vocabulary (REVIEW 1)
-- **REVIEW** `PR-SLO-3_service_level_objectives_2026.docx`: 7 of 25 stump-paragraph terms appear (balancer, partner-gateway, december, requests, request, counts); read whether the document names the move
+- **REVIEW** `PR-SLO-3_service_level_objectives_2026.docx`: 5 of 25 stump-paragraph terms appear (balancer, partner-gateway, counts, request, pr-slo-); read whether the document names the move
 
 ## 10 container metadata (INFO 1)
 - **INFO** `-`: audit reported no writer signature (1 lines)
 
 ## 12 describing content (REVIEW 1)
 - **REVIEW** `PR-SLO-3_service_level_objectives_2026.docx`: names 14 column(s) of the data files verbatim (Service, Tier, commit, component, cost, deployment): confirm it is the organisation's own record and not a note written for the analyst
+
+## 12 client quality check (INFO 2)
+- **INFO** `-`: 15 usable files (10 or more required)
+- **INFO** `-`: 3 file categories: document, spreadsheet, structured (2 or more required)
 
 ## 2 author vocabulary (clean)
 

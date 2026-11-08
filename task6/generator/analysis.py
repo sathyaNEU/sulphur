@@ -1,7 +1,9 @@
-"""task6's golden, computed from the shipped pack alone: each service's December 2026 latency SLI (the kept server
-spans weighted hour by hour by the load balancer's request counts), its verdict against its budget, and the asks
-(releases and rollbacks, customer-facing incident minutes by half, cost by half). The ladder's rungs are computed
-beside the golden for the checks."""
+"""task6's golden, computed from the shipped pack alone: each service's December 2026 latency SLI (each kept server
+span counted at its trace's edge keep share, from the load balancer's hourly request counts), its verdict against its
+budget, and the asks that read the SLI's own numerator (each service's over-threshold December requests: their shares,
+the order the engineers start in, the share the services that ran over served together and the requests beyond their
+budgets) and the customer-facing incident minutes in which an incident named one of those services, by half. The
+ladder's rungs are computed beside the golden for the checks."""
 import csv
 import datetime as dt
 import json
@@ -151,84 +153,12 @@ class Golden:
             out[s]["root_mix_weighted"] = {k: v / w_root.sum() for k, v in mix_w.items()}
         return out
 
-    # ------------------------------------------------------------ ask A: releases and rollbacks
-    def deploys(self):
-        """Production's changes in order: the pipeline's successful production deploys up to the cluster's build on 14
-        April, then prd-lis-2's rollout history, every change whoever made it; images are named by commit hash, which
-        the pipeline's records map to versions. A release is an image reaching production for the first time, a
-        rollback a change to an image first released before the running one."""
-        d = json.load(open(os.path.join(self.t, K.FILES["deploys"])))["deployments"]
-        hist = list(csv.DictReader(open(os.path.join(self.t, K.FILES["rollouts"]))))
-        start = {}
-        for h in hist:
-            if h["revision"] == "1":
-                start[h["deployment"]] = dt.datetime.strptime(h["changed_at_utc"], "%Y-%m-%d %H:%M:%S")
-        seq = {}
-        for x in d:
-            if x["environment"] != "production" or x["outcome"] != "succeeded":
-                continue
-            t = dt.datetime.strptime(x["started_at"], "%Y-%m-%dT%H:%M:%SZ")
-            if t < start[x["service"]]:
-                seq.setdefault(x["service"], []).append((t, x["commit"][:7]))
-        for h in hist:
-            sha = h["image"].rsplit(":", 1)[1]
-            t = dt.datetime.strptime(h["changed_at_utc"], "%Y-%m-%d %H:%M:%S")
-            seq.setdefault(h["deployment"], []).append((t, sha if h["revision"] != "1" else None))
-        out = {}
-        for name, ev in seq.items():
-            ev.sort(key=lambda e: e[0])
-            first, running, rel, roll = {}, None, 0, 0
-            for t, sha in ev:
-                if sha is None:                      # the cutover revision: the image already running, no change
-                    continue
-                if sha not in first:
-                    first[sha] = t
-                    rel += 1
-                elif running is not None and sha != running and first[sha] < first[running]:
-                    roll += 1
-                running = sha
-            out[self.by_trace[name]] = {"releases": rel, "rollbacks": roll}
-        return out
-
-    # ------------------------------------------------------------ ask B: cost by half
-    def costs(self):
-        rate = {}
-        with open(os.path.join(self.t, K.FILES["invoices"])) as fh:
-            for row in csv.DictReader(fh):
-                rate[row["invoice_id"]] = float(row["usd_eur_rate"])
-        res = {}
-        with open(os.path.join(self.t, K.FILES["resources"])) as fh:
-            for row in csv.DictReader(fh):
-                res[row["resource_id"]] = row
-        succ = {row["replaces"]: rid for rid, row in res.items() if row["replaces"]}
-        tag_svc = {c["Cost tag (service=)"]: c["Service"] for c in self.cat}
-
-        def service_of(rid, tags):
-            for part in tags.split(";"):
-                if part.startswith("service="):
-                    return tag_svc[part.split("=", 1)[1]]
-            seen = rid
-            while seen in succ:                       # a replaced resource ran for its replacement's service
-                seen = succ[seen]
-                for part in res[seen]["tags_now"].split(";"):
-                    if part.startswith("service="):
-                        return tag_svc[part.split("=", 1)[1]]
-            return None
-        out = {s: [0.0, 0.0] for s in K.SVC}
-        with open(os.path.join(self.t, K.FILES["billing"])) as fh:
-            for row in csv.DictReader(fh):
-                if row["line_type"] == "tax":
-                    continue
-                s = service_of(row["resource_id"], row["resource_tags"])
-                if s is None:
-                    continue
-                eur = float(row["cost"]) * (rate[row["invoice_id"]] if row["currency"] == "USD" else 1.0)
-                half = 0 if row["usage_date"] < "2026-07-01" else 1
-                out[s][half] += eur
-        return {s: [round(v[0], 2), round(v[1], 2)] for s, v in out.items()}
-
-    # ------------------------------------------------------------ ask C: customer-facing incident minutes by half
-    def incidents(self):
+    # ------------------------------------------------------------ the incident ask: minutes by half
+    def incident_intervals(self, backdate=False):
+        """Each service's customer-facing incident intervals (UTC): an incident in incidents_2026.csv is matched to its
+        status page post by component and time; it runs to the last of the post's components back to operational; a
+        service counts from the moment incident_timeline_2026.csv names it (backdate: from the declaration, the
+        export's final list read for the whole incident)."""
         import asks as A
         st = json.load(open(os.path.join(self.t, K.FILES["status"])))
 
@@ -265,29 +195,59 @@ class Golden:
             p = match[0]
             end = max(min(t for t in ops[c] if t > p["created"]) for c in p["components"])
             for x in names:
-                a_ = max(decl, named[(row["incident_id"], x)])
+                a_ = decl if backdate else max(decl, named[(row["incident_id"], x)])
                 if a_ < end:
                     iv[self.by_trace[x]].append((a_, end))
-        h1_end = dt.datetime(2026, 6, 30, 23, 0)            # 1 July 00:00 Lisbon
-        res = {}
-        for s, lst in iv.items():
-            merged = []
-            for a_, b_ in sorted(lst):
-                if merged and a_ <= merged[-1][1]:
-                    merged[-1][1] = max(merged[-1][1], b_)
-                else:
-                    merged.append([a_, b_])
-            m = [0.0, 0.0]
-            for a_, b_ in merged:
-                for i, (lo, hi) in enumerate(((dt.datetime(2026, 1, 1), h1_end), (h1_end, dt.datetime(2027, 1, 1)))):
-                    lo_, hi_ = max(a_, lo), min(b_, hi)
-                    if hi_ > lo_:
-                        m[i] += (hi_ - lo_).total_seconds() / 60
-            res[s] = m
-        return res
+        return iv
+
+    def incidents(self, services=None, backdate=False):
+        """Customer-facing incident minutes by half (PR-SLO-3 5.2 and 5.4): for each service, or with `services` the
+        minutes in which an incident named at least one of them, each minute counted once."""
+        iv = self.incident_intervals(backdate)
+        if services is not None:
+            return union_minutes([x for s in services for x in iv[s]])
+        return {s: union_minutes(lst) for s, lst in iv.items()}
 
     def run(self):
         main = self.main()
         over = [s for s in K.SVC if main[s]["over"]]
-        return {"main": main, "over": over, "deploys": self.deploys(), "costs": self.costs(),
-                "incidents": self.incidents()}
+        N = {s: main[s]["requests"] for s in K.SVC}
+        prog = programme({s: main[s]["sli"] for s in K.SVC}, N, self.bud)
+        shallow = programme({s: main[s]["by_service_hour"] for s in K.SVC}, N, self.bud)
+        return {"main": main, "over": over, "programme": prog, "shallow": shallow,
+                "incidents": self.incidents(over), "incidents_by_service": self.incidents(),
+                "shallow_incidents": self.incidents(shallow["over"])}
+
+
+H1_END = dt.datetime(2026, 6, 30, 23, 0)            # 1 July 00:00 Lisbon
+
+
+def union_minutes(lst):
+    """Minutes of a set of intervals in each half of 2026, overlaps counted once, rounded at the end only."""
+    merged = []
+    for a_, b_ in sorted(lst):
+        if merged and a_ <= merged[-1][1]:
+            merged[-1][1] = max(merged[-1][1], b_)
+        else:
+            merged.append([a_, b_])
+    m = [0.0, 0.0]
+    for a_, b_ in merged:
+        for i, (lo, hi) in enumerate(((dt.datetime(2026, 1, 1), H1_END), (H1_END, dt.datetime(2027, 1, 1)))):
+            lo_, hi_ = max(a_, lo), min(b_, hi)
+            if hi_ > lo_:
+                m[i] += (hi_ - lo_).total_seconds() / 60
+    return m
+
+
+def programme(sli, N, bud):
+    """The asks that read the SLI's numerator: each service's over-threshold December requests (its SLI times its
+    December requests, which is its weighted kept spans over the threshold), their share of all the services' total,
+    the services over budget in the order of their over-threshold requests, the share those services served together
+    and how many more over-threshold requests than their budgets allow."""
+    slow = {s: sli[s] / 100.0 * N[s] for s in K.SVC}
+    tot = sum(slow.values())
+    over = [s for s in K.SVC if K.r1(sli[s]) > bud[s]]
+    order = sorted(over, key=lambda s: -slow[s])
+    return {"slow": slow, "total": tot, "share": {s: 100.0 * slow[s] / tot for s in K.SVC}, "over": over,
+            "order": order, "over_share": 100.0 * sum(slow[s] for s in over) / tot,
+            "beyond": sum(slow[s] - bud[s] / 100.0 * N[s] for s in over)}

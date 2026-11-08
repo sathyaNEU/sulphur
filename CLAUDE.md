@@ -154,6 +154,12 @@ are written. Its judge is spawned at stage 4, by `/fix-determinism`, or when the
 
 The repository is `https://github.com/sathyaNEU/sulphur.git`, branch `main`. No other branch, no pull request.
 
+- **Every status commit lands on `main`, whatever branch a session starts on.** A session that was handed a working
+  branch (by its harness, a setup step or a default) still commits and pushes `DRAWN`, `READY`, `RESHIPPED`,
+  `SUBMITTED`, `APPROVED`, `RETURNED`, `PAUSED`, `RETIRED` and `SKILLS:` commits to `main`: check out `main`, `git pull
+  --rebase origin main`, commit there (or bring the work over with a rebase or cherry-pick), then `git push origin
+  main`. Work left only on another branch is not shipped, and no pull request is opened for it.
+
 - **Commit only at a status change**: `DRAWN (taskNN)`, `READY (taskNN): <call>`, `SUBMITTED (taskNN): <call>, runs
   <x> and <y>`, `APPROVED (taskNN)`, `RETURNED (taskNN): <why>`, `RESHIPPED (taskNN): <what moved>`, `PAUSED
   (taskNN)` with the resume step in `pipeline.json` (only when a session ends mid-stage), `RETIRED (taskNN)`. A

@@ -2,8 +2,16 @@
 generator/figures.json, then the checks and the independent verifier, then a second build into a scratch folder inside
 the task (removed after) compared byte for byte, then target.zip cut from the final build.
 
-    python3 task6/generator/build.py              everything
-    python3 task6/generator/build.py --out DIR    the pack only, into DIR"""
+    python3 task6/generator/build.py                everything
+    python3 task6/generator/build.py --out DIR      the pack only, into DIR
+    python3 task6/generator/build.py --golden-only  the goldens, figures, submission and metadata from the shipped
+                                                    pack: target/ is unpacked from target.zip (never rebuilt), checked
+                                                    member by member against it, the goldens built twice and compared
+                                                    byte for byte, golden.zip cut; target.zip is left as shipped
+
+The --golden-only path exists because a repair of the ask layer must not move the shipped pack: the pack's simulation
+reads scipy's root finder and numpy's generators, and a later library build moves a handful of rows in the span export
+and the July to December balancer file, so a rebuild in another environment is not the shipped cut."""
 import os
 for _v in ("OPENBLAS_NUM_THREADS", "OMP_NUM_THREADS", "MKL_NUM_THREADS"):
     os.environ.setdefault(_v, "1")
@@ -71,6 +79,9 @@ def build_golden(target, golden):
 
 
 def write_metadata(n, R):
+    if n is None:                      # the shipped pack: its row counts stand as recorded
+        old = json.load(open(os.path.join(TASK, "metadata.json")))
+        n = {K.FILES_KEY_OF[f]: c for f, c in old["rows"]}
     synth = ("constructed by the task generator (seeded); Rotalinha, its services, staff, systems and every record are "
              "fictional")
     about = {
@@ -112,6 +123,57 @@ def write_metadata(n, R):
         f.write("\n")
 
 
+def cut_golden_zip(golden, path):
+    if os.path.exists(path):
+        os.remove(path)
+    with zipfile.ZipFile(path, "w", zipfile.ZIP_DEFLATED) as z:
+        for f in sorted(os.listdir(golden)):
+            zi = zipfile.ZipInfo(f, date_time=(2027, 1, 8, 15, 26, 0))
+            zi.compress_type = zipfile.ZIP_DEFLATED
+            zi.external_attr = 0o644 << 16
+            z.writestr(zi, open(os.path.join(golden, f), "rb").read())
+
+
+def unpack_shipped(target):
+    """target/ from the shipped target.zip, every member compared with the file on disk."""
+    zp = os.path.join(TASK, "target.zip")
+    with zipfile.ZipFile(zp) as z:
+        names = [n_ for n_ in z.namelist() if not n_.endswith("/")]
+        if not os.path.isdir(target) or sorted(os.listdir(target)) != sorted(n_.split("/", 1)[1] for n_ in names):
+            if os.path.exists(target):
+                shutil.rmtree(target)
+            z.extractall(TASK)
+        bad = [n_ for n_ in names if hashlib.md5(z.read(n_)).hexdigest() !=
+               hashlib.md5(open(os.path.join(TASK, n_), "rb").read()).hexdigest()]
+    return hashlib.md5(open(zp, "rb").read()).hexdigest(), bad
+
+
+def golden_only():
+    target, golden = os.path.join(TASK, "target"), os.path.join(TASK, "golden")
+    zmd5, bad = unpack_shipped(target)
+    print("shipped pack: target.zip md5 %s, %s" % (zmd5, "every member matches target/" if not bad else
+                                                   "MEMBERS DIFFER " + ", ".join(bad)))
+    R, F = build_golden(target, golden)
+    write_metadata(None, R)
+    import checks
+    rc = checks.main(target)
+    import verify
+    vbad = verify.run(TASK)
+    print("verify: %s" % ("PASS" if not vbad else "FAIL " + "; ".join(vbad)))
+    first = digest(golden)
+    fig1 = open(os.path.join(HERE, "figures.json"), "rb").read()
+    sub1 = open(os.path.join(TASK, "submission.md"), "rb").read()
+    build_golden(target, golden)
+    same = digest(golden) == first and open(os.path.join(HERE, "figures.json"), "rb").read() == fig1 and \
+        open(os.path.join(TASK, "submission.md"), "rb").read() == sub1
+    print("golden rebuild: %s" % ("byte-identical" if same else "DIFFERS"))
+    cut_golden_zip(golden, os.path.join(TASK, "golden.zip"))
+    for k, v in sorted(digest(golden).items()):
+        print("  %s  golden/%s" % (v, k))
+    print("  %s  golden.zip" % hashlib.md5(open(os.path.join(TASK, "golden.zip"), "rb").read()).hexdigest())
+    sys.exit(1 if (rc or vbad or bad or not same) else 0)
+
+
 def digest(d):
     out = {}
     for root, _, files in os.walk(d):
@@ -136,7 +198,11 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--out")
     ap.add_argument("--no-rebuild", action="store_true")
+    ap.add_argument("--golden-only", action="store_true")
     a = ap.parse_args()
+    if a.golden_only:
+        golden_only()
+        return
     if a.out:
         build_pack(a.out)
         return
@@ -158,6 +224,7 @@ def main():
         same = a1 == a2
         print("rebuild: %s" % ("byte-identical" if same else "DIFFERS " + ", ".join(k for k in a1 if a1[k] != a2.get(k))))
     cut_zip(target, os.path.join(TASK, "target.zip"))
+    cut_golden_zip(golden, os.path.join(TASK, "golden.zip"))
     for k, v in sorted(digest(target).items()):
         print("  %s  %s" % (v, k))
     sys.exit(1 if (rc or vbad or not same) else 0)

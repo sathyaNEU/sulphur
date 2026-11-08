@@ -15,6 +15,7 @@ then, once known, the review result.
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | task2 arch 3 | 2026-11-08 | general-statistics-data-science / exploratory-data-analysis-distribution-assessment | descriptive-distribution | a set of products in or out, rate and 90 per cent interval each | own (a drifting process read run by run between resets) | not reported, on the golden | none | not reported, on the golden | none | landed | landed | REDESIGN | |
 | task3 arch 2 | 2026-11-08 | physical-environmental-sciences / hydrology-flood-frequency | forecasting | pick one of four alternatives, events a year each | own (a buffer emptied through a receiver's spare capacity) | not reported, on the golden | none | not reported, on the golden | none | landed | landed | REDESIGN | |
+| task6 a6 | 2026-11-08 | missing data, censoring and measurement error | descriptive-distribution | 14 | own (an inclusion probability inherited from the trace's edge request) | 73 | method shortcut | 83 | on the call (ask loss: misread of 5.2's naming clock) | 78.0 | 86.5 | FIX_ASKS | |
 
 ## Lessons
 
