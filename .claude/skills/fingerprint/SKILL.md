@@ -1,6 +1,6 @@
 ---
 name: fingerprint
-description: The anti-repeat system for task builds. Every build has a fingerprint card under cards/ (domain, subdomain, niche, objective, prompt shape, decision type, gap, pattern, generators, Gate G mechanism, calibration form, context artifact, stakeholder role, spine, world, deliverables, opening move, and a driver sentence with the domain nouns stripped), and guard.py checks a proposed draw against every card before the ladder is written, so the same kind of project is never drawn twice. Use at the start of every new build and every re-root (guard.py recent, coverage, suggest), when the draw is fixed and before any data is cut (guard.py check, then register), after the pack is cut (guard.py surface), and whenever the author asks whether a build repeats an earlier one. Mandatory, mechanical and free, it spawns nothing; a promoted pair is read side by side by the author. The 302 Project Mark cards, filed as markNN.json (Mark's taskNN), are the already-submitted baseline every Sulfur draw is checked against.
+description: The anti-repeat system for task builds. Every build has a fingerprint card under cards/ (domain, subdomain, niche, objective, prompt shape, decision type, gap, pattern, generators, Gate G mechanism, calibration form, context artifact, stakeholder role, spine, world, deliverables, opening move, and a driver sentence with the domain nouns stripped), and guard.py checks a proposed draw against every card before the ladder is written, so the same kind of project is never drawn twice. Use at the start of every new build and every re-root (guard.py recent, coverage, suggest), when the draw is fixed and before any data is cut (guard.py check, then register), after the pack is cut (guard.py surface), and whenever the author asks whether a build repeats an earlier one. Mandatory, mechanical and free, it spawns nothing; a promoted pair is read side by side by the author. The 20 Project Mark cards kept (110, 111, 114, 115, 117, 119, 120, 124, 126, 128, 132, 135, 162, 169, 175, 179, 182, 196, 253 and 258), filed as markNN.json (Mark's taskNN), with their shipped-ledger rows, are the already-submitted baseline every Sulfur draw is checked against.
 ---
 
 # Fingerprint
@@ -109,7 +109,8 @@ earlier builds on its own cell, one of them the candidate exactly once the nouns
 `check` scored it at 0.06 with neither build among the five nearest drivers: the driver score is lexical, so
 the same insight told in the setting's words is invisible to it. On any cell the lane has drawn on before,
 the setting run comes before the first harness, not after it. Everything here is mechanical and free; the people index and the clone screen keep working caches
-under `.cache/` (never committed), seeded from the tracked baselines in `corpus/` and `clone/baseline.json`
+under `.cache/` (never committed), seeded from the tracked baselines in `corpus/` and `clone/baseline.json` (both cut to the same twenty Mark builds
+as the cards; the clone baseline holds the ten of them fingerprinted on Mark's checkout)
 (the clone fingerprinter, `clone/fingerprint.py`, lives here now; the adjudicated clone check was dropped).
 
 **2. When the draw is fixed** (before the ladder; personas from `guard.py names --geo <geo> --seed <N>`):

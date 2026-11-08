@@ -33,7 +33,7 @@ spawned agent at medium. No in-house solver runs: the platform's two runs are th
 | `CLAUDE.md` | the contract: the Sulfur standard, Mark's measured laws, routing, commands, workflow, git, the current spec |
 | `.claude/skills/` | eleven skills, one per stage, scripts beside the skill that owns them |
 | `.claude/commands/`, `.claude/agents/` | six commands; the determinism judge and the run triage agents |
-| `.claude/skills/fingerprint/cards/` | 302 Project Mark cards filed as `markNN.json` (Mark's taskNN), the already-submitted duplicate baseline, plus each Sulfur card (`taskNN.json`) |
+| `.claude/skills/fingerprint/cards/` | 20 Project Mark cards filed as `markNN.json` (Mark's taskNN: 110, 111, 114, 115, 117, 119, 120, 124, 126, 128, 132, 135, 162, 169, 175, 179, 182, 196, 253 and 258), the already-submitted duplicate baseline, plus each Sulfur card (`taskNN.json`) |
 | `guidelines/` | the client's Sulfur export (`client/`) and the determinism judge's system prompt |
 | `taskNN/` | the builds |
 

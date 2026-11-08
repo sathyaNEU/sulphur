@@ -6,8 +6,8 @@
     python3 .claude/skills/build-pipeline/status.py new        the next free task number
     python3 .claude/skills/build-pipeline/status.py taskNN     one build: status, resume line, runs, portal
 
-Sulfur builds are numbered from task1 up. The Project Mark cards kept under fingerprint/cards/ as the
-already-submitted baseline are filed as mark1 to mark503 (Mark's task1 to task503), so the two never collide.
+Sulfur builds are numbered from task1 up. The twenty Project Mark cards kept under fingerprint/cards/ as
+the already-submitted baseline are filed as markNN (mark110 to mark258, Mark's taskNN), so the two never collide.
 
 Status (pipeline.json `status`, exact strings), in order:
   DRAWING    the draw is being fixed (card not yet registered)

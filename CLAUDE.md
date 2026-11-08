@@ -142,8 +142,9 @@ license the ones they name.
 One session runs the whole build in its main thread at max effort: design and build are the same hand, and a
 repair is done where the context already is.
 
-**The fingerprint guard is mandatory and free.** The card is registered the moment the draw is fixed. The 302 Project
-Mark cards under `fingerprint/cards/` (filed as `markNN.json`, Mark's taskNN) are the already-submitted baseline: a Sulfur build that repeats a Mark build's
+**The fingerprint guard is mandatory and free.** The card is registered the moment the draw is fixed. The 20 Project
+Mark cards under `fingerprint/cards/` (filed as `markNN.json`, Mark's taskNN: 110, 111, 114, 115, 117, 119, 120, 124, 126, 128, 132, 135, 162, 169, 175, 179, 182, 196, 253 and 258) and
+their shipped-ledger rows are the already-submitted baseline: a Sulfur build that repeats a Mark build's
 driver, shell or data structure is a duplicate ("two tasks built on the same pattern with the same data structure are
 treated as duplicates"). Personas come from `guard.py names`, never typed.
 
@@ -167,8 +168,8 @@ The repository is `https://github.com/sathyaNEU/sulphur.git`, branch `main`. No 
 
 ## Task numbers
 
-Sulfur builds are numbered from `task1` up (`status.py new`); the Mark baseline cards are filed as `mark1` to
-`mark503`, so the two never collide. The platform's tier sets how many run at once (one at Tier 1, three at Tier 2, six at Tier 3).
+Sulfur builds are numbered from `task1` up (`status.py new`); the Mark baseline cards are filed as `markNN`
+(`mark110` to `mark258`), so the two never collide. The platform's tier sets how many run at once (one at Tier 1, three at Tier 2, six at Tier 3).
 
 ## How a build is worked
 
