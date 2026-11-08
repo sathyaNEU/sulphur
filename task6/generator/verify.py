@@ -1,6 +1,7 @@
 """task6's independent verifier: reads only the bundle (target/), the goldens and figures.json, on its own code path
-(no generator module is imported), recomputes the call and every graded figure, reads back every format the pack
-ships, and reports each disagreement.
+(no generator module is imported), recomputes the call and every graded figure (the SLIs, the start order, the five's
+shares and the share they served together, the requests beyond their budgets, the incident minutes in which an incident
+named one of them), reads back every format the pack ships, and reports each disagreement.
 
     python3 verify.py [task_dir]"""
 import csv
@@ -93,61 +94,23 @@ def run(task_dir):
         if "%.1f" % half_up(sli[s], "0.1") != figs["sli"][s]:
             bad.append("%s SLI %.4f against %s" % (s, sli[s], figs["sli"][s]))
 
-    # ---- ask A: the pipeline's production deploys before the new cluster, then its rollout history
-    dep = json.load(open(pick("production_deployments")))["deployments"]
-    hist = list(csv.DictReader(open(pick("cluster_rollout_history"))))
-    built = {h["deployment"]: h["changed_at_utc"] for h in hist if h["revision"] == "1"}
-    seq = {}
-    for x in dep:
-        st = x["started_at"].replace("T", " ").rstrip("Z")
-        if x["environment"] == "production" and x["outcome"] == "succeeded" and st < built[x["service"]]:
-            seq.setdefault(x["service"], []).append((st, x["commit"][:7]))
-    for h in hist:
-        if h["revision"] != "1":
-            seq.setdefault(h["deployment"], []).append((h["changed_at_utc"], h["image"].split(":")[-1]))
-    for name, ev in seq.items():
-        ev.sort()
-        first, run_, rel, rb = {}, None, 0, 0
-        for t, c in ev:
-            if c not in first:
-                first[c], rel = t, rel + 1
-            elif run_ is not None and c != run_ and first[c] < first[run_]:
-                rb += 1
-            run_ = c
-        s = svc_of[name]
-        if rel != figs["releases"][s] or rb != figs["rollbacks"][s]:
-            bad.append("%s releases %d rollbacks %d against %s %s" % (s, rel, rb, figs["releases"][s],
-                                                                     figs["rollbacks"][s]))
-
-    # ---- ask B: cost by half
-    rate = {r["invoice_id"]: float(r["usd_eur_rate"]) for r in csv.DictReader(open(pick("cloud_invoices")))}
-    res = {r["resource_id"]: r for r in csv.DictReader(open(pick("cloud_resources")))}
-    successor = {r["replaces"]: k for k, r in res.items() if r["replaces"]}
-    tag_svc = {c["Cost tag (service=)"]: c["Service"] for c in cat}
-
-    def tagged(tags):
-        for p in tags.split(";"):
-            if p.startswith("service="):
-                return tag_svc[p[8:]]
-        return None
-    cost = {s: [0.0, 0.0] for s in services}
-    for r in csv.DictReader(open(pick("cloud_billing"))):
-        if r["line_type"] == "tax":
-            continue
-        s, rid = tagged(r["resource_tags"]), r["resource_id"]
-        while s is None and rid in successor:
-            rid = successor[rid]
-            s = tagged(res[rid]["tags_now"])
-        if s is None:
-            continue
-        v = float(r["cost"]) * (rate[r["invoice_id"]] if r["currency"] == "USD" else 1.0)
-        cost[s][0 if r["usage_date"] < "2026-07-01" else 1] += v
+    # ---- the asks on the SLI's numerator: each service's over-threshold December requests
+    slow = {s: num[s] for s in services}
+    total = sum(slow.values())
+    order = sorted(over, key=lambda s: -slow[s])
+    if order != figs["start_order"]:
+        bad.append("start order %s against %s" % (order, figs["start_order"]))
     for s in services:
-        got = [int(half_up(round(v, 2), "1")) for v in cost[s]]
-        if got != figs["cost_eur"][s]:
-            bad.append("%s cost %s against %s" % (s, got, figs["cost_eur"][s]))
+        if str(int(half_up(100 * slow[s] / total, "1"))) != figs["share_pct"][s]:
+            bad.append("%s share %.3f against %s" % (s, 100 * slow[s] / total, figs["share_pct"][s]))
+    together = 100 * sum(slow[s] for s in over) / total
+    if str(int(half_up(together, "1"))) != figs["over_share_pct"]:
+        bad.append("share served together %.3f against %s" % (together, figs["over_share_pct"]))
+    beyond = sum(slow[s] - bud[s] / 100 * sum(n[s].values()) for s in over)
+    if "{:,}".format(int(half_up(beyond / 10000, "1")) * 10000) != figs["beyond_budget"]:
+        bad.append("requests beyond budget %.0f against %s" % (beyond, figs["beyond_budget"]))
 
-    # ---- ask C: customer-facing incident minutes by half
+    # ---- the incident ask: minutes in which an incident named one of the services that ran over, by half
     st = json.load(open(pick("status_page_history")))
     posts = [(set(p["components"]), lisbon_utc(p["created_at"])) for p in st["incidents"]]
     ops = {}
@@ -171,21 +134,20 @@ def run(task_dir):
             if a < end:
                 spans_by[svc_of[x]].append((a, end))
     cut = dt.datetime(2026, 6, 30, 23)
-    for s in services:
-        tot, last = [0.0, 0.0], None
-        for a, b in sorted(spans_by[s]):
-            if last and a < last:
-                a = last
-            if b <= a:
-                continue
-            for i, (lo, hi) in enumerate(((dt.datetime(2026, 1, 1), cut), (cut, dt.datetime(2027, 1, 1)))):
-                lo_, hi_ = max(a, lo), min(b, hi)
-                if hi_ > lo_:
-                    tot[i] += (hi_ - lo_).total_seconds() / 60
-            last = b if last is None else max(last, b)
-        got = [int(half_up(v, "1")) for v in tot]
-        if got != figs["minutes"][s]:
-            bad.append("%s minutes %s against %s" % (s, got, figs["minutes"][s]))
+    tot, last = [0.0, 0.0], None
+    for a, b in sorted(x for s in over for x in spans_by[s]):
+        if last and a < last:
+            a = last
+        if b <= a:
+            continue
+        for i, (lo, hi) in enumerate(((dt.datetime(2026, 1, 1), cut), (cut, dt.datetime(2027, 1, 1)))):
+            lo_, hi_ = max(a, lo), min(b, hi)
+            if hi_ > lo_:
+                tot[i] += (hi_ - lo_).total_seconds() / 60
+        last = b if last is None else max(last, b)
+    got = [int(half_up(v, "1")) for v in tot]
+    if got != figs["incident_minutes"]:
+        bad.append("incident minutes %s against %s" % (got, figs["incident_minutes"]))
 
     # ---- every shipped format reads back, and the goldens carry figures.json's figures
     for f in files:
@@ -198,22 +160,28 @@ def run(task_dir):
             json.load(open(p))
     gold = os.path.join(task_dir, "golden")
     rows_csv = list(csv.DictReader(open(os.path.join(gold, "service_sli_2026.csv"))))
+    if [r["service"] for r in rows_csv] != services:
+        bad.append("golden csv rows %s" % [r["service"] for r in rows_csv])
     for r in rows_csv:
         s = r["service"]
-        want = [figs["sli"][s], figs["budget"][s], figs["ran_over"][s], str(figs["releases"][s]),
-                str(figs["rollbacks"][s])] + [str(x) for x in figs["minutes"][s] + figs["cost_eur"][s]]
-        got = [r["latency_sli_pct"], r["error_budget_pct"], r["ran_over"], r["releases_2026"], r["rollbacks_2026"],
-               r["incident_minutes_h1"], r["incident_minutes_h2"], r["cost_eur_h1"], r["cost_eur_h2"]]
+        want = [figs["sli"][s], figs["budget"][s], figs["ran_over"][s]]
+        got = [r["latency_sli_pct"], r["error_budget_pct"], r["ran_over"]]
         if want != got:
             bad.append("golden csv row %s: %s against %s" % (s, got, want))
     memo = Document(os.path.join(gold, "reliability_review_2026.docx"))
     memo_text = "\n".join(p.text for p in memo.paragraphs)
-    if ", ".join(figs["over"][:-1]) not in memo_text:
-        bad.append("golden memo does not name the services that breached")
+    if ", ".join(figs["start_order"][:-1]) not in memo_text:
+        bad.append("golden memo does not name the services that breached in their start order")
     for row in memo.tables[0].rows[1:]:
         c = [x.text for x in row.cells]
         if c[2] != figs["sli"][c[0]] or c[3] != figs["budget"][c[0]]:
             bad.append("golden memo row %s: %s" % (c[0], c))
+    start = [[x.text for x in row.cells] for row in memo.tables[1].rows[1:]]
+    if [c[1] for c in start] != figs["start_order"] or any(c[2] != figs["share_pct"][c[1]] for c in start):
+        bad.append("golden memo start table %s" % start)
+    for want in (figs["over_share_pct"] + "%", figs["beyond_budget"]) + tuple(figs["incident_minutes_text"]):
+        if want not in memo_text:
+            bad.append("golden memo does not carry %s" % want)
     if not memo.inline_shapes:
         bad.append("golden memo carries no chart")
     return bad

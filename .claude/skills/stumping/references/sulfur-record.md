@@ -13,6 +13,7 @@ then, once known, the review result.
 
 | Task | Date | Subdomain | Objective | Shape | Deep-step family | Run 1 | Run 1 class | Run 2 | Run 2 class | Avg | CF avg | Verdict | Review |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| task6 a6 | 2026-11-08 | missing data, censoring and measurement error | descriptive-distribution | 14 | own (an inclusion probability inherited from the trace's edge request) | 73 | method shortcut | 83 | on the call (ask loss: misread of 5.2's naming clock) | 78.0 | 86.5 | FIX_ASKS | |
 
 ## Lessons
 

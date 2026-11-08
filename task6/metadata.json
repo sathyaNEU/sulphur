@@ -12,7 +12,12 @@
  "distractor_files": [
   "target/capacity_review_2026-Q4.md",
   "target/app_store_reviews_2026-H2.xlsx",
-  "target/lb_target_group_requests_2026-H1.csv"
+  "target/lb_target_group_requests_2026-H1.csv",
+  "target/production_deployments_2026.json",
+  "target/cluster_rollout_history_2026.csv",
+  "target/cloud_billing_2026.csv",
+  "target/cloud_invoices_2026.csv",
+  "target/cloud_resources_2026.csv"
  ],
  "rows": [
   [

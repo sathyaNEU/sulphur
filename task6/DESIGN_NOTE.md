@@ -140,7 +140,7 @@ at the share of the edge service whose request started its trace, and journey-se
 availability lookups, are kept at a fraction of seat-map's and booking's share; weighted by each trace's own edge keep
 share, partner-gateway is at 2.9 and the review names five services.
 
-## Three rules
+## Deep reasoning
 
 - **Task type:** general-statistics-data-science `missing-data-censoring-measurement-error`, which serves Descriptive &
   Distribution Analysis: a population share estimated from records missing by design (the requests the store did not
@@ -155,10 +155,11 @@ share, partner-gateway is at 2.9 and the review names five services.
   downstream unit whose observation rides on another unit's sampling decision, so the sentence stops making sense.
 - **Layer 1:** the balancer's two exports (the old billing tool's layout to June with CRLF lines and processed gigabytes,
   the FinOps export from July with renamed target groups, bytes, LCUs and 5xx counts), the trace export's re-sent
-  batches, its kept health probes, client spans beside server spans, nanosecond epoch clocks, and on the asks' rows the
-  incident tool in UTC against the status page in Lisbon time, USD marketplace lines at each invoice's rate, VAT and the
-  support plan, team tags before the retags and the delivery pipeline's staging and failed attempts; each is produced by
-  the platform's own systems, none is placed to be caught, and none carries the call.
+  batches, its kept health probes, client spans beside server spans, nanosecond epoch clocks, and on the incident ask's
+  rows the incident tool in UTC against the status page in Lisbon time and the tool's administrative close; the review
+  folder's change and cost records (staging and failed attempts, USD marketplace lines, VAT, the support plan, team tags
+  before the retags) now sit unread beside them; each is produced by the platform's own systems, none is placed to be
+  caught, and none carries the call.
 - **Layer 2:** estimation_fit, a population share from a sample with unequal inclusion probabilities, where the sampling
   unit is the trace and its probability belongs to the edge service that started it; the choice that flips the call is
   which unit's keep share weights a downstream service's span.
@@ -189,6 +190,33 @@ share, partner-gateway is at 2.9 and the review names five services.
   services, and the capacity review and the app reviews are context the solution never reads.
 - **No certified replay:** the method is not recovered by reproducing certified figures; no shipped table prints an SLI
   or a keep share, and the balancer's 5xx counts tie under every weighting, so they confirm no route over another.
+- **Chain:** (1) the kept spans are a sample of December's requests, thinned in the busy hours, so each kept span needs
+  a weight from the balancer's hourly counts; (2) the store keeps or drops a trace whole where it starts, so an internal
+  service's span was kept at the share of the edge service whose request began its trace, not at its own; (3)
+  partner-gateway's kept spans come a third each from journey-search's, seat-map's and booking's traces, while
+  journey-search's thinly kept searches make 85 per cent of its requests and carry its slow availability lookups; (4)
+  counted at each trace's edge keep share, partner-gateway is at 2.9 against its 2.0 budget, the review names five
+  services and partner-gateway, with 40 per cent of all the services' over-threshold December requests, starts first.
+- **Judgment:** the inclusion probability of a cluster sample: which unit's keep share weights a downstream span (the
+  trace's edge request, recovered hour by hour from that edge service's balancer count over its kept root spans),
+  justified from the whole traces and the flat kept-root counts, never from a filed sentence.
+- **One-fact test:** no sentence in the pack says the store samples whole traces at the edge; told it, a run still has to
+  see that it moves a downstream service's weights, link 126,727 internal spans to their roots, recover each edge
+  service's hourly keep share from its balancer count over its kept roots and re-derive every downstream SLI, while the
+  default path's own checks (every hourly count rebuilt, the 5xx counts tied) keep passing without it.
+- **No replay:** no shipped figure is an SLI, a keep share, a share of over-threshold requests or a ranking; the
+  balancer's 5xx counts tie under every weighting, so nothing certifies the golden's route over the default path's.
+- **Pinned:** PR-SLO-3 2.1 to 2.4, 3.1, 3.2 and section 4 file the population, outcome, unit, window, comparison,
+  thresholds and budgets; the prompt files the start order's key (most requests over the latency threshold in
+  December), the shares' base (all the services' over-threshold December requests), the incident union (a minute in
+  which an incident named at least one of the services) and the rounding once at the end; every standing estimator
+  lands every graded figure in the golden's bin (checks.py, SF10, SF11, SF15).
+- **Run forecast:** a run that applies the field's correction stops at a method shortcut (each service's own spans
+  post-stratified by its own hour) and files four services, places first, 62 per cent and 160,000; a run that links the
+  traces lands the call and every coupled ask, and loses the incident minutes only if it reads the export's final
+  service lists from the declaration (5.2 names the service at the time).
+- **Strategy label:** WORKS (Banking 06, F7 population selection: who you can observe; here the selection belongs to
+  another unit, the edge request that began each trace, and is rebuilt hour by hour from that unit's own counts).
 - **Lesson:** in a trace sample the sampling unit is the trace, so a downstream service's spans carry the inclusion
   probability of whichever edge service started each trace, and post-stratifying a service's own spans by its own count
   treats a cluster sample as a simple random sample of that service's requests; no build on file prices an inclusion
@@ -249,6 +277,8 @@ share, partner-gateway is at 2.9 and the review names five services.
 | SF12 | exceeded | strictly over the threshold | at or over: identical (durations are continuous) | 2.1; same call asserted |
 | SF13 | 404 responses | requests like any other | dropped: same call | 2.4; same call asserted |
 | SF14 | a retried call | each try is a request the service handled | first tries only: same call | 2.2; same call asserted |
+| SF15 | the asks' rounding | shares, the share served together and the requests beyond budget worked from the unrounded weighted spans, rounded once | from the one-decimal SLIs: journey-search's share 15 against 16, every other ask figure the same | the prompt's closing clause ("each rounded once at the end"); asserted |
+| SF16 | a minute in which an incident named one of the five | from the moment incident_timeline_2026.csv names the service | the export's final service list read from the declaration: 1,571 and 1,067 against 1,545 and 907 | 5.2 ("named it at the time"); asserted as the incident ask's own judgment |
 
 ## Ladder
 
@@ -277,7 +307,7 @@ budget is 1.32 (journey-search); partner-gateway sits 0.28 of its budget under i
 | 7 | Weighting | each span at its trace's edge keep share | the decisive step, forced by the whole traces (C4: R3 1.44 against 2.90) |
 | 8 | Window length | December, 31 days | filed 3.1 |
 | 9 | Boundary inclusivity | strictly over the threshold | filed 2.1; SF12, C1 |
-| 10 | Rounding path | the SLI to one decimal, compared with the budget | prompt; SF8, C1 |
+| 10 | Rounding path | the SLI to one decimal, compared with the budget; the asks rounded once at the end | prompt; SF8, SF15, C1 |
 | 11 | Tie-break | none needed | C1, no service within 0.3 of its budget |
 | 12 | Maturity and censoring | none: the month is closed | C1 |
 | 13 | Order of operations | dedupe, drop probes, link roots, weight, sum | C1, each order gives the same weights |
@@ -311,83 +341,74 @@ services breach. The readings that differ violate a quotable sentence (SF1 again
 
 ## Ask sheet
 
-Three asks, 60 figures, beside the call's own figures (each service's SLI, budget and verdict, and the chart). All three
-are the annual reliability review's own items (PR-SLO-3 section 5), wanted from the same review folder; none reads a row
-the call reads (the trace export and the balancer's July to December counts carry no ask device). Each ask rides one
-reconstruction across a second system that no sentence states, with mass in every cell, over the hazards a careful
-solver handles.
+Re-sited at the rubric repair of 2026-11-08 (`## Tried and rejected` carries what the runs did to the old layer). Five
+asks, fourteen figures, beside the call's own figures (each service's SLI, budget and verdict, and the chart). Four read
+the SLI's own numerator, each service's over-threshold December requests (its weighted kept spans over its threshold,
+the SLI times its December requests), across the services the call names; the fifth reads the incident record over the
+same services. So a run off the deep step files a different value in every cell but one, and the run on it keeps them
+unless it misreads the incident clock. The pack is the shipped cut, unchanged (target.zip md5 596e59c5): the asks are
+re-sited in the prompt, the goldens and the answer blocks only.
 
-**Ask A: each service's releases and rollbacks in 2026** (20 figures, counts).
-- H18 home: the review's change record beside the SLI (section 5.1); use: the reliability engineers' briefing.
-- Files and columns: `production_deployments_2026.json` (service, environment, version, commit, finished_at, outcome),
-  `cluster_rollout_history_2026.csv` (deployment, revision, image, changed_at_utc, changed_by), the catalogue.
-- Primary device (D4 with D7, absence evidenced in a file no habitual join reaches, the true key elsewhere): on-call
-  engineers undo bad releases by hand and apply hotfix images by hand during incidents; neither passes through the
-  delivery pipeline, so neither is in its log, and the cluster's rollout history, which holds every change, tags images
-  by short commit hash, never by version. A manual undo is a rollback only if the image it restores was first released
-  before the running one, which needs each hash mapped to its version through the pipeline's `commit` field; a hotfix
-  hash no pipeline record carries is a new version reaching production, a release. Every service has at least one
-  manual undo and one hotfix, so all 20 figures move.
-- Hazards: staging deploys, failed attempts and their retries, config redeploys of the running version, a bad version
-  re-shipped after its config is fixed (neither), pipeline deploys present in both files, and rollout restarts that
-  re-apply the running image (neither).
-- Pin test: the asking sentence pins the service, the year and the two counts; section 5.1 defines both in terms of
-  production's running version; no pin names the rollout history, a hash, an undo or a hotfix.
+**Ask 1: the order the engineers start in** (5 figures, the services that ran over by their over-threshold December
+requests, most first).
+- Reads: the deep step's output directly; golden partner-gateway (438,700), places (336,200), journey-search (171,300),
+  seat-map (25,800), notifications (8,400); the default path files places, journey-search, seat-map and notifications,
+  every position different.
+- Second judgment: none of its own; it is coupled to the call. Landed run's risk: none (the closest pair, partner-gateway
+  and places, is 100,000 apart under every standing estimator).
+- Files and columns: the trace export (trace_id, span_id, parent_span_id, service_name, span_kind, start and end), the
+  balancer's July to December export (TimePeriodStart, TargetGroupName, RequestCount), the catalogue, PR-SLO-3 section 4.
+- Pin test: the prompt names the key (the most requests over the latency threshold in December); it names nothing about
+  the weighting.
 
-**Ask B: each service's cloud cost in each half of 2026** (20 figures, nearest euro).
-- H18 home: section 5.3's cost line; use: the programme's cost per engineer-month set against each service's spend.
-- Files and columns: `cloud_billing_2026.csv` (usage_date, invoice_id, resource_id, resource_tags, line_type,
-  currency, cost), `cloud_invoices_2026.csv` (invoice_id, usd_eur_rate), `cloud_resources_2026.csv` (resource_id,
-  deleted, replaces, tags_now), the catalogue's cost and team tags.
-- Primary device (D7, a prior-id chain): resources replaced during the year ran under the team's tag until their
-  replacement took over, and every team tag covers two or three services; only the replacement, which names the old
-  resource in `replaces`, carries the service tag. Each service has one resource replaced in each half, so every cell
-  carries team-tagged lines.
-- Hazards: marketplace software billed in US dollars at each invoice's own rate, VAT, the shared support plan,
-  sustained-use credits on compute.
-- Pin test: section 5.3 pins the charge, the currency, credits, VAT, shared costs and dating by the day the resource
-  ran; no pin names a replaced resource or a chain.
+**Ask 2: each named service's share of all the services' over-threshold December requests** (5 figures, whole per
+cent).
+- Golden 40, 31, 16, 2 and 1; the default path 25 (partner-gateway, outside its list), 39, 20, 3 and 1: it keeps
+  notifications only. Every standing estimator lands each share in its bin (the closest, seat-map at 2.37, is 0.12 from
+  a line); the one-decimal SLIs move journey-search to 15 (SF15, closed by the prompt's rounding clause).
 
-**Ask C: each service's customer-facing incident minutes in each half of 2026** (20 figures, nearest minute).
-- H18 home: section 5.2's incident line; use: the engineers' first-week reading list.
-- Files and columns: `incidents_2026.csv` (incident_id, declared_at_utc, services), `incident_timeline_2026.csv`
-  (incident_id, at_utc, event, detail), `status_page_history_2026.json` (posts' components and created_at, components'
-  status changes, Lisbon time), the catalogue's status page components.
-- Primary device (a state rebuilt from an event log): the export's `services` column is the incident's list when it
-  was closed; the responders name services one by one after the declaration, minutes to most of an hour apart, and only
-  the timeline says when; section 5.2 counts the minutes in which a customer-facing incident named the service. Every
-  service has a posted incident in each half, so every cell moves.
-- Second reconstruction on the same cells: the incident tool and the status page share no key, so a post is matched
-  to its incident by component and time.
-- Hazards: the status page's Lisbon clock against the tool's UTC (summer time in the first half's end and the second's
-  start), the tool's administrative close after the review against the page's return to operational, overlapping
-  incidents on one service counted once.
-- Pin test: section 5.2 pins customer-facing, the start, the end and counting once; section 5.4 pins the halves in
-  Lisbon time; no pin names the timeline or a service's naming time.
+**Ask 3: the share the services that ran over served together** (1 figure): golden 90; the default path 62.
 
-**Main population, zero counts:** the trace export and the balancer's July to December counts carry no ask device
-and no ask hazard; the asks' records (deployments, rollout history, billing, invoices, resources, incidents, timeline,
-status page) are files the call never reads (asserted, `SEP` in `checks.py`).
+**Ask 4: how many more over-threshold requests than their budgets allow** (1 figure, nearest ten thousand): golden
+300,000 (300,831; 296,700 hour-calibrated); the default path 160,000 (164,856).
 
-**Referee:** none arbitrates a device; the pipeline's staging and failed attempts, the invoices' rates and the
-status page's posts tie under every handling.
+**Ask 5: the minutes in each half of 2026 in which a customer-facing incident named at least one of them** (2 figures).
+- Golden 1,545 and 907 (sections 5.2 and 5.4: each incident matched to its status page post by component and time, its
+  end the last of its components back to operational, each service from the moment the timeline names it, each minute
+  once); the default path's four services give 1,518 and 755.
+- Second judgment (the ask's own): the export's services column is the incident's list at its close; 5.2 counts a
+  service from the minute an incident named it, which only the timeline gives. Read from the declaration, the final
+  lists give 1,571 and 1,067 (SF16).
+- Files and columns: incidents_2026.csv, incident_timeline_2026.csv (the pack's 10 to 20 page CSV), the status page
+  history, the catalogue's components.
+- Mess on the path: the status page's Lisbon clock against the tool's UTC, the tool's administrative close after the
+  review, overlapping incidents counted once; every careful run handles them the same way.
 
-| Path (cracker = lands the call, runs the battery, executes filed documents) | Kept of 20 | Verdict |
-|---|---|---|
-| Ask A, cracker: section 5.1 on the delivery pipeline's log | 0 of 20 | miss |
-| Ask B, cracker: section 5.3 by tag, team-tagged lines to no service | 0 of 20 | miss |
-| Ask B, cracker variant: team-tagged lines shared evenly in the team | 0 of 20 | miss |
-| Ask C, cracker: section 5.2 with the export's services named from the declaration | 0 of 20 | miss |
-| Ask A, one crack: the rollout history alone, its cutover revision a release | 7 of 20 | miss |
+**Main population:** the call's rows carry no ask device; the asks read the call's own weighted spans. The review
+folder's change and cost records (production_deployments_2026.json, cluster_rollout_history_2026.csv,
+cloud_billing_2026.csv, cloud_invoices_2026.csv, cloud_resources_2026.csv) are unread distractors now, beside the
+capacity review, the app reviews and the January to June balancer export (`checks.py` deletes each and asserts the call
+and every ask unchanged).
 
-The cracker keeps none of the 60 ask figures. A response that finds one ask's reconstruction keeps that ask's 20 (a
-third of the ask weight); that is the full includer's ground on one ask, not the reflex.
+**Referee:** none arbitrates; the balancer's 5xx counts tie under every weighting.
 
-Mirror leakage: 0.0 per cent of ask weight (the mirror takes the cracker's ask paths off the call).
+| Path (cracker = lands the call, runs the battery, executes filed documents) | Kept of 14 | Order | Shares | Together | Beyond | Minutes | Verdict |
+|---|---|---|---|---|---|---|---|
+| Landed run (cracker): the incident tool's final service lists from the declaration | 12 of 14 | 5 of 5 | 5 of 5 | 1 | 1 | 0 of 2 | miss |
+| Landed run: PR-SLO-3 5.2 read in full, each service from its naming time | 14 of 14 | 5 of 5 | 5 of 5 | 1 | 1 | 2 of 2 | keeps |
+| Shallow run (default path): each service's own spans by its own hour | 1 of 14 | 0 of 5 | 1 of 5 | 0 | 0 | 0 of 2 | miss |
+| Rung 2: an hour-of-day pooling | 1 of 14 | 0 of 5 | 1 of 5 | 0 | 0 | 0 of 2 | miss |
+| Rung 1: a day weighting | 0 of 14 | 0 of 5 | 0 of 5 | 0 | 0 | 0 of 2 | miss |
+| Rung 0: the kept spans' own share | 0 of 14 | 0 of 5 | 0 of 5 | 0 | 0 | 0 of 2 | miss |
 
-Pair ceiling: 28.5 (cracker on the call 45.0, mirror off it 12.0); with one ask cracked by both, 46.8.
+Shallow keep: 7.1 per cent of ask weight (one figure of fourteen, notifications' share).
 
-Measured by: generator/ceiling.py, run on the cut pack.
+Pair ceiling: 58.0 (the landed run reading 5.2 in full at 100.0, the shallow run at 15.9, on 38, 7 and 55); 54.0 with the
+landed run on the export's final service lists (92.1). Above the paper target of 50: the landed run has no second
+judgment left on the latency asks in the shipped pack, so its only ask loss is the incident clock. The measured layer
+before the repair was 78.0 (runs 73 and 83).
+
+Measured by: generator/ceiling.py, run on the shipped pack.
 
 ## Layer 1 inventory
 
@@ -404,9 +425,9 @@ unchanged under its natural mishandling).
 | Nanosecond epoch clock against a Lisbon review | the store's clock, the standard's window | Lisbon offset applied in December | SF5 |
 | The balancer's two exports | the old billing tool to June (CRLF, processed gigabytes), the FinOps metrics export from July (renamed target groups, bytes, LCUs, 5xx counts) | the January to June file read for December, or the old target group names joined | the call reads December from the July to December export through the catalogue's July names (SEP) |
 
-On the asks' rows, the delivery pipeline's staging and failed attempts and config redeploys, the rollout history's
-restarts, USD marketplace lines, VAT, the support plan, the status page's Lisbon clock and the incident tool's
-administrative close are hazards each ask's golden handles (the ask sheet).
+On the incident ask's rows, the status page's Lisbon clock and the incident tool's administrative close are hazards its
+golden handles (the ask sheet); the change and cost records' staging and failed attempts, config redeploys, restarts,
+USD marketplace lines, VAT and the support plan sit in files no ask reads.
 
 ## Pre-ship check
 
@@ -437,6 +458,40 @@ administrative close are hazards each ask's golden handles (the ask sheet).
   June distractor's deletion test) closed by the assertion above.
 - **Container.** Producer metadata scrubbed in the pack and the goldens (scrub audit clean); the parquet carries no
   writer name.
+- **Rubric repair, 2026-11-08** (platform round 1: runs 73 and 83, average 78; runs/triage.md). The pack is the shipped
+  cut, untouched (target.zip md5 596e59c5; `build.py --golden-only` unpacks it and checks every member, because a rebuild
+  under later numpy and scipy moves a handful of rows in the span export and the July to December balancer file). The
+  prompt's ask sentences, the goldens and the answer blocks changed; the question sentence and the Final Recommendation
+  did not. Gates on the repaired build: generator checks 0 failures; verify PASS; goldens rebuilt byte-identical;
+  figures_check 98 of 98; voice-check exit 0; leak.py REVIEW on the four standing lines ruled above, the prompt sweep
+  clean; precut 72 checks, 1 FAIL, the pair ceiling at 58.0 against its paper target of 50 (the ask sheet says why);
+  freeze.py rubric mode FAIL on one item, the Critical Components numbers, because components 2 and 3 were replaced
+  under supplemental-stumping Part 6 (every main-call figure, the stump, the card, the ladder, the default path and the
+  call sentence unchanged); guard.py validate clean, heart BLOCK on three draw-level rows that predate the repair,
+  re-read after the last pull (the card's differentiation lines still name the Mark baseline by its old task numbers,
+  so the two structural tests find none; the organisation family repeats task1).
+- **Distractors after the repair.** Beside the three above, the review folder's change and cost records
+  (`production_deployments_2026.json`, `cluster_rollout_history_2026.csv`, `cloud_billing_2026.csv`,
+  `cloud_invoices_2026.csv`, `cloud_resources_2026.csv`) are no longer read by any ask; PR-SLO-3 section 5 still names
+  them as what the annual review reports, so they read as the folder's own records. The two large messy CSVs the client
+  asks for stay in use: the July to December balancer export (44,160 rows, the call) and the incident timeline (535
+  rows, the incident ask).
+
+## Prompt contract
+
+What a voice rewrite of `prompt.txt` may not drop or change:
+- The question, word for word: "How many of our internal services ran over their 2026 latency error budget, and which
+  are they?"
+- The decision: each service that ran over gets a reliability engineer for the first half of 2027.
+- The start order's key: the one that served the most requests over its latency threshold in December starts first.
+- reliability_review_2026.docx: the services named in that order, each with its share of all our services'
+  over-threshold December requests; every service's SLI beside its budget; a chart of each SLI against its own budget
+  line; the share they served together; how many more over-threshold requests than their budgets allow; the minutes of
+  each half of 2026 in which a customer-facing incident named at least one of them.
+- service_sli_2026.csv: a row per service with its SLI, its budget and whether it ran over.
+- Rounding: SLIs and budgets per cents to one decimal, shares whole per cents, minutes whole, the requests beyond budget
+  to the nearest ten thousand, each rounded once at the end.
+- No method, weighting, sampling or trace word, no warning, no count of services.
 
 ## Tried and rejected
 
@@ -511,3 +566,24 @@ administrative close are hazards each ask's golden handles (the ask sheet).
   removed from the call graph.
 - Partner-gateway's seat inventory read set to a target slow share (2026-11-07): 0.25 per cent at 1,000 ms forced a 340 ms
   median, which alone put 19 per cent of seat maps over their 500 ms line; set to a fixed 85 ms read.
+- Ask A, each service's releases and rollbacks in 2026, dropped at the rubric repair on 2026-11-08: both platform runs
+  rebuilt production's history from the pipeline log and the rollout history and filed every figure the rubric tested
+  (12 points, run 1 off the call included); the reconstruction is part of a frontier run's battery and no figure reads
+  the SLI, so it could not be re-sited downstream of the deep step.
+- Ask B, each service's cloud cost by half, dropped at the rubric repair on 2026-11-08: both runs followed the
+  replacement links, converted US dollars at each invoice's rate and netted credits, filing every tested figure (19
+  points each); no cost figure reads the SLI.
+- Ask C as every service's customer-facing incident minutes by half, replaced on 2026-11-08 by the minutes in which an
+  incident named at least one of the services that ran over: run 1, off the call, read 5.2's naming clock and kept all
+  17 points while run 2, on the call, read the export's final lists from the declaration and lost them; per service the
+  cells of services both paths name are free to a careful run off the call, while the union over the call's services
+  moves with the call (1,545 and 907 against the default path's 1,518 and 755) and keeps the naming clock as the ask's
+  own judgment (1,571 and 1,067 on the final lists).
+- Critical components 2 and 3 (journey-search, places, seat-map and notifications at 1.3, 1.5, 1.5 and 1.6; fares,
+  tickets, accounts, booking and payments at 0.6, 0.6, 0.7, 0.4 and 0.3), replaced on 2026-11-08: each is an edge or
+  single-caller service the default path reproduces exactly, so run 1 kept their 14 points (rubric rows 3, 4 and 20) off
+  the call; replaced by the trace mix behind partner-gateway's weights and the start-order and programme figures.
+- Every service's share of the over-threshold requests as a column of service_sli_2026.csv, set aside during the
+  2026-11-08 repair: booking, payments and tickets round to 0 and notifications to 1 per cent on every rung, so four of
+  ten cells are free to the default path (a shallow keep of 21 per cent and a paper pair of 61.8); the shares sit in the
+  review for the services the call names, where the default path keeps one of five.
