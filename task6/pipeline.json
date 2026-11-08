@@ -23,9 +23,11 @@
   "nearest": "mark474 v2 lineage, 0.10"
  },
  "judge": {
-  "verdict": "",
-  "disposition": "",
-  "report": ""
+  "verdict": "NOT_DETERMINISTIC on ask 5 only (pre-fix prompt); asks 1 to 4, the CSV and the call forced, every figure recomputed",
+  "disposition": "SEND_BACK narrow, closed by the prompt pins (SF16 to SF18); final APPROVE on the shipped prompt, read literally, no second thread",
+  "gate_h": "domain pass, layers pass, decisive step analytical, chain 4, one-fact borderline",
+  "report": "task6/determinism_check_report.md",
+  "date": "2026-11-08"
  },
  "returned": [
   {
@@ -47,7 +49,7 @@
    "repair": "rubric",
    "what": "asks re-sited onto the SLI's numerator (start order, the five's shares, the share served together, requests beyond budget) and the incident minutes onto the union over the call's services; releases, rollbacks and cost dropped; critical components 2 and 3 replaced by chain links; pack unchanged",
    "freeze": "rubric mode FAIL on one item, the Critical Components numbers (Part 6 replacement); every main-call figure unchanged",
-   "commit": ""
+   "commit": "ca72374, 2e77f6f"
   }
  ],
  "resume": "uploaded prompt.txt (the author re-voices it against DESIGN_NOTE ## Prompt contract), the unchanged target.zip and the new answer blocks; then new platform runs and /triage-runs task6",
