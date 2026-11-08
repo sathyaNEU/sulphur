@@ -6,8 +6,8 @@
  "stage": 5,
  "stage_name": "ready",
  "updated": "2026-11-08",
- "stump": "A strong analyst who finds the Sallow Ridge clearing tests it against the wells and the county wells under recent clearings, sees no rise where the wellhead model's travel time or one lag fitted to the wells' record says it should already be, sets the clearing's effect at nil and files the 2031 cycle; only each parcel's delay through its own unsaturated thickness, read from the county's matured conversions (0.132 years a foot), puts EP-01 at 10 in 2031 and files the 2027 cycle.",
- "architecture": 4,
+ "stump": "A strong analyst who sees the test's Theis forecast overshoot the Mill Street record recalibrates the leakage against the nearest network well CV-07 (or the wells' own pre-pumping levels, or a fitted trend) and files 1,250 gpm, every schedule under 3.5 ft at OW-S; only the natural level carried from CV-02 and CV-11 beyond the cone files 1,000 gpm.",
+ "architecture": 3,
  "loops": 0,
  "precut": {
   "exit": 0,
@@ -16,19 +16,18 @@
  },
  "leak": {
   "leak_py": "REVIEW, no LEAK (2026-11-08, --asof 2026-11-06)",
-  "reader": "2026-11-08 isolated reader (Sonnet, medium): no step named, no ranking or helper file, Q6 analytical; both REVIEW lines harmless"
+  "reader": "2026-11-08 isolated reader (Sonnet, medium): no step named, no ranking or helper file, Q6 analytical; the plate's caption removed"
  },
  "duplicate_check": {
-  "heart": "WARN 2026-11-08 (first name Patricia in an older build); forum redrawn to council_or_assembly after task4 v4",
-  "surface": "1 pair promoted (task2, surface 0.100, back to back, different domains), people WARN only"
+  "heart": "PASS 2026-11-08",
+  "surface": "exit 0, 1 pair promoted (surface similarity), names WARN on 'Little Ossey' and 'Sep Oct' (not personas)"
  },
  "judge": {
-  "pass1": "DETERMINISTIC, FIX_NOW optional (2026-11-08): asks 6 and 8 thin; fixed (ridge arrivals clustered at 2030.85-2030.92, Well 7 ridge acreage up; checks.py R5)",
-  "report": "task3/determinism_check_report.md",
-  "pass2": "DETERMINISTIC, APPROVE (2026-11-08); wording-only fixes applied (arrival \"around the start of 2031\", the root-zone weighting qualified, the plan states 10 mg/L as N = 44.27 as nitrate)",
-  "report_pass2": "task3/determinism_check_report_pass2.md",
-  "gate_g": "forecasting on honest data, no surface read, no sole data defect",
-  "gate_h": "domain pass, layers pass, decisive_step analytical, chain 5 inferences, no one-fact rescue"
+  "verdict": "DETERMINISTIC",
+  "disposition": "FIX_NOW applied (plate re-cut, per-well fits, the OW-S-alone and DW-17 closures), re-judged once: APPROVE",
+  "gate_g": "method_or_model_selection, analytical_non_defect, surface_read_dependency no, sole_data_defect no",
+  "gate_h": "domain pass, layers pass, decisive_step analytical, chain 5 inferences",
+  "report": "task3/determinism_check_report.md"
  },
  "returned": [
   {
@@ -91,7 +90,7 @@
    "commit": ""
   }
  ],
- "resume": "upload prompt.txt and target.zip to the platform; then /triage-runs task3 with both runs",
+ "resume": "rolled back to architecture 3 (Reidel Road) at the author's word; READY as at ad49abe. Both architecture 3 platform runs (runs/run1.md, run2.md, triage.md) landed the call; architecture 4 (Corlinden) is in git history at 0931661",
  "approved": null,
  "delivered": "2026-11-07",
  "portal": "landed by one response (R1 2,200 t at 100 per cent, R2 2,600 t at 70 per cent), reported 2026-11-07",
@@ -99,9 +98,7 @@
  "portal_status": "",
  "portal_status_date": "",
  "wave": "wave 6 (new), seed FC36 (world, decision and quantity kept; the seed's planning-tool ranking, usage-model back-tests and route-register field reading not shipped)",
- "guard": {
-  "check": "PASS 2026-11-08 (v4, differentiated against mark181, mark166, mark451, mark234 and task3 v1)"
- },
+ "guard": "PASS at registration (2026-10-18T14:10:39Z) after waiting out bans on honest keys; the forum redrawn in the build to council_or_assembly when line_manager_or_team was banned against task247",
  "stage3": {
   "generator_checks": "64 PASS",
   "verify": "PASS",
@@ -144,6 +141,10 @@
   {
    "date": "2026-11-08",
    "event": "READY: architecture 3, the district will permit the 1,000 gpm schedule (8 ft at OW-S in 2046 against 9 ft); judge DETERMINISTIC, APPROVE after one FIX_NOW"
+  },
+  {
+   "date": "2026-11-08",
+   "event": "rolled back at the author's word to architecture 3 (Reidel Road) exactly as READY at ad49abe: prompt, pack (target.zip identical to the author's upload), goldens, submission, generator and card; architecture 4 (Corlinden nitrate plant) stays in git history at 0931661; the platform runs under runs/ kept"
   }
  ],
  "migrated_from": {
@@ -162,27 +163,21 @@
   {
    "architecture": 3,
    "drawn": "2026-11-08",
-   "fate": "spent 2026-11-08 on the platform: both runs fitted a leaky strip with the plate's walls to the test, took CV-02 and CV-11 beyond the cone as the natural-level controls, and landed Schedule C and every ask"
-  },
-  {
-   "architecture": 4,
-   "drawn": "2026-11-08",
    "fate": null
   }
  ],
  "subdomain": "hydrology-flood-frequency",
- "call": "the 2027 cycle (EP-01 first at 10 mg/L in 2031, 12 in 2034, Well 7 highest at 16)",
+ "call": "The district will permit the 1,000 gpm schedule: its greatest monthly drawdown at OW-S in 2046 is 8 ft against the 9 ft limit, where 1,250 gpm reaches 10 ft",
  "gates": {
-  "checks": "67 of 67",
+  "checks": "132 of 132",
   "verify": "PASS",
-  "rebuild": "byte-identical",
-  "figures_check": "52 of 52",
-  "leak_py": "REVIEW, no LEAK (--asof 2026-11-06)",
-  "scrub": "target and golden clean",
-  "voice": "PASS, one WARN (flow-weighted, the plan's own term)",
-  "heart": "WARN (first name Patricia in an older build)",
-  "surface": "1 pair promoted (task2, surface 0.100), people WARN only",
-  "ceiling": "pair 42.2 (49.1 with acres-only counted kept), shallow keep 0"
+  "byte_identical": true,
+  "figures_check": "67 of 67",
+  "precut": "72 checks, 0 FAIL",
+  "voice_check": "PASS (WARN shell quota)",
+  "pair_ceiling": 46.8,
+  "shallow_keep": 0.0,
+  "target_zip_sha256": "109b4ebf9580c12184d4fcbe4cc2e22294043eca9a7fb9a01d7a943a47051699"
  },
  "runs": {
   "run1": null,
@@ -198,13 +193,6 @@
   "history": [
    {
     "architecture": 2,
-    "date": "2026-11-08",
-    "run1": "on the golden",
-    "run2": "on the golden",
-    "triage": "REDESIGN"
-   },
-   {
-    "architecture": 3,
     "date": "2026-11-08",
     "run1": "on the golden",
     "run2": "on the golden",

@@ -1,107 +1,104 @@
 {
   "task": "task3",
   "project": "sulfur",
-  "architecture": "v4",
+  "architecture": "v3",
   "drawn": "2026-11-08",
-  "slot_note": "re-root after the platform landed architecture 3 (both runs on the golden at every ask); one architecture per world, so a new world (a sand-plain well field in central Wisconsin), dataset (nitrate laboratory results, a county groundwater network under its parcels' land-cover histories, a wellhead protection model's parcel table) and shell (docx, xlsx and png, a when-question)",
+  "slot_note": "re-root after the platform landed architecture 2 (both runs on the golden); one architecture per world, so a new world (a buried-valley aquifer in Indiana), dataset (aquifer-test loggers and a 2005 to 2026 water-level record) and shell (docx and xlsx, a which-question)",
   "domain": "physical-environmental-sciences",
   "subdomain": "hydrology-flood-frequency",
   "client_domain": "physical-environmental-sciences",
-  "niche": "a city water utility's nitrate removal plant under the 10 mg/L nitrate-N standard at its well field's entry point: whether the plant must go into the state loan program's 2027 cycle or can wait for the 2031 cycle, from the blended nitrate the well field will deliver from 2027 to 2040 (Sulfur task type: physical-model calibration and data assimilation; spatiotemporal exposure and source apportionment)",
+  "niche": "a city utility's groundwater withdrawal permit under a conservancy district rule capping the drawdown at a sentinel well through a twenty-year term: which of four requested pumping rates for a new well field in a buried-valley aquifer keeps the 2046 drawdown within the limit (Sulfur task type: inverse problems, physical-model calibration and uncertainty propagation)",
   "objective": "forecasting",
   "shape": "other",
-  "decision_type": "date_or_period",
-  "answer_unit": "date_or_period",
-  "answer": "Apply in the 2027 cycle: the blended entry-point nitrate first reaches 10 mg/L as N in 2031 and is about 12 mg/L in 2034, three years before a plant funded in 2031 could enter service, because the ridge timber cleared for irrigated vegetables from 2017 to 2021 has not yet leached through 57 to 94 ft of sand to the water table.",
+  "decision_type": "pick_one_of_n",
+  "answer_unit": "named_option",
+  "answer": "File the 1,000 gpm schedule: its greatest monthly drawdown at OW-S in 2046 is 8 ft against the 9 ft limit, where 1,250 gpm reaches 10 ft.",
   "answer_source": "submission.md block 1 and generator/figures.json call",
   "gap": [
-    "time",
-    "population"
+    "population",
+    "time"
   ],
   "pattern": [
     "none"
   ],
   "generators": [
-    "G12",
-    "G14",
-    "G13"
+    "G13",
+    "G16"
   ],
-  "gate_g": "decomposition_attribution",
-  "calibration_form": "censored_or_lagged_release",
-  "stump_strategy": "maturity_censoring",
+  "gate_g": "method_or_model_selection",
+  "calibration_form": "existing_book_actuals",
+  "stump_strategy": "forecast_method_backtest",
   "decisive_rule_filed": false,
   "official_decoy": false,
   "validated_decoy": false,
   "context_artifact": "monitoring_export",
   "stump_class": "analytical",
-  "analyst_test": "With the lab results converted to nitrate-N, the county lab's reporting limits and the re-keyed duplicates sorted, the easy route reads each well's annual means (flat near 7 since 2019), finds the ridge clearing in the protection area's land cover, expects its leachate over the wellhead model's groundwater travel time (one to three years) or over one lag fitted to the wells' own history (about four and a half years), sees no rise at Wells 6 and 7 or at the county wells under recent clearings, sets the clearing's effect near nil and files the 2031 cycle with EP-01 near 5.5 mg/L through 2040; it never times each parcel's leachate through its own unsaturated thickness, which the county's older conversions show stepping up later the deeper the water table.",
-  "domain_test": "The deciding quantity is a well field's nitrate over the next decade, worked the way groundwater-quality forecasting works it: nitrate leached under each parcel's land cover, carried down through the unsaturated sand at a pace set by its moisture and its recharge, then through the aquifer to the wells over the groundwater travel time, and mixed at each well in proportion to each parcel's recharge; with a clinic's or a retailer's nouns there is no water table, no unsaturated zone and no recharge to mix, so the task stops making sense.",
+  "analyst_test": "A strong analyst compensates the loggers, fits Theis to the test (an excellent fit), sees its hindcast overshoot the Mill Street record, recalibrates a leaky aquifer against CV-07 or the wells' own baselines and files 1,250 gpm, every rate under 3.5 ft at OW-S.",
+  "domain_test": "The deciding quantity is a 20-year drawdown forecast at a sentinel well, worked the way hydrogeology works it: aquifer properties from a pumping test, a conceptual model of the far field (walls, leakage) that the test cannot see, and its calibration against the drawdown an existing well field has already caused, separated from the aquifer's natural rise and fall; swap the nouns and there is no confined aquifer, no leakage through till and no cone of depression for a reference well to sit in.",
   "layer2_family": "forecast_uncertainty",
-  "layer2_pattern": "own:leachate-in-the-unsaturated-zone-timed-by-each-parcels-depth-to-water",
+  "layer2_pattern": "own:far-field-calibrated-on-an-existing-cone-against-a-clean-natural-reference",
   "layer1": [
-    "nitrate reported as nitrate-N by one lab and as nitrate (mg/L NO3) by the county health lab before 2004, with '<' values at two reporting limits",
-    "samples re-keyed when the utility's SCADA renamed the wells, field duplicates and lab re-runs as extra rows, entry-point samples beside raw-water samples",
-    "the county network's site IDs re-issued when two wells were replaced, sites with gaps and a dry-season skip year",
-    "the land-cover panel's local codes before 2008 and cropland-layer codes after, parcels split and re-numbered by the assessor",
-    "SCADA daily pumping in gallons then thousand gallons after a meter change, missing days, a duplicated export week",
-    "the age survey's tritium-helium ages for water-table wells and the production wells' mixed ages"
+    "two logger brands on two clocks (local EDT and UTC), absolute pressure needing the barologger",
+    "an observation-well logger re-hung deeper after a download, a logger rewriting its last records",
+    "the aquifer's barometric response and earth tides in the minute record",
+    "the operating reports in thousand gallons then gallons, the wells renamed at a SCADA change, a meter replacement month estimated from run hours",
+    "monitoring readings taken with the nearby well running, a measuring point raised by a casing extension and another cut down",
+    "network readings keyed twice, estimated readings, months with no field run"
   ],
-  "stakeholder_role": "Corlinden Water Utility's general manager, preparing the Common Council's loan-cycle decision",
+  "stakeholder_role": "Harlow Springs Utilities' water division manager, filing the Reidel Road application",
   "role_family": "capacity_planner",
   "scoring_unit": "other",
   "spine": {
-    "file": "corlinden_well_pumping_daily_2009-2026.csv beside ravell_county_parcel_land_cover_1986-2026.csv",
-    "rows": 26000,
-    "entity": "one well-day of pumping; one parcel-year of land cover",
-    "grain": "well x day; parcel x year",
+    "file": "PW-1_constant_rate_test_2026-09_transducers.csv beside cvwcd_network_water_levels_2005-2026.csv",
+    "rows": 103682,
+    "entity": "one logger reading",
+    "grain": "well x minute (test); well x month (record)",
     "source": "synthetic"
   },
-  "forum": "council_or_assembly",
+  "forum": "regulator_or_inspector",
   "forcing_event": "statutory_or_regulatory_filing",
   "org_family": "utility_or_infrastructure",
   "world": {
-    "geography": "United States, Wisconsin (Ravell County, a fictional county on the central sand plain; Corlinden, a fictional city)",
+    "geography": "United States, Indiana (the Corrin Valley, a fictional buried bedrock valley; Harlow Springs, a fictional city)",
     "currency": "USD",
-    "org_type": "a city water utility, its utility commission and a county land and water conservation department",
+    "org_type": "a city water utility and a regional water conservancy district",
     "invented_names": [
-      "Corlinden",
-      "Corlinden Water Utility",
-      "Ravell County",
-      "Ravell County Land and Water Conservation Department",
-      "Sallow Road well field",
-      "Sallow Ridge",
-      "Cadle River",
-      "Fenwright Hydrogeologic",
-      "Pellow Analytical Services",
-      "Hartvale Produce"
+      "Corrin Valley",
+      "Corrin Valley Water Conservancy District",
+      "Harlow Springs",
+      "Harlow Springs Utilities",
+      "Reidel Road well field",
+      "Mill Street wells",
+      "Tillbrook Hydrogeologic",
+      "Kestrel Foods",
+      "Little Ossey"
     ],
     "people": [
-      "Chloe Griffin",
-      "Dennis Diaz",
-      "Patricia Gaines"
+      "Mitchell Munoz",
+      "Todd Robinson",
+      "Wendy Ruiz",
+      "Mary Alvarez",
+      "John Ponce"
     ]
   },
   "deliverables": [
-    "corlinden_nitrate_plant_timing_memo.pdf",
-    "corlinden_entry_point_nitrate_forecast.xlsx",
-    "corlinden_entry_point_nitrate_2027-2040.png"
+    "reidel_road_sentinel_forecast.xlsx",
+    "reidel_road_WR-4_demonstration.pdf"
   ],
   "opening_move": "question-first",
-  "question_form": "when",
-  "driver": "The decisive quantity is a blended output's level over the coming years, fed by inputs whose change at the source travels through a stage no measurement of the output or of the medium sees, at a pace set by each source's own depth through that stage; a recent change sits on sources deeper than the earlier changes that matured, so the output's own history, one delay fitted to it, the downstream travel time a filed model gives, and an event study on the recent change all show no effect and set it near nil, and only the matured changes' delays, read against each source's depth and carried to each recent source, show the rise arriving inside the decision window.",
-  "driver_concrete": "Each year's 2027 to 2040 entry-point nitrate is the pumping plan's blend of Wells 3, 5, 6 and 7, each a recharge-weighted mix of its protection-area parcels' water-table nitrate delayed by the wellhead model's groundwater travel time, where a parcel's water-table nitrate is its land cover's leachate delayed by its unsaturated thickness times the sand's moisture over the recharge; the Sallow Ridge parcels cleared for irrigated vegetables from 2017 to 2021 sit over 57 to 94 ft of sand, so their leachate reaches the wells late in 2030, not by 2024 as the travel time or the wells' own lag would put it.",
-  "stump": "A strong analyst who finds the ridge clearing tests it against the wells and the county wells under recent clearings, sees no rise where the wellhead model's travel time or the wells' own fitted lag says it should already be, sets the clearing's effect near nil and files the 2031 cycle with the blend near 5.5 mg/L through 2040; only each parcel's delay through its own unsaturated thickness, read from the county's older conversions, puts the rise at the wells late in 2030 and the blend at 10 in 2031.",
-  "deep_chain": "(1) the wells' falling-then-flat record is the nutrient-management era's water arriving and cannot show leachate still above the water table; (2) the county's older conversions step up after a delay that grows with depth to water (the unsaturated travel time), while the water-table wells' own ages are one to two years, so the delay is in the unsaturated sand, not the aquifer; (3) the ridge parcels' delays follow from their 60 to 90 ft of sand, against the 15 to 40 ft the matured conversions and the wells' farmland sit on, so no pooled delay applies; (4) the irrigated-vegetable leachate after nutrient management, from the network, and each parcel's share of its well's water by recharge (irrigated land recharges more than forest); (5) the pumping plan's blend from 2027 with Well 3 retired, and the first year at 10",
-  "judgment": "separating 'the clearing does not raise nitrate' from 'its leachate has not arrived' with the matured conversions' delays against depth to water, and carrying a depth-specific delay, not a pooled one, to the ridge parcels",
-  "one_fact_test": "'the ridge clearing will raise nitrate' rescues nothing: with the wellhead model's travel time or the wells' fitted lag the rise should already show, it does not, and the reasonable fit sets it near nil; the delay must be built from each parcel's unsaturated thickness and read from the matured conversions",
+  "question_form": "which",
+  "driver": "The decisive quantity is a long-horizon response to a sustained load, when a short trial's response carries two opposing far-field effects that cancel inside its window and part only over years: the trial's own model fits it closely and overstates the long response, so the far field must be calibrated on the record a nearby load has already left, read against a natural baseline from references beyond that load's reach, because the nearest reference sits inside it and a fitted trend absorbs the response.",
+  "driver_concrete": "Each requested rate's greatest monthly drawdown at OW-S in 2046 from a bounded leaky aquifer whose leakage factor is calibrated on the drawdown the Mill Street wells caused at MS-MW and OW-S from 2009 to 2026, each well's natural level carried from the far network wells CV-02 and CV-11; not the 72-hour test's Theis fit extrapolated, and not a calibration against the readings' own pre-pumping levels, the nearest network well CV-07 (inside the Mill Street cone) or a fitted trend, each of which credits the region's wet years to leakage.",
+  "stump": "A strong analyst who sees the test's Theis forecast overshoot the Mill Street record recalibrates the leakage against the nearest network well CV-07 (or the wells' own pre-pumping levels, or a fitted trend) and files 1,250 gpm, every schedule under 3.5 ft at OW-S; only the natural level carried from CV-02 and CV-11 beyond the cone files 1,000 gpm.",
+  "deep_chain": "(1) the test's Theis fit is exact but blind to the far field, shown by its hindcast of the Mill Street record; (2) the record's drawdown is the reading's fall below its natural level, and the natural level must come from confined-aquifer wells beyond the cone (CV-02, CV-11), not CV-07 or a trend; (3) the leakage factor calibrated on that drawdown with the plate's walls; (4) the 2027 to 2046 superposition at OW-S under each schedule and the town's projection",
+  "judgment": "which reference wells carry the natural level (CV-07's record steps down with each Mill Street increase and cycles with the summer pumping, CV-02 and CV-11 agree with each other and with OW-S before 2009), and the far-field model that reproduces the separated drawdown out of the test's window",
+  "one_fact_test": "'the aquifer leaks' rescues nothing: the leakage must be calibrated, and on the raw or CV-07-referenced record it calibrates to 1,300 gpm",
   "strategy_label": "WORKS IN FORM",
   "mechanism_source": "design_note",
   "differentiation": {
-    "mark181": "mark181 nowcasts each area's specimens from each courier route's own reporting delay; here nothing is reported: a physical input travels through an unobserved stage at a pace set by each source's depth, and the delay is read from earlier land-cover changes that matured, not from a reporting log",
-    "mark166": "mark166 v3 forecasts new customers through departures linked across groups at a lagged yield; here no record links a source to the output: the delay is a physical travel time through a stage nothing samples, set by each parcel's depth to water, and the recent change sits deeper than the matured ones",
-    "mark451": "mark451 completes claims whose handler delay collapsed partway; here the delay never changed for any source, it differs across sources with their depth, and the recent sources sit deeper than every matured one",
-    "task3": "task3 v1 carried each earlier move's gain conditioned on a covariate its history printed, which both runs did by reflex; here the decisive step comes before any conditioning: the recent change's absent response is read as not yet arrived rather than as no effect, because the delay sits in a stage no record samples and the matured changes alone time it",
-    "mark234": "mark234 reads each laboratory's current output from a share a loss in transit cannot move; here nothing is lost: every unit of the input arrives, late by a travel time set by each source's depth, and the decisive step separates an effect not yet arrived from no effect at all"
+    "mark308": "mark308 v1 rebuilds unmet requests the record never stored from supply movements; here every reading is stored and the decisive step is which reference wells carry the aquifer's natural level, so the far field calibrated on an existing cone is not credited with the region's wet years",
+    "mark166": "mark166 v3 forecasts next year's arrivals through departures linked across groups; here nothing arrives or departs: a sustained pumping response is calibrated on an existing well field's cone against natural levels from reference wells outside it",
+    "mark247": "mark247 rebuilds a running sum from a record whose gaps were filled by decay toward normal; here no record is filled: the natural level is carried from reference wells beyond the cone because the nearest one sits inside it"
   },
   "lineage": [
     {
@@ -168,53 +165,22 @@
         "rounding opener": "the",
         "deliverable set": "docx+xlsx"
       }
-    },
-    {
-      "domain": "physical-environmental-sciences",
-      "subdomain": "hydrology-flood-frequency",
-      "objective": "forecasting",
-      "shape": "other",
-      "gap": [
-        "population",
-        "time"
-      ],
-      "pattern": [
-        "none"
-      ],
-      "generators": [
-        "G13",
-        "G16"
-      ],
-      "gate_g": "method_or_model_selection",
-      "stump_strategy": "forecast_method_backtest",
-      "driver": "The decisive quantity is a long-horizon response to a sustained load, when a short trial's response carries two opposing far-field effects that cancel inside its window and part only over years: the trial's own model fits it closely and overstates the long response, so the far field must be calibrated on the record a nearby load has already left, read against a natural baseline from references beyond that load's reach, because the nearest reference sits inside it and a fitted trend absorbs the response.",
-      "stump": "A strong analyst who sees the test's Theis forecast overshoot the Mill Street record recalibrates the leakage against the nearest network well CV-07 (or the wells' own pre-pumping levels, or a fitted trend) and files 1,250 gpm, every schedule under 3.5 ft at OW-S; only the natural level carried from CV-02 and CV-11 beyond the cone files 1,000 gpm.",
-      "answer": "File the 1,000 gpm schedule: its greatest monthly drawdown at OW-S in 2046 is 8 ft against the 9 ft limit, where 1,250 gpm reaches 10 ft.",
-      "architecture": "v3",
-      "drawn": "2026-11-08",
-      "fate": "spent 2026-11-08 on the platform: both runs fitted a leaky strip with the plate's walls to the test, took CV-02 and CV-11 beyond the cone as natural-level controls, and landed Schedule C and every ask (REDESIGN)"
     }
   ],
-  "notes": "shape other: a when-question (the 2027 or the 2031 loan cycle) with a yearly forecast 2027 to 2040 and each well's 2034 level; calibration censored_or_lagged_release: the county's earlier land-cover conversions are the matured cohort whose delayed responses the recent conversions have not yet shown",
+  "notes": "shape other: a which-of-four with a per-option forecast table; calibration existing_book_actuals: the Mill Street wells' 2009 to 2026 record is the organisation's own operating history",
   "lineage_shells": [
     {
       "question form": "how-much",
       "second-sentence opener": "alongside",
       "rounding opener": "the",
       "deliverable set": "docx+xlsx"
-    },
-    {
-      "question form": "whether",
-      "second-sentence opener": "the",
-      "rounding opener": "events",
-      "deliverable set": "pptx+xlsx"
     }
   ],
+  "registered": "2026-11-08T02:14:40Z",
   "shell": {
     "question form": "whether",
-    "second-sentence opener": "corlinden's",
-    "rounding opener": "nitrate",
-    "deliverable set": "pdf+png+xlsx"
-  },
-  "registered": "2026-11-08T06:45:18Z"
+    "second-sentence opener": "the",
+    "rounding opener": "events",
+    "deliverable set": "pptx+xlsx"
+  }
 }

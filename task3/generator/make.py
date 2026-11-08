@@ -1,4 +1,4 @@
-"""task3 architecture 4: the whole build. The pack into <task>/target, every rung and rival on the cut pack
+"""task3 architecture 3: the whole build. The pack into <task>/target, every rung and rival on the cut pack
 (generator/rungs.json), the goldens into <task>/golden, submission.md and generator/figures.json, metadata.json;
 then the checks and the independent verifier; then a second pack build compared byte for byte; then target.zip and
 golden.zip.
@@ -26,7 +26,7 @@ import writeup        # noqa: E402
 
 TASK = os.path.dirname(HERE)
 PULL_DONE = (2026, 11, 6, 9, 40, 0)
-MTIME = calendar.timegm((2026, 11, 6, 15, 40, 0, 0, 0, 0))
+MTIME = calendar.timegm((2026, 11, 6, 14, 40, 0, 0, 0, 0))
 
 
 def stamp(folder):
@@ -64,42 +64,48 @@ def main():
     a = ap.parse_args()
     target, n = pack(TASK)
     for f in sorted(os.listdir(target)):
-        print("  %-60s %10d bytes %s" % (f, os.path.getsize(os.path.join(target, f)), ("%d rows" % n[f]) if f in n else ""))
+        print("  %-56s %10d bytes %s" % (f, os.path.getsize(os.path.join(target, f)), ("%d rows" % n[f]) if f in n else ""))
     rpath = os.path.join(HERE, "rungs.json")
-    import solve
     if a.reuse_rungs and os.path.exists(rpath):
+        import solve
         rungs = json.load(open(rpath))
         g = solve.run(target)
     else:
         rungs, full = rivals.main(target, rpath)
         g = full["golden"]
-    F = writeup.figures(g, rungs)
-    json.dump(F, open(os.path.join(HERE, "figures.json"), "w"), indent=1)
     gdir = os.path.join(TASK, "golden")
     if os.path.isdir(gdir):
         shutil.rmtree(gdir)
     scratch = tempfile.mkdtemp(prefix="t3g_")
-    G.write(g, rungs, F, gdir, scratch)
+    G.write(g, rungs, gdir, scratch)
+    shutil.rmtree(scratch)
     stamp(gdir)
-    writeup.submission(g, rungs, F, os.path.join(TASK, "submission.md"))
+    fig = writeup.figures(g, rungs)
+    json.dump(fig, open(os.path.join(HERE, "figures.json"), "w"), indent=1, sort_keys=True)
+    writeup.submission(g, rungs, fig, os.path.join(TASK, "submission.md"))
     metadata.write(TASK)
-    print("call %s cycle, first year at 10: %s, EP-01 2034 %.2f, highest well %s %.2f" %
-          (g["call"], g["cross"], g["ep"][2034], F["hi_well"], F["hi_2034"]))
-    rc = subprocess.run([sys.executable, os.path.join(HERE, "checks.py")]).returncode
-    rc |= subprocess.run([sys.executable, os.path.join(HERE, "verify.py"), target]).returncode
+    ok_c = subprocess.run([sys.executable, os.path.join(HERE, "checks.py"), target, rpath]).returncode == 0
+    ok_v = subprocess.run([sys.executable, os.path.join(HERE, "verify.py"), target,
+                           os.path.join(HERE, "figures.json")]).returncode == 0
+    same = True
     if not a.no_rebuild:
-        d1 = digest(target)
-        tmp = tempfile.mkdtemp(prefix="t3r_")
-        t2, _ = pack(tmp)
-        d2 = digest(t2)
-        same = d1 == d2
-        print("byte-identical rebuild:", "yes" if same else "NO " + str([k for k in d1 if d1[k] != d2.get(k)]))
-        rc |= 0 if same else 1
-        shutil.rmtree(tmp, ignore_errors=True)
-    cut_zip(target, os.path.join(TASK, "target.zip"))
-    cut_zip(gdir, os.path.join(TASK, "golden.zip"))
-    shutil.rmtree(scratch, ignore_errors=True)
-    sys.exit(rc)
+        tmp = tempfile.mkdtemp(prefix="t3b_", dir=os.path.dirname(TASK))
+        try:
+            t2, _ = pack(tmp)
+            same = digest(target) == digest(t2)
+            g2 = os.path.join(tmp, "golden")
+            s2 = tempfile.mkdtemp(prefix="t3g_")
+            G.write(g, rungs, g2, s2)
+            shutil.rmtree(s2)
+            same = same and digest(gdir) == digest(g2)
+            print("rebuild byte-identical: %s" % same)
+        finally:
+            shutil.rmtree(tmp)
+    z = cut_zip(target, os.path.join(TASK, "target.zip"))
+    gz = cut_zip(gdir, os.path.join(TASK, "golden.zip"))
+    for p in (z, gz):
+        print("zip %s %d bytes sha256 %s" % (p, os.path.getsize(p), hashlib.sha256(open(p, "rb").read()).hexdigest()[:8]))
+    sys.exit(0 if (ok_c and ok_v and same) else 1)
 
 
 if __name__ == "__main__":

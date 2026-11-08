@@ -1,143 +1,214 @@
-"""task3 architecture 4: an independent recomputation from the cut pack (pandas, a different estimator at every step):
-the delay to the water table from the matured conversions, the leachate under irrigated vegetables from samples whose
-water left the root zone since 2012, and the forecast as each well's 2024-2026 level plus each cleared parcel's step at
-its own arrival. It must reproduce the call, the first year at 10, the 2034 entry point and the highest well to the
-asked rounding.
+"""task3 architecture 3: the independent verifier. Reads only the cut pack, on its own code path (pandas for the
+tables, pdftotext for the documents, Cooper-Jacob straight lines for the test, its own Hantush quadrature and its
+own calibration search), and recomputes the call and every graded figure; then compares with figures.json.
 
-    python3 verify.py <target>"""
+    python3 task3/generator/verify.py <target> [figures.json]"""
 import json
 import math
 import os
+import re
+import subprocess
 import sys
 
 import numpy as np
 import pandas as pd
 
-HERE = os.path.dirname(os.path.abspath(__file__))
-SHARE = {"W3": 0.08, "W5": 0.30, "W6": 0.32, "W7": 0.30}
-CODES = {"FOR": ["F1", "F2", "141", "142"], "GRS": ["G1", "G2", "176", "37"], "DRY": ["A1", "A2", "24", "36"],
-         "IRC": ["A3", "301"], "IRV": ["A4", "304"], "RES": ["U1", "121"], "WAT": ["W", "111"]}
-C2 = {c: k for k, v in CODES.items() for c in v}
+PSI_FT = 0.43353
+GPM = 192.5
 
 
-def decimal_year(s):
-    d = pd.to_datetime(s)
-    start = pd.to_datetime(d.dt.year.astype(str) + "-01-01")
-    end = pd.to_datetime((d.dt.year + 1).astype(str) + "-01-01")
-    return d.dt.year + (d - start).dt.total_seconds() / (end - start).dt.total_seconds()
+def pdf_text(path):
+    return subprocess.run(["pdftotext", "-layout", path, "-"], capture_output=True, text=True, check=True).stdout
 
 
-def nitrate_n(res, units):
-    v = res.str.lstrip("<").astype(float)
-    v = np.where(res.str.startswith("<"), v / 2.0, v)
-    return np.where(units.str.contains("NO3"), v / 4.427, v)
+def hantush(u, rho):
+    """W(u, rho) by Simpson's rule on x = ln(y), from ln u to ln u + 25 (a second quadrature, not solve.py's)."""
+    u = np.atleast_1d(u).astype(float)
+    x0 = np.log(u)[:, None]
+    n = 801
+    h = (np.log(60.0) - x0).clip(min=3.0) / (n - 1)
+    k = np.arange(n)[None, :]
+    x = x0 + h * k
+    y = np.exp(x)
+    f = np.exp(-y - (rho ** 2) / (4 * y))
+    wts = np.where((k == 0) | (k == n - 1), 1, np.where(k % 2 == 1, 4, 2))
+    return h[:, 0] / 3 * np.sum(wts * f, axis=1)
 
 
-def main(target):
+def frame(reg):
+    az = math.radians(18.0)
+    ua, uc = (math.sin(az), math.cos(az)), (math.cos(az), -math.sin(az))
+    cx, cy = 409800.0 + uc[0] * 2500, 1687555.0 + uc[1] * 2500
+    return {r["Well ID"]: ((r["Easting (ft)"] - cx) * ua[0] + (r["Northing (ft)"] - cy) * ua[1],
+                           (r["Easting (ft)"] - cx) * uc[0] + (r["Northing (ft)"] - cy) * uc[1])
+            for _, r in reg.iterrows()}
+
+
+def kernel(T, S, B, well, obs, width, n):
+    t = (np.arange(n) + 0.5) * 30.4375
+    s0 = well[1] + width / 2
+    imgs = [p - width / 2 for m in range(-4, 5) for p in (2 * m * width + s0, 2 * m * width - s0)]
+    tot = np.zeros(n)
+    for c in imgs:
+        r = max(math.hypot(obs[0] - well[0], obs[1] - c), 0.5)
+        if r / B > 14:
+            continue
+        tot += hantush(r * r * S / (4 * T * t), r / B) / (4 * math.pi * T)
+    return tot
+
+
+def main(target, figs=None):
     out = {}
-    r = pd.read_csv(os.path.join(target, "corlinden_raw_water_nitrate_results_1988-2026.csv"), dtype=str)
-    r["n"] = nitrate_n(r["result"], r["units"])
-    pt = {"WELL 3": "W3", "HR-W03": "W3", "WELL 5": "W5", "HR-W05": "W5", "WELL 6": "W6", "HR-W06": "W6",
-          "WELL 7": "W7", "HR-W07": "W7", "EP-01": "EP"}
-    r["w"] = r["sample_point"].map(pt)
-    r = r.groupby(["w", "collected"], as_index=False)["n"].mean()
-    r["year"] = r["collected"].str[:4].astype(int)
-    ann = r.groupby(["w", "year"])["n"].mean()
-    # land cover
-    lc = pd.read_csv(os.path.join(target, "ravell_county_parcel_land_cover_1986-2026.csv"), dtype=str).drop_duplicates()
-    lc["cls"] = lc["land_cover_code"].map(C2)
-    lc["year"] = lc["year"].astype(int)
-    hist = {}
-    for pid, g in lc.groupby("parcel_id"):
-        hist.setdefault(pid, {}).update(dict(zip(g["year"], g["cls"])))
-    for _, row in lc[lc["parent_parcel_id"].notna()].iterrows():
-        for y, c in hist.get(row["parent_parcel_id"], {}).items():
-            hist[row["parcel_id"]].setdefault(y, c)
-    # network
-    sites = pd.read_excel(os.path.join(target, "ravell_county_groundwater_network_sites.xlsx"), sheet_name="Sites")
-    alias = {r_.site_id: str(r_.notes).replace("replaced by ", "") for r_ in sites.itertuples()
-             if str(r_.status).startswith("abandoned")}
-    sites = sites[~sites["status"].astype(str).str.startswith("abandoned")].set_index("site_id")
-    ages = pd.read_excel(os.path.join(target, "ravell_county_groundwater_age_survey_2019.xlsx"), sheet_name="Results")
-    ages = ages[ages["notes"].astype(str).str.startswith("water-table")].set_index("site")["apparent_age_yr"]
-    ns = pd.read_csv(os.path.join(target, "ravell_county_groundwater_network_samples_1990-2026.csv"), dtype=str)
-    ns["site_id"] = ns["site_id"].replace(alias)
-    ns["n"] = nitrate_n(ns["nitrate_result"], ns["units"])
-    ns = ns.groupby(["site_id", "sample_date"], as_index=False)["n"].mean()
-    ns["t"] = decimal_year(ns["sample_date"])
-    # matured conversions: a step fitted by least squares, the step time half-way between the two samples it parts
-    X, Y = [], []
-    for sid, g in ns.groupby("site_id"):
-        h = hist[sites.loc[sid, "parcel_id"]]
-        ch = [y for y in range(1987, 2027) if h[y] != h[y - 1]]
-        if len(ch) != 1 or not (1987 <= ch[0] <= 2010) or h[ch[0] - 1] not in ("FOR", "GRS", "DRY") or \
-                h[ch[0]] not in ("IRC", "IRV"):
-            continue
-        c = ch[0]
-        g = g.sort_values("t")
-        g = g[g["t"] >= c - 3]
-        if (g["t"] < c + 1).sum() == 0:
-            continue
-        v = g["n"].to_numpy()
-        t = g["t"].to_numpy()
-        e = [((v[:k] - v[:k].mean()) ** 2).sum() + ((v[k:] - v[k:].mean()) ** 2).sum() for k in range(1, len(v))]
-        k = int(np.argmin(e)) + 1
-        step = 0.5 * (t[k - 1] + t[k])
-        X.append(float(sites.loc[sid, "mean_depth_to_water_ft"]))
-        Y.append(step - c - float(ages.get(sid, ages.mean())))
-    b, a = np.polyfit(X, Y, 1)
-    out["b"], out["a"], out["n"] = float(b), float(a), len(X)
-    # leachate under irrigated vegetables and forest: steady sites, samples whose water left the root zone since 2012
-    lvl = {}
-    for cls in ("IRV", "FOR"):
-        vals = []
-        for sid, g in ns.groupby("site_id"):
-            h = hist[sites.loc[sid, "parcel_id"]]
-            if set(h[y] for y in range(1986, 2027)) != {cls}:
-                continue
-            lag = float(ages.get(sid, ages.mean())) + a + b * float(sites.loc[sid, "mean_depth_to_water_ft"])
-            vals += list(g.loc[g["t"] - lag >= 2012, "n"])
-        lvl[cls] = float(np.mean(vals))
-    out["irv"] = lvl["IRV"]
-    # the protection area: each well's 2024-2026 level, plus each cleared parcel's step at its own arrival
-    pa = pd.read_excel(os.path.join(target, "sallow_road_WHPA_parcel_attributes_2019.xlsx"), sheet_name="Parcels")
-    rch = pd.read_excel(os.path.join(target, "sallow_road_WHPA_parcel_attributes_2019.xlsx"), sheet_name="Recharge")
-    q = dict(zip(rch["land_cover"], rch["recharge_in_per_yr"]))
-    qc = {"FOR": q["forest"], "GRS": q["grass and pasture"], "DRY": q["cropland, not irrigated"],
-          "IRC": q["irrigated corn and soybean"], "IRV": q["irrigated vegetables"], "RES": q["residential"], "WAT": 0.0}
-    pa["w"] = "W" + pa["zone"].str.split().str[-1]
-    fc = {}
-    for w, g in pa.groupby("w"):
-        base = float(np.mean([ann[(w, y)] for y in (2024, 2025, 2026)]))
-        flux = sum(row.acres * qc[hist[row.parcel_id][2026]] for row in g.itertuples())
-        steps = []
-        for row in g.itertuples():
-            h = hist[row.parcel_id]
-            cl = [y for y in range(2013, 2027) if h[y] in ("IRC", "IRV") and h[y - 1] not in ("IRC", "IRV")]
-            if not cl:
-                continue
-            arr = cl[0] + a + b * row.depth_to_water_ft + row.gw_time_of_travel_yr
-            share = row.acres * qc[h[2026]] / flux
-            steps.append((arr, share * (lvl["IRV"] - lvl["FOR"])))
-        fc[w] = {y: base + sum(dv * np.mean([1.0 if y + f >= arr else 0.0 for f in (0.125, 0.375, 0.625, 0.875)])
-                               for arr, dv in steps) for y in range(2027, 2041)}
-    ep = {y: sum(SHARE[w] * fc[w][y] for w in SHARE) for y in range(2027, 2041)}
-    cross = next((y for y in ep if ep[y] >= 10.0), None)
-    hi = max(SHARE, key=lambda w: fc[w][2034])
-    out.update({"cross": cross, "call": 2027 if (cross and cross < 2034) else 2031, "ep2034": ep[2034],
-                "hi": hi, "hi2034": fc[hi][2034]})
-    F = json.load(open(os.path.join(HERE, "figures.json")))
-    mg = lambda x: int(math.floor(x + 0.5))
-    ok = [("call", out["call"] == F["call"]), ("first year at 10", out["cross"] == F["cross"]),
-          ("2034 entry point (whole mg/L)", mg(out["ep2034"]) == F["ep2034_int"]),
-          ("highest well", out["hi"] == F["hi_well"]), ("its 2034 mean (whole mg/L)", mg(out["hi2034"]) == F["hi_2034_int"]),
-          ("delay per foot (0.01 yr)", abs(out["b"] - F["b3"]) < 0.01)]
-    print("verify: b %.4f a %.3f n %d, IRV %.2f, cross %s, call %s, EP 2034 %.2f, highest %s %.2f" %
-          (out["b"], out["a"], out["n"], out["irv"], out["cross"], out["call"], out["ep2034"], out["hi"], out["hi2034"]))
-    bad = [k for k, v in ok if not v]
-    print("verify:", "PASS" if not bad else "FAIL " + ", ".join(bad))
-    return 0 if not bad else 1
+    # documents: the limit, the schedules, the projection
+    rule = pdf_text(os.path.join(target, "CVWCD_Rule_WR-4_groundwater_withdrawal_permits.pdf"))
+    m = re.search(r"Harlow reach\s+OW-S.*?(\d+\.\d)\s*$", rule, re.M | re.S)
+    limit = float(m.group(1))
+    app = pdf_text(os.path.join(target, "reidel_road_WR-4_application_requested_schedules.pdf"))
+    rates = [int(x.replace(",", "")) for x in re.findall(r"^\s*[A-D]\s+([\d,]+)\s+[\d.]+\s*$", app, re.M)]
+    facs = [list(map(float, re.findall(r"\d\.\d\d", line))) for line in app.splitlines() if line.strip().startswith("Factor")]
+    new_f, town_f = facs[0], facs[1]
+    base = float(re.search(r"^\s*2026\s+(\d+)\s*$", app, re.M).group(1))
+    growth = float(re.search(r"grow at ([\d.]+) per cent", app).group(1)) / 100
+    out["doc_limit"] = limit
+    out["doc_rates"] = rates
+    out["application_states_no_limit"] = not re.search(r"\b9\.0\b", app)
+    # register and measuring points
+    reg = pd.read_excel(os.path.join(target, "cvwcd_well_register.xlsx"), sheet_name="Wells")
+    mph = pd.read_excel(os.path.join(target, "cvwcd_well_register.xlsx"), sheet_name="MP history")
+    fr = frame(reg)
+
+    def mp(w, day):
+        h = mph[mph["Well ID"] == w]
+        for _, r in h.iterrows():
+            if pd.Timestamp(r["From"]) <= day and (pd.isna(r["To"]) or r["To"] == "" or day <= pd.Timestamp(r["To"])):
+                return float(r["MP elev (ft)"])
+        return float(reg.loc[reg["Well ID"] == w, "MP elev (ft)"].iloc[0])
+    # the test: Cooper-Jacob on the late half-log-cycle of each observation well
+    lg = pd.read_excel(os.path.join(target, "PW-1_constant_rate_2026-09_field_readings.xlsx"), sheet_name="Loggers")
+    tr = pd.read_csv(os.path.join(target, "PW-1_constant_rate_2026-09_transducers.csv")).drop_duplicates(["well_id", "date_time"])
+    baro = pd.read_csv(os.path.join(target, "barologger_BL-2231_2026-09.csv"))
+    EPOCH = pd.Timestamp("1970-01-01")
+    bt = (pd.to_datetime(baro["date_time_utc"]) - EPOCH).dt.total_seconds().values
+    disch = pd.read_excel(os.path.join(target, "PW-1_constant_rate_2026-09_field_readings.xlsx"), sheet_name="Discharge")
+    q = (disch["Totalizer (gal)"].iloc[-1] - disch["Totalizer (gal)"].iloc[0]) / (
+        (pd.Timestamp(disch["Date"].iloc[-1] + " " + disch["Time (EDT)"].iloc[-1]) -
+         pd.Timestamp(disch["Date"].iloc[0] + " " + disch["Time (EDT)"].iloc[0])).total_seconds() / 60)
+    on = (pd.Timestamp("2026-09-14 13:00:00") - pd.Timestamp("1970-01-01")).total_seconds()   # 09:00 EDT
+    Ts, Ss = [], []
+    reg_i = reg.set_index("Well ID")
+    pw = (reg_i.loc["PW-1", "Easting (ft)"], reg_i.loc["PW-1", "Northing (ft)"])
+    windows = {"OW-1": (0.03, 0.5), "OW-2": (0.3, 1.0)}     # Cooper-Jacob where u stays under 0.05
+    for w in ("OW-1", "OW-2"):
+        rows = lg[lg["Well"] == w]
+        first = rows.iloc[0]
+        d = tr[tr["well_id"] == w].copy()
+        t = (pd.to_datetime(d["date_time"]) - EPOCH).dt.total_seconds()
+        if first["Clock"] != "UTC":
+            t = t + 4 * 3600
+        depth = np.full(len(d), float(first["Sensor depth below MP (ft)"]))
+        if len(rows) > 1:
+            rh = (pd.Timestamp(rows.iloc[1]["Set"]) - EPOCH).total_seconds() + 4 * 3600
+            depth[t.values >= rh] = float(rows.iloc[1]["Sensor depth below MP (ft)"])
+        lvl = -(depth - (d["pressure_psi"].values - np.interp(t, bt, baro["pressure_psi"])) / PSI_FT)
+        tt = (t.values - on) / 86400
+        pre = (tt > -5.5) & (tt < -0.05)
+        a, b = np.polyfit(tt[pre], lvl[pre], 1)[::-1]
+        s = a + b * tt - lvl
+        r = math.hypot(reg_i.loc[w, "Easting (ft)"] - pw[0], reg_i.loc[w, "Northing (ft)"] - pw[1])
+        win = (tt >= windows[w][0]) & (tt <= windows[w][1])
+        slope, icpt = np.polyfit(np.log10(tt[win]), s[win], 1)
+        T = 2.303 * q * GPM / (4 * math.pi * slope)
+        t0 = 10 ** (-icpt / slope)
+        Ts.append(T)
+        Ss.append(2.25 * T * t0 / r ** 2)
+    T, S = float(np.mean(Ts)), float(np.exp(np.mean(np.log(Ss))))
+    out["T_cj"] = round(T)
+    out["S_cj"] = S
+    # the record
+    mor = pd.read_csv(os.path.join(target, "harlow_springs_MOR_well_production_2009-2026.csv"))
+    mor["well"] = mor["source"].replace({"WELL 1": "TW-1", "WELL 2": "TW-2"})
+    mor["gal"] = mor["metered_volume"] * np.where(mor["units"] == "1000 gal", 1000, 1)
+    per = pd.PeriodIndex(mor["report_month"], freq="M")
+    mor["gpm"] = mor["gal"] / (per.days_in_month * 1440)
+    months = pd.period_range("2005-01", "2046-12", freq="M")
+    n = len(months)
+    idx = {p: i for i, p in enumerate(months)}
+    q1, q2 = np.zeros(n), np.zeros(n)
+    for _, r in mor.iterrows():
+        (q1 if r["well"] == "TW-1" else q2)[idx[pd.Period(r["report_month"], "M")]] = r["gpm"]
+    lv = {}
+    ms = pd.read_csv(os.path.join(target, "mill_street_MW_water_levels_2008-2026.csv"))
+    ms = ms[~ms["remarks"].fillna("").str.contains("running")]
+    s = np.full(n, np.nan)
+    for _, r in ms.iterrows():
+        day = pd.Timestamp(pd.to_datetime(r["date"], format="%m/%d/%Y"))
+        s[idx[day.to_period("M")]] = mp("MS-MW", day) - r["depth_to_water_ft"]
+    lv["MS-MW"] = s
+    net = pd.read_csv(os.path.join(target, "cvwcd_network_water_levels_2005-2026.csv")).drop_duplicates(["site_id", "date"])
+    net = net[net["qualifier"].fillna("") != "E"]
+    for _, r in net.iterrows():
+        day = pd.Timestamp(r["date"])
+        lv.setdefault(r["site_id"], np.full(n, np.nan))[idx[day.to_period("M")]] = mp(r["site_id"], day) - r["dtw_ft_below_mp"]
+    yrs = np.array([p.year for p in months])
+    win05 = (yrs >= 2005) & (yrs <= 2008)
+    win_ms = np.array([pd.Period("2008-06", "M") <= p <= pd.Period("2009-02", "M") for p in months])
+
+    def att(w):
+        wn = win_ms if w == "MS-MW" else win05
+        nat = np.nanmean(np.vstack([lv[c] - np.nanmean(lv[c][wn]) for c in ("CV-02", "CV-11")]), axis=0)
+        return np.nanmean(lv[w][wn]) + nat - lv[w]
+    A = {w: att(w) for w in ("MS-MW", "CV-07", "OW-S")}
+    out["msmw_2025"] = float(np.nanmean(A["MS-MW"][yrs == 2025]))
+    fit = np.array([pd.Period("2009-03", "M") <= p <= pd.Period("2026-09", "M") for p in months])
+
+    def town_model(w, B, a1, a2):
+        return sum(np.convolve(np.diff(np.concatenate([[0.0], qq])) * GPM, kernel(T, S, B, fr[src], fr[w], 5000.0, n))[:n]
+                   for qq, src in ((a1, "TW-1"), (a2, "TW-2")))
+    best = None
+    for B in np.geomspace(1500, 12000, 44):
+        e = 0.0
+        for w in ("MS-MW", "CV-07", "OW-S"):
+            mdl = town_model(w, B, q1, q2)
+            ok = fit & ~np.isnan(A[w])
+            e += float(np.sum((A[w][ok] - mdl[ok]) ** 2))
+        if best is None or e < best[0]:
+            best = (e, B)
+    B = best[1]
+    out["B"] = round(B)
+    fut = np.array([p >= pd.Period("2026-10", "M") for p in months])
+    proj = np.array([base * (1 + growth) ** (p.year - 2026) * town_f[p.month - 1] if p >= pd.Period("2026-10", "M") else 0
+                     for p in months])
+    a1, a2 = np.where(fut, 0.56 * proj, q1), np.where(fut, 0.44 * proj, q2)
+    town = town_model("OW-S", B, a1, a2)
+    peaks = {}
+    for rate in rates:
+        newq = np.array([rate * new_f[p.month - 1] if p >= pd.Period("2027-04", "M") else 0.0 for p in months])
+        fld = sum(np.convolve(np.diff(np.concatenate([[0.0], newq / 2])) * GPM,
+                              kernel(T, S, B, fr[src], fr["OW-S"], 5000.0, n))[:n] for src in ("PW-1", "PW-2"))
+        peaks[rate] = float((town + fld)[yrs == 2046].max())
+    out["peaks"] = {str(k): round(v, 2) for k, v in peaks.items()}
+    ok = [r for r in rates if peaks[r] <= limit]
+    out["call"] = max(ok) if ok else None
+    ft = lambda x: int(math.floor(x + 0.5))
+    out["peaks_ft"] = {str(k): ft(v) for k, v in peaks.items()}
+    out["msmw_2025_ft"] = ft(out["msmw_2025"])
+    fails = []
+    if figs:
+        F = json.load(open(figs))
+        if out["call"] != F["call"]:
+            fails.append("call %s against %s" % (out["call"], F["call"]))
+        if out["peaks_ft"] != F["peaks_ft"]:
+            fails.append("peaks %s against %s" % (out["peaks_ft"], F["peaks_ft"]))
+        if out["msmw_2025_ft"] != F["msmw_2025_ft"]:
+            fails.append("MS-MW %s against %s" % (out["msmw_2025_ft"], F["msmw_2025_ft"]))
+        if abs(out["doc_limit"] - F["limit"]) > 1e-9:
+            fails.append("limit")
+    if not out["application_states_no_limit"]:
+        fails.append("the application restates the limit")
+    print(json.dumps(out, indent=1))
+    print("verify: %s" % ("PASS" if not fails else "FAIL " + "; ".join(fails)))
+    return 0 if not fails else 1
 
 
 if __name__ == "__main__":
-    sys.exit(main(sys.argv[1]))
+    sys.exit(main(sys.argv[1], sys.argv[2] if len(sys.argv) > 2 else None))

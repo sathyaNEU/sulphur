@@ -1,4 +1,4 @@
-"""task3 architecture 4: cut the pack into a folder from the clean truth."""
+"""task3 architecture 3: cut the pack into a folder from the clean truth."""
 import os
 
 import numpy as np
@@ -10,19 +10,19 @@ import params as P
 import world as W
 
 FILES = {
-    "results": "corlinden_raw_water_nitrate_results_1988-2026.csv",
-    "pumping": "corlinden_well_pumping_daily_2009-2026.csv",
-    "network": "ravell_county_groundwater_network_samples_1990-2026.csv",
-    "sites": "ravell_county_groundwater_network_sites.xlsx",
-    "landcover": "ravell_county_parcel_land_cover_1986-2026.csv",
-    "whpa": "sallow_road_wellhead_protection_plan_2019.pdf",
-    "attrs": "sallow_road_WHPA_parcel_attributes_2019.xlsx",
-    "map": "sallow_road_WHPA_zones_figure3_2019.png",
-    "ages": "ravell_county_groundwater_age_survey_2019.xlsx",
-    "plan": "corlinden_water_supply_plan_2025.pdf",
-    "logs": "sallow_road_well_construction_records.pdf",
-    "spcap": "corlinden_well_specific_capacity_2008-2026.xlsx",
-    "fert": "ravell_county_fertilizer_sales_1990-2025.csv",
+    "transducers": "PW-1_constant_rate_2026-09_transducers.csv",
+    "baro": "barologger_BL-2231_2026-09.csv",
+    "notes": "PW-1_constant_rate_2026-09_field_readings.xlsx",
+    "step": "PW-1_step_drawdown_2026-08-27.csv",
+    "mor": "harlow_springs_MOR_well_production_2009-2026.csv",
+    "msmw": "mill_street_MW_water_levels_2008-2026.csv",
+    "network": "cvwcd_network_water_levels_2005-2026.csv",
+    "register": "cvwcd_well_register.xlsx",
+    "rule": "CVWCD_Rule_WR-4_groundwater_withdrawal_permits.pdf",
+    "application": "reidel_road_WR-4_application_requested_schedules.pdf",
+    "logs": "drillers_logs_corrin_valley_wells.pdf",
+    "map": "CVWCD_bedrock_surface_plate3_harlow_reach.png",
+    "quality": "PW-1_raw_water_quality_2026-09.xlsx",
 }
 
 
@@ -30,22 +30,17 @@ def build_pack(target, seed=P.SEED):
     os.makedirs(target, exist_ok=True)
     truth = W.build(seed)
     rng = np.random.default_rng(seed + 1)
-    K.assign_ids(truth, rng)
     p = {k: os.path.join(target, v) for k, v in FILES.items()}
     n = {}
-    pump = K.pumping(truth, rng)
-    truth["pump"] = pump
-    n[FILES["results"]] = K.utility_results(p["results"], truth, pump, rng)
-    n[FILES["pumping"]] = K.pumping_csv(p["pumping"], pump, rng)
-    n[FILES["network"]] = K.network_samples(p["network"], truth, rng)
-    n[FILES["sites"]] = K.network_sites(p["sites"], truth, rng)
-    n[FILES["landcover"]] = K.land_cover(p["landcover"], truth, rng)
-    n[FILES["attrs"]] = K.whpa_attributes(p["attrs"], truth, rng)
-    n[FILES["ages"]] = K.age_survey(p["ages"], truth, rng)
-    K.specific_capacity(p["spcap"], rng)
-    n[FILES["fert"]] = K.fertilizer_sales(p["fert"], rng)
-    docs.whpa_report(p["whpa"], truth)
-    docs.supply_plan(p["plan"])
-    docs.well_logs(p["logs"])
+    n[FILES["transducers"]] = K.write_test(p, truth, rng)["rows"]
+    K.write_step_test(p["step"], rng)
+    n[FILES["mor"]] = K.write_mor(p["mor"], truth, rng)
+    n[FILES["msmw"]] = K.write_msmw(p["msmw"], truth, rng)
+    n[FILES["network"]] = K.write_network(p["network"], truth, rng)
+    K.write_register(p["register"])
+    K.write_water_quality(p["quality"], rng)
+    docs.rule_wr4(p["rule"])
+    docs.application_summary(p["application"])
+    docs.drillers_logs(p["logs"])
     mapimg.draw(p["map"])
     return n, truth

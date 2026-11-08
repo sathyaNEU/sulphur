@@ -1,135 +1,129 @@
 {
  "task": "task3",
- "architecture": 4,
+ "architecture": 3,
  "setting": "2026-11-06",
  "files": [
   {
-   "name": "corlinden_raw_water_nitrate_results_1988-2026.csv",
+   "name": "PW-1_constant_rate_2026-09_transducers.csv",
    "role": "evidence",
-   "source": "synthetic: Corlinden Water Utility's nitrate results by sample point, raw water and entry point",
-   "date": "2026-11-04",
+   "source": "synthetic: Tillbrook Hydrogeologic's logger export for the 72-hour test of PW-1, six wells, one-minute absolute pressure from two logger brands",
+   "date": "2026-09-21",
    "license": "CC0 1.0 (synthetic, authored for this task)"
   },
   {
-   "name": "corlinden_well_pumping_daily_2009-2026.csv",
+   "name": "barologger_BL-2231_2026-09.csv",
    "role": "evidence",
-   "source": "synthetic: the utility's SCADA daily pumping by well",
-   "date": "2026-11-02",
+   "source": "synthetic: the on-site barologger, five-minute values in UTC",
+   "date": "2026-09-21",
    "license": "CC0 1.0 (synthetic, authored for this task)"
   },
   {
-   "name": "ravell_county_groundwater_network_samples_1990-2026.csv",
+   "name": "PW-1_constant_rate_2026-09_field_readings.xlsx",
    "role": "evidence",
-   "source": "synthetic: Ravell County's groundwater network samples (water-table wells, spring and fall)",
-   "date": "2026-10-21",
+   "source": "synthetic: the test's field notes (loggers, tape readings, discharge, events)",
+   "date": "2026-09-21",
    "license": "CC0 1.0 (synthetic, authored for this task)"
   },
   {
-   "name": "ravell_county_groundwater_network_sites.xlsx",
+   "name": "harlow_springs_MOR_well_production_2009-2026.csv",
    "role": "evidence",
-   "source": "synthetic: the network's site register, land cover codes and field notes",
-   "date": "2026-10-21",
+   "source": "synthetic: Harlow Springs Utilities' monthly operating report extract, production by well",
+   "date": "2026-10-07",
    "license": "CC0 1.0 (synthetic, authored for this task)"
   },
   {
-   "name": "ravell_county_parcel_land_cover_1986-2026.csv",
+   "name": "mill_street_MW_water_levels_2008-2026.csv",
    "role": "evidence",
-   "source": "synthetic: the county's parcel land cover by year",
-   "date": "2026-10-21",
+   "source": "synthetic: the Mill Street monitoring well's tape readings from the operating reports",
+   "date": "2026-10-07",
    "license": "CC0 1.0 (synthetic, authored for this task)"
   },
   {
-   "name": "sallow_road_wellhead_protection_plan_2019.pdf",
+   "name": "cvwcd_network_water_levels_2005-2026.csv",
    "role": "evidence",
-   "source": "synthetic: Fenwright Hydrogeologic's 2019 wellhead protection plan for the well field",
-   "date": "2019-11-14",
+   "source": "synthetic: the conservancy district's network water-level export",
+   "date": "2026-10-02",
    "license": "CC0 1.0 (synthetic, authored for this task)"
   },
   {
-   "name": "sallow_road_WHPA_parcel_attributes_2019.xlsx",
+   "name": "cvwcd_well_register.xlsx",
    "role": "evidence",
-   "source": "synthetic: the plan's Appendix B, parcel attributes and recharge by land cover",
-   "date": "2019-11-14",
+   "source": "synthetic: the district's well register with measuring-point history",
+   "date": "2026-10-02",
    "license": "CC0 1.0 (synthetic, authored for this task)"
   },
   {
-   "name": "sallow_road_WHPA_zones_figure3_2019.png",
+   "name": "CVWCD_Rule_WR-4_groundwater_withdrawal_permits.pdf",
    "role": "evidence",
-   "source": "synthetic: the plan's Figure 3, zones of contribution",
-   "date": "2019-11-14",
+   "source": "synthetic: the district's withdrawal permit rule as amended June 2023",
+   "date": "2023-06-20",
    "license": "CC0 1.0 (synthetic, authored for this task)"
   },
   {
-   "name": "ravell_county_groundwater_age_survey_2019.xlsx",
+   "name": "reidel_road_WR-4_application_requested_schedules.pdf",
    "role": "evidence",
-   "source": "synthetic: the county's 2019 tritium-helium survey",
-   "date": "2020-02-03",
+   "source": "synthetic: the utility's application summary, requested schedules and the Mill Street projection",
+   "date": "2026-10-30",
    "license": "CC0 1.0 (synthetic, authored for this task)"
   },
   {
-   "name": "corlinden_water_supply_plan_2025.pdf",
+   "name": "drillers_logs_corrin_valley_wells.pdf",
    "role": "evidence",
-   "source": "synthetic: the utility's 2025 water supply plan",
-   "date": "2025-09-10",
+   "source": "synthetic: drillers' logs compiled from the district's well records",
+   "date": "2026-10-02",
    "license": "CC0 1.0 (synthetic, authored for this task)"
   },
   {
-   "name": "sallow_road_well_construction_records.pdf",
+   "name": "CVWCD_bedrock_surface_plate3_harlow_reach.png",
+   "role": "evidence",
+   "source": "synthetic: Plate 3 of the district's 2019 bedrock surface study, the Harlow reach, wells added 2026",
+   "date": "2026-10-02",
+   "license": "CC0 1.0 (synthetic, authored for this task)"
+  },
+  {
+   "name": "PW-1_step_drawdown_2026-08-27.csv",
    "role": "distractor",
-   "source": "synthetic: the production wells' construction records",
-   "date": "2021-03-08",
+   "source": "synthetic: the August step-drawdown test of PW-1",
+   "date": "2026-08-28",
    "license": "CC0 1.0 (synthetic, authored for this task)"
   },
   {
-   "name": "corlinden_well_specific_capacity_2008-2026.xlsx",
+   "name": "PW-1_raw_water_quality_2026-09.xlsx",
    "role": "distractor",
-   "source": "synthetic: the production wells' specific capacity tests",
-   "date": "2026-05-04",
-   "license": "CC0 1.0 (synthetic, authored for this task)"
-  },
-  {
-   "name": "ravell_county_fertilizer_sales_1990-2025.csv",
-   "role": "distractor",
-   "source": "synthetic: county nitrogen fertiliser sales by product",
-   "date": "2026-03-30",
+   "source": "synthetic: the raw-water quality results from the test",
+   "date": "2026-10-05",
    "license": "CC0 1.0 (synthetic, authored for this task)"
   }
  ],
  "distractor_files": [
-  "sallow_road_well_construction_records.pdf",
-  "corlinden_well_specific_capacity_2008-2026.xlsx",
-  "ravell_county_fertilizer_sales_1990-2025.csv"
+  "PW-1_step_drawdown_2026-08-27.csv",
+  "PW-1_raw_water_quality_2026-09.xlsx"
  ],
  "distractor_reasons": {
-  "sallow_road_well_construction_records.pdf": "the screens and logs describe the wells, which all draw the full saturated thickness of one sand aquifer; the forecast turns on the land over the zones, not the wells' build",
-  "corlinden_well_specific_capacity_2008-2026.xlsx": "specific capacity bears on pumping capacity and well rehabilitation, which the plan's fixed shares already settle",
-  "ravell_county_fertilizer_sales_1990-2025.csv": "county-wide sales carry no parcel, land cover or timing; the leachate the wells receive is measured directly by the network"
+  "PW-1_step_drawdown_2026-08-27.csv": "the step test sizes PW-1's well losses, which change the drawdown inside the pumping well and nowhere in the aquifer; the sentinel's drawdown never reads it",
+  "PW-1_raw_water_quality_2026-09.xlsx": "the raw-water chemistry bears on treatment, not on the drawdown limit"
  },
  "stated_inputs": [
-  "2027",
-  "2031",
-  "2030",
-  "2034",
-  "10",
-  "4.427",
-  "8",
-  "30",
-  "32",
-  "20",
-  "27",
-  "28",
-  "25",
+  "450",
+  "700",
+  "1,000",
+  "1,250",
   "9.0",
-  "10.0",
-  "10.5",
-  "14.0",
-  "11.0",
-  "1.62",
-  "15 December 2026"
+  "2.1",
+  "2.2",
+  "4.1",
+  "4.2",
+  "4.3",
+  "4.4",
+  "1.2",
+  "2027",
+  "2046",
+  "0.56",
+  "0.44",
+  "548"
  ],
  "deliverables": [
-  "corlinden_nitrate_plant_timing_memo.pdf",
-  "corlinden_entry_point_nitrate_forecast.xlsx",
-  "corlinden_entry_point_nitrate_2027-2040.png"
+  "reidel_road_sentinel_forecast.xlsx",
+  "reidel_road_WR-4_demonstration.pdf"
  ]
 }

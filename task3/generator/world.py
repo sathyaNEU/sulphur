@@ -1,204 +1,205 @@
-"""task3 architecture 4: the clean truth. Parcels in the Sallow Road wellhead protection area and under the county's
-network wells, each with its land cover by year, depth to water and travel times; nitrate leached at the land surface,
-carried through the unsaturated sand to the water table, then through the aquifer to the wells; the wells' pumping;
-the entry point's blend. Everything here is the world; nothing here is what an analyst can see."""
+"""task3 architecture 3: the clean truth of the Corrin Valley world, before any file is written.
+
+Every series the pack will carry is built here from the aquifer, the pumping records and the region's natural
+level: the Mill Street wells' monthly pumping 2009 to 2026, the natural level each well would have shown without
+any pumping, the drawdown the Mill Street wells caused at every well, the monitoring readings, and the minute record
+of the September 2026 Reidel Road test. Nothing here knows how a file will be laid out."""
+import datetime as dt
 import math
 
 import numpy as np
 
+import aquifer as A
 import params as P
 
-T0, T1, DT = 1940.0, 2041.0, 0.05
-TG = np.round(np.arange(T0, T1 + 1e-9, DT), 4)     # the time grid (decimal years)
-NT = len(TG)
+UTC = dt.timezone.utc
+EDT = dt.timezone(dt.timedelta(hours=-4))
 
 
-def idx(t):
-    return int(round((t - T0) / DT))
-
-
-# ---------------------------------------------------------------- weather
-def weather(rng):
-    """county-wide wet and dry years: a leaching factor and a recharge factor per land-surface year"""
-    yrs = np.arange(1940, 2042)
-    lf = np.clip(rng.normal(1.0, 0.065, len(yrs)), 0.85, 1.18)
-    rf = np.clip(1.0 + 0.8 * (lf - 1.0) + rng.normal(0, 0.03, len(yrs)), 0.82, 1.2)
-    for y in range(2027, 2042):          # the forecast years carry no weather
-        lf[y - 1940] = rf[y - 1940] = 1.0
-    return {int(y): (float(a), float(b)) for y, a, b in zip(yrs, lf, rf)}
-
-
-# ---------------------------------------------------------------- parcels
-def _hist(c0, changes=()):
-    """land cover by year 1940..2040 from a starting class and (year, class) changes"""
-    h, cur = {}, c0
-    ch = dict(changes)
-    for y in range(1940, 2041):
-        if y in ch:
-            cur = ch[y]
-        h[y] = cur
-    return h
-
-
-def whpa_parcels(rng):
+def months(y0=2005, m0=1, y1=2046, m1=12):
     out = []
-
-    def plain(zone, n_near, n_far, dtw, mix, tnear=(0.5, 4.2), tfar=(5.5, 11.0)):
-        classes = []
-        for c, k in mix.items():
-            classes += [c] * k
-        rng.shuffle(classes)
-        for i, c in enumerate(classes):
-            far = i >= n_near
-            out.append(dict(zone=zone, kind="plain",
-                            acres=float(np.round(rng.uniform(14, 34) if far else rng.uniform(26, 80), 1)),
-                            dtw=float(np.round(rng.uniform(*dtw), 0)),
-                            T=float(np.round(rng.uniform(*(tfar if far else tnear)), 1)),
-                            hist=_hist(c), theta=float(rng.normal(P.THETA, P.THETA_SD)),
-                            mult=float(math.exp(rng.normal(0, 0.03)))))
-    plain("W3", 11, 3, (6, 17), {"FOR": 6, "GRS": 2, "DRY": 2, "IRC": 2, "RES": 2})
-    plain("W5", 12, 4, (8, 24), {"FOR": 5, "GRS": 1, "DRY": 3, "IRC": 4, "IRV": 1, "RES": 2})
-    plain("W6", 10, 3, (8, 24), {"FOR": 2, "GRS": 1, "DRY": 3, "IRC": 4, "IRV": 2, "RES": 1})
-    plain("W7", 9, 3, (9, 25), {"FOR": 2, "GRS": 1, "DRY": 2, "IRC": 4, "IRV": 2, "RES": 1})
-    # the Sallow Ridge timber tract, cleared for irrigated vegetables 2016-2020 in ten parcels, and the city's own
-    # ridge woodland (two parcels, left in forest)
-    ridge = [("W6", 2017, 94, 1.7, 106),
-             ("W6", 2018, 84, 2.0, 93),
-             ("W6", 2019, 80, 1.5, 111),
-             ("W6", 2019, 72, 2.6, 80),
-             ("W6", 2020, 71, 1.7, 100),
-             ("W7", 2018, 88, 1.5, 125),
-             ("W7", 2019, 76, 2.1, 136),
-             ("W7", 2020, 68, 2.1, 108),
-             ("W7", 2021, 66, 1.4, 144),
-             ("W7", 2021, 57, 2.6, 96)]
-    for zone, yr, dtw, T, ac in ridge:
-        out.append(dict(zone=zone, kind="ridge", acres=float(ac), dtw=float(dtw), T=float(T),
-                        hist=_hist("FOR", [(yr, "IRV")]), theta=float(rng.normal(P.THETA, P.THETA_SD * 0.6)),
-                        mult=float(math.exp(rng.normal(0, 0.03))), cleared=yr))
-    for zone, dtw, T, ac in [("W6", 78, 0.9, 64), ("W5", 71, 1.5, 58)]:
-        out.append(dict(zone=zone, kind="ridge_woods", acres=float(ac), dtw=float(dtw), T=float(T),
-                        hist=_hist("FOR"), theta=P.THETA, mult=1.0))
+    y, m = y0, m0
+    while (y, m) <= (y1, m1):
+        out.append((y, m))
+        m += 1
+        if m == 13:
+            y, m = y + 1, 1
     return out
 
 
-def network_sites(rng):
-    """the county's 72 water-table monitoring wells, each on its own parcel"""
-    out = []
-
-    def site(c0, changes, dtw, kind):
-        out.append(dict(kind=kind, dtw=float(dtw), hist=_hist(c0, changes),
-                        theta=float(rng.normal(P.THETA, P.THETA_SD)), mult=float(math.exp(rng.normal(0, 0.10))),
-                        age=float(np.round(rng.uniform(0.1, 0.45), 2))))
-    steady = {"FOR": 12, "GRS": 5, "DRY": 7, "IRC": 13, "IRV": 10, "RES": 4}
-    for c, k in steady.items():
-        for _ in range(k):
-            site(c, (), np.round(rng.uniform(8, 52), 0), "steady")
-    # the matured conversions: pasture, dry cropland or grass put under pivots between 1988 and 2009
-    mat_dtw = [11, 14, 17, 19, 22, 25, 28, 31, 34, 38, 43, 49, 57, 68, 82]
-    mat_yr = [1993, 1989, 2001, 1996, 2006, 1991, 1999, 2004, 1994, 2008, 1990, 2002, 1997, 1992, 1998]
-    froms = ["DRY", "GRS", "DRY", "DRY", "GRS", "DRY", "FOR", "DRY", "GRS", "DRY", "FOR", "DRY", "GRS", "FOR", "FOR"]
-    tos = ["IRC", "IRV", "IRC", "IRV", "IRC", "IRC", "IRV", "IRC", "IRC", "IRV", "IRC", "IRV", "IRC", "IRV", "IRC"]
-    for d, y, f, t in zip(mat_dtw, mat_yr, froms, tos):
-        site(f, [(y, t)], d, "converted")
-    # irrigated land enrolled in the conservation reserve
-    for d, y, f in [(16, 1991, "IRC"), (29, 1996, "IRV"), (47, 2003, "IRC")]:
-        site(f, [(y, "GRS")], d, "retired")
-    # the recent clearings on timbered upland
-    for d, y in [(90, 2017), (79, 2018), (69, 2020)]:
-        site("FOR", [(y, "IRV")], d, "recent")
-    order = rng.permutation(len(out))
-    return [out[i] for i in order]
+MONTHS = months()
+MI = {ym: i for i, ym in enumerate(MONTHS)}
+N = len(MONTHS)
+DATA_END = (2026, 9)          # the last month every long-term file carries
 
 
-# ---------------------------------------------------------------- transport
-def surface_series(p, wx):
-    """land-surface leachate concentration and recharge on the grid"""
-    yrs = np.floor(TG).astype(int)
-    conc = np.empty(NT)
-    q = np.empty(NT)
-    U = np.empty(NT)
-    for i, (t, y) in enumerate(zip(TG, yrs)):
-        y = int(min(max(y, 1940), 2040))
-        c = p["hist"][y]
-        lf, rf = wx[y]
-        conc[i] = P.leach(c, t) * p["mult"] * lf if c != "FOR" else P.leach(c, t) * lf
-        q[i] = P.RECHARGE[c] * rf
-        U[i] = P.vadose_years(p["dtw"], c, p["theta"])
-    return conc, q, U
+def xy(ac):
+    a, c = ac
+    x0, y0 = P.ORIGIN
+    # along-axis unit vector points N 18 E; across-axis points E 18 S
+    ua = (math.sin(P.AZ), math.cos(P.AZ))
+    uc = (math.cos(P.AZ), -math.sin(P.AZ))
+    return (x0 + a * ua[0] + c * uc[0], y0 + a * ua[1] + c * uc[1])
 
 
-def water_table(p, wx):
-    """concentration and flux of the water reaching the water table under the parcel, on the grid. The water moves
-    down as a piston on the cumulative recharge clock: water leaving the root zone at s reaches the water table when
-    the recharge since s has filled the sand's held water above it (theta times the depth to water)."""
-    conc, q, _ = surface_series(p, wx)
-    Q = np.concatenate([[0.0], np.cumsum(q[:-1] / 12.0 * DT)])     # feet of recharge since T0
-    store = p["theta"] * p["dtw"]
-    arr = np.interp(Q + store, Q, TG, right=np.inf)
-    num = np.zeros(NT)
-    den = np.zeros(NT)
-    for i in range(NT):
-        if not np.isfinite(arr[i]):
+def town_pumping(rng):
+    """Monthly mean gpm for TW-1 and TW-2, March 2009 to September 2026."""
+    q1 = np.zeros(N)
+    q2 = np.zeros(N)
+    for i, (y, m) in enumerate(MONTHS):
+        if (y, m) < P.TOWN_START or (y, m) > DATA_END:
             continue
-        tt = arr[i] - TG[i]
-        sig = max(P.VADOSE_SPREAD * tt, 0.12)
-        mu = arr[i]
-        lo, hi = idx(max(mu - 4 * sig, T0)), idx(min(mu + 4 * sig, T1))
-        if lo > hi:
+        yrs = (y - 2009) + (m - 1) / 12.0
+        tot = P.TOWN_BASE_GPM * (1 + P.TOWN_GROWTH) ** yrs
+        tot *= 1 + P.TOWN_SEASON * math.cos(2 * math.pi * (m - 7) / 12.0)
+        tot *= math.exp(rng.normal(0, 0.035))
+        if (y, m) < P.TW2_START:
+            q1[i] = tot
+        else:
+            share = P.TW1_SHARE_AFTER + rng.normal(0, 0.03)
+            if (y, m) == (2018, 3):          # TW-1 pulled for a pump and motor replacement
+                share = 0.0
+            if (y, m) in ((2021, 10), (2021, 11)):   # TW-2 screen redevelopment
+                share = 1.0
+            q1[i] = tot * share
+            q2[i] = tot * (1 - share)
+    return q1, q2
+
+
+def town_projection():
+    """The application's projection for the Mill Street wells, October 2026 to December 2046, monthly gpm."""
+    base = P.TOWN_PROJ_BASE
+    out = np.zeros(N)
+    for i, (y, m) in enumerate(MONTHS):
+        if (y, m) <= DATA_END:
             continue
-        r = TG[lo:hi + 1]
-        w = np.exp(-0.5 * ((r - mu) / sig) ** 2) / (sig * math.sqrt(2 * math.pi)) * DT
-        num[lo:hi + 1] += w * q[i] * conc[i]
-        den[lo:hi + 1] += w * q[i]
-    c_wt = np.where(den > 0, num / np.maximum(den, 1e-12), 0.0)
-    return c_wt, den
+        ann = base * (1 + P.TOWN_PROJ_GROWTH) ** (y - 2026)
+        out[i] = ann * P.TOWN_MONTH_FACTORS[m - 1]
+    return out
 
 
-GH_Z, GH_W = np.polynomial.hermite_e.hermegauss(7)
-GH_W = GH_W / GH_W.sum()
+def new_field(rate):
+    out = np.zeros(N)
+    for i, (y, m) in enumerate(MONTHS):
+        if (y, m) >= P.NEW_START:
+            out[i] = rate * P.NEW_SEASON[m - 1]
+    return out
 
 
-def to_well(c_wt, fl, T):
-    """water from one parcel arriving at the well: the water-table series lagged by the aquifer travel time"""
-    num = np.zeros(NT)
-    den = np.zeros(NT)
-    for z, w in zip(GH_Z, GH_W):
-        lag = max(T * (1 + P.SAT_SPREAD * z), 0.05)
-        k = int(round(lag / DT))
-        num[k:] += w * (fl * c_wt)[:NT - k]
-        den[k:] += w * fl[:NT - k]
-    return num, den
+def natural_levels(rng):
+    """Natural level anomaly (ft, + higher) for each well, monthly 2005 to 2026: the confined aquifer's regional
+    response to wet and dry years, the shallow outwash's quicker and larger one, the bedrock's muted one."""
+    yr = np.array([y for y, _ in MONTHS])
+    mo = np.array([m for _, m in MONTHS])
+    ar = np.zeros(N)
+    for i in range(1, N):
+        ar[i] = 0.92 * ar[i - 1] + rng.normal(0, 0.24)
+    yan = np.array([P.WET_DRY.get(int(y), 0.0) for y in yr])
+    # the annual anomalies ease in and out over the months rather than stepping at each new year
+    k = np.array([0.08, 0.16, 0.24, 0.24, 0.16, 0.08])
+    yan_s = np.convolve(np.pad(yan, (3, 2), mode="edge"), k, mode="valid")[:N]
+    regional = 1.05 * np.sin(2 * math.pi * (mo - 2.2) / 12.0) + yan_s + ar
+    shallow_ar = np.zeros(N)
+    for i in range(1, N):
+        shallow_ar[i] = 0.75 * shallow_ar[i - 1] + rng.normal(0, 0.45)
+    shallow = 2.6 * np.sin(2 * math.pi * (mo - 2.8) / 12.0) + 1.5 * yan_s + shallow_ar
+    out = {}
+    for w in P.WELLS:
+        gain = P.NAT_GAIN.get(w, 1.0)
+        local = np.zeros(N)
+        for i in range(1, N):
+            local[i] = 0.85 * local[i - 1] + rng.normal(0, 0.05)
+        if w in P.CONFINED:
+            out[w] = gain * regional + local
+        elif w == "CV-13":
+            out[w] = 0.35 * regional + 0.6 * local
+        else:
+            out[w] = gain * shallow + 2 * local
+    return out, regional
+
+
+def town_drawdown(q1, q2, obs, T=P.T, S=P.S, B=P.B, width=P.WIDTH):
+    """Monthly mean drawdown the Mill Street wells cause at obs (truth unless parameters are passed)."""
+    o = P.WELLS[obs] if isinstance(obs, str) else obs
+    s = A.superpose_monthly(q1, A.monthly_kernel(T, S, B, P.WELLS["TW-1"], o, width, N))
+    s += A.superpose_monthly(q2, A.monthly_kernel(T, S, B, P.WELLS["TW-2"], o, width, N))
+    return s
+
+
+def field_drawdown(qn, obs, T=P.T, S=P.S, B=P.B, width=P.WIDTH):
+    o = P.WELLS[obs] if isinstance(obs, str) else obs
+    s = A.superpose_monthly(qn / 2.0, A.monthly_kernel(T, S, B, P.WELLS["PW-1"], o, width, N))
+    s += A.superpose_monthly(qn / 2.0, A.monthly_kernel(T, S, B, P.WELLS["PW-2"], o, width, N))
+    return s
 
 
 def build(seed=P.SEED):
     rng = np.random.default_rng(seed)
-    wx = weather(rng)
-    parcels = whpa_parcels(rng)
-    sites = network_sites(rng)
-    wells = {}
-    for w in P.WELLS:
-        num = np.zeros(NT)
-        den = np.zeros(NT)
-        for p in parcels:
-            if p["zone"] != w:
-                continue
-            c_wt, fl = water_table(p, wx)
-            p["c_wt"] = c_wt
-            n, d = to_well(c_wt, fl, p["T"])
-            num += p["acres"] * n
-            den += p["acres"] * d
-        wells[w] = num / np.maximum(den, 1e-12)
-    for s in sites:
-        c_wt, _ = water_table(s, wx)
-        k = int(round(s["age"] / DT))
-        out = np.empty(NT)
-        out[k:] = c_wt[:NT - k]
-        out[:k] = c_wt[0]
-        s["c"] = out
-    return dict(wx=wx, parcels=parcels, sites=sites, wells=wells, rng_state=seed)
+    q1, q2 = town_pumping(rng)
+    nat, regional = natural_levels(rng)
+    draw = {w: town_drawdown(q1, q2, w) for w in P.WELLS if w in P.CONFINED or w in ("CV-04", "CV-09", "CV-13")}
+    # the shallow outwash and the bedrock barely feel the confined aquifer's pumping
+    for w in ("CV-04", "CV-09"):
+        draw[w] = 0.06 * draw[w]
+    draw["CV-13"] = 0.10 * draw["CV-13"]
+    return {"q1": q1, "q2": q2, "nat": nat, "regional": regional, "draw": draw, "rng": rng}
 
 
-def annual(series, y):
-    a, b = idx(y), idx(y + 1)
-    return float(np.mean(series[a:b]))
+# ---------------------------------------------------------------- the September 2026 test, minute by minute
+
+def test_clock():
+    t0 = dt.datetime.fromisoformat(P.LOG_FROM).replace(tzinfo=EDT)
+    t1 = dt.datetime.fromisoformat(P.LOG_TO).replace(tzinfo=EDT)
+    on = dt.datetime.fromisoformat(P.TEST_START).replace(tzinfo=EDT)
+    n = int((t1 - t0).total_seconds() // 60) + 1
+    stamps = [t0 + dt.timedelta(minutes=k) for k in range(n)]
+    tdays = np.array([(s - on).total_seconds() / 86400.0 for s in stamps])
+    return stamps, tdays, on
+
+
+def barometer(tdays, rng):
+    """Atmospheric pressure (psi) at the site: a slow wave, the daily tide and a front on 16 to 17 September."""
+    p = 14.38 + 0.035 * np.sin(2 * math.pi * tdays / 4.3 + 0.7)
+    p += 0.012 * np.sin(2 * math.pi * tdays * 2 + 1.1)                 # semidiurnal atmospheric tide
+    front = 2.35
+    p -= 0.165 * (1 / (1 + np.exp(-(tdays - front) / 0.18)))
+    p += 0.120 * (1 / (1 + np.exp(-(tdays - (front + 1.35)) / 0.30)))
+    walk = np.cumsum(rng.normal(0, 0.0009, len(tdays)))
+    walk -= np.linspace(walk[0], walk[-1], len(tdays))
+    return p + walk
+
+
+def test_rate_steps():
+    """PW-1's rate as hourly steps (gpm): it starts at the high end and eases down as the column warms."""
+    hi, lo = P.TEST_RATE_GPM
+    steps = []
+    for h in range(P.TEST_HOURS):
+        frac = (1 - math.exp(-h / 9.0)) / (1 - math.exp(-P.TEST_HOURS / 9.0))
+        steps.append((h / 24.0, round(hi - (hi - lo) * frac, 1)))
+    steps.append((P.TEST_HOURS / 24.0, 0.0))
+    return steps
+
+
+def test_drawdown(tdays, obs, steps, T=P.T, S=P.S, B=P.B, width=P.WIDTH):
+    """Drawdown at obs over the test record by interpolating the unit step response on a log time grid."""
+    o = P.WELLS[obs]
+    rw = P.WELLS["PW-1"]
+    grid = np.logspace(-6, 1.6, 900)
+    if obs == "PW-1":
+        o = (rw[0], rw[1] + 0.5)
+    ur = A.step_response(T, S, B, rw, o, grid, width)
+    lg = np.log(grid)
+    out = np.zeros_like(tdays)
+    prev = 0.0
+    for tc, rate in steps:
+        dq = (rate - prev) * P.GPM
+        prev = rate
+        dtv = tdays - tc
+        m = dtv > 0
+        out[m] += dq * np.interp(np.log(dtv[m]), lg, ur)
+    return out
+
+
+def earth_tide(tdays, amp):
+    return amp * (np.sin(2 * math.pi * tdays * 1.9323 + 0.4) + 0.46 * np.sin(2 * math.pi * tdays * 2.0 + 1.9) +
+                  0.38 * np.sin(2 * math.pi * tdays * 0.9973 + 2.6))

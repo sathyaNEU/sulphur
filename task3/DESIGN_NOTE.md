@@ -1,277 +1,286 @@
-# task3 architecture 4: Sallow Road well field, the nitrate plant's loan cycle
+# task3 architecture 3: Reidel Road well field, Rule WR-4 sentinel drawdown
 
-Physical & Environmental Sciences, hydrology (Sulfur task type: physical-model calibration and data assimilation,
-spatiotemporal exposure and source apportionment), Forecasting & Predictive Modeling. Re-root of the slot after the
-platform landed architecture 3 (both runs on the golden at every ask, `runs/triage.md`): one architecture per world, so
-a new world, dataset and shell.
+Physical & Environmental Sciences, hydrology (Sulfur task type: inverse problems, physical-model calibration and
+uncertainty propagation), Forecasting & Predictive Modeling. Re-root of the slot after the platform landed
+architecture 2 (both runs on the golden at every ask, `runs/triage.md`): one architecture per world, so a new world,
+dataset and shell.
 
 ## Draw
 
-- **Card:** `.claude/skills/fingerprint/cards/task3.json` v4, registered 2026-11-08 at PASS (differentiated against
-  mark181, mark166, mark451, mark234 and task3 v1; lineage carries v1 to v3 with their fates).
-- **Pairing:** a city water utility on Wisconsin's central sand plain must choose the state loan cycle for its nitrate
-  removal plant; a plant funded in 2027 enters service on 1 January 2030, one funded in 2031 on 1 January 2034, and the
-  plan requires it in service before the first year the entry point's annual flow-weighted mean nitrate reaches 10 mg/L.
-- **Shape:** a when-question (2027 or 2031) with a yearly forecast 2027 to 2040, the first year at 10, the 2034 entry
-  point and the well highest in 2034; a memo PDF, a forecast workbook and a chart PNG.
-- **Strategy:** outcomes that have not finished happening (Part A, WORKS IN FORM, F4's live form: completion speed
-  differs by a unit no pooled factor captures, here each parcel's depth to water) fused with separating two
-  explanations for one pattern (the recent clearing's absent response read as no effect or as not yet arrived).
-- **Data-native sentence:** a sand-plain well field whose nearest recharge land is an ice-contact ridge with 57 to 94 ft
-  of dry sand above the water table, cleared for irrigated vegetables from 2017 to 2021, beside a county network whose
-  older conversions, mostly on 11 to 49 ft of sand, step up later the deeper the water table.
-- **Abstraction sentence (written, then tested):** "a recent change at sources that sit deeper in an unobserved stage
-  than every earlier change that matured, so every check on the output reads its absence as no effect." Against every
-  approved and delivered build in `guard.py mechanisms --objective forecasting` and the F4 cards, no decisive step
-  separates an unarrived effect from a nil one through a depth-specific delay read from matured changes; mark181 (each
-  courier route's own reporting delay), mark451 (a handler's delay that collapsed), mark166 (departures linked at a
-  lagged yield) and mark234 (a loss in transit) each spend a different insight.
-- **Sources** (all synthetic, authored for this task, CC0; `metadata.json`): the utility's nitrate results 1988 to 2026
-  (raw water and EP-01), its SCADA daily pumping 2009 to 2026, the county network's samples 1990 to 2026 and site
-  register, the county's parcel land cover 1986 to 2026, the 2019 wellhead protection plan with its parcel attributes and
-  Figure 3, the county's 2019 tritium-helium survey, the 2025 water supply plan, and three distractors (the wells'
-  construction records, their specific capacity tests, county fertiliser sales).
-- **People:** drawn with `guard.py names --geo "United States"` (seeds 4417 and 3311): Chloe Griffin (general manager),
-  Dennis Diaz (operations superintendent), Patricia Gaines (Fenwright's hydrogeologist), Cindy Beard, Danny Sharp and Lindsey
-  Waller (county samplers, initials only in the data).
+- **Card:** `.claude/skills/fingerprint/cards/task3.json` v3, registered 2026-11-08 at PASS (differentiated against
+  mark166, mark247 and mark308; lineage carries v1 and v2 with their fates).
+- **Pairing:** a city water utility's groundwater withdrawal permit; the conservancy district's Rule WR-4 caps the
+  drawdown at a sentinel well in every month of a twenty-year term; four requested schedules for a new well field in a
+  buried-valley aquifer; the district permits the largest that meets the cap.
+- **Shape:** a which-of-four with each schedule's 2046 peak drawdown, the existing well field's drawdown at its own
+  monitoring well, a monthly forecast workbook and a demonstration PDF with the chart.
+- **Strategy:** a forecast that has to earn its place (Part A, WORKS IN FORM) fused with a clean comparison (Part A,
+  WORKS IN FORM): the far-field model is calibrated on the cone an existing well field has already drawn, and the
+  drawdown that record carries is only clean against natural levels from reference wells beyond the cone.
+- **Data-native sentence:** a confined valley aquifer whose no-flow walls and leaking till cap pull a three-day
+  test's drawdown in opposite directions and cancel inside its window, beside seventeen years of an existing well
+  field pumping into the same aquifer through a run of wet years, with the nearest network well sitting inside that
+  well field's cone.
+- **Abstraction sentence (written, then tested):** "a short trial's model fits the trial and is calibrated for the
+  long run on a sibling load's history read against a reference outside that load's reach." Against every approved
+  and delivered build in `guard.py mechanisms --objective forecasting`, no build's decisive step pairs an
+  out-of-window calibration with a contaminated-reference choice; mark166 (departures linked across groups), mark247
+  (gap-filled running sums), mark308 (unmet requests rebuilt from movements), mark138 (store at the forecast date) and
+  mark156 (infiltration below a water table) each spend a different insight.
+- **Sources** (all synthetic, authored for this task, CC0; `metadata.json`): the consultant's logger export for the
+  14 to 17 September 2026 test at PW-1 (six wells, one-minute absolute pressure, two logger brands and clocks), the
+  on-site barologger, the field-notes workbook, the August step test (distractor), Harlow Springs' monthly operating
+  report extract 2009 to 2026, the Mill Street monitoring well's tape readings 2008 to 2026, the district's network
+  water levels 2005 to 2026 and well register, Rule WR-4, the application's requested schedules, the drillers' logs,
+  Plate 3 of the 2019 bedrock surface study (PNG), and the raw-water quality workbook (distractor).
+- **People:** drawn with `guard.py names --geo US` (seeds 3303 and 3): Mitchell Munoz, Todd Robinson (test field
+  crew), Wendy Ruiz, Mary Alvarez, John Ponce (Mill Street readers).
 
 ## Default path
 
-1. Convert the utility's results to nitrate-N (the county laboratory's nitrate before 2004 over 4.427), average the
-   duplicates and re-runs, map the 2014 point names: EP-01 fell from 6.2 mg/L in 2012 to 5.3 in 2025, Wells 6 and 7
-   from 6.9 and 5.7 in 2010 to 5.4 and 4.5 in 2026.
-2. Trend each well over 2015 to 2026 and blend by the plan's shares: EP-01 near 4.7 mg/L in 2034, never at 10.
-3. A strong analyst does not stop at the trend: the parcel land cover shows the Sallow Ridge, 1,099 acres in the zones
-   of Wells 6 and 7, cleared for irrigated vegetables from 2017 to 2021, one to three years' groundwater travel from the
-   wells. It builds the protection area's mix (each parcel's land cover, its leachate from the network, its wellhead
-   model travel time), fits one lag to the wells' 1998 to 2018 record (4.5 years, residual 0.41 mg/L), and finds the
-   ridge should have raised Well 6 by about 10 mg/L by 2026.
-4. Wells 6 and 7 show no rise, nor do the network's three wells under the 2017 to 2020 upland clearings; fitted to
-   the 2019 to 2026 record the clearing's effect comes out at nil (the fit's squared error 1.2 at nil against 581 at
-   the network's leachate), so the model forecasts EP-01 near 5.5 mg/L in 2034 and never at 10.
+1. Put the six loggers on one clock (the Level TROLLs on local EDT, the Leveloggers on UTC), subtract the barologger,
+   take the OW-2 re-hang from the field notes, drop the rewritten records, and turn pressure into drawdown at PW-1's
+   observation wells against the pre-test trend.
+2. Fit Theis to OW-1, OW-2 and OW-3 (the field's method for a constant-rate test): T about 8,160 ft2/day, S about
+   1.0e-3, residual 0.08 ft over three days, the late-time derivative flat (no boundary, no leakage visible).
+3. Project the 2027 to 2046 drawdown at OW-S with that Theis aquifer and the requested schedules: nearly 22 ft even
+   at 450 gpm, so the hindcast of the Mill Street wells is run to check it, and Theis puts 12 ft of 2025 drawdown at
+   the Mill Street monitoring well where the record shows 3 to 5.
+4. Recalibrate: a leaky aquifer (Hantush, with the plate's walls) whose leakage factor reproduces the Mill Street
+   record, the drawdown at each monitoring well taken against the nearest network well in the same aquifer, CV-07,
+   as the natural level (or against the well's own 2005 to 2008 mean, or with a fitted trend): leakage factor near
+   1,900 ft, the record fitted closely.
+5. Forecast with that aquifer: every schedule's 2046 peak at OW-S under 3.5 ft, all four within the 9 ft limit.
 
-Ends on: the 2031 cycle
-Golden: the 2027 cycle
+Ends on: 1,250 gpm
+Golden: 1,000 gpm
 
 ## Stump sentence
 
-A strong analyst who finds the ridge clearing tests it against the wells and the county wells under recent clearings,
-sees no rise where the wellhead model's travel time or one lag fitted to the wells' own record says it should already
-be, sets the clearing's effect at nil and files the 2031 cycle with EP-01 near 5.5 mg/L through 2040; only each parcel's
-delay through its own unsaturated thickness, read from the county's matured conversions (0.132 years a foot), puts the
-ridge's leachate at the wells around the start of 2031, EP-01 at 10 in 2031 and the 2027 cycle.
+A strong analyst who sees the test's Theis forecast overshoot the Mill Street record recalibrates the leakage on the
+monitoring wells' drawdown read against the nearest network well CV-07 (or the wells' own pre-pumping levels, or a
+fitted trend), puts every schedule under 3.5 ft at OW-S and files 1,250 gpm; CV-07 sits inside the Mill Street cone and
+the region's wet years lift every reading, so only the natural level carried from the confined-aquifer wells beyond
+the cone (CV-02 and CV-11) gives a leakage factor near 3,500 ft and files 1,000 gpm, 8 ft against 1,250 gpm's 10.
 
 ## Deep reasoning
 
-- **Task type:** hydrology flood frequency is the vocab key; the Sulfur task type is physical-model calibration and data
-  assimilation with spatiotemporal exposure (a well field's nitrate forecast from the land over its zones), serving
-  forecasting.
-- **Domain test:** the deciding quantity is a well field's blended nitrate over the next decade, which groundwater
-  quality forecasting builds by convolving land-surface leaching with the travel time to the well, usually the
-  groundwater travel time from a wellhead protection model or a lag fitted to the wells' record.
-- **Swap:** "when does the blended nitrate reach 10 mg/L" becomes "when does a retailer's blended margin reach 10 per
-  cent": there is no water table, no unsaturated sand whose thickness sets a delay, no recharge to mix by and no
-  conversion whose leachate is still above the water table, so the delay and the absent response stop meaning anything.
-- **Layer 1:** nitrate as NO3 at the county laboratory before 2004 and '<' values at two reporting limits (laboratory),
-  field duplicates and re-runs as extra rows and the 2014 SCADA point names (utility), two network wells rebuilt under
-  new numbers in 2011, fall-only sampling in 2009 and 2010 and keyed-twice rows (county network), local land-cover codes
-  to 2007 and cropland-layer codes after, assessor splits in 2012 and the ridge re-numbered at its 2015 sale, a 2016
-  township exported twice (land cover), gallons then thousand gallons at a 2019 meter change and a duplicated export week
-  (SCADA); nothing is placed to be caught.
-- **Layer 2:** outcomes not finished: the leachate of a recent clearing is still above the water table, at a depth no
-  sample sees, and its arrival is timed by each parcel's own unsaturated thickness, which only the matured conversions
-  calibrate.
-- **Decisive step:** reading the absent response at Wells 6 and 7 and at the network's recent clearings as leachate not
-  yet arrived, with each parcel's delay to the water table built from its depth to water on the relation the matured
-  conversions show, not as the clearing leaching nothing under a pooled lag.
-- **Not semantics:** every field, unit, code and key read correctly (nitrate-N, the rebuilt wells, the parcel splits,
-  the code change) still leaves the delay to be chosen, and the wellhead model's travel time, one lag fitted to the
-  wells, and the matured conversions' average delay each put the ridge at the wells before 2026.
-- **Not rule application:** the plan files the cycles, the in-service dates, the 10 mg/L test at EP-01 and the shares;
-  no filed sentence names a delay, the unsaturated zone, a conversion cohort or a mixing weight.
-- **Analyst test:** a strong analyst cleans every file, builds the parcel mix with the network's leachate and the
-  wellhead model's travel time (or one lag fitted to the wells), finds the clearing's predicted rise absent, fits its
-  effect to nil and files the 2031 cycle.
-- **Estimand:** the 2025 water supply plan sections 2 to 4 (EP-01's annual flow-weighted mean nitrate as N, the plan's
-  shares from 2027, the plant in service before the first year that mean reaches 10 mg/L, 2027 cycle in service 1
-  January 2030, 2031 cycle 1 January 2034) and the prompt (land cover held at 2026; each year 2027 to 2040; the 2034
-  means to the nearest whole mg/L).
-- **No decoy:** no memo, plan or report states a nitrate forecast, a delay or a judgement on the cycle; the wellhead
-  plan delineates and inventories, the supply plan schedules.
-- **No certified replay:** no published forecast exists for the method to reproduce.
-- **Chain:** (1) the wells' falling-then-flat record is the nutrient-management era's water arriving and cannot show
-  leachate still above the water table; (2) the county's matured conversions step up after a delay that grows with
-  depth to water (0.132 years a foot, residual 0.3 years) while their water-table ages are under half a year, so the
-  delay is in the unsaturated sand and the wellhead model's travel time starts below it; (3) the ridge sits on 57 to
-  94 ft against the 11 to 49 ft under all but three matured conversions, so no pooled delay applies and its leachate
-  reaches the water table from 2028 and the wells around the start of 2031; (4) the leachate under irrigated vegetables since
-  nutrient management (20.9 mg/L) mixed into each well by the recharge each parcel had when its water left the water
-  table; (5) the plan's shares from 2027, EP-01 at 10 in 2031, before 1 January 2034.
-- **Judgment:** separating "the clearing does not raise nitrate" from "its leachate has not arrived" with the matured
-  conversions' delays against depth, the network's three recent upland clearings as the check (silent at 69 to 90 ft,
-  as the depth predicts), and carrying the depth-specific delay, not a pooled one, to each ridge parcel.
-- **One-fact test:** the likeliest hint, "the ridge clearing will raise nitrate", rescues nothing: with the travel time
-  or the fitted lag the rise should already show, it does not, and the reasonable fit sets it to nil; the hint "the
-  water table is deep under the ridge" still leaves the delay per foot to be read from the matured conversions, the
-  leachate level, the mixing and the blend.
-- **No replay:** the call is a forecast for 2027 to 2040; no shipped number is re-derived or wrong.
-- **Pinned:** the rivals run on the cut pack (`generator/rungs.json`, asserted in `checks.py`): the arrival read
-  half-way, as a fitted step, at a quarter or three quarters of the rise; the delay with or without an intercept and
-  with or without the water-table age; the leachate's current level over 3, 5 or 8 land-surface years or from the
-  matured conversions' post-arrival samples; nondetects at half, zero or the limit; the model carried to the wells'
-  level or not; the class record smoothed over one, three or five years. Every one files the 2027 cycle, 2031, 12 mg/L
-  in 2034 and Well 7 at 16.
-- **Run forecast:** a run first goes wrong by a self-confirming check (it fits the clearing's effect to the wells'
-  2019 to 2026 record, which under the travel time or a pooled lag rejects the effect outright) or by dismissing its
-  own evidence (the matured conversions and the recent upland clearings it reads as evidence of a small effect); a
-  trend run takes a method shortcut.
-- **Strategy label:** WORKS IN FORM (outcomes that have not finished happening, live form: completion speed differs by
-  a unit no pooled factor captures, the pooled factor files a named wrong answer; and separating two explanations, live
-  form: only a like-for-like comparison rebuilt from history separates them).
-- **Lesson:** an absent response is evidence of no effect only once the effect has had time to arrive, and the time
-  it needs is a property of each source, read from the sources whose changes matured; no build on file pairs the two.
+- **Task type:** hydrology flood frequency is the vocab key; the Sulfur task type is inverse problems and
+  physical-model calibration (the aquifer's far field calibrated on an existing record), serving forecasting.
+- **Domain test:** the deciding quantity is a 20-year drawdown forecast at a sentinel well; the field's estimator is
+  a pumping-test analysis (Theis or Cooper-Jacob type curves) carried forward by superposition of the schedule.
+- **Swap:** "which schedule keeps the sentinel's drawdown within 9 ft" becomes "which price keeps churn within 9 per
+  cent": there is no confined aquifer, no leakage through till, no no-flow wall and no cone of depression for a
+  reference well to sit inside, so the reference choice and the far-field calibration stop meaning anything.
+- **Layer 1:** two logger clocks (consultant's two brands), absolute pressure and the barologger, the OW-2 re-hang
+  and the OW-3 rewritten records (download routine), the aquifer's barometric response and earth tides (physics),
+  thousand gallons then gallons and the wells renamed at the 2016 SCADA change, the May 2019 meter month from run
+  hours (operating reports), readings taken with TW-1 running and the 2017 casing extension (the town's tape
+  readings), CV-07's 2013 measuring-point reset, keyed-twice rows, estimated readings and the 2020 months without a
+  field run (the district's network); nothing is placed to be caught.
+- **Layer 2:** forecast uncertainty: a far-field model that earns its place out of the test's window, calibrated on
+  a record whose drawdown must be separated from natural variation with a clean reference.
+- **Decisive step:** taking each monitoring well's natural level from the confined-aquifer network wells beyond the
+  Mill Street cone, so that the drawdown the record carries is the pumping's alone and the leakage factor it
+  calibrates is the aquifer's.
+- **Not semantics:** every field, unit, clock and code read correctly (the readings, the measuring points, the
+  operating report's units) still leaves a natural level to be chosen, and the nearest same-aquifer well, the
+  well's own baseline and a trend each read the region's wet years as leakage.
+- **Not rule application:** Rule WR-4 defines drawdown as the lowering the withdrawals cause and lists the records
+  an application carries; no filed sentence names a reference well, a far-field model or a calibration. Enumerated
+  family (Theis from the test; leaky or bounded leaky calibrated against own baseline, trend, CV-07, CV-02, CV-11,
+  CV-02 and CV-11; walls 4,000 ft to none; T from any observation well) spreads the 1,000 gpm peak from 2.0 ft to
+  34.4 ft; the standing family (the clean references, every wall width, every test fit) spreads it 7.95 to 8.29 ft,
+  all filing 1,000 gpm; the ruling-out is loud in the data (CV-07's record steps down with each Mill Street increase
+  and cycles with summer pumping; CV-02 and CV-11 agree with each other and with OW-S before 2009).
+- **Analyst test:** a strong analyst compensates the loggers, fits Theis (an excellent fit), sees its hindcast
+  overshoot the Mill Street record, recalibrates a leaky aquifer against CV-07 or the wells' own baselines and files
+  1,250 gpm.
+- **Estimand:** Rule WR-4 sections 1.2, 2.1, 2.2, 4.1 to 4.3 and Table 1 (the drawdown at OW-S caused by the
+  Reidel Road schedule and the Mill Street wells at their filed projection, in every month through December 2046,
+  against 9.0 ft; the largest schedule meeting it is permitted; 4.4 the nearest registered domestic well's 2046
+  peak under the permitted schedule); the schedules and the projection in the application summary.
+- **No decoy:** no memo, draft, briefing or stakeholder figure states a drawdown, a leakage factor or a reference
+  well; the application carries schedules and projections only.
+- **No certified replay:** no published or certified drawdown exists for the method to reproduce.
+- **Chain:** (1) the test's Theis fit is exact inside three days but its hindcast of the Mill Street wells
+  overshoots the record fivefold, so the far field must be calibrated on that record; (2) the record's drawdown is
+  each reading's fall below its natural level, which only the confined-aquifer wells beyond the cone carry (CV-07
+  is inside it, a trend absorbs the pumping); (3) the leakage factor that reproduces the separated drawdown at MS-MW,
+  CV-07 and OW-S with the plate's walls; (4) the 2027 to 2046 monthly superposition at OW-S under each schedule and
+  the town's projection, and the largest schedule under 9.0 ft.
+- **Judgment:** which wells carry the natural level, justified from the data (CV-07's offset from the far wells
+  steps with each Mill Street increase and follows the summer pumping; CV-02 and CV-11 move together and with OW-S in
+  2005 to 2008), and which far-field model reproduces the separated drawdown that the test cannot see.
+- **One-fact test:** the likeliest hint, "the aquifer leaks through the till", rescues nothing: the default path
+  already calibrates a leaky aquifer, and on the CV-07-referenced or raw record it calibrates to 1,250 gpm. The
+  hint "CV-07 is inside the cone" still leaves the reference to be built, the calibration and the superposition.
+- **No replay:** the call is a forecast for 2027 to 2046; no shipped number is re-derived or wrong.
+- **Pinned:** the rivals run on the cut pack (`generator/checks.py` R6): references CV-02, CV-11 or both; walls
+  4,000, 5,000, 6,500 ft or none; T and S from OW-1, OW-2, OW-3, all three, or with PW-2 and OW-S; barometric
+  correction on or off; calibration on MS-MW alone, or on MS-MW, CV-07 and OW-S. Every one files 1,000 gpm with the
+  peaks at 4, 6, 8 and 10 ft. Calibration on OW-S alone (1,250 gpm) is ruled out by the record it leaves out: its
+  leakage factor of 3,065 ft puts MS-MW's 2025 drawdown at 4.4 ft against the record's 4.9; the leaky fit to the test
+  alone (700 gpm) misses MS-MW the other way (5.4 ft).
+- **Run forecast:** a run first goes wrong by a method shortcut (Theis extrapolated, filing none of the four) or,
+  more likely for a strong run, a self-confirming check: it calibrates the leakage on the record against CV-07 or
+  its own baseline, the fit reproduces the record, and it files 1,250 gpm; a run that notices the wet years and fits
+  a trend is dismissing its own evidence (the far wells).
+- **Strategy label:** WORKS IN FORM (a forecast that has to earn its place, live form: the invariant constructed from
+  a log, the back-test the solver's own; and a clean comparison whose contamination is read from a relation in the
+  data, never a column).
+- **Lesson:** a model whose fit inside the trial is excellent can still be wrong for the decision's horizon, and an
+  out-of-window calibration is only as clean as the reference that separates the signal from the background; no
+  build on file couples the two.
 
 ## Survivor anatomy
 
-- **Actor:** every ridge parcel has rows (land cover by year, acres, depth to water, travel time); the property that
-  decides (when its leachate reaches the water table) is held in no column and comes from relating the network's
-  conversions to their depths.
-- **Link:** the delay per foot is read by aligning each network well's sample history with its parcel's land-cover
-  history and its depth, a join the wellhead model and the wells' record never ask for.
-- **Reflex:** the trend (rung 0) and the protection-area mix on the wellhead model's travel time or one fitted lag with
-  the clearing tested against the record (rung 1) both file the 2031 cycle.
-- **Back-test:** the textbook routes validate: the single lag fits the wells' 1998 to 2018 record to 0.41 mg/L, and
-  with the clearing set to nil every rung-1 model fits 2019 to 2026 as well as the golden does.
-- **Second use:** every file the decisive step reads has its own use: the network is the county's groundwater program,
-  the land cover its inventory, the parcel attributes and their depths the wellhead plan's appendix, the age survey the
-  state survey's dating of the network.
-- **Shock:** the clearing is an ordinary land sale and conversion in the land-cover panel, ten parcel-years among 5,700
-  rows, never a step in any well's record or the pack's largest anomaly.
-- **Pins:** the WHAT sits in the supply plan (EP-01, the annual flow-weighted mean, 10 mg/L, the in-service dates, the
-  shares) and the prompt (land cover held at 2026, the rounding); no sentence names a delay, the unsaturated zone, a
-  conversion cohort or a mixing weight.
+- **Actor:** the monitoring readings have rows; the property that decides (which wells sit inside the Mill Street
+  cone, and so carry the natural level and which do not) is a relation between the network wells' series and the
+  Mill Street pumping, held in no column; the register's unit code says only that CV-07, CV-02 and CV-11 are all
+  in the confined aquifer.
+- **Link:** the natural level is read by comparing network wells' records with each other and with the operating
+  reports, a comparison the pumping-test method never asks for and no key offers.
+- **Reflex:** Theis on the test (rung 0) and a leaky aquifer calibrated on the record against the nearest reference
+  (rung 1) both file a wrong answer (none of the four; 1,250 gpm).
+- **Back-test:** the textbook routes validate: Theis fits the test to 0.08 ft; the CV-07-referenced calibration
+  reproduces the Mill Street record it was calibrated on.
+- **Second use:** every file the decisive step reads has its own use: the network export and register are what Rule
+  WR-4 3.2 supplies to every applicant and carry the sentinel OW-S; the Mill Street records are the existing
+  permitted withdrawal the demonstration must include; the operating reports give that withdrawal's history.
+- **Shock:** the wet years are ordinary weather in a 22-year record, and CV-07's offset (about 1.7 ft by 2025) grows
+  with the town's slow growth, never a step or the pack's largest anomaly.
+- **Pins:** the WHAT sits in Rule WR-4 (drawdown, existing withdrawals at their filed projection, every month of a
+  term ending 2046, Table 1's 9.0 ft, the largest schedule permitted) and the application (schedules, projection);
+  no sentence names a reference well, the leakage, the walls' role or a calibration window.
 
 ## Readability screen
 
 | Rung | 1 Filed sentence | 2 Schema | 3 Reflex | 4 Control bench | 5 Hygiene | 6 Linear | 7 Dedicated organ | Verdict |
 |---|---|---|---|---|---|---|---|---|
-| 0 Trend on each well | no | no | yes | no | no | no | no | readable |
-| 1 Parcel mix on the travel time or one fitted lag, the clearing fitted to the record | no | no | yes | no | no | no | no | readable |
-| 2 Each parcel's delay from its depth on the matured conversions' relation (decisive) | no | no | no | no | no | no | no | silent |
-| 3 Mixing by recharge and the plan's blend | no | no | yes | no | no | no | no | readable |
+| 0 Theis from the test | no | no | yes | no | no | no | no | readable |
+| 1 Leaky calibrated against CV-07, own baseline or trend | no | no | yes | no | no | no | no | readable |
+| 2 Natural level from CV-02 and CV-11 beyond the cone (decisive) | no | no | no | no | no | no | no | silent |
+| 3 Superposition of the schedules and the projection | no | no | yes | no | no | no | no | readable |
 
 ## Semantic fork table
 
 | Id | Term or convention | Reading A (golden) | Reading B | Golden under A | Under B | Ruled out by |
 |---|---|---|---|---|---|---|
-| SF1 | the compliance measure | EP-01's annual flow-weighted mean (plan 3, prompt) | a single sample or a well's own level | 2027 cycle | not computed | plan section 3 and the prompt file the annual flow-weighted mean at EP-01 |
-| SF2 | pumping from 2027 | the plan's shares (8, 30, 32, 30) | the 2009-2026 shares | 2031 | 2031 (2034 mean 11) | plan section 2 fixes the shares for 2027 to 2040 |
-| SF3 | land cover after 2026 | held as in 2026 | trends continued | 2031 | not computed | the prompt holds each parcel's land cover as it stood in 2026 |
-| SF4 | in service | 1 January 2030 or 2034 | the cycle year | 2027 cycle | 2027 cycle | plan section 4 files the dates |
-| SF5 | the arrival point | half-way between the levels | a fitted step, a quarter or three quarters | 2031, 12, 16 | 2031, 12, 16 | same call (asserted) |
-| SF6 | the delay's form | a + b x depth | through the origin; without the water-table age | 2031, 12, 16 | 2031, 12, 16 | same call (asserted) |
-| SF7 | the current leachate | the five latest land-surface years | three or eight years; the matured conversions after arrival | 2031, 12, 16 | 2031, 12, 16 | same call (asserted) |
-| SF8 | nondetects | half the reporting limit | zero or the limit | 2031, 12, 16 | 2031, 12, 16 | same call (asserted) |
-| SF9 | carrying the model to the record | each well's 2019-2026 residual | uncarried | 2031, 12, 16 | 2031, 12, 16 | same call (asserted) |
-| SF10 | the mixing weight | acres times the recharge when the water left the water table | acres alone; the recharge when it left the root zone, with the model carried to the wells' level | Well 7 16, EP-01 12 | Well 7 15, EP-01 11 | the wellhead model's water balance (recharge differs by land cover) and continuity at the water table (the recharge arriving is the land's recharge then) |
-| SF11 | vegetable leachate's level | since nutrient management | the mean over every year | Well 7 16 | Well 7 17 | the network's unchanged irrigated sites fall from about 34 to 21 mg/L by land-surface year 2005 and stay there |
+| SF1 | drawdown at OW-S | caused by withdrawals (Rule 2.1) | the reading's fall from 2005 to 2008 | 1,000 gpm | 1,250 gpm (raw rung) | Rule WR-4 2.1, "caused by withdrawals" |
+| SF2 | existing withdrawals in the future | the filed projection, 56 and 44 per cent | the 2025 rate held | 1,000 gpm | not computed | Rule WR-4 2.2 files the holder's projection |
+| SF3 | which month counts | greatest monthly drawdown in 2046 (4.3) and every month (4.1) | annual mean | 1,000 gpm | 1,250 gpm | Rule WR-4 4.1 "any month" and 4.3 "greatest monthly drawdown" |
+| SF4 | walls | the plate's mapped edges, 5,000 ft | none, or 4,000 to 6,500 ft | 1,000 gpm | 1,000 gpm | same call (asserted) |
+| SF5 | T and S | Theis on OW-1 to OW-3 | any single well, or five wells | 1,000 gpm | 1,000 gpm | same call (asserted) |
+| SF6 | readings with TW-1 running | dropped | kept | 1,000 gpm | 1,000 gpm | same call (asserted) |
+| SF7 | the natural reference | CV-02 and CV-11 | either alone | 1,000 gpm | 1,000 gpm | same call (asserted) |
+| SF8 | the term's start | April 2027 per the application | January 2027 | 1,000 gpm | not computed | application section 1 files April 2027 |
+| SF9 | walls for the domestic well | the plate's mapped edges | none (the record fits either way) | DW-17 7 ft | DW-17 6 ft | Plate 3 maps the edges of the saturated sand and gravel |
 
 ## Ladder
 
-- **Rungs and winners:** rung 0 trend on each well files the 2031 cycle (EP-01 4.7 mg/L in 2034, linear or Sen); rung 1
-  the parcel mix with the clearing fitted to 2019 to 2026 files the 2031 cycle under the wellhead model's travel time
-  (squared error 0.9 at nil against 1,195 at the network's leachate), one lag fitted to 1998 to 2018 (4.5 years; 1.2
-  against 581) or the matured conversions' average delay (4.7 years; 1.1 against 156), each EP-01 near 5.5 mg/L; the
-  decisive rung (each parcel's delay from its depth) files the 2027 cycle, EP-01 at 10 in 2031 (6.0 in 2030, 11.8 in
-  2031), 11.9 in 2034, Well 7 15.9. Off the ladder: mixing by acres alone or at the root-zone recharge keeps the call
-  and puts Well 7 at 15; the all-years vegetable leachate keeps the call and puts Well 7 at 17.
-- **Margins:** the golden's crossing sits 3 years before the 2031 cycle's in-service year; every standing rival keeps
-  2031 (EP-01 5.4 to 8.6 in 2030, 10.2 to 12.3 in 2031), 2034 at 11.8 to 12.3 and Well 7 at 15.8 to 16.3.
-- **Pricing:** (1) the residue the WHAT leaves is the delay, a method; (2) the move the call needs (EP-01 from 5.5 to
-  past 10 before 2034) is the ridge's arrival inside the window, which only the depth-specific delay gives; (3) the
-  one-group-by route (the cohort's average delay) is a rung 1 shortcut; (4) the delay per foot spreads 0.128 to 0.136
-  across the arrival readings and forms, and the call holds from 0.10 (below it the ridge would already show in 2026)
-  to 0.17 years a foot (above it the ridge arrives after 2033); (5) no variance is the lever; (6) the wells' record cannot calibrate the ridge's delay
-  (its squared error is flat in the clearing's effect under the golden's delays: 1.109 at nil and at full); (7) no
-  subset of rows hands over the delay; (8) every visible grouping of the network (land cover, installation year,
-  sampler, laboratory) was swept and only depth to water carries the delay.
-- **Dominance:** each lower rung's single correction leaves it on the wrong cycle (`checks.py` R3).
+- **Rungs and winners:** rung 0 Theis from the test files none of the four (450 gpm at 21.7 ft, the Mill Street wells
+  alone over the limit by 2046); rung 1 leaky calibrated against CV-07 files 1,250 gpm (peak 3.4 ft), against the
+  wells' own baseline 1,250 gpm (2.4 ft), with a trend 1,250 gpm (2.5 ft), against CV-07 averaged with the far wells
+  1,250 gpm (7.2 ft); the decisive rung (CV-02 and CV-11) files 1,000 gpm at 8.12 ft, 1,250 gpm at 9.92 ft. Off the
+  ladder: the leaky fit to the test alone files 700 gpm, annual averages in place of the monthly schedule 1,250 gpm.
+- **Margins:** the golden's 1,000 gpm peak sits 0.88 ft under the 9.0 ft limit and its 1,250 gpm peak 0.92 ft over;
+  every standing rival keeps 1,000 gpm at 7.95 to 8.29 ft and 1,250 gpm at 9.72 to 10.12 ft.
+- **Pricing:** (1) the residue the WHAT leaves is the natural level, a method; (2) the move the call needs (1,250 gpm
+  from 3.4 ft to over 9.0) is a factor of 2.6 in the far-field response, which the reference choice produces; (3)
+  the one-group-by route (difference to the nearest same-aquifer well) is the rung 1 shortcut; (4) the leakage
+  factor's spread across the clean references and test fits is about 4 per cent (3,457 to 3,584 ft) against the 47
+  per cent the reference choice moves it; (5) no variance is the lever; (6) OW-S's own record carries 0.5 ft of
+  Mill Street drawdown, so OW-S alone cannot carry the calibration (asserted through the MS-MW miss); (7) no subset
+  of rows hands over the leakage factor; (8) every visible grouping of the network (unit code, distance, record
+  length) was swept as a reference and only the beyond-the-cone confined wells land the call.
+- **Dominance:** each lower rung's single correction leaves it on a wrong answer (R3b in `checks.py`).
 
 ## Closure table
 
 | Axis | Reading | Closure |
 |---|---|---|
-| 1 population | EP-01's blended water | plan section 3 |
-| 2 outcome | annual flow-weighted mean nitrate as N | plan section 3, prompt |
-| 3 window | each year 2027 to 2040 | prompt |
-| 4 unit | mg/L as N, the 2034 means to the nearest whole | prompt |
-| 5 comparison | the first year at 10 against the in-service dates | plan section 4 |
-| 6 shares | 8, 30, 32 and 30 per cent from 2027 | plan section 2 |
-| 7 in service | 1 January 2030 and 2034 | plan section 4 |
-| 8 land cover after 2026 | held | prompt |
-| 9 nitrate units | as N, NO3 over 4.427 | laboratory units column |
-| 10 duplicates | averaged with their sample | data |
-| 11 rebuilt wells | old numbers to the new | sites register notes |
-| 12 parcel splits | through parent_parcel_id | land cover file |
-| 13 codes | the legend sheet | sites workbook |
-| 14 meter change | per-row units | pumping file |
-| 15 water-table ages | the 2019 survey, the survey mean elsewhere | age survey |
-| 16 recharge by land cover | the wellhead model's table | parcel attributes, Recharge |
-| 17 the delay | from the matured conversions, by depth | the data (decisive) |
-| 18 the clearing's effect | the network's current leachate | the data (decisive) |
-| 19 rounding | whole mg/L for the 2034 means | prompt |
-| 20 tie at 10 | none within 0.6 mg/L in 2031 | asserted |
-| 21 the cycle rule | in service before the first year at 10 | plan section 4 |
-| 22 as-of | 6 November 2026 | the data's end and the memo date |
+| 1 population | the sentinel OW-S, Table 1 | filed in Rule WR-4 |
+| 2 outcome | drawdown caused by withdrawals | Rule WR-4 2.1 |
+| 3 window | every month through December 2046 | Rule WR-4 1.2 and 4.1 |
+| 4 unit | feet, nearest foot | prompt |
+| 5 comparison | each schedule against 9.0 ft | Table 1 |
+| 6 existing withdrawals | the Mill Street wells at the filed projection | Rule WR-4 2.2, application section 3 |
+| 7 schedule shape | the monthly factors | application section 2 |
+| 8 start | April 2027 | application section 1 |
+| 9 split of the new field | equal between PW-1 and PW-2 | application section 1 |
+| 10 split of Mill Street | 56 and 44 per cent | application section 3 |
+| 11 test rate | totalizer average | field notes |
+| 12 clocks | per logger | field notes, Loggers |
+| 13 re-hang | per logger | field notes, Loggers |
+| 14 measuring points | MP history | register |
+| 15 units of production | per row | operating report column |
+| 16 aquifer geometry | the mapped edges | Plate 3 |
+| 17 natural level | beyond the cone | the data (decisive) |
+| 18 far-field model | calibrated on the record | the data (decisive) |
+| 19 rounding | nearest foot | prompt |
+| 20 tie at the limit | none within 0.9 ft | asserted |
+| 21 largest permitted | the largest meeting 4.1 | Rule WR-4 4.2 |
+| 22 as-of | 6 November 2026 | the application's date and the data's end |
 
 ## Literal reader
 
-Executing the plan and the prompt word for word gives the estimand (EP-01's annual flow-weighted mean under the plan's
-shares, each year 2027 to 2040, land cover held at 2026, the plant in service before the first year at 10) and leaves
-the delay and the mixing to the data; every reading of the filed sentences that the data leave standing files the 2027
-cycle.
+Executing Rule WR-4 and the application word for word gives the estimand (OW-S, every month through 2046, the
+schedules plus the Mill Street projection, 9.0 ft, the largest passing schedule) and leaves the far-field model and
+the natural level to the data; every reading of the filed sentences that the data leave standing files 1,000 gpm.
 
 ## Oracles
 
-none: no control, published figure or corpus ties under any basis; the network wells are evidence, not a scored bench,
-and the three recent upland clearings agree with the golden's delay and with a nil effect alike (neither has arrived).
+none: no control, published figure or corpus ties under any basis; the network wells are evidence, not a scored
+bench, and the far wells agree with each other on every basis.
 
 ## Ask sheet
 
-- **Asks:** (A1) the first year EP-01's annual mean reaches 10 (2031); (A2) EP-01's 2034 annual mean, nearest whole
-  mg/L (12); (A3) the well with the highest 2034 annual mean and that mean, nearest whole mg/L (Well 7, 16); the memo,
-  the workbook's yearly forecast and the chart (instruction following).
-- **Devices:** every graded figure rides the decisive step (the default path files no crossing, EP-01 near 5 and Well 5
-  highest at 7), and A2 and A3's value carry a second judgment of their own: the mixing weight (acres alone, or the
-  recharge at the time the water left the root zone with the model carried to the wells' level, puts EP-01 at 11 and
-  Well 7 at 15) and the leachate's era (the all-years vegetable mean puts EP-01 at 13 and Well 7 at 17).
-- **Spans:** A1 2031 across the standing family and every second judgment; A2 11.8 to 12.3; A3 Well 7 at 15.8 to 16.3.
-- **Pair ceiling:** 42.2 (the cracker lands the call and A1 but mixes at the root-zone recharge, 72.5; the mirror on
-  rung 1, 12.0); with acres alone and its 2034 entry point counted kept, 49.1.
-- **Shallow keep:** 0 per cent of ask weight kept by the default path.
+- **Asks:** (A1) each schedule's greatest monthly drawdown at OW-S in 2046, nearest foot (4, 6, 8, 10); (A2) the
+  2025 average drawdown the Mill Street wells caused at MS-MW, nearest foot (5); (A3) the greatest monthly drawdown
+  in 2046 at the nearest registered domestic well (DW-17) under the permitted schedule, nearest foot (7); the
+  demonstration PDF with the 2027 to 2046 chart against the limit and the workbook's monthly working (instruction
+  following).
+- **Devices:** every graded figure rides the decisive step (A1 moves with the leakage factor; A2 with the natural
+  reference; A3 with both), and A2 and A3 each carry a second judgment of their own: A2 the like-for-like window (the
+  far wells' change measured from MS-MW's own pre-pumping months, not from 2005 to 2008: 4.4 ft, rounding to 4), A3
+  the plate's walls (left out, the record still fits and DW-17 reads 5.8 ft, rounding to 6).
+- **Spans:** A1 across the standing family 4.05 to 4.26, 5.83 to 6.09, 7.95 to 8.29, 9.72 to 10.12 ft; A2 4.87 to
+  4.93 ft; A3 across the plate's readings (walls 4,500 to 5,500 ft) 6.59 to 6.92 ft.
+- **Pair ceiling:** 46.8 (the cracker lands the call and A1 but takes both second judgments' shallow forms, 81.7; the
+  mirror on rung 1, 12.0).
+- **Mirror leakage:** 0 per cent of ask weight kept by the default path.
 - **Measured by:** generator/ceiling.py
 
-| Ask | Golden | Default path (rung 1, one lag) | Cracker (deep step, root-zone recharge weights) | Verdict |
+| Ask | Golden | Default path (rung 1, CV-07) | Cracker (deep step, shallow second judgments) | Verdict |
 |---|---|---|---|---|
-| A1 first year at 10 | 2031 | none | 2031 | yes |
-| A2 EP-01 2034 | 12 | 5 | 11 | miss |
-| A3 highest well | Well 7 | Well 5 | Well 7 | yes |
-| A3 its 2034 mean | 16 | 7 | 15 | miss |
+| A1 450 gpm | 4 | 1 | 4 | yes |
+| A1 700 gpm | 6 | 2 | 6 | yes |
+| A1 1,000 gpm | 8 | 3 | 8 | yes |
+| A1 1,250 gpm | 10 | 3 | 10 | yes |
+| A2 MS-MW 2025 | 5 | 3 | 4 | miss |
+| A3 DW-17 2046 | 7 | 2 | 6 | miss |
 
 ## Prompt contract
 
-The author's rewrite keeps: the question (the 2027 or the 2031 cycle for Project NR-1); the plan as the source of the
-in-service dates, the 10 mg/L test on EP-01's annual flow-weighted mean and the shares from 2027; land cover held as it
-stood in 2026; `corlinden_nitrate_plant_timing_memo.pdf` with the call; `corlinden_entry_point_nitrate_forecast.xlsx` with
-EP-01's annual mean for each year 2027 to 2040; `corlinden_entry_point_nitrate_2027-2040.png` charting it against 10 mg/L;
-the first year at 10, EP-01's 2034 mean, the well highest in 2034 with its mean; nitrate as N, the 2034 means to the
-nearest whole mg/L. The as-of is 6 November 2026, with data to October 2026.
+The author's rewrite keeps: the question (which schedule the district will permit under Rule WR-4, no count of the
+schedules); OW-S, the Table 1 limit and 2027 to 2046; `reidel_road_WR-4_demonstration.pdf` with the chart of each
+schedule's monthly drawdown at OW-S against the limit; `reidel_road_sentinel_forecast.xlsx` with the monthly
+working for every schedule; each schedule's greatest monthly drawdown at OW-S in 2046; the Mill Street wells'
+drawdown at the Mill Street monitoring well as a 2025 average; the greatest monthly drawdown in 2046 at the nearest
+registered domestic well under the permitted schedule; drawdowns to the nearest foot. The as-of is the
+application's date, 30 October 2026, with data to September 2026.
 
 ## Pre-ship check
 
-- The Sulfur standard re-read against the built pack: the call rests on the depth-specific delay (R3 and R4 asserted);
-  no field reading, filed procedure or planted catch decides it; the one-fact hint leaves rung 1 on the 2031 cycle.
-- Free gates and stage 4 are recorded in `pipeline.json` and the two reports.
+- The Sulfur standard re-read against the built pack: the call rests on the natural reference and the far-field
+  calibration (R3a, R3b, R4 asserted); no field reading, filed procedure or planted catch decides it (the leak reader
+  answered Q6 analytical); the one-fact hint leaves the default path on 1,250 gpm (R5).
+- Free gates on the final cut: checks 132 of 132, the verifier, byte-identical rebuild, precut 72 of 72, figures_check
+  63 of 63, leak.py REVIEW (no LEAK; the schedules, limit and clauses filed as stated inputs), guard heart PASS and
+  surface exit 0 (names WARN on place names only).
+- Stage 4: the leak reader found no step named, no ranking file and no helper file; the plate's machine-made note
+  removed. The determinism judge's verdict is recorded in determinism_check_report.md.
 
 ## Tried and rejected
 
@@ -504,55 +513,3 @@ Architecture 2 (the Clay Street tank):
 - 2026-11-08, build stage: asks riding only the decisive step left the run that lands the call with every ask (pair
   ceiling 56); Rule WR-4 4.4's nearest domestic well (the walls decide it, the record does not) and MS-MW's
   like-for-like window give the landed run two second judgments (pair ceiling 46.8).
-
-Architecture 3 (Reidel Road well field, Rule WR-4 sentinel drawdown):
-
-
-- The far field calibrated on an existing well field's cone, read against natural levels from reference wells beyond
-  the cone, with the nearest network well (CV-07) inside the cone as the trap: spent on the platform 2026-11-08. Both
-  runs fitted a leaky strip with the plate's walls to the test itself (the far field was identifiable from the test once
-  the mapped walls were honoured) and took CV-02 and CV-11 as controls by reflex, landing Schedule C and every ask
-  (`runs/triage.md`). A physical mechanism the test rows carry, and a control choice the field makes by default, are
-  both modelled on sight.
-
-Architecture 4 (Sallow Road well field, the nitrate plant's loan cycle), while built:
-
-
-- Ridge arrivals spread over 2029 to 2032 (first truth model): the first year at 10 moved between 2030 and 2032 with
-  the arrival reading (quarter, half-way, three quarters of the rise); the ridge parcels' depths were set so every
-  reading files 2031 (EP-01 5.8 to 9.0 in 2030, 10.6 to 12.3 in 2031), asserted in `checks.py` R4.
-- Farmland parcels in the zones 8 to 19 years' groundwater travel away: one lag fitted to the wells' record came out
-  at 9 to 10 years, long enough to put the ridge after 2026 and before 2034, so the single-lag route landed the call;
-  the zones' farmland was moved near the wells on a shallow water table (one lag of 4.5 years, which puts the ridge
-  at the wells by 2025 and is rejected by the 2019-2026 record), asserted R2.
-- Mixing at the recharge that carried the nitrate from the root zone, with the model carried to the wells' level:
-  in the truth an irrigated parcel's higher recharge pushes the old forest water out ahead of its nitrate, diluting
-  Wells 6 and 7 before the rise, so that weighting reads the dilution as bias and sets the 2034 figures a whole mg/L
-  low; the golden mixes at the recharge the parcel had when its water left the water table, and the other weighting
-  is kept as the asks' second judgment (SF10).
-- Parcel-to-parcel leaching spread of 7 per cent: each well's model was off its record by up to 1 mg/L and carrying it
-  to the record moved the per-well figures across a rounding edge; set to 3 per cent, residuals under 0.35 mg/L.
-- Each well's 2034 mean as an ask: Well 5 lands at 7 on every route, deep or shallow, so the default path kept a
-  fifth of the ask weight; the ask is the well highest in 2034 and its mean, which the default path misses (Well 5).
-- The data dictionary sheets (the network register's Fields sheet, the parcel attributes' Notes sheet, the age
-  survey's Method sheet, house-fixes H9): removed; the age survey's Method sheet also said a production well's age is
-  a mixture, a pointer the pack does not need.
-- Tarrow County, Wexmoor and the Holcomb Road well field: one letter from Barrow County, containing Exmoor, and a real
-  place name (house-fixes H21); renamed Ravell County, Corlinden and Sallow Road, every figure unchanged. Colin Hanna
-  (a first name in a recent build, a surface BLOCK) became Patricia Gaines.
-- The Utility Commission as the deciding forum: `guard.py heart` blocked `committee_or_panel` against task4 v4,
-  registered four hours earlier and pulled in after this card's check; redrawn to the Common Council
-  (`council_or_assembly`), which in Wisconsin authorises a municipal utility's borrowing, every figure unchanged.
-- REVIEW, stump vocabulary in the wellhead plan (travel, recharge, wellhead, county, effect, weight): harmless, the
-  words a wellhead delineation report is made of; it states the groundwater time of travel and recharge by land cover,
-  and nowhere a delay above the water table, a conversion, or nitrate.
-- The ridge's arrivals spread from 2030.6 to 2031.5 (the build's first cut): the stage 4 judge found the first year
-  at 10 thin against a later reading of the arrival (a third of a year late put it in 2032) and Well 7's 2034 mean
-  0.26 above the rounding line; the ridge parcels' depths and travel times were set so their arrivals cluster at
-  2030.85 to 2030.92 (every reading from a half year early to a half year late files 2031) and Well 7's ridge acreage
-  raised 7 per cent (15.92, and 15.85 at the low end of the vegetable leachate), asserted in `checks.py` R5.
-- Judge pass 2 (2026-11-08, DETERMINISTIC, APPROVE with wording only): the ridge's arrival stated as late in 2030
-  against a reading of 2031.0 to 2031.3 under other conversion-date conventions (now "around the start of 2031"); the
-  root-zone weighting stated as moving Well 7 to 15 without saying it does so only with the model carried to the wells'
-  level (now said); the nitrate-to-N factor stated in no file (the plan now gives the standard as 10 mg/L as N and
-  44.27 as nitrate). Every figure unchanged.
