@@ -1,17 +1,17 @@
 # leak check, task4
 
-**Verdict: REVIEW.** 11 files read, 15 golden figures and 3 candidate names taken from submission.md, 25 stump terms taken from the design note.
+**Verdict: REVIEW.** 11 files read, 12 golden figures and 3 candidate names taken from submission.md, 25 stump terms taken from the design note.
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: decisive, golden, section, beyond, removal, record, parcels, forecast, nothing, network, drifts, drives, leenane, letterfrack, priced, stations, reader, orders, mulranny, bangor, station, domain, forecasting, combination, setting
+Stump terms swept: decisive, golden, section, beyond, removal, record, parcels, forecast, leenane, letterfrack, nothing, network, drifts, drives, priced, stations, reader, orders, mulranny, bangor, combination, station, domain, forecasting, setting
 
 ## 3 answer figures in the pack (REVIEW 1)
-- **REVIEW** `owenduff_offer_brackloon_2027.pdf`: carries 16 of 18 distinctive words of the committed call: 'Hand Mulranny, Achill, Bangor Erris, Belmullet, Louisburgh and Ballycastle to Owenduff from January 2027 and keep Leenan'
+- **REVIEW** `owenduff_offer_brackloon_2027.pdf`: carries 14 of 18 distinctive words of the committed call: 'Hand Mulranny, Achill, Bangor Erris, Belmullet, Louisburgh and Ballycastle to Owenduff from January 2027 and keep Leenan'
 
 ## 4 design-note vocabulary (REVIEW 2)
 - **REVIEW** `network_planning_standard_NPS-3.pdf`: 4 of 25 stump-paragraph terms appear (record, parcels, nothing, network); read whether the document names the move
-- **REVIEW** `owenduff_offer_brackloon_2027.pdf`: 7 of 25 stump-paragraph terms appear (record, parcels, leenane, letterfrack, mulranny, bangor); read whether the document names the move
+- **REVIEW** `owenduff_offer_brackloon_2027.pdf`: 6 of 25 stump-paragraph terms appear (record, parcels, leenane, letterfrack, mulranny, bangor); read whether the document names the move
 
 ## 9 dates after the setting (REVIEW 2)
 - **REVIEW** `delivery_calendar_2027.csv`: 365 ISO dates after 2026-11-06, e.g. 2027-01-01, 2027-01-02, 2027-01-03, 2027-01-04, 2027-01-05

@@ -20,7 +20,7 @@ FILES = {
     "register": "district_register_2026.xlsx", "plan": "volume_plan_2027.xlsx", "rates": "fleet_rate_card_2027.xlsx",
     "calendar": "delivery_calendar_2027.csv",
 }
-PRICE = 12.60        # read from the offer letter's price table (asserted in checks against the PDF text)
+PRICE = 13.40        # read from the offer letter's price table (asserted in checks against the PDF text)
 
 
 def h(s):

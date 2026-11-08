@@ -7,9 +7,9 @@
   "LOU",
   "BCA"
  ],
- "default_lee_charge": 5000,
+ "default_lee_charge": 5400,
  "default_lee_cost": 7500,
- "default_let_charge": 7200,
+ "default_let_charge": 7600,
  "default_let_cost": 10200,
  "default_net_rounded": 20000,
  "default_set": [
@@ -35,7 +35,7 @@
   "LOU": 700,
   "MUL": 620
  },
- "net_saving_exact": 50020,
+ "net_saving_exact": 50127,
  "net_saving_rounded": 50000,
  "one_net_rounded": 35000,
  "one_set": [
@@ -45,25 +45,28 @@
   "BCA"
  ],
  "pieces": {
-  "ach_alone_h": 400,
-  "achill_h": 650,
+  "ach_alone_h": 460,
+  "achill_h": 700,
   "ban_alone_cost": 4100,
   "ban_alone_h": 70,
-  "ban_charge": 6300,
+  "ban_charge": 6700,
   "ban_marg_cost": 15600,
   "blm_alone_h": 330,
-  "corridor_charge": 65400,
+  "corridor_charge": 69500,
   "corridor_cost": 50800,
   "erris_h": 600,
-  "lee_let_charge": 12200,
+  "lee_let_charge": 13000,
   "lee_let_cost": 6300,
+  "lee_let_even": 220,
   "lee_let_h": 110,
+  "lee_let_hi": 7500,
+  "lee_let_lo": 6000,
   "mul_alone_cost": 4500,
   "mul_alone_h": 80,
-  "mul_charge": 7800,
+  "mul_charge": 8300,
   "mul_marg_cost": 14400
  },
- "price": 12.6,
+ "price": 13.4,
  "prop_net_rounded": 55000,
  "rate": 58,
  "rounding": [
@@ -81,7 +84,7 @@
  },
  "runs_before_h": {
   "R03": 1300,
-  "R04": 1550,
+  "R04": 1600,
   "R05": 1700,
   "R06": 1200,
   "R07": 1600,
@@ -90,7 +93,7 @@
  },
  "runs_saved_h": {
   "R03": 300,
-  "R04": 650,
+  "R04": 700,
   "R05": 0,
   "R06": 0,
   "R07": 600,

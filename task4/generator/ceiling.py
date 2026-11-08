@@ -57,7 +57,7 @@ def main(target):
     for r in runs:
         b = hrs[r] * plan_run[r] / par[r]
         s = sum(tid[c][0] for c in d_set if c in pk.chain[r])
-        sh["saved_" + r], sh["before_" + r], sh["after_" + r] = GD.r50(s), GD.r50(b), GD.r50(b - s)
+        sh["saved_" + r], sh["before_" + r], sh["after_" + r] = GD.r100(s), GD.r50(b), GD.r50(b - s)
     # landed, proportional carry
     model, per = res["model"], res["per"]
     keep = A.base_year(pk)
@@ -82,7 +82,7 @@ def main(target):
         if S:
             s = (A.run_hours(model, per, r, mus) - A.run_hours(model, per, r, mus, S)) * \
                 sum(sum(pk.plan[c]) for c in S) / sum(dpar[c] for c in S)
-        la["saved_" + r], la["before_" + r], la["after_" + r] = GD.r50(s), GD.r50(b), GD.r50(b - s)
+        la["saved_" + r], la["before_" + r], la["after_" + r] = GD.r100(s), GD.r50(b), GD.r50(b - s)
     asks = [k for k in gold]
     sk = sum(1 for k in asks if sh[k] == gold[k]) / len(asks)
     lk = sum(1 for k in asks if la[k] == gold[k]) / len(asks)

@@ -18,6 +18,10 @@ from openpyxl import load_workbook
 HERE = os.path.dirname(os.path.abspath(__file__))
 
 
+def r100(x):
+    return int(100 * math.floor(x / 100.0 + 0.5))
+
+
 def r50(x):
     return int(50 * math.floor(x / 50.0 + 0.5))
 
@@ -63,7 +67,7 @@ def main(target):
         for c, n in cnt.items():
             nstops[c] += n
     offer = ["MUL", "ACH", "BAN", "BLM", "LOU", "LEE", "LET", "CLI", "BCA", "CON", "CHA"]
-    price = 12.60
+    price = 13.40
     total, out, saved, before = 0.0, [], {}, {}
     for run in sorted({k[1] for k in hours}):
         ds = sorted({back.get(r[0], r[0]) for r in regs if r[5] == run},
@@ -103,7 +107,7 @@ def main(target):
         out += list(best)
         total += bv
         if cand:
-            saved[run] = r50(bh)
+            saved[run] = r100(bh)
             before[run] = r50(yr(()) + 0.5 * sum(days))
     figs = json.load(open(os.path.join(HERE, "figures.json")))
     assert sorted(out) == sorted(figs["call_set"]), (out, figs["call_set"])

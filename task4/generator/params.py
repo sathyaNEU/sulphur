@@ -13,7 +13,7 @@ HIST_START = dt.date(2025, 1, 2)
 HIST_END = dt.date(2026, 10, 30)
 AS_OF = dt.date(2026, 11, 6)
 
-PRICE_2027 = 12.60          # Owenduff, EUR per parcel, 2027
+PRICE_2027 = 13.40          # Owenduff, EUR per parcel, 2027
 RATE_2027 = 58.00           # Brackloon all-in van-hour rate, 2027
 RATE_PARTS = (("Driver, with employer's PRSI and pension", 31.20), ("Van lease and insurance", 9.80),
               ("Fuel, tyres and servicing at the fleet's average running", 17.00))
@@ -25,7 +25,7 @@ DEPOT = ("Castlebar depot", 53.8548, -9.2988)
 D = {
     "NEW": ("Newport", 53.8840, -9.5460, None, 1.22, 63, "R04", 15.0, 1.35, 1.05, 1.035, 0.06, 0.095, False),
     "MUL": ("Mulranny", 53.9060, -9.7820, "NEW", 1.25, 47, "R04", 1.8, 1.35, 1.10, 1.09, 0.07, 0.080, True),
-    "ACH": ("Achill", 53.9650, -10.0400, "MUL", 1.35, 45.5, "R04", 2.9, 1.35, 1.05, 1.04, 0.10, 0.085, True),
+    "ACH": ("Achill", 53.9650, -10.0400, "MUL", 1.35, 37.0, "R04", 2.9, 1.35, 1.05, 1.04, 0.10, 0.085, True),
     "CRO": ("Crossmolina", 54.1000, -9.3150, None, 1.22, 62, "R07", 14.0, 1.35, 1.06, 1.083, 0.06, 0.095, False),
     "BAN": ("Bangor Erris", 54.1430, -9.7420, "CRO", 1.24, 66, "R07", 1.4, 1.35, 1.12, 1.12, 0.07, 0.080, True),
     "BLM": ("Belmullet", 54.2250, -9.9900, "BAN", 1.25, 61, "R07", 2.5, 1.35, 1.07, 1.08, 0.10, 0.085, True),

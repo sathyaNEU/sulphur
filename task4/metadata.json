@@ -19,8 +19,8 @@
   {
    "path": "delivery_stops_2025-2026.csv",
    "format": "csv",
-   "bytes": 11019883,
-   "rows": 106641,
+   "bytes": 11019987,
+   "rows": 106642,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-11-06",
    "license": "CC0-1.0 (original work)"
@@ -73,7 +73,7 @@
   {
    "path": "owenduff_offer_brackloon_2027.pdf",
    "format": "pdf",
-   "bytes": 41100,
+   "bytes": 41096,
    "rows": null,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-11-06",
@@ -82,7 +82,7 @@
   {
    "path": "network_planning_standard_NPS-3.pdf",
    "format": "pdf",
-   "bytes": 30419,
+   "bytes": 30429,
    "rows": null,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-11-06",

@@ -25,6 +25,10 @@ def r50(x):
     return int(50 * math.floor(x / 50.0 + 0.5))
 
 
+def r100(x):
+    return int(100 * math.floor(x / 100.0 + 0.5))
+
+
 def r5000(x):
     return int(5000 * math.floor(x / 5000.0 + 0.5))
 
@@ -39,7 +43,7 @@ def compute(target):
     for r in runs:
         rr = res["runs"][r]
         fig["runs"][r] = {"name": RUN_NAMES[r], "before_h": rr["base_h"], "after_h": rr["after_h"],
-                          "saved_h": rr["hours"], "saved_h_rounded": r50(rr["hours"]), "before_rounded": r50(rr["base_h"]),
+                          "saved_h": rr["hours"], "saved_h_rounded": r100(rr["hours"]), "before_rounded": r50(rr["base_h"]),
                           "after_rounded": r50(rr["after_h"]), "charge": rr["charge"], "net": rr["net"],
                           "districts": rr["set"]}
     for c in offer:
@@ -90,7 +94,7 @@ def write_xlsx(path, pk, res, fig):
     ws2 = wb.create_sheet("Runs")
     ws2["A1"] = "2027 van-hours on the runs that serve an offered district, before and after the hand-over"
     ws2["A1"].font = Font(bold=True, size=12)
-    ws2["A2"] = "Van-hours depot out to depot in, to the nearest 50; all-in rate EUR %.2f a van-hour (fleet rate card 2027)" % pk.rate
+    ws2["A2"] = "Van-hours depot out to depot in; hours saved to the nearest 100, other van-hours to the nearest 50; all-in rate EUR %.2f a van-hour (fleet rate card 2027)" % pk.rate
     _head(ws2, 4, ["Run", "Districts handed over", "Van-hours 2027 as things stand", "Van-hours 2027 after the hand-over",
                    "Van-hours saved", "Cost of the hours saved (EUR)", "Owenduff charges (EUR)", "Net saving (EUR)"],
           [26, 30, 16, 16, 12, 18, 16, 14])
@@ -122,8 +126,8 @@ def write_xlsx(path, pk, res, fig):
         ("Data", "Stop log and van run log 2 January 2025 to 30 October 2026; re-synced stop rows counted once; Castlebar "
                  "north and south counted as Castlebar town (register code change of 1 April 2026)."),
         ("2027", "Commercial plan of 19 October 2026, 251 delivery days in the 2027 calendar, EUR 58.00 a van-hour, "
-                 "Owenduff EUR 12.60 a parcel delivered."),
-        ("Rounding", "Van-hours to the nearest 50 and the net saving to the nearest EUR 5,000, each rounded once from the "
+                 "Owenduff EUR 13.40 a parcel delivered."),
+        ("Rounding", "Van-hours saved to the nearest 100, other van-hours to the nearest 50 and the net saving to the nearest EUR 5,000, each rounded once from the "
                      "unrounded total; euro columns on the Runs sheet to the nearest EUR 100."),
         ("Prepared", "Aislinn Duffin, transport planning, 6 November 2026, for the 2027 budget committee.")]
     for i, (k, v) in enumerate(notes, 1):

@@ -62,7 +62,8 @@ def gates(target):
     for k in pack.DISTRACTORS:
         ok(pack.FILES[k] not in A.FILES.values(), "distractor never read by the golden: " + k)
     offer = re.sub(r"\s+", " ", text_of(os.path.join(target, pack.FILES["offer"])))
-    ok("EUR 12.60 per parcel delivered" in offer, "the offer's price is the one analysis uses")
+    ok("EUR 13.40 per parcel delivered" in offer, "the offer's price is the one analysis uses")
+    ok("combination" not in offer.lower(), "the offer files no search over combinations")
     import params as P
     for c in A.offered(None):
         ok(P.D[c][0] in offer and c in offer, "offered district in the letter: " + c)
@@ -82,14 +83,16 @@ def forks(pk, res):
         ok(sorted(v["set"]) == g, "SF14 same list under %s" % kw)
         ok(GD.r5000(v["saving"]) == gs, "SF14 same rounded net saving under %s (%.0f)" % (kw, v["saving"]))
         for r, rr in v["runs"].items():
-            for key in ("hours", "base_h", "after_h"):
-                ok(GD.r50(rr[key]) == GD.r50(res["runs"][r][key]), "SF14 same rounded %s on %s under %s" % (key, r, kw))
+            ok(GD.r100(rr["hours"]) == GD.r100(res["runs"][r]["hours"]), "SF14 same rounded hours saved on %s under %s" % (r, kw))
+            ok(GD.r50(rr["base_h"]) == GD.r50(res["runs"][r]["base_h"]), "SF14 same rounded before hours on %s under %s" % (r, kw))
     ok(abs(res["saving"] - gs) < 1500, "SF12 the net saving sits mid-bin (%.0f)" % res["saving"])
     for r, rr in res["runs"].items():
         if not rr["cand"]:
             continue
-        for lab, v in (("saved", rr["hours"]), ("before", rr["base_h"]), ("after", rr["after_h"])):
-            ok(v == 0 or abs(v - GD.r50(v)) < 17, "SF12 run %s %s hours mid-bin (%.1f)" % (r, lab, v))
+        v = rr["hours"]
+        ok(v == 0 or abs(v - GD.r100(v)) < 25, "SF12 run %s saved hours mid-bin at 100 (%.1f)" % (r, v))
+        v = rr["base_h"]
+        ok(abs(v - GD.r50(v)) < 12, "SF12 run %s before hours mid-bin at 50 (%.1f)" % (r, v))
     # SF9 each district on its own merit moves Mulranny and Bangor Erris (ruled out by NPS-3 4.3)
     one = A.removal_one(pk, res)
     one_set = sorted(c for c in one if one[c][2] > 0)

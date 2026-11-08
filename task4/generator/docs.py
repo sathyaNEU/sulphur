@@ -46,7 +46,7 @@ def offer(path):
                    "We already deliver for four shippers across west Mayo and Connemara six days a week, so your "
                    "parcels would travel with theirs from our Westport hub.", body),
          Paragraph("Districts offered", h2), _grid(rows, [200, 120], cell), Spacer(1, 6),
-         Paragraph("Brackloon may hand over any of the districts above, in any combination, by giving us the list by "
+         Paragraph("Brackloon tells us which of the districts above it is handing over by giving us the list by "
                    "30 November 2026.", body),
          Paragraph("Terms", h2),
          Paragraph("Price: EUR %s per parcel delivered, excluding VAT, fixed for the calendar year 2027. The price "
@@ -98,7 +98,7 @@ def standard(path):
             "4.2 The year's parcels are the commercial plan's parcels for the year, district by district; the year's "
             "rate is the fleet rate card's all-in van-hour rate for the year; the year's delivery days are the "
             "delivery calendar's.",
-            "4.3 The districts handed over for a year are the districts in the partner's offer whose hand-over "
+            "4.3 The districts handed over for a year are the selection from the partner's offer whose hand-over "
             "lowers the year's delivery cost most. Where no district's hand-over lowers it, none is handed over.",
             "4.4 The decision is made each autumn for the following calendar year, before the partner's offer lapses, "
             "and is reported with the year's saving."]),

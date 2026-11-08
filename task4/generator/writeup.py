@@ -38,12 +38,15 @@ def pieces(pk, res):
     return {
         "lee_let_h": r10(t5[("LEE", "LET")][0]), "lee_let_cost": r100(t5[("LEE", "LET")][0] * pk.rate),
         "lee_let_charge": r100(t5[("LEE", "LET")][1]),
+        "lee_let_lo": int(500 * math.floor(t5[("LEE", "LET")][0] * pk.rate / 500.0)),
+        "lee_let_hi": int(500 * math.ceil(t5[("LEE", "LET")][0] * 1.15 * pk.rate / 500.0)),
+        "lee_let_even": r10(t5[("LEE", "LET")][1] / pk.rate),
         "corridor_cost": r100(t5[("LEE", "LET", "CLI")][0] * pk.rate), "corridor_charge": r100(t5[("LEE", "LET", "CLI")][1]),
         "ban_alone_h": r10(t7[("BAN",)][0]), "ban_alone_cost": r100(t7[("BAN",)][0] * pk.rate),
         "ban_charge": r100(t7[("BAN",)][1]),
-        "erris_h": r10(t7[("BAN", "BLM")][0]), "blm_alone_h": r10(t7[("BLM",)][0]),
+        "erris_h": GD.r100(t7[("BAN", "BLM")][0]), "blm_alone_h": r10(t7[("BLM",)][0]),
         "mul_alone_h": r10(t4[("MUL",)][0]), "mul_alone_cost": r100(t4[("MUL",)][0] * pk.rate),
-        "mul_charge": r100(t4[("MUL",)][1]), "achill_h": r10(t4[("MUL", "ACH")][0]),
+        "mul_charge": r100(t4[("MUL",)][1]), "achill_h": GD.r100(t4[("MUL", "ACH")][0]),
         "ach_alone_h": r10(t4[("ACH",)][0]),
         "mul_marg_cost": r100((t4[("MUL", "ACH")][0] - t4[("ACH",)][0]) * pk.rate),
         "ban_marg_cost": r100((t7[("BAN", "BLM")][0] - t7[("BLM",)][0]) * pk.rate),
@@ -101,19 +104,22 @@ def write(path, pk, res, fig):
     rl = "; ".join("%s %s %s" % (r, d["name"], fmt(d["saved_h_rounded"])) for r, d in R.items())
     out.append("2. A Runs sheet with one row per run that serves an offered district, giving the districts it hands "
                "over, its 2027 van-hours as things stand and after the hand-over, and the van-hours saved, to the "
-               "nearest 50: %s." % rl)
+               "nearest hundred: %s." % rl)
     out.append("3. The sheet ends on the year's net saving after Owenduff's charges: EUR %s (to the nearest EUR 5,000)."
                % fmt(fig["net_saving_rounded"]))
     out.append("\n### %s\n" % GD.PNG)
-    bl = "; ".join("%s %s to %s" % (r, fmt(d["before_rounded"]), fmt(d["after_rounded"])) for r, d in R.items())
-    out.append("4. Paired bars for each of those runs, 2027 van-hours as things stand beside 2027 after the hand-over, "
-               "each bar labelled with its value to the nearest 50 (%s), with the title stating the districts that go "
+    bl = "; ".join("%s %s" % (r, fmt(d["before_rounded"])) for r, d in R.items())
+    out.append("4. Paired bars for each of those runs, 2027 van-hours as things stand beside 2027 after the hand-over "
+               "(the hours as things stand less the hours saved), each bar labelled with its value to the nearest 50 "
+               "(as things stand: %s), with the title stating the districts that go "
                "and the net saving of about EUR %s.\n" % (bl, fmt(fig["net_saving_rounded"])))
     out.append("## Critical Components\n")
-    out.append("1. On the Connemara run, Leenane and Letterfrack together take only **%s van-hours** off 2027, "
-               "**EUR %s** at the van-hour rate against Owenduff's **EUR %s**, because the van drives through both to "
+    out.append("1. On the Connemara run, Leenane and Letterfrack together take only **about %s van-hours** off 2027 "
+               "(EUR %s to %s at the van-hour rate, as the fit varies), far short of the **some %s van-hours** "
+               "Owenduff's **EUR %s** for their parcels would pay for, because the van drives through both to "
                "reach Clifden; the whole run beyond Aghagower costs EUR %s against Owenduff's EUR %s, so the run keeps "
-               "all three." % (fmt(pc["lee_let_h"]), fmt(pc["lee_let_cost"]), fmt(pc["lee_let_charge"]),
+               "all three." % (fmt(pc["lee_let_h"]), fmt(pc["lee_let_lo"]), fmt(pc["lee_let_hi"]), fmt(pc["lee_let_even"]),
+                               fmt(pc["lee_let_charge"]),
                                fmt(pc["corridor_cost"]), fmt(pc["corridor_charge"])))
     out.append("2. Bangor Erris on its own takes **%s van-hours** off the Erris run (EUR %s against Owenduff's EUR %s), "
                "but with Belmullet gone it is the end of the run, and the two together take **%s van-hours** off it."
