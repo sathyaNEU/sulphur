@@ -1,83 +1,99 @@
 {
   "task": "task5",
-  "architecture": "v2 (re-root after the heart BLOCK against task242: a pilot county's municipalities qualifying for a 2027 vacant-dwelling activation grant, each dwelling's occupancy in a November fortnight read from its own hourly electricity load beside the population register)",
+  "project": "sulfur",
+  "architecture": "v3 (re-root after both platform runs landed architecture 2: a fictional US state's labor market information section certifies each county's December 2026 covered jobs, estimated from the unemployment insurance quarterly reports received by 15 February 2027, for the 2027 Community Transition Fund)",
   "drawn": "2026-11-08",
-  "slot_note": "re-root of task5 in the same objective (Data Extraction & Conformation), batch 1",
+  "slot_note": "re-root of task5 in the same subdomain and objective (Survey Research & Official Statistics, Data Extraction & Conformation) after the platform runs landed architecture 2",
   "domain": "survey-research-official-statistics",
   "subdomain": "census-register-administrative-data-quality",
   "client_domain": "survey-research-official-statistics",
-  "niche": "each municipality's vacancy share in a heated Norwegian November estimated from the electricity hub's hourly meter loads, with the population register's overcoverage, undercoverage and net bias measured against it, certified for a 2027 grant",
+  "niche": "a state labor market information section's first certified estimate of each county's December covered jobs from an unemployment insurance quarterly report census whose reports arrive late, where a missing report is either a payroll agent's late batch or the employer's own trouble",
   "objective": "etl",
-  "shape": "01",
+  "shape": "03",
   "decision_type": "designation_set",
   "answer_unit": "set_of_items",
-  "answer": "Five municipalities qualify: Tverrvika, Hesteby, Solmoen, Ørnevik and Fjordeid (396 of 8,020 counted dwellings vacant); the register's overcoverage 118 (1.6 per cent), undercoverage 556 (66.7 per cent), net bias 5.5 per cent",
-  "answer_source": "task5/submission.md, Final Recommendation and Supplementary Questions",
+  "answer": "",
+  "answer_source": "task5/submission.md, Final Recommendation",
   "gap": [
-    "objective",
+    "time",
     "population"
   ],
   "pattern": [
     "none"
   ],
   "generators": [
-    "G3",
-    "G12"
+    "G13",
+    "G12",
+    "G3"
   ],
   "gate_g": "method_or_model_selection",
-  "calibration_form": "none",
-  "stump_strategy": "classification_error",
+  "calibration_form": "censored_or_lagged_release",
+  "stump_strategy": "maturity_censoring",
   "decisive_rule_filed": false,
   "official_decoy": false,
   "validated_decoy": false,
-  "context_artifact": "planning_thread",
+  "context_artifact": "register",
   "stump_class": "analytical",
-  "analyst_test": "A strong analyst who conforms the cadastre and the meter reads correctly and reads the regulation rejects the consumption floor (empty dwellings are heated in November, so the vacant use more than the lived-in), reads occupancy from the household's morning or evening rise over the dwelling's night-time use on any day, sees it separate bimodally and agree with the register, and files that Tverrvika and Ørnevik alone qualify; 70 vacant dwellings heated on a daily timer rise every day and read as lived in.",
-  "domain_test": "The deciding quantity is each municipality's vacancy share, an official estimate of true occupancy built from two error-prone administrative sources, the population register and each dwelling's own hourly load, read for what a household does that the building's own heating, on a timer or not, does not repeat; with wards for dwellings there is no heating left on an empty home's timer, no register that lags and no household's day.",
-  "layer2_family": "estimation_fit",
-  "layer2_pattern": "own:occupancy-from-a-day-departing-from-the-dwelling's-own-repeated-day-against-a-timed-heating-load",
+  "analyst_test": "A strong analyst who conforms the reports, amendments and worksites and reads the act and the data agreement imputes each missing report as the field does (the employer's September jobs moved by its county's reporting employers' change), treats an employer missing two quarters as ceased, sees the imputation back-test within a few tenths of a point on the closed quarters, and files that no county is 2.0 per cent down; a report missing while the employer's usual transmission-mates arrived marks an employer that has shed jobs or stopped trading.",
+  "domain_test": "The deciding quantity is each county's December 2026 covered employment, an official estimate from an administrative census whose reports arrive late, worked as a statistics office works unit nonresponse: which missing reports are ignorable and which carry the outcome, and what the nonrespondents' December jobs are, measured on closed quarters whose outcomes have landed; with hospitals for employers no report goes missing because the unit has closed and no account is inactivated months later.",
+  "layer2_family": "estimand_identification",
+  "layer2_pattern": "own:a-missing-report-informative-only-when-its-usual-transmission-arrived",
   "layer1": [
-    "hourly reads in UTC against a local-time household day",
-    "meter replacements splitting a dwelling's fortnight across two meter point IDs",
-    "estimated hours replaced by measured ones in a later delivery",
-    "missing hours from communication gaps",
-    "meter points keyed to addresses with unit numbers written differently from the cadastre's",
-    "a municipality renumbered after a boundary change in one register only",
-    "holiday homes and dwellings under construction on the cadastre",
-    "communal and non-dwelling meter points in the hub's extract"
+    "amended reports superseding originals and exact resubmissions",
+    "multiple worksite reports splitting an employer's jobs across counties",
+    "predecessor and successor accounts after transfers of business",
+    "seasonal accounts with zero-employment months",
+    "county names and codes written differently across the account register and the worksite reports",
+    "NAICS 2017 codes on older accounts beside NAICS 2022",
+    "employers missing two quarters not yet inactivated",
+    "habitual late filers",
+    "paper reports keyed by date only"
   ],
-  "stakeholder_role": "the head of the national statistics office's dwelling statistics section, who certifies the pilot county's municipal vacancy shares to the ministry for the 2027 grant",
+  "stakeholder_role": "the director of the state Department of Labor's labor market information section, who certifies each county's December covered employment to the Community Transition Fund Board for its March 2027 designation meeting",
   "role_family": "statistical_office_head",
   "scoring_unit": "other",
   "spine": {
-    "file": "hourly meter reads (parquet)",
-    "rows": 2720816,
-    "entity": "one meter point and hour",
-    "grain": "meter point x hour",
+    "file": "ui_quarterly_reports_2023q1_2026q4.csv",
+    "rows": 360000,
+    "entity": "one employer account's quarterly contribution report",
+    "grain": "account x quarter",
     "source": "synthetic"
   },
-  "forum": "funder_or_donor",
-  "forcing_event": "budget_or_appropriation",
+  "forum": "committee_or_panel",
+  "forcing_event": "vote_or_meeting",
   "org_family": "research_or_statistics_office",
   "world": {
-    "geography": "Norway (a fictional county of ten municipalities)",
-    "currency": "NOK",
-    "org_type": "national statistics office",
-    "invented_names": [],
+    "geography": "United States (the State of Franklin, fictional, and its fourteen counties)",
+    "currency": "USD",
+    "org_type": "state labor market information section",
+    "invented_names": [
+      "State of Franklin",
+      "Garrow County",
+      "Ostrom County",
+      "Community Transition Fund"
+    ],
     "people": [
-      "Martine Strøm",
-      "Eirik Haug"
+      "Danielle Fuller",
+      "Matthew Cox"
     ]
   },
   "deliverables": [
-    "county_dwelling_occupancy_2026-11.xlsx",
-    "vacancy_grant_certification_2027.docx"
+    "ctf_certification_december_2026.xlsx",
+    "ctf_employer_jobs_december_2026.csv"
   ],
   "opening_move": "question-first",
-  "question_form": "whether",
-  "driver": "The decisive quantity is whether each unit was in use during a window, seen only through a continuous meter whose level and daily shape are both carried by a load that runs on a schedule whether or not anyone uses the unit, so use is a day departing from what the unit's own record repeats, beyond its scheduled load and noise.",
-  "driver_concrete": "A dwelling counts as vacant when nobody lived in it in the reference fortnight, whatever the population register shows; an empty Norwegian dwelling is heated through November, and one left on its heaters' daily timer also rises every morning and evening at its comfort hours, so neither the level nor the daily rise shows a household; only a day departing from the dwelling's own typical day does.",
-  "stump": "A competent solver conforms the cadastre and the hub's hourly values, sees that an empty dwelling in a Norwegian November is heated so no consumption floor works, reads occupancy from the household's morning or evening rise over the dwelling's own night-time use, sees it separate cleanly and agree with the register, and files that Tverrvika and Ørnevik alone qualify (6.2 and 7.1 per cent); 70 vacant dwellings were left heated on a daily timer that rises at the same hours by the same amount every day, and only a household's departure from what the dwelling repeats every day, some hour more than 0.9 kWh above its own typical day, shows that someone lived there, which designates five.",
+  "question_form": "where",
+  "driver": "The decisive quantity is a period total over units whose reports arrive late, where a missing report has two causes: the intermediary that files a whole batch was late, which says nothing about the unit, or the unit failed to report on its own, which marks a unit that has shrunk or closed; only a unit missing while its usual batch-mates arrived separates the two, and a closed unit's outcome shows only in a closure record months later, so only cohorts old enough for closures to have been recorded measure what a unit's own failure to report implies.",
+  "driver_concrete": "Each county's December 2026 covered jobs are estimated from the unemployment insurance quarterly reports received by 15 February 2027; payroll agents file their clients' reports in one transmission and at year end several statewide bureaus' transmissions come late, while an employer missing when its usual transmission arrived has usually shed jobs or stopped trading, and a stopped employer shows only in an account inactivation two or three quarters later, so its December jobs are read from quarters old enough for inactivations to have landed.",
+  "stump": "A competent solver conforms the reports, amendments and worksites, imputes each employer whose December report had not arrived as the field does (its September jobs moved by its county's reporting employers' change), treats an employer missing two quarters as ceased, sees that imputation back-test within a few tenths of a point on the closed quarters and files that no county fell 2.0 per cent; an employer missing while its usual transmission-mates arrived has usually shed jobs or stopped trading and keeps about a quarter of its September jobs on the quarters old enough for inactivations to have landed, which puts two counties past the line.",
+  "deep_chain": "(1) the field's imputation (September jobs moved by the county's reporters) back-tests with a steady upward miss traced to missing reports from employers that had stopped; (2) a missing report has two causes, a payroll agent's late transmission or the employer's own failure, and only whether its usual transmission-mates arrived separates them; (3) the employers missing on their own keep about a quarter of their September jobs, which only quarters old enough for inactivations to have landed show; (4) carried into each county's December total, two counties fall 2.0 per cent or more.",
+  "judgment": "the nonresponse mechanism and the nonrespondents' outcome model: lateness is ignorable within a late transmission and carries the outcome when the employer misses alone, judged from the co-arrival history, and the outcome is measured on mature quarters where closures have landed as inactivations, not on recent ones where they have not",
+  "one_fact_test": "the likeliest hint, that an employer missing while its agent's batch arrived is in trouble, still leaves the solver to rebuild transmissions from receipt times with no agent field, to measure the trouble's outcome on quarters old enough for inactivations, and to carry both through every county",
+  "strategy_label": "WORKS IN FORM",
+  "mechanism_source": "design_note",
+  "differentiation": {
+    "mark253": "mark253's first architecture reweighted a sample's respondents within classes of a frame attribute that drove both response and the outcome; here no respondent stands in for a nonrespondent and no frame attribute defines the class: whether a missing report carries the outcome is read quarter by quarter from whether the employer's usual transmission-mates arrived, and the missing employers' December jobs come from earlier missing employers' own outcomes on quarters old enough for their closures to have been recorded."
+  },
   "lineage": [
     {
       "domain": "physical-environmental-sciences",
@@ -109,26 +125,60 @@
       "architecture": "v1 (the Corrisan Valley's untowered airfields qualifying for the district's 2027 Unleaded Avgas Transition Grants, each field's missed piston operations completed by the counted fields' unrecorded operations per never-broadcasting based airplane)",
       "drawn": "2026-10-18",
       "fate": "spent 2026-10-31 at the batch 1 repair: guard.py heart BLOCKed it against task242, registered ninety minutes earlier in another session, on strategy composition_mix, calibration gold_standard_subsample, forum council_or_assembly, forcing event budget_or_appropriation and organisation family local_government, and on pattern E against task197: the same core puzzle (a detector's capture calibrated on a gold-standard subsample and corrected by the composition of what it misses); shipped 2026-10-18, superseded before any portal result"
+    },
+    {
+      "domain": "survey-research-official-statistics",
+      "subdomain": "census-register-administrative-data-quality",
+      "objective": "etl",
+      "shape": "01",
+      "decision_type": "designation_set",
+      "answer_unit": "set_of_items",
+      "gap": [
+        "objective",
+        "population"
+      ],
+      "pattern": [
+        "none"
+      ],
+      "generators": [
+        "G3",
+        "G12"
+      ],
+      "gate_g": "method_or_model_selection",
+      "stump_strategy": "classification_error",
+      "role_family": "statistical_office_head",
+      "forum": "funder_or_donor",
+      "forcing_event": "budget_or_appropriation",
+      "org_family": "research_or_statistics_office",
+      "driver": "The decisive quantity is whether each unit was in use during a window, seen only through a continuous meter whose level and daily shape are both carried by a load that runs on a schedule whether or not anyone uses the unit, so use is a day departing from what the unit's own record repeats, beyond its scheduled load and noise.",
+      "calibration_form": "none",
+      "context_artifact": "planning_thread",
+      "layer2_family": "estimation_fit",
+      "layer2_pattern": "own:occupancy-from-a-day-departing-from-the-dwelling's-own-repeated-day-against-a-timed-heating-load",
+      "architecture": "v2",
+      "fate": "spent 2026-11-08: both platform runs (target.zip 14f7ae29) read occupancy from each dwelling's departure from its own typical day (day levels and clock-hour effects, residual cut) and filed the golden five with every register cell; the judge had sent the first form back on Gate H"
     }
   ],
+  "notes": "re-rooted 2026-11-08 after both platform runs on architecture 2 (target.zip 14f7ae29) filed the golden five and every register cell; architecture 2 spent (judge SEND_BACK at its first pass, then the landed call)",
   "lineage_shells": [
     {
       "question form": "how-many",
       "second-sentence opener": "put",
       "rounding opener": "give",
       "deliverable set": "csv+docx"
+    },
+    {
+      "question form": "which",
+      "second-sentence opener": "name",
+      "rounding opener": "shares",
+      "deliverable set": "docx+xlsx"
     }
   ],
-  "differentiation": {
-    "mark477": "task477 measures growth on work done by estimating each unit's exposure to payment schedules from how its sub-period totals move with the payment dates; here nothing is an exposure or a calendar effect: each dwelling's own hourly load is read for a household's daily cycle against the heating that runs in an empty home, to say whether anyone lived there in the fortnight.",
-    "task5": "architecture 2 as first filed read occupancy from the household's morning or evening rise over the night, a bimodal signal one sentence handed over; this deepening puts heating on daily timers in the world, so the rise reads 70 empty dwellings as lived in, and the decisive move becomes the departure of a day from the dwelling's own repeated day, a different statistic, a different confound and a different call on the rise."
-  },
-  "notes": "re-rooted 2026-10-31 (batch 1); Domains Fit and metadata repair 2026-11-07: the share judged with its 90 per cent exact interval beside it, the regulation from LibreOffice Writer, the hub extract without its writer's name; design repair 2026-11-08 (Domains Fit, no new architecture): the share framed as an estimate from two error-prone sources, the register's coverage errors as the asks, the interval's basis filed without a method, the forum redrawn to committee_or_panel, the differentiation re-keyed to mark477; stump deepened 2026-11-08 after the judge's SEND_BACK on Gate H (the rise bimodal, a one-sentence rescue): heating on daily timers in the world, the decisive step the household's departure from the dwelling's own typical day, the hub's daily values shipped as a CSV; forum redrawn from committee_or_panel (banned against task4 v4) to funder_or_donor, the ministry that pays the grant on the certified figures (Section 8); forcing event redrawn from statutory_or_regulatory_filing (banned at the heart re-run against task3 v3, registered after this card) to budget_or_appropriation, the ministry's 2027 allocation of the grant among the municipalities on the certified figures; stage 4 on 13a7d9af: reader no leak, judge DETERMINISTIC with one FIX_NOW (the interval's convention filed in the assignment); READY 2026-11-08.",
+  "registered": "2026-11-08T16:49:19Z",
   "shell": {
-    "question form": "which",
-    "second-sentence opener": "name",
-    "rounding opener": "shares",
-    "deliverable set": "docx+xlsx"
-  },
-  "registered": "2026-11-08T04:51:25Z"
+    "question form": "where",
+    "second-sentence opener": "certify",
+    "rounding opener": "jobs",
+    "deliverable set": "csv+xlsx"
+  }
 }
