@@ -1,56 +1,59 @@
-# determinism-check report, task4, 2026-11-08
+# determinism-check report, task4 (architecture 5), 2026-11-08
 
 ## Verdict
-DETERMINISTIC (no SOLUTION_WRONG on any graded figure; one solution-block imprecision, Critical Component 1)
-**Disposition:** APPROVE (optional touch-up of Critical Component 1, no rerun, no FIX_NOW item)
-**Stumping type:** mechanism: forecasting, stumping_family: analytical_non_defect, surface_read_dependency: no, sole_data_defect: no
+DETERMINISTIC
+**Disposition:** APPROVE
+**Stumping type:** mechanism: statistical_rigor (errors-in-variables, regression calibration, plus cold-form selection), stumping_family: analytical_non_defect, surface_read_dependency: no, sole_data_defect: no
 
-Judge thread: one pass, sonnet, scratch /tmp/determinism-check-task4-043108 (verdict.md there). The runtime had no Agent tool, so the main session spawned the thread from judge_brief.md.
+Judge run: one isolated sonnet thread on a fresh unzip (target.zip f1a47765) at /tmp/determinism-check-task4-r1/target/. Its verdict is at /tmp/determinism-check-task4-r1/verdict.md. The pack is unchanged since the brief.
 
 ## Why
-NPS-3 4.1/4.3 (saving = all-in van-hours taken off the runs less Owenduff's charges, set chosen to lower the year's cost most), the offer ("any combination", EUR 12.60 a parcel), the rate card (EUR 58.00), calendar, plan and stop log force one set: Mulranny, Achill, Bangor Erris, Belmullet, Louisburgh, Ballycastle. Rivals land elsewhere: cost-to-serve adds Leenane and Letterfrack (EUR 20,000), one-at-a-time pricing drops Mulranny and Bangor Erris (EUR 34-35k), proportional carry keeps the list at EUR 55,000. Net saving rounds to EUR 50,000 under every defensible fit tried.
+Executed literally (FES-2 4.1 to 4.3: -5 C design day, planning load = mean weighbridge net payload Nov 2025 to Oct 2026, limit 85 per cent of the quoted 540 kWh = 459 kWh), calibrating declared weights shipper by shipper against the weighbridge gives V02, V05, V09, V14, V16, V18 (6 tractors) on every defensible calibration. All fourteen design-day energies round to the golden's 10 kWh values. The declared-weight path orders 8, the one pooled correction 8, the one-cold-rate declared fit 10: the golden's rejected paths reproduce.
 
 ## Recomputation ledger
 | Figure | Claimed | Judge recomputed | Reproduced |
 |---|---|---|---|
-| 2027 hours as they stand R03..R09 | 1300/1550/1700/1200/1600/1550/1600 | 1291/1551/1698/1201/1601/1552/1609 | yes |
-| Saved R03/R04/R07/R08 | 300/650/600/200 | 300/648/592/208 | yes after rounding |
-| R05, R06, R09 saved | 0 | no combination pays | yes |
-| Net saving | EUR 50,000 | 49,459 (49.4k-50.9k across fits) | yes |
-| Mulranny alone / Bangor Erris alone | 80 / 70 h | 81 / 70 h | yes |
-| Charges Mulranny / Bangor / Leenane+Letterfrack | 7,800 / 6,300 / 12,200 | 7,812 / 6,300 / 12,222 | yes |
-| One-at-a-time list | EUR 35,000 | 34.0k | yes |
-| Proportional carry | EUR 55,000 | 54.6k-56.8k | yes |
-| Leenane+Letterfrack hours (CC1) | 110 h, EUR 6,300; run EUR 50,800 | about 118-124 h, about EUR 6.9-7.2k, run about 51.9k | no, 7-12 percent high; decision unchanged |
+| BEV duty-days after de-duplication | 2334 | 2374 rows, 40 re-uploads, 2334; joins 1:1 to TMS | yes |
+| Declared less weighed | -39 kg | -39.3 kg (20,971 CMRs, last weighing, gross less tare) | yes |
+| Slopes TEN/HWP/GDR/LBY | 0.26 to 0.30 | 0.28, 0.30, 0.26, 0.28; TTV 1.00; BMJ constant 13,500 kg | yes |
+| Pooled weighbridge slope | 0.94 | 0.94 | yes |
+| Payload term, declared | 1.0 | 0.97 | yes (rounding) |
+| Payload term, calibrated | 2.2 | 2.11 to 2.13 | form difference only, same bin and same duties |
+| One-rate sub-zero under-prediction | 3.4 per cent | 3.5 per cent | yes (within 0.1) |
+| Energies V02..V33 | 430,470,440,470,420,470,450,430,440,490,480,490,480,490 | 431,468,440,467,419,468,450,430,440,489,478,489,479,491 | all 14 round to golden |
+| Tractors | 6 | 6 | yes |
+| Declared-weight order | 8 | 8 | yes |
 
 ## Competing answers that survived
-None on the call. Two thin edges, neither a fork on the call: (1) NPS-3 4.3 read as a set versus district by district; "most" and "any combination" force the set, but it is the one place a literal reader could split. (2) Rounding to 50: R04 saved 648 (boundary 675; a 2026-only fit gives 680, rounds to 700) and R07 592 (17 h above the 575 boundary); the pooled two-year fit stated in the solution is stable.
+One fork, minor. A line pooled over the six pilot shippers including Tabergs (slope 0.49, payload 1.79) gives 7 (V07 at 458 against 459, 1 kWh). It mixes a slope-1.0 shipper with slope-0.28 shippers, which the per-shipper weighbridge slopes rule out, so the judge treated it as a poor method the data separates, not a licensed reading. The design note's enumerated family does not list this rival. Not a Gate C failure. One-rate calibrated model also lands the six (V03/V07/V11 at 460 to 461, thin, same side). 300 bootstrap resamples give the six in 299. Planning window shifted a month changes no duty.
 
 ## Spec gates
 | Gate | Required | Actual | Pass |
 |---|---|---|---|
-| Usable files | 10 or more | 11 | yes |
-| File categories | 2 or more | spreadsheet (4 xlsx), text (5 csv, 2 pdf) | yes |
-| Large messy CSVs | 20,000 rows plus a 10-20 page CSV | stops 106,641 rows (11 MB); van run log 4,160 rows (358 KB, far over 20 printed pages) | yes |
-| Distractors | 2 or more in metadata.json, none labelled in ZIP | 3 (fuel card, customer contacts, fleet register); no label in ZIP; judge saw none; fleet lease ends unused by NPS-3 4.2 | yes |
-| Deliverables | 1 to 3, all in golden | 2; golden.zip holds exactly district_handover_2027.xlsx and handover_2027.png | yes |
-| Asks multi-dimensional, unit and rounding stated | yes | seven run-level cells plus net; nearest 50 and EUR 5,000 stated | yes |
-| Answer shape | gradable cells downstream of deep step | per-run hours table and paired bars, all downstream of the run model and 2027 forecast | yes |
-| No build-revealing files, nothing LLM-looking | yes | judge saw no authoring or benchmark language; dates coherent. I did not open the golden xlsx or png for realism (golden-realism covers it) | yes (judge-based) |
+| Usable files | 10 or more | 12 (6 CSV, 4 XLSX, 2 PDF) | yes |
+| Categories | 2 or more | spreadsheet (CSV, XLSX) and text documents (PDF); thin, no image/code/database | yes (borderline) |
+| Large CSV | 20,000 rows or more | weighbridge 21,430 data rows | yes |
+| Second messy CSV | 10 to 20 printed pages or more | bev_daily_summary 2,374 rows x 15 columns (~315 KB, about 40 pages at 60 lines), also tms 3,501 rows, temperature 7,914 | yes |
+| Distractors | 2 or more in metadata.json, none labelled in ZIP | fuel_card_statement and workshop_log in metadata.json; ZIP names unlabelled; quotation (468 vs 540 kWh usable) a third relevant-but-unused-for-limit file | yes |
+| Distractor weight | unused, relevant, ruled out by a shipped fact | judge did not name either as the surface read | yes |
+| Deliverables | 1 to 3, all in golden | xlsx + pdf, both in golden.zip, exactly two files | yes |
+| Asks | multi-dimensional, unit and rounding stated | 14 duties x energy, share, verdict, count; kWh to nearest 10 in the prompt | yes |
+| Answer shape | gradable cells downstream of deep step | 14 energies, 14 verdicts, count, memo | yes |
+| Realism | nothing LLM-looking | judge saw real-looking artifacts with incidental mess, no authoring disclosures; golden realism not independently re-read by me | yes (judge) |
 
 ## Gate G reconciliation
-Thread: mechanism forecasting, stumping_family analytical_non_defect, surface_read_dependency no, sole_data_defect no. The design note declares the same shape (analyst test: cost-to-serve gives about EUR 20,000 with Leenane and Letterfrack; deep step is the run model, set pricing and 2027 reach forecast; strategy label WORKS IN FORM). The declared distractors (fuel card, contacts, fleet register) were not the surface read; the thread named the cost-to-serve build as the lure. Match, no mismatch finding.
+Thread: mechanism statistical_rigor (errors-in-variables), stumping_family analytical_non_defect, surface_read_dependency no, sole_data_defect no. Design note and card: stump_class analytical, errors-in-variables with source-specific error structure, Gate G forecasting. Match. The thread does not name either declared distractor as carrying the task. The thread's caution that unreliable declarations could be read as a data defect is borderline, classed as honest measurement error, consistent with the note's "no decoy, nothing planted".
 
-Gate H line: domain: pass, layers: pass, decisive_step: analytical, chain: 4 inferences (clean and order the stop log, fit the run model by least squares, price sets not districts, forecast 2027 reach days with Poisson check), one_fact: none rescues the whole (closest, "price each run with and without each combination", settles the list but not the 2027 hours or the net).
+Gate H line: domain: pass; layers: pass (L1 re-uploads, mixed weight formats, duty-code rename, repeat weighings, dropouts; L2 calibrating a noisy covariate and choosing the cold form); decisive_step: analytical; chain: 4 inferences (energy model with held-out check; weighbridge shows per-shipper dilution; calibrate to expected weighed load and refit; apply to planning loads against 459); judgment: regression calibration under measurement error plus second sub-zero rate by back-test; one_fact: "the declared pilot weights are noisy proxies for the weighed load, calibrate them shipper by shipper against the weighbridge". The design note's own one-fact paragraph agrees and argues the sentence still leaves the fit, shipper heterogeneity and cold form. Reconciles with the note's chain (4 steps, same judgment).
 
 ## Stump power (Gate F)
-Good on paper but with one soft spot, for the main thread to weigh against the ladder. NPS-3 4.1 already says "van-hours the hand-over takes off the runs", so a solver that prices each run with and without each combination reaches the list directly; the forecast step then separates exact hours and the net. The set-versus-single and drive-through steps are the field's own reasoning but the filed wording partly names the step ("anything written down is executed"). The wrong paths each lose several graded cells (EUR 20,000, EUR 35,000, EUR 55,000), and the asks make a run on any of them lose many cells. Sets and combination pricing being textbook make-or-buy moves puts the call within reach of a strong solver; platform runs are the measurement.
+Moderate to good. The reflex path (fit on declared weights, held-out check passes, declarations unbiased on average) lands on 8 and the pooled correction on 8, both wrong. Risk: a solver who simply regresses weighed on declared by shipper reaches the golden; errors-in-variables is a textbook method and the weighbridge is the obvious reference. The one-fact sentence exists and rescues most of the chain. The main thread should weigh this against the design note's ladder (rung 2 pooled correction 8, rung 3 per-shipper) and the stumping 1.3 caution; this is not a mismatch with the note.
 
 ## Findings, ranked
-1. Critical Component 1 (110 h, EUR 6,300, run EUR 50,800) does not reproduce exactly (about 118-124 h, about EUR 6.9-7.2k). Decision unchanged (charges EUR 12.2k). Not a FIX_NOW; optionally re-emit from the generator or word as "about".
-2. R04 and R07 saved hours sit close to 50-hour rounding boundaries on single-year fits; stable on the pooled fit.
-3. Set reading of NPS-3 4.3 is forced by wording but is the single literal split point.
-4. NPS-3 4.1 wording hands over part of the method (stump-power note above).
+1. Pilot-six pooled line lands 7 (V07 by 1 kWh); not listed in the note's enumerated family. Optional: add it to the pinned-rival run in checks.py and a memo line rejecting it because Tabergs' slope of 1.0 differs.
+2. Thin file categories (spreadsheet plus PDF only); borderline for the 2-category gate.
+3. Calibrated payload term recomputes at 2.11 to 2.13 against the golden's 2.2 (form difference, no decision or bin moves); confirm the shipped 2.2 is the stated method's output.
+4. No assessment date stated in the files; window choice moves no duty.
 
 ## Next action for the author
-Optionally restate Critical Component 1 as "about 120 van-hours" or re-emit it from the generator's model, then proceed; no rebuild or re-judge needed.
+No rerun needed. Optionally add the pilot-six pooled rival to the checks.py rival table so the design note's fork list covers it, then proceed to stage 5.

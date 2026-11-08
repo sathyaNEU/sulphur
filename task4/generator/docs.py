@@ -41,7 +41,7 @@ def standard(path):
     sec = [
         ("1. Scope", [
             "This standard governs which of the company's regular duties are run with battery-electric tractors. It "
-            "applies to every depot and to every order of battery-electric tractors put to the board."]),
+            "applies to every depot and to every order of battery-electric tractors put to the management group."]),
         ("2. Terms", [
             "2.1 A duty is a regular round trip from a depot as the route register records it: the run from the "
             "depot to the collection, the loaded run from the collection to the delivery and the run back to the "
@@ -61,7 +61,7 @@ def standard(path):
             "its planning load, is no more than 85 per cent of the usable battery of the tractor model being "
             "ordered. Each duty assigned takes one tractor.",
             "4.4 Duties are assessed each autumn for the following year, before any order is placed, and reported to "
-            "the board duty by duty with the energy each needs on the January design day."]),
+            "the management group duty by duty with the energy each needs on the January design day."]),
         ("5. Review", [
             "5.1 This standard is reviewed every two years or when a new tractor model is ordered. Comments to the "
             "Fleet Manager."]),

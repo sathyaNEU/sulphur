@@ -30,7 +30,7 @@ mark249 (gains against partly agreeing references) differentiated on the card. H
   quantity is each shortlisted duty's battery energy on the January design day of 2027, forecast from a model whose
   payload covariate was recorded by third parties.
 - **Niche.** Fryele Åkeri AB, a regional haulier running regular full-load duties for Småland manufacturers from
-  Jönköping and Värnamo. Six battery-electric tractors ran nine Jönköping duties from March 2025; the board orders
+  Jönköping and Värnamo. Six battery-electric tractors ran nine Jönköping duties from March 2025; the management group orders
   battery-electric tractors for Värnamo duties from January 2027 under the haulier's own standard FES-2, at the
   dealer's 2027 model (540 kWh usable).
 - **The call.** How many tractors and which shortlisted duties. FES-2 4.1 to 4.3 files the WHAT: a duty goes electric
@@ -44,15 +44,15 @@ mark249 (gains against partly agreeing references) differentiated on the card. H
   (the design day is a forecast at conditions and loads the pilot's mean does not sit at); generators G1 (unit-of-value
   swap, decisive), G13 (horizon: the heavy and light duties sit far from the pilot's mean load), G16 (the cold form,
   chosen by back-test, the asks' judgment); Gate G forecasting; calibration gold_standard_subsample (the weighbridge);
-  context artifact register; Layer 2 family estimation_fit, pattern own:declared-covariate-error-structure-by-source.
-- **Forum, event, organisation.** board_of_directors (the December board approves the order), launch_or_rollout (the
+  context artifact operations_log; Layer 2 family estimation_fit, pattern own:declared-covariate-error-structure-by-source.
+- **Forum, event, organisation.** executive_team (the management group approves the order in December), launch_or_rollout (the
   Värnamo charger bank and the first tractors in January 2027), logistics_or_3pl. Role procurement_lead (the fleet
   manager, who places the order).
 - **People** (`guard.py names --geo Sweden --seed 505`, locale sv_SE): Georg Pålsson, fleet manager, who owns FES-2 and
   places the order; Inger Norman, transport planner, whose workbook and memo the golden are; Pierre Kjellberg, the
   dealer's key account manager, who signs the quotation. None appears in the prompt.
 - **Deliverables.** ev_duty_assessment_2027.xlsx (the duties, energies, verdicts and the count) and
-  tractor_order_memo.pdf (one page for the board): xlsx and pdf.
+  tractor_order_memo.pdf (one page for the management group): xlsx and pdf.
 - **Data-native sentence.** A haulier's payload figures are the shippers' consignment-note declarations, and how a
   shipper declares is its own habit: clerks estimating from the order scatter around what the trailer carries, a dairy
   writes one standard weight on every note, a timber merchant prints its own weighbridge ticket; a pilot fitted on
@@ -280,7 +280,7 @@ What the author's voice rewrite may not drop or change:
 - The hold option is implicit in "how many" (none may qualify); never "which six" or any count.
 - Deliverables: ev_duty_assessment_2027.xlsx (every shortlisted duty with its round trip's battery energy on the January
   design day and whether it goes electric, ending on the number of tractors) and tractor_order_memo.pdf (the order
-  written up for the board on one page).
+  written up for the management group on one page).
 - Units and rounding: energies to the nearest 10 kWh.
 - Never add: a declaration, a weighbridge, a payload, a weight, a shipper, a calibration, an error, cold, temperature
   forms, "check", "validate", or any method word.
@@ -302,6 +302,11 @@ What the author's voice rewrite may not drop or change:
   the default path (rung 1), which orders 8; the call turns on the payload term (SF10).
 
 ## Tried and rejected
+
+- 2026-11-08, stage 5, the forum and context artifact as drawn (board_of_directors, register): `guard.py heart` on
+  the final pull BLOCKed both (`ban.forum`, `ban.artifact`) against task2 v4, registered after this card; redrawn to
+  executive_team (the management group approves the order) and operations_log (the weighbridge and telematics logs
+  carry the evidence), the prompt, FES-2 1 and 4.4 and the memo reworded; no figure moved.
 
 - 2026-11-08, stage 4, narrowing the pilot shippers' mean loads (11.7 to 12.9 t) so the pilot-shippers' pooled line
   (rung 2a) falls clear of the limit: the golden lost the between-shipper spread its estimate leans on (slope 1.95, the

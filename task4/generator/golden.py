@@ -1,6 +1,6 @@
 """The golden deliverables: ev_duty_assessment_2027.xlsx (every shortlisted duty's January design-day energy and
 verdict, the number of tractors, the model and the payload calibration behind it) and tractor_order_memo.pdf (one page
-for the board), both from analysis.py's figures on the shipped pack."""
+for the management group), both from analysis.py's figures on the shipped pack."""
 import datetime as dt
 import os
 
@@ -178,7 +178,7 @@ def write_pdf(path, pk, g, target):
     v14_nv = r10(nv["V14"]["kwh"])
     n_nv = len(A.chosen(nv))
     naive_slope = A.slope_per_100(g["models"]["naive"])
-    s = [Paragraph("Fryele Åkeri AB | To the board | 6 November 2026", small),
+    s = [Paragraph("Fryele Åkeri AB | To the management group | 6 November 2026", small),
          Paragraph("Battery-electric tractors for Värnamo, 2027: order %d" % g["count"], h1),
          Paragraph("<b>Recommendation.</b> Order %d battery-electric tractors under quotation Q-26-1187 for duties "
                    "%s. On the January design day each needs no more than %d kWh against the 459 kWh FES-2 allows "
@@ -205,7 +205,7 @@ def write_pdf(path, pk, g, target):
                    (heavy_nv, v14_nv, n_nv, len(heavy)), body),
          Paragraph("Inger Norman, Transport planning", small)]
     O.build(path, s, "Battery-electric tractors for Värnamo, 2027", "Inger Norman", "Tractor order memo",
-            "Fryele Åkeri AB | Board, December 2026", dt.datetime(2026, 11, 6, 10, 12, tzinfo=SE),
+            "Fryele Åkeri AB | Management group, December 2026", dt.datetime(2026, 11, 6, 10, 12, tzinfo=SE),
             dt.datetime(2026, 11, 6, 15, 48, tzinfo=SE))
 
 

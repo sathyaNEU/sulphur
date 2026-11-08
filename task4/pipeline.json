@@ -1,10 +1,10 @@
 {
  "task": "task4",
- "status": "PAUSED",
+ "status": "READY",
  "domain": "supply-chain-logistics",
  "objective": "forecasting",
- "stage": 3,
- "stage_name": "build",
+ "stage": 5,
+ "stage_name": "ready",
  "updated": "2026-11-08",
  "stump": "A competent solver fits the pilot's duty-day battery energy on distance, climb, cold and the shippers' declared payload, finds it predicts held-out January and February days within 2.4 per cent and the weighbridge's declarations right on average, and orders 8 tractors, sending the heavy steel, ballast and metal duties V03, V07 and V11 (about 440 kWh on that model) and leaving out the light insulation duty V14 (about 470); the estimating shippers' declarations scatter around the weighed load, so the fitted payload term (1.0 kWh per tonne per 100 km) is under half the loads' effect (2.2), and only each declaration taken to the weighed load it stands for, shipper by shipper, with the dairy's standard weight and the timber merchant's ticket left as what they are, orders 6: V02, V05, V09, V14, V16 and V18.",
  "architecture": 5,
@@ -15,23 +15,23 @@
   "checks": "72 of 72"
  },
  "leak": {
-  "leak_py": "REVIEW, no LEAK (2026-11-08): FES-2 section number 2.2, the quotation's 540 kWh, FES-2 carries the call's governing words; prompt shell quota",
-  "reader": ""
+  "leak_py": "REVIEW, no LEAK (2026-11-08, ce9fbb1b): FES-2 section number 2.2, the quotation's 540 kWh, the governing words of the call in FES-2, prompt shell quota; each ruled in the note",
+  "reader": "2026-11-08 isolated Sonnet reader on f1a47765: no leak on any question, decisive step an analytical choice; re-read on ce9fbb1b after the forum noun changed in FES-2 and the prompt"
  },
  "duplicate_check": {
   "check": "WARN 2026-11-08 (repeat.gate_g)",
-  "heart": "WARN 2026-11-08 (repeat.gate_g against task9); shell.lineage BLOCK cleared by recording the new prompt's shell on the card",
+  "heart": "WARN 2026-11-08 on the final pull (repeat.gate_g against task9); ban.forum and ban.artifact BLOCKs against task2 v4 (registered after this card) cleared by redrawing the forum (executive_team) and the context artifact (operations_log)",
   "surface": "exit 0 2026-11-08, 0 promoted"
  },
  "judge": {
-  "verdict": "",
-  "disposition": "",
-  "gate_g": "",
-  "gate_h": "",
-  "report": ""
+  "verdict": "DETERMINISTIC (2026-11-08, isolated Sonnet thread on target.zip f1a47765): the six duties, all 14 energies at 10 kWh and the default's 8 reproduced; 299 of 300 bootstrap resamples give the six",
+  "disposition": "APPROVE; minor: a line pooled over the pilot's six shippers gives 6 or 7 (V07 within 2 kWh of the limit), ruled out by the per-shipper slopes, now rung 2a and asserted; the calibrated term recomputes at 2.1 (form only)",
+  "gate_g": "statistical_rigor with cold-form selection, analytical_non_defect, surface_read_dependency no, sole_data_defect no",
+  "gate_h": "domain pass, layers pass, decisive step analytical, chain 4",
+  "report": "task4/determinism_check_report.md"
  },
  "returned": [],
- "resume": "stage 4 in flight: the leak reader and the determinism judge were spawned on target.zip f1a47765; collect both reports, fix in the generator, re-run gates, READY",
+ "resume": "READY: the author uploads prompt.txt and target.zip (ce9fbb1bf6928e8f); the author's voice rewrite of prompt.txt goes through voice-check.py --rewrite and leak.py; then /triage-runs",
  "approved": null,
  "delivered": null,
  "portal": null,
@@ -183,9 +183,13 @@
   {
    "date": "2026-11-08",
    "event": "DRAWN architecture 5: a Smaland road haulier's battery-electric tractor order for 2027, each Varnamo duty's January design-day energy forecast from a pilot whose payloads are shipper declarations (supply-chain-logistics in general-statistics-data-science, regression-classification-model-diagnostics, forecasting); guard WARN only (repeat.gate_g)"
+  },
+  {
+   "date": "2026-11-08",
+   "event": "stage 4 (leak reader no leak; judge DETERMINISTIC APPROVE), forum and context artifact redrawn on the final heart screen, stage 5: READY on target.zip ce9fbb1bf6928e8f"
   }
  ],
- "zip_sha256_16": "4a9ccea1839b45a0",
+ "zip_sha256_16": "ce9fbb1bf6928e8f",
  "migrated_from": {
   "project": "Mark",
   "task": "task250",
@@ -225,7 +229,7 @@
   ]
  },
  "gates": {
-  "checks": "115 assertions",
+  "checks": "116 assertions",
   "verify": "PASS (independent moments correction: 2.14 kWh per t per 100 km, the same six, all 14 bins)",
   "byte_identical": "two builds",
   "figures_check": "60 of 60",
@@ -240,5 +244,5 @@
   "backtest": "Jan-Feb 2026 held out: declared fit 2.4 per cent, golden 2.3 (blind to the dilution); one cold rate under-predicts sub-zero days by 3.4 per cent",
   "container": "clean (scrub audit, target and golden)"
  },
- "golden_zip_sha256_16": "801703c83306e234"
+ "golden_zip_sha256_16": "555088abda3cc09d"
 }

@@ -30,7 +30,7 @@
 
 ### tractor_order_memo.pdf
 
-17. One page to the board: the order of 6 tractors and the duties first, the fourteen duties' design-day energies in a table, then how the energy was estimated (the declared payloads calibrated on the Värnamo weighbridge, 2.2 against 1.0 kWh per tonne per 100 km) and what the declared-weight model would have ordered (8 tractors).
+17. One page to the management group: the order of 6 tractors and the duties first, the fourteen duties' design-day energies in a table, then how the energy was estimated (the declared payloads calibrated on the Värnamo weighbridge, 2.2 against 1.0 kWh per tonne per 100 km) and what the declared-weight model would have ordered (8 tractors).
 
 ## Critical Components
 

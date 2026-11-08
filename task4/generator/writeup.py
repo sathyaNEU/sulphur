@@ -127,7 +127,7 @@ def write(path, pk, g, f):
     L("")
     L("### tractor_order_memo.pdf")
     L("")
-    L("%d. One page to the board: the order of %d tractors and the duties first, the fourteen duties' design-day "
+    L("%d. One page to the management group: the order of %d tractors and the duties first, the fourteen duties' design-day "
       "energies in a table, then how the energy was estimated (the declared payloads calibrated on the Värnamo "
       "weighbridge, %.1f against %.1f kWh per tonne per 100 km) and what the declared-weight model would have "
       "ordered (%d tractors)." % (k, f["call_count"], f["slope_golden"], f["slope_declared"], f["default_count"]))
