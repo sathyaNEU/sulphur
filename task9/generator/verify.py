@@ -149,6 +149,35 @@ def main():
     ldf["r"] = ldf.recovery.astype(float).map(lambda x: x / 100 if x > 1 else x)
     ldf["y"] = ldf.default_date.str[:4].astype(int)
     lgd = 1 - ldf[ldf.y <= 2019].r.mean()
+    # the recovery link, its own way: each house-year's shock by Gauss-Hermite quadrature over its company-years against
+    # their cohort rates moved by the year's shock (the year's shock from the excess of its default rate), then recovery
+    # on the shocks over the 2008 to 2019 workouts
+    zy = {}
+    for y, g in P.groupby("year"):
+        dr = min(max(g.d.mean(), 1e-4), 0.5)
+        zy[y] = (norm.ppf(g.p.mean()) - norm.ppf(dr)) * np.sqrt(1 - am) / np.sqrt(am)
+    P["py"] = norm.cdf((norm.ppf(P.p) - np.sqrt(am) * P.year.map(zy)) / np.sqrt(1 - am))
+    gh_x, gh_w = np.polynomial.hermite_e.hermegauss(60)
+    gh_w = gh_w / gh_w.sum()
+    c = ah / (1 - am)
+    zh = {}
+    for (h, y), g in P.groupby(["house", "year"]):
+        t = norm.ppf(g.py.values.clip(1e-6, 1 - 1e-6))
+        pz = norm.cdf((t[:, None] - np.sqrt(c) * gh_x[None, :]) / np.sqrt(1 - c))
+        lk = np.prod(np.where(g.d.values[:, None] == 1, pz, 1 - pz), axis=0) * gh_w
+        zh[(h, y)] = float((lk * gh_x).sum() / lk.sum())
+    lid2 = {lid: (ln.company, ln.orig) for lid, ln in loans.iterrows()}
+    X_, y_ = [], []
+    for r in ldf.itertuples():
+        if r.y > 2019 or r.lb_loan_id not in lid2:
+            continue
+        sp = spell(*lid2[r.lb_loan_id])
+        if sp is None or (sp[1], r.y) not in zh:
+            continue
+        X_.append([1.0, zy[r.y], zh[(sp[1], r.y)]])
+        y_.append(r.r)
+    bl = np.linalg.lstsq(np.array(X_), np.array(y_), rcond=None)[0]
+    link = (float(bl[0]), float(bl[1]), float(bl[2]))
     fx = pd.read_csv(os.path.join(TGT, "ecb_euro_reference_rates_2026-12.csv"))
     fx = fx[fx.Date == "2026-12-31"].iloc[0].to_dict()
     fx["EUR"] = 1.0
@@ -166,16 +195,19 @@ def main():
                     a=np.array([max(1, 2027 - s[0].year) for s in sp]), k=t[cols[2]].map(smap).values,
                     h=np.array([hid[s[1]] for s in sp]), f=np.array([hid[s[1]] for s in sp]))
         port["w"] = port["w"] / port["w"].sum()
-        cum = MD.simulate(port, pdt, am=am, ak=ak, ah=ah, lgd=lgd, nsim=300_000, seed=77)
+        cum = MD.simulate(port, pdt, am=am, ak=ak, ah=ah, lgd=lgd, nsim=300_000, seed=77, link=link)
         out[key] = float((cum[-1] > 0.15).mean())
-    gk, go = F["golden"]["KL"]["p5_pct"] / 100, F["golden"]["OS"]["p5_pct"] / 100
-    callv = "OS" if (out["OS"] < 0.01 and (out["KL"] >= 0.01 or out["OS"] < out["KL"])) else "KL"
-    print("verify: company-years %d defaults %d | am %.3f ak %.3f house %.3f (golden %.3f) lgd %.3f | KL %.2f (golden %.2f) "
-          "OS %.2f (golden %.2f) | same-house pair rate %.4f, cross-house %.4f"
-          % (len(P), P.d.sum(), am, ak, ch, F["estimates"]["ch"], lgd, 100 * out["KL"], 100 * gk, 100 * out["OS"],
-             100 * go, q_house, q_cross))
-    ok = (len(P) == F["panel"]["company_years"] and int(P.d.sum()) == F["panel"]["defaults"] and callv == "OS"
-          and abs(ch - F["estimates"]["ch"]) < 0.06 and abs(out["KL"] - gk) < 0.25 * gk and abs(out["OS"] - go) < 0.25 * go
+    gk, go = F["golden"]["KL"]["p5_raw"], F["golden"]["OS"]["p5_raw"]
+    ok_k, ok_o = out["KL"] < 0.01, out["OS"] < 0.01
+    callv = ("Kestrel Lane" if out["KL"] < out["OS"] else "Ostvale") if (ok_k and ok_o) else \
+        "Kestrel Lane" if ok_k else "Ostvale" if ok_o else "neither"
+    print("verify: company-years %d defaults %d | am %.3f ak %.3f house %.3f (golden %.3f) lgd %.3f | link %.3f %.3f %.3f "
+          "(golden %.3f %.3f %.3f) | KL %.2f (golden %.2f) OS %.2f (golden %.2f) | call %s | same-house pair rate %.4f, "
+          "cross-house %.4f"
+          % (len(P), P.d.sum(), am, ak, ch, F["estimates"]["ch"], lgd, link[0], link[1], link[2], F["link"]["a"],
+             F["link"]["bm"], F["link"]["bh"], 100 * out["KL"], 100 * gk, 100 * out["OS"], 100 * go, callv, q_house, q_cross))
+    ok = (len(P) == F["panel"]["company_years"] and int(P.d.sum()) == F["panel"]["defaults"] and callv == F["call"] == "neither"
+          and abs(ch - F["estimates"]["ch"]) < 0.06 and abs(out["KL"] - gk) < 0.35 * gk and abs(out["OS"] - go) < 0.35 * go
           and abs(100 * lgd - F["lgd"]["lgd_pct"]) < 0.06)
     print("VERIFY", "PASS" if ok else "FAIL")
     return 0 if ok else 1

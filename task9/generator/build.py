@@ -79,7 +79,7 @@ def build_into(root, nsim=A.NSIM):
     json.dump(F, open(os.path.join(root, "figures.json"), "w"), indent=1)
     GD.write(F, gld, scratch)
     open(os.path.join(root, "submission.md"), "w").write(WU.text(F))
-    meta = {"architecture": 6, "as_of": "2027-02-17", "call": F["call"],
+    meta = {"architecture": 7, "as_of": "2027-02-17", "call": F["call"],
             "deliverables": ["ic_note_senior_notes_2027.docx", "senior_note_loss_by_year.csv"],
             "distractors": sorted(DISTRACTORS), "distractor_notes": DISTRACTORS,
             "rows": {k: v for k, v in info.items() if k != "lb_id"},

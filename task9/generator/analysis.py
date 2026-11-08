@@ -212,7 +212,7 @@ def lgd(pack, last_closed_year=2019):
                 open_before=sum(v for y, v in open_by_year.items() if y <= last_closed_year))
 
 
-def shocks(P, E):
+def shocks(P, E, given="sector-year"):
     """Posterior means of each year's shock (from the year's default rate against the rates its loans' ratings and ages
     expect, one factor) and of each house-year's shock given its industry-years (from the house-year's own defaults
     against its companies' industry-year rates, the house share of the residual variance)."""
@@ -223,8 +223,12 @@ def shocks(P, E):
         m = P[:, 1] == y
         dr = min(max(P[m, 6].mean(), 1e-4), 0.5)
         zy[y] = float((norm.ppf(pu[m].mean()) - norm.ppf(dr)) * np.sqrt(1 - E["am"]) / np.sqrt(E["am"]))
-    pKY = MD.cond_pd(P, P[:, 1] * 100 + P[:, 3])
-    c = E["ch"]
+    if given == "year":
+        pKY = MD.cond_pd(P, P[:, 1])
+        c = E["ah"] / (1 - E["am"])
+    else:
+        pKY = MD.cond_pd(P, P[:, 1] * 100 + P[:, 3])
+        c = E["ch"]
     grid = np.linspace(-4.5, 4.5, 181)
     prior = norm.pdf(grid)
     zh = {}
@@ -240,10 +244,11 @@ def shocks(P, E):
     return zy, zh
 
 
-def lgd_link(pack, L, buys, P, ids, E, sample="mature", last_closed_year=2019, terms=("year", "house")):
+def lgd_link(pack, L, buys, P, ids, E, sample="mature", last_closed_year=2019, terms=("year", "house"),
+             given="sector-year"):
     """Recovery on each default's year and house-year shocks, by least squares over the workouts of the default years
     whose workouts have all closed (sample mature) or every closed workout (sample closed)."""
-    zy, zh = shocks(P, E)
+    zy, zh = shocks(P, E, given)
     rows = read_csv(pack.path("lenderbase_workout_recoveries_2008-2026.csv"))
     X, yv, groups = [], [], collections.Counter()
     for r in rows:
@@ -443,15 +448,18 @@ def run(root, nsim=NSIM, rivals=True):
         res["rivals"] = {}
         Lyear = lgd_link(pack, L, buys, P, ids, E, terms=("year",))
         Lclosed = lgd_link(pack, L, buys, P, ids, E, sample="closed")
-        res["link_year_only"], res["link_closed"] = Lyear, Lclosed
+        Lhouse = lgd_link(pack, L, buys, P, ids, E, terms=("house",))
+        Lgy = lgd_link(pack, L, buys, P, ids, E, given="year")
+        res["link_year_only"], res["link_closed"], res["link_house_only"], res["link_given_year"] = Lyear, Lclosed, Lhouse, Lgy
         routes = {"one_factor": dict(am=E["am"]), "industry": dict(am=E["am"], ak=E["ak"]),
                   "house_pooled_lgd": dict(am=E["am"], ak=E["ak"], ah=E["ah"]),
                   "house_closed_lgd": dict(am=E["am"], ak=E["ak"], ah=E["ah"], lgd=G["lgd_closed"]),
                   "house_year_link": dict(am=E["am"], ak=E["ak"], ah=E["ah"], link=(Lyear["a"], Lyear["bm"], 0.0)),
                   "house_link_closed": dict(am=E["am"], ak=E["ak"], ah=E["ah"],
                                             link=(Lclosed["a"], Lclosed["bm"], Lclosed["bh"])),
-                  "house_link_half": dict(am=E["am"], ak=E["ak"], ah=E["ah"], link=(LK["a"], LK["bm"], LK["bh"] / 2)),
-                  "fund_year_link": dict(am=E["am"], ak=E["ak"], af=E["af"], link=link)}
+                  "house_link_only": dict(am=E["am"], ak=E["ak"], ah=E["ah"], link=(Lhouse["a"], 0.0, Lhouse["bh"])),
+                  "house_link_given_year": dict(am=E["am"], ak=E["ak"], ah=E["ah"], link=(Lgy["a"], Lgy["bm"], Lgy["bh"])),
+                  }
         for name, kw in routes.items():
             kw = dict(kw)
             lg = kw.pop("lgd", G["lgd"])

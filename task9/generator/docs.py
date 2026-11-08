@@ -56,20 +56,20 @@ def standard(path):
                    "the European Central Bank reference rate of the portfolio date.", body),
          Paragraph("3.3 Default: a payment default, an insolvency or a distressed restructuring, as Lenderbase records "
                    "them.", body),
-         Paragraph("3.4 Loss: a loan that defaults loses its amount times the share of it that lenders on comparable "
-                   "loans fail, on average, to recover by the end of the workout, taken over every comparable default, "
-                   "those still in workout included, and booked in the year of the default. A loan that has defaulted "
-                   "leaves the portfolio and is not replaced. Interest, fees and excess spread are left out.", body),
+         Paragraph("3.4 Loss: a loan that defaults loses its amount times the share of it that is not recovered by the "
+                   "end of its workout, booked in the year of the default. A loan that has defaulted leaves the "
+                   "portfolio and is not replaced. Interest, fees and excess spread are left out.", body),
          Paragraph("3.5 Subordination: the share of the portfolio's par that ranks below the note. A note loses "
                    "principal when the portfolio's cumulative loss exceeds its subordination.", body),
          Paragraph("4. The record", h2),
          Paragraph("4.1 Default and recovery are taken from the record of comparable loans: the European sponsor-backed "
                    "first-lien mid-market loans in the Lenderbase database that Kadeweg licenses, from 2008 to the latest "
-                   "full year, with Lenderbase's workout file. The five years are taken to be drawn from the same "
-                   "conditions as that record.", body),
+                   "full year, with Lenderbase's workout file, its open workouts included. The five years are taken to "
+                   "be drawn from the same conditions as that record.", body),
          Paragraph("4.2 A borrower defaults in a year when its credit standing falls below the point its one-year "
                    "default chance sets. Credit standings are normally distributed and are correlated as far as the "
-                   "record of comparable loans shows them to be.", body),
+                   "record of comparable loans shows them to be, and so is what lenders recover on the loans that "
+                   "default.", body),
          Paragraph("5. Review", h2),
          Paragraph("Kadeweg reviews this standard every year and after any change in the matching portfolio's "
                    "liabilities. Changes take effect when the board adopts them.", body),

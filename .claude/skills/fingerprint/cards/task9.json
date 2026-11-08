@@ -22,7 +22,7 @@
     "none"
   ],
   "generators": [
-    "G14",
+    "G2",
     "G17",
     "G13"
   ],
@@ -79,11 +79,11 @@
     ]
   },
   "deliverables": [
-    "ic_note_senior_notes_2027.pdf",
-    "senior_note_loss_2027-2031.xlsx"
+    "ic_note_senior_notes_2027.docx",
+    "senior_note_loss_by_year.csv"
   ],
   "opening_move": "question-first",
-  "question_form": "which",
+  "question_form": "whether",
   "driver": "The decisive quantity is a tail probability of a sum of losses, each a default times a severity, where the severity falls in the very states that cluster the defaults, through the same latent shock of the shared owner; a severity averaged over the record, even corrected for the cases still open, prices the tail at the average state, one tied to the economy alone misses the owner's shock that drives the clustering, and only the severity conditioned on each owner-year's shock, inferred from that owner-year's own default experience, carries the tail.",
   "driver_concrete": "Each note's chance of loss over 2027 to 2031 at 15.0 per cent subordination: a sponsor house in a bad year stops supporting its companies' restructurings, so the defaults that cluster in its year also recover less (and take longer, so the recent ones are still open); with one censoring-corrected recovery for every default, Kestrel Lane fails and Ostvale passes; with recovery tied to the house's year, inferred from each house-year's defaults among the companies it held, neither passes.",
   "stump": "A competent solver rebuilds each loan's sponsor house, fits the house-year dependence and a censoring-corrected recovery for every default, finds Kestrel Lane at about 1.5 per cent and Ostvale at about 0.6 and buys Ostvale; the defaults that cluster in a house's bad year recover far less than isolated ones, so with recovery tied to the house's year shock (and the economy's) Ostvale's chance of loss is about 3 per cent and Kestrel Lane's about 5, and the fund buys neither.",
@@ -367,8 +367,8 @@
   ],
   "registered": "2026-11-08T16:21:54Z",
   "shell": {
-    "question form": "what",
-    "second-sentence opener": "in",
+    "question form": "whether",
+    "second-sentence opener": "the",
     "rounding opener": "chances",
     "deliverable set": "csv+docx"
   }
