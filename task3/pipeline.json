@@ -25,7 +25,7 @@
   "nearest": "task3 v5 lineage 0.09 driver; task68 surface 0.071 (labels only)"
  },
  "judge": {
-  "verdict": "round 1 NOT_DETERMINISTIC (daily snow lines); round 2 NOT_DETERMINISTIC (margin: lapse read at one elevation across the station move, peak-hour temperature); both repaired; round 3 running",
+  "verdict": "round 3 NOT_DETERMINISTIC (margin, carry rule unfiled; a daily-temperature carry files 30,000 to 55,000 and 240 ft)",
   "disposition": "",
   "gate_h": "round 2: domain pass, layers pass, decisive_step analytical, one_fact none",
   "report": "task3/determinism_check_report.md"
@@ -128,7 +128,7 @@
    "commit": ""
   }
  ],
- "resume": "stage 4 round 3: read the judge's verdict (/tmp/determinism-check-task3-r3/verdict.md) and the reader's answers (scratchpad t3a6/reader3), fix any finding, re-run the gates, then stage 5 READY",
+ "resume": "architecture 6 failed determinism three rounds running (the snow-line carry is not forced by the files); author's decision needed: (a) file the carry rule in a shipped document (risks handing over the step), (b) ship an observed low-elevation gauge record that validates the carry, or (c) re-root from stage 1",
  "approved": null,
  "submitted": null,
  "portal": {

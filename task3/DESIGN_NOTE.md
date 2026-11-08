@@ -747,3 +747,7 @@ Architecture 6 (the Durrow Creek bridge):
   under 22,000 and the peak-hour temperature took it over 28,000; the move shrunk to 35 ft, the spans re-rated and the
   bands set at decades. A storm air mass lingering 30 hours after the rain (to bring the peak-hour reading to the rain's)
   re-rolled the whole flood record and widened the peak-hour spread; dropped for the refutation in SF22.
+- Architecture 6 revision 2 after round 3: the third isolated judge carried the record with daily station temperatures
+  and its own lapse set and filed 30,000 to 55,000 cfs (240 ft), with other largest floods (2008, 1973, 1999); three
+  judges, three constructions, two spans off the golden's. The storm-by-storm snow-line carry is a physical model the
+  files leave open, and its answer moves across the spans' margins with the construction; paused for the author.
