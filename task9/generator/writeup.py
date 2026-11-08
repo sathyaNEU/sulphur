@@ -9,7 +9,8 @@ def text(F):
     G, D, E, L, ev, ll = F["golden"], F["default_path"], F["estimates"], F["lgd"], F["evidence"], F["loglik"]
     kl, os_ = G["KL"], G["OS"]
     rg = F["rungs"]
-    hp, yl, hc, hh = rg["house_pooled_lgd"], rg["house_year_link"], rg["house_link_closed"], rg["house_link_only"]
+    hp, yl, hc, hh = rg["house_pooled_lgd"], rg["house_year_link"], rg["house_link_given_year"], rg["house_link_only"]
+    hx = rg["house_link_closed"]
     LK, Ly, Lc = F["link"], F["link_year_only"], F["link_closed"]
     rb = F["recovery_by_other_defaults"]
     sub = p(F["subordination_pct"]["KL"], 1)
@@ -106,11 +107,12 @@ def text(F):
     out.append(("No other conclusion survives. Without the house's year in the dependence, with it but one average "
                 "loss, or with a loss tied to the economy alone, the defaults that cluster in a house's bad year are "
                 "priced at an ordinary recovery and Kestrel Lane is bought (at %s, %s or %s per cent); every estimate "
-                "that ties recovery to the house's year keeps both notes over the test: the link fitted on every closed "
-                "workout (%s and %s per cent), the house's shock alone (%s and %s per cent), and a cohort table or pair "
-                "counts for the default model (%s to %s and %s to %s per cent). Ostvale's weaker credits fail the test "
-                "on every route.\n")
+                "that ties recovery to the house's year keeps both notes over the test: the house-year's shock read against "
+                "the year's rates (%s and %s per cent), the house's shock alone (%s and %s per cent), and a cohort table "
+                "or pair counts for the default model (%s to %s and %s to %s per cent); a link fitted on every closed "
+                "workout drops the open ones MP-RN-2 4.1 keeps, the clustered defaults' long workouts, and puts "
+                "Ostvale at %s per cent. Ostvale's weaker credits fail the test on every route that keeps them.\n")
                % (p(D["KL"]["p5_pct"]), p(hp["KL"]["p5_pct"]), p(yl["KL"]["p5_pct"]), p(hc["KL"]["p5_pct"]),
                   p(hc["OS"]["p5_pct"]), p(hh["KL"]["p5_pct"]), p(hh["OS"]["p5_pct"]), p(bk[0]), p(bk[1]), p(bo[0]),
-                  p(bo[1])))
+                  p(bo[1]), p(hx["OS"]["p5_pct"])))
     return "\n".join(out)

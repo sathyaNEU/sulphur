@@ -4,8 +4,8 @@ and critical components 38, instruction-following 7, asks 55), computed from fig
 
 The shallow run is the arch 6 route the platform's runs took: the house-year dependence, every file conformed, every
 rule read, one average loss for every default (it buys Ostvale). The default path (the industry copula) is scored
-beside it. The landed run is the cracker: the house-linked recovery taken, its second judgment at the reflex (the link
-fitted on every closed workout, whose recent cohorts keep only the quick, good workouts).
+beside it. The landed run is the cracker: the house-linked recovery taken and the call landed, its second judgment
+read another sound way (each house-year's shock inferred against the year's rates rather than the sector-year's).
 
     python3 ceiling.py
 """
@@ -34,11 +34,11 @@ def main():
     # critical components: the house clustering, the recovery gap, the link, the counts and chances
     shallow, s_keep, n = score(R["house_pooled_lgd"], F, call_right=0, comps_right=1 / 4)
     default, d_keep, _ = score(F["default_path"], F, call_right=0, comps_right=0.0)
-    landed, l_keep, _ = score(R["house_link_closed"], F, call_right=1, comps_right=2 / 4)
+    landed, l_keep, _ = score(R["house_link_given_year"], F, call_right=1, comps_right=2 / 4)
     print("ask figures scored: %d" % n)
     print("shallow run (arch 6 route, one average loss): %.1f (keeps %.1f per cent of ask weight)" % (shallow, 100 * s_keep))
     print("default path (industry copula): %.1f (keeps %.1f per cent)" % (default, 100 * d_keep))
-    print("landed run (cracker, link on every closed workout): %.1f (keeps %.1f per cent)" % (landed, 100 * l_keep))
+    print("landed run (cracker, house shocks against the year's rates): %.1f (keeps %.1f per cent)" % (landed, 100 * l_keep))
     print("pair ceiling, landed and shallow: %.1f" % ((landed + shallow) / 2))
     return 0
 

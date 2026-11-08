@@ -225,10 +225,12 @@ def ic_note(F, path, png):
           % (pct(L["lgd_pct"], 1), pct(hp["KL"]["p5_pct"], 1), pct(hp["OS"]["p5_pct"], 1), pct(yl["KL"]["p5_pct"], 1)), 10)
     bk, bo = F["band_pct"]["KL"], F["band_pct"]["OS"]
     _para(doc, ("Estimated other ways, the default rates from a cohort table or the dependence from pair counts, the "
-                "chances run %s to %s per cent for Kestrel Lane and %s to %s per cent for Ostvale; with the link fitted "
-                "on every closed workout, whose recent cohorts hold only the quick ones, Kestrel Lane's chance is %s per "
-                "cent. No sound estimate brings either note under the test.")
-          % (pct(bk[0], 1), pct(bk[1], 1), pct(bo[0], 1), pct(bo[1], 1), pct(rg["house_link_closed"]["KL"]["p5_pct"], 1)), 10)
+                "chances run %s to %s per cent for Kestrel Lane and %s to %s per cent for Ostvale; with each house-year's "
+                "shock read against the year's rates rather than the sector-year's, Kestrel Lane's chance is %s per "
+                "cent. No sound estimate brings either note under the test. Fitting the link on every closed workout "
+                "instead of the closed cohorts would leave out the open workouts, which MP-RN-2 4.1 keeps and which are "
+                "the clustered defaults' long ones.")
+          % (pct(bk[0], 1), pct(bk[1], 1), pct(bo[0], 1), pct(bo[1], 1), pct(rg["house_link_given_year"]["KL"]["p5_pct"], 1)), 10)
 
     _para(doc, "Table 2. Chance that the note has taken a loss by the end of each year", 9, bold=True, after=2, before=6)
     rows = [["", "2027", "2028", "2029", "2030", "2031"]]

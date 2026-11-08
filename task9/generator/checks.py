@@ -148,8 +148,10 @@ def main():
     Lc = A.lgd_link(pack, L, buys, PP, ids, E, sample="closed")
     ck, co = sim(X, E, G["lgd"], link=(Lc["a"], Lc["bm"], Lc["bh"]), **gold), \
         sim(Y, E, G["lgd"], link=(Lc["a"], Lc["bm"], Lc["bh"]), **gold)
-    check("SF8 the link fitted on every closed workout keeps the call", call_of(ck["p5"], co["p5"]) == "neither",
-          "KL %.2f OS %.2f" % (100 * ck["p5"], 100 * co["p5"]))
+    check("SF8 a link fitted on every closed workout drops the open ones MP-RN-2 4.1 keeps: its recent cohorts hold only "
+          "the quick workouts, so its intercept sits above the closed cohorts' and every chance falls",
+          "its open workouts included" in std and Lc["a"] > LK["a"] + 0.015 and ck["p5"] < gk["p5"] and co["p5"] < go["p5"],
+          "intercept %.3f against %.3f; KL %.2f OS %.2f" % (Lc["a"], LK["a"], 100 * ck["p5"], 100 * co["p5"]))
     Pl = T.panel(W, clock="loan")
     El = MD.estimate(Pl)
     lk = sim(T.port(W, W.X, "loan"), El, G["lgd"], am=El["am"], ak=El["ak"], ah=El["ah"], link=link)
@@ -222,25 +224,25 @@ def main():
           call_of(of_k["p5"], of_o["p5"]) == "KL" and call_of(in_k["p5"], in_o["p5"]) == "KL" and
           in_o["p5"] / in_k["p5"] > 1.5, "industry %.2f against %.2f" % (100 * in_k["p5"], 100 * in_o["p5"]))
     check("R3b the decisive step files the golden", call_of(gk["p5"], go["p5"]) == "neither")
-    check("R3d the arch 6 golden (house-year dependence, one average loss) files Ostvale",
-          call_of(pl_k["p5"], pl_o["p5"]) == "OS" and pl_o["p5"] < A.BAR / 1.15 and pl_k["p5"] > 1.1 * A.BAR,
+    check("R3d the arch 6 runs' route (house-year dependence, one average loss) files Kestrel Lane",
+          call_of(pl_k["p5"], pl_o["p5"]) == "KL" and pl_k["p5"] < A.BAR / 1.5,
           "%.2f against %.2f" % (100 * pl_k["p5"], 100 * pl_o["p5"]))
-    check("R3e the textbook downturn link (recovery on the economy's year) still files Ostvale",
-          call_of(yl_k["p5"], yl_o["p5"]) == "OS" and yl_o["p5"] < A.BAR / 1.15 and abs(Ly["bm"]) < 0.03,
+    check("R3e the textbook downturn link (recovery on the economy's year) still files Kestrel Lane",
+          call_of(yl_k["p5"], yl_o["p5"]) == "KL" and yl_k["p5"] < A.BAR / 1.5 and abs(Ly["bm"]) < 0.06,
           "%.2f against %.2f, slope %.3f" % (100 * yl_k["p5"], 100 * yl_o["p5"], Ly["bm"]))
     check("R3c no plant: Basel's assumed correlation also files Kestrel Lane", call_of(ba_k["p5"], ba_o["p5"]) == "KL",
           "%.2f against %.2f" % (100 * ba_k["p5"], 100 * ba_o["p5"]))
-    check("R4 each layer moves the call: no house files Kestrel Lane, the house with one loss files Ostvale, the house "
-          "with the recovery link files neither",
-          call_of(in_k["p5"], in_o["p5"]) == "KL" and call_of(pl_k["p5"], pl_o["p5"]) == "OS" and
+    check("R4 the two layers act together: no house files Kestrel Lane, the house with one loss still files it, the "
+          "house with its recovery link files neither",
+          call_of(in_k["p5"], in_o["p5"]) == "KL" and call_of(pl_k["p5"], pl_o["p5"]) == "KL" and
           call_of(gk["p5"], go["p5"]) == "neither")
     check("R5 the one-fact hint executed literally (recoveries lower in bad years: the economy's year) misses the call",
           call_of(yl_k["p5"], yl_o["p5"]) != "neither")
-    check("R6 the rivals: every form without the house files Kestrel Lane, every house form with one loss or a year "
-          "link files Ostvale, every house-linked recovery files neither",
-          all(call_of(a["p5"], b["p5"]) == "KL" for a, b in ((of_k, of_o), (in_k, in_o), (ba_k, ba_o))) and
-          all(call_of(a["p5"], b["p5"]) == "OS" for a, b in ((pl_k, pl_o), (yl_k, yl_o))) and
-          all(call_of(a["p5"], b["p5"]) == "neither" for a, b in ((ck, co), (hk, ho), (nk_, no_), (gk, go))))
+    check("R6 the rivals: every form without a house-linked recovery files Kestrel Lane, every sound house-linked "
+          "recovery files neither",
+          all(call_of(a["p5"], b["p5"]) == "KL" for a, b in ((of_k, of_o), (in_k, in_o), (ba_k, ba_o), (pl_k, pl_o),
+                                                              (yl_k, yl_o))) and
+          all(call_of(a["p5"], b["p5"]) == "neither" for a, b in ((hk, ho), (nk_, no_), (gk, go))))
     # V: the recovery evidence
     rb = F["recovery_by_other_defaults"]
     check("V1 on the closed cohorts the clustered defaults recover at least 15 points less than the lone ones",

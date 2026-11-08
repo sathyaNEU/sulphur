@@ -390,6 +390,15 @@ def _portfolios(W, rng, nXh=7, perh=14, nY=100, maxYh=2, core_n=5, yhouses=60,
         byh[W.funds[own[c]]["house"]][own[c]].append(c)
     cand = sorted(h for h, fs in byh.items() if sum(1 for f in fs.values() if len(f) >= 4) >= 2
                   and sum(len(f) for f in fs.values()) >= perh + 4)
+    # the houses Kestrel Lane lends to have ordinary records: none above the median house's default rate
+    hy = collections.defaultdict(lambda: [0, 0])
+    for (c, y, f, k, r, age, d) in W.cy:
+        if y >= DB0:
+            hy[W.funds[f]["house"]][0] += int(d)
+            hy[W.funds[f]["house"]][1] += 1
+    rates = {h: v[0] / v[1] for h, v in hy.items() if v[1] >= 60}
+    med = float(np.median(list(rates.values())))
+    cand = [h for h in cand if rates.get(h, med) <= med]
     # the houses whose companies carry the better ratings: Kestrel Lane lends to its sponsors' stronger credits
     def quality(h):
         cs = [c for f in byh[h] for c in byh[h][f]]
