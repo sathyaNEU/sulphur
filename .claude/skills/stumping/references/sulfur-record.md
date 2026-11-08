@@ -13,8 +13,18 @@ then, once known, the review result.
 
 | Task | Date | Subdomain | Objective | Shape | Deep-step family | Run 1 | Run 1 class | Run 2 | Run 2 class | Avg | CF avg | Verdict | Review |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|
+| task2 arch 3 | 2026-11-08 | general-statistics-data-science / exploratory-data-analysis-distribution-assessment | descriptive-distribution | a set of products in or out, rate and 90 per cent interval each | own (a drifting process read run by run between resets) | not reported, on the golden | none | not reported, on the golden | none | landed | landed | REDESIGN | |
+| task3 arch 2 | 2026-11-08 | physical-environmental-sciences / hydrology-flood-frequency | forecasting | pick one of four alternatives, events a year each | own (a buffer emptied through a receiver's spare capacity) | not reported, on the golden | none | not reported, on the golden | none | landed | landed | REDESIGN | |
 
 ## Lessons
 
 A lesson is written here only when two or more rows show it, with the rows named. A lesson that changes how a build
 is designed is moved into the skill it governs in a `SKILLS:` commit, and its line here then points at the skill.
+
+- **A mechanism the rows visibly carry is modelled on sight** (task2 arch 3, task3 arch 2). Both runs of both builds
+  spent 19 to 48 minutes, cleaned every Layer 1 item, and built the physical mechanism the data showed (dose volume
+  falling with the litres a set had pumped; dewatering bounded by the receiving plant's hourly headroom) as their
+  first model, then validated it on held-out rows of the same stream. A deep step whose content is "model the
+  structure the rows show" is a reflex for these runs; the live ground is a structure the rows in view hide or
+  mimic (two effects offsetting inside the observed window, a support or sampling property the observed values do
+  not share with the decision unit), with the deciding evidence in a second file at another grain or scale.
