@@ -72,3 +72,12 @@ Layer 1 is the mixed units, clocks, re-hung logger, and measuring-point and mete
 
 ## Fix
 Where: input_files (presentation only) and solution. (1) Re-cut the plate PNG without the "added October 2026" line and confirm the shipped zip contains the final PNG. (2) In the answer blocks, document the per-well T fits and the OW-S-alone residual comparison, so the closures on sensitivities 1 and 2 are visible. (3) Add a rubric tolerance or a prompt pin for answer 9 (the plate's walls), since 6 ft is an alternative for solvers who skip the plate. No change to the main call or any graded figure.
+
+## Re-judge of the FIX_NOW (one pass, 2026-11-08)
+
+Isolated Sonnet thread on the final bundle and the revised Step-by-Step: **DETERMINISTIC, APPROVE.** The plate no
+longer carries the caption; its own per-well Theis fits (8,430, 8,110 and 8,370 ft2/day) agree with step 2's
+(8,320, 8,090 and 8,260) and sit inside the window where 1,000 gpm holds, so the first pass's margin concern at OW-2
+is gone; the OW-S-alone closure (B 3,065 ft, MS-MW 4.4 against the record's 4.9 ft) and the DW-17 closure (Plate 3's
+mapped edges) cite shipped data. Residual note, not blocking: a solver who skips the plate reads 6 ft on answer 9
+only; the rubric may carry that as a tolerance note.
