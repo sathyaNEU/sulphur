@@ -154,14 +154,14 @@ def report(F, path, scratch):
                    "basin like the Coyner River's; on it the 140 ft span would have been selected. The state's Region 3 "
                    "equation is not used (section 7.4.3(c)). A snow line placed with the standard atmosphere's 6.5 degrees C "
                    "per kilometre sits too low in storms and gives about %s cfs; leaving out the rise of precipitation with "
-                   "elevation gives about %s cfs; the valley's daily mean temperature in place of the hourly record mixes in "
-                   "the air before and after the rain. The design flood holds at %s cfs for every storm definition and "
-                   "temperature weighting the hourly record allows." % (
+                   "elevation gives about %s cfs; the valley's daily mean temperature, or the airport's reading at the river's peak "
+                   "hour (no rain fell in that hour in %d per cent of the floods), reads air the rain did not fall in. The "
+                   "design flood holds at %s cfs for every storm definition and rain weighting the hourly record allows." % (
                        fmt(F["river_1pct"]), fmt(F["drainage_area"]), fmt(V["lapse_6.5"]["q01_5000"]),
-                       fmt(V["no_orography"]["q01_5000"]), fmt(F["q01_5000"])), body)]
+                       fmt(V["no_orography"]["q01_5000"]), F["dry_at_peak_pct"], fmt(F["q01_5000"])), body)]
     O.build(path, s, "Durrow Creek Bridge 2209-04: hydrology report", "Pelton County Public Works", "Hydrology report",
-            "Pelton County Public Works, bridge 2209-04 hydrology", dt.datetime(2026, 11, 5, 15, 12, tzinfo=PST),
-            dt.datetime(2026, 11, 6, 9, 48, tzinfo=PST))
+            "Pelton County Public Works, bridge 2209-04 hydrology", dt.datetime(2026, 11, 6, 9, 47, 52, tzinfo=PST),
+            dt.datetime(2026, 11, 6, 9, 47, 52, tzinfo=PST))
 
 
 def csv(F, path):

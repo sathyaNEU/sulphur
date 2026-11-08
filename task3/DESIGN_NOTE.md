@@ -28,7 +28,7 @@ graded at the precision the carried record supports. Earlier architectures are i
   climate of the records, and for a basin over 10 square miles sends the designer to the nearest gauged basin holding
   25 years or more of annual peaks, carried to the site, with Bulletin 17C frequency curves; that basin is the Coyner
   River near Tessel (86.4 square miles of a glaciated volcano's flank, 6.2 miles away, peaks since water year 1951);
-  three spans are rated by the consultant's hydraulic model (140, 185 and 240 ft at 22,000, 28,000 and 40,000 cfs); the
+  three spans are rated by the consultant's hydraulic model (140, 185 and 240 ft at 20,500, 29,000 and 40,000 cfs); the
   call is the shortest that carries the creek's flood.
 - **Shape:** 04, setting one dial (the span) among allowed settings, with the creek's 50 and 1 per cent flows, each
   span's exceedance band (a three-cell grid), the creek's two largest floods, and the creek's estimated annual peaks as
@@ -80,9 +80,10 @@ the field's own method for the deciding quantity in it (`stumping` 1.1b).
    18,863 x (85.3 / 86.4)^0.856, about 18,700 cfs; the creek's 50 per cent flow about 5,700 cfs; the river's annual
    peaks carried the same way are the creek's estimated annual peaks, its largest floods the river's (1983, 2001).
 4. Back-test it: the same transfer between the region's five gauged basins reproduces each one's curve to a median 2
-   per cent; the state's equation gives 14,100 cfs; the region's mean unit flood 20,200 cfs. Everything agrees on a
-   creek flood under 22,000 cfs.
-5. The 140 ft span's rated flow (22,000 cfs) carries it, exceeded once in 100 to 500 years on that curve.
+   per cent; the state's equation gives 14,100 cfs; the region's mean unit flood 18,700 cfs; a regression of the five
+   gauges' unit floods on mean elevation finds no elevation effect and gives 17,000. Everything agrees on a creek flood
+   under 20,500 cfs.
+5. The 140 ft span's rated flow (20,500 cfs) carries it, exceeded once in 100 to 1,000 years on that curve.
 
 Ends on: build the 140 ft span, the creek's 1 per cent flood about 20,000 cfs
 Golden: build the 185 ft span, the creek's 1 per cent flood about 25,000 cfs
@@ -93,9 +94,9 @@ The default path builds the 140 ft span on a creek flood of about 18,700 cfs; th
 the Coyner River's record by drainage area, when the river's floods drain only the part of its high basin below each
 storm's snow line (half of it in its median flood, three fifths in its largest tenth) while the creek's foothill basin
 drains whole in every one of those storms, so each flood carries to the creek at the ratio of the two basins' rain
-below the snow line the airport's hourly temperature places (a median 1.58 times, 1.27 in the river's largest floods)
-and the creek's 1 per cent flood is about 25,000 cfs, beyond the 140 ft span's 22,000 and inside the 185 ft span's
-28,000, with its two largest floods in water years 2008 and 2011 rather than the river's 1983 and 2001.
+below the snow line the airport's hourly temperature places (a median 1.57 times, 1.26 in the river's largest floods)
+and the creek's 1 per cent flood is about 25,000 cfs, beyond the 140 ft span's 20,500 and inside the 185 ft span's
+29,000, with its two largest floods in water years 2008 and 2011 rather than the river's 1983 and 2001.
 
 ## Deep reasoning
 
@@ -111,11 +112,11 @@ and the creek's 1 per cent flood is about 25,000 cfs, beyond the 140 ft span's 2
   scale differently from another's, and why its busiest days fall in other years.
 - Layer 1: the gauge's daily file has an equipment gap, two estimated washout winters and ice-affected days; the
   peak file carries estimate codes, missing early peak times and gage heights on a datum lowered in 1985; the valley
-  observer missed weekends before 1979 (multi-day totals in MDPR) and the station moved 160 ft up the valley in 1988
+  observer missed weekends before 1979 (multi-day totals in MDPR) and the station moved 35 ft up the valley in 1988
   with a three-month overlap; the ridge station lost three winters; the airport's hourly export carries specials
   (FM-16) that repeat rain the next routine report holds, traces, suspect flags and missing hours; the SNOTEL sites
   start in 1981 and 1983 with temperatures only from 1987 and 1989; elevations are in metres in the station files,
-  feet in the workbook, and the creek's bands in acres against the gauges' square miles. Each is what the system does;
+  feet in the workbook (its station sheet lists each station's elevation in feet). Each is what the system does;
   none is placed to be caught, and none moves a graded cell (SF12, SF13, SF19).
 - Layer 2: heterogeneity that pooling hides, read through physics: each storm's snow line leaves a different share of
   each basin draining rain, so the transfer between two basins varies storm by storm and depends on their elevation
@@ -134,7 +135,7 @@ and the creek's 1 per cent flood is about 25,000 cfs, beyond the 140 ft span's 2
   spreads the creek's 1 per cent flood from 14,100 to 37,000 cfs and splits the call three ways; the standing family
   (the snow-line transfer from the hourly record with the constants the stations measure and the orographic rise,
   every storm definition, either transition shape, either station pair's lapse, annual peaks or every flood, the
-  station skew) spans 23,800 to 25,600 cfs and files every graded cell alike; the ruling-out is loud (the river's own
+  station skew) spans 23,600 to 25,400 cfs and files every graded cell alike; the ruling-out is loud (the river's own
   floods track rain below the snow line at r 0.76 against 0.55 for the whole basin's rain; the station pair measures
   5.36 degrees C a kilometre on storm days, the snow pillows 0.89 degrees C).
 - Analyst test: the easy route a strong hydrologist takes with every record conformed and every clause read is
@@ -172,9 +173,9 @@ and the creek's 1 per cent flood is about 25,000 cfs, beyond the 140 ft span's 2
   storm's snow line and the two basins' elevation bands shows that the river's floods came from half its basin.
 - After the notice: (1) placing the snow line: the storm lapse rate the station pair measures (5.36) and the pillows'
   rain-snow temperature (0.89 degrees C), where the textbook 6.5 degrees C a kilometre files the creek's flood at 35,100
-  cfs (240 ft) and the freezing level at 21,400 (140 ft); (2) the orographic rise: the river's draining half sits higher
+  cfs (240 ft) and the freezing level at 21,200 (185 ft, the 1 per cent cell off); (2) the orographic rise: the river's draining half sits higher
   and wetter than the creek, and area alone files 31,700 cfs (240 ft); (3) the rain's own temperature from the hourly
-  record, where a daily storm mean files 29,000 (185 ft, the 1 per cent cell and the 140 ft band off); (4) every
+  record, where a daily storm mean files 29,200 and the reading at the river's peak hour 30,800 (both 240 ft); (4) every
   storm's flood carried and the year's largest taken, which names the creek's largest floods.
 - One-fact test: the likeliest hint is "the creek is rain-dominated and the river snow-affected"; the run still has
   to place every flood's snow line from the stations (a lapse rate measured on storm days, a rain-snow temperature from
@@ -205,11 +206,12 @@ and the creek's 1 per cent flood is about 25,000 cfs, beyond the 140 ft span's 2
   temperature measured at the snow pillows, and two basins' elevation bands.
 - Link: flood to storm (the USGS peak times against the airport's hourly rain), storm to snow line (the rain-weighted
   temperature with the storm lapse from the Tessel and Durrow Ridge pair and the pillows' rain-snow temperature), snow
-  line to each basin's draining area (the workbook's bands, the creek's in acres); no key joins a flood to a basin
+  line to each basin's draining area (the workbook's bands for every gauged basin and the crossing); no key joins a flood to a basin
   share, no sentence invites it, and the comparison that shows it (the river's peaks against rain below the snow line,
   r 0.76, against the whole basin's rain, r 0.55) is one the field's transfer never asks for.
 - Reflex: the field's method, Bulletin 17C at the gauge carried by drainage area, sits at rung 0 and files 18,700 cfs
-  and the 140 ft span; the regional equation (14,100) and the regional unit flood (20,200) agree.
+  and the 140 ft span; the regional equation (14,100), the regional unit flood (18,700) and an elevation regression
+  over the five gauges (17,000) agree.
 - Back-test: the textbook route validates: the drainage-area transfer reproduces each of the region's five gauged
   basins from the others to a median 2 per cent, because all five are high basins whose floods drain the same share of
   each storm (checks.py B1).
@@ -248,7 +250,7 @@ Tests: 1 filed sentence, 2 schema, 3 reflex, 4 control bench, 5 hygiene, 6 linea
 | SF9 | the temperature the rain fell at | rain-weighted over the storm; the plain mean of its wet hours; the wettest 24 hours | same cells (checks.py) |
 | SF10 | the rain-snow transition | the pillows' logistic share; a sharp threshold at its midpoint | same cells (checks.py) |
 | SF11 | carrying a peak between basins of 86.4 and 85.3 sq mi | drainage-area exponent 0.6 to 1.0 | same cells (checks.py) |
-| SF12 | the valley station's 1988 move | each record at its own elevation; the two read at one elevation | same call (checks.py) |
+| SF12 | the valley station's 1988 move (35 ft) | each record at its own elevation; the two read at one elevation | the same lapse to the second decimal (checks.py) |
 | SF13 | multi-day precipitation totals | spread over their days; on the last day | same cells (checks.py) |
 | SF14 | the two estimated peaks (1991, 2004) | kept, as USGS publishes them and Bulletin 17C reads them as record; dropped | same call, flows and bands; neither is among the creek's largest floods (checks.py) |
 | SF15 | the storm lapse rate's station pair | Tessel and Durrow Ridge (5.36); Hatchet Meadow and Corbel Ridge (5.21) | same cells (checks.py) |
@@ -258,24 +260,28 @@ Tests: 1 filed sentence, 2 schema, 3 reflex, 4 control bench, 5 hygiene, 6 linea
 | SF19 | the airport's specials (FM-16) | routine reports only; every report's rain summed into its hour | same cells (checks.py) |
 | SF20 | the dry spell that ends a storm | 6 hours; 3, 12 or 24 | same cells (checks.py) |
 | SF21 | daily against hourly temperature | the rain's hourly temperature; the valley's daily mean | the hourly record: the daily mean misses the rain's temperature by more than 1 degree C in a fifth of the floods (checks.py) |
+| SF22 | the temperature that places a flood's snow line | the rain-weighted hourly temperature; the airport's reading at the river's peak hour | the hourly record: no rain fell in the peak hour in 48 per cent of the floods and the air then ran a median 0.7 degrees C colder (checks.py) |
 
 ## Ladder
 
 | Rung | Construction | Creek 1 per cent flood (cfs) | Files | Dies to |
 |---|---|---|---|---|
 | 0 | Bulletin 17C at the Coyner River carried by drainage area | 18,700 | 140 ft | the river's floods drain only the area below each storm's snow line |
-| 0b | the region's mean unit flood; the state equation out of range | 20,200; 14,100 | 140 ft | the same, and 7.4.3 and the equation's range |
+| 0b | the region's mean unit flood; the state equation out of range; an elevation regression over the five gauges | 18,700; 14,100; 17,000 | 140 ft | the same, and 7.4.3 and the equation's range |
 | 1 | a snow line with the textbook lapse (6.5 degrees C a km) and 0 degrees C, area alone | 37,000 | 240 ft | the stations' storm lapse, the pillows' rain-snow temperature, the orographic rise |
 | 1b | the stations' lapse and the pillows' temperature, area alone | 31,700 | 240 ft | the orographic rise the stations show |
-| 1c | the freezing level as the snow line | 21,400 | 140 ft | the pillows' rain-snow temperature |
-| 1d | the stations' constants from the valley's daily storm-mean temperature | 29,000 | 185 ft, the 1 per cent cell and the 140 ft band off | the rain's own temperature in the hourly record |
-| 2 (decisive) | the stations' storm lapse, the pillows' rain-snow temperature, the orographic rise, the rain's hourly temperature, every flood | 24,978 | 185 ft | nothing |
+| 1c | the freezing level as the snow line | 21,200 | 185 ft, the 1 per cent cell off | the pillows' rain-snow temperature |
+| 1d | the stations' constants from the valley's daily storm-mean temperature, or from the airport's reading at the river's peak hour | 29,200; 30,800 | 240 ft | the rain's own temperature in the hourly record (SF21, SF22) |
+| 2 (decisive) | the stations' storm lapse, the pillows' rain-snow temperature, the orographic rise, the rain's hourly temperature, every flood | 24,781 | 185 ft | nothing |
 
-Margins: rung 0 files the creek's flood 15 per cent under the 140 ft span's rating and the golden 14 per cent over it;
-the golden sits 11 per cent under the 185 ft span's rating, and the standing family's highest member (25,600) 9 per
-cent under it; rung 1 files 32 per cent over the 185 ft span. Pricing: the residue the WHAT leaves is the carrying
-method (a method, not a knob); the one-group-by route to the call is "the creek is lower than every gauge", which files
-no figure and, quantified by an elevation regression across the five high gauges, extrapolates to 34,400 (240 ft); the
+Margins: rung 0 files the creek's flood 9 per cent under the 140 ft span's rating and the golden 21 per cent over it;
+the standing family's lowest member (23,600) sits 15 per cent over it, and every data-supported estimator combination
+(108 of them, the lapse from either pair, the rain-snow temperature 0.85 to 0.94 degrees C, the orographic gain 0.095
+to 0.11, either transition, any rain weighting) 11.6 per cent or more over it; the golden sits 15 per cent under the
+185 ft span's rating and the family's highest member (25,400) 12 per cent under it; rung 1 files 28 per cent over the
+185 ft span. Pricing: the residue the WHAT leaves is the carrying method (a method, not a knob); the one-group-by route
+to the call is "the creek is lower than every gauge", which files no figure and, quantified by an elevation regression
+across the five high gauges (their unit floods alike), finds no elevation effect and files 17,000 (140 ft); the
 decisive step's worth (the 1 per cent flood from 18,700 to 25,000) is 1.3 cells of the asks' 5,000 cfs and moves two
 of the three bands; the standing family's spread is a third of a cell; the long-run truth of the simulated climate
 (24,384 cfs in 1,200 years) sits inside the 185 ft span and the golden's cell.
@@ -301,7 +307,7 @@ of the three bands; the standing family's spread is a third of a cell; the long-
 | 15 Duplicate resolution | a peak in both files; the airport's specials | counted once (same date); routine reports only (SF19) |
 | 16 Identity normalisation | stations across the 1988 move | the two station identifiers, both kept |
 | 17 Netting against gross | none | n/a |
-| 18 Dimensional units | metres, feet, acres, square miles, Fahrenheit | the files' own headers; the workbook's station sheet in feet |
+| 18 Dimensional units | metres, feet, square miles, Fahrenheit | the files' own headers; the workbook's station sheet in feet |
 | 19 Code and status semantics | peak codes, qualifiers, GHCN attributes, LCD report types and flags | the files' own legends |
 | 20 Integerisation | none | n/a |
 | 21 Clause scope | chapter 7.4 applies to this bridge | the standard 7.1 |
@@ -335,7 +341,7 @@ curve), graded at the precision the carried record supports.
 |---|---|---|---|---|
 | A1 the creek's 50 per cent flow | 1 | every flood carried and the year's largest taken | 5,000 | 10,000 |
 | A2 the creek's 1 per cent flow | 1 | the rain's hourly temperature (the daily storm mean files 30,000) | 20,000 | 25,000 |
-| A3 each span's exceedance band | 3 | the curve's tail on a carried series | 100 to 500; beyond 500; beyond 500 | 25 to 100; 100 to 500; beyond 500 |
+| A3 each span's exceedance band | 3 | the curve's tail on a carried series | 100 to 1,000; beyond 1,000; beyond 1,000 | 10 to 100; 100 to 1,000; beyond 1,000 |
 | A4 the creek's two largest floods | 2 | every flood carried (the river's record years are not the creek's) | 1983, 2001 | 2008, 2011 |
 | A5 the annual-peaks file | 75 rows | the year without a rain flood marked below the threshold | the river's peaks scaled | the carried series |
 
@@ -346,7 +352,7 @@ codes, specials, outages); none moves a graded cell between careful runs (SF12, 
 |---|---|---|
 | A1 | the textbook lapse and flat precipitation file the 50 per cent flow at 15,000 | miss |
 | A2 | the same file the 1 per cent flow at 35,000 | miss |
-| A3 | the same put the spans' bands at more often than once in 25, 25 to 100 and 100 to 500 | miss |
+| A3 | the same put the spans' bands at more often than once in 10, 10 to 100 and 100 to 1,000 | miss |
 | A4 | the snow-line carry reorders the record whatever its constants | keep |
 | A5 | the same flood selection marks the same year | keep |
 
@@ -360,7 +366,7 @@ The author's voice rewrite may not drop or change: the decision (which span the 
 Creek bridge on Ransom Bar Road, 140, 185 or 240 ft); the rule (the shortest whose rated flow carries the creek's 1
 per cent annual exceedance peak flow); the climate (the records'); the fact that the creek has never been gauged; the
 deliverables durrow_creek_bridge_hydrology_report.pdf (the span, the creek's 50 and 1 per cent flows, each span's
-exceedance band in the four named bands, the water years of the creek's two largest floods since 1951) and
+exceedance band in the four named decade bands (once in 10, 100 and 1,000 years), the water years of the creek's two largest floods since 1951) and
 durrow_creek_estimated_annual_peaks.csv (the creek's estimated peak for each water year 1951 to 2025); the rounding
 (the report's flows to the nearest 5,000 cfs, the file's to the nearest 100 cfs).
 
@@ -379,12 +385,38 @@ main thread reproduced it: 80 defensible daily-record implementations put the cr
 92,536 cfs, the golden at the bottom, because a daily valley mean on a storm's edge mixes in the air before and after
 the rain and the snow line is steep in it. Repair (revision 2): the airport's hourly record ships, the snow line is
 read from the rain's own temperature (the family of storm definitions and weightings collapses to 23,800 to 25,600
-cfs), the spans are rated 22,000, 28,000 and 40,000 cfs so the call and every band carry margin, the asks are graded
+cfs), the spans were re-rated so the call and every band carry margin (round 2 below), the asks are graded
 at the nearest 5,000 cfs and as bands, the two largest floods and a 75-row file, and the judge's unit point is closed by
 the workbook's station sheet in feet. The judge's other point (the drainage-area transfer as the only filed carry)
 stands answered by the records: the river's floods follow rain below the snow line at r 0.76 against 0.55.
 
-leak.py on target.zip 4ff37442 (--asof 2026-10-14): REVIEW, no LEAK once the memorandum's stage table moved off the
+Round 2 (revision 2). The leak reader quoted no sentence naming the decisive step and found no file ranking the spans
+or reading as the answer; its question 6 called the transfer from the high gauge to the low creek the analytical piece
+and the filed text the procedure around it, as designed. Its realism findings, each fixed in the generator: export
+stamps on the whole minute (now with seconds), the creek's bands in acres beside the county's own square miles (now
+square miles), the workbook's writing-library dialect and one entry clock (now Excel's dialect and 1980 entry stamps,
+the container gate audit_containers.py at 0 FAIL), every zip entry on one clock (each now at its file's own save), the
+hourly reports on a :53 grid back to 1950 (56 minutes past before the automated station), and a report number from a
+real series on the state excerpt (dropped). The workbook's station list naming three stations with no file is the
+state study's wider network; harmless.
+
+Round 2 (revision 2), the determinism judge: NOT_DETERMINISTIC on margin, not mechanism. It called the storm-by-storm
+contributing-area carry the correct route, rejected the area transfer and the state equation, passed Gates G and H
+(one_fact: none), and found in its own cold derivation, before reading the answer, that the regional gauges' flood
+ratios follow the area below each storm's freezing level. Its fragility: lapse estimates of 4.77 to 5.36 degrees C a
+kilometre took the creek's 1 per cent flood under the 22,000 cfs rating, and the temperature at the river's peak hour
+took it over the 28,000. The main thread reproduced the lapse spread exactly as one reading of the Tessel record at a
+single elevation across the 1988 move (each station at its own elevation, every statistic and temperature variable gives
+5.32 to 5.39): mess deciding, so the move is now 35 ft and both readings give the same lapse (SF12). The peak-hour
+reading is not the temperature the rain fell at (no rain in that hour in 48 per cent of the floods, the air a median
+0.7 degrees C colder, SF22), stated in the Step-by-Step. The spans are re-rated 20,500, 29,000 and 40,000 cfs so every
+data-supported estimator combination keeps the call with 11.6 per cent or more to spare, the bands are decades (once in
+10, 100 and 1,000 years) so each span's band holds across the family, and the four regional gauges' precipitation is set
+so their unit floods agree with the Coyner River's (they are the alike high basins the design says), which puts the
+regional unit flood (18,700) and an elevation regression over them (17,000) on the default's 140 ft. The leak reader
+re-ran on the changed prompt (round 3) beside the re-judge.
+
+leak.py on target.zip ac2f39bf (--asof 2026-10-14): REVIEW, no LEAK once the memorandum's stage table moved off the
 5,000 cfs grid the graded flows now sit on. The main thread's rulings, one line each:
 - the six USGS text files (sweep 1): the agency's own peak records in its RDB layout; harmless.
 - the standard and the state report carrying generic design-note words (sweep 4: record, carried, station, regional,
@@ -401,15 +433,15 @@ leak.py on target.zip 4ff37442 (--asof 2026-10-14): REVIEW, no LEAK once the mem
   each of five links skipped moves the call or graded cells (R4); every rival is run (R6).
 - Mess neutral: the weekend totals on their last day, the station move read at one elevation, the estimated peaks
   dropped, either station pair's lapse, either orographic estimate and the specials summed keep the call (SF12 to
-  SF16, SF19); the creek's bands in acres cancel in every share.
-- Determinism: twenty-one forks closed and asserted (SF1 to SF21); fourteen standing family members file every graded
+  SF16, SF19).
+- Determinism: twenty-two forks closed and asserted (SF1 to SF22); fourteen standing family members file every graded
   cell the golden files; the verifier's independent road lands on 185 ft, the 5,000 cfs cells and the two floods with
-  its 1 per cent flood at 23,215 against 24,978.
-- The pack (final cut 4ff37442): sixteen files in two categories (spreadsheet, text); the airport's hourly record of
+  its 1 per cent flood at 23,074 against 24,781.
+- The pack (final cut ac2f39bf): sixteen files in two categories (spreadsheet, text); the airport's hourly record of
   659,041 reports and three CSVs of 27,000 rows or more; five distractors named only in metadata.json; every file's
   source, pull date and licence in metadata.json; no writer signature; two builds byte-identical over twenty-one files.
 - The goldens: exactly the two requested files; one set of numbers across the report, the CSV, the chart and the
-  four blocks (figures_check.py, 97 of 97).
+  four blocks (figures_check.py, 99 of 99); the container gate (audit_containers.py) at 0 FAIL.
 
 ## Tried and rejected
 
@@ -710,3 +742,8 @@ Architecture 6 (the Durrow Creek bridge):
   implementations spread the creek's 1 per cent flood 27,055 to 92,536 cfs, the golden at the bottom (a daily mean on a
   storm's edge mixes in the air before and after the rain, and the snow line is steep in it); revised to the airport's
   hourly record, where 96 storm definitions collapse to 24,317 to 27,677.
+- Revision 2 as first cut (spans 22,000, 28,000 and 40,000 cfs, the Tessel station moved 160 ft in 1988, bands at 25,
+  100 and 500 years): the round 2 judge's lapse read at one elevation across the move (5.07) took the creek's flood
+  under 22,000 and the peak-hour temperature took it over 28,000; the move shrunk to 35 ft, the spans re-rated and the
+  bands set at decades. A storm air mass lingering 30 hours after the rain (to bring the peak-hour reading to the rain's)
+  re-rolled the whole flood record and widened the peak-hour spread; dropped for the refutation in SF22.

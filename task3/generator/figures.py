@@ -6,8 +6,8 @@ import docs as DC
 import freq as F
 
 AEPS = (0.5, 0.1, 0.04, 0.02, 0.01, 0.002)
-BANDS = ((0.04, "more often than once in 25 years"), (0.01, "once in 25 to 100 years"),
-         (0.002, "once in 100 to 500 years"), (0.0, "less often than once in 500 years"))
+BANDS = ((0.10, "more often than once in 10 years"), (0.01, "once in 10 to 100 years"),
+         (0.001, "once in 100 to 1,000 years"), (0.0, "less often than once in 1,000 years"))
 
 
 def k5000(v):
@@ -116,6 +116,8 @@ def make(R, tgt):
         "factor_median": round(float(np.median(r[:, 4])), 2), "factor_big": round(float(np.median(r[big, 4])), 2),
         "big_threshold": r100(np.quantile(r[:, 0], 0.9)),
         "own_r": round(R["own_r"], 2), "total_rain_r": round(R["total_rain_r"], 2), "own_n": R["own_n"],
+        "dry_at_peak_pct": int(round(100 * R["peak_hour"]["dry_share"])),
+        "peak_hour_colder_c": round(-R["peak_hour"]["median_diff"], 1),
         "ratio_creek_river_1pct": round(q[0.01] / river1, 2),
         "variants": V,
         "variant_q01": {name: r100(v["q"]["0.01"]) for name, v in V.items()},
@@ -126,7 +128,7 @@ def make(R, tgt):
                       "base_cfs": 2500, "rounding_cfs": 5000, "rounding_file_cfs": 100, "zmin_c": 610, "zmax_c": 4380,
                       "zmax_r": 10380, "zmin_r": 1640, "textbook_lapse": 6.5, "per_1000_ft": 1000, "basin_limit_sq_mi": 10,
                       "peaks_n": 75, "span_lengths_ft": [140, 185, 240], "site_no": 12183450, "gap_hours": 6,
-                      "lookback_hours": 36, "band_years": [25, 100, 500], "first_wy": 1951, "last_wy": 2025},
+                      "lookback_hours": 36, "band_years": [10, 100, 1000], "first_wy": 1951, "last_wy": 2025},
         "as_of": "2026-11-06",
     }
     return Fg

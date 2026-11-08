@@ -21,12 +21,40 @@ import analysis as A  # noqa: E402
 import docs as DC  # noqa: E402
 import figures as FG  # noqa: E402
 import golden as GD  # noqa: E402
-import ooxml  # noqa: E402
+import postprocess as PP  # noqa: E402
 import pack as PK  # noqa: E402
 import world as W  # noqa: E402
 import writeup as WU  # noqa: E402
 
-ZSTAMP = (2026, 10, 14, 9, 41, 0)
+ZONE = "America/Los_Angeles"
+# each file's own last save, local time: the downloads when they were retrieved, the documents when the county saved them
+SAVED = {
+    "usgs_12183450_coyner_r_daily_discharge.csv": (2026, 10, 14, 9, 41, 52),
+    "usgs_12183450_coyner_r_annual_peaks.txt": (2026, 10, 14, 9, 43, 18),
+    "usgs_12187200_annual_peaks.txt": (2026, 10, 14, 9, 44, 31),
+    "usgs_12181650_annual_peaks.txt": (2026, 10, 14, 9, 46, 5),
+    "usgs_12189500_annual_peaks.txt": (2026, 10, 14, 9, 47, 40),
+    "usgs_12184900_annual_peaks.txt": (2026, 10, 14, 9, 49, 12),
+    "usgs_12183450_coyner_r_peaks_above_base.txt": (2026, 10, 14, 10, 6, 57),
+    "ghcnd_tessel_daily_1950-2025.csv": (2026, 10, 13, 14, 12, 33),
+    "ghcnd_durrow_ridge_daily_1950-2025.csv": (2026, 10, 13, 14, 15, 8),
+    "lcd_tessel_field_hourly_1950-2025.csv": (2026, 10, 13, 14, 31, 47),
+    "snotel_1187_hatchet_meadow_daily.csv": (2026, 10, 13, 15, 2, 11),
+    "snotel_1203_corbel_ridge_daily.csv": (2026, 10, 13, 15, 3, 40),
+    "region3_basin_characteristics.xlsx": (2026, 3, 19, 16, 4, 37),
+    "pelton_county_road_standards_ch7_excerpt.pdf": (2026, 4, 7, 10, 12, 58),
+    "wsdot_region3_flood_frequency_excerpt.pdf": (2026, 4, 7, 10, 20, 15),
+    "hess_tm_durrow_creek_bridge_span_ratings.pdf": (2026, 9, 21, 16, 2, 9),
+    "durrow_creek_bridge_hydrology_report.pdf": (2026, 11, 6, 9, 48, 26),
+    "durrow_creek_estimated_annual_peaks.csv": (2026, 11, 6, 9, 51, 3),
+}
+
+
+def stamp_saves(folder):
+    from zoneinfo import ZoneInfo
+    for f in os.listdir(folder):
+        t = dt.datetime(*SAVED[f], tzinfo=ZoneInfo(ZONE)).timestamp()
+        os.utime(os.path.join(folder, f), (t, t))
 DISTRACTORS = {
     "usgs_12183450_coyner_r_daily_discharge.csv": "the donor gauge's daily mean flows; looks relevant to the river's floods "
                                                    "but the frequency analysis reads the instantaneous peaks",
@@ -51,7 +79,7 @@ SOURCES = {
     "snotel_1203_corbel_ridge_daily.csv": ("USDA NRCS SNOTEL daily report, Corbel Ridge (1203)", "2026-10-13", "evidence"),
     "region3_basin_characteristics.xlsx": ("State flood study basin characteristics (Region 3) and the county's delineation of the crossing", "2026-03-19", "evidence"),
     "pelton_county_road_standards_ch7_excerpt.pdf": ("Pelton County Road Design Standards, chapter 7 (excerpt), revision 6", "2026-04-07", "governing"),
-    "wsdot_region3_flood_frequency_excerpt.pdf": ("WSDOT WA-RD 891.2, Magnitude and frequency of floods in western Washington, Region 3 excerpt", "2024-05-14", "evidence"),
+    "wsdot_region3_flood_frequency_excerpt.pdf": ("WSDOT state flood study (2019), Magnitude and frequency of floods in western Washington, Region 3 excerpt", "2024-05-14", "evidence"),
     "hess_tm_durrow_creek_bridge_span_ratings.pdf": ("Hess Hydraulic Engineering TM 26-118, hydraulic rating of the span alternatives", "2026-09-21", "evidence"),
 }
 
@@ -68,8 +96,8 @@ def build_into(root):
         os.makedirs(d, exist_ok=True)
     world = W.simulate()
     info = PK.write(world, tgt)
-    ooxml.normalize(os.path.join(tgt, "region3_basin_characteristics.xlsx"), dt.datetime(2026, 3, 17, 10, 22),
-                    dt.datetime(2026, 3, 19, 16, 4), creator="Pelton County GIS", company="Pelton County")
+    PP.normalize_ooxml(os.path.join(tgt, "region3_basin_characteristics.xlsx"), "Pelton County GIS", "Pelton County GIS",
+                       "2026-03-17T17:22:00Z", "2026-03-19T23:04:00Z", excel=True, company="Pelton County")
     maps = {k: PK.basin_map(world, world.basins[k]) for k in range(len(world.basins))}
     eq, rinfo = DC.regional_equations(world, maps)
     DC.county_standard(os.path.join(tgt, "pelton_county_road_standards_ch7_excerpt.pdf"))
@@ -100,12 +128,8 @@ def build_into(root):
 
 
 def zipdir(folder, out):
-    with zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED) as z:
-        for f in sorted(os.listdir(folder)):
-            zi = zipfile.ZipInfo(f, date_time=ZSTAMP)
-            zi.compress_type = zipfile.ZIP_DEFLATED
-            zi.external_attr = 0o644 << 16
-            z.writestr(zi, open(os.path.join(folder, f), "rb").read())
+    stamp_saves(folder)
+    PP.zip_folder(folder, out, zone=ZONE)
 
 
 def hashes(root):

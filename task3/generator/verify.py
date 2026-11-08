@@ -70,7 +70,7 @@ def main():
     bands = eb.iloc[3:].dropna(how="all")
     zc = np.array([np.mean([float(x) for x in str(v).split("-")]) for v in bands[0]])
     ar = bands[next(j for j, h in enumerate(head) if h.startswith("Coyner"))].astype(float).values
-    ac = bands[next(j for j, h in enumerate(head) if h.startswith("Durrow"))].astype(float).values / 640.0
+    ac = bands[next(j for j, h in enumerate(head) if h.startswith("Durrow"))].astype(float).values
     gauged = xl["Gauged basins"].iloc[3:].dropna(how="all")
     area_r = float(gauged[gauged[0].astype(str) == "12183450"][2].iloc[0])
     dk = xl["Durrow Ck at Ransom Bar Rd"]
@@ -81,7 +81,7 @@ def main():
     v["DATE"] = pd.to_datetime(v["DATE"])
     last_old = v[v.STATION == "USC00458114"].DATE.max()
     v = v[(v.STATION == "USC00458114") | (v.DATE > last_old)].copy()
-    v["z"] = np.where(v.STATION == "USC00458117", 1340.0, 1180.0)
+    v["z"] = (pd.to_numeric(v.ELEVATION, errors="coerce") / 0.3048).round(0)
     v["p"] = pd.to_numeric(v.PRCP, errors="coerce")
     md = pd.to_numeric(v.MDPR, errors="coerce")
     da = pd.to_numeric(v.DAPR, errors="coerce")

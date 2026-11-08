@@ -90,11 +90,13 @@ def text(F):
           F["lapse"], fmt(F["n_lapse"]), F["lapse_snotel"], F["t50"], F["g_pct"]))
     a("5. For each flood in the annual and above-base peak files, took the run of wet hours before its peak in "
       "lcd_tessel_field_hourly_1950-2025.csv (routine FM-15 reports; rain from the last wet hour within %d hours of the "
-      "peak, dry spells of %d hours or less) and its rain-weighted temperature: %d floods were fed by rain, the river "
-      "drained rain over a median %d per cent of its basin and the creek over %d per cent, and the river's own peaks follow "
-      "that rain at a correlation of %.2f against %.2f for the storm's whole-basin rain." % (
-          F["constants"]["lookback_hours"], F["constants"]["gap_hours"], F["n_matched"], F["share_river_median_pct"],
-          F["share_creek_median_pct"], F["own_r"], F["total_rain_r"]))
+      "peak, dry spells of %d hours or less) and its rain-weighted temperature, the temperature the rain fell at (the "
+      "reading at the river's peak hour is not: no rain fell in that hour in %d per cent of the floods, and it ran a median "
+      "%.1f degrees C colder): %d floods were fed by rain, the river drained rain over a median %d per cent of its basin "
+      "and the creek over %d per cent, and the river's own peaks follow that rain at a correlation of %.2f against %.2f "
+      "for the storm's whole-basin rain." % (
+          F["constants"]["lookback_hours"], F["constants"]["gap_hours"], F["dry_at_peak_pct"], F["peak_hour_colder_c"],
+          F["n_matched"], F["share_river_median_pct"], F["share_creek_median_pct"], F["own_r"], F["total_rain_r"]))
     a("6. Carried each flood to the creek at the ratio of the two basins' rain below its snow line with the state "
       "equation's drainage-area exponent, took the largest carried flood in each water year, and entered water year %s, "
       "with no flood fed by rain, as below the low-flood threshold." % " and ".join(str(y) for y in F["missing_years"]))
@@ -109,10 +111,10 @@ def text(F):
       "equation (%s cfs, barred by section 7.4.3(c)) all assume the creek drains the same share of each storm as the high "
       "gauges, which the stations and the elevation bands refute. A snow line placed with the standard atmosphere's lapse "
       "rate (about %s cfs) or rain counted without its rise with elevation (about %s cfs) contradicts what the stations "
-      "measure in storms and points to the 240 ft span; the valley's daily mean temperature mixes in the air before and "
-      "after the rain, which the airport's hourly record separates, and every storm definition and temperature weighting "
-      "the hourly record allows keeps the 1 per cent flood at about %s cfs and the %d ft span." % (
-          fmt(F["regional_unit_flood"]), fmt(F["regional_equation"]), fmt(V["lapse_6.5"]["q01_5000"]),
-          fmt(V["no_orography"]["q01_5000"]), fmt(F["q01_5000"]), call))
+      "measure in storms and points to the 240 ft span; the valley's daily mean temperature and the airport's reading at the "
+      "river's peak hour both read air the rain did not fall in, which the rain-weighted hourly record separates, and every "
+      "storm definition and rain weighting the hourly record allows keeps the 1 per cent flood at about %s cfs and the %d ft "
+      "span." % (fmt(F["regional_unit_flood"]), fmt(F["regional_equation"]), fmt(V["lapse_6.5"]["q01_5000"]),
+                 fmt(V["no_orography"]["q01_5000"]), fmt(F["q01_5000"]), call))
     a("")
     return "\n".join(lines)

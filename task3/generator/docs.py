@@ -16,7 +16,7 @@ PT = dt.timezone(dt.timedelta(hours=-8))
 PDT = dt.timezone(dt.timedelta(hours=-7))
 
 # The consultant's rated flows: the largest discharge each span carries with 2.0 ft of freeboard to the low chord.
-SPANS = [(140, 22000), (185, 28000), (240, 40000)]
+SPANS = [(140, 20500), (185, 29000), (240, 40000)]
 COSTS = {140: 6.84, 185: 8.47, 240: 10.92}
 RETURN_PERIODS = (2, 10, 25, 50, 100, 500)
 
@@ -80,7 +80,7 @@ def county_standard(path):
          Paragraph("Approved: County Engineer, Pelton County Department of Public Works.", small)]
     O.build(path, s, "Road Design Standards, Chapter 7 (excerpt)", "Pelton County Public Works",
             "Drainage structures and bridges", "Pelton County Road Design Standards, rev. 6, chapter 7 (excerpt)",
-            dt.datetime(2026, 4, 7, 10, 12, tzinfo=PDT), dt.datetime(2026, 4, 7, 10, 12, tzinfo=PDT))
+            dt.datetime(2026, 4, 7, 10, 12, 41, tzinfo=PDT), dt.datetime(2026, 4, 7, 10, 12, 41, tzinfo=PDT))
 
 
 def regional_equations(W_, maps, years=range(1951, 2026)):
@@ -121,7 +121,7 @@ def state_report(path, eq, rng_info):
                    "U.S. Geological Survey Washington Water Science Center", small),
          Paragraph("Magnitude and Frequency of Floods in Western Washington, 2019 Update: Region 3, Cascade West Slope "
                    "(excerpt: sections 4 and 5, tables 3 and 4)", h1),
-         Paragraph("Report WA-RD 891.2. Excerpt reproduced for project files.", small),
+         Paragraph("Excerpt reproduced for project files.", small),
          Spacer(1, 6),
          Paragraph("4. Regional regression equations", h2),
          Paragraph("Peak flows at ungaged sites in Region 3 are estimated with equations of the form "
@@ -148,8 +148,8 @@ def state_report(path, eq, rng_info):
                [110, 90, 90, 130], cell),
          Paragraph("Table 4. Regional skew.", small)]
     O.build(path, s, "Magnitude and Frequency of Floods in Western Washington, Region 3", "WSDOT Hydraulics Section",
-            "Regional flood equations", "WSDOT WA-RD 891.2, Region 3 excerpt",
-            dt.datetime(2024, 5, 14, 9, 0, tzinfo=PDT), dt.datetime(2024, 5, 14, 9, 0, tzinfo=PDT))
+            "Regional flood equations", "WSDOT state flood study (2019), Region 3 excerpt",
+            dt.datetime(2024, 5, 14, 9, 3, 17, tzinfo=PDT), dt.datetime(2024, 5, 14, 9, 3, 17, tzinfo=PDT))
 
 
 def consultant_tm(path):
@@ -202,4 +202,4 @@ def consultant_tm(path):
                    "rated flows and an intermediate span is wanted.", body)]
     O.build(path, s, "Durrow Creek Bridge 2209-04: hydraulic rating of span alternatives", "Hess Hydraulic Engineering PLLC",
             "Hydraulic rating", "Hess Hydraulic Engineering PLLC, TM 26-118",
-            dt.datetime(2026, 9, 21, 15, 47, tzinfo=PDT), dt.datetime(2026, 9, 21, 15, 47, tzinfo=PDT))
+            dt.datetime(2026, 9, 21, 15, 47, 9, tzinfo=PDT), dt.datetime(2026, 9, 21, 15, 47, 9, tzinfo=PDT))

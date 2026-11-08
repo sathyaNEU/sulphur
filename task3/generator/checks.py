@@ -124,7 +124,7 @@ def main():
           "%.0f (%.3f)" % (G[0.01], edge(G[0.01])))
     for sp, rq in DC.SPANS:
         aep = F.aep_of(R["par"], rq)
-        edges = [x for x in (0.04, 0.01, 0.002)]
+        edges = [x for x in (0.10, 0.01, 0.001)]
         dist = min(abs(np.log(aep / x)) for x in edges)
         check("C4 the %d ft span's exceedance band holds with a quarter of a band or more to spare" % sp, dist >= 0.30,
               "AEP %.4f, log distance %.2f" % (aep, dist))
@@ -173,8 +173,10 @@ def main():
     check("R6 rival: the state equation files 140 ft and the creek's precipitation is under its range",
           span_of(R["regional_eq"]) == 140 and R["map_creek"] < fig["equation_ranges"]["map"][0],
           "%.0f, %.1f in against %s" % (R["regional_eq"], R["map_creek"], fig["equation_ranges"]["map"]))
-    check("R6 rival: an elevation regression over the five high gauges misses 185 ft", span_of(R["elev_reg"]) != 185,
-          "%.0f" % R["elev_reg"])
+    lo_, hi_ = R["elev_reg_interval"]
+    check("R6 rival: an elevation regression over the five high gauges (mean elevations %d to %d ft, unit floods alike) "
+          "carries no elevation effect to the creek and files 140 ft" % R["elev_range"], span_of(R["elev_reg"]) == 140,
+          "%.0f (90 per cent interval %.0f to %.0f)" % (R["elev_reg"], lo_, hi_))
     family = ("gap_3", "gap_12", "gap_24", "rain_hour_mean", "wettest_24h", "sharp", "annual_only", "b_1.0", "b_0.70",
               "lapse_snotel", "t50_hatchet", "t50_corbel", "station_skew", "no_low_test")
     for name in family:
@@ -233,6 +235,9 @@ def main():
     check("SF19 the specials (FM-16) summed with the routine reports keep every cell", cells(p19, s19) == GC)
     for gap in (3, 12, 24):
         check("SF20 dry spells of %d hours keep every cell" % gap, cells(V["gap_%d" % gap]["par"], V["gap_%d" % gap]["series"]) == GC)
+    check("SF22 the temperature at the river's peak hour is not the rain's: no rain in that hour in a third of the floods or "
+          "more, and the air a median half a degree C or more colder", R["peak_hour"]["dry_share"] >= 1 / 3.0
+          and R["peak_hour"]["median_diff"] <= -0.5, "%.2f dry, %.2f C" % (R["peak_hour"]["dry_share"], R["peak_hour"]["median_diff"]))
     tz = [r[2] for r in R["rows"]]
     PV, TV = estimates(TGT)["PV"], estimates(TGT)["TV"]
     dd = [TV[r[0]] - r[2] for r in R["rows"] if r[0] in TV]

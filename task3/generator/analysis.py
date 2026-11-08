@@ -101,7 +101,7 @@ def valley_daily(tgt):
         tx, tn = _num(r["TMAX"]), _num(r["TMIN"])
         if tx is not None and tn is not None:
             T[d] = ((tx + tn) / 2.0 - 32.0) * 5.0 / 9.0
-        Z[d] = 1340.0 if r["STATION"] == "USC00458117" else 1180.0
+        Z[d] = round(float(r["ELEVATION"]) / 0.3048, 0)
     return P, T, Z
 
 
@@ -226,7 +226,7 @@ def bands(tgt):
         lo, hi = [float(x) for x in str(row[0]).split("-")]
         zc.append((lo + hi) / 2.0)
         ar.append(float(row[jr] or 0))
-        ac.append(float(row[jc] or 0) / 640.0)
+        ac.append(float(row[jc] or 0))
     g = wb["Gauged basins"]
     areas = {}
     for row in g.iter_rows(min_row=4, values_only=True):
@@ -434,7 +434,13 @@ def transfer_hourly(fh, T, P, zc, ar, ac, lapse, t50, k, g, b, zv, ramp="logisti
         h = lcd_event(i, P, gap=gap, back=back)
         if h is None or len(h) < 2:
             continue
-        tv = event_temperature(h, T, P, how=how)
+        if how == "peak":
+            j = min(i, NH - 1)
+            while j > 0 and np.isnan(T[j]):
+                j -= 1
+            tv = float(T[j])
+        else:
+            tv = event_temperature(h, T, P, how=how)
         if tv is None:
             continue
         tot = float(np.nansum(P[h]))
@@ -537,6 +543,7 @@ def run(tgt, rated=None, equations=None):
         "wettest_24h": dict(how="core"), "sharp": dict(ramp="sharp"), "annual_only": dict(annual_only=annual),
         "b_1.0": dict(b=1.0), "b_0.70": dict(b=0.70), "lapse_snotel": dict(lapse=snotel_lapse(sh, sc)[0]),
         "t50_hatchet": dict(t50=th[0]), "t50_corbel": dict(t50=tc[0]),
+        "peak_hour": dict(how="peak"),
         "lapse_6.5": dict(lapse=6.5), "freezing_0C": dict(t50=0.0), "lapse_6.5_0C": dict(lapse=6.5, t50=0.0),
         "no_orography": dict(g=None), "textbook": dict(lapse=6.5, t50=0.0, g=None),
     }
@@ -563,6 +570,15 @@ def run(tgt, rated=None, equations=None):
         V[name]["series"] = s2
         V[name]["par"] = p2
     R["variants"] = V
+    # the temperature at the river's peak hour against the rain's own
+    dry, diff = [], []
+    for d_, q_, tv_, tot_, dr_, dc_, v_ in rows:
+        i_ = next(i for dd, i, qq in fh if dd == d_)
+        j_ = min(i_, NH - 1)
+        dry.append(not (P[j_] >= 0.005))
+        if not np.isnan(T[j_]):
+            diff.append(T[j_] - tv_)
+    R["peak_hour"] = dict(dry_share=float(np.mean(dry)), median_diff=float(np.median(diff)))
     R["lapse_snotel"], R["n_lapse_snotel"] = snotel_lapse(sh, sc)
     p_creek, st_means = station_map(PV, PR, [(4160.0, sh), (5630.0, sc)], zc, ac)
     R["map_creek"] = p_creek
@@ -586,6 +602,14 @@ def run(tgt, rated=None, equations=None):
     slope, icpt = np.polyfit(pts[:, 0], pts[:, 1], 1)
     zmean_c = float((zc * ac).sum() / ac.sum())
     R["elev_reg"] = float(np.exp(icpt + slope * zmean_c) * area_c ** STATE_B)
+    # its 90 per cent prediction interval at the creek's mean elevation, five gauges, three degrees of freedom
+    xs, ys = pts[:, 0], pts[:, 1]
+    resid = ys - (icpt + slope * xs)
+    s = float(np.sqrt((resid ** 2).sum() / (len(xs) - 2)))
+    se = s * np.sqrt(1 + 1.0 / len(xs) + (zmean_c - xs.mean()) ** 2 / ((xs - xs.mean()) ** 2).sum())
+    tq = stats.t.ppf(0.95, len(xs) - 2)
+    R["elev_reg_interval"] = tuple(float(np.exp(icpt + slope * zmean_c + sgn * tq * se) * area_c ** STATE_B) for sgn in (-1, 1))
+    R["elev_range"] = (float(xs.min()), float(xs.max()))
     if rated:
         R["rated"] = rated
         R["aep_rated"] = {k_: F.aep_of(par, v) for k_, v in rated.items()}

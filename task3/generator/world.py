@@ -41,10 +41,10 @@ def band_areas(area, zmin, zmax, a, b):
 BASINS = [
     dict(key="coyner", area=86.4, zmin=1640, zmax=10380, a=1.55, b=1.25, maxbas=13, fc=240.0),
     dict(key="durrow", area=85.3, zmin=610, zmax=4380, a=1.45, b=2.9, maxbas=13, fc=240.0),
-    dict(key="tarrow", area=142.0, zmin=1880, zmax=10140, a=1.70, b=1.35, maxbas=17, fc=240.0),
-    dict(key="gorham", area=38.6, zmin=2610, zmax=9190, a=1.45, b=1.30, maxbas=9, fc=240.0),
-    dict(key="quillen", area=211.5, zmin=1490, zmax=10420, a=1.80, b=1.30, maxbas=20, fc=240.0),
-    dict(key="pinnell", area=64.2, zmin=2230, zmax=9580, a=1.50, b=1.40, maxbas=12, fc=240.0),
+    dict(key="tarrow", pmult=0.926, area=142.0, zmin=1880, zmax=10140, a=1.70, b=1.35, maxbas=17, fc=240.0),
+    dict(key="gorham", pmult=0.890, area=38.6, zmin=2610, zmax=9190, a=1.45, b=1.30, maxbas=9, fc=240.0),
+    dict(key="quillen", pmult=0.929, area=211.5, zmin=1490, zmax=10420, a=1.80, b=1.30, maxbas=20, fc=240.0),
+    dict(key="pinnell", pmult=0.888, area=64.2, zmin=2230, zmax=9580, a=1.50, b=1.40, maxbas=12, fc=240.0),
 ]
 # Twelve more gauged basins of the state's Region 3, never shipped: the state's regional equations are fitted on
 # them with the four regional gauges and the Coyner River.

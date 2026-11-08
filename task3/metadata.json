@@ -22,11 +22,11 @@
   "usgs_12184900_annual_peaks.txt": "a regional gauge's annual peaks (Pinnell Creek near Coe, 34 miles away)"
  },
  "stated_inputs": [
-  "22000",
-  "28000",
+  "20500",
+  "29000",
   "40000",
-  "22,000",
-  "28,000",
+  "20,500",
+  "29,000",
   "40,000",
   "140",
   "185",
@@ -134,7 +134,7 @@
    "license": "synthetic, CC0, generated for this task by task3/generator (a seeded hydrometeorological simulation)"
   },
   "wsdot_region3_flood_frequency_excerpt.pdf": {
-   "source": "WSDOT WA-RD 891.2, Magnitude and frequency of floods in western Washington, Region 3 excerpt",
+   "source": "WSDOT state flood study (2019), Magnitude and frequency of floods in western Washington, Region 3 excerpt",
    "date": "2024-05-14",
    "role": "evidence",
    "license": "synthetic, CC0, generated for this task by task3/generator (a seeded hydrometeorological simulation)"

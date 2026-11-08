@@ -25,10 +25,10 @@
   "nearest": "task3 v5 lineage 0.09 driver; task68 surface 0.071 (labels only)"
  },
  "judge": {
-  "verdict": "round 1 NOT_DETERMINISTIC (SEND_BACK): daily-temperature snow lines spread the 1 per cent flood over every span; repaired in revision 2; round 2 running",
+  "verdict": "round 1 NOT_DETERMINISTIC (daily snow lines); round 2 NOT_DETERMINISTIC (margin: lapse read at one elevation across the station move, peak-hour temperature); both repaired; round 3 running",
   "disposition": "",
-  "gate_h": "",
-  "report": ""
+  "gate_h": "round 2: domain pass, layers pass, decisive_step analytical, one_fact none",
+  "report": "task3/determinism_check_report.md"
  },
  "paper_pair": 23.8,
  "runs": {
@@ -128,7 +128,7 @@
    "commit": ""
   }
  ],
- "resume": "stage 4 round 2 of revision 2: read the leak reader's answers (scratchpad t3a6/reader2/reader_answers.md) and the judge's verdict (/tmp/determinism-check-task3-r2/verdict.md); if the scratch files are gone, re-run both on the built pack (python3 task3/generator/build.py rebuilds it byte-identically); fix every finding in the generator, re-run every gate (build.py with checks and verify, figures_check, leak.py --asof 2026-10-14, precut, voice-check, guard surface and heart), then stage 5 READY with target.zip, golden/ and golden.zip added with git add -f",
+ "resume": "stage 4 round 3: read the judge's verdict (/tmp/determinism-check-task3-r3/verdict.md) and the reader's answers (scratchpad t3a6/reader3), fix any finding, re-run the gates, then stage 5 READY",
  "approved": null,
  "submitted": null,
  "portal": {
@@ -208,12 +208,14 @@
   "note": "moved from Project Mark unstumped on the Mark portal; carried on here for the Sulfur bar"
  },
  "gates": {
-  "checks": "91 of 91",
+  "checks": "92 of 92",
   "verify": "PASS",
   "byte_identical": "21 files",
-  "figures_check": "97 of 97",
-  "target_zip": "4ff37442447aa37a",
-  "golden_zip": "1f7ccea0e04f8dab"
+  "figures_check": "99 of 99",
+  "containers": "PASS 0 FAIL",
+  "precut": "75 checks, 0 FAIL",
+  "target_zip": "ac2f39bfdeedaf76",
+  "golden_zip": "bd788aca9c7a356a"
  },
  "revision": 2
 }

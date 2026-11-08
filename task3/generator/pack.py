@@ -32,7 +32,7 @@ ESTIMATED = (1991, 2004)        # water years whose annual peak the gauge estima
 COOP = [
     dict(id="USC00458114", name="TESSEL 2 NE, WA US", lat=48.3586, lon=-121.7342, z=1180.0, obs=17,
          start=dt.date(1950, 10, 1), end=dt.date(1988, 6, 30), off=0.05),
-    dict(id="USC00458117", name="TESSEL 3 E, WA US", lat=48.3511, lon=-121.7019, z=1340.0, obs=17,
+    dict(id="USC00458117", name="TESSEL 3 E, WA US", lat=48.3511, lon=-121.7019, z=1215.0, obs=17,
          start=dt.date(1988, 4, 1), end=dt.date(2025, 9, 30), off=0.0),
 ]
 RIDGE = dict(id="USC00452231", name="DURROW RIDGE, WA US", lat=48.2847, lon=-121.8806, z=2710.0, obs=17,
@@ -323,7 +323,8 @@ def write_ridge(W_, rng, path):
 
 
 def write_lcd(W_, path):
-    """The airport's Local Climatological Data export: a routine report (FM-15) at 53 minutes past every hour, specials
+    """The airport's Local Climatological Data export: a routine report (FM-15) every hour (at 56 minutes past before the
+    automated station, 53 after), specials
     (FM-16) in changing weather carrying the rain since the last routine report, whole degrees F, inches of rain."""
     rng = np.random.default_rng(W_.seed + 2000)
     ph, th, fr = station_hourly(W_, rng, LCD["z"], 0.0, snow_catch=0.88, rain_catch=0.98, noise_sd=0.3)
@@ -382,7 +383,7 @@ def write_lcd(W_, path):
             out.append(",".join([head % d.replace(minute=int(minute[i])).strftime("%Y-%m-%dT%H:%M:%S"), '"FM-16"', '"%s"' % src, '"%s"' % tf,
                                  '"%s"' % pcp(part), '"%s"' % wx(part, fr[i], humid), '"%d"' % int(rh[i]), '"%d"' % int(wind[i])]))
             n_rows += 1
-        out.append(",".join([head % d.replace(minute=53).strftime("%Y-%m-%dT%H:%M:%S"), '"FM-15"', '"%s"' % src, '"%s"' % tf,
+        out.append(",".join([head % d.replace(minute=56 if src == "4" else 53).strftime("%Y-%m-%dT%H:%M:%S"), '"FM-15"', '"%s"' % src, '"%s"' % tf,
                              '"%s"' % pcp(v), '"%s"' % wx(v, fr[i], humid), '"%d"' % int(rh[i]), '"%d"' % int(wind[i])]))
         n_rows += 1
     open(path, "w", newline="\n").write("\n".join(out) + "\n")
@@ -508,14 +509,14 @@ def write_workbook(W_, path, maps):
     ws2["A1"].font = Font(bold=True)
     ws2.column_dimensions["A"].width = 34
     ws2.column_dimensions["B"].width = 58
-    # elevation bands: the gauged basins from the state study (square miles), the crossing from the county (acres)
+    # elevation bands: the gauged basins from the state study, the crossing from the county's delineation
     ws3 = wb.create_sheet("Elevation bands")
     ws3["A1"] = "Area by elevation band (500 ft bands, lower edge inclusive)"
     ws3["A1"].font = Font(bold=True)
     ws3.append([])
     short = {"12183450": "Coyner R nr Tessel", "12187200": "Tarrow R nr Brandt", "12181650": "Gorham Ck nr Vesper",
              "12189500": "Quillen R at Ashby Falls", "12184900": "Pinnell Ck nr Coe"}
-    cols = [(k, "%s (sq mi)" % short[site], 1.0) for k, site, _, _ in rows] + [(1, "Durrow Ck at Ransom Bar Rd (acres)", 640.0)]
+    cols = [(k, "%s (sq mi)" % short[site], 1.0) for k, site, _, _ in rows] + [(1, "Durrow Ck at Ransom Bar Rd (sq mi)", 1.0)]
     ws3.append(["Band (ft)"] + [h for _, h, _ in cols])
     for c in ws3[3]:
         c.font = Font(bold=True)

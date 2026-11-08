@@ -1,28 +1,28 @@
 {
  "call_span_ft": 185,
  "spans": {
-  "140": 22000,
-  "185": 28000,
+  "140": 20500,
+  "185": 29000,
   "240": 40000
  },
  "golden_raw": {
-  "0.5": 9489.2,
-  "0.1": 16313.5,
-  "0.04": 19786.7,
-  "0.02": 22380.5,
-  "0.01": 24977.7,
-  "0.002": 31103.6
+  "0.5": 9420.3,
+  "0.1": 16192.3,
+  "0.04": 19636.4,
+  "0.02": 22207.5,
+  "0.01": 24781.2,
+  "0.002": 30848.5
  },
  "q50_5000": 10000,
  "q01_5000": 25000,
  "bands": {
-  "140": "once in 25 to 100 years",
-  "185": "once in 100 to 500 years",
-  "240": "less often than once in 500 years"
+  "140": "once in 10 to 100 years",
+  "185": "once in 100 to 1,000 years",
+  "240": "less often than once in 1,000 years"
  },
  "aep_rated_pct": {
-  "140": 2.21,
-  "185": 0.45,
+  "140": 3.17,
+  "185": 0.32,
   "240": 0.02
  },
  "top2": [
@@ -30,14 +30,14 @@
   2011
  ],
  "top2_cfs": [
-  24100,
-  23400
+  24000,
+  23200
  ],
  "top2_dates": [
   "2008-01-29",
   "2011-03-27"
  ],
- "third_cfs": 19200,
+ "third_cfs": 19000,
  "river_top2": [
   1983,
   2001
@@ -53,7 +53,7 @@
  "peaks": [
   {
    "water_year": 1951,
-   "cfs": 11900,
+   "cfs": 11800,
    "qualifier": "",
    "river_date": "1950-11-12",
    "river_cfs": 7250
@@ -67,14 +67,14 @@
   },
   {
    "water_year": 1953,
-   "cfs": 9300,
+   "cfs": 9200,
    "qualifier": "",
    "river_date": "1953-01-16",
    "river_cfs": 3370
   },
   {
    "water_year": 1954,
-   "cfs": 13200,
+   "cfs": 13100,
    "qualifier": "",
    "river_date": "1953-12-29",
    "river_cfs": 12700
@@ -102,14 +102,14 @@
   },
   {
    "water_year": 1958,
-   "cfs": 8800,
+   "cfs": 8700,
    "qualifier": "",
    "river_date": "1958-01-24",
    "river_cfs": 3180
   },
   {
    "water_year": 1959,
-   "cfs": 13700,
+   "cfs": 13600,
    "qualifier": "",
    "river_date": "1959-02-13",
    "river_cfs": 10800
@@ -123,35 +123,35 @@
   },
   {
    "water_year": 1961,
-   "cfs": 10800,
+   "cfs": 10700,
    "qualifier": "",
    "river_date": "1960-11-21",
    "river_cfs": 6550
   },
   {
    "water_year": 1962,
-   "cfs": 7700,
+   "cfs": 7600,
    "qualifier": "",
    "river_date": "1962-02-17",
    "river_cfs": 6090
   },
   {
    "water_year": 1963,
-   "cfs": 6800,
+   "cfs": 6700,
    "qualifier": "",
    "river_date": "1962-12-31",
    "river_cfs": 4800
   },
   {
    "water_year": 1964,
-   "cfs": 6900,
+   "cfs": 6800,
    "qualifier": "",
    "river_date": "1964-01-28",
    "river_cfs": 2930
   },
   {
    "water_year": 1965,
-   "cfs": 19200,
+   "cfs": 19000,
    "qualifier": "",
    "river_date": "1965-02-10",
    "river_cfs": 14500
@@ -165,7 +165,7 @@
   },
   {
    "water_year": 1967,
-   "cfs": 7000,
+   "cfs": 6900,
    "qualifier": "",
    "river_date": "1967-02-28",
    "river_cfs": 3760
@@ -179,7 +179,7 @@
   },
   {
    "water_year": 1969,
-   "cfs": 12900,
+   "cfs": 12800,
    "qualifier": "",
    "river_date": "1969-03-08",
    "river_cfs": 7180
@@ -193,21 +193,21 @@
   },
   {
    "water_year": 1971,
-   "cfs": 12000,
+   "cfs": 11900,
    "qualifier": "",
    "river_date": "1971-02-12",
    "river_cfs": 9590
   },
   {
    "water_year": 1972,
-   "cfs": 11900,
+   "cfs": 11800,
    "qualifier": "",
    "river_date": "1972-01-20",
    "river_cfs": 8270
   },
   {
    "water_year": 1973,
-   "cfs": 17400,
+   "cfs": 17200,
    "qualifier": "",
    "river_date": "1972-12-04",
    "river_cfs": 14100
@@ -221,35 +221,35 @@
   },
   {
    "water_year": 1975,
-   "cfs": 8300,
+   "cfs": 8200,
    "qualifier": "",
    "river_date": "1975-03-06",
    "river_cfs": 6840
   },
   {
    "water_year": 1976,
-   "cfs": 8200,
+   "cfs": 8100,
    "qualifier": "",
    "river_date": "1976-02-06",
    "river_cfs": 5910
   },
   {
    "water_year": 1977,
-   "cfs": 4700,
+   "cfs": 4600,
    "qualifier": "",
    "river_date": "1976-11-05",
    "river_cfs": 3790
   },
   {
    "water_year": 1978,
-   "cfs": 6600,
+   "cfs": 6500,
    "qualifier": "",
    "river_date": "1978-03-16",
    "river_cfs": 3630
   },
   {
    "water_year": 1979,
-   "cfs": 10100,
+   "cfs": 10000,
    "qualifier": "",
    "river_date": "1979-03-25",
    "river_cfs": 5510
@@ -270,28 +270,28 @@
   },
   {
    "water_year": 1982,
-   "cfs": 10700,
+   "cfs": 10600,
    "qualifier": "",
    "river_date": "1982-02-06",
    "river_cfs": 8310
   },
   {
    "water_year": 1983,
-   "cfs": 16900,
+   "cfs": 16700,
    "qualifier": "",
    "river_date": "1982-11-11",
    "river_cfs": 16300
   },
   {
    "water_year": 1984,
-   "cfs": 16700,
+   "cfs": 16600,
    "qualifier": "",
    "river_date": "1983-11-10",
    "river_cfs": 7970
   },
   {
    "water_year": 1985,
-   "cfs": 7600,
+   "cfs": 7500,
    "qualifier": "",
    "river_date": "1984-11-16",
    "river_cfs": 3860
@@ -305,7 +305,7 @@
   },
   {
    "water_year": 1987,
-   "cfs": 12200,
+   "cfs": 12100,
    "qualifier": "",
    "river_date": "1987-02-28",
    "river_cfs": 7650
@@ -319,28 +319,28 @@
   },
   {
    "water_year": 1989,
-   "cfs": 11200,
+   "cfs": 11100,
    "qualifier": "",
    "river_date": "1988-11-19",
    "river_cfs": 9950
   },
   {
    "water_year": 1990,
-   "cfs": 11800,
+   "cfs": 11700,
    "qualifier": "",
    "river_date": "1990-03-18",
    "river_cfs": 6970
   },
   {
    "water_year": 1991,
-   "cfs": 9500,
+   "cfs": 9400,
    "qualifier": "",
    "river_date": "1991-02-05",
    "river_cfs": 4560
   },
   {
    "water_year": 1992,
-   "cfs": 12200,
+   "cfs": 12100,
    "qualifier": "",
    "river_date": "1991-11-24",
    "river_cfs": 6130
@@ -361,7 +361,7 @@
   },
   {
    "water_year": 1995,
-   "cfs": 13800,
+   "cfs": 13700,
    "qualifier": "",
    "river_date": "1994-11-12",
    "river_cfs": 8790
@@ -375,7 +375,7 @@
   },
   {
    "water_year": 1997,
-   "cfs": 4700,
+   "cfs": 4600,
    "qualifier": "<",
    "river_date": "",
    "river_cfs": null
@@ -389,21 +389,21 @@
   },
   {
    "water_year": 1999,
-   "cfs": 14600,
+   "cfs": 14500,
    "qualifier": "",
    "river_date": "1999-01-08",
    "river_cfs": 7730
   },
   {
    "water_year": 2000,
-   "cfs": 9500,
+   "cfs": 9400,
    "qualifier": "",
    "river_date": "2000-03-31",
    "river_cfs": 5790
   },
   {
    "water_year": 2001,
-   "cfs": 18300,
+   "cfs": 18100,
    "qualifier": "",
    "river_date": "2001-03-20",
    "river_cfs": 16000
@@ -431,7 +431,7 @@
   },
   {
    "water_year": 2005,
-   "cfs": 8000,
+   "cfs": 7900,
    "qualifier": "",
    "river_date": "2004-10-21",
    "river_cfs": 3700
@@ -445,21 +445,21 @@
   },
   {
    "water_year": 2007,
-   "cfs": 4900,
+   "cfs": 4800,
    "qualifier": "",
    "river_date": "2007-05-06",
    "river_cfs": 2660
   },
   {
    "water_year": 2008,
-   "cfs": 24100,
+   "cfs": 24000,
    "qualifier": "",
    "river_date": "2008-01-29",
    "river_cfs": 10500
   },
   {
    "water_year": 2009,
-   "cfs": 10600,
+   "cfs": 10500,
    "qualifier": "",
    "river_date": "2009-01-08",
    "river_cfs": 5650
@@ -473,91 +473,91 @@
   },
   {
    "water_year": 2011,
-   "cfs": 23400,
+   "cfs": 23200,
    "qualifier": "",
    "river_date": "2011-03-27",
    "river_cfs": 13800
   },
   {
    "water_year": 2012,
-   "cfs": 17400,
+   "cfs": 17200,
    "qualifier": "",
    "river_date": "2011-12-20",
    "river_cfs": 9010
   },
   {
    "water_year": 2013,
-   "cfs": 18800,
+   "cfs": 18700,
    "qualifier": "",
    "river_date": "2013-01-18",
    "river_cfs": 13400
   },
   {
    "water_year": 2014,
-   "cfs": 17600,
+   "cfs": 17400,
    "qualifier": "",
    "river_date": "2014-04-22",
    "river_cfs": 13300
   },
   {
    "water_year": 2015,
-   "cfs": 13000,
+   "cfs": 12800,
    "qualifier": "",
    "river_date": "2014-12-17",
    "river_cfs": 9300
   },
   {
    "water_year": 2016,
-   "cfs": 6900,
+   "cfs": 6800,
    "qualifier": "",
    "river_date": "2016-04-19",
    "river_cfs": 4050
   },
   {
    "water_year": 2017,
-   "cfs": 3100,
+   "cfs": 3000,
    "qualifier": "",
    "river_date": "2016-11-27",
    "river_cfs": 1210
   },
   {
    "water_year": 2018,
-   "cfs": 7400,
+   "cfs": 7300,
    "qualifier": "",
    "river_date": "2017-11-20",
    "river_cfs": 4190
   },
   {
    "water_year": 2019,
-   "cfs": 15300,
+   "cfs": 15100,
    "qualifier": "",
    "river_date": "2018-11-23",
    "river_cfs": 12000
   },
   {
    "water_year": 2020,
-   "cfs": 12300,
+   "cfs": 12200,
    "qualifier": "",
    "river_date": "2020-02-03",
    "river_cfs": 5270
   },
   {
    "water_year": 2021,
-   "cfs": 7600,
+   "cfs": 7500,
    "qualifier": "",
    "river_date": "2020-12-10",
    "river_cfs": 6580
   },
   {
    "water_year": 2022,
-   "cfs": 11900,
+   "cfs": 11800,
    "qualifier": "",
    "river_date": "2021-12-21",
    "river_cfs": 6970
   },
   {
    "water_year": 2023,
-   "cfs": 15200,
+   "cfs": 15100,
    "qualifier": "",
    "river_date": "2023-02-17",
    "river_cfs": 9650
@@ -580,15 +580,15 @@
  "missing_years": [
   1997
  ],
- "low_threshold": 4700,
+ "low_threshold": 4600,
  "par": {
-  "mean": 3.9744,
-  "sd": 0.1873,
-  "station_skew": -0.0751,
-  "skew": -0.0914,
+  "mean": 3.9712,
+  "sd": 0.1874,
+  "station_skew": -0.0779,
+  "skew": -0.0932,
   "n": 75,
   "low": 3,
-  "low_threshold": 4658.1428
+  "low_threshold": 4618.835
  },
  "river_par": {
   "mean": 3.7576,
@@ -615,18 +615,18 @@
   "q01_5000": 20000,
   "span": 140,
   "bands": {
-   "140": "once in 100 to 500 years",
-   "185": "less often than once in 500 years",
-   "240": "less often than once in 500 years"
+   "140": "once in 100 to 1,000 years",
+   "185": "less often than once in 1,000 years",
+   "240": "less often than once in 1,000 years"
   },
   "top2": [
    1983,
    2001
   ]
  },
- "regional_equation": 14100,
- "regional_unit_flood": 20200,
- "elevation_regression": 34400,
+ "regional_equation": 14200,
+ "regional_unit_flood": 18700,
+ "elevation_regression": 17000,
  "area_r": 86.4,
  "area_c": 85.3,
  "zv": 1160,
@@ -634,7 +634,7 @@
  "mean_elev_c": 1860,
  "lapse": 5.36,
  "lapse_1": 5.4,
- "n_lapse": 2161,
+ "n_lapse": 2158,
  "t50": 0.89,
  "t50_1": 0.9,
  "t50_sites": [
@@ -642,10 +642,10 @@
   0.78
  ],
  "k": 0.6,
- "g": 0.1,
+ "g": 0.104,
  "g_pct": 10,
- "g_ratio": 1.15,
- "g_n": 865,
+ "g_ratio": 1.16,
+ "g_n": 863,
  "n_floods": 184,
  "n_matched": 183,
  "n_years": 74,
@@ -653,30 +653,32 @@
  "share_river_big_pct": 61,
  "share_creek_median_pct": 100,
  "snowline_median_ft": 6480,
- "factor_median": 1.58,
- "factor_big": 1.27,
+ "factor_median": 1.57,
+ "factor_big": 1.26,
  "big_threshold": 9000,
  "own_r": 0.76,
  "total_rain_r": 0.55,
  "own_n": 183,
- "ratio_creek_river_1pct": 1.32,
+ "dry_at_peak_pct": 48,
+ "peak_hour_colder_c": 0.7,
+ "ratio_creek_river_1pct": 1.31,
  "variants": {
   "gap_3": {
    "q": {
-    "0.5": 9500,
-    "0.1": 16300,
-    "0.04": 19800,
-    "0.02": 22400,
-    "0.01": 25000,
-    "0.002": 31100
+    "0.5": 9400,
+    "0.1": 16200,
+    "0.04": 19600,
+    "0.02": 22200,
+    "0.01": 24800,
+    "0.002": 30900
    },
    "q50_5000": 10000,
    "q01_5000": 25000,
    "span": 185,
    "bands": {
-    "140": "once in 25 to 100 years",
-    "185": "once in 100 to 500 years",
-    "240": "less often than once in 500 years"
+    "140": "once in 10 to 100 years",
+    "185": "once in 100 to 1,000 years",
+    "240": "less often than once in 1,000 years"
    },
    "top2": [
     2008,
@@ -685,20 +687,20 @@
   },
   "gap_12": {
    "q": {
-    "0.5": 9500,
-    "0.1": 16300,
-    "0.04": 19800,
-    "0.02": 22400,
-    "0.01": 25000,
-    "0.002": 31100
+    "0.5": 9400,
+    "0.1": 16200,
+    "0.04": 19700,
+    "0.02": 22200,
+    "0.01": 24800,
+    "0.002": 30800
    },
    "q50_5000": 10000,
    "q01_5000": 25000,
    "span": 185,
    "bands": {
-    "140": "once in 25 to 100 years",
-    "185": "once in 100 to 500 years",
-    "240": "less often than once in 500 years"
+    "140": "once in 10 to 100 years",
+    "185": "once in 100 to 1,000 years",
+    "240": "less often than once in 1,000 years"
    },
    "top2": [
     2008,
@@ -708,19 +710,19 @@
   "gap_24": {
    "q": {
     "0.5": 9600,
-    "0.1": 16300,
-    "0.04": 19700,
-    "0.02": 22200,
-    "0.01": 24700,
-    "0.002": 30600
+    "0.1": 16200,
+    "0.04": 19600,
+    "0.02": 22000,
+    "0.01": 24500,
+    "0.002": 30400
    },
    "q50_5000": 10000,
    "q01_5000": 25000,
    "span": 185,
    "bands": {
-    "140": "once in 25 to 100 years",
-    "185": "once in 100 to 500 years",
-    "240": "less often than once in 500 years"
+    "140": "once in 10 to 100 years",
+    "185": "once in 100 to 1,000 years",
+    "240": "less often than once in 1,000 years"
    },
    "top2": [
     2008,
@@ -730,19 +732,19 @@
   "rain_hour_mean": {
    "q": {
     "0.5": 9500,
-    "0.1": 16300,
-    "0.04": 19700,
-    "0.02": 22200,
-    "0.01": 24700,
-    "0.002": 30500
+    "0.1": 16200,
+    "0.04": 19600,
+    "0.02": 22000,
+    "0.01": 24500,
+    "0.002": 30200
    },
    "q50_5000": 10000,
    "q01_5000": 25000,
    "span": 185,
    "bands": {
-    "140": "once in 25 to 100 years",
-    "185": "once in 100 to 500 years",
-    "240": "less often than once in 500 years"
+    "140": "once in 10 to 100 years",
+    "185": "once in 100 to 1,000 years",
+    "240": "less often than once in 1,000 years"
    },
    "top2": [
     2008,
@@ -752,19 +754,19 @@
   "wettest_24h": {
    "q": {
     "0.5": 9500,
-    "0.1": 16400,
-    "0.04": 19800,
-    "0.02": 22400,
-    "0.01": 25000,
-    "0.002": 31100
+    "0.1": 16300,
+    "0.04": 19700,
+    "0.02": 22300,
+    "0.01": 24800,
+    "0.002": 30800
    },
    "q50_5000": 10000,
    "q01_5000": 25000,
    "span": 185,
    "bands": {
-    "140": "once in 25 to 100 years",
-    "185": "once in 100 to 500 years",
-    "240": "less often than once in 500 years"
+    "140": "once in 10 to 100 years",
+    "185": "once in 100 to 1,000 years",
+    "240": "less often than once in 1,000 years"
    },
    "top2": [
     2008,
@@ -774,19 +776,19 @@
   "sharp": {
    "q": {
     "0.5": 9600,
-    "0.1": 16600,
-    "0.04": 19900,
-    "0.02": 22200,
-    "0.01": 24500,
-    "0.002": 29600
+    "0.1": 16500,
+    "0.04": 19700,
+    "0.02": 22100,
+    "0.01": 24400,
+    "0.002": 29400
    },
    "q50_5000": 10000,
    "q01_5000": 25000,
    "span": 185,
    "bands": {
-    "140": "once in 25 to 100 years",
-    "185": "once in 100 to 500 years",
-    "240": "less often than once in 500 years"
+    "140": "once in 10 to 100 years",
+    "185": "once in 100 to 1,000 years",
+    "240": "less often than once in 1,000 years"
    },
    "top2": [
     2008,
@@ -795,20 +797,20 @@
   },
   "annual_only": {
    "q": {
-    "0.5": 9100,
-    "0.1": 16000,
-    "0.04": 19600,
-    "0.02": 22200,
-    "0.01": 24900,
-    "0.002": 31200
+    "0.5": 9000,
+    "0.1": 15900,
+    "0.04": 19400,
+    "0.02": 22100,
+    "0.01": 24700,
+    "0.002": 31000
    },
    "q50_5000": 10000,
    "q01_5000": 25000,
    "span": 185,
    "bands": {
-    "140": "once in 25 to 100 years",
-    "185": "once in 100 to 500 years",
-    "240": "less often than once in 500 years"
+    "140": "once in 10 to 100 years",
+    "185": "once in 100 to 1,000 years",
+    "240": "less often than once in 1,000 years"
    },
    "top2": [
     2008,
@@ -817,20 +819,20 @@
   },
   "b_1.0": {
    "q": {
-    "0.5": 9500,
-    "0.1": 16300,
-    "0.04": 19700,
-    "0.02": 22300,
-    "0.01": 24900,
-    "0.002": 31000
+    "0.5": 9400,
+    "0.1": 16200,
+    "0.04": 19600,
+    "0.02": 22200,
+    "0.01": 24700,
+    "0.002": 30800
    },
    "q50_5000": 10000,
    "q01_5000": 25000,
    "span": 185,
    "bands": {
-    "140": "once in 25 to 100 years",
-    "185": "once in 100 to 500 years",
-    "240": "less often than once in 500 years"
+    "140": "once in 10 to 100 years",
+    "185": "once in 100 to 1,000 years",
+    "240": "less often than once in 1,000 years"
    },
    "top2": [
     2008,
@@ -839,20 +841,20 @@
   },
   "b_0.70": {
    "q": {
-    "0.5": 9500,
-    "0.1": 16300,
-    "0.04": 19800,
-    "0.02": 22400,
-    "0.01": 25000,
-    "0.002": 31200
+    "0.5": 9400,
+    "0.1": 16200,
+    "0.04": 19700,
+    "0.02": 22300,
+    "0.01": 24800,
+    "0.002": 30900
    },
    "q50_5000": 10000,
    "q01_5000": 25000,
    "span": 185,
    "bands": {
-    "140": "once in 25 to 100 years",
-    "185": "once in 100 to 500 years",
-    "240": "less often than once in 500 years"
+    "140": "once in 10 to 100 years",
+    "185": "once in 100 to 1,000 years",
+    "240": "less often than once in 1,000 years"
    },
    "top2": [
     2008,
@@ -861,20 +863,20 @@
   },
   "lapse_snotel": {
    "q": {
-    "0.5": 9000,
-    "0.1": 15500,
-    "0.04": 18800,
-    "0.02": 21300,
-    "0.01": 23800,
-    "0.002": 29600
+    "0.5": 8900,
+    "0.1": 15400,
+    "0.04": 18700,
+    "0.02": 21100,
+    "0.01": 23600,
+    "0.002": 29400
    },
    "q50_5000": 10000,
    "q01_5000": 25000,
    "span": 185,
    "bands": {
-    "140": "once in 25 to 100 years",
-    "185": "once in 100 to 500 years",
-    "240": "less often than once in 500 years"
+    "140": "once in 10 to 100 years",
+    "185": "once in 100 to 1,000 years",
+    "240": "less often than once in 1,000 years"
    },
    "top2": [
     2008,
@@ -883,20 +885,20 @@
   },
   "t50_hatchet": {
    "q": {
-    "0.5": 9700,
-    "0.1": 16700,
-    "0.04": 20200,
-    "0.02": 22900,
-    "0.01": 25500,
-    "0.002": 31700
+    "0.5": 9600,
+    "0.1": 16600,
+    "0.04": 20100,
+    "0.02": 22700,
+    "0.01": 25300,
+    "0.002": 31400
    },
    "q50_5000": 10000,
    "q01_5000": 25000,
    "span": 185,
    "bands": {
-    "140": "once in 25 to 100 years",
-    "185": "once in 100 to 500 years",
-    "240": "less often than once in 500 years"
+    "140": "once in 10 to 100 years",
+    "185": "once in 100 to 1,000 years",
+    "240": "less often than once in 1,000 years"
    },
    "top2": [
     2008,
@@ -905,42 +907,64 @@
   },
   "t50_corbel": {
    "q": {
-    "0.5": 9300,
-    "0.1": 16000,
-    "0.04": 19400,
-    "0.02": 21900,
-    "0.01": 24500,
-    "0.002": 30500
+    "0.5": 9200,
+    "0.1": 15800,
+    "0.04": 19200,
+    "0.02": 21800,
+    "0.01": 24300,
+    "0.002": 30300
    },
    "q50_5000": 10000,
    "q01_5000": 25000,
    "span": 185,
    "bands": {
-    "140": "once in 25 to 100 years",
-    "185": "once in 100 to 500 years",
-    "240": "less often than once in 500 years"
+    "140": "once in 10 to 100 years",
+    "185": "once in 100 to 1,000 years",
+    "240": "less often than once in 1,000 years"
    },
    "top2": [
     2008,
     2011
    ]
   },
+  "peak_hour": {
+   "q": {
+    "0.5": 10500,
+    "0.1": 19400,
+    "0.04": 24000,
+    "0.02": 27400,
+    "0.01": 30800,
+    "0.002": 38800
+   },
+   "q50_5000": 10000,
+   "q01_5000": 30000,
+   "span": 240,
+   "bands": {
+    "140": "once in 10 to 100 years",
+    "185": "once in 10 to 100 years",
+    "240": "once in 100 to 1,000 years"
+   },
+   "top2": [
+    2008,
+    2014
+   ]
+  },
   "lapse_6.5": {
    "q": {
-    "0.5": 13400,
-    "0.1": 23000,
-    "0.04": 27900,
-    "0.02": 31500,
-    "0.01": 35100,
-    "0.002": 43600
+    "0.5": 13300,
+    "0.1": 22900,
+    "0.04": 27700,
+    "0.02": 31300,
+    "0.01": 34900,
+    "0.002": 43300
    },
    "q50_5000": 15000,
    "q01_5000": 35000,
    "span": 240,
    "bands": {
-    "140": "more often than once in 25 years",
-    "185": "once in 25 to 100 years",
-    "240": "once in 100 to 500 years"
+    "140": "more often than once in 10 years",
+    "185": "once in 10 to 100 years",
+    "240": "once in 100 to 1,000 years"
    },
    "top2": [
     2008,
@@ -949,20 +973,20 @@
   },
   "freezing_0C": {
    "q": {
-    "0.5": 8000,
-    "0.1": 13800,
-    "0.04": 16800,
-    "0.02": 19100,
-    "0.01": 21400,
-    "0.002": 26900
+    "0.5": 7900,
+    "0.1": 13600,
+    "0.04": 16600,
+    "0.02": 18900,
+    "0.01": 21200,
+    "0.002": 26700
    },
    "q50_5000": 10000,
    "q01_5000": 20000,
-   "span": 140,
+   "span": 185,
    "bands": {
-    "140": "once in 100 to 500 years",
-    "185": "less often than once in 500 years",
-    "240": "less often than once in 500 years"
+    "140": "once in 10 to 100 years",
+    "185": "once in 100 to 1,000 years",
+    "240": "less often than once in 1,000 years"
    },
    "top2": [
     2011,
@@ -971,20 +995,20 @@
   },
   "lapse_6.5_0C": {
    "q": {
-    "0.5": 11200,
-    "0.1": 19300,
-    "0.04": 23500,
-    "0.02": 26600,
-    "0.01": 29800,
-    "0.002": 37400
+    "0.5": 11100,
+    "0.1": 19200,
+    "0.04": 23300,
+    "0.02": 26500,
+    "0.01": 29600,
+    "0.002": 37100
    },
    "q50_5000": 10000,
    "q01_5000": 30000,
    "span": 240,
    "bands": {
-    "140": "more often than once in 25 years",
-    "185": "once in 25 to 100 years",
-    "240": "less often than once in 500 years"
+    "140": "once in 10 to 100 years",
+    "185": "once in 10 to 100 years",
+    "240": "once in 100 to 1,000 years"
    },
    "top2": [
     2008,
@@ -1004,9 +1028,9 @@
    "q01_5000": 30000,
    "span": 240,
    "bands": {
-    "140": "more often than once in 25 years",
-    "185": "once in 25 to 100 years",
-    "240": "less often than once in 500 years"
+    "140": "once in 10 to 100 years",
+    "185": "once in 10 to 100 years",
+    "240": "once in 100 to 1,000 years"
    },
    "top2": [
     2011,
@@ -1026,9 +1050,9 @@
    "q01_5000": 35000,
    "span": 240,
    "bands": {
-    "140": "more often than once in 25 years",
-    "185": "more often than once in 25 years",
-    "240": "once in 100 to 500 years"
+    "140": "more often than once in 10 years",
+    "185": "once in 10 to 100 years",
+    "240": "once in 100 to 1,000 years"
    },
    "top2": [
     2011,
@@ -1037,20 +1061,20 @@
   },
   "station_skew": {
    "q": {
-    "0.5": 9500,
-    "0.1": 16300,
-    "0.04": 19800,
-    "0.02": 22500,
-    "0.01": 25100,
-    "0.002": 31400
+    "0.5": 9400,
+    "0.1": 16200,
+    "0.04": 19700,
+    "0.02": 22300,
+    "0.01": 24900,
+    "0.002": 31100
    },
    "q50_5000": 10000,
    "q01_5000": 25000,
    "span": 185,
    "bands": {
-    "140": "once in 25 to 100 years",
-    "185": "once in 100 to 500 years",
-    "240": "less often than once in 500 years"
+    "140": "once in 10 to 100 years",
+    "185": "once in 100 to 1,000 years",
+    "240": "less often than once in 1,000 years"
    },
    "top2": [
     2008,
@@ -1059,20 +1083,20 @@
   },
   "no_low_test": {
    "q": {
-    "0.5": 9600,
-    "0.1": 17500,
-    "0.04": 21000,
-    "0.02": 23400,
-    "0.01": 25600,
-    "0.002": 30000
+    "0.5": 9500,
+    "0.1": 17400,
+    "0.04": 20900,
+    "0.02": 23200,
+    "0.01": 25400,
+    "0.002": 29800
    },
    "q50_5000": 10000,
    "q01_5000": 25000,
    "span": 185,
    "bands": {
-    "140": "once in 25 to 100 years",
-    "185": "once in 100 to 500 years",
-    "240": "less often than once in 500 years"
+    "140": "once in 10 to 100 years",
+    "185": "once in 100 to 1,000 years",
+    "240": "less often than once in 1,000 years"
    },
    "top2": [
     2008,
@@ -1083,18 +1107,18 @@
    "q": {
     "0.5": 9400,
     "0.1": 17600,
-    "0.04": 21500,
-    "0.02": 24200,
-    "0.01": 26700,
-    "0.002": 32200
+    "0.04": 21400,
+    "0.02": 24000,
+    "0.01": 26500,
+    "0.002": 31900
    },
    "q50_5000": 10000,
    "q01_5000": 25000,
    "span": 185,
    "bands": {
-    "140": "once in 25 to 100 years",
-    "185": "once in 100 to 500 years",
-    "240": "less often than once in 500 years"
+    "140": "once in 10 to 100 years",
+    "185": "once in 100 to 1,000 years",
+    "240": "less often than once in 1,000 years"
    },
    "top2": [
     2008,
@@ -1103,49 +1127,50 @@
   },
   "daily_storm_mean": {
    "q": {
-    "0.5": 9800,
-    "0.1": 18900,
-    "0.04": 23100,
-    "0.02": 26100,
-    "0.01": 29000,
-    "0.002": 35000
+    "0.5": 9700,
+    "0.1": 18800,
+    "0.04": 23200,
+    "0.02": 26200,
+    "0.01": 29200,
+    "0.002": 35500
    },
    "q50_5000": 10000,
    "q01_5000": 30000,
    "span": 240,
    "bands": {
-    "140": "more often than once in 25 years",
-    "185": "once in 25 to 100 years",
-    "240": "less often than once in 500 years"
+    "140": "once in 10 to 100 years",
+    "185": "once in 10 to 100 years",
+    "240": "less often than once in 1,000 years"
    },
    "top2": [
-    2008,
-    1999
+    1999,
+    2008
    ]
   }
  },
  "variant_q01": {
-  "gap_3": 25000,
-  "gap_12": 25000,
-  "gap_24": 24700,
-  "rain_hour_mean": 24700,
-  "wettest_24h": 25000,
-  "sharp": 24500,
-  "annual_only": 24900,
-  "b_1.0": 24900,
-  "b_0.70": 25000,
-  "lapse_snotel": 23800,
-  "t50_hatchet": 25500,
-  "t50_corbel": 24500,
-  "lapse_6.5": 35100,
-  "freezing_0C": 21400,
-  "lapse_6.5_0C": 29800,
+  "gap_3": 24800,
+  "gap_12": 24800,
+  "gap_24": 24500,
+  "rain_hour_mean": 24500,
+  "wettest_24h": 24800,
+  "sharp": 24400,
+  "annual_only": 24700,
+  "b_1.0": 24700,
+  "b_0.70": 24800,
+  "lapse_snotel": 23600,
+  "t50_hatchet": 25300,
+  "t50_corbel": 24300,
+  "peak_hour": 30800,
+  "lapse_6.5": 34900,
+  "freezing_0C": 21200,
+  "lapse_6.5_0C": 29600,
   "no_orography": 31700,
   "textbook": 37000,
-  "station_skew": 25100,
-  "no_low_test": 25600,
-  "daily_wettest_day": 26700,
-  "daily_storm_mean": 29000
+  "station_skew": 24900,
+  "no_low_test": 25400,
+  "daily_wettest_day": 26500,
+  "daily_storm_mean": 29200
  },
  "regional_skew": -0.12,
  "lapse_snotel": 5.21,
@@ -1176,9 +1201,9 @@
   "gap_hours": 6,
   "lookback_hours": 36,
   "band_years": [
-   25,
+   10,
    100,
-   500
+   1000
   ],
   "first_wy": 1951,
   "last_wy": 2025
@@ -1186,46 +1211,46 @@
  "as_of": "2026-11-06",
  "equations": {
   "2": {
-   "a": 0.1304,
-   "b": 0.7979,
-   "c": 1.6442,
-   "se_log": 0.0658,
-   "se_pct": 15.2428
+   "a": 0.1548,
+   "b": 0.7945,
+   "c": 1.6094,
+   "se_log": 0.0662,
+   "se_pct": 15.3286
   },
   "10": {
-   "a": 0.8711,
-   "b": 0.8297,
-   "c": 1.3354,
-   "se_log": 0.0472,
-   "se_pct": 10.9109
+   "a": 0.9594,
+   "b": 0.8281,
+   "c": 1.3159,
+   "se_log": 0.0473,
+   "se_pct": 10.9342
   },
   "25": {
-   "a": 1.4965,
-   "b": 0.8415,
-   "c": 1.2552,
+   "a": 1.6535,
+   "b": 0.8395,
+   "c": 1.2355,
    "se_log": 0.0406,
-   "se_pct": 9.3663
+   "se_pct": 9.377
   },
   "50": {
-   "a": 2.0345,
-   "b": 0.8491,
-   "c": 1.2124,
+   "a": 2.2714,
+   "b": 0.8466,
+   "c": 1.191,
    "se_log": 0.0366,
-   "se_pct": 8.443
+   "se_pct": 8.4525
   },
   "100": {
-   "a": 2.6078,
-   "b": 0.8561,
-   "c": 1.1798,
-   "se_log": 0.0335,
-   "se_pct": 7.7267
+   "a": 2.955,
+   "b": 0.8529,
+   "c": 1.1559,
+   "se_log": 0.0336,
+   "se_pct": 7.743
   },
   "500": {
-   "a": 3.9813,
-   "b": 0.8703,
-   "c": 1.1305,
-   "se_log": 0.0302,
-   "se_pct": 6.9514
+   "a": 4.7215,
+   "b": 0.8652,
+   "c": 1.0986,
+   "se_log": 0.0304,
+   "se_pct": 7.0137
   }
  },
  "equation_ranges": {
