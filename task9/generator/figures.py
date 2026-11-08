@@ -33,11 +33,12 @@ def make(R):
                          need_raw=[round(100 * v, 2) for v in s["need"]], n=s["n"], houses=s["houses"],
                          funds=s["funds"], sectors=s["sectors"], par_eur_m=round(s["par_eur"], 1),
                          ratings=s["ratings"], exceed_raw=[round(v, 6) for v in s["exceed"]],
-                         el_port_pct=round(100 * s["el_port"], 2), pd1_pct=round(100 * s["pd1"], 2),
+                         el_port_pct=round(100 * s["el_port"], 2), el_pct=r1(s["el_port"]), el_raw=round(s["el_port"], 6),
+                         pd1_pct=round(100 * s["pd1"], 2),
                          age=round(s["age"], 2))
     rv = R["rivals"]
     rung = {name: {k: dict(p5_pct=r1(v["p5"]), p5_raw=round(v["p5"], 6), by_year_pct=[r1(x) for x in v["by_year"]],
-                           need_pct=[int(math.ceil(100 * x - 1e-9)) for x in v["need"][:2]])
+                           need_pct=[int(math.ceil(100 * x - 1e-9)) for x in v["need"][:2]], el_pct=r1(v["el"]))
                    for k, v in d.items()} for name, d in rv.items()}
     for name, d in rung.items():
         d["call"] = call_of(d["KL"]["p5_raw"], d["OS"]["p5_raw"])
@@ -67,6 +68,14 @@ def make(R):
         "link_closed": dict(a=round(Lc["a"], 3), bm=round(Lc["bm"], 3), bh=round(Lc["bh"], 3), n=Lc["n"]),
         "link_house_only": dict(a=round(Lh["a"], 3), bh=round(Lh["bh"], 3), n=Lh["n"]),
         "recovery_by_other_defaults": {str(k): dict(recovery_pct=round(100 * v[0], 1), n=v[1]) for k, v in bc.items()},
+        "count_link": dict(cells_pct=[round(100 * v, 1) for v in R["count_link"]["cells"]], a=round(R["count_link"]["a"], 3),
+                           b=round(R["count_link"]["b"], 3), n=R["count_link"]["n"],
+                           book_seen_median=R["count_link"]["book_seen_median"],
+                           book_seen_mean=round(R["count_link"]["book_seen_mean"], 1)),
+        "grain": {k: dict(v) for k, v in R["grain"].items()},
+        "pooled_moment_pct": {k: r2(v) for k, v in R["pooled_moment"].items()},
+        "band_links": {k: [round(x, 3) for x in v] for k, v in R["band_links"].items()},
+        "band_all_pct": {k: [r2(x) for x in v] for k, v in R["band_all"].items()},
         "estimates": {k: round(E[k], 3) for k in ("am", "ak", "ck", "ch", "ah", "cf", "af", "cq", "aq", "cqh")},
         "loglik": {k: round(E[k], 1) for k in ("ll_h", "ll_f", "ll_q", "ll_qh", "ll_h0", "ll_pd")},
         "lgd": dict(lgd_pct=round(100 * G["lgd"], 1), lgd_closed_pct=round(100 * G["lgd_closed"], 1),

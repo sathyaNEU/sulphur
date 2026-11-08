@@ -168,6 +168,41 @@ def simulate(port, pdt, am, ak=0.0, ah=0.0, af=0.0, aq=0.0, lgd=0.37, nsim=1_000
     return out
 
 
+def simulate_count(port, book, pdt, am, ak=0.0, ah=0.0, rec=None, whole=False, nsim=200_000, years=5, seed=27,
+                   chunk=25_000):
+    """Cumulative portfolio credit loss when each default recovers by how many other companies of its house default in
+    the same year (the rival read off the record's co-default counts): counted among the note's own loans (whole False)
+    or over the house's whole book, the note's loans with the house's other companies at risk at the end of 2026 in the
+    record (whole True). book: arrays r, a, k, h of those other companies; rec maps an array of counts to recoveries."""
+    n = len(port["w"])
+    cat = lambda f: np.concatenate([port[f], book[f]]) if whole and len(book["h"]) else port[f]
+    hh, rr, aa, kk = cat("h"), cat("r"), cat("a"), cat("k")
+    N = len(hh)
+    uh, hi = np.unique(hh, return_inverse=True)
+    onehot = np.zeros((N, len(uh)))
+    onehot[np.arange(N), hi] = 1.0
+    resid = np.sqrt(max(1.0 - am - ak - ah, 1e-12))
+    rng = np.random.default_rng(seed)
+    out = np.zeros((years, nsim))
+    thr = np.array([norm.ppf(pdt[rr, np.minimum(aa + t, pdt.shape[1] - 1)]) for t in range(years)])
+    for s0 in range(0, nsim, chunk):
+        m = min(chunk, nsim - s0)
+        loss = np.zeros(m)
+        alive = np.ones((m, N), dtype=bool)
+        for t in range(years):
+            x = (np.sqrt(am) * rng.standard_normal((m, 1))
+                 + np.sqrt(ak) * rng.standard_normal((m, NSECT))[:, kk]
+                 + np.sqrt(ah) * rng.standard_normal((m, len(uh)))[:, hi]
+                 + resid * rng.standard_normal((m, N)))
+            dd = (x < thr[t][None, :]) & alive
+            others = (dd.astype(float) @ onehot)[:, hi[:n]] - 1.0
+            r = np.clip(rec(others), 0.0, 1.0)
+            loss += (dd[:, :n] * port["w"] * (1.0 - r)).sum(axis=1)
+            alive &= ~dd
+            out[t, s0:s0 + m] = loss
+    return out
+
+
 def summary(cum, sub, targets=(0.01, 0.005, 0.0025), grid=None):
     """Chance of a loss on a note with subordination sub by each year end, the subordination each target chance
     needs over the five years, and the exceedance curve of five-year losses."""

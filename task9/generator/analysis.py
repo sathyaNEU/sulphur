@@ -22,7 +22,7 @@ import openpyxl
 
 import model as MD
 
-SUBORD = {"KL": 0.150, "OS": 0.125}
+SUBORD = {"KL": 0.150, "OS": 0.130}
 BAR = 0.01
 TARGETS = (0.01, 0.005, 0.0025)
 NSIM = 1_000_000
@@ -217,13 +217,22 @@ def shocks(P, E, given="sector-year"):
     expect, one factor) and of each house-year's shock given its industry-years (from the house-year's own defaults
     against its companies' industry-year rates, the house share of the residual variance)."""
     from scipy.stats import norm
-    pu = MD.pd_table(P)[1]
+    if given == "year-shock":
+        pt = E["pdt"]
+        pu = pt[P[:, 4], np.minimum(P[:, 5], pt.shape[1] - 1)]
+    else:
+        pu = MD.pd_table(P)[1]
     zy = {}
     for y in sorted(set(P[:, 1].tolist())):
         m = P[:, 1] == y
         dr = min(max(P[m, 6].mean(), 1e-4), 0.5)
         zy[y] = float((norm.ppf(pu[m].mean()) - norm.ppf(dr)) * np.sqrt(1 - E["am"]) / np.sqrt(E["am"]))
-    if given == "year":
+    if given == "year-shock":
+        # each company-year's rate moved by its year's shock alone, the table's rate the starting point
+        zarr = np.array([zy[int(y)] for y in P[:, 1]])
+        pKY = norm.cdf((norm.ppf(np.clip(pu, 1e-6, 1 - 1e-6)) - np.sqrt(E["am"]) * zarr) / np.sqrt(1 - E["am"]))
+        c = E["ah"] / (1 - E["am"])
+    elif given == "year":
         pKY = MD.cond_pd(P, P[:, 1])
         c = E["ah"] / (1 - E["am"])
     else:
@@ -300,6 +309,70 @@ def recovery_by_cluster(pack, L, buys, P, ids, last_closed_year=2019):
         x = float(v)
         by[o].append(x / 100.0 if x > 1.0 else x)
     return {k: (round(float(np.mean(v)), 4), len(v)) for k, v in sorted(by.items())}
+
+
+def count_link(pack, L, buys, P, ids, last_closed_year=2019):
+    """The rival link read straight off the record's co-default counts: each mature default's recovery against the
+    number of other defaults its house had in the same year, as the table's cells (none, one, two, three or more) and
+    as a straight line in the count."""
+    cnt = collections.Counter((int(h), int(y)) for h, y, d in zip(P[:, 7], P[:, 1], P[:, 6]) if d)
+    book = collections.Counter((int(h), int(y)) for h, y in zip(P[:, 7], P[:, 1]))
+    rows = read_csv(pack.path("lenderbase_workout_recoveries_2008-2026.csv"))
+    o, r, seen = [], [], []
+    for row in rows:
+        v = row["recovery"].strip()
+        if not v or row["lb_loan_id"] not in L:
+            continue
+        y = _date(row["default_date"]).year
+        if y > last_closed_year:
+            continue
+        sp = spell(L[row["lb_loan_id"]], buys)
+        if sp is None or sp["house"] not in ids["houses"]:
+            continue
+        h = ids["houses"][sp["house"]]
+        x = float(v)
+        o.append(cnt[(h, y)] - 1)
+        r.append(x / 100.0 if x > 1.0 else x)
+        seen.append(book[(h, y)])
+    o, r = np.array(o, dtype=float), np.array(r)
+    cells = [float(r[np.minimum(o, 3) == c].mean()) for c in range(4)]
+    b = np.linalg.lstsq(np.column_stack([np.ones(len(o)), o]), r, rcond=None)[0]
+    return dict(cells=cells, a=float(b[0]), b=float(b[1]), n=int(len(r)), book_seen_median=float(np.median(seen)),
+                book_seen_mean=float(np.mean(seen)))
+
+
+def count_rec(link, form):
+    if form == "cells":
+        c = np.array(link["cells"])
+        return lambda others: c[np.minimum(others, 3).astype(int)]
+    return lambda others: link["a"] + link["b"] * others
+
+
+def house_books(L, buys, ids, tapes, ports):
+    """Each note's houses' other companies at risk at the end of 2026 in the record (performing or on watch at the
+    year end), with their ratings, years since the buyout in 2027 and sectors: the rest of each house's book."""
+    book = collections.defaultdict(dict)
+    for lid in sorted(L):
+        ln = L[lid]
+        if ln["quarters"].get(dt.date(2026, 12, 31)) not in ("P", "W"):
+            continue
+        sp = spell(ln, buys)
+        if sp is None or sp["house"] not in ids["houses"]:
+            continue
+        book[ids["houses"][sp["house"]]][ln["company"]] = (ln["rating"], max(1, 2027 - sp["date"].year), ln["sector"])
+    out, grain = {}, {}
+    for k, p in ports.items():
+        mine = set(x["company"] for x in tapes[k])
+        hs = sorted(set(p["h"].tolist()))
+        e = [(h, r, a, s) for h in hs for c, (r, a, s) in sorted(book.get(h, {}).items()) if c not in mine]
+        out[k] = dict(h=np.array([x[0] for x in e], dtype=np.int64), r=np.array([x[1] for x in e], dtype=np.int64),
+                      a=np.array([x[2] for x in e], dtype=np.int64), k=np.array([x[3] for x in e], dtype=np.int64))
+        per = collections.Counter(p["h"].tolist())
+        whole = collections.Counter(out[k]["h"].tolist())
+        grain[k] = dict(loans_per_house_median=float(np.median(list(per.values()))),
+                        book_per_house_median=float(np.median([per[h] + whole[h] for h in hs])),
+                        others_in_record=int(len(e)))
+    return out, grain
 
 
 # ---------------------------------------------------------------- 6. the tapes
@@ -436,6 +509,9 @@ def run(root, nsim=NSIM, rivals=True):
     LK = lgd_link(pack, L, buys, P, ids, E)
     res["link"] = LK
     res["by_cluster"] = recovery_by_cluster(pack, L, buys, P, ids)
+    CK = count_link(pack, L, buys, P, ids)
+    res["count_link"] = CK
+    books, res["grain"] = house_books(L, buys, ids, tapes, ports)
     link = (LK["a"], LK["bm"], LK["bh"])
     for k, p in ports.items():
         cum = MD.simulate(p, E["pdt"], lgd=G["lgd"], nsim=nsim, seed=SEED, link=link, **golden)
@@ -467,19 +543,45 @@ def run(root, nsim=NSIM, rivals=True):
             for k, p in ports.items():
                 cum = MD.simulate(p, E["pdt"], lgd=lg, nsim=max(200_000, nsim // 5), seed=SEED + 1, **kw)
                 s = MD.summary(cum, SUBORD[k], TARGETS)
-                res["rivals"][name][k] = dict(p5=s["p5"], by_year=s["by_year"], need=s["need"])
+                res["rivals"][name][k] = dict(p5=s["p5"], by_year=s["by_year"], need=s["need"], el=s["el_port"])
+        # the co-default counts the record shows, carried inside each note's own loans or over its houses' whole books
+        counts = {"count_in_portfolio": ("cells", False), "count_in_portfolio_line": ("line", False),
+                  "count_whole_book": ("cells", True), "count_whole_book_line": ("line", True)}
+        for name, (form, whole) in counts.items():
+            res["rivals"][name] = {}
+            for k, p in ports.items():
+                cum = MD.simulate_count(p, books[k], E["pdt"], E["am"], E["ak"], E["ah"], rec=count_rec(CK, form),
+                                        whole=whole, nsim=max(200_000, nsim // 5), seed=SEED + 3)
+                s = MD.summary(cum, SUBORD[k], TARGETS)
+                res["rivals"][name][k] = dict(p5=s["p5"], by_year=s["by_year"], need=s["need"], el=s["el_port"])
     if rivals:
-        # the band the sound estimators span: two default-rate tables against two dependence estimators
+        # the band the sound estimators span: two default-rate tables, two dependence estimators, and each house-year's
+        # shock read against the sector-year's or the year's rates under that dependence (the link refitted each time)
         pdts = {"probit": E["pdt"], "cohort": MD.cohort_pdt(P)}
-        deps = {"cluster": golden, "moment": MD.moment_dependence(P)}
+        mom = MD.moment_dependence(P)
+        Ed = {"cluster": E, "moment": dict(E, am=mom["am"], ak=mom["ak"], ah=mom["ah"],
+                                            ch=mom["ah"] / (1 - mom["am"] - mom["ak"]))}
+        deps = {"cluster": golden, "moment": mom}
         band = {k: [] for k in ports}
+        links = {}
         for pn, pt in pdts.items():
             for dn, dep in deps.items():
-                for k, p in ports.items():
-                    cum = MD.simulate(p, pt, lgd=G["lgd"], nsim=max(200_000, nsim // 5), seed=SEED + 2, link=link, **dep)
-                    band[k].append(float((cum[-1] > SUBORD[k]).mean()))
+                for given in ("sector-year", "year", "year-shock"):
+                    Lb = lgd_link(pack, L, buys, P, ids, dict(Ed[dn], pdt=pt), given=given)
+                    lk = (Lb["a"], Lb["bm"], Lb["bh"])
+                    links["%s %s %s" % (pn, dn, given)] = lk
+                    for k, p in ports.items():
+                        cum = MD.simulate(p, pt, lgd=G["lgd"], nsim=max(200_000, nsim // 5), seed=SEED + 2, link=lk, **dep)
+                        band[k].append(float((cum[-1] > SUBORD[k]).mean()))
         res["band"] = {k: [min(v), max(v)] for k, v in band.items()}
-        res["moment_dependence"] = deps["moment"]
+        res["band_all"] = band
+        res["band_links"] = links
+        res["moment_dependence"] = mom
+        # the arch 6 runs' route under the pair-moment dependence (their own house shares sat at its estimate)
+        res["pooled_moment"] = {}
+        for k, p in ports.items():
+            cum = MD.simulate(p, E["pdt"], lgd=G["lgd"], nsim=max(200_000, nsim // 5), seed=SEED + 1, **mom)
+            res["pooled_moment"][k] = float((cum[-1] > SUBORD[k]).mean())
     res["_ports"] = ports
     res["_panel"] = P
     return res

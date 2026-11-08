@@ -9,6 +9,7 @@ from reportlab.platypus import Paragraph, Spacer, Table, TableStyle
 import officepdf as O
 
 CET = dt.timezone(dt.timedelta(hours=1))
+SUB = {"KL": 0.150, "OS": 0.130}   # the enhancement each manager offers below its Class A notes
 GMT = dt.timezone(dt.timedelta(hours=0))
 
 
@@ -85,13 +86,13 @@ def standard(path):
 
 def term_sheet(path, who, par_eur_m, n_loans):
     body, h1, h2, small, cell = _styles()
-    note = par_eur_m * 0.85
+    note = par_eur_m * (1.0 - SUB[who])
     if who == "KL":
         rows = [["Term", "Summary"],
                 ["Issuer", "KLCP Senior Loan Note 2027 DAC, a designated activity company incorporated in Ireland"],
                 ["Collateral manager", "Kestrel Lane Credit Partners LLP (authorised and regulated by the FCA)"],
                 ["Class A Notes", "EUR {:,.1f} million senior secured floating rate notes due 2034".format(note)],
-                ["Subordination", "15.0 per cent of the aggregate par of the collateral, as the request for proposals of "
+                ["Subordination", "%.1f per cent of the aggregate par of the collateral, as the request for proposals of " % (100 * SUB["KL"]) +
                                   "2 October 2026 asked, provided by the Class B Notes and the subordinated notes retained "
                                   "by the collateral manager"],
                 ["Interest", "Three-month EURIBOR plus 2.15 per cent a year, payable quarterly on 15 January, April, "
@@ -123,7 +124,7 @@ def term_sheet(path, who, par_eur_m, n_loans):
                       "compartment 2027-1."),
         ("2. Arranger and servicer", "Ostvale Capital AB, Stockholm, which originated and services the loans."),
         ("3. Notes offered", "Class A senior secured notes, EUR {:,.1f} million, floating rate.".format(note)),
-        ("4. Credit enhancement", "The Class B notes and the equity retained by Ostvale together equal 12.5 per cent of the "
+        ("4. Credit enhancement", "The Class B notes and the equity retained by Ostvale together equal %.1f per cent of the " % (100 * SUB["OS"]) +
                                   "collateral principal balance and absorb losses before the Class A notes. Kadeweg's request "
                                   "for proposals set 15.0 per cent; Ostvale offers the thinner enhancement with the wider "
                                   "margin below."),

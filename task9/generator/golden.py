@@ -23,6 +23,7 @@ FONT = "Calibri"
 
 
 def pct(v, dp=2):
+    v = 0.0 if round(v, dp) == 0 else v
     return ("%." + str(dp) + "f") % v
 
 
@@ -172,18 +173,23 @@ def ic_note(F, path, png):
                 "per cent chance of losing principal and Ostvale's a %s per cent chance, against the standard's test of "
                 "%s per cent. Kestrel Lane's note looks the safer of the two on its borrowers' ratings, but its loans "
                 "sit with %s sponsor houses, and the defaults that cluster in a house's bad year are the ones that "
-                "recover least.")
-          % (pct(kl["p5_pct"], 1), pct(os_["p5_pct"], 1), pct(F["bar_pct"], 0), word(kl["houses"])), 10)
+                "recover least. We expect credit losses over the five years of %s per cent of par on Kestrel Lane's "
+                "portfolio and %s per cent on Ostvale's.")
+          % (pct(kl["p5_pct"], 1), pct(os_["p5_pct"], 1), pct(F["bar_pct"], 0), word(kl["houses"]),
+             pct(kl["el_pct"], 1), pct(os_["el_pct"], 1)), 10)
 
-    rows = [["Note", "Loans", "Par, EUR m", "Subordination", "Chance of loss 2027-31", "Needed for 1.0%", "for 0.5%"]]
+    rows = [["Note", "Loans", "Par, EUR m", "Subordination", "Chance of loss 2027-31", "Expected loss 2027-31",
+             "Needed for 1.0%", "for 0.5%"]]
     for key, nm in (("KL", "Kestrel Lane"), ("OS", "Ostvale")):
         g = G[key]
         rows.append([nm, "%d" % g["n"], "{:,.0f}".format(g["par_eur_m"]), "%s%%" % pct(F["subordination_pct"][key], 1),
-                     "%s%%" % pct(g["p5_pct"], 1), "%d%%" % g["need_pct"][0], "%d%%" % g["need_pct"][1]])
+                     "%s%%" % pct(g["p5_pct"], 1), "%s%%" % pct(g["el_pct"], 1), "%d%%" % g["need_pct"][0],
+                     "%d%%" % g["need_pct"][1]])
     _para(doc, "Table 1. The two notes under MP-RN-2", 9, bold=True, after=2, before=4)
-    _table(doc, rows, [26, 13, 20, 26, 28, 26, 18])
-    _para(doc, ("Par converted at the ECB reference rate of 31 December 2026. Chances from %s simulated five-year paths; "
-                "subordination needed in whole per cent of par, rounded up.") % "{:,}".format(F["paths"]),
+    _table(doc, rows, [24, 12, 18, 22, 24, 24, 22, 18])
+    _para(doc, ("Par converted at the ECB reference rate of 31 December 2026. Chances and expected losses from %s "
+                "simulated five-year paths, the expected loss as a share of the portfolio's par; subordination needed in "
+                "whole per cent of par, rounded up.") % "{:,}".format(F["paths"]),
           7.5, italic=True, color="555555", after=8)
 
     doc.add_picture(png, width=Mm(160))
@@ -221,20 +227,30 @@ def ic_note(F, path, png):
                 "shock and %s per unit of the house-year's shock.")
           % (pct(rb["0"]["recovery_pct"], 1), pct(rb["3"]["recovery_pct"], 1), L["open"], pct(LK["a"], 3),
              pct(LK["bm"], 3), pct(LK["bh"], 3)), 10)
+    gr, CK, ci = F["grain"], F["count_link"], rg["count_in_portfolio"]
+    _para(doc, ("The comparison counts each default's companions across its house's whole book: a default in the record "
+                "shared its house-year with a median of %d of the house's companies. Ostvale's tape holds %s companies "
+                "of each house and Kestrel Lane's %s. Counted among each note's own loans, Ostvale's defaults would "
+                "nearly always look like lone ones and its note would pass at %s per cent, while Kestrel Lane's would "
+                "fail at %s; but what a default recovers depends on the year its house is having, not on how many of "
+                "the house's loans a note happens to hold, so the house-year's shock carries it into the simulation.")
+          % (CK["book_seen_median"], word(int(gr["OS"]["loans_per_house_median"])), word(int(gr["KL"]["loans_per_house_median"])),
+             pct(ci["OS"]["p5_pct"], 1), pct(ci["KL"]["p5_pct"], 1)), 10)
     _para(doc, ("Simulated with each default recovering on the shocks that drew it, both notes fail. With one average "
                 "loss of %s per cent for every default, as the closed workouts give it, Kestrel Lane's note would pass "
                 "at %s per cent and be bought (Ostvale's is at %s); tying recovery to the economy's year leaves Kestrel "
-                "Lane at %s per cent, because the economy's year barely moves what a default recovers. It is the "
+                "Lane at %s per cent, because a default recovers no less in the economy's bad years. It is the "
                 "house's year, which also clusters Kestrel Lane's defaults, that takes its tail past the test.")
           % (pct(L["lgd_pct"], 1), pct(hp["KL"]["p5_pct"], 1), pct(hp["OS"]["p5_pct"], 1), pct(yl["KL"]["p5_pct"], 1)), 10)
     bk, bo = F["band_pct"]["KL"], F["band_pct"]["OS"]
-    _para(doc, ("Estimated other ways, the default rates from a cohort table or the dependence from pair counts, the "
-                "chances run %s to %s per cent for Kestrel Lane and %s to %s per cent for Ostvale; with each house-year's "
-                "shock read against the year's rates rather than the sector-year's, Kestrel Lane's chance is %s per "
-                "cent. No sound estimate brings either note under the test. Fitting the link on every closed workout "
-                "instead of the closed cohorts would leave out the open workouts, which MP-RN-2 4.1 keeps and which are "
-                "the clustered defaults' long ones.")
-          % (pct(bk[0], 1), pct(bk[1], 1), pct(bo[0], 1), pct(bo[1], 1), pct(rg["house_link_given_year"]["KL"]["p5_pct"], 1)), 10)
+    cb = rg["count_whole_book"]
+    _para(doc, ("Estimated other ways, the default rates from a cohort table, the dependence from pair counts, or each "
+                "house-year's shock read against the year's rates rather than the sector-year's, the chances run %s to "
+                "%s per cent for Kestrel Lane and %s to %s per cent for Ostvale; the record's co-default counts taken "
+                "over each house's whole book give %s and %s per cent. No sound estimate brings either note under the "
+                "test. Fitting the link on every closed workout instead of the closed cohorts would leave out the open "
+                "workouts, which MP-RN-2 4.1 keeps and which are the clustered defaults' long ones.")
+          % (pct(bk[0], 1), pct(bk[1], 1), pct(bo[0], 1), pct(bo[1], 1), pct(cb["KL"]["p5_pct"], 1), pct(cb["OS"]["p5_pct"], 1)), 10)
 
     _para(doc, "Table 2. Chance that the note has taken a loss by the end of each year", 9, bold=True, after=2, before=6)
     rows = [["", "2027", "2028", "2029", "2030", "2031"]]

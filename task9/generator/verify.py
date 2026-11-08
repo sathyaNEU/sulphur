@@ -196,7 +196,7 @@ def main():
                     h=np.array([hid[s[1]] for s in sp]), f=np.array([hid[s[1]] for s in sp]))
         port["w"] = port["w"] / port["w"].sum()
         cum = MD.simulate(port, pdt, am=am, ak=ak, ah=ah, lgd=lgd, nsim=300_000, seed=77, link=link)
-        out[key] = float((cum[-1] > {"KL": 0.150, "OS": 0.125}[key]).mean())
+        out[key] = float((cum[-1] > {"KL": 0.150, "OS": 0.130}[key]).mean())
     gk, go = F["golden"]["KL"]["p5_raw"], F["golden"]["OS"]["p5_raw"]
     ok_k, ok_o = out["KL"] < 0.01, out["OS"] < 0.01
     callv = ("Kestrel Lane" if out["KL"] < out["OS"] else "Ostvale") if (ok_k and ok_o) else \

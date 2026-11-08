@@ -143,7 +143,7 @@ def main():
     if not once:
         for script in ("checks.py", "verify.py"):
             r = subprocess.run([sys.executable, os.path.join(HERE, script)], capture_output=True, text=True)
-            print(r.stdout[-4000:])
+            print(r.stdout)
             if r.returncode != 0:
                 print(r.stderr[-3000:])
                 sys.exit(r.returncode)
