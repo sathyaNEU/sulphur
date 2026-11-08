@@ -135,7 +135,8 @@ def supply_plan(path):
          _table([["Year", "Average day"]] + mgd, [30, 40]),
          Spacer(1, 6),
          Paragraph("3. Nitrate", H2),
-         Paragraph("The nitrate standard is 10 mg/L as nitrogen. The utility meets it at the entry point: the "
+         Paragraph("The nitrate standard is 10 mg/L as nitrogen (44.27 mg/L as nitrate). The utility meets it at "
+                   "the entry point: the "
                    "standard applies to the blended water at EP-01, and the utility's compliance and planning "
                    "measure is the annual flow-weighted mean nitrate at EP-01. Each well's raw water is sampled "
                    "quarterly and EP-01 monthly.", BODY),

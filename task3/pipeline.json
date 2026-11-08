@@ -1,10 +1,10 @@
 {
  "task": "task3",
- "status": "PAUSED",
+ "status": "READY",
  "domain": "physical-environmental-sciences",
  "objective": "forecasting",
- "stage": 4,
- "stage_name": "check",
+ "stage": 5,
+ "stage_name": "ready",
  "updated": "2026-11-08",
  "stump": "A strong analyst who finds the Sallow Ridge clearing tests it against the wells and the county wells under recent clearings, sees no rise where the wellhead model's travel time or one lag fitted to the wells' record says it should already be, sets the clearing's effect at nil and files the 2031 cycle; only each parcel's delay through its own unsaturated thickness, read from the county's matured conversions (0.132 years a foot), puts EP-01 at 10 in 2031 and files the 2027 cycle.",
  "architecture": 4,
@@ -19,12 +19,16 @@
   "reader": "2026-11-08 isolated reader (Sonnet, medium): no step named, no ranking or helper file, Q6 analytical; both REVIEW lines harmless"
  },
  "duplicate_check": {
-  "heart": "PASS 2026-11-08",
-  "surface": "exit 0, 1 pair promoted (surface similarity), names WARN on 'Little Ossey' and 'Sep Oct' (not personas)"
+  "heart": "WARN 2026-11-08 (first name Patricia in an older build); forum redrawn to council_or_assembly after task4 v4",
+  "surface": "1 pair promoted (task2, surface 0.100, back to back, different domains), people WARN only"
  },
  "judge": {
   "pass1": "DETERMINISTIC, FIX_NOW optional (2026-11-08): asks 6 and 8 thin; fixed (ridge arrivals clustered at 2030.85-2030.92, Well 7 ridge acreage up; checks.py R5)",
-  "report": "task3/determinism_check_report.md"
+  "report": "task3/determinism_check_report.md",
+  "pass2": "DETERMINISTIC, APPROVE (2026-11-08); wording-only fixes applied (arrival \"around the start of 2031\", the root-zone weighting qualified, the plan states 10 mg/L as N = 44.27 as nitrate)",
+  "report_pass2": "task3/determinism_check_report_pass2.md",
+  "gate_g": "forecasting on honest data, no surface read, no sole data defect",
+  "gate_h": "domain pass, layers pass, decisive_step analytical, chain 5 inferences, no one-fact rescue"
  },
  "returned": [
   {
@@ -87,7 +91,7 @@
    "commit": ""
   }
  ],
- "resume": "stage 4: the re-judge (pass 2) is running on the rebuilt target.zip (brief /tmp/determinism-check-task3-a4r2121032/judge_brief.md); read its verdict, write determinism_check_report_pass2.md, then READY to main",
+ "resume": "upload prompt.txt and target.zip to the platform; then /triage-runs task3 with both runs",
  "approved": null,
  "delivered": "2026-11-07",
  "portal": "landed by one response (R1 2,200 t at 100 per cent, R2 2,600 t at 70 per cent), reported 2026-11-07",

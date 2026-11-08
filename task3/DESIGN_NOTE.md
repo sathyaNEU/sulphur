@@ -59,7 +59,7 @@ A strong analyst who finds the ridge clearing tests it against the wells and the
 sees no rise where the wellhead model's travel time or one lag fitted to the wells' own record says it should already
 be, sets the clearing's effect at nil and files the 2031 cycle with EP-01 near 5.5 mg/L through 2040; only each parcel's
 delay through its own unsaturated thickness, read from the county's matured conversions (0.132 years a foot), puts the
-ridge's leachate at the wells late in 2030, EP-01 at 10 in 2031 and the 2027 cycle.
+ridge's leachate at the wells around the start of 2031, EP-01 at 10 in 2031 and the 2027 cycle.
 
 ## Deep reasoning
 
@@ -104,7 +104,7 @@ ridge's leachate at the wells late in 2030, EP-01 at 10 in 2031 and the 2027 cyc
   depth to water (0.132 years a foot, residual 0.3 years) while their water-table ages are under half a year, so the
   delay is in the unsaturated sand and the wellhead model's travel time starts below it; (3) the ridge sits on 57 to
   94 ft against the 11 to 49 ft under all but three matured conversions, so no pooled delay applies and its leachate
-  reaches the water table from 2028 and the wells late in 2030; (4) the leachate under irrigated vegetables since
+  reaches the water table from 2028 and the wells around the start of 2031; (4) the leachate under irrigated vegetables since
   nutrient management (20.9 mg/L) mixed into each well by the recharge each parcel had when its water left the water
   table; (5) the plan's shares from 2027, EP-01 at 10 in 2031, before 1 January 2034.
 - **Judgment:** separating "the clearing does not raise nitrate" from "its leachate has not arrived" with the matured
@@ -173,7 +173,7 @@ ridge's leachate at the wells late in 2030, EP-01 at 10 in 2031 and the 2027 cyc
 | SF7 | the current leachate | the five latest land-surface years | three or eight years; the matured conversions after arrival | 2031, 12, 16 | 2031, 12, 16 | same call (asserted) |
 | SF8 | nondetects | half the reporting limit | zero or the limit | 2031, 12, 16 | 2031, 12, 16 | same call (asserted) |
 | SF9 | carrying the model to the record | each well's 2019-2026 residual | uncarried | 2031, 12, 16 | 2031, 12, 16 | same call (asserted) |
-| SF10 | the mixing weight | acres times the recharge when the water left the water table | acres alone; the recharge when it left the root zone | Well 7 16, EP-01 12 | Well 7 15, EP-01 11 | the wellhead model's water balance (recharge differs by land cover) and continuity at the water table (the recharge arriving is the land's recharge then) |
+| SF10 | the mixing weight | acres times the recharge when the water left the water table | acres alone; the recharge when it left the root zone, with the model carried to the wells' level | Well 7 16, EP-01 12 | Well 7 15, EP-01 11 | the wellhead model's water balance (recharge differs by land cover) and continuity at the water table (the recharge arriving is the land's recharge then) |
 | SF11 | vegetable leachate's level | since nutrient management | the mean over every year | Well 7 16 | Well 7 17 | the network's unchanged irrigated sites fall from about 34 to 21 mg/L by land-surface year 2005 and stay there |
 
 ## Ladder
@@ -551,3 +551,8 @@ Architecture 4 (Sallow Road well field, the nitrate plant's loan cycle), while b
   0.26 above the rounding line; the ridge parcels' depths and travel times were set so their arrivals cluster at
   2030.85 to 2030.92 (every reading from a half year early to a half year late files 2031) and Well 7's ridge acreage
   raised 7 per cent (15.92, and 15.85 at the low end of the vegetable leachate), asserted in `checks.py` R5.
+- Judge pass 2 (2026-11-08, DETERMINISTIC, APPROVE with wording only): the ridge's arrival stated as late in 2030
+  against a reading of 2031.0 to 2031.3 under other conversion-date conventions (now "around the start of 2031"); the
+  root-zone weighting stated as moving Well 7 to 15 without saying it does so only with the model carried to the wells'
+  level (now said); the nitrate-to-N factor stated in no file (the plan now gives the standard as 10 mg/L as N and
+  44.27 as nitrate). Every figure unchanged.

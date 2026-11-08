@@ -278,7 +278,8 @@ def memo(res, rungs, F, path, png):
                  ["EP-01 annual mean (mg/L as N)"] + ["%.1f" % res["ep"][y] for y in (2027, 2029, 2030, 2031, 2032, 2034, 2040)]],
                 [52, 16, 16, 16, 16, 16, 16, 16]),
          Paragraph("Source: corlinden_entry_point_nitrate_forecast.xlsx, sheet Forecast. Nitrate as N throughout; the "
-                   "county laboratory's results before 2004, reported as nitrate, are divided by 4.427.", SMALL),
+                   "county laboratory's results before 2004, reported as nitrate, are converted at 10 mg/L as N to 44.27 as "
+                   "nitrate.", SMALL),
          Spacer(1, 4),
          Image(png, width=150 * mm, height=84.0 * mm),
          Paragraph("The forecast blends the wells by the 2025 plan's shares (Well 3 at 8 per cent from 2027) with "
@@ -302,11 +303,11 @@ def memo(res, rungs, F, path, png):
                    "grew with the depth to water, about %.2f years a foot (about %.0f year at %d ft, %.0f at %d ft), "
                    "while their water-table ages are under half a year. The %s network wells under the %d to %d "
                    "upland clearings, at %d to %d ft, show nothing yet, as that delay says they should. Carried to each "
-                   "ridge parcel's own depth, the leachate reaches the water table from %d and the wells late in "
-                   "%d." % (F["ridge_dtw"][0], F["ridge_dtw"][1], F["n"], F["cohort_years"][0], F["cohort_years"][1],
+                   "ridge parcel's own depth, the leachate reaches the water table from %d and the wells around the "
+                   "start of %d." % (F["ridge_dtw"][0], F["ridge_dtw"][1], F["n"], F["cohort_years"][0], F["cohort_years"][1],
                             F["b"], F["cohort_delay_ends"][0], F["cohort_dtw"][0], F["cohort_delay_ends"][1],
                             F["cohort_dtw"][1], WORDS[F["recent_n"]], F["recent_years"][0], F["recent_years"][1],
-                            F["recent_dtw"][0], F["recent_dtw"][1], F["wt_arrive_lo"], F["arrive_lo"]), BODY),
+                            F["recent_dtw"][0], F["recent_dtw"][1], F["wt_arrive_lo"], F["arrive_lo"] + 1), BODY),
          Paragraph("Under irrigated vegetables the network's water now carries about %d mg/L as N, down from about "
                    "%d before nutrient management. Mixed into each well by its parcels' recharge, the ridge takes "
                    "Well 6 to about %d and Well 7 to about %d mg/L, and the entry point past 10 in %d." %

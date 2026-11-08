@@ -4,7 +4,7 @@
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: record, leachate, network, matured, travel, clearing, recharge, county, conversions, wellhead, effect, decisive, fitted, sentence, survey, weight, rounding, january, pooled, recent, reading, mixing, prompt, second, factor
+Stump terms swept: record, leachate, network, matured, travel, clearing, recharge, county, conversions, wellhead, effect, decisive, fitted, sentence, survey, reading, weight, rounding, january, pooled, factor, recent, arrival, mixing, prompt
 
 ## 4 design-note vocabulary (REVIEW 1)
 - **REVIEW** `sallow_road_wellhead_protection_plan_2019.pdf`: 6 of 25 stump-paragraph terms appear (travel, recharge, county, wellhead, effect, weight); read whether the document names the move
