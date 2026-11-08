@@ -1,10 +1,10 @@
 {
  "task": "task7",
- "status": "READY",
+ "status": "RUNS",
  "domain": "banking-credit-financial-risk",
  "objective": "forecasting",
- "stage": 5,
- "stage_name": "ready",
+ "stage": 6,
+ "stage_name": "runs",
  "updated": "2026-11-08",
  "stump": "CRE-LGD-3 on the register's carried values files €0.2 million (nil); the shortfall of the inspection at default against the carried value, modelled on the years since the inspection behind it and carried to a book staler than the record, files €2.0 million",
  "architecture": 5,
@@ -77,7 +77,7 @@
    "note": "round 2 on the re-sited asks: both runs landed the call; architecture 4 spent with its world (Ruahine Bank); every file of architectures 1 to 4 removed at the author's word"
   }
  ],
- "resume": "stage 6: the author uploads prompt.txt and target.zip; when the two runs come back, /triage-runs task7 records both scores and routes the build",
+ "resume": "stage 6 to 2: paste runs/run1.md, runs/run2.md and runs/rubric.md for /triage-runs if available (they show which route reached €2.0 million); the call landed, so architecture 5 is spent and the build is redesigned at the deep step in a new draw",
  "approved": null,
  "delivered": "2026-11-08",
  "portal": null,
@@ -224,6 +224,16 @@
     "average": null,
     "verdict": "REDESIGN",
     "note": "the author reported both runs on the golden (Kinloch Engineering and Matai Valley Foods); run texts not pasted"
+   },
+   {
+    "round": 1,
+    "architecture": 5,
+    "date": "2026-11-08",
+    "run1": "landed",
+    "run2": "not reported",
+    "average": null,
+    "verdict": "REDESIGN",
+    "note": "the author reported the platform not stumped, the model filing the €2.0 million plan figure; run texts, scores and rubric not pasted; a landed call is redesigned at the deep step"
    }
   ]
  },

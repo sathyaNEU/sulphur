@@ -503,3 +503,8 @@ books differ or that the carried values are out of date.
   notes): 20 held for the pooled slope (23) and not for each book's (15 and 19), now "more than 10 in each lending
   book", asserted per book; the prompt names no CSV columns, so the answer now requires each facility's number and
   its expected loss and calls the golden file's other columns a choice of layout.
+- 2026-11-08, platform round 1 on architecture 5: not stumped; the model filed the €2.0 million plan figure (the author's word; run
+  texts not pasted). The stage 4 re-judge had named the risk: filing V as the value the bank would expect its
+  inspection to put on the security if the facility defaulted sends a solver to the record of inspections at default,
+  and once that record is built the shortfall's slope on years since inspection is the visible covariate a strong
+  model fits; architecture 5 is spent.

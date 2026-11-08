@@ -209,5 +209,6 @@
   }
  ],
  "notes": "architecture 5 drawn after rating momentum (mark179's abstraction) and offsetting effects (task3, task8 arch 18) were dropped on paper; Australia passed over for Ireland because task2 sits in Western Australia",
- "registered": "2026-11-08T06:29:49Z"
+ "registered": "2026-11-08T06:29:49Z",
+ "architecture_spent": true
 }
