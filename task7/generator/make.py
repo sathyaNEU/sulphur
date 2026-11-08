@@ -26,7 +26,9 @@ import world as W
 TASK = os.path.dirname(HERE)
 TARGET = os.path.join(TASK, "target")
 GOLDEN = os.path.join(TASK, "golden")
-DISTRACTORS = ["sector_risk_appetite_2027.pdf", "regional_economic_indicators_2019-2026.csv"]
+DISTRACTORS = ["sector_risk_appetite_2027.pdf", "regional_economic_indicators_2019-2026.csv",
+               "security_register_2026-12.xlsx", "title_instruments_2026-12.csv",
+               "commercial_property_index_2015-2026.csv", "companies_register_extract_2026-12.csv"]
 
 
 def rnd(x, u):
@@ -86,6 +88,14 @@ def short(name):
     return name.replace(" Limited", "")
 
 
+ENVELOPES = [4_500_000, 5_000_000, 5_500_000, 6_000_000, 6_500_000]
+
+
+def listing(ns):
+    ns = sorted(ns)
+    return ns[0] if len(ns) == 1 else ", ".join(ns[:-1]) + " and " + ns[-1]
+
+
 def compute(target, w):
     lines = {c["cid"]: c["line"] for c in w.watch.values()}
     names = {c["cid"]: c["name"] for c in w.watch.values()}
@@ -97,10 +107,19 @@ def compute(target, w):
     val = P.values(up)
     best, tot, runner, rtot = P.best_set(val)
     tb, ttot, _, _ = P.best_set(own)
-    A = P.security()
-    B = P.commitment()
-    C = P.sector_table()
     order = sorted(lines, key=lambda c: -val[c])
+    nm = lambda s: listing([short(names[c]) for c in s])
+    fallback = {}
+    for c in sorted(best, key=lambda c: names[c]):
+        s, t, used, lead = P.best_at(val, W.ENVELOPE, without=(c,))
+        fallback[short(names[c])] = {"intake": nm(s), "lines": used, "kept_off": rnd(t, 50_000),
+                                     "unrounded": round(t, 2), "lead": round(lead, 2)}
+    curve = []
+    for e in ENVELOPES:
+        s, t, used, lead = P.best_at(val, e)
+        curve.append({"envelope": e, "intake": nm(s), "lines": used, "kept_off": rnd(t, 50_000),
+                      "unrounded": round(t, 2), "lead": round(lead, 2)})
+
     F = {
         "call": " and ".join(short(names[c]) for c in sorted(best, key=lambda c: names[c])),
         "call_ids": sorted(best),
@@ -120,18 +139,17 @@ def compute(target, w):
         "own_k": {short(names[c]): rnd(own[c], 1_000) for c in order},
         "dependants": {short(names[c]): len(P.dependents(c)) for c in order},
         "dependant_divisions": {short(names[c]): len({P.cust[d]["sector"] for d in P.dependents(c)}) for c in order},
-        "security": {short(names[c]): rnd(A[c], 1_000) for c in order},
-        "security_unrounded": {short(names[c]): round(A[c], 2) for c in order},
-        "commitment": {short(names[c]): rnd(B[c], 1_000) for c in order},
-        "sector_share": {"%s %s" % (s, W.SECTORS[s]): round(v[0], 1) for s, v in C.items()},
-        "sector_share_unrounded": {s: v[0] for s, v in C.items()},
-        "sector_counts": {s: [v[2], v[3]] for s, v in C.items()},
+        "dependants_lgd_ead": {short(names[c]): round(sum(P.lgd_ead(d) for d in P.dependents(c)), 2) for c in order},
         "order": [short(names[c]) for c in order],
         "lines": {short(names[c]): lines[c] for c in order},
+        "fallback": fallback,
+        "envelopes": ENVELOPES,
+        "envelope_curve": curve,
         "write_off_rounding": 50_000,
         "migration_date": W.MIGRATION.strftime("%d/%m/%Y"),
         "dependence_threshold_pct": 30,
         "threshold_corridor_pct": [10, 45],
+        "follow_up_corridor_months": [9, 18],
     }
     return F, P
 
@@ -146,101 +164,115 @@ def write_golden_xlsx(F, path):
     ws.title = "Intake 2027"
     navy = "1F3A5F"
     thin = Side(style="thin", color="999999")
+
+    def header(sheet, row, labels, left):
+        for j, lab in enumerate(labels, 1):
+            c = sheet.cell(row, j, lab)
+            c.font = Font(bold=True, color="FFFFFF")
+            c.fill = PatternFill("solid", fgColor=navy)
+            c.alignment = Alignment(wrap_text=True, vertical="top", horizontal="left" if j in left else "right")
+        sheet.row_dimensions[row].height = 46
+
+    def money(sheet, row, cols):
+        for j in cols:
+            sheet.cell(row, j).number_format = "#,##0"
+
+    def ruled(sheet, row, ncol):
+        for j in range(1, ncol + 1):
+            sheet.cell(row, j).border = Border(bottom=thin)
+
     ws["A1"] = "2027 intake: take on %s" % F["call"]
     ws["A1"].font = Font(bold=True, size=13, color=navy)
     ws["A2"] = "For the Credit Committee, February 2027 meeting. Values at the 31 December 2026 IFRS 9 run, in NZ$."
     ws["A2"].font = Font(italic=True, size=9, color="555555")
-    ws["A4"], ws["B4"] = "Take on", F["call"]
-    ws["A5"], ws["B5"] = "Working-capital lines", F["lines_chosen"]
-    ws["C5"] = "of the %s envelope" % format(F["envelope"], ",")
-    ws["A6"], ws["B6"] = "Write-off kept off, 2027 (nearest 50,000)", F["total_kept_off"]
+    ws["A4"], ws["C4"] = "Take on", F["call"]
+    ws["A5"], ws["C5"] = "Working-capital lines", F["lines_chosen"]
+    ws["D5"] = "of the %s envelope" % format(F["envelope"], ",")
+    ws["A6"], ws["C6"] = "Write-off kept off, 2027 (nearest 50,000)", F["total_kept_off"]
     for r in (4, 5, 6):
         ws.cell(r, 1).font = Font(bold=True)
-    ws["B5"].number_format = ws["B6"].number_format = "#,##0"
-    ws["B5"].alignment = ws["B6"].alignment = Alignment(horizontal="right")
-    hdr = ["Borrower", "Proposed line", "Own expected write-off (nearest 1,000)",
-           "Write-off kept off the book (nearest 50,000)", "Security value at 31 Dec 2026 (nearest 1,000)",
-           "Total commitment at 31 Dec 2026 (nearest 1,000)", "Taken on"]
-    ws.append([])
-    ws.append(hdr)
-    hr = ws.max_row
-    for j in range(1, len(hdr) + 1):
-        c = ws.cell(hr, j)
-        c.font = Font(bold=True, color="FFFFFF")
-        c.fill = PatternFill("solid", fgColor=navy)
-        c.alignment = Alignment(wrap_text=True, vertical="top", horizontal="left" if j in (1, 7) else "right")
+    ws["C5"].number_format = ws["C6"].number_format = "#,##0"
+    ws["C5"].alignment = ws["C6"].alignment = Alignment(horizontal="right")
+
+    hr = 8
+    header(ws, hr, ["Rank", "Borrower", "Proposed line", "Own expected write-off (nearest 1,000)",
+                    "Write-off kept off the book (nearest 50,000)", "Taken on"], left=(2, 6))
     taken = set(F["call"].split(" and "))
-    for b in F["order"]:
-        ws.append([b, F["lines"][b], F["own_k"][b], F["kept_off"][b], F["security"][b], F["commitment"][b],
-                   "Yes" if b in taken else ""])
-        for j in range(2, 7):
-            ws.cell(ws.max_row, j).number_format = "#,##0"
-        for j in range(1, 8):
-            ws.cell(ws.max_row, j).border = Border(bottom=thin)
+    for i, b in enumerate(F["order"], 1):
+        r = hr + i
+        for j, v in enumerate([i, b, F["lines"][b], F["own_k"][b], F["kept_off"][b], "Yes" if b in taken else ""], 1):
+            ws.cell(r, j, v)
+        money(ws, r, (3, 4, 5))
+        ruled(ws, r, 6)
         if b in taken:
-            for j in range(1, 8):
-                ws.cell(ws.max_row, j).fill = PatternFill("solid", fgColor="E8EEF5")
-    last = ws.max_row
+            for j in range(1, 7):
+                ws.cell(r, j).fill = PatternFill("solid", fgColor="E8EEF5")
+    fb = hr + len(F["order"]) + 2
+    ws.cell(fb, 1, "If a borrower taken on turns its package down").font = Font(bold=True, color=navy)
+    header(ws, fb + 1, ["", "Turns its package down", "Fall-back intake", "", "Working-capital lines",
+                        "Write-off kept off (nearest 50,000)"], left=(2, 3))
+    ws.merge_cells(start_row=fb + 1, start_column=3, end_row=fb + 1, end_column=4)
+    r = fb + 1
+    for b, x in F["fallback"].items():
+        r += 1
+        ws.cell(r, 2, b)
+        ws.cell(r, 3, x["intake"])
+        ws.merge_cells(start_row=r, start_column=3, end_row=r, end_column=4)
+        ws.cell(r, 5, x["lines"])
+        ws.cell(r, 6, x["kept_off"])
+        money(ws, r, (5, 6))
+        ruled(ws, r, 6)
     notes = [
         "Write-off kept off the book is the borrower's own expected write-off plus the defaults its package prevents "
-        "among Ruahine borrowers that take most of their receipts from it, at the rate the bank's own 2022 to 2025 "
-        "defaults show: %d of %d such borrowers defaulted within a year of their main payer, against %d in %d "
-        "borrower-years where the payer kept trading. Each default is valued at the borrower's facility LGD times EAD "
-        "in the 31 December 2026 run (terms of reference, section 3.5)." % (F["p1_k"], F["p1_n"], F["p0_k"], F["p0_n"]),
-        "Security values carry the latest valuation of each property held at 31 December 2026 forward by the regional "
-        "commercial property index (section 4.1). Total commitment is facility limits plus guarantees given for "
-        "other customers' facilities (section 4.2).",
+        "among Ruahine borrowers that take most of their receipts from it, at the rise in default the bank's own 2022 "
+        "to 2025 record shows: %d of %d such borrowers defaulted within a year of their main payer's default, against "
+        "%d in %d borrower-years where the main payer kept trading. Each default is valued at the borrower's facility "
+        "LGD times EAD in the 31 December 2026 run (terms of reference, section 3.5)."
+        % (F["p1_k"], F["p1_n"], F["p0_k"], F["p0_n"]),
+        "A fall-back intake is the best whole-package choice inside the envelope from the other watch-list borrowers. "
+        "The intake at other envelope sizes is on the next sheet.",
     ]
-    r0 = last + 2
+    r0 = r + 2
     for i, txt in enumerate(notes):
-        r = r0 + i
-        ws.cell(r, 1, txt).font = Font(size=9, color="444444")
-        ws.cell(r, 1).alignment = Alignment(wrap_text=True, vertical="top")
-        ws.merge_cells(start_row=r, start_column=1, end_row=r, end_column=7)
-        ws.row_dimensions[r].height = 50 if i == 0 else 26
-    for col, wd in zip("ABCDEFG", [38, 14, 17, 19, 19, 19, 9]):
+        rr = r0 + i
+        ws.cell(rr, 1, txt).font = Font(size=9, color="444444")
+        ws.cell(rr, 1).alignment = Alignment(wrap_text=True, vertical="top")
+        ws.merge_cells(start_row=rr, start_column=1, end_row=rr, end_column=6)
+        ws.row_dimensions[rr].height = 52 if i == 0 else 26
+    for col, wd in zip("ABCDEF", [7, 30, 16, 17, 19, 19]):
         ws.column_dimensions[col].width = wd
-    ws.row_dimensions[hr].height = 46
     ws.freeze_panes = "A%d" % (hr + 1)
     ws.page_setup.orientation = "landscape"
     ws.page_setup.fitToWidth = 1
     ws.page_setup.fitToHeight = 0
     ws.sheet_properties.pageSetUpPr.fitToPage = True
-    ws.print_area = "A1:G%d" % (r0 + len(notes) - 1)
-    ws.print_title_rows = "%d:%d" % (hr, hr)
+    ws.print_area = "A1:F%d" % (r0 + len(notes) - 1)
 
-    ws2 = wb.create_sheet("Sector defaults")
-    hi = max(F["sector_share"].items(), key=lambda kv: kv[1])[0]
-    ws2["A1"] = "2025 defaults by ANZSIC division: highest in %s" % hi.split(" ", 1)[1]
+    ws2 = wb.create_sheet("Envelope")
+    ws2["A1"] = "Intake by envelope: Matai Valley Foods in every one"
     ws2["A1"].font = Font(bold=True, size=12, color=navy)
-    ws2["A2"] = "Business borrowers performing at the end of 2024 that defaulted during 2025."
+    ws2["A2"] = "The whole-package intake that keeps the most 2027 write-off off the book at each envelope, in NZ$."
     ws2["A2"].font = Font(italic=True, size=9, color="555555")
-    ws2.append(["Division", "Performing at end of 2024", "Defaulted in 2025", "Share defaulted (%)"])
-    for j in range(1, 5):
-        c = ws2.cell(3, j)
-        c.font = Font(bold=True, color="FFFFFF")
-        c.fill = PatternFill("solid", fgColor=navy)
-        c.alignment = Alignment(wrap_text=True, vertical="top", horizontal="left" if j == 1 else "right")
-    for k, v in F["sector_share"].items():
-        s_ = k.split(" ")[0]
-        ws2.append([k, F["sector_counts"][s_][0], F["sector_counts"][s_][1], v])
-        ws2.cell(ws2.max_row, 2).number_format = ws2.cell(ws2.max_row, 3).number_format = "0"
-        ws2.cell(ws2.max_row, 4).number_format = "0.0"
-        for j in range(1, 5):
-            ws2.cell(ws2.max_row, j).border = Border(bottom=thin)
-    rr = ws2.max_row + 2
-    ws2.cell(rr, 1, "Borrowers and divisions from the 31 December 2024 IFRS 9 run. A default is dated by its first "
-                    "trigger and lasts until the borrower cures, as the business PD model's 2025 validation defines "
-                    "it.").font = Font(size=9, color="444444")
+    header(ws2, 4, ["Envelope", "Intake", "Working-capital lines", "Write-off kept off (nearest 50,000)"], left=(2,))
+    for i, x in enumerate(F["envelope_curve"]):
+        r = 5 + i
+        for j, v in enumerate([x["envelope"], x["intake"], x["lines"], x["kept_off"]], 1):
+            ws2.cell(r, j, v)
+        money(ws2, r, (1, 3, 4))
+        ruled(ws2, r, 4)
+        if x["envelope"] == F["envelope"]:
+            for j in range(1, 5):
+                ws2.cell(r, j).fill = PatternFill("solid", fgColor="E8EEF5")
+    rr = 5 + len(F["envelope_curve"]) + 1
+    ws2.cell(rr, 1, "Each intake is valued as on the first sheet; the 2027 envelope approved by the Board is "
+                    "NZ$%s (terms of reference, section 3.1)." % format(F["envelope"], ",")).font = Font(size=9, color="444444")
     ws2.cell(rr, 1).alignment = Alignment(wrap_text=True, vertical="top")
     ws2.merge_cells(start_row=rr, start_column=1, end_row=rr, end_column=4)
-    ws2.row_dimensions[rr].height = 38
-    ws2.row_dimensions[3].height = 32
-    ws2.column_dimensions["A"].width = 40
-    for col in "BCD":
-        ws2.column_dimensions[col].width = 16
-    ws2.freeze_panes = "A4"
-    ws2.page_setup.orientation = "portrait"
+    ws2.row_dimensions[rr].height = 30
+    for col, wd in zip("ABCD", [14, 52, 16, 19]):
+        ws2.column_dimensions[col].width = wd
+    ws2.freeze_panes = "A5"
+    ws2.page_setup.orientation = "landscape"
     ws2.print_area = "A1:D%d" % rr
     wb.save(path)
     postprocess.scrub(path, "Lance Middlemiss", "2027-01-22")
@@ -289,15 +321,19 @@ def write_golden_docx(F, path):
     p = doc.add_paragraph()
     p.add_run("Why Matai rather than Ridgeway. ").bold = True
     p.add_run("Ranked on each borrower's own expected write-off, the envelope would go to Kinloch Engineering and "
-              "Ridgeway Precast. That ranking leaves out what a package does for the borrowers that depend on the one "
-              "we support. %s of our borrowers, in packaging, labels, pallets, haulage, cold storage, cleaning, labour "
-              "hire and engineering, take most of their receipts from Matai Valley Foods. In our own record, %d of the "
-              "%d borrowers whose main payer defaulted between 2022 and 2025 defaulted within a year, against %d in %d "
-              "borrower-years where the main payer kept trading. A package that keeps Matai trading keeps its "
-              "dependants at the lower of those two rates, so it is worth NZ$%s against NZ$%s at Ridgeway, whose %s "
-              "dependant adds little to its own figure."
-              % (WORDS[F["dependants"]["Matai Valley Foods"]], F["p1_k"], F["p1_n"], F["p0_k"], F["p0_n"],
-                 c(k["Matai Valley Foods"]), c(k["Ridgeway Precast"]), WORDS[F["dependants"]["Ridgeway Precast"]].lower()))
+              "Ridgeway Precast: Matai's own figure is NZ$%s against Ridgeway's NZ$%s. That ranking leaves out what a "
+              "package does for the borrowers that depend on the one we support. %s of our borrowers, in packaging, "
+              "labels, pallets, haulage, cold storage, cleaning, labour hire and engineering, take most of their "
+              "receipts from Matai Valley Foods. In our own record, %d of the %d borrowers whose main payer defaulted "
+              "between 2022 and 2025 defaulted within a year, against %d in %d borrower-years where a borrower just as "
+              "dependent had a main payer that kept trading. Borrowers that took a smaller share from a failing payer are "
+              "no comparison, as the same default reached them. A package that keeps Matai trading keeps its "
+              "dependants at the lower rate, so it is worth NZ$%s against NZ$%s at Ridgeway, whose %s dependant adds "
+              "little to its own figure."
+              % (c(F["own_k"]["Matai Valley Foods"]), c(F["own_k"]["Ridgeway Precast"]),
+                 WORDS[F["dependants"]["Matai Valley Foods"]], F["p1_k"], F["p1_n"], F["p0_k"], F["p0_n"],
+                 c(k["Matai Valley Foods"]), c(k["Ridgeway Precast"]),
+                 WORDS[F["dependants"]["Ridgeway Precast"]].lower()))
     t = doc.add_table(rows=1, cols=4)
     t.style = "Light Grid Accent 1"
     for j, hd in enumerate(["Borrower", "Write-off kept off (NZ$)", "Proposed line (NZ$)", "Taken on"]):
@@ -328,11 +364,15 @@ def write_golden_docx(F, path):
     for r in src.runs:
         r.font.size = Pt(8.5)
         r.font.color.rgb = RGBColor(0x55, 0x55, 0x55)
-    doc.add_paragraph("The workbook gives each case's security value and total commitment, and the 2025 default "
-                      "rate by division for borrowers performing at the end of 2024. Matai's %s dependants are spread over "
-                      "%s divisions, so the sector view does not show this risk."
-                      % (WORDS[F["dependants"]["Matai Valley Foods"]].lower(),
-                         WORDS[F["dependant_divisions"]["Matai Valley Foods"]].lower()))
+    fbk, fbm = F["fallback"]["Kinloch Engineering"], F["fallback"]["Matai Valley Foods"]
+    p = doc.add_paragraph()
+    p.add_run("If a package is turned down. ").bold = True
+    p.add_run("Should Kinloch Engineering turn its package down, the unit falls back on %s (NZ$%s kept off); should "
+              "Matai Valley Foods, on %s (NZ$%s, Ridgeway's own dependant included). Matai is in the best intake at "
+              "every envelope from NZ$%s to NZ$%s, set out on the workbook's second sheet, where a ranking on own "
+              "figures never takes it."
+              % (fbk["intake"], c(fbk["kept_off"]), fbm["intake"], c(fbm["kept_off"]),
+                 c(F["envelopes"][0]), c(F["envelopes"][-1])))
     fp = sec.footer.paragraphs[0]
     fp.text = "Ruahine Bank  |  Credit Committee  |  Restricted"
     for r in fp.runs:
@@ -352,11 +392,12 @@ def write_golden_docx(F, path):
 def write_submission(F, path):
     k = F["kept_off"]
     c = lambda x: format(x, ",")
+    fbk, fbm = F["fallback"]["Kinloch Engineering"], F["fallback"]["Matai Valley Foods"]
     L = []
     L.append("## Tags\n")
     L.append("**Domain:** Banking, Credit & Financial Risk (expected credit loss provisioning).  ")
     L.append("**Analytical objective:** Opportunity Sizing & Decision Support.\n")
-    L.append("## 1. Final Recommendation\n")
+    L.append("## Final Recommendation\n")
     L.append("**The business support unit should take on %s, keeping NZ$%s of 2027 write-off off Ruahine's book "
              "with NZ$%s of the NZ$%s envelope.** A package at Matai also keeps out of default the Ruahine borrowers "
              "that take most of their receipts from it. Not %s, which lead on the two borrowers' own expected "
@@ -364,70 +405,82 @@ def write_submission(F, path):
              "which gives up Kinloch's NZ$%s for Ridgeway's NZ$%s.\n"
              % (F["call"], c(F["total_kept_off"]), c(F["lines_chosen"]), c(F["envelope"]), F["default_path_call"],
                 F["runner_up"], c(k["Kinloch Engineering"]), c(k["Ridgeway Precast"])))
-    L.append("## 2. Critical Components\n")
-    L.append("1. Ruahine borrowers taking most of their 2026 receipts from a watch-list borrower: **%d** from Matai "
-             "Valley Foods, **%d** from Ridgeway Precast, none from the others"
+    L.append("## Supplementary Questions\n")
+    L.append("### bsu_intake_2027.xlsx\n")
+    L.append("1. The first sheet opens with the choice and its total: take on %s; 2027 write-off kept off the book "
+             "NZ$%s. The eight watch-list packages it was chosen from sit below, largest first."
+             % (F["call"], c(F["total_kept_off"])))
+    L.append("2. For each borrower taken on, the intake to fall back on were it to turn its package down, and the "
+             "2027 write-off that intake keeps off, New Zealand dollars to the nearest %s:" % c(F["write_off_rounding"]))
+    L.append("   - Kinloch Engineering turns its package down: %s, NZ$%s" % (fbk["intake"], c(fbk["kept_off"])))
+    L.append("   - Matai Valley Foods turns its package down: %s, NZ$%s" % (fbm["intake"], c(fbm["kept_off"])))
+    L.append("3. A second sheet with one row per envelope, giving the intake and the 2027 write-off it keeps off:")
+    for x in F["envelope_curve"]:
+        L.append("   - NZ$%s: %s, NZ$%s" % (c(x["envelope"]), x["intake"], c(x["kept_off"])))
+    L.append("\n### bsu_intake_2027.docx\n")
+    L.append("4. A note to the credit committee giving the recommendation and its reasoning: Matai Valley Foods' own "
+             "expected write-off of NZ$%s against NZ$%s once its dependants are counted, the record's comparison "
+             "behind that figure, and the fall-back intakes." % (c(F["own_k"]["Matai Valley Foods"]),
+                                                                 c(k["Matai Valley Foods"])))
+    L.append("")
+    L.append("## Critical Components\n")
+    L.append("1. A package at Matai Valley Foods also keeps out of default the **%d** Ruahine borrowers taking most of "
+             "their 2026 receipts from it, and one at Ridgeway Precast the **%d** taking most of its receipts from "
+             "Ridgeway; no other watch-list borrower has such a borrower"
              % (F["dependants"]["Matai Valley Foods"], F["dependants"]["Ridgeway Precast"]))
-    L.append("2. Borrowers taking 30 per cent or more of their receipts from a payer that defaulted in 2022 to 2025 "
-             "defaulted within twelve months **%d** times in **%d**; in borrower-years whose such payer was neither in "
-             "default nor defaulting, **%d** times in **%d**" % (F["p1_k"], F["p1_n"], F["p0_k"], F["p0_n"]))
-    L.append("3. Matai Valley Foods' package keeps **NZ$%s** off the book against its own expected write-off of "
-             "**NZ$%s**\n" % (c(k["Matai Valley Foods"]), c(F["own_k"]["Matai Valley Foods"])))
-    L.append("## 3. Step-by-Step Solution\n")
-    L.append("1. Summed twelve-month PD times LGD times EAD over the facilities in ifrs9_facility_run_2026-12-31.csv "
-             "of each borrower on watch_list_2027-01.pdf: Matai Valley Foods NZ$%s of its own."
-             % c(F["own_k"]["Matai Valley Foods"]))
+    L.append("2. That protection is measured against borrowers just as dependent on a payer that kept trading: "
+             "borrowers taking 30 per cent or more of their receipts from a payer that defaulted in 2022 to 2025 "
+             "defaulted within twelve months **%d** times in **%d**, against **%d** times in **%d** borrower-years "
+             "whose such payer was neither in default nor defaulting" % (F["p1_k"], F["p1_n"], F["p0_k"], F["p0_n"]))
+    L.append("3. Priced that way, Matai Valley Foods' package keeps **NZ$%s** off the book, more than twice its own "
+             "expected write-off of **NZ$%s**\n" % (c(k["Matai Valley Foods"]), c(F["own_k"]["Matai Valley Foods"])))
+    L.append("## Step-by-Step\n")
+    L.append("1. Summed twelve-month PD times LGD times EAD over each watch-list borrower's facilities in "
+             "ifrs9_facility_run_2026-12-31.csv, borrowers and proposed lines from watch_list_2027-01.pdf: Kinloch "
+             "Engineering NZ$%s, Ridgeway Precast NZ$%s and Matai Valley Foods NZ$%s of their own. Filling the "
+             "envelope on these figures alone takes %s for NZ$%s, the reasonable analysis this answer rejects."
+             % (c(F["own_k"]["Kinloch Engineering"]), c(F["own_k"]["Ridgeway Precast"]),
+                c(F["own_k"]["Matai Valley Foods"]), F["default_path_call"], c(F["default_path_total"])))
     L.append("2. Built each customer's 2026 receipts in business_account_transactions_2021-2026.csv, own-account "
              "transfers and Ruahine lending left out and on-us counterparties resolved through "
              "customer_master_2026-12.xlsx and account_number_crosswalk_2023.csv: %d borrowers take most of their "
              "receipts from Matai Valley Foods and %d from Ridgeway Precast."
              % (F["dependants"]["Matai Valley Foods"], F["dependants"]["Ridgeway Precast"]))
     L.append("3. Dated each default by its first trigger in default_register_2021-2026.csv, with cures from "
-             "default_cures_2021-2026.csv, per the default definition in ifrs9_pd_model_validation_2025.pdf: %d of %d "
-             "borrowers that took 30 per cent or more of their receipts in the twelve months before a payer's first "
-             "trigger from that payer, and were performing at it, defaulted within twelve months of it, against %d of "
-             "%d borrower-years from 2022 to 2025 in which a borrower performing at the start of the year took 30 per "
-             "cent or more of the previous year's receipts from a Ruahine borrower neither in default at the start of "
-             "the year nor defaulting during it (any share from 10 to 45 per cent selects the same borrowers)."
-             % (F["p1_k"], F["p1_n"], F["p0_k"], F["p0_n"]))
-    L.append("4. Added to each watch-list borrower its PD times %s (%d of %d less %d of %d, the rise in a "
-             "dependant's chance of default when its main payer defaults) times each dependant's LGD times EAD: Matai "
-             "Valley Foods NZ$%s and Ridgeway Precast NZ$%s, the others their own figures."
+             "default_cures_2021-2026.csv, per the definition in ifrs9_pd_model_validation_2025.pdf: %d of %d "
+             "borrowers that had taken 30 per cent or more of their receipts in the previous twelve months from a "
+             "payer that defaulted in 2022 to 2025, and were performing at its first trigger, defaulted within twelve "
+             "months of it." % (F["p1_k"], F["p1_n"]))
+    L.append("4. Measured that against borrowers just as dependent on a payer that kept trading: %d of %d "
+             "borrower-years from 2022 to 2025 in which a performing borrower took 30 per cent or more of the previous "
+             "year's receipts from a Ruahine borrower neither in default at the start of the year nor defaulting during "
+             "it (any share from %d to %d per cent selects the same borrowers). Borrowers that took a smaller share "
+             "from a failing payer are no control, because that default reached them too."
+             % (F["p0_k"], F["p0_n"], F["threshold_corridor_pct"][0], F["threshold_corridor_pct"][1]))
+    L.append("5. Added to each watch-list borrower its PD times %s (%d of %d less %d of %d) times each dependant's LGD "
+             "times EAD and ranked the eight: Matai Valley Foods NZ$%s, Kinloch Engineering NZ$%s, Ridgeway Precast "
+             "NZ$%s with its one dependant, the rest their own figures."
              % (F["uplift"], F["p1_k"], F["p1_n"], F["p0_k"], F["p0_n"], c(k["Matai Valley Foods"]),
-                c(k["Ridgeway Precast"])))
-    L.append("5. Carried each property in security_register_2026-12.xlsx from the quarter in its valuer's reference "
-             "(the register's %s valuation dates are the core migration's load date) by the latest release in "
-             "commercial_property_index_2015-2026.csv, dropping mortgages title_instruments_2026-12.csv shows "
-             "discharged by 31 December 2026: the security values below." % F["migration_date"])
-    L.append("6. Added to each borrower's limits in the 2026 run the guarantees it gave on the Guarantees sheet, "
-             "matched by NZBN or by its current or former names in companies_register_extract_2026-12.csv, less "
-             "those the Deed log releases by 31 December 2026: the commitments below.")
-    L.append("7. Took the borrowers performing at the end of 2024 in ifrs9_facility_run_2024-12-31.csv and the "
-             "defaults that started in 2025, keying each register row written against a loan account to the "
-             "customer whose account repays that loan in business_account_transactions_2021-2026.csv: the sector "
-             "shares below.")
-    L.append("8. Chose, under section 3 of bsu_terms_of_reference_2027.pdf (a NZ$%s envelope, whole packages), the "
-             "borrowers whose proposed lines fit with the largest total: %s, NZ$%s."
-             % (c(F["envelope"]), F["call"], c(F["total_kept_off"])))
+                c(k["Kinloch Engineering"]), c(k["Ridgeway Precast"])))
+    L.append("6. Chose, under section 3 of bsu_terms_of_reference_2027.pdf (a NZ$%s envelope, whole packages), the "
+             "proposed lines with the largest total: %s, NZ$%s, ahead of %s at NZ$%s."
+             % (c(F["envelope"]), F["call"], c(F["total_kept_off"]), F["runner_up"], c(F["runner_up_total"])))
+    L.append("7. Solved the same choice without each borrower taken on (Kinloch Engineering out: %s, NZ$%s; Matai "
+             "Valley Foods out: %s, NZ$%s) and at each envelope from NZ$%s to NZ$%s (%s), Matai in every intake."
+             % (fbk["intake"], c(fbk["kept_off"]), fbm["intake"], c(fbm["kept_off"]), c(F["envelopes"][0]),
+                c(F["envelopes"][-1]), "; ".join("NZ$%s" % c(x["kept_off"]) for x in F["envelope_curve"])))
     L.append("")
-    L.append("## 4. Deliverable Answers\n")
-    L.append("### bsu_intake_2027.xlsx\n")
-    L.append("1. Take on %s; 2027 write-off kept off the book NZ$%s." % (F["call"], c(F["total_kept_off"])))
-    L.append("2. 2027 write-off each package would keep off, New Zealand dollars to the nearest %s:"
-             % c(F["write_off_rounding"]))
-    for b in F["order"]:
-        L.append("   - %s: NZ$%s" % (b, c(k[b])))
-    L.append("3. Value at 31 December 2026 of the property held as security, New Zealand dollars to the nearest thousand:")
-    for b in F["order"]:
-        L.append("   - %s: NZ$%s" % (b, c(F["security"][b])))
-    L.append("4. Total commitment at 31 December 2026, New Zealand dollars to the nearest thousand:")
-    for b in F["order"]:
-        L.append("   - %s: NZ$%s" % (b, c(F["commitment"][b])))
-    L.append("5. Share of business borrowers performing at the end of 2024 that defaulted in 2025, percent to one decimal:")
-    for s_, v in F["sector_share"].items():
-        L.append("   - %s: %.1f%%" % (s_, v))
-    L.append("\n### bsu_intake_2027.docx\n")
-    L.append("6. A one-page note to the credit committee giving the recommendation and its reasoning.")
+    L.append("No other conclusion survives. Ranking on the borrowers' own expected write-off, twelve-month or "
+             "lifetime, or adding the dependants' own IFRS 9 expected loss, keeps Ridgeway, because the IFRS 9 model "
+             "scores each borrower on its own accounts and the trade dependence sits only in the payments ledger; an "
+             "assumed rise, or one pooled over every payee of a failing payer whatever its share, keeps Ridgeway too. "
+             "Measuring the rise against the less dependent payees of the same failing payers, or against the book's "
+             "default rate, keeps the choice but understates the rise, Matai's figure and every intake that holds "
+             "Matai, since the payer's default reached those borrowers too. Any receipts threshold from %d to %d per "
+             "cent, a %d- to %d-month follow-up, and a baseline from payers that never defaulted or from the "
+             "dependants' own PDs file the same figures."
+             % (F["threshold_corridor_pct"][0], F["threshold_corridor_pct"][1], F["follow_up_corridor_months"][0],
+                F["follow_up_corridor_months"][1]))
     open(path, "w").write("\n".join(L) + "\n")
 
 
@@ -475,9 +528,9 @@ def write_metadata(counts, target, path):
     json.dump(meta, open(path, "w"), indent=1)
 
 
-def zip_target(target, path):
+def zip_target(target, path, names=None):
     with zipfile.ZipFile(path, "w", zipfile.ZIP_DEFLATED) as z:
-        for f in sorted(os.listdir(target)):
+        for f in sorted(names or os.listdir(target)):
             zi = zipfile.ZipInfo(f, date_time=(2027, 1, 22, 9, 40, 0))
             zi.compress_type = zipfile.ZIP_DEFLATED
             zi.external_attr = 0o644 << 16
@@ -503,6 +556,7 @@ def main():
     os.makedirs(GOLDEN, exist_ok=True)
     write_golden_xlsx(F, os.path.join(GOLDEN, "bsu_intake_2027.xlsx"))
     write_golden_docx(F, os.path.join(GOLDEN, "bsu_intake_2027.docx"))
+    zip_target(GOLDEN, os.path.join(TASK, "golden.zip"), ["bsu_intake_2027.xlsx", "bsu_intake_2027.docx"])
     write_submission(F, os.path.join(TASK, "submission.md"))
     write_metadata(counts, tgt, os.path.join(TASK, "metadata.json"))
     for script in ("checks.py", "verify.py"):

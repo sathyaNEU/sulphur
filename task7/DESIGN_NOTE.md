@@ -15,7 +15,7 @@ generator and shell, under the objective Opportunity Sizing & Decision Support. 
 | World | Ruahine Bank, lower North Island; about 900 business borrowers whose loans and transaction accounts it carries; head of business support Stella Perano, credit risk analyst Lance Middlemiss (guard.py names, en_NZ, seed 127); drawn as Fernmark Bank and renamed at stage 3, FernMark being New Zealand's national brand mark (H21), with Harcourt Packhouse renamed Marlowe Packhouse beside Harcourts |
 | Decision | which watch-list borrowers the unit takes on within its NZ$6.0 million 2027 envelope of new working-capital lines, each package keeping its borrower out of default in 2027 |
 | Quantity | the 2027 write-off each package keeps off the book, at the IFRS 9 LGD and EAD carried at 31 December 2026 |
-| Shape | 05 allocation to a fixed total (the envelope); every watch-list borrower graded |
+| Shape | 05 allocation to a fixed total (the envelope), with its fall-backs (the intake if either borrower taken on turns its package down) and its envelope curve (the intake at every envelope from NZ$4.5 million to NZ$6.5 million); the eight packages behind the choice sit in the workbook, not asked |
 | Deliverables | bsu_intake_2027.xlsx, bsu_intake_2027.docx |
 | Default path answer | Kinloch Engineering and Ridgeway Precast, NZ$3.00 million kept off the book on its own basis |
 | Golden | Kinloch Engineering and Matai Valley Foods, NZ$3.35 million kept off the book (NZ$3,343,287 unrounded, asserted) |
@@ -80,23 +80,23 @@ The five conditions of 2026-11-07, each answered here before any data is cut.
    every historical figure the pack holds: they differ only on the counterfactual the package creates, a payer's
    default that does not happen, which no history can replay. No R-squared, back-test or reconciliation separates
    them; the step is reached by asking what else the averted default changes, and the payments ledger answers it.
-3. **The asks are not executable from filed rules.** Each rides a reconstruction across two systems or grains that
-   no sentence states (`## Ask sheet`): security values whose valuation dates the 2023 core migration overwrote,
-   the true date surviving only in the valuer's reference text, and mortgages discharged at Land Information records
-   while the security register still lists them; guarantees given under a company's former name, linked only
-   through the companies register, and released in the deed log while the register still shows them active;
-   defaults the register records at the grain of the loan account in arrears, a number no customer record lists,
-   tied to their borrower only by the loan repayments in the transaction ledger. Each top response keeps under two
-   fifths of the ask weight, measured on the cut pack (cracker sheet below).
+3. **The asks are not executable from filed rules.** Every ask figure is the call's own quantity re-solved
+   across cells the default path cannot fill (`## Ask sheet`): the intake to fall back on if either borrower taken on
+   turns its package down, and the intake at every envelope from NZ$4.5 million to NZ$6.5 million. Each cell reads
+   the eight package values the deep step produces, so the default path files a different set or write-off in every
+   one (0 of 14 kept, measured on the cut pack), and a landed run that measures the rise on an unclean comparison
+   misses most of the write-offs. The case-file measures and the sector shares of the first platform round were
+   filed procedures both runs executed to the dollar; they are no longer asked (`## Tried and rejected`).
 4. **The ladder keeps at least one of the top two off the call.** The call flips only for a response that both
    thinks of the averted payer default's effect on its payees and measures that effect from the bank's own record:
    an assumed uplift under 0.268 keeps Ridgeway, the borrower's own expected loss keeps Ridgeway, adding the
    payees' own IFRS 9 expected loss keeps Ridgeway, and a pooled rate over every payee of a defaulting payer keeps
-   Ridgeway (`## Ladder`). The cracker on the call and the mirror off it measure a pair ceiling of 28.5; with each of
-   the pair keeping two fifths of the ask weight the pair sits near 50; built under 60.
-5. **The three rules** are in `## Three rules`, one labelled line each; `precut.py` exit 0 is the gate.
+   Ridgeway (`## Ladder`). The first platform round measured it: one run landed (98), one stopped at its own evidence
+   (58). With the asks re-sited the paper pair is 56.0 when the landed run takes the clean comparison and 26.9 to
+   48.1 when it does not (`generator/ceiling.py`); under the bar of 60, over the paper target of 50.
+5. **The Sulfur standard** is in `## Deep reasoning`, one labelled line each; `precut.py` is the gate.
 
-## Three rules
+## Deep reasoning
 
 Task type: expected-credit-loss-provisioning (Banking, Credit & Financial Risk), which serves Opportunity Sizing & Decision Support in the taxonomy.
 Domain test: the deciding quantity is the credit write-off a support package keeps off the bank's book in 2027, the field's own expected credit loss (twelve-month PD times LGD times EAD) read with one obligor's 2027 default removed; with another field's nouns there is no probability of default, loss given default or exposure at default, and no trade dependence that carries one firm's default to the firms it pays, so the task stops reading the same.
@@ -110,6 +110,13 @@ Analyst test: an analyst who reads every field and rule correctly sums each watc
 Estimand: `bsu_terms_of_reference_2027.pdf` section 3 files the WHAT: the 2027 packages go to the watch-list borrowers whose support keeps the most write-off off Ruahine's book within the NZ$6.0 million envelope of new working-capital lines, a supported borrower treated as not defaulting in the twelve months of its package, each default on the book valued at its facilities' IFRS 9 LGD times EAD as carried at 31 December 2026; the population is every Ruahine business borrower on that run, members not yet in default included, and the comparison is the book with the package against the book without it.
 No decoy: nothing is planted to be caught: no copied block, hidden rule, memo, draft, briefing or stakeholder figure carries the wrong answer; the IFRS 9 run and its validation are true records answering their own questions (each borrower's PD, the model's calibration).
 No certified replay: no certified or published figure is reproduced to recover the method; the uplift is a rate counted from the bank's own default register, not a rule backed out of settled cases.
+Chain: (1) the validated IFRS 9 run values each package at the supported borrower's own expected write-off and ranks Kinloch Engineering and Ridgeway Precast first; (2) the terms value write-off over every borrower on the book, so a package's counterfactual also holds the Ruahine borrowers whose receipts depend on the supported firm, found only as shares of receipts between customers in the crosswalked payments ledger (8 at Matai Valley Foods, 1 at Ridgeway Precast); (3) the rise in such a borrower's chance of default when its main payer defaults is measured from the bank's own 2022 to 2025 record against borrowers just as dependent on a payer that kept trading (13 of 31 against 5 of 211, a rise of 0.3957); (4) priced at the payer's PD and each dependant's LGD times EAD, Matai's package keeps NZ$1,750,000 off the book and the envelope goes to Kinloch and Matai, NZ$3,350,000; (5) the same package values decide both fall-back intakes and the intake at every envelope from NZ$4.5 million to NZ$6.5 million, Matai in each.
+Judgment: the counterfactual comparison: a package averts the payer's default, so the rise is the dependants' default rate when the payer defaults less their rate when an equally important payer keeps trading; the record justifies it, since payees above the threshold of a failing payer default at 13 of 31, payees of the same failing payers below it at 6 of 61 (that default reached them too, so they are no control), and payees of surviving payers at 5 of 211, which the dependants' own PDs (2.0 to 2.9 per cent) match within half a point; the raw 13 of 31 or the contaminated 6 of 61 keep the call and miss the total and the asks.
+One-fact test: the likeliest hint, that some borrowers depend on Matai's payments, still leaves the solver to find them through on-us payments half keyed to pre-migration numbers, date defaults across two customers by the filed definition, measure the rise on the comparison that matches the counterfactual, and carry it through PD, LGD and EAD into the knapsack, the fall-backs and the envelope curve; no single sentence hands over a figure.
+No replay: no published or certified figure is re-derived and no stated number is simply wrong: the IFRS 9 run and its validation are true records answering their own questions, and the golden adds a quantity none of them states.
+Pinned: every rival a careful analyst runs is run on the clean truth in `generator/checks.py`: own twelve-month or lifetime expected write-off, the payees' own IFRS 9 expected loss, an assumed 0.25 and a rise pooled over every payee of a failing payer all keep Ridgeway (ruled out by the record's 13 of 31 against 5 of 211); thresholds from 10 to 55 per cent, follow-ups of 9 to 18 months, lookbacks of 3 to 24 months and baselines from surviving payers, never-defaulting payers or the dependants' own PDs (48 members) file the call, the total, Matai's figure and all 14 ask cells; a logistic fit on share and three share bands file the same (SF11); no baseline and the contaminated comparison are method errors the record exposes.
+Run forecast: one run stops at rung 1, or computes the dependence and the record's rates and then declines to price them (dismissed own evidence, the first round's second run at 58), and files Kinloch and Ridgeway with fall-backs and an envelope curve that never hold Matai, 0 of 14 ask cells; a run that lands may still leave the chain unfinished (the raw 13 of 31 with no baseline netted, a contaminated comparison, or Ridgeway's own dependant unpriced) and miss the total and the envelope rows.
+Strategy label: Banking 07 Correlated defaults, not independent ones (UNTESTED), built in the live form of Economics 02 (WORKS IN FORM, Part A clean comparison, Example 8): the spillover visible only through a relation in the data, the payments between the bank's own customers, priced against a comparison its default did not reach.
 Lesson: a credit intervention's value includes the defaults it averts among borrowers whose receipts depend on the supported firm, and the bank that processes their payments can see that dependence and measure its consequence; no build on file teaches default contagion through trade dependence (task177's joint-liability groups and task446's ownership flags are group structures of another kind).
 
 ## Survivor anatomy
@@ -118,7 +125,7 @@ Actor: the deciding property, how much of a package's value sits in other borrow
 Link: the payer and payee are linked only through on-us counterparty account numbers, half of them in the pre-migration format resolved by the 2023 crosswalk, and the consequence only through default dates months apart on different customers; no key joins a borrower to its dependants and no sentence asks for the comparison.
 Reflex: the field's named method for the deciding quantity, the twelve-month expected credit loss from the validated IFRS 9 run, sits at rung 1 and files Kinloch Engineering and Ridgeway Precast, NZ$3.00 million.
 Back-test: the textbook route validates: the PD model's back-test on 2024 defaults is green in the lower grades and amber in the riskier ones, monitored without recalibration, and the terms file the run's PD (3.4); the own-expected-loss ranking is consistent with every figure the pack holds, and the defaults that follow a payer's default sit inside each grade's count, where no back-test separates them from the rest.
-Second use: the payments ledger is the bank's record of its business borrowers' accounts, the source the watch list's commentary on turnover and account conduct is drawn from and the record any support case starts from; the 2023 crosswalk serves every pre-cut-over account reference in it; the default register carries the 2025 defaults the sector table needs; the year-end run carries the limits the commitment figure needs.
+Second use: the payments ledger is the bank's record of its business borrowers' accounts, the source the watch list's commentary on turnover and account conduct is drawn from and the record any support case starts from; the 2023 crosswalk serves every pre-cut-over account reference in it; the default register is the credit team's record of every default the bank's validation and reporting count; the year-end run is the provision the bank books.
 Shock: Matai Valley Foods is unremarkable on the statistics a credit analyst sorts by: second of eight by PD but fourth by exposure and fourth by its own expected write-off, its line inside the range of the others, its watch-list commentary ordinary; its eight dependants, in packaging, labels, pallets, haulage, cold storage, cleaning, labour hire and engineering, sit in three divisions and none is its own; no sort of the watch list on one column fills the envelope with Kinloch and Matai (by PD it takes Ridgeway and Matai, by exposure or own expected loss Kinloch and Ridgeway, by line or date added Marlowe and Ridgeway).
 Pins: the WHAT is filed in the support unit's terms of reference (the envelope, a supported borrower not defaulting, write-off valued at the year-end LGD and EAD, the whole book as the population) and the default definition in the model validation report; no filed sentence names payers, payees, receipts, dependence, contagion, a follow-up window or a threshold.
 
@@ -219,125 +226,99 @@ and is ordered by date added; no total in the pack ties only under the golden.
 
 ## Ask sheet
 
-Three asks, each a component of the committee's case for every watch-list borrower or an audit trail of an input the
-call consumes (H18), none computed over the call's own rows, each riding a reconstruction across two systems that no
-sentence states.
+Two asks, each the call's own quantity re-solved across cells the default path cannot fill. Every figure in both is
+computed from the eight package values the deep step produces (own expected write-off plus the payer's PD times the
+record's rise times each dependant's LGD times EAD), so a run that values the packages on their own expected write-off
+files a different set or write-off in every cell, and a landed run that measures the rise on an unclean comparison
+misses most of the write-offs. Neither ask names a payee, a dependence or a default record. The first round's
+case-file measures (security value, total commitment) and 2025 sector shares are no longer asked: terms 4.1 and 4.2
+and the validation report's default definition file their method, and both runs executed them to the dollar.
 
-**Ask A. The value at 31 December 2026 of the property held as security for each watch-list borrower's lending,
-each valuation carried forward from the date it was made by the regional property index (8 figures, NZ$ to the
-nearest thousand).** H18: a measure every candidate carries that the call does not turn on (the call values defaults
-at the run's LGD). Use: the committee's security position for each case. Files: `security_register_2026-12.xlsx`
-(Properties: 14 columns), `title_instruments_2026-12.csv` (Land Information mortgage instruments: 8 columns),
-`commercial_property_index_2015-2026.csv` (7 columns), the customer master. Primary A1 (D8, a recorded date for the
-event date): the 2023 core migration loaded every legacy security with the migration date as its valuation date; the
-date the valuation was made survives only in the valuer's reference text, written each valuer's own way. Primary A2
-(D4, absence in a file no habitual join reaches): mortgages discharged at Land Information in 2026 on properties the
-borrowers sold, still listed as held in the security register; only the title instruments show the discharge.
-Hazards: the index's latest quarter published provisional beside revised earlier quarters (latest release per
-quarter); title references written with and without the land district prefix. Stops: register date, everything
-listed (lazy); true date, discharged kept; register date, discharged dropped; golden. Every figure moves by several
-bins under each mishandling (asserted). Pin test: the sentence fixes the basis (each valuation from the date it was
-made, the regional index, held at 31 December) and leaves open which record holds the made date and which properties
-are still held. Realism: a core migration stamping its load date on carried records, and a register that learns of a
-discharge only when someone updates it, are what such systems do.
+**Ask 1. For each borrower taken on, the intake to fall back on were it to turn its package down, and the 2027
+write-off that intake keeps off (2 sets and 2 figures, NZ$ to the nearest 50,000).** Reads: the eight package values,
+the envelope and the proposed lines. Golden: Kinloch Engineering out, Matai Valley Foods and Ridgeway Precast,
+NZ$3,200,000; Matai Valley Foods out, Kinloch Engineering and Ridgeway Precast, NZ$3,050,000. Second judgment: the
+comparison the rise is measured on (the raw 13 of 31 puts Kinloch's fall-back at NZ$3,250,000) and Ridgeway's own
+dependant (left unpriced, the fall-backs fall to NZ$3,150,000 and NZ$3,000,000). Files on the path: the 2026 run
+(13 columns), the ledger (11), the customer master (two sheets), the crosswalk (4), the register (7), the cures (5),
+the watch list and the terms. Shallow: Kinloch out, Brightwater Motor Group, Ridgeway Precast and Selwyn Joinery,
+NZ$2,550,000; no Matai row, since it never takes Matai on. Pin test: the sentence fixes the WHAT (the whole intake
+fallen back on, the same envelope, whole packages, the write-off that intake keeps off); "keep the other borrower and
+fill the freed line" and "re-solve among the other seven" file the same intakes (asserted), and each fall-back leads
+the next-best set by NZ$430,572.
 
-**Ask B. The most each watch-list borrower could owe Ruahine at 31 December 2026: its facility limits plus what it
-has guaranteed of other customers' facilities, an unlimited guarantee counting the guaranteed customer's limits (8
-figures, NZ$ to the nearest thousand).** H18: a measure every candidate carries. Use: the committee's total
-commitment for each case. Files: the year-end run (limits), `security_register_2026-12.xlsx` (Guarantees: 9
-columns; Deed log: 6 columns), `companies_register_extract.csv` (NZBN, current and former names with dates: 7
-columns), the customer master. Primary B1 (D7, the true key elsewhere): guarantees executed before a guarantor's
-change of name record the former name and, before 2016, no NZBN; only the companies register's former names link
-them to the borrower. Primary B2 (D2, a state rebuilt from an event log): guarantees released during 2026 are
-recorded as released only in the deed log, while the Guarantees sheet still shows them active. Hazards: limited
-amounts written in words or with "plus interest and costs"; guaranteed customers named by trading name. Stops:
-NZBN and exact name only, every listed guarantee (lazy); former names linked, released kept; exact names, released
-dropped; golden. Pin test: the sentence fixes the WHAT (limits plus guarantees given, unlimited at the guaranteed
-limits) and leaves open which guarantees are the borrower's and which still stand.
+**Ask 2. The intake and the 2027 write-off it keeps off at every envelope from NZ$4.5 million to NZ$6.5 million in
+steps of NZ$500,000 (5 sets and 5 figures).** Reads: as ask 1. Golden: Brightwater Motor Group and Matai Valley Foods,
+NZ$2,200,000; Matai Valley Foods and Selwyn Joinery, NZ$2,450,000; Matai Valley Foods and Ridgeway Precast,
+NZ$3,200,000; Kinloch Engineering and Matai Valley Foods, NZ$3,350,000; Matai Valley Foods, Northgate Print and
+Ridgeway Precast, NZ$3,450,000. Second judgment: as ask 1, and the optima are not nested (no intake holds the one
+before), so a greedy fill by write-off per dollar misses the NZ$4.5 million row. Shallow: Ridgeway Precast and Selwyn
+Joinery NZ$2,100,000; Kinloch Engineering and Selwyn Joinery NZ$2,300,000; Kinloch Engineering and Ridgeway Precast
+NZ$3,000,000 twice; Coastline Aggregates, Kinloch Engineering and Ridgeway Precast NZ$3,350,000; no row holds Matai.
+Pin test: the envelope list, unit and rounding are in the sentence; each row's intake leads the next-best set by
+NZ$31,044 or more, every write-off clears its bin edge by NZ$8,995 or more, and the 48 standing-family members and
+SF11's two grains file every row (asserted). Envelopes of NZ$4.0, 7.0 and 8.0 million spread across two bins under the
+family and are not asked.
 
-**Ask C. For each sector, the share of business borrowers performing at the end of 2024 that defaulted during 2025
-(per cent to one decimal, 7 figures).** H18: an audit trail of the PD input the call consumes, realised defaults by
-sector beside a model the validation report tests by grade only. Use: the committee's view of which sectors default
-most. Files: `ifrs9_facility_run_2024-12-31.csv` (12 columns), `default_register_2021-2026.csv` (7 columns),
-`default_cures_2021-2026.csv` (5 columns), the customer master's Accounts sheet, the transaction ledger's loan
-repayments, and the validation report's default definition (dated by the first trigger, in default until the cure).
-Primary C1 (D6, a register at another grain than its name): the register writes an unlikely-to-pay default against
-the customer number and a 90-days-past-due default against the account in arrears; where that account is a loan, its
-number is in no customer record, and only the ledger's loan repayments (LN rows from the borrower's cheque account to
-the loan account) tie it to a borrower. Eleven of the twenty-four defaults of 2025 open on such a row; left unkeyed,
-every sector's share falls by 1.9 points or more. The register keys rows to loan accounts in every year (6, 7, 11, 7,
-14 and 6 from 2021 to 2026), so the organ is the register's habit, never a 2025 plant. Hazards, executed by the filed
-default definition and kept as texture: a default's two trigger rows count once at the first trigger; borrowers that
-met unlikely-to-pay late in December 2024 are in default at the year end though the 2024 run, cut off for arrears on
-20 December, still staged them performing; cures in 2024 return a borrower to the base and a 2025 re-default counts.
-Stops: the run's stage with customer-keyed rows only (lazy); the definition executed with loan rows unkeyed (the
-cracker); golden. Pin test: the sentence fixes the WHAT (performing at the end of 2024, defaulted during 2025, by
-sector), the filed definition fixes how a default is dated, and which register rows belong to which borrower is left
-to the records.
+Mess on both asks' path, handled the same way by every careful run and neutral to every cell: the 2023 renumbering
+(asserted for the crosswalk), the register keyed three ways, a default's two trigger rows. The pack's case-file data
+(security register, title instruments, property index, companies register) now serve no ask and ship as context with
+the sector appetite and the regional indicators, unlabelled; deleting all six moves no package value (asserted).
 
-Main population's zero-counts (asserted from the shipped rows): no device or hazard row among the watch-list
-borrowers' facilities in the 2026 run's PD, LGD and EAD; no anchor or payee default with triggers straddling a year
-end or a cure; no payee whose receipt share sits between 20 and 40 per cent; every payer and payee default the call reads
-opens on a customer-keyed row, and the call reads the same rates with the register's account rows dropped.
+Main population's zero-counts (asserted from the shipped rows): no payee whose receipt share sits between 20 and 40
+per cent; no watch-list payee in default or stage 3; every payer and payee default the call reads opens on a
+customer-keyed row, and the call reads the same rates with the register's account rows dropped.
 
-| Hazard | Asks moved | Per-ask delta |
-|---|---|---|
-| 2023 migration (dates, numbers) | A, and the call's crosswalk (neutral, asserted) | A: every borrower |
-| the index's provisional latest quarter beside revised earlier quarters | A | A: 7 of 8 figures; the terms file the latest published value, so the cracker executes it |
-| title references with and without the land district prefix | A | normalised by the battery |
-| a default's two trigger rows; December 2024 unlikely-to-pay; 2024 cures | C | executed by the filed default definition |
-| guaranteed customers named by trading name | B | B: one guarantee |
+| Ask | Cracker (call landed, rise on the clean comparison, battery run) | Landed, Ridgeway's dependant unpriced | Landed, raw rise | Landed, less dependent payees as control | Shallow (default path) | Cracker's verdict |
+|---|---|---|---|---|---|---|
+| 1 fall-back intakes | 4 of 4 cells | 2 of 4 | 3 of 4 | 3 of 4 | 0 of 4 | keep |
+| 2 envelope rows | 10 of 10 cells | 8 of 10 | 5 of 10 | 1 of 10 | 0 of 10 | keep |
 
-Referee: none; every ask's golden handling is named in a block 3 step only the grader reads.
+The cracker keeps every ask: no second judgment the clean landed run would miss survives the freeze, because the
+call's files are frozen, the deep step's own conventions (threshold, window, lookback, baseline, grain) converge by
+design, and every leak-free handle on the dependence is a function of the package values. The asks' own judgment (the
+clean comparison, Ridgeway's dependant priced) costs a landed run that takes another route 6 to 10 of 14 cells.
 
-| Ask | Cracker (call landed, battery run, every filed rule executed) | Figures it keeps | Verdict |
-|---|---|---|---|
-| A security value | latest index release and title prefixes handled; the register's dates used; discharged properties kept | 0 of 8 | miss |
-| B most it could owe | NZBN and exact names matched; former names unlinked; released guarantees kept | 0 of 8 | miss |
-| C sector shares | the default definition executed (first trigger, cures, December 2024 unlikely-to-pay at the year end); rows keyed by a loan account no customer record lists left unkeyed | 0 of 7 | miss |
-
-After the notice (one device found and handled in full): made dates found with discharges missed keeps 5 of 8 of
-ask A, discharges found with the register's dates 0 of 8; former names linked with releases missed keeps 4 of 8 of
-ask B, releases found with exact names the other 4 of 8 (disjoint blocks); loan accounts resolved through the ledger
-keep ask C whole, 7 of 23 ask figures (30.4 per cent), the largest single keep and under two fifths alone.
-Mirror leakage: 0.0 per cent of ask weight, measured (the mirror stops at R1 and at each ask's lazy stop, 0 of 23).
-Pair ceiling: 28.5 measured on the cut pack (cracker 45.0 on the call keeping 0 of 23 ask figures, mirror 12.0 off
-the call keeping 0 of 23); a response on the call that also resolves ask C's loan accounts scores 61.7 and the pair 36.9.
+Shallow keep: 0.0 per cent of ask weight (0 of 14 cells; an assumed rise of 0.25 keeps 1).
+Pair ceiling: 56.0 (the clean landed run 100.0 beside the shallow run 12.0, on 38, 7 and 55); 48.1 with a landed run that leaves Ridgeway's dependant unpriced, 34.7 with the raw rise and 26.9 with the contaminated comparison. The first round's pair under the old asks was 78.0 (98 and 58).
 Measured by: generator/ceiling.py on the cut pack.
 
 ## Deliverables and prompt
 
-Deliverables: `bsu_intake_2027.xlsx` (the choice and the total, then a line per watch-list borrower with the
-write-off its package keeps off the book, the security value and the most it could owe; a sector sheet) and
-`bsu_intake_2027.docx` (a one-page note for the credit committee). Criteria: the set (1), the total (1), eight
-borrowers times three figures (24), seven sectors' shares (7), two files (2): 35.
+Deliverables: `bsu_intake_2027.xlsx` (the choice and its total at the head, the eight watch-list packages it was chosen
+from below it, then the fall-back intake for each borrower taken on; a second sheet with the intake and its write-off at
+each envelope from NZ$4.5 million to NZ$6.5 million) and `bsu_intake_2027.docx` (a note for the credit committee).
+Criteria the blocks generate: the set (1), the total (1), the three critical components (3), the fall-backs (2 sets,
+2 figures), the envelope rows (5 sets, 5 figures), two files (2). The per-borrower package values, the security
+values, the commitments and the sector shares are not asked.
 
+## Prompt contract
+
+What the author's voice rewrite may not drop or change: the first sentence, the call (frozen: how much write-off the
+unit keeps off the book through the watch-list borrowers it takes on within its 2027 envelope); the head of the
+workbook (the choice and its total); the fall-back ask (for each borrower taken on, the whole intake fallen back on
+were it to turn its package down, and the 2027 write-off that intake keeps off); the second sheet (the intake and its
+2027 write-off at every envelope from NZ$4.5 million to NZ$6.5 million in steps of NZ$500,000); the deliverable names
+`bsu_intake_2027.xlsx` and `bsu_intake_2027.docx`; the rounding (write-offs in New Zealand dollars to the nearest
+50,000). The rewrite may add no payee, dependant, supplier, receipts share, default record, comparison or method, no
+per-borrower list of package values, and no count of borrowers.
 
 ## Pre-ship check
 
-- The three rules, re-read against the built pack: the decisive step is still analytical (an uplift measured from the
-  bank's own default record and priced over the borrowers whose receipts depend on the payer); the mess is still only
-  Layer 1 (the 2023 renumbering, the register keyed three ways, valuer references, former names, the index's releases);
-  nothing is planted. The leak reader's question 6 and the judge's Gate H both read it as analytical from outside.
-- Leak: `leak.py` REVIEW with no LEAK. The reader, twice: no sentence names the decisive step, no file ranks the
-  candidates or explains the data, nothing reads as the answer; its question 5 reads terms 3.5 literally as the change
-  in expected write-off across the whole book, the golden's estimand. It took the knock-on to run through guarantees.
-- Stump-vocabulary sweep lines, ruled here and never sent to the reader: the terms carry default, twelve-month,
-  million and carried as the WHAT's own words; the validation report carries default, twelve-month and record as its
-  subject. Harmless, neither names payees, receipts or dependence.
-- Answer-figure sweep lines: the terms' NZ$6.0 million envelope and section number 4.2 and a validation band edge
-  coincide with two sector shares; six guarantee limits coincide with rounded write-offs. Harmless coincidences of
-  round amounts; no file ranks the candidates. The block 1 rival figure that matched Matai's proposed line was dropped.
-- Judge: pass 1 DETERMINISTIC with FIX_NOW on the control count, fixed in the write-up (the control group stated at
-  the 30 per cent cut, which any cut from 10 to 45 per cent matches, and the uplift's composition shown); the one
-  re-judge returned DETERMINISTIC, APPROVE, Gate G statistical rigor and analytical non-defect with no surface-read
-  dependency, Gate H domain, layers and decisive step analytical. Its residual, the knock-on implied by 3.5 rather than
-  instructed, is the stump: filing it would name the step.
-- Duplicate: `guard.py heart` WARN answered in `## Draw`; `surface` clean, no unplanned persona.
-- House fixes run: H1 (both containers audited clean), H2 (every note figure from `generator/ladder.py`), H3 (the
-  note's counts emitted), H4 (16 members at the archive root, equal to the tree and `metadata.json`), H7 (byte-identical
-  rebuilds, zip cut last), H13 (no constant id step; long-tailed transaction ids), H14 (SF11), H16 (no date past the
-  pull), H21 (renames), H29 (bounds stated exactly), H34 (`ceiling.py` refuses an empty denominator).
+- The Sulfur standard, re-read against the rebuilt pack: the decisive step is still analytical (an uplift measured
+  from the bank's own default record against a clean comparison and priced over the borrowers whose receipts depend
+  on the payer); the mess is still only Layer 1; nothing is planted; the call's files, rows and figures are unchanged
+  (`freeze.py check task7 --mode rubric`).
+- Asks: both ride the package values (`## Ask sheet`); the default path keeps 0 of 14 cells and the clean landed run
+  all 14, so the paper pair is 56.0, under the bar and over the paper target of 50 (`precut.py` reports it).
+- Leak: `leak.py` REVIEW with no LEAK after its Creator rule learned LibreOffice's module names (a genuine Writer
+  export names "Writer"); the answer-figure lines are guarantee limits that coincide with rounded write-offs and the
+  watch list's own names, as before. The prompt changed, so the leak reader and the determinism judge run on this cut.
+- Critical components: numbers frozen, wording bound to the priced step (the protection, the clean comparison, Matai's
+  figure against its own); the Final Recommendation is unchanged.
+- House fixes: H2 (every note and block figure from the generator), H3 (no figure stated twice by two rounding
+  paths), H4 (16 members at the archive root), H7 (byte-identical rebuilds, the zips cut last), H29 (bounds stated
+  exactly).
 
 ## Tried and rejected
 
@@ -428,3 +409,11 @@ borrowers times three figures (24), seven sectors' shares (7), two files (2): 35
   2026-11-08): two-digit PDs, term loans drawn exactly to their limits and balances in whole thousands read as built,
   and an honest one-sided test fails grades 5 to 7. PDs now carry four decimals, balances cents, term loans amortise,
   and the table carries the bank's traffic light, amber in grades 5 to 7 and monitored.
+- 2026-11-08, platform round 1 (run 1 98 on the call; run 2 58 off it, Kinloch and Ridgeway, after computing the eight dependants and the record's 13 of 31 and declining to price them): both runs filed every security value, total commitment and 2025 sector share exactly. The case-file asks were rule application (terms 4.1 and 4.2 file the indexation and the guarantee basis; the validation report files the default definition), and the hygiene battery (migration dates, discharges, former names, releases, loan-keyed register rows) was run by reflex, as Mark measured; dropped as asks, their files ship as context.
+- The ranked list of the eight package values as an ask: six of the eight have no dependants, so the default path files six of eight cells; kept in the golden workbook as the table behind the choice, not asked.
+- The write-off each package keeps off other borrowers, a list of the dependants with their own figures, or the intake's write-off split by sector as asks: each names or hints at the dependence in the prompt (the deep step handed over), and the sector split also sits NZ$6,300 under a bin edge at Transport.
+- Envelopes of NZ$4.0, 7.0 and 8.0 million: the standing family spreads each across two NZ$50,000 bins; the grid runs from NZ$4.5 to NZ$6.5 million.
+- The less dependent payees' count (6 of 61) as a graded figure: one of the six defaulted exactly 365 days after its payer, so a follow-up convention moves it to 5 of 61; it stays out of every answer block and the note.
+- A second judgment the clean landed run would miss, to bring the paper pair under 50: none survives the freeze. An interval on the rise forks across methods, a timing split of 2027 against 2028 write-off reopens the call, and every leak-free handle on the dependence is a function of the package values the clean landed run computes; the pair stays at 56.0.
+- Critical component 1 as a count ("8 from Matai Valley Foods"): the off-call run counted the eight and denied the protection, and kept the criterion; reworded, numbers frozen, so the component states that the package keeps them out of default.
+- figures.json keys `commitment.Northgate Print` (1,750,000) and `sector_counts.I.1` (5) left with the case-file and sector asks; freeze.py read them as main-call figures only because their values coincide with Matai's NZ$1,750,000 and the 5 of 211 control count, which stay in figures.json under their own keys (`--allow` on both).

@@ -274,9 +274,10 @@ for d in meta["distractor_files"]:
 P3 = GD.Pack(os.path.join(tmp, "t"), lines)
 b1 = P3.p1(0.30)
 b0 = P3.p0(0.30)
-same3 = (setof(P3.values(b1[0] - b0[0])) == GOLD and P3.security() == P.security()
-         and P3.commitment() == P.commitment() and P3.sector_table() == P.sector_table())
-check("distractors deleted: the call and every ask figure are unchanged", same3)
+v3 = P3.values(b1[0] - b0[0])
+same3 = setof(v3) == GOLD and all(abs(v3[c] - val[c]) < 0.01 for c in lines)
+check("distractors deleted (the case-file data and the two context files): the call and every package value are "
+      "unchanged", same3, ", ".join(meta["distractor_files"]))
 shutil.rmtree(tmp, ignore_errors=True)
 
 
@@ -293,40 +294,143 @@ try:
 except RuntimeError:
     idx_free = False
 P.index = _saved_index
-prov = sum(1 for c in lines if rnd(P.security(latest=False)[c], 1000) != rnd(P.security()[c], 1000))
-check("R2 the property index (either release) never enters the call; provisional releases move ask A only", idx_free,
-      "ask A figures moved by the provisional reading: %d of 8" % prov)
+check("R2 the property index (either release) never enters the call or an ask", idx_free)
 
-# ---- asks: device mass and disjoint blocks ----------------------------------------------------------------
-A = P.security()
-A_reg = P.security(use_made=False, drop_discharged=False)
-A_d = P.security(use_made=True, drop_discharged=False)
-A_m = P.security(use_made=False, drop_discharged=True)
-check("ask A: the register's dates with discharged kept miss every borrower by 3 bins or more",
-      all(abs(rnd(A[c], 1000) - rnd(A_reg[c], 1000)) >= 3000 for c in lines))
-dis = {c for c in lines if rnd(A[c], 1000) != rnd(A_d[c], 1000)}
-check("ask A: discharged properties move exactly the three borrowers that sold one", dis == {key["RID"], key["HAR"], key["BRI"]},
-      str(sorted(name[c] for c in dis)))
-check("ask A: the register's dates move every borrower", all(rnd(A[c], 1000) != rnd(A_m[c], 1000) for c in lines))
-check("ask A: figures clear their edges by NZ$50", min(edge(A[c], 1000) for c in lines) >= 50, str(round(min(edge(A[c], 1000) for c in lines))))
-B = P.commitment()
-B_lazy = P.commitment(former=False, drop_released=False)
-B_f = P.commitment(former=True, drop_released=False)
-B_r = P.commitment(former=False, drop_released=True)
-check("ask B: NZBN and exact names with releases kept miss every borrower", all(rnd(B[c], 1000) != rnd(B_lazy[c], 1000) for c in lines))
-rel = {c for c in lines if rnd(B[c], 1000) != rnd(B_f[c], 1000)}
-fmr = {c for c in lines if rnd(B[c], 1000) != rnd(B_r[c], 1000)}
-check("ask B: releases and former names move disjoint blocks of four", len(rel) == 4 and len(fmr) == 4 and not (rel & fmr),
-      "%s | %s" % (sorted(name[c] for c in rel), sorted(name[c] for c in fmr)))
-C = P.sector_table()
-C_nl = P.sector_table(keys="noloan")
-C_rs = P.sector_table(use_register=False)
-C_nc = P.sector_table(use_cures=False)
-check("ask C: account rows left unkeyed miss every division by 1.0 point or more",
-      all(abs(C[s][0] - C_nl[s][0]) >= 1.0 for s in C), str({s: round(C[s][0] - C_nl[s][0], 1) for s in C}))
-check("ask C: the run's stage as the year-end state misses every division", all(round(C[s][0], 1) != round(C_rs[s][0], 1) for s in C))
-check("ask C: shares clear their edges", min(edge(C[s][0], 0.1) for s in C) >= 0.003, "%.4f" % min(edge(C[s][0], 0.1) for s in C))
-check("ask C: seven divisions, each with forty or more borrowers", len(C) == 7 and min(v[2] for v in C.values()) >= 40)
+
+def p0_never_t(t):
+    """The baseline from borrowers whose main payer never defaulted, at receipts threshold t."""
+    nn = kk = 0
+    for Y in (2022, 2023, 2024, 2025):
+        y0, y1 = GD.D(Y, 1, 1), GD.D(Y + 1, 1, 1)
+        for p in sorted(U):
+            for a in P.payers_of[p]:
+                if P.share(p, a, GD.D(Y - 1, 1, 1), y0) < t or P.starts(a):
+                    continue
+                if P.in_default(p, y0) or not P._active(p, Y):
+                    continue
+                nn += 1
+                kk += any(y0 <= x < y1 for x in P.starts(p))
+    return kk / nn
+
+
+def below_threshold_counts(T=0.30):
+    """The record's payees that took some but under T of their receipts from a payer that defaulted in 2022 to 2025."""
+    k = n = 0
+    for a in sorted(P.episodes):
+        for s, _ in P.episodes[a]:
+            if not (GD.D(2022, 1, 1) <= s <= GD.D(2025, 12, 31)):
+                continue
+            for p in sorted(U):
+                if p == a or a not in P.payers_of[p] or P.in_default(p, s):
+                    continue
+                sh = P.share(p, a, GD.add_months(GD.D(s.year, s.month, 1), -12), GD.D(s.year, s.month, 1))
+                if 0 < sh < T:
+                    n += 1
+                    k += any(s < t <= GD.add_months(s, 12) for t in P.starts(p))
+    return k, n
+
+
+# ---- asks: every figure rides the priced dependence ---------------------------------------------------------
+# The asks are the ranked write-off per package, the intake to fall back on if a borrower taken on turns its package
+# down, and the intake at each envelope from NZ$4.5 million to NZ$6.5 million. Each is asserted on the golden, on the
+# standing family (every licensed threshold, follow-up and baseline), and against the routes a run can take.
+ENVS = F["envelopes"]
+KIN, RID, MAT = key["KIN"], key["RID"], key["MAT"]
+
+
+def pkg_cells(v):
+    """The eight packages behind the choice (the golden workbook's table, not an ask) and their order."""
+    cells = {"order": tuple(sorted(lines, key=lambda c: -v[c]))}
+    for c in lines:
+        cells["value " + name[c]] = rnd(v[c], 50_000)
+    return cells
+
+
+def ask_cells(v):
+    """Every graded ask cell under a set of package values: each fall-back's set and bin, each envelope's set and
+    bin."""
+    cells = {}
+    g = set(P.best_set(v)[0])
+    for c in sorted(GOLD):
+        # a route answers the fall-back only for the borrowers it takes on itself
+        s, t, _, _ = P.best_at(v, W.ENVELOPE, without=(c,)) if c in g else ((), None, None, None)
+        cells["fall-back set " + name[c]] = tuple(sorted(s))
+        cells["fall-back bin " + name[c]] = rnd(t, 50_000) if t is not None else None
+    for e in ENVS:
+        s, t, _, _ = P.best_at(v, e)
+        cells["envelope set %d" % e] = tuple(sorted(s))
+        cells["envelope bin %d" % e] = rnd(t, 50_000)
+    return cells
+
+
+GC = ask_cells(val)
+fbF = {name[c]: x for c in lines for nm_, x in F["fallback"].items() if nm_ == name[c]}
+check("asks: figures.json fall-backs are the generator's own",
+      all(GC["fall-back bin " + b] == x["kept_off"] for b, x in fbF.items()), str({b: x["kept_off"] for b, x in fbF.items()}))
+check("asks: figures.json envelope rows are the generator's own",
+      all(GC["envelope bin %d" % x["envelope"]] == x["kept_off"] for x in F["envelope_curve"]))
+check("asks: Kinloch out falls back on Matai and Ridgeway; Matai out on Kinloch and Ridgeway",
+      GC["fall-back set Kinloch Engineering"] == tuple(sorted((MAT, RID))) and
+      GC["fall-back set Matai Valley Foods"] == tuple(sorted((KIN, RID))))
+check("asks: Matai Valley Foods is in the intake at every envelope", all(MAT in GC["envelope set %d" % e] for e in ENVS))
+check("asks: the NZ$6.0 million row is the call", set(GC["envelope set %d" % W.ENVELOPE]) == GOLD)
+leads = [x["lead"] for x in F["envelope_curve"]] + [x["lead"] for x in F["fallback"].values()]
+check("asks: every fall-back and envelope intake leads the next-best set by NZ$25,000 or more", min(leads) >= 25_000,
+      str([round(l) for l in leads]))
+ed = [edge(x["unrounded"], 50_000) for x in F["envelope_curve"]] + [edge(x["unrounded"], 50_000) for x in F["fallback"].values()]
+check("SF10 every fall-back and envelope write-off clears its NZ$50,000 bin edge by NZ$2,000", min(ed) >= 2_000,
+      str([round(x) for x in ed]))
+# the standing family: every licensed threshold, follow-up window and baseline
+fam = []
+for t in (0.10, 0.30, 0.45, 0.50):
+    pn_ = {}
+    for win in (9, 12, 15, 18):
+        q1 = P.p1(t, window=win)[0]
+        q0 = P.p0(t)[0]
+        if t not in pn_:
+            pn_[t] = p0_never_t(t)
+        fam.append(("T%.2f w%d record" % (t, win), P.values(q1 - q0, T=t)))
+        fam.append(("T%.2f w%d never" % (t, win), P.values(q1 - pn_[t], T=t)))
+        fam.append(("T%.2f w%d own PD" % (t, win), P.values(None, T=t, baseline=q1)))
+off = {lab: [k_ for k_ in GC if ask_cells(v)[k_] != GC[k_]] for lab, v in fam}
+bad = {lab: ks for lab, ks in off.items() if ks}
+check("asks: all %d standing-family members file every ask cell the golden files" % len(fam), not bad,
+      str(dict(list(bad.items())[:3])))
+same11a = {k_: ask_cells(v_) == GC for k_, v_ in fam11.items()}
+check("SF11 a logistic fit on receipt share and three share bands file every ask cell the golden files", all(same11a.values()),
+      str(same11a))
+# the routes a run can take: each misses the cells named, so the asks grade the deep step and its comparison
+shallow = ask_cells(own)
+miss_sh = [k_ for k_ in GC if shallow[k_] != GC[k_]]
+keep_sh = [k_ for k_ in GC if shallow[k_] == GC[k_]]
+check("asks: the default path (own expected write-off) keeps no ask cell", not keep_sh, str(keep_sh))
+check("asks: the packages behind the choice differ from the default path's only at Matai, Ridgeway and the order",
+      sorted(k_ for k_ in pkg_cells(val) if pkg_cells(own)[k_] != pkg_cells(val)[k_]) ==
+      sorted(["order", "value Matai Valley Foods", "value Ridgeway Precast"]))
+BK, BN = below_threshold_counts()
+ub = p1 - BK / BN
+cont = ask_cells(P.values(ub))
+miss_ct = [k_ for k_ in GC if cont[k_] != GC[k_]]
+check("asks: the less dependent payees of failing payers as the comparison keep the call but miss a fall-back and "
+      "every envelope row", setof(P.values(ub)) == GOLD and all("envelope bin %d" % e in miss_ct for e in ENVS)
+      and "fall-back bin Kinloch Engineering" in miss_ct, "%d of %d cells missed" % (len(miss_ct), len(GC)))
+nil = ask_cells(P.values(p1))
+miss_nil = [k_ for k_ in GC if nil[k_] != GC[k_]]
+check("asks: no baseline (the raw 13 of 31) misses every envelope row",
+      all("envelope bin %d" % e in miss_nil for e in ENVS), "%d of %d cells missed" % (len(miss_nil), len(GC)))
+monly = dict(val)
+monly[RID] = own[RID]
+mo = ask_cells(monly)
+miss_mo = [k_ for k_ in GC if mo[k_] != GC[k_]]
+check("asks: pricing Matai's dependants but not Ridgeway's misses Matai's fall-back and the envelope rows "
+      "holding Ridgeway", "fall-back bin Matai Valley Foods" in miss_mo and
+      all("envelope bin %d" % e in miss_mo for e in ENVS if RID in GC["envelope set %d" % e]),
+      "%d of %d cells missed" % (len(miss_mo), len(GC)))
+check("asks: the less dependent payees of failing payers default well above the clean baseline (the same default "
+      "reached them)", BK / BN > 2 * p0, "%d of %d against %d of %d" % (BK, BN, k0, n0))
+ub9 = p1 - (BK - 1) / BN
+check("asks: with one fewer of those defaults (a shorter follow-up) every envelope row still misses",
+      all(ask_cells(P.values(ub9))[k_] != GC[k_] for k_ in ["envelope bin %d" % e for e in ENVS]))
 
 # ---- realism ---------------------------------------------------------------------------------------------
 def steps(vals):

@@ -243,6 +243,19 @@ class Pack:
             out[cid] = v
         return out
 
+    def best_at(self, vals, envelope, without=()):
+        """The whole-package intake with the largest total inside an envelope, the borrowers in `without` left out
+        (a borrower that turns its package down): (set, total, lines used, lead over the next-best set)."""
+        ids = [i for i in sorted(self.watch_lines) if i not in without]
+        ranked = []
+        for k in range(1, len(ids) + 1):
+            for comb in itertools.combinations(ids, k):
+                used = sum(self.watch_lines[i] for i in comb)
+                if used <= envelope:
+                    ranked.append((sum(vals[i] for i in comb), comb, used))
+        ranked.sort(reverse=True)
+        return ranked[0][1], ranked[0][0], ranked[0][2], ranked[0][0] - ranked[1][0]
+
     def best_set(self, vals):
         ids = sorted(self.watch_lines)
         best = None

@@ -1,9 +1,12 @@
-"""task7: the ask layer's cracker and mirror sheets measured on the cut pack (supplemental-stumping 1.1, Part 0).
+"""task7: the ask layer's ceiling measured on the cut pack (supplemental-stumping Part 0 and Part 5).
 
-The cracker landed the call, ran the hygiene battery and executed every filed rule (the index's latest published
-value per quarter, title references normalised, the validation report's default definition: first trigger, in default
-until the cure). The mirror stopped at the default path's own-ECL call and at each ask's lazy stop. The after-notice
-rows model a response that finds one device and handles it fully. Every route reads target/ only."""
+Every route a run can take is scored on the same rubric model (38 main side, 7 instruction-following, 55 asks), each
+ask cell counted once: the two fall-back intakes (set and write-off each) and the five envelope rows (set and write-off
+each), fourteen cells. The landed run takes the deep step with the clean comparison and cleans every mess item; the
+shallow run is the default path (each borrower's own expected write-off). The landed variants a careful run can also
+take (the dependants' own PDs as the baseline, the raw rise with no baseline, the less dependent payees of the same
+failing payers as the comparison, Matai's dependants priced but not Ridgeway's) are scored too, and the pair is the
+worst honest one: the clean landed run beside the shallow run. Every route reads target/ only."""
 import hashlib
 import json
 import math
@@ -20,9 +23,11 @@ import golden as GD  # noqa: E402
 
 T = os.path.join(os.path.dirname(HERE), "target")
 FIG = json.load(open(os.path.join(HERE, "figures.json")))
+MAIN, IF, ASKS = 38.0, 7.0, 55.0
+PARTIAL = 5.0          # Part 0: the partial credit a run off the call collects on the main side
 
 
-def r_half(x, u):
+def rnd(x, u):
     return int(math.floor(x / u + 0.5)) * u
 
 
@@ -45,90 +50,124 @@ for ln in wl.splitlines():
 wb = openpyxl.load_workbook(os.path.join(T, "customer_master_2026-12.xlsx"), read_only=True)
 NAME = {r[0]: r[1].replace(" Limited", "") for r in list(wb["Customers"].iter_rows(values_only=True))[1:]}
 P = GD.Pack(T, LINES)
-
-gold_A = FIG["security"]
-gold_B = FIG["commitment"]
-gold_C = {k.split(" ")[0]: v for k, v in FIG["sector_share"].items()}
-
-
-def score_money(route, gold):
-    return {NAME[c]: (r_half(v, 1000), r_half(v, 1000) == gold[NAME[c]]) for c, v in route.items()}
+ENV = FIG["envelope"]
+p1 = P.p1(0.30)[0]
+p0 = P.p0(0.30)[0]
 
 
-def score_share(route):
-    return {s: (round(v[0], 1), round(v[0], 1) == gold_C[s]) for s, v in route.items()}
+def label(s):
+    ns = sorted(NAME[c] for c in s)
+    return ns[0] if len(ns) == 1 else ", ".join(ns[:-1]) + " and " + ns[-1]
 
 
-ROUTES = {
-    "cracker": {
-        "A": score_money(P.security(use_made=False, drop_discharged=False), gold_A),
-        "B": score_money(P.commitment(former=False, drop_released=False), gold_B),
-        "C": score_share(P.sector_table(use_register=True, use_cures=True, keys="noloan")),
-    },
-    "mirror": {
-        "A": score_money(P.security(use_made=False, drop_discharged=False), gold_A),
-        "B": score_money(P.commitment(former=False, drop_released=False), gold_B),
-        "C": score_share(P.sector_table(use_register=False, use_cures=False, keys="noloan")),
-    },
-    "after notice A1 (made dates found, discharges not)": {
-        "A": score_money(P.security(use_made=True, drop_discharged=False), gold_A)},
-    "after notice A2 (discharges found, register dates kept)": {
-        "A": score_money(P.security(use_made=False, drop_discharged=True), gold_A)},
-    "after notice B1 (former names linked, releases not)": {
-        "B": score_money(P.commitment(former=True, drop_released=False), gold_B)},
-    "after notice B2 (releases found, exact names only)": {
-        "B": score_money(P.commitment(former=False, drop_released=True), gold_B)},
-    "after notice C (loan accounts resolved through the ledger)": {
-        "C": score_share(P.sector_table(use_register=True, use_cures=True, keys="all"))},
-    "C, UTP rows only (every account-keyed row dropped)": {
-        "C": score_share(P.sector_table(use_register=True, use_cures=True, keys="utp"))},
-}
-N_ASK = len(gold_A) + len(gold_B) + len(gold_C)
-empty = [a for a, g in (("A", gold_A), ("B", gold_B), ("C", gold_C)) if not g]
-unscored = [n for n, asks in ROUTES.items() for a, rows in asks.items() if not rows]
-if empty or unscored or len(LINES) != 8:
-    print("ceiling: REFUSED, nothing to measure: golden asks with no figures %s; routes that scored no row %s; watch-list "
-          "lines read %d" % (empty, unscored, len(LINES)))
+GOLD_CALL = set(FIG["call_ids"])
+GOLD_CELLS = {}
+for b, x in FIG["fallback"].items():
+    GOLD_CELLS["fall-back set, %s out" % b] = x["intake"]
+    GOLD_CELLS["fall-back write-off, %s out" % b] = x["kept_off"]
+for x in FIG["envelope_curve"]:
+    GOLD_CELLS["envelope %s set" % format(x["envelope"], ",")] = x["intake"]
+    GOLD_CELLS["envelope %s write-off" % format(x["envelope"], ",")] = x["kept_off"]
+
+
+def route_cells(v):
+    """The cells a run files under package values v: it answers the fall-back for the borrowers it takes on itself."""
+    call = set(P.best_set(v)[0])
+    out = {}
+    for b in FIG["fallback"]:
+        cid = next(c for c in LINES if NAME[c] == b)
+        if cid in call:
+            s, t, _, _ = P.best_at(v, ENV, without=(cid,))
+            out["fall-back set, %s out" % b] = label(s)
+            out["fall-back write-off, %s out" % b] = rnd(t, 50_000)
+        else:
+            out["fall-back set, %s out" % b] = None
+            out["fall-back write-off, %s out" % b] = None
+    for x in FIG["envelope_curve"]:
+        s, t, _, _ = P.best_at(v, x["envelope"])
+        out["envelope %s set" % format(x["envelope"], ",")] = label(s)
+        out["envelope %s write-off" % format(x["envelope"], ",")] = rnd(t, 50_000)
+    return call, out
+
+
+def main_side(v, call):
+    """The main side on its components: the call 14, the total 10, the three critical components 14 (the dependants
+    protected 5, the rise measured on a clean comparison 5, Matai's figure 4). A run off the call keeps the Part 0
+    partial credit."""
+    if call != GOLD_CALL:
+        return PARTIAL
+    s = 14.0
+    s += 10.0 if rnd(sum(v[c] for c in call), 50_000) == FIG["total_kept_off"] else 0.0
+    s += 5.0 + 5.0
+    mat = next(c for c in LINES if NAME[c] == "Matai Valley Foods")
+    s += 4.0 if rnd(v[mat], 50_000) == FIG["kept_off"]["Matai Valley Foods"] else 0.0
+    return s
+
+
+own = {c: P.own(c) for c in LINES}
+below_k = below_n = 0
+U = P.borrower_universe()
+for a in sorted(P.episodes):
+    for s_, _ in P.episodes[a]:
+        if not (GD.D(2022, 1, 1) <= s_ <= GD.D(2025, 12, 31)):
+            continue
+        for p in sorted(U):
+            if p == a or a not in P.payers_of[p] or P.in_default(p, s_):
+                continue
+            sh = P.share(p, a, GD.add_months(GD.D(s_.year, s_.month, 1), -12), GD.D(s_.year, s_.month, 1))
+            if 0 < sh < 0.30:
+                below_n += 1
+                below_k += any(s_ < t <= GD.add_months(s_, 12) for t in P.starts(p))
+golden = P.values(p1 - p0)
+rid = next(c for c in LINES if NAME[c] == "Ridgeway Precast")
+matai_only = dict(golden)
+matai_only[rid] = own[rid]
+ROUTES = [
+    ("landed: the rise against borrowers whose main payer kept trading (golden)", golden, 5.0),
+    ("landed: the dependants' own PDs as the baseline", P.values(None, baseline=p1), 5.0),
+    ("landed: Matai's dependants priced, Ridgeway's missed", matai_only, 5.0),
+    ("landed: the raw rate, no baseline netted", P.values(p1), 0.0),
+    ("landed: the less dependent payees of failing payers as the comparison (%d of %d)" % (below_k, below_n),
+     P.values(p1 - below_k / below_n), 0.0),
+    ("shallow: own twelve-month expected write-off (default path)", own, None),
+    ("shallow: own lifetime expected write-off", {c: P.own(c, "pd_lifetime") for c in LINES}, None),
+    ("shallow: an assumed rise of 0.25", P.values(0.25), None),
+]
+if len(LINES) != 8 or not GOLD_CELLS:
+    print("ceiling: REFUSED, nothing to measure (watch-list lines %d, ask cells %d)" % (len(LINES), len(GOLD_CELLS)))
     sys.exit(2)
 
 print("pack md5 %s  (%d files)" % (digest(), len(os.listdir(T))))
-print("ask figures graded: A %d, B %d, C %d = %d" % (len(gold_A), len(gold_B), len(gold_C), N_ASK))
-kept = {}
-for name, asks in ROUTES.items():
-    k = 0
-    parts = []
-    for a, rows in asks.items():
-        hit = sum(1 for _, h in rows.values() if h)
-        k += hit
-        parts.append("%s %d of %d" % (a, hit, len(rows)))
-    kept[name] = k
-    print("%-62s %s" % (name, ", ".join(parts)))
-    if name in ("cracker", "mirror"):
-        for a, rows in asks.items():
-            print("    %s: %s" % (a, "; ".join("%s %s%s" % (key, v, "" if h else " (miss)") for key, (v, h) in rows.items())))
-
-own = P.best_set({c: P.own(c) for c in LINES})[0]
-mirror_on_call = sorted(own) == sorted(FIG["call_ids"])
-Lc = kept["cracker"] / N_ASK
-Ls = kept["mirror"] / N_ASK
-C = 38 + 7 + 55 * Lc
-S = (38 if mirror_on_call else 5) + 7 + 55 * Ls
-print("mirror's call (own ECL only): %s, %s the golden" % (" and ".join(sorted(NAME[c] for c in own)),
-                                                         "equals" if mirror_on_call else "misses"))
-print("Cracker keeps %d of %d ask figures (%.1f per cent): %.1f" % (kept["cracker"], N_ASK, 100 * Lc, C))
-print("Mirror keeps %d of %d ask figures (%.1f per cent): %.1f" % (kept["mirror"], N_ASK, 100 * Ls, S))
-print("Mirror leakage: %.1f per cent of ask weight" % (100 * Ls))
+print("ask cells graded: %d (two fall-backs and %d envelope rows, a set and a write-off each)"
+      % (len(GOLD_CELLS), len(FIG["envelope_curve"])))
+scores = {}
+for lab, v, cc2 in ROUTES:
+    call, cells = route_cells(v)
+    kept = [k for k in GOLD_CELLS if cells[k] == GOLD_CELLS[k]]
+    m = main_side(v, call)
+    if call == GOLD_CALL and cc2 == 0.0:
+        m -= 5.0        # the rise not measured against a clean comparison: the second component is lost
+    sc = m + IF + ASKS * len(kept) / len(GOLD_CELLS)
+    scores[lab] = (sc, len(kept), call == GOLD_CALL)
+    print("%-92s %s  asks %2d of %d  score %5.1f" % (lab, "on the call " if call == GOLD_CALL else "off the call",
+                                                  len(kept), len(GOLD_CELLS), sc))
+    missed = [k for k in GOLD_CELLS if k not in kept]
+    if missed and lab.startswith("landed"):
+        print("    misses: %s" % "; ".join(missed))
+    print("    files: %s" % "; ".join("%s: %s" % (k, format(v, ",") if isinstance(v, int) else v)
+                                        for k, v in cells.items() if v is not None))
+C = scores[ROUTES[0][0]][0]
+S = scores[ROUTES[5][0]][0]
+Ls = scores[ROUTES[5][0]][1] / len(GOLD_CELLS)
+print("Shallow keep: %.1f per cent of ask weight" % (100 * Ls))
+print("Landed run (clean comparison) %.1f; shallow run %.1f" % (C, S))
 print("Pair ceiling: %.1f" % ((C + S) / 2))
-worst = max(v for k, v in kept.items() if k.startswith("after notice"))
-print("Largest single after-notice keep: %d of %d (%.1f per cent of ask weight)" % (worst, N_ASK, 100 * worst / N_ASK))
+others = [scores[r[0]][0] for r in ROUTES[1:5]]
+print("Pairs with a landed run that takes another comparison: %s" % ", ".join("%.1f" % ((x + S) / 2) for x in others))
 bad = []
-if kept["cracker"]:
-    bad.append("cracker keeps an ask figure")
-if any(all(h for _, h in rows.values()) for rows in ROUTES["mirror"].values()):
-    bad.append("mirror keeps an ask whole")
-if Ls >= 0.4:
-    bad.append("mirror leakage at or over two fifths")
+if Ls >= 0.25:
+    bad.append("shallow keep at or over a quarter")
 if (C + S) / 2 >= 60:
-    bad.append("pair ceiling at or over 60")
-print("ceiling: %s" % ("PASS" if not bad else "FAIL " + "; ".join(bad)))
+    bad.append("pair at or over the bar")
+print("ceiling: %s" % ("PASS (under the bar of 60)" if not bad else "FAIL " + "; ".join(bad)))
 sys.exit(1 if bad else 0)

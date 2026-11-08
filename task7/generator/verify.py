@@ -181,81 +181,29 @@ ok("total kept off", r_half(sum(VAL[c] for c in best), 50_000) == FIG["total_kep
 short = {c: NAME[c].replace(" Limited", "") for c in LINES}
 ok("each borrower's write-off kept off", all(r_half(VAL[c], 50_000) == FIG["kept_off"][short[c]] for c in LINES))
 
-# ---- ask A ---------------------------------------------------------------------------------------------------
-IDX = {}
-for r in csv.DictReader(open(os.path.join(T, "commercial_property_index_2015-2026.csv"))):
-    k = (r["region"], r["property_type"], r["quarter"])
-    if k not in IDX or r["published"] > IDX[k][0]:
-        IDX[k] = (r["published"], float(r["index_value"]))
-HELD = {}
-for r in csv.DictReader(open(os.path.join(T, "title_instruments_2026-12.csv"))):
-    if r["mortgagee"] == "Ruahine Bank Limited":
-        HELD[re.sub(r"^[A-Z]+", "", r["title_reference"])] = not r["discharged_date"] or r["discharged_date"] > "2026-12-31"
-MON = "jan feb mar apr may jun jul aug sep oct nov dec".split()
+# ---- the asks: ranked packages, fall-back intakes, the intake at each envelope ---------------------------------
+order = [short[c] for c in sorted(LINES, key=lambda c: -VAL[c])]
+ok("ranked largest first", order == FIG["order"], ", ".join(order))
 
 
-def quarter(ref):
-    m = re.search(r"(\d{2})/(\d{2})/(\d{4})", ref) or re.search(r"(\d{2})\.(\d{2})\.(\d{2})$", ref)
-    if m:
-        y = int(m.group(3))
-        return (y if y > 99 else 2000 + y), (int(m.group(2)) + 2) // 3
-    m = re.search(r"([A-Za-z]{3})[a-z]*[ -](\d{4}|\d{2})\)?$", ref) or re.search(r"\d{1,2} ([A-Za-z]{3}) (\d{4})", ref)
-    if m:
-        y = int(m.group(2))
-        return (y if y > 99 else 2000 + y), (MON.index(m.group(1).lower()) + 3) // 3
-    m = re.search(r"BV-(\d{2})(\d{2})-", ref)
-    return 2000 + int(m.group(1)), (int(m.group(2)) + 2) // 3
+def intake(env_, out=()):
+    ids = [c for c in sorted(LINES) if c not in out]
+    sets = [comb for k in range(1, len(ids) + 1) for comb in itertools.combinations(ids, k)
+            if sum(LINES[x] for x in comb) <= env_]
+    comb = max(sets, key=lambda cb: sum(VAL[x] for x in cb))
+    names_ = sorted(short[c] for c in comb)
+    label = names_[0] if len(names_) == 1 else ", ".join(names_[:-1]) + " and " + names_[-1]
+    return label, r_half(sum(VAL[x] for x in comb), 50_000)
 
 
-sw = openpyxl.load_workbook(os.path.join(T, "security_register_2026-12.xlsx"), read_only=True)
-SEC = defaultdict(float)
-for r in list(sw["Properties"].iter_rows(values_only=True))[1:]:
-    if r[1] in LINES and HELD.get(re.sub(r"^[A-Z]+", "", str(r[2])), True):
-        y, q = quarter(r[9])
-        SEC[r[1]] += r[6] * IDX[(r[5], r[4], "2026Q4")][1] / IDX[(r[5], r[4], "%dQ%d" % (y, q))][1]
-ok("ask A security values", all(r_half(SEC[c], 1000) == FIG["security"][short[c]] for c in LINES),
-   str({short[c]: r_half(SEC[c], 1000) for c in LINES if r_half(SEC[c], 1000) != FIG["security"][short[c]]}))
-
-# ---- ask B ---------------------------------------------------------------------------------------------------
-NZ = {}
-for r in csv.DictReader(open(os.path.join(T, "companies_register_extract_2026-12.csv"))):
-    NZ[r["entity_name"]] = r["nzbn"]
-    for part in filter(None, r["previous_names"].split("; ")):
-        NZ[part.split(" (to ")[0]] = r["nzbn"]
-BYNZ = {str(r[3]): r[0] for r in list(wb["Customers"].iter_rows(values_only=True))[1:]}
-REL = {r[1] for r in list(sw["Deed log"].iter_rows(values_only=True))[1:] if r[2] == "Released" and str(r[3])[:10] <= "2026-12-31"}
-LIM = defaultdict(float)
-for r in run26:
-    LIM[r["customer_no"]] += float(r["limit_nzd"])
-WORDS = {"two hundred and fifty": 250000, "three hundred and fifty": 350000, "three hundred": 300000,
-         "four hundred": 400000, "five hundred": 500000, "six hundred and fifty": 650000,
-         "seven hundred and fifty": 750000, "nine hundred": 900000}
-COM = {c: LIM[c] for c in LINES}
-for r in list(sw["Guarantees"].iter_rows(values_only=True))[1:]:
-    who = BYNZ.get(str(r[2])) if r[2] else BYNZ.get(NZ.get(str(r[1]).upper(), ""))
-    if who not in LINES or r[0] in REL:
-        continue
-    if r[5] == "Unlimited":
-        COM[who] += LIM[r[3]]
-    else:
-        m = re.search(r"\$([\d,]+)", r[6])
-        COM[who] += float(num(m.group(1))) if m else next(v for k, v in WORDS.items() if r[6].lower().startswith(k))
-ok("ask B total commitments", all(r_half(COM[c], 1000) == FIG["commitment"][short[c]] for c in LINES),
-   str({short[c]: r_half(COM[c], 1000) for c in LINES if r_half(COM[c], 1000) != FIG["commitment"][short[c]]}))
-
-# ---- ask C ---------------------------------------------------------------------------------------------------
-DIV = {}
-for r in run24:
-    DIV.setdefault(r["customer_no"], r["anzsic_division"])
-cnt = defaultdict(lambda: [0, 0])
-for c, d in DIV.items():
-    if in_def(c, dt.date(2024, 12, 31)):
-        continue
-    cnt[d][0] += 1
-    cnt[d][1] += started(c, dt.date(2025, 1, 1), dt.date(2026, 1, 1))
-shares = {d: round(100 * v[1] / v[0], 1) for d, v in cnt.items()}
-fs = {k.split(" ")[0]: v for k, v in FIG["sector_share"].items()}
-ok("ask C sector shares", shares == fs, str({d: (shares[d], fs.get(d)) for d in shares if shares[d] != fs.get(d)}))
-
+for c in best:
+    lab, tot = intake(ENV, (c,))
+    want = FIG["fallback"][short[c]]
+    ok("fall-back if %s turns its package down" % short[c], (lab, tot) == (want["intake"], want["kept_off"]),
+       "%s, %d" % (lab, tot))
+for row in FIG["envelope_curve"]:
+    lab, tot = intake(row["envelope"])
+    ok("intake at NZ$%s" % format(row["envelope"], ","), (lab, tot) == (row["intake"], row["kept_off"]),
+       "%s, %d" % (lab, tot))
 print("verify: %d failed" % len(bad))
 sys.exit(1 if bad else 0)

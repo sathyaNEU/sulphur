@@ -11,7 +11,11 @@
  ],
  "distractor_files": [
   "sector_risk_appetite_2027.pdf",
-  "regional_economic_indicators_2019-2026.csv"
+  "regional_economic_indicators_2019-2026.csv",
+  "security_register_2026-12.xlsx",
+  "title_instruments_2026-12.csv",
+  "commercial_property_index_2015-2026.csv",
+  "companies_register_extract_2026-12.csv"
  ],
  "input_gates": {
   "files": 16,

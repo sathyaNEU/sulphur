@@ -1,17 +1,21 @@
 {
  "task": "task7",
- "status": "PAUSED",
+ "status": "BUILD",
  "domain": "banking-credit-financial-risk",
  "objective": "opportunity-sizing-decision",
- "stage": 5,
- "stage_name": "ship",
+ "stage": 4,
+ "stage_name": "check",
  "updated": "2026-11-08",
  "stump": "The default path values each 2027 support package at the supported borrower's own expected write-off from the IFRS 9 run and fills the envelope with Kinloch Engineering and Ridgeway Precast, when several Ruahine borrowers take most of their receipts from Matai Valley Foods and in the bank's own record defaulted far more often after their main payer defaulted, so a package at Matai keeps more write-off off the book.",
  "architecture": 4,
  "loops": 0,
  "precut": {
-  "exit": 0,
-  "date": "2026-11-08"
+  "exit": 1,
+  "date": "2026-11-08",
+  "failing": [
+   "pair ceiling 56.0 over the paper target 50 (under the bar 60)",
+   "the clean landed run keeps every ask"
+  ]
  },
  "leak": {
   "leak_py": "REVIEW (no LEAK) on target.zip md5 cec7d9d873c3ca13eb435a80694cf4f4",
@@ -61,9 +65,16 @@
    "portal": "FAILED_TO_STUMP: both responses landed the call, each filing the golden split exactly (Royal Marchford 508, Wendlebury 350, Holmford 120, Cleeve Park 222, Ashby Vale none, 6,816 bed-days freed).",
    "lesson": "The stump (the South depot's equipment wait running alongside the care wait, so a package frees none of those nights) is a hidden overlap that a careful response finds in the data: both did. A stronger stump needs the field's full method, done carefully, to file the wrong call, with no fit, back-test or reconciliation on the history able to pick the golden route.",
    "repair": "re-root (architecture 4) in a new client domain and world, 2026-11-07"
+  },
+  {
+   "date": "2026-11-08",
+   "source": "triage",
+   "repair": "rubric",
+   "moves": "security, commitment and sector-share asks and the per-borrower list replaced by the fall-back intake for each borrower taken on and the intake at every envelope from NZ$4.5 to 6.5 million; critical components reworded with numbers frozen; target.zip byte-identical",
+   "freeze": "rubric mode PASS with --allow commitment.Northgate Print,sector_counts.I.1 (coincident values)"
   }
  ],
- "resume": "migrated from Project Mark task127; re-read the build against the Sulfur standard (deep reasoning: three or more dependent inferences with a real modeling judgment, the one-fact test, the banned kinds) and the Sulfur submission shape (golden ZIP, four answer blocks), then /build task7 from the stage that fails",
+ "resume": "collect the leak reader and determinism judge on the re-sited asks; then READY if both clear, author decides on precut's paper-target FAIL",
  "approved": null,
  "delivered": "2026-11-08",
  "portal": null,
@@ -179,5 +190,28 @@
   "status_in_mark": "SHIPPED",
   "date": "2026-11-08",
   "note": "moved from Project Mark at the author's word: architecture 2 landed on the Mark portal and architecture 4 shipped there on 2026-11-08, pending; carried on here for the Sulfur bar"
- }
+ },
+ "runs": {
+  "run1": 98,
+  "run2": 58,
+  "average": 78.0,
+  "counterfactual_average": 77.0,
+  "first_wrong_step": {
+   "run1": "none on the analysis; ID 20 note slip (Matai's own write-off not stated)",
+   "run2": "dismissed own evidence (step 8: 13 of 31 computed, not priced)"
+  },
+  "triage": "FIX_ASKS",
+  "recorded": "2026-11-08",
+  "report": "task7/runs/triage.md",
+  "history": [
+   {
+    "round": 1,
+    "run1": 98,
+    "run2": 58,
+    "average": 78.0,
+    "verdict": "FIX_ASKS"
+   }
+  ]
+ },
+ "paper_pair": 56.0
 }

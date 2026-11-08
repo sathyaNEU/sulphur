@@ -79,83 +79,15 @@
   "Coastline Aggregates": 0,
   "Northgate Print": 0
  },
- "security": {
-  "Matai Valley Foods": 6321000,
-  "Kinloch Engineering": 4914000,
-  "Ridgeway Precast": 794000,
-  "Marlowe Packhouse": 7333000,
-  "Selwyn Joinery": 1431000,
-  "Brightwater Motor Group": 3532000,
-  "Coastline Aggregates": 7549000,
-  "Northgate Print": 2877000
- },
- "security_unrounded": {
-  "Matai Valley Foods": 6320956.22,
-  "Kinloch Engineering": 4913962.21,
-  "Ridgeway Precast": 794079.15,
-  "Marlowe Packhouse": 7333161.19,
-  "Selwyn Joinery": 1430743.61,
-  "Brightwater Motor Group": 3532308.46,
-  "Coastline Aggregates": 7548893.25,
-  "Northgate Print": 2876864.82
- },
- "commitment": {
-  "Matai Valley Foods": 5250000,
-  "Kinloch Engineering": 10022000,
-  "Ridgeway Precast": 6650000,
-  "Marlowe Packhouse": 7800000,
-  "Selwyn Joinery": 4350000,
-  "Brightwater Motor Group": 3200000,
-  "Coastline Aggregates": 2743000,
-  "Northgate Print": 1750000
- },
- "sector_share": {
-  "A Agriculture, Forestry and Fishing": 6.4,
-  "C Manufacturing": 8.2,
-  "E Construction": 6.0,
-  "F Wholesale Trade": 4.2,
-  "G Retail Trade": 8.5,
-  "I Transport, Postal and Warehousing": 9.4,
-  "N Administrative and Support Services": 6.5
- },
- "sector_share_unrounded": {
-  "A": 6.382978723404255,
-  "C": 8.16326530612245,
-  "E": 6.0,
-  "F": 4.166666666666667,
-  "G": 8.51063829787234,
-  "I": 9.433962264150944,
-  "N": 6.521739130434782
- },
- "sector_counts": {
-  "A": [
-   47,
-   3
-  ],
-  "C": [
-   49,
-   4
-  ],
-  "E": [
-   50,
-   3
-  ],
-  "F": [
-   48,
-   2
-  ],
-  "G": [
-   47,
-   4
-  ],
-  "I": [
-   53,
-   5
-  ],
-  "N": [
-   46,
-   3
-  ]
+ "dependants_lgd_ead": {
+  "Matai Valley Foods": 5600000.0,
+  "Kinloch Engineering": 0,
+  "Ridgeway Precast": 249600.0,
+  "Marlowe Packhouse": 0,
+  "Selwyn Joinery": 0,
+  "Brightwater Motor Group": 0,
+  "Coastline Aggregates": 0,
+  "Northgate Print": 0
  },
  "order": [
   "Matai Valley Foods",
@@ -177,11 +109,80 @@
   "Coastline Aggregates": 1100000,
   "Northgate Print": 900000
  },
+ "fallback": {
+  "Kinloch Engineering": {
+   "intake": "Matai Valley Foods and Ridgeway Precast",
+   "lines": 5500000,
+   "kept_off": 3200000,
+   "unrounded": 3216005.3,
+   "lead": 430572.45
+  },
+  "Matai Valley Foods": {
+   "intake": "Kinloch Engineering and Ridgeway Precast",
+   "lines": 5300000,
+   "kept_off": 3050000,
+   "unrounded": 3058005.1,
+   "lead": 430572.45
+  }
+ },
+ "envelopes": [
+  4500000,
+  5000000,
+  5500000,
+  6000000,
+  6500000
+ ],
+ "envelope_curve": [
+  {
+   "envelope": 4500000,
+   "intake": "Brightwater Motor Group and Matai Valley Foods",
+   "lines": 4400000,
+   "kept_off": 2200000,
+   "unrounded": 2190378.61,
+   "lead": 31044.25
+  },
+  {
+   "envelope": 5000000,
+   "intake": "Matai Valley Foods and Selwyn Joinery",
+   "lines": 4900000,
+   "kept_off": 2450000,
+   "unrounded": 2444616.51,
+   "lead": 124263.92
+  },
+  {
+   "envelope": 5500000,
+   "intake": "Matai Valley Foods and Ridgeway Precast",
+   "lines": 5500000,
+   "kept_off": 3200000,
+   "unrounded": 3216005.3,
+   "lead": 158000.2
+  },
+  {
+   "envelope": 6000000,
+   "intake": "Kinloch Engineering and Matai Valley Foods",
+   "lines": 5800000,
+   "kept_off": 3350000,
+   "unrounded": 3343287.25,
+   "lead": 127281.95
+  },
+  {
+   "envelope": 6500000,
+   "intake": "Matai Valley Foods, Northgate Print and Ridgeway Precast",
+   "lines": 6400000,
+   "kept_off": 3450000,
+   "unrounded": 3444897.82,
+   "lead": 46076.39
+  }
+ ],
  "write_off_rounding": 50000,
  "migration_date": "17/06/2023",
  "dependence_threshold_pct": 30,
  "threshold_corridor_pct": [
   10,
   45
+ ],
+ "follow_up_corridor_months": [
+  9,
+  18
  ]
 }
