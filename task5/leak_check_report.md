@@ -4,7 +4,7 @@
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: household, regulation, section, ministry, reading, heating, statistics, design, office, hourly, points, repair, sentence, decisive, statistic, nothing, estimate, architecture, cadastre, second, lived-in, tverrvika, residents, record, coverage
+Stump terms swept: household, regulation, section, ministry, heating, statistics, reading, office, design, hourly, points, repair, decisive, nothing, sentence, statistic, estimate, tverrvika, architecture, cadastre, second, lived-in, rnevik, departure, residents
 
 ## 3 answer figures in the pack (REVIEW 2)
 - **REVIEW** `elhub_dognverdier_2026-11-09_2026-11-22.csv`: golden figure 13,599 appears: ...11.2026;15,733;24;M 707057500100370162;13.11.2026;13,599;24;M 707057500100370162;14.11.2026;15,365;24;M 70...

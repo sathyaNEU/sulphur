@@ -1,10 +1,10 @@
 {
  "task": "task5",
- "status": "BUILD",
+ "status": "READY",
  "domain": "survey-research-official-statistics",
  "objective": "etl",
- "stage": 3,
- "stage_name": "build",
+ "stage": 5,
+ "stage_name": "ready",
  "updated": "2026-11-08",
  "stump": "A competent solver conforms the cadastre and the hub's hourly values, sees that an empty dwelling in a Norwegian November is heated so no consumption floor works, reads occupancy from the household's morning or evening rise over the dwelling's own night-time use, sees it separate cleanly and agree with the register, and files that Tverrvika and Ørnevik alone qualify (6.2 and 7.1 per cent); 70 vacant dwellings were left heated on a daily timer that rises at the same hours by the same amount every day, and only a household's departure from what the dwelling repeats every day, some hour more than 0.9 kWh above its own typical day, shows that someone lived there, which designates five.",
  "architecture": 2,
@@ -14,8 +14,8 @@
   "date": "2026-11-08"
  },
  "leak": {
-  "leak_py": "REVIEW on target.zip bc4fe60e, no LEAK, sweep 10 clean (the regulation's 5.0 and its own nouns ruled)",
-  "reader": "2026-11-07 isolated reader (Sonnet, medium) on bc4fe60e: no leak, Q6 analytical; the Clopper-Pearson interval reads as a defensible statistics-office convention; one re-read owed on the final prompt"
+  "leak_py": "REVIEW on 14f7ae29, no LEAK (the daily file's 13,599 a meter's day of 13.599 kWh; the regulation's 5.0 and nouns; the shell quota), each ruled in the note",
+  "reader": "2026-11-08 isolated reader on 13a7d9af: no leak; no file names the vacancy method, nothing names a timer, thermostat or schedule, no ranking file, no reserved domain or tell; 'so many chances' read as a binomial basis (deliberate); the January extracts' 1 November rollback (intended); nothing to fix"
  },
  "duplicate_check": {
   "guard_check": "PASS 2026-10-31 on the registered card (task477 differentiated)",
@@ -24,11 +24,11 @@
   "heart_2026-11-08": "WARN only after re-registration (forum committee_or_panel, context artifact planning_thread)"
  },
  "judge": {
-  "verdict": "DETERMINISTIC, SOLUTION_WRONG minor (2026-11-07, Sonnet thread, on bc4fe60e): the main call forced at every household-day threshold from 0.2 to 1.0 kWh (the rise bimodal, nothing between 0.3 and 0.8); shares, intervals and both tables reproduced; component 3's 557 reproduced as 556",
-  "disposition": "FIX_NOW, fixed: component 3 corrected to 556 (a resident who left a renumbered block's flat before its day read one floor up, asserted against the world); the call sentence reworded so the designation rests on the share (SF25)",
-  "gate_g": "etl_conformance, analytical_non_defect, surface_read_dependency no, sole_data_defect no",
-  "gate_h": "domain pass, layers pass, decisive_step analytical",
-  "report": "task5/determinism_check_report.md"
+  "verdict": "DETERMINISTIC (2026-11-08, on 13a7d9af)",
+  "disposition": "FIX_NOW, fixed: the interval's convention filed in the assignment as the exact binomial interval in the office's words (SF24, asserted), never in the prompt; no graded figure moved",
+  "gate_g": "method_or_model_selection, analytical_non_defect",
+  "gate_h": "pass: analytical, the classifier choice the statistical judgment, the rise rival lands on two and is unstable",
+  "report": "task5/determinism_check_report_arch2_pass2.md"
  },
  "returned": [
   {
@@ -63,7 +63,7 @@
    "frozen": "the Final Recommendation's set and every share and register figure unchanged; critical component 2 and the stump sentence moved by design; a fresh freeze.py snapshot taken at the end of this stage as the new baseline"
   }
  ],
- "resume": "2026-11-08 STOP B on target.zip 13a7d9af90ef518c, every stage-3 gate green after the stump was deepened; next: stage 4, a new leak reader and determinism judge (main thread), one fix pass, stage 5",
+ "resume": "READY on target.zip 14f7ae29ebb94bc9 and golden.zip 6bebc31a871f6761; next: the author uploads the prompt and target.zip, then /triage-runs",
  "approved": null,
  "delivered": null,
  "portal": null,
@@ -98,7 +98,7 @@
   }
  ],
  "gates": {
-  "checks": "95 of 95",
+  "checks": "97 of 97",
   "verify": "PASS (the departure recomputed by its own loop)",
   "byte_identical": "two builds",
   "figures_check": "134 of 134",
@@ -118,15 +118,18 @@
    "mirror_leakage": 0.0
   },
   "freeze": "snapshot taken on the final cut as the new baseline (18 main-call figures)",
-  "target_zip_sha256_16": "13a7d9af90ef518c",
-  "date": "2026-11-08"
+  "target_zip_sha256_16": "14f7ae29ebb94bc9",
+  "date": "2026-11-08",
+  "golden_zip_sha256_16": "6bebc31a871f6761"
  },
- "zip_sha256_16": "13a7d9af90ef518c",
+ "zip_sha256_16": "14f7ae29ebb94bc9",
  "migrated_from": {
   "project": "Mark",
   "task": "task470",
   "status_in_mark": "SHIPPED",
   "date": "2026-11-08",
   "note": "moved from Project Mark unstumped on the Mark portal; carried on here for the Sulfur bar"
- }
+ },
+ "golden_zip_sha256_16": "6bebc31a871f6761",
+ "call": "Five municipalities qualify for the 2027 grant: Tverrvika, Hesteby, Solmoen, Ørnevik and Fjordeid"
 }

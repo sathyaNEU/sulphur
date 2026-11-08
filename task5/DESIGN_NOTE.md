@@ -276,7 +276,7 @@ typical day, shows that someone lived there, which designates five.
 | SF15 | holiday homes and care homes | not counted | counted | not in the extract | Section 3 |
 | SF16 | table A, held on 1 November | the register's state that day | by event date against registration date | same persons | same call (asserted, no event straddles the day) |
 | SF18 | table A, a block's renumbering | a change of unit number | a move | the old ground floors' residents lost | the records (every resident, one day, one floor up, old numbers absent from the cadastre) |
-| SF24 | the share's 90 per cent interval | the counted dwellings as so many chances of a dwelling standing empty, graded on which intervals lie wholly above 5.0 | the exact, Wilson, Jeffreys, Wald or Agresti-Coull interval | the bounds move at one decimal and Kvernhaug's side moves under Wald; the three wholly above (5802, 5803, 5807) do not | the assignment files the basis and no method; only the wholly-above side is graded, the same under all five, every lower bound at least 0.05 points from 5.0 (asserted) |
+| SF24 | the share's 90 per cent interval | the exact binomial interval on the counted dwellings, filed in the assignment (the counted dwellings as so many chances of a dwelling standing empty), graded on which intervals lie wholly above 5.0 | the Wilson, Jeffreys, Wald or Agresti-Coull interval | the bounds move by up to 0.1; the three wholly above (5802, 5803, 5807) do not | the assignment files the exact binomial interval (asserted, and the golden's bounds are its bounds); only the wholly-above side is graded, the same under all five, every lower bound at least 0.05 points from 5.0 (asserted) |
 | SF25 | what the designation rests on | the estimated share, as Section 6 sets it, the interval reported beside it | the whole interval above the threshold | three qualify (5802, 5803, 5807) | the prompt (judged on the estimated share, the interval beside it) and Section 6 (asserted) |
 | SF26 | overcoverage and undercoverage rates | over the counted dwellings where the register held someone, and over those where it held nobody, on 1 November | over all counted dwellings, or registration on 5 January | every rate moves | the assignment's two denominators and its date (asserted) |
 | SF27 | net bias | the dwellings where the register held nobody less the vacant ones, over all counted dwellings | the difference of the two rounded shares | Tverrvika and Hesteby move by 0.1 | the assignment files it as one ratio of counts (asserted) |
@@ -469,6 +469,14 @@ name an adjustment, a correction, the meter's daily shape or an interval method.
    check WARN and heart WARN (forum and forcing event redrawn to funder_or_donor and budget_or_appropriation), surface
    exit 0, leak.py REVIEW with no LEAK (the daily file's "13,599" is one meter's day of 13.599 kWh, not the persons
    total, harmless), the pair ceiling 33.3, mirror leakage 0.0.
+
+13. Stage 4 on 13a7d9af (2026-11-08): the leak reader found no leak (no file names the vacancy method, nothing names a
+   timer, thermostat or schedule, no ranking file, no reserved domain or tell; "so many chances" read as a binomial
+   basis, deliberate; the January extracts' 1 November rollback, intended). The judge: DETERMINISTIC, Gate H passes
+   (analytical; the classifier choice is the statistical judgment; the rise rival lands on two and is unstable), one
+   FIX_NOW: the interval's method unnamed, the exact, Wilson and Jeffreys bounds differing by up to 0.1. Fixed as a
+   convention pin in the assignment, "the exact binomial interval, as in the office's register statistics" (SF24,
+   asserted), never in the prompt; the interval is not the stump and no graded figure moved.
 
 ## Tried and rejected
 

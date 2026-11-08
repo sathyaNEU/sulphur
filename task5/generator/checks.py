@@ -471,9 +471,11 @@ def run(target, golden, w=None, meta_path=None, fig_path=None):
         import email.policy
         eml_txt = " ".join(email.message_from_bytes(open(os.path.join(target, W.FILES["assignment"]), "rb").read(),
                                                     policy=email.policy.default).get_body().get_content().split())
-        check("interval: the assignment files the interval's basis and names no method",
+        check("interval: the assignment files the interval's basis and its convention (the exact binomial interval) in "
+              "the office's words, no other method and no author's name for it",
               "taking the municipality's counted dwellings as so many chances of a dwelling standing empty" in eml_txt
-              and not re.search(r"clopper|pearson|exact|binomial|wilson|jeffreys|wald", eml_txt.lower()))
+              and "exact binomial interval" in eml_txt
+              and not re.search(r"clopper|pearson|wilson|jeffreys|wald|agresti", eml_txt.lower()))
         check("SF25 the call does not move with the interval: the regulation designates on the share",
               sorted(m["nr"] for m in F["municipalities"] if m["qualifies"]) ==
               ["5802", "5803", "5805", "5807", "5809"])
@@ -491,6 +493,19 @@ def run(target, golden, w=None, meta_path=None, fig_path=None):
         check("deliverables: the workbook's summary carries the register table as figures.json", all(
             "%.1f" % summ[q["nr"]][14] == q["net_bias"] and summ[q["nr"]][10] == int(q["over"].replace(",", ""))
             and summ[q["nr"]][12] == int(q["under"].replace(",", "")) for q in F["quality"]))
+
+    # ------------------------------------------------------------------ the interval's convention (SF24)
+    import email as _em
+    _msg = _em.message_from_bytes(open(os.path.join(target, W.FILES["assignment"]), "rb").read())
+    _body = " ".join(_msg.get_payload(decode=True).decode("utf-8").split())
+    check("SF24 the assignment files the interval as the exact binomial interval on the counted dwellings",
+          "exact binomial interval" in _body and "so many chances" in _body)
+    if F is not None:
+        import golden as _G
+        bad_b = [m["nr"] for m in F["municipalities"]
+                 if ("%.1f" % _G.interval(m["vacant"], int(m["counted"].replace(",", "")))[0],
+                     "%.1f" % _G.interval(m["vacant"], int(m["counted"].replace(",", "")))[1]) != (m["low"], m["high"])]
+        check("SF24 the golden's bounds are the exact binomial (Clopper-Pearson) bounds at 90 per cent", not bad_b, bad_b)
 
     # ------------------------------------------------------------------ realism
     bad = []
