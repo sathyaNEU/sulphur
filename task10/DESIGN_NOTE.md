@@ -12,7 +12,7 @@ platform runs stay under `runs/`), and the four identities sit in the card's `li
 
 | Axis | Value |
 |---|---|
-| Card | `fingerprint/cards/task10.json`, architecture v5, registered 2026-11-08T17:13:57Z, `guard.py check` WARN (answered below), no BLOCK |
+| Card | `fingerprint/cards/task10.json`, architecture v5, registered 2026-11-08T17:13:57Z and re-registered the same evening after the window moved (below), `guard.py check` WARN (answered below), no BLOCK |
 | Client domain, subdomain | Energy Systems & Utilities / `load-forecasting`, task type Load, price & renewable forecasting (the deciding quantity is each primary's design-day demand after its credited flexibility), which serves Forecasting |
 | Objective | Forecasting & Predictive Modeling: each primary's half-hour of highest demand on the winter 2027/28 design day, a window not yet open, with the flexibility contracted for that winter credited at what its provider will deliver |
 | Decision | `designation_set`, answer unit `set_of_items`: the primaries whose reinforcement Wealdmoor commits at its December 2026 investment committee for winter 2027/28 |
@@ -21,16 +21,18 @@ platform runs stay under `runs/`), and the four identities sit in the card's `li
 | Strategy | `causal_design`, Part A "A comparison that is actually clean", WORKS IN FORM: the contamination shows only through a relation in the data (the neighbour's rise in the same half-hours, through an 11 kV open point in the feeder schedule), never a column or a filed sentence; the comparison is not filed in the estimand; two inferences follow the clean comparison |
 | Layer 2 | `estimand_identification`, `own:flexibility-relief-net-of-control-room-transfers-mirrored-at-the-neighbour` (the client lists no Energy rigor card) |
 | Stakeholder | the head of DSO for the Halverton zone (Marion Todd in the documents, never in the prompt), who takes the reinforcement list to the investment committee; `role_family` operations_director (the DSO function runs the flexibility service and network operation; capacity_planner is task3's in the last three) |
-| Forum, forcing event, org family | committee_or_panel (Wealdmoor's investment committee, 9 December 2026); vote_or_meeting (the committee commits the transformer orders a winter 2027/28 reinforcement needs); utility_or_infrastructure |
+| Forum, forcing event, org family | executive_team (Wealdmoor's executive team commits load-related capex at its December 2026 review); season_or_peak (the winter 2027/28 peak, for which a primary transformer has to be ordered this winter); utility_or_infrastructure. First drawn as committee_or_panel and vote_or_meeting; both BLOCKed when task5 v3 entered the last three at the DRAWN rebase, and both were redrawn rather than argued |
 | World | England: Wealdmoor Power Networks plc (a fictional distribution network operator), its Halverton city zone (nine 33/11 kV primaries fed from Halverton grid supply point), providers Corvane Flex (domestic heat pump and battery aggregation) and Quillon Energy Services (commercial demand response); GBP; people drawn with `guard.py names --geo uk --seed 1005`: Marion Todd, Clifford Evans, Irene Carpenter |
-| Shell | question form which (a designation asks which); second sentence led by "Build"; deliverables `halverton_primary_capacity_2027-28.xlsx` and `investment_committee_2027-28.pptx` (pptx+xlsx, under the corpus quota where docx+xlsx stood at 40 per cent); no lineage shell repeated (how-many/put, whether/the, where/the, where/return) |
+| Shell | question form which (a designation asks which); second sentence led by "Build"; deliverables `halverton_primary_capacity_2027-28.xlsx` and `capex_review_2027-28.pptx` (pptx+xlsx, under the corpus quota where docx+xlsx stood at 40 per cent); no lineage shell repeated (how-many/put, whether/the, where/the, where/return) |
 
 **Guard WARNs, answered.** `overuse.objective` and `overuse.gate_g`: Forecasting is the author's fixed objective for
 this slot and the client's most wanted; the mechanism under it is new to the corpus. `repeat.gate_g` against task4
 v5: task4 forecasts each duty's energy from shipper-declared payloads whose recording errs; here nothing is
 mis-recorded, and the forecast's credit is an intervention effect separated from a concurrent operator action.
-`repeat.question_form` against task3 v5: a designation asks which, and the second sentence, deliverable set and
-component roles differ.
+`repeat.question_form` against task3: a designation asks which, and the second sentence, deliverable set and
+component roles differ. `overuse.forum` (executive_team in nine builds): the honest forum for a load-related capex
+commitment at a network operator; committee_or_panel is in the window. `repeat.decision` against task5 v3: a
+designation of primaries for reinforcement, against task5's designation of counties by an estimate of jobs.
 
 **Data-native sentence.** Wealdmoor's control room armed its pre-planned 11 kV transfer schemes for exactly the event
 windows its flexibility providers were scheduled for, at the two zones whose open point reaches a primary with evening

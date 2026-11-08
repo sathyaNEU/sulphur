@@ -58,8 +58,8 @@
     "grain": "primary substation x half-hour",
     "source": "constructed for task10, no real dataset"
   },
-  "forum": "committee_or_panel",
-  "forcing_event": "vote_or_meeting",
+  "forum": "executive_team",
+  "forcing_event": "season_or_peak",
   "org_family": "utility_or_infrastructure",
   "world": {
     "geography": "England (a fictional distribution network operator, licence area and city zone)",
@@ -79,7 +79,7 @@
   },
   "deliverables": [
     "halverton_primary_capacity_2027-28.xlsx",
-    "investment_committee_2027-28.pptx"
+    "capex_review_2027-28.pptx"
   ],
   "opening_move": "question-first",
   "question_form": "which",
@@ -308,8 +308,8 @@
       "deliverable set": "csv+pdf"
     }
   ],
-  "notes": "forcing_event vote_or_meeting: the December 2026 investment committee, which commits the transformer orders that winter 2027/28 needs. role_family operations_director: the head of DSO runs the flexibility service and network operation (capacity_planner was the honest first label and is held by task3 in the last three). Architecture 4's identity (the rapid-charging availability plan) moved into lineage with its platform fate. subdomain moved from asset-condition-maintenance to load-forecasting because the deciding quantity is a design-day demand forecast, inside the same client domain the author fixed.",
-  "registered": "2026-11-08T17:13:57Z",
+  "notes": "forum executive_team and forcing_event season_or_peak (redrawn at stage 1 when task5 v3's committee_or_panel and vote_or_meeting entered the window): Wealdmoor's executive team commits load-related capex at its December review, and what forces the call now is the winter 2027/28 peak, for which a transformer has to be ordered this winter. role_family operations_director: the head of DSO runs the flexibility service and network operation (capacity_planner was the honest first label and is held by task3 in the last three). Architecture 4's identity (the rapid-charging availability plan) moved into lineage with its platform fate. subdomain moved from asset-condition-maintenance to load-forecasting because the deciding quantity is a design-day demand forecast, inside the same client domain the author fixed.",
+  "registered": "2026-11-08T17:17:43Z",
   "shell": {
     "question form": "which",
     "second-sentence opener": "build",
