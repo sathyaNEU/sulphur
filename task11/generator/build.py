@@ -79,18 +79,79 @@ def cut(target, S):
     return info
 
 
-def archive(target, out):
+# Export times of the files that carry no save stamp of their own (America/Chicago), each pulled from its system
+# on the days before the memo; a file with a container stamp (workbook, PDF) takes its own last save.
+EXPORTED = {
+    "hydro/TR-01_tessel_r_halvard_br_2026.csv": (2026, 11, 2, 7, 41, 12),
+    "hydro/FC-02_fennick_cr_cr_w38_2026.csv": (2026, 11, 2, 7, 42, 3),
+    "hydro/OC-03_oxley_cr_lisle_2026.csv": (2026, 11, 2, 7, 42, 51),
+    "hydro/DC-04_logger_2087445_2026.csv": (2026, 10, 29, 15, 7, 26),
+    "hydro/LB-05_logger_2087519_2026.csv": (2026, 10, 29, 15, 22, 48),
+    "lab/SHL_EDD_brennick_source_water_2026.csv": (2026, 10, 30, 9, 18, 37),
+    "lab/autosampler_run_logs_2026.csv": (2026, 10, 28, 16, 54, 9),
+    "lab/tributary_nitrate_2026.csv": (2026, 10, 30, 9, 26, 14),
+    "lake/MERRIN_BUOY_Hourly_2026.dat": (2026, 11, 1, 10, 3, 55),
+    "lake/buoy_service_log_2026.csv": (2026, 10, 31, 14, 37, 20),
+    "lake/lake_merrin_area_capacity_2019_survey.csv": (2019, 12, 9, 11, 14, 2),
+    "lake/merrin_beach_ecoli_2026.csv": (2026, 9, 8, 13, 45, 31),
+    "lake/merrin_dam_precip_daily_2026.txt": (2026, 11, 1, 8, 12, 44),
+    "plant/raw_water_log_2026-01-01_to_2026-05-26.csv": (2026, 5, 27, 8, 31, 6),
+    "plant/scada_alarm_event_history_2026.csv": (2026, 11, 2, 6, 58, 17),
+    "plant/scada_pac_dose_setpoint_2026.csv": (2026, 11, 2, 7, 3, 40),
+}
+GOLDEN_EXPORTED = {"raw_water_atrazine_2026.png": (2026, 11, 3, 9, 26, 51)}
+ZONE = "America/Chicago"
+
+
+def own_stamp(path):
+    """A container's own last save (UTC): a workbook's or document's dcterms:modified, a PDF's ModDate or
+    CreationDate."""
+    import datetime as dt
+    import re
+    if path.endswith((".xlsx", ".docx")):
+        with zipfile.ZipFile(path) as z:
+            core = z.read("docProps/core.xml").decode()
+        m = re.search(r"<dcterms:modified[^>]*>([^<]+)<", core)
+        return dt.datetime.strptime(m.group(1), "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=dt.timezone.utc)
+    if path.endswith(".pdf"):
+        b = open(path, "rb").read()
+        m = re.search(rb"/ModDate\s*\(D:(\d{14})([-+Z])?(\d{2})?'?(\d{2})?", b) or \
+            re.search(rb"/CreationDate\s*\(D:(\d{14})([-+Z])?(\d{2})?'?(\d{2})?", b)
+        t = dt.datetime.strptime(m.group(1).decode(), "%Y%m%d%H%M%S")
+        sign = (m.group(2) or b"Z").decode()
+        off = dt.timedelta(hours=int(m.group(3) or 0), minutes=int(m.group(4) or 0))
+        if sign == "-":
+            t = t + off
+        elif sign == "+":
+            t = t - off
+        return t.replace(tzinfo=dt.timezone.utc)
+    return None
+
+
+def archive(target, out, exported):
+    """Each entry dated by its file's own last save in the plant's local clock, as a desktop zip tool writes it."""
+    import datetime as dt
+    from zoneinfo import ZoneInfo
+    tz = ZoneInfo(ZONE)
     names = []
     for root, dirs, files in os.walk(target):
         for f in files:
             p = os.path.join(root, f)
             names.append((os.path.relpath(p, target).replace(os.sep, "/"), p))
     names.sort()
+    seen = set()
     with zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED) as z:
         for arc, p in names:
-            info = zipfile.ZipInfo(arc, date_time=ZIP_TIME)
+            st = own_stamp(p)
+            loc = st.astimezone(tz) if st else dt.datetime(*exported[arc], tzinfo=tz)
+            dtm = (loc.year, loc.month, loc.day, loc.hour, loc.minute, loc.second - loc.second % 2)
+            assert dtm not in seen, ("two entries share a time", arc)
+            seen.add(dtm)
+            os.utime(p, (loc.timestamp(), loc.timestamp()))
+            info = zipfile.ZipInfo(arc, date_time=dtm)
             info.compress_type = zipfile.ZIP_DEFLATED
             info.external_attr = 0o644 << 16
+            info.create_system = 3
             with open(p, "rb") as fh:
                 z.writestr(info, fh.read())
     return len(names)
@@ -116,7 +177,8 @@ def main():
     json.dump(F, open(os.path.join(HERE, "figures.json"), "w"), indent=1, sort_keys=True, default=str)
     import meta
     json.dump(meta.metadata(), open(os.path.join(TASK, "metadata.json"), "w"), indent=1)
-    n = archive(TARGET, os.path.join(TASK, "target.zip"))
+    n = archive(TARGET, os.path.join(TASK, "target.zip"), EXPORTED)
+    archive(GOLDEN, os.path.join(TASK, "golden.zip"), GOLDEN_EXPORTED)
     import writeup
     writeup.main()
     print("built in %.0fs: call %s (%d days), zip members %d" % (time.time() - t0, F["call"], F["call_days"], n))

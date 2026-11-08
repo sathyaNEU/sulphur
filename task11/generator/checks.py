@@ -200,62 +200,53 @@ def main():
     check("SF10 without Fennick's atrazine the raw water stays at most 1.0 ug/L on every day above the trigger",
           resid <= 1.0, "%.2f ug/L" % resid)
 
-    # ---------------------------------------------------------------- ask devices and bins
+    # ---------------------------------------------------------------- the asks: re-sited on the deep step's output
     import asks as A
-    gold = A.monthly(TARGET, **A.LOAD_ROUTES["golden"])
-    cells = sorted(gold)
-    check("ask cells: four sampled stations by four months, Ladd Branch not sampled",
-          len(cells) == 16 and "LAD" not in R["loads"] and not R["samples"]["LAD"], len(cells))
-    check("ask cells equal the golden's monthly loads", all(abs(gold[(k, m)] - R["loads_month"][k][m]) < 1e-9
-                                                        for k, m in cells))
-    spread = integration_spread(R)
-    for c in cells:
-        need = max(0.02, 2 * spread[c])
-        check("bin: %s %d load %.3f kg sits %.3f kg from its rounding edge, over twice the %.4f kg spread of the "
-              "integration rules" % (c[0], c[1], gold[c], edge(gold[c], 1.0), spread[c]), edge(gold[c], 1.0) >= need,
-              "%.3f against %.3f" % (edge(gold[c], 1.0), need))
     pac = R["pac"]
+    sp_act = [(t.date(), v) for t, v in R["setpoints"]]
+    check("ask B: SOP-WQ-07 3.2 and 3.3 replayed on the recorded results gives the plant's own setpoint record",
+          G.sop_replay(R["results"]) == sp_act, sp_act)
+    check("ask B: the call's row is every pound fed, May to August, and every other row is none",
+          all(abs(R["spared"]["FEN"][m] - pac[m]) < 1e-9 for m in pac) and
+          all(R["spared"][k][m] == 0.0 for k in G.SUBS if k != "FEN" for m in pac))
+    feed_days = [d for d in R["results"] if sp_act[0][0] <= d <= sp_act[-1][0]]
+    shared_all = sorted(set(d for k in G.SUBS for d in R["shared"][k]))
+    check("ask B: no sub-watershed shares the intake's layer with another on any day from the first feed to the "
+          "last stop, so each counterfactual is the residue or the record", not set(shared_all) & set(feed_days),
+          shared_all[:3])
+    check("SF20 ask B: the days two or more sub-watersheds shared the layer (September and October) all sit under 1.0 ug/L, "
+          "so no counterfactual on them can start a feed", all(R["results"][d] < 1.0 for d in shared_all),
+          max((R["results"][d] for d in shared_all), default=0))
+    without_fen = G.without(R["results"], R["E"], "FEN")[0]
+    check("ask B: without Fennick Creek's atrazine no season day is above the trigger",
+          max(v for d, v in without_fen.items() if G.SEASON[0] <= d <= G.SEASON[1]) <= G.TRIGGER)
     for m, v in pac.items():
         check("bin: carbon month %d %.3f lb at least 0.10 lb from its rounding edge" % (m, v), edge(v, 1.0) >= 0.10,
               "%.3f" % edge(v, 1.0))
-    routes = {}
-    for name, kw in A.LOAD_ROUTES.items():
-        if name != "golden":
-            routes[name] = A.monthly(TARGET, **kw)
-    moved = {n: [c for c in cells if round(r[c]) != round(gold[c])] for n, r in routes.items()}
-    check("device D8: the storm bottles at their logged times move every load cell", len(moved["logged"]) == 16,
-          sorted(set(cells) - set(moved["logged"])))
-    check("device D8: the cracker's route (logged times, one mean offset) keeps no load cell",
-          len(moved["cracker"]) == 16, sorted(set(cells) - set(moved["cracker"])))
-    check("device D8 half-repair: the k-th bottle at the k-th carousel position moves cells in every station",
-          {c[0] for c in moved["position"]} == {"TES", "FEN", "OXL", "DUN"}, moved["position"])
-    check("device D3 second primary: one mean offset moves Dunmore Creek's May, June and July",
-          {c for c in moved["mean offset"]} >= {("DUN", 5), ("DUN", 6), ("DUN", 7)} and
-          all(c[0] == "DUN" for c in moved["mean offset"]), moved["mean offset"])
-    check("device D3: offsets stepping at the visits, or prorated between them, move Dunmore Creek's July",
-          ("DUN", 7) in moved["visit offset"] and ("DUN", 7) in moved["prorated offset"],
-          (moved["visit offset"], moved["prorated offset"]))
-    check("hazard: the logger level read as gage height moves every Dunmore Creek cell",
-          {c for c in moved["no offset"] if c[0] == "DUN"} == {("DUN", m) for m in A.LOAD_MONTHS}, moved["no offset"])
-    check("separation: no load device moves a cell of a station it does not touch (the offset devices move Dunmore "
-          "Creek only)", all(c[0] == "DUN" for n in ("mean offset", "visit offset", "prorated offset", "no offset")
-                             for c in moved[n]))
-    for name, kw in A.LOAD_CONVENTIONS.items():
-        r = A.monthly(TARGET, **kw)
-        check("SF11 load convention converges: %s" % name, all(round(r[c]) == round(gold[c]) for c in cells),
-              {c: round(r[c], 2) for c in cells if round(r[c]) != round(gold[c])})
-    r = A.monthly(TARGET, bottles="golden", offs="golden", within_month=True)
-    check("SF12 samples inside each month only (ruled out by the prompt: each flow takes the samples either side of "
-          "it) moves cells", any(round(r[c]) != round(gold[c]) for c in cells))
+    gold_cells = A.ask_cells(R)
+    for name, route in A.shallow_routes(TARGET, R).items():
+        kept = [c for c in gold_cells if route.get(c) == gold_cells[c]]
+        keyed = [c for c in kept if gold_cells[c] != 0]
+        check("shallow route '%s' keeps no non-zero ask figure and misses the call's rows in both asks" % name,
+              not keyed and all(route.get(c) != gold_cells[c] for c in gold_cells if c[1] == "FEN" and gold_cells[c]),
+              keyed)
+    tag = A.day_tagged_carbon(TARGET, R)
+    check("ask B second judgment: booking each day's carbon to the sub-watershed behind that day misses every month of "
+          "the call's row", all(round(tag[m]) != round(pac[m]) for m in pac), {m: round(tag[m]) for m in pac})
+    may = A.unresolved_pulse(TARGET, R)
+    check("ask A and B second judgment: a run that leaves 29 and 30 May unattributed misses the call's May days and "
+          "its May and June carbon", may["days"]["May"] != 2 and round(may["carbon"][5]) != round(pac[5]) and
+          round(may["carbon"][6]) != round(pac[6]), may)
     pg = A.pac(TARGET, "golden")
     check("carbon golden equals the golden's monthly pounds", all(abs(pg[m] - pac[m]) < 1e-6 for m in pac))
     pmoved = {}
     for how in A.PAC_ROUTES[1:]:
         rr = A.pac(TARGET, how)
         pmoved[how] = [m for m in pg if round(rr[m]) != round(pg[m])]
-    check("device D4: setpoints with no feeder interruption (the cracker's route) move every carbon month",
+    check("SF16 texture D4: pounds the setpoints called for (no feeder interruption) move every month of the call's "
+          "carbon row, so 'fed' is load-bearing",
           len(pmoved["nodown"]) == 4, pmoved["nodown"])
-    check("device D4 half-repair: run status alone, missing the empty hopper, moves at least two months",
+    check("texture D4: run status alone, missing the empty hopper, moves at least two months",
           len(pmoved["runonly"]) >= 2, pmoved)
     pa = A.pac(TARGET, "alarmspan")
     check("SF14 an overload outage ended at the trip's return-to-normal and one ended at the next RUN STATUS ON give "
@@ -264,24 +255,29 @@ def main():
     trips = rtn_restart_pairs()
     check("SF14 every MOTOR OVERLOAD TRIP return-to-normal is logged in the same minute as the next RUN STATUS ON",
           bool(trips) and all(a == b for a, b in trips), trips)
-    check("hazard D8: setpoints and alarms left on UTC move every carbon month", len(pmoved["utc"]) == 4,
+    check("texture D8: setpoints and alarms left on UTC move every carbon month", len(pmoved["utc"]) == 4,
           pmoved["utc"])
-    check("misread: the hopper's LOW alarm taken for the outage moves at least two months", len(pmoved["lowalarm"]) >= 2,
-          pmoved["lowalarm"])
-    check("no carbon device touches the main call's rows: the call reads no plant SCADA file or ops report", True)
-    # the loggers' clock: their own header states it; months cut on UTC converge (SF11); stamps read as local do not
+    check("SF17 ask A: each day counted in the calendar month of its result, the months summing to the season",
+          sum(1 for d in R["per"]["FEN"] if 4 <= d.month <= 10) == len(R["per"]["FEN"]) == len(R["days"]))
+    ok18 = True
+    for b in (0.0, G.RESIDUE, 0.65):
+        r18 = {d: (min(v, b) if d in without_fen and without_fen[d] != v else v) for d, v in R["results"].items()}
+        ok18 = ok18 and not G.sop_replay(r18)
+    check("SF18 ask B: without Fennick Creek's atrazine the replay starts no feed whether the residue is taken as 0, "
+          "0.21 or the pre-pulse 0.65 ug/L", ok18)
+    check("SF19 ask B: every golden row is all of the carbon fed or none, so no within-day timing enters it",
+          all(all(abs(R["spared"][k][m] - pac[m]) < 1e-9 for m in pac) or all(R["spared"][k][m] == 0 for m in pac)
+              for k in G.SUBS))
+    lm = R["loads_month"]
+    alt = A.monthly(TARGET, bottles="golden", offs="golden", within_month=True)
+    check("SF11 and SF12 (the dropped load ask; the Final Recommendation's load claim only): the Tessel River carries "
+          "the most atrazine past its station in every month from April to July under the golden integration and "
+          "with samples inside each month only",
+          all(max(lm, key=lambda k: lm[k][m]) == "TES" for m in (4, 5, 6, 7)) and
+          all(max(("TES", "FEN", "OXL", "DUN"), key=lambda k: alt[(k, m)]) == "TES" for m in (4, 5, 6, 7)))
     heads = logger_heads()
     check("SF15 the DC-04 and LB-05 logger exports state their clock in their own header (Project ID: ... logger "
           "clock UTC)", all("logger clock UTC" in h for h in heads.values()), heads)
-    G.LOGGER_CLOCK = "local"
-    try:
-        loc = A.monthly(TARGET, **A.LOAD_ROUTES["golden"])
-    finally:
-        G.LOGGER_CLOCK = "UTC"
-    lmoved = [c for c in cells if round(loc[c]) != round(gold[c])]
-    check("SF15 the logger stamps read as local clock times move Dunmore Creek cells only (%s), so the header's UTC "
-          "is load-bearing" % ", ".join("%s %d" % c for c in lmoved),
-          bool(lmoved) and all(c[0] == "DUN" for c in lmoved), lmoved)
     distractor_deletion(R)
 
     # ---------------------------------------------------------------- realism and gates
@@ -501,8 +497,9 @@ def realism(R):
     from pypdf import PdfReader
     dr = os.path.join(TARGET, "lake/intake_tower_record_drawing_S-4.pdf")
     info = PdfReader(dr, strict=True).metadata
-    check("realism: the 2011 record drawing carries its CAD plot driver's metadata, not the department's toolchain",
-          info.get("/Producer") == "pdfplot10.hdi 10.0.46.0" and str(info.get("/CreationDate", "")).startswith("D:2011")
+    check("realism: the record drawing (REV C, 2011) carries the CAD plot driver's metadata of its 2019 re-plot for "
+          "the department's asset register, not a document toolchain, and a date inside the container band",
+          info.get("/Producer") == "pdfplot16.hdi 16.0.52.0" and str(info.get("/CreationDate", "")).startswith("D:2019")
           and "AutoCAD" in str(info.get("/Creator", "")), dict(info))
     texts = pdf_texts(dr)
     check("realism: three PDF readers read the drawing's text alike", len(set(len(t.split()) for t in texts)) == 1,
@@ -601,7 +598,8 @@ def distractor_deletion(R):
         same = ({k: len(v) for k, v in R2["per"].items()} == {k: len(v) for k, v in R["per"].items()}
                 and R2["rungs"]["r1_mixed30"] == R["rungs"]["r1_mixed30"]
                 and all(abs(R2["loads"][k] - R["loads"][k]) < 1e-9 for k in R["loads"])
-                and all(abs(R2["pac"][m] - R["pac"][m]) < 1e-9 for m in R["pac"]))
+                and all(abs(R2["pac"][m] - R["pac"][m]) < 1e-9 for m in R["pac"])
+                and R2["spared"] == R["spared"])
         check("distractor deletion: with the %d declared distractors deleted the call (Fennick Creek 47), the load-share "
               "rung (the Tessel River %d days) and every ask figure are unchanged" % (len(gone), R2["rungs"]["r1_mixed30"]["TES"]),
               same and max(R2["rungs"]["r1_mixed30"], key=R2["rungs"]["r1_mixed30"].get) == "TES", gone)
@@ -611,7 +609,13 @@ def distractor_deletion(R):
 
 def figures_agree(R, F):
     check("figures.json carries the call and its days", F["call"] == "Fennick Creek" and F["call_days"] == len(R["days"]))
-    check("figures.json loads equal the golden's", all(F["loads_kg"][G.NAME[k]] == int(round(v)) for k, v in R["loads"].items()))
+    check("figures.json carbon by sub-watershed equals the golden's",
+          all(F["carbon_spared_lb"][G.NAME[k]][mm] == int(round(R["spared"][k][n])) for k in G.SUBS
+              for n, mm in ((5, "May"), (6, "June"), (7, "July"), (8, "August"))))
+    check("figures.json days by month equal the golden's",
+          all(F["days_by_sub_month"][G.NAME[k]][mm] == sum(1 for d in R["per"][k] if d.month == n) for k in G.SUBS
+              for n, mm in enumerate(("January", "February", "March", "April", "May", "June", "July", "August",
+                                      "September", "October"), 1) if n >= 4))
     check("figures.json carbon equals the golden's", all(F["pac_lb"][m] == int(round(R["pac"][n])) for n, m in
                                                          ((5, "May"), (6, "June"), (7, "July"), (8, "August"))))
 

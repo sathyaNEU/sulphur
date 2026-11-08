@@ -1,20 +1,22 @@
-"""The pair ceiling, run on the cut pack. The ask figures are the sixteen monthly station loads (four sampled
-stations, April to July) and the four monthly carbon figures (May to August); the chart's two content criteria are
-counted as kept by every route.
+"""The pair estimate on the cut pack, for the re-sited asks (supplemental-stumping Part 0 and 5).
 
-  cracker   lands the call; runs the hygiene battery and every filed rule: the State laboratory's result where both
-            ran a bottle, not detected as zero, the loggers' UTC clock converted, gage height from the field visits'
-            mean offset, the rating in force by its effective time, SOP-WQ-07's pounds formula on the plant day's raw
-            water; each bottle at the time the bottle log and both laboratories give it, and the carbon from the
-            setpoints alone
-  mirror    the cracker's ask handling, off the call (the mixed-lake route names the Tessel River)
-  joined    the storm bottles joined to the autosampler log (positions that drew a sample), one mean offset, the
-            feeder's interruptions taken out (run status and the low-low alarm)
-  full      the full includer: joined, and the offsets stepping at each visit
-  position  joined with the k-th bottle at the k-th carousel position
+The ask figures are the deep step's own output across the answer's shape: every sub-watershed's days above the
+trigger by month of the season (5 rows of 7 months) and the carbon fed in each month from May to August that the
+plant would not have fed without each sub-watershed's atrazine (5 rows of 4 months). A row is kept only when every
+cell in it is exact, which is how the generated rubric grades a row. The chart carries no ask figure: the platform's
+round-1 rubric graded it in one-point rows beside the file checks, so it sits in the 7 for instruction-following.
 
-Weights 38, 7 and 55 (supplemental-stumping Part 0); r = 5 for the mirror's recommendation side; a hit only when
-exact at the stated rounding.
+Routes, each with every mess item cleaned and every filed rule read:
+  landed      the deep step taken on all 47 days and the SOP replayed on the results without each sub-watershed
+  tagged      landed, but each day's carbon booked to the sub-watershed behind that day (the run-on left out)
+  pulse       landed on 45 days, 29 and 30 May left unattributed (platform run 1's route)
+  shallow     the default path: the 30-day load share with the lake treated as one mixed volume
+  withheld    no count filed for any sub-watershed (platform run 2's route)
+
+Recommendation side: 38 for the call and the critical components when all 47 days land (25.3 for the pulse route,
+which loses the 47, on the round-1 rubric's 18, 12 and 6; 5 off the call); 7 for instruction-following; 55 for the
+asks, weighted by figures. The cracker is the pulse route, the landed route the platform measured (run 1); the full
+landing is printed beside it as the layer's exposure.
 
     python3 ceiling.py [target]"""
 import os
@@ -23,42 +25,55 @@ import sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import asks as A            # noqa: E402
+import golden as G          # noqa: E402
 
-CHART = 2
+CHART = 0
+
+
+def rows_kept(cells, gold):
+    kept, total = 0, 0
+    for kind, months in (("days", A.SEASON_MONTHS), ("lb", A.PAC_MONTHS)):
+        for k in G.SUBS:
+            w = len(months)
+            total += w
+            if cells is not None and all(cells.get((kind, k, m)) == gold[(kind, k, m)] for m in months):
+                kept += w
+    return kept, total
 
 
 def main(target):
-    gold = A.monthly(target, **A.LOAD_ROUTES["golden"])
-    cells = sorted(gold)
-    pg = A.pac(target, "golden")
-    load_routes = {"cracker": "cracker", "joined": "joined, mean offset", "full": "joined, visit offset",
-                   "position": "joined by position, visit offset"}
-    pac_routes = {"cracker": "nodown", "joined": "golden", "full": "golden", "position": "golden"}
-    n = len(cells) + len(pg) + CHART
-    keep = {}
-    for name in load_routes:
-        r = A.monthly(target, **A.LOAD_ROUTES[load_routes[name]])
-        kl = [c for c in cells if round(r[c]) == round(gold[c])]
-        rp = A.pac(target, pac_routes[name])
-        kp = [m for m in pg if round(rp[m]) == round(pg[m])]
-        keep[name] = (kl, kp)
-        print("%-9s keeps %2d of %d load cells, %d of %d carbon months, %d chart criteria: %d of %d ask criteria"
-              % (name, len(kl), len(cells), len(kp), len(pg), CHART, len(kl) + len(kp) + CHART, n))
-        if kl:
-            print("          load cells kept: %s" % ", ".join("%s %d" % c for c in kl))
-    for how in A.PAC_ROUTES[1:]:
-        rp = A.pac(target, how)
-        print("carbon %-10s keeps %d of %d" % (how, sum(1 for m in pg if round(rp[m]) == round(pg[m])), len(pg)))
-    L = (len(keep["cracker"][0]) + len(keep["cracker"][1]) + CHART) / n
-    C = 38 + 7 + 55 * L
-    S = 5 + 7 + 55 * L
-    print("cracker %.1f, mirror %.1f on the cracker's ask route" % (C, S))
-    print("Pair ceiling: %.1f" % ((C + S) / 2))
-    print("Mirror leakage: %.1f per cent of ask weight" % (100 * L))
-    for name in ("joined", "full", "position"):
-        Ls = (len(keep[name][0]) + len(keep[name][1]) + CHART) / n
-        print("stress, both top responses on the %s route: pair %.1f (ask weight kept %.1f per cent)"
-              % (name, (38 + 7 + 55 * Ls + 5 + 7 + 55 * Ls) / 2, 100 * Ls))
+    R = G.compute(target)
+    gold = A.ask_cells(R)
+    routes = {"landed": dict(gold)}
+    tag = A.day_tagged_carbon(target, R)
+    routes["tagged"] = {**gold, **{("lb", "FEN", m): int(round(tag[m])) for m in A.PAC_MONTHS}}
+    pulse = A.unresolved_pulse(target, R)
+    pc = dict(gold)
+    for n, m in enumerate(A.SEASON_MONTHS):
+        pc[("days", "FEN", m)] = list(pulse["days"].values())[n]
+    for m in A.PAC_MONTHS:
+        pc[("lb", "FEN", m)] = int(round(pulse["carbon"][m]))
+    routes["pulse"] = pc
+    routes["shallow"] = A.shallow_routes(target, R)["load share, 30 days"]
+    routes["withheld"] = None
+    rec = dict(landed=38.0, tagged=38.0, pulse=38.0 * 24 / 36, shallow=5.0, withheld=5.0)
+    score = {}
+    for name, cells in routes.items():
+        kept, total = rows_kept(cells, gold)
+        L = (kept + CHART) / (total + CHART)
+        score[name] = rec[name] + 7 + 55 * L
+        print("%-8s keeps %2d of %d ask figures in whole rows (+%d chart): ask share %.1f per cent, score %.1f"
+              % (name, kept, total, CHART, 100 * L, score[name]))
+    print("Pair, landed with shallow: %.1f" % ((score["landed"] + score["shallow"]) / 2))
+    print("Pair, landed with withheld (the platform's round-1 shape at its best for the landed run): %.1f"
+          % ((score["landed"] + score["withheld"]) / 2))
+    print("Pair, pulse with withheld (the platform's round-1 runs on the new asks): %.1f"
+          % ((score["pulse"] + score["withheld"]) / 2))
+    print("Pair, tagged with shallow: %.1f" % ((score["tagged"] + score["shallow"]) / 2))
+    print("Pair ceiling: %.1f (cracker, the pulse route, with the shallow route)" % ((score["pulse"] + score["shallow"]) / 2))
+    print("Pair, both landed: %.1f (the ladder's exposure; no ask layer reaches it)" % score["landed"])
+    print("Shallow keep: %.1f per cent of ask weight"
+          % (100 * (rows_kept(routes["shallow"], gold)[0] + CHART) / (rows_kept(None, gold)[1] + CHART)))
     return 0
 
 

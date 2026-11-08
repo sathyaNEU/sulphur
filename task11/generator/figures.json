@@ -2,6 +2,38 @@
  "call": "Fennick Creek",
  "call_days": 47,
  "call_key": "FEN",
+ "carbon_spared_lb": {
+  "Dunmore Creek": {
+   "August": 0,
+   "July": 0,
+   "June": 0,
+   "May": 0
+  },
+  "Fennick Creek": {
+   "August": 3693,
+   "July": 23776,
+   "June": 25024,
+   "May": 3243
+  },
+  "Ladd Branch": {
+   "August": 0,
+   "July": 0,
+   "June": 0,
+   "May": 0
+  },
+  "Oxley Creek": {
+   "August": 0,
+   "July": 0,
+   "June": 0,
+   "May": 0
+  },
+  "Tessel River": {
+   "August": 0,
+   "July": 0,
+   "June": 0,
+   "May": 0
+  }
+ },
  "cited": {
   "buoy_sensor_depths_m": [
    0.5,
@@ -9,6 +41,7 @@
    1.0,
    16.0
   ],
+  "first_feed_day": 29,
   "intake_centreline_navd88_ft": 829.24,
   "layer_half_width_m": 2.0,
   "lb_per_mg_per_mgl": 8.34,
@@ -19,8 +52,11 @@
    "5.2",
    "3.2"
   ],
+  "setpoint_changes": 11,
   "sop_day_result": "2.3",
-  "sop_pounds_formula": "3.2"
+  "sop_pounds_formula": "3.2",
+  "sop_stop_rule": "3.3",
+  "sop_stop_ug_l": 2.5
  },
  "days_by_month": {
   "April": 0,
@@ -30,6 +66,53 @@
   "May": 2,
   "October": 0,
   "September": 0
+ },
+ "days_by_sub_month": {
+  "Dunmore Creek": {
+   "April": 0,
+   "August": 0,
+   "July": 0,
+   "June": 0,
+   "May": 0,
+   "October": 0,
+   "September": 0
+  },
+  "Fennick Creek": {
+   "April": 0,
+   "August": 0,
+   "July": 23,
+   "June": 22,
+   "May": 2,
+   "October": 0,
+   "September": 0
+  },
+  "Ladd Branch": {
+   "April": 0,
+   "August": 0,
+   "July": 0,
+   "June": 0,
+   "May": 0,
+   "October": 0,
+   "September": 0
+  },
+  "Oxley Creek": {
+   "April": 0,
+   "August": 0,
+   "July": 0,
+   "June": 0,
+   "May": 0,
+   "October": 0,
+   "September": 0
+  },
+  "Tessel River": {
+   "April": 0,
+   "August": 0,
+   "July": 0,
+   "June": 0,
+   "May": 0,
+   "October": 0,
+   "September": 0
+  }
  },
  "days_total": 47,
  "dun_offsets_ft": [

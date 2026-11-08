@@ -4,8 +4,8 @@
  "domain": "physical-environmental-sciences",
  "subdomain": "pollution-source-attribution",
  "objective": "root-cause",
- "stage": 5,
- "stage_name": "ship",
+ "stage": 4,
+ "stage_name": "check",
  "updated": "2026-11-08",
  "seed": "RC04 (analytical_tasks/06_root_cause/RC04_commuter-peak-fix-path-counterfactual.md): the decision and the quantity kept, the world moved",
  "call": "place the 2027 atrazine cost-share program in the Fennick Creek sub-watershed: its atrazine was behind all 47 of the 2026 season's days of raw water above the 3.0 ug/L carbon-feed trigger, every other sub-watershed's behind none",
@@ -53,7 +53,7 @@
   "report": "task11/determinism_check_report.md (pass 1 on target.zip 8fd1530d): every graded figure reproduced; residuals (the overload outage's end, the loggers' clock, the extension survey's declaration) closed in the generator with no graded figure moved; the offered pin of the attribution criterion declined, as it would file the main call's HOW"
  },
  "returned": [],
- "resume": "migrated from Project Mark task398 (architecture 1, shipped there 2026-11-04, never run on the platform); re-read the build against the Sulfur standard (deep reasoning: three or more dependent inferences with a real modeling judgment, the one-fact test, the banned kinds) and the Sulfur submission shape (golden ZIP, four answer blocks), then /build task11 from the stage that fails",
+ "resume": "/fix-rubric in flight: asks re-sited and rebuilt, every free gate green (checks 79/0, verify 0, two identical rebuilds, figures_check, precut 0 FAIL, audit_containers 0 FAIL, leak.py REVIEW, leak reader NO LEAK, freeze rubric PASS); the determinism judge thread on the new asks is pending (/tmp/determinism-check-task11-215151/verdict.md); on APPROVE set READY, append returned (repair rubric) and commit RESHIPPED",
  "approved": null,
  "delivered": "2026-11-04",
  "portal": null,
@@ -72,5 +72,30 @@
   "status_in_mark": "SHIPPED",
   "date": "2026-11-08",
   "note": "moved from Project Mark at the author's word: architecture 1 shipped there on 2026-11-04, pending, never run on the platform; carried on here for the Sulfur bar"
+ },
+ "runs": {
+  "run1": 78,
+  "run2": 54,
+  "average": 66.0,
+  "counterfactual_average": 76.0,
+  "first_wrong_step": {
+   "run1": "unfinished chain at R3: left the 29 and 30 May pulse unattributed (45 days)",
+   "run2": "dismissed own evidence at R3: measured the intake-depth match, filed no count"
+  },
+  "triage": "FIX_ASKS",
+  "recorded": "2026-11-08",
+  "history": [
+   {
+    "date": "2026-11-08",
+    "run1": 78,
+    "run2": 54,
+    "average": 66.0,
+    "classes": [
+     "unfinished chain",
+     "dismissed own evidence"
+    ],
+    "route": "FIX_ASKS -> /fix-rubric"
+   }
+  ]
  }
 }

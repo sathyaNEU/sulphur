@@ -5,8 +5,9 @@ The call: the plant's raw-water days above the 3.0 ug/L trigger in the 15 April 
 its atrazine (plan 5.1). Each tributary's water enters the summer lake at the depth where the lake, read from the dam
 buoy's thermistor string, is as warm as the tributary's daily mean water temperature; the intake draws the layer at
 its own depth below the day's water surface; a sub-watershed's atrazine is in the water the intake drew on a day only
-if its water entered within the intake's layer on some day in the weeks before. The asks: each sub-watershed's April
-to September atrazine at its station, and the carbon fed by month."""
+if its water entered within the intake's layer on some day in the weeks before. The asks: each sub-watershed's days
+by month of the season, and the carbon fed in each month from May to August that the plant would not have fed without
+each sub-watershed's atrazine (SOP-WQ-07 replayed on the results without it)."""
 import csv
 import datetime as dt
 import math
@@ -540,6 +541,76 @@ def carbon(target, run_spans=None, empty_spans=None, sp=None):
     return dict(by_month), down, sp, dict(by_month_nodown)
 
 
+# ------------------------------------------------------------------ the carbon each sub-watershed's atrazine cost (ask 2)
+RESIDUE = 0.21                 # ug/L: what the intake's layer held before Fennick Creek's water reached it (SF10)
+
+
+def dose_for(v):
+    """SOP-WQ-07 Table 1."""
+    return 12.0 if v <= 4.0 else (18.0 if v <= 5.5 else 25.0)
+
+
+def sop_replay(results):
+    """SOP-WQ-07 3.2 and 3.3 day by day over the season: the feed starts, or changes dose by Table 1, on a day above
+    the trigger, and stops after two days in a row at or below 2.5 ug/L. Returns [(date, dose mg/L)], 0 a stop."""
+    on, cur, low, out = False, 0.0, 0, []
+    for d in sorted(results):
+        if not (SEASON[0] <= d <= SEASON[1]):
+            continue
+        v = results[d]
+        if v > TRIGGER:
+            low = 0
+            nd = dose_for(v)
+            if nd != cur:
+                out.append((d, nd))
+                cur = nd
+            on = True
+        elif on:
+            low = low + 1 if v <= 2.5 else 0
+            if low >= 2:
+                out.append((d, 0.0))
+                on, cur, low = False, 0.0, 0
+    return out
+
+
+def without(results, E, k, h=2.0, window=30):
+    """The season's day results without sub-watershed k's atrazine (plan 5.1): on a day k's water was the only
+    atrazine-bearing water to have reached the intake's layer, the residue; on a day it had not reached it, the
+    result as recorded. Returns the results and the days where k shared the layer with another sub-watershed."""
+    out, shared = dict(results), []
+    for d, v in results.items():
+        if not (SEASON[0] <= d <= SEASON[1]):
+            continue
+        src = [kk for kk in SUBS if reached(E, d, kk, h, window)]
+        if k in src and len(src) == 1:
+            out[d] = min(v, RESIDUE)
+        elif k in src:
+            shared.append(d)
+    return out, shared
+
+
+def carbon_spared(target, results, E, pac_month, sp_actual, cf=None):
+    """Pounds the plant fed in each month that it would not have fed without each sub-watershed's atrazine: the SOP
+    replayed on the results without it; where the replay starts no feed, every pound fed; where it gives the plant's
+    own setpoint record, none. `cf` replaces the counterfactual results per sub-watershed (the shallow routes)."""
+    actual = [(t.date(), v) for t, v in sp_actual]
+    assert sop_replay(results) == actual, "the plant's setpoints do not follow SOP-WQ-07"
+    out = {}
+    for k in SUBS:
+        r = cf[k] if cf else without(results, E, k)[0]
+        sch = sop_replay(r)
+        if sch == actual:
+            out[k] = {m: 0.0 for m in pac_month}
+        elif not sch:
+            out[k] = dict(pac_month)
+        else:
+            at = {t.date(): t for t, _ in sp_actual}
+            sp = [(at.get(d, dt.datetime.combine(d, dt.time(10, 15))), v) for d, v in sch]
+            cb = carbon(target, sp=sp)[0]
+            out[k] = {m: pac_month[m] - cb.get(m, 0.0) for m in pac_month}
+    return out
+
+
 # ------------------------------------------------------------------ the ladder's rungs (the easy routes)
 def mixed_lake(results, days, dl, window=30):
     """The mixed-lake reading: on each day above the trigger, each sub-watershed's share of the atrazine that
@@ -565,10 +636,13 @@ def compute(target):
     dl = daily_loads(target, S, series)
     cb = carbon(target)
     pac, down, sp, pac_nodown = cb
+    pac_m = {m: pac.get(m, 0.0) for m in (5, 6, 7, 8)}
+    spared = carbon_spared(target, results, E, pac_m, sp)
+    shared = {k: without(results, E, k)[1] for k in SUBS}
     rungs = dict(r0_load=dict(L), r1_mixed30=mixed_lake(results, days, dl, 30),
                  r1_mixed14=mixed_lake(results, days, dl, 14), r1_mixed45=mixed_lake(results, days, dl, 45))
     return dict(results=results, screen=screen, conf=conf, days=days, E=E, T=T, per=per, who=who, loads=L,
-                loads_month=LM, samples=S, pac=pac, pac_nodown=pac_nodown, down=down, setpoints=sp, rungs=rungs,
+                loads_month=LM, samples=S, pac=pac, spared=spared, shared=shared, pac_nodown=pac_nodown, down=down, setpoints=sp, rungs=rungs,
                 elev=elev, offsets=logger_offset(target))
 
 

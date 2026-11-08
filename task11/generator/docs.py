@@ -13,8 +13,15 @@ from reportlab.lib.units import inch
 from reportlab.pdfgen import canvas as rl_canvas
 from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer, Table, TableStyle
 
+import datetime as dt
+from zoneinfo import ZoneInfo
+
+import officepdf as O
 import postprocess as PP
 import world as W
+
+CHI = ZoneInfo("America/Chicago")
+PLANT_TEAM = "Merrin Water Treatment Plant"
 
 SS = getSampleStyleSheet()
 BODY = ParagraphStyle("b", parent=SS["BodyText"], fontName="Helvetica", fontSize=9.3, leading=12.6,
@@ -139,8 +146,9 @@ def plan(path):
                          ["Reviewed", "Carl Newman", "", "6 March 2025"],
                          ["Adopted", "Board of Water Commissioners", "Resolution 2025-07", "18 March 2025"]])]
         return s
-    two_pass(path, story, "SWP-01 rev 2", "Source Water Protection Plan: Lake Merrin",
-             b"D:20250318150212-05'00'", b"D:20250318150212-05'00'")
+    O.build(path, story(), "Source Water Protection Plan: Lake Merrin", W.DEPT, "SWP-01 revision 2",
+            "SWP-01 rev 2", dt.datetime(2025, 3, 18, 15, 2, 12, tzinfo=CHI), dt.datetime(2025, 3, 18, 15, 9, 40, tzinfo=CHI),
+            margin_mm=23, top_mm=20, bottom_mm=19, page_of=True, body_pt=9.5, letter=True, header=W.DEPT)
 
 
 def sop(path):
@@ -182,8 +190,9 @@ def sop(path):
                 Spacer(1, 8),
                 signatures([["Prepared", "Brandi Dougherty", "", "25 March 2024"],
                             ["Approved", "Carl Newman", "", "28 March 2024"]])]
-    two_pass(path, story, "SOP-WQ-07 rev 4", "SOP-WQ-07 Powdered Activated Carbon Feed",
-             b"D:20240402091544-05'00'", b"D:20240402091544-05'00'")
+    O.build(path, story(), "SOP-WQ-07 Powdered Activated Carbon Feed", PLANT_TEAM, "Standard operating procedure",
+            "SOP-WQ-07 rev 4", dt.datetime(2024, 4, 2, 9, 15, 44, tzinfo=CHI), dt.datetime(2024, 4, 2, 9, 21, 7, tzinfo=CHI),
+            margin_mm=23, top_mm=20, bottom_mm=19, page_of=True, body_pt=9.5, letter=True, header=W.DEPT)
 
 
 def drawing(path):
@@ -255,8 +264,42 @@ def drawing(path):
     c.drawString(tb_x + 3.05 * inch, tb_y + 0.15 * inch, "SHEET 9 OF 22")
     c.showPage()
     c.save()
-    PP.normalize_pdf(path, b"D:20110815103000-05'00'", b"D:20110815103000-05'00'")
+    plot_pdf_stamps(path, b"D:20190312141822-05'00'", b"D:20190312141822-05'00'")
     cad_export_info(path)
+
+
+def plot_pdf_stamps(path, created, modified):
+    """created, modified: the in-fiction stamps as PDF dates of the invariant date's length, D:YYYYMMDDHHMMSS+HH'MM'
+    (the info dictionary carries the creation date before the modification date). The library's banners are blanked
+    and its sequential font-subset tags (AAAAAA+, AAAAAB+) become the six-letter tags other producers write, each
+    substitution at equal length so the cross-reference offsets hold."""
+    import hashlib
+    b = open(path, "rb").read()
+    n = len(b)
+    inv = b"D:20000101000000+00'00'"
+    assert len(created) == len(modified) == len(inv) and b.count(inv) == 2
+    b = b.replace(inv, created, 1).replace(inv, modified, 1)
+    for banner in (b"ReportLab Generated PDF document (opensource)",
+                   b"ReportLab generated PDF document -- digest (opensource)"):
+        b = b.replace(banner, b" " * len(banner))
+    # the producer string and the digest comment, replaced at equal length so the offsets hold
+    producer = rb"ReportLab PDF Library - \(opensource\)"
+    if producer in b:
+        stand_in = rb"PDFlib 9.3.1 \(Win64\)"
+        b = b.replace(producer, stand_in + b" " * (len(producer) - len(stand_in)))
+    for banner in (b"% ReportLab generated PDF document -- digest (opensource)",
+                   b"% ReportLab generated PDF document (opensource)"):
+        b = b.replace(banner, b"%" + b" " * (len(banner) - 1))
+    tags = {}
+    for m in re.finditer(rb"/([A-Z]{6})\+([A-Za-z0-9-]+)", b):
+        key = m.group(0)
+        if key not in tags:
+            h = hashlib.sha256(key + created).digest()
+            tags[key] = b"/" + bytes(65 + x % 26 for x in h[:6]) + b"+" + m.group(2)
+    for old, new in tags.items():
+        b = re.sub(re.escape(old) + rb"(?![A-Za-z0-9-])", new, b)
+    assert len(b) == n and b"ReportLab" not in b and b"reportlab" not in b and b"AAAAAA+" not in b
+    open(path, "wb").write(b)
 
 
 def cad_export_info(path):
@@ -268,9 +311,9 @@ def cad_export_info(path):
     m = re.search(rb"\d+ 0 obj\n<<\n(/Author \(\).*?/Trapped /False)\n>>\nendobj", b, re.S)
     assert m, "info dictionary not found"
     old = m.group(1)
-    new = (b"/Author (cball) /CreationDate (D:20110815103000-05'00') "
-           b"/Creator (AutoCAD 2011 - English 2011 \\(18.1s \\(LMS Tech\\)\\)) "
-           b"/ModDate (D:20110815103000-05'00') /Producer (pdfplot10.hdi 10.0.46.0) /Title (11-0347 S-4)")
+    new = (b"/Author (rdixon) /CreationDate (D:20190312141822-05'00') "
+           b"/Creator (AutoCAD 2019 - English 2019 \\(23.0s \\(LMS Tech\\)\\)) "
+           b"/ModDate (D:20190312141822-05'00') /Producer (pdfplot16.hdi 16.0.52.0) /Title (11-0347 S-4)")
     assert len(new) <= len(old), (len(new), len(old))
     b = b[:m.start(1)] + new + b" " * (len(old) - len(new)) + b[m.end(1):]
     b = b.replace(b"%PDF-1.3\n", b"%PDF-1.5\n", 1)

@@ -129,6 +129,7 @@ say("stratified from", onset.isoformat() == F["strat_first"], onset.isoformat(),
 # the attribution, by its own route: on each day above the trigger, the sub-watershed whose water came nearest the
 # intake's depth on that day or a stratified day before it in the last 30
 count = defaultdict(int)
+cause = {}
 for d in days:
     best = None
     for n in range(31):
@@ -145,6 +146,11 @@ for d in days:
             if best is None or gap < best[0]:
                 best = (gap, k)
     count[best[1]] += 1
+    cause[d] = best[1]
+MON = {4: "April", 5: "May", 6: "June", 7: "July", 8: "August", 9: "September", 10: "October"}
+for k, name in NAMES.items():
+    got = {MON[m]: sum(1 for d, c in cause.items() if c == k and d.month == m) for m in MON}
+    say("days by month, %s" % name, got == F["days_by_sub_month"][name], got, F["days_by_sub_month"][name])
 for k, name in NAMES.items():
     say("days caused, %s" % name, count[k] == F["per_sub"][name], count[k], F["per_sub"][name])
 say("the call", max(count, key=count.get) == {v: k for k, v in NAMES.items()}[F["call"]], max(count, key=count.get),
@@ -313,5 +319,36 @@ for a, b in zip(pts, pts[1:]):
 for m, name in ((5, "May"), (6, "June"), (7, "July"), (8, "August")):
     v = int(round(lb[m]))
     say("carbon %s" % name, v == F["pac_lb"][name], v, F["pac_lb"][name])
+# ---------------------------------------------------------------- carbon each sub-watershed's atrazine cost
+# SOP-WQ-07 3.2 and 3.3 by its own loop over the season's results; a sub-watershed's days above the trigger fall to
+# the trigger or under without its atrazine, and its feed-window days after them carry its water too (the verifier
+# takes, on every season day, the sub-watershed whose water came nearest the intake as the day's only source)
+def sop(res_):
+    on, cur, low, out = False, 0.0, 0, []
+    for d in sorted(res_):
+        if not (dt.date(2026, 4, 15) <= d <= dt.date(2026, 10, 31)):
+            continue
+        v = res_[d]
+        if v > 3.0:
+            low = 0
+            nd = 12.0 if v <= 4.0 else (18.0 if v <= 5.5 else 25.0)
+            if nd != cur:
+                out.append((d, nd))
+                cur = nd
+            on = True
+        elif on:
+            low = low + 1 if v <= 2.5 else 0
+            if low >= 2:
+                out.append((d, 0.0))
+                on, cur, low = False, 0.0, 0
+    return out
+say("SOP replay reproduces the setpoint record", sop(result) == [(t.date(), v) for t, v in sp])
+for k, name in NAMES.items():
+    cf = {d: (0.21 if cause.get(d) == k or (d not in cause and k == max(count, key=count.get)
+                                           and sp[0][0].date() <= d <= sp[-1][0].date()) else v) for d, v in result.items()}
+    sch = sop(cf)
+    for m, mn in ((5, "May"), (6, "June"), (7, "July"), (8, "August")):
+        v = int(round(lb[m])) if not sch else (0 if sch == [(t.date(), x) for t, x in sp] else None)
+        say("carbon %s %s" % (name, mn), v == F["carbon_spared_lb"][name][mn], v, F["carbon_spared_lb"][name][mn])
 print("%d failed" % len(FAILS))
 sys.exit(1 if FAILS else 0)

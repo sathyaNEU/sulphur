@@ -4,7 +4,7 @@
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: source, intake, tributary, receptor, decisive, tessel, fennick, sampled, window, attribution, record, sentence, temperature, harmless, closed, shipped, carries, nothing, sub-watersheds, objective, forward, pattern, correct, second, decomposition
+Stump terms swept: source, intake, tributary, receptor, station, decisive, tessel, fennick, window, attribution, record, sentence, temperature, sampled, harmless, closed, shipped, carries, nothing, sub-watersheds, objective, forward, pattern, correct, second
 
 ## 1 file names (REVIEW 1)
 - **REVIEW** `lake/merrin_dam_precip_daily_2026.txt`: a text file in the pack: confirm it is the organisation's own record (a thread, a log, a letter) and does not describe the data
@@ -13,7 +13,7 @@ Stump terms swept: source, intake, tributary, receptor, decisive, tessel, fennic
 - **REVIEW** `program/source_water_protection_plan_rev2.pdf`: carries 8 of 8 distinctive words of the committed call: 'Place the 2027 atrazine cost-share program in the Fennick Creek sub-watershed.'
 
 ## 4 design-note vocabulary (REVIEW 1)
-- **REVIEW** `program/source_water_protection_plan_rev2.pdf`: 10 of 25 stump-paragraph terms appear (source, intake, tributary, tessel, fennick, sampled); read whether the document names the move
+- **REVIEW** `program/source_water_protection_plan_rev2.pdf`: 11 of 25 stump-paragraph terms appear (source, intake, tributary, station, tessel, fennick); read whether the document names the move
 
 ## 6 ranking artifacts (REVIEW 2)
 - **REVIEW** `program/haldane_extension_atrazine_use_survey_2026.xlsx`: names 5 of 6 answer-set candidates beside numbers; confirm it does not rank them on the decision question
@@ -22,8 +22,20 @@ Stump terms swept: source, intake, tributary, receptor, decisive, tessel, fennic
 ## 9 dates after the setting (REVIEW 1)
 - **REVIEW** `lake/buoy_service_log_2026.csv`: 1 ISO dates after 2026-11-03, e.g. 2026-11-09
 
-## 10 container metadata (INFO 1)
-- **INFO** `-`: audit reported no writer signature (1 lines)
+## 10 container metadata (REVIEW 2)
+- **REVIEW** `target/lake/intake_tower_record_drawing_S-4.pdf`: Creator 'AutoCAD 2019 - English 2019 (23.0s (LMS Tech))' is not an authoring application
+- **REVIEW** `target/lake/intake_tower_record_drawing_S-4.pdf`: Producer 'pdfplot16.hdi 16.0.52.0' is not a PDF engine
+
+## 11 prompt gate (REVIEW 1)
+- **REVIEW** `prompt.txt`: templating signals: 1 of seven: a closing list of documents ('In atrazine_sources_2026.xlsx, put the powdered carbon the plant fed in each mon') (the portal marks two as borderline and three as templated: one question, each file named in the sentence that gives its reason, no closing list)
+
+## 12 client quality check (INFO 2)
+- **INFO** `-`: 26 usable files (10 or more required)
+- **INFO** `-`: 2 file categories: document, spreadsheet (2 or more required)
+
+## 13 task metadata (REVIEW 2)
+- **REVIEW** `metadata.json`: files.target/hydro/TR-01_tessel_r_halvard_br_2026.csv.covers shares the design note's stump vocabulary (station, tessel, temperature): say what the task decides, not how
+- **REVIEW** `metadata.json`: files.target/hydro/FC-02_fennick_cr_cr_w38_2026.csv.covers shares the design note's stump vocabulary (station, fennick, temperature): say what the task decides, not how
 
 ## 2 author vocabulary (clean)
 
@@ -32,8 +44,6 @@ Stump terms swept: source, intake, tributary, receptor, decisive, tessel, fennic
 ## 7 hidden content (clean)
 
 ## 8 column names (clean)
-
-## 11 prompt gate (clean)
 
 
 ## Solver's-eye read

@@ -13,7 +13,7 @@ shell are new, and the seed's mechanism is not used (Tried and rejected, first l
 | Client domain / task type | Physical & Environmental Sciences (`physical-environmental-sciences`), `pollution-source-attribution` (serves RC): attributing the atrazine in a supply reservoir's raw water to the tributary sub-watersheds it came from is source attribution at a receptor |
 | Objective | Root-Cause Analysis: the cause behind the raw water's days above the plant's carbon-feed trigger, rivals ruled out on evidence, named so that fixing it (the cost-share program in that sub-watershed) recovers the outcome |
 | Decision | which sub-watershed above Lake Merrin gets Brennick Water's one 2027 atrazine cost-share program (`root_cause_named`), forward facing: the program must sign its farms before the April 2027 applications, and it is judged on the 2026 season, the last one closed |
-| Shape | 12, drill-down to one leaf: the 2026 days above the trigger, by sub-watershed (each sub-watershed's days caused), with each sampled sub-watershed's atrazine past its station by month (April to July) and the plant's carbon by month (May to August) as the asks |
+| Shape | 12, drill-down to one leaf: the 2026 days above the trigger, by sub-watershed (each sub-watershed's days caused), with each sub-watershed's days by month of the season and the carbon fed from May to August that the plant would not have fed without each sub-watershed's atrazine as the asks (re-sited after the platform's round 1; the first build asked the station loads and the carbon fed) |
 | Gap / pattern / generators | `objective` (each sub-watershed's load is correct and is not what the intake drew); pattern `none`; `G8` decisive (reachability: whether a tributary's water reached the intake's layer at all), `G7` second (the operating window: only while the lake is stratified) |
 | Gate G | `decomposition_attribution`: the raw water's correctly recorded days above the trigger attributed among the sources. No shipped artifact ranks the sub-watersheds on days caused; the one file that ranks them at all, the Haldane extension survey (atrazine applied, the Tessel River first), is the declared wrong-basis distractor in `metadata.json`, ruled out by plan 5.1's basis (days of raw water above the trigger caused, not atrazine applied), and deleting it with the other two declared distractors leaves the call, the load-share rung (the Tessel River, 39 days) and every ask figure unchanged (asserted) |
 | Strategy | `decomposition_attribution`; Layer 2 family `field_method`; pattern `own:inflow-entry-depth-against-the-intake-layer` |
@@ -88,7 +88,7 @@ trailing 30-day load share names the Tessel River (39 of 47 days), when the lake
 days, the Tessel's warm water spread over the surface layer above the intake, and Fennick Creek's cool spring-fed
 water entered at the intake's own depth and was behind all 47.
 
-## Three rules
+## Deep reasoning
 
 Task type: pollution-source-attribution (Physical & Environmental Sciences), serving Root-Cause Analysis: the cause of the raw water's days above the trigger, attributed among the tributary sources at the receptor and named so that the program placed on it removes the excess.
 
@@ -113,6 +113,24 @@ Estimand: Plan SWP-01 5.1 and 5.2 (program/source_water_protection_plan_rev2.pdf
 No decoy: Nothing is planted: no memo, draft, briefing, prior placement or stakeholder figure argues for the Tessel River; the loads are correct and the solver computes them; no block of readings is copied; every rule the call needs is filed and nothing decisive is withheld.
 
 No certified replay: No certified or published figure carries the method: the pack holds no earlier season's attribution, no consultant's study and no validation record to reproduce, and every entry depth is computed from the raw profile and the raw temperatures.
+
+Chain: (1) the buoy's profiles show the lake layered (top to bottom 1 C or more) from 27 April to 6 October, every day above the trigger inside it, so the intake drew one layer and a mixed-volume mass balance does not describe what it drew; (2) each tributary's water goes in at the depth where that day's profile is as warm as the tributary's daily mean, and the intake's depth is the day's pool elevation less the datum-corrected centreline, so each source is placed against the intake day by day; (3) only Fennick Creek's water entered within the intake's layer in the weeks before each of the 47 days (within 0.63 m on every one, every other tributary at least 4.5 m away), so plan 5.1's counterfactual leaves the raw water at the spring residue without it and counts every day, the 29 and 30 May pulse included, for Fennick Creek and none for the others.
+
+Judgment: the modelling judgment that a stratified reservoir routes each inflow to its density level and its fixed intake withdraws its own layer, justified by the data rather than named: the buoy temperature at the intake's depth tracks the plant's raw-water temperature (both round-1 runs measured it, 0.23 C RMSE against 5.7 C for the whole-lake mean), and the stations' temperatures place Fennick Creek alone at that depth; and the second judgment that a residual a fitted transport model cannot reproduce (29 and 30 May, 6.78 and 6.40 ug/L) still belongs to the only water in the layer.
+
+Hidden by: a pooled validation that passes: the raw water rises after the storms that carry every tributary's load, and a lagged correlation of the raw water on each tributary's samples peaks at 0.688 to 0.705 for all four at 15 to 16 days, so the load route's own check confirms it and separates no source.
+
+After the notice: (1) once a run sees the lake is layered it still has to place every tributary every day against a profile with a re-hung string on a CST clock and an intake on another datum, and the wrong turn is the whole-lake mean or a fixed depth, which puts the Tessel River back in play; (2) it still has to carry plan 5.1's counterfactual through the layer to a count per sub-watershed, and the wrong turns are leaving the days a fitted model under-predicts unattributed (round-1 run 1, 45 days) or declining to count at all (round-1 run 2); (3) for the asks it has to carry the counterfactual through SOP-WQ-07's start and stop memory, and the wrong turn is booking each day's carbon to that day's cause.
+
+One-fact test: the likeliest rescuing sentence is "the lake was stratified and the intake draws one layer"; round-1 run 2 established exactly that from the buoy and still filed no count, because the counts need each inflow routed to its depth day by day and the counterfactual carried through, and no single sentence supplies the 47 against 0.
+
+No replay: the pack carries no earlier attribution, consultant's study or published share to reproduce, and no stated number is wrong; every entry depth is computed from the raw profile and the raw temperatures.
+
+Pinned: the rivals were run on the cut pack: the trailing load share over 14, 30 and 45 days (the Tessel River 38 to 40) is ruled out by the layering the buoy records on all 47 days; lagged correlation and regression separate no source (r 0.688 to 0.705); the nearest-entry rule (the verifier's route) and the presence corridor over half-widths 1.0 to 3.5 m and look-backs 0 to 120 days give Fennick Creek 47 and the others none; the 08:00 temperatures and the noon profile give the same sources (checks.py C3 and SF7).
+
+Run forecast: measured in round 1, run 1 an unfinished chain at R3 (landed, the May pulse left unattributed, 45 days) and run 2 dismissed own evidence at R3 (the intake-depth match measured, then no count); expected next, one run on a method shortcut at R1 (the load share, the Tessel River) or dismissed own evidence, and one landing with an unfinished chain on the pulse or the procedure's run-on.
+
+Strategy label: Separating two explanations for one pattern (F8 attribution), WORKS IN FORM: the storm timing fits every source, and only the day-by-day relation of each inflow's temperature to the buoy's profile against the intake's depth separates which source the intake drew; no dated cutover, no filed sentence names the split.
 
 Lesson: A receptor in a layered water body draws the layer it sits in, so apportioning what it received by the sources' loads is wrong when the sources enter at different depths; no build on file teaches an inflow's entry level against a fixed withdrawal depth (the nearest, task263, separates wells measured only in pumped mixtures where every source is present at the receptor).
 
@@ -160,11 +178,16 @@ above.
 | SF8 | the intake's layer and look-back | 2 m either side, 30 days | 1.0 to 3.5 m; 0 to 120 days | same counts | same call (C3 corridor, asserted) |
 | SF9 | the season judged | 2026, the last completed (plan 5.1) | a forecast of 2027 | not the filed season | plan 5.1 |
 | SF10 | stayed at or below the trigger without it | against the residue the intake's layer held before Fennick's water reached it (0.21 ug/L) | against zero | same call | same call |
-| SF11 | ask conventions | left 15-minute sum, mean offset per hang, local months | trapezoid; closing stamp in; median offset per hang; DC-04 months on UTC | the same 16 cells | same figures (asserted) |
-| SF12 | the samples a month's flows take | the samples either side of each flow, whatever their month | samples inside the month only | cells move | the prompt: interpolating its samples linearly in time against the 15-minute flows |
+| SF11 | load conventions (the dropped load ask; the default path's loads only) | left 15-minute sum, mean offset per hang, local months | trapezoid; closing stamp in; median offset per hang; DC-04 months on UTC | the same 16 cells | same figures (asserted) |
+| SF12 | the samples a month's flows take (the dropped load ask) | the samples either side of each flow, whatever their month | samples inside the month only | cells move | the prompt: interpolating its samples linearly in time against the 15-minute flows |
 | SF13 | the look-back into the mixed spring | stops where the lake was mixed | the presence test carried into April | days left unattributed | plan 5.1: the spring residue (at most 0.21 ug/L) cannot hold a day above the trigger |
-| SF14 | when an overload outage ends (carbon ask) | the next RUN STATUS ON | the trip's return-to-normal | the same four months to the pound | same figures: the trip latches and its return-to-normal is logged in the restart's minute (asserted) |
-| SF15 | the DC-04 and LB-05 loggers' clock (asks; inert for the call) | UTC | the stamps read as local clock times | Dunmore Creek's May, June and July move | the loggers' own header: Project ID "Brennick Water source water, logger clock UTC" |
+| SF14 | when an overload outage ends (Ask B) | the next RUN STATUS ON | the trip's return-to-normal | the same four months to the pound | same figures: the trip latches and its return-to-normal is logged in the restart's minute (asserted) |
+| SF15 | the DC-04 and LB-05 loggers' clock (inert for the call and both asks; it moved the dropped load ask) | UTC | the stamps read as local clock times | the daily mean temperatures move by hours, no entry depth leaves its band | same call; the loggers' own header: Project ID "Brennick Water source water, logger clock UTC" |
+| SF16 | "fed ... that it would not have fed" (Ask B) | pounds actually fed (the feeder's outages out) | pounds the setpoints called for | the call's row moves every month | the asking sentence: carbon the plant fed |
+| SF17 | the day's month (Ask A) | the calendar month of the day's result | none other in the records | n/a | the records' own dates |
+| SF18 | the results without Fennick Creek's atrazine (Ask B) | the residue, 0.21 ug/L | zero; the pre-pulse 0.5 to 0.65 ug/L | no day above the trigger under any, so no feed starts | same figures (asserted) |
+| SF19 | the SOP replay's timing within a day (Ask B) | the plant's own change times | 10:15 for a change the record lacks | the golden rows are all or none, so no timing enters them | same figures |
+| SF20 | days two or more sub-watersheds shared the intake's layer (Ask B) | 15 September to 6 October only, every result under 1.0 ug/L | any split of them | no counterfactual on them can start a feed | same figures (asserted) |
 
 ## Ladder
 
@@ -213,63 +236,73 @@ Executed the prompt, plan SWP-01 5.1 and 5.2 and SOP-WQ-07 2.3 and 3.1 word for 
 days are the 47 season results above 3.0 ug/L; "caused" is 5.1's counterfactual; the only open HOW is how to know
 what the intake drew without a sub-watershed's atrazine, and every member of the family that respects the layering
 the buoy records gives Fennick Creek 47 and the others none, while the load-share members are ruled out by that
-layering, which the buoy records on every one of the 47 days. The asks are pinned by the prompt (months, units,
-rounding, linear interpolation in time against the 15-minute flows) and the records' own headers (the bottle log's
-"Time logged", the autosampler log's "Sample time", the ratings' "Effective from ... CDT", the operating report's
-"Plant day (06:00 to 06:00 next day)", SOP 3.2's pounds formula); the conventions left converge (SF11, asserted).
+layering, which the buoy records on every one of the 47 days. The asks are pinned by the prompt (the season and its months, pounds,
+carbon the plant fed that it would not have fed) and by the filed procedure (SOP-WQ-07 3.2's Table 1 and pounds
+formula, 3.3's stop rule, which replayed on the recorded results gives the plant's own setpoints) and the records'
+own headers (the operating report's "Plant day (06:00 to 06:00 next day)"); the conventions left converge (SF16 to
+SF20, asserted).
 
 ## Oracles
 
 None. Nothing ties only under the golden: the raw water's storm timing fits every source, the dam log's storage,
 releases and the area-capacity table balance whatever the attribution, and the extension survey ranks the Tessel
-River first by application. For the asks, no total, control or second source confirms a load cell or a carbon month:
-the operating report carries no carbon column, the State laboratory runs a quarter of the storm bottles at most, and
-no file states a bottle's position or a feeder outage's length.
+River first by application. For the asks, no file books a day or a pound of carbon to a sub-watershed, the operating
+report carries no carbon column, and no file states a feeder outage's length.
 
 ## Ask sheet
 
-- **Ask A, each sampled sub-watershed's atrazine past its station in each month from April to July (16 figures,
-  Ladd Branch not sampled).** Home: the program's load table the coordinator reports each November (plan 6.1). Files:
-  the three station exports, the DC-04 logger, the ratings and field visits, the bottle log, the autosampler run
-  logs, both laboratories' results. Primary D8 (a recorded time for the event time): a storm bottle's time is the
-  autosampler's sample time for its position, while the bottle log and both laboratories carry the morning the
-  carousel came off; the reconstruction left after noticing is which logged bottle filled at which position, the
-  carousel's bottles in number order against the positions that drew a sample (NO LIQUID positions hold none). The
-  logged-time route moves all 16 cells; the k-th bottle at the k-th position moves 8. Second primary D3 on a disjoint
-  block (Dunmore Creek): gage height is the logger's level plus the staff-gage offset, and the logger slid 0.25 ft in
-  its pipe on a dry afternoon between two visits; one mean offset moves May, June and July, offsets stepping at the
-  visits or prorated between them move July. Hazards: the loggers' UTC clock (stated in their header, SF15; months
-  cut on UTC converge, SF11), DC-04's rating change, the hyphenless State laboratory numbers, the split bottles
-  (plan 3.2).
-- **Ask B, the powdered carbon fed in each month from May to August (4 figures).** Home: the treatment budget's
-  carbon line. Files: the setpoint historian, the alarm and event history, the operating report, SOP-WQ-07. Primary
-  D4 (absence evidenced in a file no habitual join reaches): the feeder fed nothing while it was stopped by a motor
-  overload until it was started again (the trip latches, so its return-to-normal comes with the restart, SF14) and
-  while the hopper stood at low-low; the setpoints alone move all four months and run status alone, missing the
-  empty hopper, moves three. Hazard: the historian's UTC clock moves all four.
-- **Chart:** the daily result against the trigger; it carries no ask figure and no decision quantity in its title.
-- Separation: the asks read the stations' discharge columns, the bottles, the laboratories, the ratings, the run
-  logs and the plant's SCADA and operating report; the call reads none of them but the stations' temperature columns,
-  and no ask device row sits in a file or column the call reads (the DC-04 slip moves its level, not its
-  temperature).
+Re-sited 2026-11-08 after the platform's round 1 (run 1 landed Fennick Creek on 45 days, 78; run 2 filed no count,
+54; average 66): both runs collected every station-load and carbon-fed cell but Dunmore Creek's, because those asks
+read rows the deep step never touches. Every ask now reads the deep step's output across the answer's shape.
 
-| Ask | Figures | Cracker (lands the call; battery and filed rules; bottle-log times, one mean offset, setpoints alone) | Verdict |
+- **Ask A, every sub-watershed's days above the trigger for the season and for each month of it (5 rows of 7
+  months, in the memo).** Reads the attribution itself: the 47 days booked to the one sub-watershed whose water had
+  entered the intake's layer, by the month of the day's result. Second judgment: the 29 and 30 May pulse (6.78 and
+  6.40 ug/L), which a fitted transport model under-predicts by more than half (run 1: 2.72 and 2.22); the only water
+  in the intake's layer then was Fennick Creek's, so the residual is Fennick Creek's, and a run that leaves it
+  unattributed files May 0 against 2. Shallow value (30-day load share): the Tessel River June 16, July 23; Fennick
+  Creek July 10; Oxley and Dunmore Creek non-zero; only Ladd Branch's row agrees. Files: the plant's two result
+  exports, the buoy table and its service log, the dam log, the S-4 drawing, the five stations' temperatures (eight
+  files, 14 columns). Pin test: "caused" is plan 5.1's counterfactual and "month" is the day's calendar month; neither
+  hands over the routing. Mess on the path: the LIMS overlap, the buoy's CST clock and re-hang, the datum, the
+  loggers' UTC (texture every careful run cleans).
+- **Ask B, the carbon the plant fed in each month from May to August that it would not have fed without each
+  sub-watershed's atrazine (5 rows of 4 months, in the workbook).** Reads the attribution and the plant's procedure:
+  SOP-WQ-07 3.2 and 3.3 replayed on the season's results reproduces the plant's eleven setpoint changes exactly
+  (asserted), and replayed on the results without each sub-watershed's atrazine gives no feed at all without
+  Fennick Creek's (every pound fed goes: 3,243, 25,024, 23,776, 3,693) and the plant's own record without any other's
+  (none goes). Second judgment: the counterfactual runs through the procedure's memory, so the carbon fed after the
+  last day above the trigger while the feed waited on its stop rule (all of August, and 22 July to 31 July) is
+  Fennick Creek's too; booking each day's carbon to the sub-watershed behind that day files 1,925, 24,444, 17,938 and
+  0. The May pulse moves this row as well (a run that leaves it unattributed files May 0 and June 24,444). Shallow
+  value (30-day load share replayed through the SOP): the Tessel River 1,686, 10,716, 21,221, 3,693; Fennick Creek 0,
+  3,019, 611, 0; Oxley and Dunmore Creek non-zero; only Ladd Branch's row agrees. Files: the setpoint historian, the
+  alarm history, the operating report, SOP-WQ-07, plus Ask A's eight. Pin test: "fed ... that it would not have fed"
+  fixes the basis as pounds actually fed (the outages out), and the SOP fixes the start, dose and stop; the routing
+  is named nowhere. Mess on the path: the historian's UTC clock, the motor overload trips and the empty hopper (the
+  old Ask B's devices, texture now: every careful run took them out in round 1).
+- **Chart:** the daily result against the trigger; no ask figure, graded with the file checks.
+- **Dropped:** the station atrazine by month (round 1: both runs kept 12 of 16 cells, and the 4 they lost, Dunmore
+  Creek's, were lost to the golden holding discharge flat above the DC-04 rating's top stage, not to an analytical
+  step) and the carbon fed by month (both runs kept all four). Neither can be made to depend on the deep step.
+
+| Ask row | Figures | Cracker (lands the call, leaves 29 and 30 May unattributed, run 1's measured route) | Verdict |
 |---|---|---|---|
-| A Tessel River, April to July | 4 | storm bottles at the logged morning | miss |
-| A Fennick Creek, April to July | 4 | storm bottles at the logged morning | miss |
-| A Oxley Creek, April to July | 4 | storm bottles at the logged morning | miss |
-| A Dunmore Creek, April to July | 4 | logged morning and one mean offset across the slip | miss |
-| B May to August | 4 | setpoints with no outage taken out | miss |
+| A Fennick Creek, season and months | 7 | May 0 against 2 | miss |
+| A Tessel River, Oxley, Dunmore Creek, Ladd Branch | 28 | every month 0 | keep |
+| B Fennick Creek, May to August | 4 | May 0, June 24,444 | miss |
+| B every other sub-watershed | 16 | none in every month | keep |
 
-Measured on the cut pack by every route in generator/asks.py: the cracker keeps 0 of the 20 ask figures (2 of 22
-criteria with the chart's two); the full includer (autosampler join, offsets stepping at the visits, outages taken
-out) keeps 19 of 20 and misses Dunmore Creek's July; the join with one mean offset keeps 17; the join by
-position keeps 11. If both top responses took the full join the pair would reach 81.0: that is the layer's exposure,
-and the portal measures it.
+Measured on the cut pack by generator/ceiling.py (rows kept only when every cell is exact; weights 38, 7 and 55, the
+chart in the 7): the pulse route keeps 44 of 55 ask figures (76.3), the day-tagged landed route 51 (96.0), the
+full landing 55 (100.0); the shallow route 11 (23.0, Ladd Branch's two rows) and the withheld route, run 2's, none
+(12.0). The platform's round-1 shapes on these asks: 44.2. The exposure: a run that lands every day and replays the
+procedure, paired with a shallow run, 61.5; paired with run 2's shape, 56.0; both runs landing, 100. A full landing
+collects every coupled ask by design (supplemental-stumping Part 3); the ladder carries that case.
 
-Pair ceiling: 33.5 (cracker 50.0 and mirror 17.0 on the cracker's ask route, weights 38, 7 and 55)
+Pair ceiling: 49.7 (cracker, the pulse route, with the shallow route)
 
-Mirror leakage: 9.1 per cent of ask weight (the chart's two criteria)
+Shallow keep: 20.0 per cent of ask weight (Ladd Branch's two all-zero rows)
 
 Measured by: generator/ceiling.py
 
@@ -317,6 +350,17 @@ Verdict REVIEW, no LEAK; each REVIEW line ruled here.
   4. The drawing carries its 2011 CAD plot driver's metadata (AutoCAD 2011, pdfplot10.hdi, author cball, 15 August
      2011), its text unchanged in three readers; the laboratory export drops the empty `Flag` column. The plan's and
      the SOP's bytes are unchanged.
+
+## Prompt contract
+
+A voice rewrite may not drop or change: the question sentence as it stands (which sub-watershed above Lake Merrin
+gets Brennick Water's 2027 atrazine cost-share program, judged by the 2026 season's days of raw water above the
+3.0 ug/L carbon-feed trigger each one's atrazine caused); `cost_share_placement_2027.docx` with every sub-watershed's
+count of those days for the season and for each month of it; `atrazine_sources_2026.xlsx` with the powdered carbon
+the plant fed in each month from May to August that it would not have fed without each sub-watershed's atrazine, in
+pounds to the nearest whole pound; `raw_water_atrazine_2026.png`, the daily raw-water result against the trigger.
+Never add: stratification, a layer, a depth, temperature, an entry, the intake's elevation, mixing, a look-back,
+a model, the stop rule, a dose, "replay", "counterfactual", or any method word.
 
 ## Tried and rejected
 
@@ -382,3 +426,22 @@ Verdict REVIEW, no LEAK; each REVIEW line ruled here.
   it in the data.
 - Months cut on the loggers' UTC clock offered as the whole clock closure (2026-11-04, stage 4 round 1): reading the
   stamps as local clock times moves Dunmore Creek's May to July, so the clock is carried by the loggers' own header.
+- The station atrazine by month and the carbon fed by month as the asks (platform round 1, 2026-11-08): both runs
+  collected 12 of the 16 load cells and all four carbon months, run 2 without filing any count, because neither ask
+  reads the deep step; the 4 cells both lost (Dunmore Creek's) were lost to the golden's np.interp holding DC-04
+  discharge flat above the rating's top stage on 190 intervals, a golden defect no hydrographer would defend. Both
+  asks are dropped; the loads stay as the default path's input and the carbon fed as Ask B's base.
+- The season's days by month as an ask, rejected at the first build (Mark's decoupling: "the call's own population"):
+  under Sulfur the coupling is the point, so it returns per sub-watershed, where the shallow route files non-zero
+  Tessel, Oxley and Dunmore rows and the May pulse costs a landed run its May.
+- The carbon a program halving Fennick Creek's atrazine would have spared (2026-11-08, measured): the replay starts on
+  10 to 12 and 21 June only when the residue taken is above 0.08 to 0.14 ug/L, and the stop rule then swings by weeks,
+  so the figure forks on the residue estimate; not asked.
+- A fourth critical component for the carbon (2026-11-08): the Critical Components numbers are frozen for a rubric
+  repair; the carbon rides Ask B.
+- The plan and SOP-WQ-07 as ReportLab PDFs relabelled PDFlib with an empty Creator, the drawing's 2011 plot stamps,
+  and one clock on every zip entry (container gate H1, 2026-11-08, added after the first build): the plan and the SOP
+  are now Word documents exported by LibreOffice Writer (house officepdf, letter size, the department's header), their
+  words unchanged; the drawing is the department's 2019 re-plot of REV C for its asset register (AutoCAD 2019, a stamp
+  inside the band); each zip entry carries its file's own save or export time; every data file in target.zip is byte
+  for byte the round-1 file.

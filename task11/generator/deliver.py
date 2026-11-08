@@ -35,6 +35,8 @@ def summarise(res):
     loads = {k: int(round(v)) for k, v in res["loads"].items()}
     loads_m = {k: {m: int(round(v)) for m, v in mm.items()} for k, mm in res["loads_month"].items()}
     pac = {m: int(round(res["pac"].get(m, 0.0))) for m in (5, 6, 7, 8)}
+    by_sub_month = {k: {m: sum(1 for d in res["per"][k] if d.month == m) for m in range(4, 11)} for k in G.SUBS}
+    spared = {k: {m: int(round(v)) for m, v in res["spared"][k].items()} for k in G.SUBS}
     E = res["E"]
     strat = sorted(d for d, r in E.items() if not r["mixed"])
     # entry depths on the days the tributaries ran their storms, June and July, against the intake
@@ -52,7 +54,7 @@ def summarise(res):
                  round(max(res["T"][k][d] for d in res["T"][k] if dt.date(2026, 6, 1) <= d <= dt.date(2026, 7, 31)), 1))
              for k in G.SUBS}
     return dict(call=call, call_name=G.NAME[call], call_days=per[call], per=per, days_total=len(days),
-                first_day=days[0], last_day=days[-1], by_month=by_month, loads=loads, loads_m=loads_m, pac=pac,
+                first_day=days[0], last_day=days[-1], by_month=by_month, by_sub_month=by_sub_month, spared=spared, loads=loads, loads_m=loads_m, pac=pac,
                 strat_first=strat[0], strat_last=strat[-1], ev=ev, zi_lo=round(min(zi), 1), zi_hi=round(max(zi), 1),
                 first_feed=first_feed, last_feed=last_feed, temps=temps,
                 dun_offsets=[o for _, o in res["offsets"]["DUN"]], dun_step=res["offsets"]["DUN"][1][0],
@@ -88,15 +90,20 @@ def memo(F, path):
         "and %d in July. %s's atrazine was behind all %d of them. Without it the raw water would have stayed at or "
         "below the trigger on each of those days, and no other sub-watershed's water entered the lake at the intake's depth on any of "
         "them." % (F["days_total"], bm[5], bm[6], bm[7], F["call_name"], F["call_days"]))
-    tbl = doc.add_table(rows=1, cols=2)
+    season_m = list(range(4, 11))
+    tbl = doc.add_table(rows=1, cols=2 + len(season_m))
     tbl.style = "Light Grid Accent 1"
     hd = tbl.rows[0].cells
-    hd[0].text = "Sub-watershed"
-    hd[1].text = "2026 days above the trigger its atrazine caused"
+    hd[0].text = "Days its atrazine caused"
+    for j, m in enumerate(season_m):
+        hd[1 + j].text = MONTHS[m - 1][:3] + ("" if m > 4 else " 15-30")
+    hd[-1].text = "Season"
     for k in ORDER:
         c = tbl.add_row().cells
         c[0].text = G.NAME[k]
-        c[1].text = "%d" % F["per"][k]
+        for j, m in enumerate(season_m):
+            c[1 + j].text = "%d" % F["by_sub_month"][k][m]
+        c[-1].text = "%d" % F["per"][k]
     note = doc.add_paragraph()
     nr = note.add_run("Days counted by plan SWP-01 5.1 and 5.2 on the day's raw-water result of SOP-WQ-07 2.3 (the GC/MS "
                       "confirmation where one was run, otherwise the ELISA screen). Sources: plant laboratory records, "
@@ -124,10 +131,16 @@ def memo(F, path):
     q = doc.add_paragraph()
     q.add_run("Carbon. ").bold = True
     pac = F["pac"]
+    sv = F["spared"][F["call"]]
     q.add_run("The plant fed powdered activated carbon from %s to %s: %s lb in May, %s lb in June, %s lb in July and "
-              "%s lb in August." % (F["first_feed"].strftime("%B %-d"), F["last_feed"].strftime("%B %-d"),
-                                    "{:,}".format(pac[5]), "{:,}".format(pac[6]), "{:,}".format(pac[7]),
-                                    "{:,}".format(pac[8])))
+              "%s lb in August. Without %s's atrazine no day would have reached the trigger, the feed would never "
+              "have started, and none of that carbon would have been fed (%s, %s, %s and %s lb). Without any other "
+              "sub-watershed's atrazine every day's result, and so every start, dose change and stop under SOP-WQ-07, "
+              "would have been the same: none of the carbon was theirs."
+              % (F["first_feed"].strftime("%B %-d"), F["last_feed"].strftime("%B %-d"),
+                 "{:,}".format(pac[5]), "{:,}".format(pac[6]), "{:,}".format(pac[7]), "{:,}".format(pac[8]),
+                 F["call_name"], "{:,}".format(sv[5]), "{:,}".format(sv[6]), "{:,}".format(sv[7]),
+                 "{:,}".format(sv[8])))
     doc.add_paragraph("Sign-up for the Fennick Creek program opens December 1 so that changed practices are in place "
                       "before the April applications (plan section 4.2).")
     doc.add_paragraph()
@@ -151,8 +164,9 @@ def memo(F, path):
         r_.font.size = Pt(8)
     doc.core_properties.author = "Carl Newman"
     doc.save(path)
-    PP.normalize_ooxml(path, "Carl Newman", "Brandi Dougherty", "2026-11-02T21:14:00Z", "2026-11-03T15:42:00Z",
-                       title="2027 cost-share placement")
+    PP.normalize_docx(path, "Carl Newman", "Brandi Dougherty", "2026-11-02T21:14:00Z", "2026-11-03T15:42:00Z",
+                      revision=6, total_time=94, seed="task11-memo", title="2027 cost-share placement",
+                      company="City of Brennick Water Department")
 
 
 def book(F, res, path):
@@ -205,24 +219,12 @@ def book(F, res, path):
     ws.column_dimensions["A"].width = 14
     ws.column_dimensions["B"].width = 22
 
-    ws = wb.create_sheet("Station atrazine")
-    ws.append(["Atrazine past each station by month, 2026 (kg); 15-minute flows times sample concentrations "
-               "interpolated linearly in time"])
-    ws["A1"].font = Font(bold=True)
-    ws.append(["Sub-watershed", "Station"] + [MONTHS[m - 1] for m in LOAD_MONTHS])
-    head(ws, 2, 2 + len(LOAD_MONTHS))
-    stn = dict(TES="TR-01", FEN="FC-02", OXL="OC-03", DUN="DC-04", LAD="LB-05")
+    ws = wb.create_sheet("Days by month")
+    ws.append(["Sub-watershed"] + [MONTHS[m - 1] for m in range(4, 11)] + ["Season"])
+    head(ws, 1, 9)
     for k in ORDER:
-        if k in F["loads_m"]:
-            ws.append([G.NAME[k], stn[k]] + [F["loads_m"][k][m] for m in LOAD_MONTHS])
-            for col in range(3, 3 + len(LOAD_MONTHS)):
-                ws.cell(row=ws.max_row, column=col).number_format = "#,##0"
-        else:
-            ws.append([G.NAME[k], stn[k], "not sampled"])
+        ws.append([G.NAME[k]] + [F["by_sub_month"][k][m] for m in range(4, 11)] + [F["per"][k]])
     ws.column_dimensions["A"].width = 16
-    ws.column_dimensions["B"].width = 9
-    for col in "CDEF":
-        ws.column_dimensions[col].width = 11
 
     ws = wb.create_sheet("Carbon fed")
     ws.append(["Month (2026)", "Powdered activated carbon fed (lb)"])
@@ -232,6 +234,22 @@ def book(F, res, path):
         ws.cell(row=ws.max_row, column=2).number_format = "#,##0"
     ws.column_dimensions["A"].width = 14
     ws.column_dimensions["B"].width = 32
+
+    ws = wb.create_sheet("Carbon by sub-watershed")
+    ws.append(["Carbon fed in 2026 that the plant would not have fed without each sub-watershed's atrazine (lb)"])
+    ws["A1"].font = Font(bold=True)
+    ws.append(["Sub-watershed"] + [MONTHS[m - 1] for m in (5, 6, 7, 8)])
+    head(ws, 2, 5)
+    for k in ORDER:
+        ws.append([G.NAME[k]] + [F["spared"][k][m] for m in (5, 6, 7, 8)])
+        for col in range(2, 6):
+            ws.cell(row=ws.max_row, column=col).number_format = "#,##0"
+    ws.append(["Carbon fed"] + [F["pac"][m] for m in (5, 6, 7, 8)])
+    for col in range(2, 6):
+        ws.cell(row=ws.max_row, column=col).number_format = "#,##0"
+    ws.column_dimensions["A"].width = 16
+    for col in "BCDE":
+        ws.column_dimensions[col].width = 11
 
     ws = wb.create_sheet("Entry depths")
     ws.append(["Date", "Intake depth below surface (m)"] + ["%s entry depth (m)" % G.NAME[k] for k in ORDER])
@@ -264,14 +282,10 @@ def book(F, res, path):
             ["Days above the trigger: the day's raw-water result (SOP-WQ-07 2.3) above 3.0 ug/L, 15 April to 31 October."],
             ["Days caused: a day counts for a sub-watershed when the raw water would have stayed at or below the trigger "
              "without its atrazine (plan SWP-01 5.1)."],
-            ["Station atrazine: each 15-minute discharge times the concentration interpolated linearly in time between "
-             "the samples either side of it, by local month. A storm bottle's time is its autosampler sample time; a "
-             "grab's is its logged time. State Hygienic Laboratory result used where both laboratories ran a bottle; "
-             "not detected counted as zero (plan 3.2)."],
-            ["DC-04 discharge from gage height through the rating in force; gage height is the logger level plus the "
-             "staff-gage offset from the field visits, %.2f ft to %s and %.2f ft after."
-             % (F["dun_offsets"][0], F["dun_step"].strftime("%-d %B %H:%M"), F["dun_offsets"][1])],
-            ["Ladd Branch is not sampled for atrazine (plan 3.1); LB-05 records flow and temperature."],
+            ["Carbon by sub-watershed: SOP-WQ-07 3.2 and 3.3 (start or change the dose by Table 1 on a day above the "
+             "trigger, stop after two days in a row at or below 2.5 ug/L) replayed on the season's results without "
+             "each sub-watershed's atrazine; the replay on the recorded results gives the plant's own eleven "
+             "setpoint changes."],
             ["Carbon fed: dose setpoint x the plant day's raw water (MGD) x 8.34 (SOP-WQ-07 3.2), minute by minute, "
              "leaving out the minutes the feeder was stopped on a motor overload or had an empty hopper."],
             ["Entry depth: the depth at which the day's buoy profile is as warm as the tributary's daily mean "
@@ -332,6 +346,9 @@ def write(res, outdir):
     out = dict(call=F["call_name"], call_key=F["call"], call_days=F["call_days"], days_total=F["days_total"],
                per_sub={G.NAME[k]: F["per"][k] for k in G.SUBS}, days_by_month={MONTHS[m - 1]: F["by_month"][m]
                                                                                  for m in range(4, 11)},
+               days_by_sub_month={G.NAME[k]: {MONTHS[m - 1]: F["by_sub_month"][k][m] for m in range(4, 11)}
+                                  for k in G.SUBS},
+               carbon_spared_lb={G.NAME[k]: {MONTHS[m - 1]: F["spared"][k][m] for m in (5, 6, 7, 8)} for k in G.SUBS},
                loads_kg={G.NAME[k]: F["loads"][k] for k in F["loads"]}, load_total_kg=F["load_total"],
                loads_month_kg={G.NAME[k]: {MONTHS[m - 1]: F["loads_m"][k][m] for m in LOAD_MONTHS} for k in F["loads_m"]},
                pac_lb={MONTHS[m - 1]: F["pac"][m] for m in (5, 6, 7, 8)},
@@ -351,5 +368,6 @@ def write(res, outdir):
                cited=dict(sop_day_result="2.3", sop_pounds_formula="3.2", plan_sections=["5.1", "5.2", "3.2"],
                           buoy_sensor_depths_m=[0.5, 15.5, 1.0, 16.0], intake_centreline_navd88_ft=G.INTAKE_NAVD,
                           navd88_minus_ngvd29_ft=G.NAVD_MINUS_NGVD, look_back_days=30, layer_half_width_m=2.0,
-                          lb_per_mg_per_mgl=8.34))
+                          lb_per_mg_per_mgl=8.34, sop_stop_rule="3.3", sop_stop_ug_l=2.5,
+                          first_feed_day=F["first_feed"].day, setpoint_changes=len(res["setpoints"])))
     return out

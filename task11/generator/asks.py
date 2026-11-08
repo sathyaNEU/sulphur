@@ -171,3 +171,81 @@ LOAD_CONVENTIONS = {
     "logger months read on UTC": dict(bottles="golden", offs="golden", utc_window=True),
 }
 PAC_ROUTES = ("golden", "nodown", "runonly", "alarmspan", "utc", "lowalarm")
+
+
+# ------------------------------------------------------------------ the re-sited asks: the deep step's output
+SEASON_MONTHS = (4, 5, 6, 7, 8, 9, 10)
+
+
+def ask_cells(R):
+    """{("days", k, month): count, ("lb", k, month): pounds rounded} as the golden files them."""
+    out = {}
+    for k in G.SUBS:
+        for m in SEASON_MONTHS:
+            out[("days", k, m)] = sum(1 for d in R["per"][k] if d.month == m)
+        for m in PAC_MONTHS:
+            out[("lb", k, m)] = int(round(R["spared"][k][m]))
+    return out
+
+
+def mixed_share(R, dl, window):
+    """The default path's attribution: each day above the trigger booked to every sub-watershed whose trailing
+    load share, taken out of the day's result, leaves it at or below the trigger; and the results without each."""
+    per = {k: [] for k in G.SUBS}
+    cf = {k: dict(R["results"]) for k in G.SUBS}
+    for d in R["days"]:
+        tot = {k: sum(dl.get(k, {}).get(d - dt.timedelta(days=n), 0.0) for n in range(window)) for k in G.SUBS}
+        s = sum(tot.values())
+        for k in G.SUBS:
+            v = R["results"][d] * (1 - tot[k] / s)
+            cf[k][d] = v
+            if v <= G.TRIGGER:
+                per[k].append(d)
+    return per, cf
+
+
+def shallow_routes(target, R):
+    """The ask cells the load-share routes file (14, 30 and 45-day windows)."""
+    dl = G.daily_loads(target)
+    pac_m = {m: R["pac"].get(m, 0.0) for m in PAC_MONTHS}
+    out = {}
+    for w in (14, 30, 45):
+        per, cf = mixed_share(R, dl, w)
+        sp = G.carbon_spared(target, R["results"], R["E"], pac_m, R["setpoints"], cf=cf)
+        cells = {}
+        for k in G.SUBS:
+            for m in SEASON_MONTHS:
+                cells[("days", k, m)] = sum(1 for d in per[k] if d.month == m)
+            for m in PAC_MONTHS:
+                cells[("lb", k, m)] = int(round(sp[k][m]))
+        out["load share, %d days" % w] = cells
+    return out
+
+
+def day_tagged_carbon(target, R):
+    """The carbon fed on the calendar days the call's sub-watershed caused, by month: each day's carbon booked to the
+    day's cause, the feed's run-on under the stop rule left out."""
+    sp, ev = G.feeder_record(target)
+    run = G.spans(ev, ("RUN STATUS ON", "EVT"), ("RUN STATUS OFF", "EVT"))
+    empty = G.spans(ev, ("HOPPER LEVEL LOW-LOW NO FEED", "ALM"), ("HOPPER LEVEL LOW-LOW NO FEED", "RTN"))
+    caused = set(R["per"]["FEN"])
+    d = dt.date(2026, 4, 1)
+    while d <= dt.date(2026, 10, 31):
+        if d not in caused:
+            empty.append((dt.datetime.combine(d, dt.time(0)), dt.datetime.combine(d + dt.timedelta(days=1), dt.time(0))))
+        d += dt.timedelta(days=1)
+    r = G.carbon(target, run_spans=run, empty_spans=sorted(empty))
+    return {m: r[0].get(m, 0.0) for m in PAC_MONTHS}
+
+
+def unresolved_pulse(target, R):
+    """Run 1's route: the call's sub-watershed takes every day but 29 and 30 May, which stay as recorded."""
+    pulse = {dt.date(2026, 5, 29), dt.date(2026, 5, 30)}
+    names = dict(zip(SEASON_MONTHS, ("April", "May", "June", "July", "August", "September", "October")))
+    days = {names[m]: sum(1 for d in R["per"]["FEN"] if d.month == m and d not in pulse) for m in SEASON_MONTHS}
+    cf = {k: dict(R["results"]) for k in G.SUBS}
+    wf = G.without(R["results"], R["E"], "FEN")[0]
+    cf["FEN"] = {d: (R["results"][d] if d in pulse else v) for d, v in wf.items()}
+    pac_m = {m: R["pac"].get(m, 0.0) for m in PAC_MONTHS}
+    sp = G.carbon_spared(target, R["results"], R["E"], pac_m, R["setpoints"], cf=cf)
+    return dict(days=days, carbon=sp["FEN"])
