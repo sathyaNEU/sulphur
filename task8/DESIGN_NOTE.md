@@ -1005,3 +1005,4 @@ Architecture 11 (the contractor's plausible values drawn from a conditioning mod
   voice with the batch rule, the keyed file numbers each session's batch, and the golden memo states only what the
   files show. The reader came back clean; its one note (every early register row on one entry date) is answered by
   each school's upload carrying its own day.
+- 2026-11-08, platform round 1 on architecture 17: both runs filed Paper C and every regional figure. Run 1 fitted coverage penalties for U5 and U6 (about 1 logit each) and zeroed them for November; run 2 kept U5 and U6 responses only after each school finished the unit. The August-against-November gap in the prompt, the course outline and Appendix B's per-school sequences handed over the join, and taught-content adjustment is a reflex; spent (runs/triage.md).

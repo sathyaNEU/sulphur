@@ -15,6 +15,8 @@ then, once known, the review result.
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | task2 arch 3 | 2026-11-08 | general-statistics-data-science / exploratory-data-analysis-distribution-assessment | descriptive-distribution | a set of products in or out, rate and 90 per cent interval each | own (a drifting process read run by run between resets) | not reported, on the golden | none | not reported, on the golden | none | landed | landed | REDESIGN | |
 | task3 arch 2 | 2026-11-08 | physical-environmental-sciences / hydrology-flood-frequency | forecasting | pick one of four alternatives, events a year each | own (a buffer emptied through a receiver's spare capacity) | not reported, on the golden | none | not reported, on the golden | none | landed | landed | REDESIGN | |
+| task7 arch 4 | 2026-11-08 | banking-credit-financial-risk / expected-credit-loss-provisioning | opportunity-sizing-decision | allocation under an envelope, every candidate graded | clean comparison (spillover priced through payments between customers) | 98 | none (note slip) | 58 | dismissed own evidence | 78.0 | 77.0 | FIX_ASKS | |
+| task8 arch 17 | 2026-11-08 | education (assessment) | descriptive / decision | pick one of three drafts, expected mark each, regional counts | own (items recalibrated on taught candidates) | not reported, on the golden | none | not reported, on the golden | none | landed | landed | REDESIGN | |
 
 ## Lessons
 

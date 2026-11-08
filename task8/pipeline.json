@@ -1,10 +1,10 @@
 {
  "task": "task8",
- "status": "PAUSED",
+ "status": "DESIGN",
  "domain": "education-learning-sciences / item-response-theory-test-equating (client education-learning-sciences)",
  "objective": "etl",
- "stage": 5,
- "stage_name": "ship",
+ "stage": 2,
+ "stage_name": "design",
  "updated": "2026-11-08",
  "stump": "the bank's Term 3 items recalibrated on the responses of students whose own school had finished the unit before their sitting day: Paper C nearest 25 at the Achieved standard, against the bank's Paper A",
  "architecture": 17,
@@ -52,7 +52,7 @@
    "commit": "DRAWN (task8), architecture 17, 2026-11-07"
   }
  ],
- "resume": "migrated from Project Mark task482; re-read the build against the Sulfur standard (deep reasoning: three or more dependent inferences with a real modeling judgment, the one-fact test, the banned kinds) and the Sulfur submission shape (golden ZIP, four answer blocks), then /build task8 from the stage that fails",
+ "resume": "architecture 17 spent (both platform runs landed Paper C); /build task8 from 2: re-root at stage 1 in a new world per the one-architecture-per-world rule, reading runs/triage.md and the Sulfur run-record lesson first",
  "approved": null,
  "delivered": "2026-11-08",
  "portal": null,
@@ -256,5 +256,28 @@
   "status_in_mark": "SHIPPED",
   "date": "2026-11-08",
   "note": "moved from Project Mark at the author's word: architecture 16 landed on the Mark portal and architecture 17 shipped there on 2026-11-08, pending; carried on here for the Sulfur bar"
+ },
+ "runs": {
+  "run1": null,
+  "run2": null,
+  "average": null,
+  "counterfactual_average": null,
+  "first_wrong_step": {
+   "run1": "none, on the golden (coverage penalties for U5 and U6 in a joint conditional Rasch fit, zeroed for November)",
+   "run2": "none, on the golden (U5 and U6 responses kept only after the school finished the unit)"
+  },
+  "triage": "REDESIGN",
+  "recorded": "2026-11-08",
+  "report": "task8/runs/triage.md",
+  "note": "scores not reported by the author; both runs filed Paper C and every regional figure",
+  "history": [
+   {
+    "round": 1,
+    "architecture": 17,
+    "run1": "landed",
+    "run2": "landed",
+    "verdict": "REDESIGN"
+   }
+  ]
  }
 }
