@@ -257,7 +257,7 @@ ISO, FIPS, agency series codes), geography, naming, release calendars and revisi
 raw. **The realism sweep** is asserted in `checks.py` before any reader sees the pack: no identical counts
 across periods, sites or entities; no round headline totals, shares or rates; no constant stream or
 repeating block; no free text recurring beyond a real rate; every persona from `guard.py names`; containers
-scrubbed (`reduce-house-fixes` H1); timestamps coherent (§9). A tell the leak reader still finds is a
+written by the house writers and the gate green (`reduce-house-fixes` H1); timestamps coherent (§9). A tell the leak reader still finds is a
 generator fix before the judge.
 
 ### 7.1 The Sulfur standard, executed
@@ -395,13 +395,15 @@ local. Assert each of these in the realism sweep, per column and per document.
    and assert both no fixed period in the sequence and no name that names one service while its rows deliver
    another.
 5. **A document never states a position later than its own file date**, and a document's author is the body
-   that issued it: a regulator's fee schedule carrying the plan's name as Author is a defect (a PDF's Producer
-   and Creator name the library that wrote it, never an organisation: `reduce-house-fixes` H1), and so is
+   that issued it: a regulator's fee schedule carrying the plan's name as Author is a defect (a PDF's Creator
+   and Producer name the word processor that exported it, never a library and never an organisation:
+   `reduce-house-fixes` H1), and so is
    `Application` "Microsoft Excel" beside the writing library's own `AppVersion`. Assert both per document
    against its issuer.
 
 **Byte-identical rebuilds:** two consecutive runs give identical `target/` bytes (fixed seeds, one RNG
-stream per period, fixed mtimes, scrubbed metadata). A pack that does not rebuild has a broken generator.
+stream per period, each file's mtime its own last save, every container through the house writers in
+`reduce-house-fixes/scripts/writers/` and `audit_containers.py` green). A pack that does not rebuild has a broken generator.
 
 ## 12. Repair directions (data side; diagnosis is `stumping`)
 

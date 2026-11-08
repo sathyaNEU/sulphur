@@ -65,17 +65,18 @@ choice was made; a notebook's outputs match one top-to-bottom run and its markdo
 
 ## Part 3. The container
 
-`reduce-house-fixes` H1 owns it and its tool:
+`reduce-house-fixes` H1 owns it: the golden's files go through the same house writers as the pack
+(`reduce-house-fixes/scripts/writers/`: `officepdf.build` for a PDF, `postprocess.normalize_ooxml(..., excel=True)`
+for a workbook, `normalize_docx` for a memo, `normalize_pptx` for a deck), each file with its own created and
+modified stamps after the pack's as-of date and before the day it ships, and the golden ZIP cut with
+`zip_folder` so its entries carry each file's own save time. The gate, on the final cut:
 
 ```
-python3 .claude/skills/reduce-house-fixes/scripts/scrub_producer_metadata.py <dir>
-python3 .claude/skills/reduce-house-fixes/scripts/scrub_producer_metadata.py <dir> --apply \
-    --producer "<the organisation in the fiction>" --stamp <the in-fiction date>
+python3 .claude/skills/reduce-house-fixes/scripts/audit_containers.py taskNN
 ```
 
-Audit first: the producer and date are the fiction's and cannot be guessed. Never re-save through the
-writing library. `--producer` is for OOXML and images only: a PDF keeps its library in Producer and Creator and
-its header comment, with the organisation in Author and a real Subject (`reduce-house-fixes` H1).
+Never relabel a library's file (a PDF's layout still names its library) and never re-save by hand: the repair is
+in the generator, and two builds stay byte-identical.
 
 ## Part 4. Honest texture only
 
@@ -105,4 +106,4 @@ problem the pack lacks, or a value made scruffy (a wrong figure fails Gate A).
 - [ ] At least one true note from the pack; nothing fabricated; no hedge register
 - [ ] Titles state findings; files named after the decision
 - [ ] Format passes done (workbook affordances, chart pass with `dataviz`, code assertions and prints)
-- [ ] Container scrubbed, audited first; bundle verifier green
+- [ ] Every golden file through the house writers; `audit_containers.py taskNN` exit 0; bundle verifier green

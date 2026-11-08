@@ -190,6 +190,12 @@ Sulfur builds are numbered from `task1` up (`status.py new`); the Mark baseline 
 ## Standing rules
 
 - No em dashes anywhere in the repo. Use a comma, or parentheses for an aside.
+- **Containers are scrubbed by construction, and checked before every ship.** Every shipped PDF is exported by a word
+  processor (`reduce-house-fixes/scripts/writers/officepdf.py`), never FPDF, ReportLab or matplotlib and never
+  relabelled; every workbook, document and deck passes through `writers/postprocess.py` (shared strings, the
+  application's dialect, no library template, its own creator and stamps); no two files share a stamp and both zips
+  carry each file's own save time. `audit_containers.py taskNN` exits 0 on the final cut before any READY,
+  RESHIPPED or upload (`reduce-house-fixes` H1).
 - **No dollar sign before a digit in a skill body.** The skill loader reads `$0` to `$9` as argument placeholders.
   Write the unit in words (`USD 38M`).
 - Every figure in `submission.md` recomputes from `target/`, and a figure shared by two deliverables agrees in both

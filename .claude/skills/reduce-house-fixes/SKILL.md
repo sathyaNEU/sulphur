@@ -1,6 +1,6 @@
 ---
 name: reduce-house-fixes
-description: The register of defects the author has had to fix by hand after a build was already called finished. Each entry carries the general form of the defect rather than the incident, what it costs when a reviewer finds it, and the check that would have caught it before the bundle shipped. Use as the last pass before a bundle is declared ready, when a house fix comes back from submission and has to be recorded, and alongside the stumping pre-ship checklist, which routes here.
+description: The register of defects the author has had to fix by hand after a build was already called finished. Each entry carries the general form of the defect rather than the incident, what it costs when a reviewer finds it, and the check that would have caught it before the bundle shipped. Use as the last pass before a bundle is declared ready, when a house fix comes back from submission and has to be recorded, and alongside the stumping pre-ship checklist, which routes here. Its container gate (scripts/audit_containers.py: PDFs exported by a word processor, never FPDF or ReportLab or empty Creator and Producer; workbooks with shared strings and no openpyxl tells; decks and documents without their library's template; distinct per-file stamps and zip times) must exit 0 before any READY, RESHIPPED or upload.
 ---
 
 # House Fixes
@@ -15,31 +15,70 @@ build's checks. They sit in the artifact being *what it claims to be*, not in th
 - **When the check and the defect share a blind spot** (a tolerant reader, a regex missing a unit class),
   the check certifies the defect.
 
+## STOP: the container gate runs before every ship
+
+**No bundle is READY, RESHIPPED or uploaded until this exits 0 on the final cut**, the pack, the golden and both zips:
+
+```
+python3 .claude/skills/reduce-house-fixes/scripts/audit_containers.py taskNN
+```
+
+Every shipped PDF is exported by a word processor through `scripts/writers/officepdf.py`, every workbook, document
+and deck passes through `scripts/writers/postprocess.py`, every file carries its own stamps, and both zips are cut
+from each file's own save time (H1). The client's input check reads Creator and Producer, the workbook's string
+table, `docProps` and the zip entries first, and returns the pack for any one of them, however sound the analysis.
+
 Entries: **Defect**, **Cost**, **Line** (where the rule stops), **Check**, **Repair**.
 
 ---
 
-## H1. A generated binary carries its writer's name and the build clock
-- **Defect.** Writers stamp their name (`dc:creator`, `<Application>`, `/Producer`, PNG chunks) and a
-  real-clock timestamp into metadata, unseen by text checks.
-- **Cost.** The signature says generated; the timestamp contradicts the setting, both ways (`python-docx`
-  stamps 2013). Assert a band, not a ceiling.
-- **Line.** Signatures: scrub OOXML and image inputs; a script-made golden may keep its own. A PDF is the
-  exception: it keeps the library that wrote it in Producer and Creator and the library's own header
-  comment, puts the issuing organisation in Author only, and carries a real Subject. The portal reads a PDF
-  whose Producer or Creator is the organisation, whose header comment was overwritten, or whose Subject is
-  the library's placeholder "(unspecified)" as a masked generator and fails the inputs.
-  Timestamps: scrub every shipped file whose body states a date, goldens included.
-- **Check.** Sweep the pack and the deliverables (two generators): no writer name, no stamp outside the
-  band. Wire OOXML, PDF and image branches even before a file of that kind ships.
-- **Repair.** Byte-level, never a re-save (it re-stamps). OOXML: repack same entries in order, change only
-  `docProps/`, assert every other CRC unchanged. PDF: equal byte length (xref offsets), surplus as
-  whitespace between tokens, never padding inside the value; substitute after the `%` of a comment line,
-  never the marker. Verify with zero logged parser errors (`pypdf` degrades silently). Scrub after each
-  save in the generator; prove it by regenerating into scratch and matching the shipped file.
-- **Tooling.** `scripts/scrub_producer_metadata.py <dir>` audits; `--apply --producer "<fiction org>"
-  --stamp <fiction date>` repairs (restores on failure). Without `--floor`/`--ceiling` from the fiction it
-  reports stamps unjudged. A retrofit, not the generator scrub.
+## H1. A shipped file reads as the library that wrote it (the container gate)
+- **Defect.** The container says generated before anyone reads a figure:
+  - **PDF**: written by FPDF, ReportLab, matplotlib, cairo, WeasyPrint or headless Chrome, so Creator and Producer
+    name the library or are empty; or a library's PDF relabelled "LibreOffice" while its object layout and header
+    line are still the library's; or the organisation in Producer (a masked generator); or a LibreOffice release
+    newer than the document's own date.
+  - **XLSX**: openpyxl's own form, which survives any docProps edit: inline strings and no `xl/sharedStrings.xml`,
+    Application `Microsoft Excel Compatible / Openpyxl`, creator `openpyxl`, `calcId="124519"` with
+    `fullCalcOnLoad`, its empty `sheetPr` and `numFmts`, `baseColWidth="8"`, `[Content_Types].xml` written last,
+    entries on the build clock. XlsxWriter's calcId reads the same way inside a chart's embedded workbook.
+  - **DOCX and PPTX**: python-docx's and python-pptx's 2013 Mac templates (creator, "generated by", Steve Canny,
+    2013-12-23 or 2013-01-27, the template's own thumbnail, `stylesWithEffects.xml`, `Microsoft Macintosh` as the
+    application, `Slides` 0 on a four-slide deck, `screen4x3` on a 16:9 slide size), and a chart's embedded workbook
+    stamped with the build clock and no creator.
+  - **Time**: one created stamp across files from different organisations or teams; every entry of `target.zip` or
+    the golden ZIP on one clock; a stamp outside the fiction, or after today when the setting is not in the future.
+- **Cost.** The client's input check returns the whole pack on the containers alone, before the analysis is read:
+  "Both PDF files must have their Creator and Producer metadata fields populated with a real authoring application,
+  not left empty. FPDF (Python) generated the PDFs ... All three xlsx files are generated by openpyxl (inline string
+  format, no sharedStrings.xml, and an identical creation timestamp of 2026-10-30T16:05:00Z across files from
+  supposedly different organisations)." Scrubbing by hand after a return costs hours a build and a review cycle;
+  the writers below cost nothing.
+- **Line.** Goldens included, every shipped container is written by the house writers in
+  `scripts/writers/` (copy both files into the generator):
+  - **Every PDF is exported by a word processor**: the story through `officepdf.build` (a Word document that
+    LibreOffice Writer exports, so Creator `Writer` and Producer `LibreOffice x.y` are what the application wrote),
+    the issuing person or team in Author, a real Title and Subject, CreationDate the issue date. Never FPDF,
+    ReportLab's canvas, matplotlib's PDF backend or a relabelled file; never the organisation in Producer; never a
+    release newer than the document (LibreOffice 24.2 shipped 31 January 2024, so a 2022 document names 7.3).
+  - **Every workbook, document and deck passes through `writers/postprocess.py` after the library saves it**:
+    `normalize_ooxml(path, ..., excel=True, company=...)`, `normalize_docx(...)`, `normalize_pptx(...)`, which give
+    shared strings, the application's part order and dialect (charts and drawings included), Office's 1980 entry
+    stamps, the file's own creator, company and stamps, counts taken from the content and a thumbnail rendered from
+    the first slide.
+  - **Every file has its own stamps from its issuer's calendar**: different teams or bodies carry their own authors
+    and companies; no two files share a created or modified stamp; the pack's stamps fall before the as-of date and
+    the golden's after it (and not after the day it ships); each file's mtime is its own last save
+    (`own_mtimes`), and `target.zip` and the golden ZIP are cut with `zip_folder`, so their entries carry distinct
+    times in the sender's local clock. CSV and other exports with no stamp of their own take the time their system
+    wrote them.
+- **Check.** **The ship gate: `scripts/audit_containers.py taskNN` exits 0 on the final cut** (pack, golden and both
+  zips), at stage 3 and again at stage 5 after the zips are cut, before any READY or RESHIPPED commit; `leak.py`
+  sweep 10 runs it and reports every FAIL as LEAK. `--all` lists every build in one line each. A FAIL is never
+  answered in the design note; it is fixed.
+- **Repair.** In the generator, never on the shipped file (two builds must stay byte-identical): swap the writer,
+  rebuild, re-run the gate. `scripts/scrub_producer_metadata.py` is an OOXML retrofit only and refuses PDFs, because
+  relabelling a library's PDF leaves its layout for the reviewer to read.
 
 ## H2. A figure in the write-up whose derivation is not on disk
 - **Defect.** A supporting figure (enumeration count, margin) came from a scratch search script over unbuilt

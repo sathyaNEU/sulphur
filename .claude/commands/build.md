@@ -48,7 +48,8 @@ when its gate holds.
    decides before anything is handed over.
 5. **Stage 5, READY.** Every gate re-runs on the final cut (`precut.py`, `voice-check.py`, `leak.py`,
    `guard.py heart` and `surface`, `figures_check.py`); nothing is handed over on a skipped gate. Cut `target.zip`
-   and the golden ZIP (exactly the files the prompt requests), set `status` `READY`, commit `READY (taskNN):
+   and the golden ZIP (exactly the files the prompt requests, each entry at its file's own save time), then run
+   `audit_containers.py taskNN` on them and stop on any FAIL (`reduce-house-fixes` H1), set `status` `READY`, commit `READY (taskNN):
    <call>` and push.
 6. **Repairs run in this thread.** Spawn a fresh agent only near the context limit, briefed with `pipeline.json`,
    the design note and the findings.

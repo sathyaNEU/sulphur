@@ -28,7 +28,7 @@ from collections import Counter, defaultdict
 from pathlib import Path
 
 REPO = Path(__file__).resolve().parents[3]
-SCRUB = REPO / ".claude/skills/reduce-house-fixes/scripts/scrub_producer_metadata.py"
+AUDIT = REPO / ".claude/skills/reduce-house-fixes/scripts/audit_containers.py"
 VOICE = REPO / ".claude/skills/guide-to-prompt/references/voice-check.py"
 
 DOC_EXT = {".md", ".txt", ".docx", ".pdf", ".rtf", ".html", ".htm"}
@@ -613,49 +613,27 @@ def sweep_dates(files, rep, asof, prompt_text):
             rep.add("9 dates after the setting", "REVIEW", f["rel"], "%d ISO dates after %s, e.g. %s" % (sum(late.values()), asof, ", ".join(sorted(late)[:5])))
 
 
-def sweep_metadata(target, rep):
-    if not SCRUB.exists():
-        rep.add("10 container metadata", "INFO", "-", "scrub script not found")
+def sweep_metadata(task, rep, asof=None):
+    """The container ship gate (reduce-house-fixes H1), over the pack, the golden and both zips: every FAIL is LEAK,
+    every WARN REVIEW. A PDF whose Creator or Producer names a library (FPDF, ReportLab ...) or nothing, a workbook
+    with inline strings or the writing library's dialect, a deck or document carrying its library's template, two
+    files sharing a stamp and a zip cut on one clock all stop the ship."""
+    if not AUDIT.exists():
+        rep.add("10 container metadata", "LEAK", "-", "audit_containers.py not found: the gate cannot run")
         return
-    r = subprocess.run([sys.executable, str(SCRUB), str(target)], capture_output=True, text=True)
-    out = (r.stdout + r.stderr).strip()
-    flagged = [l for l in out.split("\n")
-               if re.search(r"python-docx|openpyxl|reportlab|matplotlib|pypdf|LibreOffice|Microsoft|outside the band|out-of-band timestamp", l, re.I)
-               and not re.search(r"\bno (producer|writer|out-of-band)|clean\b", l, re.I)]
-    # A PDF names the library that wrote it in Producer and Creator, as every real PDF does.
-    honest = [l for l in flagged if ".pdf" in l and re.search(r"reportlab", l, re.I)
-              and not re.search(r"python-docx|openpyxl|matplotlib|pypdf|outside the band|out-of-band", l, re.I)]
-    flagged = [l for l in flagged if l not in honest]
-    if flagged:
-        for l in flagged[:15]:
-            rep.add("10 container metadata", "LEAK", "-", l.strip()[:200])
-    else:
-        rep.add("10 container metadata", "INFO", "-", "audit reported no writer signature (%d lines)" % len(out.split("\n")))
-    for l in honest[:15]:
-        rep.add("10 container metadata", "INFO", "-", "PDF names the library that wrote it: " + l.strip()[:160])
-    # LibreOffice writes its component (Writer, Calc, Impress, Draw) as Creator and itself as Producer.
-    tool = re.compile(r"reportlab|microsoft|word|excel|acrobat|adobe|distiller|libreoffice|openoffice|quartz|"
-                      r"\bwriter\b|\bcalc\b|\bimpress\b|\bdraw\b|"
-                      r"ghostscript|chrom|skia|cairo|pdf|tex|prince|wkhtml|itext|foxit|nitro", re.I)
-    try:
-        from pypdf import PdfReader
-    except ImportError:
-        PdfReader = None
-    for root, _, files in os.walk(target):
-        for fn in sorted(files):
-            if not fn.lower().endswith(".pdf") or PdfReader is None:
-                continue
-            try:
-                m = PdfReader(os.path.join(root, fn)).metadata or {}
-            except Exception:
-                continue
-            if (m.get("/Subject") or "").strip() == "(unspecified)":
-                rep.add("10 container metadata", "LEAK", fn, "Subject is the library's placeholder (unspecified)")
-            for k in ("/Producer", "/Creator"):
-                v = (m.get(k) or "").strip()
-                if v and not tool.search(v):
-                    rep.add("10 container metadata", "LEAK", fn,
-                            "%s names %r, not the application that wrote the PDF" % (k[1:], v[:60]))
+    cmd = [sys.executable, str(AUDIT), str(task)] + (["--asof", asof] if asof else [])
+    r = subprocess.run(cmd, capture_output=True, text=True)
+    out = (r.stdout + r.stderr).strip().split("\n")
+    found = 0
+    for line in out:
+        m = re.match(r"\s+(FAIL|WARN)\s+(\S+)\s+(\S+)\s+(.*)$", line)
+        if m:
+            found += 1
+            rep.add("10 container metadata", "LEAK" if m.group(1) == "FAIL" else "REVIEW", m.group(3), m.group(4)[:200])
+    if r.returncode and not found:
+        rep.add("10 container metadata", "LEAK", "-", "the audit failed to run: " + " ".join(out[-3:])[:200])
+    if not found:
+        rep.add("10 container metadata", "INFO", "-", "container gate PASS (%s)" % (out[-1].strip() if out else ""))
 
 
 def sweep_prompt(prompt_text, rep, task_name="", legacy=False):
@@ -696,8 +674,6 @@ Q_STRAY = re.compile(r"(_v\d+\b|_old\b|_draft\b|_final\b|_hardened\b| copy\b|\(\
 Q_META = re.compile(r"python-docx|python-pptx|openpyxl|xlsxwriter|pandas|reportlab|matplotlib|fpdf|pymupdf|claude|\bgpt|openai|"
                     r"gemini|chatgpt|copilot|steve canny|un-named|\bunnamed\b|\buntitled\b|\banonymous\b|\(unspecified\)|"
                     r"2013-12-23|handshake|\bsulfur\b|\bsulphur\b|\bwhitney\b|project mark", re.I)
-Q_PDF_LIB = re.compile(r"reportlab", re.I)
-Q_META_LIB = re.compile(Q_META.pattern.replace("reportlab|", ""), re.I)
 Q_CONTENT = [
     (r"\bsynthetic data\b|\bdummy data\b|\bmade-up\b|\bsimulated for\b|\bgenerated with\b|\bfor this (task|exercise|benchmark)\b|"
      r"\bscenario document\b|\btest scenario\b", "LEAK"),
@@ -733,8 +709,7 @@ def pdf_meta(path):
 
 
 def pdf_meta_split(path):
-    """A PDF's Title, Author, Subject and Keywords apart from its Creator, Producer and header comment, which keep
-    the library that wrote the file (reduce-house-fixes H1)."""
+    """A PDF's Title, Author, Subject and Keywords apart from its Creator, Producer and header comment."""
     try:
         head = path.read_bytes()
     except OSError:
@@ -770,11 +745,9 @@ def sweep_quality(target, files, rep):
         if Q_STRAY.search(name):
             rep.add("12 client quality check", "LEAK", f["rel"], "stray working-copy file name")
         if f["ext"] == ".pdf":
-            # H1: the library stays in Creator, Producer and the header comment; everything else is read strictly
+            # H1: Creator and Producer name the word processor that exported the file; a library there is a rejection
             own, lib = pdf_meta_split(f["path"])
-            m = Q_META.search(own) or Q_META_LIB.search(lib)
-            if Q_PDF_LIB.search(lib):
-                rep.add("12 client quality check", "INFO", f["rel"], "PDF keeps the library that wrote it in Creator, Producer or its header (H1)")
+            m = Q_META.search(own) or Q_META.search(lib)
         else:
             meta = office_meta(f["path"]) if f["ext"] in (".docx", ".xlsx", ".pptx") else ""
             m = Q_META.search(meta)
@@ -851,7 +824,7 @@ def main():
     sweep_columns(files, rep)
     sweep_describing_content(files, rep)
     sweep_dates(files, rep, a.asof, prompt_text)
-    sweep_metadata(target, rep)
+    sweep_metadata(task, rep, a.asof)
     sweep_prompt(prompt_text, rep, task.name, legacy_prompt)
     sweep_task_metadata(task, rep, vocab, nums, prompt_text)
     sweep_quality(target, files, rep)
