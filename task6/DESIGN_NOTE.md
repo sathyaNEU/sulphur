@@ -467,9 +467,9 @@ USD marketplace lines, VAT and the support plan sit in files no ask reads.
   clean; precut 72 checks, 1 FAIL, the pair ceiling at 58.0 against its paper target of 50 (the ask sheet says why);
   freeze.py rubric mode FAIL on one item, the Critical Components numbers, because components 2 and 3 were replaced
   under supplemental-stumping Part 6 (every main-call figure, the stump, the card, the ladder, the default path and the
-  call sentence unchanged); guard.py validate clean, heart BLOCK on three draw-level rows that predate the repair,
-  re-read after the last pull (the card's differentiation lines still name the Mark baseline by its old task numbers,
-  so the two structural tests find none; the organisation family repeats task1).
+  call sentence unchanged); guard.py validate clean, heart BLOCK on one draw-level row that predates the repair,
+  the organisation family repeating task1 (the two structural tests cleared once the card's differentiation lines were
+  keyed to the Mark baseline's markNN numbers).
 - **Distractors after the repair.** Beside the three above, the review folder's change and cost records
   (`production_deployments_2026.json`, `cluster_rollout_history_2026.csv`, `cloud_billing_2026.csv`,
   `cloud_invoices_2026.csv`, `cloud_resources_2026.csv`) are no longer read by any ask; PR-SLO-3 section 5 still names

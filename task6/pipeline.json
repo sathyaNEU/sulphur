@@ -19,7 +19,7 @@
   "reader": "not re-run: no pack document changed"
  },
  "duplicate_check": {
-  "heart": "BLOCK on three draw-level rows that predate the repair, re-read after pulling 731d36f: same_puzzle_older and same_driver_older (the card's differentiation lines still name the Mark baseline as taskNN, not markNN) and org_family against task1; WARN repeat.gate_g against task7 and overuse.gate_g",
+  "heart": "BLOCK on one draw-level row: org_family (software_or_platform) against task1; the two structural rows cleared by renaming the card's differentiation keys to the Mark baseline's markNN numbers; WARN repeat.gate_g against task7 and overuse.gate_g",
   "nearest": "mark474 v2 lineage, 0.10"
  },
  "judge": {
@@ -97,5 +97,5 @@
   "recorded": "2026-11-08",
   "history": []
  },
- "gates_at_reship": "checks 0 failures; verify PASS; goldens byte-identical on rebuild; figures_check 98 of 98; voice-check exit 0; leak.py REVIEW (standing lines); precut 1 FAIL (pair ceiling 58.0); freeze rubric FAIL (Critical Components block); guard validate clean, heart BLOCK (three draw-level rows, predate the repair)"
+ "gates_at_reship": "checks 0 failures; verify PASS; goldens byte-identical on rebuild; figures_check 98 of 98; voice-check exit 0; leak.py REVIEW (standing lines); precut 1 FAIL (pair ceiling 58.0); freeze rubric FAIL (Critical Components block); guard validate clean, heart BLOCK (one draw-level row, organisation family against task1)"
 }
