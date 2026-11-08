@@ -2,6 +2,9 @@
  "T_mt": 20.6,
  "a1": 12,
  "a2": 50,
+ "affine_band_g": 6,
+ "affine_band_oz": 11,
+ "affine_band_t": 14,
  "call": "B",
  "cut": 2.5,
  "cuts": [

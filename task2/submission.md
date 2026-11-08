@@ -16,7 +16,7 @@
 
 ### stage5_high_grade_resource.xlsx
 
-3. Sheet Grade-tonnage: one row per cut-off (1.0, 1.5, 2.0, 2.5 and 3.0 g/t) with the mining blocks' tonnes, grade and contained gold, then the gold above the agreement's 2.5 g/t cut-off and the tier it covers.
+3. Sheet Grade-tonnage: one row per cut-off (1.0, 1.5, 2.0, 2.5 and 3.0 g/t) with the mining blocks' tonnes, grade and contained gold, then the gold above the agreement's 2.5 g/t cut-off and the tier it covers. The rows are the lognormal-shaped correction's; an affine correction to the same block variance moves a row's tonnes by up to 14 per cent, its grade by up to 6 per cent and its gold by up to 11 per cent, so the table is read within those bands and the graded figure is the next answer.
 4. Gold above the agreement's cut-off, nearest 50,000 oz: 150,000 oz.
 5. Sheets Declustering, Variogram and Comparison: the composites as drilled and declustered, the experimental and modelled variogram with the block average, and the same grade-tonnage curve for the declustered composites and the kriged block model.
 
