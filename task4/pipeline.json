@@ -1,13 +1,13 @@
 {
  "task": "task4",
- "status": "READY",
+ "status": "BUILD",
  "domain": "supply-chain-logistics",
  "objective": "forecasting",
- "stage": 5,
- "stage_name": "ready",
+ "stage": 3,
+ "stage_name": "build",
  "updated": "2026-11-08",
- "stump": "A competent solver prices each offered district at the van time its stops take and hands Leenane and Letterfrack to the courier with Mulranny, Achill, Bangor Erris, Belmullet, Louisburgh and Ballycastle, claiming about EUR 20,000; the Connemara van drives through Leenane and Letterfrack to reach Clifden, which stays, so they save only their own stops, and the solver who prices the run without them but one district at a time keeps Mulranny and Bangor Erris, which end the Achill and Erris runs once Achill and Belmullet go: only every combination priced on the run hands over Mulranny, Achill, Bangor Erris, Belmullet, Louisburgh and Ballycastle, about EUR 50,000 net in 2027.",
- "architecture": 4,
+ "stump": "A competent solver fits the pilot's duty-day battery energy on distance, climb, cold and the shippers' declared payload, finds it predicts held-out January and February days within 2.4 per cent and the weighbridge's declarations right on average, and orders 8 tractors, sending the heavy steel, ballast and metal duties V03, V07 and V11 (about 440 kWh on that model) and leaving out the light insulation duty V14 (about 470); the estimating shippers' declarations scatter around the weighed load, so the fitted payload term (1.0 kWh per tonne per 100 km) is under half the loads' effect (2.2), and only each declaration taken to the weighed load it stands for, shipper by shipper, with the dairy's standard weight and the timber merchant's ticket left as what they are, orders 6: V02, V05, V09, V14, V16 and V18.",
+ "architecture": 5,
  "loops": 0,
  "precut": {
   "exit": 0,
@@ -15,32 +15,23 @@
   "checks": "72 of 72"
  },
  "leak": {
-  "leak_py": "REVIEW, no LEAK (2026-11-08, 4a9ccea1): the offer names the candidates, generic shared words, the 2027 calendar's dates",
-  "reader": "2026-11-08 isolated Sonnet reader on 20a4d41e: no leak; NPS-3 4.1 and 4.3 file the estimand without the method; re-read owed on the offer and NPS-3 4.3 reworded at stage 4"
+  "leak_py": "REVIEW, no LEAK (2026-11-08): FES-2 section number 2.2, the quotation's 540 kWh, FES-2 carries the call's governing words; prompt shell quota",
+  "reader": ""
  },
  "duplicate_check": {
-  "check": "WARN 2026-11-08 (repeat.gate_g at the draw)",
-  "heart": "WARN 2026-11-08 after the forum redraw (executive_team BLOCKed against task6, now committee_or_panel): repeat.decision against task6",
-  "surface": "exit 0 2026-11-08; one pair promoted for the author: task4 against task5's re-draw (decisive gap objective and designation_set back to back), both in flight"
+  "check": "WARN 2026-11-08 (repeat.gate_g)",
+  "heart": "WARN 2026-11-08 (repeat.gate_g against task9); shell.lineage BLOCK cleared by recording the new prompt's shell on the card",
+  "surface": "exit 0 2026-11-08, 0 promoted"
  },
  "judge": {
-  "verdict": "DETERMINISTIC (2026-11-08, Sonnet thread on 20a4d41e): the list, EUR 50,000 and every run figure reproduced by an independent run-day model",
-  "disposition": "APPROVE; minor: component 1 at 118 to 124 h against 110, R04 and R07 saved hours near a 50-hour edge on single-year fits, the offer's 'any combination' read as a search order; all three fixed",
-  "gate_g": "forecasting with model selection, surface_read_dependency no, sole_data_defect no",
-  "gate_h": "domain, layers and decisive step pass, analytical",
-  "report": "task4/determinism_check_report.md"
+  "verdict": "",
+  "disposition": "",
+  "gate_g": "",
+  "gate_h": "",
+  "report": ""
  },
- "returned": [
-  {
-   "date": "2026-11-08",
-   "source": "judge",
-   "repair": "determinism",
-   "moves": "the offer's 'in any combination' dropped; NPS-3 4.3 'the selection from the partner's offer whose hand-over lowers the year's delivery cost most'; saved hours to the nearest 100 (prompt and asks), Achill road slowed and Owenduff's price to EUR 13.40 so every graded figure sits mid-bin; component 1 'about 110 van-hours' against the hours Owenduff's charge would pay for",
-   "freeze": "freeze.py check --mode rubric FAIL, 8 items, all this fix's: the Critical Components numbers (charges at EUR 13.40, component 1's range, 700), pieces achill_h 650 to 700, ban, corridor, lee_let and mul charges, runs_saved_h R04 650 to 700, and the default path's price text (12.60 to 13.40); the call sentence, the stump and the ladder did not move",
-   "zip": "4a9ccea1"
-  }
- ],
- "resume": "READY: the author uploads prompt.txt and target.zip (4a9ccea1); the leak reader's re-read of the offer and NPS-3 (changed at stage 4) is owed; then /triage-runs",
+ "returned": [],
+ "resume": "stage 4: spawn the leak reader and the determinism judge on target.zip, fix findings, re-run gates, READY",
  "approved": null,
  "delivered": null,
  "portal": null,
@@ -129,6 +120,69 @@
   {
    "date": "2026-11-08",
    "event": "stage 4 (leak reader no leak; judge DETERMINISTIC APPROVE), one fix pass, stage 5: READY on target.zip 4a9ccea1"
+  },
+  {
+   "date": "2026-11-08",
+   "event": "architecture 4 spent on the platform: the author reports not stumped (the call landed); run texts not supplied to the repo",
+   "architecture_4_record": {
+    "stump": "A competent solver prices each offered district at the van time its stops take and hands Leenane and Letterfrack to the courier with Mulranny, Achill, Bangor Erris, Belmullet, Louisburgh and Ballycastle, claiming about EUR 20,000; the Connemara van drives through Leenane and Letterfrack to reach Clifden, which stays, so they save only their own stops, and the solver who prices the run without them but one district at a time keeps Mulranny and Bangor Erris, which end the Achill and Erris runs once Achill and Belmullet go: only every combination priced on the run hands over Mulranny, Achill, Bangor Erris, Belmullet, Louisburgh and Ballycastle, about EUR 50,000 net in 2027.",
+    "call": "Hand Mulranny, Achill, Bangor Erris, Belmullet, Louisburgh and Ballycastle to Owenduff from January 2027 and keep Leenane, Letterfrack, Clifden, Cong and Charlestown: about EUR 50,000 net saving in 2027",
+    "precut": {
+     "exit": 0,
+     "date": "2026-11-08",
+     "checks": "72 of 72"
+    },
+    "leak": {
+     "leak_py": "REVIEW, no LEAK (2026-11-08, 4a9ccea1): the offer names the candidates, generic shared words, the 2027 calendar's dates",
+     "reader": "2026-11-08 isolated Sonnet reader on 20a4d41e: no leak; NPS-3 4.1 and 4.3 file the estimand without the method; re-read owed on the offer and NPS-3 4.3 reworded at stage 4"
+    },
+    "duplicate_check": {
+     "check": "WARN 2026-11-08 (repeat.gate_g at the draw)",
+     "heart": "WARN 2026-11-08 after the forum redraw (executive_team BLOCKed against task6, now committee_or_panel): repeat.decision against task6",
+     "surface": "exit 0 2026-11-08; one pair promoted for the author: task4 against task5's re-draw (decisive gap objective and designation_set back to back), both in flight"
+    },
+    "judge": {
+     "verdict": "DETERMINISTIC (2026-11-08, Sonnet thread on 20a4d41e): the list, EUR 50,000 and every run figure reproduced by an independent run-day model",
+     "disposition": "APPROVE; minor: component 1 at 118 to 124 h against 110, R04 and R07 saved hours near a 50-hour edge on single-year fits, the offer's 'any combination' read as a search order; all three fixed",
+     "gate_g": "forecasting with model selection, surface_read_dependency no, sole_data_defect no",
+     "gate_h": "domain, layers and decisive step pass, analytical",
+     "report": "task4/determinism_check_report.md"
+    },
+    "returned": [
+     {
+      "date": "2026-11-08",
+      "source": "judge",
+      "repair": "determinism",
+      "moves": "the offer's 'in any combination' dropped; NPS-3 4.3 'the selection from the partner's offer whose hand-over lowers the year's delivery cost most'; saved hours to the nearest 100 (prompt and asks), Achill road slowed and Owenduff's price to EUR 13.40 so every graded figure sits mid-bin; component 1 'about 110 van-hours' against the hours Owenduff's charge would pay for",
+      "freeze": "freeze.py check --mode rubric FAIL, 8 items, all this fix's: the Critical Components numbers (charges at EUR 13.40, component 1's range, 700), pieces achill_h 650 to 700, ban, corridor, lee_let and mul charges, runs_saved_h R04 650 to 700, and the default path's price text (12.60 to 13.40); the call sentence, the stump and the ladder did not move",
+      "zip": "4a9ccea1"
+     }
+    ],
+    "gates": {
+     "checks": "262 assertions",
+     "verify": "PASS (run-day regression: same list, EUR 50,000, every run's saved and before hours)",
+     "byte_identical": "two builds",
+     "figures_check": "56 of 56",
+     "voice_check": "PASS, 555 characters, WARN which-quota and files up front",
+     "precut": "72 of 72",
+     "ceiling": {
+      "shallow_keep": 8.7,
+      "landed_keep": 30.4,
+      "pair": 39.3,
+      "script": "generator/ceiling.py"
+     },
+     "backtest": "fit 2025, forecast 2026 Jan to Oct: 21 van-hours against 177 for the proportional carry",
+     "container": "clean (scrub audit, target and golden)"
+    },
+    "zip_sha256_16": "4a9ccea1839b45a0",
+    "golden_zip_sha256_16": "801703c83306e234",
+    "subdomain": "transportation-network",
+    "client_domain": "urban-regional-science"
+   }
+  },
+  {
+   "date": "2026-11-08",
+   "event": "DRAWN architecture 5: a Smaland road haulier's battery-electric tractor order for 2027, each Varnamo duty's January design-day energy forecast from a pilot whose payloads are shipper declarations (supply-chain-logistics in general-statistics-data-science, regression-classification-model-diagnostics, forecasting); guard WARN only (repeat.gate_g)"
   }
  ],
  "zip_sha256_16": "4a9ccea1839b45a0",
@@ -139,9 +193,9 @@
   "date": "2026-11-08",
   "note": "moved from Project Mark unstumped on the Mark portal; carried on here for the Sulfur bar"
  },
- "subdomain": "transportation-network",
- "client_domain": "urban-regional-science",
- "call": "Hand Mulranny, Achill, Bangor Erris, Belmullet, Louisburgh and Ballycastle to Owenduff from January 2027 and keep Leenane, Letterfrack, Clifden, Cong and Charlestown: about EUR 50,000 net saving in 2027",
+ "subdomain": "regression-classification-model-diagnostics",
+ "client_domain": "general-statistics-data-science",
+ "call": "Order 6 battery-electric tractors for Värnamo duties V02, V05, V09, V14, V16 and V18; V03, V07, V11, V21, V24, V27, V30 and V33 stay on diesel",
  "runs": {
   "run1": null,
   "run2": null,
@@ -160,23 +214,30 @@
     "graded": false,
     "verdict": "not stumped before the rubric phase; both runs on the golden call and every graded figure",
     "texts": "runs/run1.md, runs/run2.md"
+   },
+   {
+    "architecture": 4,
+    "date": "2026-11-08",
+    "graded": false,
+    "verdict": "not stumped (author's report); run texts not in the repo",
+    "texts": ""
    }
   ]
  },
  "gates": {
-  "checks": "262 assertions",
-  "verify": "PASS (run-day regression: same list, EUR 50,000, every run's saved and before hours)",
+  "checks": "115 assertions",
+  "verify": "PASS (independent moments correction: 2.14 kWh per t per 100 km, the same six, all 14 bins)",
   "byte_identical": "two builds",
-  "figures_check": "56 of 56",
-  "voice_check": "PASS, 555 characters, WARN which-quota and files up front",
+  "figures_check": "60 of 60",
+  "voice_check": "PASS, WARN shell quota and files up front",
   "precut": "72 of 72",
   "ceiling": {
-   "shallow_keep": 8.7,
-   "landed_keep": 30.4,
-   "pair": 39.3,
+   "shallow_keep": 13.3,
+   "landed_keep": 6.7,
+   "pair": 34.0,
    "script": "generator/ceiling.py"
   },
-  "backtest": "fit 2025, forecast 2026 Jan to Oct: 21 van-hours against 177 for the proportional carry",
+  "backtest": "Jan-Feb 2026 held out: declared fit 2.4 per cent, golden 2.3 (blind to the dilution); one cold rate under-predicts sub-zero days by 3.4 per cent",
   "container": "clean (scrub audit, target and golden)"
  },
  "golden_zip_sha256_16": "801703c83306e234"

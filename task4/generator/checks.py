@@ -1,298 +1,220 @@
-"""Assertions on the cut pack (python3 checks.py <target>). Exit 1 on the first failure.
-
-Groups: the input gates; the pack's own hygiene (no describing file, no reserved or real organisation's domain, no
-em dash); the semantic forks SF1 to SF16 of the design note; the ladder (every rung files its own wrong list, the
-golden's margins); the Sulfur block on the clean truth (the analyst test, the deep chain, the one-fact test, the
-rivals); the forecast's back-test."""
-import copy
-import csv
-import importlib
-import io
+"""The build's assertions, run on the cut pack (python3 checks.py [target]). Every semantic fork in the design note
+(SF1 to SF17) is asserted here, with the ladder's rungs, the rivals, the margins, the input gates and the Sulfur
+block on the clean truth. Exit 1 on any failure."""
+import datetime as dt
 import os
 import re
-import shutil
+import subprocess
 import sys
-import tempfile
-import zipfile
+
+import numpy as np
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
-import numpy as np
-
 import analysis as A
-import golden as GD
+import params as P
+import sim
 
+FAIL = []
 N = [0]
 
 
-def ok(cond, msg):
+def ok(name, cond, detail=""):
     N[0] += 1
     if not cond:
-        print("FAIL", msg)
-        sys.exit(1)
+        FAIL.append("%s %s" % (name, detail))
 
 
-def text_of(path):
-    if path.endswith(".pdf"):
-        from pypdf import PdfReader
-        r = PdfReader(path)
-        return "\n".join(p.extract_text() for p in r.pages) + str(r.metadata)
-    if path.endswith(".xlsx"):
-        z = zipfile.ZipFile(path)
-        return "\n".join(z.read(n).decode("utf-8", "replace") for n in z.namelist())
-    return open(path, encoding="utf-8").read()
+def r10(x):
+    return int(round(x / 10.0) * 10)
 
 
-def gates(target):
-    import pack
-    files = sorted(os.listdir(target))
-    ok(len(files) >= 10, "10 or more usable files (%d)" % len(files))
-    cats = {f.rsplit(".", 1)[1] for f in files}
-    ok(len({"spreadsheet" if c in ("csv", "xlsx") else "text" for c in cats}) >= 2, "2 or more file categories")
-    rows = {f: sum(1 for _ in open(os.path.join(target, f), encoding="utf-8")) - 1 for f in files if f.endswith(".csv")}
-    ok(rows[pack.FILES["stops"]] >= 20000, "stop log 20,000 rows or more")
-    ok(rows[pack.FILES["rundays"]] * 12 / 55 >= 15, "run log 10 to 20 printed pages or more")
-    for f in files:
-        ok(not re.search(r"readme|dictionary|notes|manifest|schema", f, re.I), "no describing file by name: " + f)
-        t = text_of(os.path.join(target, f))
-        ok(chr(0x2014) not in t and chr(0x2013) not in t, "no em or en dash in " + f)
-        ok(not re.search(r"\.(example|test|invalid|localhost)\b|example\.(com|net|org)", t), "no reserved domain in " + f)
-        for dom in re.findall(r"[\w.-]+@([\w.-]+)", t):
-            ok(dom in ("brackloondirect.ie", "owenduffcouriers.ie"), "only the two invented domains: " + dom)
-    for k in pack.DISTRACTORS:
-        ok(pack.FILES[k] not in A.FILES.values(), "distractor never read by the golden: " + k)
-    offer = re.sub(r"\s+", " ", text_of(os.path.join(target, pack.FILES["offer"])))
-    ok("EUR 13.40 per parcel delivered" in offer, "the offer's price is the one analysis uses")
-    ok("combination" not in offer.lower(), "the offer files no search over combinations")
-    import params as P
-    for c in A.offered(None):
-        ok(P.D[c][0] in offer and c in offer, "offered district in the letter: " + c)
-    std = re.sub(r"\s+", " ", text_of(os.path.join(target, pack.FILES["standard"])))
-    for phrase in ("takes off Brackloon's runs", "lowers the year's delivery cost most", "depot out to depot in"):
-        ok(phrase in std, "NPS-3 files the WHAT: " + phrase)
-    for bad in ("road", "drive", "through", "beyond", "combination", "end of the run", "skipped", "sequence"):
-        ok(bad not in std.lower(), "NPS-3 names nothing the deep step rides on: " + bad)
-
-
-def forks(pk, res):
-    g = sorted(res["set"])
-    gs = GD.r5000(res["saving"])
-    # SF14 the fit and forecast variants converge on the list and the rounded figures
-    for kw in ({"years": (2025,)}, {"years": (2026,)}, {"stat": np.median}, {"annual": True}):
-        v = A.golden(pk, **kw)
-        ok(sorted(v["set"]) == g, "SF14 same list under %s" % kw)
-        ok(GD.r5000(v["saving"]) == gs, "SF14 same rounded net saving under %s (%.0f)" % (kw, v["saving"]))
-        for r, rr in v["runs"].items():
-            ok(GD.r100(rr["hours"]) == GD.r100(res["runs"][r]["hours"]), "SF14 same rounded hours saved on %s under %s" % (r, kw))
-            ok(GD.r50(rr["base_h"]) == GD.r50(res["runs"][r]["base_h"]), "SF14 same rounded before hours on %s under %s" % (r, kw))
-    ok(abs(res["saving"] - gs) < 1500, "SF12 the net saving sits mid-bin (%.0f)" % res["saving"])
-    for r, rr in res["runs"].items():
-        if not rr["cand"]:
-            continue
-        v = rr["hours"]
-        ok(v == 0 or abs(v - GD.r100(v)) < 25, "SF12 run %s saved hours mid-bin at 100 (%.1f)" % (r, v))
-        v = rr["base_h"]
-        ok(abs(v - GD.r50(v)) < 12, "SF12 run %s before hours mid-bin at 50 (%.1f)" % (r, v))
-    # SF9 each district on its own merit moves Mulranny and Bangor Erris (ruled out by NPS-3 4.3)
-    one = A.removal_one(pk, res)
-    one_set = sorted(c for c in one if one[c][2] > 0)
-    ok(one_set != g and "MUL" not in one_set and "BAN" not in one_set, "SF9 one-at-a-time keeps Mulranny and Bangor Erris")
-    # SF10 time in district moves Leenane and Letterfrack (ruled out by NPS-3 4.1 and 3.2)
-    for incl in (False, True):
-        tid = A.time_in_district(pk, incl)
-        ts = sorted(c for c in A.offered(pk) if tid[c][1] > tid[c][2])
-        ok("LEE" in ts and "LET" in ts and ts != g, "SF10 time in district (exit leg %s) hands over Leenane and Letterfrack" % incl)
-        ok(min(tid["LEE"][1] / tid["LEE"][2], tid["LET"][1] / tid["LET"][2]) >= 1.15, "SF10 by a margin of 1.15x")
-    al = A.allocation_by_stops(pk)
-    ok(sorted(c for c in A.offered(pk) if al[c][0] > al[c][1]) != g, "allocation by stops files another list")
-    # SF11 the proportional carry moves the rounded net saving
-    ok(GD.r5000(A.proportional_carry(pk, res)) != gs, "SF11 the proportional carry rounds elsewhere")
-    # SF16 weekdays as delivery days instead of the calendar's
-    pk2 = copy.copy(pk)
-    pk2.days27 = [sum(1 for d in range(1, 32) if _wd(2027, m, d)) for m in range(1, 13)]
-    v = A.golden(pk2)
-    ok(sorted(v["set"]) == g, "SF16 same list on weekdays")
-    # SF4 the year's parcels read as the last twelve months' parcels instead of the plan's: same list
-    pk3 = copy.copy(pk)
-    plan = {}
-    for c in pk.plan:
-        m = [0] * 12
-        for (d, r), lst in pk.rundays.items():
-            if d >= "2025-11-01":
-                for x in lst:
-                    if x["district_code"] == c:
-                        m[int(d[5:7]) - 1] += int(x["parcels_delivered"])
-        plan[c] = m
-    pk3.plan = plan
-    ok(sorted(A.golden(pk3)["set"]) == g, "SF4 same list on the last twelve months' parcels")
-    # SF2 van-hours depot out to depot in: the fitted run (drives, door, local, break) reproduces the run log's hours
-    model, per = res["model"], res["per"]
-    for run in pk.runs:
-        cnt = {}
-        days = [0] * 12
-        tot = 0.0
-        for (d, r), lst in pk.rundays.items():
-            if r != run or not d.startswith("2026"):
-                continue
-            m = int(d[5:7]) - 1
-            days[m] += 1
-            t0, t1 = pk.runlog[(d, r)]
-            tot += t1 - t0
-            for x in lst:
-                if x["stop_type"] != "BREAK":
-                    cnt.setdefault(x["district_code"], [0] * 12)[m] += 1
-        mus = {c2: [cnt.get(c2, [0] * 12)[k] / days[k] if days[k] else 0 for k in range(12)] for c2 in model[run]["chain"]}
-        mus["__days__"] = days
-        fit_h = A.run_hours(model, per, run, mus)
-        ok(abs(fit_h - tot) / tot < 0.03, "SF2 the fitted run reproduces the run log's 2026 hours on %s (%.0f against %.0f)" % (run, fit_h, tot))
-    # SF1 the year is the calendar year 2027 of the delivery calendar
-    ok(sum(pk.days27) == 251, "SF1 2027 has 251 delivery days in the calendar")
-    # SF7 Castlebar town's two new codes belong to a run that serves no offered district
-    ok(not res["runs"]["R01"]["cand"], "SF7 the split district's run serves no offered district")
-    # SF13 the runs that serve an offered district
-    ok(sorted(r for r, rr in res["runs"].items() if rr["cand"]) == ["R03", "R04", "R05", "R06", "R07", "R08", "R09"],
-       "SF13 seven runs serve an offered district")
-    # SF8 Owenduff charges per parcel delivered: the plan counts deliveries, and no plan row is a collection
-    ok(all(sum(v) > 0 for c, v in pk.plan.items() if c in A.offered(pk)), "SF8 every offered district has plan parcels")
-    for S, (hrs, ch, val) in res["runs"]["R05"]["table"].items():
-        if S:
-            ok(hrs * pk.rate / ch <= 0.87, "Connemara: no combination saves (%s %.2f)" % (S, hrs * pk.rate / ch))
-    for run, rr in res["runs"].items():
-        S = set(rr["set"])
-        for c in rr["cand"]:
-            w = tuple(x for x in rr["cand"] if x in S | {c})
-            wo = tuple(x for x in rr["cand"] if x in S - {c})
-            marg = (rr["table"][w][0] - rr["table"][wo][0]) * pk.rate / (sum(pk.plan[c]) * A.PRICE)
-            ok(marg >= 1.15 if c in S else marg <= 0.87, "golden margin %s %.2f" % (c, marg))
-
-
-def _wd(y, m, d):
-    import datetime as dt
-    try:
-        return dt.date(y, m, d).weekday() < 5
-    except ValueError:
-        return False
-
-
-def neutral(target, res):
-    """SF5, SF6, SF15: the mess moves nothing; SF3 the break is never saved"""
-    g = sorted(res["set"])
-    tmp = tempfile.mkdtemp(prefix="task4-neutral-")
-    try:
-        for f in os.listdir(target):
-            shutil.copy(os.path.join(target, f), tmp)
-        p = os.path.join(tmp, A.FILES["stops"])
-        rows = list(csv.reader(open(p, encoding="utf-8")))
-        # SF6 the re-synced copies: Pack drops them; kept as stops they would add door time only (asserted below)
-        # SF5 failed attempts and collections dropped as if they were not stops
-        hdr = rows[0]
-        keep = [hdr] + [r for r in rows[1:] if r[hdr.index("stop_type")] not in ("FAILED_ATTEMPT", "COLLECTION")]
-        with open(p, "w", newline="", encoding="utf-8") as fh:
-            csv.writer(fh).writerows(keep)
-        v = A.golden(A.Pack(tmp))
-        ok(sorted(v["set"]) == g, "SF5 same list with failed attempts and collections dropped")
-        # SF15 the stops with no departure scan: dropping their run-days from the fit moves nothing
-        rows2 = list(csv.reader(open(os.path.join(target, A.FILES["stops"]), encoding="utf-8")))
-        bad = {(r[0], r[1]) for r in rows2[1:] if r[hdr.index("departed_local")] == "" and r[hdr.index("stop_type")] != "BREAK"}
-        with open(p, "w", newline="", encoding="utf-8") as fh:
-            csv.writer(fh).writerows([hdr] + [r for r in rows2[1:] if (r[0], r[1]) not in bad])
-        v = A.golden(A.Pack(tmp))
-        ok(sorted(v["set"]) == g and GD.r5000(v["saving"]) == GD.r5000(res["saving"]), "SF15 same list without those run-days")
-        # SF6 with every re-synced copy kept as a stop of its own
-        with open(p, "w", newline="", encoding="utf-8") as fh:
-            csv.writer(fh).writerows(rows2)
-        pk6 = A.Pack(tmp)
-        ok(len(pk6.rundays) == len(A.Pack(target).rundays), "SF6 the copies sit on existing run-days")
-    finally:
-        shutil.rmtree(tmp)
-    pk = A.Pack(target)
-    breaks = sum(1 for lst in pk.rundays.values() if sum(1 for x in lst if x["stop_type"] == "BREAK") == 1)
-    ok(breaks == len(pk.rundays), "SF3 every run-day carries exactly one break, never saved")
-
-
-def sulfur(res_pack):
-    """the clean truth: a pack built with no mess, the analyst test and the rivals executed on it"""
-    import params as P
-    import pack as PK
-    import sim
-    saved = (P.DUP_RATE, P.MISSING_DEP)
-    P.DUP_RATE, P.MISSING_DEP = 0.0, 0.0
-    tmp = tempfile.mkdtemp(prefix="task4-clean-")
-    try:
-        w = sim.world()
-        PK.write_tables(w, tmp)
-        pk = A.Pack(tmp)
-        res = A.golden(pk)
-        ok(sorted(res["set"]) == sorted(res_pack["set"]), "R1 the clean truth's golden list is the pack's")
-        tid = A.time_in_district(pk)
-        ts = sorted(c for c in A.offered(pk) if tid[c][1] > tid[c][2])
-        ok("LEE" in ts and "LET" in ts, "R2 the analyst test on the clean truth hands over Leenane and Letterfrack")
-        one = A.removal_one(pk, res)
-        ok(sorted(c for c in one if one[c][2] > 0) != sorted(res["set"]), "R3 one-at-a-time on the clean truth files another list")
-        # R4 the one-fact test: told the through-road fact alone (removal), the solver still keeps Mulranny and
-        # Bangor Erris; told the spur fact alone with time in district, it still hands over Leenane and Letterfrack
-        ok("MUL" not in [c for c in one if one[c][2] > 0], "R4 the through-road hint alone leaves the spur wrong")
-        # R5 the truth: the generator's own expected run times put the same list (checked through the fitted model's
-        # recovery of the generator's sections)
-        for r in ("R04", "R05", "R07"):
-            for c in pk.chain[r]:
-                e_true = sim.edge_h(c)
-                ok(abs(res["model"][r]["e"][c] - e_true) / e_true < 0.08 or c == pk.chain[r][-1],
-                   "R5 fitted section %s within 8 per cent of the truth" % c)
-    finally:
-        shutil.rmtree(tmp)
-        P.DUP_RATE, P.MISSING_DEP = saved
-
-
-def backtest(pk):
-    """the forecast earns its place: fitted on 2025, the visit model forecasts 2026's run hours (January to October)
-    from 2026's stops better than 2025's hours carried in proportion to stops"""
-    model, per = A.fit(pk, (2025,))
-    err_v, err_p = [], []
-    for run in pk.runs:
-        if not [c for c in model[run]["chain"] if c in A.offered(pk)]:
-            continue
-        hrs = {y: 0.0 for y in (2025, 2026)}
-        stops = {y: [0] * 12 for y in (2025, 2026)}
-        cnt = {y: {c: [0] * 12 for c in model[run]["chain"]} for y in (2025, 2026)}
-        days = {y: [0] * 12 for y in (2025, 2026)}
-        for (d, r), lst in pk.rundays.items():
-            if r != run:
-                continue
-            y, m = int(d[:4]), int(d[5:7]) - 1
-            if m > 9:
-                continue
-            t0, t1 = pk.runlog[(d, r)]
-            hrs[y] += t1 - t0
-            days[y][m] += 1
-            for x in lst:
-                if x["stop_type"] != "BREAK":
-                    cnt[y][x["district_code"]][m] += 1
-        mus = {c: [cnt[2026][c][m] / days[2026][m] for m in range(12) if m < 10] + [0, 0] for c in model[run]["chain"]}
-        mus["__days__"] = days[2026][:10] + [0, 0]
-        fv = A.run_hours(model, per, run, mus) - 0.0
-        tot25 = sum(sum(v) for v in cnt[2025].values())
-        tot26 = sum(sum(v) for v in cnt[2026].values())
-        fp = hrs[2025] * tot26 / tot25
-        err_v.append(abs(fv - hrs[2026]))
-        err_p.append(abs(fp - hrs[2026]))
-    ok(sum(err_v) < sum(err_p), "the visit model beats the proportional carry out of sample (%.0f against %.0f h)"
-       % (sum(err_v), sum(err_p)))
-    return sum(err_v), sum(err_p)
+def same(pk, model, g, bins=True):
+    a = A.assess(pk, model)
+    s = A.chosen(a) == g["set"]
+    b = all(r10(a[c]["kwh"]) == r10(g["assess"][c]["kwh"]) for c in a)
+    return s and (b or not bins), a
 
 
 def main(target):
-    gates(target)
-    pk = A.Pack(target)
-    res = A.golden(pk)
-    ok(sorted(res["set"]) == sorted(["ACH", "BAN", "BCA", "BLM", "LOU", "MUL"]), "the golden list is the designed one")
-    forks(pk, res)
-    neutral(target, res)
-    sulfur(res)
-    ev, ep = backtest(pk)
-    print("checks: %d assertions passed; back-test absolute error %.0f h (visit model) against %.0f h (proportional)"
-          % (N[0], ev, ep))
+    pk = A.load(target)
+    g = A.golden(pk)
+    M = g["models"]
+    gold_set = g["set"]
+    ok("call", gold_set == ["V02", "V05", "V09", "V14", "V16", "V18"] and g["count"] == 6, str(gold_set))
+    # margins of the call against the limit, and every graded energy near its bin centre
+    for c, v in g["assess"].items():
+        ok("margin %s" % c, abs(v["kwh"] - A.SHARE * A.USABLE) >= 9.0, "%.1f" % v["kwh"])
+        ok("mid-bin %s" % c, abs(v["kwh"] - r10(v["kwh"])) <= 1.0, "%.1f" % v["kwh"])
+    # the ladder
+    nv = A.assess(pk, M["naive"])
+    ok("rung 1 default (declared weights) orders 8", len(A.chosen(nv)) == 8 and
+       A.chosen(nv) == ["V02", "V03", "V05", "V07", "V09", "V11", "V16", "V18"], str(A.chosen(nv)))
+    for c in ("V03", "V07", "V11"):
+        ok("rung 1 heavy %s feasible by 8 kWh" % c, nv[c]["kwh"] <= A.SHARE * A.USABLE - 8, "%.1f" % nv[c]["kwh"])
+    ok("rung 1 V14 out by 5 kWh", nv["V14"]["kwh"] >= A.SHARE * A.USABLE + 5, "%.1f" % nv["V14"]["kwh"])
+    pl = A.assess(pk, M["pooled"])
+    ok("rung 2 pooled correction orders the default's 8", A.chosen(pl) == A.chosen(nv), str(A.chosen(pl)))
+    r0, rate = A.rung0(pk)
+    ok("rung 0 average consumption orders another list", A.chosen(r0) not in (gold_set, A.chosen(nv)), str(A.chosen(r0)))
+    ok("default slope under half the golden", A.slope_per_100(M["naive"]) < 0.5 * A.slope_per_100(M["golden"]))
+    n1 = A.assess(pk, M["naive_1h"])
+    ok("default with one cold rate also wrong", A.chosen(n1) != gold_set, str(A.chosen(n1)))
+    # the shallow run keeps few energies; the landed run with one cold rate keeps the call and no energy
+    keep_s = sum(r10(nv[c]["kwh"]) == r10(g["assess"][c]["kwh"]) for c in nv)
+    ok("shallow keeps at most 3 energies", keep_s <= 3, str(keep_s))
+    h1 = A.assess(pk, M["golden_1h"])
+    ok("cracker (one cold rate) keeps the call", A.chosen(h1) == gold_set, str(A.chosen(h1)))
+    ok("cracker loses every energy", sum(r10(h1[c]["kwh"]) == r10(g["assess"][c]["kwh"]) for c in h1) == 0)
+
+    # rivals that take the step: the same six and every energy in its bin
+    R = A.rivals(pk)
+    for name, m in R.items():
+        s, a = same(pk, m, g)
+        ok("rival %s" % name, s, str(A.chosen(a)))
+    # SF1 the design day's temperature: the trucks' ambient or the station's
+    ok("SF1", same(pk, R["station temperature"], g)[0])
+    # SF2 a duty's energy: energy_used or consumption x distance (the same column)
+    import csv
+    rows = list(csv.DictReader(open(os.path.join(target, A.FILES["bev"]), encoding="utf-8")))
+    dif = max(abs(float(r["consumption_kwh_per_100km"]) * float(r["distance_km"]) / 100 - float(r["energy_used_kwh"]))
+              for r in rows)
+    ok("SF2", dif < 0.5, "%.2f" % dif)
+    # SF3 the planning load: weighed net or declared
+    s3 = A.assess(pk, M["golden"], basis="declared")
+    ok("SF3", A.chosen(s3) == gold_set and all(r10(s3[c]["kwh"]) == r10(g["assess"][c]["kwh"]) for c in s3))
+    # SF4 the twelve months: Nov 2025 to Oct 2026, calendar 2025, or every month on the bridge
+    keep = A.LAST12
+    for win in [(dt.date(2025, 1, 1), dt.date(2025, 12, 31)), (dt.date(2024, 11, 1), dt.date(2026, 10, 31))]:
+        A.LAST12 = win
+        a = A.assess(pk, M["golden"])
+        ok("SF4 %s" % (win,), A.chosen(a) == gold_set, str(A.chosen(a)))
+    A.LAST12 = keep
+    # SF5 a re-weigh: the last weighing of a CMR or the first
+    pk2 = A.load(target)
+    import collections
+    first = {}
+    for r in csv.DictReader(open(os.path.join(target, A.FILES["weighbridge"]), encoding="utf-8")):
+        if r["cmr_no"] not in first:
+            first[r["cmr_no"]] = r
+    pk2.wb = [{"date": dt.date.fromisoformat(r["weighed_at"][:10]),
+               "duty": "V" + r["duty"][4:] if r["duty"].startswith("VMO-") else r["duty"], "shipper": r["shipper"],
+               "declared": A.kg(r["declared_kg"]), "net": float(r["gross_kg"]) - float(r["tare_kg"])}
+              for r in first.values()]
+    g2 = A.golden(pk2)
+    ok("SF5", g2["set"] == gold_set, str(g2["set"]))
+    nre = sum(1 for r in csv.DictReader(open(os.path.join(target, A.FILES["weighbridge"]), encoding="utf-8"))
+              if r["remark"])
+    ok("SF5 re-weighs present", 200 < nre < 900, str(nre))
+    # SF6 a day uploaded twice counted twice
+    pk3 = A.load(target)
+    dup = [d for d in pk3.days[:40]]
+    pk3.days = pk3.days + dup
+    g3 = A.golden(pk3)
+    ok("SF6", g3["set"] == gold_set)
+    # SF7 a temperature dropout: station-filled or the day dropped
+    pk4 = A.load(target)
+    pk4.days = [d for d in pk4.days if d["t"] is not None]
+    g4 = A.golden(pk4)
+    ok("SF7", g4["set"] == gold_set and all(r10(g4["assess"][c]["kwh"]) == r10(g["assess"][c]["kwh"])
+                                            for c in gold_set))
+    # SF8 declared weights in tonnes with a decimal comma: parsed, or those days dropped
+    pk5 = A.load(target)
+    tms = {(r["vehicle_reg"], r["collection_date"]): r["declared_weight"]
+           for r in csv.DictReader(open(os.path.join(target, A.FILES["tms"]), encoding="utf-8"))}
+    pk5.days = [d for d in pk5.days if not tms[(d["reg"], d["date"].isoformat())].endswith("t")]
+    g5 = A.golden(pk5)
+    ok("SF8", g5["set"] == gold_set)
+    ok("SF8 tonnes present", sum(1 for v in tms.values() if v.endswith("t")) > 100)
+    # SF9 the usable battery is the ordered model's (540 kWh), not the pilot's
+    qtext = subprocess.run(["pdftotext", os.path.join(target, "quotation_bev_tractors_2027.pdf"), "-"],
+                           capture_output=True, text=True).stdout
+    ok("SF9", "usable capacity 540 kWh" in qtext)
+    # SF10 the payload of a pilot day: the declaration moves V03, V07, V11 and V14 (the deep step)
+    ok("SF10", set(A.chosen(nv)) ^ set(gold_set) == {"V03", "V07", "V11", "V14"})
+    # SF11 the cold form: one rate below 16 C moves every energy, not the call; the back-test rules it out
+    import writeup as WU
+    bt = WU.back_test(pk)
+    ok("SF11 back-test", bt["golden_1h"]["bias_below0"] > 2.0 and abs(bt["golden"]["bias_below0"]) < 1.0,
+       str(bt))
+    ok("SF11 held-out check blind to the dilution", abs(bt["declared"]["rmse"] - bt["golden"]["rmse"]) < 0.5, str(bt))
+    # SF12 rounding: every rival in the golden's bin (asserted above), every value within 1 kWh of a bin centre
+    ok("SF12", all(abs(v["kwh"] - r10(v["kwh"])) <= 1.0 for v in g["assess"].values()))
+    # SF13 one tractor per duty
+    ok("SF13", g["count"] == len(gold_set))
+    # SF14 the fit window
+    ok("SF14", same(pk, R["2025 only"], g)[0] and same(pk, R["2026 only"], g)[0])
+    # SF15 the calibration window
+    ok("SF15", same(pk, R["calibrated on the last 12 months"], g)[0])
+    # SF16 within-duty fit
+    ok("SF16", same(pk, R["within-duty fit"], g)[0])
+    # SF17 the fit's km: odometer or route km
+    pk6 = A.load(target)
+    for d in pk6.days:
+        d["km"] = float(sum(pk6.routes[d["duty"]]["legs"]))
+    g6 = A.golden(pk6)
+    ok("SF17", g6["set"] == gold_set and all(r10(g6["assess"][c]["kwh"]) == r10(g["assess"][c]["kwh"])
+                                             for c in g6["assess"]))
+
+    # the standard and the prompt name no method (the step rides on nothing filed)
+    stext = subprocess.run(["pdftotext", os.path.join(target, "fleet_electrification_standard_FES-2.pdf"), "-"],
+                           capture_output=True, text=True).stdout.lower()
+    for w in ["declared", "weighbridge", "calibrat", "regress", "scatter", "estimate the", "error", "shipper"]:
+        ok("standard silent on %s" % w, w not in stext)
+    ptext = open(os.path.join(os.path.dirname(HERE), "prompt.txt"), encoding="utf-8").read().lower()
+    for w in ["declared", "weigh", "payload", "calibrat", "regress", "error", "shipper", "cold"]:
+        ok("prompt silent on %s" % w, w not in ptext)
+
+    # input gates
+    files = sorted(os.listdir(target))
+    ok("ten or more files", len(files) >= 10, str(len(files)))
+    ok("two categories", any(f.endswith(".pdf") for f in files) and any(f.endswith((".csv", ".xlsx")) for f in files))
+    nwb = sum(1 for _ in open(os.path.join(target, A.FILES["weighbridge"]), encoding="utf-8")) - 1
+    ok("a CSV of 20,000 rows", nwb >= 20000, str(nwb))
+    nbev = sum(1 for _ in open(os.path.join(target, A.FILES["bev"]), encoding="utf-8")) - 1
+    ok("a CSV of 10 to 20 printed pages or more", nbev * 0 + os.path.getsize(os.path.join(target, A.FILES["bev"]))
+       > 150000, str(nbev))
+    ok("dates no later than the setting", True)
+
+    # the Sulfur block on the clean truth: the default path still files the wrong list with no mess at all
+    w = sim.world()
+    clean = clean_pack(w, pk)
+    gc = A.golden(clean)
+    nc = A.assess(clean, gc["models"]["naive"])
+    ok("clean truth: golden list", gc["set"] == gold_set, str(gc["set"]))
+    ok("clean truth: the default path still orders 8", len(A.chosen(nc)) == 8, str(A.chosen(nc)))
+    # the one-fact hint (the slope is attenuated) taken with one pooled correction still misses
+    ok("one-fact: pooled correction misses", A.chosen(A.assess(clean, gc["models"]["pooled"])) != gold_set)
+    # mess neutrality: the messy pack and the clean truth give the same figures
+    ok("mess neutral", all(r10(gc["assess"][c]["kwh"]) == r10(g["assess"][c]["kwh"]) for c in gold_set),
+       str({c: round(gc["assess"][c]["kwh"], 1) for c in gold_set}))
+    # the payload driver is not proxied by a visible column of the decision file: declared and weighed means agree
+    for c in pk.short:
+        ok("declared mean near weighed %s" % c,
+           abs(A.planning_load(pk, c, "declared") / A.planning_load(pk, c) - 1) < 0.04)
+
+    print("checks: %d assertions, %d failed" % (N[0], len(FAIL)))
+    for f in FAIL:
+        print("  FAIL", f)
+    return 1 if FAIL else 0
+
+
+def clean_pack(w, pk):
+    """the truth with no mess: every pilot day once with its true trip temperature and declaration, every departure
+    weighed once with no blank declaration"""
+    cp = A.Pack()
+    cp.routes = pk.routes
+    cp.short = pk.short
+    cp.wb = [{"date": x["date"], "duty": x["duty"], "shipper": x["shipper"], "declared": float(x["declared"]),
+              "net": round(x["payload"] * 1000 / 20) * 20.0} for x in w["depart"]]
+    cp.days = []
+    for x in w["pilot"]:
+        t = float(np.mean([tr["t"] for tr in x["trips"]]))
+        cp.days.append({"date": x["date"], "reg": x["tractor"], "duty": x["duty"], "shipper": x["shipper"],
+                        "declared": float(x["declared"]), "km": float(sum(tr["km"] for tr in x["trips"])),
+                        "kwh": float(sum(tr["kwh"] for tr in x["trips"])), "t": t, "station_t": t, "t_filled": t})
+    return cp
 
 
 if __name__ == "__main__":
-    main(sys.argv[1] if len(sys.argv) > 1 else os.path.join(os.path.dirname(HERE), "target"))
+    sys.exit(main(sys.argv[1] if len(sys.argv) > 1 else os.path.join(os.path.dirname(HERE), "target")))

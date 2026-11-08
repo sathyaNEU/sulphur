@@ -1,11 +1,10 @@
-"""Write the data files of the pack from the clean truth: the handheld stop log, the run-day log, the district
-register, the 2027 volume plan, the 2027 rate card, the 2027 delivery calendar and the three files the call never
-reads (the fuel card statement, the customer contact log, the van fleet register)."""
+"""Write the data files of the pack from the clean truth, with the mess the haulier's systems produce: the Varnamo
+weighbridge log, the battery-electric tractors' daily summaries, the Jonkoping TMS consignments, the route, fleet and
+shipper registers, the 2027 shortlist, the daily temperatures, and the two files the call never reads (the Varnamo
+fuel card statement and the workshop log)."""
 import csv
 import datetime as dt
-import hashlib
 import math
-import os
 
 import numpy as np
 from openpyxl import Workbook
@@ -16,271 +15,328 @@ import params as P
 import sim
 
 FILES = {
-    "stops": "delivery_stops_2025-2026.csv",
-    "rundays": "van_run_log_2025-2026.csv",
-    "register": "district_register_2026.xlsx",
-    "plan": "volume_plan_2027.xlsx",
-    "rates": "fleet_rate_card_2027.xlsx",
-    "calendar": "delivery_calendar_2027.csv",
-    "offer": "owenduff_offer_brackloon_2027.pdf",
-    "standard": "network_planning_standard_NPS-3.pdf",
-    "fuel": "fuel_card_statement_2025-2026.csv",
-    "contacts": "customer_contacts_2026.csv",
-    "fleet": "van_fleet_register_2026.xlsx",
+    "weighbridge": "weighbridge_varnamo_2024-11_2026-10.csv",
+    "bev": "bev_daily_summary_2025-03_2026-10.csv",
+    "tms": "tms_consignments_jonkoping_2025-2026.csv",
+    "routes": "route_register_2026.xlsx",
+    "fleet": "fleet_register_2026.xlsx",
+    "shippers": "shipper_register_2026.xlsx",
+    "plan": "fleet_plan_2027.xlsx",
+    "temps": "daily_mean_temperature_2016-2026.csv",
+    "standard": "fleet_electrification_standard_FES-2.pdf",
+    "quote": "quotation_bev_tractors_2027.pdf",
+    "fuel": "fuel_card_statement_varnamo_2025-2026.csv",
+    "workshop": "workshop_log_2025-2026.csv",
 }
-DISTRACTORS = ["fuel", "contacts", "fleet"]
+DISTRACTORS = ["fuel", "workshop"]
+OTHER_TOWNS = ["Jönköping", "Växjö", "Halmstad", "Borås", "Ljungby", "Helsingborg", "Malmö", "Göteborg", "Kalmar",
+               "Norrköping", "Linköping", "Karlshamn", "Hässleholm", "Lund", "Falkenberg", "Vetlanda", "Örebro",
+               "Eskilstuna", "Kungsbacka", "Landskrona", "Trelleborg", "Ystad", "Nybro", "Tranås", "Värnamo",
+               "Mölndal", "Skövde", "Laholm", "Olofström", "Älmhult", "Markaryd", "Hultsfred"]
+LETTERS = "ABCDEFGHJKLMNOPRSTUWXYZ"
 
 
-def hhmmss(h):
-    s = int(round(h * 3600))
-    return "%02d:%02d:%02d" % (s // 3600, (s % 3600) // 60, s % 60)
+def reg(rng):
+    s = "".join(LETTERS[int(rng.integers(0, len(LETTERS)))] for _ in range(3))
+    tail = "%02d" % int(rng.integers(10, 99))
+    last = LETTERS[int(rng.integers(0, len(LETTERS)))] if rng.random() < 0.35 else str(int(rng.integers(0, 10)))
+    return "%s %s%s" % (s, tail, last)
 
 
-def hhmm(h):
-    s = int(round(h * 60))
-    return "%02d:%02d" % (s // 60, s % 60)
+def fleet(w):
+    rng = np.random.default_rng(P.SEED + 30)
+    bev = {t: reg(rng) for t in P.PILOT_TRACTORS}
+    diesel_j = {"D-1%02d" % k: reg(rng) for k in range(1, 6)}
+    diesel_v = {"D-2%02d" % k: reg(rng) for k in range(1, 47)}
+    trailers = {"T-%03d" % k: reg(rng) for k in range(1, 61)}
+    tare = {t: int(round(15600 + 900 * rng.random(), -1)) for t in diesel_v}
+    ttare = {t: int(round(7400 + 1200 * rng.random(), -1)) for t in trailers}
+    return bev, diesel_j, diesel_v, trailers, tare, ttare
 
 
-def district_on(code, ref, d):
-    if code in P.SPLIT and d >= P.SPLIT_DATE:
-        a, _, b, _ = P.SPLIT[code]
-        return a if int(hashlib.sha1(ref.encode()).hexdigest(), 16) % 2 else b
-    return code
-
-
-def handheld(run, d):
-    # each run's handheld was swapped once, at the summer service
-    base = 3100 + 11 * list(P.RUNS).index(run)
-    return "HH%04d" % (base + (1 if d >= dt.date(2025, 7, 14) else 0))
-
-
-def write_stops(w, path):
-    rng = np.random.default_rng(P.SEED + 1)
-    rows = []
-    for rd in w["rundays"]:
-        d = rd["date"]
-        for i, s in enumerate(rd["stops"], 1):
-            kind = {"DEL": "DELIVERY", "FAIL": "FAILED_ATTEMPT", "COL": "COLLECTION", "BREAK": "BREAK"}[s["kind"]]
-            dist = "" if s["district"] is None else district_on(s["district"], s["ref"], d)
-            dep = hhmmss(s["dep"])
-            if kind != "BREAK" and rng.random() < P.MISSING_DEP:
-                dep = ""
-            delivered = s["parcels"] if s["kind"] == "DEL" else 0
-            failed = s["parcels"] if s["kind"] == "FAIL" else 0
-            sync_h = s["dep"] + 0.002 + rng.exponential(0.01)
-            row = [d.isoformat(), rd["run"], rd["van"], handheld(rd["run"], d), i, kind, dist, s["ref"], delivered,
-                   failed, s["collect"], hhmmss(s["arr"]), dep, "%s %s" % (d.isoformat(), hhmmss(sync_h))]
-            rows.append(row)
-            if kind != "BREAK" and rng.random() < P.DUP_RATE:
-                late = rd["in"] + 0.05 + rng.exponential(0.3)
-                rows.append(row[:-1] + ["%s %s" % (d.isoformat(), hhmmss(min(late, 23.9)))])
-    with open(path, "w", newline="", encoding="utf-8") as fh:
-        cw = csv.writer(fh)
-        cw.writerow(["run_date", "run_code", "van_reg", "handheld_id", "stop_seq", "stop_type", "district_code",
-                     "customer_ref", "parcels_delivered", "parcels_failed", "items_collected", "arrived_local",
-                     "departed_local", "synced_at_local"])
-        cw.writerows(rows)
+def write_csv(path, header, rows):
+    with open(path, "w", newline="", encoding="utf-8") as f:
+        wr = csv.writer(f, lineterminator="\r\n")
+        wr.writerow(header)
+        wr.writerows(rows)
     return len(rows)
 
 
-def write_rundays(w, path):
-    """the fleet app's export: a row per van run; the app re-exported some days after a sync fault (the same rows
-    twice), the van's odometer is blank where the driver skipped the closing reading, and the run names were
-    re-keyed with an ampersand when the fleet app was upgraded on 2 March 2026"""
-    rng = np.random.default_rng(P.SEED + 3)
-    odo = {}
+def write_weighbridge(w, path, fl):
+    bev, dj, dv, trailers, tare, ttare = fl
+    rng = np.random.default_rng(P.SEED + 31)
+    tlist = sorted(trailers)
+    duty_tr = {c: "D-2%02d" % int(c[1:]) for c in ["V%02d" % k for k in range(1, 47)]}
     rows = []
-    for rd in w["rundays"]:
-        o = odo.get(rd["van"], 41200 + 900 * len(odo))
-        km = int(round(rd["km"]))
-        stops = [s for s in rd["stops"] if s["kind"] != "BREAK"]
-        name = P.RUNS[rd["run"]]
-        if rd["date"] >= dt.date(2026, 3, 2):
-            name = name.replace(" and ", " & ")
-        row = [rd["date"].isoformat(), rd["run"], name, rd["van"], rd["driver"], hhmm(rd["out"]), hhmm(rd["in"]), o,
-               "" if rng.random() < 0.01 else o + km, len(stops),
-               sum(s["parcels"] for s in stops if s["kind"] == "DEL"), int(P.BREAK_H * 60)]
-        rows.append(row)
-        if rng.random() < 0.006:
-            rows.append(list(row))
-        odo[rd["van"]] = o + km + int(km * 0.02)
-    with open(path, "w", newline="", encoding="utf-8") as fh:
-        cw = csv.writer(fh)
-        cw.writerow(["run_date", "run_code", "run_name", "van_reg", "driver_ref", "depot_out", "depot_in",
-                     "odometer_out_km", "odometer_in_km", "stops", "parcels_delivered", "break_min"])
-        cw.writerows(rows)
-    return len(rows)
+    n = 400100
+    for x in sorted(w["depart"], key=lambda r: (r["date"], r["hour"], r["duty"])):
+        d = x["date"]
+        tr = duty_tr[x["duty"]]
+        if rng.random() < 0.03:   # a spare tractor on the duty
+            tr = "D-2%02d" % int(rng.integers(1, 47))
+        tl = tlist[int(rng.integers(0, len(tlist)))]
+        net = int(round(x["payload"] * 1000 / 20)) * 20
+        t_kg = tare[tr] + ttare[tl]
+        duty = x["duty"] if d >= P.TMS_UPGRADE else "VMO-%s" % x["duty"][1:]
+        dec = "" if rng.random() < 0.012 else str(x["declared"])
+        cmr = "%s%07d" % (x["shipper"], int(rng.integers(1000000, 9999999)))
+        hh = x["hour"]
+        stamp = dt.datetime.combine(d, dt.time(0)) + dt.timedelta(hours=hh)
+        if rng.random() < 0.021:   # first weighing over an axle limit, part reload, weighed again
+            first = net + int(round(rng.normal(900, 300) / 20)) * 20
+            n += 1
+            rows.append([n, stamp.strftime("%Y-%m-%d %H:%M"), "VMO-1", dv[tr], trailers[tl], duty, x["shipper"], cmr,
+                         dec, t_kg + first, t_kg, "axle 2 over"])
+            stamp += dt.timedelta(minutes=int(rng.integers(18, 55)))
+        n += 1
+        rows.append([n, stamp.strftime("%Y-%m-%d %H:%M"), "VMO-1", dv[tr], trailers[tl], duty, x["shipper"], cmr, dec,
+                     t_kg + net, t_kg, ""])
+    return write_csv(path, ["weighing_no", "weighed_at", "bridge", "tractor_reg", "trailer_reg", "duty", "shipper",
+                            "cmr_no", "declared_kg", "gross_kg", "tare_kg", "remark"], rows)
 
 
-HEAD = Font(bold=True)
-FILL = PatternFill("solid", fgColor="DDE4EE")
+def write_bev(w, path, fl):
+    bev = fl[0]
+    rng = np.random.default_rng(P.SEED + 32)
+    rows = []
+    swap = {}
+    for x in w["pilot"]:
+        d = x["date"]
+        tr = x["tractor"]
+        trips = x["trips"]
+        km = sum(t["km"] for t in trips) * (1 + rng.normal(0, 0.006))
+        e = sum(t["kwh"] for t in trips)
+        tm = float(np.mean([t["t"] for t in trips]))
+        off = 2 if dt.date(d.year, 3, 31) - dt.timedelta(days=(dt.date(d.year, 3, 31).weekday() + 1) % 7) <= d < \
+            dt.date(d.year, 10, 31) - dt.timedelta(days=(dt.date(d.year, 10, 31).weekday() + 1) % 7) else 1
+        t0 = dt.datetime.combine(d, dt.time(0)) + dt.timedelta(hours=trips[0]["start_h"] - off)
+        t1 = dt.datetime.combine(d, dt.time(0)) + dt.timedelta(hours=trips[-1]["end_h"] - off)
+        drive = sum(t["km"] / t["speed"] for t in trips)
+        soc0 = 96 + int(rng.integers(0, 5))
+        soc1 = soc0 - 100 * e / P.PILOT_USABLE
+        tmin = min(t["t"] for t in trips) - abs(rng.normal(1.0, 0.5))
+        tmax = max(t["t"] for t in trips) + abs(rng.normal(0.8, 0.4))
+        drop = rng.random() < 0.045
+        row = [bev[tr], tr, d.isoformat(), t0.strftime("%Y-%m-%dT%H:%M:%SZ"), t1.strftime("%Y-%m-%dT%H:%M:%SZ"),
+               "%.1f" % km, "%.1f" % e, soc0, "%.0f" % soc1, "" if drop else "%.1f" % tm,
+               "" if drop else "%.1f" % tmin, "" if drop else "%.1f" % tmax, "%.2f" % drive,
+               "%.1f" % (100 * e / km)]
+        upload = t1 + dt.timedelta(minutes=int(rng.integers(3, 40)))
+        rows.append(row + [upload.strftime("%Y-%m-%dT%H:%M:%SZ")])
+        if rng.random() < 0.016:   # the modem reconnected and the day was uploaded again
+            rows.append(row + [(upload + dt.timedelta(hours=int(rng.integers(2, 20)))).strftime("%Y-%m-%dT%H:%M:%SZ")])
+    return write_csv(path, ["registration", "fleet_no", "operating_date", "first_departure_utc", "last_arrival_utc",
+                            "distance_km", "energy_used_kwh", "soc_start_pct", "soc_end_pct", "ambient_mean_c",
+                            "ambient_min_c", "ambient_max_c", "driving_time_h", "consumption_kwh_per_100km",
+                            "uploaded_utc"], rows)
+
+
+def fmt_weight(rng, kg, code):
+    r = rng.random()
+    if code in P.STD_LOAD or P.SHIPPERS[code][2] == "exact":
+        return "%d" % kg if r < 0.7 else "%s kg" % format(kg, ",").replace(",", " ")
+    if r < 0.55:
+        return "%d" % kg
+    if r < 0.85:
+        return "%s kg" % format(kg, ",").replace(",", " ")
+    return ("%.2f t" % (kg / 1000)).replace(".", ",")
+
+
+def write_tms(w, path, fl):
+    bev, dj = fl[0], fl[1]
+    rng = np.random.default_rng(P.SEED + 33)
+    by_day = {}
+    for x in w["pilot"]:
+        by_day.setdefault(x["date"], {})[x["duty"]] = x
+    rows = []
+    n = 2500000
+    goods = {"TEN": "Möbler", "HWP": "Wellpappförpackningar", "BMJ": "Mejeriprodukter, kyl", "TTV": "Sågade trävaror",
+             "GDR": "Drycker", "LBY": "Byggvaror"}
+    dlist = sorted(dj)
+    for day in P.workdays(P.PILOT_START, P.PILOT_END):
+        spare = list(dlist)
+        rng.shuffle(spare)
+        for dcode in sorted(P.PILOT):
+            ship, legs, climb, town = P.PILOT[dcode]
+            x = by_day.get(day, {}).get(dcode)
+            if x is not None:
+                vreg, dec, pal = bev[x["tractor"]], x["declared"], x["pallets"]
+            else:
+                mu, sd = P.SHIPPERS[ship][3], P.SHIPPERS[ship][4]
+                pay = float(np.clip(rng.normal(mu, sd), 0.4 * mu, 1.6 * mu))
+                dec = sim.declare(rng, ship, pay)
+                pal = int(round(pay / 0.52 + rng.normal(0, 1.2)))
+                vreg = dj[spare.pop()]
+            n += 1
+            rows.append(["FR%d" % n, day.isoformat(), dcode, vreg, ship, P.SHIPPERS[ship][1], town, max(pal, 8),
+                         fmt_weight(rng, dec, ship), goods[ship]])
+    return write_csv(path, ["consignment_no", "collection_date", "duty", "vehicle_reg", "shipper", "collection_site",
+                            "delivery_town", "pallets", "declared_weight", "goods"], rows)
 
 
 def _sheet(ws, header, rows, widths=None):
     ws.append(header)
     for c in ws[1]:
-        c.font, c.fill = HEAD, FILL
+        c.font = Font(bold=True)
+        c.fill = PatternFill("solid", fgColor="DDE3EA")
         c.alignment = Alignment(wrap_text=True, vertical="top")
     for r in rows:
         ws.append(r)
-    for i, wd in enumerate(widths or [], 1):
+    for i, wd in enumerate(widths or [14] * len(header), 1):
         ws.column_dimensions[get_column_letter(i)].width = wd
     ws.freeze_panes = "A2"
 
 
-def write_register(path):
+def write_routes(w, path):
     wb = Workbook()
     ws = wb.active
-    ws.title = "Districts"
+    ws.title = "Duties"
     rows = []
-    for c, v in P.D.items():
-        if c in P.SPLIT:
-            for code, name in ((P.SPLIT[c][0], P.SPLIT[c][1]), (P.SPLIT[c][2], P.SPLIT[c][3])):
-                rows.append([code, name, "Mayo", round(v[1] + (0.004 if code.endswith("N") else -0.004), 4),
-                             round(v[2], 4), v[6], P.RUNS[v[6]], "2026-04-01", ""])
-            continue
-        county = "Galway" if c in ("LEE", "LET", "CLI") else "Mayo"
-        rows.append([c, v[0], county, round(v[1], 4), round(v[2], 4), v[6], P.RUNS[v[6]], "2023-01-09", ""])
-    _sheet(ws, ["district_code", "district_name", "county", "centroid_lat", "centroid_lon", "run_code", "run_name",
-                "in_register_from", "in_register_to"], rows, [12, 20, 10, 12, 12, 9, 28, 14, 14])
-    ws2 = wb.create_sheet("Code changes")
-    a, an, b, bn = P.SPLIT["CBR"]
-    _sheet(ws2, ["old_code", "old_name", "new_code", "new_name", "effective_from", "basis"],
-           [["CBR", "Castlebar town", a, an, "2026-04-01", "N5 line: north of the N5 and the Westport road"],
-            ["CBR", "Castlebar town", b, bn, "2026-04-01", "N5 line: south of the N5 and the Westport road"]],
-           [10, 16, 10, 16, 14, 44])
-    ws3 = wb.create_sheet("Depot")
-    _sheet(ws3, ["site", "address", "lat", "lon", "loading_from"],
-           [[P.DEPOT[0], "Unit 4, Breaffy Business Park, Castlebar, Co. Mayo", P.DEPOT[1], P.DEPOT[2], "06:30"]],
-           [18, 48, 10, 10, 12])
+    for dcode in sorted(P.PILOT):
+        ship, legs, climb, town = P.PILOT[dcode]
+        rows.append([dcode, "", "Jönköping (Torsvik)", ship, P.SHIPPERS[ship][1], town, legs[0], legs[1], legs[2],
+                     sum(legs), climb, "Mon-Fri"])
+    rng = np.random.default_rng(P.SEED + 34)
+    for k in range(1, 47):
+        c = "V%02d" % k
+        if c in w["short"]:
+            ship, legs, climb, m = w["short"][c]
+            town = P.SHORT[c][2]
+        else:
+            ship, legs, climb = w["others"][c]
+            town = OTHER_TOWNS[k % len(OTHER_TOWNS)]
+        rows.append([c, "VMO-%02d" % k, "Värnamo terminal", ship, P.SHIPPERS[ship][1], town, legs[0], legs[1],
+                     legs[2], sum(legs), climb, "Mon-Fri"])
+    _sheet(ws, ["Duty", "Duty (before 13 Apr 2026)", "Depot", "Shipper", "Collection", "Delivery", "Depot to collection km",
+                "Collection to delivery km", "Delivery to depot km", "Round trip km", "Climb m per 100 km (routing tool)", "Runs"],
+           rows, [8, 14, 20, 9, 14, 14, 12, 12, 12, 11, 11, 9])
     wb.save(path)
 
 
-def plan_parcels(code, month):
-    """the commercial team's 2027 forecast of parcels delivered, district by month, rounded to tens"""
-    v = P.D[code]
-    days = len([d for d in P.delivery_days(dt.date(2027, 1, 1), dt.date(2027, 12, 31)) if d.month == month])
-    stops = v[7] * v[10] * P.SEASON[month] * days
-    # parcels per stop including the stops that hand nothing over
-    per_stop = (1 - P.COLLECT_RATE - P.FAIL_RATE) * v[8]
-    return int(round(stops * per_stop / 10.0)) * 10
-
-
-def write_plan(path):
+def write_fleet(w, path, fl):
+    bev, dj, dv, trailers, tare, ttare = fl
     wb = Workbook()
     ws = wb.active
-    ws.title = "Parcels by district"
+    ws.title = "Tractors"
     rows = []
-    codes = [c for c in P.D if c not in P.SPLIT] + [P.SPLIT["CBR"][0], P.SPLIT["CBR"][2]]
-    for c in codes:
-        base = "CBR" if c in (P.SPLIT["CBR"][0], P.SPLIT["CBR"][2]) else c
-        name = P.SPLIT["CBR"][1] if c == P.SPLIT["CBR"][0] else (P.SPLIT["CBR"][3] if c == P.SPLIT["CBR"][2] else P.D[c][0])
-        m = [plan_parcels(base, k) for k in range(1, 13)]
-        if base == "CBR":
-            m = [int(round(x / 20.0)) * 10 for x in m]
-        rows.append([c, name] + m + [sum(m)])
-    _sheet(ws, ["district_code", "district_name"] + [dt.date(2027, k, 1).strftime("%b-27") for k in range(1, 13)] +
-           ["2027"], rows, [12, 20] + [8] * 13)
-    ws2 = wb.create_sheet("Basis")
-    _sheet(ws2, ["item", "note"], [
-        ["Prepared", "Commercial planning, 19 October 2026, for the 2027 budget"],
-        ["Parcels", "Parcels delivered to customers in each district, by delivery month, rounded to tens"],
-        ["Growth", "District trading trends to September 2026 carried into 2027 with the spring range extension"],
-        ["Not included", "Click-and-collect orders taken at the Castlebar counter"]], [16, 90])
+    for t in P.PILOT_TRACTORS:
+        rows.append([t, bev[t], "Battery-electric 6x2 tractor", 2024, "Jönköping", "2025-02-17", "battery 540 kWh "
+                     "installed, %d kWh usable" % P.PILOT_USABLE, ""])
+    for t in sorted(dj):
+        rows.append([t, dj[t], "Diesel 6x2 tractor, Euro VI", 2019 + int(t[-1]) % 4, "Jönköping", "", "", ""])
+    for t in sorted(dv):
+        rows.append([t, dv[t], "Diesel 6x2 tractor, Euro VI", 2018 + int(t[-2:]) % 6, "Värnamo", "", "", tare[t]])
+    _sheet(ws, ["Fleet no", "Registration", "Type", "Model year", "Depot", "In service", "Battery", "Tare kg"], rows,
+           [9, 12, 30, 10, 12, 11, 30, 9])
+    ws2 = wb.create_sheet("Trailers")
+    _sheet(ws2, ["Fleet no", "Registration", "Type", "Tare kg"],
+           [[t, trailers[t], "Curtainsider semi-trailer, 13.6 m" if int(t[2:]) % 5 else "Box semi-trailer, 13.6 m",
+             ttare[t]] for t in sorted(trailers)], [9, 12, 30, 9])
     wb.save(path)
 
 
-def write_rates(path):
+def write_shippers(path):
     wb = Workbook()
     ws = wb.active
-    ws.title = "Van-hour rate 2027"
-    rows = [[k, v] for k, v in P.RATE_PARTS] + [["All-in van-hour rate, EUR", P.RATE_2027]]
-    _sheet(ws, ["component", "EUR per van-hour"], rows, [60, 18])
-    ws["A6"] = "Applies to every van-hour from depot out to depot in. Approved with the 2027 budget assumptions, 30 September 2026."
-    ws2 = wb.create_sheet("2026 for comparison")
-    _sheet(ws2, ["component", "EUR per van-hour"], [["Driver, with employer's PRSI and pension", 30.10],
-                                                    ["Van lease and insurance", 9.60],
-                                                    ["Fuel, tyres and servicing at the fleet's average running", 17.40],
-                                                    ["All-in van-hour rate, EUR", 57.10]], [60, 18])
+    ws.title = "Shippers"
+    rng = np.random.default_rng(P.SEED + 35)
+    rows = []
+    for code in sorted(P.SHIPPERS):
+        name, town = P.SHIPPERS[code][0], P.SHIPPERS[code][1]
+        org = "55%04d-%04d" % (int(rng.integers(1000, 9999)), int(rng.integers(1000, 9999)))
+        if "ek. för." in name:
+            org = "7%05d-%04d" % (int(rng.integers(10000, 99999)), int(rng.integers(1000, 9999)))
+        depots = "Jönköping, Värnamo" if code in ("TEN", "HWP", "BMJ", "TTV", "GDR", "LBY") else "Värnamo"
+        rows.append([code, name, org, town, depots, "30 days", "Full loads"])
+    _sheet(ws, ["Code", "Shipper", "Org. no", "Site", "Served from", "Payment terms", "Service"], rows,
+           [7, 28, 13, 14, 20, 12, 12])
     wb.save(path)
 
 
-def write_calendar(path):
-    days = set(P.delivery_days(dt.date(2027, 1, 1), dt.date(2027, 12, 31)))
-    hol = P.holidays(2027)
-    with open(path, "w", newline="", encoding="utf-8") as fh:
-        cw = csv.writer(fh)
-        cw.writerow(["date", "weekday", "delivery_day", "note"])
-        d = dt.date(2027, 1, 1)
-        while d.year == 2027:
-            note = "public holiday" if d in hol else ""
-            cw.writerow([d.isoformat(), d.strftime("%a"), "Y" if d in days else "N", note])
-            d += dt.timedelta(days=1)
-
-
-def write_fuel(w, path):
-    rng = np.random.default_rng(P.SEED + 7)
-    stations = ["Applegreen Castlebar", "Maxol Westport", "Circle K Ballina", "Top Oil Belmullet", "Texaco Claremorris",
-                "Emo Swinford", "Inver Clifden"]
+def write_plan(w, path):
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Shortlist 2027"
     rows = []
-    for rd in w["rundays"]:
-        if rng.random() < 0.38:
-            litres = round(float(rng.uniform(35, 70)), 2)
-            price = round(1.62 + 0.04 * math.sin(rd["date"].toordinal() / 40.0), 3)
-            rows.append([rd["date"].isoformat(), hhmm(rd["in"] - rng.uniform(0.1, 0.6)), rd["van"],
-                         "FC-%s" % rd["van"][-5:], stations[int(rng.integers(len(stations)))], "DIESEL", litres,
-                         price, round(litres * price, 2)])
-    with open(path, "w", newline="", encoding="utf-8") as fh:
-        cw = csv.writer(fh)
-        cw.writerow(["txn_date", "txn_time", "van_reg", "card_ref", "site", "product", "litres", "eur_per_litre", "amount_eur"])
-        cw.writerows(rows)
+    for c in sorted(w["short"]):
+        ship = w["short"][c][0]
+        rows.append([c, ship, P.SHIPPERS[ship][0], P.SHORT[c][2], 5, "Värnamo terminal charger bank (from Dec 2026)"])
+    _sheet(ws, ["Duty", "Shipper", "Shipper name", "Delivery", "Days a week 2027", "Charging"], rows,
+           [8, 8, 28, 14, 10, 40])
+    wb.save(path)
 
 
-def write_contacts(w, path):
-    rng = np.random.default_rng(P.SEED + 9)
-    reasons = ["Where is my order", "Delivered damaged", "Missed delivery, rebook", "Change delivery address",
-               "Return collection", "Wrong item", "Driver feedback, positive", "Access to farmyard"]
-    rows, n = [], 0
-    for rd in w["rundays"]:
-        if rd["date"].year != 2026:
-            continue
-        for s in rd["stops"]:
-            if s["kind"] == "BREAK" or rng.random() > 0.012:
-                continue
+def write_temps(w, path):
+    rows = []
+    for d in sorted(w["temps"]):
+        j, v = w["temps"][d]
+        rows.append([d.isoformat(), "Jönköping", "%.1f" % j])
+        rows.append([d.isoformat(), "Värnamo", "%.1f" % v])
+    return write_csv(path, ["date", "station", "temperature (C)"], rows)
+
+
+def write_fuel(w, path, fl):
+    dv = fl[2]
+    rng = np.random.default_rng(P.SEED + 36)
+    rows = []
+    d = dt.date(2025, 1, 2)
+    stations = ["Värnamo Terminalvägen", "Gislaved", "Ljungby E4", "Jönköping Ljungarum", "Halmstad Kistinge",
+                "Helsingborg Berga", "Växjö Norremark"]
+    n = 0
+    while d <= dt.date(2026, 10, 30):
+        if d.weekday() < 5:
+            for t in sorted(dv):
+                if rng.random() < 0.42:
+                    n += 1
+                    lit = max(80.0, rng.normal(260, 70))
+                    price = 17.9 + 1.4 * math.sin(n / 4000.0) + rng.normal(0, 0.15)
+                    rows.append(["C%05d" % (1000 + int(t[-2:])), dv[t], d.isoformat(),
+                                 "%02d:%02d" % (int(rng.integers(14, 19)), int(rng.integers(0, 60))),
+                                 stations[int(rng.integers(0, len(stations)))], "Diesel MK1", "%.2f" % lit,
+                                 "%.2f" % price, "%.2f" % (lit * price)])
+        d += dt.timedelta(days=1)
+    return write_csv(path, ["card_no", "vehicle_reg", "date", "time", "station", "product", "litres", "price_sek_l",
+                            "amount_sek"], rows)
+
+
+def write_workshop(w, path, fl):
+    bev, dj, dv = fl[0], fl[1], fl[2]
+    rng = np.random.default_rng(P.SEED + 37)
+    rows = []
+    jobs = ["Service A", "Service B", "Tyres, drive axle", "Tyres, steer axle", "Brake pads", "Annual inspection",
+            "Tail lift repair", "Windscreen", "Air dryer", "Cab heater"]
+    allv = [(t, bev[t]) for t in sorted(bev)] + [(t, dj[t]) for t in sorted(dj)] + [(t, dv[t]) for t in sorted(dv)]
+    n = 0
+    for fno, r in allv:
+        d = dt.date(2025, 1, 1) + dt.timedelta(days=int(rng.integers(0, 60)))
+        while d <= dt.date(2026, 10, 30):
             n += 1
-            dist = district_on(s["district"], s["ref"], rd["date"])
-            rows.append(["C26-%05d" % n, (rd["date"] + dt.timedelta(days=int(rng.integers(0, 3)))).isoformat(),
-                         s["ref"], dist, reasons[int(rng.integers(len(reasons)))],
-                         ["phone", "email", "web chat"][int(rng.integers(3))], ["closed", "closed", "open"][int(rng.integers(3))]])
-    with open(path, "w", newline="", encoding="utf-8") as fh:
-        cw = csv.writer(fh)
-        cw.writerow(["contact_id", "contact_date", "customer_ref", "district_code", "reason", "channel", "status"])
-        cw.writerows(rows)
-
-
-def write_fleet(w, path):
-    vans = sorted({(rd["run"], rd["van"]) for rd in w["rundays"]})
-    wb = Workbook()
-    ws = wb.active
-    ws.title = "Vans"
-    rows = []
-    for i, (r, v) in enumerate(vans):
-        rows.append([v, ["Ford Transit 350 L3H2", "Renault Master L3H2", "Ford Transit 350 L2H2"][i % 3],
-                     "3,500 kg", ["2022-03-01", "2023-01-16", "2024-06-03"][i % 3], "Fleetbridge Leasing", r,
-                     ["2027-02-28", "2027-12-31", "2028-05-31"][i % 3]])
-    _sheet(ws, ["van_reg", "model", "gross_vehicle_weight", "on_fleet_from", "lessor", "usual_run", "lease_end"], rows,
-           [14, 24, 12, 14, 20, 10, 12])
-    wb.save(path)
+            job = jobs[int(rng.integers(0, len(jobs)))]
+            if fno.startswith("BEV") and job in ("Service A", "Service B"):
+                job = "Service, battery-electric"
+            hours = round(max(0.5, rng.normal(3.0, 1.5)), 1)
+            rows.append(["WO-%05d" % (20000 + n), d.isoformat(), fno, r, job, hours,
+                         int(round(hours * 1150 + rng.normal(2500, 1800), -1)),
+                         "Värnamo" if fno.startswith("D-2") else "Jönköping"])
+            d += dt.timedelta(days=int(rng.integers(35, 120)))
+    rows.sort(key=lambda x: (x[1], x[0]))
+    return write_csv(path, ["work_order", "date", "fleet_no", "registration", "job", "labour_h", "cost_sek",
+                            "workshop"], rows)
 
 
 def write_tables(w, target):
+    import os
     F = {k: os.path.join(target, v) for k, v in FILES.items()}
-    n = {"stops": write_stops(w, F["stops"]), "rundays": write_rundays(w, F["rundays"])}
-    write_register(F["register"])
-    write_plan(F["plan"])
-    write_rates(F["rates"])
-    write_calendar(F["calendar"])
-    write_fuel(w, F["fuel"])
-    write_contacts(w, F["contacts"])
-    write_fleet(w, F["fleet"])
+    fl = fleet(w)
+    n = {}
+    n["weighbridge"] = write_weighbridge(w, F["weighbridge"], fl)
+    n["bev"] = write_bev(w, F["bev"], fl)
+    n["tms"] = write_tms(w, F["tms"], fl)
+    write_routes(w, F["routes"])
+    write_fleet(w, F["fleet"], fl)
+    write_shippers(F["shippers"])
+    write_plan(w, F["plan"])
+    n["temps"] = write_temps(w, F["temps"])
+    n["fuel"] = write_fuel(w, F["fuel"], fl)
+    n["workshop"] = write_workshop(w, F["workshop"], fl)
     return n

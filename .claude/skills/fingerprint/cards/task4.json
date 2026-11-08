@@ -1,95 +1,96 @@
 {
   "task": "task4",
   "project": "sulfur",
-  "architecture": "v4 (re-root into an online farm, pet and garden retailer's own van fleet in the west of Ireland: which outlying delivery districts to hand to a regional courier for 2027, each district's saving read as the drive and stops its vans would no longer make)",
+  "architecture": "v5 (re-root into a Swedish road haulier's battery-electric tractor order for 2027: which of its Värnamo duties can run on one charge on the January design day, each duty's energy forecast from a pilot fleet's telematics whose payloads are shipper-declared)",
   "drawn": "2026-11-08",
-  "slot_note": "re-root of task4 after architecture 3 was landed by both platform runs; new world (Ireland, an e-retailer's own last-mile fleet), new dataset (run-day stop sequences), new shell (which | xlsx+png)",
+  "slot_note": "re-root of task4 after architecture 4 was landed on the platform; new world (Sweden, Småland, a road haulier), new dataset (a battery-electric pilot's duty-day telematics and a terminal weighbridge log), new shell (how-many | please | docx+xlsx)",
   "domain": "supply-chain-logistics",
-  "client_domain": "urban-regional-science",
+  "client_domain": "general-statistics-data-science",
   "subdomain": "transportation-network",
-  "niche": "last-mile route economics of an e-retailer's own van runs: handing outlying delivery districts on through-roads and spurs to a regional courier",
+  "niche": "fleet electrification of a road haulier's regular duties: a battery-electric tractor's energy on a cold day forecast from a pilot's telematics, where the load each pilot day carried is known only as the shipper declared it; client task type regression, classification and model diagnostics",
   "objective": "forecasting",
   "shape": "other",
-  "decision_type": "designation_set",
-  "answer_unit": "set_of_items",
-  "answer": "Hand Mulranny, Achill, Bangor Erris, Belmullet, Louisburgh and Ballycastle to Owenduff from January 2027 and keep Leenane, Letterfrack, Clifden, Cong and Charlestown: about EUR 50,000 net saving in 2027",
-  "answer_source": "generator/figures.json (call_set, net_saving_rounded)",
+  "decision_type": "quantity_figure",
+  "answer_unit": "count",
+  "answer": "Order 6 battery-electric tractors for Värnamo duties V02, V05, V09, V14, V16 and V18; V03, V07, V11, V21, V24, V27, V30 and V33 stay on diesel",
+  "answer_source": "generator/figures.json (call_count, call_set)",
   "gap": [
     "objective",
-    "population"
+    "time"
   ],
   "pattern": [
     "none"
   ],
   "generators": [
-    "G5",
-    "G8",
+    "G1",
+    "G13",
     "G16"
   ],
   "gate_g": "forecasting",
-  "calibration_form": "none",
-  "stump_strategy": "decomposition_attribution",
+  "calibration_form": "gold_standard_subsample",
+  "stump_strategy": "other",
   "decisive_rule_filed": false,
   "official_decoy": false,
   "validated_decoy": false,
   "context_artifact": "register",
   "stump_class": "analytical",
-  "analyst_test": "A strong analyst who cleans the handheld stop log and reads the courier's offer and the planning standard correctly prices each offered district at the van time its stops take (the drive in from the stop before, the drives between its stops and the door time, the field's cost-to-serve build), carries it to 2027 by plan parcels and hands Leenane and Letterfrack over with the remote ends, where the Connemara van drives through both on its way to Clifden, which stays, so the golden keeps them; pricing districts one at a time instead keeps Mulranny and Bangor Erris, which the golden hands over with Achill and Belmullet.",
-  "domain_test": "The deciding quantity is each set of districts' 2027 avoidable van-hours, a route-network quantity: the drive a van run no longer makes when the set's stops leave it, which for a district on a through-road is only its stops beyond the drive between its neighbours and for districts on a spur depends on which of them go together, estimated from the run-days that skipped them and a leg-time model; put wards and nurses in place of districts and vans and there is no run that drives through one ward to reach the next and no spur, so the inference that decides has nothing to stand on.",
-  "layer2_family": "estimand_identification",
-  "layer2_pattern": "own:avoidable-drive-on-shared-runs",
+  "analyst_test": "A strong analyst who cleans the pilot telematics and the weighbridge log and reads the electrification standard correctly fits the pilot's duty-day energy on distance, climb, cold and the declared payload on the loaded leg, validates it on held-out pilot days and on the weighbridge's finding that declarations are unbiased on average, applies it to each Värnamo duty's average weighed load on the January design day and orders too many tractors, sending heavy duties the battery cannot cover and keeping a light long one it can.",
+  "domain_test": "The deciding quantity is the energy one tonne of payload adds per loaded kilometre, a regression slope on a covariate the pilot records only as declared: estimating it needs the error structure of each shipper's declarations (scattered around the true weight, a fixed standard weight the true one scatters around, or the shipper's own weighbridge figure) read from the terminal's weighed loads and carried to the pilot's loads; with nurses and shifts in place of tractors and loads nothing is declared by a third party with its own error, so the step has nothing to stand on.",
+  "layer2_family": "estimation_fit",
+  "layer2_pattern": "own:declared-covariate-error-structure-by-source",
   "layer1": [
-    "handheld re-sync duplicating stop rows",
-    "stop times in local time across the October and March clock changes",
-    "failed attempts and collection-only stops",
-    "a district code split mid-history with a crosswalk",
-    "missing departure scans",
-    "run splits on peak days"
+    "telematics duty-days uploaded twice after a modem reconnect",
+    "ambient temperature sensor dropouts",
+    "declared weights keyed in kilograms and in tonnes",
+    "weighbridge re-weighs after a reload",
+    "duty codes re-keyed at the TMS upgrade",
+    "clock in UTC on the telematics and local time on the weighbridge",
+    "tractor swaps on service days"
   ],
-  "stakeholder_role": "the retailer's head of logistics, who takes the district list to the 2027 budget committee that approves the courier contract in November",
-  "role_family": "operations_director",
+  "stakeholder_role": "the haulier's fleet manager, who places the battery-electric tractor order the board approves in December",
+  "role_family": "procurement_lead",
   "scoring_unit": "other",
   "spine": {
-    "file": "delivery_stops_2025-2026.csv",
-    "rows": 106641,
-    "entity": "one delivery stop on a van run",
-    "grain": "run-day x stop",
+    "file": "weighbridge_varnamo_2025-2026.csv",
+    "rows": 21430,
+    "entity": "one weighing of a departing truck at the Värnamo terminal",
+    "grain": "departure x weighing",
     "source": "synthetic"
   },
-  "forum": "committee_or_panel",
-  "forcing_event": "vote_or_meeting",
-  "org_family": "retailer_or_ecommerce",
+  "forum": "board_of_directors",
+  "forcing_event": "launch_or_rollout",
+  "org_family": "logistics_or_3pl",
   "world": {
-    "geography": "Ireland (Mayo and west Galway)",
-    "currency": "EUR",
-    "org_type": "an online farm, pet and garden supplies retailer with its own van fleet from one depot",
+    "geography": "Sweden (Jönköping and Värnamo, Småland)",
+    "currency": "SEK",
+    "org_type": "a regional road haulier running regular full-load duties for manufacturers",
     "invented_names": [
-      "Brackloon Direct Ltd",
-      "Owenduff Couriers"
+      "Fryele Åkeri AB"
     ],
     "people": [
-      "Niamh Gilbride",
-      "Aislinn Duffin",
-      "Karl Eivers"
+      "Georg Pålsson",
+      "Inger Norman",
+      "Pierre Kjellberg"
     ]
   },
   "deliverables": [
-    "district_handover_2027.xlsx",
-    "handover_2027.png"
+    "ev_duty_assessment_2027.xlsx",
+    "tractor_order_memo.pdf"
   ],
   "opening_move": "question-first",
-  "question_form": "which",
-  "driver": "The decisive quantity is what handing a set of members of shared sequences to an outside provider saves, the time the sequences would no longer take: a member the sequence passes through on its way to others saves only its own stops beyond the direct run between its neighbours, and on a branch the near member saves the branch only when the members beyond it go too, so pricing each member at the time its own stops and the run into them take credits passed-through members with travel the sequences still make and, member by member, keeps the near member of a branch.",
-  "driver_concrete": "Each offered district's 2027 saving is the run time its hand-over takes off its run: Leenane and Letterfrack sit on the road the Connemara van drives anyway to reach Clifden, which stays, so they save only their own stops, while Mulranny and Bangor Erris save their run's far end only once Achill and Belmullet beyond them go; read from road sections fitted on the stop log's drives, the run-days that skipped a district, and a 2027 forecast that drives each section on the days a district beyond it has a stop.",
-  "stump": "A competent solver prices each offered district at the van time its stops take and hands Leenane and Letterfrack to the courier with Mulranny, Achill, Bangor Erris, Belmullet, Louisburgh and Ballycastle, claiming about EUR 20,000; the Connemara van drives through Leenane and Letterfrack to reach Clifden, which stays, so they save only their own stops, and the solver who prices the run without them but one district at a time keeps Mulranny and Bangor Erris, which end the Achill and Erris runs once Achill and Belmullet go: only every combination priced on the run hands over Mulranny, Achill, Bangor Erris, Belmullet, Louisburgh and Ballycastle, about EUR 50,000 net in 2027.",
-  "deep_chain": "(1) a district's saving is the van time its run would no longer take, not the time its stops take; (2) on a through-road the van still drives between the stops either side, so the counterfactual leg is estimated from the run-days that skipped the district and a leg-time model on the observed legs; (3) on a spur the near district's saving depends on whether the districts beyond it go too, so sets are evaluated run by run; (4) carried to the 2027 plan's parcels and the 2027 van-hour rate against the courier's charges, the set and the year's saving",
-  "judgment": "the counterfactual run time without a set's stops, a leg-time model fitted on observed inter-district legs and checked against the run-days that skipped the set, out of sample",
-  "one_fact_test": "the likeliest hint ('the van still drives through a district to reach the next') leaves the counterfactual legs to estimate, the spur sets to evaluate together and the 2027 carry; the spur hint alone leaves time-in-district on the through-roads",
+  "question_form": "how-many",
+  "driver": "The decisive quantity is a slope on a covariate recorded by third parties whose recording errs in different ways: some records scatter around the true value, which pulls the fitted slope toward zero, some fix a standard value the true one scatters around, which leaves it unbiased, and some are exact, so a model fitted on the records predicts its own held-out records well and still misstates the outcome wherever the forecast runs at true values far from the sample's mean, and only each source's error structure, read from a second record that measures the truth for the same sources and carried to the fitted rows, recovers the slope.",
+  "driver_concrete": "Each Värnamo duty's battery energy on the January design day is forecast from the Jönköping pilot's telematics, whose payloads are the shippers' declared weights: the furniture and packaging shippers' clerks estimate them (scattered around the weighed load), the dairy declares a standard load the weighed one scatters around, and the timber merchant prints its own weighbridge figure, so the pilot's fitted payload slope is about 0.8 kWh per tonne per 100 km where the loads' true effect is about 2.1, and only each shipper's declarations calibrated on the Värnamo weighbridge's weighed loads give the slope that the heavy steel and aggregates duties and the light insulation duty turn on.",
+  "stump": "A competent solver fits the pilot's duty-day battery energy on distance, climb, cold and the shippers' declared payload, finds it predicts held-out pilot days within 3 per cent and the weighbridge's declarations unbiased on average, and orders tractors for the heavy steel and aggregates duties the battery cannot cover on the January design day while leaving out the light insulation duty it can; the declared payloads of the estimating shippers scatter around the weighed load, so the fitted payload slope is less than half the loads' true effect, and only each shipper's declarations calibrated on the weighbridge, the standard-load dairy and the ticket-printing timber merchant left as they are, give the duties and the count.",
+  "deep_chain": "(1) the pilot's payload is the shippers' declaration, and the weighbridge shows declarations unbiased on average but scattered, so the slope fitted on them is attenuated even though the model validates on held-out pilot days; (2) the scatter is not one error: per shipper the weighed load regresses on the declared at below one for estimating clerks, at one for a standard-load declarer and exactly for a weighbridge-ticket shipper, so one pooled reliability under-corrects; (3) each pilot load is replaced by its expected weighed load given the shipper and the declaration and the energy model refitted; (4) the refitted model forecasts each duty's design-day energy at its weighed average load, against 85 per cent of the 2027 tractor's usable battery, giving the duties and the count",
+  "judgment": "errors-in-variables: whether the declared payload's error is classical, Berkson or nil differs by shipper and is identified from the direction of the regression between declared and weighed loads on the Värnamo weighbridge; the regression-calibrated slope is checked against the pilot days of the shipper that declares from its own weighbridge",
+  "one_fact_test": "the likeliest hint ('declared weights are noisy, so the payload slope is attenuated') invites one reliability ratio pooled over the weighbridge, which carries the between-shipper spread and the exact shippers and under-corrects, and a per-shipper variance ratio breaks on the standard-load declarer; the solver still has to identify each shipper's error structure, calibrate the pilot's loads and refit before the forecast",
   "strategy_label": "WORKS IN FORM",
   "mechanism_source": "design_note",
   "differentiation": {
-    "mark106": "mark106 sizes suppliers against a shared finite pool of spare return-leg time and the double booking it causes; here no capacity is shared or rationed: the quantity is the counterfactual run time when stops leave a run, through-road districts costing only their stops and a spur's near district saving the spur only with the far one",
-    "mark67": "mark67 re-prices a denser period from a stem-plus-drop split recovered exactly from a shipped field; here no period is re-priced and nothing is recovered from a field: the decisive step is the counterfactual drive between neighbours and the spur sets"
+    "mark140": "mark140 solves a residual guarantee jointly with a dependent service's load estimated from its own two drivers; nothing here is a residual or a dependency: the quantity is a regression slope whose covariate is recorded by third parties with source-specific error, recovered by calibrating each source on a second record that weighs the truth",
+    "mark262": "mark262 de-attenuates one slope by a single classical noise variance carried from a selected subsample to the population; here there is no selected subsample and no variance to carry: each shipper's declarations err in a different structure (classical, Berkson, exact), identified from the direction of the declared-weighed regression on the weighbridge, so the one pooled reliability correction mark262's route takes is itself a wrong rung",
+    "mark249": "mark249 recovers each unit's gain against references that agree only partly hour by hour by matching spreads; here the units are not calibrated against references: the fitted model's covariate is replaced by its expected true value given its source and its record"
   },
   "lineage": [
     {
@@ -179,14 +180,63 @@
       },
       "architecture": "v3",
       "fate": "spent 2026-11-08 on the platform: both runs reached the golden's call (alerts at HKTW, HLDZ and HWAW) and every graded figure, so the platform returned not stumped before any rubric; each read the Warsaw overflow off the observed hub within each delivery-depot, door and night cohort by a plan-against-observed cross-check, a work order rather than a judgment"
+    },
+    {
+      "architecture": "v4",
+      "domain": "supply-chain-logistics",
+      "client_domain": "urban-regional-science",
+      "subdomain": "transportation-network",
+      "objective": "forecasting",
+      "shape": "other",
+      "decision_type": "designation_set",
+      "gap": [
+        "objective",
+        "population"
+      ],
+      "pattern": [
+        "none"
+      ],
+      "generators": [
+        "G5",
+        "G8",
+        "G16"
+      ],
+      "gate_g": "forecasting",
+      "calibration_form": "none",
+      "stump_strategy": "decomposition_attribution",
+      "context_artifact": "register",
+      "driver": "The decisive quantity is what handing a set of members of shared sequences to an outside provider saves, the time the sequences would no longer take: a member the sequence passes through on its way to others saves only its own stops beyond the direct run between its neighbours, and on a branch the near member saves the branch only when the members beyond it go too, so pricing each member at the time its own stops and the run into them take credits passed-through members with travel the sequences still make and, member by member, keeps the near member of a branch.",
+      "stump": "A competent solver prices each offered district at the van time its stops take and hands Leenane and Letterfrack to the courier with Mulranny, Achill, Bangor Erris, Belmullet, Louisburgh and Ballycastle, claiming about EUR 20,000; the Connemara van drives through Leenane and Letterfrack to reach Clifden, which stays, so they save only their own stops, and the solver who prices the run without them but one district at a time keeps Mulranny and Bangor Erris, which end the Achill and Erris runs once Achill and Belmullet go: only every combination priced on the run hands over Mulranny, Achill, Bangor Erris, Belmullet, Louisburgh and Ballycastle, about EUR 50,000 net in 2027.",
+      "forum": "committee_or_panel",
+      "forcing_event": "vote_or_meeting",
+      "org_family": "retailer_or_ecommerce",
+      "role_family": "operations_director",
+      "deliverables": [
+        "district_handover_2027.xlsx",
+        "handover_2027.png"
+      ],
+      "question_form": "which",
+      "shell": {
+        "question form": "which",
+        "second-sentence opener": "i'd",
+        "deliverable set": "png+xlsx"
+      },
+      "fate": "spent 2026-11-08 on the platform: the author reports both runs not stumped (the call landed); run texts not supplied to the repo. The counterfactual run time priced set by set is a mechanism the stop sequences visibly carry, modelled on sight."
     }
   ],
-  "notes": "re-rooted 2026-11-08 by the task4 thread after architecture 3 was landed by both platform runs; card architecture_spent for v3 moved into lineage; 2026-11-08 at the heart screen the forum executive_team BLOCKed against task6 (registered after this draw); redrawn to committee_or_panel, the 2027 budget committee that approves the courier contract, the honest body; stage 4 (2026-11-08): leak reader no leak, judge DETERMINISTIC APPROVE (Gate H analytical); fix pass dropped the offer's 'any combination', worded NPS-3 4.3 as a selection, moved saved hours to 100-hour bins (Achill road slowed, Owenduff EUR 13.40 a parcel), call unchanged; READY on target.zip 4a9ccea1",
-  "registered": "2026-11-08T01:52:14Z",
+  "notes": "stump_strategy other: errors-in-variables with a source-specific error structure (classical, Berkson, exact) identified from a gold-standard record of the same sources",
+  "registered": "2026-11-08T06:43:49Z",
   "shell": {
-    "question form": "which",
-    "second-sentence opener": "i'd",
-    "rounding opener": "van",
-    "deliverable set": "png+xlsx"
-  }
+    "question form": "how-many",
+    "second-sentence opener": "for",
+    "deliverable set": "pdf+xlsx"
+  },
+  "lineage_shells": [
+    {
+      "question form": "which",
+      "second-sentence opener": "i'd",
+      "rounding opener": "van",
+      "deliverable set": "png+xlsx"
+    }
+  ]
 }

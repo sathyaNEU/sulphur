@@ -1,5 +1,6 @@
-"""task4 documents: Owenduff's offer letter and Brackloon's network planning standard NPS-3, both PDFs written the way
-the two offices write them (a Word document exported by LibreOffice Writer)."""
+"""task4 documents: Fryele's fleet electrification standard FES-2 and the dealer's quotation for the 2027
+battery-electric tractors, both PDFs written the way the two offices write them (a Word document exported by
+LibreOffice Writer)."""
 import datetime as dt
 
 from reportlab.lib import colors
@@ -9,8 +10,8 @@ from reportlab.platypus import Paragraph, Spacer, Table, TableStyle
 import officepdf as O
 import params as P
 
-IE = dt.timezone(dt.timedelta(hours=1))
-IE_W = dt.timezone(dt.timedelta(hours=0))
+SE_W = dt.timezone(dt.timedelta(hours=1))
+SE_S = dt.timezone(dt.timedelta(hours=2))
 
 
 def _styles():
@@ -31,85 +32,77 @@ def _grid(rows, widths, cell):
     return t
 
 
-def offer(path):
-    body, h1, h2, small, cell = _styles()
-    rows = [["District", "Brackloon code"]] + [[P.D[c][0], c] for c in P.OFFER]
-    s = [Paragraph("Owenduff Couriers, Unit 7, Lannagh Business Park, Castlebar Road, Westport, Co. Mayo F28 X2K4", small),
-         Paragraph("Tel. 098 52 714 | accounts@%s" % P.PARTNER_DOMAIN, small), Spacer(1, 10),
-         Paragraph("21 October 2026", body),
-         Paragraph("Niamh Gilbride, Head of Logistics, Brackloon Direct Ltd, Unit 4, Breaffy Business Park, Castlebar, "
-                   "Co. Mayo", body), Spacer(1, 4),
-         Paragraph("Delivery of Brackloon parcels in outlying districts, 2027", h1),
-         Paragraph("Dear Niamh,", body),
-         Paragraph("Thank you for the meeting at Breaffy on 7 October. As discussed, Owenduff would be glad to take on "
-                   "delivery of Brackloon's parcels in some or all of the districts listed below from 1 January 2027. "
-                   "We already deliver for four shippers across west Mayo and Connemara six days a week, so your "
-                   "parcels would travel with theirs from our Westport hub.", body),
-         Paragraph("Districts offered", h2), _grid(rows, [200, 120], cell), Spacer(1, 6),
-         Paragraph("Brackloon tells us which of the districts above it is handing over by giving us the list by "
-                   "30 November 2026.", body),
-         Paragraph("Terms", h2),
-         Paragraph("Price: EUR %s per parcel delivered, excluding VAT, fixed for the calendar year 2027. The price "
-                   "covers parcels as Brackloon packs them today, up to 30 kg each." % ("%.2f" % P.PRICE_2027), body),
-         Paragraph("Collection: our van collects the day's parcels for the handed-over districts from your Castlebar "
-                   "depot by 08:15 each delivery day. Delivery is the same day for parcels collected by 08:15.", body),
-         Paragraph("Failed deliveries are attempted again the next delivery day at no further charge; a parcel is "
-                   "charged once, when it is delivered. Collections from customers in the handed-over districts are "
-                   "included at no charge.", body),
-         Paragraph("Invoicing monthly in arrears against our proof-of-delivery record, payment at 30 days. The "
-                   "agreement runs for the calendar year 2027 and renews for 2028 at a price we would agree with you by "
-                   "30 September 2027.", body),
-         Paragraph("I look forward to hearing from you.", body), Paragraph("Yours sincerely,", body), Spacer(1, 6),
-         Paragraph("Karl Eivers", body), Paragraph("Commercial Manager, Owenduff Couriers", small)]
-    O.build(path, s, "Delivery of Brackloon parcels in outlying districts, 2027", "Karl Eivers",
-            "Offer to Brackloon Direct Ltd", "Owenduff Couriers | Offer OC-2027-114",
-            dt.datetime(2026, 10, 21, 15, 2, tzinfo=IE), dt.datetime(2026, 10, 21, 15, 9, tzinfo=IE))
-
-
 def standard(path):
     body, h1, h2, small, cell = _styles()
-    s = [Paragraph("%s, Logistics" % P.ORG, small),
-         Paragraph("NPS-3 Network planning standard: delivery districts and delivery partners", h1),
-         Paragraph("Version 2, issued 3 March 2025. Replaces version 1 (May 2023). Owner: the Head of Logistics.", small),
-         Spacer(1, 4)]
+    s = [Paragraph("%s, Fleet and transport planning" % P.ORG, small),
+         Paragraph("FES-2 Fleet electrification standard: assigning duties to battery-electric tractors", h1),
+         Paragraph("Version 2, issued 9 June 2025. Replaces version 1 (November 2024). Owner: the Fleet Manager.",
+                   small), Spacer(1, 4)]
     sec = [
         ("1. Scope", [
-            "This standard governs how Brackloon's delivery network is described for planning, and how the company "
-            "decides each year whether to hand any delivery district to a delivery partner. It applies to every "
-            "district in the district register and every run in the van run log."]),
+            "This standard governs which of the company's regular duties are run with battery-electric tractors. It "
+            "applies to every depot and to every order of battery-electric tractors put to the board."]),
         ("2. Terms", [
-            "2.1 A delivery district is a district of the district register. Every customer address belongs to one "
-            "district, and every district belongs to one run.",
-            "2.2 A run is the daily route of one van over its territory, identified by its run code. A van leaves the "
-            "Castlebar depot, delivers and collects in the districts of its run and returns to the depot.",
-            "2.3 A van-hour is an hour of a van on a run, counted from depot out to depot in as the van run log "
-            "records them.",
-            "2.4 A parcel is a parcel delivered to a customer. A collection or an attempt at which nothing was "
-            "delivered is not a parcel."]),
-        ("3. Service in a district handed to a partner", [
-            "3.1 A partner taking a district delivers every Brackloon parcel for that district, including the "
-            "customer collections there, on the delivery day Brackloon would have delivered it.",
-            "3.2 Brackloon's own runs then make no stop in the district. A district is handed over whole or not at "
-            "all."]),
-        ("4. The decision for a year", [
-            "4.1 The saving of a hand-over for a year is the cost, at the year's all-in van-hour rate, of the "
-            "van-hours the hand-over takes off Brackloon's runs in the year, less what the partner charges for the "
-            "parcels it delivers in the handed-over districts in the year.",
-            "4.2 The year's parcels are the commercial plan's parcels for the year, district by district; the year's "
-            "rate is the fleet rate card's all-in van-hour rate for the year; the year's delivery days are the "
-            "delivery calendar's.",
-            "4.3 The districts handed over for a year are the selection from the partner's offer whose hand-over "
-            "lowers the year's delivery cost most. Where no district's hand-over lowers it, none is handed over.",
-            "4.4 The decision is made each autumn for the following calendar year, before the partner's offer lapses, "
-            "and is reported with the year's saving."]),
+            "2.1 A duty is a regular round trip from a depot as the route register records it: the run from the "
+            "depot to the collection, the loaded run from the collection to the delivery and the run back to the "
+            "depot.",
+            "2.2 A duty's energy is the energy the tractor draws from its battery for the round trip, depot out to "
+            "depot in, in kWh, as the tractor's own battery system reports it.",
+            "2.3 The usable battery of a tractor model is the usable energy its manufacturer states for it."]),
+        ("3. Planning figures", [
+            "3.1 Energy figures for planning are estimated from the company's own operating records of its "
+            "battery-electric tractors. Manufacturers' range and consumption figures are not used for planning.",
+            "3.2 A duty is charged at its depot before it departs. No charging on the road is planned."]),
+        ("4. Assigning duties", [
+            "4.1 The January design day is a working day with a mean ambient temperature of minus 5 degrees Celsius.",
+            "4.2 A duty's planning load is the mean net payload of its departures in the twelve months to the end of "
+            "the last full month before the assessment.",
+            "4.3 A duty is assigned to a battery-electric tractor when its energy on the January design day, carrying "
+            "its planning load, is no more than 85 per cent of the usable battery of the tractor model being "
+            "ordered. Each duty assigned takes one tractor.",
+            "4.4 Duties are assessed each autumn for the following year, before any order is placed, and reported to "
+            "the board duty by duty with the energy each needs on the January design day."]),
         ("5. Review", [
-            "5.1 This standard is reviewed every two years or when the network changes. Comments to the Head of "
-            "Logistics."]),
+            "5.1 This standard is reviewed every two years or when a new tractor model is ordered. Comments to the "
+            "Fleet Manager."]),
     ]
     for head, paras in sec:
         s.append(Paragraph(head, h2))
         for p in paras:
             s.append(Paragraph(p, body))
-    O.build(path, s, "NPS-3 Network planning standard", "Niamh Gilbride", "Delivery districts and delivery partners",
-            "Brackloon Direct Ltd | NPS-3 version 2", dt.datetime(2025, 3, 3, 10, 14, tzinfo=IE_W),
-            dt.datetime(2025, 3, 3, 11, 40, tzinfo=IE_W))
+    O.build(path, s, "FES-2 Fleet electrification standard", "Georg Pålsson",
+            "Assigning duties to battery-electric tractors", "Fryele Åkeri AB | FES-2 version 2",
+            dt.datetime(2025, 6, 9, 9, 22, tzinfo=SE_S), dt.datetime(2025, 6, 9, 10, 5, tzinfo=SE_S))
+
+
+def quotation(path):
+    body, h1, h2, small, cell = _styles()
+    rows = [["Item", "Specification"],
+            ["Tractor", "Battery-electric 6x2 tractor, low-entry cab, approved for 64 tonnes gross combination weight"],
+            ["Battery", "Installed capacity 630 kWh; usable capacity %d kWh" % P.USABLE_2027],
+            ["Charging", "CCS2, up to 375 kW DC; on-board 43 kW AC"],
+            ["Drive", "Three electric motors, continuous output 425 kW"],
+            ["Warranty", "Battery 8 years or 1,000,000 km, to 70 per cent of usable capacity"],
+            ["Price", "SEK 3,940,000 per tractor excluding VAT, delivered Värnamo"],
+            ["Delivery", "January to February 2027 for orders placed by 11 December 2026"]]
+    s = [Paragraph("Norrvik Lastvagnar AB, Industrigatan 14, 331 44 Värnamo", small),
+         Paragraph("Tel. 0370-48 210 | order@norrviklastvagnar.se", small), Spacer(1, 10),
+         Paragraph("2 October 2026", body),
+         Paragraph("Georg Pålsson, Fleet Manager, Fryele Åkeri AB, Terminalvägen 6, 331 53 Värnamo", body),
+         Spacer(1, 4),
+         Paragraph("Quotation Q-26-1187: battery-electric tractors for delivery in 2027", h1),
+         Paragraph("Dear Georg,", body),
+         Paragraph("Thank you for the meeting at Terminalvägen on 24 September. As agreed, we quote below for "
+                   "battery-electric tractors for your Värnamo terminal, for delivery in early 2027. The quotation "
+                   "is valid for any number of tractors from one to twelve.", body),
+         _grid(rows, [90, 380], cell), Spacer(1, 6),
+         Paragraph("Service and battery monitoring are included for the first three years under our standard "
+                   "agreement, from your Värnamo workshop. Your existing fleet portal account will show the new "
+                   "tractors' daily summaries as it does for the Jönköping tractors.", body),
+         Paragraph("We would need your order by 11 December 2026 to hold the January and February 2027 build "
+                   "slots.", body),
+         Paragraph("Kind regards,", body), Spacer(1, 6), Paragraph("Pierre Kjellberg", body),
+         Paragraph("Key account manager, Norrvik Lastvagnar AB", small)]
+    O.build(path, s, "Quotation Q-26-1187", "Pierre Kjellberg", "Battery-electric tractors for delivery in 2027",
+            "Norrvik Lastvagnar AB | Quotation Q-26-1187", dt.datetime(2026, 10, 2, 14, 11, tzinfo=SE_S),
+            dt.datetime(2026, 10, 2, 14, 20, tzinfo=SE_S))

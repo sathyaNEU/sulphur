@@ -1,120 +1,128 @@
 {
  "task": "task4",
- "architecture": 4,
- "title": "Which outlying delivery districts an online farm, pet and garden retailer in Mayo should hand to a regional courier from January 2027, and the 2027 saving",
- "domain": "Supply Chain & Logistics (house domain) in Urban & Regional Science",
- "subdomain": "transportation-network; task type forecasting (demand, load and capacity prediction)",
+ "architecture": 5,
+ "title": "How many battery-electric tractors a Sm\u00e5land road haulier should order for its V\u00e4rnamo duties for 2027, and which duties they take, under its fleet electrification standard",
+ "domain": "Supply Chain & Logistics (house domain) in General Statistics & Data Science",
+ "subdomain": "regression, classification & model diagnostics (fleet electrification: which regular duties battery-electric tractors can run on one charge)",
  "objective": "Forecasting & Predictive Modeling",
  "as_of": "2026-11-06",
  "deliverables": [
-  "district_handover_2027.xlsx",
-  "handover_2027.png"
+  "ev_duty_assessment_2027.xlsx",
+  "tractor_order_memo.pdf"
  ],
  "distractor_files": [
-  "fuel_card_statement_2025-2026.csv",
-  "customer_contacts_2026.csv",
-  "van_fleet_register_2026.xlsx"
+  "fuel_card_statement_varnamo_2025-2026.csv",
+  "workshop_log_2025-2026.csv"
  ],
  "files": [
   {
-   "path": "delivery_stops_2025-2026.csv",
+   "path": "weighbridge_varnamo_2024-11_2026-10.csv",
    "format": "csv",
-   "bytes": 11019987,
-   "rows": 106642,
+   "bytes": 1864333,
+   "rows": 21430,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-11-06",
    "license": "CC0-1.0 (original work)"
   },
   {
-   "path": "van_run_log_2025-2026.csv",
+   "path": "bev_daily_summary_2025-03_2026-10.csv",
    "format": "csv",
-   "bytes": 357635,
-   "rows": 4160,
+   "bytes": 314952,
+   "rows": 2374,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-11-06",
    "license": "CC0-1.0 (original work)"
   },
   {
-   "path": "district_register_2026.xlsx",
+   "path": "tms_consignments_jonkoping_2025-2026.csv",
+   "format": "csv",
+   "bytes": 281363,
+   "rows": 3501,
+   "source": "Constructed (seeded generator, task4/generator)",
+   "pull_date": "2026-11-06",
+   "license": "CC0-1.0 (original work)"
+  },
+  {
+   "path": "route_register_2026.xlsx",
    "format": "xlsx",
-   "bytes": 8703,
+   "bytes": 9675,
    "rows": null,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-11-06",
    "license": "CC0-1.0 (original work)"
   },
   {
-   "path": "volume_plan_2027.xlsx",
+   "path": "fleet_register_2026.xlsx",
    "format": "xlsx",
-   "bytes": 8493,
+   "bytes": 10593,
    "rows": null,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-11-06",
    "license": "CC0-1.0 (original work)"
   },
   {
-   "path": "fleet_rate_card_2027.xlsx",
+   "path": "shipper_register_2026.xlsx",
    "format": "xlsx",
-   "bytes": 6694,
+   "bytes": 6968,
    "rows": null,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-11-06",
    "license": "CC0-1.0 (original work)"
   },
   {
-   "path": "delivery_calendar_2027.csv",
+   "path": "fleet_plan_2027.xlsx",
+   "format": "xlsx",
+   "bytes": 6704,
+   "rows": null,
+   "source": "Constructed (seeded generator, task4/generator)",
+   "pull_date": "2026-11-06",
+   "license": "CC0-1.0 (original work)"
+  },
+  {
+   "path": "daily_mean_temperature_2016-2026.csv",
    "format": "csv",
-   "bytes": 7107,
-   "rows": 365,
+   "bytes": 214737,
+   "rows": 7914,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-11-06",
    "license": "CC0-1.0 (original work)"
   },
   {
-   "path": "owenduff_offer_brackloon_2027.pdf",
+   "path": "fleet_electrification_standard_FES-2.pdf",
    "format": "pdf",
-   "bytes": 41096,
+   "bytes": 31088,
    "rows": null,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-11-06",
    "license": "CC0-1.0 (original work)"
   },
   {
-   "path": "network_planning_standard_NPS-3.pdf",
+   "path": "quotation_bev_tractors_2027.pdf",
    "format": "pdf",
-   "bytes": 30429,
+   "bytes": 36523,
    "rows": null,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-11-06",
    "license": "CC0-1.0 (original work)"
   },
   {
-   "path": "fuel_card_statement_2025-2026.csv",
+   "path": "fuel_card_statement_varnamo_2025-2026.csv",
    "format": "csv",
-   "bytes": 127958,
-   "rows": 1585,
+   "bytes": 768510,
+   "rows": 9357,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-11-06",
    "license": "CC0-1.0 (original work)"
   },
   {
-   "path": "customer_contacts_2026.csv",
+   "path": "workshop_log_2025-2026.csv",
    "format": "csv",
-   "bytes": 38574,
-   "rows": 560,
-   "source": "Constructed (seeded generator, task4/generator)",
-   "pull_date": "2026-11-06",
-   "license": "CC0-1.0 (original work)"
-  },
-  {
-   "path": "van_fleet_register_2026.xlsx",
-   "format": "xlsx",
-   "bytes": 6379,
-   "rows": null,
+   "bytes": 34292,
+   "rows": 504,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-11-06",
    "license": "CC0-1.0 (original work)"
   }
  ],
- "provenance": "Every file is constructed by the seeded generator in task4/generator from a territory model of real Mayo and west Galway places (approximate town centroids, public knowledge); the organisations, people, addresses and figures are invented. Place names are real; no real organisation's records or domain is used."
+ "provenance": "Every file is constructed by the seeded generator in task4/generator; Swedish town names are real places used for realism (distances approximate), the organisations, people, vehicle registrations, consignments, weighings, temperatures and figures are invented. No real organisation's records, weather service data or domain is used."
 }

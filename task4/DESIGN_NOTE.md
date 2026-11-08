@@ -2,130 +2,139 @@
 
 ## Draw
 
-Card `.claude/skills/fingerprint/cards/task4.json`, architecture 4, registered 2026-11-08 (a re-root: architecture 3,
-the Polish parcel carrier's October scan alerts, was landed by both platform runs, which reached the golden's call and
-every graded figure, so the platform returned not stumped before any rubric; the card's lineage records it spent with
-architectures 1 and 2). One architecture per world: a new world (the west of Ireland), a new dataset (van run stop
-sequences), a new organisation family (an online retailer's own fleet) and a new shell (which | i'd | png+xlsx against
-whether | the | pptx+xlsx and how-many | in | png+xlsx).
+Card `.claude/skills/fingerprint/cards/task4.json`, architecture 5, registered 2026-11-08 (a re-root: architecture 4,
+the Irish retailer's courier hand-over priced set by set on the van runs, came back not stumped on the platform, the
+author's report, run texts not supplied to the repo). One architecture per world: a new world (Småland, Sweden), a new
+dataset (a battery-electric pilot's duty-day summaries and a terminal weighbridge log), a new organisation family (a
+road haulier) and a new shell (how-many | for | pdf+xlsx against which | i'd | png+xlsx, how-many | in | png+xlsx and
+whether | the | pptx+xlsx in the lineage).
 
-Guard on the registered card (`heart`, the last act before stage 3): WARN only, `repeat.decision` (designation_set
-after task6 v6): task6 designates a different kind of set in another domain; the honest decision type here is a set
-of districts. Axes redrawn: the forcing event at the draw (purchase_order_or_contract BLOCKed against task1 and task3,
-budget_or_appropriation against mark456; now the November meeting that approves the courier contract, vote_or_meeting),
-the second persona (a first name in mark39), and at the heart screen the forum (executive_team BLOCKed against task6,
-registered after this draw; now committee_or_panel, the 2027 budget committee that approves the contract, the body
-that actually decides). Heart nearest 0.06 (mark171), mark106's stump 0.04. `surface` exit 0, one pair promoted for
-the author: task4 against task5's re-draw (same decisive gap, objective, and decision type, designation_set, back to
-back); both builds are in flight and each label is the honest one for its own build.
+**Why this draw, from the Sulfur record.** Every Sulfur landing so far (task2 arch 3, task3 arch 2 and 3, task4 arch 3
+and 4) was a mechanism the rows visibly carry, modelled on sight and validated on held-out rows of the same stream
+(`sulfur-record.md`, Lessons). The one partial stump (task6 arch 6, 73 and 83) was a sampling property the observed
+values did not share with the decision unit. This draw takes the record's live ground literally: the decisive
+property is one the rows in view cannot show (each declared payload's error structure), the textbook model passes the
+only validation the stream allows (held-out pilot days carry the same declarations), the most natural check of the
+covariate passes too (declarations unbiased on average), and the deciding evidence sits in a second file at another
+grain (the weighbridge, one row per departure of another depot's fleet, the same shippers).
 
-- **Pairing.** Supply Chain & Logistics (house domain) in its client domain Urban & Regional Science, task type
-  forecasting (demand, load and capacity prediction), which serves Forecasting & Predictive Modeling. The deciding
-  quantity is a 2027 capacity figure: the van-hours Brackloon's runs would no longer take in 2027 if a set of outlying
-  districts went to a regional courier.
-- **Niche.** Brackloon Direct Ltd, an online farm, pet and garden supplies retailer delivering heavy orders across Mayo
-  and west Galway from one depot at Castlebar with its own vans. Nine runs, each a van's territory swept outward in
-  road order with the day's stops and driven back from the farthest district it served. Owenduff Couriers, a regional
-  courier already carrying other shippers' rural parcels, offers eleven outlying districts from 1 January 2027 at
-  EUR 13.40 a parcel delivered, for any of the districts Brackloon lists.
-- **The call.** Which districts go to Owenduff and what the hand-over saves over 2027. NPS-3 section 4 files the WHAT:
-  the saving is the cost, at the 2027 all-in van-hour rate (EUR 58.00), of the van-hours the hand-over takes off the
-  runs, less Owenduff's charges for the districts' plan parcels; the districts handed over are those whose hand-over
-  lowers the year's delivery cost most. Forward facing: a contract for a year not yet run.
-- **Shape.** other: the list of offered districts going and staying, the van-hours each run that serves one saves in
-  2027 (seven runs, to the nearest 100), the year's net saving (to the nearest EUR 5,000) and a chart of each of those
-  runs' 2027 van-hours before and after the hand-over (fourteen values). Decision designation_set, answer
-  set_of_items, question form which.
-- **Strategy.** decomposition_attribution: a run's time belongs to its districts only through what each set of them
-  takes off it. Gap objective (decisive: the time a district's stops take is a correct measure and not what NPS-3 4.1
-  scores) then population (the set, not the district, is what a run's far end prices); generators G5 (provision
-  elsewhere: the road through a district is driven for the districts beyond it) decisive, G8 (reachability: a
-  district ends its run only once the districts beyond it go), G16 (method selection: the 2027 year forecast from the
-  plan's stops, chosen by a back-test); Gate G forecasting; calibration none; context artifact register; Layer 2
-  family estimand_identification, pattern own:avoidable-drive-on-shared-runs.
-- **Forum, event, organisation.** committee_or_panel (the 2027 budget committee), vote_or_meeting (its November
-  meeting, before the offer lapses on 30 November), retailer_or_ecommerce. Role operations_director (the head of
-  logistics, who takes the list to the committee).
-- **People** (`guard.py names --geo Ireland --seed 404`, locale en_IE): Niamh Gilbride, head of logistics, who asks
-  and owns NPS-3; Aislinn Duffin, transport planner, whose workbook the golden is; Karl Eivers, Owenduff's commercial
-  manager, who signs the offer. None appears in the prompt.
-- **Deliverables.** district_handover_2027.xlsx (the districts, the runs, the net saving) and handover_2027.png (each
-  run's 2027 van-hours before and after): xlsx and png.
-- **Data-native sentence.** A Brackloon van sweeps its territory outward and drives back from the farthest district it
-  served, so the Connemara van drives the road through Leenane and Letterfrack every day to reach Clifden, which a
-  handful of hotels and shops make cheap to keep, while on the Achill and Erris runs Mulranny and Bangor Erris cost
-  little only as long as Achill and Belmullet stay beyond them.
+Guard on the registered card: WARN only, `repeat.gate_g` (forecasting after task9 v6): the objective is a forecast of
+a duty's battery energy on a day not yet run, and the honest Gate G mechanism is forecasting. Redrawn at the check:
+G3 decisive (BLOCK against task5, `ban.pattern`) to G1 (the covariate's value basis swaps between the fit, declared,
+and the forecast, weighed), and docx+xlsx (WARN against task5) to pdf+xlsx. `test.same_puzzle_older` against mark140
+answered with a differentiation line; mark262 (one classical noise variance carried from a selected subsample) and
+mark249 (gains against partly agreeing references) differentiated on the card. Heart nearest 0.06 (mark170).
+
+- **Pairing.** Supply Chain & Logistics (house domain) in its client domain General Statistics & Data Science, task type
+  regression, classification and model diagnostics, which serves Forecasting & Predictive Modeling. The deciding
+  quantity is each shortlisted duty's battery energy on the January design day of 2027, forecast from a model whose
+  payload covariate was recorded by third parties.
+- **Niche.** Fryele Åkeri AB, a regional haulier running regular full-load duties for Småland manufacturers from
+  Jönköping and Värnamo. Six battery-electric tractors ran nine Jönköping duties from March 2025; the board orders
+  battery-electric tractors for Värnamo duties from January 2027 under the haulier's own standard FES-2, at the
+  dealer's 2027 model (540 kWh usable).
+- **The call.** How many tractors and which shortlisted duties. FES-2 4.1 to 4.3 files the WHAT: a duty goes electric
+  when its energy on a −5 °C working day, carrying its planning load (the mean net payload of its departures over the
+  twelve months to October 2026), is at most 85 per cent of the ordered model's usable battery; one tractor a duty.
+  Forward facing: an order for a year not yet run.
+- **Shape.** other: the count and the duties (the call), each of the fourteen duties' design-day energy to the nearest
+  10 kWh, a one-page memo. Decision quantity_figure, answer count, question form how-many.
+- **Strategy.** other (errors-in-variables with a source-specific error structure). Gap objective (decisive: the fitted
+  model predicts the declared stream correctly and is not what the forecast at weighed loads is scored on) then time
+  (the design day is a forecast at conditions and loads the pilot's mean does not sit at); generators G1 (unit-of-value
+  swap, decisive), G13 (horizon: the heavy and light duties sit far from the pilot's mean load), G16 (the cold form,
+  chosen by back-test, the asks' judgment); Gate G forecasting; calibration gold_standard_subsample (the weighbridge);
+  context artifact register; Layer 2 family estimation_fit, pattern own:declared-covariate-error-structure-by-source.
+- **Forum, event, organisation.** board_of_directors (the December board approves the order), launch_or_rollout (the
+  Värnamo charger bank and the first tractors in January 2027), logistics_or_3pl. Role procurement_lead (the fleet
+  manager, who places the order).
+- **People** (`guard.py names --geo Sweden --seed 505`, locale sv_SE): Georg Pålsson, fleet manager, who owns FES-2 and
+  places the order; Inger Norman, transport planner, whose workbook and memo the golden are; Pierre Kjellberg, the
+  dealer's key account manager, who signs the quotation. None appears in the prompt.
+- **Deliverables.** ev_duty_assessment_2027.xlsx (the duties, energies, verdicts and the count) and
+  tractor_order_memo.pdf (one page for the board): xlsx and pdf.
+- **Data-native sentence.** A haulier's payload figures are the shippers' consignment-note declarations, and how a
+  shipper declares is its own habit: clerks estimating from the order scatter around what the trailer carries, a dairy
+  writes one standard weight on every note, a timber merchant prints its own weighbridge ticket; a pilot fitted on
+  those declarations predicts its own days well and still halves the energy a tonne costs, which is the quantity the
+  heavy steel and ballast duties and the light insulation duty turn on.
 - **Abstraction sentence** (the one a reviewer holding this build beside its nearest approved build would say is the
-  same, without domain nouns): none writable. Against mark106 (candidates sized against a shared finite pool of spare
-  return-leg time, which double-books the pool) nothing is shared or rationed; against mark67 (a denser period
-  re-priced from a stem-and-drop split recovered from a shipped field) nothing is recovered from a field; against
-  mark162 and mark151 (history replayed through a setting) nothing is replayed through a setting. The quantity is the
-  counterfactual run time when a set of stops leaves a run, priced set by set.
-- **Same-puzzle and library tests.** Gap objective, decisive pattern G5 and designation_set repeat no build in the last
-  twelve (`check`); the stump is no named correction applied as a card states it.
-- **Sources.** Last-mile cost-to-serve practice (van time charged to stops by the drive in and the door time);
-  territory runs swept in road order; regional couriers consolidating rural parcels; avoidable-cost reasoning in the
-  organisation's own standard; the client's two-layer standard. All files constructed (`metadata.json`), real place
-  names on approximate public centroids.
+  same, without domain nouns): none writable. Against mark262 (one slope de-attenuated by a single classical noise
+  variance measured in a selected subsample and carried to the population) there is no selected subsample and no
+  single variance: each source's error is a different structure (classical, Berkson, nil) and the one pooled
+  correction is itself a wrong rung; against client example 11 (sampling noise of survey shares, one correction
+  concept) the error is a recording practice read from a gold-standard record of the same sources, and the chain
+  carries a forecast and a back-tested cold form after it.
+- **Same-puzzle and library tests.** Gap objective, G1 and quantity_figure repeat no build in the last twelve
+  (`check`); the golden is no named correction applied as a card states it (the textbook reliability correction is
+  rung 2 and files the default's list).
+- **Sources.** Battery-electric truck energy practice (energy per km rising with payload, cold and climb; manufacturers'
+  ranges not used for planning); consignment-note weight declarations and terminal weighbridges; errors-in-variables
+  (classical against Berkson error, regression calibration); the client's two-layer standard. All files constructed
+  (`metadata.json`), real Swedish town names.
 
 ## Default path
 
-1. Read Owenduff's offer (eleven districts, EUR 13.40 a parcel delivered in 2027, any of them), NPS-3 section 4, the
-   2027 rate card (EUR 58.00 a van-hour), the 2027 plan (parcels by district and month) and the 2027 calendar.
-2. Clean the stop log (re-synced copies dropped, CBN and CBS mapped back to Castlebar town, failed attempts and
-   collections kept as stops) and give each offered district its van time on each run-day of the last twelve months:
-   the drive in from the stop before, the drives between its stops and the door time (the field's cost-to-serve
-   build, which reconciles every run-day to the minute with the depot legs and the break).
-3. Carry each district's van time to 2027 by its plan parcels, price it at EUR 58.00, set it against Owenduff's
-   charges and hand over every district whose van time costs more.
+1. Read FES-2 sections 2 to 4, the quotation (540 kWh usable, so 459 kWh is the limit), the shortlist and the route
+   register (each duty's three legs and climb).
+2. Clean the pilot: the daily summaries uploaded twice kept once, joined to the TMS consignments on registration and
+   date (2,334 duty-days), declared weights parsed (kilograms, kilograms with a space, tonnes with a decimal comma),
+   ambient dropouts filled from the Jönköping station day.
+3. Fit the field's consumption model by least squares: battery energy on km, climb times km, the degrees below 16 °C
+   and below 0 °C times km, and declared payload times loaded km (payload 1.0 kWh per tonne per 100 km); validate on
+   January and February 2026 held out (2.4 per cent error).
+4. Take each shortlisted duty's planning load from the weighbridge (last weighing per CMR, gross less tare, November
+   2025 to October 2026), predict the design day at −5 °C, and check the weighbridge's declarations against its
+   weighed loads: right on average (declared less weighed, −39 kg).
+5. Assign the duties within 459 kWh.
 
-Ends on: hand over Leenane and Letterfrack with Mulranny, Achill, Bangor Erris, Belmullet, Louisburgh and Ballycastle,
-claiming about EUR 20,000.
+Ends on: order 8 tractors, for V02, V03, V05, V07, V09, V11, V16 and V18 (the heavy V03, V07 and V11 at about 440 kWh;
+the light V14 out at about 470).
 
-Golden: hand over Mulranny, Achill, Bangor Erris, Belmullet, Louisburgh and Ballycastle and keep Leenane, Letterfrack,
-Clifden, Cong and Charlestown, about EUR 50,000 net in 2027.
+Golden: order 6 tractors, for V02, V05, V09, V14, V16 and V18; V03, V07 and V11 need about 470 kWh and stay diesel.
 
 ## Stump sentence
 
-A competent solver prices each offered district at the van time its stops take and hands Leenane and Letterfrack to
-the courier with Mulranny, Achill, Bangor Erris, Belmullet, Louisburgh and Ballycastle, claiming about EUR 20,000; the
-Connemara van drives through Leenane and Letterfrack to reach Clifden, which stays, so they save only their own stops,
-and the solver who prices the run without them but one district at a time keeps Mulranny and Bangor Erris, which end
-the Achill and Erris runs once Achill and Belmullet go: only every combination priced on the run hands over Mulranny,
-Achill, Bangor Erris, Belmullet, Louisburgh and Ballycastle, about EUR 50,000 net in 2027.
+A competent solver fits the pilot's duty-day battery energy on distance, climb, cold and the shippers' declared
+payload, finds it predicts held-out January and February days within 2.4 per cent and the weighbridge's declarations
+right on average, and orders 8 tractors, sending the heavy steel, ballast and metal duties V03, V07 and V11 (about 440
+kWh on that model) and leaving out the light insulation duty V14 (about 470); the estimating shippers' declarations
+scatter around the weighed load, so the fitted payload term (1.0 kWh per tonne per 100 km) is under half the loads'
+effect (2.2), and only each declaration taken to the weighed load it stands for, shipper by shipper, with the dairy's
+standard weight and the timber merchant's ticket left as what they are, orders 6: V02, V05, V09, V14, V16 and V18.
 
 ## Deep reasoning
 
-Task type: forecasting (Urban & Regional Science: demand, load and capacity prediction), the client domain the house domain supply-chain-logistics sits in, a task type the taxonomy tags for Forecasting & Predictive Modeling; the forecast is each run's 2027 van-hours with and without each set of offered districts.
-Domain test: the quantity that decides is each set of districts' 2027 avoidable van-hours, the route network's own capacity measure, estimated as the run time the runs would no longer take: each run's road sections and district access times fitted by least squares on the stop log's observed drives, door and local times measured per district, and a 2027 year in which a section is driven on the days some district beyond it has a stop.
-Swap: "which of our outlying wards should go to an agency nurse service from January, and what will that save" keeps a cost comparison but loses the van run that drives through one district to reach the next and the run's far end a district inherits when the one beyond it goes, so nothing ties a ward's saving to the wards beyond it and the call stops reading the same.
-Layer 1: the retailer's handhelds and fleet app produce it: stop rows sent again when a handheld re-synced (same stop and times, a later sync time), departure scans missing, failed attempts and collection-only stops, the Castlebar town district split in the register on 1 April 2026 with a crosswalk, the fleet app re-exporting some run-days twice, blank closing odometers, run names re-keyed with an ampersand after the March 2026 upgrade, a handheld swapped at the summer service; each is neutral on the call (SF5, SF6, SF7, SF15 asserted) and none is placed to be caught.
-Layer 2: estimand_identification: NPS-3 4.1 files the saving as the cost of the van-hours the hand-over takes off the runs; the methodological choice is how a district's share of a run is valued: by stops or parcels (allocation), by the time its stops take (cost-to-serve), by the run time its removal takes off one district at a time, or by the run time each combination takes off, priced set by set, with the 2027 year carried by parcels or forecast from the plan's stops.
-Decisive step: the run time a set of districts takes off its run, the road sections a run must still drive to reach the districts beyond them put back, priced over every combination on the run, because a district ends its run only once the districts beyond it go.
-Not semantics: every field read right (sequence numbers, the break rows, the crosswalk, failed and collection stops, the plan's parcels, the calendar, the rate card) still leaves a solver pricing a district at the time its stops take: no field says which road a run would drive without a district, and the time-in-district build reconciles every run-day to the minute.
-Not rule application: NPS-3 files the WHAT (4.1 the saving, 4.2 the year's parcels, rate and days, 4.3 the districts whose hand-over lowers the year's cost most) and nothing filed says how a district's removal is valued; the enumerated family (allocation by stops; time in district with and without the exit leg; removal one district at a time; removal set by set; each with the year carried by parcels or forecast) names four different lists (the golden; the golden plus Leenane and Letterfrack; the golden plus Leenane, Letterfrack and Cong; the golden less Mulranny and Bangor Erris, with allocation adding Leenane and Letterfrack and dropping Louisburgh) and spreads the net saving from EUR 20,000 to EUR 55,000; the standing family after a literal read of 4.1 and 4.3 keeps time in district (the time the stops take reads as the time the hand-over takes off) and one-at-a-time removal, and what rules them out is quiet: run-days that skipped a district, which look like any other run-day.
-Analyst test: a strong analyst who cleans the stop log and reads the offer, NPS-3, the plan, the rate card and the calendar correctly prices each district at the time its stops take, carries it to 2027 and and hands over Leenane and Letterfrack with Mulranny, Achill, Bangor Erris, Belmullet, Louisburgh and Ballycastle, claiming about EUR 20,000, the default path's Ends on; on the generator's clean truth (no mess) the same route files the same list (checks.py R2).
-Estimand: NPS-3 4.1 to 4.3 (network_planning_standard_NPS-3.pdf), with 2.3 and 3.2: population the districts in Owenduff's offer, outcome the 2027 delivery cost (van-hours depot out to depot in at the 2027 all-in rate, plus Owenduff's charges), window the calendar year 2027 at the delivery calendar's days, unit EUR and van-hours, comparison the year's cost with and without the hand-over.
-No decoy: nothing is planted: the offer, the plan and the rate card are ordinary commercial documents, the register is the planning team's own, no memo, earlier cost-to-serve report, draft or stakeholder figure ranks the districts, and no file is shipped to carry the wrong answer.
-No certified replay: the method is not recovered by reproducing a published figure: no file states a district's van time, cost to serve or saving, and nothing filed is reproduced to recover the valuation.
-Chain: (1) a district's saving is the run time its hand-over takes off its run, not the time its stops take, so (2) the road sections a run still drives to reach the districts beyond it are put back, estimated by least squares on the observed drives and checked on the run-days that skipped the district, which (3) makes a district's saving depend on whether the districts beyond it go, so every combination on each run is priced, and (4) the 2027 year is forecast from the plan's stops month by month with each section driven on the days a district beyond it has a stop, which the 2025 to 2026 back-test chooses over carrying the hours in proportion, giving the list and the year's saving.
-Judgment: the counterfactual run time is a fitted model of the run, not a lookup: road sections and access times from least squares on 2025 and 2026 drives (each section within 8 per cent of the truth, checks.py R5), and the 2027 year forecast with a section driven with the Poisson probability that some district beyond it has a stop; fitted on 2025 and forecasting 2026, it errs by 21 hours across the seven runs against 177 for the proportional carry (checks.py back-test).
-One-fact test: the likeliest hint ("the van still drives through a district to reach the next one") leaves the sections to fit, the combinations to price and the 2027 year to forecast, and the one-at-a-time pricing it invites still keeps Mulranny and Bangor Erris; the other hint ("a district at the end of a run saves the drive to it") leaves Leenane and Letterfrack priced at their time in district; no one sentence makes the rest routine.
+Task type: regression, classification, model diagnostics (General Statistics & Data Science), the client domain the house domain supply-chain-logistics sits in, a task type the taxonomy tags for Forecasting & Predictive Modeling; the forecast is each duty's 2027 battery energy on the January design day.
+Domain test: the quantity that decides is the energy a tonne of payload costs per loaded kilometre, a slope on a covariate the pilot holds only as third parties recorded it, so the field's question is the error structure of that covariate (classical, Berkson or nil) and the estimate that structure licenses; put patients and doses in place of tractors and loads and the shipper's declaration habit, the consignment note and the terminal's weighed departures have no counterpart, so the inference that decides has nothing to stand on.
+Swap: "how many community nurses should we hire for the 2027 rota, and which rounds should they take, from the pilot's visit times" keeps a fitted time model but loses the third-party declaration whose error differs by who writes it and the weighbridge that weighs the same senders' loads; nothing is recorded by an outside party with its own error, and the call stops reading the same.
+Layer 1: the haulier's systems produce it: the fleet portal uploading a day twice after a modem reconnect (same day, later upload stamp), ambient sensor dropouts (blank, the station file covers them), the TMS's declared weight typed three ways (12000, 12 000 kg, 12,00 t), the weighbridge's re-weigh after an axle limit (the CMR weighed twice, the later weighing final), the Värnamo duty codes re-keyed at the April 2026 TMS upgrade (VMO-07 to V07, with the crosswalk in the register), telematics in UTC and the weighbridge in local time, spare tractors on Värnamo duties (tare per weighing), blank declarations on 1.2 per cent of weighings; each is neutral on the call and every graded figure (SF5 to SF8 asserted) and none is placed to be caught.
+Layer 2: estimation_fit: the energy model's payload term is estimated on declared weights, and the methodological choice is what each pilot day's payload is taken to be: the declaration, one pooled correction of it, an average consumption with no payload at all, or each declaration's expected weighed load given its shipper, read from the weighbridge.
+Decisive step: each pilot day's declared payload is replaced by the weighed load it stands for under its shipper's own declaration practice (scattered estimates drawn toward the shipper's weighed mean, a standard weight taken at the shipper's weighed mean, a weighbridge ticket left as it is), so the energy a tonne costs is estimated on the loads the forecast is made at.
+Not semantics: every field read right (the declared weight's three formats, the BMS energy, the re-weighs, the duty-code crosswalk, the planning load's window, the limit's 540 kWh) still leaves the declared payload in the fit: no field says how a shipper declares, the declared and weighed means agree within 4 per cent for every duty, and the model fitted on them validates on held-out days.
+Not rule application: FES-2 files the WHAT (2.2 the energy, 2.3 the usable battery, 4.1 the design day, 4.2 the planning load, 4.3 the limit and one tractor a duty) and 3.1 says only that planning figures are estimated from the company's operating records; nothing filed says how the pilot's payload is taken. Enumerated family (declared, one pooled correction, average consumption, a line per shipper, each load at its shipper's mean, the exact shipper's days, a within-duty fit, the moments correction in verify.py): 9, 8, 8 and 6 tractors, payload 0 to 2.4 kWh per tonne per 100 km; standing family (the routes that take each shipper's declarations to the weighed load): 6 tractors on every one, payload 2.1 to 2.4, every energy in the same 10 kWh bin; the ruling-out is loud only to a solver who regresses the weighbridge's weighed loads on the declared ones shipper by shipper.
+Analyst test: a strong analyst who cleans the summaries, the consignments and the weighbridge and reads FES-2 and the quotation correctly fits the consumption model on the declared payloads, validates it on held-out days, finds the declarations unbiased on the weighbridge and orders 8 tractors (V02, V03, V05, V07, V09, V11, V16, V18), the default path's Ends on; on the generator's clean truth (no mess) the same route orders the same 8 (checks.py, clean truth).
+Estimand: FES-2 2.1 to 2.3 and 4.1 to 4.3 (fleet_electrification_standard_FES-2.pdf) with the quotation's usable capacity: population the shortlisted Värnamo duties (fleet_plan_2027.xlsx), outcome the battery energy of a round trip depot out to depot in, window a January working day at −5 °C mean ambient carrying the twelve-month planning load, unit kWh and tractors, comparison each duty against 85 per cent of 540 kWh.
+No decoy: nothing is planted: the declarations are what consignment notes carry, the weighbridge is the terminal's compliance and billing record, the standard and quotation are ordinary documents; no memo, earlier assessment, manufacturer's range or stakeholder figure ranks the duties or states an energy, and no file exists to carry the wrong answer.
+No certified replay: the method is not recovered by reproducing a published figure: no file states a duty's energy, a consumption rate per tonne or a shipper's declaration practice.
+Chain: (1) the pilot's payload is the shippers' declaration, and the weighbridge shows declarations right on average but scattered around the weighed load, so a slope fitted on them is diluted even though the model validates on held-out pilot days; (2) the scatter is not one error: per shipper the weighed load regresses on the declared at 0.26 to 0.30 for the estimating clerks, the dairy declares one standard weight the weighed load scatters around, and the timber merchant's declaration is its weighbridge ticket (slope 1.00), so one pooled line (0.94, carrying the shippers' differences in load) corrects the slope only to 1.1; (3) each pilot day's declaration is taken to its expected weighed load given its shipper and the model refitted, 2.2 kWh per tonne per 100 km, which the timber merchant's own days confirm (2.2); (4) the cold form is chosen by back-test (one rate below 16 °C under-predicts held-out sub-zero days by 3.4 per cent, two rates by −0.4), and the refitted model at −5 °C and each duty's planning load orders 6 tractors.
+Judgment: errors-in-variables: whether each shipper's declared payload carries classical, Berkson or no error is identified from the direction of the weighed-on-declared regression on the weighbridge, a record of the same shippers at another depot and grain; the calibrated payload term (2.2) is checked against the pilot days of the one shipper whose declarations are exact (2.2), and the moments correction in verify.py (the declared spread less the weighbridge's error variance) gives 2.1 and the same six duties.
+One-fact test: the likeliest hint ("declared weights are noisy, so the payload slope is attenuated") invites one reliability ratio over the weighbridge, which carries the shippers' differences in load and the exact shippers and corrects the slope only to 1.1 (still 8 tractors), and a per-shipper variance ratio breaks on the dairy's constant declaration; the solver still has to read each shipper's error structure, take each pilot day's load to its weighed equivalent, refit and choose the cold form before the forecast. The other hint ("check the model on weighed loads") has nothing to check against: no pilot day was weighed.
 No replay: the call does not re-derive any published figure, and no stated number in the pack is wrong.
-Pinned: run on the cut pack and the clean truth: the fit on 2025 alone, on 2026 alone, with median drives, with annual instead of monthly stops, and a regression of run-day hours on the sections reached, the districts entered and their stops (verify.py) all give the golden list, a net saving that rounds to EUR 50,000 (49,171 to 50,798) and every run figure at its rounding; time in district with or without the exit leg, allocation by stops and one-at-a-time removal each file another list (SF9, SF10); the proportional carry rounds to EUR 55,000 (SF11).
-Run forecast: method shortcut at rung 1 (the field's cost-to-serve time in district, validated by its own reconciliation); a run that reaches removal stops one inference short at rung 2 (one district at a time, keeping Mulranny and Bangor Erris), an unfinished chain; a run that lands the list and carries the year in proportion files EUR 55,000, an unfinished chain on the forecast.
-Strategy label: WORKS IN FORM (Urban 03, net not gross: the drive the runs make anyway is estimated, never filed, in the live form; with Part A's separating-explanations form for the run's far end, where only the run priced without the set, rebuilt from the fitted run, separates the district's own cost from the road it sits on).
-Lesson: a district's saving from leaving a route network is the run time its removal takes off, which for a district the run drives through is only its own stops and for a district near the end depends on the districts beyond it, forecast for the year from the days each road section is needed; no build on file prices a set of route members at the counterfactual run time.
+Pinned: run on the cut pack and the clean truth (checks.py, verify.py): a line per shipper, each load at its shipper's mean, the exact shipper's slope, a within-duty fit, the 2025 and 2026 halves, the calibration on the last twelve months, the station temperature, hinges at 14, 16 and 18 °C with a second at −2, 0 or 2 °C, a quadratic and 8 °C bins, and the moments correction: every one 6 tractors (V02, V05, V09, V14, V16, V18) and every one of the fourteen energies in the golden's 10 kWh bin; the declared weights, one pooled correction, the average cold-day consumption and the declared fit with one cold rate order 8, 8, 9 and 10.
+Run forecast: method shortcut at rung 1 (the consumption model on declared payloads, validated by its own held-out days and the weighbridge's unbiased mean: a self-confirming check); a run that suspects the declarations stops one inference short at rung 2 (one pooled correction, still 8 tractors), an unfinished chain; a run that lands the six with one cold rate below 16 °C misses all fourteen energies by a bin.
+Strategy label: WORKS IN FORM (Education 02 and General Statistics, measurement error: the reliability estimated from the pack's own data, never a filed coefficient; here not one reliability but each source's error structure, with the pooled reliability as a wrong rung).
+Lesson: a regression on a covariate recorded by third parties predicts its own stream and misstates the effect at true values; whether the error is classical, Berkson or nil is a property of each recorder, read from a record that measures the truth for the same recorders, and no build on file asks for the structure to be read source by source.
 
 ## Survivor anatomy
 
-Actor: which road a run would drive without a district has no column in any file; it is a relation between a district's place in the stop sequences, the drives either side of it and the run-days that skipped it.
-Link: each district's saving is tied to the road sections beyond it and to the run-days that skipped it, a relation no key offers (no field carries a road section, a through-road or a run's far end) and no sentence invites.
-Reflex: the field's cost-to-serve build (each district's drive in, the drives between its stops, its door time) and the allocation builds sit at rungs 0 and 1 and file the default list (Ends on), not the golden.
-Back-test: the time-in-district build reconciles every run-day's time to the minute with the depot legs and the break, so it passes the only check the records offer a cost allocation; one-district-at-a-time removal reproduces every single skipped run-day.
-Second use: every file the step reads sits in the pack for its own reason: the stop log is the population every figure is over, the run log gives depot out and in for the van-hours NPS-3 2.3 counts, the register gives the districts and runs, the offer, plan, rate card and calendar price the year.
-Shock: the movement the step recovers reads as ordinary: Leenane and Letterfrack look costly per parcel on every shipped statistic, and sorted on distance from the depot, parcels, stops or time in district the golden list is not an interval (Louisburgh goes at 33 km while Leenane stays at 45 km; Clifden, the farthest, stays).
-Pins: NPS-3 files the WHAT (the saving, the year's figures, the list that lowers the year's cost most, van-hours depot out to depot in, a district handed over whole) in the organisation's own standard; no filed sentence names a road, a drive, a run's far end, a skipped run-day, a combination or how a district's removal is valued (asserted: checks.py searches the standard's text).
+Actor: the deciding property, each shipper's declaration practice, has no column in any file; it is a relation between the declared and weighed weights of one shipper's departures (the direction and slope of their regression), on a file the pilot never touches.
+Link: each pilot day's payload is tied to the Värnamo weighbridge only through the shipper code, a key both files carry for their own reasons (billing, compliance) and no sentence connects to the energy model; nothing joins a pilot day to a weighing.
+Reflex: the field's consumption model (energy per km on payload, cold and climb, least squares on the operating records) sits at rung 1 and orders 8 tractors (Ends on); the field's average-consumption rule of thumb sits at rung 0 and orders 9.
+Back-test: the declared-payload model predicts January and February 2026 held out within 2.4 per cent (the golden 2.3), and the weighbridge's declared and weighed means agree (−39 kg); both checks a solver runs on the easy route pass.
+Second use: every file the step reads is in the pack for its own reason: the weighbridge is the planning load's source (FES-2 4.2) and the 20,000-row population file of the Värnamo duties, the TMS is the pilot's only payload and duty record, the shipper register names the shippers.
+Shock: nothing moves visibly: the declarations are unbiased, the model fits; sorted on round-trip km, planning load, climb, the default model's energy or the declared mean, the golden six are not an interval (V09 at 21 t goes, V11 at 26 t does not; V14, the second-longest light duty, goes while V33, the lightest and longest, stays).
+Pins: FES-2 files the WHAT (the energy, the design day, the planning load, the limit, one tractor a duty) in the haulier's own standard; no filed sentence names a declaration, a weighbridge, a calibration, an error or a shipper (asserted: checks.py searches FES-2 and the prompt).
 
 ## Readability screen
 
@@ -136,180 +145,162 @@ figure; 7 a file the step alone reads.
 
 | Rung | 1 Filed | 2 Schema | 3 Reflex | 4 Bench | 5 Hygiene | 6 Linear | 7 Second use | Verdict |
 |---|---|---|---|---|---|---|---|---|
-| 0 allocation by stops: golden less Louisburgh plus Leenane and Letterfrack | NPS-3 2.3 counts van-hours by run | run-day hours over stops | yes, pro-rata cost | none | no | a share | none | readable |
-| 1 (default) time in district: golden plus Leenane and Letterfrack | 4.1's "van-hours the hand-over takes off" read as the time its stops take | the stop times | yes, the field's cost-to-serve | none refutes it | no | a sum | none | readable |
-| 2 removal one district at a time: golden less Mulranny and Bangor Erris | none | the sequences | yes, avoidable cost | none | no | a difference per district | none | readable |
-| 3 (decisive) every combination priced on the fitted run, the year forecast from the plan's stops | no sentence names a road section, a far end, a combination or a skipped run-day; 4.3 names only the outcome (lowers the year's cost most) | no column holds a section or a far end | no: the reflexes are cost-to-serve and avoidable cost per district | nothing scores it | no | not linear: a fitted run priced over subsets and a Poisson year | the stop log is the population file | silent |
+| 0 average consumption on cold days: 9 tractors | FES-2 4.1's design day | the summary's consumption column | yes, the rule of thumb | none | no | a mean | none | readable |
+| 1 (default) consumption model on declared payloads: 8 tractors | FES-2 3.1, estimated from operating records | the TMS declared weight | yes, the field's model | the held-out days confirm it | no | a fit | none | readable |
+| 2 one pooled correction from the weighbridge: 8 tractors | none | declared beside weighed on one row | yes, the textbook reliability ratio | none | no | one ratio | none | readable |
+| 3 (decisive) each declaration taken to its weighed load by its shipper's practice, the model refitted | no sentence names a declaration, an error or a shipper's practice | no column holds a practice; the shipper code is a billing key | no: the reflexes are the declared fit and one reliability ratio | nothing scores it; the held-out check is blind to it | no: declarations are unbiased, no duplicate or clock is involved | not linear: a regression per shipper carried through a refit | the weighbridge is the planning load's file | silent |
 
-**Condition 1 (the review's Gate F risk), measured on the wording.** The prompt asks for "the van-hours it saves" and
-"van-hours before and after the hand-over"; NPS-3 4.1 says "the van-hours the hand-over takes off Brackloon's runs".
-Nothing in the pack computes run time with a district removed: the stop log records the stops made, the run log
-depot out and in, the register districts and runs, and no file holds a road section, a distance between districts or
-a run planned without a district (checks.py asserts the standard names no road, drive, through-road, combination or
-skipped run-day). From a stop-level log the direct build of "what a district's hand-over saves" is the time its stops
-take, which is rung 1, and the evidence against it sits only in ordinary run-days on which a district had no stop.
-The asking sentence was cut from "the van-hours our runs would no longer drive" and "the van-hours each run would
-shed" (the draw's draft) to "the van-hours it saves", which names the outcome and no counterfactual.
+**Condition 1 (Gate F risk), measured on the wording.** The prompt asks for "the battery energy its round trip needs on
+the January design day"; FES-2 says "the energy the tractor draws from its battery". Nothing in the pack weighs a pilot
+day, states a consumption per tonne or describes how a shipper declares. The held-out validation a careful solver runs
+(January and February 2026) gives 2.4 per cent for the declared fit and 2.3 for the golden: the stream cannot tell them
+apart, because the held-out days carry the same declarations. The evidence sits only in the weighbridge, read shipper
+by shipper in the direction weighed-on-declared.
 
-**Condition 2, the forecasting objective.** The 2027 year is a forecast judgment that moves graded figures: the
-plan's monthly parcels become stops at each district's own stops a parcel, and a road section is driven on a
-delivery day with the probability that some district beyond it has a stop; the proportional carry of the last twelve
-months' hours files EUR 55,000 against the golden EUR 50,000, and every run's before and after figures differ (the
-landed run misses 16 of 23 ask figures, ceiling.py). The back-test chooses the model: fitted on 2025, it forecasts
-2026 January to October within 21 van-hours across the seven runs against 177 for the proportional carry. The tag
-stays Forecasting & Predictive Modeling.
+**Condition 2, the forecasting objective.** The design day is a forecast at a temperature (−5 °C) the pilot reached on
+394 of 2,334 days below 0 °C and loads (3.9 to 31.9 t) far from the pilot's mean (12.3 t): the energy a tonne costs
+decides the heavy and light duties, and the cold form is chosen by back-test (the asks' second judgment).
 
 ## Semantic fork table
 
 | ID | Term or convention | Golden reading | Alternative | Call under it | Ruled out by |
 |---|---|---|---|---|---|
-| SF1 | 2027 | the calendar year at the delivery calendar's 251 delivery days | weekdays | same call | NPS-3 4.2; same call (asserted, SF16) |
-| SF2 | a van-hour | depot out to depot in as the run log records, the break inside | the stop log's drives and door times only | same list and figures | NPS-3 2.3; the verifier regresses run-log hours (verify.py) |
-| SF3 | the break | taken once on every run-day and never saved | saved with a district | same call | every run-day carries one break (asserted); NPS-3 3.2 removes stops, not the break |
-| SF4 | the year's parcels | the commercial plan's 2027 parcels | the last twelve months' parcels | same list | NPS-3 4.2; same list (asserted) |
-| SF5 | failed attempts and collections | stops the run makes | dropped | same list | NPS-3 2.4 and 3.1; same list (asserted) |
-| SF6 | a stop sent again at re-sync | one stop | two | same call | the same stop and times with a later sync time; the copies sit on existing run-days (asserted) |
-| SF7 | CBN and CBS | Castlebar town, split in the register | separate districts | same call | the register's Code changes; Castlebar town's run serves no offered district (asserted) |
-| SF8 | Owenduff's charge | EUR 13.40 a parcel delivered | per stop, or per attempt | same call | the offer (a parcel is charged once, when delivered) |
-| SF9 | the districts handed over | the combination that lowers the year's cost most, run by run | each district on its own merit | moves Mulranny and Bangor Erris | NPS-3 4.3's selection whose hand-over lowers the year's cost most, an outcome and no search (asserted: the offer names no combination) |
-| SF10 | the van-hours a hand-over takes off | the run's time with the set's stops removed, the road to the districts beyond still driven | the time the set's stops take | moves Leenane and Letterfrack | NPS-3 4.1 and 3.2 (the runs make no stop in the district and still serve the districts beyond it); run-days that skipped a district (asserted) |
-| SF11 | the 2027 hours | forecast from the plan's stops month by month, each section driven on the days a district beyond it has a stop | the last twelve months' hours carried by parcels | net saving EUR 55,000 | the 2025 to 2026 back-test (21 against 177 van-hours, asserted) |
-| SF12 | rounding | van-hours saved to the nearest 100, other van-hours to the nearest 50, the net saving to the nearest EUR 5,000, every graded figure mid-bin | finer | same figures | the prompt; saved hours within 25 of their bin centre, before hours within 12, the net saving within EUR 1,500, and every variant in the same bin (asserted); the judge's independent fit moved a run's saved hours by about 30 |
-| SF13 | the runs that serve an offered district | R03 to R09 | all nine runs | same figures | the prompt ("each run that serves one"); asserted |
-| SF14 | the fit | 2025 and 2026 drives, least squares on the mean of each from-to pair | 2025 alone, 2026 alone, medians, annual stops, a run-day regression | same list and rounded figures | asserted for each, and verify.py |
-| SF15 | a stop with no departure scan | its drive to the next stop left out of the fit | the run-day dropped | same list and saving | asserted |
-| SF16 | delivery days | the 2027 calendar | weekdays | same list | asserted |
+| SF1 | the design day's temperature | the trucks' ambient mean, the station's day where it dropped out | the station's day throughout | same call and bins | same call (asserted) |
+| SF2 | a duty's energy | energy_used_kwh, depot out to depot in | consumption times distance | the same column | FES-2 2.2; identical within 0.5 kWh (asserted) |
+| SF3 | the planning load | mean weighed net payload | mean declared weight | same call and bins | FES-2 4.2; same call (asserted) |
+| SF4 | the twelve months | November 2025 to October 2026 | calendar 2025, or every month on the bridge | same call | FES-2 4.2; same call (asserted) |
+| SF5 | a re-weighed CMR | the later weighing | the first | same call | the remark "axle 2 over" and the later time; same call (asserted) |
+| SF6 | a day uploaded twice | once | twice | same call | the same day and figures with a later upload stamp; same call (asserted) |
+| SF7 | an ambient dropout | the station day plus the mean offset | the day dropped | same call and bins | same call (asserted) |
+| SF8 | a declared weight in tonnes | parsed (decimal comma) | those days dropped | same call | same call (asserted) |
+| SF9 | the usable battery | 540 kWh, the 2027 model ordered | the pilot's 468 kWh | moves the call | FES-2 4.3 "the tractor model being ordered" and 2.3; the quotation (asserted) |
+| SF10 | the payload of a pilot day | the weighed load the declaration stands for, by shipper | the declaration | moves V03, V07, V11 and V14 | the weighbridge's per-shipper regression; the exact shipper's own days (asserted) |
+| SF11 | the cold form | a rate below 16 °C and a further rate below 0 °C | one rate below 16 °C | same call, every energy a bin low | the January and February 2026 back-test: 3.4 per cent against −0.4 on sub-zero days (asserted) |
+| SF12 | rounding | each energy to the nearest 10 kWh, every graded energy within 1 kWh of a bin centre | finer | same figures | the prompt; every rival in the golden's bin (asserted) |
+| SF13 | tractors | one per duty assigned | a spare | same count | FES-2 4.3 (asserted) |
+| SF14 | the fit's window | March 2025 to October 2026 | 2025 alone, 2026 alone | same call and bins | asserted |
+| SF15 | the calibration's window | the two years on the bridge | the last twelve months | same call and bins | asserted |
+| SF16 | the fit's structure | one level per km explained by climb | a level per duty, then climb | same call and bins | asserted |
+| SF17 | the fit's km | the odometer distance | the route register's km | same call and bins | asserted |
 
 ## Ladder
 
 | Rung | Construction | Answer | Dies to |
 |---|---|---|---|
-| 0 | allocation by stops: each run-day's hours shared over its stops, carried by parcels | Mulranny, Achill, Bangor Erris, Belmullet, Leenane, Letterfrack and Ballycastle | NPS-3 4.1: the van-hours taken off the run, not the run's average; Louisburgh's run drives 2 x 0.6 h for it alone |
-| 1 (default) | time in district (drive in, between its stops, door time), carried by parcels | the golden plus Leenane and Letterfrack (ratios 1.48 and 1.42), EUR 20,000; with the exit leg also Cong | the run-days that skipped Leenane or Letterfrack: the Connemara van drove the same road to Clifden |
-| 2 | removal one district at a time on the fitted run | the golden less Mulranny and Bangor Erris (0.58 and 0.66), EUR 35,000 | NPS-3 4.3: with Achill and Belmullet gone, Mulranny and Bangor Erris end their runs (marginal 1.78 and 2.37) |
-| 2b | every combination, the year carried in proportion to parcels | the golden list, EUR 55,000 | the back-test (177 against 21 van-hours) |
-| 3 (golden) | every combination on the fitted run, the year forecast from the plan's stops | the golden list, EUR 50,000 (50,020 before rounding) | |
+| 0 | average consumption on days of −8 to −2 °C (1.35 kWh per km) times each duty's km | 9 tractors (the golden less V14 plus V03, V07, V11 and V24) | FES-2 4.1 and 4.2: the energy carrying the duty's load; the pilot's consumption rises with load |
+| 1 (default) | the consumption model on declared payloads (1.0 kWh per tonne per 100 km), both cold rates | 8 tractors (V03, V07 and V11 in at about 440 kWh, V14 out at about 470) | the weighbridge: the estimating shippers' weighed loads rise 0.26 to 0.30 t per declared tonne |
+| 2 | one pooled correction from the weighbridge (0.94), 1.1 kWh per tonne per 100 km | the default's 8 | the per-shipper regressions: the pooled line carries the shippers' differences in load and the exact shippers |
+| 2b | the golden payload with one cold rate below 16 °C | the golden six, every energy a bin low | the January and February 2026 back-test (3.4 per cent under on sub-zero days) |
+| 3 (golden) | each declaration taken to its weighed load by shipper, the model refitted (2.2), both cold rates | 6 tractors: V02, V05, V09, V14, V16, V18 | |
 
-- **Margins.** Every handed-over district's marginal saving within the golden list is at least 1.78 times its charge
-  (Louisburgh 1.90, Achill 2.64, Belmullet 2.75, Bangor Erris 2.37, Ballycastle 1.86, Mulranny 1.78); every kept
-  district's at most 0.67 (Cong), and the largest Connemara combination 0.78 (asserted at 1.15 and 0.87). Rung 1's
-  wrong cells, Leenane and Letterfrack, sit at 1.48 and 1.42; rung 2's at 0.58 and 0.66.
-- **Position.** Three different wrong lists on rungs 0 to 2; the decisive move reverses the direction of rung 1 on
-  Connemara and of rung 2 on Achill and Erris.
-- **Worth.** The decisive step moves four districts and the net saving from EUR 20,000 (rung 1) or EUR 35,000 (rung 2)
-  to EUR 50,000.
-- **Pricing on the clean truth** (a pack with no mess, checks.py R1 to R5): the same golden list, the default on
-  Leenane and Letterfrack, the one-at-a-time list another, the fitted sections within 8 per cent of the generator's.
+- **Margins.** Every duty's golden energy sits at least 9 kWh from the 459 kWh limit (the heavy V03, V07 and V11 at
+  470, V14 at 450; asserted at 9.0); the default's heavy duties at least 8 kWh inside it and its V14 at least 5 outside
+  (asserted). The standing family's spread on any duty is under 5 kWh; the 1h rung's shift is 7 to 8.
+- **Position.** Three wrong lists (9, 8, 10 with the declared one-rate fit); the decisive move reverses rung 1's direction
+  on the heavy duties and on V14 together, because the slope pivots about the pilot's mean load (12.3 t).
+- **Pricing.** The residue the WHAT leaves is the payload term (a method, not a knob); the move the call needs is about
+  30 kWh on the heavy duties against a ceiling of 1.2 kWh per tonne per 100 km times 16 t times 150 km (29 kWh), so the
+  heavy duties were placed at 26 to 32 t; the one-group-by route (the declared fit) is affine in the declared column
+  and lands 8; the standard error of the golden slope is about 0.05 kWh per tonne per 100 km (under 1.5 kWh on any
+  duty); the lever (the slope) and the ranked quantity's noise are different variances.
+- **Worth.** The decisive step moves four duties and the count from 8 to 6.
 
 ## Closure table
 
 | Axis | Reading here | Move |
 |---|---|---|
-| 1 Population | the districts in Owenduff's offer | filed, the offer and NPS-3 4.3 |
-| 2 Unit of account | a district, handed over whole | filed, NPS-3 3.2 |
-| 3 Attribution window | the calendar year 2027 | filed, NPS-3 4.2 (SF1) |
-| 4 As-of dating | the extract to 30 October 2026, the plan of 19 October | C1: the call reads no later record |
-| 5 Version basis | NPS-3 version 2, the offer OC-2027-114 | filed |
-| 6 Denominator | none: euros and van-hours | n/a |
-| 7 Weighting | the plan's parcels by month | filed, NPS-3 4.2 (SF4) |
-| 8 Window length | one year | filed |
-| 9 Boundary inclusivity | a hand-over that lowers the cost; none at equal | C1, no combination within 13 per cent of break-even (asserted) |
-| 10 Rounding path | figures unrounded to the end, van-hours to 50, net to EUR 5,000 | the prompt; C1 (SF12) |
-| 11 Tie-break | none | no two combinations tie (asserted by the margins) |
-| 12 Maturity and censoring | none: the history is complete to its last day | n/a |
-| 13 Order of operations | copies dropped, then drives timed, then fitted | C1 (SF6) |
-| 14 Row order | stops ordered by sequence number | C1 |
-| 15 Duplicate resolution | a re-synced stop once; a re-exported run-day once | C1 (SF6) |
-| 16 Identity normalisation | district codes through the crosswalk | C1 (SF7) |
-| 17 Netting against gross | net saving after Owenduff's charges | filed, NPS-3 4.1 |
-| 18 Dimensional units | hours and euros | the rate card |
-| 19 Code and status semantics | a parcel delivered; failed attempts and collections are stops | filed, NPS-3 2.4 (SF5, SF8) |
-| 20 Integerisation | none before the rounding | n/a |
-| 21 Clause scope | NPS-3 section 4 for the call, 2.3 and 3.2 for the hours | filed |
-| 22 Forward window contents | the plan's 2027 parcels, the calendar, the rate card | filed (SF11 the forecast's form, chosen by the back-test) |
+| 1 Population | the shortlisted Värnamo duties | filed, fleet_plan_2027.xlsx and FES-2 4.4 |
+| 2 Unit of account | a duty, one tractor each | filed, FES-2 4.3 (SF13) |
+| 3 Attribution window | a January working day at −5 °C | filed, FES-2 4.1 |
+| 4 As-of dating | the extracts to 30 October 2026, the memo of 6 November | C1: the call reads no later record |
+| 5 Version basis | FES-2 version 2, quotation Q-26-1187 | filed |
+| 6 Denominator | the 540 kWh usable battery | filed, FES-2 4.3 and the quotation (SF9) |
+| 7 Weighting | each departure weighs once in the planning load | filed, FES-2 4.2 |
+| 8 Window length | twelve months for the load | filed, FES-2 4.2 (SF4) |
+| 9 Boundary inclusivity | no more than 85 per cent | filed, FES-2 4.3; no duty within 9 kWh (asserted) |
+| 10 Rounding path | energies unrounded to the end, to 10 kWh | the prompt; C1 (SF12) |
+| 11 Tie-break | none | no duty at the limit (asserted) |
+| 12 Maturity and censoring | none: the record is complete to its last day | n/a |
+| 13 Order of operations | duplicates dropped, then joined, then fitted | C1 (SF6) |
+| 14 Row order | weighings by time within a CMR | C1 (SF5) |
+| 15 Duplicate resolution | a re-uploaded day once; a re-weighed CMR at its later weighing | C1 (SF5, SF6) |
+| 16 Identity normalisation | Värnamo duty codes through the register's crosswalk | C1 |
+| 17 Netting against gross | net payload as gross less tare | C1, the weighbridge's gross and tare columns |
+| 18 Dimensional units | kWh, km, tonnes; declared weights in three formats | C1 (SF8) |
+| 19 Code and status semantics | the remark on a first weighing | C1 (SF5) |
+| 20 Integerisation | tractors are whole duties | filed, FES-2 4.3 |
+| 21 Clause scope | FES-2 4.1 to 4.3 for the call, 2.1 to 2.3 for the terms | filed |
+| 22 Forward window contents | the 2027 model's battery, the shortlist, the design day | filed (SF11 the cold form, chosen by back-test) |
 
 ## Literal reader
 
-Executed word for word, NPS-3 4.1 to 4.3 price each combination of offered districts at the cost of the van-hours the
-hand-over takes off the runs, depot out to depot in, less Owenduff's charges, and hand over the combination that
-lowers the year's cost most; the one step the text leaves open is how the runs' 2027 hours without the combination are
-estimated, and every route that rebuilds the run without the combination's stops (the fit on observed drives, the
-run-day regression on sections reached, each on either year) gives the golden list, while the time the stops take,
-allocation and one-at-a-time pricing are not the hours taken off the runs. SF1 to SF16 close every term and
-convention.
+Executed word for word, FES-2 4.1 to 4.3 assign each shortlisted duty whose energy on a −5 °C working day, carrying the
+mean net payload of its departures from November 2025 to October 2026, is at most 85 per cent of 540 kWh, one tractor
+each; 3.1 sends the estimate to the company's operating records of its battery-electric tractors, and the one step the
+text leaves open is how that estimate is built from records whose payloads are declarations; every route that takes
+each declaration to the weighed load it stands for gives the golden six, while the declared fit, the pooled correction
+and the average consumption are estimates of another payload. SF1 to SF17 close every term and convention.
 
 ## Oracles
 
-None. No file states a district's van time, cost to serve, saving or a run's hours without a district; the fuel card
-statement, the customer contact log and the van fleet register (distractors) rank nothing on the decision basis; the
-offer names no saving.
+None. No file states a duty's energy, a consumption per tonne, a shipper's practice or a range; the quotation gives
+the usable capacity only; the fuel card statement and the workshop log (distractors) rank nothing on the decision
+basis; the pilot's own consumption column is the energy over the distance, which the default path already reads.
 
 ## Ask sheet
 
-Four asks, 23 figures, every one computed from the deep step's output: the list (1, the call itself), the van-hours
-each run that serves an offered district saves (7), the year's net saving (1), and the chart's before and after
-figures for those runs (14). Each ask's second judgment is the 2027 forecast (SF11): a run that lands the list and
-carries the year in proportion files other before, after and net figures.
+Two asks, 15 figures, every one computed from the deep step's output: the order (1, the count and the duties, the call
+itself) and each shortlisted duty's design-day energy (14). The energies' second judgment is the cold form (SF11): a
+run that lands the six with one cold rate below 16 °C files every energy a bin low.
 
 | Ask | Figures | Deep-step output it reads | Second judgment | Shallow run against the golden | Landed run's risk | Mess on its path |
 |---|---|---|---|---|---|---|
-| 1 the list | 1 | the combinations priced | none | Leenane and Letterfrack added | none | the copies, the crosswalk |
-| 2 van-hours saved per run | 7 | the hours each run's combination takes off | the 2027 forecast | 5 of 7 differ (R06 and R09 zero both ways) | R07 and R08 move a bin under the proportional carry | the break, missing departures |
-| 3 net saving | 1 | the list and its hours | the 2027 forecast | EUR 20,000 | EUR 55,000 | none |
-| 4 before and after per run | 14 | each run's 2027 hours with and without | the 2027 forecast | 12 of 14 differ | 12 of 14 differ | the break in depot out to in |
+| 1 the order | 1 | the payload term | none | 8 tractors | none | the duplicates, the formats |
+| 2 the design-day energies | 14 | the payload term and the planning loads | the cold form | 12 of 14 differ | 14 of 14 a bin low | the re-weighs, the crosswalk, the dropouts |
 
-| Ask figure | Golden | Shallow (the default path) | Cracker (lands the list, carries the year in proportion) |
+| Ask figure | Golden | Shallow (the default path) | Cracker (lands the six, one cold rate) |
 |---|---|---|---|
-| 1 the list | the golden six | miss | keep |
-| 2 van-hours saved, R03, R04, R05, R06 and R09 | 300, 700, 0, 0, 0 | miss | keep |
-| 2 van-hours saved, R07 and R08 | 600, 200 | miss | miss |
-| 3 the net saving | EUR 50,000 | miss | miss |
-| 4 before and after, R06 | 1,200 and 1,200 | keep | keep |
-| 4 before and after, R03, R04, R05, R07, R08 and R09 | 12 figures | miss | miss |
+| 1 the order | 6, V02, V05, V09, V14, V16, V18 | miss | keep |
+| 2 energies V02, V03, V05, V07, V09, V11, V14, V16, V18, V21, V24, V33 | 430, 470, 440, 470, 420, 470, 450, 430, 440, 490, 480, 490 | miss | miss |
+| 2 energies V27 and V30 | 490, 480 | keep | miss |
 
-- **Span:** the stop log, the run log, the register, the plan, the rate card and the calendar; no ask reads a file the
-  call does not.
-- **Realism:** the depot-out-to-in hours with the break inside, the plan's months and the calendar's holidays are what
-  a transport planner works from.
-- Shallow keep: 8.7 per cent of ask weight (2 of 23 figures).
-- Pair ceiling: 39.3 (the landed run C = 38 + 7 + 55 x 0.304 = 61.7, the shallow run S = 5 + 7 + 55 x 0.087 = 16.8).
+- **Span:** the summaries, the consignments, the register, the weighbridge, the standard and the quotation; no ask
+  reads a file the call does not.
+- **Realism:** a duty-by-duty energy table against the battery is what a fleet planner takes to an order.
+- Shallow keep: 13.3 per cent of ask weight (2 of 15 figures).
+- Pair ceiling: 34.0 (the landed run C = 38 + 7 + 55 x 0.067 = 48.7, the shallow run S = 5 + 7 + 55 x 0.133 = 19.3).
 - Measured by: generator/ceiling.py on the cut pack (pack digest printed with the sheet).
 
 ## Prompt contract
 
 What the author's voice rewrite may not drop or change:
-- The question: which of the offered outlying delivery districts go to Owenduff Couriers from January 2027 under their
-  offer, and what that saves over 2027.
-- The hold option is implicit in "which" and NPS-3 4.3 (none may go); keep "which" open, never "which four".
-- Deliverables: district_handover_2027.xlsx (every district in the offer marked going or staying; for each run that
-  serves one, the van-hours it saves in 2027; the year's net saving after Owenduff's charges) and handover_2027.png
-  (each of those runs' 2027 van-hours before and after the hand-over).
-- Units and rounding: van-hours saved to the nearest hundred, other van-hours to the nearest fifty; the net saving to the nearest five thousand euros.
-- Never add: a district or run count, a road, a drive, "through", "beyond", "combination", "on its own", "no longer
-  drive", "shed", "cost to serve", or any method word.
-
-## Pre-ship check
-
-Re-read against the Sulfur standard on the final cut (target.zip 4a9ccea1, golden.zip 801703c8), 2026-11-08.
-- Analyst test: a solver that cleans every file and reads every rule still prices each district at its own stops' time
-  and hands over Leenane and Letterfrack (EUR 20,000), or prices districts one at a time and keeps Mulranny and Bangor
-  Erris (EUR 35,000); both builds pass their own reconciliation to the run log. Yes, analytical.
-- Deep chain: removal saving, not time in district; the through-road leg re-estimated from a leg model checked on the
-  run-days that skipped a district (the modeling judgment); spur districts evaluated as sets; the 2027 reach forecast
-  month by month (back-test 21 h against 180 h for the proportional carry).
-- One-fact test: the judge named "price each run with and without each combination of districts" as settling the
-  list; it is not in the pack (the offer's "in any combination" was removed at stage 4, NPS-3 4.3 names the selection
-  as an outcome), and the forecast still separates the graded figures.
-- Banned kinds: no filed procedure, no field reading, no plant, no replay, no single fact; the stop-log re-syncs, the
-  Castlebar code split, click-and-collect and failed deliveries are texture off every graded path (mess neutrality
-  asserted).
-- Gate G: no shipped artefact ranks the districts; the offer lists the candidates only.
-- Determinism: every sound fit (2025, 2026, both, median, annual, run-day regression) gives the same list and every
-  graded figure in its bin; the judge's independent fit lands the call and EUR 50,000.
-- Leak: leak.py REVIEW (the offer names the candidates; generic shared words; 2027 calendar dates), no LEAK. The
-  reader's re-read is owed for the two documents changed at stage 4 (the offer's sentence, NPS-3 4.3).
+- The question: how many battery-electric tractors to order for the Värnamo duties on the 2027 shortlist, and which of
+  those duties they take over under FES-2.
+- The hold option is implicit in "how many" (none may qualify); never "which six" or any count.
+- Deliverables: ev_duty_assessment_2027.xlsx (every shortlisted duty with its round trip's battery energy on the January
+  design day and whether it goes electric, ending on the number of tractors) and tractor_order_memo.pdf (the order
+  written up for the board on one page).
+- Units and rounding: energies to the nearest 10 kWh.
+- Never add: a declaration, a weighbridge, a payload, a weight, a shipper, a calibration, an error, cold, temperature
+  forms, "check", "validate", or any method word.
 
 ## Tried and rejected
+
+- 2026-11-08, architecture 4 (the Irish retailer's outlying districts handed to a courier, each set priced on the
+  fitted van run): spent on the platform; the author reports not stumped, run texts not supplied to the repo. The van
+  that drives through a district to reach the next one is a mechanism the stop sequences visibly carry (the run-days
+  that skipped a district show it), modelled on sight like every earlier Sulfur landing. The world is left; the next
+  deep step must sit in a property the rows in view cannot show, with its evidence in another file.
+- 2026-11-08, stage 2 pricing, the pilot's telematics at trip grain (each leg's energy): the empty legs carry a payload
+  of exactly zero, an error-free contrast with the loaded leg, so the declared fit's payload term came out at 2.0
+  against 2.2 and the dilution vanished; the fleet portal's daily summary is the pilot's record.
+- 2026-11-08, stage 2 pricing, clerks' error at 21 to 24 per cent: the declared slope fell to 0.6 kWh per tonne per
+  100 km, below what rolling resistance alone costs, a figure a solver sanity-checks against physics; at 17 per cent
+  it is 1.0, low but not absurd.
+- 2026-11-08, stage 2, an ask on each going duty's spare load to the nearest tonne: the standing family spread it over
+  a tonne on four of six duties (a fork on the asks); dropped.
+- 2026-11-08, stage 2, the shortlist on mid-weight loads: duties near the pilot's mean load (12 t) give the same energy
+  on any slope, so the shallow run kept 6 of 14 energies; the shortlist's shippers now sit far from the mean.
 
 - 2026-10-31, architecture 2 (the agro-climatic network's 2028 drift-alert setting, the drifts cut short by the 3.0
   alerts' repairs): spent at the batch 1 repair; the determinism judge returned NOT_DETERMINISTIC, SEND_BACK: the 4.0

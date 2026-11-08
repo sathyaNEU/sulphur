@@ -1,371 +1,295 @@
-"""Every figure the build owes, computed from the pack alone (target/), never from the clean truth.
+"""Every figure the build owes, computed from the shipped files alone (never from sim.py): the cleaning, the energy
+model on the pilot's daily summaries, the payload calibration on the Varnamo weighbridge, each rung of the ladder and
+each rival the design note runs.
 
-The golden: each run's road sections and district access times fitted on the observed legs of the stop log; each
-district's door time and the drive between its own stops measured directly; 2027 stops from the volume plan at each
-district's own stops per parcel; each road section driven on a 2027 delivery day with the probability that any
-district beyond it has a stop that day (Poisson on the month's mean); a set of districts handed over is the run time
-the runs would no longer take, at the 2027 rate, less Owenduff's charges; on each run the set that saves most."""
+    load(target) -> Pack      the cleaned files
+    golden(pk) -> dict        the golden model and every shortlisted duty's design-day energy
+"""
 import csv
 import datetime as dt
-import itertools
-import math
 import os
+import re
 from collections import defaultdict
 
 import numpy as np
 from openpyxl import load_workbook
 
+DESIGN_T = -5.0
+SHARE = 0.85
 FILES = {
-    "stops": "delivery_stops_2025-2026.csv", "rundays": "van_run_log_2025-2026.csv",
-    "register": "district_register_2026.xlsx", "plan": "volume_plan_2027.xlsx", "rates": "fleet_rate_card_2027.xlsx",
-    "calendar": "delivery_calendar_2027.csv",
+    "weighbridge": "weighbridge_varnamo_2024-11_2026-10.csv",
+    "bev": "bev_daily_summary_2025-03_2026-10.csv",
+    "tms": "tms_consignments_jonkoping_2025-2026.csv",
+    "routes": "route_register_2026.xlsx",
+    "plan": "fleet_plan_2027.xlsx",
+    "temps": "daily_mean_temperature_2016-2026.csv",
 }
-PRICE = 13.40        # read from the offer letter's price table (asserted in checks against the PDF text)
+LAST12 = (dt.date(2025, 11, 1), dt.date(2026, 10, 31))
+USABLE = 540.0   # the quotation's usable battery, read into the checks from the PDF text (checks.py)
 
 
-def h(s):
-    a, b, c = s.split(":")
-    return int(a) + int(b) / 60 + int(c) / 3600
+def rd(path):
+    with open(path, encoding="utf-8") as f:
+        return list(csv.DictReader(f))
 
 
-def hm(s):
-    a, b = s.split(":")
-    return int(a) + int(b) / 60
+def kg(s):
+    s = (s or "").strip()
+    if not s:
+        return None
+    if s.endswith("t"):
+        return float(s[:-1].strip().replace(",", ".")) * 1000
+    return float(s.replace("kg", "").replace(" ", "").replace(",", "."))
 
 
 class Pack:
-    def __init__(self, target):
-        self.t = target
-        p = lambda k: os.path.join(target, FILES[k])
-        wb = load_workbook(p("register"), read_only=True)
-        regs = list(wb["Districts"].iter_rows(values_only=True))[1:]
-        self.reg = {r[0]: {"name": r[1], "lat": r[3], "lon": r[4], "run": r[5]} for r in regs}
-        crow = list(wb["Code changes"].iter_rows(values_only=True))[1:]
-        self.newcode = {r[2]: r[0] for r in crow}          # CBN -> CBR
-        wb = load_workbook(p("plan"), read_only=True)
-        rows = list(wb["Parcels by district"].iter_rows(values_only=True))[1:]
-        self.plan = defaultdict(lambda: [0] * 12)
-        for r in rows:
-            code = self.newcode.get(r[0], r[0])
-            for k in range(12):
-                self.plan[code][k] += r[2 + k]
-        wb = load_workbook(p("rates"), read_only=True)
-        rr = list(wb["Van-hour rate 2027"].iter_rows(values_only=True))
-        self.rate = [r[1] for r in rr if r[0] and str(r[0]).startswith("All-in")][0]
-        self.days27 = [0] * 12
-        with open(p("calendar"), encoding="utf-8") as fh:
-            for r in csv.DictReader(fh):
-                if r["delivery_day"] == "Y":
-                    self.days27[int(r["date"][5:7]) - 1] += 1
-        # run-day log
-        self.runlog = {}
-        with open(p("rundays"), encoding="utf-8") as fh:
-            for r in csv.DictReader(fh):
-                self.runlog[(r["run_date"], r["run_code"])] = (hm(r["depot_out"]), hm(r["depot_in"]))
-        # stop log, the handheld's re-synced copies dropped (same stop, same times; only the sync time differs)
-        seen = set()
-        byrd = defaultdict(list)
-        with open(p("stops"), encoding="utf-8") as fh:
-            for r in csv.DictReader(fh):
-                key = tuple(r[k] for k in ("run_date", "run_code", "stop_seq", "stop_type", "customer_ref", "arrived_local"))
-                if key in seen:
-                    continue
-                seen.add(key)
-                byrd[(r["run_date"], r["run_code"])].append(r)
-        self.rundays = {}
-        for k, lst in byrd.items():
-            lst.sort(key=lambda r: int(r["stop_seq"]))
-            for r in lst:
-                r["district_code"] = self.newcode.get(r["district_code"], r["district_code"])
-            self.rundays[k] = lst
-        self.runs = sorted({k[1] for k in self.rundays})
-        self.chain = {}
-        for run in self.runs:
-            ds = sorted({self.newcode.get(c, c) for c, v in self.reg.items() if v["run"] == run})
-            # road order outward from the depot: the order the runs visit them in
-            pos = defaultdict(list)
-            for (d, r), lst in self.rundays.items():
-                if r != run:
-                    continue
-                order = []
-                for x in lst:
-                    c = x["district_code"]
-                    if c and (not order or order[-1] != c):
-                        order.append(c)
-                for i, c in enumerate(order):
-                    pos[c].append(i / max(1, len(order) - 1) if len(order) > 1 else 0)
-            first = defaultdict(lambda: 0.0)
-            for (d, r), lst in self.rundays.items():
-                if r == run:
-                    seq = []
-                    for x in lst:
-                        c = x["district_code"]
-                        if c and c not in seq:
-                            seq.append(c)
-                    for i, c in enumerate(seq):
-                        first[c] += i
-            n = defaultdict(int)
-            for (d, r), lst in self.rundays.items():
-                if r == run:
-                    for c in {x["district_code"] for x in lst if x["district_code"]}:
-                        n[c] += 1
-            self.chain[run] = sorted(ds, key=lambda c: (self._rank(run, c)))
-
-    def _rank(self, run, c):
-        # a district's place in the road order: in how many run-days some other district came after it
-        after = before = 0
-        for (d, r), lst in self.rundays.items():
-            if r != run:
-                continue
-            seq = []
-            for x in lst:
-                cc = x["district_code"]
-                if cc and cc not in seq:
-                    seq.append(cc)
-            if c in seq:
-                i = seq.index(c)
-                before += i
-                after += len(seq) - 1 - i
-        return before - after
+    pass
 
 
-def legs(pk, years=(2025, 2026), months=None):
-    """every observed drive: (run, from, to, hours) with from/to a district or 'DEPOT', and every door time and
-    within-district drive per district"""
-    out = []
-    door = defaultdict(list)
-    local = defaultdict(list)
-    stops_n = defaultdict(int)
-    parcels_n = defaultdict(int)
-    for (d, run), lst in pk.rundays.items():
-        if int(d[:4]) not in years:
+def load(target):
+    pk = Pack()
+    F = {k: os.path.join(target, v) for k, v in FILES.items()}
+    # route register
+    wb = load_workbook(F["routes"], read_only=True)
+    pk.routes = {}
+    for r in list(wb["Duties"].iter_rows(values_only=True))[1:]:
+        pk.routes[r[0]] = {"old": r[1], "depot": r[2], "shipper": r[3], "delivery": r[5], "legs": (r[6], r[7], r[8]),
+                          "climb": r[10]}
+    wb = load_workbook(F["plan"], read_only=True)
+    pk.short = [r[0] for r in list(wb["Shortlist 2027"].iter_rows(values_only=True))[1:]]
+    # weighbridge: the last weighing of each departure (a re-weigh after a reload replaces the first)
+    last = {}
+    for r in rd(F["weighbridge"]):
+        k = r["cmr_no"]
+        if k not in last or r["weighed_at"] >= last[k]["weighed_at"]:
+            last[k] = r
+    pk.wb = []
+    for r in last.values():
+        duty = r["duty"]
+        if duty.startswith("VMO-"):
+            duty = "V" + duty[4:]
+        pk.wb.append({"date": dt.date.fromisoformat(r["weighed_at"][:10]), "duty": duty, "shipper": r["shipper"],
+                      "declared": kg(r["declared_kg"]), "net": (float(r["gross_kg"]) - float(r["tare_kg"]))})
+    pk.wb_raw_rows = sum(1 for _ in open(F["weighbridge"], encoding="utf-8")) - 1
+    # station temperatures
+    pk.station = {}
+    for r in rd(F["temps"]):
+        pk.station[(r["date"], r["station"])] = float(r["temperature (C)"])
+    # TMS consignments keyed by vehicle and day
+    tms = {}
+    for r in rd(F["tms"]):
+        tms[(r["vehicle_reg"], r["collection_date"])] = r
+    # battery-electric daily summaries: a day uploaded twice is one day
+    seen = {}
+    for r in rd(F["bev"]):
+        k = (r["registration"], r["operating_date"])
+        if k not in seen or r["uploaded_utc"] < seen[k]["uploaded_utc"]:
+            seen[k] = r
+    days = []
+    for k, r in sorted(seen.items(), key=lambda kv: (kv[0][1], kv[0][0])):
+        c = tms.get(k)
+        if c is None:
             continue
-        if months and int(d[5:7]) not in months:
-            continue
-        t_out, t_in = pk.runlog[(d, run)]
-        prev_c, prev_t = "DEPOT", t_out
-        for x in lst:
-            if x["stop_type"] == "BREAK":
-                prev_t = h(x["departed_local"]) if prev_t is not None else None
-                continue
-            c = x["district_code"]
-            a = h(x["arrived_local"])
-            if prev_t is not None:
-                if c == prev_c:
-                    local[c].append(a - prev_t)
-                else:
-                    out.append((run, prev_c, c, a - prev_t))
-            if x["departed_local"]:
-                dp = h(x["departed_local"])
-                door[c].append(dp - a)
-                prev_t = dp
-            else:
-                prev_t = None
-            prev_c = c
-            stops_n[c] += 1
-            parcels_n[c] += int(x["parcels_delivered"])
-        if prev_t is not None:
-            out.append((run, prev_c, "DEPOT", t_in - prev_t))
-    return out, door, local, stops_n, parcels_n
+        t = r["ambient_mean_c"]
+        days.append({"date": dt.date.fromisoformat(r["operating_date"]), "reg": r["registration"],
+                     "duty": c["duty"], "shipper": c["shipper"], "declared": kg(c["declared_weight"]),
+                     "km": float(r["distance_km"]), "kwh": float(r["energy_used_kwh"]),
+                     "t": float(t) if t else None, "station_t": pk.station[(r["operating_date"], "Jönköping")]})
+    # an ambient sensor dropout takes the station's day, moved by the mean truck-against-station offset
+    off = np.mean([d["t"] - d["station_t"] for d in days if d["t"] is not None])
+    for d in days:
+        d["t_filled"] = d["t"] if d["t"] is not None else d["station_t"] + off
+    pk.days = days
+    pk.offset = float(off)
+    return pk
 
 
-def fit(pk, years=(2025, 2026), stat=None):
-    """road sections e_k (from the district before) and access a_k per district, least squares on the mean drive of
-    each from-to pair, weighted by its count"""
-    L, door, local, sn, pn = legs(pk, years)
-    # the driver's break, taken once on every run-day whatever the run serves (depot out to depot in counts it)
-    bt = [h(x["departed_local"]) - h(x["arrived_local"]) for (d, r), lst in pk.rundays.items() if int(d[:4]) in years
-          for x in lst if x["stop_type"] == "BREAK"]
-    brk = float(np.mean(bt))
-    model = {}
-    for run in pk.runs:
-        ch = pk.chain[run]
-        n = len(ch)
-        idx = {c: i for i, c in enumerate(ch)}
-        pairs = defaultdict(list)
-        for r, a, b, t in L:
-            if r == run:
-                pairs[(a, b)].append(t)
-        A, y, wts = [], [], []
-        for (a, b), ts in pairs.items():
-            row = np.zeros(2 * n)
-            if a == "DEPOT":
-                j = idx[b]
-                row[:j + 1] = 1
-                row[n + j] = 0.5
-            elif b == "DEPOT":
-                j = idx[a]
-                row[:j + 1] = 1
-                row[n + j] = 0.5
-            else:
-                i, j = idx[a], idx[b]
-                if j < i:
-                    continue
-                row[i + 1:j + 1] = 1
-                row[n + i] += 0.5
-                row[n + j] += 0.5
-            A.append(row)
-            y.append(float((stat or np.mean)(ts)))
-            wts.append(math.sqrt(len(ts)))
-        A, y, wts = np.array(A), np.array(y), np.array(wts)
-        sol = np.linalg.lstsq(A * wts[:, None], y * wts, rcond=None)[0]
-        e, acc = sol[:n], sol[n:]
-        model[run] = {"chain": ch, "e": dict(zip(ch, e)), "a": dict(zip(ch, acc)), "break": brk}
-    per = {}
-    for c in sn:
-        per[c] = {"door": float(np.mean(door[c])), "local": float(np.mean(local[c])) if local[c] else 0.0,
-                  "stops_per_parcel": sn[c] / max(1, pn[c])}
-    return model, per
+# ---------------------------------------------------------------- the payload each pilot day carried
 
-
-def mu27(pk, per, c):
-    """2027 mean stops a delivery day, month by month"""
-    return [pk.plan[c][k] * per[c]["stops_per_parcel"] / pk.days27[k] for k in range(12)]
-
-
-def run_hours(model, per, run, mus, removed=(), months=12):
-    """expected van-hours on the run over the year, months of mean stops mus[c][k] and delivery days days[k]"""
-    m = model[run]
-    ch = m["chain"]
-    tot = 0.0
-    for k in range(months):
-        lam = {c: (0.0 if c in removed else mus[c][k]) for c in ch}
-        day = 0.0
-        for i, c in enumerate(ch):
-            beyond = sum(lam[x] for x in ch[i:])
-            day += 2 * m["e"][c] * (1 - math.exp(-beyond))
-            pv = 1 - math.exp(-lam[c])
-            day += m["a"][c] * pv + lam[c] * per[c]["door"] + (lam[c] - pv) * per[c]["local"]
-        day += m.get("break", 0.0)
-        tot += day * mus["__days__"][k]
-    return tot
-
-
-def golden(pk, years=(2025, 2026), stat=None, annual=False):
-    model, per = fit(pk, years, stat)
-    mus = {c: mu27(pk, per, c) for c in per}
-    if annual:
-        mus = {c: [sum(pk.plan[c]) * per[c]["stops_per_parcel"] / sum(pk.days27)] * 12 for c in per}
-    mus["__days__"] = pk.days27
-    offer = offered(pk)
-    res = {"runs": {}, "set": [], "saving": 0.0}
-    for run in pk.runs:
-        cand = [c for c in model[run]["chain"] if c in offer]
-        base = run_hours(model, per, run, mus)
-        best = ((), 0.0, 0.0, 0.0)
-        table = {}
-        for k in range(len(cand) + 1):
-            for S in itertools.combinations(cand, k):
-                hrs = base - run_hours(model, per, run, mus, S)
-                charge = sum(sum(pk.plan[c]) for c in S) * PRICE
-                v = hrs * pk.rate - charge
-                table[S] = (hrs, charge, v)
-                if v > best[1] + 1e-9:
-                    best = (S, v, hrs, charge)
-        res["runs"][run] = {"base_h": base, "set": best[0], "hours": best[2], "charge": best[3], "net": best[1],
-                            "after_h": base - best[2], "table": table, "cand": cand}
-        res["set"] += list(best[0])
-        res["saving"] += best[1]
-    res["model"], res["per"], res["mus"] = model, per, mus
-    return res
-
-
-def offered(pk):
-    """the districts named in Owenduff's offer (read from the letter's district table; asserted in checks)"""
-    return ["MUL", "ACH", "BAN", "BLM", "LOU", "LEE", "LET", "CLI", "BCA", "CON", "CHA"]
-
-
-# ---------------------------------------------------------------- the rungs a competent solver stops at
-
-def base_year(pk):
-    """the last twelve months on file, November 2025 to October 2026"""
-    return lambda d: d >= "2025-11-01"
-
-
-def time_in_district(pk, inclusive_exit=False):
-    """the field's cost-to-serve build: each district's drive in from the stop before, the drives between its stops
-    and its door time, summed over the base year, carried to 2027 by the plan's parcels"""
-    keep = base_year(pk)
-    tid = defaultdict(float)
-    parcels = defaultdict(int)
-    for (d, run), lst in pk.rundays.items():
-        if not keep(d):
-            continue
-        t_out, t_in = pk.runlog[(d, run)]
-        prev_c, prev_t = "DEPOT", t_out
-        for x in lst:
-            if x["stop_type"] == "BREAK":
-                prev_t = h(x["departed_local"])
-                continue
-            c = x["district_code"]
-            a = h(x["arrived_local"])
-            dp = h(x["departed_local"]) if x["departed_local"] else a + 4 / 60
-            if prev_t is not None:
-                tid[c] += dp - prev_t
-            prev_t, prev_c = dp, c
-            parcels[c] += int(x["parcels_delivered"])
-        if inclusive_exit:
-            tid[prev_c] += t_in - prev_t
+def calibration(pk, mode="shipper", window=None):
+    """E[weighed net payload | declared, shipper] from the Varnamo weighbridge.
+    mode shipper: a line per shipper (a constant declaration takes the shipper's mean weighed load);
+    mode pooled: one line over every departure; mode mean: every load at its shipper's mean weighed load."""
+    rows = [r for r in pk.wb if r["declared"] is not None and (window is None or window[0] <= r["date"] <= window[1])]
+    by = defaultdict(list)
+    for r in rows:
+        by[r["shipper"]].append((r["declared"], r["net"]))
     out = {}
-    for c in tid:
-        if c in pk.plan and parcels[c]:
-            hrs = tid[c] * sum(pk.plan[c]) / parcels[c]
-            out[c] = (hrs, hrs * pk.rate, sum(pk.plan[c]) * PRICE)
+    if mode == "pooled":
+        D = np.array([r["declared"] for r in rows])
+        W = np.array([r["net"] for r in rows])
+        lam = np.cov(D, W)[0, 1] / np.var(D, ddof=1)
+        for s in by:
+            out[s] = (W.mean() - lam * D.mean(), lam)
+        return out
+    for s, v in by.items():
+        D, W = map(np.array, zip(*v))
+        if mode == "mean" or np.var(D) < 1e-6:
+            out[s] = (W.mean(), 0.0)
+        else:
+            lam = np.cov(D, W)[0, 1] / np.var(D, ddof=1)
+            out[s] = (W.mean() - lam * D.mean(), lam)
     return out
 
 
-def removal_one(pk, res):
-    """each district priced on its own, every other district kept"""
+def payloads(pk, how):
+    """the payload (t) each pilot day carried, by the rung's basis"""
+    if how == "declared":
+        return np.array([d["declared"] / 1000 for d in pk.days])
+    cal = calibration(pk, how)
+    return np.array([(cal[d["shipper"]][0] + cal[d["shipper"]][1] * d["declared"]) / 1000 for d in pk.days])
+
+
+# ---------------------------------------------------------------- the energy model
+
+def design(pk, pay, form=("hinge2", 16, 0), temp="truck"):
+    tot = np.array([d["km"] for d in pk.days])
+    lk = np.array([pk.routes[d["duty"]]["legs"][1] for d in pk.days], float)
+    cl = np.array([pk.routes[d["duty"]]["climb"] for d in pk.days], float)
+    T = np.array([d["t_filled"] if temp == "truck" else d["station_t"] for d in pk.days])
+    cols = [tot, tot * cl] + [tot * c for c in cold_terms(T, form)] + [pay * lk]
+    return np.column_stack(cols)
+
+
+def cold_terms(T, form):
+    T = np.asarray(T, float)
+    if form[0] == "hinge1":
+        return [np.maximum(0, form[1] - T)]
+    if form[0] == "linear":
+        return [form[1] - T]
+    if form[0] == "hinge2":
+        return [np.maximum(0, form[1] - T), np.maximum(0, form[2] - T)]
+    if form[0] == "quad":
+        u = np.maximum(0, form[1] - T)
+        return [u, u * u]
+    if form[0] == "bins":
+        edges = form[1]
+        return [np.clip(edges[i] - T, 0, edges[i] - edges[i + 1] if i + 1 < len(edges) else 99)
+                for i in range(len(edges))]
+    raise ValueError(form)
+
+
+def fit(pk, pay, form=("hinge2", 16, 0), mask=None, temp="truck"):
+    X = design(pk, pay, form, temp)
+    y = np.array([d["kwh"] for d in pk.days])
+    m = np.ones(len(y), bool) if mask is None else mask
+    c, *_ = np.linalg.lstsq(X[m], y[m], rcond=None)
+    resid = y[m] - X[m] @ c
+    return {"coef": c, "form": form, "rmse_pct": float(np.sqrt(np.mean((resid / y[m]) ** 2)) * 100)}
+
+
+def predict(model, legs, climb, load_t, t=DESIGN_T):
+    c, form = model["coef"], model["form"]
+    a, b, cc = legs
+    tot = a + b + cc
+    terms = [tot, tot * climb] + [tot * float(np.ravel(x)[0]) for x in cold_terms([t], form)] + [load_t * b]
+    return float(np.dot(c, terms))
+
+
+def planning_load(pk, duty, basis="net"):
+    v = [r[basis] for r in pk.wb if r["duty"] == duty and LAST12[0] <= r["date"] <= LAST12[1] and r[basis] is not None]
+    return float(np.mean(v)) / 1000
+
+
+def assess(pk, model, basis="net", t=DESIGN_T):
     out = {}
-    for run, rr in res["runs"].items():
-        for c in rr["cand"]:
-            out[c] = rr["table"][(c,)]
+    for c in pk.short:
+        r = pk.routes[c]
+        e = predict(model, r["legs"], r["climb"], planning_load(pk, c, basis), t)
+        out[c] = {"kwh": e, "go": e <= SHARE * USABLE}
     return out
 
 
-def proportional_carry(pk, res):
-    """the golden set's van-hours measured on the base year's stops and scaled to 2027 by parcels"""
-    model, per = res["model"], res["per"]
-    keep = base_year(pk)
-    # base-year mean stops by month from the stop log
-    cnt = defaultdict(lambda: [0] * 12)
-    days = [0] * 12
-    seen = set()
-    for (d, run), lst in pk.rundays.items():
-        if not keep(d):
-            continue
-        if d not in seen:
-            seen.add(d)
-            days[int(d[5:7]) - 1] += 1
-        for x in lst:
-            if x["stop_type"] != "BREAK":
-                cnt[x["district_code"]][int(d[5:7]) - 1] += 1
-    mus = {c: [cnt[c][k] / days[k] for k in range(12)] for c in cnt}
-    mus["__days__"] = days
-    tot = 0.0
-    for run, rr in res["runs"].items():
-        S = rr["set"]
-        if not S:
-            continue
-        hrs = run_hours(model, per, run, mus) - run_hours(model, per, run, mus, S)
-        p_base = sum(int(x["parcels_delivered"]) for (d, r), lst in pk.rundays.items() if keep(d) and r == run
-                     for x in lst if x["district_code"] in S)
-        scale = sum(sum(pk.plan[c]) for c in S) / p_base
-        tot += hrs * scale * pk.rate - sum(sum(pk.plan[c]) for c in S) * PRICE
-    return tot
+def chosen(a):
+    return sorted(c for c, v in a.items() if v["go"])
 
 
-def allocation_by_stops(pk):
-    keep = base_year(pk)
-    al = defaultdict(float)
-    parcels = defaultdict(int)
-    for (d, run), lst in pk.rundays.items():
-        if not keep(d):
-            continue
-        t_out, t_in = pk.runlog[(d, run)]
-        st = [x for x in lst if x["stop_type"] != "BREAK"]
-        for x in st:
-            al[x["district_code"]] += (t_in - t_out) / len(st)
-            parcels[x["district_code"]] += int(x["parcels_delivered"])
-    return {c: (al[c] * sum(pk.plan[c]) / parcels[c] * pk.rate, sum(pk.plan[c]) * PRICE)
-            for c in al if c in pk.plan and parcels[c]}
+def rung0(pk):
+    """the pilot's average consumption on January-like days (ambient -8 to -2 C), times each duty's route km"""
+    v = [d["kwh"] / d["km"] for d in pk.days if -8 <= d["t_filled"] <= -2]
+    rate = float(np.mean(v))
+    out = {}
+    for c in pk.short:
+        e = rate * sum(pk.routes[c]["legs"])
+        out[c] = {"kwh": e, "go": e <= SHARE * USABLE}
+    return out, rate
+
+
+def models(pk):
+    """the golden model and every rung's"""
+    return {
+        "naive": fit(pk, payloads(pk, "declared")),
+        "pooled": fit(pk, payloads(pk, "pooled")),
+        "golden": fit(pk, payloads(pk, "shipper")),
+        "golden_1h": fit(pk, payloads(pk, "shipper"), ("hinge1", 16)),
+        "naive_1h": fit(pk, payloads(pk, "declared"), ("hinge1", 16)),
+    }
+
+
+def golden(pk):
+    M = models(pk)
+    a = assess(pk, M["golden"])
+    return {"model": M["golden"], "assess": a, "set": chosen(a), "count": len(chosen(a)), "models": M}
+
+
+def slope_per_100(model):
+    return float(model["coef"][-1] * 100)
+
+
+def fit_fe(pk, pay, form=("hinge2", 16, 0)):
+    """within-duty fit (a level per duty for each km), the duty levels then explained by climb"""
+    duties = sorted({d["duty"] for d in pk.days})
+    tot = np.array([d["km"] for d in pk.days])
+    lk = np.array([pk.routes[d["duty"]]["legs"][1] for d in pk.days], float)
+    T = np.array([d["t_filled"] for d in pk.days])
+    du = np.array([d["duty"] for d in pk.days])
+    X = np.column_stack([tot * (du == k) for k in duties] + [tot * c for c in cold_terms(T, form)] + [pay * lk])
+    y = np.array([d["kwh"] for d in pk.days])
+    c, *_ = np.linalg.lstsq(X, y, rcond=None)
+    lev = c[:len(duties)]
+    cl = np.array([pk.routes[k]["climb"] for k in duties], float)
+    a, b = np.polyfit(cl, lev, 1)[::-1]
+    return {"coef": np.concatenate([[a, b], c[len(duties):]]), "form": form, "rmse_pct": None}
+
+
+def fit_exact_slope(pk, form=("hinge2", 16, 0)):
+    """the payload slope from the one pilot shipper whose declarations the weighbridge shows exact, the rest of the
+    model refitted with that slope held"""
+    cal = calibration(pk)
+    exact = {s for s, v in cal.items() if abs(v[1] - 1) < 0.02 and abs(v[0]) < 100}
+    dec = np.array([d["declared"] / 1000 for d in pk.days])
+    m = np.array([d["shipper"] in exact for d in pk.days])
+    tot = np.array([d["km"] for d in pk.days])
+    lk = np.array([pk.routes[d["duty"]]["legs"][1] for d in pk.days], float)
+    T = np.array([d["t_filled"] for d in pk.days])
+    y = np.array([d["kwh"] for d in pk.days])
+    Xe = np.column_stack([tot, *[tot * c for c in cold_terms(T, form)], dec * lk])[m]
+    b = np.linalg.lstsq(Xe, y[m], rcond=None)[0][-1]
+    pay = payloads(pk, "shipper")
+    X = design(pk, pay, form)[:, :-1]
+    c = np.linalg.lstsq(X, y - b * pay * lk, rcond=None)[0]
+    return {"coef": np.concatenate([c, [b]]), "form": form, "rmse_pct": None}
+
+
+def rivals(pk):
+    """every route that takes the deep step, each a model; the golden's call must hold under all of them"""
+    gp = payloads(pk, "shipper")
+    y25 = np.array([d["date"].year == 2025 for d in pk.days])
+    R = {
+        "golden": fit(pk, gp),
+        "station temperature": fit(pk, gp, temp="station"),
+        "2025 only": fit(pk, gp, mask=y25),
+        "2026 only": fit(pk, gp, mask=~y25),
+        "hinges 14 and 0": fit(pk, gp, ("hinge2", 14, 0)),
+        "hinges 18 and 0": fit(pk, gp, ("hinge2", 18, 0)),
+        "hinges 16 and -2": fit(pk, gp, ("hinge2", 16, -2)),
+        "hinges 16 and 2": fit(pk, gp, ("hinge2", 16, 2)),
+        "quadratic below 16": fit(pk, gp, ("quad", 16)),
+        "bins at 16, 8, 0, -8": fit(pk, gp, ("bins", [16, 8, 0, -8])),
+        "calibrated on the last 12 months": fit(pk, np.array([(c[0] + c[1] * d["declared"]) / 1000 for d in pk.days
+                                                               for c in [calibration(pk, "shipper", LAST12)[d["shipper"]]]])),
+        "each load at its shipper's mean": fit(pk, payloads(pk, "mean")),
+        "within-duty fit": fit_fe(pk, gp),
+        "slope from the exact shipper": fit_exact_slope(pk),
+    }
+    return R

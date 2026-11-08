@@ -45,19 +45,20 @@ def metadata(target, n):
                       "source": "Constructed (seeded generator, task4/generator)", "pull_date": "2026-11-06",
                       "license": "CC0-1.0 (original work)"})
     return {
-        "task": "task4", "architecture": 4,
-        "title": "Which outlying delivery districts an online farm, pet and garden retailer in Mayo should hand to a "
-                 "regional courier from January 2027, and the 2027 saving",
-        "domain": "Supply Chain & Logistics (house domain) in Urban & Regional Science",
-        "subdomain": "transportation-network; task type forecasting (demand, load and capacity prediction)",
+        "task": "task4", "architecture": 5,
+        "title": "How many battery-electric tractors a Småland road haulier should order for its Värnamo duties for "
+                 "2027, and which duties they take, under its fleet electrification standard",
+        "domain": "Supply Chain & Logistics (house domain) in General Statistics & Data Science",
+        "subdomain": "regression, classification & model diagnostics (fleet electrification: which regular duties "
+                     "battery-electric tractors can run on one charge)",
         "objective": "Forecasting & Predictive Modeling",
-        "as_of": "2026-11-06", "deliverables": [GD.XLSX, GD.PNG],
+        "as_of": "2026-11-06", "deliverables": [GD.XLSX, GD.PDF],
         "distractor_files": [B.FILES[k] for k in B.DISTRACTORS],
         "files": files,
-        "provenance": "Every file is constructed by the seeded generator in task4/generator from a territory model of "
-                      "real Mayo and west Galway places (approximate town centroids, public knowledge); the "
-                      "organisations, people, addresses and figures are invented. Place names are real; no real "
-                      "organisation's records or domain is used.",
+        "provenance": "Every file is constructed by the seeded generator in task4/generator; Swedish town names are "
+                      "real places used for realism (distances approximate), the organisations, people, vehicle "
+                      "registrations, consignments, weighings, temperatures and figures are invented. No real "
+                      "organisation's records, weather service data or domain is used.",
     }
 
 
@@ -65,13 +66,13 @@ def one(target, gold):
     if os.path.exists(target):
         shutil.rmtree(target)
     w, n = B.run(target)
-    pk, res, fig = GD.write(target, gold)
+    pk, g = GD.write(target, gold)
     for f in os.listdir(gold):
         p = os.path.join(gold, f)
         if f.endswith(".xlsx"):
-            postprocess.scrub(p, "Brackloon Direct Ltd", "2026-11-06")
-            postprocess.finish_office(p, "2026-11-04T09:10:00Z", "2026-11-06T16:42:00Z", "Brackloon Direct Ltd")
-    return pk, res, fig, n
+            postprocess.scrub(p, "Fryele Åkeri AB", "2026-11-06")
+            postprocess.finish_office(p, "2026-11-04T09:10:00Z", "2026-11-06T15:42:00Z", "Fryele Åkeri AB")
+    return pk, g, n
 
 
 def zipdir(folder, out):
@@ -85,12 +86,12 @@ def zipdir(folder, out):
 
 def main():
     once = "--once" in sys.argv
-    pk, res, fig, n = one(TARGET, GOLDEN)
-    figs = WU.figures(pk, res, fig)
-    json.dump(figs, open(os.path.join(HERE, "figures.json"), "w"), indent=1, sort_keys=True)
-    WU.write(os.path.join(TASK, "submission.md"), pk, res, fig)
+    pk, g, n = one(TARGET, GOLDEN)
+    figs = WU.figures(pk, g)
+    json.dump(figs, open(os.path.join(HERE, "figures.json"), "w"), indent=1, sort_keys=True, ensure_ascii=False)
+    WU.write(os.path.join(TASK, "submission.md"), pk, g, figs)
     json.dump(metadata(TARGET, n), open(os.path.join(TASK, "metadata.json"), "w"), indent=1)
-    for script in ("checks.py", "verify.py"):
+    for script in ("checks.py", "verify.py", "ceiling.py"):
         r = subprocess.run([sys.executable, os.path.join(HERE, script), TARGET], capture_output=True, text=True)
         sys.stdout.write(r.stdout[-3000:])
         if r.returncode:

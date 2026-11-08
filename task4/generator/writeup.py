@@ -1,180 +1,183 @@
-"""figures.json and submission.md, both from the figures analysis.py computed on the pack (never typed)."""
-import math
+"""figures.json and submission.md, every figure computed here from the shipped pack (analysis.py), never typed."""
+import datetime as dt
+
+import numpy as np
 
 import analysis as A
-import golden as GD
 
-
-def r100(x):
-    return int(100 * math.floor(x / 100.0 + 0.5))
+PILOT_SHIPPERS = ["TEN", "HWP", "GDR", "LBY"]
 
 
 def r10(x):
-    return int(10 * math.floor(x / 10.0 + 0.5))
+    return int(round(x / 10.0) * 10)
 
 
-def fmt(n):
-    return "{:,}".format(int(n))
+def back_test(pk):
+    """fit on everything but January and February 2026, test on those days"""
+    test = np.array([dt.date(2026, 1, 1) <= d["date"] <= dt.date(2026, 2, 28) for d in pk.days])
+    y = np.array([d["kwh"] for d in pk.days])
+    cold = test & (np.array([d["t_filled"] for d in pk.days]) < 0)
+    out = {}
+    for name, how, form in [("declared", "declared", ("hinge2", 16, 0)), ("golden", "shipper", ("hinge2", 16, 0)),
+                            ("golden_1h", "shipper", ("hinge1", 16))]:
+        p = A.payloads(pk, how)
+        m = A.fit(pk, p, form, mask=~test)
+        e = (y - A.design(pk, p, form) @ m["coef"]) / y * 100
+        out[name] = {"rmse": float(np.sqrt(np.mean(e[test] ** 2))), "bias_below0": float(np.mean(e[cold]))}
+    out["n_test"] = int(test.sum())
+    return out
 
 
-def rungs(pk, res):
-    offer = A.offered(pk)
-    tid = A.time_in_district(pk)
-    d_set = [c for c in offer if tid[c][1] > tid[c][2]]
-    d_net = sum(tid[c][1] - tid[c][2] for c in d_set)
-    r1 = A.removal_one(pk, res)
-    o_set = [c for c in offer if r1[c][2] > 0]
-    o_net = sum(r1[c][2] for c in o_set)
-    prop = A.proportional_carry(pk, res)
-    return {"default_set": d_set, "default_net": d_net, "default_net_rounded": GD.r5000(d_net),
-            "tid": tid, "one_set": o_set, "one_net": o_net, "one_net_rounded": GD.r5000(o_net),
-            "prop_net": prop, "prop_net_rounded": GD.r5000(prop)}
-
-
-def pieces(pk, res):
-    t5 = res["runs"]["R05"]["table"]
-    t4 = res["runs"]["R04"]["table"]
-    t7 = res["runs"]["R07"]["table"]
-    return {
-        "lee_let_h": r10(t5[("LEE", "LET")][0]), "lee_let_cost": r100(t5[("LEE", "LET")][0] * pk.rate),
-        "lee_let_charge": r100(t5[("LEE", "LET")][1]),
-        "lee_let_lo": int(500 * math.floor(t5[("LEE", "LET")][0] * pk.rate / 500.0)),
-        "lee_let_hi": int(500 * math.ceil(t5[("LEE", "LET")][0] * 1.15 * pk.rate / 500.0)),
-        "lee_let_even": r10(t5[("LEE", "LET")][1] / pk.rate),
-        "corridor_cost": r100(t5[("LEE", "LET", "CLI")][0] * pk.rate), "corridor_charge": r100(t5[("LEE", "LET", "CLI")][1]),
-        "ban_alone_h": r10(t7[("BAN",)][0]), "ban_alone_cost": r100(t7[("BAN",)][0] * pk.rate),
-        "ban_charge": r100(t7[("BAN",)][1]),
-        "erris_h": GD.r100(t7[("BAN", "BLM")][0]), "blm_alone_h": r10(t7[("BLM",)][0]),
-        "mul_alone_h": r10(t4[("MUL",)][0]), "mul_alone_cost": r100(t4[("MUL",)][0] * pk.rate),
-        "mul_charge": r100(t4[("MUL",)][1]), "achill_h": GD.r100(t4[("MUL", "ACH")][0]),
-        "ach_alone_h": r10(t4[("ACH",)][0]),
-        "mul_marg_cost": r100((t4[("MUL", "ACH")][0] - t4[("ACH",)][0]) * pk.rate),
-        "ban_marg_cost": r100((t7[("BAN", "BLM")][0] - t7[("BLM",)][0]) * pk.rate),
+def figures(pk, g):
+    M = g["models"]
+    a = g["assess"]
+    nv = A.assess(pk, M["naive"])
+    pl = A.assess(pk, M["pooled"])
+    h1 = A.assess(pk, M["golden_1h"])
+    r0, rate = A.rung0(pk)
+    cal = A.calibration(pk)
+    diffs = [r["declared"] - r["net"] for r in pk.wb if r["declared"] is not None]
+    bt = back_test(pk)
+    exact = A.fit_exact_slope(pk)
+    lam = {s: round(float(cal[s][1]), 2) for s in PILOT_SHIPPERS}
+    heavy = [c for c in sorted(pk.short) if not a[c]["go"] and A.planning_load(pk, c) > 25]
+    f = {
+        "call_count": g["count"], "call_set": g["set"],
+        "stay_diesel": sorted(c for c in pk.short if not a[c]["go"]),
+        "energy_kwh": {c: r10(a[c]["kwh"]) for c in sorted(a)},
+        "energy_kwh_unrounded": {c: round(a[c]["kwh"], 1) for c in sorted(a)},
+        "planning_load_t": {c: round(A.planning_load(pk, c), 1) for c in sorted(a)},
+        "limit_kwh": round(A.SHARE * A.USABLE), "usable_kwh": int(A.USABLE),
+        "slope_golden": round(A.slope_per_100(M["golden"]), 1),
+        "slope_declared": round(A.slope_per_100(M["naive"]), 1),
+        "slope_pooled": round(A.slope_per_100(M["pooled"]), 1),
+        "slope_exact_shipper": round(A.slope_per_100(exact), 1),
+        "pooled_lambda": round(float(cal_pooled(pk)), 2),
+        "pilot_lambda": lam, "lambda_min": min(lam.values()), "lambda_max": max(lam.values()),
+        "bmj_standard_kg": 13500, "ttv_lambda": round(float(cal["TTV"][1]), 2),
+        "mean_declared_minus_weighed_kg": int(round(float(np.mean(diffs)))),
+        "duty_days": len(pk.days),
+        "default_count": len(A.chosen(nv)), "default_set": A.chosen(nv),
+        "default_energy_kwh": {c: r10(nv[c]["kwh"]) for c in sorted(nv)},
+        "pooled_count": len(A.chosen(pl)),
+        "rung0_count": len(A.chosen(r0)), "rung0_rate_kwh_per_km": round(rate, 2),
+        "hinge1_energy_kwh": {c: r10(h1[c]["kwh"]) for c in sorted(h1)},
+        "heavy": heavy, "heavy_energy_kwh": r10(np.mean([a[c]["kwh"] for c in heavy])),
+        "heavy_default_kwh": r10(np.mean([nv[c]["kwh"] for c in heavy])),
+        "v14_energy_kwh": r10(a["V14"]["kwh"]), "v14_default_kwh": r10(nv["V14"]["kwh"]),
+        "holdout_rmse_declared": round(bt["declared"]["rmse"], 1), "holdout_rmse_golden": round(bt["golden"]["rmse"], 1),
+        "holdout_days": bt["n_test"],
+        "below0_bias_hinge1_pct": round(bt["golden_1h"]["bias_below0"], 1),
+        "below0_bias_golden_pct": round(bt["golden"]["bias_below0"], 1),
+        "max_go_kwh": r10(max(a[c]["kwh"] for c in g["set"])),
+        "limit_share_pct": int(round(A.SHARE * 100)), "slope_basis_km": 100, "fes2_sections": [4.1, 4.2, 4.3],
     }
+    return f
 
 
-def figures(pk, res, fig):
-    rg = rungs(pk, res)
-    pc = pieces(pk, res)
-    tid = rg["tid"]
-    return {
-        "call_set": fig["set"], "net_saving_rounded": fig["net_saving_rounded"], "net_saving_exact": round(fig["net_saving"]),
-        "price": fig["price"], "rate": fig["rate"],
-        "runs_saved_h": {r: d["saved_h_rounded"] for r, d in fig["runs"].items()},
-        "runs_before_h": {r: d["before_rounded"] for r, d in fig["runs"].items()},
-        "runs_after_h": {r: d["after_rounded"] for r, d in fig["runs"].items()},
-        "pieces": pc,
-        "default_set": rg["default_set"], "default_net_rounded": rg["default_net_rounded"],
-        "default_lee_cost": r100(tid["LEE"][1]), "default_let_cost": r100(tid["LET"][1]),
-        "default_lee_charge": r100(tid["LEE"][2]), "default_let_charge": r100(tid["LET"][2]),
-        "one_set": rg["one_set"], "one_net_rounded": rg["one_net_rounded"],
-        "prop_net_rounded": rg["prop_net_rounded"],
-        "districts_parcels": {c: d["parcels_2027"] for c, d in fig["districts"].items()},
-        "years": [2025, 2026, 2027], "standard_sections": ["4.1", "4.3", "3.2", "2.3"], "rounding": [50, 5000],
-    }
+def cal_pooled(pk):
+    c = A.calibration(pk, "pooled")
+    return next(iter(c.values()))[1]
 
 
-def write(path, pk, res, fig):
-    rg = rungs(pk, res)
-    pc = pieces(pk, res)
-    tid = rg["tid"]
-    name = lambda c: pk.reg[c]["name"]
-    gone = [name(c) for c in fig["set"]]
-    stay = [name(c) for c in A.offered(pk) if c not in fig["set"]]
-    lst = lambda xs: ", ".join(xs[:-1]) + " and " + xs[-1]
-    R = fig["runs"]
-    out = []
-    out.append("## Tags\n")
-    out.append("**Domain:** Other, Urban & Regional Science (supply chain and logistics: last-mile route economics of a "
-               "retailer's own van fleet).  ")
-    out.append("**Task type:** forecasting (demand, load and capacity prediction).  ")
-    out.append("**Analytical objective:** Forecasting & Predictive Modeling.\n")
-    out.append("## Final Recommendation\n")
-    out.append("**Hand %s to Owenduff from January 2027 and keep %s: the hand-over saves about EUR %s net in 2027.** "
-               "Pricing each district at the van time its own stops take hands Leenane and Letterfrack over too and "
-               "claims EUR %s, but the Connemara van drives through both on its way to Clifden, which stays, so they "
-               "save only their own stops; and pricing districts one at a time keeps Mulranny and Bangor Erris, which "
-               "become the end of the Achill and Erris runs once Achill and Belmullet go.\n"
-               % (lst(gone), lst(stay), fmt(fig["net_saving_rounded"]), fmt(rg["default_net_rounded"])))
-    out.append("## Supplementary Questions\n")
-    out.append("### %s\n" % GD.XLSX)
-    out.append("1. A Districts sheet with one row per district in Owenduff's offer, in the offer's order, giving the "
-               "code, the district, its run, its 2027 plan parcels, Owenduff's 2027 charge and the decision: %s go; "
-               "%s stay." % (lst(gone), lst(stay)))
-    rl = "; ".join("%s %s %s" % (r, d["name"], fmt(d["saved_h_rounded"])) for r, d in R.items())
-    out.append("2. A Runs sheet with one row per run that serves an offered district, giving the districts it hands "
-               "over, its 2027 van-hours as things stand and after the hand-over, and the van-hours saved, to the "
-               "nearest hundred: %s." % rl)
-    out.append("3. The sheet ends on the year's net saving after Owenduff's charges: EUR %s (to the nearest EUR 5,000)."
-               % fmt(fig["net_saving_rounded"]))
-    out.append("\n### %s\n" % GD.PNG)
-    bl = "; ".join("%s %s" % (r, fmt(d["before_rounded"])) for r, d in R.items())
-    out.append("4. Paired bars for each of those runs, 2027 van-hours as things stand beside 2027 after the hand-over "
-               "(the hours as things stand less the hours saved), each bar labelled with its value to the nearest 50 "
-               "(as things stand: %s), with the title stating the districts that go "
-               "and the net saving of about EUR %s.\n" % (bl, fmt(fig["net_saving_rounded"])))
-    out.append("## Critical Components\n")
-    out.append("1. On the Connemara run, Leenane and Letterfrack together take only **about %s van-hours** off 2027 "
-               "(EUR %s to %s at the van-hour rate, as the fit varies), far short of the **some %s van-hours** "
-               "Owenduff's **EUR %s** for their parcels would pay for, because the van drives through both to "
-               "reach Clifden; the whole run beyond Aghagower costs EUR %s against Owenduff's EUR %s, so the run keeps "
-               "all three." % (fmt(pc["lee_let_h"]), fmt(pc["lee_let_lo"]), fmt(pc["lee_let_hi"]), fmt(pc["lee_let_even"]),
-                               fmt(pc["lee_let_charge"]),
-                               fmt(pc["corridor_cost"]), fmt(pc["corridor_charge"])))
-    out.append("2. Bangor Erris on its own takes **%s van-hours** off the Erris run (EUR %s against Owenduff's EUR %s), "
-               "but with Belmullet gone it is the end of the run, and the two together take **%s van-hours** off it."
-               % (fmt(pc["ban_alone_h"]), fmt(pc["ban_alone_cost"]), fmt(pc["ban_charge"]), fmt(pc["erris_h"])))
-    out.append("3. Mulranny on its own takes **%s van-hours** off the Achill run (EUR %s against Owenduff's EUR %s); "
-               "with Achill gone, Mulranny and Achill together take **%s van-hours** off it."
-               % (fmt(pc["mul_alone_h"]), fmt(pc["mul_alone_cost"]), fmt(pc["mul_charge"]), fmt(pc["achill_h"])))
-    out.append("4. The 2027 van-hours are a forecast of road sections driven on the days a district beyond them has a "
-               "stop, from the plan's stops month by month; carrying the last twelve months' hours forward in "
-               "proportion to parcels overstates the year's net saving at **EUR %s**, against **EUR %s**.\n"
-               % (fmt(rg["prop_net_rounded"]), fmt(fig["net_saving_rounded"])))
-    out.append("## Step-by-Step\n")
+def write(path, pk, g, f):
+    names = {"TEN": "Tenhult Möbler", "HWP": "Huskvarna Wellpapp", "GDR": "Gränna Dryckes", "LBY": "Lekeryds Byggvaror"}
+    e = f["energy_kwh"]
+    go = ", ".join(f["call_set"])
+    stay = ", ".join(f["stay_diesel"])
+    lines = []
+    L = lines.append
+    L("## Tags")
+    L("")
+    L("**Domain:** Mathematics, Statistics and Computer Science, General Statistics & Data Science (regression, "
+      "classification & model diagnostics), house domain Supply Chain & Logistics.")
+    L("**Analytical objective:** Forecasting & Predictive Modeling.")
+    L("")
+    L("## Final Recommendation")
+    L("")
+    L("**Order %d battery-electric tractors, for Värnamo duties %s; %s stay on diesel.** Each of the six needs at "
+      "most **%d kWh** on the January design day against FES-2's **%d kWh** (85 per cent of 540 kWh usable) once each "
+      "pilot day's declared payload is taken to the weighed load it stands for, which puts a tonne at **%.1f kWh per "
+      "100 km loaded**; the model fitted on the declared weights (%.1f kWh) orders %d, sending the heavy duties %s "
+      "(%d kWh on the declared weights, %d kWh in fact) and dropping V14."
+      % (f["call_count"], go, stay, f["max_go_kwh"], f["limit_kwh"], f["slope_golden"], f["slope_declared"],
+         f["default_count"], ", ".join(f["heavy"]), f["heavy_default_kwh"], f["heavy_energy_kwh"]))
+    L("")
+    L("## Supplementary Questions")
+    L("")
+    L("### ev_duty_assessment_2027.xlsx")
+    L("")
+    L("1. One row per shortlisted duty (fourteen), with its shipper, delivery, the three legs and round-trip km, "
+      "climb, planning load (mean weighed net payload, November 2025 to October 2026), the January design-day "
+      "energy to the nearest 10 kWh, its share of the 540 kWh usable battery and whether it goes battery-electric; "
+      "beneath, the number of tractors and the duties going. Sheets for the energy model and the payload calibration "
+      "sit behind it.")
+    k = 2
+    for c in sorted(e):
+        L("%d. %s: %d kWh, %s." % (k, c, e[c], "goes battery-electric" if c in f["call_set"] else "stays diesel"))
+        k += 1
+    L("%d. Tractors to order: %d (%s)." % (k, f["call_count"], go))
+    k += 1
+    L("")
+    L("### tractor_order_memo.pdf")
+    L("")
+    L("%d. One page to the board: the order of %d tractors and the duties first, the fourteen duties' design-day "
+      "energies in a table, then how the energy was estimated (the declared payloads calibrated on the Värnamo "
+      "weighbridge, %.1f against %.1f kWh per tonne per 100 km) and what the declared-weight model would have "
+      "ordered (%d tractors)." % (k, f["call_count"], f["slope_golden"], f["slope_declared"], f["default_count"]))
+    L("")
+    L("## Critical Components")
+    L("")
+    L("1. On the Värnamo weighbridge the declarations are right on average (declared less weighed, **%d kg**) but "
+      "for the estimating pilot shippers the weighed load rises only **%.2f to %.2f** tonnes per declared tonne; the "
+      "dairy declares one standard weight (**13,500 kg**) and Tabergs Trävaror its own weighbridge figure (slope "
+      "**%.2f**)." % (f["mean_declared_minus_weighed_kg"], f["lambda_min"], f["lambda_max"], f["ttv_lambda"]))
+    L("2. A tonne of payload costs **%.1f kWh per 100 km loaded** with each pilot day's payload taken to its expected "
+      "weighed load shipper by shipper (the Tabergs days alone give %.1f), against **%.1f** fitted on the declared "
+      "weights." % (f["slope_golden"], f["slope_exact_shipper"], f["slope_declared"]))
+    L("3. The heavy duties %s need **%d kWh** on the January design day and V14 **%d kWh**, against the %d kWh "
+      "limit." % (", ".join(f["heavy"]), f["heavy_energy_kwh"], f["v14_energy_kwh"], f["limit_kwh"]))
+    L("4. **%d** tractors: %s." % (f["call_count"], go))
+    L("")
+    L("## Step-by-Step")
+    L("")
     steps = [
-        "Read Owenduff's offer (the offered districts, EUR %.2f a parcel delivered in 2027, any combination) and NPS-3 "
-        "section 4 (the saving is the cost at the 2027 all-in rate of the van-hours the hand-over takes off the "
-        "runs, less Owenduff's charges; the districts handed over are those whose hand-over lowers the year's cost "
-        "most); took EUR %.2f a van-hour from the 2027 rate card and the delivery days from the 2027 calendar."
-        % (fig["price"], fig["rate"]),
-        "Cleaned the stop log: dropped the stop rows a handheld sent again when it re-synced (same stop and times, "
-        "later sync), mapped CBN and CBS back to Castlebar town through the register's code changes, kept failed "
-        "attempts and collections as stops, and timed each drive from the previous stop's departure, the break or "
-        "depot out in the van run log.",
-        "Read each run's road order from the stop sequences: every run sweeps its districts outward and drives back "
-        "from the farthest one it served that day.",
-        "The field's cost-to-serve build, each district's drive in from the stop before, the drives between its "
-        "stops and its door time over November 2025 to October 2026 carried to 2027 by plan parcels, hands over %s "
-        "and claims EUR %s; it prices Leenane at EUR %s and Letterfrack at EUR %s against Owenduff's EUR %s and EUR "
-        "%s." % (lst([name(c) for c in rg["default_set"]]), fmt(rg["default_net_rounded"]), fmt(r100(tid["LEE"][1])),
-                 fmt(r100(tid["LET"][1])), fmt(r100(tid["LEE"][2])), fmt(r100(tid["LET"][2]))),
-        "That build charges a district with drive its run makes anyway: on the run-days when Leenane or Letterfrack had "
-        "no stop the Connemara van still drove the road through them to Clifden, so their saving is the run time "
-        "without their stops, not the time their stops take.",
-        "Fitted each run's road sections and district access times by least squares on the observed drives between "
-        "districts and to and from the depot (2025 and 2026), and each district's door time and drive between its "
-        "own stops; the fit reproduces the drives on the run-days that skipped a district.",
-        "Priced districts one at a time on that model: it hands over only %s (EUR %s), because Mulranny and Bangor "
-        "Erris save little while Achill and Belmullet stay beyond them." % (lst([name(c) for c in rg["one_set"]]),
-                                                                           fmt(rg["one_net_rounded"])),
-        "Evaluated every combination of offered districts on each run, since handing over a district at the end makes "
-        "the one before it the end: Mulranny with Achill and Bangor Erris with Belmullet take %s and %s van-hours "
-        "off their runs, more than Owenduff charges, while no combination on the Connemara, Cong or East Mayo runs "
-        "saves money." % (fmt(pc["achill_h"]), fmt(pc["erris_h"])),
-        "Forecast 2027: each district's stops a delivery day month by month from the plan's parcels at its own stops "
-        "a parcel, each road section driven with the probability that some district beyond it has a stop; the year's "
-        "net saving is EUR %s, where carrying the last twelve months' hours in proportion to parcels gives EUR %s."
-        % (fmt(fig["net_saving_rounded"]), fmt(rg["prop_net_rounded"])),
+        "Joined bev_daily_summary_2025-03_2026-10.csv (a day uploaded twice kept once) to "
+        "tms_consignments_jonkoping_2025-2026.csv on registration and date, giving %d duty-days with the declared "
+        "weight (kilograms or tonnes with a decimal comma) and the duty's legs and climb from route_register_2026.xlsx; "
+        "ambient dropouts took the Jönköping station day from daily_mean_temperature_2016-2026.csv." % f["duty_days"],
+        "Fitted each duty-day's battery energy by least squares on km, climb times km, the degrees below 16 C and "
+        "below 0 C times km, and payload times loaded km; on the declared weights the payload term is %.1f kWh per "
+        "tonne per 100 km, and the model predicts January and February 2026 held out within %.1f per cent." %
+        (f["slope_declared"], f["holdout_rmse_declared"]),
+        "Applied at −5 C and each duty's planning load from weighbridge_varnamo_2024-11_2026-10.csv, that model "
+        "orders %d tractors (%s), the reasonable but insufficient answer: the heavy duties come out at %d kWh and V14 "
+        "at %d kWh." % (f["default_count"], ", ".join(f["default_set"]), f["heavy_default_kwh"],
+                        f["v14_default_kwh"]),
+        "Read the weighbridge (the last weighing of each CMR, net as gross less tare) against the declared weights "
+        "shipper by shipper: right on average, but for %s the weighed load regresses on the declared at %.2f to %.2f, "
+        "the dairy's notes carry one standard weight and Tabergs' carry its weighbridge ticket, so a slope fitted on "
+        "the declarations is diluted wherever the declarations scatter around the load, and one pooled line over the "
+        "weighbridge (%.2f) carries the shippers' differences in load, not the clerks' error, and corrects it only to "
+        "%.1f." % (", ".join(names[s] for s in PILOT_SHIPPERS), f["lambda_min"], f["lambda_max"],
+                   f["pooled_lambda"], f["slope_pooled"]),
+        "Replaced each pilot day's declaration by its expected weighed load given the shipper and the declaration "
+        "(the shipper's weighed mean for the dairy, the declaration itself for Tabergs) and refitted: %.1f kWh per "
+        "tonne per 100 km; Tabergs' own days, whose declarations are exact, give %.1f on their own." %
+        (f["slope_golden"], f["slope_exact_shipper"]),
+        "Kept the second cold rate below 0 C: with one rate below 16 C the model fitted without January and "
+        "February 2026 under-predicts their sub-zero days by %.1f per cent, with both rates by %.1f." %
+        (f["below0_bias_hinge1_pct"], f["below0_bias_golden_pct"]),
+        "Predicted each shortlisted duty on the January design day at its planning load and kept those within %d kWh "
+        "(FES-2 4.1 to 4.3): %s, %d tractors." % (f["limit_kwh"], go, f["call_count"]),
     ]
     for i, s in enumerate(steps, 1):
-        out.append("%d. %s" % (i, s))
-    out.append("")
-    out.append("No other list survives: NPS-3 4.1 counts the van-hours a hand-over takes off the runs, so time in "
-               "district (which counts the road through Leenane and Letterfrack the Connemara van still drives) and "
-               "allocation by stops or parcels are out; NPS-3 4.3 asks for the districts whose hand-over together "
-               "lowers the year's cost most, so one-at-a-time pricing is out on the Achill and Erris runs; the fit on "
-               "2025 alone, on 2026 alone, with median drives, with annual rather than monthly stops, or a regression "
-               "of run-day hours on the districts reached all give the same list and a net saving that rounds to "
-               "EUR %s." % fmt(fig["net_saving_rounded"]))
-    open(path, "w").write("\n".join(out) + "\n")
+        L("%d. %s" % (i, s))
+    L("")
+    L("No other order survives: the model's held-out check cannot see the dilution because the held-out days carry "
+      "the same declarations, so only the weighbridge, which weighs the same shippers' loads, measures it; every "
+      "route that takes each shipper's declarations to the weighed load (a line per shipper, the shipper's mean, the "
+      "exact shipper's days, a within-duty fit, either year, any cold form with a rate below 0 C) gives the same six "
+      "duties, while the declared weights, one pooled correction and an average consumption on cold days order %d, "
+      "%d and %d." % (f["default_count"], f["pooled_count"], f["rung0_count"]))
+    open(path, "w", encoding="utf-8").write("\n".join(lines) + "\n")

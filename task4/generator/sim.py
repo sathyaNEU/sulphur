@@ -1,8 +1,6 @@
-"""The clean truth: every delivery day of 2025 and 2026 to 30 October, every run, every stop, drawn from the
-territory geometry in params.py. Each run sweeps its districts outward in road order and drives back to the depot
-from the farthest district it served that day; a district with no stops that day is driven through, not entered."""
+"""The clean truth: daily temperatures, the Jonkoping pilot's duty-days and trips, the Varnamo fleet's departures with
+their true and declared payloads. pack.py writes the files from it, mess and all."""
 import datetime as dt
-import hashlib
 import math
 
 import numpy as np
@@ -10,135 +8,126 @@ import numpy as np
 import params as P
 
 
-def hav(a, b):
-    la1, lo1, la2, lo2 = map(math.radians, (a[0], a[1], b[0], b[1]))
-    h = math.sin((la2 - la1) / 2) ** 2 + math.cos(la1) * math.cos(la2) * math.sin((lo2 - lo1) / 2) ** 2
-    return 6371.0 * 2 * math.asin(math.sqrt(h))
+def kwh_per_km(climb, t):
+    return P.E0 + P.CLIMB * climb + P.COLD1 * max(0.0, 16 - t) + P.COLD2 * max(0.0, -t)
 
 
-def coord(code):
-    return (P.DEPOT[1], P.DEPOT[2]) if code is None else (P.D[code][1], P.D[code][2])
+def leg_kwh(km, climb, t, payload):
+    return km * kwh_per_km(climb, t) + P.LOAD * payload * km
 
 
-def edge_h(code):
-    """the drive from the district before it on the road (or the depot) to this district, hours"""
-    v = P.D[code]
-    km = max(hav(coord(v[3]), coord(code)), 0.8)
-    return km * v[4] / v[5]
+def design_kwh(legs, climb, payload, t=None):
+    t = P.DESIGN_T if t is None else t
+    a, b, c = legs
+    return (a + b + c) * kwh_per_km(climb, t) + P.LOAD * payload * b
 
 
-def edge_km(code):
-    v = P.D[code]
-    return max(hav(coord(v[3]), coord(code)), 0.8) * v[4]
+def declare(rng, code, true_t):
+    prac = P.SHIPPERS[code][2]
+    if prac == "exact":
+        return int(round(true_t * 1000 / 10)) * 10
+    if prac == "std":
+        return P.STD_LOAD[code]
+    v = true_t * (1 + rng.normal(0, P.EST_SD))
+    return int(round(v * 1000 / 50)) * 50
 
 
-def chain(run):
-    """the run's districts from the depot outward"""
-    first = [c for c, v in P.D.items() if v[6] == run and v[3] is None]
-    out = [first[0]]
-    while True:
-        nxt = [c for c, v in P.D.items() if v[3] == out[-1]]
-        if not nxt:
-            return out
-        out.append(nxt[0])
+def temperatures(rng):
+    """daily mean temperature at the two stations, 2016-01-01 to 2026-10-31"""
+    d0, d1 = dt.date(2016, 1, 1), dt.date(2026, 10, 31)
+    out = {}
+    a_j = a_v = 0.0
+    d = d0
+    while d <= d1:
+        doy = d.timetuple().tm_yday
+        clim = 6.6 - 9.4 * math.cos(2 * math.pi * (doy - 22) / 365.25)
+        sd = 3.9 - 1.4 * math.cos(2 * math.pi * (doy - 22) / 365.25 + math.pi)
+        a_j = 0.78 * a_j + rng.normal(0, sd * math.sqrt(1 - 0.78 ** 2))
+        a_v = 0.6 * a_v + 0.4 * a_j + rng.normal(0, 0.6)
+        out[d] = (round(clim + a_j, 1), round(clim - 0.4 + a_v, 1))
+        d += dt.timedelta(days=1)
+    return out
 
 
-RUN_CHAIN = {r: chain(r) for r in P.RUNS}
-RUN_OF = {c: v[6] for c, v in P.D.items()}
-
-
-def season(d):
-    return P.SEASON[d.month]
-
-
-def mu(code, d):
-    """expected stops on a delivery day d"""
-    v = P.D[code]
-    base = v[7] / v[9] if d.year == 2025 else v[7]
-    return base * season(d)
-
-
-def stop_ref(code, i):
-    return "A" + hashlib.sha1(("%s-%d" % (code, i)).encode()).hexdigest()[:7].upper()
+def shortlist_km(code, mean_payload):
+    shipper, climb, town, cat = P.SHORT[code]
+    rng = np.random.default_rng(P.SEED + 7 + int(code[1:]))
+    a = int(rng.integers(6, 34))
+    r = 0.93 + 0.08 * rng.random()
+    k = kwh_per_km(climb, P.DESIGN_T)
+    target = P.LIMIT + P.TARGET[code]
+    b = (target - a * k) / ((1 + r) * k + P.LOAD * mean_payload)
+    best = None
+    for aa in range(max(5, a - 4), a + 5):
+        for bb in (int(b) - 1, int(b), int(b) + 1, int(b) + 2):
+            for cc in range(int(bb * r) - 2, int(bb * r) + 3):
+                err = abs(design_kwh((aa, bb, cc), climb, mean_payload) - target)
+                if best is None or err < best[0] - 1e-9:
+                    best = (err, (aa, bb, cc))
+    return best[1]
 
 
 def world():
     rng = np.random.default_rng(P.SEED)
-    days = P.delivery_days(P.HIST_START, P.HIST_END)
-    pools = {c: max(40, int(v[7] * 140)) for c, v in P.D.items()}
-    vans = {r: "%s-D-%05d" % ("191" if i % 2 else "192", 10411 + 37 * i) for i, r in enumerate(P.RUNS)}
-    drivers = {r: "DRV%03d" % (101 + 7 * i) for i, r in enumerate(P.RUNS)}
-    rundays = []
-    for d in days:
-        for r, ch in RUN_CHAIN.items():
-            stops = {}
-            for c in ch:
-                n = rng.poisson(mu(c, d))
-                lst = []
-                for _ in range(n):
-                    kind = "DEL"
-                    u = rng.random()
-                    if u < P.COLLECT_RATE:
-                        kind = "COL"
-                    elif u < P.COLLECT_RATE + P.FAIL_RATE:
-                        kind = "FAIL"
-                    pps = P.D[c][8]
-                    parcels = 0 if kind == "COL" else 1 + rng.poisson(pps - 1)
-                    lst.append({"kind": kind, "parcels": parcels, "ref": stop_ref(c, int(rng.integers(pools[c]))),
-                                "collect": int(1 + rng.poisson(0.3)) if kind == "COL" else 0})
-                stops[c] = lst
-            vis = [c for c in ch if stops[c]]
-            out_t = 7.45 + rng.normal(0, 0.12)          # leaves the depot about a quarter to eight, hours
-            t = out_t
-            seq, prev = [], None                        # prev: the district of the stop before (None: depot)
-            broke = False
-            for c in vis:
-                # drive from prev (or the depot) to this district's first stop
-                k = ch.index(c)
-                j = ch.index(prev) + 1 if prev is not None else 0
-                drive = sum(edge_h(x) for x in ch[j:k + 1]) + P.D[c][11] / 2 + (P.D[prev][11] / 2 if prev else 0)
-                first = True
-                for s in stops[c]:
-                    leg = drive if first else P.D[c][12]
-                    leg *= float(np.exp(rng.normal(0, P.LEG_SD)))
-                    t += leg
-                    arr = t
-                    if s["kind"] == "FAIL":
-                        dw = P.DWELL_FAILED
-                    elif s["kind"] == "COL":
-                        dw = P.DWELL_BASE + 0.4 / 60 * s["collect"]
-                    else:
-                        dw = P.DWELL_BASE + P.DWELL_PARCEL * s["parcels"]
-                    dw *= float(np.exp(rng.normal(0, P.DWELL_SD)))
-                    t += dw
-                    seq.append({"district": c, "arr": arr, "dep": t, "leg": leg, **s})
-                    first = False
-                    if not broke and t - out_t >= 3.0:
-                        seq.append({"district": None, "kind": "BREAK", "arr": t, "dep": t + P.BREAK_H, "leg": 0.0,
-                                    "parcels": 0, "ref": "", "collect": 0})
-                        t += P.BREAK_H
-                        broke = True
-                prev = c
-            if not broke:
-                seq.append({"district": None, "kind": "BREAK", "arr": t, "dep": t + P.BREAK_H, "leg": 0.0,
-                            "parcels": 0, "ref": "", "collect": 0})
-                t += P.BREAK_H
-            back = (sum(edge_h(x) for x in ch[:ch.index(prev) + 1]) + P.D[prev][11] / 2) if prev else 0.0
-            back *= float(np.exp(rng.normal(0, P.LEG_SD)))
-            t += back
-            km = 2 * sum(edge_km(x) for x in ch[:ch.index(prev) + 1]) if prev else 0.0
-            km += sum(len(stops[c]) * P.D[c][12] * 45 for c in vis)
-            rundays.append({"date": d, "run": r, "van": vans[r], "driver": drivers[r], "out": out_t, "in": t,
-                            "stops": seq, "km": km * float(np.exp(rng.normal(0, 0.03))), "counts": {c: len(stops[c]) for c in ch}})
-    return {"days": days, "rundays": rundays}
-
-
-if __name__ == "__main__":
-    w = world()
-    import collections
-    hrs = collections.defaultdict(list)
-    for rd in w["rundays"]:
-        hrs[rd["run"]].append(rd["in"] - rd["out"])
-    for r in sorted(hrs):
-        print(r, P.RUNS[r], "mean hours %.2f min %.2f max %.2f" % (np.mean(hrs[r]), min(hrs[r]), max(hrs[r])))
-    print(len(w["rundays"]), "run-days", sum(len(x["stops"]) for x in w["rundays"]), "stop rows")
+    temps = temperatures(rng)
+    # pilot duty-days: each working day six of the nine duties go to the six battery-electric tractors
+    pdays = P.workdays(P.PILOT_START, P.PILOT_END)
+    duties = list(P.PILOT)
+    route_u = {d: rng.normal(0, P.ROUTE_SD) for d in duties}
+    pilot = []
+    for day in pdays:
+        chosen = sorted(rng.choice(len(duties), size=6, replace=False))
+        tractors = list(P.PILOT_TRACTORS)
+        rng.shuffle(tractors)
+        tmean = temps[day][0]
+        for slot, i in enumerate(chosen):
+            dcode = duties[i]
+            ship, legs, climb, town = P.PILOT[dcode]
+            mu, sd = P.SHIPPERS[ship][3], P.SHIPPERS[ship][4]
+            pay = float(np.clip(rng.normal(mu, sd), 0.4 * mu, 1.6 * mu))
+            dec = declare(rng, ship, pay)
+            start = 5.0 + 0.8 * rng.random()
+            trips = []
+            for leg, km in enumerate(legs):
+                t = tmean + (-1.2, 0.8, 1.6)[leg] + rng.normal(0, 0.9)
+                p = pay if leg == 1 else 0.0
+                e = leg_kwh(km, climb, t, p) * (1 + route_u[dcode]) * (1 + rng.normal(0, P.EPS))
+                speed = (52, 71, 74)[leg] + rng.normal(0, 4)
+                dur = km / speed
+                trips.append({"leg": leg, "km": km, "t": round(t, 1), "kwh": e, "start_h": start,
+                              "end_h": start + dur, "speed": speed})
+                start += dur + (0.75 if leg == 0 else 0.6) + 0.2 * rng.random()
+            pilot.append({"date": day, "duty": dcode, "tractor": tractors[slot], "shipper": ship, "payload": pay,
+                          "declared": dec, "trips": trips, "pallets": int(round(pay / 0.52 + rng.normal(0, 1.2)))})
+    # Varnamo duties: the shortlist plus the rest of the terminal's regular duties
+    others = {}
+    pool = ["TEN", "HWP", "BMJ", "TTV", "GDR", "LBY", "GST", "SKB", "HIL", "VIS", "BPL", "RPA", "FGU", "RTR", "ANE", "KCY", "VGL"]
+    n = 0
+    for k in range(1, 47):
+        code = "V%02d" % k
+        if code in P.SHORT:
+            continue
+        ship = pool[n % len(pool)] if n < 2 * len(pool) else pool[int(rng.integers(0, 6))]
+        n += 1
+        a = int(rng.integers(6, 40))
+        b = int(rng.integers(190, 420))
+        others[code] = (ship, (a, b, int(b * (0.9 + 0.12 * rng.random()))), int(rng.integers(18, 60)))
+    wdays = P.workdays(P.WB_START, P.WB_END)
+    depart = []
+    for code in ["V%02d" % k for k in range(1, 47)]:
+        ship = P.SHORT[code][0] if code in P.SHORT else others[code][0]
+        mu, sd = P.SHIPPERS[ship][3], P.SHIPPERS[ship][4]
+        for day in wdays:
+            if code not in P.SHORT and rng.random() < 0.04:
+                continue
+            pay = float(np.clip(rng.normal(mu, sd), 0.4 * mu, 1.6 * mu))
+            depart.append({"date": day, "duty": code, "shipper": ship, "payload": pay,
+                           "declared": declare(rng, ship, pay), "hour": 5.2 + 1.6 * rng.random()})
+    # shortlist km set from each duty's last-twelve-months mean weighed payload
+    short = {}
+    for code in P.SHORT:
+        loads = [x["payload"] for x in depart if x["duty"] == code and P.LAST12[0] <= x["date"] <= P.LAST12[1]]
+        m = float(np.mean([round(v * 1000 / 20) * 20 / 1000 for v in loads]))
+        legs = shortlist_km(code, m)
+        short[code] = (P.SHORT[code][0], legs, P.SHORT[code][1], m)
+    return {"temps": temps, "pilot": pilot, "route_u": route_u, "others": others, "depart": depart, "short": short}

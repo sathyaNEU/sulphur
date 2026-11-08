@@ -1,31 +1,28 @@
 # leak check, task4
 
-**Verdict: REVIEW.** 11 files read, 12 golden figures and 3 candidate names taken from submission.md, 25 stump terms taken from the design note.
+**Verdict: REVIEW.** 12 files read, 12 golden figures and 0 candidate names taken from submission.md, 25 stump terms taken from the design note.
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: decisive, golden, section, beyond, removal, record, parcels, forecast, leenane, letterfrack, nothing, network, drifts, drives, priced, stations, reader, orders, mulranny, bangor, combination, station, domain, forecasting, setting
+Stump terms swept: shipper, declared, weighbridge, payload, weighed, record, decisive, declarations, declaration, orders, golden, correction, standard, planning, nothing, drifts, forecast, station, consumption, held-out, default, stations, reader, structure, shippers
 
-## 3 answer figures in the pack (REVIEW 1)
-- **REVIEW** `owenduff_offer_brackloon_2027.pdf`: carries 14 of 18 distinctive words of the committed call: 'Hand Mulranny, Achill, Bangor Erris, Belmullet, Louisburgh and Ballycastle to Owenduff from January 2027 and keep Leenan'
+## 3 answer figures in the pack (REVIEW 3)
+- **REVIEW** `fleet_electrification_standard_FES-2.pdf`: golden figure 2.2 appears: ...on to the delivery and the run back to the depot. 2.2 A duty's energy is the energy the tractor draws f...
+- **REVIEW** `quotation_bev_tractors_2027.pdf`: golden figure 540 appears: ...ttery Installed capacity 630 kWh; usable capacity 540 kWh Charging CCS2, up to 375 kW DC; on-board 43 k...
+- **REVIEW** `fleet_electrification_standard_FES-2.pdf`: carries 5 of 8 distinctive words of the committed call: 'Order 6 battery-electric tractors, for Värnamo duties V02, V05, V09, V14, V16, V18; V03, V07, V11, V21, V24, V27, V30, V'
 
-## 4 design-note vocabulary (REVIEW 2)
-- **REVIEW** `network_planning_standard_NPS-3.pdf`: 4 of 25 stump-paragraph terms appear (record, parcels, nothing, network); read whether the document names the move
-- **REVIEW** `owenduff_offer_brackloon_2027.pdf`: 6 of 25 stump-paragraph terms appear (record, parcels, leenane, letterfrack, mulranny, bangor); read whether the document names the move
-
-## 9 dates after the setting (REVIEW 2)
-- **REVIEW** `delivery_calendar_2027.csv`: 365 ISO dates after 2026-11-06, e.g. 2027-01-01, 2027-01-02, 2027-01-03, 2027-01-04, 2027-01-05
-- **REVIEW** `van_fleet_register_2026.xlsx`: 9 ISO dates after 2026-11-06, e.g. 2027-02-28, 2027-12-31, 2028-05-31
+## 4 design-note vocabulary (REVIEW 1)
+- **REVIEW** `fleet_electrification_standard_FES-2.pdf`: 5 of 25 stump-paragraph terms appear (payload, record, standard, planning, consumption); read whether the document names the move
 
 ## 10 container metadata (INFO 1)
 - **INFO** `-`: audit reported no writer signature (1 lines)
 
 ## 11 prompt gate (REVIEW 2)
-- **REVIEW** `prompt.txt`: shell quota: question form 'which' at 50% of 6 prompts (cap 30%); reword at the role level, not the verb
-- **REVIEW** `prompt.txt`: templating signals: 1 of seven: files listed up front (district_handover_2027.xlsx, handover_2027.png) (the portal marks two as borderline and three as templated: one question, each file named in the sentence that gives its reason, no closing list)
+- **REVIEW** `prompt.txt`: shell quota: second-sentence opener 'for' at 22% of 9 prompts (cap 20%); deliverable set 'pdf+xlsx' at 22% of 9 prompts (cap 20%); reword at the role level, not the verb
+- **REVIEW** `prompt.txt`: templating signals: 1 of seven: files listed up front (ev_duty_assessment_2027.xlsx, tractor_order_memo.pdf) (the portal marks two as borderline and three as templated: one question, each file named in the sentence that gives its reason, no closing list)
 
 ## 12 client quality check (INFO 2)
-- **INFO** `-`: 11 usable files (10 or more required)
+- **INFO** `-`: 12 usable files (10 or more required)
 - **INFO** `-`: 2 file categories: document, spreadsheet (2 or more required)
 
 ## 1 file names (clean)
@@ -39,6 +36,8 @@ Stump terms swept: decisive, golden, section, beyond, removal, record, parcels, 
 ## 7 hidden content (clean)
 
 ## 8 column names (clean)
+
+## 9 dates after the setting (clean)
 
 
 ## Solver's-eye read
