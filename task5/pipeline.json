@@ -1,10 +1,10 @@
 {
  "task": "task5",
- "status": "PAUSED",
+ "status": "DESIGN",
  "domain": "survey-research-official-statistics",
  "objective": "etl",
- "stage": 5,
- "stage_name": "ship",
+ "stage": 2,
+ "stage_name": "design",
  "updated": "2026-11-08",
  "stump": "A competent solver conforms the cadastre and the hub's hourly values, counts as vacant the dwellings whose average daily use over the fortnight sits under a consumption floor, sees the floor agree with the register, and files that no municipality qualifies at any floor from 1 to 10 kWh a day; an empty dwelling in a Norwegian November is left heated, so the vacant dwellings use a median 20.5 kWh a day against 19.5 for the lived-in ones, and only a household's morning or evening rise over the dwelling's own night-time use on some day shows that someone lived there, which designates five.",
  "architecture": 2,
@@ -44,9 +44,17 @@
     "frozen": "freeze.py rubric mode: only component 3 (557 to 556, the judge's SOLUTION_WRONG) and the reworded call sentence moved; the stump, the ladder and every other main-call figure did not; 26 ask figures added (the 20 bounds and the straddling names)",
     "zip": "bc4fe60e"
    }
+  },
+  {
+   "date": "2026-11-07",
+   "source": "review",
+   "repair": "design",
+   "portal": "upload check only, never run: input files (the ministry email's reserved .example domains, from an earlier upload; bc4fe60e already on kbd.dep.no and statkontoret.no) and Domains Fit (a regulation's threshold applied to counts and shares, with tally tables)",
+   "moves": "architecture 2 kept (world, spine, stump, card lineage): the deciding figure becomes each municipality's vacancy share estimated by correcting the population register's dwellings-without-residents statistic for its errors in both directions against the meter evidence, its uncertainty from the occupancy reading's own error measured on dwellings whose residents moved inside the fortnight; the persons-by-age and land-register tallies replaced by register-quality asks; a generator assert against reserved domains, 555-01 numbers and other authoring tells",
+   "commit": ""
   }
  ],
- "resume": "migrated from Project Mark task470; re-read the build against the Sulfur standard (deep reasoning: three or more dependent inferences with a real modeling judgment, the one-fact test, the banned kinds) and the Sulfur submission shape (golden ZIP, four answer blocks), then /build task5 from the stage that fails",
+ "resume": "2026-11-08 design repair of architecture 2 (no re-root): STOP A sent to the main thread; on its go-ahead, stage 2 under stumping, determinism-check, supplemental-stumping and guide-to-prompt (new prompt, asks, fork rows, rivals re-run incl. the register-only and consumption-floor routes and the Clopper-Pearson interval), then stage 3 rebuild",
  "approved": null,
  "delivered": null,
  "portal": null,
