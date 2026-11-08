@@ -129,7 +129,10 @@ FILES = {
     "capacity": "capacity_review_2026-Q4.md",
     "feedback": "app_store_reviews_2026-H2.xlsx",
 }
-DISTRACTORS = ["capacity", "feedback", "lb_h1"]
+# files the call and every ask leave unread: context, the balancer's January to June counts, and the review folder's
+# change and cost records (PR-SLO-3 sections 5.1 and 5.3), which the review reports but the asks do not use
+FILES_KEY_OF = {v: k for k, v in FILES.items()}
+DISTRACTORS = ["capacity", "feedback", "lb_h1", "deploys", "rollouts", "billing", "invoices", "resources"]
 DOCX_OUT = "reliability_review_2026.docx"
 CSV_OUT = "service_sli_2026.csv"
 

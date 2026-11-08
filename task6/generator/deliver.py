@@ -1,7 +1,9 @@
 """task6's golden deliverables, drawn from one figure set: reliability_review_2026.docx, the annual reliability
-review's latency note (the services that breached, every service's December SLI beside its budget, the chart of each
-SLI against its own budget line, how the SLI was read), and service_sli_2026.csv, a row per service with its SLI,
-budget, verdict, releases and rollbacks, and customer-facing incident minutes and cloud cost in each half."""
+review's latency note (the services that breached, in the order their engineers start, every service's December SLI
+beside its budget, the chart of each SLI against its own budget line, each one's share of all the services'
+over-threshold December requests and the share they served together, the requests beyond their budgets, the
+customer-facing incident minutes in which an incident named one of them, by half, how the SLI was read), and
+service_sli_2026.csv, a row per service with its SLI, budget and verdict."""
 import csv
 import io
 from decimal import Decimal, ROUND_HALF_UP
@@ -27,9 +29,14 @@ def names(lst):
     return ", ".join(lst[:-1]) + " and " + lst[-1] if len(lst) > 1 else lst[0]
 
 
+def nearest(x, step):
+    return int(Decimal(repr(float(x) / step)).quantize(Decimal("1"), rounding=ROUND_HALF_UP)) * step
+
+
 def figures(R):
-    m = R["main"]
-    F = {"over": list(R["over"]), "over_count": len(R["over"]),
+    m, P, S = R["main"], R["programme"], R["shallow"]
+    over = list(R["over"])
+    F = {"over": over, "over_count": len(over),
          "sli": {s: "%.1f" % m[s]["sli1"] for s in K.SVC},
          "budget": {s: "%.1f" % K.BUDGET[s] for s in K.SVC},
          "threshold_ms": {s: "{:,}".format(K.THRESHOLD[s]) for s in K.SVC},
@@ -39,12 +46,19 @@ def figures(R):
          "pg_kept_mix_pct": {k: "%d" % whole(100 * v) for k, v in m["partner-gateway"]["root_mix_kept"].items() if k},
          "pg_weighted_mix_pct": {k: "%d" % whole(100 * v) for k, v in m["partner-gateway"]["root_mix_weighted"].items()
                                  if k},
-         "releases": {s: R["deploys"][s]["releases"] for s in K.SVC},
-         "rollbacks": {s: R["deploys"][s]["rollbacks"] for s in K.SVC},
-         "minutes": {s: [whole(v) for v in R["incidents"][s]] for s in K.SVC},
-         "cost_eur": {s: [whole(v) for v in R["costs"][s]] for s in K.SVC},
-         "cost_eur_text": {s: ["{:,}".format(whole(v)) for v in R["costs"][s]] for s in K.SVC},
-         "minutes_text": {s: ["{:,}".format(whole(v)) for v in R["incidents"][s]] for s in K.SVC}}
+         # the asks, read off the SLI's numerator
+         "start_order": list(P["order"]),
+         "share_pct": {s: "%d" % whole(P["share"][s]) for s in K.SVC},
+         "over_share_pct": "%d" % whole(P["over_share"]),
+         "beyond_budget": "{:,}".format(nearest(P["beyond"], 10000)),
+         "incident_minutes": [whole(v) for v in R["incidents"]],
+         "incident_minutes_text": ["{:,}".format(whole(v)) for v in R["incidents"]],
+         # the same asks on the default path (each service's own spans reweighted hour by hour on its own count)
+         "shallow_order": list(S["order"]),
+         "shallow_over_share_pct": "%d" % whole(S["over_share"]),
+         "shallow_pg_share_pct": "%d" % whole(S["share"]["partner-gateway"]),
+         "shallow_beyond_budget": "{:,}".format(nearest(S["beyond"], 10000)),
+         "shallow_incident_minutes_text": ["{:,}".format(whole(v)) for v in R["shallow_incidents"]]}
     return F
 
 
@@ -116,7 +130,9 @@ def write_docx(path, R, F):
     _page_field(footer)
     over = F["over"]
     _p(doc, "%s services ran over their 2026 latency error budget and get a reliability engineer for January to June "
-            "2027: %s." % ("Five" if len(over) == 5 else str(len(over)), names(over)), bold=True, size=11.5, space=8)
+            "2027. The engineers start in this order, the service with the most requests over its latency threshold in "
+            "December first: %s." % ("Five" if len(over) == 5 else str(len(over)), names(F["start_order"])),
+       bold=True, size=11.5, space=8)
     pg = "partner-gateway"
     _p(doc, "Partner-gateway is the one a quick read misses: its SLI is %s%% against a %s%% budget, where the share "
             "of its spans the tracing store kept would put it at %s%% and a reweighting of its own spans hour by hour "
@@ -144,7 +160,32 @@ def write_docx(path, R, F):
     _p(doc, "Each bar is the service's December SLI; the dark mark on it is the service's own error budget.",
        italic=True, size=8.5, space=10)
 
-    _p(doc, "How the SLI was read", bold=True, size=12, space=4)
+    _p(doc, "Partner-gateway's engineer starts first", bold=True, size=12, space=4).paragraph_format.keep_with_next = True
+    _p(doc, "Between them the %s served %s%% of all our services' requests over their latency thresholds in December, "
+            "about %s more than their budgets allow. Each one's share of all ten services' over-threshold December "
+            "requests, in the order its engineer starts:" % (
+                "five" if len(over) == 5 else str(len(over)), F["over_share_pct"], F["beyond_budget"]), space=4)
+    t2 = doc.add_table(rows=1, cols=4)
+    t2.style = "Table Grid"
+    for i, h in enumerate(["Start", "Service", "Share of over-threshold requests (%)", "Latency SLI (%)"]):
+        c = t2.rows[0].cells[i]
+        c.text = h
+        c.paragraphs[0].runs[0].bold = True
+        _shade(c, "DCE6F0")
+    for k, s_ in enumerate(F["start_order"], 1):
+        row = t2.add_row().cells
+        for i, v in enumerate([str(k), s_, F["share_pct"][s_], F["sli"][s_]]):
+            row[i].text = v
+            if i != 1:
+                row[i].paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.RIGHT
+    _p(doc, "Source: the weighted spans over each service's threshold, as for the SLI; budgets from PR-SLO-3 "
+            "section 4. The other five services served the rest.", italic=True, size=8, space=6)
+    h1, h2 = F["incident_minutes_text"]
+    _p(doc, "Customer-facing incidents named at least one of the %s for %s minutes from January to June 2026 and %s "
+            "minutes from July to December (PR-SLO-3 sections 5.2 and 5.4, each minute counted once)."
+       % ("five" if len(over) == 5 else str(len(over)), h1, h2), space=10)
+
+    _p(doc, "How the SLI was read", bold=True, size=12, space=4).paragraph_format.keep_with_next = True
     kept, wtd = F["pg_kept_mix_pct"], F["pg_weighted_mix_pct"]
     _p(doc, "The tracing store keeps a trace whole or not at all, and the decision is taken where the trace starts: "
             "each edge service keeps about the same number of traces every hour whatever its traffic, so a busy hour "
@@ -157,11 +198,13 @@ def write_docx(path, R, F):
             "availability lookups are the slow ones; weighting its spans by its own hourly keep share under-counts "
             "them." % (kept.get("journey-search", "0"), kept.get("seat-map", "0"), kept.get("booking", "0"),
                        wtd.get("journey-search", "0")))
-    _p(doc, "Releases and rollbacks, customer-facing incident minutes and cloud cost by half are in "
-            "service_sli_2026.csv, under PR-SLO-3 section 5.", space=10)
+    _p(doc, "A service's over-threshold requests are the same weighted spans over its threshold that make its SLI, "
+            "so its share and the requests beyond its budget move with the SLI.", space=10)
     _p(doc, "Notes: SLIs are per cents to one decimal and are compared with the budget as rounded (PR-SLO-3 3.2). "
-            "December in Lisbon time is UTC throughout. The load balancer's health probes are not requests "
-            "(PR-SLO-3 2.2) and the trace export's re-sent spans are counted once.", italic=True, size=8.5)
+            "Shares and the requests beyond budget are worked from the unrounded figures; the requests beyond budget "
+            "are rounded to the nearest ten thousand. December in Lisbon time is UTC throughout. The load balancer's "
+            "health probes are not requests (PR-SLO-3 2.2) and the trace export's re-sent spans are counted once. "
+            "A service's incident minutes start when the incident timeline names it.", italic=True, size=8.5)
     doc.save(path)
 
 
@@ -196,8 +239,6 @@ def _page_field(par):
 def write_csv(path, R, F):
     with open(path, "w", newline="") as fh:
         wr = csv.writer(fh, lineterminator="\n")
-        wr.writerow(["service", "latency_sli_pct", "error_budget_pct", "ran_over", "releases_2026", "rollbacks_2026",
-                     "incident_minutes_h1", "incident_minutes_h2", "cost_eur_h1", "cost_eur_h2"])
+        wr.writerow(["service", "latency_sli_pct", "error_budget_pct", "ran_over"])
         for s in K.SVC:
-            wr.writerow([s, F["sli"][s], F["budget"][s], F["ran_over"][s], F["releases"][s], F["rollbacks"][s],
-                         F["minutes"][s][0], F["minutes"][s][1], F["cost_eur"][s][0], F["cost_eur"][s][1]])
+            wr.writerow([s, F["sli"][s], F["budget"][s], F["ran_over"][s]])

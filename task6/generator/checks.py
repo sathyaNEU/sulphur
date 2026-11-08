@@ -1,7 +1,9 @@
 """The generator's assertions on the cut pack and the seeded world: the input gates, the call and its ladder with
 margins, every semantic fork row (SF1 to SF14), the one-decimal corridor, the whole traces and partner-gateway's root
-mix that refutes rung 3, the back-test, the three rules on the clean truth, the shock screen, the separation of the
-asks from the call (SEP), the asks against the world's truths, the cracker sheet and the documents' controls.
+mix that refutes rung 3, the back-test, the three rules on the clean truth, the shock screen, the call's files (SEP)
+and the distractors, the asks (each read off the SLI's numerator or the services the call names: the same bin under
+every standing estimator, a different value on the default path, the incident clock's second reading), the ceiling
+sheet and the documents' controls.
 
     python3 checks.py [target_dir]            (run by build.py)"""
 import csv
@@ -23,6 +25,9 @@ import common as K      # noqa: E402
 import world as W       # noqa: E402
 
 GOLD5 = ["journey-search", "places", "seat-map", "partner-gateway", "notifications"]
+# the SLIs the shipped answer carries (main-call figures, frozen by every repair of the ask layer)
+SHIPPED_SLI = {"journey-search": 1.3, "fares": 0.6, "places": 1.5, "seat-map": 1.5, "booking": 0.4, "payments": 0.3,
+               "tickets": 0.6, "accounts": 0.7, "partner-gateway": 2.9, "notifications": 1.6}
 FOUR = ["journey-search", "places", "seat-map", "notifications"]
 H = K.REVIEW_HOURS
 FAILS = []
@@ -255,8 +260,10 @@ def main(target):
                 if f != K.FILES[dk]:
                     shutil.copy(os.path.join(target, f), tmp)
             part = AN.Golden(tmp).run()
-            same = part["over"] == full["over"] and part["deploys"] == full["deploys"] and \
-                part["costs"] == full["costs"] and part["incidents"] == full["incidents"] and \
+            same = part["over"] == full["over"] and part["incidents"] == full["incidents"] and \
+                part["programme"]["order"] == full["programme"]["order"] and \
+                part["programme"]["share"] == full["programme"]["share"] and \
+                part["programme"]["beyond"] == full["programme"]["beyond"] and \
                 all(part["main"][s]["sli"] == full["main"][s]["sli"] for s in K.SVC)
             check("distractor %s deleted: the call and every ask unchanged" % K.FILES[dk], same)
         finally:
@@ -265,20 +272,70 @@ def main(target):
     check("SEP the trace export carries no version, deployment, cost or incident field",
           not any(c for c in cols if any(x in c for x in ("version", "deploy", "cost", "incident"))), ", ".join(cols))
 
-    # ---------------------------------------------------------- the asks against the world's truths
-    _, _, dtruth = A.deployments()
-    _, _, _, btruth, _ = A.billing()
+    # ---------------------------------------------------------- the asks
+    check("main-call figures as shipped: every one-decimal SLI unchanged",
+          all(K.r1(sli[s]) == SHIPPED_SLI[s] for s in K.SVC))
+    N = {s: m[s]["requests"] for s in K.SVC}
+    prog = full["programme"]
+    gold = ceiling.ask_figures(prog, full["incidents"])
+    print("      asks: order %s; shares %s; together %s%%; beyond budget %s; incident minutes %s"
+          % (", ".join(gold["order"]), gold["shares"], gold["over_share"], "{:,}".format(gold["beyond"]),
+             gold["minutes"]))
+    check("the start order is the call's services", sorted(gold["order"]) == sorted(GOLD5))
+    for est in ("hajek", "calibrated", "own_hour", "orphans_dropped"):
+        p = AN.programme({s: m[s][est] for s in K.SVC}, N, K.BUDGET)
+        got = ceiling.ask_figures(p, full["incidents"])
+        check("rival %s: every ask figure in the golden's bin" % est, got == gold,
+              "order %s, shares %s, together %s, beyond %s" % (",".join(x[:6] for x in got["order"] if x),
+                                                                got["shares"], got["over_share"], got["beyond"]))
+    # SF15: the asks worked from the one-decimal SLIs instead of the unrounded ones; the prompt's closing clause
+    # ("each rounded once at the end") rules it out, and only journey-search's share leaves its bin
+    p = AN.programme({s: m[s]["sli1"] for s in K.SVC}, N, K.BUDGET)
+    got = ceiling.ask_figures(p, full["incidents"])
+    moved = [s for s in gold["shares"] if got["shares"][s] != gold["shares"][s]]
+    prompt = open(os.path.join(os.path.dirname(target.rstrip("/")), "prompt.txt")).read()
+    check("SF15 the asks from the rounded SLIs: closed by the prompt's rounding clause, only one share moves",
+          "rounded once at the end" in prompt and got["order"] == gold["order"] and got["over_share"] ==
+          gold["over_share"] and got["beyond"] == gold["beyond"] and moved == ["journey-search"],
+          "moved: %s" % (", ".join("%s %s" % (s, got["shares"][s]) for s in moved) or "none"))
+    margins = []
+    for est in ("sli", "hajek", "calibrated", "own_hour", "orphans_dropped"):
+        p = AN.programme({s: m[s][est] for s in K.SVC}, N, K.BUDGET)
+        margins += [abs(p["share"][s] % 1 - 0.5) for s in p["order"]] + [abs(p["over_share"] % 1 - 0.5)]
+        margins.append(abs(p["beyond"] % 10000 - 5000) / 10000)
+    check("asks: no share within 0.1 of a rounding line, the requests beyond budget 1,000 or more from one",
+          min(margins) >= 0.1, "closest %.3f" % min(margins))
+    mins = full["incidents"]
+    check("asks: the incident minutes 0.1 or more from a half-minute line",
+          min(abs(v % 1 - 0.5) for v in mins) >= 0.1, "%s" % [round(v, 2) for v in mins])
+    sh = full["shallow"]
+    shf = ceiling.ask_figures(sh, full["shallow_incidents"])
+    check("default path: the start order differs in every position",
+          all(a != b for a, b in zip(shf["order"], gold["order"])), ", ".join(str(x) for x in shf["order"]))
+    check("default path: the share served together outside the golden's bin", shf["over_share"] != gold["over_share"],
+          "%s against %s" % (shf["over_share"], gold["over_share"]))
+    check("default path: the requests beyond budget outside the golden's bin", shf["beyond"] != gold["beyond"],
+          "%s against %s" % ("{:,}".format(shf["beyond"]), "{:,}".format(gold["beyond"])))
+    check("default path: the incident minutes differ in both halves",
+          all(a != b for a, b in zip(shf["minutes"], gold["minutes"])), "%s against %s" % (shf["minutes"],
+                                                                                         gold["minutes"]))
+    kept_sh = [s for s, v in gold["shares"].items() if shf["shares"].get(s) == v]
+    check("default path: at most one of the five shares in the golden's bin", len(kept_sh) <= 1,
+          "kept: %s" % (", ".join(kept_sh) or "none"))
+    back = ceiling.ask_figures(prog, AN.Golden(target).incidents(full["over"], backdate=True))
+    check("SF16 the incident ask's own judgment: the final service lists read from the declaration miss both halves",
+          all(a != b for a, b in zip(back["minutes"], gold["minutes"])), "%s against %s" % (back["minutes"],
+                                                                                          gold["minutes"]))
     _, _, _, _, itruth = A.incidents()
-    gd, gc, gi = g.deploys(), g.costs(), g.incidents()
-    check("ask A releases and rollbacks match the world", gd == dtruth)
-    check("ask B costs match the world to the cent", all(gc[s] == [round(x, 2) for x in btruth[s]] for s in K.SVC))
-    check("ask C minutes match the world", all(abs(a - b) < 1e-6 for s in K.SVC for a, b in zip(gi[s], itruth[s])))
-    near = [(s, i) for s in K.SVC for i in (0, 1) if abs(gc[s][i] % 1 - 0.5) < 0.01 or abs(gi[s][i] % 1 - 0.5) < 0.01]
-    check("no euro or minute figure on a half-unit line", not near, str(near))
-    rows, L, on, off = ceiling.measure(target)
-    check("cracker sheet: every path misses", all(k < 20 for _, _, k in rows),
-          "; ".join("%s %d" % (lab.split(":")[0], k) for lab, _, k in rows))
-    check("pair ceiling at or under 60", (on + off) / 2 <= 60, "%.1f" % ((on + off) / 2))
+    gi = AN.Golden(target).incidents()
+    check("the incident reconstruction matches the world, service by service",
+          all(abs(a - b) < 1e-6 for s in K.SVC for a, b in zip(gi[s], itruth[s])))
+    rows = ceiling.measure(target)
+    sc = {key: k / 14.0 for _, key, (k, _) in rows}
+    check("shallow keep under 25 per cent of the ask figures", sc["by_service_hour"] < 0.25,
+          "%.1f per cent" % (100 * sc["by_service_hour"]))
+    worst = ceiling.pair(sc["landed_full"], sc["by_service_hour"])[2]
+    check("paper pair under the bar of 60 with the landed run keeping every ask", worst < 60, "%.1f" % worst)
 
     # ---------------------------------------------------------- documents
     names = [f.lower() for f in os.listdir(target)]
