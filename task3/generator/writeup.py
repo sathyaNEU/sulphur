@@ -43,7 +43,8 @@ def figures(g, rungs):
         "ows_only_B": c(rungs["rival_ows_only"]["B"]), "msmw_1dp": round(g["msmw_2025"], 1),
         "years": [2005, 2008, 2009, 2025, 2026, 2027, 2046],
         "options": list(S.OPTIONS), "rule_clauses": ["2.1", "2.2", "4.1", "4.2", "4.3", "4.4"],
-        "dw_inside_edge_ft": 200, "walls_tried": [4000, 4500, 5000, 5500, 6500],
+        "dw_inside_edge_ft": 200,
+        "T_wells": [c(round(rungs[k]["T"], -1)) for k in ("test_ow1", "test_ow2", "test_ow3")], "walls_tried": [4000, 4500, 5000, 5500, 6500],
     }
 
 
@@ -119,7 +120,9 @@ def submission(g, rungs, fig, path):
       "Loggers sheet: each logger on its own clock, pressure less the barologger, the OW-2 re-hang and OW-3's rewritten "
       "rows taken out, drawdown against each well's pre-test trend and barometric response.")
     A("2. Fitted Theis to OW-1, OW-2 and OW-3 at the totalizer's %d gpm: transmissivity %s ft2/day, storativity %s, "
-      "residual %.2f ft (the field's method)." % (fig["q_avg"], fig["T_text"], fig["S"], fig["rms"]))
+      "residual %.2f ft (the field's method); each well alone gives %s, %s and %s ft2/day, and every one of them keeps "
+      "the call below." % (fig["q_avg"], fig["T_text"], fig["S"], fig["rms"], fig["T_wells"][0], fig["T_wells"][1],
+                           fig["T_wells"][2]))
     A("3. Hindcast the Mill Street wells (monthly gpm from harlow_springs_MOR_well_production_2009-2026.csv, thousand "
       "gallons before July 2016) with that fit: %d ft at MS-MW in 2025, more than twice the record, so the far field is "
       "calibrated on the record." % fig["theis_msmw_2025"])
@@ -149,5 +152,8 @@ def submission(g, rungs, fig, path):
       "CV-02, CV-11 or both, with the walls from 4,000 ft apart to absent and T from any observation well, the "
       "1,000 gpm peak stays under 9 ft and the 1,250 gpm peak over it. Calibrated on OW-S alone, whose record carries "
       "half a foot of Mill Street drawdown, the leakage factor (%s ft) puts MS-MW's 2025 drawdown at %.1f ft against "
-      "the record's %.1f." % (fig["ows_only_B"], fig["ows_only_msmw"], fig["msmw_1dp"]))
+      "the record's %.1f: it fits the sentinel's own small signal more closely only by missing the wells the Mill "
+      "Street pumping draws down most. At DW-17 a model without the walls fits the record as well and reads %d ft, "
+      "but Plate 3 maps the edges of the saturated sand and gravel 5,000 ft apart, and the walls give %d ft."
+      % (fig["ows_only_B"], fig["ows_only_msmw"], fig["msmw_1dp"], fig["dw_nowalls_ft"], fig["dw_ft"]))
     open(path, "w").write("\n".join(lines) + "\n")
