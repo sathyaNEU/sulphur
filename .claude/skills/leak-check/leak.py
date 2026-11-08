@@ -633,8 +633,11 @@ def sweep_metadata(target, rep):
         rep.add("10 container metadata", "INFO", "-", "audit reported no writer signature (%d lines)" % len(out.split("\n")))
     for l in honest[:15]:
         rep.add("10 container metadata", "INFO", "-", "PDF names the library that wrote it: " + l.strip()[:160])
+    # A LibreOffice export writes the module that made the file in Creator ("Writer", "Calc", "Impress") and the suite
+    # in Producer, so a module name is an application too.
     tool = re.compile(r"reportlab|microsoft|word|excel|acrobat|adobe|distiller|libreoffice|openoffice|quartz|"
-                      r"ghostscript|chrom|skia|cairo|pdf|tex|prince|wkhtml|itext|foxit|nitro", re.I)
+                      r"ghostscript|chrom|skia|cairo|pdf|tex|prince|wkhtml|itext|foxit|nitro|"
+                      r"^writer$|^calc$|^impress$|^draw$", re.I)
     try:
         from pypdf import PdfReader
     except ImportError:
