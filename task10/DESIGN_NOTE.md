@@ -296,7 +296,7 @@ figure.
 - **Realism:** a zone-by-zone credit table against firm capacity is what a DSO planning team takes to a capital review.
 - Shallow keep: 11.8 per cent of ask weight (2 of 17 figures).
 - Pair ceiling: 39.8 (the landed run C = 38 + 7 + 55 x 0.294 = 61.2, the shallow run S = 5 + 7 + 55 x 0.118 = 18.5).
-- Measured by: generator/ceiling.py on the cut pack (pack digest 06f69ebfdf4bcf2c, printed with the sheet).
+- Measured by: generator/ceiling.py on the cut pack (pack digest 057c8c892de56a3a, printed with the sheet).
 
 ## Prompt contract
 
@@ -338,6 +338,40 @@ What the author's voice rewrite may not drop or change:
   varied, each reference numbered in its application year), every graded figure unchanged in its bin.
 - Reader, realism, the provider names typed three ways and the same letterhead on the three PDFs: one organisation's
   documents share a letterhead, and a dispatch log typed by control engineers carries such variants; kept.
+- Re-read, question 6, "mostly following a stated procedure ... the open part is analytical": the procedure is the WHAT
+  the determinism spec requires filed; executed word for word with the field's baseline it commits none (rung 1, the
+  analyst test on the clean truth), so the call turns on the open part the re-read itself names (how the provider's
+  delivery is estimated); the re-judge classed the decisive step analytical, Gate G analytical_non_defect; harmless.
+- Re-read, sweep C, the prompt's "per megawatt scheduled": the unit guideline 6 files for the credit, no method;
+  harmless.
+- Re-read, realism: "Plot 4" on every planned site in the growth register and health indices loosely tied to age, with
+  a manufacture year after commissioning, in the condition workbook: fixed (plot numbers from each reference; built in
+  or before the commissioning year; the index tracks age, correlation 0.87). The 16:00 to 19:30 windows are the
+  contract's service window; scheduled megawatts are the contracted or revised megawatts in 0.5 MW steps, as tenders
+  award them; asset, feeder and reference codes in the systems' own formats; kept.
+- Re-judge, the reading of guideline 6's "reduction in the primary's demand" as the zone's gross fall: SF12, ruled out
+  by "that its provider will deliver" and "No other measure is credited" with the rise at the linked primary in the same
+  half-hours; the judge rated it forced by the files.
+
+## Pre-ship check
+
+- The Sulfur standard re-read against the built pack: the call rests on separating each zone's provider from the
+  demand that rose at the primary across its open point (SF12, the mirror checks) and reading the net reduction at the
+  design condition (the one-fact check: netting alone lands the call and misses every delivery and credit); the
+  default path commits none on the cut pack and on the clean truth; both leak reads found no deciding sentence and no
+  ranking file; the re-judge classed the decisive step analytical (Gate G analytical_non_defect, Gate H pass).
+- Free gates on the final cut: checks 81 of 81 (every SF row, the ladder, the 16-estimator family, Layer 1, the input
+  gates, the container gate), verify.py PASS (its own reader of the raw files: csv, zoneinfo, pypdf), byte-identical
+  rebuild, precut 75 of 75, voice-check PASS (two WARNs for the author's rewrite), figures_check 68 of 68, leak.py
+  REVIEW (no LEAK; every line ruled above), guard heart WARN (answered in the Draw) and surface exit 0, ceiling 39.8.
+- Containers: audit_containers.py PASS on the pack, the golden and both zips (PDFs exported by LibreOffice Writer,
+  workbooks in Excel's form with shared strings, the deck without its library template, every file and zip entry on
+  its own save time).
+- Stage 4: the first judge pass returned DETERMINISTIC with a wording FIX_NOW (applied); its own recomputation led to
+  the literal 2025/26 correction, the near-complete-day rule, the UK-clock export, the service ending before British
+  Summer Time and the centred contracts; the re-judge returned DETERMINISTIC, APPROVE (determinism_check_report.md),
+  read on target.zip a3ba2ac0; the shipped target.zip (1350f12d) differs by the re-read's two texture fixes only,
+  submission.md, figures.json and metadata.json byte-identical to the judged state.
 
 ## Tried and rejected
 

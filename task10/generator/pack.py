@@ -435,6 +435,10 @@ def write_growth(target, feeders):
                              sites[int(rng.integers(0, len(sites)))] % names[int(rng.integers(0, len(names)))],
                              f["fid"], kw, "Accepted", (pl - dt.timedelta(days=500)).strftime("%d/%m/%Y"),
                              pl.strftime("%d/%m/%Y"), ""])
+    # a plot is numbered on its own site plan; the number is read from the application's reference, not drawn
+    for r in rows:
+        if r[2].startswith("Plot 4, "):
+            r[2] = "Plot %d, %s" % (1 + int(r[0][-5:]) % 23, r[2][len("Plot 4, "):])
     rng.shuffle(rows)
     rows.sort(key=lambda r: r[0])
     wb = openpyxl.Workbook()
@@ -474,15 +478,16 @@ def write_condition(target):
     rows = []
     for p in sorted(W.PRIMARIES, key=lambda q: q["code"]):
         for tx in ("T1", "T2"):
-            age = 2026 - COMMISSIONED[p["key"]] - int(rng.integers(0, 4))
-            h2 = int(rng.gamma(2.0, 18 + age))
-            ch4 = int(rng.gamma(2.0, 9 + age / 2))
+            made = COMMISSIONED[p["key"]] - int(rng.integers(0, 2))   # built in the year of commissioning or the one before
+            age = 2026 - made
+            h2 = int(rng.gamma(4.0, 6 + age / 2))
+            ch4 = int(rng.gamma(4.0, 3 + age / 5))
             c2h2 = round(float(rng.exponential(0.6)), 1)
-            c2h4 = int(rng.gamma(1.8, 5 + age / 4))
-            co = int(rng.gamma(3.0, 60 + 6 * age))
-            moist = round(float(rng.normal(9 + age / 6, 2.5)), 1)
-            hi = int(min(5, max(1, round(1 + age / 14 + rng.normal(0, 0.6)))))
-            rows.append([p["code"], p["name"], tx, COMMISSIONED[p["key"]] + int(rng.integers(0, 3)),
+            c2h4 = int(rng.gamma(3.0, 2 + age / 8))
+            co = int(rng.gamma(6.0, 30 + 4 * age))
+            moist = round(float(rng.normal(8 + age / 5, 1.6)), 1)
+            hi = int(min(5, max(1, round(1 + (age - 20) / 8.5 + rng.normal(0, 0.4)))))
+            rows.append([p["code"], p["name"], tx, made,
                          (dt.date(2026, 2, 1) + dt.timedelta(days=int(rng.integers(0, 150)))).strftime("%d/%m/%Y"),
                          h2, ch4, c2h2, c2h4, co, moist, "HI%d" % hi])
     wb = openpyxl.Workbook()
