@@ -29,7 +29,7 @@ OSLO = dt.timezone(dt.timedelta(hours=1))
 
 AS_OF = {   # each file's date as its source dated it
     "regulation": "2026-10-14", "assignment": "2026-12-01", "cadastre": "2027-01-04", "municipalities": "2026-01-02",
-    "meterpoints": "2027-01-04", "hourly": "2026-12-14", "register": "2027-01-05", "events": "2027-01-05",
+    "meterpoints": "2027-01-04", "hourly": "2026-12-14", "daily": "2026-12-14", "register": "2027-01-05", "events": "2027-01-05",
     "titles": "2027-01-05", "transfers": "2027-01-05", "entities": "2027-01-05", "shareholders": "2026-05-29",
     "prices": "2026-11-23", "outages": "2026-12-03",
 }
@@ -51,6 +51,7 @@ def build(out, w=None, quiet=False):
     n["municipalities"] = P.write_municipalities(f("municipalities"))
     n["meterpoints"] = P.write_meterpoints(w, f("meterpoints"), rng)
     n["hourly"] = P.write_hourly(w, f("hourly"), rng)
+    n["daily"] = P.write_daily(w, f("daily"))
     n["register"] = P.write_register(w, f("register"))
     n["events"] = P.write_events(w, f("events"), rng)
     n["titles"] = P.write_titles(w, f("titles"))

@@ -46,6 +46,7 @@ def build():
     _ownership(w)
     _meters(w)
     _loads(w)
+    _programs(w)
     _outages(w)
     _prices(w)
     return w
@@ -780,6 +781,52 @@ def _loads(w):
         if m["unit"] is None:
             T = w.temp[m["nr"]]
             w.load[("felles", m["mp"])] = np.round(0.4 + 0.02 * np.maximum(0, 10 - T) + rng.normal(0, 0.01, W.HOURS), 3)
+
+
+def _programs(w):
+    """Heating on a daily timer: comfort hours in the morning and the evening over a night setback, the same hours
+    every day of the week, the extra heat the higher setting draws at those hours. Some vacant dwellings were left with
+    their timer running (an owner moved into care, an estate not yet settled), and some lived-in dwellings run one too.
+    The draws come from their own stream so the rest of the world is unchanged."""
+    rng = np.random.default_rng(W.PROGRAM_SEED)
+    w.programmed = {}
+    for nr, *_r in W.MUNICIPALITIES:
+        dws = sorted((u for u in w.units if u["nr"] == nr and u["counted"]), key=lambda x: x["id"])
+        vac = [u for u in dws if u.get("vacant") in ("heated", "heatpump")]
+        pick = [vac[int(i)] for i in rng.permutation(len(vac))[:W.PROGRAMMED_VACANT[nr]]]
+        assert len(pick) == W.PROGRAMMED_VACANT[nr], (nr, len(vac))
+        lived = [u for u in dws if not u.get("vacant") and u["heating"] in ("electric", "heatpump")]
+        for u in lived:
+            if rng.random() < W.PROGRAMMED_LIVED_SHARE:
+                pick.append(u)
+        for u in sorted(pick, key=lambda x: x["id"]):
+            a0 = int(rng.integers(5, 7))
+            a1 = a0 + int(rng.integers(3, 5))
+            b0 = int(rng.integers(15, 18))
+            b1 = int(rng.integers(21, 24))
+            amp = rng.uniform(1.1, 2.6) if u.get("vacant") else rng.uniform(0.5, 2.2)
+            boost = rng.uniform(1.10, 1.35)
+            day = np.zeros(24)
+            day[a0:a1] = amp
+            day[b0:b1] = amp * rng.uniform(0.8, 1.0)
+            day[a0] *= boost
+            day[b0] *= boost
+            add = np.tile(day, W.DAYS)
+            add = add * (1 + rng.normal(0, 0.03, W.HOURS)) * (add > 0)
+            w.load[u["id"]] = np.round(np.maximum(w.load[u["id"]] + add, 0.0), 3)
+            if u.get("vacant") == "off":
+                w.load[u["id"]][:] = 0.0
+            w.programmed[u["id"]] = {"a": (a0, a1), "b": (b0, b1), "amp": round(float(amp), 3)}
+    # the household's odd jobs: a washing machine and dryer, a sauna, baking, on a few days of its own choosing
+    for u in sorted((x for x in w.units if x["counted"] and not x.get("vacant") and x["id"] in w.load),
+                    key=lambda x: x["id"]):
+        n = int(rng.integers(2, 7))
+        for _ in range(n):
+            d = int(rng.integers(0, W.DAYS))
+            h = int(rng.integers(8, 21))
+            k = int(rng.integers(1, 4))
+            s0 = d * 24 + h
+            w.load[u["id"]][s0:s0 + k] = np.round(w.load[u["id"]][s0:s0 + k] + rng.uniform(0.8, 2.0), 3)
 
 
 def _outages(w):

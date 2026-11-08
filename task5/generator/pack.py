@@ -120,6 +120,8 @@ def write_hourly(w, path, rng):
                 keep[a:a + int(rng.integers(1, 7))] = False
         est_day = int(rng.integers(0, W.DAYS)) if rng.random() < 0.03 else None
         w.missing[m["mp"]] = int((~keep).sum())
+        w.missing_hours = getattr(w, "missing_hours", {})
+        w.missing_hours[m["mp"]] = set(int(h) for h in hours[~keep])
         for i, h in enumerate(hours):
             if not keep[i]:
                 continue
@@ -152,6 +154,37 @@ def write_hourly(w, path, rng):
     pq.write_table(tab, path, compression="zstd", use_dictionary=True, write_statistics=False, store_schema=False)
     PQ._drop_created_by(path)
     return tab.num_rows
+
+
+def write_daily(w, path):
+    """The hub's daily values for the same points and fortnight, as its settlement export gives them: one row per
+    metering point and Norwegian calendar day, the day's kWh with a decimal comma, how many hours it rests on, and a
+    quality code (M measured in every hour, E where the hub filled missing hours by its estimate); a day the hub sent
+    twice appears twice. Its own random stream, so the other files stay as they were."""
+    rng = np.random.default_rng(W.SEED + 2)
+    rows = []
+    for m in sorted(w.meters, key=lambda x: x["mp"]):
+        key = ("felles", m["mp"]) if m["unit"] is None else m["unit"]
+        load = w.load[key]
+        lo, hi = 0, W.DAYS
+        if m["from"] and m["from"] > W.FORTNIGHT_START:
+            lo = (m["from"] - W.FORTNIGHT_START).days
+        if m["to"] and m["to"] < W.FORTNIGHT_START + dt.timedelta(days=W.DAYS):
+            hi = (m["to"] - W.FORTNIGHT_START).days
+        miss = w.missing_hours.get(m["mp"], set())
+        for dd in range(lo, hi):
+            hrs = [h for h in range(dd * 24, dd * 24 + 24) if h not in miss]
+            if len(hrs) == 24:
+                v, q = float(load[dd * 24:dd * 24 + 24].sum()), "M"
+            else:
+                got = float(sum(load[h] for h in hrs))
+                v, q = got * 24.0 / max(1, len(hrs)), "E"
+            day_ = (W.FORTNIGHT_START + dt.timedelta(days=dd)).strftime("%d.%m.%Y")
+            rows.append([str(m["mp"]), day_, ("%.3f" % v).replace(".", ","), str(len(hrs)), q])
+            if rng.random() < 0.004:
+                rows.append(rows[-1][:])
+    _csv(path, ["malepunkt_id", "dato", "forbruk_kwh", "antall_timeverdier", "kvalitet"], rows)
+    return len(rows)
 
 
 # ---------------------------------------------------------------------------------------------- population register

@@ -12,18 +12,33 @@ Architecture 2 (re-rooted 2026-10-31). Read `## Tried and rejected` first.
   utility_or_infrastructure against task118), forum minister_or_cabinet, forcing event statutory_or_regulatory_filing,
   role statistical_office_head, strategy classification_error, calibration none, context artifact register, shape 01.
   Architecture 1's identity and fate are the card's lineage, its shell (how-many, "Put", csv and docx) in
-  `lineage_shells`.
+  `lineage_shells`. Design repair of 2026-11-08 (no new architecture, the portal's Domains Fit callout): the card is
+  re-registered with the forum redrawn from minister_or_cabinet (banned at re-registration against mark273 v5) to
+  committee_or_panel, the honest label now that the office's own certified release, signed off by its quality board,
+  is the decision and the ministry pays on it; the context artifact redrawn from register (banned against task4 v4) to
+  planning_thread, the ministry's assignment that now carries the register-quality request; the differentiation line
+  re-keyed from task477 to mark477, the same build under the baseline's name. `guard.py check` and `register` on
+  2026-11-08: WARN only. Gate G stays method_or_model_selection (repeat.gate_g against task6 answered: the occupancy
+  reading is a choice of measurement model, the label the decisive step earns); the decision stays designation_set
+  (repeat.decision against task4 answered: Section 6 designates a set, the regulation's own shape); the deliverable set
+  stays docx+xlsx (Section 7 files a letter and a dwelling list, the genre the office certifies in).
 - **Pairing.** Survey Research & Official Statistics / `census-register-administrative-data-quality` / Data Extraction &
   Conformation. The task type serves ETL in the taxonomy. The work is the field's own: a register-based dwelling statistic
   built by conforming the cadastre, the population register, the electricity hub's meter point register and its hourly
   reads into one dwelling-level occupancy file under the scheme's data contract, and the call is the grant designation
-  that file decides.
+  that file decides. Since the 2026-11-08 repair the deciding figure is stated as what it is in the field's terms: each
+  municipality's vacancy share is an official estimate of true occupancy built from two error-prone administrative
+  sources, the population register (which lists residents of empty dwellings and omits people who live where they are
+  not registered) and the meter record, and the asks are the register's coverage errors measured against that estimate
+  (overcoverage, undercoverage, net bias), the register-quality statistics an office publishes when it asks whether a
+  register could carry a count, with each share's interval.
 - **Niche.** A ministry's 2027 vacant dwelling activation grant, piloted in one fictional Norwegian county of ten
   municipalities, goes to every municipality where at least 5.0 per cent of the dwellings the regulation counts stood
   vacant in the reference fortnight of 9 to 22 November 2026. The regulation defines vacant by whether anyone lived in the
   dwelling, whatever the population register shows, and has the national statistics office certify each municipality's
   share by 15 January 2027 from the hub's hourly meter data, which the regulation makes the office's source.
-- **The call.** Which municipalities qualify (a designation set), with each municipality's vacant dwellings and share.
+- **The call.** Which municipalities qualify (a designation set), with each municipality's vacant dwellings, share and
+  90 per cent interval, and the register's overcoverage, undercoverage and net bias beside them.
   Retrospective measurement, forward decision: the fortnight is closed, the grant is the 2027 programme's, and the
   regulation designates on that fortnight.
 - **Shape.** 01, the candidates against a threshold: each municipality's vacant dwellings and share (two figures for each
@@ -41,16 +56,27 @@ Architecture 2 (re-rooted 2026-10-31). Read `## Tried and rejected` first.
   there; occupancy is the presence of the morning and evening rise over the dwelling's own night-time load, a model of a
   household's routine against a heating load that no field records, so a correct read is not sufficient. Nothing in the
   step is identity resolution, grain or time semantics.
-- **Forum, event, organisation, role.** The ministry adopts the list (minister_or_cabinet); the regulation's delivery
-  deadline forces it (statutory_or_regulatory_filing); the national statistics office certifies it
-  (research_or_statistics_office), its dwelling statistics section head the stakeholder (statistical_office_head).
+- **Forum, event, organisation, role.** The ministry pays the grant on the office's certified figures (Section 8),
+  so the certification goes to the scheme's funder (funder_or_donor; redrawn on 2026-11-08 from committee_or_panel,
+  banned against task4 v4 at the deepening's re-registration); the regulation's delivery deadline forces it
+  (budget_or_appropriation since the heart re-run of 2026-11-08: the ministry's 2027 allocation of the grant on the
+  certified figures; statutory_or_regulatory_filing was banned against task3 v3, registered after this card); the national statistics office certifies it (research_or_statistics_office), its
+  dwelling statistics section head the stakeholder (statistical_office_head).
 - **People** (`guard.py names --geo Norway --seed 470`, locale no_NO): Martine Strøm, head of the office's dwelling
   statistics section; Eirik Haug, the ministry's adviser on the scheme. Neither appears in the prompt.
 - **Data-native sentence.** An empty dwelling in a Norwegian November is heated (a lowered thermostat or frost protection
   keeps the electric heating on), so its hourly load runs with the outdoor temperature at levels many lived-in flats never
-  reach, while the population register still lists residents who have moved to care or abroad and omits students and
-  workers who never re-registered; only a household's own morning and evening rise over its night-time load shows that
-  someone lived there.
+  reach, and where its owner left the heaters' or heat pump's daily timer running it also rises every morning and evening
+  at its comfort hours, while the population register still lists residents who have moved to care or abroad and omits
+  students and workers who never re-registered; only a household's day departing from what the dwelling repeats every
+  day shows that someone lived there.
+- **Stump deepened (2026-11-08, after the judge's SEND_BACK on Gate H).** As filed, the household's morning or evening
+  rise separated the dwellings bimodally, so one sentence rescued a run (H5). The world now carries heating on daily
+  timers (`sim._programs`, its own random stream, so every other draw is unchanged): 70 vacant dwellings left with their
+  timer running, 30 per cent of the lived-in electric and heat-pump dwellings with one, and each household's odd jobs
+  (a wash, a sauna, baking) on days of its own. The rise now reads the 70 as lived in and designates Tverrvika and
+  Ørnevik alone, separating cleanly and agreeing with the register, so the strong run's own route passes its own
+  checks; the decisive step is the household's departure from the dwelling's own typical day.
 - **Abstraction sentence** (written against the nearest approved builds, not writable as the same): task182's "each
   bore's own lagged driver response" reads a unit's departure from its own response to a shared driver; here the step is
   the presence or absence of the users' daily rhythm in a unit's own record whose level a use-independent load carries,
@@ -75,35 +101,40 @@ from the generator's checks on the built pack).
 2. Conform: 8,020 counted dwellings; each joined to its household metering points by the cadastre's unit ID, else by
    municipality and address for a single-unit house (Snøholt's points still under Fjordeid's old number 5809); the
    hourly values from UTC to Norwegian time, each hour once with the later delivery kept, a changed meter's two points
-   added.
-3. Apply the field's vacancy-from-meters rule, the utility-data vacancy statistic: each dwelling's average daily use
-   over the fortnight, vacant under a consumption floor. A floor of 3 kWh a day finds 113 switched-off and fridge-only
-   dwellings and no lived-in one; a floor of 10 finds 297, the lived-in dwellings' first percentile sitting at 9.3.
-4. Validate it: 75 per cent of the dwellings under a 3 kWh floor have nobody registered on 1 November, against 9 per
-   cent of the rest, so the floor agrees with the register where the register is right.
-5. Share by municipality; the highest is Solmoen's 3.7 per cent at a 3 kWh floor.
+   added; the hub's daily values agree with the hourly ones summed.
+3. Try the field's vacancy-from-meters rule, a consumption floor on the fortnight's average daily use: no municipality
+   qualifies at any floor from 1 to 10 kWh a day, and the vacant dwellings use more than the lived-in (a median 22.8
+   against 20.4 kWh a day). An empty dwelling in a Norwegian November is heated, so the analyst sets the level aside.
+4. Read occupancy from the household's day instead: the morning (06 to 09) or evening (16 to 22) mean over the night
+   (01 to 05) on any day, a dwelling lived in when some day rises. The rise is cleanly bimodal, nothing between 0.3 and
+   0.8 kWh, and the dwellings it calls empty mostly have nobody registered on 1 November, so it validates.
+5. Count: 326 vacant (70 vacant dwellings heated on a daily timer rise every morning and evening and read as lived in);
+   share by municipality.
 
-Ends on: no municipality qualifies (none at any floor from 1 to 10 kWh a day).
+Ends on: Tverrvika and Ørnevik alone qualify (6.2 and 7.1 per cent), at every rise cut from 0.3 to 1.0 kWh.
 
 Golden: five municipalities qualify (Tverrvika 7.3, Hesteby 6.4, Solmoen 6.5, Ørnevik 8.2 and Fjordeid 5.4 per cent).
+Hesteby, Solmoen and Fjordeid fall under the line on the rise (4.6, 4.7 and 4.5 per cent) because their timer dwellings
+read as lived in.
 
 ## Stump sentence
 
-A competent solver conforms the cadastre and the hub's hourly values, counts as vacant the dwellings whose average daily
-use over the fortnight sits under a consumption floor, sees the floor agree with the register, and files that no
-municipality qualifies at any floor from 1 to 10 kWh a day; an empty dwelling in a Norwegian November is left heated, so
-the vacant dwellings use a median 20.5 kWh a day against 19.5 for the lived-in ones, and only a household's morning or
-evening rise over the dwelling's own night-time use on some day shows that someone lived there, which designates five.
+A competent solver conforms the cadastre and the hub's hourly values, sees that an empty dwelling in a Norwegian November
+is heated so no consumption floor works, reads occupancy from the household's morning or evening rise over the
+dwelling's own night-time use, sees it separate cleanly and agree with the register, and files that Tverrvika and Ørnevik alone qualify (6.2 and 7.1 per cent); 70 vacant dwellings were left heated on a daily timer that rises at the same hours by the same amount every day,
+and only a household's departure from what the dwelling repeats every day, some hour more than 0.9 kWh above its own
+typical day, shows that someone lived there, which designates five.
 
-## Three rules
+## Deep reasoning
 
 - **Task type:** census-register-administrative-data-quality in Survey Research & Official Statistics, which serves
   Data Extraction & Conformation: a register-based dwelling statistic conformed from the cadastre, the meter data
   hub's metering points and hourly values and the population register into one dwelling-level file under the
   regulation's contract, the designation read from it.
-- **Domain test:** the quantity that decides is each dwelling's occupancy in the reference fortnight, the official
-  statistics question of whether a dwelling is lived in; the field's two estimators for it are the register-based
-  count (dwellings with no registered resident) and the utility-data vacancy statistic (a consumption floor on the
+- **Domain test:** the quantity that decides is each municipality's vacancy share, an official estimate of true
+  occupancy built from two error-prone administrative sources, and beside it the register's coverage errors measured
+  against that estimate; the field's two estimators for the share are the register-based count (dwellings with no
+  registered resident, net bias zero by construction) and the utility-data vacancy statistic (a consumption floor on the
   metered electricity), and both sit at the bottom of the ladder here.
 - **Swap:** put hospital wards for dwellings and admissions for residents and the call reads "which hospitals have
   5 per cent of their wards empty"; a ward's occupancy sits in the admissions system, no ward is heated empty because
@@ -116,48 +147,93 @@ evening rise over the dwelling's own night-time use on some day shows that someo
   register's events after 1 November; the land register's late registrations; the outage hours; every item as its
   system produces it, nothing placed to be caught.
 - **Layer 2:** classification from a measured signal (estimation_fit): the choice of what in a dwelling's metered
-  record shows that someone lived there, the household's daily cycle against the building's own heating load, rather
-  than the level of use or the register.
-- **Decisive step:** recognising that in a Norwegian November an empty dwelling's electricity is its heating, so the
-  level of use cannot tell an empty dwelling from a lived-in one, and reading occupancy from whether, on any day, the
-  dwelling's morning or evening use rose above its own night-time use, the household's day.
+  record shows that someone lived there, the variation of its days beyond what the building's own load repeats, rather
+  than the level of use, the daily rise or the register.
+- **Decisive step:** recognising that the daily rise has two explanations, a household's day and a heating timer's
+  comfort hours, and separating them by what each does across the fortnight: a timer repeats the same hours by the same
+  amount every day and a household departs from it, so occupancy is read from whether some hour of some day ran above
+  the dwelling's own typical day by more than its repeated load and noise allow.
 - **Not semantics:** every field read correctly (kWh per hour, UTC stamps, the E and M quality codes, the two
   deliveries, unit IDs, Snøholt's old number) gives a correct level for each dwelling and day, and the level is not
   occupancy; the floor route reads every field right and still files that no municipality qualifies.
 - **Not rule application:** no filed rule says how occupancy shows in metered values (Section 5 names the source only),
   and executing every filed rule leaves the construction open: the enumerated family spreads from no municipality to
-  all ten (the register all ten; floors of 0.5 to 10 kWh a day none; 10.5 kWh four, 11 six, 11.5 seven, 12 nine; 13 and
-  over all ten; the register's empty dwellings with no household day Hesteby alone); the standing family, once Section 4
-  rules the register out, still spreads from none to all ten across the floors; what rules the floors out is the data's
-  own structure (vacant and lived-in dwellings with the same median use), silent, and the household-day members then
-  agree on the golden five across a corridor of 0.29 to 1.00 kWh.
-- **Analyst test:** a strong analyst who conforms every file and applies every filed rule takes the field's
-  utility-data vacancy rule, a consumption floor anywhere from 1 to 10 kWh a day, sees it validate against the register,
-  and files that no municipality qualifies.
+  all ten (the register all ten; floors of 0.5 to 10 kWh a day none, higher floors four to all ten; the daily rise at
+  any cut from 0.3 to 1.0 kWh Tverrvika and Ørnevik; a timer read with its cut inside the lived-in dwellings seven or
+  all ten); what rules the floors out is the data's own structure (vacant dwellings using a median 22.8 kWh a day
+  against 20.4 for the lived-in), what rules the rise out is the timer dwellings' identical days, both silent, and the
+  departure members then agree on the golden five across a gap of 0.6 to 1.3 kWh.
+- **Analyst test:** a strong analyst who conforms every file and applies every filed rule rejects the consumption floor
+  (empty dwellings are heated), reads occupancy from the household's daily rise, sees it separate bimodally and agree
+  with the register, and files that Tverrvika and Ørnevik alone qualify (6.2 and 7.1 per cent); a weaker one stops at the floor
+  and files none.
 - **Estimand:** Sections 3, 4 and 6 of regulation_vacant_dwelling_grant_2027.pdf: the counted dwellings (the cadastre's
   Bolig units in use on or before 1 November 2026), each vacant when nobody lived in it on any day of 9 to 22 November
   2026 whatever the population register shows, a municipality's share of its counted dwellings rounded to one decimal,
-  qualifying at 5.0 per cent or more.
+  qualifying at 5.0 per cent or more; the ministry's assignment (ministry_assignment_2026-12-01.eml) files the
+  interval's basis (the counted dwellings taken as so many chances of a dwelling standing empty) and overcoverage,
+  undercoverage and net bias with their denominators.
 - **No decoy:** nothing is planted: no memo, briefing, draft or stakeholder figure argues the floor or the register; the
   regulation and the ministry's letter file the WHAT; the hub's, the cadastre's and the registers' files are what those
   systems produce.
 - **No certified replay:** no certified, published or prior-year figure ships; nothing is recovered by reproducing a
   published share or count.
-- **Lesson:** metered energy shows that a home is lived in through the shape of its use, not its level, wherever the
-  building's own load runs with nobody there (heating in a cold climate); no build on file reads a household's daily
-  cycle from a unit's own hourly record.
+- **Chain:** (1) the register-based count, the field's first estimator, designates all ten and the consumption floor,
+  its second, designates none at every floor from 1 to 10 kWh a day; (2) the vacant dwellings use more energy than the
+  lived-in (a median 22.8 against 20.4 kWh a day), so the level carries the heating, and the household's daily rise
+  over the night is the next reading, which separates bimodally, agrees with the register and gives 326 vacant,
+  Tverrvika and Ørnevik; (3) the rise has a second explanation: 70 of the dwellings it reads as lived in rise at the same
+  hours by the same amount every day of the fortnight, a heating timer, so occupancy is the departure of a day from what
+  the dwelling repeats, some hour more than 0.9 kWh over its own typical day (no vacant dwelling reaches 0.6, every
+  lived-in one 1.3), which gives 396 vacant and the five; (4) with occupancy estimated, the register's coverage errors
+  follow (118 overcoverage, 556 undercoverage, net bias 5.5 per cent), each needing step 3, and the shares' intervals
+  put Tverrvika, Hesteby and Ørnevik wholly above 5.0.
+- **Judgment:** a measurement-model judgment, separating two explanations for one pattern by its variation: the rise is
+  a household or a timer, and the analyst has to justify from the data that the dwelling's own repeated day is the
+  baseline against which a household shows (variance beyond what the building's load repeats) and place the cut in the
+  gap that statistic's distribution shows (0.6 to 1.3 kWh); a timer read as days alike lands on the same five only with
+  its cut in its own statistic's gap (a mean correlation of the days from 0.955 to 0.98), and cuts inside the lived-in
+  dwellings are ruled out by those dwellings' own hours (SF28).
+- **One-fact test:** the hint that empty dwellings are heated in November leads to the rise, which lands on two; the
+  hint that some heating runs on timers names the confound but not the reading: the solver still has to build a
+  baseline from each dwelling's own days, set each day at its night, choose a statistic and a cut the data justify (a
+  timer read with an unjustified cut gives seven or all ten), keep the outage hours from reading as activity, roll the
+  register back to 1 November through the renumbered blocks and set the register's errors against the estimate. No one
+  sentence makes it routine.
+- **No replay:** no published or certified figure ships and nothing is recovered by reproducing one; no stated number is
+  wrong.
+- **Pinned:** every rival is run on the clean truth: the register designates all ten (ruled out by Section 4), every
+  floor from 1 to 10 kWh none and higher floors four to all ten (ruled out by the records, C4), the daily rise at any
+  cut from 0.3 to 1.0 kWh Tverrvika and Ørnevik (ruled out by the timer dwellings' identical days, C4), a departure
+  either way with outage hours read as use (ruled out by the grid's outage log), a timer cut inside the lived-in
+  dwellings (ruled out by their own hours, SF28), and every departure reading in SF12 the golden five; the interval's
+  side is the same under the exact, Wilson, Jeffreys, Wald and Agresti-Coull intervals for the three wholly above
+  (SF24), and net bias is filed as one ratio of counts (SF27).
+- **Run forecast:** unfinished chain at rung 2: a strong run rejects the floor, reads the daily rise, sees it validate
+  and files Tverrvika and Ørnevik, its 20 main figures, interval sides and all 50 register cells wrong; a weaker run
+  stops at the floor (none) or the register (all ten), 0 of 50.
+- **Strategy label:** WORKS IN FORM (Part A, heterogeneity is not this; the family is classification from a measured
+  signal, Survey 03's register-auxiliary form read the other way: the second source is the estimate's evidence and the
+  register its object), the live form being a decisive feature no column records and the field's own two estimators at
+  rungs 0 and 1.
+- **Lesson:** metered energy shows that a home is lived in through what its days do that the building does not repeat,
+  not through their level or their daily shape, wherever the building's own load runs with nobody there on a schedule
+  (heating on a timer in a cold climate).
 
 ## Survivor anatomy
 
 - **Actor:** the dwelling has rows (a cadastre unit, its metering points, their hours), and whether anybody lived in it
   has no column anywhere: the register's residents are another quantity the regulation sets aside, and no file holds
   a household, an occupancy flag or a vacancy code.
-- **Link:** the signal is a relation between rows of one dwelling's own record, its morning and evening hours against
-  its own night hours on the same day, a comparison no key offers and the field's vacancy statistic never makes.
-- **Reflex:** the field's methods for the quantity sit at rungs 0 and 1: the register's empty dwellings designate all
-  ten, and the utility-data consumption floor designates none at any floor from 1 to 10 kWh a day.
-- **Back-test:** the textbook route validates: 75 per cent of the dwellings a 3 kWh floor calls vacant have nobody
-  registered on 1 November, against 9 per cent of the rest, and none of them shows any use at all.
+- **Link:** the signal is a relation between rows of one dwelling's own record, each hour of each day against the same
+  hour of the dwelling's other days, each day set at its own night, a comparison no key offers and the field's vacancy
+  statistic never makes.
+- **Reflex:** the field's methods for the quantity sit at rungs 0 and 1 (the register's empty dwellings designate all
+  ten, the utility-data consumption floor none at any floor from 1 to 10 kWh a day), and the smart-meter reading of a
+  household's daily cycle, the strong analyst's first move past them, at rung 2 (Tverrvika and Ørnevik).
+- **Back-test:** the rung-2 route validates: the rise is bimodal (nothing between 0.3 and 0.8 kWh), and of the
+  dwellings it calls vacant most have nobody registered on 1 November, so it agrees with the register where the
+  register is right; the 70 timer dwellings it reads as lived in sit in the lived-in mass of every rise statistic.
 - **Second use:** every file the decisive step reads (the cadastre, the meter register, the hourly values) is the
   regulation's own evidence under Section 5 and is read by every route to the call; deleting the step drops no file.
 - **Shock:** the golden five are the top or bottom five of none of 20 shipped statistics (the register-empty share, the
@@ -172,9 +248,9 @@ evening rise over the dwelling's own night-time use on some day shows that someo
 | Rung | 1 Filed sentence | 2 Schema | 3 Reflex | 4 Control bench | 5 Hygiene | 6 Linear | 7 Second use | Verdict |
 |---|---|---|---|---|---|---|---|---|
 | R0 the register's empty dwellings on 1 November | Section 4's register sentence | the register's rows | the official convention | none | none | a count | yes | readable |
-| R1 a consumption floor on the fortnight's average daily use | none | the hourly values | the utility-data vacancy statistic | the register agrees with it | none | a filter | yes | readable |
-| R2 the register's empty dwellings with no household day | Section 4 read as a pre-filter | the register's rows | none | none | none | a filter | yes | readable |
-| R3 (decisive) the household day on any day of the fortnight | no sentence names an hour, a pattern or heating | no column holds occupancy | the field's statistic is the level, not the shape | the register and the floor agree with each other, not with it | the battery cleans the hours and stops | a within-dwelling comparison across hours of the day | the files are the call's own evidence | silent |
+| R1 a consumption floor on the fortnight's average daily use | none | the hourly or daily values | the utility-data vacancy statistic | the register agrees with it | none | a filter | yes | readable |
+| R2 the household's daily rise over the night on any day | none | the hourly values | the smart-meter occupancy reading | bimodal, and the register agrees | none | a within-day comparison | yes | readable |
+| R3 (decisive) a day departing from the dwelling's own typical day | no sentence names an hour, a pattern, heating or a timer | no column holds occupancy or a timer | the field's readings are the level and the daily shape | the rise and the register agree with each other, not with it | the battery cleans the hours and stops | a comparison across a dwelling's own days | the files are the call's own evidence | silent |
 
 ## Semantic fork table
 
@@ -191,34 +267,35 @@ evening rise over the dwelling's own night-time use on some day shows that someo
 | SF9 | the municipalities | the ten as they stood on 1 January 2026 | Fjordeid with Snøholt | same call | Section 2 |
 | SF10 | missing hours | the day read on the hours present | a day with a gap left out | same call | same call (asserted) |
 | SF11 | outage hours | read as recorded (zero) | left out | same call | same call (asserted) |
-| SF12 | the household day | morning or evening over night on any day | morning only, evening only, highest hour over lowest, spread of hours (outage hours left out), any cut from 0.2 to 0.8 kWh | same call | same call (asserted, every member separates) |
-| SF13 | on any day | a household on one day makes it lived in | the rise averaged over the fortnight | seven qualify | Section 4 (nobody lived in it on any day) |
+| SF12 | the household's day | some hour more than the cut above the dwelling's own typical day (the median of its days hour by hour, each day set at its night), on any day | nights 00 to 06 or 02 to 05, the typical day as the quartiles' mid-point, two-hour blocks, any cut from 0.7 to 1.2 kWh | same call | same call (asserted, every member separates with a gap of 0.6 to 1.3 kWh) |
+| SF13 | on any day | a household on one day makes it lived in | the rise averaged over the fortnight | another set | Section 4 (nobody lived in it on any day) |
+| SF28 | a heating timer | read off the departure from the dwelling's own typical day | the rise with days alike read as a timer (the days' mean correlation at 0.955 to 0.98), or the rise's spread under 0.10 kWh; or either with its cut inside the lived-in dwellings (correlation 0.90, spread 0.20) | the golden five in the gap; seven or all ten inside it | the records: each lived-in dwelling such a cut calls empty has an hour at least 1.3 kWh above its own typical day, a household on that day (Section 4); asserted |
+| SF29 | a departure either way | above the typical day only | above or below, outage hours read as use | Solmoen and Snøholt gain households | the grid company's outage log: those hours had no supply (asserted with them left out) |
+| SF30 | the hub's daily values | the hourly values decide; the daily values agree with them | the daily values for the level | the same floors, the same none | same call on every floor (the daily values are the hourly ones summed, estimated where hours are missing) |
 | SF14 | a two-unit house | two dwellings | one | same call | Section 3 (dwelling units) |
 | SF15 | holiday homes and care homes | not counted | counted | not in the extract | Section 3 |
 | SF16 | table A, held on 1 November | the register's state that day | by event date against registration date | same persons | same call (asserted, no event straddles the day) |
-| SF17 | table A, age | on 1 November | on 5 January | 26 of 30 cells move | the ministry's letter (by their age on that day) |
 | SF18 | table A, a block's renumbering | a change of unit number | a move | the old ground floors' residents lost | the records (every resident, one day, one floor up, old numbers absent from the cadastre) |
-| SF19 | table B, held on 1 November | by registration (tinglyst) date | by the deed's date | every figure moves | the ministry's letter (held on the land register); no transfer registered on the day |
-| SF20 | table B, a company the municipality owns | KF, or all shares held itself or through such a company, together | one holder with all the shares | three municipalities move | the ministry's letter (itself or through such a company) |
-| SF21 | table B, a title without an organisation number | the municipality when the name is its own | left out | every figure moves | the land register's holder name and the business register's names |
-| SF22 | table B, how many | dwellings | titles | every figure moves | the ministry's letter (how many of its counted dwellings) |
-| SF23 | table B, the inter-municipal company | not the municipality's | counted | Brekkevoll and Ravnsund move | the ministry's letter (all the shares) |
-| SF24 | the share's 90 per cent interval | the exact binomial (Clopper-Pearson) interval on the municipality's counted dwellings | Wilson, Jeffreys, the normal approximation | bounds move at one decimal, the call does not | the ministry's letter (the exact binomial interval on the counted dwellings); every exact bound clears a rounding edge by at least 0.0013 points (asserted) |
+| SF24 | the share's 90 per cent interval | the counted dwellings as so many chances of a dwelling standing empty, graded on which intervals lie wholly above 5.0 | the exact, Wilson, Jeffreys, Wald or Agresti-Coull interval | the bounds move at one decimal and Kvernhaug's side moves under Wald; the three wholly above (5802, 5803, 5807) do not | the assignment files the basis and no method; only the wholly-above side is graded, the same under all five, every lower bound at least 0.05 points from 5.0 (asserted) |
 | SF25 | what the designation rests on | the estimated share, as Section 6 sets it, the interval reported beside it | the whole interval above the threshold | three qualify (5802, 5803, 5807) | the prompt (judged on the estimated share, the interval beside it) and Section 6 (asserted) |
+| SF26 | overcoverage and undercoverage rates | over the counted dwellings where the register held someone, and over those where it held nobody, on 1 November | over all counted dwellings, or registration on 5 January | every rate moves | the assignment's two denominators and its date (asserted) |
+| SF27 | net bias | the dwellings where the register held nobody less the vacant ones, over all counted dwellings | the difference of the two rounded shares | Tverrvika and Hesteby move by 0.1 | the assignment files it as one ratio of counts (asserted) |
 
 ## Ladder
 
 | Rung | Construction | Designates | Main figures kept |
 |---|---|---|---|
-| R0 | the register's empty dwellings on 1 November (the official convention) | all ten | 2 of 20 |
-| R1 | a consumption floor of 1 to 10 kWh a day (the utility-data vacancy statistic) | none | 0 to 4 of 20 |
-| R1b | floors of 10.5 to 12 kWh a day | four, six, seven, nine (Brekkevoll, Hesteby, Kvernhaug, Ravnsund first) | 0 to 2 of 20 |
-| R2 | the register's empty dwellings with no household day | Hesteby alone | 0 of 20 |
-| G | the household day on any day of the fortnight | Tverrvika, Hesteby, Solmoen, Ørnevik, Fjordeid | 20 of 20 |
+| R0 | the register's empty dwellings on 1 November (the official convention) | all ten | 0 of 20 |
+| R1 | a consumption floor of 1 to 10 kWh a day (the utility-data vacancy statistic) | none | 0 to 1 of 20 |
+| R1b | floors of 10.5 to 15 kWh a day | four to all ten | 0 to 1 of 20 |
+| R2 | the household's daily rise over the night on any day, any cut from 0.3 to 1.0 kWh | Tverrvika, Ørnevik | 0 of 20 |
+| R2b | the register's empty dwellings with no daily rise | none | 0 of 20 |
+| G | a day departing from the dwelling's own typical day | Tverrvika, Hesteby, Solmoen, Ørnevik, Fjordeid | 20 of 20 |
 
 Margins: the golden shares sit at least 0.27 points from the rounding line (Snøholt 4.68, Fjordeid 5.36); the counts are
-exact because the household day separates every dwelling (lived-in minimum 1.00 kWh, vacant maximum 0.29). No floor from
-0.5 to 30 kWh a day designates the golden five.
+exact because the departure separates every dwelling (lived-in minimum 1.3 kWh, vacant maximum 0.6); on the rise the
+three dropped municipalities sit at 4.6, 4.7 and 4.5, well under the line. No floor from 0.5 to 30 kWh a day and no rise
+cut from 0.3 to 1.0 kWh designates the golden five.
 
 ## Closure table
 
@@ -227,13 +304,13 @@ exact because the household day separates every dwelling (lived-in minimum 1.00 
 | 1 Population | the counted dwellings: Bolig units in use on or before 1 November 2026 (Section 3); units with no date, taken into use later, holiday homes and care homes out | filed in Section 3; C1 on the data (SF1) |
 | 2 Unit of account | the dwelling (a cadastre unit), a two-unit house two dwellings; the municipality for the share | filed (Sections 3 and 6); SF14 |
 | 3 Attribution window | 9 to 22 November 2026, every hour of the fortnight read; the hourly values cover exactly that fortnight | filed in Section 4; C1, nothing at the edges moves a dwelling (SF3) |
-| 4 As-of dating | the dwellings as at 1 November (in-use date); municipalities as at 1 January 2026; table A on 1 November; table B on the land register on 1 November | filed in Sections 2 and 3 and in the ministry's letter; SF9, SF16, SF19 |
+| 4 As-of dating | the dwellings as at 1 November (in-use date); municipalities as at 1 January 2026; registration on 1 November for the coverage figures | filed in Sections 2 and 3 and in the ministry's letter; SF9, SF16, SF26 |
 | 5 Version basis | the hub's later delivery where an estimated day was replaced | C1: first, latest and both give the same call (SF4) |
 | 6 Denominator | the municipality's counted dwellings | filed in Section 6 |
 | 7 Weighting | none: a count over a count | filed in Section 6 |
 | 8 Window length | the whole fortnight, a dwelling lived in if any day shows a household | filed in Section 4 (on any day); SF13 records the averaged reading's other call |
 | 9 Boundary inclusivity | 5.0 per cent or more qualifies | filed in Section 6; no share within 0.2 points of the rounding line (C1) |
-| 10 Rounding path | each share rounded once to one decimal, the threshold read on the rounded share; each interval bound rounded once to one decimal from the exact bound | filed in Section 6 and the prompt; C1, the unrounded reading gives the same call (SF8); SF24 |
+| 10 Rounding path | each share rounded once to one decimal, the threshold read on the rounded share; the coverage rates and net bias each one ratio rounded once | filed in Section 6, the prompt and the assignment; C1, the unrounded reading gives the same call (SF8); SF24, SF27 |
 | 11 Tie-break | none needed: the designation is a set, no ranking | C1 |
 | 12 Maturity and censoring | none: the fortnight is closed and fully delivered; a few hours missing per meter | C1 (SF10) |
 | 13 Order of operations | join, clock, deduplicate, classify, count | C1: each order prints the same call (SF3, SF4, SF5 asserted on every variant) |
@@ -244,7 +321,7 @@ exact because the household day separates every dwelling (lived-in minimum 1.00 
 | 18 Dimensional units | kWh per hour throughout, one unit in the hub's file | units in the data |
 | 19 Code and status semantics | kundekategori Husholdning against Fellesmåling; the quality codes E and M | the hub's own codes; C1 (SF4, SF6); never the stump |
 | 20 Integerisation | whole dwellings and persons; nothing allocated | C1 by construction |
-| 21 Clause scope | Section 4's register sentence decides vacancy only; the register is the source of table A | filed scope (Section 4, the ministry's letter) |
+| 21 Clause scope | Section 4's register sentence decides vacancy only; the register is the object of the coverage figures | filed scope (Section 4, the ministry's letter) |
 | 22 Forward window contents | the grant pays in March 2027 on the certified figures; nothing forecast | filed in Section 8; retrospective by the regulation's design |
 
 ## Literal reader
@@ -252,92 +329,90 @@ exact because the household day separates every dwelling (lived-in minimum 1.00 
 Executed word for word, the prompt and Sections 2 to 7 file the counted dwellings, the fortnight, the share, its rounding
 and the threshold (SF1, SF8, SF9), and file vacant as nobody having lived in the dwelling on any day of the fortnight
 whatever the register shows; Section 5 names the evidence and not how it shows occupancy, so the literal reader has to
-decide what in a dwelling's metered values shows that someone lived there. Every reading that decides it from the record
-itself, a household's day against the dwelling's own night hours in any form SF12 lists, gives the golden five; the
-register's reading is ruled out by Section 4's last sentence, the averaged reading by Section 4's "on any day", and every
-consumption floor by the records (C4): no floor separates the dwellings nobody lived in, which use a median 20.5 kWh a
-day against the lived-in dwellings' 19.5, and floors over 9 kWh flag lived-in dwellings whose own hours show a household
-every day. Each convention the call needs is closed in the fork table (SF3 to SF15 the same call, asserted), and each term
-of the two tables by the ministry's letter or the records (SF16 to SF23). Every step of the write-up executes as written.
+decide what in a dwelling's metered values shows that someone lived there. Every reading that decides it from the
+dwelling's own days, some hour of some day above its own typical day in any form SF12 lists, gives the golden five; the
+register's reading is ruled out by Section 4's last sentence, the averaged reading by Section 4's "on any day", every
+consumption floor by the records (C4: the vacant dwellings use a median 22.8 kWh a day against 20.4 for the lived-in),
+and the daily rise by the records (C4: 70 dwellings rise at the same hours by the same amount on every one of the 14
+days, a repetition no lived-in dwelling shows, and none of their hours ever leaves its typical day by 0.6 kWh). A timer
+read as days alike gives the golden five with its cut in its statistic's gap and is ruled out inside the lived-in
+dwellings by their own hours (SF28); a departure either way is ruled out by the outage log (SF29). Each convention the
+call needs is closed in the fork table (SF3 to SF15 the same call, asserted), and each term of the register-quality
+figures and the interval by the ministry's letter or the records (SF16, SF18, SF24 to SF27). Every step of the
+write-up executes as written.
 
 ## Oracles
 
-No shipped file ranks the municipalities on the call: no vacancy share, occupancy flag, household or count of empty
-dwellings is filed anywhere. The register is the one second source on occupancy and the regulation sets it aside; it
-agrees with the floor (the back-test), not with the golden. The outage log documents zero hours in three municipalities
-that no household-day reading depends on (SF11), and the municipality list documents Snøholt's split (SF7). Table A's
-only referee is the event log itself (every resident of a renumbered block moving one floor up on one day, the cadastre
-holding only the new numbers); table B's are the land register's holder names against the business register's and the
-shareholder register's counts. Nothing ties only under the golden.
+No shipped file ranks the municipalities on the call: no vacancy share, occupancy flag, household, timer or count of
+empty dwellings is filed anywhere. The register is the one second source on occupancy and the regulation sets it aside;
+it agrees with the floor and with the rise (the back-tests), not with the golden. The outage log documents zero hours in
+three municipalities, which rule out a departure read either way (SF29) and nothing else; the municipality list
+documents Snøholt's split (SF7). The hub's daily values are the hourly values summed by day, estimated where hours are
+missing, and give every floor the same call (SF30). The registration behind the coverage figures has only the event log
+as its referee (every resident of a renumbered block moving one floor up on one day, the cadastre holding only the new
+numbers). The land, business and shareholder registers and the day-ahead prices are read by no ask and ship as
+distractors. Nothing ties only under the golden.
 
 ## Ask sheet
 
-**Table A, each municipality's persons registered in its counted dwellings on 1 November 2026, by age that day under
-18, 18 to 66 and 67 and over** (30 figures). H18: the ministry's follow-up of the pilot (its letter of 1 December) wants
-the population the counted dwellings held on the day the regulation fixes them; the call reads no register row. Primary
-device D2 (a label stored before a silent switch): in November the cadastre renumbered 197 flats in blocks whose
-residential floors had been numbered from a ground floor of shops, and the population register records the change as
-each resident's move to the unit number one floor up on the day; the cadastre extract carries only the new numbers, so
-undoing the register's events as written leaves the old ground floors' residents on numbers no dwelling has. The blocks
-cover every age band in every municipality. Hazards: the snapshot as it stands (D2), the dead and the emigrated added
-back (D4), the births and arrivals after 1 November (D5), ages on 5 January (D8), care home residents in units the
-regulation does not count (D5). Path: the register of 5 January, the event log and the cadastre (3 files: the register's person, birth date and address
-fields, the log's event, its two dates and its from and to addresses, the cadastre's address, unit, type and date of use). Stops: the register as it stands
--21 to +9 (27 of 30 missed); every event undone as written -16 to -1 (all 30); the dead and the emigrated left out -13 to
-0 (20 of 30); ages on 5 January -12 to +12 (26 of 30). Realism: municipalities renumber flats to the national
-unit-number standard block by block, and the register writes each change as a move.
+**The register beside the vacancy figures: each municipality's overcoverage and undercoverage on 1 November 2026, each
+as dwellings and a rate, and its net bias** (50 figures, the assignment's terms, SF26 and SF27). H18: the pilot asks
+whether the register could carry the count in later years, which only the coverage errors against the estimate answer;
+the call reads no register row. The asks ride the deep step: every figure is the register set against the occupancy
+estimate, so a run on a consumption floor (0 to 2 of 50), the register (0 of 50) or the register's empty dwellings with
+no household day (20 of 50) loses nearly all of them. Second judgment, carried from architecture 2's table A: the
+registration on 1 November, the register of 5 January rolled back through the November block renumberings (device D2,
+a label stored before a silent switch), which moves the coverage counts in the renumbered blocks. Stops: the register
+as it stands 18 of 50; every event undone as written, the renumberings as moves (the cracker) 12 of 50; the dead and
+the emigrated not added back 35 of 50. Path: the register of 5 January, the event log, the cadastre, the meter files
+(the occupancy estimate). Realism: municipalities renumber flats to the national unit-number standard block by block,
+and the register writes each change as a move.
 
-**Table B, each municipality's counted dwellings held on the land register on 1 November 2026 by the municipality or a
-company it owns** (10 figures). H18: the follow-up wants the municipalities' own housing among the counted dwellings, the
-stock a municipality can bring back into use itself; the call reads no land register row. Primary device D7 (the true
-key elsewhere): 52 titles from before the business register hold the municipalities' own houses and blocks under the
-name of the day (a herredskommune, a bykommune, care of the chief executive or the property management) and no
-organisation number, so a join by number misses them and the business register's exact names do not match them. Second
-device D7 (names that lie both ways): private companies in a municipality's name (a builder, a landlord, a developer)
-hold dwellings, an inter-municipal company two municipalities share holds a block in each, and in three municipalities
-the housing company carries a name of its own and is owned 60 per cent through the municipality's holding company and
-40 per cent directly. Hazards: transfers registered after 1 November (D2), deeds signed before the day and registered
-after it (D8), the KF found by its parent (D5), titles at property level over many dwellings (D6). Path: the titles,
-the transfers, the business register, the shareholder register, the municipality list and the cadastre (6 files). Stops: organisation numbers only, with the KF and the full chain, -14 to -4 (all ten missed); exact names the
-same; every name beginning with the municipality's -49 to +63 (nine of ten); the titles as they stand -15 to +1 (all
-ten); the deeds' dates -8 to -1 (all ten); one holder with all the shares -94 to 0 (three); the municipality and its KF
-only -127 to 0 (six); no KF -97 to 0 (four); titles instead of dwellings -103 to -4 (all ten). Realism: the land register
-still carries many public titles from before organisation numbers in the holder's name of the day.
+**Each share's 90 per cent interval** (graded on its side only: the three wholly above 5.0, SF24). The basis is filed,
+no method is; the bounds are shown and not graded.
 
 Main population zero-counts: the call reads the cadastre's counted units, the meter register and the hourly values; no
-register event, title, transfer, business or shareholder row is among them, and the call computed from those three files
-alone is the golden (asserted). The cadastre and the meter register carry no old ground-floor number of a renumbered block
-(asserted), so table A's device rows sit only in the register's files.
+register event is among them, and the call computed from those three files alone is the golden (asserted). The cadastre
+and the meter register carry no old ground-floor number of a renumbered block (asserted), so the renumbering device's
+rows sit only in the register's files.
 
-| Hazard | Asks moved | Per-ask deltas (largest) |
+| Hazard | Asks moved | Cells kept of 50 |
 |---|---|---|
-| a block's renumbering read as moves (D2) | A | -16 |
-| the snapshot as it stands (D2) | A | -21 |
-| the dead and the emigrated left out (D4) | A | -13 |
-| ages on 5 January (D8) | A | +12 |
-| titles without a number left out (D7) | B | -14 |
-| names beginning with the municipality's (D7) | B | +63 |
-| the titles as they stand (D2) | B | -15 |
-| the deed's date (D8) | B | -8 |
-| one holder with all the shares (D7) | B | -94 |
+| a block's renumbering read as moves (D2) | register table | 12 |
+| the snapshot as it stands (D2) | register table | 18 |
+| the dead and the emigrated not added back (D4) | register table | 35 |
 
-Referee: the event log for the renumberings; the land register's holder names against the business register for the
-old titles.
+Referee: the event log for the renumberings.
 
 | Ask row | The cracker (landed the call, hygiene battery, every filed rule executed) | Verdict |
 |---|---|---|
-| Table A, Brekkevoll, Tverrvika, Hesteby, Kvernhaug, Solmoen | the register of 5 January rolled back by undoing every later event as the register writes it, the dead and emigrated added back, ages on 1 November | miss |
-| Table A, Ravnsund, Ørnevik, Langgrav, Fjordeid, Snøholt | the same | miss |
-| Table B, the ten municipalities | transfers undone by registration date, the KF by its parent, the shares the municipality holds itself and through its own companies added together, holders matched by organisation number and, where a title has none, by exact name | miss |
+| Register table, overcoverage and its rate | the register of 5 January rolled back by undoing every later event as the register writes it, the renumberings as moves | kept in six municipalities, missed in Hesteby, Kvernhaug, Fjordeid and Snøholt |
+| Register table, undercoverage and its rate | the same | miss |
+| Register table, net bias | the same | miss |
+| The intervals wholly above 5.0 | the same three | kept |
 
-Measured by: generator/ceiling.py on the cut pack: the cracker keeps 0 of the 40 table figures (table A 0 of 30, table B
-0 of 10); the mirror (stopped at the 10 kWh floor, its best rung) keeps 0 of 40 and 6.0 of the 38 recommendation points.
+Measured by: generator/ceiling.py on the cut pack: the cracker keeps 12 of the 50 register figures; the best mirror (a
+consumption floor of 10.5 kWh a day) keeps 1.4 of the 38 recommendation points and 0 of 50, and the strong run's rung,
+the daily rise at any cut from 0.3 to 1.0 kWh, keeps 0 of the 38 and 0 of 50.
 
-Pair ceiling: 29.0 ((38 + 7 + 55 x 0) and (6.0 + 7 + 55 x 0), averaged); the main block's 38 is the call's 8 and
-0.75 for each of the 40 municipality figures (vacant dwellings, share and the share's two bounds), and the mirror's
-counts carry its bounds with them (8 of 40 at the 10 kWh floor).
+Pair ceiling: 33.3 ((38 + 7 + 55 x 12/50) and (1.4 + 7 + 0), averaged); the main block's 38 is the call's 8, 1.35 for
+each of the 20 municipality figures (vacant dwellings and share) and 3 for the intervals lying wholly above.
 
-Mirror leakage: 0.0 per cent of ask weight
+Shallow keep: 0.0 per cent of ask weight (the default path, a consumption floor anywhere from 1 to 10 kWh a day, keeps 0 of the 50 register figures and no interval side)
+
+Mirror leakage: 0.0 per cent of ask weight (no mirror keeps a register cell: the daily rise reads the 70 timer dwellings as lived in, which moves overcoverage, undercoverage and net bias in every municipality)
+
+## Prompt contract
+
+The author's voice rewrite may not drop or change: the question (each municipality's share of counted dwellings vacant
+in the fortnight of 9 to 22 November 2026, estimated from the register and meter data, and which municipalities it
+qualifies for the 2027 vacant dwelling activation grant); the hold being grammatical ("any qualifying
+municipalities"); vacancy_grant_certification_2027.docx with the qualifying names, each municipality's vacant
+dwellings, share and 90 per cent interval, the chart of shares and intervals against the threshold, and each
+municipality's overcoverage and undercoverage on 1 November 2026, each as dwellings and as a rate, and its net bias;
+county_dwelling_occupancy_2026-11.xlsx with every counted dwelling, its municipality, the persons registered on 1
+November 2026 and whether it stood vacant; shares, intervals, rates and net bias as per cents to one decimal. It may not
+name an adjustment, a correction, the meter's daily shape or an interval method.
 
 ## Pre-ship check
 
@@ -376,6 +451,24 @@ Mirror leakage: 0.0 per cent of ask weight
    its day from a flat nobody else held that day (Haugveien 6 H0302) is read one floor up like the rest of the block,
    as the world renumbers every flat; lived in with nobody registered is 556, not 557, and every counted dwelling's
    persons now equal the world's (asserted).
+
+11. Domains Fit design repair (2026-11-08, no new architecture): the deciding figure is each municipality's vacancy
+   share as an official estimate of true occupancy from two error-prone sources, and the asks are the register's
+   coverage errors against it (overcoverage, undercoverage, net bias, SF26, SF27) with each share's interval graded on
+   its wholly-above side (SF24); the call, the stump, the ladder and every Final Recommendation and Critical Components
+   figure unchanged. Gates on target.zip 5cf39da4694631c8: checks 82 of 82, the verifier, two byte-identical builds,
+   figures_check 128 of 128, precut 72 of 72, voice-check PASS, the input-files tell sweep clean, guard heart WARN
+   only, surface exit 0 with one promoted pair (task4 v4) for the author; leak.py LEAK on sweep 10 only, the
+   regulation PDF's Creator 'Writer' that LibreOffice writes, outside the sweep's tool list.
+
+12. Stump deepened (2026-11-08, after the judge's SEND_BACK on Gate H): heating on daily timers in the world, the
+   decisive step the departure of a day from the dwelling's own typical day (gap 0.6 to 1.3 kWh, cut 0.9), the rise now
+   rung 2 (Tverrvika and Ørnevik at every cut from 0.3 to 1.0 kWh), the hub's daily values shipped as a CSV of 113,758
+   rows; the call, every share and every register figure unchanged. Gates on target.zip 13a7d9af90ef518c: checks 95 of
+   95, the verifier, two byte-identical builds, figures_check 134 of 134, precut 72 of 72, voice-check PASS, guard
+   check WARN and heart WARN (forum and forcing event redrawn to funder_or_donor and budget_or_appropriation), surface
+   exit 0, leak.py REVIEW with no LEAK (the daily file's "13,599" is one meter's day of 13.599 kWh, not the persons
+   total, harmless), the pair ceiling 33.3, mirror leakage 0.0.
 
 ## Tried and rejected
 
@@ -450,3 +543,25 @@ Mirror leakage: 0.0 per cent of ask weight
 - 2026-10-31, at design: a register move dated before 1 November and registered after it opened two readings of "held
   as resident on 1 November" (the registration or the event date); the October moves are registered by 31 October
   (SF16).
+- 2026-11-08, design repair after the portal's upload check (never run on the platform): the 2026-11-07 reword plus
+  interval left the task reading as a regulation's threshold applied to counts and shares, with two tallies (persons
+  by age, municipal holdings on the land register); both tallies dropped for the register's coverage errors against the
+  estimate (SF26, SF27), and the ministry's letter no longer names Clopper-Pearson. The land, business and shareholder
+  files stay in the pack, unread by any ask.
+- 2026-11-08, at the repair: an interval from the occupancy reading's own error, measured on the dwellings whose
+  residents moved inside the fortnight (373 dated events): the world draws a household's days at home independently of
+  the register's move dates, so the meter does not follow them and the interval would not be forced; the basis is
+  filed instead and only the wholly-above side graded (SF24).
+- 2026-11-08, at the repair: grading which intervals take in or lie wholly below 5.0: Kvernhaug lies wholly below under
+  the Wald interval and takes in the line under the exact, Wilson, Jeffreys and Agresti-Coull ones; only the
+  wholly-above side, the same under all five, is graded.
+- 2026-11-08, at the repair: net bias as the difference of the two rounded shares: Tverrvika and Hesteby move by 0.1;
+  filed as one ratio of counts (SF27).
+- 2026-11-08, at the repair: a re-root into a questionnaire module test (architecture 3, drawn and registered before the
+  author's word) was withdrawn and the card and prompt restored: architecture 2 was never run on the platform, so its
+  stump is untested and not spent.
+- 2026-11-08, architecture 2 stump as filed: one-sentence rescue, judge H5 (determinism_check_report_arch2_pass1.md:
+  DETERMINISTIC, SEND_BACK on Gate H, the household's rise cleanly bimodal so no statistical judgment was needed, H4
+  weak, and no CSV of 20,000 rows); deepened in the same world with heating on daily timers (the rise now reads 70 vacant
+  dwellings as lived in) and the household's departure from its own typical day as the decisive step, and the hub's
+  daily values shipped as a CSV of over 100,000 rows.

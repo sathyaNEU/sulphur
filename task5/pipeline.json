@@ -1,17 +1,17 @@
 {
  "task": "task5",
- "status": "DESIGN",
+ "status": "BUILD",
  "domain": "survey-research-official-statistics",
  "objective": "etl",
- "stage": 2,
- "stage_name": "design",
+ "stage": 3,
+ "stage_name": "build",
  "updated": "2026-11-08",
- "stump": "A competent solver conforms the cadastre and the hub's hourly values, counts as vacant the dwellings whose average daily use over the fortnight sits under a consumption floor, sees the floor agree with the register, and files that no municipality qualifies at any floor from 1 to 10 kWh a day; an empty dwelling in a Norwegian November is left heated, so the vacant dwellings use a median 20.5 kWh a day against 19.5 for the lived-in ones, and only a household's morning or evening rise over the dwelling's own night-time use on some day shows that someone lived there, which designates five.",
+ "stump": "A competent solver conforms the cadastre and the hub's hourly values, sees that an empty dwelling in a Norwegian November is heated so no consumption floor works, reads occupancy from the household's morning or evening rise over the dwelling's own night-time use, sees it separate cleanly and agree with the register, and files that Tverrvika and Ørnevik alone qualify (6.2 and 7.1 per cent); 70 vacant dwellings were left heated on a daily timer that rises at the same hours by the same amount every day, and only a household's departure from what the dwelling repeats every day, some hour more than 0.9 kWh above its own typical day, shows that someone lived there, which designates five.",
  "architecture": 2,
  "loops": 0,
  "precut": {
   "exit": 0,
-  "date": "2026-10-31"
+  "date": "2026-11-08"
  },
  "leak": {
   "leak_py": "REVIEW on target.zip bc4fe60e, no LEAK, sweep 10 clean (the regulation's 5.0 and its own nouns ruled)",
@@ -20,7 +20,8 @@
  "duplicate_check": {
   "guard_check": "PASS 2026-10-31 on the registered card (task477 differentiated)",
   "heart": "WARN 2026-10-31: repeat.question_form (whether) against task306; the call is a gate",
-  "surface": "clean 2026-10-31"
+  "surface": "clean 2026-10-31",
+  "heart_2026-11-08": "WARN only after re-registration (forum committee_or_panel, context artifact planning_thread)"
  },
  "judge": {
   "verdict": "DETERMINISTIC, SOLUTION_WRONG minor (2026-11-07, Sonnet thread, on bc4fe60e): the main call forced at every household-day threshold from 0.2 to 1.0 kWh (the rise bimodal, nothing between 0.3 and 0.8); shares, intervals and both tables reproduced; component 3's 557 reproduced as 556",
@@ -52,9 +53,17 @@
    "portal": "upload check only, never run: input files (the ministry email's reserved .example domains, from an earlier upload; bc4fe60e already on kbd.dep.no and statkontoret.no) and Domains Fit (a regulation's threshold applied to counts and shares, with tally tables)",
    "moves": "architecture 2 kept (world, spine, stump, card lineage): the deciding figure becomes each municipality's vacancy share estimated by correcting the population register's dwellings-without-residents statistic for its errors in both directions against the meter evidence, its uncertainty from the occupancy reading's own error measured on dwellings whose residents moved inside the fortnight; the persons-by-age and land-register tallies replaced by register-quality asks; a generator assert against reserved domains, 555-01 numbers and other authoring tells",
    "commit": ""
+  },
+  {
+   "date": "2026-11-08",
+   "source": "review",
+   "repair": "design",
+   "portal": "stage 4 on 5cf39da4: determinism judge DETERMINISTIC, SEND_BACK on Gate H (H5 one-sentence rescue, H4 weak: the household's rise bimodal) and the input gate (no CSV of 20,000 rows); the author chose to deepen the stump",
+   "moves": "heating on daily timers in the world (sim._programs, its own random stream): 70 vacant dwellings left on a timer, 30 per cent of lived-in electric and heat-pump dwellings with one, households' odd jobs on days of their own; the decisive step the departure of a day from the dwelling's own typical day (cut 0.9 kWh, gap 0.6 to 1.3); the daily rise now rung 2, Tverrvika and Ørnevik at every cut 0.3 to 1.0; the hub's daily values shipped as a CSV; the forum redrawn to funder_or_donor (committee_or_panel banned against task4 v4); the call, the shares and every register figure unchanged",
+   "frozen": "the Final Recommendation's set and every share and register figure unchanged; critical component 2 and the stump sentence moved by design; a fresh freeze.py snapshot taken at the end of this stage as the new baseline"
   }
  ],
- "resume": "2026-11-08 design repair of architecture 2 (no re-root): STOP A sent to the main thread; on its go-ahead, stage 2 under stumping, determinism-check, supplemental-stumping and guide-to-prompt (new prompt, asks, fork rows, rivals re-run incl. the register-only and consumption-floor routes and the Clopper-Pearson interval), then stage 3 rebuild",
+ "resume": "2026-11-08 STOP B on target.zip 13a7d9af90ef518c, every stage-3 gate green after the stump was deepened; next: stage 4, a new leak reader and determinism judge (main thread), one fix pass, stage 5",
  "approved": null,
  "delivered": null,
  "portal": null,
@@ -89,27 +98,30 @@
   }
  ],
  "gates": {
-  "checks": "92 of 92",
-  "verify": "PASS, every bound and component 3 recomputed independently",
+  "checks": "95 of 95",
+  "verify": "PASS (the departure recomputed by its own loop)",
   "byte_identical": "two builds",
-  "figures_check": "166 of 166",
-  "voice_check": "PASS, 997 characters",
-  "target_zip_sha256": "26076f7e43ec0c97b2c28988ecfa57066c891a809a12576809f748f028542a10",
-  "ceiling": {
-   "pair": 29.0,
-   "cracker": 45.0,
-   "best_mirror": "13.0 on a consumption floor of 10 kWh a day",
-   "mirror_leakage": 0.0,
-   "script": "generator/ceiling.py"
-  },
-  "precut": "61 of 61",
-  "leak_py": "REVIEW, no LEAK, sweep 10 clean",
+  "figures_check": "134 of 134",
+  "precut": "72 of 72",
+  "voice_check": "PASS (WARN shell quota, answered in the note)",
+  "leak_py": "REVIEW, no LEAK",
   "surface": "exit 0",
-  "heart": "BLOCK on draw-time recency bans (pattern and artifact against task464, forum against task273 v5) read from the unchanged card; WARN only on 2026-10-31",
-  "pair_ceiling": "29.0 (unchanged; the bounds ride the counts)",
-  "date": "2026-11-07"
+  "heart": "WARN only",
+  "guard_check": "WARN only, registered",
+  "input_gates": "15 files, 4 formats; hourly parquet 2,720,816 rows; daily values CSV 113,758 rows; register CSV 13,777 rows; 6 distractors",
+  "ceiling": {
+   "pair": 33.3,
+   "cracker": 58.2,
+   "best_mirror": "8.3 on a consumption floor of 10.5 kWh a day",
+   "rise_rung": "7.0 at every cut 0.3 to 1.0",
+   "shallow_keep": 0.0,
+   "mirror_leakage": 0.0
+  },
+  "freeze": "snapshot taken on the final cut as the new baseline (18 main-call figures)",
+  "target_zip_sha256_16": "13a7d9af90ef518c",
+  "date": "2026-11-08"
  },
- "zip_sha256_16": "bc4fe60e0ba401d6",
+ "zip_sha256_16": "13a7d9af90ef518c",
  "migrated_from": {
   "project": "Mark",
   "task": "task470",

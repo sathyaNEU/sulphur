@@ -1,5 +1,5 @@
 """An independent recomputation of every graded figure from target/ alone, written without methods.py: each counted
-dwelling's household day in the fortnight, the municipalities' vacant dwellings, shares and designation, the persons
+dwelling's own day against its typical day in the fortnight, the municipalities' vacant dwellings, shares and designation, the persons
 registered on 1 November by age, and the dwellings the municipalities held on the land register that day. Compared
 with generator/figures.json.
 
@@ -102,17 +102,22 @@ def main(target, fig_path):
     a = np.where(cnt > 0, tot, np.nan).reshape(len(ids), 14, 24)
     lived = {}
     for i, k in enumerate(ids):
-        best = -1.0
+        # each day against its own night hours, then each hour against the dwelling's own typical hour
+        rel = []
         for dd in range(14):
             h = a[i, dd]
             night = h[1:5][~np.isnan(h[1:5])]
-            if len(night) == 0:
+            rel.append(h - night.mean() if len(night) else np.full(24, np.nan))
+        rel = np.array(rel)
+        best = -1.0
+        for hh in range(24):
+            col = rel[:, hh][~np.isnan(rel[:, hh])]
+            if len(col) == 0:
                 continue
-            for win in (h[6:9], h[16:22]):
-                win = win[~np.isnan(win)]
-                if len(win):
-                    best = max(best, win.mean() - night.mean())
-        lived[k] = best > 0.5
+            typical = float(np.sort(col)[len(col) // 2]) if len(col) % 2 else float(np.sort(col)[len(col) // 2 - 1:
+                                                                                              len(col) // 2 + 1].mean())
+            best = max(best, float(col.max()) - typical)
+        lived[k] = best > 0.9
     res = {}
     for r in counted:
         n, v = res.get(r["kommunenr"], (0, 0))
@@ -173,7 +178,6 @@ def main(target, fig_path):
         else:
             where[p] = [frm, when]
     dkey = {key(r["kommunenr"], r["adressenavn"], r["husnr"], r["bokstav"], r["bruksenhetsnr"]): r for r in counted}
-    tab = {}
     # a renumbered block moves every flat one floor up on its day, a label nobody held that day included
     block_day = {(k[0], k[1]): v[1] for k, v in relabel.items()}
     persons_at = {}
@@ -187,62 +191,37 @@ def main(target, fig_path):
         if r is None:
             continue
         persons_at[r["bruksenhet_id"]] = persons_at.get(r["bruksenhet_id"], 0) + 1
-        b = born[p]
-        age = REF.year - b.year - ((REF.month, REF.day) < (b.month, b.day))
-        band = 0 if age < 18 else (1 if age < 67 else 2)
-        tab.setdefault(r["kommunenr"], [0, 0, 0])[band] += 1
     vac_reg = sum(1 for r in counted if not lived.get(r["bruksenhet_id"], False) and persons_at.get(r["bruksenhet_id"]))
     noreg = sum(1 for r in counted if lived.get(r["bruksenhet_id"], False) and not persons_at.get(r["bruksenhet_id"]))
     good = (vac_reg, noreg) == (int(F["vacant_registered"].replace(",", "")), int(F["lived_unregistered"].replace(",", "")))
     ok &= good
     print("%s  verify vacant with a registered resident %d, lived in with nobody registered %d" % (
         "ok  " if good else "FAIL", vac_reg, noreg))
-    for x in F["ask_a"]:
-        want = [int(x[k].replace(",", "")) for k in ("under_18", "age_18_66", "age_67")]
-        good = tab.get(x["nr"]) == want
-        ok &= good
-        print("%s  verify table A %s: %s" % ("ok  " if good else "FAIL", x["nr"], tab.get(x["nr"])))
-    # ---------------------------------------------------------------- table B
-    ent = rows(target, r"enhetsregisteret_")
-    sh = rows(target, r"aksjonaerregisteret_")
-    kom = {r["kommunenavn"].upper(): r["kommunenr"] for r in rows(target, r"kommuner_")}
-    names = {r["kommunenr"]: r["kommunenavn"].upper() for r in rows(target, r"kommuner_")}
-    owned = {}
-    for o in ent:
-        if o["organisasjonsform"] != "KOMM":
-            continue
-        nr = kom[o["navn"].rsplit(" ", 1)[0]]
-        s = {o["organisasjonsnummer"]} | {x["organisasjonsnummer"] for x in ent if x["organisasjonsform"] == "KF" and
-                                         x["overordnet_enhet"] == o["organisasjonsnummer"]}
-        grew = True
-        while grew:
-            held = {}
-            total = {}
-            for r in sh:
-                if r["aksjonaer_id"] in s:
-                    held[r["orgnr_selskap"]] = held.get(r["orgnr_selskap"], 0) + int(r["antall_aksjer"])
-                    total[r["orgnr_selskap"]] = int(r["antall_aksjer_selskap"])
-            new = {c for c in held if held[c] >= total[c]} - s
-            grew = bool(new)
-            s |= new
-        owned[nr] = s
-    tit = {(r["kommunenr"], r["gardsnr"], r["bruksnr"], r["seksjonsnr"]): (r["hjemmelshaver_id"], r["hjemmelshaver_navn"])
-           for r in rows(target, r"grunnbok_hjemmel_")}
-    trf = rows(target, r"grunnbok_overdragelser_")
-    for r in sorted(trf, key=lambda r: day(r["tinglyst_dato"]), reverse=True):
-        if day(r["tinglyst_dato"]) > REF:
-            tit[(r["kommunenr"], r["gardsnr"], r["bruksnr"], r["seksjonsnr"])] = (r["avgiver_id"], r["avgiver_navn"])
-    held = {}
+    # ---------------------------------------------------------------- the register beside the vacancy figures
+    by = {}
     for r in counted:
-        k = (r["kommunenr"], r["gardsnr"], r["bruksnr"], r["seksjonsnr"])
-        hid, hn = tit.get(k) or tit.get(k[:3] + ("",), ("", ""))
-        mine = hid in owned[r["kommunenr"]] if hid else bool(
-            re.match(r"^%s (BY|HERREDS)?KOMMUNE\b" % re.escape(names[r["kommunenr"]]), hn.upper()))
-        held[r["kommunenr"]] = held.get(r["kommunenr"], 0) + mine
-    for x in F["ask_b"]:
-        good = held.get(x["nr"], 0) == int(x["held"].replace(",", ""))
+        t = by.setdefault(r["kommunenr"], [0, 0, 0, 0, 0, 0])   # counted, held someone, over, held nobody, under, vacant
+        held, vacant = bool(persons_at.get(r["bruksenhet_id"])), not lived.get(r["bruksenhet_id"], False)
+        t[0] += 1
+        t[1] += held
+        t[2] += held and vacant
+        t[3] += not held
+        t[4] += (not held) and not vacant
+        t[5] += vacant
+    for x in F["quality"]:
+        n, nh, ov, nn, un, v = by[x["nr"]]
+        mine = (ov, "%.1f" % (100.0 * ov / nh), un, "%.1f" % (100.0 * un / nn), "%.1f" % (100.0 * (nn - v) / n))
+        want = (int(x["over"].replace(",", "")), x["over_rate"], int(x["under"].replace(",", "")), x["under_rate"],
+                x["net_bias"])
+        good = mine == want
         ok &= good
-        print("%s  verify table B %s: %d" % ("ok  " if good else "FAIL", x["nr"], held.get(x["nr"], 0)))
+        print("%s  verify register quality %s: overcoverage %d (%s), undercoverage %d (%s), net bias %s" % (
+            ("ok  " if good else "FAIL", x["nr"]) + mine))
+    above = sorted(m["name"] for m in F["municipalities"]
+                   if exact_interval(m["vacant"], int(m["counted"].replace(",", "")))[0] > 5.0)
+    good = above == sorted(F["wholly_above"])
+    ok &= good
+    print("%s  verify intervals wholly above 5.0: %s" % ("ok  " if good else "FAIL", ", ".join(above)))
     q = sorted(m["nr"] for m in F["municipalities"] if m["qualifies"])
     print("%s  verify: %d municipalities qualify (%s)" % ("ok  " if ok else "FAIL", len(q), " ".join(q)))
     return ok

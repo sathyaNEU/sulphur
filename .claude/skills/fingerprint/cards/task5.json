@@ -1,18 +1,18 @@
 {
   "task": "task5",
   "architecture": "v2 (re-root after the heart BLOCK against task242: a pilot county's municipalities qualifying for a 2027 vacant-dwelling activation grant, each dwelling's occupancy in a November fortnight read from its own hourly electricity load beside the population register)",
-  "drawn": "2026-10-31",
+  "drawn": "2026-11-08",
   "slot_note": "re-root of task5 in the same objective (Data Extraction & Conformation), batch 1",
   "domain": "survey-research-official-statistics",
   "subdomain": "census-register-administrative-data-quality",
   "client_domain": "survey-research-official-statistics",
-  "niche": "register-based dwelling occupancy certified for a grant from the electricity hub's hourly meter loads beside the population register, in a heated Norwegian November",
+  "niche": "each municipality's vacancy share in a heated Norwegian November estimated from the electricity hub's hourly meter loads, with the population register's overcoverage, undercoverage and net bias measured against it, certified for a 2027 grant",
   "objective": "etl",
   "shape": "01",
   "decision_type": "designation_set",
   "answer_unit": "set_of_items",
-  "answer": "",
-  "answer_source": "",
+  "answer": "Five municipalities qualify: Tverrvika, Hesteby, Solmoen, Ørnevik and Fjordeid (396 of 8,020 counted dwellings vacant); the register's overcoverage 118 (1.6 per cent), undercoverage 556 (66.7 per cent), net bias 5.5 per cent",
+  "answer_source": "task5/submission.md, Final Recommendation and Supplementary Questions",
   "gap": [
     "objective",
     "population"
@@ -30,12 +30,12 @@
   "decisive_rule_filed": false,
   "official_decoy": false,
   "validated_decoy": false,
-  "context_artifact": "register",
+  "context_artifact": "planning_thread",
   "stump_class": "analytical",
-  "analyst_test": "A strong analyst who conforms the cadastre and the meter reads correctly and reads the regulation takes each dwelling's average daily consumption over the reference fortnight and counts as vacant the dwellings under a consumption floor (the utility-data vacancy rule), sees it agree with the register, and files that no municipality qualifies at any floor from 1 to 10 kWh a day, because an empty Norwegian dwelling is heated through November and draws as much as a lived-in one; the register's own empty dwellings designate all ten.",
-  "domain_test": "The deciding quantity is each municipality's share of dwellings nobody lived in, the register-based dwelling statistic official statistics builds from administrative sources, read here as the presence of a household's daily routine in each dwelling's own hourly load against the heating that runs in an empty home in a Norwegian November; with another field's nouns there is no heated empty dwelling, no population register and no household rhythm inside a meter load, and the task stops reading the same.",
+  "analyst_test": "A strong analyst who conforms the cadastre and the meter reads correctly and reads the regulation rejects the consumption floor (empty dwellings are heated in November, so the vacant use more than the lived-in), reads occupancy from the household's morning or evening rise over the dwelling's night-time use on any day, sees it separate bimodally and agree with the register, and files that Tverrvika and Ørnevik alone qualify; 70 vacant dwellings heated on a daily timer rise every day and read as lived in.",
+  "domain_test": "The deciding quantity is each municipality's vacancy share, an official estimate of true occupancy built from two error-prone administrative sources, the population register and each dwelling's own hourly load, read for what a household does that the building's own heating, on a timer or not, does not repeat; with wards for dwellings there is no heating left on an empty home's timer, no register that lags and no household's day.",
   "layer2_family": "estimation_fit",
-  "layer2_pattern": "own:occupancy-from-the-household-daily-cycle-against-a-heating-load",
+  "layer2_pattern": "own:occupancy-from-a-day-departing-from-the-dwelling's-own-repeated-day-against-a-timed-heating-load",
   "layer1": [
     "hourly reads in UTC against a local-time household day",
     "meter replacements splitting a dwelling's fortnight across two meter point IDs",
@@ -56,8 +56,8 @@
     "grain": "meter point x hour",
     "source": "synthetic"
   },
-  "forum": "minister_or_cabinet",
-  "forcing_event": "statutory_or_regulatory_filing",
+  "forum": "funder_or_donor",
+  "forcing_event": "budget_or_appropriation",
   "org_family": "research_or_statistics_office",
   "world": {
     "geography": "Norway (a fictional county of ten municipalities)",
@@ -75,9 +75,9 @@
   ],
   "opening_move": "question-first",
   "question_form": "whether",
-  "driver": "The decisive quantity is whether each unit was in use during a window, seen only through a continuous meter whose level is dominated by a load that runs whether or not anyone uses the unit, so use is the presence of the users' daily rhythm in the unit's own record, not the record's level and not an official roll of users, and checking only the roll's empty units misses the units the roll still lists after their users left.",
-  "driver_concrete": "A dwelling counts as vacant when nobody lived in it in the reference fortnight, whatever the population register shows; an empty Norwegian dwelling is heated through November, so its hourly load runs with the outdoor temperature at levels many lived-in flats never reach, and only a household's daily cycle (the morning and evening rise over the night's level) in its own hourly reads shows that someone lived there; the field's consumption floor finds almost none of the heated empties, and the register's empty dwellings checked against their meters miss the dwellings whose registered residents have moved to care or left.",
-  "stump": "A competent solver conforms the cadastre and the hub's hourly values, counts as vacant the dwellings whose average daily use over the fortnight sits under a consumption floor, sees the floor agree with the register, and files that no municipality qualifies at any floor from 1 to 10 kWh a day; an empty dwelling in a Norwegian November is left heated, so the vacant dwellings use a median 20.5 kWh a day against 19.5 for the lived-in ones, and only a household's morning or evening rise over the dwelling's own night-time use on some day shows that someone lived there, which designates five.",
+  "driver": "The decisive quantity is whether each unit was in use during a window, seen only through a continuous meter whose level and daily shape are both carried by a load that runs on a schedule whether or not anyone uses the unit, so use is a day departing from what the unit's own record repeats, beyond its scheduled load and noise.",
+  "driver_concrete": "A dwelling counts as vacant when nobody lived in it in the reference fortnight, whatever the population register shows; an empty Norwegian dwelling is heated through November, and one left on its heaters' daily timer also rises every morning and evening at its comfort hours, so neither the level nor the daily rise shows a household; only a day departing from the dwelling's own typical day does.",
+  "stump": "A competent solver conforms the cadastre and the hub's hourly values, sees that an empty dwelling in a Norwegian November is heated so no consumption floor works, reads occupancy from the household's morning or evening rise over the dwelling's own night-time use, sees it separate cleanly and agree with the register, and files that Tverrvika and Ørnevik alone qualify (6.2 and 7.1 per cent); 70 vacant dwellings were left heated on a daily timer that rises at the same hours by the same amount every day, and only a household's departure from what the dwelling repeats every day, some hour more than 0.9 kWh above its own typical day, shows that someone lived there, which designates five.",
   "lineage": [
     {
       "domain": "physical-environmental-sciences",
@@ -120,14 +120,15 @@
     }
   ],
   "differentiation": {
-    "task477": "task477 measures growth on work done by estimating each unit's exposure to payment schedules from how its sub-period totals move with the payment dates; here nothing is an exposure or a calendar effect: each dwelling's own hourly load is read for a household's daily cycle against the heating that runs in an empty home, to say whether anyone lived there in the fortnight."
+    "mark477": "task477 measures growth on work done by estimating each unit's exposure to payment schedules from how its sub-period totals move with the payment dates; here nothing is an exposure or a calendar effect: each dwelling's own hourly load is read for a household's daily cycle against the heating that runs in an empty home, to say whether anyone lived there in the fortnight.",
+    "task5": "architecture 2 as first filed read occupancy from the household's morning or evening rise over the night, a bimodal signal one sentence handed over; this deepening puts heating on daily timers in the world, so the rise reads 70 empty dwellings as lived in, and the decisive move becomes the departure of a day from the dwelling's own repeated day, a different statistic, a different confound and a different call on the rise."
   },
-  "notes": "re-rooted 2026-10-31 (batch 1); Domains Fit and metadata repair 2026-11-07: the share judged with its 90 per cent exact interval beside it, the regulation from LibreOffice Writer, the hub extract without its writer's name",
-  "registered": "2026-10-31T17:41:05Z",
+  "notes": "re-rooted 2026-10-31 (batch 1); Domains Fit and metadata repair 2026-11-07: the share judged with its 90 per cent exact interval beside it, the regulation from LibreOffice Writer, the hub extract without its writer's name; design repair 2026-11-08 (Domains Fit, no new architecture): the share framed as an estimate from two error-prone sources, the register's coverage errors as the asks, the interval's basis filed without a method, the forum redrawn to committee_or_panel, the differentiation re-keyed to mark477; stump deepened 2026-11-08 after the judge's SEND_BACK on Gate H (the rise bimodal, a one-sentence rescue): heating on daily timers in the world, the decisive step the household's departure from the dwelling's own typical day, the hub's daily values shipped as a CSV; forum redrawn from committee_or_panel (banned against task4 v4) to funder_or_donor, the ministry that pays the grant on the certified figures (Section 8); forcing event redrawn from statutory_or_regulatory_filing (banned at the heart re-run against task3 v3, registered after this card) to budget_or_appropriation, the ministry's 2027 allocation of the grant among the municipalities on the certified figures.",
   "shell": {
-    "question form": "whether",
-    "second-sentence opener": "the",
+    "question form": "which",
+    "second-sentence opener": "name",
     "rounding opener": "shares",
     "deliverable set": "docx+xlsx"
-  }
+  },
+  "registered": "2026-11-08T04:51:25Z"
 }

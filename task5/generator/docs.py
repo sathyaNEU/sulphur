@@ -75,16 +75,17 @@ def regulation_text():
 ASSIGNMENT = (
     "Dear %s,\n\n"
     "Under Section 7 of the regulation on the 2027 grant for activating vacant dwellings, please send the ministry the "
-    "certification for the %s pilot by 15 January 2027. As in the office's register statistics, please give each "
-    "municipality's vacancy share with its 90 per cent interval, the exact binomial (Clopper-Pearson) interval on the "
-    "municipality's counted dwellings, so that we can see how firmly each share sits against the threshold.\n\n"
-    "For our follow-up of the pilot we would also like two tables in the certification letter. For each municipality, "
-    "the persons the population register held as resident in its counted dwellings on 1 November 2026, by their age "
-    "on that day: under 18, 18 to 66, and 67 and over. And for each municipality, how many of its counted dwellings "
-    "were held on the land register on 1 November 2026 by the municipality or by a company the municipality owns; by "
-    "a company the municipality owns we mean, as in the ministry's register of municipal companies, a municipal "
-    "enterprise of the municipality or a company in which the municipality holds all the shares, itself or through "
-    "such a company.\n\n"
+    "certification for the %s pilot by 15 January 2027. Please give each municipality's vacancy share with a 90 per "
+    "cent interval, taking the municipality's counted dwellings as so many chances of a dwelling standing empty, so "
+    "that we can see how firmly each share sits against the threshold.\n\n"
+    "The pilot is also meant to tell us whether the population register could carry the count in later years, so "
+    "for each municipality please set the register beside your figures, in the terms of the office's quality reports "
+    "on register-based dwelling statistics. Overcoverage: the counted dwellings where the register held someone as "
+    "resident on 1 November 2026 but that stood vacant, as a number and as a percentage of the counted dwellings "
+    "where it held someone. Undercoverage: the counted dwellings someone lived in where the register held nobody on "
+    "1 November 2026, as a number and as a percentage of the counted dwellings where it held nobody. And the net "
+    "bias: the counted dwellings where the register held nobody less the vacant dwellings, as a percentage of all "
+    "the counted dwellings.\n\n"
     "Best regards,\n%s\n%s\n%s\n")
 
 

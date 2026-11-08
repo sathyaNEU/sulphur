@@ -31,6 +31,14 @@ MUNICIPALITIES = [
     ("5810", "Snøholt", "mixed",        790, 37, 0.50, 0.22, 0.22, 0.06, 0.08, 0.05, 0.30),
 ]
 THRESHOLD = 5.0
+
+# Heating on a daily timer (a panel heater's or heat pump's comfort hours over a night setback): the vacant dwellings
+# left with their timer running in each municipality, and the share of lived-in electric or heat-pump dwellings that
+# run one. Drawn from a stream of their own, so every other draw in the world stays as it was.
+PROGRAM_SEED = SEED + 7001
+PROGRAMMED_VACANT = {"5801": 8, "5802": 6, "5803": 18, "5804": 4, "5805": 8, "5806": 5, "5807": 4, "5808": 6,
+                     "5809": 5, "5810": 6}
+PROGRAMMED_LIVED_SHARE = 0.30
 OLD_NUMBER = {"5810": "5809"}            # Snøholt was split from Fjordeid on 1 January 2024; the grid's records lag
 
 FORTNIGHT_START = dt.date(2026, 11, 9)   # a Monday
@@ -49,6 +57,7 @@ FILES = {
     "municipalities": "kommuner_hvitfjell_2026.csv",
     "meterpoints": "elhub_malepunkter_hvitfjell_2027-01-04.csv",
     "hourly": "elhub_timeverdier_2026-11-09_2026-11-22.parquet",
+    "daily": "elhub_dognverdier_2026-11-09_2026-11-22.csv",
     "register": "folkeregister_bosatte_2027-01-05.csv",
     "events": "folkeregister_hendelser_2026-10-01_2027-01-05.csv",
     "titles": "grunnbok_hjemmel_2027-01-05.csv",
@@ -58,5 +67,5 @@ FILES = {
     "prices": "spotpriser_no1_2026-11.csv",
     "outages": "nettselskap_avbrudd_2026-11.xlsx",
 }
-DISTRACTORS = ["prices", "outages"]
+DISTRACTORS = ["prices", "outages", "titles", "transfers", "entities", "shareholders"]
 GOLDEN = {"xlsx": "county_dwelling_occupancy_2026-11.xlsx", "docx": "vacancy_grant_certification_2027.docx"}
