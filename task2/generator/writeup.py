@@ -34,6 +34,9 @@ def figures(g, R):
         "years": [2019, 2021, 2022, 2024, 2027, 2028],
         "dims": [5, 2.5, 25, 12.5], "tiers_koz": [75, 125, 200], "tiers_oz": [75000, 125000, 200000],
         "rounding_oz": 50000, "krige_search": [24, 45, 12, 32, 60],
+        "affine_band_t": int(math.ceil(100 * max(abs(R["affine"]["gt"][str(c)]["t"] / g["gt"][c]["t"] - 1) for c in S.CUTS))),
+        "affine_band_g": int(math.ceil(100 * max(abs(R["affine"]["gt"][str(c)]["g"] / g["gt"][c]["g"] - 1) for c in S.CUTS))),
+        "affine_band_oz": int(math.ceil(100 * max(abs(R["affine"]["gt"][str(c)]["oz"] / g["gt"][c]["oz"] - 1) for c in S.CUTS))),
     }
 
 
@@ -68,7 +71,11 @@ def submission(g, R, F, path):
     A("### stage5_high_grade_resource.xlsx")
     A("")
     A("3. Sheet Grade-tonnage: one row per cut-off (1.0, 1.5, 2.0, 2.5 and 3.0 g/t) with the mining blocks' tonnes, "
-      "grade and contained gold, then the gold above the agreement's 2.5 g/t cut-off and the tier it covers.")
+      "grade and contained gold, then the gold above the agreement's 2.5 g/t cut-off and the tier it covers. The "
+      "rows are the lognormal-shaped correction's; an affine correction to the same block variance moves a row's "
+      "tonnes by up to %d per cent, its grade by up to %d per cent and its gold by up to %d per cent, so the table "
+      "is read within those bands and the graded figure is the next answer."
+      % (F["affine_band_t"], F["affine_band_g"], F["affine_band_oz"]))
     A("4. Gold above the agreement's cut-off, nearest 50,000 oz: %s oz." % F["oz_text"])
     A("5. Sheets Declustering, Variogram and Comparison: the composites as drilled and declustered, the experimental "
       "and modelled variogram with the block average, and the same grade-tonnage curve for the declustered "
