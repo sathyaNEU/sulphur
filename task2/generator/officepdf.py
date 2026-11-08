@@ -1,4 +1,4 @@
-"""task2: the pharmacy's PDFs, written the way an office writes them. A document's story (paragraphs,
+"""task3: the district and utility PDFs, written the way an office writes them. A document's story (paragraphs,
 spacers, tables, pictures and page breaks) becomes a Word document, LibreOffice Writer exports it to PDF, and the PDF's
 dates and file identifier are set to the issue date at equal length, so the cross-reference table holds and two
 builds are byte-identical. Producer and Creator stay as Writer wrote them."""
@@ -190,7 +190,7 @@ def build(path, story, title, author, subject, footer, created, modified, margin
     finally:
         shutil.rmtree(work, ignore_errors=True)
     b = _fix(b, created, modified)
-    open(path, "wb").write(b)
+    open(path, "wb").write(_creator(b))
 
 
 def _pdfdate(d):
@@ -222,3 +222,27 @@ def _fix(b, created, modified):
     b = re.sub(rb"/ID\s*\[\s*<([0-9A-Fa-f]+)>\s*<([0-9A-Fa-f]+)>\s*\]", repl, b)
     assert len(b) == n, "PDF length changed"
     return b
+
+
+def _creator(b):
+    """Writer stamps /Creator as the bare module name; the document's Creator reads as the application that made
+    it, LibreOffice Writer, written as Writer writes its Producer (a UTF-16 string), through pypdf (deterministic for
+    a given input)."""
+    import codecs
+    import io
+    from pypdf import PdfReader, PdfWriter
+    from pypdf.generic import NameObject, TextStringObject
+
+    def u16(text):
+        t = TextStringObject(text)
+        t.autodetect_utf16 = True
+        t.utf16_bom = codecs.BOM_UTF16_BE
+        return t
+    r = PdfReader(io.BytesIO(b))
+    w = PdfWriter(clone_from=r)
+    info = w._info.get_object()
+    info[NameObject("/Creator")] = u16("LibreOffice Writer")
+    info[NameObject("/Producer")] = u16(str((r.metadata or {}).get("/Producer") or "LibreOffice"))
+    out = io.BytesIO()
+    w.write(out)
+    return out.getvalue()

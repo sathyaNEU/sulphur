@@ -1,175 +1,165 @@
-"""The golden deliverables: the case to the Director of Pharmacy (PDF with its chart) and the unit's 2026 review
-table (CSV), both from figures.json and the cut pack."""
-import csv
+"""task2 architecture 4: the golden deliverables from the solution on the cut pack. The resource workbook (the
+grade-tonnage table at block support, the declustering, the variogram and the block variance, the composites'
+and the kriged model's tables for comparison) and the board deck with its chart."""
 import datetime as dt
-import io
-import os
+import math
 
-import matplotlib
-matplotlib.use("Agg")
-import matplotlib.pyplot as plt  # noqa: E402
-from reportlab.lib.units import mm  # noqa: E402
-from reportlab.platypus import Image  # noqa: E402
+import openpyxl
+from openpyxl.styles import Font
+from pptx import Presentation
+from pptx.chart.data import CategoryChartData
+from pptx.dml.color import RGBColor
+from pptx.enum.chart import XL_CHART_TYPE, XL_LEGEND_POSITION
+from pptx.util import Emu, Inches, Pt
 
-import pack as K  # noqa: E402
-import params as P  # noqa: E402
-import world as W  # noqa: E402
-
-PDF = "gravimetric_verification_2027.pdf"
-CSV = "compounding_review_2026.csv"
+import ooxml
+import solve as S
 
 
-def _fmt(v):
-    return ("%.1f" % v) if v >= 0.05 else "under 0.1"
+def r50(oz):
+    return int(50000 * math.floor(oz / 50000 + 0.5))
 
 
-def _ci(ci):
-    if ci["hi"] < 0.05:
-        return "under 0.1"
-    return "%s to %s" % (_fmt(ci["lo"]), _fmt(ci["hi"]))
+def workbook(g, rungs, path):
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = "Grade-tonnage"
+    b = Font(bold=True)
+    ws.append(["Stage 5, 5 m x 5 m x 2.5 m mining blocks (block support)"])
+    ws["A1"].font = Font(bold=True, size=12)
+    ws.append([])
+    ws.append(["Cut-off (g/t)", "Tonnes (Mt)", "Grade (g/t)", "Contained gold (koz)"])
+    for c in ws[3]:
+        c.font = b
+    for c in S.CUTS:
+        x = g["gt"][c]
+        ws.append([c, round(x["t"] / 1e6, 2), round(x["g"], 2), round(x["oz"] / 1e3, 1)])
+    ws.append([])
+    oz = g["gt"][S.CUT]["oz"]
+    ws.append(["Gold above the agreement's %.1f g/t cut-off (oz, nearest 50,000)" % S.CUT, r50(oz)])
+    ws.append(["Tier the gold covers", "Tier %s (%s oz)" % (g["tier"], "{:,}".format(dict(S.TIERS)[g["tier"]] * 1000))])
+    for row in ws.iter_rows(min_row=ws.max_row - 1, max_row=ws.max_row):
+        for c in row:
+            c.font = b
+    d = wb.create_sheet("Declustering")
+    d.append(["Quantity", "Value"])
+    for c in d[1]:
+        c.font = b
+    d.append(["Stage 5 composites (2.5 m flitch)", g["n"]])
+    d.append(["Holes with Stage 5 composites", g["holes"]])
+    d.append(["Mean grade, composites as drilled (g/t)", round(g["mean_raw"], 3)])
+    d.append(["Mean grade, declustered on 25 m cells by flitch (g/t)", round(g["mean_decl"], 3)])
+    d.append(["Coefficient of variation, declustered composites", round(g["cv_decl"], 3)])
+    d.append(["Stage 5 tonnes (Mt)", round(g["T"] / 1e6, 2)])
+    for z in ("OX", "TR", "FR"):
+        d.append(["Mean dry bulk density, %s (t/m3)" % z, round(g["rho"][z], 3)])
+    v = wb.create_sheet("Variogram")
+    v.append(["Experimental", "Lag (m)", "Gamma (g/t)^2", "Pairs"])
+    for c in v[1]:
+        c.font = b
+    for a, gm, n in g["dh"]:
+        v.append(["downhole", round(a, 1), round(gm, 4), n])
+    for a, gm, n in g["hz"]:
+        v.append(["across holes", round(a, 1), round(gm, 4), n])
+    c0, c1, a1, a2, r = g["model"]
+    v.append([])
+    v.append(["Model (share of the sill)", "nugget %.2f; spherical %.2f, range %d m; spherical %.2f, range %d m; "
+              "vertical ranges x %.1f" % (c0, c1, a1, 1 - c0 - c1, a2, r)])
+    v.append(["Average of the model within a 5 x 5 x 2.5 m block", round(g["gamma_bar"], 3)])
+    v.append(["Block variance as a share of the composites'", round(g["ratio"], 3)])
+    k = wb.create_sheet("Comparison")
+    k.append(["Cut-off (g/t)", "Declustered composites (koz)", "Kriged block model (koz)", "Mining blocks (koz)"])
+    for c in k[1]:
+        c.font = b
+    for c in S.CUTS:
+        k.append([c, round(rungs["rung1_declustered"]["gt"][str(c)]["oz"] / 1e3, 1),
+                  round(rungs["kriged"]["gt"][str(c)]["oz"] / 1e3, 1), round(g["gt"][c]["oz"] / 1e3, 1)])
+    for s in wb.worksheets:
+        for col in s.columns:
+            s.column_dimensions[col[0].column_letter].width = max(12, min(70, max(len(str(x.value or "")) for x in col) + 2))
+    wb.properties.creator = "Ironbark Gold"
+    wb.properties.lastModifiedBy = "Ironbark Gold"
+    wb.save(path)
+    ooxml.normalize(path, dt.datetime(2026, 11, 5, 1, 20), dt.datetime(2026, 11, 6, 6, 45), "Ironbark Gold")
 
 
-def chart(path_png, fig):
-    cands = sorted(fig["golden"], key=lambda c: fig["golden"][c]["rate"])
-    names = [W.product(c)["name"] for c in cands]
-    floor = 0.05
-    vals = [max(fig["golden"][c]["rate"], floor) for c in cands]
-    lo = [max(fig["interval"][c]["lo"], floor) for c in cands]
-    hi = [max(fig["interval"][c]["hi"], floor) for c in cands]
-    red = set(fig["call"]["products"])
-    plt.rcParams.update({"font.family": "DejaVu Sans", "font.size": 8.5, "svg.hashsalt": "task2"})
-    f, ax = plt.subplots(figsize=(7.4, 4.6), dpi=150)
-    for i, c in enumerate(cands):
-        col = "#c0392b" if c in red else "#7f8c97"
-        ax.plot([lo[i], hi[i]], [i, i], color=col, lw=2.2, solid_capstyle="butt")
-        ax.plot([lo[i], lo[i]], [i - 0.18, i + 0.18], color=col, lw=1.0)
-        ax.plot([hi[i], hi[i]], [i - 0.18, i + 0.18], color=col, lw=1.0)
-        ax.plot([vals[i]], [i], marker="o", ms=5.2, color=col, mec="white", mew=0.8)
-        g = fig["golden"][c]["rate"]
-        ci = fig["interval"][c]
-        lab = "under 0.1" if ci["hi"] < 0.05 else "%s (%s)" % (_fmt(g), _ci(ci))
-        ax.text(hi[i] * 1.15, i, lab, va="center", fontsize=7.0, color="#333333")
-    ax.set_xscale("log")
-    ax.set_xlim(floor, 40000)
-    ax.set_ylim(-0.7, len(cands) - 0.3)
-    ax.axvline(P.LIMIT_PER_100K, color="#1f2d3a", lw=1.1, ls="--")
-    ax.text(P.LIMIT_PER_100K * 1.08, len(cands) - 0.45, "PH-QP-07 limit: 10", fontsize=7.8, color="#1f2d3a",
-            va="top")
-    ax.set_yticks(range(len(cands)))
-    ax.set_yticklabels(names, fontsize=7.6)
-    ax.set_xlabel("Out-of-tolerance doses per 100,000 doses made (log scale)")
-    ax.spines["top"].set_visible(False)
-    ax.spines["right"].set_visible(False)
-    ax.set_title("Estimated 2026 out-of-tolerance rate and 90% interval", fontsize=9.5, loc="left")
-    f.tight_layout()
-    f.savefig(path_png, metadata={"Software": None})
-    plt.close(f)
+def deck(g, rungs, path):
+    prs = Presentation()
+    prs.slide_width, prs.slide_height = Inches(13.333), Inches(7.5)
+    blank = prs.slide_layouts[6]
+    tier_oz = dict(S.TIERS)
+    oz = g["gt"][S.CUT]["oz"]
+
+    def text(slide, x, y, w, h, lines, size=18, bold_first=False):
+        tb = slide.shapes.add_textbox(Inches(x), Inches(y), Inches(w), Inches(h))
+        tf = tb.text_frame
+        tf.word_wrap = True
+        for i, ln in enumerate(lines):
+            p = tf.paragraphs[0] if i == 0 else tf.add_paragraph()
+            p.text = ln
+            p.font.size = Pt(size)
+            p.font.bold = bold_first and i == 0
+        return tb
+    s1 = prs.slides.add_slide(blank)
+    text(s1, 0.6, 0.35, 12, 0.9, ["Commit Stage 5 to Tier %s of the Yarrabin agreement" % g["tier"]], 30, True)
+    text(s1, 0.6, 1.15, 12.2, 1.0,
+         ["Stage 5's mining blocks at %.1f g/t or more hold about %s oz, above Tier %s (%s oz) and short of Tier C "
+          "(%s oz)." % (S.CUT, "{:,}".format(r50(oz)), g["tier"], "{:,}".format(tier_oz[g["tier"]] * 1000),
+                        "{:,}".format(tier_oz["C"] * 1000))], 18)
+    cd = CategoryChartData()
+    cd.categories = ["%.1f" % c for c in S.CUTS]
+    cd.add_series("Mining blocks (koz)", [round(g["gt"][c]["oz"] / 1e3, 1) for c in S.CUTS])
+    cd.add_series("Declustered composites (koz)", [round(rungs["rung1_declustered"]["gt"][str(c)]["oz"] / 1e3, 1)
+                                                   for c in S.CUTS])
+    cd.add_series("Kriged block model (koz)", [round(rungs["kriged"]["gt"][str(c)]["oz"] / 1e3, 1) for c in S.CUTS])
+    for t, v in S.TIERS:
+        cd.add_series("Tier %s (%d koz)" % (t, v), [v] * len(S.CUTS))
+    gf = s1.shapes.add_chart(XL_CHART_TYPE.LINE_MARKERS, Inches(0.6), Inches(2.0), Inches(8.6), Inches(5.1), cd)
+    ch = gf.chart
+    ch.has_legend = True
+    ch.legend.position = XL_LEGEND_POSITION.RIGHT
+    ch.legend.include_in_layout = False
+    ch.value_axis.has_title = True
+    ch.value_axis.axis_title.text_frame.text = "Contained gold above the cut-off (koz)"
+    ch.category_axis.has_title = True
+    ch.category_axis.axis_title.text_frame.text = "Cut-off grade (g/t)"
+    cols = [(25, 70, 150), (150, 150, 150), (120, 160, 210), (200, 60, 60), (200, 60, 60), (200, 60, 60)]
+    for ser, col in zip(ch.series, cols):
+        ser.format.line.color.rgb = RGBColor(*col)
+        ser.format.line.width = Emu(38100 if col == cols[0] else 19050)
+        ser.smooth = False
+    text(s1, 9.5, 2.2, 3.5, 4.6,
+         ["At the 2.5 g/t cut-off:",
+          "Mining blocks: %d koz" % round(oz / 1e3),
+          "Declustered composites: %d koz" % round(rungs["rung1_declustered"]["oz"] / 1e3),
+          "Kriged block model: %d koz" % round(rungs["kriged"]["oz"] / 1e3),
+          "",
+          "The composites spread wider than a 5 m x 5 m x 2.5 m block; the kriged model narrower."], 14, True)
+    s2 = prs.slides.add_slide(blank)
+    text(s2, 0.6, 0.35, 12, 0.8, ["How the block gold was read"], 26, True)
+    text(s2, 0.6, 1.2, 12.2, 5.8, [
+        "1. %d Stage 5 composites (2.5 m flitches) from %d holes; the 2022 to 2024 infill sits where the 2019 to 2021 "
+        "grid ran high, so the composites as drilled average %.2f g/t and %.2f g/t declustered on the 25 m grid's cells."
+        % (g["n"], g["holes"], g["mean_raw"], g["mean_decl"]),
+        "2. Variogram: nugget %d per cent of the sill, a %d m and a %d m structure; within a 5 m x 5 m x 2.5 m block the "
+        "model averages %.2f of the sill, so a block's grades vary %.2f times as much as a composite's."
+        % (round(g["model"][0] * 100), g["model"][2], g["model"][3], g["gamma_bar"], g["ratio"]),
+        "3. The declustered composite distribution carried to that block variance (lognormal-shaped correction) gives "
+        "the grade-tonnage curve of the mining blocks; Stage 5 tonnes from the flitch outlines and the oxide, "
+        "transitional and fresh densities (%.1f Mt)." % (g["T"] / 1e6),
+        "4. The composites themselves put %d koz above 2.5 g/t (Tier C) and the kriged model %d koz (Tier A); the "
+        "kriging validates point by point, but its block estimates vary less than the blocks do."
+        % (round(rungs["rung1_declustered"]["oz"] / 1e3), round(rungs["kriged"]["oz"] / 1e3)),
+        "Working: stage5_high_grade_resource.xlsx"], 16)
+    prs.core_properties.author = "Ironbark Gold"
+    prs.core_properties.last_modified_by = "Ironbark Gold"
+    prs.core_properties.title = "Stage 5 OPA tier"
+    prs.save(path)
+    ooxml.normalize(path, dt.datetime(2026, 11, 5, 2, 10), dt.datetime(2026, 11, 6, 7, 5), "Ironbark Gold")
 
 
-BAGS = ("P0610", "P0614", "P0618")
-
-
-def _sorts_line(fig):
-    n = fig["sorts"]["P0412"]["sorts"] + fig["sorts"]["P0507"]["sorts"]
-    if n == 0:
-        return "no quarantine sort was opened on either"
-    return "only %d quarantine sort%s was opened on them" % (n, "" if n == 1 else "s")
-
-
-def _bag_loss(fig):
-    vals = []
-    for c in BAGS:
-        p = W.product(c)
-        vals.append(-fig["fits"][c]["loss_per_litre"] * p["vol"] * sum(p["size"]) / 2.0 / 1000.0)
-    return sum(vals) / len(vals)
-
-
-def write_pdf(path, fig, tmpdir):
-    png = os.path.join(tmpdir, "chart.png")
-    chart(png, fig)
-    call = fig["call"]["products"]
-    rows = [["Product", "Station", "Doses made, 2026", "Out-of-tolerance rate (per 100,000)", "90% interval",
-             "Limit of 10", "PH-QP-07 3.1"]]
-    where = {"below": "Below the interval", "above": "Above the interval", "inside": "Inside the interval"}
-    for c in sorted(fig["golden"], key=lambda c: -fig["golden"][c]["rate"]):
-        p = W.product(c)
-        g = fig["golden"][c]
-        ci = fig["interval"][c]
-        rows.append([p["name"], p["station"], "{:,}".format(g["doses"]), _fmt(g["rate"]),
-                     _ci(ci), where[ci["limit"]],
-                     "In: verify every dose" if c in call else "Out: SC-SOP-12 checks"])
-    names = [W.product(c)["name"] for c in sorted(call, key=lambda c: -fig["golden"][c]["rate"])]
-    blocks = [
-        ("t", "Gravimetric verification at the IV workflow cutover: batch-compounded products"),
-        ("s", "To: %s, Director of Pharmacy. From: %s, quality pharmacist, Sterile Compounding Unit. Cc: %s, IV "
-              "Workflow Project Lead. 8 February 2027." % (P.PEOPLE["director"], P.PEOPLE["quality"], P.PEOPLE["project"])),
-        ("h", "Recommendation"),
-        ("p", "Configure %d batch-compounded products for gravimetric verification of every dose at the 5 April 2027 "
-              "cutover: %s. Each made more than 10 out-of-tolerance doses per 100,000 doses in 2026 (PH-QP-07 3.1). "
-              "The other %d batch products stay on the in-process checks of SC-SOP-12; potassium chloride and "
-              "norepinephrine stay on GC-1 (3.2)." % (len(call), ", ".join(names[:-1]) + " and " + names[-1],
-                                                     len(fig["golden"]) - len(call))),
-        ("h", "How the 2026 rate was estimated"),
-        ("p", "PH-QP-07 counts every dose made outside tolerance, weighed or not, and SC-SOP-12 weighs the first dose "
-              "of a batch and then one syringe in a hundred or one bag in twenty, so the rate has to come from a model "
-              "of the delivered volume. On the peristaltic stations each set "
-              "delivers less the more it has pumped: across every set, a product's weighed doses fall in a straight "
-              "line with the litres the set had pumped since its set-up, about a start that varies from set to set. "
-              "For each product we fitted that start and the loss per litre on the weighed doses (the check register "
-              "tied to each dose in the server's dose log, each dose placed on its set from the compounders' set-up "
-              "events), took every completed dose at the litres its set had pumped, and added up each dose's chance of "
-              "lying outside the product's tolerance."),
-        ("p", "The 90 per cent interval on each rate comes from refitting the line on the product's sets drawn again "
-              "with replacement, a thousand times, and adding up its 2026 doses each time. The limit sits below the "
-              "interval of every product on the list (midazolam's lower bound is %s) and above the interval of every "
-              "other product (the highest upper bound is %s), so the list does not turn on where in its interval a "
-              "rate falls." % (
-                  _fmt(fig["interval"]["P0702"]["lo"]),
-                  _fmt(max(fig["interval"][c]["hi"] for c in fig["golden"] if c not in call)))),
-        ("p", "The rate is driven by the sets that carried extra batches. Cefazolin 2 g and phenylephrine sets that ran "
-              "three batches ended near the bottom of the band after the batch's last weighed dose, so almost none of "
-              "their low doses were weighed and %s. Cefoxitin's large batches cross the limit inside a second batch "
-              "and its checks caught part of them. Midazolam does not move on PC-4 but sits %.1f per cent under target, "
-              "so a small share of every batch falls outside." % (
-                  _sorts_line(fig), -fig["fits"]["P0702"]["start"])),
-        ("p", "A normal fit to each product's weighed doses (the usual capability figure) would put ampicillin, "
-              "piperacillin-tazobactam and vancomycin bags on the list: their sets start %.1f to %.1f per cent high and "
-              "lose about %.1f per cent over a batch, so the weights spread wide, but no set comes near the limit "
-              "before it is changed." % (min(fig["fits"][c]["start"] for c in BAGS),
-                                         max(fig["fits"][c]["start"] for c in BAGS), _bag_loss(fig))),
-        ("table", rows),
-        ("img", Image(png, width=170 * mm, height=105.7 * mm)),
-        ("s", "Sources: compounder dose log and event export (pharmacy server, exported 18 January 2027); gravimetric "
-              "check register and quarantine register, 2026; compounded product master; equipment register. Weights "
-              "converted to volume with each product's specific gravity; gross weights before 1 July less the "
-              "container tare."),
-    ]
-    K.pdf(path, blocks, "Gravimetric verification at cutover: batch products", P.PEOPLE["quality"],
-          K._pdfdate(dt.datetime(2027, 2, 5, 16, 22, 41)), K._pdfdate(dt.datetime(2027, 2, 8, 9, 3, 18)),
-          "%s Pharmacy Services   Sterile Compounding Unit" % P.ORG, first_col=0.25,
-          subject="Gravimetric verification of batch-compounded products at the April 2027 IV workflow cutover")
-
-
-def review_rows(fig):
-    rows = []
-    for k, v in fig["ask_a"].items():
-        st, m = k.split()
-        rows.append(["doses made", st, "2026-%s" % m, v, "doses"])
-    for c, v in fig["ask_b"].items():
-        rows.append(["sets used", "%s %s" % (c, W.product(c)["name"]), "2026", v, "sets"])
-    return rows
-
-
-def write_csv(path, fig):
-    buf = io.StringIO()
-    w = csv.writer(buf, lineterminator="\n")
-    w.writerow(["measure", "compounder_or_product", "period", "value", "unit"])
-    w.writerows(review_rows(fig))
-    with open(path, "w", encoding="utf-8", newline="") as f:
-        f.write(buf.getvalue())
-
-
-def write_all(target, golden, fig, tmpdir):
-    os.makedirs(golden, exist_ok=True)
-    write_pdf(os.path.join(golden, PDF), fig, tmpdir)
-    write_csv(os.path.join(golden, CSV), fig)
+def write(g, rungs, gdir):
+    import os
+    os.makedirs(gdir, exist_ok=True)
+    workbook(g, rungs, os.path.join(gdir, "stage5_high_grade_resource.xlsx"))
+    deck(g, rungs, os.path.join(gdir, "stage5_OPA_tier_board.pptx"))

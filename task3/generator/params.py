@@ -1,78 +1,85 @@
-"""task3 architecture 2: the world's constants. Quessling Sewer Authority (fictional), Pennsylvania; every
-quantity in million gallons (MG), million gallons a day (MGD), inches and feet unless named otherwise."""
-import datetime as dt
+"""task3 architecture 3: the Corrin Valley world, every constant in one place.
 
-SEED = 16502
-STORM_SCALE = 0.51
-UTC = dt.timezone.utc
-EST = dt.timezone(dt.timedelta(hours=-5))
+The truth: a confined sand and gravel aquifer filling a buried bedrock valley (Corrin Valley, Indiana), capped by
+clay-rich till. The valley walls are no-flow boundaries; the till leaks water down into the aquifer in proportion to
+the drawdown. Over a three-day pumping test the walls' extra drawdown and the till's leakage nearly cancel, so the
+test reads as an infinite aquifer that never leaks; over years the leakage wins and the cone stops growing.
+Harlow Springs has pumped the Mill Street wells since 2009, and the record those wells left in the monitoring wells
+is the only place the far field shows. The aquifer's natural level moves with the region's wet and dry years, and
+the nearest network well sits inside the Mill Street cone."""
+import math
 
-# The record the consent decree evaluates: 1 January 2014 to 31 December 2025, Eastern time.
-START_UTC = dt.datetime(2014, 1, 1, 5, 0, tzinfo=UTC)          # 00:00 EST
-END_UTC = dt.datetime(2026, 1, 1, 5, 0, tzinfo=UTC)
-STEP_MIN = 15
-YEARS = 12
-PULL = dt.datetime(2026, 1, 16, 9, 40)                           # local (EST) time of the data pull
+SEED = 20261109
+AS_OF = "2026-11-06"
 
-# The Outfall 014 (Clay Street) catchment.
-O14_DWF = 4.6           # MGD, dry weather flow, mean
-O14_REG = 26.0          # MGD, the regulator's diversion to the Southside interceptor
-O14_RUNOFF = 17.0       # MG of combined flow per inch of rain over the combined area
-# The Outfall 006 (Northside tank) catchment.
-O06_DWF = 2.1
-O06_REG = 7.5
-O06_RUNOFF = 9.9
+# aquifer (truth)
+T = 8000.0          # ft2/day
+S = 1.0e-3
+B = 3500.0          # leakage factor, ft
+WIDTH = 5000.0      # effective valley width between the no-flow walls, ft
+BE = 0.48           # barometric efficiency of the confined aquifer
+GPM = 192.5         # ft3/day per gpm (1 gpm = 0.13368 ft3/min * 1440)
 
-# Southside and Northside water reclamation plants (hourly influent).
-SS_CAP = 140.0          # MGD, Southside headworks hydraulic limit
-SS_BASE = 73.0
-SS_FAST = 150.0         # MGD of fast inflow per inch an hour of rain
-SS_RDII = 88.0          # MGD per inch of groundwater store at the full spring factor
-SS_HALF_LIFE_H = 60.0   # hours, the groundwater store's half life
-NS_CAP = 125.0
-NS_BASE = 41.0
-NS_FAST = 60.0
-NS_RDII = 9.0
+# valley frame: the axis runs N 18 E through ORIGIN; a = along the axis (north-north-east positive),
+# c = across it (east-south-east positive); the walls sit at c = -WIDTH/2 and c = +WIDTH/2
+ORIGIN = (412640.0, 1688210.0)     # Indiana East State Plane, US survey feet
+AZ = math.radians(18.0)
 
-# The Clay Street alternatives in TM-7: (label, volume MG, dewatering pump station firm capacity MGD, cost USD M).
-ALTERNATIVES = [("A", 19.0, 23.0, 78.6), ("B", 26.0, 31.0, 96.0), ("C", 38.0, 45.0, 128.5), ("D", 50.0, 60.0, 158.9)]
-LIMIT_EVENTS = 4.0
-EVENT_GAP_H = 24.0
+# wells in valley coordinates (a, c), ft
+WELLS = {
+    # Harlow Springs, Mill Street well field (pumping since 2009, TW-2 since 2014)
+    "TW-1": (0.0, -250.0), "TW-2": (40.0, 260.0), "MS-MW": (60.0, -630.0),
+    # Reidel Road well field (2026 test)
+    "PW-1": (9000.0, -200.0), "PW-2": (9010.0, 210.0),
+    "OW-1": (9150.0, -205.0), "OW-2": (8985.0, -820.0), "OW-3": (10450.0, -190.0),
+    # district network
+    "OW-S": (7300.0, 700.0),
+    "CV-07": (3200.0, -900.0),
+    "CV-02": (-26000.0, 300.0),
+    "CV-11": (30500.0, -420.0),
+    "CV-04": (5200.0, 1500.0),     # shallow outwash
+    "CV-09": (-12400.0, -1600.0),  # shallow outwash
+    "CV-13": (-8100.0, -3900.0),   # bedrock, outside the valley fill
+    "CV-05": (-18600.0, 1900.0),   # confined, west tributary reach, short record
+    # registered domestic wells in the confined aquifer (no readings)
+    "DW-17": (6800.0, -2300.0), "DW-22": (13800.0, 1900.0), "DW-09": (1500.0, 2100.0),
+}
+NETWORK = ["OW-S", "CV-02", "CV-04", "CV-05", "CV-07", "CV-09", "CV-11", "CV-13"]
+CONFINED = {"DW-17", "DW-22", "DW-09", "OW-S", "CV-02", "CV-05", "CV-07", "CV-11", "MS-MW", "OW-1", "OW-2", "OW-3", "PW-1", "PW-2",
+            "TW-1", "TW-2"}
 
-# The Northside tank (Outfall 006), in service 1 May 2020.
-NT_START_LOCAL = dt.datetime(2020, 5, 1, 0, 0)
-NT_VOL = 8.0            # MG at the overflow crest, 22.0 ft
-NT_CREST_FT = 22.0
-NT_HOPPER_FT = 3.0      # the sloped floor's depth
-NT_HOPPER_MG = 0.42     # MG held below 3.0 ft
-NT_NAMEPLATE = 4.0      # MGD per pump
-NT_CURVE = {1: 4.0, 2: 7.4, 3: 10.2}          # the station's tested curve with original pumps (O&M manual)
-NT_P2_OUT_LOCAL = dt.datetime(2023, 3, 6, 9, 30)
-NT_P2_REBUILT_LOCAL = dt.datetime(2023, 3, 14, 13, 0)
-NT_CLEANOUT_LOCAL = (dt.datetime(2023, 8, 14, 7, 0), dt.datetime(2023, 8, 23, 11, 0))
-NT_CURVE_P2 = {("P2",): 3.3, ("P1", "P2"): 6.9, ("P2", "P3"): 6.9, ("P1", "P2", "P3"): 9.6}
-NT_HOLD_MGD = 1.0        # the station is held off while storm flow enters the tank (O&M 4.3)
-NT_START_FT = 1.0        # the lead pump starts at 1.0 ft when the station is idle
-# SG-600's seals failing: (from, to, MGD of dry weather flow passing into the tank), local times
-NT_LEAKS = [(dt.datetime(2022, 6, 20, 8, 0), dt.datetime(2023, 2, 14, 11, 0), 0.27),
-            (dt.datetime(2023, 9, 5, 8, 0), dt.datetime(2024, 1, 30, 14, 0), 0.31),
-            (dt.datetime(2024, 7, 15, 8, 0), dt.datetime(2025, 3, 18, 10, 0), 0.29),
-            (dt.datetime(2025, 8, 4, 8, 0), dt.datetime(2025, 12, 31, 23, 45), 0.36)]
-NT_TRANSDUCER_LOCAL =dt.datetime(2023, 8, 23, 11, 0)
-NT_TRANSDUCER_OFFSET = 0.45   # ft the re-mounted transducer reads above the water's depth
+# Mill Street pumping history: annual average gpm by well, the summer peak and the 2014 second well
+TOWN_START = (2009, 3)
+TW2_START = (2014, 6)
+TOWN_BASE_GPM = 372.0
+TOWN_GROWTH = 0.0185
+TOWN_SEASON = 0.24
+TW1_SHARE_AFTER = 0.56
+# the town's own projection for 2027 to 2046 (filed in the application): growth on the 2025 average
+TOWN_PROJ_GROWTH = 0.012
 
-# Rain gauges: id, site, logger replaced (local date) to a cellular logger that stamps UTC, or None.
-GAUGES = [("RG-1", "Northside WRP", None), ("RG-2", "Clay Street pump station", None),
-          ("RG-3", "Southside WRP", dt.datetime(2024, 5, 7, 11, 20)),
-          ("RG-4", "Midtown public works yard", dt.datetime(2024, 5, 8, 9, 50))]
-TIP_IN = 0.01
-TIP_02MM_IN = 0.2 / 25.4
-CONTRACT_START = dt.date(2025, 7, 1)    # the field maintenance contract's monthly visits begin
-MECH_SWAPS = {"RG-1": dt.datetime(2025, 7, 9, 10, 5), "RG-2": dt.datetime(2025, 7, 14, 13, 40),
-              "RG-3": dt.datetime(2025, 7, 18, 9, 15), "RG-4": dt.datetime(2025, 7, 23, 11, 30)}
-ORIFICE_IN = 8.0
+# the application's four rates (annual average gpm, Reidel Road field split evenly over PW-1 and PW-2)
+OPTIONS = [450, 700, 1000, 1250]
+NEW_SEASON = [0.78, 0.76, 0.80, 0.88, 1.02, 1.21, 1.34, 1.31, 1.17, 0.98, 0.88, 0.87]   # Jan..Dec
+NEW_START = (2027, 4)
+TERM_END = 2046
+LIMIT = 9.0          # ft at OW-S, Rule WR-4 Table 1
 
-# The Outfall 014 meter replacement.
-METER_OLD_END_LOCAL = dt.datetime(2019, 6, 9, 14, 0)       # the old logger's last reading (EST)
-METER_NEW_START_LOCAL = dt.datetime(2019, 6, 2, 10, 0)      # the new logger's first reading (local)
-CFS_TO_MGD = 0.646317
+# the test
+TEST_START = "2026-09-14 09:00"   # EDT, pump on
+TEST_HOURS = 72
+TEST_RATE_GPM = (1018.0, 1003.0)  # the rate drifts down as the column warms, start to end
+LOG_FROM = "2026-09-08 12:00"
+LOG_TO = "2026-09-20 12:00"
+RECOVERY_HOURS = 72
+
+# the application's projection for the Mill Street wells (annual average gpm in 2026, then growth a year)
+TOWN_PROJ_BASE = 548.0
+TOWN_MONTH_FACTORS = [0.81, 0.80, 0.84, 0.90, 1.03, 1.17, 1.25, 1.23, 1.11, 0.98, 0.95, 0.93]
+
+# the region's wet and dry years for the confined aquifer (ft against the long-run level); the 2005 to 2008
+# baseline was a dry run, the 2010s and early 2020s wet, with the 2012 drought and the 2023 dry autumn
+WET_DRY = {2005: -0.75, 2006: -0.45, 2007: -0.95, 2008: -0.55, 2009: 0.15, 2010: 0.35, 2011: 1.25, 2012: -0.55,
+           2013: 0.75, 2014: 0.95, 2015: 1.05, 2016: 0.65, 2017: 1.55, 2018: 1.85, 2019: 1.75, 2020: 1.15,
+           2021: 0.85, 2022: 0.45, 2023: -0.15, 2024: 0.75, 2025: 0.95, 2026: 0.55}
+NAT_GAIN = {"CV-02": 0.97, "CV-11": 1.03, "CV-05": 0.92, "OW-S": 1.0, "MS-MW": 1.0, "CV-07": 1.0}

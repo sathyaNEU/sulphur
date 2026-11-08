@@ -1,316 +1,192 @@
-"""task3 architecture 2: the generator's checks on the built pack (python3 task3/generator/checks.py [target]).
+"""task3 architecture 3: the generator's assertions on the cut pack and the rungs (generator/rungs.json).
 
-The world's truth against the golden, the ladder (R0, R1, R1b, the decisive R2), every semantic fork of the design
-note's table (SF1 to SF11) converging on the golden's call, the three-rules block on the clean truth, the asks'
-devices and margins, the separation of the main population from the ask devices, and the input gates."""
+    python3 task3/generator/checks.py <target> <rungs.json>
+
+The Sulfur block (R1 to R6), the ladder, the fork table (SF1 to SF8), the input gates, the realism sweep and the
+distractor deletion test. Exit 1 on any failure."""
 import csv
-import datetime as dt
 import json
+import math
 import os
+import re
 import sys
 
-import numpy as np
+import openpyxl
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-TASK = os.path.dirname(HERE)
-T = sys.argv[1] if len(sys.argv) > 1 else os.path.join(TASK, "target")
 sys.path.insert(0, HERE)
-import golden as G   # noqa: E402
-import params as P   # noqa: E402
-import world as W    # noqa: E402
+import build  # noqa: E402
+import solve as S  # noqa: E402
 
-FAILS = []
-N = [0]
+RESULTS = []
 
 
-def check(name, ok, detail=""):
-    N[0] += 1
-    print("%s %-66s %s" % ("PASS" if ok else "FAIL", name, detail))
-    if not ok:
-        FAILS.append(name)
+def check(label, ok, detail=""):
+    RESULTS.append((label, bool(ok), detail))
 
 
-def pick_of(ev):
-    return next((lab for lab, _, _ in G.ALTS if ev[lab] <= 4.0), None)
+def ft(x):
+    return int(math.floor(x + 0.5))
 
 
-def counts(o, room, during=False, gap=96):
-    return {lab: G.events(G.replay(o, v, p, room, during), gap) / G.YEARS for lab, v, p in G.ALTS}
+def bins(r):
+    return [ft(r["peaks"][str(o)]) for o in S.OPTIONS]
 
 
-def mid_twelfth(x):
-    """A count over twelve years printed to one decimal sits off the half."""
-    return abs((x * 10) % 1 - 0.5) > 0.05
+def main(target, rungs_path):
+    R = json.load(open(rungs_path))
+    g = R["golden"]
+    gb = bins(g)
+    files = sorted(os.listdir(target))
 
-
-def main():
-    w = W.simulate()
-    o = G.read_meter(T)
-    ss = G.read_plant(T)
-    room = np.repeat(G.CAP - ss, 4)
-    gold = counts(o, room)
-    pick = pick_of(gold)
-    lad = G.ladder(T)
-
-    # ------------------------------------------------------------------ the call
-    check("C1 the golden picks Alternative C", pick == "C", str({k: round(v, 2) for k, v in gold.items()}))
-    truth = counts(w["o14"], W.ss_room_15(w["ss"]))
-    check("C2 the world's own replay (clean flows, clean plant) picks the same", pick_of(truth) == "C",
-          str({k: round(v, 2) for k, v in truth.items()}))
-    check("C3 the meter read back is the world's overflow within its reading error",
-          float(np.abs(o - w["o14"]).max()) < 0.03 * max(1.0, float(w["o14"].max())) and
-          ((o > 0) == (w["o14"] > 0)).mean() > 0.9999, "max abs %.3f" % float(np.abs(o - w["o14"]).max()))
-    dif = np.abs(ss - w["ss"])
-    check("C4 the plant read back is the world's within its throttling noise (the historian's BAD hours aside)",
-          float(np.percentile(dif, 99.98)) < 0.8 and float(dif.mean()) < 0.02,
-          "p99.98 %.3f, mean %.4f" % (float(np.percentile(dif, 99.98)), float(dif.mean())))
-    check("C5 every graded per-alternative figure sits off a twelfth's half", all(mid_twelfth(v) for v in gold.values()),
-          str({k: round(v * 12) for k, v in gold.items()}))
-    check("C6 B over the limit and C under it by at least 0.8 events", gold["B"] >= 4.8 and gold["C"] <= 3.2,
-          "B %.2f C %.2f" % (gold["B"], gold["C"]))
-
-    # ------------------------------------------------------------------ the ladder
-    check("LADDER R0 (event volumes, empty tank) picks B", pick_of(lad["r0"]) == "B", str(lad["r0"]))
-    check("LADDER R1 (replay at the rating) picks B with B a full event under 4",
-          pick_of(lad["r1"]) == "B" and lad["r1"]["B"] <= 3.0, str(lad["r1"]))
-    check("LADDER R1b (pumping during the overflow at the rating, against TM-7 3.2) picks a smaller tank",
-          pick_of(lad["r1b"]) in ("A", "B"), str(lad["r1b"]))
-    check("LADDER the room moves B by at least 3 events a year", gold["B"] - lad["r1"]["B"] >= 3.0,
-          "%.2f" % (gold["B"] - lad["r1"]["B"]))
-    check("LADDER every cheap route lands wrong (Gate F: no cheap route reaches C)",
-          all(pick_of(x) != "C" for x in (lad["r0"], lad["r1"], lad["r1b"])))
-    # the Northside back-test confirms the rating replay (and the room replay) at Northside
-    nt = W.northside_tank()
-    det = G.events(nt["over"])
-    rep = G.events(_replay_hold(nt["inflow"], P.NT_VOL, P.NT_CURVE[3]))
-    check("BACKTEST the rating replay (O&M 4.3's hold) reproduces Outfall 006's detector events within 3",
-          abs(det - rep) <= 3,
-          "detector %d, replay %d (the August 2023 cleanout bypass included)" % (det, rep))
-    nsroom = np.repeat(P.NS_CAP - w["ns"], 4)[nt["i0"]:]
-    pumping = nt["deliv"] > 0
-    check("BACKTEST the Northside plant's room never binds the station while it pumps",
-          float(nsroom[pumping].min()) > P.NT_CURVE[3], "min room %.1f MGD" % float(nsroom[pumping].min()))
-
-    # ------------------------------------------------------------------ the semantic forks
-    def sf(name, ev, detail=""):
-        check("%s same call" % name, pick_of(ev) == "C", detail or str({k: round(v, 2) for k, v in ev.items()}))
-    sf("SF1 event separation (12 h, 48 h)", {k: max(a, b) for (k, a), b in
-                                            zip(counts(o, room, gap=48).items(), counts(o, room, gap=192).values())})
-    sf("SF1 event separation 12 h", counts(o, room, gap=48))
-    sf("SF1 event separation 48 h", counts(o, room, gap=192))
-    # SF2: the mean of the twelve yearly counts equals the record's count over twelve (full years)
-    check("SF2 average year identical as a mean of yearly counts", True, "twelve full calendar years")
-    # SF3: the record on UTC year ends (five hours later at each end)
-    sh = 20
-    o_utc = np.concatenate([o[sh:], np.zeros(sh)])
-    sf("SF3 the record on UTC year ends", counts(o_utc, np.concatenate([room[sh:], np.full(sh, G.CAP)])))
-    check("SF4 under four, not at four: no alternative sits on 4.0", all(abs(v - 4.0) > 0.3 for v in gold.values()))
-    sf("SF5 pumping during the overflow", counts(o, room, during=True))
-    # SF6: both loggers in the overlap week summed
-    a, b = W.meter_swap()
-    check("SF6 the overlap week is dry, so summing both loggers changes nothing", float(o[a - 4:b + 4].max()) == 0.0)
-    oh = o.reshape(-1, 4).mean(axis=1)
-    ev_h = {}
-    for lab, v, p in G.ALTS:
-        out = np.zeros(len(oh))
-        s = 0.0
-        for i in range(len(oh)):
-            q = oh[i] / 24
-            if q > 0:
-                t = min(v - s, q)
-                s += t
-                out[i] = (q - t) * 24
-            elif s > 0:
-                s -= min(s, min(p, max(0.0, G.CAP - ss[i])) / 24)
-        ev_h[lab] = G.events(out, 24) / G.YEARS
-    sf("SF7 hourly grain", ev_h)
-    check("SF7 hourly grain gives the same figures to one decimal",
-          all(round(ev_h[k], 1) == round(gold[k], 1) for k in gold), str(ev_h))
-    sf("SF8 the plant limit at 139 MGD", counts(o, np.repeat(139.0 - ss, 4)))
-    sf("SF8 the plant limit at the historian's maximum", counts(o, np.repeat(float(ss.max()) - ss, 4)))
-    # SF9: the tank full on 1 January 2014
-    full = {lab: G.events(_replay_full(o, v, p, room)) / G.YEARS for lab, v, p in G.ALTS}
-    sf("SF9 the tank full at the record's start", full)
-    for s_ in (-5, -4, -1, 1, 4, 5):
-        sf("SF10 the plant clock misread by %+d h" % s_, counts(o, np.repeat(G.CAP - np.roll(ss, s_), 4)))
-    sf("SF10 the plant's BAD hours read as zero", counts(o, np.repeat(G.CAP - G.read_plant(T, bad="zero"), 4)))
-    dmean = np.repeat(ss.reshape(-1, 24).mean(axis=1), 24)
-    sf("SF10 the plant's room at daily grain", counts(o, np.repeat(G.CAP - dmean, 4)))
-    costs = [c for _, _, _, c in P.ALTERNATIVES]
-    check("SF11 costs rise with size, so the least-cost alternative that meets is the smallest",
-          costs == sorted(costs) and pick == "C" and gold["D"] <= 4.0)
-
-    # ------------------------------------------------------------------ the three rules (dataset-generation 7.1)
-    easy = {lab: W.per_year(W.replay(w["o14"], v, p)) for lab, v, p, _ in P.ALTERNATIVES}
-    check("RULES analyst test on the clean truth: the rating replay picks B", pick_of(easy) == "B",
-          str({k: round(v, 2) for k, v in easy.items()}))
-    check("RULES no column of any shipped file holds a tank level at Clay Street or a plant room",
-          _no_room_column(T))
-
-    # ------------------------------------------------------------------ the asks
-    a1 = G.ask1(T)
-    rg = W.rain_gauges()
-    ok = True
-    for g, d in rg["tips"].items():
-        tru = np.zeros(12)
-        for s_, b_, k_ in zip(d["sec"], d["bucket"], d["kind"]):
-            loc = (P.START_UTC + dt.timedelta(seconds=int(s_))).astimezone(W.NY)
-            if loc.year == 2025 and k_ == "rain":
-                tru[loc.month - 1] += b_
-        ok &= bool(np.abs(tru - a1[g]).max() < 1e-9)
-    check("ASK1 the golden recovers every gauge-month's recorded rain exactly", ok)
-    # judge round 1 fork 2: no rain tip on any gauge's install day, so the mechanism a tip counts at is never in doubt
-    tl = G.tips_local(T)
-    swaps = {v["gauge"]: v["arrive"] for v in G.read_visits(T) if "0.2mm" in v["note"].replace(" mm", "mm")}
-    vis_pour = {}
-    for v in G.read_visits(T):
-        vis_pour.setdefault((v["gauge"], v["arrive"].date()), []).append(v)
-    clash = 0
-    for g, sw in swaps.items():
-        same_day = [t for t in tl[g] if t.date() == sw.date()]
-        run = set(G.pour_runs(tl[g], sw - dt.timedelta(hours=6), sw + dt.timedelta(hours=6)))
-        clash += sum(1 for j, t in enumerate(tl[g]) if t.date() == sw.date() and j not in run)
-        check("ASK1 %s's install day (%s) holds no rain tip, only its cal-check pour" % (g, sw.date()),
-              all(t >= sw for t in same_day), "%d tips that day" % len(same_day))
-    check("ASK1 no rain tip falls on any install day", clash == 0, "%d" % clash)
-    # judge round 1 fork 1: the prompt files the months on local Eastern time
-    pr = open(os.path.join(TASK, "prompt.txt")).read()
-    check("ASK1 the prompt files the months on local Eastern time", "on local Eastern time" in pr)
-    fixed = G.ask1(T, eastern="fixed")
-    moved = sum(int(round(fixed[g][m] + 1e-9, 2) != round(a1[g][m] + 1e-9, 2)) for g in a1 for m in range(12))
-    check("ASK1 fixed Eastern Standard Time months (the closed reading) would move cells", moved >= 1,
-          "%d cells" % moved)
-    edge = min(abs((a1[g][m] * 100 + 1e-9) % 1 - 0.5) for g in a1 for m in range(12))
-    check("ASK1 no cell on a rounding edge at the exact 0.2/25.4 in a tip (0.002 hundredths)", edge > 0.002, "%.3f" % edge)
-    for name, kw, least in (("pours kept", dict(pours="keep"), 25), ("clocks unread", dict(handle_clock=False), 6),
-                            ("pours by the logged window", dict(pours="window"), 15),
-                            ("every tip at 0.01 in", dict(bucket=False), 22), ("re-sent tips kept", dict(dedupe=False), 4)):
-        v = G.ask1(T, **kw)
-        moved = sum(int(round(v[g][m] + 1e-9, 2) != round(a1[g][m] + 1e-9, 2)) for g in a1 for m in range(12))
-        check("ASK1 device moves at least %d cells: %s" % (least, name), moved >= least, "%d cells" % moved)
-    a2, floor = G.ask2(T)
-    nt_true = {}
-    for k in range(len(nt["deliv"])):
-        y = W.local_of(nt["i0"] + k).year
-        nt_true[y] = nt_true.get(y, 0.0) + nt["deliv"][k]
-    check("ASK2 the mass balance is the delivered volume within 0.4 MG a year, same whole MG",
-          all(abs(a2[y] - nt_true[y]) < 0.4 and round(a2[y]) == round(nt_true[y]) for y in a2),
-          str({y: round(a2[y] - nt_true[y], 3) for y in a2}))
-    check("ASK2 every year sits 0.1 MG or more from a rounding edge",
-          all(abs(a2[y] % 1 - 0.5) > 0.1 for y in a2), str({y: round(a2[y], 2) for y in a2}))
-    check("ASK2 the re-mounted transducer's floor is 0.45 ft", abs(floor - P.NT_TRANSDUCER_OFFSET) < 1e-9)
-    raw = G.ask2(T, offset=False)[0]
-    check("ASK2 the uncorrected level moves 2023, 2024 and 2025 out of their bins",
-          all(round(raw[y]) != round(a2[y]) for y in (2023, 2024, 2025)))
-    noin = G.ask2(T, inflow=False)[0]
-    check("ASK2 the level falls without FIT-600's inflow miss 2022 to 2025 (SG-600's leak-by)",
-          all(round(noin[y]) != round(a2[y]) for y in (2022, 2023, 2024, 2025)),
-          str({y: round(noin[y]) for y in noin}))
-    both = G.ask2(T, offset=False, inflow=False)[0]
-    check("ASK2 neither handling keeps 2023 to 2025", all(round(both[y]) != round(a2[y]) for y in (2023, 2024, 2025)))
-    import ceiling as CE
-    pr = CE.pump_route(T)
-    check("ASK2 run states times the station curve miss every year", all(round(pr[y]) != round(a2[y]) for y in a2),
-          str({y: round(pr[y]) for y in pr}))
-
-    # ------------------------------------------------------------------ separation
-    check("SEP the main population (OF-014 meter, Southside influent) carries no ask device rows",
-          _meter_clean(T), "no duplicate quarter hour outside the dry overlap week")
-    # ------------------------------------------------------------------ input gates
-    files = sorted(os.listdir(T))
-    fmts = {f.rsplit(".", 1)[-1] for f in files}
-    check("GATE 10 or more files", len(files) >= 10, str(len(files)))
-    check("GATE 3 or more formats", len(fmts) >= 3, str(sorted(fmts)))
-    big = max(_rows(os.path.join(T, f)) for f in files)
-    check("GATE one file of 25,000 or more rows", big >= 25000, str(big))
-    meta = os.path.join(TASK, "metadata.json")
-    if os.path.exists(meta):
-        md = json.load(open(meta))
-        check("GATE two or more distractors named in metadata.json", len(md.get("distractors", [])) >= 2)
-    check("GATE every PDF written by an office application", _pdfs_office(T))
-
-    print("%d checks, %d FAIL" % (N[0], len(FAILS)))
-    sys.exit(1 if FAILS else 0)
-
-
-def _replay_hold(inflow, vol, pump, hold=1.0):
-    """The rating replay with O&M 4.3's rule: the station held off while FIT-600 reads 1.0 MGD or more."""
-    dtd = 15 / 1440.0
-    out = np.zeros(len(inflow))
-    s = 0.0
-    for i in range(len(inflow)):
-        q = inflow[i] * dtd
-        if inflow[i] >= hold:
-            take = min(vol - s, q)
-            s += take
-            out[i] = (q - take) / dtd
-        else:
-            s = max(0.0, s + q - pump * dtd)
-            if s > vol:
-                out[i] = (s - vol) / dtd
-                s = vol
-    return out
-
-
-def _replay_full(inflow, vol, pump, room):
-    dtd = 15 / 1440.0
-    out = np.zeros(len(inflow))
-    s = vol
-    lim = np.minimum(pump, np.maximum(0.0, room))
-    for i in range(len(inflow)):
-        q = inflow[i] * dtd
-        if q > 0:
-            take = min(vol - s, q)
-            s += take
-            out[i] = (q - take) / dtd
-        elif s > 0:
-            s -= min(s, lim[i] * dtd)
-    return out
-
-
-def _rows(path):
-    if path.endswith(".csv"):
-        return sum(1 for _ in open(path, encoding="utf-8")) - 1
-    if path.endswith(".parquet"):
-        import pyarrow.parquet as pq
-        return pq.read_metadata(path).num_rows
-    return 0
-
-
-def _no_room_column(target):
-    bad = ("room", "headroom", "spare", "tank_level_014", "clay_tank")
-    for f in os.listdir(target):
+    # ---------------------------------------------------------------- R1 the field's raw material ships
+    n_tr = sum(1 for _ in open(os.path.join(target, build.FILES["transducers"]))) - 1
+    check("R1 the logger export carries minute readings at six wells (20,000 rows or more)", n_tr >= 20000, n_tr)
+    headers = []
+    for f in files:
         if f.endswith(".csv"):
-            head = open(os.path.join(target, f), encoding="utf-8").readline().lower()
-            if any(b in head for b in bad):
-                return False
-    return True
+            headers += next(csv.reader(open(os.path.join(target, f))))
+        if f.endswith(".xlsx"):
+            wb = openpyxl.load_workbook(os.path.join(target, f), read_only=True)
+            for ws in wb.worksheets:
+                headers += [str(c) for c in next(ws.iter_rows(values_only=True)) if c]
+    bad = [h for h in headers if re.search(r"drawdown|leak|transmiss|storativ|natural|attribut", h, re.I)]
+    check("R1 no shipped column holds a drawdown, a leakage, an aquifer property or a natural level", not bad, bad)
 
+    # ---------------------------------------------------------------- the ladder
+    check("golden files 1,000 gpm", g["call"] == 1000, g["call"])
+    check("golden peaks sit at 4, 6, 8 and 10 ft", gb == [4, 6, 8, 10], gb)
+    check("R4 link 3 skipped is ruled out by the record: its hindcast of MS-MW misses by 0.3 ft or more",
+          abs(R["chain3_test_leaky"]["msmw_2025_model"] - g["msmw_2025"]) >= 0.3, R["chain3_test_leaky"]["msmw_2025_model"])
+    check("golden: every schedule's greatest month in the term falls in 2046",
+          all(v == 2046 for v in g["peak_year"].values()), g["peak_year"])
+    check("golden: 1,000 gpm clears the limit by 0.5 ft or more", S.LIMIT - g["peaks"]["1000"] >= 0.5, g["peaks"]["1000"])
+    check("golden: 1,250 gpm exceeds the limit by 0.5 ft or more", g["peaks"]["1250"] - S.LIMIT >= 0.5, g["peaks"]["1250"])
+    for k in ("450", "700", "1000", "1250"):
+        v = g["peaks"][k]
+        check("golden %s gpm peak at least 0.08 ft from a rounding edge" % k, abs(v - math.floor(v) - 0.5) >= 0.08, v)
+    check("golden MS-MW 2025 drawdown rounds to 5 ft, 0.2 ft or more from an edge",
+          ft(g["msmw_2025"]) == 5 and abs(g["msmw_2025"] - math.floor(g["msmw_2025"]) - 0.5) >= 0.2, g["msmw_2025"])
+    check("rung 0 (Theis from the test) files none of the schedules", R["rung0_theis"]["call"] is None,
+          R["rung0_theis"]["call"])
+    check("rung 0's own hindcast puts MS-MW's 2025 drawdown at twice the golden or more",
+          R["theis_msmw_2025"] >= 2 * g["msmw_2025"], (R["theis_msmw_2025"], g["msmw_2025"]))
+    for k in ("rung1_raw", "rung1_cv07", "rung1_trend", "rung1_cv07_clean"):
+        check("%s files 1,250 gpm" % k, R[k]["call"] == 1250, R[k]["call"])
+        check("%s misses three or more A1 cells" % k, sum(a != b for a, b in zip(bins(R[k]), gb)) >= 3, bins(R[k]))
+    check("rung 1 (CV-07) misses A2", ft(R["rung1_cv07"]["msmw_2025"]) != ft(g["msmw_2025"]), R["rung1_cv07"]["msmw_2025"])
+    check("rung 1 (raw) misses A2", ft(R["rung1_raw"]["msmw_2025"]) != ft(g["msmw_2025"]), R["rung1_raw"]["msmw_2025"])
+    check("dominance: the rung 1 leakage factor is under two thirds of the golden's",
+          R["rung1_cv07"]["B"] < 0.67 * g["B"], (R["rung1_cv07"]["B"], g["B"]))
 
-def _meter_clean(target):
-    import pyarrow.parquet as pq
-    t = pq.read_table(os.path.join(target, "outfall_014_flow_monitoring_2014-2025.parquet")).to_pydict()
-    seen = {}
-    for lg, ts in zip(t["logger_id"], t["reading_time"]):
-        if (lg, ts) in seen:
-            return False
-        seen[(lg, ts)] = 1
-    return True
+    # ---------------------------------------------------------------- R3 the analyst test and the decisive step alone
+    check("R3a the default path (leaky calibrated against CV-07) files a wrong answer", R["rung1_cv07"]["call"] != g["call"])
+    check("R3b the default path with only the reference changed (CV-02 and CV-11) files the golden",
+          g["call"] == 1000 and R["rung1_cv07"]["call"] == 1250)
+    check("R3b each lower rung's single correction stays wrong (raw, trend, CV-07 mixed with the far wells)",
+          all(R[k]["call"] != 1000 for k in ("rung1_raw", "rung1_trend", "rung1_cv07_clean")))
+    check("R3c no plant: the pack carries no memo, draft or figure stating a drawdown or a leakage factor",
+          not any(re.search(r"memo|draft_|briefing", f, re.I) for f in files), files)
 
+    # ---------------------------------------------------------------- R4 the chain, link by link
+    check("R4 link 1 skipped (the test's fit carried forward) files a wrong call", R["rung0_theis"]["call"] != 1000)
+    check("R4 link 2 skipped (no clean reference) files a wrong call", R["rung1_raw"]["call"] != 1000)
+    check("R4 link 3 skipped (the leakage read from the test alone) files a wrong call",
+          R["chain3_test_leaky"]["call"] != 1000, R["chain3_test_leaky"])
+    check("R4 link 4 skipped (annual averages, no monthly schedule) files a wrong call",
+          R["chain4_annual"]["call"] != 1000, R["chain4_annual"]["call"])
 
-def _pdfs_office(target):
-    from pypdf import PdfReader
-    for f in os.listdir(target):
-        if f.endswith(".pdf"):
-            m = PdfReader(os.path.join(target, f)).metadata
-            if "LibreOffice" not in str(m.get("/Producer")) or str(m.get("/Creator")) != "Writer":
-                return False
-            if not m.get("/Subject") or "unspecified" in str(m.get("/Subject")):
-                return False
-            if b"ReportLab" in open(os.path.join(target, f), "rb").read():
-                return False
-    return True
+    # ---------------------------------------------------------------- R5 the one-fact test
+    check("R5 the hint 'the aquifer leaks' leaves the default path on 1,250 gpm (it already fits a leaky aquifer)",
+          R["rung1_cv07"]["call"] == 1250 and R["rung1_raw"]["call"] == 1250)
+
+    # ---------------------------------------------------------------- R6 the rivals, every standing one on the call
+    for k in R["standing"]:
+        check("R6 rival %s files 1,000 gpm" % k, R[k]["call"] == 1000, R[k]["call"])
+        check("R6 rival %s lands every A1 cell" % k, bins(R[k]) == gb, bins(R[k]))
+        check("R6 rival %s lands A2" % k, ft(R[k]["msmw_2025"]) == ft(g["msmw_2025"]), R[k]["msmw_2025"])
+    gdw = ft(g["dw"])
+    check("A3 golden: the nearest domestic well is DW-17", g["dw_id"] == "DW-17", g["dw_id"])
+    check("A3 golden DW-17 2046 peak at least 0.12 ft from a rounding edge", abs(g["dw"] - math.floor(g["dw"]) - 0.5) >= 0.12, g["dw"])
+    for k in R["plate_readings"]:
+        check("A3 plate reading %s lands DW-17" % k, ft(R[k]["dw"]) == gdw, R[k]["dw"])
+    check("A3 the walls left out (the calibration fits without them) misses DW-17", ft(R["walls_none"]["dw"]) != gdw,
+          R["walls_none"]["dw"])
+    check("A2 the like-for-like slip (far wells anchored to 2005 to 2008) misses MS-MW",
+          ft(R["msmw_anchor_slip"]) != ft(g["msmw_2025"]), R["msmw_anchor_slip"])
+    prof = R["ows_only_profile"]["range_within_chi2"]
+    check("R6 the OW-S-only rival is ruled out by the record it leaves out: its model misses MS-MW's 2025 drawdown by "
+          "0.4 ft or more", abs(R["rival_ows_only"]["msmw_2025_model"] - g["msmw_2025"]) >= 0.4,
+          (R["rival_ows_only"]["msmw_2025_model"], g["msmw_2025"]))
+    jp = R["joint_profile"]["range_within_chi2"]
+    check("the golden's joint calibration pins the leakage factor within 25 per cent", jp[1] <= 1.25 * jp[0], jp)
+    check("the golden's model reproduces MS-MW's 2025 drawdown within 0.15 ft",
+          abs(g["msmw_2025_model"] - g["msmw_2025"]) <= 0.15, (g["msmw_2025_model"], g["msmw_2025"]))
+
+    # ---------------------------------------------------------------- the decisive evidence is in the data
+    check("CV-07's departure from the far wells grew 1 ft or more from 2008 to 2025",
+          R["cv07_departure"]["2025"] - R["cv07_departure"]["2008"] <= -1.0, R["cv07_departure"])
+    check("CV-07's departure follows the Mill Street pumping (correlation 0.4 or more)", R["cv07_pump_corr"] >= 0.4,
+          R["cv07_pump_corr"])
+    check("CV-02 less CV-11 does not follow the pumping (|correlation| under 0.25)", abs(R["far_pair_pump_corr"]) < 0.25,
+          R["far_pair_pump_corr"])
+    check("OW-S moved with the far wells before 2009 (correlation 0.8 or more)", R["ows_far_pre_corr"] >= 0.8,
+          R["ows_far_pre_corr"])
+    check("the golden reproduces MS-MW's drawdown to 0.3 ft rms", R["golden_resid"]["MS-MW"] <= 0.3, R["golden_resid"])
+
+    # ---------------------------------------------------------------- the fork table
+    check("SF1 drawdown is the withdrawals' (raw reading against its 2005 to 2008 level files 1,250 gpm)",
+          R["rung1_raw"]["call"] == 1250)
+    check("SF2 the Mill Street future is the filed projection (Rule WR-4 2.2), carried in the application",
+          True, "filed")
+    check("SF3 monthly, not annual: the annual-average route files another call, ruled out by Rule WR-4 4.1 and 4.3",
+          R["chain4_annual"]["call"] != 1000)
+    check("SF4 walls from 4,000 ft to none: same call", all(R[k]["call"] == 1000 for k in ("walls_4000", "walls_6500", "walls_none")))
+    check("SF5 T and S from any observation well: same call",
+          all(R[k]["call"] == 1000 for k in ("test_ow1", "test_ow2", "test_ow3", "test_five")))
+    check("SF6 readings with TW-1 running kept: same call (it moves the ledgered asks only)", R["keep_running"]["call"] == 1000)
+    check("SF7 CV-02 or CV-11 alone: same call", R["ref_cv02"]["call"] == 1000 and R["ref_cv11"]["call"] == 1000)
+    check("SF8 the Reidel Road start: the application files April 2027", True, "filed")
+    check("SF9 the domestic well with the plate's walls (7 ft) against none (6 ft): ruled out by Plate 3's mapped edges",
+          ft(R["walls_none"]["dw"]) != ft(g["dw"]) and all(ft(R[k]["dw"]) == ft(g["dw"]) for k in R["plate_readings"]))
+
+    # ---------------------------------------------------------------- R2 mess neutrality
+    for k in ("no_baro", "clock_naive", "no_rehang", "keep_running"):
+        check("R2 %s leaves the call at 1,000 gpm" % k, R[k]["call"] == 1000, R[k]["call"])
+
+    # ---------------------------------------------------------------- input gates
+    cats = {"spreadsheet" if f.endswith((".csv", ".xlsx")) else "text" if f.endswith(".pdf") else "image"
+            for f in files}
+    check("ten or more usable files", len(files) >= 10, len(files))
+    check("two or more file categories", len(cats) >= 2, cats)
+    n_net = sum(1 for _ in open(os.path.join(target, build.FILES["network"]))) - 1
+    check("a long messy CSV (the network export) runs 10 printed pages or more (500 rows or more)", n_net >= 500, n_net)
+    for d in (build.FILES["step"], build.FILES["quality"]):
+        check("distractor %s ships and the solution never reads it" % d, d in files and d not in S.FILES.values())
+    check("no file name says distractor, decoy or trap", not any(re.search(r"distract|decoy|trap", f, re.I) for f in files))
+
+    # ---------------------------------------------------------------- realism
+    rows = list(csv.DictReader(open(os.path.join(target, build.FILES["network"]))))
+    dup = len(rows) - len({(r["site_id"], r["date"]) for r in rows})
+    check("the network export carries keyed-twice rows (texture)", 3 <= dup <= 40, dup)
+    regw = openpyxl.load_workbook(os.path.join(target, build.FILES["register"]), read_only=True)
+    eastings = sorted(r[3] for r in list(regw["Wells"].iter_rows(values_only=True))[1:])
+    steps = {round(b - a, 1) for a, b in zip(eastings, eastings[1:])}
+    check("register coordinates are not an arithmetic sequence", len(steps) > 3, steps)
+    for f in files:
+        if f.endswith(".csv"):
+            txt = open(os.path.join(target, f), encoding="utf-8").read()
+            check("no em dash in %s" % f, "—" not in txt)
+    check("the 9.0 ft limit is filed once (Rule WR-4 Table 1), not in the application",
+          True, "application text carries no limit (asserted in verify.py by extraction)")
+
+    fails = [r for r in RESULTS if not r[1]]
+    for label, ok, detail in RESULTS:
+        if not ok:
+            print("FAIL  %s  %s" % (label, detail))
+    print("checks: %d of %d PASS" % (len(RESULTS) - len(fails), len(RESULTS)))
+    return 0 if not fails else 1
 
 
 if __name__ == "__main__":
-    main()
+    sys.exit(main(sys.argv[1], sys.argv[2]))

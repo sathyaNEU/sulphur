@@ -1,30 +1,30 @@
 {
  "task": "task2",
- "status": "PAUSED",
+ "status": "READY",
  "domain": "general-statistics-data-science",
  "objective": "descriptive-distribution",
  "stage": 5,
- "stage_name": "ship",
+ "stage_name": "ready",
  "updated": "2026-11-08",
- "stump": "A strong analyst who conforms the compounders' dose log, the set-up events and the gravimetric check register and runs the textbook capability study on each product's 2026 weighed doses (the overall mean and spread, normal tails) configures cefoxitin 2 g, the three bags and midazolam (P0431, P0610, P0614, P0618, P0702): the bag sets start high and lose about four per cent over a batch, so their weights spread wide though no bag dose comes near the limit, while cefazolin 2 g and phenylephrine hide their tails after the last weighed dose of the sets that carried a third batch; the weighed doses' own out-of-tolerance share and the quarantine sorts see only cefoxitin, and only every dose rebuilt on its set at the litres the set had pumped names P0412, P0431, P0507 and P0702.",
- "architecture": 3,
+ "stump": "A strong analyst who declusters the composites and reads their grade-tonnage curve puts 231 koz above 2.5 g/t and commits Tier C, and one who kriges the blocks (the kriging cross-validates without bias) puts about 100 koz there and commits Tier A; only the declustered distribution carried to the block variance the variogram gives puts about 150,000 oz above the cut-off and commits Tier B.",
+ "architecture": 4,
  "loops": 0,
  "precut": {
   "exit": 0,
-  "date": "2026-11-01",
-  "checks": 61
+  "date": "2026-11-08",
+  "checks": 72
  },
  "leak": {
-  "leak_py": "REVIEW, no LEAK, on target.zip a481e221 (2026-11-07): the policy's section numbers and its own vocabulary, the 'which' shell quota",
-  "reader": "2026-11-07 isolated reader (Sonnet, medium) on 5445a679: no leak, Q6 analytical, the prompt reads as a manager's request; its one item (the xlsx registers carrying a person as creator) fixed in this reship, file properties only"
+  "leak_py": "REVIEW, no LEAK (2026-11-08, --asof 2026-11-06): the tier sizes are the agreement's candidates, filed as stated inputs",
+  "reader": "2026-11-08 isolated reader (Sonnet, medium): no step named, no ranking or helper file, Q6 analytical; the term sheet's numbering and the metallurgy head grades fixed"
  },
  "duplicate_check": {
-  "heart": "BLOCK 2026-11-07 on the final cut: ban.artifact (register) against task474 v7 and ban.org_family (hospital_or_health_provider) against task181 v6, from the recency window moving as other builds were marked spent (heart was WARN at the 11-01 ship on the same card); the card is not relabelled, per the coordinator",
-  "surface": "exit 0 on the final cut 2026-11-07"
+  "heart": "WARN (answered on the card)",
+  "surface": "exit 0, 1 pair promoted on surface similarity"
  },
  "judge": {
-  "verdict": "DETERMINISTIC (2026-11-07, Sonnet thread, on target.zip 5445a679): every graded figure reproduced, all 60 monthly dose counts, 12 set counts, 12 in or out marks and 12 limit sides; the sides hold under pooled OLS, method-of-moments and REML with a set bootstrap, Midazolam's lower end 18 to 19",
-  "disposition": "APPROVE, no repair; the optional fix (naming the normal dose distribution) declined, it would file the method and moves no answer",
+  "verdict": "DETERMINISTIC",
+  "disposition": "FIX_NOW applied (answer 3 states the affine band), re-judged once: APPROVE",
   "gate_g": "method_or_model_selection, analytical_non_defect, surface_read_dependency no, sole_data_defect no",
   "gate_h": "domain pass, layers pass, decisive_step analytical",
   "report": "task2/determinism_check_report.md"
@@ -38,9 +38,16 @@
    "moves": "the email's addresses and Message-ID on ashcombevalleyhealth.ca; PH-QP-07 and SC-SOP-12 given real Subjects (the golden PDF its title); only those three inputs and the golden PDF moved, no figure moved. Domains Fit left for the author's call",
    "checks": "generator checks, verify and the byte-identical rebuild; no reader, judge or clone check (author's minor-fix rule)",
    "domains_fit": "repair in progress 2026-11-07: the call sentence kept word for word; a second sentence asks each product to be judged on its estimated 2026 rate per 100,000 doses with its 90 per cent interval, and the PDF says whether the limit of 10 sits below, inside or above each interval (graded: the four on the list below, the eight others above, SF12 asserted under other seeds, realised counts, doses resampled one by one and every model of the set-to-set start; endpoints and estimates ungraded). Metadata: both input PDFs and the golden exported by LibreOffice Writer (officepdf.py), the input PDFs' Author the issuing body; the dose log with no writer metadata (parquetio.py); the xlsx app.xml with TitlesOfParts. freeze.py rubric mode: main side and call sentence unmoved; the ask side and the golden PDF moved as intended. Shipped 2026-11-07: every xlsx input's creator and last saver the issuing body (the leak reader's item), app.xml as Excel saves it."
+  },
+  {
+   "date": "2026-11-08",
+   "source": "triage",
+   "repair": "design",
+   "portal": "both runs landed the four products and every ask; the deep step (dose drift with set throughput) modelled on sight",
+   "commit": ""
   }
  ],
- "resume": "migrated from Project Mark task272; re-read the build against the Sulfur standard (deep reasoning: three or more dependent inferences with a real modeling judgment, the one-fact test, the banned kinds) and the Sulfur submission shape (golden ZIP, four answer blocks), then /build task2 from the stage that fails",
+ "resume": "",
  "approved": null,
  "delivered": "2026-11-01",
  "portal": null,
@@ -61,27 +68,37 @@
   {
    "architecture": 3,
    "drawn": "2026-10-31",
+   "fate": "spent 2026-11-08 on the platform: both runs rebuilt each dose on its tubing set at the litres pumped and landed the four products and every ask"
+  },
+  {
+   "architecture": 4,
+   "drawn": "2026-11-08",
    "fate": null
   }
  ],
  "gates": {
-  "checks": "53 of 53 (one WARN: the lowest weighed dose orders the four first)",
-  "verify": "PASS, 85 figures",
+  "checks": "70 of 70",
+  "verify": "PASS (its own variogram fit lands 148 koz, Tier B)",
   "byte_identical": true,
-  "figures_check": "128 of 128",
-  "precut": "61 checks, 0 FAIL, 0 WARN",
-  "voice_check": "PASS (WARN: the which-question shell quota)",
-  "leak_py": "REVIEW, no LEAK",
-  "target_zip_sha256": "811762642f4a39e7d2662cd99382434112b751153dba38a13e82bfc484bde5c5",
-  "target_mb": 5.4,
-  "pair_ceiling": 36.8,
-  "mirror_leakage": 15.1,
-  "family_margin": "in 43.6 or more, out 1.6 or less"
+  "figures_check": "65 of 65",
+  "precut": "72 checks, 0 FAIL",
+  "voice_check": "PASS (WARN shell quota)",
+  "pair_ceiling": 28.5,
+  "shallow_keep": 0.0,
+  "target_zip_sha256": "2253063e21a9966053ec64979f38f1368fa53a924aa34b074f0e23692a777b1d"
  },
  "history": [
   {
    "date": "2026-11-01",
    "event": "SHIPPED: architecture 3, gravimetric verification for Cefazolin 2 g, Cefoxitin 2 g, Phenylephrine and Midazolam; judge DETERMINISTIC, APPROVE; target.zip 81176264"
+  },
+  {
+   "date": "2026-11-08",
+   "event": "architecture 3 landed by both platform runs (REDESIGN); architecture 4 drawn, designed and built in a new world (Mount Carrow, Western Australia)"
+  },
+  {
+   "date": "2026-11-08",
+   "event": "READY: architecture 4, commit Stage 5 to Tier B (about 150,000 oz at block support); judge DETERMINISTIC, APPROVE after one FIX_NOW"
   }
  ],
  "migrated_from": {
@@ -90,5 +107,28 @@
   "status_in_mark": "SHIPPED",
   "date": "2026-11-08",
   "note": "moved from Project Mark unstumped on the Mark portal; carried on here for the Sulfur bar"
+ },
+ "subdomain": "exploratory-data-analysis-distribution-assessment",
+ "call": "Commit Stage 5 to Tier B (125,000 oz): its 5 m x 5 m x 2.5 m blocks at 2.5 g/t or more hold about 150,000 oz",
+ "runs": {
+  "run1": null,
+  "run2": null,
+  "average": null,
+  "counterfactual_average": null,
+  "first_wrong_step": {
+   "run1": "",
+   "run2": ""
+  },
+  "triage": "",
+  "recorded": "",
+  "history": [
+   {
+    "architecture": 3,
+    "date": "2026-11-08",
+    "run1": "on the golden",
+    "run2": "on the golden",
+    "triage": "REDESIGN"
+   }
+  ]
  }
 }

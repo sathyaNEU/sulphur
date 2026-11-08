@@ -1,303 +1,241 @@
-"""task3 architecture 2: the golden, read back from the shipped pack alone (no world state).
-
-    the call     Outfall 014's 15-minute overflow record (both loggers on UTC, cubic feet per second converted),
-                 replayed through each TM-7 tank that fills from the overflow and, once the overflow has stopped, is
-                 pumped back at the lesser of its station's firm capacity and the Southside plant's room (its 140 MGD
-                 headworks capacity less the historian's hourly influent, the hour held over its four quarter hours);
-                 events counted with Appendix C's 24-hour rule over the twelve years.
-    ask 1        each gauge's 2025 rainfall by local month: duplicate re-sent tips dropped, each calibration pour (a
-                 steady run of tips on a visit the field log says carried a cal check) removed, every logger's clock
-                 taken to local time (Eastern Standard Time on the original loggers, UTC on the cellular ones), RG-4's
-                 tips at 0.2 mm after the mechanism swap.
-    ask 2        the Northside tank's returned volume by local year, a mass balance on each quarter hour a pump ran:
-                 the fall in storage (the level transducer through the O&M manual's stage-storage table, the
-                 re-mounted transducer's 0.45 ft taken off from its re-installation) plus the inflow FIT-600 metered
-                 into the tank meanwhile (storm tails, and the dry weather flow SG-600 passed while its seals failed)."""
-import csv
+"""task3 architecture 3: the golden deliverables from the solution on the cut pack. The forecast workbook (the
+demonstration table, the test fit, the Mill Street record and its separated drawdown, the calibration, the monthly
+forecast for every schedule) and the WR-4 demonstration PDF with its chart."""
 import datetime as dt
+import math
 import os
-import re
-import sys
-import zoneinfo
 
 import numpy as np
 import openpyxl
-import pyarrow.parquet as pq
+from openpyxl.styles import Font, PatternFill
+from PIL import Image as PImage, ImageDraw, ImageFont
+from reportlab.lib import colors
+from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
+from reportlab.lib.units import mm
+from reportlab.platypus import Image, Paragraph, Spacer, Table, TableStyle
 
-NY = zoneinfo.ZoneInfo("America/New_York")
-UTC = dt.timezone.utc
-EST = dt.timezone(dt.timedelta(hours=-5))
-T0 = dt.datetime(2014, 1, 1, 5, 0, tzinfo=UTC)
-N = 420768
-NH = N // 4
-CAP = 140.0
-ALTS = [("A", 19.0, 23.0), ("B", 26.0, 31.0), ("C", 38.0, 45.0), ("D", 50.0, 60.0)]
-YEARS = 12
-CFS = 0.646317
+import officepdf as O
+import ooxml
+import solve as S
 
-
-def q_index(u):
-    return int((u - T0).total_seconds() // 900)
-
-
-# ----------------------------------------------------------------------------------------------- readers
-def read_meter(target):
-    t = pq.read_table(os.path.join(target, "outfall_014_flow_monitoring_2014-2025.parquet")).to_pydict()
-    o = np.full(N, np.nan)
-    for lg, ts, v, un in zip(t["logger_id"], t["reading_time"], t["flow"], t["flow_unit"]):
-        if un == "cfs":
-            u = dt.datetime.strptime(ts, "%m/%d/%Y %H:%M").replace(tzinfo=EST).astimezone(UTC)
-            val = v * CFS
-        else:
-            u = dt.datetime.strptime(ts, "%Y-%m-%d %H:%M:%S").replace(tzinfo=UTC)
-            val = v
-        i = q_index(u)
-        if 0 <= i < N:
-            if np.isnan(o[i]) or val > o[i]:
-                o[i] = val
-    assert not np.isnan(o).any(), "every quarter hour metered"
-    return o
+EDT = dt.timezone(dt.timedelta(hours=-4))
+FONT = "/usr/share/fonts/truetype/liberation/LiberationSans-Regular.ttf"
+FONTB = "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf"
+COLS = {450: (95, 140, 190), 700: (60, 150, 110), 1000: (25, 70, 150), 1250: (200, 120, 40)}
 
 
-def local_to_utc_rows(times):
-    """Local wall times in file order to UTC: a repeated hour's second pass is the standard-time one."""
-    out = []
-    seen = {}
-    for s in times:
-        d = dt.datetime.strptime(s, "%Y-%m-%d %H:%M")
-        k = seen.get(s, 0)
-        seen[s] = k + 1
-        out.append(d.replace(tzinfo=NY, fold=1 if k else 0).astimezone(UTC))
-    return out
+def ft(x):
+    return int(math.floor(x + 0.5))
 
 
-def read_plant(target, prefix="SS", bad="interpolate"):
-    times, vals, qual = [], [], []
-    with open(os.path.join(target, "wrp_influent_hourly_2014-2025.csv"), newline="") as f:
-        for r in csv.DictReader(f):
-            if r["tag"].startswith(prefix):
-                times.append(r["time_local"])
-                vals.append(float(r["value_mgd"]))
-                qual.append(r["quality"])
-    us = local_to_utc_rows(times)
-    h = np.full(NH, np.nan)
-    for u, v, q in zip(us, vals, qual):
-        k = int((u - T0).total_seconds() // 3600)
-        if 0 <= k < NH:
-            h[k] = v if (q == "GOOD" or bad == "zero") else np.nan
-    if np.isnan(h).any():
-        idx = np.arange(NH)
-        ok = ~np.isnan(h)
-        h = np.interp(idx, idx[ok], h[ok])
-    return h
+def chart(res, path):
+    W_, H_ = 2000, 1100
+    img = PImage.new("RGB", (W_, H_), "white")
+    d = ImageDraw.Draw(img)
+    f = ImageFont.truetype(FONT, 30)
+    fs = ImageFont.truetype(FONT, 26)
+    fb = ImageFont.truetype(FONTB, 34)
+    L, R, T, B = 150, 1960, 110, 940
+    idx = [i for i, ym in enumerate(S.MONTHS) if (2027, 1) <= ym <= (2046, 12)]
+    ymax = 12.0
+    X = lambda k: L + (R - L) * k / (len(idx) - 1)
+    Y = lambda v: B - (B - T) * v / ymax
+    for v in range(0, 13, 2):
+        d.line([(L, Y(v)), (R, Y(v))], fill=(228, 228, 228), width=2)
+        d.text((L - 50, Y(v) - 16), str(v), font=fs, fill=(60, 60, 60))
+    for yy in range(2027, 2047, 3):
+        k = idx.index(S.MI[(yy, 1)])
+        d.line([(X(k), B), (X(k), B + 10)], fill=(60, 60, 60), width=2)
+        d.text((X(k) - 34, B + 16), str(yy), font=fs, fill=(60, 60, 60))
+    d.line([(L, B), (R, B)], fill=(60, 60, 60), width=2)
+    d.line([(L, T), (L, B)], fill=(60, 60, 60), width=2)
+    x = L
+    while x < R:
+        d.line([(x, Y(S.LIMIT)), (min(x + 26, R), Y(S.LIMIT))], fill=(190, 30, 30), width=4)
+        x += 40
+    d.text((R - 330, Y(S.LIMIT) - 42), "WR-4 limit at OW-S, 9.0 ft", font=fs, fill=(190, 30, 30))
+    for r in S.OPTIONS:
+        town, field = res["series"][r]
+        tot = (town + field)[idx]
+        pts = [(X(k), Y(v)) for k, v in enumerate(tot)]
+        d.line(pts, fill=COLS[r], width=5 if r == res["call"] else 3)
+    d.text((L, 30), "Drawdown at OW-S by month, 2027 to 2046 (ft), each requested schedule", font=fb, fill=(20, 20, 20))
+    lx = L + 30
+    for r in S.OPTIONS:
+        d.line([(lx, T + 24), (lx + 50, T + 24)], fill=COLS[r], width=6)
+        d.text((lx + 60, T + 8), "{:,} gpm".format(r), font=f, fill=(20, 20, 20))
+        lx += 230
+    img.save(path, format="PNG")
 
 
-# ----------------------------------------------------------------------------------------------- replay
-def replay(inflow, vol, pump, room=None, during=False):
-    dtd = 15 / 1440.0
-    out = np.zeros(len(inflow))
-    s = 0.0
-    lim = np.full(len(inflow), pump) if room is None else np.minimum(pump, np.maximum(0.0, room))
-    for i in range(len(inflow)):
-        q = inflow[i] * dtd
-        if q > 0:
-            take = min(vol - s, q)
-            s += take
-            out[i] = (q - take) / dtd
-            if during and s > 0:
-                s -= min(s, lim[i] * dtd)
-        elif s > 0:
-            s -= min(s, lim[i] * dtd)
-    return out
-
-
-def events(series, gap_steps=96):
-    on = np.flatnonzero(series > 1e-9)
-    if len(on) == 0:
-        return 0
-    return 1 + int((np.diff(on) > gap_steps).sum())
-
-
-def event_volumes(series, gap_steps=96):
-    on = np.flatnonzero(series > 1e-9)
-    if len(on) == 0:
-        return []
-    cut = np.flatnonzero(np.diff(on) > gap_steps)
-    starts = [on[0]] + [on[c + 1] for c in cut]
-    ends = [on[c] for c in cut] + [on[-1]]
-    return [series[a:b + 1].sum() / 96 for a, b in zip(starts, ends)]
-
-
-def solve_call(target, room_hours=None, shift=0, cap=CAP, during=False):
-    o = read_meter(target)
-    ss = read_plant(target) if room_hours is None else room_hours
-    room = np.repeat(cap - np.roll(ss, shift), 4)
-    res = {}
-    for lab, v, p in ALTS:
-        res[lab] = events(replay(o, v, p, room, during)) / YEARS
-    pick = next((lab for lab, _, _ in ALTS if res[lab] <= 4.0), None)
-    return pick, res
-
-
-def ladder(target):
-    o = read_meter(target)
-    vols = event_volumes(o)
-    r0 = {lab: sum(1 for x in vols if x > v) / YEARS for lab, v, _ in ALTS}
-    r1 = {lab: events(replay(o, v, p)) / YEARS for lab, v, p in ALTS}
-    r1b = {lab: events(replay(o, v, p, during=True)) / YEARS for lab, v, p in ALTS}
-    return dict(raw=events(o) / YEARS, r0=r0, r1=r1, r1b=r1b)
-
-
-# ----------------------------------------------------------------------------------------------- ask 1
-GAUGE_NEW = {"RG-3": dt.datetime(2024, 5, 7), "RG-4": dt.datetime(2024, 5, 8)}
-TIP_02MM = 0.2 / 25.4
-
-
-def read_visits(target):
-    wb = openpyxl.load_workbook(os.path.join(target, "rain_gauge_field_service_2014-2025.xlsx"), read_only=True)
-    ws = wb["Visits"]
-    out = []
-    for r in list(ws.iter_rows(values_only=True))[1:]:
-        d, g, tech, a, b, note = r
-        d = d if isinstance(d, dt.datetime) else dt.datetime.combine(d, dt.time())
-        ha, ma = map(int, a.split(":"))
-        hb, mb = map(int, b.split(":"))
-        out.append(dict(gauge=g, arrive=d.replace(hour=ha, minute=ma), depart=d.replace(hour=hb, minute=mb), note=note))
-    return out
-
-
-def tips_local(target, handle_clock=True, dedupe=True, eastern="civil"):
-    """Each gauge's tips as local wall times, in file order."""
-    rows = []
-    with open(os.path.join(target, "rain_gauge_tips_2014-2025.csv"), newline="") as f:
-        for r in csv.DictReader(f):
-            rows.append((r["gauge_id"], r["tip_time"]))
-    if dedupe:
-        rows = list(dict.fromkeys(rows))
-    out = {}
-    for g, s in rows:
-        d = dt.datetime.strptime(s, "%Y-%m-%d %H:%M:%S")
-        if handle_clock:
-            new = GAUGE_NEW.get(g)
-            # the cellular loggers stamp UTC; their first tip comes after the install visit
-            if new is not None and d >= new.replace(hour=12):
-                loc = d.replace(tzinfo=UTC).astimezone(NY if eastern == "civil" else EST).replace(tzinfo=None)
-            else:
-                loc = d.replace(tzinfo=EST).astimezone(NY if eastern == "civil" else EST).replace(tzinfo=None)
-        else:
-            loc = d
-        out.setdefault(g, []).append(loc)
-    for g in out:
-        out[g].sort()
-    return out
-
-
-def pour_runs(times, lo, hi, min_len=20, gmin=5.0, gmax=20.0):
-    """Indices of steady runs of tips (every gap between gmin and gmax seconds, at least min_len tips) starting in
-    [lo, hi]."""
-    idx = []
-    j = 0
-    n = len(times)
-    while j < n:
-        if times[j] < lo:
-            j += 1
-            continue
-        if times[j] > hi:
+def workbook(res, path):
+    wb = openpyxl.Workbook()
+    ws = wb.active
+    ws.title = "Demonstration"
+    bold = Font(bold=True)
+    ws.append(["Reidel Road well field: Rule WR-4 demonstration at OW-S (limit %.1f ft)" % S.LIMIT])
+    ws["A1"].font = Font(bold=True, size=12)
+    ws.append([])
+    ws.append(["Schedule (annual average gpm)", "Greatest monthly drawdown at OW-S in 2046 (ft)", "Nearest foot",
+               "Greatest in the term (ft)", "Meets 4.1"])
+    for c in ws[3]:
+        c.font = bold
+    for r in S.OPTIONS:
+        ws.append([r, round(res["peaks"][r], 2), ft(res["peaks"][r]), round(res["peak_term"][r], 2),
+                   "yes" if res["peaks"][r] <= S.LIMIT else "no"])
+    ws.append([])
+    ws.append(["Schedule the district will permit (WR-4 4.2)", "{:,} gpm".format(res["call"])])
+    ws.cell(ws.max_row, 1).font = bold
+    ws.cell(ws.max_row, 2).font = bold
+    ws.append(["Drawdown the Mill Street wells caused at MS-MW, 2025 average (ft)", round(res["msmw_2025"], 2),
+               ft(res["msmw_2025"])])
+    ws.append(["Greatest monthly drawdown in 2046 at %s, nearest domestic well, %s gpm schedule (ft)" %
+               (res["dw_id"], "{:,}".format(res["call"])), round(res["dw"], 2), ft(res["dw"])])
+    t = wb.create_sheet("Aquifer test")
+    t.append(["Quantity", "Value", "Basis"])
+    for c in t[1]:
+        c.font = bold
+    t.append(["Average rate, PW-1 (gpm)", round(res["q_avg"], 1), "totalizer, 14 Sep 09:00 to 17 Sep 08:54"])
+    t.append(["Transmissivity (ft2/day)", round(res["T"], 0), "Theis fit to OW-1, OW-2, OW-3"])
+    t.append(["Storativity", float("%.3g" % res["S"]), "Theis fit to OW-1, OW-2, OW-3"])
+    t.append(["Fit residual (ft, rms)", round(res["rms"], 3), "two minutes to three days"])
+    for w in ("OW-1", "OW-2", "OW-3"):
+        t.append(["Distance PW-1 to %s (ft)" % w, round(res["dist"][w], 0), "register coordinates"])
+    for w, be in sorted(res["be"].items()):
+        t.append(["Barometric efficiency, %s" % w, round(float(be), 2), "hourly first differences, 8 to 14 Sep"])
+    m = wb.create_sheet("Mill Street record")
+    m.append(["Month", "TW-1 (gpm)", "TW-2 (gpm)", "MS-MW elev (ft)", "CV-07 elev (ft)", "OW-S elev (ft)",
+              "CV-02 elev (ft)", "CV-11 elev (ft)", "Drawdown MS-MW (ft)", "Drawdown CV-07 (ft)", "Drawdown OW-S (ft)",
+              "Model MS-MW (ft)", "Model CV-07 (ft)", "Model OW-S (ft)"])
+    for c in m[1]:
+        c.font = bold
+    q = res["q"]
+    mods = {w: S.model_town(q["TW-1"], q["TW-2"], res["frame"], w, res["T"], res["S"], res["B"], res["width"])
+            for w in ("MS-MW", "CV-07", "OW-S")}
+    rnd = lambda v: None if (v is None or (isinstance(v, float) and math.isnan(v))) else round(float(v), 2)
+    for i, (y, mo) in enumerate(S.MONTHS):
+        if (y, mo) > (2026, 9):
             break
-        k = j
-        while k + 1 < n and gmin <= (times[k + 1] - times[k]).total_seconds() <= gmax:
-            k += 1
-        if k - j + 1 >= min_len:
-            idx.extend(range(j, k + 1))
-            j = k + 1
-        else:
-            j += 1
-    return idx
-
-
-def ask1(target, handle_clock=True, dedupe=True, pours="steady", bucket=True, eastern="civil"):
-    tips = tips_local(target, handle_clock, dedupe, eastern)
-    visits = read_visits(target)
-    out = {}
-    for g, ts in tips.items():
-        drop = set()
-        if pours != "keep":
-            for v in visits:
-                if v["gauge"] != g or not re.search(r"\d+\s*mL", v["note"]):   # a poured volume is logged
-                    continue
-                if pours == "steady":
-                    lo = v["arrive"] - dt.timedelta(hours=6)
-                    hi = v["depart"] + dt.timedelta(hours=6)
-                    drop.update(pour_runs(ts, lo, hi))
-                else:   # the visit window as logged
-                    drop.update(j for j, t in enumerate(ts) if v["arrive"] <= t <= v["depart"])
-        # a gauge's 0.2 mm mechanism counts from the visit the field log records it on
-        swaps = [v["arrive"] for v in visits if v["gauge"] == g and "0.2mm" in v["note"].replace(" mm", "mm")]
-        swap = min(swaps) if (swaps and bucket) else dt.datetime(2100, 1, 1)
-        m = np.zeros(12)
-        for j, t in enumerate(ts):
-            if j in drop or t.year != 2025:
-                continue
-            b = TIP_02MM if t >= swap else 0.01
-            m[t.month - 1] += b
-        out[g] = m
-    return out
-
-
-# ----------------------------------------------------------------------------------------------- ask 2
-def stage_table(target):
-    from pypdf import PdfReader
-    txt = "\n".join(p.extract_text() for p in PdfReader(os.path.join(target, "northside_tank_om_manual_section4.pdf")).pages)
-    tail = txt.split("Table 4-1. Tank stage-storage")[-1]
-    pairs = re.findall(r"(\d+\.\d\d)\s+(\d+\.\d{4})", tail)
-    h = np.array([float(a) for a, _ in pairs])
-    v = np.array([float(b) for _, b in pairs])
-    return h, v
-
-
-def ask2(target, offset=True, inflow=True, years=range(2021, 2026)):
-    h_tab, v_tab = stage_table(target)
-    rows = []
-    with open(os.path.join(target, "northside_tank_scada_2020-2025.csv"), newline="") as f:
-        for r in csv.DictReader(f):
-            rows.append(r)
-    remount = dt.datetime(2023, 8, 23, 11, 0)
-    # the re-mounted transducer's reading of an empty tank
-    floor = min(float(r["NT_LIT601_FT"]) for r in rows
-                if r["NT_LIT601_FT"] and r["Timestamp"] >= remount.strftime("%Y-%m-%d %H:%M"))
-    tot = {y: 0.0 for y in years}
-    prev = None
-    for r in rows:
-        if not r["NT_LIT601_FT"]:
-            prev = None
+        m.append(["%04d-%02d" % (y, mo), rnd(q["TW-1"][i]), rnd(q["TW-2"][i]),
+                  rnd(res["lv"]["MS-MW"][i]), rnd(res["lv"]["CV-07"][i]), rnd(res["lv"]["OW-S"][i]),
+                  rnd(res["lv"]["CV-02"][i]), rnd(res["lv"]["CV-11"][i]),
+                  rnd(res["att"]["MS-MW"][i]), rnd(res["att"]["CV-07"][i]), rnd(res["att"]["OW-S"][i]),
+                  rnd(mods["MS-MW"][i]) if (y, mo) >= (2009, 3) else None,
+                  rnd(mods["CV-07"][i]) if (y, mo) >= (2009, 3) else None,
+                  rnd(mods["OW-S"][i]) if (y, mo) >= (2009, 3) else None])
+    c = wb.create_sheet("Calibration")
+    c.append(["Quantity", "Value"])
+    for cc in c[1]:
+        cc.font = bold
+    c.append(["Natural level reference", "CV-02 and CV-11 (confined aquifer, beyond the Mill Street cone)"])
+    c.append(["Walls", "Plate 3 mapped edges of saturated sand and gravel, %.0f ft apart" % res["width"]])
+    c.append(["Leakage factor (ft)", res["B"]])
+    c.append(["Wells fitted", "MS-MW, CV-07, OW-S, March 2009 to September 2026"])
+    c.append(["Residual, MS-MW (ft, rms)", round(res["resid"]["MS-MW"], 2)])
+    c.append(["Residual, CV-07 (ft, rms)", round(res["resid"]["CV-07"], 2)])
+    c.append(["Residual, OW-S (ft, rms)", round(res["resid"]["OW-S"], 2)])
+    f = wb.create_sheet("Forecast OW-S")
+    hdr = ["Month", "Mill Street projection (gpm)", "Drawdown from Mill Street (ft)"]
+    for r in S.OPTIONS:
+        hdr += ["Reidel Road %d gpm schedule (gpm)" % r, "Total drawdown at %d gpm (ft)" % r]
+    f.append(hdr)
+    for cc in f[1]:
+        cc.font = bold
+    proj = S.town_projection()
+    for i, (y, mo) in enumerate(S.MONTHS):
+        if not (2027, 1) <= (y, mo) <= (2046, 12):
             continue
-        t = dt.datetime.strptime(r["Timestamp"], "%Y-%m-%d %H:%M")
-        lv = float(r["NT_LIT601_FT"])
-        if offset and t >= remount:
-            lv -= floor
-        pumping = r["NT_P1_RUN"] == "1" or r["NT_P2_RUN"] == "1" or r["NT_P3_RUN"] == "1"
-        if prev is not None and pumping and t.year in tot:
-            # what the pumps returned is the fall in storage plus what flowed in meanwhile (FIT-600)
-            d = float(np.interp(prev, h_tab, v_tab)) - float(np.interp(lv, h_tab, v_tab))
-            if inflow:
-                d += float(r["NT_FIT600_MGD"]) / 96.0
-            elif d < 0:
-                d = 0.0
-            tot[t.year] += d
-        prev = lv
-    return tot, floor
+        town = res["series"][S.OPTIONS[0]][0][i]
+        row = ["%04d-%02d" % (y, mo), round(float(proj[i]), 1), round(float(town), 2)]
+        for r in S.OPTIONS:
+            rate = r * S.NEW_SEASON[mo - 1] if (y, mo) >= (2027, 4) else 0.0
+            tw, fd = res["series"][r]
+            row += [round(rate, 1), round(float(tw[i] + fd[i]), 2)]
+        f.append(row)
+    for s in wb.worksheets:
+        for col in s.columns:
+            s.column_dimensions[col[0].column_letter].width = max(10, min(46, max(len(str(x.value or "")) for x in col) + 2))
+    s = wb["Demonstration"]
+    s.column_dimensions["A"].width = 52
+    wb.properties.creator = "Harlow Springs Utilities"
+    wb.properties.lastModifiedBy = "Harlow Springs Utilities"
+    wb.save(path)
+    ooxml.normalize(path, dt.datetime(2026, 11, 6, 14, 10), dt.datetime(2026, 11, 6, 16, 45))
 
 
-def solve(target):
-    pick, ev = solve_call(target)
-    return dict(pick=pick, events=ev, ladder=ladder(target), ask1=ask1(target), ask2=ask2(target)[0])
+SS = getSampleStyleSheet()
+BODY = ParagraphStyle("b", parent=SS["Normal"], fontName="Helvetica", fontSize=9.6, leading=12.8, spaceAfter=5)
+H1 = ParagraphStyle("h1", parent=SS["Heading1"], fontName="Helvetica-Bold", fontSize=13.5, leading=17, spaceAfter=6)
+H2 = ParagraphStyle("h2", parent=SS["Heading2"], fontName="Helvetica-Bold", fontSize=10.6, leading=13.5,
+                    spaceBefore=6, spaceAfter=3)
+SMALL = ParagraphStyle("s", parent=BODY, fontSize=8.0, leading=10.2, textColor=colors.HexColor("#444444"))
+CELL = ParagraphStyle("c", parent=BODY, fontSize=8.4, leading=10.4, spaceAfter=0)
+CELLB = ParagraphStyle("cb", parent=CELL, fontName="Helvetica-Bold")
 
 
-if __name__ == "__main__":
-    tg = sys.argv[1] if len(sys.argv) > 1 else os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "target")
-    r = solve(tg)
-    print("pick", r["pick"], {k: round(v, 2) for k, v in r["events"].items()})
-    print("ladder", {k: ({a: round(b, 2) for a, b in v.items()} if isinstance(v, dict) else round(v, 2)) for k, v in r["ladder"].items()})
-    for g, m in r["ask1"].items():
-        print(g, np.round(m, 3))
-    print("ask2", {y: round(v, 2) for y, v in r["ask2"].items()})
+def _table(rows, widths):
+    data = [[Paragraph(str(c), CELLB if i == 0 else CELL) for c in r] for i, r in enumerate(rows)]
+    t = Table(data, colWidths=[w * mm for w in widths], hAlign="LEFT")
+    t.setStyle(TableStyle([("LINEBELOW", (0, 0), (-1, 0), 0.6, colors.HexColor("#333333"))]))
+    return t
+
+
+def memo(res, rungs, path, png):
+    call = res["call"]
+    nxt = min(r for r in S.OPTIONS if r > call)
+    s = [Paragraph("Reidel Road Well Field: Rule WR-4 Demonstration at Sentinel Well OW-S", H1),
+         Paragraph("Harlow Springs Utilities, Water Division. For the Corrin Valley Water Conservancy District, with the "
+                   "Reidel Road application. 6 November 2026.", SMALL),
+         Spacer(1, 4),
+         Paragraph("<b>The district will permit the %s gpm schedule.</b> Its greatest monthly drawdown at OW-S in 2046 is "
+                   "%d ft against the Table 1 limit of %.1f ft; the %s gpm schedule reaches %d ft." %
+                   ("{:,}".format(call), ft(res["peaks"][call]), S.LIMIT, "{:,}".format(nxt), ft(res["peaks"][nxt])), BODY),
+         _table([["Schedule (annual average)", "Greatest monthly drawdown at OW-S, 2046", "Within 9.0 ft"]] +
+                [["{:,} gpm".format(r), "%d ft" % ft(res["peaks"][r]), "yes" if res["peaks"][r] <= S.LIMIT else "no"]
+                 for r in S.OPTIONS], [48, 70, 30]),
+         Spacer(1, 6),
+         Image(png, width=170 * mm, height=93.5 * mm),
+         Paragraph("Each line is the drawdown at OW-S in every month from January 2027 to December 2046 from the "
+                   "Reidel Road schedule and the Mill Street wells at their filed projection. Every schedule's "
+                   "greatest month falls in 2046.", SMALL),
+         Paragraph("At %s, the registered domestic well nearest the field (Rule WR-4 4.4), the %s gpm schedule's "
+                   "greatest monthly drawdown in 2046 is %d ft." % (res["dw_id"], "{:,}".format(call), ft(res["dw"])), BODY),
+         Paragraph("The aquifer test", H2),
+         Paragraph("The 72-hour test of PW-1 (14 to 17 September 2026, %.0f gpm on the totalizer) fits the Theis "
+                   "solution at OW-1, OW-2 and OW-3 to %.2f ft: transmissivity %s ft2/day, storativity %.1e. Over three "
+                   "days the test cannot see what limits the drawdown over twenty years: carried forward unchanged, "
+                   "the same fit puts the Mill Street wells' 2025 drawdown at their monitoring well near %d ft." %
+                   (res["q_avg"], res["rms"], "{:,}".format(int(round(res["T"], -1))), res["S"],
+                    ft(rungs["theis_msmw_2025"])), BODY),
+         Paragraph("The Mill Street record", H2),
+         Paragraph("The monitoring readings since 2005 rise and fall with the region's wet and dry years, and the "
+                   "2010s and early 2020s were wet against the 2005 to 2008 baseline. CV-07, the nearest network well "
+                   "in the aquifer, sits inside the Mill Street cone: its departure from the far network wells deepens "
+                   "with each step in Mill Street pumping and follows the summer peak. CV-02 and CV-11, beyond the "
+                   "cone, move together and moved with OW-S before pumping began, so they carry the natural level. "
+                   "Against it the Mill Street wells drew MS-MW down %d ft on average in 2025." %
+                   ft(res["msmw_2025"]), BODY),
+         Paragraph("The far field", H2),
+         Paragraph("With the valley walls at the mapped edges of the saturated sand and gravel on Plate 3 (%s ft apart) "
+                   "and the test's transmissivity and storativity, leakage through the till with a leakage factor of "
+                   "%s ft reproduces the drawdown at MS-MW, CV-07 and OW-S from March 2009 to September 2026. "
+                   "Read against CV-07 or the wells' own 2005 to 2008 levels, the same record would ask for a leakage "
+                   "factor near %s ft and put every schedule under %d ft at OW-S, crediting the wet years to leakage." %
+                   ("{:,}".format(int(res["width"])), "{:,}".format(int(res["B"])),
+                    "{:,}".format(int(round(rungs["cv07_B"], -2))), ft(rungs["cv07_peak_max"]) + 1), BODY),
+         Paragraph("Schedules", H2),
+         Paragraph("Reidel Road begins in April 2027, shared equally by PW-1 and PW-2, at each schedule's monthly "
+                   "factors; the Mill Street wells follow the projection filed in the 2026 water supply plan update "
+                   "(56 per cent TW-1, 44 per cent TW-2). The monthly working is in reidel_road_sentinel_forecast.xlsx.",
+                   BODY)]
+    O.build(path, s, "Reidel Road Well Field: Rule WR-4 Demonstration", "Harlow Springs Utilities",
+            "WR-4 demonstration at OW-S for the Reidel Road schedules", "Harlow Springs Utilities, Water Division",
+            dt.datetime(2026, 11, 6, 15, 30, tzinfo=EDT), dt.datetime(2026, 11, 6, 16, 52, tzinfo=EDT))
+
+
+def write(res, rungs, gdir, scratch):
+    os.makedirs(gdir, exist_ok=True)
+    workbook(res, os.path.join(gdir, "reidel_road_sentinel_forecast.xlsx"))
+    png = os.path.join(scratch, "ows_chart.png")
+    chart(res, png)
+    memo(res, rungs, os.path.join(gdir, "reidel_road_WR-4_demonstration.pdf"), png)

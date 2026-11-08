@@ -1,465 +1,178 @@
-"""Cut the pack: the server's dose log, the compounders' event export, the check register, the quarantine register,
-the product master, the equipment register, the policy, the procedure, the cutover request and the context files."""
+"""task2 architecture 4: the data files of the pack, written the way the site's database and its contractors
+write them: collars, 1 m assays from two laboratories, the QAQC results, bulk densities, weathering logs, the Stage 5
+design, and two files that look relevant and are not (the metallurgical testwork and the Stage 4 survey pickup)."""
 import csv
 import datetime as dt
 import io
-import os
-import re
-import zipfile
-from email.message import EmailMessage
-from email.utils import format_datetime
+import math
 
 import numpy as np
 import openpyxl
-import pyarrow as pa
-import pyarrow.parquet as pq
 from openpyxl.styles import Font
-from reportlab.lib import colors
-from reportlab.lib.enums import TA_LEFT
-from reportlab.lib.pagesizes import A4
-from reportlab.lib.styles import ParagraphStyle
-from reportlab.lib.units import mm
-from reportlab.platypus import Paragraph, Spacer, Table
 
-import officepdf as O
+import ooxml
 import params as P
-import parquetio as PQ
-import world as W
 
-FILES = {
-    "doses": "compounder_dose_log_2026.parquet",
-    "events": "compounder_events_2026.csv",
-    "checks": "gravimetric_check_register_2026.xlsx",
-    "quarantine": "quarantine_register_2026.xlsx",
-    "master": "compounded_product_master.xlsx",
-    "equipment": "compounding_equipment_register.csv",
-    "policy": "PH-QP-07_batch_compounded_products_policy.pdf",
-    "sop": "SC-SOP-12_batch_compounding_procedure.pdf",
-    "request": "iv_workflow_cutover_product_list.eml",
-    "gc1": "gc1_dose_weights_2026.csv",
-    "wards": "ward_issues_2026.csv",
-    "cleanroom": "cleanroom_monitoring_2026.csv",
-}
-DISTRACTORS = ["gc1", "wards", "cleanroom"]
-UTC = dt.timezone.utc
-TEMPLATE_CHANGE = dt.date(2026, 7, 1)     # the check register's template records net weights from this date
-INITIALS = ["JB", "AK", "MT", "RS", "LD", "PN", "CW", "HG", "SO", "EV", "TF"]
+LABS = {"old": ("Goldfields Assay Laboratories", "FA50", "ppm"), "new": ("Boulder Analytical", "FA30", "g/t")}
+CRMS = [("GCRM-05", 0.512), ("GCRM-21", 1.985), ("GCRM-44", 4.672)]
 
 
-# ------------------------------------------------------------------------------------------------ writers
-
-def _csv(path, header, rows):
+def _csv(rows, header):
     buf = io.StringIO()
-    w = csv.writer(buf, lineterminator="\n")
+    w = csv.writer(buf, lineterminator="\r\n")
     w.writerow(header)
     w.writerows(rows)
-    with open(path, "w", encoding="utf-8", newline="") as f:
-        f.write(buf.getvalue())
+    return buf.getvalue().encode("utf-8")
 
 
-def _xlsx(path, sheets, creator, created, modified, widths=(12, 10, 12, 40, 9, 13, 9, 10, 30)):
+def _fmt(v, dl=0.01):
+    if v < dl:
+        return "<%.2f" % dl
+    return "%.2f" % v if v < 10 else "%.1f" % v
+
+
+def hole_ids(holes):
+    """Hole numbers as the database issues them: consecutive within each programme, with the numbers of holes
+    abandoned or never drilled skipped."""
+    skip = np.random.default_rng(P.SEED + 41)
+    n_rc, n_dd, n_gc = 16, 4, 0
+    order = sorted(range(len(holes)), key=lambda i: (holes[i]["campaign"], holes[i]["y"], holes[i]["x"]))
+    ids = [None] * len(holes)
+    for i in order:
+        h = holes[i]
+        if h["type"] == "GC":
+            n_gc += 1
+            ids[i] = "MCGC%04d" % (2400 + n_gc)
+        elif h["type"] == "RC":
+            n_rc += 1 + (1 if skip.random() < 0.06 else 0)
+            ids[i] = "MCRC%04d" % n_rc
+        else:
+            n_dd += 1 + (1 if skip.random() < 0.08 else 0)
+            ids[i] = "MCDD%03d" % n_dd
+    return ids
+
+
+def write_all(paths, truth):
+    rng = np.random.default_rng(P.SEED + 3)
+    holes = truth["holes"]
+    ids = hole_ids(holes)
+    cell = truth["cell"]
+    ox, tr = truth["ox"], truth["tr"]
+    collars, assays, qaqc, dens, weath = [], [], [], [], []
+    sid = {"old": 104300, "new": 22800}
+    for h, hid in sorted(zip(holes, ids), key=lambda t: t[1]):
+        new = h["campaign"] >= 2022
+        lab = "new" if h["campaign"] >= 2023 else "old"
+        e, n = P.GRID_E0 + h["x"], P.GRID_N0 + h["y"]
+        grid = "MGA94_51" if new else "MINE"
+        ce, cn = (e + P.MGA_SHIFT[0], n + P.MGA_SHIFT[1]) if new else (e, n)
+        depth = (20.0 if h["type"] == "GC" else
+                 round(100.0 + rng.uniform(0, 6) if h["type"] == "RC" else 100.0 + rng.uniform(2, 14), 1))
+        collars.append((hid, "RC" if h["type"] == "GC" else h["type"], "%.2f" % ce, "%.2f" % cn, "%.2f" % (P.TOP_RL + rng.normal(0.4, 0.15)), grid,
+                        "%.1f" % depth, -90, 0, "%d-%02d-%02d" % (h["campaign"], int(rng.integers(2, 12)),
+                                                                 int(rng.integers(1, 28)))))
+        ix, iy = min(int(h["x"] / P.D), P.NX - 1), min(int(h["y"] / P.D), P.NY - 1)
+        # weathering log from the surfaces at the collar
+        oxd, trd = P.TOP_RL - ox[ix, iy], P.TOP_RL - tr[ix, iy]
+        weath.append((hid, "0.0", "%.1f" % oxd, "OX"))
+        weath.append((hid, "%.1f" % oxd, "%.1f" % trd, "TR"))
+        weath.append((hid, "%.1f" % trd, "%.1f" % depth, "FR"))
+        # sample intervals
+        a = 0.0
+        while a < depth - 0.05:
+            if h["type"] == "DD":
+                ln = float(np.clip(round(rng.choice([0.7, 0.8, 1.0, 1.0, 1.0, 1.2, 1.3]), 1), 0.5, 1.5))
+            else:
+                ln = 1.0
+            b = min(round(a + ln, 1), depth)
+            mid = (a + b) / 2
+            k = min(int(mid / P.D), P.NZ - 1)
+            if rng.random() < 0.012:          # no recovery, not sampled
+                a = b
+                continue
+            geo = math.exp(rng.normal(0, 0.70) - 0.245)
+            split = math.exp(rng.normal(0, 0.35) - 0.06125)
+            labe = math.exp(rng.normal(0, P.S_ASSAY) - P.S_ASSAY ** 2 / 2)
+            v = cell[ix, iy, k] * geo * split * labe if mid < 100 else cell[ix, iy, P.NZ - 1] * geo * split
+            s = sid[lab]
+            sid[lab] += 1
+            labname, meth, unit = LABS[lab]
+            assays.append((hid, "%.1f" % a, "%.1f" % b, "MC%06d" % s, _fmt(v, 0.02 if lab == "new" else 0.01), unit,
+                           meth, labname, ""))
+            if v >= 5.0 and rng.random() < 0.7:
+                rv = cell[ix, iy, k] * geo * split * math.exp(rng.normal(0, 0.12))
+                assays.append((hid, "%.1f" % a, "%.1f" % b, "MC%06dR" % s, _fmt(rv), unit, "SFA", labname,
+                               "screen fire re-assay"))
+            if sid[lab] % 20 == 0:             # the QAQC slot after every 19 samples
+                sid[lab] += 1
+                kind = int(sid[lab] // 20) % 3
+                qid = "MC%06d" % sid[lab]
+                if kind == 0:
+                    name, cert = CRMS[int(rng.integers(0, 3))]
+                    res = cert * math.exp(rng.normal(0.0, 0.03))
+                    if lab == "old" and 105900 <= sid[lab] <= 106400 and name == "GCRM-21":
+                        res = cert * 1.11 * math.exp(rng.normal(0, 0.02))   # one batch out of tolerance
+                    qaqc.append((qid, "CRM", name, "%.3f" % cert, "%.3f" % res, "", hid, labname))
+                elif kind == 1:
+                    qaqc.append((qid, "BLANK", "BL-quartz", "<0.01", _fmt(abs(rng.normal(0.003, 0.004))), "", hid,
+                                 labname))
+                else:
+                    dv = cell[ix, iy, k] * geo * math.exp(rng.normal(0, 0.35) - 0.06125) * math.exp(
+                        rng.normal(0, P.S_ASSAY) - P.S_ASSAY ** 2 / 2)
+                    qaqc.append((qid, "FIELD_DUP", "", "", _fmt(dv), "MC%06d" % s, hid, labname))
+            a = b
+        if h["type"] == "DD":
+            for z in np.arange(3.0, depth, 9.0) + rng.uniform(0, 3):
+                rl = P.TOP_RL - z
+                zn = "OX" if rl > ox[ix, iy] else ("TR" if rl > tr[ix, iy] else "FR")
+                dens.append((hid, "%.2f" % z, zn, "%.2f" % (P.DENSITY[zn] * math.exp(rng.normal(0, 0.035))),
+                             "Archimedes, wax-coated" if zn != "FR" else "Archimedes"))
+    open(paths["collars"], "wb").write(_csv(collars, ["hole_id", "hole_type", "east", "north", "rl", "grid",
+                                                      "total_depth", "dip", "azimuth", "date_completed"]))
+    open(paths["assays"], "wb").write(_csv(assays, ["hole_id", "depth_from", "depth_to", "sample_id", "au",
+                                                    "unit", "method", "laboratory", "comment"]))
+    open(paths["qaqc"], "wb").write(_csv(qaqc, ["sample_id", "qc_type", "standard", "certified_au", "result_au",
+                                                "parent_sample_id", "hole_id", "laboratory"]))
+    open(paths["density"], "wb").write(_csv(dens, ["hole_id", "depth", "weathering", "density_t_m3", "method"]))
+    open(paths["weathering"], "wb").write(_csv(weath, ["hole_id", "depth_from", "depth_to", "weathering"]))
+    rows = []
+    for k in range(P.S5_FLITCHES):
+        e0, e1, n0, n1 = P.S5_TOP
+        s = P.S5_STEP * k
+        rows.append((k + 1, "%.1f" % (P.TOP_RL - k * P.D), "%.1f" % (P.TOP_RL - (k + 1) * P.D), "%.2f" % (e0 + s),
+                     "%.2f" % (e1 - s), "%.2f" % (n0 + s), "%.2f" % (n1 - s)))
+    open(paths["design"], "wb").write(_csv(rows, ["flitch", "rl_top", "rl_bottom", "east_min", "east_max",
+                                                  "north_min", "north_max"]))
+    return {"assays": len(assays), "qaqc": len(qaqc), "collars": len(collars)}
+
+
+def write_metallurgy(path, rng):
     wb = openpyxl.Workbook()
-    wb.remove(wb.active)
-    for title, rows, bold in sheets:
-        ws = wb.create_sheet(title)
-        for r in rows:
-            ws.append(list(r))
-        for i in bold:
-            for c in ws[i]:
-                c.font = Font(bold=True)
-        for col, width in zip("ABCDEFGHIJ", widths):
-            ws.column_dimensions[col].width = width
-    wb.properties.creator = creator
-    wb.properties.lastModifiedBy = creator
-    wb.properties.created = created
-    wb.properties.modified = modified
-    wb.properties.title = None
-    buf = io.BytesIO()
-    wb.save(buf)
-    src = zipfile.ZipFile(io.BytesIO(buf.getvalue()))
-    with zipfile.ZipFile(path, "w", zipfile.ZIP_DEFLATED) as z:
-        for info in src.infolist():
-            data = src.read(info.filename)
-            if info.filename == "docProps/core.xml":
-                data = re.sub(rb"(<dcterms:modified[^>]*>)[^<]*(</dcterms:modified>)",
-                              b"\\g<1>" + modified.strftime("%Y-%m-%dT%H:%M:%SZ").encode() + b"\\g<2>", data)
-                data = re.sub(rb"(<dcterms:created[^>]*>)[^<]*(</dcterms:created>)",
-                              b"\\g<1>" + created.strftime("%Y-%m-%dT%H:%M:%SZ").encode() + b"\\g<2>", data)
-            if info.filename == "docProps/app.xml":
-                names = [t[0] for t in sheets]
-                parts = "".join("<vt:lpstr>%s</vt:lpstr>" % n.replace("&", "&amp;") for n in names)
-                data = ('<?xml version="1.0" encoding="UTF-8" standalone="yes"?>\r\n'
-                        '<Properties xmlns="http://schemas.openxmlformats.org/officeDocument/2006/extended-properties" '
-                        'xmlns:vt="http://schemas.openxmlformats.org/officeDocument/2006/docPropsVTypes">'
-                        '<Application>Microsoft Excel</Application><DocSecurity>0</DocSecurity>'
-                        '<ScaleCrop>false</ScaleCrop><HeadingPairs><vt:vector size="2" baseType="variant"><vt:variant>'
-                        '<vt:lpstr>Worksheets</vt:lpstr></vt:variant><vt:variant><vt:i4>%d</vt:i4></vt:variant>'
-                        '</vt:vector></HeadingPairs><TitlesOfParts><vt:vector size="%d" baseType="lpstr">%s'
-                        '</vt:vector></TitlesOfParts><Company></Company><LinksUpToDate>false</LinksUpToDate>'
-                        '<SharedDoc>false</SharedDoc><HyperlinksChanged>false</HyperlinksChanged>'
-                        '<AppVersion>16.0300</AppVersion></Properties>' % (len(names), len(names), parts)).encode()
-            zi = zipfile.ZipInfo(info.filename, date_time=modified.timetuple()[:6])
-            zi.compress_type = zipfile.ZIP_DEFLATED
-            z.writestr(zi, data)
+    ws = wb.active
+    ws.title = "Bottle rolls"
+    ws.append(["Test", "Hole", "From (m)", "To (m)", "Weathering", "Head grade (g/t)", "Grind P80 (um)",
+               "24 h recovery (%)", "48 h recovery (%)", "NaCN (kg/t)", "Lime (kg/t)"])
+    for k in range(18):
+        zn = ["OX", "TR", "FR"][k % 3]
+        head = round(float(np.exp(rng.normal(0.95, 0.45))), 2)
+        rec = {"OX": 94.5, "TR": 91.2, "FR": 88.6}[zn] + rng.normal(0, 1.2)
+        top = int(rng.integers(6, 95))
+        ws.append(["BR-%02d" % (k + 1), "MCDD%03d" % int(rng.integers(5, 60)), top, top + int(rng.integers(3, 7)), zn,
+                   head, 75,
+                   round(rec - 3.1, 1), round(rec, 1), round(0.42 + 0.1 * rng.random(), 2), round(1.1 + 0.6 * rng.random(), 2)])
+    for c in ws[1]:
+        c.font = Font(bold=True)
+    wb.properties.creator = "Tallowood Processing"
+    wb.save(path)
+    ooxml.normalize(path, dt.datetime(2025, 8, 12, 9, 5), dt.datetime(2025, 9, 1, 11, 40), "Tallowood Processing")
 
 
-def _styles():
-    base = ParagraphStyle("p", fontName="Helvetica", fontSize=9.6, leading=13, alignment=TA_LEFT, spaceAfter=5)
-    return {"t": ParagraphStyle("t", parent=base, fontName="Helvetica-Bold", fontSize=13, leading=17, spaceAfter=4),
-            "s": ParagraphStyle("s", parent=base, fontSize=8.4, leading=11, textColor=colors.HexColor("#4a5560")),
-            "h": ParagraphStyle("h", parent=base, fontName="Helvetica-Bold", fontSize=10.4, leading=14, spaceBefore=6),
-            "p": base,
-            "cell": ParagraphStyle("c", parent=base, fontSize=8.6, leading=10.6, spaceAfter=0)}
-
-
-def pdf(path, blocks, title, author, created, modified, footer, first_col=0.30, subject=None):
-    """A document as the pharmacy writes it: a Word document exported to PDF by LibreOffice Writer (officepdf.py)."""
-    st = _styles()
-    story = []
-    for kind, val in blocks:
-        if kind == "table":
-            width = A4[0] - 40 * mm
-            n = len(val[0])
-            widths = [width * first_col] + [width * (1 - first_col) / (n - 1)] * (n - 1) if n > 1 else [width]
-            rows = [[Paragraph(str(c).replace("&", "&amp;"), st["cell"]) for c in r] for r in val]
-            story += [Table(rows, colWidths=widths, hAlign="LEFT", repeatRows=1), Spacer(1, 6)]
-        elif kind == "img":
-            story.append(val)
-        else:
-            story.append(Paragraph(val, st[kind]))
-    O.build(path, story, title, author, subject or title, footer, created, modified, margin_mm=20, top_mm=18,
-            bottom_mm=18)
-
-
-EST = dt.timezone(dt.timedelta(hours=-5))
-
-
-def _pdfdate(d):
-    """An Ontario winter clock time as an aware datetime."""
-    return d.replace(tzinfo=EST)
-
-
-# ------------------------------------------------------------------------------------------------ the records
-
-def _utc(t):
-    return t.astimezone(UTC)
-
-
-def write_doses(path):
-    w = W.simulate()
-    counts = {}
-    serial, ts, prod, batch, dose, ml, status = [], [], [], [], [], [], []
-    for d in w["doses"]:
-        key = d["batch_no"]
-        if d["status"] == "COMPLETE":
-            counts[key] = d["seq"]
-            n = d["seq"]
-        else:
-            n = counts.get(key, 0) + 1
-        serial.append(d["serial"])
-        ts.append(_utc(d["t"]).strftime("%Y-%m-%d %H:%M:%S"))
-        prod.append(d["product"])
-        batch.append(d["batch_no"])
-        dose.append(n)
-        ml.append(float(W.product(d["product"])["vol"]))
-        status.append(d["status"])
-    order = sorted(range(len(ts)), key=lambda i: (ts[i], serial[i], batch[i], dose[i], status[i]))
-    tbl = pa.table({
-        "compounder_sn": pa.array([serial[i] for i in order], pa.string()),
-        "fill_end_time": pa.array([ts[i] for i in order], pa.string()),
-        "product_no": pa.array([prod[i] for i in order], pa.string()),
-        "batch_no": pa.array([batch[i] for i in order], pa.string()),
-        "dose_no": pa.array([dose[i] for i in order], pa.int32()),
-        "programmed_ml": pa.array([ml[i] for i in order], pa.float64()),
-        "status": pa.array([status[i] for i in order], pa.string()),
-    })
-    PQ.write_table(tbl, path, compression="snappy", use_dictionary=True, write_statistics=False)
-    return len(order)
-
-
-def write_events(path):
-    w = W.simulate()
-    rows = sorted(((_utc(e["t"]).strftime("%Y-%m-%dT%H:%M:%SZ"), e["serial"], e["event"], e["lot"]) for e in w["events"]))
-    _csv(path, ["event_time", "compounder_sn", "event", "set_lot"], [(t, s, ev, lot) for t, s, ev, lot in rows])
-    return len(rows)
-
-
-def _weights(c, r):
-    d = c["dose"]
-    p = W.product(d["product"])
-    net = p["vol"] * (1 + d["dev"] / 100.0) * p["sg"]
-    local = c["t"].astimezone(W.TZ)
-    gross = local.date() < TEMPLATE_CHANGE
-    wt = net + (p["tare"] + float(r.normal(0, 0.04)) if gross else 0.0)
-    return local, round(wt, 2), gross
-
-
-def check_rows():
-    """Every weighed dose as the register holds it: local date and time, batch, product name, dose number, weight
-    (gross until 30 June, net from 1 July), result and initials."""
-    w = W.simulate()
-    r = W.rng("register")
-    out = []
-    for c in w["checks"]:
-        d = c["dose"]
-        p = W.product(d["product"])
-        if p.get("verified"):
-            continue
-        local, wt, gross = _weights(c, r)
-        out.append(dict(local=local, batch=d["batch_no"], name=p["name"], dose=d["seq"], wt=wt, gross=gross,
-                        result="FAIL" if c["out"] else "PASS", by=INITIALS[int(r.integers(0, len(INITIALS)))],
-                        dose_ref=d))
-    out.sort(key=lambda x: (x["local"], x["batch"], x["dose"]))
-    return out
-
-
-def write_checks(path):
-    rows = check_rows()
-    sheets = []
-    for q, (a, b) in enumerate([((1, 1), (3, 31)), ((4, 1), (6, 30)), ((7, 1), (9, 30)), ((10, 1), (12, 31))]):
-        lo, hi = dt.date(2026, *a), dt.date(2026, *b)
-        gross = q < 2
-        head = ["Date", "Time", "Batch", "Product", "Dose no.", "Gross wt (g)" if gross else "Net wt (g)", "Result",
-                "Checked by"]
-        body = [[x["local"].date().isoformat(), x["local"].strftime("%H:%M"), x["batch"], x["name"], x["dose"], x["wt"],
-                 x["result"], x["by"]] for x in rows if lo <= x["local"].date() <= hi]
-        sheets.append(("Q%d 2026" % (q + 1), [head] + body, [1]))
-    _xlsx(path, sheets, "%s, %s" % (P.HOSPITAL, P.UNIT), dt.datetime(2025, 12, 19, 14, 2, 11),
-          dt.datetime(2027, 1, 15, 16, 48, 37))
-    return len(rows)
-
-
-def sort_rows():
-    w = W.simulate()
-    r = W.rng("quarantine")
-    out = []
-    no = 1180
-    for s in sorted(w["sorts"], key=lambda x: x["t"]):
-        no += int(r.integers(3, 29))
-        local = s["t"].astimezone(W.TZ)
-        out.append(dict(no="DEV-2026-%04d" % no, opened=local, batch=s["batch_no"], quar=s["quarantined"],
-                        weighed=s["quarantined"], rej=s["rejected"], note="", recount=False, product=s["product"]))
-    # two sorts were reopened by the quality pharmacist and recounted; the recount is entered under the same number
-    rec = []
-    picks = sorted(r.choice(len(out), size=min(2, len(out)), replace=False).tolist()) if out else []
-    for i in picks:
-        x = dict(out[i])
-        first = dict(out[i])
-        first["rej"] = max(0, x["rej"] + (1 if x["rej"] < 3 else -1))
-        out[i] = first
-        x["opened"] = x["opened"] + dt.timedelta(days=int(r.integers(1, 4)), hours=int(r.integers(1, 5)))
-        x["note"] = "Recount by %s; replaces the entry of %s" % (P.PEOPLE["quality"].split()[0][0] +
-                                                                   P.PEOPLE["quality"].split()[1][0],
-                                                                   first["opened"].date().isoformat())
-        x["recount"] = True
-        rec.append(x)
-    return out, rec
-
-
-def write_quarantine(path):
-    out, rec = sort_rows()
-    rows = sorted(out + rec, key=lambda x: x["opened"])
-    head = ["Deviation no.", "Opened", "Batch", "Doses quarantined", "Doses weighed", "Doses rejected", "Closed by",
-            "Note"]
-    body = [[x["no"], x["opened"].strftime("%Y-%m-%d %H:%M"), x["batch"], x["quar"], x["weighed"], x["rej"],
-             "ES" if x["recount"] else "JB", x["note"]] for x in rows]
-    _xlsx(path, [("Sorts 2026", [head] + body, [1])], "%s, %s" % (P.HOSPITAL, P.UNIT), dt.datetime(2024, 3, 4, 9, 15, 40),
-          dt.datetime(2027, 1, 14, 11, 27, 5), widths=(15, 17, 12, 17, 14, 15, 10, 50))
-    return len(body)
-
-
-def write_master(path):
-    head = ["Product no.", "Product", "Container", "Labelled volume (mL)", "Volume tolerance (+/- %)",
-            "Specific gravity", "Container tare (g)", "Station", "Weighed every dose"]
-    body = []
-    for p in P.PRODUCTS:
-        cont = "bag" if "bag" in p["name"] else "syringe"
-        body.append([p["code"], p["name"], cont, p["vol"], p["tol"], p["sg"], p["tare"], p["station"],
-                     "yes" if p.get("verified") else "no"])
-    _xlsx(path, [("Products", [head] + body, [1])], "%s Pharmacy Services" % P.ORG, dt.datetime(2023, 9, 11, 10, 4, 52),
-          dt.datetime(2026, 11, 30, 15, 39, 18), widths=(11, 44, 10, 12, 12, 10, 10, 9, 12))
-
-
-def write_equipment(path):
+def write_survey(path, rng):
     rows = []
-    for st in sorted(P.STATIONS):
-        for s, a, b in P.STATIONS[st]["serials"]:
-            first = a if a > P.FIRST_DAY else {"PC-1": dt.date(2021, 5, 17), "PC-2": dt.date(2021, 5, 17),
-                                               "PC-3": dt.date(2019, 11, 4), "PC-4": dt.date(2023, 2, 20),
-                                               "GC-1": dt.date(2022, 8, 29)}[st]
-            rows.append([st, s, P.STATIONS[st]["model"], first.isoformat(), b.isoformat() if b else ""])
-    _csv(path, ["station", "serial", "model", "in_service_from", "in_service_to"], rows)
-
-
-def write_gc1(path):
-    w = W.simulate()
-    rows = []
-    for d in w["doses"]:
-        p = W.product(d["product"])
-        if not p.get("verified") or d["status"] != "COMPLETE":
-            continue
-        net = p["vol"] * (1 + d["dev"] / 100.0) * p["sg"]
-        rows.append([d["t"].astimezone(W.TZ).strftime("%Y-%m-%d %H:%M:%S"), d["batch_no"], d["product"], d["seq"],
-                     "%.2f" % net, "OUT" if abs(d["dev"]) > p["tol"] else "IN"])
-    _csv(path, ["filled_local", "batch_no", "product_no", "dose_no", "net_weight_g", "verdict"], rows)
-
-
-def write_wards(path):
-    w = W.simulate()
-    r = W.rng("wards")
-    wards = ["Operating Theatres", "Day Surgery", "Labour and Delivery", "ICU", "Emergency", "Medicine 3W",
-             "Surgery 4E", "Oncology Day Unit"]
-    use = {"P0412": [0.55, 0.25, 0.08, 0.04, 0.03, 0.02, 0.03, 0.0], "P0413": [0.35, 0.30, 0.1, 0.05, 0.1, 0.05, 0.05, 0],
-           "P0431": [0.6, 0.3, 0.0, 0.03, 0.02, 0.0, 0.05, 0.0], "P0507": [0.7, 0.15, 0.1, 0.05, 0, 0, 0, 0],
-           "P0509": [0.65, 0.15, 0.15, 0.05, 0, 0, 0, 0], "P0522": [0.5, 0.1, 0.0, 0.2, 0.2, 0, 0, 0]}
-    monthly = {}
-    for d in w["doses"]:
-        if d["status"] != "COMPLETE":
-            continue
-        m = d["t"].astimezone(W.TZ).month
-        monthly[(d["product"], m)] = monthly.get((d["product"], m), 0) + 1
-    rows = []
-    for (code, m), n in sorted(monthly.items()):
-        share = use.get(code, [0.1, 0.1, 0.1, 0.25, 0.15, 0.15, 0.1, 0.05])
-        issued = n * float(r.uniform(0.93, 0.985))
-        for wd, sh in zip(wards, share):
-            q = int(round(issued * sh * float(r.uniform(0.9, 1.1))))
-            if q:
-                rows.append(["2026-%02d" % m, code, wd, q])
-    _csv(path, ["month", "product_no", "ward", "doses_issued"], rows)
-
-
-def write_cleanroom(path):
-    r = W.rng("cleanroom")
-    rows = []
-    day = dt.date(2026, 1, 5)
-    while day <= P.LAST_DAY:
-        for room, grade in (("Buffer room 1", "ISO 7"), ("Buffer room 2", "ISO 7"), ("Ante room", "ISO 8"),
-                            ("PEC 1 (BSC)", "ISO 5"), ("PEC 2 (BSC)", "ISO 5")):
-            lim = {"ISO 5": 3520, "ISO 7": 352000, "ISO 8": 3520000}[grade]
-            p05 = int(lim * float(r.uniform(0.02, 0.35)))
-            cfu = int(r.poisson(0.2 if grade == "ISO 5" else 2.5))
-            rows.append([day.isoformat(), room, grade, p05, cfu])
-        day += dt.timedelta(days=7 + int(r.integers(-1, 2)))
-    _csv(path, ["sample_date", "room", "classification", "particles_0_5um_per_m3", "viable_air_cfu_per_m3"], rows)
-
-
-# ------------------------------------------------------------------------------------------------ documents
-
-def write_policy(path):
-    blocks = [
-        ("t", "%s Pharmacy Services" % P.ORG),
-        ("s", "Policy PH-QP-07. Batch-compounded sterile products: gravimetric verification. Version 3, approved by the "
-              "Director of Pharmacy on 9 December 2025, effective 1 January 2026. Review due December 2027."),
-        ("h", "1. Purpose and scope"),
-        ("p", "This policy sets which of the products the Sterile Compounding Unit batch-compounds on its compounders "
-              "are verified by weight dose by dose. It applies to every product listed in the compounded product "
-              "master. Doses prepared one at a time for a named patient are outside its scope."),
-        ("h", "2. Definitions"),
-        ("p", "A <b>dose made</b> is a dose the compounder completed. A fill the compounder stopped before completion "
-              "(an aborted fill) is discarded at the station and is not a dose made."),
-        ("p", "An <b>out-of-tolerance dose</b> is a dose made whose delivered volume lay outside the volume tolerance "
-              "the product master sets for the product, whether or not the dose was weighed or quarantined."),
-        ("p", "A product's <b>out-of-tolerance rate</b> for a calendar year is its out-of-tolerance doses made in that "
-              "year per 100,000 of its doses made in that year. The year is the calendar year in Ontario local time."),
-        ("h", "3. Gravimetric verification of every dose"),
-        ("p", "3.1 At each configuration of the pharmacy's IV workflow system, each batch-compounded product filled on "
-              "the unit's peristaltic or syringe-driver compounders (PC-1 to PC-4) is configured for gravimetric "
-              "verification of every dose where its out-of-tolerance rate in the last full calendar year exceeded 10. "
-              "The others stay on the in-process checks of SC-SOP-12."),
-        ("p", "3.2 Products filled on the gravimetric compounder (GC-1), which weighs every dose it fills, are not "
-              "configured; they stay on GC-1."),
-        ("p", "3.3 The quality pharmacist prepares the case for each product and the Director of Pharmacy approves the "
-              "list before the configuration is locked."),
-        ("h", "4. Records"),
-        ("p", "The compounders' dose and event records are kept on the pharmacy server for three years. The gravimetric "
-              "check register and the quarantine register are kept by the unit and copied to the server at each "
-              "month end."),
-        ("h", "5. Related documents"),
-        ("p", "SC-SOP-12 Batch compounding on the unit's compounders. PH-QP-02 Beyond-use dating of compounded sterile "
-              "preparations. PH-QP-11 Deviation reporting."),
-    ]
-    pdf(path, blocks, "PH-QP-07 Batch-compounded sterile products: gravimetric verification",
-        "%s Pharmacy Services" % P.ORG,
-        _pdfdate(dt.datetime(2025, 11, 24, 10, 41, 3)), _pdfdate(dt.datetime(2025, 12, 9, 15, 12, 47)),
-        "%s Pharmacy Services   PH-QP-07 v3   Controlled copy" % P.ORG,
-        subject="Pharmacy policy PH-QP-07, gravimetric verification of batch-compounded sterile products")
-
-
-def write_sop(path):
-    blocks = [
-        ("t", "SC-SOP-12 Batch compounding on the unit's compounders"),
-        ("s", "%s, %s. Version 6, effective 3 March 2025. Owner: Sterile Compounding Unit lead technician. "
-              "Approved: quality pharmacist." % (P.HOSPITAL, P.UNIT)),
-        ("h", "1. Hours"),
-        ("p", "The unit compounds on weekdays from 07:00 to 23:00 in two shifts and on Saturdays from 08:00 to 16:00. It "
-              "is closed on Sundays and statutory holidays."),
-        ("h", "2. Stations"),
-        ("p", "PC-1, PC-2 and PC-3 are peristaltic compounders: each set-up installs a new tubing set. PC-4 is a "
-              "syringe-driver compounder: each set-up installs a new fluid path set. GC-1 is the gravimetric compounder "
-              "and weighs every dose it fills. Station assignments are in the compounded product master."),
-        ("h", "3. Set-up"),
-        ("p", "3.1 Install the set, prime it with the product's source solution and run the compounder's gravimetric "
-              "calibration for the product. The compounder logs the set-up and the set lot."),
-        ("p", "3.2 A set may be used for further batches of the same product, one after another, within 24 hours of "
-              "its set-up. Bag products are set up afresh for each batch."),
-        ("p", "3.3 After an occlusion alarm, clear the line and re-seat the set in the pump head before continuing."),
-        ("h", "4. In-process checks"),
-        ("p", "4.1 Weigh the first dose of each batch on the unit's check balance, then every hundredth dose of a "
-              "syringe batch and every twentieth dose of a bag batch, and enter the weight in the gravimetric check "
-              "register with the batch, the product, the dose number and the result."),
-        ("p", "4.2 The delivered volume is the dose's net weight divided by the product's specific gravity. A dose "
-              "passes where its delivered volume lies within the product's volume tolerance."),
-        ("h", "5. Reaction plan"),
-        ("p", "5.1 A weighed dose outside tolerance stops the batch. Quarantine every dose of the batch made since the "
-              "last conforming check, weigh each quarantined dose and discard those outside tolerance. Record the sort "
-              "in the quarantine register under a deviation number."),
-        ("p", "5.2 Replace the set, set up again and continue the batch on the new set."),
-        ("h", "6. Release"),
-        ("p", "A batch is released by a pharmacist once its checks are entered and any sort is closed."),
-    ]
-    pdf(path, blocks, "SC-SOP-12 Batch compounding on the unit's compounders", "%s, %s" % (P.HOSPITAL, P.UNIT),
-        _pdfdate(dt.datetime(2025, 2, 11, 9, 2, 55)), _pdfdate(dt.datetime(2025, 3, 3, 8, 21, 9)),
-        "%s   SC-SOP-12 v6   Printed copies are uncontrolled" % P.HOSPITAL,
-        subject="Standard operating procedure SC-SOP-12, batch compounding")
-
-
-def write_request(path):
-    msg = EmailMessage()
-    msg["From"] = "%s <spencer.frank@ashcombevalleyhealth.ca>" % P.PEOPLE["project"]
-    msg["To"] = "%s <cynthia.underwood@ashcombevalleyhealth.ca>" % P.PEOPLE["director"]
-    msg["Cc"] = "%s <erin.stewart@ashcombevalleyhealth.ca>" % P.PEOPLE["quality"]
-    msg["Subject"] = "IV workflow go-live: batch products for dose-by-dose weighing"
-    msg["Date"] = format_datetime(dt.datetime(2027, 1, 18, 9, 37, 12, tzinfo=W.TZ))
-    msg["Message-ID"] = "<20270118093712.5521@ashcombevalleyhealth.ca>"
-    msg.set_content(
-        "Cynthia,\n\n"
-        "The IV workflow system goes live in the Sterile Compounding Unit on Monday 5 April 2027. The vendor locks the "
-        "product configuration on 1 March, so I need the list of batch-compounded products to set up for gravimetric "
-        "verification of every dose under PH-QP-07 by Friday 12 February, with the case for each product for the "
-        "configuration file.\n\n"
-        "Erin has pulled the unit's 2026 records from the pharmacy server and the unit's registers (the compounders' "
-        "dose log and event export, the check register, the quarantine register, the product master and the "
-        "equipment register). They are on the project share with this note.\n\n"
-        "The products on GC-1 are already weighed dose by dose and do not need configuring.\n\n"
-        "Thanks,\n\n"
-        "Spencer Frank\nIV Workflow Project Lead, Pharmacy Informatics\n%s\n" % P.ORG)
-    with open(path, "wb") as f:
-        f.write(bytes(msg))
-
-
-def build(target):
-    os.makedirs(target, exist_ok=True)
-    n = write_doses(os.path.join(target, FILES["doses"]))
-    write_events(os.path.join(target, FILES["events"]))
-    write_checks(os.path.join(target, FILES["checks"]))
-    write_quarantine(os.path.join(target, FILES["quarantine"]))
-    write_master(os.path.join(target, FILES["master"]))
-    write_equipment(os.path.join(target, FILES["equipment"]))
-    write_policy(os.path.join(target, FILES["policy"]))
-    write_sop(os.path.join(target, FILES["sop"]))
-    write_request(os.path.join(target, FILES["request"]))
-    write_gc1(os.path.join(target, FILES["gc1"]))
-    write_wards(os.path.join(target, FILES["wards"]))
-    write_cleanroom(os.path.join(target, FILES["cleanroom"]))
-    return n
+    for k in range(2400):
+        e = 920 + rng.uniform(0, 70)
+        n = 2050 + rng.uniform(0, 300)
+        rl = 330 + (e - 920) * 0.9 + rng.normal(0, 0.3)
+        rows.append(("P%05d" % (k + 1), "%.3f" % (e + P.MGA_SHIFT[0]), "%.3f" % (n + P.MGA_SHIFT[1]), "%.3f" % rl,
+                     "TOE" if k % 7 == 0 else ("CREST" if k % 7 == 1 else "FLOOR")))
+    open(path, "wb").write(_csv(rows, ["point", "east_mga", "north_mga", "rl", "code"]))

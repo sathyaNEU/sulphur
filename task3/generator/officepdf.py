@@ -1,5 +1,5 @@
-"""task482: the issuing offices' PDFs, written the way an office writes them. A document's story (paragraphs,
-spacers, tables and page breaks) becomes a Word document, LibreOffice Writer exports it to PDF, and the PDF's
+"""task3: the district and utility PDFs, written the way an office writes them. A document's story (paragraphs,
+spacers, tables, pictures and page breaks) becomes a Word document, LibreOffice Writer exports it to PDF, and the PDF's
 dates and file identifier are set to the issue date at equal length, so the cross-reference table holds and two
 builds are byte-identical. Producer and Creator stay as Writer wrote them."""
 import datetime as dt
@@ -12,11 +12,11 @@ import subprocess
 import tempfile
 
 from docx import Document
-from docx.enum.text import WD_BREAK
+from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_BREAK
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
 from docx.shared import Mm, Pt, RGBColor
-from reportlab.platypus import PageBreak, Paragraph, Spacer, Table
+from reportlab.platypus import Image, PageBreak, Paragraph, Spacer, Table
 
 FONT = "Liberation Sans"
 
@@ -28,7 +28,7 @@ def _text(p):
     return t
 
 
-def _add_runs(par, markup, size, bold, color):
+def _add_runs(par, markup, size, bold, color, italic=False):
     parts = re.split(r"(<b>|</b>|<br\s*/?>)", markup)
     on = bold
     for part in parts:
@@ -47,6 +47,7 @@ def _add_runs(par, markup, size, bold, color):
         r.font.name = FONT
         r.font.size = Pt(size)
         r.font.bold = on
+        r.font.italic = italic
         if color:
             r.font.color.rgb = RGBColor.from_string(color)
 
@@ -60,12 +61,17 @@ def _style_of(st):
     return st.fontSize, "Bold" in st.fontName, color, getattr(st, "spaceBefore", 0), getattr(st, "spaceAfter", 0)
 
 
+ALIGN = {0: WD_ALIGN_PARAGRAPH.LEFT, 1: WD_ALIGN_PARAGRAPH.CENTER, 2: WD_ALIGN_PARAGRAPH.RIGHT,
+         4: WD_ALIGN_PARAGRAPH.JUSTIFY}
+
+
 def _paragraph(doc, p):
     size, bold, color, before, after = _style_of(p.style)
     par = doc.add_paragraph()
     par.paragraph_format.space_before = Pt(before)
     par.paragraph_format.space_after = Pt(after)
-    _add_runs(par, _text(p), size, bold, color)
+    par.alignment = ALIGN.get(getattr(p.style, "alignment", 0), WD_ALIGN_PARAGRAPH.LEFT)
+    _add_runs(par, _text(p), size, bold, color, italic="Oblique" in p.style.fontName or "Italic" in p.style.fontName)
 
 
 def _border_below(cell):
@@ -128,13 +134,13 @@ def _page_field(par):
     r.font.size = Pt(7)
 
 
-def build(path, story, title, author, subject, footer, created, modified, margin_mm=18):
+def build(path, story, title, author, subject, footer, created, modified, margin_mm=18, top_mm=17, bottom_mm=17):
     """created and modified: aware datetimes, the document's in-fiction issue and last-saved times."""
     doc = Document()
     sec = doc.sections[0]
     sec.page_width, sec.page_height = Mm(210), Mm(297)
     sec.left_margin = sec.right_margin = Mm(margin_mm)
-    sec.top_margin = sec.bottom_margin = Mm(17)
+    sec.top_margin, sec.bottom_margin = Mm(top_mm), Mm(bottom_mm)
     normal = doc.styles["Normal"]
     normal.font.name = FONT
     normal.font.size = Pt(9.2)
@@ -150,13 +156,22 @@ def build(path, story, title, author, subject, footer, created, modified, margin
             sp.paragraph_format.line_spacing = Pt(max(1, fl.height))
         elif isinstance(fl, PageBreak):
             doc.add_paragraph().add_run().add_break(WD_BREAK.PAGE)
+        elif isinstance(fl, Image):
+            doc.add_picture(fl.filename, width=Mm(fl.drawWidth / 72.0 * 25.4))
         first = False
     fp = sec.footer.paragraphs[0]
-    r = fp.add_run(footer + "\tPage ")
+    fp.paragraph_format.space_after = Pt(0)
+    r = fp.add_run(footer)
     r.font.name = FONT
     r.font.size = Pt(7)
     r.font.color.rgb = RGBColor.from_string("555555")
-    _page_field(fp)
+    pp = sec.footer.add_paragraph()
+    pp.alignment = WD_ALIGN_PARAGRAPH.RIGHT
+    r = pp.add_run("Page ")
+    r.font.name = FONT
+    r.font.size = Pt(7)
+    r.font.color.rgb = RGBColor.from_string("555555")
+    _page_field(pp)
     cp = doc.core_properties
     cp.title, cp.author, cp.subject = title, author, subject
     cp.last_modified_by = author
@@ -175,7 +190,7 @@ def build(path, story, title, author, subject, footer, created, modified, margin
     finally:
         shutil.rmtree(work, ignore_errors=True)
     b = _fix(b, created, modified)
-    open(path, "wb").write(b)
+    open(path, "wb").write(_creator(b))
 
 
 def _pdfdate(d):
@@ -207,3 +222,27 @@ def _fix(b, created, modified):
     b = re.sub(rb"/ID\s*\[\s*<([0-9A-Fa-f]+)>\s*<([0-9A-Fa-f]+)>\s*\]", repl, b)
     assert len(b) == n, "PDF length changed"
     return b
+
+
+def _creator(b):
+    """Writer stamps /Creator as the bare module name; the document's Creator reads as the application that made
+    it, LibreOffice Writer, written as Writer writes its Producer (a UTF-16 string), through pypdf (deterministic for
+    a given input)."""
+    import codecs
+    import io
+    from pypdf import PdfReader, PdfWriter
+    from pypdf.generic import NameObject, TextStringObject
+
+    def u16(text):
+        t = TextStringObject(text)
+        t.autodetect_utf16 = True
+        t.utf16_bom = codecs.BOM_UTF16_BE
+        return t
+    r = PdfReader(io.BytesIO(b))
+    w = PdfWriter(clone_from=r)
+    info = w._info.get_object()
+    info[NameObject("/Creator")] = u16("LibreOffice Writer")
+    info[NameObject("/Producer")] = u16(str((r.metadata or {}).get("/Producer") or "LibreOffice"))
+    out = io.BytesIO()
+    w.write(out)
+    return out.getvalue()

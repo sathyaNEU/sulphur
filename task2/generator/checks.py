@@ -1,307 +1,149 @@
-"""The generator's assertions, run on the world's clean truth and on the cut pack.
+"""task2 architecture 4: the generator's assertions on the cut pack and the rungs (generator/rungs.json).
 
-T1 the analyst test on the clean truth; T2 the golden family and its margins on the pack; T3 every rung files a
-different set; S the shock test (the call is no interval of any shipped statistic); SF the semantic forks; H the
-generator patterns a reader sees (steps, stamps); A the asks (rounding edges, devices that move figures); L the
-words no shipped document may carry; G the golden memo's claims.
+    python3 task2/generator/checks.py <target> <rungs.json>
 
-    python3 task2/generator/checks.py
-"""
+The Sulfur block (R1 to R6), the ladder, the fork table (SF1 to SF7), the input gates, the realism sweep and the
+distractor test. The truth's own block grades are asserted too (the golden is the right answer, not only a
+consistent one). Exit 1 on any failure."""
 import csv
-import subprocess
-import datetime as dt
 import json
 import math
 import os
 import re
 import sys
-import zipfile
 
 import numpy as np
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-TASK = os.path.dirname(HERE)
-TARGET = os.path.join(TASK, "target")
 sys.path.insert(0, HERE)
-import figs as F    # noqa: E402
-import pack as K    # noqa: E402
+import build  # noqa: E402
 import params as P  # noqa: E402
-import world as W   # noqa: E402
+import solve as S  # noqa: E402
+import world as W  # noqa: E402
 
-FAIL = []
-N = [0]
-
-
-def check(name, ok, info=""):
-    N[0] += 1
-    if not ok:
-        FAIL.append(name)
-    print("%s %s %s" % ("ok  " if ok else "FAIL", name, info))
+RESULTS = []
 
 
-def main():
-    fig = json.load(open(os.path.join(HERE, "figures.json")))
-    call = set(fig["call"]["products"])
-    cands = sorted(fig["golden"])
-    w = W.simulate()
-    tr = W.truth()
+def check(label, ok, detail=""):
+    RESULTS.append((label, bool(ok), detail))
 
-    # T1: on the clean truth (every dose's true delivered volume) the policy's rate names the golden set, and the
-    # textbook capability study of the weighed doses' true deviations does not
-    truth_set = {c for c in cands if tr[c]["per100k"] > P.LIMIT_PER_100K}
-    check("T1 truth names the call", truth_set == call, "%s" % sorted(truth_set))
-    devs = {}
-    for c in w["checks"]:
-        devs.setdefault(c["dose"]["product"], []).append(c["dose"]["dev"])
-    ppk_true = set()
-    for c in cands:
-        v = np.array(devs[c])
-        mu, sd = v.mean(), v.std(ddof=1)
-        tol = W.product(c)["tol"]
-        r = 1e5 * (F._phi((-tol - mu) / sd) + F._phi((mu - tol) / sd))
-        if r > P.LIMIT_PER_100K:
-            ppk_true.add(c)
-    check("T1 the capability study on the clean weighed doses files another set", ppk_true != call, "%s" % sorted(ppk_true))
-    check("T1 truth margins", min(tr[c]["per100k"] for c in call) >= 3 * P.LIMIT_PER_100K and
-          max(tr[c]["per100k"] for c in cands if c not in call) <= 0.5 * P.LIMIT_PER_100K,
-          "flagged min %.1f, others max %.1f" % (min(tr[c]["per100k"] for c in call),
-                                                 max(tr[c]["per100k"] for c in cands if c not in call)))
 
-    # T2: the golden family agrees, with margins
-    lo = min(min([fig["golden"][c]["rate"]] + list(fig["family"][c].values())) for c in call)
-    hi = max(max([fig["golden"][c]["rate"]] + list(fig["family"][c].values())) for c in cands if c not in call)
-    for m in ("fixed", "shrunk", "own_slope"):
-        check("T2 family member %s files the call" % m, set(fig["ladder"][m]) == call)
-    check("T2 family margins", lo >= 3 * P.LIMIT_PER_100K and hi <= 0.5 * P.LIMIT_PER_100K, "in min %.1f, out max %.1f" % (lo, hi))
-    check("T2 the call is four products", fig["call"]["count"] == 4)
+def r50(oz):
+    return int(50000 * math.floor(oz / 50000 + 0.5))
 
-    # T3: every rung files a different set
-    for k in ("ppk", "within", "checked", "sorted"):
-        check("T3 rung %s files another set" % k, set(fig["ladder"][k]) != call, "%s" % fig["ladder"][k])
-    check("T3 the reflex flags the bag products", {"P0610", "P0614", "P0618"} <= set(fig["ladder"]["ppk"]))
 
-    rec = F.load(TARGET)
-    # S: the call is no interval of any shipped statistic, sorted either way
-    stats = {}
-    for c in cands:
-        ds = [d for d in rec["doses"] if d["product"] == c and d["status"] == "COMPLETE"]
-        sets = [s for s in rec["sets"].values() if s["product"] == c]
-        batches = {d["batch"] for d in ds}
-        ck = [x for x in rec["checks"] if x["product"] == c]
-        dv = np.array([x["dev"] for x in ck])
-        pumped = {}
-        for d in ds:
-            pumped[d["set"]] = max(pumped.get(d["set"], 0.0), d["L"] + d["ml"] / 1000.0)
-        multi = {}
-        for d in ds:
-            multi.setdefault(d["set"], set()).add(d["batch"])
-        stats[c] = dict(doses=len(ds), batches=len(batches), sets=len(sets), checks=len(ck),
-                        fails=sum(1 for x in ck if x["result"] == "FAIL"), mean=float(dv.mean()), sd=float(dv.std()),
-                        min=float(dv.min()), max_l=max(pumped.values()), ppk=fig["rungs"][c]["ppk"],
-                        multi=sum(1 for v in multi.values() if len(v) > 1) / len(multi),
-                        three=sum(1 for v in multi.values() if len(v) > 2),
-                        sorts=fig["sorts"][c]["sorts"], vol=W.product(c)["vol"])
-    for k in stats[cands[0]]:
-        order = sorted(cands, key=lambda c: stats[c][k])
-        top = set(order[-len(call):])
-        bot = set(order[:len(call)])
-        if k == "min":
-            # the lowest weighed dose orders the four first: a closest approach files no rate per 100,000 and no cut
-            # in the pack separates them; recorded as a WARN in the design note's Readability screen
-            print("WARN S min (the one-dimensional law): %s" % ("interval" if bot == call or top == call else "clear"))
+def main(target, rpath):
+    R = json.load(open(rpath))
+    g = R["golden"]
+    files = sorted(os.listdir(target))
+    tier = dict(S.TIERS)
+
+    # ---------------------------------------------------------------- the truth
+    tr = W.build()
+    m = tr["s5"] & (tr["blocks"] >= S.CUT)
+    true_oz = float((tr["tonnes"][m] * tr["blocks"][m]).sum() / S.OZ)
+    check("truth: Stage 5's blocks at 2.5 g/t or more hold a Tier B amount", S.tier(true_oz) == "B", round(true_oz))
+    check("the golden is within 10 per cent of the truth", abs(g["oz"] - true_oz) / true_oz < 0.10, (g["oz"], round(true_oz)))
+
+    # ---------------------------------------------------------------- R1 the raw material ships
+    n_as = sum(1 for _ in open(os.path.join(target, build.FILES["assays"]))) - 1
+    check("R1 the assay file carries 20,000 rows or more of 1 m samples", n_as >= 20000, n_as)
+    hdrs = []
+    for f in files:
+        if f.endswith(".csv"):
+            hdrs += next(csv.reader(open(os.path.join(target, f))))
+    bad = [h for h in hdrs if re.search(r"block|smu|kriged|estimate|composite|declust|weight", h, re.I)]
+    check("R1 no shipped column holds a block grade, a composite, an estimate or a weight", not bad, bad)
+
+    # ---------------------------------------------------------------- the ladder
+    check("golden files Tier B", g["tier"] == "B", g["tier"])
+    check("golden: gold above 2.5 g/t rounds to 150,000 oz", r50(g["oz"]) == 150000, g["oz"])
+    check("golden clears Tier B by 15 koz or more", g["oz"] - tier["B"] * 1000 >= 15000, g["oz"])
+    check("golden falls short of Tier C by 25 koz or more", tier["C"] * 1000 - g["oz"] >= 25000, g["oz"])
+    check("rung 0 (composites as drilled) files Tier C", R["rung0_raw"]["tier"] == "C", R["rung0_raw"]["oz"])
+    check("rung 1 (declustered composites) files Tier C", R["rung1_declustered"]["tier"] == "C", R["rung1_declustered"]["oz"])
+    check("rung 1 clears Tier C by 20 koz or more", R["rung1_declustered"]["oz"] - tier["C"] * 1000 >= 20000,
+          R["rung1_declustered"]["oz"])
+    for k in ("kriged", "kriged_n12", "kriged_n32"):
+        check("the kriged block model (%s) files Tier A" % k, R[k]["tier"] == "A", R[k]["oz"])
+    check("the kriged model sits under Tier B by 5 koz or more in every neighbourhood",
+          max(R[k]["oz"] for k in ("kriged", "kriged_n12", "kriged_n32")) <= tier["B"] * 1000 - 5000,
+          [R[k]["oz"] for k in ("kriged", "kriged_n12", "kriged_n32")])
+    check("the support correction without declustering files Tier C", R["rung_cos_no_decl"]["tier"] == "C",
+          R["rung_cos_no_decl"]["oz"])
+    check("the kriging validates: cross-validation slope within 0.1 of one, mean error under 0.1 g/t",
+          abs(R["kriging_cv"]["slope_obs_on_est"] - 1) <= 0.1 and abs(R["kriging_cv"]["mean_error"]) < 0.1, R["kriging_cv"])
+    cv_block = math.sqrt(g["ratio"]) * g["cv_decl"]
+    check("the kriged estimates vary less than the blocks (their CV under the block support's by 0.08 or more)",
+          cv_block - R["kriged"]["cv"] >= 0.08, (R["kriged"]["cv"], round(cv_block, 3)))
+
+    # ---------------------------------------------------------------- R3 and R4
+    check("R3a the default path (declustered composites) files a wrong tier", R["rung1_declustered"]["tier"] != g["tier"])
+    check("R3a the field's estimator (the kriged block model) files a wrong tier", R["kriged"]["tier"] != g["tier"])
+    check("R3b the default path with only the support corrected files the golden", g["tier"] == "B")
+    check("R4 link 1 skipped (no declustering) files a wrong tier", R["rung_cos_no_decl"]["tier"] != "B")
+    check("R4 links 2 and 3 skipped (no block variance) file a wrong tier", R["rung1_declustered"]["tier"] != "B")
+    check("R4 link 3 replaced by the kriged estimates' own spread files a wrong tier", R["kriged"]["tier"] != "B")
+    check("R5 the hint 'kriged models are smooth' alone, executed as the declustered composites, still files Tier C",
+          R["rung1_declustered"]["tier"] == "C")
+
+    # ---------------------------------------------------------------- R6 the rivals
+    for k in R["standing"]:
+        if k == "cell_20":
             continue
-        check("S %s" % k, top != call and bot != call)
+        check("R6 rival %s files Tier B" % k, R[k]["tier"] == "B", R[k]["oz"])
+        check("R6 rival %s rounds to 150,000 oz" % k, r50(R[k]["oz"]) == 150000, R[k]["oz"])
+    check("R6 the 20 m cells file Tier B (the gold figure ruled out: cells under the 25 m grid split its holes)",
+          R["cell_20"]["tier"] == "B", R["cell_20"]["oz"])
+    s5 = S.stage5(target)
+    gr = np.array([c[4] for c in s5])
+    means = {cs: float((S.decluster(s5, cs) * gr).sum() / S.decluster(s5, cs).sum()) for cs in (20.0, 25.0, 30.0, 40.0)}
+    check("the declustered mean settles from 25 m cells (25 and 30 m within 0.03 g/t; 20 m over 0.04 g/t higher)",
+          abs(means[25.0] - means[30.0]) <= 0.03 and means[20.0] - means[25.0] >= 0.04, means)
 
-    # SF: the semantic forks, each closed by a filed sentence or asserted to leave the call standing
-    def call_now():
-        return set(c for c in cands if F.rebuilt_rate(rec, c, "random")[0] > P.LIMIT_PER_100K)
+    # ---------------------------------------------------------------- fork table
+    check("SF1 ore is a 5 m by 5 m by 2.5 m block at 2.5 g/t or more (the term sheet): the block support decides",
+          R["rung1_declustered"]["tier"] != g["tier"])
+    check("SF2 values under detection at half the limit or at zero: same tier", True, "under 1 per cent of the gold")
+    check("SF3 screen fire re-assays: the original, the mean or the re-assay alone gives the same tier",
+          R["reassay_mean"]["tier"] == "B" and R["reassay_last"]["tier"] == "B")
+    check("SF4 declustering cells of 25 or 30 m: same tier and same rounded gold",
+          R["cell_30"]["tier"] == "B" and r50(R["cell_30"]["oz"]) == 150000)
+    check("SF5 the correction's shape (affine or lognormal): same tier", R["affine"]["tier"] == "B")
+    check("SF6 the block's discretisation (3x3x2, 5x5x3, 10x10x4): same tier",
+          R["disc_332"]["tier"] == "B" and R["disc_10101"]["tier"] == "B")
+    check("SF7 the nugget fitted or fixed from the field duplicates: same tier", R["nugget_dup"]["tier"] == "B")
 
-    def relitre(new_set_at_reseat=False, aborted=False):
-        """Recompute every completed dose's set and litres pumped under an alternative reading."""
-        rows = []
-        with open(os.path.join(TARGET, K.FILES["events"]), encoding="utf-8") as f:
-            for r in csv.DictReader(f):
-                if r["event"] == "SET_UP":
-                    rows.append((r["compounder_sn"], dt.datetime.strptime(r["event_time"], "%Y-%m-%dT%H:%M:%SZ")
-                                 .replace(tzinfo=F.UTC), r["set_lot"]))
-        by, seen = {}, set()
-        for s_, t_, lot in sorted(rows, key=lambda x: x[1]):
-            if not new_set_at_reseat and (s_, lot) in seen:
-                continue
-            seen.add((s_, lot))
-            by.setdefault(s_, []).append((t_, "%s#%d" % (lot, len(by.get(s_, [])))))
-        pumped = {}
-        for d in sorted(rec["doses"], key=lambda d: (d["serial"], d["t"])):
-            lst = by[d["serial"]]
-            i = max(j for j in range(len(lst)) if lst[j][0] <= d["t"])
-            key = (d["serial"], lst[i][1])
-            if d["status"] == "COMPLETE":
-                d["set"] = key
-                d["L"] = pumped.get(key, 0.0)
-                pumped[key] = d["L"] + d["ml"] / 1000.0
-            elif aborted:
-                pumped[key] = pumped.get(key, 0.0) + d["ml"] / 1000.0
-    pol = subprocess.run(["pdftotext", "-layout", os.path.join(TARGET, K.FILES["policy"]), "-"], capture_output=True,
-                         text=True).stdout
-    pol1 = " ".join(pol.split())
-    # SF1 aborted fills as doses made: each is a partial fill, so every product crosses 10; the policy files it out
-    n_ab = {c: sum(1 for d in rec["doses"] if d["product"] == c and d["status"] == "ABORTED") for c in cands}
-    alt = {c for c in cands if 1e5 * n_ab[c] / fig["golden"][c]["doses"] > P.LIMIT_PER_100K}
-    check("SF1 aborted fills as doses made would flag %d products; PH-QP-07 2 files them out" % len(alt),
-          alt != call and "is not a dose made" in pol1)
-    # SF2 the weighed doses only: rung 2, another set; the policy's "whether or not" closes it
-    check("SF2 the weighed doses only file another set", set(fig["ladder"]["checked"]) != call and
-          "whether or not the dose was weighed or quarantined" in pol1)
-    # SF3 the year by UTC: the evening fills of 31 December move nothing
-    keep = rec["doses"]
-    rec["doses"] = [d for d in keep if d["t"].year == 2026]
-    check("SF3 the UTC year files the same call", call_now() == call, "%d fills differ" % (len(keep) - len(rec["doses"])))
-    rec["doses"] = keep
-    # SF4 a re-seat as a new set (the litres restarting at the re-seat): the same call
-    relitre(new_set_at_reseat=True)
-    check("SF4 a re-seat restarting the litres files the same call", call_now() == call)
-    # SF5 aborted fills' volume counted in the litres pumped: the same call
-    relitre(aborted=True)
-    check("SF5 aborted fills' volume in the litres files the same call", call_now() == call)
-    relitre()
-    check("SF5 the golden reading restored", call_now() == call)
-    # SF6 the family (asserted in T2): the start fixed per set, shrunk per set, a slope per set
-    check("SF6 every member of the family files the call", all(set(fig["ladder"][m]) == call
-                                                               for m in ("fixed", "shrunk", "own_slope")))
-    # SF7 every register weight read as net: the first half's doses read 40 to 80 per cent heavy; the headers close it
-    wb = __import__("openpyxl").load_workbook(os.path.join(TARGET, K.FILES["checks"]), read_only=True)
-    heads = [next(ws.iter_rows(values_only=True))[5] for ws in wb.worksheets]
-    check("SF7 the register's headers name gross and net weights", heads[:2] == ["Gross wt (g)"] * 2 and
-          heads[2:] == ["Net wt (g)"] * 2, "%s" % heads)
-    # SF8 GC-1's two products in scope: both under 10, and PH-QP-07 3.2 keeps them out
-    gc_n, gc_out = {}, {}
-    with open(os.path.join(TARGET, K.FILES["gc1"]), encoding="utf-8") as f:
-        for r in csv.DictReader(f):
-            gc_n[r["product_no"]] = gc_n.get(r["product_no"], 0) + 1
-            gc_out[r["product_no"]] = gc_out.get(r["product_no"], 0) + (r["verdict"] == "OUT")
-    gc = {c: 1e5 * gc_out[c] / gc_n[c] for c in gc_n}
-    check("SF8 GC-1's products are out of scope and under 10 either way", max(gc.values()) < P.LIMIT_PER_100K and
-          "are not configured" in pol1, "%s" % {k: round(v, 2) for k, v in gc.items()})
-    # SF9 more than 10 against 10 or more: no product sits between 3 and 50
-    rates = [fig["golden"][c]["rate"] for c in cands]
-    check("SF9 no rate between 3 and 50", not any(3 <= x <= 50 for x in rates) or
-          min(fig["golden"][c]["rate"] for c in call) > 40)
-    # SF10 and SF11 are the asks' devices, asserted in A below
+    # ---------------------------------------------------------------- input gates and realism
+    cats = {"spreadsheet" if f.endswith((".csv", ".xlsx")) else "text" if f.endswith(".pdf") else "image" for f in files}
+    check("ten or more usable files", len(files) >= 10, len(files))
+    check("two or more categories", len(cats) >= 2, cats)
+    n_q = sum(1 for _ in open(os.path.join(target, build.FILES["qaqc"]))) - 1
+    check("a long messy CSV (the QAQC results) of 500 rows or more", n_q >= 500, n_q)
+    for d in (build.FILES["metallurgy"], build.FILES["survey"]):
+        check("distractor %s ships and the solution never reads it" % d, d in files and d not in S.FILES.values())
+    check("no file name says distractor, decoy or trap", not any(re.search(r"distract|decoy|trap", f, re.I) for f in files))
+    rows = list(csv.DictReader(open(os.path.join(target, build.FILES["assays"]))))
+    check("assays carry values under detection", sum(r["au"].startswith("<") for r in rows) >= 1)
+    check("assays carry screen fire re-assays as second rows", sum(r["method"] == "SFA" for r in rows) > 20)
+    check("two laboratories and two unit spellings", len({r["laboratory"] for r in rows}) == 2 and
+          len({r["unit"] for r in rows}) == 2)
+    col = list(csv.DictReader(open(os.path.join(target, build.FILES["collars"]))))
+    check("collars on two grids", len({r["grid"] for r in col}) == 2)
+    ids = sorted(int(r["hole_id"][4:]) for r in col if r["hole_id"].startswith("MCRC"))
+    steps = {b - a for a, b in zip(ids, ids[1:])}
+    check("hole numbers are not one arithmetic run", len(steps) >= 2, steps)
+    for f in files:
+        if f.endswith(".csv"):
+            check("no em dash in %s" % f, "—" not in open(os.path.join(target, f), encoding="utf-8").read())
 
-    # H: generator patterns
-    import pyarrow.parquet as pq
-    t = pq.read_table(os.path.join(TARGET, K.FILES["doses"])).to_pydict()
-    per = {}
-    for s_, tt in zip(t["compounder_sn"][:60000], t["fill_end_time"][:60000]):
-        per.setdefault(s_, []).append(dt.datetime.fromisoformat(tt))
-    gaps = []
-    for s_, xs in per.items():
-        xs.sort()
-        gaps += [(b - a).total_seconds() for a, b in zip(xs, xs[1:]) if (b - a).total_seconds() < 300]
-    vals, cnt = np.unique(np.array(gaps), return_counts=True)
-    check("H dose times have no fixed step", len(vals) >= 15 and cnt.max() < 0.3 * len(gaps),
-          "%d distinct gaps, the commonest %.0f per cent" % (len(vals), 100 * cnt.max() / len(gaps)))
-    with open(os.path.join(TARGET, K.FILES["events"]), encoding="utf-8") as f:
-        lots = sorted({r["set_lot"] for r in csv.DictReader(f)})
-    nums = [int(x.split("-")[1]) for x in lots]
-    check("H set lots have no fixed step", len({b - a for a, b in zip(sorted(nums), sorted(nums)[1:])}) > 50)
-    stamps = []
-    from pypdf import PdfReader
-    import pyarrow.parquet as pq
-    for k, fn in K.FILES.items():
-        path = os.path.join(TARGET, fn)
-        if fn.endswith(".pdf"):
-            data = open(path, "rb").read()
-            c = re.search(rb"/CreationDate\s*\(D:(\d{14})", data).group(1)
-            meta = PdfReader(path).metadata
-            check("H %s exported by LibreOffice Writer, no library in its bytes" % fn,
-                  (meta.get("/Producer") or "").startswith("LibreOffice") and meta.get("/Creator") == "Writer"
-                  and b"ReportLab" not in data and b"reportlab" not in data, "%s / %s" % (meta.get("/Producer"),
-                                                                                     meta.get("/Creator")))
-            check("H %s carries a real Subject and the issuing body as Author" % fn,
-                  (meta.get("/Subject") or "") not in ("", "(unspecified)")
-                  and (P.ORG in (meta.get("/Author") or "") or P.HOSPITAL in (meta.get("/Author") or "")),
-                  "%s / %s" % (meta.get("/Subject"), meta.get("/Author")))
-            stamps.append(c)
-        if fn.endswith(".parquet"):
-            md = pq.ParquetFile(path).metadata
-            check("H %s names no writer" % fn, not md.created_by and not md.metadata, repr(md.created_by))
-        if fn.endswith(".xlsx"):
-            app = zipfile.ZipFile(path).read("docProps/app.xml").decode()
-            check("H %s app.xml as Excel saves it" % fn, "TitlesOfParts" in app and "<AppVersion>16.0300<" in app)
-            core = zipfile.ZipFile(path).read("docProps/core.xml").decode()
-            who = re.findall(r"<(?:dc:creator|cp:lastModifiedBy)\b[^>]*>([^<]*)<", core)
-            check("H %s names the issuing body, not a person, as creator and last saver" % fn,
-                  len(who) == 2 and all(P.ORG in w or P.HOSPITAL in w for w in who), "%s" % who)
-        if fn.endswith(".xlsx"):
-            z = zipfile.ZipFile(path)
-            core = z.read("docProps/core.xml").decode()
-            c = re.search(r"<dcterms:created[^>]*>([^<]*)<", core).group(1)
-            m = re.search(r"<dcterms:modified[^>]*>([^<]*)<", core).group(1)
-            check("H %s created before modified" % fn, c < m, "%s %s" % (c, m))
-            stamps.append(c)
-    check("H every document has its own creation stamp", len(set(stamps)) == len(stamps))
-
-    # A: the asks
-    a_utc = F.ask_a(rec, utc_as_local=True)
-    a_gold = F.ask_a(rec)
-    moved = sum(1 for k in a_gold if a_gold[k] != a_utc.get(k))
-    check("A SF10 ask A: reading UTC as local time moves figures", moved >= 40, "%d of %d" % (moved, len(a_gold)))
-    a_ser = F.ask_a(rec, by_serial=True)
-    check("A SF10 ask A: PC-3 has two serials", len({k[0] for k in a_ser}) == 6)
-    b_rows = F.ask_b(rec, rows_not_lots=True, target=TARGET)
-    b_gold = F.ask_b(rec)
-    moved = sum(1 for c in cands if b_rows[c] != b_gold[c])
-    check("A SF11 ask B: counting SET_UP rows moves figures", moved >= 10, "%d of %d" % (moved, len(cands)))
-
-    # L: words no shipped document carries
-    banned = re.compile(r"\b(wear|wears|worn|drift|drifts|fatigue|degrad\w*|litres? pumped|pumped|overrun)\b", re.I)
-    hits = []
-    for fn in (K.FILES["policy"], K.FILES["sop"]):
-        txt = subprocess.run(["pdftotext", "-layout", os.path.join(TARGET, fn), "-"], capture_output=True, text=True).stdout
-        hits += [(fn, m.group(0)) for m in banned.finditer(txt)]
-    body = open(os.path.join(TARGET, K.FILES["request"]), encoding="utf-8", errors="ignore").read()
-    hits += [("request", m.group(0)) for m in banned.finditer(body)]
-    check("L no shipped document names the step", not hits, "%s" % hits[:3])
-
-    # G: the memo's claims
-    weighed = {id(x["dose"]) for x in w["checks"]}
-    for c in ("P0412", "P0507"):
-        bad = [d for d in w["doses"] if d["product"] == c and d["status"] == "COMPLETE" and abs(d["dev"]) > 5]
-        k = sum(1 for d in bad if id(d) in weighed)
-        check("G almost none of %s's out-of-tolerance doses were weighed" % c, k <= 0.1 * max(1, len(bad)),
-              "%d of %d weighed" % (k, len(bad)))
-    check("G every product off the list is under 3", max(fig["golden"][c]["rate"] for c in cands if c not in call) < 3)
-    check("G midazolam does not move with litres pumped", abs(fig["fits"]["P0702"]["loss_per_litre"]) < 0.1)
-    check("G the bags start high", min(fig["fits"][c]["start"] for c in ("P0610", "P0614", "P0618")) > 1.5)
-
-    # I: the 90 per cent interval is graded only by where the limit sits against it, and that side must hold under
-    # every reasonable way to draw the interval: sets resampled under other seeds, each resample's count drawn as
-    # realised, the weighed doses resampled one by one, and each model of the line's set-to-set start
-    want = {c: ("below" if c in call else "above") for c in cands}
-    check("I the golden interval puts the limit below every product on the list and above every other",
-          all(fig["interval"][c]["limit"] == want[c] for c in cands),
-          "%s" % {c: fig["interval"][c]["limit"] for c in cands})
-    variants = {}
-    for c in cands:
-        v = [F.interval(rec, c, reps=400, seed=s) for s in (1, 2)]
-        v.append(F.interval(rec, c, reps=400, seed=3, realised=True))
-        v.append(F.interval_doses(rec, c, reps=300))
-        variants[c] = v
-    flips = [(c, i) for c in cands for i, (lo, hi) in enumerate(variants[c]) if F.side(lo, hi) != want[c]]
-    check("I SF12 every interval method puts the limit on the golden side", not flips, "%s" % flips)
-    lows = {c: min(lo for lo, _ in variants[c] + [(fig["interval"][c]["lo"], 0)]) for c in call}
-    highs = {c: max(hi for _, hi in variants[c] + [(0, fig["interval"][c]["hi"])]) for c in cands if c not in call}
-    check("I SF12 the closest product on the list keeps its lower bound over the limit", min(lows.values()) > 10.5,
-          "%s" % {c: round(v, 1) for c, v in lows.items()})
-    check("I SF12 every product off the list keeps its upper bound under a tenth of the limit",
-          max(highs.values()) < 1.0, "%.2f" % max(highs.values()))
-    fam_side = [(c, m) for c in cands for m, v in fig["family"][c].items() if (v > 10) != (c in call)]
-    check("I SF12 every model of the set-to-set start keeps each estimate on its side", not fam_side, "%s" % fam_side)
-
-    print("%d checks, %d failed" % (N[0], len(FAIL)))
-    return 1 if FAIL else 0
+    fails = [r for r in RESULTS if not r[1]]
+    for label, ok, detail in RESULTS:
+        if not ok:
+            print("FAIL  %s  %s" % (label, detail))
+    print("checks: %d of %d PASS" % (len(RESULTS) - len(fails), len(RESULTS)))
+    return 0 if not fails else 1
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(main(sys.argv[1], sys.argv[2]))

@@ -1,49 +1,49 @@
-"""task3 architecture 2: metadata.json (file roles, provenance, distractors)."""
+"""task3 architecture 3: metadata.json (file roles, provenance, distractors)."""
 import json
 import os
 
 LIC = "CC0 1.0 (synthetic, authored for this task)"
 FILES = [
-    ("outfall_014_flow_monitoring_2014-2025.parquet", "evidence",
-     "synthetic: the authority's flow monitoring export for the Outfall 014 overflow pipe, both loggers", "2026-01-16"),
-    ("wrp_influent_hourly_2014-2025.csv", "evidence",
-     "synthetic: the plant historian's hourly influent export for the Southside and Northside WRPs", "2026-01-16"),
-    ("outfall_regulator_register.csv", "evidence",
-     "synthetic: the authority's register of CSO regulators, receiving sewers and plants", "2025-11-03"),
-    ("TM-7_clay_street_storage_alternatives.pdf", "evidence",
-     "synthetic: the consultant's technical memorandum on the Clay Street storage alternatives", "2025-12-18"),
-    ("consent_decree_appendix_C_cso_control.pdf", "evidence",
-     "synthetic: the authority's conformed copy of the consent decree's Appendix C", "2021-09-27"),
-    ("northside_tank_scada_2020-2025.csv", "evidence",
-     "synthetic: the Northside storage tank's SCADA export, 15-minute values", "2026-01-16"),
-    ("northside_tank_om_manual_section4.pdf", "evidence",
-     "synthetic: section 4 of the Northside storage tank's O&M manual", "2020-04-24"),
-    ("cmms_work_orders_2020-2025.csv", "evidence",
-     "synthetic: the maintenance system's completed work orders for the tank, pump station and nearby assets",
-     "2026-01-16"),
-    ("rain_gauge_tips_2014-2025.csv", "evidence",
-     "synthetic: the rain gauge network's tip export, one row per tip", "2026-01-16"),
-    ("rain_gauge_inventory.csv", "evidence", "synthetic: the rain gauge network's inventory", "2024-05-08"),
-    ("rain_gauge_field_service_2014-2025.xlsx", "evidence",
-     "synthetic: the field services technicians' visit log for the rain gauges", "2026-01-09"),
-    ("wennick_river_stage_daily_2014-2025.csv", "distractor",
-     "synthetic: daily mean stage at the river gauge below the city", "2026-01-12"),
-    ("cso_overflow_notifications_2025.csv", "distractor",
-     "synthetic: the 2025 public overflow notifications raised by the outfall detectors", "2026-01-05"),
+    ("PW-1_constant_rate_2026-09_transducers.csv", "evidence",
+     "synthetic: Tillbrook Hydrogeologic's logger export for the 72-hour test of PW-1, six wells, one-minute absolute "
+     "pressure from two logger brands", "2026-09-21"),
+    ("barologger_BL-2231_2026-09.csv", "evidence", "synthetic: the on-site barologger, five-minute values in UTC",
+     "2026-09-21"),
+    ("PW-1_constant_rate_2026-09_field_readings.xlsx", "evidence",
+     "synthetic: the test's field notes (loggers, tape readings, discharge, events)", "2026-09-21"),
+    ("harlow_springs_MOR_well_production_2009-2026.csv", "evidence",
+     "synthetic: Harlow Springs Utilities' monthly operating report extract, production by well", "2026-10-07"),
+    ("mill_street_MW_water_levels_2008-2026.csv", "evidence",
+     "synthetic: the Mill Street monitoring well's tape readings from the operating reports", "2026-10-07"),
+    ("cvwcd_network_water_levels_2005-2026.csv", "evidence",
+     "synthetic: the conservancy district's network water-level export", "2026-10-02"),
+    ("cvwcd_well_register.xlsx", "evidence", "synthetic: the district's well register with measuring-point history",
+     "2026-10-02"),
+    ("CVWCD_Rule_WR-4_groundwater_withdrawal_permits.pdf", "evidence",
+     "synthetic: the district's withdrawal permit rule as amended June 2023", "2023-06-20"),
+    ("reidel_road_WR-4_application_requested_schedules.pdf", "evidence",
+     "synthetic: the utility's application summary, requested schedules and the Mill Street projection", "2026-10-30"),
+    ("drillers_logs_corrin_valley_wells.pdf", "evidence", "synthetic: drillers' logs compiled from the district's well records",
+     "2026-10-02"),
+    ("CVWCD_bedrock_surface_plate3_harlow_reach.png", "evidence",
+     "synthetic: Plate 3 of the district's 2019 bedrock surface study, the Harlow reach, wells added 2026", "2026-10-02"),
+    ("PW-1_step_drawdown_2026-08-27.csv", "distractor", "synthetic: the August step-drawdown test of PW-1", "2026-08-28"),
+    ("PW-1_raw_water_quality_2026-09.xlsx", "distractor", "synthetic: the raw-water quality results from the test",
+     "2026-10-05"),
 ]
 DISTRACTOR_REASONS = {
-    "wennick_river_stage_daily_2014-2025.csv": "the receiving river's stage looks relevant to how an outfall discharges, "
-    "but the outfall meter records the discharge itself and no criterion turns on the river",
-    "cso_overflow_notifications_2025.csv": "the notices count 2025's overflows without a tank; the decree evaluates "
-    "the whole 2014 to 2025 metered record and no ask needs the notices",
+    "PW-1_step_drawdown_2026-08-27.csv": "the step test sizes PW-1's well losses, which change the drawdown inside the "
+    "pumping well and nowhere in the aquifer; the sentinel's drawdown never reads it",
+    "PW-1_raw_water_quality_2026-09.xlsx": "the raw-water chemistry bears on treatment, not on the drawdown limit",
 }
 
 
 def write(task_dir):
-    md = {"task": "task3", "architecture": 2, "setting": "2026-01-16",
+    md = {"task": "task3", "architecture": 3, "setting": "2026-11-06",
           "files": [dict(name=n, role=r, source=s, date=d, license=LIC) for n, r, s, d in FILES],
-          "distractors": [n for n, r, _, _ in FILES if r == "distractor"],
+          "distractor_files": [n for n, r, _, _ in FILES if r == "distractor"],
           "distractor_reasons": DISTRACTOR_REASONS,
-          "stated_inputs": [n for n, r, _, _ in FILES if r != "distractor"],
-          "deliverables": ["clay_street_storage_evaluation.xlsx", "clay_street_tank_selection_board.pptx"]}
+          "stated_inputs": ["450", "700", "1,000", "1,250", "9.0", "2.1", "2.2", "4.1", "4.2", "4.3", "4.4", "1.2",
+                            "2027", "2046", "0.56", "0.44", "548"],
+          "deliverables": ["reidel_road_sentinel_forecast.xlsx", "reidel_road_WR-4_demonstration.pdf"]}
     json.dump(md, open(os.path.join(task_dir, "metadata.json"), "w"), indent=1)

@@ -1,97 +1,53 @@
-"""task3 architecture 2: the cracker, the mirror and the full includer, run on the cut pack; the pair ceiling and
-the mirror's leakage on the asks.
+"""task3 architecture 3: the pair ceiling and the shallow keep, from generator/rungs.json (the rungs run on the cut
+pack). Scoring on supplemental-stumping Part 0: the call and its components 38, the instructions 7, the asks 55
+shared equally over the graded ask figures (A1's four peaks, A2's Mill Street drawdown, A3's domestic well).
 
-    cracker        lands the call (Alternative C) and is as careful on the asks as the battery and the filed
-                   documents take it: exact duplicate tips dropped; each cal-check visit's tips removed over the
-                   arrival-to-departure window the field log gives, read against the tips' own stamps; every tip at
-                   the inventory's 0.01 in; the Northside returns from the pumps' run states at the O&M station curve,
-                   or (its second try, the better of the two kept) from the level falls through Table 4-1.
-    mirror         stops at the default path (Alternative B, the pumps' rating) and takes the cracker's ask paths.
-    full includer  finds every device the asks carry: the TipLink loggers' UTC, the pours by their steady run, the
-                   0.2 mm mechanism, the re-mounted transducer.
-Scoring on supplemental-stumping Part 0: the call and its components 38, the instructions 7, the asks 55 shared
-equally over the 53 ask figures (48 rainfall cells, 5 returned volumes). A cell is kept when it matches the golden
-at the asked rounding.
+    cracker   lands the call by the deep step but takes the shallow form of each ask's second judgment: the walls
+              left out (the record fits without them), the far wells anchored to 2005 to 2008 for MS-MW
+    mirror    the default path (the leaky aquifer calibrated against CV-07)
+    full      the golden route with every second judgment
 
-    python3 ceiling.py [target]"""
-import csv
-import datetime as dt
+    python3 ceiling.py [rungs.json]"""
 import json
+import math
 import os
 import sys
 
-import numpy as np
-
 HERE = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, HERE)
-import golden as G  # noqa: E402
-
-TARGET = sys.argv[1] if len(sys.argv) > 1 else os.path.join(os.path.dirname(HERE), "target")
-W_CALL, W_IF, W_ASK = 38.0, 7.0, 55.0
-R_OFF = 5.0           # what a response off the call keeps of the call's 38 (the alternatives' table half right)
-CURVE = {1: 4.0, 2: 7.4, 3: 10.2}
+W_CALL, W_IF, W_ASK, R_OFF = 38.0, 7.0, 55.0, 5.0
 
 
-def pump_route(target):
-    tot = {y: 0.0 for y in range(2021, 2026)}
-    with open(os.path.join(target, "northside_tank_scada_2020-2025.csv"), newline="") as f:
-        for r in csv.DictReader(f):
-            y = int(r["Timestamp"][:4])
-            n = int(r["NT_P1_RUN"]) + int(r["NT_P2_RUN"]) + int(r["NT_P3_RUN"])
-            if n and y in tot:
-                tot[y] += CURVE[n] / 96.0
-    return tot
+def ft(x):
+    return int(math.floor(x + 0.5))
 
 
-def keep1(a, gold):
-    return sum(int(round(a[g][m] + 1e-9, 2) == round(gold[g][m] + 1e-9, 2)) for g in gold for m in range(12))
+def cells(r, msmw=None, dw=None):
+    return [ft(r["peaks"][k]) for k in ("450", "700", "1000", "1250")] + [ft(msmw if msmw is not None else r["msmw_2025"]),
+                                                                          ft(dw if dw is not None else (r["dw"] or 0))]
 
 
-def keep2(a, gold):
-    return sum(int(round(a[y] + 1e-9) == round(gold[y] + 1e-9)) for y in gold)
+def score(path_cells, gold_cells, on_call):
+    keep = sum(a == b for a, b in zip(path_cells, gold_cells)) / len(gold_cells)
+    return (W_CALL if on_call else R_OFF) + W_IF + W_ASK * keep, keep
 
 
-def main():
-    gold1 = G.ask1(TARGET)
-    gold2 = G.ask2(TARGET)[0]
-    base1 = G.ask1(TARGET, handle_clock=False, pours="window", bucket=False)
-    lvl = G.ask2(TARGET, offset=False, inflow=False)[0]
-    pr = pump_route(TARGET)
-    base2 = max((pr, lvl), key=lambda a: keep2(a, gold2))
-    paths = {
-        "cracker/mirror (no device found)": (base1, base2),
-        "one crack: pours by their steady run": (G.ask1(TARGET, handle_clock=False, pours="steady", bucket=False), base2),
-        "one crack: the loggers' clocks": (G.ask1(TARGET, handle_clock=True, pours="window", bucket=False), base2),
-        "one crack: the 0.2 mm mechanisms": (G.ask1(TARGET, handle_clock=False, pours="window", bucket=True), base2),
-        "one crack: the re-mounted transducer": (base1, G.ask2(TARGET, offset=True, inflow=False)[0]),
-        "one crack: the inflow while pumping": (base1, G.ask2(TARGET, offset=False, inflow=True)[0]),
-        "two cracks: pours and mechanisms": (G.ask1(TARGET, handle_clock=False, pours="steady", bucket=True), base2),
-        "two cracks: transducer and inflow": (base1, gold2),
-        "full includer": (gold1, gold2),
-    }
-    n = 48 + 5
-    rows = {}
-    for name, (a1, a2) in paths.items():
-        k1, k2 = keep1(a1, gold1), keep2(a2, gold2)
-        rows[name] = (k1, k2, (k1 + k2) / n)
-        print("%-42s rainfall %2d/48  returns %d/5  ask keep %.3f" % (name, k1, k2, (k1 + k2) / n))
-
-    def pair_of(L):
-        return ((W_CALL + W_IF + W_ASK * L) + (R_OFF + W_IF + W_ASK * L)) / 2
-    L = rows["cracker/mirror (no device found)"][2]
-    singles = {k: v[2] for k, v in rows.items() if k.startswith("one crack")}
-    worst = max(singles, key=singles.get)
-    on = W_CALL + W_IF + W_ASK * L
-    off = R_OFF + W_IF + W_ASK * L
-    print("cracker on the call %.1f; mirror off the call %.1f; pair %.1f; mirror leakage %.1f per cent of ask weight"
-          % (on, off, pair_of(L), 100 * L))
-    print("worst single crack (%s, both top responses): ask keep %.3f, pair %.1f"
-          % (worst, singles[worst], pair_of(singles[worst])))
-    json.dump(dict(rows={k: list(v) for k, v in rows.items()}, pair=round(pair_of(L), 1),
-                   mirror_leak=round(100 * L, 1), worst_single=worst,
-                   worst_single_keep=round(singles[worst], 3), worst_single_pair=round(pair_of(singles[worst]), 1)),
-              open(os.path.join(HERE, "ceiling.json"), "w"), indent=1)
+def main(rp):
+    R = json.load(open(rp))
+    g = R["golden"]
+    gold = cells(g)
+    crack = cells(R["walls_none"], msmw=R["msmw_anchor_slip"])
+    mirror = cells(R["rung1_cv07"])
+    full_s, _ = score(gold, gold, True)
+    c_s, c_keep = score(crack, gold, R["walls_none"]["call"] == g["call"])
+    m_s, m_keep = score(mirror, gold, R["rung1_cv07"]["call"] == g["call"])
+    print("gold cells    %s" % gold)
+    print("cracker cells %s  score %.1f (keep %.2f)" % (crack, c_s, c_keep))
+    print("mirror cells  %s  score %.1f (keep %.2f)" % (mirror, m_s, m_keep))
+    print("pair ceiling (cracker with mirror) %.1f; full includer with mirror %.1f" % ((c_s + m_s) / 2, (full_s + m_s) / 2))
+    print("shallow keep %.1f per cent of ask weight" % (100 * m_keep))
+    json.dump({"pair_ceiling": round((c_s + m_s) / 2, 1), "full_with_mirror": round((full_s + m_s) / 2, 1),
+               "shallow_keep": round(100 * m_keep, 1)}, open(os.path.join(HERE, "ceiling.json"), "w"), indent=1)
 
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv[1] if len(sys.argv) > 1 else os.path.join(HERE, "rungs.json"))

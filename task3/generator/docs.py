@@ -1,6 +1,6 @@
-"""task3 architecture 2: the pack's documents. The consent decree's Appendix C (the authority's conformed copy),
-Ostrem Calder's TM-7 and section 4 of the Northside tank's O&M manual, each written as a Word document and exported
-to PDF by LibreOffice Writer (officepdf), with the issuing office as author and the document's own dates."""
+"""task3 architecture 3: the pack's documents. The district's Rule WR-4, Harlow Springs Utilities' application
+summary and the drillers' logs, each written as a Word document and exported to PDF by LibreOffice Writer
+(officepdf), with the issuing body as author and the document's own dates."""
 import datetime as dt
 
 import reportlab.rl_config
@@ -10,12 +10,12 @@ from reportlab.lib.units import mm
 from reportlab.platypus import PageBreak, Paragraph, Spacer, Table, TableStyle
 
 import officepdf as O
+import pack as K
 import params as P
-import world as W
 
 reportlab.rl_config.invariant = 1
-ET_STD = dt.timezone(dt.timedelta(hours=-5))
-ET_DST = dt.timezone(dt.timedelta(hours=-4))
+EST = dt.timezone(dt.timedelta(hours=-5))
+EDT = dt.timezone(dt.timedelta(hours=-4))
 SS = getSampleStyleSheet()
 BODY = ParagraphStyle("b", parent=SS["Normal"], fontName="Helvetica", fontSize=9.6, leading=12.8, spaceAfter=5)
 H1 = ParagraphStyle("h1", parent=SS["Heading1"], fontName="Helvetica-Bold", fontSize=13.5, leading=17, spaceAfter=6)
@@ -24,7 +24,8 @@ H2 = ParagraphStyle("h2", parent=SS["Heading2"], fontName="Helvetica-Bold", font
 SMALL = ParagraphStyle("s", parent=BODY, fontSize=8.0, leading=10.2, textColor=colors.HexColor("#444444"))
 CELL = ParagraphStyle("c", parent=BODY, fontSize=8.4, leading=10.4, spaceAfter=0)
 CELLB = ParagraphStyle("cb", parent=CELL, fontName="Helvetica-Bold")
-AUTH = "Quessling Sewer Authority"
+DISTRICT = "Corrin Valley Water Conservancy District"
+UTILITY = "Harlow Springs Utilities"
 
 
 def _esc(x):
@@ -39,149 +40,154 @@ def _table(rows, widths):
     return t
 
 
-def appendix_c(path):
-    s = [Paragraph("Appendix C: Combined Sewer Overflow Control Performance", H1),
-         Paragraph("Consent Decree, United States and Commonwealth of Pennsylvania v. Quessling Sewer Authority. "
-                   "Conformed copy incorporating the 2021 modification; the Authority's file copy.", SMALL),
+RULE_SENTINELS = [("North reach", "OW-N", "Corrin Valley aquifer, Brennan Road to the county line", "6.0"),
+                  ("Harlow reach", "OW-S", "Corrin Valley aquifer, Brennan Road to the Little Ossey confluence",
+                   "%.1f" % P.LIMIT),
+                  ("Ossey reach", "OW-E", "Little Ossey tributary valley aquifer", "7.5")]
+
+
+def rule_wr4(path):
+    s = [Paragraph("Rule WR-4: Groundwater Withdrawal Permits", H1),
+         Paragraph("Corrin Valley Water Conservancy District. Adopted by the Board of Directors 12 March 2019 under "
+                   "the District's plan for the Corrin Valley aquifer; amended 14 June 2023 (Table 1).", SMALL),
          Spacer(1, 4),
-         Paragraph("1. The system", H2),
-         Paragraph("1.1 The Authority owns and operates the combined sewer system serving the City of Quessling, the "
-                   "Southside Water Reclamation Plant and the Northside Water Reclamation Plant, and the fourteen "
-                   "combined sewer outfalls listed in Table C-1, each of which discharges to the Wennick River.", BODY),
-         Paragraph("1.2 The Northside Water Reclamation Plant is rated at 45 MGD average daily flow and 125 MGD peak "
-                   "hydraulic capacity. The Northside storage tank at Outfall 006 (8.0 million gallons) was placed in "
-                   "service on 1 May 2020 under Phase 1 of this Decree.", BODY),
-         Paragraph("1.3 The Southside Water Reclamation Plant is rated at 78 MGD average daily flow and 140 MGD peak "
-                   "hydraulic capacity at the headworks.", BODY),
-         Paragraph("2. Performance criterion", H2),
-         Paragraph("2.1 The criterion in 2.4 applies to each combined sewer outfall in Table C-1 and to the discharges "
-                   "from that outfall to the Wennick River.", BODY),
-         Paragraph("2.2 An untreated overflow event is any discharge from a combined sewer outfall to the receiving "
-                   "water. Discharges from the same outfall that are separated by less than 24 hours without discharge "
-                   "are a single event.", BODY),
-         Paragraph("2.3 The average year is the period of record of the Authority's outfall flow monitoring from 1 "
-                   "January 2014 through 31 December 2025, Eastern time. The number of untreated overflow events in an "
-                   "average year is the number of events in that period divided by twelve. The performance of a "
-                   "control measure not yet constructed is determined against the same period of record.", BODY),
-         Paragraph("2.4 Each outfall shall have no more than four untreated overflow events in an average year once "
-                   "its control measures are in service.", BODY),
-         Paragraph("3. Remaining control measure: Outfall 014 (Clay Street)", H2),
-         Paragraph("3.1 The Authority shall select a storage control measure for Outfall 014 from the alternatives "
-                   "evaluated in its facilities planning, issue the design task order by 1 March 2026, submit the "
-                   "Facility Plan for Outfall 014 to EPA and the Department by 30 June 2026, and place the control "
-                   "measure in service by 31 December 2029.", BODY),
-         Paragraph("4. Annual report", H2),
-         Paragraph("4.1 The Authority's annual report for each calendar year shall include the rainfall recorded at "
-                   "each of the Authority's rain gauges in each calendar month, in inches, months taken in Eastern "
-                   "time; the volume each storage facility returned to the interceptor in the year, in million "
-                   "gallons; and the untreated overflow events at each outfall.", BODY),
+         Paragraph("1. Scope", H2),
+         Paragraph("1.1 This rule applies to any new or increased withdrawal of groundwater from the Corrin Valley "
+                   "aquifer or a tributary valley aquifer within the District at a facility capable of withdrawing "
+                   "100,000 gallons or more in a day.", BODY),
+         Paragraph("1.2 A permit issued under this rule is for a term of twenty years ending on 31 December of the "
+                   "twentieth calendar year after the year the application is filed.", BODY),
+         Paragraph("2. Definitions", H2),
+         Paragraph("2.1 <b>Drawdown</b> means the lowering of the potentiometric surface of the aquifer caused by "
+                   "withdrawals.", BODY),
+         Paragraph("2.2 <b>Existing permitted withdrawal</b> means a withdrawal from the same aquifer authorised by a "
+                   "District permit or registration on the date an application is filed, at the rates the holder's "
+                   "most recent filed projection gives for each year of the new permit's term.", BODY),
+         Paragraph("2.3 <b>Sentinel well</b> means a District monitoring well listed in Table 1 for an aquifer reach. "
+                   "The limit in Table 1 protects the domestic and farm wells of that reach.", BODY),
+         Paragraph("2.4 <b>Requested schedule</b> means the monthly withdrawal an applicant proposes for each month of "
+                   "the permit term.", BODY),
+         Paragraph("3. Application", H2),
+         Paragraph("3.1 An application shall include: (a) the requested schedule, or up to four alternative "
+                   "requested schedules, at the proposed facility; (b) a constant-rate aquifer test of at least 72 "
+                   "hours at a proposed production well, with observation wells, and the test's records; (c) the "
+                   "applicant's records of its existing withdrawals and of water levels in its own monitoring wells "
+                   "in the same reach; and (d) the demonstration required by section 4.", BODY),
+         Paragraph("3.2 The District's network water-level records and well register are provided to applicants on "
+                   "request.", BODY),
+         Paragraph("4. Demonstration", H2),
+         Paragraph("4.1 The applicant shall demonstrate that, under the requested schedule, the drawdown at the "
+                   "sentinel well of the reach, from the proposed withdrawal together with all existing permitted "
+                   "withdrawals in the reach, will not exceed the limit in Table 1 in any month of the permit term.",
+                   BODY),
+         Paragraph("4.2 Where an application carries alternative requested schedules, the demonstration is made for "
+                   "each alternative, and the District will permit the largest alternative that meets 4.1.", BODY),
+         Paragraph("4.3 The demonstration states, for each alternative, the greatest monthly drawdown at the "
+                   "sentinel well in the final year of the permit term.", BODY),
+         Paragraph("4.4 For the alternative the District will permit, the demonstration also states the greatest "
+                   "monthly drawdown in the final year of the term at the registered domestic well nearest the "
+                   "proposed facility.", BODY),
+         Paragraph("5. Conditions", H2),
+         Paragraph("5.1 A permit holder reports monthly withdrawals by source to the District each quarter and "
+                   "measures each of its monitoring wells at least monthly.", BODY),
+         Paragraph("5.2 The District may require a permit holder to reduce a withdrawal where the drawdown at a "
+                   "sentinel well exceeds the limit in Table 1.", BODY),
          Spacer(1, 4),
-         Paragraph("Table C-1. Combined sewer outfalls", H2),
-         _table([["Outfall", "Location", "Regulator", "Tributary plant"]] +
-                [[o, loc, r, pl] for o, loc, r, pl in OUTFALLS], [22, 62, 24, 50])]
-    O.build(path, s, "Appendix C: Combined Sewer Overflow Control Performance", AUTH,
-            "Consent decree Appendix C, CSO control performance, conformed copy (2021 modification)",
-            "Consent Decree, Appendix C (conformed copy)",
-            dt.datetime(2021, 9, 27, 15, 12, tzinfo=ET_DST), dt.datetime(2021, 9, 27, 15, 40, tzinfo=ET_DST))
+         Paragraph("Table 1. Sentinel wells and drawdown limits (amended 14 June 2023)", CELLB),
+         _table([["Reach", "Sentinel well", "Aquifer", "Limit (ft)"]] + [list(r) for r in RULE_SENTINELS],
+                [26, 24, 92, 22])]
+    O.build(path, s, "Rule WR-4: Groundwater Withdrawal Permits", DISTRICT,
+            "Rule WR-4, groundwater withdrawal permits, as amended 14 June 2023", "CVWCD Rule WR-4",
+            dt.datetime(2023, 6, 14, 10, 5, tzinfo=EDT), dt.datetime(2023, 6, 20, 15, 31, tzinfo=EDT))
 
 
-OUTFALLS = [("001", "Front Street at Mill Race", "R-01", "Northside WRP"),
-            ("002", "Cannery Lane", "R-02", "Northside WRP"),
-            ("003", "Bridge Street east abutment", "R-03", "Northside WRP"),
-            ("004", "Water Street", "R-04", "Northside WRP"),
-            ("005", "Locust Avenue", "R-05", "Northside WRP"),
-            ("006", "Northside tank, Pike Street", "R-06", "Northside WRP"),
-            ("007", "Tanner Street", "R-07", "Northside WRP"),
-            ("008", "Market Street", "R-08", "Southside WRP"),
-            ("009", "Ferry Street", "R-09A, R-09B", "Southside WRP"),
-            ("010", "Orchard Avenue", "R-10", "Southside WRP"),
-            ("011", "Depot Street", "R-11", "Southside WRP"),
-            ("012", "Riverside Park", "R-12", "Southside WRP"),
-            ("013", "Wennick Avenue", "R-13", "Southside WRP"),
-            ("014", "Clay Street", "R-14", "Southside WRP")]
-
-
-def tm7(path):
-    rows = [["Alternative", "Storage (MG)", "Dewatering pump station, firm capacity (MGD)", "Site",
-             "Estimated capital cost (USD million, 2025)"]]
-    sites = {"A": "Clay Street lot, single cell", "B": "Clay Street lot, two cells",
-             "C": "Clay Street lot and former rail yard, two cells", "D": "Former rail yard, three cells"}
-    for lab, v, p, c in P.ALTERNATIVES:
-        rows.append([lab, "%.0f" % v, "%.0f" % p, sites[lab], "%.1f" % c])
-    s = [Paragraph("Technical Memorandum 7: Clay Street Storage Alternatives", H1),
-         Paragraph("Quessling Sewer Authority, Outfall 014 Facility Planning. Prepared by Ostrem Calder Engineers "
-                   "(Jesus Thompson, P.E., project engineer). Final, 18 December 2025.", SMALL),
+def application_summary(path):
+    rates = P.OPTIONS
+    s = [Paragraph("Reidel Road Well Field: Withdrawal Permit Application, Requested Schedules", H1),
+         Paragraph("Harlow Springs Utilities, Water Division. For filing with the Corrin Valley Water Conservancy "
+                   "District under Rule WR-4. Draft for the Utilities Board, 30 October 2026.", SMALL),
          Spacer(1, 4),
-         Paragraph("1. Purpose", H2),
-         Paragraph("This memorandum sets out the storage alternatives for Outfall 014 at Clay Street that the Authority "
-                   "will choose among for the design task order required by Appendix C, Section 3 of the Consent "
-                   "Decree. It describes each alternative's storage, dewatering and site; it does not select one.", BODY),
-         Paragraph("2. Background", H2),
-         Paragraph("Outfall 014 drains about 1,900 acres of combined sewershed in the Clay Street, Orchard Hill and "
-                   "lower Midtown neighborhoods. Regulator R-14 at Clay Street diverts dry weather flow and the first "
-                   "of the wet weather flow to the Southside Interceptor, which carries it to the Southside Water "
-                   "Reclamation Plant; flow above the regulator's diversion discharges through Outfall 014 to the "
-                   "Wennick River. The outfall's overflow pipe has carried a flow meter since January 2014; the "
-                   "original area-velocity meter was replaced in June 2019. The Southside plant's influent record "
-                   "for the same period was provided from the plant historian by Tammy Williams, Superintendent, "
-                   "Southside WRP, for the baseline flows chapter of the Facility Plan.", BODY),
-         Paragraph("3. Alternatives", H2),
-         Paragraph("3.1 Four covered concrete storage tanks are carried forward from the screening in TM-5. Each is "
-                   "fed from a new diversion chamber on the Outfall 014 overflow pipe downstream of R-14, so that every "
-                   "flow that would have discharged through the outfall enters the tank until the tank is full; flow "
-                   "arriving at a full tank discharges through the outfall as today.", BODY),
-         _table(rows, [22, 22, 40, 52, 34]),
+         Paragraph("1. The facility", H2),
+         Paragraph("The Reidel Road well field is two production wells, PW-1 and PW-2, 410 ft apart in the Corrin "
+                   "Valley aquifer, completed in June 2026. Each alternative below is shared equally by the two wells. "
+                   "Withdrawals would begin in April 2027, when the Reidel Road treatment plant and the Kestrel Foods "
+                   "connection are commissioned.", BODY),
+         Paragraph("2. Alternative requested schedules", H2),
+         Paragraph("The Board has asked for four alternatives at annual average rates of %s gpm. In each month the "
+                   "rate is the annual average times the month's factor below, the factors following the plant's "
+                   "summer process load and the city's irrigation peak." % ", ".join("{:,}".format(r) for r in rates),
+                   BODY),
+         _table([["Alternative", "Annual average (gpm)", "Annual average (MGD)"]] +
+                [[chr(65 + k), "{:,}".format(r), "%.2f" % (r * 1440 / 1e6)] for k, r in enumerate(rates)],
+                [30, 44, 44]),
          Spacer(1, 4),
-         Paragraph("3.2 Each tank holds its contents until the overflow to it has stopped. Its dewatering pump station "
-                   "then returns the stored flow through a new force main to the Southside Interceptor at manhole SI-1, "
-                   "at the Southside WRP headworks, where it is treated with the plant's influent.", BODY),
-         Paragraph("3.3 Each pump station's firm capacity, with its largest pump out of service, is sized to return a "
-                   "full tank in about 20 hours.", BODY),
-         Paragraph("4. Selection", H2),
-         Paragraph("The Authority will carry forward to design the least-cost alternative that meets the Appendix C "
-                   "criterion at Outfall 014. Costs are planning-level estimates (AACE Class 4) in 2025 dollars and "
-                   "include the diversion chamber, force main and site work.", BODY),
-         Paragraph("5. Next steps", H2),
-         Paragraph("Following the Authority's selection, Ostrem Calder will prepare the design task order scope and "
-                   "the Facility Plan chapters for the selected alternative.", BODY)]
-    O.build(path, s, "TM-7 Clay Street Storage Alternatives", "Ostrem Calder Engineers",
-            "Outfall 014 facility planning, technical memorandum 7: Clay Street storage alternatives",
-            "Ostrem Calder Engineers  |  Quessling Sewer Authority Outfall 014 Facility Planning  |  TM-7 Final",
-            dt.datetime(2025, 12, 18, 10, 5, tzinfo=ET_STD), dt.datetime(2025, 12, 18, 16, 48, tzinfo=ET_STD))
+         _table([["Month"] + [dt.date(2027, m, 1).strftime("%b") for m in range(1, 13)],
+                 ["Factor"] + ["%.2f" % f for f in P.NEW_SEASON]], [18] + [12.5] * 12),
+         Paragraph("3. The Mill Street wells", H2),
+         Paragraph("The city's existing supply is the Mill Street well field (TW-1, in service March 2009; TW-2, in "
+                   "service June 2014), registered with the District as an existing permitted withdrawal. The "
+                   "projection below is the one filed with the District in the 2026 water supply plan update; TW-1 "
+                   "carries 56 per cent of each month's withdrawal and TW-2 44 per cent. Monthly withdrawals are the "
+                   "annual average times the Mill Street monthly factors.", BODY),
+         _table([["Year", "Annual average (gpm)"]] +
+                [[str(y), "%.0f" % (P.TOWN_PROJ_BASE * (1 + P.TOWN_PROJ_GROWTH) ** (y - 2026))]
+                 for y in (2026, 2027, 2030, 2035, 2040, 2046)], [30, 44]),
+         Paragraph("Annual averages between the years shown grow at %.1f per cent a year from 2026." %
+                   (P.TOWN_PROJ_GROWTH * 100), SMALL),
+         _table([["Month"] + [dt.date(2027, m, 1).strftime("%b") for m in range(1, 13)],
+                 ["Factor"] + ["%.2f" % f for f in P.TOWN_MONTH_FACTORS]], [18] + [12.5] * 12),
+         Paragraph("4. Supporting records", H2),
+         Paragraph("The 72-hour constant-rate test of PW-1 was run from 09:00 on 14 September to 09:00 on 17 September "
+                   "2026 by Tillbrook Hydrogeologic, with PW-2, OW-1, OW-2, OW-3 and the District's sentinel well "
+                   "OW-S logged; the logger export, the barologger record and the field notes accompany this summary, "
+                   "with the August step test of PW-1. The Mill Street wells' monthly production and the Mill Street "
+                   "monitoring well's readings are from the Water Division's monthly operating reports. The District "
+                   "supplied its network water levels and well register on 2 October 2026.", BODY),
+         Paragraph("5. Wells of the Reidel Road field", H2),
+         _table([["Well", "Purpose", "Screen (ft bgs)", "Distance to PW-1 (ft, taped)"],
+                 ["PW-1", "production", "95 to 135", "0"],
+                 ["PW-2", "production", "93 to 133", "410"],
+                 ["OW-1", "observation", "108 to 118", "150"],
+                 ["OW-2", "observation", "102 to 112", "620"],
+                 ["OW-3", "observation", "105 to 115", "1,450"]], [18, 30, 30, 50])]
+    O.build(path, s, "Reidel Road Well Field: Withdrawal Permit Application, Requested Schedules", UTILITY,
+            "Reidel Road well field, WR-4 application, requested schedules", "Harlow Springs Utilities, Water Division",
+            dt.datetime(2026, 10, 30, 11, 20, tzinfo=EDT), dt.datetime(2026, 10, 30, 16, 2, tzinfo=EDT))
 
 
-def om_section4(path):
-    rows = [["Level (ft)", "Volume (MG)"]]
-    h = 0.0
-    while h <= P.NT_CREST_FT + 1e-9:
-        rows.append(["%.2f" % h, "%.4f" % W.nt_volume_of_depth(h)])
-        h = round(h + (0.1 if h < P.NT_HOPPER_FT - 1e-9 else 1.0), 2)
-    s = [Paragraph("Section 4. Northside Storage Tank and Dewatering Pump Station", H1),
-         Paragraph("Operation and Maintenance Manual, Northside Storage Tank (Outfall 006). Quessling Sewer Authority, "
-                   "Operations. Issued at commissioning, April 2020.", SMALL),
-         Spacer(1, 4),
-         Paragraph("4.1 Tank", H2),
-         Paragraph("The tank is a covered cast-in-place concrete tank of 8.0 million gallons at the overflow crest, "
-                   "22.0 ft above the floor sump. The floor slopes to the sump over the lowest 3.0 ft. Levels in this "
-                   "section are measured from the floor sump. Table 4-1 gives the stored volume by level.", BODY),
-         Paragraph("4.2 Dewatering pump station", H2),
-         Paragraph("Three submersible pumps (P-1, P-2 and P-3), each rated 4.0 MGD at the design head, discharge "
-                   "through a common force main to the Northside Interceptor. The station curve tested at "
-                   "commissioning: one pump 4.0 MGD, two pumps 7.4 MGD, three pumps 10.2 MGD.", BODY),
-         Paragraph("4.3 Control", H2),
-         Paragraph("The station is held off while storm flow enters the tank (FIT-600 at or above 1.0 MGD). Otherwise "
-                   "the lead pump starts at 1.0 ft; the lag pump runs above 5.0 ft and the second lag above 12.0 ft. The "
-                   "lead pump rotates each week. Pumps stop when the tank is empty.", BODY),
-         Paragraph("4.4 Instrumentation", H2),
-         _table([["Tag", "Instrument"],
-                 ["LIT-601", "tank level transducer, ft"],
-                 ["FIT-600", "tank inflow, diversion chamber, MGD"],
-                 ["P-1, P-2, P-3", "pump run status"],
-                 ["LSH-006", "Outfall 006 overflow detector, downstream of the tank"]], [40, 110]),
-         PageBreak(),
-         Paragraph("Table 4-1. Tank stage-storage", H2),
-         _table(rows, [40, 40])]
-    O.build(path, s, "O&M Manual Section 4, Northside Storage Tank", AUTH,
-            "Northside storage tank O&M manual, section 4: tank, dewatering pump station, control and instruments",
-            "Northside Storage Tank O&M Manual  |  Section 4",
-            dt.datetime(2020, 4, 22, 9, 30, tzinfo=ET_DST), dt.datetime(2020, 4, 24, 14, 2, tzinfo=ET_DST))
+LOGS = [
+    ("PW-1", "2026-06-11", "Hoosier Rotary Drilling", [(0, 2, "topsoil, black, organic"),
+     (2, 49, "clay, gray, silty, stiff, with scattered pebbles (till)"), (49, 53, "silt and fine sand, gray, wet"),
+     (53, 141, "sand and gravel, brown to gray, medium to coarse, clean, water-bearing"),
+     (141, 146, "shale, black, fissile (New Albany)")]),
+    ("OW-3", "2026-07-16", "Hoosier Rotary Drilling", [(0, 3, "topsoil"), (3, 51, "clay, gray, silty, pebbly (till)"),
+     (51, 139, "sand and gravel, coarse, some cobbles"), (139, 142, "shale, black")]),
+    ("OW-S", "2004-09-21", "Wabash Test Drilling", [(0, 2, "fill and topsoil"), (2, 47, "clay, gray-brown, pebbly (till)"),
+     (47, 52, "sand, fine, silty"), (52, 136, "sand and gravel, gray, medium to coarse"), (136, 138, "shale")]),
+    ("TW-1", "2008-05-20", "Wabash Test Drilling", [(0, 4, "topsoil and fill"), (4, 55, "clay, gray, stiff, pebbly (till)"),
+     (55, 139, "sand and gravel, coarse, water-bearing"), (139, 143, "shale, black")]),
+    ("CV-07", "2004-10-05", "Wabash Test Drilling", [(0, 3, "topsoil"), (3, 50, "clay, silty, gray (till)"),
+     (50, 131, "sand and gravel"), (131, 133, "shale")]),
+    ("CV-02", "2004-08-17", "Wabash Test Drilling", [(0, 5, "topsoil, sandy"), (5, 61, "clay, gray-brown (till)"),
+     (61, 150, "sand and gravel, medium"), (150, 152, "shale, gray")]),
+    ("CV-11", "2004-11-03", "Wabash Test Drilling", [(0, 2, "topsoil"), (2, 38, "clay, gray (till), sand lens 21 to 24"),
+     (38, 112, "sand and gravel"), (112, 115, "shale")]),
+    ("CV-04", "2004-10-06", "Wabash Test Drilling", [(0, 1, "topsoil"), (1, 27, "sand, fine to medium, brown (outwash)"),
+     (27, 32, "clay, gray (till)")]),
+    ("CV-13", "2006-03-15", "Hoosier Rotary Drilling", [(0, 6, "clay, brown"), (6, 31, "clay, gray (till)"),
+     (31, 230, "shale, black to gray, fractured 160 to 205")]),
+]
+
+
+def drillers_logs(path):
+    s = [Paragraph("Drillers' Logs, Corrin Valley Wells (selected)", H1),
+         Paragraph("Compiled from the well records filed with the District. Depths in feet below ground surface.",
+                   SMALL), Spacer(1, 4)]
+    for k, (w, date, driller, rows) in enumerate(LOGS):
+        s.append(Paragraph("%s: completed %s, %s" % (w, date, driller), H2))
+        s.append(_table([["From (ft)", "To (ft)", "Description"]] + [[str(a), str(b), d] for a, b, d in rows],
+                        [20, 20, 120]))
+        if k in (3,):
+            s.append(PageBreak())
+    O.build(path, s, "Drillers' Logs, Corrin Valley Wells", DISTRICT, "Drillers' logs, Corrin Valley wells (selected)",
+            "CVWCD well records", dt.datetime(2026, 10, 2, 9, 12, tzinfo=EDT), dt.datetime(2026, 10, 2, 9, 40, tzinfo=EDT))
