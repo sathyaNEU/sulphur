@@ -185,9 +185,6 @@ def write_docx(path, R, F):
 def write_csv(path, R):
     with open(path, "w", newline="") as fh:
         wr = csv.writer(fh, lineterminator="\n")
-        wr.writerow(["water_year", "peak_date", "recorded_peak_cfs", "storm_rain_in", "paved_fraction_pct",
-                     "peak_current_watershed_cfs"])
+        wr.writerow(["water_year", "peak_date", "recorded_peak_cfs", "estimate_peak_cfs"])
         for i, y in enumerate(R["years"]):
-            wr.writerow([int(y), R["dates"][i], comma(nearest(R["ann"][i], 10)).replace(",", ""),
-                         "%.2f" % R["storm"][i], "%.1f" % (100 * R["imp"][i]),
-                         str(nearest(R["adj"][i], 10))])
+            wr.writerow([int(y), R["dates"][i], str(nearest(R["ann"][i], 10)), str(nearest(R["adj"][i], 10))])

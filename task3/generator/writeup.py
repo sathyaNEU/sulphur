@@ -35,8 +35,8 @@ def write(R, F):
          "4. The four largest in order: water years %s; as recorded the order would be %s." % (names(top4),
                                                                                               names(raw4)),
          "", "### %s" % K.CSV_OUT, "",
-         "1. %d rows, one per water year %s; columns water_year, peak_date, recorded_peak_cfs, storm_rain_in, "
-         "paved_fraction_pct and peak_current_watershed_cfs, the last the peak the estimate rests on: each "
+         "1. %d rows, one per water year %s; columns water_year, peak_date, recorded_peak_cfs and "
+         "estimate_peak_cfs, the last the peak the estimate rests on: each "
          "recorded peak raised by the response's rise between that year's paved fraction and 2025's, to the "
          "nearest ten cfs; water year %d's row reads about %s cfs." % (F["n_years"], F["years"],
                                                                            F["largest_year"], F["largest_today"]),

@@ -23,11 +23,11 @@
   "surface": "clean"
  },
  "judge": {
-  "verdict": "",
-  "disposition": "",
-  "gate_g": "",
-  "gate_h": "",
-  "report": ""
+  "verdict": "DETERMINISTIC",
+  "disposition": "FIX_NOW optional, applied, no rerun",
+  "gate_g": "decomposition_attribution with statistical_rigor, analytical_non_defect, surface_read_dependency no, sole_data_defect no",
+  "gate_h": "domain pass, layers pass, decisive step analytical, chain 5, one-fact none",
+  "report": "pending"
  },
  "returned": [
   {
@@ -98,7 +98,7 @@
    "commit": ""
   }
  ],
- "resume": "architecture 5 built; the determinism judge's isolated thread is running on /tmp/determinism-check-task3-161819; on its verdict, re-invoke the determinism-judge agent with verdict.md to write determinism_check_report.md, fix findings in the generator, re-run gates, commit READY",
+ "resume": "architecture 5 built; judge DETERMINISTIC (both optional fixes applied: the table's columns named in the prompt, the storms-since-1991 rival named in the closing paragraph); the judge agent is writing determinism_check_report.md; then commit READY",
  "approved": null,
  "delivered": "2026-11-07",
  "portal": "landed by one response (R1 2,200 t at 100 per cent, R2 2,600 t at 70 per cent), reported 2026-11-07",

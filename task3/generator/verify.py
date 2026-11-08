@@ -105,8 +105,8 @@ def run(task_dir):
     if len(rows) != len(years):
         bad.append("table has %d rows" % len(rows))
     for r, y, v in zip(rows, years, adj):
-        if int(r["water_year"]) != y or int(r["peak_current_watershed_cfs"]) != r10(v):
-            bad.append("table row %s: %s against %.0f" % (y, r["peak_current_watershed_cfs"], v))
+        if int(r["water_year"]) != y or int(r["estimate_peak_cfs"]) != r10(v):
+            bad.append("table row %s: %s against %.0f" % (y, r["estimate_peak_cfs"], v))
             break
     return bad
 

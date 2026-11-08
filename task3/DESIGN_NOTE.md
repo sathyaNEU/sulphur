@@ -295,7 +295,8 @@ What a voice rewrite of `prompt.txt` may not drop or change:
 - kinnard_road_culvert_design_flow.docx: the design flow and the culvert; the flood frequency charted against each
   costed culvert's capacity; the water year whose flood is the largest in the table of annual peaks the estimate rests
   on, and the four largest in order.
-- ollery_creek_design_peak_table.csv: that table, a row per water year.
+- ollery_creek_design_peak_table.csv: that table, a row per water year giving its recorded peak and the peak the
+  estimate uses.
 - Rounding: flows in cubic feet per second to the nearest ten.
 - No word for paving, urbanization, storms, rainfall, pairing, trend or adjustment; no count of the alternatives.
 

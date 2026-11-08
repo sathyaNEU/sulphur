@@ -73,6 +73,8 @@ def build_golden(target, golden):
     rungs, fam = g.rivals()
     sound = [v[0] for k, v in fam.items()]
     F = D.figures(R, (min(sound), max(sound)), max(list(rungs.values()) + [max(R["ann"])]))
+    import freq as FQ
+    F["recent_only"] = D.comma(D.nearest(FQ.lp3_quantile(R["adj"][R["years"] >= 1991], K.DESIGN_AEP), 10))
     text, F = WU.write(R, F)
     if os.path.exists(golden):
         shutil.rmtree(golden)

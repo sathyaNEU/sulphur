@@ -19,7 +19,7 @@ Not Alternative A (7,460 cfs), which the gauge's 70 annual peaks fitted as they 
 
 ### ollery_creek_design_peak_table.csv
 
-1. 70 rows, one per water year 1956 to 2025; columns water_year, peak_date, recorded_peak_cfs, storm_rain_in, paved_fraction_pct and peak_current_watershed_cfs, the last the peak the estimate rests on: each recorded peak raised by the response's rise between that year's paved fraction and 2025's, to the nearest ten cfs; water year 1968's row reads about 7,810 cfs.
+1. 70 rows, one per water year 1956 to 2025; columns water_year, peak_date, recorded_peak_cfs and estimate_peak_cfs, the last the peak the estimate rests on: each recorded peak raised by the response's rise between that year's paved fraction and 2025's, to the nearest ten cfs; water year 1968's row reads about 7,810 cfs.
 
 ## Critical Components
 
