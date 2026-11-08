@@ -1,69 +1,152 @@
 {
  "task": "task9",
- "status": "PAUSED",
- "domain": "pharmacology-pharmacoepidemiology-safety / benefit-risk-assessment (client pharmacology-pharmacoepidemiology-safety)",
- "objective": "opportunity-sizing-decision",
- "stage": 1,
- "stage_name": "draw, re-root to architecture 6 in quantitative finance",
+ "status": "DESIGN",
+ "domain": "quantitative-finance",
+ "subdomain": "volatility-derivatives-pricing (client task type: derivative pricing, a structured credit note's loss distribution)",
+ "objective": "forecasting",
+ "stage": 2,
+ "stage_name": "design",
  "updated": "2026-11-08",
- "stump": "The default path carries each review's pilot take-off rate to the federation's patients in scope and funds the antipsychotic review at about 24 harms a year; the step that lands it there is carrying the pilot's average rate to every patient, when practice pharmacists almost never stopped a medicine a specialist service had started (4 of 96 in the pilot), the pilot's antipsychotic patients were mostly practice-started (136 of 160) and a specialist service started 86 per cent of the antipsychotic patients in scope, so the antipsychotic review would avoid about 6 harms a year against the benzodiazepine review's 12.",
- "architecture": 5,
+ "call": "",
+ "stump": "provisional at the draw: the default path buys Kestrel Lane's senior note as the lower-risk (its borrowers spread over many industries, more subordination) under a one-factor and then an industry-factor copula fitted to the loan database, when companies held by the same buyout fund in the same year default together, which Kestrel Lane's concentration in a few funds turns into a chance of loss above the fund's 1.5 per cent bar; Ostvale's note is the one to buy",
+ "architecture": 6,
  "loops": 0,
  "precut": {
-  "exit": 0,
-  "date": "2026-11-08"
+  "exit": null,
+  "date": ""
  },
  "leak": {
-  "leak_py": "REVIEW 2026-11-08 on target.zip a915483e (--asof 2027-01-06), no LEAK; every REVIEW line ruled harmless in the design note's Stage 4",
-  "reader": "read 1 on 0bacf975 and read 2 on ea8155d7, isolated (Sonnet, medium), prompt and pack only: no leak at either; question 6 an analytical choice (which off-probability to carry to the patients not yet reviewed), who started a medicine not named at either; machine-made lists measured and ruled, the ePACT2 summary's BNF label corrected after read 2; leak_check_report.md"
+  "leak_py": "",
+  "reader": ""
  },
  "duplicate_check": {
-  "heart": "WARN 2026-11-08 on the final cut: repeat.decision (pick_one_of_n) against task118's architecture 6, registered at 01:45Z after this card (00:04Z); one review of three is the programme's own decision",
-  "surface": "exit 0 2026-11-08 on the final cut; 8 pairs promoted for the author's clone check (task304, task305, task307, task308, task310, task467, task169, task128); personas in the pack the card's three"
+  "heart": "",
+  "nearest": "task7 at 0.08 (differentiated), mark135 v1 lineage (differentiated); guard check PASS 2026-11-08"
  },
  "judge": {
-  "pass": 1,
+  "verdict": "",
+  "disposition": "",
+  "gate_h": "",
+  "report": ""
+ },
+ "paper_pair": null,
+ "runs": {
+  "run1": null,
+  "run2": null,
+  "average": null,
+  "counterfactual_average": null,
+  "first_wrong_step": {
+   "run1": "",
+   "run2": ""
+  },
+  "triage": "",
+  "recorded": "",
+  "history": [
+   {
+    "architecture": 5,
+    "date": "2026-11-08",
+    "run1": "review A at 24 harms, each review's pooled pilot rate carried to every patient in scope",
+    "run2": "the same, review A at 24 harms",
+    "triage": "none run: the platform's determinism check returned the golden and the slot's domain is quantitative finance, so the route is redesign"
+   }
+  ]
+ },
+ "returned": [],
+ "resume": "",
+ "approved": null,
+ "submitted": null,
+ "portal": {
+  "status": "",
+  "date": "",
+  "note": ""
+ },
+ "assigned_domain": "quantitative-finance",
+ "migrated_from": {
+  "project": "Mark",
+  "task": "task306",
+  "status_in_mark": "SHIPPED",
   "date": "2026-11-08",
-  "verdict": "DETERMINISTIC",
-  "disposition": "FIX_NOW",
-  "report": "task9/determinism_check_report_arch5.md",
-  "gate_g": "decomposition_attribution, analytical_non_defect, surface_read_dependency no, sole_data_defect no",
-  "gate_h": "domain pass, layers pass, decisive_step analytical",
-  "finding": "step 6 gave the GP Connect key as patient, sender and document date, which read literally as the letter date matched 757 of about 3,960 October to December letters and filed the second half at 28.8, 26.5, 27.1, 25.3 and 28.3; residuals not counted against the verdict: the 7 April copies counted twice (first half 46.8, 44.1, 46.5, 43.0, 43.6) and a weekend-only working day (Wrekinside North Q2 11.7 against 11.6)",
-  "fixed": "step 6 states the verifier's match; specification 4.3 counts a letter once, in the half and at the practice of its first receipt (SF16); hub appointments before a bank holiday written up on the day (SF17); SF16 to SF18 and both asks' clean truth asserted (checks.py K7, K8); the call, the stump and every graded figure unchanged; only the consultation extract and the specification moved in the pack (0bacf975 to ea8155d7)",
-  "re_judge": {
-   "pass": 2,
+  "note": "moved from Project Mark at the author's word: architecture 5 shipped there on 2026-11-08 and the platform returned it the same day on its determinism check, both runs on review A; carried on here for the Sulfur bar, the re-root owed in quantitative finance, the platform's domain for this slot"
+ },
+ "lineage_v5": {
+  "stump": "The default path carries each review's pilot take-off rate to the federation's patients in scope and funds the antipsychotic review at about 24 harms a year; the step that lands it there is carrying the pilot's average rate to every patient, when practice pharmacists almost never stopped a medicine a specialist service had started (4 of 96 in the pilot), the pilot's antipsychotic patients were mostly practice-started (136 of 160) and a specialist service started 86 per cent of the antipsychotic patients in scope, so the antipsychotic review would avoid about 6 harms a year against the benzodiazepine review's 12.",
+  "architecture": 5,
+  "loops": 0,
+  "precut": {
+   "exit": 0,
+   "date": "2026-11-08"
+  },
+  "leak": {
+   "leak_py": "REVIEW 2026-11-08 on target.zip a915483e (--asof 2027-01-06), no LEAK; every REVIEW line ruled harmless in the design note's Stage 4",
+   "reader": "read 1 on 0bacf975 and read 2 on ea8155d7, isolated (Sonnet, medium), prompt and pack only: no leak at either; question 6 an analytical choice (which off-probability to carry to the patients not yet reviewed), who started a medicine not named at either; machine-made lists measured and ruled, the ePACT2 summary's BNF label corrected after read 2; leak_check_report.md"
+  },
+  "duplicate_check": {
+   "heart": "WARN 2026-11-08 on the final cut: repeat.decision (pick_one_of_n) against task118's architecture 6, registered at 01:45Z after this card (00:04Z); one review of three is the programme's own decision",
+   "surface": "exit 0 2026-11-08 on the final cut; 8 pairs promoted for the author's clone check (task304, task305, task307, task308, task310, task467, task169, task128); personas in the pack the card's three"
+  },
+  "judge": {
+   "pass": 1,
    "date": "2026-11-08",
-   "cut": "ea8155d7",
    "verdict": "DETERMINISTIC",
-   "disposition": "APPROVE",
-   "report": "task9/determinism_check_report_arch5_pass2.md",
+   "disposition": "FIX_NOW",
+   "report": "task9/determinism_check_report_arch5.md",
    "gate_g": "decomposition_attribution, analytical_non_defect, surface_read_dependency no, sole_data_defect no",
    "gate_h": "domain pass, layers pass, decisive_step analytical",
-   "residual": "advisory only: a provenance flag from any class letter at any time files review A (15.8 against B 12.0) but does not separate the pilot's outcomes (23 against 47 per cent in A), so the data rule it out; 151 same-day repeat calls in the practice systems count as consultations under specification 4.1, collapsing them would lower each consultation figure by 0.1 to 0.3, row counting read as natural and no clause advised"
-  }
+   "finding": "step 6 gave the GP Connect key as patient, sender and document date, which read literally as the letter date matched 757 of about 3,960 October to December letters and filed the second half at 28.8, 26.5, 27.1, 25.3 and 28.3; residuals not counted against the verdict: the 7 April copies counted twice (first half 46.8, 44.1, 46.5, 43.0, 43.6) and a weekend-only working day (Wrekinside North Q2 11.7 against 11.6)",
+   "fixed": "step 6 states the verifier's match; specification 4.3 counts a letter once, in the half and at the practice of its first receipt (SF16); hub appointments before a bank holiday written up on the day (SF17); SF16 to SF18 and both asks' clean truth asserted (checks.py K7, K8); the call, the stump and every graded figure unchanged; only the consultation extract and the specification moved in the pack (0bacf975 to ea8155d7)",
+   "re_judge": {
+    "pass": 2,
+    "date": "2026-11-08",
+    "cut": "ea8155d7",
+    "verdict": "DETERMINISTIC",
+    "disposition": "APPROVE",
+    "report": "task9/determinism_check_report_arch5_pass2.md",
+    "gate_g": "decomposition_attribution, analytical_non_defect, surface_read_dependency no, sole_data_defect no",
+    "gate_h": "domain pass, layers pass, decisive_step analytical",
+    "residual": "advisory only: a provenance flag from any class letter at any time files review A (15.8 against B 12.0) but does not separate the pilot's outcomes (23 against 47 per cent in A), so the data rule it out; 151 same-day repeat calls in the practice systems count as consultations under specification 4.1, collapsing them would lower each consultation figure by 0.1 to 0.3, row counting read as natural and no clause advised"
+   }
+  },
+  "returned": [
+   {
+    "date": "2026-11-08",
+    "source": "platform",
+    "portal": "Project Sulfur round 1 on target.zip a915483e: the platform's determinism check returned the golden (review B does not reproduce). It read specification 3.3 as each patient's chance of being off taken from the pilot, and the close-out's section 3 (no practice, age group or sex differed from the review's overall rate, smallest p-value 0.21) as the licence to carry each review's one rate to every patient in scope, which files review A at about 24 harms a year against B 12 and C 11; it ruled the split by who started the medicine (the letters feed read with a 60-day-before-first-issue rule) a method nothing in the pack forces, the letters sitting only in specification 4.3. Verbatim in runs/determinism_finding.md",
+    "runs": "both runs filed review A at 24 harms a year against B 12 and C 11 (240, 280 and 460 patients off), each review's pooled complete-case pilot rate carried to the patients in scope with the close-out's subgroup table read as support; first-half letters 46.8, 44.1, 46.5, 43.0 and 43.6 (the 7 April copies counted twice), second-half letters equal to the golden, all 20 consultation rates 0.4 to 1.1 per 1,000 above the golden; scores not reported. Verbatim in runs/run1.md and runs/run2.md",
+    "paste": "the prompt was identical to prompt.txt and the uploaded zip the shipped cut; the answer blocks matched submission.md except the Final Recommendation, pasted without its two rejection sentences",
+    "why": "the decisive step rested on a provenance relation and a window that no filed text invites, set against a filed formula and a certified subgroup table that read as the method; a sentence forcing the split files the method (rule application, the shared-care rule rejected at the draw), and a golden on review A leaves both runs on the call",
+    "domain": "the platform assigns this slot Quantitative Finance; architecture 5 is pharmacology, so it cannot be submitted here whatever its determinism",
+    "repair": "design: re-root in quantitative finance as architecture 6 under the Sulfur standard; architecture 4's market-impact capacity driver and its which shell stay spent, on the card's lineage",
+    "commit": ""
+   }
+  ],
+  "resume": "Migrated from Project Mark task306 after the platform returned architecture 5 on its determinism check (runs/determinism_finding.md, both runs in runs/). Re-root in quantitative finance, the platform's domain for this slot, as architecture 6 under the Sulfur standard, from stage 1 (/build task9 quantitative-finance <objective>, the objective the author's to confirm; the slot has carried opportunity sizing). Architecture 4's market-impact capacity driver (both runs on its golden) and its which shell are spent and sit on the card's lineage with architectures 1 to 3; architecture 5's lesson is the design note's last Tried and rejected line.",
+  "delivered": "2026-11-08",
+  "zip": "a915483ef2342ec8d2c30a150f8286d30653413debbd533cd60d771d2c6fb41c",
+  "runs": {
+   "run1": null,
+   "run2": null,
+   "average": null,
+   "counterfactual_average": null,
+   "first_wrong_step": {
+    "run1": "",
+    "run2": ""
+   },
+   "triage": "",
+   "recorded": "2026-11-08",
+   "history": [
+    {
+     "architecture": 5,
+     "date": "2026-11-08",
+     "run1": "review A at 24 harms, each review's pooled pilot rate carried to every patient in scope",
+     "run2": "the same, review A at 24 harms",
+     "triage": "none run: the platform's determinism check returned the golden and the slot's domain is quantitative finance, so the route is redesign"
+    }
+   ]
+  },
+  "domain": "pharmacology-pharmacoepidemiology-safety / benefit-risk-assessment (client pharmacology-pharmacoepidemiology-safety)",
+  "objective": "opportunity-sizing-decision",
+  "spent": "2026-11-08 on its first platform round (Project Sulfur): the determinism check returned the golden, both runs filed review A at 24 harms; the slot's domain is quantitative finance"
  },
- "returned": [
-  {
-   "date": "2026-11-08",
-   "source": "platform",
-   "portal": "Project Sulfur round 1 on target.zip a915483e: the platform's determinism check returned the golden (review B does not reproduce). It read specification 3.3 as each patient's chance of being off taken from the pilot, and the close-out's section 3 (no practice, age group or sex differed from the review's overall rate, smallest p-value 0.21) as the licence to carry each review's one rate to every patient in scope, which files review A at about 24 harms a year against B 12 and C 11; it ruled the split by who started the medicine (the letters feed read with a 60-day-before-first-issue rule) a method nothing in the pack forces, the letters sitting only in specification 4.3. Verbatim in runs/determinism_finding.md",
-   "runs": "both runs filed review A at 24 harms a year against B 12 and C 11 (240, 280 and 460 patients off), each review's pooled complete-case pilot rate carried to the patients in scope with the close-out's subgroup table read as support; first-half letters 46.8, 44.1, 46.5, 43.0 and 43.6 (the 7 April copies counted twice), second-half letters equal to the golden, all 20 consultation rates 0.4 to 1.1 per 1,000 above the golden; scores not reported. Verbatim in runs/run1.md and runs/run2.md",
-   "paste": "the prompt was identical to prompt.txt and the uploaded zip the shipped cut; the answer blocks matched submission.md except the Final Recommendation, pasted without its two rejection sentences",
-   "why": "the decisive step rested on a provenance relation and a window that no filed text invites, set against a filed formula and a certified subgroup table that read as the method; a sentence forcing the split files the method (rule application, the shared-care rule rejected at the draw), and a golden on review A leaves both runs on the call",
-   "domain": "the platform assigns this slot Quantitative Finance; architecture 5 is pharmacology, so it cannot be submitted here whatever its determinism",
-   "repair": "design: re-root in quantitative finance as architecture 6 under the Sulfur standard; architecture 4's market-impact capacity driver and its which shell stay spent, on the card's lineage",
-   "commit": ""
-  }
- ],
- "resume": "Migrated from Project Mark task306 after the platform returned architecture 5 on its determinism check (runs/determinism_finding.md, both runs in runs/). Re-root in quantitative finance, the platform's domain for this slot, as architecture 6 under the Sulfur standard, from stage 1 (/build task9 quantitative-finance <objective>, the objective the author's to confirm; the slot has carried opportunity sizing). Architecture 4's market-impact capacity driver (both runs on its golden) and its which shell are spent and sit on the card's lineage with architectures 1 to 3; architecture 5's lesson is the design note's last Tried and rejected line.",
- "approved": null,
- "delivered": "2026-11-08",
- "portal": "Sulfur round 1, 2026-11-08: the determinism check returned the golden (review B does not reproduce); both runs filed review A, scores not reported",
- "portal_id": "",
- "portal_status": "RETURNED (determinism check)",
- "portal_status_date": "2026-11-08",
- "architecture_spent": true,
  "lineage_v4": {
   "stump": "A competent analyst nets each backtested strategy's gross alpha of its rebalances priced at what the desk's own orders paid per traded pound in the same index band and gives the GBP 400 million to small-cap momentum; cost rises with each trade's share of the stock's daily traded value, and at that size momentum's swaps take a fifth to two fifths of its small caps' day, so the mid-cap value strategy keeps the most.",
   "architecture": 4,
@@ -245,36 +328,10 @@
   {
    "date": "2026-11-08",
    "event": "migrated from Project Mark task306 to Project Sulfur as task9 at the author's word; architecture 5 spent, the re-root owed in quantitative finance"
-  }
- ],
- "zip": "a915483ef2342ec8d2c30a150f8286d30653413debbd533cd60d771d2c6fb41c",
- "migrated_from": {
-  "project": "Mark",
-  "task": "task306",
-  "status_in_mark": "SHIPPED",
-  "date": "2026-11-08",
-  "note": "moved from Project Mark at the author's word: architecture 5 shipped there on 2026-11-08 and the platform returned it the same day on its determinism check, both runs on review A; carried on here for the Sulfur bar, the re-root owed in quantitative finance, the platform's domain for this slot"
- },
- "assigned_domain": "quantitative-finance (the platform's assignment for this slot; architecture 5 is pharmacology)",
- "runs": {
-  "run1": null,
-  "run2": null,
-  "average": null,
-  "counterfactual_average": null,
-  "first_wrong_step": {
-   "run1": "",
-   "run2": ""
   },
-  "triage": "",
-  "recorded": "2026-11-08",
-  "history": [
-   {
-    "architecture": 5,
-    "date": "2026-11-08",
-    "run1": "review A at 24 harms, each review's pooled pilot rate carried to every patient in scope",
-    "run2": "the same, review A at 24 harms",
-    "triage": "none run: the platform's determinism check returned the golden and the slot's domain is quantitative finance, so the route is redesign"
-   }
-  ]
- }
+  {
+   "date": "2026-11-08",
+   "event": "DRAWN: architecture 6, quantitative finance (derivative pricing, forecasting): PHL's choice between Kestrel Lane's and Ostvale's senior rated notes, the chance of loss set by default dependence among companies held by the same buyout fund in the same year; registered 2026-11-08T06:21Z at the author's request for a draw at least three times harder, stumped on the asks as well as the call"
+  }
+ ]
 }

@@ -1,382 +1,64 @@
 # task9 design note
 
-Architecture 5, drawn 2026-11-08 after the portal returned architecture 4 FAILED_TO_STUMP on 2026-11-07 (both
-responses filed the golden capacity call and all 24 ask figures). One architecture per world: energy (EV packs),
-urban (regional GVA), actuarial (windstorm reinsurance) and quantitative finance (market impact) are spent in this
-slot, so the build moves to pharmacology with a new world, dataset, generator and prompt shell. The author's five
-conditions of 2026-11-07 bind the design and are argued in `## Author's conditions` before any data is cut.
+Architecture 6, drawn 2026-11-08 after the platform returned architecture 5 on its determinism check and confirmed
+the slot's domain as quantitative finance. Architecture 4, the slot's earlier quantitative finance build (the
+market-impact capacity call), was FAILED_TO_STUMP on 2026-11-07 with both runs on the golden and all 24 ask figures,
+and the author asked on 2026-11-08 for a draw at least three times harder, stumped on the asks as well as on the
+call. One architecture per world: energy (EV packs), urban (regional GVA), actuarial (windstorm reinsurance),
+quantitative finance's market impact and pharmacology (deprescribing) are spent in this slot, so the build moves to
+structured credit with a new world, dataset, generator and prompt shell.
 
 ## Draw
 
-1. Card: `.claude/skills/fingerprint/cards/task9.json`, architecture 5, registered 2026-11-08; architecture 4 moved
-   into the card's lineage with its fate (the four earlier architectures sit there as spent).
-2. Pairing: Pharmacology, Pharmacoepidemiology & Safety, task type benefit-risk-assessment, objective Opportunity
-   Sizing & Decision Support (never carded on this objective). The headline is a sized opportunity, pool to
-   realisable: each review's eligible patients (the pool), the patients a year of pharmacist reviews would take off
-   the medicine for good (the realisable part) and the serious harms that avoids, which decides the call.
-3. World: Marches Primary Care Collaborative, a GP federation in the West Midlands whose clinical pharmacist team
-   serves its member practices under NHS Severn Marches Integrated Care Board's medicines safety contract. The team
-   can run one structured deprescribing review across every member practice in 2027-28. In the first half of 2026 it
-   piloted all three candidate reviews in the Clun Valley Primary Care Network's practices (rural, far from the
-   specialist services) and followed each reviewed patient for six months. Specialist letters reach the practices
-   from Wrekinside Teaching Hospitals NHS Trust and Marches Mental Health NHS Trust. People from `guard.py names --geo
-   "United Kingdom" --seed 306`: Colin French (the federation's lead clinical pharmacist, who ran the pilot, runs the
-   team across the practices and puts the 2027 review to the board), Leigh Bond (the federation's clinical director,
-   who chairs the board), Sylvia McDonald (the board's medicines optimisation pharmacist, who manages the contract).
-4. Candidates: (A) antipsychotics in people aged 65 and over (excluding psychosis, schizophrenia and bipolar disorder);
-   (B) benzodiazepines and Z-drugs in people aged 65 and over; (C) gabapentinoids taken with an opioid.
-5. Quantity: for each review, the serious harms a year it would avoid if run from April 2027 across the member
-   practices outside the pilot network: the sum over the patients meeting its protocol on 31 December 2026 of each
-   patient's chance of being off the medicine six months after review times the attributable harm rate per
-   patient-year at their age (the programme specification's section 3 and table 1). The call is which review runs.
-6. Shape: other. Three reviews, each with the patients it takes off and the harms that avoids (6 figures); the call,
-   the runner-up and the gap (3); a two-panel chart (2 to 3); the letters each network's practices received in each
-   half of 2026 (10); each network's patient consultations in each quarter (20); the two files: 43 to 44 criteria.
-7. Default path: carry each review's pilot take-off rate (the share of reviewed patients still off the medicine six
-   months on) to the federation's eligible patients and weight them by the harm table; it files antipsychotics.
-8. Data-native sentence: the practices' records carry each medicine's first issue and the specialists' letters carry
-   each recommendation to start one, so who started a patient's medicine is a relation between two systems that no
-   field stores; the pilot practices' patients were mostly practice-started because the Clun Valley is far from the
-   memory and older adults' services, while elsewhere in the federation most older people on an antipsychotic were
-   started by a specialist service, and practice pharmacists almost never stopped a medicine a specialist had started.
-9. Abstraction sentence, written against the nearest approved builds and found not to be the same: task258 carries a
-   playbook only where the mechanism's precondition holds (the preload in the served head) and task309 carries a cut
-   by a physical intensity; here the review reaches every eligible patient, nothing in the mechanism is absent and
-   nothing varies in intensity: the measured success rate depends on a provenance, who started the medicine, which
-   the pilot's population nearly all shared and the federation's antipsychotic users mostly do not. The card carries
-   differentiation lines against task258, task309, task124, task141, task303, task137, task128, task304 and task98.
-10. Furniture: forum board_of_directors (the federation's board approves its 2027 programme), forcing
-   purchase_order_or_contract (the integrated care board's 2027-28 medicines safety contract names the review in its
-   schedule), org hospital_or_health_provider (a GP federation providing the pharmacist service), role field_unit_lead
-   (the lead pharmacist runs the team across the practices). Redrawn after registration: task482's architecture 17
-   registered minutes before this card with committee_or_panel, launch_or_rollout and programme_officer, so those three
-   were redrawn to the board, the contract and the team lead, each the honester description of who decides, what
-   forces it and who asks, not merely the passing one. Redrawn at the draw: forum executive_team, forcing
-   budget_or_appropriation and the stump strategy composition_mix each repeated a build in the primary checkout's
-   window (task204, task142), and decomposition_attribution repeated task185 there. Two strategy keys describe this
-   design honestly, composition_mix (the pooled rate does not fit this pool's mix on a property no column names) and
-   forecast_method_backtest (`strategies.md` F6: the rate is stationary only in a constructed exposure, rebuilt from a
-   log, and the natural carry fails forward); the card takes the second because the window bars the first, and the
-   design note's step is exactly F6's: the take-off rate is stationary only within the provenance rebuilt from the
-   letters. No back-test picks it (condition 2 below).
-11. As of 6 January 2027, the extracts' pull date; the board meets on 14 January 2027 and the review starts in April.
-12. Prompt shell: a how-much question (the harm each review would avoid), the second sentence opening on the paper
-   for the board, the rounding sentence opening "Patients"; deliverables pdf and csv. None repeats a shell in this
-   slot's lineage. Guard on main: PASS. Guard from the primary checkout: WARN repeat.gate_g (forecasting against
-   task142), answered: the forecast here is a take-off carried across provenance, task142's is a population
-   projection.
-
-## Author's conditions
-
-1. The field's full textbook method, done carefully, files the wrong call. The field's method for a deprescribing
-   review's value is absolute harm at each patient's age times the patients the review takes off, the take-off read
-   from the review's own pilot (benefit-risk card 1: absolute risks at each subgroup's baseline). Done carefully (each
-   review's own pilot rate at six months, the protocol's eligibility and exclusions applied, ages banded, practice
-   mergers conformed, the pilot checked for homogeneity across its practices, ages and sexes, which it passes), it
-   funds antipsychotics. Only the step the data's structure demands files the golden: the take-off rate is stationary
-   only within provenance, so it must be carried by who started each medicine, rebuilt from the letters. No sentence
-   in the pack says that a specialist-started medicine is harder to stop or that provenance should be read.
-2. The data does not reveal the right method by fit. No model is fitted. The pilot's pooled rate reproduces the
-   pilot exactly and so does the provenance-stratified rate; neither is tested on the federation, whose 2027 outcome
-   does not exist yet; the pilot is homogeneous on every recorded attribute (practice, age band, sex), so no residual,
-   R-squared, back-test or reconciliation on any shipped column prefers the golden route.
-3. The asks are not executable from filed rules: each rides a reconstruction across two systems or grains no sentence
-   states (designed in `## Ask sheet`, `supplemental-stumping` Part 2.1), and on paper each of the top two keeps under
-   two fifths of the ask weight.
-4. The ladder (`## Ladder`) keeps at least one of the top two off the call: every route that does not rebuild
-   provenance files antipsychotics, including every reweighting by a recorded attribute; the pair is argued near 50
-   and built under 60 against a bar of 70.
-5. The three rules sit in `## Three rules`, each on its own line; `precut.py` exit 0 before data is cut.
-
-## Default path
-
-1. Read the federation's 2027 medicines safety programme specification: one review run from April 2027 across the
-   member practices outside the Clun Valley network, valued at the serious harms a year it avoids, the sum over the
-   patients in scope of each patient's chance of being off the medicine six months after review times the harm rate
-   at their age in table 1 (section 3).
-2. Run each review's protocol on the practices' issue, problem list and registration extracts on 31 December 2026:
-   612 patients for the antipsychotic review, 1,239 for the benzodiazepine review and 1,636 for the gabapentinoid
-   review.
-3. Read the 2026 pilot from its close-out report and outcome log: the share of reviewed patients off the medicine six
-   months on is 40.0 per cent for antipsychotics, 23.0 for benzodiazepines and 27.9 for gabapentinoids, the same
-   across the pilot's practices, age groups and sexes (smallest p-value 0.21).
-4. Carry each review's pilot rate to its patients in scope and weight by the harm rate at each patient's age: about
-   24 harms a year for antipsychotics against 12 for benzodiazepines and 11 for gabapentinoids.
-
-Ends on: the antipsychotic review, about 24 harms a year avoided.
-Golden: the benzodiazepine review, 12 harms a year avoided against the gabapentinoid review's 8 (the runner-up) and
-the antipsychotic review's 6; gap 4.
-
-## Stump sentence
-
-The default path carries each review's pilot take-off rate to the federation's patients in scope and funds the
-antipsychotic review at about 24 harms a year; the step that lands it there is carrying the pilot's average rate to
-every patient, when practice pharmacists almost never stopped a medicine a specialist service had started (4 of 96
-in the pilot), the pilot's antipsychotic patients were mostly practice-started (136 of 160) and a specialist service
-started 86 per cent of the antipsychotic patients in scope, so the antipsychotic review would avoid about 6 harms a
-year against the benzodiazepine review's 12.
-
-## Three rules
-
-Task type: benefit-risk-assessment (Pharmacology, Pharmacoepidemiology & Safety), which serves Opportunity Sizing & Decision Support: each review's eligible patients are the pool, the patients a year of reviews takes off for good the realisable part, and the serious harms that avoids decide the call.
-Domain test: the quantity that decides is the serious harm a deprescribing review avoids, worked the way benefit-risk works it: the absolute harm a patient's continued use carries at their age, from the programme's attributable rates, summed over the patients the review actually takes off; with another field's nouns there is no medicine, no specialist who started it, no harm per patient-year of use and no pharmacist's review to stop it.
-Swap: "which of three loyalty campaigns should the retailer run, sized by the lapsed customers each wins back" keeps the arithmetic shape but loses what decides here, because no campaign's success depends on which body first put a customer on a product and no attributable harm per year of use weights the people it moves.
-Layer 1: the systems' own records: practice prescribing coded by dm+d virtual product against trust letters naming medicines in free text, one row per medicine line, with strengths and brand names; two practices merged on 1 April 2025, their registrations carried by the survivor and the hospitals' practice field keeping the old code for some patients; two trusts' date formats; a minority of letters carrying only a hospital number, resolved through the federation's lookup; the pilot log's six-month row beside its review row; the mental health trust's April 2026 system change (an outage week's letters sent on 7 April, four weeks re-sent under new references); the hospital trust's GP Connect receipts from October 2026 with a message id and the message's date; letters dated over Christmas arriving in January; the hub booking system in UTC; hub appointments written into shared-record practices' systems on the day or the next working day; group reviews held as one booking with a separate register. Each is produced by the system that writes it, none is placed to be caught, and with every one handled the call is unchanged (checks.py R2).
-Layer 2: estimand_identification, carrying a pilot's measured success to a different population: the pilot's take-off is stationary only within who started each medicine, so it must be carried by that provenance to the federation's own mix, not at the pilot's average.
-Decisive step: for each patient in scope, reading whether a specialist service started the medicine (a hospital or mental health trust letter naming a medicine of the class shortly before the practice first issued it) and carrying the pilot's take-off for patients started that way, because the pilot's pharmacists took 196 of 604 practice-started patients off and 4 of 96 specialist-started, and the pilot's patients were mostly practice-started.
-Not semantics: every field read right (the dm+d codes, the letters' recommendations, the six-month status, the harm table's bands) still leaves the pilot's average take-off, which is a correct figure for the pilot's own patients; no field records who started a medicine, and the take-off's dependence on it appears only when the pilot is split by a relation no column holds.
-Not rule application: no filed rule says who can be taken off or how a pilot carries; the protocols file eligibility and the specification files the harm rates and the sum over patients, and executing every filed sentence with the pilot's reported rates funds antipsychotics. The enumerated family (the pilot's average; its rate re-weighted by age band or sex; carried by product; provenance read from any class letter at any time; the provenance carry under every window from 30 to 365 days, either date basis, hospital-number letters dropped or resolved, Start letters only, the specialist rate pooled across reviews, and stratified by age band or by sex) spreads the antipsychotic review's harms from 5.8 to 24.1 a year; the standing family (the routes the pilot's own outcomes leave defensible once provenance is read: 46 against 4 per cent off) spreads them from 5.84 to 6.15 and every rounded figure stays (checks.py M5); what rules the rest out is the pilot's own split, never a sentence.
-Analyst test: a strong analyst conforms every record, applies each protocol, carries each review's pilot take-off (40.0, 23.0 and 27.9 per cent, the same across the pilot's practices, ages and sexes) to the patients in scope, weights them by the harm table and funds the antipsychotic review at about 24 harms a year; every field and rule is read right, and the call is wrong because a specialist service started 86 per cent of the antipsychotic patients in scope and the pilot's pharmacists took 4 of 96 specialist-started patients off.
-Estimand: medicines_safety_programme_2027.pdf section 3: population, the patients registered at member practices outside the Clun Valley network who meet the review's protocol on 31 December 2026, every one of whom the team reviews; outcome, the serious harms a year the review avoids, the sum over those patients of each patient's chance of being off the medicine six months after review (no class issue in the 183 days after it) times the attributable harm rate in table 1 at their age on 31 December 2026; unit, harms a year, and patients taken off as the sum of the chances; comparison, the largest.
-No decoy: nothing is planted to be caught: no memo, briefing or stakeholder argues for a review, the pilot close-out reports what the pilot measured and recommends nothing, and no document ranks the reviews by the harm they would avoid across the federation.
-No certified replay: no certified or published figure reproduces the method; the close-out's rates are the pilot's own, true for its patients, and no file carries a federation-wide take-off, a provenance share or a harm estimate for any review.
-Lesson: a programme's measured success carries to a new population only through what it depended on, and what a deprescribing review depends on most is who started the medicine; a model that learns to ask where each patient's arrangement came from before carrying a pilot rate sizes medicines programmes the way the field should, which no build on file teaches.
-
-## Survivor anatomy
-
-Actor: the deciding property, who started a patient's medicine, has no column: the practices' records carry the first issue, the letters carry a recommendation and a date, and provenance is the relation between the two (a letter naming a medicine in the review's class shortly before the practice first issued it) that nothing stores.
-Link: no key ties a letter to a medicine course; the link is the patient's pseudonym plus a time order plus a free-text medicine name read against dm+d, and no sentence invites reading letters for the call: the letters are in the pack for the board's letters workload (ask A).
-Reflex: the field's method for a review's value, absolute harm at each patient's age times the patients taken off at the review's own pilot rate, sits at rung 1 and files the antipsychotic review.
-Back-test: the textbook route validates: the pilot's take-off is homogeneous across its practices, age bands and sexes (asserted, smallest p-value 0.21), the close-out says so, and the pilot rate reproduces the pilot's own outcomes exactly; no record of the federation's 2027 outcome exists to refute it.
-Second use: every file the decisive step reads has its own reason to be in the pack: the letters feed ask A, the medication courses and prescribing issues carry each protocol's eligibility, the pilot log carries the take-off, the registrations carry ages, eligibility and ask B's networks, the list sizes both asks' denominators.
-Shock: the antipsychotic review's pilot rate is the highest and its pool harm the largest, which reads as ordinary; the golden (benzodiazepines) is not the top of any sort of the reviews by eligible patients, pilot rate, harm rate, pool harm or patients taken off at the pilot rate (asserted in checks.py, R0).
-Pins: the WHAT sits in the programme specification (the population outside the Clun Valley network on 31 December 2026, the six-month definition of off, the harm table and the age it is read at, the sum over patients) and the protocols (eligibility); no filed sentence names who started a medicine, specialists, letters, provenance or a carry by subgroup (R1).
-
-## Readability screen
-
-| Rung | 1 Filed sentence | 2 Schema | 3 Reflex | 4 Control bench | 5 Hygiene | 6 Linear | 7 Second use | Verdict |
-|---|---|---|---|---|---|---|---|---|
-| R0 eligible patients times the harm rate, no take-off | the specification's harm table | the courses' columns | the pool-harm reflex | none | none | one product | yes | readable |
-| R1 the pilot's take-off times eligible times harm | the close-out's rates | the pilot log | the field's method | the pilot reproduces itself | the battery cleans the log | one product | yes | readable |
-| R2 R1 re-weighted by age band, sex, practice or product | none | the pilot log's columns | a case-mix carry | the close-out's homogeneity table | none | one product | yes | readable |
-| R3 (decisive) each patient's take-off by who started the medicine | none names provenance, specialists or letters | no column holds provenance | not the carry reflex | no file prices any review federation-wide | the battery stops at clean courses | not affine in any shipped column | the letters carry ask A | silent |
-
-## Semantic fork table
-
-| Id | Term or convention | Golden reading | Alternative | Call under it | Ruled out by |
-|---|---|---|---|---|---|
-| SF1 | eligible | the protocol on 31 December 2026 (issues in the six months to and including that date) | issues in calendar 2026; the six months' first day read as 29 June, 30 June or 2 July | same call (asserted); the same patients in scope under every first day (asserted) | the protocols' search sentence and specification section 3.2 |
-| SF2 | off the medicine | no issue of a medicine in the review's class in the 183 days after review | off at review | not the pilot's measure; every six-month row equals the 183-day rule (asserted) | specification section 3.4 and protocol step 5 |
-| SF3 | the population | patients registered outside the Clun Valley network | every member practice | same call (asserted) | specification sections 1 and 3.2 |
-| SF4 | the age a harm rate is read at | age on 31 December 2026 | age at review in 2027 | same call (asserted) | specification section 3.3 |
-| SF5 | who started the medicine | a letter naming a class medicine in the 60 days before the first issue of the patient's earliest class course | 30, 90, 180 or 365 days; Start recommendations only | same call and rounded figures (asserted, C1) | convergence: every specialist-started course has its letter 5 to 26 days before its first issue and none earlier, and no practice-started course has a class letter in the 365 days before |
-| SF6 | the letter's date | the trust's letter date | the practice's received date where the workflow log holds it | same call and rounded figures (asserted, C1) | convergence: every initiation letter was received before the first issue |
-| SF7 | letters carrying only a hospital number | resolved through the lookup | dropped | same call and rounded figures (asserted) | no initiation letter carries only a hospital number |
-| SF8 | the pilot's specialist-started take-off | each review's own | pooled across the reviews | same call and rounded figures (asserted) | convergence: the three reviews' rates are equal (1 of 24, 1 of 24, 2 of 48) |
-| SF9 | a patient on two medicines in a class | one patient, the earliest course | one per course | same call (asserted; 74 patients, all practice-started) | the protocols: a search finds patients |
-| SF10 | a patient in scope for two reviews | counted in each review | dropped from one | same call (asserted; 16 patients) | only one review runs |
-| SF11 | the pilot's review row against its six-month row | the six-month row | the review row's outcome | not the pilot's measure; same call (asserted) | specification section 3.4, protocol step 5 and the close-out's off rate |
-| SF12 | merged practices | their patients in the survivor's network | the old code's network | same call (each merged practice sits in its survivor's network, asserted) | the practice register's closed date and successor |
-| SF13 | rounding path | each figure rounded once from its unrounded sum; the gap from the rounded figures | the gap rounded from the unrounded sums | same gap (asserted) | the prompt's rounding sentence |
-| SF14 | a course's first issue | the courses extract's first_issue_date | the earliest issue in the issue extract | not a first issue: the issue extract starts on 1 July 2025 | the field's name; it equals the issue extract wherever that covers the date (asserted) |
-| SF15 | a course begun before the letters feed opened (1 October 2019) | none exists: every class course began on or after 15 November 2019 | treated as of unknown start | same call (none exists, asserted) | the courses extract |
-| SF16 | a letter sent twice (ask A) | one letter, in the half and at the practice of its first receipt | each copy a letter | the call is untouched; every first-half figure moves (asserted, K3) | specification section 4.3, which counts a letter once at its first receipt (asserted, K7); which 7 April letters are copies is left to their content |
-| SF17 | the day a hub appointment's practice record may fall on (ask B) | the appointment's day or the next working day | the next weekday, bank holidays ignored; any window of 3 to 10 days | the call is untouched; the same 20 figures (asserted, K7) | convergence: no write-up falls across a bank holiday (the pharmacists write up before the break) and no same-pharmacist record of a patient falls within 10 days of a hub appointment except its write-up (asserted, K7) |
-| SF18 | the GP Connect receipt a Wrekinside letter takes (ask A) | the first receipt for the patient carrying no letter's reference, on or within 21 days after the letter date | windows of 15 or 30 days | the call is untouched; the same 10 figures (asserted, K7) | convergence: no other Wrekinside document reaches a patient within 30 days of a medicine letter |
-
-## Ladder
-
-| Rung | Construction | Files | Dies to |
-|---|---|---|---|
-| 0 | patients in scope times the harm rate (pool harm) | antipsychotics (60.3 against 51.1 and 38.8) | the specification values what a review takes off, not the pool |
-| 1 | the pilot's take-off times each patient's harm rate | antipsychotics (24.1 against 11.8 and 10.8) | a specialist service started 86 per cent of the antipsychotic patients in scope; the pilot's were mostly practice-started |
-| 2 | rung 1 re-weighted by age band or sex, or carried by product | antipsychotics | the same fact: none of those attributes moves the take-off |
-| 2b | provenance read from any class letter at any time | antipsychotics (15.8 against 12.0 and 9.2) | a letter after the medicine began did not start it; the pilot's antipsychotic split blurs to 23 against 47 per cent |
-| 3 (decisive) | each patient's take-off by who started the medicine | benzodiazepines 12.0, gabapentinoids 8.1, antipsychotics 6.2 | the golden |
-
-- Position and margins (measured, checks.py M3 and L1): the golden is second on rungs 0 and 1 and first on rung 3;
-  rung 1's winner leads by 2.05 times; the golden leads the runner-up by 1.48 times and the runner-up the third by
-  1.32 times.
-- Pricing sequence. (1) The residue the filed WHAT leaves is how each patient's chance of coming off is carried from
-  the pilot, a method, not a knob. (2) The antipsychotic review falls from 24.1 to 6.2 harms: its carried take-off
-  falls from 40 to 10 per cent. (3) The one-group-by routes (the pilot by any recorded attribute, or by product) are
-  homogeneous by construction and file rung 1. (4) The take-off rates are observed proportions over a pilot of 700
-  patients with a six-month check; the standing family's spread (provenance alone, or by age band or sex) moves the
-  antipsychotic review by 0.31 harms and no rounded figure. (5) and (6) No variance is corrected. (7) No subset of
-  rows prints a review's federation-wide figure. (8) The reflex sweep runs as code (checks.py L0 to L5, R3).
-- Bin test: the decisive step is worth about 18 harms on the antipsychotic review against a standing spread of 0.31;
-  each graded harm sits within 0.16 of its whole number and each patients figure within 2.2 of its ten (M4).
-
-## Closure table
-
-| Axis | Reading in this build | Move |
-|---|---|---|
-| 1 Population | the protocol's patients at member practices outside the Clun Valley network on 31 December 2026 | filed (specification section 3); SF3 |
-| 2 Unit of account | the patient; harms a year | filed; SF9 |
-| 3 Attribution window | eligibility on the six months to 31 December 2026; letters by the half of first receipt (ask A); consultations by quarter of the consultation (ask B) | filed (protocols; the asking sentences); SF1 |
-| 4 As-of dating | age and registration on 31 December 2026; the receiving practice (ask A); registration on the day of each consultation (ask B) | filed (specification 3.2, 3.3, 4.1); asserted |
-| 5 Version basis | the pilot's six-month row | filed (pilot log header); SF11 |
-| 6 Denominator | eligible patients; registered patients at the start of each half or quarter for the asks | filed (asking sentences) |
-| 7 Weighting | each patient once at their own chance and age | filed (specification section 3) |
-| 8 Window length | 183 days for off; the provenance window converges from 30 to 180 days | filed; SF2, SF5 |
-| 9 Boundary inclusivity | 31 December 2026 inside; no course begins on a window edge | asserted |
-| 10 Rounding path | once, from the unrounded sum | SF13 |
-| 11 Tie-break | none needed: margins exceed 1.2 times | asserted |
-| 12 Maturity and censoring | every pilot patient has six months of follow-up by 31 December 2026 | asserted |
-| 13 Order of operations | conform, classify, carry, weight, sum | asserted |
-| 14 Row order | none | asserted |
-| 15 Duplicate resolution | the six-month row; a re-sent letter once, at its first receipt (ask A); a hub appointment and its practice-system record once (ask B) | forced by identity; asserted (K3, K4, K5) |
-| 16 Identity normalisation | pseudonym, the hospital-number lookup, dm+d names | the systems' own keys; SF7 |
-| 17 Netting against gross | none | n/a, asserted |
-| 18 Dimensional units | patients and harms a year | filed |
-| 19 Code and status semantics | the protocol codes, the recommendation words | the protocols' own code lists |
-| 20 Integerisation | whole patients and harms printed from unrounded sums | SF13 |
-| 21 Clause scope | the specification's population binds the call only | filed scope |
-| 22 Forward window contents | the eligible patients on 31 December 2026 stand for 2027's reviews | filed (specification section 3) |
-
-## Literal reader
-
-Executed word for word, the specification asks for the sum over the eligible patients outside the Clun Valley network
-of each patient's chance of being off six months after review times the harm rate at their age; the protocols fix who
-is eligible and the pilot supplies the evidence for each patient's chance. A literal reader who estimates each
-patient's chance from the pilot's outcomes for patients like that patient files the golden once the pilot is split by
-provenance, because that is the only attribute the pilot's take-off depends on; the pilot's average is the easy method
-on the same literal estimand, not another reading of it.
-
-## Oracles
-
-None on the main call: no file carries a federation-wide take-off, a provenance share or a harm estimate for any
-review, and the close-out's rates are the pilot's own. The verifier (generator/verify.py) recomputes the call, every
-figure and both asks with pandas from target/ alone.
-
-## Ask sheet
-
-Two asks on records the call never reads: the hospital medicine letters the practices received in 2026 (ask A, in the
-paper) and the pharmacist team's 2026 consultations (ask B, the csv). Ask A counts every medicine letter any member
-practice received in 2026, about any patient; ask B counts consultations. Neither touches the protocols' searches,
-the courses, the pilot or the six-month rule.
-
-**Ask A, the hospital medicine letters each network's practices received in each half of 2026, per 1,000 patients
-registered at the start of the half (10 figures, one decimal).**
-- H18 home: the board sizes the medicine-letter workload each network's practices carry before committing the
-  pharmacist team to a review.
-- Primary 1 (D1 and D2, one letter under two reference schemes): the mental health trust's April 2026 system change
-  sent its outage week's letters on 7 April for the first time and re-sent the four weeks before under the new
-  system's references, every one dated 7 April; a re-sent letter is the earlier letter, received first in March, and a
-  held one is new, and only its content (patient, service, encounter date, lines) tells which is which. Keeping the
-  batch moves every first-half figure by 0.60 to 0.74; dropping it moves them by 0.15 to 0.38.
-- Primary 2 (D7, the true key elsewhere): from October 2026 the hospital trust's documents arrive through GP Connect,
-  and the workflow log carries the message id for a reference and the message's own date for the document date, so a
-  letter's receipt is found only as the next receipt from that sender for that patient. Re-keying on patient, sender
-  and document date moves every second-half figure by 12.0 to 14.5, and falling back to the letter date by 1.3 to 2.1
-  (each device's shifts printed by generator/ceiling.py).
-- Hazards: letters dated over Christmas received in January (the asking sentence's received basis), one row per
-  medicine line, two date formats, hospital-number-only letters, merged practices' old codes.
-- Pin test: the sentence pins the basis (received), the population (letters its practices received; specification
-  4.3 files both trusts' letters as hospital medicine letters and counts a letter once, in the half and at the
-  practice of its first receipt) and the denominator (registered at the start of the half, specification 4.2); both
-  devices sit where the pins leave open which records are one letter and which receipt belongs to which letter. The
-  count-once sentence was filed after stage 4's first judge pass read a copy's second receipt as open (SF16): it
-  names the unit, not the 7 April batch, which copies in it are earlier letters, or how a GP Connect receipt is
-  found.
-
-**Ask B, each network's patient consultations with the team in each quarter of 2026, per 1,000 patients registered at
-the start of the quarter (20 figures, one decimal).**
-- H18 home: the board checks every network's patients had pharmacist time in 2026 before committing the team to one
-  review across them.
-- Primary 1 (D1, one appointment under two systems): hub pharmacists write a hub appointment into the patient's record
-  at the 16 shared-record practices, on the day or the next working day, under the practice system's own id and the
-  time of writing; the hub's export stamps its slots in UTC. One appointment is one consultation, and matching on
-  patient and day leaves every next-day record standing: 0.41 to 1.07 per 1,000 too many in every figure.
-- Primary 2 (D6, an event's quantity one grain below): a group medicines review is one hub booking with no patient,
-  its patients in the group session register; specification 4.1 counts each patient at a group review. One per
-  session misses 17 of 20 figures by 0.13 to 0.45.
-- Hazards: did-not-attend and cancelled bookings, UTC, registration on the day for hub patients, genuine same-day
-  call-backs at the practice (an over-matching trap for a patient-and-day key).
-- Pin test: the sentence pins the unit (patient consultations, defined in 4.1, a patient counting towards the
-  network of their practice on the day of the consultation), the denominator and the quarter; neither device's
-  handling is named. How far after an appointment its practice record may fall is closed by the data, not a sentence
-  (SF17): before a bank holiday the pharmacists write up on the day, so a weekend-only working day and any window of
-  3 to 10 days file the same 20 figures.
-
-Main population zero-counts: no device row (a 7 April letter, a GP Connect receipt, a hub record, a group booking)
-touches a protocol search, course, pilot outcome or provenance relation the call reads; dropping the whole 7 April
-batch leaves every patient's provenance and the call unchanged (checks.py K6).
-
-| The cracker (landed the call, ran the hygiene battery, executed every filed rule) | Verdict |
-|---|---|
-| A, 10 letter rates: receipt through the reference join, GP Connect re-keyed on patient, sender and document date, the 7 April batch dropped as a re-send | miss |
-| A, the same with unmatched receipts on the letter date, or the batch kept | miss |
-| B, 20 consultation rates: hub and practice records matched on patient and day after UTC conversion, attended group patients counted | miss |
-
-The full includer (a stress row, outside the gate) matches each GP Connect receipt to the letter it follows, keeps the
-first-time letters in the 7 April batch and matches a hub appointment to the same pharmacist's record on the next
-working day: it keeps all 30 and scores 100 on the call; with the best miss off the call at 12, that pair is 56.
-
-Pair ceiling: 28.5 (the cracker keeps 0 of 30 ask figures: 45.0 on the call, the mirror 12.0 off it)
-Mirror leakage: 0.0 per cent of ask weight
-Measured by: generator/ceiling.py (run on the cut pack)
-
-## Stage 4
-
-Cut judged: target.zip 0bacf975 (two byte-identical builds; checks.py 99 of 99, verify PASS, figures_check 88 of 88,
-precut 61 checks with no FAIL or WARN, voice-check PASS, container audit clean on target and golden, pair ceiling 28.5).
-
-leak.py on that cut: REVIEW, no LEAK. Each line ruled:
-- Sweep 3, the protocols and the specification carry the call's wording: it is review B's own name as both file it,
-  and every review's name appears alike; harmless.
-- Sweep 4, the close-out, the protocols and the specification carry four to seven stump-paragraph terms (antipsychotic,
-  practice, programme, checks, outside, letter): the field's nouns, the specification's population and its section 4.3
-  reporting paragraph; none names specialists or who started a medicine (checks.py R1, which also holds letters to
-  that paragraph); harmless.
-- Sweep 4, a prompt sentence carries task nouns (practices, medicine); harmless.
-- Sweep 6, the falls admissions file names the five networks beside numbers: the networks are the asks' units, not the
-  decision's candidates, and the file prices no review; a declared distractor; harmless.
-
-guard.py heart WARN and surface exit 0. The WARN is repeat.decision (pick_one_of_n) against task118's architecture 6,
-registered at 01:45Z on 2026-11-08, after this card (00:04Z); one review of three is the programme's own decision.
-surface promoted 8 pairs for the author's adjudicated clone check (task304, task305, task307, task308, task310,
-task467, task169, task128), each on shared card axes (population gap, pick_one_of_n, the pilot log as calibration) or
-batch-level surface; the card carries differentiation lines against task304 and task128. Personas in the pack: the
-card's three.
-
-Leak reader (Sonnet, medium, prompt and pack only, on 0bacf975): no leak. Its question 6 named an analytical choice
-(which off-probability to carry to unreviewed patients, and whether the pilot's rates transfer) without naming who
-started a medicine; it read the close-out's consistency section as nudging toward one pooled rate, which is the
-default path's step 3. Its machine-made list was measured on the cut and ruled harmless (leak_check_report.md).
-
-Determinism judge pass 1 (Sonnet, medium, on 0bacf975): DETERMINISTIC, FIX_NOW (determinism_check_report_arch5.md).
-Every golden figure reproduced. Gate G decomposition_attribution, analytical_non_defect, surface_read_dependency no,
-sole_data_defect no; Gate H domain pass, layers pass, decisive_step analytical; stump power strong (the pooled carry
-files review A at 24.1 harms against B's 11.8 and C's 10.8, and A passes B only if its specialist-started take-off
-exceeded about 14 per cent against 4.2). The finding: step 6 named the GP Connect key as patient, sender and document
-date, which read literally as the letter date matched 757 of about 3,960 October to December letters and filed the
-second half at 28.8, 26.5, 27.1, 25.3 and 28.3. Two residual forks it did not count against the verdict: the 7 April
-copies counted twice (the first half at 46.8, 44.1, 46.5, 43.0 and 43.6) and a weekend-only working day (Wrekinside
-North's second quarter at 11.7 against 11.6).
-
-Fixed in the generator in one pass, the call, the stump and every graded figure unchanged: step 6 states the
-verifier's match (the first Wrekinside receipt for the patient carrying no letter's reference, received on or within
-21 days after the letter date and not taken by an earlier letter); specification 4.3 counts a letter once, in the half
-and at the practice of its first receipt (SF16); hub appointments before a bank holiday are written up on the day
-(SF17; the golden's 20 figures do not move); SF16 to SF18 and both asks' clean truth asserted
-(checks.py K7 and K8). Only the consultation extract and the specification moved in the pack.
-
-Leak reader read 2 (Sonnet, medium, on ea8155d7, after the specification's count-once sentence): no leak, no file
-that exists only to help, question 6 an analytical choice (how to estimate the chance off from the pilot), who
-started a medicine not named. Its machine-made list was ruled (leak_check_report.md); the one true tell, the ePACT2
-summary's label "0408010 Control of epilepsy (gabapentinoids)", is now the BNF's paragraph name with the substances
-the line counts ("0408010 Control of the epilepsies: gabapentin and pregabalin"), a declared distractor no figure
-reads. The golden paper's source note now says the first receipt on or after the letter's date, as step 6 does.
-
-Determinism judge pass 2, the re-judge (Sonnet, medium, on ea8155d7): DETERMINISTIC, APPROVE
-(determinism_check_report_arch5_pass2.md). Every committed answer reproduced; Gate G decomposition_attribution,
-analytical_non_defect, surface_read_dependency no, sole_data_defect no; Gate H domain pass, layers pass,
-decisive_step analytical; the provenance flag invariant over windows of 30 to 365 days, either date basis, Start
-letters only and the earliest or any course; the GP Connect match invariant over windows of 14 to 28 days. Two
-advisories, neither a fix: a flag from any class letter at any time files review A (15.8 harms against B's 12.0)
-but does not separate the pilot's outcomes (23 against 47 per cent in review A), which the starter flag does (4
-against 25 to 46 per cent), so the data rule it out (the ladder's any-time rung, checks.py R3); and 151 same-day
-repeat calls in the practice systems, distinct records at distinct times, count as consultations under
-specification 4.1 (each patient a pharmacist consults is one patient consultation), where collapsing them to one per
-patient per day would lower every consultation figure by 0.1 to 0.3; the judge reads row counting as the natural
-reading and advised against a further clause.
-
-Shipped cut: target.zip a915483e (sha256 a915483ef2342ec8d2c30a150f8286d30653413debbd533cd60d771d2c6fb41c), which
-differs from the re-judged ea8155d7 only in that ePACT2 label. Every free gate re-run on it: two byte-identical builds,
-checks.py 105 of 105, verify PASS, figures_check 89 of 89, precut 61 checks with no FAIL or WARN, voice-check PASS,
-leak.py REVIEW with no LEAK (the lines above), container audit clean on target and golden, guard.py heart WARN (the
-task118 decision type above) and surface exit 0, pair ceiling 28.5 with mirror leakage 0.0 (ceiling.py).
+1. Card: `.claude/skills/fingerprint/cards/task9.json`, architecture 6, registered 2026-11-08T06:21Z; architecture 5
+   moved into the card's lineage with its fate (the four earlier architectures sit there as spent). Guard: PASS, with
+   differentiation lines against mark135 (and its v1 lineage) and task7; nearest driver task7 at 0.08.
+2. Pairing: Quantitative Finance, task type derivative pricing (the vocabulary's volatility-derivatives-pricing
+   key: the price of a structured credit note is its loss distribution), objective Forecasting. The headline is a
+   forward quantity, each senior note's chance of any loss of principal over 2027 to 2031, which decides the call.
+3. World: Stichting Pensioenfonds Havenbedrijf en Logistiek (PHL), the Rotterdam port and logistics sector's
+   pension fund, buys senior rated notes of private-credit funds for its matching portfolio through its fiduciary
+   manager Kadeweg Fiduciair Beheer. Two direct-lending managers offer a senior note on a static portfolio of
+   first-lien loans to European sponsor-backed mid-market companies: Kestrel Lane Credit Partners and Ostvale
+   Capital. Kadeweg licenses Lenderbase (a loan-level performance database of European sponsor-backed loans, with its
+   workout recoveries file) and Dealtrail (a buyout transactions database). People from `guard.py names --locale
+   nl_NL --seed 906`: Ilse Lips (Kadeweg's head of credit, who puts the purchase to the fund's investment committee),
+   Damian Schenkel (the fund's investment committee chair, who signs the rated-note standard), Liza Dekker (Kadeweg's
+   credit analyst who receives the managers' data). They appear only in document control lines.
+4. Candidates: Kestrel Lane's senior note, Ostvale's senior note, or neither.
+5. Quantity: for each note, the probability that cumulative credit losses on its portfolio as held on 1 January
+   2027 exceed the note's subordination before the end of 2031, the portfolio held static (a loan repaid early is
+   replaced by an identical loan to the same borrower), default and recovery taken from the experience of comparable
+   loans; the fund buys the note under 1.5 per cent, the lower if both are, and neither if none is (the standard's
+   sections 2 and 3).
+6. Shape: 02, a forecast across periods. Each note's chance of having taken a loss by the end of each year 2027 to
+   2031 (10 figures), each note's five-year chance of loss, expected loss and the subordination it would need for a
+   1.5 per cent chance (6), the call (1), and a chart of each portfolio's five-year loss exceedance with both notes'
+   subordination marked: about 20 criteria, every one downstream of the dependence the deep step estimates.
+7. Default path: rating and age default rates from the loan database, recoveries from the workout file, a one-factor
+   Gaussian copula fitted to the database's yearly default rates, then the agencies' industry factor; it buys Kestrel
+   Lane's note (`## Default path`).
+8. Data-native sentence: a buyout fund decides from one pot of reserved equity, and one partnership's patience,
+   whether to put more money into each of its companies when they breach, so companies held by the same fund at the
+   same time fail in the same years; the loan record keeps each loan's own life and the deal record keeps each
+   company's buyers, under the names each fund signed under, and no file joins a loan to the fund that held it.
+9. Abstraction sentence, written against the nearest builds and found not to be the same: task7 values one
+   borrower's rescue by the knock-on write-off it keeps off borrowers who draw their receipts from it (a directional
+   contagion, an expectation); mark135 corrects an estimator of a variance for components struck at different times.
+   Here no unit causes another's failure and no estimator of a series is corrected: a shared owner's year shock moves
+   all its units at once, a variance component estimated from a record joined to a second record at another grain,
+   and the call is a tail probability that an expectation never sees.
+10. Furniture: forum committee_or_panel (the fund's investment committee decides the purchase), forcing
+   purchase_order_or_contract (both offers close on 29 January 2027), org financial_institution (a pension fund),
+   role portfolio_manager (Kadeweg's head of credit runs the credit sleeve and asks). Stump strategy `other`: the
+   decisive move is a dependence structure (a fund-year variance component in default), which no strategy key names;
+   Gate G forecasting (statistical_rigor may not stand alone), pattern G17 decisive with G16 and G13 (the horizon is
+   five years of a pool, the record is a year at a time of single loans).
+11. As of 8 January 2027, the extracts' pull date; the investment committee meets on 21 January 2027 and both
+   offers close on 29 January.
+12. Prompt shell: a what question (what note, if either, the fund would be right to buy), the second sentence opening
+   on the committee note, the rounding sentence opening "Chances"; deliverables docx and csv. None repeats a shell in
+   this slot's lineage (whether, how-much, which, what with pptx+xlsx, how-much with csv+pdf).
 
 ## Tried and rejected
 
@@ -436,3 +118,17 @@ task118 decision type above) and surface exit 0, pair ceiling 28.5 with mirror l
   both trusts. None names a device.
 - 2026-11-08, stage 4 judge pass 1 on 0bacf975 (DETERMINISTIC, FIX_NOW): step 6 gave the GP Connect key as patient, sender and document date, which a literal reader took as the letter date (the message's own date is the day of receipt) and which filed the second-half letters 12.0 to 14.5 per 1,000 low; hub appointments written up on the next working day across a bank holiday left a weekend-only reading one figure off (Wrekinside North's second quarter, 11.7 against 11.6); and a 7 April copy's second receipt was left to the word letters. Step 6 now states the verifier's match, the pharmacists write up before a bank holiday, and specification 4.3 counts a letter once at its first receipt.
 - 2026-11-08, architecture 5 (Marches Primary Care Collaborative's 2027 deprescribing review, the pilot's take-off carried by who started each medicine) returned on its first platform round (Project Sulfur) by the determinism check: the check executed specification 3.3 with each review's pilot rate, read the close-out's section 3 (no practice, age group or sex differed from the review's overall rate) as the licence to carry that one rate to every patient in scope, and filed review A at about 24 harms against B 12 and C 11, as both runs did; it ruled the golden's split by who started the medicine, read from the letters with a 60-day window, a method nothing in the pack forces, since the letters sit only in specification 4.3. The in-house judge had passed the split because the pilot separates on it (1 of 24 against 63 of 136); the platform's test is whether a governing document forces the method. A sentence that forces it files the method (rule application, the shared-care rule rejected above), a golden on review A leaves both runs on the call, and the slot's assigned domain is quantitative finance, so the architecture is spent and the build is carried on in Project Sulfur as task9.
+- 2026-11-08, re-root screen before architecture 6 (quantitative finance, paper and a numpy prototype only): a
+  point-in-time and search-discounted backtest (client strategy 01) was set aside because each step is a named
+  correction a careful run executes (point-in-time constituents, delisting returns, the deflated Sharpe ratio); a
+  VaR model's breach timing (client strategy 02) because the Christoffersen test and a volatility-scaled replacement
+  are the field's own moves; an earnings-event variance decomposition for single-stock options because the earnings
+  calendar would be a dedicated organ; momentum's conditional beta after a bear market because "momentum crashes" is
+  named literature; private-equity NAV marks projected by each manager's exit uplift because desmoothing a reported
+  mark is a spent family (mark slots on assessors' lagged marks).
+- 2026-11-08, architecture 6's first prototype compared a portfolio concentrated in a few buyout funds against one
+  concentrated in a few industries, at one attachment: with an industry factor near 0.07 to 0.12 and a fund-year
+  factor near 0.25 to 0.35, the two concentrations offset (the five-year chance of loss within a factor of 1.1 to 2.3
+  either way), so no estimate of either factor moved the call decisively. Re-shaped so the textbook advantage is the
+  fund-concentrated note's own (more subordination, better ratings, more industries) and only the fund-year
+  dependence takes it away; the industry-concentrated note's tail barely moves under either model.

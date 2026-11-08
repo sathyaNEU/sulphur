@@ -1,104 +1,100 @@
 {
   "task": "task9",
-  "architecture": "v5 (re-root after the portal FAILED_TO_STUMP on architecture 4: an English GP federation's 2027 medicines safety programme funding one practice-pharmacist deprescribing review of three across its member practices, valued by the serious harms the patients each review would take off their medicine would avoid, the take-off read from the 2026 pilot practices)",
+  "project": "sulfur",
+  "architecture": "v6 (re-root after the platform returned architecture 5 on its determinism check and the slot's domain was confirmed as quantitative finance; architecture 4, the quantitative finance build before it, was FAILED_TO_STUMP with both runs on the golden: a Dutch pension fund's investment committee choosing which of two direct-lending managers' senior rated notes to buy for its matching portfolio, or neither, judged on each note's chance of any loss of principal over 2027 to 2031 against the fund's bar)",
   "drawn": "2026-11-08",
-  "slot_note": "re-root of task9 in the same objective (Opportunity Sizing), architecture 5, one architecture per world: energy, urban, actuarial and quantitative finance spent in this slot",
-  "domain": "pharmacology-pharmacoepidemiology-safety",
-  "subdomain": "benefit-risk-assessment",
-  "client_domain": "pharmacology-pharmacoepidemiology-safety",
-  "niche": "an English GP federation's 2027 medicines safety programme choosing which one of three practice-pharmacist deprescribing reviews its pharmacist team runs across the member practices, by the serious harms the patients each review would take off their medicine for good would avoid, when practice pharmacists almost never stop a medicine a specialist service started and the pilot practices' patients were mostly practice-started",
-  "objective": "opportunity-sizing-decision",
-  "shape": "other",
+  "slot_note": "re-root of task9 in quantitative finance, architecture 6, one architecture per world: energy, urban, actuarial, market-impact capacity and pharmacology spent in this slot",
+  "domain": "quantitative-finance",
+  "subdomain": "volatility-derivatives-pricing",
+  "client_domain": "quantitative-finance",
+  "niche": "a Dutch pension fund pricing the chance of loss on two direct-lending managers' senior rated notes before buying one for its matching portfolio, when the buyout funds that own the borrowers decide from one pot of reserved equity whether to rescue each of their companies, so a fund's companies fail in the same years, and one manager lends to a handful of funds' companies",
+  "objective": "forecasting",
+  "shape": "02",
   "decision_type": "pick_one_of_n",
-  "answer_unit": "count",
-  "answer": "review B, benzodiazepines and Z-drugs in people aged 65 and over: 12 serious harms a year avoided; runner-up review C, gabapentinoids taken with an opioid, at 8; gap 4",
-  "answer_source": "task9/generator/figures.json: call, runner_up, gap, reviews",
+  "answer_unit": "named_option",
+  "answer": "provisional at the draw: buy Ostvale's senior note (chance of any loss 2027 to 2031 about 0.9 per cent, under the 1.5 per cent bar); Kestrel Lane's note fails the bar at about 3 per cent once companies held by the same buyout fund are let default together; figures fixed by the generator",
+  "answer_source": "task9/generator/figures.json: call, notes",
   "gap": [
-    "population",
-    "objective"
+    "objective",
+    "population"
   ],
   "pattern": [
     "none"
   ],
   "generators": [
-    "G5",
-    "G14",
-    "G6"
+    "G17",
+    "G16",
+    "G13"
   ],
   "gate_g": "forecasting",
-  "calibration_form": "pilot_log",
-  "stump_strategy": "forecast_method_backtest",
+  "calibration_form": "realised_outcome_roster",
+  "stump_strategy": "other",
   "decisive_rule_filed": false,
   "official_decoy": false,
   "validated_decoy": false,
-  "context_artifact": "close_out_summary",
+  "context_artifact": "filed_standard",
   "stump_class": "analytical",
-  "analyst_test": "An analyst who conforms every record and reads every document correctly carries each review's 2026 pilot take-off rate (the share of reviewed patients off the medicine six months later, the same across the pilot's practices, ages and sexes) to the federation's eligible patients and weights them by the filed harm rates, and funds the antipsychotic review, when practice pharmacists almost never stopped a medicine a specialist service had started, the pilot practices' antipsychotic users were mostly practice-started and the federation's are mostly specialist-started, so the antipsychotic review would take far fewer patients off than the pilot rate says and the benzodiazepine review avoids more harm.",
-  "domain_test": "Weighing a medicine's harms against stopping it is pharmacology's benefit-risk question: the serious harms (falls with fracture, strokes, deaths) a deprescribing review avoids, the absolute harm each patient's continued use carries at their age times the patients the review actually takes off; with another field's nouns there is no medicine, no specialist who started it, no attributable harm per patient-year and no pharmacist's review to stop it.",
-  "layer2_family": "estimand_identification",
-  "layer2_pattern": "own:a-pilot-deprescribing-rate-carried-by-who-started-each-medicine",
+  "analyst_test": "An analyst who conforms every file and reads the fund's standard correctly estimates each loan's default chance by rating and age from the loan database, the recovery from the workout file, and the dependence the field's portfolio models carry (one economy-wide factor fitted to the database's yearly default rates, then an industry factor in the agencies' manner, which back-tests cleanly on the database's yearly and sector default counts), simulates both portfolios and buys Kestrel Lane's note as the safer (its borrowers spread over many industries with more subordination), when companies owned by the same buyout fund in the same year default together far beyond what the economy and their industries explain, and Kestrel Lane's borrowers sit in a handful of funds, so its note fails the bar and Ostvale's is the one to buy.",
+  "domain_test": "The chance that a senior tranche of a loan portfolio loses money is a structured-credit pricing question set by default dependence: the field's own tool is a factor copula whose correlation structure must be estimated from the default record, and here the decisive structure is the buyout fund's own reserved equity and patience; with another field's nouns there is no tranche, no attachment point, no sponsor who decides whether to rescue a borrower and no default correlation to price.",
+  "layer2_family": "estimation_fit",
+  "layer2_pattern": "own:fund-year-default-dependence-priced-into-a-senior-tranche",
   "layer1": [
-    "practice prescribing coded by dm+d virtual product while the trusts' letters name medicines in free text with strengths and brand names",
-    "two practices merged on 1 April 2025, their open registrations carried by the survivor and the hospitals' practice field keeping the old code for some patients",
-    "letters from two trusts in two date formats, one row per medicine line",
-    "a minority of letters carrying only the trust's hospital number, resolved through the federation's lookup",
-    "the mental health trust's April 2026 system change: an outage week's letters sent on 7 April and four weeks of letters re-sent under the new system's references",
-    "the hospital trust's documents arriving through GP Connect from October 2026 with a message id and the message's own date",
-    "letters dated over Christmas reaching the practices in January",
-    "the pilot log's six-month row beside its review row",
-    "the hub booking system stamping slots in UTC while the practices' systems record local time, and hub appointments written into shared-record practices' systems on the day or the next working day",
-    "group medicines reviews held as one hub booking with their patients in a separate register"
+    "a vendor loan-performance panel re-submitted quarter by quarter, with restated rows, two status vocabularies and a 2019 schema change",
+    "amounts in five currencies converted at the ECB reference rate",
+    "borrowers named by legal entity in the loan record and by trading name in the deal record, joined through LEI where both carry one and by name otherwise",
+    "buyers recorded under the names each fund signed under (fund numerals, LP and SCSp vehicles, co-invest vehicles alongside)",
+    "secondary buyouts and refinancings starting new loans for the same company",
+    "workouts still open at the cut with no recovery",
+    "two managers' collateral tapes in different layouts and rating scales"
   ],
-  "stakeholder_role": "the federation's lead clinical pharmacist, who runs the pharmacist team across the member practices and puts the 2027 review to the federation's board",
-  "role_family": "field_unit_lead",
-  "scoring_unit": "per covered member",
+  "stakeholder_role": "the fiduciary manager's head of credit, who puts the purchase to the pension fund's investment committee",
+  "role_family": "portfolio_manager",
+  "scoring_unit": "other",
   "spine": {
-    "file": "trust_medicine_letters_feed_2019-2026.csv",
-    "rows": 176956,
-    "entity": "one medicine line of a hospital or mental health trust letter to a member practice",
-    "grain": "letter line",
+    "file": "lenderbase_loan_performance_2008-2026.csv",
+    "rows": 0,
+    "entity": "one quarterly status report on one loan to a sponsor-backed European mid-market company",
+    "grain": "loan x quarter",
     "source": "synthetic"
   },
-  "forum": "board_of_directors",
+  "forum": "committee_or_panel",
   "forcing_event": "purchase_order_or_contract",
-  "org_family": "hospital_or_health_provider",
+  "org_family": "financial_institution",
   "world": {
-    "geography": "England (West Midlands)",
-    "currency": "GBP",
-    "org_type": "a GP federation whose pharmacist team serves its member practices under the integrated care board's medicines safety contract",
+    "geography": "Netherlands (Rotterdam)",
+    "currency": "EUR",
+    "org_type": "a sector pension fund buying senior rated notes of private-credit funds for its matching portfolio through its fiduciary manager",
     "invented_names": [
-      "Marches Primary Care Collaborative",
-      "NHS Severn Marches Integrated Care Board",
-      "Wrekinside Teaching Hospitals NHS Trust",
-      "Marches Mental Health NHS Trust",
-      "Clun Valley Primary Care Network"
+      "Stichting Pensioenfonds Havenbedrijf en Logistiek",
+      "Kadeweg Fiduciair Beheer",
+      "Kestrel Lane Credit Partners",
+      "Ostvale Capital",
+      "Lenderbase",
+      "Dealtrail"
     ],
     "people": [
-      "Leigh Bond",
-      "Colin French",
-      "Sylvia McDonald"
+      "Ilse Lips",
+      "Damian Schenkel",
+      "Liza Dekker"
     ]
   },
   "deliverables": [
-    "medicines_safety_review_2027.pdf",
-    "pharmacist_consultations_2026.csv"
+    "ic_note_senior_notes_2027.docx",
+    "senior_note_loss_by_year.csv"
   ],
   "opening_move": "question-first",
-  "question_form": "how-much",
-  "driver": "The decisive quantity is how many units a programme would move once it runs across a whole population, when its measured success rate depends on where each unit's current arrangement came from, a provenance no field records and only another body's correspondence shows; the pilot ran where nearly every arrangement came from the more movable source, so carrying its average rate to a population whose arrangements mostly came from the other source ranks first the candidate that would move least.",
-  "driver_concrete": "Practice pharmacists in the 2026 pilot took about two in five reviewed patients off their antipsychotic for good, but almost none of the patients whose antipsychotic the mental health trust's memory service had started; the pilot practices' users were mostly practice-started and the federation's are mostly specialist-started, so across the federation the antipsychotic review would take far fewer patients off, and avoid less harm, than the benzodiazepine review.",
-  "stump": "The default path carries each review's pilot take-off rate to the federation's patients in scope and funds the antipsychotic review at about 24 harms a year; the step that lands it there is carrying the pilot's average rate to every patient, when practice pharmacists almost never stopped a medicine a specialist service had started (4 of 96 in the pilot), the pilot's antipsychotic patients were mostly practice-started (136 of 160) and a specialist service started 86 per cent of the antipsychotic patients in scope, so the antipsychotic review would avoid about 6 harms a year against the benzodiazepine review's 12.",
+  "question_form": "which",
+  "driver": "The decisive quantity is the chance that losses on a pool of units exceed a cushion, set by how far the units' failures arrive together: beyond the shared conditions and sectors every model carries, units held at the same time by the same owning vehicle fail in the same periods, a dependence no field records and only the buyer named on a separate transaction record reveals, so a model whose dependence comes from conditions and sectors alone, which back-tests cleanly on the broad record, ranks safest the pool concentrated in a few owners.",
+  "driver_concrete": "Companies held by the same buyout fund in the same year default together far beyond what the economy and their industries explain, because the fund decides from one pot of reserved equity whether to rescue each of them; Kestrel Lane lends to a handful of funds' companies, so its portfolio's loss tail is far fatter than the industry-diversified models say and its senior note fails the pension fund's 1.5 per cent bar, while Ostvale's, spread over many funds, clears it.",
+  "stump": "provisional at the draw: the default path buys Kestrel Lane's note at a chance of loss of about 0.3 per cent against Ostvale's 0.6 per cent; the step that lands it there is taking the borrowers' defaults as linked only through the economy and their industries, when companies held by the same buyout fund in the same year default together, which Kestrel Lane's concentration in a few funds turns into a chance of loss of about 3 per cent.",
+  "deep_chain": "(1) link every loan in the database and both tapes to the buyout fund that held the company when the loan ran, through the deal record's buyer names and dates; (2) see that defaults in a fund's companies bunch in the same years beyond what the year, the industry and the loans' age explain, and separate that from persistent fund quality (same-year pairs carry it, different-year pairs do not); (3) estimate the fund-year dependence like for like, conditioning on industry-year and age, as a latent correlation; (4) carry it, with the economy and industry factors, into both portfolios as they are held on 1 January 2027 and simulate five years with seasoning by time since buyout and recoveries that include the open workouts; (5) Kestrel Lane's note fails the bar and Ostvale's clears it.",
+  "judgment": "the dependence a portfolio-loss model must carry, estimated as a fund-year variance component from the default record (a random-effects probit on fund-year clusters conditioned on industry-year and age), justified because same-fund same-year pairs default together several times as often as like-for-like pairs across funds while same-fund different-year pairs do not.",
+  "one_fact_test": "the likeliest hint is that companies owned by the same buyout fund default together; the run still has to find the fund behind every loan through the deal record's buyer names and dates, separate a year shock from fund quality, estimate the dependence like for like rather than from raw co-default counts that carry shared industries and ages, and carry it through a five-year simulation with the right clock and recoveries, and each of those moves the graded figures.",
+  "strategy_label": "UNTESTED (Banking 07, correlated defaults, not independent ones, carried here into a structured-credit pricing call in quantitative finance)",
   "mechanism_source": "design_note",
   "differentiation": {
-    "task258": "task258 carries a performance playbook only to page loads whose served document carries the preload, a precondition of the mechanism every past engagement met; here the review reaches every eligible patient and nothing in the mechanism is absent: what differs is how often a reviewed patient actually comes off, which depends on who started the medicine, read from the specialists' letters.",
-    "task309": "task309 carries a roof's protective cut class by class of peak gust, a physical intensity that weakens the effect; here nothing varies in intensity: the take-off rate depends on a medicine's provenance, a practice or a specialist service, read per patient from correspondence another trust sends.",
-    "task124": "task124 carries a verified share within the kind of main a line sits on, the verification having been done on lead mains; here nothing is verified: every pilot review has an outcome, and what decides is that the pilot practices' patients mostly had practice-started medicines.",
-    "task141": "task141 reads a capped term's petition rate from the record's terms already at their class maximum, the forward condition's own members; here no forward condition is imposed: the reviews run as piloted and only the mix of specialist-started patients differs.",
-    "task137": "task137's second architecture restarted stopped medicines on the record's own restart clock; here nothing restarts: the decisive quantity is how many reviewed patients come off at all, which depends on who started the medicine.",
-    "task303": "task303 takes out of each feeder's outage minutes the substation losses its siblings logged in the same minute; here there are no siblings or shared causes: each patient's chance of coming off depends on their own medicine's provenance.",
-    "task128": "task128 reads a call's effect at the dialler's daily cut-off, a natural experiment in who was reached; here nothing is assigned by a cut-off: every pilot patient was reviewed, and the take-off rate is carried to the federation by who started each patient's medicine, a provenance read from the specialists' letters.",
-    "task304": "task304's pilot yield fails forward because a competing service absorbs one candidate's pool from a fixed date and another candidate's pilot swept a standing stock once; here nothing is absorbed and nothing is swept: the pilot rate holds patient by patient, and it fails only in aggregate because the pilot practices' patients mostly had practice-started medicines while the federation's antipsychotic users mostly had specialist-started ones.",
-    "task98": "task98's first architecture forecast from a filed provision a candidate made elsewhere; here nothing is provided elsewhere for the candidates: the provenance is of each patient's medicine, read from specialist letters, and it moves only how often a pharmacist's review takes the patient off."
+    "mark135": "mark135 (and its v1 lineage, a log-scale retransformation of a regression's mean) estimates a variance or a mean from one record's own values under an estimator correction; here the decisive quantity is a tail probability on a tranche, set by a dependence between borrowers that lives in which buyout fund held each company in each year, estimated as a fund-year variance component from the default record joined to the deal record, with nothing in any one series' values to correct.",
+    "task7": "task7 values one borrower's rescue by the expected write-off it keeps off its dependants, a directional knock-on through payment flows and a linear expectation; here no borrower causes another's default, a common owner's year shock moves all its companies at once, and the call turns on the tail of a portfolio's five-year loss distribution against a senior note's subordination, which an expectation never sees."
   },
   "lineage": [
     {
@@ -259,9 +255,34 @@
       "stump": "A competent solver nets each strategy's backtest gross alpha of its 2026 turnover priced at what the desk's own orders paid for stocks of that size and gives the GBP 400 million to small-cap momentum; the step that lands it there is pricing the trades at the cost of the desk's far smaller orders, when impact grows with each trade's share of the stock's daily traded value and at GBP 400 million momentum's trades take several per cent of its small caps' volume.",
       "driver_concrete": "At GBP 400 million the small-cap momentum strategy's month-end rebalances would trade several per cent of each small cap's daily traded value, and the desk's own orders show impact rising with the square root of that share, so its 4.8 per cent gross alpha keeps about 1.3 per cent, under the mid-cap value strategy's 2.0 and the large-cap quality strategy's 1.5, while the desk's average realised cost leaves momentum first.",
       "fate": "spent 2026-11-07 on its first portal round, FAILED_TO_STUMP: both responses filed the golden (UK Mid Cap Value 8, UK Large Cap Quality 6, momentum 5, gap 2) by the field's own textbook, a per-band fit of shortfall on volatility times the square root of participation validated on a holdout against flat band costs, so the data revealed the right method by fit; both also took all 24 ask figures, whose devices were filed. The market-impact world, the capacity driver and its shell are spent."
+    },
+    {
+      "domain": "pharmacology-pharmacoepidemiology-safety",
+      "subdomain": "benefit-risk-assessment",
+      "objective": "opportunity-sizing-decision",
+      "shape": "other",
+      "decision_type": "pick_one_of_n",
+      "answer_unit": "count",
+      "gap": [
+        "population",
+        "objective"
+      ],
+      "pattern": [
+        "none"
+      ],
+      "generators": [
+        "G5",
+        "G14",
+        "G6"
+      ],
+      "gate_g": "forecasting",
+      "driver": "The decisive quantity is how many units a programme would move once it runs across a whole population, when its measured success rate depends on where each unit's current arrangement came from, a provenance no field records and only another body's correspondence shows; the pilot ran where nearly every arrangement came from the more movable source, so carrying its average rate to a population whose arrangements mostly came from the other source ranks first the candidate that would move least.",
+      "stump": "The default path carries each review's pilot take-off rate to the federation's patients in scope and funds the antipsychotic review at about 24 harms a year; the step that lands it there is carrying the pilot's average rate to every patient, when practice pharmacists almost never stopped a medicine a specialist service had started (4 of 96 in the pilot), the pilot's antipsychotic patients were mostly practice-started (136 of 160) and a specialist service started 86 per cent of the antipsychotic patients in scope, so the antipsychotic review would avoid about 6 harms a year against the benzodiazepine review's 12.",
+      "fate": "spent 2026-11-08: the platform's determinism check returned the golden (the pooled pilot rate carried under the filed specification with the close-out's subgroup table files review A at 24 harms; the split by who started the medicine read as a method nothing in the pack forces); both runs filed review A; the slot's domain is quantitative finance",
+      "architecture": 5
     }
   ],
-  "notes": "2026-11-08 ship: heart WARN repeat.decision against task118 (v6), registered at 01:45Z after this card (00:04Z); one review of three is the programme's own decision. The determinism judge read Gate G as decomposition_attribution (the pilot's honest rates carried to the federation's mix), analytical_non_defect; the card's gate_g stays as drawn.",
+  "notes": "",
   "lineage_shells": [
     {
       "question form": "whether",
@@ -286,13 +307,19 @@
       "second-sentence opener": "the",
       "rounding opener": "alpha",
       "deliverable set": "pptx+xlsx"
+    },
+    {
+      "question form": "how-much",
+      "second-sentence opener": "a",
+      "rounding opener": "patients",
+      "deliverable set": "csv+pdf"
     }
   ],
-  "registered": "2026-11-08T00:04:58Z",
+  "registered": "2026-11-08T06:21:05Z",
   "shell": {
-    "question form": "how-much",
-    "second-sentence opener": "a",
-    "rounding opener": "patients",
-    "deliverable set": "csv+pdf"
+    "question form": "what",
+    "second-sentence opener": "in",
+    "rounding opener": "chances",
+    "deliverable set": "csv+docx"
   }
 }
