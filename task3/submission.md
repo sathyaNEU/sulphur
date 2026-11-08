@@ -1,51 +1,48 @@
 ## Tags
 
-**Domain:** Physical & Environmental Sciences (hydrology, flood frequency).  
-**Analytical objective:** Forecasting & Predictive Modeling.
+> **Domain:** Engineering and Physical Sciences, Physical & Environmental Sciences (inverse problems: physical-model calibration and uncertainty propagation, a groundwater withdrawal forecast).
+> **Analytical objective:** Forecasting & Predictive Modeling.
 
 ## 1. Final Recommendation
 
-**Carry Alternative C, the 38 MG tank, into design.**
-It leaves Outfall 014 2.9 untreated overflow events in an average year against the decree's limit of 4. Not Alternative B (26 MG), which meets the limit only at its pump station's 31 MGD rating (2.8) and leaves 6.8 once its pump-back is held to the room the Southside plant has under its 140 MGD headworks capacity. Not Alternative D, which meets the limit too but costs USD 30.4 million more.
+**The district will permit the 1,000 gpm schedule.** Its greatest monthly drawdown at OW-S in 2046 is 8 ft against Rule WR-4's 9 ft limit, and the 1,250 gpm schedule reaches 10 ft. Not 1,250 gpm: calibrating the far field on the Mill Street record read against the nearest network well CV-07 or the wells' own pre-pumping levels credits the region's wet years to leakage and puts every schedule under 4 ft; and not none of them: the test's Theis fit, carried twenty years, puts even 450 gpm at 22 ft.
 
-## 2. Critical Components
+## 2. Supplementary Questions
 
-1. Alternative B, pumped back no faster than the Southside plant's room: **6.8 events a year**
-2. Alternative C on the same replay: **2.9 events a year**
+### reidel_road_WR-4_demonstration.pdf
 
-## 3. Step-by-Step Solution
+1. Page 1 states that the district will permit the 1,000 gpm schedule, with a table of the four schedules (450, 700, 1,000 and 1,250 gpm), each one's greatest monthly drawdown at OW-S in 2046 (4, 6, 8 and 10 ft) and whether it is within 9.0 ft (yes, yes, yes, no).
+2. The chart under the table plots the drawdown at OW-S in every month from January 2027 to December 2046 for each schedule, one line per schedule with the 1,000 gpm line heaviest, against a dashed 9.0 ft limit line; every schedule's greatest month falls in 2046.
+3. The text below gives the test fit (transmissivity 8,160 ft2/day, storativity 1.0e-03), the separation of the Mill Street record against CV-02 and CV-11, the leakage factor of 3,526 ft with the walls 5,000 ft apart, and the schedules and projection used.
 
-1. Joined the two loggers in outfall_014_flow_monitoring_2014-2025.parquet onto UTC, FM-0142's cfs (Eastern Standard Time) times 0.646317 and AV-3315's MGD, the overlap week once.
-2. Took the Southside WRP's hourly influent from wrp_influent_hourly_2014-2025.csv (both tag sets, local time with its repeated and missing hours, to UTC) and its room as 140 MGD less the influent.
-3. Replayed the record through each TM-7 tank filling from the overflow and pumped back after the overflow stops (TM-7 3.2) at the lesser of the station's firm capacity and that hour's room.
-4. Counted untreated overflow events under Appendix C 2.2 and 2.3: A 9.7, B 6.8, C 2.9, D 1.3 a year; C is the least-cost alternative at or under 4 (TM-7 4).
-5. Rainfall 2025: dropped repeated tips, removed each calibration pour (a steady run of tips on a cal-check visit in rain_gauge_field_service_2014-2025.xlsx), read the TipLink C200 loggers (RG-3 and RG-4 from May 2024) as UTC and the HOBO loggers as Eastern Standard Time, and counted each gauge's tips at 0.2 mm from the July 2025 visit the field log records its new mechanism on.
-6. Northside returns: on each quarter hour a pump ran in northside_tank_scada_2020-2025.csv, the fall in storage (NT_LIT601_FT through O&M Table 4-1, readings from the 23 August 2023 re-mount less the 0.45 ft the empty tank reads) plus NT_FIT600_MGD over the quarter hour, summed by year.
-7. Recommended Alternative C at 2.9 events a year.
+### reidel_road_sentinel_forecast.xlsx
 
-## 4. Deliverable Answers
+4. Sheet Demonstration: one row per schedule with the greatest monthly drawdown at OW-S in 2046 (to the hundredth and to the nearest foot: 4, 6, 8 and 10 ft), the greatest in the term and whether it meets 4.1; then the permitted schedule, 1,000 gpm.
+5. Sheet Forecast OW-S: one row per month from 2027-01 to 2046-12 with the Mill Street projection (gpm), the drawdown from the Mill Street wells, and for each schedule its Reidel Road rate and the total drawdown at OW-S.
+6. Sheets Aquifer test, Mill Street record and Calibration: the test fit, the monthly record from 2005 with each well's drawdown against the far wells and the model's, and the leakage factor with its residuals.
 
-### clay_street_storage_evaluation.xlsx
+### Answers the district asked for
 
-1. Events a year each alternative would leave, to one decimal:
-   - Alternative A (19 MG): 9.7
-   - Alternative B (26 MG): 6.8
-   - Alternative C (38 MG): 2.9
-   - Alternative D (50 MG): 1.3
-2. Alternative to carry into design: Alternative C (38 MG)
-3. Rainfall recorded in 2025, inches:
-   - RG-1: Jan 3.94, Feb 1.79, Mar 7.54, Apr 6.31, May 6.85, Jun 2.81, Jul 3.31, Aug 2.13, Sep 3.50, Oct 10.14, Nov 1.27, Dec 2.24
-   - RG-2: Jan 3.78, Feb 1.74, Mar 7.14, Apr 6.58, May 6.56, Jun 2.74, Jul 3.39, Aug 2.33, Sep 2.69, Oct 11.08, Nov 1.50, Dec 2.02
-   - RG-3: Jan 3.57, Feb 1.95, Mar 7.02, Apr 6.83, May 5.93, Jun 2.79, Jul 4.01, Aug 2.12, Sep 3.81, Oct 11.87, Nov 1.36, Dec 2.01
-   - RG-4: Jan 3.74, Feb 1.71, Mar 7.34, Apr 6.31, May 6.13, Jun 3.17, Jul 3.13, Aug 2.46, Sep 3.69, Oct 10.81, Nov 1.16, Dec 2.14
-4. Volume the Northside tank returned to the Northside interceptor, million gallons:
-   - 2021: 261
-   - 2022: 214
-   - 2023: 300
-   - 2024: 302
-   - 2025: 372
+7. Greatest monthly drawdown at OW-S in 2046: 450 gpm 4 ft; 700 gpm 6 ft; 1,000 gpm 8 ft; 1,250 gpm 10 ft.
+8. Drawdown the Mill Street wells caused at the Mill Street monitoring well, 2025 average: 5 ft.
+9. Greatest monthly drawdown in 2046 at the registered domestic well nearest the Reidel Road field (DW-17), under the 1,000 gpm schedule: 7 ft.
 
-### clay_street_tank_selection_board.pptx
+## 3. Critical Components
 
-1. Selection: Alternative C (38 MG), on slide 2
-2. Column chart of events a year by alternative (A 9.7, B 6.8, C 2.9, D 1.3) against the limit of 4, on slide 2, Alternative C highlighted
+1. The test's Theis fit (transmissivity **8,160 ft2/day**, storativity **1.0e-03**) matches the three observation wells to 0.08 ft, yet carried forward it puts the Mill Street wells' 2025 drawdown at MS-MW at **12 ft**: the test cannot see the far field.
+2. CV-07 sits inside the Mill Street cone (its departure from CV-02 and CV-11 grew from **0.01 ft** in 2008 to **-1.67 ft** in 2025), so the natural level comes from CV-02 and CV-11, and against it the Mill Street wells drew MS-MW down **5 ft** in 2025.
+3. The bounded leaky aquifer reproducing that drawdown has a leakage factor of **3,526 ft**; against CV-07 the record asks for about **1,900 ft**.
+4. Greatest monthly drawdown at OW-S in 2046: **8 ft** at 1,000 gpm and **10 ft** at 1,250 gpm, against the **9 ft** limit.
+
+## 4. Step-by-Step
+
+1. From PW-1_constant_rate_2026-09_transducers.csv, barologger_BL-2231_2026-09.csv and the field readings' Loggers sheet: each logger on its own clock, pressure less the barologger, the OW-2 re-hang and OW-3's rewritten rows taken out, drawdown against each well's pre-test trend and barometric response.
+2. Fitted Theis to OW-1, OW-2 and OW-3 at the totalizer's 1005 gpm: transmissivity 8,160 ft2/day, storativity 1.0e-03, residual 0.08 ft (the field's method).
+3. Hindcast the Mill Street wells (monthly gpm from harlow_springs_MOR_well_production_2009-2026.csv, thousand gallons before July 2016) with that fit: 12 ft at MS-MW in 2025, more than twice the record, so the far field is calibrated on the record.
+4. Read MS-MW (dropping readings taken with TW-1 running, the measuring point from cvwcd_well_register.xlsx) and the network wells: against its own 2005 to 2008 level or against CV-07 the record calibrates a leakage factor near 1,900 ft and every schedule under 4 ft at OW-S, filing 1,250 gpm (the reasonable but insufficient route).
+5. CV-07's departure from CV-02 and CV-11 deepens with Mill Street pumping (correlation 0.91 with the monthly rate, against 0.15 for CV-02 less CV-11), and OW-S moved with CV-02 and CV-11 before 2009 (correlation 0.99): the natural level is CV-02 and CV-11's, and against it the Mill Street wells drew MS-MW down 5 ft in 2025.
+6. With the walls at Plate 3's mapped edges (5,000 ft apart) and the test's T and S, the leakage factor that reproduces the drawdown at MS-MW, CV-07 and OW-S from March 2009 to September 2026 is 3,526 ft.
+7. Superposed the Mill Street projection (reidel_road_WR-4_application_requested_schedules.pdf) and each Reidel Road schedule from April 2027 month by month at OW-S: greatest monthly drawdown in 2046 4, 6, 8 and 10 ft for 450, 700, 1,000 and 1,250 gpm, so Rule WR-4 4.2 permits 1,000 gpm.
+8. Rule WR-4 4.4's domestic well is DW-17, nearest PW-1 and PW-2 in cvwcd_well_register.xlsx and about 200 ft inside the plate's west edge, where the wall's image matters: 7 ft in 2046 under 1,000 gpm, against 6 ft if the walls are left out (the record alone fits either way).
+
+No other schedule survives. Theis from the test alone fails every schedule, but its own hindcast of the Mill Street record is more than twice the record. Every far-field calibration read against CV-07, the wells' own baselines or a fitted trend files 1,250 gpm, and CV-07's growing departure and the wet 2010s rule each of those out. Against CV-02, CV-11 or both, with the walls from 4,000 ft apart to absent and T from any observation well, the 1,000 gpm peak stays under 9 ft and the 1,250 gpm peak over it. Calibrated on OW-S alone, whose record carries half a foot of Mill Street drawdown, the leakage factor (3,065 ft) puts MS-MW's 2025 drawdown at 4.4 ft against the record's 4.9.

@@ -1,123 +1,129 @@
 {
  "task": "task3",
- "architecture": 2,
- "setting": "2026-01-16",
+ "architecture": 3,
+ "setting": "2026-11-06",
  "files": [
   {
-   "name": "outfall_014_flow_monitoring_2014-2025.parquet",
+   "name": "PW-1_constant_rate_2026-09_transducers.csv",
    "role": "evidence",
-   "source": "synthetic: the authority's flow monitoring export for the Outfall 014 overflow pipe, both loggers",
-   "date": "2026-01-16",
+   "source": "synthetic: Tillbrook Hydrogeologic's logger export for the 72-hour test of PW-1, six wells, one-minute absolute pressure from two logger brands",
+   "date": "2026-09-21",
    "license": "CC0 1.0 (synthetic, authored for this task)"
   },
   {
-   "name": "wrp_influent_hourly_2014-2025.csv",
+   "name": "barologger_BL-2231_2026-09.csv",
    "role": "evidence",
-   "source": "synthetic: the plant historian's hourly influent export for the Southside and Northside WRPs",
-   "date": "2026-01-16",
+   "source": "synthetic: the on-site barologger, five-minute values in UTC",
+   "date": "2026-09-21",
    "license": "CC0 1.0 (synthetic, authored for this task)"
   },
   {
-   "name": "outfall_regulator_register.csv",
+   "name": "PW-1_constant_rate_2026-09_field_readings.xlsx",
    "role": "evidence",
-   "source": "synthetic: the authority's register of CSO regulators, receiving sewers and plants",
-   "date": "2025-11-03",
+   "source": "synthetic: the test's field notes (loggers, tape readings, discharge, events)",
+   "date": "2026-09-21",
    "license": "CC0 1.0 (synthetic, authored for this task)"
   },
   {
-   "name": "TM-7_clay_street_storage_alternatives.pdf",
+   "name": "harlow_springs_MOR_well_production_2009-2026.csv",
    "role": "evidence",
-   "source": "synthetic: the consultant's technical memorandum on the Clay Street storage alternatives",
-   "date": "2025-12-18",
+   "source": "synthetic: Harlow Springs Utilities' monthly operating report extract, production by well",
+   "date": "2026-10-07",
    "license": "CC0 1.0 (synthetic, authored for this task)"
   },
   {
-   "name": "consent_decree_appendix_C_cso_control.pdf",
+   "name": "mill_street_MW_water_levels_2008-2026.csv",
    "role": "evidence",
-   "source": "synthetic: the authority's conformed copy of the consent decree's Appendix C",
-   "date": "2021-09-27",
+   "source": "synthetic: the Mill Street monitoring well's tape readings from the operating reports",
+   "date": "2026-10-07",
    "license": "CC0 1.0 (synthetic, authored for this task)"
   },
   {
-   "name": "northside_tank_scada_2020-2025.csv",
+   "name": "cvwcd_network_water_levels_2005-2026.csv",
    "role": "evidence",
-   "source": "synthetic: the Northside storage tank's SCADA export, 15-minute values",
-   "date": "2026-01-16",
+   "source": "synthetic: the conservancy district's network water-level export",
+   "date": "2026-10-02",
    "license": "CC0 1.0 (synthetic, authored for this task)"
   },
   {
-   "name": "northside_tank_om_manual_section4.pdf",
+   "name": "cvwcd_well_register.xlsx",
    "role": "evidence",
-   "source": "synthetic: section 4 of the Northside storage tank's O&M manual",
-   "date": "2020-04-24",
+   "source": "synthetic: the district's well register with measuring-point history",
+   "date": "2026-10-02",
    "license": "CC0 1.0 (synthetic, authored for this task)"
   },
   {
-   "name": "cmms_work_orders_2020-2025.csv",
+   "name": "CVWCD_Rule_WR-4_groundwater_withdrawal_permits.pdf",
    "role": "evidence",
-   "source": "synthetic: the maintenance system's completed work orders for the tank, pump station and nearby assets",
-   "date": "2026-01-16",
+   "source": "synthetic: the district's withdrawal permit rule as amended June 2023",
+   "date": "2023-06-20",
    "license": "CC0 1.0 (synthetic, authored for this task)"
   },
   {
-   "name": "rain_gauge_tips_2014-2025.csv",
+   "name": "reidel_road_WR-4_application_requested_schedules.pdf",
    "role": "evidence",
-   "source": "synthetic: the rain gauge network's tip export, one row per tip",
-   "date": "2026-01-16",
+   "source": "synthetic: the utility's application summary, requested schedules and the Mill Street projection",
+   "date": "2026-10-30",
    "license": "CC0 1.0 (synthetic, authored for this task)"
   },
   {
-   "name": "rain_gauge_inventory.csv",
+   "name": "drillers_logs_corrin_valley_wells.pdf",
    "role": "evidence",
-   "source": "synthetic: the rain gauge network's inventory",
-   "date": "2024-05-08",
+   "source": "synthetic: drillers' logs compiled from the district's well records",
+   "date": "2026-10-02",
    "license": "CC0 1.0 (synthetic, authored for this task)"
   },
   {
-   "name": "rain_gauge_field_service_2014-2025.xlsx",
+   "name": "CVWCD_bedrock_surface_plate3_harlow_reach.png",
    "role": "evidence",
-   "source": "synthetic: the field services technicians' visit log for the rain gauges",
-   "date": "2026-01-09",
+   "source": "synthetic: Plate 3 of the district's 2019 bedrock surface study, the Harlow reach, wells added 2026",
+   "date": "2026-10-02",
    "license": "CC0 1.0 (synthetic, authored for this task)"
   },
   {
-   "name": "wennick_river_stage_daily_2014-2025.csv",
+   "name": "PW-1_step_drawdown_2026-08-27.csv",
    "role": "distractor",
-   "source": "synthetic: daily mean stage at the river gauge below the city",
-   "date": "2026-01-12",
+   "source": "synthetic: the August step-drawdown test of PW-1",
+   "date": "2026-08-28",
    "license": "CC0 1.0 (synthetic, authored for this task)"
   },
   {
-   "name": "cso_overflow_notifications_2025.csv",
+   "name": "PW-1_raw_water_quality_2026-09.xlsx",
    "role": "distractor",
-   "source": "synthetic: the 2025 public overflow notifications raised by the outfall detectors",
-   "date": "2026-01-05",
+   "source": "synthetic: the raw-water quality results from the test",
+   "date": "2026-10-05",
    "license": "CC0 1.0 (synthetic, authored for this task)"
   }
  ],
- "distractors": [
-  "wennick_river_stage_daily_2014-2025.csv",
-  "cso_overflow_notifications_2025.csv"
+ "distractor_files": [
+  "PW-1_step_drawdown_2026-08-27.csv",
+  "PW-1_raw_water_quality_2026-09.xlsx"
  ],
  "distractor_reasons": {
-  "wennick_river_stage_daily_2014-2025.csv": "the receiving river's stage looks relevant to how an outfall discharges, but the outfall meter records the discharge itself and no criterion turns on the river",
-  "cso_overflow_notifications_2025.csv": "the notices count 2025's overflows without a tank; the decree evaluates the whole 2014 to 2025 metered record and no ask needs the notices"
+  "PW-1_step_drawdown_2026-08-27.csv": "the step test sizes PW-1's well losses, which change the drawdown inside the pumping well and nowhere in the aquifer; the sentinel's drawdown never reads it",
+  "PW-1_raw_water_quality_2026-09.xlsx": "the raw-water chemistry bears on treatment, not on the drawdown limit"
  },
  "stated_inputs": [
-  "outfall_014_flow_monitoring_2014-2025.parquet",
-  "wrp_influent_hourly_2014-2025.csv",
-  "outfall_regulator_register.csv",
-  "TM-7_clay_street_storage_alternatives.pdf",
-  "consent_decree_appendix_C_cso_control.pdf",
-  "northside_tank_scada_2020-2025.csv",
-  "northside_tank_om_manual_section4.pdf",
-  "cmms_work_orders_2020-2025.csv",
-  "rain_gauge_tips_2014-2025.csv",
-  "rain_gauge_inventory.csv",
-  "rain_gauge_field_service_2014-2025.xlsx"
+  "450",
+  "700",
+  "1,000",
+  "1,250",
+  "9.0",
+  "2.1",
+  "2.2",
+  "4.1",
+  "4.2",
+  "4.3",
+  "4.4",
+  "1.2",
+  "2027",
+  "2046",
+  "0.56",
+  "0.44",
+  "548"
  ],
  "deliverables": [
-  "clay_street_storage_evaluation.xlsx",
-  "clay_street_tank_selection_board.pptx"
+  "reidel_road_sentinel_forecast.xlsx",
+  "reidel_road_WR-4_demonstration.pdf"
  ]
 }
