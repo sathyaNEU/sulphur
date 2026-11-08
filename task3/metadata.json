@@ -1,0 +1,143 @@
+{
+ "task": "task3",
+ "architecture": 6,
+ "as_of": "2026-11-06",
+ "decision": "which span (140, 185 or 240 ft) Pelton County builds for the Durrow Creek bridge on Ransom Bar Road",
+ "deliverables": [
+  "durrow_creek_bridge_hydrology_report.pdf",
+  "durrow_creek_estimated_annual_peaks.csv"
+ ],
+ "distractors": [
+  "usgs_12181650_annual_peaks.txt",
+  "usgs_12183450_coyner_r_daily_discharge.csv",
+  "usgs_12184900_annual_peaks.txt",
+  "usgs_12187200_annual_peaks.txt",
+  "usgs_12189500_annual_peaks.txt"
+ ],
+ "distractor_notes": {
+  "usgs_12183450_coyner_r_daily_discharge.csv": "the donor gauge's daily mean flows; looks relevant to the river's floods but the frequency analysis reads the instantaneous peaks",
+  "usgs_12187200_annual_peaks.txt": "a regional gauge's annual peaks (Tarrow River near Brandt, 27 miles away); looks relevant as a donor but the standard takes the nearest gauged basin",
+  "usgs_12181650_annual_peaks.txt": "a regional gauge's annual peaks (Gorham Creek near Vesper, 19 miles away)",
+  "usgs_12189500_annual_peaks.txt": "a regional gauge's annual peaks (Quillen River at Ashby Falls, 41 miles away)",
+  "usgs_12184900_annual_peaks.txt": "a regional gauge's annual peaks (Pinnell Creek near Coe, 34 miles away)"
+ },
+ "stated_inputs": [
+  "22000",
+  "28000",
+  "40000",
+  "22,000",
+  "28,000",
+  "40,000",
+  "140",
+  "185",
+  "240",
+  "12183450"
+ ],
+ "rows": {
+  "daily_rows": 27365,
+  "pot_rows": 181,
+  "coop_rows": 27485,
+  "ridge_rows": 27123,
+  "lcd_rows": 659041,
+  "snotel_1187_hatchet_meadow_daily.csv": 16071,
+  "snotel_1203_corbel_ridge_daily.csv": 15341
+ },
+ "files": {
+  "ghcnd_durrow_ridge_daily_1950-2025.csv": {
+   "source": "NOAA NCEI GHCN-Daily daily summaries, Durrow Ridge cooperative station",
+   "date": "2026-10-13",
+   "role": "evidence",
+   "license": "synthetic, CC0, generated for this task by task3/generator (a seeded hydrometeorological simulation)"
+  },
+  "ghcnd_tessel_daily_1950-2025.csv": {
+   "source": "NOAA NCEI GHCN-Daily daily summaries, Tessel 2 NE and Tessel 3 E cooperative stations",
+   "date": "2026-10-13",
+   "role": "evidence",
+   "license": "synthetic, CC0, generated for this task by task3/generator (a seeded hydrometeorological simulation)"
+  },
+  "hess_tm_durrow_creek_bridge_span_ratings.pdf": {
+   "source": "Hess Hydraulic Engineering TM 26-118, hydraulic rating of the span alternatives",
+   "date": "2026-09-21",
+   "role": "evidence",
+   "license": "synthetic, CC0, generated for this task by task3/generator (a seeded hydrometeorological simulation)"
+  },
+  "lcd_tessel_field_hourly_1950-2025.csv": {
+   "source": "NOAA NCEI Local Climatological Data, hourly observations, Tessel Field Airport (WBAN 24151)",
+   "date": "2026-10-13",
+   "role": "evidence",
+   "license": "synthetic, CC0, generated for this task by task3/generator (a seeded hydrometeorological simulation)"
+  },
+  "pelton_county_road_standards_ch7_excerpt.pdf": {
+   "source": "Pelton County Road Design Standards, chapter 7 (excerpt), revision 6",
+   "date": "2026-04-07",
+   "role": "governing",
+   "license": "synthetic, CC0, generated for this task by task3/generator (a seeded hydrometeorological simulation)"
+  },
+  "region3_basin_characteristics.xlsx": {
+   "source": "State flood study basin characteristics (Region 3) and the county's delineation of the crossing",
+   "date": "2026-03-19",
+   "role": "evidence",
+   "license": "synthetic, CC0, generated for this task by task3/generator (a seeded hydrometeorological simulation)"
+  },
+  "snotel_1187_hatchet_meadow_daily.csv": {
+   "source": "USDA NRCS SNOTEL daily report, Hatchet Meadow (1187)",
+   "date": "2026-10-13",
+   "role": "evidence",
+   "license": "synthetic, CC0, generated for this task by task3/generator (a seeded hydrometeorological simulation)"
+  },
+  "snotel_1203_corbel_ridge_daily.csv": {
+   "source": "USDA NRCS SNOTEL daily report, Corbel Ridge (1203)",
+   "date": "2026-10-13",
+   "role": "evidence",
+   "license": "synthetic, CC0, generated for this task by task3/generator (a seeded hydrometeorological simulation)"
+  },
+  "usgs_12181650_annual_peaks.txt": {
+   "source": "USGS NWIS annual peak streamflow, Gorham Creek near Vesper, WA",
+   "date": "2026-10-14",
+   "role": "distractor",
+   "license": "synthetic, CC0, generated for this task by task3/generator (a seeded hydrometeorological simulation)"
+  },
+  "usgs_12183450_coyner_r_annual_peaks.txt": {
+   "source": "USGS NWIS annual peak streamflow, Coyner River near Tessel, WA",
+   "date": "2026-10-14",
+   "role": "evidence",
+   "license": "synthetic, CC0, generated for this task by task3/generator (a seeded hydrometeorological simulation)"
+  },
+  "usgs_12183450_coyner_r_daily_discharge.csv": {
+   "source": "USGS NWIS daily mean discharge, Coyner River near Tessel, WA",
+   "date": "2026-10-14",
+   "role": "distractor",
+   "license": "synthetic, CC0, generated for this task by task3/generator (a seeded hydrometeorological simulation)"
+  },
+  "usgs_12183450_coyner_r_peaks_above_base.txt": {
+   "source": "USGS Washington Water Science Center partial-duration series, Coyner River near Tessel",
+   "date": "2026-10-14",
+   "role": "evidence",
+   "license": "synthetic, CC0, generated for this task by task3/generator (a seeded hydrometeorological simulation)"
+  },
+  "usgs_12184900_annual_peaks.txt": {
+   "source": "USGS NWIS annual peak streamflow, Pinnell Creek near Coe, WA",
+   "date": "2026-10-14",
+   "role": "distractor",
+   "license": "synthetic, CC0, generated for this task by task3/generator (a seeded hydrometeorological simulation)"
+  },
+  "usgs_12187200_annual_peaks.txt": {
+   "source": "USGS NWIS annual peak streamflow, Tarrow River near Brandt, WA",
+   "date": "2026-10-14",
+   "role": "distractor",
+   "license": "synthetic, CC0, generated for this task by task3/generator (a seeded hydrometeorological simulation)"
+  },
+  "usgs_12189500_annual_peaks.txt": {
+   "source": "USGS NWIS annual peak streamflow, Quillen River at Ashby Falls, WA",
+   "date": "2026-10-14",
+   "role": "distractor",
+   "license": "synthetic, CC0, generated for this task by task3/generator (a seeded hydrometeorological simulation)"
+  },
+  "wsdot_region3_flood_frequency_excerpt.pdf": {
+   "source": "WSDOT WA-RD 891.2, Magnitude and frequency of floods in western Washington, Region 3 excerpt",
+   "date": "2024-05-14",
+   "role": "evidence",
+   "license": "synthetic, CC0, generated for this task by task3/generator (a seeded hydrometeorological simulation)"
+  }
+ }
+}

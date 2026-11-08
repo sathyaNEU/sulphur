@@ -1,35 +1,36 @@
 {
  "task": "task3",
- "status": "DESIGN",
+ "status": "PAUSED",
  "domain": "physical-environmental-sciences",
  "subdomain": "hydrology-flood-frequency",
  "objective": "forecasting",
- "stage": 2,
- "stage_name": "design",
+ "stage": 4,
+ "stage_name": "check",
  "updated": "2026-11-08",
- "call": "",
- "stump": "",
+ "call": "Build the 185 ft span: Durrow Creek's 1 per cent flood is about 25,000 cfs once the Coyner River's record is carried flood by flood at the snow line the airport's hourly temperature places for each storm (by drainage area it files the 140 ft span at about 18,700)",
+ "stump": "Carrying the Coyner River's record to Durrow Creek by drainage area builds the 140 ft span on about 18,700 cfs; each flood carried at the ratio of the two basins' rain below its snow line files about 25,000 cfs, the 185 ft span, and names the creek's largest floods as 2008 and 2011",
  "architecture": 6,
  "loops": 0,
  "precut": {
-  "exit": null,
-  "date": ""
+  "exit": 0,
+  "date": "2026-11-08",
+  "checks": "75 checks, 0 FAIL, 0 WARN"
  },
  "leak": {
-  "leak_py": "",
-  "reader": ""
+  "leak_py": "REVIEW (USGS text records, generic stump terms in the two filed documents, shell quota); round 1 LEAK cleared by moving the memorandum's stage table off the 5,000 cfs grid",
+  "reader": "round 1: no decisive sentence quoted; realism findings fixed (elevation bands for every gauged basin, gage-house note removed, retrieval clocks, PDF export dates); round 2 running"
  },
  "duplicate_check": {
-  "heart": "",
-  "nearest": ""
+  "heart": "WARN",
+  "nearest": "task3 v5 lineage 0.09 driver; task68 surface 0.071 (labels only)"
  },
  "judge": {
-  "verdict": "",
+  "verdict": "round 1 NOT_DETERMINISTIC (SEND_BACK): daily-temperature snow lines spread the 1 per cent flood over every span; repaired in revision 2; round 2 running",
   "disposition": "",
   "gate_h": "",
   "report": ""
  },
- "paper_pair": null,
+ "paper_pair": 23.8,
  "runs": {
   "run1": null,
   "run2": null,
@@ -127,7 +128,7 @@
    "commit": ""
   }
  ],
- "resume": "architecture 6 drawn (DESIGN_NOTE ## Draw, card v6 registered 2026-11-08T16:30:28Z); next: the generator world (snow-line hydrology, both basins, stations) to calibrate the rungs, the rivals on the clean truth, the stage-2 sections of the design note, precut exit 0",
+ "resume": "stage 4 round 2 of revision 2: read the leak reader's answers (scratchpad t3a6/reader2/reader_answers.md) and the judge's verdict (/tmp/determinism-check-task3-r2/verdict.md); if the scratch files are gone, re-run both on the built pack (python3 task3/generator/build.py rebuilds it byte-identically); fix every finding in the generator, re-run every gate (build.py with checks and verify, figures_check, leak.py --asof 2026-10-14, precut, voice-check, guard surface and heart), then stage 5 READY with target.zip, golden/ and golden.zip added with git add -f",
  "approved": null,
  "submitted": null,
  "portal": {
@@ -205,5 +206,14 @@
   "status_in_mark": "SHIPPED",
   "date": "2026-11-08",
   "note": "moved from Project Mark unstumped on the Mark portal; carried on here for the Sulfur bar"
- }
+ },
+ "gates": {
+  "checks": "91 of 91",
+  "verify": "PASS",
+  "byte_identical": "21 files",
+  "figures_check": "97 of 97",
+  "target_zip": "4ff37442447aa37a",
+  "golden_zip": "1f7ccea0e04f8dab"
+ },
+ "revision": 2
 }
