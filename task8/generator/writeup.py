@@ -74,7 +74,9 @@ def submission(f, path):
         "centres list. The 2026 paper is heavy in everyday items and the 2027 paper light, and the regions differ in "
         "how much easier everyday items are for their candidates, so estimate each region's own everyday deviation "
         "on the Level 1 sittings, each candidate's ability on the 2026 paper with it, and average the expected 2027 "
-        "marks by region; one ability scale for every region files other whole marks in some regions.",
+        "marks by region; one ability scale for every region files other whole marks in some regions. The regional "
+        "everyday deviations are centred on their mean weighted by each region's Level 1 responses (2022 to 2026) "
+        "and applied to the everyday items of both the 2026 and the 2027 papers.",
         "No other reading survives: every route that leaves the 2027 items on their Level 2 values, credits only the "
         "everyday advantage or prices only stem length files %d or more, and every form of the two-cause model "
         "(linear, logarithmic or a long-against-short step in stem length, weighted or not) files %d." %

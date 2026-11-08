@@ -229,7 +229,7 @@ def centres_file(path, w):
     regname = {r[0]: r[1] for r in P.REGIONS}
     rows = []
     for c in sorted(w["centres"], key=lambda c: c["code"]):
-        town = c["name"].split(" ")[0]
+        town = W.CENTRE_TOWNS[c["name"]]
         opened = 1998 + int(rng.integers(0, 22))
         rows.append([c["code"], c["name"], c["region"], regname[c["region"]], c["prov"], town, opened, "open", ""])
     _w(path, ["centre", "centre_name", "region", "region_name", "province", "town", "registered_since", "status",

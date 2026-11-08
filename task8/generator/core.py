@@ -193,7 +193,7 @@ def region_index(w, rows):
     return np.array([regs.index(w["sittings"][j]["region"]) for j in rows])
 
 
-def regional_model(w, lv, outer=12):
+def regional_model(w, lv, outer=12, weighted=True):
     """Level 1 calibration with each region's everyday-context deviation (centred on the Level 1 sittings' regional
     shares): difficulty of everyday item i for a candidate in region r is b_i - delta_r."""
     X, papers, s = w["X"], w["papers"], w["sittings"]
@@ -203,6 +203,8 @@ def regional_model(w, lv, outer=12):
     ev = w["it"]["everyday"].astype(float)
     nreg = len(P.REGIONS)
     share = np.bincount(reg, minlength=nreg) / len(reg)
+    if not weighted:   # the deviations centred on their plain mean (the rival centring, used by checks.py only)
+        share = np.ones(nreg) / nreg
     delta = np.zeros(nreg)
     b0 = lv["l1"]["b"]
     for _ in range(outer):
@@ -256,6 +258,58 @@ def region_means(w, b_l1, b_pr, delta=None, est="wle", k=1.0):
         sel = reg == r
         out[reg_row[0]] = (float(e[sel].mean()), int(sel.sum()))
     return out
+
+
+def region_pr(w, lv, m):
+    """The borrowed 2027 items' Level 1 difficulties under a regional calibration m (its own shift fit)."""
+    tab = shift_table(w, dict(l1=dict(b=m["b"], se=lv["l1"]["se"]), l2=lv["l2"]))
+    pr = w["it"]["sets"]["pr"]
+    return lv["l2"]["b"][pr] + predict_shift(fit_shift(tab), w["it"]["words"][pr], w["it"]["everyday"][pr])
+
+
+def region_backtest(w, b_l1, b_pr, delta):
+    """Per region: the 2026 sitters' observed mean mark on the 2026 paper, the mean the regional model expects on it
+    with each region's everyday deviation and without it (abilities held), and the 2027 mean without it."""
+    X, papers = w["X"], w["papers"]
+    rows = rows_of(w["sittings"], "L1", year=2026)
+    reg = region_index(w, rows)
+    ev = w["it"]["everyday"].astype(float)
+    p26, p27 = papers["L1-2026"], papers["L1-2027"]
+    b = b_l1.copy()
+    b[w["it"]["sets"]["pr"]] = b_pr
+    sub = np.full((len(rows), X.shape[1]), np.nan)
+    sub[:, p26] = X[np.ix_(rows, p26)]
+    off = -delta[reg][:, None] * ev[None, :]
+    th = RA.wle(sub, b, offset=off)
+    obs = sub[:, p26].sum(1)
+    e26 = np.array([W.sig(th[k] - b[p26] - off[k, p26]).sum() for k in range(len(rows))])
+    e26_no = np.array([W.sig(th[k] - b[p26]).sum() for k in range(len(rows))])
+    e27_no = np.array([W.sig(th[k] - b[p27]).sum() for k in range(len(rows))])
+    out = {}
+    for j, rr in enumerate(P.REGIONS):
+        s = reg == j
+        out[rr[0]] = dict(observed=float(obs[s].mean()), with_dev=float(e26[s].mean()), without_dev=float(e26_no[s].mean()),
+                          e27_without=float(e27_no[s].mean()))
+    return out
+
+
+def l1_loglik(w, lv, b, delta):
+    """Log-likelihood of the Level 1 sittings under difficulties b and regional everyday deviations delta, each
+    sitting's ability at its maximum."""
+    X, r1 = w["X"], lv["r1"]
+    Xr = X[r1]
+    reg = region_index(w, r1)
+    ev = w["it"]["everyday"].astype(float)
+    off = -delta[reg][:, None] * ev[None, :]
+    M = (~np.isnan(Xr)) & (~np.isnan(b))[None, :]
+    Xz = np.where(M, Xr, 0.0)
+    bb = np.nan_to_num(b)
+    th = np.zeros(len(r1))
+    for _ in range(60):
+        p = W.sig(th[:, None] - bb[None, :] - off)
+        th = np.clip(th + ((Xz - p) * M).sum(1) / np.maximum((p * (1 - p) * M).sum(1), 1e-9), -6, 6)
+    p = np.clip(W.sig(th[:, None] - bb[None, :] - off), 1e-12, 1 - 1e-12)
+    return float((M * (Xz * np.log(p) + (1 - Xz) * np.log(1 - p))).sum())
 
 
 def region_truth(w):

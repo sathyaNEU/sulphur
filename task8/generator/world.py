@@ -190,6 +190,25 @@ REGION_CENTRES = {
 }
 
 
+CENTRE_TOWNS = {
+    "Brandon Adult Learning Centre": "Brandon", "Virden Community Learning": "Virden",
+    "Souris Valley Adult Ed.": "Souris", "Neepawa Literacy Council": "Neepawa", "Killarney Learning Place": "Killarney",
+    "Selkirk Adult Learning Centre": "Selkirk", "Gimli Community Learning": "Gimli",
+    "Steinbach Adult Education": "Steinbach", "Beausejour Learning Centre": "Beausejour",
+    "Arborg Literacy Program": "Arborg", "Stonewall Adult Ed. (Library annex)": "Stonewall",
+    "Dauphin Adult Education": "Dauphin", "Swan River Learning Centre": "Swan River",
+    "The Pas Community Learning": "The Pas", "Flin Flon Adult Ed.": "Flin Flon", "Thompson Learning Hub": "Thompson",
+    "Saskatoon Westside Learning Centre": "Saskatoon", "Riverside Adult Education": "Saskatoon",
+    "Humboldt Community Learning": "Humboldt", "North Battleford Adult Learning": "North Battleford",
+    "Warman Literacy Program": "Warman", "Prince Albert Learning Centre": "Prince Albert",
+    "Regina North Central Learning": "Regina", "Heritage Adult Education (Regina)": "Regina",
+    "Moose Jaw Adult Learning": "Moose Jaw", "Weyburn Community Learning": "Weyburn",
+    "Swift Current Literacy Council": "Swift Current", "Estevan Learning Place": "Estevan",
+}
+CENTRE_TOWNS.update({nm: "Winnipeg" for nm in REGION_CENTRES["WPG"]})
+assert set(CENTRE_TOWNS) == {nm for v in REGION_CENTRES.values() for nm in v}
+
+
 def draw_centres(rng):
     rows = []
     codes = _codes(rng, sum(len(v) for v in REGION_CENTRES.values()), "LC", 100)

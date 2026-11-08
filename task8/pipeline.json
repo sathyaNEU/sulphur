@@ -1,10 +1,10 @@
 {
  "task": "task8",
- "status": "PAUSED",
+ "status": "READY",
  "domain": "education-learning-sciences / item-response-theory-test-equating (client education-learning-sciences)",
  "objective": "etl",
- "stage": 4,
- "stage_name": "check",
+ "stage": 5,
+ "stage_name": "ready",
  "updated": "2026-11-08",
  "call": "a 2027 Level 1 Numeracy pass mark of 19 of 40 (expected mark 19.09 at the standard), rejecting the bank's 22 (21.57)",
  "stump": "The default path pre-equates the 2027 Level 1 paper on the Board's concurrent Rasch bank and files 22 (careful variants 21), because the Level 2 items earlier Level 1 papers carried looked unshifted for Level 1 candidates when an everyday-context advantage and a reading cost cancelled on the long everyday ones; the 2027 paper's twelve long mathematical Level 2 items carry the cost alone, and only both causes and the scale constant fitted together price them (19).",
@@ -15,8 +15,8 @@
   "date": "2026-11-08"
  },
  "leak": {
-  "leak_py": "REVIEW (2026-11-08, no LEAK): the specification carries the filed band and pass-mark clause; the reader has not run",
-  "reader": ""
+  "leak_py": "REVIEW (2026-11-08, no LEAK, dated sweep clean): the specification carries the filed band and pass-mark clause",
+  "reader": "no leak (2026-11-08, cold reader): no sentence or file names the step, no ranking artifact, no file only for the analyst, the literal estimand matches the golden; two realism tells fixed in the generator (the centres file's towns written in full, the September minute marked unconfirmed); the coordinator re-reads the rebuilt pack"
  },
  "duplicate_check": {
   "guard_check": "WARN 2026-11-08 on the registered card (decision type and question form repeat task2 v4; older-build structural repeats differentiated: mark101, mark178, mark469, mark121, mark464)",
@@ -25,10 +25,11 @@
   "nearest": ""
  },
  "judge": {
-  "verdict": "",
-  "disposition": "",
-  "gate_h": "",
-  "report": ""
+  "verdict": "DETERMINISTIC",
+  "disposition": "APPROVE",
+  "gate_h": "pass",
+  "report": "task8/determinism_check_report.md",
+  "notes": "reproduced pass mark 19 (19.14), the band verdicts (Q29 to Q33 below) and the regional means 15/16/17/16/17/17; residual forks closed in the record: the centring of the regional everyday deviations stated in the Step-by-Step and asserted (SF12: invariant when the difficulties are re-estimated, re-centring alone 24.0 log-likelihood worse), the deviation on the 2027 everyday items stated and asserted (SF13: dropping it misses the 2026 regions' observed means by up to 1.45 marks); two-decimal chances move about 0.01 with the calibration, graded as band verdicts"
  },
  "paper_pair": {
   "pair": 45.4,
@@ -70,7 +71,7 @@
    "commit": "DRAWN (task8), architecture 17, 2026-11-07"
   }
  ],
- "resume": "stage 4: spawn the leak reader and the determinism judge",
+ "resume": "",
  "approved": null,
  "submitted": null,
  "portal": null,
@@ -83,6 +84,10 @@
   {
    "date": "2026-11-08",
    "event": "architecture 18 built to the end of stage 3 (seed 818025); paused for stage 4, which needs the Agent tool"
+  },
+  {
+   "date": "2026-11-08",
+   "event": "stage 4 fixes in one generator pass (full town names, the minute unconfirmed, the regional convention stated, SF12 and SF13 asserted); no graded figure moved (figures.json and golden byte-identical); READY"
   }
  ],
  "migrated_from": {

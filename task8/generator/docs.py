@@ -138,7 +138,8 @@ def standard_record(path):
 
 def minute(path, l1_2026, l2_2026):
     s = [_p("Awards Committee: minute of the meeting of 17 September 2026", H1),
-         _p("%s. Held by video call, 10:00 to 11:35 Central. Confirmed at the meeting of 3 December 2026 (draft)." % P.ORG,
+         _p("%s. Held by video call, 10:00 to 11:35 Central. Unconfirmed: to be confirmed at the next meeting of the "
+            "Committee." % P.ORG,
             SMALL),
          Spacer(1, 4),
          _p("Present: %s (chair), %s (Assessment Manager), %s (psychometrician), two centre representatives (Westman, "

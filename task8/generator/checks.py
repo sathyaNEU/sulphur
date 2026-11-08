@@ -156,6 +156,32 @@ def forks(w, r):
            "same" if same else "differs: %s" % {k: round(v, 2) for k, v in r["reg_avgcand"].items()})
 
 
+def regional_conventions(w, r):
+    """SF12 and SF13: how the regions' everyday deviations are centred, and whether they reach the 2027 paper."""
+    lv, m = r["lv"], r["regm"]
+    reg1 = C.region_index(w, lv["r1"])
+    n_resp = (~np.isnan(w["X"][lv["r1"]])).sum(1)
+    share = np.bincount(reg1, weights=n_resp, minlength=len(P.REGIONS)) / n_resp.sum()
+    ok("SF12 the golden centres the regional everyday deviations on their mean weighted by each region's Level 1 "
+       "responses", abs(float((share * m["delta"]).sum())) < 1e-9 and len(set(n_resp.tolist())) == 1,
+       "weighted mean %.1e; every Level 1 sitting carries %d responses" % (float((share * m["delta"]).sum()), n_resp[0]))
+    mu = C.regional_model(w, lv, weighted=False)
+    ru = C.region_means(w, mu["b"], C.region_pr(w, lv, mu), mu["delta"])
+    gap = max(abs(ru[k][0] - r["reg_golden"][k][0]) for k in ru)
+    ok("SF12 centred on their plain mean, with the difficulties re-estimated, the regional means do not move",
+       gap < 0.005 and all(int(round(ru[k][0])) == int(round(r["reg_golden"][k][0])) for k in ru), "largest move %.4f" % gap)
+    d2 = m["delta"] - m["delta"].mean()
+    drop = C.l1_loglik(w, lv, m["b"], m["delta"]) - C.l1_loglik(w, lv, m["b"], d2)
+    ok("SF12 re-centring the deviations without re-estimating the difficulties is not a fit to the Level 1 responses",
+       drop > 10, "log-likelihood lower by %.1f" % drop)
+    bt = C.region_backtest(w, m["b"], C.region_pr(w, lv, m), m["delta"])
+    with_dev = max(abs(v["with_dev"] - v["observed"]) for v in bt.values())
+    without = {k: abs(v["without_dev"] - v["observed"]) for k, v in bt.items()}
+    ok("SF13 dropping the regional deviation on a paper's everyday items misses the 2026 regions' observed mean marks "
+       "(the deviation reproduces them)", with_dev <= 0.1 and max(without.values()) >= 1.0,
+       "with %.2f; without %s" % (with_dev, {k: round(v, 2) for k, v in without.items()}))
+
+
 def population(w, r, target):
     """SF8 and SF11 on the cut pack: the region of a sitting and the 2026 population."""
     rows = C.rows_of(w["sittings"], "L1", year=2026)
@@ -238,6 +264,7 @@ def run(w, r, target):
     input_gates(target)
     sulfur_block(w, r)
     forks(w, r)
+    regional_conventions(w, r)
     population(w, r, target)
     bins_and_asks(w, r)
     realism(target, w)
