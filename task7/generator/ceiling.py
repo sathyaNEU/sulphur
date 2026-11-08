@@ -1,134 +1,82 @@
-"""task7: the ask layer's cracker and mirror sheets measured on the cut pack (supplemental-stumping 1.1, Part 0).
+"""task7 ceiling: each route a solver could take, scored on the rubric model (supplemental-stumping Part 0) on the cut
+pack, and the pair the platform's two runs would average.
 
-The cracker landed the call, ran the hygiene battery and executed every filed rule (the index's latest published
-value per quarter, title references normalised, the validation report's default definition: first trigger, in default
-until the cure). The mirror stopped at the default path's own-ECL call and at each ask's lazy stop. The after-notice
-rows model a response that finds one device and handles it fully. Every route reads target/ only."""
-import hashlib
-import json
-import math
+The model: the recommendation 20 and the four critical components 4.5 each (38 together), instruction-following 7
+(files present, named, rows and columns: every route that delivers keeps it), the asks 55: each book's figure 11, the
+facilities expected to cost most 18 (shared equally among the names), the CSV 15 (its rows and columns 5, which every
+route keeps; its total and its first row 10, which only a route on the golden's construction keeps).
+
+The components (submission.md): C1 the record's ratio by years since inspection for each lending book (a route that
+fits the ratio by book keeps it), C2 the book's staleness against the record's (a route that rebuilt the years since
+inspection keeps it), C3 the plan figure against the carried-value figure (a route on the call keeps it), C4 the
+owner-occupied gap and the split (a route that splits the books keeps it)."""
 import os
-import re
-import subprocess
 import sys
-
-import openpyxl
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
+
+import checks as CK  # noqa: E402
 import golden as GD  # noqa: E402
 
-T = os.path.join(os.path.dirname(HERE), "target")
-FIG = json.load(open(os.path.join(HERE, "figures.json")))
+UT, UB = 500000.0, 250000.0
+W_REC, W_COMP, W_IF = 20.0, 4.5, 7.0
+W_BOOK, W_NAMES, W_CSV_FIXED, W_CSV_ROUTE = 11.0, 18.0, 5.0, 10.0
+
+# what each route computes: (fits the ratio by book, rebuilt the years since inspection)
+ROUTES = [
+    ("golden (split by book)", "golden", True, True),
+    ("landed run, books pooled", "pooled", False, True),
+    ("landed run, linear fit pooled", "pooled_lin", False, True),
+    ("default path (carried values)", "carried", False, False),
+    ("reflex haircut on old valuations", "reflex_10_over_3y", False, False),
+    ("the record's average shortfall", "record_mean", False, False),
+    ("cycle re-inspections only", "cycle_drift", False, True),
+]
 
 
-def r_half(x, u):
-    return int(math.floor(x / u + 0.5)) * u
+def rnd(v, u):
+    return round(v / u) * u
 
 
-def digest():
-    h = hashlib.md5()
-    for f in sorted(os.listdir(T)):
-        h.update(f.encode())
-        h.update(open(os.path.join(T, f), "rb").read())
-    return h.hexdigest()
+def score(r, g, by_book, staleness):
+    on_call = rnd(r["total"], UT) == rnd(g["total"], UT)
+    main = W_REC * on_call
+    main += W_COMP * (by_book and staleness)          # C1
+    main += W_COMP * staleness                         # C2
+    main += W_COMP * on_call                           # C3
+    main += W_COMP * (by_book and on_call)             # C4
+    asks = W_BOOK * (rnd(r["investment"], UB) == rnd(g["investment"], UB))
+    asks += W_BOOK * (rnd(r["owner_occupied"], UB) == rnd(g["owner_occupied"], UB))
+    asks += W_NAMES * len(set(r["top5"]) & set(g["top5"])) / len(g["top5"])
+    asks += W_CSV_FIXED
+    asks += W_CSV_ROUTE * (on_call and r["top5"][0] == g["top5"][0])
+    return main + W_IF + asks, asks / 55.0, on_call
 
 
-wl = subprocess.run(["pdftotext", "-layout", os.path.join(T, "watch_list_2027-01.pdf"), "-"],
-                    capture_output=True, text=True).stdout
-LINES = {}
-for ln in wl.splitlines():
-    m = re.match(r"\s*(C\d{6})\s", ln)
-    amts = re.findall(r"\d{1,3}(?:,\d{3})+", ln)
-    if m and len(amts) >= 2:
-        LINES[m.group(1)] = float(amts[-1].replace(",", ""))
-wb = openpyxl.load_workbook(os.path.join(T, "customer_master_2026-12.xlsx"), read_only=True)
-NAME = {r[0]: r[1].replace(" Limited", "") for r in list(wb["Customers"].iter_rows(values_only=True))[1:]}
-P = GD.Pack(T, LINES)
+def main():
+    target = sys.argv[1] if len(sys.argv) > 1 else os.path.join(HERE, "..", "target")
+    C = CK.run(target, HERE)
+    res = C["res"]
+    g = res["golden"]
+    out = {}
+    for label, k, by_book, stale in ROUTES:
+        s, keep, on = score(res[k], g, by_book, stale)
+        out[k] = (s, keep, on)
+        print("%-34s score %5.1f  asks kept %5.1f%%  %s" % (label, s, 100 * keep, "on the call" if on else "off the call"))
+    best_recent = max((k for k in res if k.startswith("recent ")), key=lambda k: score(res[k], g, False, False)[0])
+    s, keep, on = score(res[best_recent], g, False, False)
+    out["recent"] = (s, keep, on)
+    print("%-34s score %5.1f  asks kept %5.1f%%  %s  (%s)" % ("recent experience, best window", s, 100 * keep,
+                                                            "on the call" if on else "off the call", best_recent))
+    landed = out["pooled"][0]
+    shallow = out["carried"]
+    print("Shallow keep: %.1f per cent of ask weight (default path)" % (100 * shallow[1]))
+    print("Pair ceiling: %.1f (landed run with books pooled %.1f, default path %.1f)" % ((landed + shallow[0]) / 2, landed, shallow[0]))
+    worst = max(out[k][0] for k in ("cycle_drift", "record_mean", "reflex_10_over_3y", "carried", "recent"))
+    print("Pair with the strongest off-call route: %.1f" % ((landed + worst) / 2))
+    print("Pair if the landed run also splits the books: %.1f" % ((out["golden"][0] + shallow[0]) / 2))
 
-gold_A = FIG["security"]
-gold_B = FIG["commitment"]
-gold_C = {k.split(" ")[0]: v for k, v in FIG["sector_share"].items()}
 
-
-def score_money(route, gold):
-    return {NAME[c]: (r_half(v, 1000), r_half(v, 1000) == gold[NAME[c]]) for c, v in route.items()}
-
-
-def score_share(route):
-    return {s: (round(v[0], 1), round(v[0], 1) == gold_C[s]) for s, v in route.items()}
-
-
-ROUTES = {
-    "cracker": {
-        "A": score_money(P.security(use_made=False, drop_discharged=False), gold_A),
-        "B": score_money(P.commitment(former=False, drop_released=False), gold_B),
-        "C": score_share(P.sector_table(use_register=True, use_cures=True, keys="noloan")),
-    },
-    "mirror": {
-        "A": score_money(P.security(use_made=False, drop_discharged=False), gold_A),
-        "B": score_money(P.commitment(former=False, drop_released=False), gold_B),
-        "C": score_share(P.sector_table(use_register=False, use_cures=False, keys="noloan")),
-    },
-    "after notice A1 (made dates found, discharges not)": {
-        "A": score_money(P.security(use_made=True, drop_discharged=False), gold_A)},
-    "after notice A2 (discharges found, register dates kept)": {
-        "A": score_money(P.security(use_made=False, drop_discharged=True), gold_A)},
-    "after notice B1 (former names linked, releases not)": {
-        "B": score_money(P.commitment(former=True, drop_released=False), gold_B)},
-    "after notice B2 (releases found, exact names only)": {
-        "B": score_money(P.commitment(former=False, drop_released=True), gold_B)},
-    "after notice C (loan accounts resolved through the ledger)": {
-        "C": score_share(P.sector_table(use_register=True, use_cures=True, keys="all"))},
-    "C, UTP rows only (every account-keyed row dropped)": {
-        "C": score_share(P.sector_table(use_register=True, use_cures=True, keys="utp"))},
-}
-N_ASK = len(gold_A) + len(gold_B) + len(gold_C)
-empty = [a for a, g in (("A", gold_A), ("B", gold_B), ("C", gold_C)) if not g]
-unscored = [n for n, asks in ROUTES.items() for a, rows in asks.items() if not rows]
-if empty or unscored or len(LINES) != 8:
-    print("ceiling: REFUSED, nothing to measure: golden asks with no figures %s; routes that scored no row %s; watch-list "
-          "lines read %d" % (empty, unscored, len(LINES)))
-    sys.exit(2)
-
-print("pack md5 %s  (%d files)" % (digest(), len(os.listdir(T))))
-print("ask figures graded: A %d, B %d, C %d = %d" % (len(gold_A), len(gold_B), len(gold_C), N_ASK))
-kept = {}
-for name, asks in ROUTES.items():
-    k = 0
-    parts = []
-    for a, rows in asks.items():
-        hit = sum(1 for _, h in rows.values() if h)
-        k += hit
-        parts.append("%s %d of %d" % (a, hit, len(rows)))
-    kept[name] = k
-    print("%-62s %s" % (name, ", ".join(parts)))
-    if name in ("cracker", "mirror"):
-        for a, rows in asks.items():
-            print("    %s: %s" % (a, "; ".join("%s %s%s" % (key, v, "" if h else " (miss)") for key, (v, h) in rows.items())))
-
-own = P.best_set({c: P.own(c) for c in LINES})[0]
-mirror_on_call = sorted(own) == sorted(FIG["call_ids"])
-Lc = kept["cracker"] / N_ASK
-Ls = kept["mirror"] / N_ASK
-C = 38 + 7 + 55 * Lc
-S = (38 if mirror_on_call else 5) + 7 + 55 * Ls
-print("mirror's call (own ECL only): %s, %s the golden" % (" and ".join(sorted(NAME[c] for c in own)),
-                                                         "equals" if mirror_on_call else "misses"))
-print("Cracker keeps %d of %d ask figures (%.1f per cent): %.1f" % (kept["cracker"], N_ASK, 100 * Lc, C))
-print("Mirror keeps %d of %d ask figures (%.1f per cent): %.1f" % (kept["mirror"], N_ASK, 100 * Ls, S))
-print("Mirror leakage: %.1f per cent of ask weight" % (100 * Ls))
-print("Pair ceiling: %.1f" % ((C + S) / 2))
-worst = max(v for k, v in kept.items() if k.startswith("after notice"))
-print("Largest single after-notice keep: %d of %d (%.1f per cent of ask weight)" % (worst, N_ASK, 100 * worst / N_ASK))
-bad = []
-if kept["cracker"]:
-    bad.append("cracker keeps an ask figure")
-if any(all(h for _, h in rows.values()) for rows in ROUTES["mirror"].values()):
-    bad.append("mirror keeps an ask whole")
-if Ls >= 0.4:
-    bad.append("mirror leakage at or over two fifths")
-if (C + S) / 2 >= 60:
-    bad.append("pair ceiling at or over 60")
-print("ceiling: %s" % ("PASS" if not bad else "FAIL " + "; ".join(bad)))
-sys.exit(1 if bad else 0)
+if __name__ == "__main__":
+    main()

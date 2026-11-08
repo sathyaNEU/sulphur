@@ -1,17 +1,18 @@
-"""task8 architecture 17: the Trust's PDFs, written in Writer and exported (officepdf): the paper specification,
-the standard-setting record, the council's minute, the 2026 course review and the make-up roster."""
+"""task8 architecture 18: the Board's documents, written in Writer and exported (officepdf): the Level 1 Numeracy
+specification, the 2022 standard-setting record and the Awards Committee's September 2026 minute; and the chair's
+email asking for the recommendation."""
 import datetime as dt
 
 from reportlab.lib import colors
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.lib.units import mm
-from reportlab.platypus import PageBreak, Paragraph, Spacer, Table, TableStyle
+from reportlab.platypus import Paragraph, Spacer, Table, TableStyle
 
 import officepdf as O
 import params as P
 
-NZT = P.NZST
-NZDT = __import__("datetime").timezone(__import__("datetime").timedelta(hours=13))
+CST = dt.timezone(dt.timedelta(hours=-6))
+CDT = dt.timezone(dt.timedelta(hours=-5))
 SS = getSampleStyleSheet()
 BODY = ParagraphStyle("b", parent=SS["Normal"], fontName="Helvetica", fontSize=9.2, leading=12.4, spaceAfter=5)
 H1 = ParagraphStyle("h1", parent=SS["Heading1"], fontName="Helvetica-Bold", fontSize=13.5, leading=17, spaceAfter=6)
@@ -20,11 +21,16 @@ H2 = ParagraphStyle("h2", parent=SS["Heading2"], fontName="Helvetica-Bold", font
 SMALL = ParagraphStyle("s", parent=BODY, fontSize=7.8, leading=10, textColor=colors.HexColor("#444444"))
 CELL = ParagraphStyle("c", parent=BODY, fontSize=7.6, leading=9.4, spaceAfter=0)
 CELLB = ParagraphStyle("cb", parent=CELL, fontName="Helvetica-Bold")
-AUTHOR = P.TRUST
+
+PEOPLE = {"manager": "Yvette Clark", "chair": "Shawn Simpson", "psychometrician": "Andrew Adams"}
 
 
 def _esc(x):
     return str(x).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+
+
+def _p(t, st=BODY):
+    return Paragraph(_esc(t), st)
 
 
 def _table(rows, widths):
@@ -34,131 +40,158 @@ def _table(rows, widths):
     return t
 
 
-def _p(t, st=BODY):
-    return Paragraph(_esc(t), st)
+SPEC_SENTENCES = {
+    "pass": ("The pass mark on each Level 1 paper is the mark that a candidate who just meets the Level 1 standard "
+             "can be expected to score on that paper, rounded to the nearest whole mark."),
+    "band": ("Each item on a Level 1 paper should be one that a candidate who just meets the Level 1 standard "
+             "answers correctly with a chance of at least 0.20 and at most 0.90."),
+}
 
 
 def specification(path):
-    s = [_p("Year 10 Science Benchmark: paper specification, 2027", H1),
-         _p("%s, Assessment Committee. Approved 4 November 2026; replaces the 2026 specification." % P.TRUST, SMALL),
+    s = [_p("Level 1 Numeracy: qualification specification", H1),
+         _p("%s. Version 2026.1, approved by the Board on 12 March 2026 for papers set from 2027; replaces version "
+            "2021.2." % P.ORG, SMALL),
          Spacer(1, 4),
          _p("1. Purpose", H2),
-         _p("The Benchmark reports each Year 10 candidate at member schools against the Achieved, Merit and Excellence "
-            "standards of the Trust's Year 10 science course. Results are returned to schools for their reports to "
-            "families."),
-         _p("2. Sitting and form", H2),
-         _p("The 2027 Benchmark is sat online in November 2027, on the dates the Council set on 14 October 2026. The "
-            "paper has 50 one-mark items, multiple-choice and short-answer, and candidates have 60 minutes."),
+         _p("Level 1 Numeracy recognises that an adult can work with whole numbers, simple fractions and decimals, "
+            "money, measures, simple data and number patterns at the level set out in the Board's Level 1 performance "
+            "descriptors, in the settings of daily life, training and work. It is offered through registered "
+            "community learning centres in Manitoba and Saskatchewan and is recognised by the provinces' adult "
+            "learning programmes as the numeracy entry point to Level 2 and to apprenticeship preparation."),
+         _p("2. The paper", H2),
+         _p("Candidates sit one paper online at a registered learning centre, under the centre's invigilation, on a "
+            "day the centre arranges between 1 February and 30 October. The paper has 40 items worth one mark each "
+            "and candidates have 75 minutes. Answers are typed: a number, a value with its unit, or a short word or "
+            "phrase. On-screen calculators are available for every item. A new paper is set for each calendar "
+            "year, and a candidate sits a given year's paper once; a candidate who does not pass may register for "
+            "the next year's paper."),
          _p("3. Content", H2),
-         _p("Items are drawn from the Year 10 science item bank and cover the six core units of the course outline. "
-            "The paper holds each strand within these limits:"),
-         _table([["Strand", "Items on the paper"], ["Material World", "10 to 14"], ["Living World", "10 to 14"],
-                 ["Physical World", "12 to 16"], ["Planet Earth and Beyond", "10 to 14"]], [70, 40]),
-         _p("4. Targeting", H2),
-         _p("The paper set for 2027 is the submitted draft whose expected mark at the Achieved standard, for a "
-            "candidate sitting the 2027 paper, is nearest 25 of its 50 marks. The expected mark is the sum over the "
-            "paper's items of the probability, under the Rasch model on the bank scale, that a candidate at the "
-            "Achieved standard answers the item correctly. Drafts are compared on their expected marks before rounding."),
-         _p("5. Standards", H2),
-         _p("The Achieved, Merit and Excellence standards are those of the standard-setting record for the Year 10 "
-            "Science Benchmark."),
-         _p("6. Review", H2),
-         _p("Every item on a submitted draft has passed the Trust's content, language and cultural reviews.")]
-    O.build(path, s, "Year 10 Science Benchmark paper specification 2027", AUTHOR,
-            "Paper specification for the 2027 Year 10 Science Benchmark", "Year 10 Science Benchmark: paper specification 2027",
-            dt.datetime(2026, 11, 4, 15, 12, tzinfo=NZDT), dt.datetime(2026, 11, 4, 16, 40, tzinfo=NZDT))
+         _p("From 2027 the paper covers five strands. The 2026 revision adds the patterns and relationships strand "
+            "(sequences, rules written in words, simple formulas and proportional reasoning) and reduces money and "
+            "measures accordingly."),
+         _table([["Strand", "Items from 2027", "Items to 2026"], ["Number", "10", "11"],
+                 ["Money and measures", "8", "14"], ["Data", "5", "8"], ["Shape and space", "5", "7"],
+                 ["Patterns and relationships", "12", "none"]], [62, 32, 32]),
+         _p("Items are set in everyday contexts (money and shopping, the home, travel, the workplace) or in "
+            "mathematical contexts."),
+         _p("4. The standard and the pass mark", H2),
+         _p("4.1 The Level 1 standard is the one the Board's standard-setting panel fixed on the 2022 Level 1 paper "
+            "and the Board adopted on 9 May 2022 (record LN1-SS-2022)."),
+         _p("4.2 " + SPEC_SENTENCES["pass"] + " A candidate whose mark reaches the pass mark is awarded Level 1 "
+            "Numeracy."),
+         _p("4.3 The Awards Committee sets each paper's pass mark before the paper opens, on the recommendation of "
+            "the assessment manager. A pass mark is not changed once its paper has opened."),
+         _p("5. Item quality", H2),
+         _p("5.1 " + SPEC_SENTENCES["band"] + " Items outside that range are reported to the Item Review Group, "
+            "which decides whether they are kept for later papers; they stay on the paper for which they were set."),
+         _p("5.2 Every item is reviewed for bias and accessibility before first use, and its record in the item bank "
+            "is reviewed each year after the papers close."),
+         _p("6. Access arrangements", H2),
+         _p("Centres may give a candidate up to 25 minutes' extra time, a reader for the instructions (not the "
+            "items) or a separate room, as recorded on the candidate's registration. No other change to the paper "
+            "is made."),
+         Spacer(1, 6),
+         _p("Document control: version 2026.1; owner, Assessment Manager; next review March 2028.", SMALL)]
+    O.build(path, s, "Level 1 Numeracy: qualification specification", P.ORG, "Level 1 Numeracy specification, "
+            "version 2026.1", P.ORG + " | LN1 specification 2026.1",
+            dt.datetime(2026, 3, 12, 15, 40, tzinfo=CST), dt.datetime(2026, 3, 13, 9, 12, tzinfo=CST))
 
 
-def standards(path, raw_cuts):
-    rows = [["Form (August 2026)", "Items", "Raw mark at the Achieved standard"]]
-    for f, c in raw_cuts:
-        rows.append(["F%d" % (f + 1), "50", str(c)])
-    s = [_p("Year 10 Science Benchmark: standard-setting record", H1),
-         _p("%s. Standards set by a Bookmark panel of fourteen teachers, 12 and 13 August 2024; confirmed by the "
-            "Assessment Committee on 3 March 2026." % P.TRUST, SMALL), Spacer(1, 4),
-         _p("1. The standards", H2),
-         _p("Each standard is a point on the Year 10 science bank scale (logits). A candidate is reported at a "
-            "standard when their ability estimate on the bank scale reaches it."),
-         _table([["Standard", "Bank scale (logits)"], ["Achieved", "%.2f" % P.THETA_ACHIEVED],
-                 ["Merit", "%.2f" % P.THETA_MERIT], ["Excellence", "%.2f" % P.THETA_EXCELLENCE]], [60, 50]),
-         _p("2. Raw marks on the August 2026 forms", H2),
-         _p("For reporting the August 2026 sitting, each form's raw mark at the Achieved standard was read from the "
-            "final 2026 calibration:"),
-         _table(rows, [45, 20, 60]),
-         _p("3. Panel", H2),
-         _p("The panel worked from an ordered item booklet of the 2024 forms over three rounds, with impact data "
-            "after round two. The committee reviewed the standards against the 2025 and 2026 results in March 2026 "
-            "and left them unchanged.")]
-    O.build(path, s, "Year 10 Science Benchmark standard-setting record", AUTHOR,
-            "Standards for the Year 10 Science Benchmark on the bank scale", "Year 10 Science Benchmark: standard-setting record",
-            dt.datetime(2026, 3, 3, 14, 5, tzinfo=NZDT), dt.datetime(2026, 3, 4, 9, 22, tzinfo=NZDT))
-
-
-def minute(path):
-    s = [_p("Minutes of the Council", H1),
-         _p("%s. Meeting of 14 October 2026, held at the Trust's offices and by video link." % P.TRUST, SMALL),
+def standard_record(path):
+    rounds = [["Round", "Panellists", "Median of panellists' totals", "Range of totals", "Board's note"],
+              ["1 (item ratings, before discussion)", "12", "25.4", "21.9 to 29.6", "item data not yet shown"],
+              ["2 (after discussion of the ratings)", "12", "26.0", "23.8 to 28.1", "item facility shown"],
+              ["3 (final ratings)", "12", "26.2", "24.6 to 27.5", "adopted, rounded to 26"]]
+    s = [_p("Level 1 Numeracy: standard-setting record", H1),
+         _p("%s. Record LN1-SS-2022. Panel met 26 and 27 April 2022, Winnipeg; adopted by the Board 9 May 2022." % P.ORG,
+            SMALL),
          Spacer(1, 4),
-         _p("1. Apologies and minutes", H2),
-         _p("Apologies were received from two members. The minutes of 12 August 2026 were confirmed."),
-         _p("2. Finance", H2),
-         _p("The council received the accounts to 30 September 2026 and approved the draft 2027 budget for "
-            "consultation with member schools."),
-         _p("3. Membership", H2),
-         _p("No school joined or left the Trust in the period."),
-         _p("4. Platform", H2),
-         _p("The delivery platform contract was renewed for 2027 on the same terms."),
-         _p("5. Benchmark timing", H2),
-         _p("The council resolved that from 2027 the Year 10 Science Benchmark is sat from Monday 1 November to "
-            "Friday 12 November, so that results reach families with schools' end-of-year reports. The Council "
-            "will set the 2027 paper at its meeting of 2 December, on the head of assessment's recommendation."),
-         _p("6. General business", H2),
-         _p("The chair thanked the make-up host schools for the August sitting.")]
-    O.build(path, s, "Minutes of the Council 14 October 2026", AUTHOR, "Council minutes, 14 October 2026",
-            "Council minutes, 14 October 2026", dt.datetime(2026, 10, 16, 10, 2, tzinfo=NZDT),
-            dt.datetime(2026, 10, 16, 11, 48, tzinfo=NZDT))
+         _p("1. Panel", H2),
+         _p("Twelve panellists: seven adult numeracy tutors from community learning centres in both provinces, two "
+            "apprenticeship preparation instructors, two of the Board's markers and one employer representative. "
+            "Each had taught or assessed Level 1 learners within the last two years. The Board's assessment staff "
+            "facilitated and did not rate."),
+         _p("2. Method", H2),
+         _p("The panel worked from the Level 1 performance descriptors and the 2022 Level 1 paper. Panellists first "
+            "agreed a description of a candidate who just meets the Level 1 standard, then rated each of the paper's "
+            "40 items: the chance, out of 100, that such a candidate answers it correctly. A panellist's total is the "
+            "sum of their ratings over the 40 items, read as the mark such a candidate can be expected to score. "
+            "Ratings were made three times; between rounds the panel discussed the items with the widest spread of "
+            "ratings and, before the second round, saw each item's facility from the 2022 sittings to date."),
+         _table(rounds, [44, 18, 34, 28, 40]),
+         _p("3. Outcome", H2),
+         _p("The panel recommended, and the Board adopted on 9 May 2022, the Level 1 standard as the performance of a "
+            "candidate who just meets the Level 1 descriptors: such a candidate can be expected to score 26 of the 40 "
+            "marks on the 2022 Level 1 paper. The 2022 pass mark was set at 26."),
+         _p("4. Evaluation", H2),
+         _p("All twelve panellists rated the training and the process as clear or very clear; eleven were confident "
+            "or very confident in the final recommendation and one was neutral. The facilitators' notes record no "
+            "procedural concerns."),
+         Spacer(1, 6),
+         _p("Facilitated by the Board's assessment staff; record prepared by the Assessment Manager, 20 May 2022.",
+            SMALL)]
+    O.build(path, s, "Level 1 Numeracy: standard-setting record", P.ORG, "Standard-setting record LN1-SS-2022",
+            P.ORG + " | LN1-SS-2022", dt.datetime(2022, 5, 20, 14, 5, tzinfo=CDT),
+            dt.datetime(2022, 5, 20, 16, 48, tzinfo=CDT))
 
 
-def course_review(path, sch, seq_rows):
-    units = [["Unit", "Strand", "Term", "Weeks suggested"]]
-    for code, name, strand, term in P.UNITS:
-        units.append(["%s %s" % (code, name), strand, str(term), "9 to 10" if term < 3 else "4 to 6"])
-    units.append(["School's own choice (extension and revision)", "", "4", ""])
-    s = [_p("Year 10 Science: course review 2026", H1),
-         _p("%s, Curriculum Committee. Presented to the Assessment Committee, 9 September 2026." % P.TRUST, SMALL),
+def minute(path, l1_2026, l2_2026):
+    s = [_p("Awards Committee: minute of the meeting of 17 September 2026", H1),
+         _p("%s. Held by video call, 10:00 to 11:35 Central. Unconfirmed: to be confirmed at the next meeting of the "
+            "Committee." % P.ORG,
+            SMALL),
          Spacer(1, 4),
-         _p("1. The course outline", H2),
-         _p("The Year 10 science course has six core units over Terms 1 to 3, with Term 4 left to each school. The "
-            "weeks suggested are a guide."),
-         _table(units, [70, 45, 15, 30]),
-         _p("2. Review", H2),
-         _p("Schools again reported that the electricity unit runs long and that practical time in Earth's systems "
-            "depends on field trips. The committee proposes no change to the core units for 2027."),
-         _p("3. Item bank", H2),
-         _p("Bank items are tagged to the six core units (U1 to U6). The strands follow the New Zealand Curriculum."),
-         PageBreak(),
-         _p("Appendix B. Member schools' Year 10 science sequences, 2026", H2),
-         _p("Sequences are as each school returned them. Week numbers are the school's own weeks of the term, counted "
-            "from the school's Term 3 start date in the second column.", SMALL),
-         _table([["School", "Term 3 began", "Term 1 and 2", "Term 3"]] + seq_rows, [38, 20, 56, 60])]
-    O.build(path, s, "Year 10 Science course review 2026", AUTHOR, "Course outline and member schools' sequences, 2026",
-            "Year 10 Science: course review 2026", dt.datetime(2026, 9, 8, 16, 30, tzinfo=NZT),
-            dt.datetime(2026, 9, 9, 8, 15, tzinfo=NZT))
+         _p("Present: %s (chair), %s (Assessment Manager), %s (psychometrician), two centre representatives (Westman, "
+            "Regina and South), the Level 2 lead marker. Apologies: the Saskatoon and Central centre representative."
+            % (PEOPLE["chair"], PEOPLE["manager"], PEOPLE["psychometrician"])),
+         _p("1. 2026 sittings", H2),
+         _p("The Assessment Manager reported %d Level 1 and %d Level 2 sittings to 31 August. Both 2026 papers close "
+            "on 30 October as usual; the item bank's annual run will follow once marking and appeals are complete."
+            % (l1_2026, l2_2026)),
+         _p("2. Papers for 2027", H2),
+         _p("The Committee approved the 2027 Level 1 and Level 2 papers as assembled by the Item Review Group against "
+            "version 2026.1 of the specifications. The 2027 Level 1 paper is the first under the revised strand "
+            "structure. Both papers will be loaded to the platform in January 2027 and open on 1 February."),
+         _p("3. Pass marks for 2027", H2),
+         _p("The pass marks for the 2027 papers will be set at the meeting of 3 December 2026. The Assessment "
+            "Manager will bring the recommendation for Level 1 with its working, the item table the Committee "
+            "asked for last year and the regional figures the regional coordinators requested."),
+         _p("4. Centre matters", H2),
+         _p("The computer suite audit of the centres is complete and the report will go to the operations group. "
+            "The learner confidence survey closed on 30 June; the Board's research officer will report in the new "
+            "year. Two Winnipeg centres merged on 1 July 2025 under the North End code; their earlier records stay "
+            "under their own codes."),
+         _p("5. Next meeting", H2),
+         _p("3 December 2026, 10:00 Central."),
+         Spacer(1, 6),
+         _p("Minute taken by the Board's committee secretary.", SMALL)]
+    O.build(path, s, "Awards Committee minute, 17 September 2026", P.ORG, "Awards Committee minute 2026-09-17",
+            P.ORG + " | Awards Committee 2026-09-17", dt.datetime(2026, 9, 21, 11, 20, tzinfo=CDT),
+            dt.datetime(2026, 9, 21, 11, 54, tzinfo=CDT))
 
 
-def roster(path, blocks):
-    s = [_p("Year 10 Science Benchmark: make-up sitting, 25 to 27 August 2026", H1),
-         _p("Booked candidates by host centre, as typed from the host supervisors' returns.", SMALL),
-         _p("Paper form M26 is marked out of 50 at the host centre, and the marker writes the candidate's mark on "
-            "the script cover out of 50 and as a percentage. The office keys each cover's mark out of 50, each "
-            "keyer's session as one batch on one template.", SMALL)]
-    first = True
-    for host_name, host_code, rows in blocks:
-        if not first:
-            s.append(PageBreak())
-        first = False
-        s.append(_p("Host centre: %s (%s)" % (host_name, host_code), H2))
-        s.append(_table([["Day", "Script", "Entry no", "Candidate", "Home school", "Attended"]] + rows,
-                        [22, 24, 22, 50, 24, 20]))
-    O.build(path, s, "Make-up sitting roster August 2026", AUTHOR, "Make-up sitting roster by host centre",
-            "Make-up sitting, August 2026", dt.datetime(2026, 8, 28, 15, 40, tzinfo=NZT),
-            dt.datetime(2026, 8, 31, 9, 5, tzinfo=NZT))
+def email(path):
+    body = (
+        "Yvette,\n\n"
+        "Ahead of 3 December, could you bring the Committee your recommended pass mark for the 2027 Level 1 "
+        "Numeracy paper, with your working. The October sittings are all in now and Andrew tells me the bank's "
+        "annual run is done.\n\n"
+        "Two things the Committee will want beside it. First, the item table we asked for last year: each item on "
+        "the paper with how a candidate right at the standard is likely to do on it, and whether it sits inside "
+        "the band in section 5 of the specification. Second, the regional coordinators want to know how the "
+        "learners who sat the 2026 paper at their centres would be expected to do on the 2027 one, as a mark for "
+        "each region, so they can plan tutor time for the new strand.\n\n"
+        "The papers go to the platform in January, so whatever we set on the 3rd is what the year runs on.\n\n"
+        "Thanks,\n\n"
+        "Shawn Simpson\nChair, Awards Committee\n%s\n" % P.ORG)
+    hdr = ("Message-ID: <20261109094112.5f2c1e@pacb-adult-credentials.ca>\r\n"
+           "Date: Mon, 9 Nov 2026 09:41:12 -0600\r\n"
+           "From: Shawn Simpson <s.simpson@pacb-adult-credentials.ca>\r\n"
+           "To: Yvette Clark <y.clark@pacb-adult-credentials.ca>\r\n"
+           "Cc: Andrew Adams <a.adams@pacb-adult-credentials.ca>\r\n"
+           "Subject: 2027 Level 1 pass mark for 3 December\r\n"
+           "MIME-Version: 1.0\r\n"
+           "Content-Type: text/plain; charset=utf-8\r\n"
+           "Content-Transfer-Encoding: 8bit\r\n\r\n")
+    open(path, "wb").write((hdr + body.replace("\n", "\r\n")).encode("utf-8"))

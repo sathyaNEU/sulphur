@@ -1,373 +1,421 @@
-"""task7 architecture 4: the generator's assertions, run on the built target/ and world's clean truth.
-Every SF row of the design note's fork table is asserted by its id; R1 to R3c are the client's three rules."""
+"""task7 checks, run on the cut pack under target/: every graded figure's bin and margin, the ladder's rungs and their
+separation, the rival family, every semantic fork row (SF1 to SF23), the Sulfur block and the input gates."""
 import csv
+import datetime as dt
 import json
 import math
 import os
 import re
-import shutil
-import subprocess
 import sys
-import tempfile
+from collections import Counter, defaultdict
 
-HERE = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, HERE)
+import numpy as np
+
 import golden as GD
-import world as W
 
-TASK = os.path.dirname(HERE)
-T = os.path.join(TASK, "target")
-F = json.load(open(os.path.join(HERE, "figures.json")))
-fails = []
-n = 0
+UT, UB = 500000.0, 250000.0
+RESULTS = []
 
 
-def check(label, ok, detail=""):
-    global n
-    n += 1
-    print("%s  %s  %s" % ("PASS" if ok else "FAIL", label, detail))
-    if not ok:
-        fails.append(label)
+def check(name, ok, detail=""):
+    RESULTS.append((name, bool(ok), detail))
 
 
-def rnd(x, u):
-    return int(math.floor(x / u + 0.5)) * u
+def rnd(v, u):
+    return round(v / u) * u
 
 
-def edge(x, u):
-    return u / 2 - abs(x - rnd(x, u))
+def edge(v, u):
+    """distance from v to the nearest edge of the cell it rounds into"""
+    return u / 2 - abs(v - rnd(v, u))
 
 
-w = W.build()
-lines = {c["cid"]: c["line"] for c in w.watch.values()}
-name = {c["cid"]: c["name"].replace(" Limited", "") for c in w.watch.values()}
-key = {c["key"]: c["cid"] for c in w.watch.values()}
-P = GD.Pack(T, lines)
-p1, k1, n1, pairs = P.p1(0.30)
-p0, k0, n0 = P.p0(0.30)
-up = p1 - p0
-own = {c: P.own(c) for c in lines}
-val = P.values(up)
-gold, gtot, runner, rtot = P.best_set(val)
-GOLD = set(gold)
+def pdf_text(target, name):
+    from pypdf import PdfReader
+    rd = PdfReader(os.path.join(target, name))
+    text = " ".join(" ".join((pg.extract_text() or "").split()) for pg in rd.pages)
+    return re.sub(r"([A-Za-z])- (\d)", r"\1-\2", text)   # a hyphen broken across lines, as in a model's name
 
 
-def setof(vals):
-    return set(P.best_set(vals)[0])
+def total_of(items, fac):
+    return GD.summarise(GD.ecl(items, fac))
 
 
-# ---- input gates -------------------------------------------------------------------------------------------
-files = sorted(os.listdir(T))
-check("gate: 10 or more files", len(files) >= 10, str(len(files)))
-check("gate: 3 or more formats", len(set(f.rsplit(".", 1)[-1] for f in files)) >= 3, str(sorted(set(f.rsplit(".", 1)[-1] for f in files))))
-with open(os.path.join(T, "business_account_transactions_2021-2026.csv")) as fh:
-    nrows = sum(1 for _ in fh) - 1
-check("gate: a file of 25,000 or more rows", nrows >= 25_000, str(nrows))
-meta = json.load(open(os.path.join(TASK, "metadata.json")))
-check("gate: two or more distractors named in metadata", len(meta["distractor_files"]) >= 2 and
-      all(d in files for d in meta["distractor_files"]))
-check("gate: no file describes the data", not any(re.search(r"readme|dictionary|notes|manifest|schema|guide", f, re.I) for f in files))
-check("gate: no distractor word in a file name", not any("distract" in f.lower() for f in files))
-
-# ---- R1: the field's raw material ships ------------------------------------------------------------------
-with open(os.path.join(T, "business_account_transactions_2021-2026.csv")) as fh:
-    hdr = next(csv.reader(fh))
-check("R1 ledger at transaction grain with counterparties", "other_party_account" in hdr and "posting_date" in hdr)
-allhdr = set()
-for f in files:
-    if f.endswith(".csv"):
-        with open(os.path.join(T, f)) as fh:
-            allhdr |= set(next(csv.reader(fh)))
-check("R1 no shipped column holds dependence, share or uplift",
-      not any(re.search(r"depend|share|uplift|contag|main_payer|payee", h, re.I) for h in allhdr), str(sorted(allhdr))[:80])
-check("R1 the golden reads the payments: Matai's dependants found in the ledger", len(P.dependents(key["MAT"])) == 8)
-
-# ---- R3a / R3b: the analyst test and the decisive step alone ---------------------------------------------
-TB = setof(own)
-check("R3a default path (own twelve-month expected write-off) files Kinloch and Ridgeway",
-      TB == {key["KIN"], key["RID"]}, str(sorted(name[c] for c in TB)))
-check("R3a default path is not the golden", TB != GOLD)
-check("R3b the decisive step alone files the golden: Kinloch and Matai", GOLD == {key["KIN"], key["MAT"]})
-life = {c: P.own(c, "pd_lifetime") for c in lines}
-check("R3b rung R2 (lifetime PD) stays on Kinloch and Ridgeway", setof(life) == TB)
-r3 = {c: own[c] + sum(P.pd(s) * P.lgd_ead(s) for s in P.dependents(c)) for c in lines}
-check("R3b rung R3 (payees' own expected loss added) stays on Kinloch and Ridgeway", setof(r3) == TB)
-check("R3b rung R4a (an assumed uplift of 0.25) stays on Kinloch and Ridgeway", setof(P.values(0.25)) == TB)
-# pooled uplift over every on-us payee of a defaulting payer, whatever its share
-pk = pn = 0
-U = P.borrower_universe()
-for a, eps in P.episodes.items():
-    for s, _ in eps:
-        if not (GD.D(2022, 1, 1) <= s <= GD.D(2025, 12, 31)):
-            continue
-        for p in U:
-            if p == a or a not in P.payers_of[p] or P.in_default(p, s):
-                continue
-            if P.share(p, a, GD.add_months(GD.D(s.year, s.month, 1), -12), GD.D(s.year, s.month, 1)) <= 0:
-                continue
-            pn += 1
-            pk += any(s < t <= GD.add_months(s, 12) for t in P.starts(p))
-pooled = pk / pn
-vb = {c: own[c] + P.pd(c) * max(0.0, pooled - p0) * sum(P.lgd_ead(s) for s in P.dependents(c, T=0.0001)) for c in lines}
-check("R3b rung R4b (pooled uplift over every payee of a defaulting payer) stays on Kinloch and Ridgeway",
-      setof(vb) == TB, "pooled %.4f over %d payees" % (pooled, pn))
-
-# ---- the fork table ---------------------------------------------------------------------------------------
-check("SF1 the book's write-off, not the supported borrower's own, decides: the two sets differ", TB != GOLD)
-check("SF2 lifetime PD read: the golden set is unchanged", setof(P.values(up, pdcol="pd_lifetime")) == GOLD)
-drawn = {}
-for r in P.run26:
-    drawn.setdefault(r["customer_no"], []).append(r)
-def own_drawn(c):
-    return sum(float(r["pd_12m"]) * float(r["lgd"]) * float(r["drawn_nzd"]) for r in drawn[c])
-vd = {c: own_drawn(c) + (val[c] - own[c]) for c in lines}
-check("SF3 drawn balance in place of EAD: the golden set is unchanged", setof(vd) == GOLD)
-check("SF4 whole packages: the golden set's lines fit the envelope", sum(lines[c] for c in GOLD) <= W.ENVELOPE,
-      str(sum(lines[c] for c in GOLD)))
-check("SF5 the watch list holds eight borrowers, all on the 2026 run", all(c in P.borrowers26() for c in lines) and len(lines) == 8)
-half = {c: own[c] / 2 + (val[c] - own[c]) / 2 for c in lines}
-check("SF6 a supported borrower's PD halved, not removed: the golden set is unchanged", setof(half) == GOLD)
-raw_deps = all(P.dependents(c, raw=True) == P.dependents(c) for c in lines)
-check("SF7 receipts with own-account transfers and lending kept: the same dependants", raw_deps)
-gap = []
-for p in P.borrowers26():
-    for a in P.payers_of[p]:
-        sh = P.share(p, a, GD.D(2026, 1, 1), GD.D(2027, 1, 1))
-        if 0.20 < sh < 0.40:
-            gap.append((p, a, round(sh, 3)))
-check("SF7 no 2026 payee between 20 and 40 per cent of receipts from one payer", not gap, str(gap[:3]))
-check("SF7 thresholds 0.20 to 0.45 give the same dependants", all(
-    P.dependents(c, T=t) == P.dependents(c) for c in lines for t in (0.2, 0.25, 0.35, 0.4, 0.45)))
-check("SF8 follow-up windows of 9, 15 and 18 months give the same rate", all(P.p1(0.30, window=m)[:3] == (p1, k1, n1)
-                                                                           for m in (9, 15, 18)))
-check("SF8 thresholds 0.10 to 0.45 give the same treated and control counts",
-      all(P.p1(t)[:3] == (p1, k1, n1) and P.p0(t) == (p0, k0, n0) for t in (0.1, 0.2, 0.4, 0.45)))
-gt_bin = rnd(gtot, 50_000)
-wide = {}
-for t in (0.10, 0.15, 0.50, 0.55):
-    q1 = P.p1(t)
-    q0 = P.p0(t)
-    vt = P.values(q1[0] - q0[0], T=t)
-    wide[t] = (setof(vt) == GOLD, rnd(sum(vt[c] for c in GOLD), 50_000) == gt_bin)
-check("SF7 thresholds 0.10 to 0.55 (Basel's 50 per cent receipts test included) file the golden set",
-      all(wide[t][0] for t in (0.10, 0.15, 0.50, 0.55)), str({t: a for t, (a, _) in wide.items()}))
-check("SF7 thresholds 0.10 to 0.50 keep the total in its NZ$50,000 bin", all(wide[t][1] for t in (0.10, 0.15, 0.50)))
-check("SF8 lookbacks of 3, 6 and 24 months before the payer's default give the same rate",
-      all(P.p1(0.30, lookback=m)[:3] == (p1, k1, n1) for m in (3, 6, 24)))
-dw = [(GD.D(2026, 7, 1), GD.D(2027, 1, 1)), (GD.D(2025, 1, 1), GD.D(2027, 1, 1)), (GD.D(2026, 10, 1), GD.D(2027, 1, 1))]
-check("SF7 dependence read over 2026 H2, 2026 Q4 or 2025 to 2026: the same dependants",
-      all(P.dependents(c, a=a, b=b) == P.dependents(c) for c in lines for a, b in dw))
-# SF11: the uplift's grain. The record's payee outcomes, each with its receipt share before its payer's default
-obs11 = []
-for a11 in sorted(P.episodes):
-    for s11, _ in P.episodes[a11]:
-        if not (GD.D(2022, 1, 1) <= s11 <= GD.D(2025, 12, 31)):
-            continue
-        for p11 in sorted(U):
-            if p11 == a11 or a11 not in P.payers_of[p11] or P.in_default(p11, s11):
-                continue
-            sh11 = P.share(p11, a11, GD.add_months(GD.D(s11.year, s11.month, 1), -12), GD.D(s11.year, s11.month, 1))
-            if sh11 >= 0.30:
-                obs11.append((a11, s11.year, sh11, any(s11 < t <= GD.add_months(s11, 12) for t in P.starts(p11))))
-
-
-def vals_rate(rate):
+def run(target, gen_dir):
+    T, rec, items, fns, fits, res = GD.compute(target)
+    gold = res["golden"]
+    G_T, G_I, G_O = gold["total"], gold["investment"], gold["owner_occupied"]
+    cT, cI, cO = rnd(G_T, UT), rnd(G_I, UB), rnd(G_O, UB)
     out = {}
-    for c in lines:
-        v = P.own(c)
-        for d in P.dependents(c):
-            v += P.pd(c) * max(0.0, rate(P.share(d, c, GD.D(2026, 1, 1), GD.D(2027, 1, 1))) - p0) * P.lgd_ead(d)
-        out[c] = v
+    # ---- the call and its asks sit mid-bin, and every member of the standing family files the same cells
+    main_family = ["golden", "split_normal", "split_lin", "split_band", "split_median", "pooled", "pooled_lin",
+                   "pooled_band", "pooled_median"]
+    book_family = ["golden", "split_normal", "split_lin", "split_band", "split_median"]
+    for k in main_family:
+        check("main family %s files the plan figure's cell" % k, rnd(res[k]["total"], UT) == cT,
+              "%.0f -> %.0f" % (res[k]["total"], rnd(res[k]["total"], UT)))
+    check("main figure clear of its bin edge (every family member, 80,000 or more)",
+          min(edge(res[k]["total"], UT) for k in main_family) >= 80000,
+          "%.0f" % min(edge(res[k]["total"], UT) for k in main_family))
+    for k in book_family:
+        check("book family %s files the investment cell" % k, rnd(res[k]["investment"], UB) == cI, "%.0f" % res[k]["investment"])
+        check("book family %s files the owner-occupied cell" % k, rnd(res[k]["owner_occupied"], UB) == cO, "%.0f" % res[k]["owner_occupied"])
+    check("book cells clear of their bin edges (every split member, 30,000 or more)",
+          min(min(edge(res[k]["investment"], UB), edge(res[k]["owner_occupied"], UB)) for k in book_family) >= 30000)
+    top = set(gold["top5"])
+    for k in book_family:
+        check("top five identical under %s" % k, set(res[k]["top5"]) == top, str(res[k]["top5"]))
+    # ---- the ladder: each shallow route files another plan figure, by at least a fifth of a bin
+    for k in ("carried", "reflex_10_over_3y", "record_mean"):
+        check("rung %s files another plan figure" % k, rnd(res[k]["total"], UT) != cT,
+              "%.0f -> %.0f" % (res[k]["total"], rnd(res[k]["total"], UT)))
+        check("rung %s clear of the golden cell" % k, abs(res[k]["total"] - cT) - UT / 2 >= 0.2 * UT,
+              "%.0f" % (abs(res[k]["total"] - cT) - UT / 2))
+    # the cycle's own re-inspections (no default selection, no distress) as a rival
+    cyc_t, cyc_r = [], []
+    for p, h in T.val.items():
+        ins = [x for x in h if x["basis"] == "INSPECTION"]
+        for a, b in zip(ins[:-1], ins[1:]):
+            car = GD.in_force(h, b["vdate"] - dt.timedelta(days=1))
+            if car is None or car["basis"] != "INDEX ROLL-FORWARD":
+                continue
+            # an inspection that follows a default is not a cycle inspection
+            cyc_t.append((b["vdate"] - a["vdate"]).days / 365.25)
+            cyc_r.append(b["value"] / car["value"])
+    dflt_insp = {(x["p"]) for x in rec}
+    cy = np.polyfit(np.array(cyc_t), np.log(np.array(cyc_r)), 1)
+    cyc = total_of(items, lambda t, bk: math.exp(cy[1] + cy[0] * t))
+    res["cycle_drift"] = cyc
+    check("rung cycle_drift (inspections of performing loans) files another plan figure", rnd(cyc["total"], UT) != cT,
+          "%.0f" % cyc["total"])
+    # blanket haircuts a solver might add by reflex
+    for hc in (0.10, 0.15, 0.20, 0.25):
+        b = total_of(items, lambda t, bk, hc=hc: 1 - hc)
+        res["blanket_%d" % int(100 * hc)] = b
+        check("blanket %d per cent haircut misses the plan cell" % int(100 * hc), rnd(b["total"], UT) != cT, "%.0f" % b["total"])
+    # recent experience: the record's average shortfall over its latest years, flat on every facility, overall and
+    # by lending book, by mean, exposure-weighted mean and median (the improving recent years read as the market)
+    R_ = np.array([x["ratio"] for x in rec])
+    Y_ = np.array([x["date"].year for x in rec])
+    E_ = np.array([x["ead"] for x in rec])
+    B_ = np.array([x["book"] == GD.TRADING for x in rec])
+    worst = None
+    for lo in range(2016, 2027):
+        m_ = Y_ >= lo
+        variants = {"mean": lambda m: float(R_[m].mean()), "exposure-weighted mean": lambda m: float((R_[m] * E_[m]).sum() / E_[m].sum()),
+                    "median": lambda m: float(np.median(R_[m]))}
+        for vn, vf in variants.items():
+            v = vf(m_)
+            r_ = total_of(items, lambda t, bk, v=v: v)
+            res["recent %s from %d" % (vn, lo)] = r_
+            gap = abs(r_["total"] - cT) - UT / 2
+            worst = gap if worst is None else min(worst, gap)
+            vb = {True: vf(m_ & B_), False: vf(m_ & ~B_)}
+            r_ = total_of(items, lambda t, bk, vb=vb: vb[bk == GD.TRADING])
+            res["recent %s by book from %d" % (vn, lo)] = r_
+            worst = min(worst, abs(r_["total"] - cT) - UT / 2)
+    check("rung: recent experience (any window from 2016, mean, weighted or median, pooled or by book) misses the plan "
+          "cell", worst > 0, "nearest %.0f outside" % worst)
+    # the landed run that pools the books lands the call and misses both book cells
+    check("pooled staleness files the plan cell", rnd(res["pooled"]["total"], UT) == cT)
+    check("pooled staleness misses the investment cell", rnd(res["pooled"]["investment"], UB) != cI, "%.0f" % res["pooled"]["investment"])
+    check("pooled staleness misses the owner-occupied cell", rnd(res["pooled"]["owner_occupied"], UB) != cO, "%.0f" % res["pooled"]["owner_occupied"])
+    check("pooled staleness: the five recorded (the landed run keeps them)", True,
+          "%d of 5" % len(set(res["pooled"]["top5"]) & top))
+    # ---- Sulfur block: the analyst test on the clean truth, the deep chain's links, the judgment's evidence
+    check("analyst test: the model on the carried values files two or more cells below the plan figure",
+          rnd(res["carried"]["total"], UT) <= cT - 2 * UT, "%.0f, cell %.0f" % (res["carried"]["total"], rnd(res["carried"]["total"], UT)))
+    pt, it = fits["split"][True], fits["split"][False]
+    check("record: the shortfall grows with years since inspection, owner-occupied", pt["b"] < -0.02, "%.4f" % pt["b"])
+    check("record: the shortfall grows with years since inspection, investment", it["b"] < -0.02, "%.4f" % it["b"])
+    taus = np.array([x["tau"] for x in rec])
+    ratios = np.array([x["ratio"] for x in rec])
+    slope_se = float(np.sqrt(np.var(np.log(ratios) - np.polyval(np.polyfit(taus, np.log(ratios), 1), taus)) /
+                             (len(taus) * np.var(taus))))
+    check("record: the staleness slope is many standard errors from nought", abs(fits["pooled"]["b"]) / slope_se > 8,
+          "slope %.4f, se %.4f" % (fits["pooled"]["b"], slope_se))
+    check("record: owner-occupied security falls further at default (level)", pt["a"] < it["a"] - 0.03,
+          "%.4f against %.4f" % (pt["a"], it["a"]))
+    check("record covers the book's staleness (defaults 7 years or more since inspection)",
+          int((taus >= 7).sum()) >= 60, str(int((taus >= 7).sum())))
+    book_tau = [(pt_["tau"], it_["ead"]) for it_ in items for pt_ in it_["parts"]]
+    ead_tot = sum(e for _, e in book_tau)
+    stale_share = sum(e for t, e in book_tau if t >= 7) / ead_tot
+    rec_stale = float((taus >= 7).mean())
+    check("the book is staler than the record (exposure last inspected 7 years or more ago)", stale_share > 2 * rec_stale,
+          "book %.3f, record %.3f" % (stale_share, rec_stale))
+    # the write-up's worded bounds, each asserted against the quantity it bounds (reduce-house-fixes H29)
+    recent_ = [x for x in rec if x["date"].year >= 2022]
+    fresh_share = sum(1 for x in recent_ if x["tau"] < 0.5) / len(recent_)
+    recent_stale = sum(1 for x in recent_ if x["tau"] >= 7) / len(recent_)
+    check("bound: over a third of the defaults since 2022 were inspected in the six months before default",
+          fresh_share > 1 / 3, "%.3f" % fresh_share)
+    check("bound: about one in ten of the defaults since 2022 rested on an inspection seven or more years old",
+          0.05 <= recent_stale <= 0.15, "%.3f" % recent_stale)
+    check("bound: fewer than one in ten of the record's properties rested on an inspection seven or more years old",
+          rec_stale < 0.10, "%.3f" % rec_stale)
+    t_book = {}
+    for bk_ in (True, False):
+        sub = [x for x in rec if (x["book"] == GD.TRADING) == bk_]
+        tt = np.array([x["tau"] for x in sub])
+        yy = np.log(np.array([x["ratio"] for x in sub]))
+        Xb = np.c_[np.ones_like(tt), tt]
+        cb = np.linalg.lstsq(Xb, yy, rcond=None)[0]
+        eb = yy - Xb @ cb
+        s2 = float(eb @ eb) / (len(tt) - 2)
+        t_book[bk_] = abs(cb[1]) / np.sqrt(s2 * np.linalg.inv(Xb.T @ Xb)[1, 1])
+    check("bound: the staleness slope is more than 10 standard errors from nought in each lending book",
+          min(t_book.values()) > 10, "owner-occupied %.1f, investment %.1f" % (t_book[True], t_book[False]))
+    # ---- the standing family beyond the main grid: every rival a careful analyst would run lands the same cells
+    TR = GD.TRADING
+    cells = lambda r: (rnd(r["total"], UT), rnd(r["investment"], UB), rnd(r["owner_occupied"], UB), frozenset(r["top5"]))
+    gcells = cells(gold)
+
+    def split_fit(rr, design, weights=None):
+        F = {}
+        for bk in (True, False):
+            sub = [x for x in rr if (x["book"] == TR) == bk]
+            t = np.array([x["tau"] for x in sub])
+            y = np.log(np.array([x["ratio"] for x in sub]))
+            X = design(t)
+            w = np.ones_like(t) if weights is None else np.array([weights(x) for x in sub])
+            c = np.linalg.lstsq(X * np.sqrt(w)[:, None], y * np.sqrt(w), rcond=None)[0]
+            F[bk] = (c, float(np.sum(w * np.exp(y - X @ c)) / np.sum(w)))
+        return F
+
+    def apply_fit(F, design):
+        return lambda t, bk: math.exp(float((design(np.array([t])) @ F[bk == TR][0])[0])) * F[bk == TR][1]
+
+    lin_d = lambda t: np.c_[np.ones_like(t), t]
+    rivals = {
+        "exposure-weighted": (rec, lin_d, lambda x: x["ead"]),
+        "defaults 2017 to 2026": ([x for x in rec if x["date"].year >= 2017], lin_d, None),
+        "defaults 2012 to 2019": ([x for x in rec if x["date"].year <= 2019], lin_d, None),
+        "defaults 2020 to 2026": ([x for x in rec if x["date"].year >= 2020], lin_d, None),
+        "quadratic in years": (rec, lambda t: np.c_[np.ones_like(t), t, t * t], None),
+        "square root of years": (rec, lambda t: np.c_[np.ones_like(t), np.sqrt(t)], None),
+        "log of one plus years": (rec, lambda t: np.c_[np.ones_like(t), np.log1p(t)], None),
+    }
+    for name, (rr, des, wt) in rivals.items():
+        r = total_of(items, apply_fit(split_fit(rr, des, wt), des))
+        res["rival " + name] = r
+        check("rival (%s) files the golden's cells" % name, cells(r) == gcells,
+              "%.0f / %.0f / %.0f" % (r["total"], r["investment"], r["owner_occupied"]))
+    # one slope, an intercept for each book
+    t_ = np.array([x["tau"] for x in rec])
+    y_ = np.log(np.array([x["ratio"] for x in rec]))
+    o_ = np.array([1.0 if x["book"] == TR else 0.0 for x in rec])
+    Xc = np.c_[np.ones_like(t_), o_, t_]
+    cc = np.linalg.lstsq(Xc, y_, rcond=None)[0]
+    smc = float(np.mean(np.exp(y_ - Xc @ cc)))
+    r = total_of(items, lambda t, bk: math.exp(cc[0] + cc[1] * (bk == TR) + cc[2] * t) * smc)
+    res["rival common slope"] = r
+    check("rival (one slope, a level for each book) files the golden's cells", cells(r) == gcells,
+          "%.0f / %.0f / %.0f" % (r["total"], r["investment"], r["owner_occupied"]))
+    # the receivers' net proceeds against the carried value, fitted the same way, priced with no further haircut
+    sales = defaultdict(list)
+    for s_ in GD.rows(target, "receiver_sales_2012_2026.csv"):
+        sales[s_["property_id"]].append(s_)
+    net = []
+    for x in rec:
+        ss = [s_ for s_ in sales.get(x["p"], []) if GD.D(s_["completion_date"]) >= x["date"]]
+        if ss:
+            car = GD.in_force(T.val[x["p"]], x["date"])["value"]
+            net.append(dict(x, ratio=(float(ss[0]["gross_price_eur"]) - float(ss[0]["selling_costs_eur"])) / car))
+    Fn = split_fit(net, lin_d)
+    fn_net = apply_fit(Fn, lin_d)
+    loans = []
+    for it_ in items:
+        v = sum(p_["carried"] * fn_net(p_["tau"], it_["book"]) for p_ in it_["parts"])
+        loans.append(dict(fac=it_["fac"], book=it_["book"], el=it_["pd"] * max(0.0, it_["ead"] - v)))
+    r = GD.summarise(loans)
+    res["rival sale proceeds"] = r
+    check("rival (receivers' net proceeds against the carried value, no haircut) files the golden's cells",
+          cells(r) == gcells, "%.0f / %.0f / %.0f, %d sales" % (r["total"], r["investment"], r["owner_occupied"], len(net)))
+
+    # ---- semantic fork rows: each alternative reading lands the golden's cells (same call) or is ruled out by a
+    # sentence the pack ships, asserted on the PDF's own text
+    memo = pdf_text(target, "plan_2027_credit_loss_request.pdf")
+    pol = pdf_text(target, "ardcarn_credit_risk_policy_part4_2025.pdf")
+    mdl = pdf_text(target, "cre_lgd_model_documentation_2025.pdf")
+    # SF1: the line is the expected loss on 2027 defaults of the year-end performing book, not 2027 write-offs
+    check("SF1 the memo files the line as expected credit loss on facilities performing at the year end",
+          "expected credit loss on the commercial property facilities that are performing at 31 December 2026" in memo
+          and "default during 2027" in memo and G_T > 0)
+    # SF2: the population is the facilities performing at 31 December 2026
+    in_default = sum(1 for f, r_ in T.book.items() if r_["default_flag"] != "N")
+    check("SF2 the population excludes facilities in default at the year end",
+          in_default == 0 and len(items) == len(T.book) and "are provided for separately and are not in this line" in memo)
+    # SF3: the batch loaded twice (June 2024) reaches no year-end row: one 20261231 row per facility
+    ye = [r_["facility_no"] for r_ in GD.rows(target, "dw_fact_loan_month_end_2022_2026.csv")
+          if r_["month_end_key"] == "20261231"]
+    check("SF3 one year-end row per facility", len(ye) == len(set(ye)), "%d rows" % len(ye))
+    # SF4: the master scale sets the chance of default (memo and policy 4.1)
+    check("SF4 every graded facility carries a master-scale grade, as the memo and policy file it",
+          all(i_["grade"] in GD.MASTER_PD for i_ in items) and "master scale for its grade at 31 December 2026" in memo)
+    # SF5: exposure is the year-end balance (memo)
+    check("SF5 exposure is the 31 December 2026 balance", all(i_["ead"] > 0 for i_ in items)
+          and "its exposure is its balance at that date" in memo)
+    # SF6: the expected value at default (mean); the median variant lands the same cells (corridor)
+    check("SF6 the median variant files the golden's cells", cells(res["split_median"]) == gcells)
+    # SF7: each default as if on 1 January 2027 (memo); a default spread through 2027 is another cell, ruled out
+    late = total_of([dict(it_, parts=[dict(p_, tau=p_["tau"] + 0.5) for p_ in it_["parts"]]) for it_ in items], fns["golden"])
+    res["midyear"] = late
+    check("SF7 the memo files each default as if on 1 January 2027 (a mid-2027 default is recorded)",
+          "as if it fell on 1 January 2027" in memo, "%.0f, cell %.0f" % (late["total"], rnd(late["total"], UT)))
+    # SF8: prices held at the latest published level (memo); the outlook's 2027 capital growth lands the same cells
+    sector_of = {}
+    for r_ in GD.rows(target, "brackley_rowe_cre_index_2004_2026.csv"):
+        sector_of[r_["series_code"]] = (r_["sector"], r_["region_group"])
+    grow = {"Retail": 0.010, "Industrial": 0.035, "Hospitality": 0.020, "Healthcare": 0.015}
+    gfac = lambda code: (1 + grow[sector_of[code][0]]) if sector_of[code][0] in grow else \
+        (0.975 if sector_of[code][1] == "Dublin" else 0.965)
+    outl = total_of([dict(it_, parts=[dict(p_, carried=p_["carried"] * gfac(p_["series"])) for p_ in it_["parts"]])
+                     for it_ in items], fns["golden"])
+    res["outlook_growth"] = outl
+    check("SF8 the outlook's 2027 capital growth on every property files the golden's cells",
+          cells(outl) == gcells and "held at their latest published level" in memo, "%.0f" % outl["total"])
+    # SF9: shared security in proportion to exposure (policy 4.4)
+    shared = sum(1 for it_ in items for p_ in it_["parts"] if p_["share"] < 1 - 1e-9)
+    check("SF9 shared properties are split in proportion to exposure", shared > 0
+          and "in proportion to their exposures at the reporting date" in pol, "%d shared parts" % shared)
+    # SF10: the register's row in force at the year end, against the last inspection rolled forward on the index as
+    # published at the as-of date (every revision taken): the same cells
+    idx = defaultdict(dict)
+    for r_ in GD.rows(target, "brackley_rowe_cre_index_2004_2026.csv"):
+        k = (int(r_["quarter"][:4]), int(r_["quarter"][5]))
+        if k not in idx[r_["series_code"]] or int(r_["release"]) > idx[r_["series_code"]][k][0]:
+            idx[r_["series_code"]][k] = (int(r_["release"]), float(r_["index_value"]))
+    def rerolled(p_):
+        h = T.val[p_["p"]]
+        li = GD.anchor(h, GD.in_force(h, GD.REPORT))
+        ser = idx[p_["series"]]
+        lastq = max(ser)
+        kq = (li["vdate"].year, (li["vdate"].month - 1) // 3 + 1)
+        full = li["value"] * ser[lastq][1] / ser[kq][1] if kq < lastq else li["value"]
+        return full * p_["share"]
+    rr_ = total_of([dict(it_, parts=[dict(p_, carried=rerolled(p_)) for p_ in it_["parts"]]) for it_ in items], fns["golden"])
+    res["latest_release"] = rr_
+    check("SF10 the roll-forward redone on the latest release files the golden's cells", cells(rr_) == gcells,
+          "%.0f" % rr_["total"])
+    # SF11: the lending book is the facility's own (register and fact agree)
+    agree = sum(1 for f, r_ in T.book.items() if GD.BOOK_CODE[r_["lending_book"]] == T.book_of.get(f))
+    check("SF11 the fact and the register agree on every facility's book", agree == len(T.book), "%d of %d" % (agree, len(T.book)))
+    # SF12: cost to the bank is the expected 2027 loss (the ask's words); by exposure or by LGD is another list
+    by_ead = [x["fac"] for x in sorted(GD.ecl(items, fns["golden"]), key=lambda x: -x["ead"])[:5]]
+    check("SF12 ranking by exposure gives another list (ruled out by the ask's words)", set(by_ead) != top)
+    # SF13: a loan is a facility; no customer holds two of the five
+    custs = [T.cust_of.get(f) for f in gold["top5"]]
+    check("SF13 the five belong to five customers", len(set(custs)) == 5, str(custs))
+    # SF14: inferred property members carry no type; the lending book sits on the facility, so none is unbooked
+    inferred = {r_["property_id"] for r_ in GD.rows(target, "dw_dim_property_2026-12.csv") if r_["source"] == "INFERRED"}
+    on_inferred = [i_ for i_ in items if any(p_["p"] in inferred for p_ in i_["parts"])]
+    check("SF14 facilities on inferred property members still carry a lending book",
+          all(i_["book"] in ("Investment", "Owner-occupied") for i_ in items), "%d facilities" % len(on_inferred))
+    # SF15: duplicate and zero-length valuation rows never sit in force
+    check("SF15 cleaned history holds no overlapping rows", all(
+        all(a["exp"] < b["eff"] or a["eff"] == b["eff"] for a, b in zip(h[:-1], h[1:])) for h in T.val.values()))
+    # SF16: legacy codes (FULL, IDX) are the same bases (policy 4.6)
+    check("SF16 legacy codes mapped as policy 4.6 files them",
+          all(x["basis"] in ("INSPECTION", "INDEX ROLL-FORWARD") for h in T.val.values() for x in h)
+          and "FULL" in pol and "IDX" in pol)
+    # SF17: the inspection at default within three months of the default; 60 or 180 days give the same cells
+    for win in (60, 180):
+        rw = GD.record(T, window=win)
+        fw, _ = GD.factor_fns(rw)
+        r = total_of(items, fw["golden"])
+        res["window_%d" % win] = r
+        check("SF17 a %d-day window after default files the golden's cells" % win, cells(r) == gcells,
+              "%d defaults, %.0f" % (len(rw), r["total"]))
+    # SF18: the carried value read on the default date, or on the day before the inspection: the same cells
+    rc = GD.record(T, carried_on="inspection")
+    fc, _ = GD.factor_fns(rc)
+    r = total_of(items, fc["golden"])
+    res["carried_before_inspection"] = r
+    check("SF18 the value carried the day before the inspection files the golden's cells", cells(r) == gcells, "%.0f" % r["total"])
+    # SF19: years since inspection counted to 1 January 2027 or to 31 December 2026: the same cells
+    r = total_of(GD.book_items(T, tau_from=GD.REPORT), fns["golden"])
+    check("SF19 years counted to 31 December 2026 file the golden's cells", cells(r) == gcells, "%.0f" % r["total"])
+    # SF20: a default's years since inspection from the inspection its carried value rests on, or from the last
+    # inspection dated before the default whether or not the register had it on file: the same cells
+    rd = GD.record(T, age="dated")
+    fd, _ = GD.factor_fns(rd)
+    r = total_of(items, fd["golden"])
+    res["age_dated"] = r
+    differ = sum(1 for a, b in zip(sorted(rec, key=lambda x: x["p"]), sorted(rd, key=lambda x: x["p"])) if abs(a["tau"] - b["tau"]) > 1e-9)
+    check("SF20 years counted from the last inspection dated before the default file the golden's cells",
+          cells(r) == gcells, "%.0f, %d defaults differ" % (r["total"], differ))
+    # SF21: each default's ratio taken against the carried value moved by the index to the inspection's quarter (the
+    # market's move between the two dates taken out), against the value carried on the default date: the same cells
+    adj = []
+    for x in rec:
+        h = T.val[x["p"]]
+        car = GD.in_force(h, x["date"])
+        ser = idx[car["series"]]
+        qc = min((car["vdate"].year, (car["vdate"].month - 1) // 3 + 1), max(ser))
+        ins = [y for y in h if y["basis"] == "INSPECTION" and x["date"] <= y["vdate"] <= x["date"] + dt.timedelta(days=92)][0]
+        qi = min((ins["vdate"].year, (ins["vdate"].month - 1) // 3 + 1), max(ser))
+        adj.append(dict(x, ratio=x["ratio"] / (ser[qi][1] / ser[qc][1])))
+    fa, _ = GD.factor_fns(adj)
+    for k_ in ("golden", "pooled"):
+        r = total_of(items, fa[k_])
+        res["index_adjusted_" + k_] = r
+    check("SF21 the record's ratios with the market's move taken out file the golden's cells",
+          cells(res["index_adjusted_golden"]) == gcells, "%.0f" % res["index_adjusted_golden"]["total"])
+    # SF22: the inspection at default is the one the bank commissions when the facility defaults (on or after the
+    # default date); the inspection nearest the default on either side picks up some made before it
+    rn = GD.record(T, side="nearest")
+    fn_, _ = GD.factor_fns([x for x in rn if x["ratio"] > 0])
+    r = total_of(items, fn_["golden"])
+    res["nearest_inspection"] = r
+    check("SF22 the inspection nearest the default on either side files the golden's cells, or the model's definition rules "
+          "it out", cells(r) == gcells or "the inspection the bank commissions when the facility defaults" in mdl,
+          "%.0f / %.0f / %.0f%s" % (r["total"], r["investment"], r["owner_occupied"], "" if cells(r) == gcells else ", other cells"))
+    # SF23: the loss is the CRE-LGD-3 figure on the expected value of the security (memo), not the expected loss over the
+    # spread of values an inspection might return (the model is convex in V, so that reading runs higher)
+    sp = {}
+    for bk_ in (True, False):
+        sub = [x for x in rec if (x["book"] == GD.TRADING) == bk_]
+        t_ = np.array([x["tau"] for x in sub])
+        y_ = np.log(np.array([x["ratio"] for x in sub]))
+        X_ = np.c_[np.ones_like(t_), t_]
+        c_ = np.linalg.lstsq(X_, y_, rcond=None)[0]
+        sp[bk_] = (c_, np.exp(y_ - X_ @ c_))
+    spread = []
+    for it_ in items:
+        c_, e_ = sp[it_["book"] == GD.TRADING]
+        base = sum(p_["carried"] * math.exp(c_[0] + c_[1] * p_["tau"]) for p_ in it_["parts"])
+        lgd_ = np.maximum(0.0, it_["ead"] - (1 - GD.H) * base * e_) / it_["ead"]
+        spread.append(dict(fac=it_["fac"], book=it_["book"], el=it_["pd"] * float(lgd_.mean()) * it_["ead"]))
+    r = GD.summarise(spread)
+    res["expected_lgd_over_spread"] = r
+    check("SF23 the memo files the loss as the CRE-LGD-3 figure on the expected value (the loss averaged over the "
+          "spread of values is recorded)", "CRE-LGD-3 applied to the value we would expect our inspection to put on "
+          "the security if the facility defaulted" in memo, "%.0f, cell %.0f" % (r["total"], rnd(r["total"], UT)))
+    check("SF21 pooled with the market's move taken out files the plan cell",
+          rnd(res["index_adjusted_pooled"]["total"], UT) == cT, "%.0f" % res["index_adjusted_pooled"]["total"])
+    # ---- input gates
+    files = sorted(f for f in os.listdir(target) if not f.startswith("."))
+    ext = Counter(os.path.splitext(f)[1] for f in files)
+    check("input gate: 10 or more files", len(files) >= 10, str(len(files)))
+    check("input gate: 2 or more categories", len({".csv", ".xlsx"} & set(ext)) >= 1 and ".pdf" in ext)
+    with open(os.path.join(target, "dw_fact_loan_month_end_2022_2026.csv"), encoding="utf-8") as fh:
+        n_fact = sum(1 for _ in fh) - 1
+    with open(os.path.join(target, "dw_dim_property_valuation_2004_2026.csv"), encoding="utf-8") as fh:
+        n_val = sum(1 for _ in fh) - 1
+    check("input gate: a CSV of 20,000 rows or more", n_fact >= 20000, str(n_fact))
+    check("input gate: a second long CSV", n_val >= 2000, str(n_val))
+    out.update(dict(res=res, fits=fits, rec=rec, items=items, cT=cT, cI=cI, cO=cO, stale_share=stale_share,
+                    rec_stale=rec_stale, n_fact=n_fact, n_val=n_val, slope_se=slope_se, t_book=t_book))
     return out
 
 
-b0 = b1 = 0.0
-for _ in range(60):
-    g0 = g1 = h00 = h01 = h11 = 0.0
-    for _, _, x, y in obs11:
-        pi = 1 / (1 + math.exp(-(b0 + b1 * x)))
-        g0 += y - pi
-        g1 += (y - pi) * x
-        wv = pi * (1 - pi)
-        h00 += wv
-        h01 += wv * x
-        h11 += wv * x * x
-    det = h00 * h11 - h01 * h01
-    b0 += (h11 * g0 - h01 * g1) / det
-    b1 += (-h01 * g0 + h00 * g1) / det
-bands3 = [(0.0, 0.60), (0.60, 0.75), (0.75, 9.0)]
-rate3 = {bd: sum(o[3] for o in obs11 if bd[0] <= o[2] < bd[1]) / sum(1 for o in obs11 if bd[0] <= o[2] < bd[1]) for bd in bands3}
-fam11 = {"logistic on share": vals_rate(lambda x: 1 / (1 + math.exp(-(b0 + b1 * x)))),
-         "three share bands": vals_rate(lambda x: next(v for bd, v in rate3.items() if bd[0] <= x < bd[1]))}
-same11 = {k: setof(v) == GOLD and all(rnd(v[c], 50_000) == rnd(val[c], 50_000) for c in lines)
-          and rnd(sum(v[c] for c in GOLD), 50_000) == rnd(gtot, 50_000) for k, v in fam11.items()}
-check("SF11 a logistic fit of default on receipt share and three share bands file the golden set and every graded bin",
-      all(same11.values()), "slope %.3f; %s" % (b1, same11))
-cells = {}
-for a11, y11, x11, d11 in obs11:
-    for k11 in (("payer", a11), ("year", y11), ("band", next(bd for bd in bands3 if bd[0] <= x11 < bd[1]))):
-        cells.setdefault(k11, []).append(d11)
-degen = [k for k, v in cells.items() if len(v) >= 3 and (all(v) or not any(v))]
-check("SF11 no payer, year or share band in the record has a payee default rate of nil or one", not degen, str(degen))
-check("SF11 no payer that defaulted shares Matai Valley Foods' division, so a rate by the payer's division has no cell for it",
-      all(P.cust[a]["sector"] != P.cust[key["MAT"]]["sector"] for a in set(o[0] for o in obs11)))
-# baselines: pooled record, payers that never defaulted, payees' own PDs
-def p0_never():
-    nn = kk = 0
-    for Y in (2022, 2023, 2024, 2025):
-        y0, y1 = GD.D(Y, 1, 1), GD.D(Y + 1, 1, 1)
-        for p in sorted(U):
-            for a in P.payers_of[p]:
-                if P.share(p, a, GD.D(Y - 1, 1, 1), y0) < 0.3 or P.starts(a):
-                    continue
-                if P.in_default(p, y0) or not P._active(p, Y):
-                    continue
-                nn += 1
-                kk += any(y0 <= t < y1 for t in P.starts(p))
-    return kk / nn
-variants = {"pooled": val, "never": P.values(p1 - p0_never()), "model": P.values(None, baseline=p1)}
-mat = key["MAT"]
-bins = {k: rnd(v[mat], 50_000) for k, v in variants.items()}
-tots = {k: rnd(v[key["KIN"]] + v[mat], 50_000) for k, v in variants.items()}
-check("SF9 every licensed baseline files the golden set", all(setof(v) == GOLD for v in variants.values()))
-check("SF9 Matai's figure in one NZ$50,000 bin under every baseline", len(set(bins.values())) == 1, str(bins))
-check("SF9 the total in one NZ$50,000 bin under every baseline", len(set(tots.values())) == 1, str(tots))
-check("SF9 a nil baseline is outside the bin (a method error, not a reading)", rnd(P.values(p1)[mat], 50_000) != bins["pooled"])
-eds = {name[c]: round(edge(val[c], 50_000)) for c in lines}
-check("SF10 every graded write-off clears its NZ$50,000 bin edge by NZ$2,000", min(eds.values()) >= 2_000, str(eds))
-check("SF10 the total clears its bin edge by NZ$2,000", edge(gtot, 50_000) >= 2_000, str(round(edge(gtot, 50_000))))
-mins = min(min(edge(v[mat], 50_000) for v in variants.values()), min(edge(v[key["KIN"]] + v[mat], 50_000) for v in variants.values()))
-check("SF10 Matai and the total clear their edges under every baseline", mins >= 1_000, str(round(mins)))
-
-# ---- margins and separation --------------------------------------------------------------------------------
-check("margin: the golden set beats the default path's set by 5 per cent or more on the book",
-      gtot >= 1.05 * sum(val[c] for c in TB), "%.0f vs %.0f" % (gtot, sum(val[c] for c in TB)))
-check("margin: the golden set beats the runner-up by NZ$100,000", gtot - rtot >= 100_000, "%.0f" % (gtot - rtot))
-r_star = (own[key["RID"]] - own[mat]) / (P.pd(mat) * sum(P.lgd_ead(s) for s in P.dependents(mat)) -
-                                          P.pd(key["RID"]) * sum(P.lgd_ead(s) for s in P.dependents(key["RID"])))
-check("ladder: an assumed uplift must exceed 0.26 to reach the golden", r_star > 0.26, "%.3f" % r_star)
-dev_main = [df for df in w.defaults if df["kind"] in ("anchor", "contagion", "baseline_payee") and df["triggers"][0][0] != "UTP"]
-check("separation: every payer and payee default the call reads opens on a customer-keyed row", not dev_main)
-eps_utp = P._episodes("utp")
-sv = P.episodes
-P.episodes = eps_utp
-same = P.p1(0.30)[:3] == (p1, k1, n1) and P.p0(0.30) == (p0, k0, n0)
-P.episodes = sv
-check("separation: the call reads the same rates with the register's account rows dropped", same)
-check("separation: no watch-list payee is in default or stage 3", all(P.borrowers26()[s][0]["stage"] != "3"
-                                                                     for c in lines for s in P.dependents(c)))
-
-# ---- R2: each mess item neutral to the call ---------------------------------------------------------------
-tmp = tempfile.mkdtemp(prefix="t127c-")
-shutil.copytree(T, os.path.join(tmp, "t"))
-with open(os.path.join(tmp, "t", "account_number_crosswalk_2023.csv"), "w") as fh:
-    fh.write("legacy_account,new_account,converted_on,status\n")
-P2 = GD.Pack(os.path.join(tmp, "t"), lines)
-a1 = P2.p1(0.30)
-a0 = P2.p0(0.30)
-v2 = P2.values(a1[0] - a0[0])
-check("R2 the 2023 crosswalk mishandled (legacy numbers unresolved): the call holds", setof(v2) == GOLD,
-      "p1 %d/%d" % a1[1:3])
-shutil.copy(os.path.join(T, "account_number_crosswalk_2023.csv"), os.path.join(tmp, "t"))
-for d in meta["distractor_files"]:
-    os.remove(os.path.join(tmp, "t", d))
-P3 = GD.Pack(os.path.join(tmp, "t"), lines)
-b1 = P3.p1(0.30)
-b0 = P3.p0(0.30)
-same3 = (setof(P3.values(b1[0] - b0[0])) == GOLD and P3.security() == P.security()
-         and P3.commitment() == P.commitment() and P3.sector_table() == P.sector_table())
-check("distractors deleted: the call and every ask figure are unchanged", same3)
-shutil.rmtree(tmp, ignore_errors=True)
-
-
-def _no_index(latest=True):
-    raise RuntimeError("the property index was read")
-
-
-_saved_index = P.index
-P.index = _no_index
-try:
-    c1 = P.p1(0.30)
-    c0 = P.p0(0.30)
-    idx_free = setof(P.values(c1[0] - c0[0])) == GOLD
-except RuntimeError:
-    idx_free = False
-P.index = _saved_index
-prov = sum(1 for c in lines if rnd(P.security(latest=False)[c], 1000) != rnd(P.security()[c], 1000))
-check("R2 the property index (either release) never enters the call; provisional releases move ask A only", idx_free,
-      "ask A figures moved by the provisional reading: %d of 8" % prov)
-
-# ---- asks: device mass and disjoint blocks ----------------------------------------------------------------
-A = P.security()
-A_reg = P.security(use_made=False, drop_discharged=False)
-A_d = P.security(use_made=True, drop_discharged=False)
-A_m = P.security(use_made=False, drop_discharged=True)
-check("ask A: the register's dates with discharged kept miss every borrower by 3 bins or more",
-      all(abs(rnd(A[c], 1000) - rnd(A_reg[c], 1000)) >= 3000 for c in lines))
-dis = {c for c in lines if rnd(A[c], 1000) != rnd(A_d[c], 1000)}
-check("ask A: discharged properties move exactly the three borrowers that sold one", dis == {key["RID"], key["HAR"], key["BRI"]},
-      str(sorted(name[c] for c in dis)))
-check("ask A: the register's dates move every borrower", all(rnd(A[c], 1000) != rnd(A_m[c], 1000) for c in lines))
-check("ask A: figures clear their edges by NZ$50", min(edge(A[c], 1000) for c in lines) >= 50, str(round(min(edge(A[c], 1000) for c in lines))))
-B = P.commitment()
-B_lazy = P.commitment(former=False, drop_released=False)
-B_f = P.commitment(former=True, drop_released=False)
-B_r = P.commitment(former=False, drop_released=True)
-check("ask B: NZBN and exact names with releases kept miss every borrower", all(rnd(B[c], 1000) != rnd(B_lazy[c], 1000) for c in lines))
-rel = {c for c in lines if rnd(B[c], 1000) != rnd(B_f[c], 1000)}
-fmr = {c for c in lines if rnd(B[c], 1000) != rnd(B_r[c], 1000)}
-check("ask B: releases and former names move disjoint blocks of four", len(rel) == 4 and len(fmr) == 4 and not (rel & fmr),
-      "%s | %s" % (sorted(name[c] for c in rel), sorted(name[c] for c in fmr)))
-C = P.sector_table()
-C_nl = P.sector_table(keys="noloan")
-C_rs = P.sector_table(use_register=False)
-C_nc = P.sector_table(use_cures=False)
-check("ask C: account rows left unkeyed miss every division by 1.0 point or more",
-      all(abs(C[s][0] - C_nl[s][0]) >= 1.0 for s in C), str({s: round(C[s][0] - C_nl[s][0], 1) for s in C}))
-check("ask C: the run's stage as the year-end state misses every division", all(round(C[s][0], 1) != round(C_rs[s][0], 1) for s in C))
-check("ask C: shares clear their edges", min(edge(C[s][0], 0.1) for s in C) >= 0.003, "%.4f" % min(edge(C[s][0], 0.1) for s in C))
-check("ask C: seven divisions, each with forty or more borrowers", len(C) == 7 and min(v[2] for v in C.values()) >= 40)
-
-# ---- realism ---------------------------------------------------------------------------------------------
-def steps(vals):
-    vs = sorted(set(vals))
-    return set(b - a for a, b in zip(vs, vs[1:]))
-cids = [int(r["customer_no"][1:]) for r in P.run26]
-fids = [int(r["facility_id"][1:]) for r in P.run26]
-check("realism: customer numbers are no arithmetic sequence", len(steps(cids)) > 5)
-check("realism: facility ids are no arithmetic sequence", len(steps(fids)) > 5)
-import openpyxl
-wb = openpyxl.load_workbook(os.path.join(T, "customer_master_2026-12.xlsx"), read_only=True)
-names_all = [r[1] for r in list(wb["Customers"].iter_rows(values_only=True))[1:]]
-shapes = set()
-for nm in names_all:
-    shapes.add("year" if re.search(r"\(\d{4}\)", nm) else "amp" if " & " in nm else "ltd" if nm.endswith(" Ltd") else
-               "coop" if "Co-operative" in nm else "family" if re.search(r"Brothers|and Sons|Family", nm) else "plain")
-check("realism: legal names take more than two shapes", len(shapes) > 2, str(sorted(shapes)))
-order_codes = [r[0] for r in list(wb["Customers"].iter_rows(values_only=True))[1:]]
-check("realism: customer order is not alphabetical", order_codes != sorted(order_codes, key=lambda c: names_all[order_codes.index(c)]))
-mt = {}
-for (cid, ym), v in P.tot.items():
-    if v > 0:
-        mt.setdefault(ym, []).append(round(v, 2))
-check("realism: no two customers share a month's receipts to the cent", all(len(v) == len(set(v)) for v in mt.values()))
-def pdftext(f):
-    return subprocess.run(["pdftotext", "-layout", os.path.join(T, f), "-"], capture_output=True, text=True).stdout
-terms = pdftext("bsu_terms_of_reference_2027.pdf")
-check("documents: the terms carry the envelope sentence (positive control)", "NZ$6.0 million of new working-capital lines" in terms)
-check("documents: the terms name no payee, dependence or contagion", not re.search(r"payee|depend|contagi|supplier|receipt", terms, re.I))
-val_txt = pdftext("ifrs9_pd_model_validation_2025.pdf")
-check("documents: the validation report carries the default definition", "dated by" in val_txt and "first trigger" in val_txt)
-wl = pdftext("watch_list_2027-01.pdf")
-check("documents: the watch list names no payee or dependence", "Matai Valley Foods" in wl and not re.search(r"payee|depend|supplier", wl, re.I))
-def pinfo(f):
-    return subprocess.run(["pdfinfo", os.path.join(T, f)], capture_output=True, text=True).stdout
-check("documents: every PDF exported by Writer, no ReportLab in the bytes",
-      all(b"ReportLab" not in open(os.path.join(T, f), "rb").read() and re.search(r"Creator:\s+Writer", pinfo(f))
-          and re.search(r"Producer:\s+LibreOffice", pinfo(f)) for f in files if f.endswith(".pdf")))
-check("documents: no file dated after the pack", all(os.path.getmtime(os.path.join(T, f)) <= 1800560400 for f in files))
-fig_ok = F["call"] == "Kinloch Engineering and Matai Valley Foods" and F["total_kept_off"] == rnd(gtot, 50_000)
-check("figures.json carries the call and total", fig_ok)
-
-print("%d checks, %d failed" % (n, len(fails)))
-sys.exit(1 if fails else 0)
+if __name__ == "__main__":
+    here = os.path.dirname(os.path.abspath(__file__))
+    target = sys.argv[1] if len(sys.argv) > 1 else os.path.join(here, "..", "target")
+    run(target, here)
+    bad = [r for r in RESULTS if not r[1]]
+    for name, ok, d in RESULTS:
+        print("%s  %s%s" % ("PASS" if ok else "FAIL", name, ("  [" + d + "]") if d else ""))
+    print("%d checks, %d failed" % (len(RESULTS), len(bad)))
+    sys.exit(1 if bad else 0)

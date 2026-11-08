@@ -35,9 +35,11 @@ VOCAB = os.path.join(REPO, ".claude", "skills", "fingerprint", "vocab.json")
 # judgment, the one-fact test, the replay and ambiguity bans, the run forecast and the strategy label.
 THREE_RULES = ("Task type", "Domain test", "Swap", "Layer 1", "Layer 2", "Decisive step", "Not semantics",
                "Not rule application", "Analyst test", "Estimand", "No decoy", "No certified replay", "Chain",
-               "Judgment", "One-fact test", "No replay", "Pinned", "Run forecast", "Strategy label", "Lesson")
+               "Judgment", "Hidden by", "After the notice", "One-fact test", "No replay", "Pinned", "Run forecast",
+               "Strategy label", "Lesson")
 # Labels a build drawn before the Sulfur refresh may lack: a WARN there, a FAIL on a build in design.
-SULFUR_LABELS = {"Chain", "Judgment", "One-fact test", "No replay", "Pinned", "Run forecast", "Strategy label"}
+SULFUR_LABELS = {"Chain", "Judgment", "Hidden by", "After the notice", "One-fact test", "No replay", "Pinned",
+                 "Run forecast", "Strategy label"}
 # The survivor anatomy (stumping 1.4): the properties every portal-approved main call shares, one labelled line
 # each, each a test answered on this build before the default path is written.
 ANATOMY = ("Actor", "Link", "Reflex", "Back-test", "Second use", "Shock", "Pins")
@@ -313,6 +315,14 @@ def check_note(task_dir, note_text):
             "%d numbered inferences" % n_inf if n_inf >= 3 else
             "%d numbered inference(s) on the Chain line; Sulfur needs three or more dependent ones, numbered (1) (2) (3)"
             % n_inf, warn=shipped)
+    an = labelled(tr, "After the notice")
+    if an:
+        n_after = len(re.findall(r"\(\d{1,2}\)|(?:^|[\s;,])\d{1,2}[.)]\s", an))
+        row("two or more inferences owed after the notice", n_after >= 2,
+            "%d numbered inferences after the notice" % n_after if n_after >= 2 else
+            "%d numbered inference(s) on the After the notice line; a step whose remedy is standard once seen was the "
+            "whole stump (stumping 1.1): number (1) (2) the inferences still owed, each with its wrong turn" % n_after,
+            warn=shipped)
     rf = labelled(tr, "Run forecast")
     if rf:
         deep = re.search(r"method shortcut|unfinished chain|dismissed (its )?own evidence|self-confirming check", rf, re.I)

@@ -1,475 +1,331 @@
-"""task8 architecture 17: the truth. The item pool (fixed by POOL_SEED), the member schools, their Term 3
-sequences and sitting days, the candidates, their responses, the entries register, the make-up sitting. Nothing
-here is shipped as is; build.py writes the pack from it."""
+"""task8 architecture 18: the clean truth. Items (pool, strand, context, stem length, difficulty on the Level 2
+reference), papers 2022 to 2027, centres, candidates, sittings and every scored response, drawn from one seed
+with a separate stream per component so that a change in one leaves the others where they were."""
 import datetime as dt
-import math
 
 import numpy as np
 
 import params as P
-import rasch as RA
 
-ONE = dt.timedelta(days=1)
-
-SCHOOL_WORDS = ["Ashcombe", "Brenmoor", "Carrick Vale", "Dunholm", "Eastcliffe", "Fernlea", "Glenarvon", "Harrowgate",
-                "Inchbury", "Jarvis Bay", "Kerrowdale", "Larchmont", "Marlow Heights", "Northbury", "Ormiston Park",
-                "Pendleford", "Queensbury Hill", "Ravensworth", "Selwyn Downs", "Tarrant", "Ulverdale", "Valemount",
-                "Westerleigh", "Yarrowby", "Aldmoor", "Belvoir Grove", "Clareston", "Drummond Hill", "Elmsworth",
-                "Foxhaven", "Greystone Bay", "Hollingbrook", "Ivanhoe Ridge", "Kingsclere", "Lindenhurst",
-                "Merrivale", "Netherby", "Oakmere", "Penrose Hill", "Rothbury", "Somerleigh", "Thornbury Vale",
-                "Wexcombe", "Abbotsleigh", "Bramblewood", "Cranleigh Downs", "Dovercourt", "Evendale"]
-SCHOOL_KINDS = ["College", "School", "Collegiate", "Grammar", "Academy", "College", "School", "College"]
-
-SURNAMES = ["Smith", "Wilson", "Brown", "Taylor", "Williams", "Anderson", "Thompson", "Walker", "Harris", "Martin",
-            "Clark", "White", "Young", "King", "Wright", "Robinson", "Campbell", "Mitchell", "Scott", "Stewart",
-            "Morris", "Kelly", "Cooper", "Murray", "Bell", "Hall", "Turner", "Parker", "Edwards", "Collins",
-            "Ngata", "Tipene", "Walker", "Paewai", "Rangi", "Tamatea", "Horomona", "Te Whata", "Kereama", "Pomare",
-            "Faleolo", "Tuilagi", "Leota", "Sapolu", "Fonoti", "Vaifale", "Taufa", "Havili", "Latu", "Folau",
-            "Chen", "Wang", "Li", "Zhang", "Liu", "Singh", "Patel", "Sharma", "Kim", "Park", "Nguyen", "Tran",
-            "Reid", "Fraser", "McKenzie", "MacDonald", "Ross", "Grant", "Sinclair", "Henderson", "Duncan",
-            "Gordon", "Mackay", "Cameron", "Fletcher", "Harvey", "Lawson", "Marsh", "Nash", "Pearce", "Quinn",
-            "Rowe", "Shaw", "Tait", "Vincent", "Wallace", "Barker", "Chapman", "Dixon", "Ellis", "Ford", "Gibson",
-            "Hughes", "Jenkins", "Knight", "Lloyd", "Mason", "Newton", "Owen", "Palmer", "Russell", "Spencer"]
-FIRST_F = ["Olivia", "Charlotte", "Isla", "Amelia", "Ava", "Mia", "Harper", "Willow", "Sophie", "Grace", "Ella",
-           "Ruby", "Emily", "Lily", "Zoe", "Hannah", "Aria", "Maia", "Anahera", "Kaia", "Mere", "Ngaio", "Aroha",
-           "Leilani", "Sina", "Mele", "Ana", "Grace", "Chloe", "Jessica", "Georgia", "Madison", "Lucy", "Eva",
-           "Holly", "Sienna", "Poppy", "Ivy", "Freya", "Jasmine", "Priya", "Mei", "Yuna", "Linh", "Sara", "Tessa"]
-FIRST_M = ["Oliver", "Jack", "Noah", "Leo", "George", "Charlie", "Lucas", "William", "Thomas", "James", "Henry",
-           "Hunter", "Max", "Mason", "Liam", "Ethan", "Samuel", "Harry", "Archie", "Finn", "Nikau", "Tama", "Wiremu",
-           "Rawiri", "Manaia", "Ihaia", "Sione", "Tevita", "Losa", "Isaac", "Joshua", "Daniel", "Benjamin",
-           "Ryan", "Caleb", "Logan", "Cooper", "Arlo", "Hugo", "Felix", "Arjun", "Wei", "Jun", "Minh", "Kai", "Toby"]
+STRANDS_L1 = ("N", "MM", "D", "SS")
+STRAND_NAME = {"N": "Number", "MM": "Money and measures", "D": "Data", "SS": "Shape and space",
+               "PR": "Patterns and relationships"}
 
 
-def schooldays_between(a, b):
-    """Weekdays in (a, b]."""
-    n, d = 0, a
-    while d < b:
-        d += ONE
-        if d.weekday() < 5:
-            n += 1
-    return n
+def sig(x):
+    return 1.0 / (1.0 + np.exp(-x))
 
 
-def add_schooldays(a, k):
-    d = a
-    while k > 0:
-        d += ONE
-        if d.weekday() < 5:
-            k -= 1
-    return d
+def streams(seed):
+    ss = np.random.SeedSequence(seed)
+    names = ("items", "papers", "centres", "people", "theta", "resp", "dates", "mess", "ids", "survey", "audit")
+    return {n: np.random.default_rng(s) for n, s in zip(names, ss.spawn(len(names)))}
 
 
-def monday(d):
-    return d - dt.timedelta(days=d.weekday())
+def _codes(rng, n, prefix, start):
+    """Bank codes advance by uneven steps, the way a bank numbers items as writers submit them."""
+    steps = rng.integers(1, 9, size=n)
+    nums = start + np.cumsum(steps)
+    return ["%s-%04d" % (prefix, k) for k in nums]
 
 
-def week_of_term(d, term_start):
-    return (monday(d) - monday(term_start)).days // 7 + 1
+def draw_items(rng):
+    """Two pools on one reference scale (what a Level 2 candidate finds). Returns a dict of arrays."""
+    n1, n2 = 236, 204
+    strand1 = rng.choice(STRANDS_L1, size=n1, p=[0.30, 0.30, 0.20, 0.20])
+    strand2 = rng.choice(STRANDS_L1 + ("PR",), size=n2, p=[0.25, 0.24, 0.17, 0.16, 0.18])
+    strand = np.concatenate([strand1, strand2])
+    p_every = {"N": 0.18, "MM": 0.90, "D": 0.58, "SS": 0.38, "PR": 0.08}
+    everyday = np.array([rng.random() < p_every[s] for s in strand])
+    p_long = {"N": 0.10, "MM": 0.34, "D": 0.40, "SS": 0.20, "PR": 0.62}
+    long_ = np.array([rng.random() < p_long[s] for s in strand])
+    words = np.where(long_, rng.integers(82, 151, size=n1 + n2), rng.integers(14, 49, size=n1 + n2))
+    b = np.concatenate([np.clip(rng.normal(-1.20, 0.82, n1), -3.3, 0.9), np.clip(rng.normal(0.55, 0.74, n2), -1.2, 2.3)])
+    pool = np.array(["L1"] * n1 + ["L2"] * n2)
+    resid = rng.normal(0.0, P.RESID_DIF, n1 + n2)
+    codes = _codes(rng, n1, "N1", 1000) + _codes(rng, n2, "N2", 2000)
+    it = dict(code=np.array(codes), pool=pool, strand=strand, everyday=everyday, words=words.astype(int), b=b,
+              resid=resid)
+    I2 = np.arange(n1, n1 + n2)
+
+    def take(cond, k, used):
+        cand = [i for i in I2 if cond(i) and i not in used]
+        rng.shuffle(cand)
+        out = cand[:k]
+        used.update(out)
+        return np.array(out)
+    used = set()
+    acc = lambda i: -0.75 <= b[i] <= 0.85
+    sp = take(lambda i: acc(i) and strand[i] == "MM", 8, used)
+    sa = take(lambda i: acc(i) and strand[i] == "N", 12, used)
+    lp = take(lambda i: acc(i) and strand[i] in ("MM", "D"), 16, used)
+    # patterns and relationships items the Item Review Group may draw on for the 2027 Level 1 paper
+    pr = take(lambda i: -0.95 <= b[i] <= 0.75 and strand[i] == "PR", 24, used)
+    if len(pr) < 18:
+        more = sorted((i for i in I2 if strand[i] == "PR" and i not in used), key=lambda i: abs(b[i] + 0.1))
+        pr = np.concatenate([pr, np.array(more[:18 - len(pr)], dtype=int)]).astype(int)
+        used.update(pr.tolist())
+    everyday[sp] = True
+    words[sp] = rng.integers(17, 42, size=len(sp))
+    everyday[sa] = False
+    words[sa] = rng.integers(15, 44, size=len(sa))
+    everyday[lp] = True
+    # long everyday items: their reading cost sits about where their everyday advantage does
+    words[lp] = np.clip(np.round(100.0 * P.BETA / P.LAMBDA + rng.normal(0, 15, size=len(lp))), 90, 142).astype(int)
+    everyday[pr] = False
+    words[pr] = rng.integers(98, 141, size=len(pr))
+    it["everyday"], it["words"] = everyday, words.astype(int)
+    it["sets"] = dict(sp=sp, sa=sa, lp=lp, pr_pool=pr)
+    return it
 
 
-# ---------------------------------------------------------------- the item pool (fixed across redraws)
-def pool():
-    g = np.random.default_rng(P.POOL_SEED)
-    items = []
-    counts = {"U1": 27, "U2": 27, "U3": 27, "U4": 27, "U5": 16, "U6": 16}
-    for code, name, strand, term in P.UNITS:
-        for k in range(counts[code]):
-            items.append(dict(unit=code, unit_name=name, strand=strand, term=term))
-    n = len(items)
-    codes = g.choice(np.arange(100, 1000), n, replace=False)
-    cards = g.choice(np.arange(1040, 4990), n, replace=False)
-    for it, c, k in zip(items, codes, cards):
-        it["code"] = "S10-%04d" % c
-        it["card"] = int(k)
-        it["mc"] = bool(g.random() < 0.8)
-    t12 = [i for i, it in enumerate(items) if it["term"] < 3]
-    t3 = [i for i, it in enumerate(items) if it["term"] == 3]
-    b = np.zeros(n)
-    delta = np.zeros(n)
-    b[t12] = g.normal(0, P.B_T12_SD, len(t12))
-    b[t3] = g.normal(P.B_T3_MEAN, P.B_T3_SD, len(t3))
-    delta[t3] = np.clip(g.normal(P.DELTA_MEAN, P.DELTA_SD, len(t3)), P.DELTA_LO, P.DELTA_HI)
-    # anchors: five per Term 1 and 2 unit, centred so the anchor block's mean is the scale's zero
-    anchors = []
-    for u in ("U1", "U2", "U3", "U4"):
-        idx = [i for i in t12 if items[i]["unit"] == u]
-        anchors += list(g.choice(idx, P.ANCHORS_PER_UNIT, replace=False))
-    anchors = sorted(int(a) for a in anchors)
-    b -= b[anchors].mean()
-    b = np.round(b, 3)
-    for i, it in enumerate(items):
-        it["anchor"] = i in anchors
-    # forms: every anchor on every form, the rest dealt to one form each
-    forms = {f: list(anchors) for f in range(P.N_FORMS)}
-    for u, per in zip(("U1", "U2", "U3", "U4"), P.FORM_T12):
-        rest = [i for i in t12 if items[i]["unit"] == u and i not in anchors]
-        g.shuffle(rest)
-        pos = 0
-        for f in range(P.N_FORMS):
-            k = per[f]
-            forms[f] += rest[pos:pos + k]
-            pos += k
-        assert pos == len(rest)
-    for u, per in zip(("U5", "U6"), P.FORM_T3):
-        rest = [i for i in t3 if items[i]["unit"] == u]
-        g.shuffle(rest)
-        for f in range(P.N_FORMS):
-            forms[f] += rest[f * per:(f + 1) * per]
-    for f in forms:
-        forms[f] = sorted(forms[f])
-        assert len(forms[f]) == P.PAPER_LEN
-    # the make-up paper (form M26, printed): its own 50 items' difficulties, for the make-up marks
-    bm = g.normal(0.1, 0.9, P.PAPER_LEN)
-    return dict(items=items, b=b, delta=delta, anchors=anchors, forms=forms, t12=t12, t3=t3, b_makeup=bm)
-
-
-# ---------------------------------------------------------------- the schools
-def schools(rng):
-    out = []
-    words = list(SCHOOL_WORDS)
-    rng.shuffle(words)
-    codes = rng.choice(np.arange(101, 999), sum(P.SCHOOLS_PER_REGION), replace=False)
-    starts = [s for s, _ in P.TERM_STARTS]
-    probs = np.array([p for _, p in P.TERM_STARTS])
-    k = 0
-    for reg, ns in zip(P.REGIONS, P.SCHOOLS_PER_REGION):
-        for _ in range(ns):
-            name = "%s %s" % (words[k], SCHOOL_KINDS[int(rng.integers(len(SCHOOL_KINDS)))])
-            ts = starts[int(rng.choice(len(starts), p=probs))]
-            first = "U5" if rng.random() < 0.5 else "U6"
-            while True:
-                span = int(rng.integers(P.SPAN_LO, P.SPAN_HI + 1))
-                d0 = int(rng.integers(0, len(P.WINDOW) - span))
-                start = P.WINDOW[d0]
-                fridays = []
-                d = start
-                for _ in range(20):
-                    d += ONE
-                    if d.weekday() == 4:
-                        sd = schooldays_between(start, d)
-                        if P.END_LO <= sd <= P.END_HI and P.WEEK_LO <= week_of_term(d, ts) <= P.WEEK_HI:
-                            fridays.append(d)
-                if not fridays:
-                    continue
-                end1 = fridays[int(rng.integers(len(fridays)))]
-                days = [w for w in P.WINDOW[d0:] if w != end1][:span]
-                if len(days) == span:
-                    break
-            out.append(dict(code="C%03d" % codes[k], name=name, region=reg, term_start=ts,
-                            term_end=P.TERM3_END[ts], first=first, second="U6" if first == "U5" else "U5",
-                            end1=end1, days=days, week_end1=week_of_term(end1, ts)))
-            k += 1
+def mix_chance(it, idx, th):
+    """Chance that a Level 1 candidate at ability th (reference scale) answers each item, over the regions."""
+    shares = np.array([r[3] for r in P.REGIONS])
+    shares = shares / shares.sum()
+    out = np.zeros(len(idx))
+    for reg, sh in zip(P.REGIONS, shares):
+        out += sh * sig(th - it["b"][idx] - l1_shift(it, idx, reg[5]))
     return out
 
 
-# ---------------------------------------------------------------- candidates, sittings and responses
-def candidates(rng, sch, pl):
-    used_nsn = set()
-    people = []
-    entry = 10000
-    for s_i, s in enumerate(sch):
-        n = int(rng.integers(P.SIZE_LO, P.SIZE_HI + 1))
-        mu = P.THETA_MEAN + rng.normal(0, P.THETA_SD_SCHOOL)
-        ncls = math.ceil(n / P.CLASS_SIZE)
-        cls_day = [s["days"][int(i * len(s["days"]) / ncls)] for i in range(ncls)]
-        rng.shuffle(cls_day)
-        cls_period = [P.PERIODS[int(rng.integers(len(P.PERIODS)))] for _ in range(ncls)]
-        for j in range(n):
-            c = j % ncls
-            while True:
-                nsn = int(rng.integers(100000000, 160000000))
-                if nsn not in used_nsn:
-                    used_nsn.add(nsn)
-                    break
-            female = rng.random() < 0.5
-            first = (FIRST_F if female else FIRST_M)[int(rng.integers(len(FIRST_F)))]
-            dob = dt.date(2011, 1, 1) + dt.timedelta(days=int(rng.integers(0, 365)))
-            entry += int(rng.integers(1, 4))
-            people.append(dict(school=s_i, cls=c, day=cls_day[c], period=cls_period[c], nsn=nsn,
-                               surname=SURNAMES[int(rng.integers(len(SURNAMES)))], first=first,
-                               gender="F" if female else "M", dob=dob, entry="26-%05d" % entry,
-                               theta=float(rng.normal(mu, P.THETA_SD)), form=None))
-        # forms rotate through each class roster
-        for c in range(ncls):
-            members = [p for p in people if p["school"] == s_i and p["cls"] == c]
-            off = int(rng.integers(P.N_FORMS))
-            for k, p in enumerate(members):
-                p["form"] = (k + off) % P.N_FORMS
-    return people
-
-
-def taught_state(p, s, unit):
-    """True when the candidate's own school had finished `unit` before the candidate's sitting day."""
-    return unit == s["first"] and p["day"] > s["end1"]
-
-
-def sit(rng, sch, people, pl):
-    items, b, delta = pl["items"], pl["b"], pl["delta"]
-    absent = rng.random(len(people)) < P.ABSENT_RATE
-    online = [p for p, a in zip(people, absent) if not a]
-    away = [p for p, a in zip(people, absent) if a]
-    N, I = len(online), len(items)
-    R = np.zeros((N, I))
-    M = np.zeros((N, I))
-    T = np.ones((N, I), bool)
-    unit = [it["unit"] for it in items]
-    for r, p in enumerate(online):
-        s = sch[p["school"]]
-        f = pl["forms"][p["form"]]
-        M[r, f] = 1
-        for i in f:
-            if items[i]["term"] == 3:
-                T[r, i] = taught_state(p, s, unit[i])
-        pr = RA.sig(p["theta"] - b[f] - delta[f] * (~T[r, f]))
-        R[r, f] = (rng.random(len(f)) < pr).astype(float)
-    return dict(online=online, away=away, R=R, M=M, T=T)
-
-
-def sessions(rng, sch, online, pl, R):
-    """The platform's sessions (UTC) and response rows; a dropped session resumes, and the items answered just
-    before the drop are answered again in the resumed session (the later answer stands)."""
-    sess, rows = [], []
-    sid = 400000
-    for r, p in enumerate(online):
-        s = sch[p["school"]]
-        h, m = p["period"]
-        start = dt.datetime.combine(p["day"], dt.time(h, m), P.NZST) + dt.timedelta(minutes=int(rng.integers(0, 7)))
-        dur = int(rng.integers(38, 59))
-        f = list(pl["forms"][p["form"]])
-        order = list(rng.permutation(f))
-        sid += int(rng.integers(1, 3))
-        if rng.random() < P.RECONNECT_RATE:
-            k = int(rng.integers(10, 41))
-            redo = int(rng.integers(1, P.REANSWER_MAX + 1))
-            t1 = start + dt.timedelta(minutes=int(k * dur / 50))
-            sid2 = sid + 1
-            t2 = t1 + dt.timedelta(minutes=int(rng.integers(2, 13)))
-            end = t2 + dt.timedelta(minutes=dur - int(k * dur / 50))
-            sess.append(dict(sid=sid, entry=p["entry"], school=s["code"], form=p["form"], start=start, end=t1,
-                             status="dropped"))
-            sess.append(dict(sid=sid2, entry=p["entry"], school=s["code"], form=p["form"], start=t2, end=end,
-                             status="submitted"))
-            for j, i in enumerate(order):
-                if j < k:
-                    first_val = R[r, i]
-                    if j >= k - redo:
-                        # answered before the drop, then again after it: the earlier answer is the one replaced
-                        first_val = R[r, i] if rng.random() < 0.6 else 1.0 - R[r, i]
-                        rows.append((sid, p["entry"], i, first_val))
-                        rows.append((sid2, p["entry"], i, R[r, i]))
-                    else:
-                        rows.append((sid, p["entry"], i, R[r, i]))
-                else:
-                    rows.append((sid2, p["entry"], i, R[r, i]))
-            sid = sid2
+def true_standard(it, ref):
+    lo, hi = -8.0, 8.0
+    for _ in range(80):
+        m = 0.5 * (lo + hi)
+        if mix_chance(it, ref, m).sum() < P.STANDARD_RAW:
+            lo = m
         else:
-            sess.append(dict(sid=sid, entry=p["entry"], school=s["code"], form=p["form"], start=start,
-                             end=start + dt.timedelta(minutes=dur), status="submitted"))
-            for i in order:
-                rows.append((sid, p["entry"], i, R[r, i]))
-    return sess, rows
+            hi = m
+    return 0.5 * (lo + hi)
 
 
-def world(seed=P.SEED, pl=None, light=False):
-    pl = pl or pool()
-    rng = np.random.default_rng(seed)
-    sch = schools(rng)
-    people = candidates(rng, sch, pl)
-    st = sit(rng, sch, people, pl)
-    w = dict(seed=seed, pool=pl, schools=sch, people=people, **st)
-    if light:
-        return w
-    w["sessions"], w["rows"] = sessions(rng, sch, st["online"], pl, st["R"])
-    w["asks"] = asks(np.random.default_rng(seed + P.ASK_SEED_OFFSET), w)
-    return w
+def l1_shift(it, idx, delta_r=0.0):
+    """How much harder item idx is for a Level 1 candidate than for a Level 2 candidate (logits)."""
+    return (P.LAMBDA * it["words"][idx] / 100.0 - (P.BETA + delta_r) * it["everyday"][idx].astype(float)
+            + it["resid"][idx])
 
 
-# ---------------------------------------------------------------- the entries register and the make-up sitting
-def _person(rng, school):
-    female = rng.random() < 0.5
-    return dict(school=school, nsn=int(rng.integers(160000000, 199999999)), gender="F" if female else "M",
-                surname=SURNAMES[int(rng.integers(len(SURNAMES)))],
-                first=(FIRST_F if female else FIRST_M)[int(rng.integers(len(FIRST_F)))],
-                dob=dt.date(2011, 1, 1) + dt.timedelta(days=int(rng.integers(0, 365))))
+def draw_papers(rng, it):
+    n1 = int((it["pool"] == "L1").sum())
+    I1 = np.arange(n1)
+    I2 = np.arange(n1, len(it["b"]))
+    s = it["sets"]
+    bridging = set(np.concatenate([s["sp"], s["sa"], s["lp"], s["pr_pool"]]).tolist())
+    b, ev = it["b"], it["everyday"]
+    papers = {}
+    # the 2022 reference paper: forty Level 1 items, sixteen in everyday contexts
+    order = rng.permutation(I1)
+    evs = [i for i in order if ev[i] and -2.7 <= b[i] <= 0.2]
+    mts = [i for i in order if not ev[i] and -2.7 <= b[i] <= 0.2]
+    ref = np.array(evs[:16] + mts[:24])
+    used = set(ref.tolist())
+    papers["L1-2022"] = ref
+    prev = list(ref)
+    for k, y in enumerate(P.YEARS[1:]):
+        reuse = list(rng.choice(prev, size=10, replace=False))
+        fresh_ev = [i for i in order if ev[i] and i not in used][:11]
+        fresh_mt = [i for i in order if not ev[i] and i not in used][:10]
+        used.update(fresh_ev + fresh_mt)
+        br = list(s["sp"][2 * k:2 * k + 2]) + list(s["sa"][3 * k:3 * k + 3]) + list(s["lp"][4 * k:4 * k + 4])
+        papers["L1-%d" % y] = np.array(reuse + fresh_ev + fresh_mt + br)
+        prev = list(set(prev) | set(fresh_ev) | set(fresh_mt))
+    # the 2027 paper: twenty-eight Level 1 items already sat (eight everyday, twenty mathematical) and the twelve
+    # patterns and relationships items from the Level 2 pool
+    th_std = true_standard(it, ref)
+    clear = lambda i: not (0.14 <= mix_chance(it, np.array([i]), th_std)[0] <= 0.27 or
+                           0.84 <= mix_chance(it, np.array([i]), th_std)[0] <= 0.95)
+    sat0 = [i for i in rng.permutation(sorted(set(np.concatenate([papers["L1-%d" % y] for y in P.YEARS])) - bridging))]
+    sat = [i for i in sat0 if clear(i)]
+    e27 = [i for i in sat if ev[i] and -2.4 <= b[i] <= 0.1][:8]
+    e27 += [i for i in sat + sat0 if ev[i] and i not in e27][:8 - len(e27)]
+    m27 = [i for i in sat if not ev[i] and -2.4 <= b[i] <= 0.3][:20]
+    m27 += [i for i in sat + sat0 if not ev[i] and i not in m27][:20 - len(m27)]
+    pool = [i for i in rng.permutation(s["pr_pool"]) if clear(i)]
+    low = [i for i in pool if mix_chance(it, np.array([i]), th_std)[0] < 0.14]
+    high = [i for i in pool if mix_chance(it, np.array([i]), th_std)[0] > 0.27]
+    k_low = min(len(low), 6)
+    pr = np.array(low[:k_low] + high[:12 - k_low], dtype=int)
+    if len(pr) < 12:
+        rest = [i for i in list(pool) + list(s["pr_pool"]) if i not in set(pr.tolist())]
+        rest = list(dict.fromkeys(rest))
+        pr = np.concatenate([pr, np.array(rest[:12 - len(pr)], dtype=int)])
+    s["pr"] = pr
+    bridging |= set(pr.tolist())
+    papers["L1-2027"] = np.array(e27 + m27 + list(s["pr"]))
+    # Level 2 papers: forty Level 2 items each, ten carried from earlier papers; every bridging item and every
+    # patterns item the 2027 paper borrows sits on at least one of them
+    o2 = [i for i in rng.permutation(I2) if i not in bridging]
+    prev2, pos = [], 0
+    br_all = list(s["sp"]) + list(s["sa"]) + list(s["lp"])
+    rng.shuffle(br_all)
+    for k, y in enumerate(P.YEARS):
+        reuse = list(rng.choice(prev2, size=10, replace=False)) if prev2 else []
+        br = br_all[k * 7:(k + 1) * 7] + ([br_all[35]] if k == 0 else [])
+        prs = list(s["pr"][4 * (k - 2):4 * (k - 2) + 4]) if k >= 2 else []
+        n_new = 40 - len(reuse) - len(br) - len(prs)
+        fresh = o2[pos:pos + n_new]
+        pos += n_new
+        papers["L2-%d" % y] = np.array(reuse + fresh + br + prs)
+        prev2 = list(set(prev2) | set(fresh))
+    for name, arr in papers.items():
+        assert len(arr) == 40 and len(set(arr.tolist())) == 40, name
+    return papers
 
 
-def asks(rng, w):
-    sch, people, online, away = w["schools"], w["people"], w["online"], w["away"]
-    codes = [s["code"] for s in sch]
-    region_of = [s["region"] for s in sch]
-    by_region = {r: [i for i, s in enumerate(sch) if s["region"] == r] for r in P.REGIONS}
-    on_set = {p["entry"] for p in online}
-    # no two candidates share a first name, surname and birth date (a birth date moves a day where two would)
-    used = {}
-    for p in people:
-        while (p["first"], p["surname"], p["dob"]) in used:
-            p["dob"] += ONE
-        used[(p["first"], p["surname"], p["dob"])] = p["entry"]
-    # twins: two candidates at one school share a surname and a birth date; their first names differ
-    twins, taken = [], set()
-    for r in P.REGIONS:
-        k = int(rng.integers(P.TWINS_PER_REGION[0], P.TWINS_PER_REGION[1] + 1))
-        pool_r = [p for p in people if region_of[p["school"]] == r]
-        done = 0
-        while done < k:
-            a = pool_r[int(rng.integers(len(pool_r)))]
-            if a["entry"] in taken:
-                continue
-            mates = [q for q in pool_r if q["school"] == a["school"] and q["entry"] != a["entry"]
-                     and q["first"] != a["first"] and q["entry"] not in taken
-                     and (q["first"], a["surname"], a["dob"]) not in used]
-            if not mates:
-                continue
-            b = mates[int(rng.integers(len(mates)))]
-            del used[(b["first"], b["surname"], b["dob"])]
-            b["surname"], b["dob"] = a["surname"], a["dob"]
-            used[(b["first"], b["surname"], b["dob"])] = b["entry"]
-            twins.append((a, b))
-            taken.update((a["entry"], b["entry"]))
-            done += 1
-    # entries: every candidate's own entry, uploaded by the school in May or June
-    entries = []
-    for p in people:
-        entries.append(dict(entry=p["entry"], nsn=p["nsn"], surname=p["surname"], first=p["first"], dob=p["dob"],
-                            gender=p["gender"], school=codes[p["school"]],
-                            entered=dt.date(2026, 5, 18) + dt.timedelta(days=int(rng.integers(0, 40))),
-                            source="school upload", status="E", person=p["entry"]))
-    # late entries keyed by the office from a school's email or call: the office form has no NSN
-    late = rng.random(len(entries)) < 0.012
-    for e, flag in zip(entries, late):
-        if flag:
-            e.update(source="office", nsn=None,
-                     entered=dt.date(2026, 7, 6) + dt.timedelta(days=int(rng.integers(0, 21))))
-    # transfers inside a region: the candidate sat at the new school under an office entry, and the old school's
-    # upload still stands
-    transfers = []
-    nxt = 90000
-    for r in P.REGIONS:
-        k = int(rng.integers(P.TRANSFERS_PER_REGION[0], P.TRANSFERS_PER_REGION[1] + 1))
-        cand = [e for e in entries if region_of[codes.index(e["school"])] == r and e["entry"] in on_set
-                and e["source"] == "school upload" and e["person"] not in taken]
-        for j in rng.choice(len(cand), k, replace=False):
-            e = cand[int(j)]
-            olds = [codes[i] for i in by_region[r] if codes[i] != e["school"]]
-            old = dict(e)
-            nxt += int(rng.integers(3, 40))
-            old.update(entry="26-%05d" % nxt, school=olds[int(rng.integers(len(olds)))],
-                       entered=dt.date(2026, 5, 18) + dt.timedelta(days=int(rng.integers(0, 30))))
-            e.update(source="office", nsn=None,
-                     entered=dt.date(2026, 7, 13) + dt.timedelta(days=int(rng.integers(0, 12))))
-            entries.append(old)
-            transfers.append((old["entry"], e["entry"]))
-            taken.add(e["person"])
-    # withdrawals: entries a school withdrew before the sitting (never candidates)
-    withdrawn = []
-    for i, s in enumerate(sch):
-        n = int(rng.binomial(max(1, sum(1 for p in people if p["school"] == i)), P.WITHDRAW_RATE))
-        for _ in range(n):
-            q = _person(rng, i)
-            while (q["first"], q["surname"], q["dob"]) in used:
-                q["dob"] += ONE
-            used[(q["first"], q["surname"], q["dob"])] = None
-            nxt += int(rng.integers(3, 40))
-            entries.append(dict(entry="26-%05d" % nxt, nsn=q["nsn"], surname=q["surname"], first=q["first"],
-                                dob=q["dob"], gender=q["gender"], school=s["code"],
-                                entered=dt.date(2026, 5, 18) + dt.timedelta(days=int(rng.integers(0, 40))),
-                                source="school upload", status="W", person=None))
-            withdrawn.append(entries[-1]["entry"])
-    # each school uploads its entries on one day between 18 May and the close on 26 June (its own stream, so the
-    # draws above and below are untouched); the office's entries keep the days the office took them
-    up = np.random.default_rng(w["seed"] * 7 + 13)
-    upload_day = {c: dt.date(2026, 5, 18) + dt.timedelta(days=int(up.integers(0, 40))) for c in codes}
-    for e in entries:
-        if e["source"] == "school upload":
-            e["entered"] = upload_day[e["school"]]
-    # one school's upload re-sent in June: the same rows again
-    resend = codes[int(rng.integers(len(sch)))]
-    entries += [dict(e) for e in entries if e["school"] == resend and e["source"] == "school upload"
-                and e["status"] == "E"]
-    # the make-up sitting: absentees booked into a host centre in week 6, on paper
-    # each school sends its absentees to its nearest host centre: the Northern host also takes four Central schools,
-    # the Central host half of Capital, the Southern host the other half
-    hN, hC, hS = by_region["Northern"][0], by_region["Central"][0], by_region["Southern"][0]
-    host_of = {}
-    for i in by_region["Northern"]:
-        host_of[i] = hN
-    for k, i in enumerate(by_region["Central"]):
-        host_of[i] = hN if k in P.CENTRAL_TO_NORTH else hC
-    cap = by_region["Capital"]
-    for k, i in enumerate(cap):
-        host_of[i] = hC if k < P.CAPITAL_TO_CENTRAL else hS
-    for i in by_region["Southern"]:
-        host_of[i] = hS
-    hosts = {"Northern": hN, "Central": hC, "Southern": hS}
-    # booked absentees sit (or do not) on their booked day; the typed roster holds the booked list only. Unbooked
-    # absentees who turned up on the day sat at the end of the room and were written onto the supervisor's sheet by
-    # hand, which the office never typed: their scripts follow the booked ones and reach only the keyed file.
-    roster, scripts, counter, sitters = [], [], {}, []
-    unbooked = []
-    for p in away:
-        if rng.random() >= P.MAKEUP_TAKE:
-            unbooked.append(p)
-            continue
-        h = host_of[p["school"]]
-        day = P.MAKEUP_DAYS[int(rng.integers(len(P.MAKEUP_DAYS)))]
-        attended = bool(rng.random() >= P.NOSHOW_RATE)
-        roster.append(dict(host=h, day=day, entry=p["entry"], surname=p["surname"], first=p["first"],
-                           home=p["school"], attended=attended, script="", mark=None, walkin=False, theta=p["theta"]))
-    walk = []
-    for r in P.REGIONS:
-        cand = [p for p in unbooked if region_of[p["school"]] == r]
-        k = min(len(cand), int(rng.integers(P.WALKINS_PER_REGION[0], P.WALKINS_PER_REGION[1] + 1)))
-        for j in sorted(rng.choice(len(cand), k, replace=False)):
-            p = cand[int(j)]
-            walk.append(dict(host=host_of[p["school"]], day=P.MAKEUP_DAYS[int(rng.integers(len(P.MAKEUP_DAYS)))],
-                             entry=p["entry"], surname=p["surname"], first=p["first"], home=p["school"],
-                             attended=True, script="", mark=None, walkin=True, theta=p["theta"]))
-    for x in sorted(roster, key=lambda x: (x["host"], x["day"])) + sorted(walk, key=lambda x: (x["host"], x["day"])):
-        if not x["attended"]:
-            continue
-        h = x["host"]
-        counter[h] = counter.get(h, 0) + 1
-        x["script"] = "%s-%03d" % (codes[h], counter[h])
-        mr = np.random.default_rng([w["seed"] + P.MARK_SEED_OFFSET, int(x["entry"][3:])])     # the script, not the room
-        x["mark"] = int((mr.random(P.PAPER_LEN) < RA.sig(x["theta"] - w["pool"]["b_makeup"])).sum())
-        sitters.append(x)
-    pct_host, pct_day = hosts["Central"], P.MAKEUP_DAYS[1]
-    for x in sitters:
-        pct = x["host"] == pct_host and x["day"] == pct_day
-        if pct:
-            keyed, by = dt.date(2026, 9, 2), "JT"
-        else:
-            keyed = x["day"] + dt.timedelta(days=int(rng.integers(6, 12)))
-            by = ["MK", "RP", "JT"][int(rng.integers(3))]
-            if by == "JT" and keyed == dt.date(2026, 9, 2):
-                by = "MK"      # JT spent 2 September on the one batch
-        # the office keys the cover's entry number where it cannot match a script to the typed roster, and RP keys it
-        # from every cover
-        entry_keyed = x["entry"] if (x["walkin"] or by == "RP") else ""
-        scripts.append(dict(script=x["script"], school=codes[x["host"]], entry=entry_keyed,
-                            keyed_mark=x["mark"] * 2 if pct else x["mark"], mark=x["mark"], keyed=keyed, by=by,
-                            pct=pct, home=x["home"], walkin=x["walkin"]))
-    scripts.sort(key=lambda s: (s["keyed"], s["script"]))
-    # the office numbers each keyer's session as one batch
-    bno, batch_of = 40, {}
-    for x in sorted(scripts, key=lambda s: (s["keyed"], s["by"], s["script"])):
-        k = (x["keyed"], x["by"])
-        if k not in batch_of:
-            bno += 1
-            batch_of[k] = "K%03d" % bno
-        x["batch"] = batch_of[k]
-    # the figures
-    person_region = {}
-    for e in entries:
-        if e["status"] == "E":
-            person_region.setdefault(e["person"], region_of[codes.index(e["school"])])
-    entered = {r: sum(1 for v in person_region.values() if v == r) for r in P.REGIONS}
-    sat = {r: sum(1 for p in online if region_of[p["school"]] == r) for r in P.REGIONS}
-    mk = {r: [] for r in P.REGIONS}
-    for x in scripts:
-        sat[region_of[x["home"]]] += 1
-        mk[region_of[x["home"]]].append(x["mark"])
-    return dict(entries=entries, twins=twins, transfers=transfers, withdrawn=withdrawn, resend=resend,
-                hosts=hosts, host_of=host_of, roster=roster, walkins=walk, scripts=scripts, entered=entered, sat=sat,
-                makeup_mean={r: (sum(v) / len(v) if v else None) for r, v in mk.items()},
-                makeup_n={r: len(v) for r, v in mk.items()})
+REGION_CENTRES = {
+    "WPG": ["North End Adult Learning Centre", "Point Douglas Community Learning", "St. Vital Adult Education",
+            "Westwood Literacy Program", "Elmwood Learning Hub", "Sargent Avenue Adult Centre (Suite 210)",
+            "Downtown Skills Centre", "Transcona Adult Ed."],
+    "WST": ["Brandon Adult Learning Centre", "Virden Community Learning", "Souris Valley Adult Ed.",
+            "Neepawa Literacy Council", "Killarney Learning Place"],
+    "INT": ["Selkirk Adult Learning Centre", "Gimli Community Learning", "Steinbach Adult Education",
+            "Beausejour Learning Centre", "Arborg Literacy Program", "Stonewall Adult Ed. (Library annex)"],
+    "PKN": ["Dauphin Adult Education", "Swan River Learning Centre", "The Pas Community Learning",
+            "Flin Flon Adult Ed.", "Thompson Learning Hub"],
+    "SKC": ["Saskatoon Westside Learning Centre", "Riverside Adult Education", "Humboldt Community Learning",
+            "North Battleford Adult Learning", "Warman Literacy Program", "Prince Albert Learning Centre"],
+    "RGS": ["Regina North Central Learning", "Heritage Adult Education (Regina)", "Moose Jaw Adult Learning",
+            "Weyburn Community Learning", "Swift Current Literacy Council", "Estevan Learning Place"],
+}
+
+
+CENTRE_TOWNS = {
+    "Brandon Adult Learning Centre": "Brandon", "Virden Community Learning": "Virden",
+    "Souris Valley Adult Ed.": "Souris", "Neepawa Literacy Council": "Neepawa", "Killarney Learning Place": "Killarney",
+    "Selkirk Adult Learning Centre": "Selkirk", "Gimli Community Learning": "Gimli",
+    "Steinbach Adult Education": "Steinbach", "Beausejour Learning Centre": "Beausejour",
+    "Arborg Literacy Program": "Arborg", "Stonewall Adult Ed. (Library annex)": "Stonewall",
+    "Dauphin Adult Education": "Dauphin", "Swan River Learning Centre": "Swan River",
+    "The Pas Community Learning": "The Pas", "Flin Flon Adult Ed.": "Flin Flon", "Thompson Learning Hub": "Thompson",
+    "Saskatoon Westside Learning Centre": "Saskatoon", "Riverside Adult Education": "Saskatoon",
+    "Humboldt Community Learning": "Humboldt", "North Battleford Adult Learning": "North Battleford",
+    "Warman Literacy Program": "Warman", "Prince Albert Learning Centre": "Prince Albert",
+    "Regina North Central Learning": "Regina", "Heritage Adult Education (Regina)": "Regina",
+    "Moose Jaw Adult Learning": "Moose Jaw", "Weyburn Community Learning": "Weyburn",
+    "Swift Current Literacy Council": "Swift Current", "Estevan Learning Place": "Estevan",
+}
+CENTRE_TOWNS.update({nm: "Winnipeg" for nm in REGION_CENTRES["WPG"]})
+assert set(CENTRE_TOWNS) == {nm for v in REGION_CENTRES.values() for nm in v}
+
+
+def draw_centres(rng):
+    rows = []
+    codes = _codes(rng, sum(len(v) for v in REGION_CENTRES.values()), "LC", 100)
+    order = rng.permutation(len(codes))
+    k = 0
+    for reg in P.REGIONS:
+        rc = reg[0]
+        names = REGION_CENTRES[rc]
+        w = rng.dirichlet(np.ones(len(names)) * 2.5)
+        for nm, wt in zip(names, w):
+            rows.append(dict(code=codes[order[k]], name=nm, region=rc, prov=reg[2], weight=float(wt)))
+            k += 1
+    return rows
+
+
+def _date(rng, year):
+    a = dt.date(year, *P.SITTING_START)
+    z = dt.date(year, *P.SITTING_END)
+    span = (z - a).days
+    # sittings bunch at the ends of the centres' course blocks (late April to June, October)
+    u = rng.random()
+    if u < 0.42:
+        d = a + dt.timedelta(days=int(rng.integers(75, 140)))
+    elif u < 0.70:
+        d = a + dt.timedelta(days=int(rng.integers(220, span + 1)))
+    else:
+        d = a + dt.timedelta(days=int(rng.integers(0, span + 1)))
+    while d.weekday() >= 5:
+        d -= dt.timedelta(days=1)
+    return max(a, min(z, d))
+
+
+def draw_people(R, centres):
+    """Every sitting 2022 to 2026: level, year, person, centre sat at, region, true ability. Some Level 1
+    candidates sit again the next year, and some go on to Level 2."""
+    rng, rt, rd = R["people"], R["theta"], R["dates"]
+    by_region = {}
+    for c in centres:
+        by_region.setdefault(c["region"], []).append(c)
+    shares = np.array([r[3] for r in P.REGIONS])
+    shares = shares / shares.sum()
+    sittings = []
+    pid = [int(rng.integers(300000, 310000))]
+
+    def new_pid():
+        pid[0] += int(rng.integers(1, 6))
+        return pid[0]
+    carry_l1, carry_l2 = [], []
+    for y in P.YEARS:
+        # Level 1
+        n = P.L1_SITTINGS[y]
+        resit = carry_l1
+        carry_l1 = []
+        for k in range(n):
+            if k < len(resit):
+                person, reg, theta0 = resit[k]
+                theta = theta0 + rt.normal(0.18, 0.12)
+            else:
+                person = new_pid()
+                reg = P.REGIONS[int(rng.choice(len(P.REGIONS), p=shares))][0]
+                off = [r[4] for r in P.REGIONS if r[0] == reg][0]
+                theta = rt.normal(P.L1_MU + off, P.L1_SD)
+            cs = by_region[reg]
+            cw = np.array([c["weight"] for c in cs])
+            cen = cs[int(rng.choice(len(cs), p=cw / cw.sum()))]
+            sittings.append(dict(level="L1", year=y, person=person, region=reg, centre=cen["code"], theta=float(theta),
+                                 date=_date(rd, y)))
+        # Level 2
+        n = P.L2_SITTINGS[y]
+        prog = carry_l2
+        carry_l2 = []
+        for k in range(n):
+            if k < len(prog):
+                person, reg, theta0 = prog[k]
+                theta = theta0 + rt.normal(0.55, 0.15)
+            else:
+                person = new_pid()
+                reg = P.REGIONS[int(rng.choice(len(P.REGIONS), p=shares))][0]
+                theta = rt.normal(P.L2_MU, P.L2_SD)
+            cs = by_region[reg]
+            cw = np.array([c["weight"] for c in cs])
+            cen = cs[int(rng.choice(len(cs), p=cw / cw.sum()))]
+            sittings.append(dict(level="L2", year=y, person=person, region=reg, centre=cen["code"], theta=float(theta),
+                                 date=_date(rd, y)))
+        # who comes back: a tenth of this year's Level 1 sitters below the middle sit Level 1 again, and a seventh of
+        # those above go on to Level 2 the next year
+        this = [s for s in sittings if s["year"] == y and s["level"] == "L1"]
+        for s in this:
+            if s["theta"] < P.L1_MU - 0.1 and rng.random() < 0.20:
+                carry_l1.append((s["person"], s["region"], s["theta"]))
+            elif s["theta"] > P.L1_MU + 0.6 and rng.random() < 0.30:
+                carry_l2.append((s["person"], s["region"], s["theta"]))
+    return sittings
+
+
+def respond(R, it, papers, sittings):
+    """Scored responses of every sitting: an (n_sittings x n_items) matrix with NaN where not presented."""
+    rng = R["resp"]
+    n = len(sittings)
+    I = len(it["b"])
+    X = np.full((n, I), np.nan)
+    delta = {r[0]: r[5] for r in P.REGIONS}
+    for j, s in enumerate(sittings):
+        idx = papers["%s-%d" % (s["level"], s["year"])]
+        d = it["b"][idx].copy()
+        if s["level"] == "L1":
+            d = d + l1_shift(it, idx, delta[s["region"]])
+        p = sig(s["theta"] - d)
+        X[j, idx] = (rng.random(len(idx)) < p).astype(float)
+    return X
+
+
+def build():
+    R = streams(P.SEED)
+    it = draw_items(R["items"])
+    papers = draw_papers(R["papers"], it)
+    centres = draw_centres(R["centres"])
+    sittings = draw_people(R, centres)
+    X = respond(R, it, papers, sittings)
+    return dict(R=R, it=it, papers=papers, centres=centres, sittings=sittings, X=X)

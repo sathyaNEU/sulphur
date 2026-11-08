@@ -1,624 +1,388 @@
-"""task7 architecture 4: Ruahine Bank's business book, 2021 to 2026, as one deterministic truth.
+"""task7 architecture 5: Ardcarn Bank's commercial property book, 2004 to 2026, simulated month by month.
 
-Every record the pack carries is drawn here from one seed: customers and their accounts, the 2023 core migration's
-renumbering, the payment relations between customers (who pays whom, and how much of each customer's receipts),
-defaults with their triggers and cures, the December 2024 and December 2026 IFRS 9 runs, the security register and
-the guarantees. Nothing here knows the answer; golden.py computes it from the shipped files.
-"""
+Every record in the pack comes from this simulation. A property's true value moves with its sector and region's
+commercial property index and with a drift of its own; the bank sees the true value only when a valuer inspects the
+property (at origination, in the credit committee's three-yearly cycle from 2012 to 2019, at a top-up, and when a
+facility defaults) and carries it between inspections as the last inspection rolled forward by the index. A
+borrower's monthly chance of default rises when its property has fallen behind the market since the last inspection;
+the tilt is mean-one at every distance from the inspection, so a grade's default rate does not depend on how long
+ago the property was inspected, while the properties of the borrowers who do default have fallen behind by more the
+longer since the inspection."""
 import datetime as dt
-import random
-import zlib
+import math
 
-SEED = 1272027
-D = dt.date
-ASOF = D(2027, 1, 22)
-MIGRATION = D(2023, 6, 17)
-RUN26 = D(2026, 12, 31)
-RUN26_PUBLISHED = D(2027, 1, 15)
-RUN24 = D(2024, 12, 31)
-RUN24_CUTOFF = D(2024, 12, 20)
-RUN24_PUBLISHED = D(2025, 1, 14)
-START = D(2021, 1, 1)
-END = D(2026, 12, 31)
-ENVELOPE = 6_000_000
-BANK = "47"
+import numpy as np
 
-REGIONS = ["Manawatū-Whanganui", "Hawke's Bay", "Wellington", "Taranaki"]
-SECTORS = {
-    "A": "Agriculture, Forestry and Fishing", "C": "Manufacturing", "E": "Construction",
-    "F": "Wholesale Trade", "G": "Retail Trade", "I": "Transport, Postal and Warehousing",
-    "N": "Administrative and Support Services",
-}
-SECTOR_KEYS = list(SECTORS)
+SEED = 141
+AS_OF = dt.date(2027, 1, 15)
+START, END = (2004, 1), (2026, 12)
 
-FIRST = ["Kinloch", "Ridgeway", "Marlowe", "Selwyn", "Brightwater", "Coastline", "Northgate", "Fernhill",
-         "Glenmore", "Westbrook", "Ashworth", "Holloway", "Linwood", "Mangrove", "Oakridge", "Pinecrest",
-         "Redcliffe", "Stonebridge", "Thornton", "Wexford", "Ashgrove", "Bellmont", "Carrick", "Dunmore",
-         "Elmswood", "Fairlie", "Greystone", "Hatfield", "Ironbark", "Juniper", "Kilburn", "Larchmont",
-         "Marlow", "Netherby", "Ormond", "Penrose", "Quarry Hill", "Rosedale", "Sandown", "Tamworth",
-         "Upland", "Valebrook", "Waverley", "Yarrow", "Alderley", "Birchgrove", "Castlerock", "Denholm",
-         "Eastfield", "Foxton Road", "Gladstone", "Highbury", "Inglewood Road", "Jarrow", "Kingsgate",
-         "Lowther", "Milbrook", "Norwood", "Overton", "Parkhurst", "Ravensworth", "Southgate", "Tolworth",
-         "Underwood", "Verity", "Whitmore", "Ashbourne", "Brackenridge", "Clearwater", "Driftwood",
-         "Evergreen", "Fenwick", "Goldfield", "Harbourside", "Ivydale", "Kestrel", "Lakeview", "Moorfield",
-         "Newstead", "Orchard Lane", "Pemberton", "Riverbend", "Silverdale", "Tidewater", "Woodstock"]
-TRADE = {
-    "A": ["Orchards", "Dairy Farms", "Contracting", "Forestry", "Growers", "Agricultural Services"],
-    "C": ["Engineering", "Precast", "Joinery", "Foods", "Packaging", "Plastics", "Print", "Fabrication",
-          "Metalworks", "Pallets", "Labels"],
-    "E": ["Construction", "Builders", "Civil", "Roofing", "Plumbing", "Electrical", "Drainage"],
-    "F": ["Distributors", "Wholesale", "Supplies", "Trading", "Imports"],
-    "G": ["Motor Group", "Hardware", "Outdoor", "Furniture", "Retail", "Garden Centre"],
-    "I": ["Freight", "Transport", "Haulage", "Cold Storage", "Logistics", "Couriers"],
-    "N": ["Cleaning", "Labour Hire", "Security", "Facilities", "Staffing", "Waste Services"],
-}
+SECTORS = ["Retail", "Office", "Industrial", "Hospitality", "Healthcare"]
+REGIONS = ["Dublin", "Regional cities", "Rest of State"]
+# a property's own drift behind or ahead of its index (log, per year), and the extra discount an inspection at
+# default finds on a property whose value rests on the failed business (the going concern lost)
+SIGMA = {"Retail": 0.056, "Office": 0.054, "Industrial": 0.051, "Hospitality": 0.060, "Healthcare": 0.058}
+KAPPA = 0.025            # a building ages against the index that rolls its value forward (log per year)
+DELTA = {"Retail": 0.040, "Office": 0.040, "Industrial": 0.035, "Hospitality": 0.085, "Healthcare": 0.075}
+GAMMA = 3.0             # default hazard per unit of log drift behind the market since the last inspection
+VALUER_SD = 0.03         # an inspection's own error, log
+SALE_FACTOR = 0.815      # sale price against the inspection at default, before costs
+SALE_SD = 0.055
+COST_RATE, COST_FIXED = 0.025, 6500.0
+H_MODEL = 0.22           # the LGD model's haircut: net sale proceeds against the inspection at default
+MASTER_PD = [None, 0.0025, 0.0050, 0.0090, 0.0150, 0.0260, 0.0450, 0.0800, 0.1600]
+# the master scale the credit policy publishes (recalibrated by the bank in 2025); the plan takes each grade's
+# twelve-month chance from it
+PUBLISHED_PD = {1: 0.0021, 2: 0.0042, 3: 0.0075, 4: 0.0125, 5: 0.0216, 6: 0.0374, 7: 0.0664, 8: 0.1328}
+CYCLE = {2004: 0.55, 2005: 0.55, 2006: 0.6, 2007: 0.7, 2008: 1.3, 2009: 2.0, 2010: 2.2, 2011: 2.0, 2012: 1.9,
+         2013: 1.55, 2014: 1.2, 2015: 0.85, 2016: 0.8, 2017: 0.75, 2018: 0.75, 2019: 0.8, 2020: 1.25, 2021: 1.05,
+         2022: 0.8, 2023: 0.95, 2024: 1.05, 2025: 0.95, 2026: 0.9}
+CYCLE_START, CYCLE_END = (2012, 1), (2019, 12)
+RECORD_START = (2012, 1)     # the warehouse went live in January 2012; the default record starts there
+REFERRAL_FROM = (2022, 1)    # from 2022 the workout unit has the security re-inspected when a facility of 500,000 or
+REFERRAL_MIN = 1000e3        # more is referred to it, two to six months before the default
 
-# The eight borrowers on the January 2027 watch list: (key, legal name, sector, region, date added, PD, line).
-WATCH = [
-    ("KIN", "Kinloch Engineering Limited", "C", "Manawatū-Whanganui", D(2026, 3, 18), 0.3807, 2_800_000),
-    ("RID", "Ridgeway Precast Limited", "C", "Manawatū-Whanganui", D(2026, 5, 20), 0.4392, 2_500_000),
-    ("MAT", "Matai Valley Foods Limited", "A", "Manawatū-Whanganui", D(2026, 8, 19), 0.4213, 3_000_000),
-    ("HAR", "Marlowe Packhouse Limited", "A", "Hawke's Bay", D(2025, 11, 19), 0.3086, 3_400_000),
-    ("SEL", "Selwyn Joinery Limited", "C", "Wellington", D(2026, 6, 17), 0.3611, 1_900_000),
-    ("BRI", "Brightwater Motor Group Limited", "G", "Taranaki", D(2026, 9, 16), 0.2896, 1_400_000),
-    ("COA", "Coastline Aggregates Limited", "E", "Taranaki", D(2026, 10, 21), 0.3304, 1_100_000),
-    ("NOR", "Northgate Print Limited", "C", "Hawke's Bay", D(2026, 11, 18), 0.2712, 900_000),
-]
-WATCH_FACILITIES = {   # (product, limit, drawn, LGD); EAD = drawn for loans, drawn + 0.6 undrawn for revolving
-    "KIN": [("Term loan", 4_200_000, 4_131_862.43, 0.45), ("Overdraft", 2_500_000, 2_093_418.77, 0.52),
-            ("Equipment finance", 2_360_000, 2_309_774.15, 0.48)],
-    "RID": [("Term loan", 3_900_000, 3_842_116.08, 0.47), ("Overdraft", 1_500_000, 1_371_640.52, 0.55),
-            ("Equipment finance", 1_250_000, 1_221_387.90, 0.52)],
-    "MAT": [("Term loan", 2_400_000, 2_361_905.31, 0.44), ("Revolving credit", 1_800_000, 1_547_233.86, 0.53)],
-    "HAR": [("Commercial property loan", 4_300_000, 4_246_512.74, 0.40),
-            ("Seasonal facility", 3_000_000, 2_871_055.20, 0.58)],
-    "SEL": [("Term loan", 2_300_000, 2_262_448.96, 0.47), ("Overdraft", 1_700_000, 1_577_302.41, 0.52)],
-    "BRI": [("Floor plan facility", 2_600_000, 2_336_917.65, 0.50), ("Term loan", 600_000, 589_213.08, 0.46)],
-    "COA": [("Equipment finance", 1_400_000, 1_371_559.47, 0.49), ("Overdraft", 750_000, 603_184.19, 0.52)],
-    "NOR": [("Term loan", 1_150_000, 1_141_806.52, 0.48), ("Overdraft", 600_000, 522_749.31, 0.52)],
-}
-# Ruahine borrowers that take most of their receipts from a watch-list borrower in 2026 (payer key: specs).
-WATCH_PAYEES = {
-    "MAT": [("Packaging", "C", 1_900_000, 0.50, 0.64), ("Cold Storage", "I", 2_600_000, 0.32, 0.71),
-            ("Haulage", "I", 2_400_000, 0.45, 0.58), ("Cleaning", "N", 600_000, 0.62, 0.83),
-            ("Engineering", "C", 1_100_000, 0.52, 0.52), ("Labour Hire", "N", 800_000, 0.65, 0.77),
-            ("Labels", "C", 1_300_000, 0.50, 0.61), ("Pallets", "C", 1_300_000, 0.48, 0.55)],
-    "RID": [("Haulage", "I", 520_000, 0.48, 0.53)],
-}
-WATCH_NONBORROWER_PAYEES = {"MAT": 2}
-SEC_NUDGE = {"KIN": 5_000}      # keeps each security value clear of its thousand-dollar edge
-
-# Payers whose default the record holds, with the payees that took most of their receipts from them.
-ANCHORS = [  # (first trigger date, payees, payees defaulting after, months after for each default)
-    (D(2022, 3, 9), 4, [3, 6]),
-    (D(2022, 9, 21), 5, [2, 4, 7]),
-    (D(2023, 2, 15), 4, [5]),
-    (D(2023, 8, 30), 5, [3, 4]),
-    (D(2024, 4, 17), 4, [2, 6]),
-    (D(2024, 11, 6), 5, [4, 8]),
-    (D(2025, 6, 11), 4, [3]),
-]
-# which of each payer's payees defaulted after it, by position in its payee list (default rate flat in receipt share)
-ANCHOR_DEFAULTERS = [(1, 3), (1, 3, 4), (2,), (0, 4), (1, 3), (1, 3), (3,)]
-N_SURVIVOR_PAYERS = 10
-SURVIVOR_PAYEES = [4, 3, 4, 3, 4, 4, 3, 4, 3, 4]    # 36 payees
-SURVIVOR_PAYEE_DEFAULTS = 5                          # over 2022-2025 dependent-years
-N_ORDINARY = 300
+ORIG_COUNTS = {2004: 168, 2005: 272, 2006: 356, 2007: 376, 2008: 220, 2009: 72, 2010: 64, 2011: 72, 2012: 96, 2013: 132, 2014: 188, 2015: 240, 2016: 272, 2017: 296, 2018: 308, 2019: 296, 2020: 168, 2021: 240, 2022: 296, 2023: 260, 2024: 280, 2025: 300, 2026: 260}
+SECTOR_MIX = {"Retail": 0.24, "Office": 0.21, "Industrial": 0.20, "Hospitality": 0.20, "Healthcare": 0.15}
+REGION_MIX = {"Dublin": 0.38, "Regional cities": 0.33, "Rest of State": 0.29}
 
 
-def months(a, b):
-    y, m = a.year, a.month
-    out = []
-    while (y, m) <= (b.year, b.month):
+def _months():
+    out, (y, m) = [], START
+    while (y, m) <= END:
         out.append((y, m))
-        m += 1
-        if m == 13:
-            y, m = y + 1, 1
+        y, m = (y, m + 1) if m < 12 else (y + 1, 1)
     return out
 
 
-MONTHS = months(START, END)
+MONTHS = _months()
+NM = len(MONTHS)
+MI = {ym: i for i, ym in enumerate(MONTHS)}
 
 
-def add_months(d, k):
-    y, m = d.year, d.month + k
-    while m > 12:
-        y, m = y + 1, m - 12
-    while m < 1:
-        y, m = y - 1, m + 12
-    last = [31, 29 if y % 4 == 0 else 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31][m - 1]
-    return D(y, m, min(d.day, last))
+def month_end(i):
+    y, m = MONTHS[i]
+    return dt.date(y + (m == 12), m % 12 + 1, 1) - dt.timedelta(days=1)
+
+
+def quarter_of(i):
+    y, m = MONTHS[i]
+    return y, (m - 1) // 3 + 1
+
+
+QUARTERS = sorted({quarter_of(i) for i in range(NM)})
+QI = {q: k for k, q in enumerate(QUARTERS)}
+NQ = len(QUARTERS)
+
+
+def quarter_end(k):
+    y, q = QUARTERS[k]
+    return dt.date(y + (q == 4), (q * 3) % 12 + 1, 1) - dt.timedelta(days=1)
+
+
+# ------------------------------------------------------------------ the index
+
+WAY = {
+    "Retail":      [(2004, 1, 100), (2007, 2, 141), (2009, 4, 82), (2012, 4, 55), (2015, 4, 66), (2019, 4, 80),
+                    (2020, 3, 71), (2022, 2, 79), (2024, 2, 74), (2026, 3, 77), (2026, 4, 77)],
+    "Office":      [(2004, 1, 100), (2007, 2, 152), (2009, 4, 85), (2013, 1, 50), (2016, 4, 92), (2019, 4, 116),
+                    (2020, 3, 110), (2022, 2, 119), (2024, 4, 89), (2026, 3, 91), (2026, 4, 91)],
+    "Industrial":  [(2004, 1, 100), (2007, 2, 131), (2009, 4, 86), (2012, 4, 60), (2016, 4, 84), (2019, 4, 110),
+                    (2020, 3, 112), (2022, 2, 137), (2024, 2, 125), (2026, 3, 131), (2026, 4, 131)],
+    "Hospitality": [(2004, 1, 100), (2007, 2, 137), (2009, 4, 78), (2012, 4, 52), (2016, 4, 79), (2019, 4, 96),
+                    (2020, 4, 74), (2021, 4, 86), (2022, 4, 101), (2024, 4, 97), (2026, 3, 99), (2026, 4, 99)],
+    "Healthcare":  [(2004, 1, 100), (2007, 2, 125), (2009, 4, 92), (2013, 1, 70), (2016, 4, 89), (2019, 4, 105),
+                    (2020, 3, 103), (2022, 2, 112), (2024, 4, 106), (2026, 3, 109), (2026, 4, 109)],
+}
+REGION_AMP = {"Dublin": 1.18, "Regional cities": 1.0, "Rest of State": 0.82}
+RECOVERY_DAMP = 0.5      # the moves after the 2012 trough, scaled from the waypoints
+
+
+def index_true(rng):
+    out = {}
+    for s in SECTORS:
+        xs = [QI[(y, q)] for y, q, _ in WAY[s]]
+        ys = [math.log(v / 100.0) for _, _, v in WAY[s]]
+        base = np.interp(np.arange(NQ), xs, ys)
+        k0 = QI[(2012, 4)]
+        base[k0 + 1:] = base[k0] + RECOVERY_DAMP * (base[k0 + 1:] - base[k0])
+        for r in REGIONS:
+            noise = np.cumsum(rng.normal(0, 0.0045, NQ))
+            noise -= np.linspace(0, 1, NQ) * noise[-1]
+            out[(s, r)] = 100.0 * np.exp(base * REGION_AMP[r] + noise)
+    return out
+
+
+def index_releases(true, rng):
+    """the publisher's vintages: a first release some six weeks after the quarter, revised a quarter and two
+    quarters later; only releases out by the as-of date exist"""
+    rel = {}
+    for key in sorted(true):
+        rows = []
+        for k in range(NQ):
+            v = true[key][k]
+            first = quarter_end(k) + dt.timedelta(days=int(rng.integers(38, 47)))
+            vals = (v * (1 + rng.normal(0, 0.006)), v * (1 + rng.normal(0, 0.0025)), v)
+            for n, d in enumerate((first, first + dt.timedelta(days=91), first + dt.timedelta(days=182))):
+                if d <= AS_OF:
+                    rows.append((k, n, d, round(float(vals[n]), 2)))
+        rel[key] = rows
+    return rel
+
+
+def published(rel_rows, upto):
+    """quarter -> index value as published on date `upto` (the latest release out by then)"""
+    best = {}
+    for k, n, d, x in rel_rows:
+        if d <= upto and (k not in best or n > best[k][0]):
+            best[k] = (n, x)
+    return {k: x for k, (n, x) in best.items()}
+
+
+# ------------------------------------------------------------------ the simulation
 
 
 class World:
-    def __init__(self):
-        self.r = random.Random(SEED)
-        self.customers = {}       # cid -> dict
-        self.used_names = set()
-        self.next_cid = 104311
-        self.next_acct = 0
-        self.links = []           # payment relations: dict(payer, payee, share or weight, start, end)
-        self.defaults = []        # dict(cid, first, triggers=[(kind, date)], cure)
-        self.build()
+    pass
 
-    # ---- identities ------------------------------------------------------------------------------------
-    def new_name(self, sector, base=None, trade=None):
-        r = self.r
-        for _ in range(500):
-            b = base or r.choice(FIRST)
-            t = trade or r.choice(TRADE[sector])
-            k = r.random()
-            if k < 0.58:
-                n = "%s %s Limited" % (b, t)
-            elif k < 0.68:
-                n = "%s %s Ltd" % (b, t)
-            elif k < 0.82:
-                n = "%s %s (%d) Limited" % (b, t, r.randint(2003, 2019))
-            elif k < 0.90:
-                n = "%s & %s %s Limited" % (b, r.choice(FIRST), t)
-            elif k < 0.95:
-                n = "%s %s Limited" % (r.choice(["McKay", "Patel", "Hohaia", "Van Dyk", "Ferris", "Tuilagi", "Brennan",
-                                                 "Okafor", "Sorensen", "Whitaker"]), r.choice(["Brothers", "and Sons", "Family"]) + " " + t)
-            else:
-                n = "%s %s Co-operative Limited" % (b, t)
-            if n not in self.used_names:
-                self.used_names.add(n)
-                return n
-            base = None
-        raise RuntimeError("names exhausted")
 
-    def nzbn(self):
-        return "9429" + "".join(str(self.r.randint(0, 9)) for _ in range(9))
-
-    def new_customer(self, name, sector, region, since, role, pd=None):
-        cid = "C%06d" % self.next_cid
-        self.next_cid += self.r.randint(3, 41)
-        r = self.r
-        import re as _re
-        trading = _re.sub(r" \(\d{4}\)", "", name.replace(" Limited", "").replace(" Ltd", ""))
-        if r.random() < 0.18:
-            trading = trading.split(" ")[0] + " " + r.choice(["Group", "Services", "Co", "& Sons", "NZ"])
-        c = dict(cid=cid, name=name, trading=trading, sector=sector, region=region, since=since, role=role,
-                 nzbn=self.nzbn(), company_no=str(r.randint(1_000_000, 8_999_999)), pd=pd, former=[],
-                 accounts=[], facilities=[], exit=None, turnover=None)
-        self.customers[cid] = c
-        self.open_accounts(c)
-        return c
-
-    def acct_numbers(self):
-        self.next_acct += 1
-        r = self.r
-        old_branch = r.choice(["0610", "0612", "0615", "0618", "0622", "0630"])
-        new_branch = {"0610": "1201", "0612": "1202", "0615": "1204", "0618": "1206", "0622": "1207",
-                      "0630": "1209"}[old_branch]
-        old = "%s-%s-%07d-%02d" % (BANK, old_branch, r.randint(100000, 9999999), r.choice([0, 0, 0, 1, 2]))
-        new = "%s-%s-%07d-%03d" % (BANK, new_branch, r.randint(100000, 9999999), r.choice([0, 0, 0, 1, 2]))
-        return old, new
-
-    def open_accounts(self, c):
-        r = self.r
-        kinds = ["Business cheque"] + (["Business savings"] if r.random() < 0.55 else []) + \
-                (["Tax holding"] if r.random() < 0.30 else [])
-        for k in kinds:
-            old, new = self.acct_numbers()
-            opened = c["since"] if k == "Business cheque" else max(c["since"], add_months(c["since"], r.randint(0, 30)))
-            c["accounts"].append(dict(kind=k, old=old if opened < MIGRATION else None, new=new, opened=opened,
-                                      closed=None))
-
-    # ---- the book --------------------------------------------------------------------------------------
-    def build(self):
-        r = self.r
-        self.watch = {}
-        for key, name, sec, reg, added, pd, line in WATCH:
-            self.used_names.add(name)
-            c = self.new_customer(name, sec, reg, D(2009 + r.randint(0, 9), r.randint(1, 12), r.randint(1, 27)),
-                                  "watch", pd)
-            c["key"], c["added"], c["line"] = key, added, line
-            c["turnover"] = {"KIN": 19e6, "RID": 14e6, "MAT": 21e6, "HAR": 24e6, "SEL": 9e6, "BRI": 31e6,
-                             "COA": 7e6, "NOR": 5e6}[key]
-            self.watch[key] = c
-        # watch-list payees (borrowers dependent on a watch-list borrower in 2026)
-        self.watch_payees = {}
-        for key, specs in WATCH_PAYEES.items():
-            lst = []
-            for trade, sec, ead, lgd, share in specs:
-                nm = self.new_name(sec, trade=trade)
-                c = self.new_customer(nm, sec, self.watch[key]["region"],
-                                      D(2012 + r.randint(0, 9), r.randint(1, 12), r.randint(1, 27)), "payee",
-                                      pd=round(r.uniform(0.020, 0.030), 4))
-                c["target_ead"], c["target_lgd"], c["share"] = ead, lgd, share
-                c["turnover"] = ead * r.uniform(1.6, 2.6)
-                self.links.append(dict(payer=self.watch[key]["cid"], payee=c["cid"], share=share,
-                                       start=max(START, c["since"]), end=END))
-                lst.append(c)
-            self.watch_payees[key] = lst
-        for key, n in WATCH_NONBORROWER_PAYEES.items():
-            for _ in range(n):
-                sec = r.choice(["N", "I"])
-                c = self.new_customer(self.new_name(sec), sec, self.watch[key]["region"], D(2016, r.randint(1, 12), 3),
-                                      "nonborrower")
-                c["share"] = round(r.uniform(0.55, 0.8), 2)
-                c["turnover"] = r.uniform(0.4e6, 1.2e6)
-                self.links.append(dict(payer=self.watch[key]["cid"], payee=c["cid"], share=c["share"], start=START, end=END))
-        # anchors and their payees
-        self.anchors = []
-        for ai, (first, npay, dmonths) in enumerate(ANCHORS):
-            sec = r.choice(["C", "F", "E", "I"])
-            a = self.new_customer(self.new_name(sec), sec, r.choice(REGIONS),
-                                  D(2006 + r.randint(0, 8), r.randint(1, 12), r.randint(1, 27)), "anchor",
-                                  pd=round(r.uniform(0.05, 0.12), 4))
-            a["turnover"] = r.uniform(12e6, 30e6)
-            pays = []
-            for i in range(npay):
-                ps = r.choice(SECTOR_KEYS)
-                p = self.new_customer(self.new_name(ps), ps, a["region"],
-                                      D(2010 + r.randint(0, 9), r.randint(1, 12), r.randint(1, 27)), "apayee",
-                                      pd=round(r.uniform(0.025, 0.045), 4))
-                p["share"] = round(r.uniform(0.49, 0.84), 2)
-                p["turnover"] = r.uniform(0.6e6, 4e6)
-                self.links.append(dict(payer=a["cid"], payee=p["cid"], share=p["share"],
-                                       start=max(START, p["since"]), end=first))
-                pays.append(p)
-            self.anchors.append(dict(c=a, first=first, payees=pays, dmonths=dmonths))
-            self.add_default(a["cid"], first, kind="anchor", utp_first=True)
-            for k, mo in enumerate(dmonths):
-                p = pays[ANCHOR_DEFAULTERS[ai][k]]
-                self.add_default(p["cid"], add_months(first, mo) + dt.timedelta(days=r.randint(-6, 6)), kind="contagion", utp_first=True)
-        # survivor payers and their payees
-        self.survivors = []
-        for i in range(N_SURVIVOR_PAYERS):
-            sec = r.choice(["C", "F", "E", "I", "A"])
-            s = self.new_customer(self.new_name(sec), sec, r.choice(REGIONS),
-                                  D(2004 + r.randint(0, 10), r.randint(1, 12), r.randint(1, 27)), "survivor",
-                                  pd=round(r.uniform(0.008, 0.03), 4))
-            s["turnover"] = r.uniform(15e6, 45e6)
-            pays = []
-            for j in range(SURVIVOR_PAYEES[i]):
-                ps = r.choice(SECTOR_KEYS)
-                p = self.new_customer(self.new_name(ps), ps, s["region"],
-                                      D(2010 + r.randint(0, 9), r.randint(1, 12), r.randint(1, 27)), "spayee",
-                                      pd=round(r.uniform(0.025, 0.045), 4))
-                p["share"] = round(r.uniform(0.49, 0.84), 2)
-                p["turnover"] = r.uniform(0.6e6, 4e6)
-                self.links.append(dict(payer=s["cid"], payee=p["cid"], share=p["share"],
-                                       start=max(START, p["since"]), end=END))
-                pays.append(p)
-            self.survivors.append(dict(c=s, payees=pays))
-        allsp = [p for s in self.survivors for p in s["payees"]]
-        picks = r.sample(allsp, SURVIVOR_PAYEE_DEFAULTS)
-        years = [2022, 2023, 2024, 2025, 2023]
-        for p, y in zip(picks, years):
-            self.add_default(p["cid"], D(y, r.choice([3, 4, 5, 6, 7, 8, 9]), r.randint(2, 26)), kind="baseline_payee", utp_first=True)
-        # ordinary borrowers
-        for i in range(N_ORDINARY):
-            sec = SECTOR_KEYS[i % len(SECTOR_KEYS)]
-            c = self.new_customer(self.new_name(sec), sec, r.choice(REGIONS),
-                                  D(2003 + r.randint(0, 20), r.randint(1, 12), r.randint(1, 27)), "ordinary",
-                                  pd=self.draw_pd())
-            if c["since"] > D(2024, 6, 30):
-                c["since"] = D(2019, c["since"].month, c["since"].day)
-                c["accounts"] = []
-                self.open_accounts(c)
-            c["turnover"] = r.lognormvariate(14.6, 0.75)
-        self.remap_ids()
-        self.ordinary_defaults()
-        self.device_defaults()
-        self.cures()
-        self.exits()
-        self.facilities()
-        self.securities()
-        self.guarantees()
-        self.name_changes()
-
-    def remap_ids(self):
-        """Customer numbers were issued as customers joined the bank, so they carry no order of this build: every
-        number is redrawn from the same range at random."""
-        r = self.r
-        old = sorted(self.customers)
-        pool = sorted(set(r.sample(range(100_311, 196_000), len(old))))
-        r.shuffle(pool)
-        m = {o: "C%06d" % n for o, n in zip(old, pool)}
-        new = {}
-        for o in old:
-            c = self.customers[o]
-            c["cid"] = m[o]
-            new[m[o]] = c
-        self.customers = new
-        for l in self.links:
-            l["payer"], l["payee"] = m[l["payer"]], m[l["payee"]]
-        for df in self.defaults:
-            df["cid"] = m[df["cid"]]
-
-    def draw_pd(self):
-        r = self.r
-        g = r.choices([0.004, 0.008, 0.015, 0.025, 0.04, 0.07, 0.12], [8, 16, 24, 24, 15, 9, 4])[0]
-        return round(g * r.uniform(0.85, 1.15), 4)
-
-    def add_default(self, cid, first, kind, utp_first=None, gap=None):
-        r = self.r
-        gap = gap if gap is not None else r.randint(12, 55)
-        if utp_first is None:
-            utp_first = r.random() < 0.45
-        if utp_first:
-            trig = [("UTP", first), ("90DPD", first + dt.timedelta(days=gap))]
+def build(seed=SEED):
+    rng = np.random.default_rng(seed)
+    w = World()
+    w.true = index_true(rng)
+    w.rel = index_releases(w.true, rng)
+    w.props, w.facs = [], []
+    plan = []
+    for y in sorted(ORIG_COUNTS):
+        for _ in range(ORIG_COUNTS[y]):
+            plan.append((y, int(rng.integers(1, 13))))
+    plan.sort()
+    for (y, m) in plan:
+        s = str(rng.choice(SECTORS, p=[SECTOR_MIX[k] for k in SECTORS]))
+        r = str(rng.choice(REGIONS, p=[REGION_MIX[k] for k in REGIONS]))
+        boom = y <= 2008
+        ltv0 = float(np.clip(rng.normal(0.80 if boom else 0.67, 0.065), 0.50, 0.88))
+        amount = float(min(max(np.exp(rng.normal(math.log(780e3), 0.72)), 90e3), 9.5e6))
+        amount = round(amount, -3)
+        props = [new_property(w, s, r, (y, m), amount / ltv0)]
+        if rng.random() < 0.045:
+            props.append(new_property(w, s, r, (y, m), amount * 0.30 / ltv0))
+        bullet = (not boom) and rng.random() < 0.62
+        if bullet:
+            term = int(rng.choice([60, 84], p=[0.6, 0.4]))
+            io = term
         else:
-            trig = [("90DPD", first)] + ([("UTP", first + dt.timedelta(days=gap))] if r.random() < 0.6 else [])
-        self.defaults.append(dict(cid=cid, first=first, triggers=trig, cure=None, kind=kind))
+            term = int(rng.choice([180, 240]) if boom else rng.choice([144, 180, 240], p=[0.3, 0.4, 0.3]))
+            io = int(rng.choice([0, 36, 60], p=[0.45, 0.30, 0.25]) if boom else rng.choice([0, 24, 36], p=[0.5, 0.3, 0.2]))
+        rate = float(np.round(rng.normal(5.4 if boom else 4.6, 0.5), 2))
+        new_facility(w, (y, m), amount, term, io, rate, len(w.facs), props, None)
+    simulate(w, rng)
+    return w
 
-    def ordinary_defaults(self):
-        """Ordinary borrowers default at about their PD a year, never in the last three weeks of a year or the first
-        five of the next (the turn of each year belongs to the sector table's own records), and never a payee."""
-        r = self.r
-        ords = [c for c in self.customers.values() if c["role"] == "ordinary"]
-        self.ord_defaulted = set()
-        for y in range(2021, 2027):
-            for c in ords:
-                if c["cid"] in self.ord_defaulted or c["since"] > D(y, 1, 1):
+
+def new_property(w, s, r, ym, v0):
+    w.props.append(dict(sector=s, region=r, first=ym, v0=v0, insp=[]))
+    return len(w.props) - 1
+
+
+def new_facility(w, ym, amount, term, io, rate, borrower, props, topup_of):
+    w.facs.append(dict(orig=ym, amount=amount, term=term, io=io, rate=rate, borrower=borrower, props=props,
+                       topup_of=topup_of, end=None, end_kind=None, grades={}, extensions=[],
+                       bullet=(io == term)))
+    return len(w.facs) - 1
+
+
+def balance(f, i):
+    """scheduled balance at month index i (interest-only, then an annuity to term; a bullet facility holds its
+    balance to maturity, extensions included); None outside the term"""
+    k = i - MI[f["orig"]]
+    if k < 0 or k >= f["term"]:
+        return None
+    if f.get("bullet"):
+        return f["amount"]
+    r = f["rate"] / 1200.0
+    b = f["amount"]
+    if k <= f["io"]:
+        return b
+    n = f["term"] - f["io"]
+    j = k - f["io"]
+    return b * ((1 + r) ** n - (1 + r) ** j) / ((1 + r) ** n - 1)
+
+
+def simulate(w, rng):
+    props, facs = w.props, w.facs
+    cap = len(props) + 1500
+    logdev = np.zeros(cap)       # log(true value / last inspection rolled forward by the true index)
+    svar = np.zeros(cap)         # variance of logdev since the last inspection
+    anchor_i = np.full(cap, -1)
+    anchor_v = np.zeros(cap)
+    sig_m = np.zeros(cap)
+    w.defaults = []
+    w.state = {}
+    w.at_risk, w.hits = {}, {}
+    starts = {}
+    for fi, f in enumerate(facs):
+        starts.setdefault(MI[f["orig"]], []).append(fi)
+    alive, grade = set(), {}
+
+    def inspect(p, i, reason, extra=0.0):
+        s = props[p]["sector"]
+        if anchor_i[p] < 0:
+            tv = props[p]["v0"] * math.exp(rng.normal(0, 0.02))
+        else:
+            k0, k1 = QI[quarter_of(anchor_i[p])], QI[quarter_of(i)]
+            tv = (anchor_v[p] * w.true[(s, props[p]["region"])][k1] / w.true[(s, props[p]["region"])][k0]
+                  * math.exp(logdev[p] - KAPPA * (i - anchor_i[p]) / 12.0))
+        val = round(tv * math.exp(extra + rng.normal(0, VALUER_SD)), -3)
+        props[p]["insp"].append((i, val, reason))
+        logdev[p] = math.log(tv / val)
+        svar[p] = VALUER_SD ** 2
+        anchor_i[p], anchor_v[p] = i, val
+        return val, tv
+
+    for i in range(NM):
+        y, m = MONTHS[i]
+        for fi in starts.get(i, []):
+            f = facs[fi]
+            alive.add(fi)
+            grade[fi] = int(rng.choice([3, 4, 5, 6, 7], p=[0.15, 0.30, 0.30, 0.18, 0.07]))
+            for p in f["props"]:
+                sig_m[p] = SIGMA[props[p]["sector"]] / math.sqrt(12)
+                if anchor_i[p] < 0 or f["topup_of"] is not None:
+                    inspect(p, i, "origination" if anchor_i[p] < 0 else "top-up")
+        logdev += rng.normal(0, 1, cap) * sig_m
+        svar += sig_m ** 2
+        if i >= MI[(2021, 1)]:
+            w.state[i] = (logdev.copy(), anchor_i.copy(), anchor_v.copy())
+        order = sorted(alive)
+        # the 2010 to 2011 revaluation of the book after the crash, then the committee's three-yearly cycle
+        # from 2012 to 2019, both for facilities of 500,000 or more
+        if (2010, 6) <= (y, m) <= (2011, 9):
+            for fi in order:
+                f = facs[fi]
+                if f["amount"] < 500e3:
                     continue
-                if r.random() < c["pd"] * 0.92:
-                    while True:
-                        d = D(y, r.randint(1, 12), r.randint(1, 28))
-                        if not ((d.month == 12 and d.day >= 8) or (d.month == 1 and d.day <= 31) or
-                                (d.month == 2 and d.day <= 4)):
-                            break
-                    self.add_default(c["cid"], d, kind="ordinary")
-                    self.ord_defaulted.add(c["cid"])
-
-    def device_defaults(self):
-        """The sector table's own records at the turn of each year: unlikely-to-pay met in the last fortnight of a
-        December with 90 days past due in the January after, one borrower per sector at the end of 2024 and four at
-        the end of 2025."""
-        r = self.r
-        ords = sorted([c for c in self.customers.values() if c["role"] == "ordinary" and c["cid"] not in self.ord_defaulted
-                       and c["since"] < D(2023, 1, 1)], key=lambda c: c["cid"])
-        r.shuffle(ords)
-        self.dev_c1 = []
-        used = set()
-        for sec in SECTOR_KEYS:
-            c = next(x for x in ords if x["sector"] == sec and x["cid"] not in used)
-            used.add(c["cid"])
-            d = D(2024, 12, r.randint(21, 30))
-            self.add_default(c["cid"], d, kind="device_c1", utp_first=True, gap=r.randint(26, 40))
-            c["pd"] = round(r.uniform(0.09, 0.16), 4)
-            self.dev_c1.append(c["cid"])
-            self.ord_defaulted.add(c["cid"])
-        self.dev_c1b = []
-        for sec in r.sample(SECTOR_KEYS, 4):
-            c = next(x for x in ords if x["sector"] == sec and x["cid"] not in used)
-            used.add(c["cid"])
-            d = D(2025, 12, r.randint(17, 30))
-            self.add_default(c["cid"], d, kind="device_c1b", utp_first=True, gap=r.randint(26, 40))
-            self.dev_c1b.append(c["cid"])
-            self.ord_defaulted.add(c["cid"])
-        self.dev_c3 = []
-        for sec in SECTOR_KEYS:
-            c = next(x for x in ords if x["sector"] == sec and x["cid"] not in used)
-            used.add(c["cid"])
-            d = D(2025, r.randint(2, 10), r.randint(2, 26))
-            self.defaults.append(dict(cid=c["cid"], first=d, triggers=[("90DPD", d)], cure=None, kind="device_c3",
-                                      loan_first=True))
-            self.dev_c3.append(c["cid"])
-            self.ord_defaulted.add(c["cid"])
-        self.dev_used = used
-
-    def cures(self):
-        """About one default in six cures after a probation period. Every sector holds a borrower in default at the
-        end of 2023 that cured during 2024, three of whom default again in 2025."""
-        r = self.r
-        ords = sorted([c for c in self.customers.values() if c["role"] == "ordinary" and c["cid"] not in self.ord_defaulted
-                       and c["since"] < D(2022, 1, 1)], key=lambda c: c["cid"])
-        r.shuffle(ords)
-        self.dev_c2 = []
-        for i, sec in enumerate(SECTOR_KEYS):
-            c = next(x for x in ords if x["sector"] == sec and x["cid"] not in self.dev_used)
-            self.dev_used.add(c["cid"])
-            d = D(2023, r.randint(3, 10), r.randint(2, 26))
-            self.add_default(c["cid"], d, kind="device_c2")
-            cure = D(2024, r.randint(3, 10), r.randint(2, 26))
-            self.defaults[-1]["cure"] = cure
-            c["pd"] = round(r.uniform(0.06, 0.11), 4)
-            self.dev_c2.append(c["cid"])
-            self.ord_defaulted.add(c["cid"])
-            if i in (1, 4, 5):
-                d2 = D(2025, r.randint(3, 9), r.randint(2, 26))
-                self.add_default(c["cid"], d2, kind="device_c2_redefault")
-        # other cures among ordinary defaults (not at a year turn, not in 2024's book): realism
-        for df in self.defaults:
-            if df["kind"] == "ordinary" and df["cure"] is None and r.random() < 0.16 and df["first"] < D(2025, 6, 1):
-                cure = df["first"] + dt.timedelta(days=r.randint(200, 420))
-                if not ((cure.month == 12 and cure.day > 10) or (cure.month == 1)) and cure < D(2026, 11, 30):
-                    df["cure"] = cure
-
-    def exits(self):
-        """A borrower in default and not cured leaves the book within a year (written off or repaid by sale)."""
-        r = self.r
-        for df in self.defaults:
-            if df["cure"] is None:
-                c = self.customers[df["cid"]]
-                last = max(t[1] for t in df["triggers"])
-                ex = last + dt.timedelta(days=r.randint(60, 330))
-                if ex <= END:
-                    c["exit"] = ex if c["exit"] is None else min(c["exit"], ex)
-        for c in self.customers.values():
-            if c["exit"]:
-                for a in c["accounts"]:
-                    a["closed"] = c["exit"]
-
-    # ---- facilities and runs -----------------------------------------------------------------------------
-    def facilities(self):
-        r = self.r
-        self.fac_seq = 2_204_117
-        order = sorted(self.customers.values(), key=lambda x: x["cid"])
-        r.shuffle(order)
-        for c in order:
-            if c["role"] == "nonborrower":
-                continue
-            if c["role"] == "watch":
-                for prod, lim, drawn, lgd in WATCH_FACILITIES[c["key"]]:
-                    self.add_fac(c, prod, lim, drawn, lgd)
-                continue
-            if c["role"] == "payee":
-                ead, lgd = c["target_ead"], c["target_lgd"]
-                h = zlib.crc32(c["cid"].encode())
-                paid = 0.88 + 0.1 * ((h % 1000) / 1000.0)          # share of the original term loan still owed
-                drawn1 = round(ead * 0.62 + (h % 9973) / 100.0, 2)
-                lim1 = round(drawn1 / paid / 1000) * 1000
-                self.add_fac(c, r.choice(["Term loan", "Equipment finance"]), lim1, drawn1, lgd)
-                rest = ead - drawn1
-                lim2 = round(rest / 0.94 / 1000) * 1000
-                drawn2 = round((rest - 0.6 * lim2) / 0.4, 2)
-                drawn2 = max(0, min(lim2, drawn2))
-                self.add_fac(c, "Overdraft", lim2, drawn2, lgd)
-                continue
-            size = (c["turnover"] or 2e6) * r.uniform(0.15, 0.45)
-            n = r.choice([1, 1, 2, 2, 3])
-            prods = r.sample(["Term loan", "Overdraft", "Equipment finance", "Commercial property loan",
-                              "Revolving credit"], n)
-            if any(df["cid"] == c["cid"] and df.get("loan_first") for df in self.defaults) and \
-                    not any(p in ("Term loan", "Equipment finance") for p in prods):
-                prods = ["Term loan"] + prods[:2]
-            for p in prods:
-                lim = max(50_000, round(size / n * r.uniform(0.6, 1.4) / 1000) * 1000)
-                h = zlib.crc32(("%s|%s" % (c["cid"], p)).encode())
-                drawn = round(lim * (0.55 + 0.42 * (h % 10007) / 10007.0), 2) \
-                    if p in ("Term loan", "Equipment finance", "Commercial property loan") else \
-                    round(lim * r.uniform(0.2, 0.95) + (h % 9973) / 100.0 - 50.0, 2)
-                lgd = {"Commercial property loan": r.uniform(0.25, 0.38), "Term loan": r.uniform(0.40, 0.52),
-                       "Equipment finance": r.uniform(0.42, 0.55), "Overdraft": r.uniform(0.50, 0.62),
-                       "Revolving credit": r.uniform(0.48, 0.60)}[p]
-                self.add_fac(c, p, lim, drawn, round(lgd, 3))
-
-    def add_fac(self, c, prod, lim, drawn, lgd):
-        self.fac_seq += self.r.randint(7, 97)
-        revolving = prod in ("Overdraft", "Revolving credit", "Seasonal facility", "Floor plan facility")
-        ead = drawn + 0.6 * (lim - drawn) if revolving else drawn
-        c["facilities"].append(dict(fid="F%07d" % self.fac_seq, product=prod, limit=lim, drawn=drawn,
-                                    lgd=lgd, ead=round(ead, 2), revolving=revolving))
-
-    # ---- security and guarantees -------------------------------------------------------------------------
-    def securities(self):
-        r = self.r
-        self.props = []
-        seq = 30_118
-        valuers = ["Telfer Young", "Colliers", "JLL", "Bayleys Valuations", "Knight Frank", "Blackmore"]
-        districts = {"Manawatū-Whanganui": "WN", "Hawke's Bay": "HBP", "Wellington": "WN", "Taranaki": "TN"}
-        wl_props = {"KIN": 3, "RID": 2, "MAT": 2, "HAR": 3, "SEL": 1, "BRI": 2, "COA": 2, "NOR": 1}
-        for c in sorted(self.customers.values(), key=lambda x: x["cid"]):
-            if c["role"] == "nonborrower" or not c["facilities"]:
-                continue
-            if c["role"] == "watch":
-                n = wl_props[c["key"]]
-            elif r.random() < 0.55:
-                n = r.choice([1, 1, 1, 2])
-            else:
-                continue
-            for k in range(n):
-                seq += r.randint(3, 29)
-                ptype = r.choice(["Industrial", "Industrial", "Commercial"])
-                # the date the valuation was made
-                if c["role"] == "watch" and k == 0:
-                    made = D(r.randint(2017, 2022), r.randint(1, 12), r.randint(1, 28))
-                else:
-                    made = D(r.randint(2016, 2026), r.randint(1, 12), r.randint(1, 28))
-                    if made > D(2026, 10, 31):
-                        made = D(2026, 6, made.day)
-                amount = round(r.uniform(0.6e6, 4.5e6) / 5000) * 5000
-                if c["role"] == "watch" and k == 0:
-                    amount += SEC_NUDGE.get(c["key"], 0)
-                valuer = r.choice(valuers)
-                if r.random() < 0.6:
-                    title = "%s%d%s/%d" % (districts[c["region"]], r.randint(10, 60), r.choice("ABCD"), r.randint(1, 999))
-                else:
-                    title = str(r.randint(100000, 999999))
-                self.props.append(dict(sid="S%06d" % seq, cid=c["cid"], title=title, ptype=ptype,
-                                       region=c["region"], amount=amount, made=made, valuer=valuer,
-                                       address="%d %s %s" % (r.randint(2, 480), r.choice(FIRST),
-                                                             r.choice(["Road", "Street", "Drive", "Place", "Avenue"])),
-                                       priority=r.choice(["1st", "1st", "1st", "2nd"]),
-                                       discharged=None, registered=made - dt.timedelta(days=r.randint(5, 60))))
-        # properties sold in 2026: the mortgage discharged at Land Information, the register not updated
-        wl_dis = {"RID": 1, "HAR": 1, "BRI": 1}
-        for c in self.watch.values():
-            if c["key"] in wl_dis:
-                ps = [p for p in self.props if p["cid"] == c["cid"]]
-                ps[-1]["discharged"] = D(2026, r.randint(3, 10), r.randint(2, 26))
-        others = [p for p in self.props if self.customers[p["cid"]]["role"] not in ("watch",)]
-        for p in r.sample(others, 9):
-            p["discharged"] = D(2026, r.randint(2, 11), r.randint(2, 26))
-
-    def guarantees(self):
-        r = self.r
-        self.guars = []
-        self.deedlog = []
-        seq = 7_412
-        borrowers = sorted([c for c in self.customers.values() if c["facilities"] and c["role"] != "watch"],
-                           key=lambda x: x["cid"])
-        # each watch-list borrower's guarantees given: (guaranteed is a borrower; kind; amount; deed date; device)
-        plan = {
-            "KIN": [("unlimited", None, D(2014, 8, 12), "former"), ("limited", 400_000, D(2021, 3, 4), None)],
-            "RID": [("limited", 650_000, D(2019, 5, 28), "released")],
-            "MAT": [("limited", 750_000, D(2015, 10, 7), "former"), ("limited", 300_000, D(2022, 7, 19), None)],
-            "HAR": [("unlimited", None, D(2018, 2, 26), "released"), ("limited", 500_000, D(2020, 9, 9), None)],
-            "SEL": [("limited", 350_000, D(2013, 6, 18), "former")],
-            "BRI": [("limited", 900_000, D(2017, 11, 21), "released"), ("unlimited", None, D(2023, 4, 3), None)],
-            "COA": [("unlimited", None, D(2015, 3, 30), "former")],
-            "NOR": [("limited", 250_000, D(2020, 1, 22), "released")],
-        }
-        self.guar_device = {}
-        for c in self.watch.values():
-            for kind, amt, deed, dev in plan[c["key"]]:
-                g = r.choice([b for b in borrowers if b["region"] == c["region"] and len(b["facilities"]) <= 2])
-                seq += r.randint(2, 17)
-                gid = "G%05d" % seq
-                rel = D(2026, r.randint(2, 10), r.randint(2, 26)) if dev == "released" else None
-                self.guars.append(dict(gid=gid, guarantor=c["cid"], guaranteed=g["cid"], kind=kind, amount=amt,
-                                       deed=deed, released=rel, device=dev))
-                self.guar_device[gid] = dev
-        # the rest of the book's guarantees (directors' companies), some released over the years
-        for _ in range(130):
-            a, b = r.sample(borrowers, 2)
-            seq += r.randint(2, 17)
-            deed = D(r.randint(2010, 2026), r.randint(1, 12), r.randint(1, 28))
-            if deed > D(2026, 11, 30):
-                deed = D(2026, 5, 4)
-            kind = r.choice(["limited", "limited", "unlimited"])
-            amt = round(r.uniform(100_000, 1_500_000) / 25_000) * 25_000 if kind == "limited" else None
-            rel = None
-            if r.random() < 0.18:
-                rel = deed + dt.timedelta(days=r.randint(200, 2400))
-                if rel > D(2026, 12, 15):
-                    rel = None
-            self.guars.append(dict(gid="G%05d" % seq, guarantor=a["cid"], guaranteed=b["cid"], kind=kind,
-                                   amount=amt, deed=deed, released=rel, device=None))
-
-    def name_changes(self):
-        """Watch-list borrowers whose guarantee predates a change of name carry the former name on the deed; other
-        companies changed name too."""
-        r = self.r
-        former = {"KIN": ("Kinloch Fabrication Limited", D(2017, 5, 2)),
-                  "MAT": ("Matai Valley Meats Limited", D(2018, 9, 14)),
-                  "SEL": ("Selwyn Kitchens Limited", D(2016, 2, 11)),
-                  "COA": ("Coastline Quarries Limited", D(2019, 7, 8))}
-        for key, (fn, chg) in former.items():
-            self.watch[key]["former"].append((fn, chg))
-        for c in r.sample(sorted(self.customers.values(), key=lambda x: x["cid"]), 24):
-            if c["role"] == "watch" or c["former"]:
-                continue
-            b = c["name"].split(" ")[0]
-            fn = "%s %s Limited" % (b, r.choice(["Holdings", "Enterprises", "Group", "Trading", "Services"]))
-            if fn in self.used_names:
-                continue
-            self.used_names.add(fn)
-            c["former"].append((fn, D(r.randint(2012, 2024), r.randint(1, 12), r.randint(1, 28))))
+                for p in f["props"]:
+                    if anchor_i[p] < MI[(2010, 6)] and rng.random() < 0.09:
+                        inspect(p, i, "revaluation")
+        if CYCLE_START <= (y, m) <= CYCLE_END:
+            for fi in order:
+                f = facs[fi]
+                if f["amount"] < 500e3:
+                    continue
+                for p in f["props"]:
+                    if i - anchor_i[p] >= 33 + (p % 7) and rng.random() < 0.5:
+                        old = logdev[p]
+                        inspect(p, i, "cycle")
+                        if old < -0.12 and grade[fi] < 8:
+                            grade[fi] += 1
+                        elif old > 0.12 and grade[fi] > 1:
+                            grade[fi] -= 1
+        # annual review on the anniversary month
+        for fi in order:
+            f = facs[fi]
+            if f["orig"][1] == m and MI[f["orig"]] < i:
+                c = CYCLE[y]
+                u = rng.random()
+                if u < 0.095 * c and grade[fi] < 8:
+                    grade[fi] += 2 if (rng.random() < 0.18 * c and grade[fi] < 7) else 1
+                elif u > 1 - 0.105 / c and grade[fi] > 1:
+                    grade[fi] -= 1
+        # top-ups from 2014: a second facility to the same borrower on the same property, inspected afresh
+        if (y, m) >= (2014, 1):
+            for fi in order:
+                f = facs[fi]
+                if f["topup_of"] is None and grade[fi] <= 5 and rng.random() < 0.0011:
+                    amt = round(f["amount"] * float(rng.uniform(0.25, 0.55)), -3)
+                    nf = new_facility(w, (y, m), amt, int(rng.choice([84, 120])), 0,
+                                      float(np.round(rng.normal(4.9, 0.4), 2)), f["borrower"], list(f["props"]), fi)
+                    alive.add(nf)
+                    grade[nf] = grade[fi]
+                    for p in f["props"]:
+                        inspect(p, i, "top-up")
+        # defaults: the grade's chance in the year's conditions, tilted by the drift since the last inspection;
+        # a default takes every live facility of the borrower
+        order = sorted(alive)
+        hit = {}
+        for fi in order:
+            f = facs[fi]
+            ps = f["props"]
+            if (y, m) >= RECORD_START:
+                band = min(int((i - min(anchor_i[q] for q in ps)) / 12), 12)
+                w.at_risk[band] = w.at_risk.get(band, 0.0) + (1 - (1 - MASTER_PD[grade[fi]]) ** (1 / 12)) * CYCLE[y]
+            d = float(np.mean(logdev[ps]))
+            pd_m = 1 - (1 - MASTER_PD[grade[fi]]) ** (1 / 12)
+            if rng.random() < pd_m * CYCLE[y] * max(0.05, 1.0 - GAMMA * d):
+                hit[f["borrower"]] = fi
+        for fi in order:
+            f = facs[fi]
+            if f["borrower"] in hit:
+                alive.discard(fi)
+                f["end"], f["end_kind"] = i, "default"
+                f["grades"][i] = "D"
+        for b, fi in sorted(hit.items()):
+            if (y, m) >= RECORD_START:
+                ps = facs[fi]["props"]
+                band = min(int((i - min(anchor_i[q] for q in ps)) / 12), 12)
+                w.hits[band] = w.hits.get(band, 0) + 1
+            group = sorted(g for g in range(len(facs)) if facs[g]["borrower"] == b and facs[g]["end"] == i
+                           and facs[g]["end_kind"] == "default")
+            w.defaults.append(dict(borrower=b, month=i, facs=group,
+                                   drift={p: float(logdev[p]) for g in group for p in facs[g]["props"]}))
+        # closures: maturity, prepayment, refinancing away
+        for fi in sorted(alive):
+            f = facs[fi]
+            if f["bullet"] and MI[f["orig"]] + f["term"] == i + 1 and rng.random() < 0.75:
+                ext = int(rng.choice([36, 48, 60]))
+                f["term"] += ext
+                f["extensions"].append((i, ext))
+            bal = balance(f, i + 1)
+            if bal is None or bal < 1.0 or rng.random() < 0.0034:
+                alive.discard(fi)
+                f["end"], f["end_kind"] = i, ("maturity" if bal is None or bal < 1.0 else "repaid")
+        if (y, m) >= (2018, 12):
+            for fi in alive:
+                facs[fi]["grades"][i] = grade[fi]
+    w.alive_end = sorted(alive)
+    w.grade_end = {fi: grade[fi] for fi in alive}
+    w.logdev_end = logdev[: len(props)].copy()
+    w.svar_end = svar[: len(props)].copy()
+    workouts(w, rng)
 
 
-def build():
-    return World()
-
-
-if __name__ == "__main__":
-    w = build()
-    roles = {}
-    for c in w.customers.values():
-        roles[c["role"]] = roles.get(c["role"], 0) + 1
-    print(roles, len(w.defaults), len(w.props), len(w.guars))
+def workouts(w, rng):
+    """for each default: the inspection the bank orders (one to two months on), the receiver's sale six to twenty
+    months after the default, selling costs, and the proceeds shared across the borrower's facilities"""
+    props = w.props
+    w.sales = []
+    for ev in w.defaults:
+        i = ev["month"]
+        # from 2022 a facility of 500,000 or more is referred to the workout unit some months before it defaults,
+        # and the unit has the security inspected at referral
+        referral = None
+        if any(w.facs[g]["amount"] >= REFERRAL_MIN for g in ev["facs"]):
+            m0 = i - int(rng.integers(2, 7))
+            if m0 >= MI[REFERRAL_FROM]:
+                referral = m0
+        for p in sorted(ev["drift"]):
+            s, r = props[p]["sector"], props[p]["region"]
+            j = min(i + int(rng.integers(1, 3)), NM - 1)
+            li, lv, _ = [x for x in props[p]["insp"] if x[0] <= i][-1]
+            k0, k1 = QI[quarter_of(li)], QI[quarter_of(j)]
+            dev = ev["drift"][p] + rng.normal(0, SIGMA[s] * math.sqrt((j - i) / 12))
+            tv = lv * w.true[(s, r)][k1] / w.true[(s, r)][k0] * math.exp(dev - KAPPA * (j - li) / 12.0)
+            val = round(tv * (1 - DELTA[s]) * math.exp(rng.normal(0, VALUER_SD)), -3)
+            props[p]["insp"].append((j, val, "default"))
+            if referral is not None and li < referral:
+                ld, ai, av = w.state[referral]
+                a_i, a_v = int(ai[p]), float(av[p])
+                r0, r1 = QI[quarter_of(a_i)], QI[quarter_of(referral)]
+                tv0 = a_v * w.true[(s, r)][r1] / w.true[(s, r)][r0] * math.exp(ld[p] - KAPPA * (referral - a_i) / 12.0)
+                props[p]["insp"].append((referral, round(tv0 * math.exp(rng.normal(0, VALUER_SD)), -3), "referral"))
+                props[p]["insp"].sort(key=lambda x: x[0])
+            sale_m = i + int(rng.integers(6, 21))
+            price = round(val * SALE_FACTOR * math.exp(rng.normal(0, SALE_SD)), -3)
+            costs = round(COST_RATE * price + COST_FIXED, 0)
+            w.sales.append(dict(prop=p, default_month=i, insp_month=j, insp_value=val, sale_month=sale_m,
+                                price=price, costs=costs, borrower=ev["borrower"], facs=ev["facs"]))
+        ev["ead"] = {g: round(balance(w.facs[g], i) or w.facs[g]["amount"], 2) for g in ev["facs"]}

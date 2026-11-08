@@ -1,103 +1,120 @@
-"""task8 architecture 17: submission.md and metadata.json, every figure from golden.compute()."""
+"""task8 architecture 18: submission.md (the platform's four answer blocks) and metadata.json, drafted from
+figures.json so that every number in the blocks is a number the generator emitted."""
 import json
 
+import pack as PK
 import params as P
 
-REG = P.REGIONS
+
+def submission(f, path):
+    reg = f["regions"]
+    reg_txt = ", ".join("%s %d" % (k, v) for k, v in reg.items())
+    below = f["items_below_band"]
+    above = ", ".join(f["items_above_band"]) if f["items_above_band"] else "none"
+    pr = {k: v for k, v in f["chances"].items() if int(k[1:]) > 28}
+    pr_in = [v for k, v in pr.items() if k not in below]
+    pr_out = [v for k, v in pr.items() if k in below]
+    lines = [
+        "## Tags", "",
+        "**Domain:** Education & Learning Sciences (item response theory and test equating: an adult numeracy awarding "
+        "body pre-equating its 2027 Level 1 paper from its Rasch item bank).",
+        "**Analytical objective:** Data Extraction & Conformation (ETL).", "",
+        "## 1. Final Recommendation", "",
+        "**Set the 2027 Level 1 Numeracy pass mark at %d of 40: a candidate who just meets the standard can be expected "
+        "to score %.2f on the paper once its twelve Level 2 patterns and relationships items carry the reading cost "
+        "Level 1 candidates pay on long stems; the bank's own values give %.2f and a pass mark of %d, which this "
+        "rejects.**" % (f["pass_mark"], f["expected_golden"], f["expected_bank"], f["pass_mark_bank"]), "",
+        "## 2. Supplementary Questions", "",
+        "1. pass_mark_2027.docx: a memo to the Awards Committee recommending a pass mark of %d of 40, stating the "
+        "expected mark of %.2f at the standard (26 of 40 on the 2022 paper) against the bank's %.2f, and why the "
+        "twelve patterns and relationships items are harder for Level 1 candidates than their bank values." %
+        (f["pass_mark"], f["expected_golden"], f["expected_bank"]),
+        "2. l1_2027_items.xlsx, item table: one row for each of the 40 items on the 2027 paper with its chance at the "
+        "standard (two decimals) and whether it sits inside the 0.20 to 0.90 band. %s of the twelve patterns and "
+        "relationships items (%s) sit below the band, at %.2f to %.2f; the other %s sit inside it at %.2f to %.2f; "
+        "no item sits above the band." % (NUM[len(below)].capitalize(), ", ".join(below), min(pr_out), max(pr_out),
+                                           NUM[len(pr_in)], min(pr_in), max(pr_in)),
+        "3. l1_2027_items.xlsx, regions: the mean mark the candidates who sat the 2026 Level 1 paper in each region "
+        "could be expected to score on the 2027 paper (whole marks): %s." % reg_txt, "",
+        "## 3. Critical Components", "",
+        "- The bank's final 2026 values put the 2027 paper's expected mark at the standard at %.2f (pass mark %d); "
+        "they carry the twelve patterns and relationships items at difficulties set by Level 2 candidates." %
+        (f["expected_bank"], f["pass_mark_bank"]),
+        "- On the %d Level 2 items the 2023 to 2026 Level 1 papers carried, each item's Level 1 difficulty less its "
+        "Level 2 difficulty needs two causes together: an everyday-context advantage of about %.1f logits and a "
+        "reading cost of about %.1f logits per 100 words of stem. On the long everyday items the two cancel (their "
+        "shift sits %.2f logits from the short mathematical items', the short everyday items' %.2f)." %
+        (f["n_bridging"], f["everyday_advantage"], f["reading_cost_per_100_words"], f["lp_mean_shift_rel"],
+         f["sp_mean_shift_rel"]),
+        "- The twelve patterns and relationships items are long and mathematical, so only the reading cost applies: "
+        "at the standard they are worth %.2f marks against %.2f on the bank's values, and %s of them fall below the "
+        "band." % (f["pr_expected_golden"], f["pr_expected_bank"], NUM[len(below)]),
+        "- Expected mark at the standard on the 2027 paper: %.2f, so the pass mark is %d." % (f["expected_golden"],
+                                                                                              f["pass_mark"]), "",
+        "## 4. Step-by-Step Solution", "",
+        "1. Conform the response export: map the 2022 and 2023 sittings' positions (Q01 to Q40) to bank codes through "
+        "the paper layouts, keep the later answer of every item answered twice after a reconnect, and attach each "
+        "sitting to its paper; count each register sitting once.",
+        "2. The bank's final 2026 run gives %.2f at the standard on the 2027 paper; screening the shared items the "
+        "usual way (link through them, set aside the outliers) flags the short everyday items and leaves the rest "
+        "looking unchanged, which still files %d. That reading is rejected." % (f["expected_bank"],
+                                                                               round(f["rival_screen"])),
+        "3. Calibrate the Level 1 sittings and the Level 2 sittings each on their own (Rasch) and take, for each of the "
+        "%d Level 2 items set on Level 1 papers, its Level 1 difficulty less its Level 2 difficulty." % f["n_bridging"],
+        "4. The short everyday items are easier for Level 1 candidates and the long everyday items are not, so a second "
+        "cause offsets the everyday advantage on the long ones: fit the shift on an intercept (the link), the stem's "
+        "length and the context together. Context alone (%.2f at the standard) or length alone (%.2f) leaves one kind "
+        "of item misfitting." % (f["rival_context"], f["rival_reading"]),
+        "5. Give each 2027 patterns and relationships item its Level 2 difficulty plus the link and the reading cost "
+        "for its stem; the Level 1 items keep their Level 1 values.",
+        "6. Find the ability at which the 2022 paper's expected mark is 26 and sum the 2027 paper's chances there: "
+        "%.2f, so the pass mark is %d; the item chances and the band follow from the same ability." %
+        (f["expected_golden"], f["pass_mark"]),
+        "7. Regions: join each 2026 Level 1 sitting to the register's sitting centre (one row per candidate) and the "
+        "centres list. The 2026 paper is heavy in everyday items and the 2027 paper light, and the regions differ in "
+        "how much easier everyday items are for their candidates, so estimate each region's own everyday deviation "
+        "on the Level 1 sittings, each candidate's ability on the 2026 paper with it, and average the expected 2027 "
+        "marks by region; one ability scale for every region files other whole marks in some regions. The regional "
+        "everyday deviations are centred on their mean weighted by each region's Level 1 responses (2022 to 2026) "
+        "and applied to the everyday items of both the 2026 and the 2027 papers.",
+        "No other reading survives: every route that leaves the 2027 items on their Level 2 values, credits only the "
+        "everyday advantage or prices only stem length files %d or more, and every form of the two-cause model "
+        "(linear, logarithmic or a long-against-short step in stem length, weighted or not) files %d." %
+        (min(round(f["rival_context"]), round(f["rival_reading"]), round(f["rival_screen"])), f["pass_mark"]),
+    ]
+    open(path, "w").write("\n".join(lines) + "\n")
 
 
-def submission(res, path):
-    g, b, n = res["gold"], res["bank"], res["t3_count"]
-    fmt = lambda d: ", ".join("%s %s" % (r, d[r]) for r in REG)
-    ent = {r: "{:,}".format(res["entered"][r]) for r in REG}
-    sat = {r: "{:,}".format(res["sat"][r]) for r in REG}
-    mk = {r: "%.1f" % res["makeup_mean"][r] for r in REG}
-    txt = """## Tags
-
-**Domain:** Education & Learning Sciences (item response theory and test equating: a schools' assessment trust pre-equating draft papers from its Rasch item bank).
-**Analytical objective:** Data Extraction & Conformation (ETL).
-
-## 1. Final Recommendation
-
-**Set Paper C for the November 2027 sitting: its expected mark at the Achieved standard is 25 of 50 ({gC:.2f}), against 26 for Paper A ({gA:.2f}) and 23 for Paper B ({gB:.2f}).**
-
-## 2. Critical Components
-
-- The bank's Term 3 difficulties come from the August 2026 sitting, where {un} per cent of the responses to Term 3 items came before the candidate's own school had finished the unit (each session's New Zealand sitting day against the school's sequence in the course review's Appendix B).
-- Each Term 3 item is re-estimated on the taught responses ({tmin} to {tmax} per item) with abilities fixed on the Term 1 and 2 items at their final 2026 bank values; the scale stays on the anchor block.
-- Expected marks at 0.35 logits: Paper A {gA:.2f}, Paper B {gB:.2f}, Paper C {gC:.2f}; the bank as calibrated gives {bA:.2f}, {bB:.2f} and {bC:.2f} and would set Paper A.
-- Term 3 items per draft: Paper A {nA}, Paper B {nB}, Paper C {nC}.
-
-## 3. Step-by-Step Solution
-
-1. Map each draft's card numbers to bank codes through the 2025 renumbering and take the final 2026 run's difficulties.
-2. Put each session's start into New Zealand time and join the candidate's school to its Term 3 start and sequence in Appendix B (names through member_schools.csv), weeks counted from the school's own start.
-3. Mark each response to an item from the two late units taught when its sitting date is after its school's last date for that unit; each school's second late unit runs to its term's end.
-4. Keep the later answer where an item was answered again after a reconnect.
-5. Estimate abilities on the Term 1 and 2 items at their bank values, then re-estimate each Term 3 item on its taught responses with those abilities fixed.
-6. Sum each draft's Rasch probabilities at 0.35 logits and set the draft nearest 25 before rounding.
-7. Entered: standing entries (status E) once per candidate on first name, surname and birth date; sat: online candidates plus each keyed script at its home school (typed roster by script number, otherwise the keyed entry number through the register); make-up marks with the one keying batch that holds values over 50 halved whole.
-
-## 4. Deliverable Answers
-
-### council_memo.docx
-
-- Set Paper C.
-- Expected marks at the Achieved standard: Paper A 26, Paper B 23, Paper C 25.
-
-### achieved_marks.png
-
-- Paper A 26, Paper B 23, Paper C 25, against the specification's 25.
-
-### paper_choice.xlsx
-
-- Expected marks at the Achieved standard (nearest whole mark): Paper A 26, Paper B 23, Paper C 25.
-- Candidates entered: {ent}.
-- Candidates who sat, online or at a make-up session: {sat}.
-- Candidates who sat a make-up paper: {mkn}.
-- Mean make-up mark: {mk}.
-""".format(gA=g["A"], gB=g["B"], gC=g["C"], bA=b["A"], bB=b["B"], bC=b["C"], nA=n["A"], nB=n["B"], nC=n["C"],
-           un=res["untaught_pct"], tmin=res["taught_min"], tmax=res["taught_max"], ent=fmt(ent), sat=fmt(sat),
-           mkn=fmt(res["makeup_n"]), mk=fmt(mk))
-    with open(path, "w") as fh:
-        fh.write(txt)
+NUM = {0: "none", 1: "one", 2: "two", 3: "three", 4: "four", 5: "five", 6: "six", 7: "seven", 8: "eight", 9: "nine",
+       10: "ten", 11: "eleven", 12: "twelve"}
 
 
-FILES = [
-    ("y10sci_aug2026_responses.csv", "evidence", "the delivery platform's response export for the August 2026 online sitting, one row per scored response", "2026-08-24"),
-    ("y10sci_aug2026_sessions.csv", "evidence", "the delivery platform's session log for the August 2026 sitting (UTC)", "2026-08-24"),
-    ("corlinn_item_bank_2026.xlsx", "evidence", "the Year 10 science item bank after the final 2026 calibration", "2026-09-08"),
-    ("bank_calibration_runs.csv", "evidence", "the bank's 2025 final and 2026 preliminary and final calibration runs", "2026-09-07"),
-    ("item_renumbering_2025.csv", "evidence", "the bank's 2025 renumbering from item card numbers to bank codes", "2025-02-01"),
-    ("y10sci_2027_drafts.xlsx", "evidence", "the drafting panels' three draft papers for 2027, by item card number", "2026-11-02"),
-    ("y10sci_paper_specification_2027.pdf", "governing", "the Assessment Committee's 2027 paper specification", "2026-11-04"),
-    ("standard_setting_record_y10sci.pdf", "governing", "the standard-setting record (standards on the bank scale)", "2026-03-04"),
-    ("council_minute_2026_10_14.pdf", "governing", "the Council's minutes of 14 October 2026 (the 2027 sitting dates)", "2026-10-16"),
-    ("y10sci_course_review_2026.pdf", "evidence", "the Curriculum Committee's 2026 course review with member schools' sequences", "2026-09-09"),
-    ("member_schools.csv", "evidence", "the Trust's member schools with codes and regions", "2026-08-31"),
-    ("paper_choice_request.eml", "context", "the head of assessment's request", "2026-11-06"),
-    ("entries_register_aug2026.xlsx", "evidence", "the Trust's entries register for the August 2026 sitting", "2026-08-31"),
-    ("makeup_roster_aug2026.pdf", "evidence", "the make-up sitting's typed roster by host centre", "2026-08-31"),
-    ("makeup_scripts_keyed.csv", "evidence", "the office's keyed make-up scripts", "2026-09-10"),
-    ("candidate_survey_2026.csv", "distractor", "the post-sitting survey of candidates' attitudes to science", "2026-08-24"),
-    ("member_bell_times_2026.json", "distractor", "member schools' Term 3 bell times from the timetabling system", "2026-08-31"),
-]
-
-
-def metadata(path):
-    d = {"task": "task8", "architecture": 17, "setting": "2026-11-06",
-         "files": [{"name": f, "role": r, "source": "synthetic: " + s, "date": dt,
-                    "license": "CC0 1.0 (synthetic, authored for this task)"} for f, r, s, dt in sorted(FILES)],
-         "distractors": ["candidate_survey_2026.csv", "member_bell_times_2026.json"],
-         "distractor_reasons": {
-             "candidate_survey_2026.csv": "candidates' attitudes after the sitting: relevant to how the cohort felt "
-                                          "about the paper, unused by the pre-equating or the regional counts",
-             "member_bell_times_2026.json": "each school's period times: relevant to when sessions ran, unused because "
-                                            "the session log carries every sitting's own time"},
-         "stated_inputs": ["the paper specification's targeting rule (nearest 25 at the Achieved standard)",
-                           "the standard-setting record's Achieved standard, 0.35 logits on the bank scale",
-                           "the Council's November 2027 sitting dates"],
-         "deliverables": ["council_memo.docx", "achieved_marks.png", "paper_choice.xlsx"]}
-    with open(path, "w") as fh:
-        json.dump(d, fh, indent=1)
-        fh.write("\n")
+def metadata(path, n_rows):
+    files = []
+    desc = {
+        "responses": ("evidence", "synthetic: the response platform's export of every scored item response at the "
+                      "Board's Level 1 and Level 2 online sittings, 2022 to 2026", "2026-11-06"),
+        "register": ("evidence", "synthetic: the Board's candidate register, centre uploads and regional office "
+                     "entries, 2022 to 2026", "2026-11-06"),
+        "bank": ("evidence", "synthetic: the Board's item bank file with the preliminary and final 2026 calibration "
+                 "runs", "2026-11-04"),
+        "layouts": ("evidence", "synthetic: the Board's paper layouts, 2022 to 2027", "2026-11-04"),
+        "centres": ("evidence", "synthetic: the Board's registered learning centres", "2026-11-02"),
+        "spec": ("governing", "synthetic: the Level 1 Numeracy specification, version 2026.1", "2026-03-12"),
+        "standard": ("governing", "synthetic: the 2022 standard-setting record for Level 1 Numeracy", "2022-05-20"),
+        "minute": ("context", "synthetic: the Awards Committee's minute of 17 September 2026", "2026-09-21"),
+        "email": ("context", "synthetic: the committee chair's email to the assessment manager", "2026-11-09"),
+        "survey": ("distractor", "synthetic: the Board's 2026 learner confidence survey", "2026-07-02"),
+        "audit": ("distractor", "synthetic: the operations group's 2026 audit of centres' computer suites", "2026-08-28"),
+    }
+    for k, name in PK.FILES.items():
+        role, src, date = desc[k]
+        files.append(dict(name=name, role=role, source=src, date=date, license="CC0 1.0 (synthetic, authored for this task)"))
+    meta = dict(task="task8", architecture=18, setting="2026-11-09",
+                organisation=P.ORG + " (fictional), Manitoba and Saskatchewan, Canada",
+                decision="the pass mark of the 2027 Level 1 Numeracy paper",
+                deliverables=["pass_mark_2027.docx", "l1_2027_items.xlsx"],
+                distractor_files=[PK.FILES[k] for k in PK.DISTRACTORS],
+                rows={k: v for k, v in n_rows.items()},
+                files=sorted(files, key=lambda x: x["name"]))
+    open(path, "w").write(json.dumps(meta, indent=1) + "\n")

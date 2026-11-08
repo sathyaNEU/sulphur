@@ -1,30 +1,34 @@
 # leak check, task8
 
-**Verdict: REVIEW.** 17 files read, 14 golden figures and 1 candidate names taken from submission.md, 25 stump terms taken from the design note.
+**Verdict: REVIEW.** 11 files read, 8 golden figures and 1 candidate names taken from submission.md, 25 stump terms taken from the design note.
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: architecture, school, taught, reader, golden, reflex, population, decisive, readers, member, record, shipped, carried, carries, inside, family, register, screened, nothing, sentence, appendix, graded, landed, reading, window
+Stump terms swept: architecture, reader, everyday, reflex, golden, population, shared, context, family, carried, advantage, screened, register, readers, decisive, reading, graded, record, carries, landed, records, nothing, sentence, screen, device
 
-## 1 file names (REVIEW 2)
-- **REVIEW** `corlinn_item_bank_2026.xlsx`: a sheet named 'Notes': confirm it is the organisation's own notes and does not describe the data's columns or files
-- **REVIEW** `entries_register_aug2026.xlsx`: a sheet named 'Notes': confirm it is the organisation's own notes and does not describe the data's columns or files
+## 3 answer figures in the pack (REVIEW 3)
+- **REVIEW** `level1_numeracy_specification_2026.pdf`: golden figure 0.90 appears: ...ectly with a chance of at least 0.20 and at most 0.90. Items outside that range are reported to the Ite...
+- **REVIEW** `level1_numeracy_specification_2026.pdf`: golden figure 0.20 appears: ...dard answers correctly with a chance of at least 0.20 and at most 0.90. Items outside that range are re...
+- **REVIEW** `level1_numeracy_specification_2026.pdf`: carries 19 of 27 distinctive words of the committed call: 'Set the 2027 Level 1 Numeracy pass mark at 19 of 40: a candidate who just meets the standard can be expected to score 19'
 
-## 3 answer figures in the pack (REVIEW 1)
-- **REVIEW** `y10sci_paper_specification_2027.pdf`: carries 9 of 9 distinctive words of the committed call: 'Set Paper C for the November 2027 sitting: its expected mark at the Achieved standard is 25 of 50 (24.80), against 26 fo'
-
-## 4 design-note vocabulary (REVIEW 2)
-- **REVIEW** `y10sci_course_review_2026.pdf`: 3 of 25 stump-paragraph terms appear (school, member, appendix); read whether the document names the move
-- **REVIEW** `y10sci_paper_specification_2027.pdf`: 3 of 25 stump-paragraph terms appear (school, member, record); read whether the document names the move
+## 4 design-note vocabulary (REVIEW 1)
+- **REVIEW** `level1_numeracy_specification_2026.pdf`: 6 of 25 stump-paragraph terms appear (reader, everyday, context, register, record, screen); read whether the document names the move
 
 ## 10 container metadata (INFO 1)
 - **INFO** `-`: audit reported no writer signature (1 lines)
 
 ## 11 prompt gate (REVIEW 1)
-- **REVIEW** `prompt.txt`: shell quota: question form 'which' at 36% of 192 prompts (cap 30%); reword at the role level, not the verb
+- **REVIEW** `prompt.txt`: shell quota: question form 'whether' at 71% of 7 prompts (cap 30%); deliverable set 'docx+xlsx' at 43% of 7 prompts (cap 20%); reword at the role level, not the verb
 
 ## 12 describing content (REVIEW 1)
-- **REVIEW** `y10sci_course_review_2026.pdf`: names 8 column(s) of the data files verbatim (Cells and body systems, Physical World, Planet Earth and Beyond, Unit, schools, start): confirm it is the organisation's own record and not a note written for the analyst
+- **REVIEW** `level1_numeracy_specification_2026.pdf`: names 10 column(s) of the data files verbatim (Data, Item, Money and measures, Strand, centre, item): confirm it is the organisation's own record and not a note written for the analyst
+
+## 12 client quality check (REVIEW 1, INFO 2)
+- **REVIEW** `pacb_candidate_register_2022_2026.csv`: 'Whitney': ...2007,L2,2022,LC-0219,LC-0219,LC-0219,2022-10-28,Sat, R614350,PA305460,Whitney,Susan,2005-04-24,L2,2022,LC-0251,RO-INT,LC-0251,2022-09-14,Sat, R6143...
+- **INFO** `-`: 11 usable files (10 or more required)
+- **INFO** `-`: 2 file categories: document, spreadsheet (2 or more required)
+
+## 1 file names (clean)
 
 ## 2 author vocabulary (clean)
 
@@ -38,55 +42,22 @@ Stump terms swept: architecture, school, taught, reader, golden, reflex, populat
 
 ## 9 dates after the setting (clean)
 
+## Solver's-eye read (second pass, rebuilt pack after the stage 4 fixes, 2026-11-08)
 
-## Solver's-eye read
+# Leak reader answers (task8b)
 
-Two isolated reads (general-purpose agents on Sonnet at medium effort, each on its own byte-identical copy of the prompt and the pack, with no design note, generator or golden). Round 1 on zip 3f18332c: CLEAN. Round 2 on zip 02c4e9b7, after the make-up roster header and the batch column were added and the forum redrawn: CLEAN.
+1. Decisive step stated? Partly, by the specification and the 2022 record, not by a "how to" sentence.
+   - level1_numeracy_specification_2026.pdf s4.2: "The pass mark on each Level 1 paper is the mark that a candidate who just meets the Level 1 standard can be expected to score on that paper, rounded to the nearest whole mark." (restated in prompt.txt)
+   - ln1_standard_setting_record_2022.pdf s3: "such a candidate can be expected to score 26 of the 40 marks on the 2022 Level 1 paper"; s2: "A panellist's total is the sum of their ratings over the 40 items".
+   No file names a linking, equating or calibration method.
+2. Ranks/scores the answer? none. The 2022 record gives 26/40 for the 2022 paper only (an anchor, not a 2027 answer). pacb_item_bank_2026.csv has difficulties (data, not a ranking of answers).
+3. Exists only to help the analyst? none clearly. The 2022 standard-setting record is the spec's cited source (s4.1) and reads as a real organisational record. The email and minute are plausible correspondence. Closest to "helper": pacb_paper_layouts_2022_2027.xlsx (but a plausible operational record).
+4. Reads as the answer? Only "26 of the 40" / "pass mark was set at 26" (ln1_standard_setting_record_2022.pdf s3), the 2022 figure; context, but a tempting anchor. Specification band "at least 0.20 and at most 0.90" (s5.1) is a stated rule, not an answer.
+5. Literal-execution sentence: spec s4.2 (above), with s4.1 fixing the standard as the 2022 panel's. Literally: compute, for the 2027 Level 1 paper (the 40 items listed in the layouts workbook sheet "LN1 2027"), the expected total score of a candidate sitting at the 2022 standard, i.e. the sum over the paper's items of that candidate's chance of a correct answer, then round to a whole mark. The ability of the "just meets" candidate is fixed by the 2022 record (expected 26 of 40 on the 2022 paper), so it has to be carried to the 2027 items. Items: s5.1 band 0.20 to 0.90 inclusive. Regional means: expected score on the 2027 paper of the 2026 Level 1 sitters in each region (prompt wording).
+6. What decides it: an analytical choice, on the face of the files (carrying a fixed 2022 standard onto a different paper via the item bank and response data, and deciding which difficulty estimate / which candidates / how items and the 2022 standard link). Nothing read as a stated procedure that spells out the steps; no planted-defect sentence is announced. Supporting facts that are only discoverable by data work (not stated): register level labels vary (L1/Level 1), centre merge note in the minute s4, preliminary vs final item-bank runs (the email says "the bank's annual run is done"; minute s1 says the annual run follows marking). These are hygiene hints, not the decider.
 
-### Round 2
+(a) pacb_learning_centres.csv: harmless. Town column reads as complete, real Manitoba/Saskatchewan place names (Weyburn, Flin Flon, Virden, North Battleford, The Pas, Swan River, Souris, Neepawa, etc.), province codes consistent with the towns. No truncation seen. Centre names such as "Sargent Avenue Adult Centre (Suite 210)" are texture.
 
-# Leak read round 2, task8
+(b) awards_committee_minute_2026-09-17.pdf: harmless. "Unconfirmed: to be confirmed at the next meeting of the Committee" is consistent with a 17 Sept minute whose next meeting is 3 Dec 2026 (PDF created 21 Sep 2026); all events are future or <= 31 Aug/17 Sep relative to its date. Nothing narrates how data were built or points at a method. Mild signposting only: s3 lists "the item table", "regional figures" the Committee will want (they are in the prompt anyway), and s4 notes the Winnipeg merger on 1 July 2025 ("earlier records stay under their own codes"), which is a data-semantics hint a real minute could carry. Rate harmless, borderline on the merger sentence only.
 
-Not solved; no figures given. Verdict: CLEAN, with two low-severity notes (items 1 and 11).
-
-### New or changed sentences
-1. makeup_roster pdf header, "Paper form M26 is marked out of 50 at the host centre, and the marker writes the candidate's mark on the script cover out of 50 and as a percentage. The office keys each cover's mark out of 50, each keyer's session as one batch on one template."
-   Mostly a fact about the form and the office's keying (what is marked, how the cover is written). The last clause ("each keyer's session as one batch on one template") is a mild hint that a batch may differ from the stated scale, since a batch column now exists and one batch holds marks above 50 (a visible anomaly in the CSV). It does not say how to correct or what the make-up mean turns on. It touches only the supplemental ask, not the main call. Low severity: it is borderline between record and nudge, but it reads as an office note, not as handling.
-2. makeup_scripts_keyed.csv `batch` column: a fact (the keying session). Lets the analyst see batch structure; states no handling.
-3. Council minute item 5, "The Council will set the 2027 paper at its meeting of 2 December, on the head of assessment's recommendation." Fact/context only. Nothing about the answer.
-4. Email: "The Council meets on 2 December...", "Could you work up the recommendation...", "carry the August sitting's entries and sittings by region, and the make-up sitting's numbers and marks". Request context only; names the deliverable content, not the method.
-5. prompt.txt "Write the recommendation to the Council as council_memo.docx": deliverable naming, consistent with the email. No leak.
-6. Entries register: one entry date per row, all datetimes; "Status" E/W and Source notes are plain record facts. Nothing handling-like.
-
-Other new-to-me analyst-facing sentences: none found.
-
-### Standing questions
-7. Decisive step: no file states it. The spec section 4 ("expected mark ... for a candidate sitting the 2027 paper, is nearest 25 ... sum over the items of the probability, under the Rasch model on the bank scale ... compared on their expected marks before rounding") states the estimand, the formula and the no-rounding rule (the how of the figure at the level of the standard definition), not which difficulty set or whether anything must be adjusted.
-8. No file ranks or scores the three drafts. The drafts workbook holds only item card lists. The standard-setting record gives per-form raw marks for the 2026 forms (F1 to F4), not for the drafts.
-9. None exists solely to help the analyst. The renumbering file, calibration runs and bank are working inputs; the course review, bell times, survey and minutes read as distractors/context.
-10. No figure or name reads as the answer. The "25" is the spec's stated target. The 0.35 Achieved cut is a stated standard.
-11. Literal sentence: spec section 4, "The paper set for 2027 is the submitted draft whose expected mark at the Achieved standard, for a candidate sitting the 2027 paper, is nearest 25 of its 50 marks. The expected mark is the sum over the paper's items of the probability, under the Rasch model on the bank scale, that a candidate at the Achieved standard answers the item correctly. Drafts are compared on their expected marks before rounding." Literal result in words: for each draft, sum Rasch probabilities at the 0.35 logit Achieved standard over its 50 items, pick the draft nearest 25. The phrase "for a candidate sitting the 2027 paper" and the bank note ("final run supersedes the preliminary") are fact-like and do not spell out which difficulty values or card-to-item mapping to use. Low severity note: the "2027 paper" wording and the 2026 form raw marks (26 to 28 at Achieved) in the standard-setting record sit close to the analyst's path but state no handling.
-12. Decided by an analytical choice (which item difficulties apply to a 2027 sitting, given the final versus preliminary calibration, the anchored scale and renumbered cards), judged from the data; no sentence announces it. I see no planted decoy: the preliminary run is plainly labelled as superseded, the sort of thing an organisation would keep.
-13. Realism: nothing reads as generated. The roster is typed returns, the email and minutes are plain, the bank notes are terse, and the spelling of schools' dates varies as real uploads do. No toolchain signatures, hidden sheets or tracked changes found (all sheets visible).
-14. Regional entries and sittings: no sentence says how to count. The entries register notes define status (W is not a candidate) and source; member_schools.csv maps school to region. No file hands over a count by region. The roster header and sessions file give no counts.
-15. Make-up candidates and mean by region: the roster header says the form is out of 50 and the keyed batches share one template per keyer; the roster's Attended column and the keyed CSV (script number, school code, entry no, mark) support the work. No sentence says how to count or average them (for example which marks to correct or which attendees to include), and no file hands over a regional figure or mean.
-
-### Round 1
-
-Verdict: CLEAN (no leak found; two minor observations below, neither hands over an answer).
-
-1. Decisive step sentence: none. The 2027 specification (y10sci_paper_specification_2027.pdf s4) files the estimand ("expected mark is the sum over the paper's items of the probability, under the Rasch model on the bank scale, that a candidate at the Achieved standard answers the item correctly... compared before rounding") but no file says which calibration run, anchor handling or item-code mapping to use, or announces any step as decisive.
-2. Ranking/scoring file: none. y10sci_2027_drafts.xlsx lists only Q/Card/Unit/Marks per paper; no expected marks. The standard-setting record gives raw marks for the 2026 forms only.
-3. Files existing only to help the analyst: none evident. Notes sheets are short and read as bank/register housekeeping. member_bell_times_2026.json, candidate_survey_2026.csv, course review Appendix B and the council minute read as plausible context or distractors.
-4. Figure or name reading as the answer: none. No expected mark, draft preference or regional count appears anywhere.
-5. Sentence fixing computation/population: spec s4, "the submitted draft whose expected mark at the Achieved standard, for a candidate sitting the 2027 paper, is nearest 25 of its 50 marks... sum over the paper's items of the probability, under the Rasch model on the bank scale, that a candidate at the Achieved standard answers the item correctly." Literal result: a Rasch expected-score sum over each draft's 50 items at the Achieved standard theta (0.35 logits per the standard-setting record), compared unrounded to 25. The standard-setting record s1: "A candidate is reported at a standard when their ability estimate on the bank scale reaches it." Reading the spec literally also means 2027 bank difficulties (final calibration) for the cards, with the 2027 sitting date (council minute, Nov 1-12) and the course review sequences as context; the pack states no adjustment rule.
-6. What decides the main answer: an analytical choice (which item difficulties are the right ones on the bank scale at the 2027 sitting, given calibration runs, anchors, renumbering and scale drift). No single sentence or file settles it; the pack gives the raw materials (bank_calibration_runs.csv with 2025 final / 2026 preliminary / 2026 final, item_renumbering_2025.csv, the bank Notes: "The final run supersedes the preliminary run"). The superseding statement is a stated ordering of runs, not the stump. Nothing reads as planted.
-7. Realism: no tell found. PDFs all LibreOffice 24.2, author the Trust, with distinct, plausible creation dates; the make-up roster text is not clipped in extraction; the roster, keyed scripts (three keyers, keyed 31 Aug to 7 Sep) and register (status E/W, school upload/office) read as kept records. Session starts cluster around 21:50 and 02:02 UTC, consistent with NZ period bell times, not a generated pattern. Minor: all xlsx files share author names consistent with the story (Jeremy York, Paul Shailer, Trust Office); the register's every row shows "Entered on" 2026-05-18 in the first rows (sorted by school; may vary later), which is mildly uniform but not clearly a tell.
-8. Regional entries/sittings: no file hands over a count by region. member_schools.csv maps school_code to region; the register Notes say "W withdrawn by the school before the sitting (a withdrawn entry is not a candidate)", which states the entry-counting rule. How to count online sittings (sessions with status submitted vs dropped) is not stated anywhere; no regional figure appears.
-9. Make-up candidates and mean mark by region: no file states how to count or average them and none hands over a regional figure. The roster PDF has an Attended Yes/No column and "Booked candidates by host centre, as typed from the host supervisors' returns"; makeup_scripts_keyed.csv has script_no, school_code (host), entry_no (mostly blank), mark. The link from script to home school and region has to be reconstructed; no sentence says how.
-
-Rulings on flagged files:
-- corlinn_item_bank_2026.xlsx Notes: reads as the Trust's own record (calibration run date, anchor block, supersession, fit definition). Not a note for the analyst.
-- entries_register_aug2026.xlsx Notes: reads as the office's own register legend (as-at date, status codes, source codes). Fine.
-- y10sci_paper_specification_2027.pdf: reads as a genuine committee specification; shared wording with the prompt is natural (the prompt cites it). It files the estimand, not a step-by-step method; acceptable.
-- y10sci_course_review_2026.pdf: reads as a curriculum committee paper with messy school-returned Appendix B (mixed date formats, varying unit names); unit names also appear as column values in the drafts workbook, but nothing in it points to a decisive step.
+Realism notes: no dates after the decision date (3 Dec 2026) in files; the email is dated 9 Nov 2026 and the data run to 30 Oct 2026, consistent. Item bank holds both "2026-06 preliminary" and "2026-10 final" runs for every item, which is natural. The 2027 layout names sheets "LN1 2027" only (no LN2 2027), fine. No hidden sheets, no cell comments, no machine-written prose found. Email text is a little tidy but plausible. Minor: the email says the "item table we asked for last year", consistent with the minute.

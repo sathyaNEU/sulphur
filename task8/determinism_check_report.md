@@ -1,51 +1,58 @@
-# determinism-check report, task8 (architecture 17), 2026-11-08
+# determinism-check report, task8 (architecture 18), 2026-11-08
 
-Target.zip sha256 02c4e9b7e51761b66b07a8348618ef419577cb04fb210d481841d7b989525203. Two judge passes, each an isolated general-purpose agent on Sonnet at medium effort that read only its own byte-identical copy of prompt.txt and the pack, wrote its derivation before opening the graded blocks, and kept that order.
+## Verdict
+DETERMINISTIC
+**Disposition:** APPROVE (judge's recommendation; author may close the regional-centring convention on paper, see Findings)
+**Stumping type:** mechanism: method_or_model_selection, stumping_family: analytical_non_defect, surface_read_dependency: no (borderline), sole_data_defect: no
 
-- Round 1 (zip 3f18332c): NOT_DETERMINISTIC, FIX_NOW on one ask cell pair only (the Capital and Central mean make-up marks: one keyer's batch keyed as percentages, with no shipped file stating the make-up paper's maximum or how a cover is keyed). The main call reproduced to two decimals; Gate H analytical. Fixed in the generator: the make-up roster's header files, in the office's voice, the 50-mark maximum, the cover's two figures and one batch on one template per keyer's session; the keyed file numbers every session's batch; every alternative treatment is asserted excluded (AF1).
-- Round 2 (zip 02c4e9b7): DETERMINISTIC, APPROVE. Every main-call and ask figure reproduced exactly.
+## Why
+The judge (one sonnet thread, scratch /tmp/determinism-check-task8-20261108063652/, derivation written before graded blocks opened) executed the shipped text literally. The standard is expected 26/40 on the 2022 paper (specification 4.1/4.2, LN1-SS-2022 s3). The bank alone gives 21.57 and pass mark 22. The 36 shared Level 2 items show a Level 1 shift explained by stem length and everyday context together (residual SD 0.105 logits; context alone 0.26, length alone 0.32, none 0.33). Carried to the twelve long mathematical items this gives 19.14 (golden 19.09) and pass mark 19 under every functional form tried (19.14 to 19.34). Single-cause and no-shift routes give 20.8 to 21.5 and are rejected by the fit. Band classification reproduces (Q29 to Q33 below, seven inside, none above). Regional whole marks reproduce exactly (15/16/17/16/17/17) under response-weighted centring of regional everyday offsets.
 
-## Round 2 verdict (verbatim)
+## Recomputation ledger
+| Figure | Claimed | Judge recomputed | Reproduced |
+|---|---|---|---|
+| Bank expected mark at standard (2027) | 21.57, pass 22 | 21.568 (26.2 target 21.80; preliminary run 21.56), all 22 | yes |
+| Two-cause expected mark | 19.09, pass 19 | 19.14, pass 19 | yes (0.05 apart; method-level) |
+| Items below band | Q29 to Q33, 0.11 to 0.14 | Q29 to Q33, 0.12 to 0.15 | yes on class; 2dp differs by 0.01 on some items |
+| Seven other patterns items | 0.25 to 0.40 inside | 0.25 to 0.40 inside | yes |
+| Regions | 15,16,17,16,17,17 | 14.91, 15.61, 17.15, 16.38, 16.72, 17.20 = 15,16,17,16,17,17 | yes |
+| Bank-only regions (wrong route) | n/a | 20,19,19,19,16,18 | n/a |
+| Context only / length only | 20.81 / 21.35 | 20.8 / 21.4 | yes |
 
-# JUDGE_REPORT task8 round 2
-Order kept: derivation.md written from prompt and pack before graded/ was opened.
+## Competing answers that survived
+- Regional centring: unweighted centring puts PKN at 16.53 (17 against 16); dropping the offset on the 2027 everyday items puts WPG at 15.69 (16 against 15). Neither is closed by a shipped sentence; the principled specification (response-weighted centring, offset applied to the paper it describes) lands on the golden. PKN 16.38 and WST 15.61 sit about 0.1 from a rounding edge. Not a surviving fork by the judge's verdict, but thin.
+- Item chances at 2dp move by 0.01 on some items with calibration method (JML vs separate Rasch); band flags are unaffected.
+- No fork on the pass mark: 0.36 from the 19.5 edge.
 
-- **Verdict:** DETERMINISTIC
-- **Disposition:** APPROVE (no repair; no rerun).
-- **Why:** Spec s4 and the prompt fix the estimand (expected mark at 0.35 logits, Nov 2027 candidate, unrounded comparison). My independent re-estimate of the 32 Term 3 (U5/U6) item difficulties on responses taken after the school finished the unit (course review Appendix B plus NZ sitting day) gives A 25.94, B 22.92, C 24.83, so Paper C. The bank as shipped gives A (24.78 / 20.64 / 21.58). All ask figures reproduce exactly.
-- **Evidence:** Residual vs U1-U4 ability: unit done +0.167, in progress or not started about -0.02 (no step before completion). Shift U5 -0.90, U6 -0.96. Stable under item-level vs unit shift, UTC vs local date, Friday handling, +3 day lag, merging dropped+resumed sessions per entry (331 repeated pairs), iterating ability on all items. Gaps: C 0.17, A 0.94, B 2.08 from 25. Asks: entered 1915/1213/1035/1289 (N/Ce/Ca/S), sat 1874/1188/1013/1261, make-up 61/37/27/45, means 28.4/25.8/23.8/25.3; all reproduced. Golden blocks, memo, workbook agree with each other and with me (small 0.05 differences in unrounded values do not change any rounded figure).
-- **Competing answers (all closed by shipped text or evidence):** (1) bank as calibrated gives Paper A; closed by "for a candidate sitting the 2027 paper" and the Nov 2027 sitting (council minute, spec s2), and by the data step at unit completion. (2) Transfer pairs (20, same name and dob, same region both times) counted twice would add 20 to entered; no region fork. (3) 14 unbooked scripts with keyed entry numbers: excluding them gives make-up 24/32/58/42 and means 24.6/24.8/28.8/25.1; the scripts are evidence of sitting, so including is the literal reading (minor residual fork, the roster is headed "Booked candidates"). (4) K047 percentage batch not halved gives Capital 27.7, Central 31.3; closed by roster header (marks out of 50, one batch per keyer session) and the batch being all even with max 80.
-- **Files/Hygiene:** PASS. 17 files; csv, xlsx, pdf, json, eml. Distractors present (bell times, survey, preliminary run, standard-setting form raw marks, 2025 run). No authoring leakage seen. No exclusion-level finding.
-- **Stump power:** Easy route reads bank difficulties straight (with correct renumbering join) and files Paper A; a strong model that notices the timing mismatch must still test it on the data. Plausibly stumps. The pre-equating framing and the sequence appendix make the mismatch discoverable but not announced.
-- **Stumping type:** mechanism: method_or_model_selection (calibration sample not representative of target sitting, re-estimated on the taught subset); stumping_family: analytical_non_defect; surface_read_dependency: no (borderline: the bank values are correct for August and the task transports them to a different exposure state); sole_data_defect: no.
-- **Three rules:** domain: pass, layers: pass (L1 renumbering, UTC/NZ time, dropped+resumed sessions, percentage keying, duplicate entries; L2 exposure-conditional recalibration), decisive_step: analytical. Field analysis: Rasch pre-equating with opportunity-to-learn adjusted difficulties; easy route takes the bank values and sets Paper A (24.78 vs 25.94 after correction).
-- **Fix:** none.
+## Spec gates
+| Gate | Required | Actual | Pass |
+|---|---|---|---|
+| Usable files / categories | 10+ files, 2+ categories | 11 files (3 pdf, 5 csv, 2 xlsx, 1 eml); spreadsheet, text, code-free but csv/pdf/eml text; categories spreadsheet and text | pass (categories borderline: no database, image or code; spreadsheet plus text = 2) |
+| Large messy files | CSV 20,000+ rows; CSV 10 to 20 printed pages | responses 400,052 rows (23 MB); register 10,550 rows (1.0 MB) | pass |
+| Distractors | 2+ in metadata.json, none labelled in ZIP | learner_confidence_survey_2026.csv, centre_computer_suite_audit_2026.xlsx; ZIP names are neutral | pass |
+| Distractor weight | unused, relevant, ruled out by a shipped fact | judge found both unused and relevant-looking; neither named as carrying the task | pass (not separately arithmetic-tested) |
+| Deliverables | 1 to 3, all in golden | pass_mark_2027.docx, l1_2027_items.xlsx; both in golden/ | pass |
+| Asks | multi-dimensional, unit and rounding stated | 40-row item table plus six regions; whole marks and 2dp stated | pass |
+| Answer shape | many gradable cells downstream of deep step | 40 chances, 40 band flags, 6 regional means | pass |
+| Golden ZIP exact | only requested files | golden.zip 47,821 bytes; golden/ holds exactly the two files | pass (zip listing not opened) |
+| Reads real | no LLM tells, realistic goldens | judge found no authoring language; mess realistic | pass |
+Leak check (separate report) is REVIEW, not LEAK: spec PDF contains 0.20/0.90 band values (legitimate, filed) and some vocabulary overlap.
 
-## Round 1 verdict (verbatim)
+## Gate G reconciliation
+Judge: mechanism method_or_model_selection, stumping_family analytical_non_defect, surface_read_dependency no (borderline), sole_data_defect no. Design note: decisive step is the joint two-cause split (constant, cost per 100 words, everyday advantage) carried to the long mathematical items, classed as separating two explanations for one pattern; clean data still files 22; Layer 1 mess "nothing placed to be caught". These match. The judge did not name a distractor as the surface read. Judge's caveat: if a reviewer reads the bank as a misleading reported number, route to live testing. Design note's easy route (22) and careful route (21) agree with the judge's.
 
-# Judge report, task8
+## Gate H line
+domain: pass (psychometric standard maintenance and equating); layers: pass (L1 position/item codes, duplicates, register variants, preliminary vs final bank; L2 population DIF transport plus regional everyday offsets); decisive_step: analytical; chain: 5 inferences (standard to theta*; Level 1 vs Level 2 shift on shared items; joint two-cause fit extrapolated to long mathematical items; recompute chances and pass mark; regional offsets and re-estimated abilities); one_fact: none that makes it routine.
 
-Order kept: yes. derivation.md was written from prompt.txt and pack/ only, before graded/ was opened.
+## Stump power (Gate F)
+High per the judge: the bank route is clean and passes its own checks (22, every item in band), and the decision needs linking across two populations and extrapolating to a cell with no shared items. The two-cause fit is the field's differential-functioning idea, but the extrapolation to unseen long mathematical items and the cancellation on long everyday items are dataset-specific; recorded for the main thread to weigh against the ladder. Transport of bank difficulties to a second population is a textbook concern a strong solver may reach (stumping 1.3), and the single-cause routes landing on 21 are the intended miss.
 
-- **Verdict:** NOT_DETERMINISTIC (one supplementary cell only; the main recommendation and every other graded figure are forced).
-- **Disposition:** FIX_NOW. File the keying basis of the make-up marks (which scripts were keyed as percent of 50) so one treatment is the literal one; the main call, the bank, the sessions and every other figure stay byte-identical, so only the mean-make-up-mark cells (Central, Capital) need a re-read.
-- **Why:** The mean make-up mark for Central and Capital rests on an unfiled inference: 13 scripts keyed by JT on 2 Sep (makeup_scripts_keyed.csv; 11 are C988-010 to 020, the Wednesday host batch, plus walk-in scripts C988-032 and 033) are all even, seven exceed 50, and no shipped file says they are percentages or what the M26 maximum is. Halving the batch (golden) gives Central 26.4 and Capital 24.5; other defensible treatments give different one-decimal figures (below). Gate C/E on the supplementary ask. Taxonomy: competing_defensible_answer. Fix location: input_files (or the ask).
+## Findings, ranked
+1. Regional means rest on a convention the Step-by-Step does not state (response-weighted centring of regional everyday offsets, offset applied to the 2027 everyday items). Two rival conventions move one region each by one mark. Close in the generator and writeup.
+2. PKN 16.38 and WST 15.61 sit about 0.1 from a rounding edge.
+3. Golden 19.09 vs independent 19.14 and item chances at 2dp vary by 0.01 with calibration; graders should tolerate 0.01.
+4. Surface risk: bank-as-misleading-number reading (judge's borderline note).
+5. Leak check REVIEW items (band values in spec; prompt shell quota 'whether' and docx+xlsx deliverable set over caps) are for the leak process, not the judge.
 
-## Evidence (recomputed)
-Main call. Mapped cards by item_renumbering_2025.csv (all 150 map). Bank as published: A 24.78, B 20.64, C 21.58 (A, rounds 25/21/22). The bank blends taught and untaught candidates on U5/U6 (Term 3 units; "calibration ... on every online response of the August 2026 sitting"). Parsing Appendix B (48 schools) and NZ session dates: observed minus expected on U5/U6 items is about -0.02 before and during the unit and +0.17 once the unit's last week is past, a sharp step with no sessions on the boundary day. Taught-only recalibration (abilities from U1 to U4 items on bank values): A 25.88, B 23.01, C 24.80; unit-shift and untaught-plus-shift variants A 25.93, B 22.9, C 24.82; session bootstrap sd 0.11 to 0.18, C nearer 25 in 100 percent. Counting "during" as taught would dilute to A 24.83, C 21.81, but the data show no effect before completion and the spec's 2027 candidate has finished the course, so it is not licensed. Golden (A 25.89, B 23.02, C 24.80; 6/11/17 Term 3 items; 104 to 176 taught responses per item; 89 percent before completion) reproduces to two decimals. Strand limits hold for all drafts.
-Region table: entered 1035/1213/1915/1289 (Capital/Central/Northern/Southern; 96 exact duplicate rows dropped, 114 W removed, 20 moved-school pairs counted once, same region in every pair), sat online or make-up 1013/1188/1874/1261, make-up 27/37/61/45 (156 roster Yes plus 14 keyed walk-in scripts): all reproduce and match the golden. Counting both entries of moved candidates would give 1040/1217/1918/1297 (fork closed by "candidates" being people and by the same-region pairs; a weaker point but acceptable). Northern 29.0 and Southern 25.1 are forced under every treatment.
-Competing figures for mean make-up mark (Capital / Central): halve the 13-script JT 2-Sep batch 24.5 / 26.4 (golden); halve only the roster Wednesday scripts 010 to 020 and 032: 25.3 / 26.4; halve 010 to 020 only: 26.3 / 26.4; drop marks over 50: 26.0 / 27.4; drop the whole batch: 24.5 / 26.1; halve only marks over 50: 26.6 / 28.0; as keyed 29.0 / 32.3. The golden's choice is the best supported (post-halving batch mean 26.2 against 26.7 elsewhere; parity 1 in 8,192), and the memo's "keyed as percentages" appears in no shipped file, but a careful analyst could defend at least dropping the impossible marks.
-
-## Gates
-- A: pass (all figures reproduce; golden step 4 "keep the later answer after a reconnect" matches no duplicate in the responses and moves nothing; the memo's "percentages" is an unsupported claim).
-- B: pass for the main call (0.35 and the renumbering in the standard-setting record and renumbering file, school sequences in the course review Appendix B, dates in sessions, difficulties in the bank). Make-up mark basis is the only decisive item with no stated rule.
-- C/E: fail on supplementary mean make-up mark, Central and Capital only (forks above). The main ask is pinned by "the draft whose expected mark at the Achieved standard comes closest to 25" and spec s.4 "for a candidate sitting the 2027 paper ... sum of probabilities under the Rasch model on the bank scale"; no fork found.
-- D: pass; difficulty is analysis, not wording.
-- F: stump power good. Naive route (bank as published, or the preliminary run) lands on Paper A with a clean number (24.78); getting to C needs the session-by-school timing join against Appendix B and a taught-only recalibration. Nothing in a shipped file names the opportunity-to-learn issue.
-- G: mechanism: statistical_rigor (calibration population against the target population), stumping_family: analytical_non_defect, surface_read_dependency: no (borderline: the bank figures are correct for the August 2026 population; no number is wrong, the estimand moves), sole_data_defect: no (on clean data the taught-versus-untaught blend still decides).
-- H: domain: pass (Rasch pre-equating and standard-based targeting of a draft form is the field's own work; swapping nouns does not preserve it); layers: pass (Layer 1: card renumbering, duplicate and moved-school entries, mixed date formats, tables in PDFs, UTC against NZ time, roster typed from returns; Layer 2: recalibrating on candidates who have been taught); decisive_step: analytical. The easy route a strong analyst who read everything correctly takes is the bank's final 2026 difficulties, giving Paper A (25 after rounding) when Paper C is the answer.
-- Hygiene: PASS. 17 files, formats csv, xlsx, pdf, json, eml; 258,631-row responses file; distractors candidate_survey_2026.csv, member_bell_times_2026.json, y10sci_course_review sections, standard-setting raw marks on the August forms, preliminary calibration run. No authoring leakage found; dates coherent (spec 4 Nov 2026, email 6 Nov, minute 14 Oct). Not exclusion-level.
-- Cross-batch check: not run (no other tasks available in this folder).
-
-## Fix
-input_files/solution: pin the make-up marks so the literal reading gives 26.4 and 24.5, for example by filing in makeup_scripts_keyed.csv or the roster which scripts were keyed as a percent of 50 (the WHAT, not the halving rule), or restate the ask as the mean of marks out of 50 and make the batch's basis explicit. Do not touch the bank, sessions or Appendix B.
+## Next action for the author
+State the weighted-centring convention for the regional offsets in the filed material or Step-by-Step (or assert it in checks.py with the unweighted rival shown to land on the same marks, or move the regions off the edge), then proceed to stage 5.

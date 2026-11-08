@@ -1,175 +1,105 @@
-"""task8 architecture 17: the ask layer's cracker, mirror and full-includer sheets, run on the cut pack.
-
-Each path is a complete handling of the shipped files; each graded ask figure (entered, sat, make-up candidates and
-make-up mean, each by region) scores a hit when it sits within half a unit of the asked rounding of figures.json.
-The golden path must reproduce figures.json exactly. Prints each path's keep and the pair ceilings (a response on
-the call scores 38 + 7 + 55 L, one off it 5 + 7 + 55 L), stamped with the pack's digest. Exit 1 if the golden path
-misses, the cracker keeps a figure or the full includer keeps two fifths or more."""
-import csv
-import hashlib
+"""task8 architecture 18: the pair ceiling, measured on the cut pack. Two rows, both cleaning every mess item and
+reading every filed rule: the landed run takes the deep step (the two-cause model on the shared items) but pools
+the regions (no regional everyday deviation); the shallow run pre-equates from the bank's own values. Every ask
+figure is scored on both rows against figures.json, on 38 (call and critical components), 7 (instructions) and 55
+(asks), with the shallow run given 5 of partial credit on the call. The asks as the answer blocks grade them: the
+items below the band (2), none above it (1), the twelve patterns items' chances as a group within 0.02 (1) and each
+region's whole mark (1.5 each)."""
 import json
 import os
-import re
-import subprocess
 import sys
 
-import openpyxl
+import numpy as np
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-TASK = os.path.dirname(HERE)
-TARGET = os.path.join(TASK, "target")
-REGIONS = ["Northern", "Central", "Capital", "Southern"]
+sys.path.insert(0, HERE)
+import verify as V  # noqa: E402
 
-
-def digest():
-    h = hashlib.sha256()
-    for f in sorted(os.listdir(TARGET)):
-        h.update(f.encode())
-        h.update(open(os.path.join(TARGET, f), "rb").read())
-    return h.hexdigest()[:16]
-
-
-def load():
-    schools, names = {}, {}
-    with open(os.path.join(TARGET, "member_schools.csv"), newline="") as fh:
-        for r in csv.DictReader(fh):
-            schools[r["school_code"]] = r["region"]
-            names[r["school_name"]] = r["school_code"]
-    online = {}
-    with open(os.path.join(TARGET, "y10sci_aug2026_sessions.csv"), newline="") as fh:
-        for r in csv.DictReader(fh):
-            online[r["entry_no"]] = r["school_code"]
-    wb = openpyxl.load_workbook(os.path.join(TARGET, "entries_register_aug2026.xlsx"), read_only=True)
-    rows = list(wb["Entries"].iter_rows(values_only=True))
-    head = [str(h) for h in rows[0]]
-    entries = [dict(zip(head, r)) for r in rows[1:] if any(v is not None for v in r)]
-    with open(os.path.join(TARGET, "makeup_scripts_keyed.csv"), newline="") as fh:
-        scripts = list(csv.DictReader(fh))
-    txt = subprocess.run(["pdftotext", "-layout", os.path.join(TARGET, "makeup_roster_aug2026.pdf"), "-"],
-                         capture_output=True, text=True, check=True).stdout
-    roster = []
-    for line in txt.splitlines():
-        m = re.search(r"\b(26-\d{5})\b", line)
-        if not m:
-            continue
-        s = re.search(r"\b(C\d{3}-\d{3})\b", line)
-        h = re.search(r"\b(C\d{3})\b(?!-)", line)
-        roster.append(dict(entry=m.group(1), script=s.group(1) if s else "", home=h.group(1) if h else None))
-    return schools, online, entries, scripts, roster
-
-
-def entered(schools, entries, how):
-    seen, exact, out = set(), set(), {r: 0 for r in REGIONS}
-    for e in entries:
-        if str(e["Status"]).strip() != "E":
-            continue
-        t = tuple(e.values())
-        if t in exact:
-            continue
-        exact.add(t)
-        if how == "nsn":
-            key = ("n", e["NSN"]) if e["NSN"] not in (None, "") else ("e", e["Entry no"])
-        elif how == "surname_dob":
-            key = (e["Surname"], str(e["Date of birth"]))
-        else:
-            key = (e["First name"], e["Surname"], str(e["Date of birth"]))
-        if key in seen:
-            continue
-        seen.add(key)
-        out[schools[e["School code"]]] += 1
-    return out
-
-
-def placed(schools, entries, scripts, roster, how):
-    """Each keyed script's region (None when the handling drops it). how: 'keyed' (the school code keyed),
-    'roster' (the typed roster's home school; unmatched scripts dropped), 'roster_keyed' (unmatched scripts at the
-    code keyed), 'golden' (unmatched scripts through the entry number keyed to the entries register)."""
-    home = {x["script"]: x["home"] for x in roster if x["script"]}
-    school_of = {}
-    for e in entries:
-        school_of.setdefault(e["Entry no"], e["School code"])
-    out = []
-    for s in scripts:
-        if how == "keyed":
-            out.append(schools[s["school_code"]])
-        elif s["script_no"] in home:
-            out.append(schools[home[s["script_no"]]])
-        elif how == "roster_keyed":
-            out.append(schools[s["school_code"]])
-        elif how == "golden" and s["entry_no"]:
-            out.append(schools[school_of[s["entry_no"]]])
-        else:
-            out.append(None)
-    return out
-
-
-def blocks(schools, online, entries, scripts, roster, e_how, s_how, pct):
-    e = entered(schools, entries, e_how)
-    sat = {r: 0 for r in REGIONS}
-    for entry, code in online.items():
-        sat[schools[code]] += 1
-    n = {r: 0 for r in REGIONS}
-    mk = {r: [] for r in REGIONS}
-    if s_how == "roster_lines":
-        for x in roster:
-            sat[schools[x["home"]]] += 1
-            n[schools[x["home"]]] += 1
-        places = placed(schools, entries, scripts, roster, "roster")
-    else:
-        places = placed(schools, entries, scripts, roster, s_how)
-        for reg in places:
-            if reg:
-                sat[reg] += 1
-                n[reg] += 1
-    wrong = {s["batch"] for s in scripts if float(s["mark"]) > 50}     # a batch keyed off the 50-mark scale
-    for s, reg in zip(scripts, places):
-        if not reg:
-            continue
-        v = float(s["mark"])
-        if (pct == "over50" and v > 50) or (pct == "batch" and s["batch"] in wrong):
-            v /= 2
-        mk[reg].append(v)
-    mean = {r: (round(sum(v) / len(v), 1) if v else None) for r, v in mk.items()}
-    return e, sat, n, mean
+S = V.S
 
 
 def main():
-    fig = json.load(open(os.path.join(HERE, "figures.json")))
-    gold = [({r: float(fig[k][r]) for r in REGIONS}, half) for k, half in
-            (("entered", 0.5), ("sat", 0.5), ("makeup_candidates", 0.5), ("makeup_mean", 0.05))]
-    data = load()
-    paths = {"golden": ("full", "golden", "batch"),
-             "cracker": ("nsn", "keyed", "batch"),
-             "mirror": ("nsn", "keyed", "batch"),
-             "full includer": ("full", "roster", "over50"),
-             "full includer, unmatched at the code keyed": ("full", "roster_keyed", "over50"),
-             "full includer, batch whole": ("full", "roster", "batch")}
-    keep = {}
-    for name, (e_how, s_how, pct) in paths.items():
-        got = blocks(*data, e_how, s_how, pct)
-        hits = []
-        for (g, half), v in zip(gold, got):
-            hits += [v[r] is not None and abs(v[r] - g[r]) <= half + 1e-9 for r in REGIONS]
-        keep[name] = sum(hits) / len(hits)
-        print("%-44s keep %2d of %d (%.2f)  %s" % (name, sum(hits), len(hits), keep[name],
-                                                    " | ".join(str(x) for x in got)))
-    on = 38 + 7
-    off = 5 + 7
-    lfi = max(keep[k] for k in keep if k.startswith("full includer"))
-    print("pack %s" % digest())
-    print("pair, the full includer on the call and the mirror off it: %.1f" % ((on + 55 * lfi + off + 55 * keep["mirror"]) / 2))
-    print("pair, the full includer and the cracker both on the call: %.1f" % ((on + 55 * lfi + on + 55 * keep["cracker"]) / 2))
-    print("pair, two full includers on the call: %.1f" % (on + 55 * lfi))
-    bad = []
-    if keep["golden"] < 1.0:
-        bad.append("the golden path does not reproduce figures.json")
-    if keep["cracker"] > 0.0:
-        bad.append("the cracker keeps an ask figure")
-    if lfi >= 0.4:
-        bad.append("a full includer keeps two fifths or more")
-    for b in bad:
-        print("FAIL " + b)
-    return 1 if bad else 0
+    fig = json.load(open(V.FIG))
+    papers, bank, latest, meta = V.conform()
+    s1 = sorted(s for s, (c, p) in meta.items() if p.startswith("LN1"))
+    s2 = sorted(s for s, (c, p) in meta.items() if p.startswith("LN2"))
+    i1 = sorted({c for nm, cs in papers.items() if nm.startswith("LN1") and not nm.endswith("2027") for c in cs})
+    i2 = sorted({c for nm, cs in papers.items() if nm.startswith("LN2") for c in cs})
+    X1, X2 = V.matrix(s1, i1, latest), V.matrix(s2, i2, latest)
+    ref = [i1.index(c) for c in papers["LN1-2022"]]
+    b1, se1, _ = V.jml(X1, ref, -0.96)
+    b2, se2, _ = V.jml(X2, [i2.index(c) for c in papers["LN2-2022"]], 0.50)
+    shared = [c for c in i1 if bank[c]["pool"] == "Level 2"]
+    d = np.array([b1[i1.index(c)] - b2[i2.index(c)] for c in shared])
+    se = np.array([np.hypot(se1[i1.index(c)], se2[i2.index(c)]) for c in shared])
+    words = np.array([bank[c]["words"] for c in shared], float)
+    ev = np.array([bank[c]["context"] == "everyday" for c in shared], float)
+    A = np.column_stack([np.ones_like(d), words / 100.0, -ev])
+    wgt = np.sqrt(1 / se ** 2)
+    coef = np.linalg.lstsq(A * wgt[:, None], d * wgt, rcond=None)[0]
+    p27 = papers["LN1-2027"]
+    # the landed run: the golden difficulties, the regions pooled
+    bl = np.array([b1[i1.index(c)] if c in i1 else b2[i2.index(c)] + coef[0] + coef[1] * bank[c]["words"] / 100.0
+                   for c in p27])
+    th = V.solve(np.array([b1[k] for k in ref]), 26)
+    # the shallow run: the bank's values throughout
+    bs = np.array([bank[c]["b"] for c in p27])
+    ths = V.solve(np.array([bank[c]["b"] for c in papers["LN1-2022"]]), 26)
+    reg_of = {r["centre"]: r["region_name"] for r in V.read_csv("pacb_learning_centres.csv")}
+    sat = {}
+    for r in V.read_csv("pacb_candidate_register_2022_2026.csv"):
+        if r["status"] == "Sat" and r["candidate_id"]:
+            lv = "LN1" if r["level"] in ("Level 1", "L1") else "LN2"
+            sat[(r["candidate_id"], "%s-%s" % (lv, r["paper_year"]))] = r["sat_at"]
+    s26 = [s for s in s1 if meta[s][1] == "LN1-2026"]
+    p26 = papers["LN1-2026"]
+
+    def regions(b_items, b27):
+        X26 = np.full((len(s26), len(p26)), np.nan)
+        for k, s in enumerate(s26):
+            for j, c in enumerate(p26):
+                X26[k, j] = latest[(s, c)][1]
+        th26 = V.wle(X26, b_items, np.zeros(X26.shape))
+        e = np.array([S(t - b27).sum() for t in th26])
+        out = {}
+        for nm in fig["regions"]:
+            sel = np.array([reg_of[sat[meta[s]]] == nm for s in s26])
+            out[nm] = int(round(float(e[sel].mean())))
+        return out
+    reg_land = regions(np.array([b1[i1.index(c)] for c in p26]), bl)
+    reg_shal = regions(np.array([bank[c]["b"] for c in p26]), bs)
+    pr_pos = ["Q%02d" % (k + 1) for k, c in enumerate(p27) if bank[c]["pool"] == "Level 2"]
+    ch_l = {("Q%02d" % (k + 1)): round(float(S(th - bl[k])), 2) for k in range(len(p27))}
+    ch_s = {("Q%02d" % (k + 1)): round(float(S(ths - bs[k])), 2) for k in range(len(p27))}
+    units = {"patterns chances": 1.0}
+    units["below band"] = 2.0
+    units["above band"] = 1.0
+    for nm in fig["regions"]:
+        units["region " + nm] = 1.5
+    tot = sum(units.values())
+
+    def score(ch, reg):
+        got = units["patterns chances"] * all(abs(ch[q] - fig["chances"][q]) <= 0.02 for q in pr_pos)
+        below = [q for q, v in ch.items() if v < 0.20]
+        above = [q for q, v in ch.items() if v > 0.90]
+        got += units["below band"] * (below == fig["items_below_band"])
+        got += units["above band"] * (above == fig["items_above_band"])
+        for nm in fig["regions"]:
+            got += units["region " + nm] * (reg[nm] == fig["regions"][nm])
+        return got / tot
+    lc = score(ch_l, reg_land)
+    ls = score(ch_s, reg_shal)
+    landed = 38 + 7 + 55 * lc
+    shallow = 5 + 7 + 55 * ls
+    pair = (landed + shallow) / 2
+    print("landed run (deep step, regions pooled): asks kept %.3f, score %.1f" % (lc, landed))
+    print("shallow run (the bank's values): asks kept %.3f, score %.1f" % (ls, shallow))
+    print("pair, one on the call and one off: %.1f" % pair)
+    print("pair, both on the call: %.1f" % landed)
+    print("shallow keep (per cent of ask weight): %.1f" % (100 * ls))
+    json.dump(dict(landed=round(landed, 1), shallow=round(shallow, 1), pair=round(pair, 1), lc=round(lc, 3),
+                   ls=round(ls, 3)), open(os.path.join(HERE, "ceiling.json"), "w"), indent=1)
+    return 0 if pair <= 50 and ls <= 0.25 else 1
 
 
 if __name__ == "__main__":

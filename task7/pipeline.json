@@ -1,33 +1,34 @@
 {
  "task": "task7",
- "status": "PAUSED",
+ "status": "READY",
  "domain": "banking-credit-financial-risk",
- "objective": "opportunity-sizing-decision",
+ "objective": "forecasting",
  "stage": 5,
- "stage_name": "ship",
+ "stage_name": "ready",
  "updated": "2026-11-08",
- "stump": "The default path values each 2027 support package at the supported borrower's own expected write-off from the IFRS 9 run and fills the envelope with Kinloch Engineering and Ridgeway Precast, when several Ruahine borrowers take most of their receipts from Matai Valley Foods and in the bank's own record defaulted far more often after their main payer defaulted, so a package at Matai keeps more write-off off the book.",
- "architecture": 4,
+ "stump": "CRE-LGD-3 on the register's carried values files €0.2 million (nil); the shortfall of the inspection at default against the carried value, modelled on the years since the inspection behind it and carried to a book staler than the record, files €2.0 million",
+ "architecture": 5,
  "loops": 0,
  "precut": {
   "exit": 0,
   "date": "2026-11-08"
  },
  "leak": {
-  "leak_py": "REVIEW (no LEAK) on target.zip md5 cec7d9d873c3ca13eb435a80694cf4f4",
-  "reader": "two passes: no decisive-step sentence, no ranking or helper file, nothing reads as the answer; question 5 reads terms 3.5 as the whole book's change in expected write-off (the golden's estimand); question 6 analytical"
+  "leak_py": "REVIEW (sweeps 2, 3, 4, 8, 9 ruled harmless in the design note)",
+  "reader": "reader 1: question 5 a main-call fork (the memo's V) and two realism tells, fixed; reader 2: clean, question 6 an analytical modelling choice; evenly spaced numbers fixed"
  },
  "duplicate_check": {
-  "heart": "WARN, answered in the design note's Guard row",
-  "surface": "clean, no unplanned persona",
-  "nearest": "task132 and task173 at 0.09"
+  "heart": "WARN (overuse and repeat WARNs answered in ## Draw)",
+  "surface": "clean (personas Colm Hourican, Geraldine Harkins)",
+  "nearest": "0.06 (task5 v2, task7 v4)"
  },
  "judge": {
-  "verdict": "DETERMINISTIC",
-  "disposition": "APPROVE (re-judge after pass 1's FIX_NOW on the control count, fixed in the write-up)",
-  "report": "task7/determinism_check_report.md (pass 1), task7/determinism_check_report_rejudge.md (re-judge)",
-  "gate_g": "statistical_rigor, analytical_non_defect, surface_read_dependency no, sole_data_defect no",
-  "gate_h": "domain pass, layers pass, decisive_step analytical"
+  "verdict": "DETERMINISTIC (pass 2; pass 1 SOLUTION_WRONG on secondary block figures, repaired)",
+  "disposition": "APPROVE (pass 2, no fix; two optional wording notes taken)",
+  "gate_g": "method_or_model_selection, analytical_non_defect, surface_read_dependency no, sole_data_defect no",
+  "gate_h": "domain pass, layers pass, decisive step analytical, chain 5 inferences, one fact none that makes it routine",
+  "report": "determinism_check_report.md",
+  "rejudge_reproduced": "total €2.01m (€1.23m and €0.78m), the same five, bootstrap interval €1.82m to €2.29m centred in the €2.0m cell"
  },
  "returned": [
   {
@@ -61,9 +62,22 @@
    "portal": "FAILED_TO_STUMP: both responses landed the call, each filing the golden split exactly (Royal Marchford 508, Wendlebury 350, Holmford 120, Cleeve Park 222, Ashby Vale none, 6,816 bed-days freed).",
    "lesson": "The stump (the South depot's equipment wait running alongside the care wait, so a package frees none of those nights) is a hidden overlap that a careful response finds in the data: both did. A stronger stump needs the field's full method, done carefully, to file the wrong call, with no fit, back-test or reconciliation on the history able to pick the golden route.",
    "repair": "re-root (architecture 4) in a new client domain and world, 2026-11-07"
+  },
+  {
+   "date": "2026-11-08",
+   "source": "triage",
+   "repair": "rubric",
+   "moves": "security, commitment and sector-share asks and the per-borrower list replaced by the fall-back intake for each borrower taken on and the intake at every envelope from NZ$4.5 to 6.5 million; critical components reworded with numbers frozen; target.zip byte-identical",
+   "freeze": "rubric mode PASS with --allow commitment.Northgate Print,sector_counts.I.1 (coincident values)"
+  },
+  {
+   "date": "2026-11-08",
+   "source": "triage",
+   "repair": "design",
+   "note": "round 2 on the re-sited asks: both runs landed the call; architecture 4 spent with its world (Ruahine Bank); every file of architectures 1 to 4 removed at the author's word"
   }
  ],
- "resume": "migrated from Project Mark task127; re-read the build against the Sulfur standard (deep reasoning: three or more dependent inferences with a real modeling judgment, the one-fact test, the banned kinds) and the Sulfur submission shape (golden ZIP, four answer blocks), then /build task7 from the stage that fails",
+ "resume": "stage 6: the author uploads prompt.txt and target.zip; when the two runs come back, /triage-runs task7 records both scores and routes the build",
  "approved": null,
  "delivered": "2026-11-08",
  "portal": null,
@@ -172,12 +186,58 @@
  "restored": "2026-10-14: architecture 3 (a full refresh at the author's request) drew judge SEND_BACK at stage 4, and the author chose to restore this architecture as task7's live build (pack unchanged from SHIPPED 59aaaba)",
  "portal_status": "",
  "portal_status_date": "",
- "shipped_zip_md5": "cec7d9d873c3ca13eb435a80694cf4f4",
  "migrated_from": {
   "project": "Mark",
   "task": "task127",
   "status_in_mark": "SHIPPED",
   "date": "2026-11-08",
   "note": "moved from Project Mark at the author's word: architecture 2 landed on the Mark portal and architecture 4 shipped there on 2026-11-08, pending; carried on here for the Sulfur bar"
+ },
+ "runs": {
+  "run1": null,
+  "run2": null,
+  "average": null,
+  "counterfactual_average": null,
+  "first_wrong_step": {
+   "run1": "",
+   "run2": ""
+  },
+  "triage": "",
+  "recorded": "",
+  "report": "",
+  "history": [
+   {
+    "round": 1,
+    "run1": 98,
+    "run2": 58,
+    "average": 78.0,
+    "verdict": "FIX_ASKS",
+    "architecture": 4,
+    "date": "2026-11-08"
+   },
+   {
+    "round": 2,
+    "architecture": 4,
+    "date": "2026-11-08",
+    "run1": "landed",
+    "run2": "landed",
+    "average": null,
+    "verdict": "REDESIGN",
+    "note": "the author reported both runs on the golden (Kinloch Engineering and Matai Valley Foods); run texts not pasted"
+   }
+  ]
+ },
+ "paper_pair": 42.3,
+ "subdomain": "expected-credit-loss-provisioning",
+ "call": "€2.0 million of 2027 credit loss on commercial property lending (investment €1.25 million, owner-occupied €0.75 million)",
+ "gates": {
+  "checks": "91 passed",
+  "verify": "10 of 10",
+  "twice": "byte-identical after the stage 4 fixes",
+  "figures_check": "PASS, 69 figures",
+  "voice_check": "PASS",
+  "metadata_scrub": "clean (target and golden)",
+  "guard_validate": "28 cards, 0 invalid",
+  "ceiling": "pair 42.3, shallow keep 15.6 per cent"
  }
 }

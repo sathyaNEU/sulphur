@@ -152,6 +152,22 @@ def _word(parts, company):
     return list(parts)
 
 
+def _powerpoint(parts, company):
+    a = parts["docProps/app.xml"]
+    n = sum(1 for k in parts if re.fullmatch(r"ppt/slides/slide\d+\.xml", k))
+    a = re.sub(rb"<Application>[^<]*</Application>", b"<Application>Microsoft Office PowerPoint</Application>", a)
+    a = re.sub(rb"<AppVersion>[^<]*</AppVersion>", b"<AppVersion>16.0000</AppVersion>", a)
+    a = re.sub(rb"<Company/>|<Company>[^<]*</Company>", b"<Company>" + company.encode() + b"</Company>", a)
+    a = re.sub(rb"<TotalTime>[^<]*</TotalTime>", b"<TotalTime>96</TotalTime>", a)
+    a = re.sub(rb"<Slides>[^<]*</Slides>", ("<Slides>%d</Slides>" % n).encode(), a)
+    parts["docProps/app.xml"] = a
+    parts.pop("docProps/thumbnail.jpeg", None)
+    parts["_rels/.rels"] = re.sub(rb'<Relationship [^>]*metadata/thumbnail[^>]*/>', b"", parts["_rels/.rels"])
+    if not any(k.endswith((".jpeg", ".jpg")) for k in parts):
+        parts["[Content_Types].xml"] = re.sub(rb'<Default Extension="jpeg"[^>]*/>', b"", parts["[Content_Types].xml"])
+    return list(parts)
+
+
 def finish_office(path, created, modified, company):
     """lay an xlsx or docx out as Office saves it, with the document's own created and modified stamps"""
     with zipfile.ZipFile(path) as z:
@@ -160,6 +176,9 @@ def finish_office(path, created, modified, company):
     _core(parts, created, modified)
     if path.endswith(".xlsx"):
         names = _excel(parts, company)
+    elif path.endswith(".pptx"):
+        keep = set(_powerpoint(parts, company))
+        names = [n for n in order if n in keep]
     else:
         _word(parts, company)
         names = [n for n in order if n in parts]

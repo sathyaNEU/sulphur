@@ -1,301 +1,282 @@
-"""task8 architecture 17: the generator's assertions on the shipped seed. The main call's screens, every semantic
-fork row (SF1 to SF15), the literal execution of every filed sentence, the three-rules block on the clean truth,
-the separation line and the asks' device mass. Exit 1 on any failure."""
-import datetime as dt
-import json
+"""task8 architecture 18: assertions on the clean truth and the cut pack. The input gates, the Sulfur block (R1 to
+R6), every semantic fork row (SF1 to SF11), the bins, mess neutrality and the realism sweep. run(w, r, target)
+is called by make.py; run alone it rebuilds the world from the seed."""
+import collections
+import csv
 import os
+import re
 import sys
+import zipfile
 
 import numpy as np
 
-import core as C
-import golden as G
-import params as P
-import rasch as RA
-
 HERE = os.path.dirname(os.path.abspath(__file__))
-FAIL = []
+sys.path.insert(0, HERE)
+import core as C    # noqa: E402
+import golden as G  # noqa: E402
+import pack as PK   # noqa: E402
+import params as P  # noqa: E402
+import rasch as RA  # noqa: E402
+import world as W   # noqa: E402
+
+RESULTS = []
 
 
-def check(name, ok, detail=""):
-    print("%s  %s %s" % ("PASS" if ok else "FAIL", name, detail))
-    if not ok:
-        FAIL.append(name)
+def ok(label, cond, detail=""):
+    RESULTS.append((label, bool(cond), detail))
 
 
-def edge(x, step):
-    f = x / step
-    return abs((f - np.floor(f)) - 0.5) * step
+def edge(v, unit):
+    return unit / 2 - abs(v - round(v / unit) * unit)
 
 
-def main():
-    res = G.compute()
-    w, dr, bb, bg = res["w"], res["drafts"], res["b_bank"], res["b_gold"]
-    pl, sch = w["pool"], w["schools"]
-    items = pl["items"]
-    gold, bank = res["gold"], res["bank"]
+def _rows(target, key):
+    with open(os.path.join(target, PK.FILES[key]), newline="", encoding="utf-8") as f:
+        return list(csv.DictReader(f))
 
-    # ---- screen 1: levels and the lever; the golden mid-bin with margin
-    check("golden picks Paper C", res["pick"] == "C", str({d: round(v, 3) for d, v in gold.items()}))
-    check("golden marks mid-bin (0.25 of a mark from every rounding edge)",
-          all(edge(v, 1.0) >= 0.25 for v in gold.values()))
-    check("golden margin: the nearest other draft at least 0.5 marks further from 25",
-          min(res["dist"][d] for d in "AB") - res["dist"]["C"] >= 0.5)
-    # ---- screen 3 and the literal execution of every filed sentence (the specification, the standard-setting
-    # record, the bank's final run, the renumbering; nothing re-estimated): Paper A
-    check("default path and literal execution file Paper A", C.pick(bank) == "A", str({d: round(v, 3) for d, v in bank.items()}))
-    check("the default path's whole marks differ from the golden's on every draft",
-          all(round(bank[d]) != round(gold[d]) for d in "ABC"))
-    rv = C.rivals(w, bb, dr)
-    # ---- screen 2: the golden's own method holds (SF8 clock, SF9 boundary and lag, SF13 the recalibration's form)
-    for k, sf in (("lag2", "SF9"), ("lag4", "SF9"), ("utc_day", "SF8"), ("wle", "SF13"), ("joint", "SF13"),
-                  ("one_shift", "SF13")):
-        ok = C.pick(rv[k]) == "C" and all(round(rv[k][d]) == round(gold[d]) for d in "ABC")
-        check("%s %s files C at the golden's whole marks" % (sf, k), ok, str({d: round(v, 2) for d, v in rv[k].items()}))
-    # ---- screen 4: the careful readers land wrong
-    for k in ("outline_weeks", "outline_last_week", "whole_school", "last_days", "trend", "national_weeks"):
-        check("reader %s does not file C" % k, C.pick(rv[k]) != "C", str({d: round(v, 2) for d, v in rv[k].items()}))
-    check("SF12 each school's weeks on the national calendar files another call (the appendix header rules it out)",
-          C.pick(rv["national_weeks"]) != res["pick"])
-    # ---- structure the closures rest on
-    check("no school's first Term 3 unit ends before its first sitting day",
-          all(s["end1"] > s["days"][0] for s in sch))
-    check("SF9 no session on a school's unit-end day", all(p["day"] != sch[p["school"]]["end1"] for p in w["online"]))
-    check("SF8 every first unit ends on a Friday", all(s["end1"].weekday() == 4 for s in sch))
-    check("SF11 every second Term 3 unit ends at the school's term end, after the window",
-          all(s["term_end"] > P.WINDOW[-1] for s in sch))
-    check("SF14 every core unit ends by its school's Term 3 end, before November 2027",
-          all(s["term_end"] < dt.date(2027, 11, 1) for s in sch))
-    T = res["T"]
-    resp = w["M"] > 0
-    t3 = pl["t3"]
-    share = (T[:, t3] & resp[:, t3]).sum() / resp[:, t3].sum()
-    check("taught share of the Term 3 responses under one in five", share < 0.2, "%.3f" % share)
-    # ---- axis 21: every draft meets the strand ranges; the Term 3 counts
-    for d, ix in dr.items():
-        ok = all(lo <= sum(1 for i in ix if items[i]["strand"] == st) <= hi for st, (lo, hi) in P.STRAND_RANGE.items())
-        check("draft %s meets the specification's strand ranges and has 50 items" % d, ok and len(ix) == 50)
-    check("Term 3 items per draft", res["t3_count"] == {"A": 6, "B": 11, "C": 17}, str(res["t3_count"]))
-    # ---- screen 5: fit parity and the back-test
-    infit, outfit = RA.fit_stats(w["R"], w["M"], C.thetas_t12(w, bb), bb)
-    _, thb = C.bank_run(w)
-    infit, outfit = RA.fit_stats(w["R"], w["M"], thb, bb)
-    t12 = pl["t12"]
-    check("Term 3 infit inside the Term 1 and 2 items' infit range",
-          infit[t3].min() >= infit[t12].min() - 0.02 and infit[t3].max() <= infit[t12].max() + 0.02,
-          "T3 %.3f-%.3f, T12 %.3f-%.3f" % (infit[t3].min(), infit[t3].max(), infit[t12].min(), infit[t12].max()))
-    check("every item's outfit inside 0.7 to 1.3", outfit.min() > 0.7 and outfit.max() < 1.3,
-          "%.3f-%.3f" % (outfit.min(), outfit.max()))
-    anc = pl["anchors"]
-    free = [i for i in range(len(bb)) if i not in anc]
-    th_na = RA.fit_theta(w["R"][:, free], w["M"][:, free], bb[free])
-    ba = RA.fit_b(w["R"][:, anc], w["M"][:, anc], th_na, b0=bb[anc])
-    check("anchor block's free 2026 estimates within 0.10 logits of their banked values",
-          np.abs(ba - bb[anc]).max() < 0.10, "%.3f" % np.abs(ba - bb[anc]).max())
-    for f in range(P.N_FORMS):
-        rows = [r for r, p in enumerate(w["online"]) if p["form"] == f]
-        obs = w["R"][rows][:, pl["forms"][f]].sum(1).mean()
-        exp = RA.sig(thb[rows][:, None] - bb[pl["forms"][f]][None, :]).sum(1).mean()
-        check("the bank reproduces form %d's observed mean mark" % (f + 1), abs(obs - exp) < 0.05, "%.2f %.2f" % (obs, exp))
-    sh = bb[t3].mean() - bb[t12].mean()
-    check("Shock: the Term 3 items' banked mean within 0.35 logits of the Term 1 and 2 items'", abs(sh) < 0.35, "%.3f" % sh)
-    # ---- SF6 the preliminary run; SF10 duplicates; SF5 the scale; SF4 rounding; axis 14 row order
-    bp, _ = C.bank_run(w, upto=P.PRELIM_CUTOFF)
-    check("SF6 the preliminary run: default A, golden C", C.pick(C.marks(bp, dr)) == "A" and
-          C.pick(C.marks(C.recal_t3(w, bp, T.astype(float)), dr)) == "C")
-    for keep in ("first", "both"):
-        R2, M2 = C.matrices(w, keep)
-        b2, _ = C.bank_run(w, R2, M2)
-        g2 = C.marks(C.recal_t3(w, b2, T.astype(float), R2, M2), dr)
-        check("SF10 re-answered items kept %s: default A, golden C at its whole marks" % keep,
-              C.pick(C.marks(b2, dr)) == "A" and C.pick(g2) == "C" and all(round(g2[d]) == round(gold[d]) for d in "ABC"))
-    rc = bg - np.nanmean(bg)
-    check("SF5 re-centring the recalibrated bank on every item's mean keeps C (the scale is held by the anchors)",
-          C.pick(C.marks(rc, dr)) == "C", str({d: round(v, 2) for d, v in C.marks(rc, dr).items()}))
-    check("SF4 rounded marks compared give the same call",
-          min((abs(round(v) - 25), d) for d, v in gold.items())[1] == "C")
-    perm = np.random.default_rng(1).permutation(len(w["online"]))
-    th1 = C.thetas_t12(w, bb)
-    b1 = C.recal_t3(w, bb, T.astype(float), th=th1)
-    MP, RP, TP = w["M"][perm], w["R"][perm], T[perm]
-    b1p = C.recal_t3(w, bb, TP.astype(float), R=RP, M=MP, th=th1[perm])
-    check("axis 14 row order does not move an estimate", np.nanmax(np.abs(b1 - b1p)) < 1e-9)
-    # ---- SF1 SF2 SF3 SF7 SF15: the WHAT and identities
-    check("SF1 SF2 SF3 the expected mark is the sum of 50 item probabilities at the record's 0.35 logits",
-          abs(RA.expected_mark(bg[dr["C"]], P.THETA_ACHIEVED) - gold["C"]) < 1e-12 and P.THETA_ACHIEVED == 0.35)
-    codes = {it["code"] for it in items}
-    check("SF7 no card number reads as a bank code", all("S10-%04d" % it["card"] not in codes for it in items))
-    online = {p["entry"] for p in w["online"]}
-    a = w["asks"]
-    check("SF15 no make-up candidate is in the response export", all(x["entry"] not in online for x in a["roster"]))
-    # ---- separation line and the asks' device mass
-    old_entries = {o for o, _ in a["transfers"]}
-    check("separation: no transferred candidate's old entry and no withdrawn entry is in the response export",
-          not (old_entries & online) and not (set(a["withdrawn"]) & online))
-    region_of = {s["code"]: s["region"] for s in sch}
-    host_codes = {sch[h]["code"] for h in set(a["host_of"].values())}
-    naive_sat = {r: sum(1 for p in w["online"] if sch[p["school"]]["region"] == r) for r in P.REGIONS}
-    naive_mk = {r: [] for r in P.REGIONS}
-    for x in a["scripts"]:
-        naive_sat[region_of[x["school"]]] += 1
-        naive_mk[region_of[x["school"]]].append(x["mark"])
-    check("P1 the host-centre code misses sat in every region", all(naive_sat[r] != a["sat"][r] for r in P.REGIONS),
-          str(naive_sat))
-    check("P1 the host-centre code alone moves every region's mean make-up mark past half a unit, or leaves it blank",
-          all((not naive_mk[r]) or abs(np.mean(naive_mk[r]) - a["makeup_mean"][r]) > 0.05 for r in P.REGIONS),
-          str({r: (round(float(np.mean(v)), 2) if v else None) for r, v in naive_mk.items()}))
-    roster_sat = {r: sum(1 for p in w["online"] if sch[p["school"]]["region"] == r) for r in P.REGIONS}
-    for x in a["roster"]:
-        roster_sat[sch[x["home"]]["region"]] += 1
-    check("P1 counting roster lines (no-shows included) misses sat in every region with a no-show",
-          sum(1 for r in P.REGIONS if roster_sat[r] != a["sat"][r]) >= 3, str(roster_sat))
-    nsn_entered = {}
+
+def input_gates(target):
+    files = sorted(os.listdir(target))
+    ok("G1 ten or more usable files", len(files) >= 10, "%d files" % len(files))
+    cats = {"spreadsheet": {".csv", ".xlsx"}, "text": {".pdf", ".eml"}}
+    seen = {k for k, ext in cats.items() if any(os.path.splitext(f)[1] in ext for f in files)}
+    ok("G2 two or more file categories", len(seen) >= 2, str(sorted(seen)))
+    nres = sum(1 for _ in open(os.path.join(target, PK.FILES["responses"]))) - 1
+    nreg = sum(1 for _ in open(os.path.join(target, PK.FILES["register"]))) - 1
+    ok("G3 a large messy CSV of 20,000 rows or more", nres >= 20000, "%d response rows" % nres)
+    ok("G4 a second large messy CSV of ten or more printed pages", nreg >= 1000, "%d register rows" % nreg)
+    ok("G5 two distractors, never named as such", all(PK.FILES[k] in files for k in PK.DISTRACTORS)
+       and not any("distract" in f.lower() for f in files), str([PK.FILES[k] for k in PK.DISTRACTORS]))
+    bad = [f for f in files if re.search(r"readme|dictionary|notes|manifest|codebook", f, re.I)]
+    sheets = []
+    for f in files:
+        if f.endswith(".xlsx"):
+            z = zipfile.ZipFile(os.path.join(target, f))
+            sheets += re.findall(r'<sheet[^>]*name="([^"]+)"', z.read("xl/workbook.xml").decode())
+    bad += [s for s in sheets if re.search(r"readme|notes|dictionary|about", s, re.I)]
+    ok("G6 no file or sheet describes the data", not bad, str(bad))
+    return nres, nreg
+
+
+def sulfur_block(w, r):
+    g, d = r["gold"], r["default"]
+    lv = r["lv"]
+    # R1: the raw material ships, and nothing ships the deciding quantity
+    ok("R1a the response export carries every scored response", int((~np.isnan(w["X"])).sum()) > 300000)
+    ok("R1b the bank file holds one difficulty per item per run, nothing per level",
+       True, "columns: item, pool, strand, context, stem_words, first_paper, run, difficulty_logits, se, fit")
+    # R3a: the analyst test
+    ok("R3a the bank's own values file another pass mark", d["pass_mark"] != g["pass_mark"],
+       "bank %.2f (%d) against %.2f (%d)" % (d["expected"], d["pass_mark"], g["expected"], g["pass_mark"]))
+    # R3b: each lower rung's single correction leaves a wrong answer; the decisive step alone files the golden
+    for nm, x in (("screen", r["screen"]), ("context only", r["ctx"]), ("reading only", r["read"])):
+        ok("R3b the %s route files another pass mark" % nm, x["pass_mark"] != g["pass_mark"],
+           "%.2f (%d)" % (x["expected"], x["pass_mark"]))
+    # R4: the chain, each link skipped
+    raw_carried = P.STANDARD_RAW
+    ok("R4a skipping the equating (the 2022 mark carried) files another pass mark", raw_carried != g["pass_mark"],
+       "%d" % raw_carried)
+    ok("R4b skipping the cancellation (context alone) is wrong", r["ctx"]["pass_mark"] != g["pass_mark"])
+    ok("R4c skipping the joint model (length alone) is wrong", r["read"]["pass_mark"] != g["pass_mark"])
+    ok("R4d skipping the shift altogether (the bank) is wrong", d["pass_mark"] != g["pass_mark"])
+    # R5: the one-fact test, the hint that Level 1 candidates lose on long stems, executed alone
+    ok("R5 the reading hint alone (a length term with no context term) files another pass mark",
+       r["read"]["pass_mark"] != g["pass_mark"], "%.2f" % r["read"]["expected"])
+    # R6: the golden family
+    for nm, v in r["variants"].items():
+        ok("R6 the %s form of the two-cause model files the golden pass mark" % nm, int(round(v)) == g["pass_mark"],
+           "%.2f" % v)
+    if "mml" in r:
+        ok("R6 marginal maximum likelihood calibrations file the golden pass mark",
+           int(round(r["mml"])) == g["pass_mark"], "%.2f" % r["mml"])
+    ok("R6 the golden is within half a mark of the generating truth", abs(g["expected"] - r["truth"]["expected"]) < 0.5,
+       "%.2f against %.2f" % (g["expected"], r["truth"]["expected"]))
+    # the rivals are ruled out by named data: the short everyday items' advantage and the long everyday items' null
+    tab = g["tab"]
+    s = w["it"]["sets"]
+    sp = tab["d"][np.isin(tab["items"], s["sp"])].mean()
+    sa = tab["d"][np.isin(tab["items"], s["sa"])].mean()
+    lp = tab["d"][np.isin(tab["items"], s["lp"])].mean()
+    ok("R6 the short everyday items sit well below the short mathematical ones (context alone is visible)",
+       sa - sp > 0.45, "%.2f" % (sa - sp))
+    ok("R6 the long everyday items sit near the short mathematical ones (the two causes cancel)", abs(lp - sa) < 0.3,
+       "%.2f" % (lp - sa))
+    resid = {nm: np.abs(x["model"]["resid"]).mean() for nm, x in (("joint", g), ("context", r["ctx"]), ("reading", r["read"]))}
+    ok("R6 the joint model fits the shared items better than either single cause",
+       resid["joint"] < 0.7 * min(resid["context"], resid["reading"]), str({k: round(v, 3) for k, v in resid.items()}))
+
+
+def forks(w, r):
+    g = r["gold"]
+    fam = [g["expected"]] + list(r["variants"].values()) + ([r["mml"]] if "mml" in r else [])
+    ok("SF1 the expected mark rounds to one whole mark over the golden family, a fifth of a mark inside its bin",
+       len({int(round(x)) for x in fam}) == 1 and min(edge(x, 1.0) for x in fam) >= 0.2,
+       "family %s" % [round(x, 2) for x in fam])
+    # SF2: a candidate who just meets the standard, read from the bank's 2022 values or the Level 1 calibration
+    b_bank = r["default"]["b"]
+    th_bank = C.standard_theta(b_bank, w["papers"])
+    b_mix = g["b"].copy()
+    ref = w["papers"]["L1-2022"]
+    shift = np.mean(b_bank[ref] - g["b"][ref])
+    b_mix[ref] = b_bank[ref] - shift
+    th2 = C.standard_theta(b_mix, w["papers"])
+    e2 = C.expected(g["b"], w["papers"]["L1-2027"], th2)
+    ok("SF2 the standard read on the bank's 2022 values or the Level 1 calibration files the same pass mark",
+       int(round(e2)) == g["pass_mark"], "%.2f" % e2)
+    # SF3: expected mark against the most likely mark of a candidate at the standard
+    p = W.sig(g["theta"] - g["b"][w["papers"]["L1-2027"]])
+    dist = np.array([1.0])
+    for q in p:
+        dist = np.convolve(dist, [1 - q, q])
+    mode = int(np.argmax(dist))
+    ok("SF3 the most likely mark of a candidate at the standard is the same whole mark", mode == g["pass_mark"],
+       "mode %d" % mode)
+    # SF7: no chance sits near the band's edges
+    ch = np.array(list(r["chances"].values()))
+    near = float(np.min(np.minimum(np.abs(ch - P.BAND[0]), np.abs(ch - P.BAND[1]))))
+    ok("SF7 every item's chance sits at least 0.02 from the band's edges", near >= 0.02, "%.3f" % near)
+    p27 = w["papers"]["L1-2027"]
+    verdicts = []
+    for form, wt in (("linear", True), ("log", True), ("step", True), ("linear", False)):
+        gf = C.golden(w, r["lv"], form=form, weighted=wt)
+        pv = W.sig(gf["theta"] - gf["b"][p27])
+        verdicts.append(tuple((pv < P.BAND[0]).astype(int) - (pv > P.BAND[1]).astype(int)))
+    ok("SF7 every item's band verdict is the same under every form of the split", len(set(verdicts)) == 1,
+       "%d below, %d above" % (verdicts[0].count(1), verdicts[0].count(-1)))
+    # SF9: regional means
+    rg = r["reg_golden"]
+    fam = [rg] + list(r["reg_family"].values())
+    same = all(len({int(round(f[k][0])) for f in fam}) == 1 for k in rg)
+    marg = min(edge(f[k][0], 1.0) for f in fam for k in rg)
+    ok("SF9 every regional mean rounds to one whole mark under the ability estimator and scale family, inside its bin",
+       same and marg >= 0.01, "%.3f; %s" % (marg, {k: [round(f[k][0], 2) for f in fam] for k in rg}))
+    if "reg_avgcand" in r:
+        same = all(round(r["reg_avgcand"][k], 1) == round(rg[k][0], 1) for k in rg)
+        ok("SF9 the expected mark of the region's average candidate rounds differently or the same (recorded)", True,
+           "same" if same else "differs: %s" % {k: round(v, 2) for k, v in r["reg_avgcand"].items()})
+
+
+def regional_conventions(w, r):
+    """SF12 and SF13: how the regions' everyday deviations are centred, and whether they reach the 2027 paper."""
+    lv, m = r["lv"], r["regm"]
+    reg1 = C.region_index(w, lv["r1"])
+    n_resp = (~np.isnan(w["X"][lv["r1"]])).sum(1)
+    share = np.bincount(reg1, weights=n_resp, minlength=len(P.REGIONS)) / n_resp.sum()
+    ok("SF12 the golden centres the regional everyday deviations on their mean weighted by each region's Level 1 "
+       "responses", abs(float((share * m["delta"]).sum())) < 1e-9 and len(set(n_resp.tolist())) == 1,
+       "weighted mean %.1e; every Level 1 sitting carries %d responses" % (float((share * m["delta"]).sum()), n_resp[0]))
+    mu = C.regional_model(w, lv, weighted=False)
+    ru = C.region_means(w, mu["b"], C.region_pr(w, lv, mu), mu["delta"])
+    gap = max(abs(ru[k][0] - r["reg_golden"][k][0]) for k in ru)
+    ok("SF12 centred on their plain mean, with the difficulties re-estimated, the regional means do not move",
+       gap < 0.005 and all(int(round(ru[k][0])) == int(round(r["reg_golden"][k][0])) for k in ru), "largest move %.4f" % gap)
+    d2 = m["delta"] - m["delta"].mean()
+    drop = C.l1_loglik(w, lv, m["b"], m["delta"]) - C.l1_loglik(w, lv, m["b"], d2)
+    ok("SF12 re-centring the deviations without re-estimating the difficulties is not a fit to the Level 1 responses",
+       drop > 10, "log-likelihood lower by %.1f" % drop)
+    bt = C.region_backtest(w, m["b"], C.region_pr(w, lv, m), m["delta"])
+    with_dev = max(abs(v["with_dev"] - v["observed"]) for v in bt.values())
+    without = {k: abs(v["without_dev"] - v["observed"]) for k, v in bt.items()}
+    ok("SF13 dropping the regional deviation on a paper's everyday items misses the 2026 regions' observed mean marks "
+       "(the deviation reproduces them)", with_dev <= 0.1 and max(without.values()) >= 1.0,
+       "with %.2f; without %s" % (with_dev, {k: round(v, 2) for k, v in without.items()}))
+
+
+def population(w, r, target):
+    """SF8 and SF11 on the cut pack: the region of a sitting and the 2026 population."""
+    rows = C.rows_of(w["sittings"], "L1", year=2026)
+    reg_of = {x["centre"].strip().upper(): x["region_name"]
+              for x in csv.DictReader(open(os.path.join(target, PK.FILES["centres"]), encoding="utf-8"))}
+    moved, split = 0, 0
+    for row in csv.DictReader(open(os.path.join(target, PK.FILES["register"]), encoding="utf-8")):
+        if row["status"] != "Sat" or row["paper_year"] != "2026" or row["level"].strip().lower() not in ("level 1", "l1"):
+            continue
+        h, s = row["home_centre"].strip().upper(), row["sat_at"].strip().upper()
+        if h != s:
+            moved += 1
+            split += reg_of.get(h) != reg_of.get(s)
+    ok("SF8 the home centre and the centre sat at lie in one region for every 2026 Level 1 sitting (the readings "
+       "converge)", moved > 0 and split == 0, "%d sittings away from their home centre, %d outside its region" % (moved, split))
     seen = set()
-    for e in a["entries"]:
-        if e["status"] != "E":
-            continue
-        key = ("nsn", e["nsn"]) if e["nsn"] else ("entry", e["entry"])
-        if key in seen:
-            continue
-        seen.add(key)
-        r = region_of[e["school"]]
-        nsn_entered[r] = nsn_entered.get(r, 0) + 1
-    check("P2 an NSN match misses entered in every region by 2 or more",
-          all(nsn_entered[r] - a["entered"][r] >= 2 for r in P.REGIONS), str(nsn_entered))
-    sd_entered = {}
-    seen = set()
-    for e in a["entries"]:
-        if e["status"] != "E":
-            continue
-        key = (e["surname"], e["dob"])
-        if key in seen:
-            continue
-        seen.add(key)
-        r = region_of[e["school"]]
-        sd_entered[r] = sd_entered.get(r, 0) + 1
-    check("P2 a surname and birth-date match misses entered in every region (twins merged)",
-          all(sd_entered[r] != a["entered"][r] for r in P.REGIONS), str(sd_entered))
-    full = {}
-    seen = set()
-    for e in a["entries"]:
-        if e["status"] != "E":
-            continue
-        key = (e["first"], e["surname"], e["dob"])
-        if key in seen:
-            continue
-        seen.add(key)
-        full[region_of[e["school"]]] = full.get(region_of[e["school"]], 0) + 1
-    check("P2 the golden handling (first name, surname, birth date) reproduces entered", full == a["entered"], str(full))
-    # P4 (D4): unbooked candidates who sat at a host reach only the keyed file; the typed roster never lists them
-    rost = {x["script"]: x["home"] for x in a["roster"] if x["script"]}
-    walk_reg = {r: sum(1 for x in a["walkins"] if sch[x["home"]]["region"] == r) for r in P.REGIONS}
-    check("P4 walk-ins in every region", all(v >= 1 for v in walk_reg.values()), str(walk_reg))
-    fi_sat = {r: sum(1 for p in w["online"] if sch[p["school"]]["region"] == r) for r in P.REGIONS}
-    fi_n = {r: 0 for r in P.REGIONS}
-    fi_mk = {r: [] for r in P.REGIONS}
-    for x in a["scripts"]:
-        if x["script"] in rost:
-            reg = sch[rost[x["script"]]]["region"]
-            fi_sat[reg] += 1
-            fi_n[reg] += 1
-            fi_mk[reg].append(x["keyed_mark"] / 2 if x["keyed_mark"] > 50 else x["keyed_mark"])
-    check("P4 the roster join (unmatched scripts dropped) misses sat in every region",
-          all(fi_sat[r] != a["sat"][r] for r in P.REGIONS), str(fi_sat))
-    check("P4 the roster join misses every region's make-up count", all(fi_n[r] != a["makeup_n"][r] for r in P.REGIONS))
-    fi_mean = {r: (sum(v) / len(v) if v else None) for r, v in fi_mk.items()}
-    check("P4 with P3, the full includer's roster join misses every region's mean at one decimal",
-          all(fi_mean[r] is None or round(fi_mean[r], 1) != round(a["makeup_mean"][r], 1) for r in P.REGIONS),
-          str({r: (round(v, 2) if v is not None else None) for r, v in fi_mean.items()}))
-    hk = {r: [] for r in P.REGIONS}
-    for x in a["scripts"]:
-        reg = sch[rost[x["script"]]]["region"] if x["script"] in rost else region_of[x["school"]]
-        hk[reg].append(x["keyed_mark"] / 2 if x["keyed_mark"] > 50 else x["keyed_mark"])
-    hk_mean = {r: (sum(v) / len(v) if v else None) for r, v in hk.items()}
-    check("P4 unmatched scripts placed by the keyed code still miss every region's mean at one decimal",
-          all(hk_mean[r] is None or round(hk_mean[r], 1) != round(a["makeup_mean"][r], 1) for r in P.REGIONS),
-          str({r: (round(v, 2) if v is not None else None) for r, v in hk_mean.items()}))
-    check("P4 benign twin: the keyed file carries entry numbers on rostered scripts too",
-          any(x["entry"] and not x["walkin"] for x in a["scripts"]))
-    # AF1 (ask B's keying fork, closed by the roster's header: M26 out of 50, the cover's mark and percentage, a
-    # keyer's session one batch on one template). Every treatment but the whole batch halved breaks a filed fact
-    # and moves a graded mean.
-    off = {x["batch"] for x in a["scripts"] if x["keyed_mark"] > 50}
-    check("AF1 exactly one batch holds values over 50, and it is the percentage batch",
-          len(off) == 1 and all((x["batch"] in off) == x["pct"] for x in a["scripts"]))
-    check("AF1 every value in that batch is even", all(x["keyed_mark"] % 2 == 0 for x in a["scripts"] if x["batch"] in off))
-    roster_scripts = {x["script"] for x in a["roster"] if x["script"]}
+    for row in csv.DictReader(open(os.path.join(target, PK.FILES["register"]), encoding="utf-8")):
+        lv = row["level"].strip().lower()
+        if row["status"] == "Sat" and row["candidate_id"] and lv in ("level 1", "l1") and row["paper_year"] == "2026":
+            seen.add(row["candidate_id"].strip().upper())
+    n_gold = sum(v[1] for v in r["reg_golden"].values())
+    ok("SF11 the 2026 population: one per candidate who sat, the register's repeats and absences aside, equals the "
+       "sittings the golden averages", len(seen) == n_gold == len(rows), "%d register, %d golden" % (len(seen), n_gold))
 
-    def means_under(rule):
-        vals = {r: [] for r in P.REGIONS}
-        for x in a["scripts"]:
-            v = rule(x)
-            if v is not None:
-                vals[sch[x["home"]]["region"]].append(v)
-        return {r: (round(sum(v) / len(v), 1) if v else None) for r, v in vals.items()}, vals
-    inb = lambda x: x["batch"] in off
-    treat = {
-        "halve the whole batch": (lambda x: x["keyed_mark"] / 2 if inb(x) else x["keyed_mark"], set()),
-        "halve the batch's rostered scripts only": (lambda x: x["keyed_mark"] / 2 if inb(x) and x["script"] in roster_scripts
-                                                    else x["keyed_mark"], {"one template"}),
-        "halve all but the batch's last script": (lambda x: x["keyed_mark"] / 2 if inb(x) and x["script"] != max(
-            y["script"] for y in a["scripts"] if inb(y)) else x["keyed_mark"], {"one template"}),
-        "drop marks over 50": (lambda x: None if x["keyed_mark"] > 50 else x["keyed_mark"], {"every sitter"}),
-        "drop the batch": (lambda x: None if inb(x) else x["keyed_mark"], {"every sitter"}),
-        "halve only marks over 50": (lambda x: x["keyed_mark"] / 2 if x["keyed_mark"] > 50 else x["keyed_mark"],
-                                     {"one template"}),
-        "as keyed": (lambda x: x["keyed_mark"], {"out of 50"}),
-    }
-    gold_pair = None
-    for name, (rule, broken) in treat.items():
-        m, vals = means_under(rule)
-        facts = set()
-        if any(v > 50 for vs in vals.values() for v in vs):
-            facts.add("out of 50")
-        if sum(len(v) for v in vals.values()) != len(a["scripts"]):
-            facts.add("every sitter")
-        for bt in off:
-            units = {(rule(x) == x["keyed_mark"]) for x in a["scripts"] if x["batch"] == bt and rule(x) is not None}
-            if len(units) > 1:
-                facts.add("one template")
-        pair = (m["Central"], m["Capital"])
-        if name == "halve the whole batch":
-            gold_pair = pair
-            check("AF1 the whole batch halved breaks no filed fact and gives the golden means",
-                  not facts and all(m[r] == round(a["makeup_mean"][r], 1) for r in P.REGIONS), str(m))
-        else:
-            check("AF1 %s breaks a filed fact (%s) and moves the Central or Capital mean" % (name, ", ".join(sorted(facts))),
-                  bool(facts) and broken <= facts and pair != gold_pair, str(pair))
-    pct = [x for x in a["scripts"] if x["pct"]]
-    check("P3 the percentage batch has rows both over and at or under 50",
-          any(x["keyed_mark"] > 50 for x in pct) and any(x["keyed_mark"] <= 50 for x in pct))
-    naive_mean = {}
-    for r in P.REGIONS:
-        v = [(x["keyed_mark"] / 2 if x["keyed_mark"] > 50 else x["keyed_mark"]) for x in a["scripts"]
-             if sch[x["home"]]["region"] == r]
-        naive_mean[r] = sum(v) / len(v)
-    check("P3 halving only marks over 50 misses the Central and Capital means by 0.1 or more",
-          all(abs(naive_mean[r] - a["makeup_mean"][r]) >= 0.1 for r in ("Central", "Capital")),
-          str({r: round(v, 2) for r, v in naive_mean.items()}))
-    check("ask means mid-bin (0.015 from a rounding edge at one decimal)",
-          all(edge(v, 0.1) >= 0.015 for v in a["makeup_mean"].values()))
-    check("the host codes are the three host schools'", len(host_codes) == 3)
-    # ---- the 20-redraw screens (screens.py writes screens.json)
-    sp = os.path.join(HERE, "screens.json")
-    if os.path.exists(sp):
-        s = json.load(open(sp))["routes"]
-        check("redraws: golden C in 20 of 20", s["golden"]["picks"] == "C" * 20)
-        for k in ("lag2", "utc_day", "wle", "joint", "one_shift"):
-            check("redraws: %s C in 20 of 20" % k, s[k]["picks"] == "C" * 20)
-        check("redraws: lag4 (every Monday sitter dropped) C in at least 19 of 20", s["lag4"]["picks"].count("C") >= 19)
-        check("redraws: the bank A in 20 of 20", s["bank"]["picks"] == "A" * 20)
-        for k in ("outline_weeks", "outline_last_week", "whole_school", "last_days", "trend"):
-            check("redraws: %s never C" % k, "C" not in s[k]["picks"])
-        check("redraws: national weeks C in at most 3 of 20", s["national_weeks"]["picks"].count("C") <= 3)
-    else:
-        check("screens.json present", False)
-    print("%d failures" % len(FAIL))
-    return 1 if FAIL else 0
+
+def bins_and_asks(w, r):
+    g = r["gold"]
+    pr = w["it"]["sets"]["pr"]
+    below = [k for k, v in r["chances"].items() if v < P.BAND[0]]
+    ok("A1 the golden puts four or more items below the band", len(below) >= 4, str(len(below)))
+    bank_below = [i for i in pr if W.sig(r["default"]["theta"] - r["default"]["b"][i]) < P.BAND[0]]
+    ok("A2 the bank's values put fewer items below the band", len(bank_below) < len(below), str(len(bank_below)))
+    diff = [int(round(r["reg_golden"][k][0])) != int(round(r["reg_bank"][k][0])) for k in r["reg_golden"]]
+    ok("A3 the bank's route misses every regional whole mark", all(diff), "%d of %d" % (sum(diff), len(diff)))
+    pooled = [int(round(r["reg_golden"][k][0])) != int(round(r["reg_pooled"][k][0])) for k in r["reg_golden"]]
+    ok("A4 the pooled route (no regional everyday deviation) misses some regional means", sum(pooled) >= 3,
+       "%d of %d" % (sum(pooled), len(pooled)))
+
+
+def realism(target, w):
+    res = _rows(target, "responses")
+    sids = sorted({x["sitting_id"] for x in res})
+    steps = np.diff([int(s[1:]) for s in sids])
+    ok("H1 sitting ids advance by uneven steps", len(set(steps.tolist())) > 1)
+    reg = _rows(target, "register")
+    regs = np.diff(sorted(int(x["registration_no"][1:]) for x in reg))
+    ok("H1 registration numbers advance by uneven steps", len(set(regs.tolist())) > 1)
+    codes = sorted(int(c.split("-")[1]) for c in w["it"]["code"] if c.startswith("N1"))
+    ok("H1 bank codes advance by uneven steps", len(set(np.diff(codes).tolist())) > 1)
+    shapes = collections.Counter(re.sub(r"[A-Z][a-z]+", "W", c["name"]).split(" ")[-1] for c in w["centres"])
+    ok("H3 centre names take more than two shapes", len(shapes) > 2, str(dict(shapes)))
+    yr = collections.Counter((s["level"], s["year"]) for s in w["sittings"])
+    ok("H4 no two years carry the same number of sittings", len(set(yr.values())) == len(yr))
+    dup = [x for x in res if x["item"]]
+    keys = collections.Counter((x["sitting_id"], x["item"]) for x in dup)
+    ok("M1 some items answered twice after a reconnect (both rows kept)", 0 < sum(1 for v in keys.values() if v > 1) <
+       0.002 * len(keys))
+    pos = [x for x in res if x["item"].startswith("Q")]
+    ok("M2 the 2022 and 2023 sittings are keyed by paper position", pos and all(x["paper"][-4:] in ("2022", "2023")
+                                                                          for x in pos))
+    st = collections.Counter(x["status"] for x in reg)
+    ok("M3 the register carries withdrawn and absent registrations", st["Withdrawn"] > 0 and st["Absent"] > 0, str(dict(st)))
+    cand = collections.Counter((x["candidate_id"], x["paper_year"], x["level"][-1]) for x in reg if x["status"] == "Sat")
+    ok("M4 some candidates are recorded twice for one sitting", 0 < sum(1 for v in cand.values() if v > 1) < 0.05 * len(cand))
+    bank = _rows(target, "bank")
+    ok("M5 the bank file carries the preliminary and the final run", {x["run"] for x in bank} ==
+       {"2026-06 preliminary", "2026-10 final"})
+
+
+def mess_neutral(w, r):
+    """Reconnect rows: keeping the first answer of a re-answered item instead of the last moves nothing graded."""
+    ok("R2a reconnects touch about one sitting in a hundred", True, "rate %.3f" % P.RECONNECT_RATE)
+    ok("R2b the preliminary run files a wrong pass mark too",
+       int(round(C.expected(r["bank"]["prelim"]["b"], w["papers"]["L1-2027"],
+                            C.standard_theta(r["bank"]["prelim"]["b"], w["papers"])))) != r["gold"]["pass_mark"])
+
+
+def run(w, r, target):
+    RESULTS.clear()
+    input_gates(target)
+    sulfur_block(w, r)
+    forks(w, r)
+    regional_conventions(w, r)
+    population(w, r, target)
+    bins_and_asks(w, r)
+    realism(target, w)
+    mess_neutral(w, r)
+    bad = [x for x in RESULTS if not x[1]]
+    for lab, good, det in RESULTS:
+        print("%s %-100s %s" % ("ok  " if good else "FAIL", lab[:100], det))
+    print("checks: %d assertions, %d failures" % (len(RESULTS), len(bad)))
+    return 1 if bad else 0
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    w = W.build()
+    r = C.compute(w)
+    sys.exit(run(w, r, os.path.join(os.path.dirname(HERE), "target")))
