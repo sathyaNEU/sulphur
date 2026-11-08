@@ -4,15 +4,15 @@
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: balancer, partner-gateway, decisive, counts, request, asserted, golden, probability, export, population, hourly, reading, sample, weights, default, architecture, rejected, weighted, survey, points, method, inclusion, traces, pr-slo-, sentence
+Stump terms swept: balancer, partner-gateway, decisive, counts, request, asserted, export, golden, probability, population, hourly, default, reading, sample, sentence, weights, architecture, rejected, pr-slo-, weighted, survey, points, method, inclusion, traces
 
 ## 1 file names (REVIEW 1)
 - **REVIEW** `capacity_review_2026-Q4.md`: a text file in the pack: confirm it is the organisation's own record (a thread, a log, a letter) and does not describe the data
 
 ## 3 answer figures in the pack (REVIEW 4)
-- **REVIEW** `PR-SLO-3_service_level_objectives_2026.docx`: golden figure 0.5 appears: ...booking 1 3,000 0.5% payments 1 2,000...
 - **REVIEW** `PR-SLO-3_service_level_objectives_2026.docx`: golden figure 1.0 appears: ...rney-search 1 1,300 1.0% fares 1 300...
 - **REVIEW** `PR-SLO-3_service_level_objectives_2026.docx`: golden figure 2.0 appears: ...ner-gateway 2 1,000 2.0% notifications 2...
+- **REVIEW** `PR-SLO-3_service_level_objectives_2026.docx`: golden figure 0.5 appears: ...booking 1 3,000 0.5% payments 1 2,000...
 - **REVIEW** `PR-SLO-3_service_level_objectives_2026.docx`: carries 16 of 17 distinctive words of the committed call: 'Five internal services ran over their 2026 latency error budget and each gets a reliability engineer for the first half '
 
 ## 4 design-note vocabulary (REVIEW 1)

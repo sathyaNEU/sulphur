@@ -213,8 +213,7 @@ share, partner-gateway is at 2.9 and the review names five services.
   lands every graded figure in the golden's bin (checks.py, SF10, SF11, SF15).
 - **Run forecast:** a run that applies the field's correction stops at a method shortcut (each service's own spans
   post-stratified by its own hour) and files four services, places first, 62 per cent and 160,000; a run that links the
-  traces lands the call and every coupled ask, and loses the incident minutes only if it reads the export's final
-  service lists from the declaration (5.2 names the service at the time).
+  traces lands the call and every coupled ask; the incident clock is pinned in the prompt, so it has no ask loss left.
 - **Strategy label:** WORKS (Banking 06, F7 population selection: who you can observe; here the selection belongs to
   another unit, the edge request that began each trace, and is rebuilt hour by hour from that unit's own counts).
 - **Lesson:** in a trace sample the sampling unit is the trace, so a downstream service's spans carry the inclusion
@@ -278,7 +277,9 @@ share, partner-gateway is at 2.9 and the review names five services.
 | SF13 | 404 responses | requests like any other | dropped: same call | 2.4; same call asserted |
 | SF14 | a retried call | each try is a request the service handled | first tries only: same call | 2.2; same call asserted |
 | SF15 | the asks' rounding | shares, the share served together and the requests beyond budget worked from the unrounded weighted spans, rounded once | from the one-decimal SLIs: journey-search's share 15 against 16, every other ask figure the same | the prompt's closing clause ("each rounded once at the end"); asserted |
-| SF16 | a minute in which an incident named one of the five | from the moment incident_timeline_2026.csv names the service | the export's final service list read from the declaration: 1,571 and 1,067 against 1,545 and 907 | 5.2 ("named it at the time"); asserted as the incident ask's own judgment |
+| SF16 | when an incident names a service | from the moment the incident tool added it (incident_timeline_2026.csv), nothing if added after the status page cleared | the export's final service list read from the declaration: 1,571 and 1,067 against 1,545 and 907 | the prompt ("a service counting from when the incident tool added it"), added after the judge's 2026-11-08 finding; asserted |
+| SF17 | incident minutes | the summed duration of the merged intervals, rounded once | distinct clock minutes touched: 1,553 and 911 | the prompt ("for how long", "time in whole minutes"), added after the judge's finding; asserted |
+| SF18 | the share the five served together | of all the services' over-threshold December requests | of all December requests: 74 | the prompt ("what share of those requests"), added after the judge's finding; asserted |
 
 ## Ladder
 
@@ -376,9 +377,10 @@ cent).
 - Golden 1,545 and 907 (sections 5.2 and 5.4: each incident matched to its status page post by component and time, its
   end the last of its components back to operational, each service from the moment the timeline names it, each minute
   once); the default path's four services give 1,518 and 755.
-- Second judgment (the ask's own): the export's services column is the incident's list at its close; 5.2 counts a
-  service from the minute an incident named it, which only the timeline gives. Read from the declaration, the final
-  lists give 1,571 and 1,067 (SF16).
+- The naming clock is pinned in the prompt since the judge's 2026-11-08 finding (SF16), as are the minute unit (SF17)
+  and the joint share's base (SF18), so the ask has no judgment of its own left: it is coupled to the call through
+  partner-gateway and is lost only by a run off the call (the export's final lists, read from the declaration, would
+  give 1,571 and 1,067).
 - Files and columns: incidents_2026.csv, incident_timeline_2026.csv (the pack's 10 to 20 page CSV), the status page
   history, the catalogue's components.
 - Mess on the path: the status page's Lisbon clock against the tool's UTC, the tool's administrative close after the
@@ -405,7 +407,7 @@ Shallow keep: 7.1 per cent of ask weight (one figure of fourteen, notifications'
 
 Pair ceiling: 58.0 (the landed run reading 5.2 in full at 100.0, the shallow run at 15.9, on 38, 7 and 55); 54.0 with the
 landed run on the export's final service lists (92.1). Above the paper target of 50: the landed run has no second
-judgment left on the latency asks in the shipped pack, so its only ask loss is the incident clock. The measured layer
+judgment left on the asks in the shipped pack; with the incident clock pinned, 58.0 is the expected figure. The measured layer
 before the repair was 78.0 (runs 73 and 83).
 
 Measured by: generator/ceiling.py, run on the shipped pack.
@@ -486,10 +488,11 @@ What a voice rewrite of `prompt.txt` may not drop or change:
 - The start order's key: the one that served the most requests over its latency threshold in December starts first.
 - reliability_review_2026.docx: the services named in that order, each with its share of all our services'
   over-threshold December requests; every service's SLI beside its budget; a chart of each SLI against its own budget
-  line; the share they served together; how many more over-threshold requests than their budgets allow; the minutes of
-  each half of 2026 in which a customer-facing incident named at least one of them.
+  line; the share of those requests they served together; how many more than their budgets allow; for how long in
+  each half of 2026 a customer-facing incident named at least one of them, a service counting from when the incident
+  tool added it.
 - service_sli_2026.csv: a row per service with its SLI, its budget and whether it ran over.
-- Rounding: SLIs and budgets per cents to one decimal, shares whole per cents, minutes whole, the requests beyond budget
+- Rounding: SLIs and budgets per cents to one decimal, shares whole per cents, time in whole minutes, the requests beyond budget
   to the nearest ten thousand, each rounded once at the end.
 - No method, weighting, sampling or trace word, no warning, no count of services.
 
@@ -587,3 +590,7 @@ What a voice rewrite of `prompt.txt` may not drop or change:
   2026-11-08 repair: booking, payments and tickets round to 0 and notifications to 1 per cent on every rung, so four of
   ten cells are free to the default path (a shallow keep of 21 per cent and a paper pair of 61.8); the shares sit in the
   review for the services the call names, where the default path keeps one of five.
+- The incident ask's naming clock as its own judgment, closed on 2026-11-08: the determinism judge read PR-SLO-3 5.2
+  ("named it at the time") as not saying which record defines naming, so the final-list reading (1,571 and 1,067) is a
+  licensed alternative, and a loss there is a misread clause rather than an analytical one; the prompt now pins it
+  (SF16), with the minute unit (SF17) and the joint share's base (SF18).
