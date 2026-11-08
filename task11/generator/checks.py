@@ -271,8 +271,8 @@ def main():
     pre = [v for d, v in R["results"].items() if d < dt.date(2026, 4, 18)]
     check("SF22 the lake's background predates every 2026 application: raw water 0.17 to 0.32 ug/L before 18 April",
           bool(pre) and max(pre) <= 0.35, max(pre) if pre else None)
-    check("SF21 the asking sentence pins Ask B's months: each calendar month, on local time",
-          "each calendar month from May to August, on local time" in open(os.path.join(TASK, "prompt.txt")).read())
+    check("SF21 the asking sentence pins Ask B's months: each calendar month, on local daylight time",
+          "each calendar month from May to August, on local daylight time" in open(os.path.join(TASK, "prompt.txt")).read())
     lm = R["loads_month"]
     alt = A.monthly(TARGET, bottles="golden", offs="golden", within_month=True)
     check("SF11 and SF12 (the dropped load ask; the Final Recommendation's load claim only): the Tessel River carries "

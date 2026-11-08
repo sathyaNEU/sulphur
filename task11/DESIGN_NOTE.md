@@ -187,7 +187,7 @@ above.
 | SF17 | the day's month (Ask A) | the calendar month of the day's result | none other in the records | n/a | the records' own dates |
 | SF18 | the results without Fennick Creek's atrazine (Ask B) | the residue, 0.21 ug/L | zero; the pre-pulse 0.5 to 0.65 ug/L | no day above the trigger under any, so no feed starts | same figures (asserted) |
 | SF19 | the SOP replay's timing within a day (Ask B) | the plant's own change times | 10:15 for a change the record lacks | the golden rows are all or none, so no timing enters them | same figures |
-| SF21 | the month a pound falls in (Ask B) | the local calendar month of the minute it was fed | the plant day's month (06:00 to 06:00); fixed CST; UTC | the call's row moves in every month (judge pass 2: 3,570, 24,961, 23,700, 3,504 by plant day) | the asking sentence: each calendar month, on local time (pinned after judge pass 2) |
+| SF21 | the month a pound falls in (Ask B) | the local calendar month of the minute it was fed | the plant day's month (06:00 to 06:00); fixed CST; UTC | the call's row moves in every month (judge pass 2: 3,570, 24,961, 23,700, 3,504 by plant day) | the asking sentence: each calendar month, on local daylight time (pinned after judge pass 2; "daylight" closes the fixed-CST residual the report named) |
 | SF22 | whose atrazine the lake's background is (main call's zeros and Ask B) | nobody's 2026 runoff: the raw water held 0.17 to 0.32 ug/L from January to 17 April, before any 2026 application, and no tributary's water reached the intake's layer between the lake's stratifying and Fennick Creek's first entry | the background apportioned by load share | the Tessel River up to about 8 days (judge pass 2), Fennick Creek still first | the raw-water record before the applications (asserted) and plan 5.1's season |
 | SF20 | days two or more sub-watersheds shared the intake's layer (Ask B) | 15 September to 6 October only, every result under 1.0 ug/L | any split of them | no counterfactual on them can start a feed | same figures (asserted) |
 
@@ -448,4 +448,4 @@ a model, the stop rule, a dose, "replay", "counterfactual", or any method word.
   inside the band); each zip entry carries its file's own save or export time; every data file in target.zip is byte
   for byte the round-1 file.
 - Months of Ask B left to the reader (judge pass 2, 2026-11-08, FIX_NOW): the plant day's month, fixed CST and UTC
-  each move the call's row; the asking sentence now says each calendar month, on local time.
+  each move the call's row; the asking sentence now says each calendar month, on local daylight time.
