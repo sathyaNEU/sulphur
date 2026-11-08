@@ -17,3 +17,9 @@ Route: REDESIGN (build-pipeline, Stage 6: both runs landed the call). Architectu
 re-rooted to architecture 4 in a new world. The platform checks the main recommendation before any grading, so a
 landed call never reaches the asks: only a deep step that moves both runs' Final Recommendation counts, and the
 asks are a second layer once the call holds, never the stump.
+
+## Architecture 4 (the Irish retailer's courier hand-over, target.zip 4a9ccea1)
+
+The author reported on 2026-11-08 that the platform runs were not stumped (the call landed). The run texts were not
+supplied to the repo, so no first-wrong-step class is recorded. Route: REDESIGN; the build is re-rooted to
+architecture 5 (a Småland haulier's battery-electric tractor order) in a new world, dataset and shell.

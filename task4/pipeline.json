@@ -1,6 +1,6 @@
 {
  "task": "task4",
- "status": "BUILD",
+ "status": "PAUSED",
  "domain": "supply-chain-logistics",
  "objective": "forecasting",
  "stage": 3,
@@ -31,7 +31,7 @@
   "report": ""
  },
  "returned": [],
- "resume": "stage 4: spawn the leak reader and the determinism judge on target.zip, fix findings, re-run gates, READY",
+ "resume": "stage 4 in flight: the leak reader and the determinism judge were spawned on target.zip f1a47765; collect both reports, fix in the generator, re-run gates, READY",
  "approved": null,
  "delivered": null,
  "portal": null,
