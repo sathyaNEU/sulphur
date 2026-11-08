@@ -1,44 +1,69 @@
 {
  "task": "task10",
- "status": "PAUSED",
- "domain": "energy-systems-utilities/asset-condition-maintenance (client domain energy-systems-utilities; world: an Irish regional public rapid-charging operator naming, for its concession's 2027 review, the hubs whose high-power charge points will fall below 99 per cent availability once the partnership's programme removes the legacy 50 kW units at some hubs)",
+ "status": "DESIGN",
+ "domain": "energy-systems-utilities/load-forecasting (client domain energy-systems-utilities; world: an English distribution network operator, Wealdmoor Power Networks, committing for winter 2027/28 the reinforcement of the Halverton primaries whose design-day demand, after the flexibility contracted for that winter is credited, exceeds firm capacity)",
+ "subdomain": "load-forecasting",
  "objective": "forecasting",
- "stage": 5,
- "stage_name": "ship",
+ "stage": 2,
+ "stage_name": "design",
  "updated": "2026-11-08",
- "stump": "Carrying each high-power charge point's controller-hang and fault rates from 2023 to 2026, validated leaving each unit out and on two back-tests, files 5 hubs below 99 per cent in 2027, the five whose HX150 units already hang two or three times a year; the step that lands it there is reading each unit's hang rate as its own, when a hang comes only after about 75 days without a power-up and the RC50's monthly cabinet service powers down every unit on its pillar, so only the units at those five hubs (on a pillar of their own) routinely ran that long, and at the seven standard programme hubs, which keep neither two-monthly visits nor frequent supply interruptions once the RC50 goes, the HX150 units will hang two or three times a year, as often as the five hubs' units already do, and the set is 12.",
- "architecture": 4,
+ "call": "",
+ "stump": "Measuring each flexibility zone's event-window reduction against a weather-adjusted baseline, validated on placebo days and held-out events, and carrying it at its delivery per megawatt scheduled to the 2027/28 contracts files only Elmstead Park for reinforcement; the step that lands it there is reading the primary's drop as the provider's delivery, when on every event at Ashcombe Road and Fenwick Street the control room moved a feeder section to Brindle Lane and Greaves Hill for the event window, so the providers deliver about half of what is scheduled and Ashcombe Road and Fenwick Street, with Elmstead Park, need reinforcement.",
+ "architecture": 5,
  "loops": 0,
  "precut": {
-  "exit": 0,
-  "date": "2026-11-08",
-  "detail": "61 checks, 0 FAIL, 0 WARN (ship cut)"
+  "exit": null,
+  "date": ""
  },
  "leak": {
-  "leak_py": "REVIEW 2026-11-08 (--asof 2026-11-06) on 5356713d: sweeps 4, 6 and 9, each ruled in the design note; sweep 11 (the prompt gate) clean; no LEAK; sweep 9 reads no dated stamp with a T or day-first date, so checks.py's dates sweep covers the records",
-  "reader": "round 2 (isolated, on 3a6e329b): questions 1 to 6 clean (no decisive-step sentence, no ranking, no helper file, no figure reading as the answer; Q5 Schedule 4.1, 4.3, 4.4, 4.6 and 6.2, 6.4 fix the WHAT; Q6 analytical); items a to d, f, g, h and j harmless, e harmless for the asks, i mild (about 90 per cent of the hang call-outs at the five own-pillar hubs) ruled the mechanism's own footprint; the ship pass changed no document's words and no prompt",
-  "reader_r1": "round 1 on 4bf9959c: questions 1 to 6 clean, item i mild, answered in the second stage-4 pass"
+  "leak_py": "",
+  "reader": ""
  },
  "duplicate_check": {
-  "guard_check": "WARN 2026-11-08 on the updated card (repeat.decision against task268, answered in the design note; the question form now where, its repeat.question_form WARN gone); test.same_puzzle_older (task451) and test.same_driver_older (task105 v1, task162 v2, task170 v1, task229 v3) differentiated on the card",
-  "heart": "WARN 2026-11-08 on 3a6e329b (repeat.decision against task268); shell where, return, csv+pdf",
-  "surface": "2026-11-08, guard.py surface on the full re-extract: 314 builds screened, 9 pairs promoted for adjudication on card axes or surface percentile (task157 back to back by number, task465, task488, task265, task136, task483, task229, task162, task451), each differentiated on the card in one line, left for the author's adjudicated clone check; people: Ailis Fee found in the pack, on the card, no BLOCK"
+  "guard_check": "WARN 2026-11-08 on the registered card (overuse.objective, repeat.gate_g against task4, overuse.gate_g, repeat.question_form against task3), answered in the design note",
+  "heart": "",
+  "surface": ""
  },
  "judge": {
-  "verdict": "DETERMINISTIC (pass 2, r2, on 3a6e329b)",
-  "disposition": "APPROVE, no FIX_NOW; its optional items taken in the ship pass (the spurs' margin widened, SF17 to SF20 asserted)",
-  "gate_g": "forecasting, analytical_non_defect, surface_read_dependency no, sole_data_defect no",
-  "gate_h": "domain pass, layers pass, decisive_step analytical",
-  "report": "task10/determinism_check_report_pass2.md (round 1: task10/determinism_check_report.md)"
+  "verdict": "",
+  "disposition": "",
+  "gate_g": "",
+  "gate_h": "",
+  "report": ""
+ },
+ "paper_pair": null,
+ "runs": {
+  "run1": null,
+  "run2": null,
+  "average": null,
+  "counterfactual_average": null,
+  "first_wrong_step": {
+   "run1": "",
+   "run2": ""
+  },
+  "triage": "",
+  "recorded": "",
+  "history": [
+   {
+    "architecture": 4,
+    "run1": null,
+    "run2": null,
+    "verdict": "REDESIGN",
+    "recorded": "2026-11-08",
+    "note": "both runs on the golden 12 hubs; not graded"
+   }
+  ]
  },
  "returned": [],
- "resume": "migrated from Project Mark task156 (architecture 4, shipped there 2026-11-08, never run on the platform); re-read the build against the Sulfur standard (deep reasoning: three or more dependent inferences with a real modeling judgment, the one-fact test, the banned kinds) and the Sulfur submission shape (golden ZIP, four answer blocks), then /build task10 from the stage that fails",
+ "resume": "stage 2: write the design note's remaining sections (default path, deep reasoning, survivor anatomy, readability, forks, ladder, closure, literal reader, oracles, ask sheet, prompt contract), then precut.py; then the generator",
  "approved": null,
- "delivered": "2026-11-08",
- "portal": null,
- "portal_id": "",
- "portal_status": "",
- "portal_status_date": "",
+ "submitted": null,
+ "delivered": null,
+ "portal": {
+  "status": "",
+  "date": "",
+  "note": ""
+ },
  "history": [
   {
    "architecture": 1,
@@ -200,17 +225,57 @@
   {
    "date": "2026-11-08",
    "event": "migrated from Project Mark task156 to Project Sulfur as task10 at the author's word"
+  },
+  {
+   "architecture": 4,
+   "domain": "energy-systems-utilities/asset-condition-maintenance (client domain energy-systems-utilities; world: an Irish regional public rapid-charging operator naming, for its concession's 2027 review, the hubs whose high-power charge points will fall below 99 per cent availability once the partnership's programme removes the legacy 50 kW units at some hubs)",
+   "objective": "forecasting",
+   "stump": "Carrying each high-power charge point's controller-hang and fault rates from 2023 to 2026, validated leaving each unit out and on two back-tests, files 5 hubs below 99 per cent in 2027, the five whose HX150 units already hang two or three times a year; the step that lands it there is reading each unit's hang rate as its own, when a hang comes only after about 75 days without a power-up and the RC50's monthly cabinet service powers down every unit on its pillar, so only the units at those five hubs (on a pillar of their own) routinely ran that long, and at the seven standard programme hubs, which keep neither two-monthly visits nor frequent supply interruptions once the RC50 goes, the HX150 units will hang two or three times a year, as often as the five hubs' units already do, and the set is 12.",
+   "precut": {
+    "exit": 0,
+    "date": "2026-11-08",
+    "detail": "61 checks, 0 FAIL, 0 WARN (ship cut)"
+   },
+   "leak": {
+    "leak_py": "REVIEW 2026-11-08 (--asof 2026-11-06) on 5356713d: sweeps 4, 6 and 9, each ruled in the design note; sweep 11 (the prompt gate) clean; no LEAK; sweep 9 reads no dated stamp with a T or day-first date, so checks.py's dates sweep covers the records",
+    "reader": "round 2 (isolated, on 3a6e329b): questions 1 to 6 clean (no decisive-step sentence, no ranking, no helper file, no figure reading as the answer; Q5 Schedule 4.1, 4.3, 4.4, 4.6 and 6.2, 6.4 fix the WHAT; Q6 analytical); items a to d, f, g, h and j harmless, e harmless for the asks, i mild (about 90 per cent of the hang call-outs at the five own-pillar hubs) ruled the mechanism's own footprint; the ship pass changed no document's words and no prompt",
+    "reader_r1": "round 1 on 4bf9959c: questions 1 to 6 clean, item i mild, answered in the second stage-4 pass"
+   },
+   "duplicate_check": {
+    "guard_check": "WARN 2026-11-08 on the updated card (repeat.decision against task268, answered in the design note; the question form now where, its repeat.question_form WARN gone); test.same_puzzle_older (task451) and test.same_driver_older (task105 v1, task162 v2, task170 v1, task229 v3) differentiated on the card",
+    "heart": "WARN 2026-11-08 on 3a6e329b (repeat.decision against task268); shell where, return, csv+pdf",
+    "surface": "2026-11-08, guard.py surface on the full re-extract: 314 builds screened, 9 pairs promoted for adjudication on card axes or surface percentile (task157 back to back by number, task465, task488, task265, task136, task483, task229, task162, task451), each differentiated on the card in one line, left for the author's adjudicated clone check; people: Ailis Fee found in the pack, on the card, no BLOCK"
+   },
+   "judge": {
+    "verdict": "DETERMINISTIC (pass 2, r2, on 3a6e329b)",
+    "disposition": "APPROVE, no FIX_NOW; its optional items taken in the ship pass (the spurs' margin widened, SF17 to SF20 asserted)",
+    "gate_g": "forecasting, analytical_non_defect, surface_read_dependency no, sole_data_defect no",
+    "gate_h": "domain pass, layers pass, decisive_step analytical",
+    "report": "task10/determinism_check_report_pass2.md (round 1: task10/determinism_check_report.md)"
+   },
+   "gates_stage3": "ship cut 5356713d: checks.py 83 assertions 0 failed (Gate F 0 of 8 cheap routes on the golden, none holding more than one standard programme hub; standing family 6 of 6; margins 20 of 20 over redraws, closest 0.10, median 0.30; truth's closest 0.48, golden's 0.35; SF1 to SF20; the spurs at 99.56 and 99.76 per unit, 99.36 and 99.58 on the expected lowest unit, events 0.21 and 0.10, 99.53 and 99.75 on the fleet's hang spells; the calendar member on the same 12; the dates sweep clean); verify.py 0 disagreements (closest 0.34); two builds byte-identical (15 files) and the zip cut twice to one sha256; figures_check.py PASS (67); precut.py exit 0; voice-check.py PASS, no WARN; ceiling.py pair 28.5, mirror leakage 0.0, every route 0 of 60; heart WARN (repeat.decision); surface 314 screened, 9 promoted and differentiated on the card; people no BLOCK; leak.py REVIEW, no LEAK",
+   "zip_sha256_16": "5356713da0281cc4",
+   "answer": "List 12 hubs in the 2027 Availability Plan: Ballinkeel Main Street, Bunacurry Pier, Carrowkeel Business Park, Clonlea Leisure Centre, Derrylane Park and Ride, Glenfad Shopping Centre, Kilbeg Retail Park, Portavaddy Seafront, Rathmoy Station Road, Rossnabeg Harbour, Tobernalt Road and Tullymore Market Square.",
+   "delivered": "2026-11-08",
+   "migrated_from": {
+    "project": "Mark",
+    "task": "task156",
+    "status_in_mark": "SHIPPED",
+    "date": "2026-11-08",
+    "note": "moved from Project Mark at the author's word: architecture 4 shipped there on 2026-11-08 (462411f1), pending, never run on the platform; carried on here for the Sulfur bar"
+   },
+   "freeze": "freeze.py check task10 --mode determinism against the snapshot taken before the ship pass's first edit, --allow charges and energy_mwh of Annagh Cross and Cloonfin Crossroads (fix 5) and the ungraded pack.* record counts and salt.NM125: the call, the stump, the ladder, the default path, blocks 1 and 2 and every other figures.json value unmoved; one item printed, block 4's hub_availability_2027.csv, whose numbers differ from the snapshot's by exactly the four allowed figures (1738, 57.3, 2545, 81.9 out; 1786, 57.5, 2507, 81.0 in), the determinism mode comparing a block 4 file whole",
+   "returned": [
+    {
+     "date": "2026-11-08",
+     "source": "triage",
+     "portal": "FAILED_TO_STUMP: both platform runs landed the golden 12 hubs (the author reports not stumped; no rubric, no score). Run 1 (59 minutes) fitted a piecewise hazard on time since physical restart from the 97 hangs with a known prior restart (ages 76.356 to 105.482 days) and simulated the renewed network; run 2 (43 minutes) fitted a censored Weibull on time since evidenced reset (shape 13.55, scale 93.47 days); both back-tested on 2026. Asks lost by both (93,640 and 94,297 charges against 90,612) but a landed call is not graded.",
+     "lesson": "A mechanism the rows carry in one plot (the hang-age floor) with its remedy written in the work orders' narratives (frozen screen cleared by a local power cycle) is modelled on sight; the renewal programme's removal of the RC50s named the change the forecast had to carry.",
+     "repair": "redesign: re-root (architecture 5) in a new world inside the same client domain at the author's word, 2026-11-08",
+     "runs": "task10/runs/run1.md, run2.md, triage.md"
+    }
+   ],
+   "fate": "spent 2026-11-08 on the platform (both runs on the golden call); world spent"
   }
- ],
- "gates_stage3": "ship cut 5356713d: checks.py 83 assertions 0 failed (Gate F 0 of 8 cheap routes on the golden, none holding more than one standard programme hub; standing family 6 of 6; margins 20 of 20 over redraws, closest 0.10, median 0.30; truth's closest 0.48, golden's 0.35; SF1 to SF20; the spurs at 99.56 and 99.76 per unit, 99.36 and 99.58 on the expected lowest unit, events 0.21 and 0.10, 99.53 and 99.75 on the fleet's hang spells; the calendar member on the same 12; the dates sweep clean); verify.py 0 disagreements (closest 0.34); two builds byte-identical (15 files) and the zip cut twice to one sha256; figures_check.py PASS (67); precut.py exit 0; voice-check.py PASS, no WARN; ceiling.py pair 28.5, mirror leakage 0.0, every route 0 of 60; heart WARN (repeat.decision); surface 314 screened, 9 promoted and differentiated on the card; people no BLOCK; leak.py REVIEW, no LEAK",
- "zip_sha256": "5356713da0281cc4dadd2b716e216fcc3470335ee9c09f6436a6342c6b6f915d",
- "answer": "List 12 hubs in the 2027 Availability Plan: Ballinkeel Main Street, Bunacurry Pier, Carrowkeel Business Park, Clonlea Leisure Centre, Derrylane Park and Ride, Glenfad Shopping Centre, Kilbeg Retail Park, Portavaddy Seafront, Rathmoy Station Road, Rossnabeg Harbour, Tobernalt Road and Tullymore Market Square.",
- "freeze": "freeze.py check task10 --mode determinism against the snapshot taken before the ship pass's first edit, --allow charges and energy_mwh of Annagh Cross and Cloonfin Crossroads (fix 5) and the ungraded pack.* record counts and salt.NM125: the call, the stump, the ladder, the default path, blocks 1 and 2 and every other figures.json value unmoved; one item printed, block 4's hub_availability_2027.csv, whose numbers differ from the snapshot's by exactly the four allowed figures (1738, 57.3, 2545, 81.9 out; 1786, 57.5, 2507, 81.0 in), the determinism mode comparing a block 4 file whole",
- "migrated_from": {
-  "project": "Mark",
-  "task": "task156",
-  "status_in_mark": "SHIPPED",
-  "date": "2026-11-08",
-  "note": "moved from Project Mark at the author's word: architecture 4 shipped there on 2026-11-08 (462411f1), pending, never run on the platform; carried on here for the Sulfur bar"
- }
+ ]
 }

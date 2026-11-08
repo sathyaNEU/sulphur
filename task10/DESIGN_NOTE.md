@@ -1,388 +1,70 @@
-# task10: a rapid-charging operator, which hubs fall below 99 per cent availability in 2027 (architecture 4)
+# task10: Wealdmoor Power Networks, which Halverton primaries need reinforcement committed for winter 2027/28 (architecture 5)
 
-Private, never ships. Architectures 1 to 3 were each returned FAILED_TO_STUMP by the portal: Millrind's paid
-moderation pool (product analytics), the Riverbank Road pump station's consented overflows (physical and
-environmental sciences) and the union branch's protected action ballots (political science and public policy, both
-responses on the golden 11 councils on 2026-11-07). The slot is re-rooted in a fourth domain: world, decision,
-quantity, data, generator, prompt shell, deliverables, asks and mechanism are all new, architecture 3's build outputs
-left the folder at this draw (git history keeps them), and the three identities sit in the card's `lineage` with
-their fates.
+Private, never ships. Architectures 1 to 4 were each spent on the platform: Millrind's paid moderation pool (product
+analytics), the pump station's consented overflows (physical and environmental sciences), the union branch's protected
+action ballots (political science) and the Irish rapid-charging operator's 2027 availability plan (energy systems,
+both runs on the golden 12 hubs on 2026-11-08). The author fixed the client domain at Energy Systems & Utilities for
+this re-root, so architecture 5 stays in the domain and moves world, data, decision, quantity, mechanism, prompt shell
+and deliverables; architecture 4's build outputs leave the folder at this draw (git history keeps them, and its two
+platform runs stay under `runs/`), and the four identities sit in the card's `lineage` with their fates.
 
 ## Draw
 
 | Axis | Value |
 |---|---|
-| Card | `.claude/skills/fingerprint/cards/task10.json`, architecture v4, registered 2026-11-08; architectures 1 to 3 in `lineage`, their three shells in `lineage_shells` |
-| Domain / task type | `energy-systems-utilities`, task type `asset-condition-maintenance` (serves Forecasting): the deciding quantity is each high-power charge point's availability in the 2027 contract year, forecast from each failure mode's frequency and the downtime it costs through the visits, repairs and asset changes the year will run under |
-| Objective | Forecasting & Predictive Modeling: availability in the contract year 1 January to 31 December 2027, a window not yet open; the asset base is the partnership's renewal programme of record (the legacy units out at its hubs by 18 December 2026) |
-| Shape | `10`, a scorecard against one threshold: every hub carries a side of the 99 per cent standard for its high-power charge points, and the call is the set below it |
-| Decision | `designation_set`, answer unit `set_of_items`: the hubs the operator names in its 2027 availability plan because a high-power charge point there is forecast below 99 per cent |
-| Mechanism | gap time (the hang record comes from units powered down every month, the 2027 bet is on units powered down a few times a year); generators G7 (a hang can only happen inside an uptime window that the hub's power-downs open or shut), G14 (the hang rate measured on units sharing a pillar with a legacy unit does not apply once it goes), G13 (the 2027 regime differs from every year on record at the programme hubs); Gate G `forecasting`; strategy `forecast_method_backtest` |
-| Layer 2 family / pattern | `estimation_fit`; `own:hang-hazard-on-the-hub-power-down-clock-carried-through-a-changed-repair-regime` |
-| Furniture | forum `customer_or_counterparty` (the North Midlands Charging Partnership, the concession's grantor, reviews the plan), forcing event `audit_or_inspection` (the partnership's annual concession review in December 2026), organisation family `utility_or_infrastructure` (Ardvane Charge DAC, a public rapid-charging operator), role family `operations_director` (the operator's network performance lead), context artifact `monitoring_export` (the back office's status history), calibration `none`, opening `question-first`, question form `where` |
-| Spine | `connector_status_history_2023-2026.csv`, one row per status change a charge point reported to the back office or the back office wrote when its heartbeats stopped (26,382 rows, UTC), beside the asset register, the two contractors' work orders, the planned maintenance schedule, the supply interruption log and the 2026 charging sessions; constructed for this build, no real dataset |
-| Deliverables | `hub_availability_2027.csv` (the partnership's plan return, one row per hub, the asks in its columns), `availability_plan_2027.pdf` (the covering letter naming the hubs) |
-| People | drawn with `guard.py names --geo ireland --seed 156`: Sorcha Jackman (the operator's network performance lead, who signs the plan), Ailis Fee (the partnership's concession manager, its addressee), Darcy McGlinchey (the partnership's director of concessions) and Domhnall Linehan (the operator's managing director), who sign the consolidated schedules; Henry Dunford passed over, his first name already on task457 |
+| Card | `fingerprint/cards/task10.json`, architecture v5, registered 2026-11-08T17:13:57Z, `guard.py check` WARN (answered below), no BLOCK |
+| Client domain, subdomain | Energy Systems & Utilities / `load-forecasting`, task type Load, price & renewable forecasting (the deciding quantity is each primary's design-day demand after its credited flexibility), which serves Forecasting |
+| Objective | Forecasting & Predictive Modeling: each primary's half-hour of highest demand on the winter 2027/28 design day, a window not yet open, with the flexibility contracted for that winter credited at what its provider will deliver |
+| Decision | `designation_set`, answer unit `set_of_items`: the primaries whose reinforcement Wealdmoor commits at its December 2026 investment committee for winter 2027/28 |
+| Shape | 10, a scorecard against thresholds: each primary's design-day demand before and after credited flexibility against its firm capacity, each flexibility zone's delivery per megawatt scheduled, each zone's median-winter event days and dispatch cost |
+| Mechanism | gap objective (the zone's measured event-window reduction is a correct measurement and is not the provider's delivery the guideline credits), then time (the record's event days had a neighbour with evening headroom; the design day's credit is the provider alone); generators G4 (the drop at each event's start is attributed to the provider when a feeder section was switched away at the same moment), G5 (the moved section was supplied elsewhere, by the neighbouring primary), G3 (the record shows one fall where the operation was two actions) |
+| Strategy | `causal_design`, Part A "A comparison that is actually clean", WORKS IN FORM: the contamination shows only through a relation in the data (the neighbour's rise in the same half-hours, through an 11 kV open point in the feeder schedule), never a column or a filed sentence; the comparison is not filed in the estimand; two inferences follow the clean comparison |
+| Layer 2 | `estimand_identification`, `own:flexibility-relief-net-of-control-room-transfers-mirrored-at-the-neighbour` (the client lists no Energy rigor card) |
+| Stakeholder | the head of DSO for the Halverton zone (Marion Todd in the documents, never in the prompt), who takes the reinforcement list to the investment committee; `role_family` operations_director (the DSO function runs the flexibility service and network operation; capacity_planner is task3's in the last three) |
+| Forum, forcing event, org family | committee_or_panel (Wealdmoor's investment committee, 9 December 2026); vote_or_meeting (the committee commits the transformer orders a winter 2027/28 reinforcement needs); utility_or_infrastructure |
+| World | England: Wealdmoor Power Networks plc (a fictional distribution network operator), its Halverton city zone (nine 33/11 kV primaries fed from Halverton grid supply point), providers Corvane Flex (domestic heat pump and battery aggregation) and Quillon Energy Services (commercial demand response); GBP; people drawn with `guard.py names --geo uk --seed 1005`: Marion Todd, Clifford Evans, Irene Carpenter |
+| Shell | question form which (a designation asks which); second sentence led by "Build"; deliverables `halverton_primary_capacity_2027-28.xlsx` and `investment_committee_2027-28.pptx` (pptx+xlsx, under the corpus quota where docx+xlsx stood at 40 per cent); no lineage shell repeated (how-many/put, whether/the, where/the, where/return) |
 
-**The hubs.** Thirty hubs, each with one legacy Tavrin RC50 (50 kW, 2017 to 2019) and one to four Korrant HX150 (150
-kW, 2021 to 2023). At 25 hubs every unit is fed from one supply pillar; at the three coastal hubs (Bunacurry Pier,
-Rossnabeg Harbour, Portavaddy Seafront) and at Carrowkeel Business Park and Tobernalt Road the HX150 units sit on a
-pillar of their own, a fact no file stores. The RC50's monthly cabinet service, and its cabinet repairs, isolate the
-pillar it stands on. Motorway service hubs (planned visits every two months): Carrigvane Services, Lismoy Services,
-Ardcree Services, Knockvane Services, Drumtane Services, Monaleen Services. The renewal programme takes the RC50 out at
-twelve hubs by 18 December 2026: the first three motorway hubs, seven standard hubs (Kilbeg Retail Park, Tullymore
-Market Square, Clonlea Leisure Centre, Rathmoy Station Road, Glenfad Shopping Centre, Ballinkeel Main Street, Derrylane
-Park and Ride) and two hubs on long rural supply spurs (Annagh Cross, Cloonfin Crossroads), with a new HX150 at the
-ten that are not on the spurs. The other ten hubs keep their RC50 and share its pillar. The record is an ordinary fleet's:
-about one month in five the RC50's monthly job is an external inspection that leaves the pillar live, a few services
-are skipped, and a shared-pillar unit hangs now and then when two such months fall together (never before day 76); an
-HX150's 4G router, SIM or antenna fails about once a decade, the unit offline until a technician replaces the part;
-ordinary faults run about a quarter a unit-year (above one at the coast), callouts take one and a half to two and a
-half days. The two rural spurs hang on long overhead lines: Annagh Cross logged 42 supply interruptions over the record
-and Cloonfin Crossroads 54, about 11 and 14 a year, against three or fewer a year at the other hubs.
+**Guard WARNs, answered.** `overuse.objective` and `overuse.gate_g`: Forecasting is the author's fixed objective for
+this slot and the client's most wanted; the mechanism under it is new to the corpus. `repeat.gate_g` against task4
+v5: task4 forecasts each duty's energy from shipper-declared payloads whose recording errs; here nothing is
+mis-recorded, and the forecast's credit is an intervention effect separated from a concurrent operator action.
+`repeat.question_form` against task3 v5: a designation asks which, and the second sentence, deliverable set and
+component roles differ.
 
-**Guard answers (check on the draft and again on the registered card).** WARN `repeat.decision` (designation_set
-repeats task268): the decision is a set of named hubs because the concession's plan names hubs, and no other answer
-type fits the review. The prompt now asks where (the which shell held 32 per cent of the prompts on file and repeated
-task482), so the card's question form is `where` and its `repeat.question_form` WARN is gone. NOTE
-`test.same_puzzle_older` (task451) and `test.same_driver_older` (task105 v1, task162 v2, task170 v1, task229 v3):
-differentiated on the card, one line each. Variants measured at the draw and refused: pattern E (same puzzle as
-task235 and task445, same driver as eight builds), G14 decisive (`ban.pattern` against task250), G13 decisive
-(`ban.pattern` against task482), pattern A (ten older drivers). Forum, forcing event, organisation family, role
-family, context artifact and strategy clear the last three builds (task250, task482, task268). `voice-check.py` PASS
-with no WARN on the where shell; the shell differs from every approved build at the second sentence's opener (Return)
-and the deliverable set (csv and pdf), and from the slot's three dead shells on all three axes.
+**Data-native sentence.** Wealdmoor's control room armed its pre-planned 11 kV transfer schemes for exactly the event
+windows its flexibility providers were scheduled for, at the two zones whose open point reaches a primary with evening
+headroom (Ashcombe Road to Brindle Lane, Fenwick Street to Greaves Hill), so the SCADA demand that measures each
+provider also carries a moved feeder section, and only the neighbouring primary's rise in the same half-hours shows it.
 
-**The data-native sentence.** The back office's status history records each charge point going offline, and the only
-place a pillar's power-down shows is the minute in which every unit on it drops at once; the HX150 controller hangs,
-which only an on-site power cycle clears, come after the days since the unit last powered up, and the RC50's monthly
-cabinet service, which isolates its pillar, is what kept those spells short at 25 hubs through 2023 to 2026.
+**The abstraction sentence** (what a reviewer holding this build beside its nearest would say is the same, domain nouns
+stripped): "an intervention's measured effect at a unit includes load an operator moved from it to a neighbour in the
+same hours, which the neighbour, the natural comparison, mirrors." No approved build on file says it. The nearest on
+file: the client's Example 4 (controls improved because a shared floor's freed time went to them; the effect was
+understated and the clean comparison was the untouched states), mark124 v1 to v3 (analogs' draw held down by the
+organisation's own dispatch, the quantity needed for new units), task7 arch 4 (a borrower's failure removed through
+payments between customers). Here the treated unit's own drop is inflated by a concurrent action, the comparison is
+inflated by the same action in the other direction, and the credit is read where the two cancel.
 
-**The abstraction sentence.** "A unit's failures run on a clock that its neighbours' repairs reset, so a plan that
-removes the failing neighbours raises the survivors' failures." It cannot be written against the nearest approved
-builds: task132 (a failure resets the failed item's own wear curve), task303 (a shared upstream loss every unit logs
-in the same minute is taken out of a figure), task162 (a device acts only above its setting), task141 (a cap moves
-every unit to the at-ceiling rate), task169 (a closed route had pre-empted the open one), task175 (a vacant lot's
-take-up follows its own street's fill); nor against task10's spent architectures (a closed pool's falling leaving
-rate, infiltration scaled by submerged sewer, a delegate in post at the worksite); nor against the two nearest
-drivers by text, task127 v4 (supporting one firm prevents its dependants' failures) and task173 v3 (work on a unit
-breaks the parts attached to it soon after).
+**Same-puzzle and library tests.** Gap objective, decisive generator G4 and decision designation_set repeat no build
+in the last twelve (`test.same_puzzle` and `test.same_driver` clear; G5 and G3 were tried first and collided with
+task4 v4 and task5 v2). The library test: the stump sentence is not "use X on Y" with X a named correction; the field's
+M&V baseline (weather-adjusted, with or without in-day adjustment or a neighbouring control) is the default path, and
+the deep step is that every baseline route measures the primary, not the provider.
 
-## Shape
-
-Shape 10, a scorecard against one threshold. Criteria: the set (1), each hub's side of 99 per cent (30), the asks
-(each hub's January to October 2026 high-power charges and the energy they delivered, 60), the two deliverables (2):
-93, supplied by the answer's structure. The prompt names no count.
-
-## Default path
-
-1. Read the asset register (the June 2025 back-office migration re-keyed every charge point; the register carries both
-   IDs and the serial the contractors log), the status history (UTC), the two contractors' work orders (Irish time, a
-   new job-code list from the April 2024 contract change), the planned maintenance schedule, the supply interruption
-   log, Schedule 4 of the concession agreement and the partnership's renewal programme.
-2. Rebuild each HX150's availability for 2023 to 2026 under Schedule 4 (Faulted, Unavailable and Offline minutes count;
-   notified planned maintenance and supply interruptions, with the half hour after each, are excluded).
-3. Fit the failure model per unit and failure mode: controller hangs (offline until a technician power cycles the unit)
-   and other faults, a Poisson rate per unit-year on hub type, coast, the hub's unit count, commissioning year, 2026
-   charges a day, planned visits a year, supply interruptions a year and the legacy unit's work orders a year, unit
-   effects shrunk to the hub and the fleet; the downtime each event costs from the status history and the work orders.
-4. Validate: leave each unit out, and back-test 2025 from 2023-24 and January to October 2026 from 2023-25: mean errors
-   of 0.17, 0.41 and 0.41 points (about what a unit-year's faults and comms repairs scatter), and 57, 50 and 53 of 58
-   units on their side of 99 per cent (`checks.py`).
-5. Carry the rates into 2027 on the programme's asset base (the RC50 out at its hubs with its own isolation minutes,
-   the new HX150 units at fleet rates, every covariate at its 2027 value) and list the hubs with an HX150 below 99.
-
-Ends on: 5 hubs (Bunacurry Pier, Carrowkeel Business Park, Portavaddy Seafront, Rossnabeg Harbour, Tobernalt Road).
-Golden: 12 hubs (Ballinkeel Main Street, Bunacurry Pier, Carrowkeel Business Park, Clonlea Leisure Centre, Derrylane
-Park and Ride, Glenfad Shopping Centre, Kilbeg Retail Park, Portavaddy Seafront, Rathmoy Station Road, Rossnabeg
-Harbour, Tobernalt Road, Tullymore Market Square).
-
-## Stump sentence
-
-Carrying each high-power charge point's controller-hang and fault rates from 2023 to 2026, validated leaving each unit
-out and on two back-tests, files 5 hubs below 99 per cent in 2027, the five whose HX150 units already hang two or three
-times a year; the step that lands it there is reading each unit's hang rate as its own, when a hang comes only after
-about 75 days without a power-up and the RC50's monthly cabinet service powers down every unit on its pillar, so only
-the units at those five hubs (on a pillar of their own) routinely ran that long, and at the seven standard programme hubs,
-which keep neither two-monthly visits nor frequent supply interruptions once the RC50 goes, the HX150 units will hang
-two or three times a year, as often as the five hubs' units already do, and the set is 12.
-
-## Three rules
-
-Task type: asset-condition-maintenance (Energy Systems & Utilities), which serves Forecasting & Predictive Modeling: each high-power charge point's availability in the 2027 contract year, forecast from each failure mode's frequency and repair downtime under the visits, repairs and asset changes the year will run under.
-Domain test: the deciding quantity is each high-power charge point's 2027 availability against the concession's 99 per cent standard, worked the way asset condition and maintenance forecasting works it, each failure mode's frequency and the downtime each event costs carried through the year's planned visits, repairs and asset changes; with another field's nouns there is no failure a power cycle clears and no repair that powers its neighbours down, so the forecast stops reading.
-Swap: put "hospital wards" for "hubs" and "beds" for "charge points": a ward has no supply pillar that a neighbour's service opens and a bed does not seize until it is power cycled; put "megawatt-hours" for "minutes available" and the restart clock has nothing to count.
-Layer 1: the June 2025 back-office migration re-keyed every charge point (the register carries both IDs, the contractors log serials); the status history is in UTC and the work orders, visit schedule and supply log in Irish local time; the back office writes Offline only after three missed heartbeats, about fifteen minutes after a drop; status notifications are re-sent and duplicated; the two maintenance contractors used different job-code lists before and after April 2024, and a no-response job is a power cycle or a comms part replaced only by its own words; a fifth of the RC50's monthly jobs are external inspections; the planned maintenance schedule changed layout and visit windows between years; the session export splits a charge when the back office loses a unit for more than five minutes and when a card's pre-authorisation runs out, and carries the technicians' load bank tests among the customers' charges; each export ends at its own moment (the status history at 31 October 24:00, the work orders at the coordinator's last save, so five jobs stand open, the schedule at the contractor's), and the two contractors raise planned jobs their own ways; Schedule 4 and the programme are PDFs with tables. Nothing is placed to be caught.
-Layer 2: estimation_fit: the hang rate has to be estimated on the clock that drives it, the days since each unit last powered up, each spell ended by the next power-down or restart, and the 2027 forecast run on the power-down regime the programme leaves; the choice that flips the call is reading each unit's recorded hang rate as a property of the power-down regime it was measured in.
-Decisive step: recognising that the HX150 hangs come only after about 75 days without a power-up, that every unit on a pillar restarts whenever the pillar is isolated for the RC50's monthly service or a repair, a planned visit or a supply interruption, and that the programme takes the RC50 away, so each 2027 unit's hangs follow the days between its hub's remaining power-downs.
-Not semantics: every field, code and clock read correctly (IDs and serials crosswalked, UTC converted, the heartbeat lag allowed for, duplicates removed, both contractors' job codes mapped, Schedule 4's exclusions applied) still leaves the unit-level route on 5 hubs; no field records a power-up or a pillar, and no file defines a hang by uptime or names the restart.
-Not rule application: no filed rule or procedure says a hang depends on the days since a power-up or that the RC50's service powers down other units; Schedule 4 files only the availability definition, its exclusions and the standard. Enumerated family (each unit's own rate carried, rates shrunk to hub and fleet, the full-covariate Poisson model with the RC50's work orders, visits and interruptions at their 2027 values, a regression tree on the same covariates, the RC50's recent jobs and the days since its last job as daily covariates, the 2026 availability carried, each unit's monthly series smoothed): on the clean truth the members file sets of 3 to 9 hubs, none the golden and none holding more than one of the seven standard programme hubs (the Ladder's counts, asserted in checks.py); standing family once the restart clock is seen (the hang rate by days since power-up read as a 5-day or 1-day life table or a fitted onset, run through the 2027 regime by simulation or by renewal arithmetic): the same 12 hubs, so the standing spread on the graded set is zero only after the step; what rules the cheap members out is the hangs' onset in the days since power-up, which only the pillar-wide Offline minutes in the status history show.
-Analyst test: a strong analyst who maps the IDs, converts the clocks, applies Schedule 4 and reads the programme fits each high-power charge point's hang and fault rates with every covariate the pack holds, validates them leaving each unit out and on 2025 and 2026 back-tests, carries them into 2027 with the legacy units removed and files 5 hubs (the five whose HX150 units already hang); seven standard programme hubs it passes fall below 99 per cent once the hangs are read on the days since the units last powered up.
-Estimand: Schedule 4 of the concession agreement files the population (every high-power charge point in service at a hub in the contract year, new units included), the outcome (the share of the year's minutes, notified planned maintenance and supply interruptions with the half hour after each excluded, in which it was not Faulted, Unavailable or Offline), the window (the 2027 contract year), the unit (the charge point), the comparison (below 99 per cent) and the asset base (the partnership's approved programme for the year), and its clause 4.6 names the hubs the plan must list (any hub with a high-power charge point forecast below the standard).
-No decoy: nothing is planted: no memo, briefing, forecast or stakeholder figure ranks the hubs or argues a set; the programme says which units go and why (Tavrin's support for the RC50 ends in 2026), not what availability follows; the customer survey and the tariff schedule are distractors that carry no availability figure.
-No certified replay: the method is not hidden behind a certified figure to be reproduced; no availability statement for a past year ships, both routes reproduce the history the status log records, and the decisive step changes the forward window, not the fit to the past.
-Lesson: a failure rate measured on units whose clock their neighbours' repairs kept resetting belongs to that repair regime, and a plan that removes the neighbours has to be forecast on the clock that drives the failure, not on the rate; no build on file has a unit's failure clock reset by work done on another unit.
-
-## Survivor anatomy
-
-Actor: the deciding property is each HX150's days since it last powered up, which no column holds: a power-up shows only as an Available row after an Offline one, a pillar's power-down only as the minute in which every unit on it goes Offline at once, and which units share a pillar with the RC50 is in no file (the register lists units and hubs, not pillars).
-Link: the relation is the coincidence of Offline rows across sibling charge points at one hub, in the status history the availability rebuild already reads; the join it needs is hub by minute across units, and the missing key is a power-down or pillar identifier, which no file carries; the work orders log the RC50's monthly service at every hub, the five where it powers down only the RC50 included, so the work orders alone give the wrong clock.
-Reflex: the field's method for the deciding quantity, each unit's failure rate per mode carried with its repair downtime (a Poisson rate with unit effects shrunk to the hub, the full-covariate model beside it), sits at rung 0 and files 5 hubs.
-Back-test: leave-one-unit-out and the 2025 and January to October 2026 back-tests pass on the rate route, because every unit ran under one power-down regime throughout 2023 to 2026 (an RC50 stood at every hub all four years).
-Second use: the status history is the availability rebuild's input, the work orders give repair downtime and classify the hangs, the visit schedule and the supply log give Schedule 4's exclusions, the programme gives the asset base and the register the IDs; deleting the decisive step leaves every file in the pack.
-Shock: the seven standard programme hubs are among the most available in the record (two HX150 hangs there in four years, both at Tullymore Market Square, against 95 at the five), the change reads as an asset renewal that removes the RC50's own isolation minutes, and the golden is not an interval of any shipped statistic (the five hubs that already hang sit at the bottom of every sort, the seven at the top).
-Pins: Schedule 4 files the WHAT (each high-power charge point in service in the contract year, the availability formula, its exclusions, the 99 per cent standard, clause 4.6's listing rule, the programme as the asset base); no filed sentence names power-ups, uptime, pillars, restarts or what the RC50's service does to other units.
-
-## Readability screen
-
-| Rung | What a solver has to see | Where it shows | Verdict |
-|---|---|---|---|
-| 0: each unit's hang and fault rates carried with their downtime (the reflex) | hangs and faults per unit-year, attendance and repair times | status history, work orders | readable |
-| 1: the five hubs that hang read as coast or hub effects | the high-hang hubs share no stored attribute but three are on the coast | register, status history | readable |
-| 2 (decisive): hangs follow the days since power-up, and an RC50 isolation powers up every unit on its pillar | Offline rows of every unit at a hub in one minute, and every hang at 75 or more days after the unit's last power-up | status history only, as a relation across sibling units | silent |
-| 3: the 2027 power-down regime per hub | the 2027 visit plan, each hub's supply interruption rate, the programme's hubs | visit schedule, supply log, programme | readable |
-
-## Semantic fork table
-
-| Id | Term or convention | Golden reading | Alternative | Call under it | Ruled out by |
-|---|---|---|---|---|---|
-| SF1 | hub | each of the thirty hubs in the register | a hub counted once per supply pillar | same call | Schedule 4 clause 4.6 names hubs; same call, asserted |
-| SF2 | high-power charge point | every HX150 in service at the hub in 2027, the programme's new units included | the existing units only | same call | Schedule 4 4.1 (in service in the contract year); same call, asserted |
-| SF3 | availability | Schedule 4's minutes formula with the exclusions out of both terms | planned visits and interruptions counted as downtime | same call | Schedule 4 4.3; same call, asserted |
-| SF4 | below 99 per cent | strictly below | at or below | same call | the closest golden forecast sits 0.35 points from 99 (asserted at 0.2 or more) |
-| SF5 | forecast | each unit's expected 2027 availability | the median simulated year | same call | Schedule 4 4.6 (forecast availability); same call, asserted |
-| SF6 | a hub's side | its lowest HX150 | the mean of its HX150 units | same call | clause 4.6 (any high-power charge point); same call, asserted |
-| SF7 | the contract year | 1 January to 31 December 2027, Irish time | the year in UTC | same call | Schedule 4 4.2; same call, asserted |
-| SF8 | the asset base | the programme of record: RC50 out at its twelve hubs by 18 December 2026, new HX150 at ten | the register as at the extract | same call at every hub outside the programme; the programme is the filed base | Schedule 4 4.6 (the approved programme) |
-| SF9 | Offline minutes | as the back office recorded them (from the Offline row) | back-dated fifteen minutes to the drop | same call | same call, asserted |
-| SF10 | duplicated status rows | one row per change | every row read | same call | same call, asserted |
-| SF11 | the half hour after an exclusion | excluded (Schedule 4 4.3) | not excluded | same call | Schedule 4 4.3; same call, asserted |
-| SF12 | supply interruptions in 2027 | each hub's 2023 to 2026 rate | the last twelve months' rate | same call | same call, asserted |
-| SF13 | attendance in 2027 | each hub's own callouts on the work orders, attended less logged, 2023 to 2026 | the callouts pooled over the hubs outside the rate route's five (1.91 days), or over the fleet (1.94 days) | same call: the seven standard programme hubs at most 98.47, 98.62 and 98.61 per cent under the three readings, the programme's motorway and spur hubs at least 99.57, 99.51 and 99.51 | same call, asserted under each reading |
-| SF14 | the new units' start | commissioned by 18 December 2026, uptime from the programme works | uptime from 1 January 2027 | same call | same call, asserted |
-| SF15 | hang classification | an Offline spell of three hours or more ended by a power cycle (the work order, no comms part replaced) | every Offline spell over an hour; or the comms repairs (a router, SIM or antenna replaced) read as hangs too | same call | same call, asserted for both |
-| SF16 | supply interruptions by hub | each hub's own interruption record | one rate pooled over the fleet | 14 hubs (adds Annagh Cross and Cloonfin Crossroads) | the log itself: its per-hub counts (0 to 54 over the record) reject a common rate (dispersion 742 on 29 degrees of freedom, p below 1e-6), asserted |
-| SF17 | a hub's side | each unit's expected 2027 availability, the lowest of them | the hub's expected lowest unit (the mean over simulated years of its worst unit) | same call (closest Eskerbrook Shopping Centre at 99.07) | Schedule 4.4 and 4.6: the standard and the forecast are each charge point's Availability, and an expectation of a minimum is no charge point's; same call, asserted |
-| SF18 | clause 4.6's forecast | each unit's expected availability against 99 | the event that some high-power charge point at the hub falls below 99, at a majority of simulated years | same call (the largest probability outside the 12 is 0.43, Eskerbrook Shopping Centre; the smallest inside 0.94, Rathmoy Station Road) | same call, asserted |
-| SF19 | a unit's fault rate | its hub's ordinary fault rate on the record | each unit's own | same call | same call, asserted |
-| SF20 | the hang hazard's form | the life table on the days-since-power-up clock | a two-parameter Weibull on that clock, each spell censored at its next power-up (shape 13.6, scale 93.4 days) | same call by its point forecasts (motorway hubs 99.67 to 99.86, the spurs 99.58 and 99.77) | its fit is worse than the fitted onset's (log-likelihood -356.9 against -342.2 on 3,463 spells and 97 hangs, AIC 717.8 against 690.3); same call, asserted |
-
-## Ladder
-
-Pricing sequence on the generator's clean truth (`checks.py` asserts each number; the generator's figures are the
-source of the counts below, this table quotes them):
-
-| Rung | Construction | Set filed | Reaches golden |
-|---|---|---|---|
-| 0 | each unit's hang and fault rates carried, the RC50's isolation minutes dropped at the programme hubs | 5 hubs (the five whose units hang on record) | no |
-| 0b | rates shrunk to hub and fleet (gamma-Poisson) | 5 hubs | no |
-| 0c | the full-covariate Poisson model (hub type, coast, unit count, commissioning year, 2026 charges a day, visits, interruptions, the RC50's work orders a year) at 2027 values | 3 hubs (the coast; the RC50's work runs high where the units hang, so its removal lowers the forecast) | no |
-| 0d | a regression tree on the same covariates | 6 hubs, one outside the golden and one standard programme hub | no |
-| 0e | the daily model given the RC50's jobs in the last 60 days and the days since its last job | 3 hubs (the coast alone) | no |
-| 0e2 | the daily model given the days since the RC50's last full cabinet service (its inspection-only months read from the work orders' words) | 3 hubs | no |
-| 0f | the January to October 2026 availability carried | 9 hubs, three outside the golden and one standard programme hub | no |
-| 0g | each unit's monthly availability series smoothed | 8 hubs, two outside the golden and one standard programme hub | no |
-| 1 | the restart clock built from the work orders (every RC50 job a power-up for every unit at its hub) | 2 hubs (the hangs then fall on short uptimes and spread thin) | no |
-| 2 | the restart clock from the status history, but 2027 run without the visits or the interruptions | 17 hubs (adds the motorway and rural spur hubs) | no |
-| 3 (golden) | hangs read on the days since power-up from the coincident Offline rows, run through the 2027 visit plan, each hub's interruption rate and attendance | 12 hubs | yes |
-
-Gate F: cheap routes reaching the golden on the clean truth, 0 of 8 (rungs 0 to 0g), none holding more than one of the
-seven standard programme hubs; standing family after the step, 6
-of 6 constructions on the golden (5-day and 1-day life tables and a fitted onset, each run by simulation and by
-day-step arithmetic, the day holding the part of its length a hang is down); margins over 20 redraws of the world as
-printed by `checks.py` (the Gates line below).
-
-## Closure table
-
-| Axis | Reading | Move |
-|---|---|---|
-| 1 Population | every HX150 in service at a hub in 2027 (Schedule 4 4.1), new units included | filed; SF2 asserted |
-| 2 Unit of account | the charge point, the hub listed by its lowest | filed (4.6); SF6 asserted |
-| 3 Attribution window | the 2027 contract year in Irish time | filed (4.2); SF7 asserted |
-| 4 As-of dating | the programme of record approved 21 October 2026 | filed (4.6) |
-| 5 Version basis | the status history as exported 2 November 2026, one version | C1 |
-| 6 Denominator | the year's minutes less excluded minutes | filed (4.3) |
-| 7 Weighting | none: each unit's own availability | filed (4.6) |
-| 8 Window length | the whole 2023 to 2026 record for rates and attendance | C1 across windows (SF12, SF13) |
-| 9 Boundary inclusivity | strictly below 99 | C1, the closest golden forecast 0.35 points from 99 (SF4, asserted at 0.2 or more) |
-| 10 Rounding path | the side only is graded, no availability figure | C1 |
-| 11 Tie-break | none needed | C1 |
-| 12 Maturity and censoring | uptime spells still open at 31 October 2026 censored | C1, asserted on the standing family |
-| 13 Order of operations | exclusions before the share | filed (4.3) |
-| 14 Row order | none: rows sorted by time per unit | C1 |
-| 15 Duplicate resolution | a re-sent status row counts once | C1 (SF10) |
-| 16 Identity normalisation | old and new IDs and serials through the register | the register's own crosswalk, C4 |
-| 17 Netting against gross | none | C1 |
-| 18 Dimensional units | minutes | C1 |
-| 19 Code and status semantics | Faulted, Unavailable and Offline count (4.3) | filed |
-| 20 Integerisation | none | C1 |
-| 21 Clause scope | clause 4.6 lists hubs for the contract year | filed |
-| 22 Forward window contents | the 2027 visit plan sheet, the programme's dates, each hub's interruption record | shipped driver files |
-
-## Literal reader
-
-Executed word for word: Schedule 4 fixes the population, the formula, the exclusions, the standard and the asset base,
-and clause 4.6 lists every hub with any high-power charge point forecast below 99 per cent; the prompt adds nothing
-the schedule does not carry. Every literal reading of a convention (SF1 to SF16) files the same set or is ruled out by
-a quoted clause. The easy answer (5 hubs) comes from an easy method on the same literal estimand, a rate carried, never
-from another reading; the golden (12 hubs) comes from the same estimand worked on the clock the data show.
-
-## Oracles
-
-None ships. No availability statement, forecast or plan for any past or future year is in the pack; the programme
-gives dates and units, never availability; the supply log, the visit schedule and the work orders each tie to the
-status history under every handling, and nothing arbitrates between the rate route and the restart clock except the
-status history's own rows.
-
-## Ask sheet
-
-The call's population is the status history, the work orders, the visit schedule, the supply log, the register and
-the programme. Both asks read the January to October 2026 session export, which the call reads only for a charges-a-day
-covariate that moves no forecast (asserted: the default path's set and the golden are unchanged under every handling
-of the session devices), and the work orders' attendance windows, which the call reads for attendance and the hang
-classification (the asks take only the Arrived and Completed minutes). Zero device or hazard rows sit in the call's
-population (asserted by count).
-
-**Ask A, each hub's high-power charges begun January to October 2026 (30 figures, whole charges).** H18: each hub's
-use of the units the plan forecasts, which the partnership's return carries beside the side. Schedule 6 files the
-WHAT: a charge is a vehicle's connection to a connector in which energy was delivered, from connection to
-disconnection, counted once in the month it began (Irish time). Primary 1 (D4 with D1, a charge under two records with
-its middle in neither): when the back office hears nothing from a unit for five minutes it closes the charge at its
-last meter reading and records the rest, when the unit reconnects, as a new charge with no token; every hub's units
-drop out several times a week while charging, so every figure moves by dozens. Found only by the meter register: the
-resumed record starts above the last one's closing register with no charge between. Primary 2 (D6, a charge at the
-payment grain): a card charge that reaches its pre-authorisation is closed and continued under a new pre-authorisation
-one to four seconds later, both records with no token. Primary 3 (D5 with D8, out-of-scope rows known only by a join
-across two systems and two clocks): after every planned visit and every HX150 repair the technician runs a load bank
-test of about a quarter of an hour on each connector, on the technician's own card, and the back office records it as
-a session like any other; Schedule 6 counts a vehicle's connection, so the tests are out, and they are found only by
-joining the sessions to the work orders' attendance windows (a session that starts between a job's Arrived and
-Completed minutes on its unit, or on any unit at the hub for a site visit), the work orders saying load bank test in
-their technicians' own words. Every hub's count moves by 2 to 32 on the tests alone. Hazards: a re-sent page of exact
-duplicate rows in the September export; failed starts with no energy; genuine back-to-back card charges two and a half
-minutes or more apart (a merge by time alone over-merges them). Pin test: Schedule 6 names the unit (a vehicle's
-connection) and the month rule, never which records belong to one connection or that a technician's test is in the
-export.
-
-**Ask B, the energy those charges delivered (30 figures, MWh to one decimal).** H18: the energy the partnership's
-return reports per hub. Schedule 6 files the WHAT: the energy the charge point's meter registered for the charge.
-Primary 1's other face: the energy delivered while the unit was out of contact is in neither record's energy column,
-only in the step between the first record's closing register and the second's opening one (0.36 to 3.03 MWh a hub).
-Primary 3's other face: the load bank tests put 0.07 to 1.13 MWh a hub on the registers, so a register-based total
-that joins every split record still sits over the golden at every hub, and a column total (the gaps out, the tests
-in) never lands by cancellation (the two at least 0.19 MWh apart at every hub, held by the generator's clearance).
-Hazards as Ask A. Pin test: the meter is named, the continuity across records and the tests are not.
-
-| Ask | Figures | Cracker path and the stress rows beside it (each lands the call) | Cracker keeps | Verdict |
-|---|---|---|---|---|
-| A, charges | 30 | the cracker (lands the call, runs the battery, executes every filed rule): duplicates out, failed starts out, records with one token on one connector less than 30 minutes apart merged; over by 44 to 323 charges a hub | 0 of 30 | miss |
-| B, energy | 30 | the cracker: the energy column summed over its charges | 0 of 30 | miss |
-| A and B | 60 | the full includer: as the cracker, plus every record that opens above the last one's closing register joined to it, energy from the registers, card continuations left; over by 9 to 87 charges | 0 of 60 | miss |
-| A and B | 60 | the register advance: the cracker's charges, each unit's register advance over the window for energy | 0 of 60 | miss |
-| A and B | 60 | the careful register-joined analyst: both kinds of split record joined exactly as the golden joins them, the load bank tests left in; over by 2 to 32 charges | 0 of 60 | miss |
-
-| Ask | Mirror (the rate route's set, same ask handling) | Mirror keeps |
-|---|---|---|
-| A | as the cracker | 0 of 30 |
-| B | as the cracker | 0 of 30 |
-
-Pair ceiling: 28.5 (one response on the call and one off it, both handling the asks the cracker's way; measured on the
-cut pack). A response that lands the call and joins every split record but keeps the tests in scores 45.0 (the call
-and instruction-following, no ask figure).
-Mirror leakage: 0.0 per cent of the ask weight.
-Measured by: generator/ceiling.py (on the cut pack), each row asserted in checks.py.
-
-## Gates at stage 3
-
-Run on the shipped cut (target.zip sha256 5356713da0281cc4dadd2b716e216fcc3470335ee9c09f6436a6342c6b6f915d).
-
-- `checks.py`: 83 assertions, 0 failed: R1 to R3c on the clean truth (97 hangs on record, none before day 76, 2,481
-  unit-days at 60 to 75 days with none; the default path files the 5, the restart clock alone files the 12 in all six
-  standing constructions, the work-order clock files 2 and the clock without the 2027 visits and interruptions 17, no
-  copied block); Gate F, 0 of 8 cheap routes on the golden and none holding more than one of the seven standard
-  programme hubs, the full-covariate model at 2027 values on 3 hubs, the rate route's back-tests 0.17, 0.41 and 0.41
-  points (57, 50 and 53 of 58 units on their side), 6 of 6 standing constructions on the golden; margins over 20
-  redraws of the world, 20 of 20 on the truth's set (closest forecast 0.10 points from 99, median 0.30); every hub's
-  true side at least 0.48 points from 99 and the golden's closest 0.35 (SF4); SF1 to SF20, SF13 under each hub's own,
-  the by-group (1.91 days) and the fleet's (1.94 days) attendance with the seven standard programme hubs at most 98.47,
-  98.62 and 98.61 per cent and the programme's motorway and spur hubs at least 99.57, 99.51 and 99.51, SF16's pooled
-  interruption rate (14 hubs) ruled out by the log's own dispersion (742 on 29 degrees of freedom), SF17 to SF20 each on
-  the same 12; the spur hubs (Annagh Cross on 10.95 interruptions a year at 99.56 per unit, 99.36 on its expected lowest
-  unit, event 0.21; Cloonfin Crossroads on 14.08 at 99.76, 99.58 and 0.10; 99.53 and 99.75 with each hang's downtime
-  drawn from the fleet's 105 recorded hang spells); the calendar member on the same 12 (the ordinary hubs' expected
-  lowest unit at least 99.23 and their event at most 0.32, against 99.07 and 0.43 on the Poisson draw; 0.01 to 0.20
-  hangs a unit-year forecast at them, against 0.05 to 0.53 on the Poisson draw and 0.00 to 0.39 on the record); the
-  asks (the golden handling reproduces the true charges and energy exactly, every energy figure at least 0.013 MWh from
-  its rounding edge, the cracker, the full includer, the register advance and the careful register-joined analyst each
-  keeping 0 of 60, the gaps 0.36 to 3.03 MWh and the tests 0.07 to 1.13 MWh a hub and never within 0.19 of each other);
-  the separation line; the input gates; H1 on every workbook and PDF, the golden letter included; the realism sweep
-  (3,541 closed jobs read back as the truth has them and 5 open at the save, 2,464 distinct write-ups over 3,546 jobs,
-  each contractor's own planning lead with none stacked at a ceiling); the dates sweep (no record after 2026-11-06 or
-  after its own file's save, the schedule's forward visits and the programme's works dates aside).
-- `verify.py`: 0 disagreements on its own code path (pandas readers, its own spell and cluster logic with a spell open
-  at the export's end censored, attendance from the work orders, its own day-step forecast): the same 12 hubs, its
-  closest forecast 0.34 points from 99, the rate route's 5, and 30 of 30 charges and 30 of 30 energy figures.
-- Two consecutive builds byte-identical (15 files: every file under target/ and golden/, figures.json, metadata.json,
-  submission.md); target.zip cut twice to one sha256 (`generator/zip_target.py`), its ten files at the root.
-- `freeze.py check task10 --mode determinism`, against the snapshot taken before the pass's first edit, with --allow
-  for the four keys and the ungraded keys below: the call, the stump (pipeline, card stump and driver), the ladder, the
-  default path, the prompt's call sentence, blocks 1 and 2 and every other figures.json value unmoved. The one item it
-  still prints is block 4's file for hub_availability_2027.csv, because the determinism mode compares that file's
-  numbers whole and --allow names figures.json keys only; its numbers differ from the snapshot's by exactly the four
-  allowed figures (1738, 57.3, 2545 and 81.9 out; 1786, 57.5, 2507 and 81.0 in).
-- `figures_check.py` PASS (67 figures); `precut.py` exit 0; `voice-check.py` PASS with no WARN (581 characters, the
-  question read as where); `ceiling.py` pair 28.5, mirror leakage 0.0, the careful register-joined row 0 of 60.
-- `guard.py heart` WARN (repeat.decision against task268, answered under Guard answers; shell where, return,
-  csv+pdf). `guard.py surface task10` on the full re-extract: 314 builds screened, 9 pairs promoted for adjudication,
-  the same nine as at the second hand-off, each differentiated on the card and left for the author's adjudicated clone
-  check. `guard.py people`: Ailis Fee found in the pack, on the card, no BLOCK.
-- `leak.py --asof 2026-11-06`: REVIEW, no LEAK, each line ruled. Sweep 4: the schedules', the programme's and the
-  tariff's words (register, record, schedule, service, forecast, minutes, status, planned, supply) are those documents'
-  own vocabulary (the meter registers a charge's energy, the programme's works isolate the supply on the works day),
-  and none names power-ups, uptime, pillars, hangs or what the RC50's service does to other units. Sweep 6: the
-  programme lists its twelve hubs with works dates and serials, and the register, the visit schedule and the work
-  orders name every hub because they are about every hub; none ranks hubs on 2027 availability. Sweep 9: the 2027 plan
-  sheet's visit dates, forward by nature; the sweep reads neither ISO stamps with a time nor day-first dates, which is
-  why it never flagged the status rows and work orders after the setting the ship pass cut (checks.py's dates sweep now
-  covers them). Sweep 11 (the prompt gate) clean. Files leak.py flagged that may be named to the reader:
-  asset_renewal_programme_2027.pdf (sweeps 4 and 6), concession_agreement_schedules_4_and_6.pdf and
-  tariff_schedule_2026.pdf (sweep 4), charge_point_register.xlsx and work_orders_2023-2026.xlsx (sweep 6),
-  planned_maintenance_schedule.xlsx (sweeps 6 and 9).
-- Documents against the second hand-off's cut: the schedules, the tariff, the register and the survey byte-identical;
-  the programme the same 501 words, its document control block moved whole to page 2; the golden letter's text and the
-  prompt unchanged.
-
-## Pre-ship check
-
-The 10/10 rules read again against the built pack:
-- The task uses its domain: the call turns on each high-power charge point's 2027 availability under Schedule 4, forecast
-  from each failure mode's hazard on the clock that drives it (days since power-up) through the visits, interruptions,
-  repairs and asset changes the year will run under; with a hospital's nouns there is no pillar a neighbour's service
-  opens and no failure a power cycle clears.
-- Two layers: the mess is the operator's and the contractors' own (re-keyed IDs, UTC against Irish time, the heartbeat
-  lag, re-sent rows, two job-code lists, layouts and visit windows changing by year, open jobs at the workbook's save,
-  split session records, load bank tests among the charges, PDFs with tables), nothing placed; cleaning all of it leaves
-  the rate route on the 5. The analysis decides the call: the hang hazard read on the days-since-power-up clock and run
-  through the regime the programme leaves.
-- None of the three banned stumps decides it: nothing is planted (the reader's round 2 item i, about 90 per cent of the
-  hang call-outs at the five own-pillar hubs, is the mechanism's own footprint, ruled harmless: the hangs fall where the
-  units run longest between power-ups, and the rate route already finds the cluster and files the five, so seeing it
-  decides nothing); every field read right still files the 5; no filed rule says a hang waits on the days since a
-  power-up or that the RC50's service powers its neighbours down.
-- Analyst test: a strong analyst who cleans the data and reads every rule still files the 5 by carrying each unit's
-  rates, validated leaving each unit out and on two back-tests; yes, analytical.
-- Leak reader, round 2 (isolated, on 3a6e329b): questions 1 to 6 clean (no sentence states the decisive step, no
-  ranking, no helper file, no figure reading as the answer; Q5 Schedule 4.1, 4.3, 4.4, 4.6 and 6.2, 6.4 fix the WHAT; Q6
-  analytical); items a to d, f, g, h and j harmless, item e harmless for the asks, item i mild and ruled as above.
-- Judge, pass 2 (r2, `task10/determinism_check_report_pass2.md`): DETERMINISTIC, APPROVE, no FIX_NOW; Gate G
-  forecasting, analytical_non_defect, surface_read_dependency no, sole_data_defect no; three rules pass (domain, layers,
-  decisive step analytical); spec gates pass; order kept, its blind first pass on the default path's 5; all 30 charge
-  counts and 30 energies reproduced with step 6's rule. Its optional items are taken in this pass: the spurs' margin
-  widened (fix 5), the expected lowest unit, the event reading, each unit's own fault rate and a Weibull onset asserted
-  as SF17 to SF20.
-- Sweep 9's gap: leak.py's dated-record sweep needs a word boundary after the day, so it skipped 2026-11-08T10:48:13Z,
-  and it reads no day-first dates; checks.py's dates sweep now reads both, and the cut pack holds no record after the
-  setting or after its own file's save.
+**Sources, one line each.** All files are constructed for task10 (no real dataset; external hosts are closed to this
+session) and declared in `metadata.json` outside the ZIP. Spine: `primary_demand_halfhourly_2023-2026.csv`, the
+Halverton zone's SCADA export (nine primaries, half-hourly MW and Mvar, UTC, October to March of three winters, point
+names re-keyed in a May 2024 asset ID migration). Operating extracts: `flexibility_events_2024-2026.csv` (the zones'
+dispatch log in UK local time, re-issued and cancelled events), `halverton_weather_hourly_2023-2026.csv` (the
+reference station, UTC), `halverton_daily_mean_temperature_1991-2020.csv` (the station's long daily record).
+Lookups and registers: `primary_substation_register.xlsx` (codes old and new, transformers, firm capacity, DFES
+growth), `network_feeders_11kv.xlsx` (the 11 kV feeders each primary supplies, customers, normally-open points),
+`load_growth_register_2026-27.xlsx` (accepted connections by feeder). Governing documents:
+`capacity_assessment_guideline_2026.pdf` (the design condition, firm capacity, how flexibility is credited, the
+commit rule), `flexibility_contract_awards_2027-28.pdf` (the 2027/28 awards, the service window and its scheduling
+trigger, prices). Distractors (named only in `metadata.json`): `customer_interruptions_2025-26.xlsx` and
+`duos_charging_statement_2027-28.pdf`.
 
 ## Tried and rejected
 
@@ -690,3 +372,40 @@ The 10/10 rules read again against the built pack:
   unit-year there against 0.00 to 0.39 on the record, which thins those hubs' expected-lowest-unit margins (Eskerbrook
   Shopping Centre at 99.07); drawn from the record's own calendar the member lists the same 12 at 99.23 and 0.32 at
   worst, measured and asserted, and the golden keeps the Poisson draw (no golden change).
+
+- Architecture 4, the rapid-charging operator's 2027 availability plan (2026-11-08, platform round 1, target.zip
+  5356713d): both runs landed the golden 12 hubs (the author reports not stumped; no rubric). Both read the hang ages
+  off the first histogram (no hang before day 76 after a power-up), fitted a censored hazard on time since restart with
+  the work orders' power cycles as the remedy, simulated the renewed network and back-tested on 2026: a mechanism the
+  rows carry in one plot, with its remedy written in the work orders, was modelled on sight. Its asks fell (93,640 and
+  94,297 charges against the golden's 90,612) but the platform rules a landed call before grading. World spent.
+- Architecture 5 draw, a heat pump conversion programme's second phase forecast from homes that under-heated on gas and
+  will heat fully on a heat pump (each home's uplift conditioned on its own pre-conversion balance point): rejected at
+  the draw, because it is task3 architecture 1's driver in other nouns (the gain an upgrade adds conditioned on how much
+  of each unit the old level already served), which one of that build's runs landed by regressing each earlier unit's
+  gain on its own prior coverage; conditioning a carried gain on a covariate each unit's history prints is a reflex.
+- Architecture 5 draw, a pilot of hybrid heat pumps whose gas backup flattened the cold-day electrical load carried to
+  an all-electric second phase: rejected at the draw on the one-fact test (the pilot's units are hybrids), and the
+  backup's discovery would be finding a population fact rather than analysing.
+- Architecture 5 draw, stations whose winter peak responds in opposite directions to the gas-to-electricity price ratio
+  (hybrids switching fuel, all-electric homes economising) carried to the 2027 energy tax shift: rejected at the draw,
+  because a per-station forecast is the natural default, so each station's own slope is a reflex there (the grouping
+  dichotomy), and the decision weights no population mix.
+- Architecture 5 draw, measurement error in the heat pump count by substation (postcode allocation) attenuating the per
+  heat pump coefficient: rejected at the draw, task4 architecture 5 carries an errors-in-variables driver in flight.
+- Architecture 5 draw, phase imbalance (single-phase heat pumps landing on one phase, the transformer's per-phase limit
+  binding first): rejected at the draw, because per-phase columns invite the per-phase reading and the installers'
+  allocation is readable off the first phase's increments.
+- Architecture 5 draw, latent excavation damage behind a spike in cable faults read as ageing: rejected at the draw, an
+  activity elsewhere, linked by place and time, driving failures repeats architecture 4's family in this slot.
+- Architecture 5 draw, export from PV-saturated feeders censored by inverter overvoltage trips: rejected at the draw, a
+  trip is not a clean cap, and the capped-quantity family is crowded on this repository's cards (mark124, mark162,
+  task4 architecture 2).
+- Architecture 5 prototype, the partners' own design-day demand reconstructed by removing the moved sections as the
+  deciding step: kept off the call, because removing a moved load from a series is cleaning; the partners' flags hold
+  under every route by margin and the moved sections decide only their ask figures, while the call moves on what
+  the credited flexibility is.
+- Architecture 5 prototype, an unadjusted customer baseline (the mean of the ten previous non-event weekdays): measured
+  0.33, minus 0.38 and 0.25 per megawatt scheduled at the three zones, its cold-day bias cancelling part of the moved
+  section at one zone and turning another negative; it files a fourth primary (Charlecote Way) and misses, and its
+  negative zone sends a run to the weather-adjusted baseline, which carries the whole moved section.

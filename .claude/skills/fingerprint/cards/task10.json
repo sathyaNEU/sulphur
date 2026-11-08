@@ -1,102 +1,97 @@
 {
   "task": "task10",
-  "architecture": "v4 (re-root after architecture 3's portal FAILED_TO_STUMP: an Irish regional rapid-charging operator naming, for its concession's 2027 review, the hubs whose high-power charge points will fall below 99 per cent availability once the partnership's programme removes the legacy 50 kW units at some hubs; the high-power units' controller hangs run on the days since the hub was last powered down, which the legacy unit's monthly cabinet service, isolating the supply pillar it shares with them, kept short)",
+  "project": "sulfur",
+  "architecture": "v5 (re-root after architecture 4's platform round, both runs on the golden call: an English distribution network operator's winter 2027/28 reinforcement list for its Halverton primary substations, flexibility credited at what the contracted providers deliver)",
   "drawn": "2026-11-08",
-  "slot_note": "re-root of task10 in the same objective (Forecasting); architectures 1, 2 and 3 in lineage, each spent on the portal",
+  "slot_note": "re-root of task10 in the same client domain (Energy Systems & Utilities) at the author's word and the same objective (Forecasting); architectures 1 to 4 in lineage, each spent on the platform",
   "domain": "energy-systems-utilities",
-  "subdomain": "asset-condition-maintenance",
+  "subdomain": "load-forecasting",
   "client_domain": "energy-systems-utilities",
-  "niche": "a regional public rapid-charging operator in Ireland preparing its concession's 2027 availability plan: which hubs will have a high-power charge point below the 99 per cent contract-year availability standard after the partnership's programme removes the end-of-life 50 kW units at some hubs, when the high-power units' controller hangs, which only an on-site power cycle clears, follow the days since the hub was last powered down",
+  "niche": "an English distribution network operator's DSO function naming, for its December 2026 investment committee, the 33/11 kV primary substations in its Halverton city zone that must have reinforcement committed for winter 2027/28 because their design-day demand, after the flexibility contracted for that winter is credited, will exceed firm capacity; at two of the three flexibility zones the control room also moved an 11 kV feeder section to the neighbouring primary for every event window",
   "objective": "forecasting",
   "shape": "10",
   "decision_type": "designation_set",
   "answer_unit": "set_of_items",
-  "answer": "List 12 hubs in the 2027 Availability Plan: Ballinkeel Main Street, Bunacurry Pier, Carrowkeel Business Park, Clonlea Leisure Centre, Derrylane Park and Ride, Glenfad Shopping Centre, Kilbeg Retail Park, Portavaddy Seafront, Rathmoy Station Road, Rossnabeg Harbour, Tobernalt Road and Tullymore Market Square.",
-  "answer_source": "task10/submission.md block 1; task10/golden/hub_availability_2027.csv and availability_plan_2027.pdf",
+  "answer": "",
+  "answer_source": "",
   "gap": [
+    "objective",
     "time"
   ],
   "pattern": [
     "none"
   ],
   "generators": [
-    "G7",
-    "G14",
-    "G13"
+    "G4",
+    "G5",
+    "G3"
   ],
   "gate_g": "forecasting",
   "calibration_form": "none",
-  "stump_strategy": "forecast_method_backtest",
+  "stump_strategy": "causal_design",
   "decisive_rule_filed": false,
   "official_decoy": false,
   "validated_decoy": false,
   "context_artifact": "monitoring_export",
   "stump_class": "analytical",
-  "analyst_test": "A strong analyst who maps the re-keyed charge point IDs, converts the UTC status history and the local-time work orders, applies the concession's exclusions and reads the programme fits each high-power charge point's controller-hang and fault rates with every covariate the pack holds (hub type, coast, unit count, commissioning year, charges a day, visits, interruptions, the legacy unit's work orders), validates them leaving each unit out and on 2025 and 2026 back-tests, carries them into 2027 with the legacy units removed and files only the five hubs whose high-power units already hang; the hangs come only after about 75 days without a power-up, which the legacy unit's monthly cabinet service, isolating the pillar it shares with them, never let happen, so at the seven standard hubs the programme strips the high-power units will hang two or three times a year and fall below the standard.",
-  "domain_test": "The deciding quantity is each high-power charge point's 2027 availability, forecast the way asset condition and maintenance analysis forecasts it, from each failure mode's hazard on the clock that drives it and the maintenance and repair regime the year will run under; with another field's nouns there is no failure mode a power cycle clears and no repair that powers a whole hub down, so the forecast stops reading.",
-  "layer2_family": "estimation_fit",
-  "layer2_pattern": "own:hang-hazard-on-the-hub-power-down-clock-carried-through-a-changed-repair-regime",
+  "analyst_test": "A strong analyst who maps the renamed primary codes, aligns the half-hourly SCADA (UTC) with the event log (UK local time), weather-corrects each primary to the design day with the event windows excluded, and measures each flexibility zone's event-window reduction against a weather-adjusted baseline (and against neighbouring primaries as controls), validated on placebo days and held-out events, carries each zone's delivery per megawatt scheduled to the 2027/28 contracts and files only Elmstead for reinforcement; at Ashcombe Road and Fenwick Street a feeder section moved to the neighbouring primary for every event window, so the providers' own delivery is far lower and both primaries, with Elmstead, need reinforcement.",
+  "domain_test": "The deciding quantity is each primary's design-day demand after its contracted flexibility, worked the way distribution planning works it: a weather-corrected peak at the design condition, the flexibility's delivered reduction measured against a weather-adjusted baseline, and the group's N-1 firm capacity; in another field's nouns the counterfactual is no weather-driven load model, the neighbour's mirror is no power-flow identity across an 11 kV open point, and the design day's coincident peaks have no counterpart.",
+  "layer2_family": "estimand_identification",
+  "layer2_pattern": "own:flexibility-relief-net-of-control-room-transfers-mirrored-at-the-neighbour",
   "layer1": [
     "utc-local",
     "id-rekey-crosswalk",
-    "duplicate-notifications",
-    "heartbeat-lag-offline",
-    "code-list-change-between-contractors",
-    "layout-change-across-years",
+    "duplicate-rows-at-clock-change",
+    "missing-intervals-flagged",
+    "re-issued-events",
+    "name-variants",
+    "withdrawn-and-duplicate-register-rows",
     "pdf-tables"
   ],
-  "stakeholder_role": "the operator's network performance lead, who prepares the concession's 2027 availability plan for the partnership's annual review",
+  "stakeholder_role": "the network operator's head of DSO for the Halverton zone, who takes the winter 2027/28 reinforcement list to the December investment committee",
   "role_family": "operations_director",
   "scoring_unit": "per active unit per period",
   "spine": {
-    "file": "connector_status_history_2023-2026.csv",
-    "rows": 26382,
-    "entity": "one row is one status change a charge point reported to the operator's back office, or that the back office wrote when the charge point's heartbeats stopped",
-    "grain": "charge point x status change",
+    "file": "primary_demand_halfhourly_2023-2026.csv",
+    "rows": 0,
+    "entity": "one row is one primary substation's metered demand in one half-hour, as its SCADA export writes it",
+    "grain": "primary substation x half-hour",
     "source": "constructed for task10, no real dataset"
   },
-  "forum": "customer_or_counterparty",
-  "forcing_event": "audit_or_inspection",
+  "forum": "committee_or_panel",
+  "forcing_event": "vote_or_meeting",
   "org_family": "utility_or_infrastructure",
   "world": {
-    "geography": "Ireland (a fictional operator, partnership and hubs)",
-    "currency": "EUR",
-    "org_type": "regional public rapid-charging operator under a local authority concession",
+    "geography": "England (a fictional distribution network operator, licence area and city zone)",
+    "currency": "GBP",
+    "org_type": "electricity distribution network operator",
     "invented_names": [
-      "Ardvane Charge DAC",
-      "North Midlands Charging Partnership",
-      "Ardvane Rapid"
+      "Wealdmoor Power Networks",
+      "Halverton",
+      "Corvane Flex",
+      "Quillon Energy Services"
     ],
     "people": [
-      "Sorcha Jackman",
-      "Ailis Fee",
-      "Darcy McGlinchey",
-      "Domhnall Linehan"
+      "Marion Todd",
+      "Clifford Evans",
+      "Irene Carpenter"
     ]
   },
   "deliverables": [
-    "hub_availability_2027.csv",
-    "availability_plan_2027.pdf"
+    "halverton_primary_capacity_2027-28.xlsx",
+    "investment_committee_2027-28.pptx"
   ],
   "opening_move": "question-first",
-  "question_form": "where",
-  "driver": "Each unit's failures run on a clock that its site's other units' repairs reset, so its recorded failure rate is a property of how often those neighbours were repaired, and a forward plan that removes the failing neighbours stops the resets and multiplies the survivors' failures, which every route carried on each unit's own record misses while it validates on the years the resets ran.",
-  "driver_concrete": "A high-power charge point's controller hangs only after about 75 days without a power-up, and the legacy 50 kW unit's monthly cabinet service isolates the supply pillar it shares with the high-power units at most hubs, so through 2023 to 2026 the units on a pillar of their own carried 95 of the record's 105 hangs; the partnership's programme removes the legacy units at some hubs in December 2026, after which those hubs are powered down only for planned visits and supply faults and, where visits are twice a year, their high-power units hang two or three times a year, as often as the units on a pillar of their own already do.",
-  "stump": "Carrying each high-power charge point's controller-hang and fault rates from 2023 to 2026, validated leaving each unit out and on two back-tests, files only the five hubs whose units already hang; the step that lands it there is reading each unit's hang rate as its own, when a hang comes only after about 75 days without a power-up and the legacy unit's monthly cabinet service powers down every unit on its pillar, so at the seven standard hubs the programme strips the high-power units will run months between power-ups and the set is twelve.",
+  "question_form": "which",
+  "driver": "The decisive quantity is what a contracted intervention removes from a constrained unit's demand under a design condition, but on every occasion the record measured it the operator also moved part of the unit's load onto a neighbouring unit for the same hours, so the unit's measured reduction is the intervention plus the move and the neighbour, the natural comparison, rose by what was moved; only the intervention's own reduction, read where the move cancels, is credited under the design condition, when the neighbour has no room to take it.",
+  "driver_concrete": "On every flexibility event at Ashcombe Road and Fenwick Street the control room closed the 11 kV open point to Brindle Lane and Greaves Hill for the event window and moved a feeder section across, so each primary's event-window drop is the provider's reduction plus the section; Brindle Lane and Greaves Hill rose by the section in the same half-hours, so only the providers' own reduction counts toward the 2027/28 contracts and both primaries, with Elmstead, need reinforcement committed.",
+  "stump": "Measuring each flexibility zone's event-window reduction against a weather-adjusted baseline, validated on placebo days and held-out events, and carrying it at its delivery per megawatt scheduled to the 2027/28 contracts files only Elmstead for reinforcement; the step that lands it there is reading the primary's drop as the provider's delivery, when on every event at Ashcombe Road and Fenwick Street the control room moved a feeder section to Brindle Lane and Greaves Hill for the event window (their mirror rise in the same half-hours), so the providers deliver about half of what is scheduled, not four-fifths, and Ashcombe Road and Fenwick Street, with Elmstead, need reinforcement.",
+  "deep_chain": "(1) each zone's event-window reduction against a weather-adjusted baseline is the primary's drop; (2) the neighbouring primaries tied to Ashcombe Road and Fenwick Street by 11 kV open points rose in exactly those half-hours by what the zone shed beyond the provider's own response, so the drop is the provider plus a moved section; (3) the provider's own delivery is read where the move cancels (the pair combined, or the zone's drop less the neighbour's rise on a baseline built without those days); (4) only that delivery, carried to the 2027/28 contracts, is credited on the design day against each primary's weather-corrected, growth-carried demand.",
+  "judgment": "Choosing a comparison the concurrent operator action has not touched: the neighbour is the natural control and is itself contaminated; the data justify the clean comparison by the mirror (the neighbour's rise equals the zone's excess drop half-hour by half-hour) and by the zone whose events carried no move (Charlecote Way), where the same provider's delivery matches the clean estimate.",
+  "one_fact_test": "The likeliest hint, that Brindle Lane's demand rose during Ashcombe Road's events, still leaves the run to tie it to the open point, build a baseline for the neighbour on days the move did not happen, net the move from the zone's reduction, find the same at Fenwick Street, carry the provider's own delivery to the 2027/28 contracts and forecast every primary's design day.",
+  "strategy_label": "WORKS IN FORM (a comparison that is actually clean: the contamination visible only through a relation in the data, never a column or a filed sentence)",
   "mechanism_source": "design_note",
-  "differentiation": {
-    "task451": "task451 completes each partner's unobserved cost from a payment-development pattern whose handler delay collapsed mid-period; here nothing is unobserved at the cut: each high-power unit's hang hazard runs on the days since its hub was last powered down, and what changes in the forward year is how often the hub is powered down, once the programme removes the legacy units whose repairs did it.",
-    "task162": "task162 replays a valve's action against recorded inlet pressure that a distant user's draw lowers; here no device acts on a recorded variable: a unit's failure clock is reset by the repairs made to other units at its hub, and the forward plan removes those units and so the resets.",
-    "task229": "task229 corrects a convex daily conversion for the intra-day swings an upstream controller imposes; here no conversion or measurement is biased: each unit's hang rate is a property of how often its hub was powered down for its neighbours' repairs, which the 2027 programme ends at some hubs.",
-    "task105": "task105's new outlet misses a class of commitment agreed a season ahead of its start; here no class or agreement timing enters: an existing unit fails more because the repairs to its neighbours that used to power it down stop.",
-    "task170": "task170 forecasts moves at the first scheduled measurement over a level from each unit's own path and the record's scatter; here no measurement or threshold on a unit's own path decides: the hang hazard runs on the time since the hub's last power-down, which other units' repairs set.",
-    "task157": "task157 carries lateness from one bus route into another's departures through the drivers who change routes at a shared interchange; here no person or task links the units: a unit's failure clock is reset by the power-downs its site's legacy unit's servicing causes, and the forward plan removes that servicing.",
-    "task465": "task465 counts units carrying two traits no source records together by fusing surveys; here nothing is fused or counted: each unit's failure rate depends on how often its site was powered down, which the 2027 programme changes.",
-    "task488": "task488 times a substance's arrival at each outlet of a branched network by each conduit's own draws; here nothing travels: each unit's failures follow the days since its site's last power-down, which the legacy unit's monthly service set.",
-    "task265": "task265 corrects a cumulative revision share for a registry that began after many implants (left truncation); here the record holds every unit from its start, and the step is the clock the hang hazard runs on and the power-down regime the forward year keeps.",
-    "task136": "task136 reads a scheduled programme's enrolments against sites not yet reached to strip pull-forward from a forecast; here no intervention enrols units: removing a legacy unit removes the power-downs that kept its neighbours from failing.",
-    "task483": "task483 rebuilds medians from percentiles at a coarser grain to decide a designation; here no statistic is rebuilt from summaries: each unit's failure rate is a property of its site's power-down regime, forecast through the regime the programme leaves."
-  },
+  "differentiation": {},
   "lineage": [
     {
       "architecture": "v3 (re-root in batch 1: a Victorian local government union branch choosing the councils at which it applies for protected action ballot orders for ballots opening 1 March 2027, a ballot counting only if half the roll votes, each member's vote carried from the branch's own online votes and lifted where an elected workplace delegate is active at the member's worksite)",
@@ -220,6 +215,71 @@
       "stump_strategy": "binding_constraint",
       "layer2_family": "allocation_constraints",
       "layer2_pattern": "own:volunteer-review-capacity-projected-from-reviewer-retention-against-inbox-arrivals"
+    },
+    {
+      "domain": "energy-systems-utilities",
+      "subdomain": "asset-condition-maintenance",
+      "client_domain": "energy-systems-utilities",
+      "niche": "a regional public rapid-charging operator in Ireland preparing its concession's 2027 availability plan: which hubs will have a high-power charge point below the 99 per cent contract-year availability standard after the partnership's programme removes the end-of-life 50 kW units at some hubs, when the high-power units' controller hangs, which only an on-site power cycle clears, follow the days since the hub was last powered down",
+      "objective": "forecasting",
+      "shape": "10",
+      "decision_type": "designation_set",
+      "answer_unit": "set_of_items",
+      "gap": [
+        "time"
+      ],
+      "pattern": [
+        "none"
+      ],
+      "generators": [
+        "G7",
+        "G14",
+        "G13"
+      ],
+      "gate_g": "forecasting",
+      "calibration_form": "none",
+      "stump_strategy": "forecast_method_backtest",
+      "context_artifact": "monitoring_export",
+      "layer2_family": "estimation_fit",
+      "layer2_pattern": "own:hang-hazard-on-the-hub-power-down-clock-carried-through-a-changed-repair-regime",
+      "stakeholder_role": "the operator's network performance lead, who prepares the concession's 2027 availability plan for the partnership's annual review",
+      "role_family": "operations_director",
+      "forum": "customer_or_counterparty",
+      "forcing_event": "audit_or_inspection",
+      "org_family": "utility_or_infrastructure",
+      "world": {
+        "geography": "Ireland (a fictional operator, partnership and hubs)",
+        "currency": "EUR",
+        "org_type": "regional public rapid-charging operator under a local authority concession",
+        "invented_names": [
+          "Ardvane Charge DAC",
+          "North Midlands Charging Partnership",
+          "Ardvane Rapid"
+        ],
+        "people": [
+          "Sorcha Jackman",
+          "Ailis Fee",
+          "Darcy McGlinchey",
+          "Domhnall Linehan"
+        ]
+      },
+      "deliverables": [
+        "hub_availability_2027.csv",
+        "availability_plan_2027.pdf"
+      ],
+      "question_form": "where",
+      "driver": "Each unit's failures run on a clock that its site's other units' repairs reset, so its recorded failure rate is a property of how often those neighbours were repaired, and a forward plan that removes the failing neighbours stops the resets and multiplies the survivors' failures, which every route carried on each unit's own record misses while it validates on the years the resets ran.",
+      "driver_concrete": "A high-power charge point's controller hangs only after about 75 days without a power-up, and the legacy 50 kW unit's monthly cabinet service isolates the supply pillar it shares with the high-power units at most hubs, so through 2023 to 2026 the units on a pillar of their own carried 95 of the record's 105 hangs; the partnership's programme removes the legacy units at some hubs in December 2026, after which those hubs are powered down only for planned visits and supply faults and, where visits are twice a year, their high-power units hang two or three times a year, as often as the units on a pillar of their own already do.",
+      "stump": "Carrying each high-power charge point's controller-hang and fault rates from 2023 to 2026, validated leaving each unit out and on two back-tests, files only the five hubs whose units already hang; the step that lands it there is reading each unit's hang rate as its own, when a hang comes only after about 75 days without a power-up and the legacy unit's monthly cabinet service powers down every unit on its pillar, so at the seven standard hubs the programme strips the high-power units will run months between power-ups and the set is twelve.",
+      "answer": "List 12 hubs in the 2027 Availability Plan: Ballinkeel Main Street, Bunacurry Pier, Carrowkeel Business Park, Clonlea Leisure Centre, Derrylane Park and Ride, Glenfad Shopping Centre, Kilbeg Retail Park, Portavaddy Seafront, Rathmoy Station Road, Rossnabeg Harbour, Tobernalt Road and Tullymore Market Square.",
+      "architecture": "v4 (architecture 4: an Irish regional rapid-charging operator's 2027 availability plan, the hubs whose high-power charge points fall below 99 per cent once the renewal programme removes the 50 kW units)",
+      "fate": "spent 2026-11-08 on the platform: both runs landed the golden 12 hubs (the author reports not stumped; no rubric). Both read the hang ages off the first histogram (no hang before day 76 after a power-up), fitted a censored hazard on time since restart with the work orders' power cycles as the remedy, simulated the renewed network and back-tested on 2026; a mechanism the rows carry in one plot, with its remedy written in the work orders, was modelled on sight",
+      "shell": {
+        "question form": "where",
+        "second-sentence opener": "return",
+        "rounding opener": "charges",
+        "deliverable set": "csv+pdf"
+      }
     }
   ],
   "lineage_shells": [
@@ -240,14 +300,20 @@
       "second-sentence opener": "the",
       "rounding opener": "the",
       "deliverable set": "docx+xlsx"
+    },
+    {
+      "question form": "where",
+      "second-sentence opener": "return",
+      "rounding opener": "charges",
+      "deliverable set": "csv+pdf"
     }
   ],
-  "notes": "forcing_event audit_or_inspection: the partnership's annual concession review in December 2026, at which the operator names every hub it forecasts below the 99 per cent standard for 2027 with its remediation. Architecture 3's identity (a Victorian union branch's protected action ballots) moved into lineage with the portal's fate on 2026-11-08.",
-  "registered": "2026-11-08T01:11:52Z",
+  "notes": "forcing_event vote_or_meeting: the December 2026 investment committee, which commits the transformer orders that winter 2027/28 needs. role_family operations_director: the head of DSO runs the flexibility service and network operation (capacity_planner was the honest first label and is held by task3 in the last three). Architecture 4's identity (the rapid-charging availability plan) moved into lineage with its platform fate. subdomain moved from asset-condition-maintenance to load-forecasting because the deciding quantity is a design-day demand forecast, inside the same client domain the author fixed.",
+  "registered": "2026-11-08T17:13:57Z",
   "shell": {
-    "question form": "where",
-    "second-sentence opener": "return",
-    "rounding opener": "charges",
-    "deliverable set": "csv+pdf"
+    "question form": "which",
+    "second-sentence opener": "build",
+    "rounding opener": "demand",
+    "deliverable set": "pptx+xlsx"
   }
 }
