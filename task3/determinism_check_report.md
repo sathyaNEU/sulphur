@@ -1,83 +1,102 @@
-# Determinism check report: task3 (architecture 3)
+# determinism-check report, task3 (architecture 4), 2026-11-08
 
-Judge thread: isolated Sonnet at medium, 2026-11-08, on the bundle unzipped from target.zip and the submission's
-graded blocks; the brief at /tmp/determinism-check-task3-107173/judge_brief.md.
-
-- **Verdict:** DETERMINISTIC (the main call and answers 7, 8 and 9 reproduced: OW-S peaks 4.15, 5.95, 8.11 and 9.90
-  ft; MS-MW 4.95 ft; DW-17 6.81 ft).
-- **Disposition:** FIX_NOW, presentation and solution text only. Applied 2026-11-08: (1) the plate's "added October
-  2026" caption was already removed in the generator; the judge read an earlier unzip, and the shipped target.zip
-  carries the re-cut plate (sha 11e08aae19 against the judge's 4767f783c5); (2) Step-by-Step step 2 now gives each
-  observation well's own Theis fit (8,320, 8,090 and 8,260 ft2/day; checks.py R6 asserts each keeps the call); (3)
-  the closing passage now states the OW-S-alone closure (it fits the sentinel's half foot of signal more closely only
-  by missing MS-MW) and the DW-17 closure (a model without walls fits the record as well and reads 6 ft; Plate 3 maps
-  the edges 5,000 ft apart and the walls give 7 ft). No pack, prompt or graded figure moved. Re-judged once (below).
-- **Gate G:** method_or_model_selection, analytical_non_defect, surface_read_dependency no, sole_data_defect no.
-- **Gate H:** domain pass, layers pass, decisive_step analytical, chain 5 inferences.
-- **The judge's sensitivities, answered:** the transmissivity window it found (7,400 to 9,300 ft2/day) contains every
-  fit the golden's processing gives (8,090 to 8,320); its 7,400 at OW-2 came from its cruder processing.
-
-## The judge's verdict, verbatim
-
-# Determinism verdict, task3 (Reidel Road, Rule WR-4)
-
-**Verdict:** DETERMINISTIC. I reproduced the main call and supplementary answers 7, 8 and 9 independently. Two sensitivities are reported below as risks, not failures.
-
-**Disposition:** FIX_NOW. The only repair is presentation. The PNG in the unzipped folder still carries the caption "Wells of the Reidel Road field added October 2026." (visible lower right on the plate), although the brief says it was removed. Re-cut the bundle from the final PNG. No figure moves, so no model rerun is needed. Optional lever: see the two sensitivities under Evidence.
+## Verdict
+DETERMINISTIC
+**Disposition:** FIX_NOW (optional per the thread; APPROVE defensible)
+**Stumping type:** mechanism: forecasting with a depth-specific delay read from matured conversions, stumping_family: outcomes not finished / two explanations for one absent response, surface_read_dependency: no, sole_data_defect: no
 
 ## Why
-The call is forced by the files if the solver reaches a leaky, wall-bounded aquifer calibrated on the far wells CV-02 and CV-11. That reading reproduces the golden almost exactly: 1,000 gpm peaks at 8.1 ft and 1,250 gpm at 9.9 ft against the 9.0 ft limit in Table 1 of the Rule. The tempting alternatives each land on 1,250 gpm or on none, and each is ruled out by named data. The shipped data separate them: CV-07's departure from CV-02 and CV-11 grows with Mill Street pumping, and the Theis hindcast of MS-MW is more than twice the record. I found no Gate A, B, D or E failure. Gate C holds with two margin and fork cautions (below).
+The thread executed the prompt and the plan literally (EP-01's annual flow-weighted mean, the plan's shares, land cover held at 2026, in service before the first year at 10) and reconstructed the forecast from the bundle: delay slope 0.133 years a foot (residual 0.28), vegetable leachate 20.5 to 20.9 mg/L, the ridge at the wells 2030.6 to 2031.5, EP-01 first at 10 in 2031, 11.87 in 2034, Well 7 highest at 15.76. The 2027 cycle is forced; the short-lag rivals predict a rise visible by 2026 that the record rejects; the three upland clearings are flat, as the depth delay says.
 
-## Evidence (recomputed from target/ only)
-| Item | Golden | My recompute | Source |
+## Recomputation ledger
+See the thread's verdict below (every figure reproduced; ask 6 and ask 8 thin).
+
+## Competing answers that survived
+None on the call. Two thin asks: the first year at 10 (a delay a third of a year later moved it to 2032) and Well 7's 2034 mean (0.26 above the rounding line; 15.28 at a vegetable leachate of 20.0 in the thread's model).
+
+## Spec gates
+| Gate | Required | Actual | Pass |
 |---|---|---|---|
-| Monthly Mill Street rates (gal to gpm, units mixed, 1000 gal before 2016-07, 2019-05 run-hours month consistent) | n/a | 2025 mean TW-1 285, TW-2 224 gpm | harlow_springs_MOR csv |
-| MS-MW 2025 drawdown vs CV-02/CV-11 mean (TW-1 "running" reads dropped, MP history applied) | 5 ft (4.9) | 4.95 ft | mill_street_MW csv, well register MP history, network csv |
-| CV-07 departure from CV-02/CV-11, relative to 2006-08 baseline | 0.01 in 2008, -1.67 in 2025 | +0.10 (2008), -1.70 (2025) | network csv (CV-07 MP change 2013-08 applied) |
-| OW-S departure | about 0.5 ft Mill Street drawdown | -0.32 ft in 2025 | network csv |
-| Leaky strip model (Hantush W with no-flow images; walls 5,000 ft apart read off Plate 3, slanted; T 8,160, S 1e-3), B = 3,526 ft | MS-MW 4.9, OW-S/CV-07 fit | MS-MW 4.96, CV-07 1.74 (record 1.70), OW-S 0.54 (record 0.32) | plate PNG, register coordinates |
-| Joint least-squares B over MS-MW, CV-07, OW-S (monthly 2009-2026) | 3,526 | minimum near 3,500 (summed squared error 0.102 at 3,526 vs 0.125 at 3,400 and 0.178 at 3,700) | derived |
-| OW-S greatest monthly drawdown 2046, all months peak in July 2046 | 4, 6, 8, 10 ft | 4.15, 5.95, 8.11, 9.90 ft | application PDF schedules and factors, Mill Street projection (1.2 per cent growth reproduces the stated anchors) |
-| DW-17 (nearest registered domestic well, about 3,040 ft from PW-1; DW-22 5,240 ft, DW-09 7,840 ft), 1,000 gpm, 2046 | 7 ft | 6.81 ft (6.63 to 6.88 for walls 4,500 to 5,500 ft apart, B refit) | register, plate |
-| Rival: calibrate on OW-S alone | B 3,065, MS-MW 4.4 ft | B 3,065 gives MS-MW 4.39 ft, OW-S 0.34 ft, and 1,000/1,250 peaks of 6.45/7.91 ft | derived |
-| Rival: no walls at B 3,526 | n/a | 1,000 gpm 4.79 ft, 1,250 gpm 5.90 ft at that B; the golden says the same result holds after refit | derived |
-| Theis test fit (my crude re-processing, 1,005 gpm, EDT/UTC aligned, barometric correction, pre-test trend) | T 8,160, S 1.0e-3, residual 0.08 ft | per well T 8,600 (OW-1), 7,400 (OW-2), 8,600 (OW-3); joint 8,300; S about 1e-3 | transducer csv, baro csv, field readings |
+| usable files | 10 or more | 13 | yes |
+| categories | 2 or more | spreadsheet, text (pdf), image | yes |
+| CSV of 20,000+ rows | 1 | pumping, 26,080 rows | yes |
+| CSV of 10-20 pages or more | 1 | network samples, 5,000+ rows; land cover 5,700 rows | yes |
+| distractors | 2 or more, unlabelled | 3 in metadata.json | yes |
+| deliverables | 1 to 3, all in golden | 3 of 3 | yes |
+| golden ZIP exactly the requested files | yes | yes | yes |
 
-I did not rebuild the test analysis to the golden's exact residual. The figures agree to within my cruder processing.
+## Gate G reconciliation
+The thread's type (forecasting on honest data, stump power strong, no single sentence rescues a run) matches the card (decomposition_attribution, maturity_censoring, analytical) and the design note's deep step. The thread named no distractor as load-bearing.
 
-**Sensitivities and forks (not failures, but the margins are about 10 per cent):**
-1. **Transmissivity window.** With B refit to MS-MW's 4.95 ft at each T, the answer 1,000 gpm holds for T of roughly 7,400 to 9,300 ft2/day.
-   - T = 7,000 gives 1,000/1,250 peaks of 7.04/8.65 ft, so 1,250 gpm would be permitted.
-   - T = 9,500 gives 9.14 ft at 1,000 gpm, so 700 gpm would be permitted.
-   - My own per-well fits span 7,400 to 8,600, and OW-2 alone sits at the lower edge, where the 1,250 gpm peak is about 9.0 ft. The golden's 8,160 and its claim that "T from any observation well" keeps the call rest on its cleaner processing. A judge should confirm that claim from the golden's per-well fits. If OW-2's fit is below about 7,500 the 1,250 gpm margin is a coin toss.
-2. **OW-S-alone calibration (B 3,065).** It fits the sentinel record better by itself (RMSE 0.144 vs 0.218 ft) and permits 1,250 gpm. It is ruled out only by MS-MW (4.4 vs 4.95 ft) and CV-07. That misfit is real (about 0.5 ft against reading noise near 0.1 ft), so the closure is defensible. It is a genuine alternative a strong solver could choose, and the files give no rule saying "calibrate on all three wells". If the golden does not already document the residual comparison, add it to the answer blocks.
-3. **Supplementary question 9 (DW-17: 7 ft) depends on reading the walls from Plate 3** (no-flow edges 5,000 ft apart). A solver who skips the plate and refits gets 6 ft, as the golden's step 8 states. The prompt never mentions the plate or boundaries. Treat 6 as a surviving alternative for answer 9 only. It does not touch the main call. Consider a tolerance note in the rubric for answer 9, or have the prompt name the plate.
-4. Wall slope and spacing are read off the PNG. Within plus or minus 500 ft of spacing, answer 9 still rounds to 7 and the main call is unchanged after refit.
+## Stump power (Gate F)
+Strong: the default path (the record, a trend, the wellhead travel time or one fitted lag with the clearing tested against 2019 to 2026) files the 2031 cycle; only the depth-specific delay files 2027.
 
-Other points that passed: the permit term and months (April 2027 start, 2027-2046); the 56/44 TW-1/TW-2 split; the monthly factors; the largest alternative that meets 4.1 (the Rule's own tie-break, 4.2); the greatest month in the final year (4.3); the nearest domestic well (4.4). All rule terms are in the shipped Rule PDF and application PDF. The method vocabulary ("leakage factor", "Theis") appears in the answer blocks only; the prompt leaves the method open, as intended.
+## Findings, ranked
+1. Ask 6 thin against a later arrival reading. Fixed: the ridge parcels' arrivals clustered at 2030.85 to 2030.92; every reading half a year early to half a year late files 2031 (checks.py R5).
+2. Ask 8 thin (Well 7 0.26 above 15.5). Fixed: Well 7's ridge acreage raised; 15.92, and 15.85 at a vegetable leachate of 20.0 (R5).
+3. The golden's mixing weight is not filed but fits the record best (rmse 0.21 against 0.40 at Well 6): kept as the asks' second judgment (SF10).
+
+## Next action for the author
+Re-judge once on the rebuilt target.zip.
+
+## The thread's verdict (verbatim)
+
+# Determinism verdict, task3 (Corlinden NR-1 timing)
+
+**Verdict:** DETERMINISTIC on the main call (2027 cycle). Supplementary asks 6 and 8 are thin: ask 6 is a roughly 0.25-year timing margin, and ask 8 depends on an unpinned mixing weight and a leachate estimate. Reported as a Gate C risk, not a failure of the main call. SOLUTION_WRONG: none found.
+
+**Disposition:** FIX_NOW (optional, no rerun). Pin or soften asks 6 and 8 only if the author wants them literal: file the mixing weight (acres x recharge of the land cover in force when the water left the water table) in the plan or prompt, and consider rounding Well 7 consistently. The main call, the stump and the files stay untouched. If the author prefers to leave it, APPROVE is defensible because the cycle decision holds under every reasonable variant.
+
+## Why
+- The decision (2027 vs 2031 cycle) is forced. Every depth-specific delay variant I ran puts the first year at 10 mg/L between 2031 and 2032, well before 2034. The 2031 cycle (in service 1 Jan 2034) fails in all of them.
+- The only rival, "falling record or trend means no rise, so wait", is not defensible. It requires treating the Sallow Ridge clearing as leaching nothing, but the network shows irrigated vegetable land leaches about 21 mg/L. The depth-delay fit (0.133 yr/ft) from the 14 matured conversions also explains why the 3 upland clearings (TCGW-053, 076, 012) are still flat.
+- Short-lag alternatives (wellhead travel time alone, one 4.5 or 4.7 yr lag) predict a rise already visible by 2026 (EP-01 about 10.4 from 2027 in my run). The record rejects them, so they cannot survive as defensible rivals.
+
+## Evidence (recomputation ledger)
+Source files: network samples + sites + age survey, parcel land cover, WHPA parcel attributes, raw water results, supply plan.
+
+| Figure | Claimed | My value | Reproduced | Source |
+|---|---|---|---|---|
+| Matured conversions 1990 to 2008 | 14 | 14 (010, 014, 024, 026, 034, 051, 055, 056, 062, 064, 068, 070, 072, 085) | yes | land cover + sites |
+| Delay slope b (yr/ft) | 0.13 (0.132) | 0.133; through origin 0.133 | yes | network samples, logistic half-way arrival minus conversion year |
+| Fit residual (yr) | 0.3 | 0.28 | yes | same |
+| Irrigated vegetable leachate, latest 5 land-surface years | 20.9 | 20.5 (3-yr smoothed) to 20.9 | yes, within estimation noise | network wells on unchanged land |
+| Irrigated corn/soy leachate | 13.2 | 13.2 | yes | same |
+| Irrigated vegetables before nutrient management | about 34 | 32 to 37 | yes | same |
+| Ridge clearing area | 1,084 acres | 1,084 (10 parcels) | yes | WHPA attributes + land cover |
+| Ridge depth to water | 54 to 95 ft | 54 to 95 | yes | WHPA attributes |
+| Ridge arrival at wells | 2030 to 2031 | 2030.6 to 2031.5 | yes | model |
+| Well model offsets vs 2019 to 2026 record | -0.31 to 0.01 | W3 +0.02, W5 -0.31, W6 -0.26, W7 -0.19 | yes | raw water results |
+| EP-01 2030 | about 7 | 5.7 (consistent with water-table-age subtraction: 6.9) | approximately | model |
+| First year EP-01 at or above 10 | 2031 | 2031 (EP 10.67; 11.6 if water-table age is subtracted) | yes, but thin (see fork) | model |
+| EP-01 2034 | 12 | 11.87 | yes | model |
+| Well 7 2034 | 16 | 15.76 | yes, but thin (see fork) | model |
+| Well 6 2034 | not claimed | 14.9 | n/a | model |
+| Plan shares 2027 to 2040 | 8/30/32/30 | as filed in plan Table 1 | yes | supply plan |
+| Upland clearings flat to 2026 | "no rise yet" | flat at 0.5 to 0.6 mg/L N through 2026 | yes | network samples |
+
+Forks and sensitivities (all from my own reconstruction):
+- **Ask 6, first year.** Adding a +0.25 to +0.3 yr delay (for example a different step estimator, or double counting water-table age) turns the 2031 mean from 10.7 into 9.2 to 9.35, so the first year becomes 2032. Subtracting water-table age as the golden does moves it the other way (2031 = 11.6). A consistent conversion-date convention cancels out. Result: 2031 for the golden's own method and for the plain method, but the margin is thin. The cycle call does not move.
+- **Ask 8, Well 7 2034.** The Well 7 mean is 15.76 under the golden's mixing (acres x recharge of the land cover at the time the water left the water table). It is 15.2 with acres only and 15.0 with recharge by the land cover at the land surface when the leachate left the root zone. The golden's mixing fits the record best (shifted rmse 0.21 vs 0.40 for Well 6), so it is data-supported but not filed in the prompt or files. Separately, Well 7 sits only 0.26 above the 15.5 rounding line. Irrigated vegetable leachate of 20.0 gives 15.28 (rounds to 15), 20.5 gives 15.56, 20.9 gives 15.78. EP-01 2034 stays at 12 for any irrigated vegetable leachate of 20 or more (11.6 to 12.1). Well 7 stays the highest well in every variant.
+- **Ask 7.** 12 is robust across the variants above, except acres-only or low leachate, which give 11.4 to 11.5 (rounds to 11).
 
 ## Files/Hygiene
-PASS, with one stale item. 13 files: csv (6), xlsx (3), pdf (3), png (1), so four formats. Two large messy CSVs (transducers 103,682 rows, network levels 1,911 rows plus mixed units and MP changes in the other tables). Distractors present and unlabelled (water-quality workbook, step test, drillers' logs for non-decisive wells, shallow CV-04/CV-09/CV-13). Real-looking operational artifacts with incidental noise (mixed units, MP changes, meter replacement, re-hung logger, timezone mixes). No authoring or benchmark disclosure found. Temporal coherence fine (application draft dated 30 October 2026, District data supplied 2 October 2026). Stale item: the PNG still shows the "added October 2026" caption, contrary to the brief. It is harmless to the figures but should be re-cut. No exclusion-level finding.
+**PASS, no exclusion-level finding.**
+- 13 files; formats: csv (5), xlsx (4), pdf (3), png (1).
+- Two large CSVs: pumping daily (26,080 rows, mixed gal/kgal units, mixed well labels WELL n vs HR-Wn, and daily volumes in the 2019 onward rows that read very differently from the earlier ones) and network samples (5,114 rows, mixed NO3 vs N units, two labs, rebuilt wells).
+- Unlabelled distractors: pumping data (plan shares are given), specific capacity workbook, fertilizer sales, well construction records.
+- No provenance leakage seen. Data reads like real agency exports (lab changes, duplicates, re-runs, a well rebuild, a 2008 land cover recode, split parcels).
+- Temporal coherence is fine (plan adopted Sep 2025, samples run to Nov 2026).
+- One note: the 2019 onward pumping volumes appear to switch units for part of the file (status column, kgal mixed). That is texture only.
 
 ## Stump power
-Strong. A competent analyst who fits the test well with Theis fails every schedule (hindcast 12 ft at MS-MW vs 5 ft record). One who calibrates against the nearest network well CV-07, or the wells' own pre-pumping baselines, gets B near 1,900 ft and every schedule under 4 ft, which files 1,250 gpm. That is the reasonable but insufficient route. The deciding insight, that CV-07 sits inside the Mill Street cone, comes from separating two explanations for one pattern (wet-year recharge vs Mill Street drawdown) and is hard to see without the cross-well departure analysis. Risk: if a solver stops at T from the test and B from the sentinel alone, the answer 1,250 gpm can be reached for a defensible-looking reason (sensitivity 2).
+Strong. The trap that does the work is that the falling record, any trend on it, and every one-lag or travel-time-only model fitted to it reach "wait". Doing the right thing needs the depth-dependent unsaturated delay from the 14 conversions, the leachate by land-surface year, and the parcel-by-parcel carry to the wells. A solver that cleans everything perfectly and fits the record or the single average lag still lands on the 2031 cycle. I could not find a single sentence that rescues a run; the one-fact candidate ("the delay grows with depth to water") still leaves the fit, the leachate series and the mixing to be built.
 
 ## Stumping type
-`mechanism: method_or_model_selection` (with statistical_rigor on the far-field reference choice), `stumping_family: analytical_non_defect`, `surface_read_dependency: no`, `sole_data_defect: no`. The reported numbers are fine. The difficulty is choosing the model and the reference wells on honest data, and carrying the calibrated model twenty years forward against a limit.
+`mechanism: forecasting`, `stumping_family: analytical_non_defect`, `surface_read_dependency: no`, `sole_data_defect: no`. The reported record and all figures are fine; the difficulty is a forward projection the correctly read past does not pin (outcome not yet finished happening). On clean data the task would still stump. Not banned.
 
 ## Deep reasoning
-`domain: pass`, `layers: pass`, `decisive_step: analytical`, `chain: 5 inferences, judgment: separating natural level from Mill Street drawdown and calibrating a bounded leaky aquifer to it`, `one_fact: "CV-07 is inside the Mill Street cone"` (no single sentence makes the rest routine: the solver still has to rebuild the test fit, fit the leakage factor with walls, and superpose both fields to 2046).
-
-Layer 1 is the mixed units, clocks, re-hung logger, and measuring-point and meter changes. Layer 2 is the groundwater hindcast and calibration. The easy route from CV-07 or the wells' own baselines gives under 4 ft and 1,250 gpm. Swapping the nouns (for example a river) breaks the wells and aquifer test reasoning, so the domain is used, not borrowed.
+`domain: pass` (hydrogeologic travel-time modelling, wellhead protection, blended entry-point compliance), `layers: pass` (Layer 1: units NO3 vs N, two labs, rebuilt wells, split parcels, 2008 code recode, mixed pumping units; Layer 2: unsaturated delay and leachate projection), `decisive_step: analytical`, `chain: 5 inferences, judgment: depth-dependent delay fit and its out-of-range transfer to the ridge, justified against the upland clearings`, `one_fact: none`. The easy route is a per-well trend or a single-lag fit, giving EP-01 about 5 to 6 in 2034 and the 2031 cycle.
 
 ## Fix
-Where: input_files (presentation only) and solution. (1) Re-cut the plate PNG without the "added October 2026" line and confirm the shipped zip contains the final PNG. (2) In the answer blocks, document the per-well T fits and the OW-S-alone residual comparison, so the closures on sensitivities 1 and 2 are visible. (3) Add a rubric tolerance or a prompt pin for answer 9 (the plate's walls), since 6 ft is an alternative for solvers who skip the plate. No change to the main call or any graded figure.
-
-## Re-judge of the FIX_NOW (one pass, 2026-11-08)
-
-Isolated Sonnet thread on the final bundle and the revised Step-by-Step: **DETERMINISTIC, APPROVE.** The plate no
-longer carries the caption; its own per-well Theis fits (8,430, 8,110 and 8,370 ft2/day) agree with step 2's
-(8,320, 8,090 and 8,260) and sit inside the window where 1,000 gpm holds, so the first pass's margin concern at OW-2
-is gone; the OW-S-alone closure (B 3,065 ft, MS-MW 4.4 against the record's 4.9 ft) and the DW-17 closure (Plate 3's
-mapped edges) cite shipped data. Residual note, not blocking: a solver who skips the plate reads 6 ft on answer 9
-only; the rubric may carry that as a tolerance note.
+Where: solution (optional) or prompt. Specific change: none needed for the main call. If asks 6 and 8 are to be graded literally, file the mixing convention and the leachate level in the answer blocks (solution wording), or state in the golden that Well 7 depends on it. No change to the input files.

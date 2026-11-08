@@ -315,7 +315,11 @@ def run(target, D=None, **opts):
     fit = delay_fit(D, opts)
     if "b_override" in opts:
         fit = dict(fit, b=opts["b_override"])
+    if "shift" in opts:
+        fit = dict(fit, a=fit["a"] + opts["shift"])
     curves = class_curves(D, fit, opts)
+    if "irv_override" in opts:
+        curves["IRV"] = dict(curves["IRV"], last=opts["irv_override"])
     years = list(range(1992, 2041))
     model = {w: {y: model_well(D, fit, curves, w, y, opts) for y in years} for w in P.WELLS}
     obs = D["well_annual"]

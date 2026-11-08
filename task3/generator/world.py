@@ -62,10 +62,16 @@ def whpa_parcels(rng):
     plain("W7", 9, 3, (9, 25), {"FOR": 2, "GRS": 1, "DRY": 2, "IRC": 4, "IRV": 2, "RES": 1})
     # the Sallow Ridge timber tract, cleared for irrigated vegetables 2016-2020 in ten parcels, and the city's own
     # ridge woodland (two parcels, left in forest)
-    ridge = [("W6", 2017, 95, 1.6, 111), ("W6", 2018, 80, 2.4, 98), ("W6", 2019, 79, 1.1, 117),
-             ("W6", 2019, 70, 2.9, 85), ("W6", 2020, 72, 1.4, 105),
-             ("W7", 2018, 90, 1.0, 116), ("W7", 2019, 76, 2.0, 127), ("W7", 2020, 68, 1.8, 101),
-             ("W7", 2021, 69, 1.2, 135), ("W7", 2021, 54, 3.3, 89)]
+    ridge = [("W6", 2017, 94, 1.7, 106),
+             ("W6", 2018, 84, 2.0, 93),
+             ("W6", 2019, 80, 1.5, 111),
+             ("W6", 2019, 72, 2.6, 80),
+             ("W6", 2020, 71, 1.7, 100),
+             ("W7", 2018, 88, 1.5, 125),
+             ("W7", 2019, 76, 2.1, 136),
+             ("W7", 2020, 68, 2.1, 108),
+             ("W7", 2021, 66, 1.4, 144),
+             ("W7", 2021, 57, 2.6, 96)]
     for zone, yr, dtw, T, ac in ridge:
         out.append(dict(zone=zone, kind="ridge", acres=float(ac), dtw=float(dtw), T=float(T),
                         hist=_hist("FOR", [(yr, "IRV")]), theta=float(rng.normal(P.THETA, P.THETA_SD * 0.6)),

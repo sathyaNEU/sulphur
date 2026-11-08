@@ -115,6 +115,17 @@ ok("R4 the network's recent clearings show nothing yet", len(rec) == 3 and max(r
 ok("R4 the 2031 margin", float(g["ep"]["2031"]) >= 10.5 and float(g["ep"]["2030"]) <= 9.3,
    "%s %s" % (g["ep"]["2030"], g["ep"]["2031"]))
 
+# R5 the judge's stress cases (2026-11-08): a timing shift of a third to half a year either way, and the vegetable
+# leachate at the low end of its estimates, keep every graded figure
+for lab, kw in (("shift -0.45", {"shift": -0.45}), ("shift +0.45", {"shift": 0.45}), ("no age", {"age": False}),
+                ("vegetable leachate 20.0", {"irv_override": 20.0}), ("vegetable leachate 21.5", {"irv_override": 21.5})):
+    r = S.run(TARGET, D=D, **kw)
+    hw = max(P.WELLS, key=lambda w: r["fc"][w][2034])
+    c5 = (r["call"], r["cross"], mg(r["ep"][2034]), hw, mg(r["fc"][hw][2034]))
+    ok("R5 %s keeps the golden's cells" % lab, c5 == GOLD, str(c5))
+ok("R5 Well 7's 2034 mean sits clear of the rounding line", 0.3 <= abs(g["hi_2034"] - 15.5) and g["hi_2034"] < 16.3,
+   str(g["hi_2034"]))
+
 # ceiling
 C = json.load(open(os.path.join(HERE, "ceiling.json")))
 ok("pair ceiling at or under 50", C["pair_ceiling"] <= 50 and C["pair_ceiling_area"] <= 50, str(C))

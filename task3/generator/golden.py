@@ -302,12 +302,11 @@ def memo(res, rungs, F, path, png):
                    "grew with the depth to water, about %.2f years a foot (about %.0f year at %d ft, %.0f at %d ft), "
                    "while their water-table ages are under half a year. The %s network wells under the %d to %d "
                    "upland clearings, at %d to %d ft, show nothing yet, as that delay says they should. Carried to each "
-                   "ridge parcel's own depth, the leachate reaches the water table from %d and the wells in %d and "
+                   "ridge parcel's own depth, the leachate reaches the water table from %d and the wells late in "
                    "%d." % (F["ridge_dtw"][0], F["ridge_dtw"][1], F["n"], F["cohort_years"][0], F["cohort_years"][1],
                             F["b"], F["cohort_delay_ends"][0], F["cohort_dtw"][0], F["cohort_delay_ends"][1],
                             F["cohort_dtw"][1], WORDS[F["recent_n"]], F["recent_years"][0], F["recent_years"][1],
-                            F["recent_dtw"][0], F["recent_dtw"][1], F["wt_arrive_lo"], F["arrive_lo"],
-                            F["arrive_hi"]), BODY),
+                            F["recent_dtw"][0], F["recent_dtw"][1], F["wt_arrive_lo"], F["arrive_lo"]), BODY),
          Paragraph("Under irrigated vegetables the network's water now carries about %d mg/L as N, down from about "
                    "%d before nutrient management. Mixed into each well by its parcels' recharge, the ridge takes "
                    "Well 6 to about %d and Well 7 to about %d mg/L, and the entry point past 10 in %d." %

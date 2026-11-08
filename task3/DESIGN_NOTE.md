@@ -17,7 +17,7 @@ a new world, dataset and shell.
 - **Strategy:** outcomes that have not finished happening (Part A, WORKS IN FORM, F4's live form: completion speed
   differs by a unit no pooled factor captures, here each parcel's depth to water) fused with separating two
   explanations for one pattern (the recent clearing's absent response read as no effect or as not yet arrived).
-- **Data-native sentence:** a sand-plain well field whose nearest recharge land is an ice-contact ridge with 54 to 95 ft
+- **Data-native sentence:** a sand-plain well field whose nearest recharge land is an ice-contact ridge with 57 to 94 ft
   of dry sand above the water table, cleared for irrigated vegetables from 2017 to 2021, beside a county network whose
   older conversions, mostly on 11 to 49 ft of sand, step up later the deeper the water table.
 - **Abstraction sentence (written, then tested):** "a recent change at sources that sit deeper in an unobserved stage
@@ -41,13 +41,13 @@ a new world, dataset and shell.
    duplicates and re-runs, map the 2014 point names: EP-01 fell from 6.2 mg/L in 2012 to 5.3 in 2025, Wells 6 and 7
    from 6.9 and 5.7 in 2010 to 5.4 and 4.5 in 2026.
 2. Trend each well over 2015 to 2026 and blend by the plan's shares: EP-01 near 4.7 mg/L in 2034, never at 10.
-3. A strong analyst does not stop at the trend: the parcel land cover shows the Sallow Ridge, 1,084 acres in the zones
+3. A strong analyst does not stop at the trend: the parcel land cover shows the Sallow Ridge, 1,099 acres in the zones
    of Wells 6 and 7, cleared for irrigated vegetables from 2017 to 2021, one to three years' groundwater travel from the
    wells. It builds the protection area's mix (each parcel's land cover, its leachate from the network, its wellhead
    model travel time), fits one lag to the wells' 1998 to 2018 record (4.5 years, residual 0.41 mg/L), and finds the
    ridge should have raised Well 6 by about 10 mg/L by 2026.
 4. Wells 6 and 7 show no rise, nor do the network's three wells under the 2017 to 2020 upland clearings; fitted to
-   the 2019 to 2026 record the clearing's effect comes out at nil (the fit's squared error 1.3 at nil against 582 at
+   the 2019 to 2026 record the clearing's effect comes out at nil (the fit's squared error 1.2 at nil against 581 at
    the network's leachate), so the model forecasts EP-01 near 5.5 mg/L in 2034 and never at 10.
 
 Ends on: the 2031 cycle
@@ -59,7 +59,7 @@ A strong analyst who finds the ridge clearing tests it against the wells and the
 sees no rise where the wellhead model's travel time or one lag fitted to the wells' own record says it should already
 be, sets the clearing's effect at nil and files the 2031 cycle with EP-01 near 5.5 mg/L through 2040; only each parcel's
 delay through its own unsaturated thickness, read from the county's matured conversions (0.132 years a foot), puts the
-ridge's leachate at the wells in 2030 and 2031, EP-01 at 10 in 2031 and the 2027 cycle.
+ridge's leachate at the wells late in 2030, EP-01 at 10 in 2031 and the 2027 cycle.
 
 ## Deep reasoning
 
@@ -102,9 +102,9 @@ ridge's leachate at the wells in 2030 and 2031, EP-01 at 10 in 2031 and the 2027
 - **Chain:** (1) the wells' falling-then-flat record is the nutrient-management era's water arriving and cannot show
   leachate still above the water table; (2) the county's matured conversions step up after a delay that grows with
   depth to water (0.132 years a foot, residual 0.3 years) while their water-table ages are under half a year, so the
-  delay is in the unsaturated sand and the wellhead model's travel time starts below it; (3) the ridge sits on 54 to
-  95 ft against the 11 to 49 ft under all but three matured conversions, so no pooled delay applies and its leachate
-  reaches the water table from 2027 and the wells in 2030 and 2031; (4) the leachate under irrigated vegetables since
+  delay is in the unsaturated sand and the wellhead model's travel time starts below it; (3) the ridge sits on 57 to
+  94 ft against the 11 to 49 ft under all but three matured conversions, so no pooled delay applies and its leachate
+  reaches the water table from 2028 and the wells late in 2030; (4) the leachate under irrigated vegetables since
   nutrient management (20.9 mg/L) mixed into each well by the recharge each parcel had when its water left the water
   table; (5) the plan's shares from 2027, EP-01 at 10 in 2031, before 1 January 2034.
 - **Judgment:** separating "the clearing does not raise nitrate" from "its leachate has not arrived" with the matured
@@ -180,13 +180,13 @@ ridge's leachate at the wells in 2030 and 2031, EP-01 at 10 in 2031 and the 2027
 
 - **Rungs and winners:** rung 0 trend on each well files the 2031 cycle (EP-01 4.7 mg/L in 2034, linear or Sen); rung 1
   the parcel mix with the clearing fitted to 2019 to 2026 files the 2031 cycle under the wellhead model's travel time
-  (squared error 1.0 at nil against 1,180 at the network's leachate), one lag fitted to 1998 to 2018 (4.5 years; 1.3
-  against 582) or the matured conversions' average delay (4.7 years; 1.2 against 166), each EP-01 near 5.5 mg/L; the
-  decisive rung (each parcel's delay from its depth) files the 2027 cycle, EP-01 at 10 in 2031 (6.8 in 2030, 11.6 in
-  2031), 11.9 in 2034, Well 7 15.7. Off the ladder: mixing by acres alone or at the root-zone recharge keeps the call
+  (squared error 0.9 at nil against 1,195 at the network's leachate), one lag fitted to 1998 to 2018 (4.5 years; 1.2
+  against 581) or the matured conversions' average delay (4.7 years; 1.1 against 156), each EP-01 near 5.5 mg/L; the
+  decisive rung (each parcel's delay from its depth) files the 2027 cycle, EP-01 at 10 in 2031 (6.0 in 2030, 11.8 in
+  2031), 11.9 in 2034, Well 7 15.9. Off the ladder: mixing by acres alone or at the root-zone recharge keeps the call
   and puts Well 7 at 15; the all-years vegetable leachate keeps the call and puts Well 7 at 17.
 - **Margins:** the golden's crossing sits 3 years before the 2031 cycle's in-service year; every standing rival keeps
-  2031 (EP-01 5.8 to 9.0 in 2030, 10.6 to 12.3 in 2031), 2034 at 11.8 to 12.3 and Well 7 at 15.7 to 16.1.
+  2031 (EP-01 5.4 to 8.6 in 2030, 10.2 to 12.3 in 2031), 2034 at 11.8 to 12.3 and Well 7 at 15.8 to 16.3.
 - **Pricing:** (1) the residue the WHAT leaves is the delay, a method; (2) the move the call needs (EP-01 from 5.5 to
   past 10 before 2034) is the ridge's arrival inside the window, which only the depth-specific delay gives; (3) the
   one-group-by route (the cohort's average delay) is a rung 1 shortcut; (4) the delay per foot spreads 0.128 to 0.136
@@ -245,7 +245,7 @@ and the three recent upland clearings agree with the golden's delay and with a n
   highest at 7), and A2 and A3's value carry a second judgment of their own: the mixing weight (acres alone, or the
   recharge at the time the water left the root zone with the model carried to the wells' level, puts EP-01 at 11 and
   Well 7 at 15) and the leachate's era (the all-years vegetable mean puts EP-01 at 13 and Well 7 at 17).
-- **Spans:** A1 2031 across the standing family and every second judgment; A2 11.8 to 12.3; A3 Well 7 at 15.7 to 16.1.
+- **Spans:** A1 2031 across the standing family and every second judgment; A2 11.8 to 12.3; A3 Well 7 at 15.8 to 16.3.
 - **Pair ceiling:** 42.2 (the cracker lands the call and A1 but mixes at the root-zone recharge, 72.5; the mirror on
   rung 1, 12.0); with acres alone and its 2034 entry point counted kept, 49.1.
 - **Shallow keep:** 0 per cent of ask weight kept by the default path.
@@ -546,3 +546,8 @@ Architecture 4 (Sallow Road well field, the nitrate plant's loan cycle), while b
 - REVIEW, stump vocabulary in the wellhead plan (travel, recharge, wellhead, county, effect, weight): harmless, the
   words a wellhead delineation report is made of; it states the groundwater time of travel and recharge by land cover,
   and nowhere a delay above the water table, a conversion, or nitrate.
+- The ridge's arrivals spread from 2030.6 to 2031.5 (the build's first cut): the stage 4 judge found the first year
+  at 10 thin against a later reading of the arrival (a third of a year late put it in 2032) and Well 7's 2034 mean
+  0.26 above the rounding line; the ridge parcels' depths and travel times were set so their arrivals cluster at
+  2030.85 to 2030.92 (every reading from a half year early to a half year late files 2031) and Well 7's ridge acreage
+  raised 7 per cent (15.92, and 15.85 at the low end of the vegetable leachate), asserted in `checks.py` R5.

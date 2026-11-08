@@ -56,6 +56,7 @@ def figures(g, R):
         "ridge_T": [min(r[4] for r in ridge), max(r[4] for r in ridge)],
         "ridge_delay": [round(min(r[8] for r in ridge), 1), round(max(r[8] for r in ridge), 1)],
         "arrive_lo": int(math.floor(min(r[9] for r in ridge))), "arrive_hi": int(math.floor(max(r[9] for r in ridge))),
+        "arrive_range": [round(min(r[9] for r in ridge), 1), round(max(r[9] for r in ridge), 1)],
         "wt_arrive_lo": int(math.floor(min(r[7] + r[8] for r in ridge))),
         "irv": round(g["curves"]["IRV"]["last"], 1), "irv_int": mg(g["curves"]["IRV"]["last"]),
         "irc": round(g["curves"]["IRC"]["last"], 1), "irv_pre_int": mg(irv_pre),
@@ -144,11 +145,11 @@ def submission(g, R, F, path):
       "below it." % (F["n"], F["cohort_years"][0], F["cohort_years"][1], F["b"], F["cohort_delay_ends"][0],
                      F["cohort_dtw"][0], F["cohort_delay_ends"][1], F["cohort_dtw"][1]))
     A("2. The Sallow Ridge parcels cleared for irrigated vegetables in %d to %d (%s acres, %d to %d ft to water, %.0f "
-      "to %.0f years' groundwater travel from Wells 6 and 7) send their leachate to the wells in **%d and %d**; with "
+      "to %.0f years' groundwater travel from Wells 6 and 7) send their leachate to the wells **late in %d**; with "
       "the travel time alone, or the one lag of about %.1f years that fits the wells' record, it would already show, "
       "and fitting the record then sets the clearing's effect to nil."
       % (F["ridge_years"][0], F["ridge_years"][1], c(F["ridge_acres"]), F["ridge_dtw"][0], F["ridge_dtw"][1],
-         F["ridge_T"][0], F["ridge_T"][1], F["arrive_lo"], F["arrive_hi"], F["single_lag"]))
+         F["ridge_T"][0], F["ridge_T"][1], F["arrive_lo"], F["single_lag"]))
     A("3. Water under irrigated vegetables now carries about **%d mg/L as N** (the land-surface years since nutrient "
       "management; about %d before it), mixed into each well by its parcels' recharge at the time the water left the "
       "water table." % (F["irv_int"], F["irv_pre_int"]))
@@ -192,8 +193,8 @@ def submission(g, R, F, path):
       "acres times the recharge it had when the water left the water table (sallow_road_WHPA_parcel_attributes_2019"
       ".xlsx, Recharge), each well's model carried to its 2019-2026 level (residuals %.2f to %.2f mg/L), and the wells "
       "blended by corlinden_water_supply_plan_2025.pdf's shares with land cover held at 2026: the ridge reaches the wells "
-      "in %d and %d, EP-01 passes 10 in %d and is %d mg/L in 2034, %s at %d."
-      % (min(g["resid"].values()), max(g["resid"].values()), F["arrive_lo"], F["arrive_hi"], F["cross"],
+      "late in %d, EP-01 passes 10 in %d and is %d mg/L in 2034, %s at %d."
+      % (min(g["resid"].values()), max(g["resid"].values()), F["arrive_lo"], F["cross"],
          F["ep2034_int"], F["hi_well_name"], F["hi_2034_int"]))
     A("")
     A("No other conclusion survives. The record, a trend on it and any fit to it read the ridge's absence as no "

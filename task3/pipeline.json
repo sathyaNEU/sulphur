@@ -23,10 +23,7 @@
   "surface": "exit 0, 1 pair promoted (surface similarity), names WARN on 'Little Ossey' and 'Sep Oct' (not personas)"
  },
  "judge": {
-  "verdict": "DETERMINISTIC",
-  "disposition": "FIX_NOW applied (plate re-cut, per-well fits, the OW-S-alone and DW-17 closures), re-judged once: APPROVE",
-  "gate_g": "method_or_model_selection, analytical_non_defect, surface_read_dependency no, sole_data_defect no",
-  "gate_h": "domain pass, layers pass, decisive_step analytical, chain 5 inferences",
+  "pass1": "DETERMINISTIC, FIX_NOW optional (2026-11-08): asks 6 and 8 thin; fixed (ridge arrivals clustered at 2030.85-2030.92, Well 7 ridge acreage up; checks.py R5)",
   "report": "task3/determinism_check_report.md"
  },
  "returned": [
@@ -90,7 +87,7 @@
    "commit": ""
   }
  ],
- "resume": "stage 4: the determinism judge thread is running on target.zip (brief at /tmp/determinism-check-task3-a4120407/judge_brief.md); read verdict.md, fix findings in the generator, re-judge once if FIX_NOW, then READY to main",
+ "resume": "stage 4: the re-judge (pass 2) is running on the rebuilt target.zip (brief /tmp/determinism-check-task3-a4r2121032/judge_brief.md); read its verdict, write determinism_check_report_pass2.md, then READY to main",
  "approved": null,
  "delivered": "2026-11-07",
  "portal": "landed by one response (R1 2,200 t at 100 per cent, R2 2,600 t at 70 per cent), reported 2026-11-07",
@@ -172,7 +169,7 @@
  "subdomain": "hydrology-flood-frequency",
  "call": "the 2027 cycle (EP-01 first at 10 mg/L in 2031, 12 in 2034, Well 7 highest at 16)",
  "gates": {
-  "checks": "61 of 61",
+  "checks": "67 of 67",
   "verify": "PASS",
   "rebuild": "byte-identical",
   "figures_check": "52 of 52",
