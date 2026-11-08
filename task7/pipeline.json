@@ -19,7 +19,7 @@
  },
  "leak": {
   "leak_py": "REVIEW (no LEAK) on target.zip md5 cec7d9d873c3ca13eb435a80694cf4f4",
-  "reader": "two passes: no decisive-step sentence, no ranking or helper file, nothing reads as the answer; question 5 reads terms 3.5 as the whole book's change in expected write-off (the golden's estimand); question 6 analytical"
+  "reader": "CLEAN on the re-sited prompt (task7/leak_reader_report.md): no step announced, no ranking file, no ask ambiguity"
  },
  "duplicate_check": {
   "heart": "WARN, answered in the design note's Guard row",
