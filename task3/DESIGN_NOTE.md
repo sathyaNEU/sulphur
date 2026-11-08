@@ -513,3 +513,13 @@ Architecture 2 (the Clay Street tank):
 - 2026-11-08, build stage: asks riding only the decisive step left the run that lands the call with every ask (pair
   ceiling 56); Rule WR-4 4.4's nearest domestic well (the walls decide it, the record does not) and MS-MW's
   like-for-like window give the landed run two second judgments (pair ceiling 46.8).
+
+Architecture 3 (Reidel Road well field, Rule WR-4 sentinel drawdown):
+
+
+- The far field calibrated on an existing well field's cone, read against natural levels from reference wells beyond
+  the cone, with the nearest network well (CV-07) inside the cone as the trap: spent on the platform 2026-11-08. Both
+  runs fitted a leaky strip with the plate's walls to the test itself (the far field was identifiable from the test once
+  the mapped walls were honoured) and took CV-02 and CV-11 as controls by reflex, landing Schedule C and every ask
+  (`runs/triage.md`). A physical mechanism the test rows carry, and a control choice the field makes by default, are
+  both modelled on sight.

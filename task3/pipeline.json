@@ -1,13 +1,13 @@
 {
  "task": "task3",
- "status": "READY",
+ "status": "DESIGN",
  "domain": "physical-environmental-sciences",
  "objective": "forecasting",
- "stage": 5,
- "stage_name": "ready",
+ "stage": 2,
+ "stage_name": "design",
  "updated": "2026-11-08",
  "stump": "A strong analyst who sees the test's Theis forecast overshoot the Mill Street record recalibrates the leakage against the nearest network well CV-07 (or the wells' own pre-pumping levels, or a fitted trend) and files 1,250 gpm, every schedule under 3.5 ft at OW-S; only the natural level carried from CV-02 and CV-11 beyond the cone files 1,000 gpm.",
- "architecture": 3,
+ "architecture": 4,
  "loops": 0,
  "precut": {
   "exit": 0,
@@ -90,7 +90,7 @@
    "commit": ""
   }
  ],
- "resume": "",
+ "resume": "stage 2: architecture 4 (Wisconsin Central Sands nitrate world) drawn, design note to precut",
  "approved": null,
  "delivered": "2026-11-07",
  "portal": "landed by one response (R1 2,200 t at 100 per cent, R2 2,600 t at 70 per cent), reported 2026-11-07",
@@ -98,7 +98,9 @@
  "portal_status": "",
  "portal_status_date": "",
  "wave": "wave 6 (new), seed FC36 (world, decision and quantity kept; the seed's planning-tool ranking, usage-model back-tests and route-register field reading not shipped)",
- "guard": "PASS at registration (2026-10-18T14:10:39Z) after waiting out bans on honest keys; the forum redrawn in the build to council_or_assembly when line_manager_or_team was banned against task247",
+ "guard": {
+  "check": "PASS 2026-11-08 (v4, differentiated against mark181, mark166, mark451, mark234 and task3 v1)"
+ },
  "stage3": {
   "generator_checks": "64 PASS",
   "verify": "PASS",
@@ -159,6 +161,11 @@
   {
    "architecture": 3,
    "drawn": "2026-11-08",
+   "fate": "spent 2026-11-08 on the platform: both runs fitted a leaky strip with the plate's walls to the test, took CV-02 and CV-11 beyond the cone as the natural-level controls, and landed Schedule C and every ask"
+  },
+  {
+   "architecture": 4,
+   "drawn": "2026-11-08",
    "fate": null
   }
  ],
@@ -189,6 +196,13 @@
   "history": [
    {
     "architecture": 2,
+    "date": "2026-11-08",
+    "run1": "on the golden",
+    "run2": "on the golden",
+    "triage": "REDESIGN"
+   },
+   {
+    "architecture": 3,
     "date": "2026-11-08",
     "run1": "on the golden",
     "run2": "on the golden",
