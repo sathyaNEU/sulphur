@@ -32,7 +32,12 @@ Run these in order and stop at the first failure:
 5. **The design note's stump sentence.** Grep `DESIGN_NOTE.md` for the one sentence naming the
    wrong committed answer a competent solver files and the step that lands them there. Absent, the
    build has no stump to approve: stop and say so.
-6. **The determinism record.** If `<task>/pipeline.json` exists, read `judge` and
+6. **The container gate.** `python3 .claude/skills/reduce-house-fixes/scripts/audit_containers.py <task>` exits 0
+   on the zips the author will upload (`reduce-house-fixes` H1). Any FAIL stops the approval: a PDF not exported by a
+   word processor, a workbook in openpyxl's form, a deck or document with its library's template, two files on one
+   stamp or zip entries on one clock is returned by the client's input check before the analysis is read. Relay the
+   FAIL lines and the fix route the audit prints; the repair is in the generator, never on the file.
+7. **The determinism record.** If `<task>/pipeline.json` exists, read `judge` and
    `duplicate_check`. Relay the judge's verdict, disposition and Gate G line and the duplicate-check
    line. A build with no judge pass is stated plainly, not refused: the author decides.
 

@@ -1,22 +1,30 @@
 # leak check, task5
 
-**Verdict: REVIEW.** 14 files read, 69 golden figures and 0 candidate names taken from submission.md, 25 stump terms taken from the design note.
+**Verdict: REVIEW.** 15 files read, 67 golden figures and 0 candidate names taken from submission.md, 25 stump terms taken from the design note.
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: section, household, statistics, fortnight, hourly, points, heating, design, office, sentence, cadastre, nothing, statistic, population, record, reading, family, consumption, decisive, golden, pattern, decides, residents, second, floors
+Stump terms swept: household, regulation, section, ministry, heating, statistics, reading, office, design, hourly, points, repair, decisive, nothing, sentence, statistic, estimate, tverrvika, architecture, cadastre, second, lived-in, rnevik, departure, residents
 
-## 3 answer figures in the pack (REVIEW 1)
+## 3 answer figures in the pack (REVIEW 2)
+- **REVIEW** `elhub_dognverdier_2026-11-09_2026-11-22.csv`: golden figure 13,599 appears: ...11.2026;15,733;24;M 707057500100370162;13.11.2026;13,599;24;M 707057500100370162;14.11.2026;15,365;24;M 70...
 - **REVIEW** `regulation_vacant_dwelling_grant_2027.pdf`: golden figure 5.0 appears: ...ualifies for the grant when its vacancy share is 5.0 per cent or more. Section 7. Certification By 15...
 
 ## 4 design-note vocabulary (REVIEW 1)
-- **REVIEW** `regulation_vacant_dwelling_grant_2027.pdf`: 8 of 25 stump-paragraph terms appear (section, statistics, fortnight, points, office, cadastre); read whether the document names the move
+- **REVIEW** `regulation_vacant_dwelling_grant_2027.pdf`: 8 of 25 stump-paragraph terms appear (regulation, section, ministry, statistics, office, points); read whether the document names the move
 
 ## 9 dates after the setting (INFO 1)
 - **INFO** `-`: no --asof given, sweep skipped (pass the fiction's as-of date)
 
 ## 10 container metadata (INFO 1)
 - **INFO** `-`: audit reported no writer signature (1 lines)
+
+## 11 prompt gate (REVIEW 1)
+- **REVIEW** `prompt.txt`: shell quota: question form 'which' at 38% of 8 prompts (cap 30%); deliverable set 'docx+xlsx' at 38% of 8 prompts (cap 20%); reword at the role level, not the verb
+
+## 12 client quality check (INFO 2)
+- **INFO** `-`: 15 usable files (10 or more required)
+- **INFO** `-`: 2 file categories: document, spreadsheet (2 or more required)
 
 ## 1 file names (clean)
 
@@ -29,8 +37,6 @@ Stump terms swept: section, household, statistics, fortnight, hourly, points, he
 ## 7 hidden content (clean)
 
 ## 8 column names (clean)
-
-## 11 prompt gate (clean)
 
 
 ## Solver's-eye read

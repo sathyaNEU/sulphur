@@ -10,7 +10,8 @@ import pandas as pd
 import world as W
 
 REF = pd.Timestamp("2026-11-01")
-CUT = 0.5          # a household's day: the morning or evening hours above the same day's night hours, in kWh
+CUT = 0.5          # the morning or evening hours above the same day's night hours, in kWh (rung R2, the rise)
+DCUT = 0.9         # a household: an hour above the dwelling's own typical hour, each day set at its night, in kWh
 _CACHE = {}
 
 
@@ -111,6 +112,28 @@ def signature(g):
     return pd.Series(np.nanmax(np.where(np.isnan(rise), -9, rise), axis=1), index=g.index)
 
 
+def departure(g, night=(1, 5), centre="median", block=1, sign="up"):
+    """How far any hour of the fortnight sits above the dwelling's own typical day: each day set to its own night
+    hours, the typical day its median hour by hour, the largest excess over it. A heating load, on a timer or not,
+    repeats day after day and stays near its typical day; a household's day departs from it."""
+    a = g.to_numpy().reshape(len(g), W.DAYS, 24)
+    with np.errstate(invalid="ignore", all="ignore"):
+        n = np.nanmean(a[:, :, night[0]:night[1]], axis=2)
+        x = a - n[:, :, None]
+        if block > 1:
+            x = np.nanmean(x.reshape(len(g), W.DAYS, 24 // block, block), axis=3)
+        if centre == "median":
+            c = np.nanmedian(x, axis=1)
+        else:
+            lo, hi = np.nanpercentile(x, 25, axis=1), np.nanpercentile(x, 75, axis=1)
+            c = (lo + hi) / 2
+        e = x - c[:, None, :]
+        if sign == "abs":
+            e = np.abs(e)
+        v = np.nanmax(np.where(np.isnan(e), -9, e).reshape(len(g), -1), axis=1)
+    return pd.Series(v, index=g.index)
+
+
 def level(g):
     return pd.Series(np.nansum(g.to_numpy(), axis=1) / W.DAYS, index=g.index)
 
@@ -129,11 +152,18 @@ def call(d, rule="golden", floor=None):
     cnt = counted(d)
     g = series(d)
     s = signature(g).reindex(cnt["bruksenhet_id"]).fillna(-9)
+    dp = departure(g).reindex(cnt["bruksenhet_id"]).fillna(-9)
     lv = level(g).reindex(cnt["bruksenhet_id"]).fillna(0.0)
     if rule in ("register", "reg_and_shape", "reg_and_level"):
         reg = registered_nov1(d).reindex(cnt["bruksenhet_id"]).fillna(0)
     if rule == "golden":
-        vac = s < CUT
+        vac = dp < DCUT
+    elif rule == "rise":
+        vac = s < (CUT if floor is None else floor)
+    elif rule == "departure":
+        opts = dict(floor or {})
+        cut = opts.pop("cut", DCUT)
+        vac = departure(g, **opts).reindex(cnt["bruksenhet_id"]).fillna(-9) < cut
     elif rule == "level":
         vac = lv < floor
     elif rule == "register":
@@ -152,6 +182,25 @@ def call(d, rule="golden", floor=None):
         out[nr] = {"name": name, "counted": len(sub), "vacant": v, "share": round(100.0 * v / len(sub), 1),
                    "raw": 100.0 * v / len(sub)}
     return out, cnt
+
+
+def coverage(cnt, county=False):
+    """The register set beside the vacancy figures, in the assignment's terms, from a frame of counted dwellings with
+    its vacant flag and the persons registered there on 1 November: overcoverage (registered someone, stood vacant,
+    over the dwellings where it held someone), undercoverage (lived in, held nobody, over the dwellings where it held
+    nobody) and the net bias (the dwellings where it held nobody less the vacant ones, over all counted), per cent."""
+    def one(sub):
+        held = sub["persons"].to_numpy() > 0
+        vac = sub["vacant"].to_numpy().astype(bool)
+        n = len(sub)
+        over, under = int((held & vac).sum()), int((~held & ~vac).sum())
+        nh, nn = int(held.sum()), int((~held).sum())
+        return {"held": nh, "none": nn, "over": over, "over_rate": 100.0 * over / nh, "under": under,
+                "under_rate": 100.0 * under / nn, "register_share": 100.0 * nn / n,
+                "net_bias": 100.0 * (nn - int(vac.sum())) / n}
+    if county:
+        return one(cnt)
+    return {nr: one(cnt[cnt["kommunenr"] == nr]) for nr, *_r in W.MUNICIPALITIES}
 
 
 def designated(res):

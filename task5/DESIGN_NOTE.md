@@ -1,381 +1,357 @@
 # task5 design note
 
-Architecture 2 (re-rooted 2026-10-31). Read `## Tried and rejected` first.
+Architecture 3 (re-rooted 2026-11-08 after both platform runs landed architecture 2). Read `## Tried and rejected`
+first. Figures marked as measured come from `generator/checks.py` on the built pack; the rest are design targets the
+generator asserts.
 
 ## Draw
 
-- **Card:** `.claude/skills/fingerprint/cards/task5.json`, architecture v2, registered 2026-10-31T17:41:05Z after a pull,
-  so every card filed before it was in the check (the re-roots of task118, task181 and task306 included). `guard.py check`
-  on the registered card: PASS. One older-build match on gap, pattern and Gate G (task477) is answered by a
-  differentiation line on the card. Axes drawn clear of the window at registration: organisation family
-  research_or_statistics_office (local_government is banned against task181, government_agency against task306,
-  utility_or_infrastructure against task118), forum minister_or_cabinet, forcing event statutory_or_regulatory_filing,
-  role statistical_office_head, strategy classification_error, calibration none, context artifact register, shape 01.
-  Architecture 1's identity and fate are the card's lineage, its shell (how-many, "Put", csv and docx) in
-  `lineage_shells`.
-- **Pairing.** Survey Research & Official Statistics / `census-register-administrative-data-quality` / Data Extraction &
-  Conformation. The task type serves ETL in the taxonomy. The work is the field's own: a register-based dwelling statistic
-  built by conforming the cadastre, the population register, the electricity hub's meter point register and its hourly
-  reads into one dwelling-level occupancy file under the scheme's data contract, and the call is the grant designation
-  that file decides.
-- **Niche.** A ministry's 2027 vacant dwelling activation grant, piloted in one fictional Norwegian county of ten
-  municipalities, goes to every municipality where at least 5.0 per cent of the dwellings the regulation counts stood
-  vacant in the reference fortnight of 9 to 22 November 2026. The regulation defines vacant by whether anyone lived in the
-  dwelling, whatever the population register shows, and has the national statistics office certify each municipality's
-  share by 15 January 2027 from the hub's hourly meter data, which the regulation makes the office's source.
-- **The call.** Which municipalities qualify (a designation set), with each municipality's vacant dwellings and share.
-  Retrospective measurement, forward decision: the fortnight is closed, the grant is the 2027 programme's, and the
-  regulation designates on that fortnight.
-- **Shape.** 01, the candidates against a threshold: each municipality's vacant dwellings and share (two figures for each
-  municipality), the designated set, the margin to the line, a chart of the shares against the threshold with named parts
-  and the two files; with the asks, well over 25 criteria. Decision designation_set, answer set_of_items, question form
-  whether (the call is where the grant should go).
-- **Strategy.** classification_error. Gap objective first (the register's residents and the meter's level are correct
-  records and are not what the regulation scores, which is whether anyone lived there), then population. Generators G3
-  (record against operation: the meter's level records the heating, not the household) and G12 (absence of a registered
-  resident against absence of residents). Gate G method_or_model_selection. Layer 2 family estimation_fit, pattern
-  own:occupancy-from-the-household-daily-cycle-against-a-heating-load.
-- **The ETL pincer, answered.** Of the five ETL moves this is the per-case input a second file pins: each dwelling's
-  occupancy, pinned by its own hourly reads. The forcing file pins a condition (a household's daily cycle on some day of
-  the fortnight). Reading the file correctly gives a level per hour and per day, and neither says whether anyone lived
-  there; occupancy is the presence of the morning and evening rise over the dwelling's own night-time load, a model of a
-  household's routine against a heating load that no field records, so a correct read is not sufficient. Nothing in the
-  step is identity resolution, grain or time semantics.
-- **Forum, event, organisation, role.** The ministry adopts the list (minister_or_cabinet); the regulation's delivery
-  deadline forces it (statutory_or_regulatory_filing); the national statistics office certifies it
-  (research_or_statistics_office), its dwelling statistics section head the stakeholder (statistical_office_head).
-- **People** (`guard.py names --geo Norway --seed 470`, locale no_NO): Martine Strøm, head of the office's dwelling
-  statistics section; Eirik Haug, the ministry's adviser on the scheme. Neither appears in the prompt.
-- **Data-native sentence.** An empty dwelling in a Norwegian November is heated (a lowered thermostat or frost protection
-  keeps the electric heating on), so its hourly load runs with the outdoor temperature at levels many lived-in flats never
-  reach, while the population register still lists residents who have moved to care or abroad and omits students and
-  workers who never re-registered; only a household's own morning and evening rise over its night-time load shows that
-  someone lived there.
-- **Abstraction sentence** (written against the nearest approved builds, not writable as the same): task182's "each
-  bore's own lagged driver response" reads a unit's departure from its own response to a shared driver; here the step is
-  the presence or absence of the users' daily rhythm in a unit's own record whose level a use-independent load carries,
-  with no response to a driver estimated. Against task236 (a notified share read through a sentinel network's positivity)
-  and task258 (each slow load rebuilt part by part), no second channel is used and nothing is rebuilt from components.
-- **Sources.** The client's two-layer standard; register-based housing statistics (dwelling occupancy from the
-  population register's registered residents, the official statistics convention this task's regulation sets aside);
-  utility-data vacancy statistics (a dwelling counted vacant below a consumption floor over a period, the field's
-  method at rung 1); smart-meter occupancy detection from load profiles (the household's daily activity cycle);
-  Norway's centralised meter-data hub, its hourly reads and quality codes, and its meter point register;
-  the Norwegian land register's public titles from before organisation numbers.
+- **Card:** `.claude/skills/fingerprint/cards/task5.json`, architecture v3, registered 2026-11-08T16:49:19Z after a pull
+  that brought in task3 v6, task7 v6, task9 v7 and task10. `guard.py check` on the registered card: WARN only,
+  `repeat.gate_g` against task3 v6, answered here: the decisive step is a choice of nonresponse model pinned by the
+  closed quarters' own outcomes, which is what method_or_model_selection means, and task3 v6's step (a transfer
+  storm by storm) shares nothing else with it. Axes redrawn at registration because the window moved under the draft:
+  the decisive generator from G12 (same puzzle and same driver against task8 v14 and v10, task6 v2 and mark196) and
+  then G6 (banned against task3 v6) to G13, the horizon mismatch, which is the honest label (the outcome of a report
+  that has not arrived lands as an inactivation months after the flash, so neither the flash nor the latest quarters
+  can see it); the context artifact from published_series (task3 v6) and planning_thread (task7 v6) to register (the
+  unemployment insurance employer account register is the frame the section works from); the forcing event from
+  statutory_or_regulatory_filing (task3 v6) and budget_or_appropriation (task7 v6) to vote_or_meeting (the Fund
+  Board designates at its 4 March 2027 meeting); the forum to committee_or_panel (the Board). Architecture 2's
+  identity and fate are the card's lineage, its shell (which, name, docx+xlsx) in `lineage_shells`. The NOTE against
+  mark253 v1 (a sample's respondents reweighted within a frame attribute) is answered by the card's differentiation
+  line: no respondent stands in for a nonrespondent here and no frame attribute defines the class.
+- **Pairing.** Survey Research & Official Statistics / `census-register-administrative-data-quality` / Data
+  Extraction & Conformation. The work is the field's own: an official statistic (each county's covered employment for
+  December 2026) conformed from an administrative census (the unemployment insurance quarterly contribution reports,
+  their amendments, the multiple worksite reports, the employer account register and its status history) whose
+  reports arrive late, certified on the reports in by a cut-off, with every liable employer counted whether or not
+  its report has arrived. The ETL move is "complete a record the process could not make": the December jobs of the
+  employers whose report has not arrived, and the conformation feeds the judgment that decides, which is a
+  nonresponse model (`guide-to-prompt` section 1, the ETL pincer: the correction's input is absent for the current
+  quarter and present, as outcomes, for the closed ones, so the step is a measurement model of the nonrespondents
+  forced by the closed quarters).
+- **Niche.** The State of Franklin (fictional) created a Community Transition Fund in 2026. For each fund year the
+  Fund Board designates every county whose covered employment in the December before fell 2.0 per cent or more on the
+  December a year earlier, on the Commissioner of Labor's certification filed by 1 March from the reports the
+  Department has received by 15 February. 2027 is the fund's first year. The Labor Market Information section
+  prepares the certification from the Unemployment Insurance Tax Division's extract.
+- **The call.** Which counties qualify (a designation set, "none" grammatical), with each county's December 2026
+  jobs, the part of them estimated for employers whose report had not arrived, and the change on December 2025.
+  Retrospective measurement, forward decision: December 2026 is past but not fully reported at the cut-off, and the
+  Act designates on the certified estimate for the 2027 fund year.
+- **Shape.** 03, a bridge between two totals, county by county: the jobs the received reports show, plus the jobs
+  estimated for the employers whose report had not arrived, gives the December 2026 estimate, against December 2025.
+  Graded cells: per county the estimated part, the December total and the change (the reported part is in the
+  deliverable and not asked, because every route files it the same way), and the designated set.
+- **Strategy.** maturity_censoring (late arrival), gap time then population, generators G13 (horizon mismatch), G12
+  (absence of record against record of absence), G3 (record against operation). Gate G method_or_model_selection.
+  Layer 2 family estimand_identification, pattern own:a-missing-report-informative-only-when-its-usual-transmission-arrived.
+- **Forum, event, organisation, role.** The Community Transition Fund Board designates at its 4 March 2027 meeting
+  (committee_or_panel, vote_or_meeting) on the certification the Department of Labor's Labor Market Information
+  section prepares (research_or_statistics_office); the section's director is the stakeholder (statistical_office_head).
+- **People** (`guard.py names --geo "United States" --seed 501`, locale en_US): Danielle Fuller, director of the Labor
+  Market Information section; Matthew Cox, the Department of Commerce's administrator for the Fund. Neither appears in
+  the prompt.
+- **World.** Fourteen counties: Calder (the metro county), Merritt, Linden, Whitcomb, Garrow, Pell, Hadley, Ostrom,
+  Bray, Fenwick, Corliss, Talcott, Kittredge, Sayre; about 23,800 liable accounts and 330,000 covered jobs. Payroll
+  agents file most small employers' reports, each agent sending its clients' reports in one transmission a quarter
+  (a few send a main file and a follow-up); twelve statewide payroll bureaus serve clients across the state, the rest
+  are local accountants. Q4 reports are due 31 January and at year end about half the statewide bureaus send their
+  fourth-quarter transmissions after the 15 February cut-off, every year, while local accountants rarely run late.
+- **Data-native sentence.** In an unemployment insurance report census the reports a payroll agent files arrive
+  together, so a missing report usually means its agent's whole transmission is late and says nothing about the
+  employer, while a report missing from a transmission that arrived means the employer stopped sending its payroll,
+  which an employer that has shed jobs or closed does; a closed employer files nothing more and appears only when the
+  Division inactivates its account two or three quarters later, so the closed quarters show what the missing alone
+  were and the latest quarters do not yet.
+- **Abstraction sentence** (against the nearest approved builds, not writable as the same): mark196 recovers a count
+  from two dependent capture channels; mark182 corrects a duration distribution sampled by length; mark253 counts units
+  below a line as a sum of probabilities under separated noise; mark179 links a second agency's records person by
+  person. Here a unit-level total is completed for units that have not reported, where whether a unit's silence
+  carries its outcome is read from whether the units it always reports with have reported, and the silent units'
+  outcomes are read from earlier silent units on cohorts old enough for their closures to have been recorded. No
+  sentence holding any of those builds beside this one is the same sentence.
+- **Sources.** The client's two-layer standard and Survey strategy 03 (nonresponse bias weighting does not remove);
+  the BLS Quarterly Census of Employment and Wages practice for delinquent reports (the previous month's employment
+  carried by the reporting units' change in the same industry and area, the field's method at rung 1); state
+  unemployment insurance bulk filing by payroll service providers and third-party administrators; UI account
+  inactivation after consecutive quarters without a report; the multiple worksite report.
 
 ## Default path
 
-The path a competent analyst takes after conforming every file correctly and reading both governing documents (figures
-from the generator's checks on the built pack).
+The path a competent analyst takes after conforming every file correctly and reading the Act and the data agreement
+(figures measured on the built pack by `checks.py`, rung R1x).
 
-1. Read the regulation: the dwellings counted are the cadastre's Bolig units in use on or before 1 November 2026
-   (Section 3); a dwelling is vacant when nobody lived in it on any day of 9 to 22 November 2026, whatever the register
-   shows (Section 4); the office reads it from the hub's metered values with the cadastre (Section 5); 5.0 per cent or
-   more of a municipality's counted dwellings qualifies it (Section 6).
-2. Conform: 8,020 counted dwellings; each joined to its household metering points by the cadastre's unit ID, else by
-   municipality and address for a single-unit house (Snøholt's points still under Fjordeid's old number 5809); the
-   hourly values from UTC to Norwegian time, each hour once with the later delivery kept, a changed meter's two points
-   added.
-3. Apply the field's vacancy-from-meters rule, the utility-data vacancy statistic: each dwelling's average daily use
-   over the fortnight, vacant under a consumption floor. A floor of 3 kWh a day finds 113 switched-off and fridge-only
-   dwellings and no lived-in one; a floor of 10 finds 297, the lived-in dwellings' first percentile sitting at 9.3.
-4. Validate it: 75 per cent of the dwellings under a 3 kWh floor have nobody registered on 1 November, against 9 per
-   cent of the rest, so the floor agrees with the register where the register is right.
-5. Share by municipality; the highest is Solmoen's 3.7 per cent at a 3 kWh floor.
+1. Read the Act: a county's December covered employment is the jobs for the pay period including 12 December at
+   worksites in the county, summed over every employer liable for the fourth quarter, whether or not its report has
+   been received; a county qualifies when its change on the December before, rounded to one decimal, is minus 2.0 per
+   cent or lower; the certification counts the reports received by 15 February 2027.
+2. Conform: the Q4 2026 reports received by 15 February 2027, the latest version of each (amendments over originals,
+   resubmissions once); multiple worksite employers split by their worksite reports; the liable accounts from the
+   register and its status history (inactivated accounts out from their effective quarter, successors in); the
+   December 2025 base from the closed Q4 2025 reports.
+3. Impute each liable employer whose Q4 2026 report has not arrived as the field does for a delinquent report: its
+   September 2026 jobs moved by the change of the reporting employers in its county and supersector; an employer that
+   has missed two quarters is treated as ceased.
+4. Back-test the imputation on the closed quarters, rebuilt from the receipt times as the flash would have seen them:
+   it lands every county within a few tenths of a point of the final figures, a steady small upward miss.
+5. Sum by county and compare with December 2025.
 
-Ends on: no municipality qualifies (none at any floor from 1 to 10 kWh a day).
+Ends on: no county qualifies (Ostrom and Garrow the lowest at about minus 1.0 and plus 0.2 per cent).
 
-Golden: five municipalities qualify (Tverrvika 7.3, Hesteby 6.4, Solmoen 6.5, Ørnevik 8.2 and Fjordeid 5.4 per cent).
+Golden: Garrow and Ostrom qualify (about minus 2.8 and minus 3.1 per cent).
 
 ## Stump sentence
 
-A competent solver conforms the cadastre and the hub's hourly values, counts as vacant the dwellings whose average daily
-use over the fortnight sits under a consumption floor, sees the floor agree with the register, and files that no
-municipality qualifies at any floor from 1 to 10 kWh a day; an empty dwelling in a Norwegian November is left heated, so
-the vacant dwellings use a median 20.5 kWh a day against 19.5 for the lived-in ones, and only a household's morning or
-evening rise over the dwelling's own night-time use on some day shows that someone lived there, which designates five.
+A competent solver conforms the reports, amendments and worksites, imputes each employer whose December report had not
+arrived as the field does (its September jobs moved by its county's reporting employers' change), treats an employer
+missing two quarters as ceased, sees that imputation back-test within a few tenths of a point on the closed quarters and
+files that no county qualifies; a report missing from a transmission that arrived marks an employer that has shed jobs
+or stopped trading, which keeps about a quarter of its September jobs on the quarters old enough for inactivations to
+have landed, and that puts Garrow and Ostrom past the line.
 
-## Three rules
+## Deep reasoning
 
 - **Task type:** census-register-administrative-data-quality in Survey Research & Official Statistics, which serves
-  Data Extraction & Conformation: a register-based dwelling statistic conformed from the cadastre, the meter data
-  hub's metering points and hourly values and the population register into one dwelling-level file under the
-  regulation's contract, the designation read from it.
-- **Domain test:** the quantity that decides is each dwelling's occupancy in the reference fortnight, the official
-  statistics question of whether a dwelling is lived in; the field's two estimators for it are the register-based
-  count (dwellings with no registered resident) and the utility-data vacancy statistic (a consumption floor on the
-  metered electricity), and both sit at the bottom of the ladder here.
-- **Swap:** put hospital wards for dwellings and admissions for residents and the call reads "which hospitals have
-  5 per cent of their wards empty"; a ward's occupancy sits in the admissions system, no ward is heated empty because
-  of the climate while its register lists the departed, and the household's own day against the building's heating has
-  no meaning, so the task stops making sense.
-- **Layer 1:** the hub's UTC hour stamps; days first delivered as estimates and replaced by a second delivery; hours
-  missing after communication faults; meters changed in the fortnight under a new point; Snøholt's points still under
-  Fjordeid's number because the grid company's records lag the 2024 split; addresses in capitals, unit numbers with a
-  space or missing on single-unit houses, some points without the unit ID; communal points at block addresses; the
-  register's events after 1 November; the land register's late registrations; the outage hours; every item as its
-  system produces it, nothing placed to be caught.
-- **Layer 2:** classification from a measured signal (estimation_fit): the choice of what in a dwelling's metered
-  record shows that someone lived there, the household's daily cycle against the building's own heating load, rather
-  than the level of use or the register.
-- **Decisive step:** recognising that in a Norwegian November an empty dwelling's electricity is its heating, so the
-  level of use cannot tell an empty dwelling from a lived-in one, and reading occupancy from whether, on any day, the
-  dwelling's morning or evening use rose above its own night-time use, the household's day.
-- **Not semantics:** every field read correctly (kWh per hour, UTC stamps, the E and M quality codes, the two
-  deliveries, unit IDs, Snøholt's old number) gives a correct level for each dwelling and day, and the level is not
-  occupancy; the floor route reads every field right and still files that no municipality qualifies.
-- **Not rule application:** no filed rule says how occupancy shows in metered values (Section 5 names the source only),
-  and executing every filed rule leaves the construction open: the enumerated family spreads from no municipality to
-  all ten (the register all ten; floors of 0.5 to 10 kWh a day none; 10.5 kWh four, 11 six, 11.5 seven, 12 nine; 13 and
-  over all ten; the register's empty dwellings with no household day Hesteby alone); the standing family, once Section 4
-  rules the register out, still spreads from none to all ten across the floors; what rules the floors out is the data's
-  own structure (vacant and lived-in dwellings with the same median use), silent, and the household-day members then
-  agree on the golden five across a corridor of 0.29 to 1.00 kWh.
-- **Analyst test:** a strong analyst who conforms every file and applies every filed rule takes the field's
-  utility-data vacancy rule, a consumption floor anywhere from 1 to 10 kWh a day, sees it validate against the register,
-  and files that no municipality qualifies.
-- **Estimand:** Sections 3, 4 and 6 of regulation_vacant_dwelling_grant_2027.pdf: the counted dwellings (the cadastre's
-  Bolig units in use on or before 1 November 2026), each vacant when nobody lived in it on any day of 9 to 22 November
-  2026 whatever the population register shows, a municipality's share of its counted dwellings rounded to one decimal,
-  qualifying at 5.0 per cent or more.
-- **No decoy:** nothing is planted: no memo, briefing, draft or stakeholder figure argues the floor or the register; the
-  regulation and the ministry's letter file the WHAT; the hub's, the cadastre's and the registers' files are what those
-  systems produce.
-- **No certified replay:** no certified, published or prior-year figure ships; nothing is recovered by reproducing a
-  published share or count.
-- **Lesson:** metered energy shows that a home is lived in through the shape of its use, not its level, wherever the
-  building's own load runs with nobody there (heating in a cold climate); no build on file reads a household's daily
-  cycle from a unit's own hourly record.
+  Data Extraction & Conformation: an official covered-employment statistic conformed from an administrative report
+  census whose reports arrive late, with the nonreporting employers' December jobs estimated for the certification.
+- **Domain test:** the quantity that decides is each county's December 2026 covered employment, an official estimate
+  from an administrative census with late reports, worked as a statistics office works unit nonresponse: which missing
+  reports are ignorable and which carry the outcome, and what the nonrespondents' jobs are; the field's estimator for
+  a delinquent report (the employer's previous month carried by the reporting units' change in its cell) sits at rung 1.
+- **Swap:** put hospitals and their monthly activity returns for employers and their reports and the call reads "which
+  regions' December inpatient days fell 2 per cent on the returns in by mid-February"; no hospital stops filing because
+  it has closed, no account is inactivated two quarters later to say so, and a hospital's missing return carries no
+  outcome of its own, so the deciding inference has nothing to read and the task stops making sense.
+- **Layer 1:** amended reports superseding originals and exact resubmissions seconds apart (the Division's filing
+  system); multiple worksite reports splitting an employer's jobs across counties, with county names upper-cased and
+  suffixed there and coded in the register (two systems); successor accounts after a transfer of business, the
+  predecessor inactivated (the Division's account maintenance); seasonal employers reporting near-zero December jobs;
+  NAICS 2017 codes on older accounts beside NAICS 2022 (the register's history); paper reports keyed by date with no
+  time (the mail room); habitual late filers; employers missing two quarters not yet inactivated (the Division's
+  quarterly run); every item as its system produces it, nothing placed to be caught.
+- **Layer 2:** identification of a nonresponse mechanism and the nonrespondents' outcome (estimand_identification):
+  a missing report is ignorable when its whole transmission is late and carries the employer's outcome when it is
+  missing alone, and the outcome is read from earlier nonrespondents on quarters whose closures have been recorded.
+- **Decisive step:** recognising that a missing report has two causes, an agent's late transmission or the employer's
+  own failure to send its payroll, separating them by whether the employer's usual transmission-mates have reported, and
+  estimating the missing-alone employers' December jobs from earlier missing-alone employers on quarters old enough for
+  their inactivations to have landed.
+- **Not semantics:** every field read correctly (the receipt time to the second, the report kind, the worksite split,
+  the status history's codes and effective quarters, the Act's liable employers) gives a correct list of who has and
+  has not reported, and the list does not say what a missing employer's December jobs are; the default path reads
+  every field right and files that no county qualifies.
+- **Not rule application:** no filed rule says how a nonreporting employer's jobs are estimated (the Act files the
+  population, the outcome, the window, the comparison and the threshold; the data agreement describes fields), and the
+  family a competent analyst would build spreads from none to every county: the reports as received designate all
+  fourteen, the field's imputation and its two-quarter refinement none, the filer-type reading (every agent client's
+  lateness ignorable) Ostrom alone, the newly-late reading every county with a late statewide bureau, the
+  missing-alone reading with outcomes from the latest quarters Ostrom alone, with never-filers dropped none; the
+  standing family (the missing-alone reading with the closed quarters' outcomes, under every clustering, window and
+  stratification in SF12) files Garrow and Ostrom, and what rules the rest out is the closed quarters' own outcomes
+  (C4), loud in the employers the rival misreads.
+- **Analyst test:** a strong analyst who conforms every file and reads the Act and the agreement imputes each missing
+  report as the field does, treats employers missing two quarters as ceased, back-tests within a few tenths of a point
+  and files that no county qualifies; one who notices the agents' transmissions and reads every agent client's lateness
+  as the agent's files Ostrom alone.
+- **Estimand:** sections 2, 4 and 5 of community_transition_fund_act_2026.pdf: December covered employment for a county
+  (the jobs for the pay period including 12 December at worksites in the county, summed over every employer liable to
+  report for the quarter, whether or not its report has been received when the Commissioner certifies), the change on
+  the December before as a per cent rounded to one decimal, minus 2.0 or lower designates, from the reports received
+  by 15 February 2027; the data agreement (ui_lmi_data_sharing_agreement_2025.pdf) defines every field.
+- **No decoy:** nothing is planted: no memo, briefing, draft or stakeholder figure argues the field's imputation or any
+  set; the Act and the agreement file the WHAT and the fields; every file is what its system produces.
+- **No certified replay:** the published Q4 2025 county table confirms the December 2025 base on every route and says
+  nothing about December 2026; no certified figure for December 2026 ships and nothing is recovered by reproducing one.
+- **Chain:** (1) the field's imputation (September jobs moved by the cell's reporters) back-tests with a steady upward
+  miss, traced on the closed quarters to missing reports from employers that had stopped; (2) a missing report has two
+  causes, a payroll agent's late transmission or the employer's own failure, and only whether its usual
+  transmission-mates have reported separates them, because the agents are named nowhere and their year-end lateness
+  fills the missing pool; (3) the employers missing alone keep about a quarter of their September jobs, which only the
+  quarters old enough for inactivations to have landed show, the latest quarters reading about two thirds because their
+  closures have not been recorded; (4) carried into each county's December total, Garrow and Ostrom fall 2.0 per cent
+  or more and no other county does.
+- **Judgment:** a nonresponse-mechanism and outcome-model judgment, justified from the data: lateness within a late
+  transmission is ignorable (the closed quarters show batch-late employers' December jobs moving with their cell's) and
+  lateness alone carries the outcome (the closed quarters show the missing-alone keeping about a quarter of their
+  September jobs, most of them never filing again and inactivated later), and the outcome must be measured on quarters
+  whose closures have landed, because an immature quarter's unresolved employers are the closed ones.
+- **Hidden by:** the field's imputation passes its own back-test, because informative lateness has been a small part of
+  every past quarter's missing pool and its upward miss is a few tenths; in December 2026 the missing pool's size and
+  its mix by county, industry and size look like every year-end's, because the statewide bureaus' late transmissions
+  dominate it, and the reporting employers in Garrow and Ostrom fall only slightly (the hardest hit are the ones that
+  have not reported), so no group-by of the received reports shows the two counties.
+- **After the notice:** once a run has seen that agents' transmissions arrive together, it still owes (1) the sibling
+  reading, built from receipt times with no agent field, and the wrong turn there is the filer-type reading (every agent
+  client's lateness taken as its agent's), which files Ostrom alone because Garrow's missing-alone employers are
+  agent clients; (2) the outcome of missing alone, and the wrong turns there are the latest quarters (about two
+  thirds kept, Ostrom alone) and dropping the employers that never filed (none); (3) carrying both through every
+  county's worksites and its December 2025 base.
+- **One-fact test:** the likeliest hint, that an employer missing from a transmission that arrived is in trouble, still
+  leaves the solver to rebuild the transmissions from receipt times with no agent field, to measure the trouble's
+  outcome on quarters old enough for inactivations to have landed (the obvious quarters, the latest, read two thirds),
+  and to carry it through every county; the hint that missing reports can mean closure leads to the newly-late reading,
+  which designates every county with a late statewide bureau. No one sentence makes it routine.
+- **No replay:** no published or certified figure for December 2026 ships and nothing is recovered by reproducing one;
+  no stated number is wrong.
+- **Pinned:** every rival is run on the clean truth (checks.py, the ladder): the reports as received designate all
+  fourteen (ruled out by section 2: every liable employer counts whether or not its report has arrived); the field's
+  imputation and its two-quarter refinement none, the filer-type reading Ostrom alone, the newly-late reading every
+  county with a late statewide bureau, the latest-quarters and never-filers-dropped readings Ostrom alone and none (each
+  ruled out by the closed quarters' outcomes for the employers it misreads, C4); every member of the standing family in
+  SF12 files Garrow and Ostrom; the December 2025 base is one figure on every route (SF8).
+- **Run forecast:** method shortcut at rung 1: a strong run conforms everything, applies the field's imputation, sees it
+  back-test and files that no county qualifies; a run that notices the transmissions takes the filer-type reading
+  (unfinished chain) and files Ostrom alone; a run that separates the two causes and reads the outcome from the latest
+  quarters is a self-confirming check (its window agrees with its other recent windows) and files Ostrom alone.
+- **Strategy label:** WORKS IN FORM (Part A, outcomes that have not finished happening): completion speed differs by a
+  unit no pooled factor captures, here whether a missing report's transmission arrived, so the pooled or textbook
+  completion (the field's imputation, a pooled late-report factor) files a named wrong answer; the dead form (the
+  field's standard completion as the golden) is rung 1.
+- **Lesson:** in an administrative census a missing record's meaning depends on how it would have arrived: a record
+  missing with the batch it always comes in says nothing about its unit, one missing alone says what happened to it,
+  and what happened is read only on cohorts old enough for the system to have recorded closures.
 
 ## Survivor anatomy
 
-- **Actor:** the dwelling has rows (a cadastre unit, its metering points, their hours), and whether anybody lived in it
-  has no column anywhere: the register's residents are another quantity the regulation sets aside, and no file holds
-  a household, an occupancy flag or a vacancy code.
-- **Link:** the signal is a relation between rows of one dwelling's own record, its morning and evening hours against
-  its own night hours on the same day, a comparison no key offers and the field's vacancy statistic never makes.
-- **Reflex:** the field's methods for the quantity sit at rungs 0 and 1: the register's empty dwellings designate all
-  ten, and the utility-data consumption floor designates none at any floor from 1 to 10 kWh a day.
-- **Back-test:** the textbook route validates: 75 per cent of the dwellings a 3 kWh floor calls vacant have nobody
-  registered on 1 November, against 9 per cent of the rest, and none of them shows any use at all.
-- **Second use:** every file the decisive step reads (the cadastre, the meter register, the hourly values) is the
-  regulation's own evidence under Section 5 and is read by every route to the call; deleting the step drops no file.
-- **Shock:** the golden five are the top or bottom five of none of 20 shipped statistics (the register-empty share, the
-  mean and median use, the shares under and over floors from 1 to 30 kWh a day, the share of flats, the dwelling count,
-  the holiday homes), asserted in checks.py.
-- **Pins:** the WHAT is filed in the ministry's regulation (Sections 3, 4 and 6); no filed sentence names an hour of the
-  day, a daily pattern, a consumption level, heating or a test (asserted on both governing documents), and the
-  regulation's register sentence rules out rung 0 only.
+- **Actor:** the employer has rows (an account, its quarterly reports with receipt times, its worksites, its status
+  changes), and whether its missing report carries its outcome has no column: no file holds a filing agent, a channel,
+  a transmission number or a distress flag, and the data agreement's field list carries none.
+- **Link:** the signal is a relation between rows of the reports file across quarters, an employer's report against
+  the reports that arrived in the same second with it in earlier quarters and their arrival this quarter, a comparison
+  no key offers and the field's imputation never makes; and the outcome is read across two files at two grains, the
+  closed quarters' late reports and the status history's inactivations with their effective quarters.
+- **Reflex:** the field's method for the deciding quantity (a delinquent report imputed from the previous month by the
+  reporting units' change in its industry and area) sits at rung 1 and, with its two-quarter refinement, files that no
+  county qualifies.
+- **Back-test:** the textbook route validates: rebuilt from the receipt times on the closed quarters, the field's
+  imputation lands every county within a few tenths of a point of its final figure, the small upward miss steady from
+  quarter to quarter.
+- **Second use:** every file the decisive step reads is read by every route: the receipt times define what the flash
+  holds, the status history defines who is liable (inactivations, successors) and the December 2025 base, the closed
+  quarters' reports are the history every back-test uses; deleting the step drops no file.
+- **Shock:** Garrow and Ostrom are the top two of none of the shipped statistics a sort would read (the missing share,
+  the share of usually-punctual employers missing, the reporting employers' change, the field's imputed change, the
+  county's size, the share of agent clients, the share of small employers), asserted in checks.py.
+- **Pins:** the WHAT is filed in the Act (the population with members not yet reported, the outcome, the pay period,
+  the comparison, the rounding, the threshold, the cut-off); no filed sentence names an agent, a transmission, a
+  filing channel, lateness, an imputation or an outcome of a missing report (asserted on both governing documents and
+  the request).
 
 ## Readability screen
 
 | Rung | 1 Filed sentence | 2 Schema | 3 Reflex | 4 Control bench | 5 Hygiene | 6 Linear | 7 Second use | Verdict |
 |---|---|---|---|---|---|---|---|---|
-| R0 the register's empty dwellings on 1 November | Section 4's register sentence | the register's rows | the official convention | none | none | a count | yes | readable |
-| R1 a consumption floor on the fortnight's average daily use | none | the hourly values | the utility-data vacancy statistic | the register agrees with it | none | a filter | yes | readable |
-| R2 the register's empty dwellings with no household day | Section 4 read as a pre-filter | the register's rows | none | none | none | a filter | yes | readable |
-| R3 (decisive) the household day on any day of the fortnight | no sentence names an hour, a pattern or heating | no column holds occupancy | the field's statistic is the level, not the shape | the register and the floor agree with each other, not with it | the battery cleans the hours and stops | a within-dwelling comparison across hours of the day | the files are the call's own evidence | silent |
+| R0 the reports as received | section 2's whether-or-not clause rules it out | the reports' rows | none | none | none | a sum | yes | readable |
+| R1 the field's imputation for every missing report | none | the reports and the cells | the delinquent-report imputation | its own back-test passes | none | a ratio | yes | readable |
+| R1x the same with two-quarter delinquents ceased | none | two missing quarters in the reports | the careful analyst's refinement | the back-test passes | the battery flags long delinquents | a filter | yes | readable |
+| R2 the filer-type reading | none | co-arriving receipt times | a channel reading of lateness | none | none | a group-by of filers | yes | readable |
+| R3 (decisive) missing from a transmission that arrived, outcomes on closed quarters | no sentence names an agent, a transmission, lateness or an outcome | no column holds an agent, a channel or a distress flag | the field's method imputes from the cell | the back-test passes the field's method | the battery cleans versions and worksites and stops | a comparison of each employer's report with its transmission-mates', across quarters | the files are every route's | silent |
 
 ## Semantic fork table
 
 | ID | Term or convention | Golden reading | Alternative | Call under it | Ruled out by |
 |---|---|---|---|---|---|
-| SF1 | counted dwellings | Bolig units in use on or before 1 November 2026 | units with no date, units taken into use later, holiday homes | more dwellings, unmetered ones vacant | Section 3 (a date of taking into use on or before 1 November 2026) |
-| SF2 | vacant | nobody lived in it on any day of the fortnight | no registered resident on 1 November | all ten | Section 4 (whether anyone was registered does not decide) |
-| SF3 | the fortnight's clock | Norwegian time | the hub's UTC hours | same call | same call (asserted) |
-| SF4 | an hour delivered twice | the later delivery | the first, or both added | same call | same call (asserted) |
-| SF5 | a meter changed in the fortnight | both points added | the current point only | same call | same call (asserted) |
-| SF6 | communal points | not a dwelling's | joined by address where one dwelling has it | same call | same call (asserted) |
-| SF7 | Snøholt's points under 5809 | joined by unit ID | joined by address under 5809 | same call by ID | the meter register's unit IDs (asserted complete for Snøholt) |
-| SF8 | the threshold | on the share rounded to one decimal | on the unrounded share | same call | same call (asserted, no share within 0.2 points of the line) |
-| SF9 | the municipalities | the ten as they stood on 1 January 2026 | Fjordeid with Snøholt | same call | Section 2 |
-| SF10 | missing hours | the day read on the hours present | a day with a gap left out | same call | same call (asserted) |
-| SF11 | outage hours | read as recorded (zero) | left out | same call | same call (asserted) |
-| SF12 | the household day | morning or evening over night on any day | morning only, evening only, highest hour over lowest, spread of hours (outage hours left out), any cut from 0.2 to 0.8 kWh | same call | same call (asserted, every member separates) |
-| SF13 | on any day | a household on one day makes it lived in | the rise averaged over the fortnight | seven qualify | Section 4 (nobody lived in it on any day) |
-| SF14 | a two-unit house | two dwellings | one | same call | Section 3 (dwelling units) |
-| SF15 | holiday homes and care homes | not counted | counted | not in the extract | Section 3 |
-| SF16 | table A, held on 1 November | the register's state that day | by event date against registration date | same persons | same call (asserted, no event straddles the day) |
-| SF17 | table A, age | on 1 November | on 5 January | 26 of 30 cells move | the ministry's letter (by their age on that day) |
-| SF18 | table A, a block's renumbering | a change of unit number | a move | the old ground floors' residents lost | the records (every resident, one day, one floor up, old numbers absent from the cadastre) |
-| SF19 | table B, held on 1 November | by registration (tinglyst) date | by the deed's date | every figure moves | the ministry's letter (held on the land register); no transfer registered on the day |
-| SF20 | table B, a company the municipality owns | KF, or all shares held itself or through such a company, together | one holder with all the shares | three municipalities move | the ministry's letter (itself or through such a company) |
-| SF21 | table B, a title without an organisation number | the municipality when the name is its own | left out | every figure moves | the land register's holder name and the business register's names |
-| SF22 | table B, how many | dwellings | titles | every figure moves | the ministry's letter (how many of its counted dwellings) |
-| SF23 | table B, the inter-municipal company | not the municipality's | counted | Brekkevoll and Ravnsund move | the ministry's letter (all the shares) |
-| SF24 | the share's 90 per cent interval | the exact binomial (Clopper-Pearson) interval on the municipality's counted dwellings | Wilson, Jeffreys, the normal approximation | bounds move at one decimal, the call does not | the ministry's letter (the exact binomial interval on the counted dwellings); every exact bound clears a rounding edge by at least 0.0013 points (asserted) |
-| SF25 | what the designation rests on | the estimated share, as Section 6 sets it, the interval reported beside it | the whole interval above the threshold | three qualify (5802, 5803, 5807) | the prompt (judged on the estimated share, the interval beside it) and Section 6 (asserted) |
+| SF1 | liable employers for the fourth quarter | accounts liable on the register for any day of the quarter, not inactivated with an earlier effective quarter | accounts that filed a Q4 report; accounts active on 15 February | all fourteen; the same | section 2 (whether or not its report has been received) and the status history's effective quarters (asserted) |
+| SF2 | December covered employment | the month-three employment of the Q4 report (the pay period including 12 December) | the quarter's average; total wages | another figure | section 2 and the agreement's field definition (asserted) |
+| SF3 | the reports received by 15 February | received at or before 23:59:59 on 15 February 2027, local time | the due date; the extract's full contents | same call | same call (asserted, nothing received on 15 February moves a county by 0.05) |
+| SF4 | a report received twice or amended | the latest version received by the cut-off | the first; both | same call | same call (asserted) |
+| SF5 | an employer with worksites in several counties | its jobs split by its worksite report; a missing one by its latest worksite report | the register's county | same call | same call (asserted, every county within 0.05) |
+| SF6 | a successor account | the successor counts from its liability date, the predecessor out from its transfer quarter | both, or neither | same call | the status history (asserted) |
+| SF7 | the December 2025 base | the closed Q4 2025 reports, latest versions, inactivated employers at zero | the published Q4 2025 table | same figures | the table equals the reports on every county (asserted) |
+| SF8 | the change | Dec 2026 over Dec 2025, minus one, per cent, rounded once to one decimal; minus 2.0 or lower qualifies | unrounded; strict | same call | section 4 (asserted, no county within 0.15 of the line) |
+| SF9 | paper reports keyed by date | received on that date | at midnight as a transmission | same call | same call (asserted) |
+| SF10 | the cell for the field's imputation | county by supersector, falling back to the county | the county alone; the supersector statewide | same call | same call (asserted on every rung) |
+| SF11 | an employer missing two quarters | carried at the closed quarters' outcome for two-quarter delinquents | ceased; imputed alive | same call | same call (asserted) |
+| SF12 | the missing-alone reading | a missing employer whose last transmission's other reports have mostly arrived (and a direct filer newly late), carried at the closed quarters' outcome for missing alone | transmission by the exact second or within a minute; mates from the last quarter or the last four; a majority or any arrival; outcomes by size class or pooled; closed quarters from 2024 or from 2023Q3 | same call | same call (asserted, every member files Garrow and Ostrom) |
+| SF13 | the filer-type reading | ruled out | every agent client's lateness taken as its agent's | Ostrom alone | the closed quarters: agent clients missing from a transmission that arrived kept about a quarter of their jobs (asserted) |
+| SF14 | outcomes of missing employers | quarters whose missing-alone employers have all resolved (a late report or an inactivation) | the latest quarters; never-filers dropped | Ostrom alone; none | the status history: the latest quarters' unresolved employers are inactivated within the next two quarters on every closed quarter (asserted) |
+| SF15 | seasonal employers missing in December | their own December-to-September pattern from the year before, moved by the cell | September moved by the cell | same call | the closed quarters (asserted, an ask's second judgment) |
 
 ## Ladder
 
 | Rung | Construction | Designates | Main figures kept |
 |---|---|---|---|
-| R0 | the register's empty dwellings on 1 November (the official convention) | all ten | 2 of 20 |
-| R1 | a consumption floor of 1 to 10 kWh a day (the utility-data vacancy statistic) | none | 0 to 4 of 20 |
-| R1b | floors of 10.5 to 12 kWh a day | four, six, seven, nine (Brekkevoll, Hesteby, Kvernhaug, Ravnsund first) | 0 to 2 of 20 |
-| R2 | the register's empty dwellings with no household day | Hesteby alone | 0 of 20 |
-| G | the household day on any day of the fortnight | Tverrvika, Hesteby, Solmoen, Ørnevik, Fjordeid | 20 of 20 |
+| R0 | the reports as received | all fourteen | 0 of 14 |
+| R1 | the field's imputation for every missing report | none | to be measured |
+| R1x | R1 with two-quarter delinquents ceased (default path) | none | to be measured |
+| R2 | the filer-type reading | Ostrom | to be measured |
+| R2b | every newly-late employer at the missing-alone outcome | every county with a late statewide bureau | to be measured |
+| R3a | missing alone, outcomes from the latest quarters | Ostrom | to be measured |
+| R3b | missing alone, never-filers dropped | none | to be measured |
+| G | missing alone, outcomes on the closed quarters | Garrow, Ostrom | 14 of 14 |
 
-Margins: the golden shares sit at least 0.27 points from the rounding line (Snøholt 4.68, Fjordeid 5.36); the counts are
-exact because the household day separates every dwelling (lived-in minimum 1.00 kWh, vacant maximum 0.29). No floor from
-0.5 to 30 kWh a day designates the golden five.
+Margins, positions and the pricing sequence: written from `checks.py` once the generator runs.
 
 ## Closure table
 
 | Axis | Reading in this build | Move |
 |---|---|---|
-| 1 Population | the counted dwellings: Bolig units in use on or before 1 November 2026 (Section 3); units with no date, taken into use later, holiday homes and care homes out | filed in Section 3; C1 on the data (SF1) |
-| 2 Unit of account | the dwelling (a cadastre unit), a two-unit house two dwellings; the municipality for the share | filed (Sections 3 and 6); SF14 |
-| 3 Attribution window | 9 to 22 November 2026, every hour of the fortnight read; the hourly values cover exactly that fortnight | filed in Section 4; C1, nothing at the edges moves a dwelling (SF3) |
-| 4 As-of dating | the dwellings as at 1 November (in-use date); municipalities as at 1 January 2026; table A on 1 November; table B on the land register on 1 November | filed in Sections 2 and 3 and in the ministry's letter; SF9, SF16, SF19 |
-| 5 Version basis | the hub's later delivery where an estimated day was replaced | C1: first, latest and both give the same call (SF4) |
-| 6 Denominator | the municipality's counted dwellings | filed in Section 6 |
-| 7 Weighting | none: a count over a count | filed in Section 6 |
-| 8 Window length | the whole fortnight, a dwelling lived in if any day shows a household | filed in Section 4 (on any day); SF13 records the averaged reading's other call |
-| 9 Boundary inclusivity | 5.0 per cent or more qualifies | filed in Section 6; no share within 0.2 points of the rounding line (C1) |
-| 10 Rounding path | each share rounded once to one decimal, the threshold read on the rounded share; each interval bound rounded once to one decimal from the exact bound | filed in Section 6 and the prompt; C1, the unrounded reading gives the same call (SF8); SF24 |
-| 11 Tie-break | none needed: the designation is a set, no ranking | C1 |
-| 12 Maturity and censoring | none: the fortnight is closed and fully delivered; a few hours missing per meter | C1 (SF10) |
-| 13 Order of operations | join, clock, deduplicate, classify, count | C1: each order prints the same call (SF3, SF4, SF5 asserted on every variant) |
-| 14 Row order | none: every step is a set operation keyed by point and hour | C1 |
-| 15 Duplicate resolution | an hour delivered twice (estimate then measurement): the later | C1 (SF4) |
-| 16 Identity normalisation | point to dwelling by the cadastre's unit ID, else by municipality and address for a single-unit house; Snøholt's points under 5809 carry their IDs | the systems' own keys; C4 on the address-only join (SF6, SF7) |
-| 17 Netting against gross | a dwelling's two points (a changed meter) added hour by hour | C1 (SF5) |
-| 18 Dimensional units | kWh per hour throughout, one unit in the hub's file | units in the data |
-| 19 Code and status semantics | kundekategori Husholdning against Fellesmåling; the quality codes E and M | the hub's own codes; C1 (SF4, SF6); never the stump |
-| 20 Integerisation | whole dwellings and persons; nothing allocated | C1 by construction |
-| 21 Clause scope | Section 4's register sentence decides vacancy only; the register is the source of table A | filed scope (Section 4, the ministry's letter) |
-| 22 Forward window contents | the grant pays in March 2027 on the certified figures; nothing forecast | filed in Section 8; retrospective by the regulation's design |
+| 1 Population | every employer liable for Q4 2026 on the register, reported or not | filed in section 2; SF1 |
+| 2 Unit of account | the job (a worker on the payroll for the pay period including 12 December) at a worksite; the county | filed in section 2; SF2, SF5 |
+| 3 Attribution window | December 2026 (month three of Q4) against December 2025 | filed in sections 2 and 4 |
+| 4 As-of dating | reports received by 23:59:59 on 15 February 2027; the register and status history as at that day | filed in section 5; SF3 |
+| 5 Version basis | the latest version of a report received by the cut-off | C1 (SF4) |
+| 6 Denominator | the county's December 2025 covered employment | filed in section 4; SF7 |
+| 7 Weighting | none: totals over totals | filed in section 4 |
+| 8 Window length | one month (December) in each year | filed in section 2 |
+| 9 Boundary inclusivity | minus 2.0 or lower qualifies | filed in section 4; SF8 |
+| 10 Rounding path | the change rounded once to one decimal; jobs summed unrounded and stated whole | filed in section 4 and the prompt; SF8 |
+| 11 Tie-break | none: a set, no ranking | C1 |
+| 12 Maturity and censoring | December 2026 incomplete at the cut-off (the estimand counts every liable employer); the history's quarters mature as closures land | filed in section 2; the decisive step, SF12, SF14 |
+| 13 Order of operations | versions, then liability, then worksites, then estimation, then sums | C1 (SF4, SF5 asserted on every order) |
+| 14 Row order | none: set operations keyed by account and quarter | C1 |
+| 15 Duplicate resolution | exact resubmissions once | C1 (SF4) |
+| 16 Identity normalisation | the account number; county names to codes; NAICS 2017 to 2022 | the systems' own keys; C1 |
+| 17 Netting against gross | a successor's jobs once | C1 (SF6) |
+| 18 Dimensional units | jobs (head count) throughout | units in the data |
+| 19 Code and status semantics | report kind O and A; status codes INACT, REACT, XFER, CLOSE | the agreement's schedules; C1 |
+| 20 Integerisation | estimated jobs summed unrounded, stated whole | C1 |
+| 21 Clause scope | section 2's whether-or-not clause governs the population only | filed scope |
+| 22 Forward window contents | the Board designates on the certification for the 2027 fund year; nothing forecast past December 2026 | filed in sections 4 and 5 |
 
 ## Literal reader
 
-Executed word for word, the prompt and Sections 2 to 7 file the counted dwellings, the fortnight, the share, its rounding
-and the threshold (SF1, SF8, SF9), and file vacant as nobody having lived in the dwelling on any day of the fortnight
-whatever the register shows; Section 5 names the evidence and not how it shows occupancy, so the literal reader has to
-decide what in a dwelling's metered values shows that someone lived there. Every reading that decides it from the record
-itself, a household's day against the dwelling's own night hours in any form SF12 lists, gives the golden five; the
-register's reading is ruled out by Section 4's last sentence, the averaged reading by Section 4's "on any day", and every
-consumption floor by the records (C4): no floor separates the dwellings nobody lived in, which use a median 20.5 kWh a
-day against the lived-in dwellings' 19.5, and floors over 9 kWh flag lived-in dwellings whose own hours show a household
-every day. Each convention the call needs is closed in the fork table (SF3 to SF15 the same call, asserted), and each term
-of the two tables by the ministry's letter or the records (SF16 to SF23). Every step of the write-up executes as written.
+Executed word for word, the prompt and sections 2 to 5 of the Act file the population (every liable employer, reported
+or not), the outcome (month-three jobs at worksites in the county), the window, the comparison, the rounding and the
+threshold, and say nothing of how a nonreporting employer's jobs are estimated, so the literal reader has to estimate
+them. Every reading that estimates them from the closed quarters' own outcomes for employers missing alone, in any form
+SF12 lists, gives Garrow and Ostrom; the reports-as-received reading is ruled out by section 2's whether-or-not clause;
+the field's imputation, the filer-type reading, the newly-late reading and the latest-quarters and never-filers-dropped
+readings are ruled out by the closed quarters' outcomes for the employers each misreads (C4, SF13, SF14). Each
+convention the call needs is closed in the fork table, asserted in checks.py.
 
 ## Oracles
 
-No shipped file ranks the municipalities on the call: no vacancy share, occupancy flag, household or count of empty
-dwellings is filed anywhere. The register is the one second source on occupancy and the regulation sets it aside; it
-agrees with the floor (the back-test), not with the golden. The outage log documents zero hours in three municipalities
-that no household-day reading depends on (SF11), and the municipality list documents Snøholt's split (SF7). Table A's
-only referee is the event log itself (every resident of a renumbered block moving one floor up on one day, the cadastre
-holding only the new numbers); table B's are the land register's holder names against the business register's and the
-shareholder register's counts. Nothing ties only under the golden.
+No shipped file ranks the counties on the call: no December 2026 figure, flash, imputation, agent, transmission number
+or distress flag ships. The published Q4 2025 county table ties to the reports on every route (SF7). The closed
+quarters' reports and the status history are the referee for every reading of a missing report, and they refute every
+rival on the employers it misreads; nothing ties only under the golden. The contribution rate notice and the county
+population estimates are read by no route and ship as distractors.
 
 ## Ask sheet
 
-**Table A, each municipality's persons registered in its counted dwellings on 1 November 2026, by age that day under
-18, 18 to 66 and 67 and over** (30 figures). H18: the ministry's follow-up of the pilot (its letter of 1 December) wants
-the population the counted dwellings held on the day the regulation fixes them; the call reads no register row. Primary
-device D2 (a label stored before a silent switch): in November the cadastre renumbered 197 flats in blocks whose
-residential floors had been numbered from a ground floor of shops, and the population register records the change as
-each resident's move to the unit number one floor up on the day; the cadastre extract carries only the new numbers, so
-undoing the register's events as written leaves the old ground floors' residents on numbers no dwelling has. The blocks
-cover every age band in every municipality. Hazards: the snapshot as it stands (D2), the dead and the emigrated added
-back (D4), the births and arrivals after 1 November (D5), ages on 5 January (D8), care home residents in units the
-regulation does not count (D5). Path: the register of 5 January, the event log and the cadastre (3 files: the register's person, birth date and address
-fields, the log's event, its two dates and its from and to addresses, the cadastre's address, unit, type and date of use). Stops: the register as it stands
--21 to +9 (27 of 30 missed); every event undone as written -16 to -1 (all 30); the dead and the emigrated left out -13 to
-0 (20 of 30); ages on 5 January -12 to +12 (26 of 30). Realism: municipalities renumber flats to the national
-unit-number standard block by block, and the register writes each change as a move.
+To be written from the ceiling script once the pack is cut: per county the jobs estimated for employers whose report
+had not arrived, the December 2026 total and the change; the designated set; the employer list.
 
-**Table B, each municipality's counted dwellings held on the land register on 1 November 2026 by the municipality or a
-company it owns** (10 figures). H18: the follow-up wants the municipalities' own housing among the counted dwellings, the
-stock a municipality can bring back into use itself; the call reads no land register row. Primary device D7 (the true
-key elsewhere): 52 titles from before the business register hold the municipalities' own houses and blocks under the
-name of the day (a herredskommune, a bykommune, care of the chief executive or the property management) and no
-organisation number, so a join by number misses them and the business register's exact names do not match them. Second
-device D7 (names that lie both ways): private companies in a municipality's name (a builder, a landlord, a developer)
-hold dwellings, an inter-municipal company two municipalities share holds a block in each, and in three municipalities
-the housing company carries a name of its own and is owned 60 per cent through the municipality's holding company and
-40 per cent directly. Hazards: transfers registered after 1 November (D2), deeds signed before the day and registered
-after it (D8), the KF found by its parent (D5), titles at property level over many dwellings (D6). Path: the titles,
-the transfers, the business register, the shareholder register, the municipality list and the cadastre (6 files). Stops: organisation numbers only, with the KF and the full chain, -14 to -4 (all ten missed); exact names the
-same; every name beginning with the municipality's -49 to +63 (nine of ten); the titles as they stand -15 to +1 (all
-ten); the deeds' dates -8 to -1 (all ten); one holder with all the shares -94 to 0 (three); the municipality and its KF
-only -127 to 0 (six); no KF -97 to 0 (four); titles instead of dwellings -103 to -4 (all ten). Realism: the land register
-still carries many public titles from before organisation numbers in the holder's name of the day.
+Pair ceiling: to be measured
 
-Main population zero-counts: the call reads the cadastre's counted units, the meter register and the hourly values; no
-register event, title, transfer, business or shareholder row is among them, and the call computed from those three files
-alone is the golden (asserted). The cadastre and the meter register carry no old ground-floor number of a renumbered block
-(asserted), so table A's device rows sit only in the register's files.
+Shallow keep: to be measured
 
-| Hazard | Asks moved | Per-ask deltas (largest) |
-|---|---|---|
-| a block's renumbering read as moves (D2) | A | -16 |
-| the snapshot as it stands (D2) | A | -21 |
-| the dead and the emigrated left out (D4) | A | -13 |
-| ages on 5 January (D8) | A | +12 |
-| titles without a number left out (D7) | B | -14 |
-| names beginning with the municipality's (D7) | B | +63 |
-| the titles as they stand (D2) | B | -15 |
-| the deed's date (D8) | B | -8 |
-| one holder with all the shares (D7) | B | -94 |
+Measured by: generator/ceiling.py
 
-Referee: the event log for the renumberings; the land register's holder names against the business register for the
-old titles.
+## Prompt contract
 
-| Ask row | The cracker (landed the call, hygiene battery, every filed rule executed) | Verdict |
-|---|---|---|
-| Table A, Brekkevoll, Tverrvika, Hesteby, Kvernhaug, Solmoen | the register of 5 January rolled back by undoing every later event as the register writes it, the dead and emigrated added back, ages on 1 November | miss |
-| Table A, Ravnsund, Ørnevik, Langgrav, Fjordeid, Snøholt | the same | miss |
-| Table B, the ten municipalities | transfers undone by registration date, the KF by its parent, the shares the municipality holds itself and through its own companies added together, holders matched by organisation number and, where a title has none, by exact name | miss |
-
-Measured by: generator/ceiling.py on the cut pack: the cracker keeps 0 of the 40 table figures (table A 0 of 30, table B
-0 of 10); the mirror (stopped at the 10 kWh floor, its best rung) keeps 0 of 40 and 6.0 of the 38 recommendation points.
-
-Pair ceiling: 29.0 ((38 + 7 + 55 x 0) and (6.0 + 7 + 55 x 0), averaged); the main block's 38 is the call's 8 and
-0.75 for each of the 40 municipality figures (vacant dwellings, share and the share's two bounds), and the mirror's
-counts carry its bounds with them (8 of 40 at the 10 kWh floor).
-
-Mirror leakage: 0.0 per cent of ask weight
-
-## Pre-ship check
-
-1. Domain: the call stands on each dwelling's occupancy in the fortnight, read from its own hourly electricity record as
-   a household's day against the building's heating; with wards for dwellings there is no heating left on in an empty
-   home, no register that lags, and no household's day, and the task stops making sense.
-2. Two layers: Layer 1 (the hub's clock, deliveries, gaps and meter changes, Snøholt's old number, the address and unit
-   formats, the communal points, the outage hours) is cleaned by the battery and moves nothing (SF3 to SF11 asserted);
-   Layer 2, what in a dwelling's record shows that someone lived there, decides the call.
-3. No plant, semantics or rule application decides: the floor reads every field right and every filed rule applied and
-   files none; no sentence names the household's day; the register and the floor are the field's own methods.
-4. Determinism: the WHAT filed in Sections 3, 4 and 6 and the ministry's letter; the household-day family converges on
-   the golden five across every member and cut (SF12); the tables' terms closed (SF16 to SF23).
-5. Gates on the final cut (target.zip sha256 52fc465dedb924b1, after the shareholder register's realism pass, no figure
-   moved): generator checks 84 of 84, the verifier on every
-   graded figure, two byte-identical builds, figures_check.py 123 of 123, precut.py 61 of 61, voice-check.py PASS,
-   leak.py REVIEW with no LEAK, guard.py surface clean and heart WARN only on the question form (a gate asks
-   whether); the leak reader found no leak, and the determinism judge returned DETERMINISTIC, APPROVE (SF19 closes its
-   one low note, the deed's date against the registration date).
-6. leak.py REVIEW, sweep 3: the regulation's 5.0 is the threshold Section 6 files, shared by every reading,
-   harmless.
-7. leak.py REVIEW, sweep 4: the regulation's section, statistics, fortnight, points, office and cadastre are its
-   own nouns, none names the decisive step, harmless (ruled here, not sent to the reader).
-8. Domains Fit repair (portal, 2026-11-07: the prompt read as a regulation's threshold applied to counts and
-   shares): the question now asks for the grant judged on the estimated share of each municipality's housing standing
-   vacant, from the register and meter data, with that share's 90 per cent interval beside it, and the letter charts
-   each share with its interval; the designation rests on the share (SF25, the judge's mild fork closed). The interval is a reporting statistic the ministry's letter files as the exact binomial interval on the
-   counted dwellings (SF24); Wilson, Jeffreys and the normal approximation round differently somewhere, which is why
-   the convention is filed, and the call does not move with any of them. The intervals of Kvernhaug, Solmoen,
-   Ravnsund, Fjordeid and Snøholt take in the 5.0 line; the regulation designates on the share. The decisive step is
-   unchanged: what in a dwelling's own hourly record shows that someone lived there.
-9. Metadata repair (leak.py sweep 10): the regulation is exported by LibreOffice Writer (generator/officepdf.py), the
-   ministry as Author and a real Subject; the hub's extract is written with no Arrow schema and no created_by
-   (generator/parquetio.py), its timestamps read back in milliseconds, UTC, the same values.
-10. Critical component 3 corrected at the judge's read (2026-11-07): a resident who left a renumbered block before
-   its day from a flat nobody else held that day (Haugveien 6 H0302) is read one floor up like the rest of the block,
-   as the world renumbers every flat; lived in with nobody registered is 556, not 557, and every counted dwelling's
-   persons now equal the world's (asserted).
+The author's voice rewrite may not drop or change: the question (where covered jobs in December 2026 fell 2.0 per cent
+or more below December 2025, county by county, on the estimate the Department can certify from the quarterly reports
+it had received by 15 February 2027); the hold being grammatical ("any counties that qualify"); the 2027 Community
+Transition Fund; ctf_certification_december_2026.xlsx with every county's December 2026 jobs, how many of them are
+estimated for employers whose report had not arrived, its change on December 2025, and the chart of the changes against
+the line; ctf_employer_jobs_december_2026.csv with every liable employer, a row for each county it employs in, whether
+its report had arrived and its December 2026 jobs there as reported or estimated; jobs whole numbers and changes per
+cents to one decimal. It may not name an agent, a transmission, lateness, an imputation, a model, a back-test or a
+closure.
 
 ## Tried and rejected
 
@@ -450,3 +426,58 @@ Mirror leakage: 0.0 per cent of ask weight
 - 2026-10-31, at design: a register move dated before 1 November and registered after it opened two readings of "held
   as resident on 1 November" (the registration or the event date); the October moves are registered by 31 October
   (SF16).
+- 2026-11-08, design repair after the portal's upload check (never run on the platform): the 2026-11-07 reword plus
+  interval left the task reading as a regulation's threshold applied to counts and shares, with two tallies (persons
+  by age, municipal holdings on the land register); both tallies dropped for the register's coverage errors against the
+  estimate (SF26, SF27), and the ministry's letter no longer names Clopper-Pearson. The land, business and shareholder
+  files stay in the pack, unread by any ask.
+- 2026-11-08, at the repair: an interval from the occupancy reading's own error, measured on the dwellings whose
+  residents moved inside the fortnight (373 dated events): the world draws a household's days at home independently of
+  the register's move dates, so the meter does not follow them and the interval would not be forced; the basis is
+  filed instead and only the wholly-above side graded (SF24).
+- 2026-11-08, at the repair: grading which intervals take in or lie wholly below 5.0: Kvernhaug lies wholly below under
+  the Wald interval and takes in the line under the exact, Wilson, Jeffreys and Agresti-Coull ones; only the
+  wholly-above side, the same under all five, is graded.
+- 2026-11-08, at the repair: net bias as the difference of the two rounded shares: Tverrvika and Hesteby move by 0.1;
+  filed as one ratio of counts (SF27).
+- 2026-11-08, at the repair: a re-root into a questionnaire module test (architecture 3, drawn and registered before the
+  author's word) was withdrawn and the card and prompt restored: architecture 2 was never run on the platform, so its
+  stump is untested and not spent.
+- 2026-11-08, architecture 2 stump as filed: one-sentence rescue, judge H5 (determinism_check_report_arch2_pass1.md:
+  DETERMINISTIC, SEND_BACK on Gate H, the household's rise cleanly bimodal so no statistical judgment was needed, H4
+  weak, and no CSV of 20,000 rows); deepened in the same world with heating on daily timers (the rise now reads 70 vacant
+  dwellings as lived in) and the household's departure from its own typical day as the decisive step, and the hub's
+  daily values shipped as a CSV of over 100,000 rows.
+- 2026-11-08, architecture 2 spent on its first platform round (target.zip 14f7ae29, runs saved under runs/): both runs
+  read occupancy from each dwelling's departure from its own typical day (one subtracted the overnight baseline and the
+  recurring local-hour pattern and cut the positive residual at 0.75 kWh, the other fitted day levels and clock-hour
+  effects and cut the residual RMS at 0.20), filed the golden five and 396 vacant, and also rebuilt the 1 November
+  register through the 20 renumbered blocks (359 people) and filed every coverage cell. The day-against-own-typical-day
+  reading is a decomposition these runs make on sight; with the judge's earlier SEND_BACK the world is spent, and the
+  re-root moves to another world, dataset and shell.
+- 2026-11-08, re-root screen: a coverage survey whose non-contacts are mostly overcoverage, fixed by an admin auxiliary
+  known for respondents and non-contacts alike: the same device as the signs-of-life screen task8 recorded (every
+  activity window a threshold read as a fork), and once a run cross-tabs non-contact against the auxiliary the remedy is
+  the textbook calibration; not drawn.
+- 2026-11-08, re-root screen: a register-based estimate judged against a survey benchmark area by area, the observed
+  discrepancy carrying the survey's design-based sampling noise: shrinkage ground (Survey 02 DOES NOT WORK), one
+  correction concept, and task4 already carries a reliability correction; not drawn.
+- 2026-11-08, re-root screen: a register count validated by its net agreement with the last census while gross over- and
+  undercoverage scale with different migration flows: a projection whose deciding configuration (the components'
+  divergence) is out of sample, the Gate C death of an open method; not drawn.
+- 2026-11-08, at the draw: the decisive generator G12 (a missing report against a closed employer) repeats task8 v14 and
+  v10, task6 v2 and mark196 on gap and Gate G under either gap order; G14 (the reporters' conditioned change) and G6 (the
+  missing pool's mix) were banned against task7 v5 and task3 v6 when those registered during the draw; G13 (the horizon
+  on which a missing report's outcome lands) is the honest remaining label and carries no structural repeat.
+- 2026-11-08, at the draw: the deliverable set csv+pdf crossed the corpus quota (three of nine prompts) when task3 v6 and
+  another build took it during the draw; the certification moved to a workbook (csv+xlsx).
+- 2026-11-08, prototype on the clean truth: with healthy employers late at the same rate at every size, the closed
+  quarters' missing-alone pool was 63 per cent healthy by jobs (the healthy late filers are the larger employers), so
+  its outcome (0.71 kept) did not transport to the shocked counties' pool (98 per cent distressed); the world now has
+  large employers almost never late unless distressed, and the closed quarters start once four earlier quarters exist
+  (habitual late filers misread as newly late in the first three), which put the pool at 95 per cent distressed and
+  its outcome at about a quarter kept.
+- 2026-11-08, prototype: a distressed agent client whose agent is also late cannot be told from its batch-mates, so a
+  shock among clients of the late statewide bureaus is invisible to every reading; the shocked counties' exposed small
+  employers file through local accountants (Garrow) or directly (Ostrom), and the year-end lateness sits with the
+  statewide bureaus, as it does in practice.

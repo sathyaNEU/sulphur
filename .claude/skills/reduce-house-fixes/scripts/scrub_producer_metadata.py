@@ -1,5 +1,11 @@
 #!/usr/bin/env python3
-"""Audit or repair H1 in a task bundle: producer signatures and build-clock timestamps
+"""A retrofit for OOXML only: rewrite docProps of an already-built Office file in place. It is not the gate and not the
+house writer: the gate is audit_containers.py, and a generator passes its files through writers/postprocess.py.
+A PDF is never repaired here: a PDF a library wrote (FPDF, ReportLab, matplotlib) is regenerated through
+writers/officepdf.py, because relabelling its Creator and Producer leaves the library's object layout behind and the
+client's input check names the library from it ("FPDF (Python) generated the PDFs").
+
+Audit or repair H1 in a task bundle: producer signatures and build-clock timestamps
 inside shipped binary inputs.
 
     python3 scrub_producer_metadata.py <dir>                       audit, writes nothing
@@ -18,8 +24,8 @@ Any assertion failure restores the original and the file is left as it was.
 """
 import argparse, os, re, shutil, sys, zipfile
 
-SIG = ["python-docx", "openpyxl", "Openpyxl", "reportlab", "ReportLab",
-       "matplotlib", "Matplotlib", "python-pptx", "LibreOffice"]
+SIG = ["python-docx", "openpyxl", "Openpyxl", "reportlab", "ReportLab", "fpdf", "FPDF", "PyFPDF",
+       "matplotlib", "Matplotlib", "python-pptx"]
 OOXML = (".docx", ".xlsx", ".pptx")
 IMAGES = (".png", ".jpg", ".jpeg", ".svg")
 ISO = re.compile(rb"\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ")
@@ -134,6 +140,7 @@ def lines_holding(b, tok):
 
 
 def scrub_pdf(path, producer, stamp, floor=None, ceiling=None):
+    raise RuntimeError("a PDF is not relabelled: regenerate it through writers/officepdf.py (LibreOffice Writer export)")
     b = open(path, "rb").read()
     n0 = len(b)
     date = f"D:{stamp.replace('-', '')}000000".encode()

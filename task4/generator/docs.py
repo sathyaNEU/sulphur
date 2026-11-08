@@ -1,145 +1,108 @@
-"""task4 documents: the tracking data standard TDS-4 (pdf) and the director of network operations' request (eml)."""
+"""task4 documents: Fryele's fleet electrification standard FES-2 and the dealer's quotation for the 2027
+battery-electric tractors, both PDFs written the way the two offices write them (a Word document exported by
+LibreOffice Writer)."""
+import datetime as dt
+
 from reportlab.lib import colors
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
-from reportlab.lib.units import mm
 from reportlab.platypus import Paragraph, Spacer, Table, TableStyle
-
-import datetime as dt
 
 import officepdf as O
 import params as P
 
-CET = dt.timezone(dt.timedelta(hours=1))
-
-DOMAIN = "kurierwarta.pl"
-HEAD = ("Inga Blaut", "i.blaut")
-LINEHAUL = ("Krzysztof Konieczek", "k.konieczek")
-INTEGRATION = ("Aurelia Pieczyrak", "a.pieczyrak")
+SE_W = dt.timezone(dt.timedelta(hours=1))
+SE_S = dt.timezone(dt.timedelta(hours=2))
 
 
 def _styles():
     ss = getSampleStyleSheet()
-    body = ParagraphStyle("body", parent=ss["Normal"], fontName="Helvetica", fontSize=9.6, leading=13.4, spaceAfter=5)
+    body = ParagraphStyle("body", parent=ss["Normal"], fontName="Helvetica", fontSize=9.8, leading=13.6, spaceAfter=6)
     h1 = ParagraphStyle("h1", parent=ss["Heading1"], fontName="Helvetica-Bold", fontSize=13.5, leading=17, spaceAfter=4)
     h2 = ParagraphStyle("h2", parent=ss["Heading2"], fontName="Helvetica-Bold", fontSize=10.5, leading=14,
                         spaceBefore=8, spaceAfter=4, keepWithNext=1)
-    small = ParagraphStyle("small", parent=body, fontSize=8, leading=10.5, textColor=colors.HexColor("#444444"))
-    cell = ParagraphStyle("cell", fontName="Helvetica", fontSize=8.0, leading=9.8)
+    small = ParagraphStyle("small", parent=body, fontSize=8.2, leading=10.8, textColor=colors.HexColor("#444444"))
+    cell = ParagraphStyle("cell", fontName="Helvetica", fontSize=8.4, leading=10.2)
     return body, h1, h2, small, cell
 
 
 def _grid(rows, widths, cell):
     t = Table([[Paragraph(str(c), cell) for c in r] for r in rows], colWidths=widths, repeatRows=1)
     t.setStyle(TableStyle([("GRID", (0, 0), (-1, -1), 0.4, colors.HexColor("#9AA0AB")),
-                           ("VALIGN", (0, 0), (-1, -1), "TOP"),
-                           ("BACKGROUND", (0, 0), (-1, 0), colors.HexColor("#E3E8EF"))]))
+                           ("VALIGN", (0, 0), (-1, -1), "TOP")]))
     return t
 
 
 def standard(path):
     body, h1, h2, small, cell = _styles()
-    s = [Paragraph("%s, Tracking Data Quality" % P.ORG, small),
-         Paragraph("TDS-4 Tracking data standard", h1),
-         Paragraph("Version 4.1, issued 2 March 2026, in force from the April 2026 scorecard. Replaces version 4.0 "
-                   "(September 2024). Owner: the Head of Tracking Data Quality.", small), Spacer(1, 4)]
+    s = [Paragraph("%s, Fleet and transport planning" % P.ORG, small),
+         Paragraph("FES-2 Fleet electrification standard: assigning duties to battery-electric tractors", h1),
+         Paragraph("Version 2, issued 9 June 2025. Replaces version 1 (November 2024). Owner: the Fleet Manager.",
+                   small), Spacer(1, 4)]
     sec = [
-        ("1. Purpose and scope", [
-            "Every parcel Kurier Warta carries is known to its shippers, its recipients and the claims desk only "
-            "through the records the tracking platform holds: the shippers' pre-advices, the couriers' handheld "
-            "events at collection and delivery, the sorters' events at the sort hubs and the delivery depots' "
-            "arrival scans. This standard sets the measures the Tracking Data Quality team reports for each "
-            "calendar month, the alert that sends a scan audit to a sort hub, and how a month's figures are "
-            "fixed. It applies to every hub and depot in the network register."]),
-        ("2. Sort scan completeness", [
-            "2.1 A sort hub handles a parcel when it sorts the parcel for the delivery depot that unloads it. Every "
-            "parcel a delivery depot unloads was sorted by one hub on the night before. A month's parcels are the "
-            "parcels the delivery depots unloaded on the mornings of that month, and a hub's parcels for the month "
-            "are the month's parcels it sorted.",
-            "2.2 A missed sort scan is one of a hub's parcels for the month for which the platform holds no sort "
-            "event. A hub's missed-scan rate is its missed sort scans as a per cent of its parcels for the month.",
-            "2.3 The scan alert fires for a sort hub when its missed-scan rate for the month is above 1.00 per cent. "
-            "A fired alert sends the scan audit (section 5) to the hub."]),
-        ("3. Events sent twice", [
-            "3.1 The platform keeps every record a source sends it. A source has sent an event twice when the "
-            "platform receives a further record of a scan it already holds; the scan is one event sent twice however "
-            "many further records arrive.",
-            "3.2 A courier event belongs to the depot the event names."]),
-        ("4. Pre-advices", [
-            "4.1 A shipper pre-advises each consignment before it is collected, naming the collection depot, the "
-            "collection date and the pieces; each piece is one parcel. A later version of a consignment replaces "
-            "the earlier versions in full.",
-            "4.2 A parcel is pre-advised for a month's collection when the latest version of its consignment names "
-            "a collection date in that month.",
-            "4.3 A pre-advice naming a depot code that the network register shows replaced is read as naming the "
-            "replacing depot from the day that depot opened.",
-            "4.4 A pre-advised parcel was never picked up when Kurier Warta never collected it from the shipper."]),
-        ("5. The scorecard and the scan audit", [
-            "5.1 The team publishes each month's scorecard in the first working week of the next month, from the "
-            "platform as it stands on the morning the month's extract is taken. A record reaching the platform "
-            "after the extract does not reopen the month.",
-            "5.2 A scan audit is two auditors at the hub for two consecutive sort nights. They follow the induction, "
-            "the chutes and the scanner arches, read the arches' fault logs and file their findings with the hub "
-            "manager within five working days. An alert stands until the hub's rate for a later month is at or "
-            "below the tolerance."]),
+        ("1. Scope", [
+            "This standard governs which of the company's regular duties are run with battery-electric tractors. It "
+            "applies to every depot and to every order of battery-electric tractors put to the management group."]),
+        ("2. Terms", [
+            "2.1 A duty is a regular round trip from a depot as the route register records it: the run from the "
+            "depot to the collection, the loaded run from the collection to the delivery and the run back to the "
+            "depot.",
+            "2.2 A duty's energy is the energy the tractor draws from its battery for the round trip, depot out to "
+            "depot in, in kWh, as the tractor's own battery system reports it.",
+            "2.3 The usable battery of a tractor model is the usable energy its manufacturer states for it."]),
+        ("3. Planning figures", [
+            "3.1 Energy figures for planning are estimated from the company's own operating records of its "
+            "battery-electric tractors. Manufacturers' range and consumption figures are not used for planning.",
+            "3.2 A duty is charged at its depot before it departs. No charging on the road is planned."]),
+        ("4. Assigning duties", [
+            "4.1 The January design day is a working day with a mean ambient temperature of minus 5 degrees Celsius.",
+            "4.2 A duty's planning load is the mean net payload of its departures in the twelve months to the end of "
+            "the last full month before the assessment.",
+            "4.3 A duty is assigned to a battery-electric tractor when its energy on the January design day, carrying "
+            "its planning load, is no more than 85 per cent of the usable battery of the tractor model being "
+            "ordered. Each duty assigned takes one tractor.",
+            "4.4 Duties are assessed each autumn for the following year, before any order is placed, and reported to "
+            "the management group duty by duty with the energy each needs on the January design day."]),
+        ("5. Review", [
+            "5.1 This standard is reviewed every two years or when a new tractor model is ordered. Comments to the "
+            "Fleet Manager."]),
     ]
     for head, paras in sec:
         s.append(Paragraph(head, h2))
         for p in paras:
             s.append(Paragraph(p, body))
-    s.append(Paragraph("6. Document control", h2))
-    s.append(_grid([["Version", "Issued", "Change"],
-                    ["3.2", "May 2022", "Sort scan completeness by hub; tolerance 1.50 per cent"],
-                    ["4.0", "September 2024", "Courier events and pre-advices added (sections 3 and 4)"],
-                    ["4.1", "March 2026", "Tolerance for sort scans 1.00 per cent; latest version of a pre-advice "
-                                          "(4.1); replaced depot codes (4.3)"]],
-                   [22 * mm, 30 * mm, 118 * mm], cell))
-    s.append(Spacer(1, 6))
-    s.append(Paragraph("Approved by the Chief Operating Officer, 27 February 2026.", small))
-    O.build(path, s, "TDS-4 Tracking data standard, version 4.1", P.ORG,
-            "Tracking data standard TDS-4, version 4.1: sort scan completeness, events sent twice and pre-advices",
-            "TDS-4 v4.1  |  " + P.ORG, dt.datetime(2026, 3, 2, 9, 14, 37, tzinfo=CET),
-            dt.datetime(2026, 3, 2, 11, 2, 9, tzinfo=CET), margin_mm=20, top_mm=18, bottom_mm=18)
+    O.build(path, s, "FES-2 Fleet electrification standard", "Georg Pålsson",
+            "Assigning duties to battery-electric tractors", "Fryele Åkeri AB | FES-2 version 2",
+            dt.datetime(2025, 6, 9, 9, 22, tzinfo=SE_S), dt.datetime(2025, 6, 9, 10, 5, tzinfo=SE_S))
 
 
-def _mail(who):
-    return "%s <%s@%s>" % (who[0], who[1], DOMAIN)
-
-
-def request(path):
-    text = f"""From: {_mail(LINEHAUL)}
-To: Analityka <analityka@{DOMAIN}>
-Cc: {_mail(HEAD)}, {_mail(INTEGRATION)}
-Date: Fri, 06 Nov 2026 09:12:44 +0100
-Subject: October tracking scorecard
-Message-ID: <20261106091244.4417.kkonieczek@{DOMAIN}>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-
-Dzień dobry,
-
-Inga tells me the October extract came off the platform at 07:40 this
-morning, so the scorecard can go ahead. I need it before the peak briefing
-on Monday. The peak crews start on the night of 9 November, and a hub whose
-scan alert fires gets its audit in the first two weeks of the peak, so the
-audit nights have to go into the hub rosters now.
-
-Aurelia takes the depot lines to her monthly call with the shippers'
-integration teams on Wednesday.
-
-The workbook and the slide go to the operations board as usual. From this
-month the board wants every hub's rate with its 90 per cent interval, so it
-can see which verdicts a month's chance could tip: take each parcel the hub
-handled as an independent chance of a missed sort scan, and say whether the
-interval lies wholly above the tolerance, across it or wholly below it.
-
-Pozdrawiam,
-Krzysztof
-
---
-{LINEHAUL[0]}
-Director of Network Operations
-{P.ORG}
-"""
-    with open(path, "w", encoding="utf-8") as fh:
-        fh.write(text)
+def quotation(path):
+    body, h1, h2, small, cell = _styles()
+    rows = [["Item", "Specification"],
+            ["Tractor", "Battery-electric 6x2 tractor, low-entry cab, approved for 64 tonnes gross combination weight"],
+            ["Battery", "Installed capacity 630 kWh; usable capacity %d kWh" % P.USABLE_2027],
+            ["Charging", "CCS2, up to 375 kW DC; on-board 43 kW AC"],
+            ["Drive", "Three electric motors, continuous output 425 kW"],
+            ["Warranty", "Battery 8 years or 1,000,000 km, to 70 per cent of usable capacity"],
+            ["Price", "SEK 3,940,000 per tractor excluding VAT, delivered Värnamo"],
+            ["Delivery", "January to February 2027 for orders placed by 11 December 2026"]]
+    s = [Paragraph("Norrvik Lastvagnar AB, Industrigatan 14, 331 44 Värnamo", small),
+         Paragraph("Tel. 0370-48 210 | order@norrviklastvagnar.se", small), Spacer(1, 10),
+         Paragraph("2 October 2026", body),
+         Paragraph("Georg Pålsson, Fleet Manager, Fryele Åkeri AB, Terminalvägen 6, 331 53 Värnamo", body),
+         Spacer(1, 4),
+         Paragraph("Quotation Q-26-1187: battery-electric tractors for delivery in 2027", h1),
+         Paragraph("Dear Georg,", body),
+         Paragraph("Thank you for the meeting at Terminalvägen on 24 September. As agreed, we quote below for "
+                   "battery-electric tractors for your Värnamo terminal, for delivery in early 2027. The quotation "
+                   "is valid for any number of tractors from one to twelve.", body),
+         _grid(rows, [90, 380], cell), Spacer(1, 6),
+         Paragraph("Service and battery monitoring are included for the first three years under our standard "
+                   "agreement, from your Värnamo workshop. Your existing fleet portal account will show the new "
+                   "tractors' daily summaries as it does for the Jönköping tractors.", body),
+         Paragraph("We would need your order by 11 December 2026 to hold the January and February 2027 build "
+                   "slots.", body),
+         Paragraph("Kind regards,", body), Spacer(1, 6), Paragraph("Pierre Kjellberg", body),
+         Paragraph("Key account manager, Norrvik Lastvagnar AB", small)]
+    O.build(path, s, "Quotation Q-26-1187", "Pierre Kjellberg", "Battery-electric tractors for delivery in 2027",
+            "Norrvik Lastvagnar AB | Quotation Q-26-1187", dt.datetime(2026, 10, 2, 14, 11, tzinfo=SE_S),
+            dt.datetime(2026, 10, 2, 14, 20, tzinfo=SE_S))

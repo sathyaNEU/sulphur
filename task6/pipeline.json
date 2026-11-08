@@ -1,0 +1,103 @@
+{
+ "task": "task6",
+ "status": "READY",
+ "domain": "general-statistics-data-science",
+ "objective": "descriptive-distribution",
+ "stage": 5,
+ "stage_name": "ready",
+ "updated": "2026-11-08",
+ "stump": "A competent analyst who sees the trace store's sample thin in the busy hours reweights each service's kept server spans hour by hour by that service's own load balancer count, which lands the edge services, and passes partner-gateway at 1.4 per cent against its 2 per cent budget, because its spans were kept with the traces journey-search, seat-map and booking started at very different keep shares; weighted by each trace's own edge keep share, partner-gateway breaches at 2.9.",
+ "architecture": 6,
+ "loops": 1,
+ "precut": {
+  "exit": 1,
+  "date": "2026-11-08",
+  "note": "72 checks, 1 FAIL: pair ceiling 58.0 against the paper target of 50 (54.0 with the landed run on the export's final service lists)"
+ },
+ "leak": {
+  "leak_py": "REVIEW (the four standing lines ruled at ship; prompt sweep clean)",
+  "reader": "not re-run: no pack document changed"
+ },
+ "duplicate_check": {
+  "heart": "BLOCK on one draw-level row: org_family (software_or_platform) against task1; the two structural rows cleared by renaming the card's differentiation keys to the Mark baseline's markNN numbers; WARN repeat.gate_g against task7 and overuse.gate_g",
+  "nearest": "mark474 v2 lineage, 0.10"
+ },
+ "judge": {
+  "verdict": "NOT_DETERMINISTIC on ask 5 only (pre-fix prompt); asks 1 to 4, the CSV and the call forced, every figure recomputed",
+  "disposition": "SEND_BACK narrow, closed by the prompt pins (SF16 to SF18); final APPROVE on the shipped prompt, read literally, no second thread",
+  "gate_h": "domain pass, layers pass, decisive step analytical, chain 4, one-fact borderline",
+  "report": "task6/determinism_check_report.md",
+  "date": "2026-11-08"
+ },
+ "returned": [
+  {
+   "date": "2026-10-28",
+   "portal": "determinism block failed by both judges (answer_contradicts_files: charter 3.2 read as the deaths on file, Fennick); both responses missed the call; rubric average 12.5",
+   "repair": "design",
+   "commit": ""
+  },
+  {
+   "date": "2026-11-07",
+   "portal": "architecture 5: both responses landed the call (Oro Rosso), each assembling homes from the settlement file's shared card reference; rubric scores not reported",
+   "repair": "design (re-root: the filed unit announces the linkage)",
+   "commit": ""
+  },
+  {
+   "date": "2026-11-08",
+   "source": "triage",
+   "portal": "Sulfur round 1: runs 73 (off the call, partner-gateway 1.4, every ask kept) and 83 (on the call, incident minutes lost), average 78",
+   "repair": "rubric",
+   "what": "asks re-sited onto the SLI's numerator (start order, the five's shares, the share served together, requests beyond budget) and the incident minutes onto the union over the call's services; releases, rollbacks and cost dropped; critical components 2 and 3 replaced by chain links; pack unchanged",
+   "freeze": "rubric mode FAIL on one item, the Critical Components numbers (Part 6 replacement); every main-call figure unchanged",
+   "commit": "ca72374, 2e77f6f"
+  }
+ ],
+ "resume": "uploaded prompt.txt (the author re-voices it against DESIGN_NOTE ## Prompt contract), the unchanged target.zip and the new answer blocks; then new platform runs and /triage-runs task6",
+ "approved": null,
+ "delivered": null,
+ "portal": null,
+ "portal_id": "",
+ "portal_status": "FAILED_TO_STUMP",
+ "portal_status_date": "2026-11-07",
+ "seed": "analytical_tasks/03_descriptive_distribution/DA18_quick-commerce-pilot-service-hours-population.md (header and Situation only)",
+ "seed_world": 273,
+ "zip_md5": "596e59c58e56743119f60b349b5c0e1c",
+ "zip_sha256_16": "e6d4daff8f522ed8",
+ "precut_exit": 1,
+ "shipped": "2026-11-07",
+ "call": "Five internal services ran over their 2026 latency error budget and each gets a reliability engineer for the first half of 2027: journey-search, places, seat-map, partner-gateway and notifications.",
+ "gates_at_ship": "checks 0 failures; verify PASS; rebuild byte-identical; figures_check 117 of 117; precut 61 checks 0 FAIL; voice-check exit 0; leak.py REVIEW (ruled harmless); leak reader clean on the shipped cut; determinism judge DETERMINISTIC, APPROVE; heart exit 0 (WARN gate_g repeat and overuse); surface exit 0, no promoted pair",
+ "migrated_from": {
+  "project": "Mark",
+  "task": "task268",
+  "status_in_mark": "SHIPPED",
+  "date": "2026-11-08",
+  "note": "moved from Project Mark at the author's word: architecture 5 landed on the Mark portal and architecture 6 shipped there on 2026-11-07, pending; carried on here for the Sulfur bar"
+ },
+ "golden_zip_md5": "00985bc0f061568324cd3e28b5c90970",
+ "paper_pair": {
+  "before": {
+   "claimed": 28.5,
+   "measured": 78.0
+  },
+  "after": {
+   "landed_full": 58.0,
+   "landed_final_lists": 54.0,
+   "shallow_keep_pct": 7.1
+  }
+ },
+ "runs": {
+  "run1": 73,
+  "run2": 83,
+  "average": 78.0,
+  "counterfactual_average": 86.5,
+  "first_wrong_step": {
+   "run1": "method shortcut: each service's own spans post-stratified by its own hour, partner-gateway 1.4, four services",
+   "run2": "landed the call; lost the incident ask by reading the export's final service lists from the declaration (5.2 misread)"
+  },
+  "triage": "FIX_ASKS",
+  "recorded": "2026-11-08",
+  "history": []
+ },
+ "gates_at_reship": "checks 0 failures; verify PASS; goldens byte-identical on rebuild; figures_check 98 of 98; voice-check exit 0; leak.py REVIEW (standing lines); precut 1 FAIL (pair ceiling 58.0); freeze rubric FAIL (Critical Components block); guard validate clean, heart BLOCK (one draw-level row, organisation family against task1)"
+}

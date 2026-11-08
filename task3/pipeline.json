@@ -1,33 +1,62 @@
 {
  "task": "task3",
- "status": "READY",
+ "status": "DESIGN",
  "domain": "physical-environmental-sciences",
+ "subdomain": "hydrology-flood-frequency",
  "objective": "forecasting",
- "stage": 5,
- "stage_name": "ready",
+ "stage": 2,
+ "stage_name": "design",
  "updated": "2026-11-08",
- "stump": "A strong analyst who sees the test's Theis forecast overshoot the Mill Street record recalibrates the leakage against the nearest network well CV-07 (or the wells' own pre-pumping levels, or a fitted trend) and files 1,250 gpm, every schedule under 3.5 ft at OW-S; only the natural level carried from CV-02 and CV-11 beyond the cone files 1,000 gpm.",
- "architecture": 3,
+ "call": "",
+ "stump": "",
+ "architecture": 6,
  "loops": 0,
  "precut": {
-  "exit": 0,
-  "date": "2026-11-08",
-  "checks": 72
+  "exit": null,
+  "date": ""
  },
  "leak": {
-  "leak_py": "REVIEW, no LEAK (2026-11-08, --asof 2026-11-06)",
-  "reader": "2026-11-08 isolated reader (Sonnet, medium): no step named, no ranking or helper file, Q6 analytical; the plate's caption removed"
+  "leak_py": "",
+  "reader": ""
  },
  "duplicate_check": {
-  "heart": "PASS 2026-11-08",
-  "surface": "exit 0, 1 pair promoted (surface similarity), names WARN on 'Little Ossey' and 'Sep Oct' (not personas)"
+  "heart": "",
+  "nearest": ""
  },
  "judge": {
-  "verdict": "DETERMINISTIC",
-  "disposition": "FIX_NOW applied (plate re-cut, per-well fits, the OW-S-alone and DW-17 closures), re-judged once: APPROVE",
-  "gate_g": "method_or_model_selection, analytical_non_defect, surface_read_dependency no, sole_data_defect no",
-  "gate_h": "domain pass, layers pass, decisive_step analytical, chain 5 inferences",
-  "report": "task3/determinism_check_report.md"
+  "verdict": "",
+  "disposition": "",
+  "gate_h": "",
+  "report": ""
+ },
+ "paper_pair": null,
+ "runs": {
+  "run1": null,
+  "run2": null,
+  "average": null,
+  "counterfactual_average": null,
+  "first_wrong_step": {
+   "run1": "",
+   "run2": ""
+  },
+  "triage": "",
+  "recorded": "",
+  "history": [
+   {
+    "architecture": 2,
+    "date": "2026-11-08",
+    "run1": "on the golden",
+    "run2": "on the golden",
+    "triage": "REDESIGN"
+   },
+   {
+    "architecture": 3,
+    "date": "2026-11-08",
+    "run1": "on the golden",
+    "run2": "on the golden",
+    "triage": "REDESIGN"
+   }
+  ]
  },
  "returned": [
   {
@@ -88,26 +117,23 @@
    "repair": "design",
    "portal": "both runs landed Alternative C and every ask; the deep step (plant headroom) modelled on sight",
    "commit": ""
+  },
+  {
+   "date": "2026-11-08",
+   "source": "triage",
+   "repair": "design",
+   "portal": "architecture 3 platform round: both runs on the golden at every ask (runs/triage.md)",
+   "disposition": "re-root at the author's word: architecture 5 drawn in a new world (Ollery Creek's culvert, flood frequency), dataset and shell",
+   "commit": ""
   }
  ],
- "resume": "",
+ "resume": "architecture 6 drawn (DESIGN_NOTE ## Draw, card v6 registered 2026-11-08T16:30:28Z); next: the generator world (snow-line hydrology, both basins, stations) to calibrate the rungs, the rivals on the clean truth, the stage-2 sections of the design note, precut exit 0",
  "approved": null,
- "delivered": "2026-11-07",
- "portal": "landed by one response (R1 2,200 t at 100 per cent, R2 2,600 t at 70 per cent), reported 2026-11-07",
- "portal_id": "",
- "portal_status": "",
- "portal_status_date": "",
- "wave": "wave 6 (new), seed FC36 (world, decision and quantity kept; the seed's planning-tool ranking, usage-model back-tests and route-register field reading not shipped)",
- "guard": "PASS at registration (2026-10-18T14:10:39Z) after waiting out bans on honest keys; the forum redrawn in the build to council_or_assembly when line_manager_or_team was banned against task247",
- "stage3": {
-  "generator_checks": "64 PASS",
-  "verify": "PASS",
-  "byte_identical": true,
-  "figures_check": "PASS (85)",
-  "voice_check": "PASS",
-  "ceiling": "pair 39.9, mirror leakage 20.8, worst single crack 46.1 (generator/ceiling.py)",
-  "zip": "335646722e258718311dfd1d0bb4607f01aa20295d74e27d8a25c4bee5552b9d",
-  "freeze": "rubric PASS (main call, stump, every main-call figure unchanged)"
+ "submitted": null,
+ "portal": {
+  "status": "",
+  "date": "",
+  "note": ""
  },
  "history": [
   {
@@ -141,15 +167,16 @@
   {
    "date": "2026-11-08",
    "event": "READY: architecture 3, the district will permit the 1,000 gpm schedule (8 ft at OW-S in 2046 against 9 ft); judge DETERMINISTIC, APPROVE after one FIX_NOW"
+  },
+  {
+   "date": "2026-11-08",
+   "event": "rolled back at the author's word to architecture 3 (Reidel Road) exactly as READY at ad49abe: prompt, pack (target.zip identical to the author's upload), goldens, submission, generator and card; architecture 4 (Corlinden nitrate plant) stays in git history at 0931661; the platform runs under runs/ kept"
+  },
+  {
+   "date": "2026-11-08",
+   "event": "architecture 5 (READY at a19fc6c from a parallel session, never uploaded) superseded and architecture 6 drawn (the Durrow Creek bridge) at the author's word: a total rework of the slot"
   }
  ],
- "migrated_from": {
-  "project": "Mark",
-  "task": "task165",
-  "status_in_mark": "SHIPPED",
-  "date": "2026-11-08",
-  "note": "moved from Project Mark unstumped on the Mark portal; carried on here for the Sulfur bar"
- },
  "architectures": [
   {
    "architecture": 2,
@@ -159,41 +186,24 @@
   {
    "architecture": 3,
    "drawn": "2026-11-08",
+   "fate": "spent 2026-11-08 on the platform: both runs fitted the leaky strip with the plate's walls and took the remote wells as the control, landing 1,000 gpm and every ask"
+  },
+  {
+   "architecture": 5,
+   "drawn": "2026-11-08",
+   "fate": "built to READY by a parallel session (a19fc6c), never uploaded; superseded 2026-11-08 at the author's word (total rework)"
+  },
+  {
+   "architecture": 6,
+   "drawn": "2026-11-08",
    "fate": null
   }
  ],
- "subdomain": "hydrology-flood-frequency",
- "call": "The district will permit the 1,000 gpm schedule: its greatest monthly drawdown at OW-S in 2046 is 8 ft against the 9 ft limit, where 1,250 gpm reaches 10 ft",
- "gates": {
-  "checks": "132 of 132",
-  "verify": "PASS",
-  "byte_identical": true,
-  "figures_check": "67 of 67",
-  "precut": "72 checks, 0 FAIL",
-  "voice_check": "PASS (WARN shell quota)",
-  "pair_ceiling": 46.8,
-  "shallow_keep": 0.0,
-  "target_zip_sha256": "109b4ebf9580c12184d4fcbe4cc2e22294043eca9a7fb9a01d7a943a47051699"
- },
- "runs": {
-  "run1": null,
-  "run2": null,
-  "average": null,
-  "counterfactual_average": null,
-  "first_wrong_step": {
-   "run1": "",
-   "run2": ""
-  },
-  "triage": "",
-  "recorded": "",
-  "history": [
-   {
-    "architecture": 2,
-    "date": "2026-11-08",
-    "run1": "on the golden",
-    "run2": "on the golden",
-    "triage": "REDESIGN"
-   }
-  ]
+ "migrated_from": {
+  "project": "Mark",
+  "task": "task165",
+  "status_in_mark": "SHIPPED",
+  "date": "2026-11-08",
+  "note": "moved from Project Mark unstumped on the Mark portal; carried on here for the Sulfur bar"
  }
 }

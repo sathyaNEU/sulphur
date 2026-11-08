@@ -142,8 +142,9 @@ license the ones they name.
 One session runs the whole build in its main thread at max effort: design and build are the same hand, and a
 repair is done where the context already is.
 
-**The fingerprint guard is mandatory and free.** The card is registered the moment the draw is fixed. The 302 Project
-Mark cards under `fingerprint/cards/` (filed as `markNN.json`, Mark's taskNN) are the already-submitted baseline: a Sulfur build that repeats a Mark build's
+**The fingerprint guard is mandatory and free.** The card is registered the moment the draw is fixed. The 20 Project
+Mark cards under `fingerprint/cards/` (filed as `markNN.json`, Mark's taskNN: 110, 111, 114, 115, 117, 119, 120, 124, 126, 128, 132, 135, 162, 169, 175, 179, 182, 196, 253 and 258) and
+their shipped-ledger rows are the already-submitted baseline: a Sulfur build that repeats a Mark build's
 driver, shell or data structure is a duplicate ("two tasks built on the same pattern with the same data structure are
 treated as duplicates"). Personas come from `guard.py names`, never typed.
 
@@ -153,6 +154,12 @@ are written. Its judge is spawned at stage 4, by `/fix-determinism`, or when the
 ## Git: one branch, commits at status changes only
 
 The repository is `https://github.com/sathyaNEU/sulphur.git`, branch `main`. No other branch, no pull request.
+
+- **Every status commit lands on `main`, whatever branch a session starts on.** A session that was handed a working
+  branch (by its harness, a setup step or a default) still commits and pushes `DRAWN`, `READY`, `RESHIPPED`,
+  `SUBMITTED`, `APPROVED`, `RETURNED`, `PAUSED`, `RETIRED` and `SKILLS:` commits to `main`: check out `main`, `git pull
+  --rebase origin main`, commit there (or bring the work over with a rebase or cherry-pick), then `git push origin
+  main`. Work left only on another branch is not shipped, and no pull request is opened for it.
 
 - **Commit only at a status change**: `DRAWN (taskNN)`, `READY (taskNN): <call>`, `SUBMITTED (taskNN): <call>, runs
   <x> and <y>`, `APPROVED (taskNN)`, `RETURNED (taskNN): <why>`, `RESHIPPED (taskNN): <what moved>`, `PAUSED
@@ -167,8 +174,8 @@ The repository is `https://github.com/sathyaNEU/sulphur.git`, branch `main`. No 
 
 ## Task numbers
 
-Sulfur builds are numbered from `task1` up (`status.py new`); the Mark baseline cards are filed as `mark1` to
-`mark503`, so the two never collide. The platform's tier sets how many run at once (one at Tier 1, three at Tier 2, six at Tier 3).
+Sulfur builds are numbered from `task1` up (`status.py new`); the Mark baseline cards are filed as `markNN`
+(`mark110` to `mark258`), so the two never collide. The platform's tier sets how many run at once (one at Tier 1, three at Tier 2, six at Tier 3).
 
 ## How a build is worked
 
@@ -183,6 +190,12 @@ Sulfur builds are numbered from `task1` up (`status.py new`); the Mark baseline 
 ## Standing rules
 
 - No em dashes anywhere in the repo. Use a comma, or parentheses for an aside.
+- **Containers are scrubbed by construction, and checked before every ship.** Every shipped PDF is exported by a word
+  processor (`reduce-house-fixes/scripts/writers/officepdf.py`), never FPDF, ReportLab or matplotlib and never
+  relabelled; every workbook, document and deck passes through `writers/postprocess.py` (shared strings, the
+  application's dialect, no library template, its own creator and stamps); no two files share a stamp and both zips
+  carry each file's own save time. `audit_containers.py taskNN` exits 0 on the final cut before any READY,
+  RESHIPPED or upload (`reduce-house-fixes` H1).
 - **No dollar sign before a digit in a skill body.** The skill loader reads `$0` to `$9` as argument placeholders.
   Write the unit in words (`USD 38M`).
 - Every figure in `submission.md` recomputes from `target/`, and a figure shared by two deliverables agrees in both

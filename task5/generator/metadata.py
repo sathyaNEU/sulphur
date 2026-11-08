@@ -28,13 +28,14 @@ def write(target, out_path, counts=None):
     meta = {
         "task": "task5",
         "architecture": 2,
-        "title": "Where the 2027 vacant dwelling activation grant goes among the municipalities of a county pilot, "
-                 "with each municipality's vacant dwellings and share, and two tables for the ministry's follow-up",
+        "title": "Each municipality's vacancy share in a county pilot, estimated from the register and meter data with "
+                 "its interval, the population register's overcoverage, undercoverage and net bias beside it, and "
+                 "where the 2027 vacant dwelling activation grant goes",
         "domain": "Survey Research & Official Statistics",
         "subdomain": "census-register-administrative-data-quality",
         "objective": "Data Extraction & Conformation (ETL)",
-        "prompt_shape": "01: the municipalities against the regulation's threshold, each with its vacant dwellings and "
-                        "share, beside two tables by municipality",
+        "prompt_shape": "01: the municipalities against the regulation's threshold, each with its estimated vacant "
+                        "dwellings, share and interval, beside the register's coverage errors by municipality",
         "as_of": "2027-01-12",
         "deliverables": DELIVERABLES,
         "distractor_files": DISTRACTORS,
@@ -43,8 +44,8 @@ def write(target, out_path, counts=None):
         "sources": [
             {"files": "all files under target/",
              "origin": "constructed for this task by task5/generator/build.py (seeded, deterministic) in the layouts "
-                       "of a Norwegian cadastre unit extract, a meter data hub's metering point register and hourly "
-                       "values, a population register extract and its event log, land register titles and transfers, "
+                       "of a Norwegian cadastre unit extract, a meter data hub's metering point register, hourly "
+                       "and daily values, a population register extract and its event log, land register titles and transfers, "
                        "business and shareholder register extracts, a power exchange's day-ahead prices, a grid "
                        "company's outage log, a ministry regulation and a ministry letter; the county, the "
                        "municipalities, the organisations, the persons and the dwellings are fictional and personal "

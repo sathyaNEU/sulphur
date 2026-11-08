@@ -1,341 +1,342 @@
-"""Cut the pack from the clean truth: the platform's three feeds (hub sort events, depot scans, courier events) as each
-source writes them, the sort plan, the network register, the shippers' EDI pre-advices and accounts, and two files the
-call never reads (claims, sorter availability)."""
+"""Write the data files of the pack from the clean truth, with the mess the haulier's systems produce: the Varnamo
+weighbridge log, the battery-electric tractors' daily summaries, the Jonkoping TMS consignments, the route, fleet and
+shipper registers, the 2027 shortlist, the daily temperatures, and the two files the call never reads (the Varnamo
+fuel card statement and the workshop log)."""
+import csv
 import datetime as dt
 import math
-import os
 
 import numpy as np
-import pandas as pd
 from openpyxl import Workbook
-from openpyxl.styles import Font
+from openpyxl.styles import Alignment, Font, PatternFill
 from openpyxl.utils import get_column_letter
 
 import params as P
-import parquetio as PQ
 import sim
 
 FILES = {
-    "hub": "hub_sort_events_2026-10.parquet",
-    "depot": "depot_scan_events_2026-10.csv",
-    "courier": "courier_events_2026-10.parquet",
-    "plan": "sort_plan_2026Q4.xlsx",
-    "register": "network_register_2026-10.xlsx",
-    "standard": "TDS-4_tracking_data_standard.pdf",
-    "preadvice": "edi_preadvice_2026-10.csv",
-    "accounts": "shipper_accounts_2026-10.csv",
-    "request": "october_scorecard_request.eml",
-    "claims": "customer_claims_2026-10.csv",
-    "sorters": "hub_sorter_availability_2026-10.csv",
+    "weighbridge": "weighbridge_varnamo_2024-11_2026-10.csv",
+    "bev": "bev_daily_summary_2025-03_2026-10.csv",
+    "tms": "tms_consignments_jonkoping_2025-2026.csv",
+    "routes": "route_register_2026.xlsx",
+    "fleet": "fleet_register_2026.xlsx",
+    "shippers": "shipper_register_2026.xlsx",
+    "plan": "fleet_plan_2027.xlsx",
+    "temps": "daily_mean_temperature_2016-2026.csv",
+    "standard": "fleet_electrification_standard_FES-2.pdf",
+    "quote": "quotation_bev_tractors_2027.pdf",
+    "fuel": "fuel_card_statement_varnamo_2025-2026.csv",
+    "workshop": "workshop_log_2025-2026.csv",
 }
-DISTRACTORS = ["claims", "sorters"]
-CONTEXT = ["request"]
+DISTRACTORS = ["fuel", "workshop"]
+OTHER_TOWNS = ["Jönköping", "Växjö", "Halmstad", "Borås", "Ljungby", "Helsingborg", "Malmö", "Göteborg", "Kalmar",
+               "Norrköping", "Linköping", "Karlshamn", "Hässleholm", "Lund", "Falkenberg", "Vetlanda", "Örebro",
+               "Eskilstuna", "Kungsbacka", "Landskrona", "Trelleborg", "Ystad", "Nybro", "Tranås", "Värnamo",
+               "Mölndal", "Skövde", "Laholm", "Olofström", "Älmhult", "Markaryd", "Hultsfred"]
+LETTERS = "ABCDEFGHJKLMNOPRSTUWXYZ"
 
 
-# ------------------------------------------------------------------ clocks
-def utc_offset_h(day, minute):
-    """Europe/Warsaw: CEST (+2) until 03:00 local on 25 October 2026, CET (+1) after"""
-    t = dt.datetime.combine(day, dt.time(0)) + dt.timedelta(minutes=minute)
-    return 2 if t < dt.datetime(2026, 10, 25, 3, 0) else 1
+def reg(rng):
+    s = "".join(LETTERS[int(rng.integers(0, len(LETTERS)))] for _ in range(3))
+    tail = "%02d" % int(rng.integers(10, 99))
+    last = LETTERS[int(rng.integers(0, len(LETTERS)))] if rng.random() < 0.35 else str(int(rng.integers(0, 10)))
+    return "%s %s%s" % (s, tail, last)
 
 
-def local_dt(day, minute):
-    return dt.datetime.combine(day, dt.time(0)) + dt.timedelta(minutes=minute)
+def fleet(w):
+    rng = np.random.default_rng(P.SEED + 30)
+    bev = {t: reg(rng) for t in P.PILOT_TRACTORS}
+    diesel_j = {"D-1%02d" % k: reg(rng) for k in range(1, 6)}
+    diesel_v = {"D-2%02d" % k: reg(rng) for k in range(1, 47)}
+    trailers = {"T-%03d" % k: reg(rng) for k in range(1, 61)}
+    tare = {t: int(round(15600 + 900 * rng.random(), -1)) for t in diesel_v}
+    ttare = {t: int(round(7400 + 1200 * rng.random(), -1)) for t in trailers}
+    return bev, diesel_j, diesel_v, trailers, tare, ttare
 
 
-def to_utc(day, minute):
-    return local_dt(day, minute) - dt.timedelta(hours=utc_offset_h(day, minute))
+def write_csv(path, header, rows):
+    with open(path, "w", newline="", encoding="utf-8") as f:
+        wr = csv.writer(f, lineterminator="\r\n")
+        wr.writerow(header)
+        wr.writerows(rows)
+    return len(rows)
 
 
-def fmt_local(t):
-    return t.strftime("%Y-%m-%d %H:%M:%S")
-
-
-def fmt_utc(t):
-    return t.strftime("%Y-%m-%dT%H:%M:%SZ")
-
-
-def uid(g):
-    b = g.integers(0, 256, size=16, dtype=np.uint8)
-    b[6] = (b[6] & 0x0F) | 0x40
-    b[8] = (b[8] & 0x3F) | 0x80
-    h = "".join("%02x" % int(x) for x in b)
-    return "%s-%s-%s-%s-%s" % (h[:8], h[8:12], h[12:16], h[16:20], h[20:])
-
-
-# ------------------------------------------------------------------ the feeds
-def hub_feed(w, seed=P.SEED):
-    """one row per read the hub's interface sent: the sort, and a second read where the parcel went round the loop"""
-    g = np.random.default_rng([seed, 1, 11])
-    scanners = {"HPOZ": ["POZ-T1", "POZ-T2", "POZ-H07"], "HWRO": ["WRO-T1", "WRO-T2", "WRO-H03"],
-                "HKTW": ["KTW-T1", "KTW-H05"], "HKRK": ["KRK-T1", "KRK-T2", "KRK-H02"],
-                "HLDZ": ["LDZ-T1", "LDZ-T2", "LDZ-H11", "LDZ-H12", "LDZ-H14"],
-                "HWAW": ["WAW-T1", "WAW-T2", "WAW-T3", "WAW-H04"]}
+def write_weighbridge(w, path, fl):
+    bev, dj, dv, trailers, tare, ttare = fl
+    rng = np.random.default_rng(P.SEED + 31)
+    tlist = sorted(trailers)
+    duty_tr = {c: "D-2%02d" % int(c[1:]) for c in ["V%02d" % k for k in range(1, 47)]}
     rows = []
-    for p in sorted(w["parcels"], key=lambda p: p["pid"]):
-        if not p["scanned"]:
-            continue
-        hub = p["hub"]
-        if p["flex"]:
-            sc = scanners["HLDZ"][2 + p["pid"] % 3]          # the manual line's handhelds
-        else:
-            sc = scanners[hub][int(g.integers(0, len(scanners[hub]) - 1))] if g.random() < 0.97 else scanners[hub][-1]
-        t = to_utc(p["night"], p["sort_min"])
-        rows.append((t, p["label"], hub, sc))
-        if p["recirc"]:
-            rows.append((t + dt.timedelta(seconds=float(g.uniform(160, 540))), p["label"], hub, sc))
-    rows.sort(key=lambda r: (r[0], r[1]))
-    out = []
-    for t, lab, hub, sc in rows:
-        rec = t + dt.timedelta(seconds=float(g.uniform(0.4, 9.0)))
-        out.append({"event_id": uid(g), "tracking_no": lab, "hub_code": hub, "scanner_id": sc,
-                    "event_time_utc": fmt_utc(t), "received_at_utc": fmt_utc(rec)})
-    return pd.DataFrame(out)
+    n = 400100
+    for x in sorted(w["depart"], key=lambda r: (r["date"], r["hour"], r["duty"])):
+        d = x["date"]
+        tr = duty_tr[x["duty"]]
+        if rng.random() < 0.03:   # a spare tractor on the duty
+            tr = "D-2%02d" % int(rng.integers(1, 47))
+        tl = tlist[int(rng.integers(0, len(tlist)))]
+        net = int(round(x["payload"] * 1000 / 20)) * 20
+        t_kg = tare[tr] + ttare[tl]
+        duty = x["duty"] if d >= P.TMS_UPGRADE else "VMO-%s" % x["duty"][1:]
+        dec = "" if rng.random() < 0.012 else str(x["declared"])
+        cmr = "%s%07d" % (x["shipper"], int(rng.integers(1000000, 9999999)))
+        hh = x["hour"]
+        stamp = dt.datetime.combine(d, dt.time(0)) + dt.timedelta(hours=hh)
+        if rng.random() < 0.021:   # first weighing over an axle limit, part reload, weighed again
+            first = net + int(round(rng.normal(900, 300) / 20)) * 20
+            n += 1
+            rows.append([n, stamp.strftime("%Y-%m-%d %H:%M"), "VMO-1", dv[tr], trailers[tl], duty, x["shipper"], cmr,
+                         dec, t_kg + first, t_kg, "axle 2 over"])
+            stamp += dt.timedelta(minutes=int(rng.integers(18, 55)))
+        n += 1
+        rows.append([n, stamp.strftime("%Y-%m-%d %H:%M"), "VMO-1", dv[tr], trailers[tl], duty, x["shipper"], cmr, dec,
+                     t_kg + net, t_kg, ""])
+    return write_csv(path, ["weighing_no", "weighed_at", "bridge", "tractor_reg", "trailer_reg", "duty", "shipper",
+                            "cmr_no", "declared_kg", "gross_kg", "tare_kg", "remark"], rows)
 
 
-def depot_feed(w, seed=P.SEED):
-    """one row per arrival scan at a depot door, as the depot server sends it; the server re-sent one morning's
-    batch at two depots on 21 October with the rows as they were"""
-    g = np.random.default_rng([seed, 1, 12])
+def write_bev(w, path, fl):
+    bev = fl[0]
+    rng = np.random.default_rng(P.SEED + 32)
     rows = []
-    for p in w["parcels"]:
-        t = local_dt(p["arr_day"], p["arr_min"])
-        rows.append((t, p["label"], p["depot_code"], p["door"], p["arr_day"], p["arr_min"]))
-    rows.sort(key=lambda r: (r[0], r[2], r[1]))
-    out = []
-    for t, lab, code, door, day, minute in rows:
-        rec = to_utc(day, minute) + dt.timedelta(seconds=float(g.uniform(1, 25)))
-        out.append({"event_id": uid(g), "tracking_no": lab, "depot_code": code, "scanner_id": door,
-                    "event_type": "ARRIVED", "scanned_at": fmt_local(t), "received_at_utc": fmt_utc(rec)})
-    df = pd.DataFrame(out)
-    resent = df[(df["scanned_at"].str.startswith("2026-10-21")) & (df["depot_code"].isin(["D-WRO1", "D-KTW1"]))]
-    resent = resent[resent["scanned_at"].str[11:13].isin(["04", "05"])]
-    df = pd.concat([df, resent], ignore_index=True)
-    return df
+    swap = {}
+    for x in w["pilot"]:
+        d = x["date"]
+        tr = x["tractor"]
+        trips = x["trips"]
+        km = sum(t["km"] for t in trips) * (1 + rng.normal(0, 0.006))
+        e = sum(t["kwh"] for t in trips)
+        tm = float(np.mean([t["t"] for t in trips]))
+        off = 2 if dt.date(d.year, 3, 31) - dt.timedelta(days=(dt.date(d.year, 3, 31).weekday() + 1) % 7) <= d < \
+            dt.date(d.year, 10, 31) - dt.timedelta(days=(dt.date(d.year, 10, 31).weekday() + 1) % 7) else 1
+        t0 = dt.datetime.combine(d, dt.time(0)) + dt.timedelta(hours=trips[0]["start_h"] - off)
+        t1 = dt.datetime.combine(d, dt.time(0)) + dt.timedelta(hours=trips[-1]["end_h"] - off)
+        drive = sum(t["km"] / t["speed"] for t in trips)
+        soc0 = 96 + int(rng.integers(0, 5))
+        soc1 = soc0 - 100 * e / P.PILOT_USABLE
+        tmin = min(t["t"] for t in trips) - abs(rng.normal(1.0, 0.5))
+        tmax = max(t["t"] for t in trips) + abs(rng.normal(0.8, 0.4))
+        drop = rng.random() < 0.045
+        row = [bev[tr], tr, d.isoformat(), t0.strftime("%Y-%m-%dT%H:%M:%SZ"), t1.strftime("%Y-%m-%dT%H:%M:%SZ"),
+               "%.1f" % km, "%.1f" % e, soc0, "%.0f" % soc1, "" if drop else "%.1f" % tm,
+               "" if drop else "%.1f" % tmin, "" if drop else "%.1f" % tmax, "%.2f" % drive,
+               "%.1f" % (100 * e / km)]
+        upload = t1 + dt.timedelta(minutes=int(rng.integers(3, 40)))
+        rows.append(row + [upload.strftime("%Y-%m-%dT%H:%M:%SZ")])
+        if rng.random() < 0.016:   # the modem reconnected and the day was uploaded again
+            rows.append(row + [(upload + dt.timedelta(hours=int(rng.integers(2, 20)))).strftime("%Y-%m-%dT%H:%M:%SZ")])
+    return write_csv(path, ["registration", "fleet_no", "operating_date", "first_departure_utc", "last_arrival_utc",
+                            "distance_km", "energy_used_kwh", "soc_start_pct", "soc_end_pct", "ambient_mean_c",
+                            "ambient_min_c", "ambient_max_c", "driving_time_h", "consumption_kwh_per_100km",
+                            "uploaded_utc"], rows)
 
 
-def courier_feed(w, seed=P.SEED):
-    """the couriers' handheld events; a re-send carries the event as the app queued it (TC52: local time, TC51: UTC,
-    both cut to the minute) and goes out on a later sync"""
-    g = np.random.default_rng([seed, 1, 13])
-    names = {"PICKUP": "PICKED_UP", "PICKUP_FAILED": "PICKUP_FAILED", "OUT_FOR_DELIVERY": "OUT_FOR_DELIVERY",
-             "ATTEMPT": "DELIVERY_ATTEMPTED", "DELIVERED": "DELIVERED"}
+def fmt_weight(rng, kg, code):
+    r = rng.random()
+    if code in P.STD_LOAD or P.SHIPPERS[code][2] == "exact":
+        return "%d" % kg if r < 0.7 else "%s kg" % format(kg, ",").replace(",", " ")
+    if r < 0.55:
+        return "%d" % kg
+    if r < 0.85:
+        return "%s kg" % format(kg, ",").replace(",", " ")
+    return ("%.2f t" % (kg / 1000)).replace(".", ",")
+
+
+def write_tms(w, path, fl):
+    bev, dj = fl[0], fl[1]
+    rng = np.random.default_rng(P.SEED + 33)
+    by_day = {}
+    for x in w["pilot"]:
+        by_day.setdefault(x["date"], {})[x["duty"]] = x
     rows = []
-    for e in w["courier"]["events"]:
-        t = local_dt(e["day"], e["min"])
-        tu = to_utc(e["day"], e["min"])
-        rec = tu + dt.timedelta(minutes=e["sync_lag"]) + dt.timedelta(seconds=float(g.uniform(1, 40)))
-        if e["copy"]:
-            if e["model"] == "TC51":
-                shown = tu.replace(second=0)
+    n = 2500000
+    goods = {"TEN": "Möbler", "HWP": "Wellpappförpackningar", "BMJ": "Mejeriprodukter, kyl", "TTV": "Sågade trävaror",
+             "GDR": "Drycker", "LBY": "Byggvaror"}
+    dlist = sorted(dj)
+    for day in P.workdays(P.PILOT_START, P.PILOT_END):
+        spare = list(dlist)
+        rng.shuffle(spare)
+        for dcode in sorted(P.PILOT):
+            ship, legs, climb, town = P.PILOT[dcode]
+            x = by_day.get(day, {}).get(dcode)
+            if x is not None:
+                vreg, dec, pal = bev[x["tractor"]], x["declared"], x["pallets"]
             else:
-                shown = t.replace(second=0)
-        else:
-            shown = t
-        code = sim.depot_code(e["depot"], e["day"])
-        rows.append((rec, {"event_id": None, "tracking_no": e["label"], "depot_code": code, "courier_id": e["courier"],
-                           "device_id": e["device"], "event_code": names[e["type"]], "event_time": fmt_local(shown),
-                           "received_at_utc": fmt_utc(rec), "customer_ref": e["ref"][:20] if e["ref"] else None}))
-    rows.sort(key=lambda r: (r[0], r[1]["tracking_no"], r[1]["event_code"]))
-    out = []
-    for rec, r in rows:
-        r["event_id"] = uid(g)
-        out.append(r)
-    return pd.DataFrame(out)
+                mu, sd = P.SHIPPERS[ship][3], P.SHIPPERS[ship][4]
+                pay = float(np.clip(rng.normal(mu, sd), 0.4 * mu, 1.6 * mu))
+                dec = sim.declare(rng, ship, pay)
+                pal = int(round(pay / 0.52 + rng.normal(0, 1.2)))
+                vreg = dj[spare.pop()]
+            n += 1
+            rows.append(["FR%d" % n, day.isoformat(), dcode, vreg, ship, P.SHIPPERS[ship][1], town, max(pal, 8),
+                         fmt_weight(rng, dec, ship), goods[ship]])
+    return write_csv(path, ["consignment_no", "collection_date", "duty", "vehicle_reg", "shipper", "collection_site",
+                            "delivery_town", "pallets", "declared_weight", "goods"], rows)
 
 
-def preadvice_file(w, seed=P.SEED):
-    """the EDI pre-advice lines as received: one line per consignment, a later version where a shipper corrected one
-    (a weight, or the collection day moved)"""
-    g = np.random.default_rng([seed, 1, 14])
-    out = []
-    for ln in w["preadvice"]:
-        day = ln["date"]
-        sent = to_utc(day - dt.timedelta(days=1), float(g.uniform(15 * 60, 23.5 * 60)))
-        depot = ln["depot"]
-        if depot == "D-KRK1" and day >= P.KRK_MOVE and g.random() < 0.55:
-            dep_code = "D-KRK1"                        # shippers' systems still carrying the old code
-        else:
-            dep_code = sim.depot_code(depot, day)
-        base = {"consignment_id": ln["cons"], "version": 1, "sent_at_utc": fmt_utc(sent),
-                "shipper_account": ln["shipper"], "collection_depot": dep_code,
-                "collection_date": day.isoformat(), "tracking_no": ln["master"] or None,
-                "pieces": ln["pieces"], "customer_ref": ln["ref"] or None,
-                "weight_kg": round(float(g.lognormal(1.0, 0.7)) * ln["pieces"], 1)}
-        out.append(base)
-        if g.random() < 0.06:
-            v2 = dict(base, version=2, sent_at_utc=fmt_utc(sent + dt.timedelta(hours=float(g.uniform(1, 14)))))
-            if not ln["collected"] and day.weekday() == 4 and day >= dt.date(2026, 10, 23) and g.random() < 0.7:
-                v2["collection_date"] = (day + dt.timedelta(days=3)).isoformat()   # moved to the next Monday
-            else:
-                v2["weight_kg"] = round(base["weight_kg"] * float(g.uniform(0.7, 1.3)), 1)
-            out.append(v2)
-    out.sort(key=lambda r: (r["sent_at_utc"], r["consignment_id"], r["version"]))
-    return pd.DataFrame(out)
-
-
-def accounts_file(w, seed=P.SEED):
-    g = np.random.default_rng([seed, 1, 15])
-    stems = ["Bialski", "Gorecki", "Kaminski", "Lesniak", "Malinowski", "Nowicki", "Ostrowski", "Pawlak", "Rutkowski",
-             "Sadowski", "Tomczak", "Wawrzyniak", "Zielinski", "Adamczyk", "Borowski", "Czarnecki", "Dudek", "Jasinski",
-             "Kubiak", "Laskowski", "Mazur", "Pietrzak", "Sikora", "Urban", "Wieczorek", "Wrobel", "Zawadzki"]
-    trades = ["Hurtownia", "Drukarnia", "Sklep", "Zaklad", "Pracownia", "Studio", "Apteka", "Salon", "Magazyn"]
-    goods = ["Elektro", "Agro", "Medi", "Tex", "Moto", "Pol", "Bud", "Eko", "Opti", "Libra", "Nova", "Vita"]
-    integ = {"api": "API", "marketplace": "MARKETPLACE", "b2b": "EDI-B2B", "legacy": "EDI-LEGACY"}
-    out = []
-    for s in w["shippers"]:
-        r = g.random()
-        if r < 0.34:
-            name = "%s %s sp. z o.o." % (goods[int(g.integers(0, len(goods)))] + ["tron", "mex", "plast", "trade", "med"][int(g.integers(0, 5))], ["", "Polska"][int(g.integers(0, 2))])
-            name = " ".join(name.split())
-        elif r < 0.6:
-            name = "%s %s" % (trades[int(g.integers(0, len(trades)))], stems[int(g.integers(0, len(stems)))])
-        elif r < 0.8:
-            name = "PPHU %s %s" % (stems[int(g.integers(0, len(stems)))], "i Syn" if g.random() < 0.3 else "")
-            name = name.strip()
-        else:
-            name = "%s S.A." % (goods[int(g.integers(0, len(goods)))] + ["pak", "dom", "lux", "flex"][int(g.integers(0, 4))])
-        start = dt.date(2017, 1, 1) + dt.timedelta(days=int(g.integers(0, 3300)))
-        out.append({"shipper_account": s["account"], "shipper_name": name, "collection_depot": sim.depot_code(s["depot"], dt.date(2026, 10, 31)),
-                    "integration": integ[s["kind"]], "contract_start": start.isoformat()})
-    return pd.DataFrame(out)
-
-
-def claims_file(w, seed=P.SEED):
-    g = np.random.default_rng([seed, 1, 16])
-    ps = w["parcels"]
-    out = []
-    cid = 2600000 + int(g.integers(0, 50000))
-    for p in ps:
-        if g.random() < 0.0095:
-            cid += int(g.integers(1, 12))
-            kind = ["DAMAGED", "LATE", "CONTENTS_MISSING", "LOST"][int(g.choice(4, p=[0.46, 0.31, 0.15, 0.08]))]
-            opened = p["deliv_day"] + dt.timedelta(days=int(g.integers(0, 9)))
-            amount = round(float(g.lognormal(4.6, 0.9)), 2)
-            status = ["OPEN", "ACCEPTED", "REJECTED", "PAID"][int(g.integers(0, 4))]
-            if opened > P.EXTRACT.date():
-                continue                               # not yet opened when the extract was taken
-            if (P.EXTRACT.date() - opened).days < 5:
-                status = "OPEN"
-            out.append({"claim_id": "RK%07d" % cid, "tracking_no": p["label"], "claim_type": kind,
-                        "opened_on": opened.isoformat(), "claimed_pln": amount, "status": status})
-    return pd.DataFrame(out)
-
-
-def sorters_file(w, seed=P.SEED):
-    g = np.random.default_rng([seed, 1, 17])
-    out = []
-    for night in sorted(w["nights"]):
-        for h in [x[0] for x in P.HUBS]:
-            sched = int(g.integers(255, 300))
-            down = int(max(0, g.normal(9, 8))) if g.random() < 0.55 else 0
-            reason = "" if down == 0 else ["jam", "induction fault", "PLC restart", "scale calibration", "chute full"][int(g.integers(0, 5))]
-            out.append({"hub_code": h, "sort_night": night.isoformat(), "scheduled_minutes": sched,
-                        "downtime_minutes": down, "main_reason": reason or None})
-    return pd.DataFrame(out)
-
-
-# ------------------------------------------------------------------ the workbooks
-def _sheet(ws, header, rows, widths):
+def _sheet(ws, header, rows, widths=None):
     ws.append(header)
     for c in ws[1]:
         c.font = Font(bold=True)
+        c.fill = PatternFill("solid", fgColor="DDE3EA")
+        c.alignment = Alignment(wrap_text=True, vertical="top")
     for r in rows:
-        ws.append(list(r))
-    for i, wd in enumerate(widths, 1):
+        ws.append(r)
+    for i, wd in enumerate(widths or [14] * len(header), 1):
         ws.column_dimensions[get_column_letter(i)].width = wd
     ws.freeze_panes = "A2"
 
 
-def plan_xlsx(path):
+def write_routes(w, path):
     wb = Workbook()
     ws = wb.active
-    ws.title = "Sort plan"
+    ws.title = "Duties"
     rows = []
-    for d in P.DEPOTS:
-        code, name, hub = d[0], d[1], d[2]
-        if code == "D-KRK1":
-            rows.append((code, name, hub, "2026-09-28", "2026-10-11", "Q4-1"))
-            rows.append((P.KRK_NEW[0], P.KRK_NEW[1], hub, "2026-10-12", "2026-12-31", "Q4-1"))
-        elif code == "D-WRO2":
-            rows.append((code, name, hub, "2026-09-28", "2026-10-18", "Q4-1"))
-            rows.append((code, name, "HKTW", "2026-10-19", "2026-12-31", "Q4-2"))
+    for dcode in sorted(P.PILOT):
+        ship, legs, climb, town = P.PILOT[dcode]
+        rows.append([dcode, "", "Jönköping (Torsvik)", ship, P.SHIPPERS[ship][1], town, legs[0], legs[1], legs[2],
+                     sum(legs), climb, "Mon-Fri"])
+    rng = np.random.default_rng(P.SEED + 34)
+    for k in range(1, 47):
+        c = "V%02d" % k
+        if c in w["short"]:
+            ship, legs, climb, m = w["short"][c]
+            town = P.SHORT[c][2]
         else:
-            rows.append((code, name, hub, "2026-09-28", "2026-12-31", "Q4-1"))
-    _sheet(ws, ["delivery_depot", "depot_name", "sort_hub", "first_sort_night", "last_sort_night", "plan_issue"],
-           rows, [15, 24, 10, 16, 16, 11])
-    ws2 = wb.create_sheet("Issues")
-    _sheet(ws2, ["plan_issue", "issued", "change"],
-           [("Q4-1", "2026-09-22", "Q4 plan from the sort night of 28 September; Krakow-Zablocie (D-KRK1) moves to "
-                                   "Krakow-Rybitwy (D-KRK3) from 12 October"),
-            ("Q4-2", "2026-10-14", "Opole (D-WRO2) sorted at Sosnowiec from the night of 19 October")],
-           [11, 12, 86])
+            ship, legs, climb = w["others"][c]
+            town = OTHER_TOWNS[k % len(OTHER_TOWNS)]
+        rows.append([c, "VMO-%02d" % k, "Värnamo terminal", ship, P.SHIPPERS[ship][1], town, legs[0], legs[1],
+                     legs[2], sum(legs), climb, "Mon-Fri"])
+    _sheet(ws, ["Duty", "Duty (before 13 Apr 2026)", "Depot", "Shipper", "Collection", "Delivery", "Depot to collection km",
+                "Collection to delivery km", "Delivery to depot km", "Round trip km", "Climb m per 100 km (routing tool)", "Runs"],
+           rows, [8, 14, 20, 9, 14, 14, 12, 12, 12, 11, 11, 9])
     wb.save(path)
 
 
-def register_xlsx(path, w, seed=P.SEED):
-    g = np.random.default_rng([seed, 1, 18])
+def write_fleet(w, path, fl):
+    bev, dj, dv, trailers, tare, ttare = fl
     wb = Workbook()
     ws = wb.active
-    ws.title = "Hubs"
-    addr = {"HPOZ": "ul. Poznanska 160, 62-052 Komorniki", "HWRO": "ul. Logistyczna 6, 55-040 Bielany Wroclawskie",
-            "HKTW": "ul. Baczynskiego 14, 41-203 Sosnowiec", "HKRK": "ul. Krakowska 29, 32-085 Modlniczka",
-            "HLDZ": "ul. Gen. Sikorskiego 7, 95-010 Strykow", "HWAW": "ul. Przejazdowa 21, 05-800 Pruszkow"}
-    sorter = {"HPOZ": "cross-belt, 2 induction lines", "HWRO": "cross-belt, 2 induction lines",
-              "HKTW": "tilt-tray, 1 induction line", "HKRK": "cross-belt, 2 induction lines",
-              "HLDZ": "cross-belt, 2 induction lines; manual sort hall", "HWAW": "cross-belt, 3 induction lines"}
-    _sheet(ws, ["hub_code", "hub_name", "address", "sorter"],
-           [(h[0], h[1], addr[h[0]], sorter[h[0]]) for h in P.HUBS], [10, 22, 46, 46])
-    ws = wb.create_sheet("Depots")
-    daddr = {"D-POZ1": "ul. Gluszyna 120, 61-329 Poznan", "D-POZ2": "ul. Okrezna 33, 64-100 Leszno",
-             "D-WRO1": "ul. Stabłowicka 147, 54-066 Wroclaw".replace("ł", "l"), "D-WRO2": "ul. Wspolna 22, 45-837 Opole",
-             "D-KTW1": "ul. Pukowca 5, 40-847 Katowice", "D-KTW2": "ul. Lesna 11, 43-300 Bielsko-Biala",
-             "D-KRK1": "ul. Przemyslowa 3, 30-701 Krakow", "D-KRK2": "ul. Komunalna 2, 33-100 Tarnow",
-             "D-LDZ1": "ul. Malownicza 4, 92-702 Lodz", "D-LDZ2": "ul. Wronia 65, 97-300 Piotrkow Trybunalski",
-             "D-WAW1": "ul. Komitetu Obrony Robotnikow 45, 02-146 Warszawa",
-             "D-WAW2": "ul. Handlowa 5, 03-216 Warszawa"}
+    ws.title = "Tractors"
     rows = []
-    for d in P.DEPOTS:
-        if d[0] == "D-KRK1":
-            rows.append((d[0], d[1], daddr[d[0]], "2014-03-03", "2026-10-11", P.KRK_NEW[0]))
-            rows.append((P.KRK_NEW[0], P.KRK_NEW[1], "ul. Rybitwy 104, 30-722 Krakow", "2026-10-12", None, None))
-        else:
-            rows.append((d[0], d[1], daddr[d[0]], ["2012-05-14", "2015-09-01", "2018-02-19", "2019-06-03"][int(g.integers(0, 4))], None, None))
-    _sheet(ws, ["depot_code", "depot_name", "address", "opened", "closed", "replaced_by"], rows, [12, 24, 50, 12, 12, 12])
-    ws = wb.create_sheet("Door scanners")
-    rows = []
-    for d in P.DEPOTS:
-        codes = [d[0]] if d[0] != "D-KRK1" else ["D-KRK1", P.KRK_NEW[0]]
-        for c in codes:
-            for door in ("B1", "B2"):
-                inst = "2026-10-12" if c == P.KRK_NEW[0] else ["2021-04-12", "2022-08-29", "2023-11-06"][int(g.integers(0, 3))]
-                rows.append((c, door, "%s-%s" % (c, door), "fixed tunnel reader", inst))
-    _sheet(ws, ["depot_code", "door", "scanner_id", "scanner_type", "installed"], rows, [12, 7, 14, 20, 12])
-    ws = wb.create_sheet("Handhelds")
-    rows = []
-    for d, cs in w["courier"]["couriers"].items():
-        for c in cs:
-            issued = dt.date(2021, 1, 4) + dt.timedelta(days=int(g.integers(0, 1700)))
-            if c["model"] == "TC51":
-                issued = dt.date(2019, 3, 4) + dt.timedelta(days=int(g.integers(0, 700)))
-            rows.append((c["device"], sim.depot_code(d, dt.date(2026, 10, 31)), c["courier"], c["model"], issued.isoformat()))
-    _sheet(ws, ["device_id", "depot_code", "courier_id", "model", "issued"], rows, [12, 12, 12, 8, 12])
+    for t in P.PILOT_TRACTORS:
+        rows.append([t, bev[t], "Battery-electric 6x2 tractor", 2024, "Jönköping", "2025-02-17", "battery 540 kWh "
+                     "installed, %d kWh usable" % P.PILOT_USABLE, ""])
+    for t in sorted(dj):
+        rows.append([t, dj[t], "Diesel 6x2 tractor, Euro VI", 2019 + int(t[-1]) % 4, "Jönköping", "", "", ""])
+    for t in sorted(dv):
+        rows.append([t, dv[t], "Diesel 6x2 tractor, Euro VI", 2018 + int(t[-2:]) % 6, "Värnamo", "", "", tare[t]])
+    _sheet(ws, ["Fleet no", "Registration", "Type", "Model year", "Depot", "In service", "Battery", "Tare kg"], rows,
+           [9, 12, 30, 10, 12, 11, 30, 9])
+    ws2 = wb.create_sheet("Trailers")
+    _sheet(ws2, ["Fleet no", "Registration", "Type", "Tare kg"],
+           [[t, trailers[t], "Curtainsider semi-trailer, 13.6 m" if int(t[2:]) % 5 else "Box semi-trailer, 13.6 m",
+             ttare[t]] for t in sorted(trailers)], [9, 12, 30, 9])
     wb.save(path)
 
 
-def write_tables(w, out):
-    f = lambda k: os.path.join(out, FILES[k])
-    hub = hub_feed(w)
-    PQ.write(hub, f("hub"), compression="zstd")
-    dep = depot_feed(w)
-    dep.to_csv(f("depot"), index=False)
-    cou = courier_feed(w)
-    PQ.write(cou, f("courier"), compression="zstd")
-    pre = preadvice_file(w)
-    pre.to_csv(f("preadvice"), index=False)
-    accounts_file(w).to_csv(f("accounts"), index=False)
-    claims_file(w).to_csv(f("claims"), index=False)
-    sorters_file(w).to_csv(f("sorters"), index=False)
-    plan_xlsx(f("plan"))
-    register_xlsx(f("register"), w)
-    return {"hub": len(hub), "depot": len(dep), "courier": len(cou), "preadvice": len(pre)}
+def write_shippers(path):
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Shippers"
+    rng = np.random.default_rng(P.SEED + 35)
+    rows = []
+    for code in sorted(P.SHIPPERS):
+        name, town = P.SHIPPERS[code][0], P.SHIPPERS[code][1]
+        org = "55%04d-%04d" % (int(rng.integers(1000, 9999)), int(rng.integers(1000, 9999)))
+        if "ek. för." in name:
+            org = "7%05d-%04d" % (int(rng.integers(10000, 99999)), int(rng.integers(1000, 9999)))
+        depots = "Jönköping, Värnamo" if code in ("TEN", "HWP", "BMJ", "TTV", "GDR", "LBY") else "Värnamo"
+        rows.append([code, name, org, town, depots, "30 days", "Full loads"])
+    _sheet(ws, ["Code", "Shipper", "Org. no", "Site", "Served from", "Payment terms", "Service"], rows,
+           [7, 28, 13, 14, 20, 12, 12])
+    wb.save(path)
+
+
+def write_plan(w, path):
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "Shortlist 2027"
+    rows = []
+    for c in sorted(w["short"]):
+        ship = w["short"][c][0]
+        rows.append([c, ship, P.SHIPPERS[ship][0], P.SHORT[c][2], 5, "Värnamo terminal charger bank (from Dec 2026)"])
+    _sheet(ws, ["Duty", "Shipper", "Shipper name", "Delivery", "Days a week 2027", "Charging"], rows,
+           [8, 8, 28, 14, 10, 40])
+    wb.save(path)
+
+
+def write_temps(w, path):
+    rows = []
+    for d in sorted(w["temps"]):
+        j, v = w["temps"][d]
+        rows.append([d.isoformat(), "Jönköping", "%.1f" % j])
+        rows.append([d.isoformat(), "Värnamo", "%.1f" % v])
+    return write_csv(path, ["date", "station", "temperature (C)"], rows)
+
+
+def write_fuel(w, path, fl):
+    dv = fl[2]
+    rng = np.random.default_rng(P.SEED + 36)
+    rows = []
+    d = dt.date(2025, 1, 2)
+    stations = ["Värnamo Terminalvägen", "Gislaved", "Ljungby E4", "Jönköping Ljungarum", "Halmstad Kistinge",
+                "Helsingborg Berga", "Växjö Norremark"]
+    n = 0
+    while d <= dt.date(2026, 10, 30):
+        if d.weekday() < 5:
+            for t in sorted(dv):
+                if rng.random() < 0.42:
+                    n += 1
+                    lit = max(80.0, rng.normal(260, 70))
+                    price = 17.9 + 1.4 * math.sin(n / 4000.0) + rng.normal(0, 0.15)
+                    rows.append(["C%05d" % (1000 + int(t[-2:])), dv[t], d.isoformat(),
+                                 "%02d:%02d" % (int(rng.integers(14, 19)), int(rng.integers(0, 60))),
+                                 stations[int(rng.integers(0, len(stations)))], "Diesel MK1", "%.2f" % lit,
+                                 "%.2f" % price, "%.2f" % (lit * price)])
+        d += dt.timedelta(days=1)
+    return write_csv(path, ["card_no", "vehicle_reg", "date", "time", "station", "product", "litres", "price_sek_l",
+                            "amount_sek"], rows)
+
+
+def write_workshop(w, path, fl):
+    bev, dj, dv = fl[0], fl[1], fl[2]
+    rng = np.random.default_rng(P.SEED + 37)
+    rows = []
+    jobs = ["Service A", "Service B", "Tyres, drive axle", "Tyres, steer axle", "Brake pads", "Annual inspection",
+            "Tail lift repair", "Windscreen", "Air dryer", "Cab heater"]
+    allv = [(t, bev[t]) for t in sorted(bev)] + [(t, dj[t]) for t in sorted(dj)] + [(t, dv[t]) for t in sorted(dv)]
+    n = 0
+    for fno, r in allv:
+        d = dt.date(2025, 1, 1) + dt.timedelta(days=int(rng.integers(0, 60)))
+        while d <= dt.date(2026, 10, 30):
+            n += 1
+            job = jobs[int(rng.integers(0, len(jobs)))]
+            if fno.startswith("BEV") and job in ("Service A", "Service B"):
+                job = "Service, battery-electric"
+            hours = round(max(0.5, rng.normal(3.0, 1.5)), 1)
+            rows.append(["WO-%05d" % (20000 + n), d.isoformat(), fno, r, job, hours,
+                         int(round(hours * 1150 + rng.normal(2500, 1800), -1)),
+                         "Värnamo" if fno.startswith("D-2") else "Jönköping"])
+            d += dt.timedelta(days=int(rng.integers(35, 120)))
+    rows.sort(key=lambda x: (x[1], x[0]))
+    return write_csv(path, ["work_order", "date", "fleet_no", "registration", "job", "labour_h", "cost_sek",
+                            "workshop"], rows)
+
+
+def write_tables(w, target):
+    import os
+    F = {k: os.path.join(target, v) for k, v in FILES.items()}
+    fl = fleet(w)
+    n = {}
+    n["weighbridge"] = write_weighbridge(w, F["weighbridge"], fl)
+    n["bev"] = write_bev(w, F["bev"], fl)
+    n["tms"] = write_tms(w, F["tms"], fl)
+    write_routes(w, F["routes"])
+    write_fleet(w, F["fleet"], fl)
+    write_shippers(F["shippers"])
+    write_plan(w, F["plan"])
+    n["temps"] = write_temps(w, F["temps"])
+    n["fuel"] = write_fuel(w, F["fuel"], fl)
+    n["workshop"] = write_workshop(w, F["workshop"], fl)
+    return n

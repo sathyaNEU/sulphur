@@ -90,6 +90,8 @@ answered before the default path is written, in the design note's `## Deep reaso
 | `No certified replay:` | that the method is not hidden and recovered by reproducing certified or published figures |
 | `Chain:` | the three or more dependent inferences from the cleaned files to the call, numbered in one line, each needing the one before |
 | `Judgment:` | the statistical or modeling judgment among them, and the data that justify it (not a named method alone) |
+| `Hidden by:` | how the rows in view hide or mimic the deciding structure: two effects offsetting inside the observed window, a selection or sampling property the decision's population does not share with the history, or a pooled validation that passes; a structure one plot or one group-by of one file displays is modelled on sight (`references/sulfur-record.md`, four builds, five rounds) |
+| `After the notice:` | the two or more inferences still owed once a run has seen the evidence, numbered (1) (2), each with the wrong turn a competent run can take there; a step whose remedy is standard once noticed was the whole stump (task7 arch 4, task8 arch 17). Covariate selection by held-out error, a retransformation to the mean, a split by a recorded group and an out-of-sample check are not owed inferences: a run does all four unprompted (task7 arch 5's run fitted the golden's age-and-book model, tested it on 122 held-out recent pairs and bootstrapped it) |
 | `One-fact test:` | the single sentence that would rescue a run, shown not to exist: name the likeliest hint and why the solver still has to build the comparison, fit the model or carry the chain through |
 | `No replay:` | that the call does not re-derive a published figure and no stated number is simply wrong |
 | `Pinned:` | every rival method a careful analyst would run, run on the clean truth, each landing on the call or ruled out by named data (`determinism-check` §1) |
@@ -177,7 +179,11 @@ origins population), 483 (the day-180 dating), 464 v3 and v9 (the estimator is t
 most of them after a determinism repair had filed the step and the next round landed the call. **The fork-
 is-the-stump test, before any repair:** if the sentence that would close a judge's fork names the thing the
 decisive step recognises, the fork is the stump and the build re-roots; a repair there spends the stump and
-buys a landed call within a day (118 v2, 141 SF33, 179 v3 section 6, 181 v2, 190 v6).
+buys a landed call within a day (118 v2, 141 SF33, 179 v3 section 6, 181 v2, 190 v6). A leak reader's question-5
+fork counts as a judge's, and naming the quantity the step estimates names the thing it recognises: task7 arch 5's
+reader executed "the expected value of the security" as the register's value, the closing sentence filed V as "the
+value we would expect our inspection to put on the security if the facility defaulted", and the next run went
+straight to the record of inspections at default and filed every graded cell.
 
 **A definition that implies the step is not a filing of it.** A filed outcome in plain words that the
 golden's step follows from does not rule out the field's standard computation of that outcome: the judge
@@ -247,7 +253,7 @@ capacity) makes this the stump an analyst trips on here. A move that reads the s
 
 ### 2.1 The readability screen
 
-Each rung runs seven tests on paper; any that fires makes it readable, and a readable decisive rung is dead.
+Each rung runs eight tests on paper; any that fires makes it readable, and a readable decisive rung is dead.
 **Enumerate the reflex row from the field's vocabulary for the deciding quantity, never from the rungs
 beneath it** (a row listing alternatives to rung 1 declares the decisive rung silent and passes the gate
 wrongly).
@@ -265,7 +271,12 @@ delete the decisive step from the design and ask whether the pack would still ca
 instrument or corpus that makes the golden computable; if not, its presence announces the step. Anything
 shipped to make the answer computable is shipped to the solver too (a sensitive-limit laboratory beside a
 legacy one; a climate series read by one rung), so the escape is a **multi-purpose** organ: a property of
-records the organisation keeps for a reason it independently has. The note gives a row per rung, verdict
+records the organisation keeps for a reason it independently has. **8 Framing:** the prompt or a
+governing document states the difference between the history and the decision's window, population or unit on
+the very axis the step corrects (a November sitting set from August responses, task8 arch 17; write-off kept off
+the book through the borrowers taken on, task7 arch 4): the runs read the framing as the question and model the
+axis on sight. The decision is framed on its own terms, and the difference the step corrects is one the data
+show and nothing states. The note gives a row per rung, verdict
 last, the decisive row `silent`.
 
 **A readable decisive rung is not re-hidden; it is moved.** Every approved stump that was once a shipped
@@ -374,6 +385,14 @@ Part 3):
 - **A construction over a selection event** is the same single dial: curvature falls as the selection grows
   extreme while the bias removed grows (spread 13.2 against a bias of 10.5, worse than doing nothing).
 
+- **A record's latest window mirrors a forward population that ages smoothly.** Where the units the decision
+  prices are the same population the record's latest failures came from, a year on, those failures already carry the
+  forward profile on the axis the step corrects, and "use recent experience" files the call without the step: on
+  task7 architecture 5's first world the 2020 and 2021 windows averaged by group filed all three graded cells. Break the
+  mirror with a practice the organisation keeps for its own reasons that changes the record's recent failures and not
+  the forward units (a workout unit's inspection at referral, months before default), and assert every recent window
+  (mean, weighted mean and median, pooled and by group) outside the cell; there the nearest sat 375,000 outside.
+
 **The arithmetic, on paper before any row.** Position, margin, separation and dominance as
 `dataset-generation` §6 asserts them (4th or 5th on rung 0, no margin under 1.15x, every rung's highest
 figure clearing the decision boundary by the same floor the golden clears it by, asserted in `checks.py`
@@ -474,7 +493,10 @@ register while a pass runs, and a written table is stale within the hour in both
   observation effort behind the counts). Enumerate the files the organisation keeps, ask of each what it
   pins that no other file pins, then screen every construction it forces and expect the obvious one to be
   proxied by a column the file already prints (5 for 5 on one ground, +0.9960).
-- **The field's estimator meets the data's process.** List the field's methods for the deciding quantity;
+- **The field's estimator meets the data's process.** The structures a dimensional warehouse imposes on the
+  rows (type 2 histories, periodic and accumulating snapshots, late-arriving facts, go-live truncation, aggregate
+  tables, relabelling events) and the trap each sets are in `references/warehouse-traps.md`, split into what the
+  hygiene battery cleans and what can seed a deep step. List the field's methods for the deciding quantity;
   write how each file's rows come to exist (who records them, when, by which route, what they cannot see).
   Pitfalls live where recording differs from the event: delay by route, reporters not yet filed, checks that
   see a unit just before resetting it, replacements restarting a wear curve, detection falling as targets
@@ -611,7 +633,7 @@ close it.
 
 ## Checklist (mirrored by `precut.py`)
 
-- [ ] Card registered first; `guard.py mechanisms` read; the abstraction sentence written and not writable against any approved build; same-puzzle and library tests answered; the Sulfur standard line by line (chain, judgment, one-fact test, every banned stump), swap run on the sentence
+- [ ] Card registered first; `guard.py mechanisms` read; the abstraction sentence written and not writable against any approved build; same-puzzle and library tests answered; the Sulfur standard line by line (chain, judgment, how the rows hide it, what is owed after the notice, one-fact test, every banned stump), swap run on the sentence
 - [ ] The survivor anatomy's seven lines answered on this build: no column, a link no key offers, the field's method at rung 0 or 1 filing `Ends on:`, the textbook route validating, every file with a second use, the shock ordinary, no pin naming what the stump rides on
 - [ ] Analyst test written to execute on the clean truth (`dataset-generation` §7.1); the task type serves the objective
 - [ ] Default path ending wrong with the field's method in it, named by the stump sentence; data-native sentence

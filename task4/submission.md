@@ -1,61 +1,52 @@
-# task4 submission
-
 ## Tags
 
-**Domain:** General Statistics & Data Science (missing data, censoring and measurement error: a parcel carrier's sort-scan completeness, where the hub an unscanned parcel passed through is itself missing and is recovered from the unloading it arrived in at its delivery depot).
-**Analytical objective:** Data Quality Monitoring & Alerting (whether the TDS-4 scan alert fires at any of Kurier Warta's sort hubs for October 2026, and at which).
+**Domain:** Mathematics, Statistics and Computer Science, General Statistics & Data Science (regression, classification & model diagnostics), house domain Supply Chain & Logistics.
+**Analytical objective:** Forecasting & Predictive Modeling.
 
-## 1. Final Recommendation
+## Final Recommendation
 
-**Fire the October 2026 scan alerts at Sosnowiec, Strykow and Pruszkow, and at no other hub.**
+**Order 6 battery-electric tractors, for Värnamo duties V02, V05, V09, V14, V16, V18; V03, V07, V11, V21, V24, V27, V30, V33 stay on diesel.** Each of the six needs at most **450 kWh** on the January design day against FES-2's **459 kWh** (85 per cent of 540 kWh usable) once each pilot day's declared payload is taken to the weighed load it stands for, which puts a tonne at **2.2 kWh per 100 km loaded**; the model fitted on the declared weights (1.0 kWh) orders 8, sending the heavy duties V03, V07, V11 (440 kWh on the declared weights, 470 kWh in fact) and dropping V14.
 
-Sosnowiec missed 1.34 per cent of its sort scans, Strykow 1.55 and Pruszkow 1.23, against the 1.00 per cent tolerance; the nearest hub under it is Bielany Wroclawskie at 0.79. On 24 mornings the Warsaw depots unloaded a second trailer from Strykow, which had sorted 1,440 parcels of Pruszkow's flow by hand; 130 of their sort scans are missing, against 205 missing from Pruszkow's own trailers on those mornings, so a parcel without a sort scan is charged to the hub whose trailer it came off, read from its unloading. Not the sort plan's hub, which charges Strykow's misses to Pruszkow (Pruszkow 1.76, Strykow 0.49) and leaves Strykow under the line. Not each depot morning's split of its sorted parcels, which assumes the two hubs missed alike (Strykow 0.77). Not the mornings with two hubs left out (Pruszkow 0.86, Strykow 0.55), nor the excess over Pruszkow's rate on its other mornings charged to Strykow (Strykow 2.30, Pruszkow 0.86): Pruszkow's own sorter missed more on the same heavy nights, so both clear Pruszkow.
+## Supplementary Questions
 
-Taking each parcel a hub handled as an independent chance of a missed sort scan, the 90 per cent interval on each of the three rates lies wholly above the tolerance, and each other hub's lies wholly below it, so no verdict rests on a rate the month's chance variation could carry across the line.
+### ev_duty_assessment_2027.xlsx
 
-## 2. Critical Components
+1. One row per shortlisted duty (fourteen), with its shipper, delivery, the three legs and round-trip km, climb, planning load (mean weighed net payload, November 2025 to October 2026), the January design-day energy to the nearest 10 kWh, its share of the 540 kWh usable battery and whether it goes battery-electric; beneath, the number of tractors and the duties going. Sheets for the energy model and the payload calibration sit behind it.
+2. V02: 430 kWh, goes battery-electric.
+3. V03: 470 kWh, stays diesel.
+4. V05: 440 kWh, goes battery-electric.
+5. V07: 470 kWh, stays diesel.
+6. V09: 420 kWh, goes battery-electric.
+7. V11: 470 kWh, stays diesel.
+8. V14: 450 kWh, goes battery-electric.
+9. V16: 430 kWh, goes battery-electric.
+10. V18: 440 kWh, goes battery-electric.
+11. V21: 490 kWh, stays diesel.
+12. V24: 480 kWh, stays diesel.
+13. V27: 490 kWh, stays diesel.
+14. V30: 480 kWh, stays diesel.
+15. V33: 490 kWh, stays diesel.
+16. Tractors to order: 6 (V02, V05, V09, V14, V16, V18).
 
-1. Missed-scan rate by hub: Komorniki **0.48** per cent; Bielany Wroclawskie **0.79** per cent; Sosnowiec **1.34** per cent; Modlniczka **0.63** per cent; Strykow **1.55** per cent; Pruszkow **1.23** per cent
-2. Parcels handled and missed sort scans at the three hubs that fire: Sosnowiec **16,530** and **222**; Strykow **12,178** and **189**; Pruszkow **24,425** and **301**
-3. The mornings with two trailers: **24** depot mornings at Warszawa-Okecie and Warszawa-Targowek; **1,440** parcels off Strykow's trailers, **130** of them without a sort scan
-4. The 90 per cent interval against the tolerance: Komorniki **wholly below the tolerance**; Bielany Wroclawskie **wholly below the tolerance**; Sosnowiec **wholly above the tolerance**; Modlniczka **wholly below the tolerance**; Strykow **wholly above the tolerance**; Pruszkow **wholly above the tolerance**
+### tractor_order_memo.pdf
 
-## 3. Step-by-Step Solution
+17. One page to the management group: the order of 6 tractors and the duties first, the fourteen duties' design-day energies in a table, then how the energy was estimated (the declared payloads calibrated on the Värnamo weighbridge, 2.2 against 1.0 kWh per tonne per 100 km) and what the declared-weight model would have ordered (8 tractors).
 
-1. Took October's parcels from depot_scan_events_2026-10.csv, one per tracking number unloaded on the mornings of 1 to 31 October (TDS-4 s.2.1; the rows re-sent on 21 October are the same rows again): 91,324 parcels.
-2. Took each parcel's hub from hub_sort_events_2026-10.parquet where it has a sort event (one hub per parcel; a second read on the sorter loop is the same sort); a parcel with none is a missed sort scan (s.2.2).
-3. Split each depot door's arrival scans into unloadings wherever the door stood idle for more than ten minutes (any pause from one to 29 minutes gives the same 300 unloadings), and found every unloading's sorted parcels carrying one hub.
-4. Charged each parcel without a sort scan to its unloading's hub, then counted each hub's parcels, missed sort scans and rate, and fired the alert above 1.00 per cent (s.2.3).
-5. Put a 90 per cent interval on each hub's rate, its parcels handled taken as independent chances of a missed sort scan as october_scorecard_request.eml asks (the Wilson score interval; the normal, Clopper-Pearson, Jeffreys and Agresti-Coull intervals place every hub on the same side of the tolerance), and read whether it lies wholly above the tolerance, across it or wholly below it.
-6. Courier events sent twice (TDS-4 s.3): a later-received record of the same parcel, event, courier and handheld carrying the first record's time cut to the minute, as local time from a TC52 and as UTC from a TC51 (two hours behind local until 25 October, one after); a second loop or the afternoon wave is a new scan; counted under the depot the event names.
-7. Pre-advised parcels never picked up (TDS-4 s.4): each consignment's latest version with an October collection date, D-KRK1 read as D-KRK3 from 12 October, its pieces as parcels; a parcel the platform holds a pickup, sort, arrival or delivery record for was collected (trailer collections carry no pickup scan) and a failed pickup is not a collection; a piece label is the consignment number plus a three-digit piece number, and a marketplace order is matched on its first 20 characters, the orders sharing them counted against their pickups.
+## Critical Components
 
-## 4. Deliverable Answers
+1. On the Värnamo weighbridge the declarations are right on average (declared less weighed, **-39 kg**) but for the estimating pilot shippers the weighed load rises only **0.26 to 0.30** tonnes per declared tonne; the dairy declares one standard weight (**13,500 kg**) and Tabergs Trävaror its own weighbridge figure (slope **1.00**).
+2. A tonne of payload costs **2.2 kWh per 100 km loaded** with each pilot day's payload taken to its expected weighed load shipper by shipper (the Tabergs days alone give 2.2), against **1.0** fitted on the declared weights.
+3. The heavy duties V03, V07, V11 need **470 kWh** on the January design day and V14 **450 kWh**, against the 459 kWh limit.
+4. **6** tractors: V02, V05, V09, V14, V16, V18.
 
-### tracking_scorecard_2026-10.xlsx
+## Step-by-Step
 
-1. Each hub's parcels handled, missed sort scans, missed-scan rate, where its 90 per cent interval lies against the tolerance, and alert:
-   - Komorniki (HPOZ): 12,600 parcels, 61 missed, 0.48 per cent, interval wholly below the tolerance, does not fire
-   - Bielany Wroclawskie (HWRO): 11,963 parcels, 95 missed, 0.79 per cent, interval wholly below the tolerance, does not fire
-   - Sosnowiec (HKTW): 16,530 parcels, 222 missed, 1.34 per cent, interval wholly above the tolerance, fires
-   - Modlniczka (HKRK): 13,628 parcels, 86 missed, 0.63 per cent, interval wholly below the tolerance, does not fire
-   - Strykow (HLDZ): 12,178 parcels, 189 missed, 1.55 per cent, interval wholly above the tolerance, fires
-   - Pruszkow (HWAW): 24,425 parcels, 301 missed, 1.23 per cent, interval wholly above the tolerance, fires
-2. Each depot's courier events sent twice and pre-advised parcels never picked up:
-   - D-POZ1 Poznan-Gluszyna: 581 sent twice, 106 never picked up
-   - D-POZ2 Leszno: 125 sent twice, 257 never picked up
-   - D-WRO1 Wroclaw-Pracze: 600 sent twice, 162 never picked up
-   - D-WRO2 Opole: 272 sent twice, 139 never picked up
-   - D-KTW1 Katowice-Zaleze: 324 sent twice, 110 never picked up
-   - D-KTW2 Bielsko-Biala: 375 sent twice, 195 never picked up
-   - D-KRK1 Krakow-Zablocie: 97 sent twice, 43 never picked up
-   - D-KRK3 Krakow-Rybitwy: 200 sent twice, 86 never picked up
-   - D-KRK2 Tarnow: 127 sent twice, 170 never picked up
-   - D-LDZ1 Lodz-Olechow: 599 sent twice, 189 never picked up
-   - D-LDZ2 Piotrkow Trybunalski: 292 sent twice, 309 never picked up
-   - D-WAW1 Warszawa-Okecie: 942 sent twice, 145 never picked up
-   - D-WAW2 Warszawa-Targowek: 736 sent twice, 346 never picked up
+1. Joined bev_daily_summary_2025-03_2026-10.csv (a day uploaded twice kept once) to tms_consignments_jonkoping_2025-2026.csv on registration and date, giving 2334 duty-days with the declared weight (kilograms or tonnes with a decimal comma) and the duty's legs and climb from route_register_2026.xlsx; ambient dropouts took the Jönköping station day from daily_mean_temperature_2016-2026.csv.
+2. Fitted each duty-day's battery energy by least squares on km, climb times km, the degrees below 16 C and below 0 C times km, and payload times loaded km; on the declared weights the payload term is 1.0 kWh per tonne per 100 km, and the model predicts January and February 2026 held out within 2.4 per cent.
+3. Applied at −5 C and each duty's planning load from weighbridge_varnamo_2024-11_2026-10.csv, that model orders 8 tractors (V02, V03, V05, V07, V09, V11, V16, V18), the reasonable but insufficient answer: the heavy duties come out at 440 kWh and V14 at 470 kWh.
+4. Read the weighbridge (the last weighing of each CMR, net as gross less tare) against the declared weights shipper by shipper: right on average, but for Tenhult Möbler, Huskvarna Wellpapp, Gränna Dryckes, Lekeryds Byggvaror the weighed load regresses on the declared at 0.26 to 0.30, the dairy's notes carry one standard weight and Tabergs' carry its weighbridge ticket, so a slope fitted on the declarations is diluted wherever the declarations scatter around the load, and one pooled line over the weighbridge (0.94) carries the shippers' differences in load, not the clerks' error, and corrects it only to 1.1.
+5. Replaced each pilot day's declaration by its expected weighed load given the shipper and the declaration (the shipper's weighed mean for the dairy, the declaration itself for Tabergs) and refitted: 2.2 kWh per tonne per 100 km; Tabergs' own days, whose declarations are exact, give 2.2 on their own.
+6. Kept the second cold rate below 0 C: with one rate below 16 C the model fitted without January and February 2026 under-predicts their sub-zero days by 3.4 per cent, with both rates by -0.4.
+7. Predicted each shortlisted duty on the January design day at its planning load and kept those within 459 kWh (FES-2 4.1 to 4.3): V02, V05, V09, V14, V16, V18, 6 tractors.
 
-### scan_alerts_2026-10.pptx
-
-3. One slide: a horizontal bar chart of each hub's missed-scan rate with its 90 per cent interval against the 1.00 per cent tolerance line, the bars of Sosnowiec, Strykow and Pruszkow marked as firing and their intervals clear of the line, the other three under it, beside the six hubs' parcels, missed sort scans, rates, intervals and alerts.
+No other order survives: the model's held-out check cannot see the dilution because the held-out days carry the same declarations, so only the weighbridge, which weighs the same shippers' loads, measures it; every route that takes each shipper's declarations to the weighed load (a line per shipper, the shipper's mean, the exact shipper's days, a within-duty fit, either year, any cold form with a rate below 0 C) gives the same six duties, while the declared weights, one pooled correction and an average consumption on cold days order 8, 8 and 9.

@@ -1,286 +1,62 @@
-# task3 architecture 3: Reidel Road well field, Rule WR-4 sentinel drawdown
+# task3 architecture 6: the Durrow Creek bridge on Ransom Bar Road, an ungauged foothill creek's 1 per cent flood
 
-Physical & Environmental Sciences, hydrology (Sulfur task type: inverse problems, physical-model calibration and
-uncertainty propagation), Forecasting & Predictive Modeling. Re-root of the slot after the platform landed
-architecture 2 (both runs on the golden at every ask, `runs/triage.md`): one architecture per world, so a new world,
-dataset and shell.
+Physical & Environmental Sciences, hydrology-flood-frequency (Sulfur task type: extreme-value and environmental-hazard
+return-period analysis), Forecasting & Predictive Modeling. Re-root at the author's word: a total rework of the slot,
+with the domain fit (the swap test must break) and the difficulty named. Architecture 5 (Ollery Creek, READY at a19fc6c
+from a parallel session, never uploaded) is superseded; architecture 3 landed on the platform (`runs/triage.md`). One architecture per world, so a new world (the
+Sierra Nevada west slope), dataset (a high river's gauge beside valley and SNOTEL stations and both basins' elevation
+bands) and shell (a which-question, a PDF report and a CSV). Earlier architectures' design sections are in git history
+(architecture 3 at 1fffdf5, 4 at 0931661, 5 at a51b7e6).
 
 ## Draw
 
-- **Card:** `.claude/skills/fingerprint/cards/task3.json` v3, registered 2026-11-08 at PASS (differentiated against
-  mark166, mark247 and mark308; lineage carries v1 and v2 with their fates).
-- **Pairing:** a city water utility's groundwater withdrawal permit; the conservancy district's Rule WR-4 caps the
-  drawdown at a sentinel well in every month of a twenty-year term; four requested schedules for a new well field in a
-  buried-valley aquifer; the district permits the largest that meets the cap.
-- **Shape:** a which-of-four with each schedule's 2046 peak drawdown, the existing well field's drawdown at its own
-  monitoring well, a monthly forecast workbook and a demonstration PDF with the chart.
-- **Strategy:** a forecast that has to earn its place (Part A, WORKS IN FORM) fused with a clean comparison (Part A,
-  WORKS IN FORM): the far-field model is calibrated on the cone an existing well field has already drawn, and the
-  drawdown that record carries is only clean against natural levels from reference wells beyond the cone.
-- **Data-native sentence:** a confined valley aquifer whose no-flow walls and leaking till cap pull a three-day
-  test's drawdown in opposite directions and cancel inside its window, beside seventeen years of an existing well
-  field pumping into the same aquifer through a run of wet years, with the nearest network well sitting inside that
-  well field's cone.
-- **Abstraction sentence (written, then tested):** "a short trial's model fits the trial and is calibrated for the
-  long run on a sibling load's history read against a reference outside that load's reach." Against every approved
-  and delivered build in `guard.py mechanisms --objective forecasting`, no build's decisive step pairs an
-  out-of-window calibration with a contaminated-reference choice; mark166 (departures linked across groups), mark247
-  (gap-filled running sums), mark308 (unmet requests rebuilt from movements), mark138 (store at the forecast date) and
-  mark156 (infiltration below a water table) each spend a different insight.
-- **Sources** (all synthetic, authored for this task, CC0; `metadata.json`): the consultant's logger export for the
-  14 to 17 September 2026 test at PW-1 (six wells, one-minute absolute pressure, two logger brands and clocks), the
-  on-site barologger, the field-notes workbook, the August step test (distractor), Harlow Springs' monthly operating
-  report extract 2009 to 2026, the Mill Street monitoring well's tape readings 2008 to 2026, the district's network
-  water levels 2005 to 2026 and well register, Rule WR-4, the application's requested schedules, the drillers' logs,
-  Plate 3 of the 2019 bedrock surface study (PNG), and the raw-water quality workbook (distractor).
-- **People:** drawn with `guard.py names --geo US` (seeds 3303 and 3): Mitchell Munoz, Todd Robinson (test field
-  crew), Wendy Ruiz, Mary Alvarez, John Ponce (Mill Street readers).
-
-## Default path
-
-1. Put the six loggers on one clock (the Level TROLLs on local EDT, the Leveloggers on UTC), subtract the barologger,
-   take the OW-2 re-hang from the field notes, drop the rewritten records, and turn pressure into drawdown at PW-1's
-   observation wells against the pre-test trend.
-2. Fit Theis to OW-1, OW-2 and OW-3 (the field's method for a constant-rate test): T about 8,160 ft2/day, S about
-   1.0e-3, residual 0.08 ft over three days, the late-time derivative flat (no boundary, no leakage visible).
-3. Project the 2027 to 2046 drawdown at OW-S with that Theis aquifer and the requested schedules: nearly 22 ft even
-   at 450 gpm, so the hindcast of the Mill Street wells is run to check it, and Theis puts 12 ft of 2025 drawdown at
-   the Mill Street monitoring well where the record shows 3 to 5.
-4. Recalibrate: a leaky aquifer (Hantush, with the plate's walls) whose leakage factor reproduces the Mill Street
-   record, the drawdown at each monitoring well taken against the nearest network well in the same aquifer, CV-07,
-   as the natural level (or against the well's own 2005 to 2008 mean, or with a fitted trend): leakage factor near
-   1,900 ft, the record fitted closely.
-5. Forecast with that aquifer: every schedule's 2046 peak at OW-S under 3.5 ft, all four within the 9 ft limit.
-
-Ends on: 1,250 gpm
-Golden: 1,000 gpm
-
-## Stump sentence
-
-A strong analyst who sees the test's Theis forecast overshoot the Mill Street record recalibrates the leakage on the
-monitoring wells' drawdown read against the nearest network well CV-07 (or the wells' own pre-pumping levels, or a
-fitted trend), puts every schedule under 3.5 ft at OW-S and files 1,250 gpm; CV-07 sits inside the Mill Street cone and
-the region's wet years lift every reading, so only the natural level carried from the confined-aquifer wells beyond
-the cone (CV-02 and CV-11) gives a leakage factor near 3,500 ft and files 1,000 gpm, 8 ft against 1,250 gpm's 10.
-
-## Deep reasoning
-
-- **Task type:** hydrology flood frequency is the vocab key; the Sulfur task type is inverse problems and
-  physical-model calibration (the aquifer's far field calibrated on an existing record), serving forecasting.
-- **Domain test:** the deciding quantity is a 20-year drawdown forecast at a sentinel well; the field's estimator is
-  a pumping-test analysis (Theis or Cooper-Jacob type curves) carried forward by superposition of the schedule.
-- **Swap:** "which schedule keeps the sentinel's drawdown within 9 ft" becomes "which price keeps churn within 9 per
-  cent": there is no confined aquifer, no leakage through till, no no-flow wall and no cone of depression for a
-  reference well to sit inside, so the reference choice and the far-field calibration stop meaning anything.
-- **Layer 1:** two logger clocks (consultant's two brands), absolute pressure and the barologger, the OW-2 re-hang
-  and the OW-3 rewritten records (download routine), the aquifer's barometric response and earth tides (physics),
-  thousand gallons then gallons and the wells renamed at the 2016 SCADA change, the May 2019 meter month from run
-  hours (operating reports), readings taken with TW-1 running and the 2017 casing extension (the town's tape
-  readings), CV-07's 2013 measuring-point reset, keyed-twice rows, estimated readings and the 2020 months without a
-  field run (the district's network); nothing is placed to be caught.
-- **Layer 2:** forecast uncertainty: a far-field model that earns its place out of the test's window, calibrated on
-  a record whose drawdown must be separated from natural variation with a clean reference.
-- **Decisive step:** taking each monitoring well's natural level from the confined-aquifer network wells beyond the
-  Mill Street cone, so that the drawdown the record carries is the pumping's alone and the leakage factor it
-  calibrates is the aquifer's.
-- **Not semantics:** every field, unit, clock and code read correctly (the readings, the measuring points, the
-  operating report's units) still leaves a natural level to be chosen, and the nearest same-aquifer well, the
-  well's own baseline and a trend each read the region's wet years as leakage.
-- **Not rule application:** Rule WR-4 defines drawdown as the lowering the withdrawals cause and lists the records
-  an application carries; no filed sentence names a reference well, a far-field model or a calibration. Enumerated
-  family (Theis from the test; leaky or bounded leaky calibrated against own baseline, trend, CV-07, CV-02, CV-11,
-  CV-02 and CV-11; walls 4,000 ft to none; T from any observation well) spreads the 1,000 gpm peak from 2.0 ft to
-  34.4 ft; the standing family (the clean references, every wall width, every test fit) spreads it 7.95 to 8.29 ft,
-  all filing 1,000 gpm; the ruling-out is loud in the data (CV-07's record steps down with each Mill Street increase
-  and cycles with summer pumping; CV-02 and CV-11 agree with each other and with OW-S before 2009).
-- **Analyst test:** a strong analyst compensates the loggers, fits Theis (an excellent fit), sees its hindcast
-  overshoot the Mill Street record, recalibrates a leaky aquifer against CV-07 or the wells' own baselines and files
-  1,250 gpm.
-- **Estimand:** Rule WR-4 sections 1.2, 2.1, 2.2, 4.1 to 4.3 and Table 1 (the drawdown at OW-S caused by the
-  Reidel Road schedule and the Mill Street wells at their filed projection, in every month through December 2046,
-  against 9.0 ft; the largest schedule meeting it is permitted; 4.4 the nearest registered domestic well's 2046
-  peak under the permitted schedule); the schedules and the projection in the application summary.
-- **No decoy:** no memo, draft, briefing or stakeholder figure states a drawdown, a leakage factor or a reference
-  well; the application carries schedules and projections only.
-- **No certified replay:** no published or certified drawdown exists for the method to reproduce.
-- **Chain:** (1) the test's Theis fit is exact inside three days but its hindcast of the Mill Street wells
-  overshoots the record fivefold, so the far field must be calibrated on that record; (2) the record's drawdown is
-  each reading's fall below its natural level, which only the confined-aquifer wells beyond the cone carry (CV-07
-  is inside it, a trend absorbs the pumping); (3) the leakage factor that reproduces the separated drawdown at MS-MW,
-  CV-07 and OW-S with the plate's walls; (4) the 2027 to 2046 monthly superposition at OW-S under each schedule and
-  the town's projection, and the largest schedule under 9.0 ft.
-- **Judgment:** which wells carry the natural level, justified from the data (CV-07's offset from the far wells
-  steps with each Mill Street increase and follows the summer pumping; CV-02 and CV-11 move together and with OW-S in
-  2005 to 2008), and which far-field model reproduces the separated drawdown that the test cannot see.
-- **One-fact test:** the likeliest hint, "the aquifer leaks through the till", rescues nothing: the default path
-  already calibrates a leaky aquifer, and on the CV-07-referenced or raw record it calibrates to 1,250 gpm. The
-  hint "CV-07 is inside the cone" still leaves the reference to be built, the calibration and the superposition.
-- **No replay:** the call is a forecast for 2027 to 2046; no shipped number is re-derived or wrong.
-- **Pinned:** the rivals run on the cut pack (`generator/checks.py` R6): references CV-02, CV-11 or both; walls
-  4,000, 5,000, 6,500 ft or none; T and S from OW-1, OW-2, OW-3, all three, or with PW-2 and OW-S; barometric
-  correction on or off; calibration on MS-MW alone, or on MS-MW, CV-07 and OW-S. Every one files 1,000 gpm with the
-  peaks at 4, 6, 8 and 10 ft. Calibration on OW-S alone (1,250 gpm) is ruled out by the record it leaves out: its
-  leakage factor of 3,065 ft puts MS-MW's 2025 drawdown at 4.4 ft against the record's 4.9; the leaky fit to the test
-  alone (700 gpm) misses MS-MW the other way (5.4 ft).
-- **Run forecast:** a run first goes wrong by a method shortcut (Theis extrapolated, filing none of the four) or,
-  more likely for a strong run, a self-confirming check: it calibrates the leakage on the record against CV-07 or
-  its own baseline, the fit reproduces the record, and it files 1,250 gpm; a run that notices the wet years and fits
-  a trend is dismissing its own evidence (the far wells).
-- **Strategy label:** WORKS IN FORM (a forecast that has to earn its place, live form: the invariant constructed from
-  a log, the back-test the solver's own; and a clean comparison whose contamination is read from a relation in the
-  data, never a column).
-- **Lesson:** a model whose fit inside the trial is excellent can still be wrong for the decision's horizon, and an
-  out-of-window calibration is only as clean as the reference that separates the signal from the background; no
-  build on file couples the two.
-
-## Survivor anatomy
-
-- **Actor:** the monitoring readings have rows; the property that decides (which wells sit inside the Mill Street
-  cone, and so carry the natural level and which do not) is a relation between the network wells' series and the
-  Mill Street pumping, held in no column; the register's unit code says only that CV-07, CV-02 and CV-11 are all
-  in the confined aquifer.
-- **Link:** the natural level is read by comparing network wells' records with each other and with the operating
-  reports, a comparison the pumping-test method never asks for and no key offers.
-- **Reflex:** Theis on the test (rung 0) and a leaky aquifer calibrated on the record against the nearest reference
-  (rung 1) both file a wrong answer (none of the four; 1,250 gpm).
-- **Back-test:** the textbook routes validate: Theis fits the test to 0.08 ft; the CV-07-referenced calibration
-  reproduces the Mill Street record it was calibrated on.
-- **Second use:** every file the decisive step reads has its own use: the network export and register are what Rule
-  WR-4 3.2 supplies to every applicant and carry the sentinel OW-S; the Mill Street records are the existing
-  permitted withdrawal the demonstration must include; the operating reports give that withdrawal's history.
-- **Shock:** the wet years are ordinary weather in a 22-year record, and CV-07's offset (about 1.7 ft by 2025) grows
-  with the town's slow growth, never a step or the pack's largest anomaly.
-- **Pins:** the WHAT sits in Rule WR-4 (drawdown, existing withdrawals at their filed projection, every month of a
-  term ending 2046, Table 1's 9.0 ft, the largest schedule permitted) and the application (schedules, projection);
-  no sentence names a reference well, the leakage, the walls' role or a calibration window.
-
-## Readability screen
-
-| Rung | 1 Filed sentence | 2 Schema | 3 Reflex | 4 Control bench | 5 Hygiene | 6 Linear | 7 Dedicated organ | Verdict |
-|---|---|---|---|---|---|---|---|---|
-| 0 Theis from the test | no | no | yes | no | no | no | no | readable |
-| 1 Leaky calibrated against CV-07, own baseline or trend | no | no | yes | no | no | no | no | readable |
-| 2 Natural level from CV-02 and CV-11 beyond the cone (decisive) | no | no | no | no | no | no | no | silent |
-| 3 Superposition of the schedules and the projection | no | no | yes | no | no | no | no | readable |
-
-## Semantic fork table
-
-| Id | Term or convention | Reading A (golden) | Reading B | Golden under A | Under B | Ruled out by |
-|---|---|---|---|---|---|---|
-| SF1 | drawdown at OW-S | caused by withdrawals (Rule 2.1) | the reading's fall from 2005 to 2008 | 1,000 gpm | 1,250 gpm (raw rung) | Rule WR-4 2.1, "caused by withdrawals" |
-| SF2 | existing withdrawals in the future | the filed projection, 56 and 44 per cent | the 2025 rate held | 1,000 gpm | not computed | Rule WR-4 2.2 files the holder's projection |
-| SF3 | which month counts | greatest monthly drawdown in 2046 (4.3) and every month (4.1) | annual mean | 1,000 gpm | 1,250 gpm | Rule WR-4 4.1 "any month" and 4.3 "greatest monthly drawdown" |
-| SF4 | walls | the plate's mapped edges, 5,000 ft | none, or 4,000 to 6,500 ft | 1,000 gpm | 1,000 gpm | same call (asserted) |
-| SF5 | T and S | Theis on OW-1 to OW-3 | any single well, or five wells | 1,000 gpm | 1,000 gpm | same call (asserted) |
-| SF6 | readings with TW-1 running | dropped | kept | 1,000 gpm | 1,000 gpm | same call (asserted) |
-| SF7 | the natural reference | CV-02 and CV-11 | either alone | 1,000 gpm | 1,000 gpm | same call (asserted) |
-| SF8 | the term's start | April 2027 per the application | January 2027 | 1,000 gpm | not computed | application section 1 files April 2027 |
-| SF9 | walls for the domestic well | the plate's mapped edges | none (the record fits either way) | DW-17 7 ft | DW-17 6 ft | Plate 3 maps the edges of the saturated sand and gravel |
-
-## Ladder
-
-- **Rungs and winners:** rung 0 Theis from the test files none of the four (450 gpm at 21.7 ft, the Mill Street wells
-  alone over the limit by 2046); rung 1 leaky calibrated against CV-07 files 1,250 gpm (peak 3.4 ft), against the
-  wells' own baseline 1,250 gpm (2.4 ft), with a trend 1,250 gpm (2.5 ft), against CV-07 averaged with the far wells
-  1,250 gpm (7.2 ft); the decisive rung (CV-02 and CV-11) files 1,000 gpm at 8.12 ft, 1,250 gpm at 9.92 ft. Off the
-  ladder: the leaky fit to the test alone files 700 gpm, annual averages in place of the monthly schedule 1,250 gpm.
-- **Margins:** the golden's 1,000 gpm peak sits 0.88 ft under the 9.0 ft limit and its 1,250 gpm peak 0.92 ft over;
-  every standing rival keeps 1,000 gpm at 7.95 to 8.29 ft and 1,250 gpm at 9.72 to 10.12 ft.
-- **Pricing:** (1) the residue the WHAT leaves is the natural level, a method; (2) the move the call needs (1,250 gpm
-  from 3.4 ft to over 9.0) is a factor of 2.6 in the far-field response, which the reference choice produces; (3)
-  the one-group-by route (difference to the nearest same-aquifer well) is the rung 1 shortcut; (4) the leakage
-  factor's spread across the clean references and test fits is about 4 per cent (3,457 to 3,584 ft) against the 47
-  per cent the reference choice moves it; (5) no variance is the lever; (6) OW-S's own record carries 0.5 ft of
-  Mill Street drawdown, so OW-S alone cannot carry the calibration (asserted through the MS-MW miss); (7) no subset
-  of rows hands over the leakage factor; (8) every visible grouping of the network (unit code, distance, record
-  length) was swept as a reference and only the beyond-the-cone confined wells land the call.
-- **Dominance:** each lower rung's single correction leaves it on a wrong answer (R3b in `checks.py`).
-
-## Closure table
-
-| Axis | Reading | Closure |
-|---|---|---|
-| 1 population | the sentinel OW-S, Table 1 | filed in Rule WR-4 |
-| 2 outcome | drawdown caused by withdrawals | Rule WR-4 2.1 |
-| 3 window | every month through December 2046 | Rule WR-4 1.2 and 4.1 |
-| 4 unit | feet, nearest foot | prompt |
-| 5 comparison | each schedule against 9.0 ft | Table 1 |
-| 6 existing withdrawals | the Mill Street wells at the filed projection | Rule WR-4 2.2, application section 3 |
-| 7 schedule shape | the monthly factors | application section 2 |
-| 8 start | April 2027 | application section 1 |
-| 9 split of the new field | equal between PW-1 and PW-2 | application section 1 |
-| 10 split of Mill Street | 56 and 44 per cent | application section 3 |
-| 11 test rate | totalizer average | field notes |
-| 12 clocks | per logger | field notes, Loggers |
-| 13 re-hang | per logger | field notes, Loggers |
-| 14 measuring points | MP history | register |
-| 15 units of production | per row | operating report column |
-| 16 aquifer geometry | the mapped edges | Plate 3 |
-| 17 natural level | beyond the cone | the data (decisive) |
-| 18 far-field model | calibrated on the record | the data (decisive) |
-| 19 rounding | nearest foot | prompt |
-| 20 tie at the limit | none within 0.9 ft | asserted |
-| 21 largest permitted | the largest meeting 4.1 | Rule WR-4 4.2 |
-| 22 as-of | 6 November 2026 | the application's date and the data's end |
-
-## Literal reader
-
-Executing Rule WR-4 and the application word for word gives the estimand (OW-S, every month through 2046, the
-schedules plus the Mill Street projection, 9.0 ft, the largest passing schedule) and leaves the far-field model and
-the natural level to the data; every reading of the filed sentences that the data leave standing files 1,000 gpm.
-
-## Oracles
-
-none: no control, published figure or corpus ties under any basis; the network wells are evidence, not a scored
-bench, and the far wells agree with each other on every basis.
-
-## Ask sheet
-
-- **Asks:** (A1) each schedule's greatest monthly drawdown at OW-S in 2046, nearest foot (4, 6, 8, 10); (A2) the
-  2025 average drawdown the Mill Street wells caused at MS-MW, nearest foot (5); (A3) the greatest monthly drawdown
-  in 2046 at the nearest registered domestic well (DW-17) under the permitted schedule, nearest foot (7); the
-  demonstration PDF with the 2027 to 2046 chart against the limit and the workbook's monthly working (instruction
-  following).
-- **Devices:** every graded figure rides the decisive step (A1 moves with the leakage factor; A2 with the natural
-  reference; A3 with both), and A2 and A3 each carry a second judgment of their own: A2 the like-for-like window (the
-  far wells' change measured from MS-MW's own pre-pumping months, not from 2005 to 2008: 4.4 ft, rounding to 4), A3
-  the plate's walls (left out, the record still fits and DW-17 reads 5.8 ft, rounding to 6).
-- **Spans:** A1 across the standing family 4.05 to 4.26, 5.83 to 6.09, 7.95 to 8.29, 9.72 to 10.12 ft; A2 4.87 to
-  4.93 ft; A3 across the plate's readings (walls 4,500 to 5,500 ft) 6.59 to 6.92 ft.
-- **Pair ceiling:** 46.8 (the cracker lands the call and A1 but takes both second judgments' shallow forms, 81.7; the
-  mirror on rung 1, 12.0).
-- **Mirror leakage:** 0 per cent of ask weight kept by the default path.
-- **Measured by:** generator/ceiling.py
-
-| Ask | Golden | Default path (rung 1, CV-07) | Cracker (deep step, shallow second judgments) | Verdict |
-|---|---|---|---|---|
-| A1 450 gpm | 4 | 1 | 4 | yes |
-| A1 700 gpm | 6 | 2 | 6 | yes |
-| A1 1,000 gpm | 8 | 3 | 8 | yes |
-| A1 1,250 gpm | 10 | 3 | 10 | yes |
-| A2 MS-MW 2025 | 5 | 3 | 4 | miss |
-| A3 DW-17 2046 | 7 | 2 | 6 | miss |
-
-## Prompt contract
-
-The author's rewrite keeps: the question (which schedule the district will permit under Rule WR-4, no count of the
-schedules); OW-S, the Table 1 limit and 2027 to 2046; `reidel_road_WR-4_demonstration.pdf` with the chart of each
-schedule's monthly drawdown at OW-S against the limit; `reidel_road_sentinel_forecast.xlsx` with the monthly
-working for every schedule; each schedule's greatest monthly drawdown at OW-S in 2046; the Mill Street wells'
-drawdown at the Mill Street monitoring well as a 2025 average; the greatest monthly drawdown in 2046 at the nearest
-registered domestic well under the permitted schedule; drawdowns to the nearest foot. The as-of is the
-application's date, 30 October 2026, with data to September 2026.
-
-## Pre-ship check
-
-- The Sulfur standard re-read against the built pack: the call rests on the natural reference and the far-field
-  calibration (R3a, R3b, R4 asserted); no field reading, filed procedure or planted catch decides it (the leak reader
-  answered Q6 analytical); the one-fact hint leaves the default path on 1,250 gpm (R5).
-- Free gates on the final cut: checks 132 of 132, the verifier, byte-identical rebuild, precut 72 of 72, figures_check
-  63 of 63, leak.py REVIEW (no LEAK; the schedules, limit and clauses filed as stated inputs), guard heart PASS and
-  surface exit 0 (names WARN on place names only).
-- Stage 4: the leak reader found no step named, no ranking file and no helper file; the plate's machine-made note
-  removed. The determinism judge's verdict is recorded in determinism_check_report.md.
+- **Card:** `.claude/skills/fingerprint/cards/task3.json` v6, registered 2026-11-08T16:34:09Z; `guard.py check` on the
+  filed card: WARN only. `overuse.objective` (forecasting in 7 of the last 12): the slot's assigned objective.
+  `repeat.question_form` (which, against task7 v6 and task9 v7): the decision is a pick among three spans, and a pick
+  asks which. `test.same_driver_older` against mark253 v1 (lineage) is differentiated on the card: that build adjusted a
+  count for nonresponse within classes; here every storm is observed and each is transferred between two basins.
+  Axes redrawn from the first draft, each for an honest reason: the decisive pattern G1 (unit of value) was blocked
+  against task4, then G14 (conditioned yield) against task7 v6 and task9 v7, filed by parallel sessions minutes before
+  this card; G6 (the population of flood-making storms shifts between the two basins, cold storms counting at the creek
+  and hardly at the river) is the generator the transfer has to handle, with G14 and G1 beneath it. Gate G forecasting
+  with gap population and G14 was blocked against task1; the selection between the drainage-area transfer and the
+  storm-by-storm transfer, pinned by the river's own storms, is what carries the stump. The deliverable sets docx with
+  csv or xlsx broke the shell quota, and a PDF hydraulic report is the genre the state's structures review receives.
+- **Pairing:** Pelton County's public works department replaces the one-lane bridge where Ransom Bar Road crosses
+  Durrow Creek, a foothill creek of about 52 square miles that has never been gauged; the county's road standard sizes
+  a bridge to carry the 1 per cent annual exceedance peak flow with its freeboard, and for basins over 10 square
+  miles sends the designer to stream-gauge records (at a site, transferred from a gauged basin, or the state's
+  regional equations); the nearest gauge is the Coyner River near Tessel, about 86 square miles of high Sierra
+  basin, recorded since 1950; three spans are costed and rated by the consultant's hydraulic model; the call is the
+  shortest that carries the flood.
+- **Shape:** 04, setting one dial (the span) among allowed settings, with the creek's frequency curve (six
+  quantiles), the chosen span's chance of exceedance over its design life and the curve as a CSV.
+- **Strategy:** heterogeneity that pooling hides (`references/sulfur-strategies.md`, WORKS IN FORM), in the live
+  form: the storms respond differently (each storm's snow line, rebuilt from station temperature histories, leaves a
+  different share of each basin draining rain; no column holds it), and the decision weights every storm to a basin
+  whose response to it differs from the gauged basin's.
+- **Data-native sentence:** the Coyner River drains a high Sierra basin (1,600 to 9,500 ft) whose floods come from
+  rain over the part of it below each storm's snow line, from about two fifths in an ordinary storm to most of it in
+  the warmest atmospheric rivers, while Durrow Creek's foothill basin (600 to 4,400 ft) lies below the snow line in
+  almost every storm; the river's annual peaks look like any flood record and transfer cleanly between the region's
+  other high gauges, so nothing in them shows that the creek's floods are drawn from a different part of each storm.
+- **Abstraction sentence (written, then tested):** "a rare-event level at an unmeasured unit transferred from a
+  measured neighbour whose events each drew on only the part of it below a threshold that moved from event to event,
+  while the unmeasured unit lies almost wholly below that threshold." Against `guard.py mechanisms --objective
+  forecasting` and every lineage driver: the nearest (0.09, this slot's architecture 5) offsets a rising response
+  against weaker storms inside one record; none transfers a level between two units whose events draw on different
+  shares of themselves.
+- **Domain fit (the user's swap test, run on the sentence):** "which span carries the creek's 1 per cent flood,
+  transferred from the river's gauge" with any other field's nouns loses the snow line, rain falling over a
+  contributing area, the lapse rate that places the snow line from a valley thermometer, the elevation bands of two
+  basins and the exceedance probability of an annual peak flow; nothing is left to compute.
+- **Prototype** (scratch `proto2.py`, an event model, 2026-11-08): on three seeds the creek's true 1 per cent flood
+  is about 5,700 cfs on the prototype's scale; the drainage-area transfer of the river's Bulletin 17C flood files
+  2,800 to 3,500; a contributing-area ratio read at the river's median flood storm files 6,400 to 9,000; every storm
+  transferred at its own snow line files 5,100 to 6,400; an elevation regression over the high gauges extrapolated to
+  the creek files 7,000 to 11,300. The build rescales the world and asserts every route's distance from its span.
+- **People:** drawn with `guard.py names --geo us --locale en_US --seed 611`: Amy Rasmussen (the county's bridge
+  engineer), Frederick Hess (the hydraulic consultant).
 
 ## Tried and rejected
 
@@ -513,3 +289,32 @@ Architecture 2 (the Clay Street tank):
 - 2026-11-08, build stage: asks riding only the decisive step left the run that lands the call with every ask (pair
   ceiling 56); Rule WR-4 4.4's nearest domestic well (the walls decide it, the record does not) and MS-MW's
   like-for-like window give the landed run two second judgments (pair ceiling 46.8).
+- 2026-11-08, architecture 3 (Reidel Road, the sentinel forecast calibrated against a clean natural reference): the
+  platform's two runs both fitted the leaky strip with the plate's walls and took the remote wells beyond the cone as
+  the control by default, landing 1,000 gpm and every ask; a hydrogeologist's default control is no stump. The world is
+  spent.
+- 2026-11-08, architecture 5 draw: mixed flood populations (snowmelt against rain floods) set aside, because one
+  group-by of the peak file's dates shows the two seasons and the runs model a structure one group-by displays;
+  historical-flood censoring set aside, because the expected-moments treatment of a perception threshold is the
+  field's flagship method and is executed by reflex.
+
+Architecture 6 (the Durrow Creek bridge):
+
+- 2026-11-08, architecture 5 (Ollery Creek's culvert from a record whose response rose while its storms fell): built
+  to READY by a parallel session while this one drew (a19fc6c, Alternative B at about 10,570 cfs, judge DETERMINISTIC
+  and APPROVE), never uploaded; superseded at the author's word, a total rework of the slot asked for after every
+  run architecture landed, so it carries no platform measurement. Its design sections are in git history at a19fc6c.
+- 2026-11-08, draw stage: the snow line under a planned warming (the state's planning temperature filed for the
+  design life) set aside, because the framing names the axis and the field's climate scaling of rainfall is a
+  reflex; a transfer between two basins of different elevation keeps the axis unnamed.
+- 2026-11-08, draw stage: the prototype's first gauged basin (1,100 to 7,600 ft, storm temperature and wetness
+  correlated at 0.30): the storm-by-storm transfer sat 1.1 to 1.2 times the drainage-area transfer, inside the
+  gauge's sampling noise; the gauged basin was raised (1,500 to 9,500 ft) and the correlation set at 0.20, which
+  moves it to 1.6 to 2.0.
+- 2026-11-08, draw stage: a high-water mark or an overtopping log for the old bridge set aside: one recorded creek
+  flood hands the answer's scale to any reader (a single-fact rescue). A low-elevation regional gauge set aside: its
+  short record offers a noisy direct donor and an elevation regression one point wide.
+- 2026-11-08, draw stage: the decisive pattern G1 blocked against task4 (`ban.pattern`), then G14 against task7 v6 and
+  task9 v7 once the parallel sessions' cards reached this checkout; Gate G forecasting with gap population and G14
+  blocked against task1 (`test.same_driver`); the deliverable sets docx with csv (33 per cent of
+  prompts) and docx with xlsx (44 per cent) broke the shell quota.

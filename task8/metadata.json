@@ -1,0 +1,100 @@
+{
+ "task": "task8",
+ "architecture": 18,
+ "setting": "2026-11-09",
+ "organisation": "Prairie Adult Credentials Board (fictional), Manitoba and Saskatchewan, Canada",
+ "decision": "the pass mark of the 2027 Level 1 Numeracy paper",
+ "deliverables": [
+  "pass_mark_2027.docx",
+  "l1_2027_items.xlsx"
+ ],
+ "distractor_files": [
+  "learner_confidence_survey_2026.csv",
+  "centre_computer_suite_audit_2026.xlsx"
+ ],
+ "rows": {
+  "responses": 400052,
+  "register": 10550,
+  "bank": 568,
+  "centres": 36
+ },
+ "files": [
+  {
+   "name": "2027_level1_pass_mark_request.eml",
+   "role": "context",
+   "source": "synthetic: the committee chair's email to the assessment manager",
+   "date": "2026-11-09",
+   "license": "CC0 1.0 (synthetic, authored for this task)"
+  },
+  {
+   "name": "awards_committee_minute_2026-09-17.pdf",
+   "role": "context",
+   "source": "synthetic: the Awards Committee's minute of 17 September 2026",
+   "date": "2026-09-21",
+   "license": "CC0 1.0 (synthetic, authored for this task)"
+  },
+  {
+   "name": "centre_computer_suite_audit_2026.xlsx",
+   "role": "distractor",
+   "source": "synthetic: the operations group's 2026 audit of centres' computer suites",
+   "date": "2026-08-28",
+   "license": "CC0 1.0 (synthetic, authored for this task)"
+  },
+  {
+   "name": "learner_confidence_survey_2026.csv",
+   "role": "distractor",
+   "source": "synthetic: the Board's 2026 learner confidence survey",
+   "date": "2026-07-02",
+   "license": "CC0 1.0 (synthetic, authored for this task)"
+  },
+  {
+   "name": "level1_numeracy_specification_2026.pdf",
+   "role": "governing",
+   "source": "synthetic: the Level 1 Numeracy specification, version 2026.1",
+   "date": "2026-03-12",
+   "license": "CC0 1.0 (synthetic, authored for this task)"
+  },
+  {
+   "name": "ln1_standard_setting_record_2022.pdf",
+   "role": "governing",
+   "source": "synthetic: the 2022 standard-setting record for Level 1 Numeracy",
+   "date": "2022-05-20",
+   "license": "CC0 1.0 (synthetic, authored for this task)"
+  },
+  {
+   "name": "pacb_candidate_register_2022_2026.csv",
+   "role": "evidence",
+   "source": "synthetic: the Board's candidate register, centre uploads and regional office entries, 2022 to 2026",
+   "date": "2026-11-06",
+   "license": "CC0 1.0 (synthetic, authored for this task)"
+  },
+  {
+   "name": "pacb_item_bank_2026.csv",
+   "role": "evidence",
+   "source": "synthetic: the Board's item bank file with the preliminary and final 2026 calibration runs",
+   "date": "2026-11-04",
+   "license": "CC0 1.0 (synthetic, authored for this task)"
+  },
+  {
+   "name": "pacb_learning_centres.csv",
+   "role": "evidence",
+   "source": "synthetic: the Board's registered learning centres",
+   "date": "2026-11-02",
+   "license": "CC0 1.0 (synthetic, authored for this task)"
+  },
+  {
+   "name": "pacb_numeracy_responses_2022_2026.csv",
+   "role": "evidence",
+   "source": "synthetic: the response platform's export of every scored item response at the Board's Level 1 and Level 2 online sittings, 2022 to 2026",
+   "date": "2026-11-06",
+   "license": "CC0 1.0 (synthetic, authored for this task)"
+  },
+  {
+   "name": "pacb_paper_layouts_2022_2027.xlsx",
+   "role": "evidence",
+   "source": "synthetic: the Board's paper layouts, 2022 to 2027",
+   "date": "2026-11-04",
+   "license": "CC0 1.0 (synthetic, authored for this task)"
+  }
+ ]
+}

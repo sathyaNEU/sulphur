@@ -137,12 +137,10 @@
   }
  ],
  "level": "90",
- "straddling": [
-  "Kvernhaug",
-  "Solmoen",
-  "Ravnsund",
-  "Fjordeid",
-  "Snøholt"
+ "wholly_above": [
+  "Tverrvika",
+  "Hesteby",
+  "Ørnevik"
  ],
  "lowest_qualifying": {
   "name": "Fjordeid",
@@ -159,145 +157,156 @@
  },
  "vacant_registered": "118",
  "lived_unregistered": "556",
- "vacant_median_kwh": "20.5",
- "lived_median_kwh": "19.5",
+ "vacant_median_kwh": "22.8",
+ "lived_median_kwh": "20.4",
  "rivals": {
   "register_count": 10,
   "floor_low": "1",
   "floor_high": "10",
-  "register_and_profile": [
-   "Hesteby"
-  ]
+  "register_and_profile": []
  },
- "cut": "0.5",
- "age_bands": {
-  "under": "18",
-  "upper": "66",
-  "over": "67"
- },
+ "cut": "0.9",
+ "rise_cut": "0.5",
+ "timer_vacant": 70,
+ "timer_registered": 26,
+ "rise_set": [
+  "Tverrvika",
+  "Ørnevik"
+ ],
+ "rise_vacant": "326",
+ "dep_lived_min": "1.3",
+ "dep_vacant_max": "0.6",
  "renumbered": 197,
- "ask_a": [
+ "quality": [
   {
    "nr": "5801",
    "name": "Brekkevoll",
-   "under_18": "115",
-   "age_18_66": "1,748",
-   "age_67": "636"
+   "held": "1,392",
+   "none": "248",
+   "over": "15",
+   "over_rate": "1.1",
+   "under": "197",
+   "under_rate": "79.4",
+   "register_share": "15.1",
+   "net_bias": "11.1"
   },
   {
    "nr": "5802",
    "name": "Tverrvika",
-   "under_18": "86",
-   "age_18_66": "670",
-   "age_67": "227"
+   "held": "488",
+   "none": "32",
+   "over": "13",
+   "over_rate": "2.7",
+   "under": "7",
+   "under_rate": "21.9",
+   "register_share": "6.2",
+   "net_bias": "-1.2"
   },
   {
    "nr": "5803",
    "name": "Hesteby",
-   "under_18": "106",
-   "age_18_66": "1,122",
-   "age_67": "425"
+   "held": "897",
+   "none": "83",
+   "over": "8",
+   "over_rate": "0.9",
+   "under": "28",
+   "under_rate": "33.7",
+   "register_share": "8.5",
+   "net_bias": "2.0"
   },
   {
    "nr": "5804",
    "name": "Kvernhaug",
-   "under_18": "80",
-   "age_18_66": "907",
-   "age_67": "281"
+   "held": "688",
+   "none": "172",
+   "over": "7",
+   "over_rate": "1.0",
+   "under": "146",
+   "under_rate": "84.9",
+   "register_share": "20.0",
+   "net_bias": "16.2"
   },
   {
    "nr": "5805",
    "name": "Solmoen",
-   "under_18": "72",
-   "age_18_66": "516",
-   "age_67": "215"
+   "held": "403",
+   "none": "27",
+   "over": "12",
+   "over_rate": "3.0",
+   "under": "11",
+   "under_rate": "40.7",
+   "register_share": "6.3",
+   "net_bias": "-0.2"
   },
   {
    "nr": "5806",
    "name": "Ravnsund",
-   "under_18": "57",
-   "age_18_66": "875",
-   "age_67": "301"
+   "held": "679",
+   "none": "61",
+   "over": "10",
+   "over_rate": "1.5",
+   "under": "37",
+   "under_rate": "60.7",
+   "register_share": "8.2",
+   "net_bias": "3.6"
   },
   {
    "nr": "5807",
    "name": "Ørnevik",
-   "under_18": "86",
-   "age_18_66": "462",
-   "age_67": "189"
+   "held": "360",
+   "none": "20",
+   "over": "19",
+   "over_rate": "5.3",
+   "under": "8",
+   "under_rate": "40.0",
+   "register_share": "5.3",
+   "net_bias": "-2.9"
   },
   {
    "nr": "5808",
    "name": "Langgrav",
-   "under_18": "141",
-   "age_18_66": "1,342",
-   "age_67": "503"
+   "held": "1,039",
+   "none": "81",
+   "over": "10",
+   "over_rate": "1.0",
+   "under": "55",
+   "under_rate": "67.9",
+   "register_share": "7.2",
+   "net_bias": "4.0"
   },
   {
    "nr": "5809",
    "name": "Fjordeid",
-   "under_18": "78",
-   "age_18_66": "716",
-   "age_67": "228"
+   "held": "517",
+   "none": "43",
+   "over": "10",
+   "over_rate": "1.9",
+   "under": "23",
+   "under_rate": "53.5",
+   "register_share": "7.7",
+   "net_bias": "2.3"
   },
   {
    "nr": "5810",
    "name": "Snøholt",
-   "under_18": "128",
-   "age_18_66": "936",
-   "age_67": "351"
+   "held": "723",
+   "none": "67",
+   "over": "14",
+   "over_rate": "1.9",
+   "under": "44",
+   "under_rate": "65.7",
+   "register_share": "8.5",
+   "net_bias": "3.8"
   }
  ],
- "ask_b": [
-  {
-   "nr": "5801",
-   "name": "Brekkevoll",
-   "held": "133"
-  },
-  {
-   "nr": "5802",
-   "name": "Tverrvika",
-   "held": "17"
-  },
-  {
-   "nr": "5803",
-   "name": "Hesteby",
-   "held": "149"
-  },
-  {
-   "nr": "5804",
-   "name": "Kvernhaug",
-   "held": "80"
-  },
-  {
-   "nr": "5805",
-   "name": "Solmoen",
-   "held": "27"
-  },
-  {
-   "nr": "5806",
-   "name": "Ravnsund",
-   "held": "141"
-  },
-  {
-   "nr": "5807",
-   "name": "Ørnevik",
-   "held": "23"
-  },
-  {
-   "nr": "5808",
-   "name": "Langgrav",
-   "held": "136"
-  },
-  {
-   "nr": "5809",
-   "name": "Fjordeid",
-   "held": "86"
-  },
-  {
-   "nr": "5810",
-   "name": "Snøholt",
-   "held": "58"
-  }
- ]
+ "quality_county": {
+  "held": "7,186",
+  "none": "834",
+  "over": "118",
+  "over_rate": "1.6",
+  "under": "556",
+  "under_rate": "66.7",
+  "register_share": "10.4",
+  "net_bias": "5.5"
+ }
 }

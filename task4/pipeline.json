@@ -1,49 +1,37 @@
 {
  "task": "task4",
- "status": "PAUSED",
+ "status": "READY",
  "domain": "supply-chain-logistics",
- "objective": "data-quality-monitoring",
+ "objective": "forecasting",
  "stage": 5,
- "stage_name": "ship",
+ "stage_name": "ready",
  "updated": "2026-11-08",
- "stump": "A competent solver takes each parcel's hub from its sort scan or, where it has none, from the sort plan of its night, and ends on alerts at Sosnowiec and Pruszkow with Strykow under the line; Strykow sorted Pruszkow's overflow by hand on the heavy nights and sent it to the Warsaw depots on its own trailers, so the unscanned overflow parcels that route charges to Pruszkow came off Strykow's trailers, and only the unloading each unscanned parcel came off at its delivery depot fires Strykow as well.",
- "architecture": 3,
+ "stump": "A competent solver fits the pilot's duty-day battery energy on distance, climb, cold and the shippers' declared payload, finds it predicts held-out January and February days within 2.4 per cent and the weighbridge's declarations right on average, and orders 8 tractors, sending the heavy steel, ballast and metal duties V03, V07 and V11 (about 440 kWh on that model) and leaving out the light insulation duty V14 (about 470); the estimating shippers' declarations scatter around the weighed load, so the fitted payload term (1.0 kWh per tonne per 100 km) is under half the loads' effect (2.2), and only each declaration taken to the weighed load it stands for, shipper by shipper, with the dairy's standard weight and the timber merchant's ticket left as what they are, orders 6: V02, V05, V09, V14, V16 and V18.",
+ "architecture": 5,
  "loops": 0,
  "precut": {
   "exit": 0,
-  "date": "2026-10-31"
+  "date": "2026-11-08",
+  "checks": "72 of 72"
  },
  "leak": {
-  "leak_py": "REVIEW, no LEAK (2026-11-07, bd959e1c): TDS-4's 1.00 tolerance and population words, the plan's Q4 dates, each ruled in the note",
-  "reader": "2026-11-07 Sonnet reader on d5630ad1: no leak; the prompt's interval basis read as a dictated method and the workbook sentence as a field list (templating), both fixed; one re-read of the final pack owed to the main thread"
+  "leak_py": "REVIEW, no LEAK (2026-11-08, ce9fbb1b): FES-2 section number 2.2, the quotation's 540 kWh, the governing words of the call in FES-2, prompt shell quota; each ruled in the note",
+  "reader": "2026-11-08 isolated Sonnet reader on f1a47765: no leak on any question, decisive step an analytical choice; re-read on ce9fbb1b after the forum noun changed in FES-2 and the prompt"
  },
  "duplicate_check": {
-  "heart": "WARN (2026-10-31): repeat.decision and repeat.question_form only, after the redraw of the decisive generator (G17) and the requester (operations_director)",
-  "surface": "exit 0 (2026-10-31): no surface overlap; one card-axis pair promoted against task480 (gap time, G17, designation_set), the card's differentiation line names how the driver differs",
-  "heart_2026-11-07": "BLOCK on the recency window only (ban.strategy population_selection and ban.forcing_event season_or_peak against task273 v5); WARN at ship on 10-31; the card is unchanged by this repair and was not relabelled",
-  "surface_2026-11-07": "exit 0"
+  "check": "WARN 2026-11-08 (repeat.gate_g)",
+  "heart": "WARN 2026-11-08 on the final pull (repeat.gate_g against task9); ban.forum and ban.artifact BLOCKs against task2 v4 (registered after this card) cleared by redrawing the forum (executive_team) and the context artifact (operations_log)",
+  "surface": "exit 0 2026-11-08, 0 promoted"
  },
  "judge": {
-  "verdict": "DETERMINISTIC (2026-11-07, Sonnet thread on target.zip d5630ad1): every rate, the 300 unloadings, the intervals' sides under five methods and every depot count reproduced",
-  "disposition": "APPROVE, no repair; the residual fork on the hub of an unsorted parcel ruled settled by the unloading structure (SF11)",
-  "gate_g": "decomposition_attribution, analytical_non_defect, surface_read_dependency no, sole_data_defect no (borderline)",
-  "gate_h": "domain pass, layers pass, decisive_step analytical",
-  "report": "task4/determinism_check_report.md",
-  "after_judge": "the interval's basis moved from the prompt into october_scorecard_request.eml and the workbook sentence rewritten as a request; meaning unchanged, freeze.py PASS"
+  "verdict": "DETERMINISTIC (2026-11-08, isolated Sonnet thread on target.zip f1a47765): the six duties, all 14 energies at 10 kWh and the default's 8 reproduced; 299 of 300 bootstrap resamples give the six",
+  "disposition": "APPROVE; minor: a line pooled over the pilot's six shippers gives 6 or 7 (V07 within 2 kWh of the limit), ruled out by the per-shipper slopes, now rung 2a and asserted; the calibrated term recomputes at 2.1 (form only)",
+  "gate_g": "statistical_rigor with cold-form selection, analytical_non_defect, surface_read_dependency no, sole_data_defect no",
+  "gate_h": "domain pass, layers pass, decisive step analytical, chain 4",
+  "report": "task4/determinism_check_report.md"
  },
- "returned": [
-  {
-   "date": "2026-11-07",
-   "portal": "portal input check: both parquet extracts carried the pandas and pyarrow creator metadata. Domains Fit: read as a stated tolerance applied to rates, with counting asks",
-   "repair": "metadata",
-   "zip": "7dd4b6b4",
-   "moves": "both extracts written with no pandas or Arrow schema metadata and no created_by in the footer (generator/parquetio.py), every column a string so no value moved; only the two parquet files moved, no figure moved. Domains Fit left for the author's call",
-   "checks": "generator checks, verify and the byte-identical rebuild; no reader, judge or clone check (author's minor-fix rule)",
-   "domains_fit": "prompt reworded: the deciding figure is each hub's rate over the parcels it handled with a 90 per cent interval, each parcel an independent chance of a missed sort scan, graded as lying wholly above, across or wholly below the tolerance (SF24: Wald, Wilson, Clopper-Pearson, Jeffreys, Agresti-Coull and a parcel bootstrap agree, every bound at least 0.05 points from the line; the bounds themselves are not graded); TDS-4 exported by LibreOffice Writer; the call, the stump, the ladder and every existing figure unchanged (freeze.py: only the interval sides and the level 90 added)",
-   "reshipped": "bd959e1c"
-  }
- ],
- "resume": "migrated from Project Mark task250; re-read the build against the Sulfur standard (deep reasoning: three or more dependent inferences with a real modeling judgment, the one-fact test, the banned kinds) and the Sulfur submission shape (golden ZIP, four answer blocks), then /build task4 from the stage that fails",
+ "returned": [],
+ "resume": "READY: the author uploads prompt.txt and target.zip (ce9fbb1bf6928e8f); the author's voice rewrite of prompt.txt goes through voice-check.py --rewrite and leak.py; then /triage-runs",
  "approved": null,
  "delivered": null,
  "portal": null,
@@ -82,14 +70,179 @@
   {
    "date": "2026-10-31",
    "event": "PAUSED at stage 4 for the main thread: the leak reader and the determinism judge cannot be spawned from a fork"
+  },
+  {
+   "date": "2026-11-08",
+   "event": "architecture 3 spent on the platform: both runs reached the golden's call (alerts at HKTW, HLDZ and HWAW) and every graded figure, not stumped, no rubric generated; runs saved under runs/",
+   "architecture_3_record": {
+    "stump": "A competent solver takes each parcel's hub from its sort scan or, where it has none, from the sort plan of its night, and ends on alerts at Sosnowiec and Pruszkow with Strykow under the line; Strykow sorted Pruszkow's overflow by hand on the heavy nights and sent it to the Warsaw depots on its own trailers, so the unscanned overflow parcels that route charges to Pruszkow came off Strykow's trailers, and only the unloading each unscanned parcel came off at its delivery depot fires Strykow as well.",
+    "precut": {
+     "exit": 0,
+     "date": "2026-10-31"
+    },
+    "leak": {
+     "leak_py": "REVIEW, no LEAK (2026-11-07, bd959e1c): TDS-4's 1.00 tolerance and population words, the plan's Q4 dates, each ruled in the note",
+     "reader": "2026-11-07 Sonnet reader on d5630ad1: no leak; the prompt's interval basis read as a dictated method and the workbook sentence as a field list (templating), both fixed; one re-read of the final pack owed to the main thread"
+    },
+    "duplicate_check": {
+     "heart": "WARN (2026-10-31): repeat.decision and repeat.question_form only, after the redraw of the decisive generator (G17) and the requester (operations_director)",
+     "surface": "exit 0 (2026-10-31): no surface overlap; one card-axis pair promoted against task480 (gap time, G17, designation_set), the card's differentiation line names how the driver differs",
+     "heart_2026-11-07": "BLOCK on the recency window only (ban.strategy population_selection and ban.forcing_event season_or_peak against task273 v5); WARN at ship on 10-31; the card is unchanged by this repair and was not relabelled",
+     "surface_2026-11-07": "exit 0"
+    },
+    "judge": {
+     "verdict": "DETERMINISTIC (2026-11-07, Sonnet thread on target.zip d5630ad1): every rate, the 300 unloadings, the intervals' sides under five methods and every depot count reproduced",
+     "disposition": "APPROVE, no repair; the residual fork on the hub of an unsorted parcel ruled settled by the unloading structure (SF11)",
+     "gate_g": "decomposition_attribution, analytical_non_defect, surface_read_dependency no, sole_data_defect no (borderline)",
+     "gate_h": "domain pass, layers pass, decisive_step analytical",
+     "report": "task4/determinism_check_report.md",
+     "after_judge": "the interval's basis moved from the prompt into october_scorecard_request.eml and the workbook sentence rewritten as a request; meaning unchanged, freeze.py PASS"
+    },
+    "returned": [
+     {
+      "date": "2026-11-07",
+      "portal": "portal input check: both parquet extracts carried the pandas and pyarrow creator metadata. Domains Fit: read as a stated tolerance applied to rates, with counting asks",
+      "repair": "metadata",
+      "zip": "7dd4b6b4",
+      "moves": "both extracts written with no pandas or Arrow schema metadata and no created_by in the footer (generator/parquetio.py), every column a string so no value moved; only the two parquet files moved, no figure moved. Domains Fit left for the author's call",
+      "checks": "generator checks, verify and the byte-identical rebuild; no reader, judge or clone check (author's minor-fix rule)",
+      "domains_fit": "prompt reworded: the deciding figure is each hub's rate over the parcels it handled with a 90 per cent interval, each parcel an independent chance of a missed sort scan, graded as lying wholly above, across or wholly below the tolerance (SF24: Wald, Wilson, Clopper-Pearson, Jeffreys, Agresti-Coull and a parcel bootstrap agree, every bound at least 0.05 points from the line; the bounds themselves are not graded); TDS-4 exported by LibreOffice Writer; the call, the stump, the ladder and every existing figure unchanged (freeze.py: only the interval sides and the level 90 added)",
+      "reshipped": "bd959e1c"
+     }
+    ],
+    "zip_sha256_16": "bd959e1ca7171cbd"
+   }
+  },
+  {
+   "date": "2026-11-08",
+   "event": "DRAWN architecture 4: an Irish online farm, pet and garden retailer's own van runs from Castlebar, which outlying districts go to a regional courier for 2027 (supply-chain-logistics in urban-regional-science, forecasting); guard WARN only (repeat.gate_g)"
+  },
+  {
+   "date": "2026-11-08",
+   "event": "stage 4 (leak reader no leak; judge DETERMINISTIC APPROVE), one fix pass, stage 5: READY on target.zip 4a9ccea1"
+  },
+  {
+   "date": "2026-11-08",
+   "event": "architecture 4 spent on the platform: the author reports not stumped (the call landed); run texts not supplied to the repo",
+   "architecture_4_record": {
+    "stump": "A competent solver prices each offered district at the van time its stops take and hands Leenane and Letterfrack to the courier with Mulranny, Achill, Bangor Erris, Belmullet, Louisburgh and Ballycastle, claiming about EUR 20,000; the Connemara van drives through Leenane and Letterfrack to reach Clifden, which stays, so they save only their own stops, and the solver who prices the run without them but one district at a time keeps Mulranny and Bangor Erris, which end the Achill and Erris runs once Achill and Belmullet go: only every combination priced on the run hands over Mulranny, Achill, Bangor Erris, Belmullet, Louisburgh and Ballycastle, about EUR 50,000 net in 2027.",
+    "call": "Hand Mulranny, Achill, Bangor Erris, Belmullet, Louisburgh and Ballycastle to Owenduff from January 2027 and keep Leenane, Letterfrack, Clifden, Cong and Charlestown: about EUR 50,000 net saving in 2027",
+    "precut": {
+     "exit": 0,
+     "date": "2026-11-08",
+     "checks": "72 of 72"
+    },
+    "leak": {
+     "leak_py": "REVIEW, no LEAK (2026-11-08, 4a9ccea1): the offer names the candidates, generic shared words, the 2027 calendar's dates",
+     "reader": "2026-11-08 isolated Sonnet reader on 20a4d41e: no leak; NPS-3 4.1 and 4.3 file the estimand without the method; re-read owed on the offer and NPS-3 4.3 reworded at stage 4"
+    },
+    "duplicate_check": {
+     "check": "WARN 2026-11-08 (repeat.gate_g at the draw)",
+     "heart": "WARN 2026-11-08 after the forum redraw (executive_team BLOCKed against task6, now committee_or_panel): repeat.decision against task6",
+     "surface": "exit 0 2026-11-08; one pair promoted for the author: task4 against task5's re-draw (decisive gap objective and designation_set back to back), both in flight"
+    },
+    "judge": {
+     "verdict": "DETERMINISTIC (2026-11-08, Sonnet thread on 20a4d41e): the list, EUR 50,000 and every run figure reproduced by an independent run-day model",
+     "disposition": "APPROVE; minor: component 1 at 118 to 124 h against 110, R04 and R07 saved hours near a 50-hour edge on single-year fits, the offer's 'any combination' read as a search order; all three fixed",
+     "gate_g": "forecasting with model selection, surface_read_dependency no, sole_data_defect no",
+     "gate_h": "domain, layers and decisive step pass, analytical",
+     "report": "task4/determinism_check_report.md"
+    },
+    "returned": [
+     {
+      "date": "2026-11-08",
+      "source": "judge",
+      "repair": "determinism",
+      "moves": "the offer's 'in any combination' dropped; NPS-3 4.3 'the selection from the partner's offer whose hand-over lowers the year's delivery cost most'; saved hours to the nearest 100 (prompt and asks), Achill road slowed and Owenduff's price to EUR 13.40 so every graded figure sits mid-bin; component 1 'about 110 van-hours' against the hours Owenduff's charge would pay for",
+      "freeze": "freeze.py check --mode rubric FAIL, 8 items, all this fix's: the Critical Components numbers (charges at EUR 13.40, component 1's range, 700), pieces achill_h 650 to 700, ban, corridor, lee_let and mul charges, runs_saved_h R04 650 to 700, and the default path's price text (12.60 to 13.40); the call sentence, the stump and the ladder did not move",
+      "zip": "4a9ccea1"
+     }
+    ],
+    "gates": {
+     "checks": "262 assertions",
+     "verify": "PASS (run-day regression: same list, EUR 50,000, every run's saved and before hours)",
+     "byte_identical": "two builds",
+     "figures_check": "56 of 56",
+     "voice_check": "PASS, 555 characters, WARN which-quota and files up front",
+     "precut": "72 of 72",
+     "ceiling": {
+      "shallow_keep": 8.7,
+      "landed_keep": 30.4,
+      "pair": 39.3,
+      "script": "generator/ceiling.py"
+     },
+     "backtest": "fit 2025, forecast 2026 Jan to Oct: 21 van-hours against 177 for the proportional carry",
+     "container": "clean (scrub audit, target and golden)"
+    },
+    "zip_sha256_16": "4a9ccea1839b45a0",
+    "golden_zip_sha256_16": "801703c83306e234",
+    "subdomain": "transportation-network",
+    "client_domain": "urban-regional-science"
+   }
+  },
+  {
+   "date": "2026-11-08",
+   "event": "DRAWN architecture 5: a Smaland road haulier's battery-electric tractor order for 2027, each Varnamo duty's January design-day energy forecast from a pilot whose payloads are shipper declarations (supply-chain-logistics in general-statistics-data-science, regression-classification-model-diagnostics, forecasting); guard WARN only (repeat.gate_g)"
+  },
+  {
+   "date": "2026-11-08",
+   "event": "stage 4 (leak reader no leak; judge DETERMINISTIC APPROVE), forum and context artifact redrawn on the final heart screen, stage 5: READY on target.zip ce9fbb1bf6928e8f"
   }
  ],
- "zip_sha256_16": "bd959e1ca7171cbd",
+ "zip_sha256_16": "ce9fbb1bf6928e8f",
  "migrated_from": {
   "project": "Mark",
   "task": "task250",
   "status_in_mark": "SHIPPED",
   "date": "2026-11-08",
   "note": "moved from Project Mark unstumped on the Mark portal; carried on here for the Sulfur bar"
- }
+ },
+ "subdomain": "regression-classification-model-diagnostics",
+ "client_domain": "general-statistics-data-science",
+ "call": "Order 6 battery-electric tractors for Värnamo duties V02, V05, V09, V14, V16 and V18; V03, V07, V11, V21, V24, V27, V30 and V33 stay on diesel",
+ "runs": {
+  "run1": null,
+  "run2": null,
+  "average": null,
+  "counterfactual_average": null,
+  "first_wrong_step": {
+   "run1": "",
+   "run2": ""
+  },
+  "triage": "",
+  "recorded": "",
+  "history": [
+   {
+    "architecture": 3,
+    "date": "2026-11-08",
+    "graded": false,
+    "verdict": "not stumped before the rubric phase; both runs on the golden call and every graded figure",
+    "texts": "runs/run1.md, runs/run2.md"
+   },
+   {
+    "architecture": 4,
+    "date": "2026-11-08",
+    "graded": false,
+    "verdict": "not stumped (author's report); run texts not in the repo",
+    "texts": ""
+   }
+  ]
+ },
+ "gates": {
+  "checks": "116 assertions",
+  "verify": "PASS (independent moments correction: 2.14 kWh per t per 100 km, the same six, all 14 bins)",
+  "byte_identical": "two builds",
+  "figures_check": "60 of 60",
+  "voice_check": "PASS, WARN shell quota and files up front",
+  "precut": "72 of 72",
+  "ceiling": {
+   "shallow_keep": 13.3,
+   "landed_keep": 6.7,
+   "pair": 34.0,
+   "script": "generator/ceiling.py"
+  },
+  "backtest": "Jan-Feb 2026 held out: declared fit 2.4 per cent, golden 2.3 (blind to the dilution); one cold rate under-predicts sub-zero days by 3.4 per cent",
+  "container": "clean (scrub audit, target and golden)"
+ },
+ "golden_zip_sha256_16": "555088abda3cc09d"
 }

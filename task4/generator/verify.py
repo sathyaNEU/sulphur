@@ -1,174 +1,157 @@
-"""The independent verifier: every graded figure recomputed from a target folder by a second code path that shares
-nothing with golden.py (each unscanned parcel's hub from its nearest sorted neighbours at the same depot door; the
-re-sends with a hand-written Warsaw clock; the pickups through merges), compared with figures.json.
+"""An independent recomputation of the golden from the shipped files, sharing no code with analysis.py: its own
+parsers, its own de-duplication, a per-shipper errors-in-variables correction by moments (the declared weight's
+error variance read from the weighbridge, removed from the pilot's within-shipper spread), normal equations solved
+directly, and the FES-2 assessment. Exit 1 unless it gives the golden's six duties and every energy in the golden's
+10 kWh bin.
 
-    python3 verify.py [target]      -> exit 1 on any mismatch
+    python3 verify.py [target]
 """
-import collections
-import datetime as dt
+import csv
 import json
 import os
+import subprocess
 import sys
+import zipfile
+from xml.etree import ElementTree as ET
 
-import pandas as pd
-from openpyxl import load_workbook
+import numpy as np
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-TASK = os.path.dirname(HERE)
-NAMES = {"depot": "depot_scan_events_2026-10.csv", "hub": "hub_sort_events_2026-10.parquet",
-         "courier": "courier_events_2026-10.parquet", "pre": "edi_preadvice_2026-10.csv",
-         "register": "network_register_2026-10.xlsx"}
-WINDOW = dt.timedelta(minutes=15)
-SUMMER_END = dt.datetime(2026, 10, 25, 3, 0)
+NS = {"m": "http://schemas.openxmlformats.org/spreadsheetml/2006/main"}
 
 
-def sheet(path, name):
-    rows = list(load_workbook(path, read_only=True)[name].iter_rows(values_only=True))
-    return [dict(zip(rows[0], r)) for r in rows[1:]]
-
-
-def hubs_by_neighbour(dep, hub):
-    """an unscanned parcel takes the hub of the sorted parcels scanned off at the same door within 15 minutes"""
-    seen = set()
-    arr = []
-    for r in dep.itertuples(index=False):
-        k = (r.event_id, r.tracking_no)
-        if k in seen:
-            continue
-        seen.add(k)
-        if r.scanned_at.startswith("2026-10"):
-            arr.append((r.depot_code, r.scanner_id, dt.datetime.strptime(r.scanned_at, "%Y-%m-%d %H:%M:%S"),
-                        r.tracking_no))
-    hub_of = {}
-    for t, h in zip(hub["tracking_no"], hub["hub_code"]):
-        assert hub_of.setdefault(t, h) == h
-    lanes = collections.defaultdict(list)
-    for d, door, t, tr in arr:
-        lanes[(d, door)].append((t, tr))
-    out = {}
-    for lane, v in lanes.items():
-        v.sort()
-        for i, (t, tr) in enumerate(v):
-            if tr in hub_of:
-                out[tr] = hub_of[tr]
-                continue
-            near = set()
-            for j in range(i - 1, -1, -1):
-                if t - v[j][0] > WINDOW:
-                    break
-                if v[j][1] in hub_of:
-                    near.add(hub_of[v[j][1]])
-            for j in range(i + 1, len(v)):
-                if v[j][0] - t > WINDOW:
-                    break
-                if v[j][1] in hub_of:
-                    near.add(hub_of[v[j][1]])
-            assert len(near) == 1, (lane, t, near)
-            out[tr] = near.pop()
-    return out, hub_of
-
-
-def warsaw_to_utc(s):
-    t = dt.datetime.strptime(s, "%Y-%m-%d %H:%M:%S")
-    return t - dt.timedelta(hours=2 if t < SUMMER_END else 1)
-
-
-def resends(cou, models):
-    groups = collections.defaultdict(list)
-    for r in cou.itertuples(index=False):
-        groups[(r.tracking_no, r.event_code, r.courier_id, r.device_id)].append(r)
-    out = collections.Counter()
-    for k, v in groups.items():
-        if len(v) < 2:
-            continue
-        v.sort(key=lambda r: r.received_at_utc)
-        for j, b in enumerate(v):
-            if not b.event_time.endswith(":00"):
-                continue
-            for a in v[:j]:
-                same_local = a.event_time[:16] == b.event_time[:16]
-                same_utc = models[b.device_id] == "TC51" and warsaw_to_utc(a.event_time).strftime("%Y-%m-%d %H:%M") == b.event_time[:16]
-                if same_local or same_utc:
-                    out[b.depot_code] += 1
-                    break
+def sheet_rows(path, name):
+    z = zipfile.ZipFile(path)
+    wbx = ET.fromstring(z.read("xl/workbook.xml"))
+    rels = ET.fromstring(z.read("xl/_rels/workbook.xml.rels"))
+    rid = [s.get("{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id")
+           for s in wbx.find("m:sheets", NS) if s.get("name") == name][0]
+    target = [r.get("Target") for r in rels if r.get("Id") == rid][0]
+    shared = []
+    if "xl/sharedStrings.xml" in z.namelist():
+        for si in ET.fromstring(z.read("xl/sharedStrings.xml")).findall("m:si", NS):
+            shared.append("".join(t.text or "" for t in si.iter("{%s}t" % NS["m"])))
+    ws = ET.fromstring(z.read("xl/" + target.lstrip("/").replace("xl/", "")))
+    out = []
+    for row in ws.find("m:sheetData", NS):
+        vals = []
+        for c in row:
+            col = 0
+            for ch in c.get("r"):
+                if ch.isalpha():
+                    col = col * 26 + ord(ch) - 64
+            while len(vals) < col - 1:
+                vals.append(None)
+            v = c.find("m:v", NS)
+            t = c.get("t")
+            if t == "s":
+                vals.append(shared[int(v.text)])
+            elif t == "inlineStr":
+                vals.append("".join(x.text or "" for x in c.iter("{%s}t" % NS["m"])))
+            else:
+                vals.append(None if v is None else float(v.text))
+        out.append(vals)
     return out
 
 
-def never_collected(pre, cou, hub, dep, depots):
-    pre = pre.copy()
-    pre["version"] = pre["version"].astype(int)
-    last = pre.loc[pre.groupby("consignment_id")["version"].idxmax()]
-    last = last[last["collection_date"].between("2026-10-01", "2026-10-31")].copy()
-    moved = {r["depot_code"]: (r["replaced_by"], None) for r in depots if r["replaced_by"]}
-    opened = {r["depot_code"]: str(r["opened"])[:10] for r in depots}
-    last["at"] = [moved[c][0] if c in moved and day >= opened[moved[c][0]] else c
-                  for c, day in zip(last["collection_depot"], last["collection_date"])]
-    last["pieces"] = last["pieces"].astype(int)
-    travelled = pd.concat([cou.loc[cou["event_code"].isin(["PICKED_UP", "OUT_FOR_DELIVERY", "DELIVERY_ATTEMPTED",
-                                                            "DELIVERED"]), "tracking_no"],
-                           hub["tracking_no"], dep["tracking_no"]]).drop_duplicates()
-    lab = pd.DataFrame({"t": travelled})
-    lab["master"] = lab["t"].where(~lab["t"].str.fullmatch(r"\d{16}"), lab["t"].str[:13])
-    got = lab.groupby("master").size()
-    num = last[last["tracking_no"] != ""].copy()
-    num["got"] = num["tracking_no"].map(got).fillna(0).astype(int)
-    assert (num["got"] <= num["pieces"]).all()
-    num["left"] = num["pieces"] - num["got"]
-    out = num.groupby("at")["left"].sum().to_dict()
-    mk = last[last["tracking_no"] == ""].copy()
-    mk["k"] = mk["customer_ref"].str.slice(0, 20)
-    pk = cou[(cou["event_code"] == "PICKED_UP") & cou["customer_ref"].notna()].drop_duplicates(["tracking_no"])
-    picked = pk.groupby("customer_ref").size()
-    g = mk.groupby(["k", "at"])["pieces"].sum().reset_index()
-    g["p"] = g["k"].map(picked).fillna(0).astype(int)
-    assert (g["p"] <= g["pieces"]).all()
-    g["left"] = g["pieces"] - g["p"]
-    for at, v in g.groupby("at")["left"].sum().items():
-        out[at] = out.get(at, 0) + int(v)
-    return out
+def weight(s):
+    s = s.strip().replace(" ", " ")
+    if s.endswith(" t"):
+        return float(s[:-2].replace(",", ".")) * 1000.0
+    return float(s.replace(" kg", "").replace(" ", ""))
 
 
-def main(target=None):
-    target = target or os.path.join(TASK, "target")
-    p = lambda k: os.path.join(target, NAMES[k])
-    dep = pd.read_csv(p("depot"), dtype=str)
-    hub = pd.read_parquet(p("hub"))
-    cou = pd.read_parquet(p("courier"))
-    pre = pd.read_csv(p("pre"), dtype=str, keep_default_na=False)
-    reg_h = sheet(p("register"), "Hubs")
-    reg_d = sheet(p("register"), "Depots")
-    models = {r["device_id"]: r["model"] for r in sheet(p("register"), "Handhelds")}
+def main(target):
+    j = lambda f: os.path.join(target, f)
+    routes = {}
+    for r in sheet_rows(j("route_register_2026.xlsx"), "Duties")[1:]:
+        routes[r[0]] = (r[3], (r[6], r[7], r[8]), r[10])
+    short = [r[0] for r in sheet_rows(j("fleet_plan_2027.xlsx"), "Shortlist 2027")[1:]]
+    # weighbridge: per CMR the latest weighing
+    latest = {}
+    with open(j("weighbridge_varnamo_2024-11_2026-10.csv"), encoding="utf-8") as f:
+        for r in csv.DictReader(f):
+            if r["cmr_no"] not in latest or r["weighed_at"] > latest[r["cmr_no"]]["weighed_at"]:
+                latest[r["cmr_no"]] = r
+    by_ship = {}
+    loads = {}
+    for r in latest.values():
+        net = float(r["gross_kg"]) - float(r["tare_kg"])
+        duty = r["duty"].replace("VMO-", "V")
+        if "2025-11-01" <= r["weighed_at"][:10] <= "2026-10-31":
+            loads.setdefault(duty, []).append(net)
+        if r["declared_kg"]:
+            by_ship.setdefault(r["shipper"], []).append((float(r["declared_kg"]), net))
+    # each shipper's declaration error: classical (variance of declared less weighed), standard (no spread) or nil
+    err = {}
+    for s, v in by_ship.items():
+        D, W = np.array(v).T
+        if D.std() < 1.0:
+            err[s] = ("std", W.mean())
+        else:
+            err[s] = ("classical", np.var(D - W, ddof=1), D.mean(), W.mean())
+    # pilot days
+    tms = {}
+    with open(j("tms_consignments_jonkoping_2025-2026.csv"), encoding="utf-8") as f:
+        for r in csv.DictReader(f):
+            tms[(r["vehicle_reg"], r["collection_date"])] = r
+    station = {}
+    with open(j("daily_mean_temperature_2016-2026.csv"), encoding="utf-8") as f:
+        for r in csv.DictReader(f):
+            if r["station"] == "Jönköping":
+                station[r["date"]] = float(r["temperature (C)"])
+    days = {}
+    with open(j("bev_daily_summary_2025-03_2026-10.csv"), encoding="utf-8") as f:
+        for r in csv.DictReader(f):
+            days.setdefault((r["registration"], r["operating_date"]), r)
+    rows = []
+    for k, r in days.items():
+        c = tms.get(k)
+        if not c:
+            continue
+        rows.append((c["duty"], c["shipper"], weight(c["declared_weight"]), float(r["distance_km"]),
+                     float(r["energy_used_kwh"]), float(r["ambient_mean_c"]) if r["ambient_mean_c"] else None,
+                     station[k[1]]))
+    off = np.mean([t - st for *_, t, st in rows if t is not None])
+    duty = np.array([x[0] for x in rows])
+    ship = np.array([x[1] for x in rows])
+    dec = np.array([x[2] for x in rows])
+    km = np.array([x[3] for x in rows])
+    y = np.array([x[4] for x in rows])
+    T = np.array([x[5] if x[5] is not None else x[6] + off for x in rows])
+    lk = np.array([routes[d][1][1] for d in duty], float)
+    cl = np.array([routes[d][2] for d in duty], float)
+    # the payload by moments: within each shipper, the pilot's declared spread less the error variance
+    pay = np.zeros(len(rows))
+    for s in set(ship):
+        m = ship == s
+        e = err[s]
+        if e[0] == "std":
+            pay[m] = e[1]
+        else:
+            vd = np.var(dec[m], ddof=1)
+            lam = max(0.0, vd - e[1]) / vd if vd > 0 else 1.0
+            pay[m] = dec[m].mean() + lam * (dec[m] - dec[m].mean())
+    pay /= 1000.0
+    X = np.column_stack([km, km * cl, km * np.maximum(0, 16 - T), km * np.maximum(0, -T), pay * lk])
+    beta = np.linalg.solve(X.T @ X, X.T @ y)
+    limit = 0.85 * 540
+    res = {}
+    for c in short:
+        s, legs, climb = routes[c]
+        tot = sum(legs)
+        e = beta @ np.array([tot, tot * climb, tot * 21.0, tot * 5.0, np.mean(loads[c]) / 1000 * legs[1]])
+        res[c] = (float(e), e <= limit)
+    go = sorted(c for c, v in res.items() if v[1])
     fig = json.load(open(os.path.join(HERE, "figures.json")))
-    fails = []
-    hub_of_parcel, _ = hubs_by_neighbour(dep, hub)
-    n, m = collections.Counter(), collections.Counter()
-    sorted_set = set(hub["tracking_no"])
-    for t, h in hub_of_parcel.items():
-        n[h] += 1
-        m[h] += t not in sorted_set
-    for x in fig["hubs"]:
-        h = x["hub_code"]
-        rate = round(100.0 * m[h] / n[h], 2)
-        for k, v in (("parcels", n[h]), ("missed", m[h]), ("rate", rate), ("fires", 100.0 * m[h] / n[h] > 1.0)):
-            if x[k] != v:
-                fails.append("%s %s: %s against %s" % (h, k, x[k], v))
-    rs = resends(cou, models)
-    nc = never_collected(pre, cou, hub, dep, reg_d)
-    for x in fig["depots"]:
-        c = x["depot_code"]
-        if x["sent_twice"] != rs.get(c, 0):
-            fails.append("%s sent twice: %s against %s" % (c, x["sent_twice"], rs.get(c, 0)))
-        if x["never_picked"] != nc.get(c, 0):
-            fails.append("%s never picked up: %s against %s" % (c, x["never_picked"], nc.get(c, 0)))
-    fired = sorted(x["hub_name"] for x in fig["hubs"] if x["fires"])
-    if sorted(fig["call"]) != fired:
-        fails.append("call %s against %s" % (fig["call"], fired))
-    if len(reg_h) != len(fig["hubs"]):
-        fails.append("hubs %d against %d" % (len(reg_h), len(fig["hubs"])))
-    return fails
+    bins = {c: int(round(v[0] / 10.0) * 10) for c, v in res.items()}
+    okset = go == fig["call_set"]
+    okbins = bins == fig["energy_kwh"]
+    print("verify: %d pilot days, payload %.2f kWh per t per 100 km, %d tractors %s; set %s, bins %s" %
+          (len(rows), beta[-1] * 100, len(go), go, "agree" if okset else "DIFFER", "agree" if okbins else
+           "DIFFER " + str({c: (bins[c], fig["energy_kwh"][c]) for c in bins if bins[c] != fig["energy_kwh"][c]})))
+    return 0 if okset and okbins else 1
 
 
 if __name__ == "__main__":
-    f = main(sys.argv[1] if len(sys.argv) > 1 else None)
-    print("verify: %s" % ("PASS" if not f else "FAIL\n  " + "\n  ".join(f)))
-    sys.exit(1 if f else 0)
+    sys.exit(main(sys.argv[1] if len(sys.argv) > 1 else os.path.join(os.path.dirname(HERE), "target")))

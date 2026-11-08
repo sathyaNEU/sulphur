@@ -1,33 +1,33 @@
 {
  "task": "task5",
- "status": "PAUSED",
+ "status": "DESIGN",
  "domain": "survey-research-official-statistics",
  "objective": "etl",
- "stage": 5,
- "stage_name": "ship",
+ "stage": 2,
+ "stage_name": "design",
  "updated": "2026-11-08",
- "stump": "A competent solver conforms the cadastre and the hub's hourly values, counts as vacant the dwellings whose average daily use over the fortnight sits under a consumption floor, sees the floor agree with the register, and files that no municipality qualifies at any floor from 1 to 10 kWh a day; an empty dwelling in a Norwegian November is left heated, so the vacant dwellings use a median 20.5 kWh a day against 19.5 for the lived-in ones, and only a household's morning or evening rise over the dwelling's own night-time use on some day shows that someone lived there, which designates five.",
- "architecture": 2,
+ "stump": "A competent solver conforms the reports, amendments and worksites, imputes each employer whose December report had not arrived as the field does (its September jobs moved by its county's reporting employers' change), treats an employer missing two quarters as ceased, sees that imputation back-test within a few tenths of a point on the closed quarters and files that no county qualifies; a report missing from a transmission that arrived marks an employer that has shed jobs or stopped trading, which keeps about a quarter of its September jobs on the quarters old enough for inactivations to have landed, and that puts Garrow and Ostrom past the line.",
+ "architecture": 3,
  "loops": 0,
  "precut": {
-  "exit": 0,
-  "date": "2026-10-31"
+  "exit": null,
+  "date": ""
  },
  "leak": {
-  "leak_py": "REVIEW on target.zip bc4fe60e, no LEAK, sweep 10 clean (the regulation's 5.0 and its own nouns ruled)",
-  "reader": "2026-11-07 isolated reader (Sonnet, medium) on bc4fe60e: no leak, Q6 analytical; the Clopper-Pearson interval reads as a defensible statistics-office convention; one re-read owed on the final prompt"
+  "leak_py": "",
+  "reader": ""
  },
  "duplicate_check": {
-  "guard_check": "PASS 2026-10-31 on the registered card (task477 differentiated)",
-  "heart": "WARN 2026-10-31: repeat.question_form (whether) against task306; the call is a gate",
-  "surface": "clean 2026-10-31"
+  "guard_check": "WARN 2026-11-08 on the registered card (repeat.gate_g against task3 v6, answered in the note)",
+  "heart": "",
+  "surface": ""
  },
  "judge": {
-  "verdict": "DETERMINISTIC, SOLUTION_WRONG minor (2026-11-07, Sonnet thread, on bc4fe60e): the main call forced at every household-day threshold from 0.2 to 1.0 kWh (the rise bimodal, nothing between 0.3 and 0.8); shares, intervals and both tables reproduced; component 3's 557 reproduced as 556",
-  "disposition": "FIX_NOW, fixed: component 3 corrected to 556 (a resident who left a renumbered block's flat before its day read one floor up, asserted against the world); the call sentence reworded so the designation rests on the share (SF25)",
-  "gate_g": "etl_conformance, analytical_non_defect, surface_read_dependency no, sole_data_defect no",
-  "gate_h": "domain pass, layers pass, decisive_step analytical",
-  "report": "task5/determinism_check_report.md"
+  "verdict": "",
+  "disposition": "",
+  "gate_g": "",
+  "gate_h": "",
+  "report": ""
  },
  "returned": [
   {
@@ -44,9 +44,33 @@
     "frozen": "freeze.py rubric mode: only component 3 (557 to 556, the judge's SOLUTION_WRONG) and the reworded call sentence moved; the stump, the ladder and every other main-call figure did not; 26 ask figures added (the 20 bounds and the straddling names)",
     "zip": "bc4fe60e"
    }
+  },
+  {
+   "date": "2026-11-07",
+   "source": "review",
+   "repair": "design",
+   "portal": "upload check only, never run: input files (the ministry email's reserved .example domains, from an earlier upload; bc4fe60e already on kbd.dep.no and statkontoret.no) and Domains Fit (a regulation's threshold applied to counts and shares, with tally tables)",
+   "moves": "architecture 2 kept (world, spine, stump, card lineage): the deciding figure becomes each municipality's vacancy share estimated by correcting the population register's dwellings-without-residents statistic for its errors in both directions against the meter evidence, its uncertainty from the occupancy reading's own error measured on dwellings whose residents moved inside the fortnight; the persons-by-age and land-register tallies replaced by register-quality asks; a generator assert against reserved domains, 555-01 numbers and other authoring tells",
+   "commit": ""
+  },
+  {
+   "date": "2026-11-08",
+   "source": "review",
+   "repair": "design",
+   "portal": "stage 4 on 5cf39da4: determinism judge DETERMINISTIC, SEND_BACK on Gate H (H5 one-sentence rescue, H4 weak: the household's rise bimodal) and the input gate (no CSV of 20,000 rows); the author chose to deepen the stump",
+   "moves": "heating on daily timers in the world (sim._programs, its own random stream): 70 vacant dwellings left on a timer, 30 per cent of lived-in electric and heat-pump dwellings with one, households' odd jobs on days of their own; the decisive step the departure of a day from the dwelling's own typical day (cut 0.9 kWh, gap 0.6 to 1.3); the daily rise now rung 2, Tverrvika and Ørnevik at every cut 0.3 to 1.0; the hub's daily values shipped as a CSV; the forum redrawn to funder_or_donor (committee_or_panel banned against task4 v4); the call, the shares and every register figure unchanged",
+   "frozen": "the Final Recommendation's set and every share and register figure unchanged; critical component 2 and the stump sentence moved by design; a fresh freeze.py snapshot taken at the end of this stage as the new baseline"
+  },
+  {
+   "date": "2026-11-08",
+   "source": "triage",
+   "repair": "design",
+   "portal": "both platform runs on target.zip 14f7ae29 landed the call (the golden five, 396 vacant) and the register cells; scores not reported, the author's word: not stumped",
+   "moves": "re-rooted to architecture 3 in a new world, dataset and shell (a fictional US state's December 2026 covered-employment flash from unemployment insurance quarterly reports, the 2027 Community Transition Fund)",
+   "commit": ""
   }
  ],
- "resume": "migrated from Project Mark task470; re-read the build against the Sulfur standard (deep reasoning: three or more dependent inferences with a real modeling judgment, the one-fact test, the banned kinds) and the Sulfur submission shape (golden ZIP, four answer blocks), then /build task5 from the stage that fails",
+ "resume": "stage 2 design: write generator/ (world, sim, pack, docs, golden, writeup, checks, verify, ceiling, metadata, build), measure the ladder, margins and ceiling, then precut.py",
  "approved": null,
  "delivered": null,
  "portal": null,
@@ -78,35 +102,93 @@
     "script": "generator/ceiling.py"
    },
    "fate": "spent 2026-10-31 at the batch 1 repair: guard.py heart BLOCK against task242 on strategy, calibration, forum, forcing event and organisation family, and on pattern against task197; superseded before any portal result"
+  },
+  {
+   "architecture": 2,
+   "domain": "survey-research-official-statistics",
+   "objective": "etl",
+   "stump": "A competent solver conforms the cadastre and the hub's hourly values, sees that an empty dwelling in a Norwegian November is heated so no consumption floor works, reads occupancy from the household's morning or evening rise over the dwelling's own night-time use, sees it separate cleanly and agree with the register, and files that Tverrvika and Ørnevik alone qualify (6.2 and 7.1 per cent); 70 vacant dwellings were left heated on a daily timer that rises at the same hours by the same amount every day, and only a household's departure from what the dwelling repeats every day, some hour more than 0.9 kWh above its own typical day, shows that someone lived there, which designates five.",
+   "call": "Five municipalities qualify for the 2027 grant: Tverrvika, Hesteby, Solmoen, Ørnevik and Fjordeid",
+   "leak": {
+    "leak_py": "REVIEW on 14f7ae29, no LEAK (the daily file's 13,599 a meter's day of 13.599 kWh; the regulation's 5.0 and nouns; the shell quota), each ruled in the note",
+    "reader": "2026-11-08 isolated reader on 13a7d9af: no leak; no file names the vacancy method, nothing names a timer, thermostat or schedule, no ranking file, no reserved domain or tell; 'so many chances' read as a binomial basis (deliberate); the January extracts' 1 November rollback (intended); nothing to fix"
+   },
+   "judge": {
+    "verdict": "DETERMINISTIC (2026-11-08, on 13a7d9af)",
+    "disposition": "FIX_NOW, fixed: the interval's convention filed in the assignment as the exact binomial interval in the office's words (SF24, asserted), never in the prompt; no graded figure moved",
+    "gate_g": "method_or_model_selection, analytical_non_defect",
+    "gate_h": "pass: analytical, the classifier choice the statistical judgment, the rise rival lands on two and is unstable",
+    "report": "task5/determinism_check_report_arch2_pass2.md"
+   },
+   "gates": {
+    "checks": "97 of 97",
+    "verify": "PASS (the departure recomputed by its own loop)",
+    "byte_identical": "two builds",
+    "figures_check": "134 of 134",
+    "precut": "72 of 72",
+    "voice_check": "PASS (WARN shell quota, answered in the note)",
+    "leak_py": "REVIEW, no LEAK",
+    "surface": "exit 0",
+    "heart": "WARN only",
+    "guard_check": "WARN only, registered",
+    "input_gates": "15 files, 4 formats; hourly parquet 2,720,816 rows; daily values CSV 113,758 rows; register CSV 13,777 rows; 6 distractors",
+    "ceiling": {
+     "pair": 33.3,
+     "cracker": 58.2,
+     "best_mirror": "8.3 on a consumption floor of 10.5 kWh a day",
+     "rise_rung": "7.0 at every cut 0.3 to 1.0",
+     "shallow_keep": 0.0,
+     "mirror_leakage": 0.0
+    },
+    "freeze": "snapshot taken on the final cut as the new baseline (18 main-call figures)",
+    "target_zip_sha256_16": "14f7ae29ebb94bc9",
+    "date": "2026-11-08",
+    "golden_zip_sha256_16": "6bebc31a871f6761"
+   },
+   "target_zip_sha256_16": "14f7ae29ebb94bc9",
+   "golden_zip_sha256_16": "6bebc31a871f6761",
+   "runs": {
+    "run1": null,
+    "run2": null,
+    "average": null,
+    "first_wrong_step": {
+     "run1": "none: on the golden",
+     "run2": "none: on the golden"
+    },
+    "triage": "REDESIGN",
+    "recorded": "2026-11-08",
+    "files": [
+     "task5/runs/run1.md",
+     "task5/runs/run2.md"
+    ]
+   },
+   "fate": "spent 2026-11-08 on its first platform round: both runs read occupancy from each dwelling's departure from its own typical day and filed the golden five and every register cell; the judge had sent the first form back on Gate H"
   }
  ],
- "gates": {
-  "checks": "92 of 92",
-  "verify": "PASS, every bound and component 3 recomputed independently",
-  "byte_identical": "two builds",
-  "figures_check": "166 of 166",
-  "voice_check": "PASS, 997 characters",
-  "target_zip_sha256": "26076f7e43ec0c97b2c28988ecfa57066c891a809a12576809f748f028542a10",
-  "ceiling": {
-   "pair": 29.0,
-   "cracker": 45.0,
-   "best_mirror": "13.0 on a consumption floor of 10 kWh a day",
-   "mirror_leakage": 0.0,
-   "script": "generator/ceiling.py"
-  },
-  "precut": "61 of 61",
-  "leak_py": "REVIEW, no LEAK, sweep 10 clean",
-  "surface": "exit 0",
-  "heart": "BLOCK on draw-time recency bans (pattern and artifact against task464, forum against task273 v5) read from the unchanged card; WARN only on 2026-10-31",
-  "pair_ceiling": "29.0 (unchanged; the bounds ride the counts)",
-  "date": "2026-11-07"
- },
- "zip_sha256_16": "bc4fe60e0ba401d6",
+ "gates": {},
+ "zip_sha256_16": null,
  "migrated_from": {
   "project": "Mark",
   "task": "task470",
   "status_in_mark": "SHIPPED",
   "date": "2026-11-08",
   "note": "moved from Project Mark unstumped on the Mark portal; carried on here for the Sulfur bar"
+ },
+ "golden_zip_sha256_16": null,
+ "call": "",
+ "subdomain": "census-register-administrative-data-quality",
+ "paper_pair": null,
+ "runs": {
+  "run1": null,
+  "run2": null,
+  "average": null,
+  "counterfactual_average": null,
+  "first_wrong_step": {
+   "run1": "",
+   "run2": ""
+  },
+  "triage": "",
+  "recorded": "",
+  "history": []
  }
 }
