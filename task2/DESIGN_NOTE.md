@@ -326,3 +326,13 @@ as-of is 6 November 2026.
 - 2026-11-08, build stage: one graded figure that only the decisive step reaches left a landed run with every ask
   (pair 56); the cracker's second judgment is the variance the block ratio applies to (the declustered one, not the
   composites' as drilled), which moves the gold to 200,000 oz while the tier holds.
+- 2026-11-08, architecture 4 on the platform: the one run filed Tier B by plain inverse-distance-squared blocks
+  (159,610 oz) with no declustering, variogram or support correction, and the domain fit return read the prompt as
+  summing tabulated blocks against stated tiers. Measured afterwards on the shipped pack: inverse distance files 92 to
+  162 koz across powers 2 and 3, 3 to 16 composites, in three dimensions or within the flitch (nearest neighbour 217),
+  and at 4 composites it reproduces the golden's tonnes, grade and gold at every cut-off, so no tier floor separates
+  it. Seven re-tuned worlds (a larger short structure, flat supergene lenses 12 to 25 m across and 2 to 3 m thick on a
+  1.25 m vertical grid, a smaller nugget) moved where it crosses but never removed the crossing: a smoother whose
+  neighbourhood is a free knob sweeps through the true block variance, and the composite-support variogram read the
+  thin lenses as nugget, biasing the golden low. The support stump is spent; the slot re-roots.
+
