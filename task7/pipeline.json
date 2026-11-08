@@ -1,10 +1,10 @@
 {
   "task": "task7",
-  "status": "PAUSED",
+  "status": "DESIGN",
   "domain": "banking-credit-financial-risk",
-  "objective": null,
-  "stage": 1,
-  "stage_name": "draw",
+  "objective": "forecasting",
+  "stage": 2,
+  "stage_name": "design",
   "updated": "2026-11-08",
   "stump": null,
   "architecture": 5,
@@ -75,7 +75,7 @@
       "note": "round 2 on the re-sited asks: both runs landed the call; architecture 4 spent with its world (Ruahine Bank); every file of architectures 1 to 4 removed at the author's word"
     }
   ],
-  "resume": "stage 1: draw architecture 5 in a new world (not Ruahine Bank) in expected-credit-loss-provisioning, forecasting (banking x forecasting is drawable and never built). Candidate carried to the draw: a commercial property book's expected 2027 credit loss, where the bank's LGD haircut was fitted on fresh valuations made at default while the book carries quarterly index roll-forwards of inspections far older than the historical defaulters' were, and failing borrowers' properties fall behind the index by more the longer since the last inspection (staleness read by walking the type 2 valuation history past the INDEXED rows). Next: guard.py slots on the mechanism and the setting nouns, card through check and register, commit DRAWN.",
+  "resume": "stage 2: prototype the generator's world (book, valuation history, defaults, sales), calibrate the ladder, write Default path to Prompt contract, run precut.py to exit 0",
   "approved": null,
   "delivered": "2026-11-08",
   "portal": null,

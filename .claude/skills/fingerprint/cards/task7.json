@@ -1,99 +1,92 @@
 {
   "task": "task7",
-  "architecture": "v4 (re-root after the portal landed architecture 2: Ruahine Bank's 2027 business support packages, valued by the write-off each keeps off the whole book when smaller borrowers take most of their receipts from the supported firm)",
-  "drawn": "2026-11-07",
-  "slot_note": "re-root of task7 in Opportunity Sizing after the portal's FAILED_TO_STUMP on architecture 2; moved out of healthcare delivery to banking, a new world, dataset and shell",
+  "project": "sulfur",
+  "architecture": "v5",
+  "drawn": "2026-11-08",
+  "slot_note": "re-root after architecture 4 (Ruahine Bank) was landed by both runs in platform round 2",
   "domain": "banking-credit-financial-risk",
   "subdomain": "expected-credit-loss-provisioning",
   "client_domain": "banking-credit-financial-risk",
-  "niche": "a New Zealand member-owned bank's business support unit choosing which two watch-list borrowers get its 2027 support packages by the credit write-off each package keeps off the bank's book, when some of the bank's smaller business borrowers take most of their receipts from one watch-list firm through payments the bank itself processes",
-  "objective": "opportunity-sizing-decision",
-  "shape": "05",
-  "decision_type": "ranked_slate_under_cap",
-  "answer_unit": "set_of_items",
-  "answer": "Kinloch Engineering and Matai Valley Foods, NZ$3,350,000 of 2027 write-off kept off the book",
-  "answer_source": "task7/generator/figures.json (call, total_kept_off), recomputed by task7/generator/verify.py",
+  "niche": "the credit loss an Irish commercial property lender should plan for 2027 when its security values are quarterly index roll-forwards of inspections mostly made before 2020 and its loss given default haircut was fitted on valuations made at default",
+  "objective": "forecasting",
+  "shape": "07",
+  "decision_type": "quantity_figure",
+  "answer_unit": "currency",
+  "answer": "",
+  "answer_source": "",
   "gap": [
     "objective",
     "population"
   ],
   "pattern": [
-    "E"
+    "none"
   ],
   "generators": [
     "G14",
-    "G16",
+    "G6",
     "G3"
   ],
   "gate_g": "method_or_model_selection",
-  "calibration_form": "realised_outcome_roster",
-  "stump_strategy": "causal_design",
+  "calibration_form": "physical_verification",
+  "stump_strategy": "population_selection",
   "decisive_rule_filed": false,
   "official_decoy": false,
   "validated_decoy": false,
-  "context_artifact": "monitoring_export",
+  "context_artifact": "filed_standard",
   "stump_class": "analytical",
-  "analyst_test": "An analyst who reads every field and rule correctly sums each watch-list borrower's IFRS 9 twelve-month PD x LGD x EAD from the bank's validated run and gives the two packages to the two largest (Ends on: Kinloch Engineering and Ridgeway Precast, NZ$3.0 million kept off the book), missing the write-off a package to Matai Valley Foods also keeps off the borrowers in the book that take most of their receipts from it.",
-  "domain_test": "Write-off a support package prevents is an expected credit loss computation (PD x LGD x EAD) with one obligor's 2027 default averted and the dependent obligors' default chance conditioned on it, read from the bank's own record of defaults following a main payer's default; with another field's nouns there is no loss given default, no exposure at default and no trade dependence carrying one firm's default to its suppliers, so the task stops reading the same.",
+  "analyst_test": "A strong analyst takes each loan's 2027 default chance from the master scale and its exposure at 31 December 2026, prices the loss with the bank's loss given default model (its sale haircut on the security value the property register carries, the last inspection rolled forward by the commercial property index), back-tests the model on the 2012 to 2026 defaults at their valuations at default, where it passes, and files a 2027 credit loss well under the golden.",
+  "domain_test": "The 2027 expected credit loss of a commercial property book is default chance times exposure times loss given default, and the loss turns on what the security fetches if the borrower fails; the decisive step reads credit's own collateral mechanics (an inspection at default, an index roll-forward, a sale haircut, and the selection of which borrowers fail), and with another field's nouns there is no security value whose drift is selected by the very failure being priced.",
   "layer2_family": "estimand_identification",
-  "layer2_pattern": "own:credit-write-off-a-support-package-prevents-across-trade-dependent-borrowers",
+  "layer2_pattern": "own:collateral-value-conditioned-on-default",
   "layer1": [
-    "a payments export with New Zealand account numbers written with and without dashes and with two- or three-digit suffixes, and payer names, particulars, codes and references as free text",
-    "a customer master listing several accounts per customer, trading names apart from legal names, and a 2023 core banking migration that renumbered accounts behind an old-to-new crosswalk",
-    "the IFRS 9 run at facility grain while the watch list and the support terms speak of borrowers",
-    "the December watch list as a credit committee PDF table",
-    "watch-list borrowers' annual accounts in a workbook whose layout changed with the bank's 2024 template",
-    "a default register in which the unlikely-to-pay flag and the 90-days-past-due date of one default fall on different days"
+    "type 2 valuation history whose quarterly index roll-forward rows carry the current effective date",
+    "facility numbers re-issued at a 2021 core banking migration, with a crosswalk",
+    "a month-end snapshot batch loaded twice",
+    "recovery postings arriving months after the sale settles",
+    "a cross-collateral bridge with allocation shares and effective dates",
+    "the property index revised by release vintage",
+    "inferred property members carrying an unknown type until the dimension load caught up"
   ],
-  "stakeholder_role": "Ruahine Bank's head of business support, who decides which two watch-list borrowers the unit takes on in 2027",
-  "role_family": "portfolio_manager",
-  "scoring_unit": "per resolved case",
+  "stakeholder_role": "Ardcarn Bank's chief financial officer, who sets the credit-loss line of the 2027 plan the executive committee approves",
+  "role_family": "finance_controller",
+  "scoring_unit": "per active unit per period",
   "spine": {
-    "file": "business_account_transactions_2021-2026.csv",
-    "rows": 281419,
-    "entity": "one posted transaction on a business customer's transaction account",
-    "grain": "transaction",
+    "file": "cre_loan_month_end_2019-2026.csv",
+    "rows": 0,
+    "entity": "one commercial property loan facility at one month end",
+    "grain": "facility x month",
     "source": "synthetic"
   },
-  "forum": "committee_or_panel",
-  "forcing_event": "vote_or_meeting",
+  "forum": "executive_team",
+  "forcing_event": "budget_or_appropriation",
   "org_family": "financial_institution",
   "world": {
-    "geography": "New Zealand, lower North Island",
-    "currency": "NZD",
-    "org_type": "a member-owned bank with a business lending book and its borrowers' transaction accounts",
+    "geography": "Ireland (a fictional commercial property lender headquartered in Galway, lending across the Republic)",
+    "currency": "EUR",
+    "org_type": "a licensed bank lending to small and medium businesses on commercial property",
     "invented_names": [
-      "Ruahine Bank",
-      "Matai Valley Foods",
-      "Kinloch Engineering",
-      "Ridgeway Precast"
+      "Ardcarn Bank"
     ],
     "people": [
-      "Stella Perano",
-      "Lance Middlemiss",
-      "Maria Humphrey",
-      "Andrew Buckley",
-      "Christopher Gibbons",
-      "Tracey Smith",
-      "Paul Stevens",
-      "Barry Munro",
-      "Stephen Russell",
-      "Haley Richards"
+      "Colm Hourican",
+      "Geraldine Harkins"
     ]
   },
   "deliverables": [
-    "bsu_intake_2027.xlsx",
-    "bsu_intake_2027.docx"
+    "cre_expected_loss_2027_by_loan.csv",
+    "exco_cre_credit_loss_2027.pptx"
   ],
   "opening_move": "question-first",
   "question_form": "how-much",
-  "driver": "The decisive quantity is what preventing one unit's failure removes across a population of units, when some units draw most of their inflow from that unit and in the population's own record failed at a high rate within months of their main payer's failure, so a value read on the unit's own expected loss misses the failures it would set off; the dependence comes from the flows between units and the conditional failure rate from the population's past failures, neither stored in any field.",
-  "driver_concrete": "A business support package that keeps a watch-list borrower out of default in 2027 also keeps out of default the Ruahine borrowers that take most of their receipts from it, which in the bank's 2021 to 2026 record defaulted far more often within twelve months of their main payer's default than otherwise; a package's prevented write-off is the borrower's own PD x LGD x EAD plus its PD times that uplift times each dependent's LGD x EAD, with dependence read from the on-us payments.",
-  "stump": "A competent solver values each package at the supported borrower's own 2027 expected write-off from the IFRS 9 run and gives the two packages to Kinloch Engineering and Ridgeway Precast, when Matai Valley Foods pays most of the receipts of several borrowers in the book whose defaults followed their main payer's in the bank's own record, so a package there keeps more write-off off the book than one at Ridgeway.",
+  "driver": "The decisive quantity is what a unit's security fetches if the unit fails, which the record measures by an inspection made at the failure while the forward units carry only a market index rolled forward from an earlier inspection; the security of units that fail falls behind the index by more the longer since that inspection, and the forward units were inspected longer ago than the record's failures mostly were, so the rolled-forward index overstates what the failing units will fetch.",
+  "driver_concrete": "Each commercial property loan's 2027 loss turns on what its property sells for if the borrower defaults: Ardcarn's loss given default haircut was fitted on valuations made at default, the 2026 book carries quarterly index roll-forwards of inspections mostly made before 2020, and in the bank's own record a defaulter's property was valued at default below its rolled-forward index value by more the older its last inspection.",
+  "stump": "A competent solver applies the bank's haircut to the security values the property register carries at 31 December 2026, weights each loan by its master-scale default chance and exposure, sees the model back-test cleanly on the 2012 to 2026 defaults at their valuations at default, and files a 2027 credit loss well under the golden; the step that lands it there is taking the rolled-forward index value as the value the bank will sell at.",
+  "deep_chain": "(1) the 2027 loss is each loan's default chance times exposure times loss given default, with the bank's haircut model at rung 0; (2) the haircut was fitted on inspections made at default while the book carries index roll-forwards of older inspections, so the model's input differs between its fit and its use; (3) in the record a defaulter's inspection at default sits below its rolled-forward index value by an amount that grows with the years since its last inspection; (4) the 2026 book was last inspected longer ago than most of the record's defaulters; (5) each loan's expected value at default is its rolled-forward value cut by its own staleness shortfall, run through the haircut and the floor to the 2027 loss.",
+  "judgment": "The shortfall of value at default against the rolled-forward index as a function of years since the last inspection, a selection effect (borrowers fail when their property has fallen behind the market) estimated by regression on the record's defaults that carry both values, and applied to each loan's own staleness, inside the range the record covers.",
+  "one_fact_test": "The likeliest hint, that valuations at default come in below the indexed value, still leaves the solver to find that the shortfall grows with staleness (an average shortfall files the record's mix, not the book's), to read each loan's staleness by walking its valuation history past the quarterly roll-forward rows, and to carry it through the haircut's floor loan by loan.",
+  "strategy_label": "WORKS IN FORM: heterogeneity that pooling hides, the shortfall differing by staleness and the decision weighting it to a book staler than the record, the staleness rebuilt from the valuation history and never read off a column.",
   "mechanism_source": "design_note",
-  "differentiation": {
-    "task482": "task482 v11 re-estimates a group's share from its members' own sparse answers instead of imputations from a population model; here nothing is imputed: the decisive move adds to one unit's own expected loss the failures its survival prevents among other units that draw most of their inflow from it, read from flows between units and their past failures"
-  },
+  "differentiation": {},
   "lineage": [
     {
       "domain": "nonprofit-grant-making",
@@ -173,6 +166,32 @@
       "architecture": "v2 (re-root after SEND_BACK: winter discharge-to-assess packages across five hospitals)",
       "drawn": "2026-10-12",
       "fate": "spent 2026-11-07 at the portal (FAILED_TO_STUMP): both responses filed the golden split exactly (Royal Marchford 508, Wendlebury 350, Holmford 120, Cleeve Park 222, Ashby Vale none, 6,816 bed-days); the equipment wait running alongside the care wait was a hidden overlap a careful response found by joining the depot's deliveries to the covered patients"
+    },
+    {
+      "domain": "banking-credit-financial-risk",
+      "subdomain": "expected-credit-loss-provisioning",
+      "objective": "opportunity-sizing-decision",
+      "shape": "05",
+      "decision_type": "ranked_slate_under_cap",
+      "answer_unit": "set_of_items",
+      "gap": [
+        "objective",
+        "population"
+      ],
+      "pattern": [
+        "E"
+      ],
+      "generators": [
+        "G14",
+        "G16",
+        "G3"
+      ],
+      "gate_g": "method_or_model_selection",
+      "driver": "The decisive quantity is what preventing one unit's failure removes across a population of units, when some units draw most of their inflow from that unit and in the population's own record failed at a high rate within months of their main payer's failure, so a value read on the unit's own expected loss misses the failures it would set off; the dependence comes from the flows between units and the conditional failure rate from the population's past failures, neither stored in any field.",
+      "stump_strategy": "causal_design",
+      "drawn": "2026-11-07",
+      "architecture": "v4 (Ruahine Bank business support packages, the write-off a package keeps off dependent borrowers)",
+      "fate": "spent 2026-11-08: platform round 1 run 1 98 on the call, run 2 58 off it after computing the dependants and declining to price them (FIX_ASKS); round 2 on the re-sited asks both runs landed Kinloch Engineering and Matai Valley Foods (REDESIGN); the payer dependence was visible in the transactions and the default register"
     }
   ],
   "lineage_shells": [
@@ -181,14 +200,14 @@
       "second-sentence opener": "the",
       "rounding opener": "packages",
       "deliverable set": "svg+xlsx"
+    },
+    {
+      "question form": "how-much",
+      "second-sentence opener": "that",
+      "rounding opener": "write",
+      "deliverable set": "docx+xlsx"
     }
   ],
-  "notes": "v4 drawn 2026-11-07 for the re-root after the portal's FAILED_TO_STUMP on architecture 2 (both responses landed the golden split). The discharge world's decisive step (a concurrent wait) is spent; one architecture per world, so the slot moved to banking-credit-financial-risk / expected-credit-loss-provisioning, never carded on this objective on main. No seed: task7 has none in START_HERE.md. Axes corrected at stage 3 (2026-11-07), when the guard re-read the card against task165 v2 and task268 v6, both registered before it: the forum is the Credit Committee, which confirms the intake at its February meeting and receives the note (committee_or_panel, not the unit's own team); the call is forced by the Board's 2027 envelope, an allocation round (budget_or_appropriation, not the year-end close); the calibration organ is the default register as a roster of each borrower's realised default, counted into rates conditioned on the payer's default the way task97 counts returning grants (realised_outcome_roster; existing_book_actuals is the corpus's label for business volumes and claims experience). Forcing event redrawn at ship (2026-11-08), when the pull before the push put task456 v3 (registered 2026-11-01, before this card) in the window with budget_or_appropriation: the call is forced by the Credit Committee's February meeting, which confirms the intake under the terms' section 5 and receives the note (vote_or_meeting); the envelope is what that meeting allocates.",
-  "registered": "2026-11-07T22:27:30Z",
-  "shell": {
-    "question form": "how-much",
-    "second-sentence opener": "that",
-    "rounding opener": "write",
-    "deliverable set": "docx+xlsx"
-  }
+  "notes": "architecture 5 drawn after rating momentum (mark179's abstraction) and offsetting effects (task3, task8 arch 18) were dropped on paper; Australia passed over for Ireland because task2 sits in Western Australia",
+  "registered": "2026-11-08T06:29:49Z"
 }

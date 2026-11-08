@@ -1,7 +1,56 @@
 # task7 design note (architecture 5)
 
-The draw, the default path and every gated section are written at stage 2. Architectures 1 to 4 left only
-the record below; their files were removed at the author's word on 2026-11-08.
+Architectures 1 to 4 left only the Tried and rejected record at the end of this note; their files were removed at the
+author's word on 2026-11-08.
+
+## Draw
+
+- **Card:** `.claude/skills/fingerprint/cards/task7.json`, architecture v5, lineage v1 to v4 (v4 moved in with its fate
+  and shell), registered 2026-11-08 at WARN only and re-checked on the registered card as the last act of stage 1. A
+  first draft with the gap `population` first BLOCKed `test.same_puzzle` against task3's lineage v1 (population, G14,
+  quantity figure); the decisive gap is `objective`, the honester reading, because the property register's rolled-forward
+  value is a correct market figure and the loss is scored on what the property fetches when its borrower fails.
+- **WARNs answered:** `overuse.strategy` (population_selection in three of twelve): the security behind the loans that
+  fail is selected by the failure, which is this build's mechanism, and the other carriers select by busy-hour sampling
+  (task6) and by examination on signs (mark124), not by the outcome being priced. `overuse.forum` (executive_team): an
+  Irish bank's plan lines are set by its executive committee, and the shell carries the forum only as the deck's
+  audience. `overuse.objective` (forecasting six in twelve): banking x forecasting has never been built and is the
+  client's most welcome objective. `repeat.gate_g` and `overuse.gate_g` (method_or_model_selection, against task2 v4):
+  the stump is carried by what the loss model's input means at its fit against at its use, a modelling judgment; task2's
+  is a change of support in a resource model.
+- **Pairing:** Banking, Credit & Financial Risk, task type `expected-credit-loss-provisioning`, which serves
+  forecasting: the expected credit loss of the loans on the book at 31 December 2026 over 2027.
+- **Shape:** 07, a grid of cells: the 2027 loss and the loans whose security will not cover them, by property type,
+  under one headline figure, with a loan-level file behind it.
+- **Strategy:** `population_selection` (failure selects the security that falls behind its market), Gate G
+  `method_or_model_selection`, generators G14 (the security's yield conditioned on the failure), G6 (the book is staler
+  than the record's failures were) and G3 (the register's carried value against what a sale realises).
+- **Strategy label (`sulfur-strategies.md`):** WORKS IN FORM, heterogeneity that pooling hides: the shortfall differs by
+  the years since the last inspection, and the decision weights it to a book far staler than the record's defaults, the
+  staleness rebuilt from the valuation history and never read off a column.
+- **Data-native sentence:** Ardcarn stopped inspecting its commercial property security after 2019 and has carried it
+  since as quarterly index roll-forwards, while its loss model was fitted on the inspection it orders when a borrower
+  defaults; a property that falls behind its market is the kind whose borrower defaults, so the roll-forward overstates
+  the security of exactly the loans that will make the losses, and by more the longer since the last inspection.
+- **Abstraction sentence:** a recovery input that the record measures fresh at failure is carried forward from an old
+  measurement for the units being priced, and the failing units' input has drifted adversely from the carry-forward by
+  more the older the measurement. Written against the nearest approved and in-flight builds, it is none of theirs:
+  mark179 prices an excess hazard after an outside event, mark132 a clock a replacement restarts, mark124 a rate
+  measured on units examined for signs of the outcome, task2 a change of support, task8 arch 18 two features cancelling.
+- **World:** Ardcarn Bank plc, a fictional licensed lender headquartered in Galway, lending to small and medium
+  businesses on commercial property across the Republic (let retail, offices and industrial units; owner-occupied
+  hotels, pubs and restaurants, nursing homes and shops). People drawn with `guard.py names --geo Ireland --seed 7`:
+  Colm Hourican (chief financial officer, who sets the 2027 plan's credit-loss line) and Geraldine Harkins (chief risk
+  officer). Currency EUR.
+- **Sources (all constructed for this task, seeded and deterministic; nothing real is described):** the month-end loan
+  snapshot of the warehouse (facility x month, 2019 to 2026, the large messy CSV); the property valuation history, a
+  type 2 dimension whose quarterly index roll-forward rows sit beside the inspections (the long CSV); the facility
+  dimension with the 2021 core banking re-keying and its crosswalk; the security bridge sharing properties between
+  facilities; the default register (2012 to 2026); the sale and recovery postings; the commercial property index by
+  region and sector with its release vintages; the credit policy's master scale and ECL standard and the loss given
+  default model documentation (PDF); the chief financial officer's 2027 plan instruction; and distractors a planner
+  would weigh (the 2027 property market outlook, the rent roll, the buildings insurance register, the sector
+  concentration report).
 
 ## Tried and rejected
 
