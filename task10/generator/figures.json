@@ -1,0 +1,114 @@
+{
+ "call": [
+  "Ashcombe Road",
+  "Hartwell Common"
+ ],
+ "conventions": {
+  "design_day_degrees_below_zero": 3.0,
+  "heating_base_c": 15.5
+ },
+ "default_call": [],
+ "event_temperature_c": {
+  "coldest_below_zero": 5.779167,
+  "mildest": 6.191667
+ },
+ "pack": {
+  "event_rows": 372,
+  "scada_rows": 196201,
+  "weather_rows": 13372
+ },
+ "steps": {
+  "events": {
+   "Ashcombe Road": 90,
+   "Charlecote Way": 58,
+   "Fenwick Street": 82,
+   "Hartwell Common": 91
+  }
+ },
+ "zones": {
+  "Ashcombe Road": {
+   "after": 26.192337,
+   "avg_credited": 5.862127,
+   "avg_delivery": 0.617066,
+   "before": 29.988476,
+   "code": "PS40617",
+   "credited": 3.796139,
+   "d26": 26.509265,
+   "delivery": 0.399594,
+   "did": 0.959451,
+   "firm": 23.0,
+   "linked": "Tollbrook Lane",
+   "linked_rise": 1.383026,
+   "measured": 0.862843,
+   "mw28": 9.5,
+   "n_events": 89,
+   "over": true,
+   "pair": 0.399325,
+   "provider": "Corvane Flex Ltd",
+   "zone": "Ashcombe Road CMZ"
+  },
+  "Charlecote Way": {
+   "after": 21.070559,
+   "avg_credited": 4.906651,
+   "avg_delivery": 0.613331,
+   "before": 25.068634,
+   "code": "PS41108",
+   "credited": 3.998075,
+   "d26": 23.644017,
+   "delivery": 0.499759,
+   "did": 0.613331,
+   "firm": 22.5,
+   "linked": "",
+   "linked_rise": 0.022089,
+   "measured": 0.613331,
+   "mw28": 8.0,
+   "n_events": 58,
+   "over": false,
+   "pair": 0.499759,
+   "provider": "Quillon Energy Services Ltd",
+   "zone": "Charlecote Way CMZ"
+  },
+  "Fenwick Street": {
+   "after": 29.302156,
+   "avg_credited": 8.974447,
+   "avg_delivery": 0.641032,
+   "before": 35.984837,
+   "code": "PS41474",
+   "credited": 6.682681,
+   "d26": 33.826169,
+   "delivery": 0.477334,
+   "did": 0.985479,
+   "firm": 30.5,
+   "linked": "Wexley Hill",
+   "linked_rise": 1.428554,
+   "measured": 0.88754,
+   "mw28": 14.0,
+   "n_events": 79,
+   "over": false,
+   "pair": 0.476895,
+   "provider": "Quillon Energy Services Ltd",
+   "zone": "Fenwick Street CMZ"
+  },
+  "Hartwell Common": {
+   "after": 20.072659,
+   "avg_credited": 4.52604,
+   "avg_delivery": 0.603472,
+   "before": 22.958262,
+   "code": "PS41236",
+   "credited": 2.885602,
+   "d26": 20.922994,
+   "delivery": 0.384747,
+   "did": 1.018768,
+   "firm": 17.8,
+   "linked": "Kestwick Fields",
+   "linked_rise": 0.826039,
+   "measured": 0.911618,
+   "mw28": 7.5,
+   "n_events": 91,
+   "over": true,
+   "pair": 0.383384,
+   "provider": "Corvane Flex Ltd",
+   "zone": "Hartwell Common CMZ"
+  }
+ }
+}
