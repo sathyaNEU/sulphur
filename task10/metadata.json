@@ -1,0 +1,97 @@
+{
+ "task": "task10",
+ "decision": "the Halverton flexibility zones' primary substations whose reinforcement Wealdmoor Power Networks commits for winter 2027/28, with each zone's provider delivery, credited flexibility and design-day demand",
+ "deliverables": [
+  "halverton_primary_capacity_2027-28.xlsx",
+  "capex_review_2027-28.pptx"
+ ],
+ "distractor_files": [
+  "target/customer_interruptions_2025-26.xlsx",
+  "target/primary_transformer_condition_2026.xlsx",
+  "target/duos_charging_statement_2027-28.pdf"
+ ],
+ "files": [
+  {
+   "path": "target/primary_demand_halfhourly_2023-2026.csv",
+   "source": "constructed for task10; no real dataset",
+   "date": "2026-11-03",
+   "licence": "CC0 1.0 (constructed)",
+   "covers": "The Halverton zone's SCADA historian export: the nine 33/11 kV primaries' half-hourly demand, November to March of winters 2023/24 to 2025/26, UTC."
+  },
+  {
+   "path": "target/flexibility_events_2024-2026.csv",
+   "source": "constructed for task10; no real dataset",
+   "date": "2026-11-03",
+   "licence": "CC0 1.0 (constructed)",
+   "covers": "The DSO's flexibility dispatch log for the four Halverton constraint managed zones, winters 2024/25 and 2025/26, UK local time."
+  },
+  {
+   "path": "target/halverton_weather_hourly_2023-2026.csv",
+   "source": "constructed for task10; no real dataset",
+   "date": "2026-11-03",
+   "licence": "CC0 1.0 (constructed)",
+   "covers": "Hourly observations at Halverton weather station, October to March of winters 2023/24 to 2025/26."
+  },
+  {
+   "path": "target/primary_substation_register.xlsx",
+   "source": "constructed for task10; no real dataset",
+   "date": "2026-11-03",
+   "licence": "CC0 1.0 (constructed)",
+   "covers": "The primary substation register (asset codes, SCADA points, transformers) and the DFES 2026 growth rates."
+  },
+  {
+   "path": "target/network_feeders_11kv.xlsx",
+   "source": "constructed for task10; no real dataset",
+   "date": "2026-11-03",
+   "licence": "CC0 1.0 (constructed)",
+   "covers": "The 11 kV feeder schedule and normally-open points of the Halverton zone."
+  },
+  {
+   "path": "target/load_growth_register_2026-27.xlsx",
+   "source": "constructed for task10; no real dataset",
+   "date": "2026-11-03",
+   "licence": "CC0 1.0 (constructed)",
+   "covers": "The connections team's load growth register."
+  },
+  {
+   "path": "target/capacity_assessment_guideline_2026.pdf",
+   "source": "constructed for task10; no real dataset",
+   "date": "2026-11-03",
+   "licence": "CC0 1.0 (constructed)",
+   "covers": "Network Planning's winter capacity assessment guideline, issue 4, September 2026."
+  },
+  {
+   "path": "target/flexibility_contract_awards_2027-28.pdf",
+   "source": "constructed for task10; no real dataset",
+   "date": "2026-11-03",
+   "licence": "CC0 1.0 (constructed)",
+   "covers": "The DSO's flexibility contract award notice for winter 2027/28."
+  },
+  {
+   "path": "target/customer_interruptions_2025-26.xlsx",
+   "source": "constructed for task10; no real dataset",
+   "date": "2026-11-03",
+   "licence": "CC0 1.0 (constructed)",
+   "covers": "Customer interruptions and minutes lost by 11 kV feeder, regulatory year 2025/26."
+  },
+  {
+   "path": "target/primary_transformer_condition_2026.xlsx",
+   "source": "constructed for task10; no real dataset",
+   "date": "2026-11-03",
+   "licence": "CC0 1.0 (constructed)",
+   "covers": "Primary transformer oil analysis and health indices, 2026."
+  },
+  {
+   "path": "target/duos_charging_statement_2027-28.pdf",
+   "source": "constructed for task10; no real dataset",
+   "date": "2026-11-03",
+   "licence": "CC0 1.0 (constructed)",
+   "covers": "The use of system charging statement effective 1 April 2027."
+  }
+ ],
+ "rows": {
+  "scada": 196201,
+  "events": 372,
+  "weather": 13372
+ }
+}

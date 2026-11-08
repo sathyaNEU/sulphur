@@ -168,6 +168,7 @@ def main(target):
     ptext = open(os.path.join(os.path.dirname(HERE), "prompt.txt"), encoding="utf-8").read().lower()
     for w in ["declared", "weigh", "payload", "calibrat", "regress", "error", "shipper", "cold"]:
         ok("prompt silent on %s" % w, w not in ptext)
+    ok("prompt files the energy as a forecast from the pilot (H20)", "forecast from" in ptext and "pilot" in ptext)
 
     # input gates
     files = sorted(os.listdir(target))

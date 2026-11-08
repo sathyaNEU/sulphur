@@ -1,23 +1,20 @@
 {
  "task": "task10",
- "status": "DESIGN",
+ "status": "PAUSED",
  "domain": "energy-systems-utilities/load-forecasting (client domain energy-systems-utilities; world: an English distribution network operator, Wealdmoor Power Networks, committing for winter 2027/28 the reinforcement of the Halverton primaries whose design-day demand, after the flexibility contracted for that winter is credited, exceeds firm capacity)",
  "subdomain": "load-forecasting",
  "objective": "forecasting",
- "stage": 2,
- "stage_name": "design",
+ "stage": 4,
+ "stage_name": "check",
  "updated": "2026-11-08",
- "call": "",
- "stump": "Measuring each flexibility zone's event-window reduction against a weather-adjusted baseline, validated on placebo days and held-out events, and carrying it at its delivery per megawatt scheduled to the 2027/28 contracts files only Elmstead Park for reinforcement; the step that lands it there is reading the primary's drop as the provider's delivery, when on every event at Ashcombe Road and Fenwick Street the control room moved a feeder section to Brindle Lane and Greaves Hill for the event window, so the providers deliver about half of what is scheduled and Ashcombe Road and Fenwick Street, with Elmstead Park, need reinforcement.",
+ "call": "Commit reinforcement at Ashcombe Road and Hartwell Common for winter 2027/28; Charlecote Way and Fenwick Street hold firm capacity with the flexibility contracted for that winter",
+ "stump": "Measuring each flexibility event's fall at its zone primary against a weather-adjusted baseline, validated on held-out non-event weekdays and stable across both winters, and crediting the 2027/28 contracts at the 0.9, 0.6, 0.9 and 0.9 per megawatt scheduled the event records show commits no primary; the step that lands it there is reading the primary's fall as the provider's delivery, when at Ashcombe Road, Fenwick Street and Hartwell Common the control room moved a feeder section across an open point to Tollbrook Lane, Wexley Hill and Kestwick Fields for each event window, so the providers' own reduction, net of the neighbour's rise and read at the design day's minus 3.0 C, is 0.4 and 0.5 per megawatt and Ashcombe Road and Hartwell Common must be reinforced.",
  "architecture": 5,
  "loops": 0,
- "precut": {
-  "exit": null,
-  "date": ""
- },
+ "precut": "PASS 2026-11-08 (75 checks, 0 FAIL, 0 WARN)",
  "leak": {
-  "leak_py": "",
-  "reader": ""
+  "leak_py": "REVIEW 2026-11-08 (no LEAK)",
+  "reader": "2026-11-08 twice: no deciding sentence, no ranking file; realism tells fixed or ruled"
  },
  "duplicate_check": {
   "guard_check": "WARN 2026-11-08 on the registered card (overuse.objective, repeat.gate_g against task4, overuse.gate_g, repeat.question_form against task3), answered in the design note",
@@ -25,13 +22,15 @@
   "surface": ""
  },
  "judge": {
-  "verdict": "",
-  "disposition": "",
-  "gate_g": "",
-  "gate_h": "",
-  "report": ""
+  "first": "DETERMINISTIC, FIX_NOW (wording: no control-room action claimed in the blocks); applied",
+  "rejudge": "running on target.zip a3ba2ac0"
  },
- "paper_pair": null,
+ "paper_pair": {
+  "pair_ceiling": 39.8,
+  "shallow_keep": 11.8,
+  "landed_keep": 29.4,
+  "measured_by": "generator/ceiling.py"
+ },
  "runs": {
   "run1": null,
   "run2": null,
@@ -55,7 +54,7 @@
   ]
  },
  "returned": [],
- "resume": "stage 2: write the design note's remaining sections (default path, deep reasoning, survivor anatomy, readability, forks, ladder, closure, literal reader, oracles, ask sheet, prompt contract), then precut.py; then the generator",
+ "resume": "stage 4: the re-judge thread (brief /tmp/determinism-check-task10-1794165018/judge_brief.md) writes verdict.md; send its path to the judge agent for the reconciliation and determinism_check_report.md; apply the re-read's two realism fixes (plot numbers in the growth register, health indices with age in the condition workbook), rebuild, re-run every gate; then stage 5",
  "approved": null,
  "submitted": null,
  "delivered": null,
