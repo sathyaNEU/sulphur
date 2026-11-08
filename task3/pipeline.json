@@ -1,10 +1,10 @@
 {
  "task": "task3",
- "status": "PAUSED",
+ "status": "READY",
  "domain": "physical-environmental-sciences",
  "objective": "forecasting",
- "stage": 4,
- "stage_name": "check",
+ "stage": 5,
+ "stage_name": "ready",
  "updated": "2026-11-08",
  "stump": "A strong analyst who sees the test's Theis forecast overshoot the Mill Street record recalibrates the leakage against the nearest network well CV-07 (or the wells' own pre-pumping levels, or a fitted trend) and files 1,250 gpm, every schedule under 3.5 ft at OW-S; only the natural level carried from CV-02 and CV-11 beyond the cone files 1,000 gpm.",
  "architecture": 3,
@@ -16,17 +16,17 @@
  },
  "leak": {
   "leak_py": "REVIEW, no LEAK (2026-11-08, --asof 2026-11-06)",
-  "reader": "2026-11-08 isolated reader (Sonnet, medium): no step named, no ranking or helper file, Q6 analytical; realism notes fixed in the generator"
+  "reader": "2026-11-08 isolated reader (Sonnet, medium): no step named, no ranking or helper file, Q6 analytical; the plate's caption removed"
  },
  "duplicate_check": {
   "heart": "PASS 2026-11-08",
   "surface": "exit 0, 1 pair promoted (surface similarity), names WARN on 'Little Ossey' and 'Sep Oct' (not personas)"
  },
  "judge": {
-  "verdict": "DETERMINISTIC (2026-11-08, Sonnet thread: the call and answers 7 to 9 reproduced)",
-  "disposition": "FIX_NOW applied (plate re-cut, per-well fits and two closures written); re-judge running",
+  "verdict": "DETERMINISTIC",
+  "disposition": "FIX_NOW applied (plate re-cut, per-well fits, the OW-S-alone and DW-17 closures), re-judged once: APPROVE",
   "gate_g": "method_or_model_selection, analytical_non_defect, surface_read_dependency no, sole_data_defect no",
-  "gate_h": "domain pass, layers pass, decisive_step analytical",
+  "gate_h": "domain pass, layers pass, decisive_step analytical, chain 5 inferences",
   "report": "task3/determinism_check_report.md"
  },
  "returned": [
@@ -90,7 +90,7 @@
    "commit": ""
   }
  ],
- "resume": "stage 4: the FIX_NOW re-judge is running (verdict_r2.md in /tmp/determinism-check-task3-107173/); on APPROVE append it to the report, re-run the free gates and set READY with target.zip, golden.zip and golden/ force-added",
+ "resume": "",
  "approved": null,
  "delivered": "2026-11-07",
  "portal": "landed by one response (R1 2,200 t at 100 per cent, R2 2,600 t at 70 per cent), reported 2026-11-07",
@@ -137,6 +137,10 @@
   {
    "date": "2026-11-08",
    "event": "architecture 2 landed by both platform runs (REDESIGN); architecture 3 drawn, designed and built through stage 3 in a new world (Corrin Valley, Indiana)"
+  },
+  {
+   "date": "2026-11-08",
+   "event": "READY: architecture 3, the district will permit the 1,000 gpm schedule (8 ft at OW-S in 2046 against 9 ft); judge DETERMINISTIC, APPROVE after one FIX_NOW"
   }
  ],
  "migrated_from": {
@@ -164,11 +168,12 @@
   "checks": "132 of 132",
   "verify": "PASS",
   "byte_identical": true,
-  "figures_check": "62 of 62",
+  "figures_check": "67 of 67",
   "precut": "72 checks, 0 FAIL",
   "voice_check": "PASS (WARN shell quota)",
   "pair_ceiling": 46.8,
-  "shallow_keep": 0.0
+  "shallow_keep": 0.0,
+  "target_zip_sha256": "109b4ebf9580c12184d4fcbe4cc2e22294043eca9a7fb9a01d7a943a47051699"
  },
  "runs": {
   "run1": null,
