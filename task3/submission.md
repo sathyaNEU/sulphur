@@ -1,48 +1,49 @@
 ## Tags
 
-> **Domain:** Engineering and Physical Sciences, Physical & Environmental Sciences (inverse problems: physical-model calibration and uncertainty propagation, a groundwater withdrawal forecast).
+> **Domain:** Engineering and Physical Sciences, Physical & Environmental Sciences (physical-model calibration and data assimilation, spatiotemporal exposure: a well field's nitrate forecast from the land over it).
 > **Analytical objective:** Forecasting & Predictive Modeling.
 
 ## 1. Final Recommendation
 
-**The district will permit the 1,000 gpm schedule.** Its greatest monthly drawdown at OW-S in 2046 is 8 ft against Rule WR-4's 9 ft limit, and the 1,250 gpm schedule reaches 10 ft. Not 1,250 gpm: calibrating the far field on the Mill Street record read against the nearest network well CV-07 or the wells' own pre-pumping levels credits the region's wet years to leakage and puts every schedule under 4 ft; and not none of them: the test's Theis fit, carried twenty years, puts even 450 gpm at 22 ft.
+**Put Project NR-1 on the 2027 cycle.** The entry point's annual mean nitrate first reaches 10 mg/L as N in 2031 and is about 12 mg/L in 2034, so a plant funded in the 2031 cycle (in service 1 January 2034) comes too late. Not the 2031 cycle: the wells' falling record, a trend on it, and every model fitted to it with the wellhead model's groundwater travel time or one lag for every parcel set the Sallow Ridge clearing's effect to nothing, because the ridge's leachate is still in the 54 to 95 ft of sand above the water table.
 
 ## 2. Supplementary Questions
 
-### reidel_road_WR-4_demonstration.pdf
+### corlinden_nitrate_plant_timing_memo.pdf
 
-1. Page 1 states that the district will permit the 1,000 gpm schedule, with a table of the four schedules (450, 700, 1,000 and 1,250 gpm), each one's greatest monthly drawdown at OW-S in 2046 (4, 6, 8 and 10 ft) and whether it is within 9.0 ft (yes, yes, yes, no).
-2. The chart under the table plots the drawdown at OW-S in every month from January 2027 to December 2046 for each schedule, one line per schedule with the 1,000 gpm line heaviest, against a dashed 9.0 ft limit line; every schedule's greatest month falls in 2046.
-3. The text below gives the test fit (transmissivity 8,160 ft2/day, storativity 1.0e-03), the separation of the Mill Street record against CV-02 and CV-11, the leakage factor of 3,526 ft with the walls 5,000 ft apart, and the schedules and projection used.
+1. Opens with the call (the 2027 cycle), the first year EP-01's annual mean reaches 10 mg/L as N (2031) and the 2034 level (about 12), with a row of the forecast for 2027, 2029 to 2032, 2034 and 2040, then the chart.
+2. Explains why the record looks safe (the wells fell from about 6.2 mg/L at EP-01 in 2012 to 5.3 in 2025 and show no rise where the travel time or the wells' own lag says the ridge should already show) and why the rise is coming (the unsaturated delay read from the county's matured conversions, carried to each ridge parcel's depth), with what the forecast rests on.
 
-### reidel_road_sentinel_forecast.xlsx
+### corlinden_entry_point_nitrate_forecast.xlsx
 
-4. Sheet Demonstration: one row per schedule with the greatest monthly drawdown at OW-S in 2046 (to the hundredth and to the nearest foot: 4, 6, 8 and 10 ft), the greatest in the term and whether it meets 4.1; then the permitted schedule, 1,000 gpm.
-5. Sheet Forecast OW-S: one row per month from 2027-01 to 2046-12 with the Mill Street projection (gpm), the drawdown from the Mill Street wells, and for each schedule its Reidel Road rate and the total drawdown at OW-S.
-6. Sheets Aquifer test, Mill Street record and Calibration: the test fit, the monthly record from 2005 with each well's drawdown against the far wells and the model's, and the leakage factor with its residuals.
+3. Sheet Forecast: one row per year 2027 to 2040 with each well's forecast, the plan's shares (Well 3 8, Well 5 30, Well 6 32, Well 7 30 per cent) and EP-01's annual mean, flagged at or above 10 from 2031.
+4. Sheets Unsaturated delay (the 14 matured conversions, each one's half-way arrival and delay, the fit a + b x depth with b = 0.13 years a foot), Leachate (each land cover's current level and the land-surface-year record), Protection area parcels (each parcel's delay and, for the ridge, its arrival at the well) and Wells record (observed against the model, 1990 to 2026).
 
-### Answers the district asked for
+### corlinden_entry_point_nitrate_2027-2040.png
 
-7. Greatest monthly drawdown at OW-S in 2046: 450 gpm 4 ft; 700 gpm 6 ft; 1,000 gpm 8 ft; 1,250 gpm 10 ft.
-8. Drawdown the Mill Street wells caused at the Mill Street monitoring well, 2025 average: 5 ft.
-9. Greatest monthly drawdown in 2046 at the registered domestic well nearest the Reidel Road field (DW-17), under the 1,000 gpm schedule: 7 ft.
+5. EP-01's annual mean from 2012 to 2026 (record) and 2027 to 2040 (forecast) against a dashed 10 mg/L line, with the two cycles' in-service dates marked; the forecast steps from about 7 in 2030 to past 10 in 2031.
+
+### Answers the Council asked for
+
+6. First year EP-01's annual mean reaches 10 mg/L as N: 2031.
+7. EP-01's 2034 annual mean: 12 mg/L as N.
+8. Well with the highest 2034 annual mean: Well 7, at 16 mg/L as N.
 
 ## 3. Critical Components
 
-1. The test's Theis fit (transmissivity **8,160 ft2/day**, storativity **1.0e-03**) matches the three observation wells to 0.08 ft, yet carried forward it puts the Mill Street wells' 2025 drawdown at MS-MW at **12 ft**: the test cannot see the far field.
-2. CV-07 sits inside the Mill Street cone (its departure from CV-02 and CV-11 grew from **0.01 ft** in 2008 to **-1.67 ft** in 2025), so the natural level comes from CV-02 and CV-11, and against it the Mill Street wells drew MS-MW down **5 ft** in 2025.
-3. The bounded leaky aquifer reproducing that drawdown has a leakage factor of **3,526 ft**; against CV-07 the record asks for about **1,900 ft**.
-4. Greatest monthly drawdown at OW-S in 2046: **8 ft** at 1,000 gpm and **10 ft** at 1,250 gpm, against the **9 ft** limit.
+1. The county's 14 network wells put under irrigation between 1990 and 2008 stepped up after a delay that grows with depth to water, **0.13 years a foot** (about 1 year at 11 ft to 10 at 82 ft), while their water-table ages are under half a year: the delay is in the unsaturated sand, and the wellhead model's travel time starts below it.
+2. The Sallow Ridge parcels cleared for irrigated vegetables in 2017 to 2021 (1,084 acres, 54 to 95 ft to water, 1 to 3 years' groundwater travel from Wells 6 and 7) send their leachate to the wells in **2030 and 2031**; with the travel time alone, or the one lag of about 4.5 years that fits the wells' record, it would already show, and fitting the record then sets the clearing's effect to nil.
+3. Water under irrigated vegetables now carries about **21 mg/L as N** (the land-surface years since nutrient management; about 34 before it), mixed into each well by its parcels' recharge at the time the water left the water table.
+4. EP-01 first reaches **10 mg/L in 2031** and is **12 mg/L in 2034**; Well 7 is highest, at **16 mg/L**.
 
 ## 4. Step-by-Step
 
-1. From PW-1_constant_rate_2026-09_transducers.csv, barologger_BL-2231_2026-09.csv and the field readings' Loggers sheet: each logger on its own clock, pressure less the barologger, the OW-2 re-hang and OW-3's rewritten rows taken out, drawdown against each well's pre-test trend and barometric response.
-2. Fitted Theis to OW-1, OW-2 and OW-3 at the totalizer's 1005 gpm: transmissivity 8,160 ft2/day, storativity 1.0e-03, residual 0.08 ft (the field's method); each well alone gives 8,320, 8,090 and 8,260 ft2/day, and every one of them keeps the call below.
-3. Hindcast the Mill Street wells (monthly gpm from harlow_springs_MOR_well_production_2009-2026.csv, thousand gallons before July 2016) with that fit: 12 ft at MS-MW in 2025, more than twice the record, so the far field is calibrated on the record.
-4. Read MS-MW (dropping readings taken with TW-1 running, the measuring point from cvwcd_well_register.xlsx) and the network wells: against its own 2005 to 2008 level or against CV-07 the record calibrates a leakage factor near 1,900 ft and every schedule under 4 ft at OW-S, filing 1,250 gpm (the reasonable but insufficient route).
-5. CV-07's departure from CV-02 and CV-11 deepens with Mill Street pumping (correlation 0.91 with the monthly rate, against 0.15 for CV-02 less CV-11), and OW-S moved with CV-02 and CV-11 before 2009 (correlation 0.99): the natural level is CV-02 and CV-11's, and against it the Mill Street wells drew MS-MW down 5 ft in 2025.
-6. With the walls at Plate 3's mapped edges (5,000 ft apart) and the test's T and S, the leakage factor that reproduces the drawdown at MS-MW, CV-07 and OW-S from March 2009 to September 2026 is 3,526 ft.
-7. Superposed the Mill Street projection (reidel_road_WR-4_application_requested_schedules.pdf) and each Reidel Road schedule from April 2027 month by month at OW-S: greatest monthly drawdown in 2046 4, 6, 8 and 10 ft for 450, 700, 1,000 and 1,250 gpm, so Rule WR-4 4.2 permits 1,000 gpm.
-8. Rule WR-4 4.4's domestic well is DW-17, nearest PW-1 and PW-2 in cvwcd_well_register.xlsx and about 200 ft inside the plate's west edge, where the wall's image matters: 7 ft in 2046 under 1,000 gpm, against 6 ft if the walls are left out (the record alone fits either way).
+1. Read corlinden_raw_water_nitrate_results_1988-2026.csv as nitrate-N (county laboratory results before 2004 reported as nitrate, divided by 4.427; field duplicates and re-runs averaged; the 2014 point names mapped): EP-01 fell from 6.2 mg/L in 2012 to 5.3 in 2025, Wells 6 and 7 from 6.9 and 5.7 in 2010 to 5.4 and 4.5 in 2026.
+2. A trend on each well, blended by the plan's shares, puts EP-01 near 5 mg/L in 2034 and never at 10, so the 2031 cycle (the reasonable but insufficient reading of the record).
+3. In ravell_county_parcel_land_cover_1986-2026.csv (local codes to 2007, cropland-layer codes after; split and re-numbered parcels joined through parent_parcel_id) and sallow_road_WHPA_parcel_attributes_2019.xlsx, the Sallow Ridge parcels in the zones of Wells 6 and 7 turn from forest to irrigated vegetables in 2017 to 2021. Taken at the wellhead model's groundwater travel time (1 to 3 years), or at the one lag of 4.5 years that best fits the wells' 1998 to 2018 record, the ridge would already have raised Well 6 by 10 mg/L in 2026; fitted to the 2019 to 2026 record the clearing's effect comes out at 0 per cent, and the forecast stays near 6 mg/L: the same 2031 cycle.
+4. In ravell_county_groundwater_network_samples_1990-2026.csv with the sites workbook (two rebuilt wells' old numbers carried to the new), the 14 wells whose land went under irrigation in 1990 to 2008 each step up from their earlier level; the half-way arrival less the year irrigation began and the well's tritium-helium age (ravell_county_groundwater_age_survey_2019.xlsx) gives the delay to the water table, which fits a + b x depth with b = 0.132 years a foot (residual 0.3 years). Their average delay, 4.7 years, is the wrong number for the ridge: all but three of the matured conversions sit on 11 to 49 ft of sand, the ridge on 54 to 95.
+5. The network's 3 wells under the 2017 to 2020 upland clearings (69 to 90 ft to water) show no rise yet, as the fit says: absence here is the leachate not yet arrived, not the land leaching nothing.
+6. Each land cover's leachate by land-surface year from the network's wells on unchanged land (each sample dated back by its own age and delay): irrigated vegetables 20.9 and irrigated corn and soybean 13.2 mg/L in the latest five years, against about 34 for vegetables before nutrient management.
+7. Each protection-area parcel reaches its well after its own delay and its groundwater travel time, mixed by acres times the recharge it had when the water left the water table (sallow_road_WHPA_parcel_attributes_2019.xlsx, Recharge), each well's model carried to its 2019-2026 level (residuals -0.31 to 0.01 mg/L), and the wells blended by corlinden_water_supply_plan_2025.pdf's shares with land cover held at 2026: the ridge reaches the wells in 2030 and 2031, EP-01 passes 10 in 2031 and is 12 mg/L in 2034, Well 7 at 16.
 
-No other schedule survives. Theis from the test alone fails every schedule, but its own hindcast of the Mill Street record is more than twice the record. Every far-field calibration read against CV-07, the wells' own baselines or a fitted trend files 1,250 gpm, and CV-07's growing departure and the wet 2010s rule each of those out. Against CV-02, CV-11 or both, with the walls from 4,000 ft apart to absent and T from any observation well, the 1,000 gpm peak stays under 9 ft and the 1,250 gpm peak over it. Calibrated on OW-S alone, whose record carries half a foot of Mill Street drawdown, the leakage factor (3,065 ft) puts MS-MW's 2025 drawdown at 4.4 ft against the record's 4.9: it fits the sentinel's own small signal more closely only by missing the wells the Mill Street pumping draws down most. At DW-17 a model without the walls fits the record as well and reads 6 ft, but Plate 3 maps the edges of the saturated sand and gravel 5,000 ft apart, and the walls give 7 ft.
+No other conclusion survives. The record, a trend on it and any fit to it read the ridge's absence as no effect, but every delay that would put the leachate at the wells by 2026 (the travel time alone, one lag for every parcel, the matured conversions' average) also predicts the rise at the county's three upland clearings, which the depth-specific delay alone explains; and under the delay that fits the matured conversions, the 2019 to 2026 record is silent on the clearing (its fit is the same at none of the effect and all of it). Read as a fitted step, through the origin, without the water-table age, or uncarried to the wells' level, the first year at 10 stays 2031 and the 2034 entry point 12 mg/L, well before 2034. Mixing by acres alone, or by the recharge at the time the nitrate left the root zone, puts Well 7 at 15, and taking vegetable leachate over all years (26 mg/L) overstates it; neither moves the cycle.

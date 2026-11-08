@@ -1,10 +1,4 @@
-"""task3 architecture 3: the data files of the pack, written the way each office's system writes them.
-
-The consultant's logger export for the September 2026 test (two logger brands, two clocks, absolute pressure), the
-on-site barologger, the field notes workbook, the August step test, Harlow Springs' monthly operating report
-extract, the Mill Street monitoring well's tape readings, the district's network export and its well register,
-and the raw-water quality workbook."""
-import calendar
+"""task3 architecture 4: the data files of the pack, cut from the truth with the mess each system really makes."""
 import csv
 import datetime as dt
 import io
@@ -12,400 +6,408 @@ import math
 
 import numpy as np
 import openpyxl
-from openpyxl.styles import Alignment, Font
+from openpyxl.styles import Font
 
 import ooxml
 import params as P
 import world as W
 
-UTC = dt.timezone.utc
-EDT = W.EDT
-EST = dt.timezone(dt.timedelta(hours=-5))
-PSI_FT = 0.43353        # psi per foot of fresh water at about 12 C
-
-# ground and measuring point elevations (ft NAVD88); MP history where a measuring point moved
-GROUND = {"TW-1": 757.8, "TW-2": 757.1, "MS-MW": 758.6, "PW-1": 754.2, "PW-2": 754.0, "OW-1": 754.4,
-          "OW-2": 755.9, "OW-3": 753.1, "OW-S": 755.3, "CV-07": 758.9, "CV-02": 771.4, "CV-11": 741.6,
-          "CV-04": 756.2, "CV-09": 764.8, "CV-13": 803.7, "CV-05": 768.2,
-          "DW-17": 761.9, "DW-22": 752.6, "DW-09": 765.3}
-STICKUP = {"TW-1": 1.1, "TW-2": 1.3, "MS-MW": 2.42, "PW-1": 1.6, "PW-2": 1.5, "OW-1": 2.31, "OW-2": 2.74,
-           "OW-3": 2.18, "OW-S": 2.63, "CV-07": 2.21, "CV-02": 2.95, "CV-11": 1.87, "CV-04": 2.40, "CV-09": 2.66,
-           "CV-13": 1.94, "CV-05": 2.37, "DW-17": 1.0, "DW-22": 1.2,
-           "DW-09": 0.9}
-MS_MW_MP_RAISE = (dt.date(2017, 4, 11), 2.15)      # a casing extension after the flood-proofing of the pad
-CV07_MP_RESET = (dt.date(2013, 8, 6), -0.58)       # cut down after a mower strike, MP re-surveyed
+AS_OF = dt.date(*P.ASOF)
 
 
-def static_elev(w):
-    a = P.WELLS[w][0]
-    if w in ("CV-04", "CV-09"):
-        return 744.0 - 0.0007 * a
-    if w == "CV-13":
-        return 768.0 - 0.0002 * a
-    return 731.4 - 0.00062 * a
-
-
-def mp_elev(w, day=None):
-    e = GROUND[w] + STICKUP[w]
-    if w == "MS-MW" and day is not None and day >= MS_MW_MP_RAISE[0]:
-        e += MS_MW_MP_RAISE[1]
-    if w == "CV-07" and day is not None and day < CV07_MP_RESET[0]:
-        e -= CV07_MP_RESET[1]
-    return round(e, 2)
-
-
-def _csv(rows, header):
+def _csv(path, header, rows):
     buf = io.StringIO()
-    wr = csv.writer(buf, lineterminator="\r\n")
-    wr.writerow(header)
-    wr.writerows(rows)
-    return buf.getvalue().encode("utf-8")
+    w = csv.writer(buf, lineterminator="\r\n")
+    w.writerow(header)
+    w.writerows(rows)
+    open(path, "w", newline="", encoding="utf-8").write(buf.getvalue())
+    return len(rows)
 
 
-# ---------------------------------------------------------------- the September 2026 test
+def dec(d):
+    """decimal year of a date"""
+    y0 = dt.date(d.year, 1, 1)
+    return d.year + (d - y0).days / (dt.date(d.year + 1, 1, 1) - y0).days
 
-LOGGERS = [  # well, model, serial, clock, sensor depth below MP (ft)
-    ("PW-1", "Level TROLL 400", "852214", "local", 96.50),
-    ("PW-2", "Level TROLL 400", "852230", "local", 88.00),
-    ("OW-1", "Level TROLL 400", "852219", "local", 74.20),
-    ("OW-2", "Levelogger 5", "2109347", "utc", 61.03),
-    ("OW-3", "Levelogger 5", "2109351", "utc", 63.80),
-    ("OW-S", "Levelogger 5", "2109362", "utc", 66.45),
+
+def at(series, d):
+    t = dec(d)
+    return float(np.interp(t, W.TG, series))
+
+
+# ---------------------------------------------------------------- identifiers
+def assign_ids(truth, rng):
+    """assessor parcel numbers (township-section-parcel), network site IDs, and the assessor's re-numbering"""
+    used = set()
+
+    def pid(twp):
+        while True:
+            s = "%02d-%03d-%04d" % (twp, int(rng.integers(1, 37)), int(rng.integers(1, 9800)))
+            if s not in used:
+                used.add(s)
+                return s
+    for p in truth["parcels"]:
+        p["pid"] = pid(14 if p["zone"] in ("W3", "W5") else 15)
+        p["old_pid"] = None
+    # the ridge tract was re-numbered when Hartvale Produce bought it from the paper company in 2015
+    for p in truth["parcels"]:
+        if p["kind"] in ("ridge",):
+            p["old_pid"] = pid(15)
+    # three plain parcels split by the assessor in 2012: the panel carries the parent number to 2011
+    plain = [p for p in truth["parcels"] if p["kind"] == "plain"]
+    for k in rng.choice(len(plain), 3, replace=False):
+        plain[int(k)]["old_pid"] = pid(14)
+    n = list(range(1, 90))
+    rng.shuffle(n)
+    for s, k in zip(truth["sites"], sorted(n[:len(truth["sites"])])):
+        s["sid"] = "TCGW-%03d" % k
+        s["pid"] = pid(int(rng.choice([12, 13, 14, 15, 16, 17])))
+        s["old_pid"] = None
+    # two network wells rebuilt in 2011 under new numbers
+    for s in [truth["sites"][7], truth["sites"][40]]:
+        s["sid_old"] = s["sid"]
+        s["sid"] = s["sid"] + "R"
+        s["rebuilt"] = dt.date(2011, 6, int(rng.integers(6, 24)))
+
+
+# ---------------------------------------------------------------- land cover panel
+LOCAL = {"FOR": ["F1", "F2"], "GRS": ["G1", "G2"], "DRY": ["A1", "A2"], "IRC": ["A3"], "IRV": ["A4"],
+         "RES": ["U1"], "WAT": ["W"]}
+NEWC = {"FOR": [141, 142], "GRS": [176, 37], "DRY": [24, 36], "IRC": [301], "IRV": [304], "RES": [121], "WAT": [111]}
+LEGEND = [
+    ("F1", "1986-2007", "Forest, deciduous"), ("F2", "1986-2007", "Forest, coniferous and plantation"),
+    ("G1", "1986-2007", "Grassland, pasture, idle"), ("G2", "1986-2007", "Conservation reserve grass"),
+    ("A1", "1986-2007", "Cropland, not irrigated"), ("A2", "1986-2007", "Hay and alfalfa, not irrigated"),
+    ("A3", "1986-2007", "Irrigated cropland, corn and soybean rotation"),
+    ("A4", "1986-2007", "Irrigated cropland, vegetable rotation (potato, sweet corn, snap bean)"),
+    ("U1", "1986-2007", "Residential and farmstead"), ("W", "1986-2007", "Open water, wetland"),
+    ("141", "2008-", "Deciduous forest"), ("142", "2008-", "Evergreen forest and plantation"),
+    ("176", "2008-", "Grassland and pasture"), ("37", "2008-", "Other hay and conservation grass"),
+    ("24", "2008-", "Cropland, not irrigated"), ("36", "2008-", "Alfalfa, not irrigated"),
+    ("301", "2008-", "Irrigated corn and soybean rotation"),
+    ("304", "2008-", "Irrigated vegetable rotation (potato, sweet corn, snap bean, field corn)"),
+    ("121", "2008-", "Developed, residential and farmstead"), ("111", "2008-", "Open water and wetland"),
 ]
-OW2_REHANG = (dt.datetime(2026, 9, 12, 14, 20, tzinfo=EDT), 62.40)
-OW3_DOWNLOAD = dt.datetime(2026, 9, 12, 14, 5, tzinfo=EDT)
 
 
-def test_series(truth, rng):
-    """Depth to water (ft below MP) minute by minute at each logged well, and the barometer, the truth behind the
-    logger file; also the times, the rate steps and the static level each well started from."""
-    stamps, tdays, on = W.test_clock()
-    baro = W.barometer(tdays, rng)
-    steps = W.test_rate_steps()
-    i_sep = W.MI[(2026, 9)]
-    out = {}
-    for w, _, _, _, _ in LOGGERS:
-        lvl0 = static_elev(w) + truth["nat"][w][i_sep] - truth["draw"][w][i_sep]
-        dd = W.test_drawdown(tdays, w, steps)
-        if w == "PW-1":
-            q = np.interp(tdays, [s[0] for s in steps], [s[1] for s in steps])
-            q = np.where((tdays >= 0) & (tdays < P.TEST_HOURS / 24.0), q, 0.0)
-            dd = dd + 3.05e-6 * q * q + 1.1e-3 * q
-            dd += np.where(q > 0, rng.normal(0, 0.012, len(tdays)), 0)
-        dbaro_ft = (baro - baro[0]) / PSI_FT
-        lvl = lvl0 - dd - 0.0058 * (tdays - tdays[0]) - P.BE * dbaro_ft + W.earth_tide(tdays, 0.011)
-        lvl += rng.normal(0, 0.0025, len(tdays))
-        out[w] = mp_elev(w) - lvl
-    return stamps, tdays, on, baro, steps, out
-
-
-def write_test(paths, truth, rng):
-    stamps, tdays, on, baro, steps, dtw = test_series(truth, rng)
+def land_cover(path, truth, rng):
     rows = []
-    for w, model, sn, clock, depth in LOGGERS:
-        for k, s in enumerate(stamps):
-            sensor = depth
-            if w == "OW-2" and s >= OW2_REHANG[0]:
-                sensor = OW2_REHANG[1]
-            if w == "OW-2" and OW2_REHANG[0] - dt.timedelta(minutes=7) <= s < OW2_REHANG[0]:
-                continue                                        # lifted for the download
-            col = sensor - dtw[w][k]
-            psi = col * PSI_FT + baro[k] + rng.normal(0, 0.0012)
-            temp = 12.6 + 0.02 * math.sin(k / 900.0) + (0.4 if w == "PW-1" and 0 <= tdays[k] < 3 else 0.0)
-            when = s.astimezone(UTC) if clock == "utc" else s
-            rows.append((w, sn, when.strftime("%Y-%m-%d %H:%M:%S"), "%.4f" % psi, "%.2f" % temp))
-            if w == "OW-3" and s == OW3_DOWNLOAD:                # the logger rewrites its last three records
-                rows.extend(rows[-4:-1])
-    open(paths["transducers"], "wb").write(_csv(rows, ["well_id", "logger_sn", "date_time", "pressure_psi",
-                                                       "temperature_c"]))
-    brow = []
-    for k in range(0, len(stamps), 5):
-        brow.append((stamps[k].astimezone(UTC).strftime("%Y-%m-%d %H:%M:%S"), "%.4f" % (baro[k] + rng.normal(0, 4e-4)),
-                     "%.2f" % (17.5 + 6 * math.sin(2 * math.pi * (tdays[k] - 0.3)))))
-    open(paths["baro"], "wb").write(_csv(brow, ["date_time_utc", "pressure_psi", "temperature_c"]))
-    _field_notes(paths["notes"], stamps, tdays, on, steps, dtw, rng)
-    return {"rows": len(rows), "steps": steps}
+    allp = [(p, "whpa") for p in truth["parcels"]] + [(s, "network") for s in truth["sites"]]
+    variant = {}
+    for p, _ in allp:
+        for c in P.CLASSES:
+            variant[(id(p), c)] = (LOCAL[c][int(rng.integers(len(LOCAL[c])))], NEWC[c][int(rng.integers(len(NEWC[c])))])
+    for p, src in allp:
+        for y in P.YEARS:
+            c = p["hist"][y]
+            lo, nw = variant[(id(p), c)]
+            code = lo if y < 2008 else str(nw)
+            source = "LWCD inventory" if y < 2008 else "LWCD from cropland layer"
+            pid = p["pid"]
+            parent = ""
+            if p.get("old_pid"):
+                if p["kind"] == "ridge" and y < 2015:
+                    pid = p["old_pid"]
+                elif p["kind"] == "plain" and y < 2012:
+                    pid = p["old_pid"]
+                elif p["kind"] in ("ridge", "plain"):
+                    parent = p["old_pid"]
+            rows.append([pid, y, code, source, parent])
+    order = sorted(range(len(rows)), key=lambda i: (rows[i][0], rows[i][1]))
+    rows = [rows[i] for i in order]
+    # the 2016 file was exported twice for one township and both copies were kept
+    dup = [r for r in rows if r[1] == 2016 and r[0].startswith("15-")]
+    rows += dup[: len(dup) // 3]
+    rows.sort(key=lambda r: (r[0], r[1]))
+    return _csv(path, ["parcel_id", "year", "land_cover_code", "source", "parent_parcel_id"], rows)
 
 
-def _field_notes(path, stamps, tdays, on, steps, dtw, rng):
-    wb = openpyxl.Workbook()
-    ws = wb.active
-    ws.title = "Loggers"
-    ws.append(["Well", "Logger", "Serial", "Clock", "Interval", "Sensor depth below MP (ft)", "Set", "Notes"])
-    for w, model, sn, clock, depth in LOGGERS:
-        clk = "UTC" if clock == "utc" else "Local (EDT)"
-        ws.append([w, model, sn, clk, "1 min", depth, "2026-09-08 11:40" if w != "OW-S" else "2026-09-08 12:05",
-                   "absolute (non-vented) sensor"])
-    ws.append(["OW-2", "Levelogger 5", "2109347", "UTC", "1 min", OW2_REHANG[1], "2026-09-12 14:20",
-               "downloaded and re-hung after the cable clip slipped"])
-    ws.append(["Site", "Barologger 5", "2109388 (BL-2231)", "UTC", "5 min", None, "2026-09-08 11:30",
-               "in the PW-1 well house, above flood level"])
-    ws2 = wb.create_sheet("Manual levels")
-    ws2.append(["Date", "Time (EDT)", "Well", "Depth to water (ft below MP)", "By", "Remark"])
-    times = [dt.datetime(2026, 9, 8, 11, 35), dt.datetime(2026, 9, 12, 14, 12), dt.datetime(2026, 9, 14, 8, 40),
-             dt.datetime(2026, 9, 14, 10, 30), dt.datetime(2026, 9, 14, 15, 0), dt.datetime(2026, 9, 15, 9, 15),
-             dt.datetime(2026, 9, 16, 9, 5), dt.datetime(2026, 9, 17, 8, 50), dt.datetime(2026, 9, 17, 9, 40),
-             dt.datetime(2026, 9, 18, 9, 30), dt.datetime(2026, 9, 20, 11, 50)]
-    who = ["M. Munoz", "T. Robinson"]
-    for i, tm in enumerate(times):
-        for w, _, _, _, _ in LOGGERS:
-            if w == "PW-1" and 0 < (tm.replace(tzinfo=EDT) - on).total_seconds() / 86400 < 3:
-                continue          # no tape down the pumping well while the pump runs
-            k = int(round((tm.replace(tzinfo=EDT) - stamps[0]).total_seconds() / 60))
-            val = dtw[w][k] + rng.normal(0, 0.006)
-            ws2.append([tm.date().isoformat(), tm.strftime("%H:%M"), w, round(val, 2), who[i % 2],
-                        "steel tape" if w != "PW-1" else "e-tape"])
-    ws3 = wb.create_sheet("Discharge")
-    ws3.append(["Date", "Time (EDT)", "Totalizer (gal)", "Rate (gpm)", "Remark"])
-    tot = 4418200.0
-    last = 0.0
-    q_at = lambda td: next((r for t0, r in reversed(steps) if td >= t0), 0.0)
-    for hh in [0, 0.25, 0.5, 1, 2, 3, 4, 6, 8, 10, 12, 16, 20, 24, 28, 32, 36, 40, 44, 48, 52, 56, 60, 64, 68, 71.9]:
-        td = hh / 24.0
-        # totalizer integrates the hourly rate
-        vol = 0.0
-        for (t0, r), (t1, _) in zip(steps[:-1], steps[1:]):
-            a, b = max(t0, last), min(t1, td)
-            if b > a:
-                vol += r * (b - a) * 1440
-        tot += vol
-        last = td
-        tm = on + dt.timedelta(days=td)
-        ws3.append([tm.date().isoformat(), tm.strftime("%H:%M"), int(round(tot)), round(q_at(td) + rng.normal(0, 1.5)),
-                    "pump on, gate valve set" if hh == 0 else ("valve opened a quarter turn" if hh == 8 else "")])
-    ws4 = wb.create_sheet("Events")
-    ws4.append(["Date", "Time (EDT)", "Event"])
-    for tm, ev in [(dt.datetime(2026, 9, 8, 11, 30), "Loggers set in PW-1, PW-2, OW-1, OW-2, OW-3, OW-S; barologger in well house"),
-                   (dt.datetime(2026, 9, 12, 14, 5), "OW-3 downloaded"),
-                   (dt.datetime(2026, 9, 12, 14, 13), "OW-2 downloaded, cable clip had slipped; re-hung, see Loggers"),
-                   (dt.datetime(2026, 9, 14, 9, 0), "PW-1 pump on; discharge to Hollins Ditch 1,650 ft east of the well field"),
-                   (dt.datetime(2026, 9, 14, 17, 0), "Valve adjusted to hold about 1,010 gpm"),
-                   (dt.datetime(2026, 9, 16, 6, 0), "Rain overnight, front passing; 0.6 in at the site gauge"),
-                   (dt.datetime(2026, 9, 17, 9, 0), "PW-1 pump off; recovery begins"),
-                   (dt.datetime(2026, 9, 20, 12, 0), "Loggers pulled; test complete"),
-                   (dt.datetime(2026, 9, 20, 12, 10), "Mill Street wells ran on their normal schedule throughout")]:
-        ws4.append([tm.date().isoformat(), tm.strftime("%H:%M"), ev])
-    for s in wb.worksheets:
-        for col in s.columns:
-            s.column_dimensions[col[0].column_letter].width = max(10, min(70, max(len(str(c.value or "")) for c in col) + 2))
-        for c in s[1]:
-            c.font = Font(bold=True)
-    wb.properties.creator = "Tillbrook Hydrogeologic"
-    wb.properties.lastModifiedBy = "Tillbrook Hydrogeologic"
-    wb.save(path)
-    ooxml.normalize(path, dt.datetime(2026, 9, 14, 7, 55), dt.datetime(2026, 9, 21, 15, 12), "Tillbrook Hydrogeologic")
+# ---------------------------------------------------------------- laboratory helpers
+def _lab(d):
+    return ("Ravell County Health Department Laboratory", "Nitrate", "mg/L as NO3", 0.5) if d.year < 2004 else \
+        ("Pellow Analytical Services", "Nitrate+Nitrite as N", "mg/L", 0.10)
 
 
-def write_step_test(path, rng):
-    """The August step test at PW-1: four 100-minute steps, the pumping well alone, local time."""
-    t0 = dt.datetime(2026, 8, 27, 8, 0, tzinfo=EDT)
-    rates = [(0, 0), (60, 410), (160, 615), (260, 820), (360, 1020), (460, 0)]
+def _report(c_n, d, rng):
+    """a laboratory result for a true nitrate-N concentration c_n on date d: (result text, units, qualifier, RL)"""
+    lab, analyte, unit, rl = _lab(d)
+    val = c_n * (1 + rng.normal(0, 0.03)) + rng.normal(0, 0.03)
+    if unit == "mg/L as NO3":
+        val *= P.NO3_PER_N
+        txt = "%.1f" % val if val >= rl else "<%.1f" % rl
+    else:
+        txt = "%.2f" % val if val >= rl else "<%.2f" % rl
+    return lab, analyte, unit, txt, ("" if not txt.startswith("<") else "U"), rl
+
+
+def _sample_day(y, m, rng, lo=3, hi=26):
+    d = dt.date(y, m, int(rng.integers(lo, hi)))
+    while d.weekday() > 4:
+        d += dt.timedelta(days=1)
+    return d
+
+
+# ---------------------------------------------------------------- the utility's results
+def point_name(w, d):
+    return ("WELL %s" % w[1:]) if d < dt.date(2014, 4, 1) else ("HR-W%02d" % int(w[1:]))
+
+
+def utility_results(path, truth, pump, rng):
     rows = []
-    for k in range(0, 640):
-        t = k
-        q = [r for s, r in rates if t >= s][-1]
-        steps = [(s / 1440.0, r) for s, r in rates]
-        dd = 0.0
-        prev = 0.0
-        import aquifer as A
-        for (s, r) in steps:
-            if t / 1440.0 > s:
-                dq = (r - prev) * P.GPM
-                dd += dq * float(A.step_response(P.T, P.S, P.B, P.WELLS["PW-1"], (P.WELLS["PW-1"][0], P.WELLS["PW-1"][1] + 0.5),
-                                                 [t / 1440.0 - s], P.WIDTH)[0])
-            prev = r
-        dd += 3.05e-6 * q * q + 1.1e-3 * q
-        dtw = 31.42 + dd + rng.normal(0, 0.01)
-        rows.append(((t0 + dt.timedelta(minutes=t)).strftime("%m/%d/%Y %H:%M"), "%.2f" % dtw, q if q else ""))
-    open(path, "wb").write(_csv(rows, ["Date Time (EDT)", "Depth to water (ft below MP)", "Step rate (gpm)"]))
+    sid = [880000]
 
-
-# ---------------------------------------------------------------- long-term records
-
-def _read_day(y, m, rng, lo=3, hi=13):
-    d = int(rng.integers(lo, hi))
-    while dt.date(y, m, d).weekday() >= 5:
-        d += 1
-    return dt.date(y, m, d)
-
-
-def write_mor(path, truth, rng):
-    q1, q2 = truth["q1"], truth["q2"]
-    rows = []
-    for i, (y, m) in enumerate(W.MONTHS):
-        if (y, m) < P.TOWN_START or (y, m) > W.DATA_END:
-            continue
-        days = calendar.monthrange(y, m)[1]
-        for well, q in (("TW-1", q1[i]), ("TW-2", q2[i])):
-            if well == "TW-2" and (y, m) < P.TW2_START:
+    def add(point, d, c, extra=""):
+        lab, an, un, txt, q, rl = _report(c, d, rng)
+        sid[0] += int(rng.integers(3, 40))
+        rows.append(["WX%07d" % sid[0], point, d.isoformat(), lab, an, txt, un, q, ("%g" % rl), extra])
+        return rows[-1]
+    for w in P.WELLS:
+        y0 = max(1988, P.WELL_DRILLED[w])
+        for y in range(y0, 2027):
+            for m in (2, 5, 8, 11):
+                d = _sample_day(y, m, rng)
+                if d >= AS_OF or (y == 1996 and w == "W7" and m < 8):
+                    continue
+                if rng.random() < 0.04:
+                    continue
+                short = 1 + rng.normal(0, 0.035)
+                c = at(truth["wells"][w], d) * short
+                r = add(point_name(w, d), d, c)
+                if rng.random() < 0.035:      # field duplicate
+                    lab, an, un, txt, q, rl = _report(c, d, rng)
+                    rows.append([r[0] + "-D", r[1], r[2], lab, an, txt, un, q, ("%g" % rl), "field duplicate"])
+                if rng.random() < 0.012:      # laboratory re-run
+                    lab, an, un, txt, q, rl = _report(c, d, rng)
+                    rows.append([r[0], r[1], r[2], lab, an, txt, un, q, ("%g" % rl), "re-run, QC"])
+    # entry point, monthly from 2012
+    for y in range(2012, 2027):
+        for m in range(1, 13):
+            d = _sample_day(y, m, rng, 4, 20)
+            if d >= AS_OF:
                 continue
-            gal = q * days * 1440
-            hours = gal / (1150.0 if well == "TW-1" else 980.0) / 60.0
-            old = (y, m) < (2016, 7)
-            name = {"TW-1": "WELL 1", "TW-2": "WELL 2"}[well] if old else well
-            meter = ("M-1187" if (y, m) < (2019, 5) else "M-5530") if well == "TW-1" else "M-2204"
-            remark = ""
-            vol = gal / 1000.0 if old else gal
-            if well == "TW-1" and (y, m) == (2019, 5):
-                remark = "meter replaced 5/14; month from run hours x 1,150 gpm"
-                vol = round(hours * 60 * 1150)
-            elif well == "TW-1" and (y, m) == (2018, 3):
-                remark = "pump and motor replaced, well out of service"
-            elif well == "TW-2" and (y, m) in ((2021, 10), (2021, 11)):
-                remark = "screen redevelopment" if (y, m) == (2021, 10) else "back in service 11/29"
-            vtxt = ("%.1f" % vol) if old else ("%d" % int(round(vol)))
-            rows.append(("%04d-%02d" % (y, m), name, vtxt, "1000 gal" if old else "gal", meter,
-                         "%.1f" % hours, remark))
-    open(path, "wb").write(_csv(rows, ["report_month", "source", "metered_volume", "units", "meter_id",
-                                       "run_hours", "remarks"]))
-    return len(rows)
+            c = pump["blend_at"](d) * (1 + rng.normal(0, 0.02))
+            add("EP-01", d, c)
+    rows.sort(key=lambda r: (r[2], r[1]))
+    return _csv(path, ["sample_id", "sample_point", "collected", "laboratory", "analyte", "result", "units",
+                       "qualifier", "reporting_limit", "remarks"], rows)
 
 
-def _level(w, i, truth, rng, noise=0.03):
-    return static_elev(w) + truth["nat"][w][i] - truth["draw"][w][i] + rng.normal(0, noise)
+# ---------------------------------------------------------------- pumping
+def pumping(truth, rng):
+    """daily pumping by well 2009-01-01 to 2026-10-31 and the blend it makes"""
+    days = []
+    d = dt.date(2009, 1, 1)
+    while d <= dt.date(2026, 10, 31):
+        days.append(d)
+        d += dt.timedelta(days=1)
+    vol = {w: np.zeros(len(days)) for w in P.WELLS}
+    drift = {w: 1.0 for w in P.WELLS}
+    for i, d in enumerate(days):
+        doy = d.timetuple().tm_yday
+        season = 1 + 0.28 * math.exp(-((doy - 205) / 38.0) ** 2)
+        grow = 1 + 0.006 * (d.year - 2009)
+        total = P.FIELD_MGD * 1e6 * 0.93 * season * grow * (1 + rng.normal(0, 0.04))
+        if doy == 1:
+            for w in P.WELLS:
+                drift[w] = float(np.clip(rng.normal(1.0, 0.08), 0.8, 1.2))
+        sh = {w: P.HIST_SHARE[w] * drift[w] for w in P.WELLS}
+        if d.year == 2013 and 150 < doy < 240:     # Well 3's pump replaced
+            sh["W3"] = 0.0
+        s = sum(sh.values())
+        for w in P.WELLS:
+            vol[w][i] = total * sh[w] / s * (1 + rng.normal(0, 0.03))
+    dts = np.array([dec(x) for x in days])
+
+    def blend_at(day):
+        k = (day - days[0]).days
+        if k < 0 or k >= len(days):
+            sh = P.HIST_SHARE
+            return sum(sh[w] * at(truth["wells"][w], day) for w in P.WELLS)
+        num = sum(vol[w][k] * at(truth["wells"][w], day) for w in P.WELLS)
+        return num / sum(vol[w][k] for w in P.WELLS)
+    return dict(days=days, vol=vol, dts=dts, blend_at=blend_at)
 
 
-def write_msmw(path, truth, rng):
+def pumping_csv(path, pump, rng):
     rows = []
-    for i, (y, m) in enumerate(W.MONTHS):
-        if (y, m) < (2008, 6) or (y, m) > W.DATA_END:
-            continue
-        day = _read_day(y, m, rng, 2, 11)
-        lvl = _level("MS-MW", i, truth, rng)
-        running = (y, m) >= P.TOWN_START and rng.random() < 0.08
-        remark = ""
-        if running:
-            lvl -= 0.8 + 0.5 * rng.random()        # the short-term cone of TW-1 running at the hour of reading
-            remark = "TW-1 running"
-        elif (y, m) >= P.TOWN_START and rng.random() < 0.5:
-            remark = "TW-1 off %d hr" % int(rng.integers(2, 9))
-        if (y, m) == (2017, 4):
-            remark = (remark + "; " if remark else "") + "read from top of new casing extension (+2.15 ft) from 4/11"
-        mp = mp_elev("MS-MW", day)
-        hh = "%02d:%02d" % (int(rng.integers(7, 11)), int(rng.integers(0, 60)))
-        rows.append((day.strftime("%m/%d/%Y"), hh, "%.2f" % (mp - lvl),
-                     "top of casing" if day < MS_MW_MP_RAISE[0] else "top of casing extension",
-                     ["WR", "WR", "MA", "J. Ponce"][int(rng.integers(0, 4))], remark))
-    open(path, "wb").write(_csv(rows, ["date", "time", "depth_to_water_ft", "measured_from", "by", "remarks"]))
-    return len(rows)
-
-
-NET_START = {"OW-S": (2005, 1), "CV-02": (2005, 1), "CV-04": (2005, 1), "CV-07": (2005, 1), "CV-09": (2005, 1),
-             "CV-11": (2005, 1), "CV-13": (2006, 4), "CV-05": (2016, 5)}
-
-
-def write_network(path, truth, rng):
-    rows = []
-    for i, (y, m) in enumerate(W.MONTHS):
-        if (y, m) > W.DATA_END:
-            continue
-        for w in P.NETWORK:
-            if (y, m) < NET_START[w]:
+    for i, d in enumerate(pump["days"]):
+        for w in P.WELLS:
+            v = pump["vol"][w][i]
+            name = point_name(w, d)
+            if d.year == 2013 and w == "W3" and v == 0:
+                rows.append([d.isoformat(), name, "0", "gal", "0.0", "OUT OF SERVICE"])
                 continue
-            if (y, m) in ((2020, 4), (2020, 5)) or rng.random() < 0.012:
-                continue                           # no field run, or the well not reached
-            day = _read_day(y, m, rng)
-            lvl = _level(w, i, truth, rng)
-            mp = mp_elev(w, day)
-            method = "steel tape" if (y < 2015 or w in ("CV-13", "CV-05")) else "electric tape"
-            qual = ""
-            remark = ""
-            if w == "CV-07" and (y, m) == (2013, 8):
-                remark = "casing cut down after mower strike 8/6; new MP surveyed"
-            if rng.random() < 0.01:
-                qual = "E"
-                remark = "cascading water in casing; reading uncertain"
-                lvl += rng.normal(0, 0.4)
-            hh = "%02d:%02d" % (int(rng.integers(8, 15)), int(rng.integers(0, 60)))
-            rows.append((w, day.isoformat(), hh, "%.2f" % (mp - lvl), method, qual, remark))
-            if rng.random() < 0.008:                 # entered twice when the field sheet was keyed
-                rows.append(rows[-1])
-    open(path, "wb").write(_csv(rows, ["site_id", "date", "time", "dtw_ft_below_mp", "method", "qualifier",
-                                       "remarks"]))
+            hours = min(24.0, v / (P.FIELD_MGD * 1e6 * P.HIST_SHARE[w] * 1.9 / 24.0))
+            if rng.random() < 0.002:
+                rows.append([d.isoformat(), name, "", "", "", "NO DATA"])
+                continue
+            if d >= dt.date(2019, 3, 12):
+                rows.append([d.isoformat(), name, "%.1f" % (v / 1000.0), "kgal", "%.1f" % hours, ""])
+            else:
+                rows.append([d.isoformat(), name, "%d" % round(v), "gal", "%.1f" % hours, ""])
+    # the export for the week of 6 June 2022 was appended twice
+    extra = [r for r in rows if "2022-06-06" <= r[0] <= "2022-06-12"]
+    rows += extra
+    rows.sort(key=lambda r: (r[0], r[1]))
+    return _csv(path, ["date", "well", "volume", "volume_units", "run_hours", "status"], rows)
+
+
+# ---------------------------------------------------------------- the county network
+def network_samples(path, truth, rng):
+    rows = []
+    for s in truth["sites"]:
+        inst = s.setdefault("installed", int(rng.choice([1988, 1989, 1989, 1990, 1990, 1990])))
+        for y in range(max(1990, inst), 2027):
+            months = (5, 10) if y not in (2009, 2010) else (10,)
+            for m in months:
+                d = _sample_day(y, m, rng)
+                if d >= AS_OF or rng.random() < 0.03:
+                    continue
+                sid = s["sid"]
+                if s.get("sid_old"):
+                    if d < s["rebuilt"]:
+                        sid = s["sid_old"]
+                    elif y == 2011 and m == 5:
+                        continue
+                c = at(s["c"], d) * (1 + rng.normal(0, 0.045))
+                lab, an, un, txt, q, rl = _report(c, d, rng)
+                do = max(0.3, rng.normal(8.4, 0.9))
+                sc = 90 + 32 * c + rng.normal(0, 25)
+                tc = 9.0 + rng.normal(0, 0.5) + (0.6 if m == 10 else 0)
+                wl = s["dtw"] + rng.normal(0, 1.2) + (0.8 if m == 10 else -0.4)
+                rows.append([sid, d.isoformat(), txt, un, an, lab, q, "%.1f" % do, "%d" % sc, "%.1f" % tc,
+                             "%.2f" % wl, str(rng.choice(["CB", "CB", "DS", "LW"]) if y >= 2006 else
+                                              rng.choice(["JK", "RT", "RT"]))])
+                if rng.random() < 0.02:
+                    rows.append(rows[-1][:])
+    rows.sort(key=lambda r: (r[0], r[1]))
+    return _csv(path, ["site_id", "sample_date", "nitrate_result", "units", "analyte", "laboratory", "qualifier",
+                       "dissolved_oxygen_mg_L", "specific_conductance_uS_cm", "temperature_C",
+                       "depth_to_water_ft", "sampler"], rows)
+
+
+def _book(path, sheets, created, modified, company):
+    wb = openpyxl.Workbook()
+    wb.remove(wb.active)
+    for name, header, rows, widths in sheets:
+        ws = wb.create_sheet(name)
+        ws.append(header)
+        for c in ws[1]:
+            c.font = Font(bold=True)
+        for r in rows:
+            ws.append(r)
+        for i, wdt in enumerate(widths):
+            ws.column_dimensions[openpyxl.utils.get_column_letter(i + 1)].width = wdt
+        ws.freeze_panes = "A2"
+    wb.properties.creator = company
+    wb.properties.lastModifiedBy = company
+    wb.save(path)
+    ooxml.normalize(path, created, modified, company)
+
+
+def network_sites(path, truth, rng):
+    rows = []
+    for s in sorted(truth["sites"], key=lambda s: s["sid"]):
+        inst = s["installed"]
+        idate = dt.date(inst, int(rng.integers(4, 10)), int(rng.integers(2, 27)))
+        top = s["dtw"] - float(rng.uniform(2.0, 4.0))
+        note = ""
+        status = "active"
+        if s.get("sid_old"):
+            note = "replaces %s (casing failure), rebuilt %s on the same parcel" % (s["sid_old"], s["rebuilt"].isoformat())
+        elev = 1050 + rng.uniform(-30, 90) + s["dtw"] * 0.6
+        rows.append([s["sid"], s["pid"], idate.isoformat(), round(elev, 1), round(top + 10.0 + 2.0, 1),
+                     round(top, 1), round(top + 10.0, 1), round(s["dtw"], 1), status, note])
+    for s in truth["sites"]:
+        if s.get("sid_old"):
+            rows.append([s["sid_old"], s["pid"], dt.date(s["installed"], 5, 14).isoformat(), "", "", "", "",
+                         round(s["dtw"], 1), "abandoned %s" % s["rebuilt"].isoformat(), "replaced by %s" % s["sid"]])
+    rows.sort(key=lambda r: r[0])
+    created = dt.datetime(2026, 1, 12, 15, 2)
+    _book(path, [("Sites", ["site_id", "parcel_id", "installed", "land_surface_elev_ft", "well_depth_ft",
+                            "screen_top_ft", "screen_bottom_ft", "mean_depth_to_water_ft", "status", "notes"], rows,
+                  [12, 14, 11, 12, 10, 10, 11, 12, 18, 54]),
+                 ("Land cover codes", ["code", "years used", "description"], [list(x) for x in LEGEND], [8, 12, 70])],
+          created, dt.datetime(2026, 10, 21, 13, 40), "Ravell County Land and Water Conservation Department")
     return len(rows)
 
 
-UNITS = {"BVA": "Corrin Valley buried valley aquifer (sand and gravel under till)",
-         "SOW": "surficial outwash above the till",
-         "BDR": "Devonian shale bedrock"}
-OWNERS = {"DW-17": "private (registered 2019)", "DW-22": "private (registered 2019)",
-          "DW-09": "private (registered 2020)", "TW-1": "Harlow Springs Utilities", "TW-2": "Harlow Springs Utilities", "MS-MW": "Harlow Springs Utilities",
-          "PW-1": "Harlow Springs Utilities", "PW-2": "Harlow Springs Utilities", "OW-1": "Harlow Springs Utilities",
-          "OW-2": "Harlow Springs Utilities", "OW-3": "Harlow Springs Utilities"}
-PURPOSE = {"DW-17": "domestic", "DW-22": "domestic and livestock", "DW-09": "domestic", "TW-1": "public supply", "TW-2": "public supply", "PW-1": "public supply (proposed)",
-           "PW-2": "public supply (proposed)", "MS-MW": "monitoring", "OW-1": "test observation",
-           "OW-2": "test observation", "OW-3": "test observation", "OW-S": "sentinel (WR-4 Table 1)"}
-SCREEN = {"TW-1": (96, 136), "TW-2": (94, 134), "MS-MW": (104, 114), "PW-1": (95, 135), "PW-2": (93, 133),
-          "OW-1": (108, 118), "OW-2": (102, 112), "OW-3": (105, 115), "OW-S": (100, 110), "CV-07": (98, 108),
-          "CV-02": (121, 131), "CV-11": (82, 92), "CV-04": (14, 24), "CV-09": (18, 28), "CV-13": (160, 220),
-          "CV-05": (110, 120), "DW-17": (88, 96), "DW-22": (79, 87), "DW-09": (101, 109)}
-INSTALLED = {"TW-1": "2008-05-20", "TW-2": "2013-10-02", "MS-MW": "2008-05-29", "PW-1": "2026-06-11",
-             "PW-2": "2026-06-30", "OW-1": "2026-07-14", "OW-2": "2026-07-15", "OW-3": "2026-07-16",
-             "DW-17": "1997-05-14", "DW-22": "2003-08-29", "DW-09": "1988-10-03", "OW-S": "2004-09-21", "CV-07": "2004-10-05", "CV-02": "2004-08-17", "CV-11": "2004-11-03",
-             "CV-04": "2004-10-06", "CV-09": "2004-08-24", "CV-13": "2006-03-15", "CV-05": "2016-04-26"}
+def age_survey(path, truth, rng):
+    """the 2019 tritium-helium survey: 24 network wells and the four production wells"""
+    rows = []
+    pick = [s for s in truth["sites"]]
+    rng.shuffle(pick)
+    lam = math.log(2) / 12.32
+    for s in sorted(pick[:24], key=lambda s: s["sid"]):
+        age = max(0.1, s["age"] + rng.normal(0, 0.15))
+        h3 = 6.1 + rng.normal(0, 0.4)
+        he = h3 * (math.exp(lam * age) - 1)
+        rows.append([s["sid"], dt.date(2019, 7, int(rng.integers(8, 26))).isoformat(), round(h3, 2), round(he, 2),
+                     round(age, 1), "water-table well"])
+    for w in P.WELLS:
+        ps = [p for p in truth["parcels"] if p["zone"] == w]
+        wt = np.array([p["acres"] * P.RECHARGE[p["hist"][2019]] for p in ps])
+        T = np.array([p["T"] for p in ps])
+        mix = float(np.sum(wt * T) / wt.sum())
+        age = mix * 0.82 + rng.normal(0, 0.3)
+        h3 = 6.0 + rng.normal(0, 0.4)
+        he = h3 * (math.exp(lam * age) - 1)
+        rows.append(["Corlinden " + P.WELL_NAMES[w], dt.date(2019, 8, int(rng.integers(5, 20))).isoformat(),
+                     round(h3, 2), round(he, 2), round(age, 1), "production well, raw tap, pump running"])
+    _book(path, [("Results", ["site", "sampled", "tritium_TU", "tritiogenic_he3_TU", "apparent_age_yr", "notes"], rows,
+                  [22, 11, 11, 16, 15, 38]),],
+          dt.datetime(2020, 2, 3, 9, 15), dt.datetime(2020, 2, 3, 9, 15), "Ravell County Land and Water Conservation Department")
+    return len(rows)
 
 
-def write_register(path):
-    wb = openpyxl.Workbook()
-    ws = wb.active
-    ws.title = "Wells"
-    ws.append(["Well ID", "Owner", "Purpose", "Easting (ft)", "Northing (ft)", "Ground elev (ft)", "MP elev (ft)",
-               "Screen top (ft bgs)", "Screen bottom (ft bgs)", "Unit", "Installed", "Status"])
-    order = ["OW-S", "CV-02", "CV-04", "CV-05", "CV-07", "CV-09", "CV-11", "CV-13", "TW-1", "TW-2", "MS-MW",
-             "PW-1", "PW-2", "OW-1", "OW-2", "OW-3", "DW-09", "DW-17", "DW-22"]
-    for w in order:
-        x, y = W.xy(P.WELLS[w])
-        unit = "SOW" if w in ("CV-04", "CV-09") else ("BDR" if w == "CV-13" else "BVA")
-        ws.append([w, OWNERS.get(w, "CVWCD"), PURPOSE.get(w, "network monitoring"), round(x, 1), round(y, 1),
-                   GROUND[w], mp_elev(w, dt.date(2026, 10, 1)), SCREEN[w][0], SCREEN[w][1], unit, INSTALLED[w],
-                   "active"])
-    ws2 = wb.create_sheet("MP history")
-    ws2.append(["Well ID", "From", "To", "MP elev (ft)", "Note"])
-    ws2.append(["MS-MW", "2008-05-29", "2017-04-10", mp_elev("MS-MW", dt.date(2010, 1, 1)), "top of PVC casing"])
-    ws2.append(["MS-MW", "2017-04-11", "", mp_elev("MS-MW", dt.date(2020, 1, 1)), "top of casing extension"])
-    ws2.append(["CV-07", "2004-10-05", "2013-08-05", mp_elev("CV-07", dt.date(2010, 1, 1)), "top of steel casing"])
-    ws2.append(["CV-07", "2013-08-06", "", mp_elev("CV-07", dt.date(2020, 1, 1)), "casing cut down, resurveyed"])
-    ws3 = wb.create_sheet("Units")
-    ws3.append(["Code", "Unit"])
-    for k, v in UNITS.items():
-        ws3.append([k, v])
-    ws4 = wb.create_sheet("Datum")
-    for line in ["Coordinates: Indiana State Plane East (NAD83), US survey feet.",
-                 "Elevations: NAVD88, feet. Ground elevations from the 2019 district LiDAR, MP elevations by level loop.",
-                 "Depths below ground surface (bgs) from the drillers' logs."]:
-        ws4.append([line])
-    for s in wb.worksheets:
-        for col in s.columns:
-            s.column_dimensions[col[0].column_letter].width = max(9, min(60, max(len(str(c.value or "")) for c in col) + 2))
-        for c in s[1]:
-            c.font = Font(bold=True)
-    wb.properties.creator = "Corrin Valley Water Conservancy District"
-    wb.properties.lastModifiedBy = "Corrin Valley Water Conservancy District"
-    wb.save(path)
-    ooxml.normalize(path, dt.datetime(2019, 3, 4, 13, 20), dt.datetime(2026, 10, 2, 13, 41),
-                    "Corrin Valley Water Conservancy District")
+# ---------------------------------------------------------------- distractors
+def specific_capacity(path, rng):
+    rows = []
+    for w in P.WELLS:
+        sc0 = {"W3": 41.0, "W5": 63.0, "W6": 58.0, "W7": 70.0}[w]
+        for y in range(2008, 2027, 2):
+            d = dt.date(y, int(rng.integers(3, 6)), int(rng.integers(2, 27)))
+            rate = {"W3": 650, "W5": 900, "W6": 900, "W7": 950}[w] + int(rng.integers(-40, 40))
+            sc = sc0 * (1 - 0.012 * (y - 2008)) * (1 + rng.normal(0, 0.04))
+            if w == "W3" and y >= 2016:
+                sc *= 0.86
+            dd = rate / sc
+            rows.append([P.WELL_NAMES[w], d.isoformat(), rate, round(dd, 1), round(sc, 1),
+                         "after rehabilitation" if (w == "W5" and y == 2018) else ""])
+    _book(path, [("Tests", ["well", "test_date", "rate_gpm", "drawdown_ft", "specific_capacity_gpm_ft", "remarks"],
+                  rows, [10, 11, 9, 11, 22, 24])],
+          dt.datetime(2026, 5, 4, 10, 0), dt.datetime(2026, 5, 4, 10, 0), "Corlinden Water Utility")
+    return len(rows)
 
 
-def write_water_quality(path, rng):
-    wb = openpyxl.Workbook()
-    ws = wb.active
-    ws.title = "PW-1 raw water"
-    ws.append(["Sample", "Collected", "Analyte", "Result", "Units", "MDL", "Method", "Lab"])
-    analytes = [("Iron", 1.42, "mg/L", 0.02, "EPA 200.7"), ("Manganese", 0.118, "mg/L", 0.002, "EPA 200.8"),
-                ("Hardness as CaCO3", 362, "mg/L", 2, "SM 2340B"), ("Nitrate as N", 0.31, "mg/L", 0.05, "EPA 300.0"),
-                ("Chloride", 41.8, "mg/L", 0.5, "EPA 300.0"), ("Sulfate", 66.2, "mg/L", 0.5, "EPA 300.0"),
-                ("Total dissolved solids", 512, "mg/L", 10, "SM 2540C"), ("Arsenic", 0.0021, "mg/L", 0.0005, "EPA 200.8"),
-                ("Ammonia as N", 0.44, "mg/L", 0.05, "SM 4500-NH3"), ("pH (field)", 7.21, "s.u.", None, "field meter")]
-    for k, when in enumerate(["2026-09-14 10:15", "2026-09-15 14:30", "2026-09-17 08:40"]):
-        for a, v, u, mdl, meth in analytes:
-            val = v * math.exp(rng.normal(0, 0.05))
-            ws.append(["PW1-%d" % (k + 1), when, a, round(val, 4 if val < 0.01 else 3 if val < 1 else 1), u, mdl,
-                       meth, "Heartland Environmental Laboratories"])
-    for col in ws.columns:
-        ws.column_dimensions[col[0].column_letter].width = max(9, min(40, max(len(str(c.value or "")) for c in col) + 2))
-    for c in ws[1]:
-        c.font = Font(bold=True)
-    wb.properties.creator = "Heartland Environmental Laboratories"
-    wb.properties.lastModifiedBy = "Tillbrook Hydrogeologic"
-    wb.save(path)
-    ooxml.normalize(path, dt.datetime(2026, 10, 1, 16, 2), dt.datetime(2026, 10, 5, 10, 18), "Tillbrook Hydrogeologic")
+def fertilizer_sales(path, rng):
+    rows = []
+    for y in range(1990, 2026):
+        base = 9800 * (1 + 0.012 * (y - 1990)) if y < 1998 else 10700 * (1 - 0.035 * min(y - 1998, 7))
+        if y >= 2005:
+            base = 10700 * (1 - 0.035 * 7) * (1 + 0.004 * (y - 2005))
+        for prod, sh in [("Anhydrous ammonia", 0.18), ("Urea", 0.27), ("UAN solutions", 0.31),
+                         ("Ammonium sulfate", 0.07), ("Ammonium nitrate", 0.05), ("Other N blends", 0.12)]:
+            rows.append([y, prod, round(base * sh * (1 + rng.normal(0, 0.05)), 0), "tons N",
+                         "reported to the state" if y >= 1995 else "dealer survey"])
+    return _csv(path, ["year", "product", "nitrogen_sold", "units", "basis"], rows)
+
+
+CLASS_DESC = {"FOR": "forest", "GRS": "grass and pasture", "DRY": "cropland, not irrigated",
+              "IRC": "irrigated corn and soybean", "IRV": "irrigated vegetables", "RES": "residential",
+              "WAT": "wetland"}
+
+
+def whpa_attributes(path, truth, rng):
+    rows = []
+    for p in sorted(truth["parcels"], key=lambda p: (p["zone"], p["pid"])):
+        owner = "City of Corlinden" if p["kind"] == "ridge_woods" else ("Hartvale Produce LLC" if p["kind"] == "ridge"
+                                                                       else "private")
+        rows.append([p["pid"], round(p["acres"], 1), P.WELL_NAMES[p["zone"]], int(round(p["dtw"])),
+                     round(p["T"], 1), CLASS_DESC[p["hist"][2018]], owner])
+    wb = [[CLASS_DESC[c], P.RECHARGE[c]] for c in P.CLASSES if c != "WAT"]
+    _book(path, [("Parcels", ["parcel_id", "acres", "zone", "depth_to_water_ft", "gw_time_of_travel_yr",
+                              "land_cover_2018", "owner"], rows, [14, 8, 9, 16, 20, 28, 20]),
+                 ("Recharge", ["land_cover", "recharge_in_per_yr"], wb, [30, 18])],
+          dt.datetime(2019, 11, 12, 14, 31), dt.datetime(2019, 11, 14, 9, 5), "Fenwright Hydrogeologic")
+    return len(rows)

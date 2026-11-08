@@ -1,461 +1,337 @@
-"""task3 architecture 3: everything owed, computed from the cut pack alone.
+"""task3 architecture 4: the solution, read from the cut pack alone. Every rung and rival is a variant of run() with
+its options; the golden is run() with the defaults.
 
-The golden path: the test's loggers compensated and put on one clock, the barometric response and the background
-trend taken out, the Theis fit to the three observation wells (the test's transmissivity and storativity); the Mill
-Street wells' monthly pumping from the operating reports; each monitoring well's natural level from the two
-confined-aquifer network wells beyond the Mill Street cone (CV-02 and CV-11), the drawdown the Mill Street wells
-caused being that natural level less the reading; the leakage factor that makes the bounded leaky aquifer (walls at
-the plate's mapped edges) reproduce that drawdown at MS-MW, CV-07 and OW-S from March 2009 to September 2026; and the monthly forecast at OW-S
-for 2027 to 2046 under the town's projection and each requested schedule. Every rung and rival of the design note
-runs through the same functions with one switch changed."""
-import calendar
+The golden: (1) each well's and the entry point's annual means from the laboratory results (nitrate as NO3 to
+nitrate-N, duplicates and re-runs averaged); (2) the county network's matured conversions (pasture, dry cropland,
+grass or forest put under irrigation 1987 to 2010) each step up after a delay, measured at the midpoint between the
+site's level before and its level since 2019; the delay less the site's water-table age, regressed on the site's
+depth to water, is the unsaturated travel time a + b x depth; (3) each class's leachate by land-surface year from the
+network's steady sites, each sample dated back by its own age and unsaturated travel time; (4) each protection-area
+parcel's water reaches its well after its unsaturated travel time and the wellhead model's groundwater time of
+travel, mixed by acres times recharge; (5) each well's model carried to the observed level (its 2019-2026 mean
+residual), the plan's shares from 2027, the first year the entry point's annual mean reaches 10 mg/L."""
 import csv
 import datetime as dt
 import math
 import os
-from functools import lru_cache
+from collections import defaultdict
 
 import numpy as np
 import openpyxl
 
-import aquifer as A
+import params as P
 
-UTC = dt.timezone.utc
-EDT = dt.timezone(dt.timedelta(hours=-4))
-PSI_FT = 0.43353
-GPM = 192.5
-LIMIT = 9.0
-OPTIONS = [450, 700, 1000, 1250]
-FILES = {
-    "transducers": "PW-1_constant_rate_2026-09_transducers.csv",
-    "baro": "barologger_BL-2231_2026-09.csv",
-    "notes": "PW-1_constant_rate_2026-09_field_readings.xlsx",
-    "mor": "harlow_springs_MOR_well_production_2009-2026.csv",
-    "msmw": "mill_street_MW_water_levels_2008-2026.csv",
-    "network": "cvwcd_network_water_levels_2005-2026.csv",
-    "register": "cvwcd_well_register.xlsx",
-}
-# read off Plate 3 and the application: the valley axis bears N 18 E and the mapped edges of the saturated sand and
-# gravel run parallel to it 5,000 ft apart; the edge west of TW-1 passes through (409,800, 1,687,555)
-PLATE = {"az_deg": 18.0, "width": 5000.0, "west_edge_point": (409800.0, 1687555.0)}
-NEW_SEASON = [0.78, 0.76, 0.80, 0.88, 1.02, 1.21, 1.34, 1.31, 1.17, 0.98, 0.88, 0.87]
-TOWN_FACTORS = [0.81, 0.80, 0.84, 0.90, 1.03, 1.17, 1.25, 1.23, 1.11, 0.98, 0.95, 0.93]
-TOWN_2026 = 548.0
-TOWN_GROWTH = 0.012
+CODE_CLASS = {"F1": "FOR", "F2": "FOR", "141": "FOR", "142": "FOR", "G1": "GRS", "G2": "GRS", "176": "GRS",
+              "37": "GRS", "A1": "DRY", "A2": "DRY", "24": "DRY", "36": "DRY", "A3": "IRC", "301": "IRC",
+              "A4": "IRV", "304": "IRV", "U1": "RES", "121": "RES", "W": "WAT", "111": "WAT"}
+DESC_CLASS = {"forest": "FOR", "grass and pasture": "GRS", "cropland, not irrigated": "DRY",
+              "irrigated corn and soybean": "IRC", "irrigated vegetables": "IRV", "residential": "RES",
+              "wetland": "WAT"}
+F = {"results": "corlinden_raw_water_nitrate_results_1988-2026.csv",
+     "pumping": "corlinden_well_pumping_daily_2009-2026.csv",
+     "network": "ravell_county_groundwater_network_samples_1990-2026.csv",
+     "sites": "ravell_county_groundwater_network_sites.xlsx",
+     "landcover": "ravell_county_parcel_land_cover_1986-2026.csv",
+     "attrs": "sallow_road_WHPA_parcel_attributes_2019.xlsx",
+     "ages": "ravell_county_groundwater_age_survey_2019.xlsx"}
+POINT = {"WELL 3": "W3", "WELL 5": "W5", "WELL 6": "W6", "WELL 7": "W7", "HR-W03": "W3", "HR-W05": "W5",
+         "HR-W06": "W6", "HR-W07": "W7", "EP-01": "EP"}
 
 
-def months(y0=2005, m0=1, y1=2046, m1=12):
-    out, y, m = [], y0, m0
-    while (y, m) <= (y1, m1):
-        out.append((y, m))
-        m += 1
-        if m == 13:
-            y, m = y + 1, 1
-    return out
+def dec(s):
+    d = dt.date.fromisoformat(s[:10])
+    y0 = dt.date(d.year, 1, 1)
+    return d.year + (d - y0).days / (dt.date(d.year + 1, 1, 1) - y0).days
 
 
-MONTHS = months()
-MI = {ym: i for i, ym in enumerate(MONTHS)}
-N = len(MONTHS)
-YR = np.array([y for y, _ in MONTHS])
+def to_n(result, units, nd="half"):
+    r = result.strip()
+    cen = r.startswith("<")
+    v = float(r.lstrip("<"))
+    if cen:
+        v = v / 2.0 if nd == "half" else (0.0 if nd == "zero" else v)
+    if "NO3" in units:
+        v /= P.NO3_PER_N
+    return v
 
 
 # ---------------------------------------------------------------- reading the pack
-
-def register(target):
-    wb = openpyxl.load_workbook(os.path.join(target, FILES["register"]), read_only=True)
-    rows = list(wb["Wells"].iter_rows(values_only=True))
-    hdr = rows[0]
-    reg = {r[0]: dict(zip(hdr, r)) for r in rows[1:] if r[0]}
-    mph = [r for r in wb["MP history"].iter_rows(values_only=True)][1:]
-    return reg, mph
-
-
-def valley_frame(reg, width=None):
-    """Valley coordinates (a along the axis, c across from the centre line) of every well, from the plate."""
-    az = math.radians(PLATE["az_deg"])
-    ua = (math.sin(az), math.cos(az))
-    uc = (math.cos(az), -math.sin(az))
-    wx, wy = PLATE["west_edge_point"]
-    # centre line: half a width east-south-east of the west edge
-    cx, cy = wx + uc[0] * PLATE["width"] / 2, wy + uc[1] * PLATE["width"] / 2
-    out = {}
-    for w, r in reg.items():
-        dx, dy = r["Easting (ft)"] - cx, r["Northing (ft)"] - cy
-        out[w] = (dx * ua[0] + dy * ua[1], dx * uc[0] + dy * uc[1])
-    return out
-
-
-def mp_at(w, day, reg, mph):
-    for r in mph:
-        if r[0] != w:
-            continue
-        f = dt.date.fromisoformat(r[1])
-        t = dt.date.fromisoformat(r[2]) if r[2] else dt.date(2100, 1, 1)
-        if f <= day <= t:
-            return float(r[3])
-    return float(reg[w]["MP elev (ft)"])
-
-
-def town_pumping(target):
-    q = {"TW-1": np.zeros(N), "TW-2": np.zeros(N)}
-    with open(os.path.join(target, FILES["mor"]), newline="") as f:
-        for r in csv.DictReader(f):
-            y, m = map(int, r["report_month"].split("-"))
-            well = {"WELL 1": "TW-1", "WELL 2": "TW-2"}.get(r["source"], r["source"])
-            v = float(r["metered_volume"]) * (1000.0 if r["units"] == "1000 gal" else 1.0)
-            q[well][MI[(y, m)]] = v / (calendar.monthrange(y, m)[1] * 1440.0)
-    return q
-
-
-def town_projection():
-    out = np.zeros(N)
-    for i, (y, m) in enumerate(MONTHS):
-        if (y, m) >= (2026, 10):
-            out[i] = TOWN_2026 * (1 + TOWN_GROWTH) ** (y - 2026) * TOWN_FACTORS[m - 1]
-    return out
-
-
-def levels(target, reg, mph, keep_running=False):
-    """Monthly water-level elevation (ft) at MS-MW and each network well; NaN where no usable reading."""
-    lv = {}
-    with open(os.path.join(target, FILES["msmw"]), newline="") as f:
-        s = np.full(N, np.nan)
-        for r in csv.DictReader(f):
-            if "TW-1 running" in r["remarks"] and not keep_running:
-                continue
-            day = dt.datetime.strptime(r["date"], "%m/%d/%Y").date()
-            s[MI[(day.year, day.month)]] = mp_at("MS-MW", day, reg, mph) - float(r["depth_to_water_ft"])
-        lv["MS-MW"] = s
-    seen = set()
-    with open(os.path.join(target, FILES["network"]), newline="") as f:
-        for r in csv.DictReader(f):
-            key = (r["site_id"], r["date"])
-            if key in seen:
-                continue
-            seen.add(key)
-            if r["qualifier"] == "E":
-                continue
-            day = dt.date.fromisoformat(r["date"])
-            lv.setdefault(r["site_id"], np.full(N, np.nan))[MI[(day.year, day.month)]] = (
-                mp_at(r["site_id"], day, reg, mph) - float(r["dtw_ft_below_mp"]))
-    return lv
-
-
-# ---------------------------------------------------------------- the test
-
-def _notes(target):
-    wb = openpyxl.load_workbook(os.path.join(target, FILES["notes"]), read_only=True)
-    loggers = [r for r in wb["Loggers"].iter_rows(values_only=True)][1:]
-    disch = [r for r in wb["Discharge"].iter_rows(values_only=True)][1:]
-    return loggers, disch
-
-
-_TEST = {}
-
-
-def test_drawdowns(target, baro_correct=True, clock_naive=False, ignore_rehang=False):
-    key = (os.path.abspath(target), baro_correct, clock_naive, ignore_rehang)
-    if key not in _TEST:
-        _TEST[key] = _test_drawdowns(target, baro_correct, clock_naive, ignore_rehang)
-    return _TEST[key]
-
-
-def _test_drawdowns(target, baro_correct=True, clock_naive=False, ignore_rehang=False):
-    """Drawdown (ft) at each logged well against days since pump-on, with the test's average rate (gpm)."""
-    loggers, disch = _notes(target)
-    clock, depth, rehang = {}, {}, {}
-    for r in loggers:
-        if r[0] == "Site":
-            continue
-        if r[0] in clock and r[6] != clock.get(r[0] + "_set"):
-            rehang[r[0]] = (dt.datetime.strptime(r[6], "%Y-%m-%d %H:%M").replace(tzinfo=EDT), float(r[5]))
-            continue
-        clock[r[0]] = r[3]
-        clock[r[0] + "_set"] = r[6]
-        depth[r[0]] = float(r[5])
-    bt, bp = [], []
-    with open(os.path.join(target, FILES["baro"]), newline="") as f:
-        for r in csv.DictReader(f):
-            bt.append(dt.datetime.strptime(r["date_time_utc"], "%Y-%m-%d %H:%M:%S").replace(tzinfo=UTC).timestamp())
-            bp.append(float(r["pressure_psi"]))
-    bt, bp = np.array(bt), np.array(bp)
-    on = dt.datetime(2026, 9, 14, 9, 0, tzinfo=EDT).timestamp()
-    off = on + 3 * 86400
-    data = {}
-    with open(os.path.join(target, FILES["transducers"]), newline="") as f:
-        rows = list(csv.DictReader(f))
-    seen = set()
+def read(target, nd="half"):
+    D = {}
+    rows = list(csv.DictReader(open(os.path.join(target, F["results"]), encoding="utf-8")))
+    by = defaultdict(list)
     for r in rows:
-        w = r["well_id"]
-        key = (w, r["date_time"])
-        if key in seen:
+        by[(POINT[r["sample_point"]], r["collected"])].append(to_n(r["result"], r["units"], nd))
+    samp = defaultdict(list)
+    for (w, d), v in by.items():
+        samp[w].append((dec(d), float(np.mean(v))))
+    D["well_samples"] = {w: sorted(v) for w, v in samp.items()}
+    ann = {}
+    for w, v in D["well_samples"].items():
+        g = defaultdict(list)
+        for t, x in v:
+            g[int(t)].append(x)
+        ann[w] = {y: float(np.mean(x)) for y, x in g.items()}
+    D["well_annual"] = ann
+    # network sites
+    wb = openpyxl.load_workbook(os.path.join(target, F["sites"]), read_only=True)
+    sites = {}
+    alias = {}
+    for r in list(wb["Sites"].iter_rows(values_only=True))[1:]:
+        sid, pid, _, _, _, _, _, dtw, status, note = r
+        if str(status).startswith("abandoned"):
+            alias[sid] = str(note).replace("replaced by ", "").strip()
             continue
-        seen.add(key)
-        tz = UTC if (clock[w] == "UTC" and not clock_naive) else EDT
-        t = dt.datetime.strptime(r["date_time"], "%Y-%m-%d %H:%M:%S").replace(tzinfo=tz)
-        d = depth[w]
-        if w in rehang and t >= rehang[w][0] and not ignore_rehang:
-            d = rehang[w][1]
-        data.setdefault(w, []).append((t.timestamp(), float(r["pressure_psi"]), d))
-    # average rate from the totalizer over the pumping period
-    tot = [(dt.datetime.strptime(r[0] + " " + r[1], "%Y-%m-%d %H:%M").replace(tzinfo=EDT).timestamp(), r[2])
-           for r in disch]
-    q_avg = (tot[-1][1] - tot[0][1]) / ((tot[-1][0] - tot[0][0]) / 60.0)
-    out = {}
-    for w, v in data.items():
-        v.sort()
-        t = np.array([a for a, _, _ in v])
-        p = np.array([b for _, b, _ in v])
-        sd = np.array([c for _, _, c in v])
-        baro = np.interp(t, bt, bp)
-        dtw = sd - (p - baro) / PSI_FT
-        lvl = -dtw
-        pre = (t >= on - 5.5 * 86400) & (t < on - 60)
-        tt = (t - on) / 86400.0
-        # background: linear trend and barometric response fitted on the pre-test days, in first differences of
-        # hourly means for the barometric efficiency
-        be = 0.0
-        if baro_correct:
-            hh = np.floor(tt[pre] * 24)
-            hl = np.array([lvl[pre][hh == h].mean() for h in np.unique(hh)])
-            hb = np.array([baro[pre][hh == h].mean() for h in np.unique(hh)])
-            dl, db = np.diff(hl), np.diff(hb) / PSI_FT
-            X = np.column_stack([db, np.ones_like(db)])
-            be = -np.linalg.lstsq(X, dl, rcond=None)[0][0]
-        corr = lvl + be * (baro - baro[pre].mean()) / PSI_FT
-        X = np.column_stack([np.ones(pre.sum()), tt[pre]])
-        c0, c1 = np.linalg.lstsq(X, corr[pre], rcond=None)[0]
-        dd = (c0 + c1 * tt) - corr
-        out[w] = {"t": tt, "s": dd, "be": be}
-    return out, q_avg
+        sites[sid] = dict(pid=pid, dtw=float(dtw))
+    D["sites"] = sites
+    # ages
+    wb = openpyxl.load_workbook(os.path.join(target, F["ages"]), read_only=True)
+    ages = {}
+    for r in list(wb["Results"].iter_rows(values_only=True))[1:]:
+        if str(r[5]).startswith("water-table"):
+            ages[r[0]] = float(r[4])
+    D["ages"] = ages
+    # network samples
+    ns = defaultdict(dict)
+    for r in csv.DictReader(open(os.path.join(target, F["network"]), encoding="utf-8")):
+        sid = alias.get(r["site_id"], r["site_id"])
+        ns[sid].setdefault(r["sample_date"], []).append(to_n(r["nitrate_result"], r["units"], nd))
+    D["net"] = {s: sorted((dec(d), float(np.mean(v))) for d, v in x.items()) for s, x in ns.items()}
+    # land cover
+    lc = defaultdict(dict)
+    parent = {}
+    for r in csv.DictReader(open(os.path.join(target, F["landcover"]), encoding="utf-8")):
+        lc[r["parcel_id"]][int(r["year"])] = CODE_CLASS[r["land_cover_code"]]
+        if r["parent_parcel_id"]:
+            parent[r["parcel_id"]] = r["parent_parcel_id"]
+    for child, par in parent.items():
+        for y, c in lc.get(par, {}).items():
+            lc[child].setdefault(y, c)
+    D["lc"] = dict(lc)
+    # protection area parcels
+    wb = openpyxl.load_workbook(os.path.join(target, F["attrs"]), read_only=True)
+    parcels = []
+    for r in list(wb["Parcels"].iter_rows(values_only=True))[1:]:
+        pid, ac, zone, dtw, T, lc18, owner = r
+        parcels.append(dict(pid=pid, acres=float(ac), zone="W" + str(zone).split()[-1], dtw=float(dtw), T=float(T)))
+    D["parcels"] = parcels
+    rech = {}
+    for r in list(wb["Recharge"].iter_rows(values_only=True))[1:]:
+        rech[DESC_CLASS[r[0]]] = float(r[1])
+    rech["WAT"] = 0.0
+    D["recharge"] = rech
+    return D
 
 
-def theis_fit(test, q_avg, wells=("OW-1", "OW-2", "OW-3"), coords=None, t_lo=2 / 1440.0, t_hi=3.0):
-    """Least-squares Theis fit of T and S to the pumping-period drawdowns of the observation wells."""
-    obs = []
-    for w in wells:
-        t, s = test[w]["t"], test[w]["s"]
-        m = (t >= t_lo) & (t <= t_hi)
-        # thin to log-spaced samples so the late minutes do not swamp the fit
-        idx = np.unique(np.searchsorted(t[m], np.logspace(np.log10(t_lo), np.log10(t_hi), 160)).clip(0, m.sum() - 1))
-        r = coords[w]
-        obs.append((r, t[m][idx], s[m][idx]))
-    Q = q_avg * GPM
-
-    def sse(lT, lS):
-        T, S = math.exp(lT), math.exp(lS)
-        e = 0.0
-        for r, t, s in obs:
-            m = Q / (4 * math.pi * T) * A.well_function(r * r * S / (4 * T * t))
-            e += float(np.sum((m - s) ** 2))
-        return e
-    best = None
-    for lT in np.linspace(math.log(3000), math.log(30000), 40):
-        for lS in np.linspace(math.log(1e-5), math.log(1e-2), 40):
-            e = sse(lT, lS)
-            if best is None or e < best[0]:
-                best = (e, lT, lS)
-    _, lT, lS = best
-    step = 0.06
-    for _ in range(60):
-        moved = False
-        for dT, dS in ((step, 0), (-step, 0), (0, step), (0, -step)):
-            e = sse(lT + dT, lS + dS)
-            if e < best[0]:
-                best, lT, lS, moved = (e, lT + dT, lS + dS), lT + dT, lS + dS, True
-        if not moved:
-            step /= 2
-            if step < 1e-4:
-                break
-    n = sum(len(t) for _, t, _ in obs)
-    return math.exp(lT), math.exp(lS), math.sqrt(best[0] / n)
+def lc_at(D, pid, y):
+    h = D["lc"][pid]
+    y = int(min(max(y, 1986), 2026))
+    return h[y]
 
 
-def test_leakage(test, q_avg, frame, T, S, width, reg, wells=("OW-1", "OW-2", "OW-3")):
-    """The leakage factor fitted to the test alone (walls at the plate, T and S held): the chain's third link
-    skipped, the far field read from three days."""
-    obs = []
-    for w in wells:
-        t, s = test[w]["t"], test[w]["s"]
-        m = (t >= 2 / 1440.0) & (t <= 3.0)
-        idx = np.unique(np.searchsorted(t[m], np.logspace(np.log10(2 / 1440.0), np.log10(3.0), 120)).clip(0, m.sum() - 1))
-        obs.append((frame[w], t[m][idx], s[m][idx]))
-    Q = q_avg * GPM
-    best = None
-    for B in np.geomspace(1000, 200000, 40):
-        e = 0.0
-        for o, t, s in obs:
-            e += float(np.sum((Q * A.step_response(T, S, B, frame["PW-1"], o, t, width) - s) ** 2))
-        if best is None or e < best[0]:
-            best = (e, B)
-    return round(best[1], 0)
-
-
-# ---------------------------------------------------------------- the far field
-
-def nearest_domestic(reg):
-    """The registered domestic well nearest PW-1 and PW-2 (Rule WR-4 4.4)."""
-    px = (reg["PW-1"]["Easting (ft)"] + reg["PW-2"]["Easting (ft)"]) / 2
-    py = (reg["PW-1"]["Northing (ft)"] + reg["PW-2"]["Northing (ft)"]) / 2
-    dom = [w for w, r in reg.items() if str(r["Purpose"]).startswith("domestic")]
-    return min(dom, key=lambda w: math.hypot(reg[w]["Easting (ft)"] - px, reg[w]["Northing (ft)"] - py))
-
-
-CLEAN = ("CV-02", "CV-11")
-_FITS = {}
-BASE = {"MS-MW": ((2008, 6), (2009, 2)), "default": ((2005, 1), (2008, 12))}
-
-
-def _win(w):
-    a, b = BASE.get(w, BASE["default"])
-    return np.array([a <= ym <= b for ym in MONTHS])
-
-
-def attributable(lv, w, control):
-    """Drawdown the Mill Street wells caused at w: its natural level (its own pre-pumping mean moved by the
-    control's change from the same months) less the reading. control None: the reading against its own
-    pre-pumping mean."""
-    win = _win(w)
-    base = np.nanmean(lv[w][win])
-    if control is None:
-        return base - lv[w]
-    cs = np.vstack([lv[c] - np.nanmean(lv[c][win]) for c in control])
-    cnt = np.sum(~np.isnan(cs), axis=0)
-    nat = np.where(cnt > 0, np.nansum(cs, axis=0) / np.maximum(cnt, 1), np.nan)
-    return base + nat - lv[w]
-
-
-FIT = np.array([(2009, 3) <= ym <= (2026, 9) for ym in MONTHS])
-
-
-@lru_cache(maxsize=None)
-def _kern(T, S, B, well, obs, width):
-    return A.monthly_kernel(T, S, B, well, obs, width, N)
-
-
-def model_town(q1, q2, frame, w, T, S, B, width):
-    return (A.superpose_monthly(q1, _kern(T, S, B, frame["TW-1"], frame[w], width)) +
-            A.superpose_monthly(q2, _kern(T, S, B, frame["TW-2"], frame[w], width)))
-
-
-def calibrate(q, frame, att, T, S, width, wells=("MS-MW", "CV-07", "OW-S"), trend=False, profile=False):
-    """The leakage factor (ft) minimising the squared misfit to the attributable drawdown, March 2009 to September
-    2026; trend adds a free intercept and slope per well (the easy route's regional trend)."""
-    q1, q2 = q["TW-1"], q["TW-2"]
-
-    def sse(lB):
-        B = math.exp(lB)
-        e = 0.0
-        for w in wells:
-            m = model_town(q1, q2, frame, w, T, S, B, width)
-            ok = FIT & ~np.isnan(att[w])
-            r = att[w][ok] - m[ok]
-            if trend:
-                X = np.column_stack([np.ones(ok.sum()), np.arange(N)[ok] / 120.0])
-                r = r - X @ np.linalg.lstsq(X, r, rcond=None)[0]
-            e += float(np.sum(r * r))
-        return e
-    grid = np.linspace(math.log(600), math.log(60000), 30)
-    vals = [sse(g) for g in grid]
-    if profile:
-        return [(round(math.exp(g)), v) for g, v in zip(grid, vals)]
-    k = int(np.argmin(vals))
-    lo, hi = grid[max(k - 1, 0)], grid[min(k + 1, len(grid) - 1)]
-    for _ in range(24):
-        m1, m2 = lo + (hi - lo) / 3, hi - (hi - lo) / 3
-        if sse(m1) < sse(m2):
-            hi = m2
-        else:
-            lo = m1
-    return round(math.exp((lo + hi) / 2), 0)
-
-
-def profile(q, frame, att, T, S, width, wells, B0):
-    """The misfit over leakage factors from half to twice B0, 61 points."""
-    q1, q2 = q["TW-1"], q["TW-2"]
+# ---------------------------------------------------------------- the unsaturated delay
+def cohort(D, lo=1987, hi=2010):
     out = []
-    for B in np.geomspace(B0 / 2, B0 * 2, 61):
-        B = round(float(B), 0)
-        e = 0.0
-        for w in wells:
-            m = model_town(q1, q2, frame, w, T, S, B, width)
-            ok = FIT & ~np.isnan(att[w])
-            e += float(np.sum((att[w][ok] - m[ok]) ** 2))
-        out.append((B, e))
+    for sid, s in D["sites"].items():
+        h = D["lc"][s["pid"]]
+        ch = [y for y in range(1987, 2027) if h[y] != h[y - 1]]
+        if len(ch) != 1:
+            continue
+        c = ch[0]
+        if not (lo <= c <= hi and h[c - 1] in ("FOR", "GRS", "DRY") and h[c] in P.IRRIGATED):
+            continue
+        out.append(dict(sid=sid, c=c, dtw=s["dtw"], series=D["net"][sid]))
     return out
 
 
-def forecast(q, frame, T, S, B, width, rate, seasonal=True, at="OW-S"):
-    """Monthly drawdown at OW-S, 2005 to 2046: the Mill Street wells (record, then the projection) and the Reidel
-    Road field at the rate."""
-    proj = town_projection()
-    fut = np.array([ym >= (2026, 10) for ym in MONTHS])
-    if not seasonal:
-        proj = np.array([TOWN_2026 * (1 + TOWN_GROWTH) ** (y - 2026) if (y, m) >= (2026, 10) else 0.0
-                         for y, m in MONTHS])
-    q1 = np.where(fut, proj * 0.56, q["TW-1"])
-    q2 = np.where(fut, proj * 0.44, q["TW-2"])
-    town = model_town(q1, q2, frame, at, T, S, B, width)
-    new = np.array([rate * (NEW_SEASON[m - 1] if seasonal else 1.0) if (y, m) >= (2027, 4) else 0.0
-                    for y, m in MONTHS])
-    field = (A.superpose_monthly(new / 2, _kern(T, S, B, frame["PW-1"], frame[at], width)) +
-             A.superpose_monthly(new / 2, _kern(T, S, B, frame["PW-2"], frame[at], width)))
-    return town, field
+def arrival(series, c, post_from=2019.0, rule="mid"):
+    pre = [x for t, x in series if c - 3 <= t < c + 1.0]
+    post = [x for t, x in series if t >= post_from]
+    if not pre or not post:
+        return None
+    lo, hi = float(np.mean(pre)), float(np.mean(post))
+    if rule == "step":
+        pts = [(t, x) for t, x in series if c - 3 <= t]
+        best = None
+        for k in range(1, len(pts)):
+            a1 = float(np.mean([x for _, x in pts[:k]]))
+            a2 = float(np.mean([x for _, x in pts[k:]]))
+            e = sum((x - a1) ** 2 for _, x in pts[:k]) + sum((x - a2) ** 2 for _, x in pts[k:])
+            if best is None or e < best[0]:
+                best = (e, 0.5 * (pts[k - 1][0] + pts[k][0]))
+        return best[1]
+    lvl = lo + (hi - lo) * (0.5 if rule == "mid" else (0.25 if rule == "quarter" else 0.75))
+    prev = None
+    for t, x in series:
+        if t < c:
+            prev = (t, x)
+            continue
+        if x >= lvl and prev is not None and prev[1] < lvl:
+            t0, x0 = prev
+            return t0 + (lvl - x0) / (x - x0) * (t - t0)
+        prev = (t, x)
+    return None
 
 
-def run(target, control=CLEAN, width="plate", T=None, S=None, trend=False, leaky=True, keep_running=False,
-        baro_correct=True, fit_wells=("MS-MW", "CV-07", "OW-S"), fit_test=("OW-1", "OW-2", "OW-3"),
-        clock_naive=False, ignore_rehang=False, seasonal=True, test_leaky=False):
-    reg, mph = register(target)
-    frame = valley_frame(reg)
-    wd = PLATE["width"] if width == "plate" else width
-    test, q_avg = test_drawdowns(target, baro_correct, clock_naive, ignore_rehang)
-    dist = {w: math.hypot(reg[w]["Easting (ft)"] - reg["PW-1"]["Easting (ft)"],
-                          reg[w]["Northing (ft)"] - reg["PW-1"]["Northing (ft)"]) for w in ("OW-1", "OW-2", "OW-3", "PW-2", "OW-S")}
-    fk = (os.path.abspath(target), baro_correct, tuple(fit_test), clock_naive, ignore_rehang)
-    if fk not in _FITS:
-        _FITS[fk] = theis_fit(test, q_avg, wells=fit_test, coords=dist)
-    Tf, Sf, rms = _FITS[fk]
-    T = Tf if T is None else T
-    S = Sf if S is None else S
-    q = town_pumping(target)
-    lv = levels(target, reg, mph, keep_running)
-    att = {w: attributable(lv, w, control) for w in ("MS-MW", "OW-S", "CV-07")}
-    if test_leaky:
-        B = test_leakage(test, q_avg, frame, T, S, wd, reg)
-    elif leaky:
-        B = calibrate(q, frame, att, T, S, wd, fit_wells, trend)
-    else:
-        B, wd = None, None
-    res = {"T": T, "S": S, "T_fit": Tf, "S_fit": Sf, "rms": rms, "q_avg": q_avg, "B": B, "width": wd,
-           "be": {w: test[w]["be"] for w in test}, "dist": dist, "att": att, "lv": lv, "q": q, "frame": frame}
-    peaks, series = {}, {}
-    for r in OPTIONS:
-        town, field = forecast(q, frame, T, S, B, wd, r, seasonal)
-        tot = town + field
-        series[r] = (town, field)
-        peaks[r] = float(tot[YR == 2046].max())
-        res.setdefault("peak_term", {})[r] = float(tot[(YR >= 2027) & (YR <= 2046)].max())
-        res.setdefault("peak_year", {})[r] = int(YR[(YR >= 2027) & (YR <= 2046)][np.argmax(tot[(YR >= 2027) & (YR <= 2046)])])
-    res["peaks"] = peaks
-    res["resid"] = {}
-    for w in ("MS-MW", "CV-07", "OW-S"):
-        mdl = model_town(q["TW-1"], q["TW-2"], frame, w, T, S, B, wd)
-        ok = FIT & ~np.isnan(att[w])
-        res["resid"][w] = float(np.sqrt(np.mean((att[w][ok] - mdl[ok]) ** 2)))
-    res["series"] = series
-    ok = [r for r in OPTIONS if peaks[r] <= LIMIT]
-    res["call"] = max(ok) if ok else None
-    m25 = YR == 2025
-    res["msmw_2025"] = float(np.nanmean(att["MS-MW"][m25]))
-    res["msmw_2025_model"] = float(model_town(q["TW-1"], q["TW-2"], frame, "MS-MW", T, S, B, wd)[m25].mean())
-    if res["call"]:
-        tw, fd = forecast(q, frame, T, S, B, wd, res["call"], seasonal, at=nearest_domestic(reg))
-        res["dw"] = float((tw + fd)[YR == 2046].max())
-        res["dw_id"] = nearest_domestic(reg)
-    else:
-        res["dw"], res["dw_id"] = None, nearest_domestic(reg)
-    town_sel = series[OPTIONS[0]][0]
-    res["town_dec2046"] = float(town_sel[MI[(2046, 12)]])
-    return res
+def delay_fit(D, opts):
+    co = cohort(D)
+    X, Yv = [], []
+    for s in co:
+        t = arrival(s["series"], s["c"], rule=opts.get("rule", "mid"))
+        if t is None:
+            continue
+        age = D["ages"].get(s["sid"], opts.get("default_age", float(np.mean(list(D["ages"].values())))))
+        if opts.get("age", True) is False:
+            age = 0.0
+        X.append(s["dtw"])
+        Yv.append(t - s["c"] - age)
+    X, Yv = np.array(X), np.array(Yv)
+    if opts.get("delay") == "pooled":
+        return dict(a=float(np.mean(Yv)), b=0.0, n=len(X), X=X, Y=Yv)
+    if opts.get("delay") == "origin":
+        b = float(np.sum(X * Yv) / np.sum(X * X))
+        return dict(a=0.0, b=b, n=len(X), X=X, Y=Yv)
+    b, a = np.polyfit(X, Yv, 1)
+    res = Yv - (a + b * X)
+    return dict(a=float(a), b=float(b), n=len(X), X=X, Y=Yv, rmse=float(np.sqrt(np.mean(res ** 2))))
+
+
+# ---------------------------------------------------------------- leachate by class and land-surface year
+def class_curves(D, fit, opts):
+    bins = defaultdict(lambda: defaultdict(list))
+    for sid, s in D["sites"].items():
+        h = D["lc"][s["pid"]]
+        if len(set(h[y] for y in range(1986, 2027))) != 1:
+            continue
+        c = h[2026]
+        age = D["ages"].get(sid, float(np.mean(list(D["ages"].values()))))
+        lag = age + fit["a"] + fit["b"] * s["dtw"]
+        if opts.get("curve_lag") == "none":
+            lag = 0.0
+        for t, x in D["net"][sid]:
+            bins[c][int(math.floor(t - lag))].append(x)
+    curves = {}
+    for c, b in bins.items():
+        ys = sorted(b)
+        raw = {y: float(np.mean(b[y])) for y in ys}
+        sm = {}
+        k = opts.get("smooth", 1)
+        for y in ys:
+            v = [raw[z] for z in range(y - k, y + k + 1) if z in raw]
+            sm[y] = float(np.mean(v))
+        tail = opts.get("tail", 5)
+        last = float(np.mean([raw[y] for y in ys])) if tail == "all" else float(np.mean([sm[y] for y in ys[-tail:]]))
+        curves[c] = dict(years=ys, val=sm, first=sm[ys[0]], last=last)
+    if opts.get("leach_from") == "cohort":
+        for c in P.IRRIGATED:
+            vals = []
+            for s in cohort(D):
+                if D["lc"][D["sites"][s["sid"]]["pid"]][2026] != c:
+                    continue
+                t = arrival(s["series"], s["c"])
+                vals += [x for tt, x in s["series"] if t is not None and tt >= t + 1.0]
+            lvl = float(np.mean(vals))
+            curves[c] = dict(years=[2100], val={}, first=lvl, last=lvl, flat=True)
+    return curves
+
+
+def L(curves, c, s):
+    if c == "WAT":
+        return 0.0
+    cv = curves[c]
+    if cv.get("flat"):
+        return cv["last"]
+    y = int(math.floor(s))
+    if y in cv["val"]:
+        return cv["val"][y]
+    if y < cv["years"][0]:
+        return cv["first"]
+    if y > cv["years"][-1]:
+        return cv["last"]
+    near = min(cv["years"], key=lambda z: abs(z - y))
+    return cv["val"][near]
+
+
+# ---------------------------------------------------------------- the well field
+_RC = {}
+
+
+def recent_clearings(D):
+    """protection-area parcels whose land cover turned to an irrigated class after 2012"""
+    key = id(D)
+    if key not in _RC:
+        out = set()
+        for p in D["parcels"]:
+            h = D["lc"][p["pid"]]
+            if any(h[y] in P.IRRIGATED and h[y - 1] not in P.IRRIGATED for y in range(2013, 2027)):
+                out.add(p["pid"])
+        _RC[key] = out
+    return _RC[key]
+
+
+def fit_k(target, D, **opts):
+    """the clearing's effect fitted to the wells' 2019-2026 record (Wells 6 and 7, the model unanchored)"""
+    best = None
+    for k in np.arange(0.0, 1.501, 0.05):
+        r = run(target, D=D, k=float(k), anchor=False, **opts)
+        e = sum((r["obs"][w][y] - r["model"][w][y]) ** 2 for w in ("W6", "W7") for y in range(2019, 2027))
+        if best is None or e < best[0]:
+            best = (e, float(k))
+    return best[1]
+
+def model_well(D, fit, curves, w, y, opts):
+    num = den = 0.0
+    for p in D["parcels"]:
+        if p["zone"] != w:
+            continue
+        acc = 0.0
+        wsum = 0.0
+        for f in (0.125, 0.375, 0.625, 0.875):
+            t = y + f
+            T = 0.0 if opts.get("sat") == "none" else p["T"]
+            if opts.get("delay") == "lag":
+                s = t - opts["lag"]
+            elif opts.get("delay") == "none":
+                s = t - T
+            else:
+                s = t - T - (fit["a"] + fit["b"] * p["dtw"])
+            c = lc_at(D, p["pid"], math.floor(s))
+            # the water a parcel sends at t left the water table at t - T, at the recharge the parcel then had
+            cq = lc_at(D, p["pid"], math.floor(t - T)) if opts.get("weight", "current") == "current" else c
+            q = D["recharge"][cq] if opts.get("flux", True) else (0.0 if cq == "WAT" else 1.0)
+            x = p["acres"] * q
+            v = L(curves, c, s)
+            if "k" in opts and c in P.IRRIGATED and p["pid"] in recent_clearings(D):
+                v = L(curves, "FOR", s) + opts["k"] * (v - L(curves, "FOR", s))
+            acc += x * v
+            wsum += x
+        num += acc
+        den += wsum
+    return num / den if den else 0.0
+
+
+def run(target, D=None, **opts):
+    D = D or read(target, opts.get("nd", "half"))
+    fit = delay_fit(D, opts)
+    if "b_override" in opts:
+        fit = dict(fit, b=opts["b_override"])
+    curves = class_curves(D, fit, opts)
+    years = list(range(1992, 2041))
+    model = {w: {y: model_well(D, fit, curves, w, y, opts) for y in years} for w in P.WELLS}
+    obs = D["well_annual"]
+    resid = {}
+    for w in P.WELLS:
+        r = [obs[w][y] - model[w][y] for y in range(2019, 2027) if y in obs[w]]
+        resid[w] = float(np.mean(r))
+    anchor = opts.get("anchor", True)
+    fc = {w: {y: model[w][y] + (resid[w] if anchor else 0.0) for y in years} for w in P.WELLS}
+    share = opts.get("share", P.PLAN_SHARE)
+    ep = {y: sum(share[w] * fc[w][y] for w in P.WELLS) / sum(share.values()) for y in P.FC_YEARS}
+    cross = next((y for y in P.FC_YEARS if ep[y] >= P.LIMIT), None)
+    rmse = {w: float(np.sqrt(np.mean([(obs[w][y] - fc[w][y]) ** 2 for y in range(1998, 2027) if y in obs[w]])))
+            for w in P.WELLS}
+    call = 2027 if (cross is not None and cross < P.CYCLES[2031]) else 2031
+    return dict(fit={k: v for k, v in fit.items() if k not in ("X", "Y")}, fitXY=(list(map(float, fit["X"])),
+                list(map(float, fit["Y"]))), curves={c: {"last": v["last"]} for c, v in curves.items()},
+                model=model, fc=fc, ep=ep, cross=cross, call=call, resid=resid, rmse=rmse, obs=obs, D=D,
+                curves_full=curves)

@@ -12,7 +12,7 @@
   "shape": "other",
   "decision_type": "date_or_period",
   "answer_unit": "date_or_period",
-  "answer": "Apply in the 2027 cycle: the blended entry-point nitrate first reaches 10 mg/L as N in 2031, three years before a plant funded in 2031 could enter service, because the ridge timber cleared for irrigated vegetables from 2016 to 2020 has not yet leached through 60 to 90 ft of sand to the water table.",
+  "answer": "Apply in the 2027 cycle: the blended entry-point nitrate first reaches 10 mg/L as N in 2031 and is about 12 mg/L in 2034, three years before a plant funded in 2031 could enter service, because the ridge timber cleared for irrigated vegetables from 2017 to 2021 has not yet leached through 54 to 95 ft of sand to the water table.",
   "answer_source": "submission.md block 1 and generator/figures.json call",
   "gap": [
     "time",
@@ -34,7 +34,7 @@
   "validated_decoy": false,
   "context_artifact": "monitoring_export",
   "stump_class": "analytical",
-  "analyst_test": "With the lab results converted to nitrate-N, the county lab's reporting limits and the re-keyed duplicates sorted, the easy route reads each well's annual means (flat near 7 since 2019), finds the ridge clearing in the protection area's land cover, expects its leachate over the wellhead model's groundwater travel time (one to four years) or over one lag fitted to the wells' own history (six to nine years), sees no rise at Wells 6 and 7 or at the county wells under recent clearings, sets the clearing's effect near nil and files the 2031 cycle with the blend under 8.5 through 2040; it never times each parcel's leachate through its own unsaturated thickness, which the county's older conversions show stepping up later the deeper the water table.",
+  "analyst_test": "With the lab results converted to nitrate-N, the county lab's reporting limits and the re-keyed duplicates sorted, the easy route reads each well's annual means (flat near 7 since 2019), finds the ridge clearing in the protection area's land cover, expects its leachate over the wellhead model's groundwater travel time (one to three years) or over one lag fitted to the wells' own history (about four and a half years), sees no rise at Wells 6 and 7 or at the county wells under recent clearings, sets the clearing's effect near nil and files the 2031 cycle with EP-01 near 5.5 mg/L through 2040; it never times each parcel's leachate through its own unsaturated thickness, which the county's older conversions show stepping up later the deeper the water table.",
   "domain_test": "The deciding quantity is a well field's nitrate over the next decade, worked the way groundwater-quality forecasting works it: nitrate leached under each parcel's land cover, carried down through the unsaturated sand at a pace set by its moisture and its recharge, then through the aquifer to the wells over the groundwater travel time, and mixed at each well in proportion to each parcel's recharge; with a clinic's or a retailer's nouns there is no water table, no unsaturated zone and no recharge to mix, so the task stops making sense.",
   "layer2_family": "forecast_uncertainty",
   "layer2_pattern": "own:leachate-in-the-unsaturated-zone-timed-by-each-parcels-depth-to-water",
@@ -46,55 +46,51 @@
     "SCADA daily pumping in gallons then thousand gallons after a meter change, missing days, a duplicated export week",
     "the age survey's tritium-helium ages for water-table wells and the production wells' mixed ages"
   ],
-  "stakeholder_role": "Wexmoor Water Utility's general manager, preparing the utility commission's loan-cycle decision",
+  "stakeholder_role": "Corlinden Water Utility's general manager, preparing the Common Council's loan-cycle decision",
   "role_family": "capacity_planner",
   "scoring_unit": "other",
   "spine": {
-    "file": "wexmoor_well_pumping_daily_2009-2026.csv beside tarrow_county_parcel_land_cover_1986-2026.csv",
+    "file": "corlinden_well_pumping_daily_2009-2026.csv beside ravell_county_parcel_land_cover_1986-2026.csv",
     "rows": 26000,
     "entity": "one well-day of pumping; one parcel-year of land cover",
     "grain": "well x day; parcel x year",
     "source": "synthetic"
   },
-  "forum": "committee_or_panel",
+  "forum": "council_or_assembly",
   "forcing_event": "statutory_or_regulatory_filing",
   "org_family": "utility_or_infrastructure",
   "world": {
-    "geography": "United States, Wisconsin (Tarrow County, a fictional county on the central sand plain; Wexmoor, a fictional city)",
+    "geography": "United States, Wisconsin (Ravell County, a fictional county on the central sand plain; Corlinden, a fictional city)",
     "currency": "USD",
     "org_type": "a city water utility, its utility commission and a county land and water conservation department",
     "invented_names": [
-      "Wexmoor",
-      "Wexmoor Water Utility",
-      "Tarrow County",
-      "Tarrow County Land and Water Conservation Department",
-      "Holcomb Road well field",
-      "Holcomb Ridge",
+      "Corlinden",
+      "Corlinden Water Utility",
+      "Ravell County",
+      "Ravell County Land and Water Conservation Department",
+      "Sallow Road well field",
+      "Sallow Ridge",
       "Cadle River",
       "Fenwright Hydrogeologic",
-      "Ashby Analytical Services",
-      "Dunmore Produce"
+      "Pellow Analytical Services",
+      "Hartvale Produce"
     ],
     "people": [
       "Chloe Griffin",
       "Dennis Diaz",
-      "Colin Hanna",
-      "Cindy Beard",
-      "Samuel Butler",
-      "Danny Sharp",
-      "Lindsey Waller"
+      "Patricia Gaines"
     ]
   },
   "deliverables": [
-    "wexmoor_nitrate_plant_timing_memo.pdf",
-    "wexmoor_entry_point_nitrate_forecast.xlsx",
-    "wexmoor_entry_point_nitrate_2027-2040.png"
+    "corlinden_nitrate_plant_timing_memo.pdf",
+    "corlinden_entry_point_nitrate_forecast.xlsx",
+    "corlinden_entry_point_nitrate_2027-2040.png"
   ],
   "opening_move": "question-first",
   "question_form": "when",
   "driver": "The decisive quantity is a blended output's level over the coming years, fed by inputs whose change at the source travels through a stage no measurement of the output or of the medium sees, at a pace set by each source's own depth through that stage; a recent change sits on sources deeper than the earlier changes that matured, so the output's own history, one delay fitted to it, the downstream travel time a filed model gives, and an event study on the recent change all show no effect and set it near nil, and only the matured changes' delays, read against each source's depth and carried to each recent source, show the rise arriving inside the decision window.",
-  "driver_concrete": "Each year's 2027 to 2040 entry-point nitrate is the pumping plan's blend of Wells 5, 6 and 7, each a recharge-weighted mix of its protection-area parcels' water-table nitrate delayed by the wellhead model's groundwater travel time, where a parcel's water-table nitrate is its land cover's leachate delayed by its unsaturated thickness times the sand's moisture over the recharge; the Holcomb Ridge parcels cleared for irrigated vegetables from 2016 to 2020 sit over 60 to 90 ft of sand, so their leachate reaches the wells from 2028 to 2031, not by 2024 as the travel time or the wells' own lag would put it.",
-  "stump": "A strong analyst who finds the ridge clearing tests it against the wells and the county wells under recent clearings, sees no rise where the wellhead model's travel time or the wells' own fitted lag says it should already be, sets the clearing's effect near nil and files the 2031 cycle with the blend under 8.5 through 2040; only each parcel's delay through its own unsaturated thickness, read from the county's older conversions, puts the rise at the wells from 2028 and the blend at 10 in 2031.",
+  "driver_concrete": "Each year's 2027 to 2040 entry-point nitrate is the pumping plan's blend of Wells 3, 5, 6 and 7, each a recharge-weighted mix of its protection-area parcels' water-table nitrate delayed by the wellhead model's groundwater travel time, where a parcel's water-table nitrate is its land cover's leachate delayed by its unsaturated thickness times the sand's moisture over the recharge; the Sallow Ridge parcels cleared for irrigated vegetables from 2017 to 2021 sit over 54 to 95 ft of sand, so their leachate reaches the wells in 2030 and 2031, not by 2024 as the travel time or the wells' own lag would put it.",
+  "stump": "A strong analyst who finds the ridge clearing tests it against the wells and the county wells under recent clearings, sees no rise where the wellhead model's travel time or the wells' own fitted lag says it should already be, sets the clearing's effect near nil and files the 2031 cycle with the blend near 5.5 mg/L through 2040; only each parcel's delay through its own unsaturated thickness, read from the county's older conversions, puts the rise at the wells in 2030 and 2031 and the blend at 10 in 2031.",
   "deep_chain": "(1) the wells' falling-then-flat record is the nutrient-management era's water arriving and cannot show leachate still above the water table; (2) the county's older conversions step up after a delay that grows with depth to water (the unsaturated travel time), while the water-table wells' own ages are one to two years, so the delay is in the unsaturated sand, not the aquifer; (3) the ridge parcels' delays follow from their 60 to 90 ft of sand, against the 15 to 40 ft the matured conversions and the wells' farmland sit on, so no pooled delay applies; (4) the irrigated-vegetable leachate after nutrient management, from the network, and each parcel's share of its well's water by recharge (irrigated land recharges more than forest); (5) the pumping plan's blend from 2027 with Well 3 retired, and the first year at 10",
   "judgment": "separating 'the clearing does not raise nitrate' from 'its leachate has not arrived' with the matured conversions' delays against depth to water, and carrying a depth-specific delay, not a pooled one, to the ridge parcels",
   "one_fact_test": "'the ridge clearing will raise nitrate' rescues nothing: with the wellhead model's travel time or the wells' fitted lag the rise should already show, it does not, and the reasonable fit sets it near nil; the delay must be built from each parcel's unsaturated thickness and read from the matured conversions",
@@ -216,9 +212,9 @@
   ],
   "shell": {
     "question form": "whether",
-    "second-sentence opener": "the",
-    "rounding opener": "drawdowns",
-    "deliverable set": "pdf+xlsx"
+    "second-sentence opener": "corlinden's",
+    "rounding opener": "nitrate",
+    "deliverable set": "pdf+png+xlsx"
   },
-  "registered": "2026-11-08T06:04:47Z"
+  "registered": "2026-11-08T06:45:18Z"
 }

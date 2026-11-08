@@ -1,12 +1,12 @@
 {
  "task": "task3",
- "status": "DESIGN",
+ "status": "PAUSED",
  "domain": "physical-environmental-sciences",
  "objective": "forecasting",
- "stage": 2,
- "stage_name": "design",
+ "stage": 4,
+ "stage_name": "check",
  "updated": "2026-11-08",
- "stump": "A strong analyst who sees the test's Theis forecast overshoot the Mill Street record recalibrates the leakage against the nearest network well CV-07 (or the wells' own pre-pumping levels, or a fitted trend) and files 1,250 gpm, every schedule under 3.5 ft at OW-S; only the natural level carried from CV-02 and CV-11 beyond the cone files 1,000 gpm.",
+ "stump": "A strong analyst who finds the Sallow Ridge clearing tests it against the wells and the county wells under recent clearings, sees no rise where the wellhead model's travel time or one lag fitted to the wells' record says it should already be, sets the clearing's effect at nil and files the 2031 cycle; only each parcel's delay through its own unsaturated thickness, read from the county's matured conversions (0.132 years a foot), puts EP-01 at 10 in 2031 and files the 2027 cycle.",
  "architecture": 4,
  "loops": 0,
  "precut": {
@@ -16,7 +16,7 @@
  },
  "leak": {
   "leak_py": "REVIEW, no LEAK (2026-11-08, --asof 2026-11-06)",
-  "reader": "2026-11-08 isolated reader (Sonnet, medium): no step named, no ranking or helper file, Q6 analytical; the plate's caption removed"
+  "reader": "2026-11-08 isolated reader (Sonnet, medium): no step named, no ranking or helper file, Q6 analytical; both REVIEW lines harmless"
  },
  "duplicate_check": {
   "heart": "PASS 2026-11-08",
@@ -90,7 +90,7 @@
    "commit": ""
   }
  ],
- "resume": "stage 2: architecture 4 (Wisconsin Central Sands nitrate world) drawn, design note to precut",
+ "resume": "stage 4: the determinism judge thread is running on target.zip (brief at /tmp/determinism-check-task3-a4120407/judge_brief.md); read verdict.md, fix findings in the generator, re-judge once if FIX_NOW, then READY to main",
  "approved": null,
  "delivered": "2026-11-07",
  "portal": "landed by one response (R1 2,200 t at 100 per cent, R2 2,600 t at 70 per cent), reported 2026-11-07",
@@ -170,17 +170,18 @@
   }
  ],
  "subdomain": "hydrology-flood-frequency",
- "call": "The district will permit the 1,000 gpm schedule: its greatest monthly drawdown at OW-S in 2046 is 8 ft against the 9 ft limit, where 1,250 gpm reaches 10 ft",
+ "call": "the 2027 cycle (EP-01 first at 10 mg/L in 2031, 12 in 2034, Well 7 highest at 16)",
  "gates": {
-  "checks": "132 of 132",
+  "checks": "61 of 61",
   "verify": "PASS",
-  "byte_identical": true,
-  "figures_check": "67 of 67",
-  "precut": "72 checks, 0 FAIL",
-  "voice_check": "PASS (WARN shell quota)",
-  "pair_ceiling": 46.8,
-  "shallow_keep": 0.0,
-  "target_zip_sha256": "109b4ebf9580c12184d4fcbe4cc2e22294043eca9a7fb9a01d7a943a47051699"
+  "rebuild": "byte-identical",
+  "figures_check": "52 of 52",
+  "leak_py": "REVIEW, no LEAK (--asof 2026-11-06)",
+  "scrub": "target and golden clean",
+  "voice": "PASS, one WARN (flow-weighted, the plan's own term)",
+  "heart": "WARN (first name Patricia in an older build)",
+  "surface": "1 pair promoted (task2, surface 0.100), people WARN only",
+  "ceiling": "pair 42.2 (49.1 with acres-only counted kept), shallow keep 0"
  },
  "runs": {
   "run1": null,
