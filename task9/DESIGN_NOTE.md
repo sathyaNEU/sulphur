@@ -438,6 +438,12 @@ leak_check_report.md under the Solver's-eye read.
 
 ## Tried and rejected
 
+- 2026-11-08, architecture 6 (the sponsor house's year in the default dependence, Ostvale bought at 0.54 against
+  Kestrel Lane's 1.33): landed on the platform (author's report, not stumped). Both runs rebuilt sponsor ownership from
+  Dealtrail and fitted a house factor (run 1 Kestrel 1.47 and Ostvale 0.58; run 2 0.94 and 0.55), so the deep step was
+  noticed and executed; both priced one censoring-corrected recovery for every default. Architecture 7 keeps the world
+  at the author's word and moves the deep step to the recovery a default earns in its house's year.
+
 - Pack 1 of the prototype (2026-10-24, seed 3061) hid each imported car's pack history before its Dutch registration (the log started at the Dutch registration), so a solver could not know an import's pack state and both probes repaired it differently (sonnet calibrated the imports down by 0.74, opus modelled the abroad replacements in expectation): a fork, not the stump. The log is now the OEMs' EU-wide record plus Voltwerk's own, and a car whose pack failed outside warranty abroad is scrapped there and never imported.
 - The prototype's truth carried a scrappage and export rate that no file shows; the forecast now takes a car in use to stay in use through 2027, filed in the tooling plan.
 - The first cut's imports arrived about six years old, inside the eight-year warranty, and moved the call by three per cent and one lot; the Mira city car is now the platform kept alive by old imports from abroad, as old cheap EVs are.

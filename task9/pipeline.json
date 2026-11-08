@@ -1,15 +1,15 @@
 {
  "task": "task9",
- "status": "READY",
+ "status": "DESIGN",
  "domain": "quantitative-finance",
  "subdomain": "volatility-derivatives-pricing (client task type: derivative pricing, a structured credit note's loss distribution)",
  "objective": "forecasting",
- "stage": 5,
- "stage_name": "ready",
+ "stage": 2,
+ "stage_name": "design",
  "updated": "2026-11-08",
- "call": "buy Ostvale's Class A note: 0.54 per cent chance of any loss 2027 to 2031 against the 1 per cent test; Kestrel Lane's fails at 1.33 per cent (both at 15.0 per cent subordination)",
- "stump": "The default path buys Kestrel Lane's note at a 0.14 per cent chance of loss against Ostvale's 0.44 per cent (the field's copula, one factor fitted to the yearly default rates plus the agencies' industry factor, back-tested on the record); the step that lands it there is linking defaults only through the economy and the sector, when the companies held by one sponsor house's funds default in the same years (0.503 of the residual variance), and Kestrel Lane's 95 loans sit with five houses, so its note's chance is 1.33 per cent, over the bar, against Ostvale's 0.54.",
- "architecture": 6,
+ "call": "",
+ "stump": "A competent solver rebuilds each loan's sponsor house, fits the house-year dependence and a censoring-corrected recovery for every default, finds Kestrel Lane at about 1.5 per cent and Ostvale at about 0.6 and buys Ostvale; the defaults that cluster in a house's bad year recover far less than isolated ones, so with recovery tied to the house's year shock (and the economy's) Ostvale's chance of loss is about 3 per cent and Kestrel Lane's about 5, and the fund buys neither.",
+ "architecture": 7,
  "loops": 0,
  "precut": {
   "exit": 0,
@@ -69,11 +69,18 @@
     "run1": "review A at 24 harms, each review's pooled pilot rate carried to every patient in scope",
     "run2": "the same, review A at 24 harms",
     "triage": "none run: the platform's determinism check returned the golden and the slot's domain is quantitative finance, so the route is redesign"
+   },
+   {
+    "architecture": 6,
+    "date": "2026-11-08",
+    "graded": false,
+    "verdict": "not stumped (author's report); both runs bought Ostvale",
+    "texts": "runs/arch6_run1.md, runs/arch6_run2.md"
    }
   ]
  },
  "returned": [],
- "resume": "READY: upload prompt.txt and target.zip (2e2598bc), generate the two runs, then /triage-runs task9 with both runs and the generated rubric saved under runs/.",
+ "resume": "stage 2-3: tie workout recovery and duration to the year and house shocks in world.py, estimate the link from the pack in analysis.py, simulate with it in model.py, rewrite golden, writeup, checks, verify, ceiling, the design note and the prompt",
  "approved": null,
  "submitted": null,
  "portal": {
@@ -361,6 +368,14 @@
   {
    "date": "2026-11-08",
    "event": "READY: buy Ostvale's Class A note (0.54 per cent chance of loss 2027 to 2031 against the 1 per cent test; Kestrel Lane's fails at 1.33); target.zip 2e2598bc, golden.zip 23f116d2"
+  },
+  {
+   "date": "2026-11-08",
+   "event": "architecture 6 landed on the platform (author: not stumped; both runs on Ostvale with a sponsor factor, run 1 Kestrel 1.47 and Ostvale 0.58, run 2 0.94 and 0.55); runs saved under runs/"
+  },
+  {
+   "date": "2026-11-08",
+   "event": "DRAWN architecture 7 in the same world at the author's word: recovery tied to the sponsor house's year (and the economy's), so the call moves from Ostvale to neither; guard WARN only"
   }
  ],
  "build": {
