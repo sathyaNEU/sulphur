@@ -40,7 +40,8 @@ def write(R, F):
           "over-threshold requests than their budgets allow, to the nearest ten thousand." % (
               n_over, F["over_share_pct"], F["beyond_budget"]),
           "5. Customer-facing incidents named at least one of the %s for %s minutes in the first half of 2026 and %s "
-          "minutes in the second, whole minutes." % (n_over, h1, h2),
+          "minutes in the second, each service counting from when the incident tool added it, whole minutes." % (
+              n_over, h1, h2),
           "", "### %s" % K.CSV_OUT, "",
           "1. A row per service, columns service, latency_sli_pct, error_budget_pct and ran_over; SLI and budget per "
           "cent to one decimal:"]

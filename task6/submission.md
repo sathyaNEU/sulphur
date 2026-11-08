@@ -26,7 +26,7 @@ Partner-gateway's December SLI is 2.9% against its 2.0% budget once each kept sp
    - notifications: SLI 1.6 against a budget of 1.0, over
 3. A bar chart after that table, each service's SLI against its own budget line, the services over budget in red.
 4. The five served 90% of all our services' over-threshold December requests together and 300,000 more over-threshold requests than their budgets allow, to the nearest ten thousand.
-5. Customer-facing incidents named at least one of the five for 1,545 minutes in the first half of 2026 and 907 minutes in the second, whole minutes.
+5. Customer-facing incidents named at least one of the five for 1,545 minutes in the first half of 2026 and 907 minutes in the second, each service counting from when the incident tool added it, whole minutes.
 
 ### service_sli_2026.csv
 

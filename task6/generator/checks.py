@@ -323,7 +323,13 @@ def main(target):
     check("default path: at most one of the five shares in the golden's bin", len(kept_sh) <= 1,
           "kept: %s" % (", ".join(kept_sh) or "none"))
     back = ceiling.ask_figures(prog, AN.Golden(target).incidents(full["over"], backdate=True))
-    check("SF16 the incident ask's own judgment: the final service lists read from the declaration miss both halves",
+    check("SF16 closed in the prompt: a service counts from when the incident tool added it",
+          "counting from when the incident tool added it" in prompt)
+    check("SF17 closed in the prompt: incident time is a duration in whole minutes, rounded once",
+          "for how long" in prompt and "time in whole minutes" in prompt)
+    check("SF18 closed in the prompt: the joint share is of the same over-threshold requests",
+          "what share of those requests they served together" in prompt)
+    check("the incident clock's other reading: the final service lists read from the declaration miss both halves",
           all(a != b for a, b in zip(back["minutes"], gold["minutes"])), "%s against %s" % (back["minutes"],
                                                                                           gold["minutes"]))
     _, _, _, _, itruth = A.incidents()
