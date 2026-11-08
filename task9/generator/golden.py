@@ -15,7 +15,7 @@ from docx.oxml import OxmlElement  # noqa: E402
 from docx.oxml.ns import qn  # noqa: E402
 from docx.shared import Mm, Pt, RGBColor  # noqa: E402
 
-import ooxml  # noqa: E402
+import postprocess as PP  # noqa: E402
 
 BLUE, ORANGE = "#2a78d6", "#eb6834"
 INK, INK2, GRID = "#0b0b0b", "#52514e", "#d9d8d4"
@@ -268,8 +268,9 @@ def ic_note(F, path, png):
     doc.core_properties.title = "IC-2027-03 Senior note purchase"
     doc.core_properties.last_modified_by = "Ilse Lips"
     doc.save(path)
-    ooxml.normalize(path, dt.datetime(2027, 2, 16, 8, 2), dt.datetime(2027, 2, 18, 16, 47), creator="Ilse Lips",
-                    company="Kadeweg Fiduciair Beheer")
+    PP.normalize_docx(path, "Ilse Lips", "Ilse Lips", "2027-02-16T08:02:00Z", "2027-02-18T15:47:00Z", revision=11,
+                      total_time=214, seed="task9-ic-2027-03", title="IC-2027-03 Senior note purchase",
+                      company="Kadeweg Fiduciair Beheer")
 
 
 def by_year_csv(F, path):

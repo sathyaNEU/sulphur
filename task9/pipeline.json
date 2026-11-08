@@ -17,7 +17,7 @@
   "checks": "75, 0 FAIL, 0 WARN, re-run on the final cut 7c395ae0"
  },
  "leak": {
-  "leak_py": "REVIEW on bed0980b and on the final cut 7c395ae0 (--asof 2027-02-17), no LEAK; every REVIEW line ruled harmless in the design note's Stage 4",
+  "leak_py": "REVIEW on bed0980b, 7c395ae0 and the final cut 3ec3c9ed (--asof 2027-02-17), no LEAK, the container sweep PASS; every REVIEW line ruled harmless in the design note's Stage 4",
   "reader": "two isolated reads (bed0980b, final 7c395ae0): no leak at either; question 1 none (MP-RN-2 4.2 read as the model family, not the estimation), question 6 an analytical choice; read 1's finding (Ostvale's Class A sized at 85 per cent of par against its 13.0 per cent enhancement) fixed and asserted (K19); leak_check_report.md"
  },
  "duplicate_check": {
@@ -82,7 +82,7 @@
   ]
  },
  "returned": [],
- "resume": "READY: upload prompt.txt and target.zip (7c395ae0), generate the two runs, then /triage-runs task9 with both runs and the generated rubric saved under runs/.",
+ "resume": "READY: upload prompt.txt and target.zip (3ec3c9ed), generate the two runs, then /triage-runs task9 with both runs and the generated rubric saved under runs/.",
  "approved": null,
  "submitted": null,
  "portal": {
@@ -381,13 +381,14 @@
   }
  ],
  "build": {
-  "zip": "7c395ae0df91368f",
-  "golden_zip": "ea48e0f502d4eb3a",
+  "zip": "3ec3c9ed18cf7d6d",
+  "golden_zip": "ddc31f6f7edddd77",
   "byte_identical": true,
   "checks": "0 FAIL (K1 to K19, SF1 to SF23 with SF16b, R1 to R8, V1 to V4, B1, T1, S1, L1, D1, D2)",
   "verify": "PASS (independent road: house 0.460, Kestrel Lane 1.60, Ostvale 2.40, call neither)",
   "figures_check": "110 figures, 0 absent",
-  "metadata": "clean (scrub audit, target and golden)"
+  "metadata": "clean (scrub audit and the container gate, target and golden)",
+  "container_gate": "audit_containers.py 0 FAIL, 0 WARN on the final cut 3ec3c9ed (36 FAIL on 7c395ae0, the first READY cut: openpyxl's and python-docx's containers and one zip clock; the generator now writes through postprocess.py); every cell, sentence and figure unchanged, figures.json byte-identical"
  },
  "lineage_v6": {
   "stump": "The default path buys Kestrel Lane's note at a 0.14 per cent chance of loss against Ostvale's 0.44 per cent (the field's copula, one factor fitted to the yearly default rates plus the agencies' industry factor, back-tested on the record); the step that lands it there is linking defaults only through the economy and the sector, when the companies held by one sponsor house's funds default in the same years (0.503 of the residual variance), and Kestrel Lane's 95 loans sit with five houses, so its note's chance is 1.33 per cent, over the bar, against Ostvale's 0.54.",

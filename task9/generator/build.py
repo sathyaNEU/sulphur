@@ -21,12 +21,24 @@ import analysis as A  # noqa: E402
 import docs as DC  # noqa: E402
 import figures as FG  # noqa: E402
 import golden as GD  # noqa: E402
-import ooxml  # noqa: E402
+import postprocess as PP  # noqa: E402
 import pack as PK  # noqa: E402
 import world as W  # noqa: E402
 import writeup as WU  # noqa: E402
 
-ZSTAMP = (2027, 2, 17, 9, 30, 0)
+ISO = "%Y-%m-%dT%H:%M:%SZ"
+UTC = dt.timezone.utc
+# the exports have no save stamp of their own: each file's time is the pull that wrote it (metadata.json's dates)
+EXPORTS = {
+    "dealtrail_buyout_transactions_1997-2026.csv": dt.datetime(2027, 2, 15, 16, 22, 41, tzinfo=UTC),
+    "ecb_euro_reference_rates_2026-12.csv": dt.datetime(2027, 1, 4, 15, 5, 12, tzinfo=UTC),
+    "euribor_forward_curve_2026-12-31.csv": dt.datetime(2026, 12, 31, 17, 10, 3, tzinfo=UTC),
+    "lei_reference_extract_2026-12-31.csv": dt.datetime(2026, 12, 31, 14, 26, 55, tzinfo=UTC),
+    "lenderbase_loan_performance_2008-2026.csv": dt.datetime(2027, 2, 16, 7, 58, 19, tzinfo=UTC),
+    "lenderbase_workout_recoveries_2008-2026.csv": dt.datetime(2027, 2, 16, 8, 3, 7, tzinfo=UTC),
+    "lenderbase_sector_codes.json": dt.datetime(2024, 1, 1, 10, 15, 30, tzinfo=UTC),
+    "senior_note_loss_by_year.csv": dt.datetime(2027, 2, 18, 15, 41, 26, tzinfo=UTC),
+}
 DISTRACTORS = {
     "euribor_forward_curve_2026-12-31.csv": "the euro money market curve at the cut-off; looks relevant to the notes' "
                                             "floating coupons but the test is on principal loss alone",
@@ -68,7 +80,8 @@ def build_into(root, nsim=A.NSIM):
             ("ostvale_collateral_tape_20261231.xlsx", dt.datetime(2027, 1, 5, 10, 41), "Ostvale Reporting", "Ostvale Capital AB"),
             ("phl_matching_portfolio_cashflows_2027-2076.xlsx", dt.datetime(2026, 11, 20, 14, 3), "Liza Dekker",
              "Kadeweg Fiduciair Beheer")):
-        ooxml.normalize(os.path.join(tgt, name), when - dt.timedelta(days=3), when, creator=who, company=org)
+        PP.normalize_ooxml(os.path.join(tgt, name), who, who, (when - dt.timedelta(days=3)).strftime(ISO),
+                           when.strftime(ISO), excel=True, company=org)
     DC.standard(os.path.join(tgt, "phl_rated_note_standard_2026.pdf"))
     kl = [world.loans[world.comps[c]["loan"]] for c in world.X]
     os_ = [world.loans[world.comps[c]["loan"]] for c in world.Y]
@@ -92,12 +105,9 @@ def build_into(root, nsim=A.NSIM):
 
 
 def zipdir(folder, out):
-    with zipfile.ZipFile(out, "w", zipfile.ZIP_DEFLATED) as z:
-        for f in sorted(os.listdir(folder)):
-            zi = zipfile.ZipInfo(f, date_time=ZSTAMP)
-            zi.compress_type = zipfile.ZIP_DEFLATED
-            zi.external_attr = 0o644 << 16
-            z.writestr(zi, open(os.path.join(folder, f), "rb").read())
+    """Each file's own save time, as a desktop zip tool at Kadeweg's office writes it (postprocess.zip_folder)."""
+    PP.own_mtimes(folder, EXPORTS)
+    PP.zip_folder(folder, out, zone="Europe/Amsterdam")
 
 
 def hashes(root):
