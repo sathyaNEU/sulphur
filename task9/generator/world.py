@@ -40,13 +40,14 @@ SECONDARY_P = 0.40
 REFI_P = 0.12
 # workouts: duration in years and the recovery it ends on
 WO_SHAPE, WO_SCALE = 2.6, 1.05
-REC_A, REC_B, REC_SD = 1.2416, 0.125, 0.14
+REC_A, REC_B, REC_SD = 1.4263, 0.125, 0.14
 # a house in a bad year stops putting money into its companies' restructurings and takes longer to settle each one:
 # the shock that clusters a house's defaults also cuts what they recover and lengthens the workouts; the economy's
 # year moves how many default, not what a default recovers
-REC_M, REC_H = 0.0, 0.16
-DUR_M, DUR_H = 0.0, 0.20
+REC_M, REC_H = 0.0, 0.26
+DUR_M, DUR_H = 0.0, 0.30
 WO_MAX = 8.5                 # no workout in the record runs past eight and a half years
+REC_FLOOR = 0.02             # a workout always recovers something, if only the cash in the accounts
 
 SECTORS = [  # Lenderbase code, Lenderbase name, Kestrel Lane (agency industry), Ostvale (GICS-style), Dealtrail word
     ("LB01", "Business services", "Services: Business", "Commercial & Professional Services", "Business services"),
@@ -354,7 +355,7 @@ def _workouts(W, rng):
         y = L["end"].year
         zm, zh = W.M[y], W.F[(W.funds[L["fund"]]["house"], y)]
         d = min(float(rng.gamma(WO_SHAPE, WO_SCALE)) * float(np.exp(-DUR_M * zm - DUR_H * zh)), WO_MAX)
-        r = float(np.clip(REC_A - REC_B * d + REC_M * zm + REC_H * zh + rng.normal(0, REC_SD), 0.0, 1.0))
+        r = float(np.clip(REC_A - REC_B * d + REC_M * zm + REC_H * zh + rng.normal(0, REC_SD), REC_FLOOR, 1.0))
         L["wo_years"], L["recovery"] = d, r
         L["resolved"] = L["end"] + dt.timedelta(days=int(round(d * 365.25)))
         L["resolution"] = ("Restructuring" if r > 0.55 else "Sale of business" if r > 0.3 else "Liquidation")
