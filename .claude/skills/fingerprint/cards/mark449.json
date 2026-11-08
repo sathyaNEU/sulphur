@@ -1,0 +1,92 @@
+{
+  "task": "mark449",
+  "architecture": "v1",
+  "drawn": "2026-10-12",
+  "slot_note": "wave 2 for oviya1301, seed ET06 (analytical_tasks/07_data_extraction_conformation): the complaint-operations world, the permanent-staff-against-overtime decision after an industry event and the sustained workload quantity are kept; the seed's taxonomy-seam trap (data semantics) is not used as the decisive step, and the pitfall is re-found from how the program's contacts are matched into complaint matters",
+  "domain": "general-statistics-data-science",
+  "subdomain": "data-integration-record-linkage-entity-resolution",
+  "client_domain": "general-statistics-data-science",
+  "niche": "estimating, from a card issuer's outsourced complaint desk's six intake channels, the weekly new complaint matters that do not arise from a processor's payment-posting failure (the sustained base the 2027 dedicated team is sized on), when about a fifth of the window's matters open on a social care desk that attaches the first of the cardholders whose name and city match a poster's display name",
+  "objective": "etl",
+  "shape": "other",
+  "decision_type": "dial_setting",
+  "answer_unit": "count",
+  "answer": "Carry 35 dedicated analysts in Bellcroft's 2027 complaint desk statement of work (a sustained base of 950 new matters a week after 500 a week arising from Meridel's payment-posting failure).",
+  "answer_source": "task449/submission.md, block 1",
+  "gap": [
+    "population"
+  ],
+  "pattern": [
+    "none"
+  ],
+  "generators": [
+    "G17",
+    "G3",
+    "G10"
+  ],
+  "gate_g": "method_or_model_selection",
+  "calibration_form": "none",
+  "stump_strategy": "identity_resolution",
+  "decisive_rule_filed": false,
+  "official_decoy": false,
+  "validated_decoy": false,
+  "context_artifact": "operations_log",
+  "stakeholder_role": "workforce planning lead at the outsourcing firm that runs a card issuer's complaint desk, who sets the dedicated analysts the client's 2027 statement of work will carry",
+  "role_family": "capacity_planner",
+  "scoring_unit": "flat per seat",
+  "spine": {
+    "file": "complaint_matters_2025_2026.csv",
+    "rows": 77145,
+    "entity": "one complaint matter opened by the program's case system from a contact on any of six intake channels",
+    "grain": "matter (one consumer's complaint about one problem with one account)",
+    "source": "synthetic (constructed in the layouts of a complaint case register with its status history, a social care tool's JSON export, a processor's affected-payment file and a workforce time system; no real consumer, complaint or company is depicted)"
+  },
+  "forum": "committee_or_panel",
+  "forcing_event": "budget_or_appropriation",
+  "org_family": "professional_services",
+  "world": {
+    "geography": "United States (a regional card issuer's national cardholder base; the complaint desk works Eastern time)",
+    "currency": "USD",
+    "org_type": "business process outsourcer running a regional card issuer's complaint desk under an annual statement of work",
+    "invented_names": [
+      "Bellcroft Bank",
+      "Fenwright Contact Services",
+      "Meridel Payment Systems"
+    ],
+    "people": [
+      "Catherine Schneider",
+      "Stacy Fernandez"
+    ]
+  },
+  "deliverables": [
+    "dedicated_analysts_2027.docx",
+    "flex_hours_2026.csv"
+  ],
+  "opening_move": "question-first",
+  "question_form": "how-many",
+  "driver": "A characteristic of each record is read through a link to another file, and for one class of records the link is the first of several equally plausible targets, so the linked value is the record's own only one time in k and otherwise the value of an unrelated target, which carries the population's rate; a share computed from the linked values is diluted toward that rate, and the class's true share has to be recovered by inverting the dilution with each record's own chance of a right link, which matters only once a shock moves a large share of the records into that class.",
+  "driver_concrete": "After the May 2026 payment-posting failure about a quarter of new complaint matters open on the social care desk, whose agents attach the first of the cardholders whose name and city match a poster's display name; whether a social-care matter arises from the failure (the cardholder's payment was in the processor's affected-payment file) read off that attached account comes out near 36 per cent, against a true share of about 80 per cent, so the sustained base the dedicated analysts are sized on is overstated by about 135 matters a week unless the share is estimated from the searches that returned one cardholder or by inverting each attachment's one-in-k reliability (figures fixed at build).",
+  "stump": "A competent solver attributes each new matter in the last eight complete weeks to the failure by checking the account the case system attached against the processor's affected-payment file, keeps every social-care matter whose attached account had no affected payment in the sustained base, and files about 40 dedicated analysts; the social care desk attached the first of k same-name cardholders, so most of the failure's social-care matters look unaffected, and with the share estimated from the one-match searches the base is about 950 matters a week and the team 35 (figures fixed at build).",
+  "stump_class": "analytical",
+  "analyst_test": "A strong analyst who conforms the six channel matters, joins the social care desk's search records, applies Schedule 7's four codes and affected-payment test to each matter's attached account and the planning standard's 27.5 matters per analyst-week files about 40 dedicated analysts; one who distrusts the name-and-city attachments and imputes from the verified social matters files 34 (figures fixed at build).",
+  "domain_test": "False links attenuate: a characteristic read through an uncertain link mixes the record's own value with the population's, and record linkage corrects estimates from linked data for the false-link rate (the Lahiri and Larsen and Chambers adjustments, or the subsample whose links are certainly right) instead of reading the linked values as truth; with a plain join of the attached account the sustained base rises by about 135 matters a week and the team from 35 to 40, so the call does not survive the swap of method.",
+  "layer2_family": "estimation_fit",
+  "layer2_pattern": "general-statistics-data-science/data-integration-record-linkage-entity-resolution/1",
+  "layer1": [
+    "six intake channels in one register, each with its own source-reference format",
+    "the social care tool's export in JSON lines with nested search records and UTC post times, against the register's Eastern opening times",
+    "account references in two formats across the register and the processor's affected-payment file",
+    "returned and re-presented payments in the processor's file",
+    "the desk's complaint code list against the incident schedule's four codes",
+    "a status history in which a reopened matter keeps its number, and merged duplicates",
+    "Fenwright's time records carrying other programs' overtime, and two staffing agencies' timesheets in their own layouts",
+    "an operations log of the surge (overtime approvals, agency starts, the social care desk's changes)"
+  ],
+  "mechanism_source": "design_note",
+  "differentiation": {
+    "task101": "task101 removes the decision's own earlier payments from the distribution a threshold is cut from; here nothing is removed from a baseline: a share read through first-of-k account attachments is diluted toward the portfolio rate and is recovered by inverting the dilution.",
+    "task126": "task126 splits units a succession link wrongly joins, using a separate ledger's classification; here no unit is split or joined: each matter's count is exact and only the characteristic read through an arbitrary account attachment is corrected for the attachment's one-in-k reliability."
+  },
+  "lineage": [],
+  "notes": "Drawn 2026-10-12 for wave 2 with rule 1 as the governing constraint. The seed's world is complaint operations, and the ETL lane's only task type that fits it is record linkage (general statistics); the swap there is of the method, and the deciding quantity is the linkage field's own estimate of distinct entities under linkage error (the client's pattern: propagate linkage error to the estimate; shortcut: links above a cutoff as truth). stump_strategy identity_resolution is the honest family (the decisive step is the reliability of an entity link) and draws the guard's semantics-risk WARN: every field and rule is read right on the default path, which still files the wrong base; the step is the correction of a linked share for false links. First draw (rejected before registering): counting new matters as the sum of one minus the matching engine's probabilities, which is task253's lesson (count by summed posterior probabilities); the capture-rate alternative (unlinkable contacts imputed from linkable ones) is task448's. calibration_form none. Personas drawn with guard.py names --geo 'United States' --seed 449. Forum, forcing event and organisation drawn clear of the three builds drawn before it (tasks 185, 229 and 448)."
+}

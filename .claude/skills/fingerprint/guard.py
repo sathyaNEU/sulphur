@@ -144,7 +144,8 @@ def task_num(task):
 
 def load_cards(cards_dir=CARDS_DIR):
     cards = []
-    for p in sorted(Path(cards_dir).glob("task*.json")):
+    # Sulfur builds are cards/taskNN.json; the Project Mark baseline is cards/markNN.json (Mark's taskNN).
+    for p in sorted(list(Path(cards_dir).glob("task*.json")) + list(Path(cards_dir).glob("mark*.json"))):
         try:
             c = json.loads(p.read_text())
         except Exception as e:
@@ -202,7 +203,8 @@ def ledger_status():
                 rk = mod.status_rank(r.get("status"))
                 if rk[0] > best[0]:
                     best = rk
-            out[task] = best[1]
+            # The ledger's rows are Project Mark's portal record, so they key the markNN baseline cards.
+            out[re.sub(r"^task", "mark", task)] = best[1]
         return out
     except Exception:
         return {}
@@ -372,8 +374,8 @@ def real_source(c):
 def validate_card(c, vocab, strict=False):
     errs, warns = [], []
     t = c.get("task", "")
-    if not re.fullmatch(r"task\d+", t or ""):
-        errs.append("task must read taskNN, got %r" % t)
+    if not re.fullmatch(r"(task|mark)\d+", t or ""):
+        errs.append("task must read taskNN (a Sulfur build) or markNN (the Mark baseline), got %r" % t)
     if c.get("_path") and Path(c["_path"]).parent.resolve() == CARDS_DIR.resolve():
         if Path(c["_path"]).stem != t:
             errs.append("file name %s does not match task %s" % (Path(c["_path"]).name, t))
@@ -1350,6 +1352,7 @@ def cmd_heart(args):
         mod = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(mod)
         for task, rows in mod.parse_ledger(str(LEDGER)).items():
+            task = re.sub(r"^task", "mark", task)
             if task == cand.get("task"):
                 continue
             for r in rows:

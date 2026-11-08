@@ -1,0 +1,128 @@
+{
+  "task": "mark303",
+  "architecture": "v2",
+  "drawn": "2026-10-25",
+  "slot_note": "re-root at stage 1 after architecture 1 (a pet insurer's renewal increase, lifetime owners held by a continuing condition) was spent at stage 4; candidates screened on paper and by isolated concept probes before this draw (design note ## Tried and rejected)",
+  "domain": "energy-systems-utilities",
+  "subdomain": "asset-condition-maintenance",
+  "client_domain": "energy-systems-utilities",
+  "niche": "an electric distribution utility's storm-hardening filing choosing which of six feeders' three-phase backbones to convert to covered conductor on steel poles, sized as the customer-minutes of sustained interruption a year the conversion removes, when some tickets recorded at a feeder's breaker are losses of its substation's supply that every feeder there opens in the same minute",
+  "objective": "opportunity-sizing-decision",
+  "shape": "01",
+  "decision_type": "pick_one_of_n",
+  "answer_unit": "count",
+  "answer": "Convert the backbone of F-205 (Sorrel Hill) in 2027: 237,600 customer-minutes of sustained interruption a year, worth USD 499,000 a year at USD 2.10 a customer-minute",
+  "answer_source": "task303/submission.md block 1, from generator/figures.json",
+  "gap": [
+    "population"
+  ],
+  "pattern": [
+    "none"
+  ],
+  "generators": [
+    "G8",
+    "G3"
+  ],
+  "gate_g": "decomposition_attribution",
+  "calibration_form": "none",
+  "stump_strategy": "decomposition_attribution",
+  "decisive_rule_filed": false,
+  "official_decoy": false,
+  "validated_decoy": false,
+  "context_artifact": "operations_log",
+  "stump_class": "analytical",
+  "analyst_test": "A strong analyst who reads every file correctly sums each candidate's feeder-breaker and line-recloser tickets caused by vegetation, wind or wildlife outside the accepted major event days over 2019 to 2025, takes nine in ten of their customer-minutes divided by seven and converts F-112 at about 356,000 customer-minutes a year, where the golden is F-205 at about 263,000.",
+  "domain_test": "The deciding quantity is the customer-minutes a backbone conversion removes, which a reliability engineer attributes to where each interruption originated: a ticket recorded at a feeder's breaker that every feeder at the substation opens in the same minute is a loss of the substation's supply and not a fault on that feeder's backbone; with wards or stores in place of feeders the sentence loses its mechanism, because neither has a protective device that records a shared upstream supply loss as its own interruption.",
+  "layer2_family": "field_method",
+  "layer2_pattern": "own:interruptions-attributed-to-their-origin-before-a-feeder-investment-is-credited",
+  "layer1": [
+    "an outage-system migration on 1 January 2023: legacy tickets with feeder numbers, codes, Eastern local dates and clock times and minutes of duration; current tickets with feeder ids, worded categories and UTC start and restoration stamps",
+    "major event days as Eastern calendar days against UTC stamps",
+    "transformer and service tickets beside the tap fuses",
+    "a feeder inventory with LiDAR canopy shares and pole counts",
+    "vegetation work by feeder section on a four-year cycle (a distractor)",
+    "the storm crews' mobile workforce records: the storm desk's screen in Eastern local time, the contract crews' own devices on Eastern standard time all year, and the desk's late entries of restorations (ask A's path)",
+    "legacy handheld tickets with durations in hours and minutes, dated the day the crew closed them (ask B's path)"
+  ],
+  "stakeholder_role": "the utility's distribution planning engineer preparing the 2027 storm-hardening filing",
+  "role_family": "capacity_planner",
+  "scoring_unit": "other",
+  "spine": {
+    "file": "oms_interruptions_2019_2022.csv and oms_interruptions_2023_2025.csv",
+    "rows": 15600,
+    "entity": "one feeder's sustained interruption on one ticket",
+    "grain": "feeder x interruption",
+    "source": "synthetic"
+  },
+  "forum": "regulator_or_inspector",
+  "forcing_event": "statutory_or_regulatory_filing",
+  "org_family": "utility_or_infrastructure",
+  "world": {
+    "geography": "United States (south-east, an invented service territory)",
+    "currency": "USD",
+    "org_type": "an investor-owned electric distribution utility",
+    "invented_names": [
+      "Shenmore Valley Electric",
+      "Pell Creek",
+      "Sorrel Hill",
+      "Byers Mill",
+      "Hollow Fork",
+      "Kettle Run",
+      "Willow Crossing",
+      "State Utility Regulation Commission"
+    ],
+    "people": [
+      "Zachary Sanders"
+    ]
+  },
+  "deliverables": [
+    "hardening_memo_2027.pdf",
+    "hardening_tables_2027.xlsx"
+  ],
+  "opening_move": "question-first",
+  "question_form": "which",
+  "driver": "The decisive quantity is what an intervention on one unit removes from its recorded losses, when part of that record is a shared loss that every unit fed from the same upstream source logs in the same minute under its own first device; summing the unit's records by cause and device credits the intervention with losses that originate upstream, and only the minute every sibling shares separates them.",
+  "driver_concrete": "Each candidate's figure is nine in ten of the customer-minutes outside major event days from vegetation, wind and wildlife interruptions on its backbone, after removing the feeder-breaker tickets that every feeder at its substation opened in the same minute, which are losses of the substation's supply that the conversion cannot prevent.",
+  "stump": "A competent solver sums each candidate's breaker and recloser tickets caused by vegetation, wind or wildlife outside major event days, takes nine in ten of their customer-minutes over seven years and converts F-112 at 455,400 customer-minutes a year, where the golden is F-205 at 237,600; the step that lands it there is reading every feeder-breaker ticket as a fault on that feeder's backbone, when the Pell Creek tickets that all three of its feeders open in the same minute are losses of the substation's supply.",
+  "mechanism_source": "design_note",
+  "lineage": [
+    {
+      "architecture": "v1",
+      "domain": "actuarial-science-insurance",
+      "subdomain": "pricing-ratemaking-credibility",
+      "niche": "a Canadian pet insurer choosing which of four products takes a 12 per cent renewal increase in 2027, sized by what the increase adds to the year's underwriting result on the 2027 renewals, when an owner whose pet has a continuing condition covered for life cannot take that cover to a new insurer and renews whatever the price",
+      "objective": "opportunity-sizing-decision",
+      "shape": "other",
+      "decision_type": "pick_one_of_n",
+      "gap": [
+        "population"
+      ],
+      "pattern": [
+        "none"
+      ],
+      "generators": [
+        "G14",
+        "G6",
+        "G9"
+      ],
+      "gate_g": "decomposition_attribution",
+      "stump_strategy": "composition_mix",
+      "calibration_form": "existing_book_actuals",
+      "context_artifact": "other",
+      "forum": "board_of_directors",
+      "forcing_event": "launch_or_rollout",
+      "org_family": "financial_institution",
+      "role_family": "portfolio_manager",
+      "layer2_family": "estimand_identification",
+      "layer2_pattern": "own:the-owners-a-renewal-increase-drives-away-are-those-who-can-replace-the-cover",
+      "driver": "A price rise's yield on a book is the rise on those who stay less the margin of those it drives away, and members who cannot take what they hold elsewhere stay whatever the price; when what a member holds is worth most to the members who cost most, the rise drives away the book's profitable members, so their margin rather than the book's average is what it loses, and a book whose holding lapses after a fixed term has no such members.",
+      "driver_concrete": "Each product's 2027 addition is the 12 per cent on the policies that renew less the margin of the extra policies the increase drives away, each valued at its own claims. On the lifetime products a pet with a continuing condition is covered for it every year and no new insurer would cover it, so its owner lapses 3 to 7 per cent whatever the offer, while healthy pets' owners lapse 13 to 40 per cent as the offer rises; the extra lapses are the healthy pets, whose margin (about CAD 360 a Lifetime Dog renewal against minus 1,280 with a continuing condition) is the book's highest, so Lifetime Dog's increase adds little, and Essentials, whose renewals carry about nil margin, adds the most.",
+      "stump": "A competent solver fits the renewal response to past offers by product with age and claim history, values each renewal at its expected claims and puts the increase on Lifetime Dog at about CAD 0.5 to 1.4 million, where the golden is Essentials at CAD 0.5 million; the step that lands it there is reading the renewal response as the product's, when the owners of pets with a continuing condition covered for life renew whatever the price and the increase drives away only the healthy pets, whose margin is the book's highest.",
+      "answer": "Essentials, CAD 0.5 million added to the 2027 underwriting result (0.463 to 0.509 across the 144 constructions that split the lifetime response by a continuing condition)",
+      "fate": "spent 2026-10-25 at stage 4: scored reader A named Essentials with a claims-aware retention model by product (lifetime claimants almost never leave), a covariate reflex that reaches the split without marking a condition; the determinism judge returned NOT_DETERMINISTIC, SEND_BACK on the figure (0.32 to 0.51 across condition markings, flag timings and response fits); both readers took 48 of 48 ask cells"
+    }
+  ],
+  "differentiation": {},
+  "notes": "stump_strategy decomposition_attribution: a feeder's recorded customer-minutes split by where each interruption originated (its own backbone, its taps, the substation's supply), the overlap of the sibling feeders' tickets in the same minute deciding the split; gap population (what one breaker-level ticket is); generators G8 (the conversion cannot reach a loss of the substation's supply, decided ticket by ticket) and G3 (the ticket records the feeder's own breaker while the interruption began upstream); pattern none (pattern C's join is not the form here: no share behind a join, the classification is read off the sibling tickets' shared minute); scoring_unit other: the commission's incentive pays per customer-minute removed. WARNs answered in the design note: people.first (Zachary, one older build), repeat.gate_g (task121 v5, spent), repeat.decision and repeat.question_form (task166 v2: the decision here is a pick of one feeder, so the question asks which).",
+  "registered": "2026-10-25T17:59:56Z"
+}

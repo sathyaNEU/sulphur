@@ -1,0 +1,150 @@
+{
+  "task": "mark486",
+  "architecture": "v3",
+  "drawn": "2026-10-25",
+  "slot_note": "wave 8, oviya1301 ETL lane; architectures 1 (a privacy-protected census release, judge SEND_BACK) and 2 (HMIS pairwise linkage resolved into people, reader A landed) spent at stage 4 and re-rooted fresh by the author's no-retirement rule",
+  "domain": "survey-research-official-statistics",
+  "subdomain": "census-register-administrative-data-quality",
+  "client_domain": "survey-research-official-statistics",
+  "niche": "an island nation's statistics office placing the tax authority's PAYE employer register, which holds each employer's March staff at its PAYE address, at the premises each employer occupies in the valuation list, to name the designated town centres whose workplace retail employment fell by at least 8 per cent between March 2022 and March 2026, the eligibility test of the government's 2027 Town Centre Renewal Fund",
+  "objective": "etl",
+  "shape": "10",
+  "decision_type": "designation_set",
+  "answer_unit": "set_of_items",
+  "gap": [
+    "population"
+  ],
+  "pattern": [
+    "none"
+  ],
+  "generators": [
+    "G14",
+    "G2"
+  ],
+  "gate_g": "etl_conformance",
+  "calibration_form": "none",
+  "stump_strategy": "composition_mix",
+  "decisive_rule_filed": false,
+  "official_decoy": false,
+  "validated_decoy": false,
+  "context_artifact": "published_series",
+  "stump_class": "analytical",
+  "analyst_test": "With every field read and the prospectus applied, the strong analyst sees that the register holds a chain at its PAYE address, matches its premises in the rates lists by company number, places its staff across them by floor area, sums the retail employers' staff inside each town centre boundary in both years and names the wrong set of centres; only placing each premises at its rating class's staffing density, measured on the single-site employers, names the golden set",
+  "domain_test": "The deciding quantity is each designated town centre's workplace retail employment, which official business statistics build from an employer register by placing staff at the local units they work in; a payroll register holds a multi-site employer at its PAYE address, and the field places those staff at the employer's premises at the staffing density of each premises' class; with another field's nouns there is no PAYE address, no rating class and no hereditament to place staff at",
+  "layer2_family": "estimation_fit",
+  "layer2_pattern": "own:a multi-site employer's staff placed at its premises by each premises' floor area times the staffing density of its rating class, measured on the single-site employers of that class",
+  "layer1": [
+    "the PAYE extract's 2026 layout (a scheme reference split into office and employer parts, an added trading-name field) against its 2022 layout",
+    "employers whose PAYE address is a payroll bureau or an accountant",
+    "the valuation list's 2017 and 2023 editions in their own layouts, shops measured net internal and large stores gross internal",
+    "ratepayer names written per district billing system, with and without company numbers, trading names and previous names",
+    "premises held by a group's property company while its trading company employs the staff",
+    "empty and part-occupied premises flagged differently by district",
+    "postcodes recoded between the two lists",
+    "payroll schemes that merged or split between 2022 and 2026"
+  ],
+  "stakeholder_role": "the head of economic statistics at the island's statistics office, whose team compiles the employment statistics from the tax authority's PAYE returns and prepares the fund's eligibility schedule for the Council of Ministers",
+  "role_family": "statistical_office_head",
+  "scoring_unit": "other",
+  "spine": {
+    "file": "paye_employer_returns_march_2022_2026.csv",
+    "rows": 61000,
+    "entity": "one PAYE scheme's return for the tax month ending 5 April, with its employees paid in the month",
+    "grain": "employer x March",
+    "source": "synthetic (constructed in the layout of a tax authority's PAYE employer extract)"
+  },
+  "forum": "minister_or_cabinet",
+  "forcing_event": "vote_or_meeting",
+  "org_family": "research_or_statistics_office",
+  "world": {
+    "geography": "a fictional self-governing island nation in the British Isles (Torvasay), its districts, towns, firms and people invented",
+    "currency": "GBP",
+    "org_type": "the island's government statistics office, which compiles labour market statistics from PAYE returns",
+    "invented_names": [
+      "Torvasay",
+      "Torvasay Statistics",
+      "Rookgate",
+      "Dorrstead",
+      "Glenskarn",
+      "Ingmouth",
+      "Neshdale",
+      "Skelrigg"
+    ],
+    "people": [
+      "Frances Davies",
+      "Stewart Sheppard",
+      "Irene Walters"
+    ]
+  },
+  "deliverables": [
+    "town_centre_fund_2027_eligibility.xlsx",
+    "town_centre_retail_employment_2022_2026.png"
+  ],
+  "opening_move": "question-first",
+  "question_form": "which",
+  "driver": "The decisive quantity is each area's count of the members of multi-site units, which the record holds only at each unit's registered address; the count follows when each unit's members are placed at its sites in proportion to each site's size times the density of its class, measured on the single-site units of that class, so a share by size alone moves members to the large, sparse sites a unit opens and takes too few from the small, dense sites it closes",
+  "driver_concrete": "The employer register built from PAYE returns holds every employer's March staff at its PAYE address; a retail chain's staff work at its shops, superstores, retail warehouses, distribution centres and head office in the councils' business rates lists, and those premises hold very different staff per square metre by rating class (a high-street shop about six per 100 square metres, a distribution centre under one), which only the register's single-site employers, each matched to its one hereditament, measure; placing each chain's staff by floor area alone moves staff to the distribution centres several chains opened in 2025 and understates what the town centres lost when chains shut small shops",
+  "stump": "Placing each multi-site employer's staff at its premises by floor area (or rateable value) names the wrong set of town centres for the 2027 fund, because a share by floor area puts a new distribution centre's share of a chain's staff at many times what it employs and gives a closed high-street shop a share far below its staff",
+  "mechanism_source": "design_note",
+  "differentiation": {
+    "task233": "task233 carries an imputation departure measured on a follow-up to every unit on the odds scale; here no value is imputed: each multi-site employer's recorded staff are split across its premises by size times a class density measured on single-site employers",
+    "task273": "task273 estimates each group's travel exposure from the uninvolved parties of two-party events within strata; here the exposure is known (floor area) and the decisive quantity is staff per square metre by premises class",
+    "task280": "task280 re-weights self-silenced probes to a continuous load record; here nothing is under-sampled: each employer's whole payroll is recorded, at the wrong place, and is placed at its premises",
+    "task458": "task458 counts trait holders from events seen while observed, inflating by an observation share; here every member is counted once and the decisive step is where each is placed, not how many there are",
+    "task473": "task473 inflates positives by a detection share by trait level; here nothing is undetected and no count is inflated, the total is fixed and is apportioned across an employer's sites"
+  },
+  "lineage": [
+    {
+      "gap": [
+        "population"
+      ],
+      "pattern": [
+        "none"
+      ],
+      "generators": [
+        "G2",
+        "G16",
+        "G12"
+      ],
+      "gate_g": "etl_conformance",
+      "decision_type": "conformed_dataset",
+      "stump_strategy": "other",
+      "layer2_pattern": "own:post-processing-truncation-bias-by-grain",
+      "driver": "Small-area counts published with added noise and then forced to non-negative whole numbers that add up to the next level's count are pushed up where the true count is near zero and down where it is large, so an area assembled from the sparse cells of groups it shares with dense cells collects the drift; it has to be built from the groups' own counts and split inside a cut group by a measure the release leaves exact.",
+      "niche": "fusing a formally private census release's nested block, block group and tract tables with the county's housing register into census-day counts of older residents for senior-services provider areas whose boundaries cut block groups at the town edges, for the state aging formula's filing",
+      "subdomain": "data-integration-record-linkage-entity-resolution",
+      "domain": "general-statistics-data-science",
+      "architecture": "v1",
+      "drawn": "2026-10-21",
+      "stump": "Summing the release's block counts over each provider area's blocks files North Kelvane at 850 residents aged 60 and over where it held about 700, and every rural area 4 to 21 per cent high and both towns 1 to 3 per cent low, because noise-infused counts forced to be non-negative and consistent with their block group drift from the dense town blocks into the sparse rural blocks of the block groups the boundaries cut.",
+      "fate": "spent at stage 4 on 2026-10-21: the determinism judge returned NOT_DETERMINISTIC (competing_defensible_answer, SEND_BACK): the release's block counts summed over each area were a defensible reading because nothing shipped separated them from the housing-unit split of the block groups' counts; both isolated readers missed the call but kept every ask figure (the replay cap and the prior-number death chain sat on the careful path); re-rooted fresh by the author's rule (no retirement)"
+    },
+    {
+      "gap": [
+        "population"
+      ],
+      "pattern": [
+        "none"
+      ],
+      "generators": [
+        "G17",
+        "G2"
+      ],
+      "gate_g": "etl_conformance",
+      "decision_type": "allocation_to_total",
+      "stump_strategy": "identity_resolution",
+      "layer2_pattern": "general-statistics-data-science/data-integration-record-linkage-entity-resolution/3",
+      "driver": "The decisive quantity is a count of distinct units across several lists that each hold a unit once, joined only by pairwise findings; a record carrying fewer identifiers matches several units at once, so merging every chain of findings joins units one list keeps apart, and the count follows only when the findings are resolved so that no group holds two rows of one list, each chain cut at its weakest finding.",
+      "driver_concrete": "Four Continuums of Care's HMIS exports, a domestic violence coalition's database, a homeless clinic's patients and a city outreach app's clients are linked by a state linkage unit that reports scored pairwise findings; outreach contacts, coalition survivors and street intakes carrying only a birth year link to every client of that name, year and sex, so merging every chain of links joins two clients one source keeps apart; resolving the findings strongest first so no person holds two records of one source, cutting each such chain at its weakest link, restores them.",
+      "stump": "Merging every record the linkage unit linked, directly or through other records, files the region at 39,874 people and the downtown Continuum at 17,644 people and 7,964,889 dollars, 28,815 dollars short, because a record carrying only a year of birth links to every client of that name, year and sex, so 225 merged groups hold two records one source keeps apart.",
+      "architecture": "v2",
+      "fate": "spent 2026-10-23 at stage 4: scored reader A counted each merged group's records by source, found the groups holding two records of one source, clustered the LINK findings strongest first under the one-per-source rule and landed the allocation; the decisive structure was a relation a per-group check shows",
+      "niche": "resolving a state linkage unit's pairwise findings across four Continuums of Care's HMIS exports, a domestic violence coalition's comparable database, a health care for the homeless clinic and a city outreach app into the people a region served once each in FY2026, the count its 2027 regional fund is split on",
+      "domain": "general-statistics-data-science",
+      "subdomain": "data-integration-record-linkage-entity-resolution"
+    }
+  ],
+  "notes": "Re-rooted 2026-10-25 (architecture 3). Forum, forcing event and organisation redrawn off task269 (council_or_assembly, budget_or_appropriation, local_government): the Council of Ministers approves the fund's list at a scheduled meeting and the compiler is the statistics office, which is who would compile it on an island with one PAYE register and one valuation list. stump_strategy grain_or_unit carries the strategy-risk warning, answered in the Three rules: reading the register's grain correctly is the first rung, not the decisive step; the decisive step is the staffing density by premises class that the single-site employers measure. question_form which repeats task485 v3 (spent) because the call is a set of centres. Stage 3, 2026-10-26: heart BLOCKed ban.strategy and ban.artifact against task137 v2 (grain_or_unit, register), registered three minutes before this card in another session and merged after it. Redrawn as the honester labels: the step the call turns on is a mix shift (chains opening retail park units and distribution centres while closing shops between the Marches), corrected by standardising each premises' staff to its kind's density, which is composition_mix; with the mix held still a share by floor area names the golden set exactly (the design note's proto2 line), so the register's grain is the first rung everyone takes and not what decides. The context artifact is the office's own Labour Force Survey series (residents in employment by industry and district), a published_series that answers a residence-based question correctly; the valuation list and companies register are evidence, not context.",
+  "architecture_spent": true,
+  "registered": "2026-10-26T00:19:34Z"
+}

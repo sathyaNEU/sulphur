@@ -12,7 +12,7 @@ Run the pipeline for `$ARGUMENTS`. Invoke the `build-pipeline` skill first: the 
 
 **Arguments.**
 
-- `taskNN <domain> <objective>`: the number (`status.py new` gives the next free one, task601 up), the assigned
+- `taskNN <domain> <objective>`: the number (`status.py new` gives the next free one, task1 up), the assigned
   Sulfur subdomain (one of the 21 in `guidelines/client/domains.txt`, mapped to its vocab key) and the objective.
   A starter data kit path, when the author claimed one, becomes the pack's spine candidate.
 - `new <domain> <objective>`: the same with the next free number.

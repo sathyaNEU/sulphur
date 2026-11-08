@@ -1,0 +1,221 @@
+{
+  "task": "mark170",
+  "architecture": "v5",
+  "drawn": "2026-10-24",
+  "slot_note": "architecture 5, the tenth cell of a reopened number: v1 (the paediatric ARV order), v3 (the repellent net campaign) and v4 (the auto-enrolled employer match) are in lineage; architecture 2's cells and cells five to nine died before any card (design note ## Tried and rejected)",
+  "domain": "human-factors-ergonomics",
+  "subdomain": "human-reliability-assessment",
+  "client_domain": "human-factors-ergonomics",
+  "niche": "a regional rail operator's forecast, for the rail safety regulator, of the train data entry errors its Phase 4 depots' drivers will make at ETCS Start of Mission in each depot's first twelve months on ETCS, when the suburban depots that went first gave each driver four to six times as many start-ups a month",
+  "objective": "forecasting",
+  "shape": "07",
+  "decision_type": "quantity_figure",
+  "answer_unit": "count",
+  "answer": "About 650 train data entry errors by the Phase 4 depots' drivers in each depot's first twelve months on ETCS (planning value at the draw; fixed from the shipped files at ship)",
+  "answer_source": "design note ## Draw (planning value; submission.md block 1 at ship)",
+  "gap": [
+    "population",
+    "time"
+  ],
+  "pattern": [
+    "E"
+  ],
+  "generators": [
+    "G14",
+    "G2",
+    "G13"
+  ],
+  "gate_g": "forecasting",
+  "calibration_form": "pilot_log",
+  "stump_strategy": "time_semantics",
+  "decisive_rule_filed": false,
+  "official_decoy": false,
+  "validated_decoy": false,
+  "context_artifact": "operations_log",
+  "stump_class": "analytical",
+  "analyst_test": "A strong analyst who joins the Start of Mission log to the safety desk's error register, removes the duplicate reports, maps the re-keyed staff numbers, reads the safety case conventions correctly and carries the Phase 1 to 3 depots' errors per start-up over each depot's first twelve months on ETCS (or that rate month by month since go-live) to the Phase 4 drivers' start-ups files about 400, against about 650.",
+  "domain_test": "The deciding quantity is a human error probability, train data entry at ETCS Start of Mission, under the experience performance shaping factor human reliability assessment applies to a task: read from the record as the per-attempt error probability on each driver's own count of start-ups and carried to the forward drivers' own start-up rates. Swap the drivers for machines and there is no operator whose practice moves the probability, so the call becomes the earlier depots' rate times the forward volume.",
+  "layer2_family": "estimation_fit",
+  "layer2_pattern": "own:per-attempt-error-probability-on-the-operator's-own-count-of-attempts",
+  "layer1": [
+    "staff numbers re-keyed when drivers moved depots, with a crosswalk",
+    "the safety desk's error register with a second report of the same error from the signaller",
+    "error reports with no event reference, matched by unit and minute",
+    "Start of Mission times in UTC on the on-board recorder against local time in the register",
+    "units renumbered after refurbishment",
+    "a diagram file with cancelled and re-issued turns",
+    "test and depot-shunt start-ups on the log beside service start-ups"
+  ],
+  "stakeholder_role": "the operator's human factors lead, whose Phase 4 safety case submission to the rail safety regulator carries the forecast of train data entry errors that sets the driver monitoring plan",
+  "role_family": "compliance_or_audit",
+  "scoring_unit": "other",
+  "spine": {
+    "file": "etcs_start_of_mission_log (the on-board recorders' Start of Mission events, Phase 1 to 3 depots, each depot's go-live to 31 October 2026)",
+    "rows": 0,
+    "entity": "one Start of Mission by one driver on one unit",
+    "grain": "driver x start-up",
+    "source": "synthetic"
+  },
+  "forum": "regulator_or_inspector",
+  "forcing_event": "launch_or_rollout",
+  "org_family": "utility_or_infrastructure",
+  "world": {
+    "geography": "Elsmarra (a fictional country; Carvanne Vale Railways, its depots, its regulator and every record are fictional)",
+    "currency": "none",
+    "org_type": "a regional passenger rail operator running about 600 drivers from fourteen depots",
+    "invented_names": [
+      "Elsmarra",
+      "Carvanne Vale Railways",
+      "Elsmarra Office of Rail Safety"
+    ],
+    "people": [
+      "Kate Potter",
+      "Arthur Jackson",
+      "Charlie Coles",
+      "Gillian Armstrong"
+    ]
+  },
+  "deliverables": [
+    "phase4_data_entry_forecast.xlsx",
+    "phase4_depot_readiness.svg"
+  ],
+  "opening_move": "question-first",
+  "question_form": "how-many",
+  "driver": "The decisive quantity is a per-attempt failure probability that falls with each operator's own count of attempts, so a forward group whose operators make attempts more slowly spends most of its first year on the steep part of the curve; the earlier groups' first-year rate per attempt, or a curve on time since start, carries their faster practice into the forecast and understates it.",
+  "driver_concrete": "Carvanne Vale's Phase 1 to 3 suburban depots gave each driver about 110 ETCS start-ups a month, so a driver passed 600 start-ups inside the first six months, where the train data entry error rate has fallen to a fifth of its first-week level; the Phase 4 rural depots' diagrams give 20 to 45, so their drivers spend the first year where the earlier drivers spent their first two months.",
+  "stump": "A competent analyst carries the Phase 1 to 3 depots' train data entry errors per start-up over each depot's first twelve months on ETCS (or the same rate month by month since go-live) to the Phase 4 drivers' start-ups and files about 400, against about 650, because the error probability falls with each driver's own count of start-ups and the Phase 4 diagrams run that count up at a quarter of the suburban pace.",
+  "mechanism_source": "design_note",
+  "differentiation": {
+    "task170": "v4 recovered a choice model of a default from an opt-in record; v5 reads a learning curve on each operator's own count of attempts and carries it at the forward operators' slower practice",
+    "task179": "there a predictor's distribution collapses under an allocation regime change and the chance is read at it; here no regime changes the people: the clock the probability runs on is practice, so even a learning curve on calendar time fails",
+    "task167": "there units follow one of two unnamed draw schedules and the young book's mix of them sets the forward draw; here every driver follows one learning curve and only the pace along it differs, read on each driver's own count of attempts",
+    "task177": "there an intervention's effect depends on where it lands in each unit's decision cycle; here a per-attempt error probability falls with the operator's accumulated attempts, with no intervention and no cycle",
+    "task31": "there a lag splits absolutely on a prior approval recovered through a join; here a probability falls continuously with each operator's own practice count, which every log row carries",
+    "task44": "there a pilot's pooled effect mixes opposite effects split by a moderator measured over a prior window; here one monotone curve holds for every operator and the forward operators sit earlier on it",
+    "task56": "there a population is identifiable only by its absence from an event stream; here every forward operator is named in the plan and the probability is read along each one's own count",
+    "task57": "there candidate measures reproduce their own year and only a held-out year separates them; here the candidate clocks are separated inside the record, by drivers who practised slowly inside fast depots",
+    "task76": "there a class with zero conversion exists only as a look-back over failed contacts; here no class is hidden: the probability is a function of practice and the forward drivers' practice rate is planned",
+    "task124": "there the analogs' measured value was held down by the organisation's own dispatch, which newcomers cannot join; here nothing held the earlier depots' rate down: their drivers practised faster, so their first-year rate per attempt is lower than the forward drivers' will be"
+  },
+  "lineage": [
+    {
+      "architecture": "v1",
+      "domain": "healthcare-delivery-health-economics",
+      "subdomain": "utilization-access-demand-forecasting",
+      "client_domain": "healthcare-delivery-health-economics",
+      "niche": "national ARV quantification of the children's line of the adult first-line TLD order across the paediatric weight-band transition, the band just lowered to 30 kg and the children's visits just thinned",
+      "objective": "forecasting",
+      "shape": "other",
+      "decision_type": "quantity_figure",
+      "answer_unit": "count",
+      "answer": "",
+      "answer_source": "generator/figures.json",
+      "gap": [
+        "time",
+        "population"
+      ],
+      "pattern": [
+        "none"
+      ],
+      "generators": [
+        "G7",
+        "G13",
+        "G6"
+      ],
+      "gate_g": "forecasting",
+      "calibration_form": "none",
+      "stump_strategy": "other",
+      "decisive_rule_filed": false,
+      "official_decoy": false,
+      "validated_decoy": false,
+      "context_artifact": "operations_log",
+      "stakeholder_role": "the Central Medical Stores quantification lead",
+      "role_family": "procurement_lead",
+      "scoring_unit": "per active unit per period",
+      "spine": {
+        "file": "paediatric register visit extract",
+        "rows": 698723,
+        "entity": "one clinic visit of a child on antiretroviral treatment, with the weighing and the regimen dispensed",
+        "grain": "child x clinic visit",
+        "source": "synthetic"
+      },
+      "forum": "committee_or_panel",
+      "forcing_event": "purchase_order_or_contract",
+      "org_family": "government_agency",
+      "world": {
+        "geography": "fictional",
+        "currency": "USD",
+        "org_type": "national Central Medical Stores of a southern African ministry of health, ordering antiretrovirals for a programme of about 310,000 adults on TLD and 12,000 children on treatment",
+        "invented_names": [],
+        "people": [
+          "Nomalanga Magubane",
+          "Thabisile Mahlinza",
+          "Sibongile Sikhosana"
+        ]
+      },
+      "deliverables": [
+        "c7_tld_order.xlsx",
+        "c4_c5_tld_flows.png"
+      ],
+      "opening_move": "question-first",
+      "question_form": "how-many",
+      "layer2_family": "estimation_fit",
+      "layer2_pattern": "own:first-scheduled-weighing-over-the-dosing-band-from-each-childs-growth-line-and-the-scale-scatter",
+      "layer1": [
+        "the paediatric register's migration from the legacy electronic register to the national EPR: legacy visit rows with day/month/year dates and regimen lines as free text, EPR rows with ISO dates and national regimen codes, the June 2024 migration month present in both",
+        "children keyed by facility ART numbers in the legacy export and by the national patient identifier in the EPR, a crosswalk between them, and a new ART number on each transfer between facilities",
+        "paper-captured legacy sites recording weights to the half kilogram until May 2024",
+        "estimated dates of birth entered as 1 July of the year",
+        "drug collections by a caregiver with no weighing recorded",
+        "visit rows re-sent by clinic tablets after a failed sync",
+        "the 2026 edition of the dosing annex in force from 1 March 2026, the register's earlier moves onto TLD made at 35 kg and its children's visits thinned by the two- and three-month dispensing it introduced",
+        "deaths, transfers out and loss to follow-up entered weeks after the last visit",
+        "the logistics information system's monthly facility reports with returned and resubmitted months, each stamped with the requisition group's region at submission",
+        "the warehouse system's delivery documents: posting dates days before the proof of delivery, transfers between CMS warehouses, returns from customers and the odd delivery refused at the gate",
+        "the warehouse stock by batch with a quarantined lot, and a planned framework call-off beside the confirmed lots",
+        "the programme's patient projection by region and month in its own layout",
+        "the customer master's delivery region kept as set when each account was opened, before the April 2026 regional boundary change, and facility codes reissued to new sites after closures",
+        "a partner's donated TLD reported on its own eLMIS product line"
+      ],
+      "driver": "Units move to another line at the first of their scheduled measurements that reads at or above a fixed level, and a single measurement scatters around each unit's own path by more than the path rises between measurements, so most moves come months before the paths reach the level; only the chance that each scheduled measurement reads over the level, taken from each unit's own path and the record's scatter, forecasts them, while paths projected to the level, a fixed age, the recent count of moves, the moves seen at each recorded level or a pooled rate each misplace them.",
+      "driver_concrete": "Children on paediatric antiretroviral regimens move to adult TLD at the first clinic weighing that reads 30 kg or more, and a clinic weighing scatters more than a kilogram either side of a child's own growth line while the line rises about a fifth of a kilogram a month, so most switches come months before the line reaches 30 kg; the children's line of the C7 order needs each child's chance of a qualifying weighing at each visit its own dispensing interval schedules, and projecting growth to 30 kg, a switch age, the recent switch count or the switch rate by last recorded weight each misplace the line by a pallet or more, the register's own rates because its switches came under the 35 kg band and at the monthly visits the 2026 guidelines replaced.",
+      "stump": "A competent solver fits each child's growth line from the register, switches the child to TLD at the first scheduled visit after the line reaches 30 kg and files line 2 at 10 pallets against 11, because the first weighing that reads 30 kg comes months before the line gets there.",
+      "stump_class": "analytical",
+      "analyst_test": "With every field read, the 2026 dosing band applied as filed and the SOP's line 2 built as filed, a strong analyst projects each child's weighings forward on a fitted growth line, moves the child to TLD when the line reaches 30 kg and files line 2 at 10 pallets of 8,064 bottles, one pallet below the 11 the scheduled weighings imply.",
+      "domain_test": "The line turns on the paediatric regimen-transition forecast of ARV quantification, the patient-months on TLD of children who will be weighed into the 30 kg band at their scheduled visits, built from each child's weighings, the clinics' weighing scatter, each child's dispensing interval and retention; with another field's nouns the dosing band applied at a clinic weighing, the dispensing interval and the cycle order's paediatric line stop meaning anything.",
+      "fate": "spent 2026-10-18 at stage 4 on strength: with line 2 of the C7 order in whole pallets the first-passage lead was 1.03 pallets and routes with a chosen lead landed it; the number was retired 2026-10-19 after the redraw died in two cells on paper and reopened 2026-10-23, its rebuild cell (expected-credit-loss provisioning) dying on the shipped-proxy screen before this draw"
+    },
+    {
+      "architecture": "v3",
+      "drawn": "2026-10-23",
+      "niche": "an implementing non-profit's forecast, for its donor, of how many Ombeni fever cases the March 2027 county-wide distribution of repellent sleeping nets in Ruvari County will avert among the people sleeping under them from April to December 2027, when the county's vector bites earlier in the evening and more outdoors than at any site of the five-site trial that measured the nets' protective efficacy",
+      "domain": "epidemiology-public-health",
+      "subdomain": "health-burden-impact-modeling",
+      "objective": "forecasting",
+      "shape": "other",
+      "driver": "A protection acts only on the exposure that arrives while the protected state holds, so an efficacy measured in a trial is a per-exposure protection times the share of its own sites' exposure that arrived in that state; the target's share is the overlap of when and where exposure arrives with when people are in the protected state, read hour by hour from two records at a finer grain than the trial's headline, and carrying the trial's efficacy, or multiplying it by the target's share without dividing out the sites' own, misstates the forward effect.",
+      "driver_concrete": "Ruvari County's Ombeni fever vector bites from dusk and half of it outdoors, so only 0.36 of a resident's bites arrive while in bed under a net, against 0.49 to 0.96 at the KINGA-5 sites; the nets' pooled protective efficacy of 56.7 per cent is a per-bite protection of 0.80 times each site's in-bed share, so the cases averted among users from April to December 2027 are the plan's baseline times the planned use times 0.80 times 0.36, not the trial's efficacy and not that efficacy times the county's share.",
+      "stump": "A competent solver applies the trial's pooled protective efficacy of 56.7 per cent to the plan's expected cases among net users and files 22,000 cases averted against 11,000; the step that lands it there is carrying an efficacy measured where most bites arrived after participants were in bed to a county whose vector bites early and half outdoors, where 0.36 of a resident's bites arrive in bed against 0.49 to 0.96 at the sites.",
+      "layer2_pattern": "own:protective-efficacy-carried-through-the-in-bed-share-of-exposure",
+      "answer": "About 11,000 Ombeni fever cases averted among the people sleeping under the March 2027 LulaNet R nets in Ruvari County from April to December 2027, 21 per cent of the 53,042 cases the county expects (11,208 unrounded from the shipped files).",
+      "fate": "spent 2026-10-23 at stage 4 Gate F on zip 74728781: judge DETERMINISTIC / APPROVE; blind reader A regressed each trial site's efficacy on its in-bed share of exposure from the report's site tables and filed 12,000 against 11,000"
+    },
+    {
+      "architecture": "v4",
+      "drawn": "2026-10-23",
+      "niche": "a county hospital group's forecast, for its FY2027 budget, of the employer matching contributions its workplace pension plan will pay on the staff it hires in 2027, the first intake enrolled automatically at a 3 per cent default with the right to opt out, when every earlier intake had to opt in and the record shows only the hires who chose to join",
+      "domain": "psychology-behavioral-science",
+      "subdomain": "decision-making-computational-behavioral-modeling",
+      "objective": "forecasting",
+      "shape": "other",
+      "driver": "When a default switches direction, the record from the old default shows only the units whose preference differs from it and only once they have acted, so the pace at which every unit acts is that record's take-up curve divided by its own plateau; under the new default every unit holds the default until it acts, and the forward take-up is the not-yet-acted share plus the acted share who prefer it, not the old take-up, not one minus it, and not the old curve read as the pace of acting.",
+      "driver_concrete": "Vindeholm's opt-in record shows 43 per cent of hires joining within five years at a pace where 35 per cent of hires have made a choice by their first payroll and 90 per cent by their twelfth; from January 2027 every hire contributes 3 per cent until choosing, so the intake's FY2027 match is the not-yet-chosen at 3 per cent plus the joiners at their own rates, TNK 11.5 million, not the cover's 16 per cent cancellation curve carried as the plan's opt-outs (14.5 million) and not the 43 per cent contributing from the first payroll (8.5 million).",
+      "stump": "A competent analyst carries the income protection cover's cancellations, the group's one record of hires leaving a default, as the share of the 2027 intake that will opt out and files TNK 14.5 million against 11.5 million; the step that lands it there is reading a cancellation curve set by the 16 per cent of hires who want to drop a 0.4 per cent cover as the opt-outs of a plan 57 per cent of hires never join, when the opt-in record holds both what hires prefer and how fast every hire makes a choice.",
+      "layer2_pattern": "own:the-default-holds-until-each-hire-makes-an-active-choice-on-the-clock-the-opt-in-record-shows",
+      "answer": "About TNK 11.5 million in employer matching contributions on Vindeholm County Hospitals' 2027 intake over the January to December 2027 payrolls (TNK 11,439,212 unrounded from the shipped files), with about 1,600 of the intake contributing on the December 2027 payroll.",
+      "fate": "spent 2026-10-23 at stage 4: the judge returned NOT_DETERMINISTIC (the default's take-up pace forked); cells five to nine found no draw that held before this one"
+    }
+  ],
+  "notes": "stump_strategy time_semantics: the decisive clock is the operator's own count of attempts, not calendar time since go-live; composition_mix also describes the forward drivers' lower practice rate, keyed time_semantics because a calendar-clock learning curve, the learning-aware analyst's route, lands with the pooled rate. Prototypes: scratchpad t170h/proto lc1.py to lc3.py (pooled and month routes 36 to 39 per cent low; own-count bands, power law and log-linear within 2 to 9 per cent of each other; a ward-count curve converges). Keyed pattern E (G14, does the pooled rate apply to this pool) with the decisive gap population: the forward drivers practise at a quarter of the suburban pace; pattern A (time_semantics' own) is banned against task281 in the last three and the count-call keyings on G2 and G13 collide with task173's lineage inside the window; nothing relabelled.",
+  "registered": "2026-10-24T23:47:23Z"
+}

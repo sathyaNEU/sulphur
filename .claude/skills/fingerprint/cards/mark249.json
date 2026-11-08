@@ -1,0 +1,119 @@
+{
+  "task": "mark249",
+  "architecture": "v6 (fresh rebuild at the author's request after architecture 5 was spent: a coding certification examination's 2027 resit results, the gain from earlier exposure carried through the sitting's four-hour limit)",
+  "drawn": "2026-10-21",
+  "slot_note": "architecture 6, a fresh draw at the author's standing instruction after architecture 5 was spent at stage 4 (2026-10-20); its first, untimed form was landed by both call-only probes before the card was filed (design note, Tried and rejected)",
+  "domain": "psychology-behavioral-science",
+  "subdomain": "psychometric-measurement-scale-validation",
+  "client_domain": "psychology-behavioral-science",
+  "niche": "a professional institute's clinical coding certification examination (four-hour open-book sittings, forms drawn at random, resits in any later window): how many scored items each 2027 form's resit candidates gained from what an earlier sitting or results review had shown them, counting the items at the end of the form they reached only because the items they recognised took them less time",
+  "objective": "data-quality-monitoring",
+  "shape": "10",
+  "decision_type": "designation_set",
+  "answer_unit": "set_of_items",
+  "answer": "Flag CC27-A, CC27-B, CC27-C, CC27-D, CC27-G and CC27-H: each gave its 2027 resit candidates more than one scored item per resit sitting from what an earlier sitting or results review had shown them (1.4 or more on every licensed estimate), so their 2027 resit results carry the exposure flag and the six forms are reassembled before they are used again.",
+  "answer_source": "submission.md, 1. Final Recommendation",
+  "gap": [
+    "objective"
+  ],
+  "pattern": [
+    "none"
+  ],
+  "generators": [
+    "G7",
+    "G16",
+    "G10"
+  ],
+  "gate_g": "method_or_model_selection",
+  "calibration_form": "none",
+  "stump_strategy": "causal_design",
+  "decisive_rule_filed": false,
+  "official_decoy": false,
+  "validated_decoy": false,
+  "context_artifact": "register",
+  "stump_class": "analytical",
+  "analyst_test": "A strong analyst who links every resit to the candidate's earlier sittings and reviews, reads item models, trial slots and blanks correctly and estimates each resit candidate's excess on the items an earlier sitting or review had shown them (or their item-model siblings) over their own difficulty-adjusted performance on the items none had, flags CC27-A, C, G and H and misses CC27-B and D, where most of the gain is the items resit candidates reached at the end of the four hours only because the items they recognised took them less time.",
+  "domain_test": "The deciding quantity is a credentialing examination's repeat-examinee exposure effect, estimated the way psychometrics estimates it (item-level responses against first-time candidates' difficulties, item models as one memorable unit, randomly drawn forms) and carried through the sitting's time limit the way speededness analysis reads response latencies and unanswered items; with hospital or energy nouns there are no forms, item models, code lookups, latencies or a four-hour limit and the task does not read.",
+  "layer2_family": "estimand_identification",
+  "layer2_pattern": "own:exposure-spillover-through-the-time-limit",
+  "layer1": [
+    "two delivery vendors' sitting exports in different layouts",
+    "an item renumbering at the 2027 bank migration with a crosswalk",
+    "candidate records merged after re-registration",
+    "pretest items interleaved in the response strings",
+    "an item withdrawn from scoring after review"
+  ],
+  "stakeholder_role": "the Institute's examinations psychometrician",
+  "role_family": "research_desk",
+  "scoring_unit": "other",
+  "spine": {
+    "file": "results_export_r3_2026-02_to_2027-05.csv and results_export_r4_2027-08_to_2027-11.csv",
+    "rows": 33562,
+    "entity": "one sitting by one candidate",
+    "grain": "candidate x window",
+    "source": "synthetic"
+  },
+  "forum": "committee_or_panel",
+  "forcing_event": "statutory_or_regulatory_filing",
+  "org_family": "cooperative_or_member_body",
+  "world": {
+    "geography": "India",
+    "currency": "INR",
+    "org_type": "professional certification institute",
+    "invented_names": [
+      "Institute of Healthcare Coding Professionals",
+      "Certified Clinical Coder",
+      "Pariksha Delivery Services"
+    ],
+    "people": [
+      "Abhiram Sarin",
+      "Yahvi Reddy"
+    ]
+  },
+  "deliverables": [
+    "resit_exposure_review_2027.xlsx",
+    "resit_exposure_2027.pdf"
+  ],
+  "opening_move": "question-first",
+  "question_form": "which",
+  "driver": "The decisive quantity is a treatment's total effect on a unit made of many parts that share a capped budget: the treatment acts on some parts directly and also saves budget on them, and the saving buys outcomes on the untreated parts where the cap binds, so a comparison of treated with untreated parts inside each unit counts only the direct effect and misses the units where the cap binds.",
+  "driver_concrete": "Each 2027 form's resit gain is the resit candidates' excess on the items an earlier sitting or review showed them (or their siblings) plus the correct answers on the items they reached only because recognised items took less of the four hours than their own pace on unrecognised items would have taken, read from the item latencies; the direct excess alone misses the speeded forms.",
+  "stump": "A competent analyst estimates each resit candidate's excess on the items an earlier sitting or review had shown them (siblings included) against their own difficulty-adjusted performance on the other items and flags CC27-A, C, G and H; the other items share the four hours, and on the two speeded forms with moderate reuse (CC27-B and D) most of the gain is the items resit candidates reached only because the items they recognised took less time, so those forms are missed.",
+  "lineage": [
+    {
+      "architecture": "v1",
+      "driver": "The decisive quantity is each unit's gain against the truth at its own position, seen only through references at other positions that share the truth's distribution over weeks but agree with it only partly hour by hour, so a slope fitted on the paired readings is pulled toward zero by that imperfect agreement, making healthy distant units look low and units drifted high look healthy, while matching the unit's spread to the references' spread recovers the gain.",
+      "fate": "stage 4 reader landed the call (errors-in-variables slope) and every ask figure, 2026-10-18; re-rooted to architecture 2"
+    },
+    {
+      "architecture": "v2",
+      "driver": "The decisive quantity is each unit's gain against the truth at its own position, seen only through references elsewhere that share the truth only in the hours a daily process mixes the medium; outside those hours the units standing apart from the references differ for reasons that are not their gain, so any comparison over all hours, however it corrects for the references' imperfect agreement, misreads those units, and only the comparison restricted to the mixed hours reads every unit's gain.",
+      "fate": "stage 4 reader landed the call 2026-10-19 (afternoon regression after the 900 m sites' night-time intercepts); judge DETERMINISTIC APPROVE; re-rooted to architecture 3 in another client domain at the author's request (fresh re-root)"
+    },
+    {
+      "architecture": "v3",
+      "driver": "The decisive quantity is how often a check comparing a second reading with a first flags units whose first reading was honest, among units chosen because their first reading was high; a unit chosen on a noisy first reading falls back on the second by an amount set by how small a share the choice takes and how noisy the first reading is where it reaches, so a flag rate measured on unchosen units understates every selective choice, while a gain between the readings that fades with the time between them lowers the rate where the second reading follows soon.",
+      "fate": "stage 4 reader landed the call 2026-10-19 (a latent-ability model of each account's shortlist: a tier prior deconvolved from the pool, Table 4.3's errors, the study's retest gain) and all 19 ask figures; judge DETERMINISTIC APPROVE; re-rooted to architecture 4 in Product Analytics at the author's request"
+    },
+    {
+      "architecture": "v4",
+      "driver": "The decisive quantity is how many distinct units a count of identifiers represents when one class of unit loses its identifier after a fixed idle gap, recovered by replaying the expiry on the histories of units whose identifiers persist, matched only on attributes the expiry cannot alter, because a status that a quota held in the same expiring storage hands out differently on the two sides sorts the frequent returners unevenly between its groups.",
+      "fate": "stage 4 round 3 (2026-10-19): one of five clean readers landed the call by a calibration on the signed-in WebKit browsers stratified by edition, cookie age and sessions per identifier; judge DETERMINISTIC APPROVE on three packs, both round 3 readers 0 of 24 ask figures; the number retired 2026-10-20 and re-rooted the same day to architecture 5 at the author's request (a fresh rebuild from scratch)"
+    },
+    {
+      "architecture": "v5",
+      "driver": "The decisive quantity is a total built by applying a relation calibrated on samples whose phase within a recurring rise-and-fall cycle is set by when the samplers can reach the site, while the relation itself differs between the rising and the falling phase, so it must be conditioned on the phase, read from a continuous record at another grain, before it is applied to every step of the record.",
+      "fate": "spent 2026-10-20 at stage 4: both scored readers landed the call (rising-limb conditioning, the field's hysteresis reflex) and all 28 ask figures"
+    }
+  ],
+  "differentiation": {
+    "task144": "task144's spillover runs through a network of followers to other units; here the effect stays inside one sitting and travels through a shared time limit to the items a candidate reaches, read from latencies and unanswered items.",
+    "task230": "task230 v2 read a vigilance clock resetting at task switches; here no fatigue or reset is involved: recognised items free time inside a capped sitting and the freed time buys answers at the end of the form.",
+    "task193": "task193 v2 reads an ordering's chance under no effect from where each unit's first exposure falls in its observation window; here the window is a sitting's four hours and the quantity is the extra answers that the time recognised items free buys at the end of the form, read from item latencies.",
+    "task254": "task254 v3 times a passage through stages whose delay builds while the unit travels; here nothing builds: recognised items take less of a capped sitting and the saving buys answers on the end-of-form items a within-candidate comparison treats as untouched."
+  },
+  "mechanism_source": "design_note",
+  "notes": "Generators G7, G16, G10: the four-hour operating window decides which items a sitting lets a candidate answer, G16 the counterfactual chosen, G10 the item model as one memorable unit (a lower rung).",
+  "architecture_spent": false,
+  "registered": "2026-10-21T14:33:30Z"
+}

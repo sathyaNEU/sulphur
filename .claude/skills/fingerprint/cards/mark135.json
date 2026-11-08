@@ -1,0 +1,149 @@
+{
+  "task": "mark135",
+  "architecture": "v2",
+  "drawn": "2026-10-11",
+  "slot_note": "architecture 2 of 3, a re-root of v1 (spent on paper at the precut retrofit: the field's textbook retransformation was the default path); drawn fresh in Forecasting & Predictive Modeling, with no estimator correction a strong analyst applies by reflex, no conditioned yield (G14 and G9 banned against task134 and task133) and no time-to-event estimator",
+  "domain": "quantitative-finance",
+  "subdomain": "volatility-derivatives-pricing",
+  "niche": "an endowed grant-making charity setting the largest growth-asset share its investment policy's volatility cap allows for 2027, from two years of the prices its holdings are reported at, where the segregated UK equities are valued at the London close and the pooled funds at a noon valuation point that carries each overseas market's last close",
+  "objective": "forecasting",
+  "shape": "04",
+  "decision_type": "dial_setting",
+  "answer_unit": "rate_or_share",
+  "answer": "Set the 2027 growth share at 60 per cent: it is the largest of the policy's steps whose expected volatility stays inside the 10% cap.",
+  "answer_source": "submission.md",
+  "gap": [
+    "time"
+  ],
+  "pattern": [
+    "none"
+  ],
+  "generators": [
+    "G7",
+    "G2",
+    "G17"
+  ],
+  "gate_g": "method_or_model_selection",
+  "calibration_form": "none",
+  "stump_strategy": "other",
+  "decisive_rule_filed": false,
+  "official_decoy": false,
+  "validated_decoy": false,
+  "context_artifact": "monitoring_export",
+  "stakeholder_role": "finance director of an endowed grant-making charity preparing the trustees' December decision on the 2027 growth-asset share under the investment policy's volatility cap",
+  "role_family": "portfolio_manager",
+  "scoring_unit": "other",
+  "spine": {
+    "file": "brackenfold_valuation_lots_2024-11_2026-11.csv",
+    "rows": 42894,
+    "entity": "one purchase lot of one holding in one designation of the charity's portfolio, valued on one business day",
+    "grain": "holding lot x designation x valuation day",
+    "source": "synthetic"
+  },
+  "forum": "trustees_or_governors",
+  "forcing_event": "vote_or_meeting",
+  "org_family": "foundation_or_funder",
+  "world": {
+    "geography": "United Kingdom, England",
+    "currency": "GBP",
+    "org_type": "an endowed grant-making charity holding a segregated UK equity mandate and a range of pooled charity funds through a custodian",
+    "invented_names": [
+      "The Wrexford Trust",
+      "Fernside Partners",
+      "Kestwick Investment Management",
+      "Kestwick Charity Funds",
+      "Kestwick North American Equity Fund for Charities",
+      "Kestwick European Equity Fund for Charities",
+      "Kestwick Japan Equity Fund for Charities",
+      "Kestwick Gilt Fund for Charities",
+      "Kestwick Sterling Corporate Bond Fund for Charities",
+      "Brackenfold Custody"
+    ],
+    "people": [
+      "Harriet Clarke",
+      "Lawrence Barnes",
+      "Samantha Morton",
+      "Connor Wells"
+    ]
+  },
+  "deliverables": [
+    "growth_share_2027.xlsx",
+    "income_cost_by_step_2027.svg"
+  ],
+  "opening_move": "question-first",
+  "question_form": "what",
+  "driver": "The decisive quantity is the variance of a weighted sum over a long horizon, estimated from short-interval changes in components whose values are struck at different times of day, so a shock enters some components in the interval it happens and others in the next; same-interval covariances then capture only the overlap and the short-interval variance scaled up to the horizon understates the sum's variance, which only changes over intervals long enough to align the striking times, or short-interval covariances with their one-interval lead and lag terms, recover.",
+  "driver_concrete": "Each holding's day-on-day total return comes from the price it is reported at: the segregated UK equities at the London close and the Kestwick funds at their noon valuation point from each market's last available price, so the North American fund's noon price is the previous evening's New York close; a New York session enters the UK equities on the dated day it happens and the North American fund a day later, the daily covariance between them captures about a quarter of their co-movement, and the daily standard deviation times the square root of 252 puts the portfolio's twelve-month volatility about a sixth low, so the 10 per cent cap appears to allow 70 per cent growth when weekly returns, or daily covariances with their one-day lead and lag, allow 60.",
+  "stump": "A competent solver builds each holding's daily total return from the custodian's reported prices, estimates the two-year covariance of daily returns, scales the portfolio's daily standard deviation by the square root of 252 at each step and sets the 2027 growth share at 70 per cent against 60; the step that lands it there is the estimator, since the same-day covariance misses the covariance that lands a day apart when the North American fund's noon price carries the previous evening's New York close and the London-close UK equities have already priced that session.",
+  "stump_class": "analytical",
+  "analyst_test": "A strong analyst who strips the mandate's external flows, adds back accrued income and fund distributions, adjusts the UK holdings for their corporate actions, aligns the UK and US holiday calendars and reads the policy's volatility definition, its daily returns and the valuation points correctly still estimates co-movement from same-dated daily returns, scales by the square root of 252 and sets growth at 70 per cent, above what the cap allows; keeping the daily returns and adding the one-day lead and lag covariances (or Newey-West at four or five lags) sets it at 60.",
+  "domain_test": "The deciding quantity is the portfolio's twelve-month volatility at each growth step, which investment risk practice estimates from returns over which the holdings' prices are contemporaneous, because a pooled fund's unit price is struck at its valuation point from each market's last available price and listed equities at their exchange's close; with another field's nouns there is no valuation point, no stale overseas close and no annualising from daily returns, and the task stops reading the same.",
+  "mechanism_source": "design_note",
+  "differentiation": {},
+  "lineage": [
+    {
+      "architecture": "v1",
+      "drawn": "2026-10-11",
+      "domain": "physical-environmental-sciences",
+      "subdomain": "other",
+      "niche": "a mutual irrigation reservoir company sizing the sediment forebay of a new off-channel reservoir, filled by decreed diversions from two creeks, for five years of trapped suspended sediment between cleanouts, in its design submittal to the state dam safety engineer",
+      "objective": "forecasting",
+      "shape": "14",
+      "decision_type": "quantity_figure",
+      "answer_unit": "count",
+      "gap": [
+        "objective",
+        "time"
+      ],
+      "pattern": [
+        "none"
+      ],
+      "generators": [
+        "G17",
+        "G1"
+      ],
+      "gate_g": "forecasting",
+      "calibration_form": "none",
+      "stump_strategy": "other",
+      "context_artifact": "published_series",
+      "role_family": "field_unit_lead",
+      "forum": "regulator_or_inspector",
+      "forcing_event": "statutory_or_regulatory_filing",
+      "org_family": "cooperative_or_member_body",
+      "layer2_family": "field_method",
+      "layer2_pattern": "own:retransformation-bias-in-a-sediment-rating-curve",
+      "driver": "The decisive quantity is the mean of a quantity predicted by a regression fitted on the log scale, multiplied by a second daily quantity and summed over a long record of the predictor: exponentiating the fitted log value returns the conditional median, which understates the mean by a factor that grows with the residual spread, so the committed total needs the retransformation correction, and the correction differs by segment because each segment's residual spread differs.",
+      "driver_concrete": "Each creek's suspended-sediment rating curve, log concentration on log daily creek discharge from fifteen years of samples, is applied to every day of a seventy-six-year daily record, and each day's concentration times the flow the company's decree lets it divert gives the sediment entering the new reservoir's forebay; exponentiating the fitted line gives the median concentration, about a quarter low on the flashy plains creek (smearing factor 1.344) and about seven per cent low on the foothills creek (1.075), so the forebay sized for five years of trapped sediment needs the smearing (or lognormal) correction; the samples' own mean misses because storm days were sampled on purpose, and the curve applied to the diverted flow or to monthly mean flows understates.",
+      "stump": "A competent solver fits each creek's rating curve in logs, applies it to every day's creek flow, multiplies by the day's decreed diversion, sums, and sizes the forebay at 23,000 cubic yards, about 18 per cent small against 28,000; the step that lands it there is reading the back-transformed line as the expected concentration, when it is the median and the sediment the forebay traps is a mean.",
+      "answer": "Size the Antelope Flats Reservoir forebay for 28,000 cubic yards of sediment storage.",
+      "spine": {
+        "file": "usgs_06756890_elk_draw_dv_wy1951-2026.rdb",
+        "rows": 27759,
+        "entity": "one day's mean discharge at a creek gauge above a diversion headgate",
+        "grain": "gauge day",
+        "source": "synthetic"
+      },
+      "deliverables": [
+        "forebay_sediment_build.xlsx",
+        "forebay_design_basis_memo.pdf"
+      ],
+      "fate": "spent 2026-10-11 on paper at the precut retrofit, before any precut repair: the honest default path applies the field's retransformation correction to the log-log rating (Duan smearing or the lognormal factor, every correction 28,000 cubic yards), so the default path was the golden and the no-correction rung (23,000) screened readable (a reflex, and the samples back-test it); its ask layer also split the call's own construction"
+    }
+  ],
+  "notes": "Re-root drawn 2026-10-11 after architecture 1 was spent on paper at the precut retrofit (design note, Tried and rejected); architecture 1's identity is in lineage with its fate. stump_strategy other: nonsynchronous pricing, co-movement measured on same-dated prices struck at different times of day (not time_semantics: reading the valuation points correctly does not change the estimator; not grain_or_unit). subdomain volatility-derivatives-pricing: the client task type whose objective is Forecasting and whose core is volatility forecasting; nothing is priced. Decisive generator G7 (when each price is struck, from the valuation points in the operations documents), G2 (the return interval as the grain of co-movement), G17 (the margin across the synchronous estimators, asserted). Gate G method_or_model_selection: the covariance estimator the asynchronous data entitles. Candidates measured and set aside at this draw are in the design note's Tried and rejected.",
+  "client_domain": "quantitative-finance",
+  "layer2_family": "estimation_fit",
+  "layer2_pattern": "own:nonsynchronous-unit-prices-in-a-portfolio-volatility",
+  "layer1": [
+    "a custodian's daily valuation export at purchase-lot grain across two designations, with accrued income reported beside market value and the mandate's cash on its own lines",
+    "corporate actions on the segregated UK equities (a share consolidation, a demerger whose new shares arrive the day after, a rights issue taken up, a cash takeover) recorded in a separate events file",
+    "UK, US and Japanese trading calendars that differ, so the North American or Japan fund carries an unchanged close on the noon after its own market's holiday",
+    "two price sources for the pooled funds: the custodian's valuation for the days held and each fund's own published price history for the whole window",
+    "income units whose distributions drop out of the price on ex-dividend dates, beside accumulation units",
+    "external flows into and out of the segregated mandate (a legacy, the quarterly rebalancing transfers, the expendable endowment's quarterly capital releases) that a time-weighted return has to strip",
+    "an income entitlement extract that repeats each event's holding-level amount on every purchase-lot line, with the grain unstated, and runs thirteen months against the budget's twelve",
+    "REIT distributions paid in two components, a property income distribution and an ordinary dividend, under two event references on one ex-dividend date",
+    "grant instalments whose due date is a progress-report date for conditional payments, with currency and withdrawal status held in a separate grant header table and UK-format dates beside the finance system's ISO dates",
+    "UK and US daylight-saving changes on different dates shifting the gap between valuation points"
+  ]
+}

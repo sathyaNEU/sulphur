@@ -1,0 +1,142 @@
+{
+  "task": "mark125",
+  "architecture": "v4",
+  "drawn": "2026-10-31",
+  "slot_note": "re-root 4: architecture 3 sent back at stage 4 (a planted-defect flip)",
+  "domain": "criminology-justice",
+  "subdomain": "crime-incidence-hotspot-analysis",
+  "niche": "a mid-size Ontario police service's 2027 hot spot patrol designation over its street segments, the year a junior hockey team moves its home games from an old arena to a lakeshore events centre",
+  "objective": "anomaly-detection",
+  "shape": "01",
+  "decision_type": "designation_set",
+  "answer_unit": "set_of_items",
+  "answer": "the 14 chronic segments, King St Wellington to Albert (112148) and the five Lakeshore Centre segments (Harbour Rd, Ontario to Simcoe 124511, Simcoe St, Front to King 158663, Harbour Rd, Simcoe to Mill 150449, Front St, Simcoe to Mill 176470, Front St, Peel to Ontario 109465); the five Memorial Gardens segments the 2026 count keeps drop out",
+  "answer_source": "golden/hot_spot_patrols_2027.pptx slide 1; submission.md block 4",
+  "gap": [
+    "time",
+    "population"
+  ],
+  "pattern": [
+    "none"
+  ],
+  "generators": [
+    "G5",
+    "G6",
+    "G13"
+  ],
+  "gate_g": "method_or_model_selection",
+  "calibration_form": "none",
+  "stump_strategy": "composition_mix",
+  "decisive_rule_filed": false,
+  "official_decoy": false,
+  "validated_decoy": false,
+  "context_artifact": "other",
+  "stump_class": "analytical",
+  "analyst_test": "A strong analyst conforms the records-management export (each incident's latest version, founded incidents only, the protocol's patrol offence codes across the 2023 code change), counts each street segment's patrol crimes over 2026 or over 2022 to 2026, ranks the segments and designates the top 20; every field is read and the protocol applied, and it designates the segments beside the Memorial Gardens and leaves out those beside the Lakeshore Centre, because those segments' 2027 crimes follow the 2027 venue calendar and not their own record.",
+  "domain_test": "The deciding quantity is each street segment's expected count of patrol crimes in 2027, the hot spot forecast place-based policing rests on, and an arena or events centre is a crime generator whose crowds raise street crime on the segments around it on event days; put a hospital ward in for the segment and nothing generates on a calendar, so the forecast has no generator to move.",
+  "layer2_family": "estimation_fit",
+  "layer2_pattern": "own:venue-event-increments-carried-by-the-coming-calendar",
+  "layer1": [
+    "a records-management export with one row per report version under each occurrence number, later versions reclassifying the offence, correcting the segment or recording the occurrence unfounded",
+    "the legacy system's offence codes and day-first dates on versions entered before the March 2023 migration",
+    "occurrences with no occurrence time dated by their report, and reports of 2021 and 2027 occurrences in the extract",
+    "a paid-duty register in two layouts, one row per booking to 2023 with abbreviated venue names and one row per officer line from 2024, holding the duties booked ahead into 2027",
+    "a CAD export in UTC carrying the contracted township's events with its patrol zones in the district column",
+    "a tour roster dating each night tour by the evening it starts"
+  ],
+  "stakeholder_role": "Superintendent, Patrol Operations, signing off the 2027 designation with the platoons' deployment plan",
+  "role_family": "operations_director",
+  "scoring_unit": "other",
+  "spine": {
+    "file": "mps_rms_occurrences_2022_2026.csv",
+    "rows": 82436,
+    "entity": "one report version of one occurrence",
+    "grain": "occurrence x version",
+    "source": "synthetic"
+  },
+  "forum": "line_manager_or_team",
+  "forcing_event": "period_close",
+  "org_family": "local_government",
+  "world": {
+    "geography": "Canada, Ontario (a fictional lakeshore city, its police service, venues, team and people)",
+    "currency": "CAD",
+    "org_type": "municipal police service",
+    "invented_names": [
+      "Mountjoy Police Service",
+      "City of Mountjoy",
+      "Mountjoy Memorial Gardens",
+      "Lakeshore Centre",
+      "Mountjoy Mariners"
+    ],
+    "people": [
+      "Lindsey Turner",
+      "Eric Gordon",
+      "Ruben Stafford"
+    ]
+  },
+  "deliverables": [
+    "hot_spot_patrols_2027.pptx",
+    "patrol_figures_2026.csv"
+  ],
+  "opening_move": "question-first",
+  "question_form": "where",
+  "driver": "A unit's events come from a steady part and a part tied to scheduled occasions at a site it borders, and the coming window's schedule moves most of those occasions to another site, so every forecast built on the units' own records keeps the occasions where they were, and only a forecast that carries each unit's increment per occasion by the coming schedule puts them where they will be.",
+  "driver_concrete": "Street segments beside an arena record street crime that rises on the arena's event days; in 2027 the Mariners move their home games from the Memorial Gardens to the Lakeshore Centre, so carrying each segment's record forward keeps the Gardens' segments among the 20 hottest and leaves the Lakeshore's out, while each segment's event-day increment carried by the 2027 calendar puts the Lakeshore's in and the Gardens' out.",
+  "stump": "A competent analyst who reads the protocol's designation rule and conforms the incident export ranks the street segments by their 2026, or 2022 to 2026, patrol crimes and designates the top 20, keeping the segments beside the Memorial Gardens and leaving out those beside the Lakeshore Centre; the step that lands it there is forecasting 2027 from each segment's own record when a large share of those segments' crimes fall on venue event days and the 2027 calendar moves the Mariners' home games to the Lakeshore.",
+  "mechanism_source": "design_note",
+  "differentiation": {
+    "task130": "task130 reads each inspection's outcome at the visit count its inspector will have after a redrawn district map; here no outcome depends on who records it: a street segment's count rises with the events at a venue it borders, and the forecast moves with the published 2027 venue calendar.",
+    "task118": "task118 credits demand-response programmes at the fourth consecutive event day of a heat run; here events are a venue's scheduled games and shows, and what moves is where they happen, not how a response fades over a run.",
+    "task178": "task178 removes an absorbing agent from a market's dispersion through an instrument for the flow it offset; here nothing is removed or instrumented: each street segment's event-day increment is read directly off its record and carried to the venue that will host the events in 2027.",
+    "task156": "task156 replays a sewer network through twenty years of rainfall with each day's water table; here the forecast is a count at places driven by a published calendar of crowds, with no replay of a physical record."
+  },
+  "lineage": [
+    {
+      "architecture": "v1 (Wealdmoor County Council digit filter: the 2027/28 call-off of routed payments for post-payment examination)",
+      "fate": "spent 2026-10-10: in-house solver rounds 1 and 2 landed (80.2, 85.1), judge SEND_BACK on hygiene (the payments ledger read as generated); FAILED_TO_STUMP, re-rooted 2026-10-12 under the no-retirement rule",
+      "driver": "The forward count of items a fixed band rule selects includes units outside the band today: each unit's periodic amount is one sum over every component it holds, a filed date in the forward window ends one class of component, and re-summing what survives moves the unit's amount into the selected band; some units are paid in two equal parts to two linked payees, and how a unit is paid depends on how many components it keeps, because the record's own changed units show that a unit left with one component is paid its whole amount by the first payee and nothing by the second; a forecast that treats every linked unit as always paid in halves carries the one-component units' halves below the band's lower floor and out of the count, and only applying the payment rule recovered from the changed units puts each such unit's whole amount into the band once a period, after a fixed-term cohort run-off on a term recovered from an earlier completed cohort, the whole-amount decomposition and the linked-pair re-sum have all been made and read as final."
+    },
+    {
+      "architecture": "v2 (Merrowland Statistics' Household Labour Survey: the three-visit cap on first interviews read intake by intake)",
+      "fate": "retired 2026-10-31 at the batch audit: shipped before the survivor-anatomy gates and short of all three (the intake and visit number schema-visible through the serial, the field's estimator re-run as the golden, the decisive step exact arithmetic); re-rooted rather than repaired",
+      "driver": "A change at the point units are recruited filters out a hard-to-reach share whose outcomes differ from the rest, and because every recruited unit stays for a fixed run of later periods carrying part of that difference, the distortion in the aggregate compounds while filtered intakes are still being issued and decays for a full run after the change is reversed; the unit the change acts on is the intake and not the period, so each period's distortion is a re-estimate on that period's own mix of filtered and unfiltered intakes and the change between two filtered periods is the change in that mix, while the first-period gap repeated while the change lasts files no change at all and the same gap applied at every position overstates every period.",
+      "stump": "A competent solver finds the cap in the field instruction, measures how much dropping the households first interviewed at a fourth to sixth visit moves a wave-1 intake (0.21 point on the unemployment rate) and files that one gap for every quarter the cap is issued and 0.00 from April to June 2027, with none of the 0.27-point July to September rise the cap, so the rise is real; the step that lands it there is taking the unit the change acts on to be the quarter's fieldwork, when it is the intake, which the panel keeps for five quarters, so each published quarter is a mix of capped and uncapped intakes, the gap compounds to 0.62 point by January to March 2027 and the change between two capped quarters is the change in the mix, not zero."
+    },
+    {
+      "architecture": "v3 (Umzimela Catchment Management Agency: the 2027 sulfate load directives read at boundary monitors below mine-stream confluences)",
+      "fate": "spent 2026-10-31 at stage 4: the determinism judge returned NOT_DETERMINISTIC with SEND_BACK, confirmed on reconciliation: the decisive step caught four boundary samples taken in unmixed plumes (planted_defect_flip, surface_read_rejection, sole_data_defect yes) and the schedule executed literally filed the reverse of the golden; re-rooted into criminology",
+      "driver": "The quantity a unit carries out is read at a single point its inflows reach before they have mixed, so the point reports whichever inflow runs along its side rather than the blend of the unit's whole flow, and only the sum of what each inflow carries in, measured where that inflow is already mixed, gives what the unit carries out.",
+      "forum": "line_manager_or_team",
+      "forcing_event": "period_close",
+      "org_family": "government_agency"
+    }
+  ],
+  "notes": "Re-rooted from architecture 3 (a planted-defect flip). Every recorded number is accurate as recorded; the easy route uses accurate counts the wrong way, as a forecast of 2027. Built on seed 125054: the gap at the cut is 23 expected crimes and every standing member files one designation. Forcing event redrawn at the build from vote_or_meeting (banned against task172 v2, drawn just before) to period_close: the designation is made once the year has closed, for the calendar year ahead. Forum redrawn at the stage 4 repair from executive_team (banned against task122 v4 once the forcing-event redraw re-registered the card) to line_manager_or_team: the Superintendent, Patrol Operations adopts the designation for the division with the deployment plan.",
+  "registered": "2026-11-01T00:37:31Z",
+  "shell": {
+    "question form": "whether",
+    "second-sentence opener": "lay",
+    "rounding opener": "crimes",
+    "deliverable set": "csv+pptx"
+  },
+  "lineage_shells": [
+    {
+      "question form": "how-much",
+      "second-sentence opener": "i",
+      "rounding opener": "give",
+      "deliverable set": "docx+xlsx"
+    },
+    {
+      "question form": "how-much",
+      "second-sentence opener": "i",
+      "rounding opener": "rates",
+      "deliverable set": "docx+xlsx"
+    },
+    {
+      "question form": "where",
+      "second-sentence opener": "the",
+      "rounding opener": "loads",
+      "deliverable set": "pdf+xlsx"
+    }
+  ]
+}

@@ -1,0 +1,77 @@
+{
+  "task": "mark115",
+  "architecture": "v1",
+  "drawn": "2026-10-08",
+  "slot_note": "first build in the author-declared new domain Marketing & Consumer Research (vocab key added 2026-10-08 at /build); bar top two under 50, build to 40",
+  "domain": "marketing-consumer-research",
+  "subdomain": "pricing-promotion",
+  "niche": "a branded tea maker choosing which deal mechanic to offer an Irish franchise symbol group's March 2027 central deal event, where each member store sets its own everyday prices and a featured line has to forecast at least two and a half times its base sales",
+  "objective": "forecasting",
+  "shape": "07",
+  "decision_type": "pick_one_of_n",
+  "answer_unit": "named_option",
+  "answer": "",
+  "answer_source": "",
+  "gap": [
+    "time",
+    "population"
+  ],
+  "pattern": [
+    "D",
+    "E"
+  ],
+  "generators": [
+    "G2",
+    "G14",
+    "G16"
+  ],
+  "gate_g": "forecasting",
+  "calibration_form": "existing_book_actuals",
+  "stump_strategy": "withheld_rule_official_decoy",
+  "decisive_rule_filed": false,
+  "official_decoy": true,
+  "validated_decoy": true,
+  "context_artifact": "close_out_summary",
+  "stakeholder_role": "revenue growth manager at a branded tea company",
+  "role_family": "research_desk",
+  "scoring_unit": "per accepted item",
+  "spine": {
+    "file": "store_week_category_sales.csv",
+    "rows": 400000,
+    "entity": "one franchise store's weekly sales of one tea line",
+    "grain": "store x week x line",
+    "source": "synthetic (fictional symbol group's category scan data); real Eircode routing keys and Irish public holidays"
+  },
+  "forum": "executive_team",
+  "forcing_event": "vote_or_meeting",
+  "org_family": "manufacturer",
+  "world": {
+    "geography": "Ireland",
+    "currency": "EUR",
+    "org_type": "branded tea company selling through an Irish franchise symbol group",
+    "invented_names": [
+      "Delahunt Tea",
+      "Tullan Grocers"
+    ],
+    "people": [
+      "Tess Tuohey",
+      "Eamon Manahan",
+      "Joanne Uniacke",
+      "George Fenelon",
+      "Rebekah Masterson",
+      "Martina Mulgrew"
+    ]
+  },
+  "deliverables": [
+    "march_offer_paper.pdf",
+    "march_offer_workings.xlsx"
+  ],
+  "opening_move": "rule-first",
+  "driver": "A planned move earns a second response only at the points where its new level falls to or below a rival option's own level at that same point; the rival's volume shows that response only in part, because the subjects that move gain twice what the rival loses, so it has to be measured on the subjects that moved rather than read off the rival; the subject's own closed moves never reached that level anywhere, so its own response curve reproduces its whole history and misses the plan, the rival's loss credited one for one understates the plan, and a crossing tested against the rival's average level misplaces it.",
+  "driver_concrete": "Delahunt's 160s earns the own-label switch only in the stores where a mechanic puts its deal price at or below that store's own-label 160s price; in other brands' crossing deals own label lost about a third of its normal sales while the deal line sold extra packs worth 0.7 of own label's base, so the own-label drop credited one for one puts Save 40% at 2.2 and offers half price, Delahunt's own curve says sit out, the recap's mainstream lifts say Save a third, the chain-average own-label price says EUR 2.40 off, and the switch measured on the deal line store by store says Save 40% clears at 2.7.",
+  "stump": "A competent solver either never finds the switch, fits Delahunt's own Save 20% and Save 25% deals and sits March out, or finds it the way the data shows it first, own-label 160s sales falling by about a third wherever another brand's 160s deal undercut the store's own-label price, credits those lost packs to the deal line one for one, forecasts Save 40% at 2.2 times base and offers half price; the step that lands it there is never measuring the response on the deal line itself, which in those store-weeks sold twice the packs own label lost, enough to put Save 40% at 2.7 in the stores whose own-label price is highest.",
+  "mechanism_source": "design_note",
+  "differentiation": {},
+  "lineage": [],
+  "notes": "Domain declared by the author at /build (Marketing & Consumer Research, new; vocab key marketing-consumer-research and its subdomains added 2026-10-08). Decisive rung from the measured catalogue: #13 validates on one population, applies to another (Delahunt's own deal curve fits every one of its shallow closed deals and is carried to mechanics that cross own label), with #14 coarsens the segment (the crossing tested against the chain-average own-label price) and #25 assumes an effect the log could measure (the switch is measured from other brands' deals in the scan data) behind it. Patterns A, B and C unavailable (task114, task109, task116). Calibration organ: Delahunt's own closed deal events (existing_book_actuals), structurally blind to the crossing because none of them went below own label in any store. Context artifact: the group's 2026 deal-event recap (close_out_summary), correct uplifts for the lines and events it lists. Decision is pick_one_of_n because the group's menu mixes percentage and money-off mechanics; the prompt licenses sitting the event out. Open at checkpoint A: the portal's label for this domain may be 'Marketing & Sales' (client Batch 14 exemplar)."
+}

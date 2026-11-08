@@ -127,14 +127,14 @@ or an open reading is re-rooted at stage 1, never resumed.
   keys carrying them, the stump sentence, the card's stump and driver, the design note's ladder and default path, and
   the prompt's call sentence; in determinism mode also every Supplementary Questions number.
 - `status.py` prints every Sulfur build with its status and runs; `status.py next` the build to work next (returned,
-  paused and in-runs builds first); `status.py new` the next free number (task601 up); `status.py taskNN` one build.
+  paused and in-runs builds first); `status.py new` the next free number (task1 up); `status.py taskNN` one build.
 
 ## `pipeline.json`
 
 The one state file in a task folder: where the build is, never why.
 
 ```json
-{"task": "task601", "status": "BUILD",
+{"task": "task1", "status": "BUILD",
  "domain": "<vocab domain key>", "subdomain": "<the assigned Sulfur subdomain>", "objective": "forecasting",
  "stage": 3, "stage_name": "build", "updated": "2026-11-07",
  "call": "the committed recommendation in one line",

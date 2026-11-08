@@ -1,0 +1,159 @@
+{
+  "task": "mark145",
+  "architecture": "v2",
+  "drawn": "2026-11-01",
+  "slot_note": "batch 1 re-root; architecture 1 (Larchwood Express Canada's customs broker posts) moved to lineage as spent",
+  "domain": "education-learning-sciences",
+  "subdomain": "learning-analytics-early-warning-models",
+  "client_domain": "education-learning-sciences",
+  "niche": "a US charter high school network's spring 2027 credit-recovery and mentoring seats: which tier of its Bridge contract the board funds for the students expected to leave before completing by 30 June 2027, when a fall attendance initiative cut the scattered absences every early-warning rate counts while week-long disappearances rose",
+  "objective": "forecasting",
+  "shape": "04",
+  "decision_type": "dial_setting",
+  "answer_unit": "named_option",
+  "answer": "",
+  "answer_source": "",
+  "gap": [
+    "population",
+    "time"
+  ],
+  "pattern": [
+    "none"
+  ],
+  "generators": [
+    "G2",
+    "G6"
+  ],
+  "gate_g": "forecasting",
+  "calibration_form": "none",
+  "stump_strategy": "grain_or_unit",
+  "decisive_rule_filed": false,
+  "official_decoy": false,
+  "validated_decoy": false,
+  "context_artifact": "monitoring_export",
+  "stump_class": "analytical",
+  "analyst_test": "A strong analyst who conforms the absence file across its two export layouts, applies the state's half-day rule, prices each student on the network's early-warning indicators (chronic absence, course failures, behaviour incidents) and validates them on the 2025-26 leavers files about 95 expected spring leavers and the Bridge contract's first tier; the call is wrong because leaving rides on unbroken runs of instructional days missed, not on the share of days missed, and the fall 2026 attendance texts cut the scattered days while the week-long runs rose, so the network expects about 150 leavers and needs the second tier.",
+  "domain_test": "The leavers are forecast student by student from an early-warning model of the attendance, course and behaviour record, the learning-analytics task type's own estimate; the deciding fact is how disengagement shows in a school's absence record (a run of instructional days missed, read against the school calendar's weekends, holidays and non-student days), so with another field's nouns the semester, credit and instructional-calendar structure the forecast rests on falls away.",
+  "layer2_family": "estimation_fit",
+  "layer2_pattern": "own:absence-runs-over-rates",
+  "layer1": [
+    "absence rows in two student-information-system export layouts",
+    "half-day and period absences against the state's half-day rule",
+    "instructional calendars differing by school (non-student days, a snow day)",
+    "withdrawal codes renamed between school years",
+    "students moving between the network's schools under new local ids",
+    "UTC timestamps on the family-texting platform's log"
+  ],
+  "stakeholder_role": "the network's director of student services, who takes the Bridge contract to the board",
+  "role_family": "programme_officer",
+  "scoring_unit": "per active unit per period",
+  "spine": {
+    "file": "absences_2023_2026.csv",
+    "rows": 0,
+    "entity": "one student and instructional day with an absence recorded",
+    "grain": "student x day",
+    "source": "synthetic"
+  },
+  "forum": "trustees_or_governors",
+  "forcing_event": "purchase_order_or_contract",
+  "org_family": "university_or_school",
+  "world": {
+    "geography": "United States, Colorado (a fictional city, Cottonwood Plains)",
+    "currency": "USD",
+    "org_type": "a nonprofit charter network running four high schools under one board",
+    "invented_names": [
+      "Cedar Prairie Charter Schools",
+      "Cottonwood Plains"
+    ],
+    "people": [
+      "Monica Shaffer",
+      "Terry Dixon",
+      "Patricia Villarreal"
+    ]
+  },
+  "deliverables": [
+    "bridge_2027_board_paper.pdf",
+    "attendance_figures_2026.xlsx"
+  ],
+  "opening_move": "question-first",
+  "question_form": "what",
+  "driver": "A unit's chance of leaving before it completes rides on unbroken runs of missed days, which no column holds and only the absence rows read against the instructional calendar rebuild, not on the share of days missed; a forward period in which a nudge cut the scattered days while the long runs rose looks safer on every rate the field's indicators count, so a model on the absence rate, validated on every closed year, understates the leavers.",
+  "driver_concrete": "Each student's spring 2027 chance of leaving without completing is priced on the runs of five or more consecutive instructional days missed in the fall semester, read from the absence file against each school's 2026-27 calendar, beside course failures; the fall 2026 attendance texts cut scattered absences (chronic absence fell by about a quarter) while the five-day runs rose by about a third, so the network expects about 150 leavers and needs the Bridge contract's second tier, while the chronic-absence indicators file about 95.",
+  "stump": "A competent analyst prices each student on the network's early-warning indicators (chronic absence, course failures, behaviour incidents), validates them on the 2025-26 leavers and files about 95 expected leavers and the Bridge contract's first tier; the step that lands it there is counting missed days rather than unbroken runs of them, when the fall 2026 attendance texts cut the scattered days while week-long disappearances rose and leaving rides on the runs.",
+  "mechanism_source": "design_note",
+  "differentiation": {
+    "task120": "task120 (architecture 1) groups records into a claimed household through a two-hop join before cutting percentiles; here the unit is a run of consecutive instructional days missed by one student, built from the absence rows against each school calendar, and the call is a contract tier.",
+    "task141": "task141 (architecture 2) nets a figure against an offsetting term filed under another key and case; here nothing is netted: a student leaving rides on the runs of days missed rather than the share, and the forward semester has more runs and fewer scattered days.",
+    "task142": "task142 builds an upper percentile from arrivals and their durations; here the forecast is an expected count of leavers, each student priced on the unbroken absence runs the calendar reveals, with no tail quantile.",
+    "task148": "task148 (architecture 1) sums the hazards of every unit behind a shared backer; here each student is priced alone, on the runs of days missed that the attendance texts did not shorten.",
+    "task173": "task173 (architecture 2) splits one meter between two sources; here no total is split: the unit is the run of missed instructional days and the absence rate the indicators use hides it."
+  },
+  "lineage": [
+    {
+      "architecture": "v1",
+      "drawn": "2026-10-15",
+      "domain": "economics-econometrics",
+      "subdomain": "forecasting-forecast-evaluation",
+      "objective": "forecasting",
+      "shape": "05",
+      "decision_type": "allocation_to_total",
+      "gap": [
+        "time",
+        "population"
+      ],
+      "pattern": [
+        "none"
+      ],
+      "generators": [
+        "G16",
+        "G13"
+      ],
+      "gate_g": "forecasting",
+      "stump_strategy": "forecast_method_backtest",
+      "calibration_form": "none",
+      "context_artifact": "filed_standard",
+      "forum": "executive_team",
+      "forcing_event": "vote_or_meeting",
+      "org_family": "logistics_or_3pl",
+      "role_family": "capacity_planner",
+      "stakeholder_role": "the brokerage workforce planning lead in the carrier's Canadian customs brokerage department, who prepares the annual broker establishment review",
+      "world": {
+        "geography": "Canada (five import gateways at Mississauga, Dorval, Richmond, Calgary and Winnipeg; the express carrier, its contract broker, people, systems and data are fictional)",
+        "currency": "CAD",
+        "org_type": "an express carrier's Canadian customs brokerage department and its five gateway brokerage desks",
+        "invented_names": [
+          "Larchwood Express Canada",
+          "Brandmoor Customs Services"
+        ],
+        "people": [
+          "Laura Parks",
+          "Robin Larson",
+          "Wanda Armstrong",
+          "Brian Stewart",
+          "Clémence Sirois",
+          "Theresa Rowe"
+        ]
+      },
+      "deliverables": [
+        "broker_posts_2027.xlsx",
+        "establishment_review_2027.pptx"
+      ],
+      "question_form": "where",
+      "driver": "The forward count of units above a fixed line is set by where each unit's value lands at the forward period's conversion factors, and units differ in which value they hold fixed from period to period, their own denomination or the line's; the history's count carries only the past factors, a mechanical re-conversion of every unit treats every unit as holding its own denomination, and one pooled share of holders treats unlike groups alike, so only estimating each group's mix of holders from the units seen in both periods, and re-converting the own-denomination share alone, gets the count.",
+      "driver_concrete": "Each gateway's 2027 formal entries are its shipments of the twelve months to September 2026 routed for the plan year with each segment's exchange-rate pass-through: by gateway and invoice currency, the share of the base year's repeat consignments that kept their invoice value (and so carry the rate into their CAD value) against those that kept their CAD value; that share is re-routed at the network plan's 2027 planning rate against the CAD 3,300 line, the rest keeps the route the base year gave it, OGD-regulated shipments formal whatever their value, scaled to the plan's volumes. Calgary's US-dollar goods (0.009) and the Chinese goods at Mississauga and Richmond (0.011, 0.013) hold their CAD values while every other segment keeps its invoice prices (0.958 to 1.000), so Dorval gains about an eighth at the plan's euro rate of 1.68, Mississauga, Richmond and Winnipeg lose about a tenth at the plan's US dollar rate of 1.34, and Calgary stays where it was.",
+      "stump": "Carrying each gateway's formal entries per inbound shipment of the twelve months to September 2026 onto the 2027 network plan places one post at each of the five gateways and holds one; the step that lands it there is forecasting the 2027 count without estimating how each segment's CAD values respond to the plan's exchange rates, and re-routing every shipment at those rates instead (or one pooled pass-through share) drops Calgary's post and holds four.",
+      "answer": "Place two of the six new broker posts at Dorval and one at Calgary for 2027, and hold the other three to the next review.",
+      "shell": null,
+      "fate": "spent 2026-11-01 at the batch 1 audit: short of the survivor anatomy (precut.py FAIL, the Survivor anatomy section missing; the prompt disclosed a count the data hold, the five gateways); re-rooted rather than repaired"
+    }
+  ],
+  "lineage_shells": [],
+  "notes": "",
+  "registered": "2026-11-01T00:29:56Z",
+  "shell": {
+    "question form": "whether",
+    "second-sentence opener": "in",
+    "rounding opener": "give",
+    "deliverable set": "pptx+xlsx"
+  }
+}

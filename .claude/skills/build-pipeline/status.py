@@ -6,8 +6,8 @@
     python3 .claude/skills/build-pipeline/status.py new        the next free task number
     python3 .claude/skills/build-pipeline/status.py taskNN     one build: status, resume line, runs, portal
 
-Sulfur builds are numbered from task601 up, so they never collide with the Project Mark cards kept under
-fingerprint/cards/ as the already-submitted baseline (task1 to task503).
+Sulfur builds are numbered from task1 up. The Project Mark cards kept under fingerprint/cards/ as the
+already-submitted baseline are filed as mark1 to mark503 (Mark's task1 to task503), so the two never collide.
 
 Status (pipeline.json `status`, exact strings), in order:
   DRAWING    the draw is being fixed (card not yet registered)
@@ -28,7 +28,7 @@ import sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 REPO = os.path.abspath(os.path.join(HERE, "..", "..", ".."))
-FIRST = 601
+FIRST = 1
 
 ORDER = ["DRAWING", "DESIGN", "BUILD", "READY", "RUNS", "SUBMITTED", "APPROVED", "RETURNED", "PAUSED", "RETIRED"]
 # What `next` picks first: work the author is waiting on, then work in flight, oldest number first.
