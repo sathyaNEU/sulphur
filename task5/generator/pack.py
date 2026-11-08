@@ -1,300 +1,439 @@
-"""Writers for the data files under target/, each in its source system's own layout: the cadastre and the population
-register in semicolon CSV with day-first dates as the registers deliver them, the meter data hub's metering point
-register and its hourly values (UTC hour starts, quality codes, a later delivery correcting estimated hours), the land
-register's titles and its 2026 transfers, the business and shareholder registers, the weather service's hourly
-temperatures and the grid company's outage log."""
+"""task5 architecture 3: the Division's extract, as its systems write it.
+
+The quarterly reports (originals, amendments, the odd resubmission), the employer account register, its status
+history, the multiple worksite reports, the county codes and the NAICS concordance, cut from the world in sim.py and
+held as tables; write_* put them on disk the way each source exports them."""
 import csv
 import datetime as dt
-import re
+import io
 
 import numpy as np
-import pyarrow as pa
-import pyarrow.parquet as pq
+import pandas as pd
 
-import parquetio as PQ
-
+import sim
 import world as W
 
-OUTSIDE = ["4601", "0301", "5001", "1103", "3301", "1508"]
+SURNAMES = ("Abernathy Ackley Alder Ambrose Aldana Archer Arnett Ashworth Babcock Bainbridge Barlow Beasley Bertrand "
+            "Bixby Blackwell Bonner Boyce Bramlett Brennan Briggs Brock Burnham Calloway Carver Castellano Chadwick "
+            "Chamberlain Cheney Childers Cobb Colfax Conover Corbin Cormier Crandall Crowell Cutler Dalton Danforth "
+            "Darrow DeLuca Dempsey Devlin Dorsey Draper Dunbar Duquette Easton Eckert Ellery Emmons Ewing Fairbanks "
+            "Farnham Faulkner Fennell Finley Fitch Fogarty Forsythe Fuentes Gaffney Galloway Garrison Geller Gilchrist "
+            "Goddard Gorski Granger Greer Gunderson Haddock Hagen Halvorsen Hammond Harlan Haskell Hatcher Hayward "
+            "Hedlund Hendrix Herrera Hollis Holmquist Horne Huckabee Ingersoll Iverson Jarvis Jessup Kavanagh Keane "
+            "Kemper Kessler Kincaid Kirkland Kowalski Lachance Landry Langley Larkin Ledbetter Lindqvist Lockhart "
+            "Lombardi Lowry Macklin Madsen Marchetti Markham Mattingly McAllister McCready Mercer Merriweather Moody "
+            "Mulvaney Nadeau Nolan Novak Oakes Oberlin Ostrander Pacheco Pardee Pelletier Pettibone Platt Prescott "
+            "Pruitt Quimby Radcliffe Ransom Reardon Renfro Riordan Rockwell Rourke Rutledge Salazar Sandoval Sawyer "
+            "Schaefer Seaver Sheffield Shipley Sinclair Slocum Sorensen Spalding Stafford Steadman Stoddard Strand "
+            "Sutter Swanson Talbot Tatum Thibodeau Tillman Trask Tremblay Underhill Upham Vance Vaughn Voss Wadsworth "
+            "Walcott Waverly Webber Wendell Whitaker Wilder Winslow Wolcott Yarbrough Yates Zeller Zimmerman").split()
+TOWNS = {
+    "001": ["Brayton", "Hollins Ford", "Pike Valley", "Ashgrove"],
+    "003": ["Port Calder", "East Calder", "Wexley", "Marlow Heights", "Cedar Bluff"],
+    "005": ["Corliss", "Fallowfield", "Dunmore Station"],
+    "007": ["Fenwick", "Larch Hill", "Northbrook"],
+    "009": ["Garrow Mills", "Kestrel", "Ridley", "Stony Brook Junction"],
+    "011": ["Hadleyville", "Glenmere", "Upton Falls"],
+    "013": ["Kittredge Harbor", "Loon Point", "Tamarack"],
+    "015": ["Linden Crossing", "Oakmont", "Westvale", "Benton"],
+    "017": ["Merritt Falls", "Quarry Hill", "Elmwood", "Southport"],
+    "019": ["Ostrom Junction", "Pinecrest", "Black Spruce", "Rainier Flats"],
+    "021": ["Pellston", "Redfield", "Harrow"],
+    "023": ["Talcott Lake", "Juniper Bay", "Winslow"],
+    "025": ["Whitcomb", "Millbrook", "Ivy Point", "Danby"],
+    "027": ["Sayre", "Yarrow", "North Talcott"],
+}
+FEATURES = ["Cedar Ridge", "Pine Hollow", "Stonegate", "Riverbend", "Maple Grove", "Lakeside", "Northfield",
+            "Highland", "Blue Heron", "Granite Peak", "Willow Creek", "Old Mill", "Birchwood", "Summit", "Harbor View",
+            "Twin Oaks", "Elk Run", "Silver Lake", "Fox Hollow", "Ironwood", "Meadowbrook", "Eagle Point"]
+IND = {
+    "111421": ["Nursery", "Tree Farm", "Greenhouses"], "111998": ["Farms", "Farm", "Acres"], "112111": ["Cattle Co.", "Ranch", "Beef"],
+    "112120": ["Dairy", "Dairy Farm", "Farms"], "113310": ["Logging", "Timber", "Forest Products"],
+    "115310": ["Forestry Services", "Timber Services", "Forest Management"], "212321": ["Sand & Gravel", "Aggregates"],
+    "236115": ["Homes", "Builders", "Home Builders"], "236118": ["Remodeling", "Renovations", "Home Improvement"],
+    "236220": ["Construction", "Building Co.", "Contracting"], "237310": ["Paving", "Excavating & Paving", "Road Builders"],
+    "238110": ["Concrete", "Foundations", "Concrete Works"], "238160": ["Roofing", "Roofing & Siding"],
+    "238210": ["Electric", "Electrical Contractors", "Electric Co."], "238220": ["Plumbing & Heating", "Mechanical", "Heating & Cooling"],
+    "238310": ["Drywall", "Insulation", "Drywall & Plaster"], "238320": ["Painting", "Painting Co.", "Decorating"],
+    "238910": ["Excavating", "Site Work", "Earthworks"], "238990": ["Contracting", "Fence Co.", "Specialty Builders"],
+    "311812": ["Bakery", "Baking Co."], "321113": ["Lumber", "Sawmill", "Wood Products"], "321918": ["Millwork", "Woodworks"],
+    "322121": ["Paper Co.", "Paper Mill"], "326199": ["Plastics", "Molding"], "332323": ["Metal Works", "Ironworks"],
+    "332710": ["Machine", "Machine Shop", "Precision"], "336390": ["Automotive Components", "Auto Parts Mfg"],
+    "337110": ["Cabinetry", "Kitchens", "Cabinet Co."], "221122": ["Electric Cooperative", "Power & Light"],
+    "423310": ["Building Supply", "Lumber Supply"], "423810": ["Equipment", "Equipment Sales"], "424410": ["Food Distributors", "Grocery Supply"],
+    "441110": ["Motors", "Ford", "Chevrolet", "Auto Sales"], "444110": ["Home Center"], "444180": ["Building Supply", "Hardware"],
+    "445110": ["Market", "Foods", "Grocery"], "445131": ["Quick Stop", "Mini Mart", "Convenience"], "455211": ["Wholesale Club"],
+    "456110": ["Pharmacy", "Drug", "Apothecary"], "457110": ["Fuel & Food", "Gas & Go", "Petroleum"], "458110": ["Outfitters", "Clothing Co."],
+    "459110": ["Sporting Goods", "Outdoor Supply"], "459420": ["Gifts", "Gift Shop", "Trading Post"], "459999": ["Supply", "Variety"],
+    "484110": ["Trucking", "Freight", "Transport"], "484220": ["Trucking", "Hauling", "Log Hauling"], "488410": ["Towing", "Wrecker Service"],
+    "492210": ["Courier", "Delivery"], "493110": ["Warehousing", "Storage"], "513110": ["Gazette", "Herald", "Courier-Journal"],
+    "517112": ["Wireless", "Cellular"], "519290": ["Data Services", "Information Services"],
+    "522110": ["Savings Bank", "National Bank", "Trust Company"], "522130": ["Federal Credit Union", "Community Credit Union"],
+    "524210": ["Insurance Agency", "Insurance Group"], "531110": ["Properties", "Apartments", "Rentals"],
+    "531210": ["Realty", "Real Estate", "Realtors"], "531311": ["Property Management", "Management Co."],
+    "541110": ["Law Office", "Law Group", "& Associates"], "541211": ["CPAs", "& Company CPAs", "Accounting"],
+    "541213": ["Tax Service", "Tax & Bookkeeping"], "541330": ["Engineering", "Engineers"], "541512": ["Technologies", "IT Solutions", "Systems"],
+    "541810": ["Advertising", "Creative"], "561320": ["Staffing", "Personnel"], "561720": ["Cleaning", "Janitorial"],
+    "561730": ["Landscaping", "Lawn & Garden", "Grounds Care"], "562111": ["Disposal", "Sanitation", "Waste Services"],
+    "611110": ["Academy", "School"], "621111": ["Medical Group", "Family Medicine", "Physicians"], "621210": ["Family Dentistry", "Dental Associates", "Dental Care"],
+    "621340": ["Physical Therapy", "Rehab"], "621610": ["Home Health", "Home Care"], "622110": ["Medical Center", "Hospital"],
+    "623110": ["Health & Rehabilitation", "Nursing Home", "Care Center"], "623312": ["Senior Living", "Assisted Living"],
+    "624410": ["Child Care", "Learning Center", "Daycare"], "713930": ["Marina", "Boat Club"], "713940": ["Fitness", "Athletic Club", "Gym"],
+    "713990": ["Adventures", "Recreation", "Outfitters"], "721110": ["Inn", "Motel", "Lodge"], "721211": ["Campground", "RV Park"],
+    "721214": ["Camp", "Youth Camp"], "722410": ["Tavern", "Pub", "Taproom"], "722511": ["Restaurant", "Grill", "Bistro", "Kitchen"],
+    "722513": ["Pizza", "Subs", "Burgers", "Tacos"], "722515": ["Coffee", "Ice Cream", "Bakery & Cafe"],
+    "811111": ["Auto Repair", "Garage", "Automotive"], "811121": ["Collision", "Auto Body"], "812111": ["Barber Shop", "Barbers"],
+    "812112": ["Salon", "Hair Studio", "Beauty Salon"], "812910": ["Pet Grooming", "Kennels"], "813110": ["Church", "Congregation", "Parish"],
+}
+PRO_SUFFIX = {"541110": ["PLLC", "LLP", "PC"], "541211": ["PLLC", "LLP", "PC"], "621111": ["PC", "PLLC"],
+              "621210": ["PC", "DDS PC", "PLLC"], "541330": ["PLLC", "Inc."], "813110": [""]}
+SUFFIX = ["LLC", "LLC", "LLC", "Inc.", "Inc.", "Co.", "Corp.", "Company", ""]
 
 
-def _d(x):
-    return x.strftime("%d.%m.%Y") if x else ""
+def check_digit(x):
+    s = 0
+    for k, ch in enumerate(str(x)[::-1]):
+        d = int(ch) * (2 if k % 2 == 0 else 1)
+        s += d // 10 + d % 10
+    return (10 - s % 10) % 10
 
 
-def _csv(path, header, rows, sep=";"):
-    with open(path, "w", newline="", encoding="utf-8") as fh:
-        wr = csv.writer(fh, delimiter=sep, lineterminator="\r\n")
-        wr.writerow(header)
-        for r in rows:
-            wr.writerow(r)
-    return len(rows)
+def account_numbers(w, r):
+    """accounts are numbered as they register: initial accounts in order of their liability date, later ones after"""
+    order_old = np.argsort(w.liab_date_ord, kind="stable")
+    nums = np.zeros(w.n, int)
+    x = 1004000 + int(r.integers(0, 900))
+    for i in order_old:
+        x += int(r.integers(9, 260))
+        nums[i] = x
+    return nums
 
 
-def label(u, when):
-    """A unit's number as the cadastre had it on a date: renumbered blocks carry the old number before the change."""
-    if "unit_old" in u and when < u["renum_date"]:
-        return u["unit_old"]
-    return u["unit"]
+def name_for(w, i, r):
+    naics, c = w.naics[i], w.county[i]
+    town = TOWNS[c][int(r.integers(0, len(TOWNS[c])))]
+    cname = W.NAMES[c]
+    if w.state[i]:
+        return ["Franklin Department of Transportation", "Franklin Department of Corrections",
+                "Franklin Department of Health and Human Services", "University of Franklin"][i % 4], ""
+    if w.gov[i]:
+        if naics == "611110":
+            return r.choice(["%s Public Schools", "%s Union School District", "%s Regional School District"]) % town, ""
+        if naics == "921140":
+            return r.choice(["Town of %s" % town, "City of %s" % town, "%s County" % cname]), ""
+        if naics == "922120":
+            return "%s Police Department" % town, ""
+        if naics == "622110":
+            return r.choice(["%s Regional Medical Center" % town, "%s County Hospital" % cname]), ""
+        return "%s County" % cname, ""
+    words = IND.get(naics, ["Services"])
+    iw = words[int(r.integers(0, len(words)))]
+    suf = PRO_SUFFIX.get(naics, SUFFIX)
+    sx = suf[int(r.integers(0, len(suf)))]
+    sn = SURNAMES[int(r.integers(0, len(SURNAMES)))]
+    shape = r.random()
+    if shape < 0.32:
+        nm = "%s %s" % (sn, iw)
+    elif shape < 0.48:
+        nm = "%s %s" % (town, iw)
+    elif shape < 0.58 and naics[:2] in ("23", "11", "48", "81", "33"):
+        nm = "%s & Sons %s" % (sn, iw)
+    elif shape < 0.66:
+        a, b = SURNAMES[int(r.integers(0, len(SURNAMES)))][0], SURNAMES[int(r.integers(0, len(SURNAMES)))][0]
+        nm = "%s&%s %s" % (a, b, iw) if r.random() < 0.5 else "%s.%s. %s" % (a, b, iw)
+    elif shape < 0.84:
+        nm = "%s %s" % (FEATURES[int(r.integers(0, len(FEATURES)))], iw)
+    elif shape < 0.92 and naics in ("541110", "541211", "531210", "524210"):
+        nm = "%s %s %s" % (sn, SURNAMES[int(r.integers(0, len(SURNAMES)))], iw)
+    else:
+        nm = "%s %s" % (sn, iw)
+    if iw.startswith("&"):
+        nm = "%s %s" % (sn, iw)
+    legal = (nm + (" " + sx if sx else "")).replace("  ", " ")
+    trade = ""
+    if r.random() < 0.28 and naics[:2] in ("72", "44", "45", "81", "71"):
+        trade = "The %s %s" % (FEATURES[int(r.integers(0, len(FEATURES)))].split()[0], iw)
+    return legal, trade
 
 
-def prepare(w):
-    for uid, (old, new, d) in w.renumbered.items():
-        w.by_id[uid]["renum_date"] = d
-
-
-# ---------------------------------------------------------------------------------------------- cadastre
-def write_cadastre(w, path):
+# ------------------------------------------------------------------------------------------------------ tables
+def _version_rows(w):
+    """every report version received by the extract: the original (carrying a month in error where it was later
+    amended), the amendment, and a resubmission seconds after the original"""
     rows = []
-    btype = {"Leilighet": "Boligblokk", "Enebolig": "Enebolig", "Rekkehus": "Rekkehus", "Tomannsbolig": "Tomannsbolig",
-             "Fritidsbolig": "Fritidsbygg", "Institusjon": "Sykehjem"}
-    for u in sorted(w.units, key=lambda x: (x["nr"], x["street"], x["no"], x["unit"], x["id"])):
-        rows.append([u["nr"], u["id"], u["gnr"], u["bnr"], u["snr"] or "", u["street"], u["no"], u["letter"],
-                     u["unit"], u["category"], btype[u["type"]], u["area"], _d(u["in_use"]), u["building"]])
-    return _csv(path, ["kommunenr", "bruksenhet_id", "gardsnr", "bruksnr", "seksjonsnr", "adressenavn", "husnr",
-                       "bokstav", "bruksenhetsnr", "bruksenhetstype", "bygningstype", "bruksareal_m2",
-                       "tatt_i_bruk", "bygning_id"], rows)
-
-
-def write_municipalities(path):
-    rows = []
-    for nr, name, *_r in W.MUNICIPALITIES:
-        rows.append([nr, name, "01.01.2024" if nr in W.OLD_NUMBER else "01.01.2020", W.OLD_NUMBER.get(nr, ""),
-                     "Delt fra %s 01.01.2024" % W.OLD_NUMBER[nr] if nr in W.OLD_NUMBER else ""])
-    return _csv(path, ["kommunenr", "kommunenavn", "gyldig_fra", "tidligere_kommunenr", "merknad"], rows)
-
-
-# ---------------------------------------------------------------------------------------------- metering points
-def write_meterpoints(w, path, rng):
-    rows = []
-    for m in sorted(w.meters, key=lambda x: x["mp"]):
-        if m["unit"] is None:
-            nr = m["nr"]
-            blocks = sorted({(u["street"], u["no"]) for u in w.units if u["nr"] == nr and u["type"] == "Leilighet"})
-            s, n = blocks[int(rng.integers(0, len(blocks)))] if blocks else ("Storgata", 1)
-            rows.append([m["mp"], "Hvitfjell Nett AS", W.OLD_NUMBER.get(nr, nr), "%s %d" % (s, n), "", "",
-                         "Fellesmåling", _d(m["from"]), _d(m["to"])])
+    for (i, q), t in w.recv.items():
+        if t > W.EXTRACT:
             continue
-        u = w.by_id[m["unit"]]
-        nr = W.OLD_NUMBER.get(u["nr"], u["nr"])
-        adr = "%s %d%s" % (u["street"], u["no"], u["letter"])
-        if rng.random() < 0.18:
-            adr = adr.upper()
-        unit = u["unit"]
-        single = u["counted"] and len(w.props.get((u["nr"], u["gnr"], u["bnr"]), {}).get("units", [u])) == 1
-        if single and u["type"] != "Leilighet":
-            unit = "" if rng.random() < 0.7 else unit
-        elif rng.random() < 0.12:
-            unit = "%s %s" % (unit[0], unit[1:])
-        uid = u["id"]
-        if single and unit == "" and u["nr"] not in W.OLD_NUMBER and rng.random() < 0.08:
-            uid = ""
-        kind = {"Bolig": "Husholdning", "Fritidsbolig": "Fritidsbolig"}[u["category"]]
-        rows.append([m["mp"], "Hvitfjell Nett AS", nr, adr, unit, uid, kind, _d(m["from"]), _d(m["to"])])
-    return _csv(path, ["malepunkt_id", "nettselskap", "kommunenr", "adresse", "bruksenhetsnr", "bruksenhet_id",
-                       "kundekategori", "gyldig_fra", "gyldig_til"], rows)
-
-
-def write_hourly(w, path, rng):
-    """One row per metering point and UTC hour it reported in the fortnight, as the hub delivered it: some hours
-    missing after communication faults, some days first delivered as estimates and replaced by measured values in a
-    later delivery, both deliveries kept."""
-    t0 = dt.datetime(W.FORTNIGHT_START.year, W.FORTNIGHT_START.month, W.FORTNIGHT_START.day) - \
-        dt.timedelta(hours=W.UTC_OFFSET)
-    mps, ts, kwh, qual, ver = [], [], [], [], []
-    w.estimated = {}
-    w.missing = {}
-    for m in sorted(w.meters, key=lambda x: x["mp"]):
-        key = ("felles", m["mp"]) if m["unit"] is None else m["unit"]
-        load = w.load[key]
-        lo, hi = 0, W.HOURS
-        if m["from"] and m["from"] > W.FORTNIGHT_START:
-            lo = (m["from"] - W.FORTNIGHT_START).days * 24
-        if m["to"] and m["to"] < W.FORTNIGHT_START + dt.timedelta(days=W.DAYS):
-            hi = (m["to"] - W.FORTNIGHT_START).days * 24
-        hours = np.arange(lo, hi)
-        keep = np.ones(len(hours), bool)
-        if rng.random() < 0.10:
-            for _ in range(int(rng.integers(1, 3))):
-                a = int(rng.integers(0, max(1, len(hours) - 6)))
-                keep[a:a + int(rng.integers(1, 7))] = False
-        est_day = int(rng.integers(0, W.DAYS)) if rng.random() < 0.03 else None
-        w.missing[m["mp"]] = int((~keep).sum())
-        w.missing_hours = getattr(w, "missing_hours", {})
-        w.missing_hours[m["mp"]] = set(int(h) for h in hours[~keep])
-        for i, h in enumerate(hours):
-            if not keep[i]:
-                continue
-            mps.append(m["mp"])
-            ts.append(t0 + dt.timedelta(hours=int(h)))
-            if est_day is not None and h // 24 == est_day:
-                block = load[(h // 24) * 24:(h // 24) * 24 + 24]
-                kwh.append(round(float(block.mean()), 3))
-                qual.append("E")
-                ver.append(1)
-                mps.append(m["mp"])
-                ts.append(t0 + dt.timedelta(hours=int(h)))
-                kwh.append(float(load[h]))
-                qual.append("M")
-                ver.append(2)
-            else:
-                kwh.append(float(load[h]))
-                qual.append("M")
-                ver.append(1)
-        if est_day is not None:
-            w.estimated[m["mp"]] = est_day
-    order = np.lexsort((np.array(ver), np.array(ts, dtype="datetime64[s]"), np.array(mps)))
-    tab = pa.table({
-        "malepunkt_id": pa.array(np.array(mps)[order], pa.int64()),
-        "fra_tidspunkt_utc": pa.array(np.array(ts, dtype="datetime64[s]")[order], pa.timestamp("s", tz="UTC")),
-        "forbruk_kwh": pa.array(np.array(kwh, dtype=np.float64)[order], pa.float64()),
-        "kvalitet": pa.array(np.array(qual)[order], pa.string()),
-        "leveranse": pa.array(np.array(ver)[order], pa.int8()),
-    })
-    pq.write_table(tab, path, compression="zstd", use_dictionary=True, write_statistics=False, store_schema=False)
-    PQ._drop_created_by(path)
-    return tab.num_rows
-
-
-def write_daily(w, path):
-    """The hub's daily values for the same points and fortnight, as its settlement export gives them: one row per
-    metering point and Norwegian calendar day, the day's kWh with a decimal comma, how many hours it rests on, and a
-    quality code (M measured in every hour, E where the hub filled missing hours by its estimate); a day the hub sent
-    twice appears twice. Its own random stream, so the other files stay as they were."""
-    rng = np.random.default_rng(W.SEED + 2)
-    rows = []
-    for m in sorted(w.meters, key=lambda x: x["mp"]):
-        key = ("felles", m["mp"]) if m["unit"] is None else m["unit"]
-        load = w.load[key]
-        lo, hi = 0, W.DAYS
-        if m["from"] and m["from"] > W.FORTNIGHT_START:
-            lo = (m["from"] - W.FORTNIGHT_START).days
-        if m["to"] and m["to"] < W.FORTNIGHT_START + dt.timedelta(days=W.DAYS):
-            hi = (m["to"] - W.FORTNIGHT_START).days
-        miss = w.missing_hours.get(m["mp"], set())
-        for dd in range(lo, hi):
-            hrs = [h for h in range(dd * 24, dd * 24 + 24) if h not in miss]
-            if len(hrs) == 24:
-                v, q = float(load[dd * 24:dd * 24 + 24].sum()), "M"
-            else:
-                got = float(sum(load[h] for h in hrs))
-                v, q = got * 24.0 / max(1, len(hrs)), "E"
-            day_ = (W.FORTNIGHT_START + dt.timedelta(days=dd)).strftime("%d.%m.%Y")
-            rows.append([str(m["mp"]), day_, ("%.3f" % v).replace(".", ","), str(len(hrs)), q])
-            if rng.random() < 0.004:
-                rows.append(rows[-1][:])
-    _csv(path, ["malepunkt_id", "dato", "forbruk_kwh", "antall_timeverdier", "kvalitet"], rows)
-    return len(rows)
-
-
-# ---------------------------------------------------------------------------------------------- population register
-def _addr(u, when):
-    return [u["nr"], u["street"], u["no"], u["letter"], label(u, when)]
-
-
-def write_register(w, path):
-    rows = []
-    for p in sorted(w.persons, key=lambda x: x["id"]):
-        if p["unit"] is None:
+        m = w.jobs[i, 3 * q:3 * q + 3].astype(int).tolist()
+        if q >= w.xfer_q[i] >= 0:
             continue
-        u = w.by_id[p["unit"]]
-        rows.append([p["id"], _d(p["born"])] + _addr(u, W.SNAPSHOT_DAY) + [_d(p["since"])])
-    return _csv(path, ["person_lopenr", "fodselsdato", "kommunenr", "adressenavn", "husnr", "bokstav",
-                       "bruksenhetsnr", "bosatt_fra"], rows)
+        orig = list(m)
+        a = w.amend.get((i, q))
+        if a is not None:
+            k, d = a[1], a[2]
+            orig[k] = max(0, orig[k] - d)
+        rows.append((i, q, "ORIGINAL", orig, t))
+        if (i, q) in w.dup and w.dup[i, q] <= W.EXTRACT:
+            rows.append((i, q, "ORIGINAL", orig, w.dup[i, q]))
+        if a is not None and a[0] <= W.EXTRACT:
+            rows.append((i, q, "AMENDED", m, a[0]))
+    return rows
 
 
-def write_events(w, path, rng):
-    rows = []
-    for e in w.events:
-        frm = ["", "", "", "", ""]
-        to = ["", "", "", "", ""]
-        land_f = land_t = ""
-        if e.get("renumber"):
-            u = w.by_id[e["from"]]
-            frm = [u["nr"], u["street"], u["no"], u["letter"], e["renumber"][0]]
-            to = [u["nr"], u["street"], u["no"], u["letter"], e["renumber"][1]]
+def tables(w):
+    r = np.random.default_rng([w.seed, 31])
+    rn = sim.rng("names", w.seed)
+    n = w.n
+    # liability dates: initial accounts registered between 1972 and 2022, the rest on their liability day
+    liab = []
+    for i in range(n):
+        if w.start_m[i] == 0 and not w.birth[i] and w.pred[i] < 0:
+            y = int(r.integers(1972, 2023))
+            d = dt.date(y, int(r.integers(1, 13)), int(r.integers(1, 29)))
         else:
-            if e["from"] is not None:
-                frm = _addr(w.by_id[e["from"]], e["date"])
-            if e["to"] is not None:
-                to = _addr(w.by_id[e["to"]], e["date"] + dt.timedelta(days=1))
-            if e.get("to_out") == "OUT":
-                to = [OUTSIDE[int(rng.integers(0, len(OUTSIDE)))], "", "", "", ""]
-            if e.get("to_out") == "ABROAD":
-                land_t = ["SE", "PL", "DK", "ES", "LT", "DE"][int(rng.integers(0, 6))]
-            if e.get("from_out") == "ABROAD":
-                land_f = ["PL", "LT", "SE", "UA", "PH", "DE"][int(rng.integers(0, 6))]
-        rows.append([e["pid"], _d(w.person_by_id[e["pid"]]["born"]), e["type"], _d(e["date"]), _d(e["reg"])] + frm +
-                    [land_f] + to + [land_t])
-    return _csv(path, ["person_lopenr", "fodselsdato", "hendelse", "hendelsesdato", "registrert_dato", "fra_kommunenr",
-                       "fra_adressenavn", "fra_husnr", "fra_bokstav", "fra_bruksenhetsnr", "fra_land", "til_kommunenr",
-                       "til_adressenavn", "til_husnr", "til_bokstav", "til_bruksenhetsnr", "til_land"], rows)
+            md = sim.month_date(w.start_m[i])
+            d = dt.date(md.year, md.month, 1 if w.pred[i] >= 0 else int(w.liab_day[i]))   # a successor from its transfer
+        liab.append(d)
+    w.liab_date = liab
+    w.liab_date_ord = np.array([d.toordinal() for d in liab])
+    acct = account_numbers(w, r)
+    w.acct = acct
+    fmt = lambda x: "%07d-%d" % (x, check_digit(x))
+    w.acct_s = [fmt(x) for x in acct]
+    names = [name_for(w, i, rn) for i in range(n)]
+    # NAICS as registered: many accounts registered before 2022 still carry the 2017 code
+    old = {a[0]: a[4] for a in W.NAICS if a[4]}
+    naics_reg = []
+    for i in range(n):
+        c = w.naics[i]
+        if c in old and liab[i] < dt.date(2022, 6, 1) and r.random() < 0.78:
+            naics_reg.append(old[c])
+        else:
+            naics_reg.append(c)
+    # status as at the extract
+    status, sdate = ["ACTIVE"] * n, [""] * n
+    ev = sorted([e for e in w.events if e[3] <= W.EXTRACT.date() and w.registered[e[0]]], key=lambda e: (e[3], e[0]))
+    for e in ev:
+        i, kind = e[0], e[1]
+        if kind in ("INACTIVATED", "CLOSED", "TRANSFERRED"):
+            status[i], sdate[i] = "INACTIVE", e[2].isoformat()
+    acc = pd.DataFrame({
+        "_n": acct,
+        "account_no": w.acct_s,
+        "legal_name": [nm[0] for nm in names],
+        "trade_name": [nm[1] for nm in names],
+        "ownership": ["2" if w.state[i] else ("3" if w.gov[i] else "5") for i in range(n)],
+        "naics_code": naics_reg,
+        "county_code": [w.county[i] for i in range(n)],
+        "liability_date": [d.strftime("%m/%d/%Y") for d in liab],
+        "account_status": status,
+        "status_effective_date": sdate,
+        "multi_worksite": ["Y" if i in w.sites else "N" for i in range(n)],
+        "predecessor_account": [w.acct_s[w.pred[i]] if w.pred[i] >= 0 else "" for i in range(n)],
+    })
+    acc = acc[w.registered].sort_values("_n", kind="stable").reset_index(drop=True)
+    # the status history
+    st = []
+    for e in ev:
+        i, kind, eff, proc, reason, other = e
+        if kind == "TRANSFERRED":
+            reason = "SUCCESSOR %s" % w.acct_s[other]
+        elif kind == "LIABLE" and other is not None:
+            reason = "SUCCESSOR TO %s" % w.acct_s[other]
+        st.append((w.acct_s[i], kind, eff.isoformat(), proc.isoformat(), reason))
+    stat = pd.DataFrame(st, columns=["account_no", "change_type", "effective_date", "processed_date", "reason"])
+    # the reports
+    vr = _version_rows(w)
+    mw2 = {"11": 3400, "21": 5800, "22": 8200, "23": 5600, "31": 4300, "32": 5200, "33": 5600, "42": 6000, "44": 2900,
+           "45": 2700, "48": 4600, "49": 4100, "51": 7400, "52": 7800, "53": 4300, "54": 7900, "56": 3500, "61": 4400,
+           "62": 4700, "71": 2500, "72": 1950, "81": 3200, "92": 5100}
+    wage = {c: mw2.get(c[:2], 4000) for c in set(w.naics)}
+    rw = np.random.default_rng([w.seed, 32])
+    rep = []
+    for (i, q, kind, m, t) in vr:
+        mw = wage.get(w.naics[i], 4200) * (1 + 0.06 * ((q // 4) - 1))
+        tw = sum(m) * mw * rw.uniform(0.82, 1.18)
+        tax = min(tw, sum(m) / 3.0 * (14000 if q % 4 == 0 else (9000 if q % 4 == 1 else (3000 if q % 4 == 2 else 900))))
+        rep.append((w.acct_s[i], 2023 + q // 4, q % 4 + 1, kind, m[0], m[1], m[2], "%.2f" % tw, "%.2f" % max(0, tax),
+                    t.strftime("%Y-%m-%d %H:%M:%S"), i, q))
+    reps = pd.DataFrame(rep, columns=["account_no", "year", "quarter", "report_type", "month1_employment",
+                                      "month2_employment", "month3_employment", "total_wages", "taxable_wages",
+                                      "received_at", "_i", "_q"])
+    reps = reps.sort_values(["account_no", "year", "quarter", "received_at"], kind="stable").reset_index(drop=True)
+    # multiple worksite reports: one row per worksite for each report version on file, the last version's split
+    ws = []
+    latest = {}
+    for (i, q, kind, m, t) in vr:
+        if i in w.sites and (latest.get((i, q)) is None or t > latest[i, q][1]):
+            latest[i, q] = (m, t)
+    for (i, q), (m, t) in sorted(latest.items(), key=lambda kv: (w.acct[kv[0][0]], kv[0][1])):
+        sites = w.sites[i]
+        split = _split(m, [s for _, s in sites], np.random.default_rng([w.seed, 33, int(i), int(q)]))
+        for k, (cc, _) in enumerate(sites):
+            town = TOWNS[cc][(int(w.acct[i]) + k) % len(TOWNS[cc])]
+            ws.append(("%07d%d" % (w.acct[i], check_digit(w.acct[i])), "%03d" % (k + 1), 2023 + q // 4, q % 4 + 1,
+                       "%s COUNTY" % W.NAMES[cc].upper(), town.upper(), w.naics[i],
+                       split[k][0], split[k][1], split[k][2]))
+    work = pd.DataFrame(ws, columns=["uiacct", "reporting_unit", "year", "quarter", "worksite_county", "worksite_city",
+                                     "naics", "m1_emp", "m2_emp", "m3_emp"])
+    return {"reports": reps, "accounts": acc, "status": stat, "worksites": work}
 
 
-# ---------------------------------------------------------------------------------------------- land, business, shares
-def _kind(holder):
-    return "Person" if str(holder).startswith("P") else "Organisasjon"
+def _split(m, shares, r):
+    """split each month's jobs across worksites in proportion to their shares, whole numbers summing to the month"""
+    out = [[0, 0, 0] for _ in shares]
+    sh = np.array(shares) / sum(shares)
+    for k in range(3):
+        tot = int(m[k])
+        raw = sh * tot * r.uniform(0.96, 1.04, len(sh))
+        raw = raw / raw.sum() * tot if raw.sum() else raw
+        base = np.floor(raw).astype(int)
+        rest = tot - base.sum()
+        order = np.argsort(-(raw - base))
+        for j in range(rest):
+            base[order[j % len(base)]] += 1
+        for s in range(len(sh)):
+            out[s][k] = int(base[s])
+    return out
 
 
-def write_titles(w, path):
+def counties_table():
+    seats = {c: TOWNS[c][0] for c in W.CODES}
+    return pd.DataFrame([(c[0], c[1] + " County", c[7], seats[c[0]]) for c in W.COUNTIES],
+                        columns=["county_code", "county_name", "lmi_region", "county_seat"])
+
+
+def naics_table():
     rows = []
-    for t in sorted(w.titles, key=lambda x: (x["nr"], x["gnr"], x["bnr"], x["snr"])):
-        rows.append([t["nr"], t["gnr"], t["bnr"], t["snr"] or "", t["holder"], t["name"], _kind(t["holder"]), "1/1",
-                     _d(t["reg"])])
-    return _csv(path, ["kommunenr", "gardsnr", "bruksnr", "seksjonsnr", "hjemmelshaver_id", "hjemmelshaver_navn",
-                       "hjemmelshaver_type", "andel", "tinglyst_dato"], rows)
+    for code, title, ss, _, old in W.NAICS:
+        rows.append((code, "2022", title, ss, W.SUPERSECTORS[ss][0]))
+    seen = {r[0] for r in rows}
+    for code, title, ss in W.GOV_NAICS:
+        if code not in seen:
+            rows.append((code, "2022", title, ss, W.SUPERSECTORS[ss][0]))
+            seen.add(code)
+    titles2017 = {"444190": "Other Building Material Dealers", "445120": "Convenience Stores",
+                  "452311": "Warehouse Clubs and Supercenters", "446110": "Pharmacies and Drug Stores",
+                  "447110": "Gasoline Stations with Convenience Stores", "448140": "Family Clothing Stores",
+                  "451110": "Sporting Goods Stores", "453220": "Gift, Novelty, and Souvenir Stores",
+                  "453998": "All Other Miscellaneous Store Retailers (except Tobacco Stores)",
+                  "511110": "Newspaper Publishers", "517312": "Wireless Telecommunications Carriers (except Satellite)",
+                  "519130": "Internet Publishing and Broadcasting and Web Search Portals"}
+    for code, title, ss, _, old in W.NAICS:
+        if old:
+            rows.append((old, "2017", titles2017[old], ss, W.SUPERSECTORS[ss][0]))
+    for code, title, ss, _, old in W.NAICS:
+        if not old:
+            rows.append((code, "2017", title.replace("Retailers", "Stores"), ss, W.SUPERSECTORS[ss][0]))
+    df = pd.DataFrame(rows, columns=["naics_code", "naics_vintage", "naics_title", "supersector_code", "supersector_title"])
+    return df.sort_values(["naics_vintage", "naics_code"], kind="stable").reset_index(drop=True)
 
 
-def write_transfers(w, path):
+def write_csv(df, path, cols=None):
+    cols = cols or [c for c in df.columns if not c.startswith("_")]
+    buf = io.StringIO()
+    df[cols].to_csv(buf, index=False, lineterminator="\r\n", quoting=csv.QUOTE_MINIMAL)
+    open(path, "w", encoding="utf-8", newline="").write(buf.getvalue())
+    return len(df)
+
+
+# ------------------------------------------------------------------------------------------------------ writers
+def published_q4_2025(T):
+    """the Section's published fourth-quarter 2025 county table: reporting units, monthly jobs, wages"""
+    rep = T["reports"]
+    x = rep[(rep["year"] == 2025) & (rep["quarter"] == 4)].sort_values("received_at", kind="stable")
+    last = x.groupby("account_no").tail(1).set_index("account_no")
+    acc = T["accounts"].set_index("account_no")
+    ws = T["worksites"]
+    wq = ws[(ws["year"] == 2025) & (ws["quarter"] == 4)]
+    cmap = {W.NAMES[c].upper() + " COUNTY": c for c in W.CODES}
+    out = {c: [0, 0.0, 0.0, 0.0, 0.0] for c in W.CODES}
+    multi = set(wq["uiacct"])
+    for a_, row in last.iterrows():
+        key = a_.replace("-", "")
+        if key in multi:
+            continue
+        c = acc.loc[a_, "county_code"]
+        out[c][0] += 1
+        out[c][1] += row["month1_employment"]; out[c][2] += row["month2_employment"]; out[c][3] += row["month3_employment"]
+        out[c][4] += float(row["total_wages"])
+    tw = dict(zip(last.index.str.replace("-", ""), last["total_wages"].astype(float)))
+    tot3 = dict(zip(last.index.str.replace("-", ""), last["month1_employment"] + last["month2_employment"] + last["month3_employment"]))
+    for _, row in wq.iterrows():
+        c = cmap[row["worksite_county"]]
+        out[c][0] += 1
+        out[c][1] += row["m1_emp"]; out[c][2] += row["m2_emp"]; out[c][3] += row["m3_emp"]
+        t3 = tot3.get(row["uiacct"], 0)
+        out[c][4] += tw.get(row["uiacct"], 0.0) * ((row["m1_emp"] + row["m2_emp"] + row["m3_emp"]) / t3 if t3 else 0)
     rows = []
-    for t in w.transfers:
-        rows.append([t["nr"], t["gnr"], t["bnr"], t["snr"] or "", "Skjøte", t["from"], t["from_name"], t["to"],
-                     t["to_name"], _d(t["doc"]), _d(t["reg"])])
-    return _csv(path, ["kommunenr", "gardsnr", "bruksnr", "seksjonsnr", "dokumenttype", "avgiver_id", "avgiver_navn",
-                       "erverver_id", "erverver_navn", "dokumentdato", "tinglyst_dato"], rows)
+    for c in W.CODES:
+        u, m1, m2, m3, wg = out[c]
+        aww = wg / ((m1 + m2 + m3) / 3.0) / 13.0 if m1 + m2 + m3 else 0
+        rows.append((c, W.NAMES[c] + " County", u, int(m1), int(m2), int(m3), round(wg), round(aww)))
+    return rows
 
 
-def write_entities(w, path):
-    rows = []
-    for o in sorted(w.orgs, key=lambda x: x["orgnr"]):
-        rows.append([o["orgnr"], o["name"], o["form"], o["parent"] or "", o["nr"]])
-    return _csv(path, ["organisasjonsnummer", "navn", "organisasjonsform", "overordnet_enhet",
-                       "forretningsadresse_kommunenr"], rows)
-
-
-def write_shareholders(w, path):
-    names = {o["orgnr"]: o["name"] for o in w.orgs}
-    rows = []
-    for s in sorted(w.shareholders, key=lambda x: (x["company"], str(x["holder"]))):
-        rows.append([s["company"], names.get(s["company"], ""), "Ordinære aksjer", s["holder"],
-                     names.get(s["holder"], ""), s["n"], s["total"]])
-    return _csv(path, ["orgnr_selskap", "selskap", "aksjeklasse", "aksjonaer_id", "aksjonaer_navn", "antall_aksjer",
-                       "antall_aksjer_selskap"], rows)
-
-
-# ---------------------------------------------------------------------------------------------- the two distractors
-def write_prices(w, path):
-    rows = []
-    t0 = dt.datetime(W.FORTNIGHT_START.year, W.FORTNIGHT_START.month, W.FORTNIGHT_START.day)
-    for h in range(W.HOURS):
-        t = t0 + dt.timedelta(hours=h)
-        rows.append([t.strftime("%d.%m.%Y"), "%02d-%02d" % (t.hour, (t.hour + 1) % 24),
-                     ("%.2f" % w.prices[h]).replace(".", ",")])
-    return _csv(path, ["dato", "time", "no1_ore_per_kwh"], rows)
-
-
-def write_outages(w, path):
-    from openpyxl import Workbook
-    wb = Workbook()
+def write_published(rows, path):
+    import openpyxl
+    from openpyxl.styles import Alignment, Border, Font, Side
+    wb = openpyxl.Workbook()
     ws = wb.active
-    ws.title = "Avbrudd november 2026"
-    ws.append(["Kommunenr", "Dato", "Fra kl.", "Til kl.", "Berørte sluttkunder", "Årsak"])
-    names = {m[0]: m[1] for m in W.MUNICIPALITIES}
-    for o in w.outages:
-        d = W.FORTNIGHT_START + dt.timedelta(days=o["day"])
-        ws.append([o["nr"], d.strftime("%d.%m.%Y"), "%02d:00" % o["h0"], "%02d:00" % (o["h0"] + o["dur"]),
-                   o["customers"], "Feil på høyspentlinje, %s" % names[o["nr"]]])
-    for col, wd in zip("ABCDEF", (11, 12, 9, 9, 20, 40)):
-        ws.column_dimensions[col].width = wd
+    ws.title = "County"
+    ws["A1"] = "Covered Employment and Wages by County, Fourth Quarter 2025"
+    ws["A1"].font = Font(bold=True, size=12)
+    ws["A2"] = "Franklin Department of Labor, Labor Market Information. Final data, released September 10, 2026."
+    ws["A3"] = "Private and government employers covered by the Unemployment Insurance Law, by worksite county."
+    head = ["County code", "County", "Reporting units", "October 2025 employment", "November 2025 employment",
+            "December 2025 employment", "Total quarterly wages ($)", "Average weekly wage ($)"]
+    for k, h in enumerate(head):
+        cell = ws.cell(row=5, column=k + 1, value=h)
+        cell.font = Font(bold=True)
+        cell.alignment = Alignment(wrap_text=True, vertical="top")
+        cell.border = Border(bottom=Side(style="thin"))
+    r0 = 6
+    for i, row in enumerate(rows):
+        for k, v in enumerate(row):
+            c = ws.cell(row=r0 + i, column=k + 1, value=v)
+            if k >= 2:
+                c.number_format = "#,##0"
+    tr = r0 + len(rows)
+    ws.cell(row=tr, column=2, value="State total").font = Font(bold=True)
+    for k in range(2, 7):
+        col = openpyxl.utils.get_column_letter(k + 1)
+        c = ws.cell(row=tr, column=k + 1, value="=SUM(%s%d:%s%d)" % (col, r0, col, tr - 1))
+        c.number_format = "#,##0"
+        c.font = Font(bold=True)
+    ws.cell(row=tr + 2, column=1, value="Employment is the number of workers on the payroll for the pay period including the 12th of the month.")
+    for k, wdt in enumerate([10, 16, 11, 14, 14, 14, 18, 14]):
+        ws.column_dimensions[openpyxl.utils.get_column_letter(k + 1)].width = wdt
+    ws.row_dimensions[5].height = 45
+    ws.freeze_panes = "A6"
     wb.save(path)
-    return len(w.outages)
+
+
+def write_population(path, T):
+    rows = published_q4_2025(T)
+    r = np.random.default_rng([W.SEED, 41])
+    out = [("county_code", "county", "population_2025", "households_2025", "median_age_2025", "persons_per_sq_mile")]
+    area = r.uniform(380, 1250, len(rows))
+    for k, row in enumerate(rows):
+        pop = int(row[5] * r.uniform(1.85, 2.45))
+        out.append((row[0], row[1], pop, int(pop / r.uniform(2.25, 2.55)), round(r.uniform(36.5, 47.5), 1), round(pop / area[k], 1)))
+    with open(path, "w", encoding="utf-8", newline="") as f:
+        csv.writer(f, lineterminator="\r\n").writerows(out)
+
+
+def write_pack(w, T, out):
+    """every data file into out; returns the row counts"""
+    import os
+    n = {}
+    f = lambda k: os.path.join(out, W.FILES[k])
+    n["reports"] = write_csv(T["reports"], f("reports"))
+    n["accounts"] = write_csv(T["accounts"], f("accounts"))
+    n["status"] = write_csv(T["status"], f("status"))
+    n["worksites"] = write_csv(T["worksites"], f("worksites"))
+    n["counties"] = write_csv(counties_table(), f("counties"))
+    n["naics"] = write_csv(naics_table(), f("naics"))
+    write_published(published_q4_2025(T), f("published"))
+    write_population(f("population"), T)
+    return n

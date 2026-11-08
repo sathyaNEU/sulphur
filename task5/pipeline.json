@@ -1,33 +1,34 @@
 {
  "task": "task5",
- "status": "DESIGN",
+ "status": "READY",
  "domain": "survey-research-official-statistics",
  "objective": "etl",
- "stage": 2,
- "stage_name": "design",
+ "stage": 5,
+ "stage_name": "ready",
  "updated": "2026-11-08",
- "stump": "A competent solver conforms the reports, amendments and worksites, imputes each employer whose December report had not arrived as the field does (its September jobs moved by its county's reporting employers' change), treats an employer missing two quarters as ceased, sees that imputation back-test within a few tenths of a point on the closed quarters and files that no county qualifies; a report missing from a transmission that arrived marks an employer that has shed jobs or stopped trading, which keeps about a quarter of its September jobs on the quarters old enough for inactivations to have landed, and that puts Garrow and Ostrom past the line.",
+ "stump": "A competent solver conforms the reports, amendments and worksites, imputes each employer whose December report had not arrived as the field does (its September jobs moved by its county's reporting employers' change), treats an employer missing two quarters as ceased, sees that imputation back-test with a steady upward miss under 0.7 of a point on the closed quarters and files that no county qualifies; a report missing from a transmission that arrived marks an employer that has shed jobs or stopped trading, which keeps 0.29 of its September jobs on the quarters old enough for inactivations to have landed, and that puts Garrow and Ostrom past the line.",
  "architecture": 3,
  "loops": 0,
  "precut": {
-  "exit": null,
-  "date": ""
+  "exit": 0,
+  "date": "2026-11-08"
  },
  "leak": {
-  "leak_py": "",
-  "reader": ""
+  "leak_py": "REVIEW 2026-11-08 on the final cut (no LEAK; the container gate inside sweep 10 green); REVIEW lines ruled harmless in the design note",
+  "reader": "2026-11-08, isolated Sonnet reader on target.zip 250434913d558e4b: nothing quoted for question 1, no ranking file, decisive step an analytical choice; findings fixed in the generator (closing-notice dates spread, a notice of closing entered with the final report so Schedule C read literally moves nothing) or ruled harmless (leak_check_report.md); later repairs data-only or container-only, checked by leak.py"
  },
  "duplicate_check": {
   "guard_check": "WARN 2026-11-08 on the registered card (repeat.gate_g against task3 v6, answered in the note)",
-  "heart": "",
-  "surface": ""
+  "heart": "WARN 2026-11-08 after the final pull (repeat.gate_g against task3 v6, answered in the note)",
+  "surface": "PASS 2026-11-08 after the final pull (no promoted pair; 'Matt Matthew' is the email's sign-off over Matthew Cox)"
  },
  "judge": {
-  "verdict": "",
-  "disposition": "",
-  "gate_g": "",
-  "gate_h": "",
-  "report": ""
+  "verdict": "DETERMINISTIC",
+  "disposition": "APPROVE",
+  "gate_g": "method_or_model_selection, analytical_non_defect, surface_read_dependency no, sole_data_defect no",
+  "gate_h": "domain pass, layers pass, decisive_step analytical, chain 5 inferences, one_fact none",
+  "report": "determinism_check_report.md (2026-11-08, on target.zip md5 882e5301b1d84d153bf7784bbdd57c7a)",
+  "open_item": "off by one in liable and outstanding (a first-month closing notice dated before its account's liability); fixed and asserted (SF1)"
  },
  "returned": [
   {
@@ -70,7 +71,7 @@
    "commit": ""
   }
  ],
- "resume": "stage 2 design: write generator/ (world, sim, pack, docs, golden, writeup, checks, verify, ceiling, metadata, build), measure the ladder, margins and ceiling, then precut.py",
+ "resume": "stage 6 runs: the author uploads prompt.txt and target.zip; /triage-runs task5 when the two runs come back",
  "approved": null,
  "delivered": null,
  "portal": null,
@@ -165,7 +166,18 @@
    "fate": "spent 2026-11-08 on its first platform round: both runs read occupancy from each dwelling's departure from its own typical day and filed the golden five and every register cell; the judge had sent the first form back on Gate H"
   }
  ],
- "gates": {},
+ "gates": {
+  "date": "2026-11-08",
+  "checks": "97 of 97",
+  "verify": "69 of 69",
+  "byte_identical": "PASS",
+  "figures_check": "91 of 91 present",
+  "precut": "exit 0 (75 checks)",
+  "containers": "audit_containers.py 0 FAIL, 0 WARN",
+  "target_zip_md5": "31f0d7e34321e89c15a45ba8ae3ba38f",
+  "golden_zip_md5": "7822d735ee8c26b6904e0b7aa83d826f",
+  "ceiling": "pair 39.8 (landed 72.5, shallow 7.0), shallow keep 0.0; 53.5 if the landed run also reads the resorts"
+ },
  "zip_sha256_16": null,
  "migrated_from": {
   "project": "Mark",

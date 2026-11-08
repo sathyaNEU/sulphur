@@ -1,10 +1,10 @@
 """Build task5: the pack into <task>/target, the golden deliverables into <task>/golden, metadata.json, submission.md
 and generator/figures.json; then the checks and the independent verifier, a second full build into a scratch folder
-inside the task compared byte for byte, and target.zip cut from the final build.
+compared byte for byte, and target.zip and golden.zip cut from the final build.
 
     python3 task5/generator/build.py              everything
-    python3 task5/generator/build.py --out DIR    the pack only, into DIR
-    python3 task5/generator/build.py --fast       one build with the checks, no second build or zip
+    python3 task5/generator/build.py --fast       one build with the checks, no second build or zips
+    python3 task5/generator/build.py --out DIR    the pack and golden only, into DIR/target and DIR/golden
 """
 import argparse
 import datetime as dt
@@ -13,152 +13,114 @@ import os
 import shutil
 import sys
 import warnings
+import zipfile
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 warnings.filterwarnings("ignore")
 
-import numpy as np       # noqa: E402
-
-import pack as P         # noqa: E402
-import sim               # noqa: E402
-import world as W        # noqa: E402
+import docs as D          # noqa: E402
+import golden as G        # noqa: E402
+import pack as P          # noqa: E402
+import postprocess as PP  # noqa: E402
+import sim                # noqa: E402
+import world as W         # noqa: E402
 
 TASK = os.path.dirname(HERE)
-OSLO = dt.timezone(dt.timedelta(hours=1))
-
-AS_OF = {   # each file's date as its source dated it
-    "regulation": "2026-10-14", "assignment": "2026-12-01", "cadastre": "2027-01-04", "municipalities": "2026-01-02",
-    "meterpoints": "2027-01-04", "hourly": "2026-12-14", "daily": "2026-12-14", "register": "2027-01-05", "events": "2027-01-05",
-    "titles": "2027-01-05", "transfers": "2027-01-05", "entities": "2027-01-05", "shareholders": "2026-05-29",
-    "prices": "2026-11-23", "outages": "2026-12-03",
+STAMP = {   # each file's date as its source wrote it (local time)
+    "reports": dt.datetime(2027, 2, 16, 6, 12), "accounts": dt.datetime(2027, 2, 16, 6, 14),
+    "status": dt.datetime(2027, 2, 16, 6, 15), "worksites": dt.datetime(2027, 2, 16, 6, 18),
+    "counties": dt.datetime(2024, 7, 1, 10, 2), "naics": dt.datetime(2023, 3, 15, 15, 40),
+    "act": dt.datetime(2026, 5, 6, 9, 41), "agreement": dt.datetime(2025, 6, 20, 14, 3),
+    "request": dt.datetime(2027, 1, 12, 10, 14), "published": dt.datetime(2026, 9, 10, 8, 55),
+    "rates": dt.datetime(2026, 11, 30, 8, 30), "population": dt.datetime(2026, 6, 26, 16, 20),
 }
+GOLDEN_CSV_STAMP = dt.datetime(2027, 2, 26, 16, 8)       # the employer list, written after the workbook's last save
+ZONE = "America/New_York"
 
 
-def build(out, w=None, quiet=False):
-    import docs as DC
-    import postprocess as PP
-    if os.path.exists(out):
-        shutil.rmtree(out)
-    os.makedirs(out)
-    f = lambda k: os.path.join(out, W.FILES[k])
-    if w is None:
-        w = sim.build()
-        P.prepare(w)
-    rng = np.random.default_rng(W.SEED + 1)
-    n = {}
-    n["cadastre"] = P.write_cadastre(w, f("cadastre"))
-    n["municipalities"] = P.write_municipalities(f("municipalities"))
-    n["meterpoints"] = P.write_meterpoints(w, f("meterpoints"), rng)
-    n["hourly"] = P.write_hourly(w, f("hourly"), rng)
-    n["daily"] = P.write_daily(w, f("daily"))
-    n["register"] = P.write_register(w, f("register"))
-    n["events"] = P.write_events(w, f("events"), rng)
-    n["titles"] = P.write_titles(w, f("titles"))
-    n["transfers"] = P.write_transfers(w, f("transfers"))
-    n["entities"] = P.write_entities(w, f("entities"))
-    n["shareholders"] = P.write_shareholders(w, f("shareholders"))
-    n["prices"] = P.write_prices(w, f("prices"))
-    n["outages"] = P.write_outages(w, f("outages"))
-    DC.write_regulation(f("regulation"))
-    DC.write_assignment(f("assignment"))
-    PP.normalize_ooxml(f("outages"), "Driftssentralen", "Driftssentralen", "2026-12-02T13:05:00Z",
-                       "2026-12-03T08:41:27Z", excel=True, company="Hvitfjell Nett AS")
-    for i, k in enumerate(W.FILES):
-        y, m, d = (int(v) for v in AS_OF[k].split("-"))
-        ts = dt.datetime(y, m, d, 8 + (i * 5) % 9, (i * 13) % 60, tzinfo=OSLO).timestamp()
-        os.utime(f(k), (ts, ts))
+def _local(when):
+    from zoneinfo import ZoneInfo
+    return when.replace(tzinfo=ZoneInfo(ZONE))
+
+
+def build_into(root, quiet=False):
+    target, gold = os.path.join(root, "target"), os.path.join(root, "golden")
+    for d in (target, gold):
+        if os.path.exists(d):
+            shutil.rmtree(d)
+        os.makedirs(d)
+    w = sim.build()
+    T = P.tables(w)
+    n = P.write_pack(w, T, target)
+    f = lambda k: os.path.join(target, W.FILES[k])
+    texts = {"act": D.write_act(f("act")), "agreement": D.write_agreement(f("agreement")),
+             "request": D.write_request(f("request"))}
+    D.write_rates(f("rates"))
+    PP.normalize_ooxml(f("published"), "Labor Market Information", "Labor Market Information", "2026-09-08T19:41:00Z",
+                       "2026-09-10T13:55:00Z", title="Covered Employment and Wages by County, 2025 Q4", excel=True,
+                       company="Franklin Department of Labor")
+    # each file's mtime its own last save: an office file's from its container, an export's from the system that wrote it
+    PP.own_mtimes(target, {W.FILES[k]: _local(STAMP[k]) for k in W.FILES
+                           if not W.FILES[k].endswith((".xlsx", ".docx", ".pptx", ".pdf"))})
+    pk, Gd = G.build(target, gold)
+    for k in W.DELIVERABLES:
+        p = os.path.join(gold, W.DELIVERABLES[k])
+        if p.endswith(".xlsx"):
+            PP.normalize_ooxml(p, W.PEOPLE["lmi_director"][0], W.PEOPLE["lmi_director"][0], "2027-02-24T15:12:00Z",
+                               "2027-02-26T21:05:00Z", title="CTF 2027 certification of December covered employment",
+                               excel=True, company="Franklin Department of Labor")
+    PP.own_mtimes(gold, {W.DELIVERABLES["employers"]: _local(GOLDEN_CSV_STAMP)})
     if not quiet:
-        big = max(n, key=lambda k: n[k])
-        print("pack: %d files, largest %s (%d rows)" % (len(W.FILES), W.FILES[big], n[big]))
-    return n, w
+        print("built %s: %s" % (root, ", ".join("%s %d" % kv for kv in n.items())))
+    return w, T, pk, Gd, texts, n
 
 
 def digest(folder):
-    return {f: hashlib.sha256(open(os.path.join(folder, f), "rb").read()).hexdigest() for f in sorted(os.listdir(folder))}
+    h = hashlib.sha256()
+    for fn in sorted(os.listdir(folder)):
+        h.update(fn.encode())
+        h.update(open(os.path.join(folder, fn), "rb").read())
+    return h.hexdigest()
 
 
-def cut_zip(root):
-    import zipfile
-    folder = os.path.join(root, "target")
-    zp = os.path.join(root, "target.zip")
-    with zipfile.ZipFile(zp, "w") as z:
-        for name in sorted(os.listdir(folder)):
-            t = dt.datetime.fromtimestamp(os.path.getmtime(os.path.join(folder, name)), OSLO)
-            zi = zipfile.ZipInfo(name, date_time=(t.year, t.month, t.day, t.hour, t.minute, t.second))
-            zi.compress_type = zipfile.ZIP_DEFLATED
-            zi.external_attr = 0o644 << 16
-            z.writestr(zi, open(os.path.join(folder, name), "rb").read())
-    return zp
+def zip_folder(folder, path):
+    """the house cut (postprocess.zip_folder): entries in name order, each at its file's own save time on the
+    sender's clock"""
+    PP.zip_folder(folder, path, zone=ZONE)
+    return hashlib.sha256(open(path, "rb").read()).hexdigest()[:16]
 
 
-def everything(root, w=None, quiet=False):
-    import golden as GO
-    import metadata as MD
-    import writeup as WU
-    n, w = build(os.path.join(root, "target"), w=w, quiet=quiet)
-    gdir = os.path.join(root, "golden")
-    if os.path.exists(gdir):
-        shutil.rmtree(gdir)
-    fig = os.path.join(root, "generator", "figures.json")
-    GO.main(os.path.join(root, "target"), gdir, fig)
-    MD.write(os.path.join(root, "target"), os.path.join(root, "metadata.json"), n)
-    WU.write(fig, os.path.join(root, "submission.md"))
-    if not quiet:
-        print("built %s: %d pack files, %d golden files" % (root, len(os.listdir(os.path.join(root, "target"))),
-                                                           len(os.listdir(gdir))))
-    return w
-
-
-def main(fast=False):
-    import tempfile
-    import zipfile
-    import checks as CK
-    import verify as V
-    w = everything(TASK)
-    good = CK.run(os.path.join(TASK, "target"), os.path.join(TASK, "golden"), w=w,
-                  meta_path=os.path.join(TASK, "metadata.json"), fig_path=os.path.join(HERE, "figures.json"))
-    vgood = V.main(os.path.join(TASK, "target"), os.path.join(HERE, "figures.json"))
-    if fast:
-        if not (good and vgood):
-            raise SystemExit("checks failed")
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--fast", action="store_true")
+    ap.add_argument("--out")
+    a = ap.parse_args()
+    if a.out:
+        build_into(a.out)
         return
-    tmp = tempfile.mkdtemp(dir=TASK, suffix=".tmp")
-    try:
-        os.makedirs(os.path.join(tmp, "generator"))
-        everything(tmp, quiet=True)
-        same_t = digest(os.path.join(TASK, "target")) == digest(os.path.join(tmp, "target"))
-        same_g = digest(os.path.join(TASK, "golden")) == digest(os.path.join(tmp, "golden"))
-        same = {fn: open(os.path.join(TASK, fn), "rb").read() == open(os.path.join(tmp, fn), "rb").read()
-                for fn in ("metadata.json", "submission.md", os.path.join("generator", "figures.json"))}
-        if not (same_t and same_g and all(same.values())):
-            bad = [k for k, v in digest(os.path.join(TASK, "target")).items()
-                   if digest(os.path.join(tmp, "target")).get(k) != v]
-            badg = [k for k, v in digest(os.path.join(TASK, "golden")).items()
-                    if digest(os.path.join(tmp, "golden")).get(k) != v]
-            raise SystemExit("second build differs: target %s %s, golden %s %s, %s" % (same_t, bad, same_g, badg, same))
-    finally:
-        shutil.rmtree(tmp)
-    print("two builds byte-identical: %d target files, %d golden files, metadata.json, submission.md, figures.json" % (
-        len(os.listdir(os.path.join(TASK, "target"))), len(os.listdir(os.path.join(TASK, "golden")))))
-    zp = cut_zip(TASK)
-    with zipfile.ZipFile(zp) as z:
-        inside = {i.filename: hashlib.sha256(z.read(i.filename)).hexdigest() for i in z.infolist()}
-    if inside != digest(os.path.join(TASK, "target")):
-        raise SystemExit("target.zip differs from target/")
-    print("target.zip cut from this build: %d files, each identical to target/ (sha256 %s)" % (
-        len(inside), hashlib.sha256(open(zp, "rb").read()).hexdigest()[:16]))
-    if not (good and vgood):
-        raise SystemExit("checks failed")
+    w, T, pk, Gd, texts, n = build_into(TASK)
+    import writeup as WR
+    figs = WR.write(TASK, w, T, pk, Gd, n)
+    import metadata as MD
+    MD.write(TASK, n)
+    import checks as C
+    ok = C.run(TASK, w, T, pk, Gd, texts, figs, n)
+    import verify as V
+    vok = V.main(TASK)
+    if a.fast:
+        sys.exit(0 if ok and vok else 1)
+    scratch = os.path.join(TASK, ".rebuild")
+    build_into(scratch, quiet=True)
+    same = digest(os.path.join(TASK, "target")) == digest(os.path.join(scratch, "target")) and \
+        digest(os.path.join(TASK, "golden")) == digest(os.path.join(scratch, "golden"))
+    shutil.rmtree(scratch)
+    print("byte-identical rebuild:", "PASS" if same else "FAIL")
+    tz = zip_folder(os.path.join(TASK, "target"), os.path.join(TASK, "target.zip"))
+    gz = zip_folder(os.path.join(TASK, "golden"), os.path.join(TASK, "golden.zip"))
+    print("target.zip %s  golden.zip %s" % (tz, gz))
+    sys.exit(0 if ok and vok and same else 1)
 
 
 if __name__ == "__main__":
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--out", help="build the pack only, into this folder")
-    ap.add_argument("--fast", action="store_true")
-    args = ap.parse_args()
-    if args.out:
-        build(args.out)
-        print("pack written to", args.out)
-    else:
-        main(fast=args.fast)
+    main()

@@ -10,7 +10,7 @@ import zipfile
 PATTERNS = [
     ("a reserved or documentation domain", r"[a-z0-9-]\.(?:example|test|invalid|localhost)\b|\blocalhost\b"),
     ("an example.com, .net or .org address", r"example\.(?:com|net|org)"),
-    ("a 555-01xx telephone number", r"555[-. ]?01\d\d"),
+    ("a 555-01xx telephone number", r"(?<![\d.])555[-. ]?01\d\d(?![\d.])"),
     ("a documentation IP block", r"\b(?:192\.0\.2|198\.51\.100|203\.0\.113)\.\d+"),
     ("placeholder text", r"lorem ipsum|\bplaceholder\b|\btodo\b|\btbd\b|xxx+|\bjohn doe\b|\bjane doe\b|\bacme\b|"
                          r"\bfoo\b|\bbar baz\b"),
@@ -25,15 +25,16 @@ PATTERNS = [
 def file_text(path):
     b = open(path, "rb").read()
     ext = os.path.splitext(path)[1].lower()
-    parts = [] if ext == ".parquet" else [b.decode("utf-8", "ignore")]
+    parts = [] if ext in (".parquet", ".pdf") else [b.decode("utf-8", "ignore")]
     if ext in (".xlsx", ".docx", ".pptx"):
         with zipfile.ZipFile(io.BytesIO(b)) as z:
-            parts += [z.read(n).decode("utf-8", "ignore") for n in z.namelist()]
+            # Word's own latent-style list (Placeholder Text and the rest) is in every document it saves: not a tell
+            parts += [re.sub(r"<w:lsdException [^>]*/>", "", z.read(n).decode("utf-8", "ignore")) for n in z.namelist()]
     elif ext == ".pdf":
         from pypdf import PdfReader
         r = PdfReader(io.BytesIO(b))
         parts += [p.extract_text() or "" for p in r.pages]
-        parts += ["%s %s" % (k, v) for k, v in (r.metadata or {}).items()]
+        parts += ["%s %s" % (k, v) for k, v in (r.metadata or {}).items() if k not in ("/Producer", "/Creator")]
     elif ext == ".parquet":
         import pyarrow.parquet as pq
         f = pq.ParquetFile(io.BytesIO(b))

@@ -1,393 +1,245 @@
-"""The golden deliverables, computed from the shipped files only: county_dwelling_occupancy_2026-11.xlsx (every dwelling
-the regulation counts, its municipality, the persons registered there on 1 November 2026 and whether it stood vacant,
-with the municipalities' summary) and vacancy_grant_certification_2027.docx (the office's certification letter to the
-ministry: the qualifying municipalities, each municipality's vacant dwellings and share with its interval, the chart
-against the threshold and the population register set beside the vacancy figures); and figures.json, every figure the
-write-up states."""
-import io
-import json
+"""task5 architecture 3: the golden deliverables, computed from the pack as written to disk.
+
+ctf_certification_december_2026.xlsx: the certification, each county's December 2026 jobs from the reports in hand,
+the jobs estimated for employers whose report had not arrived, the December 2026 total and the change on December 2025,
+the designated counties, a chart of the changes against the line, and how the outstanding reports were estimated.
+ctf_employer_jobs_december_2026.csv: every liable employer, a row for each county it employs in."""
+import csv
 import os
-import sys
 
-HERE = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, HERE)
+import numpy as np
+import pandas as pd
 
-import numpy as np      # noqa: E402
+import methods as M
+import world as W
 
-import methods as M     # noqa: E402
-import world as W       # noqa: E402
-
-BLUE = "#1f4e79"
-GREY = "#a6adb4"
-RED = "#9c2f2f"
-LEVEL = 0.90
-
-
-def interval(v, n, level=LEVEL):
-    """The share's exact binomial interval on the counted dwellings, in per cent (the office's convention, filed in
-    the ministry's assignment)."""
-    from scipy.stats import beta
-    a = (1 - level) / 2
-    lo = beta.ppf(a, v, n - v + 1) if v > 0 else 0.0
-    hi = beta.ppf(1 - a, v + 1, n - v) if v < n else 1.0
-    return 100 * lo, 100 * hi
+KIND_TEXT = {
+    "reported": "reported",
+    "batch": "estimated: its usual transmission had not arrived",
+    "habitual": "estimated: reports after the cutoff every quarter",
+    "alone": "estimated: missing from a transmission that arrived, or late for the first time",
+    "two_q": "estimated: no report for the third quarter either",
+    "new": "estimated: new employer, no report yet",
+}
 
 
-WORDS = {0: "No", 1: "One", 2: "Two", 3: "Three", 4: "Four", 5: "Five", 6: "Six", 7: "Seven", 8: "Eight", 9: "Nine",
-         10: "Ten"}
+def load_pack(folder):
+    rd = lambda k, **kw: pd.read_csv(os.path.join(folder, W.FILES[k]), dtype=str, keep_default_na=False, **kw)
+    rep = rd("reports")
+    for c in ("year", "quarter", "month1_employment", "month2_employment", "month3_employment"):
+        rep[c] = rep[c].astype(int)
+    ws = rd("worksites")
+    for c in ("year", "quarter", "m1_emp", "m2_emp", "m3_emp"):
+        ws[c] = ws[c].astype(int)
+    return M.Pack(rep, rd("accounts"), rd("status"), ws, rd("counties"), rd("naics"))
 
 
-def fmt(n):
-    return "{:,}".format(int(n))
+def compute(pk):
+    """the golden: every county's figures, the designated set, the outcome shares and the employer rows"""
+    g = M.county_change(pk, {})
+    ratios = pk.route_ratios(dict(M.GOLDEN))
+    v = pk.view(W.FLASH_Q)
+    rec = v["rec"]
+    reported = {c: 0.0 for c in pk.codes}
+    for a_, c, e in g["rows"]:
+        if g["kind"][a_] == "reported":
+            reported[c] += e
+    counts = pd.Series(g["kind"]).value_counts().to_dict()
+    by_county_kind = {}
+    for a_, c, e in g["rows"]:
+        k = g["kind"][a_]
+        by_county_kind.setdefault((c, k), [0, 0.0])
+        by_county_kind[(c, k)][0] += 1
+        by_county_kind[(c, k)][1] += e
+    out = dict(change=g["change"], total=g["total"], imputed=g["imputed"], base=g["base"], reported=reported,
+               designated=M.designated(g["change"]), ratios={str(k): float(x) for k, x in ratios.items() if np.isfinite(x)},
+               kind=g["kind"], rows=g["rows"], counts=counts, by_county_kind=by_county_kind,
+               n_liable=len(v["liable"]), n_received=len(rec), n_missing=len(v["missing"]))
+    return out
 
 
-def compute(target):
-    d = M.load(target)
-    res, cnt = M.call(d)
-    per = M.persons_nov1(d).groupby("dw").size()
-    cnt = cnt.assign(persons=cnt["bruksenhet_id"].map(per).fillna(0).astype(int))
-    g = M.series(d)
-    lv = M.level(g).reindex(cnt["bruksenhet_id"]).fillna(0.0).to_numpy()
-    floors = {}
-    for fl in range(1, 11):
-        r, _ = M.call(d, "level", float(fl))
-        floors[fl] = M.designated(r)
-    reg, _ = M.call(d, "register")
-    rs, _ = M.call(d, "reg_and_shape")
-    rise, _ = M.call(d, "rise", M.CUT)
-    regn = cnt["persons"].to_numpy()
-    vac = cnt["vacant"].to_numpy()
-    rz = M.signature(g).reindex(cnt["bruksenhet_id"]).fillna(-9).to_numpy()
-    dp = M.departure(g).reindex(cnt["bruksenhet_id"]).fillna(-9).to_numpy()
-    return dict(d=d, res=res, cnt=cnt, lv=lv, floors=floors, reg=reg, rs=rs, rise=rise, quality=M.coverage(cnt),
-                timer=int((vac & (rz >= M.CUT)).sum()), timer_reg=int((vac & (rz >= M.CUT) & (regn > 0)).sum()),
-                dep_lived_min=float(dp[~vac].min()), dep_vacant_max=float(dp[vac].max()),
-                vac_reg=int(((regn > 0) & vac).sum()), lived_noreg=int(((regn == 0) & ~vac).sum()),
-                renum=len(M.renumberings(d)[1]))
+def round_jobs(x):
+    return int(round(x / 100.0)) * 100
 
 
-def clears(v, n):
-    """Whether the share's 90 per cent interval lies wholly above the threshold."""
-    return interval(v, n)[0] > W.THRESHOLD
+def write_employers(pk, G, path):
+    rows = []
+    acc = pk.a
+    for a_, c, e in sorted(G["rows"], key=lambda r: (r[0], r[1])):
+        k = G["kind"][a_]
+        rows.append((acc.loc[a_, "account_no"], acc.loc[a_, "legal_name"], c, W.NAMES[c],
+                     "Y" if k == "reported" else "N",
+                     "%.1f" % e,
+                     KIND_TEXT[k]))
+    with open(path, "w", encoding="utf-8", newline="") as f:
+        wr = csv.writer(f, lineterminator="\r\n")
+        wr.writerow(["account_no", "legal_name", "county_code", "county", "report_received", "december_2026_jobs", "basis"])
+        wr.writerows(rows)
+    return len(rows)
 
 
-def figures(X):
-    res = X["res"]
-    names = {nr: res[nr]["name"] for nr in res}
-    q = M.designated(res)
-    out = [nr for nr in res if nr not in q]
-    below = max(out, key=lambda nr: res[nr]["raw"])
-    above = min(q, key=lambda nr: res[nr]["raw"])
-    lv, vac = X["lv"], X["cnt"]["vacant"].to_numpy()
-    assert all(v == [] for v in X["floors"].values())
-    return dict(
-        count=len(q),
-        count_word=WORDS[len(q)],
-        threshold="5.0",
-        qualifying=[dict(nr=nr, name=names[nr], vacant=res[nr]["vacant"], share="%.1f" % res[nr]["share"]) for nr in q],
-        municipalities=[dict(nr=nr, name=names[nr], counted=fmt(res[nr]["counted"]), vacant=res[nr]["vacant"],
-                             share="%.1f" % res[nr]["share"], qualifies=nr in q,
-                             low="%.1f" % interval(res[nr]["vacant"], res[nr]["counted"])[0],
-                             high="%.1f" % interval(res[nr]["vacant"], res[nr]["counted"])[1]) for nr in res],
-        level="90",
-        wholly_above=[names[nr] for nr in res if clears(res[nr]["vacant"], res[nr]["counted"])],
-        lowest_qualifying=dict(name=names[above], share="%.1f" % res[above]["share"]),
-        highest_below=dict(name=names[below], share="%.1f" % res[below]["share"]),
-        totals=dict(counted=fmt(sum(r["counted"] for r in res.values())), vacant=fmt(sum(r["vacant"] for r in
-                    res.values())), persons=fmt(int(X["cnt"]["persons"].sum()))),
-        vacant_registered=fmt(X["vac_reg"]),
-        lived_unregistered=fmt(X["lived_noreg"]),
-        vacant_median_kwh="%.1f" % np.median(lv[vac]),
-        lived_median_kwh="%.1f" % np.median(lv[~vac]),
-        rivals=dict(register_count=len(M.designated(X["reg"])), floor_low="1", floor_high="10",
-                    register_and_profile=[names[nr] for nr in M.designated(X["rs"])]),
-        cut="%.1f" % M.DCUT,
-        rise_cut="%.1f" % M.CUT,
-        timer_vacant=X["timer"],
-        timer_registered=X["timer_reg"],
-        rise_set=[names[nr] for nr in M.designated(X["rise"])],
-        rise_vacant=fmt(sum(r["vacant"] for r in X["rise"].values())),
-        dep_lived_min="%.1f" % (np.floor(X["dep_lived_min"] * 10) / 10),
-        dep_vacant_max="%.1f" % (np.ceil(X["dep_vacant_max"] * 10) / 10),
-        renumbered=X["renum"],
-        quality=[dict(nr=nr, name=names[nr], held=fmt(q["held"]), none=fmt(q["none"]), over=fmt(q["over"]),
-                      over_rate="%.1f" % q["over_rate"], under=fmt(q["under"]), under_rate="%.1f" % q["under_rate"],
-                      register_share="%.1f" % q["register_share"], net_bias="%.1f" % q["net_bias"])
-                 for nr, q in X["quality"].items()],
-        quality_county={k: (fmt(v) if isinstance(v, (int, np.integer)) else "%.1f" % v)
-                        for k, v in M.coverage(X["cnt"], county=True).items()},
-    )
+def write_certification(pk, G, path):
+    import openpyxl
+    from openpyxl.chart import BarChart, LineChart, Reference
+    from openpyxl.chart.label import DataLabelList
+    from openpyxl.styles import Alignment, Border, Font, PatternFill, Side
 
-
-# ---------------------------------------------------------------------------------------------- the workbook
-def write_xlsx(X, F, path):
-    from openpyxl import Workbook
-    from openpyxl.styles import Alignment, Font, PatternFill
-    wb = Workbook()
+    wb = openpyxl.Workbook()
     ws = wb.active
-    ws.title = "Dwellings"
-    head = ["Municipality no.", "Municipality", "Dwelling ID", "Address", "Unit", "Persons registered 1 Nov 2026",
-            "Vacant 9-22 Nov 2026"]
-    ws.append(head)
-    names = {m["nr"]: m["name"] for m in F["municipalities"]}
-    c = X["cnt"].copy()
-    c["addr"] = [("%s %s%s" % (a, n, b)).strip() for a, n, b in zip(c["adressenavn"], c["husnr"], c["bokstav"])]
-    c["husnr_i"] = c["husnr"].astype(int)
-    c = c.sort_values(["kommunenr", "adressenavn", "husnr_i", "bokstav", "bruksenhetsnr", "bruksenhet_id"])
-    for r in c.itertuples():
-        ws.append([int(r.kommunenr), names[r.kommunenr], int(r.bruksenhet_id), r.addr, r.bruksenhetsnr, int(r.persons),
-                   "Yes" if r.vacant else "No"])
+    ws.title = "Certification"
     bold = Font(bold=True)
-    fill = PatternFill("solid", fgColor="DCE6F1")
-    for cell in ws[1]:
+    ws["A1"] = "Community Transition Fund: December covered employment, fund year 2027"
+    ws["A1"].font = Font(bold=True, size=13)
+    ws["A2"] = "Franklin Department of Labor, Labor Market Information. Certified to the Community Transition Fund Board under section 5 of the Act."
+    ws["A3"] = "From the quarterly contribution reports received by February 15, 2027. Covered employment for the pay period including the 12th of the month, by worksite county."
+    des = [W.NAMES[c] for c in G["designated"]]
+    ws["A5"] = "Counties designated under section 4 (December 2026 at least 2.0 percent below December 2025): " + (", ".join(des) if des else "none")
+    ws["A5"].font = bold
+    head = ["County code", "County", "December 2025 jobs", "December 2026 jobs, reports received",
+            "December 2026 jobs, estimated for employers whose report had not arrived", "December 2026 jobs",
+            "Change on December 2025 (%)", "Designated"]
+    hr = 7
+    for k, h in enumerate(head):
+        cell = ws.cell(row=hr, column=k + 1, value=h)
         cell.font = bold
-        cell.fill = fill
         cell.alignment = Alignment(wrap_text=True, vertical="top")
-    for col, wd in zip("ABCDEFG", (14, 14, 13, 26, 8, 15, 13)):
-        ws.column_dimensions[col].width = wd
-    ws.freeze_panes = "A2"
-    ws.auto_filter.ref = "A1:G%d" % (len(c) + 1)
-    s = wb.create_sheet("By municipality")
-    s.append(["Municipality no.", "Municipality", "Counted dwellings", "Vacant dwellings", "Vacancy share (%)",
-              "90% interval, low (%)", "90% interval, high (%)", "Qualifies", "Register held someone",
-              "Register held nobody", "Overcoverage", "Overcoverage rate (%)", "Undercoverage",
-              "Undercoverage rate (%)", "Net bias (%)"])
-    for m, q in zip(F["municipalities"], F["quality"]):
-        assert m["nr"] == q["nr"]
-        s.append([int(m["nr"]), m["name"], int(m["counted"].replace(",", "")), m["vacant"], float(m["share"]),
-                  float(m["low"]), float(m["high"]), "Yes" if m["qualifies"] else "No"] +
-                 [int(q[k].replace(",", "")) for k in ("held", "none", "over")] + [float(q["over_rate"]),
-                  int(q["under"].replace(",", "")), float(q["under_rate"]), float(q["net_bias"])])
-    qc = F["quality_county"]
-    s.append([None, "County", int(F["totals"]["counted"].replace(",", "")), int(F["totals"]["vacant"].replace(",", "")),
-              None, None, None, None] + [int(qc[k].replace(",", "")) for k in ("held", "none", "over")] +
-             [float(qc["over_rate"]), int(qc["under"].replace(",", "")), float(qc["under_rate"]), float(qc["net_bias"])])
-    for cell in s[1]:
-        cell.font = bold
-        cell.fill = fill
-        cell.alignment = Alignment(wrap_text=True, vertical="top")
-    for cell in s[s.max_row]:
-        cell.font = bold
-    for row in s.iter_rows(min_row=2, min_col=5, max_col=15):
-        for cell in row:
-            if isinstance(cell.value, float):
+        cell.border = Border(bottom=Side(style="thin"))
+        cell.fill = PatternFill("solid", fgColor="E7EEF5")
+    r = hr + 1
+    for c in W.CODES:
+        ch = round(G["change"][c] + 1e-9, 1) + 0.0
+        vals = [c, W.NAMES[c], round_jobs(G["base"][c]), round_jobs(G["reported"][c]), round_jobs(G["imputed"][c]),
+                round_jobs(G["total"][c]), ch, "Yes" if c in G["designated"] else "No"]
+        for k, v in enumerate(vals):
+            cell = ws.cell(row=r, column=k + 1, value=v)
+            if k in (2, 3, 4, 5):
+                cell.number_format = "#,##0"
+            if k == 6:
                 cell.number_format = "0.0"
-    for col, wd in zip("ABCDEFGHIJKLMNO", (14, 14, 11, 10, 11, 11, 11, 10, 11, 11, 12, 12, 13, 13, 10)):
-        s.column_dimensions[col].width = wd
-    s.freeze_panes = "C2"
-    nt = wb.create_sheet("Notes")
-    for line in (
-            ("Counted dwellings", "Cadastre units of type Bolig in use on or before 1 November 2026 (regulation, Section 3)."),
-            ("Vacant", "Nobody lived in the dwelling on any day of 9 to 22 November 2026 (Section 4), read from the "
-                       "dwelling's hourly electricity values in the meter data hub (Section 5)."),
-            ("Vacancy share", "Vacant dwellings as a percentage of counted dwellings, rounded to one decimal (Section 6)."),
-            ("90% interval", "The municipality's counted dwellings taken as so many chances of a dwelling standing "
-                             "empty, as the ministry's letter of 1 December 2026 asks; exact binomial bounds."),
-            ("Persons registered", "Residents the population register held in the dwelling on 1 November 2026: the "
-                                   "register of 5 January 2027 with every later event undone."),
-            ("Overcoverage", "Counted dwellings where the register held someone that stood vacant; rate over the "
-                             "counted dwellings where it held someone."),
-            ("Undercoverage", "Counted dwellings lived in where the register held nobody; rate over the counted "
-                              "dwellings where it held nobody."),
-            ("Net bias", "Dwellings where the register held nobody less vacant dwellings, as a percentage of all "
-                         "counted dwellings.")):
-        nt.append(list(line))
-    nt.column_dimensions["A"].width = 20
-    nt.column_dimensions["B"].width = 100
-    for cell in nt["A"]:
+        if c in G["designated"]:
+            for k in range(8):
+                ws.cell(row=r, column=k + 1).font = bold
+        r += 1
+    last = r - 1
+    st = sum(G["base"].values()), sum(G["reported"].values()), sum(G["imputed"].values()), sum(G["total"].values())
+    ws.cell(row=r, column=2, value="State").font = bold
+    for k, v in enumerate(st):
+        cell = ws.cell(row=r, column=3 + k, value=round_jobs(v))
+        cell.number_format = "#,##0"
         cell.font = bold
+    cell = ws.cell(row=r, column=7, value=round(100 * (st[3] / st[0] - 1) + 1e-9, 1))
+    cell.number_format = "0.0"
+    cell.font = bold
+    ws.cell(row=r + 2, column=1, value="Jobs are rounded to the nearest hundred, so a county's two parts may not add to its "
+                                        "total; the change is computed before rounding.")
+    ws.cell(row=r + 3, column=1, value="Prepared by %s, %s, February 26, 2027." % W.PEOPLE["lmi_director"][:2])
+    # chart data: county and change, with the line, beside the table
+    ws.cell(row=hr, column=11, value="County").font = bold
+    ws.cell(row=hr, column=12, value="Change on December 2025 (%)").font = bold
+    ws.cell(row=hr, column=13, value="Designation line, -2.0%").font = bold
+    for k_ in (11, 12, 13):
+        ws.cell(row=hr, column=k_).alignment = Alignment(wrap_text=True, vertical="top")
+    for i, c in enumerate(W.CODES):
+        ws.cell(row=hr + 1 + i, column=11, value=W.NAMES[c])
+        ws.cell(row=hr + 1 + i, column=12, value=round(G["change"][c] + 1e-9, 1) + 0.0).number_format = "0.0"
+        ws.cell(row=hr + 1 + i, column=13, value=W.THRESHOLD).number_format = "0.0"
+    bar = BarChart()
+    bar.type = "col"
+    bar.title = "Garrow and Ostrom are the only counties below the -2.0% line"
+    bar.y_axis.title = "Change in covered jobs, December 2026 on December 2025 (%)"
+    bar.y_axis.number_format = "0.0"
+    data = Reference(ws, min_col=12, min_row=hr, max_row=hr + len(W.CODES))
+    cats = Reference(ws, min_col=11, min_row=hr + 1, max_row=hr + len(W.CODES))
+    bar.add_data(data, titles_from_data=True)
+    bar.set_categories(cats)
+    bar.dataLabels = DataLabelList()
+    bar.dataLabels.showVal = True
+    line = LineChart()
+    line.add_data(Reference(ws, min_col=13, min_row=hr, max_row=hr + len(W.CODES)), titles_from_data=True)
+    line.series[0].graphicalProperties.line.solidFill = "C00000"
+    line.series[0].graphicalProperties.line.dashStyle = "dash"
+    # the designated counties' columns in their own colour, every other county's in one quiet one
+    from openpyxl.chart.marker import DataPoint
+    ser = bar.series[0]
+    ser.graphicalProperties.solidFill = "8497B0"
+    ser.graphicalProperties.line.solidFill = "8497B0"
+    for i, c in enumerate(W.CODES):
+        if c in G["designated"]:
+            pt = DataPoint(idx=i)
+            pt.graphicalProperties.solidFill = "A9332B"
+            pt.graphicalProperties.line.solidFill = "A9332B"
+            ser.dPt.append(pt)
+    bar += line
+    bar.legend.position = "b"
+    bar.height, bar.width = 9.5, 22
+    ws.add_chart(bar, "A%d" % (r + 6))
+    ws.freeze_panes = "A%d" % (hr + 1)
+    ws.page_setup.orientation = "landscape"
+    ws.page_setup.fitToWidth, ws.page_setup.fitToHeight = 1, 0
+    ws.sheet_properties.pageSetUpPr.fitToPage = True
+    ws.print_area = "A1:H%d" % (r + 26)
+    for k, wdt in enumerate([11, 13, 13, 16, 22, 13, 13, 11, 3, 3, 13, 11, 9]):
+        ws.column_dimensions[openpyxl.utils.get_column_letter(k + 1)].width = wdt
+    ws.row_dimensions[hr].height = 62
+    # how the outstanding reports were estimated
+    es = wb.create_sheet("Estimation")
+    es["A1"] = "December 2026 jobs for employers whose report had not arrived by February 15, 2027"
+    es["A1"].font = Font(bold=True, size=12)
+    rr = G["ratios"]
+    lines = [
+        ("Liable employer accounts, fourth quarter 2026", G["n_liable"]),
+        ("Reports received by the cutoff", G["n_received"]),
+        ("Reports outstanding", G["n_missing"]),
+    ]
+    for i, (a, b) in enumerate(lines):
+        es.cell(row=3 + i, column=1, value=a)
+        es.cell(row=3 + i, column=2, value=b).number_format = "#,##0"
+    es["A7"] = "Outstanding report"
+    es["B7"] = "Employers"
+    es["C7"] = "Estimated December jobs"
+    es["D7"] = "How estimated"
+    for c_ in ("A7", "B7", "C7", "D7"):
+        es[c_].font = bold
+    how = {
+        "batch": "September 2026 jobs moved by the change of the reporting employers in the county and supersector "
+                 "(an employer's own December-to-September pattern where it runs a seasonal business)",
+        "habitual": "as above",
+        "alone": "September 2026 jobs times %.2f, the share of September jobs kept in December by employers in the same "
+                 "position at the 2024Q1 to 2025Q3 cutoffs, every one of them since resolved" % rr.get("('alone', 'all')", float("nan")),
+        "two_q": "last reported jobs times %.3f, measured the same way" % rr.get("('two_q', 'all')", float("nan")),
+        "new": "the average December jobs of the quarter's new employers that did report",
+    }
+    present = [k for k in ("batch", "habitual", "alone", "two_q", "new")
+               if sum(v[0] for (c, kk), v in G["by_county_kind"].items() if kk == k)]
+    for i, k in enumerate(present):
+        n_ = int(G["counts"].get(k, 0))                 # accounts, each counted once whatever its counties
+        j_ = sum(v[1] for (c, kk), v in G["by_county_kind"].items() if kk == k)
+        es.cell(row=8 + i, column=1, value=KIND_TEXT[k].replace("estimated: ", "").capitalize())
+        es.cell(row=8 + i, column=2, value=n_).number_format = "#,##0"
+        es.cell(row=8 + i, column=3, value=round_jobs(j_)).number_format = "#,##0"
+        es.cell(row=8 + i, column=4, value=how[k])
+        es.cell(row=8 + i, column=4).alignment = Alignment(wrap_text=True, vertical="top")
+    tr = 8 + len(present)
+    es.cell(row=tr, column=1, value="Total").font = bold
+    es.cell(row=tr, column=2, value=int(sum(int(G["counts"].get(k, 0)) for k in present))).number_format = "#,##0"
+    es.cell(row=tr, column=3, value=round_jobs(sum(v[1] for (c, kk), v in G["by_county_kind"].items()
+                                                   if kk in present))).number_format = "#,##0"
+    for k_ in (2, 3):
+        es.cell(row=tr, column=k_).font = bold
+    es.cell(row=tr + 2, column=1, value="An employer with worksites in more than one county is counted once here and listed "
+                                        "once for each of its counties in %s." % W.DELIVERABLES["employers"])
+    es.column_dimensions["A"].width = 46
+    es.column_dimensions["B"].width = 11
+    es.column_dimensions["C"].width = 14
+    es.column_dimensions["D"].width = 80
     wb.save(path)
 
 
-# ---------------------------------------------------------------------------------------------- the letter
-def chart_png(F):
-    import matplotlib
-    matplotlib.use("Agg")
-    import matplotlib.pyplot as plt
-    ms = sorted(F["municipalities"], key=lambda m: float(m["share"]))
-    vals = [float(m["share"]) for m in ms]
-    fig, ax = plt.subplots(figsize=(6.4, 3.6), dpi=150)
-    cols = [BLUE if m["qualifies"] else GREY for m in ms]
-    lo = [v - float(m["low"]) for v, m in zip(vals, ms)]
-    hi = [float(m["high"]) - v for v, m in zip(vals, ms)]
-    ax.barh(range(len(ms)), vals, color=cols, height=0.62, xerr=[lo, hi],
-            error_kw=dict(ecolor="#3b3b3b", elinewidth=0.8, capsize=2.2))
-    ax.axvline(5.0, color=RED, linewidth=1.0, linestyle=(0, (4, 2)))
-    ax.text(5.07, len(ms) - 0.45, "Threshold 5.0 %", color=RED, fontsize=7.4, va="center")
-    for i, (v, m) in enumerate(zip(vals, ms)):
-        ax.text(float(m["high"]) + 0.12, i, "%.1f" % v, va="center", fontsize=7.2, color="#2b2b2b")
-    ax.set_yticks(range(len(ms)))
-    ax.set_yticklabels(["%s (%s)" % (m["name"], m["nr"]) for m in ms], fontsize=7.6)
-    ax.set_xlabel("Vacant dwellings, per cent of counted dwellings, 9 to 22 November 2026", fontsize=7.6)
-    ax.set_xlim(0, max(float(m["high"]) for m in ms) * 1.1)
-    ax.spines["top"].set_visible(False)
-    ax.spines["right"].set_visible(False)
-    ax.tick_params(axis="x", labelsize=7.4)
-    fig.tight_layout()
-    buf = io.BytesIO()
-    fig.savefig(buf, format="png", metadata={"Software": None})
-    plt.close(fig)
-    return buf.getvalue()
-
-
-def _page_field(paragraph):
-    from docx.oxml import OxmlElement
-    from docx.oxml.ns import qn
-    run = paragraph.add_run()
-    for kind, text in (("begin", None), (None, "PAGE"), ("end", None)):
-        if kind:
-            el = OxmlElement("w:fldChar")
-            el.set(qn("w:fldCharType"), kind)
-        else:
-            el = OxmlElement("w:instrText")
-            el.set(qn("xml:space"), "preserve")
-            el.text = text
-        run._r.append(el)
-
-
-def _join(xs):
-    return ", ".join(xs[:-1]) + " and " + xs[-1] if len(xs) > 1 else xs[0]
-
-
-def _table(doc, head, rows, right_from=2, widths=None):
-    from docx.enum.text import WD_ALIGN_PARAGRAPH
-    from docx.shared import Pt
-    t = doc.add_table(rows=1, cols=len(head))
-    t.style = "Light List Accent 1"
-    for c, txt in zip(t.rows[0].cells, head):
-        c.text = txt
-    for r in rows:
-        cells = t.add_row().cells
-        for c, v in zip(cells, r):
-            c.text = str(v)
-    for rw in t.rows:
-        for k, c in enumerate(rw.cells):
-            for p in c.paragraphs:
-                for run in p.runs:
-                    run.font.size = Pt(9)
-                if k >= right_from:
-                    p.alignment = WD_ALIGN_PARAGRAPH.RIGHT
-    return t
-
-
-def write_docx(X, F, path):
-    from docx import Document
-    from docx.shared import Inches, Pt, RGBColor
-    doc = Document()
-    st = doc.styles["Normal"]
-    st.font.name = "Calibri"
-    st.font.size = Pt(10.5)
-    for sec in doc.sections:
-        sec.left_margin = sec.right_margin = Inches(0.95)
-        sec.top_margin = sec.bottom_margin = Inches(0.85)
-    grey = RGBColor(0x59, 0x59, 0x59)
-    h = doc.add_paragraph()
-    hr = h.add_run("Statistics Office  |  Section for Dwelling Statistics")
-    hr.font.size = Pt(9)
-    hr.font.color.rgb = grey
-    foot = doc.sections[0].footer.paragraphs[0]
-    fr = foot.add_run("Certification, 2027 vacant dwelling activation grant, %s pilot  |  Page " % W.COUNTY)
-    fr.font.size = Pt(8)
-    fr.font.color.rgb = grey
-    _page_field(foot)
-    sh, mi = W.PEOPLE["section_head"], W.PEOPLE["ministry"]
-    addr = doc.add_paragraph()
-    addr.add_run("%s\nHousing Policy Department\nAttn. %s\n\nOur ref. 26/4470-3   Your ref. letter of 1 December 2026"
-                 "\n12 January 2027" % (W.MINISTRY, mi[0])).font.size = Pt(9.5)
-    t = doc.add_paragraph()
-    rt = t.add_run("Certification under Section 7: vacant dwellings in the %s pilot of the 2027 vacant dwelling "
-                   "activation grant" % W.COUNTY)
-    rt.bold = True
-    rt.font.size = Pt(13)
-    rt.font.color.rgb = RGBColor(0x1F, 0x4E, 0x79)
-    qn_ = ["%s (%s per cent)" % (r["name"], r["share"]) for r in F["qualifying"]]
-    p = doc.add_paragraph()
-    p.add_run("%s municipalities qualify for the grant: %s. " % (F["count_word"], _join(qn_))).bold = True
-    p.add_run("In each of them %s per cent or more of the dwellings the regulation counts (Section 3) stood vacant in "
-              "the reference fortnight of 9 to 22 November 2026 (Sections 4 and 6). The highest share below the "
-              "threshold is %s's %s per cent. Across the county %s of the %s counted dwellings stood vacant." % (
-                  F["threshold"], F["highest_below"]["name"], F["highest_below"]["share"], F["totals"]["vacant"],
-                  F["totals"]["counted"]))
-    _table(doc, ["Municipality", "No.", "Counted dwellings", "Vacant dwellings", "Vacancy share (%)",
-                 "90% interval (%)", "Qualifies"],
-           [[m["name"], m["nr"], m["counted"], m["vacant"], m["share"], "%s to %s" % (m["low"], m["high"]),
-             "Yes" if m["qualifies"] else "No"]
-            for m in F["municipalities"]] + [["County", "", F["totals"]["counted"], F["totals"]["vacant"], "", "", ""]])
-    doc.add_paragraph()
-    doc.add_picture(io.BytesIO(chart_png(F)), width=Inches(6.2))
-    cap = doc.add_paragraph()
-    rc = cap.add_run("Figure 1. Vacancy share by municipality with its 90 per cent interval, against the Section 6 "
-                     "threshold. Qualifying municipalities in blue.")
-    rc.italic = True
-    rc.font.size = Pt(8)
-    doc.add_paragraph(
-        "How vacancy was established. Each counted dwelling was joined to its household metering points in the hub's "
-        "extract, by the cadastre's unit ID or, for a house without one, by its address, and its hourly values were "
-        "put on Norwegian time, the measured value kept where an hour had been estimated first, a dwelling's two "
-        "points added where its meter was changed in the fortnight. Each day was set against its own night hours and "
-        "each dwelling against its own typical day, hour by hour: a dwelling was taken as lived in when some hour of "
-        "some day ran more than %s kWh above its typical day, the household doing something the building's own load "
-        "does not repeat; it was vacant when its days repeated. In the dwellings read as vacant no hour ran more than "
-        "%s kWh above the typical day, and in the lived-in ones some hour ran at least %s kWh above it. The level of "
-        "use does not settle it in November: an empty dwelling here is left heated, and the vacant dwellings used a "
-        "median %s kWh a day against %s for the lived-in ones. Nor does a morning or evening rise on its own: %s "
-        "vacant dwellings were heated on a timer, comfort hours over a night setback, and rose every morning and "
-        "evening at the same hours, the same amount each day. Nor does the register: %s of the vacant dwellings still "
-        "had someone registered in them on 1 November, and %s lived-in dwellings had nobody registered." % (
-            F["cut"], F["dep_vacant_max"], F["dep_lived_min"], F["vacant_median_kwh"], F["lived_median_kwh"],
-            F["timer_vacant"], F["vacant_registered"], F["lived_unregistered"]))
-    doc.add_paragraph(
-        "Each share is given with its 90 per cent interval, the municipality's counted dwellings taken as so many "
-        "chances of a dwelling standing empty, as the ministry asked; the interval here is the exact binomial one. The "
-        "intervals of %s lie wholly above the %s per cent threshold; the regulation designates on the share itself "
-        "(Section 6), so the intervals do not change the certification, but they show how firmly each share sits "
-        "against the line." % (_join(F["wholly_above"]), F["threshold"]))
-    doc.add_paragraph("The dwelling-level list is in %s." % W.GOLDEN["xlsx"])
-    a = doc.add_paragraph()
-    a.add_run("Table A. The register held nobody in %s counted dwellings on 1 November 2026, and %s per cent of them were "
-              "lived in" % (F["quality_county"]["none"], F["quality_county"]["under_rate"])).bold = True
-    _table(doc, ["Municipality", "No.", "Overcoverage", "Rate (%)", "Undercoverage", "Rate (%)", "Net bias (%)"],
-           [[r["name"], r["nr"], r["over"], r["over_rate"], r["under"], r["under_rate"], r["net_bias"]]
-            for r in F["quality"]] + [["County", "", F["quality_county"]["over"], F["quality_county"]["over_rate"],
-                                       F["quality_county"]["under"], F["quality_county"]["under_rate"],
-                                       F["quality_county"]["net_bias"]]])
-    n1 = doc.add_paragraph()
-    r1 = n1.add_run("Overcoverage: counted dwellings where the register held someone as resident on 1 November but "
-                    "that stood vacant, as a percentage of the counted dwellings where it held someone. Undercoverage: "
-                    "counted dwellings lived in where it held nobody, as a percentage of those where it held nobody. "
-                    "Net bias: the dwellings where it held nobody less the vacant dwellings, as a percentage of all "
-                    "counted dwellings. Registration is the register of 5 January 2027 with every event after 1 "
-                    "November undone; where the cadastre renumbered a block's flats in November the register shows "
-                    "each resident moving to the new unit number on the day, which is a change of number, not a move.")
-    r1.font.size = Pt(8.5)
-    r1.font.color.rgb = grey
-    n2 = doc.add_paragraph(
-        "On these figures the register alone could not carry the count: in %s municipalities it holds nobody in "
-        "more dwellings than stood vacant, and in %s it still lists residents in enough empty dwellings to hold "
-        "nobody in fewer." % (WORDS[sum(1 for r in F["quality"] if float(r["net_bias"]) > 0)].lower(),
-                              _join([r["name"] for r in F["quality"] if float(r["net_bias"]) < 0])))
-    sig = doc.add_paragraph()
-    sig.add_run("\nYours sincerely\n\n%s\n%s" % (sh[0], sh[1])).font.size = Pt(10.5)
-    doc.save(path)
-
-
-def main(target, golden, figures_path):
-    import postprocess as PP
-    os.makedirs(golden, exist_ok=True)
-    X = compute(target)
-    F = figures(X)
-    xp = os.path.join(golden, W.GOLDEN["xlsx"])
-    write_xlsx(X, F, xp)
-    PP.normalize_ooxml(xp, W.PEOPLE["section_head"][0], W.PEOPLE["section_head"][0], "2027-01-08T09:14:00Z",
-                       "2027-01-12T13:52:31Z", excel=True, company="Statistics Office")
-    dp = os.path.join(golden, W.GOLDEN["docx"])
-    write_docx(X, F, dp)
-    PP.normalize_ooxml(dp, W.PEOPLE["section_head"][0], W.PEOPLE["section_head"][0], "2027-01-11T08:03:00Z",
-                       "2027-01-12T14:20:00Z", company="Statistics Office")
-    stamp = 1799761200.0
-    for f in os.listdir(golden):
-        os.utime(os.path.join(golden, f), (stamp, stamp))
-    with open(figures_path, "w") as fh:
-        json.dump(F, fh, indent=1, ensure_ascii=False)
-        fh.write("\n")
-    return X
+def build(pack_dir, out_dir):
+    pk = load_pack(pack_dir)
+    G = compute(pk)
+    os.makedirs(out_dir, exist_ok=True)
+    write_certification(pk, G, os.path.join(out_dir, W.DELIVERABLES["cert"]))
+    n = write_employers(pk, G, os.path.join(out_dir, W.DELIVERABLES["employers"]))
+    G["n_employer_rows"] = n
+    return pk, G

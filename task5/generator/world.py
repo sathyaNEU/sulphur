@@ -1,71 +1,228 @@
-"""The fiction: one Norwegian county's pilot of a 2027 grant for activating vacant dwellings, certified by the national
-statistics office from the cadastre and the meter data hub's hourly reads. Every name is invented; the people come from
-guard.py names --geo Norway --seed 470."""
+"""task5 architecture 3: the fixed facts of the State of Franklin's unemployment insurance report census.
+
+Fourteen counties, the industries and their NAICS codes, the quarter calendar with due dates and flash cut-offs,
+the shipped file names and the people. Everything here is a fact of the fiction; sim.py draws the employers."""
 import datetime as dt
 
-SEED = 470
-COUNTY = "Hvitfjell"
-OFFICE = "Statistics Office"
-OFFICE_FULL = "the national statistics office"
-MINISTRY = "Ministry of Local Government and Housing"
-HUB = "the meter data hub"
-PEOPLE = {
-    "section_head": ("Martine Strøm", "Head of Section, Dwelling Statistics"),
-    "ministry": ("Eirik Haug", "Senior Adviser, Housing Policy Department"),
+SEED = 50327
+
+STATE = "Franklin"
+EXTRACT = dt.datetime(2027, 2, 15, 23, 59, 59)       # the Division's extract: everything received by then
+CUTOFF_DAY = 15                                       # a quarter's flash takes the reports received by the 15th of
+                                                      # the second month after the quarter ends
+THRESHOLD = -2.0                                      # section 4: a change of minus 2.0 per cent or lower designates
+
+# county: FIPS-style code (alphabetical, Sayre formed in 1931 from Talcott and given the next number), name,
+# accounts at the start of 2023, healthy trend a year, share of small employers filing through a payroll agent,
+# share of agent clients served by a statewide bureau, lake county (summer-seasonal resorts), LMI region
+COUNTIES = [
+    # code   name        n0     trend   agent  bureau  lake   region
+    ("001", "Bray",       1130, -0.00849, 0.60, 0.34, False, "Southern Tier"),
+    ("003", "Calder",     5380,  0.01576, 0.62, 0.58, False, "Capital"),
+    ("005", "Corliss",     840,  0.01226, 0.58, 0.30, False, "Southern Tier"),
+    ("007", "Fenwick",     990,  0.00358, 0.57, 0.33, False, "North Woods"),
+    ("009", "Garrow",     1880, -0.00371, 0.66, 0.22, False, "Capital"),
+    ("011", "Hadley",     1490,  0.01770, 0.60, 0.40, False, "Southern Tier"),
+    ("013", "Kittredge",   590, -0.00050, 0.61, 0.52, True,  "Lakes"),
+    ("015", "Linden",     2470,  0.00974, 0.63, 0.56, False, "Capital"),
+    ("017", "Merritt",    2880, -0.01278, 0.59, 0.36, False, "River"),
+    ("019", "Ostrom",     1290, -0.00490, 0.50, 0.30, False, "North Woods"),
+    ("021", "Pell",       1690,  0.00719, 0.60, 0.38, False, "River"),
+    ("023", "Talcott",     690,  0.00482, 0.62, 0.55, True,  "Lakes"),
+    ("025", "Whitcomb",   2080,  0.00831, 0.61, 0.44, False, "River"),
+    ("027", "Sayre",       500,  0.01924, 0.58, 0.31, False, "Lakes"),
+]
+CODES = [c[0] for c in COUNTIES]
+# each county's employer sizes, as drawn, times this factor
+SCALE = {"001": 1.02060, "003": 1.00463, "005": 1.01013, "007": 1.01505, "009": 0.96684, "011": 1.02269,
+         "013": 1.03175, "015": 0.98651, "017": 0.98719, "019": 0.99774, "021": 0.99920, "023": 1.05802,
+         "025": 0.99665, "027": 1.05349}
+# each county's 2026 drift beyond the calibrated trend
+NUDGE = {"001": -0.000121, "003": 0.000197, "005": -0.000546, "007": 0.000234, "009": 0.001591, "011": -0.000548,
+         "013": -0.000461, "015": -0.000145, "017": -0.000523, "019": 0.001073, "021": 0.000730, "023": 0.000462,
+         "025": -0.000616, "027": 0.000539}
+NAMES = {c[0]: c[1] for c in COUNTIES}
+SHOCK = {"009": "garrow", "019": "ostrom"}             # the two counties hit in the fourth quarter of 2026
+
+# BLS supersectors: code, title, month factors Jan..Dec (pay period including the 12th)
+SUPERSECTORS = {
+    "1011": ("Natural resources and mining", [0.88, 0.88, 0.92, 0.99, 1.06, 1.10, 1.10, 1.09, 1.06, 1.03, 0.97, 0.92]),
+    "1012": ("Construction", [0.88, 0.88, 0.93, 1.00, 1.05, 1.08, 1.09, 1.09, 1.07, 1.05, 1.00, 0.93]),
+    "1013": ("Manufacturing", [0.99, 0.99, 0.99, 1.00, 1.00, 1.01, 1.00, 1.01, 1.01, 1.00, 1.00, 0.99]),
+    "1021": ("Trade, transportation, and utilities", [0.97, 0.96, 0.97, 0.98, 0.99, 1.00, 1.00, 1.00, 0.99, 1.00, 1.04, 1.07]),
+    "1022": ("Information", [1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00]),
+    "1023": ("Financial activities", [0.99, 0.99, 1.00, 1.00, 1.00, 1.01, 1.01, 1.01, 1.00, 1.00, 1.00, 1.00]),
+    "1024": ("Professional and business services", [0.97, 0.98, 0.99, 1.00, 1.00, 1.01, 1.01, 1.01, 1.01, 1.01, 1.01, 1.00]),
+    "1025": ("Education and health services", [1.01, 1.01, 1.01, 1.01, 1.00, 0.97, 0.95, 0.97, 1.01, 1.02, 1.02, 1.01]),
+    "1026": ("Leisure and hospitality", [0.92, 0.92, 0.95, 0.98, 1.04, 1.10, 1.12, 1.11, 1.03, 0.98, 0.94, 0.94]),
+    "1027": ("Other services", [0.99, 0.99, 1.00, 1.00, 1.00, 1.01, 1.01, 1.01, 1.00, 1.00, 1.00, 0.99]),
+    "1028": ("Public administration", [1.00, 1.00, 1.00, 1.00, 1.00, 1.01, 1.01, 1.00, 1.00, 1.00, 1.00, 1.00]),
 }
 
-# number, name, character, counted dwellings, golden vacant, composition of the vacant (heated house, heat-pump
-# dwelling, near-empty flat, switched off), share of counted dwellings that are central-heated flats, share of the
-# occupied unregistered on 1 November, share of the vacant still carrying a registered resident
-MUNICIPALITIES = [
-    # nr,   name,          kind,       N,    V,  heated, hp, tiny, off,  flats, unreg, regvac
-    ("5801", "Brekkevoll", "town",     1640, 66, 0.34, 0.18, 0.40, 0.08, 0.46, 0.13, 0.20),
-    ("5802", "Tverrvika", "coast",      520, 38, 0.82, 0.08, 0.04, 0.06, 0.04, 0.02, 0.42),
-    ("5803", "Hesteby", "suburb",       980, 63, 0.20, 0.66, 0.08, 0.06, 0.32, 0.03, 0.12),
-    ("5804", "Kvernhaug", "industry",   860, 33, 0.48, 0.20, 0.24, 0.08, 0.30, 0.17, 0.24),
-    ("5805", "Solmoen", "inland",       430, 28, 0.36, 0.06, 0.46, 0.12, 0.05, 0.02, 0.38),
-    ("5806", "Ravnsund", "town",        740, 34, 0.44, 0.22, 0.28, 0.06, 0.38, 0.06, 0.26),
-    ("5807", "Ørnevik", "coast",        380, 31, 0.86, 0.06, 0.04, 0.04, 0.03, 0.03, 0.45),
-    ("5808", "Langgrav", "suburb",     1120, 36, 0.30, 0.42, 0.20, 0.08, 0.22, 0.05, 0.22),
-    ("5809", "Fjordeid", "mixed",       560, 30, 0.58, 0.16, 0.20, 0.06, 0.14, 0.04, 0.33),
-    ("5810", "Snøholt", "mixed",        790, 37, 0.50, 0.22, 0.22, 0.06, 0.08, 0.05, 0.30),
+# NAICS 2022 code, title, supersector, weight in the private economy, the code it replaced in NAICS 2017 (or None)
+NAICS = [
+    ("111421", "Nursery and Tree Production", "1011", 0.6, None),
+    ("111998", "All Other Miscellaneous Crop Farming", "1011", 0.5, None),
+    ("112111", "Beef Cattle Ranching and Farming", "1011", 0.5, None),
+    ("112120", "Dairy Cattle and Milk Production", "1011", 0.6, None),
+    ("113310", "Logging", "1011", 0.7, None),
+    ("115310", "Support Activities for Forestry", "1011", 0.3, None),
+    ("212321", "Construction Sand and Gravel Mining", "1011", 0.2, None),
+    ("236115", "New Single-Family Housing Construction (except For-Sale Builders)", "1012", 1.4, None),
+    ("236118", "Residential Remodelers", "1012", 1.6, None),
+    ("236220", "Commercial and Institutional Building Construction", "1012", 0.7, None),
+    ("237310", "Highway, Street, and Bridge Construction", "1012", 0.4, None),
+    ("238110", "Poured Concrete Foundation and Structure Contractors", "1012", 0.6, None),
+    ("238160", "Roofing Contractors", "1012", 0.8, None),
+    ("238210", "Electrical Contractors and Other Wiring Installation Contractors", "1012", 1.3, None),
+    ("238220", "Plumbing, Heating, and Air-Conditioning Contractors", "1012", 1.5, None),
+    ("238310", "Drywall and Insulation Contractors", "1012", 0.5, None),
+    ("238320", "Painting and Wall Covering Contractors", "1012", 0.7, None),
+    ("238910", "Site Preparation Contractors", "1012", 0.8, None),
+    ("238990", "All Other Specialty Trade Contractors", "1012", 0.6, None),
+    ("311812", "Commercial Bakeries", "1013", 0.3, None),
+    ("321113", "Sawmills", "1013", 0.4, None),
+    ("321918", "Other Millwork (including Flooring)", "1013", 0.3, None),
+    ("322121", "Paper (except Newsprint) Mills", "1013", 0.1, None),
+    ("326199", "All Other Plastics Product Manufacturing", "1013", 0.3, None),
+    ("332323", "Ornamental and Architectural Metal Work Manufacturing", "1013", 0.3, None),
+    ("332710", "Machine Shops", "1013", 0.8, None),
+    ("336390", "Other Motor Vehicle Parts Manufacturing", "1013", 0.2, None),
+    ("337110", "Wood Kitchen Cabinet and Countertop Manufacturing", "1013", 0.4, None),
+    ("221122", "Electric Power Distribution", "1021", 0.1, None),
+    ("423310", "Lumber, Plywood, Millwork, and Wood Panel Merchant Wholesalers", "1021", 0.3, None),
+    ("423810", "Construction and Mining (except Oil Well) Machinery and Equipment Merchant Wholesalers", "1021", 0.3, None),
+    ("424410", "General Line Grocery Merchant Wholesalers", "1021", 0.3, None),
+    ("441110", "New Car Dealers", "1021", 0.6, None),
+    ("444110", "Home Centers", "1021", 0.2, None),
+    ("444180", "Other Building Material Dealers", "1021", 0.5, "444190"),
+    ("445110", "Supermarkets and Other Grocery Retailers (except Convenience Retailers)", "1021", 0.7, None),
+    ("445131", "Convenience Retailers", "1021", 0.6, "445120"),
+    ("455211", "Warehouse Clubs and Supercenters", "1021", 0.1, "452311"),
+    ("456110", "Pharmacies and Drug Retailers", "1021", 0.5, "446110"),
+    ("457110", "Gasoline Stations with Convenience Stores", "1021", 0.7, "447110"),
+    ("458110", "Clothing and Clothing Accessories Retailers", "1021", 0.5, "448140"),
+    ("459110", "Sporting Goods Retailers", "1021", 0.3, "451110"),
+    ("459420", "Gift, Novelty, and Souvenir Retailers", "1021", 0.4, "453220"),
+    ("459999", "All Other Miscellaneous Retailers", "1021", 0.5, "453998"),
+    ("484110", "General Freight Trucking, Local", "1021", 0.7, None),
+    ("484220", "Specialized Freight (except Used Goods) Trucking, Local", "1021", 0.6, None),
+    ("488410", "Motor Vehicle Towing", "1021", 0.3, None),
+    ("492210", "Local Messengers and Local Delivery", "1021", 0.3, None),
+    ("493110", "General Warehousing and Storage", "1021", 0.3, None),
+    ("513110", "Newspaper Publishers", "1022", 0.2, "511110"),
+    ("517112", "Wireless Telecommunications Carriers (except Satellite)", "1022", 0.2, "517312"),
+    ("519290", "Web Search Portals and All Other Information Services", "1022", 0.2, "519130"),
+    ("522110", "Commercial Banking", "1023", 0.4, None),
+    ("522130", "Credit Unions", "1023", 0.3, None),
+    ("524210", "Insurance Agencies and Brokerages", "1023", 0.9, None),
+    ("531110", "Lessors of Residential Buildings and Dwellings", "1023", 0.6, None),
+    ("531210", "Offices of Real Estate Agents and Brokers", "1023", 0.8, None),
+    ("531311", "Residential Property Managers", "1023", 0.5, None),
+    ("541110", "Offices of Lawyers", "1024", 1.4, None),
+    ("541211", "Offices of Certified Public Accountants", "1024", 0.9, None),
+    ("541213", "Tax Preparation Services", "1024", 0.4, None),
+    ("541330", "Engineering Services", "1024", 0.7, None),
+    ("541512", "Computer Systems Design Services", "1024", 0.6, None),
+    ("541810", "Advertising Agencies", "1024", 0.3, None),
+    ("561320", "Temporary Help Services", "1024", 0.3, None),
+    ("561720", "Janitorial Services", "1024", 0.7, None),
+    ("561730", "Landscaping Services", "1024", 1.2, None),
+    ("562111", "Solid Waste Collection", "1024", 0.2, None),
+    ("611110", "Elementary and Secondary Schools", "1025", 0.2, None),
+    ("621111", "Offices of Physicians (except Mental Health Specialists)", "1025", 1.2, None),
+    ("621210", "Offices of Dentists", "1025", 1.1, None),
+    ("621340", "Offices of Physical, Occupational and Speech Therapists, and Audiologists", "1025", 0.6, None),
+    ("621610", "Home Health Care Services", "1025", 0.5, None),
+    ("622110", "General Medical and Surgical Hospitals", "1025", 0.05, None),
+    ("623110", "Nursing Care Facilities (Skilled Nursing Facilities)", "1025", 0.3, None),
+    ("623312", "Assisted Living Facilities for the Elderly", "1025", 0.3, None),
+    ("624410", "Child Care Services", "1025", 0.8, None),
+    ("713930", "Marinas", "1026", 0.15, None),
+    ("713940", "Fitness and Recreational Sports Centers", "1026", 0.5, None),
+    ("713990", "All Other Amusement and Recreation Industries", "1026", 0.4, None),
+    ("721110", "Hotels (except Casino Hotels) and Motels", "1026", 0.5, None),
+    ("721211", "RV (Recreational Vehicle) Parks and Campgrounds", "1026", 0.25, None),
+    ("721214", "Recreational and Vacation Camps (except Campgrounds)", "1026", 0.15, None),
+    ("722410", "Drinking Places (Alcoholic Beverages)", "1026", 0.6, None),
+    ("722511", "Full-Service Restaurants", "1026", 2.2, None),
+    ("722513", "Limited-Service Restaurants", "1026", 1.6, None),
+    ("722515", "Snack and Nonalcoholic Beverage Bars", "1026", 0.5, None),
+    ("811111", "General Automotive Repair", "1027", 1.0, None),
+    ("811121", "Automotive Body, Paint, and Interior Repair and Maintenance", "1027", 0.5, None),
+    ("812111", "Barber Shops", "1027", 0.3, None),
+    ("812112", "Beauty Salons", "1027", 0.8, None),
+    ("812910", "Pet Care (except Veterinary) Services", "1027", 0.3, None),
+    ("813110", "Religious Organizations", "1027", 0.9, None),
 ]
-THRESHOLD = 5.0
+GOV_NAICS = [("611110", "Elementary and Secondary Schools", "1025"), ("921140", "Executive and Legislative Offices, Combined", "1028"),
+             ("922120", "Police Protection", "1028"), ("921190", "Other General Government Support", "1028"),
+             ("622110", "General Medical and Surgical Hospitals", "1025")]
+SHOCK_NAICS = {
+    "garrow": {"236115", "236118", "236220", "238110", "238160", "238210", "238220", "238310", "238320", "238910",
+               "238990", "423310", "444180", "321918", "337110", "332323"},
+    "ostrom": {"113310", "115310", "484220", "484110", "321113", "488410", "423810"},
+}
+LAKE_SEASONAL = {"713930", "713990", "721211", "721214", "721110", "722511", "722513", "722515", "459420"}
 
-# Heating on a daily timer (a panel heater's or heat pump's comfort hours over a night setback): the vacant dwellings
-# left with their timer running in each municipality, and the share of lived-in electric or heat-pump dwellings that
-# run one. Drawn from a stream of their own, so every other draw in the world stays as it was.
-PROGRAM_SEED = SEED + 7001
-PROGRAMMED_VACANT = {"5801": 8, "5802": 6, "5803": 18, "5804": 4, "5805": 8, "5806": 5, "5807": 4, "5808": 6,
-                     "5809": 5, "5810": 6}
-PROGRAMMED_LIVED_SHARE = 0.30
-OLD_NUMBER = {"5810": "5809"}            # Snøholt was split from Fjordeid on 1 January 2024; the grid's records lag
+# size classes: upper bound of employees and share of private accounts
+SIZE_CLASSES = [(4, 0.48), (9, 0.21), (19, 0.14), (49, 0.10), (99, 0.04), (249, 0.022), (499, 0.0055), (1500, 0.0025)]
 
-FORTNIGHT_START = dt.date(2026, 11, 9)   # a Monday
-DAYS = 14
-HOURS = DAYS * 24
-UTC_OFFSET = 1                           # Norwegian time is UTC+1 in November
-REGISTER_DAY = dt.date(2026, 11, 1)
-SNAPSHOT_DAY = dt.date(2027, 1, 5)
-EVENTS_FROM = dt.date(2026, 10, 1)
-CERTIFY_BY = dt.date(2027, 1, 15)
+
+def quarter_label(q):
+    """q = 0 is 2023 Q1."""
+    return "%dQ%d" % (2023 + q // 4, q % 4 + 1)
+
+
+def quarter_end(q):
+    y, k = 2023 + q // 4, q % 4 + 1
+    return dt.date(y, 3 * k, [31, 30, 30, 31][k - 1])
+
+
+def due_date(q):
+    """the report is due the last day of the month after the quarter"""
+    e = quarter_end(q)
+    m, y = e.month + 1, e.year
+    if m > 12:
+        m, y = 1, y + 1
+    nxt = dt.date(y + (m == 12), m % 12 + 1, 1)
+    return nxt - dt.timedelta(days=1)
+
+
+def cutoff(q):
+    """the flash for quarter q counts reports received by the 15th of the second month after it, 23:59:59"""
+    e = quarter_end(q)
+    m, y = e.month + 2, e.year
+    if m > 12:
+        m, y = m - 12, y + 1
+    return dt.datetime(y, m, CUTOFF_DAY, 23, 59, 59)
+
+
+NQ = 16          # 2023Q1 .. 2026Q4
+NM = 48          # January 2023 .. December 2026
+FLASH_Q = 15     # 2026Q4
+BASE_Q = 11      # 2025Q4
 
 FILES = {
-    "regulation": "regulation_vacant_dwelling_grant_2027.pdf",
-    "assignment": "ministry_assignment_2026-12-01.eml",
-    "cadastre": "matrikkel_bruksenheter_hvitfjell_2027-01-04.csv",
-    "municipalities": "kommuner_hvitfjell_2026.csv",
-    "meterpoints": "elhub_malepunkter_hvitfjell_2027-01-04.csv",
-    "hourly": "elhub_timeverdier_2026-11-09_2026-11-22.parquet",
-    "daily": "elhub_dognverdier_2026-11-09_2026-11-22.csv",
-    "register": "folkeregister_bosatte_2027-01-05.csv",
-    "events": "folkeregister_hendelser_2026-10-01_2027-01-05.csv",
-    "titles": "grunnbok_hjemmel_2027-01-05.csv",
-    "transfers": "grunnbok_overdragelser_2026.csv",
-    "entities": "enhetsregisteret_utdrag_2027-01-05.csv",
-    "shareholders": "aksjonaerregisteret_2025.csv",
-    "prices": "spotpriser_no1_2026-11.csv",
-    "outages": "nettselskap_avbrudd_2026-11.xlsx",
+    "reports": "ui_quarterly_reports_2023q1_2026q4.csv",
+    "accounts": "ui_employer_accounts_2027-02-15.csv",
+    "status": "ui_account_status_history_2023-2027.csv",
+    "worksites": "ui_multiple_worksite_reports_2023q1_2026q4.csv",
+    "counties": "franklin_county_codes.csv",
+    "naics": "naics_2017_2022_supersector_concordance.csv",
+    "act": "community_transition_fund_act_2026.docx",
+    "agreement": "ui_lmi_data_sharing_agreement_2025.docx",
+    "request": "fund_board_certification_request_2027-01-12.eml",
+    "published": "covered_employment_by_county_2025q4.xlsx",
+    "rates": "ui_contribution_rate_notice_2027.docx",
+    "population": "franklin_county_population_estimates_2025.csv",
 }
-DISTRACTORS = ["prices", "outages", "titles", "transfers", "entities", "shareholders"]
-GOLDEN = {"xlsx": "county_dwelling_occupancy_2026-11.xlsx", "docx": "vacancy_grant_certification_2027.docx"}
+DISTRACTORS = ["rates", "population"]
+
+DELIVERABLES = {"cert": "ctf_certification_december_2026.xlsx", "employers": "ctf_employer_jobs_december_2026.csv"}
+
+PEOPLE = {
+    "lmi_director": ("Danielle Fuller", "Director, Labor Market Information", "dfuller@labor.franklin.gov"),
+    "fund_admin": ("Matthew Cox", "Administrator, Community Transition Fund", "matthew.cox@commerce.franklin.gov"),
+    "ui_chief": ("William Robertson", "Chief, Unemployment Insurance Tax Division", "wrobertson@labor.franklin.gov"),
+}

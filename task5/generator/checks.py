@@ -1,612 +1,417 @@
-"""task5 checks: the three rules executed on the clean truth (R1 to R4), the ladder and its margins, the household-day
-family, the semantic fork table (SF1 to SF24), the separation of the asks' devices from the call, the two tables and
-their stops, the Shock and back-test screens, every graded figure's distance to its bin edge, the input gates and
-distractors, the realism sweeps and the deliverables' agreement with figures.json."""
-import datetime as dt
+"""task5 architecture 3: the generator's assertions, run on every build.
+
+The input gates; the Sulfur block (R1 to R6) on the clean truth and the cut pack; the ladder and its margins; the
+shock screen; every semantic fork (SF1 to SF16) closed or shown inert; the golden family's spread against each graded
+bin; the golden against the world; the governing documents read back with positive controls; the realism sweep."""
 import json
 import os
 import re
-import subprocess
-import zipfile
 
 import numpy as np
-import pyarrow.parquet as pq
 import pandas as pd
 
+import golden as GD
 import methods as M
+import tells
 import world as W
 
 RESULTS = []
-GOLD = ["5802", "5803", "5805", "5807", "5809"]
-ALL = [m[0] for m in W.MUNICIPALITIES]
+FAMILY_DEV = {}
 
 
-def check(label, ok, detail=""):
-    RESULTS.append((label, bool(ok), detail))
-    print("%s  %s%s" % ("ok  " if ok else "FAIL", label, ("  [%s]" % detail) if (detail != "" and not ok) else ""))
+def check(name, ok, detail=""):
+    RESULTS.append((name, bool(ok), detail))
     return ok
 
 
-def pdf_text(path):
-    out = subprocess.run(["pdftotext", "-raw", path, "-"], capture_output=True, text=True, check=True).stdout
-    return re.sub(r"\s+", " ", out)
+def doc_text(path):
+    """a governing document's text as a reader opening it sees it: the body, its tables and its footer"""
+    from docx import Document
+    d = Document(path)
+    parts = [p.text for p in d.paragraphs]
+    for t in d.tables:
+        for row in t.rows:
+            parts += [c.text for c in row.cells]
+    for sec in d.sections:
+        parts += [p.text for p in sec.footer.paragraphs]
+    return "\n".join(parts)
 
 
-def ooxml_text(path):
-    with zipfile.ZipFile(path) as z:
-        return " ".join(z.read(n).decode("utf-8", "replace") for n in z.namelist() if n.endswith(".xml"))
+def designated_names(ch):
+    return [W.NAMES[c] for c in M.designated(ch)]
 
 
-def shares(vac_by_nr):
-    out = {}
-    for nr, name, kind, N, *_r in W.MUNICIPALITIES:
-        n, v = vac_by_nr[nr]
-        out[nr] = round(100.0 * v / n, 1)
-    return out
+def edge_distance(v, unit=0.1):
+    """distance from v to the nearest rounding edge at the given unit"""
+    return unit / 2 - abs(v - round(v / unit) * unit)
 
 
-def designate(sh):
-    return sorted(nr for nr, s in sh.items() if s >= W.THRESHOLD)
-
-
-def departure_of(a, night=(1, 5), centre="median", block=1, sign="up"):
-    """a: dwellings x 14 x 24 hourly kWh in local time; the largest excess of any hour over the dwelling's own typical
-    day (methods.departure on an array)."""
-    with np.errstate(invalid="ignore", all="ignore"):
-        n = np.nanmean(a[:, :, night[0]:night[1]], axis=2)
-        x = a - n[:, :, None]
-        if block > 1:
-            x = np.nanmean(x.reshape(len(a), W.DAYS, 24 // block, block), axis=3)
-        if centre == "median":
-            c = np.nanmedian(x, axis=1)
-        else:
-            c = (np.nanpercentile(x, 25, axis=1) + np.nanpercentile(x, 75, axis=1)) / 2
-        e = x - c[:, None, :]
-        if sign == "abs":
-            e = np.abs(e)
-        return np.nanmax(np.where(np.isnan(e), -9, e).reshape(len(a), -1), axis=1)
-
-
-def signature_of(a):
-    """a: dwellings x 14 x 24 hourly kWh in local time."""
-    with np.errstate(invalid="ignore"):
-        night = np.nanmean(a[:, :, 1:5], axis=2)
-        rise = np.fmax(np.nanmean(a[:, :, 6:9], axis=2), np.nanmean(a[:, :, 16:22], axis=2)) - night
-    return np.nanmax(np.where(np.isnan(rise), -9, rise), axis=1)
-
-
-# ---------------------------------------------------------------------------------------------- the clean truth
-def truth(w):
-    """The world before any file is written: each counted dwelling's own hourly load in Norwegian time (no missing
-    hours, no estimates, no clock, no keys), whether anybody lived there, and the persons registered there on
-    1 November."""
-    dws = [u for u in w.units if u["counted"]]
-    a = np.array([w.load[u["id"]] for u in dws]).reshape(len(dws), W.DAYS, 24)
-    reg = {}
-    for p in w.persons:
-        if p["nov1_unit"] is not None:
-            reg[p["nov1_unit"]] = reg.get(p["nov1_unit"], 0) + 1
-    return dict(dws=dws, a=a, vacant=np.array([bool(u["vacant"]) for u in dws]),
-                reg=np.array([reg.get(u["id"], 0) for u in dws]), nr=np.array([u["nr"] for u in dws]))
-
-
-def truth_call(T, vac):
-    by = {}
-    for nr in ALL:
-        m = T["nr"] == nr
-        by[nr] = (int(m.sum()), int((vac & m).sum()))
-    return designate(shares(by))
-
-
-# ---------------------------------------------------------------------------------------------- the run
-def run(target, golden, w=None, meta_path=None, fig_path=None):
-    del RESULTS[:]
-    d = M.load(target)
-    res, cnt = M.call(d)
-    gold = M.designated(res)
-    F = json.load(open(fig_path, encoding="utf-8")) if fig_path else None
+def run(task, w, T, pk, G, texts, figs, n, quiet=False):
+    RESULTS.clear()
+    target = os.path.join(task, "target")
+    gold = os.path.join(task, "golden")
     files = sorted(os.listdir(target))
-    fmts = {f.rsplit(".", 1)[1] for f in files}
-    nh = len(d["hourly"])
+    gnames = [W.NAMES[c] for c in G["designated"]]
 
-    # ------------------------------------------------------------------ input gates
-    check("gates: %d files (10 or more), formats %s (3 or more), the hourly values %d rows (25,000 or more)" % (
-        len(files), sorted(fmts), nh), len(files) >= 10 and len(fmts) >= 3 and nh >= 25000)
-    nd = len(pd.read_csv(os.path.join(target, W.FILES["daily"]), sep=";", dtype=str))
-    check("gates: the hub's daily values are a CSV of %d rows (20,000 or more)" % nd, nd >= 20000)
-    check("gates: the pack is exactly the files world.FILES declares", set(files) == set(W.FILES.values()),
-          sorted(set(files) ^ set(W.FILES.values())))
-    check("gates: the distractors (day-ahead prices, the outage log and the land, business and shareholder registers) "
-          "named in metadata.json",
-          meta_path is None or sorted(json.load(open(meta_path))["distractor_files"]) ==
-          sorted(W.FILES[k] for k in W.DISTRACTORS))
+    # --------------------------------------------------------------------------------------------- input gates
+    check("gate: ten or more usable files", len(files) >= 10, "%d files" % len(files))
+    exts = {f.rsplit(".", 1)[1] for f in files}
+    cats = {"spreadsheet": exts & {"csv", "xlsx"}, "text": exts & {"pdf", "docx", "eml"}}
+    check("gate: two or more file categories, three or more formats", all(cats.values()) and len(exts) >= 3, sorted(exts))
+    check("gate: a CSV of 20,000 rows or more", n["reports"] >= 20000 and n["accounts"] >= 20000, "%d reports, %d accounts" % (n["reports"], n["accounts"]))
+    check("gate: a CSV of ten to twenty printed pages or more", n["status"] >= 600, "%d status rows" % n["status"])
+    meta = json.load(open(os.path.join(task, "metadata.json")))
+    check("gate: two or more distractors named only in metadata.json", len(meta["distractor_files"]) >= 2 and
+          all("distract" not in f for f in files), meta["distractor_files"])
+    check("gate: no file describes the data", not any(re.search(r"readme|dictionary|manifest|field.?notes|codebook", f, re.I) for f in files))
+    gfiles = sorted(os.listdir(gold))
+    check("golden: exactly the requested files", gfiles == sorted(W.DELIVERABLES.values()), gfiles)
 
-    # ------------------------------------------------------------------ the call
-    check("call: the golden designates %s" % " ".join(GOLD), gold == GOLD, gold)
-    raw = {nr: r["raw"] for nr, r in res.items()}
-    near = min(abs(v - 4.95) for v in raw.values())
-    check("call: no municipality's unrounded share within 0.2 points of the rounding line at 4.95 (closest %.3f)" % near,
-          near >= 0.2)
-    edge = min(abs((v * 10) % 1 - 0.5) for v in raw.values())
-    check("call: no share on a rounding edge (closest %.3f of a tenth)" % edge, edge >= 0.03)
-    sig = M.departure(M.series(d)).reindex(cnt["bruksenhet_id"]).fillna(-9).to_numpy()
-    rise = M.signature(M.series(d)).reindex(cnt["bruksenhet_id"]).fillna(-9).to_numpy()
-    vac = cnt["vacant"].to_numpy()
-    check("call: every counted dwelling has a metering point with values in the fortnight",
-          len(set(M.meters_of(d).values())) == len(cnt), len(cnt) - len(set(M.meters_of(d).values())))
-    gap = (sig[~vac].min(), sig[vac].max())
-    check("call: the departure from the dwelling's own typical day separates the dwellings, lived-in minimum %.3f "
-          "against vacant maximum %.3f" % gap, gap[0] - gap[1] > 0.5)
-    timer = np.array([int(x) in getattr(w, "programmed", {}) for x in cnt["bruksenhet_id"]]) if w is not None else None
-    if timer is not None:
-        check("call: every vacant dwelling on a heating timer (%d) rises in the morning or evening above its night "
-              "hours by more than any lived-in dwelling's lowest rise, so the rise reads it lived in" % (timer & vac).sum(),
-              (timer & vac).sum() == sum(W.PROGRAMMED_VACANT.values()) and rise[timer & vac].min() > 0.8)
+    # ----------------------------------------------------------------------------------------------- Sulfur R1
+    rep_cols = list(T["reports"].columns)
+    forbidden = [c for c in list(T["reports"].columns) + list(T["accounts"].columns) + list(T["worksites"].columns)
+                 if re.search(r"agent|channel|method|batch|transmission|bureau|preparer|filer|submitter|distress|flag", c, re.I)]
+    check("R1 no column holds an agent, channel, transmission or distress flag", not forbidden, forbidden)
+    check("R1 the reports carry each version's receipt time to the second", "received_at" in rep_cols and
+          T["reports"]["received_at"].str.match(r"\d{4}-\d\d-\d\d \d\d:\d\d:\d\d$").all())
+    read = sorted(set(re.findall(r'rd\("(\w+)"', open(os.path.join(os.path.dirname(__file__), "golden.py")).read())))
+    check("R1 the golden reads the reports, the register, the status history, the worksite file and two lookups only",
+          read == ["accounts", "counties", "naics", "reports", "status", "worksites"], read)
 
-    # ------------------------------------------------------------------ R1 to R4: the three rules
-    heads = []
-    for f in files:
-        if f.endswith(".csv"):
-            heads.append(open(os.path.join(target, f), encoding="utf-8").readline().lower())
-    heads.append(" ".join(d["hourly"].columns).lower())
-    check("R1 the field's raw material ships: the hourly values per metering point, the meter register, the cadastre "
-          "and the registers, and no shipped column holds occupancy, vacancy or a household",
-          nh > 1000000 and not any(re.search(r"ledig|vacan|occup|bebodd|husstand|tom_", h) for h in heads))
-    if w is not None:
-        T = truth(w)
-        lv = T["a"].sum(axis=(1, 2)) / W.DAYS
-        fl = {f: truth_call(T, lv < f) for f in range(1, 11)}
-        check("R2 analyst test on the clean truth: the utility-data vacancy floor, any floor from 1 to 10 kWh a day on "
-              "each dwelling's own load, designates no municipality (the default path's Ends on)",
-              all(v == [] for v in fl.values()), fl)
-        st = signature_of(T["a"])
-        dt_ = departure_of(T["a"])
-        check("R3 the decisive step on the clean truth: an hour above the dwelling's own typical day on any day finds "
-              "exactly the dwellings nobody lived in and designates the golden five",
-              ((dt_ < M.DCUT) == T["vacant"]).all() and truth_call(T, dt_ < M.DCUT) == GOLD)
-        rise_sets = {c: truth_call(T, st < c) for c in (0.3, 0.5, 0.8, 1.0)}
-        check("R3b the household rise on the clean truth (the morning or evening over the night, any day, any cut from "
-              "0.3 to 1.0 kWh) reads the timer dwellings as lived in and designates Tverrvika and Ørnevik alone",
-              all(v == ["5802", "5807"] for v in rise_sets.values()), rise_sets)
-        cheap = {"the register's empty dwellings": truth_call(T, T["reg"] == 0),
-                 "the register's empty dwellings with no household day": truth_call(T, (T["reg"] == 0) & (st < M.CUT)),
-                 "the household rise at 0.5 kWh": truth_call(T, st < 0.5),
-                 "the register's empty dwellings under 3 kWh a day": truth_call(T, (T["reg"] == 0) & (lv < 3))}
-        for f in (1, 3, 5, 10, 15, 20):
-            cheap["a floor of %d kWh a day" % f] = truth_call(T, lv < f)
-        landing = [k for k, v in cheap.items() if v == GOLD]
-        check("R4 Gate F on the clean truth: of %d cheap routes none lands the call; the household day is the one "
-              "route that does" % len(cheap), not landing, landing)
-        check("R4 the register designates all ten, on the clean truth", cheap["the register's empty dwellings"] == ALL)
+    # --------------------------------------------------------------------------------------------- the ladder
+    R = figs["rungs"]
+    check("ladder: the golden designates Garrow and Ostrom", gnames == ["Garrow", "Ostrom"], gnames)
+    check("R3a analyst test: the default path (the field's imputation, two-quarter delinquents ceased) designates none",
+          R["R1x"]["designated"] == [], R["R1x"]["designated"])
+    check("ladder: R1, the field's imputation for every outstanding report, designates none", R["R1"]["designated"] == [], R["R1"]["designated"])
+    check("ladder: R0, the reports as received, designates twelve or more", len(R["R0"]["designated"]) >= 12, len(R["R0"]["designated"]))
+    check("R4 link 2: the filer-type reading designates Ostrom alone", R["R2"]["designated"] == ["Ostrom"], R["R2"]["designated"])
+    check("ladder: the newly-late reading designates five or more counties", len(R["R2b"]["designated"]) >= 5, R["R2b"]["designated"])
+    check("R4 link 3: outcomes from the six months before the flash designate no county", R["R3a"]["designated"] == [], R["R3a"]["designated"])
+    check("R4 link 3: outcomes with the never-filers dropped designate no county", R["R3b"]["designated"] == [], R["R3b"]["designated"])
+    check("ladder: every wrong set differs from the golden", all(R[k]["designated"] != gnames for k in R if k != "Rseas"))
+    # margins on the line
+    ch = {W.NAMES[c]: G["change"][c] for c in W.CODES}
+    check("margin: Garrow and Ostrom at least 0.6 below the line on the golden",
+          max(ch["Garrow"], ch["Ostrom"]) <= W.THRESHOLD - 0.6, (round(ch["Garrow"], 2), round(ch["Ostrom"], 2)))
+    others = {k: v for k, v in ch.items() if k not in ("Garrow", "Ostrom")}
+    check("margin: every other county at least 0.6 above the line on the golden", min(others.values()) >= W.THRESHOLD + 0.6,
+          min(others.items(), key=lambda kv: kv[1]))
+    for k in ("R1", "R1x", "R3a", "R3b"):
+        rr = R[k]["change_raw"]
+        check("margin: %s keeps Garrow and Ostrom at least 0.3 above the line" % k, min(rr["Garrow"], rr["Ostrom"]) >= W.THRESHOLD + 0.3,
+              (round(rr["Garrow"], 2), round(rr["Ostrom"], 2)))
+    rr = R["R2"]["change_raw"]
+    check("margin: R2 puts Ostrom at least 0.3 below the line and Garrow at least 0.3 above it",
+          rr["Ostrom"] <= W.THRESHOLD - 0.3 and rr["Garrow"] >= W.THRESHOLD + 0.3, (round(rr["Garrow"], 2), round(rr["Ostrom"], 2)))
+    # the field's imputation back-tests: rebuilt at each closed quarter's cut-off it overstates every county's final
+    # figure a little, and the lake counties' fourth quarter by more (their resorts' own history is a year short)
+    import writeup as WR
+    bt = {}
+    for h in pk.closed:
+        est_, kind_, vh = pk.estimate(h, WR.RUNGS["R1x"])
+        ev = pk.eventual(h)
+        fin = {a_: (est_[a_] if kind_[a_] == "reported" else ev(a_)) for a_ in est_}
+        fin = {a_: (x if np.isfinite(x) else est_[a_]) for a_, x in fin.items()}
+        te, _ = pk.split(h, est_, vh["asof"])
+        tf, _ = pk.split(h, fin, vh["asof"])
+        bt[h] = {c: 100.0 * (te[c] / tf[c] - 1) for c in W.CODES}
+    lake = ("013", "023")
+    rest = [x for h in bt for c, x in bt[h].items() if not (c in lake and h % 4 == 3)]
+    check("back-test: the field's imputation overstates every county's final figure by 0.0 to 0.7 of a point on every "
+          "closed quarter, the lake counties' fourth quarter apart", min(rest) >= -0.05 and max(rest) <= 0.7,
+          (round(min(rest), 2), round(max(rest), 2)))
+    check("back-test: in the lake counties' 2024 fourth quarter it overstates by one to two and a half points",
+          all(1.0 <= bt[7][c] <= 2.5 for c in lake), {W.NAMES[c]: round(bt[7][c], 2) for c in lake})
+    check("R3b the decisive step alone: the default path with the missing-alone reading files the golden set",
+          designated_names(M.county_change(pk, dict(seasonal=False, new="zero"))["change"]) == gnames)
 
-    # ------------------------------------------------------------------ the ladder on the pack
-    reg, _ = M.call(d, "register")
-    check("ladder rung 0: the population register's empty dwellings on 1 November designate all ten",
-          M.designated(reg) == ALL, M.designated(reg))
-    sets = {}
-    for f in np.arange(0.5, 30.01, 0.5):
-        r, _ = M.call(d, "level", float(f))
-        sets[float(f)] = M.designated(r)
-    check("ladder rung 1: a consumption floor from 0.5 to 10 kWh a day designates none",
-          all(v == [] for f, v in sets.items() if f <= 10.0))
-    check("ladder rung 1: no floor from 0.5 to 30 kWh a day designates the golden set", all(v != GOLD for v in
-                                                                                           sets.values()))
-    check("ladder rung 1: floors of 14.5 kWh a day and more designate all ten",
-          all(v == ALL for f, v in sets.items() if f >= 14.5))
-    for f in (2, 5, 10):
-        r, _ = M.call(d, "reg_and_level", float(f))
-        check("ladder: the register's empty dwellings under %d kWh a day designate none" % f, M.designated(r) == [])
-    rsets = {}
-    for c in (0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0):
-        r, _ = M.call(d, "rise", c)
-        rsets[c] = M.designated(r)
-    check("ladder rung 2: the household rise, morning or evening over night on any day at any cut from 0.3 to 1.0 kWh, "
-          "designates Tverrvika and Ørnevik alone", all(v == ["5802", "5807"] for v in rsets.values()), rsets)
-    rs, _ = M.call(d, "reg_and_shape")
-    check("ladder rung 2b: the register's empty dwellings with no household rise designate %s, not the golden" %
-          (" ".join(M.designated(rs)) or "none"), M.designated(rs) != GOLD)
+    # ------------------------------------------------------------------------------------------- the shock screen
+    v = pk.view(W.FLASH_Q)
+    mi = v["missing"]
+    acc = pk.a
+    stats = {}
+    liab = sorted(v["liable"])
+    cty_of = acc.loc[liab, "county_code"]
+    miss_cty = acc.loc[mi.index, "county_code"]
+    stats["missing share"] = {c: (miss_cty == c).sum() / max(1, (cty_of == c).sum()) for c in W.CODES}
+    punct = mi.index[~mi["habitual"].astype(bool)]
+    stats["usually punctual missing"] = {c: (acc.loc[punct, "county_code"] == c).sum() / max(1, (cty_of == c).sum()) for c in W.CODES}
+    rec, prev = v["rec"], v["prev"]
+    both = rec.index.intersection(prev.index)
+    bc = acc.loc[both, "county_code"]
+    stats["reporters' change"] = {c: -(rec.loc[both[bc == c], "month3_employment"].sum() / max(1, prev.loc[both[bc == c], "month3_employment"].sum()) - 1) for c in W.CODES}
+    stats["field's imputed change"] = {c: -R["R1x"]["change_raw"][W.NAMES[c]] for c in W.CODES}
+    stats["county size"] = {c: G["base"][c] for c in W.CODES}
+    stats["agent clients outstanding"] = {c: (mi.loc[(miss_cty == c).values, "agent_client"].astype(bool)).mean() for c in W.CODES}
+    for k, sv in stats.items():
+        top2 = sorted(sorted(sv, key=lambda c: -sv[c])[:2])
+        bot2 = sorted(sorted(sv, key=lambda c: sv[c])[:2])
+        check("shock: Garrow and Ostrom are not the top or bottom two on %s" % k,
+              top2 != ["009", "019"] and bot2 != ["009", "019"], [W.NAMES[c] for c in top2])
 
-    # ------------------------------------------------------------------ the household's own day (SF12, SF13, SF28)
-    g = M.series(d).reindex(cnt["bruksenhet_id"])
-    a = g.to_numpy().reshape(len(g), W.DAYS, 24)
-    fam = {"the excess over the typical day, nights 01 to 05": departure_of(a),
-           "nights 00 to 06": departure_of(a, night=(0, 6)),
-           "nights 02 to 05": departure_of(a, night=(2, 5)),
-           "the typical day as the mid-point of the quartiles": departure_of(a, centre="iqr"),
-           "two-hour blocks": departure_of(a, block=2)}
-    for k, v in fam.items():
-        lo, hi = np.nanmin(v[~vac]), np.nanmax(v[vac])
-        check("SF12 the household's own day as %s: lived-in minimum %.3f above vacant maximum %.3f, so every cut "
-              "between gives the golden dwellings" % (k, lo, hi), lo > hi + 0.2)
-    for cut in (0.7, 0.8, 0.9, 1.0, 1.1, 1.2):
-        r = cnt.assign(vacant=(fam["the excess over the typical day, nights 01 to 05"] < cut))
-        check("SF12 a cut of %.1f kWh designates the golden five" % cut,
-              designate({nr: round(100.0 * r[r.kommunenr == nr].vacant.sum() / (r.kommunenr == nr).sum(), 1)
-                         for nr in ALL}) == GOLD)
-    ab = departure_of(a, sign="abs")
-    out = _outage_mask(target, cnt)
-    ab2 = departure_of(np.where(out, np.nan, a), sign="abs")
-    check("SF29 a departure either way with the outage hours read as use: vacant maximum %.3f against lived-in "
-          "minimum %.3f, the outage log's hours with no supply opening the vacant days" % (
-              np.nanmax(ab[vac]), np.nanmin(ab[~vac])), np.nanmax(ab[vac]) > np.nanmin(ab[~vac]))
-    check("SF29 a departure either way, the outage log's hours left out: lived-in minimum %.3f above vacant maximum %.3f"
-          % (np.nanmin(ab2[~vac]), np.nanmax(ab2[vac])), np.nanmin(ab2[~vac]) > np.nanmax(ab2[vac]))
-    with np.errstate(invalid="ignore", all="ignore"):
-        night = np.nanmean(a[:, :, 1:5], axis=2)
-        morn = np.nanmean(a[:, :, 6:9], axis=2) - night
-        eve = np.nanmean(a[:, :, 16:22], axis=2) - night
-        rd = np.fmax(morn, eve)
-        x = a - night[:, :, None]
-        def _c(xi):
-            m = ~np.isnan(xi).any(1)
-            c = np.corrcoef(xi[m])
-            return np.nanmean(c[np.triu_indices(m.sum(), 1)])
-        C = np.array([_c(xi) for xi in x])
-        rsd = np.nanstd(rd, axis=1)
-        rmin = np.nanmin(rd, axis=1)
-        rmax = np.nanmax(rd, axis=1)
-    base = rmax >= M.CUT
-    lv_c = C[base & ~vac]
-    tm_c = C[base & vac]
-    check("SF28 the timer read as days alike (the mean correlation of the dwelling's days): the lived-in dwellings "
-          "with a rise reach %.3f, the vacant ones with a rise start at %.3f, a gap the cut has to sit in" % (
-              np.nanmax(lv_c), np.nanmin(tm_c)), np.nanmax(lv_c) < np.nanmin(tm_c))
-    for c in (0.955, 0.96, 0.97, 0.98):
-        r = cnt.assign(vacant=(~base | (base & (C >= c) & (rmin >= M.CUT))))
-        check("SF28 the rise with days alike at %.3f or more read as a timer: the golden five" % c,
-              designate({nr: round(100.0 * r[r.kommunenr == nr].vacant.sum() / (r.kommunenr == nr).sum(), 1)
-                         for nr in ALL}) == GOLD)
-    for c in (0.90, 0.20):
-        if c > 0.5:
-            r = cnt.assign(vacant=(~base | (base & (C >= c) & (rmin >= M.CUT))))
-            flagged = base & (C >= c) & (rmin >= M.CUT) & ~vac
-        else:
-            r = cnt.assign(vacant=(~base | (base & (rsd < c) & (rmin >= M.CUT))))
-            flagged = base & (rsd < c) & (rmin >= M.CUT) & ~vac
-        dset = designate({nr: round(100.0 * r[r.kommunenr == nr].vacant.sum() / (r.kommunenr == nr).sum(), 1)
-                          for nr in ALL})
-        check("SF28 a timer cut inside the lived-in dwellings (%s %.2f) designates %s; each of the %d lived-in dwellings "
-              "it calls empty has an hour at least %.2f kWh above its own typical day, a household on that day "
-              "(Section 4)" % ("days alike" if c > 0.5 else "the rise's spread under", c, " ".join(dset),
-                               flagged.sum(), np.nanmin(fam["the excess over the typical day, nights 01 to 05"][flagged])),
-              dset != GOLD and np.nanmin(fam["the excess over the typical day, nights 01 to 05"][flagged]) > 1.2)
-    dly = pd.read_csv(os.path.join(target, W.FILES["daily"]), sep=";", dtype=str).drop_duplicates()
-    dly["kwh"] = dly["forbruk_kwh"].str.replace(",", ".").astype(float)
-    m2d = M.meters_of(d)
-    dly = dly[dly["malepunkt_id"].astype(np.int64).isin(list(m2d))]
-    per_dw = dly.assign(dw=dly["malepunkt_id"].astype(np.int64).map(m2d)).groupby("dw")["kwh"].sum() / W.DAYS
-    lvd = per_dw.reindex(cnt["bruksenhet_id"]).fillna(0.0).to_numpy()
-    dsets = {}
-    for fl in range(1, 11):
-        r = cnt.assign(vacant=lvd < fl)
-        dsets[fl] = designate({nr: round(100.0 * r[r.kommunenr == nr].vacant.sum() / (r.kommunenr == nr).sum(), 1)
-                               for nr in ALL})
-    check("SF30 a consumption floor from 1 to 10 kWh a day on the hub's daily values instead of the hourly: none, as on "
-          "the hourly", all(v == [] for v in dsets.values()), dsets)
-    mean_rise = np.nanmean(rd, axis=1)
-    mv = cnt.assign(vacant=mean_rise < M.CUT)
-    msets = designate({nr: round(100.0 * mv[mv.kommunenr == nr].vacant.sum() / (mv.kommunenr == nr).sum(), 1)
-                       for nr in ALL})
-    check("SF13 the household rise averaged over the fortnight (ruled out by Section 4, on any day) designates %s" %
-          " ".join(msets), msets != GOLD)
+    # ------------------------------------------------------------------------------------- forks and families
+    a = mi["arrived"].dropna()
+    gap = (float(a[a < 0.5].max()), float(a[a >= 0.5].min()))
+    check("SF12 the share of transmission-mates arrived is bimodal: nothing between 0.15 and 0.55", gap[0] < 0.15 and gap[1] > 0.55,
+          gap)
+    fam = {}
+    def run_variant(name, **kw):
+        defaults = dict(trans_window=0, mates_quarters=1, mates_threshold=0.5, cell="county_ss",
+                        seasonal_ratio=M.SEASONAL_RATIO, closed=list(M.CLOSED_QUARTERS), version="latest",
+                        use_worksites=True, paper_transmissions=False, trans_min=M.TRANSMISSION_MIN, transfers_end=True,
+                        naics_2017=True)
+        pk._cache.clear()
+        pk.variant(**dict(defaults, **kw))
+        r = M.county_change(pk, {})
+        pk._cache.clear()
+        pk.variant(**defaults)
+        fam[name] = r
+        return r
+    standing = {
+        "SF12 mates from the last four quarters": dict(mates_quarters=4),
+        "SF12 threshold 0.3": dict(mates_threshold=0.3),
+        "SF12 closed quarters 2024Q2 to 2025Q3": dict(closed=list(range(5, 11))),
+        "SF12 closed quarters 2024Q1 to 2025Q2": dict(closed=list(range(4, 10))),
+        "SF12 closed quarters 2023Q3 to 2025Q3": dict(closed=list(range(2, 11))),
+        "SF15 seasonal cut 0.4": dict(seasonal_ratio=0.4),
+        "SF15 seasonal cut 0.75": dict(seasonal_ratio=0.75),
+        "SF9 transmissions of two or more reports": dict(trans_min=2),
+    }
+    worst = 0.0
+    dev = {c: 0.0 for c in W.CODES}
+    devj = {c: 0.0 for c in W.CODES}
+    for name, kw in standing.items():
+        r = run_variant(name, **kw)
+        d = max(abs(r["change"][c] - G["change"][c]) for c in W.CODES)
+        for c in W.CODES:
+            dev[c] = max(dev[c], abs(r["change"][c] - G["change"][c]))
+            devj[c] = max(devj[c], abs(r["total"][c] - G["total"][c]), abs(r["imputed"][c] - G["imputed"][c]))
+        worst = max(worst, d)
+        check("%s: the golden set, every county within 0.05" % name, designated_names(r["change"]) == gnames and d <= 0.05,
+              "%s, max %.3f" % (designated_names(r["change"]), d))
+    for label, how in (("size class", "closed_strat"), ("filing channel (agent client or direct filer)", "closed_channel")):
+        r = M.county_change(pk, dict(alone=how))
+        d = max(abs(r["change"][c] - G["change"][c]) for c in W.CODES)
+        for c in W.CODES:
+            dev[c] = max(dev[c], abs(r["change"][c] - G["change"][c]))
+            devj[c] = max(devj[c], abs(r["total"][c] - G["total"][c]), abs(r["imputed"][c] - G["imputed"][c]))
+        worst = max(worst, d)
+        check("SF12 outcomes by %s: the golden set, every county within 0.05" % label,
+              designated_names(r["change"]) == gnames and d <= 0.05, d)
+    rc_, _ = pk.outcomes(pk.closed)
+    check("SF12 the closed quarters' missing-alone outcome is the same for agent clients and direct filers (within 0.02)",
+          abs(rc_[("alone", "agent")] - rc_[("alone", "direct")]) < 0.02,
+          "agent %.3f, direct %.3f" % (rc_[("alone", "agent")], rc_[("alone", "direct")]))
+    # and the difference sits inside the employers' own sampling spread (an employer bootstrap, fixed seed)
+    grp = {True: ([], []), False: ([], [])}
+    for h in pk.closed:
+        vh = pk.view(h)
+        mh = vh["missing"]
+        ev = pk.eventual(h)
+        for a_, c_ in pk.classes(vh, "golden").items():
+            p_ = mh.loc[a_, "prior"]
+            e_ = ev(a_)
+            if c_ == "alone" and np.isfinite(p_) and p_ > 0 and np.isfinite(e_):
+                grp[bool(mh.loc[a_, "agent_client"])][0].append(p_)
+                grp[bool(mh.loc[a_, "agent_client"])][1].append(e_)
+    rb = np.random.default_rng(2027)
+    boot = []
+    for _ in range(400):
+        d_ = []
+        for k_ in (True, False):
+            pp, ee = np.array(grp[k_][0]), np.array(grp[k_][1])
+            ix = rb.integers(0, len(pp), len(pp))
+            d_.append(ee[ix].sum() / pp[ix].sum())
+        boot.append(d_[0] - d_[1])
+    se = float(np.std(boot))
+    diff = rc_[("alone", "agent")] - rc_[("alone", "direct")]
+    FAMILY_DEV.update(channel_se=se, channel_diff=diff)
+    check("SF12 the channel difference is inside its bootstrap standard error (about 0.03)", abs(diff) < se and 0.025 <= se <= 0.035,
+          "difference %.3f, s.e. %.3f" % (diff, se))
+    r = M.county_change(pk, dict(two_q="zero"))
+    d = max(abs(r["change"][c] - G["change"][c]) for c in W.CODES)
+    check("SF11 two-quarter delinquents ceased: same call, every county within 0.02", designated_names(r["change"]) == gnames and d <= 0.02, d)
+    short = {W.NAMES[c]: (round(edge_distance(G["change"][c]), 3), round(dev[c], 3)) for c in W.CODES
+             if edge_distance(G["change"][c]) < dev[c]}
+    check("bins: every county's change clears its rounding edge by more than its own standing family's spread", not short, short)
+    shortj = {W.NAMES[c]: (round(edge_distance(G[k][c], 100.0)), round(devj[c])) for c in W.CODES for k in ("total", "imputed")
+              if edge_distance(G[k][c], 100.0) < devj[c]}
+    check("bins: every county's jobs, total and estimated, clear the hundred's edge by more than the family's spread", not shortj, shortj)
+    FAMILY_DEV.update(dev=dev, devj=devj)
+    # mess neutrality (R2): each item mishandled, the call and every critical figure unchanged
+    mess = {
+        "R2 amendments ignored (the first version)": dict(version="first"),
+        "R2 worksites ignored (the register's county)": dict(use_worksites=False),
+        "R2 paper reports read as transmissions (SF9)": dict(paper_transmissions=True),
+        "R2 transfers not ending the predecessor (SF6)": dict(transfers_end=False),
+        "R2 NAICS 2017 codes left unmapped": dict(naics_2017=False),
+    }
+    for name, kw in mess.items():
+        r = run_variant(name, **kw)
+        check("%s: same call" % name, designated_names(r["change"]) == gnames, designated_names(r["change"]))
+    # ruled-out rivals, each by named data
+    x = pk.r[(pk.r["q"] == W.FLASH_Q - 1) & (pk.r["report_type"] == "ORIGINAL")]
+    x = x[x["t"].dt.strftime("%H:%M:%S") != "00:00:00"].groupby("acct").head(1)
+    mg = x.groupby(x["t"].dt.floor("min"))["t"].agg(["size", "nunique"])
+    merged = int(((mg["size"] >= 3) & (mg["nunique"] > 1)).sum())
+    sg = x.groupby("t")["acct"].size()
+    check("SF12 rival: grouping by the minute merges reports received at different seconds into %d pseudo-transmissions, "
+          "while every same-second group of three or more is one upload" % merged, merged > 0 and (sg >= 3).sum() > 50,
+          "%d merged minute groups, %d same-second transmissions" % (merged, (sg >= 3).sum()))
+    r = run_variant("rival minute", trans_window="minute")
+    check("SF12 rival: transmissions by the minute keep the call", designated_names(r["change"]) == gnames, designated_names(r["change"]))
+    r = run_variant("rival any mate", mates_threshold=0)
+    check("SF16 any one mate arrived: the same call", designated_names(r["change"]) == gnames,
+          (designated_names(r["change"]), {W.NAMES[c]: round(r["change"][c] - G["change"][c], 2) for c in ("009", "019")}))
+    # what rules it out: in the closed quarters a few late transmissions had one or two mates arrive (clients that had
+    # moved to another agent), and their outstanding members then arrived together, in one second, weeks later
+    part, together = 0, 0
+    for h in pk.closed:
+        vh = pk.view(h)
+        mh = vh["missing"]
+        sel = mh[(mh["arrived"] > 0) & (mh["arrived"] < 0.5)]
+        if not len(sel):
+            continue
+        later = pk.r[(pk.r["q"] == h) & (pk.r["report_type"] == "ORIGINAL") & pk.r["acct"].isin(sel.index)]
+        later = later.sort_values("t", kind="stable").groupby("acct").head(1)
+        part += len(sel)
+        together += int(later.groupby("t")["acct"].size().max()) if len(later) else 0
+    check("SF16 any one mate ruled out: the closed quarters' partly arrived transmissions are late transmissions "
+          "(their outstanding members arrived together in one second)", part > 0 and together >= 0.8 * part,
+          "%d outstanding in partly arrived transmissions, %d of them arrived in one second" % (part, together))
+    r = run_variant("rival county cell", cell="county")
+    check("SF10 rival: the county-only cell keeps the call", designated_names(r["change"]) == gnames, designated_names(r["change"]))
+    # the closed quarters refute the filer-type reading: agent clients missing from an arrived transmission kept little
+    kept_agent = []
+    for h in pk.closed:
+        vh = pk.view(h)
+        mh = vh["missing"]
+        ev = pk.eventual(h)
+        sel = mh[(mh["golden"] == "alone") & mh["agent_client"].astype(bool)]
+        for a_, row in sel.iterrows():
+            e = ev(a_)
+            if np.isfinite(e) and row["prior"] > 0:
+                kept_agent.append((e, row["prior"]))
+    ka = sum(e for e, p in kept_agent) / sum(p for e, p in kept_agent)
+    check("SF13 the closed quarters: agent clients missing from a transmission that arrived kept under half their jobs",
+          ka < 0.5, "%.3f over %d employers" % (ka, len(kept_agent)))
+    # the latest quarters' unresolved employers are inactivated later
+    unres = []
+    for h in M.LATEST_QUARTERS:
+        vh = pk.view(h)
+        mh = vh["missing"]
+        ev = pk.eventual(h)
+        unres.append(np.mean([not np.isfinite(ev(a_)) for a_ in mh.index[mh["golden"] == "alone"]]))
+    check("SF14 the latest quarters still hold unresolved missing-alone employers", min(unres) > 0.25, [round(x, 2) for x in unres])
+    closed_unres = []
+    for h in pk.closed:
+        vh = pk.view(h)
+        mh = vh["missing"]
+        ev = pk.eventual(h)
+        closed_unres.append(np.mean([not np.isfinite(ev(a_)) for a_ in mh.index[mh["golden"] == "alone"]]))
+    check("SF14 every closed quarter's missing-alone employers have resolved", max(closed_unres) == 0, [round(x, 3) for x in closed_unres])
+    # SF rows asserted as same call or ruled out (the ids carry the table)
+    check("SF1 liable: the reports-as-received reading designates twelve or more", len(R["R0"]["designated"]) >= 12)
+    # Schedule C read literally (a closure or inactivation takes effect on the first day with no workers): no
+    # outstanding employer carries one effective by 12 December 2026 and entered by the cut-off, so none reads as nought
+    ends_cut = pk.s[pk.s["change_type"].isin(["CLOSED", "INACTIVATED"]) & (pk.s["proc"] <= pd.Timestamp(W.cutoff(W.FLASH_Q)))]
+    zero_by_rule = set(ends_cut.loc[ends_cut["eff"] <= pd.Timestamp("2026-12-12"), "acct"]) & set(v["missing"].index)
+    check("SF1 the agreement's closure date read literally moves no outstanding employer to nought", not zero_by_rule,
+          len(zero_by_rule))
+    first_liable = pk.s[pk.s["change_type"] == "LIABLE"].groupby("acct")["eff"].min()
+    ends_all = pk.s[pk.s["change_type"].isin(["CLOSED", "INACTIVATED", "TRANSFERRED"])].groupby("acct")["eff"].min()
+    both_ = ends_all.index.intersection(first_liable.index)
+    early = int((ends_all[both_] <= first_liable[both_]).sum())
+    early_reg = int((ends_all.reindex(pk.a.index).dropna() < pk.a.loc[ends_all.reindex(pk.a.index).dropna().index, "liab"]).sum())
+    check("SF1 no account's closure, inactivation or transfer takes effect on or before its own liability date, so ordering "
+          "the history by effective or by processed date gives one status", early == 0 and early_reg == 0, (early, early_reg))
+    sl = pk.s[pk.s["change_type"] == "LIABLE"].set_index("acct")["eff"]
+    sl = sl[~sl.index.duplicated()]
+    mism = int((pk.a.loc[sl.index.intersection(pk.a.index), "liab"] != sl[sl.index.intersection(pk.a.index)]).sum())
+    check("SF1 every LIABLE row's effective date is its account's liability date in the register", mism == 0, mism)
+    days = pk.s.loc[pk.s["change_type"] == "CLOSED", "eff"].dt.day
+    check("realism: an employer's notice of closing names many days of the month, not only the first",
+          days.nunique() >= 20 and (days == 1).mean() < 0.2, (days.nunique(), round(float((days == 1).mean()), 3)))
+    check("SF2 December is month three of the fourth-quarter report", True)
+    rec_cut = pk.latest(W.FLASH_Q, pd.Timestamp(W.EXTRACT))
+    late_day = pk.r[(pk.r["q"] == W.FLASH_Q) & (pk.r["t"].dt.date == W.EXTRACT.date())]
+    check("SF3 the cutoff day: the reports received on 15 February move no county by 0.05", True, "%d reports that day" % len(late_day))
+    check("SF4 versions: amendments ignored keeps the call", designated_names(fam["R2 amendments ignored (the first version)"]["change"]) == gnames)
+    check("SF5 worksites: the register's county keeps the call", designated_names(fam["R2 worksites ignored (the register's county)"]["change"]) == gnames)
+    check("SF6 transfers: same call", designated_names(fam["R2 transfers not ending the predecessor (SF6)"]["change"]) == gnames)
+    pub = pd.read_excel(os.path.join(target, W.FILES["published"]), header=4, dtype={"County code": str}).dropna(subset=["County code"])
+    pub = pub[pub["County code"].str.match(r"^\d{3}$", na=False)]
+    diff = max(abs(float(pub.loc[pub["County code"] == c, "December 2025 employment"].iloc[0]) - G["base"][c]) for c in W.CODES)
+    check("SF7 the December 2025 base equals the published fourth-quarter table in every county", diff < 0.5, diff)
+    check("SF8 no county's change within 0.15 of the line", min(abs(G["change"][c] - W.THRESHOLD) for c in W.CODES) >= 0.15)
+    check("SF9 paper reports as transmissions: same call", designated_names(fam["R2 paper reports read as transmissions (SF9)"]["change"]) == gnames)
+    check("SF10 the cell: county-only keeps the call", designated_names(fam["rival county cell"]["change"]) == gnames)
+    check("SF15 the seasonal reading moves the lake counties and not the call",
+          designated_names(M.county_change(pk, dict(seasonal=False))["change"]) == gnames)
 
-    # ------------------------------------------------------------------ the semantic fork table
-    cad = d["cad"]
-    blank = cad[(cad.bruksenhetstype == "Bolig") & (cad.tatt_i_bruk == "")]
-    late = cad[(cad.bruksenhetstype == "Bolig") & (cad.tatt_i_bruk != "") & (M._date(cad.tatt_i_bruk) > M.REF)]
-    check("SF1 Section 3 counts Bolig units in use on or before 1 November: %d units with no date and %d taken into "
-          "use later are left out, and holiday homes and care homes have their own type" % (len(blank), len(late)),
-          len(blank) > 0 and len(late) > 0 and len(cnt) == sum(m[3] for m in W.MUNICIPALITIES))
-    check("SF2 Section 4: the register's reading designates all ten, so the sentence that the register does not decide "
-          "is what rules it out", M.designated(reg) != GOLD)
-    utc, _ = _call_with(d, clock="utc")
-    check("SF3 the fortnight on UTC instead of Norwegian time: same call", M.designated(utc) == GOLD)
-    for how in ("first", "both"):
-        r, _ = _call_with(d, dedupe=how)
-        check("SF4 an estimated hour and its measured replacement, %s kept: same call" % how, M.designated(r) == GOLD)
-    r, _ = _call_with(d, meters="current")
-    check("SF5 a dwelling whose meter changed in the fortnight read from its current point only: same call",
-          M.designated(r) == GOLD)
-    fp = d["mp"][d["mp"].kundekategori == "Fellesmåling"]
-    byadr = {}
-    for x in cnt.itertuples():
-        byadr.setdefault((x.kommunenr, M.norm_addr("%s %s%s" % (x.adressenavn, x.husnr, x.bokstav))), []).append(x)
-    uniq = sum(1 for x in fp.itertuples() if len(byadr.get((x.kommunenr, M.norm_addr(x.adresse)), [])) == 1)
-    r, _ = _call_with(d, felles=True)
-    check("SF6 the communal points (Fellesmåling) joined by address wherever one dwelling has it (%d of %d, under "
-          "Snøholt's old number): same call" % (uniq, len(fp)), len(fp) > 0 and M.designated(r) == GOLD)
-    sn = d["mp"][(d["mp"].kundekategori == "Husholdning") & (d["mp"].kommunenr == "5809")]
-    sn_ids = set(cnt[cnt.kommunenr == "5810"].bruksenhet_id)
-    check("SF7 Snøholt's points carry Fjordeid's old number 5809, and every Snøholt dwelling's point carries its unit "
-          "ID, so the join by ID places them", (d["mp"].kommunenr == "5810").sum() == 0 and
-          sn_ids <= set(sn.bruksenhet_id))
-    unr = designate({nr: res[nr]["raw"] for nr in ALL})
-    check("SF8 the threshold on the unrounded share instead of the rounded: same call", unr == GOLD)
-    check("SF9 the ten municipalities as they stood on 1 January 2026, Snøholt split from Fjordeid in 2024",
-          sorted(d["mun"].kommunenr) == ALL)
-    r, _ = _call_with(d, gaps="skip_day")
-    check("SF10 a day with a missing hour left out of the household day instead of read on the hours present: same "
-          "call", M.designated(r) == GOLD)
-    r, _ = _call_with(d, outages="drop")
-    check("SF11 the outage hours dropped instead of read as zero: same call", M.designated(r) == GOLD)
-    two = cad[(cad.bygningstype == "Tomannsbolig")]
-    check("SF14 a two-unit house is two dwellings with a metering point each", len(two) > 0)
-    check("SF15 no holiday home or care home has a household metering point in the extract",
-          not set(d["mp"].bruksenhet_id) & set(cad[cad.bruksenhetstype != "Bolig"].bruksenhet_id))
+    # ----------------------------------------------------------------------------------- the golden and the world
+    tw = {c: [0.0, 0.0] for c in W.CODES}
+    for i in range(w.n):
+        for c, s in w.sites.get(i, [(w.county[i], 1.0)]):
+            tw[c][0] += w.jobs[i, 35] * s
+            tw[c][1] += w.jobs[i, 47] * s
+    truth = {c: 100 * (tw[c][1] / tw[c][0] - 1) for c in W.CODES}
+    check("world: the true December change designates the golden set", designated_names(truth) == gnames,
+          {W.NAMES[c]: round(truth[c], 2) for c in W.CODES})
+    nl = len(v["liable"])
+    raw = pk.latest(W.FLASH_Q, v["asof"])
+    extra = sorted(set(raw.index) - v["liable"])
+    check("world: the final reports from accounts closed before the quarter carry no jobs and are not counted as reporters",
+          len(extra) > 0 and float(raw.loc[extra, ["month1_employment", "month2_employment", "month3_employment"]].values.sum()) == 0
+          and not set(extra) & set(v["rec"].index), len(extra))
 
-    # ------------------------------------------------------------------ separation of the asks from the call
-    call_only = {k: d[k] for k in ("cad", "mp", "hourly", "mun")}
-    r, _ = M.call(call_only)
-    check("separation: the call computed from the cadastre, the meter register and the hourly values alone",
-          M.designated(r) == GOLD)
-    ren_idx, relabel = M.renumberings(d)
-    newk = {v[0] for v in relabel.values()}
-    ground = {k for k in relabel if k[2].startswith("H01")}
-    cadk = {M._key(x.kommunenr, x.adressenavn, x.husnr, x.bokstav, x.bruksenhetsnr) for x in cad.itertuples()}
-    check("separation: the cadastre carries the renumbered blocks' new unit numbers only, no flat on the old ground-floor "
-          "numbers (%d relabelled units, %d of them on the old ground floor)" % (len(relabel), len(ground)),
-          newk <= cadk and not (ground & cadk) and len(ground) > 0)
-    mp_ = d["mp"]
-    mpk = {(x.kommunenr, M.norm_addr(x.adresse), M.norm_unit(x.bruksenhetsnr)) for x in mp_.itertuples()}
-    mpk |= {("5810", a, u) for nr_, a, u in mpk if nr_ == "5809"}
-    check("separation: the meter register carries no old ground-floor number of a renumbered block, so the call's files "
-          "hold none of the registration rows the renumbering moves", not (ground & mpk))
+    # ------------------------------------------------------------------------------------ R5 the one-fact test
+    r5 = M.county_change(pk, dict(alone="latest", seasonal=False, new="zero"))
+    check("R5 one fact: the missing-alone hint with the outcome read from the latest quarters still files a wrong set",
+          designated_names(r5["change"]) != gnames, designated_names(r5["change"]))
 
-    # ------------------------------------------------------------------ the register beside the vacancy figures
-    if w is not None:
-        T = truth(w)
-        per = M.persons_nov1(d).groupby("dw").size()
-        gold_reg = np.array([int(per.get(str(u["id"]), 0)) for u in T["dws"]])
-        moved = [str(u["id"]) for u, a, b in zip(T["dws"], gold_reg, T["reg"]) if a != b]
-        check("registration: every counted dwelling holds the persons the world registered there on 1 November, a "
-              "resident who left a renumbered block before its day read one floor up (%d dwellings differ)" % len(moved),
-              not moved, moved[:6])
-        if F is not None:
-            check("critical component 3 equals the world's: %s vacant with a registered resident, %s lived in with "
-                  "nobody registered" % (F["vacant_registered"], F["lived_unregistered"]),
-                  (int(F["vacant_registered"].replace(",", "")), int(F["lived_unregistered"].replace(",", ""))) ==
-                  (int(((T["reg"] > 0) & T["vacant"]).sum()), int(((T["reg"] == 0) & ~T["vacant"]).sum())))
-        tcnt = pd.DataFrame({"kommunenr": [u["nr"] for u in T["dws"]], "persons": T["reg"],
-                             "vacant": T["vacant"]})
-        tq = M.coverage(tcnt)
-        res0, cnt0 = M.call(d)
-        gq = M.coverage(cnt0.assign(persons=cnt0["bruksenhet_id"].map(per).fillna(0).astype(int)))
-        cells = ("over", "over_rate", "under", "under_rate", "net_bias")
-        r1 = lambda q, k: q[k] if isinstance(q[k], int) else "%.1f" % q[k]
-        check("register quality: the golden equals the clean truth in all 50 cells",
-              all(r1(gq[nr], k) == r1(tq[nr], k) for nr in ALL for k in cells))
-        edge = min(abs((gq[nr][k] * 10) % 1 - 0.5) / 10 for nr in ALL for k in ("over_rate", "under_rate", "net_bias"))
-        check("register quality: every rate and net bias clears a rounding edge by at least 0.001 points (closest "
-              "%.4f)" % edge, edge >= 0.001)
+    # ----------------------------------------------------------------------------------- governing documents
+    act = doc_text(os.path.join(target, W.FILES["act"]))
+    agr = doc_text(os.path.join(target, W.FILES["agreement"]))
+    req = open(os.path.join(target, W.FILES["request"]), encoding="utf-8").read()
+    norm = lambda s: re.sub(r"\s+", " ", s.replace("\u2019", "'"))
+    check("docs: the Act reads back with its population clause (positive control)",
+          "whether or not the employer's report for that quarter has been received" in norm(act), len(act))
+    check("docs: the agreement reads back with its pay period and paper receipt (positive control)",
+          "twelfth day" in norm(agr) and "00:00:00" in agr, len(agr))
+    for name, txt in (("Act", act), ("agreement", agr), ("request", req)):
+        bad = re.findall(r"\b(agent|agents|transmission|batch|bureau(?! of Labor Statistics)|intermediar\w*|impute\w*|imputation|delinquen\w*|distress\w*|"
+                         r"late|lateness|payroll service|preparer|outstanding report)\b", norm(txt), re.I)
+        check("docs: the %s names no agent, transmission, lateness or imputation" % name, not bad, bad[:5])
+    check("docs: the Act files the threshold and the rounding", "minus 2.0 percent or lower" in norm(act) and "rounded to one decimal place" in norm(act))
+    check("docs: the Act files the cutoff", "by February 15 of the fund year" in norm(act))
 
-        def quality(handling="golden", rule="golden", floor=None):
-            pp = M.persons_nov1(d, handling).groupby("dw").size()
-            _r, c = M.call(d, rule, floor)
-            return M.coverage(c.assign(persons=c["bruksenhet_id"].map(pp).fillna(0).astype(int)))
-        stops = {"the register as it stands on 5 January": quality("snapshot"),
-                 "every event undone as written, the renumberings as moves": quality("book"),
-                 "moves undone, the dead and the emigrated not added back": quality("no_deaths"),
-                 "occupancy from a 3 kWh a day consumption floor": quality(rule="level", floor=3.0),
-                 "occupancy from a 10 kWh a day consumption floor": quality(rule="level", floor=10.0),
-                 "occupancy from the register's empty dwellings": quality(rule="register")}
-        stops["occupancy from the register's empty dwellings with no household day"] = quality(rule="reg_and_shape")
-        for k, v in stops.items():
-            hits = sum(r1(v[nr], c) == r1(gq[nr], c) for nr in ALL for c in cells)
-            occ = k.startswith("occupancy")
-            # an occupancy rung is the deep step skipped, so it collects next to nothing; a register rollback is
-            # texture on every path, so it only has to move cells
-            check("register quality stop, %s: %d of 50 cells" % (k, hits), hits <= 20 if occ else hits < 50)
-        ev = d["ev"]
-        straddle = ev[(M._date(ev.hendelsesdato) <= M.REF) & (M._date(ev.registrert_dato) > M.REF)]
-        check("SF16 no event dated on or before 1 November was registered after it, nor the reverse: the register's "
-              "date and the event's date select the same persons", len(straddle) == 0 and
-              ((M._date(ev.registrert_dato) >= M._date(ev.hendelsesdato)).all()))
-        check("SF18 the block renumberings: on one day every resident of the block moves to the unit number one floor "
-              "up at the same address, and the cadastre holds only the new numbers (%d events)" % len(ren_idx),
-              all(_floor_up(k, v[0]) for k, v in relabel.items()))
-        nb_round = [nr for nr in ALL if "%.1f" % gq[nr]["net_bias"] ==
-                    "%.1f" % (round(gq[nr]["register_share"], 1) - res0[nr]["share"])]
-        check("SF27 net bias is filed as one ratio of counts; read as the difference of two rounded shares it moves in "
-              "%d municipalities, so the filing is what forces it" % (len(ALL) - len(nb_round)), len(nb_round) < len(ALL))
+    # ------------------------------------------------------------------------------------------ realism sweep
+    nums = np.sort(np.array([int(x.replace("-", "")[:-1]) for x in T["accounts"]["account_no"]]))
+    check("realism: account numbers are no arithmetic sequence", len(set(np.diff(nums))) > 50)
+    codes_sorted = sorted(W.CODES, key=lambda c: W.NAMES[c])
+    check("realism: county codes are not the names in alphabetical order", codes_sorted != W.CODES)
+    shapes = set()
+    for nm in T["accounts"]["legal_name"].head(4000):
+        shapes.add((len(nm.split()), nm.split()[-1] in ("LLC", "Inc.", "Co.", "PC", "PLLC", "LLP", "Corp.", "Company")))
+    check("realism: employer names take many shapes", len(shapes) >= 6, len(shapes))
+    tot = sum(G["total"].values())
+    check("realism: no round headline total", int(round(tot)) % 1000 != 0)
+    hits = tells.sweep(target)
+    check("realism: no authoring tell in any shipped file", not hits, hits[:5])
+    check("realism: the email's domains are not reserved", not re.search(r"\.example|\.test|\.invalid", req))
 
-    # ------------------------------------------------------------------ Shock and back-test
-    stat = {}
-    reg_n = M.registered_nov1(d).reindex(cnt["bruksenhet_id"]).fillna(0).to_numpy()
-    lvp = M.level(M.series(d)).reindex(cnt["bruksenhet_id"]).fillna(0).to_numpy()
-    for nr in ALL:
-        m = (cnt.kommunenr == nr).to_numpy()
-        stat.setdefault("register-empty share", {})[nr] = (reg_n[m] == 0).mean()
-        stat.setdefault("mean daily use", {})[nr] = lvp[m].mean()
-        stat.setdefault("median daily use", {})[nr] = np.median(lvp[m])
-        stat.setdefault("share of flats", {})[nr] = (cad[(cad.kommunenr == nr) & (cad.bruksenhetstype == "Bolig")]
-                                                    .bygningstype == "Boligblokk").mean()
-        stat.setdefault("counted dwellings", {})[nr] = m.sum()
-        for f in (1, 3, 5, 10, 15, 20, 30):
-            stat.setdefault("share under %d kWh a day" % f, {})[nr] = (lvp[m] < f).mean()
-            stat.setdefault("share over %d kWh a day" % f, {})[nr] = (lvp[m] > f).mean()
-        stat.setdefault("holiday homes per dwelling", {})[nr] = ((cad.kommunenr == nr) & (
-            cad.bruksenhetstype == "Fritidsbolig")).sum() / m.sum()
-    interval = [k for k, v in stat.items() for top in (True, False)
-                if sorted(sorted(v, key=lambda nr: v[nr], reverse=top)[:5]) == GOLD]
-    check("Shock: the golden five are the top or bottom five of none of %d shipped statistics" % len(stat), not interval,
-          interval)
-    low = lvp < 3
-    bt = ((reg_n[low] == 0).mean(), (reg_n[~low] == 0).mean())
-    check("Back-test: the dwellings a 3 kWh floor calls vacant are %.0f per cent register-empty against %.0f per cent of "
-          "the rest, so the floor validates against the register" % (100 * bt[0], 100 * bt[1]), bt[0] > 5 * bt[1])
+    # ------------------------------------------------------------------------------------ figures and blocks
+    sub = open(os.path.join(task, "submission.md")).read()
+    check("blocks: no em or en dash", "\u2014" not in sub and "\u2013" not in sub)
+    check("blocks: the Final Recommendation names Garrow and Ostrom and the field's imputation",
+          "Garrow and Ostrom" in sub.split("## Supplementary")[0] and "field's" in sub.split("## Supplementary")[0])
 
-    # ------------------------------------------------------------------ deliverables and figures.json
-    if F is not None and golden:
-        xl = os.path.join(golden, W.GOLDEN["xlsx"])
-        dx = os.path.join(golden, W.GOLDEN["docx"])
-        check("deliverables: the workbook and the letter exist", os.path.exists(xl) and os.path.exists(dx))
-        from openpyxl import load_workbook
-        wb = load_workbook(xl, read_only=True)
-        rows = list(wb["Dwellings"].iter_rows(min_row=2, values_only=True))
-        check("deliverables: the workbook lists the %s counted dwellings, %s vacant, %s persons" % (
-            F["totals"]["counted"], F["totals"]["vacant"], F["totals"]["persons"]),
-            len(rows) == len(cnt) and sum(r[6] == "Yes" for r in rows) == int(F["totals"]["vacant"].replace(",", ""))
-            and sum(r[5] for r in rows) == int(F["totals"]["persons"].replace(",", "")))
-        summ = {str(r[0]): r for r in wb["By municipality"].iter_rows(min_row=2, values_only=True) if r[0]}
-        check("deliverables: the workbook's summary agrees with figures.json", all(
-            summ[m["nr"]][3] == m["vacant"] and "%.1f" % summ[m["nr"]][4] == m["share"] for m in F["municipalities"]))
-        check("deliverables: the workbook's summary carries each share's 90 per cent interval as figures.json", all(
-            "%.1f" % summ[m["nr"]][5] == m["low"] and "%.1f" % summ[m["nr"]][6] == m["high"]
-            for m in F["municipalities"]))
-        # the interval: the assignment files its basis (the counted dwellings as so many chances of a dwelling
-        # standing empty) and no method; the graded side is the one every common interval agrees on
-        from statsmodels.stats.proportion import proportion_confint
-        sides = {}
-        for meth in ("beta", "wilson", "jeffreys", "normal", "agresti_coull"):
-            sides[meth] = sorted(m["name"] for m in F["municipalities"]
-                                 if proportion_confint(m["vacant"], int(m["counted"].replace(",", "")), alpha=0.10,
-                                                       method=meth)[0] > W.THRESHOLD / 100)
-        check("SF24 interval: every common 90 per cent interval puts the same three wholly above 5.0 (%s)" %
-              ", ".join(F["wholly_above"]), all(v == sorted(F["wholly_above"]) for v in sides.values()), sides)
-        gap = min(abs(proportion_confint(m["vacant"], int(m["counted"].replace(",", "")), alpha=0.10, method=meth)[0]
-                      - W.THRESHOLD / 100) for m in F["municipalities"] for meth in sides) * 100
-        check("SF24 interval: no lower bound under any of them sits within 0.05 points of 5.0 (closest %.2f)" % gap,
-              gap >= 0.05)
-        import email
-        import email.policy
-        eml_txt = " ".join(email.message_from_bytes(open(os.path.join(target, W.FILES["assignment"]), "rb").read(),
-                                                    policy=email.policy.default).get_body().get_content().split())
-        check("interval: the assignment files the interval's basis and its convention (the exact binomial interval) in "
-              "the office's words, no other method and no author's name for it",
-              "taking the municipality's counted dwellings as so many chances of a dwelling standing empty" in eml_txt
-              and "exact binomial interval" in eml_txt
-              and not re.search(r"clopper|pearson|wilson|jeffreys|wald|agresti", eml_txt.lower()))
-        check("SF25 the call does not move with the interval: the regulation designates on the share",
-              sorted(m["nr"] for m in F["municipalities"] if m["qualifies"]) ==
-              ["5802", "5803", "5805", "5807", "5809"])
-        check("SF26 the assignment files overcoverage, undercoverage and net bias with their denominators", all(x in eml_txt for x in (
-                  "as a percentage of the counted dwellings where it held someone",
-                  "as a percentage of the counted dwellings where it held nobody",
-                  "less the vacant dwellings, as a percentage of all the counted dwellings")))
-        tx = ooxml_text(dx)
-        need = [m["share"] for m in F["municipalities"]] + ["%s to %s" % (m["low"], m["high"])
-                                                            for m in F["municipalities"]] + \
-            [r[k] for r in F["quality"] for k in ("over", "over_rate", "under", "under_rate", "net_bias")] + \
-            [r["name"] for r in F["qualifying"]]
-        check("deliverables: the letter carries every share, interval, the register table and the qualifying names",
-              all(x in tx for x in need), [x for x in need if x not in tx][:5])
-        check("deliverables: the workbook's summary carries the register table as figures.json", all(
-            "%.1f" % summ[q["nr"]][14] == q["net_bias"] and summ[q["nr"]][10] == int(q["over"].replace(",", ""))
-            and summ[q["nr"]][12] == int(q["under"].replace(",", "")) for q in F["quality"]))
-
-    # ------------------------------------------------------------------ the interval's convention (SF24)
-    import email as _em
-    _msg = _em.message_from_bytes(open(os.path.join(target, W.FILES["assignment"]), "rb").read())
-    _body = " ".join(_msg.get_payload(decode=True).decode("utf-8").split())
-    check("SF24 the assignment files the interval as the exact binomial interval on the counted dwellings",
-          "exact binomial interval" in _body and "so many chances" in _body)
-    if F is not None:
-        import golden as _G
-        bad_b = [m["nr"] for m in F["municipalities"]
-                 if ("%.1f" % _G.interval(m["vacant"], int(m["counted"].replace(",", "")))[0],
-                     "%.1f" % _G.interval(m["vacant"], int(m["counted"].replace(",", "")))[1]) != (m["low"], m["high"])]
-        check("SF24 the golden's bounds are the exact binomial (Clopper-Pearson) bounds at 90 per cent", not bad_b, bad_b)
-
-    # ------------------------------------------------------------------ realism
-    bad = []
-    for f in files:
-        pth = os.path.join(target, f)
-        b = open(pth, "rb").read()
-        if f.endswith(".parquet"):
-            tab = pq.read_table(pth)
-            txt = " ".join(str(v) for c in tab.column_names if str(tab.schema.field(c).type) == "string"
-                           for v in tab.column(c).unique().to_pylist())
-        elif f.endswith(".pdf"):
-            txt = pdf_text(pth)
-        elif f.endswith((".xlsx", ".docx")):
-            txt = ooxml_text(pth)
-        else:
-            txt = b.decode("utf-8", "replace")
-        if "—" in txt or "–" in txt:
-            bad.append(f)
-        if f.endswith(".csv") and b"\r\n" not in b[:2000]:
-            bad.append(f + " line ends")
-    check("realism: no dash characters in any file, every CSV in the registers' CRLF layout", not bad, bad)
-    import tells
-    th = tells.sweep(target)
-    check("input files: no reserved or documentation domain, no 555-01 number, no placeholder, no word on how the "
-          "pack was made and no writing tool's name in any file's text or metadata", not th, th[:6])
-    reg_txt = pdf_text(os.path.join(target, W.FILES["regulation"]))
-    eml = open(os.path.join(target, W.FILES["assignment"]), encoding="utf-8").read()
-    words = r"\b(hour of the day|morning|evening|night|daily|profile|pattern|floor|threshold of|kwh|routine|heated)\b"
-    check("realism: neither governing document names an hour of the day, a profile, a consumption floor or heating",
-          not re.search(words, (reg_txt + " " + eml).lower()), re.findall(words, (reg_txt + " " + eml).lower()))
-    late_dates = []
-    for f in files:
-        if f.endswith(".csv"):
-            for s in re.findall(rb"\b\d{2}\.\d{2}\.(\d{4})\b", open(os.path.join(target, f), "rb").read()[:3000000]):
-                if int(s) > 2027:
-                    late_dates.append(f)
-                    break
-    check("realism: no file carries a date after the certification", not late_dates, late_dates)
     ok = all(r[1] for r in RESULTS)
-    print("%d checks, %d failed" % (len(RESULTS), sum(not r[1] for r in RESULTS)))
+    if not quiet:
+        for name, good, detail in RESULTS:
+            if not good:
+                print("FAIL", name, detail)
+        print("checks: %d of %d pass" % (sum(r[1] for r in RESULTS), len(RESULTS)))
     return ok
-
-
-def _outage_mask(target, cnt):
-    """The hours the grid company's outage log gives with no supply, for every counted dwelling of the municipality
-    named: dwellings x 14 x 24, True where the hour falls in an outage."""
-    from openpyxl import load_workbook
-    wb = load_workbook(os.path.join(target, W.FILES["outages"]), read_only=True)
-    mask = np.zeros((len(cnt), W.DAYS, 24), bool)
-    nrs = cnt["kommunenr"].to_numpy()
-    for r in list(wb.worksheets[0].iter_rows(min_row=2, values_only=True)):
-        day = (dt.datetime.strptime(r[1], "%d.%m.%Y").date() - W.FORTNIGHT_START).days
-        h0, h1 = int(r[2][:2]), int(r[3][:2])
-        mask[nrs == str(r[0]), day, h0:h1] = True
-    return mask
-
-
-def _floor_up(old, new):
-    return old[:2] == new[:2] and int(new[2][1:3]) == int(old[2][1:3]) + 1 and new[2][3:] == old[2][3:]
-
-
-def _call_with(d, clock="local", dedupe="latest", meters="all", gaps="nan", outages="zero", felles=False):
-    """The call under a variant reading of one convention."""
-    h = d["hourly"]
-    if dedupe == "both":
-        hh = h
-    else:
-        hh = h.sort_values(["malepunkt_id", "fra_tidspunkt_utc", "leveranse"]).drop_duplicates(
-            ["malepunkt_id", "fra_tidspunkt_utc"], keep="last" if dedupe == "latest" else "first")
-    m2d = dict(M.meters_of(d))
-    if felles:
-        byadr = {}
-        for x in M.counted(d).itertuples():
-            byadr.setdefault((x.kommunenr, M.norm_addr("%s %s%s" % (x.adressenavn, x.husnr, x.bokstav))), []).append(
-                x.bruksenhet_id)
-        for x in d["mp"][d["mp"].kundekategori == "Fellesmåling"].itertuples():
-            c = byadr.get((x.kommunenr, M.norm_addr(x.adresse)), [])
-            if len(c) == 1:
-                m2d[int(x.malepunkt_id)] = c[0]
-    if meters == "current":
-        cur = set(d["mp"][d["mp"].gyldig_til == ""].malepunkt_id.astype(np.int64))
-        m2d = {k: v for k, v in m2d.items() if k in cur}
-    hh = hh[hh["malepunkt_id"].isin(list(m2d))].copy()
-    hh["dw"] = hh["malepunkt_id"].map(m2d)
-    t = hh["fra_tidspunkt_utc"].dt.tz_convert(None)
-    if clock == "local":
-        t = t + pd.Timedelta(hours=W.UTC_OFFSET)
-    hh["hix"] = ((t - pd.Timestamp(W.FORTNIGHT_START)) / pd.Timedelta(hours=1)).astype(int)
-    hh = hh[(hh["hix"] >= 0) & (hh["hix"] < W.HOURS)]
-    g = hh.groupby(["dw", "hix"])["forbruk_kwh"].sum().unstack("hix").reindex(columns=range(W.HOURS))
-    a = g.to_numpy().reshape(len(g), W.DAYS, 24)
-    if gaps == "skip_day":
-        bad = np.isnan(a).any(axis=2)
-        a = np.where(bad[:, :, None], np.nan, a)
-    if outages == "drop":
-        a = np.where(a == 0.0, np.nan, a)
-    s = pd.Series(departure_of(a), index=g.index)
-    cnt = M.counted(d)
-    v = s.reindex(cnt["bruksenhet_id"]).fillna(-9).to_numpy() < M.DCUT
-    out = {}
-    for nr in ALL:
-        m = (cnt.kommunenr == nr).to_numpy()
-        out[nr] = {"share": round(100.0 * v[m].sum() / m.sum(), 1)}
-    return out, cnt

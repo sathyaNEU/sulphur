@@ -12,7 +12,7 @@
   "shape": "03",
   "decision_type": "designation_set",
   "answer_unit": "set_of_items",
-  "answer": "",
+  "answer": "Garrow and Ostrom qualify (December 2026 covered jobs 3.0 and 3.1 per cent below December 2025); the field's imputation designates no county",
   "answer_source": "task5/submission.md, Final Recommendation",
   "gap": [
     "time",
@@ -34,7 +34,7 @@
   "validated_decoy": false,
   "context_artifact": "register",
   "stump_class": "analytical",
-  "analyst_test": "A strong analyst who conforms the reports, amendments and worksites and reads the act and the data agreement imputes each missing report as the field does (the employer's September jobs moved by its county's reporting employers' change), treats an employer missing two quarters as ceased, sees the imputation back-test within a few tenths of a point on the closed quarters, and files that no county is 2.0 per cent down; a report missing while the employer's usual transmission-mates arrived marks an employer that has shed jobs or stopped trading.",
+  "analyst_test": "A strong analyst who conforms the reports, amendments and worksites and reads the act and the data agreement imputes each missing report as the field does (the employer's September jobs moved by its county's reporting employers' change), treats an employer missing two quarters as ceased, sees the imputation back-test with a steady upward miss under 0.7 of a point on the closed quarters, and files that no county is 2.0 per cent down; a report missing while the employer's usual transmission-mates arrived marks an employer that has shed jobs or stopped trading.",
   "domain_test": "The deciding quantity is each county's December 2026 covered employment, an official estimate from an administrative census whose reports arrive late, worked as a statistics office works unit nonresponse: which missing reports are ignorable and which carry the outcome, and what the nonrespondents' December jobs are, measured on closed quarters whose outcomes have landed; with hospitals for employers no report goes missing because the unit has closed and no account is inactivated months later.",
   "layer2_family": "estimand_identification",
   "layer2_pattern": "own:a-missing-report-informative-only-when-its-usual-transmission-arrived",
@@ -54,7 +54,7 @@
   "scoring_unit": "other",
   "spine": {
     "file": "ui_quarterly_reports_2023q1_2026q4.csv",
-    "rows": 360000,
+    "rows": 416574,
     "entity": "one employer account's quarterly contribution report",
     "grain": "account x quarter",
     "source": "synthetic"
@@ -74,7 +74,8 @@
     ],
     "people": [
       "Danielle Fuller",
-      "Matthew Cox"
+      "Matthew Cox",
+      "William Robertson"
     ]
   },
   "deliverables": [
@@ -85,8 +86,8 @@
   "question_form": "where",
   "driver": "The decisive quantity is a period total over units whose reports arrive late, where a missing report has two causes: the intermediary that files a whole batch was late, which says nothing about the unit, or the unit failed to report on its own, which marks a unit that has shrunk or closed; only a unit missing while its usual batch-mates arrived separates the two, and a closed unit's outcome shows only in a closure record months later, so only cohorts old enough for closures to have been recorded measure what a unit's own failure to report implies.",
   "driver_concrete": "Each county's December 2026 covered jobs are estimated from the unemployment insurance quarterly reports received by 15 February 2027; payroll agents file their clients' reports in one transmission and at year end several statewide bureaus' transmissions come late, while an employer missing when its usual transmission arrived has usually shed jobs or stopped trading, and a stopped employer shows only in an account inactivation two or three quarters later, so its December jobs are read from quarters old enough for inactivations to have landed.",
-  "stump": "A competent solver conforms the reports, amendments and worksites, imputes each employer whose December report had not arrived as the field does (its September jobs moved by its county's reporting employers' change), treats an employer missing two quarters as ceased, sees that imputation back-test within a few tenths of a point on the closed quarters and files that no county fell 2.0 per cent; an employer missing while its usual transmission-mates arrived has usually shed jobs or stopped trading and keeps about a quarter of its September jobs on the quarters old enough for inactivations to have landed, which puts two counties past the line.",
-  "deep_chain": "(1) the field's imputation (September jobs moved by the county's reporters) back-tests with a steady upward miss traced to missing reports from employers that had stopped; (2) a missing report has two causes, a payroll agent's late transmission or the employer's own failure, and only whether its usual transmission-mates arrived separates them; (3) the employers missing on their own keep about a quarter of their September jobs, which only quarters old enough for inactivations to have landed show; (4) carried into each county's December total, two counties fall 2.0 per cent or more.",
+  "stump": "A competent solver conforms the reports, amendments and worksites, imputes each employer whose December report had not arrived as the field does (its September jobs moved by its county's reporting employers' change), treats an employer missing two quarters as ceased, sees that imputation back-test with a steady upward miss under 0.7 of a point on the closed quarters and files that no county fell 2.0 per cent; an employer missing while its usual transmission-mates arrived has usually shed jobs or stopped trading and keeps 0.29 of its September jobs on the quarters old enough for inactivations to have landed, which puts two counties past the line.",
+  "deep_chain": "(1) the field's imputation (September jobs moved by the county's reporters) back-tests with a steady upward miss traced to missing reports from employers that had stopped; (2) a missing report has two causes, a payroll agent's late transmission or the employer's own failure, and only whether its usual transmission-mates arrived separates them; (3) the employers missing on their own keep 0.29 of their September jobs, which only quarters old enough for inactivations to have landed show; (4) carried into each county's December total, two counties fall 2.0 per cent or more.",
   "judgment": "the nonresponse mechanism and the nonrespondents' outcome model: lateness is ignorable within a late transmission and carries the outcome when the employer misses alone, judged from the co-arrival history, and the outcome is measured on mature quarters where closures have landed as inactivations, not on recent ones where they have not",
   "one_fact_test": "the likeliest hint, that an employer missing while its agent's batch arrived is in trouble, still leaves the solver to rebuild transmissions from receipt times with no agent field, to measure the trouble's outcome on quarters old enough for inactivations, and to carry both through every county",
   "strategy_label": "WORKS IN FORM",

@@ -51,13 +51,16 @@ generator asserts.
   (committee_or_panel, vote_or_meeting) on the certification the Department of Labor's Labor Market Information
   section prepares (research_or_statistics_office); the section's director is the stakeholder (statistical_office_head).
 - **People** (`guard.py names --geo "United States" --seed 501`, locale en_US): Danielle Fuller, director of the Labor
-  Market Information section; Matthew Cox, the Department of Commerce's administrator for the Fund. Neither appears in
-  the prompt.
+  Market Information section; Matthew Cox, the Department of Commerce's administrator for the Fund; and from
+  `guard.py names --geo US --n 4 --seed 50327`, William Robertson, chief of the Unemployment Insurance Tax Division, who
+  signs the data agreement for the Division and is copied on the Fund's request. None appears in the prompt.
 - **World.** Fourteen counties: Calder (the metro county), Merritt, Linden, Whitcomb, Garrow, Pell, Hadley, Ostrom,
-  Bray, Fenwick, Corliss, Talcott, Kittredge, Sayre; about 23,800 liable accounts and 330,000 covered jobs. Payroll
+  Bray, Fenwick, Corliss, Talcott, Kittredge, Sayre; about 27,700 liable accounts and 480,000 covered jobs. Payroll
   agents file most small employers' reports, each agent sending its clients' reports in one transmission a quarter
-  (a few send a main file and a follow-up); twelve statewide payroll bureaus serve clients across the state, the rest
-  are local accountants. Q4 reports are due 31 January and at year end about half the statewide bureaus send their
+  (some statewide bureaus send a main file and a follow-up); twelve statewide payroll bureaus serve clients across the
+  state, the rest are local accountants. The Division posts a new employer's account from its first contribution
+  report (liability established on that report, posted in the next few nights), so the register holds no liable
+  account that has never reported. Q4 reports are due 31 January and at year end about half the statewide bureaus send their
   fourth-quarter transmissions after the 15 February cut-off, every year, while local accountants rarely run late.
 - **Data-native sentence.** In an unemployment insurance report census the reports a payroll agent files arrive
   together, so a missing report usually means its agent's whole transmission is late and says nothing about the
@@ -95,21 +98,23 @@ The path a competent analyst takes after conforming every file correctly and rea
    September 2026 jobs moved by the change of the reporting employers in its county and supersector; an employer that
    has missed two quarters is treated as ceased.
 4. Back-test the imputation on the closed quarters, rebuilt from the receipt times as the flash would have seen them:
-   it lands every county within a few tenths of a point of the final figures, a steady small upward miss.
+   it overstates every county's final figure by 0.0 to 0.7 of a point on every closed quarter, a steady upward miss
+   averaging 0.2 to 0.5, apart from the two lake counties' 2024 fourth quarter (1.3 and 2.2, their resorts' own
+   December history a year short then), asserted in checks.py.
 5. Sum by county and compare with December 2025.
 
-Ends on: no county qualifies (Ostrom and Garrow the lowest at about minus 1.0 and plus 0.2 per cent).
+Ends on: no county qualifies (the lowest Bray at minus 0.7, Ostrom minus 0.5, Garrow plus 0.3 per cent).
 
-Golden: Garrow and Ostrom qualify (about minus 2.8 and minus 3.1 per cent).
+Golden: Garrow and Ostrom qualify (minus 3.0 and minus 3.1 per cent; Kittredge next at minus 1.2).
 
 ## Stump sentence
 
 A competent solver conforms the reports, amendments and worksites, imputes each employer whose December report had not
 arrived as the field does (its September jobs moved by its county's reporting employers' change), treats an employer
-missing two quarters as ceased, sees that imputation back-test within a few tenths of a point on the closed quarters and
-files that no county qualifies; a report missing from a transmission that arrived marks an employer that has shed jobs
-or stopped trading, which keeps about a quarter of its September jobs on the quarters old enough for inactivations to
-have landed, and that puts Garrow and Ostrom past the line.
+missing two quarters as ceased, sees that imputation back-test with a steady upward miss under 0.7 of a point on the
+closed quarters and files that no county qualifies; a report missing from a transmission that arrived marks an employer
+that has shed jobs or stopped trading, which keeps 0.29 of its September jobs on the quarters old enough for
+inactivations to have landed, and that puts Garrow and Ostrom past the line.
 
 ## Deep reasoning
 
@@ -147,19 +152,19 @@ have landed, and that puts Garrow and Ostrom past the line.
   family a competent analyst would build spreads from none to every county: the reports as received designate all
   fourteen, the field's imputation and its two-quarter refinement none, the filer-type reading (every agent client's
   lateness ignorable) Ostrom alone, the newly-late reading every county with a late statewide bureau, the
-  missing-alone reading with outcomes from the latest quarters Ostrom alone, with never-filers dropped none; the
-  standing family (the missing-alone reading with the closed quarters' outcomes, under every clustering, window and
-  stratification in SF12) files Garrow and Ostrom, and what rules the rest out is the closed quarters' own outcomes
+  missing-alone reading with outcomes from the latest quarters none, with never-filers dropped none; the
+  standing family (the missing-alone reading with the closed quarters' outcomes, under every clustering, window,
+  threshold and split in SF12) files Garrow and Ostrom, and what rules the rest out is the closed quarters' own outcomes
   (C4), loud in the employers the rival misreads.
 - **Analyst test:** a strong analyst who conforms every file and reads the Act and the agreement imputes each missing
-  report as the field does, treats employers missing two quarters as ceased, back-tests within a few tenths of a point
-  and files that no county qualifies; one who notices the agents' transmissions and reads every agent client's lateness
+  report as the field does, treats employers missing two quarters as ceased, back-tests with a steady upward miss under
+  0.7 of a point and files that no county qualifies (the lowest Bray at minus 0.7, Ostrom minus 0.5, Garrow plus 0.3); one who notices the agents' transmissions and reads every agent client's lateness
   as the agent's files Ostrom alone.
-- **Estimand:** sections 2, 4 and 5 of community_transition_fund_act_2026.pdf: December covered employment for a county
+- **Estimand:** sections 2, 4 and 5 of community_transition_fund_act_2026.docx: December covered employment for a county
   (the jobs for the pay period including 12 December at worksites in the county, summed over every employer liable to
   report for the quarter, whether or not its report has been received when the Commissioner certifies), the change on
   the December before as a per cent rounded to one decimal, minus 2.0 or lower designates, from the reports received
-  by 15 February 2027; the data agreement (ui_lmi_data_sharing_agreement_2025.pdf) defines every field.
+  by 15 February 2027; the data agreement (ui_lmi_data_sharing_agreement_2025.docx) defines every field.
 - **No decoy:** nothing is planted: no memo, briefing, draft or stakeholder figure argues the field's imputation or any
   set; the Act and the agreement file the WHAT and the fields; every file is what its system produces.
 - **No certified replay:** the published Q4 2025 county table confirms the December 2025 base on every route and says
@@ -168,29 +173,29 @@ have landed, and that puts Garrow and Ostrom past the line.
   miss, traced on the closed quarters to missing reports from employers that had stopped; (2) a missing report has two
   causes, a payroll agent's late transmission or the employer's own failure, and only whether its usual
   transmission-mates have reported separates them, because the agents are named nowhere and their year-end lateness
-  fills the missing pool; (3) the employers missing alone keep about a quarter of their September jobs, which only the
-  quarters old enough for inactivations to have landed show, the latest quarters reading about two thirds because their
-  closures have not been recorded; (4) carried into each county's December total, Garrow and Ostrom fall 2.0 per cent
+  fills the missing pool; (3) the employers missing alone keep 0.29 of their September jobs, which only the quarters
+  old enough for inactivations to have landed show, the latest quarters reading 0.72 because their closures have not
+  been recorded; (4) carried into each county's December total, Garrow and Ostrom fall 2.0 per cent
   or more and no other county does.
 - **Judgment:** a nonresponse-mechanism and outcome-model judgment, justified from the data: lateness within a late
   transmission is ignorable (the closed quarters show batch-late employers' December jobs moving with their cell's) and
-  lateness alone carries the outcome (the closed quarters show the missing-alone keeping about a quarter of their
-  September jobs, most of them never filing again and inactivated later), and the outcome must be measured on quarters
+  lateness alone carries the outcome (the closed quarters show the missing-alone keeping 0.29 of their September
+  jobs, the same for agent clients and direct filers within sampling error, most of them never filing again and inactivated later), and the outcome must be measured on quarters
   whose closures have landed, because an immature quarter's unresolved employers are the closed ones.
 - **Hidden by:** the field's imputation passes its own back-test, because informative lateness has been a small part of
-  every past quarter's missing pool and its upward miss is a few tenths; in December 2026 the missing pool's size and
+  every past quarter's missing pool and its upward miss is 0.2 to 0.5 of a point; in December 2026 the missing pool's size and
   its mix by county, industry and size look like every year-end's, because the statewide bureaus' late transmissions
   dominate it, and the reporting employers in Garrow and Ostrom fall only slightly (the hardest hit are the ones that
   have not reported), so no group-by of the received reports shows the two counties.
 - **After the notice:** once a run has seen that agents' transmissions arrive together, it still owes (1) the sibling
   reading, built from receipt times with no agent field, and the wrong turn there is the filer-type reading (every agent
   client's lateness taken as its agent's), which files Ostrom alone because Garrow's missing-alone employers are
-  agent clients; (2) the outcome of missing alone, and the wrong turns there are the latest quarters (about two
-  thirds kept, Ostrom alone) and dropping the employers that never filed (none); (3) carrying both through every
+  agent clients; (2) the outcome of missing alone, and the wrong turns there are the latest quarters (0.72 kept,
+  none) and dropping the employers that never filed (0.70, none); (3) carrying both through every
   county's worksites and its December 2025 base.
 - **One-fact test:** the likeliest hint, that an employer missing from a transmission that arrived is in trouble, still
   leaves the solver to rebuild the transmissions from receipt times with no agent field, to measure the trouble's
-  outcome on quarters old enough for inactivations to have landed (the obvious quarters, the latest, read two thirds),
+  outcome on quarters old enough for inactivations to have landed (the obvious quarters, the latest, read 0.72),
   and to carry it through every county; the hint that missing reports can mean closure leads to the newly-late reading,
   which designates every county with a late statewide bureau. No one sentence makes it routine.
 - **No replay:** no published or certified figure for December 2026 ships and nothing is recovered by reproducing one;
@@ -198,13 +203,14 @@ have landed, and that puts Garrow and Ostrom past the line.
 - **Pinned:** every rival is run on the clean truth (checks.py, the ladder): the reports as received designate all
   fourteen (ruled out by section 2: every liable employer counts whether or not its report has arrived); the field's
   imputation and its two-quarter refinement none, the filer-type reading Ostrom alone, the newly-late reading every
-  county with a late statewide bureau, the latest-quarters and never-filers-dropped readings Ostrom alone and none (each
+  county with a late statewide bureau, the latest-quarters and never-filers-dropped readings none and none (each
   ruled out by the closed quarters' outcomes for the employers it misreads, C4); every member of the standing family in
   SF12 files Garrow and Ostrom; the December 2025 base is one figure on every route (SF8).
 - **Run forecast:** method shortcut at rung 1: a strong run conforms everything, applies the field's imputation, sees it
   back-test and files that no county qualifies; a run that notices the transmissions takes the filer-type reading
   (unfinished chain) and files Ostrom alone; a run that separates the two causes and reads the outcome from the latest
-  quarters is a self-confirming check (its window agrees with its other recent windows) and files Ostrom alone.
+  quarters is a self-confirming check (its window agrees with its other recent windows) and files that no county
+  qualifies.
 - **Strategy label:** WORKS IN FORM (Part A, outcomes that have not finished happening): completion speed differs by a
   unit no pooled factor captures, here whether a missing report's transmission arrived, so the pooled or textbook
   completion (the field's imputation, a pooled late-report factor) files a named wrong answer; the dead form (the
@@ -226,8 +232,8 @@ have landed, and that puts Garrow and Ostrom past the line.
   reporting units' change in its industry and area) sits at rung 1 and, with its two-quarter refinement, files that no
   county qualifies.
 - **Back-test:** the textbook route validates: rebuilt from the receipt times on the closed quarters, the field's
-  imputation lands every county within a few tenths of a point of its final figure, the small upward miss steady from
-  quarter to quarter.
+  imputation overstates every county's final figure by 0.0 to 0.7 of a point, the small upward miss steady from quarter
+  to quarter (the lake counties' 2024 fourth quarter apart, where the resorts' own history is a year short).
 - **Second use:** every file the decisive step reads is read by every route: the receipt times define what the flash
   holds, the status history defines who is liable (inactivations, successors) and the December 2025 base, the closed
   quarters' reports are the history every back-test uses; deleting the step drops no file.
@@ -253,7 +259,7 @@ have landed, and that puts Garrow and Ostrom past the line.
 
 | ID | Term or convention | Golden reading | Alternative | Call under it | Ruled out by |
 |---|---|---|---|---|---|
-| SF1 | liable employers for the fourth quarter | accounts liable on the register for any day of the quarter, not inactivated with an earlier effective quarter | accounts that filed a Q4 report; accounts active on 15 February | all fourteen; the same | section 2 (whether or not its report has been received) and the status history's effective quarters (asserted) |
+| SF1 | liable employers for the fourth quarter | accounts liable on the register for any day of the quarter: liable by its last day and not closed, inactivated or transferred with effect by its first (a final report of zeros from an account closed before the quarter is no reporter) | accounts that filed a Q4 report; accounts active on 15 February; the history ordered by effective rather than processed date; an outstanding employer with a closure effective by 12 December read as nought (Schedule C) | all fourteen; the same; the same; the same | section 2 (whether or not its report has been received) and the history's effective dates (asserted); no account ends on or before its own liability date, so both orderings give one status, and no outstanding employer carries a closure entered by the cut-off, because a notice of closing is entered with the final report (both asserted) |
 | SF2 | December covered employment | the month-three employment of the Q4 report (the pay period including 12 December) | the quarter's average; total wages | another figure | section 2 and the agreement's field definition (asserted) |
 | SF3 | the reports received by 15 February | received at or before 23:59:59 on 15 February 2027, local time | the due date; the extract's full contents | same call | same call (asserted, nothing received on 15 February moves a county by 0.05) |
 | SF4 | a report received twice or amended | the latest version received by the cut-off | the first; both | same call | same call (asserted) |
@@ -264,25 +270,32 @@ have landed, and that puts Garrow and Ostrom past the line.
 | SF9 | paper reports keyed by date | received on that date | at midnight as a transmission | same call | same call (asserted) |
 | SF10 | the cell for the field's imputation | county by supersector, falling back to the county | the county alone; the supersector statewide | same call | same call (asserted on every rung) |
 | SF11 | an employer missing two quarters | carried at the closed quarters' outcome for two-quarter delinquents | ceased; imputed alive | same call | same call (asserted) |
-| SF12 | the missing-alone reading | a missing employer whose last transmission's other reports have mostly arrived (and a direct filer newly late), carried at the closed quarters' outcome for missing alone | transmission by the exact second or within a minute; mates from the last quarter or the last four; a majority or any arrival; outcomes by size class or pooled; closed quarters from 2024 or from 2023Q3 | same call | same call (asserted, every member files Garrow and Ostrom) |
-| SF13 | the filer-type reading | ruled out | every agent client's lateness taken as its agent's | Ostrom alone | the closed quarters: agent clients missing from a transmission that arrived kept about a quarter of their jobs (asserted) |
-| SF14 | outcomes of missing employers | quarters whose missing-alone employers have all resolved (a late report or an inactivation) | the latest quarters; never-filers dropped | Ostrom alone; none | the status history: the latest quarters' unresolved employers are inactivated within the next two quarters on every closed quarter (asserted) |
+| SF12 | the missing-alone reading | a missing employer whose last transmission's other reports have mostly arrived (and a direct filer newly late), carried at the closed quarters' outcome for missing alone, pooled | a transmission as three or more reports in one second or two or more; mates from the last quarter or the last four; half or three in ten arrived; outcomes pooled, by size class or by filing channel (agent clients 0.28, direct filers 0.30, bootstrap s.e. of the difference 0.03); closed quarters 2024Q1, 2024Q2 or 2023Q3 to 2025Q2 or 2025Q3 | same call | same call (asserted, every member files Garrow and Ostrom with every county's change, total and estimated part in the golden's bin) |
+| SF13 | the filer-type reading | ruled out | every agent client's lateness taken as its agent's | Ostrom alone | the closed quarters: agent clients missing from a transmission that arrived kept 0.28 of their September jobs (asserted under one half) |
+| SF14 | outcomes of missing employers | quarters whose missing-alone employers have all resolved (a late report or an inactivation) | the latest quarters; never-filers dropped | none; none | the status history: the latest quarters' unresolved employers are inactivated within the next two quarters on every closed quarter (asserted) |
 | SF15 | seasonal employers missing in December | their own December-to-September pattern from the year before, moved by the cell | September moved by the cell | same call | the closed quarters (asserted, an ask's second judgment) |
+| SF16 | a transmission that arrived | at least half of the employer's third-quarter transmission-mates have reported | any one of them has | same call, Garrow 0.3 and Ostrom 0.2 higher | the closed quarters: the two late transmissions in 2024Q1 and 2024Q2 with one or two of 48 mates in (clients that had moved to another agent) had their outstanding members arrive together, in one second, weeks later (asserted) |
 
 ## Ladder
 
-| Rung | Construction | Designates | Main figures kept |
+| Rung | Construction | Designates | Changes kept (of 14) |
 |---|---|---|---|
-| R0 | the reports as received | all fourteen | 0 of 14 |
-| R1 | the field's imputation for every missing report | none | to be measured |
-| R1x | R1 with two-quarter delinquents ceased (default path) | none | to be measured |
-| R2 | the filer-type reading | Ostrom | to be measured |
-| R2b | every newly-late employer at the missing-alone outcome | every county with a late statewide bureau | to be measured |
-| R3a | missing alone, outcomes from the latest quarters | Ostrom | to be measured |
-| R3b | missing alone, never-filers dropped | none | to be measured |
-| G | missing alone, outcomes on the closed quarters | Garrow, Ostrom | 14 of 14 |
+| R0 | the reports as received | all fourteen (Fenwick the nearest the line at minus 2.7) | 0 |
+| R1 | the field's imputation for every missing report | none (Bray nearest at 0.0) | 0 |
+| R1x | R1 with two-quarter delinquents ceased (default path) | none (Bray minus 0.7, Ostrom minus 0.5, Garrow plus 0.3) | 0 |
+| R2 | the filer-type reading | Ostrom (minus 2.8; Garrow minus 0.2) | 3 |
+| R2b | every newly-late employer at the missing-alone outcome | twelve counties, all but Fenwick and Sayre | 0 |
+| R3a | missing alone, outcomes from the latest quarters (0.72 kept) | none (Ostrom minus 1.5) | 0 |
+| R3b | missing alone, never-filers dropped (0.70 kept) | none (Ostrom minus 1.6) | 0 |
+| Rs | the golden with the lake resorts at their cell's change | Garrow, Ostrom | 12 |
+| G | missing alone, outcomes on the closed quarters | Garrow, Ostrom (minus 3.0 and minus 3.1; Kittredge next at minus 1.2) | 14 |
 
-Margins, positions and the pricing sequence: written from `checks.py` once the generator runs.
+Margins (checks.py): on the golden Garrow and Ostrom sit 1.0 and 1.1 below the line and every other county at least
+0.8 above it; R1, R1x, R3a and R3b keep both at least 0.4 above the line; R2 puts Ostrom at minus 2.8 and Garrow at
+minus 0.2. Every rung but Rs names a set other than the golden's. Pricing: the shallow run (R1x) keeps nothing of the
+call, the components or the asks; a run that notices the transmissions and stops at the filer-type reading (R2)
+designates Ostrom alone and keeps three changes; a run that takes the deep step keeps the call and the components and
+loses the lake counties' figures unless it also reads the resorts on their own pattern (Rs).
 
 ## Closure table
 
@@ -319,8 +332,9 @@ threshold, and say nothing of how a nonreporting employer's jobs are estimated, 
 them. Every reading that estimates them from the closed quarters' own outcomes for employers missing alone, in any form
 SF12 lists, gives Garrow and Ostrom; the reports-as-received reading is ruled out by section 2's whether-or-not clause;
 the field's imputation, the filer-type reading, the newly-late reading and the latest-quarters and never-filers-dropped
-readings are ruled out by the closed quarters' outcomes for the employers each misreads (C4, SF13, SF14). Each
-convention the call needs is closed in the fork table, asserted in checks.py.
+readings are ruled out by the closed quarters' outcomes for the employers each misreads (C4, SF13, SF14), and the
+any-one-mate reading of a transmission that arrived by the late transmissions whose members arrived together weeks
+later (SF16). Each convention the call needs is closed in the fork table, asserted in checks.py.
 
 ## Oracles
 
@@ -330,14 +344,34 @@ quarters' reports and the status history are the referee for every reading of a 
 rival on the employers it misreads; nothing ties only under the golden. The contribution rate notice and the county
 population estimates are read by no route and ship as distractors.
 
+Leak sweep (leak.py REVIEW, no LEAK, on the reader's cut and again on the final cut): the rate notice's 3.0, 0.0 and 0.1 are edges of
+its reserve-ratio bands in the Division's 2027 contribution schedule, a distractor no route reads, and name no county
+(harmless); the Act's "section", "account" and "design" are its own section numbering, the employer account and the
+words designate and designation, and the agreement's "closed", "section", "account", "history", "agreement" and
+"earlier" are its status codes, its schedules and the status-history extract's name, and neither document names an
+agent, a transmission, lateness, an imputation or an outcome (asserted in checks.py; harmless).
+
 ## Ask sheet
 
-To be written from the ceiling script once the pack is cut: per county the jobs estimated for employers whose report
-had not arrived, the December 2026 total and the change; the designated set; the employer list.
+The asks ride the deep step: per county the December 2026 jobs, the part estimated for employers whose report had not
+arrived and the change, the designated set (sheet and chart) and the employer list with its classes. The landed row is
+a run that takes the deep step and cleans every mess item but carries the lake resorts at their cell's change (the
+asks' own second judgment); the shallow row is the default path, R1x.
 
-Pair ceiling: to be measured
+| Ask (Supplementary item) | Shallow run (R1x) | Landed run's figures | Landed run, cracker verdict |
+|---|---|---|---|
+| 1 the sheet names the designated counties | misses (none) | Garrow and Ostrom | kept |
+| 2 December 2026 jobs, fourteen counties and the state | misses | Kittredge and Talcott a hundred or more off | miss |
+| 3 the jobs estimated for employers whose report had not arrived | misses | Kittredge and Talcott a hundred or more off | miss |
+| 4 the change on December 2025, fourteen counties and the state | misses | Kittredge minus 0.2 and Talcott 1.1 against minus 1.2 and 0.3 | miss |
+| 5 the chart against the line | misses | the same two columns below the line | kept |
+| 6 the employer list and its classes | misses | every class count | kept |
 
-Shallow keep: to be measured
+Pair ceiling: 39.8 (the landed run 72.5, the shallow run 7.0). If the landed run also reads the resorts on their own
+pattern it keeps every ask, 100.0, and the pair is 53.5, or 56.0 with five points of partial credit on the shallow run:
+under 60, over the paper target of 50.
+
+Shallow keep: 0.0 per cent of the ask weight (the landed run keeps 50.0).
 
 Measured by: generator/ceiling.py
 
@@ -481,3 +515,42 @@ closure.
   shock among clients of the late statewide bureaus is invisible to every reading; the shocked counties' exposed small
   employers file through local accountants (Garrow) or directly (Ostrom), and the year-end lateness sits with the
   statewide bureaus, as it does in practice.
+- 2026-11-08, at build: new employers whose first report had not arrived (72, about 450 jobs) had no history to be
+  estimated from, and nought, the median or the mean of the quarter's reporting new employers each moved twelve
+  counties' changes by 0.1; the Division now posts a new employer's account from its first report, so no liable account
+  without a report exists at the cut-off and the class is empty.
+- 2026-11-08, at build (review): the missing-alone outcome taken separately for agent clients and direct filers read
+  0.283 against 0.363 on the closed quarters and moved Garrow and Ostrom a bin each, because the direct filers' pool
+  held healthy employers the agent clients' did not (habitual late filers in their second quarter after a birth or a
+  succession, with one late report on file; local accountants' follow-up clients, whose small files formed no
+  transmission; healthy one-off lateness weighted to larger employers). New and successor accounts now start on time,
+  only the statewide bureaus send follow-up files, and healthy lateness runs at one multiple of the trouble hazard in
+  every size class through both channels: 0.282 against 0.302, bootstrap s.e. of the difference 0.029, and the split is
+  a standing member.
+- 2026-11-08, at build: limiting follow-up files to the bureaus first drew their timing only for the bureaus, which
+  shifted the timing stream and moved which agents ran late in every quarter (two late bureau files at the flash each
+  had one switched client arrive, and the any-one-mate reading then designated Bray); the follow-up timing is drawn for
+  the same agents as before and used only for the bureaus.
+- 2026-11-08, at build: centring each county by its trend moved December 2025 as well as December 2026, and the
+  rounding noise of the two levels was the size of the bin; a 2026-only nudge per county and the county size scale now
+  centre each county's whole standing family inside one bin of change and one hundred of jobs.
+- 2026-11-08, at build: the missing-alone outcome stated to three decimals (0.292) forked across the standing family
+  (0.286 to 0.297 by window); it is stated as 0.29 in every block and the workbook.
+- 2026-11-08, at stage 4 (judge, DETERMINISTIC and APPROVE, one open item): the judge's rebuild counted 27,652 liable
+  and 4,275 outstanding against 27,651 and 4,274; the extra account was a new employer whose first-month closing
+  notice was dated before its own liability date, so ordering the history by effective date left it active. Every
+  closing and inactivation now takes effect after the account's own liability date, successors' register liability
+  dates are their transfer dates, and checks.py asserts both orderings give one status.
+- 2026-11-08, at stage 4 (reader): every closure took effect on the first of a month (3,842 of 3,842). An employer's
+  notice of closing now names the day after its last payroll; the Division's inactivations keep the first of the
+  month. Read literally, Schedule C then counted one outstanding employer at nought (its notice entered by the
+  cut-off, its final report in its agent's late batch). Filing a closing employer's final report itself, with the
+  notice, closed that and was rejected: a closing client's report arriving on time beside its agent's late batch made
+  hundreds of late transmissions partly arrived, and the any-one-mate reading then designated no county. A notice of
+  closing is now entered with the final report instead.
+- 2026-11-08, at stage 5: the container ship gate (reduce-house-fixes H1, pulled from main during the session) fails
+  a PDF written by ReportLab, and the house PDF writer needs LibreOffice, which this machine does not have; the Act,
+  the data agreement and the rate notice now ship as Word documents written from the same stories by the house
+  writer's Word stage and saved in Word's form (postprocess.normalize_docx), each with its own author and its drafting
+  and last-save stamps, and both zips are cut by the house zip_folder with each file at its own save time. No
+  sentence, cell or figure moved.
