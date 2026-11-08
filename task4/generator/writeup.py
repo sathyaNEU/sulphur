@@ -54,7 +54,7 @@ def figures(pk, g):
         "slope_exact_shipper": round(A.slope_per_100(exact), 1),
         "pooled_lambda": round(float(cal_pooled(pk)), 2),
         "pilot_lambda": lam, "lambda_min": min(lam.values()), "lambda_max": max(lam.values()),
-        "bmj_standard_kg": 13500, "ttv_lambda": round(float(cal["TTV"][1]), 2),
+        "bmj_standard_kg": std_weight(pk, "BMJ"), "ttv_lambda": round(float(cal["TTV"][1]), 2),
         "mean_declared_minus_weighed_kg": int(round(float(np.mean(diffs)))),
         "duty_days": len(pk.days),
         "default_count": len(A.chosen(nv)), "default_set": A.chosen(nv),
@@ -73,6 +73,12 @@ def figures(pk, g):
         "limit_share_pct": int(round(A.SHARE * 100)), "slope_basis_km": 100, "fes2_sections": [4.1, 4.2, 4.3],
     }
     return f
+
+
+def std_weight(pk, s):
+    v = {r["declared"] for r in pk.wb if r["shipper"] == s and r["declared"] is not None}
+    assert len(v) == 1, v
+    return int(v.pop())
 
 
 def cal_pooled(pk):
@@ -130,8 +136,9 @@ def write(path, pk, g, f):
     L("")
     L("1. On the Värnamo weighbridge the declarations are right on average (declared less weighed, **%d kg**) but "
       "for the estimating pilot shippers the weighed load rises only **%.2f to %.2f** tonnes per declared tonne; the "
-      "dairy declares one standard weight (**13,500 kg**) and Tabergs Trävaror its own weighbridge figure (slope "
-      "**%.2f**)." % (f["mean_declared_minus_weighed_kg"], f["lambda_min"], f["lambda_max"], f["ttv_lambda"]))
+      "dairy declares one standard weight (**%s kg**) and Tabergs Trävaror its own weighbridge figure (slope "
+      "**%.2f**)." % (f["mean_declared_minus_weighed_kg"], f["lambda_min"], f["lambda_max"],
+                         format(f["bmj_standard_kg"], ",").replace(",", ","), f["ttv_lambda"]))
     L("2. A tonne of payload costs **%.1f kWh per 100 km loaded** with each pilot day's payload taken to its expected "
       "weighed load shipper by shipper (the Tabergs days alone give %.1f), against **%.1f** fitted on the declared "
       "weights." % (f["slope_golden"], f["slope_exact_shipper"], f["slope_declared"]))

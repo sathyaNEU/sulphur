@@ -55,6 +55,10 @@ def main(target):
     ok("rung 1 V14 out by 5 kWh", nv["V14"]["kwh"] >= A.SHARE * A.USABLE + 5, "%.1f" % nv["V14"]["kwh"])
     pl = A.assess(pk, M["pooled"])
     ok("rung 2 pooled correction orders the default's 8", A.chosen(pl) == A.chosen(nv), str(A.chosen(pl)))
+    pp = M["pilot_pooled"]
+    ok("rung 2a pilot-shippers' pooled line sits between the declared and the golden slope",
+       A.slope_per_100(M["naive"]) < A.slope_per_100(pp) < 0.9 * A.slope_per_100(M["golden"]),
+       "%.2f" % A.slope_per_100(pp))
     r0, rate = A.rung0(pk)
     ok("rung 0 average consumption orders another list", A.chosen(r0) not in (gold_set, A.chosen(nv)), str(A.chosen(r0)))
     ok("default slope under half the golden", A.slope_per_100(M["naive"]) < 0.5 * A.slope_per_100(M["golden"]))

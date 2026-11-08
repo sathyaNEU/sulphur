@@ -215,11 +215,22 @@ def rung0(pk):
     return out, rate
 
 
+def pilot_pooled(pk):
+    """one weighed-on-declared line over the weighbridge departures of the pilot's own shippers"""
+    ps = {d["shipper"] for d in pk.days}
+    rows = [r for r in pk.wb if r["declared"] is not None and r["shipper"] in ps]
+    D = np.array([r["declared"] for r in rows])
+    W = np.array([r["net"] for r in rows])
+    lam = np.cov(D, W)[0, 1] / np.var(D, ddof=1)
+    return np.array([(W.mean() + lam * (d["declared"] - D.mean())) / 1000 for d in pk.days])
+
+
 def models(pk):
     """the golden model and every rung's"""
     return {
         "naive": fit(pk, payloads(pk, "declared")),
         "pooled": fit(pk, payloads(pk, "pooled")),
+        "pilot_pooled": fit(pk, pilot_pooled(pk)),
         "golden": fit(pk, payloads(pk, "shipper")),
         "golden_1h": fit(pk, payloads(pk, "shipper"), ("hinge1", 16)),
         "naive_1h": fit(pk, payloads(pk, "declared"), ("hinge1", 16)),

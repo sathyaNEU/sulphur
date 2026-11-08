@@ -190,6 +190,7 @@ decides the heavy and light duties, and the cold form is chosen by back-test (th
 | 0 | average consumption on days of −8 to −2 °C (1.35 kWh per km) times each duty's km | 9 tractors (the golden less V14 plus V03, V07, V11 and V24) | FES-2 4.1 and 4.2: the energy carrying the duty's load; the pilot's consumption rises with load |
 | 1 (default) | the consumption model on declared payloads (1.0 kWh per tonne per 100 km), both cold rates | 8 tractors (V03, V07 and V11 in at about 440 kWh, V14 out at about 470) | the weighbridge: the estimating shippers' weighed loads rise 0.26 to 0.30 t per declared tonne |
 | 2 | one pooled correction from the weighbridge (0.94), 1.1 kWh per tonne per 100 km | the default's 8 | the per-shipper regressions: the pooled line carries the shippers' differences in load and the exact shippers |
+| 2a | one line over the weighbridge departures of the pilot's own six shippers (0.49), 1.9 kWh per tonne per 100 km | 6 or 7 (V07 within 2 kWh of the limit; the judge's variant 458, this build's 460) | the per-shipper slopes: the line blends Tabergs' exact declarations (1.00) and the dairy's standard weight with the clerks' 0.26 to 0.30, so it estimates no shipper's error |
 | 2b | the golden payload with one cold rate below 16 °C | the golden six, every energy a bin low | the January and February 2026 back-test (3.4 per cent under on sub-zero days) |
 | 3 (golden) | each declaration taken to its weighed load by shipper, the model refitted (2.2), both cold rates | 6 tractors: V02, V05, V09, V14, V16, V18 | |
 
@@ -284,7 +285,28 @@ What the author's voice rewrite may not drop or change:
 - Never add: a declaration, a weighbridge, a payload, a weight, a shipper, a calibration, an error, cold, temperature
   forms, "check", "validate", or any method word.
 
+## Leak rulings
+
+- leak.py sweep 3, FES-2's "2.2": a section number, not the golden's payload figure; harmless.
+- leak.py sweep 3, the quotation's 540 kWh: the WHAT (FES-2 4.3's usable battery), filed once at authority; harmless.
+- leak.py sweep 3, FES-2 carries the call's words: the standard governs the call (battery-electric, duties, Värnamo is
+  not named in it); it names no duty, energy or count; harmless.
+- leak.py sweep 4, FES-2 shares payload, record, standard, planning, consumption with the stump paragraph: payload
+  appears only in 4.2's planning load, consumption in 3.1's exclusion of manufacturers' figures; neither names a
+  declaration, a weighbridge or an error; the reader quoted nothing for question 1; harmless.
+- leak.py sweep 11, the prompt's shell quota and files up front: WARNs for the author's voice rewrite.
+- Reader, question 5, FES-2 4.2's window end inferred from "the last full month before the assessment": the pack's
+  latest records end 30 October 2026 and the quotation is dated 2 October, so the window is November 2025 to October
+  2026; SF4 asserts the same call under calendar 2025 and under every month on the bridge; harmless.
+- Reader, question 6, "the decision may reduce to cleaning plus the filed 4.3 rule if the model is simple": that is
+  the default path (rung 1), which orders 8; the call turns on the payload term (SF10).
+
 ## Tried and rejected
+
+- 2026-11-08, stage 4, narrowing the pilot shippers' mean loads (11.7 to 12.9 t) so the pilot-shippers' pooled line
+  (rung 2a) falls clear of the limit: the golden lost the between-shipper spread its estimate leans on (slope 1.95, the
+  within-duty fit and the shipper-mean route left the golden's bins and the latter its six); reverted, the rung is
+  ruled out by the per-shipper slopes and recorded as straddling the limit.
 
 - 2026-11-08, architecture 4 (the Irish retailer's outlying districts handed to a courier, each set priced on the
   fitted van run): spent on the platform; the author reports not stumped, run texts not supplied to the repo. The van
