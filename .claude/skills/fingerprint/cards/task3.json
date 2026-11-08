@@ -12,8 +12,8 @@
   "shape": "04",
   "decision_type": "pick_one_of_n",
   "answer_unit": "named_option",
-  "answer": "",
-  "answer_source": "",
+  "answer": "Build Alternative B, the triple 10 ft x 9 ft box (capacity 13,380 cfs): the design flow at Kinnard Road is about 10,570 cfs once the record's storms are run through today's watershed.",
+  "answer_source": "task3/submission.md Final Recommendation and generator/figures.json pick",
   "gap": [
     "population",
     "time"
@@ -34,7 +34,7 @@
   "validated_decoy": false,
   "context_artifact": "published_series",
   "stump_class": "analytical",
-  "analyst_test": "A strong analyst fits the gauge's 70 annual peaks under Bulletin 17C, finds no significant trend (Mann-Kendall p near 0.3) and no low outliers, confirms the fit against the plotting positions and picks the 8,500 cfs culvert; truncating to the post-development years or regressing the peaks on the paved fraction keeps it there, because the drier storms since 1990 offset the faster runoff.",
+  "analyst_test": "A strong analyst fits the gauge's 70 annual peaks under Bulletin 17C, finds no significant trend (Kendall p 0.79) and no low outliers, confirms the fit against the plotting positions and picks Alternative A at 5,090 cfs; truncating to the developed years or regressing the peaks on the paved fraction keeps it there, because the lighter storms since 1990 offset the faster runoff.",
   "domain_test": "The deciding quantity is the 1 per cent annual exceedance peak flow at a crossing for the coming decade, worked the way flood hydrology works it: a frequency curve fitted to annual peak flows, which assumes the record is homogeneous; here the watershed's rainfall-runoff response changed through the record while its storm climate changed the other way, so the record must be put on today's watershed by pairing each storm with the flood it made; swap the nouns and there is no rainfall forcing, no runoff response, no lag shortened by storm drains and no exceedance probability of a peak flow.",
   "layer2_family": "forecast_uncertainty",
   "layer2_pattern": "own:a-flood-record-whose-response-rose-while-its-storms-weakened",
@@ -50,7 +50,7 @@
   "scoring_unit": "other",
   "spine": {
     "file": "ollery_creek_daily_discharge_1956-2025.csv beside tamsett_rain_gauge_daily_1956-2025.csv",
-    "rows": 51000,
+    "rows": 25720,
     "entity": "one gauge day",
     "grain": "daily",
     "source": "constructed for this task (seeded simulation)"
@@ -76,13 +76,13 @@
   },
   "deliverables": [
     "kinnard_road_culvert_design_flow.docx",
-    "ollery_creek_peaks_current_watershed.csv"
+    "ollery_creek_design_peak_table.csv"
   ],
   "opening_move": "question-first",
   "question_form": "which",
   "driver": "The decisive quantity is a rare-event level for a coming window, estimated from a record whose response to its driver rose gradually while the driver itself weakened, so the two offset in the record's maxima and every check on the maxima passes; only pairing each event with its driver separates them, and re-running the whole driver record through today's response gives the level.",
   "driver_concrete": "Ollery Creek's annual peaks look stationary because the paved fraction rose from 6 to 30 per cent (storm drains halving the time to peak) while the storms since 1990 ran about a quarter lighter; paired with the rain gauge's storm totals, the same storm now makes a far larger flood, and putting all 70 years of storms through today's watershed moves the 1 per cent flood from about 7,000 to about 10,000 cfs.",
-  "stump": "A strong analyst fits Bulletin 17C to the 70 annual peaks, finds no trend, and picks the 8,500 cfs culvert; truncating to the developed years or regressing the peaks on the paved fraction keeps it there; only conditioning each flood on its storm and rebuilding the record on today's watershed files the 14,000 cfs culvert.",
+  "stump": "A strong analyst fits Bulletin 17C to the 70 annual peaks, finds no trend (p = 0.79) and picks Alternative A at 5,090 cfs; truncating to the developed years or regressing the peaks on the paved fraction keeps it there; only setting each flood against its storm and rebuilding the record on today's watershed files Alternative B at 10,570 cfs.",
   "deep_chain": "(1) the test's Theis fit is exact but blind to the far field, shown by its hindcast of the Mill Street record; (2) the record's drawdown is the reading's fall below its natural level, and the natural level must come from confined-aquifer wells beyond the cone (CV-02, CV-11), not CV-07 or a trend; (3) the leakage factor calibrated on that drawdown with the plate's walls; (4) the 2027 to 2046 superposition at OW-S under each schedule and the town's projection",
   "judgment": "which reference wells carry the natural level (CV-07's record steps down with each Mill Street increase and cycles with the summer pumping, CV-02 and CV-11 agree with each other and with OW-S before 2009), and the far-field model that reproduces the separated drawdown out of the test's window",
   "one_fact_test": "'the aquifer leaks' rescues nothing: the leakage must be calibrated, and on the raw or CV-07-referenced record it calibrates to 1,300 gpm",

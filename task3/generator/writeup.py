@@ -1,159 +1,91 @@
-"""task3 architecture 3: submission.md (the four platform blocks) and generator/figures.json, every figure taken
-from the solution and the rungs computed on the cut pack."""
-import json
-import math
-
-import solve as S
-
-
-def ft(x):
-    return int(math.floor(x + 0.5))
+"""task3's submission.md, drafted from the figure set deliver.figures builds: every number is emitted, never typed.
+The blocks run in the platform's order: Final Recommendation, Supplementary Questions, Critical Components,
+Step-by-Step."""
+import common as K
+from deliver import comma, names
 
 
-def c(n):
-    return "{:,}".format(int(n))
-
-
-def figures(g, rungs):
-    th = rungs["rung0_theis"]
-    cv = rungs["rung1_cv07"]
-    raw = rungs["rung1_raw"]
-    return {
-        "call": g["call"], "call_text": "%s gpm" % c(g["call"]), "next": 1250, "limit": S.LIMIT,
-        "peaks_ft": {str(r): ft(g["peaks"][r]) for r in S.OPTIONS},
-        "peaks_2dp": {str(r): round(g["peaks"][r], 2) for r in S.OPTIONS},
-        "msmw_2025_ft": ft(g["msmw_2025"]), "msmw_2025_2dp": round(g["msmw_2025"], 2),
-        "dw_ft": ft(g["dw"]), "dw_2dp": round(g["dw"], 2), "dw_id": g["dw_id"],
-        "dw_nowalls_ft": ft(rungs["walls_none"]["dw"]), "msmw_slip_ft": ft(rungs["msmw_anchor_slip"]),
-        "T": int(round(g["T"], -1)), "T_text": c(round(g["T"], -1)), "S": "%.1e" % g["S"], "rms": round(g["rms"], 2),
-        "q_avg": round(g["q_avg"]), "B": int(g["B"]), "B_text": c(g["B"]), "width": c(g["width"]),
-        "theis_msmw_2025": ft(rungs["theis_msmw_2025"]),
-        "theis_peak_450": ft(th["peaks"]["450"]),
-        "cv07_B": c(round(cv["B"], -2)), "cv07_peaks_ft": {k: ft(v) for k, v in cv["peaks"].items()},
-        "cv07_msmw": ft(cv["msmw_2025"]), "raw_msmw": ft(raw["msmw_2025"]),
-        "raw_peak_top": ft(raw["peaks"]["1250"]), "cv07_peak_top": ft(cv["peaks"]["1250"]),
-        "cv07_departure_2025": rungs["cv07_departure"]["2025"], "cv07_departure_2008": rungs["cv07_departure"]["2008"],
-        "cv07_pump_corr": rungs["cv07_pump_corr"], "far_pair_pump_corr": rungs["far_pair_pump_corr"],
-        "ows_far_pre_corr": rungs["ows_far_pre_corr"],
-        "standing_1000_range": [min(rungs[k]["peaks"]["1000"] for k in rungs["standing"]),
-                                max(rungs[k]["peaks"]["1000"] for k in rungs["standing"])],
-        "standing_top_range": [min(rungs[k]["peaks"]["1250"] for k in rungs["standing"]),
-                                max(rungs[k]["peaks"]["1250"] for k in rungs["standing"])],
-        "ows_only_msmw": round(rungs["rival_ows_only"]["msmw_2025_model"], 1),
-        "ows_only_B": c(rungs["rival_ows_only"]["B"]), "msmw_1dp": round(g["msmw_2025"], 1),
-        "years": [2005, 2008, 2009, 2025, 2026, 2027, 2046],
-        "options": list(S.OPTIONS), "rule_clauses": ["2.1", "2.2", "4.1", "4.2", "4.3", "4.4"],
-        "dw_inside_edge_ft": 200,
-        "T_wells": [c(round(rungs[k]["T"], -1)) for k in ("test_ow1", "test_ow2", "test_ow3")], "walls_tried": [4000, 4500, 5000, 5500, 6500],
-    }
-
-
-def submission(g, rungs, fig, path):
-    p = fig["peaks_ft"]
-    cv = fig["cv07_peaks_ft"]
-    lines = []
-    A = lines.append
-    A("## Tags")
-    A("")
-    A("> **Domain:** Engineering and Physical Sciences, Physical & Environmental Sciences (inverse problems: physical-"
-      "model calibration and uncertainty propagation, a groundwater withdrawal forecast).")
-    A("> **Analytical objective:** Forecasting & Predictive Modeling.")
-    A("")
-    A("## 1. Final Recommendation")
-    A("")
-    A("**The district will permit the %s gpm schedule.** Its greatest monthly drawdown at OW-S in 2046 is %d ft "
-      "against Rule WR-4's 9 ft limit, and the 1,250 gpm schedule reaches %d ft. Not 1,250 gpm: calibrating the far "
-      "field on the Mill Street record read against the nearest network well CV-07 or the wells' own pre-pumping "
-      "levels credits the region's wet years to leakage and puts every schedule under %d ft; and not none of them: "
-      "the test's Theis fit, carried twenty years, puts even 450 gpm at %d ft."
-      % (c(g["call"]), p["1000"], p["1250"], max(cv.values()) + 1, fig["theis_peak_450"]))
-    A("")
-    A("## 2. Supplementary Questions")
-    A("")
-    A("### reidel_road_WR-4_demonstration.pdf")
-    A("")
-    A("1. Page 1 states that the district will permit the %s gpm schedule, with a table of the four schedules "
-      "(450, 700, 1,000 and 1,250 gpm), each one's greatest monthly drawdown at OW-S in 2046 (%d, %d, %d and %d ft) "
-      "and whether it is within 9.0 ft (yes, yes, yes, no)." % (c(g["call"]), p["450"], p["700"], p["1000"], p["1250"]))
-    A("2. The chart under the table plots the drawdown at OW-S in every month from January 2027 to December 2046 for "
-      "each schedule, one line per schedule with the 1,000 gpm line heaviest, against a dashed 9.0 ft limit line; "
-      "every schedule's greatest month falls in 2046.")
-    A("3. The text below gives the test fit (transmissivity %s ft2/day, storativity %s), the separation of the Mill "
-      "Street record against CV-02 and CV-11, the leakage factor of %s ft with the walls %s ft apart, and the "
-      "schedules and projection used." % (fig["T_text"], fig["S"], fig["B_text"], fig["width"]))
-    A("")
-    A("### reidel_road_sentinel_forecast.xlsx")
-    A("")
-    A("4. Sheet Demonstration: one row per schedule with the greatest monthly drawdown at OW-S in 2046 (to the "
-      "hundredth and to the nearest foot: %d, %d, %d and %d ft), the greatest in the term and whether it meets 4.1; "
-      "then the permitted schedule, %s gpm." % (p["450"], p["700"], p["1000"], p["1250"], c(g["call"])))
-    A("5. Sheet Forecast OW-S: one row per month from 2027-01 to 2046-12 with the Mill Street projection (gpm), the "
-      "drawdown from the Mill Street wells, and for each schedule its Reidel Road rate and the total drawdown at OW-S.")
-    A("6. Sheets Aquifer test, Mill Street record and Calibration: the test fit, the monthly record from 2005 with "
-      "each well's drawdown against the far wells and the model's, and the leakage factor with its residuals.")
-    A("")
-    A("### Answers the district asked for")
-    A("")
-    A("7. Greatest monthly drawdown at OW-S in 2046: 450 gpm %d ft; 700 gpm %d ft; 1,000 gpm %d ft; 1,250 gpm %d ft."
-      % (p["450"], p["700"], p["1000"], p["1250"]))
-    A("8. Drawdown the Mill Street wells caused at the Mill Street monitoring well, 2025 average: %d ft."
-      % fig["msmw_2025_ft"])
-    A("9. Greatest monthly drawdown in 2046 at the registered domestic well nearest the Reidel Road field (%s), "
-      "under the %s gpm schedule: %d ft." % (fig["dw_id"], c(g["call"]), fig["dw_ft"]))
-    A("")
-    A("## 3. Critical Components")
-    A("")
-    A("1. The test's Theis fit (transmissivity **%s ft2/day**, storativity **%s**) matches the three observation wells "
-      "to %.2f ft, yet carried forward it puts the Mill Street wells' 2025 drawdown at MS-MW at **%d ft**: the test "
-      "cannot see the far field." % (fig["T_text"], fig["S"], fig["rms"], fig["theis_msmw_2025"]))
-    A("2. CV-07 sits inside the Mill Street cone (its departure from CV-02 and CV-11 grew from **%.2f ft** in 2008 to "
-      "**%.2f ft** in 2025), so the natural level comes from CV-02 and CV-11, and against it the Mill Street wells drew "
-      "MS-MW down **%d ft** in 2025." % (fig["cv07_departure_2008"], fig["cv07_departure_2025"], fig["msmw_2025_ft"]))
-    A("3. The bounded leaky aquifer reproducing that drawdown has a leakage factor of **%s ft**; against CV-07 the "
-      "record asks for about **%s ft**." % (fig["B_text"], fig["cv07_B"]))
-    A("4. Greatest monthly drawdown at OW-S in 2046: **%d ft** at 1,000 gpm and **%d ft** at 1,250 gpm, against the "
-      "**9 ft** limit." % (p["1000"], p["1250"]))
-    A("")
-    A("## 4. Step-by-Step")
-    A("")
-    A("1. From PW-1_constant_rate_2026-09_transducers.csv, barologger_BL-2231_2026-09.csv and the field readings' "
-      "Loggers sheet: each logger on its own clock, pressure less the barologger, the OW-2 re-hang and OW-3's rewritten "
-      "rows taken out, drawdown against each well's pre-test trend and barometric response.")
-    A("2. Fitted Theis to OW-1, OW-2 and OW-3 at the totalizer's %d gpm: transmissivity %s ft2/day, storativity %s, "
-      "residual %.2f ft (the field's method); each well alone gives %s, %s and %s ft2/day, and every one of them keeps "
-      "the call below." % (fig["q_avg"], fig["T_text"], fig["S"], fig["rms"], fig["T_wells"][0], fig["T_wells"][1],
-                           fig["T_wells"][2]))
-    A("3. Hindcast the Mill Street wells (monthly gpm from harlow_springs_MOR_well_production_2009-2026.csv, thousand "
-      "gallons before July 2016) with that fit: %d ft at MS-MW in 2025, more than twice the record, so the far field is "
-      "calibrated on the record." % fig["theis_msmw_2025"])
-    A("4. Read MS-MW (dropping readings taken with TW-1 running, the measuring point from cvwcd_well_register.xlsx) and "
-      "the network wells: against its own 2005 to 2008 level or against CV-07 the record calibrates a leakage factor "
-      "near %s ft and every schedule under %d ft at OW-S, filing 1,250 gpm (the reasonable but insufficient route)."
-      % (fig["cv07_B"], max(cv.values()) + 1))
-    A("5. CV-07's departure from CV-02 and CV-11 deepens with Mill Street pumping (correlation %.2f with the monthly "
-      "rate, against %.2f for CV-02 less CV-11), and OW-S moved with CV-02 and CV-11 before 2009 (correlation %.2f): "
-      "the natural level is CV-02 and CV-11's, and against it the Mill Street wells drew MS-MW down %d ft in 2025."
-      % (fig["cv07_pump_corr"], fig["far_pair_pump_corr"], fig["ows_far_pre_corr"], fig["msmw_2025_ft"]))
-    A("6. With the walls at Plate 3's mapped edges (%s ft apart) and the test's T and S, the leakage factor that "
-      "reproduces the drawdown at MS-MW, CV-07 and OW-S from March 2009 to September 2026 is %s ft."
-      % (fig["width"], fig["B_text"]))
-    A("7. Superposed the Mill Street projection (reidel_road_WR-4_application_requested_schedules.pdf) and each "
-      "Reidel Road schedule from April 2027 month by month at OW-S: greatest monthly drawdown in 2046 %d, %d, %d and "
-      "%d ft for 450, 700, 1,000 and 1,250 gpm, so Rule WR-4 4.2 permits 1,000 gpm."
-      % (p["450"], p["700"], p["1000"], p["1250"]))
-    A("8. Rule WR-4 4.4's domestic well is %s, nearest PW-1 and PW-2 in cvwcd_well_register.xlsx and about 200 ft "
-      "inside the plate's west edge, where the wall's image matters: %d ft in 2046 under %s gpm, against %d ft if "
-      "the walls are left out (the record alone fits either way)." % (fig["dw_id"], fig["dw_ft"], c(g["call"]),
-                                                                     fig["dw_nowalls_ft"]))
-    A("")
-    A("No other schedule survives. Theis from the test alone fails every schedule, but its own hindcast of the Mill "
-      "Street record is more than twice the record. Every far-field calibration read against CV-07, the wells' own baselines or a "
-      "fitted trend files 1,250 gpm, and CV-07's growing departure and the wet 2010s rule each of those out. Against "
-      "CV-02, CV-11 or both, with the walls from 4,000 ft apart to absent and T from any observation well, the "
-      "1,000 gpm peak stays under 9 ft and the 1,250 gpm peak over it. Calibrated on OW-S alone, whose record carries "
-      "half a foot of Mill Street drawdown, the leakage factor (%s ft) puts MS-MW's 2025 drawdown at %.1f ft against "
-      "the record's %.1f: it fits the sentinel's own small signal more closely only by missing the wells the Mill "
-      "Street pumping draws down most. At DW-17 a model without the walls fits the record as well and reads %d ft, "
-      "but Plate 3 maps the edges of the saturated sand and gravel 5,000 ft apart, and the walls give %d ft."
-      % (fig["ows_only_B"], fig["ows_only_msmw"], fig["msmw_1dp"], fig["dw_nowalls_ft"], fig["dw_ft"]))
-    open(path, "w").write("\n".join(lines) + "\n")
+def write(R, F):
+    cap = F["capacity"]
+    top4 = [str(y) for y in F["top4"]]
+    raw4 = [str(y) for y in F["raw_top4"]]
+    L = ["## Tags", "",
+         "**Domain:** Physical & Environmental Sciences, hydrology (flood frequency).",
+         "**Analytical objective:** Forecasting & Predictive Modeling.", "",
+         "## Final Recommendation", "",
+         "**Build Alternative %s, the %s (capacity %s cfs): the design flow at Kinnard Road is about %s cfs once the "
+         "record's storms are run through today's watershed.**" % (F["pick"], F["pick_barrels"], F["pick_capacity"],
+                                                                   F["design_flow"]),
+         "Not Alternative %s (%s cfs), which the gauge's %d annual peaks fitted as they stand would choose at %s cfs: "
+         "they show no trend only because the paved watershed's faster floods and the lighter storms since 1990 "
+         "cancel in them." % (F["raw_pick"], cap[F["raw_pick"]], F["n_years"], F["raw_q1"]),
+         "", "## Supplementary Questions", "",
+         "### %s" % K.DOCX_OUT, "",
+         "1. States the design flow, about %s cfs (%s to %s cfs on every sound pairing of the storms with their "
+         "floods), and recommends Alternative %s, %s, capacity %s cfs; Alternative A (%s cfs) would overtop and "
+         "Alternative C (%s cfs) passes at greater cost." % (F["design_flow"], F["band_low"], F["band_high"],
+                                                            F["pick"], F["pick_barrels"], F["pick_capacity"],
+                                                            cap["A"], cap["C"]),
+         "2. A chart of peak flow against return period: the frequency curve of the table the estimate rests on, the "
+         "recorded peaks' curve beside it, both series' plotting positions, and the three capacities as lines.",
+         "3. Names water year %d as the largest flood in the table the estimate rests on (%s cfs recorded, about %s "
+         "cfs on today's watershed), not water year %d, the largest as recorded (%s cfs)." % (
+             F["largest_year"], F["largest_recorded"], F["largest_today"], F["raw_largest_year"],
+             F["recorded_largest"]),
+         "4. The four largest in order: water years %s; as recorded the order would be %s." % (names(top4),
+                                                                                              names(raw4)),
+         "", "### %s" % K.CSV_OUT, "",
+         "1. %d rows, one per water year %s; columns water_year, peak_date, recorded_peak_cfs, storm_rain_in, "
+         "paved_fraction_pct and peak_current_watershed_cfs, the last the peak the estimate rests on: each "
+         "recorded peak raised by the response's rise between that year's paved fraction and 2025's, to the "
+         "nearest ten cfs; water year %d's row reads about %s cfs." % (F["n_years"], F["years"],
+                                                                           F["largest_year"], F["largest_today"]),
+         "", "## Critical Components", "",
+         "1. The %d recorded annual peaks show no trend (Kendall's tau **%s**, p = **%s**) and fitted as they stand "
+         "give **%s cfs**, under Alternative A's %s." % (F["n_years"], F["mk_tau"], F["mk_p"], F["raw_q1"], cap["A"]),
+         "2. Paired with the rain gauge's storm totals, the same storm makes about **%s times** the peak on today's "
+         "watershed that it made in 1960: the log peak rises **%s** per unit of paved fraction, which grew from **%s** "
+         "to **%s per cent**." % (F["factor"], F["c"], F["imp_1956"], F["imp_2025"]),
+         "3. On today's watershed the design flow is about **%s cfs** (**%s** to **%s** on every sound pairing), "
+         "above Alternative A's **%s** and under Alternative %s's **%s**." % (F["design_flow"], F["band_low"],
+                                                                            F["band_high"], cap["A"], F["pick"],
+                                                                            F["pick_capacity"]),
+         "4. Water year **%d** is the largest flood on today's watershed, not **%d**, the largest as recorded." % (
+             F["largest_year"], F["raw_largest_year"]),
+         "", "## Step-by-Step", "",
+         "1. Read the Drainage Standard section 4: the design flow is the peak with a 1 per cent chance of being "
+         "equalled or exceeded in any year of the crossing's first ten years of service (4.2), estimated from the "
+         "gauge's record with the county's other records for the watershed (4.3); the least costly alternative whose "
+         "capacity reaches it is recommended (4.5); capacities are in kinnard_road_culvert_alternatives.docx.",
+         "2. Fitted the %d annual peaks in ollery_creek_annual_peak_flows.csv as they stand: Kendall's tau %s "
+         "(p = %s), no trend, and the log-Pearson III 1 per cent flow %s cfs, which picks Alternative %s; the peaks "
+         "since 1995 alone, the peaks regressed on the paved fraction or detrended in time all stay at or under %s "
+         "cfs, the reasonable analysis that falls short." % (F["n_years"], F["mk_tau"], F["mk_p"], F["raw_q1"],
+                                                           F["raw_pick"], F["rungs_high"]),
+         "3. Rebuilt each year's paved fraction from tamsett_stormwater_impervious_parcels.xlsx (the Ollery basin's "
+         "impervious area by the year it was built, a split parcel under both numbers counted once, over the "
+         "basin's 11.5 square miles): %s per cent in 1956, %s in 2025." % (F["imp_1956"], F["imp_2025"]),
+         "4. Paired the peaks in ollery_creek_peaks_above_base_1956-2025.csv (the 2009 and 2010 duplicate export "
+         "counted once) with tamsett_rain_gauge_daily_1956-2025.csv's totals for the peak day and the two days before "
+         "(the gauge in service, Monday accumulations spread): for the %d storms of an inch or more, the log peak "
+         "rises %s per unit of paved fraction at a fixed storm, about %s times the 1960 peak for the same storm; the "
+         "storms since 1990 also ran lighter, which is why the annual peaks hide it." % (F["n_pairs"], F["c"],
+                                                                                        F["factor"]),
+         "5. Put each annual peak on today's watershed by that rise and refitted log-Pearson III: the 1 per cent flow "
+         "is about %s cfs, over Alternative A's %s and under Alternative %s's %s, so the county builds Alternative %s." % (
+             F["design_flow"], cap["A"], F["pick"], F["pick_capacity"], F["pick"]),
+         "6. Ranked the adjusted table: water year %d is the largest (%s cfs recorded, about %s cfs today), then %s; "
+         "as recorded the order is %s." % (F["largest_year"], F["largest_recorded"], F["largest_today"],
+                                          names(top4[1:]), names(raw4)),
+         "",
+         "No other conclusion survives. Every sound pairing of the storms with their floods (windows of two to four "
+         "days, storms of half an inch to three inches, the annual peaks against their own storms, decade effects, "
+         "log-Pearson III or the generalized extreme value) puts the design flow between %s and %s cfs, between "
+         "Alternative A's and Alternative %s's capacities, and keeps water year %d first and the same four largest in "
+         "the same order. Every route that fits the recorded peaks, however trimmed or detrended, stays at or under "
+         "%s cfs, because the lighter storms of the last three decades hide the faster floods in the annual maxima; "
+         "only setting each flood against its storm separates the two." % (
+             F["band_low"], F["band_high"], F["pick"], F["largest_year"], F["rungs_high"])]
+    text = "\n".join(L) + "\n"
+    F["sections"] = ["4.2", "4.3", "4.5", "4.6"]
+    return text, F

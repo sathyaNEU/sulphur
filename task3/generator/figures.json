@@ -1,98 +1,50 @@
 {
- "B": 3526,
- "B_text": "3,526",
- "S": "1.0e-03",
- "T": 8160,
- "T_text": "8,160",
- "T_wells": [
-  "8,320",
-  "8,090",
-  "8,260"
+ "area_sqmi": "11.5",
+ "band_high": "11,250",
+ "band_low": "9,570",
+ "c": "2.96",
+ "capacity": {
+  "A": "7,460",
+  "B": "13,380",
+  "C": "18,720"
+ },
+ "design_flow": "10,570",
+ "factor": "2.0",
+ "imp_1956": "6",
+ "imp_2025": "30",
+ "largest_recorded": "3,880",
+ "largest_today": "7,810",
+ "largest_year": 1968,
+ "mk_p": "0.79",
+ "mk_tau": "0.02",
+ "n_pairs": 312,
+ "n_years": 70,
+ "pick": "B",
+ "pick_barrels": "triple 10 ft x 9 ft box",
+ "pick_capacity": "13,380",
+ "pick_cost": "2,480,000",
+ "raw_largest_year": 1990,
+ "raw_pick": "A",
+ "raw_q1": "5,090",
+ "raw_top4": [
+  1990,
+  1983,
+  1968,
+  1978
  ],
- "call": 1000,
- "call_text": "1,000 gpm",
- "cv07_B": "1,900",
- "cv07_departure_2008": 0.01,
- "cv07_departure_2025": -1.67,
- "cv07_msmw": 3,
- "cv07_peak_top": 3,
- "cv07_peaks_ft": {
-  "1000": 3,
-  "1250": 3,
-  "450": 1,
-  "700": 2
- },
- "cv07_pump_corr": 0.911,
- "dw_2dp": 6.75,
- "dw_ft": 7,
- "dw_id": "DW-17",
- "dw_inside_edge_ft": 200,
- "dw_nowalls_ft": 6,
- "far_pair_pump_corr": 0.155,
- "limit": 9.0,
- "msmw_1dp": 4.9,
- "msmw_2025_2dp": 4.87,
- "msmw_2025_ft": 5,
- "msmw_slip_ft": 4,
- "next": 1250,
- "options": [
-  450,
-  700,
-  1000,
-  1250
- ],
- "ows_far_pre_corr": 0.994,
- "ows_only_B": "3,065",
- "ows_only_msmw": 4.4,
- "peaks_2dp": {
-  "1000": 8.12,
-  "1250": 9.92,
-  "450": 4.16,
-  "700": 5.96
- },
- "peaks_ft": {
-  "1000": 8,
-  "1250": 10,
-  "450": 4,
-  "700": 6
- },
- "q_avg": 1005,
- "raw_msmw": 3,
- "raw_peak_top": 2,
- "rms": 0.08,
- "rule_clauses": [
-  "2.1",
-  "2.2",
-  "4.1",
+ "recorded_largest": "4,510",
+ "rungs_high": "5,870",
+ "sections": [
   "4.2",
   "4.3",
-  "4.4"
+  "4.5",
+  "4.6"
  ],
- "standing_1000_range": [
-  7.949,
-  8.29
+ "top4": [
+  1968,
+  1983,
+  1978,
+  1962
  ],
- "standing_top_range": [
-  9.716,
-  10.124
- ],
- "theis_msmw_2025": 12,
- "theis_peak_450": 22,
- "walls_tried": [
-  4000,
-  4500,
-  5000,
-  5500,
-  6500
- ],
- "width": "5,000",
- "years": [
-  2005,
-  2008,
-  2009,
-  2025,
-  2026,
-  2027,
-  2046
- ]
+ "years": "1956 to 2025"
 }

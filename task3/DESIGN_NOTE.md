@@ -47,6 +47,258 @@ design sections are in git history at 1fffdf5, architecture 4's at 0931661.
   culvert's rating by 1.15.
 - **People:** drawn with `guard.py names --geo us --locale en_US --seed 517`: Lisa Horne, James Reynolds.
 
+## Default path
+
+Every figure is built by `generator/analysis.py` from the shipped pack and asserted in `generator/checks.py` (seed 96).
+
+1. Read the Drainage Standard section 4: the design flow is the peak with a 1 per cent chance of being equalled or
+   exceeded in any year of the crossing's first ten years (4.2), estimated from the full length of the gauge's record
+   with the county's other records (4.3); the least costly alternative whose capacity reaches it is recommended (4.5).
+2. Read the three alternatives' capacities (7,460, 13,380 and 18,720 cfs) from the roads division's memo.
+3. Take the gauge's 70 annual peaks (water years 1956 to 2025), check them the field's way: Kendall's tau 0.02,
+   p = 0.79, no trend; no low outliers; the log-Pearson III fit (moments of the base-10 logs, the station skew) sits on
+   the Weibull plotting positions.
+4. The 1 per cent flow is 5,090 cfs (the generalized extreme value gives 5,300), under Alternative A's 7,460 cfs.
+
+Ends on: Alternative A (5,090 cfs).
+
+Golden: Alternative B (10,570 cfs on today's watershed).
+
+## Stump sentence
+
+A strong analyst fits Bulletin 17C's log-Pearson III to the 70 annual peaks, finds no trend (p = 0.79) and files
+Alternative A at 5,090 cfs; the peaks since 1995, the peaks regressed on the paved fraction or detrended in time keep it
+there (at most 5,870 cfs), because the lighter storms since 1990 offset the paved watershed's faster floods in the
+annual maxima; only setting each flood against the storm that made it (the peaks above base paired with the rain
+gauge's storm totals, the response's rise with the paved fraction read at a fixed storm) and putting every year's peak
+on today's watershed files Alternative B at 10,570 cfs.
+
+## Deep reasoning
+
+- **Task type:** physical-environmental-sciences `hydrology-flood-frequency`, which serves Forecasting & Predictive
+  Modeling: the design flood of a crossing's coming decade from a gauged record (Sulfur task type: extreme-value and
+  environmental-hazard return-period analysis).
+- **Domain test:** the deciding quantity is the 1 per cent annual exceedance peak flow at Kinnard Road for 2027 to
+  2036; the field estimates it with a frequency distribution fitted to annual peak flows (log-Pearson III under
+  Bulletin 17C, or the generalized extreme value), which assumes the record is homogeneous; replace the frequency curve
+  of the record with any generic summary and there is no exceedance probability to read.
+- **Swap:** "which culvert passes the 1 per cent flood of its first ten years" becomes "which warehouse passes the 1
+  per cent peak of its first ten years of orders"; orders have no storm that makes them, no watershed response, no lag
+  shortened by drains and no rain gauge to pair against, so the sentence stops making sense.
+- **Layer 1:** the rain gauge's 1987 move with two months on both sites, observers' weekend readings accumulated into
+  Monday's through 1978, trace codes and missed days (the climate office's export); the peak listing's 2009 and 2010
+  water years exported twice and its estimate codes (the gauge's data unit); split parcels carried under both numbers
+  after the 2004 reassessment and every basin of the county on one bill (the stormwater utility); the daily
+  discharge's provisional months, ice and equipment days (the data unit). Each is the systems' own, none is placed to
+  be caught, and each careful handling gives the same call (SF1 to SF4).
+- **Layer 2:** forecast_uncertainty, a design flood from a record that is not homogeneous: the response of the
+  watershed rose through the record while its storm climate fell, so the frequency curve of the record describes a
+  watershed that no longer exists; the choice that flips the call is whether each flood is read against its storm.
+- **Decisive step:** separating the watershed's response from the storm climate by pairing each peak above base with
+  the rain gauge's total for its storm, reading the rise of the log peak with the paved fraction at a fixed storm
+  (2.96 per unit), and putting each year's annual peak on today's watershed before fitting the frequency curve.
+- **Not semantics:** every field read correctly (the gauge in service, Monday accumulations spread, the duplicate peaks
+  once, split parcels once, water years as the standard's years, the capacities as filed) still files Alternative A
+  on the record fitted as it stands; no column, code or definition changes when the floods are read against storms,
+  because no file stores a storm's flood response or the watershed's change.
+- **Not rule application:** no filed rule says how the record is used beyond its full length; executing section 4
+  word for word leaves the estimator open. The enumerated family (the record as it stands, the peaks since 1995 or
+  2005, the peaks regressed on the paved fraction, the peaks detrended in time, each in log-Pearson III and the
+  generalized extreme value; and every pairing of peaks with storms in windows of two to four days, storms of half an
+  inch to three inches, the annual peaks against their own storms, decade effects) spans 3,750 to 11,250 cfs and files
+  A or B; the standing family (the pairings, which the record's own storm totals license) spans 9,570 to 11,250 cfs and
+  files B in every member; the ruling-out is quiet: the storms since 1990 are lighter in the rain gauge and the same
+  storm makes about twice the 1960 peak, both visible only once the two records are set side by side.
+- **Analyst test:** a strong analyst who reads every record and rule correctly, fits the 70 annual peaks under
+  Bulletin 17C, finds no trend (p = 0.79) and no outlier, and confirms the fit on the plotting positions files
+  Alternative A at 5,090 cfs, the default path's `Ends on:`.
+- **Estimand:** Drainage Standard 4.2 and 4.3 in `tamsett_drainage_standard_section_4.docx`: the peak discharge with a
+  1 per cent chance of being equalled or exceeded in any year of the crossing's first ten years of service, from the
+  full length of the gauge's record with the county's other records for the watershed.
+- **No decoy:** nothing is planted to be caught: the offset is the storms' own run of lighter decades and the
+  subdivisions' own drains; no document states a design flow, a trend, a response or a ranking, and the inspection,
+  the cross sections, the grab samples and the daily discharge are records the county keeps that the solution never
+  reads.
+- **No certified replay:** no shipped figure is a design flow or a frequency estimate; nothing certifies a route.
+- **Chain:** (1) the 70 annual peaks look homogeneous, so the question is whether the watershed and the storms each
+  stayed put; (2) the rain gauge shows the storms since 1990 lighter, so a flat flood record with lighter storms means
+  the response rose; (3) pairing each peak above base with its storm's total and reading the log peak against the
+  paved fraction at a fixed storm measures the rise (2.96 per unit, about twice the 1960 peak); (4) every year's peak
+  put on today's watershed and refitted gives the 1 per cent flow (10,570 cfs), so Alternative B, the four largest
+  floods 1968, 1983, 1978 and 1962.
+- **Judgment:** separating two explanations for one flat record (a watershed that never changed, or one whose
+  response rose while its storms fell) by a like-for-like comparison: the same storm's flood across the decades,
+  justified from the paired records, then a frequency model of a record made homogeneous on today's watershed.
+- **Hidden by:** two effects offsetting inside the observed window: the paved fraction's rise from 6 to 30 per cent and
+  the storms' fall since 1990 cancel in the annual maxima (Kendall p = 0.79), so the trend test, the outlier test and
+  the fit all pass; the pairing that shows the change needs two files no key joins.
+- **After the notice:** a run that suspects the paving still owes (1) reading the change at a fixed storm, where the
+  easy turns (the annual peaks regressed on the paved fraction, 5,460 cfs, or detrended in time, 5,670) keep the storms'
+  fall inside the estimate and stay on A; and (2) carrying the measured rise to every year of the record and refitting,
+  where truncating to the developed years (since 1995: 4,300) or to today's storms only (since 1991: 4,490, ruled out
+  by 4.3) lands on A.
+- **One-fact test:** the likeliest hint, "the watershed has urbanized", still leaves a run to find that the annual
+  peaks do not show it, decide the storms are hiding it, pair two records no key joins, read the rise at a fixed storm
+  and rebuild the record; told it, the obvious moves (regress the peaks on the paved fraction, keep the recent years)
+  stay on A.
+- **No replay:** the call re-derives no published figure and no stated number is wrong.
+- **Pinned:** every rival a careful analyst would run is run in `checks.py`: the stationary family (ten members) files
+  A; the pairing family (32 members, windows, storm sizes, annual pairs, decade effects, two distributions) files B;
+  only-the-recent-storms routes file A and are ruled out by 4.3's full length (SF13); each Layer 1 reading lands on B
+  (SF1 to SF4, SF9, SF11).
+- **Run forecast:** a run that applies the field's method stops at a method shortcut (the record fitted as it stands,
+  no trend found) and files A at 5,090 cfs; a run that suspects the paving and regresses the peaks on it dismisses its
+  own evidence (no significant slope) and stays on A; a run that pairs the records lands B.
+- **Strategy label:** WORKS IN FORM (separating two explanations for one pattern; the live form: a like-for-like
+  comparison rebuilt from history, no dated cutover, no filed sentence naming the split).
+- **Lesson:** a flood record can look stationary because its watershed and its storms moved in opposite directions;
+  the trend test on the maxima cannot see it, and only each flood against its storm separates the two; no build on
+  file prices a design flood from a record whose response and forcing offset.
+
+## Survivor anatomy
+
+- **Actor:** the deciding property is each flood's response to its storm, which no column stores: it is a relation
+  between a row of the peak listing and the rain gauge's rows for the same days.
+- **Link:** the peaks and the storms share no key; the link is a date window (the peak day and the days before) across
+  two agencies' exports, and the paved fraction is a third file's parcels summed by year; no sentence invites it.
+- **Reflex:** the field's method (log-Pearson III under Bulletin 17C on the annual peaks, with its trend and outlier
+  checks) sits at rung 0 and files A.
+- **Back-test:** the textbook route validates: no trend (p = 0.79), no low outliers, the fit on the plotting positions.
+- **Second use:** every file the decisive step reads is in the folder for its own reason: the rain gauge is the
+  county's climate record, the peak listing is the gauge's publication, the parcels are the stormwater bill.
+- **Shock:** the change reads as ordinary: the record's largest flood is 1990's, the recent decades look like the
+  early ones, and the storms' fall is a decade-scale dry spell of the kind the Piedmont's records carry.
+- **Pins:** the WHAT sits in the county's drainage standard (4.2 the probability, the window and the overtopping
+  criterion; 4.3 the full length of the record; 4.5 the least costly passing alternative); no filed sentence names
+  the paving, the storms, a pairing, a trend or a response.
+
+## Readability screen
+
+| Rung | 1 Filed sentence | 2 Schema | 3 Reflex | 4 Control bench | 5 Hygiene | 6 Linear | 7 Dedicated organ | Verdict |
+|---|---|---|---|---|---|---|---|---|
+| R0 the record fitted as it stands | 4.3 names the gauge's record | the peak file | yes, Bulletin 17C | the trend test passes | no | yes | no | readable |
+| R1 the developed years only | none | the peak file | yes, a homogeneous subset | none | no | yes | no | readable |
+| R2 the peaks regressed on the paved fraction or on time | none | parcels summed by year | yes, a covariate adjustment | slope not significant | no | yes | no | readable |
+| R3 (decisive) each flood against its storm, the record put on today's watershed | none: no sentence names a storm, a pairing or a response | no key joins a peak to a storm | no: the reflex adjusts the maxima | none: the maxima's checks pass on R0 | no | no: a pairing across files, a regression at a fixed storm, a rebuild and a refit | no: the rain gauge, the peak listing and the parcels are the county's own records | silent |
+
+## Semantic fork table
+
+| Id | Term or convention | Golden reading | Alternatives and their call | Ruled out by |
+|---|---|---|---|---|
+| SF1 | the rain gauge across its 1987 move | the gauge in service, the old site to 14 June 1987 | the new site's overlap readings: B | same call, asserted |
+| SF2 | weekend readings accumulated into Monday's | spread over the days covered | left on Monday: B | same call, asserted |
+| SF3 | the 2009 and 2010 peaks exported twice | counted once | counted twice: B | same call, asserted |
+| SF4 | split parcels under both numbers | counted once | counted twice: B | same call, asserted |
+| SF5 | the storm total's window | the peak day and the two days before | two or four days: B | same call, asserted |
+| SF6 | the storms paired | an inch or more | half an inch to three inches: B | same call, asserted |
+| SF7 | the frequency distribution | log-Pearson III, station skew | the generalized extreme value: B | same call, asserted |
+| SF8 | the rise's estimator | the regression on the paved fraction | the annual peaks against their own storms, decade effects: B | same call, asserted |
+| SF9 | the service years' watershed | the 2025 watershed | the paved fraction carried to 2036: B | same call, asserted |
+| SF10 | the years of the record | water years (October to September), as the peak file publishes them | none | 4.3, the gauge's record |
+| SF11 | when a parcel's impervious area counts | from the year built | from the year after: B | same call, asserted |
+| SF12 | rounding | the design flow to the nearest ten cfs | the nearest hundred: B | same call, asserted |
+| SF13 | the storms the estimate stands on | the full record's | only those since 1981, 1991 or 2001 (B, A, A) | 4.3 ("the full length of the gauge's record") |
+
+## Ladder
+
+| Rung | Construction | 1 per cent flow (cfs) | Pick | Dies to |
+|---|---|---|---|---|
+| R0 | the 70 annual peaks fitted as they stand (log-Pearson III; GEV 5,300) | 5,090 | A | the storms' fall hiding the response's rise |
+| R1 | the peaks since 1995 or 2005 only | 3,750 to 4,530 | A | the developed years are the dry years; 4.3's full length |
+| R2 | the peaks regressed on the paved fraction or detrended in time | 5,460 to 5,870 | A | the storms' fall stays inside the slope |
+| R3 | each flood against its storm, the record on today's watershed (golden) | 10,570 (family 9,570 to 11,250) | B | |
+
+Margins: every stationary rung and the record's largest flood (4,510 cfs) sit 1.27 under Alternative A's 7,460; the
+golden family sits 1.28 over it and 1.19 under Alternative B's 13,380. Seed 96 from a sweep of 300 (scratch
+`scan6.py`), chosen for the widest joint margin with the trend test over p = 0.3 and the four largest stable across
+the family.
+
+## Closure table
+
+| # | Axis | Reading | Move |
+|---|---|---|---|
+| 1 | Population | the floods of the crossing's first ten years of service | filed 4.2 |
+| 2 | Unit of account | the annual peak flow (cfs) | filed 4.2, the peak file |
+| 3 | Attribution window | a flood to its water year | the peak file; SF10 |
+| 4 | As-of dating | the records as exported in January 2026 | metadata; one export each |
+| 5 | Version basis | approved and provisional flows alike; peaks as published | C1, the daily flows unread |
+| 6 | Denominator | none: a quantile | C1 |
+| 7 | Weighting | each year's peak once | C1 |
+| 8 | Window length | the full record, 1956 to 2025 | filed 4.3; SF13 |
+| 9 | Boundary inclusivity | equalled or exceeded | filed 4.2 |
+| 10 | Rounding path | flows to the nearest ten cfs, compared unrounded | prompt; SF12 |
+| 11 | Tie-break | the least costly passing alternative | filed 4.5 |
+| 12 | Maturity and censoring | the peak listing's 50 cfs base below every paired storm's flood | the paired storms an inch or more; SF6 |
+| 13 | Order of operations | clean, pair, regress, rebuild, fit | C1, each order gives the same rebuild |
+| 14 | Row order | file order | C1 |
+| 15 | Duplicate resolution | the duplicate peaks and split parcels once | SF3, SF4 |
+| 16 | Identity normalisation | the rain gauge across its move | SF1 |
+| 17 | Netting against gross | none | C1 |
+| 18 | Dimensional units | cfs, inches, square feet over the basin's square miles | the files' own units |
+| 19 | Code and status semantics | estimate codes kept as peaks; A, A3, T and M rain flags | SF2 |
+| 20 | Integerisation | none | C1 |
+| 21 | Clause scope | section 4 for a stream over one square mile | filed 4.1 |
+| 22 | Forward window contents | the 2027 to 2036 watershed as 2025's | SF9 |
+
+## Literal reader
+
+Executed word for word, section 4 gives the golden: 4.2 asks for the peak with a 1 per cent chance in each year of the
+first ten years of service, which is a property of the floods the culvert will meet; 4.3 sends the estimate to the
+full gauge record and the county's other records; the record's floods came from a watershed that the parcels show
+changed and whose same-size storms now make twice the flood, so the record must be put on today's watershed before
+its curve speaks for the service years. Readings that differ fit the record as if its floods were today's (R0 to R2),
+or drop part of it, which 4.3 rules out (SF13).
+
+## Oracles
+
+- The trend and outlier tests on the annual peaks: pass on every route; they confirm nothing.
+- The plotting positions: every frequency curve sits on its own series' positions.
+- No shipped figure is a design flow, a frequency quantile, a response or a ranking.
+
+## Ask sheet
+
+Four asks besides the call, every one read off the series the estimate rests on, so a run that fits the record as it
+stands files a different value in every cell; the run that takes the deep step keeps them, since the pack carries no
+second judgment the asks could ride without opening a fork.
+
+**Ask 1: the design flow** (1 figure, nearest ten cfs). Golden 10,570 cfs; the family 9,570 to 11,250, stated as
+that band in the answer blocks; the default path 5,090.
+
+**Ask 2: the largest flood in the table the estimate rests on** (1 figure, a water year). Golden 1968 on every member
+of the family; the recorded table names 1990.
+
+**Ask 3: the four largest in order** (4 positions). Golden 1968, 1983, 1978, 1962 on every member; recorded 1990,
+1983, 1968, 1978. The fourth and fifth largest sit 3 per cent apart, so the ask stops at four.
+
+**Ask 4: the table the estimate rests on** (70 rows). Graded through the four largest years' rows inside the family's
+band; the default path files the recorded peaks.
+
+| Path (cracker = lands the call, runs the battery, executes filed documents) | Design flow | Largest year | Four largest | Table rows | Verdict |
+|---|---|---|---|---|---|
+| landed | 1 | 1 | 1 | 1.00 | keeps |
+| shallow (recorded peaks) | 0 | 0 | 0 | 0.00 | miss |
+| rung 2 (peaks regressed on paved fraction) | 0 | 0 | 0 | 0.00 | miss |
+
+Shallow keep: 0.0 per cent of ask weight.
+
+Pair ceiling: 56.0 (landed 100.0, shallow 12.0). Above the paper target of 50: the landed run has no second judgment
+left on these asks; one could be added only by an ask whose figure the family does not pin, which would open a fork.
+
+Measured by: generator/ceiling.py, run on the cut pack.
+
+## Prompt contract
+
+What a voice rewrite of `prompt.txt` may not drop or change:
+- The question: which box culvert costed for the Kinnard Road crossing of Ollery Creek the county should build.
+- The criterion: the road may not overtop in the flood with a 1 per cent chance of being equalled or exceeded in any
+  year of the culvert's first ten years of service.
+- kinnard_road_culvert_design_flow.docx: the design flow and the culvert; the flood frequency charted against each
+  costed culvert's capacity; the water year whose flood is the largest in the table of annual peaks the estimate rests
+  on, and the four largest in order.
+- ollery_creek_design_peak_table.csv: that table, a row per water year.
+- Rounding: flows in cubic feet per second to the nearest ten.
+- No word for paving, urbanization, storms, rainfall, pairing, trend or adjustment; no count of the alternatives.
+
 ## Tried and rejected
 
 

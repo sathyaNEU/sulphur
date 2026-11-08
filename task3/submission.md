@@ -1,48 +1,40 @@
 ## Tags
 
-> **Domain:** Engineering and Physical Sciences, Physical & Environmental Sciences (inverse problems: physical-model calibration and uncertainty propagation, a groundwater withdrawal forecast).
-> **Analytical objective:** Forecasting & Predictive Modeling.
+**Domain:** Physical & Environmental Sciences, hydrology (flood frequency).
+**Analytical objective:** Forecasting & Predictive Modeling.
 
-## 1. Final Recommendation
+## Final Recommendation
 
-**The district will permit the 1,000 gpm schedule.** Its greatest monthly drawdown at OW-S in 2046 is 8 ft against Rule WR-4's 9 ft limit, and the 1,250 gpm schedule reaches 10 ft. Not 1,250 gpm: calibrating the far field on the Mill Street record read against the nearest network well CV-07 or the wells' own pre-pumping levels credits the region's wet years to leakage and puts every schedule under 4 ft; and not none of them: the test's Theis fit, carried twenty years, puts even 450 gpm at 22 ft.
+**Build Alternative B, the triple 10 ft x 9 ft box (capacity 13,380 cfs): the design flow at Kinnard Road is about 10,570 cfs once the record's storms are run through today's watershed.**
+Not Alternative A (7,460 cfs), which the gauge's 70 annual peaks fitted as they stand would choose at 5,090 cfs: they show no trend only because the paved watershed's faster floods and the lighter storms since 1990 cancel in them.
 
-## 2. Supplementary Questions
+## Supplementary Questions
 
-### reidel_road_WR-4_demonstration.pdf
+### kinnard_road_culvert_design_flow.docx
 
-1. Page 1 states that the district will permit the 1,000 gpm schedule, with a table of the four schedules (450, 700, 1,000 and 1,250 gpm), each one's greatest monthly drawdown at OW-S in 2046 (4, 6, 8 and 10 ft) and whether it is within 9.0 ft (yes, yes, yes, no).
-2. The chart under the table plots the drawdown at OW-S in every month from January 2027 to December 2046 for each schedule, one line per schedule with the 1,000 gpm line heaviest, against a dashed 9.0 ft limit line; every schedule's greatest month falls in 2046.
-3. The text below gives the test fit (transmissivity 8,160 ft2/day, storativity 1.0e-03), the separation of the Mill Street record against CV-02 and CV-11, the leakage factor of 3,526 ft with the walls 5,000 ft apart, and the schedules and projection used.
+1. States the design flow, about 10,570 cfs (9,570 to 11,250 cfs on every sound pairing of the storms with their floods), and recommends Alternative B, triple 10 ft x 9 ft box, capacity 13,380 cfs; Alternative A (7,460 cfs) would overtop and Alternative C (18,720 cfs) passes at greater cost.
+2. A chart of peak flow against return period: the frequency curve of the table the estimate rests on, the recorded peaks' curve beside it, both series' plotting positions, and the three capacities as lines.
+3. Names water year 1968 as the largest flood in the table the estimate rests on (3,880 cfs recorded, about 7,810 cfs on today's watershed), not water year 1990, the largest as recorded (4,510 cfs).
+4. The four largest in order: water years 1968, 1983, 1978 and 1962; as recorded the order would be 1990, 1983, 1968 and 1978.
 
-### reidel_road_sentinel_forecast.xlsx
+### ollery_creek_design_peak_table.csv
 
-4. Sheet Demonstration: one row per schedule with the greatest monthly drawdown at OW-S in 2046 (to the hundredth and to the nearest foot: 4, 6, 8 and 10 ft), the greatest in the term and whether it meets 4.1; then the permitted schedule, 1,000 gpm.
-5. Sheet Forecast OW-S: one row per month from 2027-01 to 2046-12 with the Mill Street projection (gpm), the drawdown from the Mill Street wells, and for each schedule its Reidel Road rate and the total drawdown at OW-S.
-6. Sheets Aquifer test, Mill Street record and Calibration: the test fit, the monthly record from 2005 with each well's drawdown against the far wells and the model's, and the leakage factor with its residuals.
+1. 70 rows, one per water year 1956 to 2025; columns water_year, peak_date, recorded_peak_cfs, storm_rain_in, paved_fraction_pct and peak_current_watershed_cfs, the last the peak the estimate rests on: each recorded peak raised by the response's rise between that year's paved fraction and 2025's, to the nearest ten cfs; water year 1968's row reads about 7,810 cfs.
 
-### Answers the district asked for
+## Critical Components
 
-7. Greatest monthly drawdown at OW-S in 2046: 450 gpm 4 ft; 700 gpm 6 ft; 1,000 gpm 8 ft; 1,250 gpm 10 ft.
-8. Drawdown the Mill Street wells caused at the Mill Street monitoring well, 2025 average: 5 ft.
-9. Greatest monthly drawdown in 2046 at the registered domestic well nearest the Reidel Road field (DW-17), under the 1,000 gpm schedule: 7 ft.
+1. The 70 recorded annual peaks show no trend (Kendall's tau **0.02**, p = **0.79**) and fitted as they stand give **5,090 cfs**, under Alternative A's 7,460.
+2. Paired with the rain gauge's storm totals, the same storm makes about **2.0 times** the peak on today's watershed that it made in 1960: the log peak rises **2.96** per unit of paved fraction, which grew from **6** to **30 per cent**.
+3. On today's watershed the design flow is about **10,570 cfs** (**9,570** to **11,250** on every sound pairing), above Alternative A's **7,460** and under Alternative B's **13,380**.
+4. Water year **1968** is the largest flood on today's watershed, not **1990**, the largest as recorded.
 
-## 3. Critical Components
+## Step-by-Step
 
-1. The test's Theis fit (transmissivity **8,160 ft2/day**, storativity **1.0e-03**) matches the three observation wells to 0.08 ft, yet carried forward it puts the Mill Street wells' 2025 drawdown at MS-MW at **12 ft**: the test cannot see the far field.
-2. CV-07 sits inside the Mill Street cone (its departure from CV-02 and CV-11 grew from **0.01 ft** in 2008 to **-1.67 ft** in 2025), so the natural level comes from CV-02 and CV-11, and against it the Mill Street wells drew MS-MW down **5 ft** in 2025.
-3. The bounded leaky aquifer reproducing that drawdown has a leakage factor of **3,526 ft**; against CV-07 the record asks for about **1,900 ft**.
-4. Greatest monthly drawdown at OW-S in 2046: **8 ft** at 1,000 gpm and **10 ft** at 1,250 gpm, against the **9 ft** limit.
+1. Read the Drainage Standard section 4: the design flow is the peak with a 1 per cent chance of being equalled or exceeded in any year of the crossing's first ten years of service (4.2), estimated from the gauge's record with the county's other records for the watershed (4.3); the least costly alternative whose capacity reaches it is recommended (4.5); capacities are in kinnard_road_culvert_alternatives.docx.
+2. Fitted the 70 annual peaks in ollery_creek_annual_peak_flows.csv as they stand: Kendall's tau 0.02 (p = 0.79), no trend, and the log-Pearson III 1 per cent flow 5,090 cfs, which picks Alternative A; the peaks since 1995 alone, the peaks regressed on the paved fraction or detrended in time all stay at or under 5,870 cfs, the reasonable analysis that falls short.
+3. Rebuilt each year's paved fraction from tamsett_stormwater_impervious_parcels.xlsx (the Ollery basin's impervious area by the year it was built, a split parcel under both numbers counted once, over the basin's 11.5 square miles): 6 per cent in 1956, 30 in 2025.
+4. Paired the peaks in ollery_creek_peaks_above_base_1956-2025.csv (the 2009 and 2010 duplicate export counted once) with tamsett_rain_gauge_daily_1956-2025.csv's totals for the peak day and the two days before (the gauge in service, Monday accumulations spread): for the 312 storms of an inch or more, the log peak rises 2.96 per unit of paved fraction at a fixed storm, about 2.0 times the 1960 peak for the same storm; the storms since 1990 also ran lighter, which is why the annual peaks hide it.
+5. Put each annual peak on today's watershed by that rise and refitted log-Pearson III: the 1 per cent flow is about 10,570 cfs, over Alternative A's 7,460 and under Alternative B's 13,380, so the county builds Alternative B.
+6. Ranked the adjusted table: water year 1968 is the largest (3,880 cfs recorded, about 7,810 cfs today), then 1983, 1978 and 1962; as recorded the order is 1990, 1983, 1968 and 1978.
 
-## 4. Step-by-Step
-
-1. From PW-1_constant_rate_2026-09_transducers.csv, barologger_BL-2231_2026-09.csv and the field readings' Loggers sheet: each logger on its own clock, pressure less the barologger, the OW-2 re-hang and OW-3's rewritten rows taken out, drawdown against each well's pre-test trend and barometric response.
-2. Fitted Theis to OW-1, OW-2 and OW-3 at the totalizer's 1005 gpm: transmissivity 8,160 ft2/day, storativity 1.0e-03, residual 0.08 ft (the field's method); each well alone gives 8,320, 8,090 and 8,260 ft2/day, and every one of them keeps the call below.
-3. Hindcast the Mill Street wells (monthly gpm from harlow_springs_MOR_well_production_2009-2026.csv, thousand gallons before July 2016) with that fit: 12 ft at MS-MW in 2025, more than twice the record, so the far field is calibrated on the record.
-4. Read MS-MW (dropping readings taken with TW-1 running, the measuring point from cvwcd_well_register.xlsx) and the network wells: against its own 2005 to 2008 level or against CV-07 the record calibrates a leakage factor near 1,900 ft and every schedule under 4 ft at OW-S, filing 1,250 gpm (the reasonable but insufficient route).
-5. CV-07's departure from CV-02 and CV-11 deepens with Mill Street pumping (correlation 0.91 with the monthly rate, against 0.15 for CV-02 less CV-11), and OW-S moved with CV-02 and CV-11 before 2009 (correlation 0.99): the natural level is CV-02 and CV-11's, and against it the Mill Street wells drew MS-MW down 5 ft in 2025.
-6. With the walls at Plate 3's mapped edges (5,000 ft apart) and the test's T and S, the leakage factor that reproduces the drawdown at MS-MW, CV-07 and OW-S from March 2009 to September 2026 is 3,526 ft.
-7. Superposed the Mill Street projection (reidel_road_WR-4_application_requested_schedules.pdf) and each Reidel Road schedule from April 2027 month by month at OW-S: greatest monthly drawdown in 2046 4, 6, 8 and 10 ft for 450, 700, 1,000 and 1,250 gpm, so Rule WR-4 4.2 permits 1,000 gpm.
-8. Rule WR-4 4.4's domestic well is DW-17, nearest PW-1 and PW-2 in cvwcd_well_register.xlsx and about 200 ft inside the plate's west edge, where the wall's image matters: 7 ft in 2046 under 1,000 gpm, against 6 ft if the walls are left out (the record alone fits either way).
-
-No other schedule survives. Theis from the test alone fails every schedule, but its own hindcast of the Mill Street record is more than twice the record. Every far-field calibration read against CV-07, the wells' own baselines or a fitted trend files 1,250 gpm, and CV-07's growing departure and the wet 2010s rule each of those out. Against CV-02, CV-11 or both, with the walls from 4,000 ft apart to absent and T from any observation well, the 1,000 gpm peak stays under 9 ft and the 1,250 gpm peak over it. Calibrated on OW-S alone, whose record carries half a foot of Mill Street drawdown, the leakage factor (3,065 ft) puts MS-MW's 2025 drawdown at 4.4 ft against the record's 4.9: it fits the sentinel's own small signal more closely only by missing the wells the Mill Street pumping draws down most. At DW-17 a model without the walls fits the record as well and reads 6 ft, but Plate 3 maps the edges of the saturated sand and gravel 5,000 ft apart, and the walls give 7 ft.
+No other conclusion survives. Every sound pairing of the storms with their floods (windows of two to four days, storms of half an inch to three inches, the annual peaks against their own storms, decade effects, log-Pearson III or the generalized extreme value) puts the design flow between 9,570 and 11,250 cfs, between Alternative A's and Alternative B's capacities, and keeps water year 1968 first and the same four largest in the same order. Every route that fits the recorded peaks, however trimmed or detrended, stays at or under 5,870 cfs, because the lighter storms of the last three decades hide the faster floods in the annual maxima; only setting each flood against its storm separates the two.

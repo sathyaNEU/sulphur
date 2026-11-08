@@ -1,205 +1,126 @@
-"""task3 architecture 3: the clean truth of the Corrin Valley world, before any file is written.
-
-Every series the pack will carry is built here from the aquifer, the pumping records and the region's natural
-level: the Mill Street wells' monthly pumping 2009 to 2026, the natural level each well would have shown without
-any pumping, the drawdown the Mill Street wells caused at every well, the monitoring readings, and the minute record
-of the September 2026 Reidel Road test. Nothing here knows how a file will be laid out."""
+"""The simulated world behind task3 architecture 5: seventy years of storms over Ollery Creek's 11.5 square miles, the
+watershed's runoff response as its paved fraction rises, and the creek's daily flows and instantaneous peaks. The
+truth (every storm's runoff and peak) never ships; the pack carries the gauges' records and the county's parcels."""
 import datetime as dt
-import math
 
 import numpy as np
 
-import aquifer as A
-import params as P
+import common as K
 
-UTC = dt.timezone.utc
-EDT = dt.timezone(dt.timedelta(hours=-4))
-
-
-def months(y0=2005, m0=1, y1=2046, m1=12):
-    out = []
-    y, m = y0, m0
-    while (y, m) <= (y1, m1):
-        out.append((y, m))
-        m += 1
-        if m == 13:
-            y, m = y + 1, 1
-    return out
+D0 = dt.date(K.YEAR0 - 1, 10, 1)           # water year 1956 starts 1 October 1955
+D1 = dt.date(K.YEAR1, 12, 31)
 
 
-MONTHS = months()
-MI = {ym: i for i, ym in enumerate(MONTHS)}
-N = len(MONTHS)
-DATA_END = (2026, 9)          # the last month every long-term file carries
+def imp_frac(year):
+    y = np.asarray(year, dtype=float)
+    return K.IMP0 + (K.IMP1 - K.IMP0) / (1 + np.exp(-(y - K.IMP_MID) / K.IMP_WID))
 
 
-def xy(ac):
-    a, c = ac
-    x0, y0 = P.ORIGIN
-    # along-axis unit vector points N 18 E; across-axis points E 18 S
-    ua = (math.sin(P.AZ), math.cos(P.AZ))
-    uc = (math.cos(P.AZ), -math.sin(P.AZ))
-    return (x0 + a * ua[0] + c * uc[0], y0 + a * ua[1] + c * uc[1])
+def climate(year):
+    return np.where(np.asarray(year) < K.SHIFT_YEAR, K.WET_PRE, K.WET_POST)
 
 
-def town_pumping(rng):
-    """Monthly mean gpm for TW-1 and TW-2, March 2009 to September 2026."""
-    q1 = np.zeros(N)
-    q2 = np.zeros(N)
-    for i, (y, m) in enumerate(MONTHS):
-        if (y, m) < P.TOWN_START or (y, m) > DATA_END:
-            continue
-        yrs = (y - 2009) + (m - 1) / 12.0
-        tot = P.TOWN_BASE_GPM * (1 + P.TOWN_GROWTH) ** yrs
-        tot *= 1 + P.TOWN_SEASON * math.cos(2 * math.pi * (m - 7) / 12.0)
-        tot *= math.exp(rng.normal(0, 0.035))
-        if (y, m) < P.TW2_START:
-            q1[i] = tot
-        else:
-            share = P.TW1_SHARE_AFTER + rng.normal(0, 0.03)
-            if (y, m) == (2018, 3):          # TW-1 pulled for a pump and motor replacement
-                share = 0.0
-            if (y, m) in ((2021, 10), (2021, 11)):   # TW-2 screen redevelopment
-                share = 1.0
-            q1[i] = tot * share
-            q2[i] = tot * (1 - share)
-    return q1, q2
+def water_year(d):
+    return d.year + 1 if d.month >= 10 else d.year
 
 
-def town_projection():
-    """The application's projection for the Mill Street wells, October 2026 to December 2046, monthly gpm."""
-    base = P.TOWN_PROJ_BASE
-    out = np.zeros(N)
-    for i, (y, m) in enumerate(MONTHS):
-        if (y, m) <= DATA_END:
-            continue
-        ann = base * (1 + P.TOWN_PROJ_GROWTH) ** (y - 2026)
-        out[i] = ann * P.TOWN_MONTH_FACTORS[m - 1]
-    return out
+def curve_number(imp, prior5):
+    dcia = K.DCIA_SHARE * imp                            # the paved area piped straight to the creek
+    cn = K.CN_PERV * (1 - dcia) + 98 * dcia
+    if prior5 < 0.5:
+        cn = cn / (2.281 - 0.01281 * cn)
+    elif prior5 > 2.0:
+        cn = cn / (0.427 + 0.00573 * cn)
+    return min(cn, 98.0)
 
 
-def new_field(rate):
-    out = np.zeros(N)
-    for i, (y, m) in enumerate(MONTHS):
-        if (y, m) >= P.NEW_START:
-            out[i] = rate * P.NEW_SEASON[m - 1]
-    return out
+def runoff_in(p, cn):
+    s = 1000 / cn - 10
+    return (p - 0.2 * s) ** 2 / (p + 0.8 * s) if p > 0.2 * s else 0.0
 
 
-def natural_levels(rng):
-    """Natural level anomaly (ft, + higher) for each well, monthly 2005 to 2026: the confined aquifer's regional
-    response to wet and dry years, the shallow outwash's quicker and larger one, the bedrock's muted one."""
-    yr = np.array([y for y, _ in MONTHS])
-    mo = np.array([m for _, m in MONTHS])
-    ar = np.zeros(N)
-    for i in range(1, N):
-        ar[i] = 0.92 * ar[i - 1] + rng.normal(0, 0.24)
-    yan = np.array([P.WET_DRY.get(int(y), 0.0) for y in yr])
-    # the annual anomalies ease in and out over the months rather than stepping at each new year
-    k = np.array([0.08, 0.16, 0.24, 0.24, 0.16, 0.08])
-    yan_s = np.convolve(np.pad(yan, (3, 2), mode="edge"), k, mode="valid")[:N]
-    regional = 1.05 * np.sin(2 * math.pi * (mo - 2.2) / 12.0) + yan_s + ar
-    shallow_ar = np.zeros(N)
-    for i in range(1, N):
-        shallow_ar[i] = 0.75 * shallow_ar[i - 1] + rng.normal(0, 0.45)
-    shallow = 2.6 * np.sin(2 * math.pi * (mo - 2.8) / 12.0) + 1.5 * yan_s + shallow_ar
-    out = {}
-    for w in P.WELLS:
-        gain = P.NAT_GAIN.get(w, 1.0)
-        local = np.zeros(N)
-        for i in range(1, N):
-            local[i] = 0.85 * local[i - 1] + rng.normal(0, 0.05)
-        if w in P.CONFINED:
-            out[w] = gain * regional + local
-        elif w == "CV-13":
-            out[w] = 0.35 * regional + 0.6 * local
-        else:
-            out[w] = gain * shallow + 2 * local
-    return out, regional
+def time_to_peak_h(imp):
+    return K.TP_RURAL_H * (1 - K.LAG_DROP * (imp - K.IMP0) / (K.IMP1 - K.IMP0))
 
 
-def town_drawdown(q1, q2, obs, T=P.T, S=P.S, B=P.B, width=P.WIDTH):
-    """Monthly mean drawdown the Mill Street wells cause at obs (truth unless parameters are passed)."""
-    o = P.WELLS[obs] if isinstance(obs, str) else obs
-    s = A.superpose_monthly(q1, A.monthly_kernel(T, S, B, P.WELLS["TW-1"], o, width, N))
-    s += A.superpose_monthly(q2, A.monthly_kernel(T, S, B, P.WELLS["TW-2"], o, width, N))
-    return s
-
-
-def field_drawdown(qn, obs, T=P.T, S=P.S, B=P.B, width=P.WIDTH):
-    o = P.WELLS[obs] if isinstance(obs, str) else obs
-    s = A.superpose_monthly(qn / 2.0, A.monthly_kernel(T, S, B, P.WELLS["PW-1"], o, width, N))
-    s += A.superpose_monthly(qn / 2.0, A.monthly_kernel(T, S, B, P.WELLS["PW-2"], o, width, N))
-    return s
-
-
-def build(seed=P.SEED):
-    rng = np.random.default_rng(seed)
-    q1, q2 = town_pumping(rng)
-    nat, regional = natural_levels(rng)
-    draw = {w: town_drawdown(q1, q2, w) for w in P.WELLS if w in P.CONFINED or w in ("CV-04", "CV-09", "CV-13")}
-    # the shallow outwash and the bedrock barely feel the confined aquifer's pumping
-    for w in ("CV-04", "CV-09"):
-        draw[w] = 0.06 * draw[w]
-    draw["CV-13"] = 0.10 * draw["CV-13"]
-    return {"q1": q1, "q2": q2, "nat": nat, "regional": regional, "draw": draw, "rng": rng}
-
-
-# ---------------------------------------------------------------- the September 2026 test, minute by minute
-
-def test_clock():
-    t0 = dt.datetime.fromisoformat(P.LOG_FROM).replace(tzinfo=EDT)
-    t1 = dt.datetime.fromisoformat(P.LOG_TO).replace(tzinfo=EDT)
-    on = dt.datetime.fromisoformat(P.TEST_START).replace(tzinfo=EDT)
-    n = int((t1 - t0).total_seconds() // 60) + 1
-    stamps = [t0 + dt.timedelta(minutes=k) for k in range(n)]
-    tdays = np.array([(s - on).total_seconds() / 86400.0 for s in stamps])
-    return stamps, tdays, on
-
-
-def barometer(tdays, rng):
-    """Atmospheric pressure (psi) at the site: a slow wave, the daily tide and a front on 16 to 17 September."""
-    p = 14.38 + 0.035 * np.sin(2 * math.pi * tdays / 4.3 + 0.7)
-    p += 0.012 * np.sin(2 * math.pi * tdays * 2 + 1.1)                 # semidiurnal atmospheric tide
-    front = 2.35
-    p -= 0.165 * (1 / (1 + np.exp(-(tdays - front) / 0.18)))
-    p += 0.120 * (1 / (1 + np.exp(-(tdays - (front + 1.35)) / 0.30)))
-    walk = np.cumsum(rng.normal(0, 0.0009, len(tdays)))
-    walk -= np.linspace(walk[0], walk[-1], len(tdays))
-    return p + walk
-
-
-def test_rate_steps():
-    """PW-1's rate as hourly steps (gpm): it starts at the high end and eases down as the column warms."""
-    hi, lo = P.TEST_RATE_GPM
-    steps = []
-    for h in range(P.TEST_HOURS):
-        frac = (1 - math.exp(-h / 9.0)) / (1 - math.exp(-P.TEST_HOURS / 9.0))
-        steps.append((h / 24.0, round(hi - (hi - lo) * frac, 1)))
-    steps.append((P.TEST_HOURS / 24.0, 0.0))
-    return steps
-
-
-def test_drawdown(tdays, obs, steps, T=P.T, S=P.S, B=P.B, width=P.WIDTH):
-    """Drawdown at obs over the test record by interpolating the unit step response on a log time grid."""
-    o = P.WELLS[obs]
-    rw = P.WELLS["PW-1"]
-    grid = np.logspace(-6, 1.6, 900)
-    if obs == "PW-1":
-        o = (rw[0], rw[1] + 0.5)
-    ur = A.step_response(T, S, B, rw, o, grid, width)
-    lg = np.log(grid)
-    out = np.zeros_like(tdays)
-    prev = 0.0
-    for tc, rate in steps:
-        dq = (rate - prev) * P.GPM
-        prev = rate
-        dtv = tdays - tc
-        m = dtv > 0
-        out[m] += dq * np.interp(np.log(dtv[m]), lg, ur)
-    return out
-
-
-def earth_tide(tdays, amp):
-    return amp * (np.sin(2 * math.pi * tdays * 1.9323 + 0.4) + 0.46 * np.sin(2 * math.pi * tdays * 2.0 + 1.9) +
-                  0.38 * np.sin(2 * math.pi * tdays * 0.9973 + 2.6))
+class World:
+    def __init__(self, seed=K.SEED):
+        self.seed = seed
+        r = self.r = np.random.default_rng(seed)
+        ndays = (D1 - D0).days + 1
+        self.days = [D0 + dt.timedelta(days=i) for i in range(ndays)]
+        rain = np.zeros(ndays)
+        events = []                                      # (start index, length, depth, kind)
+        i = 0
+        while i < ndays:
+            d = self.days[i]
+            doy = d.timetuple().tm_yday
+            p_start = 0.105 + 0.03 * np.cos(2 * np.pi * (doy - 200) / 365)
+            if r.random() < p_start:
+                trop_p = K.TROP_PRE if d.year < K.SHIFT_YEAR else K.TROP_POST
+                tropical = 213 <= doy <= 300 and r.random() < trop_p
+                if tropical:
+                    depth = r.gamma(3.2, 1.25)
+                    length = int(r.integers(1, 4))
+                else:
+                    depth = r.gamma(0.95, 0.62)
+                    length = int(r.choice([1, 1, 1, 2, 2, 3]))
+                depth *= float(climate(d.year))
+                length = min(length, ndays - i)
+                w = r.dirichlet(np.ones(length) * 1.6)
+                rain[i:i + length] += depth * w
+                events.append((i, length, depth, "tropical" if tropical else "frontal", float(w.max())))
+                i += length + int(r.integers(3, 6))           # storms come at least three dry days apart
+            else:
+                i += 1
+        # light rain on other days: no runoff, but the gauge's totals read like the Piedmont's 45 inches a year
+        near = np.zeros(ndays, dtype=bool)                  # light rain keeps clear of the storms
+        for (s0, ln, *_rest) in events:
+            near[max(0, s0 - 3):min(ndays, s0 + ln + 3)] = True
+        light = (rain == 0) & ~near & (r.random(ndays) < 0.62)
+        rain[light] += np.round(r.gamma(0.8, 0.25, light.sum()), 2)
+        self.rain = rain
+        # runoff, instantaneous peaks and daily flows
+        flow = np.zeros(ndays)
+        seasonal = np.array([9 + 9 * np.cos(2 * np.pi * (d.timetuple().tm_yday - 45) / 365) for d in self.days])
+        rb = np.random.default_rng(seed + 55)
+        wob = np.exp(np.convolve(rb.normal(0, 0.06, ndays), np.ones(9) / 3.0, mode="same"))
+        flow += np.maximum(0.6, seasonal * wob + 0.25 * np.convolve(rain, np.exp(-np.arange(20) / 6.0))[:ndays])
+        self.events = []
+        acre_ft_per_in = K.AREA_ACRES / 12.0
+        for (s, length, depth, kind, wmax) in events:
+            d = self.days[s]
+            imp = float(imp_frac(d.year + (d.timetuple().tm_yday / 365.0)))
+            prior5 = rain[max(0, s - 5):s].sum()
+            wetness = 1.0
+            q_in = K.RUNOFF_K * depth ** K.RUNOFF_EXP * wetness * (1 + K.VOL_RISE * (imp - K.IMP0))
+            if q_in <= 0:
+                continue
+            tp = time_to_peak_h(imp)
+            burst = 0.90 + 0.2 * wmax                   # rain packed into one day makes a sharper peak
+            qp = 484 * K.AREA_SQMI * q_in / tp * burst * float(np.exp(r.normal(0, 0.09)))
+            vol_cfs_days = q_in * acre_ft_per_in / 1.9835
+            urban = (imp - K.IMP0) / (K.IMP1 - K.IMP0)
+            spread = np.array([0.5 + 0.15 * urban, 0.32 - 0.08 * urban, 0.18 - 0.07 * urban])
+            pk = s + length - 1                          # the creek peaks on the storm's last day of rain
+            for j, f in enumerate(spread):
+                if pk + j < ndays:
+                    flow[pk + j] += vol_cfs_days * f
+            hour = float(np.clip(r.normal(14, 5), 0.1, 23.9))
+            self.events.append({"day": pk, "date": self.days[pk], "hour": hour, "depth": depth, "kind": kind,
+                                "imp": imp, "runoff_in": q_in, "peak": qp, "start": s, "length": length})
+        self.flow = flow
+        wy = np.array([water_year(d) for d in self.days])
+        self.wy = wy
+        self.annual = {}
+        for e in self.events:
+            y = water_year(e["date"])
+            if K.YEAR0 <= y <= K.YEAR1 and e["peak"] > self.annual.get(y, {"peak": 0})["peak"]:
+                self.annual[y] = e
+        for y in range(K.YEAR0, K.YEAR1 + 1):           # a year without a runoff event peaks on its baseflow
+            if y not in self.annual:
+                idx = np.nonzero(wy == y)[0]
+                j = int(idx[np.argmax(flow[idx])])
+                self.annual[y] = {"day": j, "date": self.days[j], "hour": 9.0, "depth": float(rain[j]),
+                                  "kind": "none", "imp": float(imp_frac(self.days[j].year)), "runoff_in": 0.0,
+                                  "peak": float(flow[j] * 1.25), "start": j, "length": 1}

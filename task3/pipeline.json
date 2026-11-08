@@ -1,25 +1,26 @@
 {
  "task": "task3",
- "status": "DESIGN",
+ "status": "PAUSED",
  "domain": "physical-environmental-sciences",
  "objective": "forecasting",
- "stage": 2,
- "stage_name": "design",
+ "stage": 4,
+ "stage_name": "check",
  "updated": "2026-11-08",
- "stump": "",
+ "stump": "A strong analyst fits Bulletin 17C to the 70 annual peaks, finds no trend (p = 0.79) and files Alternative A at 5,090 cfs; only setting each flood against its storm and rebuilding the record on today's watershed files Alternative B at 10,570 cfs.",
  "architecture": 5,
  "loops": 0,
  "precut": {
-  "exit": null,
-  "date": ""
+  "exit": 1,
+  "date": "2026-11-08",
+  "note": "75 checks, 1 FAIL: pair ceiling 56.0 against the paper target of 50"
  },
  "leak": {
-  "leak_py": "",
-  "reader": ""
+  "leak_py": "REVIEW (standing vocabulary and the deliverable-set quota)",
+  "reader": "2026-11-08 isolated reader: no step named, no ranking or helper file, Q6 analytical; three realism notes fixed"
  },
  "duplicate_check": {
-  "heart": "",
-  "surface": ""
+  "heart": "WARN (objective overuse, deliverable set)",
+  "surface": "clean"
  },
  "judge": {
   "verdict": "",
@@ -97,7 +98,7 @@
    "commit": ""
   }
  ],
- "resume": "architecture 5 drawn (DESIGN_NOTE ## Draw, card v5); next: the design note's stage-2 sections, then the generator (world, pack, golden), precut, build gates, leak reader and judge",
+ "resume": "architecture 5 built; the determinism judge's isolated thread is running on /tmp/determinism-check-task3-161819; on its verdict, re-invoke the determinism-judge agent with verdict.md to write determinism_check_report.md, fix findings in the generator, re-run gates, commit READY",
  "approved": null,
  "delivered": "2026-11-07",
  "portal": "landed by one response (R1 2,200 t at 100 per cent, R2 2,600 t at 70 per cent), reported 2026-11-07",
@@ -174,7 +175,7 @@
   }
  ],
  "subdomain": "hydrology-flood-frequency",
- "call": "",
+ "call": "Build Alternative B (capacity 13,380 cfs): the design flow is about 10,570 cfs once the record's storms run through today's watershed",
  "gates": {
   "checks": "132 of 132",
   "verify": "PASS",
