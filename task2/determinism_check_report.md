@@ -79,3 +79,11 @@ The field's own analysis (volume-variance and recoverable-resource estimation) d
 
 ## Fix
 solution (rubric tolerance only). State in the answer blocks and rubric that the tonnes and grade cells above 2.5 g/t are method-dependent, with the gold at 2.5 g/t the committed value. Tolerate about 10% on tonnes and grade, and about 5% on ounces at the other cut-offs, so a lognormal or affine support correction both score. Make no prompt or pack change.
+
+## Re-judge of the FIX_NOW (one pass, 2026-11-08)
+
+Isolated Sonnet thread on the fixed answer 3 (brief judge_brief_r2.md): **DETERMINISTIC, APPROVE.** The affine rows
+against the lognormal rows at the golden's variance ratio differ by at most 13.2 per cent in tonnes (1.5 g/t), 5.6 per
+cent in grade (2.5 g/t) and 10.5 per cent in gold (1.5 g/t), all inside the stated bands (14, 6, 11); at 2.5 g/t both
+corrections give Tier B and round to 150,000 oz (147.6 and 140.7 koz); the declustered composites (229 koz, Tier C)
+and the kriged model (96 koz, Tier A) fall far outside the tolerance. Nothing else in the graded blocks is a fork.

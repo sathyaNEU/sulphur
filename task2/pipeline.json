@@ -1,29 +1,30 @@
 {
  "task": "task2",
- "status": "PAUSED",
+ "status": "READY",
  "domain": "general-statistics-data-science",
  "objective": "descriptive-distribution",
- "stage": 4,
- "stage_name": "check",
+ "stage": 5,
+ "stage_name": "ready",
  "updated": "2026-11-08",
  "stump": "A strong analyst who declusters the composites and reads their grade-tonnage curve puts 231 koz above 2.5 g/t and commits Tier C, and one who kriges the blocks (the kriging cross-validates without bias) puts about 100 koz there and commits Tier A; only the declustered distribution carried to the block variance the variogram gives puts about 150,000 oz above the cut-off and commits Tier B.",
  "architecture": 4,
  "loops": 0,
  "precut": {
-  "exit": null,
-  "date": ""
+  "exit": 0,
+  "date": "2026-11-08",
+  "checks": 72
  },
  "leak": {
-  "leak_py": "",
-  "reader": "2026-11-08 isolated reader (Sonnet, medium): no step named, no ranking or helper file, Q6 analytical; realism notes fixed in the generator"
+  "leak_py": "REVIEW, no LEAK (2026-11-08, --asof 2026-11-06): the tier sizes are the agreement's candidates, filed as stated inputs",
+  "reader": "2026-11-08 isolated reader (Sonnet, medium): no step named, no ranking or helper file, Q6 analytical; the term sheet's numbering and the metallurgy head grades fixed"
  },
  "duplicate_check": {
-  "heart": "",
-  "surface": ""
+  "heart": "WARN (answered on the card)",
+  "surface": "exit 0, 1 pair promoted on surface similarity"
  },
  "judge": {
-  "verdict": "DETERMINISTIC (2026-11-08, Sonnet thread on target.zip 38cfe50a: the call and the graded gold forced)",
-  "disposition": "FIX_NOW applied (Supplementary answer 3 states the affine band); re-judge running",
+  "verdict": "DETERMINISTIC",
+  "disposition": "FIX_NOW applied (answer 3 states the affine band), re-judged once: APPROVE",
   "gate_g": "method_or_model_selection, analytical_non_defect, surface_read_dependency no, sole_data_defect no",
   "gate_h": "domain pass, layers pass, decisive_step analytical",
   "report": "task2/determinism_check_report.md"
@@ -46,7 +47,7 @@
    "commit": ""
   }
  ],
- "resume": "stage 4: the FIX_NOW re-judge is running from /tmp/determinism-check-task2-r1/judge_brief_r2.md; on APPROVE append it to determinism_check_report.md, re-run the free gates on the final cut and set READY with target.zip, golden.zip and golden/ force-added",
+ "resume": "",
  "approved": null,
  "delivered": "2026-11-01",
  "portal": null,
@@ -76,18 +77,15 @@
   }
  ],
  "gates": {
-  "checks": "53 of 53 (one WARN: the lowest weighed dose orders the four first)",
-  "verify": "PASS, 85 figures",
+  "checks": "70 of 70",
+  "verify": "PASS (its own variogram fit lands 148 koz, Tier B)",
   "byte_identical": true,
-  "figures_check": "128 of 128",
-  "precut": "61 checks, 0 FAIL, 0 WARN",
-  "voice_check": "PASS (WARN: the which-question shell quota)",
-  "leak_py": "REVIEW, no LEAK",
-  "target_zip_sha256": "811762642f4a39e7d2662cd99382434112b751153dba38a13e82bfc484bde5c5",
-  "target_mb": 5.4,
-  "pair_ceiling": 36.8,
-  "mirror_leakage": 15.1,
-  "family_margin": "in 43.6 or more, out 1.6 or less"
+  "figures_check": "65 of 65",
+  "precut": "72 checks, 0 FAIL",
+  "voice_check": "PASS (WARN shell quota)",
+  "pair_ceiling": 28.5,
+  "shallow_keep": 0.0,
+  "target_zip_sha256": "2253063e21a9966053ec64979f38f1368fa53a924aa34b074f0e23692a777b1d"
  },
  "history": [
   {
@@ -97,6 +95,10 @@
   {
    "date": "2026-11-08",
    "event": "architecture 3 landed by both platform runs (REDESIGN); architecture 4 drawn, designed and built in a new world (Mount Carrow, Western Australia)"
+  },
+  {
+   "date": "2026-11-08",
+   "event": "READY: architecture 4, commit Stage 5 to Tier B (about 150,000 oz at block support); judge DETERMINISTIC, APPROVE after one FIX_NOW"
   }
  ],
  "migrated_from": {
