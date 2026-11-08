@@ -16,6 +16,11 @@ design sections are in git history at 1fffdf5, architecture 4's at 0931661.
   shifted under it; G14 repeated task7), the forcing event is the state floodplain review of the crossing's hydraulic
   design (the budget repeated task7), and the decisive gap is population (the record's floods come from a watershed
   that no longer exists; time against G6 repeated task6's lineage).
+- **Relabel at stage 4:** the card's stump strategy moved from decomposition_attribution to causal_design on
+  2026-11-08, when task7's and task9's re-registrations put task8 v18 in this card's window (`ban.strategy`); the
+  decisive step is the paved fraction's effect on the flood at a fixed storm, a like-for-like comparison, which
+  causal_design names as truly. Heart re-read after the last pull: WARN (`overuse.objective`, `repeat.gate_g` against
+  task8 v18, an equating pass mark in another domain).
 - **Pairing:** Tamsett County's roads division replaces the failing culvert where Kinnard Road crosses Ollery Creek;
   the county's drainage standard requires a crossing to pass the 1 per cent annual exceedance peak flow of its first
   ten years of service without overtopping the road; three box culverts are costed, rated by the division's hydraulic

@@ -1,10 +1,10 @@
 {
  "task": "task3",
- "status": "PAUSED",
+ "status": "READY",
  "domain": "physical-environmental-sciences",
  "objective": "forecasting",
- "stage": 4,
- "stage_name": "check",
+ "stage": 5,
+ "stage_name": "ready",
  "updated": "2026-11-08",
  "stump": "A strong analyst fits Bulletin 17C to the 70 annual peaks, finds no trend (p = 0.79) and files Alternative A at 5,090 cfs; only setting each flood against its storm and rebuilding the record on today's watershed files Alternative B at 10,570 cfs.",
  "architecture": 5,
@@ -12,22 +12,22 @@
  "precut": {
   "exit": 1,
   "date": "2026-11-08",
-  "note": "75 checks, 1 FAIL: pair ceiling 56.0 against the paper target of 50"
+  "note": "75 checks, 1 FAIL: pair ceiling 56.0 against the paper target of 50; every other check passes"
  },
  "leak": {
   "leak_py": "REVIEW (standing vocabulary and the deliverable-set quota)",
   "reader": "2026-11-08 isolated reader: no step named, no ranking or helper file, Q6 analytical; three realism notes fixed"
  },
  "duplicate_check": {
-  "heart": "WARN (objective overuse, deliverable set)",
+  "heart": "WARN after the strategy relabel (objective overuse; gate_g repeat against task8 v18)",
   "surface": "clean"
  },
  "judge": {
   "verdict": "DETERMINISTIC",
-  "disposition": "FIX_NOW optional, applied, no rerun",
+  "disposition": "APPROVE (both optional fixes applied, the second confirmed in submission.md after the rebuild)",
   "gate_g": "decomposition_attribution with statistical_rigor, analytical_non_defect, surface_read_dependency no, sole_data_defect no",
   "gate_h": "domain pass, layers pass, decisive step analytical, chain 5, one-fact none",
-  "report": "pending"
+  "report": "task3/determinism_check_report.md"
  },
  "returned": [
   {
@@ -98,7 +98,7 @@
    "commit": ""
   }
  ],
- "resume": "architecture 5 built; judge DETERMINISTIC (both optional fixes applied: the table's columns named in the prompt, the storms-since-1991 rival named in the closing paragraph); the judge agent is writing determinism_check_report.md; then commit READY",
+ "resume": "upload prompt.txt (after the author's voice pass against ## Prompt contract), target.zip, the four blocks in submission.md and golden.zip; then /triage-runs task3",
  "approved": null,
  "delivered": "2026-11-07",
  "portal": "landed by one response (R1 2,200 t at 100 per cent, R2 2,600 t at 70 per cent), reported 2026-11-07",
@@ -207,5 +207,7 @@
     "triage": "REDESIGN"
    }
   ]
- }
+ },
+ "zip_md5": "9efaf3be6223908a845ce3edaa911b5c",
+ "golden_zip_md5": "0ae536a5846bd361f4036ab04e578771"
 }

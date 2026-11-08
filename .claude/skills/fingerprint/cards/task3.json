@@ -28,7 +28,7 @@
   ],
   "gate_g": "decomposition_attribution",
   "calibration_form": "none",
-  "stump_strategy": "decomposition_attribution",
+  "stump_strategy": "causal_design",
   "decisive_rule_filed": false,
   "official_decoy": false,
   "validated_decoy": false,
@@ -268,7 +268,7 @@
       "fate": "built to READY 2026-11-08 (0931661), then rolled back to v3 at the author's word before any platform round; the nitrate world is not reused"
     }
   ],
-  "notes": "Architecture 5, re-root 2026-11-08 at the author's word after architecture 3 landed (both runs). Prototype (scratch proto3.py): Mann-Kendall p 0.13 to 0.70 on most seeds; the stationary rungs 5,800 to 8,000 cfs; the deep-step family 9,800 to 13,000 cfs across thresholds, regression forms and LP3 against GEV; the seed is chosen in the build so both families clear their culvert's rating by 1.15.",
+  "notes": "Architecture 5, re-root 2026-11-08 at the author's word after architecture 3 landed (both runs). Prototype (scratch proto3.py): Mann-Kendall p 0.13 to 0.70 on most seeds; the stationary rungs 5,800 to 8,000 cfs; the deep-step family 9,800 to 13,000 cfs across thresholds, regression forms and LP3 against GEV; the seed is chosen in the build so both families clear their culvert's rating by 1.15. Stump strategy relabelled decomposition_attribution to causal_design on 2026-11-08 after task7 and task9 re-registered and moved task8 v18 into this card's window (ban.strategy): the decisive step is the effect of the paved fraction on the flood at a fixed storm, a like-for-like comparison holding the storm climate fixed, which causal_design names as truly; gate_g stays decomposition_attribution.",
   "lineage_shells": [
     {
       "question form": "how-much",

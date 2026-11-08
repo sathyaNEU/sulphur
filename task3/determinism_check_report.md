@@ -1,83 +1,57 @@
-# Determinism check report: task3 (architecture 3)
+# determinism-check report, task3, 2026-11-08
 
-Judge thread: isolated Sonnet at medium, 2026-11-08, on the bundle unzipped from target.zip and the submission's
-graded blocks; the brief at /tmp/determinism-check-task3-107173/judge_brief.md.
+## Verdict
+DETERMINISTIC (no SOLUTION_WRONG)
+**Disposition:** APPROVE once one wording item is applied (see Findings 1). No re-judge needed.
+**Stumping type:** mechanism: decomposition_attribution (two offsetting trends) with statistical_rigor, stumping_family: analytical_non_defect, surface_read_dependency: no, sole_data_defect: no
 
-- **Verdict:** DETERMINISTIC (the main call and answers 7, 8 and 9 reproduced: OW-S peaks 4.15, 5.95, 8.11 and 9.90
-  ft; MS-MW 4.95 ft; DW-17 6.81 ft).
-- **Disposition:** FIX_NOW, presentation and solution text only. Applied 2026-11-08: (1) the plate's "added October
-  2026" caption was already removed in the generator; the judge read an earlier unzip, and the shipped target.zip
-  carries the re-cut plate (sha 11e08aae19 against the judge's 4767f783c5); (2) Step-by-Step step 2 now gives each
-  observation well's own Theis fit (8,320, 8,090 and 8,260 ft2/day; checks.py R6 asserts each keeps the call); (3)
-  the closing passage now states the OW-S-alone closure (it fits the sentinel's half foot of signal more closely only
-  by missing MS-MW) and the DW-17 closure (a model without walls fits the record as well and reads 6 ft; Plate 3 maps
-  the edges 5,000 ft apart and the walls give 7 ft). No pack, prompt or graded figure moved. Re-judged once (below).
-- **Gate G:** method_or_model_selection, analytical_non_defect, surface_read_dependency no, sole_data_defect no.
-- **Gate H:** domain pass, layers pass, decisive_step analytical, chain 5 inferences.
-- **The judge's sensitivities, answered:** the transmissivity window it found (7,400 to 9,300 ft2/day) contains every
-  fit the golden's processing gives (8,090 to 8,320); its 7,400 at OW-2 came from its cruder processing.
-
-## The judge's verdict, verbatim
-
-# Determinism verdict, task3 (Reidel Road, Rule WR-4)
-
-**Verdict:** DETERMINISTIC. I reproduced the main call and supplementary answers 7, 8 and 9 independently. Two sensitivities are reported below as risks, not failures.
-
-**Disposition:** FIX_NOW. The only repair is presentation. The PNG in the unzipped folder still carries the caption "Wells of the Reidel Road field added October 2026." (visible lower right on the plate), although the brief says it was removed. Re-cut the bundle from the final PNG. No figure moves, so no model rerun is needed. Optional lever: see the two sensitivities under Evidence.
+Note: the isolated thread judged the pack as first spawned (golden CSV with storm_rain_in and paved_fraction_pct columns, prompt without column wording). The author then changed the prompt and golden CSV and rebuilt. Closure of those items is checked by me against the shipped files, not re-judged (one thread only).
 
 ## Why
-The call is forced by the files if the solver reaches a leaky, wall-bounded aquifer calibrated on the far wells CV-02 and CV-11. That reading reproduces the golden almost exactly: 1,000 gpm peaks at 8.1 ft and 1,250 gpm at 9.9 ft against the 9.0 ft limit in Table 1 of the Rule. The tempting alternatives each land on 1,250 gpm or on none, and each is ruled out by named data. The shipped data separate them: CV-07's departure from CV-02 and CV-11 grows with Mill Street pumping, and the Theis hindcast of MS-MW is more than twice the record. I found no Gate A, B, D or E failure. Gate C holds with two margin and fork cautions (below).
+Section 4.2 and 4.3 of the standard pin the design flow (1 per cent annual chance, first ten years, full record plus the county's other records) and 4.5 picks the cheapest alternative that reaches it. Unadjusted log-Pearson III gives 5,085 cfs (A); the storm-paired, today's-watershed fit gives about 10,570 (above A's 7,460, below B's 13,380), so B. All 15 window and threshold variants stayed 10,290 to 11,250 with the same top four. The post-1990-storms rival (4,488 cfs, A) is closed by 4.3's "full length of the gauge's record".
 
-## Evidence (recomputed from target/ only)
-| Item | Golden | My recompute | Source |
+## Recomputation ledger
+| Figure | Claimed | Judge recomputed | Reproduced |
 |---|---|---|---|
-| Monthly Mill Street rates (gal to gpm, units mixed, 1000 gal before 2016-07, 2019-05 run-hours month consistent) | n/a | 2025 mean TW-1 285, TW-2 224 gpm | harlow_springs_MOR csv |
-| MS-MW 2025 drawdown vs CV-02/CV-11 mean (TW-1 "running" reads dropped, MP history applied) | 5 ft (4.9) | 4.95 ft | mill_street_MW csv, well register MP history, network csv |
-| CV-07 departure from CV-02/CV-11, relative to 2006-08 baseline | 0.01 in 2008, -1.67 in 2025 | +0.10 (2008), -1.70 (2025) | network csv (CV-07 MP change 2013-08 applied) |
-| OW-S departure | about 0.5 ft Mill Street drawdown | -0.32 ft in 2025 | network csv |
-| Leaky strip model (Hantush W with no-flow images; walls 5,000 ft apart read off Plate 3, slanted; T 8,160, S 1e-3), B = 3,526 ft | MS-MW 4.9, OW-S/CV-07 fit | MS-MW 4.96, CV-07 1.74 (record 1.70), OW-S 0.54 (record 0.32) | plate PNG, register coordinates |
-| Joint least-squares B over MS-MW, CV-07, OW-S (monthly 2009-2026) | 3,526 | minimum near 3,500 (summed squared error 0.102 at 3,526 vs 0.125 at 3,400 and 0.178 at 3,700) | derived |
-| OW-S greatest monthly drawdown 2046, all months peak in July 2046 | 4, 6, 8, 10 ft | 4.15, 5.95, 8.11, 9.90 ft | application PDF schedules and factors, Mill Street projection (1.2 per cent growth reproduces the stated anchors) |
-| DW-17 (nearest registered domestic well, about 3,040 ft from PW-1; DW-22 5,240 ft, DW-09 7,840 ft), 1,000 gpm, 2046 | 7 ft | 6.81 ft (6.63 to 6.88 for walls 4,500 to 5,500 ft apart, B refit) | register, plate |
-| Rival: calibrate on OW-S alone | B 3,065, MS-MW 4.4 ft | B 3,065 gives MS-MW 4.39 ft, OW-S 0.34 ft, and 1,000/1,250 peaks of 6.45/7.91 ft | derived |
-| Rival: no walls at B 3,526 | n/a | 1,000 gpm 4.79 ft, 1,250 gpm 5.90 ft at that B; the golden says the same result holds after refit | derived |
-| Theis test fit (my crude re-processing, 1,005 gpm, EDT/UTC aligned, barometric correction, pre-test trend) | T 8,160, S 1.0e-3, residual 0.08 ft | per well T 8,600 (OW-1), 7,400 (OW-2), 8,600 (OW-3); joint 8,300; S about 1e-3 | transducer csv, baro csv, field readings |
+| Kendall tau, 70 peaks (annual_peak_flows.csv) | 0.02, p 0.79 | 0.022, p 0.788 | yes |
+| LP3 1% flow as recorded | 5,090 | 5,085 | yes (rounding) |
+| Paved fraction 1956 / 2025 (parcels xlsx) | 6 / 30 | 6.2 / 30.5 | yes |
+| Log-peak slope per unit paved fraction, 312 storms | 2.96 | 2.95 | yes |
+| Rise 1960 to 2025 at fixed storm | about 2.0x | 2.04x | yes |
+| Adjusted LP3 1% flow | 10,570 | 10,568 | yes |
+| Adjusted top four | 1968, 1983, 1978, 1962 | same (1968 = 7,805) | yes |
+| Recorded top four | 1990, 1983, 1968, 1978 | same | yes |
 
-I did not rebuild the test analysis to the golden's exact residual. The figures agree to within my cruder processing.
+## Competing answers that survived
+- None that change the call. Storms-since-1991 only (about 4,490, A) and since 1996 (4,765, A) are ruled out by 4.3 (design note SF13). Projecting paving to 2030 gives about 11,500, still B. A 5-day window falls to 9,500 or below, not a sound pairing, still between A and B on the 3-day-and-under readings the golden claims.
+- Rain-gauge mflag codes and the RG-01 to RG-02 handover are undocumented in the pack; data supports one reading and the slope barely moves (SF1, SF2 in the design note, asserted in checks.py).
 
-**Sensitivities and forks (not failures, but the margins are about 10 per cent):**
-1. **Transmissivity window.** With B refit to MS-MW's 4.95 ft at each T, the answer 1,000 gpm holds for T of roughly 7,400 to 9,300 ft2/day.
-   - T = 7,000 gives 1,000/1,250 peaks of 7.04/8.65 ft, so 1,250 gpm would be permitted.
-   - T = 9,500 gives 9.14 ft at 1,000 gpm, so 700 gpm would be permitted.
-   - My own per-well fits span 7,400 to 8,600, and OW-2 alone sits at the lower edge, where the 1,250 gpm peak is about 9.0 ft. The golden's 8,160 and its claim that "T from any observation well" keeps the call rest on its cleaner processing. A judge should confirm that claim from the golden's per-well fits. If OW-2's fit is below about 7,500 the 1,250 gpm margin is a coin toss.
-2. **OW-S-alone calibration (B 3,065).** It fits the sentinel record better by itself (RMSE 0.144 vs 0.218 ft) and permits 1,250 gpm. It is ruled out only by MS-MW (4.4 vs 4.95 ft) and CV-07. That misfit is real (about 0.5 ft against reading noise near 0.1 ft), so the closure is defensible. It is a genuine alternative a strong solver could choose, and the files give no rule saying "calibrate on all three wells". If the golden does not already document the residual comparison, add it to the answer blocks.
-3. **Supplementary question 9 (DW-17: 7 ft) depends on reading the walls from Plate 3** (no-flow edges 5,000 ft apart). A solver who skips the plate and refits gets 6 ft, as the golden's step 8 states. The prompt never mentions the plate or boundaries. Treat 6 as a surviving alternative for answer 9 only. It does not touch the main call. Consider a tolerance note in the rubric for answer 9, or have the prompt name the plate.
-4. Wall slope and spacing are read off the PNG. Within plus or minus 500 ft of spacing, answer 9 still rounds to 7 and the main call is unchanged after refit.
+## Spec gates
+| Gate | Required | Actual | Pass |
+|---|---|---|---|
+| Usable files / categories | 10+, 2+ | 10 files; docx, csv, xlsx | yes |
+| Large CSVs | 20,000+ rows and a 10-20 page CSV | rain gauge 25,720, daily discharge 25,660; peaks above base 1,138 rows (about 20 printed pages) | yes (page count estimated from rows) |
+| metadata.json distractors | 2+, nothing in ZIP labels one | 4 named (daily discharge, inspection, cross sections, grab samples); none labelled in ZIP | yes |
+| Distractors unused yet weigh | none answers a graded quantity | daily discharge max is 657 cfs mean flow, cannot reproduce 3,880 or 5,000+ peaks | yes |
+| Deliverables | 1-3, all in golden | 2 (docx, csv), both in golden.zip, which holds exactly those two | yes |
+| Ask shape | multi-dimensional, unit and rounding stated | 70-row table plus ranked top four plus chart; cfs, nearest ten | yes |
+| Prompt names table content | gradable cells | "row per water year giving its recorded peak and the peak the estimate uses"; golden CSV has exactly water_year, peak_date, recorded_peak_cfs, estimate_peak_cfs. Prompt does not name the date column, a minor extra | yes |
+| LLM-read / realism | none | judge found no authoring leakage; I did not re-sweep the golden docx prose | provisional |
+| Real-world licence/source | recorded | metadata says constructed, fictional, CC0 | yes (not verifiable from bundle) |
 
-Other points that passed: the permit term and months (April 2027 start, 2027-2046); the 56/44 TW-1/TW-2 split; the monthly factors; the largest alternative that meets 4.1 (the Rule's own tie-break, 4.2); the greatest month in the final year (4.3); the nearest domestic well (4.4). All rule terms are in the shipped Rule PDF and application PDF. The method vocabulary ("leakage factor", "Theis") appears in the answer blocks only; the prompt leaves the method open, as intended.
+## Gate G reconciliation
+Thread: mechanism decomposition_attribution with statistical_rigor, analytical_non_defect, surface_read_dependency no, sole_data_defect no. Design note: judgment "separating two explanations for one flat record by a like-for-like comparison", strategy WORKS IN FORM, hidden by two offsetting effects, one-fact test "the watershed has urbanized" does not rescue. Match. The declared distractors (daily discharge, inspection, cross sections, grab samples) are not named as the surface read; the thread named the impervious-parcels file as a strong cue, but that file is a solving input, not a declared distractor. The design note's own run forecast (field-method run files A at 5,090) agrees with the thread.
 
-## Files/Hygiene
-PASS, with one stale item. 13 files: csv (6), xlsx (3), pdf (3), png (1), so four formats. Two large messy CSVs (transducers 103,682 rows, network levels 1,911 rows plus mixed units and MP changes in the other tables). Distractors present and unlabelled (water-quality workbook, step test, drillers' logs for non-decisive wells, shallow CV-04/CV-09/CV-13). Real-looking operational artifacts with incidental noise (mixed units, MP changes, meter replacement, re-hung logger, timezone mixes). No authoring or benchmark disclosure found. Temporal coherence fine (application draft dated 30 October 2026, District data supplied 2 October 2026). Stale item: the PNG still shows the "added October 2026" caption, contrary to the brief. It is harmless to the figures but should be re-cut. No exclusion-level finding.
+Gate H line: domain: pass (flood-frequency with non-stationarity and rainfall-runoff response), layers: pass (L1 gauge change, Monday accumulations, duplicate 2009/2010 export, split and re-keyed parcels; L2 offsetting-trend attribution), decisive_step: analytical, chain: 5 inferences (trend test, paved history, storm-paired response at fixed storm, adjust to 2025, refit and compare), one_fact: none that makes it routine.
 
-## Stump power
-Strong. A competent analyst who fits the test well with Theis fails every schedule (hindcast 12 ft at MS-MW vs 5 ft record). One who calibrates against the nearest network well CV-07, or the wells' own pre-pumping baselines, gets B near 1,900 ft and every schedule under 4 ft, which files 1,250 gpm. That is the reasonable but insufficient route. The deciding insight, that CV-07 sits inside the Mill Street cone, comes from separating two explanations for one pattern (wet-year recharge vs Mill Street drawdown) and is hard to see without the cross-well departure analysis. Risk: if a solver stops at T from the test and B from the sentinel alone, the answer 1,250 gpm can be reached for a defensible-looking reason (sensitivity 2).
+## Stump power (Gate F)
+Moderate to good. Easy route (stationary LP3, or peaks regressed on paving or time, 5,090 to 5,870) lands A. Concern: a solver who reads the parcels file will suspect urbanisation; the stump rests on separating it from the storms' fall by pairing two unkeyed records, which the thread calls a modeling judgment. No part of the decisive step is a textbook one-shot method; the LP3 fit is rung 0-1. Main thread to weigh against the ladder.
 
-## Stumping type
-`mechanism: method_or_model_selection` (with statistical_rigor on the far-field reference choice), `stumping_family: analytical_non_defect`, `surface_read_dependency: no`, `sole_data_defect: no`. The reported numbers are fine. The difficulty is choosing the model and the reference wells on honest data, and carrying the calibrated model twenty years forward against a limit.
+## Findings, ranked
+1. LOW, OPEN: submission.md's closing "No other conclusion survives" paragraph still does not name the storms-since-1991 rival (about 4,490 cfs, A) as closed by 4.3. The coordinator says it was applied, but the current submission.md (saved 16:22) has no 1991, 4,49 or 4.3 text in the closing paragraph (step 1 cites 4.3 only). Apply that sentence; it is wording only, no figure or file changes, no re-judge.
+2. LOW, CLOSED: unnamed table columns. The prompt now describes the table as recorded peak plus the peak the estimate uses, and the golden CSV carries exactly water_year, peak_date, recorded_peak_cfs, estimate_peak_cfs; submission.md line 22 matches. Verified against the shipped prompt, golden CSV (70 data rows) and submission.
+3. LOW, ACCEPTED: undocumented rain-gauge flags and handover; one data-supported reading, slope moves little; recorded as SF1 and SF2 in the design note and asserted in checks.py (not opened by me beyond the design note table).
+4. INFO: the judged pack was the pre-fix build; the post-fix prompt and golden CSV were not re-judged, per the one-thread rule.
 
-## Deep reasoning
-`domain: pass`, `layers: pass`, `decisive_step: analytical`, `chain: 5 inferences, judgment: separating natural level from Mill Street drawdown and calibrating a bounded leaky aquifer to it`, `one_fact: "CV-07 is inside the Mill Street cone"` (no single sentence makes the rest routine: the solver still has to rebuild the test fit, fit the leakage factor with walls, and superpose both fields to 2046).
-
-Layer 1 is the mixed units, clocks, re-hung logger, and measuring-point and meter changes. Layer 2 is the groundwater hindcast and calibration. The easy route from CV-07 or the wells' own baselines gives under 4 ft and 1,250 gpm. Swapping the nouns (for example a river) breaks the wells and aquifer test reasoning, so the domain is used, not borrowed.
-
-## Fix
-Where: input_files (presentation only) and solution. (1) Re-cut the plate PNG without the "added October 2026" line and confirm the shipped zip contains the final PNG. (2) In the answer blocks, document the per-well T fits and the OW-S-alone residual comparison, so the closures on sensitivities 1 and 2 are visible. (3) Add a rubric tolerance or a prompt pin for answer 9 (the plate's walls), since 6 ft is an alternative for solvers who skip the plate. No change to the main call or any graded figure.
-
-## Re-judge of the FIX_NOW (one pass, 2026-11-08)
-
-Isolated Sonnet thread on the final bundle and the revised Step-by-Step: **DETERMINISTIC, APPROVE.** The plate no
-longer carries the caption; its own per-well Theis fits (8,430, 8,110 and 8,370 ft2/day) agree with step 2's
-(8,320, 8,090 and 8,260) and sit inside the window where 1,000 gpm holds, so the first pass's margin concern at OW-2
-is gone; the OW-S-alone closure (B 3,065 ft, MS-MW 4.4 against the record's 4.9 ft) and the DW-17 closure (Plate 3's
-mapped edges) cite shipped data. Residual note, not blocking: a solver who skips the plate reads 6 ft on answer 9
-only; the rubric may carry that as a tolerance note.
+## Next action for the author
+Add one sentence to the closing paragraph of submission.md naming the storms-since-1991 rival (about 4,490 cfs, Alternative A) and that section 4.3's full-length-of-the-record rule rules it out; rebuild if the submission is copied elsewhere; then proceed to READY.

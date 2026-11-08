@@ -84,8 +84,10 @@ def write(R, F):
          "Alternative A's and Alternative %s's capacities, and keeps water year %d first and the same four largest in "
          "the same order. Every route that fits the recorded peaks, however trimmed or detrended, stays at or under "
          "%s cfs, because the lighter storms of the last three decades hide the faster floods in the annual maxima; "
-         "only setting each flood against its storm separates the two." % (
-             F["band_low"], F["band_high"], F["pick"], F["largest_year"], F["rungs_high"])]
+         "only setting each flood against its storm separates the two. Rebuilding only the storms since 1991 on "
+         "today's watershed (%s cfs) would file Alternative A, but section 4.3 requires the full length of the "
+         "gauge's record." % (F["band_low"], F["band_high"], F["pick"], F["largest_year"], F["rungs_high"],
+                              F["recent_only"])]
     text = "\n".join(L) + "\n"
     F["sections"] = ["4.2", "4.3", "4.5", "4.6"]
     return text, F
