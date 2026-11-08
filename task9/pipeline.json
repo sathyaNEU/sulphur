@@ -1,35 +1,56 @@
 {
  "task": "task9",
- "status": "DESIGN",
+ "status": "READY",
  "domain": "quantitative-finance",
  "subdomain": "volatility-derivatives-pricing (client task type: derivative pricing, a structured credit note's loss distribution)",
  "objective": "forecasting",
- "stage": 2,
- "stage_name": "design",
+ "stage": 5,
+ "stage_name": "ready",
  "updated": "2026-11-08",
- "call": "",
- "stump": "provisional at the draw: the default path buys Kestrel Lane's senior note as the lower-risk (its borrowers spread over many industries, more subordination) under a one-factor and then an industry-factor copula fitted to the loan database, when companies held by the same buyout fund in the same year default together, which Kestrel Lane's concentration in a few funds turns into a chance of loss above the fund's 1.5 per cent bar; Ostvale's note is the one to buy",
+ "call": "buy Ostvale's Class A note: 0.54 per cent chance of any loss 2027 to 2031 against the 1 per cent test; Kestrel Lane's fails at 1.33 per cent (both at 15.0 per cent subordination)",
+ "stump": "The default path buys Kestrel Lane's note at a 0.14 per cent chance of loss against Ostvale's 0.44 per cent (the field's copula, one factor fitted to the yearly default rates plus the agencies' industry factor, back-tested on the record); the step that lands it there is linking defaults only through the economy and the sector, when the companies held by one sponsor house's funds default in the same years (0.503 of the residual variance), and Kestrel Lane's 95 loans sit with five houses, so its note's chance is 1.33 per cent, over the bar, against Ostvale's 0.54.",
  "architecture": 6,
  "loops": 0,
  "precut": {
-  "exit": null,
-  "date": ""
+  "exit": 0,
+  "date": "2026-11-08",
+  "checks": "72, 0 FAIL, 0 WARN, re-run on the final cut 2e2598bc"
  },
  "leak": {
-  "leak_py": "",
-  "reader": ""
+  "leak_py": "REVIEW on the final cut 2e2598bc (--asof 2027-02-17), no LEAK; every REVIEW line ruled harmless in the design note's Stage 4",
+  "reader": "four isolated reads (2e83c33f with a stale prompt, 150c10c4, 076bb4b7, final 2e2598bc): no leak at any; question 1 none (MP-RN-2 4.2 read as the method family only, no grouping), question 6 an analytical choice; fixes from reads 1 and 3 applied; leak_check_report.md"
  },
  "duplicate_check": {
-  "heart": "",
-  "nearest": "task7 at 0.08 (differentiated), mark135 v1 lineage (differentiated); guard check PASS 2026-11-08"
+  "heart": "PASS on the final cut",
+  "surface": "exit 0, no promoted pairs; personas Damian Schenkel and Ilse Lips (card); 'Ireland Collateral' a PDF-text false positive",
+  "nearest": "task7 at 0.08 (differentiated), mark135 v1 lineage (differentiated)"
  },
  "judge": {
-  "verdict": "",
-  "disposition": "",
-  "gate_h": "",
-  "report": ""
+  "pass": 1,
+  "date": "2026-11-08",
+  "verdict": "DETERMINISTIC",
+  "disposition": "FIX_NOW",
+  "report": "task9/determinism_check_report_pass1.md",
+  "gate_g": "method_or_model_selection over statistical_rigor, analytical_non_defect, surface_read_dependency no, sole_data_defect no",
+  "gate_h": "domain pass, layers pass, decisive_step analytical",
+  "finding": "ageing over the five years unpinned; loss given default readable as every closed workout; Ostvale thin under held ages with the judge's dependence; two-decimal figures reproduce only within the estimators' spread; LEI-only join misassigned houses",
+  "fixed": "MP-RN-2 3.2 ages the portfolio (SF16), 3.4 takes the average over every comparable default (SF17), every buyout from 2015 carries its LEI (K12), the estimators' band stated in the critical components and asserted (K13); no figure moved",
+  "re_judge": {
+   "pass": 2,
+   "date": "2026-11-08",
+   "cut": "076bb4b7",
+   "verdict": "DETERMINISTIC",
+   "disposition": "APPROVE",
+   "report": "task9/determinism_check_report.md",
+   "gate_g": "method_or_model_selection, censored loss secondary, analytical_non_defect, surface_read_dependency no, sole_data_defect no",
+   "gate_h": "domain pass, layers pass, decisive_step analytical, chain of five",
+   "residual": "optional pin applied (a defaulted loan leaves the portfolio, SF18); two-decimal figures move 0.1 to 0.2 across sound estimators, stated as the band"
+  }
  },
- "paper_pair": null,
+ "paper_pair": {
+  "ceiling_py": "cracker 47.0 against shallow 15.7, pair 31.3; two shallow runs 15.7; the full includer 57.8 against a shallow run",
+  "shallow_keep_pct": 15.8
+ },
  "runs": {
   "run1": null,
   "run2": null,
@@ -52,7 +73,7 @@
   ]
  },
  "returned": [],
- "resume": "",
+ "resume": "READY: upload prompt.txt and target.zip (2e2598bc), generate the two runs, then /triage-runs task9 with both runs and the generated rubric saved under runs/.",
  "approved": null,
  "submitted": null,
  "portal": {
@@ -332,6 +353,23 @@
   {
    "date": "2026-11-08",
    "event": "DRAWN: architecture 6, quantitative finance (derivative pricing, forecasting): PHL's choice between Kestrel Lane's and Ostvale's senior rated notes, the chance of loss set by default dependence among companies held by the same buyout fund in the same year; registered 2026-11-08T06:21Z at the author's request for a draw at least three times harder, stumped on the asks as well as the call"
+  },
+  {
+   "date": "2026-11-08",
+   "event": "stage 4: leak reads clean; determinism judge pass 1 DETERMINISTIC FIX_NOW (ageing, loss-given-default scope, estimator band, LEI join), fixed in one pass; pass 2 DETERMINISTIC APPROVE; its optional pin (a defaulted loan leaves the portfolio) applied, no figure moved"
+  },
+  {
+   "date": "2026-11-08",
+   "event": "READY: buy Ostvale's Class A note (0.54 per cent chance of loss 2027 to 2031 against the 1 per cent test; Kestrel Lane's fails at 1.33); target.zip 2e2598bc, golden.zip 23f116d2"
   }
- ]
+ ],
+ "build": {
+  "zip": "2e2598bcf1a03026",
+  "golden_zip": "23f116d29fe15ff5",
+  "byte_identical": true,
+  "checks": "51 PASS, 0 FAIL (K1 to K13, SF1 to SF18 with SF16b, R1 to R6, B1, S1, L1, D1, D2)",
+  "verify": "PASS (independent road: house 0.460, Kestrel Lane 1.18, Ostvale 0.58)",
+  "figures_check": "79 figures, 0 absent",
+  "metadata": "clean"
+ }
 }

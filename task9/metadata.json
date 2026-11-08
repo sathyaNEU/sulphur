@@ -1,0 +1,103 @@
+{
+ "architecture": 6,
+ "as_of": "2027-02-17",
+ "call": "Ostvale",
+ "deliverables": [
+  "ic_note_senior_notes_2027.docx",
+  "senior_note_loss_by_year.csv"
+ ],
+ "distractors": [
+  "euribor_forward_curve_2026-12-31.csv",
+  "phl_matching_portfolio_cashflows_2027-2076.xlsx"
+ ],
+ "distractor_notes": {
+  "euribor_forward_curve_2026-12-31.csv": "the euro money market curve at the cut-off; looks relevant to the notes' floating coupons but the test is on principal loss alone",
+  "phl_matching_portfolio_cashflows_2027-2076.xlsx": "the fund's projected benefit payments; looks relevant to what the notes are bought for but no figure is read from it"
+ },
+ "rows": {
+  "lenderbase_rows": 73066,
+  "workout_rows": 578,
+  "dealtrail_rows": 8858,
+  "lei_rows": 4485
+ },
+ "files": {
+  "dealtrail_buyout_transactions_1997-2026.csv": {
+   "source": "Dealtrail European buyout transactions extract",
+   "date": "2027-02-15",
+   "role": "evidence",
+   "license": "synthetic, CC0, generated for this task by task9/generator"
+  },
+  "ecb_euro_reference_rates_2026-12.csv": {
+   "source": "European Central Bank euro reference rates, December 2026",
+   "date": "2027-01-04",
+   "role": "evidence",
+   "license": "synthetic, CC0, generated for this task by task9/generator"
+  },
+  "euribor_forward_curve_2026-12-31.csv": {
+   "source": "EURIBOR fixings and three-month forwards at the cut-off",
+   "date": "2026-12-31",
+   "role": "distractor",
+   "license": "synthetic, CC0, generated for this task by task9/generator"
+  },
+  "kestrel_lane_senior_note_term_sheet.pdf": {
+   "source": "Kestrel Lane indicative terms, KLCP Senior Loan Note 2027",
+   "date": "2026-12-08",
+   "role": "evidence",
+   "license": "synthetic, CC0, generated for this task by task9/generator"
+  },
+  "klcp_static_portfolio_2026-12-31.xlsx": {
+   "source": "Kestrel Lane Credit Partners collateral tape",
+   "date": "2027-01-05",
+   "role": "evidence",
+   "license": "synthetic, CC0, generated for this task by task9/generator"
+  },
+  "lei_reference_extract_2026-12-31.csv": {
+   "source": "Legal entity identifier reference extract (GLEIF format) for the borrowers and fund vehicles",
+   "date": "2026-12-31",
+   "role": "evidence",
+   "license": "synthetic, CC0, generated for this task by task9/generator"
+  },
+  "lenderbase_loan_performance_2008-2026.csv": {
+   "source": "Lenderbase quarterly loan performance extract, European sponsor-backed first-lien loans",
+   "date": "2027-02-16",
+   "role": "evidence",
+   "license": "synthetic, CC0, generated for this task by task9/generator"
+  },
+  "lenderbase_sector_codes.json": {
+   "source": "Lenderbase sector classification and crosswalk, version 2024.1",
+   "date": "2024-01-01",
+   "role": "evidence",
+   "license": "synthetic, CC0, generated for this task by task9/generator"
+  },
+  "lenderbase_workout_recoveries_2008-2026.csv": {
+   "source": "Lenderbase workout and recovery file",
+   "date": "2027-02-16",
+   "role": "evidence",
+   "license": "synthetic, CC0, generated for this task by task9/generator"
+  },
+  "ostvale_collateral_tape_20261231.xlsx": {
+   "source": "Ostvale Capital collateral tape",
+   "date": "2027-01-05",
+   "role": "evidence",
+   "license": "synthetic, CC0, generated for this task by task9/generator"
+  },
+  "ostvale_senior_note_term_sheet.pdf": {
+   "source": "Ostvale indicative terms, Senior Secured Note 2027-1",
+   "date": "2026-12-11",
+   "role": "evidence",
+   "license": "synthetic, CC0, generated for this task by task9/generator"
+  },
+  "phl_matching_portfolio_cashflows_2027-2076.xlsx": {
+   "source": "PHL matching portfolio projected benefit cash flows",
+   "date": "2026-11-20",
+   "role": "distractor",
+   "license": "synthetic, CC0, generated for this task by task9/generator"
+  },
+  "phl_rated_note_standard_2026.pdf": {
+   "source": "PHL investment committee standard MP-RN-2 for senior rated notes",
+   "date": "2026-11-18",
+   "role": "governing",
+   "license": "synthetic, CC0, generated for this task by task9/generator"
+  }
+ }
+}
