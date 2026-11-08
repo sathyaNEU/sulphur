@@ -1,100 +1,104 @@
 {
   "task": "task3",
-  "architecture": "v2 (re-root after the portal return of 2026-11-07: a Pennsylvania sewer authority choosing the Clay Street storage tank that brings combined sewer Outfall 014 to the consent decree's four untreated overflows in an average year, the tank emptied only as fast as the Southside plant has room for its dewatering flow)",
-  "drawn": "2026-11-07",
-  "slot_note": "re-root of the wave 6 slot after the arch 1 portal landing; one architecture per world, so a new world, dataset and shell",
+  "project": "sulfur",
+  "architecture": "v3",
+  "drawn": "2026-11-08",
+  "slot_note": "re-root after the platform landed architecture 2 (both runs on the golden); one architecture per world, so a new world (a buried-valley aquifer in Indiana), dataset (aquifer-test loggers and a 2005 to 2026 water-level record) and shell (docx and xlsx, a which-question)",
   "domain": "physical-environmental-sciences",
   "subdomain": "hydrology-flood-frequency",
   "client_domain": "physical-environmental-sciences",
-  "niche": "a Pennsylvania city sewer authority selecting, for its consent decree's facility plan, which of four storage tank alternatives at the Clay Street regulator brings combined sewer Outfall 014 to no more than four untreated overflow events in an average year of the 2014 to 2025 metered record, when the tank drains into the Southside interceptor at the plant headworks and the Southside plant runs at its hydraulic limit for one to four days after most wet-season storms",
+  "niche": "a city utility's groundwater withdrawal permit under a conservancy district rule capping the drawdown at a sentinel well through a twenty-year term: which of four requested pumping rates for a new well field in a buried-valley aquifer keeps the 2046 drawdown within the limit (Sulfur task type: inverse problems, physical-model calibration and uncertainty propagation)",
   "objective": "forecasting",
-  "shape": "08",
+  "shape": "other",
   "decision_type": "pick_one_of_n",
   "answer_unit": "named_option",
-  "answer": "Select Alternative C, the 38 MG tank: it leaves Outfall 014 2.9 untreated overflow events a year, where the 26 MG Alternative B leaves 6.8.",
-  "answer_source": "submission.md, 1. Final Recommendation (generator/deliver.py from the pack; generator/verify.py recomputes)",
+  "answer": "File the 1,000 gpm schedule: its greatest monthly drawdown at OW-S in 2046 is 8 ft against the 9 ft limit, where 1,250 gpm reaches 10 ft.",
+  "answer_source": "submission.md block 1 and generator/figures.json call",
   "gap": [
+    "population",
     "time"
   ],
   "pattern": [
     "none"
   ],
   "generators": [
-    "G7",
-    "G3"
+    "G13",
+    "G16"
   ],
-  "gate_g": "binding_constraint",
+  "gate_g": "method_or_model_selection",
   "calibration_form": "existing_book_actuals",
-  "stump_strategy": "binding_constraint",
+  "stump_strategy": "forecast_method_backtest",
   "decisive_rule_filed": false,
   "official_decoy": false,
   "validated_decoy": false,
-  "context_artifact": "filed_standard",
-  "stakeholder_role": "the sewer authority's director of engineering and planning, who takes the tank selection to the board before the consent decree's facility plan is filed",
+  "context_artifact": "monitoring_export",
+  "stump_class": "analytical",
+  "analyst_test": "A strong analyst compensates the loggers, fits Theis to the test (an excellent fit), sees its hindcast overshoot the Mill Street record, recalibrates a leaky aquifer against CV-07 or the wells' own baselines and files 1,250 gpm, every rate under 3.5 ft at OW-S.",
+  "domain_test": "The deciding quantity is a 20-year drawdown forecast at a sentinel well, worked the way hydrogeology works it: aquifer properties from a pumping test, a conceptual model of the far field (walls, leakage) that the test cannot see, and its calibration against the drawdown an existing well field has already caused, separated from the aquifer's natural rise and fall; swap the nouns and there is no confined aquifer, no leakage through till and no cone of depression for a reference well to sit in.",
+  "layer2_family": "forecast_uncertainty",
+  "layer2_pattern": "own:far-field-calibrated-on-an-existing-cone-against-a-clean-natural-reference",
+  "layer1": [
+    "two logger brands on two clocks (local EDT and UTC), absolute pressure needing the barologger",
+    "an observation-well logger re-hung deeper after a download, a logger rewriting its last records",
+    "the aquifer's barometric response and earth tides in the minute record",
+    "the operating reports in thousand gallons then gallons, the wells renamed at a SCADA change, a meter replacement month estimated from run hours",
+    "monitoring readings taken with the nearby well running, a measuring point raised by a casing extension and another cut down",
+    "network readings keyed twice, estimated readings, months with no field run"
+  ],
+  "stakeholder_role": "Harlow Springs Utilities' water division manager, filing the Reidel Road application",
   "role_family": "capacity_planner",
   "scoring_unit": "other",
   "spine": {
-    "file": "outfall_014_flow_monitoring_2014-2025.parquet (Outfall 014's overflow pipe flow meter, 15-minute readings, with the 2019 meter replacement) beside wrp_influent_hourly_2014-2025.csv (both reclamation plants' hourly influent from the plant historian)",
-    "rows": 420000,
-    "entity": "one 15-minute interval of discharge through the Clay Street overflow pipe",
-    "grain": "outfall x 15 minutes",
-    "source": "synthetic (constructed in the layout of a sewer authority's flow monitoring export and a treatment plant historian's hourly export)"
+    "file": "PW-1_constant_rate_test_2026-09_transducers.csv beside cvwcd_network_water_levels_2005-2026.csv",
+    "rows": 103682,
+    "entity": "one logger reading",
+    "grain": "well x minute (test); well x month (record)",
+    "source": "synthetic"
   },
   "forum": "regulator_or_inspector",
-  "forcing_event": "purchase_order_or_contract",
+  "forcing_event": "statutory_or_regulatory_filing",
   "org_family": "utility_or_infrastructure",
   "world": {
-    "geography": "United States, Pennsylvania (Quessling, a fictional river city of about 180,000 with a combined sewer system; the authority, its plants, consultant, people, systems and data are fictional)",
+    "geography": "United States, Indiana (the Corrin Valley, a fictional buried bedrock valley; Harlow Springs, a fictional city)",
     "currency": "USD",
-    "org_type": "a municipal sewer authority running two water reclamation plants and the city's combined sewer outfalls under a federal and state consent decree",
+    "org_type": "a city water utility and a regional water conservancy district",
     "invented_names": [
-      "Quessling",
-      "Quessling Sewer Authority",
-      "Southside Water Reclamation Plant",
-      "Northside Water Reclamation Plant",
-      "Clay Street",
-      "Ostrem Calder Engineers",
-      "Wennick River"
+      "Corrin Valley",
+      "Corrin Valley Water Conservancy District",
+      "Harlow Springs",
+      "Harlow Springs Utilities",
+      "Reidel Road well field",
+      "Mill Street wells",
+      "Tillbrook Hydrogeologic",
+      "Kestrel Foods",
+      "Little Ossey"
     ],
     "people": [
-      "Tammy Williams",
-      "Nicholas Hernandez",
-      "Jesus Thompson"
+      "Mitchell Munoz",
+      "Todd Robinson",
+      "Wendy Ruiz",
+      "Mary Alvarez",
+      "John Ponce"
     ]
   },
   "deliverables": [
-    "clay_street_storage_evaluation.xlsx",
-    "clay_street_tank_selection_board.pptx"
+    "reidel_road_sentinel_forecast.xlsx",
+    "reidel_road_WR-4_demonstration.pdf"
   ],
   "opening_move": "question-first",
-  "question_form": "what",
-  "layer2_family": "allocation_constraints",
-  "layer2_pattern": "own:storage-drawdown-bound-by-receiving-plant-headroom",
-  "layer1": [
-    "the Outfall 014 meter replaced in June 2019 (cubic feet per second in Eastern Standard Time all year, then million gallons a day in UTC), with the two loggers overlapping for a week",
-    "the plant historian's hourly export in local time with the daylight saving repeat and gap, its two plants in one long file, and the 2021 historian upgrade that renamed the influent tags",
-    "tipping-bucket rain gauge loggers replaced in 2024 at two of four gauges, the new loggers stamping UTC, and technicians' calibration pours recorded as tips among the rain",
-    "the Northside tank SCADA's pump run states every 15 minutes, a dewatering pump rebuilt and re-rated in 2023 that kept its SCADA tag, and the level transducer reset during the 2023 cleanout",
-    "the regulator register's interceptor codes, a field service log in free text, and a work order export across a CMMS change"
-  ],
-  "driver": "A storage buffer that captures a discharge until it is full empties only through a receiving channel whose spare capacity vanishes for one to several days after each wet event, so in a run of events the buffer meets the next one still partly full; counting each event against an empty buffer, or a buffer emptied at its outlet's rated pace, understates how often it spills, and only replaying the record with the outlet bounded by the receiving channel's spare capacity, read from that channel's own record, prices the size the limit needs.",
-  "driver_concrete": "Clay Street's tank is pumped out into the Southside interceptor at the plant headworks, and the Southside plant, its sewershed full of groundwater and inflow, takes its 140 MGD hydraulic limit for one to four days after most storms from March to June; the Northside tank, whose plant has room within hours, empties at its pumps' rating and its overflows replay exactly that way, but Clay Street's pumps can only send what Southside has room for, so in a wet spell the tank meets the next storm still full and the 26 MG alternative that clears four events at its pumps' rating leaves 6.8 a year; only the 38 MG tank, at 2.9, meets the decree.",
-  "stump": "A competent solver replays Outfall 014's metered overflows through each tank pumped out at its station's rated dewatering flow (the continuous simulation the decree evaluates by, which reproduces the Northside tank's overflows since 2020) and selects Alternative B, the 26 MG tank, at 2.8 events a year; the step that lands it there is taking the pumps' rating as the pace the tank empties, when it empties into the Southside interceptor at the headworks of a plant that sits at its 140 MGD limit for days after wet-season storms, so only a replay bounded by Southside's own headroom hour by hour shows the 20 MG tank at 6.8 events and selects Alternative C, the 38 MG tank, at 2.9.",
-  "stump_class": "analytical",
-  "analyst_test": "A strong analyst who converts the old meter from cubic feet per second and Eastern Standard Time, joins the two loggers across their overlap, counts events with the decree's 24-hour separation and replays each alternative through the tank dewatered at its pump station's rated flow, checking the method on the Northside tank's record, files Alternative B (26 MG, 2.8 events a year); only bounding the dewatering by the Southside plant's hourly headroom files Alternative C (38 MG, 2.9 a year, with B at 6.8).",
-  "domain_test": "The quantity that decides the call is the exceedance frequency of a storage-regulated outfall over the period of record, found the way hydrologists find overflow and flood frequency for a regulated system, by continuous simulation of the record through the storage with its outflow bounded by the receiving system; with hospital beds or school places in place of million gallons there is no storm record, no event separation and no receiving plant whose wet-weather recession sets the storage's drawdown.",
+  "question_form": "which",
+  "driver": "The decisive quantity is a long-horizon response to a sustained load, when a short trial's response carries two opposing far-field effects that cancel inside its window and part only over years: the trial's own model fits it closely and overstates the long response, so the far field must be calibrated on the record a nearby load has already left, read against a natural baseline from references beyond that load's reach, because the nearest reference sits inside it and a fitted trend absorbs the response.",
+  "driver_concrete": "Each requested rate's greatest monthly drawdown at OW-S in 2046 from a bounded leaky aquifer whose leakage factor is calibrated on the drawdown the Mill Street wells caused at MS-MW and OW-S from 2009 to 2026, each well's natural level carried from the far network wells CV-02 and CV-11; not the 72-hour test's Theis fit extrapolated, and not a calibration against the readings' own pre-pumping levels, the nearest network well CV-07 (inside the Mill Street cone) or a fitted trend, each of which credits the region's wet years to leakage.",
+  "stump": "A strong analyst who sees the test's Theis forecast overshoot the Mill Street record recalibrates the leakage against the nearest network well CV-07 (or the wells' own pre-pumping levels, or a fitted trend) and files 1,250 gpm, every schedule under 3.5 ft at OW-S; only the natural level carried from CV-02 and CV-11 beyond the cone files 1,000 gpm.",
+  "deep_chain": "(1) the test's Theis fit is exact but blind to the far field, shown by its hindcast of the Mill Street record; (2) the record's drawdown is the reading's fall below its natural level, and the natural level must come from confined-aquifer wells beyond the cone (CV-02, CV-11), not CV-07 or a trend; (3) the leakage factor calibrated on that drawdown with the plate's walls; (4) the 2027 to 2046 superposition at OW-S under each schedule and the town's projection",
+  "judgment": "which reference wells carry the natural level (CV-07's record steps down with each Mill Street increase and cycles with the summer pumping, CV-02 and CV-11 agree with each other and with OW-S before 2009), and the far-field model that reproduces the separated drawdown out of the test's window",
+  "one_fact_test": "'the aquifer leaks' rescues nothing: the leakage must be calibrated, and on the raw or CV-07-referenced record it calibrates to 1,300 gpm",
+  "strategy_label": "WORKS IN FORM",
   "mechanism_source": "design_note",
   "differentiation": {
-    "task156": "there a pump station's infiltration scales with the sewer length below a fluctuating water table read from a bore, so one response fitted on a dry record understates a wet replay; here nothing scales the inflow: the metered overflows are taken as recorded, and what decides is how fast a storage tank can empty into a receiving plant that stays at its limit for days after storms",
-    "task162": "there each pressure valve acts only in hours its inlet runs above the setting, an hourly threshold with no memory; here the decisive structure is a stored volume carried from one storm to the next, emptied only as fast as another system's headroom allows",
-    "task118": "there a resource drawn from a buffer that refills only partly between consecutive calls responds less with each call of a run, and the run is the decisive step; here the run is the field's own continuous simulation, a rung below the call, and what decides is that the tank empties into another system whose headroom, read from that plant's own record, bounds its pumps after storms",
-    "task105": "there a new outlet wins only its side of the bisector with a sister outlet, a market cut no closed opening could show; here no market is divided: one tank's spills follow from how full it still is when the next storm comes, set by how fast another plant lets it empty",
-    "task460": "there a new zero-rate source displaces the marginal units of the intervals it runs in, weighted by its own profile; here nothing displaces anything at a margin: a stored volume is carried between storms and emptied only into the room a receiving plant has left",
-    "task127": "there a fixed team's spare capacity shows only as the ceiling it held through an earlier surge and caps how many units it can finish; here no team or count is capped: the receiving plant's headroom after each storm sets how much of a tank is empty when the next one arrives",
-    "task87": "there two owed items in one slot cannot both be taken by one unit, an exclusivity the closed record never paid for; here no slot is exclusive: a tank's volume is shared across storms through the time it takes to empty into a plant that stays at its limit",
-    "task32": "there a constraint binds at a finer time resolution than the natural forecast; here the binding limit is on another system, the receiving plant, and it binds through a state the tank carries between events, not within one period",
-    "task164": "there each plug-in vehicle adds its charging schedule to a shared transformer's summer peak, read from a panel that gained one; here nothing is added to the plant: a tank already on the record's overflows empties only into the room the receiving plant has left after each storm",
-    "task453": "there a questionnaire redesign is read from the rotation groups newest to a panel, net of their time-in-sample drift; here nothing is measured differently: a storage tank's spills follow from how full it still is when the next storm comes"
+    "mark308": "mark308 v1 rebuilds unmet requests the record never stored from supply movements; here every reading is stored and the decisive step is which reference wells carry the aquifer's natural level, so the far field calibrated on an existing cone is not credited with the region's wet years",
+    "mark166": "mark166 v3 forecasts next year's arrivals through departures linked across groups; here nothing arrives or departs: a sustained pumping response is calibrated on an existing well field's cone against natural levels from reference wells outside it",
+    "mark247": "mark247 rebuilds a running sum from a record whose gaps were filled by decay toward normal; here no record is filled: the natural level is carried from reference wells beyond the cone because the nearest one sits inside it"
   },
   "lineage": [
     {
@@ -130,14 +134,53 @@
       "driver_concrete": "Quellbrook's Priority 2 trucks salt a collector only at its intersections, hills and curves, so a collector's gain on moving to Priority 1 is mostly the stretch between them at the Priority 1 rate; the collectors moved from 2022 to 2025 were mostly hill, school and hospital-access streets whose Priority 2 salt already covered much of their length, while the redesign's 424 lane-km are long flat outer-suburb grid collectors whose Priority 2 trucks salted about a sixth of them, so the moved streets' average gain understates theirs and the Priority 1 collectors' rate less the new streets' own Priority 2 salt overstates it; only the gain read off each moved street's own Priority 2 salt, at the new streets' Priority 2 salt, carries across.",
       "architecture": "v1 (loops 2)",
       "fate": "landed on the portal (2026-11-07): one response filed the golden 2,200 t by regressing each earlier move's gain on its own Priority 2 salt and reading it at the new streets' (100 per cent), the other filed the default 2,600 t and still kept 70 per cent on the asks; conditioning a carried gain on a covariate each unit's history prints is the strong solver's reflex, so the world is spent"
+    },
+    {
+      "architecture": "v2",
+      "drawn": "2026-11-07",
+      "fate": "spent 2026-11-08 on the platform: both runs bounded the tank's dewatering by the Southside plant's hourly headroom and landed Alternative C and every ask (REDESIGN)",
+      "domain": "physical-environmental-sciences",
+      "subdomain": "hydrology-flood-frequency",
+      "objective": "forecasting",
+      "shape": "08",
+      "gap": [
+        "time"
+      ],
+      "pattern": [
+        "none"
+      ],
+      "generators": [
+        "G7",
+        "G3"
+      ],
+      "gate_g": "binding_constraint",
+      "stump_strategy": "binding_constraint",
+      "driver": "A storage buffer that captures a discharge until it is full empties only through a receiving channel whose spare capacity vanishes for one to several days after each wet event, so in a run of events the buffer meets the next one still partly full; counting each event against an empty buffer, or a buffer emptied at its outlet's rated pace, understates how often it spills, and only replaying the record with the outlet bounded by the receiving channel's spare capacity, read from that channel's own record, prices the size the limit needs.",
+      "driver_concrete": "Clay Street's tank is pumped out into the Southside interceptor at the plant headworks, and the Southside plant, its sewershed full of groundwater and inflow, takes its 140 MGD hydraulic limit for one to four days after most storms from March to June; the Northside tank, whose plant has room within hours, empties at its pumps' rating and its overflows replay exactly that way, but Clay Street's pumps can only send what Southside has room for, so in a wet spell the tank meets the next storm still full and the 26 MG alternative that clears four events at its pumps' rating leaves 6.8 a year; only the 38 MG tank, at 2.9, meets the decree.",
+      "stump": "A competent solver replays Outfall 014's metered overflows through each tank pumped out at its station's rated dewatering flow (the continuous simulation the decree evaluates by, which reproduces the Northside tank's overflows since 2020) and selects Alternative B, the 26 MG tank, at 2.8 events a year; the step that lands it there is taking the pumps' rating as the pace the tank empties, when it empties into the Southside interceptor at the headworks of a plant that sits at its 140 MGD limit for days after wet-season storms, so only a replay bounded by Southside's own headroom hour by hour shows the 20 MG tank at 6.8 events and selects Alternative C, the 38 MG tank, at 2.9.",
+      "answer": "Select Alternative C, the 38 MG tank: it leaves Outfall 014 2.9 untreated overflow events a year, where the 26 MG Alternative B leaves 6.8.",
+      "shell": {
+        "question form": "how-much",
+        "second-sentence opener": "alongside",
+        "rounding opener": "the",
+        "deliverable set": "docx+xlsx"
+      }
     }
   ],
-  "notes": "",
-  "registered": "2026-11-07T21:11:47Z",
+  "notes": "shape other: a which-of-four with a per-option forecast table; calibration existing_book_actuals: the Mill Street wells' 2009 to 2026 record is the organisation's own operating history",
+  "lineage_shells": [
+    {
+      "question form": "how-much",
+      "second-sentence opener": "alongside",
+      "rounding opener": "the",
+      "deliverable set": "docx+xlsx"
+    }
+  ],
+  "registered": "2026-11-08T02:14:40Z",
   "shell": {
-    "question form": "how-much",
-    "second-sentence opener": "alongside",
-    "rounding opener": "the",
-    "deliverable set": "docx+xlsx"
+    "question form": "whether",
+    "second-sentence opener": "the",
+    "rounding opener": "events",
+    "deliverable set": "pptx+xlsx"
   }
 }

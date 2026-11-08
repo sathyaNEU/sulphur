@@ -1,284 +1,248 @@
-# task2 design note: a hospital pharmacy's batch-compounded doses against their volume tolerance (architecture 3)
+# task2 architecture 4: Mount Carrow Stage 5, the Yarrabin delivery tier
 
-Architecture 3, drawn 2026-10-31 after architecture 2 (the Vellacott Health Foundation's coaching grants) was spent at
-stage 4 and retired again by the batch audit. Earlier architectures' sections are retired; their records and their
-lessons stand below and in Tried and rejected.
+General Statistics & Data Science, exploratory data analysis and distribution assessment, Descriptive & Distribution
+Analysis. Re-root of the slot after the platform landed architecture 3 (both runs on the golden at every ask,
+`runs/triage.md`): one architecture per world, so a new world, dataset and shell.
 
 ## Draw
 
-- **Card:** `.claude/skills/fingerprint/cards/task2.json`, architecture v3, registered 2026-10-31 after a
-  fast-forward to main, guard WARN only: `people.first` (Cynthia, an older build's first name), `repeat.gate_g`
-  and `repeat.deliverables` against task172. The structural signature (population, G7, method_or_model_selection)
-  repeats three lineage architectures and is differentiated against each (task271 v2, task308 v1, task471 v1); the
-  nearest ideas are differentiated too (task229 v2 at 0.08, task482 v8, task252, task274).
-- **Pairing.** Client domain general-statistics-data-science, task type
-  exploratory-data-analysis-distribution-assessment (which serves Descriptive & Distribution Analysis), objective
-  Descriptive & Distribution Analysis: each product's distribution of delivered dose volumes over 2026 is assessed
-  against its volume tolerance, and the tail beyond the tolerance decides the call.
-- **Niche.** Ashcombe Valley Health, a regional hospital in Ontario, batch-compounds ready-to-administer syringes and
-  bags for its wards and theatres in the pharmacy's sterile compounding unit on three peristaltic compounders (PC-1 to
-  PC-3), a syringe-driver compounder (PC-4) and a gravimetric compounder that weighs every dose (GC-1). Each set is
-  calibrated gravimetrically at set-up; the unit's procedure weighs the first dose of each batch and then every
-  hundredth syringe or twentieth bag; a weighed dose outside tolerance stops the batch, every dose made since the last
-  conforming check is weighed (a quarantine sort) and the set is replaced. The procedure lets a set carry further
-  batches of one product inside 24 hours of its set-up. The IV workflow system goes live on 5 April 2027 and weighs
-  every dose of the products configured for gravimetric verification at cutover.
-- **Decision.** Which batch-compounded products are configured for 100 percent gravimetric verification at the
-  cutover (a designation set). Forward facing: the configuration governs every dose from April 2027; the policy reads
-  it on the last full calendar year, so the estimate is of 2026 and the reason is filed in the policy.
-- **The quantity.** The pharmacy's quality policy files the WHAT: a product goes onto verification of every dose
-  where its out-of-tolerance doses in the last full calendar year exceeded 10 in every 100,000 doses made, an
-  out-of-tolerance dose being one whose delivered volume lay outside the product's volume tolerance, whether or not
-  it was weighed or quarantined.
-- **Data-native sentence.** Each set's delivered volume falls with the litres its tubing has pumped since the set-up
-  calibration, and the procedure lets a set carry consecutive batches of one product, so the doses at the end of the
-  sets that carried a third batch sit furthest below target, after that batch's last weighed dose; a capability study
-  of the weighed doses reads them as one stationary spread.
-- **Default path.** A capability study of each product's 2026 weighed doses: the overall mean and standard deviation
-  of the delivered volume and the normal tails beyond the tolerance, the reflex of a process performance study.
-- **Golden.** Each dose placed on its set: the product's loss per litre pumped and the set's start (varying from set
-  to set about its mean) read from the weighed doses, each dose's probability of lying outside the tolerance at the
-  litres its set had pumped, summed over every dose made and stated per 100,000: cefazolin 2 g, cefoxitin 2 g,
-  phenylephrine and midazolam.
-- **Shape.** 14, cuts of a distribution: each product's distribution of delivered volumes cut at its tolerance
-  limits, the share outside per 100,000 doses made, charted against the line of 10.
-- **Shell.** Question form which (the corpus quota WARN), deliverables pdf and csv (WARN against task172), forum the
-  Director of Pharmacy (`line_manager_or_team`), forcing event the IV workflow cutover (`cutover_or_migration`),
-  organisation family `hospital_or_health_provider`, context artifact the unit's gravimetric check register
-  (`register`), all clear of the last three builds.
-- **Personas** from `guard.py names --geo "Canada" --seed 272`: Cynthia Underwood (Director of Pharmacy), Erin
-  Stewart (the unit's quality pharmacist), Jacob Burgess (the unit's lead technician), Spencer Frank (the IV
-  workflow project lead).
-- **Screens, run as code before the pack was cut.** In units of the dose-to-dose scatter, sets changed before the
-  loss reaches the band leave the textbook normal fit at hundreds per million against truths near zero, while the
-  rare long runs carry truths far above anything the weighed share or the sorts see. The built world was then screened
-  across eighteen seeds: the call held on every one under every member of the family, the capability study filed the
-  bags on every one, and the seed was chosen where the pooled Johnson fits, the weighed share and the sorts each file
-  a wrong set too (seed 27267); `generator/checks.py` asserts each rung's set on the cut pack.
+- **Card:** `.claude/skills/fingerprint/cards/task2.json` v4, registered 2026-11-08 at WARN (answered on the card:
+  grain_or_unit here never decides on a field or a filed rule; method_or_model_selection repeats task3 v3, whose step
+  shares nothing with this one); differentiated against mark257 and mark269; lineage carries v1 to v3.
+- **Pairing:** a gold miner commits a contained-gold tier in an ore purchase agreement; ore is a 5 m by 5 m by 2.5 m
+  mining block grading 2.5 g/t or more; Ironbark commits the largest tier Stage 5's ore covers.
+- **Shape:** a which-tier with the grade-tonnage curve at block support, a workbook and a board deck with the chart.
+- **Strategy:** own (UNTESTED in `sulfur-strategies.md`): the distribution of block averages read from point samples
+  (the support effect), with declustering at rung 1 and the kriged block model as the field's estimator beside it.
+- **Data-native sentence:** a gold deposit whose grades carry a large nugget and a short structure, drilled on a 25 m
+  grid with 12.5 m infill where the first holes ran high, and sold by 5 m by 5 m by 2.5 m blocks at a cut-off above
+  the mean: a 2.5 m composite varies about twice as much as a block, and an interpolated block estimate about a
+  third less.
+- **Abstraction sentence (written, then tested):** "the share of a population above a line is read at the size of
+  the unit selected, not at the size measured, and not from smoothed estimates." Against every approved and
+  delivered build in `guard.py mechanisms --objective descriptive-distribution`: mark253 (a count of latent levels
+  under a line seen through averages) is the nearest; its averages are a unit's own noisy observations shrunk to a
+  level, where here the average is spatial, over a block the samples never measured, read from the covariance with
+  distance; mark274 (an instrument's bias against a reference) and mark182 (length-biased snapshots) spend other
+  insights.
+- **Sources** (synthetic, authored for this task, CC0; `metadata.json`): the drillhole database's collars, 1 m assays
+  from two laboratories, QAQC results, bulk densities and weathering logs; the Stage 5 design by flitch; Tallowood's
+  term sheet; the 2027 mine plan summary; the geology office's drilling plan (PNG); the toll mill's bottle-roll
+  testwork and the Stage 4 survey pickup (distractors).
+- **People:** drawn with `guard.py names --geo AU --seed 2`: Mary Fitzgerald, Elizabeth Parker, Catherine Lawson,
+  Stacy Stephens.
 
 ## Default path
 
-1. Read PH-QP-07 sections 2 and 3.1: each product filled on PC-1 to PC-4 is configured for gravimetric verification
-   of every dose where its 2026 out-of-tolerance rate exceeded 10, the rate being the doses made outside the
-   product's volume tolerance, weighed or not, per 100,000 doses made.
-2. Conform the check register: each weighed dose's delivered volume (the gross weight less the container tare to 30
-   June, the net weight from 1 July, divided by the specific gravity) as a per cent of the labelled volume.
-3. Count each product's completed fills in the server's dose log, the denominator.
-4. Run the capability study each product's weighed doses invite, the field's way of turning in-process weights into a
-   nonconforming rate: the overall mean and standard deviation of the per cent deviation and the normal tails beyond
-   the tolerance, the rate a Ppk implies, per 100,000 doses made.
-5. Configure the products over 10.
+1. Put the collars on the mine grid, composite the 1 m assays to the 2.5 m flitches, keep the composites inside the
+   Stage 5 outlines (10,837 composites from 444 holes).
+2. Decluster on the 25 m grid's cells by flitch (the infill and the grade-control trial cluster where grades ran
+   high): mean 1.38 g/t as drilled, 1.18 g/t declustered (the field's exploratory step).
+3. Read the declustered composites' grade-tonnage curve against Stage 5's tonnes (20.6 Mt from the flitch outlines
+   and the weathering zones' densities): 231 koz above 2.5 g/t.
+4. Commit the largest tier the gold covers.
 
-Ends on: P0431, P0610, P0614, P0618 and P0702 (cefoxitin 2 g, the three bags and midazolam)
-Golden: P0412, P0431, P0507 and P0702 (cefazolin 2 g, cefoxitin 2 g, phenylephrine and midazolam)
+Ends on: Tier C
+Golden: Tier B
 
 ## Stump sentence
 
-The default path runs the textbook capability study on each product's 2026 weighed doses and configures P0431, P0610,
-P0614, P0618 and P0702, the three bag products whose sets start high and lose about four per cent over a batch among
-them, while cefazolin 2 g (P0412) and phenylephrine (P0507) read near zero; the step that lands it there is reading
-the weights as one stationary spread, when every dose's volume falls with the litres its set has pumped since its
-set-up and the sets that carried a third batch end below the limit after their last weighed dose, so only the doses
-rebuilt set by set name P0412, P0431, P0507 and P0702.
+A strong analyst who declusters the composites and reads their grade-tonnage curve puts 231 koz above 2.5 g/t and
+commits Tier C, and one who kriges the blocks instead (the kriging cross-validates without bias) puts about 100 koz
+there and commits Tier A; a 2.5 m composite varies about twice as much as a 5 m by 5 m by 2.5 m block and the kriged
+estimates vary less than the blocks, so only the declustered distribution carried to the block variance the
+variogram gives (0.54 of the composites') puts about 150,000 oz above the cut-off and commits Tier B.
 
-## Three rules
+## Deep reasoning
 
-Task type: exploratory-data-analysis-distribution-assessment (General Statistics & Data Science), which serves Descriptive & Distribution Analysis: each product's distribution of delivered volumes over every dose made in 2026, assessed against its tolerance.
-Domain test: the quantity that decides is each product's share of doses outside its tolerance, the tail a process performance study estimates, read through the process's own structure (each set's volume falling with the litres it has pumped and resetting at the next set-up) rather than a normal fit to pooled weights; with a school's or a utility's nouns there is no set, no litres pumped and no tolerance band, and the task stops reading the same.
-Swap: "which schools put more than 10 pupils in 100,000 below a line" has no instrument that wears between resets and no run to place a reading on, and "which feeders breached a limit" has no sparse weighed sample of a continuous output, so the task does not read the same with another field's nouns.
-Layer 1: the server's dose log in UTC with no zone marker beside the register's local times, the event export keyed by serial with a re-seated set logged twice, PC-3 replaced in July under a new serial, the register's weights gross until 30 June and net after, products named in the register and numbered in the logs, aborted fills in the dose log; each is what the systems that hold it produce and none is placed to be caught.
-Layer 2: estimation_fit: the out-of-tolerance tail of a drifting process sampled sparsely: each product's volume modelled as its set's start plus a loss per litre pumped, the start varying from set to set, and every dose's chance of lying outside taken at its own litres pumped, weighed or not.
-Decisive step: placing every completed dose and every weighed dose on its set through the compounders' set-up events, reading the loss per litre and the start's spread from the weighed doses, and summing every dose's chance of lying outside the tolerance at the litres its set had pumped.
-Not semantics: reading every field, code and the policy correctly still leaves the tail to estimate; no column stores a dose's set or its litres pumped, and the capability study, the weighed share and the quarantine sorts all read every field right and file the wrong set.
-Not rule application: PH-QP-07 files the estimand (out-of-tolerance doses per 100,000 doses made, weighed or not) and SC-SOP-12 the checks and the reaction plan; no clause says how the doses nobody weighed are estimated, and executing every filed rule leaves the capability study, the weighed share or the sorts as the estimate, each wrong.
-Analyst test: a strong analyst conforms the dose log, the event export and the register, reads PH-QP-07 and every tolerance right, runs the capability study on each product's weighed doses and configures P0431, P0610, P0614, P0618 and P0702; every field is read and every rule executed, and the set is wrong because the weights are not one stationary spread.
-Estimand: PH-QP-07 sections 2 and 3.1: population, each product filled on PC-1 to PC-4; outcome, a dose made outside the product's volume tolerance, weighed or not (an aborted fill is not a dose made); window, calendar 2026 in Ontario local time; unit, out-of-tolerance doses per 100,000 doses made; comparison, more than 10.
-No decoy: nothing is planted to be caught; no memo, draft list or vendor recommendation argues any product, and no shipped file states a rate, a capability index or a list.
-No certified replay: no certified or published figure reproduces any route; GC-1's every-dose weights cover only the two products GC-1 fills, which PH-QP-07 3.2 keeps out of scope.
-Lesson: a rate a policy files over every dose made, for a process that wears between resets and is weighed one dose in a hundred, is read from each dose's place in its run, not from the spread of the weighed doses; the long runs end where nobody weighs.
+- **Task type:** exploratory data analysis distribution assessment (the distribution of block grades above a
+  cut-off), serving descriptive-distribution.
+- **Domain test:** the deciding quantity is the gold in the upper tail of the distribution of 5 m by 5 m by 2.5 m
+  block grades; the field's estimators are the declustered sample histogram and the kriged block model.
+- **Swap:** "the gold in blocks above 2.5 g/t" becomes "the revenue in stores above a sales line": there is no
+  support, no nugget and no block average whose variance a covariance with distance fixes, so the correction loses
+  its object.
+- **Layer 1:** values under detection written "<0.01" and two laboratories' unit spellings (the laboratories'
+  reports), screen fire re-assays as second rows (the high-grade protocol), core loss intervals not sampled, collars
+  on the mine grid before 2022 and MGA after (the database migration), CRMs, blanks and field duplicates with one
+  standard's batch out of tolerance (the QAQC programme); nothing is placed to be caught.
+- **Layer 2:** estimation fit: the variance of a block average read from the composites' spatial covariance, and the
+  declustered distribution carried to that variance.
+- **Decisive step:** correcting the distribution to block support: the block variance from the variogram model's
+  average within a 5 m by 5 m by 2.5 m block (nugget 34 per cent of the sill, structures of 12 m and 50 m), and the
+  declustered composites carried to it by a lognormal-shaped correction.
+- **Not semantics:** every field, unit, grid and code read correctly (the term sheet's block, the cut-off, the
+  laboratories, the collar grids) still leaves the support to be corrected; a run that reads every clause takes the
+  composites' or the kriged model's distribution for the blocks'.
+- **Not rule application:** the term sheet defines ore by the block and its grade; nothing filed says how a block's
+  grade distribution is estimated. Enumerated family (composites as drilled, declustered composites, kriged blocks in
+  three neighbourhoods, support-corrected composites under two shapes, three declustering cells, three
+  discretisations, two lag classes, a fitted or duplicate-fixed nugget) spreads the 2.5 g/t gold from about 100 to
+  350 koz; the standing family (the support-corrected composites, every shape, cell of 25 or 30 m, discretisation,
+  nugget choice) spreads it 136 to 177 koz, all Tier B; the ruling-out is loud in the data (the kriged estimates'
+  spread is under the block variance the variogram gives; the composites' over it).
+- **Analyst test:** a strong analyst declusters and reads the composites (231 koz, Tier C) or kriges the blocks and
+  reads the kriged model (about 100 koz, Tier A), validating the kriging by cross-validation.
+- **Estimand:** the term sheet 1.2 and 2.1 (ore is a 5 m by 5 m by 2.5 m block of Stage 5 at 2.5 g/t or more; the
+  tier is the contained gold of the ore delivered over 2027 and 2028); the mine plan summary (Stage 5 is the design's
+  flitches, all dug in 2027 and 2028).
+- **No decoy:** no resource statement, block model, memo or consultant figure ships; nothing states a tonnage,
+  grade or ounces for Stage 5.
+- **No certified replay:** no published resource exists for the method to reproduce.
+- **Chain:** (1) composite and decluster the assays (the infill and the grade-control trial sit where earlier holes
+  ran high); (2) fit the variogram to the composites downhole and across holes, the trial's 5 m pattern pinning the
+  short range; (3) the block variance from the model's average within a block and the declustered distribution
+  carried to it; (4) the gold above 2.5 g/t against Stage 5's tonnes by weathering zone, and the tier.
+- **Judgment:** the support the distribution is assessed at: the composites overstate and the kriged estimates
+  understate the blocks' spread, and the block variance is read from the data's own covariance (a 34 per cent nugget
+  and a 12 m structure the trial pattern shows), not assumed.
+- **One-fact test:** the likeliest hint, "kriged models are smoothed", sends a run to the composites (Tier C) or to a
+  support correction it still has to build (declustering, a variogram fitted to a noisy horizontal curve, the block
+  average); "decluster the infill" alone lands Tier C.
+- **No replay:** the call is a forward commitment for 2027 and 2028; no shipped figure is re-derived or wrong.
+- **Pinned:** rivals run on the cut pack (`generator/checks.py` R6): affine against lognormal correction, 25 or 30 m
+  cells, discretisation 3x3x2 to 10x10x4, lags of 10 or 12.5 m, the nugget fitted or fixed from the field duplicates,
+  the re-assays as original, mean or re-assay; every one files Tier B and rounds to 150,000 oz. 20 m cells (Tier B,
+  177 koz) are ruled out for the gold figure by cells smaller than the 25 m grid splitting its holes (the declustered
+  mean jumps 0.05 g/t from 25 to 20 m and moves under 0.03 from 25 to 30 m). The independent verifier's own
+  variogram fit (coordinate search, Monte Carlo block average) lands 148 koz.
+- **Run forecast:** a run first goes wrong by a method shortcut (the declustered composites' histogram read as the
+  blocks', Tier C) or a self-confirming check (the kriged block model, unbiased in cross-validation, read as the
+  blocks' distribution, Tier A).
+- **Strategy label:** UNTESTED (fresh ground: the support effect in a distribution assessment), screens run harder:
+  declustering sits at rung 1 (the client's preferential-sampling form is the rung here, never the step).
+- **Lesson:** a distribution must be assessed at the support of the unit the decision selects; a validated
+  estimator can still have the wrong spread; no build on file teaches the support effect.
 
 ## Survivor anatomy
 
-Actor: the deciding property, each dose's litres pumped on its set, has no column: it is a relation between the dose log's rows (the earlier completed fills on the same set) and the event export's set-ups, and the set itself is a column in neither the dose log nor the register.
-Link: the comparison that finds the call places the register's weighed doses (local time, product names) on the dose log's fills (UTC, product numbers) and both on the event export's set-ups (serial and time), a join no key offers and no sentence invites; the capability study needs only the register.
-Reflex: the field's way of turning in-process weights into a nonconforming rate, a capability study's normal tails (the Ppk figure), is rung 0 and files P0431, P0610, P0614, P0618 and P0702.
-Back-test: the textbook route validates on the record: on GC-1, which weighs every dose, the normal fit to potassium chloride's and norepinephrine's weights predicts their every-dose record (well under one dose out of tolerance expected, none recorded), and not one of cefazolin 2 g's, phenylephrine's or midazolam's 2026 weighed doses was out of tolerance.
-Second use: every file the decisive step reads has its own reason to be in the pack: the register is the unit's checks, the dose log the doses made (Ask A), the event export the sets (Ask B), the product master the tolerances and the equipment register the stations.
-Shock: the movement the step recovers is the ordinary loss every set shows; the four are no interval of the products sorted on doses made, batches, sets, weighed doses, failed checks, sorts, mean, spread, Ppk, sets carrying more than one batch, the longest set or the labelled volume (asserted, S); the one sort that orders them first, each product's lowest weighed dose, files no rate and is recorded as a WARN in the Readability screen.
-Pins: the WHAT sits in PH-QP-07 sections 2 and 3.1 (population, outcome, window, unit, comparison) and no filed sentence names a set's litres, wear, drift or a model (asserted, L); deleting section 2's "whether or not it was weighed or quarantined" unforces only the population of unweighed doses, and that clause names no step.
+- **Actor:** the composites have rows; the property that decides (a block's grade variance) has no column and no
+  row: it is a relation between composites at different distances.
+- **Link:** the block variance is read through the variogram, a comparison of every pair of composites by distance
+  that no key offers and no sentence invites.
+- **Reflex:** the declustered histogram (rung 1) and the kriged block model (the field's estimator) each file a
+  wrong tier (C and A).
+- **Back-test:** the kriging validates: leave-one-hole-out cross-validation is unbiased (slope near one), and the
+  kriged mean equals the declustered mean.
+- **Second use:** every file the decisive step reads has its own use: the assays and collars are the resource's
+  only data; the grade-control trial is the new fleet's ground test; the field duplicates are the QAQC programme's.
+- **Shock:** nothing moves: the nugget and the short range are ordinary features of a gold deposit's variogram,
+  never an anomaly.
+- **Pins:** the WHAT is in the term sheet (the block, the cut-off, the tiers, the term) and the plan summary (Stage
+  5's flitches); no sentence names a support, a variance, a correction or a model.
 
 ## Readability screen
 
 | Rung | 1 Filed sentence | 2 Schema | 3 Reflex | 4 Control bench | 5 Hygiene | 6 Linear | 7 Dedicated organ | Verdict |
 |---|---|---|---|---|---|---|---|---|
-| 0 capability study (normal, overall) | PH-QP-07 2 files the population, not the estimate | the register's weights | the field's reflex | GC-1's every-dose record agrees with it | the battery runs it | one mean and one spread | none | readable |
-| 1 the spread within batches (Cpk) | none | the register by batch | a quality engineer's variant | none | yes | one spread | none | readable |
-| 2 the weighed doses' out-of-tolerance share | "weighed or not" points away from it | the register's Result | a literal count | none | yes | one share | none | readable |
-| 3 the quarantine sorts' rejects | SC-SOP-12 5.1 | the quarantine register | a records count | none | yes | one sum | none | readable |
-| 4 a pooled bounded fit (Johnson SB, SU) | none | the register's weights | a statistician's repair for non-normal weights | none | yes | one fitted shape | none | readable |
-| 5 (decisive) every dose rebuilt on its set | none names a set's litres, wear or a model | no column holds a dose's set or litres | not the reflex | none | no battery item | not affine in a shipped column | the event export is the compounders' own log | silent |
-
-WARN (the one-dimensional law): each product's lowest weighed dose orders the four first (cefoxitin -5.86, midazolam
--4.93, cefazolin 2 g -4.59, phenylephrine -4.48, then ampicillin -3.39); a closest approach files no rate per 100,000, and
-the cut that would separate them is nowhere in the pack.
+| 0 Composites as drilled | no | no | yes | no | no | no | no | readable |
+| 1 Declustered composites | no | no | yes | no | yes | no | no | readable |
+| 1 Kriged block model | no | no | yes | no | no | no | no | readable |
+| 2 The block variance and the support correction (decisive) | no | no | no | no | no | no | no | silent |
 
 ## Semantic fork table
 
-| SF | Term or convention | Golden reading | Alternative | Call under it | Ruled out by |
-|---|---|---|---|---|---|
-| SF1 | a dose made | a completed fill | an aborted fill too (each a partial fill, out of tolerance) | every product crosses 10 (asserted) | PH-QP-07 2 (an aborted fill is not a dose made) |
-| SF2 | out of tolerance | delivered volume outside the product's tolerance, weighed or not | the weighed doses only | rung 2 (asserted) | PH-QP-07 2 |
-| SF3 | the year | 2026 in Ontario local time | the UTC year | same call (asserted) | PH-QP-07 2 |
-| SF4 | a set | a set lot on its device, a re-seat the same set | a re-seat restarting the litres | same call (asserted) | the event export's lots |
-| SF5 | litres pumped | the programmed volumes of the set's earlier completed fills | delivered volumes, or aborted fills' volume counted | same call (asserted) | none needed |
-| SF6 | the start | varying from set to set about its mean | fixed per set, shrunk, a slope per set | same call (asserted, the family) | none needed |
-| SF7 | the register's weights | gross less the container tare to 30 June, net from 1 July | every weight as net | the first half's doses read 40 to 80 per cent heavy, not a reading | the register's own headers, Gross wt (g) and Net wt (g) (asserted) |
-| SF8 | the products in scope | the twelve filled on PC-1 to PC-4 | GC-1's two as well | same call, both under 10 (asserted) | PH-QP-07 3.2 |
-| SF9 | exceeded 10 | more than 10 per 100,000 | 10 or more | same call (every product off the list under 3, every product on it over 40, asserted) | PH-QP-07 3.1 |
-| SF10 | Ask A's doses and months | completed fills by Ontario-local month, a compounder its station across serials | UTC months, a serial each | moves Ask A (asserted) | PH-QP-07 2 and the equipment register |
-| SF11 | Ask B's sets | a distinct lot on its device, its product the doses filled on it | each SET_UP row | moves Ask B (asserted) | the event export's lots |
-| SF12 | the 90 per cent interval | the product's sets resampled with replacement, the line refitted and its 2026 doses re-summed, 5th and 95th percentiles | other seeds, each resample's count drawn as realised (Poisson), the weighed doses resampled one by one, any model of the set-to-set start | same call and the same side of the limit for every product (asserted, I: the closest lower bound on the list over 10.5, every upper bound off it under 1) | only the side is graded, never an endpoint |
+| Id | Term or convention | Reading A (golden) | Reading B | Golden under A | Under B | Ruled out by |
+|---|---|---|---|---|---|---|
+| SF1 | ore | a 5 m by 5 m by 2.5 m block at 2.5 g/t or more | a composite or sample at 2.5 g/t | Tier B | Tier C | term sheet 1.2 |
+| SF2 | values under detection | half the limit | zero | Tier B | Tier B | same call |
+| SF3 | screen fire re-assays | the original | the mean, or the re-assay | Tier B | Tier B | same call (asserted) |
+| SF4 | declustering cell | 25 m | 30 m (20 m) | Tier B | Tier B | same call (asserted); 20 m splits the grid's holes |
+| SF5 | correction shape | lognormal | affine | Tier B | Tier B | same call (asserted) |
+| SF6 | block discretisation | 5x5x3 | 3x3x2, 10x10x4 | Tier B | Tier B | same call (asserted) |
+| SF7 | the nugget | fitted | fixed from the field duplicates | Tier B | Tier B | same call (asserted) |
 
 ## Ladder
 
-| Rung | Construction | Files | Dies to |
-|---|---|---|---|
-| 0 | the capability study on each product's weighed doses (normal, overall mean and SD) | P0431, P0610, P0614, P0618, P0702 | the bags' sets start 2.2 to 2.4 per cent high and lose about four per cent over a batch, so their weights spread wide (183, 110 and 309 per 100,000) though no bag dose comes near the limit; cefazolin 2 g (0.4) and phenylephrine (3.1) hide their tails after the last weighed dose of the sets that carried a third batch |
-| 1 | the spread within batches about the overall mean (Cpk) | P0431, P0610, P0614, P0618, P0702 | the same |
-| 2 | the weighed doses' out-of-tolerance share | P0431 | one syringe in a hundred is weighed; not one of cefazolin 2 g's, phenylephrine's or midazolam's weighed doses was out of tolerance |
-| 3 | the quarantine sorts' rejects per dose made | P0431 | a sort opens only on a failed check |
-| 4 | a pooled Johnson SU fit to the weights | P0412, P0431, P0507, P0610, P0614, P0618, P0702 | an unbounded shape gives the flat bag weights tails |
-| 4b | a pooled Johnson SB fit to the weights | P0431, P0507, P0702 | a bounded shape fitted to the weighed doses alone stops above the limit for cefazolin 2 g (0.4), whose low doses nobody weighed |
-| 5 (decisive) | every completed dose rebuilt on its set: start varying about its mean, one loss per litre, the dose's chance outside at its litres | P0412 131.4, P0431 451.2, P0507 266.6, P0702 43.7 | the golden |
-
-- **Margins on the cut pack** (asserted in checks.py, T2): every member of the family (the start fixed per set, shrunk
-  per set, a slope per set) files the four; the lowest of the four under any member is 43.6 (midazolam, the start shrunk
-  per set), the highest of the other eight 1.6 (heparin, the start fixed per set).
-- **Separation.** On the clean truth the four are the products over 10 (cefazolin 2 g 78.5, cefoxitin 504.1,
-  phenylephrine 188.3, midazolam 106.6, every other product 0.0) and the capability study on the true deviations of the
-  weighed doses files the default path's set (T1).
+- **Rungs and winners:** rung 0 composites as drilled: 350 koz, Tier C; rung 1 declustered composites: 231 koz, Tier
+  C; the field's estimator (ordinary kriging of the blocks, 12 to 32 composites): about 100 to 112 koz, Tier A; the
+  support correction without declustering: 256 koz, Tier C; the decisive rung (declustered and corrected to block
+  support): 147 koz, Tier B (truth 151 koz).
+- **Margins:** the golden sits 22 koz over Tier B's 125,000 and 53 koz under Tier C's 200,000; rung 1 31 koz over
+  Tier C; every kriged neighbourhood under Tier B.
+- **Pricing:** (1) the residue the WHAT leaves is the block distribution, a method; (2) the move the call needs (231
+  to under 200 koz) is a third of the high-grade gold, which the support effect at a 34 per cent nugget produces; (3)
+  the one-group-by route (the declustered histogram) is rung 1; (4) the block variance's spread across the standing
+  fits is about 4 per cent (0.53 to 0.56) against the factor of two it moves the variance; (5) the lever is a
+  variance and the call a verdict on one quantity far from both edges; (8) every visible grouping (weathering zone,
+  laboratory, programme) was swept and none carries the support.
+- **Dominance:** each lower rung's single correction leaves it on a wrong tier (R3b and R4 in `checks.py`).
 
 ## Closure table
 
-| Axis | Reading in this build | Move |
+| Axis | Reading | Closure |
 |---|---|---|
-| 1 Population | the twelve products filled on PC-1 to PC-4 | filed (PH-QP-07 3.1, 3.2) |
-| 2 Unit of account | the dose made | filed (PH-QP-07 2) |
-| 3 Attribution window | calendar 2026, Ontario local time | filed (PH-QP-07 2) |
-| 4 As-of dating | the server export of 18 January 2027 | the request and the files' dates |
-| 5 Version basis | one record per fill; an aborted fill is not a dose made | SF1 |
-| 6 Denominator | the product's doses made in 2026 | filed (PH-QP-07 2) |
-| 7 Weighting | every dose once | C1 |
-| 8 Window length | the year | filed |
-| 9 Boundary inclusivity | outside the tolerance is beyond it; exceeded 10 is more than 10 | SF9 |
-| 10 Rounding path | rates and their intervals compared unrounded and graded by side of the limit only; the asks whole numbers | C1, SF12 |
-| 11 Tie-break | none needed | C1 |
-| 12 Maturity and censoring | the year closed on 31 December; every dose made is in the export | C1 |
-| 13 Order of operations | conform, place on sets, fit, sum | C1 |
-| 14 Row order | none: set operations by serial and time | C1 |
-| 15 Duplicate resolution | a re-seated set is the same set (its lot) | SF4, SF11 |
-| 16 Identity normalisation | serials to stations through the equipment register; register names to product numbers through the master | SF10 |
-| 17 Netting against gross | gross weights less the container tare | SF7 |
-| 18 Dimensional units | per cent of the labelled volume; mL, g and specific gravity from the master | the master |
-| 19 Code and status semantics | COMPLETE and ABORTED; SET_UP, CAL_OK and ALARM_OCCLUSION; PASS and FAIL | the files' own codes |
-| 20 Integerisation | whole doses and whole sets | C1 |
-| 21 Clause scope | SC-SOP-12's checks decide what is weighed, not the estimand | filed scope |
-| 22 Forward window contents | the configuration governs every dose from 5 April 2027 | filed (PH-QP-07 3.1, the request) |
+| 1 population | Stage 5's blocks | term sheet 1.1, design file |
+| 2 outcome | contained gold of ore blocks | term sheet 1.2 |
+| 3 window | 2027 and 2028, all of Stage 5 | term sheet 1.1, plan summary |
+| 4 unit | ounces, nearest 50,000 | prompt |
+| 5 comparison | the gold against each tier | term sheet 2.1 |
+| 6 block | 5 m by 5 m by 2.5 m | term sheet 1.2 |
+| 7 cut-off | 2.5 g/t | term sheet 1.2 |
+| 8 grids | MGA less the filed shift | plan summary |
+| 9 laboratories | ppm and g/t one unit | assay rows |
+| 10 detection | half the limit | same call |
+| 11 re-assays | the original | same call |
+| 12 density | by weathering zone | density and weathering files |
+| 13 tonnes | flitch outlines | design file |
+| 14 compositing | to the flitch | the block's flitch |
+| 15 declustering | 25 m cells by flitch | the regular grid |
+| 16 variogram | fitted downhole and across holes | the data |
+| 17 support | the block variance | the data (decisive) |
+| 18 correction | lognormal-shaped | same call |
+| 19 rounding | nearest 50,000 oz | prompt |
+| 20 tie at a tier | none within 20 koz | asserted |
+| 21 largest tier | the largest covered | the prompt's question, term sheet 2.2 |
+| 22 as-of | 6 November 2026 | the plan summary and the election date |
 
 ## Literal reader
 
-Executed word for word, PH-QP-07 asks for each product's out-of-tolerance doses made in 2026 per 100,000 doses made,
-weighed or not. Read literally, the weighed doses are one syringe in a hundred and one bag in twenty after each batch's
-first, so the doses nobody weighed have to be estimated; the record's own structure (every set's volume falling with
-the litres it has pumped since its set-up and resetting at the next) gives each unweighed dose's expected volume, and
-summing every dose's chance of lying outside its tolerance names P0412, P0431, P0507 and P0702. The asks, read
-literally on the dose log's completed fills by Ontario month and on distinct set lots, give the figures in
-figures.json.
+Executing the term sheet and the plan summary word for word gives the estimand (Stage 5's 5 m by 5 m by 2.5 m blocks
+at 2.5 g/t or more, their contained gold over the term, the largest tier covered) and leaves the block distribution
+to the data; every reading the data leave standing files Tier B.
 
 ## Oracles
 
-None on the main call: no file carries a rate, a capability index, a draft list or a recommendation; GC-1's
-every-dose weights cover only its two products, out of scope under PH-QP-07 3.2. The asks have no oracle either: no
-file states a monthly count of doses or a count of sets.
+none: no resource statement, reconciliation or block model ships; the QAQC file scores the laboratories, not the
+estimate.
 
 ## Ask sheet
 
-Two asks on the conformed record, each read through a reconstruction across two systems that no sentence states.
+- **Asks:** (A1) the gold above the agreement's cut-off, nearest 50,000 oz (150,000); the workbook's grade-tonnage
+  table from 1.0 to 3.0 g/t and the deck's chart against the tiers (instruction following).
+- **Devices:** A1 rides the decisive step (declustered composites 250,000, kriged 100,000) and carries a second
+  judgment of its own: the block ratio applies to the declustered variance; applied to the composites' variance as
+  drilled (inflated by the clustered infill) the same correction keeps Tier B at 196 koz and rounds to 200,000.
+- **Pair ceiling:** 28.5 (`generator/ceiling.py`: the cracker lands Tier B and misses A1, 45; the mirror on rung 1,
+  12); the full includer with the mirror 56.
+- **Shallow keep:** 0 per cent of ask weight kept by the default path.
+- **Measured by:** generator/ceiling.py
 
-**Ask A, each compounder's doses made in each month of 2026 (60 figures).**
-- Files: the dose log and the equipment register.
-- Primary (the clock): the server writes each fill's end time in UTC with no zone marker, and every weekday's last
-  batch runs on the evening shift after 19:00, so read as local time the evening fills of each weekday month end fall
-  into the next month; the unit's hours in SC-SOP-12 and the register's local times beside the same doses make UTC
-  unmistakable.
-- Hazards: PC-3's two serials (the equipment register); aborted fills.
+| Ask | Golden | Default path (rung 1) | Cracker (block ratio on the as-drilled variance) | Verdict |
+|---|---|---|---|---|
+| A1 gold above 2.5 g/t | 150,000 | 250,000 | 200,000 | miss |
 
-**Ask B, the sets each product filled on PC-1 to PC-4 used in 2026 (12 figures).**
-- Files: the event export and the dose log.
-- Primary (the real unit): a set re-seated after an occlusion alarm is logged as a second SET_UP on the same lot, so
-  counting SET_UP rows counts it twice; and the export carries no product, so each set's product is the product of the
-  doses filled on it, read from the dose log by serial and time.
-- Hazard: PC-3's two serials.
+## Prompt contract
 
-| Ask figures | Cracker (lands the call, runs the battery, executes every filed rule) | Mirror (stops at rung 0) | Verdict |
-|---|---|---|---|
-| A, 60 monthly figures | reads the fill times as local time | the same | miss |
-| B, 12 product figures | counts each SET_UP row as a set | the same | miss |
-
-Pair ceiling: 36.8 (the cracker on the call at 53.3, the mirror off it at 20.3, each keeping 11 of 73 ask criteria:
-the 10 monthly figures no evening boundary moves and the chart)
-Mirror leakage: 15.1 per cent of the ask weight
-Measured by: generator/ceiling.py (run on the cut pack, target.zip 81176264)
-
-## Leak sweep
-
-`leak.py task2 --asof 2027-01-18` on target.zip 81176264: REVIEW, no LEAK; each line ruled.
-- Sweep 3 on the policy and the procedure (3.1, and 100 inside "per 100,000"): harmless; section numbers and the
-  policy's own unit of the rate, which is the filed WHAT.
-- Sweep 4 on the policy and the procedure (weighed, register, tolerance, volume, outside, calendar): harmless; the
-  policy files the estimand and the procedure the checks and the reaction plan, and neither says anything of a set's
-  volume changing as it is used, of litres pumped, or of how the doses nobody weighed are estimated (asserted, L).
-- Sweep 11 (the shell quota, question form which): the corpus WARN, answered at the draw.
-- Fixed before this run: the serial column's name in the dose log and the event export (now `compounder_sn`), and
-  metadata.json's source line, which carried the task number.
+The author's rewrite keeps: the question (what contained-gold tier Ironbark can commit Stage 5 to for 2027 and
+2028); `stage5_OPA_tier_board.pptx` with the chart of the gold in Stage 5's mining blocks against cut-off beside the
+three tier thresholds; `stage5_high_grade_resource.xlsx` with the tonnes, grade and gold above each cut-off from 1.0
+to 3.0 g/t in steps of 0.5 and the gold above the agreement's cut-off; that gold to the nearest 50,000 ounces. The
+as-of is 6 November 2026.
 
 ## Pre-ship check
 
-1. Three rules: the decisive step (every dose rebuilt on its set at the litres it had pumped) is analytical; nothing
-   planted, read or executed decides (the Three rules lines).
-2. Determinism: PH-QP-07 sections 2 and 3.1 file the WHAT; the family (the start varying about its mean, fixed per
-   set, shrunk per set, a slope per set) files the same four, with the lowest of them at 43.6 and the highest of the
-   others at 1.6, and the forks are closed (SF1 to SF11, asserted).
-3. Gates on the final cut (target.zip 81176264): generator checks 53 of 53 (one WARN, the lowest weighed dose's
-   ordering), the independent verifier on every graded figure (85), two byte-identical builds, figures_check 128 of
-   128, precut, voice-check PASS with the shell quota WARN, leak.py REVIEW with no LEAK, guard surface and heart below;
-   the leak reader and the determinism judge run from the main thread, since a fork cannot spawn them.
-4. Guard. Heart run before the pull BLOCKed on three axes against builds registered minutes before this card
-   (task125 v4's role family, task445 v2's organisation family and context artifact) whose cards had not reached this
-   worktree when the draw was checked; after the pull the window holds task145, task231, task146 and task445 v3 and
-   heart is WARN only (the first name Cynthia, an older build's; the which question form against task468 v5), the
-   card's own check WARN. Surface on the cut: exit 0, WARN on the first name Cynthia only.
-5. Watch item for stage 4: the pooled Johnson SB fit misses cefazolin 2 g on this cut (0.4) but filed the golden four
-   on 4 of the 10 seeds screened (Tried and rejected); a reader or judge who reaches it is the signal to deepen the
-   long sets' unweighed stretch in the generator.
-
-## Architecture 2 record (spent 2026-10-21)
-
-- Draw: the Vellacott Health Foundation's FY2027 Decision Coaching Grants, one per Fair Assistance Collaborative hospital where at least six percent of its counsellors' 2025 first reviews on households within the free-care limit, on their income over the twelve months before applying, left the household owing more than half of its balance. Golden: 16 grants ($1,024,000), H02, H08, H10, H11, H12, H14, H15, H17, H20, H22, H23, H24, H26, H28, H29 and H30, each application's three-month income put on a twelve-month basis through its region's calendar for its kind of work; the 2025 policy's quarter times four files 5, a calendar pooled across regions or across kinds of work 10.
-- Build: stage 3 green on target.zip 66ca10c7 (checks 0 failed, the independent verifier PASS, two byte-identical builds, figures_check 85 of 85, precut 51, leak.py REVIEW answered, heart WARN), committed PAUSED at e59482a0 and 90d43a79.
-- Stage 4, two isolated scored readers (`score_reader.py --call-key call.qualify --call-key call.count`): both landed the call with the golden set. Reader C (r272c) fitted a smoothed seasonal profile for each hospital and kind of work by month received and checked it on households seen twice (predicted and observed ratios correlating at about 0.98); reader D (r272d) estimated profiles by kind of work, hospital group and month and validated them on the households that applied more than once (their log spread fell from 0.58 to 0.10). Each quoted criteria 2.3's twelve months against the guide's three months times four as the decisive sentence. Asks: neither kept an Ask A figure (both summed every write-off line once exact duplicates were dropped, 602,632.9 thousand against 299,646.9); Ask B 1 of 31 each, the H20 tie (code 1 for the whole year).
-- Judge (the isolated thread's verdict): DETERMINISTIC, APPROVE; the 16 reproduced with the calendars fitted on either year or both, per hospital, on medians or geometric means (the qualifiers at 7.04 or above, the others at 5.05 or below); the easy route files 5, one calendar per kind of work 10; Gate G method_or_model_selection and analytical_non_defect; Gate H pass; findings on the asks (the repeated write-off and its credit to the household's last approval, the renumbered reason list), watch items, and one on a rival clause: "one calendar for each region" files 10 only with the seasonal kinds pooled per region and the year-round kinds left flat, while pooling every kind files 4, so a rival construction is stated exactly or not at all.
-- Fate: Gate F failed at both readers, so the architecture is spent. A three-month figure beside a filed twelve-month window is a gap the documents state outright, and seasonal work named on every application hands over the correction: a reader who sees the gap estimates the calendar at the finest cell the data supports, which is the golden family. Both ask devices held against both readers.
-
-## Architecture 1 record (spent 2026-10-21)
-
-- Draw: the Vellacott Health Foundation's FY2027 Decision Coaching Grants, one per Fair Assistance Collaborative hospital whose financial-assistance counsellors are at least six points less likely to approve right after an approval than right after a denial on the same working day, on 2025 determinations pooled from three billing hubs. Golden: 11 grants ($704,000), H03, H06, H09, H10, H17, H19, H20, H21, H22, H26 and H31, from the within-day contrast less its expectation with each counsellor-day's determinations in every order; the counsellor-day fixed-effects slope files 23 and the pooled contrast 2.
-- Build: stage 3 green on target.zip 90774da6 (checks 0 failed, the independent verifier PASS, two byte-identical builds, figures_check 82 of 82, precut 51, leak.py REVIEW answered, heart WARN), committed PAUSED at a84ba0db and 24b56b9e.
-- Stage 4, two isolated scored readers (`score_reader.py --call-key call.qualify`): both landed the call with the golden set. Reader 1 (r272a) corrected each within-day contrast by shuffling the day's determinations and kept no ask figure (every FAWO line summed, 816,026.2 thousand; code 1 read for the whole year). Reader 2 (r272b) fitted counsellor-day fixed effects, named their bias at about 19 determinations a day unprompted and subtracted the null of 150 within-day permutations per hospital; it kept every Ask A figure (31 of 31: the write-off once per application, the twice-loaded lines dropped on adjustment_id, reversals per account) and no Ask B figure (code 1 for the whole year).
-- Judge (the isolated thread's verdict.md, `determinism_check_report.md`): DETERMINISTIC, FIX_NOW on documentation only: every figure reproduced (197,939 determinations, the 11, $704,000, all 62 ask figures); the one live main-call reading is the uncorrected within-day contrast (23), which is the stump itself; the two ask conventions (the write-off once per application, the 1 July 2025 renumbering) recoverable from the data and unstated. Gate G method_or_model_selection and analytical_non_defect; Gate H pass.
-- Fate: Gate F failed at both readers, so the architecture is spent. The small-sample bias of conditioning on the previous outcome inside a short sequence (the Miller and Sanjurjo hot-hand correction) is a named reflex for these readers: criteria that compare "the chance" within the same working day, beside queues of about 19, hand over the within-day permutation null. Ask B's renumbering held against both readers; Ask A's repeated write-off held against one.
+- The Sulfur standard re-read against the built pack: the call rests on the block support (the variogram's block
+  variance and the correction), with declustering at rung 1 and the kriged model beside it (R3a, R3b, R4 asserted);
+  the leak reader answered Q6 analytical; the one-fact hint lands Tier C (R5).
+- Free gates on the final cut: checks 70 of 70, the verifier (its own variogram fit lands 148 koz, Tier B),
+  byte-identical rebuild, precut 72 of 72, figures_check 62 of 62, leak.py REVIEW (no LEAK; the tiers filed as stated
+  inputs), guard heart WARN (answered on the card) and surface exit 0.
+- Stage 4: the leak reader found no step named and no ranking file; the term sheet's clause numbering and the
+  metallurgical head grades fixed. The determinism judge's verdict is recorded in determinism_check_report.md.
 
 ## Tried and rejected
+
 
 - The seed's own quantity (the Medicaid gap on the "would recommend" top-box rate across a state report's hospitals), every route screened at the draw: composition and patient mix settle the comparison population (WHAT screen); shrinkage of small cells repeats task253; design weighting repeats task264's lesson and task268 v2's reflex; nonresponse either fails determinacy or repeats the inverse-probability weighting of task264, task267 and task268; survey mode effects belong to Experiment & Causal Analysis; misclassification is the spent sensitivity-and-specificity family; nowcasting the late returns repeats task181; telescoping sits next to task453.
 - A race-probability (BISG) regression for the equity gap (prototype `p1.py`): a strong ladder, but the same linear unmixing of a mixed population as task263, a clone of its driver.
@@ -346,3 +310,19 @@ Measured by: generator/ceiling.py (run on the cut pack, target.zip 81176264)
   fit lands only when the long sets' third batches leave a visible shoulder in the weighed doses, so this is the rung
   to watch at stage 4.
 - 2026-11-07, Domains Fit return (the prompt read as PH-QP-07's 10 per cent rule applied to rates, with counting asks): the prompt now asks for each product's estimated 2026 rate with its 90 per cent interval and where the limit sits against it, the chart drawing each interval; the interval's endpoints are left ungraded because they move with the method (the estimate itself ranges 131 to 205 for cefazolin 2 g across the family), only the side of the limit is graded, and it holds under every method tried (SF12). The call, the stump and every earlier figure stay as they were.
+- 2026-11-08, architecture 3 (each product's out-of-tolerance rate rebuilt dose by dose on its tubing set): the
+  platform's two runs both modelled the drift with the litres a set had pumped as their first move and landed the four
+  products and every ask; a mechanism the weighed doses show is modelled on sight. The world is spent.
+- 2026-11-08, draw stage: a lead service line inventory estimated from a random verification sample beside opt-in
+  identifications: mark124 v5 spent the remainder accounting already.
+- 2026-11-08, draw stage: a fraud or risk-targeting model's precision under label shift with verification-biased
+  labels: mark267 spent the verification bias, and label shift alone is one insight.
+- 2026-11-08, build stage: the 2.0 g/t cut-off left the kriged model 2 koz from Tier B's edge; 2.5 g/t, above the
+  mean, separates the composites, the blocks and the kriged estimates into three tiers.
+- 2026-11-08, build stage: without short horizontal lags the variogram's nugget was unidentified (an independent fit
+  put the block variance at 0.41 and the gold in Tier A); the 2024 grade-control trial's 5 m pattern pins it. Placed
+  first on a low-grade patch, its pairs understated the variance (the proportional effect) and swung the fit the
+  other way; moved to a patch of typical grade.
+- 2026-11-08, build stage: one graded figure that only the decisive step reaches left a landed run with every ask
+  (pair 56); the cracker's second judgment is the variance the block ratio applies to (the declustered one, not the
+  composites' as drilled), which moves the gold to 200,000 oz while the tier holds.

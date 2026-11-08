@@ -1,33 +1,32 @@
 {
  "task": "task3",
  "status": "PAUSED",
- "domain": "physical-environmental-sciences / hydrology-flood-frequency (client physical-environmental-sciences)",
+ "domain": "physical-environmental-sciences",
  "objective": "forecasting",
- "stage": 5,
- "stage_name": "ship",
+ "stage": 4,
+ "stage_name": "check",
  "updated": "2026-11-08",
- "stump": "A competent solver replays Outfall 014's metered overflows through each tank pumped out at its station's rated dewatering flow (the continuous simulation the decree evaluates by, which reproduces the Northside tank's overflows since 2020) and selects Alternative B, the 26 MG tank, at 2.9 events a year; the step that lands it there is taking the pumps' rating as the pace the tank empties, when it empties into the Southside interceptor at the headworks of a plant that sits at its 140 MGD limit for days after wet-season storms, so only a replay bounded by Southside's own headroom hour by hour shows the 20 MG tank at 5.7 events and selects Alternative C, the 38 MG tank, at 3.0.",
- "architecture": 2,
+ "stump": "A strong analyst who sees the test's Theis forecast overshoot the Mill Street record recalibrates the leakage against the nearest network well CV-07 (or the wells' own pre-pumping levels, or a fitted trend) and files 1,250 gpm, every schedule under 3.5 ft at OW-S; only the natural level carried from CV-02 and CV-11 beyond the cone files 1,000 gpm.",
+ "architecture": 3,
  "loops": 0,
  "precut": {
   "exit": 0,
-  "date": "2026-11-07",
-  "checks": 61
+  "date": "2026-11-08",
+  "checks": 72
  },
  "leak": {
-  "leak_py": "REVIEW, no LEAK, on target.zip 33564672 (2026-11-07, --asof 2026-01-16): sweep 3 figures (a section number, the plant rating, stage-storage rows, TM-7 listing the alternatives), sweep 4 the documents' own nouns",
-  "reader": "round 1 (Sonnet) on b8c8ebc1: no leak, Q6 analytical; final-pack re-read (Sonnet) on bc14740a: no leak, Q6 analytical, three realism notes fixed in the generator on 33564672 (no prompt or document text changed, so no further read owed)"
+  "leak_py": "REVIEW, no LEAK (2026-11-08, --asof 2026-11-06)",
+  "reader": "2026-11-08 isolated reader (Sonnet, medium): no step named, no ranking or helper file, Q6 analytical; realism notes fixed in the generator"
  },
  "duplicate_check": {
-  "heart": "WARN 2026-11-07 (repeat.question_form what against task456; NOTEs differentiated)",
-  "surface": "exit 0 on 2026-11-07: 4 promoted (task164, task453, task460, task87), each differentiated on the card, left to the author's optional clone-check"
+  "heart": "PASS 2026-11-08",
+  "surface": "exit 0, 1 pair promoted (surface similarity), names WARN on 'Little Ossey' and 'Sep Oct' (not personas)"
  },
  "judge": {
-  "verdict": "DETERMINISTIC (round 1, Sonnet, on b8c8ebc1: A 9.67, B 6.83, C 2.92, D 1.33; all 48 rainfall and 5 return figures reproduce)",
-  "disposition": "APPROVE; two ask forks closed in the generator (months on local Eastern time in the asking sentence; every mechanism install on a day without rain), six rainfall cells moved 0.01 in through the bucket remainder; the room limit stays unfiled and the Northside method unpinned (coordinator's calls)",
-  "gate_g": "binding_constraint, analytical_non_defect, surface_read_dependency no, sole_data_defect no",
-  "gate_h": "domain pass, layers pass, decisive_step analytical",
-  "report": "task3/determinism_check_report.md"
+  "verdict": "",
+  "disposition": "",
+  "gate_h": "",
+  "report": "stage 4 running"
  },
  "returned": [
   {
@@ -81,9 +80,16 @@
    "moves": "Outfall 014's notices with the detector's own minutes and every outfall its own action wording; the FIT-600 leak-by reports in each operator's words; the CMMS with the authority's other pump stations, regulators, screens, generators and meters; the field log saved with shared strings and a wider pool of notes",
    "freeze": "rubric PASS, no graded figure moved (figures.json and submission.md byte-identical)",
    "commit": ""
+  },
+  {
+   "date": "2026-11-08",
+   "source": "triage",
+   "repair": "design",
+   "portal": "both runs landed Alternative C and every ask; the deep step (plant headroom) modelled on sight",
+   "commit": ""
   }
  ],
- "resume": "migrated from Project Mark task165; re-read the build against the Sulfur standard (deep reasoning: three or more dependent inferences with a real modeling judgment, the one-fact test, the banned kinds) and the Sulfur submission shape (golden ZIP, four answer blocks), then /build task3 from the stage that fails",
+ "resume": "stage 4: the leak reader is done (no leak, rulings in leak_check_report.md); the determinism judge's isolated thread is running from /tmp/determinism-check-task3-107173/judge_brief.md. On its verdict: write determinism_check_report.md, fix any finding in the generator, rebuild with make.py, re-run every free gate, then READY with target.zip, golden.zip and golden/ force-added",
  "approved": null,
  "delivered": "2026-11-07",
  "portal": "landed by one response (R1 2,200 t at 100 per cent, R2 2,600 t at 70 per cent), reported 2026-11-07",
@@ -126,6 +132,10 @@
   {
    "date": "2026-11-07",
    "event": "RESHIPPED: realism notes from the final-pack leak read fixed, no graded figure moved"
+  },
+  {
+   "date": "2026-11-08",
+   "event": "architecture 2 landed by both platform runs (REDESIGN); architecture 3 drawn, designed and built through stage 3 in a new world (Corrin Valley, Indiana)"
   }
  ],
  "migrated_from": {
@@ -134,5 +144,50 @@
   "status_in_mark": "SHIPPED",
   "date": "2026-11-08",
   "note": "moved from Project Mark unstumped on the Mark portal; carried on here for the Sulfur bar"
+ },
+ "architectures": [
+  {
+   "architecture": 2,
+   "drawn": "2026-11-07",
+   "fate": "spent 2026-11-08 on the platform: both runs bounded the dewatering by the Southside plant's hourly headroom and landed Alternative C and every ask"
+  },
+  {
+   "architecture": 3,
+   "drawn": "2026-11-08",
+   "fate": null
+  }
+ ],
+ "subdomain": "hydrology-flood-frequency",
+ "call": "The district will permit the 1,000 gpm schedule: its greatest monthly drawdown at OW-S in 2046 is 8 ft against the 9 ft limit, where 1,250 gpm reaches 10 ft",
+ "gates": {
+  "checks": "132 of 132",
+  "verify": "PASS",
+  "byte_identical": true,
+  "figures_check": "62 of 62",
+  "precut": "72 checks, 0 FAIL",
+  "voice_check": "PASS (WARN shell quota)",
+  "pair_ceiling": 46.8,
+  "shallow_keep": 0.0
+ },
+ "runs": {
+  "run1": null,
+  "run2": null,
+  "average": null,
+  "counterfactual_average": null,
+  "first_wrong_step": {
+   "run1": "",
+   "run2": ""
+  },
+  "triage": "",
+  "recorded": "",
+  "history": [
+   {
+    "architecture": 2,
+    "date": "2026-11-08",
+    "run1": "on the golden",
+    "run2": "on the golden",
+    "triage": "REDESIGN"
+   }
+  ]
  }
 }

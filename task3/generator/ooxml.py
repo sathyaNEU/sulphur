@@ -4,7 +4,7 @@ import re
 import zipfile
 
 
-def _excel_app(sheets):
+def _excel_app(sheets, company=b"Harlow Springs Utilities"):
     """docProps/app.xml as Excel writes it for a workbook of these sheets."""
     n = len(sheets)
     parts = b"".join(b"<vt:lpstr>" + s + b"</vt:lpstr>" for s in sheets)
@@ -15,7 +15,7 @@ def _excel_app(sheets):
             b'<HeadingPairs><vt:vector size="2" baseType="variant"><vt:variant><vt:lpstr>Worksheets</vt:lpstr>'
             b"</vt:variant><vt:variant><vt:i4>" + str(n).encode() + b"</vt:i4></vt:variant></vt:vector></HeadingPairs>"
             b'<TitlesOfParts><vt:vector size="' + str(n).encode() + b'" baseType="lpstr">' + parts +
-            b"</vt:vector></TitlesOfParts><Company>Quessling Sewer Authority</Company><LinksUpToDate>false"
+            b"</vt:vector></TitlesOfParts><Company>" + company + b"</Company><LinksUpToDate>false"
             b"</LinksUpToDate><SharedDoc>false</SharedDoc><HyperlinksChanged>false</HyperlinksChanged>"
             b"<AppVersion>16.0300</AppVersion></Properties>")
 
@@ -60,17 +60,17 @@ def _shared_strings(items):
     return res
 
 
-def normalize(path, created, modified):
+def normalize(path, created, modified, company="Harlow Springs Utilities"):
     """created, modified: naive datetimes for the core properties (written as UTC, as Office writes them)."""
-    blob = normalize_bytes(open(path, "rb").read(), created, modified)
+    blob = normalize_bytes(open(path, "rb").read(), created, modified, company)
     open(path, "wb").write(blob)
 
 
-def normalize_bytes(blob, created, modified):
+def normalize_bytes(blob, created, modified, company="Harlow Springs Utilities"):
     src = zipfile.ZipFile(io.BytesIO(blob))
     items = [(i.filename, src.read(i.filename)) for i in src.infolist()]
     src.close()
-    items = [(n, normalize_bytes(d, created, modified) if n.endswith(".xlsx") else d) for n, d in items]
+    items = [(n, normalize_bytes(d, created, modified, company) if n.endswith(".xlsx") else d) for n, d in items]
     names = dict(items)
     if "xl/workbook.xml" in names and "xl/sharedStrings.xml" not in names and any(
             b't="inlineStr"' in d for n, d in items if n.startswith("xl/worksheets/")):
@@ -78,7 +78,7 @@ def normalize_bytes(blob, created, modified):
         names = dict(items)
     if "xl/workbook.xml" in names and "docProps/app.xml" in names:
         sheets = re.findall(rb'<sheet [^>]*name="([^"]+)"', names["xl/workbook.xml"])
-        items = [(n, _excel_app(sheets) if n == "docProps/app.xml" else d) for n, d in items]
+        items = [(n, _excel_app(sheets, company.encode()) if n == "docProps/app.xml" else d) for n, d in items]
     c = created.strftime("%Y-%m-%dT%H:%M:%SZ").encode()
     m = modified.strftime("%Y-%m-%dT%H:%M:%SZ").encode()
     zt = modified.timetuple()[:6]
