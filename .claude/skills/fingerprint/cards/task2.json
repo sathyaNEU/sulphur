@@ -11,8 +11,8 @@
   "shape": "14",
   "decision_type": "dial_setting",
   "answer_unit": "rate_or_share",
-  "answer": "",
-  "answer_source": "",
+  "answer": "Commit to Ceiling C, 14 per cent: under the frozen release 6.0 the expected share of audited dictations above 15 per cent word error rate stays under 10 per cent in the first quarter of 2027, sits between 10 and 12 in the second and third and reaches about 13 per cent in the fourth, so 10 is passed from the second quarter and 12 in the fourth; nine in ten fourth-quarter dictations stay under 16 per cent",
+  "answer_source": "task2/submission.md, Final Recommendation; task2/generator/figures.json",
   "gap": [
     "time",
     "population"
@@ -48,10 +48,10 @@
   "role_family": "product_manager",
   "scoring_unit": "other",
   "spine": {
-    "file": "dictation_audits_2023_2026.csv",
-    "rows": 40000,
-    "entity": "one audited dictation",
-    "grain": "dictation",
+    "file": "dictation_volumes_2022_2026.csv",
+    "rows": 81150,
+    "entity": "one clinician's dictations in a month",
+    "grain": "clinician x month",
     "source": "synthetic"
   },
   "forum": "customer_or_counterparty",
@@ -69,11 +69,13 @@
       "Jody Cahir",
       "Yasmine Ganley",
       "Colum Wallace",
-      "Pearce Stapleton"
+      "Pearce Stapleton",
+      "Alexander Sigerson",
+      "Kristopher McLoughlin"
     ]
   },
   "deliverables": [
-    "quality_schedule_2027_ceiling.docx",
+    "quality_schedule_2027_ceiling.pdf",
     "heavy_correction_2027.xlsx"
   ],
   "opening_move": "question-first",

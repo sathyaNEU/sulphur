@@ -1,0 +1,216 @@
+{
+ "call": {
+  "ceiling_pct": 14,
+  "first_quarter_past_10": 2,
+  "first_quarter_past_12": 4
+ },
+ "quarters_2027": {
+  "lowest_ceiling": [
+   10,
+   12,
+   12,
+   14
+  ],
+  "p90_q4_pct": 16,
+  "share_1dp": [
+   "8.8",
+   "11.1",
+   "11.4",
+   "13.1"
+  ],
+  "share_whole": [
+   9,
+   11,
+   11,
+   13
+  ],
+  "voluntary_share_of_dictations_pct": [
+   62,
+   48,
+   47,
+   36
+  ]
+ },
+ "record": {
+  "shares_1dp": [
+   "6.7",
+   "6.5",
+   "7.6",
+   "7.4",
+   "7.1",
+   "7.9",
+   "6.3",
+   "7.2",
+   "7.7",
+   "7.7",
+   "7.4",
+   "6.8",
+   "7.0",
+   "7.6",
+   "7.4",
+   "7.5"
+  ],
+  "late_min_1dp": "6.3",
+  "late_max_1dp": "7.7",
+  "late_floor": 6,
+  "late_ceil": 8,
+  "gap_from_1dp": "6.6",
+  "gap_to_1dp": "7.3"
+ },
+ "evidence": {
+  "heavy_share_frozen_pct": {
+   "voluntary": "2.4",
+   "compulsory": "19.2"
+  },
+  "heavy_share_frozen_whole": {
+   "voluntary": 2,
+   "compulsory": 19
+  },
+  "release_steps_pct": {
+   "3.4": "15",
+   "4.0": "12",
+   "5.0": "5",
+   "5.2": "3",
+   "6.0": "0"
+  },
+  "release_cuts_pct": {
+   "4.0": "3",
+   "5.0": "6",
+   "5.2": "3",
+   "6.0": "3"
+  },
+  "golive_levels_pct": [
+   "10.4",
+   "10.3",
+   "10.2",
+   "10.2",
+   "10.0",
+   "9.8"
+  ],
+  "turnover_pct_year": "9",
+  "ramp_pct": [
+   "23",
+   "53",
+   "82"
+  ],
+  "steady_volume_month": 43,
+  "staff_in_post": {
+   "SSU": 820,
+   "BKU": 1250
+  },
+  "dictating_dec_2026": {
+   "SSU": 197,
+   "BKU": 306
+  },
+  "dictating_dec_2026_total": 503,
+  "voluntary_share_2026_pct": 68,
+  "staff_in_post_total": 2070
+ },
+ "ladder": {
+  "R0 the 2026 share carried forward": {
+   "shares_1dp": [
+    "7.4",
+    "7.4",
+    "7.4",
+    "7.4"
+   ],
+   "ceiling": 10
+  },
+  "R1 each hospital's 2026 share at 2027's hospital mix": {
+   "shares_1dp": [
+    "7.1",
+    "6.1",
+    "6.0",
+    "5.3"
+   ],
+   "ceiling": 10
+  },
+  "R1 starters at the average clinician's level": {
+   "shares_1dp": [
+    "7.5",
+    "7.2",
+    "7.1",
+    "6.9"
+   ],
+   "ceiling": 10
+  },
+  "R2 the release gap's drift added": {
+   "shares_1dp": [
+    "7.8",
+    "8.1",
+    "8.3",
+    "8.6"
+   ],
+   "ceiling": 10
+  },
+  "R2 the go-live step at the small hospitals, in points": {
+   "shares_1dp": [
+    "7.6",
+    "8.0",
+    "7.9",
+    "8.0"
+   ],
+   "ceiling": 10
+  },
+  "R2 starters at the 2025 and 2026 starters' level": {
+   "shares_1dp": [
+    "8.2",
+    "9.3",
+    "9.4",
+    "10.3"
+   ],
+   "ceiling": 12
+  }
+ },
+ "no_ramp": {
+  "p90_q4_pct": 16,
+  "first_past": {
+   "10": 1,
+   "12": 4
+  },
+  "lowest_ceiling": [
+   12,
+   12,
+   12,
+   14
+  ]
+ },
+ "constants": {
+  "line_pct": 15,
+  "ceilings_pct": [
+   10,
+   12,
+   14,
+   16
+  ],
+  "audit_rate_pct": "2.5",
+  "quarters": [
+   1,
+   2,
+   3,
+   4
+  ],
+  "year": 2027,
+  "as_of": "2027-01-11",
+  "frozen_release": "6.0",
+  "compulsory": {
+   "SSU": "1 February 2027",
+   "BKU": "1 October 2027"
+  },
+  "rounding_units": [
+   10000
+  ],
+  "nine_in_ten": 90,
+  "record_years": [
+   2023,
+   2026
+  ],
+  "releases": [
+   "3.4",
+   "4.0",
+   "5.0",
+   "5.2",
+   "6.0"
+  ]
+ }
+}

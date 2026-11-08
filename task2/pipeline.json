@@ -1,18 +1,35 @@
 {
  "task": "task2",
- "status": "DESIGN",
+ "status": "READY",
  "domain": "general-statistics-data-science",
  "objective": "descriptive-distribution",
- "stage": 2,
- "stage_name": "design",
+ "stage": 5,
+ "stage_name": "ready",
  "updated": "2026-11-08",
  "stump": "A competent solver takes the steady audited share (or adds the 2024 release gap's climb, or the steps past go-lives at the small hospitals) and commits to the 10 or 12 per cent ceiling; the step that lands it there is reading the steadiness as stability, when releases cancelled a mix moving toward clinicians who began once dictation was compulsory, and with the model frozen and the two largest hospitals going compulsory the 2027 quarters pass 12 per cent.",
  "architecture": 5,
  "loops": 0,
- "precut": {},
- "leak": {},
- "duplicate_check": {},
- "judge": {},
+ "precut": {
+  "exit": 0,
+  "date": "2026-11-08",
+  "checks": 75,
+  "note": "final cut, 0 FAIL, 0 WARN"
+ },
+ "leak": {
+  "leak_py": "REVIEW, no LEAK (2026-11-08, --asof 2027-01-11, final cut)",
+  "reader": "2026-11-08 isolated reader (Sonnet, medium): no step named, no ranking or helper file, Q5 reads Schedule 4.2 as the golden population and weighting, Q6 an analytical modelling choice; no finding"
+ },
+ "duplicate_check": {
+  "heart": "WARN (2026-11-08, final cut): repeat.gate_g against task7 v6, answered in the Draw",
+  "surface": "exit 0"
+ },
+ "judge": {
+  "verdict": "DETERMINISTIC",
+  "disposition": "first pass DETERMINISTIC, FIX_NOW (the percentile rounding, audit times after the as-of date, two figures finer than the data carry), all fixed; the one targeted re-judge DETERMINISTIC, APPROVE, its nit restated",
+  "gate_g": "forecasting, analytical_non_defect, surface_read_dependency no, sole_data_defect no",
+  "gate_h": "domain pass, layers pass, decisive_step analytical, chain 5 inferences, one_fact none",
+  "report": "task2/determinism_check_report.md"
+ },
  "returned": [
   {
    "date": "2026-11-07",
@@ -40,7 +57,7 @@
    "commit": ""
   }
  ],
- "resume": "stage 2 (design): the default path, the deep chain and the Deep reasoning lines, the ladder priced on a prototype of the world (the flat 2023 to 2026 record, the 2024 release gap, the four offered ceilings), the fork and closure tables, the asks, prompt.txt; then precut.py",
+ "resume": "stage 5 READY: the author uploads prompt.txt and target.zip; when the two runs come back, /triage-runs task2",
  "approved": null,
  "delivered": "2026-11-01",
  "portal": null,
@@ -75,15 +92,16 @@
   }
  ],
  "gates": {
-  "checks": "70 of 70",
-  "verify": "PASS (its own variogram fit lands 148 koz, Tier B)",
-  "byte_identical": true,
-  "figures_check": "65 of 65",
-  "precut": "72 checks, 0 FAIL",
-  "voice_check": "PASS (WARN shell quota)",
-  "pair_ceiling": 28.5,
-  "shallow_keep": 0.0,
-  "target_zip_sha256": "2253063e21a9966053ec64979f38f1368fa53a924aa34b074f0e23692a777b1d"
+  "date": "2026-11-08",
+  "checks": "37 of 37",
+  "figures_check": "58 of 58",
+  "precut": "exit 0, 75 checks, 0 WARN",
+  "voice_check": "exit 0",
+  "leak_py": "REVIEW, no LEAK",
+  "surface": "exit 0",
+  "heart": "WARN",
+  "audit_containers": "exit 0, 0 FAIL, 0 WARN",
+  "byte_identical": "make.py --twice on the final generator"
  },
  "history": [
   {
@@ -107,7 +125,7 @@
   "note": "moved from Project Mark unstumped on the Mark portal; carried on here for the Sulfur bar"
  },
  "subdomain": "robustness-analysis",
- "call": "Commit Stage 5 to Tier B (125,000 oz): its 5 m x 5 m x 2.5 m blocks at 2.5 g/t or more hold about 150,000 oz",
+ "call": "Commit to Ceiling C, 14 per cent: the expected share of audited dictations above 15 per cent word error rate stays under 10 per cent in 2027 Q1, between 10 and 12 in Q2 and Q3 and about 13 per cent in Q4; nine in ten Q4 dictations under 16 per cent",
  "runs": {
   "run1": null,
   "run2": null,
@@ -128,5 +146,12 @@
     "triage": "REDESIGN"
    }
   ]
+ },
+ "build": {
+  "checks": "37 of 37 (generator/checks.py on the cut pack)",
+  "figures_check": "58 of 58",
+  "byte_identical": "make.py --twice: target, golden, both zips, submission, metadata, figures.json SAME (before the file renames; re-run after)",
+  "ceiling": "pair 44.3 (landed run 74.8, steady route 13.9), shallow keep 12.5 per cent",
+  "world": "seed 52515; small hospitals 70 per cent voluntary uptake; teaching hospitals 13 and 15 per cent at launch, 40 per cent for new hires; releases 0.975, 0.94, 0.975, 0.975; audit 2.5 per cent; frozen release 6.0"
  }
 }

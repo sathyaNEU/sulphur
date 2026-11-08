@@ -1,0 +1,131 @@
+{
+ "task": "task2",
+ "title": "Larkmoor Speech: the heavy-correction ceiling for Shannonside Hospital Group's 2027 schedule",
+ "domain": "General Statistics & Data Science",
+ "task_type": "robustness analysis",
+ "objective": "Descriptive & Distribution Analysis",
+ "as_of": "2027-01-11",
+ "deliverables": [
+  "quality_schedule_2027_ceiling.pdf",
+  "heavy_correction_2027.xlsx"
+ ],
+ "distractor_files": [
+  "support_tickets_2024_2026.csv",
+  "headset_inventory_2026.xlsx",
+  "ehr_integration_uptime_2026.xlsx"
+ ],
+ "input_gates": {
+  "files": 13,
+  "formats": [
+   "csv",
+   "docx",
+   "pdf",
+   "xlsx"
+  ],
+  "largest_file": "dictation_volumes_2022_2026.csv",
+  "largest_file_rows": 81150,
+  "long_file": "dictation_audits_2023_2026.csv",
+  "long_file_rows": 75444
+ },
+ "sources": [
+  {
+   "files": "all files under target/",
+   "origin": "constructed for this task around a fictional Irish medical speech-recognition vendor and a fictional hospital group; every record and figure is invented",
+   "date": "2027-01-12",
+   "license": "CC BY 4.0 (original work)"
+  }
+ ],
+ "files": [
+  {
+   "path": "QA-07_recognition_quality_audit.pdf",
+   "format": "pdf",
+   "bytes": 29644,
+   "covers": "Larkmoor's recognition quality audit procedure",
+   "made": "constructed by task2/generator/make.py (seeded, deterministic)"
+  },
+  {
+   "path": "clinician_register_2026.xlsx",
+   "format": "xlsx",
+   "bytes": 82300,
+   "covers": "the group's register of clinicians who have used the dictation service",
+   "made": "constructed by task2/generator/make.py (seeded, deterministic)"
+  },
+  {
+   "path": "dictation_audits_2023_2026.csv",
+   "format": "csv",
+   "bytes": 8204569,
+   "covers": "every audited dictation at the group's hospitals, January 2023 to December 2026",
+   "made": "constructed by task2/generator/make.py (seeded, deterministic)"
+  },
+  {
+   "path": "dictation_volumes_2022_2026.csv",
+   "format": "csv",
+   "bytes": 2287293,
+   "covers": "each clinician's dictations by month, January 2022 to December 2026",
+   "made": "constructed by task2/generator/make.py (seeded, deterministic)"
+  },
+  {
+   "path": "draft_schedule4_quality_2027.docx",
+   "format": "docx",
+   "bytes": 9724,
+   "covers": "the group's draft 2027 quality schedule",
+   "made": "constructed by task2/generator/make.py (seeded, deterministic)"
+  },
+  {
+   "path": "ehr_integration_uptime_2026.xlsx",
+   "format": "xlsx",
+   "bytes": 9029,
+   "covers": "monthly availability of the EHR integration by site",
+   "made": "constructed by task2/generator/make.py (seeded, deterministic)"
+  },
+  {
+   "path": "headset_inventory_2026.xlsx",
+   "format": "xlsx",
+   "bytes": 44244,
+   "covers": "headsets issued to clinicians",
+   "made": "constructed by task2/generator/make.py (seeded, deterministic)"
+  },
+  {
+   "path": "quality_reports_2023_2026.xlsx",
+   "format": "xlsx",
+   "bytes": 12031,
+   "covers": "Larkmoor's quarterly quality reports to the group",
+   "made": "constructed by task2/generator/make.py (seeded, deterministic)"
+  },
+  {
+   "path": "recognition_releases_2023_2026.pdf",
+   "format": "pdf",
+   "bytes": 36040,
+   "covers": "Larkmoor's recognition release notes",
+   "made": "constructed by task2/generator/make.py (seeded, deterministic)"
+  },
+  {
+   "path": "service_notice_SN-2026-14.pdf",
+   "format": "pdf",
+   "bytes": 24512,
+   "covers": "Larkmoor's notice of the 2027 Dublin migration",
+   "made": "constructed by task2/generator/make.py (seeded, deterministic)"
+  },
+  {
+   "path": "services_agreement_schedule2_deployment.pdf",
+   "format": "pdf",
+   "bytes": 41191,
+   "covers": "the services agreement's deployment schedule (amendment 4)",
+   "made": "constructed by task2/generator/make.py (seeded, deterministic)"
+  },
+  {
+   "path": "shannonside_dictation_rollout_2027.xlsx",
+   "format": "xlsx",
+   "bytes": 7458,
+   "covers": "the group's 2027 go-live plan for its two teaching hospitals",
+   "made": "constructed by task2/generator/make.py (seeded, deterministic)"
+  },
+  {
+   "path": "support_tickets_2024_2026.csv",
+   "format": "csv",
+   "bytes": 169120,
+   "covers": "the service desk's tickets from the group's clinicians",
+   "made": "constructed by task2/generator/make.py (seeded, deterministic)"
+  }
+ ]
+}
