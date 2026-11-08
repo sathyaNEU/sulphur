@@ -28,10 +28,11 @@
  },
  "judge": {
   "verdict": "DETERMINISTIC",
-  "disposition": "APPROVE (re-judge after pass 1's FIX_NOW on the control count, fixed in the write-up)",
-  "report": "task7/determinism_check_report.md (pass 1), task7/determinism_check_report_rejudge.md (re-judge)",
-  "gate_g": "statistical_rigor, analytical_non_defect, surface_read_dependency no, sole_data_defect no",
-  "gate_h": "domain pass, layers pass, decisive_step analytical"
+  "disposition": "APPROVE (FIX_NOW applied: the 5 of 211 control rule stated exactly in step 4, SF12 added)",
+  "gate_g": "decomposition_attribution / statistical_rigor feeding binding_constraint, analytical_non_defect, surface_read_dependency no, sole_data_defect no",
+  "gate_h": "domain pass, layers pass, decisive_step analytical (5 inferences, the control group the judgment)",
+  "report": "task7/determinism_check_report_pass4.md",
+  "residual": "the judge's own control readings ran 5 of 202 to 219; verify.py's independent path recomputes 5 of 211 under the stated rule"
  },
  "returned": [
   {
@@ -74,7 +75,7 @@
    "freeze": "rubric mode PASS with --allow commitment.Northgate Print,sector_counts.I.1 (coincident values)"
   }
  ],
- "resume": "collect the leak reader and determinism judge on the re-sited asks; then READY if both clear, author decides on precut's paper-target FAIL",
+ "resume": "every gate passes except precut's paper target (pair 56.0 over 50; the clean landed run keeps every ask); the author decides: upload the new prompt and answer blocks as they stand (target.zip unchanged), or add a second judgment to the asks",
  "approved": null,
  "delivered": "2026-11-08",
  "portal": null,
