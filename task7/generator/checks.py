@@ -426,8 +426,12 @@ check("asks: pricing Matai's dependants but not Ridgeway's misses Matai's fall-b
       "holding Ridgeway", "fall-back bin Matai Valley Foods" in miss_mo and
       all("envelope bin %d" % e in miss_mo for e in ENVS if RID in GC["envelope set %d" % e]),
       "%d of %d cells missed" % (len(miss_mo), len(GC)))
-check("asks: the less dependent payees of failing payers default well above the clean baseline (the same default "
-      "reached them)", BK / BN > 2 * p0, "%d of %d against %d of %d" % (BK, BN, k0, n0))
+check("SF12 the less dependent payees of failing payers default well above the clean baseline (the same default "
+      "reached them), so they are no control", BK / BN > 2 * p0, "%d of %d against %d of %d" % (BK, BN, k0, n0))
+check("SF12 the dependants' own PDs agree with the clean baseline within half a point",
+      all(abs(P.pd(d) - p0) < 0.006 for c in lines for d in P.dependents(c)),
+      "%.4f; PDs %.4f to %.4f" % (p0, min(P.pd(d) for c in lines for d in P.dependents(c)),
+                                  max(P.pd(d) for c in lines for d in P.dependents(c))))
 ub9 = p1 - (BK - 1) / BN
 check("asks: with one fewer of those defaults (a shorter follow-up) every envelope row still misses",
       all(ask_cells(P.values(ub9))[k_] != GC[k_] for k_ in ["envelope bin %d" % e for e in ENVS]))

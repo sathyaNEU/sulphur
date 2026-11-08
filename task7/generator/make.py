@@ -452,10 +452,13 @@ def write_submission(F, path):
              "payer that defaulted in 2022 to 2025, and were performing at its first trigger, defaulted within twelve "
              "months of it." % (F["p1_k"], F["p1_n"]))
     L.append("4. Measured that against borrowers just as dependent on a payer that kept trading: %d of %d "
-             "borrower-years from 2022 to 2025 in which a performing borrower took 30 per cent or more of the previous "
-             "year's receipts from a Ruahine borrower neither in default at the start of the year nor defaulting during "
-             "it (any share from %d to %d per cent selects the same borrowers). Borrowers that took a smaller share "
-             "from a failing payer are no control, because that default reached them too."
+             "borrower-years from 2022 to 2025 in which a borrower on ifrs9_facility_run_2024-12-31.csv, "
+             "ifrs9_facility_run_2026-12-31.csv or the default register, performing at the start of the year and "
+             "with receipts in its first quarter, had taken 30 per cent or more of the previous calendar year's "
+             "receipts (own-account transfers and Ruahine lending left out) from one Ruahine customer neither in "
+             "default at the start of the year nor defaulting during it, and defaulted in the year (any share from "
+             "%d to %d per cent selects the same borrowers). Borrowers that took a smaller share from a failing payer "
+             "are no control, because that default reached them too."
              % (F["p0_k"], F["p0_n"], F["threshold_corridor_pct"][0], F["threshold_corridor_pct"][1]))
     L.append("5. Added to each watch-list borrower its PD times %s (%d of %d less %d of %d) times each dependant's LGD "
              "times EAD and ranked the eight: Matai Valley Foods NZ$%s, Kinloch Engineering NZ$%s, Ridgeway Precast "
