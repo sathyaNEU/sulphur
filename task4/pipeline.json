@@ -1,6 +1,6 @@
 {
  "task": "task4",
- "status": "READY",
+ "status": "RETURNED",
  "domain": "supply-chain-logistics",
  "objective": "forecasting",
  "stage": 5,
@@ -30,8 +30,16 @@
   "gate_h": "domain pass, layers pass, decisive step analytical, chain 4",
   "report": "task4/determinism_check_report.md"
  },
- "returned": [],
- "resume": "READY: the author uploads prompt.txt and target.zip (ce9fbb1bf6928e8f); the author's voice rewrite of prompt.txt goes through voice-check.py --rewrite and leak.py; then /triage-runs",
+ "returned": [
+  {
+   "date": "2026-11-08",
+   "portal": "Domains Fit (General Statistics & Data Science): read as a stated battery limit applied to route energy and a count of qualifying duties; no estimate, model or uncertainty seen in the prompt",
+   "repair": "domain_fit (H20)",
+   "moves": "prompt.txt: each duty's energy filed as 'forecast from what our Jönköping pilot tractors drew on their own duties' (the data FES-2 3.1 already names, no model, covariate or correction); the design note's prompt contract carries the clause; checks.py asserts it (117 assertions, 0 failed on target.zip ce9fbb1b); voice-check PASS (draft and the author's voice version); leak.py prompt sweep REVIEW only. The call, the stump, the ladder, every figure, the pack and the golden unchanged",
+   "owed": "leak.py sweep 10 and audit_containers.py fail on containers (openpyxl dialect in the five workbooks, one zip clock for every entry): the generator's local postprocess.py predates the house writers (SKILLS 7833045); migrate make.py and build.py to reduce-house-fixes/scripts/writers, rebuild, then RESHIPPED"
+  }
+ ],
+ "resume": "RETURNED: the container migration owed (generator to the house writers, rebuild, audit_containers.py exit 0, leak.py), then RESHIPPED and the author uploads the reworded prompt and the rebuilt target.zip",
  "approved": null,
  "delivered": null,
  "portal": null,
@@ -187,6 +195,10 @@
   {
    "date": "2026-11-08",
    "event": "stage 4 (leak reader no leak; judge DETERMINISTIC APPROVE), forum and context artifact redrawn on the final heart screen, stage 5: READY on target.zip ce9fbb1bf6928e8f"
+  },
+  {
+   "date": "2026-11-08",
+   "event": "RETURNED on Domains Fit (read as a battery limit applied to route arithmetic); prompt reworded to file each duty's energy as a forecast from the pilot tractors, no figure moved"
   }
  ],
  "zip_sha256_16": "ce9fbb1bf6928e8f",

@@ -150,8 +150,8 @@ figure; 7 a file the step alone reads.
 | 2 one pooled correction from the weighbridge: 8 tractors | none | declared beside weighed on one row | yes, the textbook reliability ratio | none | no | one ratio | none | readable |
 | 3 (decisive) each declaration taken to its weighed load by its shipper's practice, the model refitted | no sentence names a declaration, an error or a shipper's practice | no column holds a practice; the shipper code is a billing key | no: the reflexes are the declared fit and one reliability ratio | nothing scores it; the held-out check is blind to it | no: declarations are unbiased, no duplicate or clock is involved | not linear: a regression per shipper carried through a refit | the weighbridge is the planning load's file | silent |
 
-**Condition 1 (Gate F risk), measured on the wording.** The prompt asks for "the battery energy its round trip needs on
-the January design day"; FES-2 says "the energy the tractor draws from its battery". Nothing in the pack weighs a pilot
+**Condition 1 (Gate F risk), measured on the wording.** The prompt asks for "the battery energy its round trip will need
+on the January design day, forecast from what our Jönköping pilot tractors drew on their own duties"; FES-2 says "the energy the tractor draws from its battery". Nothing in the pack weighs a pilot
 day, states a consumption per tonne or describes how a shipper declares. The held-out validation a careful solver runs
 (January and February 2026) gives 2.4 per cent for the declared fit and 2.3 for the golden: the stream cannot tell them
 apart, because the held-out days carry the same declarations. The evidence sits only in the weighbridge, read shipper
@@ -282,6 +282,9 @@ What the author's voice rewrite may not drop or change:
   design day and whether it goes electric, ending on the number of tractors) and tractor_order_memo.pdf (the order
   written up for the management group on one page).
 - Units and rounding: energies to the nearest 10 kWh.
+- The estimand as a forecast: each duty's energy is "forecast from what our Jönköping pilot tractors drew on their own
+  duties" (H20: without it the platform's domain review reads a stated limit applied to route arithmetic). It names the
+  data the forecast stands on, as FES-2 3.1 does, never the model, the covariates or a correction.
 - Never add: a declaration, a weighbridge, a payload, a weight, a shipper, a calibration, an error, cold, temperature
   forms, "check", "validate", or any method word.
 
