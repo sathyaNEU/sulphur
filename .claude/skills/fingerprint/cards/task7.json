@@ -1,214 +1,235 @@
 {
- "task": "task7",
- "project": "sulfur",
- "architecture": "v5",
- "drawn": "2026-11-08",
- "slot_note": "re-root after architecture 4 (Ruahine Bank) was landed by both runs in platform round 2",
- "domain": "banking-credit-financial-risk",
- "subdomain": "expected-credit-loss-provisioning",
- "client_domain": "banking-credit-financial-risk",
- "niche": "the credit loss an Irish commercial property lender should plan for 2027 when its security values are quarterly index roll-forwards of inspections mostly made before 2020 and its loss given default haircut was fitted on valuations made at default",
- "objective": "forecasting",
- "shape": "07",
- "decision_type": "quantity_figure",
- "answer_unit": "currency",
- "answer": "€2.0 million of 2027 credit loss on commercial property lending (investment €1.25 million, owner-occupied €0.75 million), not the €0.2 million the LGD model gives on the register's carried values",
- "answer_source": "task7/submission.md, Final Recommendation; task7/generator/figures.json",
- "gap": [
-  "objective",
-  "population"
- ],
- "pattern": [
-  "none"
- ],
- "generators": [
-  "G14",
-  "G6",
-  "G3"
- ],
- "gate_g": "method_or_model_selection",
- "calibration_form": "physical_verification",
- "stump_strategy": "population_selection",
- "decisive_rule_filed": false,
- "official_decoy": false,
- "validated_decoy": false,
- "context_artifact": "filed_standard",
- "stump_class": "analytical",
- "analyst_test": "A strong analyst takes each loan's 2027 default chance from the master scale and its exposure at 31 December 2026, prices the loss with the bank's loss given default model (its sale haircut on the security value the property register carries, the last inspection rolled forward by the commercial property index), back-tests the model on the 2012 to 2026 defaults at their valuations at default, where it passes, and files a 2027 credit loss well under the golden.",
- "domain_test": "The 2027 expected credit loss of a commercial property book is default chance times exposure times loss given default, and the loss turns on what the security fetches if the borrower fails; the decisive step reads credit's own collateral mechanics (an inspection at default, an index roll-forward, a sale haircut, and the selection of which borrowers fail), and with another field's nouns there is no security value whose drift is selected by the very failure being priced.",
- "layer2_family": "estimand_identification",
- "layer2_pattern": "own:collateral-value-conditioned-on-default",
- "layer1": [
-  "type 2 valuation history whose quarterly index roll-forward rows carry the current effective date",
-  "facility numbers re-issued at a 2021 core banking migration, with a crosswalk",
-  "a month-end snapshot batch loaded twice",
-  "recovery postings arriving months after the sale settles",
-  "a cross-collateral bridge with allocation shares and effective dates",
-  "the property index revised by release vintage",
-  "inferred property members carrying an unknown type until the dimension load caught up"
- ],
- "stakeholder_role": "Ardcarn Bank's chief financial officer, who sets the credit-loss line of the 2027 plan the executive committee approves",
- "role_family": "finance_controller",
- "scoring_unit": "per active unit per period",
- "spine": {
-  "file": "dw_fact_loan_month_end_2022_2026.csv",
-  "rows": 133156,
-  "entity": "one commercial property loan facility at one month end",
-  "grain": "facility x month",
-  "source": "synthetic"
- },
- "forum": "executive_team",
- "forcing_event": "budget_or_appropriation",
- "org_family": "financial_institution",
- "world": {
-  "geography": "Ireland (a fictional commercial property lender headquartered in Galway, lending across the Republic)",
-  "currency": "EUR",
-  "org_type": "a licensed bank lending to small and medium businesses on commercial property",
-  "invented_names": [
-   "Ardcarn Bank"
-  ],
-  "people": [
-   "Colm Hourican",
-   "Geraldine Harkins"
-  ]
- },
- "deliverables": [
-  "cre_expected_loss_2027_by_loan.csv",
-  "exco_cre_credit_loss_2027.pptx"
- ],
- "opening_move": "question-first",
- "question_form": "how-much",
- "driver": "The decisive quantity is what a unit's security fetches if the unit fails, which the record measures by an inspection made at the failure while the forward units carry only a market index rolled forward from an earlier inspection; the security of units that fail falls behind the index by more the longer since that inspection, and the forward units were inspected longer ago than the record's failures mostly were, so the rolled-forward index overstates what the failing units will fetch.",
- "driver_concrete": "Each commercial property loan's 2027 loss turns on what its property sells for if the borrower defaults: Ardcarn's loss given default haircut was fitted on valuations made at default, the 2026 book carries quarterly index roll-forwards of inspections mostly made before 2020, and in the bank's own record a defaulter's property was valued at default below its rolled-forward index value by more the older its last inspection.",
- "stump": "A competent solver applies the bank's LGD model to the security values the property register carries at 31 December 2026, weights each loan by its master-scale default chance and year-end balance, sees the model back-test cleanly on the inspections at default, and files €0.2 million (nil at the nearest €500,000) against €2.0 million; a solver who notices the inspections at default coming in below the carried values and applies the record's average shortfall (€1.0 million) or its latest years' (€1.0 to €1.5 million) still misses, because the shortfall grows with the years since the inspection behind the carried value, the year-end book is far staler than the record, and the recent defaults were re-inspected months before they defaulted.",
- "deep_chain": "(1) the 2027 loss is each loan's default chance times exposure times loss given default, with the bank's haircut model at rung 0; (2) the haircut was fitted on inspections made at default while the book carries index roll-forwards of older inspections, so the model's input differs between its fit and its use; (3) in the record a defaulter's inspection at default sits below its rolled-forward index value by an amount that grows with the years since its last inspection; (4) the 2026 book was last inspected longer ago than most of the record's defaulters; (5) each loan's expected value at default is its rolled-forward value cut by its own staleness shortfall, run through the haircut and the floor to the 2027 loss.",
- "judgment": "The shortfall of value at default against the rolled-forward index as a function of years since the last inspection, a selection effect (borrowers fail when their property has fallen behind the market) estimated by regression on the record's defaults that carry both values, and applied to each loan's own staleness, inside the range the record covers.",
- "one_fact_test": "The likeliest hint, that valuations at default come in below the indexed value, still leaves the solver to find that the shortfall grows with staleness (an average shortfall files the record's mix, not the book's), to read each loan's staleness by walking its valuation history past the quarterly roll-forward rows, and to carry it through the haircut's floor loan by loan.",
- "strategy_label": "WORKS IN FORM: heterogeneity that pooling hides, the shortfall differing by staleness and the decision weighting it to a book staler than the record, the staleness rebuilt from the valuation history and never read off a column.",
- "mechanism_source": "design_note",
- "differentiation": {},
- "lineage": [
-  {
-   "domain": "nonprofit-grant-making",
-   "subdomain": "giving-strategy-program-funding",
-   "objective": "opportunity-sizing-decision",
-   "shape": "05",
-   "decision_type": "allocation_to_total",
-   "answer_unit": "count",
-   "gap": [
-    "time",
-    "objective",
-    "population"
-   ],
-   "pattern": [
-    "none",
-    "C",
-    "E"
-   ],
-   "generators": [
-    "G7",
-    "G8",
-    "G14",
-    "G16"
-   ],
-   "gate_g": "binding_constraint",
-   "driver": "The decisive quantity is how many of the period's placeable units a fixed team can finish before the period closes, because each unit counts only once that team performs one last step for it, the team's spare weekly capacity is visible only as the ceiling it held through an earlier unrelated surge, and the decision's own volume, bunched by its filed calendar into weeks no closed period approached, queues the later units past the close; the closed record's lag and an annual capacity check both pass, so the placeable count overstates the in-period total wherever the team is small and the units are many.",
-   "architecture": "v1 (heat-pump rebate slots across six co-ops, the crew meter-set queue)",
-   "drawn": "2026-10-10",
-   "fate": "spent 2026-10-10: the determinism judge returned SEND_BACK (binding_constraint, analytical_non_defect): the participation terms' 'an install proceeds only where the feeder has that capacity remaining' read literally fills capped feeders in date order, which moves Uplands from 170 to 200 slots, a competing defensible answer on the main call"
-  },
-  {
-   "domain": "actuarial-science-insurance",
-   "subdomain": "reserving-development-triangles",
-   "objective": "forecasting",
-   "shape": "14",
-   "decision_type": "quantity_figure",
-   "answer_unit": "currency",
-   "gap": [
-    "time"
-   ],
-   "pattern": [
-    "none"
-   ],
-   "generators": [
-    "G16",
-    "G14"
-   ],
-   "gate_g": "forecasting",
-   "driver": "The decisive quantity is a forward total projected from a history of cumulative progress by age in which the units carrying most of the amount began resolving more slowly partway through the record; the share of the amount settled tracks the share of units resolved rather than age, so the history has to be restated at the resolution shares the latest observations show before its age-to-age ratios are carried forward, and carrying them unrestated, or taking them from the latest periods alone, understates the total.",
-   "stump_strategy": "forecast_method_backtest",
-   "architecture": "v3 (Ninebark Mutual motor bodily injury reserve at year end 2026, the paid development restated at the latest closed shares)",
-   "drawn": "2026-10-14",
-   "fate": "spent 2026-10-14: the determinism judge returned NOT_DETERMINISTIC, SEND_BACK (method_or_model_selection, analytical_non_defect, competing_defensible_answer): the reserving basis leaves the method to the actuary, and frequency-severity on paid per closed feature carries $350 million against the restatement's $400 million with nothing shipped selecting between them; the author restored architecture 2"
-  },
-  {
-   "domain": "healthcare-delivery-health-economics",
-   "subdomain": "patient-flow-beds-workforce-optimization",
-   "objective": "opportunity-sizing-decision",
-   "shape": "05",
-   "decision_type": "allocation_to_total",
-   "answer_unit": "count",
-   "gap": [
+  "task": "task7",
+  "project": "sulfur",
+  "architecture": "v6",
+  "drawn": "2026-11-08",
+  "slot_note": "re-root after architecture 5 landed on the platform; a new domain and objective",
+  "domain": "energy-systems-utilities",
+  "subdomain": "efficiency-savings-verification",
+  "niche": "a municipal utility's commercial building retrofit grants, recruited from its annual gas benchmarking notices, judged on verified normal-weather gas savings",
+  "objective": "experiment-causal",
+  "shape": "07",
+  "decision_type": "designation_set",
+  "answer_unit": "set_of_items",
+  "answer": "",
+  "answer_source": "",
+  "gap": [
     "population",
-    "objective"
-   ],
-   "pattern": [
-    "C"
-   ],
-   "generators": [
-    "G3",
-    "G11",
-    "G8"
-   ],
-   "gate_g": "decomposition_attribution",
-   "driver": "The decisive quantity is the part of each unit's recorded wait that the offered intervention removes, because the recorded wait fuses the step the intervention replaces with a concurrent step it leaves in place, so only the replaced step's excess over the concurrent one, built by joining separate operational logs, counts; ranking units by the recorded wait, or by the replaced step measured from the same start, credits the units whose concurrent step is slowest.",
-   "stump_strategy": "decomposition_attribution",
-   "architecture": "v2 (re-root after SEND_BACK: winter discharge-to-assess packages across five hospitals)",
-   "drawn": "2026-10-12",
-   "fate": "spent 2026-11-07 at the portal (FAILED_TO_STUMP): both responses filed the golden split exactly (Royal Marchford 508, Wendlebury 350, Holmford 120, Cleeve Park 222, Ashby Vale none, 6,816 bed-days); the equipment wait running alongside the care wait was a hidden overlap a careful response found by joining the depot's deliveries to the covered patients"
-  },
-  {
-   "domain": "banking-credit-financial-risk",
-   "subdomain": "expected-credit-loss-provisioning",
-   "objective": "opportunity-sizing-decision",
-   "shape": "05",
-   "decision_type": "ranked_slate_under_cap",
-   "answer_unit": "set_of_items",
-   "gap": [
-    "objective",
-    "population"
-   ],
-   "pattern": [
-    "E"
-   ],
-   "generators": [
+    "time"
+  ],
+  "pattern": [
+    "none"
+  ],
+  "generators": [
     "G14",
     "G16",
-    "G3"
-   ],
-   "gate_g": "method_or_model_selection",
-   "driver": "The decisive quantity is what preventing one unit's failure removes across a population of units, when some units draw most of their inflow from that unit and in the population's own record failed at a high rate within months of their main payer's failure, so a value read on the unit's own expected loss misses the failures it would set off; the dependence comes from the flows between units and the conditional failure rate from the population's past failures, neither stored in any field.",
-   "stump_strategy": "causal_design",
-   "drawn": "2026-11-07",
-   "architecture": "v4 (Ruahine Bank business support packages, the write-off a package keeps off dependent borrowers)",
-   "fate": "spent 2026-11-08: platform round 1 run 1 98 on the call, run 2 58 off it after computing the dependants and declining to price them (FIX_ASKS); round 2 on the re-sited asks both runs landed Kinloch Engineering and Matai Valley Foods (REDESIGN); the payer dependence was visible in the transactions and the default register"
-  }
- ],
- "lineage_shells": [
-  {
-   "question form": "whether",
-   "second-sentence opener": "the",
-   "rounding opener": "packages",
-   "deliverable set": "svg+xlsx"
+    "G17"
+  ],
+  "gate_g": "decomposition_attribution",
+  "calibration_form": "none",
+  "stump_strategy": "causal_design",
+  "decisive_rule_filed": false,
+  "official_decoy": false,
+  "validated_decoy": false,
+  "context_artifact": "planning_thread",
+  "stump_class": "analytical",
+  "analyst_test": "A strong analyst who cleans the meter reads and reads the council's rule correctly verifies each past retrofit's saving as its weather-normalised gas use (degree days at the standard 15 degree heating limit) before against after, confirms it against customers who took no grant, and funds every pipeline building whose grant then clears the cost-per-tonne limit, a far larger round than the savings support.",
+  "domain_test": "The call turns on a retrofit's verified gas saving in a normal-weather year, which energy measurement and verification takes from metered use regressed on heating degree days at each building's own balance point; with another field's nouns there is no heating limit that the retrofit itself lowers and no weather year to normalise to.",
+  "layer2_family": "estimand_identification",
+  "layer2_pattern": "own:retrofit-saving-recruited-on-a-high-year",
+  "layer1": [
+    "meter points re-keyed at meter exchanges",
+    "estimated reads between actual reads",
+    "billing periods not aligned to calendar months",
+    "tenant changes on the same building",
+    "duplicate read loads",
+    "a weather station gap filled from a neighbour"
+  ],
+  "stakeholder_role": "head of energy services at the municipal utility",
+  "role_family": "programme_officer",
+  "scoring_unit": "per accepted item",
+  "spine": {
+    "file": "",
+    "rows": 0,
+    "entity": "one gas meter read",
+    "grain": "meter point x read date",
+    "source": "synthetic"
   },
-  {
-   "question form": "how-much",
-   "second-sentence opener": "that",
-   "rounding opener": "write",
-   "deliverable set": "docx+xlsx"
+  "forum": "council_or_assembly",
+  "forcing_event": "budget_or_appropriation",
+  "org_family": "utility_or_infrastructure",
+  "world": {
+    "geography": "Germany (Baden-Wuerttemberg)",
+    "currency": "EUR",
+    "org_type": "municipal utility (Stadtwerke)",
+    "invented_names": [
+      "Haldenau",
+      "Stadtwerke Haldenau"
+    ],
+    "people": [
+      "Torben Römer",
+      "Magda Peukert"
+    ]
+  },
+  "deliverables": [
+    "council_briefing_retrofit_round_2027.docx",
+    "retrofit_pipeline_2027.xlsx"
+  ],
+  "opening_move": "question-first",
+  "question_form": "which",
+  "driver": "The decisive quantity is the effect of a treatment on units enrolled because a noisy yearly measure of them ran high, so their own before-and-after fall carries that measure's regression and only units flagged by the same measure and left untreated give the counterfactual; the outcome is normalised to a reference exposure through a threshold each unit sets and the treatment itself moves, so a common threshold misstates the change whenever the after years' exposure differs.",
+  "driver_concrete": "Haldenau's retrofit grants went to commercial buildings whose gas use the utility's benchmarking notice flagged as high the year before, so their before-and-after fall includes the regression of that high year, which buildings flagged the same year without a grant also show; and gas use is normalised to a normal winter through each building's own heating limit, which insulation lowers, so the standard 15 degree limit overstates the saving in the mild winters after the works.",
+  "stump": "A competent solver verifies each past retrofit's saving as its weather-normalised gas use (degree days at the standard 15 degree heating limit) in the year before the works against the years after, sees the saving confirmed against customers who took no grant, and funds most of the 2027 pipeline; the step that lands it there is taking the flagged year as the baseline, when the buildings were enrolled because that year ran high and flagged buildings without a grant fall nearly as far, and normalising every building at one heating limit that the insulation itself lowers.",
+  "differentiation": {},
+  "lineage": [
+    {
+      "domain": "nonprofit-grant-making",
+      "subdomain": "giving-strategy-program-funding",
+      "objective": "opportunity-sizing-decision",
+      "shape": "05",
+      "decision_type": "allocation_to_total",
+      "answer_unit": "count",
+      "gap": [
+        "time",
+        "objective",
+        "population"
+      ],
+      "pattern": [
+        "none",
+        "C",
+        "E"
+      ],
+      "generators": [
+        "G7",
+        "G8",
+        "G14",
+        "G16"
+      ],
+      "gate_g": "binding_constraint",
+      "driver": "The decisive quantity is how many of the period's placeable units a fixed team can finish before the period closes, because each unit counts only once that team performs one last step for it, the team's spare weekly capacity is visible only as the ceiling it held through an earlier unrelated surge, and the decision's own volume, bunched by its filed calendar into weeks no closed period approached, queues the later units past the close; the closed record's lag and an annual capacity check both pass, so the placeable count overstates the in-period total wherever the team is small and the units are many.",
+      "architecture": "v1 (heat-pump rebate slots across six co-ops, the crew meter-set queue)",
+      "drawn": "2026-10-10",
+      "fate": "spent 2026-10-10: the determinism judge returned SEND_BACK (binding_constraint, analytical_non_defect): the participation terms' 'an install proceeds only where the feeder has that capacity remaining' read literally fills capped feeders in date order, which moves Uplands from 170 to 200 slots, a competing defensible answer on the main call"
+    },
+    {
+      "domain": "actuarial-science-insurance",
+      "subdomain": "reserving-development-triangles",
+      "objective": "forecasting",
+      "shape": "14",
+      "decision_type": "quantity_figure",
+      "answer_unit": "currency",
+      "gap": [
+        "time"
+      ],
+      "pattern": [
+        "none"
+      ],
+      "generators": [
+        "G16",
+        "G14"
+      ],
+      "gate_g": "forecasting",
+      "driver": "The decisive quantity is a forward total projected from a history of cumulative progress by age in which the units carrying most of the amount began resolving more slowly partway through the record; the share of the amount settled tracks the share of units resolved rather than age, so the history has to be restated at the resolution shares the latest observations show before its age-to-age ratios are carried forward, and carrying them unrestated, or taking them from the latest periods alone, understates the total.",
+      "stump_strategy": "forecast_method_backtest",
+      "architecture": "v3 (Ninebark Mutual motor bodily injury reserve at year end 2026, the paid development restated at the latest closed shares)",
+      "drawn": "2026-10-14",
+      "fate": "spent 2026-10-14: the determinism judge returned NOT_DETERMINISTIC, SEND_BACK (method_or_model_selection, analytical_non_defect, competing_defensible_answer): the reserving basis leaves the method to the actuary, and frequency-severity on paid per closed feature carries $350 million against the restatement's $400 million with nothing shipped selecting between them; the author restored architecture 2"
+    },
+    {
+      "domain": "healthcare-delivery-health-economics",
+      "subdomain": "patient-flow-beds-workforce-optimization",
+      "objective": "opportunity-sizing-decision",
+      "shape": "05",
+      "decision_type": "allocation_to_total",
+      "answer_unit": "count",
+      "gap": [
+        "population",
+        "objective"
+      ],
+      "pattern": [
+        "C"
+      ],
+      "generators": [
+        "G3",
+        "G11",
+        "G8"
+      ],
+      "gate_g": "decomposition_attribution",
+      "driver": "The decisive quantity is the part of each unit's recorded wait that the offered intervention removes, because the recorded wait fuses the step the intervention replaces with a concurrent step it leaves in place, so only the replaced step's excess over the concurrent one, built by joining separate operational logs, counts; ranking units by the recorded wait, or by the replaced step measured from the same start, credits the units whose concurrent step is slowest.",
+      "stump_strategy": "decomposition_attribution",
+      "architecture": "v2 (re-root after SEND_BACK: winter discharge-to-assess packages across five hospitals)",
+      "drawn": "2026-10-12",
+      "fate": "spent 2026-11-07 at the portal (FAILED_TO_STUMP): both responses filed the golden split exactly (Royal Marchford 508, Wendlebury 350, Holmford 120, Cleeve Park 222, Ashby Vale none, 6,816 bed-days); the equipment wait running alongside the care wait was a hidden overlap a careful response found by joining the depot's deliveries to the covered patients"
+    },
+    {
+      "domain": "banking-credit-financial-risk",
+      "subdomain": "expected-credit-loss-provisioning",
+      "objective": "opportunity-sizing-decision",
+      "shape": "05",
+      "decision_type": "ranked_slate_under_cap",
+      "answer_unit": "set_of_items",
+      "gap": [
+        "objective",
+        "population"
+      ],
+      "pattern": [
+        "E"
+      ],
+      "generators": [
+        "G14",
+        "G16",
+        "G3"
+      ],
+      "gate_g": "method_or_model_selection",
+      "driver": "The decisive quantity is what preventing one unit's failure removes across a population of units, when some units draw most of their inflow from that unit and in the population's own record failed at a high rate within months of their main payer's failure, so a value read on the unit's own expected loss misses the failures it would set off; the dependence comes from the flows between units and the conditional failure rate from the population's past failures, neither stored in any field.",
+      "stump_strategy": "causal_design",
+      "drawn": "2026-11-07",
+      "architecture": "v4 (Ruahine Bank business support packages, the write-off a package keeps off dependent borrowers)",
+      "fate": "spent 2026-11-08: platform round 1 run 1 98 on the call, run 2 58 off it after computing the dependants and declining to price them (FIX_ASKS); round 2 on the re-sited asks both runs landed Kinloch Engineering and Matai Valley Foods (REDESIGN); the payer dependence was visible in the transactions and the default register"
+    },
+    {
+      "architecture": "v5",
+      "fate": "spent 2026-11-08: platform run 1 landed every graded cell (the memo's V sentence sent it to the record of inspections at default; it fitted the golden's age-and-book model and validated it out of sample)",
+      "driver": "The decisive quantity is what a unit's security fetches if the unit fails, which the record measures by an inspection made at the failure while the forward units carry only a market index rolled forward from an earlier inspection; the security of units that fail falls behind the index by more the longer since that inspection, and the forward units were inspected longer ago than the record's failures mostly were, so the rolled-forward index overstates what the failing units will fetch.",
+      "domain": "banking-credit-financial-risk",
+      "subdomain": "expected-credit-loss-provisioning",
+      "gap": [
+        "objective",
+        "population"
+      ],
+      "pattern": [
+        "none"
+      ],
+      "generators": [
+        "G14",
+        "G6",
+        "G3"
+      ],
+      "gate_g": "method_or_model_selection",
+      "stump_strategy": "population_selection",
+      "shell": null
+    }
+  ],
+  "lineage_shells": [
+    {
+      "question form": "whether",
+      "second-sentence opener": "the",
+      "rounding opener": "packages",
+      "deliverable set": "svg+xlsx"
+    },
+    {
+      "question form": "how-much",
+      "second-sentence opener": "that",
+      "rounding opener": "write",
+      "deliverable set": "docx+xlsx"
+    }
+  ],
+  "notes": "architecture 6 (2026-11-08)",
+  "registered": "2026-11-08T16:17:59Z",
+  "shell": {
+    "question form": "how-much",
+    "second-sentence opener": "counting",
+    "rounding opener": "round",
+    "deliverable set": "csv+pptx"
   }
- ],
- "notes": "architecture 5 drawn after rating momentum (mark179's abstraction) and offsetting effects (task3, task8 arch 18) were dropped on paper; Australia passed over for Ireland because task2 sits in Western Australia",
- "registered": "2026-11-08T06:29:49Z",
- "architecture_spent": true
 }

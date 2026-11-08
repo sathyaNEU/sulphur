@@ -1,362 +1,54 @@
-# task7 design note (architecture 5)
+# task7 design note (architecture 6)
 
-Architectures 1 to 4 left only the Tried and rejected record at the end of this note; their files were removed at the
-author's word on 2026-11-08.
+Architectures 1 to 5 survive only in the Tried and rejected record at the end of this note and in git; architecture 5's
+pack, generator and goldens were removed at the re-root on 2026-11-08 (READY commit c404109 holds them), and its one
+platform run is kept as evidence in `runs/arch5/run1.md`.
 
 ## Draw
 
-- **Card:** `.claude/skills/fingerprint/cards/task7.json`, architecture v5, lineage v1 to v4 (v4 moved in with its fate
-  and shell), registered 2026-11-08 at WARN only and re-checked on the registered card as the last act of stage 1. A
-  first draft with the gap `population` first BLOCKed `test.same_puzzle` against task3's lineage v1 (population, G14,
-  quantity figure); the decisive gap is `objective`, the honester reading, because the property register's rolled-forward
-  value is a correct market figure and the loss is scored on what the property fetches when its borrower fails.
-- **WARNs answered:** `overuse.strategy` (population_selection in three of twelve): the security behind the loans that
-  fail is selected by the failure, which is this build's mechanism, and the other carriers select by busy-hour sampling
-  (task6) and by examination on signs (mark124), not by the outcome being priced. `overuse.forum` (executive_team): an
-  Irish bank's plan lines are set by its executive committee, and the shell carries the forum only as the deck's
-  audience. `overuse.objective` (forecasting six in twelve): banking x forecasting has never been built and is the
-  client's most welcome objective. `repeat.gate_g` and `overuse.gate_g` (method_or_model_selection, against task2 v4):
-  the stump is carried by what the loss model's input means at its fit against at its use, a modelling judgment; task2's
-  is a change of support in a resource model.
-- **Pairing:** Banking, Credit & Financial Risk, task type `expected-credit-loss-provisioning`, which serves
-  forecasting: the expected credit loss of the loans on the book at 31 December 2026 over 2027.
-- **Shape:** 07, a grid of cells: the 2027 plan figure, its two lending-book cells and the five facilities expected
-  to cost most, with the facility-level file (2,260 rows) behind them; every cell moves with the deep step (the default
-  path files nil, €0.25 million and nil on the three figures and one of the five).
-- **Strategy:** `population_selection` (failure selects the security that falls behind its market), Gate G
-  `method_or_model_selection`, generators G14 (the security's yield conditioned on the failure), G6 (the book is staler
-  than the record's failures were) and G3 (the register's carried value against what a sale realises).
-- **Strategy label (`sulfur-strategies.md`):** WORKS IN FORM, heterogeneity that pooling hides: the shortfall differs by
-  the years since the last inspection, and the decision weights it to a book far staler than the record's defaults, the
-  staleness rebuilt from the valuation history and never read off a column.
-- **Data-native sentence:** Ardcarn stopped inspecting its performing commercial property security after its 2012 to 2019
-  cycle and has carried it since as quarterly index roll-forwards, while its loss model was fitted on the inspection it
-  orders when a borrower defaults; a property that falls behind its market is the kind whose borrower defaults, so the
-  roll-forward overstates the security of exactly the loans that will make the losses, by more the longer since the
-  last inspection, and since 2022 the workout unit has re-inspected large facilities months before they default, so
-  the record's recent defaults rest on fresh inspections while the year-end book does not.
-- **Abstraction sentence:** a recovery input that the record measures fresh at failure is carried forward from an old
-  measurement for the units being priced, and the failing units' input has drifted adversely from the carry-forward by
-  more the older the measurement. Written against the nearest approved and in-flight builds, it is none of theirs:
-  mark179 prices an excess hazard after an outside event, mark132 a clock a replacement restarts, mark124 a rate
-  measured on units examined for signs of the outcome, task2 a change of support, task8 arch 18 two features cancelling.
-- **World:** Ardcarn Bank plc, a fictional licensed lender headquartered in Galway, lending to small and medium
-  businesses on commercial property across the Republic (let retail, offices and industrial units; owner-occupied
-  hotels, pubs and restaurants, nursing homes and shops). People drawn with `guard.py names --geo Ireland --seed 7`:
-  Colm Hourican (chief financial officer, who sets the 2027 plan's credit-loss line) and Geraldine Harkins (chief risk
-  officer). Currency EUR.
-- **Sources (all constructed for this task, seeded and deterministic; nothing real is described):** the month-end
-  facility fact of the warehouse (facility x month, January 2022 to December 2026, 133,156 rows, the large messy CSV);
-  the property valuation history, a type 2 dimension whose quarterly index roll-forward rows sit beside the inspections
-  (121,249 rows, the long CSV); the property dimension with inferred members; the facility register with the 2021 core
-  banking re-keying and its crosswalk; the security bridge sharing properties between facilities; the default register
-  (2012 to 2026); the receivers' sales and the recovery postings; the commercial property index by sector and region
-  with its release vintages; the credit policy's master scale and ECL standard and the loss given default model
-  documentation (PDF); the chief financial officer's 2027 plan request; and distractors a planner would weigh (the 2027
-  property market outlook, the rent roll, the buildings insurance register, the September 2026 concentration report).
-
-## Default path
-
-The field's own method for the deciding quantity, executed as the files state it:
-
-1. plan_2027_credit_loss_request.pdf and the policy fix the line: each facility performing at 31 December 2026 takes
-   the master-scale chance of default for its year-end grade, its year-end balance, and CRE-LGD-3.
-2. The 20261231 rows of the month-end fact with default flag N give 2,260 facilities and €1.84 billion; the bridge rows
-   in force at the year end give the security, a shared property split by exposure (policy 4.4).
-3. The valuation history is cleaned (exact repeats, same-day corrections, legacy FULL and IDX codes) and the row in
-   force on 31 December 2026 gives each property's value: the register's carried value.
-4. CRE-LGD-3, max(0, EAD - 0.78 x V) / EAD, on that value; the model documentation's back-test passes in every year,
-   so the route validates.
-5. PD x LGD x EAD summed over the book.
-
-- **Ends on:** €0.2 million (€221,294), which rounds to nil at the nearest €500,000.
-- **Golden:** €2.0 million (€2,022,102).
-
-## Stump sentence
-
-The default path files €0.2 million (nil at the nearest €500,000) because it feeds CRE-LGD-3 the register's carried
-values, index roll-forwards of inspections up to twenty years old, while the model's V is the inspection the bank orders
-at default and the bank's own defaults came in below the carried value by more the longer since the inspection behind
-it; the year-end book is far staler than the record, so neither the record's average shortfall (€1.2 million, so
-€1.0 million) nor its latest years (€0.8 to €1.4 million) price it, and only the shortfall modelled on the years since
-inspection and carried to each facility files €2.0 million.
-
-## Deep reasoning
-
-- **Task type:** expected-credit-loss-provisioning (Banking, Credit & Financial Risk), which serves forecasting: the 2027
-  expected credit loss of the book performing at the year end.
-- **Domain test:** the deciding quantity is the expected value of each facility's security at a 2027 default, the V of
-  the bank's commercial property LGD model; the field's estimator is CRE-LGD-3 applied to the security value with the
-  master-scale PD and the year-end exposure.
-- **Swap:** "plan the 2027 readmission cost of the patients discharged at the year end, where the cost model was fitted
-  on the cost assessed at readmission" stops making sense: there is no collateral carried between inspections by a
-  market index, no inspection that a failure triggers, and no failure that selects the collateral which has fallen
-  behind its market.
-- **Layer 1:** the warehouse's own texture, each from the system that makes it: type 2 valuation rows with exact
-  repeats and same-day corrections (the load process), legacy FULL and IDX basis codes before the 2021 conversion,
-  facility numbers re-issued on 5 June 2021 with the register's crosswalk, inferred property members (properties loaded
-  before their dimension row), a June 2024 month-end batch loaded twice and a February 2023 batch never loaded,
-  second default triggers on the same facility, recovery postings into 2027, index release vintages; none sits on a
-  graded path (SF3, SF15, SF16, SF14).
-- **Layer 2:** heterogeneity that pooling hides (population selection): the shortfall of the security at default
-  against the carried value grows with the years since the inspection the carried value rests on, and the decision
-  weights that relation to a year-end book far staler than the record's defaults.
-- **Decisive step:** model the bank's inspection at default as a share of the value carried on the default date as a
-  function of the years since the inspection that value rests on, from the bank's own defaults, and price each
-  performing facility's security at its own years since inspection and lending book.
-- **Not semantics:** every field read right (V is the inspection at default, the register's value is an index
-  roll-forward, FULL and IDX are the old codes, the book is on the facility) still leaves the default path on the
-  carried values, which are the register's correct market figures for a performing property and not what a failing
-  borrower's property is inspected at.
-- **Not rule application:** no filed rule says how to estimate V before a default happens: the memo asks for "the
-  expected value of the security at that date", the model defines V as the inspection at default, and nothing says the
-  carried value is biased or what the bias depends on. The enumerated family spreads from €0.22 million (carried) to
-  €4.18 million (a blanket 25 per cent haircut) over seven plan cells; the standing family (log, normal, linear,
-  banded and median fits, split or pooled, index-adjusted, exposure-weighted, three sub-periods, three other forms,
-  sale proceeds, the fork readings) spreads €1.92 to €2.12 million, all €2.0 million; the ruling-out is loud: the
-  slope on staleness is 23 standard errors from nought, and the record's average, its latest years and the cycle's
-  drift miss the plan cell by €375,000 or more.
-- **Analyst test:** CRE-LGD-3 on the register's carried values with the master-scale PD and the year-end balance, the
-  model's own validated route, files €0.2 million, nil at the nearest €500,000.
-- **Estimand:** plan_2027_credit_loss_request.pdf: the expected credit loss on the commercial property facilities
-  performing at 31 December 2026 that default during 2027, the master-scale PD for the year-end grade, the year-end
-  balance, and CRE-LGD-3 applied to the value the bank would expect its inspection to put on the security if the
-  facility defaulted, each default as if on 1 January 2027 and prices held at the latest published level; defaulted
-  facilities and 2027 lending outside the line.
-- **No decoy:** nothing is planted: the carried values are the register's correct roll-forwards, the back-test is the
-  model's genuine validation, the referral inspections are the workout unit's ordinary practice, and no memo, draft or
-  stakeholder figure argues for any plan figure.
-- **No certified replay:** the method is not recovered by reproducing a published figure; no file prints the plan
-  line, an ECL total or a shortfall ratio.
-- **Chain:** (1) V in CRE-LGD-3 is the inspection the bank orders at default, while the year-end register carries
-  index roll-forwards, so the input has to be predicted before any default happens; (2) the bank's defaults since
-  2012, joined through the legacy facility numbers, the bridge on each default date and the cleaned type 2 history,
-  give the inspection at default against the value carried then: 844 defaults averaging 87.1 per cent; (3) that ratio
-  falls with the years since the inspection the carried value rests on, about 2.9 per cent a year, 23 standard errors
-  from nought, while the cycle's inspections of performing properties fall by less (no failure selected them), so the
-  shortfall is selection and ageing, not a constant; (4) the year-end book is staler than the record (26 per cent of
-  exposure on inspections seven or more years old against 9 per cent of defaults, and 10 per cent of the defaults since
-  2022, which the workout unit re-inspected months before default), so the relation, not any average, prices it;
-  (5) each facility's expected value at its own years and lending book through CRE-LGD-3 and the master scale gives
-  €2.0 million, €1.25 million on investment lending and €0.75 million on owner-occupied.
-- **Judgment:** the statistical judgment is that the shortfall is a function of staleness to be estimated on a selected
-  record and transferred to a population with another staleness mix: a regression of the log ratio on the years since
-  inspection with a retransformation to the mean, justified by the slope's precision, by the cycle inspections that
-  show the unselected drift, and by the referral defaults that sit at the fresh end of the same line.
-- **Hidden by:** the register's current row reads as fresh (a valuation date at the last quarter end, basis index
-  roll-forward), the model's back-test passes in every year because it feeds the inspection at default, and the record's
-  latest years are no worse than its earlier ones because the large recent defaults were re-inspected at referral.
-- **After the notice:** once the solver sees inspections at default coming in below the carried values, it still owes
-  (1) that the shortfall is not a constant: the record's average applied flat files €1.2 million, so €1.0 million;
-  (2) that the latest years are not the book: their average applied flat files €0.8 to €1.4 million, because a third
-  of them rest on inspections made months before default; (3) the book's staleness rebuilt per property from the type 2
-  history past the roll-forward rows; (4) that owner-occupied security falls further at the same staleness: pooling
-  lands the plan figure but files €1.5 million and €0.5 million on the split.
-- **One-fact test:** the likeliest rescuing sentence, "the carried values are roll-forwards of old inspections", is
-  already policy 4.5's own description of a roll-forward and still leaves the record to be built across three re-keyed
-  files, the shortfall to be modelled on staleness, the referral inspections to be read as freshness rather than better
-  recoveries, and the relation to be transferred per facility; a sentence naming the relation would be the method.
-- **No replay:** the call re-derives no published figure and no stated number is wrong; the concentration report and
-  the outlook are exposures and market views.
-- **Pinned:** every rival run on the cut pack, asserted in checks.py: log, normal, linear, banded and median fits split
-  by book (€1.92 to €2.10 million, all three cells), pooled (€1.93 to €2.11 million, the plan cell, other split cells),
-  exposure-weighted (€2.05 million), defaults 2012 to 2019, 2017 to 2026 and 2020 to 2026 (€2.00 to €2.04 million), quadratic,
-  square-root and log-of-one-plus forms (€2.05 to €2.07 million), one slope with a level per book (€2.03 million), the
-  receivers' net proceeds against the carried value with no haircut (€2.12 million), and the fork readings SF6, SF8,
-  SF10, SF17 to SF22, every one on the golden's three cells and five facilities.
-- **Run forecast:** a run that applies CRE-LGD-3 to the carried values is a method shortcut at rung 0 (nil); a run that
-  builds the record and applies its average or its latest years' is an unfinished chain at rung 2 (€1.0 to €1.5
-  million); a run that fits the staleness relation but pools the books lands the plan figure and is dismissed own
-  evidence on the owner-occupied gap (€1.5 million and €0.5 million).
-- **Strategy label:** WORKS IN FORM, heterogeneity that pooling hides, in its live form: the shortfall by staleness
-  weighted to the population the decision serves (a book staler than the record), the staleness rebuilt from the type 2
-  history and never read off a column.
-- **Lesson:** a loss model's input measured fresh at failure cannot be fed a carried-forward value, and a selected
-  record's average transfers only through the variable that selects it; no build on file teaches this (mark179 prices
-  a post-event hazard, mark124 a rate measured on examined units, task2 a change of support).
-
-## Survivor anatomy
-
-- **Actor:** the years since the inspection behind a carried value has no column: the register's rows carry a valuation
-  date (the quarter end for a roll-forward) and a basis, and the age of the inspection is a relation between rows of
-  the type 2 history, read past every roll-forward row.
-- **Link:** the record joins the default register to the valuation history through re-keyed facility numbers (the
-  register's crosswalk) and the bridge as at each default date, a join no key offers, and compares the inspection at
-  default with the value carried before it, a comparison CRE-LGD-3 never asks for (it takes V at default as given).
-- **Reflex:** the field's method, CRE-LGD-3 on the register's security values with the master scale and the year-end
-  balance, files €0.2 million, nil at the nearest €500,000 (the default path).
-- **Back-test:** the model documentation's back-test passes in every default year because it feeds the inspection at
-  default; the easy route validates.
-- **Second use:** every file the step reads is in the pack for the plan anyway: the valuation history (the carried
-  values), the default register and facility register (the record and the books), the bridge (the security), the
-  index (the roll-forwards), the model documentation; delete the step and none drops out.
-- **Shock:** the recovered movement reads as ordinary: the five facilities expected to cost most rank 1, 10, 101, 130
-  and 511 on exposure, 1, 6, 12, 25 and 27 on PD times exposure, 3, 453, 731, 792 and 799 on the carried-value loss and
-  433 to 854 on staleness; the answer set is an interval of no shipped statistic.
-- **Pins:** the WHAT sits in the chief financial officer's memo and policy 4.1 to 4.4 (population, PD, exposure, the
-  LGD model, the date, prices held); no filed sentence names staleness, the record, a regression, the referral practice
-  or a split of the shortfall by book.
-
-## Readability screen
-
-| Rung | What the rows in view show | Verdict |
-|---|---|---|
-| 0 the model on the carried values | the register's row in force per property, CRE-LGD-3, the master scale | readable |
-| 1 a reflex haircut (blanket, or 10 per cent past three years) | the model's 22 per cent, any haircut a reviewer adds | readable |
-| 2 the record's shortfall applied flat (all years or the latest) | inspections at default against carried values, averaged | readable |
-| 3 the shortfall by years since inspection, carried to each facility (decisive) | no column: the years rebuilt per property past the roll-forward rows, the record joined through re-keyed numbers and the bridge as at each default | silent |
-| 4 the lending books apart (ask) | no column: owner-occupied security below investment at the same years, read only in the fitted record | silent |
-
-Test 8 (framing): neither the prompt nor any governing document states that the year-end book is staler than the
-record, that recent defaults were re-inspected at referral, that the shortfall depends on anything, or that the books
-differ; the memo frames the line on its own terms (performing at the year end, defaulting in 2027).
-
-## Semantic fork table
-
-| Id | Term or convention | Golden reading | Alternative | Call under it | Ruled out by |
-|---|---|---|---|---|---|
-| SF1 | "credit loss" for 2027 | expected credit loss on 2027 defaults of the year-end performing book | 2027 write-offs on facilities already in default | another line | memo: "expected credit loss on the commercial property facilities that are performing at 31 December 2026 and default during 2027" (SF1) |
-| SF2 | the population | default flag N at 20261231, 2,260 facilities | with the year-end defaulted facilities | another figure | memo: "already in default at 31 December 2026 are provided for separately and are not in this line" (SF2) |
-| SF3 | the year-end snapshot | one 20261231 row per facility | the June 2024 batch loaded twice | same call | the reload reaches no year-end row (SF3) |
-| SF4 | chance of default | the master scale at the year-end grade | a rate recalibrated on the record | another figure | memo and policy 4.1 (SF4) |
-| SF5 | exposure | the 31 December 2026 balance | a balance amortised to a 2027 default, or the limit | another figure | memo: "its exposure is its balance at that date" (SF5) |
-| SF6 | "expected value" of the security | the mean (Duan retransformation) | the median of the fitted ratio | €2.10 million, the same cells | same call (SF6) |
-| SF7 | when the default falls | as if on 1 January 2027 | spread through 2027 (half a year staler) | €2.26 million, so €2.5 million | memo: "as if it fell on 1 January 2027" (SF7) |
-| SF8 | prices | held at the latest published level | the outlook's 2027 capital growth applied | €2.00 million, the same cells | same call (SF8) |
-| SF9 | a shared property | split in proportion to exposure | the whole property to each facility | another figure | policy 4.4 (SF9) |
-| SF10 | the carried value | the register's row in force on 31 December 2026 | the last inspection re-rolled on the latest release | €2.02 million, the same cells | same call (SF10) |
-| SF11 | lending book | the facility's own (fact and register agree) | the property's type | same call | they agree on all 2,260 (SF11) |
-| SF12 | "cost the bank the most" | expected 2027 loss | exposure, or LGD | another list | the ask's words (SF12) |
-| SF13 | a loan | a facility | a customer | same five | five customers (SF13) |
-| SF14 | inferred property members | the book read from the facility | the facility dropped for a missing type | same call | 41 facilities keep their book (SF14) |
-| SF15 | repeats and same-day rows | dropped | kept | same call | none sits in force after cleaning (SF15) |
-| SF16 | FULL and IDX | inspection and index roll-forward | other bases | another record | policy 4.6 (SF16) |
-| SF17 | the inspection at default | within 92 days after the default | within 60 or 180 days | €2.03 and €2.02 million, the same cells | same call (SF17) |
-| SF18 | the record's carried value | in force on the default date | in force the day before the inspection | €2.05 million, the same cells | same call (SF18) |
-| SF19 | years since inspection, to | 1 January 2027 | 31 December 2026 | the same cells | same call (SF19) |
-| SF20 | a default's years since inspection | from the inspection its carried value rests on | from the last inspection dated before the default | €2.03 million, the same cells | same call (SF20) |
-| SF21 | the market's move in a ratio | the ratio against the value carried on the default date | index-adjusted to the inspection's quarter | €2.09 million, the same cells | same call (SF21) |
-| SF22 | which inspection is at default | the one ordered on or after the default | the nearest either side | €2.02 million, the same cells | same call (SF22) |
-| SF23 | the loss on the security | CRE-LGD-3 applied to the expected value of the inspection at default | the loss averaged over the spread of values an inspection might return | €2.48 million, so €2.5 million | memo: "CRE-LGD-3 applied to the value we would expect our inspection to put on the security if the facility defaulted" (SF23) |
-
-## Ladder
-
-| Rung | Route | 2027 line | Plan figure | Investment / owner-occupied |
-|---|---|---|---|---|
-| 0 | CRE-LGD-3 on the carried values (default path) | €221,294 | nil | €0.25m / nil |
-| 1a | 10 per cent off values inspected over three years ago | €571,909 | €0.5m | €0.5m / €0.25m |
-| 1b | blanket haircut of 10, 15, 20 or 25 per cent | €0.82m to €4.18m | €1.0, 1.5, 2.5, 4.0m | |
-| 2a | the record's average shortfall (87.1 per cent) flat | €1,210,923 | €1.0m | €0.75m / €0.25m |
-| 2b | the cycle's inspections of performing properties by years | €1,241,140 | €1.0m | €1.0m / €0.25m |
-| 2c | the latest years' shortfall flat (66 windows and variants) | €0.80m to €1.37m | €1.0m to €1.5m | |
-| 3 (decisive) | the shortfall by years since inspection, pooled | €2,023,524 | €2.0m | €1.5m / €0.5m |
-| 3 + ask | by lending book (golden) | €2,022,102 | €2.0m | €1.25m / €0.75m |
-| family | every standing rival (Pinned) | €1.92m to €2.12m | €2.0m | €1.25m / €0.75m |
-| ruled out | defaults spread through 2027 (SF7) | €2,257,522 | €2.5m | |
-
-The record's routes sit €375,000 or more outside the plan cell (asserted), the nearest blanket haircut (15 per cent)
-€181,000; the family's nearest edge is €127,000 inside
-it (€2.12 million against €2.25 million), the books' €48,000 and €50,000 inside theirs. The five facilities are the same
-under every split member: AB322222580 (€110,067), AB316705961 (€57,448), AB321158994 (€37,941), AB325355079 (€36,941),
-AB322344238 (€32,225); the sixth is €29,207. Pricing: the residue the filed WHAT leaves is the estimator of V, a method;
-the move is €1.8 million on a call the record's average misses by €0.8 million; one standard error on the slope
-(0.00125 on 0.0292) moves the plan figure by about €100,000, so the cell holds the golden 2.3 standard errors either
-way.
-
-## Closure table
-
-| Axis | Reading | Move |
-|---|---|---|
-| 1 Population | facilities performing at 31 December 2026 that default in 2027 | filed: memo (SF2) |
-| 2 Unit of account | the facility; euro | filed: prompt and memo (SF13) |
-| 3 Attribution window | 2027 defaults; the record 2012 to 2026 | filed: memo; C1 over record windows (SF17) |
-| 4 As-of dating | the 31 December 2026 snapshot, defaults as if on 1 January 2027 | filed: memo (SF7, SF19) |
-| 5 Version basis | the register's row in force against a re-roll on the latest release | C1 (SF10) |
-| 6 Denominator | the value carried on the default date | C1 (SF18, SF21) |
-| 7 Weighting | each default once in the fit | C1: exposure-weighted the same cells |
-| 8 Window length | every default since 2012 | C1: 2012 to 2019, 2017 to 2026, 2020 to 2026 the same cells |
-| 9 Boundary inclusivity | 92 days after default; seven years is descriptive only | C1 (SF17); nothing graded on an edge |
-| 10 Rounding path | each figure rounded once from the unrounded sum | filed: prompt |
-| 11 Tie-break | none: the fifth and sixth facilities €3,018 apart, every member the same five | C1 |
-| 12 Maturity and censoring | 2027 defaults unobserved; the line is an expectation | filed: memo |
-| 13 Order of operations | the expected value of the security, then the LGD | filed: memo ("the expected value of the security") |
-| 14 Row order | no estimator depends on file order | C1: a property shared by two defaulted facilities defaults with both, one ratio |
-| 15 Duplicate resolution | exact repeats and same-day rows dropped; the first default per facility | C1 (SF15) |
-| 16 Identity normalisation | legacy facility numbers through the register's crosswalk | the bank's own crosswalk (policy 4.6) |
-| 17 Netting against gross | none | not applicable: no quantity offsets another |
-| 18 Dimensional units | euro throughout | units in the data |
-| 19 Code and status semantics | FULL and IDX; INV and OWN; default flag Y and N | policy 4.6; the fact's own codes (SF11, SF16) |
-| 20 Integerisation | each loan to the euro; the CSV total is its rows' sum | filed: prompt |
-| 21 Clause scope | CRE-LGD-3 for every facility secured on commercial property | filed: model documentation 1, policy 4.4 |
-| 22 Forward window contents | prices held, no 2027 lending, master-scale PD | filed: memo (SF8) |
-
-## Literal reader
-
-Executed word for word, the memo, policy 4.1 to 4.6 and the model documentation fix the population, the PD, the
-exposure, the LGD formula and its V (the value the bank would expect its inspection to put on the security if the
-facility defaulted, as of 1 January 2027 at the latest published prices), the date and the prices; the literal reader
-that feeds the register's carried values to the model files nil, an easy method on the same literal estimand (the
-carried value taken as the expected inspection), never another reading of it. Every term's alternatives are in the fork table and land on the golden's cells or are ruled out by a
-quoted sentence; the estimator of V stays open and the data force it: the record rejects a constant shortfall (the
-slope at 23 standard errors), the latest years' average (it misses by €375,000 or more), the cycle's unselected drift,
-and pooling on the split (the owner-occupied level 4 points lower).
-
-## Oracles
-
-None ships. The model's back-test ties under every route because it uses the inspection at default (true and silent on
-the carried value); the concentration report states exposures and limits, the outlook market views; no file totals,
-ranks or splits a 2027 credit loss.
-
-## Ask sheet
-
-- **Ask A, the split by lending book (2 cells, rides the deep step and carries its own judgment):** owner-occupied
-  security comes in 4 points lower at default at the same years since inspection, so the shortfall is fitted per book;
-  golden €1.25 million and €0.75 million, pooled €1.5 million and €0.5 million, the default path €0.25 million and nil.
-- **Ask B, the five facilities expected to cost most (5 names):** every split member names the same five; the pooled run
-  keeps them, the default path keeps one, the record's average two.
-- **Ask C, the facility-level CSV (2,260 rows):** its rows, columns and order by expected loss, its total equal to the
-  plan figure before rounding, its first row AB322222580; the per-loan euros move a few per cent with the fit's
-  conventions (the judge's rebuild), so no euro-exact cell is graded, and every owner-occupied row moves under pooling.
-- **Pair ceiling:** 42.3 (landed run with the books pooled 69.0, default path 15.6; with the strongest off-call route,
-  the latest years by book, 51.4; a landed run that also splits the books 57.8).
-- **Shallow keep:** 15.6 per cent of the ask weight.
-- **Measured by:** task7/generator/ceiling.py on the cut pack.
-
-| Ask figure | Golden | Landed run (staleness, books pooled) | Shallow run (carried values) | Cracker verdict on the landed run |
-|---|---|---|---|---|
-| plan figure | €2.0 million | €2.0 million | nil | keeps |
-| investment | €1.25 million | €1.5 million | €0.25 million | misses |
-| owner-occupied | €0.75 million | €0.5 million | nil | misses |
-| the five facilities | AB322222580, AB316705961, AB321158994, AB325355079, AB322344238 | the same five | one of five | keeps |
-| CSV rows and columns | 2,260 rows, 10 columns | the same | the same | keeps |
-| CSV first row | AB322222580 | AB322222580 | another facility | keeps |
-
-## Prompt contract
-
-A voice rewrite may not drop or change: the question (how much credit loss Ardcarn Bank's 2027 plan should carry for
-the commercial property loans it held at the end of 2026); the population (the loans performing at the year end that go
-into default during 2027); exco_cre_credit_loss_2027.pptx as the deck for the plan, giving the figure, its split between
-investment lending and owner-occupied lending, and the five loans expected to cost the bank the most;
-cre_expected_loss_2027_by_loan.csv with every one of those performing loans and its expected 2027 loss; the plan figure
-to the nearest €500,000, the split to the nearest €250,000 and each loan's loss to the nearest euro. It may never add
-inspections, valuations, staleness, the register, roll-forwards, the index, the record, past defaults, recoveries,
-haircuts, the LGD model by name, the workout unit, the master scale by name, a count of loans, or any hint that the
-books differ or that the carried values are out of date.
-
-## Leak sweep rulings
-
-`leak.py --asof 2027-01-15` returns REVIEW; each line ruled in the main thread:
-
-- Sweep 2, "the model" in cre_lgd_model_documentation_2025.pdf: a model document's own subject; harmless.
-- Sweep 3, golden-looking figures in the policy (0.75 and 1.25, the master scale's 0.75 and 1.25 per cent for grades
-  3 and 4) and the model document (0.2, a back-test difference of -0.2 points): coincidences of a scale and a table
-  with the graded euro figures; harmless.
-- Sweep 4, the policy's inspection, roll-forward, record and register terms: policy 4.5 and 4.6 describe the register's
-  fields and versions in the bank's voice and say nothing of staleness, selection or the record's shortfall; the memo's
-  security, facility and latest-published wording files the WHAT; harmless.
-- Sweep 8, internal_grade and default_flag in the month-end fact: ordinary warehouse names; harmless.
-- Sweep 9, dates after 15 January 2027: maturity dates in the fact and register, lease ends in the rent roll, renewal
-  dates in the insurance register; forward-dated fields, not events; harmless.
+- **Card:** `.claude/skills/fingerprint/cards/task7.json`, architecture v6, lineage v1 to v5 (v5 moved in with its fate and
+  shell), registered 2026-11-08 at WARN only and re-checked on the registered card as the last act of stage 1. A first
+  draft took `filed_standard` as the context artifact and BLOCKed `ban.artifact` against task9; the stakeholder's file
+  is the climate committee's request thread, so `planning_thread` is the honester key.
+- **WARNs answered:** `repeat.gate_g` (decomposition_attribution, against task3 v5): task3 separates a storm driver from
+  a catchment response inside flood maxima; here the fall in a retrofitted building's gas use is split between the
+  retrofit, the regression of the year it was recruited on, and the weather normalisation, a different mechanism on a
+  different kind of record. `repeat.question_form` (which, against task3 v5): the decision designates buildings, so a
+  "which" question is the decision's own form.
+- **Pairing:** Energy Systems & Utilities, task type `efficiency-savings-verification`, which serves Experiment & Causal
+  Analysis: the effect of a commercial building retrofit on the building's gas use in a normal-weather year. The call
+  faces forward: which buildings in the 2027 round the council should fund.
+- **Shape:** 07, a grid of cells: every building in the 2027 pipeline with its expected normal-year gas saving and its
+  verdict against the council's cost-per-tonne limit, under the round's totals.
+- **Strategy:** `causal_design` (a comparison that is actually clean), Gate G `decomposition_attribution`, generators G14
+  (the recruitment year is a conditioned draw), G16 (the normalisation basis) and G17.
+- **Strategy label (`sulfur-strategies.md`):** WORKS IN FORM, a comparison that is actually clean, in its live form: the
+  selection is visible only through a relation in the data (each grant's building against the benchmarking notices of
+  the year before), the comparison is never filed in the estimand, and after the clean comparison is taken two more
+  inferences carry the chain (each building's own heating limit before and after the works, and the weighting to the
+  2027 pipeline's buildings); with Energy 05's form (regression to the mean plus building-specific balance points).
+- **Data-native sentence:** Haldenau's utility recruits its commercial retrofit grants through the benchmarking notice
+  it sends when a building's normalised gas use per square metre runs in the top fifth of its type, so every grant
+  went to a building in a year that ran high for reasons of its own as well, and the winters after the works were
+  mild while the insulation lowered each building's heating limit, so both the flagged year as a baseline and the
+  standard 15 degree normalisation flatter the saving.
+- **Abstraction sentence:** the card's driver: the effect of a treatment on units enrolled because a noisy yearly
+  measure ran high, where only units flagged the same way and left untreated give the counterfactual, and the outcome
+  is normalised through a threshold each unit sets and the treatment moves. Against the nearest builds on file it is
+  none of theirs: task4 corrects a slope for third-party recording error, task6 inherits an inclusion probability from
+  a parent request, task3 separates a driver from a response in flood maxima, task1 prices a provider-tenure clock.
+- **World:** Stadtwerke Haldenau, the fictional municipal utility of Haldenau (Baden-Wuerttemberg), supplies gas to
+  about 2,400 commercial buildings and runs a council-funded retrofit grant (insulation, heating controls, condensing
+  boilers). The council's climate committee sets the 2027 round in its January 2027 budget session. People drawn with
+  `guard.py names --geo Germany --seed 11`: Torben Römer (head of energy services at the utility) and Magda Peukert
+  (chair of the council's climate committee). Currency EUR.
+- **Sources (all constructed for this task, seeded and deterministic; nothing real is described):** the gas meter reads
+  (meter point x read date, 2019 to 2026, the large messy CSV, with estimated reads, meter exchanges and billing periods
+  off the calendar); the benchmarking notice register (building x year, 2021 to 2026, the long CSV); the grant
+  programme's applications and completions (2023 to 2026 rounds) and the 2027 pipeline; the building register; the
+  weather station's daily mean temperatures and its published monthly degree days; the council's climate action plan
+  (the cost-effectiveness rule) and the committee's request; the programme guideline; distractors a planner would weigh
+  (electricity reads, the solar cadastre, the municipal heat plan summary, a federal funding overview).
 
 ## Tried and rejected
 
@@ -508,3 +200,5 @@ books differ or that the carried values are out of date.
   inspection to put on the security if the facility defaulted sends a solver to the record of inspections at default,
   and once that record is built the shortfall's slope on years since inspection is the visible covariate a strong
   model fits; architecture 5 is spent.
+- 2026-11-08, re-root to architecture 6: architecture 5's files removed from the folder (in git at c404109); its run
+  kept as `runs/arch5/run1.md`.
