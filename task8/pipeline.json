@@ -6,31 +6,43 @@
  "stage": 2,
  "stage_name": "design",
  "updated": "2026-11-08",
- "stump": "the bank's Term 3 items recalibrated on the responses of students whose own school had finished the unit before their sitting day: Paper C nearest 25 at the Achieved standard, against the bank's Paper A",
- "architecture": 17,
+ "call": "",
+ "stump": "The default path pre-equates the 2027 Level 1 paper from the Board's concurrent Rasch bank and files a pass mark about three marks too high, because the Level 2 items earlier Level 1 papers carried looked invariant for Level 1 candidates when an everyday-context advantage and a reading cost cancelled on the long everyday ones, and the 2027 paper's long mathematical Level 2 items carry the cost alone.",
+ "architecture": 18,
  "loops": 0,
  "precut": {
-  "exit": 0,
-  "date": "2026-11-07"
+  "exit": null,
+  "date": ""
  },
  "leak": {
-  "leak_py": "REVIEW 2026-11-08 on the round-1 fix (no LEAK; dates clean at as-of 2026-11-06)",
-  "reader": "round 1 CLEAN 2026-11-08 (one realism note answered by per-school upload days); round 2 CLEAN 2026-11-08 (two low notes: the roster header nudges only the make-up ask and reads as an office fact; spec section 4 files the estimand, not a handling)"
+  "leak_py": "",
+  "reader": ""
  },
  "duplicate_check": {
-  "guard_check": "WARN 2026-11-07 on the registered card (Paul in one older build, task117; which repeats task127's question form; older-build signature differentiated against task122 v2, task194 v3, task501 v4)",
-  "heart": "WARN 2026-11-08 after rebase and the forum and org family redraw (council_or_assembly, nonprofit_or_charity); Paul in task117; older signature differentiated",
-  "surface": "exit 0 2026-11-08; personas Jeremy York, Paul Shailer, Theo Stevens only; promoted for the author: task194 (0.080) and task501 (0.077) on the time/G13/pick signature"
+  "guard_check": "WARN 2026-11-08 on the registered card (decision type and question form repeat task2 v4; older-build structural repeats differentiated: mark101, mark178, mark469, mark121, mark464)",
+  "heart": "",
+  "surface": "",
+  "nearest": ""
  },
  "judge": {
-  "verdict": "DETERMINISTIC",
-  "disposition": "APPROVE",
-  "pass": 2,
-  "date": "2026-11-08",
-  "report": "task8/determinism_check_report.md",
-  "gate_g": "card etl_conformance (the judges read statistical_rigor on round 1 and analytical_non_defect, surface_read_dependency no, on round 2)",
-  "gate_h": "domain pass, layers pass, decisive_step analytical",
-  "round1": "NOT_DETERMINISTIC, FIX_NOW on the Capital and Central make-up means (fixed in the generator)"
+  "verdict": "",
+  "disposition": "",
+  "gate_h": "",
+  "report": ""
+ },
+ "paper_pair": null,
+ "runs": {
+  "run1": null,
+  "run2": null,
+  "average": null,
+  "counterfactual_average": null,
+  "first_wrong_step": {
+   "run1": "",
+   "run2": ""
+  },
+  "triage": "",
+  "recorded": "",
+  "history": []
  },
  "returned": [
   {
@@ -52,14 +64,24 @@
    "commit": "DRAWN (task8), architecture 17, 2026-11-07"
   }
  ],
- "resume": "architecture 17 spent (both platform runs landed Paper C); /build task8 from 2: re-root at stage 1 in a new world per the one-architecture-per-world rule, reading runs/triage.md and the Sulfur run-record lesson first",
+ "resume": "stage 2: write the design note's Default path to Prompt contract on the drawn architecture 18 (the Prairie Adult Credentials Board's 2027 Level 1 pass mark), build the generator core and screens, run precut.py to exit 0",
  "approved": null,
- "delivered": "2026-11-08",
+ "submitted": null,
  "portal": null,
- "portal_id": "",
- "portal_status": "",
- "portal_status_date": "",
- "source_note": "re-root into a new client domain (a New Zealand independent schools' assessment trust choosing which draft Year 10 science paper to print for November 2027, pre-equated from its Rasch bank); architectures 1 to 16 spent",
+ "source_note": "re-root into a new world (a Canadian not-for-profit adult credentials board setting the pass mark of its 2027 Level 1 Numeracy paper, pre-equated from its concurrent Rasch bank while the paper borrows twelve long mathematical Level 2 items); architectures 1 to 17 spent",
+ "history": [
+  {
+   "date": "2026-11-08",
+   "event": "DRAWN: architecture 18 registered (WARN only), the draw screened on a 16-redraw prototype"
+  }
+ ],
+ "migrated_from": {
+  "project": "Mark",
+  "task": "task482",
+  "status_in_mark": "SHIPPED",
+  "date": "2026-11-08",
+  "note": "moved from Project Mark at the author's word: architecture 16 landed on the Mark portal and architecture 17 shipped there on 2026-11-08, pending; carried on here for the Sulfur bar"
+ },
  "lineage_v11": {
   "zip": "ce5456c3620c70081c8372bb8f8231421d635c03a6e7d284bc3af350eac671f7",
   "leak": {
@@ -212,72 +234,94 @@
   ],
   "spent": "2026-11-07 on its first portal round: both responses landed the golden premium of EUR 342,000, each allocating the homogenizing furnace's gas by its loads' firing hours, not their tonnes (6082 billet 0.263 over the 0.235 limit); the method a careful analyst reaches for, and the hourly gas fitted it at R-squared 0.9985, which handed over the route; the portal also flagged Domains Fit. The emissions-inventory world and the furnace-allocation driver are spent."
  },
- "build": {
-  "seed": 482025,
-  "ask_seed_offset": 6,
-  "target_zip_sha256": "02c4e9b7e51761b66b07a8348618ef419577cb04fb210d481841d7b989525203",
-  "files": 17,
-  "spine_rows": 258631,
-  "byte_identical_rebuild": true,
-  "checks": "0 failures",
-  "verify": "PASS",
-  "figures_check": "PASS (30 figures)",
-  "precut": "exit 0",
-  "voice_check": "PASS (WARN which quota)",
-  "ceiling": "golden 16/16, cracker 0/16, mirror 0/16, full includer 4/16; pairs 35.4 (one on, one off), 51.9 (full includer and cracker on), 58.8 (two full includers on)",
-  "stage4_briefs": [
-   "/tmp/claude-0/-home-user-real-world-data-extraction-conformation-etl-build-problems/77fa9de9-3064-520d-a4df-ed5eaf8d3d05/scratchpad/t482/stage4_r2/reader/BRIEF.md",
-   "/tmp/claude-0/-home-user-real-world-data-extraction-conformation-etl-build-problems/77fa9de9-3064-520d-a4df-ed5eaf8d3d05/scratchpad/t482/stage4_r2/judge/BRIEF.md"
-  ],
-  "mark_seed_offset": 111
- },
- "history": [
-  {
-   "date": "2026-11-07",
-   "event": "DRAWN: architecture 17 registered (WARN only), six screens measured on the prototype before registration"
+ "lineage_v17": {
+  "stump": "the bank's Term 3 items recalibrated on the responses of students whose own school had finished the unit before their sitting day: Paper C nearest 25 at the Achieved standard, against the bank's Paper A",
+  "zip": "02c4e9b7e51761b66b07a8348618ef419577cb04fb210d481841d7b989525203",
+  "delivered": "2026-11-08",
+  "precut": {
+   "exit": 0,
+   "date": "2026-11-07"
   },
-  {
-   "date": "2026-11-07",
-   "event": "stage 2: precut exit 0 (61 checks); generator core (world, rasch, core, golden, screens, checks) green on seed 482025, screens.json over 20 redraws"
+  "leak": {
+   "leak_py": "REVIEW 2026-11-08 on the round-1 fix (no LEAK; dates clean at as-of 2026-11-06)",
+   "reader": "round 1 CLEAN 2026-11-08 (one realism note answered by per-school upload days); round 2 CLEAN 2026-11-08 (two low notes: the roster header nudges only the make-up ask and reads as an office fact; spec section 4 files the estimand, not a handling)"
   },
-  {
+  "duplicate_check": {
+   "guard_check": "WARN 2026-11-07 on the registered card (Paul in one older build, task117; which repeats task127's question form; older-build signature differentiated against task122 v2, task194 v3, task501 v4)",
+   "heart": "WARN 2026-11-08 after rebase and the forum and org family redraw (council_or_assembly, nonprofit_or_charity); Paul in task117; older signature differentiated",
+   "surface": "exit 0 2026-11-08; personas Jeremy York, Paul Shailer, Theo Stevens only; promoted for the author: task194 (0.080) and task501 (0.077) on the time/G13/pick signature"
+  },
+  "judge": {
+   "verdict": "DETERMINISTIC",
+   "disposition": "APPROVE",
+   "pass": 2,
    "date": "2026-11-08",
-   "event": "stage 3: pack, goldens, submission and metadata built; every free gate green; stage-4 briefs written (leak reader and determinism judge, each copy byte-identical to target.zip)"
+   "report": "task8/determinism_check_report.md",
+   "gate_g": "card etl_conformance (the judges read statistical_rigor on round 1 and analytical_non_defect, surface_read_dependency no, on round 2)",
+   "gate_h": "domain pass, layers pass, decisive_step analytical",
+   "round1": "NOT_DETERMINISTIC, FIX_NOW on the Capital and Central make-up means (fixed in the generator)"
   },
-  {
-   "date": "2026-11-08",
-   "event": "stage 4 round 1: reader CLEAN, judge FIX_NOW on ask B; one fix pass (keying facts filed, batch numbers, per-script marks, per-school upload days, forum and org family redrawn after heart blocked post-rebase); every free gate re-run on the final cut"
-  }
- ],
- "target_zip_sha256": "02c4e9b7e51761b66b07a8348618ef419577cb04fb210d481841d7b989525203",
- "migrated_from": {
-  "project": "Mark",
-  "task": "task482",
-  "status_in_mark": "SHIPPED",
-  "date": "2026-11-08",
-  "note": "moved from Project Mark at the author's word: architecture 16 landed on the Mark portal and architecture 17 shipped there on 2026-11-08, pending; carried on here for the Sulfur bar"
- },
- "runs": {
-  "run1": null,
-  "run2": null,
-  "average": null,
-  "counterfactual_average": null,
-  "first_wrong_step": {
-   "run1": "none, on the golden (coverage penalties for U5 and U6 in a joint conditional Rasch fit, zeroed for November)",
-   "run2": "none, on the golden (U5 and U6 responses kept only after the school finished the unit)"
+  "build": {
+   "seed": 482025,
+   "ask_seed_offset": 6,
+   "target_zip_sha256": "02c4e9b7e51761b66b07a8348618ef419577cb04fb210d481841d7b989525203",
+   "files": 17,
+   "spine_rows": 258631,
+   "byte_identical_rebuild": true,
+   "checks": "0 failures",
+   "verify": "PASS",
+   "figures_check": "PASS (30 figures)",
+   "precut": "exit 0",
+   "voice_check": "PASS (WARN which quota)",
+   "ceiling": "golden 16/16, cracker 0/16, mirror 0/16, full includer 4/16; pairs 35.4 (one on, one off), 51.9 (full includer and cracker on), 58.8 (two full includers on)",
+   "stage4_briefs": [
+    "/tmp/claude-0/-home-user-real-world-data-extraction-conformation-etl-build-problems/77fa9de9-3064-520d-a4df-ed5eaf8d3d05/scratchpad/t482/stage4_r2/reader/BRIEF.md",
+    "/tmp/claude-0/-home-user-real-world-data-extraction-conformation-etl-build-problems/77fa9de9-3064-520d-a4df-ed5eaf8d3d05/scratchpad/t482/stage4_r2/judge/BRIEF.md"
+   ],
+   "mark_seed_offset": 111
   },
-  "triage": "REDESIGN",
-  "recorded": "2026-11-08",
-  "report": "task8/runs/triage.md",
-  "note": "scores not reported by the author; both runs filed Paper C and every regional figure",
+  "runs": {
+   "run1": null,
+   "run2": null,
+   "average": null,
+   "counterfactual_average": null,
+   "first_wrong_step": {
+    "run1": "none, on the golden (coverage penalties for U5 and U6 in a joint conditional Rasch fit, zeroed for November)",
+    "run2": "none, on the golden (U5 and U6 responses kept only after the school finished the unit)"
+   },
+   "triage": "REDESIGN",
+   "recorded": "2026-11-08",
+   "report": "task8/runs/triage.md",
+   "note": "scores not reported by the author; both runs filed Paper C and every regional figure",
+   "history": [
+    {
+     "round": 1,
+     "architecture": 17,
+     "run1": "landed",
+     "run2": "landed",
+     "verdict": "REDESIGN"
+    }
+   ]
+  },
   "history": [
    {
-    "round": 1,
-    "architecture": 17,
-    "run1": "landed",
-    "run2": "landed",
-    "verdict": "REDESIGN"
+    "date": "2026-11-07",
+    "event": "DRAWN: architecture 17 registered (WARN only), six screens measured on the prototype before registration"
+   },
+   {
+    "date": "2026-11-07",
+    "event": "stage 2: precut exit 0 (61 checks); generator core (world, rasch, core, golden, screens, checks) green on seed 482025, screens.json over 20 redraws"
+   },
+   {
+    "date": "2026-11-08",
+    "event": "stage 3: pack, goldens, submission and metadata built; every free gate green; stage-4 briefs written (leak reader and determinism judge, each copy byte-identical to target.zip)"
+   },
+   {
+    "date": "2026-11-08",
+    "event": "stage 4 round 1: reader CLEAN, judge FIX_NOW on ask B; one fix pass (keying facts filed, batch numbers, per-script marks, per-school upload days, forum and org family redrawn after heart blocked post-rebase); every free gate re-run on the final cut"
    }
-  ]
+  ],
+  "source_note": "re-root into a new client domain (a New Zealand independent schools' assessment trust choosing which draft Year 10 science paper to print for November 2027, pre-equated from its Rasch bank); architectures 1 to 16 spent",
+  "spent": "2026-11-08 on its first platform round: both runs filed Paper C and every regional figure; triage REDESIGN (runs/triage.md): the prompt's August-against-November gap announced the mechanism, the course outline and Appendix B handed over the join, taught-content recalibration is a textbook IRT reflex, and every ask device was a hygiene item both runs caught"
  }
 }

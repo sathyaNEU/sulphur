@@ -1,412 +1,117 @@
 # task8 design note
 
-Status lives in `pipeline.json`; this note holds the design. Architecture 17, drawn 2026-11-07 after architectures 1
-to 16 were spent: a new client domain, world, dataset and shell. The Corlinn Schools Assessment Trust, a charitable
-trust serving member independent schools across New Zealand, sets one Year 10 science paper each year (the Year 10
-Science Benchmark) and reports every candidate against its Achieved standard. Its Rasch item bank was calibrated on the
-August 2026 sitting, held in weeks 3 to 5 of Term 3, when every member school was part-way through the course
-outline's two Term 3 units (forces and motion; Earth's systems) in its own sequence. The Trust's Council has moved the
-2027 sitting to November, after every school has finished every unit, and sets one of three draft papers at its
-December meeting; the paper specification files the choice: the draft whose expected mark at the Achieved standard sits
-nearest 25 of its 50 marks.
+Status lives in `pipeline.json`; this note holds the design. Architecture 18, drawn 2026-11-08 after architecture 17
+landed in both platform runs (`runs/triage.md`): a new world, dataset and shell in the same subdomain and objective. The
+Prairie Adult Credentials Board, a not-for-profit awarding body in Winnipeg, certifies adult numeracy at Level 1 and
+Level 2 for community learning centres across Manitoba and Saskatchewan. Candidates sit a 40-item online paper at their
+centre on demand; each calendar year has its own paper, and every Level 1 paper's pass mark is set by the Board's Awards
+Committee before the paper opens. The Board keeps one Rasch item bank for both levels, calibrated concurrently on every
+paper sat since 2022. The 2027 Level 1 paper fills the patterns and relationships strand the 2026 revision of the
+specification added with twelve long word problems from the Level 2 pool; the other 28 items come from the Level 1 pool.
+The specification files the pass mark as the mark a candidate who just meets the Level 1 standard can be expected to
+score on the paper, and the 2022 standard-setting record fixes that standard as 26 of the 40 marks on the 2022 paper.
 
 ## Draw
 
-- **Card:** `.claude/skills/fingerprint/cards/task8.json` (architecture v17; lineage v1 to v16 spent, v16 moved in
-  with its fate and shell), registered 2026-11-07 after a fetch of main and of the second line's cards
-  (claude/jolly-hypatia-06c61h, copied untracked for each run and deleted after). The last act of stage 1, `check` on
-  the registered card: WARN only (Paul appears in one older build, task117; the which question form repeats task127's,
-  the decision being a pick among three). A first draft read BLOCK and was redrawn, never relabelled: the decisive gap
-  and pattern (population with G6) repeat thirteen older builds, so the decisive gap is time (the calibration is a
-  mid-year sitting, the decision a year-end one) with G13 leading, which is the honester reading of what moves; Gate G
-  is etl_conformance (the conformed difficulties judged against the paper specification, a contract); the shell was
-  still v16's (read off the old prompt) and is redrawn with the world. The remaining older-build signature (time, G13,
-  a pick) is differentiated on the card against task122 v2, task194 v3 and task501 v4. The window when drawn: task214,
-  task268 and task127 (decomposition_attribution, population_selection and causal_design banned; composition_mix free
-  again since task212 left it).
+- **Card:** `.claude/skills/fingerprint/cards/task8.json` (architecture v18; lineage v1 to v17, v17 moved in with its
+  fate and shell), registered 2026-11-08T05:32:52Z at WARN only, and `check` re-run on the registered card as the last
+  act of stage 1 (WARN only). The two WARNs answered: the decision type (a dial) and the question form (what) repeat
+  task2 v4, because the call is a pass mark, a value on one dial, and the form follows the decision; the shell is varied
+  at the role level instead (the second sentence is led by the reader, the deliverable set is a memo and one workbook,
+  and the workbook's two asks are a per-item table and a per-region count). The structural tests read older-build
+  repeats only (gap population, pattern G3, decomposition_attribution, a dial), each answered on the card's
+  differentiation (mark101, mark178 lineage, mark469, mark121 lineage, mark464). A first draft with G14 leading
+  BLOCKed `test.same_puzzle` against mark445 (population, G14, dial_setting) and was redrawn, not relabelled: the
+  decisive pattern is G3 (record versus operation), the honester reading, because the bank records one difficulty per
+  item and the decisive step is how a Level 2 item operates for a Level 1 candidate. The window when drawn: task2, task3
+  and task6 (forum board_of_directors, regulator_or_inspector and executive_team; strategy grain_or_unit,
+  forecast_method_backtest and population_selection; shape other twice, so a numbered shape) banned; this draw's axes
+  are clear of them.
 - **Pairing:** Education & Learning Sciences, task type `item-response-theory-test-equating`, which serves ETL. The
-  August 2026 response export, its session log, the bank and its 2025 renumbering, each school's scheme of work and the
-  three drafts are conformed into one table of the difficulty each draft item will have in November 2027 and each
-  draft's expected Achieved mark, from which the pick is read. The slot's two earlier equating architectures (v6, a
-  community college's mathematics placement form and its items' field-test positions; v11, plausible values by school)
-  are other worlds and other drivers.
-- **Strategy:** `composition_mix`: each Term 3 item's banked difficulty is a mix of the responses whose takers had
-  finished the unit and those who had not, and the November 2027 sitting is all of the first kind; the property is
-  rebuilt for each response from its student's sitting day against its own school's scheme of work, never read off a
-  column. Not grain_or_unit (the unit, a draft's expected mark, is filed), not time_semantics (no clock is misread),
-  not maturity_censoring (nothing is still arriving).
-- **Data-native sentence:** the bank's Term 3 items were calibrated at a sitting held in weeks 3 to 5 of the national
-  Term 3, while each member school's own sequence ends its first Term 3 unit in week 4 or 5 of its own term, 1 to 7
-  school days after its first sitting day, and its second at the end of term; about nine in ten responses to those
-  items came from candidates whose school had not yet finished the unit, and the November 2027 sitting follows every
-  school's last unit.
-- **ETL pincer (guide-to-prompt 1):** the forcing file pins a condition per response (taught or not when given), read
-  off the session log against the course review's appendix; reading it correctly is not sufficient, because the call
-  moves only when each Term 3 item is re-estimated on the taught responses with abilities held on the Term 1 and 2
-  items and the drafts are pre-equated again, an estimation step no field or rule performs.
-- **Abstraction sentence:** a calibrated parameter carried to a coming administration whose takers will all have been
-  taught what many of the calibration's takers had not, the state set for each taker by their own institution's
-  teaching calendar against the day they took it. No approved or delivered build on file reads this way: v6 carried
-  items to new positions by a position term read off a column; task474 measured a retest gain on repeaters; task450
-  linked through carried-over items; task445 read a choice advantage among optional questions.
-- **The decision and the quantity:** which draft (A, B or C) the committee prints for November 2027, decided by each
-  draft's expected mark at the Achieved standard under the Rasch model, the specification picking the draft nearest 25.
-- **Sources (all synthetic, shaped on New Zealand Year 10 science practice and Rasch pre-equating; the Trust, the schools
-  and the people are fictional):** the August 2026 response export (the spine, one row per scored response, about
-  259,000 rows); the session log (each sitting, UTC, with dropped and resumed sessions); the item bank (the final 2026
-  run's difficulties, unit, strand, anchor flag and fit); the calibration runs (2025 final, 2026 preliminary and
-  final); the 2025 renumbering; the three drafts (item card numbers); the paper specification; the standard-setting
-  record (the Achieved ability on the bank scale); the council's minute fixing the November 2027 dates; the 2026 course
-  review (the course outline's units, strands and terms, and its appendix of member schools' Year 10 science
-  sequences as returned, in each school's own words and term weeks); the member schools list; the request email; for
-  the asks, the entries register, the make-up roster and the office's keyed make-up scripts; distractors, the 2026
-  candidate survey of attitudes to science and the schools' bell schedules.
-- **Guard redraw at stage 4 (2026-11-08):** after the rebase, heart blocked ban.forum (committee_or_panel against
-  task127 v4) and ban.org_family (cooperative_or_member_body against task156 v3), both cards filed before this
-  draw's time. Redrawn with the world, not relabelled: the Council, which already fixed the sitting dates in the
-  pack, sets the paper on the head of assessment's recommendation (council_or_assembly), and the Trust is a
-  charitable trust serving its member schools, with no ownership claim anywhere in the pack (nonprofit_or_charity,
-  the label a trust carries in New Zealand's charities register). The prompt, the minute, the email and the memo
-  follow; the specification stays the Assessment Committee's. Heart then read WARN only.
-- **Gate G label:** the round-1 judge read the mechanism as statistical_rigor (calibration population against the
-  target population), analytical_non_defect, surface-read dependency no; the card keeps etl_conformance because the
-  call is read off a conformed table, each draft item's difficulty for the 2027 sitting judged against the
-  specification's targeting clause, and the re-estimation on the taught responses is how that conformation is done
-  (statistical rigor is the method inside it, and the guard refuses statistical_rigor alone as a Gate G).
-- **Shell WARN answered:** voice-check holds the which question form at 37 per cent of prompts against a 30 per cent
-  cap; the decision is a pick among drafts, so the form follows the decision, and the shell is varied at the role
-  level instead: the question carries the specification's rule in its own clause, and the workbook carries both asks
-  beside the working, with no side table or count-once sheet.
-- **People (guard.py names, en_NZ, seed 482):** Paul Shailer, head of assessment (asks for the recommendation); Theo
-  Stevens, chair of the Council; Jeremy York, the Trust's psychometrician (keeps the bank).
+  response export of every online sitting since 2022 (two item-code schemes), the candidate register, the bank file with
+  its preliminary and final 2026 runs, the paper layouts and the 2022 standard-setting record are conformed into one
+  table of the 2027 paper's items, each with the difficulty it will have for a Level 1 candidate and its chance at the
+  standard, from which the pass mark is read; shape 15 (fields to one schema: each 2027 item's source pool, bank code,
+  difficulty for a Level 1 candidate and chance at the standard).
+- **Strategy:** `decomposition_attribution`: each Level 2 item's shift for Level 1 candidates is split between two
+  causes the bank file records for every item (its context, everyday or mathematical, and its stem's word count), the
+  only split that fits the Level 2 items the 2023 to 2026 Level 1 papers carried. Not composition_mix (no population
+  is reweighted), not population_selection (nobody is selected), not grain_or_unit.
+- **Strategy label (`sulfur-strategies.md`):** WORKS IN FORM, separating two explanations for one pattern: the long
+  everyday Level 2 items' unchanged difficulty for Level 1 candidates is either invariance or an everyday-context
+  advantage cancelled by a reading cost, and only the like-for-like comparison with the short everyday items (the
+  advantage alone) and the short mathematical items (neither) separates them; no dated cutover, no filed sentence.
+- **Data-native sentence:** adult Level 1 candidates, older and more practised with money and measures than the
+  apprentices and school leavers who sit Level 2, gain on everyday contexts and lose on long stems they read slowly,
+  and the Level 2 items earlier Level 1 papers borrowed were short and long everyday items and short mathematical
+  ones, so the two effects cancelled on the long ones; the 2027 paper borrows long mathematical items, which carry the
+  cost with nothing to cancel it.
+- **ETL pincer (guide-to-prompt 1):** the forcing files pin each item's context and word count (the bank file, kept
+  for the blueprint and the accessibility review) and each response's level (the response export's paper code);
+  reading them correctly is not sufficient, because the pass mark moves only when each Level 2 item's difficulty for a
+  Level 1 candidate is estimated from the bridging items with both causes in one model and the link between the
+  levels fixed on the items that carry neither, an estimation step no field or rule performs.
+- **Abstraction sentence:** a fixed level's expected score on a new instrument is built from parts borrowed from
+  another population's calibration, where the borrowed parts already used with the target population looked unshifted
+  because two recorded features moved them in opposite directions, and the new instrument's borrowed parts carry only
+  the feature that makes them harder. No approved or delivered build on file reads this way: mark450 screened anchor
+  items one cause had moved (a curriculum change) and linked through the rest; mark445 read a choice advantage; mark474
+  a retest gain on a common-person link; v6 a position term; v17 a taught state rebuilt from each school's calendar.
+- **The decision and the quantity:** the 2027 Level 1 pass mark the Awards Committee sets at its 3 December 2026
+  meeting before the paper opens on 11 January 2027, decided by the paper's expected mark for a candidate who just meets
+  the Level 1 standard (26 of 40 on the 2022 paper) under the Rasch model, to the nearest whole mark.
+- **Sources (all synthetic, shaped on Canadian adult basic education numeracy certification and Rasch pre-equating; the
+  Board, the centres and the people are fictional):** the response export (the spine, one row per scored response of
+  every online sitting 2022 to 2026, about 330,000 rows); the candidate register (every registration, about 9,000 rows,
+  the long messy file); the item bank file (each item's pool, strand, context, stem word count, preliminary and final
+  2026 Rasch difficulty and fit); the paper layouts 2022 to 2027 (positions to bank codes); the qualification
+  specification (the pass-mark clause and the targeting band); the 2022 standard-setting record; the Awards Committee's
+  terms of reference and its September 2026 minute; the learning centres list; the assessment manager's request email;
+  distractors, the 2026 learner confidence survey and the centres' computer suite audit.
+- **People (guard.py names, en_CA, seed 8):** Yvette Clark, the Board's assessment manager (asks for the
+  recommendation); Shawn Simpson, chair of the Awards Committee; Andrew Adams, the Board's psychometrician (keeps the
+  bank). The seed 818 draw was replaced because two of its first names repeat older builds.
 
-### The six go/no-go screens (`generator/screens.py`, 20 redraws, and `generator/checks.py` on the shipped seed)
+### The go/no-go screens (prototype, 16 redraws, before registration)
 
-The item pool and the drafts are held fixed (140 items on four 2026 forms of 50, a 20-item anchor block from the Term 1
-and 2 units on every form; the drafts composed to taught expected Achieved marks A 26.0, B 23.0, C 25.0 with 6, 11 and
-17 Term 3 items); each redraw re-draws the 48 schools' term starts, Term 3 sequences and sitting days, about 5,200
-online candidates and their responses: each school sits over 6 to 9 school days of the 15-day window, its first Term 3
-unit ends on a Friday 1 to 7 school days after its first sitting day (week 4 or 5 of its own term) and its second at
-its term end; a response to a unit not yet taught is harder by about 1.0 logit, item by item (0.6 to 1.3); the
-Achieved standard sits at 0.35 logits; about 11 per cent of the Term 3 responses were taught (shipped seed 10.8).
+The prototype draws a Level 1 pool and a Level 2 pool, Level 1 papers 2022 to 2026 (the 2022 reference paper's items
+reused on later papers, eight Level 2 items on each of the 2023 to 2026 papers: two short everyday, three short
+mathematical, three long everyday), Level 2 papers 2024 to 2026 carrying those items and the twelve 2027 items, about
+700 Level 1 and 1,600 Level 2 candidates a sitting; Level 1 candidates carry an everyday advantage of 0.8 logits and a
+reading cost of 0.7 logits per 100 words; the bank is a concurrent joint maximum likelihood Rasch calibration of
+everything. Measured over 16 redraws:
 
-1. **Levels and the lever.** Golden marks A 25.94, B 22.81, C 24.90 over the redraws (shipped seed A 25.89, B 23.02, C 24.80); the golden
-   picks C in 20 of 20, with C 0.20 from 25 at the shipped seed against A's 0.89. Levels: the untaught effect
-   of about 1.0 logit sits inside the item-level instructional sensitivity reported for content not yet taught
-   (Polikoff 2010, Educational Measurement: Issues and Practice 29(4)); Rasch fit norms (Wright and Linacre 1994, Rasch
-   Measurement Transactions 8(3): 0.8 to 1.2 for high-stakes and 0.7 to 1.3 for run-of-the-mill multiple-choice
-   tests); true-score pre-equating from a calibrated bank (Kolen and Brennan, Test Equating, Scaling, and Linking, 3rd
-   ed., 2014). Every graded figure sits at least a quarter of a mark from a rounding edge, asserted in checks.py.
-2. **The golden's own method holds.** Taught counted from the unit's last day or 2 or 4 days after it, the sitting day
-   read in UTC, Warm's estimates for abilities, a joint recalibration dropping the untaught responses, and one taught
-   shift shared by every Term 3 item: each picks C in 20 of 20 but the 4-day lag, 19 of 20 as it drops every Monday
-   sitter (lag2 C 24.90; lag4 C 24.88; utc_day C 24.90; wle C 24.88; joint C 24.88; one_shift C 24.89), and, at the shipped seed, each puts every draft
-   on the golden's whole mark.
-3. **The first look lands wrong** in 20 of 20: the bank's difficulties pick A in 20 (marks A 24.83, B 20.62, C 21.71; shipped seed
-   A 24.78, B 20.64, C 21.58).
-4. **The careful readers land wrong**, over the 20 redraws: (a) the field-decomposing reader (true-score pre-equating
-   on the bank after an anchor drift screen and item fit, all clean) is the bank, A; (b) the constructing readers: the
-   last three days' sitters recalibrated pick A in 20 (A 25.13, B 21.15, C 22.54), the within-window trend carried to the window's
-   last day picks A in 20 (A 25.15, B 21.21, C 22.59); (c) the per-record reader (school by item rates) has no all-taught cell to
-   carry and returns the bank; (d) the mechanism-naming readers: the course outline's model weeks for every school
-   leave no response taught and return the bank (A in 20), forces and motion taken as taught in the outline's
-   fifth week picks A in 20 (A 24.99, B 20.90, C 22.17), whole schools that had finished a unit before sitting find none (no school's
-   first unit ends before its first sitting day) and fall back to the bank, and each school's week numbers read against
-   the national term calendar pick A in 19 and C in 1 (a Layer 1 misread below the decisive rung, ruled out
-   by the appendix header); (e) the literal replay of every filed fact is the bank, A.
-5. **Fit parity.** Under the bank calibration (shipped seed) the Term 3 items' infit (0.96 to 1.06, mean 1.00) sits
-   inside the Term 1 and 2 items' range (0.95 to 1.08); every item's outfit sits inside 0.85 to 1.24, the one Term 3
-   item over 1.2 ordinary in a 140-item multiple-choice bank; the anchor block's free 2026 estimates sit within 0.09
-   logits of their banked values; the bank reproduces each 2026 form's observed mean mark; the Term 3 items' banked
-   mean sits 0.20 logits above the Term 1 and 2 items'. The August 2025 and 2026 sittings share the same weeks, so the
-   2025 run agrees with the 2026 run. No diagnostic a careful analyst runs points at the Term 3 items.
-6. **Literal execution.** The specification, the standard-setting record, the bank's final run and the renumbering
-   read word for word pre-equate on the banked difficulties and print A (asserted). No governing sentence (the
-   specification, the record, the council's minute, the bank's notes) says which responses an item's difficulty rests
-   on, when units are taught or whether candidates had been taught them: the specification files the candidates who
-   sit the 2027 paper, the minute files only the November 2027 dates and an ordinary reason (results reaching families
-   with end-of-year reports), and the course review's appendix is the curriculum committee's record of each school's
-   sequence, from which it is read that every core unit ends before November.
+1. **The lever.** The truth's pass mark sits 2.3 to 3.1 marks under the bank's; the golden (both causes and the link
+   in one model of the bridging items' shifts) lands within 0.4 of the truth every time.
+2. **Every single-cause or screening route lands high.** Dropping the flagged bridging items (the short everyday ones)
+   and re-linking: 1.7 to 2.3 marks high; crediting the everyday advantage alone (the 2027 items are mathematical, so
+   nothing changes): 1.4 to 2.1 high; the reading cost alone (its slope flattened to 0.1 to 0.3 by the long everyday
+   items' null): 1.7 to 2.4 high. The nearest rival sits 1.35 to 2.14 marks above the golden.
+3. **The bridging items look clean.** Under the bank's Rasch model the long everyday items shift by -0.05 to -0.3
+   logits on average for Level 1 candidates, the short mathematical ones by 0.0, and only the short everyday items are
+   flagged (3 to 7 items of 32 at a 1.5 standard deviation screen).
+4. To be measured on the generator (stage 2): fit parity of the Level 2 items on the Level 1 papers, the bank's
+   prediction of every Level 1 paper's mean mark, every graded figure a quarter mark inside its bin, and the literal
+   execution of every filed sentence filing the bank's pass mark.
 
 ## Default path
 
-1. Conform the bank: map each draft's item card numbers to the bank's codes through the 2025 renumbering file, and take
-   each item's final 2026 Rasch difficulty (the runs file's final run, not the preliminary one).
-2. Read the Achieved ability on the bank scale from the standard-setting record (0.35 logits).
-3. Pre-equate each draft by the test characteristic curve: the expected mark at the Achieved ability is the sum of its
-   items' Rasch probabilities.
-4. Check the bank the way the field does: the anchor block's drift (none), every item's infit and outfit (all inside
-   0.7 to 1.3), and the 2026 forms' observed mean marks (reproduced).
-5. Pick the draft whose expected mark sits nearest 25, compared before rounding.
+(stage 2)
 
-Ends on: Paper A
-Golden: Paper C
+## Architecture 17 record (spent 2026-11-08)
 
-The default path's expected Achieved marks on the bank's difficulties are A 24.78, B 20.64 and C 21.58 at the shipped
-seed (whole marks 25, 21, 22); the golden's, with the Term 3 items recalibrated on the taught responses, A 25.89, B
-23.02 and C 24.80 (whole marks 26, 23, 25).
-
-## Stump sentence
-
-The default path pre-equates the drafts from the bank's Rasch difficulties and sets Paper A, whose expected Achieved
-mark sits nearest 25 of 50; the bank set the two Term 3 units' items on the August 2026 sitting, at which about nine in
-ten of their responses came before the candidate's own school had finished the unit, which shows only when each
-candidate's sitting day is set against their own school's sequence in the course review, and with those items
-re-estimated on the responses of candidates whose school had finished the unit before they sat, Paper C is nearest.
-
-## Three rules
-
-- Task type: item-response-theory-test-equating (Education & Learning Sciences), which serves ETL: the August 2026
-  response export, the session log, the bank and its renumbering, the schools' schemes of work and the three drafts are
-  conformed into one table of each draft item's 2027 difficulty and each draft's expected Achieved mark, from which the
-  pick is read.
-- Domain test: the deciding quantity is each draft's expected mark at the Achieved ability under the Rasch model, the
-  true-score pre-equating a testing programme runs from its bank; the decisive step is whether the banked difficulties
-  hold for a sitting at which every candidate has been taught every unit (item parameter invariance across opportunity
-  to learn). The swap fails: hospital forms or library loans have no item bank calibrated mid-way through a teaching
-  sequence, no scheme of work, no sitting day.
-- Swap: "which draft paper should the Trust print" with clinics for schools and questionnaires for papers becomes
-  "which questionnaire should the clinics use", and the unit not yet taught, the scheme of work and the sitting day
-  that decide it stop making sense.
-- Layer 1: the bank renumbered its items in 2025 (the drafts list old numbers); the response export carries UTC times
-  while schools sat on New Zealand school days; sessions that reconnected left duplicate response rows; each school's
-  scheme of work is in its own format with units named in its own words; make-up sitters appear under the make-up
-  centre's code; the bank history overlaps a preliminary and a final 2026 run. Each is what those systems produce, and
-  none carries the call.
-- Layer 2: estimation from the data's structure: each Term 3 item's banked difficulty mixes responses whose takers had
-  and had not been taught its unit, and the coming sitting is all taught; the item has to be re-estimated on the taught
-  responses, with abilities from the items every student had been taught.
-- Decisive step: set each student's sitting day (the session log, in New Zealand time) against their own school's last
-  day of each Term 3 unit (its scheme of work), recalibrate each Term 3 item on the responses of students whose school
-  had finished its unit before they sat, abilities fixed on the Term 1 and 2 items, and pre-equate the drafts.
-- No decoy: nothing is planted to be caught; no memo, earlier paper or published figure ranks the drafts; the bank's
-  difficulties are the Trust's own calibration, correct for the sitting it was run on, and every file is what the
-  Trust, its schools and its delivery platform keep for their own reasons.
-- Not semantics: every field (each response's score, each session's time, each item's unit and difficulty, each scheme
-  of work's weeks, every specification sentence) can be read correctly and the bank's difficulties still pick A,
-  because no field holds whether a response was taught: the state exists only as each student's sitting day against
-  their own school's calendar.
-- Not rule application: the specification files what is chosen (the draft nearest 25 at the Achieved standard for the
-  November 2027 sitting) and the standard-setting record files the Achieved ability; no rule or procedure says which
-  responses an item's difficulty is estimated on, and the routes the files leave open (the bank as run, recalibration on
-  late sitters, on whole schools, on the course outline's model weeks, on each response's own taught state) differ in
-  the population behind each difficulty, which the data's structure decides.
-- Analyst test: a strong analyst who conforms the renumbering, the UTC sessions and the duplicate rows, reads the
-  specification correctly and pre-equates the drafts from the bank after a clean drift screen and clean item fit picks
-  Paper A; the Term 3 items were calibrated on a sitting at which most students had not been taught them, and
-  recalibrated on the taught responses Paper C is nearest.
-- Estimand: the specification files it: the draft whose expected mark at the Achieved standard, for candidates sitting
-  in November 2027, sits nearest 25 of 50, the expected mark being the Rasch model's at the Achieved ability on the
-  bank's scale.
-- No certified replay: no certified figure blesses the bank's route; the 2025 and 2026 sittings' own results agree with
-  the bank because they were sat in the same weeks, which is what a sitting in November does not share.
-- Lesson: a model learns that a bank's difficulties carry the teaching state of the sitting they were calibrated on,
-  that a unit not yet taught makes its items look harder for every student who sat before their school finished it,
-  and that a sitting after all teaching needs those items re-estimated on the responses whose takers had been taught.
-
-## Survivor anatomy
-
-- Actor: the deciding property, whether a response was given after the candidate's own school had finished the item's unit, has no column in any file: it is a relation between the response's session (UTC, in the session log), the candidate's school, that school's Term 3 sequence and term start (the course review's appendix, in the school's own words and week numbers) and the item's unit (the bank), and no file or single join holds it.
-- Link: the comparison of each response's sitting day with its own school's last day of the item's unit is a cross-file comparison true-score pre-equating never asks for; the appendix lists schools by name in their own formats, nothing in the bank or the specification names a sequence or a sitting day, and no clause puts both sides in one sentence.
-- Reflex: the field's own method for the deciding quantity, true-score pre-equating of each draft from the bank at the Achieved ability after an anchor drift screen and item fit, sits at rung 0 and files Paper A, written into the default path.
-- Back-test: the textbook route validates on everything the pack holds: the bank reproduces every 2026 form's observed mean mark (it was calibrated on them), the anchor block's free 2026 estimates sit inside 0.10 logits of their banked values, every item's infit and outfit sit inside 0.8 to 1.2, and the 2025 run agrees with the 2026 run on the items both carried because both sittings fell in the same weeks.
-- Second use: every file the decisive step reads sits in the pack for a reason it independently has: the session log is the sitting's record (and the participation ask reads it), the response export carries the item fit and the reconnect duplicates every route meets, and the course review is where the unit-to-strand map the blueprint check needs is filed, its appendix the curriculum committee's own return of member schools' sequences.
-- Shock: the movement the step recovers reads as ordinary: the Term 3 items' banked difficulties sit inside the bank's spread (their mean about a quarter of a logit above the Term 1 and 2 items'), their fit matches the rest, no school, day or form is an outlier, and no sort of items on a shipped statistic puts the Term 3 items, or the drafts, in the golden's order.
-- Pins: the WHAT is filed in the Trust's own genre, the paper specification (a candidate at the Achieved standard sitting the 2027 paper, the expected mark under the Rasch model on the bank scale, nearest 25 of 50, compared before rounding) and the standard-setting record (the Achieved ability on the bank scale); no filed sentence names a teaching sequence, a sitting day, a taught state or which responses an item's difficulty rests on, and the council's minute files only the November 2027 dates and its reason.
-
-## Readability screen
-
-| Rung | 1 Filed | 2 Schema | 3 Reflex | 4 Control | 5 Hygiene | 6 Linear | 7 Organ | Verdict |
-|---|---|---|---|---|---|---|---|---|
-| 0 bank pre-equating after the renumbering, the final run, the drift screen and item fit (A) | spec and record | bank columns | the field's method | clean | clean | yes | no | readable |
-| 1 the November move noticed, abilities grown to November, the Achieved point held (A) | minute's dates | no | growth models | none | no | yes | no | readable |
-| 2 the outline's model weeks, whole schools finished before sitting, the last days' sitters, the within-window trend (A) | outline weeks | session days | late-sitter subset | none | no | no | no | readable |
-| 3 each school's week numbers read against the national term calendar (A, 2 of 20 C) | appendix weeks | no | no | none | no | no | no | readable |
-| 4 decisive: each response's taught state from its own school's sequence and term against its sitting day in New Zealand time, the Term 3 items recalibrated on the taught responses with abilities fixed on the Term 1 and 2 items, then pre-equated (C) | no clause names a sequence, a sitting day or a taught state | no column holds the state, and the join runs through a name-keyed appendix | the field's reflex is the bank, rung 0 | no control refutes the bank: it reproduces every 2026 form, its anchors do not drift, its items fit | the battery finds nothing on the Term 3 items | a recalibration on a per-response subset, not a subtraction or ratio | the course review is filed for its unit-to-strand map and the session log for the sitting record | silent |
-
-## Semantic fork table
-
-| ID | Term or convention | Golden reading | Alternative | Call under it | Ruled out by |
-|---|---|---|---|---|---|
-| SF1 | which draft to print | one of the three drafts as submitted | a draft altered by item swaps | none computed | the specification: "the draft printed is the submitted draft whose expected mark ... is nearest 25" |
-| SF2 | expected mark | the sum over the paper's 50 one-mark items of the Rasch probability of a correct answer | the probability of scoring 25 or more; a median raw mark | A or C, unfiled | the specification defines the expected mark as that sum, under the Rasch model on the bank scale |
-| SF3 | the Achieved standard | 0.35 logits on the bank scale | the 2026 forms' raw cut scores; the Achieved rate | not a point on the scale | the standard-setting record files the standard as an ability on the bank scale, and the specification asks for a candidate at it |
-| SF4 | nearest 25 | absolute distance, unrounded | rounded marks compared | same call | the specification: "compared before rounding"; C is nearest both ways (asserted) |
-| SF5 | the bank scale | held by the anchor block at its banked values | the recalibrated bank re-centred on all items' mean | same call | the bank's notes: "the scale is held by the anchor block at its banked values"; re-centred, C stays nearest (asserted) |
-| SF6 | which 2026 calibration | the final run | the preliminary run (sessions to 19 August) | same call | the runs file's header: the final run supersedes the preliminary; the golden and the default path keep their calls on either (asserted) |
-| SF7 | item identity | each draft's item card numbers mapped through the 2025 renumbering | card numbers read as bank codes | none computed | the renumbering file; no card number is a bank code |
-| SF8 | the sitting day's clock | the session's start in New Zealand time | its UTC date | same call | asserted: no school sits on its unit's last day and every first unit ends on a Friday, so no response crosses a unit's end under either clock |
-| SF9 | finished before the sitting | sat on a later day than the school's last day of the unit | the last day itself counted; 2 or 4 days after it | same call | asserted: no session falls on a unit's last day, and the lag variants file C with every draft at the golden's whole mark |
-| SF10 | a re-answered item after a reconnect | the later answer, the platform's final response | the earlier answer; both rows | same call | asserted on the golden and the default path |
-| SF11 | the second Term 3 unit | taught at the school's term end, after every sitting day | none | same call | every appendix sequence ends at its school's term end, after 21 August (asserted) |
-| SF12 | a school's week numbers | weeks of the school's own Term 3, from its start in the appendix | weeks of the national Term 3 calendar | A (2 of 20 redraws C) | the appendix header: weeks are the school's own Term 3 weeks, with each school's start date given |
-| SF13 | the recalibration's form | Term 3 items re-estimated on the taught responses, abilities fixed on the Term 1 and 2 items | a joint calibration without the untaught responses; Warm's abilities; one taught shift for every Term 3 item | same call | asserted: each files C with every draft at the golden's whole mark |
-| SF14 | the November 2027 candidates | taught every core unit before they sit | none in the record | same call | the course outline places every core unit in Terms 1 to 3 and every appendix sequence ends by its term end; no sequence reaches November |
-| SF15 | make-up papers | not in the calibration (paper scripts carry no item responses) | none | same call | the response export holds online sessions only; the make-up scripts carry a total mark |
-
-## Ladder
-
-1. Rung 0, the bank: pre-equate each draft from the final 2026 run after the renumbering, the drift screen and item fit; Paper A in 20 of 20 (redraw means A 24.83, B 20.62, C 21.71; shipped seed A 24.78, B 20.64, C 21.58).
-2. Rung 1, the move noticed: grow the 2026 abilities to November and hold the Achieved point; the standard is a point on the scale, so every draft's mark at it is unchanged; Paper A.
-3. Rung 2, a taught set without each school's own sequence: the outline's model weeks (no response taught, the bank), forces and motion taken as taught in the outline's fifth week (A 24.99, B 20.90, C 22.17), whole schools finished before sitting (none), the last three days' sitters (A 25.13, B 21.15, C 22.54), the within-window trend (A 25.15, B 21.21, C 22.59); Paper A in 20 of 20 each.
-4. Rung 3, each school's week numbers on the national calendar: Paper A in 19 of 20, C in 1 (a Layer 1 misread below the decisive rung).
-5. Rung 4, decisive: each response's taught state from its own school's sequence and term against its New Zealand sitting day, the Term 3 items recalibrated on the taught responses with abilities fixed on the Term 1 and 2 items; Paper C in 20 of 20 (redraw means A 25.94, B 22.81, C 24.90; shipped seed A 25.89, B 23.02, C 24.80).
-
-## Closure table
-
-| Axis | Reading | Closure |
-|---|---|---|
-| 1 Population | the estimand's candidates are those sitting the 2027 paper in November 2027 (the specification); the calibration's are every online response of the August 2026 sitting | filed; C1 for the calibration (make-up scripts carry no item responses) |
-| 2 Unit of account | a draft of 50 one-mark items and its expected mark | filed in the question and the specification |
-| 3 Attribution window | a response's sitting day against its school's unit end | C1: no session on a unit's last day, first units end on Fridays (asserted) |
-| 4 As-of dating | the bank as at its final 2026 run; the specification's 2027 edition | filed; static |
-| 5 Version basis | the final run over the preliminary | filed in the runs file; C1 for the call (asserted) |
-| 6 Denominator | 50 marks | filed |
-| 7 Weighting | one mark per item | filed (50 one-mark items) |
-| 8 Window length | none: the taught state is per response | C1 across the lag variants (asserted) |
-| 9 Boundary inclusivity | taught when sat on a later day than the unit's last day | C1: nothing on the edge (asserted) |
-| 10 Rounding path | unrounded comparison, whole marks reported once | filed in the specification and the prompt |
-| 11 Tie-break | none needed: C 0.20 from 25 against A's 0.89 at the shipped seed | C4, the margin asserted at the shipped seed |
-| 12 Maturity and censoring | none: the 2026 responses are complete | not applicable, stated |
-| 13 Order of operations | recalibrate, then pre-equate | C1: one order computes |
-| 14 Row order | estimates do not depend on file order | C1, asserted on a shuffled export |
-| 15 Duplicate resolution | the later answer of a re-answered item | C1: first and both give the same call (asserted) |
-| 16 Identity normalisation | card numbers to bank codes through the renumbering; appendix school names to codes through the member schools file | C4: an unmapped card or name matches nothing (asserted) |
-| 17 Netting against gross | none | not applicable, stated |
-| 18 Dimensional units | logits on the bank scale; marks | filed (the record states the standard in logits on the bank scale) |
-| 19 Code and status semantics | session status (dropped, submitted), unit codes U1 to U6 through the course outline | the files' own definitions; never the stump |
-| 20 Integerisation | none: expected marks are real-valued | not applicable, stated |
-| 21 Clause scope | the targeting clause applies to the 2027 paper; the blueprint clause holds for every draft | filed; C1 (every draft meets the blueprint, asserted) |
-| 22 Forward window contents | the November 2027 sitting follows every core unit's teaching | the course outline and every appendix sequence (ends by its term end), asserted |
-
-## Literal reader
-
-Executed word for word, the prompt and the specification file the WHAT (a candidate at the Achieved standard sitting the 2027 paper in November 2027, the expected mark under the Rasch model on the bank scale, nearest 25 of 50, compared before rounding), the standard-setting record files the ability and the bank files the scale and every difficulty as calibrated on the August 2026 sitting. The text is silent on which responses an item's difficulty for a November sitting rests on, so every option is computed: the bank as run (A: its Term 3 difficulties describe a sitting at which about nine in ten of their responses came before the candidate's school finished the unit, which the session log against the appendix shows), the outline's weeks (A), whole schools (A, none qualify), the last days' sitters (A), the trend (A), each school's weeks on the national calendar (A; ruled out by the appendix header), and each response's own taught state (C, the golden, with every variant of its form C). The easy answer A comes from an easy method on the same literal estimand, never from another reading. checks.py asserts that the literal execution of every filed sentence alone (the specification, the standard-setting record, the bank's final run, the renumbering, with no response re-estimated) files Paper A, so no filed sentence hands over the decisive step, and that every golden variant files C.
-
-## Oracles
-
-No control ties only under the golden and none arbitrates the call: the bank reproduces the 2026 forms' observed mean marks because it was calibrated on them, the anchor block does not drift, every item fits, and the 2025 run agrees with the 2026 run; no file reports a November sitting, a taught-only calibration or any draft's expected mark; no memo, minute or email ranks the drafts or says which responses an item's difficulty should rest on. The specification and the standard-setting record each state a WHAT only.
-
-## Ask sheet
-
-Two asks, each on rows the main call never reads, each a component of the call's case (H18): ask A is the audit trail
-of the population the bank was calibrated on (who was entered and who sat, by region); ask B reconciles the make-up
-sitting, the part of the 2026 sitting the bank never saw. Criteria the shape supplies: the call, each draft's expected
-Achieved mark (3), the chart's draft bars against the 25 line, the three named files and the rounding, then 16 ask
-figures (4 regions by entered, sat, make-up candidates and mean make-up mark): 27.
-
-- Ask A: for each region, the candidates its schools entered for the August 2026 sitting and how many of them sat it,
-  online or at a make-up session (whole candidates; 8 figures).
-  - Primary 1, D7 (block: sat): the office keys make-up scripts under the school code written on the script cover,
-    which is the host centre's, and the hosts serve across regions (the Northern host takes four Central schools, the
-    Central host half of Capital, the Southern host the other half); a script's home school is recoverable only
-    through the host's typed roster (script number to entry), and the roster also lists booked candidates who did not
-    attend.
-  - Primary 2, D1 (block: entered): candidates who moved school inside a region stand twice in the entries register,
-    the old school's upload with an NSN and the new school's office entry without one (the office form records no
-    NSN), matched only by first name, surname and birth date; twins at one school share a surname and a birth date.
-  - Primary 4, D4 (block: sat): unbooked absentees who turned up at a host sat at the end of the room and were written
-    onto the supervisor's sheet by hand; the office never typed them, so they are absent from the roster and reach
-    only the keyed file, where the office keyed the cover's entry number because no roster line matched (as one keyer
-    does on every cover), and their home school is read through the entries register.
-- Ask B: for each region, how many of its candidates sat a make-up paper and, where any did, their mean make-up mark
-  (whole candidates and marks to one decimal; 8 figures).
-  - Primary 4 (D4, shared with A's sat block, block: both B figures): walk-ins counted and their marks taken only
-    through the entry number keyed.
-  - Primary 3, D3 (block: the Central and Capital means): one keyer keyed the Central host's second day from the
-    cover's percentage, so that batch stands at twice its marks; only some of its rows exceed 50. The roster's header
-    files the WHAT in the office's voice (M26 is marked out of 50, the cover carries the mark out of 50 and as a
-    percentage, the office keys the mark out of 50 and each keyer's session as one batch on one template) and the
-    keyed file numbers each session's batch; the reconstruction left after noticing the impossible values is to find
-    the session they belong to and put every row of it, those under 50 included, back on the 50-mark scale.
-  - Ask fork AF1 (round 1's judge finding), closed by those filed facts and asserted in checks.py: halving the whole
-    batch breaks none and gives the golden means; halving only the batch's rostered scripts or all but its last script
-    breaks one batch on one template (Central and Capital 25.8 and 25.3, 25.8 and 24.4), dropping marks over 50 or the
-    batch drops sitters (28.1 and 25.7, 26.0 and 24.4), halving only marks over 50 breaks one template (28.6 and 26.3),
-    and the marks as keyed break the 50-mark maximum (31.3 and 27.7); the golden is 25.8 and 23.8. The make-up marks
-    are now drawn per script, so the host each school uses moves no mark; the redraw moved the four means (Northern
-    28.4, Central 25.8, Capital 23.8, Southern 25.3, each at least 0.027 inside its bin) and no count.
-  - Shared hazard: Primary 1's host attribution (every region's count and mean).
-- Hazards (ask side): the re-sent entry upload (exact duplicate rows) and withdrawn entries (status W, not
-  candidates), each moving entered by itself; the session log's resumed sessions and UTC times are main-path texture
-  both sides meet, and no ask figure rests on them.
-- Separation: no device or hazard row sits in the main call's population (the response export, the bank and its runs,
-  the renumbering, the drafts, the specification and the standard-setting record); the entries register, the make-up
-  roster and the keyed scripts are read by the asks alone, and with them deleted no main file yields an ask figure.
-
-| Ask block | Cracker path (landed the call, ran the battery, read every document) | Golden handling | Cracker |
-|---|---|---|---|
-| A entered, four regions | standing entries deduplicated on NSN after dropping exact duplicates and withdrawals: office entries carry no NSN, so moved candidates count twice | first name, surname and birth date across the region's schools, twins kept apart | miss |
-| A sat, four regions | online candidates plus keyed scripts by the school code keyed: every host's scripts land in its own region | scripts placed through the roster, walk-ins through the entry number keyed and the register | miss |
-| B make-up candidates, four regions | keyed scripts by the school code keyed | as for sat | miss |
-| B mean make-up mark, four regions | keyed marks by the school code keyed, the batch with values over 50 halved whole | marks by home school, the batch with values over 50 halved whole | miss |
-
-The full includer, who reads the cover codes as the hosts', joins every script to the typed roster and matches entries
-on first name, surname and birth date, keeps the entered block (4 of 16, 25 per cent): with the unmatched scripts
-dropped or placed at the code keyed, and whether or not it halves the percentage batch whole, it misses every region's
-sat, make-up count and mean (asserted in checks.py, measured on the cut pack by ceiling.py).
-
-- Pair ceiling: 35.4 (the full includer on the call, C = 38 + 7 + 55 x 0.25 = 58.8, with the mirror off it, S = 5 + 7 +
-  55 x 0 = 12); two responses on the call, the full includer with the cracker, 51.9, and two full includers 58.8.
-- Mirror leakage: 0 per cent of the ask weight (the mirror stops at the bank route and handles the asks as the
-  cracker does).
-- Measured by: generator/ceiling.py, which runs the cracker, mirror and full-includer paths on the cut pack and scores
-  each graded figure against figures.json.
-
-## Stage 3 record
-
-- Gates on the final cut after the round-1 fix (seed 482025, ask stream offset 6, make-up marks drawn per script with
-  offset 111, target.zip sha256 02c4e9b7e51761b66b07a8348618ef419577cb04fb210d481841d7b989525203): two byte-identical builds (pack, goldens, submission, figures); checks.py 0
-  failures, AF1 included; verify.py PASS from the shipped files alone (marks A 25.89, B 23.02, C 24.80, bank A 24.78,
-  B 20.64, C 21.58, every ask figure); figures_check PASS; precut exit 0; voice-check PASS (the which quota WARN
-  answered in the Draw); freeze.py rubric PASS (the main call, the stump and every frozen figure unchanged, the four
-  make-up means moved); leak.py REVIEW with no LEAK and no date after 6 November 2026; guard heart WARN after the
-  axis redraw; guard surface exit 0 with the three drawn personas only; every PDF Writer and LibreOffice 24.2 with
-  the Trust as author and its own date.
-- ceiling.py on the cut pack: the golden path 16 of 16, the cracker and the mirror 0, the full includer 4 of 16 in all
-  three of its variants; pairs 35.4 (one on the call, one off), 51.9 (the full includer and the cracker on it) and
-  58.8 (two full includers on it).
-- leak.py REVIEW lines, each ruled harmless: the two Notes sheets are the bank's and the office's own notes (the scale
-  and the run order; the status and source codes) and say nothing of teaching or of any count; the specification
-  shares the question's words because it is the rule the question cites, and carries no figure of the answer; the
-  course review's shared terms are its own unit and strand names; the clone screen's two promoted pairs (task194 at
-  0.080, task501 at 0.077) are the time, G13 and pick signature already differentiated on the card, for the author's
-  adjudicated read.
-- H13: identifiers advance by random steps (entries 1 to 3, sessions 1 to 2, late and withdrawn entries 3 to 39);
-  each school's entries carry its own upload day; session starts sit 0 to 6 minutes after a period start; every PDF
-  and workbook carries its own created and modified stamps in order; the roster and the appendix read back whole
-  under pdftotext -layout.
-
-## Pre-ship check
-
-Written at ship, 2026-11-08, on the final cut (target.zip 02c4e9b7, seed 482025; the digest is in `pipeline.json`).
-
-- Stage 4, round 1 (zip 3f18332c): the leak reader CLEAN; the judge NOT_DETERMINISTIC with FIX_NOW on the Capital and
-  Central mean make-up marks only (one keyer's batch keyed as percentages with no filed maximum or keying unit). The
-  main call reproduced to two decimals and Gate H read analytical. Fixed in the generator: the make-up roster's header
-  files the 50-mark maximum, the cover's two figures and one batch on one template per keyer's session; the keyed file
-  numbers every session's batch; every alternative treatment is asserted excluded (AF1). The four make-up means moved;
-  the main call and every count did not (freeze, rubric mode, PASS).
-- After the rebase onto main, heart blocked ban.forum and ban.org_family against newer cards from another session; the
-  world changed rather than the label (the Council sets the paper on the head of assessment's recommendation; the Trust
-  is a charitable trust), and heart reads WARN only.
-- Stage 4, round 2 (zip 02c4e9b7): the judge DETERMINISTIC, APPROVE, every figure reproduced (Gate F good; Gate G
-  analytical_non_defect, surface_read_dependency no; Gate H domain pass, layers pass, decisive step analytical); the
-  leak reader CLEAN, its two low notes ruled: the roster header reads as an office fact and nudges only the make-up
-  ask, and specification section 4 files the estimand, never a handling.
-- The 10/10 rules re-read against the built pack: the decisive step is still the taught-state recalibration no
-  sentence states (the literal execution of every filed sentence files Paper A, asserted), the history fits the bank as
-  well as the golden (fit parity, asserted), and the mess is only Layer 1.
-- Every gate re-run on the final cut: make.py (two byte-identical builds, checks.py 0 failures, verify.py from the
-  shipped files alone, ceiling.py), figures_check 31 of 31, precut 61 checks with 0 FAIL and 0 WARN, voice-check PASS
-  (a WARN on the which quota, kept because the call is a pick), leak.py REVIEW with no LEAK (each REVIEW line ruled
-  above), the five PDFs exported by LibreOffice Writer with the Trust as author and a real subject, guard heart WARN
-  (Paul in task117; the time, G13 and pick signature differentiated on the card) and surface exit 0 with two pairs
-  promoted on that signature (task194, task501), answered on the card. The other line's cards were copied untracked for
-  the guard runs and removed after.
-- Ask ceiling (ceiling.py on the cut pack): the cracker keeps 0 of 16, the full includer 4 of 16 (25 per cent), the
-  mirror 0; one top response on the call and one off 35.4, the full includer and the cracker both on 51.9, two full
-  includers on 58.8.
+The Corlinn Schools Assessment Trust's choice among three draft Year 10 science papers for the November 2027 sitting
+(education-learning-sciences, item-response-theory-test-equating, composition_mix): the bank's Term 3 items had been
+calibrated at the August 2026 sitting, when about nine in ten of their responses came before the candidate's own school
+had finished the unit, and recalibrated on the taught responses they put Paper C nearest 25 at the Achieved standard
+(A 25.89, B 23.02, C 24.80) against the bank's Paper A (24.78, 20.64, 21.58). The asks were each region's entries,
+sittings, make-up sittings and mean make-up mark. Shipped 2026-11-08 (judge DETERMINISTIC, APPROVE on round 2, target.zip
+02c4e9b7). On the platform's first round both runs filed Paper C and every regional figure: run 1 fitted a joint
+conditional Rasch model with a coverage contrast for each Term 3 unit, run 2 kept the Term 3 responses after each school
+finished the unit; the prompt's August-against-November gap announced the mechanism, the course outline and Appendix
+B's per-school sequences handed over the join, taught-content adjustment is a textbook IRT reflex, and each ask device
+was a hygiene item both runs caught. The full record is in `pipeline.json` (`lineage_v17`) and `runs/triage.md`; its
+stage-4 reports are kept as `determinism_check_report_arch17.md` and `leak_check_report_arch17.md`.
 
 ## Architecture 16 record (spent 2026-11-07)
 
@@ -1006,3 +711,18 @@ Architecture 11 (the contractor's plausible values drawn from a conditioning mod
   files show. The reader came back clean; its one note (every early register row on one entry date) is answered by
   each school's upload carrying its own day.
 - 2026-11-08, platform round 1 on architecture 17: both runs filed Paper C and every regional figure. Run 1 fitted coverage penalties for U5 and U6 (about 1 logit each) and zeroed them for November; run 2 kept U5 and U6 responses only after each school finished the unit. The August-against-November gap in the prompt, the course outline and Appendix B's per-school sequences handed over the join, and taught-content adjustment is a reflex; spent (runs/triage.md).
+- Architecture 18 draw screens (2026-11-08), each set aside before the card: a guessing floor at a low Level 1
+  standard on Level 2-calibrated multiple-choice items (a prototype put the bank eight marks off the truth and spread
+  the floor-only and full routes over three marks around it: Rasch misfit at the low end makes every estimator's
+  answer depend on its form, and a three-parameter fit is the reflex for multiple-choice data); the same floor offset by
+  a reading cost on the bridging items (the same fragility, replaced by two clean shifts under a true Rasch model);
+  teacher-judgment standard setting with class-referenced judging (the literal standard executes to the pooled
+  contrasting-groups cut, so the correction is a withheld artefact rule, and a moderators-only route is unbiased);
+  standard maintenance through prior attainment with the prior's unreliability (task5's screen: a measurement model
+  whose estimate spreads, and the school-level route lands); common-centre standard maintenance with centres leaving
+  after a bad year (about a tenth of a logit of regression at realistic selection, and multi-year averaging, the
+  reflex, removes most of it); item clones whose features shift difficulty (one pass mark for every version is
+  unbiased on average, so the call does not move); a concordance from dual test-takers who took the second test after
+  a low first score (mark474's driver, selection on falling short in a common-person link); a pretest-to-operational
+  shift, repeaters' familiarity with reused items and mid-life item revisions (each removed by a reflex: a pretest
+  adjustment, excluding repeaters, a latest-version rule).
