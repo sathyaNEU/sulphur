@@ -1,245 +1,42 @@
-# task2 architecture 4: Mount Carrow Stage 5, the Yarrabin delivery tier
+# task2 architecture 5: Larkmoor Speech, the 2027 heavy-correction ceiling for Shannonside Hospital Group
 
-General Statistics & Data Science, exploratory data analysis and distribution assessment, Descriptive & Distribution
-Analysis. Re-root of the slot after the platform landed architecture 3 (both runs on the golden at every ask,
-`runs/triage.md`): one architecture per world, so a new world, dataset and shell.
+General Statistics & Data Science, robustness analysis (distribution shift), Descriptive & Distribution Analysis.
+Re-root of the slot after the platform landed architecture 4 (one run filed Tier B with inverse-distance blocks,
+`runs/arch4_platform_feedback.md`): one architecture per world, so a new world, dataset and shell.
 
 ## Draw
 
-- **Card:** `.claude/skills/fingerprint/cards/task2.json` v4, registered 2026-11-08 at WARN (answered on the card:
-  grain_or_unit here never decides on a field or a filed rule; method_or_model_selection repeats task3 v3, whose step
-  shares nothing with this one); differentiated against mark257 and mark269; lineage carries v1 to v3.
-- **Pairing:** a gold miner commits a contained-gold tier in an ore purchase agreement; ore is a 5 m by 5 m by 2.5 m
-  mining block grading 2.5 g/t or more; Ironbark commits the largest tier Stage 5's ore covers.
-- **Shape:** a which-tier with the grade-tonnage curve at block support, a workbook and a board deck with the chart.
-- **Strategy:** own (UNTESTED in `sulfur-strategies.md`): the distribution of block averages read from point samples
-  (the support effect), with declustering at rung 1 and the kriged block model as the field's estimator beside it.
-- **Data-native sentence:** a gold deposit whose grades carry a large nugget and a short structure, drilled on a 25 m
-  grid with 12.5 m infill where the first holes ran high, and sold by 5 m by 5 m by 2.5 m blocks at a cut-off above
-  the mean: a 2.5 m composite varies about twice as much as a block, and an interpolated block estimate about a
-  third less.
-- **Abstraction sentence (written, then tested):** "the share of a population above a line is read at the size of
-  the unit selected, not at the size measured, and not from smoothed estimates." Against every approved and
-  delivered build in `guard.py mechanisms --objective descriptive-distribution`: mark253 (a count of latent levels
-  under a line seen through averages) is the nearest; its averages are a unit's own noisy observations shrunk to a
-  level, where here the average is spatial, over a block the samples never measured, read from the covariance with
-  distance; mark274 (an instrument's bias against a reference) and mark182 (length-biased snapshots) spend other
-  insights.
-- **Sources** (synthetic, authored for this task, CC0; `metadata.json`): the drillhole database's collars, 1 m assays
-  from two laboratories, QAQC results, bulk densities and weathering logs; the Stage 5 design by flitch; Tallowood's
-  term sheet; the 2027 mine plan summary; the geology office's drilling plan (PNG); the toll mill's bottle-roll
-  testwork and the Stage 4 survey pickup (distractors).
-- **People:** drawn with `guard.py names --geo AU --seed 2`: Mary Fitzgerald, Elizabeth Parker, Catherine Lawson,
-  Stacy Stephens.
-
-## Default path
-
-1. Put the collars on the mine grid, composite the 1 m assays to the 2.5 m flitches, keep the composites inside the
-   Stage 5 outlines (10,837 composites from 444 holes).
-2. Decluster on the 25 m grid's cells by flitch (the infill and the grade-control trial cluster where grades ran
-   high): mean 1.38 g/t as drilled, 1.18 g/t declustered (the field's exploratory step).
-3. Read the declustered composites' grade-tonnage curve against Stage 5's tonnes (20.6 Mt from the flitch outlines
-   and the weathering zones' densities): 231 koz above 2.5 g/t.
-4. Commit the largest tier the gold covers.
-
-Ends on: Tier C
-Golden: Tier B
-
-## Stump sentence
-
-A strong analyst who declusters the composites and reads their grade-tonnage curve puts 231 koz above 2.5 g/t and
-commits Tier C, and one who kriges the blocks instead (the kriging cross-validates without bias) puts about 100 koz
-there and commits Tier A; a 2.5 m composite varies about twice as much as a 5 m by 5 m by 2.5 m block and the kriged
-estimates vary less than the blocks, so only the declustered distribution carried to the block variance the
-variogram gives (0.54 of the composites') puts about 150,000 oz above the cut-off and commits Tier B.
-
-## Deep reasoning
-
-- **Task type:** exploratory data analysis distribution assessment (the distribution of block grades above a
-  cut-off), serving descriptive-distribution.
-- **Domain test:** the deciding quantity is the gold in the upper tail of the distribution of 5 m by 5 m by 2.5 m
-  block grades; the field's estimators are the declustered sample histogram and the kriged block model.
-- **Swap:** "the gold in blocks above 2.5 g/t" becomes "the revenue in stores above a sales line": there is no
-  support, no nugget and no block average whose variance a covariance with distance fixes, so the correction loses
-  its object.
-- **Layer 1:** values under detection written "<0.01" and two laboratories' unit spellings (the laboratories'
-  reports), screen fire re-assays as second rows (the high-grade protocol), core loss intervals not sampled, collars
-  on the mine grid before 2022 and MGA after (the database migration), CRMs, blanks and field duplicates with one
-  standard's batch out of tolerance (the QAQC programme); nothing is placed to be caught.
-- **Layer 2:** estimation fit: the variance of a block average read from the composites' spatial covariance, and the
-  declustered distribution carried to that variance.
-- **Decisive step:** correcting the distribution to block support: the block variance from the variogram model's
-  average within a 5 m by 5 m by 2.5 m block (nugget 34 per cent of the sill, structures of 12 m and 50 m), and the
-  declustered composites carried to it by a lognormal-shaped correction.
-- **Not semantics:** every field, unit, grid and code read correctly (the term sheet's block, the cut-off, the
-  laboratories, the collar grids) still leaves the support to be corrected; a run that reads every clause takes the
-  composites' or the kriged model's distribution for the blocks'.
-- **Not rule application:** the term sheet defines ore by the block and its grade; nothing filed says how a block's
-  grade distribution is estimated. Enumerated family (composites as drilled, declustered composites, kriged blocks in
-  three neighbourhoods, support-corrected composites under two shapes, three declustering cells, three
-  discretisations, two lag classes, a fitted or duplicate-fixed nugget) spreads the 2.5 g/t gold from about 100 to
-  350 koz; the standing family (the support-corrected composites, every shape, cell of 25 or 30 m, discretisation,
-  nugget choice) spreads it 136 to 177 koz, all Tier B; the ruling-out is loud in the data (the kriged estimates'
-  spread is under the block variance the variogram gives; the composites' over it).
-- **Analyst test:** a strong analyst declusters and reads the composites (231 koz, Tier C) or kriges the blocks and
-  reads the kriged model (about 100 koz, Tier A), validating the kriging by cross-validation.
-- **Estimand:** the term sheet 1.2 and 2.1 (ore is a 5 m by 5 m by 2.5 m block of Stage 5 at 2.5 g/t or more; the
-  tier is the contained gold of the ore delivered over 2027 and 2028); the mine plan summary (Stage 5 is the design's
-  flitches, all dug in 2027 and 2028).
-- **No decoy:** no resource statement, block model, memo or consultant figure ships; nothing states a tonnage,
-  grade or ounces for Stage 5.
-- **No certified replay:** no published resource exists for the method to reproduce.
-- **Chain:** (1) composite and decluster the assays (the infill and the grade-control trial sit where earlier holes
-  ran high); (2) fit the variogram to the composites downhole and across holes, the trial's 5 m pattern pinning the
-  short range; (3) the block variance from the model's average within a block and the declustered distribution
-  carried to it; (4) the gold above 2.5 g/t against Stage 5's tonnes by weathering zone, and the tier.
-- **Judgment:** the support the distribution is assessed at: the composites overstate and the kriged estimates
-  understate the blocks' spread, and the block variance is read from the data's own covariance (a 34 per cent nugget
-  and a 12 m structure the trial pattern shows), not assumed.
-- **One-fact test:** the likeliest hint, "kriged models are smoothed", sends a run to the composites (Tier C) or to a
-  support correction it still has to build (declustering, a variogram fitted to a noisy horizontal curve, the block
-  average); "decluster the infill" alone lands Tier C.
-- **No replay:** the call is a forward commitment for 2027 and 2028; no shipped figure is re-derived or wrong.
-- **Pinned:** rivals run on the cut pack (`generator/checks.py` R6): affine against lognormal correction, 25 or 30 m
-  cells, discretisation 3x3x2 to 10x10x4, lags of 10 or 12.5 m, the nugget fitted or fixed from the field duplicates,
-  the re-assays as original, mean or re-assay; every one files Tier B and rounds to 150,000 oz. 20 m cells (Tier B,
-  177 koz) are ruled out for the gold figure by cells smaller than the 25 m grid splitting its holes (the declustered
-  mean jumps 0.05 g/t from 25 to 20 m and moves under 0.03 from 25 to 30 m). The independent verifier's own
-  variogram fit (coordinate search, Monte Carlo block average) lands 148 koz.
-- **Run forecast:** a run first goes wrong by a method shortcut (the declustered composites' histogram read as the
-  blocks', Tier C) or a self-confirming check (the kriged block model, unbiased in cross-validation, read as the
-  blocks' distribution, Tier A).
-- **Strategy label:** UNTESTED (fresh ground: the support effect in a distribution assessment), screens run harder:
-  declustering sits at rung 1 (the client's preferential-sampling form is the rung here, never the step).
-- **Lesson:** a distribution must be assessed at the support of the unit the decision selects; a validated
-  estimator can still have the wrong spread; no build on file teaches the support effect.
-
-## Survivor anatomy
-
-- **Actor:** the composites have rows; the property that decides (a block's grade variance) has no column and no
-  row: it is a relation between composites at different distances.
-- **Link:** the block variance is read through the variogram, a comparison of every pair of composites by distance
-  that no key offers and no sentence invites.
-- **Reflex:** the declustered histogram (rung 1) and the kriged block model (the field's estimator) each file a
-  wrong tier (C and A).
-- **Back-test:** the kriging validates: leave-one-hole-out cross-validation is unbiased (slope near one), and the
-  kriged mean equals the declustered mean.
-- **Second use:** every file the decisive step reads has its own use: the assays and collars are the resource's
-  only data; the grade-control trial is the new fleet's ground test; the field duplicates are the QAQC programme's.
-- **Shock:** nothing moves: the nugget and the short range are ordinary features of a gold deposit's variogram,
-  never an anomaly.
-- **Pins:** the WHAT is in the term sheet (the block, the cut-off, the tiers, the term) and the plan summary (Stage
-  5's flitches); no sentence names a support, a variance, a correction or a model.
-
-## Readability screen
-
-| Rung | 1 Filed sentence | 2 Schema | 3 Reflex | 4 Control bench | 5 Hygiene | 6 Linear | 7 Dedicated organ | Verdict |
-|---|---|---|---|---|---|---|---|---|
-| 0 Composites as drilled | no | no | yes | no | no | no | no | readable |
-| 1 Declustered composites | no | no | yes | no | yes | no | no | readable |
-| 1 Kriged block model | no | no | yes | no | no | no | no | readable |
-| 2 The block variance and the support correction (decisive) | no | no | no | no | no | no | no | silent |
-
-## Semantic fork table
-
-| Id | Term or convention | Reading A (golden) | Reading B | Golden under A | Under B | Ruled out by |
-|---|---|---|---|---|---|---|
-| SF1 | ore | a 5 m by 5 m by 2.5 m block at 2.5 g/t or more | a composite or sample at 2.5 g/t | Tier B | Tier C | term sheet 1.2 |
-| SF2 | values under detection | half the limit | zero | Tier B | Tier B | same call |
-| SF3 | screen fire re-assays | the original | the mean, or the re-assay | Tier B | Tier B | same call (asserted) |
-| SF4 | declustering cell | 25 m | 30 m (20 m) | Tier B | Tier B | same call (asserted); 20 m splits the grid's holes |
-| SF5 | correction shape | lognormal | affine | Tier B | Tier B | same call (asserted) |
-| SF6 | block discretisation | 5x5x3 | 3x3x2, 10x10x4 | Tier B | Tier B | same call (asserted) |
-| SF7 | the nugget | fitted | fixed from the field duplicates | Tier B | Tier B | same call (asserted) |
-
-## Ladder
-
-- **Rungs and winners:** rung 0 composites as drilled: 350 koz, Tier C; rung 1 declustered composites: 231 koz, Tier
-  C; the field's estimator (ordinary kriging of the blocks, 12 to 32 composites): about 100 to 112 koz, Tier A; the
-  support correction without declustering: 256 koz, Tier C; the decisive rung (declustered and corrected to block
-  support): 147 koz, Tier B (truth 151 koz).
-- **Margins:** the golden sits 22 koz over Tier B's 125,000 and 53 koz under Tier C's 200,000; rung 1 31 koz over
-  Tier C; every kriged neighbourhood under Tier B.
-- **Pricing:** (1) the residue the WHAT leaves is the block distribution, a method; (2) the move the call needs (231
-  to under 200 koz) is a third of the high-grade gold, which the support effect at a 34 per cent nugget produces; (3)
-  the one-group-by route (the declustered histogram) is rung 1; (4) the block variance's spread across the standing
-  fits is about 4 per cent (0.53 to 0.56) against the factor of two it moves the variance; (5) the lever is a
-  variance and the call a verdict on one quantity far from both edges; (8) every visible grouping (weathering zone,
-  laboratory, programme) was swept and none carries the support.
-- **Dominance:** each lower rung's single correction leaves it on a wrong tier (R3b and R4 in `checks.py`).
-
-## Closure table
-
-| Axis | Reading | Closure |
-|---|---|---|
-| 1 population | Stage 5's blocks | term sheet 1.1, design file |
-| 2 outcome | contained gold of ore blocks | term sheet 1.2 |
-| 3 window | 2027 and 2028, all of Stage 5 | term sheet 1.1, plan summary |
-| 4 unit | ounces, nearest 50,000 | prompt |
-| 5 comparison | the gold against each tier | term sheet 2.1 |
-| 6 block | 5 m by 5 m by 2.5 m | term sheet 1.2 |
-| 7 cut-off | 2.5 g/t | term sheet 1.2 |
-| 8 grids | MGA less the filed shift | plan summary |
-| 9 laboratories | ppm and g/t one unit | assay rows |
-| 10 detection | half the limit | same call |
-| 11 re-assays | the original | same call |
-| 12 density | by weathering zone | density and weathering files |
-| 13 tonnes | flitch outlines | design file |
-| 14 compositing | to the flitch | the block's flitch |
-| 15 declustering | 25 m cells by flitch | the regular grid |
-| 16 variogram | fitted downhole and across holes | the data |
-| 17 support | the block variance | the data (decisive) |
-| 18 correction | lognormal-shaped | same call |
-| 19 rounding | nearest 50,000 oz | prompt |
-| 20 tie at a tier | none within 20 koz | asserted |
-| 21 largest tier | the largest covered | the prompt's question, term sheet 2.2 |
-| 22 as-of | 6 November 2026 | the plan summary and the election date |
-
-## Literal reader
-
-Executing the term sheet and the plan summary word for word gives the estimand (Stage 5's 5 m by 5 m by 2.5 m blocks
-at 2.5 g/t or more, their contained gold over the term, the largest tier covered) and leaves the block distribution
-to the data; every reading the data leave standing files Tier B.
-
-## Oracles
-
-none: no resource statement, reconciliation or block model ships; the QAQC file scores the laboratories, not the
-estimate.
-
-## Ask sheet
-
-- **Asks:** (A1) the gold above the agreement's cut-off, nearest 50,000 oz (150,000); the workbook's grade-tonnage
-  table from 1.0 to 3.0 g/t and the deck's chart against the tiers (instruction following).
-- **Devices:** A1 rides the decisive step (declustered composites 250,000, kriged 100,000) and carries a second
-  judgment of its own: the block ratio applies to the declustered variance; applied to the composites' variance as
-  drilled (inflated by the clustered infill) the same correction keeps Tier B at 196 koz and rounds to 200,000.
-- **Pair ceiling:** 28.5 (`generator/ceiling.py`: the cracker lands Tier B and misses A1, 45; the mirror on rung 1,
-  12); the full includer with the mirror 56.
-- **Shallow keep:** 0 per cent of ask weight kept by the default path.
-- **Measured by:** generator/ceiling.py
-
-| Ask | Golden | Default path (rung 1) | Cracker (block ratio on the as-drilled variance) | Verdict |
-|---|---|---|---|---|
-| A1 gold above 2.5 g/t | 150,000 | 250,000 | 200,000 | miss |
-
-## Prompt contract
-
-The author's rewrite keeps: the question (what contained-gold tier Ironbark can commit Stage 5 to for 2027 and
-2028); `stage5_OPA_tier_board.pptx` with the chart of the gold in Stage 5's mining blocks against cut-off beside the
-three tier thresholds; `stage5_high_grade_resource.xlsx` with the tonnes, grade and gold above each cut-off from 1.0
-to 3.0 g/t in steps of 0.5 and the gold above the agreement's cut-off; that gold to the nearest 50,000 ounces. The
-as-of is 6 November 2026.
-
-## Pre-ship check
-
-- The Sulfur standard re-read against the built pack: the call rests on the block support (the variogram's block
-  variance and the correction), with declustering at rung 1 and the kriged model beside it (R3a, R3b, R4 asserted);
-  the leak reader answered Q6 analytical; the one-fact hint lands Tier C (R5).
-- Free gates on the final cut: checks 70 of 70, the verifier (its own variogram fit lands 148 koz, Tier B),
-  byte-identical rebuild, precut 72 of 72, figures_check 62 of 62, leak.py REVIEW (no LEAK; the tiers filed as stated
-  inputs), guard heart WARN (answered on the card) and surface exit 0.
-- Stage 4: the leak reader found no step named and no ranking file; the term sheet's clause numbering and the
-  metallurgical head grades fixed. The determinism judge's verdict is recorded in determinism_check_report.md.
+- **Card:** `.claude/skills/fingerprint/cards/task2.json` v5, registered 2026-11-08T22:01:37Z at WARN; lineage carries
+  v1 to v4, the v4 shell (what, for, pptx and xlsx) among the dead shells. Answered: `overuse.strategy`
+  (composition_mix in 3 of the last 12): task3 v5 transfers a rare-event level between two basins by each event's own
+  threshold and task1 an exit curve by provider tenure; neither splits a steady aggregate into a cancelling
+  improvement and drift, and the label is the honest one because the ceiling is a mixture carried to a forward mix.
+  `repeat.gate_g` (decomposition_attribution, task7 v6): task7 splits a lottery gap into the works and a contaminating
+  visit; here the split is of a steady share into release steps and a composition drift, with no comparison group.
+- **Pairing:** a medical speech-recognition vendor commits a ceiling in a hospital group's 2027 quality schedule: the
+  share of a quarter's audited dictations whose word error rate exceeds 15 per cent (heavy correction) may not pass
+  the ceiling in any quarter, and the schedule offers ceilings of 10, 12, 14 and 16 per cent at falling fees.
+- **Shape:** 14, cuts of a distribution: each 2027 quarter's share above 15 per cent and its 90th-percentile word
+  error rate, each hospital's share in the fourth quarter, and the lowest offered ceiling no quarter breaches.
+- **Strategy:** composition_mix, Part A "Heterogeneity that pooling hides", WORKS IN FORM: the groups differ and the
+  decision weights them to a population whose mix the record never held, with the group property rebuilt from a
+  history (a clinician's start set against the hospital's compulsory date) and never read off a column; GSDS 02 (a
+  held-out record that does not look like deployment) in the live form, the deployment population rebuilt from the
+  record.
+- **Data-native sentence:** the audited share has held between about 8 and 10 per cent for four years because each
+  of the four model releases cut every clinician's error by about a tenth while the dictation mix moved toward
+  clinicians who began only once their hospital made dictation compulsory, whose own level is about half again as
+  high; the six hospitals that went compulsory were small with high voluntary uptake, and the two that go compulsory
+  in 2027 are the teaching hospitals, larger than the other six together, with low uptake, under a model frozen for
+  the platform migration.
+- **The lessons it is drawn against** (`sulfur-record.md`): a mechanism the rows visibly carry is modelled on sight,
+  so the structure here is one the rows in view hide (two effects cancelling inside the observed window) with the
+  deciding evidence in a second file at another grain (the contract's compulsory dates against each clinician's first
+  dictation); noticing was the whole stump in task7 arch 4 and task8 arch 17, so after the notice the 2027 mix still
+  has to be projected through turnover and two go-live ramps with the model frozen, and the cheap routes all err the
+  same way (low), so no intermediate shortcut can cross into the golden's ceiling by chance (architecture 4's death).
+- **People:** drawn with `guard.py names --geo ie --seed 5205`: Jody Cahir, Yasmine Ganley, Colum Wallace, Pearce
+  Stapleton.
 
 ## Tried and rejected
 
@@ -335,4 +132,23 @@ as-of is 6 November 2026.
   1.25 m vertical grid, a smaller nugget) moved where it crosses but never removed the crossing: a smoother whose
   neighbourhood is a free knob sweeps through the true block variance, and the composite-support variogram read the
   thin lenses as nugget, biasing the golden low. The support stump is spent; the slot re-roots.
-
+- 2026-11-08, architecture 5 draw: a recognizer's error falling with each user's own count of dictations, carried
+  to a new market of new users: the right clock as cumulative use is Mark 46's held driver (a rate law stationary in
+  cumulative service exposure), and "a new market's users are all new" names the axis in the decision's framing.
+- 2026-11-08, architecture 5 draw: a contaminant's share of private wells above a new limit from a random survey with
+  a detection limit above it and targeted low-limit sampling near sources: the targeted samples stratified on what
+  drove the targeting and carried to the register's mix is mark124's driver.
+- 2026-11-08, architecture 5 draw: pass@k at a budget beyond the samples drawn, from a latent per-problem solve-rate
+  distribution with unsolvable problems: a deep-sampled subset either reads the answer directly or, if itself
+  selected, reduces to two-phase design weighting (task264's lesson); the pattern also sits on the client's Example 9.
+- 2026-11-08, architecture 5 draw: benchmark contamination separated from item-difficulty drift by each model's own
+  training cutoff: a causal split whose objective is Experiment & Causal Analysis, not this slot's.
+- 2026-11-08, architecture 5 draw: the same cancelling structure with the hidden property a recording device read
+  from a device inventory: the customer's IT plan to move everyone to the phone app names the axis, so noticing is
+  the whole stump.
+- 2026-11-08, architecture 5 prototype: a single "sign the 10 per cent ceiling or not" call is landed by two cheap
+  routes that over- or under-shoot past the line (recent starters' average level; a linear trend in starters' level
+  extrapolated to 2027), so the call moved to the lowest of four offered ceilings, the cheap routes landing on 10 or
+  12 and the trend extrapolation on 16; and the past compulsory go-lives were made small hospitals with high
+  voluntary uptake, because a per-hospital event study at go-lives of the same size as 2027's would carry the step
+  to the teaching hospitals without any clinician-level reasoning.

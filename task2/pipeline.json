@@ -6,29 +6,13 @@
  "stage": 2,
  "stage_name": "design",
  "updated": "2026-11-08",
- "stump": "A strong analyst who declusters the composites and reads their grade-tonnage curve puts 231 koz above 2.5 g/t and commits Tier C, and one who kriges the blocks (the kriging cross-validates without bias) puts about 100 koz there and commits Tier A; only the declustered distribution carried to the block variance the variogram gives puts about 150,000 oz above the cut-off and commits Tier B.",
- "architecture": 4,
+ "stump": "A competent solver takes the steady audited share (or adds the 2024 release gap's climb, or the steps past go-lives at the small hospitals) and commits to the 10 or 12 per cent ceiling; the step that lands it there is reading the steadiness as stability, when releases cancelled a mix moving toward clinicians who began once dictation was compulsory, and with the model frozen and the two largest hospitals going compulsory the 2027 quarters pass 12 per cent.",
+ "architecture": 5,
  "loops": 0,
- "precut": {
-  "exit": 0,
-  "date": "2026-11-08",
-  "checks": 72
- },
- "leak": {
-  "leak_py": "REVIEW, no LEAK (2026-11-08, --asof 2026-11-06): the tier sizes are the agreement's candidates, filed as stated inputs",
-  "reader": "2026-11-08 isolated reader (Sonnet, medium): no step named, no ranking or helper file, Q6 analytical; the term sheet's numbering and the metallurgy head grades fixed"
- },
- "duplicate_check": {
-  "heart": "WARN (answered on the card)",
-  "surface": "exit 0, 1 pair promoted on surface similarity"
- },
- "judge": {
-  "verdict": "DETERMINISTIC",
-  "disposition": "FIX_NOW applied (answer 3 states the affine band), re-judged once: APPROVE",
-  "gate_g": "method_or_model_selection, analytical_non_defect, surface_read_dependency no, sole_data_defect no",
-  "gate_h": "domain pass, layers pass, decisive_step analytical",
-  "report": "task2/determinism_check_report.md"
- },
+ "precut": {},
+ "leak": {},
+ "duplicate_check": {},
+ "judge": {},
  "returned": [
   {
    "date": "2026-11-07",
@@ -56,7 +40,7 @@
    "commit": ""
   }
  ],
- "resume": "re-root to architecture 5 at stage 1 (draw): architecture 4's support stump is spent; inverse distance's neighbourhood sweeps through the true block variance, so no tier or grade field isolates the golden",
+ "resume": "stage 2 (design): the default path, the deep chain and the Deep reasoning lines, the ladder priced on a prototype of the world (the flat 2023 to 2026 record, the 2024 release gap, the four offered ceilings), the fork and closure tables, the asks, prompt.txt; then precut.py",
  "approved": null,
  "delivered": "2026-11-01",
  "portal": null,
@@ -83,6 +67,11 @@
    "architecture": 4,
    "drawn": "2026-11-08",
    "fate": "spent 2026-11-08 on the platform: one run landed Tier B with inverse-distance blocks; a smoother whose neighbourhood is a free knob reaches the true block variance by chance"
+  },
+  {
+   "architecture": 5,
+   "drawn": "2026-11-08",
+   "fate": ""
   }
  ],
  "gates": {
@@ -117,7 +106,7 @@
   "date": "2026-11-08",
   "note": "moved from Project Mark unstumped on the Mark portal; carried on here for the Sulfur bar"
  },
- "subdomain": "exploratory-data-analysis-distribution-assessment",
+ "subdomain": "robustness-analysis",
  "call": "Commit Stage 5 to Tier B (125,000 oz): its 5 m x 5 m x 2.5 m blocks at 2.5 g/t or more hold about 150,000 oz",
  "runs": {
   "run1": null,
