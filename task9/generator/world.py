@@ -1,4 +1,4 @@
-"""task9, architecture 6: the truth behind the pack.
+"""task9, architecture 7: the truth behind the pack.
 
 Sponsor houses raise buyout funds one after another. A fund buys European mid-market companies during its five-year
 investment period, each with a first-lien loan at the buyout; companies refinance, are sold on to other houses' funds,
@@ -40,7 +40,11 @@ SECONDARY_P = 0.40
 REFI_P = 0.12
 # workouts: duration in years and the recovery it ends on
 WO_SHAPE, WO_SCALE = 2.6, 1.05
-REC_A, REC_B, REC_SD = 0.93, 0.125, 0.14
+REC_A, REC_B, REC_SD = 1.187, 0.125, 0.14
+# a house in a bad year stops backing its companies' restructurings, and the economy's year moves every sale: the
+# shocks that cluster the defaults also cut what they recover and lengthen the workouts
+REC_M, REC_H = 0.07, 0.06
+DUR_M, DUR_H = 0.15, 0.10
 
 SECTORS = [  # Lenderbase code, Lenderbase name, Kestrel Lane (agency industry), Ostvale (GICS-style), Dealtrail word
     ("LB01", "Business services", "Services: Business", "Commercial & Professional Services", "Business services"),
@@ -345,8 +349,10 @@ def _workouts(W, rng):
     for L in W.loans:
         if L["status"] != "default":
             continue
-        d = float(rng.gamma(WO_SHAPE, WO_SCALE))
-        r = float(np.clip(REC_A - REC_B * d + rng.normal(0, REC_SD), 0.0, 1.0))
+        y = L["end"].year
+        zm, zh = W.M[y], W.F[(W.funds[L["fund"]]["house"], y)]
+        d = float(rng.gamma(WO_SHAPE, WO_SCALE)) * float(np.exp(-DUR_M * zm - DUR_H * zh))
+        r = float(np.clip(REC_A - REC_B * d + REC_M * zm + REC_H * zh + rng.normal(0, REC_SD), 0.0, 1.0))
         L["wo_years"], L["recovery"] = d, r
         L["resolved"] = L["end"] + dt.timedelta(days=int(round(d * 365.25)))
         L["resolution"] = ("Restructuring" if r > 0.55 else "Sale of business" if r > 0.3 else "Liquidation")

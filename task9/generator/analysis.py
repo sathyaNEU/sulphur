@@ -212,6 +212,91 @@ def lgd(pack, last_closed_year=2019):
                 open_before=sum(v for y, v in open_by_year.items() if y <= last_closed_year))
 
 
+def shocks(P, E):
+    """Posterior means of each year's shock (from the year's default rate against the rates its loans' ratings and ages
+    expect, one factor) and of each house-year's shock given its industry-years (from the house-year's own defaults
+    against its companies' industry-year rates, the house share of the residual variance)."""
+    from scipy.stats import norm
+    pu = MD.pd_table(P)[1]
+    zy = {}
+    for y in sorted(set(P[:, 1].tolist())):
+        m = P[:, 1] == y
+        dr = min(max(P[m, 6].mean(), 1e-4), 0.5)
+        zy[y] = float((norm.ppf(pu[m].mean()) - norm.ppf(dr)) * np.sqrt(1 - E["am"]) / np.sqrt(E["am"]))
+    pKY = MD.cond_pd(P, P[:, 1] * 100 + P[:, 3])
+    c = E["ch"]
+    grid = np.linspace(-4.5, 4.5, 181)
+    prior = norm.pdf(grid)
+    zh = {}
+    keys = collections.defaultdict(list)
+    for i, (h, y) in enumerate(zip(P[:, 7].tolist(), P[:, 1].tolist())):
+        keys[(h, y)].append(i)
+    for key, idx in keys.items():
+        t = norm.ppf(np.clip(pKY[idx], 1e-6, 1 - 1e-6))
+        pz = norm.cdf((t[:, None] - np.sqrt(c) * grid[None, :]) / np.sqrt(1 - c))
+        d = P[idx, 6][:, None]
+        w = prior * np.prod(np.where(d == 1, pz, 1 - pz), axis=0)
+        zh[key] = float((w * grid).sum() / w.sum())
+    return zy, zh
+
+
+def lgd_link(pack, L, buys, P, ids, E, sample="mature", last_closed_year=2019, terms=("year", "house")):
+    """Recovery on each default's year and house-year shocks, by least squares over the workouts of the default years
+    whose workouts have all closed (sample mature) or every closed workout (sample closed)."""
+    zy, zh = shocks(P, E)
+    rows = read_csv(pack.path("lenderbase_workout_recoveries_2008-2026.csv"))
+    X, yv, groups = [], [], collections.Counter()
+    for r in rows:
+        v = r["recovery"].strip()
+        if not v or r["lb_loan_id"] not in L:
+            continue
+        ln = L[r["lb_loan_id"]]
+        sp = spell(ln, buys)
+        if sp is None:
+            continue
+        y = _date(r["default_date"]).year
+        if sample == "mature" and y > last_closed_year:
+            continue
+        h = ids["houses"].get(sp["house"])
+        if h is None or (h, y) not in zh:
+            continue
+        x = float(v)
+        cols = [1.0] + ([zy[y]] if "year" in terms else []) + ([zh[(h, y)]] if "house" in terms else [])
+        X.append(cols)
+        yv.append(x / 100.0 if x > 1.0 else x)
+    X, yv = np.array(X), np.array(yv)
+    b = np.linalg.lstsq(X, yv, rcond=None)[0]
+    full = [float(b[0]), 0.0, 0.0]
+    j = 1
+    if "year" in terms:
+        full[1] = float(b[j])
+        j += 1
+    if "house" in terms:
+        full[2] = float(b[j])
+    return dict(a=full[0], bm=full[1], bh=full[2], n=int(len(yv)), sample=sample)
+
+
+def recovery_by_cluster(pack, L, buys, P, ids, last_closed_year=2019):
+    """Mean recovery of the mature defaults by how many other defaults the same house had in the same year."""
+    cnt = collections.Counter((int(h), int(y)) for h, y, d in zip(P[:, 7], P[:, 1], P[:, 6]) if d)
+    rows = read_csv(pack.path("lenderbase_workout_recoveries_2008-2026.csv"))
+    by = collections.defaultdict(list)
+    for r in rows:
+        v = r["recovery"].strip()
+        if not v or r["lb_loan_id"] not in L:
+            continue
+        y = _date(r["default_date"]).year
+        if y > last_closed_year:
+            continue
+        sp = spell(L[r["lb_loan_id"]], buys)
+        if sp is None or sp["house"] not in ids["houses"]:
+            continue
+        o = min(cnt[(ids["houses"][sp["house"]], y)] - 1, 3)
+        x = float(v)
+        by[o].append(x / 100.0 if x > 1.0 else x)
+    return {k: (round(float(np.mean(v)), 4), len(v)) for k, v in sorted(by.items())}
+
+
 # ---------------------------------------------------------------- 6. the tapes
 def fx_rates(pack):
     rows = read_csv(pack.path("ecb_euro_reference_rates_2026-12.csv"))
@@ -343,8 +428,12 @@ def run(root, nsim=NSIM, rivals=True):
                n_funds=len(ids["funds"]), ports={})
     res["evidence"] = pair_evidence(P)
     golden = dict(am=E["am"], ak=E["ak"], ah=E["ah"])
+    LK = lgd_link(pack, L, buys, P, ids, E)
+    res["link"] = LK
+    res["by_cluster"] = recovery_by_cluster(pack, L, buys, P, ids)
+    link = (LK["a"], LK["bm"], LK["bh"])
     for k, p in ports.items():
-        cum = MD.simulate(p, E["pdt"], lgd=G["lgd"], nsim=nsim, seed=SEED, **golden)
+        cum = MD.simulate(p, E["pdt"], lgd=G["lgd"], nsim=nsim, seed=SEED, link=link, **golden)
         s = MD.summary(cum, SUBORD[k], TARGETS)
         s.update(n=int(len(p["w"])), houses=int(len(set(p["h"]))), funds=int(len(set(p["f"]))),
                  sectors=int(len(set(p["k"]))), par_eur=p["par_eur"], ratings=np.bincount(p["r"], minlength=4).tolist(),
@@ -352,10 +441,17 @@ def run(root, nsim=NSIM, rivals=True):
         res["ports"][k] = s
     if rivals:
         res["rivals"] = {}
+        Lyear = lgd_link(pack, L, buys, P, ids, E, terms=("year",))
+        Lclosed = lgd_link(pack, L, buys, P, ids, E, sample="closed")
+        res["link_year_only"], res["link_closed"] = Lyear, Lclosed
         routes = {"one_factor": dict(am=E["am"]), "industry": dict(am=E["am"], ak=E["ak"]),
-                  "fund_year": dict(am=E["am"], ak=E["ak"], af=E["af"]),
-                  "fund_persistent": dict(am=E["am"], ak=E["ak"], aq=E["aq"]),
-                  "golden_closed_lgd": dict(am=E["am"], ak=E["ak"], ah=E["ah"], lgd=G["lgd_closed"])}
+                  "house_pooled_lgd": dict(am=E["am"], ak=E["ak"], ah=E["ah"]),
+                  "house_closed_lgd": dict(am=E["am"], ak=E["ak"], ah=E["ah"], lgd=G["lgd_closed"]),
+                  "house_year_link": dict(am=E["am"], ak=E["ak"], ah=E["ah"], link=(Lyear["a"], Lyear["bm"], 0.0)),
+                  "house_link_closed": dict(am=E["am"], ak=E["ak"], ah=E["ah"],
+                                            link=(Lclosed["a"], Lclosed["bm"], Lclosed["bh"])),
+                  "house_link_half": dict(am=E["am"], ak=E["ak"], ah=E["ah"], link=(LK["a"], LK["bm"], LK["bh"] / 2)),
+                  "fund_year_link": dict(am=E["am"], ak=E["ak"], af=E["af"], link=link)}
         for name, kw in routes.items():
             kw = dict(kw)
             lg = kw.pop("lgd", G["lgd"])
@@ -372,7 +468,7 @@ def run(root, nsim=NSIM, rivals=True):
         for pn, pt in pdts.items():
             for dn, dep in deps.items():
                 for k, p in ports.items():
-                    cum = MD.simulate(p, pt, lgd=G["lgd"], nsim=max(200_000, nsim // 5), seed=SEED + 2, **dep)
+                    cum = MD.simulate(p, pt, lgd=G["lgd"], nsim=max(200_000, nsim // 5), seed=SEED + 2, link=link, **dep)
                     band[k].append(float((cum[-1] > SUBORD[k]).mean()))
         res["band"] = {k: [min(v), max(v)] for k, v in band.items()}
         res["moment_dependence"] = deps["moment"]
@@ -390,6 +486,7 @@ if __name__ == "__main__":
           "funds", R["n_funds"])
     print({k: round(v, 4) if isinstance(v, float) else v for k, v in R["est"].items()})
     print("lgd", R["lgd"])
+    print("link", R["link"], "by cluster", R["by_cluster"])
     print("evidence", R["evidence"])
     for k, s in R["ports"].items():
         print(k, "n", s["n"], "houses", s["houses"], "p5 %.4f" % s["p5"], "by year", [round(100 * v, 2) for v in s["by_year"]],

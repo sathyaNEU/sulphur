@@ -1,6 +1,6 @@
 {
  "task": "task9",
- "status": "DESIGN",
+ "status": "PAUSED",
  "domain": "quantitative-finance",
  "subdomain": "volatility-derivatives-pricing (client task type: derivative pricing, a structured credit note's loss distribution)",
  "objective": "forecasting",
@@ -80,7 +80,7 @@
   ]
  },
  "returned": [],
- "resume": "stage 2-3: tie workout recovery and duration to the year and house shocks in world.py, estimate the link from the pack in analysis.py, simulate with it in model.py, rewrite golden, writeup, checks, verify, ceiling, the design note and the prompt",
+ "resume": "stage 2-3, architecture 7: world.py ties workout duration and recovery to the year and house shocks (REC_M 0.07, REC_H 0.06, DUR_M 0.15, DUR_H 0.10, REC_A 1.187: mature-cohort loss 40.3 per cent); model.simulate takes link=(a, bm, bh); analysis.py estimates the link (shocks, lgd_link, recovery_by_cluster) and simulates the golden with it. Owed: run analysis.py on a scratch pack (several minutes), then golden.py, figures.py, writeup.py, checks.py, verify.py, ceiling.py, the design note's architecture 7 sections, the prompt (shell which | the | pdf+xlsx), metadata, the gates, stage 4, READY",
  "approved": null,
  "submitted": null,
  "portal": {

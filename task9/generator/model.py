@@ -123,11 +123,13 @@ def estimate(P):
 
 
 def simulate(port, pdt, am, ak=0.0, ah=0.0, af=0.0, aq=0.0, lgd=0.37, nsim=1_000_000, years=5, seed=27,
-             chunk=100_000, frozen=False):
+             chunk=100_000, frozen=False, link=None):
     """Cumulative portfolio credit loss (share of par) at the end of each forward year, nsim paths.
 
     port: dict of arrays w (par weights summing to one), r (rating 0-3), a (full years since buyout at the start),
-    k (sector 0-15), h (house id), f (fund id). aq is a persistent fund effect drawn once for the five years."""
+    k (sector 0-15), h (house id), f (fund id). aq is a persistent fund effect drawn once for the five years.
+    link (a, bm, bh): each default recovers a + bm z_year + bh z_house of its exposure, from the same year and house
+    shocks that drew the default; without it every default loses lgd."""
     n = len(port["w"])
     uh, hi = np.unique(port["h"], return_inverse=True)
     uf, fi = np.unique(port["f"], return_inverse=True)
@@ -142,17 +144,25 @@ def simulate(port, pdt, am, ak=0.0, ah=0.0, af=0.0, aq=0.0, lgd=0.37, nsim=1_000
         alive = np.ones((m, n), dtype=bool)
         Q = rng.standard_normal((m, len(uf)))[:, fi] if aq > 0 else 0.0
         for t in range(years):
-            x = (np.sqrt(am) * rng.standard_normal((m, 1))
+            zm = rng.standard_normal((m, 1))
+            x = (np.sqrt(am) * zm
                  + np.sqrt(ak) * rng.standard_normal((m, NSECT))[:, port["k"]]
                  + resid * rng.standard_normal((m, n)))
+            zh = 0.0
             if ah > 0:
-                x += np.sqrt(ah) * rng.standard_normal((m, len(uh)))[:, hi]
+                zh = rng.standard_normal((m, len(uh)))[:, hi]
+                x += np.sqrt(ah) * zh
             if af > 0:
                 x += np.sqrt(af) * rng.standard_normal((m, len(uf)))[:, fi]
             if aq > 0:
                 x += np.sqrt(aq) * Q
             dd = (x < thr[t][None, :]) & alive
-            loss += (dd * port["w"]).sum(axis=1) * lgd
+            if link is None:
+                loss += (dd * port["w"]).sum(axis=1) * lgd
+            else:
+                a, bm, bh = link
+                rec = np.clip(a + bm * zm + bh * zh, 0.0, 1.0)
+                loss += (dd * port["w"] * (1.0 - rec)).sum(axis=1)
             alive &= ~dd
             out[t, s0:s0 + m] = loss
     return out
