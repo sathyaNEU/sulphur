@@ -232,7 +232,13 @@ def columns_of(path, text):
         first = text.split("\n", 1)[0]
         return [c.strip().strip('"') for c in re.split(r"[,\t;|]", first)]
     if ext in (".xlsx",):
-        return [c for line in text.split("\n")[:3] for c in line.split("\t")]
+        # the header row: the first of the opening lines whose cells are all labels (no number, no entity code such as
+        # PS40233 or C458036); a title row above a header is skipped, and data rows never count as column names
+        for line in text.split("\n")[:3]:
+            cells = [c for c in line.split("\t") if c.strip()]
+            if len(cells) >= 2 and not any(re.fullmatch(r"-?[\d.,]+|[A-Z]{1,5}-?\d{3,}", c.strip()) for c in cells):
+                return cells
+        return []
     if ext == ".json":
         return re.findall(r'"([A-Za-z_][A-Za-z0-9_ ]{1,40})"\s*:', text[:20000])
     return []
