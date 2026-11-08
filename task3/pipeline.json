@@ -1,33 +1,32 @@
 {
  "task": "task3",
- "status": "READY",
+ "status": "DESIGN",
  "domain": "physical-environmental-sciences",
  "objective": "forecasting",
- "stage": 5,
- "stage_name": "ready",
+ "stage": 2,
+ "stage_name": "design",
  "updated": "2026-11-08",
- "stump": "A strong analyst who sees the test's Theis forecast overshoot the Mill Street record recalibrates the leakage against the nearest network well CV-07 (or the wells' own pre-pumping levels, or a fitted trend) and files 1,250 gpm, every schedule under 3.5 ft at OW-S; only the natural level carried from CV-02 and CV-11 beyond the cone files 1,000 gpm.",
- "architecture": 3,
+ "stump": "",
+ "architecture": 5,
  "loops": 0,
  "precut": {
-  "exit": 0,
-  "date": "2026-11-08",
-  "checks": 72
+  "exit": null,
+  "date": ""
  },
  "leak": {
-  "leak_py": "REVIEW, no LEAK (2026-11-08, --asof 2026-11-06)",
-  "reader": "2026-11-08 isolated reader (Sonnet, medium): no step named, no ranking or helper file, Q6 analytical; the plate's caption removed"
+  "leak_py": "",
+  "reader": ""
  },
  "duplicate_check": {
-  "heart": "PASS 2026-11-08",
-  "surface": "exit 0, 1 pair promoted (surface similarity), names WARN on 'Little Ossey' and 'Sep Oct' (not personas)"
+  "heart": "",
+  "surface": ""
  },
  "judge": {
-  "verdict": "DETERMINISTIC",
-  "disposition": "FIX_NOW applied (plate re-cut, per-well fits, the OW-S-alone and DW-17 closures), re-judged once: APPROVE",
-  "gate_g": "method_or_model_selection, analytical_non_defect, surface_read_dependency no, sole_data_defect no",
-  "gate_h": "domain pass, layers pass, decisive_step analytical, chain 5 inferences",
-  "report": "task3/determinism_check_report.md"
+  "verdict": "",
+  "disposition": "",
+  "gate_g": "",
+  "gate_h": "",
+  "report": ""
  },
  "returned": [
   {
@@ -88,9 +87,17 @@
    "repair": "design",
    "portal": "both runs landed Alternative C and every ask; the deep step (plant headroom) modelled on sight",
    "commit": ""
+  },
+  {
+   "date": "2026-11-08",
+   "source": "triage",
+   "repair": "design",
+   "portal": "architecture 3 platform round: both runs on the golden at every ask (runs/triage.md)",
+   "disposition": "re-root at the author's word: architecture 5 drawn in a new world (Ollery Creek's culvert, flood frequency), dataset and shell",
+   "commit": ""
   }
  ],
- "resume": "rolled back to architecture 3 (Reidel Road) at the author's word; READY as at ad49abe. Both architecture 3 platform runs (runs/run1.md, run2.md, triage.md) landed the call; architecture 4 (Corlinden) is in git history at 0931661",
+ "resume": "architecture 5 drawn (DESIGN_NOTE ## Draw, card v5); next: the design note's stage-2 sections, then the generator (world, pack, golden), precut, build gates, leak reader and judge",
  "approved": null,
  "delivered": "2026-11-07",
  "portal": "landed by one response (R1 2,200 t at 100 per cent, R2 2,600 t at 70 per cent), reported 2026-11-07",
@@ -167,7 +174,7 @@
   }
  ],
  "subdomain": "hydrology-flood-frequency",
- "call": "The district will permit the 1,000 gpm schedule: its greatest monthly drawdown at OW-S in 2046 is 8 ft against the 9 ft limit, where 1,250 gpm reaches 10 ft",
+ "call": "",
  "gates": {
   "checks": "132 of 132",
   "verify": "PASS",

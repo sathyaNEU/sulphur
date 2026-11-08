@@ -1,19 +1,19 @@
 {
   "task": "task3",
   "project": "sulfur",
-  "architecture": "v3",
+  "architecture": "v5",
   "drawn": "2026-11-08",
-  "slot_note": "re-root after the platform landed architecture 2 (both runs on the golden); one architecture per world, so a new world (a buried-valley aquifer in Indiana), dataset (aquifer-test loggers and a 2005 to 2026 water-level record) and shell (docx and xlsx, a which-question)",
+  "slot_note": "re-root after architecture 3's platform round landed both runs (REDESIGN); one architecture per world, so a new world (a suburban Piedmont creek's culvert crossing), dataset (a stream gauge's 1956 to 2025 record beside a rain gauge's) and shell (docx and csv, a which-question); architecture 4 (nitrate) was rolled back unrun and is not reused",
   "domain": "physical-environmental-sciences",
   "subdomain": "hydrology-flood-frequency",
   "client_domain": "physical-environmental-sciences",
-  "niche": "a city utility's groundwater withdrawal permit under a conservancy district rule capping the drawdown at a sentinel well through a twenty-year term: which of four requested pumping rates for a new well field in a buried-valley aquifer keeps the 2046 drawdown within the limit (Sulfur task type: inverse problems, physical-model calibration and uncertainty propagation)",
+  "niche": "a county roads division sizing a replacement culvert at a creek crossing to pass the 1 per cent annual exceedance flood of its first ten years of service, from a gauge record spanning the watershed's suburban build-out (Sulfur task type: extreme-value and environmental-hazard return-period analysis)",
   "objective": "forecasting",
-  "shape": "other",
+  "shape": "04",
   "decision_type": "pick_one_of_n",
   "answer_unit": "named_option",
-  "answer": "File the 1,000 gpm schedule: its greatest monthly drawdown at OW-S in 2046 is 8 ft against the 9 ft limit, where 1,250 gpm reaches 10 ft.",
-  "answer_source": "submission.md block 1 and generator/figures.json call",
+  "answer": "",
+  "answer_source": "",
   "gap": [
     "population",
     "time"
@@ -22,74 +22,67 @@
     "none"
   ],
   "generators": [
-    "G13",
-    "G16"
+    "G6",
+    "G14",
+    "G13"
   ],
-  "gate_g": "method_or_model_selection",
-  "calibration_form": "existing_book_actuals",
-  "stump_strategy": "forecast_method_backtest",
+  "gate_g": "decomposition_attribution",
+  "calibration_form": "none",
+  "stump_strategy": "decomposition_attribution",
   "decisive_rule_filed": false,
   "official_decoy": false,
   "validated_decoy": false,
-  "context_artifact": "monitoring_export",
+  "context_artifact": "published_series",
   "stump_class": "analytical",
-  "analyst_test": "A strong analyst compensates the loggers, fits Theis to the test (an excellent fit), sees its hindcast overshoot the Mill Street record, recalibrates a leaky aquifer against CV-07 or the wells' own baselines and files 1,250 gpm, every rate under 3.5 ft at OW-S.",
-  "domain_test": "The deciding quantity is a 20-year drawdown forecast at a sentinel well, worked the way hydrogeology works it: aquifer properties from a pumping test, a conceptual model of the far field (walls, leakage) that the test cannot see, and its calibration against the drawdown an existing well field has already caused, separated from the aquifer's natural rise and fall; swap the nouns and there is no confined aquifer, no leakage through till and no cone of depression for a reference well to sit in.",
+  "analyst_test": "A strong analyst fits the gauge's 70 annual peaks under Bulletin 17C, finds no significant trend (Mann-Kendall p near 0.3) and no low outliers, confirms the fit against the plotting positions and picks the 8,500 cfs culvert; truncating to the post-development years or regressing the peaks on the paved fraction keeps it there, because the drier storms since 1990 offset the faster runoff.",
+  "domain_test": "The deciding quantity is the 1 per cent annual exceedance peak flow at a crossing for the coming decade, worked the way flood hydrology works it: a frequency curve fitted to annual peak flows, which assumes the record is homogeneous; here the watershed's rainfall-runoff response changed through the record while its storm climate changed the other way, so the record must be put on today's watershed by pairing each storm with the flood it made; swap the nouns and there is no rainfall forcing, no runoff response, no lag shortened by storm drains and no exceedance probability of a peak flow.",
   "layer2_family": "forecast_uncertainty",
-  "layer2_pattern": "own:far-field-calibrated-on-an-existing-cone-against-a-clean-natural-reference",
+  "layer2_pattern": "own:a-flood-record-whose-response-rose-while-its-storms-weakened",
   "layer1": [
-    "two logger brands on two clocks (local EDT and UTC), absolute pressure needing the barologger",
-    "an observation-well logger re-hung deeper after a download, a logger rewriting its last records",
-    "the aquifer's barometric response and earth tides in the minute record",
-    "the operating reports in thousand gallons then gallons, the wells renamed at a SCADA change, a meter replacement month estimated from run hours",
-    "monitoring readings taken with the nearby well running, a measuring point raised by a casing extension and another cut down",
-    "network readings keyed twice, estimated readings, months with no field run"
+    "a gauge record with provisional and approved periods, ice and equipment-malfunction estimates and a datum shift on the staff gage",
+    "a rain gauge moved 0.4 mile in 1987 with a short overlap, accumulated multi-day totals after missed readings and trace codes",
+    "the peak file's qualification codes (estimated, discharge greater than shown, affected by regulation for a construction diversion)",
+    "development records keyed to tax parcels renumbered at a 2004 reassessment",
+    "flows in cfs and a few years exported in cubic metres per second"
   ],
-  "stakeholder_role": "Harlow Springs Utilities' water division manager, filing the Reidel Road application",
+  "stakeholder_role": "the county's hydraulics engineer in the roads division, filing the crossing's hydraulic design with the state floodplain review before the board funds it",
   "role_family": "capacity_planner",
   "scoring_unit": "other",
   "spine": {
-    "file": "PW-1_constant_rate_test_2026-09_transducers.csv beside cvwcd_network_water_levels_2005-2026.csv",
-    "rows": 103682,
-    "entity": "one logger reading",
-    "grain": "well x minute (test); well x month (record)",
-    "source": "synthetic"
+    "file": "ollery_creek_daily_discharge_1956-2025.csv beside tamsett_rain_gauge_daily_1956-2025.csv",
+    "rows": 51000,
+    "entity": "one gauge day",
+    "grain": "daily",
+    "source": "constructed for this task (seeded simulation)"
   },
   "forum": "regulator_or_inspector",
   "forcing_event": "statutory_or_regulatory_filing",
-  "org_family": "utility_or_infrastructure",
+  "org_family": "local_government",
   "world": {
-    "geography": "United States, Indiana (the Corrin Valley, a fictional buried bedrock valley; Harlow Springs, a fictional city)",
+    "geography": "United States, North Carolina Piedmont (Tamsett County, a fictional county; Pellsboro, a fictional town)",
     "currency": "USD",
-    "org_type": "a city water utility and a regional water conservancy district",
+    "org_type": "a county roads division and its board of commissioners",
     "invented_names": [
-      "Corrin Valley",
-      "Corrin Valley Water Conservancy District",
-      "Harlow Springs",
-      "Harlow Springs Utilities",
-      "Reidel Road well field",
-      "Mill Street wells",
-      "Tillbrook Hydrogeologic",
-      "Kestrel Foods",
-      "Little Ossey"
+      "Tamsett County",
+      "Pellsboro",
+      "Ollery Creek",
+      "Kinnard Road",
+      "Tamsett County Roads Division"
     ],
     "people": [
-      "Mitchell Munoz",
-      "Todd Robinson",
-      "Wendy Ruiz",
-      "Mary Alvarez",
-      "John Ponce"
+      "Lisa Horne",
+      "James Reynolds"
     ]
   },
   "deliverables": [
-    "reidel_road_sentinel_forecast.xlsx",
-    "reidel_road_WR-4_demonstration.pdf"
+    "kinnard_road_culvert_design_flow.docx",
+    "ollery_creek_peaks_current_watershed.csv"
   ],
   "opening_move": "question-first",
   "question_form": "which",
-  "driver": "The decisive quantity is a long-horizon response to a sustained load, when a short trial's response carries two opposing far-field effects that cancel inside its window and part only over years: the trial's own model fits it closely and overstates the long response, so the far field must be calibrated on the record a nearby load has already left, read against a natural baseline from references beyond that load's reach, because the nearest reference sits inside it and a fitted trend absorbs the response.",
-  "driver_concrete": "Each requested rate's greatest monthly drawdown at OW-S in 2046 from a bounded leaky aquifer whose leakage factor is calibrated on the drawdown the Mill Street wells caused at MS-MW and OW-S from 2009 to 2026, each well's natural level carried from the far network wells CV-02 and CV-11; not the 72-hour test's Theis fit extrapolated, and not a calibration against the readings' own pre-pumping levels, the nearest network well CV-07 (inside the Mill Street cone) or a fitted trend, each of which credits the region's wet years to leakage.",
-  "stump": "A strong analyst who sees the test's Theis forecast overshoot the Mill Street record recalibrates the leakage against the nearest network well CV-07 (or the wells' own pre-pumping levels, or a fitted trend) and files 1,250 gpm, every schedule under 3.5 ft at OW-S; only the natural level carried from CV-02 and CV-11 beyond the cone files 1,000 gpm.",
+  "driver": "The decisive quantity is a rare-event level for a coming window, estimated from a record whose response to its driver rose gradually while the driver itself weakened, so the two offset in the record's maxima and every check on the maxima passes; only pairing each event with its driver separates them, and re-running the whole driver record through today's response gives the level.",
+  "driver_concrete": "Ollery Creek's annual peaks look stationary because the paved fraction rose from 6 to 30 per cent (storm drains halving the time to peak) while the storms since 1990 ran about a quarter lighter; paired with the rain gauge's storm totals, the same storm now makes a far larger flood, and putting all 70 years of storms through today's watershed moves the 1 per cent flood from about 7,000 to about 10,000 cfs.",
+  "stump": "A strong analyst fits Bulletin 17C to the 70 annual peaks, finds no trend, and picks the 8,500 cfs culvert; truncating to the developed years or regressing the peaks on the paved fraction keeps it there; only conditioning each flood on its storm and rebuilding the record on today's watershed files the 14,000 cfs culvert.",
   "deep_chain": "(1) the test's Theis fit is exact but blind to the far field, shown by its hindcast of the Mill Street record; (2) the record's drawdown is the reading's fall below its natural level, and the natural level must come from confined-aquifer wells beyond the cone (CV-02, CV-11), not CV-07 or a trend; (3) the leakage factor calibrated on that drawdown with the plate's walls; (4) the 2027 to 2046 superposition at OW-S under each schedule and the town's projection",
   "judgment": "which reference wells carry the natural level (CV-07's record steps down with each Mill Street increase and cycles with the summer pumping, CV-02 and CV-11 agree with each other and with OW-S before 2009), and the far-field model that reproduces the separated drawdown out of the test's window",
   "one_fact_test": "'the aquifer leaks' rescues nothing: the leakage must be calibrated, and on the raw or CV-07-referenced record it calibrates to 1,300 gpm",
@@ -165,22 +158,143 @@
         "rounding opener": "the",
         "deliverable set": "docx+xlsx"
       }
+    },
+    {
+      "architecture": "v3",
+      "drawn": "2026-11-08",
+      "domain": "physical-environmental-sciences",
+      "subdomain": "hydrology-flood-frequency",
+      "objective": "forecasting",
+      "shape": "other",
+      "gap": [
+        "population",
+        "time"
+      ],
+      "pattern": [
+        "none"
+      ],
+      "generators": [
+        "G13",
+        "G16"
+      ],
+      "gate_g": "method_or_model_selection",
+      "stump_strategy": "forecast_method_backtest",
+      "driver": "The decisive quantity is a long-horizon response to a sustained load, when a short trial's response carries two opposing far-field effects that cancel inside its window and part only over years: the trial's own model fits it closely and overstates the long response, so the far field must be calibrated on the record a nearby load has already left, read against a natural baseline from references beyond that load's reach, because the nearest reference sits inside it and a fitted trend absorbs the response.",
+      "driver_concrete": "Each requested rate's greatest monthly drawdown at OW-S in 2046 from a bounded leaky aquifer whose leakage factor is calibrated on the drawdown the Mill Street wells caused at MS-MW and OW-S from 2009 to 2026, each well's natural level carried from the far network wells CV-02 and CV-11; not the 72-hour test's Theis fit extrapolated, and not a calibration against the readings' own pre-pumping levels, the nearest network well CV-07 (inside the Mill Street cone) or a fitted trend, each of which credits the region's wet years to leakage.",
+      "stump": "A strong analyst who sees the test's Theis forecast overshoot the Mill Street record recalibrates the leakage against the nearest network well CV-07 (or the wells' own pre-pumping levels, or a fitted trend) and files 1,250 gpm, every schedule under 3.5 ft at OW-S; only the natural level carried from CV-02 and CV-11 beyond the cone files 1,000 gpm.",
+      "world": {
+        "geography": "United States, Indiana (the Corrin Valley, a fictional buried bedrock valley; Harlow Springs, a fictional city)",
+        "currency": "USD",
+        "org_type": "a city water utility and a regional water conservancy district",
+        "invented_names": [
+          "Corrin Valley",
+          "Corrin Valley Water Conservancy District",
+          "Harlow Springs",
+          "Harlow Springs Utilities",
+          "Reidel Road well field",
+          "Mill Street wells",
+          "Tillbrook Hydrogeologic",
+          "Kestrel Foods",
+          "Little Ossey"
+        ],
+        "people": [
+          "Mitchell Munoz",
+          "Todd Robinson",
+          "Wendy Ruiz",
+          "Mary Alvarez",
+          "John Ponce"
+        ]
+      },
+      "shell": {
+        "question form": "whether",
+        "second-sentence opener": "the",
+        "rounding opener": "events",
+        "deliverable set": "pptx+xlsx"
+      },
+      "fate": "spent 2026-11-08 on the platform: both runs fitted the leaky strip with the plate's walls and took the remote wells CV-02 and CV-11 as the natural-level control, landing 1,000 gpm and every ask (REDESIGN); the author rolled task3 back to it once, then re-rooted"
+    },
+    {
+      "architecture": "v4",
+      "drawn": "2026-11-08",
+      "domain": "physical-environmental-sciences",
+      "subdomain": "hydrology-flood-frequency",
+      "objective": "forecasting",
+      "shape": "other",
+      "gap": [
+        "time",
+        "population"
+      ],
+      "pattern": [
+        "none"
+      ],
+      "generators": [
+        "G12",
+        "G14",
+        "G13"
+      ],
+      "gate_g": "decomposition_attribution",
+      "stump_strategy": "maturity_censoring",
+      "driver": "The decisive quantity is a blended output's level over the coming years, fed by inputs whose change at the source travels through a stage no measurement of the output or of the medium sees, at a pace set by each source's own depth through that stage; a recent change sits on sources deeper than the earlier changes that matured, so the output's own history, one delay fitted to it, the downstream travel time a filed model gives, and an event study on the recent change all show no effect and set it near nil, and only the matured changes' delays, read against each source's depth and carried to each recent source, show the rise arriving inside the decision window.",
+      "driver_concrete": "Each year's 2027 to 2040 entry-point nitrate is the pumping plan's blend of Wells 3, 5, 6 and 7, each a recharge-weighted mix of its protection-area parcels' water-table nitrate delayed by the wellhead model's groundwater travel time, where a parcel's water-table nitrate is its land cover's leachate delayed by its unsaturated thickness times the sand's moisture over the recharge; the Sallow Ridge parcels cleared for irrigated vegetables from 2017 to 2021 sit over 57 to 94 ft of sand, so their leachate reaches the wells late in 2030, not by 2024 as the travel time or the wells' own lag would put it.",
+      "stump": "A strong analyst who finds the ridge clearing tests it against the wells and the county wells under recent clearings, sees no rise where the wellhead model's travel time or the wells' own fitted lag says it should already be, sets the clearing's effect near nil and files the 2031 cycle with the blend near 5.5 mg/L through 2040; only each parcel's delay through its own unsaturated thickness, read from the county's older conversions, puts the rise at the wells late in 2030 and the blend at 10 in 2031.",
+      "world": {
+        "geography": "United States, Wisconsin (Ravell County, a fictional county on the central sand plain; Corlinden, a fictional city)",
+        "currency": "USD",
+        "org_type": "a city water utility, its utility commission and a county land and water conservation department",
+        "invented_names": [
+          "Corlinden",
+          "Corlinden Water Utility",
+          "Ravell County",
+          "Ravell County Land and Water Conservation Department",
+          "Sallow Road well field",
+          "Sallow Ridge",
+          "Cadle River",
+          "Fenwright Hydrogeologic",
+          "Pellow Analytical Services",
+          "Hartvale Produce"
+        ],
+        "people": [
+          "Chloe Griffin",
+          "Dennis Diaz",
+          "Patricia Gaines"
+        ]
+      },
+      "shell": {
+        "question form": "whether",
+        "second-sentence opener": "corlinden's",
+        "rounding opener": "nitrate",
+        "deliverable set": "pdf+png+xlsx"
+      },
+      "fate": "built to READY 2026-11-08 (0931661), then rolled back to v3 at the author's word before any platform round; the nitrate world is not reused"
     }
   ],
-  "notes": "shape other: a which-of-four with a per-option forecast table; calibration existing_book_actuals: the Mill Street wells' 2009 to 2026 record is the organisation's own operating history",
+  "notes": "Architecture 5, re-root 2026-11-08 at the author's word after architecture 3 landed (both runs). Prototype (scratch proto3.py): Mann-Kendall p 0.13 to 0.70 on most seeds; the stationary rungs 5,800 to 8,000 cfs; the deep-step family 9,800 to 13,000 cfs across thresholds, regression forms and LP3 against GEV; the seed is chosen in the build so both families clear their culvert's rating by 1.15.",
   "lineage_shells": [
     {
       "question form": "how-much",
       "second-sentence opener": "alongside",
       "rounding opener": "the",
       "deliverable set": "docx+xlsx"
+    },
+    {
+      "question form": "whether",
+      "second-sentence opener": "the",
+      "rounding opener": "events",
+      "deliverable set": "pptx+xlsx"
+    },
+    {
+      "question form": "whether",
+      "second-sentence opener": "corlinden's",
+      "rounding opener": "nitrate",
+      "deliverable set": "pdf+png+xlsx"
     }
   ],
-  "registered": "2026-11-08T02:14:40Z",
   "shell": {
     "question form": "whether",
     "second-sentence opener": "the",
-    "rounding opener": "events",
-    "deliverable set": "pptx+xlsx"
-  }
+    "rounding opener": "drawdowns",
+    "deliverable set": "pdf+xlsx"
+  },
+  "architecture_spent": false,
+  "registered": "2026-11-08T15:48:08Z"
 }
