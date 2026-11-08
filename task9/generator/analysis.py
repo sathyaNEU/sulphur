@@ -22,7 +22,7 @@ import openpyxl
 
 import model as MD
 
-SUBORD = {"KL": 0.150, "OS": 0.150}
+SUBORD = {"KL": 0.150, "OS": 0.125}
 BAR = 0.01
 TARGETS = (0.01, 0.005, 0.0025)
 NSIM = 1_000_000

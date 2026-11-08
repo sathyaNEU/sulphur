@@ -34,16 +34,18 @@ def chart(F, path):
     for key, col, label in (("KL", BLUE, "Kestrel Lane portfolio"), ("OS", ORANGE, "Ostvale portfolio")):
         y = [max(100 * v, 1e-3) for v in F["golden"][key]["exceed_raw"]]
         ax.plot(grid, y, color=col, lw=2, label=label, solid_capstyle="round")
-    sub = F["subordination_pct"]["KL"]
-    ax.axvline(sub, color=INK2, lw=1, ls=(0, (4, 3)))
+    sk, so = F["subordination_pct"]["KL"], F["subordination_pct"]["OS"]
+    ax.axvline(sk, color=BLUE, lw=1, ls=(0, (4, 3)))
+    ax.axvline(so, color=ORANGE, lw=1, ls=(0, (4, 3)))
     ax.axhline(F["bar_pct"], color=INK2, lw=1, ls=(0, (1, 2)))
-    ax.text(sub + 0.3, 40, "both notes' subordination, %s%%" % pct(sub, 1), color=INK2, fontsize=7.5, va="center")
+    ax.text(sk + 0.3, 40, "Kestrel Lane's subordination, %s%%" % pct(sk, 1), color=INK2, fontsize=7.5, va="center")
+    ax.text(so - 0.3, 40, "Ostvale's, %s%%" % pct(so, 1), color=INK2, fontsize=7.5, va="center", ha="right")
     ax.text(29.6, F["bar_pct"] * 1.18, "MP-RN-2 test, %s%%" % pct(F["bar_pct"], 0), color=INK2, fontsize=7.5, ha="right")
     kl, os_ = F["golden"]["KL"]["p5_pct"], F["golden"]["OS"]["p5_pct"]
-    ax.plot([sub], [kl], "o", ms=5, color=BLUE, mec="#fcfcfb", mew=1.5)
-    ax.plot([sub], [os_], "o", ms=5, color=ORANGE, mec="#fcfcfb", mew=1.5)
-    ax.annotate("%s%%" % pct(kl, 1), (sub, kl), xytext=(8, 6), textcoords="offset points", color=INK, fontsize=7.5)
-    ax.annotate("%s%%" % pct(os_, 1), (sub, os_), xytext=(8, -11), textcoords="offset points", color=INK, fontsize=7.5)
+    ax.plot([sk], [kl], "o", ms=5, color=BLUE, mec="#fcfcfb", mew=1.5)
+    ax.plot([so], [os_], "o", ms=5, color=ORANGE, mec="#fcfcfb", mew=1.5)
+    ax.annotate("%s%%" % pct(kl, 1), (sk, kl), xytext=(8, 6), textcoords="offset points", color=INK, fontsize=7.5)
+    ax.annotate("%s%%" % pct(os_, 1), (so, os_), xytext=(-30, 6), textcoords="offset points", color=INK, fontsize=7.5)
     ax.set_yscale("log")
     ax.set_ylim(0.01, 100)
     ax.set_xlim(0, 30)
@@ -186,7 +188,9 @@ def ic_note(F, path, png):
 
     doc.add_picture(png, width=Mm(160))
     _para(doc, ("Figure 1. Chance that each portfolio's credit loss over 2027 to 2031 exceeds a given share of par. "
-                "Both notes start losing principal at 15.0 per cent."), 7.5, italic=True, color="555555", after=10)
+                "Kestrel Lane's note starts losing principal at %s per cent and Ostvale's at %s per cent.")
+          % (pct(F["subordination_pct"]["KL"], 1), pct(F["subordination_pct"]["OS"], 1)), 7.5, italic=True, color="555555",
+          after=10)
 
     _para(doc, "Defaults cluster by sponsor house", 11.5, bold=True, after=4)
     ev = F["evidence"]
@@ -240,9 +244,10 @@ def ic_note(F, path, png):
     _para(doc, ("Portfolios held as they stood on 31 December 2026 with repaid loans replaced, as MP-RN-2 3.2 sets out. "
                 "Sources: Lenderbase extract of 16 February 2027 and its workout file, Dealtrail extract of 15 February "
                 "2027, managers' tapes at 31 December 2026."), 7.5, italic=True, color="555555", after=8)
-    _para(doc, ("To meet the test as offered, Ostvale's note would need %d per cent subordination and Kestrel Lane's %d, "
-                "against the 15.0 per cent both offer. Either manager may re-offer at that level in the next round.")
-          % (os_["need_pct"][0], kl["need_pct"][0]), 10)
+    _para(doc, ("To meet the test, Kestrel Lane's note would need %d per cent subordination against the %s it offers, "
+                "and Ostvale's %d per cent against its %s. Either manager may re-offer at that level in the next round.")
+          % (kl["need_pct"][0], pct(F["subordination_pct"]["KL"], 1), os_["need_pct"][0],
+             pct(F["subordination_pct"]["OS"], 1)), 10)
     doc.core_properties.author = "Ilse Lips"
     doc.core_properties.title = "IC-2027-03 Senior note purchase"
     doc.core_properties.last_modified_by = "Ilse Lips"

@@ -37,7 +37,7 @@ def check(name, ok, detail=""):
 
 def sim(port, E, lgd, nsim=NS, seed=31, **kw):
     cum = MD.simulate(port, E["pdt"], lgd=lgd, nsim=nsim, seed=seed, **kw)
-    return MD.summary(cum, 0.15, A.TARGETS)
+    return MD.summary(cum, port.get("sub", A.SUBORD["KL"]), A.TARGETS)
 
 
 def call_of(pk, po, bar=A.BAR):
@@ -92,7 +92,7 @@ def main():
           recent_blank == 0, "%d recent buyouts without one" % recent_blank)
 
     # ------------------------------------------------------------ portfolios and the golden on the truth
-    X, Y = T.port(W, W.X), T.port(W, W.Y)
+    X, Y = dict(T.port(W, W.X), sub=A.SUBORD["KL"]), dict(T.port(W, W.Y), sub=A.SUBORD["OS"])
     gold = dict(am=E["am"], ak=E["ak"], ah=E["ah"])
     LK = F["link"]
     link = (LK["a"], LK["bm"], LK["bh"])
@@ -154,7 +154,7 @@ def main():
     Pl = T.panel(W, clock="loan")
     El = MD.estimate(Pl)
     lk = sim(T.port(W, W.X, "loan"), El, G["lgd"], am=El["am"], ak=El["ak"], ah=El["ah"], link=link)
-    lo = sim(T.port(W, W.Y, "loan"), El, G["lgd"], am=El["am"], ak=El["ak"], ah=El["ah"], link=link)
+    lo = sim(dict(T.port(W, W.Y, "loan"), sub=A.SUBORD["OS"]), El, G["lgd"], am=El["am"], ak=El["ak"], ah=El["ah"], link=link)
     check("SF9 the loan-age clock keeps the call",
           call_of(lk["p5"], lo["p5"]) == "neither",
           "KL %.2f OS %.2f; buyout clock fits better by %.1f" % (100 * lk["p5"], 100 * lo["p5"], E["ll_pd"] - El["ll_pd"]))
@@ -180,7 +180,7 @@ def main():
     check("SF18 MP-RN-2 3.4 files that a defaulted loan leaves the portfolio and is not replaced",
           "A loan that has defaulted leaves the portfolio and is not replaced" in std)
     fzk = MD.summary(MD.simulate(X, E["pdt"], lgd=G["lgd"], nsim=NS, seed=31, frozen=True, link=link, **gold), 0.15)
-    fzo = MD.summary(MD.simulate(Y, E["pdt"], lgd=G["lgd"], nsim=NS, seed=31, frozen=True, link=link, **gold), 0.15)
+    fzo = MD.summary(MD.simulate(Y, E["pdt"], lgd=G["lgd"], nsim=NS, seed=31, frozen=True, link=link, **gold), A.SUBORD["OS"])
     check("SF16b ages held at the portfolio date (the reading 3.2 now rules out) would keep the call",
           call_of(fzk["p5"], fzo["p5"]) == "neither", "KL %.2f OS %.2f" % (100 * fzk["p5"], 100 * fzo["p5"]))
     check("SF17 MP-RN-2 4.1 takes the workout file with its open workouts", "its open workouts included" in std)

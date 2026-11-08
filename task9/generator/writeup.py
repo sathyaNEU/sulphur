@@ -14,6 +14,7 @@ def text(F):
     LK, Ly, Lc = F["link"], F["link_year_only"], F["link_closed"]
     rb = F["recovery_by_other_defaults"]
     sub = p(F["subordination_pct"]["KL"], 1)
+    subo = p(F["subordination_pct"]["OS"], 1)
     yk = ", ".join(p(v) for v in kl["by_year_pct"][:-1]) + " and " + p(kl["by_year_pct"][-1])
     yo = ", ".join(p(v) for v in os_["by_year_pct"][:-1]) + " and " + p(os_["by_year_pct"][-1])
     nk = "%d and %d" % tuple(kl["need_pct"])
@@ -41,12 +42,12 @@ def text(F):
                "per cent." % (p(kl["p5_pct"]), p(os_["p5_pct"])))
     out.append("3. The subordination each note would need for chances of 1 and 0.5 per cent, in whole per cent of par "
                "rounded up: Kestrel Lane %s per cent (it offers %s); Ostvale %s per cent (it offers %s)."
-               % (nk, sub, no, sub))
+               % (nk, sub, no, subo))
     out.append(("4. The chart: one log-scale panel, the five-year credit loss as a share of par from 0 to 30 per cent "
                 "across, the chance it is exceeded up the side, one line per portfolio with Kestrel Lane's above "
-                "Ostvale's in the tail, a vertical line at both notes' %s per cent subordination where the lines read "
-                "%s and %s per cent, and a horizontal line at the 1 per cent test.\n")
-               % (sub, p(kl["p5_pct"]), p(os_["p5_pct"])))
+                "Ostvale's in the tail, a vertical line at each note's subordination (Kestrel Lane %s, Ostvale %s per "
+                "cent) where its line reads %s and %s per cent, and a horizontal line at the 1 per cent test.\n")
+               % (sub, subo, p(kl["p5_pct"]), p(os_["p5_pct"])))
     out.append("### senior_note_loss_by_year.csv\n")
     out.append(("5. Ten rows, one per note and year end, columns note, issuer, subordination_pct, year_end and "
                 "chance_of_loss_pct: Kestrel Lane %s per cent at the ends of 2027 to 2031; Ostvale %s per cent.\n")
@@ -65,10 +66,10 @@ def text(F):
                 "**%s** per unit of the year's), each shock inferred from that house-year's or year's own defaults "
                 "against the rates its loans' ratings, ages and sector-years expected.")
                % (p(LK["a"], 3), p(LK["bh"], 3), p(LK["bm"], 3)))
-    out.append(("4. Kestrel Lane's **%d** loans sit with **%d** houses and Ostvale's **%d** with **%d**; at %s per cent "
-                "subordination the five-year chance of loss is **%s per cent** for Kestrel Lane and **%s per cent** "
-                "for Ostvale, both over the test.\n")
-               % (kl["n"], kl["houses"], os_["n"], os_["houses"], sub, p(kl["p5_pct"]), p(os_["p5_pct"])))
+    out.append(("4. Kestrel Lane's **%d** loans sit with **%d** houses and Ostvale's **%d** with **%d**; the five-year "
+                "chance of loss is **%s per cent** for Kestrel Lane's note at %s per cent subordination and **%s per "
+                "cent** for Ostvale's at %s, both over the test.\n")
+               % (kl["n"], kl["houses"], os_["n"], os_["houses"], p(kl["p5_pct"]), sub, p(os_["p5_pct"]), subo))
     out.append("## Step-by-Step\n")
     out.append(("1. Conformed lenderbase_loan_performance_2008-2026.csv (latest submission of each loan-quarter, the 2019 "
                 "change of codes, older loans joined by name through lei_reference_extract_2026-12-31.csv): %s "
@@ -101,8 +102,8 @@ def text(F):
                % (p(LK["a"], 3), p(LK["bh"], 3), p(LK["bm"], 3)))
     out.append(("8. Read both tapes into euros at the ECB rate of 31 December 2026 and simulated %s five-year paths "
                 "under MP-RN-2, each default recovering on the year and house shocks that drew it: Kestrel Lane %s per "
-                "cent and Ostvale %s per cent at %s per cent subordination, with the year-end chances and the "
-                "subordination needed above.\n") % ("{:,}".format(F["paths"]), p(kl["p5_pct"]), p(os_["p5_pct"]), sub))
+                "cent at %s per cent subordination and Ostvale %s per cent at %s, with the year-end chances and the "
+                "subordination needed above.\n") % ("{:,}".format(F["paths"]), p(kl["p5_pct"]), sub, p(os_["p5_pct"]), subo))
     bk, bo = F["band_pct"]["KL"], F["band_pct"]["OS"]
     out.append(("No other conclusion survives. Without the house's year in the dependence, with it but one average "
                 "loss, or with a loss tied to the economy alone, the defaults that cluster in a house's bad year are "

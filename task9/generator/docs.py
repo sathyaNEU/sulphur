@@ -123,10 +123,11 @@ def term_sheet(path, who, par_eur_m, n_loans):
                       "compartment 2027-1."),
         ("2. Arranger and servicer", "Ostvale Capital AB, Stockholm, which originated and services the loans."),
         ("3. Notes offered", "Class A senior secured notes, EUR {:,.1f} million, floating rate.".format(note)),
-        ("4. Credit enhancement", "The Class B notes and the equity retained by Ostvale together equal 15.0 per cent of the "
-                                  "collateral principal balance, the level set in Kadeweg's request for proposals, and absorb "
-                                  "losses before the Class A notes."),
-        ("5. Interest", "Three-month EURIBOR plus 225 basis points a year, quarterly in arrear."),
+        ("4. Credit enhancement", "The Class B notes and the equity retained by Ostvale together equal 12.5 per cent of the "
+                                  "collateral principal balance and absorb losses before the Class A notes. Kadeweg's request "
+                                  "for proposals set 15.0 per cent; Ostvale offers the thinner enhancement with the wider "
+                                  "margin below."),
+        ("5. Interest", "Three-month EURIBOR plus 255 basis points a year, quarterly in arrear."),
         ("6. Collateral", "%d first-lien loans to sponsor-backed companies in Europe, EUR {:,.0f} million principal at "
                           "31 December 2026, set out in ostvale_collateral_tape_20261231.xlsx.".format(par_eur_m) % n_loans),
         ("7. Reinvestment", "Until the end of 2031 a repaid loan may be relent to the same borrower; otherwise the cash is "
