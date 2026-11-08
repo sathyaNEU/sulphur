@@ -283,7 +283,9 @@ def main():
         if f.endswith('.pdf'):
             m = PdfReader(os.path.join(TARGET, f)).metadata
             ok(m.get('/Subject') not in (None, '', '(unspecified)'), 'PDF %s carries a real Subject' % f)
-            ok('ReportLab' in (m.get('/Producer') or '') and 'ReportLab' in (m.get('/Creator') or ''), 'PDF %s names the tool that wrote it' % f)
+            ok((m.get('/Creator') or '') == 'Writer' and (m.get('/Producer') or '').startswith('LibreOffice')
+               and b'ReportLab' not in open(os.path.join(TARGET, f), 'rb').read(),
+               "PDF %s is the office's LibreOffice Writer export, no library named" % f)
             ok((m.get('/Author') or '') == 'Corvane Sprachen GmbH', 'PDF %s names its issuer in Author only' % f)
             ok(str(m.get('/CreationDate', '')).startswith('D:2025'), 'PDF %s is dated in the fiction' % f, m.get('/CreationDate'))
             # H13: no text past the margin; H25: a strict reader and two independent extractors read the same words

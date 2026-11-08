@@ -4,7 +4,7 @@
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: months, tutors, teaching, stopping, lesson, standard, checks, tenure, provider, survival, retention, membership, membership-month, method, agency, sentence, billing, autumn, projection, attached, growth, joiners, history, close-out, six-month
+Stump terms swept: months, tutors, teaching, stopping, lesson, standard, checks, tenure, method, provider, survival, retention, membership, membership-month, projection, agency, sentence, billing, autumn, attached, growth, joiners, history, close-out, six-month
 
 ## 3 answer figures in the pack (REVIEW 1)
 - **REVIEW** `growth_review_standard.pdf`: carries 3 of 4 distinctive words of the committed call: 'Do not book the January and February re-run of AUT26 on the same terms.'
@@ -16,17 +16,12 @@ Stump terms swept: months, tutors, teaching, stopping, lesson, standard, checks,
 - **REVIEW** `eurostat_edat_aes_l21_foreign_languages_known.csv`: columns a generator names and an organisation does not: OBS_FLAG
 - **REVIEW** `signup_attribution_2022-01_2026-10.csv`: columns a generator names and an organisation does not: device
 
-## 10 container metadata (INFO 2)
-- **INFO** `-`: audit reported no writer signature (3 lines)
-- **INFO** `-`: PDF names the library that wrote it: growth_review_standard.pdf                           ReportLab, reportlab
+## 10 container metadata (INFO 1)
+- **INFO** `-`: container gate PASS (PASS: 0 FAIL, 0 WARN)
 
-## 11 prompt gate (REVIEW 1)
-- **REVIEW** `prompt.txt`: shell quota: question form 'whether' at 100% of 1 prompts (cap 30%); second-sentence opener 'the' at 100% of 1 prompts (cap 20%); rounding opener 'give' at 100% of 1 prompts (cap 20%); deliverable set 'docx+xlsx' at 100% of 1 prompts (cap 20%); reword at the role level, not the verb
-
-## 12 client quality check (INFO 3)
+## 12 client quality check (INFO 2)
 - **INFO** `-`: 11 usable files (10 or more required)
 - **INFO** `-`: 3 file categories: document, spreadsheet, structured (2 or more required)
-- **INFO** `growth_review_standard.pdf`: PDF keeps the library that wrote it in Creator, Producer or its header (H1)
 
 ## 1 file names (clean)
 
@@ -39,6 +34,8 @@ Stump terms swept: months, tutors, teaching, stopping, lesson, standard, checks,
 ## 7 hidden content (clean)
 
 ## 9 dates after the setting (clean)
+
+## 11 prompt gate (clean)
 
 
 ## Solver's-eye read

@@ -85,8 +85,9 @@ def agency_workbook(path, rng, rates, n_paid):
     wb.properties.created = dt.datetime(2026, 11, 2, 16, 12, 0)
     wb.properties.modified = dt.datetime(2026, 11, 2, 16, 40, 0)
     wb.save(path)
-    ooxml_props(path, 'Veit Stadelmann', 'Veit Stadelmann', dt.datetime(2026, 11, 2, 16, 12, 0),
-                dt.datetime(2026, 11, 2, 16, 40, 0), 'Fenwright Media GmbH')
+    import postprocess as PP
+    PP.normalize_ooxml(path, 'Veit Stadelmann', 'Veit Stadelmann', '2026-11-02T16:12:00Z', '2026-11-02T16:40:00Z',
+                       excel=True, company='Fenwright Media GmbH')
     return dict(media_net_eur_ecb=round(net_eur, 2), lines=len(lines))
 
 
@@ -265,25 +266,14 @@ def standard_pdf(path):
                                     ('LINEBELOW', (0, 0), (-1, 0), .5, colors.black)]))
             story.append(tb)
 
-    def footer(c, d):
-        c.saveState(); c.setFont('Helvetica', 7.5)
-        c.drawString(20 * mm, 12 * mm, 'Corvane Sprachen GmbH, Growth. Internal. Growth review standard v3.')
-        c.drawRightString(190 * mm, 12 * mm, 'Page %d' % d.page)
-        c.restoreState()
-    doc = SimpleDocTemplate(path, pagesize=A4, leftMargin=20 * mm, rightMargin=20 * mm, topMargin=20 * mm,
-                            bottomMargin=20 * mm, title='Growth review standard v3', author='Corvane Sprachen GmbH',
-                            subject='Growth review standard v3: definitions for paid acquisition campaign reviews',
-                            creator='ReportLab PDF Library - www.reportlab.com', invariant=1)
-    doc.build(story, onFirstPage=footer, onLaterPages=footer)
-    # ReportLab's invariant mode stamps 1 January 2000; put the document's own date in, at equal byte length so the
-    # cross-reference offsets stay valid. Producer, Creator and the header comment stay the library's.
-    b = open(path, 'rb').read()
-    stamp = b"D:20250619101500+00'00'"
-    n = b.count(b"D:20000101000000+00'00'")
-    assert n >= 1 and len(stamp) == len(b"D:20000101000000+00'00'")
-    b = b.replace(b"D:20000101000000+00'00'", stamp)
-    assert b"(unspecified)" not in b and b"ReportLab" in b
-    open(path, 'wb').write(b)
+    # the office's own PDF: the story as a Word document exported by LibreOffice Writer (reduce-house-fixes H1),
+    # issued 19 June 2025 with the version 3 revision
+    import officepdf
+    when = dt.datetime(2025, 6, 19, 10, 15, 0, tzinfo=dt.timezone.utc)
+    officepdf.build(path, story, title='Growth review standard v3', author='Corvane Sprachen GmbH',
+                    subject='Growth review standard v3: definitions for paid acquisition campaign reviews',
+                    footer='Corvane Sprachen GmbH, Growth. Internal. Growth review standard v3.',
+                    created=when, modified=when, margin_mm=20, top_mm=20, bottom_mm=20, body_pt=9.5)
 
 
 def metadata(path, files, distractors):

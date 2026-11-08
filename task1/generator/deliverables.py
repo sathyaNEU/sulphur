@@ -377,8 +377,9 @@ def workbook(R, F, path):
     wb.properties.title = None
     wb.save(path)
     import docs
-    docs.ooxml_props(path, 'Marit Klemt', 'Marit Klemt', dt.datetime(2026, 11, 5, 9, 14, 0),
-                     dt.datetime(2026, 11, 6, 17, 2, 0), 'Corvane Sprachen GmbH')
+    import postprocess as PP
+    PP.normalize_ooxml(path, 'Marit Klemt', 'Marit Klemt', '2026-11-05T09:14:00Z', '2026-11-06T17:02:00Z',
+                       excel=True, company='Corvane Sprachen GmbH')
 
 
 # ------------------------------------------------------------------------------------------------ memo
@@ -467,13 +468,10 @@ def memo(R, F, path, png):
     cp.created = dt.datetime(2026, 11, 6, 8, 30, 0); cp.modified = dt.datetime(2026, 11, 6, 16, 45, 0)
     cp.revision = 3
     d.save(path)
-    import docs
-    text = ' '.join(p.text for p in d.paragraphs)
-    words = len(text.split()); chars = len(text.replace(' ', ''))
-    docs.ooxml_props(path, 'Marit Klemt', 'Marit Klemt', dt.datetime(2026, 11, 6, 8, 30, 0),
-                     dt.datetime(2026, 11, 6, 16, 45, 0), 'Corvane Sprachen GmbH', title='AUT26 re-run decision note',
-                     docx_stats=dict(minutes=94, pages=2, words=words, chars=chars, chars_sp=len(text),
-                                     lines=max(1, chars // 70), paras=len(d.paragraphs)), revision=3)
+    import postprocess as PP
+    PP.normalize_docx(path, 'Marit Klemt', 'Marit Klemt', '2026-11-06T08:30:00Z', '2026-11-06T16:45:00Z', revision=3,
+                      total_time=94, seed='task1-aut26-memo', title='AUT26 re-run decision note',
+                      company='Corvane Sprachen GmbH')
 
 
 def main():
