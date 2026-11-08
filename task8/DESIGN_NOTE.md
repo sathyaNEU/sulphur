@@ -18,7 +18,7 @@ score on the paper, and the 2022 standard-setting record fixes that standard as 
   act of stage 1 (WARN only). The two WARNs answered: the decision type (a dial) and the question form (what) repeat
   task2 v4, because the call is a pass mark, a value on one dial, and the form follows the decision; the shell is varied
   at the role level instead (the second sentence is led by the reader, the deliverable set is a memo and one workbook,
-  and the workbook's two asks are a per-item table and a per-region count). The structural tests read older-build
+  and the workbook's two asks are a per-item table and a per-region mean mark). The structural tests read older-build
   repeats only (gap population, pattern G3, decomposition_attribution, a dial), each answered on the card's
   differentiation (mark101, mark178 lineage, mark469, mark121 lineage, mark464). A first draft with G14 leading
   BLOCKed `test.same_puzzle` against mark445 (population, G14, dial_setting) and was redrawn, not relabelled: the
@@ -58,15 +58,15 @@ score on the paper, and the 2022 standard-setting record fixes that standard as 
   items one cause had moved (a curriculum change) and linked through the rest; mark445 read a choice advantage; mark474
   a retest gain on a common-person link; v6 a position term; v17 a taught state rebuilt from each school's calendar.
 - **The decision and the quantity:** the 2027 Level 1 pass mark the Awards Committee sets at its 3 December 2026
-  meeting before the paper opens on 11 January 2027, decided by the paper's expected mark for a candidate who just meets
+  meeting before the paper opens on 1 February 2027, decided by the paper's expected mark for a candidate who just meets
   the Level 1 standard (26 of 40 on the 2022 paper) under the Rasch model, to the nearest whole mark.
 - **Sources (all synthetic, shaped on Canadian adult basic education numeracy certification and Rasch pre-equating; the
   Board, the centres and the people are fictional):** the response export (the spine, one row per scored response of
-  every online sitting 2022 to 2026, about 330,000 rows); the candidate register (every registration, about 9,000 rows,
-  the long messy file); the item bank file (each item's pool, strand, context, stem word count, preliminary and final
+  every online sitting 2022 to 2026, 400,052 rows); the candidate register (every registration, 10,550 rows, the long
+  messy file); the item bank file (each item's pool, strand, context, stem word count, preliminary and final
   2026 Rasch difficulty and fit); the paper layouts 2022 to 2027 (positions to bank codes); the qualification
   specification (the pass-mark clause and the targeting band); the 2022 standard-setting record; the Awards Committee's
-  terms of reference and its September 2026 minute; the learning centres list; the assessment manager's request email;
+  September 2026 minute; the learning centres list; the committee chair's request email to the assessment manager;
   distractors, the 2026 learner confidence survey and the centres' computer suite audit.
 - **People (guard.py names, en_CA, seed 8):** Yvette Clark, the Board's assessment manager (asks for the
   recommendation); Shawn Simpson, chair of the Awards Committee; Andrew Adams, the Board's psychometrician (keeps the
@@ -96,7 +96,257 @@ everything. Measured over 16 redraws:
 
 ## Default path
 
-(stage 2)
+The opponent as measured: it conforms every file, reads every clause and runs the field's method on the bank.
+
+1. Conform the response export (positions Q01 to Q40 to bank codes for the 2022 and 2023 sittings through the paper
+   layouts, the later answer of a reconnect pair) and the register (one row per candidate who sat).
+2. Read the standard as 26 of 40 on the 2022 Level 1 paper (the record, specification 4.1) and find the ability at
+   which the 2022 paper's test characteristic curve reaches 26 on the bank's final 2026 values.
+3. Sum the 2027 paper's chances at that ability on the bank's values: 21.57, a pass mark of 22.
+4. The careful run checks the Level 2 items earlier Level 1 papers carried before trusting the bank: calibrating each
+   level on its own and screening the shared items' displacement (median and robust spread, a cut at 2), it finds the
+   short everyday items easier for Level 1 candidates, sets them aside and re-links on the rest (21.12, a pass mark
+   of 21); crediting the everyday advantage alone moves nothing on the mathematical 2027 items (20.81,
+   21); pricing stem length alone, its slope flattened by the long everyday items' null, gives 21.35 (21).
+
+- **Ends on:** a pass mark of 22 (the bank's final 2026 values, expected mark 21.57 at the standard), and
+  21 on every careful variant.
+- **Golden:** a pass mark of 19 (expected mark 19.09 at the standard).
+
+## Stump sentence
+
+The bank's final 2026 values put the 2027 paper's expected mark at the standard at 21.57 and its pass mark at
+22, and every careful variant (screening the shared items and re-linking, crediting the everyday advantage,
+pricing stem length) files 21, because the Level 2 items earlier Level 1 papers carried looked unshifted where
+it mattered: on the long everyday ones an everyday advantage and a reading cost cancelled; the 2027 paper's twelve long
+mathematical items carry the reading cost with nothing to cancel it, and only a model of the shift with both causes and
+the constant between the two scales fitted together prices them, which files 19.
+
+## Deep reasoning
+
+- **Task type:** item-response-theory-test-equating: pre-equating a new Level 1 form's pass mark through a Rasch item
+  bank, which serves ETL (the response export, the register, the bank file, the layouts and the 2022 record conformed
+  into one table of the 2027 items).
+- **Domain test:** the expected mark on the 2027 paper of a candidate at the Level 1 standard, by Rasch true-score
+  pre-equating: the ability at which the 2022 paper's test characteristic curve reaches 26, then the 2027 paper's test
+  characteristic curve at that ability.
+- **Swap:** "a hospital's 2027 triage cut-off, set as the score a patient just at the admission threshold can be
+  expected to reach on a new checklist built partly from items scored on another ward's patients": the arithmetic
+  survives the swap but nothing that decides does, because there is no stem a patient reads, no everyday-against-
+  mathematical context and no second level of candidate for whom the same item operates differently.
+- **Layer 1:** the response platform keys the 2022 and 2023 sittings by paper position and later ones by bank code
+  (its 2024 upgrade) and keeps both rows when a candidate reconnects and re-answers (about 1.2 per cent of sittings);
+  the register carries centre uploads beside regional office entries (one sitting twice), withdrawn and absent
+  registrations, dates of birth in three formats and centre codes in several shapes; the bank file carries the June
+  preliminary run beside the final one. Nothing is placed to be caught, and every careful run cleans it the same way.
+- **Layer 2:** decomposition attribution, separating two explanations for one pattern: the shared items' unchanged
+  difficulty on the long everyday ones is invariance or two recorded causes cancelling, and the choice flips the call.
+- **Decisive step:** splitting each shared Level 2 item's Level 1 difficulty less its Level 2 difficulty into a constant
+  between the two scales, a cost per 100 words of stem and an everyday-context advantage, fitted together on all the
+  shared items, and carrying the split to the twelve long mathematical items by their own stems.
+- **Not semantics:** every field read right (the pool, the context, the stem's word count, the paper codes, the 26 on
+  the 2022 paper) still leaves the bank's values on the 2027 items, because no field records how an item operates for a
+  Level 1 candidate: that is a relation between two levels' responses to the same items, estimated, never read.
+- **Not rule application:** no filed rule says how a Level 2 item transfers to Level 1 candidates; executing the
+  specification's clauses and the record's 26 on the bank files 22. The enumerated family (the bank 21.57,
+  the screen and re-link 21.12, context alone 20.81, length alone 21.35, the two-cause model in linear, logarithmic
+  and step forms, weighted or not, on joint or marginal likelihood 19.09 to 19.29) spreads 2.48 marks; the
+  standing family (the forms the shared items do not reject) spreads 0.20 marks inside one whole mark; the
+  ruling-out is loud in the residuals by item kind (mean absolute 0.076 logits for the joint model against 0.208
+  for context alone and 0.269 for length alone).
+- **Analyst test:** the strong analyst conforms everything, reads the 26, pre-equates on the bank's final values and
+  files a pass mark of 22; the careful one screens the shared items, sees the short everyday ones drift easier,
+  sets them aside and re-links, or credits an everyday advantage the mathematical 2027 items never get, and files
+  21.
+- **Estimand:** "The pass mark on each Level 1 paper is the mark that a candidate who just meets the Level 1 standard
+  can be expected to score on that paper, rounded to the nearest whole mark" (specification 4.2), the standard being
+  the one fixed on the 2022 Level 1 paper (specification 4.1; record LN1-SS-2022: 26 of 40); the paper is the 2027
+  Level 1 paper as laid out in the layouts file.
+- **No decoy:** nothing is planted: the bank file is the Board's real calibration and right for what it calibrates (one
+  concurrent scale), the preliminary run is a dated run the Board keeps, and no memo, draft or stakeholder figure
+  carries 22 or 21.
+- **No certified replay:** no published figure is re-derived: the 2027 pass mark has never been computed, and the
+  2022 record's 26 is an input, never a target the method is recovered from.
+- **Chain:** (1) the 2027 paper's twelve patterns items come from the Level 2 pool, and their bank values rest on Level
+  2 candidates' responses; (2) the Level 2 items the 2023 to 2026 Level 1 papers carried show how such items operate for
+  Level 1 candidates once each level is calibrated on its own; (3) their shifts need an everyday advantage and a
+  reading cost together with a constant between the scales, because the short everyday items move and the long
+  everyday ones do not; (4) the 2027 items, long and mathematical, take the constant and the reading cost only; (5) the
+  ability at the standard on the 2022 paper and the 2027 paper's curve there give 19.09, a pass mark of 19.
+- **Judgment:** the modelling judgment that the shared items' shifts are additive in two recorded causes rather than
+  invariance with outliers or one cause, justified from the data: the short everyday items sit -0.83 logits from
+  the short mathematical ones and the long everyday ones -0.20, and the joint model's residual (0.076) is under a
+  third of either single cause's; stem length varies inside every kind of shared item, which carries the fit to the
+  long mathematical items without an untested interaction.
+- **Hidden by:** two effects offsetting inside the observed window: on the long everyday items, the commonest shared
+  items, the everyday advantage and the reading cost cancel, so the shared items look unshifted on average, the bank's
+  concurrent calibration fits them, and the only drift in view (the short everyday items) reads as outliers to set aside.
+- **After the notice:** once a run sees the short everyday items drift, (1) it must ask why the long everyday items,
+  also everyday, do not (wrong turn: set the drifting items aside and re-link on the rest, 21); (2) it must fit
+  both causes and the constant between the scales in one model on all the shared items (wrong turn: credit the
+  everyday advantage alone, which leaves the mathematical 2027 items where the bank has them, 21, or price length
+  alone with its slope flattened by the long everyday null, 21); (3) it must carry the fit to each 2027 item by
+  its own stem and context and read the standard on the Level 1 values (wrong turn: shift the twelve items by the
+  shared items' mean drift, which is near nothing).
+- **One-fact test:** the likeliest hint, "Level 2 items do not play the same for Level 1 candidates", is what the
+  field's screen already acts on, and it files 21; even "long stems cost Level 1 candidates" leaves the run to
+  separate the cost from the everyday advantage, fix the constant between the scales and carry both to the 2027 items,
+  and length alone files 21. No one sentence does the estimation.
+- **No replay:** the call re-derives no published figure, and no shipped number is wrong: the bank's values answer the
+  bank's question.
+- **Pinned:** every rival run on the clean truth: the bank 21.57 (22); the screen 21.12
+  (21); context alone 20.81 (21); length alone 21.35 (21); the two-cause model linear 19.09,
+  logarithmic 19.12, step 19.29, unweighted 19.09, marginal likelihood 19.09, all 19; the standard read on the
+  bank's 2022 values 19 (SF2); the most likely mark at the standard 19 (SF3); the truth 19.16.
+- **Run forecast:** one run pre-equates on the bank and stops (method shortcut at rung 0, 22); the other
+  screens the shared items and re-links, or credits the everyday advantage alone (unfinished chain at rung 1 or 2,
+  21); a run that fits both causes still pools every region on one ability scale and loses the regional
+  figures (dismissed own evidence: the regions' different everyday advantages in the same sittings).
+- **Strategy label:** WORKS IN FORM, separating two explanations for one pattern; the live form here is two recorded
+  item features whose effects cancel on the commonest shared items, with no dated cutover and no filed sentence.
+- **Lesson:** a model learns that a bank's invariance on shared items can be two causes cancelling and that a borrowed
+  item is priced by the causes it carries; no build on file teaches a two-cause population shift through a test link
+  (mark450 screened anchors one cause had moved, mark445 read a choice advantage, v6 a position term).
+
+## Survivor anatomy
+
+- **Actor:** the item (a bank code) has rows in every file; the deciding property, how a Level 2 item operates for a
+  Level 1 candidate, has no column anywhere: it is a relation between two levels' responses to the same item.
+- **Link:** it is read only by calibrating the Level 1 and the Level 2 sittings each on their own and differencing the
+  same items across the two, a comparison the concurrent bank exists to avoid; no key or file offers it.
+- **Reflex:** the field's reflex is pre-equating on the bank's one scale (rung 0) and, done carefully, a displacement
+  screen on the shared items (rung 1); both are executed correctly and file 22 and 21.
+- **Back-test:** the bank passes its own checks: the shared items fit it, and its values predict every earlier Level 1
+  paper's mean mark, because the earlier papers borrowed the cancelling kind.
+- **Second use:** the same split drives the item table's band verdicts (5 patterns items below the band, none on
+  the bank) and, with each region's own everyday deviation, the regional figures.
+- **Shock:** nothing happens on a date: the shift is a standing property of two populations, and the 2027 paper is the
+  first to borrow items carrying one cause without the other.
+- **Pins:** the WHAT is filed in the Board's genre (the specification's pass-mark and band clauses, the record's 26 of
+  40); nothing names the two levels' difference, the shared items, stem length or context as a cause of anything.
+
+## Readability screen
+
+| Rung | What the rows in view show | Verdict |
+|---|---|---|
+| 0 the bank's values | one difficulty per item on one scale, fit statistics that pass | readable |
+| 1 the displacement screen | the short everyday items drift easier for Level 1 candidates; the rest look unshifted | readable |
+| 2 one cause (context or length) | a context effect on the short items, a length slope near zero | readable |
+| 3 the two-cause split (decisive) | no column, no sentence: only the two calibrations differenced across the three kinds of shared item, with both causes and the scale constant fitted together | silent |
+| 4 the regions' own everyday deviation (ask) | no column: each region's 2026 candidates' pattern on everyday against mathematical items, read against a 2027 paper with fewer everyday items | silent |
+
+Test 8 (framing): neither the prompt nor any governing document states how the 2027 items' history differs from the
+decision's population on the axis the step corrects: the specification's strand table states the content change and
+the bank's pool column each item's origin, both facts about items; nothing says the 2027 items were calibrated on Level
+2 candidates, that stems cost Level 1 candidates, or that regions differ on everyday items.
+
+## Semantic fork table
+
+| Id | Term or convention | Golden reading | Alternative | Call under it | Ruled out by |
+|---|---|---|---|---|---|
+| SF1 | "can be expected to score" | the expected mark (test characteristic curve) at the standard's ability, under the two-cause split | the split's other forms (logarithmic, step, unweighted) and the marginal-likelihood calibration | 19 in every form (19.09 to 19.29) | same call, asserted in checks.py (SF1, a fifth of a mark inside the bin) |
+| SF2 | "the Level 1 standard" | the ability whose expected mark on the 2022 paper is 26, on the Level 1 calibration | the same ability read on the bank's 2022 values | 19 | same call, asserted (SF2) |
+| SF3 | "expected to score" | the expected value of the mark | the most likely mark of a candidate at the standard | 19 | same call, asserted (SF3) |
+| SF7 | the item table's chance and band verdict | the chance at the standard's ability; inside means at least 0.20 and at most 0.90 (specification 5) | edges read strictly; rounding before the verdict; another form of the split | the same verdict for every item | no chance within 0.048 of an edge and the verdicts identical over the forms, asserted (SF7) |
+| SF8 | "sat the 2026 Level 1 paper in that region" | the region of the centre sat at | the region of the home centre | the same regional means | every sitting away from home is within its home region, asserted on the cut pack (SF8) |
+| SF9 | the regional mean mark | the mean over the region's 2026 sitters of each one's expected mark on the 2027 paper, to the whole mark | maximum likelihood abilities; the joint likelihood's stretch undone in part or in full | the same whole marks | asserted over the family (SF9; the narrowest margin 0.01 of a mark) |
+| SF11 | the 2026 population | each candidate who sat, once (the register's repeat entries and its absent and withdrawn rows aside) | counting register rows | the same sittings | the response export carries exactly the sittings the golden averages, asserted on the cut pack (SF11) |
+
+## Ladder
+
+| Rung | Route | Expected mark at the standard | Pass mark |
+|---|---|---|---|
+| skip | the 2022 standard carried as a mark | (26 of 40) | 26 |
+| 0 | pre-equating on the bank's final 2026 values | 21.57 | 22 |
+| 0p | the bank's June preliminary run | 21.56 | 22 |
+| 1 | the displacement screen, the drifting items set aside, re-linked | 21.12 | 21 |
+| 2a | the everyday advantage alone | 20.81 | 21 |
+| 2b | stem length alone | 21.35 | 21 |
+| 3 (decisive) | both causes and the scale constant fitted together, carried to the 2027 items | 19.09 | 19 |
+| truth | the generating model | 19.16 | 19 |
+
+The nearest rival sits 2 marks above the golden's whole mark.
+
+## Closure table
+
+| Axis | Reading | Move |
+|---|---|---|
+| 1 Population | Level 1 candidates on the 2027 paper; the standard as fixed on the 2022 paper | filed: specification 4.1 and 4.2 |
+| 2 Unit of account | the mark; a candidate for the regional means | filed by the clause and the prompt |
+| 3 Attribution window | sittings 2022 to 2026, the 2026 papers closed on 30 October | C1: every sitting is complete before the export |
+| 4 As-of dating | the export of 6 November and the bank's final run | C1: the golden calibrates from responses and reads no bank value |
+| 5 Version basis | the bank's final run against its June preliminary | C4: both file a wrong pass mark; the golden uses neither |
+| 6 Denominator | the 40 items of the 2027 paper | filed: the layouts' 2027 sheet |
+| 7 Weighting | the shared items weighted by precision or equally | C1: weighted and unweighted both 19 (SF1) |
+| 8 Window length | every shared item on a 2023 to 2026 Level 1 paper | C1: each shared item sits on one Level 1 paper; nothing licenses a shorter window |
+| 9 Boundary inclusivity | the band's "at least" and "at most" | C1: no chance within 0.048 of an edge (SF7) |
+| 10 Rounding path | the expected mark rounded once, at the end | filed: specification 4.2 |
+| 11 Tie-break | none needed | C1: the expected mark sits 0.21 inside its bin |
+| 12 Maturity and censoring | the 2027 candidates are future; the estimand is a standard candidate's expected mark | filed: specification 4.2 |
+| 13 Order of operations | the split fitted in one model, then carried | C4: the sequential single-cause fits are the rungs 2a and 2b |
+| 14 Row order | none | C1: no estimator here depends on row order |
+| 15 Duplicate resolution | a reconnect pair's later answer, the one the platform scores | texture: about 1.2 per cent of sittings, one or two items each |
+| 16 Identity normalisation | the register's candidate id across the centre and office routes | C1: one sitting per candidate and paper (SF11) |
+| 17 Netting against gross | none | not applicable: no quantity offsets another |
+| 18 Dimensional units | logits on each level's own scale | C1: the constant between the scales is estimated with the split |
+| 19 Code and status semantics | Sat against Withdrawn and Absent; Level 1 and L1 | C1: only Sat registrations have responses (SF11) |
+| 20 Integerisation | whole marks for the pass mark and the regional means | filed by the clause and the prompt |
+| 21 Clause scope | the band applies to each item on a Level 1 paper | filed: specification 5 |
+| 22 Forward window contents | the 2027 paper's 40 items | filed: the layouts' 2027 sheet |
+
+## Literal reader
+
+Executed word for word, the specification's 4.1 and 4.2, the record's 26 of 40 and the prompt fix the population,
+outcome, unit and rounding; the literal reader that pre-equates on the bank's values files 22, an easy method on
+the same literal estimand, never another reading of it. Every term's alternatives are in the fork table and land on the
+golden's figures or converge on the records; the method stays open and the data force it, because the shared items
+reject invariance (the short everyday items' -0.83), the screen (it leaves the long everyday items' null unexplained)
+and each single cause (residuals 0.208 and 0.269 against 0.076).
+
+## Oracles
+
+None ships. No control total, published figure or validation record ties under the golden: the bank's own fit
+statistics pass the shared items, the 2022 record's 26 is an input, and the preliminary run is a dated run that files
+its own wrong mark. No file ranks pass marks.
+
+## Ask sheet
+
+- **Ask A, the item table (40 rows, rides the decisive step):** each 2027 item's chance at the standard and its band
+  verdict. On the bank's values no item sits below the band; on the golden 5 patterns items do (Q29, Q30, Q31, Q32, Q33, at
+  0.11 to 0.14), the other patterns items sit inside at 0.25 to 0.40, and none sits above. Graded as
+  the verdicts and the patterns items' range, because the forms of the split move single chances by up to 0.048.
+- **Ask B, the regional means (6 regions, its own judgment):** the regions differ in how much easier everyday items are
+  for their candidates (estimated deviations Winnipeg -0.31, Westman +0.07, Interlake-Eastman +0.31, Parkland and North +0.41, Saskatoon and Central -0.10, Regina and South +0.10 logits), the 2026 paper is everyday-heavy and the 2027 paper
+  everyday-light, so one ability scale for every region carries each region's everyday advantage onto a paper that
+  rewards it less. Golden Winnipeg 15, Westman 16, Interlake-Eastman 17, Parkland and North 16, Saskatoon and Central 17, Regina and South 17; one scale for every region Winnipeg 14, Westman 16, Interlake-Eastman 18, Parkland and North 17, Saskatoon and Central 16, Regina and South 17 (4 of 6 regions on another
+  whole mark); the bank's values Winnipeg 16, Westman 18, Interlake-Eastman 20, Parkland and North 19, Saskatoon and Central 18, Regina and South 19 (6 of 6).
+- **Pair ceiling:** 45.4 (landed run 74.6, shallow run 16.2; both runs on the call would average 74.6).
+- **Shallow keep:** 7.7 per cent of the ask weight.
+- **Measured by:** task8/generator/ceiling.py on the cut pack (writes generator/ceiling.json).
+
+| Ask figure | Golden | Landed run (the split, regions pooled) | Shallow run (the bank's values) | Cracker verdict on the landed run |
+|---|---|---|---|---|
+| items below the band | Q29, Q30, Q31, Q32, Q33 | Q29, Q30, Q31, Q32, Q33 | none | keeps |
+| items above the band | none | none | none | keeps |
+| the patterns items' chances | 0.11 to 0.40 | the same | higher | keeps |
+| Winnipeg | 15 | 14 | 16 | misses |
+| Westman | 16 | 16 | 18 | keeps |
+| Interlake-Eastman | 17 | 18 | 20 | misses |
+| Parkland and North | 16 | 17 | 19 | misses |
+| Saskatoon and Central | 17 | 16 | 18 | misses |
+| Regina and South | 17 | 17 | 19 | keeps |
+
+## Prompt contract
+
+A voice rewrite may not drop or change: the question (the pass mark the Board should set on its 2027 Level 1 Numeracy
+paper); the clause it is held to (the mark a candidate who just meets the Level 1 standard can be expected to score on
+that paper); pass_mark_2027.docx as the memo to the Awards Committee; l1_2027_items.xlsx with one row for each item on
+the 2027 paper, the chance a candidate who just meets the standard answers it correctly and whether it sits inside the
+specification's targeting band; for each region, the mean mark the candidates who sat the 2026 Level 1 paper in that
+region could be expected to score on the 2027 paper; the pass mark and the regional means to the nearest whole mark and
+the chances to two decimal places. It may never add Level 2, the item bank, stems, reading, length, context, everyday
+items, shared or common items, linking, calibration, drift, differential functioning, any region's name or count, or
+any hint that the regions or the two levels differ.
 
 ## Architecture 17 record (spent 2026-11-08)
 
@@ -726,3 +976,4 @@ Architecture 11 (the contractor's plausible values drawn from a conditioning mod
   a low first score (mark474's driver, selection on falling short in a common-person link); a pretest-to-operational
   shift, repeaters' familiarity with reused items and mid-life item revisions (each removed by a reflex: a pretest
   adjustment, excluding repeaters, a latest-version rule).
+- 2026-11-08, architecture 18, stage 2: the regional ask as a count of expected passes (the first prompt draft) was replaced by a mean mark, because a count at whole candidates moves with every estimator choice near the pass mark; the mean mark at one decimal was graded in whole marks instead, because the ability estimator and scale family (Warm or maximum likelihood abilities, the joint likelihood's stretch undone in part or in full) spreads each region's mean by up to 0.26 of a mark; and each patterns item's chance is graded as its band verdict and the group's range, because the forms of the split move single chances by up to 0.048. Seeds 818018 to 818043 were screened (the call's bin, the band edges, the rivals' distance, the regional whole marks over the family); 818025 is the one kept.

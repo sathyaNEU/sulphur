@@ -1,27 +1,27 @@
 {
  "task": "task8",
- "status": "DESIGN",
+ "status": "PAUSED",
  "domain": "education-learning-sciences / item-response-theory-test-equating (client education-learning-sciences)",
  "objective": "etl",
- "stage": 2,
- "stage_name": "design",
+ "stage": 4,
+ "stage_name": "check",
  "updated": "2026-11-08",
- "call": "",
- "stump": "The default path pre-equates the 2027 Level 1 paper from the Board's concurrent Rasch bank and files a pass mark about three marks too high, because the Level 2 items earlier Level 1 papers carried looked invariant for Level 1 candidates when an everyday-context advantage and a reading cost cancelled on the long everyday ones, and the 2027 paper's long mathematical Level 2 items carry the cost alone.",
+ "call": "a 2027 Level 1 Numeracy pass mark of 19 of 40 (expected mark 19.09 at the standard), rejecting the bank's 22 (21.57)",
+ "stump": "The default path pre-equates the 2027 Level 1 paper on the Board's concurrent Rasch bank and files 22 (careful variants 21), because the Level 2 items earlier Level 1 papers carried looked unshifted for Level 1 candidates when an everyday-context advantage and a reading cost cancelled on the long everyday ones; the 2027 paper's twelve long mathematical Level 2 items carry the cost alone, and only both causes and the scale constant fitted together price them (19).",
  "architecture": 18,
  "loops": 0,
  "precut": {
-  "exit": null,
-  "date": ""
+  "exit": 0,
+  "date": "2026-11-08"
  },
  "leak": {
-  "leak_py": "",
+  "leak_py": "REVIEW (2026-11-08, no LEAK): the specification carries the filed band and pass-mark clause; the reader has not run",
   "reader": ""
  },
  "duplicate_check": {
   "guard_check": "WARN 2026-11-08 on the registered card (decision type and question form repeat task2 v4; older-build structural repeats differentiated: mark101, mark178, mark469, mark121, mark464)",
-  "heart": "",
-  "surface": "",
+  "heart": "WARN 2026-11-08 (decision type and question form repeat task2 v4, answered in the note)",
+  "surface": "PASS 2026-11-08: 16 pairs in scope, 0 promoted; personas in the pack Andrew Adams, Shawn Simpson, Yvette Clark (all on the card)",
   "nearest": ""
  },
  "judge": {
@@ -30,7 +30,13 @@
   "gate_h": "",
   "report": ""
  },
- "paper_pair": null,
+ "paper_pair": {
+  "pair": 45.4,
+  "landed": 74.6,
+  "shallow": 16.2,
+  "shallow_keep": 7.7,
+  "measured_by": "task8/generator/ceiling.py"
+ },
  "runs": {
   "run1": null,
   "run2": null,
@@ -64,7 +70,7 @@
    "commit": "DRAWN (task8), architecture 17, 2026-11-07"
   }
  ],
- "resume": "stage 2: write the design note's Default path to Prompt contract on the drawn architecture 18 (the Prairie Adult Credentials Board's 2027 Level 1 pass mark), build the generator core and screens, run precut.py to exit 0",
+ "resume": "stage 4: spawn the leak reader and the determinism judge",
  "approved": null,
  "submitted": null,
  "portal": null,
@@ -73,6 +79,10 @@
   {
    "date": "2026-11-08",
    "event": "DRAWN: architecture 18 registered (WARN only), the draw screened on a 16-redraw prototype"
+  },
+  {
+   "date": "2026-11-08",
+   "event": "architecture 18 built to the end of stage 3 (seed 818025); paused for stage 4, which needs the Agent tool"
   }
  ],
  "migrated_from": {
@@ -323,5 +333,6 @@
   ],
   "source_note": "re-root into a new client domain (a New Zealand independent schools' assessment trust choosing which draft Year 10 science paper to print for November 2027, pre-equated from its Rasch bank); architectures 1 to 16 spent",
   "spent": "2026-11-08 on its first platform round: both runs filed Paper C and every regional figure; triage REDESIGN (runs/triage.md): the prompt's August-against-November gap announced the mechanism, the course outline and Appendix B handed over the join, taught-content recalibration is a textbook IRT reflex, and every ask device was a hygiene item both runs caught"
- }
+ },
+ "seed": 818025
 }

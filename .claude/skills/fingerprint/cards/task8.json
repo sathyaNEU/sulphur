@@ -12,7 +12,7 @@
   "shape": "15",
   "decision_type": "dial_setting",
   "answer_unit": "count",
-  "answer": "",
+  "answer": "a 2027 Level 1 pass mark of 19 of 40 (expected mark 19.09 at the standard), rejecting the bank's 22 (21.57)",
   "answer_source": "",
   "gap": [
     "population"
@@ -49,8 +49,8 @@
   "role_family": "programme_officer",
   "scoring_unit": "other",
   "spine": {
-    "file": "numeracy_responses_2022_2026.csv",
-    "rows": 0,
+    "file": "pacb_numeracy_responses_2022_2026.csv",
+    "rows": 400052,
     "entity": "one scored response of one candidate to one item at one online sitting",
     "grain": "candidate x item (a re-answered item after a reconnect has two rows)",
     "source": "synthetic"
@@ -637,7 +637,7 @@
   "registered": "2026-11-08T05:32:52Z",
   "shell": {
     "question form": "whether",
-    "second-sentence opener": "the",
+    "second-sentence opener": "i",
     "rounding opener": "pass",
     "deliverable set": "docx+xlsx"
   }
