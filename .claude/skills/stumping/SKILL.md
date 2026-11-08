@@ -91,7 +91,7 @@ answered before the default path is written, in the design note's `## Deep reaso
 | `Chain:` | the three or more dependent inferences from the cleaned files to the call, numbered in one line, each needing the one before |
 | `Judgment:` | the statistical or modeling judgment among them, and the data that justify it (not a named method alone) |
 | `Hidden by:` | how the rows in view hide or mimic the deciding structure: two effects offsetting inside the observed window, a selection or sampling property the decision's population does not share with the history, or a pooled validation that passes; a structure one plot or one group-by of one file displays is modelled on sight (`references/sulfur-record.md`, four builds, five rounds) |
-| `After the notice:` | the two or more inferences still owed once a run has seen the evidence, numbered (1) (2), each with the wrong turn a competent run can take there; a step whose remedy is standard once noticed was the whole stump (task7 arch 4, task8 arch 17) |
+| `After the notice:` | the two or more inferences still owed once a run has seen the evidence, numbered (1) (2), each with the wrong turn a competent run can take there; a step whose remedy is standard once noticed was the whole stump (task7 arch 4, task8 arch 17). Covariate selection by held-out error, a retransformation to the mean, a split by a recorded group and an out-of-sample check are not owed inferences: a run does all four unprompted (task7 arch 5's run fitted the golden's age-and-book model, tested it on 122 held-out recent pairs and bootstrapped it) |
 | `One-fact test:` | the single sentence that would rescue a run, shown not to exist: name the likeliest hint and why the solver still has to build the comparison, fit the model or carry the chain through |
 | `No replay:` | that the call does not re-derive a published figure and no stated number is simply wrong |
 | `Pinned:` | every rival method a careful analyst would run, run on the clean truth, each landing on the call or ruled out by named data (`determinism-check` §1) |
@@ -179,7 +179,11 @@ origins population), 483 (the day-180 dating), 464 v3 and v9 (the estimator is t
 most of them after a determinism repair had filed the step and the next round landed the call. **The fork-
 is-the-stump test, before any repair:** if the sentence that would close a judge's fork names the thing the
 decisive step recognises, the fork is the stump and the build re-roots; a repair there spends the stump and
-buys a landed call within a day (118 v2, 141 SF33, 179 v3 section 6, 181 v2, 190 v6).
+buys a landed call within a day (118 v2, 141 SF33, 179 v3 section 6, 181 v2, 190 v6). A leak reader's question-5
+fork counts as a judge's, and naming the quantity the step estimates names the thing it recognises: task7 arch 5's
+reader executed "the expected value of the security" as the register's value, the closing sentence filed V as "the
+value we would expect our inspection to put on the security if the facility defaulted", and the next run went
+straight to the record of inspections at default and filed every graded cell.
 
 **A definition that implies the step is not a filing of it.** A filed outcome in plain words that the
 golden's step follows from does not rule out the field's standard computation of that outcome: the judge
