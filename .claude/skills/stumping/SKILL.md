@@ -381,6 +381,14 @@ Part 3):
 - **A construction over a selection event** is the same single dial: curvature falls as the selection grows
   extreme while the bias removed grows (spread 13.2 against a bias of 10.5, worse than doing nothing).
 
+- **A record's latest window mirrors a forward population that ages smoothly.** Where the units the decision
+  prices are the same population the record's latest failures came from, a year on, those failures already carry the
+  forward profile on the axis the step corrects, and "use recent experience" files the call without the step: on
+  task7 architecture 5's first world the 2020 and 2021 windows averaged by group filed all three graded cells. Break the
+  mirror with a practice the organisation keeps for its own reasons that changes the record's recent failures and not
+  the forward units (a workout unit's inspection at referral, months before default), and assert every recent window
+  (mean, weighted mean and median, pooled and by group) outside the cell; there the nearest sat 375,000 outside.
+
 **The arithmetic, on paper before any row.** Position, margin, separation and dominance as
 `dataset-generation` §6 asserts them (4th or 5th on rung 0, no margin under 1.15x, every rung's highest
 figure clearing the decision boundary by the same floor the golden clears it by, asserted in `checks.py`

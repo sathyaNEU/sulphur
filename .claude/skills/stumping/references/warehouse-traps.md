@@ -31,7 +31,17 @@ deep step where the decision's population or window does not share the property 
 | Aggregate fact table or cube | segment mix moves under a flat total | a trend on the total | two effects offsetting inside the window, with the decision weighting segments to a mix the history did not hold, the segment rebuilt from a history and not read off a column |
 | Late-arriving facts (claims, recoveries, chargebacks posted after the period) | recent periods incomplete | the latest periods read as improvement | completion by a unit whose delay changed |
 | No factless coverage table | events without the exposure that produced them | event counts read as rates | exposure rebuilt from another file at another grain |
+| Index roll-forward between physical measurements (a carried collateral or asset value) | the carried value is the last measurement moved by a market index; nothing stores how old the measurement is | the carried value as the current value, fed to a model fitted on fresh measurements | the units that fail are the ones whose value fell behind the index, by more the staler; the shortfall estimated on the age of the measurement behind each carried value from the failures' own re-measurement, and carried to a forward book staler than the record (task7 arch 5) |
 | Relabelling recorded as attribute change (a model recalibration, a scale change) | moves that carry no news about the entity sit among moves that do | every move treated as news | the two explanations for a move separated by what follows it, never by a reason code |
+
+## What the generator owes the structures (so they stay texture and open no fork)
+
+| Structure | The defect when it is skipped | What the generator does |
+|---|---|---|
+| Warehouse go-live | derived rows (roll-forwards, accruals, revaluations) start at the first cycle after go-live, so the first months' records compare against stale pre-go-live values: outliers that bent every functional form apart (task7 arch 5, 2012 defaults at 0.2 to 0.35 of value) | writes the go-live's own load of the derived rows |
+| Versions dated before the reporting date, loaded after it | the row in force at the reporting date is not the latest version by date, a fork on the carried value; a book facility with no row in force at all | loads every version dated in the year by the year-end close; never writes a derived row over a newer source row already on file |
+| A trending index between two dates a ratio compares | the market's move over the lag enters every ratio, and the raw and index-adjusted constructions split (7 per cent on task7 arch 5) | damps the trend or asserts that both constructions land together |
+| Business keys handed out by the generator | sorted, a key column runs as an arithmetic progression (steps of 11, 13, 37) | gaps from a stream of their own, increasing in the same order, so no sort and no draw moves |
 
 A seed decides only with the rest of the anatomy in place (`../SKILL.md` 1.4): the property has no column, the field's
 method at rung 0 or 1 files the wrong answer and validates on the pooled history, and two or more inferences are still

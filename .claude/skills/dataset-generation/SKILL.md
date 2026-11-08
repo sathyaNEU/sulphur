@@ -150,6 +150,13 @@ written to explain the pack: a column named for its grain, a header the export r
 governing document's flat definition ("Recipients are distinct within [entity], [program] and [period]";
 "[Status] is account-level and survives a lapsed subscription"), never advice (§3).
 
+**Centre several graded families at once with the one free scale.** Where every route scales linearly in one
+shipped parameter (a PD master scale, a tariff, a unit rate), the rivals' relative spread is a property of the world and
+the scale only places it: scan world seeds for a configuration whose relative spreads fit every graded bin at once, then
+set the scale to centre them, and assert the margins. On task7 architecture 5 one seed in twenty-four put the plan
+figure, both book figures and the five names inside their cells under every rival with every shallow route outside;
+tuning one world by hand moved a different figure across an edge each time.
+
 ## 7. Authentic mess and the realism gate (Layer 1)
 
 `references/layer1-messiness.md` is the library (eight universal techniques, eight per domain); the card's

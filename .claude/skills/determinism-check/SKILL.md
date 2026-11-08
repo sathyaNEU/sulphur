@@ -204,6 +204,12 @@ time). `precut.py` refuses an unresolved row; `checks.py` asserts every row.
   every licensed reading of the convention prints the same call (275's SF14, 141's SF31 and SF32), or one WHAT
   sentence at authority (162's SF15, 151's SF23). A closure that would name the thing the decisive step recognises
   is the fork-is-the-stump case (section 1) and re-roots the build instead.
+- **A convex loss on an estimated input has two expectations.** The model applied to the expected input and the
+  loss averaged over the input's spread differ by the convexity gap, a whole bin on a leveraged loss (task7
+  architecture 5: 2.02 against 2.48 million, the second a cell up). The WHAT sentence files which one the decision
+  takes ("the model applied to the value we would expect ..."), and `checks.py` records the other's cell beside the
+  sentence that rules it out. A sentence that only says "the expected value of the security" read literally as the
+  register's value with prices held, which was the default path (stage 4 leak reader, question 5).
 - **The deciding configuration must be in the record.** A forecast or model whose deciding configuration is out of
   sample cannot be forced by any filing short of the HOW; where the golden family's own spread exceeds the graded
   band, re-root into a world where that configuration is recorded and the construction replays it.
