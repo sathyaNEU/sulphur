@@ -1,11 +1,11 @@
 {
  "task": "task10",
- "status": "PAUSED",
+ "status": "READY",
  "domain": "energy-systems-utilities/load-forecasting (client domain energy-systems-utilities; world: an English distribution network operator, Wealdmoor Power Networks, committing for winter 2027/28 the reinforcement of the Halverton primaries whose design-day demand, after the flexibility contracted for that winter is credited, exceeds firm capacity)",
  "subdomain": "load-forecasting",
  "objective": "forecasting",
- "stage": 4,
- "stage_name": "check",
+ "stage": 5,
+ "stage_name": "ready",
  "updated": "2026-11-08",
  "call": "Commit reinforcement at Ashcombe Road and Hartwell Common for winter 2027/28; Charlecote Way and Fenwick Street hold firm capacity with the flexibility contracted for that winter",
  "stump": "Measuring each flexibility event's fall at its zone primary against a weather-adjusted baseline, validated on held-out non-event weekdays and stable across both winters, and crediting the 2027/28 contracts at the 0.9, 0.6, 0.9 and 0.9 per megawatt scheduled the event records show commits no primary; the step that lands it there is reading the primary's fall as the provider's delivery, when at Ashcombe Road, Fenwick Street and Hartwell Common the control room moved a feeder section across an open point to Tollbrook Lane, Wexley Hill and Kestwick Fields for each event window, so the providers' own reduction, net of the neighbour's rise and read at the design day's minus 3.0 C, is 0.4 and 0.5 per megawatt and Ashcombe Road and Hartwell Common must be reinforced.",
@@ -23,7 +23,8 @@
  },
  "judge": {
   "first": "DETERMINISTIC, FIX_NOW (wording: no control-room action claimed in the blocks); applied",
-  "rejudge": "running on target.zip a3ba2ac0"
+  "rejudge": "DETERMINISTIC, APPROVE on target.zip a3ba2ac0 (2026-11-08); shipped 1350f12d differs by two texture fixes, graded files byte-identical",
+  "report": "determinism_check_report.md"
  },
  "paper_pair": {
   "pair_ceiling": 39.8,
@@ -54,7 +55,7 @@
   ]
  },
  "returned": [],
- "resume": "stage 4: the re-judge thread (brief /tmp/determinism-check-task10-1794165018/judge_brief.md) writes verdict.md; send its path to the judge agent for the reconciliation and determinism_check_report.md; apply the re-read's two realism fixes (plot numbers in the growth register, health indices with age in the condition workbook), rebuild, re-run every gate; then stage 5",
+ "resume": "READY: hand the author prompt.txt, target.zip, golden.zip and the four answer blocks; then the platform's two runs and /triage-runs",
  "approved": null,
  "submitted": null,
  "delivered": null,
@@ -276,5 +277,23 @@
    ],
    "fate": "spent 2026-11-08 on the platform (both runs on the golden call); world spent"
   }
- ]
+ ],
+ "gates_stage5": {
+  "checks": "81/81",
+  "verify": "PASS",
+  "precut": "75/75",
+  "voice_check": "PASS (2 WARN)",
+  "figures_check": "68/68",
+  "leak_py": "REVIEW, no LEAK",
+  "guard_heart": "WARN",
+  "guard_surface": "exit 0",
+  "containers": "audit_containers.py PASS",
+  "byte_identical": true,
+  "ceiling": 39.8,
+  "shallow_keep": 11.8
+ },
+ "zips": {
+  "target.zip": "1350f12d94f40741f1601f73d9903de5df0ad7d06f9f66d03d3f2fbecbe88156",
+  "golden.zip": "ee828b0678212f053b596caaa7c81142f1b401316e9e4904f57c75f4f66e2063"
+ }
 }
