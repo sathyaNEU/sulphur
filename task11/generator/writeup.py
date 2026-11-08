@@ -74,7 +74,7 @@ def main():
              "million gallons per mg/L (SOP-WQ-07 3.2), minute by minute, over the minutes the feeder in "
              "scada_alarm_event_history_2026.csv was running with carbon: stopped from a MOTOR OVERLOAD TRIP until "
              "its next RUN STATUS ON, and feeding nothing from a HOPPER LEVEL LOW-LOW NO FEED alarm to its return: "
-             "%s lb in May, %s in June, %s in July and %s in August." % (fmt(pac["May"]), fmt(pac["June"]),
+             "by local calendar month, %s lb in May, %s in June, %s in July and %s in August." % (fmt(pac["May"]), fmt(pac["June"]),
                                                                        fmt(pac["July"]), fmt(pac["August"])))
     L.append("6. Replayed SOP-WQ-07 3.2 and 3.3 day by day on the season's results (start the feed, or change its "
              "dose by Table 1, on a day above 3.0 ug/L; stop after two days in a row at or below 2.5 ug/L): the replay "

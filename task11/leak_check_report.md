@@ -27,7 +27,7 @@ Stump terms swept: source, intake, tributary, receptor, station, decisive, tesse
 - **REVIEW** `target/lake/intake_tower_record_drawing_S-4.pdf`: Producer 'pdfplot16.hdi 16.0.52.0' is not a PDF engine
 
 ## 11 prompt gate (REVIEW 1)
-- **REVIEW** `prompt.txt`: templating signals: 1 of seven: a closing list of documents ('In atrazine_sources_2026.xlsx, put the powdered carbon the plant fed in each mon') (the portal marks two as borderline and three as templated: one question, each file named in the sentence that gives its reason, no closing list)
+- **REVIEW** `prompt.txt`: templating signals: 1 of seven: a closing list of documents ('In atrazine_sources_2026.xlsx, put the powdered carbon the plant fed in each cal') (the portal marks two as borderline and three as templated: one question, each file named in the sentence that gives its reason, no closing list)
 
 ## 12 client quality check (INFO 2)
 - **INFO** `-`: 26 usable files (10 or more required)
