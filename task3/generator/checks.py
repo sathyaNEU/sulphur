@@ -262,6 +262,23 @@ def main():
           all(share_of(r[2], arb) > 0.5 for r in rec) and all(share_of(by_wy[wy][2], arb) < 0.5 for wy in fig["top2"])
           and all(share_of(r[2], acb) >= 0.95 for r in R["rows"]))
 
+    Vd = R["validation"]
+    g_mad = Vd["golden"][1]
+    rivals_v = [k for k in Vd if k != "golden"]
+    check("V1 the foothill gauge selects the carry: the golden construction reproduces its floods best (median absolute "
+          "log error), every rival construction 0.04 or more worse", all(Vd[k][1] >= g_mad + 0.04 for k in rivals_v),
+          "golden %.3f; %s" % (g_mad, ", ".join("%s %.3f" % (k, Vd[k][1]) for k in rivals_v)))
+    check("V2 the golden carries the foothill gauge's floods with a median bias under 10 per cent", abs(Vd["golden"][0]) < 0.095,
+          "%+.3f over %d floods" % (Vd["golden"][0], Vd["golden"][2]))
+    check("V3 the drainage-area transfer misses the foothill gauge's floods by 25 per cent or more", Vd["drainage_area"][0] < -0.29,
+          "%+.3f" % Vd["drainage_area"][0])
+    check("V4 shortcut: the short record extended on the river's by MOVE.1 and carried by area files 140 ft",
+          span_of(R["sc_move1"]) == 140, "%.0f" % R["sc_move1"])
+    check("V5 shortcut: the short record's own curve is barred (under 25 years; 7.4.3 takes the nearest gauged basin with 25)",
+          R["short_years"] < 25 and "25 years or more" in std, "%d years" % R["short_years"])
+    check("V6 shortcut: one median concurrent ratio on the river's curve misses the floods and the file (it carries no storm)",
+          frozenset(fig["river_top2"]) != GC["top2"], "%.0f" % R["sc_ratio"])
+
     # ------------------------------------------------------------------ back-test, literal reader, oracles
     check("B1 the drainage-area transfer validates among the region's gauged basins (median error under 5 per cent)",
           _backtest(TGT) < 0.05, "%.3f" % _backtest(TGT))
@@ -397,7 +414,7 @@ def _backtest(tgt):
     wb = load_workbook(os.path.join(tgt, "region3_basin_characteristics.xlsx"), data_only=True)
     pts = {}
     for row in wb["Gauged basins"].iter_rows(min_row=4, values_only=True):
-        if not row or not row[0]:
+        if not row or not row[0] or A.record_years(row[8]) < 25:
             continue
         site = str(row[0])
         fn = "usgs_12183450_coyner_r_annual_peaks.txt" if site == "12183450" else "usgs_%s_annual_peaks.txt" % site

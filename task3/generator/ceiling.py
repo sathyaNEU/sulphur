@@ -52,6 +52,11 @@ def main(tgt):
         v = R["variants"][name]
         missing = [y for y in range(1951, 2026) if y not in v["series"]]
         rows[name] = score(cells(v["par"], v["series"], bool(missing)), gold)
+    # the concurrent-ratio shortcut: the river's curve scaled by one median ratio from the foothill gauge, the river's years
+    import numpy as _np
+    rpar_r = dict(R["river_par"])
+    rpar_r["mean"] += _np.log10(R["sc_ratio"] / F.quantile(R["river_par"], 0.01))
+    rows["concurrent_ratio"] = score(cells(rpar_r, {y: R["annual"][y][1] for y in R["annual"]}, False), gold)
     rpar_c = dict(R["river_par"])
     rpar_c["mean"] += A.STATE_B * __import__("numpy").log10(R["area_c"] / R["area_r"])
     river = {y: R["annual"][y][1] for y in R["annual"]}

@@ -1,28 +1,29 @@
 # leak check, task3
 
-**Verdict: REVIEW.** 16 files read, 15 golden figures and 4 candidate names taken from submission.md, 25 stump terms taken from the design note.
+**Verdict: REVIEW.** 17 files read, 15 golden figures and 4 candidate names taken from submission.md, 25 stump terms taken from the design note.
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: temperature, record, hourly, transfer, station, basins, storms, carried, orographic, stations, design, rain-snow, regional, bulletin, elevation, inside, golden, decisive, degrees, pillows, sentence, valley, family, airport, different
+Stump terms swept: temperature, record, hourly, station, transfer, basins, storms, carried, orographic, elevation, stations, rain-snow, design, regional, bulletin, golden, degrees, inside, family, decisive, pillows, airport, sentence, valley, regression
 
-## 1 file names (REVIEW 6)
+## 1 file names (REVIEW 7)
 - **REVIEW** `usgs_12181650_annual_peaks.txt`: a text file in the pack: confirm it is the organisation's own record (a thread, a log, a letter) and does not describe the data
 - **REVIEW** `usgs_12183450_coyner_r_annual_peaks.txt`: a text file in the pack: confirm it is the organisation's own record (a thread, a log, a letter) and does not describe the data
 - **REVIEW** `usgs_12183450_coyner_r_peaks_above_base.txt`: a text file in the pack: confirm it is the organisation's own record (a thread, a log, a letter) and does not describe the data
 - **REVIEW** `usgs_12184900_annual_peaks.txt`: a text file in the pack: confirm it is the organisation's own record (a thread, a log, a letter) and does not describe the data
+- **REVIEW** `usgs_12186050_annual_peaks.txt`: a text file in the pack: confirm it is the organisation's own record (a thread, a log, a letter) and does not describe the data
 - **REVIEW** `usgs_12187200_annual_peaks.txt`: a text file in the pack: confirm it is the organisation's own record (a thread, a log, a letter) and does not describe the data
 - **REVIEW** `usgs_12189500_annual_peaks.txt`: a text file in the pack: confirm it is the organisation's own record (a thread, a log, a letter) and does not describe the data
 
 ## 4 design-note vocabulary (REVIEW 2)
 - **REVIEW** `pelton_county_road_standards_ch7_excerpt.pdf`: 7 of 25 stump-paragraph terms appear (record, station, carried, design, regional, bulletin); read whether the document names the move
-- **REVIEW** `wsdot_region3_flood_frequency_excerpt.pdf`: 7 of 25 stump-paragraph terms appear (record, station, basins, design, regional, bulletin); read whether the document names the move
+- **REVIEW** `wsdot_region3_flood_frequency_excerpt.pdf`: 8 of 25 stump-paragraph terms appear (record, station, basins, design, regional, bulletin); read whether the document names the move
 
 ## 10 container metadata (INFO 1)
 - **INFO** `-`: container gate PASS (PASS: 0 FAIL, 0 WARN)
 
 ## 12 client quality check (INFO 2)
-- **INFO** `-`: 16 usable files (10 or more required)
+- **INFO** `-`: 17 usable files (10 or more required)
 - **INFO** `-`: 2 file categories: document, spreadsheet (2 or more required)
 
 ## 2 author vocabulary (clean)

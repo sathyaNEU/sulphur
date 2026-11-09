@@ -63,8 +63,11 @@ def make(R, tgt):
     river = {y: annual[y][1] for y in annual}
     river1 = F.quantile(R["river_par"], 0.01)
     rated = dict(DC.SPANS)
-    zmean_c = float((zc * ac).sum() / ac.sum())
-    zmean_r = float((zc * ar).sum() / ar.sum())
+    from openpyxl import load_workbook
+    wbk = load_workbook(A.os.path.join(tgt, "region3_basin_characteristics.xlsx"), data_only=True)
+    zmean_c = next(float(r[1]) for r in wbk["Durrow Ck at Ransom Bar Rd"].iter_rows(values_only=True)
+                   if r and r[0] == "Mean basin elevation (ft)")
+    zmean_r = next(float(r[3]) for r in wbk["Gauged basins"].iter_rows(min_row=4, values_only=True) if r and str(r[0]) == "12183450")
     low_thr = par["low_threshold"]
     # the creek's estimated annual peaks, one row per water year
     peaks = []
@@ -120,6 +123,10 @@ def make(R, tgt):
         "peak_hour_colder_c": round(-R["peak_hour"]["median_diff"], 1),
         "ratio_creek_river_1pct": round(q[0.01] / river1, 2),
         "variants": V,
+        "validation": {k: {"bias_pct": int(round(100 * (np.exp(v[0]) - 1))), "mad": round(v[1], 2), "n": v[2]}
+                       for k, v in R["validation"].items()},
+        "val_site": R["val_site"], "val_area": R["val_area"], "short_years": R["short_years"],
+        "sc_ratio": r100(R["sc_ratio"]), "sc_move1": r100(R["sc_move1"]), "sc_own": r100(R["sc_own"]),
         "variant_q01": {name: r100(v["q"]["0.01"]) for name, v in V.items()},
         "regional_skew": F.REGIONAL_SKEW,
         "lapse_snotel": round(R["lapse_snotel"], 2), "lapse_snotel_1": round(R["lapse_snotel"], 1),

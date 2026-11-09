@@ -357,6 +357,10 @@ codes, specials, outages); none moves a graded cell between careful runs (SF12, 
 | A5 | the same flood selection marks the same year | keep |
 
 Shallow keep: 14.3 per cent of ask cells (the 240 ft span's band)
+Landed shortcut (stated, not hidden): one median concurrent ratio from the foothill gauge on the river's curve scores 84.3
+(the call, both flows and the bands; it misses the creek's two floods and the file); against a shallow run the pair is
+52.1, under the bar but with one run on the call, so the build rests on most runs taking the drainage-area transfer or
+the textbook constants (ceiling.py).
 Pair ceiling: 23.8 (ceiling.py: the cracker 27.7 against the shallow run 19.9; the full includer, every second judgment taken, 100.0 against a shallow run gives 59.9)
 Measured by: generator/ceiling.py
 
@@ -416,7 +420,24 @@ so their unit floods agree with the Coyner River's (they are the alike high basi
 regional unit flood (18,700) and an elevation regression over them (17,000) on the default's 140 ft. The leak reader
 re-ran on the changed prompt (round 3) beside the re-judge.
 
-leak.py on target.zip ac2f39bf (--asof 2026-10-14): REVIEW, no LEAK once the memorandum's stage table moved off the
+Round 3 (revision 2), the determinism judge: NOT_DETERMINISTIC again; its carry from daily station temperatures and
+its own lapse set filed 30,000 to 55,000 cfs. Three judges, three constructions: the carry was a physical model the
+files left open. The author chose the repair (the main thread's option 2): the pack now holds the deciding configuration
+in its own record, a foothill crest-stage gauge (Selby Creek near Hollis, USGS 12186050, 62 square
+miles between 420 and 3,900 ft, water years 2012 to 2025, 14 years, too short to carry under 7.4.3).
+Carried from the river's concurrent floods, the golden construction reproduces its 11 floods to a median
++5 per cent (median absolute log error 0.07); every rival construction does
+worse by 0.04 or more: the drainage-area transfer -26, the standard atmosphere's lapse
++47, rain without the orographic rise +37, the freezing level
+-11, the valley's daily mean +11 and the peak-hour reading
++25 per cent (checks.py V1 to V3). The data, not the author, now select the carry. The
+shortcuts the short record invites: MOVE.1 extension carried by area files 18,300 cfs (140 ft, V4); the
+record's own curve is barred by 7.4.3 (V5); one median concurrent ratio on the river's curve files 25,300 cfs,
+the golden's span and 1 per cent cell, and misses the creek's floods and the file (V6). Its cost is stated in the ask
+sheet. Round 3's minor note (the creek's mean elevation 1,860 against the workbook's 1,870 ft) is fixed: the write-up
+reads the workbook's figure.
+
+leak.py on target.zip d36f2053 (--asof 2026-10-14): REVIEW, no LEAK once the memorandum's stage table moved off the
 5,000 cfs grid the graded flows now sit on. The main thread's rulings, one line each:
 - the six USGS text files (sweep 1): the agency's own peak records in its RDB layout; harmless.
 - the standard and the state report carrying generic design-note words (sweep 4: record, carried, station, regional,
@@ -437,11 +458,11 @@ leak.py on target.zip ac2f39bf (--asof 2026-10-14): REVIEW, no LEAK once the mem
 - Determinism: twenty-two forks closed and asserted (SF1 to SF22); fourteen standing family members file every graded
   cell the golden files; the verifier's independent road lands on 185 ft, the 5,000 cfs cells and the two floods with
   its 1 per cent flood at 23,074 against 24,781.
-- The pack (final cut ac2f39bf): sixteen files in two categories (spreadsheet, text); the airport's hourly record of
+- The pack (final cut d36f2053): seventeen files in two categories (spreadsheet, text); the airport's hourly record of
   659,041 reports and three CSVs of 27,000 rows or more; five distractors named only in metadata.json; every file's
-  source, pull date and licence in metadata.json; no writer signature; two builds byte-identical over twenty-one files.
+  source, pull date and licence in metadata.json; no writer signature; two builds byte-identical over twenty-two files.
 - The goldens: exactly the two requested files; one set of numbers across the report, the CSV, the chart and the
-  four blocks (figures_check.py, 99 of 99); the container gate (audit_containers.py) at 0 FAIL.
+  four blocks (figures_check.py, 110 of 110); the container gate (audit_containers.py) at 0 FAIL.
 
 ## Tried and rejected
 
@@ -751,3 +772,7 @@ Architecture 6 (the Durrow Creek bridge):
   and its own lapse set and filed 30,000 to 55,000 cfs (240 ft), with other largest floods (2008, 1973, 1999); three
   judges, three constructions, two spans off the golden's. The storm-by-storm snow-line carry is a physical model the
   files leave open, and its answer moves across the spans' margins with the construction; paused for the author.
+- Option 2's foothill gauge at 41 and 48 square miles (and from water year 2008 at 62 and 68): at the small sizes the
+  golden overran the gauge's floods by 7 to 10 per cent and the freezing level fit them better, so the data would have
+  chosen a wrong construction; from 2008 MOVE.1 reached the golden's span; 62 square miles from 2012 leaves the golden
+  the best fit by 0.05 and MOVE.1 on the 140 ft span.

@@ -457,6 +457,82 @@ def transfer_hourly(fh, T, P, zc, ar, ac, lapse, t50, k, g, b, zv, ramp="logisti
     return series
 
 
+def record_years(rec):
+    """Water years in a workbook record span such as "1951-2025"."""
+    y0, y1 = (int(x) for x in str(rec).split("-"))
+    return y1 - y0 + 1
+
+
+def short_gauge(tgt):
+    """The gauged basin whose record is under 25 years: site, area, elevation bands (aligned with bands()) and its annual
+    peaks as (date, hour, discharge)."""
+    wb = load_workbook(os.path.join(tgt, "region3_basin_characteristics.xlsx"), data_only=True)
+    site = area = name = None
+    for row in wb["Gauged basins"].iter_rows(min_row=4, values_only=True):
+        if row and row[0] and record_years(row[8]) < 25:
+            site, name, area = str(row[0]), str(row[1]), float(row[2])
+    ws = wb["Elevation bands"]
+    head = [str(h or "") for h in next(ws.iter_rows(min_row=3, max_row=3, values_only=True))]
+    js = next(j for j, h in enumerate(head) if h.split(" (")[0].lower().startswith(name.split()[0].lower()))
+    bands_s = np.array([float(r[js] or 0) for r in ws.iter_rows(min_row=4, values_only=True) if r and r[0] is not None])
+    peaks = []
+    for r in read_rdb(os.path.join(tgt, "usgs_%s_annual_peaks.txt" % site)):
+        d = dt.date.fromisoformat(r["peak_dt"])
+        hh, mm = (int(x) for x in r["peak_tm"].split(":")) if r.get("peak_tm") else (12, 0)
+        peaks.append((d, int((dt.datetime(d.year, d.month, d.day, hh, mm) - T0).total_seconds() // 3600), float(r["peak_va"])))
+    return site, area, bands_s, peaks
+
+
+def validate(tgt, fh, T, P, zc, ar, area_r, est, b, zv, PV=None, TV=None):
+    """Each construction of the carry run from the river to the short-record foothill gauge, flood by flood: the river's
+    flood in the 24 hours before to 36 hours after the gauge's annual peak, carried to the gauge's own bands and area,
+    against the peak it recorded. Returns construction -> (median log error, median absolute log error, floods)."""
+    site, area_s, bs, peaks = short_gauge(tgt)
+    pairs = []
+    for d, hs, qs in peaks:
+        near = [(q, i, dd) for dd, i, q in fh if hs - 24 <= i <= hs + 36]
+        if near:
+            q, i, dd = max(near)
+            pairs.append((qs, q, i, dd))
+
+    def temp(i, dd, how):
+        if how in ("pw", "peak"):
+            if how == "peak":
+                j = min(i, NH - 1)
+                while j > 0 and np.isnan(T[j]):
+                    j -= 1
+                return float(T[j])
+            h = lcd_event(i, P)
+            return None if h is None or len(h) < 2 else event_temperature(h, T, P)
+        days = [dd - dt.timedelta(days=k) for k in range(3) if (dd - dt.timedelta(days=k)) in TV]
+        if how == "daily_peak_day":
+            return TV.get(dd)
+        w = [PV.get(x) or 0.0 for x in days]
+        return float(np.average([TV[x] for x in days], weights=w)) if sum(w) > 0 else None
+    cons = {"golden": dict(), "peak_hour": dict(how="peak"), "daily_peak_day": dict(how="daily_peak_day"),
+            "daily_storm_mean": dict(how="daily_storm_mean"), "lapse_6.5": dict(lapse=6.5), "freezing_0C": dict(t50=0.0),
+            "no_orography": dict(g=None), "textbook": dict(lapse=6.5, t50=0.0, g=None)}
+    out = {}
+    for name, ov in cons.items():
+        e = []
+        for qs, q, i, dd in pairs:
+            t = temp(i, dd, ov.get("how", "pw"))
+            if t is None:
+                continue
+            L, t50, g = ov.get("lapse", est["lapse"]), ov.get("t50", est["t50"]), ov.get("g", est["g"])
+            dr = depth(zc, ar, 1.0, t, L, t50, est["k"], g, zv=zv)
+            ds = depth(zc, bs, 1.0, t, L, t50, est["k"], g, zv=zv)
+            if dr > 0.01:
+                e.append(np.log(q * (area_s / area_r) ** b * ds / dr / qs))
+        out[name] = (float(np.median(e)), float(np.median(np.abs(e))), len(e))
+    e = [np.log(q * (area_s / area_r) ** b / qs) for qs, q, i, dd in pairs]
+    out["drainage_area"] = (float(np.median(e)), float(np.median(np.abs(e))), len(e))
+    # the shortcuts a short record invites, carried to the creek: one concurrent ratio on the river's curve, and the
+    # short record extended on the river's by MOVE.1
+    shortcuts = {"median_ratio": float(np.median([qs / q for qs, q, i, dd in pairs]))}
+    return out, pairs, shortcuts, (site, area_s)
+
+
 def own_fit(pairs, min_q=0.0):
     """How well the river's storm rain over its area below the snow line explains its own flood peaks: the
     correlation of the logarithms over the matched floods."""
@@ -580,6 +656,20 @@ def run(tgt, rated=None, equations=None):
             diff.append(T[j_] - tv_)
     R["peak_hour"] = dict(dry_share=float(np.mean(dry)), median_diff=float(np.median(diff)))
     R["lapse_snotel"], R["n_lapse_snotel"] = snotel_lapse(sh, sc)
+    val, vpairs, vshort, (vsite, varea) = validate(tgt, fh, T, P, zc, ar, areas["12183450"]["area"], est, STATE_B, zv, PV, TV)
+    R["validation"], R["val_pairs"], R["val_site"], R["val_area"] = val, vpairs, vsite, varea
+    # shortcuts: the median concurrent ratio on the river's curve, carried by area to the creek; the short record extended
+    # on the river's annual peaks by MOVE.1 and carried by area; the short record's own curve carried by area
+    rq_ = {y: annual[y][1] for y in annual}
+    ratio = float(np.median([qs / q for qs, q, i, dd in vpairs]))
+    R["sc_ratio"] = F.quantile(rpar, 0.01) * ratio * (area_c / varea) ** STATE_B
+    sp_ = {d.year + (1 if d.month >= 10 else 0): q for d, i, q in short_gauge(tgt)[3]}
+    xs = np.log10([rq_[y] for y in sorted(sp_)]); ys = np.log10([sp_[y] for y in sorted(sp_)])
+    b1 = ys.std(ddof=1) / xs.std(ddof=1) * np.sign(np.corrcoef(xs, ys)[0, 1]); a1 = ys.mean() - b1 * xs.mean()
+    ext = [10 ** (a1 + b1 * np.log10(rq_[y])) for y in range(1951, 2026) if y not in sp_] + list(sp_.values())
+    R["sc_move1"] = F.quantile(F.fit(np.array(ext)), 0.01) * (area_c / varea) ** STATE_B
+    R["sc_own"] = F.quantile(F.fit(np.array(list(sp_.values()))), 0.01) * (area_c / varea) ** STATE_B
+    R["short_years"] = len(sp_)
     p_creek, st_means = station_map(PV, PR, [(4160.0, sh), (5630.0, sc)], zc, ac)
     R["map_creek"] = p_creek
     R["map_station_means"] = st_means
@@ -590,7 +680,7 @@ def run(tgt, rated=None, equations=None):
     gsh = wb["Gauged basins"]
     pts = []
     for row in gsh.iter_rows(min_row=4, values_only=True):
-        if not row or not row[0]:
+        if not row or not row[0] or record_years(row[8]) < 25:
             continue
         site = str(row[0])
         fn = "usgs_12183450_coyner_r_annual_peaks.txt" if site == "12183450" else "usgs_%s_annual_peaks.txt" % site

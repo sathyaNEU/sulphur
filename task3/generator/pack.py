@@ -19,7 +19,7 @@ PULL = dt.datetime(2026, 10, 14, 9, 41)
 RETRIEVED = {"daily": dt.datetime(2026, 10, 14, 9, 41), "12183450": dt.datetime(2026, 10, 14, 9, 43),
              "pot": dt.datetime(2026, 10, 14, 10, 6), "12187200": dt.datetime(2026, 10, 14, 9, 44),
              "12181650": dt.datetime(2026, 10, 14, 9, 46), "12189500": dt.datetime(2026, 10, 14, 9, 47),
-             "12184900": dt.datetime(2026, 10, 14, 9, 49)}
+             "12184900": dt.datetime(2026, 10, 14, 9, 49), "12186050": dt.datetime(2026, 10, 14, 9, 51)}
 RIVER = dict(site="12183450", name="COYNER RIVER NEAR TESSEL, WA", lat="48 21 07", lon="121 46 52", datum=1603.4)
 REGIONAL = [  # world index, site, name, first water year
     (2, "12187200", "TARROW RIVER NEAR BRANDT, WA", 1956),
@@ -27,6 +27,7 @@ REGIONAL = [  # world index, site, name, first water year
     (4, "12189500", "QUILLEN RIVER AT ASHBY FALLS, WA", 1951),
     (5, "12184900", "PINNELL CREEK NEAR COE, WA", 1968),
 ]
+SHORT = (18, "12186050", "SELBY CREEK NEAR HOLLIS, WA", 2012)   # world index, site, name, first water year
 BASE = 2500                     # the river's partial-duration base discharge, cfs
 ESTIMATED = (1991, 2004)        # water years whose annual peak the gauge estimated (recorder washed out)
 COOP = [
@@ -476,9 +477,9 @@ def write_workbook(W_, path, maps):
     for c in ws[3]:
         c.font = Font(bold=True)
         c.alignment = Alignment(wrap_text=True)
-    rows = [(0, RIVER["site"], RIVER["name"], 1951)] + REGIONAL
-    forest = {0: 71, 2: 78, 3: 83, 4: 69, 5: 86}
-    dist = {0: 6.2, 2: 27.4, 3: 18.9, 4: 41.3, 5: 33.6}
+    rows = [(0, RIVER["site"], RIVER["name"], 1951)] + REGIONAL + [SHORT]
+    forest = {0: 71, 2: 78, 3: 83, 4: 69, 5: 86, 18: 76}
+    dist = {0: 6.2, 2: 27.4, 3: 18.9, 4: 41.3, 5: 33.6, 18: 14.6}
     for k, site, name, first in rows:
         b = W_.basins[k]
         mean_z = float((b["bands"] * W.Z).sum() / b["area"])
@@ -515,7 +516,7 @@ def write_workbook(W_, path, maps):
     ws3["A1"].font = Font(bold=True)
     ws3.append([])
     short = {"12183450": "Coyner R nr Tessel", "12187200": "Tarrow R nr Brandt", "12181650": "Gorham Ck nr Vesper",
-             "12189500": "Quillen R at Ashby Falls", "12184900": "Pinnell Ck nr Coe"}
+             "12189500": "Quillen R at Ashby Falls", "12184900": "Pinnell Ck nr Coe", "12186050": "Selby Ck nr Hollis"}
     cols = [(k, "%s (sq mi)" % short[site], 1.0) for k, site, _, _ in rows] + [(1, "Durrow Ck at Ransom Bar Rd (sq mi)", 1.0)]
     ws3.append(["Band (ft)"] + [h for _, h, _ in cols])
     for c in ws3[3]:
@@ -534,7 +535,7 @@ def write_workbook(W_, path, maps):
             continue
         ws3.append(["%d-%d" % (lo, lo + 500)] + vals)
     ws3.column_dimensions["A"].width = 12
-    for col in "BCDEFG":
+    for col in "BCDEFGH":
         ws3.column_dimensions[col].width = 15
     ws3.freeze_panes = "B4"
     # the climate stations the state study's precipitation map drew on
@@ -575,7 +576,10 @@ def write(W_, tgt):
     info["lcd_rows"] = write_lcd(W_, os.path.join(tgt, LCD["file"]))
     for st in SNOTEL:
         info[st["file"]] = write_snotel(W_, rng, st, os.path.join(tgt, st["file"]))
-    maps = {k: basin_map(W_, W_.basins[k]) for k in (0, 1, 2, 3, 4, 5)}
+    k, site, name, first = SHORT
+    write_peaks(W_, np.random.default_rng(W_.seed + 3000), os.path.join(tgt, "usgs_%s_annual_peaks.txt" % site), k, site,
+                name, first_wy=first)
+    maps = {k: basin_map(W_, W_.basins[k]) for k in (0, 1, 2, 3, 4, 5, 18)}
     write_workbook(W_, os.path.join(tgt, "region3_basin_characteristics.xlsx"), maps)
     info["maps"] = maps
     return info

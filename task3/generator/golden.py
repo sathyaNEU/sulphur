@@ -122,6 +122,13 @@ def report(F, path, scratch):
                        F["n_matched"], F["lapse"], fmt(F["n_lapse"]), F["lapse_snotel"], F["t50"], F["g_pct"], F["g_ratio"],
                        F["share_river_median_pct"], F["share_river_big_pct"], F["share_creek_median_pct"], F["own_r"],
                        F["own_n"], F["total_rain_r"]), body),
+         Paragraph("The construction was checked on Selby Creek near Hollis (USGS %s, %.0f square miles of foothills like the "
+                   "creek's, a crest-stage record of %d years, too short to carry under section 7.4.3): carried from the "
+                   "river's concurrent floods in the same way, its %d recorded floods are reproduced to a median %+d per cent, "
+                   "where the drainage-area transfer runs %+d per cent and a snow line placed with the standard atmosphere's "
+                   "lapse rate %+d per cent." % (F["val_site"], F["val_area"], F["short_years"], F["validation"]["golden"]["n"],
+                                                  F["validation"]["golden"]["bias_pct"], F["validation"]["drainage_area"]["bias_pct"],
+                                                  F["validation"]["lapse_6.5"]["bias_pct"]), body),
          Paragraph("The creek's flood in each water year is the largest of its carried floods. Water year %s holds no flood "
                    "fed by rain in the river's files, only a spring melt peak, and enters the fit as below the low-flood "
                    "threshold (%s cfs). Bulletin 17C was fitted by expected moments; the Multiple Grubbs-Beck test flags %d "

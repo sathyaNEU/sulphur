@@ -121,6 +121,12 @@
    "role": "distractor",
    "license": "synthetic, CC0, generated for this task by task3/generator (a seeded hydrometeorological simulation)"
   },
+  "usgs_12186050_annual_peaks.txt": {
+   "source": "USGS NWIS annual peak streamflow (crest-stage gauge), Selby Creek near Hollis, WA",
+   "date": "2026-10-14",
+   "role": "evidence",
+   "license": "synthetic, CC0, generated for this task by task3/generator (a seeded hydrometeorological simulation)"
+  },
   "usgs_12187200_annual_peaks.txt": {
    "source": "USGS NWIS annual peak streamflow, Tarrow River near Brandt, WA",
    "date": "2026-10-14",

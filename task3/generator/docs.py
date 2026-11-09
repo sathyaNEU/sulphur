@@ -87,7 +87,7 @@ def regional_equations(W_, maps, years=range(1951, 2026)):
     """The state's Region 3 equations, fitted to the region's gauged basins (the river, the four regional gauges and the
     twelve other basins of the state study): log10 Q_T = a + b log10 A + c log10 P, A the drainage area (sq mi), P the
     basin's mean annual precipitation (in)."""
-    idx = [0, 2, 3, 4, 5] + list(range(6, len(W_.basins)))
+    idx = [0, 2, 3, 4, 5] + list(range(6, 6 + len(W.REGRESSION)))
     rows = []
     for k in idx:
         b = W_.basins[k]

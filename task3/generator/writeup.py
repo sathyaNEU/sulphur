@@ -97,13 +97,22 @@ def text(F):
       "for the storm's whole-basin rain." % (
           F["constants"]["lookback_hours"], F["constants"]["gap_hours"], F["dry_at_peak_pct"], F["peak_hour_colder_c"],
           F["n_matched"], F["share_river_median_pct"], F["share_creek_median_pct"], F["own_r"], F["total_rain_r"]))
-    a("6. Carried each flood to the creek at the ratio of the two basins' rain below its snow line with the state "
+    Vv = F["validation"]
+    a("6. Checked the construction out of sample on the foothill gauge in usgs_%s_annual_peaks.txt (%d years, too short "
+      "to carry under 7.4.3, a basin like the creek's): carried from the river's concurrent floods it reproduces the gauge's "
+      "%d floods to a median %+d per cent (median absolute log error %.2f), where the drainage-area transfer runs %+d per "
+      "cent, the standard atmosphere's lapse rate %+d per cent, rain without its rise with elevation %+d per cent, the "
+      "valley's daily mean temperature %+d per cent and the airport's reading at the river's peak hour %+d per cent." % (
+          F["val_site"], F["short_years"], Vv["golden"]["n"], Vv["golden"]["bias_pct"], Vv["golden"]["mad"],
+          Vv["drainage_area"]["bias_pct"], Vv["lapse_6.5"]["bias_pct"], Vv["no_orography"]["bias_pct"],
+          Vv["daily_peak_day"]["bias_pct"], Vv["peak_hour"]["bias_pct"]))
+    a("7. Carried each flood to the creek at the ratio of the two basins' rain below its snow line with the state "
       "equation's drainage-area exponent, took the largest carried flood in each water year, and entered water year %s, "
       "with no flood fed by rain, as below the low-flood threshold." % " and ".join(str(y) for y in F["missing_years"]))
-    a("7. Fitted Bulletin 17C to the carried series: the creek's 50 per cent flow is about %s cfs and its 1 per cent flow "
+    a("8. Fitted Bulletin 17C to the carried series: the creek's 50 per cent flow is about %s cfs and its 1 per cent flow "
       "about %s cfs, and the two largest carried floods are water years %d and %d." % (
           fmt(F["q50_5000"]), fmt(F["q01_5000"]), top[0], top[1]))
-    a("8. Compared the rated flows in hess_tm_durrow_creek_bridge_span_ratings.pdf with the curve: the 140 ft span's %s cfs "
+    a("9. Compared the rated flows in hess_tm_durrow_creek_bridge_span_ratings.pdf with the curve: the 140 ft span's %s cfs "
       "would be exceeded %s, the %d ft span's %s cfs %s, so the county builds the %d ft span." % (
           fmt(sp[140]), F["bands"]["140"], call, fmt(sp[call]), F["bands"][str(call)], call))
     a("")
@@ -111,10 +120,12 @@ def text(F):
       "equation (%s cfs, barred by section 7.4.3(c)) all assume the creek drains the same share of each storm as the high "
       "gauges, which the stations and the elevation bands refute. A snow line placed with the standard atmosphere's lapse "
       "rate (about %s cfs) or rain counted without its rise with elevation (about %s cfs) contradicts what the stations "
-      "measure in storms and points to the 240 ft span; the valley's daily mean temperature and the airport's reading at the "
+      "measure in storms and points to the 240 ft span; the foothill gauge's own floods reject each of these constructions and "
+      "the drainage-area transfer, and its short record extended on the river's by MOVE.1 files %s cfs (the 140 ft span); "
+      "the valley's daily mean temperature and the airport's reading at the "
       "river's peak hour both read air the rain did not fall in, which the rain-weighted hourly record separates, and every "
       "storm definition and rain weighting the hourly record allows keeps the 1 per cent flood at about %s cfs and the %d ft "
       "span." % (fmt(F["regional_unit_flood"]), fmt(F["regional_equation"]), fmt(V["lapse_6.5"]["q01_5000"]),
-                 fmt(V["no_orography"]["q01_5000"]), fmt(F["q01_5000"]), call))
+                 fmt(V["no_orography"]["q01_5000"]), fmt(F["sc_move1"]), fmt(F["q01_5000"]), call))
     a("")
     return "\n".join(lines)

@@ -57,7 +57,9 @@ _FC = [205.0, 310.0, 170.0, 265.0, 330.0, 190.0, 280.0, 160.0, 300.0, 220.0, 255
 _MB = [0.75, 1.30, 0.85, 1.20, 1.00, 0.70, 1.35, 0.90, 1.15, 0.80, 1.25, 1.05]   # routing, against the area rule
 REGRESSION = [dict(key="r%02d" % (i + 1), area=a, zmin=z0, zmax=z1, a=aa, b=bb, pmult=_PM[i],
                    maxbas=int(round((7 + 2.2 * a ** 0.35) * _MB[i])), fc=_FC[i]) for i, (a, z0, z1, aa, bb) in enumerate(_RB)]
-for _b in BASINS + REGRESSION:
+# a foothill basin of the county with a short record (a crest-stage gauge from water year 2012), never in the state study
+SELBY = dict(key="selby", area=62.0, zmin=420, zmax=3900, a=1.40, b=2.6, maxbas=10, fc=240.0)
+for _b in BASINS + REGRESSION + [SELBY]:
     _b["bands"] = band_areas(_b["area"], _b["zmin"], _b["zmax"], _b["a"], _b["b"])
 
 # Stations: key, elevation (ft), first water year of record.
@@ -179,7 +181,7 @@ def weather(rng):
 
 
 def simulate(seed=SEED, basins=None):
-    basins = BASINS + REGRESSION if basins is None else basins
+    basins = BASINS + REGRESSION + [SELBY] if basins is None else basins
     rng = np.random.default_rng(seed)
     w = weather(rng)
     p, tv, lapse, gain = w["p"], w["tv"], w["lapse"], w["gain"]

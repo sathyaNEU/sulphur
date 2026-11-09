@@ -631,7 +631,7 @@
  "area_c": 85.3,
  "zv": 1160,
  "mean_elev_r": 6350,
- "mean_elev_c": 1860,
+ "mean_elev_c": 1870,
  "lapse": 5.36,
  "lapse_1": 5.4,
  "n_lapse": 2158,
@@ -1148,6 +1148,59 @@
    ]
   }
  },
+ "validation": {
+  "golden": {
+   "bias_pct": 5,
+   "mad": 0.07,
+   "n": 11
+  },
+  "peak_hour": {
+   "bias_pct": 25,
+   "mad": 0.29,
+   "n": 11
+  },
+  "daily_peak_day": {
+   "bias_pct": 11,
+   "mad": 0.13,
+   "n": 11
+  },
+  "daily_storm_mean": {
+   "bias_pct": 9,
+   "mad": 0.16,
+   "n": 11
+  },
+  "lapse_6.5": {
+   "bias_pct": 47,
+   "mad": 0.39,
+   "n": 11
+  },
+  "freezing_0C": {
+   "bias_pct": -11,
+   "mad": 0.13,
+   "n": 11
+  },
+  "no_orography": {
+   "bias_pct": 37,
+   "mad": 0.32,
+   "n": 11
+  },
+  "textbook": {
+   "bias_pct": 60,
+   "mad": 0.47,
+   "n": 11
+  },
+  "drainage_area": {
+   "bias_pct": -26,
+   "mad": 0.31,
+   "n": 11
+  }
+ },
+ "val_site": "12186050",
+ "val_area": 62.0,
+ "short_years": 14,
+ "sc_ratio": 25300,
+ "sc_move1": 18300,
+ "sc_own": 20600,
  "variant_q01": {
   "gap_3": 24800,
   "gap_12": 24800,
