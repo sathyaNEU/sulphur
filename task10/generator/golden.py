@@ -178,18 +178,14 @@ def write_deck(G, path):
     _text(s, 600000, 1150000, W_ - 1200000, 5200000, lines, size=16)
 
     s = prs.slides.add_slide(blank)
-    t1, t2 = G["sens_Ts"]
+    t1 = G["sens_Ts"][0]
     first = [z for z in G["zones"] if z["sens"][t1]["over"] and not z["over"]]
-    second = [z for z in G["zones"] if z["sens"][t2]["over"] and not z["sens"][t1]["over"]]
-    _title(s, "A colder winter: %s would exceed firm capacity at minus %.1f C and %s at minus %.1f C"
-           % (" and ".join(z["primary"] for z in first), -t1, " and ".join(z["primary"] for z in second), -t2), 22)
+    _title(s, "A colder winter: on a working weekday at minus %.1f C, %s would also exceed firm capacity"
+           % (-t1, " and ".join(z["primary"] for z in first)), 22)
     lines = []
-    for t in G["sens_Ts"]:
-        over = [z["primary"] for z in G["zones"] if z["sens"][t]["over"]]
-        held = [z["primary"] for z in G["zones"] if not z["sens"][t]["over"]]
-        lines.append("Working weekday at minus %.1f C: %s over firm capacity after flexibility%s."
-                     % (-t, "all four" if not held else ", ".join(over[:-1]) + " and " + over[-1],
-                        "" if not held else "; %s holds" % " and ".join(held)))
+    for z in G["zones"]:
+        lines.append("%s: %s firm capacity after flexibility on the design day, %s at minus %.1f C."
+                     % (z["primary"], "over" if z["over"] else "within", "over" if z["sens"][t1]["over"] else "within", -t1))
     lines.append("Both providers deliver less per MW scheduled on a colder day, so the credit falls as the demand rises.")
     _text(s, 600000, 1150000, W_ - 1200000, 5200000, lines, size=18)
 
@@ -200,9 +196,8 @@ def write_deck(G, path):
         " and ".join(z["primary"] for z in commit),
         "Keep the 2027/28 flexibility contracts at %s; they hold firm capacity on the design day." %
         " and ".join(z["primary"] for z in hold),
-        "%s: its flexibility holds it on the design day but not at minus %.1f C, and %s not at minus %.1f C; review both "
-        "at next year's assessment." % (" and ".join(z["primary"] for z in first), -t1,
-                                         " and ".join(z["primary"] for z in second), -t2),
+        "%s: their flexibility holds them on the design day but not on a working weekday at minus %.1f C; review both at "
+        "next year's assessment." % (" and ".join(z["primary"] for z in first), -t1),
         "Ask the control room to log the switching state of the %s open points for each flexibility event."
         % ", ".join(z["linked"] for z in G["zones"] if z["linked"])],
           size=18)

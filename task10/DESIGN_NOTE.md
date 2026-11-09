@@ -16,7 +16,7 @@ platform runs stay under `runs/`), and the four identities sit in the card's `li
 | Client domain, subdomain | Energy Systems & Utilities / `load-forecasting`, task type Load, price & renewable forecasting (the deciding quantity is each primary's design-day demand after its credited flexibility), which serves Forecasting |
 | Objective | Forecasting & Predictive Modeling: each primary's half-hour of highest demand on the winter 2027/28 design day, a window not yet open, with the flexibility contracted for that winter credited at what its provider will deliver |
 | Decision | `designation_set`, answer unit `set_of_items`: the primaries whose reinforcement Wealdmoor commits at its December 2026 investment committee for winter 2027/28 |
-| Shape | 10, a scorecard against thresholds: for each flexibility zone, its provider's delivery per megawatt scheduled on the design day, the megawatts credited and the primary's design-day demand after them against firm capacity, with the chart of each primary's demand before and after against its firm capacity, how far each primary to reinforce exceeds firm, and the primaries over firm on two colder working weekdays (minus 4.5 and minus 6.0 C); every figure sits downstream of the deep step (the default path keeps none of the 19, the zone's own fall read at the day keeps Charlecote Way's three) |
+| Shape | 10, a scorecard against thresholds: for each flexibility zone, its provider's delivery per megawatt scheduled on the design day, the megawatts credited and the primary's design-day demand after them against firm capacity, with the chart of each primary's demand before and after against its firm capacity, how far each primary to reinforce exceeds firm, and the primaries over firm on a colder working weekday (minus 6.0 C); every figure sits downstream of the deep step (the default path keeps none of the 18, the zone's own fall read at the day keeps Charlecote Way's three) |
 | Mechanism | gap objective (the zone's measured event-window reduction is a correct measurement and is not the provider's delivery the guideline credits), then time (the record's event days had a neighbour with evening headroom; the design day's credit is the provider alone); generators G4 (the drop at each event's start is attributed to the provider when a feeder section was switched away at the same moment), G5 (the moved section was supplied elsewhere, by the neighbouring primary), G3 (the record shows one fall where the operation was two actions) |
 | Strategy | `causal_design`, Part A "A comparison that is actually clean", WORKS IN FORM: the contamination shows only through a relation in the data (the neighbour's rise in the same half-hours, through an 11 kV open point in the feeder schedule), never a column or a filed sentence; the comparison is not filed in the estimand; two inferences follow the clean comparison |
 | Layer 2 | `estimand_identification`, `own:flexibility-relief-net-of-control-room-transfers-mirrored-at-the-neighbour` (the client lists no Energy rigor card) |
@@ -180,7 +180,7 @@ scheduled: the providers' net reduction per megawatt at the design condition dec
 | SF9 | the credited half-hours | ending 17:30 and 18:00 | the whole 16:00 to 19:30 window | moves Ashcombe Road, Fenwick Street and Hartwell Common | guideline 6 (asserted) |
 | SF10 | the MW scheduled | each instruction's latest revision | its first | same call and figures | same (asserted) |
 | SF11 | a cancelled instruction | no event (0.0 MW) | an event | not computable | the log's own 0.0 MW on every cancellation (asserted) |
-| SF12 | the provider's reduction | the zone's fall net of its linked primary's rise | the zone's fall | moves the call to Ashcombe Road alone (or none, averaged) | the linked primaries' rise in the same half-hours (asserted) |
+| SF12 | the provider's reduction | the zone's fall net of its linked primary's rise | the zone's fall | moves the call to Ashcombe Road alone (or none, averaged) | guideline 6, "the reduction ... that its provider will deliver" and "No other measure is credited", the award notice's delivery "measured on the provider's metered assets", and the linked primaries' rise in the same half-hours (asserted); the write-up's closing rebuts the route read at minus 3.0 C by name |
 | SF13 | the neighbour's baseline | fitted without the zone's scheduled days | fitted on every workday | moves every delivery | the rise itself: on those days the neighbour carries the moved section (asserted) |
 | SF14 | the delivery's temperature | the event day's daily mean | the evening's, read at the design day's evening | same call and figures | same (asserted); read at minus 3.0 C it moves, ruled out by guideline 2 |
 | SF15 | the delivery's temperature form | linear | quadratic | same call and figures | same (asserted) |
@@ -191,12 +191,12 @@ scheduled: the providers' net reduction per megawatt at the design condition dec
 | SF20 | "exceeds" | strictly | at or over | same call | no primary within 1 MW of firm (asserted) |
 | SF21 | the megawatts credited | 2027/28 in the award notice | the previous winters' table | moves the call to all four | guideline 6, "the megawatts contracted for that winter in the contract award notice" (asserted) |
 | SF22 | the half-hours' clock | the export's UK-clock stamps as written | the stamps read as UTC and moved to the UK clock | same call, Hartwell Common's delivery moves | the export's own column, interval_end_uk_local (asserted) |
-| SF23 | the colder working weekdays' credit | the provider's reduction read at that day's own daily mean, on the 2027/28 megawatts | the design day's credit carried to the colder days | moves both sets (Fenwick Street holds at minus 4.5 C, Charlecote Way at minus 6.0 C) | guideline 6, the reduction the provider will deliver on the day assessed, and the providers' net reduction falling with cold (asserted) |
-| SF24 | the 2025/26 correction's form | straight below 15.5 C (one level, one slope) | quadratic in the daily mean | moves Ashcombe Road's design-day after to 27 MW and the minus 4.5 C set | winter 2023/24 ran no flexibility: fitted on its working weekdays as mild as each zone's 2025/26 days, the straight form meets its sub-zero working weekdays within 0.17 MW at every zone and the quadratic overshoots them by 0.23 to 0.36 MW (asserted) |
-| SF25 | the colder days' demand before flexibility | the 2025/26 correction read at the colder mean and grown as guideline 4 grows it | the design-day demand moved by the 2025/26 slope alone | same sets | same (asserted) |
-| SF26 | "exceed" on the colder days | strictly | at or over | same sets | no zone within 0.4 MW of firm at either colder day; the estimator family's nearest 0.26 MW (asserted) |
-| SF27 | how far a primary exceeds firm | the unrounded after less firm, whole MW | the rounded after less firm | same (3 and 2 MW) | same (asserted) |
-| SF28 | the colder days' daily mean | the station's hourly readings over the GMT day (guideline 2) | the UK local day | same sets | same (asserted) |
+| SF23 | the colder working weekday's credit | the provider's reduction read at that day's own daily mean, on the 2027/28 megawatts | the design day's credit carried to the colder day | moves the set (Charlecote Way holds at minus 6.0 C) | guideline 6, the reduction the provider will deliver on the day assessed, and the providers' net reduction falling with cold (asserted) |
+| SF24 | the 2025/26 correction's form | straight below 15.5 C (one level, one slope) | quadratic in the daily mean | moves Ashcombe Road's design-day after to 27 MW; the minus 6.0 C set holds under it | winter 2023/24 ran no flexibility: fitted on its working weekdays as mild as each zone's 2025/26 days, the straight form meets its sub-zero working weekdays within 0.17 MW at every zone and the quadratic overshoots them by 0.23 to 0.36 MW (asserted) |
+| SF25 | the colder day's demand before flexibility | the 2025/26 correction read at the colder mean and grown as guideline 4 grows it | the design-day demand moved by the 2025/26 slope alone | same sets | same (asserted) |
+| SF26 | "exceed" on the colder day | strictly | at or over | same set | no zone within 0.4 MW of firm at minus 6.0 C; the estimator family's nearest 0.32 MW, the quadratic correction and the 2025/26 events alone included (asserted) |
+| SF27 | how far a primary exceeds firm | the unrounded after less firm, whole MW (the prompt's rounding sentence) | the rounded after less firm | same (3 and 2 MW) | same (asserted) |
+| SF28 | the colder day's daily mean | the station's hourly readings over the GMT day (guideline 2) | the UK local day | same set | same (asserted) |
 
 ## Ladder
 
@@ -274,17 +274,16 @@ transformer condition, use of system charges) rank nothing on the decision basis
 
 ## Ask sheet
 
-Seven items, 19 figures, every one computed from the deep step's output (repaired on 2026-11-09 after the platform's
+Seven items, 18 figures, every one computed from the deep step's output (repaired on 2026-11-09 after the platform's
 first architecture 5 pair, run 1 on the call and run 2 off it; run 2 still collected Charlecote Way's row, the two
 over-firm flags that agree on both paths, the layout and the chart). Items 1 to 3 are the call's table, one item per
 quantity across the four zones, so a run off the call that is right only at Charlecote Way (the one zone with no
 transfer, where every route that reads the design day agrees) misses each item; the over-firm flags are folded into
 item 3's set; item 4 is the chart, graded on which after-flexibility columns stand above firm; item 5 sizes the two
-reinforcements; item 6 carries the asks' own second judgment, the primaries over firm on two colder working weekdays
-of winter 2027/28, where each provider's net reduction falls further while the demand rises, so the design day's
-credit carried to those days files the wrong set at both temperatures, and where the correction's straight form has
-to earn its place on winter 2023/24 (the one winter without flexibility, whose cold days a quadratic fitted on mild
-days overshoots); item 7 is the slides' names.
+reinforcements; item 6 carries the asks' own second judgment, the primaries over firm on a colder working weekday of
+winter 2027/28 (minus 6.0 C), where each provider's net reduction falls further while the demand rises, so the design
+day's credit carried to that day leaves Charlecote Way within firm, and where the correction's straight form has to
+earn its place on winter 2023/24 (the one winter without flexibility); item 7 is the slides' names.
 
 | Ask | Figures | Deep-step output it reads | Second judgment | Shallow run against the golden | Landed run's risk | Mess on its path |
 |---|---|---|---|---|---|---|
@@ -293,7 +292,7 @@ days overshoots); item 7 is the slides' names.
 | 3 after flexibility against firm, and the set over it | 5 | the credit and the before-demand | none | 5 of 5 differ | low | the growth register, the held values |
 | 4 the chart's after columns above firm | 1 | the after figures | none | differs (none above) | low | none |
 | 5 how far each primary to reinforce exceeds firm | 2 | the after figures | none | 2 of 2 differ (commits none) | low | none |
-| 6 the primaries over firm at minus 4.5 and minus 6.0 C | 2 | the net reduction's temperature response, the 2025/26 correction read at the colder means | the provider's reduction re-read on each colder day (SF23), the straight correction validated on winter 2023/24 (SF24) | 2 of 2 differ | medium | the weather versions |
+| 6 the primaries over firm at minus 6.0 C | 1 | the net reduction's temperature response, the 2025/26 correction read at the colder mean | the provider's reduction re-read on the colder day (SF23), the straight correction validated on winter 2023/24 (SF24) | differs | medium | the weather versions |
 | 7 the slides name the primaries to reinforce | 1 | the call | none | differs | none | none |
 
 | Ask figure | Golden | Shallow (the default path) | Zone fall at the day (run 2's route) | Cracker (the design day's credit held) |
@@ -303,29 +302,29 @@ days overshoots); item 7 is the slides' names.
 | 3 after against firm | 26, 21, 29, 20 MW; Ashcombe Road and Hartwell Common over | miss | miss (Charlecote Way's 21 kept) | keep |
 | 4 chart | Ashcombe Road and Hartwell Common above firm | miss | miss | keep |
 | 5 exceedance | 3 and 2 MW | miss | miss | keep |
-| 6 colder days | minus 4.5 C: Ashcombe Road, Fenwick Street, Hartwell Common; minus 6.0 C: all four | miss | miss | miss |
+| 6 colder day | minus 6.0 C: all four | miss | miss | miss |
 | 7 slides | Ashcombe Road and Hartwell Common | miss | miss | keep |
 
-- **Routes on item 6** (checks.py, ask miss): the default path files none and Ashcombe Road; the zone's fall read at
-  the day, the neighbour as control read at the day and the neighbour's baseline fitted on every workday file
-  Ashcombe Road with Hartwell Common, then with Charlecote Way added; the net reduction averaged files Ashcombe Road
-  with Hartwell Common at both; the design day's credit held files Ashcombe Road with Hartwell Common, then with
-  Fenwick Street added. Only a route that nets the moved section and re-reads the reduction on the colder day files
-  the golden's two sets (the pair taken together and one delivery per provider both do).
+- **Routes on item 6** (checks.py, ask miss): the default path files Ashcombe Road; the zone's fall read at the day,
+  the neighbour as control read at the day and the neighbour's baseline fitted on every workday file Ashcombe Road,
+  Charlecote Way and Hartwell Common (Fenwick Street within firm); the net reduction averaged files Ashcombe Road and
+  Hartwell Common; the design day's credit held files Ashcombe Road, Fenwick Street and Hartwell Common (Charlecote
+  Way within firm). Only a route that nets the moved section and re-reads the reduction on the colder day files all
+  four (the pair taken together and one delivery per provider both do).
 - **Span:** the SCADA export, the dispatch log, the weather, the register, the feeder schedule, the growth register,
   the guideline and the awards; item 6 also reads winter 2023/24 of the SCADA export for the correction's form.
 - **Realism:** a zone-by-zone credit table against firm capacity, the size of each reinforcement and a cold-weather
   sensitivity are what a DSO planning team takes to a capital review.
-- Shallow keep: 0.0 per cent of ask figures (the default path keeps none of the 19; the zone's own fall read at each
-  day keeps Charlecote Way's three, 15.8 per cent, and none of the seven items).
-- Pair ceiling: 53.1 (the cracker, which nets the moved section and reads the design day as both platform runs did
-  but carries the design day's credit to the colder days, keeps 17 of 19 figures, C = 38 + 7 + 55 x 0.895 = 94.2,
-  against the default path at S = 12.0; 52.1 by item; 32.8 with the design's first cracker, which averages the
-  delivery and no platform run took). The full includer, every judgment taken, against the off-call route the
-  platform measured gives 60.3 by figure and 56.0 by item. Above the paper target of 50: the frozen call and critical
-  components carry 45 of a landed run's points, so a pair with one run on the call cannot fall below about 56 on this
-  split when the landed run takes every judgment, whatever the asks; the measured layer before the repair was about
-  61 (triage estimate) to 68 (the author's).
+- Shallow keep: 0.0 per cent of ask figures (the default path keeps none of the 18; the zone's own fall read at each
+  day keeps Charlecote Way's three, 16.7 per cent, and none of the seven items).
+- Pair ceiling: 54.5 (the cracker, which nets the moved section and reads the design day as both platform runs did but
+  carries the design day's credit to the colder day, keeps 17 of 18 figures, C = 38 + 7 + 55 x 0.944 = 96.9, against
+  the default path at S = 12.0; 52.1 by item; 33.1 with the design's first cracker, which averages the delivery and no
+  platform run took). The full includer, every judgment taken, against the off-call route the platform measured gives
+  60.6 by figure and 56.0 by item. Above the paper target of 50: the frozen call and critical components carry 45 of a
+  landed run's points, so a pair with one run on the call cannot fall below about 56 on this split when the landed run
+  takes every judgment, whatever the asks; the measured layer before the repair was about 61 (triage estimate) to 68
+  (the author's).
 - Measured by: generator/ceiling.py on the cut pack (pack digest printed with the sheet).
 
 ## Prompt contract
@@ -338,12 +337,13 @@ What the author's voice rewrite may not drop or change:
   scheduled on the design day, the megawatts credited, the design-day demand after them against firm capacity; a
   chart of each primary's demand before and after the flexibility against its firm capacity), how far each primary
   to reinforce exceeds firm capacity on the design day, which primaries' demand after their flexibility would exceed
-  firm capacity on a working weekday of that winter at a daily mean of minus 4.5 C and at minus 6.0 C, and
-  capex_review_2027-28.pptx (the slides that name the primaries to reinforce).
-- Units and rounding: demand and credited megawatts in whole MW, delivery per megawatt scheduled to one decimal.
+  firm capacity on a working weekday of that winter at a daily mean of minus 6.0 C (with its reason, a winter
+  colder than the design day), and capex_review_2027-28.pptx (the slides that name the primaries to reinforce).
+- Units and rounding: demand, credited megawatts and each excess over firm capacity in whole MW, delivery per
+  megawatt scheduled to one decimal.
 - Never add: a transfer, a neighbour, an open point, a feeder, switching, a baseline, a control, "net", "check",
-  "validate", any method word, or any temperature but the two colder daily means; never say the providers deliver
-  less when it is colder, or that the credit is to be read again on the colder days.
+  "validate", any method word, or any temperature but the colder daily mean; never say the providers deliver less
+  when it is colder, or that the credit is to be read again on the colder day.
 
 ## Leak rulings
 
@@ -386,7 +386,7 @@ What the author's voice rewrite may not drop or change:
   by "that its provider will deliver" and "No other measure is credited" with the rise at the linked primary in the same
   half-hours; the judge rated it forced by the files.
 
-- Rubric repair read (2026-11-09, on 203d2bf4): questions 1 to 6 clean (no deciding sentence, no ranking file, question
+- Rubric repair read (2026-11-09, on 203d2bf4, before the stage 4 judge dropped minus 4.5 C): questions 1 to 6 clean (no deciding sentence, no ranking file, question
   5 the golden's WHAT with the estimator open, question 6 analytical); the two colder temperatures beside a guideline
   that knows only minus 3.0 C read task-driven, so the ask now carries its reason ("should that winter bring days
   colder than the design day"); guideline issue 4's document-control row, the award notice's "on the same terms" and the
@@ -832,3 +832,17 @@ What the author's voice rewrite may not drop or change:
 - The pair ceiling gated on the design's first cracker (the delivery averaged over the event days, 32.8 on the new
   asks): no platform run took that row, so it is not the worst honest landed run; the gated figure is now the landed
   run that reads the design day and misses the asks' own judgment (53.1), with the full includer's beside it.
+- Stage 4 judge on the repaired asks (2026-11-09, pass 2, target.zip 203d2bf4; NOT_DETERMINISTIC, SEND_BACK, Gate G
+  analytical_non_defect and Gate H pass, stump power strong; report determinism_check_report_pass2.md): the minus
+  4.5 C set turned on Fenwick Street by 0.05 MW under the thread's own joint regression and fell 0.39 to 0.87 MW short
+  under a quadratic correction or a delivery fitted on the 2025/26 events alone, so it is dropped and the colder-day
+  ask keeps minus 6.0 C, which held under every variant the thread ran (Charlecote Way 0.35 to 0.70 MW over); the
+  excess's rounding is now in the prompt's rounding sentence; three growth-register acceptances dated after the
+  register's own save (late connections, outside the window, no figure moved) now fall before it.
+- The same pass read guideline 6's "reduction in the primary's demand" as the primary's whole fall, the route read at
+  minus 3.0 C that files Ashcombe Road alone (23.5 MW against 23.0), and found no filed sentence stating a transfer;
+  two earlier passes and the run triage ruled that route out by "that its provider will deliver", "No other measure is
+  credited" and the award notice's delivery measured on the provider's metered assets. The closing passage now names
+  and rebuts that route; the judge's own closure ("load picked up elsewhere across open points is not credited")
+  names the transfer the deep step finds and fails the fork-is-the-stump test, so the main call is left for the
+  author's decision rather than pinned in a rubric repair.

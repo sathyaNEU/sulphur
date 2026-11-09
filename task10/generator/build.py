@@ -40,7 +40,9 @@ def rungs(X, G):
         pair = E.delivery_at(E.pair_records(prep, tm, ev, code, linked), net=False) if linked else z["delivery"]
         recs = E.delivery_records(prep, tm, ev, code, partner=linked) if linked else E.delivery_records(prep, tm, ev, code)
         avg = E.delivery_at(recs, net=True, temperature=False)
-        out[z["primary"]] = dict(did=did, pair=pair, avg_delivery=avg, avg_credited=avg * z["mw28"])
+        gross = E.delivery_at(E.delivery_records(prep, tm, ev, code), net=False)   # the zone's own fall read at -3.0 C
+        out[z["primary"]] = dict(did=did, pair=pair, avg_delivery=avg, avg_credited=avg * z["mw28"], fall_delivery=gross,
+                                 fall_after=z["before"] - gross * z["mw28"], fall_over_by=z["before"] - gross * z["mw28"] - z["firm"])
     # the colder working weekday with the design day's credit held (the unfinished chain the write-up names)
     held = E.golden_from(X, hold_credit=True)
     hz = {z["primary"]: z for z in held["zones"]}
@@ -73,7 +75,8 @@ def figures(X, G, info):
     for z in G["zones"]:
         counts[z["primary"]] = int(((ev["zone"] == z["code"]) & (ev["status"] == "Completed")).sum())
     shallow = [p for p, v in zones.items() if v["before"] - v["measured"] * v["mw28"] > v["firm"]]
-    F = dict(call=G["commit"], default_call=shallow, zones=zones, steps=dict(events=counts),
+    fall_call = [p for p, v in zones.items() if v["fall_over_by"] > 0]
+    F = dict(call=G["commit"], default_call=shallow, fall_at_day_call=fall_call, zones=zones, steps=dict(events=counts),
              sens={"%.1f" % -t: dict(degrees_below_zero=-t, commit=G["commit_sens"][t], held_credit_commit=held_sets["%.1f" % -t])
                    for t in G["sens_Ts"]},
              validation=form_validation(X, G),

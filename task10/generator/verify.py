@@ -163,7 +163,7 @@ def main():
     figs = json.load(open(os.path.join(HERE, "figures.json")))
     bad = []
     call = []
-    colder = {t: [] for t in (-4.5, -6.0)}
+    colder = {t: [] for t in (-6.0,)}
     for zone in ("Ashcombe Road", "Charlecote Way", "Fenwick Street", "Hartwell Common"):
         c = code_of[zone]
         days = [d for d in peak[c] if workday(d) and d in tmean and d not in sched[c] and count[c][d] >= 44]

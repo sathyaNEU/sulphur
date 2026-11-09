@@ -30,7 +30,7 @@ def blocks(F):
     out.append("## Supplementary Questions\n")
     out.append("### halverton_primary_capacity_2027-28.xlsx\n")
     zs = (("Ashcombe Road", A), ("Charlecote Way", C), ("Fenwick Street", Fz), ("Hartwell Common", H))
-    S1, S2 = F["sens"]["4.5"], F["sens"]["6.0"]
+    S2 = F["sens"]["6.0"]
 
     def names(ps):
         return "all four" if len(ps) == 4 else ", ".join(ps[:-1]) + " and " + ps[-1]
@@ -55,8 +55,8 @@ def blocks(F):
     out.append("5. How far each primary to reinforce exceeds firm capacity on the design day: %s."
                % " and ".join("%s by %s MW" % (nm, r0(Z["over_by"])) for nm, Z in zs if Z["over"]))
     out.append("6. The primaries whose demand after their flexibility would exceed firm capacity on a working weekday "
-               "of winter 2027/28 at a daily mean of minus %s C: %s; at minus %s C: %s."
-               % (r1(S1["degrees_below_zero"]), names(S1["commit"]), r1(S2["degrees_below_zero"]), names(S2["commit"])))
+               "of winter 2027/28 at a daily mean of minus %s C: %s."
+               % (r1(S2["degrees_below_zero"]), names(S2["commit"])))
     out.append("\n### capex_review_2027-28.pptx\n")
     out.append("7. Slides for the capital expenditure review that name Ashcombe Road and Hartwell Common as the primaries "
                "to reinforce for winter 2027/28, state that Charlecote Way and Fenwick Street hold firm capacity on the "
@@ -120,25 +120,29 @@ def blocks(F):
                "working weekdays as mild as the 2025/26 days the correction uses, it meets that winter's sub-zero working "
                "weekdays within %s MW on average at every zone primary, closer than a quadratic at each."
                % r1(F["validation"]["linear_bias_max"]))
-    out.append("9. Read the same correction and the same provider regressions at daily means of minus %s and minus %s C: "
-               "each provider delivers less per MW scheduled on a colder day while the demand rises, so %s exceed firm "
-               "capacity at minus %s C and %s at minus %s C; carrying the design day's credit to those days instead "
-               "leaves Fenwick Street within firm capacity at minus %s C and Charlecote Way within it at minus %s C.\n"
-               % (r1(S1["degrees_below_zero"]), r1(S2["degrees_below_zero"]), names(S1["commit"]),
-                  r1(S1["degrees_below_zero"]), names(S2["commit"]), r1(S2["degrees_below_zero"]),
-                  r1(S1["degrees_below_zero"]), r1(S2["degrees_below_zero"])))
+    held = [p for p in S2["commit"] if p not in S2["held_credit_commit"]]
+    out.append("9. Read the same correction and the same provider regressions at a daily mean of minus %s C: each provider "
+               "delivers less per MW scheduled on the colder day while the demand rises, so %s exceed firm capacity; "
+               "carrying the design day's credit to that day instead leaves %s within it, and the zone's own fall leaves "
+               "Fenwick Street within it.\n"
+               % (r1(S2["degrees_below_zero"]), names(S2["commit"]), " and ".join(held)))
+    fall = [p for p in F["fall_at_day_call"]]
     out.append("No other conclusion survives the files. The zone primary's own fall, against a weather-adjusted baseline "
                "or the ten previous weekdays, counts the demand that rose at the neighbour, and the ten-day baseline also "
-               "sits below the cold event days it is set against, so it files all four primaries; taking the linked "
-               "primary as the control adds that rise twice (%s per MW at Ashcombe Road) and files none. The "
-               "zone and its linked primary taken together give the netting's provider reduction exactly (%s per MW at "
-               "minus 3.0 C at Ashcombe Road). Crediting the providers at the average event day rather than at the design "
-               "day keeps the same two primaries over firm capacity but credits %s, %s, %s and %s MW, which is not the "
-               "reduction section 6 of the guideline credits, and like the zone's own fall it leaves Fenwick Street within "
-               "firm capacity at minus %s C; on the design day's credit, Ashcombe Road and Hartwell Common need "
-               "reinforcement."
-               % (r1(A["did"]), r1(A["pair"]), r0(A["avg_credited"]), r0(C["avg_credited"]), r0(Fz["avg_credited"]),
-                  r0(H["avg_credited"]), r1(S1["degrees_below_zero"])))
+               "sits below the cold event days it is set against, so it files all four primaries. Read at minus 3.0 C, "
+               "the same fall credits %s, %s, %s and %s per MW and files %s alone (%s MW over firm), because it counts as "
+               "the providers' reduction the demand that rose across the open points, which is not a reduction its provider "
+               "delivers: section 6 of the guideline credits only that, and the award notice measures what a provider "
+               "delivers on its own metered assets. Taking the linked primary as the control adds that rise twice (%s per "
+               "MW at Ashcombe Road) and files none. The zone and its linked primary taken together give the netting's "
+               "provider reduction exactly (%s per MW at minus 3.0 C at Ashcombe Road). Crediting the providers at the "
+               "average event day rather than at the design day keeps the same two primaries over firm capacity but "
+               "credits %s, %s, %s and %s MW, which is not the reduction section 6 of the guideline credits, and at minus "
+               "%s C it leaves Charlecote Way and Fenwick Street within firm capacity; on the design day's credit, "
+               "Ashcombe Road and Hartwell Common need reinforcement."
+               % (r1(A["fall_delivery"]), r1(C["fall_delivery"]), r1(Fz["fall_delivery"]), r1(H["fall_delivery"]),
+                  " and ".join(fall), r1(A["fall_over_by"]), r1(A["did"]), r1(A["pair"]), r0(A["avg_credited"]),
+                  r0(C["avg_credited"]), r0(Fz["avg_credited"]), r0(H["avg_credited"]), r1(S2["degrees_below_zero"])))
     return "\n".join(out) + "\n"
 
 

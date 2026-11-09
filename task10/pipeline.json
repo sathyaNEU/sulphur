@@ -11,9 +11,9 @@
  "stump": "Measuring each flexibility event's fall at its zone primary against a weather-adjusted baseline, validated on held-out non-event weekdays and stable across both winters, and crediting the 2027/28 contracts at the 0.9, 0.6, 0.9 and 0.9 per megawatt scheduled the event records show commits no primary; the step that lands it there is reading the primary's fall as the provider's delivery, when at Ashcombe Road, Fenwick Street and Hartwell Common the control room moved a feeder section across an open point to Tollbrook Lane, Wexley Hill and Kestwick Fields for each event window, so the providers' own reduction, net of the neighbour's rise and read at the design day's minus 3.0 C, is 0.4 and 0.5 per megawatt and Ashcombe Road and Hartwell Common must be reinforced.",
  "architecture": 5,
  "loops": 1,
- "precut": "1 FAIL 2026-11-09 (75 checks: the pair ceiling at 53.1, the honest landed row, over the paper target of 50; task6's precedent at reship)",
+ "precut": "1 FAIL 2026-11-09 (75 checks: the pair ceiling at 54.5, the honest landed row, over the paper target of 50; task6's precedent at reship)",
  "leak": {
-  "leak_py": "REVIEW 2026-11-09 on 203d2bf4 (no LEAK; every line ruled in the design note)",
+  "leak_py": "REVIEW 2026-11-09 on a670e735 (no LEAK; every line ruled in the design note)",
   "reader": "2026-11-09 on 203d2bf4, questions 1 to 6 clean (no deciding sentence, no ranking file, question 5 the golden's WHAT with the estimator open, question 6 analytical); the colder temperatures' reason added to the prompt",
   "reader_earlier": "2026-11-08 twice: no deciding sentence, no ranking file; realism tells fixed or ruled"
  },
@@ -25,16 +25,26 @@
  "judge": {
   "first": "DETERMINISTIC, FIX_NOW (wording: no control-room action claimed in the blocks); applied",
   "rejudge": "DETERMINISTIC, APPROVE on target.zip a3ba2ac0 (2026-11-08); shipped 1350f12d differs by two texture fixes, graded files byte-identical",
-  "report": "determinism_check_report.md"
+  "report": "determinism_check_report.md",
+  "rubric_repair": {
+   "pass": "2 (2026-11-09, on target.zip 203d2bf4, the thread kept the derive-first order)",
+   "verdict": "NOT_DETERMINISTIC",
+   "disposition": "SEND_BACK",
+   "gate_g": "decomposition_attribution, analytical_non_defect, surface_read_dependency no, sole_data_defect no",
+   "gate_h": "domain pass, layers pass, decisive_step analytical, chain 4 inferences, one_fact leaves the regression",
+   "findings": "ask 6 at minus 4.5 C margin-fragile (fixed: dropped, minus 6.0 C kept, robust under every variant); the excess's rounding unstated (fixed in the prompt); register acceptances after its save (fixed); guideline 6 read as the primary's whole fall, Ashcombe Road alone (contested: two earlier passes and the triage ruled it out; the closing now rebuts it; the judge's pin names the transfer and fails the fork-is-the-stump test; the author's decision)",
+   "report": "determinism_check_report_pass2.md",
+   "rejudge_left": 1
+  }
  },
  "paper_pair": {
-  "pair_ceiling": 53.1,
+  "pair_ceiling": 54.5,
   "pair_ceiling_by_item": 52.1,
   "shallow_keep": 0.0,
-  "zone_fall_keep": 15.8,
-  "full_includer_vs_measured_off_call": 60.3,
+  "zone_fall_keep": 16.7,
+  "full_includer_vs_measured_off_call": 60.6,
   "full_includer_vs_measured_off_call_by_item": 56.0,
-  "averaging_cracker": 32.8,
+  "averaging_cracker": 33.1,
   "measured_by": "generator/ceiling.py",
   "before_repair": "landed_keep 29.4 and shallow_keep 11.8 on the old asks (pair 39.8 with the averaging cracker)"
  },
@@ -78,7 +88,7 @@
    "commit": ""
   }
  ],
- "resume": "stage 4 of the rubric repair (/fix-rubric): every free gate re-run on target.zip 203d2bf4 (checks 101/101, verify PASS, two byte-identical builds, figures_check 72/72, voice-check PASS, leak.py REVIEW no LEAK, guard validate clean and heart WARN, surface exit 0, audit_containers PASS, freeze.py rubric PASS; precut 1 FAIL, the honest pair ceiling 53.1); the leak reader clean; the determinism judge thread spawned from /tmp/determinism-check-task10-1794182959/judge_brief.md (it writes verdict.md there). On its verdict: re-invoke the determinism-judge agent with verdict.md to write determinism_check_report_pass2.md, fix any FIX_NOW in the generator and re-judge once, then set READY and commit RESHIPPED (task10). If the scratch is gone, re-run the judge from scratch on the committed target.zip",
+ "resume": "the author's decision on the stage 4 judge's main-call finding (determinism_check_report_pass2.md): guideline 6 read as the primary's whole fall files Ashcombe Road alone. Either (a) accept the existing closure (\"that its provider will deliver\", \"No other measure is credited\", the award notice's provider-metered delivery, now rebutted by name in the closing) and ship: re-read the prompt with the leak reader, spend the one re-judge, set READY and commit RESHIPPED; or (b) /fix-determinism with a WHAT sentence that names no transfer, run the fork-is-the-stump test first; or (c) re-root. The ask layer is repaired and every free gate re-run on a670e735 (checks 103/103, verify PASS, byte-identical, figures_check 72/72, voice-check PASS, leak.py REVIEW no LEAK, audit PASS, freeze rubric PASS, precut 1 FAIL on the honest pair ceiling 54.5)",
  "approved": null,
  "submitted": null,
  "delivered": null,
@@ -316,7 +326,7 @@
   "shallow_keep": 11.8
  },
  "zips": {
-  "target.zip": "203d2bf4acb6c775efa7450027f21b074a6c57b016e094805fe3f0cf60cdc319",
-  "golden.zip": "5bf36c9c5f8321f3ec858b43e14985b5abb8a860993662a413633220cae10646"
+  "target.zip": "a670e735c98c485a668ec8543aa170d2b4b073d0a2c784437d293f12a23560af",
+  "golden.zip": "9af93f82b37ee4cbb57b5bc51efa02c83e18f70f00ebed1823ad7cda860d7878"
  }
 }

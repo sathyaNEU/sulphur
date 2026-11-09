@@ -12,7 +12,7 @@ import pandas as pd
 UTC = dt.timezone.utc
 BASE_T = 15.5
 T_DESIGN = -3.0
-SENS_TS = (-4.5, -6.0)   # the prompt's two colder working weekdays of winter 2027/28 (daily means, guideline 2's station)
+SENS_TS = (-6.0,)        # the prompt's colder working weekday of winter 2027/28 (daily mean, guideline 2's station)
 CREDIT_HH = ("17:30", "18:00")
 WINDOW = ("16:30", "17:00", "17:30", "18:00", "18:30", "19:00", "19:30")   # half-hours ending, local
 BANK_HOLIDAYS = {dt.date(2023, 12, 25), dt.date(2023, 12, 26), dt.date(2024, 1, 1), dt.date(2024, 3, 29),

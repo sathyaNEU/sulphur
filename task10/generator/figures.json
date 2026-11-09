@@ -12,24 +12,15 @@
   "coldest_below_zero": 5.779167,
   "mildest": 6.191667
  },
+ "fall_at_day_call": [
+  "Ashcombe Road"
+ ],
  "pack": {
   "event_rows": 372,
   "scada_rows": 196201,
   "weather_rows": 13372
  },
  "sens": {
-  "4.5": {
-   "commit": [
-    "Ashcombe Road",
-    "Fenwick Street",
-    "Hartwell Common"
-   ],
-   "degrees_below_zero": 4.5,
-   "held_credit_commit": [
-    "Ashcombe Road",
-    "Hartwell Common"
-   ]
-  },
   "6.0": {
    "commit": [
     "Ashcombe Road",
@@ -95,9 +86,11 @@
    "d26": 26.509265,
    "delivery": 0.399594,
    "did": 0.959451,
+   "fall_after": 23.43083,
+   "fall_delivery": 0.690279,
+   "fall_over_by": 0.43083,
    "firm": 23.0,
    "held_after": {
-    "4.5": 27.091571,
     "6.0": 27.990805
    },
    "linked": "Tollbrook Lane",
@@ -110,11 +103,6 @@
    "pair": 0.399325,
    "provider": "Corvane Flex Ltd",
    "sens": {
-    "4.5": {
-     "after": 27.714696,
-     "delivery": 0.334001,
-     "over": true
-    },
     "6.0": {
      "after": 29.237055,
      "delivery": 0.268409,
@@ -133,9 +121,11 @@
    "d26": 23.644017,
    "delivery": 0.499759,
    "did": 0.613331,
+   "fall_after": 21.070559,
+   "fall_delivery": 0.499759,
+   "fall_over_by": -1.429441,
    "firm": 22.5,
    "held_after": {
-    "4.5": 21.613704,
     "6.0": 22.156849
    },
    "linked": "",
@@ -148,11 +138,6 @@
    "pair": 0.499759,
    "provider": "Quillon Energy Services Ltd",
    "sens": {
-    "4.5": {
-     "after": 21.999901,
-     "delivery": 0.451485,
-     "over": false
-    },
     "6.0": {
      "after": 22.929244,
      "delivery": 0.40321,
@@ -171,9 +156,11 @@
    "d26": 33.826169,
    "delivery": 0.477334,
    "did": 0.985479,
+   "fall_after": 25.399913,
+   "fall_delivery": 0.756066,
+   "fall_over_by": -5.100087,
    "firm": 30.5,
    "held_after": {
-    "4.5": 30.297424,
     "6.0": 31.292692
    },
    "linked": "Wexley Hill",
@@ -186,11 +173,6 @@
    "pair": 0.476895,
    "provider": "Quillon Energy Services Ltd",
    "sens": {
-    "4.5": {
-     "after": 31.053819,
-     "delivery": 0.423306,
-     "over": true
-    },
     "6.0": {
      "after": 32.805482,
      "delivery": 0.369278,
@@ -209,9 +191,11 @@
    "d26": 20.922994,
    "delivery": 0.384747,
    "did": 1.018768,
+   "fall_after": 17.392022,
+   "fall_delivery": 0.742165,
+   "fall_over_by": -0.407978,
    "firm": 17.8,
    "held_after": {
-    "4.5": 20.871937,
     "6.0": 21.671214
    },
    "linked": "Kestwick Fields",
@@ -224,11 +208,6 @@
    "pair": 0.383384,
    "provider": "Corvane Flex Ltd",
    "sens": {
-    "4.5": {
-     "after": 21.397637,
-     "delivery": 0.314654,
-     "over": true
-    },
     "6.0": {
      "after": 22.722614,
      "delivery": 0.24456,

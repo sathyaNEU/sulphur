@@ -431,9 +431,11 @@ def write_growth(target, feeders):
                              en.strftime("%d/%m/%Y"), en.strftime("%d/%m/%Y")])
             else:
                 pl = dt.date(2027, 11, 20) + dt.timedelta(days=int(rng.integers(0, 400)))
-                rows.append([ref(pl - dt.timedelta(days=500)), APPLICANT_TYPES[int(rng.integers(0, len(APPLICANT_TYPES)))],
+                # accepted before the register's last save (30 October 2026), never after it
+                acc_l = min(pl - dt.timedelta(days=500), dt.date(2026, 10, 23) - dt.timedelta(days=pl.toordinal() % 61))
+                rows.append([ref(acc_l), APPLICANT_TYPES[int(rng.integers(0, len(APPLICANT_TYPES)))],
                              sites[int(rng.integers(0, len(sites)))] % names[int(rng.integers(0, len(names)))],
-                             f["fid"], kw, "Accepted", (pl - dt.timedelta(days=500)).strftime("%d/%m/%Y"),
+                             f["fid"], kw, "Accepted", acc_l.strftime("%d/%m/%Y"),
                              pl.strftime("%d/%m/%Y"), ""])
     # a plot is numbered on its own site plan; the number is read from the application's reference, not drawn
     for r in rows:

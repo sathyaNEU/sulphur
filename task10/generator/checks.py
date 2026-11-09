@@ -417,8 +417,7 @@ def main():
     # Each ask rides the deep step: the design-day exceedance at the primaries to reinforce, and the primaries over firm
     # capacity on the two colder working weekdays, where the providers' reduction is read at the colder day's own mean.
     TS = E.SENS_TS
-    want_sens = {-4.5: ["Ashcombe Road", "Fenwick Street", "Hartwell Common"],
-                 -6.0: ["Ashcombe Road", "Charlecote Way", "Fenwick Street", "Hartwell Common"]}
+    want_sens = {-6.0: ["Ashcombe Road", "Charlecote Way", "Fenwick Street", "Hartwell Common"]}
     check("ask: colder days", G["commit_sens"] == want_sens, "over firm capacity after flexibility: %s"
           % {"%.1f C" % t: "+".join(v) for t, v in G["commit_sens"].items()})
     ob = {z["primary"]: z["over_by"] for z in G["zones"] if z["over"]}
@@ -480,7 +479,11 @@ def main():
         pairs = [(y[j] - y[i]) / (T_[j] - T_[i]) for i in range(len(T_)) for j in range(i + 1, len(T_))
                  if abs(T_[j] - T_[i]) > 0.2]
         b = float(np.median(pairs)); a = float(np.median(y - b * T_))
+        late = np.array([E.WINTER_OF(r[0]) == "2025/26" for r in rr])
+        latep = np.array([E.WINTER_OF(r[0]) == "2025/26" for r in pooled_])
         return {"linear": np.poly1d(np.polyfit(T_, y, 1)), "pooled per provider": np.poly1d(np.polyfit(Tp, yp, 1)),
+                "2025/26 events only": np.poly1d(np.polyfit(T_[late], y[late], 1)),
+                "2025/26 events only, pooled": np.poly1d(np.polyfit(Tp[latep], yp[latep], 1)),
                 "quadratic": np.poly1d(np.polyfit(T_, y, 2)), "pooled quadratic": np.poly1d(np.polyfit(Tp, yp, 2)),
                 "Theil-Sen": np.poly1d([b, a]), "weighted by MW": np.poly1d(np.polyfit(T_, y, 1, w=np.sqrt(w))),
                 "linear below 2 C": np.poly1d(np.polyfit(T_[T_ < 2], y[T_ < 2], 1)),
@@ -505,13 +508,29 @@ def main():
                     k = (z["primary"], t)
                     if k not in worst or abs(m) < abs(worst[k][0]):
                         worst[k] = (m, nm)
+    # the quadratic correction (ruled out by winter 2023/24, SF24) read at the colder day all the same
+    for z in G["zones"]:
+        code = z["code"]
+        allz = set(X["events"][X["events"]["zone"] == code]["date"])
+        pk = E.daily_peaks(prep, code)
+        dd = [d for d in pk.index if E._workday(d) and d in tm.index and d not in allz and E.WINTER_OF(d) == "2025/26"]
+        cq = np.polyfit([tm[d] for d in dd], [pk[d] for d in dd], 2)
+        r1, r2 = X["rates"][code]
+        fns = fam_fns(rec[code]["net"], pooled[z["provider"]])
+        for nm, f in fns.items():
+            for t in TS:
+                m = (np.polyval(cq, t) * (1 + r1 / 100.0) * (1 + r2 / 100.0) + X["growth"].get(code, 0.0)
+                     - float(f(t)) * z["mw28"] - z["firm"])
+                k = (z["primary"], t)
+                if abs(m) < abs(worst[k][0]):
+                    worst[k] = (m, nm + ", quadratic correction")
     flip = [k for k, (m, _) in worst.items() if (m > 0) != (gap[k] > 0)]
     check("ask: colder-day family", not flip and all(abs(m) >= 0.2 for m, _ in worst.values()),
-          "%d estimators by 3 readings of guideline 3 keep every zone on its side of firm at both colder days; nearest %s"
+          "%d estimators by 3 readings of guideline 3 and the quadratic correction keep every zone on its side of firm at "
+          "the colder day; nearest %s"
           % (len(fns), min(((k, round(m, 2), nm) for k, (m, nm) in worst.items()), key=lambda r: abs(r[1]))))
     # SF23 the colder days' credit: the reduction the provider delivers on that day, against the design day's held
-    check("SF23", sh["the design day's credit held"] == {-4.5: ["Ashcombe Road", "Hartwell Common"],
-                                                          -6.0: ["Ashcombe Road", "Fenwick Street", "Hartwell Common"]},
+    check("SF23", sh["the design day's credit held"] == {-6.0: ["Ashcombe Road", "Fenwick Street", "Hartwell Common"]},
           "the design day's credit carried to the colder days files %s; ruled out by guideline 6 (the reduction the provider "
           "will deliver on the day) and the providers' net reduction falling with cold (slopes %s per degree)"
           % ({"%.1f C" % t: "+".join(v) for t, v in sh["the design day's credit held"].items()},
@@ -529,7 +548,7 @@ def main():
     check("SF25", v25 == want_sens, "the design-day demand moved by the 2025/26 slope alone: %s"
           % {"%.1f C" % t: "+".join(v) for t, v in v25.items()})
     # SF26 "exceed" on the colder days: strictly, against at or over (no zone near firm under any estimator)
-    check("SF26", all(abs(v) >= 0.4 for v in gap.values()) and all(abs(m) >= 0.2 for m, _ in worst.values()),
+    check("SF26", all(abs(v) >= 0.4 for v in gap.values()) and all(abs(m) >= 0.25 for m, _ in worst.values()),
           "nearest zone to firm at the colder days %.2f MW on the golden, %.2f across the family: the same sets either way"
           % (min(abs(v) for v in gap.values()), min(abs(m) for m, _ in worst.values())))
     # SF27 the exceedance from the rounded figures, against the unrounded
@@ -540,6 +559,17 @@ def main():
         Gl = E.golden_from(fresh())
     check("SF28", Gl["commit_sens"] == want_sens, "daily mean over the UK local day: %s"
           % {"%.1f C" % t: "+".join(v) for t, v in Gl["commit_sens"].items()})
+    # the gross route read at the design day, which the write-up's closing names: Ashcombe Road alone
+    g1b = sh["rung 1b zone fall at the day"]
+    fall_call = [z["primary"] for z in G["zones"]
+                 if z["before"] - fit_at(rec[z["code"]]["base"], False)(E.T_DESIGN) * z["mw28"] > z["firm"]]
+    check("closing: the zone's fall at the design day", fall_call == ["Ashcombe Road"] and
+          "Fenwick Street" not in g1b[-6.0], "files %s at minus 3.0 C and leaves Fenwick Street within firm at minus 6.0 C (%s)"
+          % (fall_call, "+".join(g1b[-6.0])))
+    # the growth register records no acceptance after its own last save
+    acc = [dt.datetime.strptime(r["Offer accepted"], "%d/%m/%Y").date() for r in rows if r["Offer accepted"]]
+    check("realism: register dates", max(acc) <= dt.date(2026, 10, 30), "latest offer accepted %s; the register saved "
+          "30 October 2026" % max(acc))
     check("ask: clean truth", GC["commit_sens"] == want_sens, "the colder days on the world before mess: %s"
           % {"%.1f C" % t: "+".join(v) for t, v in GC["commit_sens"].items()})
 
