@@ -15,18 +15,30 @@ def cond(t):
     return P.COLD2_S * (math.log1p(math.exp(-abs(z))) + max(z, 0.0))
 
 
-def kwh_per_km(climb, t):
-    return P.E0 + P.CLIMB * climb + P.COLD1 * max(0.0, 16 - t) + P.COLD2 * cond(t)
+def kwh_per_km(climb, t, v=None):
+    v = P.V_REF if v is None else v
+    return (P.E0 + P.CLIMB * climb + P.COLD1 * max(0.0, 16 - t) + P.COLD2 * cond(t)
+            + P.AERO * (v * v - P.V_REF ** 2) / 1000.0)
 
 
-def leg_kwh(km, climb, t, payload):
-    return km * kwh_per_km(climb, t) + P.LOAD * payload * km
+def ratio(t):
+    """actual over planned speed on a day at t: winter roads, darkness and slower traffic"""
+    z = (P.RT - t) / P.RS
+    return P.R0 - P.RC * P.RS * (math.log1p(math.exp(-abs(z))) + max(z, 0.0))
 
 
-def design_kwh(legs, climb, payload, t=None):
+def leg_kwh(km, climb, t, payload, v=None):
+    return km * kwh_per_km(climb, t, v) + P.LOAD * payload * km
+
+
+def design_speed(code):
+    return P.SHORT_V[code] * ratio(P.DESIGN_T)
+
+
+def design_kwh(legs, climb, payload, t=None, v=None):
     t = P.DESIGN_T if t is None else t
     a, b, c = legs
-    return (a + b + c) * kwh_per_km(climb, t) + P.LOAD * payload * b
+    return (a + b + c) * kwh_per_km(climb, t, v) + P.LOAD * payload * b
 
 
 def declare(rng, code, true_t, day=None):
@@ -64,14 +76,15 @@ def shortlist_km(code, mean_payload):
     rng = np.random.default_rng(P.SEED + 7 + int(code[1:]))
     a = int(rng.integers(6, 34))
     r = 0.93 + 0.08 * rng.random()
-    k = kwh_per_km(climb, P.DESIGN_T)
+    vd = design_speed(code)
+    k = kwh_per_km(climb, P.DESIGN_T, vd)
     target = P.TARGET[code]
     b = (target - a * k) / ((1 + r) * k + P.LOAD * mean_payload)
     best = None
     for aa in range(max(5, a - 4), a + 5):
         for bb in (int(b) - 1, int(b), int(b) + 1, int(b) + 2):
             for cc in range(int(bb * r) - 2, int(bb * r) + 3):
-                err = abs(design_kwh((aa, bb, cc), climb, mean_payload) - target)
+                err = abs(design_kwh((aa, bb, cc), climb, mean_payload, v=vd) - target)
                 if best is None or err < best[0] - 1e-9:
                     best = (err, (aa, bb, cc))
     return best[1]
@@ -100,11 +113,12 @@ def world():
             dec = declare(rng, ship, pay, day)
             start = 5.0 + 0.8 * rng.random()
             trips = []
+            vday = P.PILOT_V[dcode] * ratio(tmean) * (1 + rng.normal(0, P.R_SD))
             for leg, km in enumerate(legs):
                 t = tmean + (-1.2, 0.8, 1.6)[leg] + rng.normal(0, 0.9)
                 p = pay if leg == 1 else 0.0
-                e = leg_kwh(km, climb, t, p) * (1 + route_u[dcode]) * (1 + rng.normal(0, P.EPS))
-                speed = (52, 71, 74)[leg] + rng.normal(0, 4)
+                speed = vday * (0.9, 1.02, 1.03)[leg] * (1 + rng.normal(0, 0.015))
+                e = leg_kwh(km, climb, t, p, speed) * (1 + route_u[dcode]) * (1 + rng.normal(0, P.EPS))
                 dur = km / speed
                 trips.append({"leg": leg, "km": km, "t": round(t, 1), "kwh": e, "start_h": start,
                               "end_h": start + dur, "speed": speed})

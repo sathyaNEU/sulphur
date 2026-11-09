@@ -55,7 +55,7 @@ def load(target):
     pk.routes = {}
     for r in list(wb["Duties"].iter_rows(values_only=True))[1:]:
         pk.routes[r[0]] = {"old": r[1], "depot": r[2], "shipper": r[3], "delivery": r[5], "legs": (r[6], r[7], r[8]),
-                          "climb": r[10]}
+                          "climb": r[10], "plan_h": float(r[12])}
     wb = load_workbook(F["plan"], read_only=True)
     pk.short = [r[0] for r in list(wb["Shortlist 2027"].iter_rows(values_only=True))[1:]]
     # weighbridge: the last weighing of each departure (a re-weigh after a reload replaces the first)
@@ -95,6 +95,7 @@ def load(target):
         days.append({"date": dt.date.fromisoformat(r["operating_date"]), "reg": r["registration"],
                      "duty": c["duty"], "shipper": c["shipper"], "declared": kg(c["declared_weight"]),
                      "km": float(r["distance_km"]), "kwh": float(r["energy_used_kwh"]),
+                     "v": float(r["distance_km"]) / float(r["driving_time_h"]),
                      "t": float(t) if t else None, "station_t": pk.station[(r["operating_date"], "Jönköping")],
                      "soc0": float(r["soc_start_pct"]), "soc1": float(r["soc_end_pct"])})
     # an ambient sensor dropout takes the station's day, moved by the mean truck-against-station offset
@@ -176,13 +177,55 @@ def payloads(pk, how, split=True, window=None):
 
 # ---------------------------------------------------------------- the energy model
 
-def design(pk, pay, form=("hinge2", 16, 0), temp="truck"):
+V_REF = 65.0
+
+
+def speed_term(v, speed):
+    """the energy model's speed column per km: air drag rising with the square of speed (sq), a straight line (lin),
+    or none"""
+    v = np.asarray(v, float)
+    if speed == "sq":
+        return [(v * v - V_REF ** 2) / 1000.0]
+    if speed == "lin":
+        return [v - V_REF]
+    return []
+
+
+def design(pk, pay, form=("hinge2", 16, 0), temp="truck", speed="sq"):
     tot = np.array([d["km"] for d in pk.days])
     lk = np.array([pk.routes[d["duty"]]["legs"][1] for d in pk.days], float)
     cl = np.array([pk.routes[d["duty"]]["climb"] for d in pk.days], float)
     T = np.array([d["t_filled"] if temp == "truck" else d["station_t"] for d in pk.days])
-    cols = [tot, tot * cl] + [tot * c for c in cold_terms(T, form)] + [pay * lk]
+    v = np.array([d["v"] for d in pk.days])
+    cols = ([tot, tot * cl] + [tot * c for c in cold_terms(T, form)] + [tot * c for c in speed_term(v, speed)]
+            + [pay * lk])
     return np.column_stack(cols)
+
+
+def plan_speed(pk, duty):
+    r = pk.routes[duty]
+    return sum(r["legs"]) / r["plan_h"]
+
+
+def speed_ratio(pk, t=DESIGN_T, how="hinge10"):
+    """actual over planned speed, fitted on the pilot days against the day's temperature, read at t.
+    how hinge10: a slope below 10 C; hinge8, hinge12; linear: on the temperature; bins: the mean of days within 2.5 C
+    of t; mean: the year's mean ratio, whatever the weather; plan: the routing tool's speed as it stands (1.0)"""
+    if how == "plan":
+        return 1.0
+    r = np.array([d["v"] / plan_speed(pk, d["duty"]) for d in pk.days])
+    T = np.array([d["t_filled"] for d in pk.days])
+    if how == "mean":
+        return float(r.mean())
+    if how == "bins":
+        return float(r[np.abs(T - t) <= 2.5].mean())
+    if how == "linear":
+        b = np.polyfit(T, r, 1)
+        return float(np.polyval(b, t))
+    k = float(how[5:])
+    X = np.column_stack([np.ones(len(T)), np.maximum(0, k - T)])
+    c = np.linalg.lstsq(X, r, rcond=None)[0]
+    return float(c[0] + c[1] * max(0.0, k - t))
 
 
 def cold_terms(T, form):
@@ -203,20 +246,23 @@ def cold_terms(T, form):
     raise ValueError(form)
 
 
-def fit(pk, pay, form=("hinge2", 16, 0), mask=None, temp="truck"):
-    X = design(pk, pay, form, temp)
+def fit(pk, pay, form=("hinge2", 16, 0), mask=None, temp="truck", speed="sq", vmode="hinge10"):
+    """vmode: how each shortlisted duty's speed on the design day is set (speed_ratio's how)"""
+    X = design(pk, pay, form, temp, speed)
     y = np.array([d["kwh"] for d in pk.days])
     m = np.ones(len(y), bool) if mask is None else mask
     c, *_ = np.linalg.lstsq(X[m], y[m], rcond=None)
     resid = y[m] - X[m] @ c
-    return {"coef": c, "form": form, "rmse_pct": float(np.sqrt(np.mean((resid / y[m]) ** 2)) * 100)}
+    return {"coef": c, "form": form, "speed": speed, "vmode": vmode,
+            "rmse_pct": float(np.sqrt(np.mean((resid / y[m]) ** 2)) * 100)}
 
 
-def predict(model, legs, climb, load_t, t=DESIGN_T):
+def predict(model, legs, climb, load_t, t=DESIGN_T, v=V_REF):
     c, form = model["coef"], model["form"]
     a, b, cc = legs
     tot = a + b + cc
-    terms = [tot, tot * climb] + [tot * float(np.ravel(x)[0]) for x in cold_terms([t], form)] + [load_t * b]
+    terms = ([tot, tot * climb] + [tot * float(np.ravel(x)[0]) for x in cold_terms([t], form)]
+             + [tot * float(np.ravel(x)[0]) for x in speed_term([v], model.get("speed"))] + [load_t * b])
     return float(np.dot(c, terms))
 
 
@@ -261,10 +307,12 @@ def planning_load(pk, duty, basis="net"):
 
 def assess(pk, model, basis="net", t=DESIGN_T, lim=None):
     lim = limit(pk) if lim is None else lim
+    rr = speed_ratio(pk, t, model.get("vmode", "hinge10")) if model.get("speed") else 1.0
     out = {}
     for c in pk.short:
         r = pk.routes[c]
-        e = predict(model, r["legs"], r["climb"], planning_load(pk, c, basis), t)
+        v = plan_speed(pk, c) * rr
+        e = predict(model, r["legs"], r["climb"], planning_load(pk, c, basis), t, v)
         out[c] = {"kwh": e, "go": e <= lim}
     return out
 
@@ -314,16 +362,19 @@ def routes(pk):
     """each shortcut's committed answer: (model, limit) for the golden and every hurried route effort.json records"""
     gp, dp = payloads(pk, "shipper"), payloads(pk, "declared")
     f, fa = fade(pk), fade(pk, "age")
+    L = limit(pk, f)
     return {
-        "golden": (fit(pk, gp, H2), limit(pk, f)),
-        "declared weights": (fit(pk, dp, H2), limit(pk, f)),
-        "one pooled correction": (fit(pk, payloads(pk, "pooled"), H2), limit(pk, f)),
-        "one line over the pilot shippers": (fit(pk, pilot_pooled(pk), H2), limit(pk, f)),
-        "one cold rate": (fit(pk, gp, H1), limit(pk, f)),
+        "golden": (fit(pk, gp, H2), L),
+        "no speed term": (fit(pk, gp, H2, speed=None), L),
+        "the routing tool's speed": (fit(pk, gp, H2, vmode="plan"), L),
+        "the year's mean speed ratio": (fit(pk, gp, H2, vmode="mean"), L),
+        "declared weights": (fit(pk, dp, H2), L),
+        "one pooled correction": (fit(pk, payloads(pk, "pooled"), H2), L),
+        "one line over the pilot shippers": (fit(pk, pilot_pooled(pk), H2), L),
+        "one cold rate": (fit(pk, gp, H1), L),
         "no first-year loss": (fit(pk, gp, H2), SHARE * USABLE),
-        "careful but hurried": (fit(pk, dp, H1), limit(pk, fa)),
-        "declared weights, one cold rate": (fit(pk, dp, H1), limit(pk, f)),
-        "the v13 golden (no loss)": (fit(pk, gp, H2), SHARE * USABLE),
+        "careful but hurried": (fit(pk, gp, H2, speed=None), L),
+        "the arch 6 golden": (fit(pk, gp, H2, speed=None), L),
     }
 
 
@@ -336,6 +387,7 @@ def models(pk):
         "golden": fit(pk, gp, H2),
         "golden_1h": fit(pk, gp, H1),
         "naive_1h": fit(pk, dp, H1),
+        "no_speed": fit(pk, gp, H2, speed=None),
     }
 
 
@@ -358,14 +410,17 @@ def fit_fe(pk, pay, form=("hinge2", 16, 0)):
     tot = np.array([d["km"] for d in pk.days])
     lk = np.array([pk.routes[d["duty"]]["legs"][1] for d in pk.days], float)
     T = np.array([d["t_filled"] for d in pk.days])
+    v = np.array([d["v"] for d in pk.days])
     du = np.array([d["duty"] for d in pk.days])
-    X = np.column_stack([tot * (du == k) for k in duties] + [tot * c for c in cold_terms(T, form)] + [pay * lk])
+    X = np.column_stack([tot * (du == k) for k in duties] + [tot * c for c in cold_terms(T, form)]
+                        + [tot * c for c in speed_term(v, "sq")] + [pay * lk])
     y = np.array([d["kwh"] for d in pk.days])
     c, *_ = np.linalg.lstsq(X, y, rcond=None)
     lev = c[:len(duties)]
     cl = np.array([pk.routes[k]["climb"] for k in duties], float)
     a, b = np.polyfit(cl, lev, 1)[::-1]
-    return {"coef": np.concatenate([[a, b], c[len(duties):]]), "form": form, "rmse_pct": None}
+    return {"coef": np.concatenate([[a, b], c[len(duties):]]), "form": form, "speed": "sq", "vmode": "hinge10",
+            "rmse_pct": None}
 
 
 def fit_exact_slope(pk, form=("hinge2", 16, 0)):
@@ -411,4 +466,9 @@ def rivals(pk):
         "loss: temperature and its square": (fit(pk, gp, H2), limit(pk, fade(pk, "quad"))),
         "loss: degrees below 15 C": (fit(pk, gp, H2), limit(pk, fade(pk, "cold15"))),
         "loss: the same months a year apart": (fit(pk, gp, H2), limit(pk, fade(pk, "yoy"))),
+        "speed: a straight line": (fit(pk, gp, H2, speed="lin"), lim),
+        "speed ratio: slope below 8 C": (fit(pk, gp, H2, vmode="hinge8"), lim),
+        "speed ratio: slope below 12 C": (fit(pk, gp, H2, vmode="hinge12"), lim),
+        "speed ratio: on the temperature": (fit(pk, gp, H2, vmode="linear"), lim),
+        "speed ratio: days within 2.5 C": (fit(pk, gp, H2, vmode="bins"), lim),
     }

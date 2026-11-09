@@ -1,13 +1,13 @@
 {
- "backtest_one_rate": -6.1,
- "backtest_one_rate_abs": 6.1,
- "backtest_two_rates": 0.7,
+ "backtest_one_rate": -6.4,
+ "backtest_one_rate_abs": 6.4,
+ "backtest_two_rates": 0.8,
  "calibration_slope": {
   "BMJ all": 0.84,
   "GDR note": 0.15,
   "GDR ticket": 1.0,
   "HWP all": 0.2,
-  "LBY all": 0.2,
+  "LBY all": 0.18,
   "TEN all": 0.2,
   "VGL all": 0.13
  },
@@ -22,36 +22,64 @@
  ],
  "careful_count": 9,
  "careful_energy": {
-  "V02": 410,
-  "V03": 420,
-  "V05": 420,
-  "V07": 420,
+  "V02": 400,
+  "V03": 430,
+  "V05": 400,
+  "V07": 450,
   "V09": 380,
-  "V11": 420,
-  "V14": 430,
-  "V16": 400,
-  "V18": 420,
+  "V11": 430,
+  "V14": 420,
+  "V16": 390,
+  "V18": 400,
   "V21": 450,
-  "V24": 450,
-  "V27": 460,
-  "V30": 450,
-  "V33": 480
+  "V24": 460,
+  "V27": 450,
+  "V30": 440,
+  "V33": 470
  },
  "clerk_slope_hi": 0.2,
  "clerk_slope_lo": 0.13,
  "conventions": {
   "capacity_ref_c": 20,
+  "design_t": -5,
   "fes_sections": [
    2.3,
    4.1,
    4.2,
    4.3
   ],
+  "loss_band": [
+   3.6,
+   4.0
+  ],
   "pallet_kg": 540,
+  "payload_band": [
+   1.9,
+   2.1
+  ],
   "per_km": 100,
   "share_pct": 85,
+  "speed_step_kmh": 10,
   "usable_quoted": 540
  },
+ "design_speed": {
+  "V02": 63,
+  "V03": 65,
+  "V05": 68,
+  "V07": 63,
+  "V09": 68,
+  "V11": 66,
+  "V14": 64,
+  "V16": 67,
+  "V18": 67,
+  "V21": 66,
+  "V24": 61,
+  "V27": 65,
+  "V30": 67,
+  "V33": 62
+ },
+ "design_speed_hi": 68,
+ "design_speed_lo": 61,
  "duty_days": 2334,
  "energy": {
   "V02": 410,
@@ -60,7 +88,7 @@
   "V07": 460,
   "V09": 400,
   "V11": 450,
-  "V14": 430,
+  "V14": 440,
   "V16": 410,
   "V18": 420,
   "V21": 470,
@@ -70,69 +98,94 @@
   "V33": 480
  },
  "energy_raw": {
-  "V02": 411.2,
-  "V03": 449.8,
-  "V05": 420.9,
-  "V07": 456.8,
-  "V09": 401.1,
-  "V11": 450.9,
-  "V14": 433.6,
-  "V16": 410.9,
-  "V18": 420.7,
-  "V21": 470.9,
+  "V02": 410.9,
+  "V03": 449.3,
+  "V05": 424.7,
+  "V07": 457.0,
+  "V09": 400.5,
+  "V11": 451.3,
+  "V14": 435.4,
+  "V16": 410.4,
+  "V18": 424.5,
+  "V21": 471.1,
   "V24": 471.2,
-  "V27": 470.7,
-  "V30": 460.9,
-  "V33": 480.8
+  "V27": 471.0,
+  "V30": 456.6,
+  "V33": 481.2
  },
  "limit": 442,
  "limit_no_loss": 459,
  "loss_pct": 3.8,
  "loss_pct_age_only": 3.2,
- "loss_pct_yoy": 3.7,
- "payload_term": 2.0,
+ "loss_pct_yoy": 3.6,
+ "nospeed_shift_hi": 21,
+ "nospeed_shift_lo": 9,
+ "payload_term": 2.1,
  "payload_term_declared": 1.2,
  "payload_term_pilot_line": 1.8,
  "payload_term_pooled": 1.3,
+ "pilot_speed_max": 73,
+ "plan_speed": {
+  "V02": 76,
+  "V03": 79,
+  "V05": 82,
+  "V07": 77,
+  "V09": 83,
+  "V11": 80,
+  "V14": 78,
+  "V16": 81,
+  "V18": 81,
+  "V21": 80,
+  "V24": 74,
+  "V27": 79,
+  "V30": 81,
+  "V33": 75
+ },
+ "plan_speed_hi": 83,
+ "plan_speed_lo": 74,
  "planning_load": {
   "V02": 3.9,
-  "V03": 29.1,
-  "V05": 7.6,
+  "V03": 29.0,
+  "V05": 7.7,
   "V07": 32.0,
-  "V09": 20.9,
-  "V11": 26.6,
-  "V14": 4.7,
-  "V16": 9.1,
-  "V18": 5.5,
-  "V21": 18.5,
-  "V24": 20.9,
-  "V27": 13.6,
+  "V09": 21.0,
+  "V11": 26.3,
+  "V14": 4.6,
+  "V16": 9.0,
+  "V18": 5.4,
+  "V21": 18.4,
+  "V24": 20.8,
+  "V27": 13.4,
   "V30": 13.4,
-  "V33": 4.0
+  "V33": 3.9
  },
- "rmse_pct": 2.5,
+ "rival_maxdev": 7,
+ "rmse_nospeed_pct": 2.88,
+ "rmse_pct": 2.51,
  "route_count": {
   "careful but hurried": 9,
   "declared weights": 8,
-  "declared weights, one cold rate": 9,
   "golden": 6,
-  "no first-year loss": 9,
-  "one cold rate": 8,
+  "no first-year loss": 10,
+  "no speed term": 9,
+  "one cold rate": 9,
   "one line over the pilot shippers": 6,
   "one pooled correction": 8,
-  "the v13 golden (no loss)": 9
+  "the arch 6 golden": 9,
+  "the routing tool's speed": 3,
+  "the year's mean speed ratio": 5
  },
  "route_set": {
   "careful but hurried": [
    "V02",
    "V03",
    "V05",
-   "V07",
    "V09",
    "V11",
    "V14",
    "V16",
-   "V18"
+   "V18",
+   "V30"
   ],
   "declared weights": [
    "V02",
@@ -141,17 +194,6 @@
    "V07",
    "V09",
    "V11",
-   "V16",
-   "V18"
-  ],
-  "declared weights, one cold rate": [
-   "V02",
-   "V03",
-   "V05",
-   "V07",
-   "V09",
-   "V11",
-   "V14",
    "V16",
    "V18"
   ],
@@ -172,7 +214,19 @@
    "V11",
    "V14",
    "V16",
-   "V18"
+   "V18",
+   "V30"
+  ],
+  "no speed term": [
+   "V02",
+   "V03",
+   "V05",
+   "V09",
+   "V11",
+   "V14",
+   "V16",
+   "V18",
+   "V30"
   ],
   "one cold rate": [
    "V02",
@@ -182,7 +236,8 @@
    "V11",
    "V14",
    "V16",
-   "V18"
+   "V18",
+   "V30"
   ],
   "one line over the pilot shippers": [
    "V02",
@@ -202,18 +257,33 @@
    "V16",
    "V18"
   ],
-  "the v13 golden (no loss)": [
+  "the arch 6 golden": [
    "V02",
    "V03",
    "V05",
-   "V07",
    "V09",
    "V11",
    "V14",
    "V16",
+   "V18",
+   "V30"
+  ],
+  "the routing tool's speed": [
+   "V02",
+   "V09",
+   "V16"
+  ],
+  "the year's mean speed ratio": [
+   "V02",
+   "V05",
+   "V09",
+   "V16",
    "V18"
   ]
  },
+ "speed_kwh_per_10kmh": 6.2,
+ "speed_ratio_design": 0.82,
+ "speed_ratio_year": 0.91,
  "stay_diesel": [
   "V03",
   "V07",

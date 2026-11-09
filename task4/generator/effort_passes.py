@@ -3,9 +3,9 @@ the author's implementation of a named method, run end to end on the shipped fil
 
   quick      the pilot's average consumption on January-like days times each duty's km, against 85 per cent of the
              quoted battery; planning loads as the bridge's mean net weight over everything weighed
-  careful    every file cleaned, the field's energy model on the declared payloads (validated on held-out days,
-             which carry the same declarations), one degree-day cold rate below 16 C, the batteries' loss from an
-             age trend of each day's energy per full charge
+  careful    what the architecture 6 platform run did: every file cleaned, each declaration taken to its weighed
+             equivalent, a curved cold form, the loss net of the cold; energy forecast in proportion to distance at
+             the pilot's own speeds (no speed term), the transfer to the Varnamo duties' faster runs left untested
   thorough   the golden
 """
 import json
@@ -46,34 +46,29 @@ def main(target):
     ca = A.assess(pk, cm, lim=cl)
     c_loss = round(100 * A.fade(pk, "age"), 1)
 
-    gl = figs["planning_load"]
     res = [
-        {"id": "R1", "name": "each duty's planning load", "graded_as": "Ask 1", "figure": "planning_load",
-         "depends": [], "independent": "", "golden": gl,
-         "bands": {c: [gl[c] - 0.3, gl[c] + 0.3] for c in gl},
-         "passes": {"quick": q_loads, "careful": figs["planning_load"], "thorough": gl}},
-        {"id": "R2", "name": "payload term, kWh per t per 100 km", "graded_as": "Component 1",
+        {"id": "R1", "name": "payload term, kWh per t per 100 km", "graded_as": "Component 1",
          "figure": "payload_term", "depends": [], "independent": "",
          "golden": figs["payload_term"], "band": [1.9, 2.1], "partly": [1.6, 2.4],
-         "passes": {"quick": None, "careful": figs["payload_term_declared"], "thorough": figs["payload_term"]}},
-        {"id": "R3", "name": "first-year battery loss, per cent", "graded_as": "Component 2", "figure": "loss_pct",
+         "passes": {"quick": None, "careful": figs["payload_term"], "thorough": figs["payload_term"]}},
+        {"id": "R2", "name": "first-year battery loss, per cent", "graded_as": "Component 2", "figure": "loss_pct",
          "depends": [], "independent": "",
          "golden": figs["loss_pct"], "band": [3.6, 4.0], "partly": [2.8, 4.8],
-         "passes": {"quick": None, "careful": c_loss, "thorough": figs["loss_pct"]}},
-        {"id": "R4", "name": "the 14 design-day energies", "graded_as": "Ask 2", "figure": "energy",
-         "depends": ["R1", "R2"], "independent": "",
+         "passes": {"quick": None, "careful": figs["loss_pct"], "thorough": figs["loss_pct"]}},
+        {"id": "R3", "name": "the 14 design-day energies", "graded_as": "Ask 1", "figure": "energy",
+         "depends": ["R1"], "independent": "",
          "golden": figs["energy"], "bands": {c: [v - 10, v + 10] for c, v in figs["energy"].items()},
          "passes": {"quick": energies(qa), "careful": energies(ca), "thorough": figs["energy"]}},
-        {"id": "R5", "name": "each duty's verdict", "graded_as": "Ask 3", "figure": "verdict",
-         "depends": ["R3", "R4"], "independent": "", "golden": figs["verdict"],
+        {"id": "R4", "name": "each duty's verdict", "graded_as": "Ask 2", "figure": "verdict",
+         "depends": ["R2", "R3"], "independent": "", "golden": figs["verdict"],
          "passes": {"quick": verdicts(qa), "careful": verdicts(ca), "thorough": figs["verdict"]}},
-        {"id": "R6", "name": "the order", "graded_as": "Recommendation", "figure": "call_set",
-         "depends": ["R3", "R4"], "independent": "", "golden": figs["call_set"],
+        {"id": "R5", "name": "the order", "graded_as": "Recommendation", "figure": "call_set",
+         "depends": ["R2", "R3"], "independent": "", "golden": figs["call_set"],
          "passes": {"quick": A.chosen(qa), "careful": A.chosen(ca), "thorough": figs["call_set"]}},
     ]
     # a result's list grade: Partly when half the union is shared; the order is graded exactly
     for r in res:
-        if r["id"] == "R6":
+        if r["id"] == "R5":
             for p in ("quick", "careful"):
                 v = r["passes"][p]
                 if v != r["golden"]:
@@ -86,10 +81,10 @@ def main(target):
         routes.append({"name": k, "answer": A.chosen(aa), "golden": k == "golden"})
     routes.append({"name": "quick (average cold-day consumption)", "answer": A.chosen(qa), "golden": False})
     hints = [
-        {"sentence": "the shippers' declared weights scatter around what the trucks carry", "rescues": ["R2"]},
-        {"sentence": "below freezing the draw rises faster than one degree-day rate allows", "rescues": []},
-        {"sentence": "the cold takes capacity for the day and gives it back, so take it out of the loss",
-         "rescues": ["R3"]},
+        {"sentence": "the Värnamo duties drive faster than the pilot, and energy per km rises with speed",
+         "rescues": []},
+        {"sentence": "the routing tool's driving times are optimistic, more so in winter", "rescues": []},
+        {"sentence": "the shippers' declared weights scatter around what the trucks carry", "rescues": []},
     ]
     out = {"results": res, "hints": hints, "routes": routes}
     json.dump(out, open(os.path.join(HERE, "effort.json"), "w"), indent=1, ensure_ascii=False, sort_keys=True)

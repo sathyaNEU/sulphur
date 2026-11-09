@@ -19,6 +19,14 @@ LOAD = 0.0215      # per tonne of payload per loaded km
 EPS = 0.030        # trip-to-trip noise (driver, traffic, wind), multiplicative
 ROUTE_SD = 0.006   # each duty's own route effect beyond its climb, multiplicative
 
+AERO = 0.046      # air drag: kWh per km per 1000 (km/h)^2 of average speed above the reference
+V_REF = 65.0       # the speed at which E0 holds
+# the routing tool's planned speed is optimistic, and more so on winter roads: actual = planned x ratio(T) x noise
+R0 = 0.945         # actual over planned on mild days
+RC = 0.0085        # the ratio's fall per degree below about 10 C, a smooth curve (sim.ratio)
+RT, RS = 10.0, 3.0
+R_SD = 0.03        # day-to-day spread of the ratio (traffic, roadworks, the driver)
+
 DESIGN_T = -5.0    # FES-2 4.1, the January design day
 USABLE_2027 = 540.0  # the dealer's quotation, usable battery of the 2027 tractor
 SHARE = 0.85       # FES-2 4.3
@@ -66,6 +74,11 @@ PILOT = {
     "J08": ("GDR", (30, 100, 90), 44, "Vimmerby"),
     "J09": ("LBY", (21, 112, 108), 36, "Värnamo"),
 }
+# the routing tool's planned average speed over the round trip (km/h): the pilot's regional routes and the Varnamo
+# shortlist's long runs, mostly on the E4, E6, 25 and 27
+PILOT_V = {"J01": 68, "J02": 62, "J03": 66, "J04": 63, "J05": 64, "J06": 67, "J07": 61, "J08": 65, "J09": 69}
+SHORT_V = {"V03": 79, "V07": 77, "V11": 80, "V14": 78, "V18": 81, "V02": 76, "V05": 82, "V09": 83, "V16": 81,
+           "V21": 80, "V24": 74, "V27": 79, "V30": 81, "V33": 75}
 PILOT_START = dt.date(2025, 3, 3)
 PILOT_END = dt.date(2026, 10, 30)
 PILOT_TRACTORS = ["BEV-01", "BEV-02", "BEV-03", "BEV-04", "BEV-05", "BEV-06"]
@@ -91,7 +104,7 @@ SHORT = {
     "V33": ("KCY", 34, "Västervik", "no"),
 }
 # each duty's true design-day energy (kWh), set so the duty sits where the order's design puts it
-TARGET = {"V02": 413.4, "V03": 456.8, "V05": 425.2, "V07": 465.0, "V09": 406.1, "V11": 457.6, "V14": 436.9, "V16": 415.1, "V18": 424.6, "V21": 476.3, "V24": 478.2, "V27": 475.8, "V30": 466.3, "V33": 484.7}
+TARGET = {"V02": 414.4, "V03": 456.2, "V05": 430.5, "V07": 464.9, "V09": 405.9, "V11": 457.5, "V14": 438.6, "V16": 415.8, "V18": 430.0, "V21": 476.4, "V24": 478.4, "V27": 476.3, "V30": 463.0, "V33": 485.0}
 
 WB_START = dt.date(2024, 11, 1)
 WB_END = dt.date(2026, 10, 30)

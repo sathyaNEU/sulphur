@@ -1,12 +1,13 @@
 # leak check, task4
 
-**Verdict: REVIEW.** 12 files read, 31 golden figures and 5 candidate names taken from submission.md, 25 stump terms taken from the design note.
+**Verdict: REVIEW.** 12 files read, 18 golden figures and 6 candidate names taken from submission.md, 25 stump terms taken from the design note.
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: record, orders, drifts, station, declared, stations, reader, careful, golden, network, decisive, calibration, weight, shipper, nothing, method, shortcut, missed, readings, season, declarations, modelling, carries, re-run, overflow
+Stump terms swept: record, routing, orders, drifts, station, stations, reader, temperature, network, decisive, fitted, graded, missed, readings, transfer, result, platform, architecture, re-run, overflow, pruszkow, golden, driving, design-day, careful
 
-## 3 answer figures in the pack (REVIEW 3)
+## 3 answer figures in the pack (REVIEW 4)
+- **REVIEW** `fleet_electrification_standard_FES-2.pdf`: golden figure 2.1 appears: ...ic tractors put to the management group. 2. Terms 2.1 A duty is a regular round trip from a depot as th...
 - **REVIEW** `quotation_bev_tractors_2027.pdf`: golden figure 540 appears: ...ttery Installed capacity 630 kWh; usable capacity 540 kWh Charging CCS2, up to 375 kW DC; on-board 43 k...
 - **REVIEW** `fleet_electrification_standard_FES-2.pdf`: carries 4 of 6 distinctive words of the committed call: 'Order 6 battery-electric tractors, for V02, V05, V09, V14, V16, V18; V03, V07, V11, V21, V24, V27, V30, V33 stay on dies'
 - **REVIEW** `quotation_bev_tractors_2027.pdf`: carries 4 of 6 distinctive words of the committed call: 'Order 6 battery-electric tractors, for V02, V05, V09, V14, V16, V18; V03, V07, V11, V21, V24, V27, V30, V33 stay on dies'
@@ -166,3 +167,16 @@ only).
    separate estimation, and only the final verdict is the filed rule applied to them.
 Sweep rulings: the quotation's 540 kWh harmless (the ordered model's specification); the shared words of the call
 harmless (the topic's ordinary nouns); the shell quota harmless (a style fingerprint, no disclosure).
+
+Architecture 7, 2026-11-09, isolated Sonnet reader on target.zip 76adf383 (a fresh copy of prompt.txt and target/
+only).
+1. How to do it: FES-2 2.2, 2.3, 3.1, 4.1 to 4.3 (the energy's source, the loss's population, the design day, the
+   planning load's window, the 85 per cent test): the WHAT; the forecast, the payload figure and the loss left open.
+2. Ranking file: none. 3. Helping file: none. 4. Answer figure: none (540, 520 and the 75 per cent warranty are inputs
+   or a ruled-out shortcut).
+5. Literal sentences: FES-2 4.3 and 4.2 fix the comparison and the load's window; executed they give the golden's basis.
+6. One thing: none; FES-2 settles the rule, while the energies, the payload figure and the loss each need estimation
+   on the large files.
+Sweep rulings: the quotation's 540 kWh harmless (a specification); the call's shared words harmless (the topic's
+nouns); the route register's "Driving time h (routing tool)" harmless: its header and values say nothing of how it is
+used, and the reader took it for a likely distractor beside the energy chain.

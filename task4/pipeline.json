@@ -6,8 +6,8 @@
  "stage": 5,
  "stage_name": "ready",
  "updated": "2026-11-09",
- "stump": "No one step decides: declared payloads alone order 8, one cold rate alone 8 (another set), no first-year loss alone 9, the careful but hurried pass 9",
- "architecture": 6,
+ "stump": "The careful pass making the platform run's three corrections orders 9 at the pilot's speeds; speed at the routing tool's figure orders 3, at the year's ratio 5",
+ "architecture": 7,
  "loops": 0,
  "precut": {
   "exit": 0,
@@ -15,8 +15,8 @@
   "checks": "85 of 85, 1 WARN (R2 upstream of 3)"
  },
  "leak": {
-  "leak_py": "REVIEW, no LEAK (2026-11-09, b8f03fbc, as-of 2026-11-06): the quoted 540 kWh, generic words of the call, the shell quota",
-  "reader": "2026-11-09 isolated Sonnet reader on 9d65a333: no leak on any question, no one thing; the three sweep lines harmless; not re-run after the data-only pallet fix"
+  "leak_py": "REVIEW, no LEAK (2026-11-09, 76adf383, as-of 2026-11-06)",
+  "reader": "2026-11-09 isolated Sonnet reader on 76adf383: no leak, no one thing; the routing-tool driving time column read as a likely distractor"
  },
  "duplicate_check": {
   "check": "WARN 2026-11-08 (repeat.gate_g)",
@@ -24,10 +24,10 @@
   "surface": "exit 0 2026-11-08, 0 promoted"
  },
  "judge": {
-  "verdict": "DETERMINISTIC (2026-11-09, isolated thread on target.zip 9d65a333): all 14 planning loads exact, the 540 to 519 to 441 kWh chain exact, the cleaning steps present; the regression figures verified in direction and size",
-  "disposition": "APPROVE; one FIX_NOW without rerun (the dairy's constant 13,500 kg declaration read as an authored device), fixed: both standard-weight shippers declare planned pallets at a standard weight each, gates re-run on b8f03fbc",
-  "gate_g": "mixed: regression calibration, out-of-sample form selection, confound-controlled degradation; surface_read_dependency no, sole_data_defect no",
-  "gate_h": "domain pass, layers pass, one_thing none, the largest hint rescues at most 2 of 6",
+  "verdict": "DETERMINISTIC (2026-11-09, isolated thread on 76adf383): speeds, the 540 to 520 to 442 kWh chain and the payload calibration reproduced from named files",
+  "disposition": "APPROVE; minor: metadata.json architecture fixed; the judge's own one-fact sentence rescues at most a third; the distractors unused but not decoys",
+  "gate_g": "method_or_model_selection (binding constraint on the FES-2 limit), analytical_non_defect, surface_read_dependency no, sole_data_defect no",
+  "gate_h": "domain pass, layers pass, one_thing none",
   "report": "task4/determinism_check_report.md"
  },
  "returned": [
@@ -46,7 +46,7 @@
    "moves": "re-rooted in the same world on the client's instruction (architecture 6, a results chain at depth level 5): Tabergs out of the pilot, Granna Dryckes' notes on its dock scale from 17 Aug 2026, a smooth sub-zero curve the held-out winter chooses, FES-2 2.3 charging the first year's permanent battery loss read from the pilot's SOC records; each of the three estimates moves the order alone (8, 8, 9)"
   }
  ],
- "resume": "READY: the author rewrites prompt.txt in their own voice (voice-check.py --rewrite, leak.py), uploads it with target.zip, pastes the four blocks of submission.md, and the platform's two runs go to /triage-runs",
+ "resume": "READY: the author rewrites prompt.txt in their own voice (voice-check.py --rewrite, leak.py), uploads it with target.zip as the next version, pastes the four blocks of submission.md, and /triage-runs once both platform runs are in",
  "approved": null,
  "delivered": null,
  "portal": null,
@@ -214,9 +214,17 @@
   {
    "date": "2026-11-09",
    "event": "stage 4: reader no leak, judge DETERMINISTIC APPROVE; the judge's FIX_NOW (a constant standard declaration) fixed in the generator, every gate re-run; stage 5: READY on target.zip b8f03fbc0bbd9ef3"
+  },
+  {
+   "date": "2026-11-09",
+   "event": "architecture 6 landed by platform run 1 (three reflexes; the distance transfer left as an untested assumption); re-designed in place as architecture 7 (the speed transfer), stage 3 gates green, stage 4 reader and judge spawned"
+  },
+  {
+   "date": "2026-11-09",
+   "event": "stage 4 on architecture 7: reader no leak, judge DETERMINISTIC APPROVE; READY on target.zip 76adf383c1395b39"
   }
  ],
- "zip_sha256_16": "b8f03fbc0bbd9ef3",
+ "zip_sha256_16": "76adf383c1395b39",
  "migrated_from": {
   "project": "Mark",
   "task": "task250",
@@ -252,11 +260,18 @@
     "graded": false,
     "verdict": "not stumped (author's report); run texts not in the repo",
     "texts": ""
+   },
+   {
+    "architecture": 6,
+    "date": "2026-11-09",
+    "graded": false,
+    "verdict": "run 1 on the golden call and every graded figure (author supplied); run 2 not supplied",
+    "texts": "runs/arch6/run1.md"
    }
   ]
  },
  "gates": {
-  "checks": "156 assertions",
+  "checks": "181 assertions",
   "verify": "PASS (moments correction 1.95, tractor-by-tractor loss 3.82 per cent, the same six, every energy within 10 kWh)",
   "byte_identical": "two builds",
   "figures_check": "90 figures, 0 absent",
@@ -265,14 +280,14 @@
   "containers": "audit_containers exit 0",
   "guard": "check WARN, heart WARN, surface exit 0"
  },
- "golden_zip_sha256_16": "530a74209100087b",
+ "golden_zip_sha256_16": "2f69a87a0faeac1e",
  "doctrine": "throughout",
- "chain": "R1 planning loads (assembly), R2 payload term 2.0 kWh/t/100 km (measurement), R3 first-year loss 3.8 per cent (modeling), R4 fourteen design-day energies (validation of the cold form), R5 verdicts against 441 kWh, R6 the order of 6 (synthesis)",
- "paper_pair": 49.7,
+ "chain": "R1 payload term 2.1 kWh/t/100 km, R2 first-year loss 3.8 per cent, R3 fourteen design-day energies with each duty's speed carried from the routing tool through the pilot's winter ratio, R4 verdicts against 442 kWh, R5 the order of 6",
+ "paper_pair": 44.8,
  "effort": {
-  "quick": 34.5,
-  "careful": 49.7,
+  "quick": 20.8,
+  "careful": 44.8,
   "thorough": 100.0,
-  "largest_hint": "the shippers' declared weights scatter around what the trucks carry (1 of 6)"
+  "largest_hint": "the Värnamo duties drive faster and energy rises with speed (0 of 5)"
  }
 }

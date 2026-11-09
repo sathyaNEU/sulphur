@@ -198,8 +198,9 @@ def write_routes(w, path):
     for dcode in sorted(P.PILOT):
         ship, legs, climb, town = P.PILOT[dcode]
         rows.append([dcode, "", "Jönköping (Torsvik)", ship, P.SHIPPERS[ship][1], town, legs[0], legs[1], legs[2],
-                     sum(legs), climb, "Mon-Fri"])
+                     sum(legs), climb, "Mon-Fri", round(sum(legs) / P.PILOT_V[dcode], 2)])
     rng = np.random.default_rng(P.SEED + 34)
+    vrng = np.random.default_rng(P.SEED + 38)
     for k in range(1, 47):
         c = "V%02d" % k
         if c in w["short"]:
@@ -208,11 +209,13 @@ def write_routes(w, path):
         else:
             ship, legs, climb = w["others"][c]
             town = OTHER_TOWNS[k % len(OTHER_TOWNS)]
+        vplan = P.SHORT_V[c] if c in P.SHORT_V else float(66 + 16 * vrng.random())
         rows.append([c, "VMO-%02d" % k, "Värnamo terminal", ship, P.SHIPPERS[ship][1], town, legs[0], legs[1],
-                     legs[2], sum(legs), climb, "Mon-Fri"])
+                     legs[2], sum(legs), climb, "Mon-Fri", round(sum(legs) / vplan, 2)])
     _sheet(ws, ["Duty", "Duty (before 13 Apr 2026)", "Depot", "Shipper", "Collection", "Delivery", "Depot to collection km",
-                "Collection to delivery km", "Delivery to depot km", "Round trip km", "Climb m per 100 km (routing tool)", "Runs"],
-           rows, [8, 14, 20, 9, 14, 14, 12, 12, 12, 11, 11, 9])
+                "Collection to delivery km", "Delivery to depot km", "Round trip km", "Climb m per 100 km (routing tool)", "Runs",
+                "Driving time h (routing tool)"],
+           rows, [8, 14, 20, 9, 14, 14, 12, 12, 12, 11, 11, 9, 12])
     wb.save(path)
 
 

@@ -66,7 +66,7 @@ def main(target):
     j = lambda f: os.path.join(target, f)
     routes = {}
     for r in sheet_rows(j("route_register_2026.xlsx"), "Duties")[1:]:
-        routes[r[0]] = (r[3], (r[6], r[7], r[8]), r[10])
+        routes[r[0]] = (r[3], (r[6], r[7], r[8]), r[10], (r[6] + r[7] + r[8]) / r[12])
     short = [r[0] for r in sheet_rows(j("fleet_plan_2027.xlsx"), "Shortlist 2027")[1:]]
     # weighbridge: per CMR the latest weighing
     latest = {}
@@ -121,7 +121,8 @@ def main(target):
             continue
         rows.append((c["duty"], per(c["shipper"], k[1][:7]), weight(c["declared_weight"]), float(r["distance_km"]),
                      float(r["energy_used_kwh"]), float(r["ambient_mean_c"]) if r["ambient_mean_c"] else None,
-                     station[k[1]], k[0], k[1], float(r["soc_start_pct"]) - float(r["soc_end_pct"])))
+                     station[k[1]], k[0], k[1], float(r["soc_start_pct"]) - float(r["soc_end_pct"]),
+                     float(r["distance_km"]) / float(r["driving_time_h"])))
     off = np.mean([x[5] - x[6] for x in rows if x[5] is not None])
     duty = np.array([x[0] for x in rows])
     ship = np.empty(len(rows), dtype=object)
@@ -144,7 +145,13 @@ def main(target):
             lam = max(0.0, vd - e[1]) / vd if vd > 0 else 1.0
             pay[m] = dec[m].mean() + lam * (dec[m] - dec[m].mean())
     pay /= 1000.0
-    X = np.column_stack([km, km * cl, km * np.maximum(0, 16 - T), km * np.maximum(0, -T), pay * lk])
+    vday = np.array([x[10] for x in rows])
+    X = np.column_stack([km, km * cl, km * np.maximum(0, 16 - T), km * np.maximum(0, -T),
+                         km * (vday ** 2 - 65.0 ** 2) / 1000.0, pay * lk])
+    # the speed a duty keeps on a -5 C day: its routing-tool speed times the pilot's actual-to-planned ratio on the
+    # days within 3 C of -5
+    ratio = vday / np.array([routes[d][3] for d in duty])
+    rr = float(ratio[np.abs(T + 5.0) <= 3.0].mean())
     beta = np.linalg.solve(X.T @ X, X.T @ y)
     # the first-year loss, tractor by tractor: energy per full charge on age and degrees below 20 C
     import datetime as dt
@@ -161,9 +168,11 @@ def main(target):
     limit = 0.85 * 540 * (1 - loss)
     res = {}
     for c in short:
-        s, legs, climb = routes[c]
+        s, legs, climb, vplan = routes[c]
         tot = sum(legs)
-        e = beta @ np.array([tot, tot * climb, tot * 21.0, tot * 5.0, np.mean(loads[c]) / 1000 * legs[1]])
+        v5 = vplan * rr
+        e = beta @ np.array([tot, tot * climb, tot * 21.0, tot * 5.0, tot * (v5 ** 2 - 65.0 ** 2) / 1000.0,
+                             np.mean(loads[c]) / 1000 * legs[1]])
         res[c] = (float(e), e <= limit)
     go = sorted(c for c, v in res.items() if v[1])
     fig = json.load(open(os.path.join(HERE, "figures.json")))

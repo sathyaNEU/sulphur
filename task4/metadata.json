@@ -1,6 +1,6 @@
 {
  "task": "task4",
- "architecture": 6,
+ "architecture": 7,
  "title": "How many battery-electric tractors a Sm\u00e5land road haulier should order for its V\u00e4rnamo duties for 2027, and which duties they take, under its fleet electrification standard",
  "domain": "Supply Chain & Logistics (house domain) in General Statistics & Data Science",
  "subdomain": "regression, classification & model diagnostics (fleet electrification: which regular duties battery-electric tractors can run on one charge)",
@@ -18,8 +18,8 @@
   {
    "path": "weighbridge_varnamo_2024-11_2026-10.csv",
    "format": "csv",
-   "bytes": 1867928,
-   "rows": 21470,
+   "bytes": 1862397,
+   "rows": 21407,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-11-06",
    "license": "CC0-1.0 (original work)"
@@ -27,7 +27,7 @@
   {
    "path": "bev_daily_summary_2025-03_2026-10.csv",
    "format": "csv",
-   "bytes": 315106,
+   "bytes": 315109,
    "rows": 2374,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-11-06",
@@ -36,7 +36,7 @@
   {
    "path": "tms_consignments_jonkoping_2025-2026.csv",
    "format": "csv",
-   "bytes": 276499,
+   "bytes": 276401,
    "rows": 3501,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-11-06",
@@ -45,7 +45,7 @@
   {
    "path": "route_register_2026.xlsx",
    "format": "xlsx",
-   "bytes": 10116,
+   "bytes": 10511,
    "rows": null,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-11-06",

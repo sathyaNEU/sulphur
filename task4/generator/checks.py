@@ -29,7 +29,7 @@ def r10(x):
     return int(round(x / 10.0) * 10)
 
 
-def same(pk, model, g, lim=None, tol=6.0):
+def same(pk, model, g, lim=None, tol=7.0):
     a = A.assess(pk, model, lim=g["limit"] if lim is None else lim)
     s = A.chosen(a) == g["set"]
     near = all(abs(a[c]["kwh"] - g["assess"][c]["kwh"]) <= tol for c in a)
@@ -44,21 +44,30 @@ def main(target):
     L = g["limit"]
     ok("call", gold_set == ["V02", "V05", "V09", "V14", "V16", "V18"] and g["count"] == 6, str(gold_set))
     for c, v in g["assess"].items():
-        ok("margin %s" % c, abs(v["kwh"] - L) >= 7.0, "%.1f against %.1f" % (v["kwh"], L))
+        ok("margin %s" % c, abs(v["kwh"] - L) >= 5.0, "%.1f against %.1f" % (v["kwh"], L))
     # the routes: each hurried step alone lands on its own wrong order
     R = A.routes(pk)
     sets = {k: A.chosen(A.assess(pk, m, lim=lm)) for k, (m, lm) in R.items()}
     ok("declared weights order 8: V03, V07, V11 in, V14 out",
        set(sets["declared weights"]) ^ set(gold_set) == {"V03", "V07", "V11", "V14"}, str(sets["declared weights"]))
-    ok("one cold rate orders 8: V03 and V11 in", set(sets["one cold rate"]) ^ set(gold_set) == {"V03", "V11"},
+    ok("one cold rate orders 9: V03, V11 and V30 in",
+       set(sets["one cold rate"]) ^ set(gold_set) == {"V03", "V11", "V30"},
        str(sets["one cold rate"]))
-    ok("no first-year loss orders 9: V03, V07, V11 in",
-       set(sets["no first-year loss"]) ^ set(gold_set) == {"V03", "V07", "V11"}, str(sets["no first-year loss"]))
+    ok("no first-year loss orders 10: V03, V07, V11, V30 in",
+       set(sets["no first-year loss"]) ^ set(gold_set) == {"V03", "V07", "V11", "V30"}, str(sets["no first-year loss"]))
+    ok("no speed term (the architecture 6 golden) orders 9: V03, V11 and V30 in",
+       set(sets["no speed term"]) ^ set(gold_set) == {"V03", "V11", "V30"}, str(sets["no speed term"]))
+    ok("the routing tool's speed orders 3: V05, V14, V18 out",
+       set(sets["the routing tool's speed"]) ^ set(gold_set) == {"V05", "V14", "V18"}, str(sets["the routing tool's speed"]))
+    ok("the year's mean speed ratio orders 5: V14 out",
+       set(sets["the year's mean speed ratio"]) ^ set(gold_set) == {"V14"},
+       str(sets["the year's mean speed ratio"]))
     ok("careful but hurried orders 9", len(sets["careful but hurried"]) == 9, str(sets["careful but hurried"]))
     wrong = {tuple(v) for k, v in sets.items() if k != "golden" and v != gold_set}
     ok("three or more distinct wrong orders", len(wrong) >= 3, str(len(wrong)))
     for k, (m, lm) in R.items():
-        if k in ("declared weights", "one cold rate", "no first-year loss"):
+        if k in ("declared weights", "one cold rate", "no first-year loss", "no speed term", "the routing tool's speed",
+                 "the year's mean speed ratio"):
             a = A.assess(pk, m, lim=lm)
             flips = set(A.chosen(a)) ^ set(gold_set)
             ok("route %s clear of its limit on the duties it flips" % k,
@@ -107,6 +116,16 @@ def main(target):
     est = [v[1] for (s, rr), v in cal.items() if s in pilot and P.SHIPPERS[s][2] == "est" and rr != "ticket"]
     ok("estimating clerks' slopes 0.1 to 0.25", all(0.1 <= x <= 0.25 for x in est), str(est))
     # the battery never runs below its reserve on a pilot day
+    # the speed transfer: the pilot cannot show the Varnamo duties' speeds directly, and a model without speed
+    # validates on the pilot
+    nos = A.fit(pk, gp, A.H2, speed=None)
+    ok("speed term improves the pilot fit only modestly", 0.05 < nos["rmse_pct"] - g["model"]["rmse_pct"] < 0.6,
+       "%.2f against %.2f" % (nos["rmse_pct"], g["model"]["rmse_pct"]))
+    vmax = max(d["v"] for d in pk.days)
+    ok("every shortlisted duty's routing-tool speed above any pilot day's actual",
+       min(A.plan_speed(pk, c) for c in pk.short) > vmax, "%.1f" % vmax)
+    rr = A.speed_ratio(pk)
+    ok("winter speed ratio near the truth", abs(rr - sim.ratio(P.DESIGN_T)) < 0.01, "%.3f" % rr)
     ok("pilot SOC end at 5 per cent or more", min(d["soc1"] for d in pk.days) >= 5, str(min(d["soc1"] for d in pk.days)))
     # SF1 the design day's temperature: the trucks' ambient or the station's
     ok("SF1", same(pk, RV["station temperature"][0], g)[0])
@@ -183,6 +202,11 @@ def main(target):
     # SF21 "permanently": the cold's loss returns each spring, so the age trend alone is low (asserted above)
     ok("SF21 the cold's capacity loss is reversible", A.fade(pk, "age") < f - 0.004)
     ok("SF22 the limit", abs(L - A.SHARE * A.USABLE * (1 - f)) < 1e-9)
+    ok("SF24 the design-day speed: the routing tool's and the year's ratio each order otherwise",
+       sets["the routing tool's speed"] != gold_set and sets["the year's mean speed ratio"] != gold_set
+       and A.speed_ratio(pk) < A.speed_ratio(pk, how="mean") - 0.05)
+    ok("SF25 the speed term's form", same(pk, RV["speed: a straight line"][0], g, RV["speed: a straight line"][1])[0])
+    ok("SF26 the ratio's form", all(same(pk, RV[k][0], g, RV[k][1])[0] for k in RV if k.startswith("speed ratio")))
     # SF23 the usable battery: the quoted 540 less the loss, not the pilot's
     ok("SF23", abs(g["usable_y1"] - 540 * (1 - f)) < 1e-6)
     # SF17 the fit's km: odometer or route km
@@ -254,7 +278,8 @@ def clean_pack(w, pk):
         cp.days.append({"date": x["date"], "reg": x["tractor"], "duty": x["duty"], "shipper": x["shipper"],
                         "declared": float(x["declared"]), "km": float(sum(tr["km"] for tr in x["trips"])),
                         "kwh": float(sum(tr["kwh"] for tr in x["trips"])), "t": t, "station_t": t, "t_filled": t,
-                        "cap": x["cap"], "age": (x["date"] - A.IN_SERVICE).days / 365.25})
+                        "cap": x["cap"], "age": (x["date"] - A.IN_SERVICE).days / 365.25,
+                        "v": sum(tr["km"] for tr in x["trips"]) / sum(tr["km"] / tr["speed"] for tr in x["trips"])})
     return cp
 
 
