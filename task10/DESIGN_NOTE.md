@@ -345,6 +345,14 @@ What the author's voice rewrite may not drop or change:
   "validate", any method word, or any temperature but the colder daily mean; never say the providers deliver less
   when it is colder, or that the credit is to be read again on the colder day.
 
+- The prompt on file is the author's voice rewrite of 2026-11-09 (`pipeline.json` `prompt_rewritten`): first person,
+  direct, the question in the first sentence. It drops only what the pack already pins: "counting the flexibility
+  contracted for that winter" (guideline 6 credits the flexibility contracted for the winter assessed and guideline 7
+  commits on demand after it), and "on the design day" on the delivery and on the excess (guideline 6 reads the
+  delivery in the design day's two half-hours; guideline 7 commits on the design day, so the excess asked for the
+  primaries to reinforce is the design day's). Every ask, the per-zone row, the chart's parts, the working-weekday
+  condition at a daily mean of minus 6.0 C, both file names and the rounding are kept in meaning; voice-check
+  `--rewrite` PASS with no WARN, leak.py sweep 11 clean, checks 103/103 (the pins check reads the new prompt).
 ## Leak rulings
 
 - leak.py sweep 3, the guideline's Appendix A (23.0, 22.5, 30.5, 17.8) and the awards' megawatts (10.0, 8.0, 14.5,

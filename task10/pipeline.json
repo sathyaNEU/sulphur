@@ -88,7 +88,7 @@
    "commit": ""
   }
  ],
- "resume": "the author's decision on the stage 4 judge's main-call finding (determinism_check_report_pass2.md): guideline 6 read as the primary's whole fall files Ashcombe Road alone. Either (a) accept the existing closure (\"that its provider will deliver\", \"No other measure is credited\", the award notice's provider-metered delivery, now rebutted by name in the closing) and ship: re-read the prompt with the leak reader, spend the one re-judge, set READY and commit RESHIPPED; or (b) /fix-determinism with a WHAT sentence that names no transfer, run the fork-is-the-stump test first; or (c) re-root. The ask layer is repaired and every free gate re-run on a670e735 (checks 103/103, verify PASS, byte-identical, figures_check 72/72, voice-check PASS, leak.py REVIEW no LEAK, audit PASS, freeze rubric PASS, precut 1 FAIL on the honest pair ceiling 54.5)",
+ "resume": "the author's decision on the stage 4 judge's main-call finding (determinism_check_report_pass2.md): guideline 6 read as the primary's whole fall files Ashcombe Road alone. Either (a) accept the existing closure (\"that its provider will deliver\", \"No other measure is credited\", the award notice's provider-metered delivery, now rebutted by name in the closing) and ship: re-read the rewritten prompt (2026-11-09, prompt_rewritten) with the leak reader, spend the one re-judge, set READY and commit RESHIPPED; or (b) /fix-determinism with a WHAT sentence that names no transfer, run the fork-is-the-stump test first; or (c) re-root. The ask layer is repaired and every free gate re-run on a670e735 (checks 103/103, verify PASS, byte-identical, figures_check 72/72, voice-check PASS, leak.py REVIEW no LEAK, audit PASS, freeze rubric PASS, precut 1 FAIL on the honest pair ceiling 54.5)",
  "approved": null,
  "submitted": null,
  "delivered": null,
@@ -309,6 +309,10 @@
     }
    ],
    "fate": "spent 2026-11-08 on the platform (both runs on the golden call); world spent"
+  },
+  {
+   "date": "2026-11-09",
+   "event": "prompt rewritten for a human voice at the author's word (first person, direct); dropped only what the guideline already pins: 'counting the flexibility contracted for that winter' (guideline 6 and 7), 'on the design day' on the delivery and on the excess (guideline 6 reads the delivery on the design day, guideline 7 commits on it); every ask, unit, rounding, the working-weekday minus 6.0 C condition and both file names kept"
   }
  ],
  "gates_stage5": {
@@ -328,5 +332,6 @@
  "zips": {
   "target.zip": "a670e735c98c485a668ec8543aa170d2b4b073d0a2c784437d293f12a23560af",
   "golden.zip": "9af93f82b37ee4cbb57b5bc51efa02c83e18f70f00ebed1823ad7cda860d7878"
- }
+ },
+ "prompt_rewritten": true
 }
