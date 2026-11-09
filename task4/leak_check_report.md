@@ -4,12 +4,15 @@
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: record, orders, drifts, station, declared, stations, reader, careful, golden, network, decisive, calibration, shipper, nothing, method, shortcut, missed, readings, season, weight, declarations, modelling, carries, re-run, overflow
+Stump terms swept: record, orders, drifts, station, declared, stations, reader, careful, golden, network, decisive, calibration, weight, shipper, nothing, method, shortcut, missed, readings, season, declarations, modelling, carries, re-run, overflow
 
 ## 3 answer figures in the pack (REVIEW 3)
 - **REVIEW** `quotation_bev_tractors_2027.pdf`: golden figure 540 appears: ...ttery Installed capacity 630 kWh; usable capacity 540 kWh Charging CCS2, up to 375 kW DC; on-board 43 k...
 - **REVIEW** `fleet_electrification_standard_FES-2.pdf`: carries 4 of 6 distinctive words of the committed call: 'Order 6 battery-electric tractors, for V02, V05, V09, V14, V16, V18; V03, V07, V11, V21, V24, V27, V30, V33 stay on dies'
 - **REVIEW** `quotation_bev_tractors_2027.pdf`: carries 4 of 6 distinctive words of the committed call: 'Order 6 battery-electric tractors, for V02, V05, V09, V14, V16, V18; V03, V07, V11, V21, V24, V27, V30, V33 stay on dies'
+
+## 9 dates after the setting (INFO 1)
+- **INFO** `-`: no --asof given, sweep skipped (pass the fiction's as-of date)
 
 ## 10 container metadata (INFO 1)
 - **INFO** `-`: container gate PASS (PASS: 0 FAIL, 0 WARN)
@@ -34,8 +37,6 @@ Stump terms swept: record, orders, drifts, station, declared, stations, reader, 
 ## 7 hidden content (clean)
 
 ## 8 column names (clean)
-
-## 9 dates after the setting (clean)
 
 
 ## Solver's-eye read
@@ -150,3 +151,18 @@ Flagged file verdicts:
 - fleet_electrification_standard_FES-2.pdf: harmless. It files the estimand and thresholds; no figures or method.
 - quotation_bev_tractors_2027.pdf: harmless. Supplies battery size and price; "usable 540" is a necessary input. Sentence "Your existing fleet portal account will show the new tractors' daily summaries as it does for the Jonkoping tractors" is texture. Its 24 Sept meeting reference is dated before the setting.
 - prompt.txt: harmless. Pins question, deliverables and rounding; names no method. It does say "under FES-2", pointing to the governing standard, which is fine.
+
+Architecture 6, 2026-11-09, isolated Sonnet reader on target.zip 9d65a333 (a fresh copy of prompt.txt and target/
+only).
+1. How to do it: FES-2 4.2 and 4.3 (the planning load's population and window, the 85 per cent test against the
+   ordered model): filed conventions, the WHAT; the forecast and the loss estimate left open.
+2. Ranking file: none; the shortlist carries no score, energy or verdict.
+3. Helping file: none; every file is an operational register or governing document.
+4. Answer figure or name: none; the 540 and 520 kWh capacities are inputs.
+5. Literal sentences: FES-2 4.2 (each duty's own departures, the trailing twelve months, gross less tare), 4.3 (the
+   ordered model's usable battery), 2.3 (the loss share from the company's own tractors), 4.1 (-5 C, inside the
+   observed range): each fixes the population or the target, none a figure; executed, they give the golden's basis.
+6. One thing: none; the planning load is assembly, the energy, the payload coefficient and the loss are each
+   separate estimation, and only the final verdict is the filed rule applied to them.
+Sweep rulings: the quotation's 540 kWh harmless (the ordered model's specification); the shared words of the call
+harmless (the topic's ordinary nouns); the shell quota harmless (a style fingerprint, no disclosure).

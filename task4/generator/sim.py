@@ -35,8 +35,9 @@ def declare(rng, code, true_t, day=None):
         prac = "exact"
     if prac == "exact":
         return int(round(true_t * 1000 / 10)) * 10
-    if prac == "std":
-        return P.STD_LOAD[code]
+    if prac == "std":   # the load plan's pallet count at the shipper's standard pallet weight
+        n = max(1, int(round(true_t * 1000 / P.STD_LOAD[code] + rng.normal(0, 1.1))))
+        return n * P.STD_LOAD[code]
     v = true_t * (1 + rng.normal(0, P.EST_SD))
     return int(round(v * 1000 / 50)) * 50
 

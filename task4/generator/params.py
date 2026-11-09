@@ -49,7 +49,7 @@ SHIPPERS = {
     "KCY": ("Kulltorps Cykel AB", "Kulltorp", "est", 3.9, 0.60),
     "VGL": ("Vaggeryds Glas AB", "Vaggeryd", "est", 21.0, 1.80),
 }
-STD_LOAD = {"BMJ": 13500, "RPA": 9000}   # the standard full-load weight each std shipper writes on every note
+STD_LOAD = {"BMJ": 540, "RPA": 360}   # the standard weight per pallet each std shipper writes, times the pallets on the note
 EST_SD = 0.22     # the estimating clerks' relative error (mean zero)
 # Granna Dryckes put a platform scale on its loading dock: from this date its notes carry the scale's weight
 SCALE_FROM = {"GDR": dt.date(2026, 8, 17)}
@@ -91,7 +91,7 @@ SHORT = {
     "V33": ("KCY", 34, "Västervik", "no"),
 }
 # each duty's true design-day energy (kWh), set so the duty sits where the order's design puts it
-TARGET = {"V02": 412.8, "V03": 456.8, "V05": 424.9, "V07": 464.8, "V09": 405.3, "V11": 458.3, "V14": 435.1, "V16": 414.0, "V18": 424.2, "V21": 475.5, "V24": 477.8, "V27": 475.0, "V30": 465.8, "V33": 482.9}
+TARGET = {"V02": 413.4, "V03": 456.8, "V05": 425.2, "V07": 465.0, "V09": 406.1, "V11": 457.6, "V14": 436.9, "V16": 415.1, "V18": 424.6, "V21": 476.3, "V24": 478.2, "V27": 475.8, "V30": 466.3, "V33": 484.7}
 
 WB_START = dt.date(2024, 11, 1)
 WB_END = dt.date(2026, 10, 30)

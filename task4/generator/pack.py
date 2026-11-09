@@ -169,6 +169,8 @@ def write_tms(w, path, fl):
                 pal = int(round(pay / 0.52 + rng.normal(0, 1.2)))
                 vreg = dj[spare.pop()]
             n += 1
+            if ship in P.STD_LOAD:   # the note's pallets are the load plan's, which the declared weight counts
+                pal = dec // P.STD_LOAD[ship]
             rows.append(["FR%d" % n, day.isoformat(), dcode, vreg, ship, P.SHIPPERS[ship][1], town, max(pal, 8),
                          fmt_weight(rng, dec, ship, day), goods[ship]])
     return write_csv(path, ["consignment_no", "collection_date", "duty", "vehicle_reg", "shipper", "collection_site",

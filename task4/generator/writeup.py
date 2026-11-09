@@ -42,12 +42,12 @@ def figures(pk, g):
         # conventions the blocks cite: FES-2 sections, the quoted battery and share, the per-100-km unit, and the
         # capacity model's reference temperature
         "conventions": {"fes_sections": [2.3, 4.1, 4.2, 4.3], "usable_quoted": 540, "share_pct": 85,
-                        "per_km": 100, "capacity_ref_c": 20},
+                        "per_km": 100, "capacity_ref_c": 20, "pallet_kg": 540},
     }
     cal = A.calibration(pk)
     f["calibration_slope"] = {"%s %s" % k: round(v[1], 2) for k, v in sorted(cal.items())
                               if k[0] in {d["shipper"] for d in pk.days}}
-    est = [v for k, v in f["calibration_slope"].items() if 0.0 < v < 0.9]
+    est = [v for k, v in f["calibration_slope"].items() if 0.0 < v < 0.9 and not k.startswith("BMJ")]
     f["clerk_slope_lo"], f["clerk_slope_hi"] = min(est), max(est)
     return f
 
@@ -97,7 +97,7 @@ def write(path, pk, g, f):
 1. Cleaned bev_daily_summary_2025-03_2026-10.csv (a day uploaded twice kept once, ambient dropouts filled from the Jönköping station plus the mean offset) and joined tms_consignments_jonkoping_2025-2026.csv on registration and date: {days} pilot duty-days with declared weights read in kg or tonnes.
 2. Planning loads from weighbridge_varnamo_2024-11_2026-10.csv per FES-2 4.2: the last weighing of each CMR, VMO-nn read as Vnn, gross less tare, November 2025 to October 2026 (V03 {l03} t, V14 {l14} t).
 3. Fitted each duty-day's energy on km, climb, cold and payload times loaded km. On the declared weights the payload term is {pdec} kWh per tonne per 100 km and held-out days look fine, because they carry the same declarations.
-4. Read the declarations against the Värnamo weighings shipper by shipper: the clerks' weighed load rises only {slo} to {shi} t per declared tonne, the dairy declares one weight whatever is loaded, and the drinks maker's notes match the bridge from August 2026. Each pilot day's declaration taken to its expected weighed load at its shipper and note period gives **{pt}**; one pooled line over the bridge gives {ppool} and one over the pilot shippers {pline}, each mixing different declaration habits.
+4. Read the declarations against the Värnamo weighings shipper by shipper: the clerks' weighed load rises only {slo} to {shi} t per declared tonne, the dairy declares its planned pallets at 540 kg each its weighed load following the pallet count at {sbmj} t per declared tonne, and the drinks maker's notes match the bridge from August 2026. Each pilot day's declaration taken to its expected weighed load at its shipper and note period gives **{pt}**; one pooled line over the bridge gives {ppool} and one over the pilot shippers {pline}, each mixing different declaration habits.
 5. Chose the cold form out of sample: fitted without January and February 2026, one rate below 16 C under-forecasts those sub-zero days by {bt1n} per cent; with a further rate below 0 C the error is {bt2} per cent. One rate puts every design-day energy about 12 kWh low and admits {one_extra}.
 6. Estimated the first-year loss from each day's energy per full charge (kWh used over the SOC it took) with a level per tractor, age in service and degrees below 20 C: **{loss} per cent**. Age alone gives {lage} per cent, because the pilot began in March and ended in a mild October; the same months a year apart give {lyoy}. Usable battery {uy1} kWh, limit {lim} kWh (FES-2 2.3, 4.3).
 7. Forecast each duty at -5 C and its planning load from route_register_2026.xlsx: {goset} at {gor}; {heavy} at {heavyr}; the rest at {restr}.
@@ -113,5 +113,5 @@ No other order survives: the declared weights are unbiased on average but scatte
         one_extra=", ".join(one_extra), lage=f["loss_pct_age_only"], lyoy=f["loss_pct_yoy"],
         gor=rng(go), restr=rng([c for c in no if c not in heavy]), cdec=rc["declared weights"],
         dec_extra=", ".join(dec_extra), cone=rc["one cold rate"], cnol=rc["no first-year loss"],
-        ccar=rc["careful but hurried"], slo=f["clerk_slope_lo"], shi=f["clerk_slope_hi"])
+        ccar=rc["careful but hurried"], slo=f["clerk_slope_lo"], shi=f["clerk_slope_hi"], sbmj=f["calibration_slope"]["BMJ all"])
     open(path, "w", encoding="utf-8").write(txt)

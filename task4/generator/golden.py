@@ -228,7 +228,7 @@ def write_pdf(path, pk, g, target):
          Paragraph("<b>Basis.</b> A model of each pilot duty-day's energy (%d days) on distance, climb, cold and "
                    "payload. Three things move the order. (1) The pilot's payloads are shippers' declarations; at "
                    "Värnamo, where the same shippers' loads are weighed, the clerks' figures scatter widely around "
-                   "the weighed load and the dairy writes one weight on every note. Fitted on the declarations a "
+                   "the weighed load, and the dairy declares its planned pallets at a standard weight each. Fitted on the declarations a "
                    "tonne costs %.1f kWh per 100 loaded km; taking each declaration to the weighed load it stands "
                    "for, shipper by shipper, %.1f. (2) Below freezing the draw rises faster: one rate below 16 C "
                    "fitted without Jan-Feb 2026 under-forecast those sub-zero days by %.1f per cent, a further rate "

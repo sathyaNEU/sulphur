@@ -18,8 +18,8 @@
   {
    "path": "weighbridge_varnamo_2024-11_2026-10.csv",
    "format": "csv",
-   "bytes": 1865207,
-   "rows": 21442,
+   "bytes": 1867928,
+   "rows": 21470,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-11-06",
    "license": "CC0-1.0 (original work)"
@@ -27,7 +27,7 @@
   {
    "path": "bev_daily_summary_2025-03_2026-10.csv",
    "format": "csv",
-   "bytes": 315138,
+   "bytes": 315106,
    "rows": 2374,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-11-06",
@@ -36,7 +36,7 @@
   {
    "path": "tms_consignments_jonkoping_2025-2026.csv",
    "format": "csv",
-   "bytes": 276496,
+   "bytes": 276499,
    "rows": 3501,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-11-06",
@@ -45,7 +45,7 @@
   {
    "path": "route_register_2026.xlsx",
    "format": "xlsx",
-   "bytes": 10130,
+   "bytes": 10116,
    "rows": null,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-11-06",

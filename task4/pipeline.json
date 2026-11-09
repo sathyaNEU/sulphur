@@ -1,10 +1,10 @@
 {
  "task": "task4",
- "status": "BUILD",
+ "status": "READY",
  "domain": "supply-chain-logistics",
  "objective": "forecasting",
- "stage": 4,
- "stage_name": "check",
+ "stage": 5,
+ "stage_name": "ready",
  "updated": "2026-11-09",
  "stump": "No one step decides: declared payloads alone order 8, one cold rate alone 8 (another set), no first-year loss alone 9, the careful but hurried pass 9",
  "architecture": 6,
@@ -15,8 +15,8 @@
   "checks": "85 of 85, 1 WARN (R2 upstream of 3)"
  },
  "leak": {
-  "leak_py": "REVIEW, no LEAK (2026-11-09, 9d65a333, as-of 2026-11-06): the quoted 540 kWh, generic words of the call, the shell quota",
-  "reader": ""
+  "leak_py": "REVIEW, no LEAK (2026-11-09, b8f03fbc, as-of 2026-11-06): the quoted 540 kWh, generic words of the call, the shell quota",
+  "reader": "2026-11-09 isolated Sonnet reader on 9d65a333: no leak on any question, no one thing; the three sweep lines harmless; not re-run after the data-only pallet fix"
  },
  "duplicate_check": {
   "check": "WARN 2026-11-08 (repeat.gate_g)",
@@ -24,9 +24,10 @@
   "surface": "exit 0 2026-11-08, 0 promoted"
  },
  "judge": {
-  "verdict": "",
-  "disposition": "",
-  "gate_h": "",
+  "verdict": "DETERMINISTIC (2026-11-09, isolated thread on target.zip 9d65a333): all 14 planning loads exact, the 540 to 519 to 441 kWh chain exact, the cleaning steps present; the regression figures verified in direction and size",
+  "disposition": "APPROVE; one FIX_NOW without rerun (the dairy's constant 13,500 kg declaration read as an authored device), fixed: both standard-weight shippers declare planned pallets at a standard weight each, gates re-run on b8f03fbc",
+  "gate_g": "mixed: regression calibration, out-of-sample form selection, confound-controlled degradation; surface_read_dependency no, sole_data_defect no",
+  "gate_h": "domain pass, layers pass, one_thing none, the largest hint rescues at most 2 of 6",
   "report": "task4/determinism_check_report.md"
  },
  "returned": [
@@ -45,7 +46,7 @@
    "moves": "re-rooted in the same world on the client's instruction (architecture 6, a results chain at depth level 5): Tabergs out of the pilot, Granna Dryckes' notes on its dock scale from 17 Aug 2026, a smooth sub-zero curve the held-out winter chooses, FES-2 2.3 charging the first year's permanent battery loss read from the pilot's SOC records; each of the three estimates moves the order alone (8, 8, 9)"
   }
  ],
- "resume": "stage 4: collect the leak reader and the determinism judge, fix every finding in the generator in one pass, re-run gates.py, then READY",
+ "resume": "READY: the author rewrites prompt.txt in their own voice (voice-check.py --rewrite, leak.py), uploads it with target.zip, pastes the four blocks of submission.md, and the platform's two runs go to /triage-runs",
  "approved": null,
  "delivered": null,
  "portal": null,
@@ -209,9 +210,13 @@
   {
    "date": "2026-11-09",
    "event": "architecture 5 returned by the portal (reward 68.5, not stumped, one thing); re-rooted to architecture 6 in the same world as a results chain (six results, five areas, depth level 5), card redrawn (allocation-sensitivity, measurement), stage 3 gates green, stage 4 reader and judge spawned"
+  },
+  {
+   "date": "2026-11-09",
+   "event": "stage 4: reader no leak, judge DETERMINISTIC APPROVE; the judge's FIX_NOW (a constant standard declaration) fixed in the generator, every gate re-run; stage 5: READY on target.zip b8f03fbc0bbd9ef3"
   }
  ],
- "zip_sha256_16": "9d65a333f5c0f4ed",
+ "zip_sha256_16": "b8f03fbc0bbd9ef3",
  "migrated_from": {
   "project": "Mark",
   "task": "task250",
@@ -260,7 +265,7 @@
   "containers": "audit_containers exit 0",
   "guard": "check WARN, heart WARN, surface exit 0"
  },
- "golden_zip_sha256_16": "202688b95b778925",
+ "golden_zip_sha256_16": "530a74209100087b",
  "doctrine": "throughout",
  "chain": "R1 planning loads (assembly), R2 payload term 2.0 kWh/t/100 km (measurement), R3 first-year loss 3.8 per cent (modeling), R4 fourteen design-day energies (validation of the cold form), R5 verdicts against 441 kWh, R6 the order of 6 (synthesis)",
  "paper_pair": 49.7,
