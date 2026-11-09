@@ -8,8 +8,15 @@ import numpy as np
 import params as P
 
 
+def cond(t):
+    """battery and cab conditioning: nothing in the mild months, coming in gradually around freezing and rising about
+    linearly below it (a smooth hinge, so no setting shows as a corner in the data)"""
+    z = (P.COLD2_T0 - t) / P.COLD2_S
+    return P.COLD2_S * (math.log1p(math.exp(-abs(z))) + max(z, 0.0))
+
+
 def kwh_per_km(climb, t):
-    return P.E0 + P.CLIMB * climb + P.COLD1 * max(0.0, 16 - t) + P.COLD2 * max(0.0, -t)
+    return P.E0 + P.CLIMB * climb + P.COLD1 * max(0.0, 16 - t) + P.COLD2 * cond(t)
 
 
 def leg_kwh(km, climb, t, payload):
@@ -22,8 +29,10 @@ def design_kwh(legs, climb, payload, t=None):
     return (a + b + c) * kwh_per_km(climb, t) + P.LOAD * payload * b
 
 
-def declare(rng, code, true_t):
+def declare(rng, code, true_t, day=None):
     prac = P.SHIPPERS[code][2]
+    if code in P.SCALE_FROM and day is not None and day >= P.SCALE_FROM[code]:
+        prac = "exact"
     if prac == "exact":
         return int(round(true_t * 1000 / 10)) * 10
     if prac == "std":
@@ -55,7 +64,7 @@ def shortlist_km(code, mean_payload):
     a = int(rng.integers(6, 34))
     r = 0.93 + 0.08 * rng.random()
     k = kwh_per_km(climb, P.DESIGN_T)
-    target = P.LIMIT + P.TARGET[code]
+    target = P.TARGET[code]
     b = (target - a * k) / ((1 + r) * k + P.LOAD * mean_payload)
     best = None
     for aa in range(max(5, a - 4), a + 5):
@@ -74,6 +83,8 @@ def world():
     pdays = P.workdays(P.PILOT_START, P.PILOT_END)
     duties = list(P.PILOT)
     route_u = {d: rng.normal(0, P.ROUTE_SD) for d in duties}
+    frng = np.random.default_rng(P.SEED + 11)
+    fade = {t: P.FADE_Y1 + frng.normal(0, P.FADE_TRACTOR_SD) for t in P.PILOT_TRACTORS}
     pilot = []
     for day in pdays:
         chosen = sorted(rng.choice(len(duties), size=6, replace=False))
@@ -85,7 +96,7 @@ def world():
             ship, legs, climb, town = P.PILOT[dcode]
             mu, sd = P.SHIPPERS[ship][3], P.SHIPPERS[ship][4]
             pay = float(np.clip(rng.normal(mu, sd), 0.4 * mu, 1.6 * mu))
-            dec = declare(rng, ship, pay)
+            dec = declare(rng, ship, pay, day)
             start = 5.0 + 0.8 * rng.random()
             trips = []
             for leg, km in enumerate(legs):
@@ -97,7 +108,12 @@ def world():
                 trips.append({"leg": leg, "km": km, "t": round(t, 1), "kwh": e, "start_h": start,
                               "end_h": start + dur, "speed": speed})
                 start += dur + (0.75 if leg == 0 else 0.6) + 0.2 * rng.random()
-            pilot.append({"date": day, "duty": dcode, "tractor": tractors[slot], "shipper": ship, "payload": pay,
+            tr = tractors[slot]
+            age = (day - P.PILOT_IN_SERVICE).days / 365.25
+            tday = float(np.mean([x["t"] for x in trips]))
+            cap = P.PILOT_USABLE * (1 - fade[tr] * age) * (1 - P.CAP_COLD * max(0.0, 20 - tday)) * \
+                (1 + frng.normal(0, 0.004))
+            pilot.append({"date": day, "duty": dcode, "tractor": tr, "shipper": ship, "payload": pay, "cap": cap,
                           "declared": dec, "trips": trips, "pallets": int(round(pay / 0.52 + rng.normal(0, 1.2)))})
     # Varnamo duties: the shortlist plus the rest of the terminal's regular duties
     others = {}
@@ -122,7 +138,7 @@ def world():
                 continue
             pay = float(np.clip(rng.normal(mu, sd), 0.4 * mu, 1.6 * mu))
             depart.append({"date": day, "duty": code, "shipper": ship, "payload": pay,
-                           "declared": declare(rng, ship, pay), "hour": 5.2 + 1.6 * rng.random()})
+                           "declared": declare(rng, ship, pay, day), "hour": 5.2 + 1.6 * rng.random()})
     # shortlist km set from each duty's last-twelve-months mean weighed payload
     short = {}
     for code in P.SHORT:
@@ -130,4 +146,4 @@ def world():
         m = float(np.mean([round(v * 1000 / 20) * 20 / 1000 for v in loads]))
         legs = shortlist_km(code, m)
         short[code] = (P.SHORT[code][0], legs, P.SHORT[code][1], m)
-    return {"temps": temps, "pilot": pilot, "route_u": route_u, "others": others, "depart": depart, "short": short}
+    return {"temps": temps, "pilot": pilot, "fade": fade, "route_u": route_u, "others": others, "depart": depart, "short": short}

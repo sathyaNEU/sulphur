@@ -1,45 +1,21 @@
 # leak check, task4
 
-**Verdict: LEAK.** 12 files read, 12 golden figures and 0 candidate names taken from submission.md, 25 stump terms taken from the design note.
+**Verdict: REVIEW.** 12 files read, 31 golden figures and 5 candidate names taken from submission.md, 25 stump terms taken from the design note.
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: shipper, declared, payload, weighbridge, weighed, record, decisive, declaration, declarations, orders, standard, golden, planning, correction, nothing, consumption, reader, drifts, default, station, held-out, carries, stations, structure, shippers
+Stump terms swept: record, orders, drifts, station, declared, stations, reader, careful, golden, network, decisive, calibration, shipper, nothing, method, shortcut, missed, readings, season, weight, declarations, modelling, carries, re-run, overflow
 
 ## 3 answer figures in the pack (REVIEW 3)
-- **REVIEW** `fleet_electrification_standard_FES-2.pdf`: golden figure 2.2 appears: ...on to the delivery and the run back to the depot. 2.2 A duty's energy is the energy the tractor draws f...
 - **REVIEW** `quotation_bev_tractors_2027.pdf`: golden figure 540 appears: ...ttery Installed capacity 630 kWh; usable capacity 540 kWh Charging CCS2, up to 375 kW DC; on-board 43 k...
-- **REVIEW** `fleet_electrification_standard_FES-2.pdf`: carries 5 of 8 distinctive words of the committed call: 'Order 6 battery-electric tractors, for Värnamo duties V02, V05, V09, V14, V16, V18; V03, V07, V11, V21, V24, V27, V30, V'
+- **REVIEW** `fleet_electrification_standard_FES-2.pdf`: carries 4 of 6 distinctive words of the committed call: 'Order 6 battery-electric tractors, for V02, V05, V09, V14, V16, V18; V03, V07, V11, V21, V24, V27, V30, V33 stay on dies'
+- **REVIEW** `quotation_bev_tractors_2027.pdf`: carries 4 of 6 distinctive words of the committed call: 'Order 6 battery-electric tractors, for V02, V05, V09, V14, V16, V18; V03, V07, V11, V21, V24, V27, V30, V33 stay on dies'
 
-## 4 design-note vocabulary (REVIEW 1)
-- **REVIEW** `fleet_electrification_standard_FES-2.pdf`: 5 of 25 stump-paragraph terms appear (payload, record, standard, planning, consumption); read whether the document names the move
+## 10 container metadata (INFO 1)
+- **INFO** `-`: container gate PASS (PASS: 0 FAIL, 0 WARN)
 
-## 9 dates after the setting (INFO 1)
-- **INFO** `-`: no --asof given, sweep skipped (pass the fiction's as-of date)
-
-## 10 container metadata (LEAK 17, REVIEW 1)
-- **LEAK** `target/fleet_plan_2027.xlsx`: the writing library's dialect: openpyxl's baseColWidth 8
-- **LEAK** `target/fleet_plan_2027.xlsx`: the writing library's dialect: openpyxl's empty numFmts
-- **LEAK** `target/fleet_plan_2027.xlsx`: Excel claimed but workbook.xml has no <fileVersion appName="xl">
-- **LEAK** `target/fleet_register_2026.xlsx`: the writing library's dialect: openpyxl's baseColWidth 8
-- **LEAK** `target/fleet_register_2026.xlsx`: the writing library's dialect: openpyxl's empty numFmts
-- **LEAK** `target/fleet_register_2026.xlsx`: Excel claimed but workbook.xml has no <fileVersion appName="xl">
-- **LEAK** `target/route_register_2026.xlsx`: the writing library's dialect: openpyxl's baseColWidth 8
-- **LEAK** `target/route_register_2026.xlsx`: the writing library's dialect: openpyxl's empty numFmts
-- **LEAK** `target/route_register_2026.xlsx`: Excel claimed but workbook.xml has no <fileVersion appName="xl">
-- **LEAK** `target/shipper_register_2026.xlsx`: the writing library's dialect: openpyxl's baseColWidth 8
-- **LEAK** `target/shipper_register_2026.xlsx`: the writing library's dialect: openpyxl's empty numFmts
-- **LEAK** `target/shipper_register_2026.xlsx`: Excel claimed but workbook.xml has no <fileVersion appName="xl">
-- **LEAK** `target.zip`: all 12 entries carry one mtime 2026-11-06 08:05:00: every file from one clock
-- **LEAK** `golden/ev_duty_assessment_2027.xlsx`: the writing library's dialect: openpyxl's baseColWidth 8
-- **LEAK** `golden/ev_duty_assessment_2027.xlsx`: the writing library's dialect: openpyxl's empty numFmts
-- **LEAK** `golden/ev_duty_assessment_2027.xlsx`: Excel claimed but workbook.xml has no <fileVersion appName="xl">
-- **LEAK** `golden.zip`: 2 entries share the mtime 2026-11-06 08:05:00: ev_duty_assessment_2027.xlsx, tractor_order_memo.pdf
-- **REVIEW** `target`: one author 'Fryele Åkeri AB' on 4 of 6 documents: files from different teams or bodies carry their own authors
-
-## 11 prompt gate (REVIEW 2)
-- **REVIEW** `prompt.txt`: shell quota: second-sentence opener 'for' at 22% of 9 prompts (cap 20%); reword at the role level, not the verb
-- **REVIEW** `prompt.txt`: templating signals: 1 of seven: files listed up front (ev_duty_assessment_2027.xlsx, tractor_order_memo.pdf) (the portal marks two as borderline and three as templated: one question, each file named in the sentence that gives its reason, no closing list)
+## 11 prompt gate (REVIEW 1)
+- **REVIEW** `prompt.txt`: shell quota: deliverable set 'docx+xlsx' at 29% of 14 prompts (cap 20%); reword at the role level, not the verb
 
 ## 12 client quality check (INFO 2)
 - **INFO** `-`: 12 usable files (10 or more required)
@@ -49,6 +25,8 @@ Stump terms swept: shipper, declared, payload, weighbridge, weighed, record, dec
 
 ## 2 author vocabulary (clean)
 
+## 4 design-note vocabulary (clean)
+
 ## 5 announcements (clean)
 
 ## 6 ranking artifacts (clean)
@@ -56,6 +34,8 @@ Stump terms swept: shipper, declared, payload, weighbridge, weighed, record, dec
 ## 7 hidden content (clean)
 
 ## 8 column names (clean)
+
+## 9 dates after the setting (clean)
 
 
 ## Solver's-eye read

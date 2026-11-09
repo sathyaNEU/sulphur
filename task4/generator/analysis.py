@@ -26,6 +26,7 @@ FILES = {
 }
 LAST12 = (dt.date(2025, 11, 1), dt.date(2026, 10, 31))
 USABLE = 540.0   # the quotation's usable battery, read into the checks from the PDF text (checks.py)
+IN_SERVICE = dt.date(2025, 2, 17)   # the pilot tractors' in-service date (fleet register)
 
 
 def rd(path):
@@ -94,11 +95,15 @@ def load(target):
         days.append({"date": dt.date.fromisoformat(r["operating_date"]), "reg": r["registration"],
                      "duty": c["duty"], "shipper": c["shipper"], "declared": kg(c["declared_weight"]),
                      "km": float(r["distance_km"]), "kwh": float(r["energy_used_kwh"]),
-                     "t": float(t) if t else None, "station_t": pk.station[(r["operating_date"], "Jönköping")]})
+                     "t": float(t) if t else None, "station_t": pk.station[(r["operating_date"], "Jönköping")],
+                     "soc0": float(r["soc_start_pct"]), "soc1": float(r["soc_end_pct"])})
     # an ambient sensor dropout takes the station's day, moved by the mean truck-against-station offset
     off = np.mean([d["t"] - d["station_t"] for d in days if d["t"] is not None])
     for d in days:
         d["t_filled"] = d["t"] if d["t"] is not None else d["station_t"] + off
+    for d in days:
+        d["cap"] = d["kwh"] / (d["soc0"] - d["soc1"]) * 100   # the battery's energy per full charge that day
+        d["age"] = (d["date"] - IN_SERVICE).days / 365.25
     pk.days = days
     pk.offset = float(off)
     return pk
@@ -106,14 +111,36 @@ def load(target):
 
 # ---------------------------------------------------------------- the payload each pilot day carried
 
-def calibration(pk, mode="shipper", window=None):
+def ticket_months(pk, shipper):
+    """the months in which a shipper's notes carry its own scale weight: nearly every departure's declaration equals
+    the weighed load to the bridge's 20 kg"""
+    cache = pk.__dict__.setdefault("_tickets", {})
+    if shipper in cache:
+        return cache[shipper]
+    m = defaultdict(list)
+    for r in pk.wb:
+        if r["shipper"] == shipper and r["declared"] is not None:
+            m[(r["date"].year, r["date"].month)].append(abs(r["declared"] - r["net"]) <= 20)
+    cache[shipper] = {k for k, v in m.items() if np.mean(v) > 0.9}
+    return cache[shipper]
+
+
+def regime(pk, shipper, day):
+    t = ticket_months(pk, shipper)
+    if not t:
+        return "all"
+    return "ticket" if (day.year, day.month) in t else "note"
+
+
+def calibration(pk, mode="shipper", window=None, split=True):
     """E[weighed net payload | declared, shipper] from the Varnamo weighbridge.
     mode shipper: a line per shipper (a constant declaration takes the shipper's mean weighed load);
     mode pooled: one line over every departure; mode mean: every load at its shipper's mean weighed load."""
     rows = [r for r in pk.wb if r["declared"] is not None and (window is None or window[0] <= r["date"] <= window[1])]
     by = defaultdict(list)
     for r in rows:
-        by[r["shipper"]].append((r["declared"], r["net"]))
+        key = (r["shipper"], regime(pk, r["shipper"], r["date"]) if split else "all")
+        by[key].append((r["declared"], r["net"]))
     out = {}
     if mode == "pooled":
         D = np.array([r["declared"] for r in rows])
@@ -132,12 +159,19 @@ def calibration(pk, mode="shipper", window=None):
     return out
 
 
-def payloads(pk, how):
-    """the payload (t) each pilot day carried, by the rung's basis"""
+def payloads(pk, how, split=True, window=None):
+    """the payload (t) each pilot day carried, by the route's basis"""
     if how == "declared":
         return np.array([d["declared"] / 1000 for d in pk.days])
-    cal = calibration(pk, how)
-    return np.array([(cal[d["shipper"]][0] + cal[d["shipper"]][1] * d["declared"]) / 1000 for d in pk.days])
+    cal = calibration(pk, how, window, split)
+    out = []
+    for d in pk.days:
+        k = (d["shipper"], regime(pk, d["shipper"], d["date"]) if split else "all")
+        if how == "pooled":
+            k = next(iter(cal))
+        a, b = cal[k]
+        out.append((a + b * d["declared"]) / 1000)
+    return np.array(out)
 
 
 # ---------------------------------------------------------------- the energy model
@@ -186,17 +220,52 @@ def predict(model, legs, climb, load_t, t=DESIGN_T):
     return float(np.dot(c, terms))
 
 
+# ---------------------------------------------------------------- the battery a 2027 tractor has after a year
+
+def fade(pk, how="cold"):
+    """the share of its capacity a pilot battery permanently loses in a year in service, from each day's energy per
+    full charge (energy used over the state of charge it took): a level per tractor, a slope on age, and the day's
+    cold, which takes capacity for the day and gives it back.
+    how cold: degrees below 20 C on the day; linear: the day's temperature; age: age alone; yoy: the same months a year
+    apart; quad: temperature and its square"""
+    cap = np.array([d["cap"] for d in pk.days])
+    age = np.array([d["age"] for d in pk.days])
+    T = np.array([d["t_filled"] for d in pk.days])
+    regs = sorted({d["reg"] for d in pk.days})
+    R = np.column_stack([[1.0 if d["reg"] == g else 0.0 for d in pk.days] for g in regs])
+    if how == "yoy":
+        mo = np.array([d["date"].month for d in pk.days])
+        yr = np.array([d["date"].year for d in pk.days])
+        r = [cap[(yr == 2026) & (mo == m)].mean() / cap[(yr == 2025) & (mo == m)].mean() for m in range(3, 11)]
+        return float(1 - np.mean(r))
+    extra = {"cold": [np.maximum(0, 20 - T)], "cold15": [np.maximum(0, 15 - T)], "linear": [T], "quad": [T, T * T],
+             "age": []}[how]
+    X = np.column_stack([R, age] + extra)
+    c = np.linalg.lstsq(X, cap, rcond=None)[0]
+    lev = c[:len(regs)]
+    if how in ("linear", "quad"):   # the level at 20 C
+        lev = lev + c[len(regs) + 1] * 20 + (c[len(regs) + 2] * 400 if how == "quad" else 0)
+    return float(-c[len(regs)] / lev.mean())
+
+
+def limit(pk, f=None):
+    """FES-2 2.3 and 4.3: 85 per cent of the ordered model's usable battery less its first year's loss"""
+    f = fade(pk) if f is None else f
+    return SHARE * USABLE * (1 - f)
+
+
 def planning_load(pk, duty, basis="net"):
     v = [r[basis] for r in pk.wb if r["duty"] == duty and LAST12[0] <= r["date"] <= LAST12[1] and r[basis] is not None]
     return float(np.mean(v)) / 1000
 
 
-def assess(pk, model, basis="net", t=DESIGN_T):
+def assess(pk, model, basis="net", t=DESIGN_T, lim=None):
+    lim = limit(pk) if lim is None else lim
     out = {}
     for c in pk.short:
         r = pk.routes[c]
         e = predict(model, r["legs"], r["climb"], planning_load(pk, c, basis), t)
-        out[c] = {"kwh": e, "go": e <= SHARE * USABLE}
+        out[c] = {"kwh": e, "go": e <= lim}
     return out
 
 
@@ -204,14 +273,19 @@ def chosen(a):
     return sorted(c for c, v in a.items() if v["go"])
 
 
-def rung0(pk):
+H2 = ("hinge2", 16, 0)   # the golden cold form: a rate below 16 C and a further rate below 0 C
+H1 = ("hinge1", 16)      # the field's degree-day form: one rate below 16 C
+
+
+def rung0(pk, lim=None):
     """the pilot's average consumption on January-like days (ambient -8 to -2 C), times each duty's route km"""
     v = [d["kwh"] / d["km"] for d in pk.days if -8 <= d["t_filled"] <= -2]
     rate = float(np.mean(v))
+    lim = SHARE * USABLE if lim is None else lim
     out = {}
     for c in pk.short:
         e = rate * sum(pk.routes[c]["legs"])
-        out[c] = {"kwh": e, "go": e <= SHARE * USABLE}
+        out[c] = {"kwh": e, "go": e <= lim}
     return out, rate
 
 
@@ -225,22 +299,53 @@ def pilot_pooled(pk):
     return np.array([(W.mean() + lam * (d["declared"] - D.mean())) / 1000 for d in pk.days])
 
 
-def models(pk):
-    """the golden model and every rung's"""
+def backtest(pk, pay, form, months=((2026, 1), (2026, 2))):
+    """fit without the held-out months, forecast their working days: mean error in per cent on the days below 0 C"""
+    ho = np.array([(d["date"].year, d["date"].month) in months for d in pk.days])
+    sub = np.array([d["t_filled"] < 0 for d in pk.days])
+    m = fit(pk, pay, form, mask=~ho)
+    X = design(pk, pay, form)
+    y = np.array([d["kwh"] for d in pk.days])
+    e = (X @ m["coef"] - y) / y
+    return float(100 * e[ho & sub].mean()), float(100 * e[ho].mean())
+
+
+def routes(pk):
+    """each shortcut's committed answer: (model, limit) for the golden and every hurried route effort.json records"""
+    gp, dp = payloads(pk, "shipper"), payloads(pk, "declared")
+    f, fa = fade(pk), fade(pk, "age")
     return {
-        "naive": fit(pk, payloads(pk, "declared")),
-        "pooled": fit(pk, payloads(pk, "pooled")),
-        "pilot_pooled": fit(pk, pilot_pooled(pk)),
-        "golden": fit(pk, payloads(pk, "shipper")),
-        "golden_1h": fit(pk, payloads(pk, "shipper"), ("hinge1", 16)),
-        "naive_1h": fit(pk, payloads(pk, "declared"), ("hinge1", 16)),
+        "golden": (fit(pk, gp, H2), limit(pk, f)),
+        "declared weights": (fit(pk, dp, H2), limit(pk, f)),
+        "one pooled correction": (fit(pk, payloads(pk, "pooled"), H2), limit(pk, f)),
+        "one line over the pilot shippers": (fit(pk, pilot_pooled(pk), H2), limit(pk, f)),
+        "one cold rate": (fit(pk, gp, H1), limit(pk, f)),
+        "no first-year loss": (fit(pk, gp, H2), SHARE * USABLE),
+        "careful but hurried": (fit(pk, dp, H1), limit(pk, fa)),
+        "declared weights, one cold rate": (fit(pk, dp, H1), limit(pk, f)),
+        "the v13 golden (no loss)": (fit(pk, gp, H2), SHARE * USABLE),
+    }
+
+
+def models(pk):
+    gp, dp = payloads(pk, "shipper"), payloads(pk, "declared")
+    return {
+        "naive": fit(pk, dp, H2),
+        "pooled": fit(pk, payloads(pk, "pooled"), H2),
+        "pilot_pooled": fit(pk, pilot_pooled(pk), H2),
+        "golden": fit(pk, gp, H2),
+        "golden_1h": fit(pk, gp, H1),
+        "naive_1h": fit(pk, dp, H1),
     }
 
 
 def golden(pk):
     M = models(pk)
-    a = assess(pk, M["golden"])
-    return {"model": M["golden"], "assess": a, "set": chosen(a), "count": len(chosen(a)), "models": M}
+    f = fade(pk)
+    lim = limit(pk, f)
+    a = assess(pk, M["golden"], lim=lim)
+    return {"model": M["golden"], "assess": a, "set": chosen(a), "count": len(chosen(a)), "models": M,
+            "fade": f, "limit": lim, "usable_y1": USABLE * (1 - f)}
 
 
 def slope_per_100(model):
@@ -283,24 +388,27 @@ def fit_exact_slope(pk, form=("hinge2", 16, 0)):
 
 
 def rivals(pk):
-    """every route that takes the deep step, each a model; the golden's call must hold under all of them"""
+    """every route that takes all three steps, each (model, limit); the golden's call must hold under all of them"""
     gp = payloads(pk, "shipper")
+    lim = limit(pk)
     y25 = np.array([d["date"].year == 2025 for d in pk.days])
-    R = {
-        "golden": fit(pk, gp),
-        "station temperature": fit(pk, gp, temp="station"),
-        "2025 only": fit(pk, gp, mask=y25),
-        "2026 only": fit(pk, gp, mask=~y25),
-        "hinges 14 and 0": fit(pk, gp, ("hinge2", 14, 0)),
-        "hinges 18 and 0": fit(pk, gp, ("hinge2", 18, 0)),
-        "hinges 16 and -2": fit(pk, gp, ("hinge2", 16, -2)),
-        "hinges 16 and 2": fit(pk, gp, ("hinge2", 16, 2)),
-        "quadratic below 16": fit(pk, gp, ("quad", 16)),
-        "bins at 16, 8, 0, -8": fit(pk, gp, ("bins", [16, 8, 0, -8])),
-        "calibrated on the last 12 months": fit(pk, np.array([(c[0] + c[1] * d["declared"]) / 1000 for d in pk.days
-                                                               for c in [calibration(pk, "shipper", LAST12)[d["shipper"]]]])),
-        "each load at its shipper's mean": fit(pk, payloads(pk, "mean")),
-        "within-duty fit": fit_fe(pk, gp),
-        "slope from the exact shipper": fit_exact_slope(pk),
+    return {
+        "golden": (fit(pk, gp, H2), lim),
+        "station temperature": (fit(pk, gp, H2, temp="station"), lim),
+        "2025 only": (fit(pk, gp, H2, mask=y25), lim),
+        "2026 only": (fit(pk, gp, H2, mask=~y25), lim),
+        "hinges 14 and 0": (fit(pk, gp, ("hinge2", 14, 0)), lim),
+        "hinges 18 and 0": (fit(pk, gp, ("hinge2", 18, 0)), lim),
+        "hinges 16 and -2": (fit(pk, gp, ("hinge2", 16, -2)), lim),
+        "hinges 16 and 2": (fit(pk, gp, ("hinge2", 16, 2)), lim),
+        "quadratic below 16": (fit(pk, gp, ("quad", 16)), lim),
+        "bins at 16, 8, 0, -8": (fit(pk, gp, ("bins", [16, 8, 0, -8])), lim),
+        "calibrated on the last 12 months": (fit(pk, payloads(pk, "shipper", window=LAST12), H2), lim),
+        "each load at its shipper's mean": (fit(pk, payloads(pk, "mean"), H2), lim),
+        "one shipper line over both note periods": (fit(pk, payloads(pk, "shipper", split=False), H2), lim),
+        "within-duty fit": (fit_fe(pk, gp), lim),
+        "loss: the day's temperature": (fit(pk, gp, H2), limit(pk, fade(pk, "linear"))),
+        "loss: temperature and its square": (fit(pk, gp, H2), limit(pk, fade(pk, "quad"))),
+        "loss: degrees below 15 C": (fit(pk, gp, H2), limit(pk, fade(pk, "cold15"))),
+        "loss: the same months a year apart": (fit(pk, gp, H2), limit(pk, fade(pk, "yoy"))),
     }
-    return R

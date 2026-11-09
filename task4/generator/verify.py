@@ -1,8 +1,9 @@
 """An independent recomputation of the golden from the shipped files, sharing no code with analysis.py: its own
 parsers, its own de-duplication, a per-shipper errors-in-variables correction by moments (the declared weight's
-error variance read from the weighbridge, removed from the pilot's within-shipper spread), normal equations solved
-directly, and the FES-2 assessment. Exit 1 unless it gives the golden's six duties and every energy in the golden's
-10 kWh bin.
+error variance read from the weighbridge for each shipper and each period its notes keep one practice, removed from
+the pilot's within-shipper spread), normal equations solved directly, the batteries' first-year loss fitted tractor
+by tractor, and the FES-2 assessment. Exit 1 unless it gives the golden's duties and every energy within 10 kWh of
+the golden's.
 
     python3 verify.py [target]
 """
@@ -75,13 +76,22 @@ def main(target):
                 latest[r["cmr_no"]] = r
     by_ship = {}
     loads = {}
+    month_gap = {}
     for r in latest.values():
         net = float(r["gross_kg"]) - float(r["tare_kg"])
         duty = r["duty"].replace("VMO-", "V")
         if "2025-11-01" <= r["weighed_at"][:10] <= "2026-10-31":
             loads.setdefault(duty, []).append(net)
         if r["declared_kg"]:
-            by_ship.setdefault(r["shipper"], []).append((float(r["declared_kg"]), net))
+            month_gap.setdefault((r["shipper"], r["weighed_at"][:7]), []).append(abs(float(r["declared_kg"]) - net))
+    # a month in which a shipper's notes carry its scale weight: the median gap is inside the bridge's resolution
+    ticket = {k for k, v in month_gap.items() if np.median(v) <= 20}
+    full = {s for s in {k[0] for k in month_gap} if all((s, m) in ticket for (ss, m) in month_gap if ss == s)}
+    per = lambda s, ym: (s, "t" if (s, ym) in ticket and s not in full else "n")
+    for r in latest.values():
+        if r["declared_kg"]:
+            net = float(r["gross_kg"]) - float(r["tare_kg"])
+            by_ship.setdefault(per(r["shipper"], r["weighed_at"][:7]), []).append((float(r["declared_kg"]), net))
     # each shipper's declaration error: classical (variance of declared less weighed), standard (no spread) or nil
     err = {}
     for s, v in by_ship.items():
@@ -109,12 +119,13 @@ def main(target):
         c = tms.get(k)
         if not c:
             continue
-        rows.append((c["duty"], c["shipper"], weight(c["declared_weight"]), float(r["distance_km"]),
+        rows.append((c["duty"], per(c["shipper"], k[1][:7]), weight(c["declared_weight"]), float(r["distance_km"]),
                      float(r["energy_used_kwh"]), float(r["ambient_mean_c"]) if r["ambient_mean_c"] else None,
-                     station[k[1]]))
-    off = np.mean([t - st for *_, t, st in rows if t is not None])
+                     station[k[1]], k[0], k[1], float(r["soc_start_pct"]) - float(r["soc_end_pct"])))
+    off = np.mean([x[5] - x[6] for x in rows if x[5] is not None])
     duty = np.array([x[0] for x in rows])
-    ship = np.array([x[1] for x in rows])
+    ship = np.empty(len(rows), dtype=object)
+    ship[:] = [x[1] for x in rows]
     dec = np.array([x[2] for x in rows])
     km = np.array([x[3] for x in rows])
     y = np.array([x[4] for x in rows])
@@ -124,7 +135,7 @@ def main(target):
     # the payload by moments: within each shipper, the pilot's declared spread less the error variance
     pay = np.zeros(len(rows))
     for s in set(ship):
-        m = ship == s
+        m = np.array([x == s for x in ship])
         e = err[s]
         if e[0] == "std":
             pay[m] = e[1]
@@ -135,7 +146,19 @@ def main(target):
     pay /= 1000.0
     X = np.column_stack([km, km * cl, km * np.maximum(0, 16 - T), km * np.maximum(0, -T), pay * lk])
     beta = np.linalg.solve(X.T @ X, X.T @ y)
-    limit = 0.85 * 540
+    # the first-year loss, tractor by tractor: energy per full charge on age and degrees below 20 C
+    import datetime as dt
+    cap = y / np.array([x[9] for x in rows]) * 100
+    age = np.array([(dt.date.fromisoformat(x[8]) - dt.date(2025, 2, 17)).days / 365.25 for x in rows])
+    regs = np.array([x[7] for x in rows])
+    loss = []
+    for g in sorted(set(regs)):
+        m = regs == g
+        A = np.column_stack([np.ones(m.sum()), age[m], np.maximum(0, 20 - T[m])])
+        b = np.linalg.solve(A.T @ A, A.T @ cap[m])
+        loss.append(-b[1] / b[0])
+    loss = float(np.mean(loss))
+    limit = 0.85 * 540 * (1 - loss)
     res = {}
     for c in short:
         s, legs, climb = routes[c]
@@ -144,13 +167,14 @@ def main(target):
         res[c] = (float(e), e <= limit)
     go = sorted(c for c, v in res.items() if v[1])
     fig = json.load(open(os.path.join(HERE, "figures.json")))
-    bins = {c: int(round(v[0] / 10.0) * 10) for c, v in res.items()}
     okset = go == fig["call_set"]
-    okbins = bins == fig["energy_kwh"]
-    print("verify: %d pilot days, payload %.2f kWh per t per 100 km, %d tractors %s; set %s, bins %s" %
-          (len(rows), beta[-1] * 100, len(go), go, "agree" if okset else "DIFFER", "agree" if okbins else
-           "DIFFER " + str({c: (bins[c], fig["energy_kwh"][c]) for c in bins if bins[c] != fig["energy_kwh"][c]})))
-    return 0 if okset and okbins else 1
+    far = {c: (round(v[0]), fig["energy"][c]) for c, v in res.items() if abs(v[0] - fig["energy"][c]) > 10}
+    okloss = abs(100 * loss - fig["loss_pct"]) <= 0.2
+    print("verify: %d pilot days, payload %.2f kWh per t per 100 km, loss %.2f per cent, limit %.1f, %d tractors %s;"
+          " set %s, energies %s, loss %s" % (len(rows), beta[-1] * 100, 100 * loss, limit, len(go), go,
+                                             "agree" if okset else "DIFFER", "within 10 kWh" if not far else
+                                             "DIFFER " + str(far), "agrees" if okloss else "DIFFERS"))
+    return 0 if okset and not far and okloss else 1
 
 
 if __name__ == "__main__":

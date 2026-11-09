@@ -45,7 +45,7 @@ def metadata(target, n):
                       "source": "Constructed (seeded generator, task4/generator)", "pull_date": "2026-11-06",
                       "license": "CC0-1.0 (original work)"})
     return {
-        "task": "task4", "architecture": 5,
+        "task": "task4", "architecture": 6,
         "title": "How many battery-electric tractors a Småland road haulier should order for its Värnamo duties for "
                  "2027, and which duties they take, under its fleet electrification standard",
         "domain": "Supply Chain & Logistics (house domain) in General Statistics & Data Science",
@@ -67,21 +67,16 @@ def one(target, gold):
         shutil.rmtree(target)
     w, n = B.run(target)
     pk, g = GD.write(target, gold)
-    for f in os.listdir(gold):
-        p = os.path.join(gold, f)
-        if f.endswith(".xlsx"):
-            postprocess.scrub(p, "Fryele Åkeri AB", "2026-11-06")
-            postprocess.finish_office(p, "2026-11-04T09:10:00Z", "2026-11-06T15:42:00Z", "Fryele Åkeri AB")
+    postprocess.normalize_ooxml(os.path.join(gold, GD.XLSX), "Inger Norman", "Inger Norman", "2026-11-04T09:10:00Z",
+                                "2026-11-06T14:42:00Z", excel=True, company="Fryele Åkeri AB")
+    postprocess.own_mtimes(gold, {})
     return pk, g, n
 
 
 def zipdir(folder, out):
-    with zipfile.ZipFile(out, "w") as z:
-        for f in sorted(os.listdir(folder)):
-            zi = zipfile.ZipInfo(f, date_time=ZSTAMP)
-            zi.compress_type = zipfile.ZIP_DEFLATED
-            zi.external_attr = 0o644 << 16
-            z.writestr(zi, open(os.path.join(folder, f), "rb").read())
+    if os.path.exists(out):
+        os.remove(out)
+    postprocess.zip_folder(folder, out, zone="Europe/Stockholm")
 
 
 def main():
@@ -91,7 +86,7 @@ def main():
     json.dump(figs, open(os.path.join(HERE, "figures.json"), "w"), indent=1, sort_keys=True, ensure_ascii=False)
     WU.write(os.path.join(TASK, "submission.md"), pk, g, figs)
     json.dump(metadata(TARGET, n), open(os.path.join(TASK, "metadata.json"), "w"), indent=1)
-    for script in ("checks.py", "verify.py", "ceiling.py"):
+    for script in ("checks.py", "verify.py", "effort_passes.py"):
         r = subprocess.run([sys.executable, os.path.join(HERE, script), TARGET], capture_output=True, text=True)
         sys.stdout.write(r.stdout[-3000:])
         if r.returncode:

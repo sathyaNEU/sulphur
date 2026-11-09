@@ -113,7 +113,7 @@ def write_bev(w, path, fl):
         t1 = dt.datetime.combine(d, dt.time(0)) + dt.timedelta(hours=trips[-1]["end_h"] - off)
         drive = sum(t["km"] / t["speed"] for t in trips)
         soc0 = 96 + int(rng.integers(0, 5))
-        soc1 = soc0 - 100 * e / P.PILOT_USABLE
+        soc1 = soc0 - 100 * e / x["cap"]
         tmin = min(t["t"] for t in trips) - abs(rng.normal(1.0, 0.5))
         tmax = max(t["t"] for t in trips) + abs(rng.normal(0.8, 0.4))
         drop = rng.random() < 0.045
@@ -131,9 +131,10 @@ def write_bev(w, path, fl):
                             "uploaded_utc"], rows)
 
 
-def fmt_weight(rng, kg, code):
+def fmt_weight(rng, kg, code, day=None):
     r = rng.random()
-    if code in P.STD_LOAD or P.SHIPPERS[code][2] == "exact":
+    scale = code in P.SCALE_FROM and day is not None and day >= P.SCALE_FROM[code]
+    if code in P.STD_LOAD or P.SHIPPERS[code][2] == "exact" or scale:
         return "%d" % kg if r < 0.7 else "%s kg" % format(kg, ",").replace(",", " ")
     if r < 0.55:
         return "%d" % kg
@@ -150,7 +151,7 @@ def write_tms(w, path, fl):
         by_day.setdefault(x["date"], {})[x["duty"]] = x
     rows = []
     n = 2500000
-    goods = {"TEN": "Möbler", "HWP": "Wellpappförpackningar", "BMJ": "Mejeriprodukter, kyl", "TTV": "Sågade trävaror",
+    goods = {"TEN": "Möbler", "HWP": "Wellpappförpackningar", "BMJ": "Mejeriprodukter, kyl", "VGL": "Planglas",
              "GDR": "Drycker", "LBY": "Byggvaror"}
     dlist = sorted(dj)
     for day in P.workdays(P.PILOT_START, P.PILOT_END):
@@ -164,12 +165,12 @@ def write_tms(w, path, fl):
             else:
                 mu, sd = P.SHIPPERS[ship][3], P.SHIPPERS[ship][4]
                 pay = float(np.clip(rng.normal(mu, sd), 0.4 * mu, 1.6 * mu))
-                dec = sim.declare(rng, ship, pay)
+                dec = sim.declare(rng, ship, pay, day)
                 pal = int(round(pay / 0.52 + rng.normal(0, 1.2)))
                 vreg = dj[spare.pop()]
             n += 1
             rows.append(["FR%d" % n, day.isoformat(), dcode, vreg, ship, P.SHIPPERS[ship][1], town, max(pal, 8),
-                         fmt_weight(rng, dec, ship), goods[ship]])
+                         fmt_weight(rng, dec, ship, day), goods[ship]])
     return write_csv(path, ["consignment_no", "collection_date", "duty", "vehicle_reg", "shipper", "collection_site",
                             "delivery_town", "pallets", "declared_weight", "goods"], rows)
 
@@ -220,7 +221,7 @@ def write_fleet(w, path, fl):
     ws.title = "Tractors"
     rows = []
     for t in P.PILOT_TRACTORS:
-        rows.append([t, bev[t], "Battery-electric 6x2 tractor", 2024, "Jönköping", "2025-02-17", "battery 540 kWh "
+        rows.append([t, bev[t], "Battery-electric 6x2 tractor", 2024, "Jönköping", "2025-02-17", "battery 600 kWh "
                      "installed, %d kWh usable" % P.PILOT_USABLE, ""])
     for t in sorted(dj):
         rows.append([t, dj[t], "Diesel 6x2 tractor, Euro VI", 2019 + int(t[-1]) % 4, "Jönköping", "", "", ""])
@@ -246,7 +247,7 @@ def write_shippers(path):
         org = "55%04d-%04d" % (int(rng.integers(1000, 9999)), int(rng.integers(1000, 9999)))
         if "ek. för." in name:
             org = "7%05d-%04d" % (int(rng.integers(10000, 99999)), int(rng.integers(1000, 9999)))
-        depots = "Jönköping, Värnamo" if code in ("TEN", "HWP", "BMJ", "TTV", "GDR", "LBY") else "Värnamo"
+        depots = "Jönköping, Värnamo" if code in ("TEN", "HWP", "BMJ", "VGL", "GDR", "LBY") else "Värnamo"
         rows.append([code, name, org, town, depots, "30 days", "Full loads"])
     _sheet(ws, ["Code", "Shipper", "Org. no", "Site", "Served from", "Payment terms", "Service"], rows,
            [7, 28, 13, 14, 20, 12, 12])

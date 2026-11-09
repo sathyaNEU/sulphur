@@ -1,0 +1,618 @@
+{
+ "hints": [
+  {
+   "rescues": [
+    "R2"
+   ],
+   "sentence": "the shippers' declared weights scatter around what the trucks carry"
+  },
+  {
+   "rescues": [],
+   "sentence": "below freezing the draw rises faster than one degree-day rate allows"
+  },
+  {
+   "rescues": [
+    "R3"
+   ],
+   "sentence": "the cold takes capacity for the day and gives it back, so take it out of the loss"
+  }
+ ],
+ "results": [
+  {
+   "bands": {
+    "V02": [
+     3.6,
+     4.2
+    ],
+    "V03": [
+     29.0,
+     29.6
+    ],
+    "V05": [
+     7.3,
+     7.8999999999999995
+    ],
+    "V07": [
+     31.7,
+     32.3
+    ],
+    "V09": [
+     20.9,
+     21.5
+    ],
+    "V11": [
+     26.2,
+     26.8
+    ],
+    "V14": [
+     4.3,
+     4.8999999999999995
+    ],
+    "V16": [
+     8.799999999999999,
+     9.4
+    ],
+    "V18": [
+     5.1000000000000005,
+     5.7
+    ],
+    "V21": [
+     18.099999999999998,
+     18.7
+    ],
+    "V24": [
+     20.7,
+     21.3
+    ],
+    "V27": [
+     13.1,
+     13.700000000000001
+    ],
+    "V30": [
+     13.2,
+     13.8
+    ],
+    "V33": [
+     3.6,
+     4.2
+    ]
+   },
+   "depends": [],
+   "figure": "planning_load",
+   "golden": {
+    "V02": 3.9,
+    "V03": 29.3,
+    "V05": 7.6,
+    "V07": 32.0,
+    "V09": 21.2,
+    "V11": 26.5,
+    "V14": 4.6,
+    "V16": 9.1,
+    "V18": 5.4,
+    "V21": 18.4,
+    "V24": 21.0,
+    "V27": 13.4,
+    "V30": 13.5,
+    "V33": 3.9
+   },
+   "graded_as": "Ask 1",
+   "id": "R1",
+   "independent": "",
+   "name": "each duty's planning load",
+   "passes": {
+    "careful": {
+     "V02": 3.9,
+     "V03": 29.3,
+     "V05": 7.6,
+     "V07": 32.0,
+     "V09": 21.2,
+     "V11": 26.5,
+     "V14": 4.6,
+     "V16": 9.1,
+     "V18": 5.4,
+     "V21": 18.4,
+     "V24": 21.0,
+     "V27": 13.4,
+     "V30": 13.5,
+     "V33": 3.9
+    },
+    "quick": {
+     "V02": 3.9,
+     "V03": 29.1,
+     "V05": 7.6,
+     "V07": 32.0,
+     "V09": 21.2,
+     "V11": 26.4,
+     "V14": 4.6,
+     "V16": 9.1,
+     "V18": 5.4,
+     "V21": 18.4,
+     "V24": 21.0,
+     "V27": 13.5,
+     "V30": 13.3,
+     "V33": 3.9
+    },
+    "thorough": {
+     "V02": 3.9,
+     "V03": 29.3,
+     "V05": 7.6,
+     "V07": 32.0,
+     "V09": 21.2,
+     "V11": 26.5,
+     "V14": 4.6,
+     "V16": 9.1,
+     "V18": 5.4,
+     "V21": 18.4,
+     "V24": 21.0,
+     "V27": 13.4,
+     "V30": 13.5,
+     "V33": 3.9
+    }
+   }
+  },
+  {
+   "band": [
+    1.9,
+    2.1
+   ],
+   "depends": [],
+   "figure": "payload_term",
+   "golden": 2.0,
+   "graded_as": "Component 1",
+   "id": "R2",
+   "independent": "",
+   "name": "payload term, kWh per t per 100 km",
+   "partly": [
+    1.6,
+    2.4
+   ],
+   "passes": {
+    "careful": 1.1,
+    "quick": null,
+    "thorough": 2.0
+   }
+  },
+  {
+   "band": [
+    3.6,
+    4.0
+   ],
+   "depends": [],
+   "figure": "loss_pct",
+   "golden": 3.8,
+   "graded_as": "Component 2",
+   "id": "R3",
+   "independent": "",
+   "name": "first-year battery loss, per cent",
+   "partly": [
+    2.8,
+    4.8
+   ],
+   "passes": {
+    "careful": 3.3,
+    "quick": null,
+    "thorough": 3.8
+   }
+  },
+  {
+   "bands": {
+    "V02": [
+     400,
+     420
+    ],
+    "V03": [
+     440,
+     460
+    ],
+    "V05": [
+     410,
+     430
+    ],
+    "V07": [
+     450,
+     470
+    ],
+    "V09": [
+     390,
+     410
+    ],
+    "V11": [
+     440,
+     460
+    ],
+    "V14": [
+     420,
+     440
+    ],
+    "V16": [
+     400,
+     420
+    ],
+    "V18": [
+     410,
+     430
+    ],
+    "V21": [
+     460,
+     480
+    ],
+    "V24": [
+     460,
+     480
+    ],
+    "V27": [
+     460,
+     480
+    ],
+    "V30": [
+     450,
+     470
+    ],
+    "V33": [
+     470,
+     490
+    ]
+   },
+   "depends": [
+    "R1",
+    "R2"
+   ],
+   "figure": "energy",
+   "golden": {
+    "V02": 410,
+    "V03": 450,
+    "V05": 420,
+    "V07": 460,
+    "V09": 400,
+    "V11": 450,
+    "V14": 430,
+    "V16": 410,
+    "V18": 420,
+    "V21": 470,
+    "V24": 470,
+    "V27": 470,
+    "V30": 460,
+    "V33": 480
+   },
+   "graded_as": "Ask 2",
+   "id": "R4",
+   "independent": "",
+   "name": "the 14 design-day energies",
+   "passes": {
+    "careful": {
+     "V02": 410,
+     "V03": 420,
+     "V05": 420,
+     "V07": 420,
+     "V09": 380,
+     "V11": 420,
+     "V14": 430,
+     "V16": 400,
+     "V18": 420,
+     "V21": 450,
+     "V24": 450,
+     "V27": 460,
+     "V30": 450,
+     "V33": 480
+    },
+    "quick": {
+     "V02": 430,
+     "V03": 400,
+     "V05": 430,
+     "V07": 400,
+     "V09": 380,
+     "V11": 410,
+     "V14": 460,
+     "V16": 410,
+     "V18": 430,
+     "V21": 450,
+     "V24": 440,
+     "V27": 460,
+     "V30": 450,
+     "V33": 500
+    },
+    "thorough": {
+     "V02": 410,
+     "V03": 450,
+     "V05": 420,
+     "V07": 460,
+     "V09": 400,
+     "V11": 450,
+     "V14": 430,
+     "V16": 410,
+     "V18": 420,
+     "V21": 470,
+     "V24": 470,
+     "V27": 470,
+     "V30": 460,
+     "V33": 480
+    }
+   }
+  },
+  {
+   "depends": [
+    "R3",
+    "R4"
+   ],
+   "figure": "verdict",
+   "golden": {
+    "V02": "yes",
+    "V03": "no",
+    "V05": "yes",
+    "V07": "no",
+    "V09": "yes",
+    "V11": "no",
+    "V14": "yes",
+    "V16": "yes",
+    "V18": "yes",
+    "V21": "no",
+    "V24": "no",
+    "V27": "no",
+    "V30": "no",
+    "V33": "no"
+   },
+   "graded_as": "Ask 3",
+   "id": "R5",
+   "independent": "",
+   "name": "each duty's verdict",
+   "passes": {
+    "careful": {
+     "V02": "yes",
+     "V03": "yes",
+     "V05": "yes",
+     "V07": "yes",
+     "V09": "yes",
+     "V11": "yes",
+     "V14": "yes",
+     "V16": "yes",
+     "V18": "yes",
+     "V21": "no",
+     "V24": "no",
+     "V27": "no",
+     "V30": "no",
+     "V33": "no"
+    },
+    "quick": {
+     "V02": "yes",
+     "V03": "yes",
+     "V05": "yes",
+     "V07": "yes",
+     "V09": "yes",
+     "V11": "yes",
+     "V14": "yes",
+     "V16": "yes",
+     "V18": "yes",
+     "V21": "yes",
+     "V24": "yes",
+     "V27": "no",
+     "V30": "yes",
+     "V33": "no"
+    },
+    "thorough": {
+     "V02": "yes",
+     "V03": "no",
+     "V05": "yes",
+     "V07": "no",
+     "V09": "yes",
+     "V11": "no",
+     "V14": "yes",
+     "V16": "yes",
+     "V18": "yes",
+     "V21": "no",
+     "V24": "no",
+     "V27": "no",
+     "V30": "no",
+     "V33": "no"
+    }
+   }
+  },
+  {
+   "depends": [
+    "R3",
+    "R4"
+   ],
+   "figure": "call_set",
+   "golden": [
+    "V02",
+    "V05",
+    "V09",
+    "V14",
+    "V16",
+    "V18"
+   ],
+   "graded_as": "Recommendation",
+   "id": "R6",
+   "independent": "",
+   "name": "the order",
+   "passes": {
+    "careful": {
+     "grade": "missed",
+     "value": [
+      "V02",
+      "V03",
+      "V05",
+      "V07",
+      "V09",
+      "V11",
+      "V14",
+      "V16",
+      "V18"
+     ],
+     "why": "the order is graded as the count and the duties; 9 is not 6"
+    },
+    "quick": {
+     "grade": "missed",
+     "value": [
+      "V02",
+      "V03",
+      "V05",
+      "V07",
+      "V09",
+      "V11",
+      "V14",
+      "V16",
+      "V18",
+      "V21",
+      "V24",
+      "V30"
+     ],
+     "why": "the order is graded as the count and the duties; 12 is not 6"
+    },
+    "thorough": [
+     "V02",
+     "V05",
+     "V09",
+     "V14",
+     "V16",
+     "V18"
+    ]
+   }
+  }
+ ],
+ "routes": [
+  {
+   "answer": [
+    "V02",
+    "V05",
+    "V09",
+    "V14",
+    "V16",
+    "V18"
+   ],
+   "golden": true,
+   "name": "golden"
+  },
+  {
+   "answer": [
+    "V02",
+    "V03",
+    "V05",
+    "V07",
+    "V09",
+    "V11",
+    "V16",
+    "V18"
+   ],
+   "golden": false,
+   "name": "declared weights"
+  },
+  {
+   "answer": [
+    "V02",
+    "V03",
+    "V05",
+    "V07",
+    "V09",
+    "V11",
+    "V16",
+    "V18"
+   ],
+   "golden": false,
+   "name": "one pooled correction"
+  },
+  {
+   "answer": [
+    "V02",
+    "V05",
+    "V09",
+    "V14",
+    "V16",
+    "V18"
+   ],
+   "golden": false,
+   "name": "one line over the pilot shippers"
+  },
+  {
+   "answer": [
+    "V02",
+    "V03",
+    "V05",
+    "V09",
+    "V11",
+    "V14",
+    "V16",
+    "V18"
+   ],
+   "golden": false,
+   "name": "one cold rate"
+  },
+  {
+   "answer": [
+    "V02",
+    "V03",
+    "V05",
+    "V07",
+    "V09",
+    "V11",
+    "V14",
+    "V16",
+    "V18"
+   ],
+   "golden": false,
+   "name": "no first-year loss"
+  },
+  {
+   "answer": [
+    "V02",
+    "V03",
+    "V05",
+    "V07",
+    "V09",
+    "V11",
+    "V14",
+    "V16",
+    "V18"
+   ],
+   "golden": false,
+   "name": "careful but hurried"
+  },
+  {
+   "answer": [
+    "V02",
+    "V03",
+    "V05",
+    "V07",
+    "V09",
+    "V11",
+    "V14",
+    "V16",
+    "V18"
+   ],
+   "golden": false,
+   "name": "declared weights, one cold rate"
+  },
+  {
+   "answer": [
+    "V02",
+    "V03",
+    "V05",
+    "V07",
+    "V09",
+    "V11",
+    "V14",
+    "V16",
+    "V18"
+   ],
+   "golden": false,
+   "name": "the v13 golden (no loss)"
+  },
+  {
+   "answer": [
+    "V02",
+    "V03",
+    "V05",
+    "V07",
+    "V09",
+    "V11",
+    "V14",
+    "V16",
+    "V18",
+    "V21",
+    "V24",
+    "V30"
+   ],
+   "golden": false,
+   "name": "quick (average cold-day consumption)"
+  }
+ ]
+}

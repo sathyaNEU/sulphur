@@ -1,8 +1,8 @@
 {
   "task": "task4",
   "project": "sulfur",
-  "architecture": "v5 (re-root into a Swedish road haulier's battery-electric tractor order for 2027: which of its Värnamo duties can run on one charge on the January design day, each duty's energy forecast from a pilot fleet's telematics whose payloads are shipper-declared)",
-  "drawn": "2026-11-08",
+  "architecture": "v6 (the Fryele world rebuilt as a results chain on the portal's return of 2026-11-09: the order now needs three estimates each of which moves it, the payload term under shipper-specific declaration error, the sub-zero cold form chosen out of sample, and the batteries' first-year permanent loss separated from the cold's temporary loss)",
+  "drawn": "2026-11-09",
   "slot_note": "re-root of task4 after architecture 4 was landed on the platform; new world (Sweden, Småland, a road haulier), new dataset (a battery-electric pilot's duty-day telematics and a terminal weighbridge log), new shell (how-many | please | docx+xlsx)",
   "domain": "supply-chain-logistics",
   "client_domain": "general-statistics-data-science",
@@ -32,7 +32,7 @@
   "decisive_rule_filed": false,
   "official_decoy": false,
   "validated_decoy": false,
-  "context_artifact": "operations_log",
+  "context_artifact": "capacity_report",
   "stump_class": "analytical",
   "analyst_test": "A strong analyst who cleans the pilot telematics and the weighbridge log and reads the electrification standard correctly fits the pilot's duty-day energy on distance, climb, cold and the declared payload on the loaded leg, validates it on held-out pilot days and on the weighbridge's finding that declarations are unbiased on average, applies it to each Värnamo duty's average weighed load on the January design day and orders too many tractors, sending heavy duties the battery cannot cover and keeping a light long one it can.",
   "domain_test": "The deciding quantity is the energy one tonne of payload adds per loaded kilometre, a regression slope on a covariate the pilot records only as declared: estimating it needs the error structure of each shipper's declarations (scattered around the true weight, a fixed standard weight the true one scatters around, or the shipper's own weighbridge figure) read from the terminal's weighed loads and carried to the pilot's loads; with nurses and shifts in place of tractors and loads nothing is declared by a third party with its own error, so the step has nothing to stand on.",
@@ -57,8 +57,8 @@
     "grain": "departure x weighing",
     "source": "synthetic"
   },
-  "forum": "executive_team",
-  "forcing_event": "launch_or_rollout",
+  "forum": "line_manager_or_team",
+  "forcing_event": "purchase_order_or_contract",
   "org_family": "logistics_or_3pl",
   "world": {
     "geography": "Sweden (Jönköping and Värnamo, Småland)",
@@ -79,12 +79,12 @@
   ],
   "opening_move": "question-first",
   "question_form": "how-many",
-  "driver": "The decisive quantity is a slope on a covariate recorded by third parties whose recording errs in different ways: some records scatter around the true value, which pulls the fitted slope toward zero, some fix a standard value the true one scatters around, which leaves it unbiased, and some are exact, so a model fitted on the records predicts its own held-out records well and still misstates the outcome wherever the forecast runs at true values far from the sample's mean, and only each source's error structure, read from a second record that measures the truth for the same sources and carried to the fitted rows, recovers the slope.",
+  "driver": "A decision against a limit needs three estimates, each with its own measurement trap: a slope on a covariate recorded by third parties with source-specific error, recovered from a record that measures the truth for the same sources; a nonlinear response chosen on a held-out season; and a slow degradation read from a ratio that a seasonal covariate also moves, so the trend alone misstates it.",
   "driver_concrete": "Each Värnamo duty's battery energy on the January design day is forecast from the Jönköping pilot's telematics, whose payloads are the shippers' declared weights: the furniture and packaging shippers' clerks estimate them (scattered around the weighed load), the dairy declares a standard load the weighed one scatters around, and the timber merchant prints its own weighbridge figure, so the pilot's fitted payload slope is about 0.8 kWh per tonne per 100 km where the loads' true effect is about 2.1, and only each shipper's declarations calibrated on the Värnamo weighbridge's weighed loads give the slope that the heavy steel and aggregates duties and the light insulation duty turn on.",
-  "stump": "A competent solver fits the pilot's duty-day battery energy on distance, climb, cold and the shippers' declared payload, finds it predicts held-out January and February days within 2.4 per cent and the weighbridge's declarations right on average, and orders 8 tractors, sending the heavy steel, ballast and metal duties V03, V07 and V11 (about 440 kWh on that model) and leaving out the light insulation duty V14 (about 470); the estimating shippers' declarations scatter around the weighed load, so the fitted payload term (1.0 kWh per tonne per 100 km) is under half the loads' effect (2.2), and only each declaration taken to the weighed load it stands for, shipper by shipper, with the dairy's standard weight and the timber merchant's ticket left as what they are, orders 6: V02, V05, V09, V14, V16 and V18.",
-  "deep_chain": "(1) the pilot's payload is the shippers' declaration, and the weighbridge shows declarations unbiased on average but scattered, so the slope fitted on them is attenuated even though the model validates on held-out pilot days; (2) the scatter is not one error: per shipper the weighed load regresses on the declared at below one for estimating clerks, at one for a standard-load declarer and exactly for a weighbridge-ticket shipper, so one pooled reliability under-corrects; (3) each pilot load is replaced by its expected weighed load given the shipper and the declaration and the energy model refitted; (4) the refitted model forecasts each duty's design-day energy at its weighed average load, against 85 per cent of the 2027 tractor's usable battery, giving the duties and the count",
+  "stump": "No one step decides: declared payloads alone order 8 (V03, V07, V11 in, V14 out), one degree-day cold rate alone 8 (V03, V11 in), leaving out the batteries' first-year loss alone 9 (V03, V07, V11 in), and the careful but hurried pass that takes all three shortcuts 9; the six need each pilot declaration taken to its shipper's weighed load (2.0 against 1.1 kWh per tonne per 100 km), a further cold rate below 0 C chosen on held-out January and February 2026 (-6.6 against +0.5 per cent), and a 3.8 per cent first-year loss with the cold's temporary loss taken out (3.3 by age alone).",
+  "deep_chain": "(1) planning loads from the weighbridge; (2) the payload term by regression calibration per shipper and note period; (3) the first-year loss from energy per full charge with tractor levels, age and degrees below 20 C; (4) the cold form out of sample and each duty's design-day energy; (5) each duty's verdict against the loss-adjusted limit; (6) the order.",
   "judgment": "errors-in-variables: whether the declared payload's error is classical, Berkson or nil differs by shipper and is identified from the direction of the regression between declared and weighed loads on the Värnamo weighbridge; the regression-calibrated slope is checked against the pilot days of the shipper that declares from its own weighbridge",
-  "one_fact_test": "the likeliest hint ('declared weights are noisy, so the payload slope is attenuated') invites one reliability ratio pooled over the weighbridge, which carries the between-shipper spread and the exact shippers and under-corrects, and a per-shipper variance ratio breaks on the standard-load declarer; the solver still has to identify each shipper's error structure, calibrate the pilot's loads and refit before the forecast",
+  "one_fact_test": "the most useful sentence ('the shippers' declared weights scatter around what the trucks carry') rescues the payload term only; the careful pass still files 9 tractors on one cold rate and the age-only loss; each of the other two hints rescues at most the loss figure (effort.py: 1 of 6).",
   "strategy_label": "WORKS IN FORM",
   "mechanism_source": "design_note",
   "differentiation": {
@@ -222,14 +222,20 @@
         "deliverable set": "png+xlsx"
       },
       "fate": "spent 2026-11-08 on the platform: the author reports both runs not stumped (the call landed); run texts not supplied to the repo. The counterfactual run time priced set by set is a mechanism the stop sequences visibly carry, modelled on sight."
+    },
+    {
+      "architecture": "v5",
+      "spent": "2026-11-09 portal return (reward 68.5, not stumped): the order rested on one recognition, the declared payloads' dilution, with Tabergs Travaror's exact declarations a free check; the cold form never moved a duty",
+      "driver": "single deep step"
     }
   ],
   "notes": "stump_strategy other: errors-in-variables with a source-specific error structure (classical, Berkson, exact) identified from a gold-standard record of the same sources",
-  "registered": "2026-11-08T06:43:49Z",
+  "registered": "2026-11-09T19:06:34Z",
   "shell": {
     "question form": "how-many",
     "second-sentence opener": "for",
-    "deliverable set": "pdf+xlsx"
+    "rounding opener": "loads",
+    "deliverable set": "docx+xlsx"
   },
   "lineage_shells": [
     {
@@ -238,5 +244,17 @@
       "rounding opener": "van",
       "deliverable set": "png+xlsx"
     }
-  ]
+  ],
+  "answer_shape": "allocation-sensitivity",
+  "weight": "measurement",
+  "chain_signature": [
+    "assembly-reconciliation",
+    "missingness-measurement",
+    "modeling",
+    "validation",
+    "synthesis"
+  ],
+  "depth_level": 5,
+  "doctrine": "throughout",
+  "client_subdomain": "regression-classification-model-diagnostics"
 }

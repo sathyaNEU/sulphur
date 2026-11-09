@@ -11,16 +11,21 @@ AS_OF = dt.date(2026, 11, 6)
 # the truth of a battery-electric 64-tonne combination's battery energy per km (kWh), never shipped
 E0 = 0.86          # base, at 16 C and above, flat road, empty
 CLIMB = 0.0028     # per metre of climb per 100 km of route
-COLD1 = 0.0110     # per degree C below 16 (cab heating, rolling resistance, air density)
-COLD2 = 0.0120     # a further rate per degree C below 0 (battery conditioning)
+COLD1 = 0.0100     # per degree C below 16 (cab heating, rolling resistance, air density)
+COLD2 = 0.0240     # battery and cab conditioning below about freezing, a smooth curve (sim.cond), per degree
+COLD2_T0 = 1.5     # where the conditioning curve is centred (C)
+COLD2_S = 2.2      # how gradually it comes in (C)
 LOAD = 0.0215      # per tonne of payload per loaded km
 EPS = 0.030        # trip-to-trip noise (driver, traffic, wind), multiplicative
-ROUTE_SD = 0.012   # each duty's own route effect beyond its climb, multiplicative
+ROUTE_SD = 0.006   # each duty's own route effect beyond its climb, multiplicative
 
 DESIGN_T = -5.0    # FES-2 4.1, the January design day
 USABLE_2027 = 540.0  # the dealer's quotation, usable battery of the 2027 tractor
 SHARE = 0.85       # FES-2 4.3
-LIMIT = SHARE * USABLE_2027
+FADE_Y1 = 0.039    # share of usable capacity a pilot battery permanently loses in its first year (never shipped)
+FADE_TRACTOR_SD = 0.002   # tractor-to-tractor spread of that first-year loss
+CAP_COLD = 0.0030  # apparent capacity lost per degree C below 20 on the day (cold cells, voltage sag), recovers
+LIMIT = SHARE * USABLE_2027 * (1 - FADE_Y1)
 
 # shippers: code, name, town, declaration practice (never shipped), mean and sd of a full load's net payload (t)
 # est: the clerk's estimate from the order (scatters around the weighed load); std: one standard load weight declared
@@ -45,24 +50,27 @@ SHIPPERS = {
     "VGL": ("Vaggeryds Glas AB", "Vaggeryd", "est", 21.0, 1.80),
 }
 STD_LOAD = {"BMJ": 13500, "RPA": 9000}   # the standard full-load weight each std shipper writes on every note
-EST_SD = 0.17     # the estimating clerks' relative error (mean zero)
+EST_SD = 0.22     # the estimating clerks' relative error (mean zero)
+# Granna Dryckes put a platform scale on its loading dock: from this date its notes carry the scale's weight
+SCALE_FROM = {"GDR": dt.date(2026, 8, 17)}
 
 # the Jonkoping pilot duties: code, shipper, (empty out, loaded, empty back) km, climb m per 100 km, delivery town
 PILOT = {
-    "J01": ("TEN", (14, 162, 150), 46, "Norrköping"),
-    "J02": ("TEN", (14, 141, 128), 38, "Linköping"),
-    "J03": ("HWP", (9, 155, 146), 30, "Borås"),
-    "J04": ("HWP", (9, 128, 133), 52, "Växjö"),
-    "J05": ("BMJ", (16, 150, 136), 34, "Hultsfred"),
-    "J06": ("TTV", (12, 146, 140), 42, "Kalmar"),
-    "J07": ("GDR", (38, 118, 82), 28, "Motala"),
-    "J08": ("GDR", (38, 134, 128), 44, "Västervik"),
-    "J09": ("LBY", (21, 160, 158), 36, "Halmstad"),
+    "J01": ("TEN", (14, 106, 96), 46, "Linköping"),
+    "J02": ("TEN", (14, 96, 92), 38, "Tranås"),
+    "J03": ("HWP", (9, 112, 104), 30, "Borås"),
+    "J04": ("HWP", (9, 102, 104), 52, "Växjö"),
+    "J05": ("BMJ", (16, 106, 98), 34, "Hultsfred"),
+    "J06": ("VGL", (12, 98, 92), 42, "Kalmar"),
+    "J07": ("GDR", (38, 104, 70), 28, "Motala"),
+    "J08": ("GDR", (30, 100, 90), 44, "Vimmerby"),
+    "J09": ("LBY", (21, 112, 108), 36, "Värnamo"),
 }
 PILOT_START = dt.date(2025, 3, 3)
 PILOT_END = dt.date(2026, 10, 30)
 PILOT_TRACTORS = ["BEV-01", "BEV-02", "BEV-03", "BEV-04", "BEV-05", "BEV-06"]
-PILOT_USABLE = 468.0
+PILOT_USABLE = 520.0
+PILOT_IN_SERVICE = dt.date(2025, 2, 17)
 
 # the Varnamo duties on the 2027 shortlist: shipper, (empty out, loaded, empty back) km, climb, delivery town
 # the km are set by sim.shortlist_km so each duty's design-day energy sits where the design puts it
@@ -82,9 +90,8 @@ SHORT = {
     "V30": ("BMJ", 40, "Uddevalla", "no"),
     "V33": ("KCY", 34, "Västervik", "no"),
 }
-# target margin of the truth design-day energy against the limit (kWh): hi heavy duties just above, lo light duties
-# just below, ok comfortably below, no comfortably above
-TARGET = {"V03": 13.0, "V07": 12.7, "V11": 11.5, "V14": -6.9, "V18": -14.8, "V02": -26.4, "V05": -14.7, "V09": -38.7, "V16": -25.7, "V21": 31.8, "V24": 24.7, "V27": 33.4, "V30": 24.5, "V33": 34.5}
+# each duty's true design-day energy (kWh), set so the duty sits where the order's design puts it
+TARGET = {"V02": 412.8, "V03": 456.8, "V05": 424.9, "V07": 464.8, "V09": 405.3, "V11": 458.3, "V14": 435.1, "V16": 414.0, "V18": 424.2, "V21": 475.5, "V24": 477.8, "V27": 475.0, "V30": 465.8, "V33": 482.9}
 
 WB_START = dt.date(2024, 11, 1)
 WB_END = dt.date(2026, 10, 30)

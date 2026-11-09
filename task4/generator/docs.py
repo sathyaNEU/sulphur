@@ -36,7 +36,7 @@ def standard(path):
     body, h1, h2, small, cell = _styles()
     s = [Paragraph("%s, Fleet and transport planning" % P.ORG, small),
          Paragraph("FES-2 Fleet electrification standard: assigning duties to battery-electric tractors", h1),
-         Paragraph("Version 2, issued 9 June 2025. Replaces version 1 (November 2024). Owner: the Fleet Manager.",
+         Paragraph("Version 3, issued 22 September 2025. Replaces version 2 (June 2025). Owner: the Fleet Manager.",
                    small), Spacer(1, 4)]
     sec = [
         ("1. Scope", [
@@ -48,7 +48,9 @@ def standard(path):
             "depot.",
             "2.2 A duty's energy is the energy the tractor draws from its battery for the round trip, depot out to "
             "depot in, in kWh, as the tractor's own battery system reports it.",
-            "2.3 The usable battery of a tractor model is the usable energy its manufacturer states for it."]),
+            "2.3 The usable battery of a tractor model is the usable energy its manufacturer states for it, less the "
+            "share of its usable energy a battery permanently loses in its first twelve months in service. That "
+            "share is taken from the company's own battery-electric tractors."]),
         ("3. Planning figures", [
             "3.1 Energy figures for planning are estimated from the company's own operating records of its "
             "battery-electric tractors. Manufacturers' range and consumption figures are not used for planning.",
@@ -59,7 +61,8 @@ def standard(path):
             "the last full month before the assessment.",
             "4.3 A duty is assigned to a battery-electric tractor when its energy on the January design day, carrying "
             "its planning load, is no more than 85 per cent of the usable battery of the tractor model being "
-            "ordered. Each duty assigned takes one tractor.",
+            "ordered. The other 15 per cent is the reserve for traffic, diversions and the unexpected. Each duty "
+            "assigned takes one tractor.",
             "4.4 Duties are assessed each autumn for the following year, before any order is placed, and reported to "
             "the management group duty by duty with the energy each needs on the January design day."]),
         ("5. Review", [
@@ -71,8 +74,9 @@ def standard(path):
         for p in paras:
             s.append(Paragraph(p, body))
     O.build(path, s, "FES-2 Fleet electrification standard", "Georg Pålsson",
-            "Assigning duties to battery-electric tractors", "Fryele Åkeri AB | FES-2 version 2",
-            dt.datetime(2025, 6, 9, 9, 22, tzinfo=SE_S), dt.datetime(2025, 6, 9, 10, 5, tzinfo=SE_S))
+            "Assigning duties to battery-electric tractors", "Fryele Åkeri AB | FES-2 version 3",
+            dt.datetime(2025, 9, 22, 9, 22, tzinfo=SE_S), dt.datetime(2025, 9, 22, 10, 5, tzinfo=SE_S),
+            producer="LibreOffice 25.8.1.1")
 
 
 def quotation(path):
@@ -82,7 +86,7 @@ def quotation(path):
             ["Battery", "Installed capacity 630 kWh; usable capacity %d kWh" % P.USABLE_2027],
             ["Charging", "CCS2, up to 375 kW DC; on-board 43 kW AC"],
             ["Drive", "Three electric motors, continuous output 425 kW"],
-            ["Warranty", "Battery 8 years or 1,000,000 km, to 70 per cent of usable capacity"],
+            ["Warranty", "Battery 8 years or 1,000,000 km, to 75 per cent of usable capacity"],
             ["Price", "SEK 3,940,000 per tractor excluding VAT, delivered Värnamo"],
             ["Delivery", "January to February 2027 for orders placed by 11 December 2026"]]
     s = [Paragraph("Norrvik Lastvagnar AB, Industrigatan 14, 331 44 Värnamo", small),
