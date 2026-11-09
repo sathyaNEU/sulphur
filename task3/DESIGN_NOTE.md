@@ -437,6 +437,15 @@ the golden's span and 1 per cent cell, and misses the creek's floods and the fil
 sheet. Round 3's minor note (the creek's mean elevation 1,860 against the workbook's 1,870 ft) is fixed: the write-up
 reads the workbook's figure.
 
+Round 4 (option 2, the final cut d36f2053), the determinism judge: DETERMINISTIC, APPROVE. It forced the 185 ft span,
+reproduced the foothill gauge's validation (median -0.4 per cent against the golden's +5), put the creek's 1 per cent
+flood at about 23,500 cfs (21,000 to 27,500 over the parameter ranges the data support) and its 50 per cent flood at 8,800,
+both in the golden's cells, found water years 2008 and 2011 the two largest in all eight of its variants and every band
+reproduced; Gates G and H pass (one_fact none). Its advisory, the 1 per cent cell about 1,000 cfs from its edge in its
+replication, is a rubric-tolerance note. The leak reader (round 4) quoted no sentence naming the step; its rulings are in
+the leak report. guard.py surface promotes task2 against this build (G6 back to back): task2 was re-drawn after this card
+(22:01 against 16:34), in another domain and on another driver, so the rule falls on the later draw.
+
 leak.py on target.zip d36f2053 (--asof 2026-10-14): REVIEW, no LEAK once the memorandum's stage table moved off the
 5,000 cfs grid the graded flows now sit on. The main thread's rulings, one line each:
 - the six USGS text files (sweep 1): the agency's own peak records in its RDB layout; harmless.

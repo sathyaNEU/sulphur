@@ -2,6 +2,50 @@
 
 Each round ran one isolated judge thread (Sonnet, medium effort) that saw only prompt.txt, target/ and the graded blocks, wrote its derivation before opening the blocks, and filed the verdict below verbatim. The main thread's disposition follows each round.
 
+## Round 4 (option 2, the foothill gauge, target.zip d36f2053): the final cut
+
+Order kept: derivation.md was written before graded_blocks.md was opened (yes).
+
+- **Verdict:** DETERMINISTIC
+- **Disposition:** APPROVE (no rerun). Advisory only: the report's 1 per cent flow sits about 1,000 cfs above a rounding edge (see Evidence), so a rubric tolerance of one rounding step on supplementary 3 and on the CSV is prudent; no pack change needed.
+- **Why:** The span is forced by the standard's own rule (7.4.3(b): Coyner R, 6.2 mi, 75 yr, is the nearest qualifying gauge; Selby Ck's 14 yr and the regional equations, with Durrow's mean annual precipitation of about 60 in outside the 65 to 112 in range, are barred) plus a transposition that the shipped stations and Selby's 14 peaks validate or refute. Every transposition that is unbiased against Selby (median error within about +-10 per cent) lands Q100 between roughly 21k and 27.5k, which is above 20,500 and below 29,000, so 185 ft; the area-ratio transfer (18.7k, 140 ft) is biased -26 per cent on Selby and the standard-atmosphere lapse (about 30k to 35k, 240 ft) is biased +29 to +47 per cent. The two largest floods (WY2008, WY2011) did not change in any variant I ran.
+
+## Evidence (recomputed from target/)
+| Item | Golden | Mine | Source |
+|---|---|---|---|
+| Coyner 75-peak B17C Q100 (weighted skew -0.159) | 18,900 | 18,860 (MoM) / 18,835 to 19,146 (EMA, censoring 2,000 to 3,000) | usgs_12183450 annual peaks, WSDOT excerpt Table 4 |
+| Area-ratio carry | 18,700 | 18,700 | workbook areas 85.3 / 86.4 |
+| Coyner rain share of area at the floods | median 50% | median 50.1% | hourly Tessel + elevation bands |
+| Storm lapse rate | 5.36 C/km | 5.31 mean, 5.36 median (2,083 days >= 0.5 in at both) | two GHCND files |
+| Precip rise with elevation | ~10% / 1,000 ft | Durrow Ridge / Tessel on warm storm days 1.15 over 1,550 ft | same |
+| Selby out-of-sample, golden construction | +5% median | -0.4% median, median abs log error 0.107 | usgs_12186050 |
+| Selby, rivals | -26 / +47 / +37 | std atm +29%, no rise +19%, tsnow 2 C +20% | my replication |
+| Durrow Q50 / Q100 (flood-by-flood carry, EMA, WY1997 below threshold) | 10,000 / 25,000 | 8.8k / 23.5k (21k to 27.5k across validated parameter ranges) | rounds to 10,000 / 25,000 |
+| Two largest WYs | 2008, 2011 | 2008, 2011 in all 8 variants | |
+| Exceedance classes | 10-100 / 100-1,000 / >1,000 | 20,500 ~ Q50 (10-100); 29,000 near Q500 (100-1,000); 40,000 beyond Q1000 | |
+
+Forks tested: (F1) "carried to the site" is unfiled; the area-ratio reading gives 140 ft but is refuted by Selby (named data) and by the elevation bands. (F2) MOVE.1 extension of Selby (18.3k, 140 ft) is excluded by the filed 25-year rule in 7.4.3; it is not the nearest qualifying basin. (F3) Storm window, dry-spell, EMA censoring threshold: Q100 moves 23.4k to 23.6k, no change of bin. (F4) Parameter choices inside the data-supported band (rise 0.05 to 0.15, lapse 5.36 to 5.7): Q100 20.6k to 24.5k, always 185 ft, but at rise 0.15 the rounded 1 per cent flow would read 20,000 (that variant is -8% to Selby's floods vs. -0.4% for the golden; separable by the named gauge). (F5) Regional equations: out of range by MAP, so 7.4.3(c) is closed. Data caveat: the Tessel hourly file has multi-day gaps (e.g. 1969-02-10); events inside gaps need the COOP files, and this did not alter the top-two ranking.
+
+SOLUTION_WRONG: none found. Not exactly reproducible to 100 cfs for the CSV (unfiled flood-by-flood details), so that file should be graded with tolerance and on the two largest values and the 1997 "<" qualifier.
+
+## Files/Hygiene
+PASS. 17 files: CSV (5), TXT (6 USGS peak files), PDF (3), XLSX (1), formats span tabular, text, PDF, workbook. Real-looking NWIS, GHCN, LCD and SNOTEL layouts with gaps, partial duration series, datum change note, blank gage heights. Distractors present and unused (Gorham, Pinnell, Tarrow, Quillen peaks, SNOTEL pair for the lapse check is used). Constant exact 3.14 F per 1000 ft offsets between Tessel and both SNOTEL stations suggest the weather is derived rather than raw; I flag this as a possible provenance tell, not exclusion-level. No authoring disclosures seen in the PDFs. Temporal: retrieved dates 2026-10, memo 21 Sept 2026, consistent.
+
+## Stump power
+Good. The reflexive route, B17C on the named nearest gauge carried by drainage area (18.7k, 140 ft), is the textbook method the standard seems to ask for, and it is wrong by a physical reason (a high snow basin carried to a low rain basin). A run that notices the elevation mismatch still has to build the snow line from station data, calibrate lapse, rain-snow temperature and precipitation rise, and validate on a gauge the standard bars from design; a wrong lapse (6.5 C/km) or a missing precipitation rise sends it to 240 ft. Plausible partial failures are many, so both runs losing for analytical reasons is likely.
+
+## Stumping type
+`mechanism: method_or_model_selection` (transposition of a gauged record to an ungauged basin validated out of sample), `stumping_family: analytical_non_defect`, `surface_read_dependency: no`, `sole_data_defect: no`. The reported inputs (Coyner peaks, rated flows) are all correct; the difficulty is which transfer is right, decided by the short gauge, not by catching a bad number.
+
+## Deep reasoning
+`domain: pass`, `layers: pass`, `decisive_step: analytical`, `chain: 5 inferences, judgment: transposition model chosen and validated out of sample against Selby (heterogeneity a pooled area-ratio transfer hides)`, `one_fact: none that makes it routine; the nearest sentence is "Coyner's floods are rain on snow, so carry them by the share of area below the snow line", which still leaves the lapse, rain-snow temperature, precipitation rise, event rain definition and validation to be built`.
+Layer 1: gaps in the hourly airport file, PDS versus annual peak files, two COOP stations, datum change, provisional codes. Layer 2: hydrologic transposition by rain-contributing area and B17C on the carried series. Swap test: change the nouns to any non-hydrologic field and it stops making sense. Easy route: area-ratio carry, Q100 18.7k, 140 ft.
+
+## Fix
+none. Optional (solution/rubric): allow one-bin tolerance on the 1 per cent flow and on CSV values, since the unrounded Q100 (about 23.5k in my replication) is only about 1,000 cfs above the 22,500 rounding edge.
+
+**Disposition (main thread):** DETERMINISTIC, shipped READY. The advisory (the 1 per cent cell about 1,000 cfs from its edge in the judge's replication, 2,300 in the golden's) is a rubric-tolerance note; the call and the bands carry the margin. The CSV's 100 cfs values are not graded one by one (the Supplementary answer describes its rows, columns, the censored year and its two largest values).
+
 ## Round 3 (revision 2, target.zip ac2f39bf)
 
 # Verdict, task3 (Durrow Creek bridge span)
@@ -24,7 +68,7 @@ Order kept: derivation.md was written before graded_blocks.md was opened.
 - **Deep reasoning:** `domain: pass` (hydrology: flood frequency, regionalisation, rain-on-snow contributing area), `layers: pass`, `decisive_step: analytical`, `chain: 5 inferences, judgment: transfer of a high snow-dominated basin's flood record to a low rain-dominated basin by event-wise contributing area, with the snow-line temperature and lapse rate justified from station data`, `one_fact: none that fully rescues, though "use the storm snow line at the rain-weighted hourly temperature and the storm-day lapse rate" would make it routine`. The easy route is the drainage-area transfer of the Coyner LP3 curve (Q1% about 18,700, 140 ft); the golden's route gives about 25,000 and 185 ft.
 - **Fix:** prompt and input_files. File the carry rule and its parameters in a shipped document, or restructure so the 1 per cent flow sits well inside one span's band under every defensible lapse rate, rain-snow temperature and precipitation gradient; then rebuild the CSV and top-two-flood answers from the pinned rule.
 
-**Disposition (main thread):** not shipped. Three isolated judges each built the snow-line carry a different defensible way (daily temperatures, other lapse sets) and two of three filed spans other than the golden's; the carry is an open physical model whose result the files do not force at the span's margin. Paused for the author's decision between filing the carry, adding an observed low-basin record, or re-rooting.
+**Disposition (main thread):** repaired by option 2 (round 4). Three isolated judges each built the snow-line carry a different defensible way (daily temperatures, other lapse sets) and two of three filed spans other than the golden's; the carry is an open physical model whose result the files do not force at the span's margin. Paused for the author's decision between filing the carry, adding an observed low-basin record, or re-rooting.
 
 ## Round 2 (revision 2 as first cut, target.zip 4ff37442)
 
