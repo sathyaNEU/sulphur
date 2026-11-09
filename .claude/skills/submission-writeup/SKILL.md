@@ -34,10 +34,12 @@ python3 .claude/skills/determinism-check/figures_check.py taskNN
 - **Reproducible, not low-level.** Steps name the file and the method that produce each result; they do not walk
   arithmetic, restate the files' conventions or narrate cleaning. A convention needing a paragraph belongs pinned in
   a shipped file.
-- **An estimate is stated at the grain its estimator supports.** A changepoint, an onset or a peak is given as "about
-  17:00" (the nearest five minutes, or whatever grain the data's density carries), never its raw minute, which a
-  sound rival method misses by a few and a grader then marks as a near miss; the generator asserts that the rounding
-  keeps every graded order (task6, SF19).
+- **An estimate's clock time is never graded.** A changepoint, an onset or a peak moves by tens of minutes between
+  sound methods (task6: the independent verifier's rolling median dated every December onset 15 to 55 minutes earlier
+  than the golden's changepoint, with the same owner and the same order), and a run that names the right cause at
+  another minute is then marked a near miss, a surface loss. So the answer blocks grade what the data force (the
+  owner, the order of the rises, the side of a line) and state no clock time; a golden file may give an "about" time
+  as the analyst's own dating. Run a second method's dating before any time goes near a block.
 
 **Order:** build, `determinism-check`, this skill, `golden-realism`; never before the analysis is done.
 
