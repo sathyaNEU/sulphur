@@ -168,7 +168,7 @@ file, no second-sentence opener, rounding opener or deliverable set over 20 per 
 templated at three, borderline at two: files listed up front; steps ("First... Then... Finally"); three or
 more stacked questions (two question-sentences in the opening already count); a closing one-sentence list of
 documents; a dictated method ("according to the standard"); lists inside the prompt; UK spelling. Write one
-question, name each deliverable file only in the sentence that gives its reason, never close on a list of
+question, ask for each deliverable only in the sentence that gives its reason, never close on a list of
 documents, and keep every ask's definition and rounding in flowing prose. Fold a second quantity into the one
 question ("judged on the bed-days each hospital's share would free") rather than asking it; prefer neutral
 wording to a UK-only spelling ("with every bar showing its value", not "labelled"). Mark's task127 scored four
@@ -181,7 +181,7 @@ unmade is a second decision (`reduce-house-fixes` H18). An entity plus an aggreg
 designed in `supplemental-stumping`.
 
 **The author's rewrite.** The design note's `## Prompt contract` lists, line by line, what a voice rewrite may not
-drop or change: the decision sentence, the threshold, the hold option, every deliverable name and extension, every
+drop or change: the decision sentence, the threshold, the hold option, every deliverable (by type, or by file name where the prompt gives one), every
 ask with its unit and rounding, the as-of date. Hand it to the author with the draft. When the rewrite comes back, it
 replaces `prompt.txt`, `pipeline.json` gets `"prompt_rewritten": true`, and the gate runs in rewrite mode: every leak
 rule still fails it, the voice rules only warn. Then `leak.py` again, and the four answer blocks are re-read against
@@ -201,7 +201,8 @@ or emphasis outside a file name; a line break; no question mark in the first two
 more; an em or en dash; a persona from the card's `world.people`, a title, sign-off, board vote or reader; a sentence
 opening Then, Next, First, Second, Last, Finally, After that; an LLM tell (leverage, robust, comprehensive, seamless,
 delve, ensure, note that, in order to, furthermore, stakeholders); two attributed opinions; rounding outside the last
-sentence; zero or more than three files; a count the data hold. **And on Sulfur's two leak rules:** a method,
+sentence; zero or more than three deliverables (by file name or by type); a prompt that opens by saying who is
+asking; a count the data hold. **And on Sulfur's two leak rules:** a method,
 comparison or adjustment named; a warning to the solver. It warns on a method hint word (cohort, holdout, matured,
 pooled, weighted, seasonal, spillover, comparison or control group), a shell class over its corpus quota and a missing
 rounding sentence.

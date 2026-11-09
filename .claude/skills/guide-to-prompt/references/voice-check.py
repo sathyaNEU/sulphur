@@ -452,6 +452,14 @@ def _gate(text, task=None, legacy=False):
     if titles:
         detail.append("title or sign-off: " + "; ".join(titles[:4]))
     rows.append(("no persona or title", "FAIL" if detail else "PASS", "; ".join(detail) or "no name, title, sign-off chain or reader"))
+    # The client's reviewers return a prompt that says who is asking ("I'm a product manager at ..."), so an opening
+    # self-introduction fails in both modes; this rule is not one of the voice rules the rewrite turns into a WARN.
+    opening = (sentences(text) or [""])[0]
+    intro = re.match(r"\s*(?:I'm|I’m|I am|I work|I run|I lead|I manage|I head|I look after|As (?:a|an|the|our|your)\b"
+                     r"|We're|We’re|We are|Our team|My team)\b", opening, re.I)
+    rows.append(("no stated role", "FAIL" if intro else "PASS",
+                 "the prompt opens by saying who is asking (\"%s\"); go straight into the problem" % opening[:60]
+                 if intro else "the prompt goes straight into the problem"))
 
     seq = [m.group(1) for m in re.finditer(SEQUENCING, re.sub(r"\s+", " ", text))]
     rows.append(("no sequencing", "FAIL" if seq else "PASS", "sentence openers: " + ", ".join(seq) if seq else "none"))

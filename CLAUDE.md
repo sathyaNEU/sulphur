@@ -207,7 +207,10 @@ Sulfur builds are numbered from `task1` up (`status.py new`); the Mark baseline 
 - **Prompts are written the Mark way, then the author rewrites them for voice.** The draft is short and crisp (one
   plain paragraph under 1,000 characters, question first, no persona, rounding once at the end) and it is correct
   and leak-free: it pins the question, the decision, the deciding outcome or threshold and the deliverables, and
-  never names the method, the comparison, the adjustment or a step, and never warns. The author's rewrite comes back
+  never names the method, the comparison, the adjustment or a step, and never warns. It names no file (no input file
+  ever; deliverables by type, "a spreadsheet and a few slides", a file name only where a person would naturally give
+  one) and never says who is asking, the four things the client's reviewers return a prompt for being a spelled-out
+  method, named files, context the files already carry and a stated role. The author's rewrite comes back
   through `voice-check.py --rewrite` (leaks fail, voice only warns) and `leak.py` (`guide-to-prompt`, `leak-check`).
 
 ## Current spec

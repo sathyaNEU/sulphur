@@ -40,7 +40,7 @@ anything else.
 | `spine` | file, rows, row meaning, grain, source dataset |
 | `world` | geography, currency, org type, invented nouns, `people` |
 | `forum`, `forcing_event`, `org_family` | who decides, what forces it now, the kind of organisation; always declared |
-| `deliverables`, `opening_move`, `question_form` | file names; `question-first`; how many, how much, which, whether, what, when, who, where |
+| `deliverables`, `opening_move`, `question_form` | the deliverables (the golden's file names; the prompt itself asks by type); `question-first`; how many, how much, which, whether, what, when, who, where |
 | `driver` | **one sentence, the decisive move with every domain noun stripped** (similarity) |
 | `driver_concrete`, `stump` | the move in the build's terms; the wrong committed answer and the step that lands it |
 | `answer`, `answer_source` | the committed answer verbatim, its source |
