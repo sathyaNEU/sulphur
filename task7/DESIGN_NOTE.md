@@ -657,3 +657,9 @@ count of measures, buildings or applications, or any hint that the comparison bu
   4.2 now files the construction (each works building's use as a share of its 2018/19 use against the comparison
   buildings' average share, one less the ratio, averaged over buildings and seasons), never which buildings compare;
   critical component 2 restated at whole points and the 2018/19 rival at 500 tonnes.
+- 2026-11-09, platform review of architecture 6 (version 17; stumped, determinism, solution and type checks passed;
+  prelim verdict sent back for fixes): the funding answer turns on one thing, the service visits in the meter file
+  (about 7 per cent off most passed-over buildings and none of the works buildings, `TUNE_EFFECT = 0.070` on `~w.works`
+  only), constructed, only in the comparison arm, fixed by one exclusion; past it the plan's 4.2 and 4.4 formulas carried
+  every figure. The reviewer kept the lottery and the per-measure projection to the offer's close. Re-rooted at stage 1
+  as architecture 7 in the same world at the reviewer's direction (client text decides what is allowed).

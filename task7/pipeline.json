@@ -1,11 +1,11 @@
 {
  "task": "task7",
- "status": "READY",
+ "status": "RETURNED",
  "domain": "energy-systems-utilities",
  "objective": "experiment-causal",
  "stage": 5,
  "stage_name": "ready",
- "updated": "2026-11-08",
+ "updated": "2026-11-09",
  "stump": "The plain lottery comparison (the works buildings against every owner the draw passed over, each against its own 2018/19 season) files 13, 2 and below zero and funds insulation alone, heating optimisation at EUR 280 a tonne; service visits reached most passed-over buildings district by district from August 2019, each followed by normal-weather use about 7 per cent lower, and no works building had one, so against passed-over buildings not yet visited, each dropped from its visit season, the rates are 16, 6 and 2 and heating optimisation is funded at EUR 90 a tonne.",
  "architecture": 6,
  "loops": 0,
@@ -75,9 +75,16 @@
    "source": "triage",
    "repair": "design",
    "note": "round 2 on the re-sited asks: both runs landed the call; architecture 4 spent with its world (Ruahine Bank); every file of architectures 1 to 4 removed at the author's word"
+  },
+  {
+   "date": "2026-11-09",
+   "source": "review",
+   "portal": "version 17: stumped, determinism (main, supp), solution (main, supp), task type and stumped type passed; prelim verdict sent back for fixes: the funding answer turns on one thing (the service visits, about 7 per cent off most passed-over buildings and none of the works buildings), and past it the plan's saving-rate and appraisal formulas carry the rest",
+   "repair": "design (re-root to a results chain, architecture 7, same world at the reviewer's direction)",
+   "feedback": "task7/runs/review_2026-11-09.md"
   }
  ],
- "resume": "stage 5 READY: the author uploads prompt.txt and target.zip; when the two runs come back, /triage-runs task7",
+ "resume": "RETURNED: re-root at stage 1 as architecture 7 (results chain), the lottery and the per-measure projection kept",
  "approved": null,
  "delivered": "2026-11-08",
  "portal": null,
