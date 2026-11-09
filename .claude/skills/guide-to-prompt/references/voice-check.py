@@ -247,8 +247,39 @@ def question_form(text):
     return "none"
 
 
+# A deliverable asked for by its type, the way a person asks for it ("a spreadsheet", "a few slides", "a short memo"),
+# read only when the prompt gives no file name at all. Client reviewers return prompts that name files, so a prompt
+# may ask by type; an input file is still never named. Each type maps to the extension its file would carry, so the
+# deliverable set and the three-file ceiling read the same either way. A chart inside a requested file is no file.
+TYPED = [
+    ("xlsx", r"spreadsheets?|workbooks?|excel (?:file|workbook|sheet)s?"),
+    ("pptx", r"slide decks?|slides?|decks?|presentations?|powerpoints?"),
+    ("docx", r"briefing notes?|memos?|write-?ups?|reports?|word (?:files?|documents?)"),
+    ("csv", r"csv(?: files?)?"),
+    ("ipynb", r"notebooks?"),
+    ("py", r"(?:python )?scripts?"),
+    ("html", r"dashboards?"),
+]
+TYPED_TOKEN = re.compile(
+    r"\b(?:a|an|one|two|three|a few|a couple of|some|short|quick|brief)\s+(?:[a-z][a-z\-]*\s+){0,2}?(%s)\b"
+    % "|".join("(?:%s)" % pat for _, pat in TYPED), re.I)
+
+
+def typed_deliverables(text):
+    """Deliverables asked for by type, as type.ext tokens (one per extension), when no file name is given."""
+    out = set()
+    for m in TYPED_TOKEN.finditer(text):
+        word = m.group(1).lower()
+        for ext, pat in TYPED:
+            if re.fullmatch(pat, word, re.I):
+                out.add("%s.%s" % (re.sub(r"[^a-z]+", "-", word).strip("-"), ext))
+                break
+    return sorted(out)
+
+
 def deliverables(text):
-    return sorted({m.group(0).lower() for m in FILE_TOKEN.finditer(text)})
+    named = sorted({m.group(0).lower() for m in FILE_TOKEN.finditer(text)})
+    return named or typed_deliverables(text)
 
 
 def people_of(task):
@@ -472,7 +503,7 @@ def _gate(text, task=None, legacy=False):
 
     files = deliverables(text)
     if not files:
-        rows.append(("deliverables named", "FAIL", "no output file name with an extension"))
+        rows.append(("deliverables named", "FAIL", "no deliverable asked for, by file name or by type (a spreadsheet, a few slides, a memo)"))
     elif len(files) > 3:
         rows.append(("deliverables named", "FAIL", "%d files named, three is the ceiling" % len(files)))
     else:

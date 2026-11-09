@@ -92,9 +92,10 @@ for a human voice, and the rewrite comes back through the gate in rewrite mode (
 Write it last, against the golden. Context, question, files, rounding, in one paragraph. **The ten rules:**
 
 1. **Lead with the question**, a direct question in the first two sentences.
-2. **Cut who and why:** no names, titles, sign-offs, meetings or readers of the file.
+2. **Cut who and why:** no names, titles, roles ("I'm getting the recommendation together"), sign-offs, meetings or
+   readers of the file; go straight into the problem.
 3. **Test every fact before cutting it:** a send date, extract date, cut-over or stop rule that bounds the answer stays.
-4. **Keep every ask exactly:** file names, columns, periods, units and rounding word for word.
+4. **Keep every ask exactly:** what each deliverable holds, its periods, units and rounding, in meaning.
 5. **Do not change meaning while smoothing:** "in cents" is not "dollars and cents"; "whether any, and if so how many"
    is not "how many".
 6. **One continuous paragraph**, list items joined by commas and semicolons, no "Then" or "Last".
@@ -108,9 +109,10 @@ Write it last, against the golden. Context, question, files, rounding, in one pa
 **The prompt pins only four things** (Sulfur): the question, the decision, the deciding outcome or threshold, and the
 deliverables. **May say:** the question, with the candidate set and the hold on the same footing ("or none this
 cycle") where relevant; the forcing fact once (window, date, cut-over, stop rule); the threshold the call is held to;
-each file by name and extension with its content as a person states it ("one stacked bar per district, each high
-segment labelled with its count"); the standard the call runs on only where the pack lacks it; a generic threat to
-validity ("participation was voluntary").
+each deliverable by its type, as a person asks for it ("a spreadsheet with a before-and-after chart", "a few slides
+for the review"), with its content as a person states it; a file name only where the person would really give one;
+the standard the call runs on only where the pack lacks it; a generic threat to validity ("participation was
+voluntary").
 
 **Never says:**
 - **a method, comparison, model or adjustment** (Sulfur: never name the method, the trap, the comparison group, the
@@ -132,6 +134,13 @@ validity ("participation was voluntary").
   cost", "the sites where it fell"): make "none" a grammatical answer ("whether any and, if so, how many and what
   they cost") with every figure, unit and rounding kept, while a fact the requester knows before any analysis stays
   (`reduce-house-fixes` H23).
+
+**What the client's reviewers return:** a prompt that spells out the method (anything the model should
+work out itself, including an intermediate quantity asked only because the method needs it), that names the
+attached files or lists the files wanted back, that describes more than the question needs, or that says who is
+asking. Context the decision needs is buried in the files; the prompt is minimally sufficient: the question, the
+outcomes wanted, the deliverables by type, the rounding. `voice-check.py` reads a deliverable named by type when
+no file name is given.
 
 Sulfur's prompt module sends a prompt back when it "names the method or the trap, warns the solver, rests on a written
 procedure, allows a hedged answer, needs outside knowledge, pulls in a separate dataset or decision, or asks for more
