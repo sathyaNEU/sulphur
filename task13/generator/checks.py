@@ -159,7 +159,11 @@ def main():
         cc = pd.Series(d, index=R['coef'].index)
         sims.append(float(G.project(cc, {f: R['station'][f] for f in six}, R['trims'], R['NE'], R['cpe'])['avoided'].sum()))
     flo, fhi = np.percentile(sims, [5, 95])
-    check('SF19 the record\'s spread is about twice the fit\'s own uncertainty', (hi - lo) > 1.7 * (fhi - flo),
+    w19 = [int(round(float(np.percentile(G.weather_years(R, (2006, 2024)), q)), -3)) for q in (5, 95)]
+    check('SF19 the range runs over every complete regulatory year, 2006-07 to 2025-26', G.RANGE_YEARS == (2006, 2025) and len(wy) == 20,
+          '20 years %s; the 19 to 2024-25 would give %s' % (F['range90'], w19))
+    check('SF19 the 19-year window is recorded', F['range90_19yr'] == w19, str(w19))
+    check('SF19 the record\'s spread is more than twice the fit\'s own uncertainty', (hi - lo) > 2.0 * (fhi - flo),
           'weather %.0f to %.0f; fit alone %.0f to %.0f' % (lo, hi, flo, fhi))
 
     # ------------------------------------------------------------ texture that must not decide

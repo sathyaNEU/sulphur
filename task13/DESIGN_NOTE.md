@@ -220,7 +220,7 @@ stations, growth, exposure or a method.
 | SF16 | the count model | Poisson with a rate per feeder | negative binomial | same call (asserted) | same call asserted |
 | SF17 | Titi Saddle's units | knots converted before July 2013 | left unconverted | same call (asserted) | the station register's note and the unit column |
 | SF18 | suspect and missing hours | dropped | suspect hours kept | same call (asserted); no gap falls inside the outage record | the station record's quality flag |
-| SF19 | the 90 per cent range | the 5th to 95th percentile of the six's saving across the weather of the 19 regulatory years 2006-07 to 2024-25 | nearest-rank percentiles; the fit's own standard errors | nearest rank within one step of each end; the fit's own errors give a range about half as wide (11,000 to 16,000) | the decision year is one year of weather, and the station record's spread is about twice the fit's (asserted) |
+| SF19 | the 90 per cent range | the 5th to 95th percentile of the six's saving across the weather of every complete regulatory year of the station record, the 20 from 2006-07 to 2025-26: 6,000 to 19,000 | the 19 years to 2024-25; nearest-rank percentiles; the fit's own standard errors | the 19 years give 10,000 to 19,000 (recorded); nearest rank within one step of each end; the fit's own errors give 11,000 to 16,000 | every complete year is the record's own spread of weather, and 2025-26 is complete; the decision year is one year of weather, so the fit's errors alone understate it (asserted) |
 
 ## Ladder
 
@@ -305,11 +305,11 @@ quantity (the past three years), which the terms do not ask for.
   step in every cell: the shallow run's left-as-is figures are its recent averages and its after-catch-up figures a
   guess; second judgment on the after-catch-up column: the corridor regrows through 2027-28 from 31 March.
 - **A2 the six's total and network SAIFI** (critical): 12,984 and 0.33 on 39,943 ICPs; shallow 5,770 on the wrong six.
-- **A3 the split across the regulatory year's quarters**: 2,752, 5,466, 3,102 and 1,664; second judgment: the storms
+- **A3 the split across the regulatory year's quarters**: 2,753, 5,466, 3,102 and 1,663; second judgment: the storms
   are seasonal (the record's winter carries most of the gust load) and both corridors grow through the year, so an
   even split or a year-grain projection misses.
-- **A4 the 90 per cent range**: 10,000 to 19,000; second judgment: the decision year is one year of weather, so the
-  range is the spread across the station record's years (about twice the width of the fit's own uncertainty, 11,000 to 16,000).
+- **A4 the 90 per cent range**: 6,000 to 19,000; second judgment: the decision year is one year of weather, so the
+  range is the spread across the station record's complete years (more than twice the width of the fit's own uncertainty, 11,000 to 16,000).
 - **A5 the chart** of the avoided interruptions on every feeder.
 - **Mess on the paths:** every Layer 1 item is handled alike by careful runs (`checks.py` SF1 to SF4, SF12 to SF18).
 
@@ -383,6 +383,12 @@ interruptions are to be estimated (no wind, weather, stations, growth, exposure,
   packs being flat folders of the same three formats (every wording, name and schema axis at zero); the weather
   service's four hourly records now ship in their delivery folder `pou_aws_hourly/`, and no pair is promoted. The
   exports' saved times are now written as New Zealand time (they had been read in the build machine's zone).
+- After the first READY commit: the 90 per cent range had run over the 19 regulatory years to 2024-25 although the
+  station record also completes 2025-26; it now runs over every complete regulatory year, the 20 from 2006-07 to
+  2025-26 (6,000 to 19,000; the 19 years give 10,000 to 19,000, recorded in SF19 and asserted). The quarters are
+  rounded by largest remainder so they add to the year (2,753, 5,466, 3,102, 1,663), and the independent verifier now
+  recomputes the quarters and the range as well. The judge traced the range rather than recomputing it; the six, the
+  total, the SAIFI and every feeder row are unchanged.
 
 ## Tried and rejected
 

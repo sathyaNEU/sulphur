@@ -292,15 +292,18 @@ def quarters(R):
     T, M = project(R['coef'], {f: R['station'][f] for f in R['six']}, R['trims'], R['NE'], R['cpe'], monthly=True)
     tot = M.sum(axis=1).values
     q = [float(tot[3 * k:3 * k + 3].sum()) for k in range(4)]
-    r = [int(round(x)) for x in q]
     year = int(round(sum(q)))
-    while sum(r) != year:
-        k = int(np.argmax([x - round(x) for x in q]) if sum(r) < year else np.argmin([x - round(x) for x in q]))
-        r[k] += 1 if sum(r) < year else -1
+    r = [int(math.floor(x)) for x in q]
+    # the largest remainders take the units the floors leave short of the year's figure
+    for k in sorted(range(4), key=lambda k: -(q[k] - r[k]))[:year - sum(r)]:
+        r[k] += 1
     return r
 
 
-def weather_years(R, years=(2006, 2024)):
+RANGE_YEARS = (2006, 2025)    # every complete regulatory year of the station record, 2006-07 to 2025-26
+
+
+def weather_years(R, years=RANGE_YEARS):
     """the six's customer interruptions avoided in 2027-28 had it the weather of each regulatory year of the station
     record (each month's exposure as recorded), the fitted corridors and growth held"""
     EX, six = R['EX'], R['six']
@@ -406,7 +409,8 @@ def figures(R):
         'feeders': len(T),
         'strong_wind_kmh': int(THRESHOLD),
         'load_base_kmh': int(BASE),
-        'record_years': 19,
+        'record_years': RANGE_YEARS[1] - RANGE_YEARS[0] + 1,
+        'range90_19yr': [int(round(float(np.percentile(weather_years(R, (2006, 2024)), q)), -3)) for q in (5, 95)],
         'vegetation_interruptions': int(len(K['veg'])),
         'oms_rows': int(len(K['o']) + K['n_dup']),
         'family_total_range': family_totals(R),

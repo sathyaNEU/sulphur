@@ -212,6 +212,27 @@ def main():
     order = sorted(fl, key=lambda f: -out[f][3])
     six = order[:6]
     F = json.load(open(os.path.join(HERE, 'figures.json')))
+
+    def avoided_six(expo):
+        """the six's avoided customer interruptions month by month in 2027-28 at the given monthly exposure"""
+        months = []
+        for (yy, mm) in ry27:
+            when = dt.datetime(yy, mm, 1) + dt.timedelta(days=14)
+            tot = 0.0
+            for f in six:
+                j = fl.index(f)
+                e = expo(stn[f], mm)
+                tot += (math.exp(beta[j] + gamma * ys(f, when)) - math.exp(beta[j] + gamma * (when - done).days / 365.25)) * e * cpe[f]
+            months.append(tot)
+        return months
+    m27 = avoided_six(lambda sid, mm: norm[sid][mm])
+    quarters = [sum(m27[3 * k:3 * k + 3]) for k in range(4)]
+    years = []
+    for y in range(2006, 2026):
+        def expo_y(sid, mm, y=y):
+            return ex[sid].get((y if mm >= 4 else y + 1, mm), 0)
+        years.append(sum(avoided_six(expo_y)))
+    rng90 = [int(round(float(np.percentile(years, q)), -3)) for q in (5, 95)]
     ok = True
 
     def check(name, cond, detail=''):
@@ -231,6 +252,8 @@ def main():
     g = list(csv.DictReader(open(os.path.join(TASK, 'golden', 'vegetation_catchup_2027_feeders.csv'))))
     check('golden table ranks', [r['feeder'] for r in g] == [r['feeder'] for r in F['rows']], '%d rows' % len(g))
     check('golden table avoided', all(int(r['customer_interruptions_avoided']) == int(round(out[r['feeder']][3])) for r in g), '')
+    check('quarters', all(abs(round(q) - g) <= 1 for q, g in zip(quarters, F['quarters'])), ' '.join('%.0f' % q for q in quarters))
+    check('90 per cent range over the 20 complete regulatory years', rng90 == F['range90'], '%d to %d' % tuple(rng90))
     print('VERIFY', 'PASS' if ok else 'FAIL')
     return 0 if ok else 1
 

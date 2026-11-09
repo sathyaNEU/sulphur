@@ -151,7 +151,7 @@ def write_note(F, R, path, png):
          'customer interruptions at the feeder’s own customers per vegetation interruption. Other measures of the wind '
          '(hours of gusts from 45 to 70 km/h, the gust excess over 35 or 45 km/h), other base years and other forms for '
          'the growth give the same six, with totals from %s to %s. The range is the spread of the six’s '
-         'saving across the weather of the regulatory years 2006-07 to 2024-25 in the station record, the 5th to the '
+         'saving across the weather of every complete regulatory year in the station record, 2006-07 to 2025-26, the 5th to the '
          '95th percentile, with the corridors and their growth held as fitted.'
          % ('{:,}'.format(F['family_total_range'][0]), '{:,}'.format(F['family_total_range'][1])), after=6)
     tbl = doc.add_table(rows=1, cols=5)

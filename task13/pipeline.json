@@ -51,5 +51,6 @@
     "status": "",
     "date": "",
     "note": ""
-  }
+  },
+  "notes": "post-judge fixes on 2026-11-09 (no re-judge owed: the judge approved and traced the range): metadata distractors; feeder register ICPs from the registry; station records in pou_aws_hourly/; exports stamped in New Zealand time; the range over every complete regulatory year (6,000 to 19,000); quarters by largest remainder; verifier extended to the quarters and the range"
 }

@@ -18,8 +18,8 @@
 ### vegetation_catchup_2027_board_note.docx
 
 4. Names the six and states that together they avoid 12,984 customer interruptions in 2027-28, 0.33 of network SAIFI on the 39,943 ICPs connected at 31 October 2026, against 1,268 for the next-best feeder, TOT-02.
-5. The split across the regulatory year's quarters: 2,752 in April to June 2027, 5,466 in July to September, 3,102 in October to December and 1,664 in January to March 2028.
-6. A 90 per cent range of 10,000 to 19,000 customer interruptions avoided, the spread of the six's saving across the weather of the station record's 19 regulatory years from 2006-07 to 2024-25.
+5. The split across the regulatory year's quarters: 2,753 in April to June 2027, 5,466 in July to September, 3,102 in October to December and 1,663 in January to March 2028.
+6. A 90 per cent range of 6,000 to 19,000 customer interruptions avoided, the spread of the six's saving across the weather of every complete regulatory year in the station record, the 20 from 2006-07 to 2025-26.
 7. One chart of the customer interruptions avoided on every feeder, the 48 bars ranked, the six highlighted and labelled, with the next feeder labelled beside them.
 
 ## Critical Components
@@ -38,6 +38,6 @@
 5. Took each station's monthly gust load (each hour's gust above 40 km/h, squared, summed), which fits the vegetation record best of the exposure measures tried; hour counts from 50 km/h leave months with vegetation interruptions and no exposure.
 6. Fitted each feeder's monthly vegetation interruptions from April 2022 as Poisson counts on its station's gust load: a corridor rate for each feeder times a growth of 15.5 per cent a year since its last crew-finished cycle trim in vegetation_cycle_log_2014-2026.xlsx.
 7. Projected 2027-28 month by month at each station's 2006 to 2025 mean gust load, with the growth running on and with it restarted on 31 March 2027, and turned each into customer interruptions at the feeder's own customers per vegetation interruption.
-8. Ranked by the difference: PBY-10 2,741, HRK-03 2,337, HRK-05 2,279, WTK-02 1,916, PBY-11 1,890 and PBY-03 1,821, then TOT-02 1,268; the six total 12,984, 0.33 SAIFI on 39,943 ICPs, split 2,752, 5,466, 3,102 and 1,664 by quarter; across the station record's 19 regulatory years of weather the total runs 10,000 to 19,000 at the 5th and 95th percentiles, against 11,000 to 16,000 from the fit's own uncertainty alone.
+8. Ranked by the difference: PBY-10 2,741, HRK-03 2,337, HRK-05 2,279, WTK-02 1,916, PBY-11 1,890 and PBY-03 1,821, then TOT-02 1,268; the six total 12,984, 0.33 SAIFI on 39,943 ICPs, split 2,753, 5,466, 3,102 and 1,663 by quarter; across the weather of the station record's 20 complete regulatory years the total runs 6,000 to 19,000 at the 5th and 95th percentiles, against 11,000 to 16,000 from the fit's own uncertainty alone.
 
 No other conclusion survives. Ranking on the recent counts carries the southern storms and funds the plantation feeders; normalising for wind but counting every expected interruption as removable still funds them, because their corridor rate stays after a trim (TOT-02 keeps 4,951 of 6,220); fitting the growth on counts alone, or projecting at the three stormy years or the outage record's own weather, funds the southern late-cycle feeders; funding the most overdue feeders funds the open plains and small feeders with few trees. Every exposure measure tried (hours of 45 to 70 km/h, gust excess over 35 to 45 km/h, straight or squared), every base period, a lag or whole-year bins in the growth, a negative binomial fit, blended stations, job-closed trim dates, UTC months and every cleaning choice give the same six, with totals from 12,247 to 15,757.
