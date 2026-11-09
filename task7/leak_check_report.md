@@ -1,17 +1,12 @@
 # leak check, task7
 
-**Verdict: REVIEW.** 18 files read, 46 golden figures and 0 candidate names taken from submission.md, 25 stump terms taken from the design note.
+**Verdict: REVIEW.** 18 files read, 60 golden figures and 0 candidate names taken from submission.md, 25 stump terms taken from the design note.
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: architecture, carried, heating, record, golden, controls, pooled, feeder, patients, insulation, optimisation, nothing, comparison, missed, december, default, building, states, service, seasons, shipped, method, average, exactly, equipment
+Stump terms swept: architecture, million, carried, heating, record, golden, controls, pooled, feeder, patients, insulation, optimisation, nothing, comparison, missed, december, default, building, states, service, seasons, shipped, method, average, exactly
 
-## 3 answer figures in the pack (REVIEW 8)
-- **REVIEW** `climate_action_plan_2023_extract.pdf`: golden figure 4.1 appears: ...that use most are one of the plan's instruments. 4.1 The programme The council grants 30 per cent of a...
-- **REVIEW** `climate_action_plan_2023_extract.pdf`: golden figure 4.3 appears: ...ce of each measure's saving from the 2019 pilot. 4.3 Normal weather A season runs from 1 May to 30 Apr...
-- **REVIEW** `climate_action_plan_2023_extract.pdf`: golden figure 4.6 appears: ...ted floor area in Stadtwerke Haldenau's register. 4.6 Monitoring The Climate Protection Office reports...
-- **REVIEW** `climate_action_plan_2023_extract.pdf`: golden figure 4.4 appears: ...denau normalises it for its benchmarking notices. 4.4 Appraisal of a round An application's lifetime to...
-- **REVIEW** `committee_request_2026-06-15.docx`: golden figure 4.6 appears: ...rks saved in the season to April 2026, as section 4.6 sets it out. With thanks and best wishes,...
+## 3 answer figures in the pack (REVIEW 3)
 - **REVIEW** `climate_action_plan_2023_extract.pdf`: carries 3 of 3 distinctive words of the committed call: 'insulation and heating controls'
 - **REVIEW** `grant_offer_2026_terms.pdf`: carries 3 of 3 distinctive words of the committed call: 'insulation and heating controls'
 - **REVIEW** `pilot_2019_rules.pdf`: carries 3 of 3 distinctive words of the committed call: 'insulation and heating controls'
@@ -23,11 +18,11 @@ Stump terms swept: architecture, carried, heating, record, golden, controls, poo
 - **REVIEW** `grant_offer_2026_terms.pdf`: 7 of 25 stump-paragraph terms appear (heating, record, controls, insulation, optimisation, nothing); read whether the document names the move
 - **REVIEW** `pilot_2019_rules.pdf`: 6 of 25 stump-paragraph terms appear (heating, record, controls, insulation, optimisation, building); read whether the document names the move
 
-## 9 dates after the setting (INFO 1)
-- **INFO** `-`: no --asof given, sweep skipped (pass the fiction's as-of date)
-
 ## 10 container metadata (INFO 1)
 - **INFO** `-`: container gate PASS (PASS: 0 FAIL, 0 WARN)
+
+## 11 prompt gate (REVIEW 1)
+- **REVIEW** `prompt.txt`: rounding at the close: no rounding words anywhere; every derived figure needs one, stated once at the end
 
 ## 12 client quality check (INFO 2)
 - **INFO** `-`: 18 usable files (10 or more required)
@@ -45,7 +40,7 @@ Stump terms swept: architecture, carried, heating, record, golden, controls, poo
 
 ## 8 column names (clean)
 
-## 11 prompt gate (clean)
+## 9 dates after the setting (clean)
 
 
 ## Solver's-eye read

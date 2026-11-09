@@ -40,7 +40,7 @@ def edge(v, u):
 
 
 def pct(x):
-    return round(100.0 * x, 1)
+    return round(100.0 * x, 2)
 
 
 # ---------------------------------------------------------------- each result, golden, rivals and hurried
@@ -297,9 +297,6 @@ def run(target, gen_dir, quick=False):
             lo2, hi2 = C["R6_rival_seed"][m]
             check("SF8 R6 %s's range under another resampling seed within €6 at both ends" % m,
                   abs(lo2 - lo) <= 6 and abs(hi2 - hi) <= 8, "%.1f-%.1f against %.1f-%.1f" % (lo2, hi2, lo, hi))
-        be = C["R6"][m]["break_even"]
-        check("R6 %s's flip rate (arithmetic on the applications) sits clear of its one-decimal edge" % m, edge(100 * be, 0.1) >= 0.005,
-              "%.3f" % (100 * be))
     # ---- R7 the round at close
     R7 = C["R7"]
     for m in MEAS:
@@ -336,14 +333,11 @@ def run(target, gen_dir, quick=False):
     check("the golden projection lands within 12 per cent of what the world's round pays (the round's own sampling)",
           abs(C["R7_funded_paid"] / tp - 1) < 0.12,
           "%.3f against %.3f million" % (C["R7_funded_paid"] / 1e6, tp / 1e6))
-    check("the funded round's payment sits 0.012 million or more from its €0.1 million edge",
-          edge(C["R7_funded_paid"] / 1e6, 0.1) >= 0.012, "%.4f" % (C["R7_funded_paid"] / 1e6))
     # ---- R8 the 2025/26 saving
     for name, v in C["R8_rivals"].items():
         check("SF10 R8 %s: within 2 per cent of the golden" % name, abs(v / C["R8"] - 1) <= 0.02, "%.0f against %.0f" % (v, C["R8"]))
     for name, v in C["R8_hurried"].items():
         check("R3 R8 %s: 8 per cent or more off the golden" % name, abs(v / C["R8"] - 1) >= 0.08, "%.0f against %.0f" % (v, C["R8"]))
-    check("the 2025/26 saving sits 25 tonnes or more from its 100-tonne edge", edge(C["R8"], 100) >= 25, "%.0f" % C["R8"])
     # ---- SF rows: the conventions that move nothing
     for m in MEAS:
         check("SF1 the share of the gas, R1 every season: rounding at one decimal lands every rival in the band", True)
@@ -462,37 +456,38 @@ def figures(C):
         "R2_ho_first_pct": pct(C["R1"]["heating optimisation"][0]),
         "R3_by_type_pct": {m: {t: pct(v) for t, v in C["R3"][m].items()} for m in MEAS},
         "R3_class_pct": {m: {k: pct(v) for k, v in C["R3_class"][m].items()} for m in MEAS},
-        "controls_round_clock_share_pct": {k: int(round(100 * v)) for k, v in C["controls_round_clock_share"].items()},
+        "controls_round_clock_share_pct": {k: pct(v) for k, v in C["controls_round_clock_share"].items()},
         "R4_rate_on_applications_pct": {m: pct(A[m]["rate"]) for m in MEAS},
         "R4_pooled_life_pct": {m: pct(GD.lifetime(C["R1"][m], m)) for m in MEAS},
-        "R5_eur_per_tonne": {m: int(rnd(A[m]["eur_t"], 1)) for m in MEAS},
-        "R5_eur_per_tonne_unrounded": {m: round(A[m]["eur_t"], 1) for m in MEAS},
+        "R5_eur_per_tonne": {m: round(A[m]["eur_t"], 2) for m in MEAS},
+        "R5_eur_per_tonne_unrounded": {m: round(A[m]["eur_t"], 4) for m in MEAS},
         "applications_received": {m: A[m]["n"] for m in MEAS},
-        "grant_received_eur": {m: int(rnd(A[m]["grant"], 10000)) for m in MEAS},
-        "lifetime_tonnes_received": {m: int(rnd(A[m]["tonnes"], 10)) for m in MEAS},
-        "R6_range_eur": {m: [int(rnd(C["R6"][m]["lo"], 1)), int(rnd(C["R6"][m]["hi"], 1))] for m in MEAS},
+        "grant_received_eur": {m: int(round(A[m]["grant"])) for m in MEAS},
+        "lifetime_tonnes_received": {m: int(round(A[m]["tonnes"])) for m in MEAS},
+        "R6_range_eur": {m: [round(C["R6"][m]["lo"], 2), round(C["R6"][m]["hi"], 2)] for m in MEAS},
         "R6_break_even_pct": {m: pct(C["R6"][m]["break_even"]) for m in MEAS},
-        "R7_applications_at_close": {m: int(rnd(C["R7"][m]["n_close"], 10)) for m in MEAS},
-        "R7_grant_at_close_eur": {m: int(rnd(C["R7"][m]["grant_close"], 10000)) for m in MEAS},
-        "R7_grant_paid_eur": {m: int(rnd(C["R7"][m]["paid"], 10000)) for m in MEAS},
-        "R7_funded_paid_million": round(rnd(C["R7_funded_paid"] / 1e6, 0.1), 1),
-        "R7_funded_close_million": round(rnd(C["R7_funded_close"] / 1e6, 0.1), 1),
-        "R7_share_by_day_pct": {m: int(round(100 * C["R7"][m]["share"])) for m in MEAS},
-        "R7_late_size_ratio": {m: round(C["R7"][m]["size"], 2) for m in MEAS},
+        "R7_applications_at_close": {m: int(round(C["R7"][m]["n_close"])) for m in MEAS},
+        "R7_grant_at_close_eur": {m: int(round(C["R7"][m]["grant_close"])) for m in MEAS},
+        "R7_grant_paid_eur": {m: int(round(C["R7"][m]["paid"])) for m in MEAS},
+        "R7_funded_paid_eur": int(round(C["R7_funded_paid"])),
+        "R7_funded_close_eur": int(round(C["R7_funded_close"])),
+        "R7_share_by_day_pct": {m: pct(C["R7"][m]["share"]) for m in MEAS},
+        "R7_late_size_ratio": {m: round(C["R7"][m]["size"], 3) for m in MEAS},
+        "R7_late_size_premium_pct": {m: pct(C["R7"][m]["size"] - 1.0) for m in MEAS},
         "R7_withdrawn_pct": {m: [pct(C["R7"][m]["w_early"]), pct(C["R7"][m]["w_late"])] for m in MEAS},
-        "R8_tonnes": int(rnd(C["R8"], 100)),
-        "R8_hurried_tonnes": {k: int(rnd(v, 100)) for k, v in C["R8_hurried"].items()},
-        "grant_received_funded_eur": int(rnd(sum(A[m]["grant"] for m in C["funded"]), 10000)),
+        "R8_tonnes": int(round(C["R8"])),
+        "R8_hurried_tonnes": {k: int(round(v)) for k, v in C["R8_hurried"].items()},
+        "grant_received_funded_eur": int(round(sum(A[m]["grant"] for m in C["funded"]))),
         "R9_funded_applications": sum(1 for a in C["apps"] if a["funded"]),
-        "R9_funded_grant_eur": int(rnd(sum(a["grant"] for a in C["apps"] if a["funded"]), 10000)),
-        "R9_funded_tonnes": int(rnd(sum(a["life_t"] for a in C["apps"] if a["funded"]), 10)),
+        "R9_funded_grant_eur": int(round(sum(a["grant"] for a in C["apps"] if a["funded"]))),
+        "R9_funded_tonnes": int(round(sum(a["life_t"] for a in C["apps"] if a["funded"]))),
         "routes": {k: list(v) for k, v in C["route_sets"].items()},
-        "hurried_eur_per_tonne": {k: {m: int(rnd(v[m]["eur_t"], 1)) for m in MEAS} for k, v in C["R45_hurried"].items()},
+        "hurried_eur_per_tonne": {k: {m: round(v[m]["eur_t"], 2) for m in MEAS} for k, v in C["R45_hurried"].items()},
         "limit_eur": int(GD.LIMIT), "lives": GD.LIFE, "factor": GD.EF,
         "works_buildings": {m: int(((P.measure == m) & P.works).sum()) for m in MEAS},
         "passed_over": {m: int(((P.measure == m) & P.answered & ~P.drawn).sum()) for m in MEAS},
         "answers_2019": len(P.answers19), "drawn_2019": int(P.drawn.sum()), "works_2019": int(P.works.sum()),
-        "visited_share_pct": {k: int(round(100 * v)) for k, v in C["visited_share"].items()},
+        "visited_share_pct": {k: pct(v) for k, v in C["visited_share"].items()},
         "resubmitted_received": C["resubmitted_received"],
     }
     return F
@@ -528,7 +523,7 @@ def effort(C, F):
         gold_r6[m + " flip"] = pct(C["R6"][m]["break_even"])
         r6_bands[m + " flip"] = [gold_r6[m + " flip"] - 0.05, gold_r6[m + " flip"] + 0.05]
         for end, key in (("lo", "low"), ("hi", "high")):
-            v = round(C["R6"][m][end], 1)
+            v = round(C["R6"][m][end], 2)
             gold_r6["%s %s" % (m, key)] = v
             r6_bands["%s %s" % (m, key)] = [v - 8.0, v + 8.0]
     gold_r7 = {}
@@ -587,8 +582,8 @@ def effort(C, F):
               "figure": "R8_tonnes", "depends": ["R1"], "independent": "",
               "golden": F["R8_tonnes"], "band": [F["R8_tonnes"] * 0.97, F["R8_tonnes"] * 1.03],
               "partly": [F["R8_tonnes"] * 0.92, F["R8_tonnes"] * 1.08],
-              "passes": {"quick": int(rnd(C["R8_hurried"]["before and after"], 100)),
-                         "careful": int(rnd(C["R8_hurried"]["2025/26 rate on the 2018/19 use"], 100)),
+              "passes": {"quick": int(round(C["R8_hurried"]["before and after"])),
+                         "careful": int(round(C["R8_hurried"]["2025/26 rate on the 2018/19 use"])),
                          "thorough": F["R8_tonnes"]}})
     R.append({"id": "R9", "name": "every funded application's lifetime tonnes", "graded_as": "Ask 5",
               "figure": "R9_table", "depends": ["R4", "R5"], "independent": "",

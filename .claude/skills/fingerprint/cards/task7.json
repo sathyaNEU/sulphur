@@ -11,7 +11,7 @@
  "shape": "13",
  "decision_type": "designation_set",
  "answer_unit": "set_of_items",
- "answer": "Fund insulation and heating controls in the 2026 round, not heating optimisation: on the applications received, €88, €99 and €158 of grant per lifetime tonne against €120 (90% ranges €83 to €93, €90 to €110, €122 to €229); the funded round grants about €7.7 million once the offer closes and pays about €7.3 million after withdrawals; the pilot's works saved about 3,300 tonnes of CO2 in 2025/26",
+ "answer": "Fund insulation and heating controls in the 2026 round, not heating optimisation: on the applications received €88.24, €98.60 and €157.82 of grant per lifetime tonne against €120 (90% ranges €83.12 to €93.38, €90.27 to €109.84, €122.26 to €229.48); the funded round's applications ask for €7,738,505 and it pays €7,262,823; the pilot's works saved 3,303 tonnes of CO2 in 2025/26",
  "answer_source": "task7/submission.md, Final Recommendation; task7/generator/figures.json",
  "gap": [
   "population",

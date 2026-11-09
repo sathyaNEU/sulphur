@@ -8,184 +8,184 @@
    "depends": [],
    "independent": "",
    "golden": {
-    "insulation 2019/20": 14.8,
-    "insulation 2020/21": 16.5,
-    "insulation 2021/22": 16.3,
-    "insulation 2022/23": 16.8,
-    "insulation 2023/24": 16.5,
-    "insulation 2024/25": 16.6,
-    "insulation 2025/26": 16.7,
-    "heating optimisation 2019/20": 11.8,
-    "heating optimisation 2020/21": 4.4,
+    "insulation 2019/20": 14.77,
+    "insulation 2020/21": 16.46,
+    "insulation 2021/22": 16.26,
+    "insulation 2022/23": 16.76,
+    "insulation 2023/24": 16.54,
+    "insulation 2024/25": 16.62,
+    "insulation 2025/26": 16.71,
+    "heating optimisation 2019/20": 11.81,
+    "heating optimisation 2020/21": 4.36,
     "heating optimisation 2021/22": 1.9,
-    "heating optimisation 2022/23": 1.4,
-    "heating optimisation 2023/24": 1.2,
-    "heating optimisation 2024/25": 1.4,
-    "heating optimisation 2025/26": 1.2,
-    "heating controls 2019/20": 5.2,
-    "heating controls 2020/21": 6.0,
-    "heating controls 2021/22": 4.6,
-    "heating controls 2022/23": 3.8,
+    "heating optimisation 2022/23": 1.38,
+    "heating optimisation 2023/24": 1.24,
+    "heating optimisation 2024/25": 1.41,
+    "heating optimisation 2025/26": 1.21,
+    "heating controls 2019/20": 5.15,
+    "heating controls 2020/21": 5.97,
+    "heating controls 2021/22": 4.64,
+    "heating controls 2022/23": 3.82,
     "heating controls 2023/24": 4.1,
-    "heating controls 2024/25": 4.1,
-    "heating controls 2025/26": 4.0
+    "heating controls 2024/25": 4.11,
+    "heating controls 2025/26": 4.01
    },
    "bands": {
     "insulation 2019/20": [
-     14.350000000000001,
-     15.25
+     14.32,
+     15.219999999999999
     ],
     "insulation 2020/21": [
-     16.05,
-     16.95
+     16.01,
+     16.91
     ],
     "insulation 2021/22": [
-     15.850000000000001,
-     16.75
+     15.810000000000002,
+     16.71
     ],
     "insulation 2022/23": [
-     16.35,
-     17.25
+     16.310000000000002,
+     17.21
     ],
     "insulation 2023/24": [
-     16.05,
-     16.95
+     16.09,
+     16.99
     ],
     "insulation 2024/25": [
-     16.150000000000002,
-     17.05
+     16.17,
+     17.07
     ],
     "insulation 2025/26": [
-     16.25,
-     17.15
+     16.26,
+     17.16
     ],
     "heating optimisation 2019/20": [
-     11.350000000000001,
-     12.25
+     11.360000000000001,
+     12.26
     ],
     "heating optimisation 2020/21": [
-     3.95,
-     4.8500000000000005
+     3.91,
+     4.8100000000000005
     ],
     "heating optimisation 2021/22": [
      1.45,
      2.35
     ],
     "heating optimisation 2022/23": [
-     0.95,
-     1.8499999999999999
+     0.9299999999999999,
+     1.8299999999999998
     ],
     "heating optimisation 2023/24": [
-     0.75,
-     1.65
+     0.79,
+     1.69
     ],
     "heating optimisation 2024/25": [
-     0.95,
-     1.8499999999999999
+     0.96,
+     1.8599999999999999
     ],
     "heating optimisation 2025/26": [
-     0.75,
-     1.65
+     0.76,
+     1.66
     ],
     "heating controls 2019/20": [
-     4.75,
-     5.65
+     4.7,
+     5.6000000000000005
     ],
     "heating controls 2020/21": [
-     5.55,
-     6.45
+     5.52,
+     6.42
     ],
     "heating controls 2021/22": [
-     4.1499999999999995,
-     5.05
+     4.1899999999999995,
+     5.09
     ],
     "heating controls 2022/23": [
-     3.3499999999999996,
-     4.25
+     3.3699999999999997,
+     4.27
     ],
     "heating controls 2023/24": [
      3.6499999999999995,
      4.55
     ],
     "heating controls 2024/25": [
-     3.6499999999999995,
-     4.55
+     3.66,
+     4.5600000000000005
     ],
     "heating controls 2025/26": [
-     3.55,
-     4.45
+     3.5599999999999996,
+     4.46
     ]
    },
    "partly_share": 0.5,
    "passes": {
     "quick": {
-     "insulation 2019/20": 18.7,
-     "insulation 2020/21": 25.9,
-     "insulation 2021/22": 23.8,
-     "insulation 2022/23": 30.9,
-     "insulation 2023/24": 28.2,
-     "insulation 2024/25": 26.8,
-     "insulation 2025/26": 25.3,
-     "heating optimisation 2019/20": 15.2,
-     "heating optimisation 2020/21": 15.1,
-     "heating optimisation 2021/22": 9.9,
-     "heating optimisation 2022/23": 17.2,
-     "heating optimisation 2023/24": 14.0,
-     "heating optimisation 2024/25": 12.0,
-     "heating optimisation 2025/26": 10.2,
-     "heating controls 2019/20": 9.7,
-     "heating controls 2020/21": 16.8,
-     "heating controls 2021/22": 13.2,
-     "heating controls 2022/23": 20.6,
-     "heating controls 2023/24": 17.7,
-     "heating controls 2024/25": 16.1,
-     "heating controls 2025/26": 14.5
+     "insulation 2019/20": 18.73,
+     "insulation 2020/21": 25.89,
+     "insulation 2021/22": 23.79,
+     "insulation 2022/23": 30.87,
+     "insulation 2023/24": 28.17,
+     "insulation 2024/25": 26.77,
+     "insulation 2025/26": 25.26,
+     "heating optimisation 2019/20": 15.18,
+     "heating optimisation 2020/21": 15.14,
+     "heating optimisation 2021/22": 9.94,
+     "heating optimisation 2022/23": 17.18,
+     "heating optimisation 2023/24": 14.03,
+     "heating optimisation 2024/25": 12.03,
+     "heating optimisation 2025/26": 10.16,
+     "heating controls 2019/20": 9.69,
+     "heating controls 2020/21": 16.79,
+     "heating controls 2021/22": 13.22,
+     "heating controls 2022/23": 20.58,
+     "heating controls 2023/24": 17.69,
+     "heating controls 2024/25": 16.09,
+     "heating controls 2025/26": 14.45
     },
     "careful": {
-     "insulation 2019/20": 14.8,
-     "insulation 2020/21": 16.5,
-     "insulation 2021/22": 16.3,
-     "insulation 2022/23": 16.8,
-     "insulation 2023/24": 16.5,
-     "insulation 2024/25": 16.6,
-     "insulation 2025/26": 16.7,
-     "heating optimisation 2019/20": 11.8,
-     "heating optimisation 2020/21": 4.4,
+     "insulation 2019/20": 14.77,
+     "insulation 2020/21": 16.46,
+     "insulation 2021/22": 16.26,
+     "insulation 2022/23": 16.76,
+     "insulation 2023/24": 16.54,
+     "insulation 2024/25": 16.62,
+     "insulation 2025/26": 16.71,
+     "heating optimisation 2019/20": 11.81,
+     "heating optimisation 2020/21": 4.36,
      "heating optimisation 2021/22": 1.9,
-     "heating optimisation 2022/23": 1.4,
-     "heating optimisation 2023/24": 1.2,
-     "heating optimisation 2024/25": 1.4,
-     "heating optimisation 2025/26": 1.2,
-     "heating controls 2019/20": 5.2,
-     "heating controls 2020/21": 6.0,
-     "heating controls 2021/22": 4.6,
-     "heating controls 2022/23": 3.8,
+     "heating optimisation 2022/23": 1.38,
+     "heating optimisation 2023/24": 1.24,
+     "heating optimisation 2024/25": 1.41,
+     "heating optimisation 2025/26": 1.21,
+     "heating controls 2019/20": 5.15,
+     "heating controls 2020/21": 5.97,
+     "heating controls 2021/22": 4.64,
+     "heating controls 2022/23": 3.82,
      "heating controls 2023/24": 4.1,
-     "heating controls 2024/25": 4.1,
-     "heating controls 2025/26": 4.0
+     "heating controls 2024/25": 4.11,
+     "heating controls 2025/26": 4.01
     },
     "thorough": {
-     "insulation 2019/20": 14.8,
-     "insulation 2020/21": 16.5,
-     "insulation 2021/22": 16.3,
-     "insulation 2022/23": 16.8,
-     "insulation 2023/24": 16.5,
-     "insulation 2024/25": 16.6,
-     "insulation 2025/26": 16.7,
-     "heating optimisation 2019/20": 11.8,
-     "heating optimisation 2020/21": 4.4,
+     "insulation 2019/20": 14.77,
+     "insulation 2020/21": 16.46,
+     "insulation 2021/22": 16.26,
+     "insulation 2022/23": 16.76,
+     "insulation 2023/24": 16.54,
+     "insulation 2024/25": 16.62,
+     "insulation 2025/26": 16.71,
+     "heating optimisation 2019/20": 11.81,
+     "heating optimisation 2020/21": 4.36,
      "heating optimisation 2021/22": 1.9,
-     "heating optimisation 2022/23": 1.4,
-     "heating optimisation 2023/24": 1.2,
-     "heating optimisation 2024/25": 1.4,
-     "heating optimisation 2025/26": 1.2,
-     "heating controls 2019/20": 5.2,
-     "heating controls 2020/21": 6.0,
-     "heating controls 2021/22": 4.6,
-     "heating controls 2022/23": 3.8,
+     "heating optimisation 2022/23": 1.38,
+     "heating optimisation 2023/24": 1.24,
+     "heating optimisation 2024/25": 1.41,
+     "heating optimisation 2025/26": 1.21,
+     "heating controls 2019/20": 5.15,
+     "heating controls 2020/21": 5.97,
+     "heating controls 2021/22": 4.64,
+     "heating controls 2022/23": 3.82,
      "heating controls 2023/24": 4.1,
-     "heating controls 2024/25": 4.1,
-     "heating controls 2025/26": 4.0
+     "heating controls 2024/25": 4.11,
+     "heating controls 2025/26": 4.01
     }
    }
   },
@@ -199,44 +199,44 @@
    ],
    "independent": "",
    "golden": {
-    "insulation": 16.5,
+    "insulation": 16.52,
     "heating optimisation": 2.2,
-    "heating controls": 4.3
+    "heating controls": 4.28
    },
    "bands": {
     "insulation": [
-     16.1,
-     16.9
+     16.12,
+     16.92
     ],
     "heating optimisation": [
      2.0,
      2.4
     ],
     "heating controls": [
-     4.1,
-     4.5
+     4.08,
+     4.48
     ]
    },
    "partly_share": 0.6,
    "passes": {
     "quick": {
-     "insulation": 25.6,
-     "heating optimisation": 13.4,
+     "insulation": 25.64,
+     "heating optimisation": 13.38,
      "heating controls": 15.5
     },
     "careful": {
      "value": {
-      "insulation": 16.6,
+      "insulation": 16.61,
       "heating optimisation": 2.2,
-      "heating controls": 4.4
+      "heating controls": 4.38
      },
      "grade": "right",
      "why": "a frontier run sees heating optimisation fall season by season and carries the level it settles at; insulation and controls barely move"
     },
     "thorough": {
-     "insulation": 16.5,
+     "insulation": 16.52,
      "heating optimisation": 2.2,
-     "heating controls": 4.3
+     "heating controls": 4.28
     }
    }
   },
@@ -250,97 +250,97 @@
    ],
    "independent": "",
    "golden": {
-    "insulation office": 20.1,
+    "insulation office": 20.09,
     "insulation retail": 19.8,
-    "insulation hotel": 12.7,
-    "insulation workshop": 14.7,
-    "insulation care home": 12.9,
-    "insulation restaurant": 11.3,
-    "heating optimisation office": 4.4,
-    "heating optimisation retail": 3.8,
-    "heating optimisation hotel": 2.6,
-    "heating optimisation workshop": 2.8,
+    "insulation hotel": 12.72,
+    "insulation workshop": 14.67,
+    "insulation care home": 12.85,
+    "insulation restaurant": 11.25,
+    "heating optimisation office": 4.38,
+    "heating optimisation retail": 3.75,
+    "heating optimisation hotel": 2.56,
+    "heating optimisation workshop": 2.84,
     "heating optimisation care home": 4.8,
-    "heating optimisation restaurant": 2.0,
+    "heating optimisation restaurant": 1.97,
     "heating controls office": 10.4,
-    "heating controls retail": 7.4,
+    "heating controls retail": 7.37,
     "heating controls hotel": 0.3,
-    "heating controls workshop": 6.5,
-    "heating controls care home": 0.1,
-    "heating controls restaurant": 2.8
+    "heating controls workshop": 6.53,
+    "heating controls care home": 0.07,
+    "heating controls restaurant": 2.84
    },
    "bands": {
     "insulation office": [
-     19.1,
-     21.1
+     19.09,
+     21.09
     ],
     "insulation retail": [
      18.8,
      20.8
     ],
     "insulation hotel": [
-     11.7,
-     13.7
+     11.72,
+     13.72
     ],
     "insulation workshop": [
-     13.7,
-     15.7
+     13.67,
+     15.67
     ],
     "insulation care home": [
-     11.9,
-     13.9
+     11.85,
+     13.85
     ],
     "insulation restaurant": [
-     10.3,
-     12.3
+     10.25,
+     12.25
     ],
     "heating optimisation office": [
-     3.4000000000000004,
-     5.4
+     3.38,
+     5.38
     ],
     "heating optimisation retail": [
-     2.8,
-     4.8
+     2.75,
+     4.75
     ],
     "heating optimisation hotel": [
-     1.6,
-     3.6
+     1.56,
+     3.56
     ],
     "heating optimisation workshop": [
-     1.7999999999999998,
-     3.8
+     1.8399999999999999,
+     3.84
     ],
     "heating optimisation care home": [
      3.8,
      5.8
     ],
     "heating optimisation restaurant": [
-     1.0,
-     3.0
+     0.97,
+     2.9699999999999998
     ],
     "heating controls office": [
      9.4,
      11.4
     ],
     "heating controls retail": [
-     6.4,
-     8.4
+     6.37,
+     8.370000000000001
     ],
     "heating controls hotel": [
      -0.7,
      1.3
     ],
     "heating controls workshop": [
-     5.5,
-     7.5
+     5.53,
+     7.53
     ],
     "heating controls care home": [
-     -0.9,
-     1.1
+     -0.9299999999999999,
+     1.07
     ],
     "heating controls restaurant": [
-     1.7999999999999998,
-     3.8
+     1.8399999999999999,
+     3.84
     ]
    },
    "partly_share": 0.5,
@@ -373,41 +373,41 @@
       "insulation workshop": 16.3,
       "insulation care home": 16.3,
       "insulation restaurant": 16.3,
-      "heating optimisation office": 3.3,
-      "heating optimisation retail": 3.3,
-      "heating optimisation hotel": 3.3,
-      "heating optimisation workshop": 3.3,
-      "heating optimisation care home": 3.3,
-      "heating optimisation restaurant": 3.3,
-      "heating controls office": 4.5,
-      "heating controls retail": 4.5,
-      "heating controls hotel": 4.5,
-      "heating controls workshop": 4.5,
-      "heating controls care home": 4.5,
-      "heating controls restaurant": 4.5
+      "heating optimisation office": 3.33,
+      "heating optimisation retail": 3.33,
+      "heating optimisation hotel": 3.33,
+      "heating optimisation workshop": 3.33,
+      "heating optimisation care home": 3.33,
+      "heating optimisation restaurant": 3.33,
+      "heating controls office": 4.54,
+      "heating controls retail": 4.54,
+      "heating controls hotel": 4.54,
+      "heating controls workshop": 4.54,
+      "heating controls care home": 4.54,
+      "heating controls restaurant": 4.54
      },
      "grade": "partly",
      "why": "a careful run may split the savings by use in exploring, but the prompt asks for no table by type and the run that does not still files one rate per measure"
     },
     "thorough": {
-     "insulation office": 20.1,
+     "insulation office": 20.09,
      "insulation retail": 19.8,
-     "insulation hotel": 12.7,
-     "insulation workshop": 14.7,
-     "insulation care home": 12.9,
-     "insulation restaurant": 11.3,
-     "heating optimisation office": 4.4,
-     "heating optimisation retail": 3.8,
-     "heating optimisation hotel": 2.6,
-     "heating optimisation workshop": 2.8,
+     "insulation hotel": 12.72,
+     "insulation workshop": 14.67,
+     "insulation care home": 12.85,
+     "insulation restaurant": 11.25,
+     "heating optimisation office": 4.38,
+     "heating optimisation retail": 3.75,
+     "heating optimisation hotel": 2.56,
+     "heating optimisation workshop": 2.84,
      "heating optimisation care home": 4.8,
-     "heating optimisation restaurant": 2.0,
+     "heating optimisation restaurant": 1.97,
      "heating controls office": 10.4,
-     "heating controls retail": 7.4,
+     "heating controls retail": 7.37,
      "heating controls hotel": 0.3,
-     "heating controls workshop": 6.5,
-     "heating controls care home": 0.1,
-     "heating controls restaurant": 2.8
+     "heating controls workshop": 6.53,
+     "heating controls care home": 0.07,
+     "heating controls restaurant": 2.84
     }
    }
   },
@@ -422,40 +422,40 @@
    ],
    "independent": "",
    "golden": {
-    "insulation": 15.9,
-    "heating optimisation": 2.3,
-    "heating controls": 7.0
+    "insulation": 15.86,
+    "heating optimisation": 2.28,
+    "heating controls": 7.04
    },
    "bands": {
     "insulation": [
-     15.4,
-     16.3
+     15.41,
+     16.31
     ],
     "heating optimisation": [
-     2.1,
-     2.5
+     2.08,
+     2.48
     ],
     "heating controls": [
-     6.6,
-     7.5
+     6.59,
+     7.49
     ]
    },
    "partly_share": 0.6,
    "passes": {
     "quick": {
-     "insulation": 25.6,
-     "heating optimisation": 13.4,
+     "insulation": 25.64,
+     "heating optimisation": 13.38,
      "heating controls": 15.5
     },
     "careful": {
-     "insulation": 16.5,
+     "insulation": 16.52,
      "heating optimisation": 2.2,
-     "heating controls": 4.3
+     "heating controls": 4.28
     },
     "thorough": {
-     "insulation": 15.9,
-     "heating optimisation": 2.3,
-     "heating controls": 7.0
+     "insulation": 15.86,
+     "heating optimisation": 2.28,
+     "heating controls": 7.04
     }
    }
   },
@@ -497,76 +497,76 @@
    ],
    "independent": "",
    "golden": {
-    "insulation flip": 11.7,
-    "insulation low": 83.1,
-    "insulation high": 93.4,
+    "insulation flip": 11.66,
+    "insulation low": 83.12,
+    "insulation high": 93.38,
     "heating optimisation flip": 3.0,
-    "heating optimisation low": 122.3,
-    "heating optimisation high": 229.5,
-    "heating controls flip": 5.8,
-    "heating controls low": 90.3,
-    "heating controls high": 109.8
+    "heating optimisation low": 122.26,
+    "heating optimisation high": 229.48,
+    "heating controls flip": 5.79,
+    "heating controls low": 90.27,
+    "heating controls high": 109.84
    },
    "bands": {
     "insulation flip": [
-     11.649999999999999,
-     11.75
+     11.61,
+     11.71
     ],
     "insulation low": [
-     75.1,
-     91.1
+     75.12,
+     91.12
     ],
     "insulation high": [
-     85.4,
-     101.4
+     85.38,
+     101.38
     ],
     "heating optimisation flip": [
      2.95,
      3.05
     ],
     "heating optimisation low": [
-     114.3,
-     130.3
+     114.26,
+     130.26
     ],
     "heating optimisation high": [
-     221.5,
-     237.5
+     221.48,
+     237.48
     ],
     "heating controls flip": [
-     5.75,
-     5.85
+     5.74,
+     5.84
     ],
     "heating controls low": [
-     82.3,
-     98.3
+     82.27,
+     98.27
     ],
     "heating controls high": [
-     101.8,
-     117.8
+     101.84,
+     117.84
     ]
    },
    "partly_share": 0.4,
    "passes": {
     "quick": {
-     "insulation flip": 11.7,
+     "insulation flip": 11.66,
      "insulation low": null,
      "insulation high": null,
      "heating optimisation flip": 3.0,
      "heating optimisation low": null,
      "heating optimisation high": null,
-     "heating controls flip": 5.8,
+     "heating controls flip": 5.79,
      "heating controls low": null,
      "heating controls high": null
     },
     "careful": {
      "value": {
-      "insulation flip": 11.7,
+      "insulation flip": 11.66,
       "insulation low": null,
       "insulation high": null,
       "heating optimisation flip": 3.0,
       "heating optimisation low": null,
       "heating optimisation high": null,
-      "heating controls flip": 5.8,
+      "heating controls flip": 5.79,
       "heating controls low": null,
       "heating controls high": null
      },
@@ -574,15 +574,15 @@
      "why": "the flip rate is arithmetic on the applications; the range is taken on the pooled rate, so its ends sit with the pooled route's grant per tonne"
     },
     "thorough": {
-     "insulation flip": 11.7,
-     "insulation low": 83.1,
-     "insulation high": 93.4,
+     "insulation flip": 11.66,
+     "insulation low": 83.12,
+     "insulation high": 93.38,
      "heating optimisation flip": 3.0,
-     "heating optimisation low": 122.3,
-     "heating optimisation high": 229.5,
-     "heating controls flip": 5.8,
-     "heating controls low": 90.3,
-     "heating controls high": 109.8
+     "heating optimisation low": 122.26,
+     "heating optimisation high": 229.48,
+     "heating controls flip": 5.79,
+     "heating controls low": 90.27,
+     "heating controls high": 109.84
     }
    }
   },
@@ -688,19 +688,19 @@
     "R1"
    ],
    "independent": "",
-   "golden": 3300,
+   "golden": 3303,
    "band": [
-    3201.0,
-    3399.0
+    3203.91,
+    3402.09
    ],
    "partly": [
-    3036.0,
-    3564.0000000000005
+    3038.76,
+    3567.2400000000002
    ],
    "passes": {
-    "quick": 8900,
-    "careful": 3600,
-    "thorough": 3300
+    "quick": 8917,
+    "careful": 3648,
+    "thorough": 3303
    }
   },
   {

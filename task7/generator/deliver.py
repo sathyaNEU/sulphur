@@ -33,10 +33,6 @@ def eur(v):
     return "€" + format(int(rnd(v, 1)), ",")
 
 
-def mil(v):
-    return "€%.1f million" % v
-
-
 def head_row(ws, widths):
     for c in ws[1]:
         c.font = Font(bold=True, color="FFFFFF")
@@ -61,9 +57,9 @@ def write_xlsx(path, C, F):
                    F["R6_range_eur"][m][0], F["R6_range_eur"][m][1], F["R6_break_even_pct"][m],
                    "yes" if m in C["funded"] else "no"])
     head_row(ws, [22, 16, 18, 13, 14, 13, 13, 12, 12, 16, 7])
-    for r in ws.iter_rows(min_row=2, min_col=5, max_col=6):
+    for r in ws.iter_rows(min_row=2, min_col=2, max_col=10):
         for cell in r:
-            cell.number_format = "#,##0"
+            cell.number_format = "#,##0" if cell.column in (4, 5, 6) else "0.00"
     ws2 = wb.create_sheet("savings by season")
     ws2.append(["measure"] + F["season_labels"])
     for m in MEAS:
@@ -86,9 +82,12 @@ def write_xlsx(path, C, F):
     for a in C["apps"]:
         if a["funded"]:
             ws4.append([a["no"], a["bid"], a["date"].strftime("%Y-%m-%d"), USE[a["use"]].lower(), a["measure"],
-                        int(round(a["grant"])), int(round(a["ref_kwh"])), round(100 * a["rate"], 1),
-                        int(rnd(a["life_t"], 10))])
+                        int(round(a["grant"])), int(round(a["ref_kwh"])), round(100 * a["rate"], 2),
+                        round(a["life_t"], 1)])
     head_row(ws4, [15, 12, 11, 12, 20, 11, 16, 14, 13])
+    for r in ws4.iter_rows(min_row=2, min_col=8, max_col=9):
+        for cell in r:
+            cell.number_format = "0.00" if cell.column == 8 else "#,##0.0"
     for r in ws4.iter_rows(min_row=2, min_col=6, max_col=7):
         for cell in r:
             cell.number_format = "#,##0"
@@ -102,8 +101,8 @@ def write_xlsx(path, C, F):
                     F["R7_late_size_ratio"][m], F["R7_grant_at_close_eur"][m], F["R7_withdrawn_pct"][m][0],
                     F["R7_withdrawn_pct"][m][1], F["R7_grant_paid_eur"][m], "yes" if m in C["funded"] else "no"])
     ws5.append([])
-    ws5.append(["funded round", None, None, None, None, F["R7_funded_close_million"] * 1000000, None, None,
-                F["R7_funded_paid_million"] * 1000000, None])
+    ws5.append(["funded round", None, None, None, None, F["R7_funded_close_eur"], None, None,
+                F["R7_funded_paid_eur"], None])
     ws5.cell(row=ws5.max_row, column=1).font = Font(bold=True)
     head_row(ws5, [22, 14, 14, 13, 13, 14, 12, 12, 14, 8])
     for r in ws5.iter_rows(min_row=2, min_col=6, max_col=9):
@@ -114,7 +113,7 @@ def write_xlsx(path, C, F):
     ws6.append(["measure", "works buildings", "saving 2025/26 (%)", "tonnes CO2"])
     for m in MEAS:
         ws6.append([LABEL[m], F["works_buildings"][m], F["R1_saving_by_season_pct"][m][-1],
-                    int(rnd(C["R8_by_measure"][m], 10))])
+                    int(round(C["R8_by_measure"][m]))])
     ws6.append(["all three", int(P.works.sum()), None, F["R8_tonnes"]])
     ws6.cell(row=ws6.max_row, column=1).font = Font(bold=True)
     head_row(ws6, [22, 14, 16, 12])
@@ -139,8 +138,8 @@ def write_xlsx(path, C, F):
             ("Range", "90%, the pilot's buildings drawn again within use and arm, every step repeated"),
             ("Round at close", "the 2019 answers in by the same day after the notice, their late and early grants and "
                                "withdrawals, measure by measure"),
-            ("Rounding", "savings and rates to one decimal, grant per tonne to the euro, counts to 10, a measure's "
-                         "grants to EUR 10,000, round totals to EUR 0.1 million, tonnes to 10, the 2025/26 saving to 100")]:
+            ("Precision", "savings and rates to two decimals, grant per tonne to the cent, money to the euro, counts and "
+                         "totals whole, an application's lifetime tonnes to a tenth")]:
         ws8.append(list(line))
     ws8.column_dimensions["A"].width = 16
     ws8.column_dimensions["B"].width = 110
@@ -173,7 +172,7 @@ def chart(C, F, scratch):
         lo, hi = C["R6"][m]["lo"], C["R6"][m]["hi"]
         ax.plot([x, x], [lo, hi], color=col, lw=6, alpha=0.35, solid_capstyle="butt")
         ax.plot([x], [v], "o", color=col, ms=8)
-        ax.text(x + 0.12, v, "€%d" % F["R5_eur_per_tonne"][m], va="center", fontsize=10, color=INK)
+        ax.text(x + 0.12, v, "€%.2f" % F["R5_eur_per_tonne"][m], va="center", fontsize=10, color=INK)
     ax.axhline(GD.LIMIT, color=INK, lw=1.1, ls="--")
     ax.text(2.45, GD.LIMIT + 5, "limit €120", ha="right", fontsize=9, color=INK)
     ax.set_xticks(xs)
@@ -279,16 +278,16 @@ def write_note(path, C, F, png):
             run._r.append(el)
     ins, ho, ct = "insulation", "heating optimisation", "heating controls"
     para(doc, "Fund insulation and heating controls in the 2026 round; do not fund heating optimisation. On the "
-              "applications received by 12 June, insulation comes to €%d and heating controls to €%d of grant per "
-              "lifetime tonne of CO2, under the €%d limit, and heating optimisation to €%d."
+              "applications received by 12 June, insulation comes to €%.2f and heating controls to €%.2f of grant per "
+              "lifetime tonne of CO2, under the €%d limit, and heating optimisation to €%.2f."
          % (F["R5_eur_per_tonne"][ins], F["R5_eur_per_tonne"][ct], F["limit_eur"], F["R5_eur_per_tonne"][ho]),
          bold=True, size=10.5, after=6)
-    para(doc, "Heating optimisation saved %.1f%% of the gas its buildings would have used in its first winter, but by "
-              "the fourth it was saving %.1f%% and it has stayed near there since: carried over its fifteen-year life it "
-              "saves %.1f%%. Heating controls save about %.0f%% in offices and around nothing in hotels and care homes "
-              "heated round the clock; %d%% of the pilot's controls buildings were hotels or care homes against %d%% "
-              "of this year's controls applicants, so on this year's applications controls save %.1f%% over their life, "
-              "not the pilot's %.1f%%."
+    para(doc, "Heating optimisation saved %.2f%% of the gas its buildings would have used in its first winter, but by "
+              "the fourth it was saving %.2f%% and it has stayed near there since: carried over its fifteen-year life it "
+              "saves %.2f%%. Heating controls save %.2f%% in offices and around nothing in hotels and care homes "
+              "heated round the clock; %.2f%% of the pilot's controls answers came from hotels or care homes against "
+              "%.2f%% of this year's controls applicants, so on this year's applications controls save %.2f%% over their "
+              "life, not the pilot's %.2f%%."
          % (F["R1_saving_by_season_pct"][ho][0], F["R1_saving_by_season_pct"][ho][3], F["R2_life_saving_pct"][ho],
             F["R3_by_type_pct"][ct]["office"], F["controls_round_clock_share_pct"]["2019"],
             F["controls_round_clock_share_pct"]["2026"], F["R4_rate_on_applications_pct"][ct],
@@ -296,9 +295,9 @@ def write_note(path, C, F, png):
     rows = [["Measure", "Saving over its life, pilot", "Saving rate on this year's applications", "Grant per tonne",
              "90% range", "Flips at a saving of", "Fund"]]
     for m in MEAS:
-        rows.append([LABEL[m], "%.1f%%" % F["R2_life_saving_pct"][m], "%.1f%%" % F["R4_rate_on_applications_pct"][m],
-                     "€%d" % F["R5_eur_per_tonne"][m], "€%d to €%d" % tuple(F["R6_range_eur"][m]),
-                     "%.1f%%" % F["R6_break_even_pct"][m], "yes" if m in C["funded"] else "no"])
+        rows.append([LABEL[m], "%.2f%%" % F["R2_life_saving_pct"][m], "%.2f%%" % F["R4_rate_on_applications_pct"][m],
+                     "€%.2f" % F["R5_eur_per_tonne"][m], "€%.2f to €%.2f" % tuple(F["R6_range_eur"][m]),
+                     "%.2f%%" % F["R6_break_even_pct"][m], "yes" if m in C["funded"] else "no"])
     table(doc, rows, [34, 25, 30, 20, 26, 22, 12], left=(0, 6))
     para(doc, "Applications received by 12 June 2026, a revised application in place of the one it replaces. Reference "
               "consumption is the notice's normalised use per square metre times the register's heated floor area "
@@ -310,15 +309,15 @@ def write_note(path, C, F, png):
               "own 2018/19 season, in normal weather. Each application is priced at the saving its own use showed in "
               "the pilot, faded as its measure's saving fades.", size=8.5, italic=True, after=8)
     para(doc, "What the round will pay", bold=True, size=11, after=3)
-    para(doc, "%d insulation and %d heating controls applications were in by 12 June. In 2019 only %d%% of the "
-              "insulation answers and %d%% of the controls answers had come in by the same day after the notice, the "
-              "late insulation answers ran %d%% larger, and %.1f%% of the late insulation places were withdrawn against "
-              "%.1f%% of the early ones. On that record the funded round will grant about %s once the offer closes and "
-              "pay about %s once the works are done; heating optimisation's applications would ask for and be paid the "
-              "amounts below only if it were funded."
+    para(doc, "%d insulation and %d heating controls applications were in by 12 June. In 2019 only %.2f%% of the "
+              "insulation answers and %.2f%% of the controls answers had come in by the same day after the notice, the "
+              "late insulation answers ran %.2f%% larger, and %.2f%% of the late insulation places were withdrawn "
+              "against %.2f%% of the early ones. On that record the funded round's applications will ask for %s once "
+              "the offer closes and it will pay %s once the works are done; heating optimisation's applications would "
+              "ask for and be paid the amounts below only if it were funded."
          % (A[ins]["n"], A[ct]["n"], F["R7_share_by_day_pct"][ins], F["R7_share_by_day_pct"][ct],
-            int(round(100 * (F["R7_late_size_ratio"][ins] - 1))), F["R7_withdrawn_pct"][ins][1],
-            F["R7_withdrawn_pct"][ins][0], mil(F["R7_funded_close_million"]), mil(F["R7_funded_paid_million"])), after=4)
+            F["R7_late_size_premium_pct"][ins], F["R7_withdrawn_pct"][ins][1],
+            F["R7_withdrawn_pct"][ins][0], eur(F["R7_funded_close_eur"]), eur(F["R7_funded_paid_eur"])), after=4)
     rows = [["Measure", "Applications at close", "Grant asked", "Paid once the works are done"]]
     for m in MEAS:
         rows.append([LABEL[m] + ("" if m in C["funded"] else " (not funded)"), "about %d" % F["R7_applications_at_close"][m],
@@ -327,16 +326,16 @@ def write_note(path, C, F, png):
     para(doc, "The 2019 answers' dates, quotes and withdrawals from the pilot's response file; works to be done by 30 "
               "September 2026 and paid on completion (terms of the 2026 offer, 4).", size=7.5, italic=True, after=6)
     para(doc, "For the annual report", bold=True, size=11, after=3)
-    para(doc, "The pilot's works saved about %s tonnes of CO2 in the season to April 2026: the gas the works buildings "
+    para(doc, "The pilot's works saved %s tonnes of CO2 in the season to April 2026: the gas the works buildings "
               "would have used that season without the works, less what they used, in normal weather."
          % format(F["R8_tonnes"], ","), after=8)
     para(doc, "How the quicker readings land", bold=True, size=11, after=3)
     rows = [["Reading of the pilot", "Insulation", "Heating optimisation", "Heating controls", "Funds"]]
-    rows.append(["This appraisal", "€%d" % F["R5_eur_per_tonne"][ins], "€%d" % F["R5_eur_per_tonne"][ho],
-                 "€%d" % F["R5_eur_per_tonne"][ct], ", ".join(LABEL[m].lower() for m in C["funded"])])
+    rows.append(["This appraisal", "€%.2f" % F["R5_eur_per_tonne"][ins], "€%.2f" % F["R5_eur_per_tonne"][ho],
+                 "€%.2f" % F["R5_eur_per_tonne"][ct], ", ".join(LABEL[m].lower() for m in C["funded"])])
     for k in ROUTE_ORDER:
         v = F["hurried_eur_per_tonne"][k]
-        rows.append([ROUTE_TEXT[k], "€%d" % v[ins], "€%d" % v[ho], "€%d" % v[ct],
+        rows.append([ROUTE_TEXT[k], "€%.2f" % v[ins], "€%.2f" % v[ho], "€%.2f" % v[ct],
                      ", ".join(LABEL[m].lower() for m in F["routes"][k]) or "none"])
     table(doc, rows, [62, 22, 30, 26, 48], left=(0, 4))
     para(doc, "Each reading run on the same applications and the same pilot record; only the way the pilot is read "

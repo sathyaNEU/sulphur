@@ -146,7 +146,7 @@ Nearest build: task2 (a recognizer's error rate weighted to each 2027 clinician 
 | 7 | Weighting | the gas: buildings by their use, applications by reference consumption | filed: plan 4.2 and 4.4 (SF2) |
 | 8 | Window length | seven seasons observed, the service lives filed | filed: plan 4.4; SF6 |
 | 9 | Boundary inclusivity | €120 or less funds | filed: plan 4.4; no grant per tonne within 10 per cent of the limit |
-| 10 | Rounding path | each figure once, at the prompt's units | the prompt; bins asserted |
+| 10 | Rounding path | none in the prompt (the author's call, 2026-11-09): every figure stated at its natural precision, percentages to two decimals, grant per tonne to the cent, money to the euro, counts and totals whole, an application's tonnes to a tenth | C1: the bands are wider than any printing choice, asserted |
 | 11 | Tie-break | none needed | C1 |
 | 12 | Maturity and censoring | the 2026 round open to 30 June; seasons after the seventh unobserved | the prompt and R7; SF6 |
 | 13 | Order of operations | normalise, compare, carry, weight | C1 |
@@ -156,7 +156,7 @@ Nearest build: task2 (a recognizer's error rate weighted to each 2027 clinician 
 | 17 | Netting against gross | none | C1 |
 | 18 | Dimensional units | cubic metres to kWh by z-number and calorific value | method 2 |
 | 19 | Code and status semantics | read reasons; drawn, withdrawn and completed | the files' own columns |
-| 20 | Integerisation | applications at close to the nearest 10 | the prompt |
+| 20 | Integerisation | applications at close whole, as an estimate | C1 |
 | 21 | Clause scope | plan 4.4 for each measure in the round | filed |
 | 22 | Forward window contents | the applications still to come, from the 2019 answers' timing, sizes and withdrawals | R7, the 2019 responses ship |
 
@@ -172,7 +172,7 @@ sentence names a comparison, a fade, a split by use or a projection.
 
 ## Prompt contract
 
-May not drop or change: the question (which measures, under €120 of grant per lifetime tonne of CO2); for each measure its saving in the pilot's works buildings in each season since the works, its saving rate on the applications received so far, their grant per tonne with a 90 per cent range and the saving rate at which the answer would flip, and how many applications it will have once the offer closes, the grant they ask for and what would be paid on them once the works are done, with the funded round's totals; every funded application received so far with its grant and lifetime tonnes; the pilot's 2025/26 CO2; a short note with the answer first and a workbook; the rounding sentence. Must never add: a method (a comparison, a fade, a split by use, a projection), a warning, an attached file's name, a role or a count the data hold.
+May not drop or change: the question (which measures, under €120 of grant per lifetime tonne of CO2); for each measure its saving in the pilot's works buildings in each season since the works, its saving rate on the applications received so far, their grant per tonne with a 90 per cent range and the saving rate at which the answer would flip, and how many applications it will have once the offer closes, the grant they ask for and what would be paid on them once the works are done, with the funded round's totals; every funded application received so far with its grant and lifetime tonnes; the pilot's 2025/26 CO2; a short note with the answer first and a workbook. The prompt carries no rounding sentence at the author's word; the answer blocks and the golden state every figure at its natural precision. Must never add: a method (a comparison, a fade, a split by use, a projection), a warning, an attached file's name, a role or a count the data hold.
 
 ## Tried and rejected
 
@@ -385,3 +385,7 @@ May not drop or change: the question (which measures, under €120 of grant per 
   over the gas-weighted share and the 2025/26 saving 11 per cent apart by use; plan 4.2 now files the share of the gas.
 - 2026-11-09, heating optimisation keeping 20 to 40 per cent of its first season: the flat route and the golden
   family sat within the 90 per cent range of each other; it now keeps about 5 per cent, levelling by the fourth season.
+- 2026-11-09, the prompt's rounding sentence (savings to one decimal, grant per tonne to the euro, counts to 10, grants
+  to EUR 10,000, round totals to EUR 0.1 million, tonnes to 10, the 2025/26 CO2 to 100): dropped at the author's word;
+  the golden and the answer blocks now state each figure at its natural precision, every value unchanged (the widest
+  printed shift under the old rounding was 94 application rows under 10 tonnes printed as 0 or 10).

@@ -151,9 +151,9 @@ def main():
         sys.exit(0 if ok else 1)
     F, C, counts = build(TASK, HERE)
     print(json.dumps(counts, indent=1))
-    print("funded %s; eur/t %s; ranges %s; flip %s; rates %s; life %s; at close paid %s million; 2025/26 %s t"
+    print("funded %s; eur/t %s; ranges %s; flip %s; rates %s; life %s; at close paid EUR %s; 2025/26 %s t"
           % (F["funded"], F["R5_eur_per_tonne"], F["R6_range_eur"], F["R6_break_even_pct"],
-             F["R4_rate_on_applications_pct"], F["R2_life_saving_pct"], F["R7_funded_paid_million"], F["R8_tonnes"]))
+             F["R4_rate_on_applications_pct"], F["R2_life_saving_pct"], F["R7_funded_paid_eur"], F["R8_tonnes"]))
     print("%d checks passed" % len(CK.RESULTS))
 
 
