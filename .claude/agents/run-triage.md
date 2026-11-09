@@ -73,13 +73,18 @@ If a run file or the scores are missing, stop and say which.
 
 ## Verdict and route
 
-- `SUBMIT`: the average is under 60, the counterfactual average is under 60, and no run's losses are mostly surface,
-  formatting or defensible-alternative. Say whether the losses are spread (strongest) or concentrated on one
-  legitimate step (thinner, still submitted; record it for the next draw).
+**Precedence.** `FIX_DETERMINISM` first (any `defensible_alternative`); then `SURFACE_RISK` when any of these hold:
+a run's first wrong step is a surface class; any result is lost as `missed_planted_defect` or
+`missed_shallow_hidden_factor` (a design defect, not a slip, whatever else the run lost); the counterfactual average
+reaches 60. Otherwise the score routes below, and a minor surface loss among deep ones is noted, not routed.
+
+- `SUBMIT`: the average is under 60, the counterfactual average is under 60, and no surface condition above holds.
+  Say whether the losses are spread (strongest) or concentrated on one legitimate step (thinner, still submitted;
+  record it for the next draw), and note any minor surface loss.
 - `FIX_DETERMINISM`: a run is `defensible_alternative` on a graded result. Route `/fix-determinism`.
-- `SURFACE_RISK`: a run lost a graded result to a surface class (a planted defect, a shallow hidden factor, a
-  reading, a procedure). Even under 60 a reviewer sends it back. Name the trigger (the row, factor, field or
-  sentence) so the build can make it texture or rebuild that result on real analysis, and the runs be regenerated.
+- `SURFACE_RISK`: one of the surface conditions above holds. Even under 60 a reviewer sends it back. Name the
+  trigger (the row, factor, field or sentence) so the build can make it texture or rebuild that result on real
+  analysis, and the runs be regenerated.
 - `FIX_ASKS`: the runs lost the call or the components to deep classes, the average is 60 or more, and the asks
   were collected without the deep work. Route `/fix-rubric`.
 - `REDESIGN`: the average is 60 or more with the losses concentrated on one or two results, or the counterfactual
