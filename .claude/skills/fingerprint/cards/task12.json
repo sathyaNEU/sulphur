@@ -1,0 +1,101 @@
+{
+  "task": "task12",
+  "project": "sulfur",
+  "architecture": "v1",
+  "drawn": "2026-11-08",
+  "slot_note": "author-requested Marketing & Consumer Research build: deep reasoning, at least two analytical rigor judgments layered, domain-native, business-realistic files, no library metadata in any container",
+  "domain": "marketing-consumer-research",
+  "subdomain": "new-product-innovation",
+  "client_domain": "marketing-consumer-research",
+  "niche": "a Canadian plant-based beverage maker's 2027 portfolio treatment of its spring 2026 oat beverage launch, forecast from a household purchase panel's trial and repeat before the co-packer's 2027 production slots are booked",
+  "objective": "forecasting",
+  "shape": "02",
+  "decision_type": "dial_setting",
+  "answer_unit": "named_option",
+  "answer": "",
+  "answer_source": "",
+  "gap": [
+    "population",
+    "time"
+  ],
+  "pattern": [
+    "none"
+  ],
+  "generators": [
+    "G6",
+    "G14",
+    "G13"
+  ],
+  "gate_g": "forecasting",
+  "calibration_form": "none",
+  "stump_strategy": "population_selection",
+  "decisive_rule_filed": false,
+  "official_decoy": false,
+  "validated_decoy": false,
+  "context_artifact": "filed_standard",
+  "stump_class": "analytical",
+  "analyst_test": "A strong analyst who cleans the panel's purchase lines (receipt rescans, returns, multibuy prices, EANs that lost their leading zero, the system migration's date format), restricts to continuously reporting households, fits the cumulative trial curve, reads repeat from the most mature trier cohort and the buying index from triers' 2026 category litres, and multiplies them (Parfitt-Collins with its textbook caveats) files about 3.0 per cent of 2027 category litres and puts the line in the support band; the call is wrong because the April cohort that gives the repeat rate is premium-tier heavy while a fifth of trier litres sit with value-tier households that tried when the discount banners listed the line and settle near 1 per cent, and because triers were caught in their own high-buying phases, so their 2026 litres overstate their 2027 weight; both corrected, the line holds about 2.0 per cent and sits in the hold band.",
+  "domain_test": "The deciding quantity is a new grocery line's 2027 share of category litres projected from a household panel's trial and repeat, the consumer-panel new-product forecast (Parfitt-Collins penetration, repeat and buying index); what decides it is how each household's price tier, rebuilt from what it paid per litre against private label and the premium brands before launch, sets its long-run share of category requirements, and how a household's category buying falls back after the phase in which it tried, so with another field's nouns the litre-weighted share of requirements, private-label reversion and the banners' listing dates stop making sense.",
+  "layer2_family": "estimand_identification",
+  "layer2_pattern": "own:repeat-floor-set-by-pre-launch-price-tier-and-trier-buying-caught-high",
+  "layer1": [
+    "receipt rescans duplicating purchase lines",
+    "returns as negative quantities",
+    "multibuy prices recorded on the first unit",
+    "EANs stored as numbers that dropped a leading zero",
+    "pack sizes in mL and L across two product master vintages",
+    "banner name variants across the panel's retailer coding change",
+    "households joining and leaving the panel with partial reporting weeks",
+    "a date format change at the panel's data platform migration"
+  ],
+  "stakeholder_role": "consumer insights manager at the plant-based beverage maker, who writes the line's 2027 treatment paper for the brand director",
+  "role_family": "research_desk",
+  "scoring_unit": "other",
+  "spine": {
+    "file": "panel_purchases_plant_beverages_2024w01_2026w44.csv",
+    "rows": 300000,
+    "entity": "one household purchase line: one product bought on one shopping trip",
+    "grain": "household x trip x EAN",
+    "source": "synthetic (a fictional Canadian household purchase panel)"
+  },
+  "forum": "line_manager_or_team",
+  "forcing_event": "purchase_order_or_contract",
+  "org_family": "manufacturer",
+  "world": {
+    "geography": "Canada (national: Atlantic, Quebec, Ontario, Prairies, British Columbia)",
+    "currency": "CAD",
+    "org_type": "a mid-size plant-based beverage maker selling through national and regional grocery banners",
+    "invented_names": [
+      "Northvale Oat Co.",
+      "Northvale Oat Barista"
+    ],
+    "people": [
+      "Gabriel Sloan",
+      "Angela Reyes",
+      "Brian Mueller"
+    ]
+  },
+  "deliverables": [
+    "northvale_oat_2027_treatment.docx",
+    "northvale_oat_2027_forecast.xlsx"
+  ],
+  "opening_move": "question-first",
+  "question_form": "how-much",
+  "driver": "The forward level is a weighted sum over units that have entered and units still to enter: each entered unit's response fades with time since its own entry to a floor set by a property rebuilt from its own pre-entry history, the earliest entrants are drawn mostly from the high-floor kind while a later wave opened by a second access route is drawn from the low-floor kind, and each entrant was caught during a transient high in its own activity that the forward window does not keep; reading the floor from the most mature entrants and the weight from the entry window overstates the forward level twice over, and either correction alone still leaves it above the bar.",
+  "driver_concrete": "Each Northvale Oat buyer's share of its own plant-beverage litres fades from its first-purchase high to a floor set by what the household paid per litre before launch (premium-tier households near 17 per cent, mainstream near 5, value near 1), the April triers who give the textbook repeat rate are premium-heavy while the households that tried when the discount banners listed the line in July are value-tier, and triers' 2026 category litres run about a fifth above their own 2024-25 rate while non-triers' do not, so the most-mature-cohort repeat and the 2026 buying index each overstate the 2027 share and only both corrected take it from the support band to the hold band.",
+  "stump": "A competent solver fits the cumulative trial curve, reads repeat from the most mature trier cohort and the buying index from triers' 2026 litres, files about 3.0 per cent of 2027 category litres and puts the line in the support band; the steps that land it there are carrying the premium-heavy April cohort's long-run share to every trier, including the value-tier households that tried at the discount listing and revert to private label, and weighting triers by litres bought during the high-buying phases in which they tried.",
+  "deep_chain": "(1) each household's price tier rebuilt from what it paid per litre in the category in 2024-25 against the product master's private-label and premium brands; (2) each trier's share of its own category litres traced by weeks since its own first purchase, the fade separated from cohort composition by comparing cohorts at equal tenure and within tier, and each tier's floor read where the tier has long tenure; (3) the 2027 trier base built by tier from the triers to date and the organic trial hazard of the households still to try; (4) each household's 2027 category litres taken from its own pre-launch rate grown with the category, not from the 2026 window in which it was selected; (5) the litre-weighted 2027 share by quarter against the portfolio standard's bands.",
+  "judgment": "two statistical judgments: a heterogeneity judgment (the long-run share of requirements differs by a tier no column holds, and the 2027 trier base's tier mix differs from the mature cohort's, shown by equal-tenure comparisons within tier) and a selection judgment (trial is caught during high-buying phases, shown by triers' 2026 litres against their own 2024-25 rate beside non-triers', so the buying index regresses).",
+  "one_fact_test": "The likeliest hint is that the discount-banner triers buy mostly private label; the solver still has to rebuild every household's tier, separate fade from composition at equal tenure, read each tier's floor, project the trier base, and still overstates the share by about a fifth unless it also sees that triers' buying was caught high; no single sentence covers both judgments.",
+  "strategy_label": "WORKS IN FORM",
+  "mechanism_source": "design_note",
+  "differentiation": {
+    "task1": "task1's forward members ride a second entity's clock (the tutor's tenure hazard); here each household's own time since trial sets the fade, the floor comes from the household's own pre-launch price tier, and the forward weight regresses from the phase in which it tried, with the households still to try observable in the panel.",
+    "mark132": "mark132's forward rate restarts when a failed unit is replaced by a new one at the bottom of the wear curve; here no unit is replaced: each household's share of its own litres fades with its own time since trial to a floor set by its pre-launch price tier, and the forward weight is the household's own buying falling back from the phase in which it tried.",
+    "mark124": "mark124 recovers each unexamined unit's kind from its group's surviving records under examinations drawn toward flagged groups; here the kind is rebuilt from the household's own pre-launch purchase prices, it sets a long-run share that only shows after the household's own fade, and a second, independent judgment (buying caught high at trial) moves each household's forward weight.",
+    "mark175": "mark175's take-up rises with the neighbours already built on a lot's own run and access reached well-built runs first; here there is no neighbour effect: a second access route (the discount banners' listing) brought value-tier households whose own floor is near zero, the floor is read within tier at equal tenure after each household's own fade, and the triers' buying weight regresses from its selection, which mark175 has no counterpart for."
+  },
+  "lineage": [],
+  "notes": "Subdomain is the house key new-product-innovation; the closest client task type serving forecasting is conjoint-choice-willingness-to-pay-analysis (revealed choice behaviour and segment response to price), named in the design note's Task type line. Axes redrawn against the last three live cards: forum (executive_team and committee_or_panel held by task10 and task5) is the brand director's delegated call under the portfolio standard; forcing event (vote_or_meeting, season_or_peak, budget_or_appropriation held) is the co-packer's 2027 slot schedule confirmation; strategy population_selection rather than composition_mix (overused) or maturity_censoring (task5), honest because both judgments are about who the early triers are and when they were caught.",
+  "registered": "2026-11-09T00:03:37Z"
+}
