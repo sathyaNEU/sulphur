@@ -1,5 +1,5 @@
 {
- "_about": "Controlled vocabulary for fingerprint cards. Every enumerated field on a card must use a key from here, so two builds that made the same choice collide on the same string. Sources: guide-to-prompt/references/domains and shapes, stumping Parts 1, 2, 6.1 and 6.2, determinism-check Gate G, guide-to-prompt SKILL.md section 3. Add a value only when no existing one fits, and add it here before using it on a card. stump_strategies is the family of the decisive move independent of the gap and pattern labels, and decisive_rule_filed plus official_decoy on a card mark the withheld-rule-with-official-decoy architecture whatever family label it carries; validated_decoy marks the build whose wrong method reproduces every closed, published or certified figure in the pack and breaks only on a forward condition. client_domains is the client's taxonomy (seven groups, twenty-one domains, each with its task types and the Axis 1 objectives each task type serves); house_domains are the nine domains the earlier spec named, still valid for cards and mapped to the client domains they sit in. layer2_families are the five families of the client's two-layer design; a card's layer2_family takes one key and its layer2_pattern names the pattern from stumping/references/client/layer2-rigor-patterns.md as <domain>/<task-type>/<n>, or 'own:<short name>' for a pattern built beyond the library. stump_classes classifies the decisive step under the client's three rules: only 'analytical' may decide the answer; a planted defect, decoy or hidden rule, a data-semantics reading and a stated-rule application can appear in a task but never as the decisive stump. A card drawn on or after 2026-10-10 also carries analyst_test (the easy route a strong analyst takes after cleaning the data and reading every rule correctly, and the wrong answer it gives) and domain_test (the field's own analysis that decides the answer, and why swapping the nouns into another field breaks the task).",
+ "_about": "Controlled vocabulary for fingerprint cards. Every enumerated field on a card must use a key from here, so two builds that made the same choice collide on the same string. Sources: guide-to-prompt/references/domains and shapes, stumping Parts 1, 2, 6.1 and 6.2, determinism-check Gate G, guide-to-prompt SKILL.md section 3. Add a value only when no existing one fits, and add it here before using it on a card. stump_strategies is the family of the decisive move independent of the gap and pattern labels, and decisive_rule_filed plus official_decoy on a card mark the withheld-rule-with-official-decoy architecture whatever family label it carries; validated_decoy marks the build whose wrong method reproduces every closed, published or certified figure in the pack and breaks only on a forward condition. client_domains is the client's taxonomy (seven groups, twenty-one domains, each with its task types and the Axis 1 objectives each task type serves); house_domains are the nine domains the earlier spec named, still valid for cards and mapped to the client domains they sit in. layer2_families are the five families of the client's two-layer design; a card's layer2_family takes one key and its layer2_pattern names the pattern from stumping/references/client/layer2-rigor-patterns.md as <domain>/<task-type>/<n>, or 'own:<short name>' for a pattern built beyond the library. stump_classes classifies the decisive step under the client's three rules: only 'analytical' may decide the answer; a planted defect, decoy or hidden rule, a data-semantics reading and a stated-rule application can appear in a task but never as the decisive stump. A card drawn on or after 2026-10-10 also carries analyst_test (the easy route a strong analyst takes after cleaning the data and reading every rule correctly, and the wrong answer it gives) and domain_test (the field's own analysis that decides the answer, and why swapping the nouns into another field breaks the task). The nine analysis types the client assigns from 2026-11-09 are the keys of objectives (comparative-explanation added, served by every task type that serves root-cause, descriptive-distribution or experiment-causal); areas, answer_shapes, weights and run_classes are the client's fourteen areas of analysis, fourteen answer shapes, eleven places the weight can sit and the run-loss classes, used by cards drawn from 2026-11-09 (analysis_type, answer_shape, weight, chain_signature) and by precut.py.",
  "domains": {
   "product-analytics": "Product Analytics",
   "supply-chain-logistics": "Supply Chain & Logistics",
@@ -347,14 +347,15 @@
   ]
  },
  "objectives": {
-  "forecasting": "Forecasting & Predictive Modeling",
-  "root-cause": "Root-Cause Analysis",
-  "anomaly-detection": "Anomaly Detection & Diagnostics",
-  "experiment-causal": "Experiment & Causal Analysis",
-  "descriptive-distribution": "Descriptive & Distribution Analysis",
-  "etl": "Data Extraction & Conformation (ETL)",
-  "opportunity-sizing-decision": "Opportunity Sizing & Decision Support (author-declared new Axis 1 objective, 2026-10-03)",
-  "data-quality-monitoring": "Data Quality Monitoring & Alerting (author-declared new Axis 1 objective, 2026-10-03)",
+  "descriptive-distribution": "Descriptive & Distribution Analysis: where a total really sits, once immature periods or design weights are handled",
+  "comparative-explanation": "Comparative Analysis & Explanation: why two groups or two periods differ, with the gap decomposed",
+  "anomaly-detection": "Anomaly Detection & Diagnostics: which units are genuinely unusual once real variance beyond noise is modelled, with a stated rule and false-alarm rate",
+  "root-cause": "Root-Cause Analysis: the chain from a symptom back to its cause, with rival explanations ruled out by the data",
+  "experiment-causal": "Experiment & Causal Analysis: what a change did, against a comparison the design supports (over-represented; give the others a turn)",
+  "forecasting": "Forecasting & Predictive Modeling: a path with a band, chosen because it wins out of sample",
+  "opportunity-sizing-decision": "Opportunity Sizing & Decision Support: how large an opportunity is and where a dial should be set",
+  "etl": "Data Extraction & Conformation (ETL / Pipeline Build): messy sources linked and conformed to one schema, with a computed, checkable result",
+  "data-quality-monitoring": "Data Quality, Monitoring & Alerting: a monitoring rule tuned on history, with the alert load it will produce",
   "legacy-retired": "A tag that is no longer valid (legacy cards only)"
  },
  "shapes": {
@@ -629,14 +630,17 @@
    "group": "Product analytics",
    "task_types": {
     "online-experimentation-a-b-test-design-readout": [
-     "experiment-causal"
+     "experiment-causal",
+     "comparative-explanation"
     ],
     "observational-causal-inference": [
-     "experiment-causal"
+     "experiment-causal",
+     "comparative-explanation"
     ],
     "metric-definition-measurement-science": [
      "descriptive-distribution",
-     "data-quality-monitoring"
+     "data-quality-monitoring",
+     "comparative-explanation"
     ],
     "retention-cohort-lifetime-value-modeling": [
      "forecasting"
@@ -647,14 +651,17 @@
     ],
     "funnel-journey-analysis": [
      "descriptive-distribution",
-     "root-cause"
+     "root-cause",
+     "comparative-explanation"
     ],
     "network-effect-marketplace-experimentation": [
-     "experiment-causal"
+     "experiment-causal",
+     "comparative-explanation"
     ],
     "feature-adoption-diffusion-modeling": [
      "forecasting",
-     "descriptive-distribution"
+     "descriptive-distribution",
+     "comparative-explanation"
     ]
    }
   },
@@ -663,21 +670,25 @@
    "group": "Product analytics",
    "task_types": {
     "segmentation-market-structure": [
-     "descriptive-distribution"
+     "descriptive-distribution",
+     "comparative-explanation"
     ],
     "conjoint-choice-willingness-to-pay-analysis": [
      "opportunity-sizing-decision",
      "forecasting"
     ],
     "brand-campaign-ad-effectiveness-measurement": [
-     "experiment-causal"
+     "experiment-causal",
+     "comparative-explanation"
     ],
     "customer-satisfaction-driver-analysis": [
-     "root-cause"
+     "root-cause",
+     "comparative-explanation"
     ],
     "media-reach-frequency-audience-measurement": [
      "descriptive-distribution",
-     "forecasting"
+     "forecasting",
+     "comparative-explanation"
     ]
    }
   },
@@ -687,40 +698,47 @@
    "task_types": {
     "exploratory-data-analysis-distribution-assessment": [
      "descriptive-distribution",
-     "anomaly-detection"
+     "anomaly-detection",
+     "comparative-explanation"
     ],
     "regression-classification-model-diagnostics": [
      "forecasting"
     ],
     "resampling-simulation-monte-carlo-methods": [
      "forecasting",
-     "descriptive-distribution"
+     "descriptive-distribution",
+     "comparative-explanation"
     ],
     "bayesian-modeling-posterior-inference": [
      "forecasting"
     ],
     "missing-data-censoring-measurement-error": [
      "descriptive-distribution",
-     "data-quality-monitoring"
+     "data-quality-monitoring",
+     "comparative-explanation"
     ],
     "multiple-testing-selective-inference": [
      "anomaly-detection",
-     "experiment-causal"
+     "experiment-causal",
+     "comparative-explanation"
     ],
     "data-integration-record-linkage-entity-resolution": [
      "etl"
     ],
     "benchmarking-and-ablations": [
-     "experiment-causal"
+     "experiment-causal",
+     "comparative-explanation"
     ],
     "scaling-laws": [
      "forecasting"
     ],
     "robustness-analysis": [
-     "descriptive-distribution"
+     "descriptive-distribution",
+     "comparative-explanation"
     ],
     "interpretability": [
-     "root-cause"
+     "root-cause",
+     "comparative-explanation"
     ]
    }
   },
@@ -729,36 +747,45 @@
    "group": "Biomedical and health sciences",
    "task_types": {
     "clinical-trial-design-analysis": [
-     "experiment-causal"
+     "experiment-causal",
+     "comparative-explanation"
     ],
     "survival-time-to-event-analysis": [
      "forecasting",
-     "descriptive-distribution"
+     "descriptive-distribution",
+     "comparative-explanation"
     ],
     "diagnostic-biomarker-accuracy": [
-     "descriptive-distribution"
+     "descriptive-distribution",
+     "comparative-explanation"
     ],
     "dose-response-pk-pd-modeling": [
      "forecasting"
     ],
     "genomics-gwas-high-dimensional-association": [
      "anomaly-detection",
-     "descriptive-distribution"
+     "descriptive-distribution",
+     "comparative-explanation"
     ],
     "statistical-genomics": [
-     "descriptive-distribution"
+     "descriptive-distribution",
+     "comparative-explanation"
     ],
     "longitudinal-outcomes-repeated-measures": [
-     "experiment-causal"
+     "experiment-causal",
+     "comparative-explanation"
     ],
     "adaptive-platform-basket-trial-methods": [
-     "experiment-causal"
+     "experiment-causal",
+     "comparative-explanation"
     ],
     "real-world-evidence-comparative-effectiveness": [
-     "experiment-causal"
+     "experiment-causal",
+     "comparative-explanation"
     ],
     "medical-imaging-reader-study-evaluation": [
-     "descriptive-distribution"
+     "descriptive-distribution",
+     "comparative-explanation"
     ]
    }
   },
@@ -767,14 +794,16 @@
    "group": "Biomedical and health sciences",
    "task_types": {
     "observational-study-design-cohort-case-control": [
-     "experiment-causal"
+     "experiment-causal",
+     "comparative-explanation"
     ],
     "disease-surveillance-outbreak-anomaly-detection": [
      "anomaly-detection",
      "data-quality-monitoring"
     ],
     "risk-factor-causal-effect-estimation": [
-     "experiment-causal"
+     "experiment-causal",
+     "comparative-explanation"
     ],
     "screening-diagnostic-policy-evaluation": [
      "opportunity-sizing-decision"
@@ -787,10 +816,12 @@
      "forecasting"
     ],
     "cluster-stepped-wedge-community-trials": [
-     "experiment-causal"
+     "experiment-causal",
+     "comparative-explanation"
     ],
     "health-equity-disparity-decomposition": [
-     "root-cause"
+     "root-cause",
+     "comparative-explanation"
     ]
    }
   },
@@ -802,7 +833,8 @@
      "forecasting"
     ],
     "drug-utilization-comparative-safety": [
-     "experiment-causal"
+     "experiment-causal",
+     "comparative-explanation"
     ],
     "safety-signal-detection": [
      "anomaly-detection"
@@ -811,7 +843,8 @@
      "opportunity-sizing-decision"
     ],
     "medication-adherence-persistence": [
-     "descriptive-distribution"
+     "descriptive-distribution",
+     "comparative-explanation"
     ]
    }
   },
@@ -827,7 +860,8 @@
     ],
     "provider-quality-risk-adjustment": [
      "descriptive-distribution",
-     "anomaly-detection"
+     "anomaly-detection",
+     "comparative-explanation"
     ],
     "patient-flow-beds-workforce-optimization": [
      "opportunity-sizing-decision",
@@ -844,7 +878,8 @@
    "group": "Economics and quantitative social science",
    "task_types": {
     "causal-identification-did-iv-rd-synthetic-control": [
-     "experiment-causal"
+     "experiment-causal",
+     "comparative-explanation"
     ],
     "structural-equilibrium-modeling": [
      "opportunity-sizing-decision"
@@ -854,7 +889,8 @@
     ],
     "panel-data-estimation": [
      "experiment-causal",
-     "root-cause"
+     "root-cause",
+     "comparative-explanation"
     ],
     "elasticity-welfare-policy-impact-estimation": [
      "opportunity-sizing-decision"
@@ -866,7 +902,8 @@
      "forecasting"
     ],
     "spatial-econometrics-spillover-estimation": [
-     "experiment-causal"
+     "experiment-causal",
+     "comparative-explanation"
     ]
    }
   },
@@ -878,20 +915,25 @@
      "forecasting"
     ],
     "policy-evaluation-administrative-data-inference": [
-     "experiment-causal"
+     "experiment-causal",
+     "comparative-explanation"
     ],
     "legislative-behavior-ideal-point-estimation": [
-     "descriptive-distribution"
+     "descriptive-distribution",
+     "comparative-explanation"
     ],
     "conflict-protest-event-data-analysis": [
      "anomaly-detection",
-     "descriptive-distribution"
+     "descriptive-distribution",
+     "comparative-explanation"
     ],
     "public-opinion-survey-experimentation": [
-     "experiment-causal"
+     "experiment-causal",
+     "comparative-explanation"
     ],
     "small-area-public-opinion-estimation-mrp": [
-     "descriptive-distribution"
+     "descriptive-distribution",
+     "comparative-explanation"
     ]
    }
   },
@@ -903,21 +945,26 @@
      "forecasting"
     ],
     "social-mobility-inequality-measurement": [
-     "descriptive-distribution"
+     "descriptive-distribution",
+     "comparative-explanation"
     ],
     "social-network-peer-effect-analysis": [
-     "experiment-causal"
+     "experiment-causal",
+     "comparative-explanation"
     ],
     "event-history-life-course-analysis": [
      "descriptive-distribution",
-     "forecasting"
+     "forecasting",
+     "comparative-explanation"
     ],
     "neighborhood-segregation-contextual-effects": [
-     "descriptive-distribution"
+     "descriptive-distribution",
+     "comparative-explanation"
     ],
     "fertility-mortality-life-table-estimation": [
      "forecasting",
-     "descriptive-distribution"
+     "descriptive-distribution",
+     "comparative-explanation"
     ]
    }
   },
@@ -926,29 +973,36 @@
    "group": "Economics and quantitative social science",
    "task_types": {
     "experimental-design-power-analysis": [
-     "experiment-causal"
+     "experiment-causal",
+     "comparative-explanation"
     ],
     "psychometric-measurement-scale-validation": [
      "descriptive-distribution",
-     "data-quality-monitoring"
+     "data-quality-monitoring",
+     "comparative-explanation"
     ],
     "statistical-inference-hypothesis-testing": [
-     "experiment-causal"
+     "experiment-causal",
+     "comparative-explanation"
     ],
     "mediation-moderation-process-modeling": [
-     "root-cause"
+     "root-cause",
+     "comparative-explanation"
     ],
     "meta-analysis-evidence-synthesis": [
-     "experiment-causal"
+     "experiment-causal",
+     "comparative-explanation"
     ],
     "longitudinal-growth-curve-modeling": [
-     "descriptive-distribution"
+     "descriptive-distribution",
+     "comparative-explanation"
     ],
     "decision-making-computational-behavioral-modeling": [
      "forecasting"
     ],
     "experience-sampling-intensive-longitudinal-analysis": [
-     "descriptive-distribution"
+     "descriptive-distribution",
+     "comparative-explanation"
     ]
    }
   },
@@ -963,10 +1017,12 @@
      "forecasting"
     ],
     "sentencing-bail-disparity-analysis": [
-     "root-cause"
+     "root-cause",
+     "comparative-explanation"
     ],
     "intervention-policing-policy-evaluation": [
-     "experiment-causal"
+     "experiment-causal",
+     "comparative-explanation"
     ]
    }
   },
@@ -976,17 +1032,21 @@
    "task_types": {
     "sample-design-allocation-weighting": [
      "descriptive-distribution",
-     "opportunity-sizing-decision"
+     "opportunity-sizing-decision",
+     "comparative-explanation"
     ],
     "nonresponse-calibration-measurement-error-adjustment": [
      "descriptive-distribution",
-     "data-quality-monitoring"
+     "data-quality-monitoring",
+     "comparative-explanation"
     ],
     "questionnaire-mode-effects-research": [
-     "experiment-causal"
+     "experiment-causal",
+     "comparative-explanation"
     ],
     "small-area-estimation": [
-     "descriptive-distribution"
+     "descriptive-distribution",
+     "comparative-explanation"
     ],
     "census-register-administrative-data-quality": [
      "data-quality-monitoring",
@@ -997,7 +1057,8 @@
      "etl"
     ],
     "complex-survey-estimation-variance": [
-     "descriptive-distribution"
+     "descriptive-distribution",
+     "comparative-explanation"
     ],
     "anomaly-detection": [
      "anomaly-detection"
@@ -1028,7 +1089,8 @@
      "forecasting"
     ],
     "network-analysis": [
-     "descriptive-distribution"
+     "descriptive-distribution",
+     "comparative-explanation"
     ]
    }
   },
@@ -1038,26 +1100,32 @@
    "task_types": {
     "student-growth-value-added-modeling": [
      "descriptive-distribution",
-     "experiment-causal"
+     "experiment-causal",
+     "comparative-explanation"
     ],
     "randomized-quasi-experimental-program-evaluation": [
-     "experiment-causal"
+     "experiment-causal",
+     "comparative-explanation"
     ],
     "item-response-theory-test-equating": [
      "etl",
-     "descriptive-distribution"
+     "descriptive-distribution",
+     "comparative-explanation"
     ],
     "learning-analytics-early-warning-models": [
      "forecasting"
     ],
     "multilevel-classroom-school-research": [
-     "root-cause"
+     "root-cause",
+     "comparative-explanation"
     ],
     "psychometrics": [
-     "descriptive-distribution"
+     "descriptive-distribution",
+     "comparative-explanation"
     ],
     "text-analysis": [
-     "descriptive-distribution"
+     "descriptive-distribution",
+     "comparative-explanation"
     ]
    }
   },
@@ -1069,19 +1137,22 @@
      "opportunity-sizing-decision"
     ],
     "factor-return-attribution": [
-     "root-cause"
+     "root-cause",
+     "comparative-explanation"
     ],
     "strategy-backtesting-evaluation": [
      "forecasting"
     ],
     "market-microstructure-execution-cost": [
-     "descriptive-distribution"
+     "descriptive-distribution",
+     "comparative-explanation"
     ],
     "volatility-derivatives-pricing": [
      "forecasting"
     ],
     "event-study": [
-     "experiment-causal"
+     "experiment-causal",
+     "comparative-explanation"
     ]
    }
   },
@@ -1129,7 +1200,8 @@
     ],
     "claims-frequency-severity": [
      "descriptive-distribution",
-     "forecasting"
+     "forecasting",
+     "comparative-explanation"
     ],
     "reinsurance-capital": [
      "opportunity-sizing-decision"
@@ -1148,7 +1220,8 @@
      "forecasting"
     ],
     "pollution-source-attribution": [
-     "root-cause"
+     "root-cause",
+     "comparative-explanation"
     ],
     "sensor-calibration-measurement": [
      "data-quality-monitoring"
@@ -1158,7 +1231,8 @@
     ],
     "emissions-inventory": [
      "etl",
-     "descriptive-distribution"
+     "descriptive-distribution",
+     "comparative-explanation"
     ]
    }
   },
@@ -1174,17 +1248,20 @@
     ],
     "grid-reliability-outage-analysis": [
      "root-cause",
-     "anomaly-detection"
+     "anomaly-detection",
+     "comparative-explanation"
     ],
     "tariff-demand-response-evaluation": [
-     "experiment-causal"
+     "experiment-causal",
+     "comparative-explanation"
     ],
     "asset-condition-maintenance": [
      "forecasting",
      "opportunity-sizing-decision"
     ],
     "efficiency-savings-verification": [
-     "experiment-causal"
+     "experiment-causal",
+     "comparative-explanation"
     ]
    }
   },
@@ -1193,23 +1270,28 @@
    "group": "Engineering and physical sciences",
    "task_types": {
     "usability-task-performance-studies": [
-     "experiment-causal"
+     "experiment-causal",
+     "comparative-explanation"
     ],
     "workload-fatigue-shift-analysis": [
-     "root-cause"
+     "root-cause",
+     "comparative-explanation"
     ],
     "safety-incident-error-analysis": [
      "root-cause",
-     "anomaly-detection"
+     "anomaly-detection",
+     "comparative-explanation"
     ],
     "human-reliability-assessment": [
      "forecasting"
     ],
     "anthropometric-design-fit": [
-     "descriptive-distribution"
+     "descriptive-distribution",
+     "comparative-explanation"
     ],
     "alarm-interface-evaluation": [
-     "experiment-causal"
+     "experiment-causal",
+     "comparative-explanation"
     ]
    }
   }
@@ -1290,5 +1372,65 @@
   "planted": "a defect, decoy or hidden rule inserted only so that catching it flips the answer (a copied block, a staff memo arguing for the wrong answer, a rule recovered from settled cases). Banned as the decisive stump.",
   "data_semantics": "the answer flips only on reading a field, code, unit or definition correctly (a capacity column that also counts preschool seats, a rainfall column of multi-day totals). Banned as the decisive stump.",
   "rule_application": "the answer comes from applying stated rules correctly, however many steps there are (checking listed eligibility criteria and a stated score, following transfer records to a date). Banned as the decisive stump."
+ },
+ "areas": {
+  "framing": "Framing: a loose question turned into precise quantities, populations, units, windows and success criteria",
+  "data-discovery": "Data discovery: which of many files, tables, metrics or logs matter, how they relate, what each field records",
+  "assembly-reconciliation": "Assembly and reconciliation: join keys, duplicates, linkage, schema drift, unit and calendar changes, vintages, control totals",
+  "missingness-measurement": "Missingness and measurement: censoring, truncation, immature cohorts, nonresponse, designs and weights, measurement error, instrument changes",
+  "exploration-triage": "Exploration and triage at breadth: hundreds or thousands of series, signal from noise, many comparisons at once",
+  "investigation-loops": "Investigation loops: hypothesis, test, rule out rivals, follow the next lead, revise; cause against symptom",
+  "modeling": "Modeling: specification, diagnostics, heterogeneity, nonlinearity, dependence, pooling, choosing between models",
+  "validation": "Validation: out-of-sample tests, backtests, holdouts, cross-checks against independent data, constraint checks",
+  "causal-reasoning": "Causal reasoning: identification, confounding, selection, interference, transport to a new population",
+  "forecasting": "Forecasting: seasonality, regime changes, leading indicators, honest bands, scenarios, evaluating the forecast",
+  "decomposition-attribution": "Decomposition and attribution: contributions, mix against rate, bridges that reconcile, interactions, method sensitivity",
+  "uncertainty": "Uncertainty: quantified at each step, carried to the answer, robustness, how sure",
+  "synthesis": "Synthesis: many intermediate results combined into one account, ranked, conflicts reconciled, limits stated",
+  "self-verification": "Self-verification: numbers that add up, a figure reproduced two ways, own errors caught"
+ },
+ "answer_shapes": {
+  "ranked-causes": "Ranked causes with their contributions",
+  "timeline": "A timeline of what went wrong and when",
+  "forecast-bands-drivers": "A forecast path with bands, plus its drivers",
+  "bridge": "A bridge that reconciles two totals",
+  "flagged-set": "A flagged set with the evidence and the false-alarm rate",
+  "reconciled-table": "A reconciled table plus findings",
+  "allocation-sensitivity": "An allocation plus its sensitivity",
+  "ranked-list-cap": "A ranked list under a cap",
+  "schedule-capacity": "A schedule under capacity",
+  "monitoring-rule": "A monitoring rule with its expected alert count",
+  "scenarios-flip": "Scenarios with the point where the call flips",
+  "distribution-cut": "A distribution and where it is cut",
+  "composite-score": "A composite score",
+  "defined-metric": "A defined metric with its properties"
+ },
+ "weights": {
+  "assembly": "Assembly: building one dataset you can trust (linkage under uncertainty, reconciliation to a control total)",
+  "measurement": "Measurement: a design, a wording or instrument change, top codes, censoring",
+  "triage": "Triage: separating real change from noise across many series or units at once",
+  "investigation": "Investigation: hypotheses formed, tested and discarded until one account survives",
+  "modeling": "Modeling: specification and diagnostics carry the result",
+  "validation": "Validation: proving a model or forecast holds on data it has not seen",
+  "attribution": "Attribution: a bridge or decomposition that reconciles, with its method sensitivity",
+  "synthesis": "Synthesis: many intermediate results pulled into one ranked, reconciled account",
+  "allocation": "Allocation under constraints",
+  "hard-to-measure": "An estimate of a quantity that is hard to measure",
+  "metric-or-rule-design": "A metric or rule to design, with its properties on history"
+ },
+ "run_classes": {
+  "method-shortcut": "deep: right data, simpler method, and the simpler method moves a result",
+  "unfinished-chain": "deep: early steps right, the inference not carried through",
+  "first-story": "deep: stopped at the first story; the first explanation that fits, a symptom taken for the cause, the rival never tested",
+  "narrow-look": "deep: a narrow look at broad data; a handful of series, runs or units inspected where the question needed all of them",
+  "dismissed-evidence": "deep: the run's own output shows the signal and it sets the signal aside",
+  "self-confirming": "deep: robustness tested only by nearby choices, so the check can never overturn the first answer",
+  "one-step": "partly: lost most points at one legitimate step; genuine but thinner",
+  "planted-defect": "surface: missed a planted defect",
+  "hidden-factor": "surface: missed a shallow hidden factor one sentence would have rescued",
+  "misread": "surface: misread a rule, definition, field, clause, window or population",
+  "procedure": "rule application: misapplied a written procedure",
+  "near-miss": "not evidence: near miss or formatting slip",
+  "defensible-alternative": "not deterministic: a sound method the prompt allows gives a different answer"
  }
 }

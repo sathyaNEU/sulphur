@@ -84,6 +84,10 @@ VALIDATED_CAP = 3
 # The client's three rules apply to every card drawn from this date: the card classifies its decisive step
 # (only analytical may decide) and carries the analyst test and the domain test.
 THREE_RULES_FROM = "2026-10-10"
+# The client's bar of 2026-11-09 (guidelines/client/deep-reasoning.md): every card drawn from this date names its
+# answer shape, where the weight of the work sits and the chain of areas its results run through, and the same
+# chain in the same order with the same answer shape is a template whatever the data.
+THROUGHOUT_FROM = "2026-11-09"
 # Stump strategies whose decisive step most often turns out to be a field reading or a stated rule.
 SEMANTICS_RISK = ("time_semantics", "grain_or_unit", "identity_resolution", "stated_rule_hard_construction",
                   "withheld_rule_corpus_fit")
@@ -399,6 +403,13 @@ def validate_card(c, vocab, strict=False):
         enum("client_domain", vocab.get("client_domains", {}), c.get("client_domain"))
     if c.get("stump_class") is not None:
         enum("stump_class", vocab.get("stump_classes", {}), c.get("stump_class"))
+    if c.get("answer_shape") is not None:
+        enum("answer_shape", vocab.get("answer_shapes", {}), c.get("answer_shape"))
+    if c.get("weight") is not None:
+        enum("weight", vocab.get("weights", {}), c.get("weight"))
+    for i, a in enumerate(c.get("chain_signature") or []):
+        if a not in vocab.get("areas", {}):
+            errs.append("chain_signature[%d]=%r is not an area in vocab.json" % (i, a))
     enum("shape", vocab["shapes"], c.get("shape"))
     enum("decision_type", vocab["decision_types"], c.get("decision_type"))
     enum("answer_unit", vocab["answer_units"], c.get("answer_unit"), required=strict)
@@ -593,6 +604,44 @@ def check(cand, cards, vocab, status=None):
                 add(level, "three_rules.task_type", "house domain %s sits in %s, where no task type serves %s"
                     % (dom, ", ".join(m for m in maps if m) or "no client domain", obj), [],
                     "draw a client domain with a task type serving %s" % obj)
+    # Difficulty throughout (client bar of 2026-11-09): the card names the answer shape, where the weight sits and
+    # the chain of areas its results run through; a chain repeated in the same order with the same answer shape is
+    # a template ("A lesson can come back in a new task. A structure cannot."), and the weight and the shape rotate.
+    if (cand.get("drawn") or "") >= THROUGHOUT_FROM:
+        sig = list(cand.get("chain_signature") or [])
+        for f, what in (("answer_shape", "one of the fourteen answer shapes in vocab.json"),
+                        ("weight", "where the weight of the work sits, one of the eleven in vocab.json")):
+            if not cand.get(f):
+                add("BLOCK", "throughout." + f, "the card has no %s" % f, [], "name %s" % what)
+        if len(sig) < 4 or len(set(sig)) < 3:
+            add("BLOCK", "throughout.chain", "chain_signature has %d results across %d areas" % (len(sig), len(set(sig))),
+                [], "four or more checkable results across three or more of the fourteen areas, in the design note's "
+                "Results chain order")
+        shp, wt = cand.get("answer_shape"), cand.get("weight")
+        twins = [c for c in others if sig and list(c.get("chain_signature") or []) == sig and shp
+                 and c.get("answer_shape") == shp]
+        if twins:
+            add("BLOCK", "template.chain", "the same chain of areas in the same order with the same answer shape (%s)"
+                % shp, tasks(twins), "move the weight or change the answer shape; a reused structure is a template "
+                "even on new data")
+        near = [c for c in others if c not in twins and sig and (list(c.get("chain_signature") or []) == sig or
+                (shp and wt and c.get("answer_shape") == shp and c.get("weight") == wt))]
+        if near:
+            add("WARN", "template.chain_near", "shares the chain, or the answer shape and the weight", tasks(near),
+                "say in the design note's Template check what differs")
+        carded = [c for c in live if c.get("weight")]
+        hit = [c for c in carded[-2:] if wt and c.get("weight") == wt]
+        if hit:
+            add("BLOCK", "ban.weight", "the weight sits in %s again, as in one of the last two builds" % wt, tasks(hit),
+                "pick where the weight sits from one you have not leaned on recently")
+        elif wt and [c for c in carded[-5:] if c.get("weight") == wt]:
+            add("WARN", "overuse.weight", "the weight sits in %s in one of the last five builds" % wt,
+                tasks([c for c in carded[-5:] if c.get("weight") == wt]), "vary where the hardness sits")
+        shaped = [c for c in live if c.get("answer_shape")]
+        hit = [c for c in shaped[-1:] if shp and c.get("answer_shape") == shp]
+        if hit:
+            add("BLOCK", "ban.answer_shape", "answer shape %s repeats the last build" % shp, tasks(hit),
+                "draw another of the fourteen answer shapes")
     lp = cand.get("layer2_pattern")
     if lp:
         same = [c for c in cards if c.get("task") != cand.get("task") and c.get("layer2_pattern") == lp]
@@ -1171,7 +1220,7 @@ def cmd_new(args):
         "task": t, "project": "sulfur", "architecture": "v1", "drawn": date.today().isoformat(), "slot_note": "",
         "domain": "<vocab domains key>", "subdomain": "<vocab subdomains[domain] item>",
         "niche": "<the unusual sub-function inside the subdomain, in this build's nouns>",
-        "objective": "<vocab objectives key>", "shape": "<vocab shapes key>",
+        "objective": "<vocab objectives key: the assigned analysis type>", "shape": "<vocab shapes key>",
         "decision_type": "<vocab decision_types key>", "answer_unit": "<vocab answer_units item>",
         "answer": "", "answer_source": "",
         "gap": ["<decisive gap first>"], "pattern": ["<decisive pattern first, or none>"],
@@ -1201,12 +1250,14 @@ def cmd_new(args):
         "driver": "<ONE sentence, the decisive move with every domain noun stripped>",
         "driver_concrete": "<ONE sentence, the decisive move in this build's own terms>",
         "stump": "<ONE sentence, the wrong committed answer a competent solver files and the step that lands them there>",
-        "stump_class": "<vocab stump_classes key: only analytical may decide the answer>",
-        "deep_chain": "<the three or more dependent inferences, numbered (1) (2) (3), as in the design note's Chain: line>",
-        "judgment": "<the statistical or modeling judgment among them, and the data that justify it>",
-        "one_fact_test": "<the likeliest single hint, and why the solver still has to build the chain>",
+        "stump_class": "<vocab stump_classes key: analytical, every result's difficulty is analysis>",
+        "answer_shape": "<vocab answer_shapes key>",
+        "weight": "<vocab weights key: where most of the work sits>",
+        "chain_signature": ["<vocab areas key of R1>", "<R2>", "<R3>", "<R4: four or more, three or more areas>"],
+        "results": "<the results chain in one line: R1 ..., R2 ..., each a checkable result>",
+        "one_fact_test": "<the most useful single sentence, and the results it rescues: N of M>",
         "strategy_label": "<WORKS | WORKS IN FORM | UNTESTED, from stumping/references/sulfur-strategies.md>",
-        "analyst_test": "<ONE sentence: the easy route a strong analyst takes after cleaning the data and reading every rule correctly, and the wrong answer it gives>",
+        "analyst_test": "<ONE sentence: what the careful but hurried pass files on the results it loses, and why>",
         "domain_test": "<ONE sentence: the field's own analysis that decides the answer, and why swapping the nouns into another field breaks the task>",
         "mechanism_source": "design_note", "differentiation": {}, "lineage": [], "notes": "",
     }

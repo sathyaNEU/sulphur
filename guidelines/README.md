@@ -12,21 +12,29 @@ Where the client text is newer than a skill, the client text wins and the skill 
 - `client/overview.txt`: the welcome, program details, approval criteria, key requirements, the 18 answer shapes,
   the difficulty bar, how the rubric is built, banned stumps beside a deep version of each, and the 15 blocks of
   the task walkthrough.
-- `client/deep-reasoning.txt`: the standard in one line, the seven judgments that decide deep tasks, the one-fact
-  test, the table of how runs fail (which failures count as evidence), the banned list with its quick tests, and
-  the seven-item build checklist.
+- `client/deep-reasoning.md` (exported 2026-11-09, the current bar): difficulty throughout the analysis, the
+  fourteen areas where analysis gets hard, a worked six-result illustration, the effort test and its three passes,
+  where the weight can sit, the nine analysis types, the fourteen answer shapes, templating, the tools and where a
+  hurried analyst stops, the shallow hidden factor and its three conditions with seven designs to judge, how runs
+  lose points and which losses count, the banned list, surface against deep pairs, and the build checklist.
+- `client/project-lead-review-2026-11-09.md`: the project lead's review of about 500 tasks, verbatim: the four prompt
+  faults and the three-strike policy, "most tasks hinge on one thing", the shapes the client loves, task types now
+  assigned.
 - `client/domains.txt`: the seven major domains and their 21 subdomains, each with example task types, what makes
   it deep and what domain fit means there.
 - `client/prompt.txt`: the export of the Prompt page duplicated the Deep reasoning page; it carries the author's
   standing note at its end (the author rewrites every prompt for voice; the harness makes it correct and leak-free).
 - `client/learning-modules/`: prompt writing, prompt reminders, input files, data messiness, two-layer task design,
-  golden output, glossary, and the per-domain stumping strategies.
+  golden output, glossary, and `stumping-strategies.md` (exported 2026-11-09): 77 investigation strategies across
+  seven domain groups, each with its analysis type, answer shape, weight, chain of results, public data, scenario,
+  hurried failures and pins, and each group's shallow versions with the client's verdicts.
 - `client/examples/`: the rebuilt example library (15 tasks that stumped the models for reasoning reasons) and its
   index.
 - `client/quality-checks/quality.txt`: the reviewer-side quality checklist.
-- `determinism_judge_system_prompt.md`: the determinism judge's system prompt with Gate H set to the Sulfur standard
-  (H1 domain, H2 layers, H3 the decisive step's class, H4 the deep chain, H5 the one-fact test), handed verbatim to
-  the `determinism-judge` agent.
+- `determinism_judge_system_prompt.md`: the determinism judge's system prompt with Gate H set to the bar of
+  2026-11-09 (H1 domain, H2 layers, H3 not one thing with the shallow hidden factor test, H4 difficulty throughout
+  with the effort test, H5 the one-fact test counted in results, and determinism per result with bands), handed
+  verbatim to the `determinism-judge` agent.
 
 ## Where the working standard lives
 

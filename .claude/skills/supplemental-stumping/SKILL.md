@@ -1,62 +1,61 @@
 ---
 name: supplemental-stumping
-description: Design the asks and the rubric arithmetic for Sulfur's bar (two runs averaging under 60, both losing for an analytical reason; build to 50 on paper). Under Sulfur the asks ride the deep step, because with one run on the call the other must lose almost every ask, and each ask carries a second analytical judgment so even the run that took the deep step loses some; Mark's measured record of what models execute (anything written down, the hygiene battery, a device whose discovery is its remedy) still binds, and Mark's decoupled data devices become Layer 1 texture. Use after stumping fixes the ladder and before data is cut, and in /fix-rubric. references/evidence.md and proven-in-production.md hold Mark's measured record.
+description: Turn the results chain into asks and price the rubric for Sulfur's bar (two runs averaging under 60, losing their points in several places for analytical reasons; build to 50 on paper). Every result in the chain is asked for and graded on its own, so a run that skips a result's work loses that result and only the results that depend on it; the pair is priced result by result by effort.py. Mark's measured record of what models execute (anything written down, the hygiene battery, a device whose discovery is its remedy) still binds every ask. Use after stumping fixes the results chain and before data is cut, and in /fix-rubric. references/evidence.md and proven-in-production.md hold Mark's measured record.
 ---
 
 # The Ask Layer
 
-The asks are where most of the rubric's criteria come from, and under Sulfur a run that took the wrong analytical
-path must get them wrong. So the asks are built downstream of the deep step, over the answer's shape, each one
-multi-dimensional and carrying its own second judgment, fixed on paper before data is cut and worded last against
-the golden. Mark's record (`references/evidence.md`, cited as `evidence.md` with its part; the shipped devices with
-their portal tier in `references/proven-in-production.md`) says what models execute; it is kept as the list of
-things an ask must never rest on.
+The asks are the results chain, asked for. The rubric is generated from the prompt and the four answer blocks, so
+every result the chain names becomes criteria only if an asking sentence and an answer block carry it. A result
+that is computed but never asked is unpriced work; an ask that is not a result of the chain is a lookup. Mark's
+record (`references/evidence.md`, cited as `evidence.md` with its part; the shipped devices with their portal tier in
+`references/proven-in-production.md`) says what models execute; it is kept as the list of things an ask must never
+rest on.
 
-## Part 0. The Sulfur arithmetic
+## Part 0. The arithmetic, result by result
 
-The rubric is generated from the prompt and the four answer blocks. The client publishes no weights, only their
-order: the recommendation and critical components carry the most, the asks next, instruction-following a small
-share. Price on Mark's measured split until the Sulfur record says otherwise (`../stumping/references/
-sulfur-record.md`): the call and critical components 38, instruction-following 7, the asks 55. A run that lands the
-call scores `C = 38 + 7 + 55 Lc`; a run off it scores `S = r + 7 + 55 Ls`, with `r` about 5 of partial credit and `L`
-the share of ask weight kept. The bar is `(C + S) / 2 < 60`; the paper target is 50.
+The client publishes no weights, only their order: the recommendation and critical components carry the most, the
+asks next, instruction-following a small share. Price on Mark's measured split until the Sulfur record says
+otherwise (`../stumping/references/sulfur-record.md`): the call and the critical components 38, the asks 55,
+instruction-following 7. `effort.py` spreads each block's weight over the results graded in it and scores the three
+passes: the bar is the runs' average under 60, the paper target is the careful but hurried pass at 50 or under.
 
-| The runs | What the pair needs | So |
-|---|---|---|
-| One on the call, one off | `55 (Lc + Ls) < 68` at the bar, `55 (Lc + Ls) <= 48` at the target | the run off the call keeps almost nothing (`Ls` near 0.1), which only coupling gives, and the run on it loses about a third of the ask weight (`Lc` near 0.65) to the asks' own judgments |
-| Both off the call | `2 (r + 7) + 55 (L1 + L2) < 120` | passes even with most asks kept, but each run's loss must still be analytical |
-| Both on the call | `55 (L1 + L2) < 15` at the bar | no ask layer reaches it; the ladder failed and the build is redesigned, never rescued by asks (Mark: no approved build was repaired by hardening the asks alone after a landed call) |
+What that means for the design:
+- **The pair is the share of results a careful run in a hurry loses.** With six results of equal weight the careful
+  pass has to lose about half of the weighted results to sit near 50, so at least three results need a move beyond
+  the runs' reflexes (`../stumping/SKILL.md` Part 0), in different areas so the two runs lose in different places.
+- **The recommendation and the components are priced like the rest.** A call that one result decides prices the
+  task at that result again; the call rests on several, and the components are results from different areas of the
+  chain, never three restatements of one fit.
+- **The paper is optimistic.** Mark measured paper ceilings of 35.1 and 39.4 that came back at 83.5, and 182 gated
+  39.1 against an honest 75.2. So the passes are computed end to end by the generator, the careful column is
+  calibrated to the run record, and the platform's two runs are the only measurement (`/triage-runs`).
 
-**The ladder is checked before the asks are priced**: where the judge's Gate F finds the call landable by both runs,
-no ask work is worth doing. **The paper number is a model and Mark measured it optimistic** (paper ceilings of 35.1
-and 39.4 measured 83.5; 182 gated 39.1 against an honest 75.2), so the pair is computed by a script on the cut pack
-(Part 5), and the platform's two runs are the only measurement (`/triage-runs`).
+## Part 1. The ask doctrine
 
-## Part 1. The ask doctrine under Sulfur
-
-1. **Ride the deep step.** Every ask figure is computed from the deep step's output: the same quantity across the
-   shape's cells (every candidate, period, segment, reconciling item), its range, the best alternative sized on the
-   same basis, the sensitivity of the call to the judgment's one free input. A run that took the default path files a
-   different value in most cells. Test, on the clean truth: run the default path's method through every ask; it
-   keeps at most about a tenth of the ask weight (`Shallow keep:` on the ask sheet).
-2. **Give each ask its own second judgment.** The run that took the deep step must still lose some asks for deep
-   reasons: a projection of an immature segment, an interval that matches the design, a forecast validated out of
-   sample, a rival explanation separated on a like-for-like cut. One judgment per ask, never a reading or a rule, and
-   never the same judgment as the call's.
+1. **Every result is asked for.** One asking sentence (or one numbered sub-ask) per result, in the deliverable's
+   terms, with its unit and rounding inside the sentence; the answer blocks carry the result's figure at that
+   rounding. A result that is only a step toward another figure is either asked for or cut from the chain.
+2. **Each ask is graded on its own.** Where the world allows, a later result is asked against an input of its own (a
+   bridge against the forecast file and the actuals; a rule against its alert count on a stated history), so a run
+   that slipped earlier still earns it by doing the step right. The platform grades against the golden, so this is
+   a property of the world and the asking sentence, never of a carry-forward note.
 3. **No ask is won or lost on a surface cause.** A run that loses an ask to a field reading, a filed rule, a planted
-   row or a formatting choice is evidence of a surface stump, and the reviewer reads the first place each run went
-   wrong. Mess sits on the ask paths as texture that every careful run cleans the same way (Part 4).
-4. **Hard, not long.** No cap on asks and no target count (Sulfur); a few demanding multi-part asks beat many
-   lookups. One ask can span many rows, periods or cells and still resolve to one gradable answer; unit and
-   rounding sit inside the asking sentence; every figure is separately gradable and determinate.
-5. **Critical components carry the chain.** The 2 to 5 components are links of the deep chain (`submission-writeup`),
-   so the heaviest rubric rows are the ones a shallow run gets wrong.
+   row or a formatting choice is evidence of a surface stump, and the reviewer reads where each run lost its points.
+   Mess sits on the ask paths as texture that every careful run cleans the same way (Part 4), or as an assembly
+   result of its own with a count and a gap to a control total.
+4. **Hard, not long.** No cap on asks and no target count; a few demanding multi-part asks beat many lookups. One ask
+   can span many rows, periods or cells and still resolve to gradable answers; every figure is separately gradable
+   and determinate, with a band where reasonable methods differ (`determinism-check`).
+5. **The answer's shape supplies the criteria.** A ranked list under a cap, a bridge, a timeline, a forecast path
+   with bands, a flagged set with its false-alarm rate: the shape's cells are many gradable criteria, and the
+   results that price the task sit in different cells.
 
 ## Part 2. What Mark measured, which still binds
 
 Eleven Mark portal rubric figures sorted cleanly (`evidence.md`): **every ask layer at or over 70 was reachable by
 executing something written down**, and every layer that held rode a reconstruction across two systems or grains
-that no sentence states. Under Sulfur the asks ride the deep step instead of a data device, but the first finding
+that no sentence states. Under Sulfur the asks are the results of the chain instead of data devices, but the first finding
 binds every ask: nothing written down may carry an ask's difficulty. These rules are applied before an ask is
 drafted:
 
@@ -139,11 +138,11 @@ level, all else ties under every handling.
 ## Part 3. Mark rules that Sulfur supersedes, and why
 
 - **"No ask keyed to the call or its construction"** (Mark ban 4; 110 at 84, 464 v2) and **"decoupled in
-  computation"** (Mark 1.3): in Mark a coupled ask was collected by every response that landed the call, which raised
-  the top-two pair. Under Sulfur the run that lands the call is expected to collect the coupled asks, and the bar is
-  met by the run off the call losing them; decoupled asks are exactly what that run would still answer. The surviving
-  half of the rule: no ask hands over the construction (no "for the option you recommend" that a wrong pick can
-  still answer on its own terms, no ladder walk that names the rungs).
+  computation"** (Mark 1.3): in Mark a coupled ask was collected by every response that landed the call. Under the
+  results chain every ask is a result with work of its own, so an ask that only restates the call's construction
+  (the same fit read at another cell) double-counts one result and is cut or rebuilt. The surviving half of the
+  rule: no ask hands over a construction (no "for the option you recommend" that a wrong pick can still answer on its
+  own terms, no asking sentence that names the steps).
 - **"An ask's device may turn on data semantics or rule application"** (Mark 2.1): Sulfur reviewers read where each run
   first went wrong, so an ask lost on a reading or a rule marks the task as a surface stump. Every ask's difficulty is
   analytical.
@@ -207,11 +206,11 @@ without a script behind it is the author's exposure, not the solver's).
 
 
 
-## Part 5. The ask ladder, determinism and the audit
+## Part 5. Each result's stops, determinism and the audit
 
-Each ask is a ladder of three to five stops, complete competent pipelines at distinct values outside the bin:
-the natural read, the half-handled device, the over-corrected read, the right rule on the wrong population, the
-answer. The golden sits mid-bin; a miss inside the bin needs more device mass. The ladder file comes from the
+Each result has three to five stops, complete competent pipelines at distinct values outside its band: the quick
+read, the careful but hurried read (the deep class named in the results chain), the over-corrected read, the right
+method on the wrong population, the answer. These are the passes `effort.py` scores. The golden sits mid-bin; a miss inside the bin needs more device mass. The ladder file comes from the
 golden's code and never ships. Every figure is separately gradable, a quantity, never a treatment or device word.
 
 **The span floor:** eight or more files and ten to fifteen columns on the golden's causal path, each file moving
@@ -247,13 +246,12 @@ without the inconsistency is a fork however good the inconsistency is (182's "th
 not record"). Take the lazy answer's handhold away (rename channels after what the instrument measures, not after
 the ask's words) and word the quantity so the device's rows are inside it by construction.
 
-**The ceiling script** (`ceiling.py` or its sibling, named on the `Measured by:` line): two rows, the landed run
-(the deep step taken, every mess item cleaned, every filed rule read) and the shallow run (the default path, every
-mess item cleaned, every rule read), every ask contributing a scored figure to both rows; computed on 38, 7 and 55 so
-builds are comparable; the worst honest number in the gated field
+**The effort script** (`effort.py` on `generator/effort.json`, named on the `Measured by:` line): three passes, every
+result contributing a scored figure to each, computed end to end by the generator's own code on the cut pack and
+priced on 38, 7 and 55 so builds are comparable; the worst honest number in the gated field
 (182 wrote 39.1 for a response that skipped the filed rules while the cracker measured 75.2). The script is read,
-not just run: scoring the same stops on both rows, hardcoding an ask to zero, or swapping the rows' names have
-each passed `precut.py`. Re-run it after every change, not once at the end. Cutting a figure no device reaches is
+not just run: scoring the same stops on two passes, hardcoding a result to Missed, or a hand grade that ignores the
+chain have each passed a gate that only read the sheet. Re-run it after every change, not once at the end. Cutting a figure no device reaches is
 a correctness check as well as a ceiling lever (190's plain quarterly count was hiding a quarter-basis defect).
 
 Every ask answer recomputes from the bundle, forced by the records; assert every stop and delta, recompute every
@@ -263,21 +261,21 @@ device at a time, organ and records together; never delete an organ.
 
 ## Part 6. The returned-task revision
 
-**The call held, the average reached 60** (`/fix-rubric`, from `/triage-runs`' `FIX_ASKS`, proved by `freeze.py check
---mode rubric`): read which criteria the run off the call still passed and why. Each one is re-sited downstream of the
-deep step or dropped; each critical component that a shallow run also got right is replaced by a link of the chain.
-The call sentence, the ladder and the main rows stay. **The call landed in both runs:** the ladder first
-(`stumping`), never the asks.
+**The losses were analytical but the average reached 60** (`/fix-rubric`, from `/triage-runs`' `FIX_ASKS`, proved by
+`freeze.py check --mode rubric`): read which results both runs earned and why. A result earned only because its
+difficulty was a reflex (the textbook method, a plot, a holdout) is rebuilt around a move beyond it or replaced by a
+result from an area the chain does not yet reach; a critical component that the hurried pass also got right is
+replaced by one it loses. **The runs lost most of their points on one result**: the task is thin, so the fix adds
+results that need their own work rather than hardening that one. Never harden by planting.
 
 **A stopping rule checks its fallback is shippable**: "cut the layer back to what the records force" is not a
-fallback where pinning the open quantities kills the asks' judgments and the pair sits near the bar (Mark 182).
+fallback where pinning the open quantities kills the results' judgments and the pair sits near the bar (Mark 182).
 
-## Part 7. The ask sheet
+## Part 7. The effort sheet
 
-`## Ask sheet` is the ledger `dataset-generation` builds against and `precut.py` reads. Per ask: figures, the deep
-step's output it reads, its own second judgment, its file and column count, the shallow run's value against the
-golden, the landed run's risk, the pin test's answer, and the mess on its path with the handling every careful run
-applies. Then a table whose header names the cracker (the landed run), one row per ask ending `miss` or `keep`; the
-lines `Shallow keep:` (per cent of ask weight the shallow run keeps, target 10, under 25), `Pair ceiling:` (at or
-under 50) and `Measured by:` naming the script that ran on the cut pack. Precut reads `Mirror leakage:` as the same
-figure as `Shallow keep:` for builds that carry the older label.
+The design note's `## Results chain` and `## Effort test` are the ledger `dataset-generation` builds against and
+`precut.py` reads (`../stumping/references/design-note-template.md`): per result, its asking sentence's block, its
+band, the hurried pass's value against the golden, and the mess on its path with the handling every careful run
+applies; then the three-pass table, `Measured by:` naming `effort.py` on `generator/effort.json`, `Largest single
+hint:` and `Pair estimate:` (50 or under). Builds cut under the retired design carry `## Ask sheet` with `Shallow
+keep:`, `Pair ceiling:` and a cracker table, and `precut.py` reads them there.

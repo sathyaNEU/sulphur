@@ -18,20 +18,24 @@ Run these in order and stop at the first failure:
    Exit 1 is a BLOCK and the command stops there: relay the nearest builds it printed and the axis
    to redraw. A WARN is relayed with the one-line differentiation the design note carries, or the
    lack of one, which is a finding.
-   If the card's `stump` or `driver` is empty, fill it from the design note's stump sentence first
-   (`guard.py validate <task>` afterwards), because a card with no heart cannot be checked.
+   If the card's `stump` or `driver` is empty, fill it from the design note's results chain first (the driver: the
+   chain's hardest move with the domain nouns stripped; `guard.py validate <task>` afterwards), because a card with
+   no heart cannot be checked. A card drawn from 2026-11-09 also needs `answer_shape`, `weight` and
+   `chain_signature`.
 2. **The surface screen.** `python3 .claude/skills/fingerprint/guard.py surface <task>`. A promoted
    pair is a rename or a regeneration, not an approval.
-3. **The paper gate and the prompt gate.** `python3 .claude/skills/stumping/precut.py <task>` exits 0 on a
-   build designed under the current skill (it runs `voice-check.py` on `prompt.txt`); on a build from before
-   the rule, relay the failing rows as findings and carry on, because the author decides.
+3. **The paper gate, the effort test and the prompt gate.** `python3 .claude/skills/stumping/precut.py <task>`
+   exits 0 on a build designed under the current skill (it runs `voice-check.py` on `prompt.txt` and `effort.py`
+   on `generator/effort.json`). A build cut under the retired single-deep-step design shows the `doctrine` WARN:
+   say plainly that the client returns that design since 2026-11-09 and that it should be re-rooted to a results
+   chain before upload; the author decides.
 4. **The leak report.** `<task>/leak_check_report.md` must exist and its verdict line must not read
    LEAK. If it is missing, run `python3 .claude/skills/leak-check/leak.py <task> --quiet` and read
    the verdict. REVIEW passes only if every REVIEW line is answered in the design note; say which
    are not.
-5. **The design note's stump sentence.** Grep `DESIGN_NOTE.md` for the one sentence naming the
-   wrong committed answer a competent solver files and the step that lands them there. Absent, the
-   build has no stump to approve: stop and say so.
+5. **The design note's results chain.** `DESIGN_NOTE.md` carries `## Results chain`, `## Hidden factor record`
+   and `## Effort test`, and the effort table agrees with `effort.py`. Absent, the build has no argued difficulty to
+   approve: stop and say so.
 6. **The container gate.** `python3 .claude/skills/reduce-house-fixes/scripts/audit_containers.py <task>` exits 0
    on the zips the author will upload (`reduce-house-fixes` H1). Any FAIL stops the approval: a PDF not exported by a
    word processor, a workbook in openpyxl's form, a deck or document with its library's template, two files on one

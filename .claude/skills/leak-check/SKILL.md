@@ -5,7 +5,7 @@ description: "Check a built bundle for anything that hands the solver the answer
 
 # Leak check
 
-A leak is the author's text (the submission's answers, the design note's stump sentence, the generator's
+A leak is the author's text (the submission's answers, the design note's results chain and hidden factors, the generator's
 library names) turning up in `prompt.txt` or under `target/`. `leak.py` looks for it mechanically; one
 reader then reads the pack as a solver would.
 
@@ -86,17 +86,19 @@ step: `build-pipeline` classes a rung executed as a work order as announced, not
 `prompt.txt` and `target/`, never the design note, generator, submission or report. It reads the pack for leaks and never solves
 the task (no figures, no answer, no score):
 
-1. Which sentence or file tells you the decisive step? Quote it.
+1. Which sentence or file tells you how any part of the analysis should be done (a step, a comparison, an
+   adjustment, a grouping, a population, a window)? Quote it.
 2. Which file already ranks or scores the candidates on the prompt's question?
 3. Which file exists only to help the analyst?
 4. Which figure or name reads as the answer rather than context?
-5. Which filed sentence, read literally, fixes how the main figure is computed or over which population?
-   Quote it and give its literal result. The main thread checks it is the golden; if it is the easy
-   answer it is a main-call fork (`determinism-check` §1).
-6. What decides the main answer: an analytical choice, reading one field, code, unit or definition
-   correctly, following a stated rule or procedure, or catching something that looks planted? Quote the
-   sentence or name the file that decides it. Anything but an analytical choice (a field reading, a stated procedure, a planted
-   catch, a replayed figure, one fact) is a Sulfur banned-stump finding (`CLAUDE.md`, first section): the build goes back to stage 2.
+5. Which filed sentence, read literally, fixes how any graded figure is computed or over which population?
+   Quote it and give its literal result. The main thread checks it is the golden; if it is the hurried
+   figure it is a fork on that result (`determinism-check` §0 and §1).
+6. Is there one thing (a file, a sentence, a column, a pattern that looks built into the data) that, once noticed,
+   would make most of what the prompt asks for routine? Name it and say what it would settle. Then, for what the
+   prompt asks: does each part turn on analysis, or on reading one field, code, unit or definition correctly,
+   following a stated rule or procedure, or catching something that looks planted? Anything but analysis, or any one
+   thing that settles most of it, is a banned finding (`CLAUDE.md`, first section): the build goes back to stage 2.
 
 Answers append to the report under `## Solver's-eye read`, with a verdict on each REVIEW line. The main
 thread rules fix or harmless per line, harmless ones one line each in the design note.

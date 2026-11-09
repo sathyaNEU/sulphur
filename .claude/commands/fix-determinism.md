@@ -28,13 +28,15 @@ under each.
 - `solution_incorrect`, `missing_input_data`, `answer_contradicts_files`: a figure that does not recompute
   from the shipped files, or a fact the golden uses that no file carries.
 
-**3. The stump test and the banned list, before choosing a move.** A closure that files the method makes the
-decisive step rule application, which the Sulfur standard bans whatever the determinism verdict
-(`CLAUDE.md`, first section). Close the WHAT, never the HOW. Then the stump test: Ask whether the fork *is* the stump: does the golden's lead
-over the easy answer come from the reading rather than from the analysis? If closing the fork in either
-direction makes the default path land on the golden, the stump lived in the fork (eight builds died this
-way). **Stop**: write the line in `## Tried and rejected`, set `pipeline.json` `status` `DESIGN`, and report
-that this is a redesign (`/build taskNN from 2`), not a determinism fix. Never keep a fork open to keep a stump.
+**3. The fork-is-the-result test and the banned list, before choosing a move.** A closure that files the method
+makes that result rule application, which the client bans whatever the determinism verdict (`CLAUDE.md`, first
+section). Close the WHAT, never the HOW. Then ask whether the fork *is* a result's difficulty: does the golden's
+lead over the hurried figure at that result come from the reading rather than from the analysis? If closing the fork
+in either direction puts the hurried pass inside the result's band, the difficulty lived in the fork (eight builds
+died this way). **Stop**: write the line in `## Tried and rejected`, set `pipeline.json` `status` `DESIGN`, and
+report that this result is redesigned (`/build taskNN from 2`), not pinned. A fork whose fix is a wider band is
+closed by widening the band to what the honest family shares, then `effort.py` re-run: a band that now holds the
+hurried figure grades nothing, and the result is redesigned. Never keep a fork open to keep a difficulty.
 
 **4. Close it with the strongest move that holds** (`determinism-check` §3):
 - **C1 converge:** align the records so every reading selects the same rows and the same figure; asserted on
@@ -42,9 +44,9 @@ that this is a redesign (`/build taskNN from 2`), not a determinism fix. Never k
 - **C2 confirm / C3 corridor / C4 separate**, in that order, as the closure table defines them.
 - **A pin at authority, once:** one filed sentence in the governing document (never the prompt, which
   carries the question and no convention) that fixes the WHAT (population, window, unit, inclusion,
-  rounding), never the HOW. Run the readability screen (`stumping` 2.1, test 1) on the exact wording: a pin
-  that names the decisive quantity, or only makes the solver ask the question, spends the stump; reword it
-  or use C1.
+  rounding), never the HOW. Read the exact wording as the runs would: a pin that names a result's quantity or
+  step, or only makes the solver ask the question, hands that result over (`stumping` Part 5); reword it or use
+  C1.
 - A figure that does not recompute is fixed in the generator so `figures.json`, the golden and the write-up
   agree; the write-up is redrafted from `figures.json` (`submission-writeup`).
 - `prompt_ambiguity` on an ask: tighten that ask's wording only, unit and rounding kept, `voice-check.py`

@@ -1,23 +1,28 @@
 ---
 name: dataset-generation
-description: Build the input pack that carries a designed deep step. Covers scope, Sulfur's input gates (10+ usable files in 2+ categories, two large messy CSVs, one of 20,000+ rows and one of 10 to 20 printed pages or more, 2+ unlabelled distractors, real license-clean sources with source, pull date and license recorded, nothing LLM-generated or broken on purpose), file roles, calibration and context artifacts where a strategy needs them, rung exactness, authentic Layer 1 mess and the realism gate, governing documents, provenance and metadata.json, the generator's assertions (the Sulfur block: the field's raw material, neutral mess, the analyst test, the deep chain, the one-fact test, the rivals), the independent verifier and byte-identical rebuilds. Use at the build stage once precut.py passes the design note, when repairing a pack, or when a number does not reproduce. Never build data before the ladder exists.
+description: Build the input pack that carries a results chain to the client's bar of 2026-11-09. Covers scope, the data doctrine (generated data that behaves like the real thing throughout, by simulating the process that makes the files, or public data used as is), Sulfur's input gates (10+ usable files in 2+ categories, two large messy CSVs, one of 20,000+ rows and one of 10 to 20 printed pages or more, 2+ unlabelled distractors, source, pull date and license recorded, nothing LLM-generated or broken on purpose), real breadth, file roles, authentic Layer 1 mess and the realism gate, governing documents, provenance and metadata.json, the generator's assertions (the bar block: the field's raw material, neutral mess, each result's hurried figure, no one thing, the one-fact test computed, the rivals inside each band), effort.json, the independent verifier and byte-identical rebuilds. Use at the build stage once precut.py passes the design note, when repairing a pack, or when a number does not reproduce. Never build data before the results chain exists.
 ---
 
 # Building the evidence pack
 
-> The prompt names the decision; the pack is the task. Every rung reproduces to zero drift from the
-> bundle, and every rival dies to a fact in the bundle. A golden number the pack cannot recompute does
-> not exist.
+> The prompt names the decision; the pack is the task. Every result reproduces to zero drift from the
+> bundle, and every rival lands in its band or dies to a fact in the bundle. A golden number the pack cannot
+> recompute does not exist.
+
+**Reading the older sections.** Sections 3 to 9 carry Mark's measured rules in the vocabulary of the retired
+single-step design. Read "rung" as a stop at one result (a pass's value there), "the ladder" as a result's stops,
+"the default path" as the careful but hurried pass, and "the stump" as a result's difficulty; every rule still holds
+result by result.
 
 **Prerequisites.** The card is registered clear of BLOCK (`fingerprint`), and `DESIGN_NOTE.md` passes
-`stumping/precut.py` (pairing, default path, stump sentence, ladder, semantic fork table, closure table,
-ask sheet). Read its `## Tried and rejected` first.
+`stumping/precut.py` (the results chain, the hidden factor record, the effort test on paper, the data provenance, the
+template check, the fork and closure tables). Read its `## Tried and rejected` first.
 
 ## 1. Scope, and the evidence the objective needs
 
-One client domain, one task type, one of the eight Axis 1 objectives
-(`guide-to-prompt/references/domains/README.md`); house domains stay valid only for cards on file. If the
-stump needs evidence from a second sector, the stump is wrong. Framing rule: the entity is a platform, the
+One client domain, one task type, the assigned analysis type (one of the nine,
+`guide-to-prompt/references/domains/README.md`); house domains stay valid only for cards on file. If a result needs
+evidence from a second sector, the result is wrong. Framing rule: the entity is a platform, the
 public dataset the market it sells into. The pack carries the raw material the task type's own analysis
 runs on (§7.1, R1): a pack whose deciding computation is a sort, filter, join or stated score over shipped
 columns makes the domain a backdrop, and goes back to design.
@@ -26,6 +31,7 @@ columns makes the domain a backdrop, and goes back to design.
 |---|---|
 | Descriptive | row-level records at the decision grain, real volume (only summaries ship) |
 | Anomaly | baseline history, seasonal structure, the ops log separating artifact from event (a spike with no baseline) |
+| Comparative | both groups or periods at row level, each driver's own records, and the totals the bridge reconciles to (only the two totals) |
 | Root-Cause | two or more drivers correlating in aggregate, and the separating evidence (one driver) |
 | Opportunity Sizing | the addressable pool at row level and the evidence taking it to the realisable (one number, or retaggable as forecast) |
 | DQ Monitoring | the pipeline's own records (deliveries, arrivals, counts, schemas, checks, incidents, routing) beside the published (a business metric dressed up) |
@@ -33,18 +39,40 @@ columns makes the domain a backdrop, and goes back to design.
 | Forecasting | history to fit and hold out, the regime break in the series, settled outcomes where a back-test chooses (every method agrees, or the horizon is unpinned) |
 | ETL | three or more genuinely disagreeing sources with crosswalks, id maps, dated FX or unit tables (cosmetic differences) |
 
-## 2. Sourcing
+## 2. Sourcing: data that behaves like the real thing throughout
 
-Start from the author's **starter data kit** when one was claimed (the platform's Starter data kits page); otherwise
-source a **real public spine** (authenticity, volume, real mess, clean licence), **real publisher documentation**,
-and a **constructed operating layer** (extracts, ledgers, configs, memos) where the stump lives. A fully
-constructed pack passes when every derived file is declared and behaves like a real export.
+Two routes, both legitimate (the client: "Start from real data where the difficulty already exists... If you have to
+assemble or simulate data, such as a realistic dump of training logs, it must behave like the real thing throughout,
+with many genuine patterns and noise, not one effect added for the solver to find"):
 
-**Blocking:** never fabricate, corrupt, pad or truncate to make difficulty; never ship a long generated
-PDF, DOCX or PPTX (constructed documents are two to four pages of operational content); AI may write
-transforms, never create the empirical source evidence. **The spine:** the market the entity sells into,
-10^3 to 10^6 rows, a natural key, shippable documentation, genuine mess (non-response, vintage code
-changes, revisions), a dimension the decision grain can differ from. Check the volume gate here.
+- **Generated, the house route.** The generator simulates the process that makes the files: the organisation's
+  systems and the people and physics behind them. Business-realistic data is fine as long as it behaves like the
+  real thing throughout (the author's ruling, 2026-11-09).
+- **Public, used as is, welcome where it fits.** A real public spine (authenticity, volume, real mess, a clean
+  licence) with its real publisher documentation, sampled, joined or relabelled for a fictional organisation where
+  needed, with the source, pull date and license in `metadata.json`. Network downloads work from this machine
+  (GitHub raw, NOAA NCEI and Zenodo answered; some portals refuse).
+
+**What "behaves like the real thing throughout" means, asserted in the generator:**
+1. **The process first.** Write how each file's rows come to exist (who records them, when, by which route, what they
+   cannot see) and simulate that; the results' difficulties fall out of the process (a logger that changed
+   resolution, counters that restart on resume, cohorts that have not matured, sources keyed differently, many
+   series moving together with noise), never out of an effect placed for a result.
+2. **Many genuine patterns and noise.** Seasonality, trend, scale effects, day-of-week and holiday structure,
+   overdispersion, heterogeneity across units, correlated shocks: three or more named in the note's `Genuine
+   patterns:` line, present across the whole dataset.
+3. **Several genuine problems of different kinds**, each produced by a process step (a meter swap, a schema change, a
+   late-arriving fact, a revised vintage, a failover duplicate), plus benign oddities that decide nothing.
+4. **Nothing only where it decides.** Every factor a result needs appears across the units the way its process
+   would put it there; `checks.py` asserts each factor's footprint outside the deciding units (the house rule in
+   `stumping` 2.2).
+5. **Real breadth where it is natural.** Many runs, units, series or files, so deciding what to look at is work.
+
+**Blocking:** never fabricate, corrupt, pad or truncate to make difficulty; never ship a long generated PDF, DOCX or
+PPTX (constructed documents are two to four pages of operational content); AI may write transforms and simulators,
+never hand-write the empirical records. **The spine:** 10^3 to 10^6 rows, a natural key, shippable documentation,
+genuine mess (non-response, vintage code changes, revisions), a dimension the decision grain can differ from.
+Check the volume gate here.
 
 ## 3. Roles and the input gates
 
@@ -260,39 +288,38 @@ repeating block; no free text recurring beyond a real rate; every persona from `
 written by the house writers and the gate green (`reduce-house-fixes` H1); timestamps coherent (§9). A tell the leak reader still finds is a
 generator fix before the judge.
 
-### 7.1 The Sulfur standard, executed
+### 7.1 The bar, executed
 
-The generator holds the clean truth (the world before any mess is applied or any document written), so the
-Sulfur standard is asserted, not argued: one block in `checks.py`, every label starting `R1` to `R6`, run on every
-build and every repair.
+The generator holds the clean truth (the world before any mess is applied or any document written), so the bar is
+asserted, not argued: one block in `checks.py`, every label starting `R1` to `R7`, run on every build and every repair.
 
-- **R1, the field's raw material ships.** The pack carries what the task type's estimator runs on, at the
-  grain the field works at (paired readings, censored durations, a triangle's claims, assignment records,
-  microdata with its weights), never the deciding quantity precomputed and never a list to sort. Assert that
-  the golden's decisive computation reads those rows and that no shipped column holds the deciding quantity.
-- **R2, every mess item is real and neutral.** The design note's Layer 1 inventory names each item, the
-  system that writes it, the file it sits in and its natural mishandling. Per item, the golden method run
-  with that item mishandled leaves the call and every critical component where they were, or moves only its
-  ledgered asks (§7); one assertion per item.
-- **R3a, the analyst test.** The easy route (the default path) run on the clean truth, every filed rule
-  applied, files the named wrong answer. If executing the stated rules reaches the golden, the decisive step
-  is rule application.
-- **R3b, the decisive step alone.** The easy route with only the decisive step changed files the golden;
-  each lower rung's single correction leaves it on a wrong answer.
-- **R3c, no plant.** None of the client's plant kinds ships: a copied or backfilled block, a swapped or
-  reversed series, a hidden year-to-date column, a decoy memo or staff draft, a stakeholder figure wrong only
-  so the task can overturn it. The realism sweep's repeated-block check covers the first two by assertion.
-
-- **R4, the chain.** For each inference in the design note's `Chain:` line, the golden method with that one
-  inference skipped (the shallow version of it) files a wrong call or moves a critical component outside its
-  rounding bin. A link whose skipping changes nothing is not a link, and a chain with fewer than three live links
-  fails Sulfur's depth bar.
-- **R5, the one-fact test.** The easy route plus the likeliest single hint (the `One-fact test:` line's sentence,
-  executed literally) still files a wrong answer. If one fact rescues it, the stump is surface.
-- **R6, the rivals.** Every rival method in the fork table that a careful analyst could defend, run on the clean
-  truth, lands on the golden's call, or is ruled out by a named shipped fact asserted here.
+- **R1, the field's raw material ships.** The pack carries what each result's analysis runs on, at the grain the
+  field works at (paired readings, censored durations, a triangle's claims, assignment records, microdata with its
+  weights, per-step logs), never a result precomputed and never a list to sort. Assert that each result's golden
+  computation reads those rows and that no shipped column holds a result.
+- **R2, every mess item is real and neutral.** The design note's Layer 1 inventory names each item, the system that
+  writes it, the file it sits in and its natural mishandling. Per item, the golden method run with that item
+  mishandled moves only the assembly result that grades it (if one does) and leaves every other result inside its
+  band; one assertion per item.
+- **R3, each result's hurried figure.** For every result the careful but hurried pass loses, its method (the deep
+  class named in the results chain) run on the clean truth files a figure outside the result's band by a stated
+  margin; for every result the pass earns, it lands inside. These are the values `effort.json` carries.
+- **R4, no plant.** None of the client's plant kinds ships: a copied or backfilled block, a swapped or reversed
+  series, a hidden year-to-date column, a decoy memo or staff draft, a stakeholder figure wrong only so the task can
+  overturn it. The realism sweep's repeated-block check covers the first two by assertion.
+- **R5, no one thing.** For every hidden factor in the record: its footprint outside the deciding units (the factor
+  present across the data the way its process would put it there); and the hurried pass with that factor alone
+  corrected rescues no more than a third of the results it lost. A factor that rescues more is the one thing.
+- **R6, the one-fact test, computed.** Each hint in `effort.json` (the `Largest single hint:` sentence first),
+  executed literally on the hurried pass, rescues the results it lists and no others.
+- **R7, the rivals.** Every rival method in the fork table that a careful analyst could defend, run on the clean
+  truth, lands inside the result's band, or is ruled out by a named shipped fact asserted here.
 
 A failing R assertion is a design failure: back to `stumping`, never patched in the data.
+
+**`effort.json`** is written by the generator after the golden: each result's golden (from the same object that
+writes `figures.json`), band, partial band, dependencies, independent input if any, and the value each pass files,
+computed by running that pass's methods end to end; then `python3 .claude/skills/stumping/effort.py taskNN`.
 
 ## 8. Governing documents
 
@@ -340,10 +367,12 @@ concrete, dates reconciling with the data; never a generator's voice or a task s
 
 ## 10. Build order
 
-1. Read the design note: rungs (candidate, killing fact, carrying file), ask sheet (pool, device, path).
+1. Read the design note: the results chain (each result's pin, band, hurried figure and carrying files), the hidden
+   factor record, the data provenance (the process to simulate).
 2. Spine (§2). 3. Calibration corpus if needed (§4), records first, twin pair from the start.
 4. Operating extracts. 5. Lookup tables, each file's own conventions in its own form (§3, §6.5).
-6. Compute every rung; assert separation, dominance, disagreement (§6).
+6. Compute every result's golden and its stops; assert the bar block (§7.1) and separation (§6); write
+   `figures.json` and `effort.json` from the same objects.
 7. Context artifact (§5), distractors (§8.3), `metadata.json`. 8. Governing document and voices (§8).
 9. Mess (§7), then step 6 again: nothing moves. 10. Provenance in `metadata.json` (§9). 11. Verify (§11).
 
@@ -351,13 +380,12 @@ After any later data edit, re-run step 6 in full.
 
 ## 11. Verification
 
-**Asserted paths:** every rung and rival-killer reproduces from the bundle; the default path lands on its
-named wrong answer; each intermediate rung on its own; the correct path on the answer from shipped
-evidence alone; the fork grid cell by cell, each losing cell mapped to the sentence it violates (maturity
-and censoring included); mess neutrality per complication; the cracker sheet (`supplemental-stumping`)
-outside every ask's bin.
+**Asserted paths:** every result and rival-killer reproduces from the bundle; each hurried pass files its named
+figure at each result it loses; the correct path on every result from shipped evidence alone; the fork grid cell by
+cell, each losing cell mapped to the sentence it violates (maturity and censoring included); mess neutrality per
+complication; `effort.py` exit 0.
 
-**`checks.py`, 40 or more assertions:** the three-rules block (§7.1, R1 to R3c); rung winners by name and margins; position table; dominance;
+**`checks.py`, 40 or more assertions:** the bar block (§7.1, R1 to R7); each result's golden and stops by name and margins; position table; dominance;
 disagreement both ways; calibration back-test and swept count; fork grid and every `SF` row; mess
 neutrality; each graded figure's distance to its bin edge; every figure a voice quotes; no round totals,
 shares or uniform counts; each load-bearing fact in exactly one file; the input gates; the realism sweep;

@@ -1,6 +1,6 @@
 ---
 name: submission-writeup
-description: Draft or revise submission.md, the Sulfur answer blocks the author pastes into the platform, and every golden deliverable in the golden ZIP. Invoke whenever a submission.md is being written, rewritten, extended or reviewed for a task folder, including when the request just says "write the submission", "draft the answer", "do the golden for taskNN", or when a review says a block is thin. Carries the four platform blocks in order (Final Recommendation naming what it rejects, Supplementary Questions numbered one per sub-ask, Critical Components 2 to 5 with the deep step among them, Step-by-Step showing the deep step and the insufficient analysis it rejects, closing on why no other conclusion survives), the rule that every figure is emitted by the generator and recomputes, and the golden ZIP rules (exactly the files the prompt requests, one set of numbers).
+description: Draft or revise submission.md, the Sulfur answer blocks the author pastes into the platform, and every golden deliverable in the golden ZIP. Invoke whenever a submission.md is being written, rewritten, extended or reviewed for a task folder, including when the request just says "write the submission", "draft the answer", "do the golden for taskNN", or when a review says a block is thin. Carries the four platform blocks in order (Final Recommendation naming what it rejects, Supplementary Questions numbered one per sub-ask, Critical Components 2 to 5 drawn from different areas of the results chain, Step-by-Step walking every result and showing the hurried analysis it rejects, closing on why no other conclusion survives), the rule that every figure is emitted by the generator and recomputes, and the golden ZIP rules (exactly the files the prompt requests, one set of numbers).
 ---
 
 # Writing the answer blocks
@@ -10,7 +10,8 @@ Questions, Updated Critical Components and Updated Step-by-Step fields. The rubr
 the prompt (`guidelines/client/overview.txt`, "How the rubric is built"): the recommendation and the critical
 components carry the most weight, each supplementary answer becomes criteria, and instruction-following (files
 present and named, rows and columns, length) takes a small share. So these blocks decide what the runs are graded
-on: **every criterion they generate should be one a run that skipped the deep step gets wrong**.
+on: **the criteria are the results of the chain** (`stumping` 1.3), each one a result a run that skipped that
+result's work gets wrong, and the results the runs lose sit in different blocks and different areas.
 
 ## Every figure recomputes, and is emitted, never typed
 
@@ -19,7 +20,8 @@ steps that read differently when followed literally were twelve of sixteen write
 reports. Every extra figure is one more claim that can fail.
 
 - The generator writes `<task>/generator/figures.json` (the call, each component, each step result, each
-  supplementary answer, and the default path's answer, as the blocks state them); the blocks are drafted from it,
+  supplementary answer, every result of the chain, and the careful but hurried pass's answer, as the blocks state
+  them); the blocks are drafted from it,
   and this fails the build on any number absent from it:
 
 ```
@@ -28,7 +30,7 @@ python3 .claude/skills/determinism-check/figures_check.py taskNN
 
 - **Cut incidental figures, never owed ones.** Every figure a component or an ask owes stays (each is a criterion).
   A figure that only shows working (a sub-count, a denominator) goes, except where the Step-by-Step needs it to show
-  the deep step.
+  a result's hard move.
 - **Reproducible, not low-level.** Steps name the file and the method that produce each result; they do not walk
   arithmetic, restate the files' conventions or narrate cleaning. A convention needing a paragraph belongs pinned in
   a shipped file.
@@ -56,8 +58,9 @@ the task type, and the objective. No scenario recap.
 
 **1. Final Recommendation.** The call first, stated as a call, with no conditions and no "subject to"; a hold is a
 call ("Fund none of the three programs this cycle"). Then the deciding figure and the margin, and **what it
-rejects**: the answer the reasonable but insufficient analysis gives, named with its figure, and in a clause why it
-fails. This block answers the main recommendation only.
+rejects**: the answer the careful but hurried pass gives, named with its figure, and in a clause why it fails. Where
+the answer is a set of results with no single call (a timeline, a bridge, a flagged set), the recommendation states
+the headline result and the action it supports. This block answers the main recommendation only.
 
 > **Send the winter outreach team to Harlow district, not Brenton.** Harlow's excess is 41 cases a week once the
 > lab's testing growth is separated out; Brenton leads on the raw count (63) only because its testing doubled.
@@ -78,21 +81,21 @@ Each answer is graded at the main call's bar: it reproduces and is uniquely forc
 - **Never a markdown table** (pipes break, wide tables wrap, odd tables are an LLM tell).
 - A figure in two places has the same rounding in both; compute it once in code and carry it.
 
-**3. Critical Components.** 2 to 5 load-bearing findings **every valid method must compute** to reach the call,
-one line each, the figure in bold at its rounding everywhere else. **The deep step is among them**: the comparison
-chosen and the estimate it gives, the projection of the unfinished outcomes, the design-matched interval, whichever
-link of the chain decides. These carry the most rubric weight, so a cleaned total, a row count or a reconciliation
-that any analysis reaches is not a component. Test: if a defensible method could skip it and still land the call,
-cut it; if the shallow analysis also gets it right, it grades nothing.
+**3. Critical Components.** 2 to 5 load-bearing results **every valid method must compute**, one line each, the
+figure in bold at its rounding everywhere else, **drawn from different areas of the results chain** (an assembly
+result with its gap to a control total, a model's estimate with its band, a backtest's error, an attribution's
+shares, an onset date), never three restatements of one fit. These carry the most rubric weight, so most of them are
+results the careful but hurried pass loses. Test: if a defensible method could skip it and still reach the answer,
+cut it; if the hurried pass also gets it right, it grades nothing but its place in the chain.
 
 > 1. Testing volume in Brenton rose **104 per cent** year on year against **11 per cent** in Harlow.
 > 2. Harlow's testing-adjusted excess is **41 cases a week** (90 per cent interval **33 to 49**).
 
-**4. Step-by-Step.** A short numbered path from the raw files to the recommendation and the supplementary answers,
-one sentence per step: the method, the shipped file it reads, and the figure it produces. It must make the deciding
-judgment explicit (which comparison, which model, which adjustment, and why the data rule out the simpler route)
-and **show the reasonable but insufficient analysis it rejects**: one step names the default path's method and its
-answer from `figures.json`, and the next names the data that overturn it.
+**4. Step-by-Step.** A short numbered path from the raw files through each result to the recommendation and the
+supplementary answers, one sentence per step: the method, the shipped file it reads, and the figure it produces. At
+each result the hurried pass loses, the step makes the judgment explicit (which comparison, which model, which
+adjustment, which check, and why the data rule out the simpler route) and **shows the hurried analysis it rejects**:
+the hurried method's figure from `figures.json`, then the data that overturn it.
 
 > 3. Ranked districts on raw weekly cases from `case_line_list.csv`: Brenton leads at 63 a week (the shallow read).
 > 4. Joined `lab_testing_volumes.xlsx`: Brenton's tests doubled while positivity stayed flat, so its rise is
@@ -134,8 +137,9 @@ convention; a conditional call; a golden ZIP whose file count differs from the p
 - [ ] Exactly the four blocks plus tags; none of the banned blocks
 - [ ] Final Recommendation first, one or two sentences, the deciding figure, what it rejects and why
 - [ ] Supplementary Questions numbered one per sub-ask, grouped by file, each file's look described
-- [ ] Critical Components 2 to 5, the deep step among them, none that the shallow analysis also gets right
-- [ ] Step-by-Step shows the deep step and the rejected analysis with its figure; closing passage names every rival
+- [ ] Critical Components 2 to 5 from different areas of the chain, most of them results the hurried pass loses
+- [ ] Step-by-Step walks every result and shows the hurried analysis it rejects with its figure; closing passage
+      names every rival
 - [ ] No incidental figure; shared figures agree everywhere to the same rounding
 - [ ] The golden ZIP holds exactly the requested files; code prints the components; `golden-realism` run after the
       figures froze

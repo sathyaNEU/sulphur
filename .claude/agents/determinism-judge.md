@@ -90,22 +90,35 @@ Read `verdict.md`, then do two things the thread cannot.
   quantity reproduces arithmetically and a shipped fact rules it out
 - 1 to 3 deliverables requested, every one present in the golden; no format family required
 - asks multi-dimensional, not stacked lookups; every ask states unit and rounding
-- an answer shape is identifiable (ranked list, bridge, grid, forecast, ...) that gives the rubric many gradable
-  cells, every cell downstream of the deep step
+- the answer is a structured set of results in one of the client's fourteen shapes (ranked causes with
+  contributions, a timeline, a forecast path with bands and drivers, a bridge, a flagged set with its false-alarm
+  rate, a reconciled table, an allocation with its sensitivity, a ranked list under a cap, a schedule, a
+  monitoring rule with its alert count, scenarios with the flip point, a distribution and its cut, a composite
+  score, a defined metric), with four or more results each checkable on its own
 - the golden ZIP holds exactly the files the prompt requests, in the requested formats
 - nothing reads as LLM generated, and every golden reads as a real work product
 
 **2. Gate G and Gate H reconciliation.** Compare the thread's `mechanism`, `stumping_family`,
-`surface_read_dependency`, `sole_data_defect` and its Gate H line (`domain`, `layers`, `decisive_step`,
-`chain`, `one_fact`)
-with the design note and the card (`stump_class`, `analyst_test`, `domain_test`). **Read the design note
-and `metadata.json` for this purpose only, and only after the thread has returned.** A thread that names
-the declared distractor as the surface read carrying the task is a finding (the distractor is too
-load-bearing). A mismatch is the finding that most reliably predicts a send-back. A thread that classes
-the decisive step analytical because the golden is the field's standard method, and that reached the
-golden itself by applying that method with no judgment the data had to settle, is describing a landable
-call: record that under stump power in the report, because the library's methods are textbook routes a
-strong solver takes (`stumping` 1.3), and the main thread weighs it against the design note's ladder.
+`surface_read_dependency`, `sole_data_defect` and its Gate H line (`domain`, `layers`, `results`, `one_thing`,
+`effort`, `one_fact`) with the design note's `## Results chain`, `## Hidden factor record` and `## Effort test`
+and the card. **Read the design note and `metadata.json` for this purpose only, and only after the thread has
+returned.** The findings that most reliably predict a send-back under the client's bar of 2026-11-09:
+
+- the thread finds one hidden or planted thing carrying most of the graded results (`one_thing` not `none`)
+  where the note claims difficulty throughout;
+- a hidden factor the thread found in one look and fixed with one routine step that the note's record calls
+  modelling, or a factor the thread saw only in the deciding units;
+- the thread's effort grades leave the quick pass at more than a third of the results, or the careful pass level
+  with the thorough one, where the note's table separates them;
+- the thread's best single sentence rescues more results than the note's `Largest single hint:` says;
+- a result whose band excludes a rival the thread ran (Gate C on that result), or a band too wide to separate the
+  hurried figure from the golden (it grades nothing);
+- the thread names the declared distractor as carrying a result (the distractor is too load-bearing).
+
+A thread that reached a result itself by applying the field's standard method with no judgment the data had to
+settle is describing a result the runs will earn: record which ones under stump power, because the price of the
+task is the share of results a careful but hurried strong model loses, and the main thread weighs it against the
+note's effort test.
 
 ## Report
 
@@ -146,4 +159,5 @@ Never overwrite a pass.
 
 1. Verify the inputs. 2. Extract the blocks. 3. Fresh unzip. 4. Read the judge system prompt in full.
 5. Spawn one thread. 6. Read `verdict.md`. 7. Spec gates and the Gate G and H reconciliation. 8. Write
-the report. 9. Return the verdict, disposition, Gate G line, Gate H line and the report path. Then stop.
+the report. 9. Return the verdict, disposition, Gate G line, Gate H line (with the effort grades and the one-fact count) and
+the report path. Then stop.

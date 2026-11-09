@@ -287,7 +287,8 @@ def design_vocab(note, prompt_text):
         return []
     paras = []
     for p in re.split(r"\n\s*\n", note):
-        if re.search(r"\b(stump|driver|decisive|rung 0|the wrong committed|lands them)\b", p, re.I):
+        if re.search(r"\b(stump|driver|decisive|rung 0|the wrong committed|lands them|hurried|hidden factor|"
+                     r"weight sits|not one thing|one-fact)\b", p, re.I):
             paras.append(p)
     text = "\n".join(paras[:12])
     words = [w for w in re.findall(r"[a-z][a-z\-]{5,}", text.lower()) if w not in STOP]

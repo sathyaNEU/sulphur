@@ -23,7 +23,8 @@ anything else.
 |---|---|
 | `domain`, `subdomain`, `client_domain` | domain and subdomain; the client domain a house domain sits in |
 | `niche` | the unusual sub-function, in the build's nouns (similarity) |
-| `objective`, `shape` | one of the eight objectives; prompt shape `01` to `18`, `single-figure`, `other` |
+| `objective`, `shape` | the assigned analysis type (one of the nine in `vocab.json` objectives); prompt shape `01` to `18`, `single-figure`, `other` |
+| `answer_shape`, `weight`, `chain_signature`, `results` | from 2026-11-09: one of the fourteen answer shapes; where the weight of the work sits (one of the eleven); the areas of the results chain in order (four or more, three or more distinct); the chain in one line |
 | `decision_type`, `answer_unit`, `scoring_unit` | kind of call, its unit, the unit it is scored or paid on |
 | `gap`, `pattern`, `generators` | decisive first |
 | `gate_g` | the mechanism carrying the stump |
@@ -32,7 +33,7 @@ anything else.
 | `decisive_rule_filed`, `official_decoy` | booleans; `false` plus `true` is the withheld rule with an official decoy, whatever the strategy says |
 | `validated_decoy` | the wrong method reproduces every certified figure and only a forward condition breaks it |
 | `stump_class` | `analytical`, `planted`, `data_semantics` or `rule_application`; only `analytical` passes |
-| `analyst_test` | the easy route a strong analyst takes after reading everything correctly, and its wrong answer |
+| `analyst_test` | what the careful but hurried pass files on the results it loses, and why (on retired cards: the easy route and its wrong answer) |
 | `domain_test` | the field's own analysis that decides, and why a noun swap breaks the task |
 | `layer2_family`, `layer2_pattern` | family from `vocab.json`; pattern `<domain>/<task-type>/<n>` from `layer2-rigor-patterns.md`, or `own:<name>` |
 | `layer1` | the Layer 1 techniques the pack carries |
@@ -172,6 +173,10 @@ BLOCK if any rule blocks, else WARN, else PASS; exit 1 on BLOCK.
 | `template.validated_decoy`, `template.validated_cap` | BLOCK | in the last build, or already three in the last twelve |
 | `overuse.strategy` | WARN | one strategy in three of the last twelve |
 | `three_rules.class`, `.analyst_test`, `.domain_test` | BLOCK | a card from 2026-10-10 missing them or not `analytical` |
+| `throughout.answer_shape`, `.weight`, `.chain` | BLOCK | a card from 2026-11-09 missing them, or a chain under four results or three areas |
+| `template.chain` | BLOCK, never cleared by differentiation | the same chain signature in the same order and the same answer shape as any card on file ("A lesson can come back in a new task. A structure cannot.") |
+| `template.chain_near` | WARN | the same chain signature, or the same answer shape and weight |
+| `ban.weight`, `ban.answer_shape` | BLOCK | the weight of either of the last two live cards; the answer shape of the last one (`overuse.weight` WARN within five) |
 | `three_rules.strategy_risk` | WARN | `time_semantics`, `grain_or_unit`, `identity_resolution`, `stated_rule_hard_construction`, `withheld_rule_corpus_fit` |
 | `test.same_puzzle` | BLOCK | gap, pattern and decision type equal, last twelve, lineage included (older: unless differentiated) |
 | `test.same_driver` | BLOCK | gap, pattern and Gate G equal, last twelve, lineage included (older: unless differentiated) |

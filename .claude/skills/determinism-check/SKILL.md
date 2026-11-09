@@ -1,6 +1,6 @@
 ---
 name: determinism-check
-description: "The determinism spec for every build: what is filed literally (the estimand, every convention), what may stay open (the method, only when forced), the literal-reader test, the semantic fork table, the closure moves, the generator assertions, figures.json and figures_check.py, the judge's gates A to H, and the judge run. Invoke while the ladder is designed, while the generator is written and on the finished build. The judge thread is spawned only at the pipeline's judge stage or when the author asks."
+description: "The determinism spec for every build, result by result: what is filed literally (each result's estimand, every convention), what may stay open (the method, only when forced), the band each result carries where reasonable methods differ and the rivals run to set it, the literal-reader test, the semantic fork table, the closure moves, the generator assertions, figures.json and figures_check.py, the judge's gates A to H, and the judge run. Invoke while the results chain is designed, while the generator is written and on the finished build. The judge thread is spawned only at the pipeline's judge stage or when the author asks."
 ---
 
 # Determinism
@@ -12,6 +12,30 @@ the shipped text, read literally, supports another. Findings in 25 judge reports
 not reproducing 19 (§5); estimand not literal 16 (§1); convention unpinned 13 (§3); method unforced 9
 (§1); a filed rule reading otherwise 7 (§1). task445 passed our judge twice and failed the portal on a
 population read literally; eight builds lost their stump when a pin removed the ambiguity it lived in.
+
+## 0. Determinism per result
+
+The client's bar asks for several checkable results, and the judge holds every one of them to Gates A to E on its own
+(`guidelines/determinism_judge_system_prompt.md`, Gate H, per-result determinism). So everything below applies to each
+row of the design note's `## Results chain`, not only to the recommendation:
+
+- **Each result is pinned** by the data or a stated convention, and its estimand (population, outcome, window, unit,
+  comparison) is filed so the literal reading is the golden.
+- **Each result carries a band where reasonable methods differ.** Run every defensible rival on the clean truth
+  (the rivals file in the generator), take the band they span, and state it in the answer blocks at the rounding the
+  ask names. The band is the client's own device ("Pin the question, the outputs and the baseline... where reasonable
+  methods differ, use a band"). A band that excludes a defensible rival is a Gate C failure on that result; a band
+  wide enough to hold the careful but hurried figure grades nothing, so the hurried figure sits outside every band by
+  a margin `checks.py` asserts.
+- **The grader compares every figure to the golden.** A later result built on a wrong earlier figure is wrong unless
+  it is asked against an input of its own; design those inputs into the world (`supplemental-stumping` Part 1) and
+  record them in the `Depends on` column. Never write a band wide enough to absorb an upstream slip: that is a band
+  that grades nothing.
+- **`generator/effort.json`** carries each result's golden, band and figures.json key; `effort.py` refuses a golden
+  that differs from the answer blocks' figure.
+
+In the sections below, "the stump" and "the decisive step" read as any result's difficulty: the WHAT is still filed,
+the HOW still stays open, and a result whose difficulty a filing hands over is a fork or a rule, never a result.
 
 ## 1. WHAT is filed literally, HOW may stay open
 
@@ -435,14 +459,14 @@ the write-up does not grade it.
 
 | Gate | Question | Fails as |
 |---|---|---|
-| H | Domain's own analysis (swap test), both layers, and a strong analyst who read every field and rule still wrong the easy way? | SEND_BACK |
+| H | Domain's own analysis (swap test), both layers, four or more results across three or more areas with no one hidden or planted thing carrying most of them, every hidden factor through the three conditions, the effort test separating the passes, the best single hint rescuing a third or fewer? | SEND_BACK |
 | G | Difficulty survives deleting every wrong number; not a lens swap? | SEND_BACK |
 | A | Every figure recomputes from the shipped files at their grain? | `solution_incorrect` |
 | B | Every decisive fact shipped; every distinctive term of the recommendation in some input? | `missing_input_data`, `answer_contradicts_files` |
 | C | Does an answer flip under an open definition, threshold, scope, window or rounding path? Literal reading first. | `underspecified_objective` |
 | D | Would rigorous solvers differ by reading a term, not by analysing? | `semantic_fork` |
 | E | Decision pinned, every ask single and precise? | `prompt_ambiguity` |
-| F | Can the stump sentence be written (the default path ends on a wrong answer), does at least one of the two runs miss the call on the paper ladder, and does a run off the call lose the asks with it (`supplemental-stumping` Part 0)? | too easy |
+| F | Does a careful but hurried strong model lose several results, in different areas, for analytical reasons, with the pair estimate at 50 or under (`effort.py`, `supplemental-stumping` Part 0)? | too easy |
 
 The judge's own text: `guidelines/determinism_judge_system_prompt.md`.
 
@@ -494,7 +518,8 @@ shipped twice and neither build was approved (447, 306).
 
 ## Checklist
 
-- [ ] Estimand filed literally, unobserved members stated; method filed (then not the stump) or forced, candidates separated, asserted
+- [ ] Every result's estimand filed literally, unobserved members stated; method filed (then not a result's difficulty) or forced, candidates separated, asserted
+- [ ] Every result banded by the rivals run on the clean truth, the hurried figure outside the band by an asserted margin; effort.json tied to figures.json
 - [ ] No filed rule, basis or formula with another literal answer; `Literal reader` line written
 - [ ] Semantic fork table complete, every row ruled out or convergent, the stump none of them, every row in `checks.py`
 - [ ] 22-axis closure table (`precut.py` exit 0); pins at authority; counter-pin sweep clean

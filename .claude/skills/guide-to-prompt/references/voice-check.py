@@ -301,6 +301,26 @@ def people_of(task):
     return out
 
 
+def pack_names(task):
+    """The attached files of the build, as (basenames, stem phrases), read from <task>/target/. The project lead
+    returns a prompt that names the attached files ("do you normally name out every single file that is attached?
+    You can just say 'see attached ZIP' or nothing at all"), so a prompt naming one fails in both modes."""
+    if not task:
+        return set(), set()
+    d = os.path.join(REPO, task if str(task).startswith("task") else "task%s" % re.sub(r"[^0-9]", "", str(task)),
+                     "target")
+    names, stems = set(), set()
+    for root, _, files in os.walk(d):
+        for f in files:
+            if f.startswith("."):
+                continue
+            names.add(f.lower())
+            stem = re.sub(r"[_\-]+", " ", os.path.splitext(f)[0]).strip().lower()
+            if len(stem.split()) >= 2:
+                stems.add(stem)
+    return names, stems
+
+
 def task_status(task):
     """The build's pipeline.json status, or '' when it cannot be read."""
     if not task:
@@ -460,6 +480,19 @@ def _gate(text, task=None, legacy=False):
     rows.append(("no stated role", "FAIL" if intro else "PASS",
                  "the prompt opens by saying who is asking (\"%s\"); go straight into the problem" % opening[:60]
                  if intro else "the prompt goes straight into the problem"))
+
+    # The attached files are never named (project lead, 2026-11-09): a pack file's name, or its stem read as words.
+    pnames, pstems = pack_names(task)
+    attached = sorted({m.group(0).lower() for m in FILE_TOKEN.finditer(text)} & pnames)
+    low = re.sub(r"[_\-]+", " ", text.lower())
+    attached += sorted(st for st in pstems if re.search(r"\b%s\b" % re.escape(st), low))
+    rows.append(("no attached file named", "FAIL" if attached else "PASS",
+                 "names %s: say nothing about the attachments, or \"see the attached ZIP\"" % ", ".join(attached)
+                 if attached else ("no pack file named" if pnames else "no pack under target/ to read")))
+    out_named = sorted({m.group(0).lower() for m in FILE_TOKEN.finditer(text)} - pnames)
+    rows.append(("deliverables asked for by type", "WARN" if out_named else "PASS",
+                 "names %s: a person asks for a spreadsheet or a short note; a file name only where one would "
+                 "naturally be given" % ", ".join(out_named) if out_named else "by type"))
 
     seq = [m.group(1) for m in re.finditer(SEQUENCING, re.sub(r"\s+", " ", text))]
     rows.append(("no sequencing", "FAIL" if seq else "PASS", "sentence openers: " + ", ".join(seq) if seq else "none"))

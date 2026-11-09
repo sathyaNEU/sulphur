@@ -12,7 +12,7 @@ What is frozen, by mode:
   both modes   the main side: every number in submission.md's Final Recommendation and Critical
                Components blocks, every figures.json value that equals one of them, the stump
                sentence (pipeline.json `stump`, the card's `stump` and `driver`) and the design note's
-               ladder and default-path sections.
+               ladder and default-path sections (retired builds), the results chain and hidden factor record.
   determinism  also the ask side: every number in the Supplementary Questions block, file by file, and every
                other figures.json value. A determinism repair closes a reading; it moves no graded figure.
                The prompt may gain a closing clause; its first question sentence may not change.
@@ -165,6 +165,8 @@ def take(t, d):
         "card_driver": card.get("driver", ""),
         "ladder": section(note, ("ladder", "rung")),
         "default_path": section(note, ("default path",)),
+        "results_chain": section(note, ("results chain", "hidden factor record")),
+        "chain": pipe.get("chain", ""),
     }
 
 
@@ -198,6 +200,8 @@ def check(t, d, mode, allow):
     frozen("card stump", old["card_stump"], new["card_stump"])
     frozen("card driver", old["card_driver"], new["card_driver"])
     frozen("design note ladder sections", old["ladder"], new["ladder"])
+    frozen("design note results chain and hidden factor record", old.get("results_chain", ""), new.get("results_chain", ""))
+    frozen("pipeline chain line", old.get("chain", ""), new.get("chain", ""))
     frozen("design note default path", old["default_path"], new["default_path"])
     frozen("prompt call sentence", old["call_sentence"], new["call_sentence"])
 

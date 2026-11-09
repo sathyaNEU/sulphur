@@ -5,13 +5,13 @@ Sulfur evidence that the next draw reads first, beside Project Mark's measured r
 `strategies.md`, `shipped-ledger.md`). A row is a measurement: the two runs' scores, where each first went wrong,
 and the verdict. Nothing here is inferred, and an in-house estimate never gets a row.
 
-**Columns.** task and architecture; date (ISO); subdomain; objective; the answer shape; the deep step's family
-(`stumping` Part 1.0 names: clean comparison, hidden heterogeneity, design-matched uncertainty, variance beyond
-noise, competing explanations, unfinished outcomes, forecast that earns its place, or own); run 1 score and its
-first-wrong-step class; run 2 score and its class; the average; the counterfactual average; the triage verdict;
-then, once known, the review result.
+**Columns.** task and architecture; date (ISO); subdomain; analysis type; the answer shape; for builds cut under
+the retired single-step design, the deep step's family, and for builds on the results chain, the weight and the chain
+signature (the areas of the results in order); run 1 score and its first-wrong-step class; run 2 score and its
+class; the average; the counterfactual average; the triage verdict; then, once known, the review result. A results-
+chain row also notes the spread (results lost to deep classes per run) from `/triage-runs`.
 
-| Task | Date | Subdomain | Objective | Shape | Deep-step family | Run 1 | Run 1 class | Run 2 | Run 2 class | Avg | CF avg | Verdict | Review |
+| Task | Date | Subdomain | Analysis type | Shape | Deep-step family, or weight and chain | Run 1 | Run 1 class | Run 2 | Run 2 class | Avg | CF avg | Verdict | Review |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|---|
 | task2 arch 3 | 2026-11-08 | general-statistics-data-science / exploratory-data-analysis-distribution-assessment | descriptive-distribution | a set of products in or out, rate and 90 per cent interval each | own (a drifting process read run by run between resets) | not reported, on the golden | none | not reported, on the golden | none | landed | landed | REDESIGN | |
 | task3 arch 2 | 2026-11-08 | physical-environmental-sciences / hydrology-flood-frequency | forecasting | pick one of four alternatives, events a year each | own (a buffer emptied through a receiver's spare capacity) | not reported, on the golden | none | not reported, on the golden | none | landed | landed | REDESIGN | |
@@ -35,7 +35,8 @@ A lesson is written here only when two or more rows show it, with the rows named
 is designed is moved into the skill it governs in a `SKILLS:` commit, and its line here then points at the skill.
 
 - **A mechanism the rows visibly carry is modelled on sight** (task2 arch 3, task3 arch 2, task3 arch 3, task5 arch 2, task7 arch 4 round 2,
-  task8 arch 17; moved into `../SKILL.md` 1.4, the lines `Hidden by:` and `After the notice:`). Both runs of the first three builds
+  task8 arch 17; moved into `../SKILL.md` Part 0 and Part 3: the careful column earns any result whose only
+  difficulty is a pattern one plot or one group-by shows, and `precut.py` refuses a hurried failure the runs do not make). Both runs of the first three builds
   spent 19 to 48 minutes, cleaned every Layer 1 item, and built the physical mechanism the data showed (dose volume
   falling with the litres a set had pumped; dewatering bounded by the receiving plant's hourly headroom) as their
   first model, then validated it on held-out rows of the same stream; task3 arch 3's runs also took the field's default control (remote
@@ -48,5 +49,14 @@ is designed is moved into the skill it governs in a `SKILLS:` commit, and its li
   fit the coverage contrast), and nine of the ten runs across the five rounds reached the golden or computed its key
   figure. The designs passed the readability screen on paper because no column or sentence named the step, but the
   decision's own framing named the axis (a November sitting set from August data; write-off kept off the book through
-  the borrowers taken on). Moved into `../SKILL.md` 2.1 as readability test 8 (the framing) and 1.1's `After the
-  notice:` line.
+  the borrowers taken on). Moved into `../SKILL.md` Part 2: a result whose whole difficulty is
+  noticing is one thing, and the one-fact test counts the results a single sentence rescues.
+- **The single-deep-step design is returned at review, whatever the runs scored** (the project lead's review of
+  2026-11-09, about 500 Sulfur tasks; every build on file, task1 to task14, was designed this way, and task12 and
+  task13 were READY on it). The review's words: "most tasks hinge on one thing. Usually it's a hidden factor built into
+  the data: a subgroup, an event that hits the control group, a confounder that only shows up in the units that decide
+  the call"; "a factor you planted in the data is really just a planted defect in a stats costume". Our builds passed
+  every gate here because the gates priced one hidden step: the ladder, the survivor anatomy and the readability
+  screen all certified that the step was hidden, which is exactly what the client now returns. Moved into every skill
+  in the `SKILLS:` commit of 2026-11-09: the results chain, the hidden factor record, the effort test (`effort.py`),
+  the template check, the prompt rules (no attached file named, no role), and Gate H of the judge.
