@@ -1,0 +1,527 @@
+{
+ "hints": [
+  {
+   "rescues": [],
+   "sentence": "each kept span counts at its trace root's hourly keep share"
+  },
+  {
+   "rescues": [
+    "R2"
+   ],
+   "sentence": "each December incident's cause is the named service whose own handling rose first, not the one furthest over its curve"
+  },
+  {
+   "rescues": [],
+   "sentence": "an SLI's interval takes whole traces as its units within each root service's hour"
+  }
+ ],
+ "results": [
+  {
+   "depends": [],
+   "figure": "minutes",
+   "golden": {
+    "accounts": [
+     "128",
+     "626"
+    ],
+    "booking": [
+     "421",
+     "483"
+    ],
+    "fares": [
+     "266",
+     "534"
+    ],
+    "journey-search": [
+     "149",
+     "584"
+    ],
+    "notifications": [
+     "99",
+     "680"
+    ],
+    "partner-gateway": [
+     "292",
+     "659"
+    ],
+    "payments": [
+     "345",
+     "471"
+    ],
+    "places": [
+     "430",
+     "249"
+    ],
+    "seat-map": [
+     "690",
+     "216"
+    ],
+    "tickets": [
+     "254",
+     "371"
+    ]
+   },
+   "graded_as": "Ask 1",
+   "id": "R1",
+   "name": "incident minutes by half",
+   "passes": {
+    "careful": {
+     "accounts": [
+      "128",
+      "626"
+     ],
+     "booking": [
+      "421",
+      "483"
+     ],
+     "fares": [
+      "266",
+      "534"
+     ],
+     "journey-search": [
+      "149",
+      "584"
+     ],
+     "notifications": [
+      "99",
+      "680"
+     ],
+     "partner-gateway": [
+      "292",
+      "659"
+     ],
+     "payments": [
+      "345",
+      "471"
+     ],
+     "places": [
+      "430",
+      "249"
+     ],
+     "seat-map": [
+      "690",
+      "216"
+     ],
+     "tickets": [
+      "254",
+      "371"
+     ]
+    },
+    "quick": {
+     "accounts": [
+      "3652",
+      "7158"
+     ],
+     "booking": [
+      "10638",
+      "8952"
+     ],
+     "fares": [
+      "7845",
+      "11624"
+     ],
+     "journey-search": [
+      "7906",
+      "6989"
+     ],
+     "notifications": [
+      "3810",
+      "12756"
+     ],
+     "partner-gateway": [
+      "8898",
+      "10007"
+     ],
+     "payments": [
+      "14022",
+      "6862"
+     ],
+     "places": [
+      "14576",
+      "2839"
+     ],
+     "seat-map": [
+      "16404",
+      "4406"
+     ],
+     "tickets": [
+      "4217",
+      "4172"
+     ]
+    },
+    "thorough": {
+     "accounts": [
+      "128",
+      "626"
+     ],
+     "booking": [
+      "421",
+      "483"
+     ],
+     "fares": [
+      "266",
+      "534"
+     ],
+     "journey-search": [
+      "149",
+      "584"
+     ],
+     "notifications": [
+      "99",
+      "680"
+     ],
+     "partner-gateway": [
+      "292",
+      "659"
+     ],
+     "payments": [
+      "345",
+      "471"
+     ],
+     "places": [
+      "430",
+      "249"
+     ],
+     "seat-map": [
+      "690",
+      "216"
+     ],
+     "tickets": [
+      "254",
+      "371"
+     ]
+    }
+   }
+  },
+  {
+   "depends": [
+    "R1"
+   ],
+   "figure": "root_cause",
+   "golden": {
+    "INC-1570": "seat-map",
+    "INC-1579": "partner-gateway",
+    "INC-1588": "partner-gateway",
+    "INC-1594": "payments",
+    "INC-1611": "fares",
+    "INC-1619": "notifications",
+    "INC-1627": "places"
+   },
+   "graded_as": "Component 1",
+   "id": "R2",
+   "name": "root cause of each December incident",
+   "passes": {
+    "careful": {
+     "INC-1570": "seat-map",
+     "INC-1579": "seat-map",
+     "INC-1588": "partner-gateway",
+     "INC-1594": "payments",
+     "INC-1611": "journey-search",
+     "INC-1619": "accounts",
+     "INC-1627": "places"
+    },
+    "quick": {
+     "INC-1570": "partner-gateway",
+     "INC-1579": "seat-map",
+     "INC-1588": "journey-search",
+     "INC-1594": "booking",
+     "INC-1611": "journey-search",
+     "INC-1619": "accounts",
+     "INC-1627": "places"
+    },
+    "thorough": {
+     "INC-1570": "seat-map",
+     "INC-1579": "partner-gateway",
+     "INC-1588": "partner-gateway",
+     "INC-1594": "payments",
+     "INC-1611": "fares",
+     "INC-1619": "notifications",
+     "INC-1627": "places"
+    }
+   }
+  },
+  {
+   "depends": [
+    "R1",
+    "R2"
+   ],
+   "figure": "sli",
+   "golden": {
+    "accounts": "1.4",
+    "booking": "0.3",
+    "fares": "1.3",
+    "journey-search": "0.5",
+    "notifications": "1.3",
+    "partner-gateway": "2.3",
+    "payments": "0.2",
+    "places": "1.8",
+    "seat-map": "2.0",
+    "tickets": "0.6"
+   },
+   "graded_as": "Ask 2",
+   "id": "R3",
+   "name": "every service's December SLI",
+   "passes": {
+    "careful": {
+     "accounts": "1.8",
+     "booking": "0.3",
+     "fares": "0.4",
+     "journey-search": "0.9",
+     "notifications": "0.6",
+     "partner-gateway": "1.1",
+     "payments": "0.4",
+     "places": "1.8",
+     "seat-map": "2.1",
+     "tickets": "0.6"
+    },
+    "quick": {
+     "accounts": "1.6",
+     "booking": "0.3",
+     "fares": "0.4",
+     "journey-search": "0.6",
+     "notifications": "0.6",
+     "partner-gateway": "0.6",
+     "payments": "0.3",
+     "places": "0.9",
+     "seat-map": "1.3",
+     "tickets": "0.6"
+    },
+    "thorough": {
+     "accounts": "1.4",
+     "booking": "0.3",
+     "fares": "1.3",
+     "journey-search": "0.5",
+     "notifications": "1.3",
+     "partner-gateway": "2.3",
+     "payments": "0.2",
+     "places": "1.8",
+     "seat-map": "2.0",
+     "tickets": "0.6"
+    }
+   }
+  },
+  {
+   "bands": {
+    "fares hi": [
+     1.43,
+     1.47
+    ],
+    "fares lo": [
+     1.13,
+     1.18
+    ],
+    "notifications hi": [
+     1.47,
+     1.55
+    ],
+    "notifications lo": [
+     1.12,
+     1.16
+    ],
+    "partner-gateway hi": [
+     2.4,
+     2.46
+    ],
+    "partner-gateway lo": [
+     2.06,
+     2.13
+    ],
+    "places hi": [
+     1.98,
+     2.03
+    ],
+    "places lo": [
+     1.52,
+     1.58
+    ],
+    "seat-map hi": [
+     2.24,
+     2.29
+    ],
+    "seat-map lo": [
+     1.73,
+     1.79
+    ]
+   },
+   "depends": [
+    "R3"
+   ],
+   "figure": "ci_cells",
+   "golden": {
+    "fares hi": 1.45,
+    "fares lo": 1.15,
+    "notifications hi": 1.49,
+    "notifications lo": 1.14,
+    "partner-gateway hi": 2.44,
+    "partner-gateway lo": 2.08,
+    "places hi": 2.01,
+    "places lo": 1.56,
+    "seat-map hi": 2.26,
+    "seat-map lo": 1.77
+   },
+   "graded_as": "Component 2",
+   "id": "R4",
+   "name": "intervals on the over-budget SLIs",
+   "passes": {
+    "careful": {
+     "fares hi": 0.49,
+     "fares lo": 0.39,
+     "notifications hi": 0.69,
+     "notifications lo": 0.55,
+     "partner-gateway hi": 1.16,
+     "partner-gateway lo": 1.03,
+     "places hi": 1.95,
+     "places lo": 1.63,
+     "seat-map hi": 2.29,
+     "seat-map lo": 1.94
+    },
+    "quick": {
+     "fares hi": 0.46,
+     "fares lo": 0.37,
+     "notifications hi": 0.64,
+     "notifications lo": 0.51,
+     "partner-gateway hi": 0.6,
+     "partner-gateway lo": 0.51,
+     "places hi": 1.03,
+     "places lo": 0.8,
+     "seat-map hi": 1.46,
+     "seat-map lo": 1.18
+    },
+    "thorough": {
+     "fares hi": 1.45,
+     "fares lo": 1.15,
+     "notifications hi": 1.49,
+     "notifications lo": 1.14,
+     "partner-gateway hi": 2.44,
+     "partner-gateway lo": 2.08,
+     "places hi": 2.01,
+     "places lo": 1.56,
+     "seat-map hi": 2.26,
+     "seat-map lo": 1.77
+    }
+   }
+  },
+  {
+   "depends": [
+    "R3"
+   ],
+   "figure": "over",
+   "golden": [
+    "fares",
+    "places",
+    "seat-map",
+    "partner-gateway",
+    "notifications"
+   ],
+   "graded_as": "Recommendation",
+   "id": "R5",
+   "name": "the services over budget",
+   "passes": {
+    "careful": [
+     "places",
+     "seat-map"
+    ],
+    "quick": [
+     "seat-map"
+    ],
+    "thorough": [
+     "fares",
+     "places",
+     "seat-map",
+     "partner-gateway",
+     "notifications"
+    ]
+   }
+  },
+  {
+   "depends": [
+    "R3",
+    "R5"
+   ],
+   "figure": "programme_cells",
+   "golden": {
+    "beyond": "280,000",
+    "order": "places, partner-gateway, fares, seat-map, notifications",
+    "share fares": "16",
+    "share notifications": "3",
+    "share partner-gateway": "31",
+    "share places": "36",
+    "share seat-map": "3",
+    "together": "89"
+   },
+   "graded_as": "Ask 3",
+   "id": "R6",
+   "name": "start order, shares, together, beyond",
+   "passes": {
+    "careful": {
+     "beyond": "200,000",
+     "order": "places, seat-map",
+     "share places": "46",
+     "share seat-map": "4",
+     "together": "51"
+    },
+    "quick": {
+     "beyond": "0",
+     "order": "seat-map",
+     "share seat-map": "13",
+     "together": "13"
+    },
+    "thorough": {
+     "beyond": "280,000",
+     "order": "places, partner-gateway, fares, seat-map, notifications",
+     "share fares": "16",
+     "share notifications": "3",
+     "share partner-gateway": "31",
+     "share places": "36",
+     "share seat-map": "3",
+     "together": "89"
+    }
+   }
+  }
+ ],
+ "routes": [
+  {
+   "answer": [
+    "seat-map"
+   ],
+   "golden": false,
+   "name": "Kept spans unweighted; each incident on the service named first"
+  },
+  {
+   "answer": [
+    "places",
+    "seat-map"
+   ],
+   "golden": false,
+   "name": "Each service's spans on its own hourly count; each incident on the service furthest over its load curve across the incident"
+  },
+  {
+   "answer": [
+    "places",
+    "seat-map"
+   ],
+   "golden": false,
+   "name": "Each service's spans on its own hourly count; causes dated by when own handling rose"
+  },
+  {
+   "answer": [
+    "places",
+    "seat-map",
+    "partner-gateway"
+   ],
+   "golden": false,
+   "name": "Each span at its trace root's keep share; each incident on the service furthest over its load curve"
+  },
+  {
+   "answer": [
+    "fares",
+    "places",
+    "seat-map",
+    "partner-gateway",
+    "notifications"
+   ],
+   "golden": true,
+   "name": "Each span at its trace root's keep share; causes dated by when own handling rose (this review)"
+  }
+ ]
+}

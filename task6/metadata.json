@@ -1,10 +1,11 @@
 {
  "task": "task6",
+ "as_of": "2027-01-06",
  "title": "Rotalinha: the internal services that ran over their 2026 latency error budget",
  "domain": "General Statistics & Data Science",
  "objective": "Descriptive & Distribution Analysis",
  "decision": "which internal services ran over their 2026 latency error budget and get a reliability engineer for the first half of 2027",
- "answer": "journey-search, places, seat-map, partner-gateway, notifications",
+ "answer": "fares, places, seat-map, partner-gateway, notifications",
  "deliverables": [
   "reliability_review_2026.docx",
   "service_sli_2026.csv"
@@ -30,7 +31,7 @@
   ],
   [
    "trace_spans_2026-12.parquet",
-   378897
+   458192
   ]
  ],
  "provenance": {

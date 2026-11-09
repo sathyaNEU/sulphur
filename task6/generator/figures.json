@@ -1,7 +1,7 @@
 {
- "beyond_budget": "300,000",
+ "beyond_budget": "280,000",
  "budget": {
-  "accounts": "1.0",
+  "accounts": "2.0",
   "booking": "0.5",
   "fares": "1.0",
   "journey-search": "1.0",
@@ -12,51 +12,277 @@
   "seat-map": "1.0",
   "tickets": "1.0"
  },
- "incident_minutes": [
-  1545,
-  907
+ "careful_over": [
+  "places",
+  "seat-map"
  ],
- "incident_minutes_text": [
-  "1,545",
-  "907"
- ],
- "kept_share": {
-  "accounts": "0.7",
+ "careful_sli": {
+  "accounts": "1.8",
   "booking": "0.3",
-  "fares": "0.6",
-  "journey-search": "0.7",
-  "notifications": "1.6",
-  "partner-gateway": "0.8",
-  "payments": "0.3",
-  "places": "0.7",
-  "seat-map": "0.7",
+  "fares": "0.4",
+  "journey-search": "0.9",
+  "notifications": "0.6",
+  "partner-gateway": "1.1",
+  "payments": "0.4",
+  "places": "1.8",
+  "seat-map": "2.1",
   "tickets": "0.6"
  },
+ "ci": {
+  "fares": [
+   "1.15",
+   "1.45"
+  ],
+  "notifications": [
+   "1.14",
+   "1.49"
+  ],
+  "partner-gateway": [
+   "2.08",
+   "2.44"
+  ],
+  "places": [
+   "1.56",
+   "2.01"
+  ],
+  "seat-map": [
+   "1.77",
+   "2.26"
+  ]
+ },
+ "ci_cells": {
+  "fares hi": 1.45,
+  "fares lo": 1.15,
+  "notifications hi": 1.49,
+  "notifications lo": 1.14,
+  "partner-gateway hi": 2.44,
+  "partner-gateway lo": 2.08,
+  "places hi": 2.01,
+  "places lo": 1.56,
+  "seat-map hi": 2.26,
+  "seat-map lo": 1.77
+ },
+ "deciding": [
+  "INC-1611",
+  "INC-1619"
+ ],
+ "incidents": [
+  {
+   "careful_cause": "seat-map",
+   "cause": "seat-map",
+   "declared": "8 December 12:24",
+   "end": "8 December 13:49",
+   "id": "INC-1570",
+   "named": [
+    "partner-gateway",
+    "seat-map"
+   ],
+   "onset": {
+    "seat-map": "12:14"
+   },
+   "onset_about": {
+    "seat-map": "12:15"
+   }
+  },
+  {
+   "careful_cause": "seat-map",
+   "cause": "partner-gateway",
+   "declared": "14 December 12:31",
+   "end": "14 December 13:40",
+   "id": "INC-1579",
+   "named": [
+    "seat-map",
+    "partner-gateway"
+   ],
+   "onset": {
+    "partner-gateway": "12:15",
+    "seat-map": "12:58"
+   },
+   "onset_about": {
+    "partner-gateway": "12:15",
+    "seat-map": "13:00"
+   }
+  },
+  {
+   "careful_cause": "partner-gateway",
+   "cause": "partner-gateway",
+   "declared": "15 December 19:41",
+   "end": "16 December 00:03",
+   "id": "INC-1588",
+   "named": [
+    "journey-search",
+    "partner-gateway",
+    "fares"
+   ],
+   "onset": {
+    "partner-gateway": "19:03"
+   },
+   "onset_about": {
+    "partner-gateway": "19:05"
+   }
+  },
+  {
+   "careful_cause": "payments",
+   "cause": "payments",
+   "declared": "17 December 20:49",
+   "end": "17 December 22:12",
+   "id": "INC-1594",
+   "named": [
+    "booking",
+    "payments",
+    "notifications"
+   ],
+   "onset": {
+    "payments": "20:34"
+   },
+   "onset_about": {
+    "payments": "20:35"
+   }
+  },
+  {
+   "careful_cause": "journey-search",
+   "cause": "fares",
+   "declared": "21 December 19:46",
+   "end": "21 December 23:18",
+   "id": "INC-1611",
+   "named": [
+    "journey-search",
+    "fares",
+    "booking"
+   ],
+   "onset": {
+    "fares": "19:43",
+    "journey-search": "20:27"
+   },
+   "onset_about": {
+    "fares": "19:45",
+    "journey-search": "20:25"
+   }
+  },
+  {
+   "careful_cause": "accounts",
+   "cause": "notifications",
+   "declared": "26 December 18:01",
+   "end": "26 December 22:39",
+   "id": "INC-1619",
+   "named": [
+    "accounts",
+    "notifications",
+    "payments"
+   ],
+   "onset": {
+    "accounts": "18:34",
+    "notifications": "16:58"
+   },
+   "onset_about": {
+    "accounts": "18:35",
+    "notifications": "17:00"
+   }
+  },
+  {
+   "careful_cause": "places",
+   "cause": "places",
+   "declared": "29 December 10:12",
+   "end": "29 December 11:27",
+   "id": "INC-1627",
+   "named": [
+    "places"
+   ],
+   "onset": {
+    "places": "09:55"
+   },
+   "onset_about": {
+    "places": "09:55"
+   }
+  }
+ ],
+ "interval_level_pct": 90,
+ "minutes": {
+  "accounts": [
+   "128",
+   "626"
+  ],
+  "booking": [
+   "421",
+   "483"
+  ],
+  "fares": [
+   "266",
+   "534"
+  ],
+  "journey-search": [
+   "149",
+   "584"
+  ],
+  "notifications": [
+   "99",
+   "680"
+  ],
+  "partner-gateway": [
+   "292",
+   "659"
+  ],
+  "payments": [
+   "345",
+   "471"
+  ],
+  "places": [
+   "430",
+   "249"
+  ],
+  "seat-map": [
+   "690",
+   "216"
+  ],
+  "tickets": [
+   "254",
+   "371"
+  ]
+ },
+ "misread": [
+  "INC-1579",
+  "INC-1611",
+  "INC-1619"
+ ],
  "over": [
-  "journey-search",
+  "fares",
   "places",
   "seat-map",
   "partner-gateway",
   "notifications"
  ],
  "over_count": 5,
- "over_share_pct": "90",
- "pg_kept_mix_pct": {
-  "booking": "34",
-  "journey-search": "33",
-  "seat-map": "33"
+ "owncount_over": [
+  "places",
+  "seat-map"
+ ],
+ "owncount_sli": {
+  "accounts": "1.4",
+  "booking": "0.3",
+  "fares": "0.9",
+  "journey-search": "0.5",
+  "notifications": "0.8",
+  "partner-gateway": "1.1",
+  "payments": "0.4",
+  "places": "1.8",
+  "seat-map": "2.0",
+  "tickets": "0.6"
  },
- "pg_service_hour": "1.4",
- "pg_weighted_mix_pct": {
-  "booking": "4",
-  "journey-search": "85",
-  "seat-map": "12"
+ "programme_cells": {
+  "beyond": "280,000",
+  "order": "places, partner-gateway, fares, seat-map, notifications",
+  "share fares": "16",
+  "share notifications": "3",
+  "share partner-gateway": "31",
+  "share places": "36",
+  "share seat-map": "3",
+  "together": "89"
  },
  "ran_over": {
   "accounts": "no",
   "booking": "no",
-  "fares": "no",
-  "journey-search": "yes",
+  "fares": "yes",
+  "journey-search": "no",
   "notifications": "yes",
   "partner-gateway": "yes",
   "payments": "no",
@@ -64,64 +290,115 @@
   "seat-map": "yes",
   "tickets": "no"
  },
- "sections": [
-  "5.2",
-  "5.4"
- ],
- "shallow_beyond_budget": "160,000",
- "shallow_incident_minutes_text": [
-  "1,518",
-  "755"
- ],
- "shallow_order": [
+ "root_cause": {
+  "INC-1570": "seat-map",
+  "INC-1579": "partner-gateway",
+  "INC-1588": "partner-gateway",
+  "INC-1594": "payments",
+  "INC-1611": "fares",
+  "INC-1619": "notifications",
+  "INC-1627": "places"
+ },
+ "rootcareful_over": [
   "places",
-  "journey-search",
   "seat-map",
-  "notifications"
+  "partner-gateway"
  ],
- "shallow_over_share_pct": "62",
- "shallow_pg_share_pct": "25",
+ "rootcareful_sli": {
+  "accounts": "1.8",
+  "booking": "0.3",
+  "fares": "0.9",
+  "journey-search": "0.9",
+  "notifications": "0.9",
+  "partner-gateway": "2.3",
+  "payments": "0.2",
+  "places": "1.8",
+  "seat-map": "2.1",
+  "tickets": "0.6"
+ },
+ "routes": [
+  {
+   "over": [
+    "seat-map"
+   ],
+   "reading": "Kept spans unweighted; each incident on the service named first"
+  },
+  {
+   "over": [
+    "places",
+    "seat-map"
+   ],
+   "reading": "Each service's spans on its own hourly count; each incident on the service furthest over its load curve across the incident"
+  },
+  {
+   "over": [
+    "places",
+    "seat-map"
+   ],
+   "reading": "Each service's spans on its own hourly count; causes dated by when own handling rose"
+  },
+  {
+   "over": [
+    "places",
+    "seat-map",
+    "partner-gateway"
+   ],
+   "reading": "Each span at its trace root's keep share; each incident on the service furthest over its load curve"
+  },
+  {
+   "golden": true,
+   "over": [
+    "fares",
+    "places",
+    "seat-map",
+    "partner-gateway",
+    "notifications"
+   ],
+   "reading": "Each span at its trace root's keep share; causes dated by when own handling rose (this review)"
+  }
+ ],
  "share_pct": {
-  "accounts": "2",
+  "accounts": "4",
   "booking": "0",
-  "fares": "7",
-  "journey-search": "16",
-  "notifications": "1",
-  "partner-gateway": "40",
+  "fares": "16",
+  "journey-search": "6",
+  "notifications": "3",
+  "partner-gateway": "31",
   "payments": "0",
-  "places": "31",
-  "seat-map": "2",
+  "places": "36",
+  "seat-map": "3",
   "tickets": "0"
  },
  "sli": {
-  "accounts": "0.7",
-  "booking": "0.4",
-  "fares": "0.6",
-  "journey-search": "1.3",
-  "notifications": "1.6",
-  "partner-gateway": "2.9",
-  "payments": "0.3",
-  "places": "1.5",
-  "seat-map": "1.5",
+  "accounts": "1.4",
+  "booking": "0.3",
+  "fares": "1.3",
+  "journey-search": "0.5",
+  "notifications": "1.3",
+  "partner-gateway": "2.3",
+  "payments": "0.2",
+  "places": "1.8",
+  "seat-map": "2.0",
   "tickets": "0.6"
  },
  "start_order": [
-  "partner-gateway",
   "places",
-  "journey-search",
+  "partner-gateway",
+  "fares",
   "seat-map",
   "notifications"
  ],
  "threshold_ms": {
-  "accounts": "400",
+  "accounts": "600",
   "booking": "3,000",
   "fares": "300",
-  "journey-search": "1,300",
+  "journey-search": "1,500",
   "notifications": "600",
   "partner-gateway": "1,000",
   "payments": "2,000",
   "places": "150",
   "seat-map": "500",
-  "tickets": "1,000"
- }
+  "tickets": "1,500"
+ },
+ "together_pct": "89"
 }

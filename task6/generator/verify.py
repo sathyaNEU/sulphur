@@ -1,194 +1,250 @@
-"""task6's independent verifier: reads only the bundle (target/), the goldens and figures.json, on its own code path
-(no generator module is imported), recomputes the call and every graded figure (the SLIs, the start order, the five's
-shares and the share they served together, the requests beyond their budgets, the incident minutes in which an incident
-named one of them), reads back every format the pack ships, and reports each disagreement.
+"""An independent recomputation of task6's graded figures from the shipped bundle alone (target/, figures.json and
+submission.md), on its own code path: pandas over the span export, each trace's root found by walking parents, the
+weights from the balancer's export, its own reading of each December incident's cause (the first fifteen-minute bin,
+from three hours before the declaration, where a named service's own handling ran 1.4 times its median at the same
+hour on December's other days, held for the next bin too), the exclusions, the SLIs, the incident minutes, the
+start order and shares, and the linearised intervals. Returns a list of disagreements; empty is a pass.
 
     python3 verify.py [task_dir]"""
-import csv
 import datetime as dt
 import json
 import os
+import re
 import sys
-from decimal import Decimal, ROUND_HALF_UP
 
-import pyarrow.parquet as pq
-from docx import Document
-from openpyxl import load_workbook
+import numpy as np
+import pandas as pd
 
 HERE = os.path.dirname(os.path.abspath(__file__))
+DEC0 = pd.Timestamp("2026-12-01")
+H = 744
 
 
 def half_up(x, q):
+    from decimal import Decimal, ROUND_HALF_UP
     return float(Decimal(repr(float(x))).quantize(Decimal(q), rounding=ROUND_HALF_UP))
 
 
 def lisbon_utc(local):
-    """A Lisbon wall-clock minute to UTC (summer time from 29 March 01:00 UTC to 25 October 01:00 UTC in 2026)."""
-    t = dt.datetime.strptime(local, "%Y-%m-%d %H:%M")
-    on, off = dt.datetime(2026, 3, 29, 1), dt.datetime(2026, 10, 25, 1)
-    u = t - dt.timedelta(hours=1)
-    return u if on <= u < off else t
+    t = pd.Timestamp(local)
+    yr = t.year
+    def last_sun(m):
+        d = pd.Timestamp(yr, m, 31)
+        return d - pd.Timedelta(days=(d.weekday() + 1) % 7)
+    start, end = last_sun(3) + pd.Timedelta(hours=1), last_sun(10) + pd.Timedelta(hours=1)
+    u = t - pd.Timedelta(hours=1)
+    return u if start <= u < end else t
 
 
 def run(task_dir):
     tgt = os.path.join(task_dir, "target")
-    files = sorted(os.listdir(tgt))
+    F = json.load(open(os.path.join(HERE, "figures.json")))
     bad = []
-    pick = lambda pre: os.path.join(tgt, [f for f in files if f.startswith(pre)][0])
-
-    # ---- the standard and the catalogue
-    slo = Document(pick("PR-SLO-3"))
-    slo_text = "\n".join(p.text for p in slo.paragraphs)
-    if "whether or not the tracing store kept a span for it" not in slo_text:
-        bad.append("PR-SLO-3 read-back: section 2.2 not found")
+    cat = pd.read_excel(os.path.join(tgt, "service_catalogue_2026.xlsx"), sheet_name="Services")
+    by_trace = dict(zip(cat["Tracing service name"], cat["Service"]))
+    by_tg = dict(zip(cat["Load balancer target group (from 1 Jul 2026)"], cat["Service"]))
+    comp = dict(zip(cat["Service"], cat["Status page component"]))
+    from docx import Document
+    d = Document(os.path.join(tgt, "PR-SLO-3_service_level_objectives_2026.docx"))
     thr, bud = {}, {}
-    for row in slo.tables[0].rows[1:]:
+    for row in d.tables[0].rows[1:]:
         c = [x.text for x in row.cells]
-        thr[c[0]] = float(c[2].replace(",", ""))
-        bud[c[0]] = float(c[3].rstrip("%"))
-    ws = load_workbook(pick("service_catalogue"), read_only=True)["Services"]
-    rows = list(ws.iter_rows(values_only=True))
-    cat = [dict(zip(rows[0], r)) for r in rows[1:] if r[0]]
-    svc_of = {c["Tracing service name"]: c["Service"] for c in cat}
-    tg = {c["Load balancer target group (from 1 Jul 2026)"]: c["Service"] for c in cat}
-    services = [c["Service"] for c in cat]
+        thr[c[0]], bud[c[0]] = float(c[2].replace(",", "")), float(c[3].rstrip("%"))
+    svcs = list(thr)
 
-    # ---- the balancer's December counts
-    n = {s: {} for s in services}
-    for r in csv.DictReader(open(pick("lb_target_group_requests_2026-H2"))):
-        t = dt.datetime.strptime(r["TimePeriodStart"], "%Y-%m-%dT%H:%M:%SZ")
-        if t.month == 12:
-            n[tg[r["TargetGroupName"]]][(t.day - 1) * 24 + t.hour] = int(r["RequestCount"])
+    sp = pd.read_parquet(os.path.join(tgt, "trace_spans_2026-12.parquet"))
+    sp = sp.drop_duplicates("span_id")
+    sp = sp[sp["span_name"] != "GET /healthz"].copy()
+    sp["svc"] = sp["service_name"].map(by_trace)
+    sp["t"] = (sp["start_time_unix_nano"] - DEC0.value) / 1e9
+    sp["ms"] = (sp["end_time_unix_nano"] - sp["start_time_unix_nano"]) / 1e6
+    sp["h"] = np.floor(sp["t"] / 3600).astype(int)
+    srv = sp[sp["span_kind"] == "SPAN_KIND_SERVER"].copy()
+    roots = srv[(srv["parent_span_id"] == "") & (srv["h"] >= 0) & (srv["h"] < H)]
+    root_of = roots.set_index("trace_id")[["svc", "h"]]
+    kroot = roots.groupby(["svc", "h"]).size()
 
-    # ---- the spans: dedupe, drop probes, find each trace's root, weight by the root's hourly keep share
-    tb = pq.read_table(pick("trace_spans")).to_pydict()
-    dec0 = int(dt.datetime(2026, 12, 1, tzinfo=dt.timezone.utc).timestamp()) * 10 ** 9
-    seen, spans = set(), []
-    for i in range(len(tb["span_id"])):
-        sid = tb["span_id"][i]
-        if sid in seen or tb["span_name"][i] == "GET /healthz":
-            continue
-        seen.add(sid)
-        spans.append((tb["trace_id"][i], tb["parent_span_id"][i], svc_of[tb["service_name"][i]], tb["span_kind"][i],
-                      (tb["start_time_unix_nano"][i] - dec0) // 3600000000000,
-                      (tb["end_time_unix_nano"][i] - tb["start_time_unix_nano"][i]) / 1e6))
-    root, kept_root = {}, {}
-    for tid, pid, s, kind, h, ms in spans:
-        if kind == "SPAN_KIND_SERVER" and pid == "":
-            root[tid] = (s, h)
-            kept_root[(s, h)] = kept_root.get((s, h), 0) + 1
-    num = {s: 0.0 for s in services}
-    for tid, pid, s, kind, h, ms in spans:
-        if kind != "SPAN_KIND_SERVER" or not 0 <= h < 744 or tid not in root:
-            continue
-        e, he = root[tid]
-        if ms > thr[s]:
-            num[s] += n[e][he] / kept_root[(e, he)]
-    sli = {s: 100 * num[s] / sum(n[s].values()) for s in services}
-    over = [s for s in services if half_up(sli[s], "0.1") > bud[s]]
+    lb = pd.read_csv(os.path.join(tgt, "lb_target_group_requests_2026-H2.csv"))
+    lb["t"] = pd.to_datetime(lb["TimePeriodStart"].str.replace("Z", ""))
+    lb = lb[lb["t"] >= DEC0].copy()
+    lb["svc"] = lb["TargetGroupName"].map(by_tg)
+    lb["h"] = ((lb["t"] - DEC0).dt.total_seconds() // 3600).astype(int)
+    N = lb.set_index(["svc", "h"])["RequestCount"].astype(float)
 
-    figs = json.load(open(os.path.join(HERE, "figures.json")))
-    if over != figs["over"]:
-        bad.append("the call: %s against figures.json %s" % (over, figs["over"]))
-    for s in services:
-        if "%.1f" % half_up(sli[s], "0.1") != figs["sli"][s]:
-            bad.append("%s SLI %.4f against %s" % (s, sli[s], figs["sli"][s]))
+    dec = srv[(srv["h"] >= 0) & (srv["h"] < H)].copy()
+    dec = dec.join(root_of.rename(columns={"svc": "rsvc", "h": "rh"}), on="trace_id")
+    own_k = dec.groupby(["svc", "h"]).size()
+    def wt(r):
+        if pd.isna(r.rsvc):
+            return N[(r.svc, r.h)] / own_k[(r.svc, r.h)]
+        return N[(r.rsvc, int(r.rh))] / kroot[(r.rsvc, int(r.rh))]
+    dec["w"] = [wt(r) for r in dec.itertuples()]
+    dec["slow"] = dec["ms"] > dec["svc"].map(thr)
 
-    # ---- the asks on the SLI's numerator: each service's over-threshold December requests
-    slow = {s: num[s] for s in services}
-    total = sum(slow.values())
-    order = sorted(over, key=lambda s: -slow[s])
-    if order != figs["start_order"]:
-        bad.append("start order %s against %s" % (order, figs["start_order"]))
-    for s in services:
-        if str(int(half_up(100 * slow[s] / total, "1"))) != figs["share_pct"][s]:
-            bad.append("%s share %.3f against %s" % (s, 100 * slow[s] / total, figs["share_pct"][s]))
-    together = 100 * sum(slow[s] for s in over) / total
-    if str(int(half_up(together, "1"))) != figs["over_share_pct"]:
-        bad.append("share served together %.3f against %s" % (together, figs["over_share_pct"]))
-    beyond = sum(slow[s] - bud[s] / 100 * sum(n[s].values()) for s in over)
-    if "{:,}".format(int(half_up(beyond / 10000, "1")) * 10000) != figs["beyond_budget"]:
-        bad.append("requests beyond budget %.0f against %s" % (beyond, figs["beyond_budget"]))
+    # own handling: the span less the union of its client children
+    cl = sp[sp["span_kind"] == "SPAN_KIND_CLIENT"][["parent_span_id", "t", "ms"]].copy()
+    cl["e"] = cl["t"] + cl["ms"] / 1000
+    cov = {}
+    for pid, grp in cl.sort_values("t").groupby("parent_span_id"):
+        tot, a_, b_ = 0.0, None, None
+        for s_, e_ in zip(grp["t"], grp["e"]):
+            if a_ is None or s_ > b_:
+                if a_ is not None:
+                    tot += b_ - a_
+                a_, b_ = s_, e_
+            else:
+                b_ = max(b_, e_)
+        cov[pid] = tot + (b_ - a_)
+    dec["own"] = np.maximum(0.001, dec["ms"] - dec["span_id"].map(cov).fillna(0) * 1000)
 
-    # ---- the incident ask: minutes in which an incident named one of the services that ran over, by half
-    st = json.load(open(pick("status_page_history")))
+    # the incidents
+    st = json.load(open(os.path.join(tgt, "status_page_history_2026.json")))
     posts = [(set(p["components"]), lisbon_utc(p["created_at"])) for p in st["incidents"]]
     ops = {}
     for c in st["component_status_changes"]:
         if c["status"] == "operational":
             ops.setdefault(c["component"], []).append(lisbon_utc(c["at"]))
-    named = {(r["incident_id"], r["detail"]): dt.datetime.strptime(r["at_utc"], "%Y-%m-%d %H:%M:%S")
-             for r in csv.DictReader(open(pick("incident_timeline"))) if r["event"] == "service added"}
-    comp = {c["Service"]: c["Status page component"] for c in cat}
-    spans_by = {s: [] for s in services}
-    for r in csv.DictReader(open(pick("incidents_2026"))):
-        d0 = dt.datetime.strptime(r["declared_at_utc"], "%Y-%m-%d %H:%M:%S")
-        ss = r["services"].split(";")
-        mine = {comp[svc_of[x]] for x in ss}
-        m = [p for p in posts if p[0] & mine and dt.timedelta(0) <= p[1] - d0.replace(second=0) <= dt.timedelta(minutes=15)]
+    tl = pd.read_csv(os.path.join(tgt, "incident_timeline_2026.csv"))
+    added = tl[tl["event"] == "service added"]
+    named_at = {(r.incident_id, by_trace[r.detail]): pd.Timestamp(r.at_utc) for r in added.itertuples()}
+    inc = pd.read_csv(os.path.join(tgt, "incidents_2026.csv"))
+    incs = []
+    for r in inc.itertuples():
+        decl = pd.Timestamp(r.declared_at_utc)
+        names = [by_trace[x] for x in r.services.split(";")]
+        m = [p for p in posts if p[0] & {comp[x] for x in names} and
+             pd.Timedelta(0) <= p[1] - decl.floor("min") <= pd.Timedelta(minutes=15)]
         if not m:
             continue
-        end = max(min(t for t in sorted(ops[c]) if t > m[0][1]) for c in m[0][0])
-        for x in ss:
-            a = max(d0, named[(r["incident_id"], x)])
-            if a < end:
-                spans_by[svc_of[x]].append((a, end))
-    cut = dt.datetime(2026, 6, 30, 23)
-    tot, last = [0.0, 0.0], None
-    for a, b in sorted(x for s in over for x in spans_by[s]):
-        if last and a < last:
-            a = last
-        if b <= a:
-            continue
-        for i, (lo, hi) in enumerate(((dt.datetime(2026, 1, 1), cut), (cut, dt.datetime(2027, 1, 1)))):
-            lo_, hi_ = max(a, lo), min(b, hi)
-            if hi_ > lo_:
-                tot[i] += (hi_ - lo_).total_seconds() / 60
-        last = b if last is None else max(last, b)
-    got = [int(half_up(v, "1")) for v in tot]
-    if got != figs["incident_minutes"]:
-        bad.append("incident minutes %s against %s" % (got, figs["incident_minutes"]))
+        end = max(min(t for t in ops[c] if t > m[0][1]) for c in m[0][0])
+        incs.append({"id": r.incident_id, "declared": decl, "end": end,
+                     "named": [(x, named_at[(r.incident_id, x)]) for x in names]})
+    decinc = [x for x in incs if x["declared"] >= DEC0]
 
-    # ---- every shipped format reads back, and the goldens carry figures.json's figures
-    for f in files:
-        p = os.path.join(tgt, f)
-        if f.endswith(".md") and not open(p).read().strip():
-            bad.append("%s reads back empty" % f)
-        if f.endswith(".xlsx") and not any(load_workbook(p, read_only=True).worksheets[0].iter_rows(max_row=2)):
-            bad.append("%s reads back empty" % f)
-        if f.endswith(".json"):
-            json.load(open(p))
-    gold = os.path.join(task_dir, "golden")
-    rows_csv = list(csv.DictReader(open(os.path.join(gold, "service_sli_2026.csv"))))
-    if [r["service"] for r in rows_csv] != services:
-        bad.append("golden csv rows %s" % [r["service"] for r in rows_csv])
-    for r in rows_csv:
-        s = r["service"]
-        want = [figs["sli"][s], figs["budget"][s], figs["ran_over"][s]]
-        got = [r["latency_sli_pct"], r["error_budget_pct"], r["ran_over"]]
-        if want != got:
-            bad.append("golden csv row %s: %s against %s" % (s, got, want))
-    memo = Document(os.path.join(gold, "reliability_review_2026.docx"))
-    memo_text = "\n".join(p.text for p in memo.paragraphs)
-    if ", ".join(figs["start_order"][:-1]) not in memo_text:
-        bad.append("golden memo does not name the services that breached in their start order")
-    for row in memo.tables[0].rows[1:]:
-        c = [x.text for x in row.cells]
-        if c[2] != figs["sli"][c[0]] or c[3] != figs["budget"][c[0]]:
-            bad.append("golden memo row %s: %s" % (c[0], c))
-    start = [[x.text for x in row.cells] for row in memo.tables[1].rows[1:]]
-    if [c[1] for c in start] != figs["start_order"] or any(c[2] != figs["share_pct"][c[1]] for c in start):
-        bad.append("golden memo start table %s" % start)
-    for want in (figs["over_share_pct"] + "%", figs["beyond_budget"]) + tuple(figs["incident_minutes_text"]):
-        if want not in memo_text:
-            bad.append("golden memo does not carry %s" % want)
-    if not memo.inline_shapes:
-        bad.append("golden memo carries no chart")
+    # each December incident's cause: the earliest held rise of a named service's own handling over its load
+    dec["lo"] = np.log(dec["own"])
+    quiet = pd.Series(True, index=range(H))
+    for x in decinc:
+        a_ = int((x["declared"] - DEC0).total_seconds() // 3600) - 3
+        b_ = int((x["end"] - DEC0).total_seconds() // 3600) + 1
+        quiet.loc[max(0, a_):min(H - 1, b_)] = False
+    cause = {}
+    for x in decinc:
+        t0 = (x["declared"] - DEC0).total_seconds() - 3 * 3600
+        t1 = (x["end"] - DEC0).total_seconds()
+        firsts = {}
+        for s, _ in x["named"]:
+            best = None
+            for name, g in dec[dec["svc"] == s].groupby("span_name"):
+                hm = g[g["h"].map(quiet)].groupby("h")["lo"].agg(["median", "size"])
+                hm = hm[hm["size"] >= 3]
+                if len(hm) < 30:
+                    continue
+                ld = np.log(np.array([N[(s, h)] for h in hm.index]) + 1)
+                cf = np.polyfit(ld, hm["median"].values, 2)
+                w = g[(g["t"] >= t0) & (g["t"] < t1)].sort_values("t")
+                if len(w) < 24:
+                    continue
+                res = w["lo"].values - np.polyval(cf, np.log(np.array([N[(s, h)] for h in w["h"]]) + 1))
+                roll = pd.Series(res).rolling(12).median().values
+                for j in range(11, len(res) - 12):
+                    if roll[j] > np.log(1.4) and np.nanmin(roll[j:j + 12]) > np.log(1.25):
+                        tt = w["t"].values[j - 11]
+                        best = tt if best is None else min(best, tt)
+                        break
+            if best is not None:
+                firsts[s] = best
+        cause[x["id"]] = min(firsts, key=firsts.get) if firsts else None
+    if cause != F["root_cause"]:
+        bad.append("root causes %s against %s" % (cause, F["root_cause"]))
+
+    # exclusions and SLIs
+    keep = pd.Series(True, index=dec.index)
+    for x in decinc:
+        for s, t in x["named"]:
+            if s != cause.get(x["id"]):
+                a_ = (max(x["declared"], t) - DEC0).total_seconds()
+                b_ = (x["end"] - DEC0).total_seconds()
+                keep &= ~((dec["svc"] == s) & (dec["t"] >= a_) & (dec["t"] < b_))
+    k = dec[keep]
+    num = (k["w"] * k["slow"]).groupby(k["svc"]).sum()
+    den = k.groupby("svc")["w"].sum()
+    sli = 100 * num / den
+    for s in svcs:
+        if "%.1f" % half_up(sli[s], "0.1") != F["sli"][s]:
+            bad.append("%s SLI %.3f against %s" % (s, sli[s], F["sli"][s]))
+    over = [s for s in svcs if half_up(sli[s], "0.1") > bud[s]]
+    if over != F["over"]:
+        bad.append("over %s against %s" % (over, F["over"]))
+    order = sorted(over, key=lambda s: -num[s])
+    tot = num.sum()
+    cells = {"order": ", ".join(order), "together": "%d" % half_up(100 * num[over].sum() / tot, "1"),
+             "beyond": "{:,}".format(int(half_up(sum(num[s] - bud[s] / 100 * den[s] for s in over) / 10000, "1")) * 10000)}
+    for s in order:
+        cells["share %s" % s] = "%d" % half_up(100 * num[s] / tot, "1")
+    if cells != F["programme_cells"]:
+        bad.append("programme %s against %s" % (cells, F["programme_cells"]))
+
+    # the intervals: linearised over strata of root service and hour, traces as units
+    for s in over:
+        R = sli[s] / 100
+        ks = k[k["svc"] == s].copy()
+        ks["z"] = ks["slow"].astype(float) - R
+        zt = ks.groupby("trace_id")["z"].sum()
+        X = ks["w"].sum()
+        rr = roots[["trace_id", "svc", "h"]].copy()
+        rr["z"] = rr["trace_id"].map(zt).fillna(0.0)
+        rr["n"] = rr.groupby(["svc", "h"])["trace_id"].transform("size")
+        rr["N"] = [N[(a, b)] for a, b in zip(rr["svc"], rr["h"])]
+        rr["u"] = rr["N"] / rr["n"] * rr["z"] / X
+        V = 0.0
+        for (_, _), g in rr.groupby(["svc", "h"]):
+            n = len(g)
+            if n < 2:
+                continue
+            f = min(1.0, n / max(g["N"].iloc[0], 1))
+            V += (1 - f) * n / (n - 1) * ((g["u"] - g["u"].mean()) ** 2).sum()
+        orph = ks[ks["rsvc"].isna()]
+        if len(orph) > 1:
+            u = orph["w"] * (orph["slow"].astype(float) - R) / X
+            V += len(u) / (len(u) - 1) * ((u - u.mean()) ** 2).sum()
+        se = 100 * np.sqrt(V)
+        lo, hi = half_up(sli[s] - 1.6448536269514722 * se, "0.01"), half_up(sli[s] + 1.6448536269514722 * se, "0.01")
+        if abs(lo - F["ci_cells"]["%s lo" % s]) > 0.011 or abs(hi - F["ci_cells"]["%s hi" % s]) > 0.011:
+            bad.append("%s interval %.2f to %.2f against %s to %s" % (s, lo, hi, F["ci_cells"]["%s lo" % s],
+                                                                    F["ci_cells"]["%s hi" % s]))
+
+    # incident minutes by half, Lisbon halves
+    h1_end = pd.Timestamp("2026-06-30 23:00")
+    for s in svcs:
+        iv = sorted((max(x["declared"], t), x["end"]) for x in incs for s_, t in x["named"] if s_ == s
+                    and max(x["declared"], t) < x["end"])
+        merged = []
+        for a_, b_ in iv:
+            if merged and a_ <= merged[-1][1]:
+                merged[-1][1] = max(merged[-1][1], b_)
+            else:
+                merged.append([a_, b_])
+        m = [0.0, 0.0]
+        for a_, b_ in merged:
+            for i, (lo_, hi_) in enumerate(((pd.Timestamp("2026-01-01"), h1_end), (h1_end, pd.Timestamp("2027-01-01")))):
+                x0, x1 = max(a_, lo_), min(b_, hi_)
+                if x1 > x0:
+                    m[i] += (x1 - x0).total_seconds() / 60
+        got = ["%d" % half_up(v, "1") for v in m]
+        if got != F["minutes"][s]:
+            bad.append("%s minutes %s against %s" % (s, got, F["minutes"][s]))
+
+    # every figure the answer blocks state is one the figure set carries
+    sub = open(os.path.join(task_dir, "submission.md")).read()
+    for s in svcs:
+        if "%s: SLI %s against a budget of %s" % (s, F["sli"][s], F["budget"][s]) not in sub:
+            bad.append("submission lacks %s's SLI line" % s)
     return bad
 
 
 if __name__ == "__main__":
-    task = sys.argv[1] if len(sys.argv) > 1 else os.path.dirname(HERE)
-    b = run(task)
+    td = sys.argv[1] if len(sys.argv) > 1 else os.path.dirname(HERE)
+    b = run(td)
     print("verify: %s" % ("PASS" if not b else "FAIL\n  " + "\n  ".join(b)))
     sys.exit(1 if b else 0)

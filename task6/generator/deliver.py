@@ -1,9 +1,9 @@
 """task6's golden deliverables, drawn from one figure set: reliability_review_2026.docx, the annual reliability
-review's latency note (the services that breached, in the order their engineers start, every service's December SLI
-beside its budget, the chart of each SLI against its own budget line, each one's share of all the services'
-over-threshold December requests and the share they served together, the requests beyond their budgets, the
-customer-facing incident minutes in which an incident named one of them, by half, how the SLI was read), and
-service_sli_2026.csv, a row per service with its SLI, budget and verdict."""
+review's latency note (the services that breached, in the order their engineers start, with each one's share of the
+over-threshold requests the SLIs count and a 90 per cent interval on its SLI; every service's December SLI beside its
+budget and the chart; the service that owned the root cause of each December customer-facing incident; the requests
+beyond budget; how the SLI was read), and service_sli_2026.csv, a row per service with its SLI, budget, verdict and
+customer-facing incident minutes by half."""
 import csv
 import io
 from decimal import Decimal, ROUND_HALF_UP
@@ -33,33 +33,103 @@ def nearest(x, step):
     return int(Decimal(repr(float(x) / step)).quantize(Decimal("1"), rounding=ROUND_HALF_UP)) * step
 
 
+def two(x):
+    return "%.2f" % float(Decimal(repr(float(x))).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP))
+
+
+def lisbon(t):
+    return t.strftime("%-d December %H:%M")
+
+
+def about(hhmm):
+    """A changepoint's time as a reviewer states it: to the nearest five minutes."""
+    h, m = map(int, hhmm.split(":"))
+    t = nearest(h * 60 + m, 5)
+    return "%02d:%02d" % divmod(t % 1440, 60)
+
+
+# how the write-up names each service's slowed handling
+HANDLING = {"notifications": "notifications' SMS verification", "accounts": "accounts' sign-in handling"}
+
+
+def handling(s):
+    return HANDLING.get(s, "%s own handling" % (s + "'" if s.endswith("s") else s + "'s"))
+
+
 def figures(R):
-    m, P, S = R["main"], R["programme"], R["shallow"]
-    over = list(R["over"])
+    S, P, Sc, Pc = R["S"], R["P"], R["careful"]["S"], R["careful"]["P"]
+    over = list(P["over"])
+    import analysis as A
+    import datetime as dt
+    incs = []
+    for x in R["incidents"]:
+        if x["declared"] < A.DEC0:
+            continue
+        on = R["onset"][x["id"]]
+        incs.append({"id": x["id"], "declared": lisbon(x["declared"]), "named": [s_ for s_, _ in x["named"]],
+                     "cause": R["attribution"][x["id"]], "careful_cause": R["careful"]["attribution"][x["id"]],
+                     "onset": {s_: (A.DEC0 + dt.timedelta(seconds=v[0])).strftime("%H:%M") for s_, v in on.items() if v},
+                     "end": lisbon(x["end"])})
+    for x in incs:
+        x["onset_about"] = {s_: about(v) for s_, v in x["onset"].items()}
     F = {"over": over, "over_count": len(over),
-         "sli": {s: "%.1f" % m[s]["sli1"] for s in K.SVC},
-         "budget": {s: "%.1f" % K.BUDGET[s] for s in K.SVC},
-         "threshold_ms": {s: "{:,}".format(K.THRESHOLD[s]) for s in K.SVC},
-         "ran_over": {s: "yes" if m[s]["over"] else "no" for s in K.SVC},
-         "pg_service_hour": "%.1f" % K.r1(m["partner-gateway"]["by_service_hour"]),
-         "kept_share": {s: "%.1f" % K.r1(m[s]["unweighted"]) for s in K.SVC},
-         "pg_kept_mix_pct": {k: "%d" % whole(100 * v) for k, v in m["partner-gateway"]["root_mix_kept"].items() if k},
-         "pg_weighted_mix_pct": {k: "%d" % whole(100 * v) for k, v in m["partner-gateway"]["root_mix_weighted"].items()
-                                 if k},
-         # the asks, read off the SLI's numerator
+         "sli": {s: "%.1f" % K.r1(S[s]["sli"]) for s in K.SVC},
+         "budget": {s: "%.1f" % R["bud"][s] for s in K.SVC},
+         "threshold_ms": {s: "{:,}".format(int(R["thr"][s])) for s in K.SVC},
+         "ran_over": {s: "yes" if s in over else "no" for s in K.SVC},
          "start_order": list(P["order"]),
          "share_pct": {s: "%d" % whole(P["share"][s]) for s in K.SVC},
-         "over_share_pct": "%d" % whole(P["over_share"]),
+         "together_pct": "%d" % whole(P["together"]),
          "beyond_budget": "{:,}".format(nearest(P["beyond"], 10000)),
-         "incident_minutes": [whole(v) for v in R["incidents"]],
-         "incident_minutes_text": ["{:,}".format(whole(v)) for v in R["incidents"]],
-         # the same asks on the default path (each service's own spans reweighted hour by hour on its own count)
-         "shallow_order": list(S["order"]),
-         "shallow_over_share_pct": "%d" % whole(S["over_share"]),
-         "shallow_pg_share_pct": "%d" % whole(S["share"]["partner-gateway"]),
-         "shallow_beyond_budget": "{:,}".format(nearest(S["beyond"], 10000)),
-         "shallow_incident_minutes_text": ["{:,}".format(whole(v)) for v in R["shallow_incidents"]]}
+         "ci": {s: [two(R["ci"][s][0]), two(R["ci"][s][1])] for s in over},
+         "incidents": incs,
+         "minutes": {s: ["%d" % whole(v) for v in R["minutes"][s]] for s in K.SVC},
+         # the careful but hurried pass: each service's own spans reweighted on its own hourly count, each incident put
+         # on the service whose own handling ran furthest over its load curve across the whole incident
+         "careful_over": list(Pc["over"]),
+         "careful_sli": {s: "%.1f" % K.r1(Sc[s]["sli"]) for s in K.SVC},
+         # the root weights with that attribution
+         "rootcareful_sli": {s: "%.1f" % K.r1(R["rootcareful"]["S"][s]["sli"]) for s in K.SVC},
+         # each service's own hourly count with the golden's exclusions: the weighting the only change
+         "owncount_sli": {s: "%.1f" % K.r1(R["hint_i5"]["S"][s]["sli"]) for s in K.SVC},
+         "owncount_over": list(R["hint_i5"]["P"]["over"]),
+         "rootcareful_over": list(R["rootcareful"]["P"]["over"])}
+    F["interval_level_pct"] = 90
+    F["root_cause"] = {x["id"]: x["cause"] for x in incs}
+    F["ci_cells"] = ci_cells(R["ci"], over)
+    F["programme_cells"] = programme_cells(P)
+    # the incidents the whole-window reading puts on a caller, and those of them that decide a verdict
+    F["misread"] = [x["id"] for x in incs if x["cause"] != x["careful_cause"]]
+    F["deciding"] = [x["id"] for x in incs if x["cause"] != x["careful_cause"] and x["cause"] not in F["rootcareful_over"]]
+    # the other readings of the same spans and the lists they give, each a route a hurried review takes
+    F["routes"] = [
+        {"reading": "Kept spans unweighted; each incident on the service named first",
+         "over": list(R["quick"]["P"]["over"])},
+        {"reading": "Each service's spans on its own hourly count; each incident on the service furthest over its load "
+                    "curve across the incident", "over": list(Pc["over"])},
+        {"reading": "Each service's spans on its own hourly count; causes dated by when own handling rose",
+         "over": list(R["hint_i5"]["P"]["over"])},
+        {"reading": "Each span at its trace root's keep share; each incident on the service furthest over its load "
+                    "curve", "over": list(R["rootcareful"]["P"]["over"])},
+        {"reading": "Each span at its trace root's keep share; causes dated by when own handling rose (this review)",
+         "over": over, "golden": True}]
     return F
+
+
+def ci_cells(ci, svcs):
+    out = {}
+    for s in svcs:
+        out["%s lo" % s] = float(two(ci[s][0]))
+        out["%s hi" % s] = float(two(ci[s][1]))
+    return out
+
+
+def programme_cells(P):
+    out = {"order": ", ".join(P["order"]), "together": "%d" % whole(P["together"]),
+           "beyond": "{:,}".format(nearest(P["beyond"], 10000))}
+    for s in P["order"]:
+        out["share %s" % s] = "%d" % whole(P["share"][s])
+    return out
 
 
 def chart_png(F):
@@ -77,7 +147,7 @@ def chart_png(F):
     ax.set_yticklabels(["%s (budget %s%%)" % (s_, F["budget"][s_]) for s_ in svcs], fontsize=8.5)
     i_pg = svcs.index("partner-gateway")
     ax.annotate("%s%% against %s%%" % (F["sli"]["partner-gateway"], F["budget"]["partner-gateway"]),
-                xy=(float(F["sli"]["partner-gateway"]), i_pg), xytext=(float(F["sli"]["partner-gateway"]) - 1.15, i_pg + 1.2),
+                xy=(float(F["sli"]["partner-gateway"]), i_pg), xytext=(float(F["sli"]["partner-gateway"]) + 0.35, i_pg - 1.4),
                 fontsize=8, color="#c0392b", arrowprops=dict(arrowstyle="-", color="#c0392b", lw=0.8))
     ax.set_title("%s services over their own error budget, December 2026" % ("Five" if len(F["over"]) == 5 else
                  str(len(F["over"]))), fontsize=10, loc="left", color="#1f2d3d")
@@ -109,6 +179,23 @@ def _p(doc, text, bold=False, size=10.5, italic=False, space=4, color=None):
     return para
 
 
+def _table(doc, head, rows, right=()):
+    t = doc.add_table(rows=1, cols=len(head))
+    t.style = "Table Grid"
+    for i, h in enumerate(head):
+        c = t.rows[0].cells[i]
+        c.text = h
+        c.paragraphs[0].runs[0].bold = True
+        _shade(c, "DCE6F0")
+    for r in rows:
+        cells = t.add_row().cells
+        for i, v in enumerate(r):
+            cells[i].text = v
+            if i in right:
+                cells[i].paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.RIGHT
+    return t
+
+
 def write_docx(path, R, F):
     doc = Document()
     st = doc.styles["Normal"]
@@ -117,94 +204,80 @@ def write_docx(path, R, F):
     for sec in doc.sections:
         sec.left_margin = sec.right_margin = Cm(2.2)
         sec.top_margin = sec.bottom_margin = Cm(2.0)
+    n = "Five" if len(F["over"]) == 5 else str(len(F["over"]))
     _p(doc, "Rotalinha Platform Reliability", bold=True, size=9, color=(0x55, 0x55, 0x55))
     _p(doc, "To: Engineering leadership group    From: %s, Platform Reliability    Date: 8 January 2027"
        % K.PEOPLE["head"], size=9, space=0)
     _p(doc, "Ref: PR-SLO-3 annual review 2026, latency objectives, read over December 2026 in Lisbon time", size=9,
        space=10)
-    _p(doc, "%s services ran over their latency budget in 2026" % ("Five" if len(F["over"]) == 5 else
-       str(len(F["over"]))), bold=True, size=16, space=8)
+    _p(doc, "%s services ran over their latency budget in 2026" % n, bold=True, size=16, space=8)
     footer = doc.sections[0].footer.paragraphs[0]
     footer.text = "PR-SLO-3 annual review 2026    page "
     footer.runs[0].font.size = Pt(8)
     _page_field(footer)
-    over = F["over"]
     _p(doc, "%s services ran over their 2026 latency error budget and get a reliability engineer for January to June "
-            "2027. The engineers start in this order, the service with the most requests over its latency threshold in "
-            "December first: %s." % ("Five" if len(over) == 5 else str(len(over)), names(F["start_order"])),
-       bold=True, size=11.5, space=8)
-    pg = "partner-gateway"
-    _p(doc, "Partner-gateway is the one a quick read misses: its SLI is %s%% against a %s%% budget, where the share "
-            "of its spans the tracing store kept would put it at %s%% and a reweighting of its own spans hour by hour "
-            "at %s%%. Journey-search, places and seat-map breach their 1.0%% budgets at %s%%, %s%% and %s%%, and "
-            "notifications at %s%%."
-       % (F["sli"][pg], F["budget"][pg], F["kept_share"][pg], F["pg_service_hour"], F["sli"]["journey-search"],
-          F["sli"]["places"], F["sli"]["seat-map"], F["sli"]["notifications"]), space=8)
+            "2027, starting in this order, the service whose SLI counts the most requests over its threshold first: "
+            "%s." % (n, names(F["start_order"])), bold=True, size=11.5, space=8)
+    _table(doc, ["Start", "Service", "Share of over-threshold requests (%)", "Latency SLI (%)",
+                 "90% interval (%)", "Error budget (%)"],
+           [[str(k), s_, F["share_pct"][s_], F["sli"][s_], "%s to %s" % tuple(F["ci"][s_]), F["budget"][s_]]
+            for k, s_ in enumerate(F["start_order"], 1)], right=(0, 2, 3, 4, 5))
+    _p(doc, "Source: trace_spans_2026-12.parquet weighted by the load balancer's hourly counts; budgets from PR-SLO-3 "
+            "section 4. The interval is for the trace store's sample of December's requests.",
+       italic=True, size=8, space=8)
+    _p(doc, "Between them the %s served %s%% of the requests over their thresholds that all our services' SLIs count, "
+            "about %s more than their budgets allow." % (n.lower(), F["together_pct"], F["beyond_budget"]), space=8)
 
-    tbl = doc.add_table(rows=1, cols=5)
-    tbl.style = "Table Grid"
-    for i, h in enumerate(["Service", "Threshold (ms)", "Latency SLI (%)", "Error budget (%)", "Ran over"]):
-        c = tbl.rows[0].cells[i]
-        c.text = h
-        c.paragraphs[0].runs[0].bold = True
-        _shade(c, "DCE6F0")
-    for s in K.SVC:
-        row = tbl.add_row().cells
-        for i, v in enumerate([s, F["threshold_ms"][s], F["sli"][s], F["budget"][s], F["ran_over"][s]]):
-            row[i].text = v
-            if i:
-                row[i].paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.RIGHT
-    _p(doc, "Source: trace_spans_2026-12.parquet and lb_target_group_requests_2026-H2.csv; thresholds and budgets from "
-            "PR-SLO-3 section 4.", italic=True, size=8, space=8)
+    _p(doc, "Every service against its budget", bold=True, size=12, space=4).paragraph_format.keep_with_next = True
+    _table(doc, ["Service", "Threshold (ms)", "Latency SLI (%)", "Error budget (%)", "Ran over"],
+           [[s, F["threshold_ms"][s], F["sli"][s], F["budget"][s], F["ran_over"][s]] for s in K.SVC],
+           right=(1, 2, 3))
+    _p(doc, "Source: as above; thresholds from PR-SLO-3 section 4.", italic=True, size=8, space=8)
     doc.add_picture(io.BytesIO(chart_png(F)), width=Cm(16.0))
     _p(doc, "Each bar is the service's December SLI; the dark mark on it is the service's own error budget.",
        italic=True, size=8.5, space=10)
 
-    _p(doc, "Partner-gateway's engineer starts first", bold=True, size=12, space=4).paragraph_format.keep_with_next = True
-    _p(doc, "Between them the %s served %s%% of all our services' requests over their latency thresholds in December, "
-            "about %s more than their budgets allow. Each one's share of all ten services' over-threshold December "
-            "requests, in the order its engineer starts:" % (
-                "five" if len(over) == 5 else str(len(over)), F["over_share_pct"], F["beyond_budget"]), space=4)
-    t2 = doc.add_table(rows=1, cols=4)
-    t2.style = "Table Grid"
-    for i, h in enumerate(["Start", "Service", "Share of over-threshold requests (%)", "Latency SLI (%)"]):
-        c = t2.rows[0].cells[i]
-        c.text = h
-        c.paragraphs[0].runs[0].bold = True
-        _shade(c, "DCE6F0")
-    for k, s_ in enumerate(F["start_order"], 1):
-        row = t2.add_row().cells
-        for i, v in enumerate([str(k), s_, F["share_pct"][s_], F["sli"][s_]]):
-            row[i].text = v
-            if i != 1:
-                row[i].paragraphs[0].alignment = WD_ALIGN_PARAGRAPH.RIGHT
-    _p(doc, "Source: the weighted spans over each service's threshold, as for the SLI; budgets from PR-SLO-3 "
-            "section 4. The other five services served the rest.", italic=True, size=8, space=6)
-    h1, h2 = F["incident_minutes_text"]
-    _p(doc, "Customer-facing incidents named at least one of the %s for %s minutes from January to June 2026 and %s "
-            "minutes from July to December (PR-SLO-3 sections 5.2 and 5.4, each minute counted once)."
-       % ("five" if len(over) == 5 else str(len(over)), h1, h2), space=10)
+    _p(doc, "December's customer-facing incidents", bold=True, size=12, space=4).paragraph_format.keep_with_next = True
+    _p(doc, "PR-SLO-3 3.2 leaves a service's requests out of its SLI while a customer-facing incident named it, unless "
+            "it owned the incident's root cause. December's post-incident reviews were still open, so the review "
+            "dated, for each service an incident named, when its own handling of requests rose above what its load "
+            "that hour would explain; the earliest rise owns the cause.", space=4)
+    _table(doc, ["Incident", "Declared (Lisbon)", "Services named, in order", "Root cause owned by"],
+           [[x["id"], x["declared"], ", ".join(x["named"]), x["cause"]] for x in F["incidents"]])
+    _p(doc, "Source: incidents_2026.csv, incident_timeline_2026.csv, status_page_history_2026.json and the span "
+            "export.", italic=True, size=8, space=8)
+    dec = [x for x in F["incidents"] if x["id"] in F["deciding"]]
+    if dec:
+        _p(doc, "%s are the ones to read twice. %s Charged to %s, they would leave %s at %s." % (
+            names([x["id"] for x in dec]),
+            " ".join("In %s, %s slowed from about %s, and %s only backed up behind it from about %s." % (
+                x["id"], handling(x["cause"]), x["onset_about"][x["cause"]], handling(x["careful_cause"]),
+                x["onset_about"][x["careful_cause"]]) for x in dec),
+            names([x["careful_cause"] for x in dec]), names([x["cause"] for x in dec]),
+            ("%s%% each" % F["rootcareful_sli"][dec[0]["cause"]]) if len({F["rootcareful_sli"][x["cause"]] for x in dec}) == 1
+            else names(["%s%%" % F["rootcareful_sli"][x["cause"]] for x in dec])), space=10)
 
     _p(doc, "How the SLI was read", bold=True, size=12, space=4).paragraph_format.keep_with_next = True
-    kept, wtd = F["pg_kept_mix_pct"], F["pg_weighted_mix_pct"]
-    _p(doc, "The tracing store keeps a trace whole or not at all, and the decision is taken where the trace starts: "
-            "each edge service keeps about the same number of traces every hour whatever its traffic, so a busy hour "
-            "is kept thinly. Each kept server span therefore counts for the requests its "
-            "trace's edge service handled that hour over the traces it kept, from the load balancer's hourly counts; "
-            "the SLI is the weighted slow spans over the service's December requests (PR-SLO-3 sections 2 and 3).")
-    _p(doc, "For an internal service the weight belongs to the edge request that started the trace, not to the "
-            "service itself. Partner-gateway's kept spans come %s%% from journey-search's traces, %s%% from "
-            "seat-map's and %s%% from booking's, while journey-search's searches make %s%% of its requests, and those "
-            "availability lookups are the slow ones; weighting its spans by its own hourly keep share under-counts "
-            "them." % (kept.get("journey-search", "0"), kept.get("seat-map", "0"), kept.get("booking", "0"),
-                       wtd.get("journey-search", "0")))
-    _p(doc, "A service's over-threshold requests are the same weighted spans over its threshold that make its SLI, "
-            "so its share and the requests beyond its budget move with the SLI.", space=10)
-    _p(doc, "Notes: SLIs are per cents to one decimal and are compared with the budget as rounded (PR-SLO-3 3.2). "
-            "Shares and the requests beyond budget are worked from the unrounded figures; the requests beyond budget "
-            "are rounded to the nearest ten thousand. December in Lisbon time is UTC throughout. The load balancer's "
-            "health probes are not requests (PR-SLO-3 2.2) and the trace export's re-sent spans are counted once. "
-            "A service's incident minutes start when the incident timeline names it.", italic=True, size=8.5)
+    _p(doc, "The tracing store keeps a trace whole or not at all, and decides where the trace starts: each edge service "
+            "keeps about the same number of traces every hour whatever its traffic. Each kept server span therefore "
+            "counts for the requests its trace's edge service handled in the hour the trace started, over the traces it "
+            "kept then, from the load balancer's hourly counts. For an internal service that weight belongs to the "
+            "caller, not to the service: fares, partner-gateway and notifications are called from busy, thinly kept "
+            "edge services for their slow operations and from quiet ones for their fast ones, so their own hourly "
+            "counts, with the same incident time left out, would put them at %s%%, %s%% and %s%%." % (
+                F["owncount_sli"]["fares"], F["owncount_sli"]["partner-gateway"], F["owncount_sli"]["notifications"]))
+    _p(doc, "The interval treats the kept traces as the sample they are: drawn within each edge service's hours, a "
+            "whole trace at a time, so a service's spans in one trace move together and a thinly kept hour weighs more.",
+       space=8)
+    _p(doc, "The same spans read other ways give other lists:", space=4).paragraph_format.keep_with_next = True
+    _table(doc, ["Reading of the December spans", "Services over budget"],
+           [[x["reading"], names(x["over"]) if x["over"] else "none"] for x in F["routes"]])
+    _p(doc, "Source: trace_spans_2026-12.parquet and the load balancer's hourly counts, with the exclusions of PR-SLO-3 "
+            "3.2 under each attribution.", italic=True, size=8, space=10)
+    _p(doc, "Notes: SLIs are per cents to one decimal and are compared with the budget as rounded (PR-SLO-3 3.4); "
+            "intervals are to two decimals. Shares and the requests beyond budget are worked from the unrounded "
+            "figures. December in Lisbon time is UTC throughout, and the trace export's re-sent spans are counted "
+            "once.", italic=True, size=8.5)
     doc.save(path)
 
 
@@ -239,6 +312,7 @@ def _page_field(par):
 def write_csv(path, R, F):
     with open(path, "w", newline="") as fh:
         wr = csv.writer(fh, lineterminator="\n")
-        wr.writerow(["service", "latency_sli_pct", "error_budget_pct", "ran_over"])
+        wr.writerow(["service", "latency_sli_pct", "error_budget_pct", "ran_over", "incident_minutes_h1",
+                     "incident_minutes_h2"])
         for s in K.SVC:
-            wr.writerow([s, F["sli"][s], F["budget"][s], F["ran_over"][s]])
+            wr.writerow([s, F["sli"][s], F["budget"][s], F["ran_over"][s]] + F["minutes"][s])

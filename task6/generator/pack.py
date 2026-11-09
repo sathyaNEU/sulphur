@@ -36,11 +36,36 @@ EDGE_OPS = {
     "tickets": [("GET /tickets/{ref}/pdf", 0.64), ("GET /tickets/{ref}", 0.36)],
 }
 INT_OPS = {("fares", "quote"): ("POST", "/fares/quote"),
+           ("fares", "batch"): ("POST", "/fares/quotes:batch"),
            ("partner-gateway", "availability"): ("POST", "/operators/{code}/availability"),
            ("partner-gateway", "seats"): ("GET", "/operators/{code}/seats/{tripId}"),
            ("partner-gateway", "reserve"): ("POST", "/operators/{code}/reservations"),
+           ("partner-gateway", "ticket"): ("GET", "/operators/{code}/tickets/{ref}"),
            ("payments", "authorise"): ("POST", "/payments/authorise"),
-           ("notifications", "email"): ("POST", "/messages/email")}
+           ("payments", "wallet"): ("GET", "/payments/wallets/{customerId}"),
+           ("notifications", "email"): ("POST", "/messages/email"),
+           ("notifications", "verify"): ("POST", "/messages/sms/verification"),
+           ("notifications", "resend"): ("POST", "/messages/email/resend")}
+
+
+def edge_name(svc, calls, r):
+    """The route an edge request took, read off the calls it made (a request that sent an SMS code was a sign-in)."""
+    if svc == "journey-search":
+        return "GET /v2/journeys/search" if calls else "GET /v2/journeys/{id}"
+    if svc == "accounts":
+        if "verify" in calls:
+            return "POST /auth/token"
+        if "wallet" in calls:
+            return "GET /me/payment-methods"
+        return "POST /auth/token" if r.random() < 0.3 else "GET /me"
+    if svc == "tickets":
+        if "resend" in calls:
+            return "POST /tickets/{ref}/resend"
+        if "ticket" in calls:
+            return "GET /tickets/{ref}/pdf"
+        return "GET /tickets/{ref}"
+    names, shares = zip(*EDGE_OPS[svc])
+    return names[int(r.choice(len(names), p=shares))]
 
 
 class PodPool:
@@ -78,8 +103,7 @@ class PodPool:
 
 
 def span_table(w):
-    """The kept spans that started in December (UTC), the load balancer's kept health probes and the exporter's
-    re-sent batches, in export order."""
+    """The kept spans that started in December (UTC) and the exporter's re-sent batches, in export order."""
     r = np.random.default_rng(K.SEED + 404)
     sp = w.sp
     keep = (sp["t0"] >= 0) & (sp["t0"] < K.REVIEW_HOURS * 3600)
@@ -103,13 +127,15 @@ def span_table(w):
                              "host_name")}
     base_ns = _ns(DEC0_UTC)
     pod_of = {}
+    calls_of = {}
+    for i in np.nonzero(sp["kind"] == "CLIENT")[0]:
+        calls_of.setdefault(int(sp["parent"][i]), set()).add(str(sp["op"][i]).split(":")[1])
     for i in idx:
         svc, op, kind, t0, ms, code = (str(sp["svc"][i]), str(sp["op"][i]), str(sp["kind"][i]), float(sp["t0"][i]),
                                        float(sp["ms"][i]), int(sp["code"][i]))
         tr = int(sp["trace"][i])
         if kind == "SERVER" and op == "own":
-            names, shares = zip(*EDGE_OPS[svc])
-            name = names[int(r.choice(len(names), p=shares))]
+            name = edge_name(svc, calls_of.get(int(sp["sid"][i]), set()), r)
             if code == 200 and name.startswith("GET") and ms < K.THRESHOLD[svc] / 3 and r.random() < 0.004:
                 code = 404
         elif kind == "SERVER":
@@ -136,23 +162,6 @@ def span_table(w):
         cols["status_code"].append("STATUS_CODE_ERROR" if code >= 500 else "STATUS_CODE_UNSET")
         cols["http_status_code"].append(code)
         cols["host_name"].append(pod_of[pk])
-    # the load balancer probes /healthz on every pod every 15 seconds; the store keeps about one probe in 720
-    for svc in K.SVC:
-        for h in range(K.REVIEW_HOURS):
-            for _ in range(int(r.poisson(2))):
-                t0 = h * 3600 + float(r.uniform(0, 3599))
-                s0 = base_ns + int(round(t0 * 1e9))
-                cols["trace_id"].append(_hex(r, 32))
-                cols["span_id"].append(_hex(r, 16))
-                cols["parent_span_id"].append("")
-                cols["service_name"].append(K.TRACE_NAME[svc])
-                cols["span_name"].append("GET /healthz")
-                cols["span_kind"].append("SPAN_KIND_SERVER")
-                cols["start_time_unix_nano"].append(s0)
-                cols["end_time_unix_nano"].append(s0 + int(r.uniform(0.6, 3.2) * 1e6))
-                cols["status_code"].append("STATUS_CODE_UNSET")
-                cols["http_status_code"].append(200)
-                cols["host_name"].append(pool.pick(svc, t0))
     n = len(cols["span_id"])
     order = np.argsort(np.array(cols["start_time_unix_nano"]), kind="stable")
     # the exporter re-sends about one batch in three hundred: those rows appear twice, identical
@@ -267,11 +276,11 @@ def write_asks(out):
     with open(os.path.join(out, K.FILES["incidents"]), "w", newline="") as fh:
         wr = csv.writer(fh, lineterminator="\n")
         wr.writerow(["incident_id", "declared_at_utc", "resolved_at_utc", "severity", "services", "title",
-                     "commander"])
+                     "commander", "review_status", "root_cause_service"])
         for x in inc:
             wr.writerow([x["incident_id"], x["declared_at"].strftime("%Y-%m-%d %H:%M:%S"),
                          x["resolved_at"].strftime("%Y-%m-%d %H:%M:%S"), x["severity"], x["services"], x["title"],
-                         x["commander"]])
+                         x["commander"], x["review"], x["root_cause"]])
     with open(os.path.join(out, K.FILES["status"]), "w") as fh:
         json.dump({"page": "status.rotalinha.pt", "timezone": "Europe/Lisbon",
                    "incidents": [{"id": p["post_id"], "name": p["name"], "components": p["components"],

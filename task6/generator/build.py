@@ -33,6 +33,16 @@ import postprocess as PP   # noqa: E402
 
 TASK = os.path.dirname(HERE)
 MTIME = calendar.timegm(K.ASSEMBLED.timetuple())
+_U = __import__("datetime").timezone.utc
+_T = lambda *a: __import__("datetime").datetime(*a, tzinfo=_U)
+# each export's own save time, by the system that wrote it (the workbooks and documents carry their own stamps)
+EXPORTED = {"spans": _T(2027, 1, 1, 6, 12, 41), "lb_h1": _T(2026, 7, 2, 7, 40, 3), "lb_h2": _T(2027, 1, 2, 7, 41, 19),
+            "incidents": _T(2027, 1, 4, 9, 2, 55), "timeline": _T(2027, 1, 4, 9, 3, 12),
+            "status": _T(2027, 1, 4, 11, 27, 38), "billing": _T(2027, 1, 5, 8, 15, 4),
+            "invoices": _T(2027, 1, 5, 8, 16, 47), "resources": _T(2027, 1, 5, 8, 18, 22),
+            "deploys": _T(2027, 1, 4, 8, 12, 44), "rollouts": _T(2027, 1, 4, 8, 30, 9),
+            "capacity": _T(2027, 1, 5, 14, 5, 51)}
+GOLDEN_CSV_SAVED = _T(2027, 1, 8, 14, 52, 17)
 
 
 def build_pack(out):
@@ -48,8 +58,7 @@ def build_pack(out):
                        "2026-12-18T11:05:00Z", excel=True)
     PP.normalize_ooxml(p("feedback"), "Customer Communications", "Customer Communications", "2027-01-05T08:44:00Z",
                        "2027-01-05T08:44:00Z", excel=True)
-    for f in os.listdir(out):
-        os.utime(os.path.join(out, f), (MTIME, MTIME))
+    PP.own_mtimes(out, {K.FILES[k]: v for k, v in EXPORTED.items()})
     return w, n, truths
 
 
@@ -68,14 +77,89 @@ def build_golden(target, golden):
     PP.COMPANY = K.ORG_LTD
     PP.normalize_ooxml(os.path.join(golden, K.DOCX_OUT), K.PEOPLE["sre"], K.PEOPLE["head"], "2027-01-07T09:12:00Z",
                        "2027-01-08T15:26:00Z", title="Reliability review 2026: latency objectives")
-    for f in os.listdir(golden):
-        os.utime(os.path.join(golden, f), (MTIME, MTIME))
+    PP.own_mtimes(golden, {K.CSV_OUT: GOLDEN_CSV_SAVED})
     with open(os.path.join(HERE, "figures.json"), "w") as fh:
         json.dump(F, fh, indent=1, sort_keys=True, default=str)
         fh.write("\n")
+    write_effort(R, F)
     with open(os.path.join(TASK, "submission.md"), "w", encoding="utf-8") as fh:
         fh.write(text)
     return R, F
+
+
+def write_effort(R, F):
+    """generator/effort.json: each result's golden (the figures.json value), its band, and what the quick, careful but
+    hurried and thorough passes file, each pass's methods run end to end on the pack; then the hints, each applied
+    alone to the careful pass, with the results it rescues measured by effort.py's own grading."""
+    import importlib.util
+    import deliver as D
+    spec = importlib.util.spec_from_file_location("effort", os.path.join(
+        os.path.dirname(os.path.dirname(HERE)), ".claude", "skills", "stumping", "effort.py"))
+    EF = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(EF)
+    over = F["over"]
+
+    def mins(M):
+        return {s: ["%d" % D.whole(v) for v in M[s]] for s in K.SVC}
+
+    def sli(S):
+        return {s: "%.1f" % K.r1(S[s]["sli"]) for s in K.SVC}
+
+    bands = {}
+    for s in over:
+        lo = sorted([float(D.two(R["ci"][s][0])), float(D.two(R["ci_boot"][s][0]))])
+        hi = sorted([float(D.two(R["ci"][s][1])), float(D.two(R["ci_boot"][s][1]))])
+        bands["%s lo" % s] = [round(lo[0] - 0.02, 2), round(lo[1] + 0.02, 2)]
+        bands["%s hi" % s] = [round(hi[0] - 0.02, 2), round(hi[1] + 0.02, 2)]
+    passes = {"quick": R["quick"], "careful": R["careful"]}
+    res = [
+        {"id": "R1", "name": "incident minutes by half", "graded_as": "Ask 1", "figure": "minutes", "depends": [],
+         "golden": F["minutes"], "passes": {"quick": mins(R["quick"]["minutes"]), "careful": mins(R["minutes"]),
+                                            "thorough": F["minutes"]}},
+        {"id": "R2", "name": "root cause of each December incident", "graded_as": "Component 1",
+         "figure": "root_cause", "depends": ["R1"], "golden": F["root_cause"],
+         "passes": {p: dict(passes[p]["attribution"]) for p in passes} | {"thorough": F["root_cause"]}},
+        {"id": "R3", "name": "every service's December SLI", "graded_as": "Ask 2", "figure": "sli",
+         "depends": ["R1", "R2"], "golden": F["sli"],
+         "passes": {p: sli(passes[p]["S"]) for p in passes} | {"thorough": F["sli"]}},
+        {"id": "R4", "name": "intervals on the over-budget SLIs", "graded_as": "Component 2", "figure": "ci_cells",
+         "depends": ["R3"], "golden": F["ci_cells"], "bands": bands,
+         "passes": {p: D.ci_cells(passes[p]["ci"], over) for p in passes} | {"thorough": F["ci_cells"]}},
+        {"id": "R5", "name": "the services over budget", "graded_as": "Recommendation", "figure": "over",
+         "depends": ["R3"], "golden": list(over),
+         "passes": {p: list(passes[p]["P"]["over"]) for p in passes} | {"thorough": list(over)}},
+        {"id": "R6", "name": "start order, shares, together, beyond", "graded_as": "Ask 3",
+         "figure": "programme_cells", "depends": ["R3", "R5"], "golden": F["programme_cells"],
+         "passes": {p: D.programme_cells(passes[p]["P"]) for p in passes} | {"thorough": F["programme_cells"]}},
+    ]
+    # the hints: what each one alone does to the careful pass
+    hinted = {
+        "each kept span counts at its trace root's hourly keep share":
+            {"R3": sli(R["rootcareful"]["S"]), "R5": list(R["rootcareful"]["P"]["over"]),
+             "R6": D.programme_cells(R["rootcareful"]["P"])},
+        "each December incident's cause is the named service whose own handling rose first, not the one furthest "
+        "over its curve":
+            {"R2": F["root_cause"], "R3": sli(R["hint_i5"]["S"]), "R5": list(R["hint_i5"]["P"]["over"]),
+             "R6": D.programme_cells(R["hint_i5"]["P"])},
+        "an SLI's interval takes whole traces as its units within each root service's hour":
+            {"R4": D.ci_cells(R["hint_ci"], over)},
+    }
+    hints = []
+    for sentence, vals in hinted.items():
+        rescued = []
+        for r in res:
+            if r["id"] not in vals:
+                continue
+            before = EF.grade(r["passes"]["careful"], r)[0]
+            after = EF.grade(vals[r["id"]], r)[0]
+            if before != "right" and after == "right":
+                rescued.append(r["id"])
+        hints.append({"sentence": sentence, "rescues": rescued})
+    # the routes: the services each tempting shortcut puts over budget, beside the golden's five
+    routes = [{"name": x["reading"], "answer": list(x["over"]), "golden": bool(x.get("golden"))} for x in F["routes"]]
+    with open(os.path.join(HERE, "effort.json"), "w") as fh:
+        json.dump({"results": res, "hints": hints, "routes": routes}, fh, indent=1, sort_keys=True)
+        fh.write("\n")
 
 
 def write_metadata(n, R):
@@ -107,13 +191,13 @@ def write_metadata(n, R):
         prov[fn] = {"source": synth, "covers": about[k][0], "date": about[k][1],
                     "licence": "CC0 1.0 (constructed for this task)",
                     "made": "generated by task6/generator from its seeded records"}
-    m = {"task": "task6",
+    m = {"task": "task6", "as_of": "2027-01-06",
          "title": "Rotalinha: the internal services that ran over their 2026 latency error budget",
          "domain": "General Statistics & Data Science",
          "objective": "Descriptive & Distribution Analysis",
          "decision": "which internal services ran over their 2026 latency error budget and get a reliability engineer "
                      "for the first half of 2027",
-         "answer": ", ".join(R["over"]),
+         "answer": ", ".join(R["P"]["over"]),
          "deliverables": [K.DOCX_OUT, K.CSV_OUT],
          "distractor_files": ["target/" + K.FILES[k] for k in K.DISTRACTORS],
          "rows": sorted([(K.FILES["spans"], n["spans"]), (K.FILES["lb_h1"], n["lb_h1"]), (K.FILES["lb_h2"], n["lb_h2"])]),
@@ -126,12 +210,7 @@ def write_metadata(n, R):
 def cut_golden_zip(golden, path):
     if os.path.exists(path):
         os.remove(path)
-    with zipfile.ZipFile(path, "w", zipfile.ZIP_DEFLATED) as z:
-        for f in sorted(os.listdir(golden)):
-            zi = zipfile.ZipInfo(f, date_time=(2027, 1, 8, 15, 26, 0))
-            zi.compress_type = zipfile.ZIP_DEFLATED
-            zi.external_attr = 0o644 << 16
-            z.writestr(zi, open(os.path.join(golden, f), "rb").read())
+    PP.zip_folder(golden, path, zone="Europe/Lisbon")
 
 
 def unpack_shipped(target):
@@ -186,12 +265,7 @@ def digest(d):
 def cut_zip(target, path):
     if os.path.exists(path):
         os.remove(path)
-    with zipfile.ZipFile(path, "w", zipfile.ZIP_DEFLATED) as z:
-        for f in sorted(os.listdir(target)):
-            zi = zipfile.ZipInfo("target/" + f, date_time=K.ASSEMBLED.timetuple()[:6])
-            zi.compress_type = zipfile.ZIP_DEFLATED
-            zi.external_attr = 0o644 << 16
-            z.writestr(zi, open(os.path.join(target, f), "rb").read())
+    PP.zip_folder(target, path, prefix="target/", zone="Europe/Lisbon")
 
 
 def main():

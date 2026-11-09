@@ -3,6 +3,7 @@ the deployment tool's production log (releases and rollbacks), the cloud provide
 resource inventory (each service's cost by half), and the incident tool's export beside the public status page's
 history (each service's customer-facing incident minutes by half). The truth of each ask is kept beside its records."""
 import datetime as dt
+import zlib
 
 import numpy as np
 
@@ -338,23 +339,39 @@ def _svc_of_tag(tags):
 
 
 # ------------------------------------------------------------------ incidents and the status page
+def _dec(d, h, m, sec=0):
+    return dt.datetime(2026, 12, d, h, m, sec)
+
+
+# December incidents the responders handled without a status page post: not customer-facing (PR-SLO-3 5.2)
+DEC_UNPOSTED = [
+    {"id": "U1", "named": [("notifications", (6, 3, 12, 40))], "declared": (6, 3, 12, 40), "mitigated": (6, 3, 51),
+     "sev": "SEV3"},
+    {"id": "U2", "named": [("fares", (19, 2, 41, 7)), ("booking", (19, 2, 55, 30))], "declared": (19, 2, 41, 7),
+     "mitigated": (19, 3, 24), "sev": "SEV3"},
+]
+
+
 def incidents(seed=K.SEED + 305):
     """The incident tool holds every incident with its declaration, the services it named by the time it was closed
-    and the administrative close after the review; its timeline holds each event, the moment each service was named
-    among them; the status page holds the public posts and each component's status changes in Lisbon local time. A
-    customer-facing incident's minutes run from its declaration until the status page shows every component it
-    affected operational again, and a service's minutes are those in which such an incident named it, counted once.
-    The tool and the page share no key."""
+    and the administrative close; its timeline holds each event, the moment each service was named among them; the
+    post-incident review records the service that owned the root cause once the review closes, and December's reviews
+    were still open on the export date. The status page holds the public posts and each component's status changes
+    in Lisbon local time. A customer-facing incident's minutes run from its declaration until the status page shows
+    every component it affected operational again, and a service's minutes are those in which such an incident named
+    it, counted once. The tool and the page share no key. December's posted incidents are the world's own
+    (K.DEC_INCIDENTS): the latency the trace store kept moved with them."""
     r = np.random.default_rng(seed)
     inc, posts, changes, timeline = [], [], [], []
     iv = {s: [] for s in K.SVC}
     need = {(h, s) for h in (1, 2) for s in K.SVC}
     fold = dt.datetime(2026, 10, 25, 0, 0)
+    dec0 = dt.datetime(2026, 12, 1) - dt.timedelta(days=2)
     n = 0
     t = Y0 + dt.timedelta(days=3)
     while True:
         t += dt.timedelta(hours=float(r.uniform(55, 150)))
-        if t >= Y1 - dt.timedelta(days=3):
+        if t >= dec0:
             if not need:
                 break
             t = Y0 + dt.timedelta(days=3, hours=float(r.uniform(0, 40)))     # a second pass for any cell still empty
@@ -379,8 +396,6 @@ def incidents(seed=K.SEED + 305):
         declared = t.replace(second=int(r.integers(0, 60)), microsecond=0)
         mins = int(r.integers(18, 190))
         end_first = (declared + dt.timedelta(minutes=mins)).replace(second=0)
-        # the responders name the services one by one: the first with the declaration or within minutes, the rest as
-        # the call finds them, now and then one only in the review after the incident has ended
         named = {}
         named[lead] = declared + (dt.timedelta(0) if r.random() < 0.5 else dt.timedelta(seconds=int(r.integers(30, 200))))
         for x in svcs[1:]:
@@ -389,12 +404,15 @@ def incidents(seed=K.SEED + 305):
             else:
                 named[x] = declared + dt.timedelta(seconds=int(r.integers(240, min(45 * 60, mins * 60 - 120))))
         order = sorted(svcs, key=lambda x: named[x])
+        # the review's finding: the first service named owned the root cause in under half of the incidents
+        cause = order[0] if (len(order) == 1 or r.random() < 0.42) else order[1 + int(r.integers(0, len(order) - 1))]
         closed = end_first + dt.timedelta(hours=float(r.uniform(4, 70)))
         commander = str(r.choice(["ipereira", "fvalente", "mdomingues", "ateixeira", "tnogueira"]))
         inc.append({"incident_id": iid, "declared_at": declared, "resolved_at": closed.replace(microsecond=0),
                     "severity": sev, "services": ";".join(K.TRACE_NAME[x] for x in order),
-                    "title": _title(svcs, r), "commander": commander})
-        timeline.append((iid, declared, "declared", _title(svcs, r)))
+                    "title": _title(order, iid), "commander": commander, "review": "closed",
+                    "root_cause": K.TRACE_NAME[cause]})
+        timeline.append((iid, declared, "declared", _title(order, iid)))
         timeline.append((iid, declared + dt.timedelta(seconds=int(r.integers(5, 50))), "severity set", sev))
         timeline.append((iid, declared + dt.timedelta(seconds=int(r.integers(20, 120))), "commander assigned", commander))
         for x in order:
@@ -403,8 +421,6 @@ def incidents(seed=K.SEED + 305):
             timeline.append((iid, end_first + dt.timedelta(minutes=int(r.integers(-10, 5))), "mitigated", ""))
             timeline.append((iid, closed.replace(microsecond=0), "resolved", ""))
             continue
-        # the status page: a post a few minutes after the declaration on the components of the services named by
-        # then; a component joins the post when a service on it is named while the incident is still open
         post_at = (declared + dt.timedelta(minutes=int(r.integers(2, 9)))).replace(second=0)
         comp_from = {}
         for x in order:
@@ -431,6 +447,64 @@ def incidents(seed=K.SEED + 305):
             if named[x] < fin:
                 iv[x].append((max(declared, named[x]), fin))
             need.discard((half, x))
+    # December: the incidents the responders handled without a post, then the world's customer-facing ones, numbered
+    # on from the tool's sequence in the order they were declared
+    last = max(int(x["incident_id"][4:]) for x in inc)
+    dec_all = sorted([("u", x) for x in DEC_UNPOSTED] + [("p", x) for x in K.DEC_INCIDENTS],
+                     key=lambda z: _dec(*z[1]["declared"]))
+    ids = {}
+    for kind, x in dec_all:
+        last += int(r.integers(4, 11))
+        ids[(kind, x["id"])] = "INC-%04d" % last
+    for x in DEC_UNPOSTED:
+        x = dict(x, id=ids[("u", x["id"])])
+        declared = _dec(*x["declared"])
+        order = [s_ for s_, _ in x["named"]]
+        commander = str(r.choice(["ipereira", "fvalente", "mdomingues", "ateixeira", "tnogueira"]))
+        mit = _dec(*x["mitigated"])
+        closed = (mit + dt.timedelta(hours=float(r.uniform(6, 30)))).replace(microsecond=0)
+        inc.append({"incident_id": x["id"], "declared_at": declared, "resolved_at": closed, "severity": x["sev"],
+                    "services": ";".join(K.TRACE_NAME[s_] for s_ in order), "title": _title(order, x["id"]),
+                    "commander": commander, "review": "open", "root_cause": ""})
+        timeline.append((x["id"], declared, "declared", _title(order, x["id"])))
+        timeline.append((x["id"], declared + dt.timedelta(seconds=int(r.integers(5, 50))), "severity set", x["sev"]))
+        timeline.append((x["id"], declared + dt.timedelta(seconds=int(r.integers(20, 120))), "commander assigned",
+                         commander))
+        for s_, tt in x["named"]:
+            timeline.append((x["id"], _dec(*tt), "service added", K.TRACE_NAME[s_]))
+        timeline.append((x["id"], mit, "mitigated", ""))
+        timeline.append((x["id"], closed, "resolved", ""))
+    for x in K.DEC_INCIDENTS:
+        x = dict(x, id=ids[("p", x["id"])])
+        declared = _dec(*x["declared"])
+        order = [s_ for s_, _ in sorted(x["named"], key=lambda z: z[1])]
+        named = {s_: _dec(*tt) for s_, tt in x["named"]}
+        commander = str(r.choice(["ipereira", "fvalente", "mdomingues", "ateixeira", "tnogueira"]))
+        fin = max(_dec(*p[2]) for p in x["posts"])
+        closed = (fin + dt.timedelta(hours=float(r.uniform(5, 40)))).replace(microsecond=0)
+        inc.append({"incident_id": x["id"], "declared_at": declared, "resolved_at": closed, "severity": x["sev"],
+                    "services": ";".join(K.TRACE_NAME[s_] for s_ in order), "title": _title(order, x["id"]),
+                    "commander": commander, "review": "open", "root_cause": ""})
+        timeline.append((x["id"], declared, "declared", _title(order, x["id"])))
+        timeline.append((x["id"], declared + dt.timedelta(seconds=int(r.integers(5, 50))), "severity set", x["sev"]))
+        timeline.append((x["id"], declared + dt.timedelta(seconds=int(r.integers(20, 120))), "commander assigned",
+                         commander))
+        for s_ in order:
+            timeline.append((x["id"], named[s_], "service added", K.TRACE_NAME[s_]))
+        comps = [p[0] for p in x["posts"]]
+        for c, a_, b_ in x["posts"]:
+            changes.append({"component": c, "status": "degraded_performance" if x["sev"] != "SEV1" else "partial_outage",
+                            "at_local": to_lisbon(_dec(*a_))})
+            changes.append({"component": c, "status": "operational", "at_local": to_lisbon(_dec(*b_))})
+        post_at = min(_dec(*p[1]) for p in x["posts"])
+        posts.append({"post_id": "sp-%s" % format(int(r.integers(10 ** 9, 10 ** 10)), "x"),
+                      "name": _public(sorted(comps, key=K.COMPONENTS.index), r), "components": comps,
+                      "created_local": to_lisbon(post_at), "resolved_local": to_lisbon(fin)})
+        timeline.append((x["id"], fin + dt.timedelta(minutes=int(r.integers(-6, 4))), "mitigated", ""))
+        timeline.append((x["id"], closed, "resolved", ""))
+        for s_ in order:
+            if named[s_] < fin:
+                iv[s_].append((max(declared, named[s_]), fin))
     truth = {}
     for x in K.SVC:
         merged = []
@@ -452,13 +526,27 @@ def incidents(seed=K.SEED + 305):
     return inc, posts, changes, timeline, truth
 
 
-def _title(svcs, r):
-    s = svcs[0]
-    words = {"journey-search": "Search results slow", "fares": "Fare quotes timing out", "places": "Stop autocomplete errors",
-             "seat-map": "Seat maps not loading", "booking": "Booking confirmations failing", "payments": "Card payments declined",
-             "tickets": "E-tickets delayed", "accounts": "Sign-in failures", "partner-gateway": "Operator availability calls failing",
-             "notifications": "Booking emails delayed"}
-    return words[s] + (" (%d services)" % len(svcs) if len(svcs) > 1 else "")
+def _title(svcs, iid):
+    """What the commander typed when declaring: the symptom of the first service named, in one of the phrasings the
+    commanders use. The phrasing is drawn from the incident id, never from the world's stream."""
+    words = {"journey-search": ["Search results slow", "Journey search latency up", "Slow searches on app and web",
+                                "search timing out for some users", "Search page spinning"],
+             "fares": ["Fare quotes timing out", "Prices missing from results", "fares slow", "Quotes failing on some routes"],
+             "places": ["Stop autocomplete errors", "Autocomplete not returning stops", "Station search failing",
+                        "places lookups slow"],
+             "seat-map": ["Seat maps not loading", "Seat selection unavailable", "seat-map timeouts at checkout",
+                          "Can't pick seats on some coaches"],
+             "booking": ["Booking confirmations failing", "Bookings stuck in pending", "Checkout errors at confirm step",
+                         "booking 5xx"],
+             "payments": ["Card payments declined", "Payment step failing", "Elevated payment errors", "payments latency high"],
+             "tickets": ["E-tickets delayed", "Tickets not showing in app", "Ticket PDFs not generating", "tickets queue backing up"],
+             "accounts": ["Sign-in failures", "Login slow or failing", "Users can't sign back in", "accounts API errors"],
+             "partner-gateway": ["Operator availability calls failing", "Operator API timeouts",
+                                 "Availability missing for some operators", "partner gateway errors"],
+             "notifications": ["Booking emails delayed", "Confirmation emails late", "notifications backlog",
+                               "Email and push delays"]}
+    opts = words[svcs[0]]
+    return opts[zlib.crc32(iid.encode()) % len(opts)]
 
 
 def _public(comps, r):

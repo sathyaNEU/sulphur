@@ -11,8 +11,8 @@
   "shape": "14",
   "decision_type": "designation_set",
   "answer_unit": "set_of_items",
-  "answer": "Five internal services ran over their 2026 latency error budget and each gets a reliability engineer for the first half of 2027: journey-search, places, seat-map, partner-gateway and notifications.",
-  "answer_source": "task6/submission.md block 1; golden/reliability_review_2026.docx; golden/service_sli_2026.csv",
+  "answer": "Put reliability engineers on places, partner-gateway, fares, seat-map, notifications, in that order: the five ran over their 2026 latency error budgets",
+  "answer_source": "task6/submission.md, Final Recommendation",
   "gap": [
     "population",
     "time"
@@ -33,7 +33,7 @@
   "validated_decoy": false,
   "context_artifact": "monitoring_export",
   "stump_class": "analytical",
-  "analyst_test": "A careful run reweights each service's own kept spans hour by hour on its own load balancer count and puts each incident on the service the responders named first or the one with the most slow requests, so fares and partner-gateway fall under their budgets (measured at stage 2).",
+  "analyst_test": "A careful run reweights each service's own kept spans hour by hour on its own load balancer count (fares 0.4, partner-gateway 1.1, notifications 0.6) and puts each December incident on the named service furthest over its load curve across the incident (journey-search on 21 December, accounts on 26 December, seat-map on 14 December; fares and notifications 0.9 each): it files places and seat-map, or with the root weights places, seat-map and partner-gateway.",
   "domain_test": "The field's own estimation from a cluster sample with unequal, unrecorded inclusion probabilities (each trace's root edge service and hour), cause against symptom in a call tree separated from load, and intervals that match the design; with a hospital's nouns the trace root, the keep share and the call tree have no meaning.",
   "layer2_family": "estimation_fit",
   "layer2_pattern": "own:cluster-sample-shares-weighted-by-trace-root-with-incident-time-charged-to-the-faulting-service",
@@ -51,7 +51,7 @@
   "scoring_unit": "other",
   "spine": {
     "file": "trace_spans_2026-12.parquet",
-    "rows": 379119,
+    "rows": 458192,
     "entity": "one span the trace store kept: a request an edge service handled or a call inside the trace it started",
     "grain": "span",
     "source": "synthetic (the tracing store's span export for December 2026)"
@@ -77,8 +77,8 @@
   "opening_move": "question-first",
   "question_form": "which",
   "driver": "Several unit-level rates are estimated from a cluster sample whose inclusion probability is set by the stratum each cluster starts in, events are attributed to the unit whose own processing degraded first against its load-matched norm rather than to the first unit reported, the event time is removed only from the units that suffered it, and the intervals carry the clusters and the unequal weights, so the units over their limits need the weighting and the attribution together.",
-  "driver_concrete": "Each Rotalinha service's December latency SLI is estimated from the trace store's whole-trace edge sample with each kept span weighted by its root edge service's hourly keep share; each December customer-facing incident is put on the service whose own handling slowed first against its load-matched norm, not the service the responders named first; a service's incident time leaves its SLI only where another service was at fault; fares and partner-gateway run over only when the weights and the attribution are both right.",
-  "stump": "A careful run reweights each service's own kept spans hour by hour on its own load balancer count and puts each incident on the service the responders named first or the one with the most slow requests, so fares and partner-gateway fall under their budgets (measured at stage 2).",
+  "driver_concrete": "Each Rotalinha service's December latency SLI is estimated from the trace store's whole-trace edge sample with each kept span weighted by its root edge service's hourly keep share; each December customer-facing incident is put on the service whose own handling slowed first against its load-matched norm, not the service the responders named first; a service's incident time leaves its SLI only where another service was at fault; fares and notifications run over only when the weights and the attribution are both right, partner-gateway only with the weights.",
+  "stump": "A careful run reweights each service's own kept spans hour by hour on its own load balancer count (fares 0.4, partner-gateway 1.1, notifications 0.6) and puts each December incident on the named service furthest over its load curve across the incident (journey-search on 21 December, accounts on 26 December, seat-map on 14 December; fares and notifications 0.9 each): it files places and seat-map, or with the root weights places, seat-map and partner-gateway.",
   "mechanism_source": "design_note",
   "differentiation": {
     "mark245": "mark245 rebuilds whole recording periods a failing recorder lost, from each period's driver; here no hour is lost: the store keeps whole traces at a rate each edge service resets hourly, and a span's weight comes from the edge request that started its trace.",
@@ -271,7 +271,7 @@
       "deliverable set": "csv+docx"
     }
   ],
-  "notes": "Architecture 6, re-root 2026-11-07 after architecture 5 landed on the portal (both responses on the golden). Candidates 1 (inherited trace sampling, task452 v2) and 2 (onboarding critical path, task127 v2 and task472 v2) were set aside at the draw. This draw was prototyped on the clean truth before registration (scratch p1.py): the kept spans' own share and a day-by-day reweighting understate the busy services, hourly and minute weighting agree. WARN repeat.decision (designation_set against task156) answered in the note. v7 (2026-11-09): stump_strategy causal_design for the incident attribution against load (the result that, with the weighting, moves the list); population_selection (v6) is blocked by task12 inside the window and v7 is not decided by it. Axes redrawn at v7 against the window task2, task12, task13: context_artifact operations_log to monitoring_export (the load balancer's metrics export and the trace store's span export are what the review reads), org_family software_or_platform to retailer_or_ecommerce (Rotalinha sells bus and ferry tickets online). ban.pairing against task2 is forced: the platform fixed this returned task's domain and analysis type (task 4b456953, task type match passed), so the re-root cannot redraw the pairing.",
+  "notes": "Architecture 6, re-root 2026-11-07 after architecture 5 landed on the portal (both responses on the golden). Candidates 1 (inherited trace sampling, task452 v2) and 2 (onboarding critical path, task127 v2 and task472 v2) were set aside at the draw. This draw was prototyped on the clean truth before registration (scratch p1.py): the kept spans' own share and a day-by-day reweighting understate the busy services, hourly and minute weighting agree. WARN repeat.decision (designation_set against task156) answered in the note. v7 (2026-11-09): stump_strategy causal_design for the incident attribution against load (the result that, with the weighting, moves the list); population_selection (v6) is blocked by task12 inside the window and v7 is not decided by it. Axes redrawn at v7 against the window task2, task12, task13: context_artifact operations_log to monitoring_export (the load balancer's metrics export and the trace store's span export are what the review reads), org_family software_or_platform to retailer_or_ecommerce (Rotalinha sells bus and ferry tickets online). ban.pairing against task2 is forced: the platform fixed this returned task's domain and analysis type (task 4b456953, task type match passed), so the re-root cannot redraw the pairing. 2026-11-09: heart's ban.pairing BLOCK against task2 v5 accepted by the author for the architecture 7 re-ship (the returned platform task's own subdomain and analysis type).",
   "answer_shape": "flagged-set",
   "weight": "hard-to-measure",
   "chain_signature": [

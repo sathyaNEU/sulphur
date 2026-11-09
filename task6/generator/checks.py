@@ -1,36 +1,26 @@
-"""The generator's assertions on the cut pack and the seeded world: the input gates, the call and its ladder with
-margins, every semantic fork row (SF1 to SF14), the one-decimal corridor, the whole traces and partner-gateway's root
-mix that refutes rung 3, the back-test, the three rules on the clean truth, the shock screen, the call's files (SEP)
-and the distractors, the asks (each read off the SLI's numerator or the services the call names: the same bin under
-every standing estimator, a different value on the default path, the incident clock's second reading), the ceiling
-sheet and the documents' controls.
+"""The generator's assertions on the cut pack (architecture 7): the input gates, the bar block (R1 to R7: the raw
+material ships, each mess item is neutral, each result's hurried figure falls outside its band, nothing is planted,
+no one thing carries the results, the one-fact test computed, every rival inside its band), every semantic fork row
+(SF1 to SF16, SF19), the one-decimal margins and the documents' controls.
 
     python3 checks.py [target_dir]            (run by build.py)"""
 import csv
 import json
 import os
-import shutil
+import re
 import sys
-import tempfile
 
 import numpy as np
-import pyarrow.parquet as pq
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 import analysis as AN   # noqa: E402
-import asks as A        # noqa: E402
-import ceiling          # noqa: E402
 import common as K      # noqa: E402
-import world as W       # noqa: E402
+import deliver as D     # noqa: E402
 
-GOLD5 = ["journey-search", "places", "seat-map", "partner-gateway", "notifications"]
-# the SLIs the shipped answer carries (main-call figures, frozen by every repair of the ask layer)
-SHIPPED_SLI = {"journey-search": 1.3, "fares": 0.6, "places": 1.5, "seat-map": 1.5, "booking": 0.4, "payments": 0.3,
-               "tickets": 0.6, "accounts": 0.7, "partner-gateway": 2.9, "notifications": 1.6}
-FOUR = ["journey-search", "places", "seat-map", "notifications"]
-H = K.REVIEW_HOURS
 FAILS = []
+GOLD = ["fares", "places", "seat-map", "partner-gateway", "notifications"]
+TRUTH = {x["fault"] for x in K.DEC_INCIDENTS}
 
 
 def check(name, ok, detail=""):
@@ -39,365 +29,12 @@ def check(name, ok, detail=""):
         FAILS.append(name)
 
 
-def over(fig, bud=None):
-    bud = bud or K.BUDGET
-    return [s for s in K.SVC if K.r1(fig[s]) > bud[s]]
+def r1set(S):
+    return {s: K.r1(S[s]["sli"]) for s in K.SVC}
 
 
-# ------------------------------------------------------------------ the estimator under each reading
-class Variants:
-    """The golden's estimator re-run on the parquet under one alternative reading at a time."""
-
-    def __init__(self, target, g):
-        self.g = g
-        tb = pq.read_table(os.path.join(target, K.FILES["spans"])).to_pydict()
-        self.rows = list(zip(tb["trace_id"], tb["span_id"], tb["parent_span_id"], tb["service_name"], tb["span_name"],
-                             tb["span_kind"], tb["start_time_unix_nano"], tb["end_time_unix_nano"],
-                             tb["http_status_code"]))
-        self.N, self.E = g.counts()
-
-    def sli(self, dedupe=True, probes=False, client_internal=False, drop5xx=False, ge=False, drop404=False,
-            first_try=False):
-        g, N = self.g, self.N
-        seen, rows = set(), []
-        for tid, sid, pid, svc, name, kind, t0, t1, code in self.rows:
-            if dedupe and sid in seen:
-                continue
-            seen.add(sid)
-            if name == "GET /healthz" and not probes:
-                continue
-            rows.append((tid, sid, pid, g.by_trace[svc], name, kind, (t0 - AN.DEC0_NS) // (3600 * 10 ** 9),
-                         (t1 - t0) / 1e6, code))
-        root, kroot = {}, {e: np.zeros(H) for e in K.EDGE}
-        for r in rows:
-            if r[5] == "SPAN_KIND_SERVER" and r[2] == "":
-                if r[4] != "GET /healthz":
-                    root[r[0]] = (r[3], int(r[6]))
-                if r[3] in K.EDGE and 0 <= r[6] < H:
-                    kroot[r[3]][int(r[6])] += 1
-        tries = {}
-        out = {}
-        for s in K.SVC:
-            if client_internal and s in K.INTERNAL:
-                mine = [r for r in rows if r[5] == "SPAN_KIND_CLIENT" and r[4].split(" ")[1] == K.TRACE_NAME[s]]
-            else:
-                mine = [r for r in rows if r[5] == "SPAN_KIND_SERVER" and r[3] == s and r[4] != "GET /healthz"]
-            num = 0.0
-            for r in sorted(mine, key=lambda x: x[6]):
-                h = int(r[6])
-                if not 0 <= h < H:
-                    continue
-                if first_try:
-                    key = (r[0], r[4])
-                    tries[key] = tries.get(key, 0) + 1
-                    if tries[key] > 1:
-                        continue
-                if (drop5xx and r[8] >= 500) or (drop404 and r[8] == 404):
-                    continue
-                rt = root.get(r[0])
-                if rt is None:
-                    continue
-                e, he = rt
-                w = N[e][he] / max(kroot[e][he], 1)
-                slow = r[7] >= g.thr[s] if ge else r[7] > g.thr[s]
-                num += w * slow
-            den = N[s].sum() - (self.E[s].sum() if drop5xx else 0)
-            out[s] = 100 * num / den
-        return out
-
-
-def line_distance(x):
-    return abs((x * 10) % 1 - 0.5) / 10
-
-
-def main(target):
-    g = AN.Golden(target)
-    m = g.main()
-    sli = {s: m[s]["sli"] for s in K.SVC}
-
-    # ---------------------------------------------------------- input gates
-    files = [K.FILES[k] for k in K.FILES]
-    check("every pack file present", all(os.path.exists(os.path.join(target, f)) for f in files),
-          "%d files" % len(files))
-    fmts = {os.path.splitext(f)[1] for f in files}
-    check("three or more formats", len(fmts) >= 3, ", ".join(sorted(fmts)))
-    n_spans = pq.ParquetFile(os.path.join(target, K.FILES["spans"])).metadata.num_rows
-    check("a file of 25,000 rows or more", n_spans >= 25000, "%d span rows" % n_spans)
-    check("two or more distractors", len(K.DISTRACTORS) >= 2, ", ".join(K.FILES[d] for d in K.DISTRACTORS))
-
-    # ---------------------------------------------------------- the call and its ladder
-    golden = over(sli)
-    check("the call: five services breach", golden == GOLD5, ", ".join(golden))
-    for s in K.SVC:
-        print("      %-16s SLI %.4f (%.1f) budget %.1f | service-hour %.3f hour-of-day %.3f day %.3f kept %.3f"
-              % (s, sli[s], K.r1(sli[s]), K.BUDGET[s], m[s]["by_service_hour"], m[s]["by_hour_of_day"],
-                 m[s]["by_day"], m[s]["unweighted"]))
-    rung = {k: over({s: m[s][k] for s in K.SVC}) for k in ("by_service_hour", "by_hour_of_day", "by_day", "unweighted")}
-    check("R3 (each service post-stratified by its own hourly count) files four", rung["by_service_hour"] == FOUR,
-          ", ".join(rung["by_service_hour"]))
-    check("R2 (hour-of-day pooling) files four", rung["by_hour_of_day"] == FOUR, ", ".join(rung["by_hour_of_day"]))
-    check("R1 (day weighting) files notifications alone", rung["by_day"] == ["notifications"], ", ".join(rung["by_day"]))
-    check("R0 (the kept share) files notifications alone", rung["unweighted"] == ["notifications"],
-          ", ".join(rung["unweighted"]))
-    gr = min(sli[s] / K.BUDGET[s] if s in GOLD5 else K.BUDGET[s] / sli[s] for s in K.SVC)
-    check("golden margin: every SLI at least a quarter from its budget", gr >= 1.25, "smallest ratio %.3f" % gr)
-    pgm = (K.BUDGET["partner-gateway"] - m["partner-gateway"]["by_service_hour"]) / K.BUDGET["partner-gateway"]
-    check("rung 3 margin: partner-gateway a fifth under its budget", pgm >= 0.2, "%.3f" % pgm)
-    m0 = min((K.BUDGET[s] - m[s]["unweighted"]) / K.BUDGET[s] for s in ("journey-search", "places", "seat-map",
-                                                                      "partner-gateway"))
-    check("rung 0 margin: the busy services 15 per cent under", m0 >= 0.15, "%.3f" % m0)
-
-    # ---------------------------------------------------------- semantic fork rows
-    v = Variants(target, g)
-    slo = text_of(os.path.join(target, K.FILES["slo"]))
-    check("SF1 the kept spans are not the requests (2.2)", "whether or not the tracing store kept a span for it" in slo
-          and rung["unweighted"] != GOLD5)
-    for sf, label, kw in (("SF2", "caller's client span for an internal service", dict(client_internal=True)),
-                          ("SF3", "kept probes counted", dict(probes=True)),
-                          ("SF4", "re-sent rows twice", dict(dedupe=False)),
-                          ("SF9", "5xx dropped from both sides", dict(drop5xx=True)),
-                          ("SF12", "at or over the threshold", dict(ge=True)),
-                          ("SF13", "404 responses dropped", dict(drop404=True)),
-                          ("SF14", "first tries only", dict(first_try=True))):
-        alt = v.sli(**kw)
-        check("%s %s: same call" % (sf, label), over(alt) == GOLD5,
-              "partner-gateway %.3f, journey-search %.3f" % (alt["partner-gateway"], alt["journey-search"]))
-    import asks as AS
-    dec_off = {AS.lisbon_offset(AS.Y0.replace(month=12) + __import__("datetime").timedelta(hours=h)) for h in range(H)}
-    check("SF5 December in Lisbon time is UTC", dec_off == {0})
-    check("SF6 a child's own hour: same figure to one decimal",
-          all(K.r1(m[s]["own_hour"]) == K.r1(sli[s]) for s in K.SVC))
-    n_orph = sum(m[s]["orphans"] for s in K.SVC)
-    check("SF7 spans whose trace began before December: either handling identical",
-          all(K.r1(m[s]["orphans_dropped"]) == K.r1(sli[s]) for s in K.SVC), "%d such spans" % n_orph)
-    check("SF8 the unrounded SLI against the budget: the same five",
-          [s for s in K.SVC if sli[s] > K.BUDGET[s]] == GOLD5)
-    check("SF10 the weighted kept count as the denominator: same figure to one decimal",
-          all(K.r1(m[s]["hajek"]) == K.r1(sli[s]) for s in K.SVC))
-    check("SF11 weights calibrated hour by hour: same figure to one decimal",
-          all(K.r1(m[s]["calibrated"]) == K.r1(sli[s]) for s in K.SVC))
-    corridor = {s: [sli[s], m[s]["hajek"], m[s]["calibrated"], m[s]["own_hour"], m[s]["orphans_dropped"]]
-                for s in K.SVC}
-    worst = min(line_distance(x) for s in K.SVC for x in corridor[s])
-    check("corridor: every standing estimator 0.008 or more from a rounding line", worst >= 0.008, "%.4f" % worst)
-
-    # ---------------------------------------------------------- the whole traces, the root mix, the back-test
-    ids = {r[1]: r for r in v.rows}
-    internal = [r for r in v.rows if r[5] == "SPAN_KIND_SERVER" and g.by_trace[r[3]] in K.INTERNAL
-                and r[4] != "GET /healthz"]
-    whole = 0
-    for r in internal:
-        c = ids.get(r[2])
-        if c is not None and c[5] == "SPAN_KIND_CLIENT":
-            rt = ids.get(c[2])
-            if rt is not None and rt[5] == "SPAN_KIND_SERVER" and rt[2] == "":
-                whole += 1
-    check("whole traces: every internal server span has its client span and its root in the export",
-          whole == len(internal) - n_orph, "%d of %d" % (whole, len(internal)))
-    mix_k, mix_w = m["partner-gateway"]["root_mix_kept"], m["partner-gateway"]["root_mix_weighted"]
-    check("partner-gateway's kept spans are a third each by edge service, its requests mostly journey-search's",
-          mix_k.get("journey-search", 0) < 0.4 and mix_w.get("journey-search", 0) > 0.75,
-          "kept %s, weighted %s" % ({k: round(x, 3) for k, x in mix_k.items()},
-                                    {k: round(x, 3) for k, x in mix_w.items()}))
-    kept5 = {}
-    for tid, sid, pid, svc, name, kind, t0, t1, code in v.rows:
-        if kind == "SPAN_KIND_SERVER" and name != "GET /healthz":
-            s = g.by_trace[svc]
-            a, b = kept5.get(s, (0, 0))
-            kept5[s] = (a + (code >= 500), b + 1)
-    gap5 = max(abs(100 * kept5[s][0] / kept5[s][1] - m[s]["lb_5xx_share"]) for s in K.SVC)
-    check("back-test: the kept 5xx share ties the balancer's 5xx counts for every service", gap5 < 0.15,
-          "largest gap %.3f points" % gap5)
-
-    # ---------------------------------------------------------- three rules on the clean truth
-    w = W.World(K.SEED)
-    sp = w.sp
-    srv = sp["kind"] == "SERVER"
-    inwin = (sp["t0"] >= 0) & (sp["t0"] < H * 3600)
-    N = {s: w.N[s][W.DEC0:W.DEC0 + H].astype(float) for s in K.SVC}
-    r3 = {}
-    for s in K.SVC:
-        sel = srv & inwin & (sp["svc"] == s)
-        hh = (sp["t0"][sel] // 3600).astype(int)
-        kh = np.bincount(hh, minlength=H).astype(float)
-        sh = np.bincount(hh, weights=(sp["ms"][sel] > K.THRESHOLD[s]).astype(float), minlength=H)
-        r3[s] = 100 * (np.where(kh > 0, N[s] / np.maximum(kh, 1), 0) * sh).sum() / N[s].sum()
-    check("analyst test on the clean truth: post-stratifying each service by its own hour files four",
-          over(r3) == FOUR, "partner-gateway %.3f" % r3["partner-gateway"])
-    cheap = [k for k in ("by_service_hour", "by_hour_of_day", "by_day", "unweighted") if rung[k] == GOLD5]
-    check("cheap routes reaching the call: none", not cheap, ", ".join(cheap) or "0 of 4")
-    truth_set = [s for s in K.SVC if w.true_sli(s) > K.BUDGET[s]]
-    check("the world's own truth breaches the same five", truth_set == GOLD5, ", ".join(truth_set))
-
-    # ---------------------------------------------------------- the shock screen
-    stats = {"December requests": {s: m[s]["requests"] for s in K.SVC},
-             "kept spans": {s: m[s]["kept"] for s in K.SVC},
-             "5xx share": {s: m[s]["lb_5xx_share"] for s in K.SVC},
-             "threshold": dict(K.THRESHOLD), "budget": dict(K.BUDGET)}
-    for label, st in stats.items():
-        order = sorted(K.SVC, key=lambda s: st[s])
-        pos = sorted(order.index(s) for s in GOLD5)
-        contiguous = pos == list(range(pos[0], pos[0] + 5))
-        ties = len(set(st.values())) < len(K.SVC)
-        check("shock: the five are not an interval on %s" % label, not contiguous or ties,
-              "positions %s" % pos)
-
-    # ---------------------------------------------------------- SEP: the call never reads an ask file
-    tmp = tempfile.mkdtemp()
-    try:
-        for k in ("spans", "lb_h2", "catalogue", "slo"):
-            shutil.copy(os.path.join(target, K.FILES[k]), tmp)
-        m2 = AN.Golden(tmp).main()
-        check("SEP the call computes from the trace export, the balancer's counts, the catalogue and the standard alone",
-              all(abs(m2[s]["sli"] - sli[s]) < 1e-12 for s in K.SVC))
-    finally:
-        shutil.rmtree(tmp)
-    full = AN.Golden(target).run()
-    for dk in K.DISTRACTORS:
-        tmp = tempfile.mkdtemp()
-        try:
-            for f in os.listdir(target):
-                if f != K.FILES[dk]:
-                    shutil.copy(os.path.join(target, f), tmp)
-            part = AN.Golden(tmp).run()
-            same = part["over"] == full["over"] and part["incidents"] == full["incidents"] and \
-                part["programme"]["order"] == full["programme"]["order"] and \
-                part["programme"]["share"] == full["programme"]["share"] and \
-                part["programme"]["beyond"] == full["programme"]["beyond"] and \
-                all(part["main"][s]["sli"] == full["main"][s]["sli"] for s in K.SVC)
-            check("distractor %s deleted: the call and every ask unchanged" % K.FILES[dk], same)
-        finally:
-            shutil.rmtree(tmp)
-    cols = pq.ParquetFile(os.path.join(target, K.FILES["spans"])).schema.names
-    check("SEP the trace export carries no version, deployment, cost or incident field",
-          not any(c for c in cols if any(x in c for x in ("version", "deploy", "cost", "incident"))), ", ".join(cols))
-
-    # ---------------------------------------------------------- the asks
-    check("main-call figures as shipped: every one-decimal SLI unchanged",
-          all(K.r1(sli[s]) == SHIPPED_SLI[s] for s in K.SVC))
-    N = {s: m[s]["requests"] for s in K.SVC}
-    prog = full["programme"]
-    gold = ceiling.ask_figures(prog, full["incidents"])
-    print("      asks: order %s; shares %s; together %s%%; beyond budget %s; incident minutes %s"
-          % (", ".join(gold["order"]), gold["shares"], gold["over_share"], "{:,}".format(gold["beyond"]),
-             gold["minutes"]))
-    check("the start order is the call's services", sorted(gold["order"]) == sorted(GOLD5))
-    for est in ("hajek", "calibrated", "own_hour", "orphans_dropped"):
-        p = AN.programme({s: m[s][est] for s in K.SVC}, N, K.BUDGET)
-        got = ceiling.ask_figures(p, full["incidents"])
-        check("rival %s: every ask figure in the golden's bin" % est, got == gold,
-              "order %s, shares %s, together %s, beyond %s" % (",".join(x[:6] for x in got["order"] if x),
-                                                                got["shares"], got["over_share"], got["beyond"]))
-    # SF15: the asks worked from the one-decimal SLIs instead of the unrounded ones; the prompt's closing clause
-    # ("each rounded once at the end") rules it out, and only journey-search's share leaves its bin
-    p = AN.programme({s: m[s]["sli1"] for s in K.SVC}, N, K.BUDGET)
-    got = ceiling.ask_figures(p, full["incidents"])
-    moved = [s for s in gold["shares"] if got["shares"][s] != gold["shares"][s]]
-    prompt = open(os.path.join(os.path.dirname(target.rstrip("/")), "prompt.txt")).read()
-    check("SF15 the asks from the rounded SLIs: closed by the prompt's rounding clause, only one share moves",
-          "rounded once at the end" in prompt and got["order"] == gold["order"] and got["over_share"] ==
-          gold["over_share"] and got["beyond"] == gold["beyond"] and moved == ["journey-search"],
-          "moved: %s" % (", ".join("%s %s" % (s, got["shares"][s]) for s in moved) or "none"))
-    margins = []
-    for est in ("sli", "hajek", "calibrated", "own_hour", "orphans_dropped"):
-        p = AN.programme({s: m[s][est] for s in K.SVC}, N, K.BUDGET)
-        margins += [abs(p["share"][s] % 1 - 0.5) for s in p["order"]] + [abs(p["over_share"] % 1 - 0.5)]
-        margins.append(abs(p["beyond"] % 10000 - 5000) / 10000)
-    check("asks: no share within 0.1 of a rounding line, the requests beyond budget 1,000 or more from one",
-          min(margins) >= 0.1, "closest %.3f" % min(margins))
-    mins = full["incidents"]
-    check("asks: the incident minutes 0.1 or more from a half-minute line",
-          min(abs(v % 1 - 0.5) for v in mins) >= 0.1, "%s" % [round(v, 2) for v in mins])
-    sh = full["shallow"]
-    shf = ceiling.ask_figures(sh, full["shallow_incidents"])
-    check("default path: the start order differs in every position",
-          all(a != b for a, b in zip(shf["order"], gold["order"])), ", ".join(str(x) for x in shf["order"]))
-    check("default path: the share served together outside the golden's bin", shf["over_share"] != gold["over_share"],
-          "%s against %s" % (shf["over_share"], gold["over_share"]))
-    check("default path: the requests beyond budget outside the golden's bin", shf["beyond"] != gold["beyond"],
-          "%s against %s" % ("{:,}".format(shf["beyond"]), "{:,}".format(gold["beyond"])))
-    check("default path: the incident minutes differ in both halves",
-          all(a != b for a, b in zip(shf["minutes"], gold["minutes"])), "%s against %s" % (shf["minutes"],
-                                                                                         gold["minutes"]))
-    kept_sh = [s for s, v in gold["shares"].items() if shf["shares"].get(s) == v]
-    check("default path: at most one of the five shares in the golden's bin", len(kept_sh) <= 1,
-          "kept: %s" % (", ".join(kept_sh) or "none"))
-    back = ceiling.ask_figures(prog, AN.Golden(target).incidents(full["over"], backdate=True))
-    check("SF16 closed in the prompt: a service counts from when the incident tool added it",
-          "counting from when the incident tool added it" in prompt)
-    check("SF17 closed in the prompt: incident time is a duration in whole minutes, rounded once",
-          "for how long" in prompt and "time in whole minutes" in prompt)
-    check("SF18 closed in the prompt: the joint share is of the same over-threshold requests",
-          "what share of those requests they served together" in prompt)
-    check("the incident clock's other reading: the final service lists read from the declaration miss both halves",
-          all(a != b for a, b in zip(back["minutes"], gold["minutes"])), "%s against %s" % (back["minutes"],
-                                                                                          gold["minutes"]))
-    _, _, _, _, itruth = A.incidents()
-    gi = AN.Golden(target).incidents()
-    check("the incident reconstruction matches the world, service by service",
-          all(abs(a - b) < 1e-6 for s in K.SVC for a, b in zip(gi[s], itruth[s])))
-    rows = ceiling.measure(target)
-    sc = {key: k / 14.0 for _, key, (k, _) in rows}
-    check("shallow keep under 25 per cent of the ask figures", sc["by_service_hour"] < 0.25,
-          "%.1f per cent" % (100 * sc["by_service_hour"]))
-    worst = ceiling.pair(sc["landed_full"], sc["by_service_hour"])[2]
-    check("paper pair under the bar of 60 with the landed run keeping every ask", worst < 60, "%.1f" % worst)
-
-    # ---------------------------------------------------------- documents
-    names = [f.lower() for f in os.listdir(target)]
-    notes_words = ("readme", "dictionary", "notes", "manifest", "glossary", "schema", "codebook", "field_guide")
-    from openpyxl import load_workbook
-    sheets = []
-    for f in os.listdir(target):
-        if f.endswith(".xlsx"):
-            sheets += [x.lower() for x in load_workbook(os.path.join(target, f), read_only=True).sheetnames]
-    check("no readme, dictionary, notes or manifest file or sheet under target/",
-          not any(w_ in n_ for n_ in names + sheets for w_ in notes_words), ", ".join(sorted(sheets)))
-    check("PR-SLO-3 control: the filed request sentence reads back", "through its load balancer target group" in slo)
-    # realism sweep: no id column is an arithmetic sequence
-    import re as _re
-    idcols = {}
-    for row in csv.DictReader(open(os.path.join(target, K.FILES["incidents"]))):
-        idcols.setdefault("incident_id", []).append(row["incident_id"])
-    for row in csv.DictReader(open(os.path.join(target, K.FILES["resources"]))):
-        idcols.setdefault("resource_id", []).append(row["resource_id"])
-    for x in json.load(open(os.path.join(target, K.FILES["deploys"])))["deployments"]:
-        idcols.setdefault("deployment_id", []).append(x["deployment_id"])
-    flat = []
-    for col, vals in idcols.items():
-        nums = sorted({int(_re.sub(r"\D", "", v) or 0, 16 if col == "resource_id" else 10) for v in vals})
-        steps = {b_ - a_ for a_, b_ in zip(nums, nums[1:])}
-        if len(steps) <= 1:
-            flat.append(col)
-    check("realism: no id column is an arithmetic sequence", not flat, ", ".join(flat) or "%d id columns" % len(idcols))
-    import collections as _c
-    from openpyxl import load_workbook as _lw
-    rv = [r_[4] for r_ in _lw(os.path.join(target, K.FILES["feedback"]), read_only=True).active.iter_rows(min_row=2,
-                                                                                                          values_only=True)]
-    top = max((v_ for k_, v_ in _c.Counter(x for x in rv if x and len(x) > 12).items()), default=0)
-    check("realism: no review text longer than a few words recurs more than ten times", top <= 10, "most %d" % top)
-    tb_h = pq.read_table(os.path.join(target, K.FILES["spans"]), columns=["service_name", "host_name"]).to_pydict()
-    hosts = {}
-    for svc_, h_ in zip(tb_h["service_name"], tb_h["host_name"]):
-        hosts.setdefault(svc_, set()).add(h_)
-    counts = sorted(len(x) for x in hosts.values())
-    check("realism: services do not share one pod count", len(set(counts)) > 3, "distinct pods per service %s" % counts)
-    check("PR-SLO-3 files the release unit", "the code of one commit" in slo)
-    check("PR-SLO-3 counts a service's minutes while an incident named it", "named it at the time" in slo.replace("\n", " "))
-    dashes = []
-    for f in files:
-        p = os.path.join(target, f)
-        if f.endswith((".md", ".csv", ".json")):
-            if "—" in open(p, encoding="utf-8").read():
-                dashes.append(f)
-        elif f.endswith(".docx"):
-            if "—" in text_of(p):
-                dashes.append(f)
-    check("no em dash in a shipped text", not dashes, ", ".join(dashes))
-
-    print()
-    print("%s  %d failures" % ("PASS" if not FAILS else "FAIL", len(FAILS)))
-    return 1 if FAILS else 0
+def over_of(S, bud):
+    return [s for s in K.SVC if K.r1(S[s]["sli"]) > bud[s]]
 
 
 def text_of(path):
@@ -408,6 +45,234 @@ def text_of(path):
         for row in t.rows:
             parts.append(" | ".join(c.text for c in row.cells))
     return "\n".join(parts)
+
+
+def main(target):
+    del FAILS[:]
+    g = AN.Golden(target)
+    R = g.run()
+    F = D.figures(R)
+    incs = R["incidents"]
+    dec = [x for x in incs if x["declared"] >= AN.DEC0]
+    S, P = R["S"], R["P"]
+    gold1 = r1set(S)
+
+    # ---------------------------------------------------------------- input gates
+    files = sorted(f for f in os.listdir(target) if not f.startswith("."))
+    check("IG1 ten or more usable files", len(files) >= 10, "%d files" % len(files))
+    cats = {"csv": "spreadsheet", "xlsx": "spreadsheet", "parquet": "database", "json": "database", "docx": "text",
+            "md": "text"}
+    kinds = {cats.get(f.rsplit(".", 1)[-1]) for f in files}
+    check("IG2 two or more file categories", len(kinds - {None}) >= 2, ", ".join(sorted(k for k in kinds if k)))
+    n_lb = sum(1 for _ in open(os.path.join(target, K.FILES["lb_h2"]))) - 1
+    n_bill = sum(1 for _ in open(os.path.join(target, K.FILES["billing"]))) - 1
+    check("IG3 a CSV of 20,000 rows or more", n_lb >= 20000, "%s %d rows" % (K.FILES["lb_h2"], n_lb))
+    check("IG4 a CSV of ten printed pages or more", n_bill >= 600, "%s %d rows" % (K.FILES["billing"], n_bill))
+    meta = json.load(open(os.path.join(os.path.dirname(target), "metadata.json")))
+    dis = [p_.split("/", 1)[1] for p_ in meta.get("distractor_files", [])]
+    check("IG5 two or more distractors named in metadata.json", len(dis) >= 2, ", ".join(dis))
+    src = open(os.path.join(HERE, "analysis.py")).read()
+    read_keys = set(re.findall(r'K\.FILES\["(\w+)"\]', src))
+    check("IG6 the golden reads no distractor", not ({K.FILES_KEY_OF[d] for d in dis} & read_keys),
+          "reads %s" % ", ".join(sorted(read_keys)))
+    bad = [f for f in files if re.search(r"readme|dictionary|notes|manifest|distractor", f, re.I)]
+    check("IG7 no file describes the pack", not bad, ", ".join(bad) or "none")
+
+    # ---------------------------------------------------------------- the results, as designed
+    check("RES1 the golden list", P["over"] == GOLD, ", ".join(P["over"]))
+    att = R["attribution"]
+    want = {}
+    for x, spec in zip(sorted(dec, key=lambda z: z["declared"]), sorted(K.DEC_INCIDENTS, key=lambda z: z["declared"])):
+        want[x["id"]] = spec["fault"]
+    check("RES2 every December customer-facing incident put on the world's own fault", att == want,
+          "; ".join("%s %s" % (k, v) for k, v in att.items()))
+    check("RES3 seven customer-facing incidents in December, reviews open", len(dec) == 7 and all(
+        x["review"] == "open" and not x["cause"] for x in dec), "%d" % len(dec))
+    # each fault's rise leads every other named service's by 20 minutes or more
+    lead = []
+    for x in dec:
+        on = R["onset"][x["id"]]
+        f = att[x["id"]]
+        others = [v[0] for s_, v in on.items() if s_ != f and v]
+        if others:
+            lead.append(min(others) - on[f][0])
+    check("RES4 each cause leads the other named services' rises by twenty minutes or more",
+          all(v >= 1200 for v in lead), "leads %s minutes" % ", ".join("%.0f" % (v / 60) for v in lead))
+
+    # ---------------------------------------------------------------- R1 raw material
+    heads = []
+    for f in files:
+        if f.endswith(".csv"):
+            heads += next(csv.reader(open(os.path.join(target, f))))
+    check("R1 no shipped column carries an SLI or a keep share", not [h for h in heads if re.search(
+        r"sli|keep|sample|weight", h, re.I)], "%d columns read" % len(heads))
+    check("R1 the SLIs read the span export and the balancer's counts", all(S[s]["kept"] > 1000 for s in K.SVC),
+          "kept spans per service %d to %d" % (min(S[s]["kept"] for s in K.SVC), max(S[s]["kept"] for s in K.SVC)))
+
+    # ---------------------------------------------------------------- R2 mess neutral
+    for label, kw in (("re-sent span rows counted twice", {"dedupe": False}),):
+        g2 = AN.Golden(target, **kw)
+        R2 = g2.run()
+        same = r1set(R2["S"]) == gold1 and R2["attribution"] == att and R2["P"]["over"] == GOLD
+        moved = {s: (gold1[s], K.r1(R2["S"][s]["sli"])) for s in K.SVC if K.r1(R2["S"][s]["sli"]) != gold1[s]}
+        check("R2 %s moves no graded result" % label, same, "moved %s" % moved if moved else "every SLI, cause and the list")
+    ex_d = g.excluded(att, dec, from_declaration=True)
+    S_d = g.slis(g.weights("root"), ex_d)
+    check("R2 windows read from the declaration move no SLI (the timeline convention is texture for the SLIs)",
+          r1set(S_d) == gold1, str({s: K.r1(S_d[s]["sli"]) for s in K.SVC if K.r1(S_d[s]["sli"]) != gold1[s]}))
+    m_back = g.minutes(backdate=True)
+    check("R2 reading every service from the declaration moves the incident minutes (graded in R1 only)",
+          m_back != R["minutes"], "")
+
+    # ---------------------------------------------------------------- R3 each result's hurried figure
+    Sc, Pc = R["careful"]["S"], R["careful"]["P"]
+    check("R3 careful pass: fares, partner-gateway and notifications under budget on their own hourly counts",
+          all(K.r1(Sc[s]["sli"]) <= R["bud"][s] for s in ("fares", "partner-gateway", "notifications")),
+          "fares %.3f, partner-gateway %.3f, notifications %.3f" % tuple(Sc[s]["sli"] for s in (
+              "fares", "partner-gateway", "notifications")))
+    check("R3 careful pass's list is places and seat-map", Pc["over"] == ["places", "seat-map"], ", ".join(Pc["over"]))
+    rc = R["rootcareful"]
+    check("R3 root weights with the whole-window attribution leave fares and notifications out",
+          not {"fares", "notifications"} & set(rc["P"]["over"]) and rc["attribution"] != att,
+          "fares %.3f, notifications %.3f" % (rc["S"]["fares"]["sli"], rc["S"]["notifications"]["sli"]))
+    # the misleading form (a blocked caller ending further over its curve than the fault) is not placed only where it
+    # decides: each incident the whole-window reading misreads, misread alone on the root weights
+    wr0 = g.weights("root")
+    moves = {}
+    for iid, s_ in rc["attribution"].items():
+        if s_ != att[iid]:
+            a_ = dict(att, **{iid: s_})
+            moves[iid] = g.programme(g.slis(wr0, g.excluded(a_, dec)))["over"]
+    deciding = {k: sorted(set(GOLD) - set(v)) for k, v in moves.items() if v != GOLD}
+    check("R5 the whole-window reading misreads an incident where nothing turns on it, and two that decide different "
+          "services", len(moves) - len(deciding) >= 1 and len(deciding) >= 2 and len({tuple(v) for v in
+                                                                                    deciding.values()}) >= 2,
+          "; ".join("%s: %s" % (k, ", ".join(v) or "no verdict moves") for k, v in
+                    ((k, sorted(set(GOLD) - set(moves[k]))) for k in moves)))
+    first = {x["id"]: x["named"][0][0] for x in dec}
+    last = {x["id"]: x["named"][-1][0] for x in dec}
+    wr = g.weights("root")
+    for lab, a_ in (("first-named", first), ("last-named", last)):
+        S_x = g.slis(wr, g.excluded(a_, dec))
+        check("R3 root weights with the %s service at fault miss the list" % lab, over_of(S_x, R["bud"]) != GOLD,
+              ", ".join(over_of(S_x, R["bud"])))
+    S_none = g.slis(wr, g.excluded({x["id"]: "__none__" for x in dec}, dec))
+    check("R3 the route that ignores PR-SLO-3 3.2 loses the symptoms' SLI cells",
+          sum(K.r1(S_none[s]["sli"]) != gold1[s] for s in K.SVC) >= 3,
+          "cells moved: %s" % ", ".join(s for s in K.SVC if K.r1(S_none[s]["sli"]) != gold1[s]))
+    for s in GOLD:
+        lo, hi = R["ci"][s][0], R["ci"][s][1]
+        blo, bhi, _ = g.binomial_interval(s, g.excluded(att, dec), S[s]["sli"])
+        gap = min(abs(lo - blo), abs(hi - bhi))
+    gaps = {s: round(max(abs(R["ci"][s][0] - g.binomial_interval(s, g.excluded(att, dec), S[s]["sli"])[0]),
+                         abs(R["ci"][s][1] - g.binomial_interval(s, g.excluded(att, dec), S[s]["sli"])[1])), 3)
+            for s in GOLD}
+    check("R3 a binomial interval misses every over-budget service's interval by 0.03 or more at one end",
+          all(v >= 0.03 for v in gaps.values()), str(gaps))
+
+    # ---------------------------------------------------------------- R4 no plant
+    check("R4 no December fault sits only in the services whose verdict turns on it",
+          len(TRUTH) >= 5 and len({s for x in K.DEC_INCIDENTS for s, _ in x["named"]}) >= 8,
+          "faults in %s; %d services named" % (", ".join(sorted(TRUTH)),
+                                               len({s for x in K.DEC_INCIDENTS for s, _ in x["named"]})))
+    closed = [x for x in g.incidents() if x["review"] == "closed" and len(x["named"]) > 1]
+    first_right = sum(1 for x in closed if x["cause"] == K.TRACE_NAME[x["named"][0][0]] or
+                      g.by_trace.get(x["cause"]) == x["named"][0][0])
+    check("R4 the closed reviews show the first service named is not reliably the cause",
+          0.2 <= first_right / max(len(closed), 1) <= 0.6, "%d of %d" % (first_right, len(closed)))
+
+    # ---------------------------------------------------------------- R5 no one thing: footprints
+    w_own = g.weights("own")
+    S_own_gold = g.slis(w_own, g.excluded(att, dec))
+    shifts = {s: round(S[s]["sli"] - S_own_gold[s]["sli"], 3) for s in K.INTERNAL}
+    check("R5 the root weights move every internal service's SLI by 0.1 or more, in both directions",
+          all(abs(v) >= 0.1 for v in shifts.values()) and min(shifts.values()) < 0 < max(shifts.values()),
+          str(shifts))
+    eff = json.load(open(os.path.join(HERE, "effort.json")))
+    worst = max(len(h["rescues"]) for h in eff["hints"])
+    check("R5 no single correction rescues more than a third of the results", worst <= len(eff["results"]) / 3.0,
+          "; ".join("%s: %s" % (h["sentence"][:48], ",".join(h["rescues"]) or "none") for h in eff["hints"]))
+
+    # ---------------------------------------------------------------- R7 rivals inside each band
+    w_sh = g.weights("root_span_hour")
+    w_drop = wr.copy()
+    for i in np.nonzero(g.dec)[0]:
+        if g.tr[i] not in g.root_of:
+            w_drop[i] = 0.0
+    ex = g.excluded(att, dec)
+    for lab, S_r in (("Horvitz-Thompson on the balancer's count", g.slis(wr, ex, ht=True)),
+                     ("the root's share at the span's own hour", g.slis(w_sh, ex)),
+                     ("spans of traces begun in November dropped", g.slis(w_drop, ex))):
+        check("R7 %s gives every one-decimal SLI" % lab, r1set(S_r) == gold1,
+              str({s: K.r1(S_r[s]["sli"]) for s in K.SVC if K.r1(S_r[s]["sli"]) != gold1[s]}))
+    curves = g.load_curves(dec)
+    for lab, kw in (("a two-hour lead", {"lead_min": 120}), ("a four-hour lead", {"lead_min": 240})):
+        alt = {x["id"]: (lambda on: min((s_ for s_, v in on.items() if v), key=lambda s_: on[s_][0]))(
+            g.onsets(x, curves, **kw)) for x in dec}
+        check("R7 the onset read over %s puts every incident on the same service" % lab, alt == att, str(alt))
+    lin = {s: (R["ci"][s][0], R["ci"][s][1]) for s in GOLD}
+    boot = R["ci_boot"]
+    check("R7 the trace bootstrap agrees with the linearised interval to 0.04 at both ends",
+          all(abs(lin[s][0] - boot[s][0]) <= 0.04 and abs(lin[s][1] - boot[s][1]) <= 0.04 for s in GOLD),
+          str({s: (round(lin[s][0], 2), round(boot[s][0], 2), round(lin[s][1], 2), round(boot[s][1], 2)) for s in GOLD}))
+
+    # ---------------------------------------------------------------- margins
+    dist = {s: round(min(abs(S[s]["sli"] - (np.floor(S[s]["sli"] * 10) / 10 + 0.05)),
+                         abs(S[s]["sli"] - (np.floor(S[s]["sli"] * 10) / 10 - 0.05))), 3) for s in K.SVC}
+    check("M1 every SLI 0.01 or more from a rounding line", min(dist.values()) >= 0.01, str(dist))
+    vmarg = {s: round(S[s]["sli"] - (R["bud"][s] + 0.05), 3) for s in K.SVC}
+    check("M2 every verdict 0.1 or more from its budget line", all(abs(v) >= 0.1 for v in vmarg.values()), str(vmarg))
+    check("M3 the five's order holds by a tenth of the next service's count",
+          all(S[a]["over_requests"] >= 1.1 * S[b]["over_requests"] for a, b in zip(P["order"], P["order"][1:])),
+          ", ".join("%s %.0f" % (s, S[s]["over_requests"]) for s in P["order"]))
+
+    # ---------------------------------------------------------------- the semantic fork rows
+    check("SF1 December in Lisbon time is UTC: no span moves between days", True, "PR-SLO-3 3.1; WET all month")
+    check("SF2 over threshold is strictly greater", sum(1 for i in np.nonzero(g.dec)[0]
+                                                       if g.ms[i] == g.thr[g.svc[i]]) == 0, "no span on a threshold")
+    check("SF3 a re-sent span id counts once", True, "R2 above")
+    check("SF4 the balancer's probes are not requests", not any(g.name == "GET /healthz"),
+          "PR-SLO-3 2.2; the edge sampler never sees a probe, so the export carries none")
+    check("SF5 a retried call is a request", True, "PR-SLO-3 2.2: any call a caller sent")
+    check("SF6 errors count like any request", True, "PR-SLO-3 2.4")
+    check("SF7 a request belongs to the time its service started it", True, "PR-SLO-3 2.4")
+    check("SF8 the weighting base (balancer count or weighted kept count)", True, "R7 above: same one decimal")
+    check("SF9 the root's hour or the span's own hour", True, "R7 above")
+    check("SF10 spans of traces begun in November", True, "R7 above")
+    check("SF11 a symptom's window starts when the timeline adds it", True, "PR-SLO-3 3.2; R2 above for the SLIs")
+    check("SF12 an incident ends when the status page shows its last component operational",
+          all(x["end"] <= x["resolved"] for x in dec), "PR-SLO-3 3.2 and 5.2")
+    check("SF13 a December incident with no status post leaves nothing out", len([x for x in incs if x["declared"] >=
+                                                                                 AN.DEC0]) == 7, "PR-SLO-3 5.2")
+    check("SF14 the onset's lead window", True, "R7 above")
+    check("SF15 shares are of the over-threshold requests all the SLIs count", abs(sum(P["share"].values()) - 100)
+          < 1e-6, "the base is the ten SLIs' numerators")
+    check("SF16 the interval's method (linearised against bootstrapped)", True, "R7 above")
+    # an onset is stated to the nearest five minutes: the rounding keeps every pair of rises in its order, ten minutes
+    # or more apart, so a time read a few minutes either way grades the same
+    gaps = []
+    for x in dec:
+        on = R["onset"][x["id"]]
+        f = att[x["id"]]
+        for s_, v in on.items():
+            if s_ != f and v:
+                a5 = D.about((AN.DEC0 + __import__("datetime").timedelta(seconds=on[f][0])).strftime("%H:%M"))
+                b5 = D.about((AN.DEC0 + __import__("datetime").timedelta(seconds=v[0])).strftime("%H:%M"))
+                gaps.append((x["id"], a5, b5))
+    check("SF19 an onset stated to five minutes keeps each cause's rise ten minutes or more before the others'",
+          all((int(b[:2]) * 60 + int(b[3:])) - (int(a[:2]) * 60 + int(a[3:])) >= 10 for _, a, b in gaps),
+          "; ".join("%s %s before %s" % g for g in gaps))
+
+    # ---------------------------------------------------------------- the documents
+    slo = text_of(os.path.join(target, K.FILES["slo"]))
+    check("DOC1 the standard files the incident clause (positive control)", "owned the incident's root cause" in slo
+          and "does not." in slo, "")
+    check("DOC2 the standard names no method for finding the cause", not re.search(
+        r"self.time|own handling time|changepoint|onset|first to slow|load curve|trace", slo.split("3.2")[1].split("3.4")[0],
+        re.I), "")
+    check("DOC3 no December review records a cause", all(not x["cause"] for x in dec), "")
+    print("%d checks failed" % len(FAILS) if FAILS else "all checks passed")
+    return len(FAILS)
 
 
 if __name__ == "__main__":

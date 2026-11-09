@@ -1,114 +1,179 @@
-"""The seed sweep behind the design note's draw: every route's designated set, the golden and rung margins, the
-one-decimal corridor and the rounding-line distance, seed by seed on the world's own kept spans.
+"""The seed sweep behind architecture 7's world (generator/common.py's settings): for each seed, every service's
+December SLI under each weighting and each incident attribution on the world's own kept spans (no pack is cut), and
+the margins the design needs (the golden list; partner-gateway, fares and notifications each over only with both the
+root weights and the right attribution; journey-search and accounts within on every route; the 26 December incident
+out-slowed by accounts on the latency share). Seed 2711 was chosen from 2700 to 2829.
 
-    python3 seed_sweep.py 2700 2950"""
+    python3 seed_sweep.py 2700 2830 > sweep.jsonl"""
+import json
 import sys
+import warnings
+
 import numpy as np
-sys.path.insert(0, __import__('os').path.dirname(__import__('os').path.abspath(__file__)))
-import common as K, world as W
+
+warnings.filterwarnings("ignore")
+sys.path.insert(0, __import__("os").path.dirname(__import__("os").path.abspath(__file__)))
+import common as K   # noqa: E402
+import world as W    # noqa: E402
 
 H = W.H
-GOLD = ['journey-search', 'places', 'seat-map', 'partner-gateway', 'notifications']
-FOUR = ['journey-search', 'places', 'seat-map', 'notifications']
+GOLD = ["fares", "places", "seat-map", "partner-gateway", "notifications"]
 
 
-def r2(x):
-    return K.r2(x)
+def sec(d, h, m, s=0):
+    return W._sec(d, h, m, s)
 
 
-def estimates(w):
+def analyse(w, verbose=True):
     sp = w.sp
-    srv = sp['kind'] == 'SERVER'
-    # trace -> root service and root start
-    root = srv & (sp['parent'] == -1)
-    tr_root_svc = {}
-    tr_root_t = {}
-    for t, s, t0 in zip(sp['trace'][root], sp['svc'][root], sp['t0'][root]):
-        tr_root_svc[t] = s
-        tr_root_t[t] = t0
-    inwin = (sp['t0'] >= 0) & (sp['t0'] < H * 3600)
-    Kr = {}
-    for s in K.EDGE:
-        sel = root & inwin & (sp['svc'] == s)
-        Kr[s] = np.bincount((sp['t0'][sel] // 3600).astype(int), minlength=H)
+    srv = sp["kind"] == "SERVER"
+    inwin = (sp["t0"] >= 0) & (sp["t0"] < H * 3600)
+    root = srv & (sp["parent"] == -1)
+    rs, rh = {}, {}
+    for t, s, t0 in zip(sp["trace"][root], sp["svc"][root], sp["t0"][root]):
+        rs[t] = s
+        rh[t] = int(t0 // 3600)
+    Kr = {e: np.bincount((sp["t0"][root & inwin & (sp["svc"] == e)] // 3600).astype(int), minlength=H) for e in K.EDGE}
     N = {s: w.N[s][W.DEC0:W.DEC0 + H].astype(float) for s in K.SVC}
-    hod, day = np.arange(H) % 24, np.arange(H) // 24
-    out = {}
+    posts_end = {x["id"]: max(sec(*p[2]) for p in x["posts"]) for x in K.DEC_INCIDENTS}
+    kids = {}
+    for k in np.nonzero(sp["kind"] == "CLIENT")[0]:
+        kids.setdefault(int(sp["parent"][k]), []).append((float(sp["t0"][k]), float(sp["t0"][k]) + sp["ms"][k] / 1000))
+    self_ms = np.array(sp["ms"], dtype=float)
+    for k in np.nonzero(srv)[0]:
+        ch = kids.get(int(sp["sid"][k]))
+        if not ch:
+            continue
+        ch.sort()
+        tot, cur = 0.0, None
+        for a_, b_ in ch:
+            if cur is None or a_ > cur[1]:
+                if cur:
+                    tot += cur[1] - cur[0]
+                cur = [a_, b_]
+            else:
+                cur[1] = max(cur[1], b_)
+        tot += cur[1] - cur[0]
+        self_ms[k] = max(0.0, sp["ms"][k] - tot * 1000)
+    data = {}
     for s in K.SVC:
-        sel = srv & inwin & (sp['svc'] == s)
-        t0 = sp['t0'][sel]; ms = sp['ms'][sel]; trs = sp['trace'][sel]
-        slow = (ms > K.THRESHOLD[s]).astype(float)
-        h_own = (t0 // 3600).astype(int)
-        rs = np.array([tr_root_svc[t] for t in trs])
-        rt = np.array([tr_root_t[t] for t in trs])
-        orphan = rt < 0
-        h_root = np.clip((rt // 3600).astype(int), 0, H - 1)
+        sel = np.nonzero(srv & inwin & (sp["svc"] == s))[0]
+        tr = sp["trace"][sel]
+        t0 = sp["t0"][sel]
+        h = (t0 // 3600).astype(int)
+        slow = (sp["ms"][sel] > K.THRESHOLD[s]).astype(float)
+        e = [rs.get(x) for x in tr]
+        he = [rh.get(x, -1) for x in tr]
+        w_root = np.array([N[ee][hh] / Kr[ee][hh] if ee is not None and 0 <= hh < H and Kr[ee][hh] > 0 else np.nan
+                           for ee, hh in zip(e, he)])
+        Kh = np.bincount(h, minlength=H).astype(float)
+        w_own = N[s][h] / np.maximum(Kh[h], 1)
+        w_root = np.where(np.isnan(w_root), w_own, w_root)
+        data[s] = dict(t0=t0, h=h, slow=slow, w_root=w_root, w_own=w_own, op=sp["op"][sel], self=self_ms[sel],
+                       tr=tr)
+    # incident-free hours, for the load curves
+    busy = np.zeros(H, dtype=bool)
+    for x in K.DEC_INCIDENTS:
+        a_ = sec(*x["onset"]) // 3600
+        b_ = posts_end[x["id"]] // 3600
+        busy[max(0, a_ - 1):min(H, b_ + 2)] = True
+    truth = {x["id"]: x["fault"] for x in K.DEC_INCIDENTS}
+    first = {x["id"]: x["named"][0][0] for x in K.DEC_INCIDENTS}
+    last = {x["id"]: x["named"][-1][0] for x in K.DEC_INCIDENTS}
+    ev = {}
+    for x in K.DEC_INCIDENTS:
+        a_, b_ = sec(*x["declared"]), posts_end[x["id"]]
+        rows = []
+        for svc, _t in x["named"]:
+            d = data[svc]
+            m = (d["t0"] >= a_) & (d["t0"] < b_)
+            over = float((d["w_root"][m] * d["slow"][m]).sum())
+            over_k = float(d["slow"][m].sum())
+            rate = over / max(float(d["w_root"][m].sum()), 1)
+            # per operation: excess of the window's median self time over a load curve fitted on incident-free hours
+            best = (1.0, "")
+            for op in np.unique(d["op"]):
+                mo = d["op"] == op
+                hh = d["h"][mo]
+                med = {}
+                for hv in np.unique(hh):
+                    v = d["self"][mo][hh == hv]
+                    if len(v) >= 3:
+                        med[hv] = np.median(v)
+                xs = np.array([np.log(N[svc][hv] + 1) for hv in med if not busy[hv]])
+                ys = np.array([np.log(med[hv]) for hv in med if not busy[hv]])
+                if len(xs) < 30:
+                    continue
+                cf = np.polyfit(xs, ys, 2)
+                mw = m & mo
+                if mw.sum() < 5:
+                    continue
+                pred = np.exp(np.polyval(cf, np.log(N[svc][d["h"][mw]] + 1)))
+                ratio = float(np.exp(np.median(np.log(np.maximum(d["self"][mw], 1e-3)) - np.log(pred))))
+                if ratio > best[0]:
+                    best = (ratio, op)
+            rows.append((svc, over, over_k, rate, best[0], best[1], int(m.sum())))
+        ev[x["id"]] = rows
+    most = {i: max(r, key=lambda z: z[1])[0] for i, r in ev.items()}
+    mostk = {i: max(r, key=lambda z: z[2])[0] for i, r in ev.items()}
+    rate = {i: max(r, key=lambda z: z[3])[0] for i, r in ev.items()}
+    loadx = {i: max(r, key=lambda z: z[4])[0] for i, r in ev.items()}
+    schemes = {"golden": truth, "first": first, "last": last, "most": most, "mostk": mostk, "rate": rate,
+               "loadx": loadx, "none": None}
+    res = {}
+    for name, att in schemes.items():
+        excl = {s: [] for s in K.SVC}
+        if att is not None:
+            for x in K.DEC_INCIDENTS:
+                for svc, t in x["named"]:
+                    if svc != att[x["id"]]:
+                        excl[svc].append((sec(*t), posts_end[x["id"]]))
+        for wname in ("w_root", "w_own", "unw"):
+            out = {}
+            for s in K.SVC:
+                d = data[s]
+                keep = np.ones(len(d["t0"]), dtype=bool)
+                for a_, b_ in excl[s]:
+                    keep &= ~((d["t0"] >= a_) & (d["t0"] < b_))
+                ww = np.ones(len(d["t0"])) if wname == "unw" else d[wname]
+                out[s] = 100 * (ww[keep] * d["slow"][keep]).sum() / ww[keep].sum()
+            res[(name, wname)] = out
+    hits = {k: sum(v[i] == truth[i] for i in truth) for k, v in schemes.items() if v is not None and k != "golden"}
+    if False:
+        print("attribution hits of %d: %s" % (len(truth), hits))
+        for i, rows in ev.items():
+            print("  %s fault %-15s " % (i, truth[i]) + "; ".join(
+                "%s w%.0f k%.0f r%.3f lx%.2f(%s) n%d" % r for r in rows))
+        cols = [("golden", "w_root"), ("golden", "w_own"), ("none", "w_root"), ("first", "w_root"), ("last", "w_root"),
+                ("most", "w_root"), ("mostk", "w_root"), ("rate", "w_root"), ("loadx", "w_root"), ("most", "w_own")]
+        print("%-16s %4s | %s" % ("service", "bud", " ".join("%-10s" % ("/".join(c)[:10]) for c in cols)))
+        for s in K.SVC:
+            print("%-16s %4.1f | %s" % (s, K.BUDGET[s], " ".join(
+                "%-10s" % ("%.2f%s" % (res[c][s], "*" if round(res[c][s] + 1e-9, 1) > K.BUDGET[s] else "")) for c in cols)))
+        for c in cols:
+            print("over %-16s %s" % ("/".join(c), [s for s in K.SVC if round(res[c][s] + 1e-9, 1) > K.BUDGET[s]]))
+    return res, ev, data, hits
 
-        def wts(hh):
-            wv = np.zeros(len(t0))
-            for e in K.EDGE:
-                m = rs == e
-                if m.any():
-                    wv[m] = N[e][hh[m]] / np.maximum(Kr[e][hh[m]], 1)
-            return wv
-        w_root = wts(h_root)
-        w_root[orphan] = 0.0
-        w_own = wts(h_own)
-        w_own[orphan] = 0.0
-        Ns = N[s].sum()
-        ht = 100 * (w_root * slow).sum() / Ns
-        hajek = 100 * (w_root * slow).sum() / w_root.sum()
-        num_h = np.bincount(h_own, w_root * slow, minlength=H); den_h = np.bincount(h_own, w_root, minlength=H)
-        cal = 100 * np.where(den_h > 0, N[s] * num_h / np.maximum(den_h, 1e-12), 0).sum() / Ns
-        ht_ownh = 100 * (w_own * slow).sum() / Ns
-        # orphans weighted at the service's own hourly share instead of dropped
-        Kh = np.bincount(h_own, minlength=H).astype(float); Sh = np.bincount(h_own, slow, minlength=H)
-        w_orph = w_root.copy(); w_orph[orphan] = (N[s] / np.maximum(Kh, 1))[h_own[orphan]]
-        ht_orph = 100 * (w_orph * slow).sum() / Ns
 
-        def strat(g):
-            Ng, Kg, Sg = np.bincount(g, N[s]), np.bincount(g, Kh), np.bincount(g, Sh)
-            return 100 * (np.where(Kg > 0, Ng / np.maximum(Kg, 1), 0) * Sg).sum() / Ns
-        out[s] = dict(gold=ht, hajek=hajek, cal=cal, ownh=ht_ownh, orph=ht_orph, r3=strat(np.arange(H)),
-                      hod=strat(hod), day=strat(day), unw=100 * Sh.sum() / Kh.sum(), true=w.true_sli(s),
-                      empty=int(((Kh == 0) & (N[s] > 0)).sum()), orphans=int(orphan.sum()))
-    return out
+def main(lo, hi):
+    for seed in range(lo, hi):
+        res, ev, data, hits = analyse(W.World(seed=seed), verbose=False)
+        g = res[("golden", "w_root")]
+        over = [s for s in K.SVC if round(g[s] + 1e-9, 1) > K.BUDGET[s]]
+        i5 = {r[0]: r[3] for r in ev[[x["id"] for x in K.DEC_INCIDENTS if x["fault"] == "notifications"][0]]}
+        rec = {"seed": seed, "gold": over == GOLD,
+               "margin": round(min(abs(g[s] - (K.BUDGET[s] + 0.05)) for s in K.SVC), 3),
+               "pg": round(g["partner-gateway"], 3),
+               "pg_x": round(max(res[("first", "w_root")]["partner-gateway"], res[("last", "w_root")]["partner-gateway"]), 3),
+               "fares": round(g["fares"], 3),
+               "fa_x": round(max(res[("first", "w_root")]["fares"], res[("last", "w_root")]["fares"]), 3),
+               "notif": round(g["notifications"], 3),
+               "no_x": round(max(res[("most", "w_root")]["notifications"], res[("rate", "w_root")]["notifications"],
+                                 res[("loadx", "w_root")]["notifications"]), 3),
+               "own": {s: round(res[("golden", "w_own")][s], 3) for s in ("fares", "partner-gateway", "notifications")},
+               "i5_rate_acc_minus_notif": round(i5["accounts"] - i5["notifications"], 3), "hits": hits}
+        print(json.dumps(rec), flush=True)
 
 
-def judge(o):
-    sets = {k: [s for s in K.SVC if o[s][k] > K.BUDGET[s]] for k in ('gold', 'r3', 'hod', 'day', 'unw')}
-    ok = sets['gold'] == GOLD and sets['r3'] == FOUR and sets['hod'] == FOUR and sets['day'] == ['notifications'] \
-        and sets['unw'] == ['notifications']
-    gr = min(o[s]['gold'] / K.BUDGET[s] if s in GOLD else K.BUDGET[s] / o[s]['gold'] for s in K.SVC)
-    wr = min(abs(o[s][k] - K.BUDGET[s]) / K.BUDGET[s] for s in K.SVC for k in ('r3', 'hod', 'day', 'unw'))
-    corr = all(len({K.r1(o[s][k]) for k in ('gold', 'hajek', 'cal', 'ownh', 'orph')}) == 1 for s in K.SVC)
-    spread = max(max(o[s][k] for k in ('gold', 'hajek', 'cal')) - min(o[s][k] for k in ('gold', 'hajek', 'cal'))
-                 for s in K.SVC)
-    return ok, gr, wr, corr, spread, sets
-
-
-
-
-if __name__ == '__main__':
-
-    base = W.medians()
-    rows=[]
-    for seed in range(int(sys.argv[1]), int(sys.argv[2])):
-        w = W.World(seed, base); o = estimates(w)
-        gold = [s for s in K.SVC if o[s]['gold'] > K.BUDGET[s]]
-        r3 = [s for s in K.SVC if o[s]['r3'] > K.BUDGET[s]]
-        if gold != GOLD or 'partner-gateway' in r3 or r3 == GOLD: continue
-        if any(o['partner-gateway'][k] > K.BUDGET['partner-gateway'] for k in ('hod','day','unw')): continue
-        unw = [s for s in K.SVC if o[s]['unw'] > K.BUDGET[s]]
-        if any(s in unw for s in ('journey-search','places','seat-map')): continue   # rung 0 passes the busy edge services
-        corr = all(len({K.r1(o[s][k]) for k in ('gold','hajek','cal','ownh','orph')}) == 1 for s in K.SVC)
-        if not corr: continue
-        gr = min(o[s]['gold'] / K.BUDGET[s] if s in GOLD else K.BUDGET[s] / o[s]['gold'] for s in K.SVC)
-        pgm = (K.BUDGET['partner-gateway'] - o['partner-gateway']['r3']) / K.BUDGET['partner-gateway']
-        m0 = min(abs(o[s]['unw'] - K.BUDGET[s]) / K.BUDGET[s] for s in K.SVC)
-        line = min(min(abs((o[s][k]*10) % 1 - 0.5)/10 for k in ('gold','hajek','cal','ownh','orph')) for s in K.SVC)
-        spread = max(max(o[s][k] for k in ('gold','hajek','cal')) - min(o[s][k] for k in ('gold','hajek','cal')) for s in K.SVC)
-        rows.append((round(min(gr - 1, 2 * line / 0.05 * 0.3, m0), 3), round(gr, 3), round(pgm, 3), round(m0, 3), round(line, 4), round(spread, 4), seed))
-    rows.sort(reverse=True)
-    print(len(rows), 'seeds')
-    for r in rows[:12]: print('  score %.3f gold-ratio %.3f pg-r3-margin %.3f rung0-margin %.3f line %.4f spread %.4f seed %d' % r)
+if __name__ == "__main__":
+    main(int(sys.argv[1]), int(sys.argv[2]))

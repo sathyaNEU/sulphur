@@ -424,3 +424,51 @@ def normalize_svg(path):
     s = s.replace('id="matplotlib.axis_', 'id="axis_')
     assert "matplotlib" not in s.lower() and "Matplotlib" not in s, "plotting library named in the SVG"
     open(path, "w", encoding="utf-8").write(s)
+
+
+# ---------------------------------------------------------------------------------------- file times and archives
+def own_mtimes(folder, fallback):
+    """Each file's modification time set to its own last save as its container records it (a workbook's or deck's
+    modified stamp, a PDF's modification or creation date); a file with no stamp of its own (an export) takes the
+    one given in fallback, by file name. Returns {name: aware datetime}."""
+    import datetime as dt
+    import os
+    out = {}
+    for name in sorted(os.listdir(folder)):
+        p = os.path.join(folder, name)
+        stamp = None
+        if name.endswith((".xlsx", ".docx", ".pptx")):
+            with zipfile.ZipFile(p) as z:
+                core = z.read("docProps/core.xml").decode()
+            m = re.search(r"<dcterms:modified[^>]*>([^<]+)<", core)
+            stamp = dt.datetime.strptime(m.group(1), "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=dt.timezone.utc)
+        elif name.endswith(".pdf"):
+            b = open(p, "rb").read()
+            m = re.search(rb"/ModDate\s*\(D:(\d{14})", b) or re.search(rb"/CreationDate\s*\(D:(\d{14})", b)
+            stamp = dt.datetime.strptime(m.group(1).decode(), "%Y%m%d%H%M%S").replace(tzinfo=dt.timezone.utc)
+        if name in fallback:
+            stamp = fallback[name]
+        assert stamp is not None, "no stamp for %s" % name
+        os.utime(p, (stamp.timestamp(), stamp.timestamp()))
+        out[name] = stamp
+    stamps = list(out.values())
+    assert len(set(stamps)) == len(stamps), "two files share a save time"
+    return out
+
+
+def zip_folder(folder, out, prefix="", zone="Europe/London"):
+    """An archive of a folder as a desktop zip tool writes it: entries in name order, each entry's time the file's own
+    modification time in the sender's local clock, so two cuts of the same files are byte-identical."""
+    import datetime as dt
+    import os
+    from zoneinfo import ZoneInfo
+    tz = ZoneInfo(zone)
+    with zipfile.ZipFile(out, "w") as z:
+        for name in sorted(os.listdir(folder)):
+            p = os.path.join(folder, name)
+            t = dt.datetime.fromtimestamp(os.path.getmtime(p), dt.timezone.utc).astimezone(tz)
+            zi = zipfile.ZipInfo(prefix + name, date_time=(t.year, t.month, t.day, t.hour, t.minute, t.second))
+            zi.compress_type = zipfile.ZIP_DEFLATED
+            zi.external_attr = 0o644 << 16
+            zi.create_system = 3
+            z.writestr(zi, open(p, "rb").read())

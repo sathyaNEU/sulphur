@@ -53,9 +53,16 @@ def write_slo(path):
     _p(doc, "3  The annual review", bold=True, size=12)
     _p(doc, "3.1  The annual review reads each service's latency SLI over December, in Lisbon time: the month of the "
             "heaviest traffic, and the 31 days the tracing store holds on the review date.")
-    _p(doc, "3.2  A service breaches its latency objective when its latency SLI for the review period exceeds its "
+    _p(doc, "3.2  Requests a service handled while a customer-facing incident (5.2) named it, from the moment the "
+            "incident tool added the service until the status page showed every component the incident affected "
+            "operational again, are left out of the service's latency SLI for the review, unless the service owned "
+            "the incident's root cause.")
+    _p(doc, "3.3  An incident's root cause is the failure that set it off. A service owns it when the failure was in "
+            "the service's own handling of requests, including the systems outside the catalogue it relies on; a "
+            "service that slowed only because another service in the catalogue that it called had slowed does not.")
+    _p(doc, "3.4  A service breaches its latency objective when its latency SLI for the review period exceeds its "
             "error budget.")
-    _p(doc, "3.3  Each service that breaches its latency objective in the 2026 review is assigned a reliability "
+    _p(doc, "3.5  Each service that breaches its latency objective in the 2026 review is assigned a reliability "
             "engineer for January to June 2027 under the reliability programme.")
 
     _p(doc, "4  Thresholds and error budgets", bold=True, size=12)

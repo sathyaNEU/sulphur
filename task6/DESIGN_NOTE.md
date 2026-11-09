@@ -2,6 +2,8 @@
 
 ## Draw
 
+The design of architecture 6 (the single deep step it was returned for) is in git history at commit bd3bbed.
+
 - **Card.** `.claude/skills/fingerprint/cards/task6.json`, architecture v7, registered 2026-11-09T16:23:04Z with
   `--force` on one axis: `ban.pairing` against task2 (general-statistics-data-science with Descriptive & Distribution
   Analysis). The platform assigned this returned task its domain and analysis type (task 4b456953, version 17, task
@@ -19,13 +21,13 @@
   step among several." The world keeps its people, files and sampler; the call graph, the December incidents and the
   standard's incident clause are what change.
 - **Pairing.** general-statistics-data-science / missing-data-censoring-measurement-error / descriptive-distribution.
-- **Analysis type:** Descriptive & Distribution Analysis (where each service's December latency share really sits,
-  once the sample's design weights and the incident time charged elsewhere are handled).
-- **Answer shape:** a flagged set with the evidence: the services over budget with each SLI, its interval and the
-  December incidents' faults behind it, in the order their engineers start.
-- **Weight:** a hard-to-measure quantity: each service's share of slow requests from a whole-trace sample whose
-  inclusion probability is recorded nowhere, with incident time charged to the service at fault. The last builds
-  leaned on attribution (task13), robustness (task2) and forecasting (task12).
+Analysis type: Descriptive & Distribution Analysis (where each service's December latency share really sits, once the
+sample's design weights and the incident time charged elsewhere are handled).
+Answer shape: a flagged set with the evidence: the services over budget with each SLI, its interval and the December
+incidents' root causes behind it, in the order their engineers start.
+Weight: a hard-to-measure quantity: each service's share of slow requests from a whole-trace sample whose inclusion
+probability is recorded nowhere, with incident time charged to the service that owned each incident's root cause. The
+last builds leaned on attribution (task13), robustness (task2) and forecasting (task12).
 - **Decision.** Which internal services ran over their 2026 latency error budget; each gets a reliability engineer
   for January to June 2027, the one whose SLI counts the most requests over its threshold first. Retrospective by
   design: the SLO year closed on 31 December 2026 and the programme starts in January.
@@ -37,498 +39,272 @@
 - **People.** Teresa Nogueira (Head of Platform Reliability), Bruno Marques (FinOps), Ivo Pereira (SRE): the
   personas drawn for architecture 5's world and kept with it.
 
-## Tried and rejected`; architecture 5's design sections are in git history at 6e745ade.
-
-## Draw
-
-- **Card.** `.claude/skills/fingerprint/cards/task6.json`, architecture v6, re-registered 2026-11-07 after the edge-sampler
-  redraw (the first registration, 21:54:53Z, carried the per-service sampler now in `## Tried and rejected`). `guard.py check`
-  on the filed card: WARN only, `repeat.gate_g` (method_or_model_selection against task127 v4) and `overuse.gate_g` (5 of the
-  last 12). Answer: the gate names the decisive step, the choice of inclusion probability for a cluster sample of traces;
-  task127 (a bank's support packages valued by the write-off they keep off the book) shares no world, driver or shell.
-  Three axes were redrawn after task127 v4 was registered at 22:27Z with the same values: context artifact monitoring_export
-  to operations_log (the decisive file is the trace store's span export, an event log of every call a kept request made),
-  forum line_manager_or_team to executive_team (the engineering leadership group approved PR-SLO-3 and staffs the reliability
-  programme the call assigns engineers in), forcing event period_close to budget_or_appropriation (the call is the January
-  allocation of reliability engineers for the first half of 2027). The older same-puzzle and same-driver signatures (task245,
-  task265, task139 v1, task182 v4, task270 v1 and v6, task452 v2), task264 and the slot's own superseded registration carry
-  one differentiation line each on the card.
-- **Pairing.** general-statistics-data-science / missing-data-censoring-measurement-error / descriptive-distribution. The
-  setting is the platform reliability team of Rotalinha, a Lisbon marketplace selling intercity bus and ferry tickets in
-  Portugal and Spain; the statistics is the field: a population share estimated from a cluster sample of traces whose
-  inclusion probability is set where each trace starts and recorded nowhere.
-- **Decision.** Which internal services ran over their 2026 latency error budget. Each one that did gets a reliability engineer
-  for the first half of 2027. Retrospective by design: the SLO year closed on 31 December 2026 and the programme starts in
-  January.
-- **The quantity.** Each service's 2026 latency SLI as the annual review reads it, over December in Lisbon time (PR-SLO-3
-  section 3.1): the share of the requests it handled whose server-side duration exceeded its threshold, against its error
-  budget (both in the standard).
-- **Data-native sentence.** The trace store's sampler sits at the edge: each edge service keeps a share of its requests that
-  it resets at the top of every hour from its previous hour's traffic, and a kept request's whole trace is kept with it, so
-  an internal service's kept spans carry the keep share of whichever edge service started their trace; partner-gateway's
-  slow availability lookups are made by journey-search's searches, the busiest edge service and the one kept at the smallest
-  share, while seat-map and booking, kept at far larger shares, make its fast calls. The load balancer counts every request
-  each service handled per hour; no file records a keep share.
-- **Abstraction sentence (nearest builds).** The nearest approved builds are task275 (an invariant total raised to unobserved
-  trips) and task253 (a count past a line as the sum of probabilities), and neither shares the move. A reviewer holding
-  task452 v2 (delivered) would say both weight a sample by its inclusion probability: there the probability belongs to a
-  drawn stratum, recorded in the design, and the trap is a reclassification after the draw; task264 weights a sampled person
-  by a probability proportional to their own visits. Here the probability belongs to another unit, the edge service whose
-  request started the trace, is recorded nowhere, and is recovered hour by hour from that unit's load balancer count.
-  task258 (approved) is the nearest world (web performance) and shares no step.
-- **Shape.** 14, cuts of a distribution per segment: for each internal service its SLI and whether it breached, the call, the
-  chart, the files, and the asks.
-- **Strategy.** population_selection, gate method_or_model_selection, generators G9 (the measured outcome is the kept one),
-  G6, G13; gap population; Layer 2 estimation_fit.
-- **Prototype on the world's own kept spans (`generator/seed_sweep.py 2700 2950`, 2026-11-07).** 205 of 250 seeds hold the ladder
-  and the one-decimal corridor. Seed 2886: the golden puts journey-search 1.3, places 1.5, seat-map 1.5, partner-gateway 2.9
-  and notifications 1.6 over budget; reweighting each service's spans hour by hour by its own count passes partner-gateway at
-  1.44 against 2.0, pooling by hour of day at 1.26, and the kept share and a day reweighting pass journey-search, places,
-  seat-map and partner-gateway (0.69, 0.71, 0.74, 0.84). Smallest golden ratio to budget 1.32; partner-gateway 0.28 under
-  its budget on the per-service rung; every graded one-decimal figure at least 0.018 from a rounding line under
-  Horvitz-Thompson on the balancer's count, Hajek, hour-calibrated, own-hour weights and either orphan handling.
-
-### Spent insights on this objective (`guard.py mechanisms --objective descriptive-distribution`, 2026-11-07)
-
-One line per insight a live or lineage card has spent, so no candidate re-screens them.
-
-- task253: a count of units past a line is the sum of their probabilities, not the count of shrunken predictions.
-- task254: a path's passage time through stages whose delays build during the unit's own passage.
-- task255: the upper tail of a two-kind size distribution under per-item floors, a moving ceiling and open items.
-- task256: the share inside a multivariate box carried from a reference group by its conditional distribution.
-- task257: latent dimensions of categorical items where Pearson correlations on codes mislead.
-- task258: an intervention moves only the units whose served document carries the reference its step needs.
-- task259: a level at a reference date carried from earlier reports by the level's own movement in the same units.
-- task260: an interval for a shared-sample improvement must resample raters and items together.
-- task261: a subgroup difference's error from one clustered sample, the subgroups sharing clusters.
-- task262: a slope on a long-run average measured in full only for a subsample selected on its level.
-- task263: each source's level recovered from mixtures run in changing proportions.
-- task264: distinct members from events sampled in proportion to each member's events; v1 the price setter as the unit.
-- task265: survival from a record that began after many units started (delayed entry).
-- task266: cumulative incidence with competing ways a spell ends, many still open.
-- task267: a rule's capture rate when the check went to every flagged member and a random fifth of the rest.
-- task269: compliance read from staff observers who sample mostly well-covered periods.
-- task270: (v1 to v10) selection on a weighted sum; a reporting cost; practice effects; part against composite; correlated
-  errors of two changes; slot landings; losses recorded when made good; fixed-schedule suppliers; a variogram of moves;
-  free servers away from base; (now) remaining time from a group published only as one total.
-- task271: impact of events that stand alone, read from events mostly inside sequences; risk from earlier episodes;
-  members unreachable at the call hours; penetrance with testing selected on outcome; rates carried by supply-zone geometry.
-- task272: drift between resets under sparse checks; dependence on the previous decision within sessions; a seasonal
-  quarter scaled to the year.
-- task274: groups below a line with an instrument bias under one calibration and a remeasured subsample; age with missing
-  start dates.
-- task275: observed trips land undersized fish and avoid nursery grounds, so the unwanted catch per hour by ground is raised.
-- task279: substance lost from a compressible medium read off the surface lowering.
-- task280: probes silenced by members' own activity, the activity rising with load.
-- task281: wear-out before a fixed age with a part that never wears out; a year's need rebuilt with planned gaps.
-- task101: the decision's own earlier payments sit in the distribution it cuts from.
-- task114: demand that takes a room only when two parties share a site (co-presence under consolidation).
-- task126: a succession link that both continues a unit and opens a new one on a carried file.
-- task93: a floor's cost as a shortfall per person per pay period under flat all-in pay.
-- task73: a capped slate bound by a processing allocation with re-assigned review intervals.
-- task65: capped sums over entities constituted from child records by the child's own location.
-- task57: archives whose union nulls a third of records; filed place limits binding below the money.
-- task53: eligible volume pooled per account against a scale break.
-- task38, task34, task24, task19, task14, task10, task9, task8, task7, task5, task4, task3, task2, task1: the legacy
-  surface-read, identity and stated-rule forms (pre-10/10, not drawable now).
-- task182 v4 (another lane, same objective family): durations seen only in snapshots, length-biased.
-- task452 v2 (shipped): weight each reference observation by the stratum it was drawn in, not the revised one.
-- task127 v2 (landed on the portal): an intervention removes only the replaced step's excess over a concurrent step.
-- task472 v2 (shipped): saved work counts only where it brings a release into an earlier fixed window.
-- task181 (approved): an eventual count completed by each reporting route's own delay.
-- This slot: v1 daytime presence carried from commuting flows; v2 a stock's fall from preferential collectors against a
-  survey; v3 survival with censoring that follows worsening; v4 claims completed by notifying route; v5 duplication of
-  purchase at the home, homes linked by a shared payment card.
-
-## Default path
-
-Every figure below is built by `generator/analysis.py` from the shipped pack and asserted in `generator/checks.py`
-(seed 2886).
-
-1. Read PR-SLO-3: a service's latency SLI is the share of the requests it handled whose server-side duration exceeded its
-   threshold (2.1); a request is any call it handled, whether or not the tracing store kept a span for it, the balancer's
-   probes excluded (2.2); the duration is the service's own server span (2.3); the review reads December in Lisbon time,
-   which is UTC all month (3.1); a breach is an SLI over the budget (3.2); thresholds and budgets are in section 4.
-2. Join the service catalogue's tracing names and target groups to the trace export and the load balancer's July to
-   December export; keep the server spans, drop the health probes and the re-sent rows.
-3. Count kept server spans against the balancer's requests hour by hour: each service's kept spans run at a flat few dozen
-   an hour while its requests swing from a few hundred to 57,000, so the sample thins in the busy hours, when requests are
-   slow.
-4. Correct for it the standard way, post-stratifying each service's kept spans by hour on its own count (each hour's slow
-   share times the hour's requests, summed over December, over December's requests). Check it: the weights rebuild every
-   service's hourly count, and the weighted 5xx share matches the balancer's 5xx counts for every service.
-5. Compare each SLI with its budget: journey-search 1.3, places 1.5, seat-map 1.5 and notifications 1.6 against 1.0 are
-   over; partner-gateway is at 1.4 against 2.0, fares, booking, payments, tickets and accounts under.
-
-Ends on: four services: journey-search, places, seat-map and notifications (partner-gateway 1.4 against its 2.0 budget).
-
-Golden: five services: journey-search, places, seat-map, partner-gateway (2.9 against 2.0) and notifications.
-
-## Stump sentence
-
-A competent analyst who sees the trace store's sample thin in the busy hours post-stratifies each service's kept server
-spans by hour on that service's own load balancer count, which lands every edge service, and files four services, with
-partner-gateway at 1.4 against its 2.0 budget; the step that lands it there is weighting a partner-gateway span by
-partner-gateway's own hourly keep share, when the store keeps or drops whole traces at the edge, so each span was kept
-at the share of the edge service whose request started its trace, and journey-search's searches, which make the slow
-availability lookups, are kept at a fraction of seat-map's and booking's share; weighted by each trace's own edge keep
-share, partner-gateway is at 2.9 and the review names five services.
-
 ## Deep reasoning
 
-- **Task type:** general-statistics-data-science `missing-data-censoring-measurement-error`, which serves Descriptive &
-  Distribution Analysis: a population share estimated from records missing by design (the requests the store did not
-  keep), whose inclusion probability has to be recovered before the share is read.
-- **Domain test:** the deciding quantity is each service's latency SLI, a population proportion over every request it
-  handled, estimated from the store's sample; the statistician's estimator is a design-weighted share in the
-  Horvitz-Thompson form, each kept unit counted at the inverse of its inclusion probability; replace it with the kept
-  spans' own share, or with each service's spans post-stratified by hour, and the call changes (partner-gateway 0.8 or
-  1.4 against 2.9).
-- **Swap:** "which services ran over their latency error budget" becomes "which wards ran over their infection budget";
-  a ward has no trace store keeping whole request paths at a rate the entry point sets, no balancer count and no
-  downstream unit whose observation rides on another unit's sampling decision, so the sentence stops making sense.
-- **Layer 1:** the balancer's two exports (the old billing tool's layout to June with CRLF lines and processed gigabytes,
-  the FinOps export from July with renamed target groups, bytes, LCUs and 5xx counts), the trace export's re-sent
-  batches, its kept health probes, client spans beside server spans, nanosecond epoch clocks, and on the incident ask's
-  rows the incident tool in UTC against the status page in Lisbon time and the tool's administrative close; the review
-  folder's change and cost records (staging and failed attempts, USD marketplace lines, VAT, the support plan, team tags
-  before the retags) now sit unread beside them; each is produced by the platform's own systems, none is placed to be
-  caught, and none carries the call.
-- **Layer 2:** estimation_fit, a population share from a sample with unequal inclusion probabilities, where the sampling
-  unit is the trace and its probability belongs to the edge service that started it; the choice that flips the call is
-  which unit's keep share weights a downstream service's span.
-- **Decisive step:** recognising that the store keeps or drops whole traces at the edge, so a partner-gateway span was
-  kept at the keep share of the edge service whose request began its trace, in the hour that request began, and counting
-  each span at that edge service's balancer count over its kept root spans for the hour.
-- **Not semantics:** every field read correctly (server spans only, probes and re-sent rows dropped, the catalogue's
-  names and target groups joined, December in Lisbon time, the section 4 thresholds) still files four services under the
-  per-service hourly correction; no column, code or unit changes when a trace's edge keep share is used, because no file
-  stores a keep share, a sampling rule or a trace's edge service.
-- **Not rule application:** no filed rule says how kept spans are weighted; executing PR-SLO-3 and every convention leaves
-  the estimator open. The enumerated family (the kept share, a day weighting, an hour-of-day pooling, each service's
-  spans post-stratified by its own hourly count, and the trace-edge weighting in Horvitz-Thompson, Hajek and
-  hour-calibrated forms with the root's hour or the span's own) spans 0.84 to 2.90 for partner-gateway and files one,
-  four or five services; the standing family (the trace-edge weightings the whole traces leave defensible) spans 2.87 to
-  2.90 and files five in every member; the ruling-out is quiet: the whole traces and each edge service's flat count of
-  kept root spans show only when spans are linked to their trace's root and the root to the balancer's count.
-- **Analyst test:** a strong analyst who drops probes and re-sent rows, reads the catalogue, sees the sample thin in the
-  busy hours and post-stratifies each service's kept spans by hour on its own balancer count files four services:
-  journey-search, places, seat-map and notifications, with partner-gateway at 1.4 against its 2.0 budget, the default
-  path's `Ends on:`.
-- **Estimand:** PR-SLO-3 sections 2.1 to 2.4, 3.1 and 3.2: for each internal service, the share of the requests it handled
-  in December 2026 in Lisbon time, from any caller and whether or not the store kept a span for it, whose server-side
-  duration exceeded its section 4 threshold, against its section 4 error budget; the file is
-  `PR-SLO-3_service_level_objectives_2026.docx`.
-- **No decoy:** nothing is planted to be caught: the sampler is the store's own edge sampler, the README describes fields
-  and says only that the store keeps a sample, no document states a keep rate, a weighting or an SLI, nothing ranks the
-  services, and the capacity review and the app reviews are context the solution never reads.
-- **No certified replay:** the method is not recovered by reproducing certified figures; no shipped table prints an SLI
-  or a keep share, and the balancer's 5xx counts tie under every weighting, so they confirm no route over another.
-- **Chain:** (1) the kept spans are a sample of December's requests, thinned in the busy hours, so each kept span needs
-  a weight from the balancer's hourly counts; (2) the store keeps or drops a trace whole where it starts, so an internal
-  service's span was kept at the share of the edge service whose request began its trace, not at its own; (3)
-  partner-gateway's kept spans come a third each from journey-search's, seat-map's and booking's traces, while
-  journey-search's thinly kept searches make 85 per cent of its requests and carry its slow availability lookups; (4)
-  counted at each trace's edge keep share, partner-gateway is at 2.9 against its 2.0 budget, the review names five
-  services and partner-gateway, with 40 per cent of all the services' over-threshold December requests, starts first.
-- **Judgment:** the inclusion probability of a cluster sample: which unit's keep share weights a downstream span (the
-  trace's edge request, recovered hour by hour from that edge service's balancer count over its kept root spans),
-  justified from the whole traces and the flat kept-root counts, never from a filed sentence.
-- **One-fact test:** no sentence in the pack says the store samples whole traces at the edge; told it, a run still has to
-  see that it moves a downstream service's weights, link 126,727 internal spans to their roots, recover each edge
-  service's hourly keep share from its balancer count over its kept roots and re-derive every downstream SLI, while the
-  default path's own checks (every hourly count rebuilt, the 5xx counts tied) keep passing without it.
-- **No replay:** no shipped figure is an SLI, a keep share, a share of over-threshold requests or a ranking; the
-  balancer's 5xx counts tie under every weighting, so nothing certifies the golden's route over the default path's.
-- **Pinned:** PR-SLO-3 2.1 to 2.4, 3.1, 3.2 and section 4 file the population, outcome, unit, window, comparison,
-  thresholds and budgets; the prompt files the start order's key (most requests over the latency threshold in
-  December), the shares' base (all the services' over-threshold December requests), the incident union (a minute in
-  which an incident named at least one of the services) and the rounding once at the end; every standing estimator
-  lands every graded figure in the golden's bin (checks.py, SF10, SF11, SF15).
-- **Run forecast:** a run that applies the field's correction stops at a method shortcut (each service's own spans
-  post-stratified by its own hour) and files four services, places first, 62 per cent and 160,000; a run that links the
-  traces lands the call and every coupled ask; the incident clock is pinned in the prompt, so it has no ask loss left.
-- **Strategy label:** WORKS (Banking 06, F7 population selection: who you can observe; here the selection belongs to
-  another unit, the edge request that began each trace, and is rebuilt hour by hour from that unit's own counts).
-- **Lesson:** in a trace sample the sampling unit is the trace, so a downstream service's spans carry the inclusion
-  probability of whichever edge service started each trace, and post-stratifying a service's own spans by its own count
-  treats a cluster sample as a simple random sample of that service's requests; no build on file prices an inclusion
-  probability inherited from another unit's sampling decision.
+Task type: missing-data-censoring-measurement-error (General Statistics & Data Science), serving Descriptive &
+Distribution Analysis: a population share estimated from a sample whose inclusion probability is set by another unit
+and recorded nowhere, with part of the population left out by a filed rule whose membership has to be established.
+Domain test: the field's own estimator for a share from a stratified cluster sample with unequal, unrecorded inclusion
+probabilities (Horvitz-Thompson or Hajek, each trace weighted by its root edge service's hourly keep share), the
+design-based variance of a ratio from whole-trace clusters within root-service hours, and a changepoint on load-adjusted
+residuals to date which service's own handling degraded first.
+Swap: "which hospital wards ran over their waiting-time budget" breaks at once: a ward has no trace root whose keep
+share sets every other ward's inclusion, no call tree that makes one ward slow because another is, and no responders
+naming wards in the order they suspected them.
+Where the weight sits: the hard-to-measure quantity, every service's December SLI: the kept spans are a cluster sample
+drawn at the edge, so four internal services carry their callers' keep shares (fares, partner-gateway and notifications
+up, payments down), and the incident time PR-SLO-3 3.2 leaves out depends on a root cause no review has
+recorded yet. The work is long because each piece has its own evidence, not because one piece is clever.
+Layer 1: re-sent span rows from the exporter's retries (the same span id twice, neutral, asserted); traces begun in
+the last hour of November whose root is not in the export (any handling, same one-decimal SLIs); the balancer's target
+groups renamed on 1 July (the catalogue's crosswalk); the status page in Lisbon local time against the incident tool's
+UTC (an hour apart in summer, the same in December); the incident export's final service lists against the timeline's
+add times; 404s, 5xx and a retried partner-gateway call counting as requests. None moves a graded result except the
+incident minutes, which grade the timeline reconciliation itself.
+Not one thing: the strongest single piece is the root keep-share weighting, and a run that has it still files the
+wrong list unless the 21 and 26 December incidents are put on fares and notifications (each 0.9 against 1.3 if they go
+to journey-search and accounts); a run that dates every incident right still files places and seat-map alone on its
+own hourly counts; the intervals, the minutes and the shares each need their own work.
+One-fact test: the most useful sentence is "each December incident's cause is the named service whose own handling
+rose first, not the one furthest over its curve"; applied alone to the careful pass it rescues R2 only, 1 of 6 results
+(effort.json, measured). "Each kept span counts at its trace root's hourly keep share" rescues none: the list still
+needs the attribution.
+Not semantics: every field, unit and clause read correctly (the re-sent rows, the windows, the halves) still leaves the
+own-hour weighting at fares 0.4, partner-gateway 1.1 and notifications 0.6, and the whole-window attribution on
+seat-map, journey-search and accounts in three incidents.
+Not rule application: PR-SLO-3 files what an SLI is, which incident time leaves it and what owning a root cause means;
+no filed rule weights a span, dates a degradation, or builds an interval. Executing every filed rule with the textbook
+own-hour reweighting and the incident tool's order files places and seat-map; the estimator family the rules leave open
+(HT on the balancer's count, Hajek, the root's or the span's hour, November orphans either way) spans 0.0 at one decimal
+on every SLI (checks R7), and the onset reads over two- and four-hour leads agree (checks R7).
+Estimand: PR-SLO-3 3.1 (December in Lisbon time), 2.1 to 2.4 (every request a service handled, kept or not, its server
+span's duration, by the time it started, errors counting), 3.2 (incident time from when the tool added the service to
+when the status page showed every component operational, left out unless the service owned the root cause), 3.3 (a
+service owns it when the failure was in its own handling, systems outside the catalogue included; a service that slowed
+only because a catalogue service it called slowed does not), 3.4 (a breach is the SLI over the budget), 5.2 and 5.4
+(the minutes, the halves).
+No decoy: no memo, draft or stakeholder figure; the capacity review and the app reviews are context the golden never
+reads; the closed reviews record causes only for January to November, and nothing names December's.
+No replay: no shipped figure is re-derived; no stated number is wrong.
+Pinned: every rival estimator on every SLI lands on the same one-decimal value (checks R7: HT, span hour, November
+orphans dropped); the trace bootstrap lands within 0.04 of the linearised interval at both ends, the effort bands carry
+both; the onset over a two- and a four-hour lead puts every incident on the same service; the verifier's own rolling-
+median onset on its own code path agrees on all seven.
+Run forecast: a run loses R3 to R6 by method shortcut (each service's own spans reweighted on its own hourly count,
+fares 0.4, partner-gateway 1.1, notifications 0.6), or keeps the weights and loses R2, R5 and R6 by stopping at the
+first story (the 21 and 26 December incidents on journey-search and accounts and the 14 December one on seat-map, each
+furthest over its curve across the incident, so fares and notifications drop to 0.9); R4 falls to a method shortcut (a
+binomial interval on the own-hour SLIs, every interval off the golden's ends); R1 to a narrow look (the export's final
+service lists read from each declaration).
+Strategy label: WORKS IN FORM (variance and inclusion that the sample's design sets, `sulfur-strategies.md`'s clean
+comparison and heterogeneity rows read as results) for the weighting, and the client's own investigation shape for
+the attribution (dating onsets to separate cause from symptom), each one result among six.
+Depth level: 5 on the client's scale. Four judgments, each with its own checkable figure: the root keep-share weighting
+(R3: fares, partner-gateway and notifications up, payments down), each December incident's cause dated by load-adjusted
+own handling time (R2: INC-1611 to fares and INC-1619 to notifications, INC-1579 to partner-gateway where nothing
+turns on it), the incident windows from when the tool added each service (R1), and the design-based interval with
+traces as units (R4). The shortcuts land on three different wrong lists: seat-map alone (unweighted, first named),
+places and seat-map (own hourly count, with either attribution), and places, seat-map and partner-gateway (root
+weights, the cause furthest over its curve).
+Lesson: an estimate from a sample drawn somewhere else must carry that sample's design throughout (weights, units of
+the interval), and an incident's cause is the earliest degradation once load is taken out, not the service the
+responders named or the one that suffered most; no build on file pairs a design-weighted share with dated causes.
 
-## Survivor anatomy
+## Results chain
 
-- **Actor:** each kept span's inclusion probability decides, a property no column stores: it belongs to the request that
-  began the trace (the server span with a blank parent), is set from that edge service's previous hour of traffic, and is
-  recovered as that service's balancer count over its kept root spans in the hour (test: the trace export's 12 columns
-  and the balancer's 6; none holds a keep share, a sampling rule or a trace's edge service, and none is one join away).
-- **Link:** the signal is read through two links no key offers and no sentence invites: a span to its trace's root
-  through `trace_id` and the parent chain (server, client, root server), and the root's service and hour to its target
-  group's hourly count through the catalogue; the README describes fields only.
-- **Reflex:** the field's correction for a sample that thins under load, post-stratifying each service's kept spans by
-  hour on its own count, is rung 3 and files four services (partner-gateway 1.4); the tracing tool's own share beneath it,
-  rung 0, files notifications alone.
-- **Back-test:** the textbook route validates: rung 3's weights rebuild every service's hourly balancer count exactly, and
-  every route's weighted 5xx share matches the balancer's 5xx counts for every service (partner-gateway 0.80 per cent
-  under each), because errors do not move with load.
-- **Second use:** every file the decisive step reads has its own reason to be in the review folder: the trace export is
-  the SLI's only latency record, the balancer's export is the count of requests handled that every route's denominator
-  needs, the catalogue joins the systems' names and carries the asks' tags and components, and PR-SLO-3 files the
-  estimand; deleting the decisive step drops no file.
-- **Shock:** partner-gateway's breach reads as ordinary explained movement: an operator-facing gateway slow under peak
-  search traffic is everyday reliability news, its December volume is second to places, its rung 3 figure sits well under
-  its 2.0 budget, and sorted on every shipped statistic (December requests, kept spans, 5xx share, threshold, budget) the
-  five golden services are not an interval.
-- **Pins:** the WHAT sits in PR-SLO-3 (2.1 to 2.4 the population, outcome and unit; 3.1 the window; 3.2 the comparison;
-  section 4 the thresholds and budgets), and no filed sentence names the sampler, a keep share, a sampling unit, a weight
-  or a trace; deleting any filed sentence removes part of the estimand, never a hint.
+| ID | Result (checkable) | Area | Pinned by | Band | Hurried analyst | Depends on | Graded as |
+|---|---|---|---|---|---|---|---|
+| R1 | each service's customer-facing incident minutes in each half of 2026 | Assembly and reconciliation | PR-SLO-3 5.2 and 5.4; the timeline's add times; the status page's last operational change | exact | narrow look at broad data: the export's final service lists read from each declaration, or the tool's resolve time as the end | - | Ask 1 |
+| R2 | the service that owned the root cause of each December customer-facing incident | Investigation loops | PR-SLO-3 3.3; own handling time against a load curve on incident-free hours; the earliest held rise | exact | stopped at the first story: the service named first, or the one furthest over its curve across the whole incident (14, 21 and 26 December on seat-map, journey-search and accounts) | R1 | Component 1 |
+| R3 | every service's December latency SLI | Missingness and measurement | PR-SLO-3 2 and 3.1 to 3.2; each span at its trace root's hourly keep share; the windows R2 leaves out | exact at one decimal (every rival) | method shortcut: each service's own spans reweighted on its own hourly count | R1, R2 | Ask 2 |
+| R4 | a 90 per cent confidence interval on each over-budget service's SLI | Uncertainty | the trace store's design: strata of root service and hour, whole traces as units | the linearised and bootstrapped ends, 0.02 either side | method shortcut: a binomial interval on the kept span count, ignoring the clusters and the weights' spread | R3 | Component 2 |
+| R5 | the services over budget | Synthesis | PR-SLO-3 3.4 on R3 | exact | unfinished chain: the weighted SLIs computed with each incident on the service that suffered most, fares and notifications dropped | R3 | Recommendation |
+| R6 | the start order, each one's share of the over-threshold requests the SLIs count, the share together and the requests beyond budget | Decomposition and attribution | the SLIs' weighted numerators and counted requests | exact at the asked rounding | method shortcut: shares of the kept over-threshold spans on the own-hour weights | R3, R5 | Ask 3 |
 
-## Readability screen
+Carry-forward: R1 stands alone (the incident records only). R2 needs only R1's windows. R4, R5 and R6 fall with R3, and
+R3 needs both the weighting and R2: no single analytical result is the only one behind them (`precut.py`'s count), and
+the largest hint rescues one result (effort.json).
 
-| Rung | 1 Filed sentence | 2 Schema | 3 Reflex | 4 Control bench | 5 Hygiene | 6 Linear | 7 Dedicated organ | Verdict |
-|---|---|---|---|---|---|---|---|---|
-| R0 the kept spans' own share | 2.1 names a share | the spans | yes, the tracing tool's view | 2.2 says kept or not | no | yes | no | readable |
-| R1 each day's kept spans weighted by the day's requests | 2.4 names days | the balancer's hours summed | yes | rebuilds daily counts | no | yes | no | readable |
-| R2 hour-of-day pooled weights | none | the balancer's hours | no | rebuilds hour-of-day totals | no | yes | no | readable |
-| R3 each service's spans post-stratified by its own hourly count | none | the balancer's hours | yes, the field's correction | rebuilds every hourly count; 5xx ties | no | yes | no | readable |
-| R4 (decisive) each span counted at its trace's edge keep share | none: no sentence names a trace, a keep share or the edge | no column holds a keep share or a trace's edge service | no: the reflex weights a service by its own count | none: the 5xx and count benches pass under R3 too | no | no: a trace-root link per span, then the root's hourly share | no: the balancer export is the denominator every rung reads | silent |
+## Hidden factor record
+
+| Factor | Real or constructed | Only in deciding units | Found by | Fix depth | Verdict |
+|---|---|---|---|---|---|
+| whole traces kept at the edge, a near-fixed number an hour per edge service | constructed (the world's sampler) | no: it moves all four internal services (fares, partner-gateway and notifications up, payments down) and every interval | a targeted query: each kept span's root against the balancer's hourly counts | a reweight by the root's keep share, routine once seen | keep, one result among six |
+| December faults in one service's own handling, reaching the services that call it | constructed (seven incidents in six services) | no: nine services named, faults in six, one incident on a single service | modelling: own handling time against a load curve, a changepoint per span name | modelling | keep |
+| callers' workers waiting on a slow call late in an incident, in three incidents further over their curves than the fault | constructed (five of seven incidents; ramped, uneven onsets) | no: journey-search, seat-map, booking and accounts; the larger-than-the-fault form in INC-1579 (decides no verdict), INC-1611 and INC-1619 (fares and notifications) | modelling: onset order, not size | modelling | keep |
+| evening and campaign load raising every service's handling time | constructed (the world's queueing curve) | no: every service, every day | modelling: the load curve itself | modelling | keep |
+| the exporter re-sending a batch | constructed (one batch in three hundred) | no | a query: a repeated span id | routine | keep, texture (moves nothing, checks R2) |
+
+## Effort test
+
+| Result | Quick pass | Careful but hurried | Thorough |
+|---|---|---|---|
+| R1 incident minutes by half | Missed | Right | Right |
+| R2 root cause of each December incident | Missed | Partly | Right |
+| R3 every service's December SLI | Missed | Missed | Right |
+| R4 intervals on the over-budget SLIs | Missed | Missed | Right |
+| R5 the services over budget | Missed | Missed | Right |
+| R6 start order, shares, together, beyond | Missed | Missed | Right |
+| Roughly | 0 of 6 | 1.5 of 6 | 6 of 6 |
+
+Measured by: .claude/skills/stumping/effort.py on generator/effort.json (each pass's methods run end to end on the cut
+pack by generator/analysis.py: quick unweighted with the first-named service at fault and the export's lists from each
+declaration; careful on each service's own hourly count with each incident on the service furthest over its load curve
+across the whole incident, binomial intervals; thorough the golden).
+Largest single hint: each December incident's cause is the named service whose own handling rose first, not the one
+furthest over its curve; rescues 1 of 6 results.
+Pair estimate: 31.3
+Routes (`effort.json` routes, the golden's other-readings table): unweighted with the first-named cause gives seat-map;
+own hourly count gives places and seat-map whichever attribution it takes; root weights with the cause furthest over
+its curve give places, seat-map and partner-gateway; only the root weights with dated causes give the five.
+AND: R3, R5 and R6 need both the weighting and R2. The weighting alone (root keep shares, each incident on the
+service furthest over its curve) leaves fares and notifications at 0.9 per cent each and three over; the dating alone
+(own hourly counts, every cause dated right) leaves fares at 0.9, partner-gateway at 1.1 and notifications at 0.8 and
+places and seat-map over. **So "each kept span counts at its trace root's hourly keep share" rescues 0 of 6 results, not
+half: R3 still misses fares and notifications, and R4 to R6 fall with R3** (effort.json, measured; judge passes 2 and 3
+each found a fresh reader overclaiming this sentence).
+Graded up: a careful run that dates the onsets on raw own handling time, with no load curve, would earn R2 (judge pass
+3); the careful pass is then 2 of 6 and its rubric score 37.3, still under 50, because the list still needs the
+weighting.
+
+## Data provenance
+
+Source: generated by task6/generator from a simulated platform (seed 2711): hourly traffic for six edge services, the
+calls each request makes to four internal services, queueing latency under load, an edge sampler keeping about 24 whole
+traces an hour per edge service, and December's incidents as faults in one service's handling.
+Behaves like the real thing: latencies are log-normal with a queueing curve in each service's hourly load, as service
+latency is; the sampler is head-based and per trace at the edge, as OpenTelemetry's rate-limiting samplers are; callers
+inherit their callees' slowness and queue behind them late in an incident, as thread-pool services do; responders name
+the paging service first and add the cause as they find it, as the closed reviews show (the first-named service owned
+the cause in a minority of them).
+Genuine patterns: (1) diurnal peaks per service and a weekend dip (2) December seasonality with three campaign evenings
+and the Christmas weeks (3) queueing under load, steepest for partner-gateway and seat-map (4) per-operation latency
+that differs by caller (5) incidents that start before they are declared and end after mitigation (6) a retried
+partner-gateway 5xx.
+Problems by process: the exporter re-sends a batch (repeated span ids); traces begun in November leave orphan spans in
+December's export; the balancer renamed its target groups on 1 July; the status page writes Lisbon local time and the
+incident tool UTC; the tool's export carries each incident's final service list while the timeline dates each addition;
+December's reviews were still open on the export date.
+Breadth: ten services, 744 hours, about 450,000 spans across 107,000 traces, 44,160 hourly balancer rows, 85 incidents
+with 581 timeline events and 41 status posts, so choosing what to read and at what grain is work.
+
+## Template check
+
+Chain signature: assembly-reconciliation, investigation-loops, missingness-measurement, uncertainty, synthesis,
+decomposition-attribution
+Question form: which, then how much and how sure
+Nearest build: task13 (an outage record and a ranked list of feeders by modelled exposure); the nearest chain on file
+dates no cause and weights no sample. The abstraction sentence a reviewer would write for task6 and task13 ("rates
+read through a model of exposure") does not hold: here the weights come from a sample's design and the exclusions from
+dated causes.
 
 ## Semantic fork table
 
-| Id | Term or convention | Golden reading | Alternatives and their call | Ruled out by |
+| ID | Term or convention | Readings | Golden | Ruled out by |
 |---|---|---|---|---|
-| SF1 | request | any call the service handled, kept or not | the kept spans as the requests: rung 0, one service | 2.2 ("whether or not the tracing store kept a span for it") |
-| SF2 | server-side duration | the service's own server span | the caller's client span for an internal service: partner-gateway 2.93, same call | 2.3; same call asserted |
-| SF3 | health probes | not requests | kept probes counted: every SLI about 8 per cent lower, same call | 2.2; same call asserted |
-| SF4 | re-sent rows | a span once, by `span_id` | both copies: same call | README; same call asserted |
-| SF5 | the review month | December 2026 in Lisbon time | December in UTC: identical, Lisbon is UTC in December | 3.1; same call asserted |
-| SF6 | a child's hour | the root's start hour sets the keep share | the child span's own start hour: same figure to one decimal | same call, asserted |
-| SF7 | a span whose trace began before 1 December | none in the export | weighted at its own service's hourly share or dropped: identical | same call, asserted (count) |
-| SF8 | breach | the SLI to one decimal over the budget | the unrounded SLI over the budget: the same five | 3.2; same call asserted |
-| SF9 | errors | counted like any request | 5xx dropped from both sides: same call | 2.4; same call asserted |
-| SF10 | the denominator | the balancer's December requests | the weighted kept count (Hajek): same figure to one decimal | same call, asserted (corridor) |
-| SF11 | hourly calibration | each span at its edge share, summed | weights calibrated hour by hour to the service's count: same figure to one decimal | same call, asserted (corridor) |
-| SF12 | exceeded | strictly over the threshold | at or over: identical (durations are continuous) | 2.1; same call asserted |
-| SF13 | 404 responses | requests like any other | dropped: same call | 2.4; same call asserted |
-| SF14 | a retried call | each try is a request the service handled | first tries only: same call | 2.2; same call asserted |
-| SF15 | the asks' rounding | shares, the share served together and the requests beyond budget worked from the unrounded weighted spans, rounded once | from the one-decimal SLIs: journey-search's share 15 against 16, every other ask figure the same | the prompt's closing clause ("each rounded once at the end"); asserted |
-| SF16 | when an incident names a service | from the moment the incident tool added it (incident_timeline_2026.csv), nothing if added after the status page cleared | the export's final service list read from the declaration: 1,571 and 1,067 against 1,545 and 907 | the prompt ("a service counting from when the incident tool added it"), added after the judge's 2026-11-08 finding; asserted |
-| SF17 | incident minutes | the summed duration of the merged intervals, rounded once | distinct clock minutes touched: 1,553 and 911 | the prompt ("for how long", "time in whole minutes"), added after the judge's finding; asserted |
-| SF18 | the share the five served together | of all the services' over-threshold December requests | of all December requests: 74 | the prompt ("what share of those requests"), added after the judge's finding; asserted |
-
-## Ladder
-
-| Rung | Construction | journey-search | places | seat-map | partner-gateway | notifications | Set | Dies to |
-|---|---|---|---|---|---|---|---|---|
-| R0 | the kept spans' own share | 0.69 | 0.71 | 0.74 | 0.84 | 1.58 | 1: notifications | SF1, 2.2 |
-| R1 | each day's spans weighted by its requests | 0.75 | 0.81 | 0.79 | 0.89 | 1.59 | 1: notifications | the busy hours inside each day |
-| R2 | hour-of-day pooled weights | 1.13 | 1.28 | 1.26 | 1.26 | 1.57 | 4, no partner-gateway | the campaign evenings and the edge share |
-| R3 | each service post-stratified by its own hourly count | 1.32 | 1.50 | 1.48 | 1.44 | 1.61 | 4, no partner-gateway | the edge keep share (decisive) |
-| R4 | each span at its trace's edge keep share (golden) | 1.32 | 1.50 | 1.48 | 2.90 | 1.61 | 5 | |
-
-Fares, booking, payments, tickets and accounts stay under their budgets on every rung (fares at most 0.61 against 1.0,
-booking 0.37 and payments 0.31 against 0.5, tickets 0.61 and accounts 0.67 against 1.0). The golden's smallest ratio to a
-budget is 1.32 (journey-search); partner-gateway sits 0.28 of its budget under it on R3.
+| SF1 | December in Lisbon time | UTC or local | the same: Lisbon is UTC in December | PR-SLO-3 3.1 |
+| SF2 | over the threshold | strictly greater, or at least | strictly greater | PR-SLO-3 2.1 ("exceeded"); no span sits on a threshold |
+| SF3 | a re-sent span id | once or twice | once | same call (checks R2) |
+| SF4 | the balancer's probes | requests or not | not requests | PR-SLO-3 2.2; the export carries none |
+| SF5 | a retried call | one request or two | two | PR-SLO-3 2.2 ("any call a caller sent") |
+| SF6 | a request that ended in an error | counted or not | counted | PR-SLO-3 2.4 |
+| SF7 | which window a request belongs to | its start or its end | its start | PR-SLO-3 2.4 |
+| SF8 | the weighting base | the balancer's count, or the weighted kept count | either | same call (checks R7) |
+| SF9 | the root's hour or the span's own hour | either | either | same call (checks R7) |
+| SF10 | spans of traces begun in November | weighted on their own hour, or dropped | either | same call (checks R7) |
+| SF11 | when a named service's window starts | the declaration, or the timeline's add time | the add time | PR-SLO-3 3.2; the SLIs are the same either way (checks R2) |
+| SF12 | when an incident ends | the tool's resolve time, or the status page's last operational change | the status page | PR-SLO-3 3.2 and 5.2 |
+| SF13 | a December incident with no status post | left out or not | nothing left out | PR-SLO-3 5.2 (customer-facing means posted) |
+| SF14 | the onset's lead window | two to four hours before the declaration | every lead gives the same causes | same call (checks R7) |
+| SF15 | the shares' base | all ten SLIs' counted over-threshold requests | that | the prompt ("all our services' SLIs count") |
+| SF16 | the interval's method | linearised or a trace bootstrap | either, within the band | same call (checks R7, the effort band) |
+| SF19 | an onset's time as stated | the changepoint's minute, or to the nearest five minutes | about, to five minutes | the answer blocks say "about"; R2 grades the service at fault, and the order of each pair of rises is all a time carries |
 
 ## Closure table
 
 | # | Axis | Reading | Move |
 |---|---|---|---|
-| 1 | Population | every request each service handled in December, kept or not, probes out | filed 2.2; SF1, SF3 |
-| 2 | Unit of account | the request (a server span when kept) | filed 2.1 and 2.3; SF2 |
-| 3 | Attribution window | the hour a request began, for the window | filed 2.4; nothing on 1 December's edge moves the call (SF7) |
-| 4 | As-of dating | the store as held on 1 January 2027 | README; one export, C1 |
+| 1 | Population | every request each service handled in December, kept or not, incident time left out per 3.2 | filed 2.2, 3.2 |
+| 2 | Unit of account | the request (a server span when kept) | filed 2.1 and 2.3 |
+| 3 | Attribution window | the time a request began | filed 2.4 (SF7) |
+| 4 | As-of dating | the export of 1 January 2027; reviews open then | one export, C1 |
 | 5 | Version basis | one export, no revisions | C1 |
-| 6 | Denominator | the balancer's December requests | filed 2.2; SF10 corridor (C3) |
-| 7 | Weighting | each span at its trace's edge keep share | the decisive step, forced by the whole traces (C4: R3 1.44 against 2.90) |
+| 6 | Denominator | the requests a service handled less those left out | filed 2.2 and 3.2; SF8 corridor |
+| 7 | Weighting | each span at its trace root's hourly keep share | the sample's design (R3); rivals same (SF8 to SF10) |
 | 8 | Window length | December, 31 days | filed 3.1 |
-| 9 | Boundary inclusivity | strictly over the threshold | filed 2.1; SF12, C1 |
-| 10 | Rounding path | the SLI to one decimal, compared with the budget; the asks rounded once at the end | prompt; SF8, SF15, C1 |
-| 11 | Tie-break | none needed | C1, no service within 0.3 of its budget |
-| 12 | Maturity and censoring | none: the month is closed | C1 |
-| 13 | Order of operations | dedupe, drop probes, link roots, weight, sum | C1, each order gives the same weights |
-| 14 | Row order | export order | C1, asserted over a shuffled read |
-| 15 | Duplicate resolution | a re-sent span once | SF4, C1 |
-| 16 | Identity normalisation | tracing names and target groups through the catalogue | the catalogue's own crosswalk |
+| 9 | Boundary inclusivity | strictly over the threshold | filed 2.1 (SF2) |
+| 10 | Rounding path | SLIs to one decimal and compared as rounded; intervals two decimals; shares whole; the rest once at the end | prompt; checks M1 |
+| 11 | Tie-break | none needed: the order's neighbours differ by more than a tenth | checks M3 |
+| 12 | Maturity and censoring | the month is closed; December's reviews open, so causes are dated from the data | C1; filed 3.3 |
+| 13 | Order of operations | dedupe, link roots, weight, leave out, sum | C1 |
+| 14 | Row order | export order | C1 |
+| 15 | Duplicate resolution | a re-sent span once | SF3 |
+| 16 | Identity normalisation | tracing names and target groups through the catalogue | the catalogue's crosswalk |
 | 17 | Netting against gross | none | C1 |
-| 18 | Dimensional units | nanoseconds to milliseconds, per cents | the README's units |
-| 19 | Code and status semantics | 5xx and 404 count as requests | filed 2.4; SF9, SF13 |
+| 18 | Dimensional units | nanoseconds to milliseconds; per cents | the export's own columns |
+| 19 | Code and status semantics | 5xx, 404 and retries count as requests | filed 2.2 and 2.4 (SF5, SF6) |
 | 20 | Integerisation | none | C1 |
-| 21 | Clause scope | section 4's table for every service | filed |
+| 21 | Clause scope | section 4's table for every service; 3.2 for every December customer-facing incident | filed |
 | 22 | Forward window contents | none: the call reads a closed month | C1 |
 
 ## Literal reader
 
-Executed word for word, PR-SLO-3 gives the golden: 2.2 puts every request in the population whether or not a span was
-kept, so the kept spans are a sample and the share has to be estimated; the export keeps whole traces (every internal
-server span has its client span and its root in the store) and each edge service's kept root spans run flat each hour
-against a swinging count, so a span's inclusion is its trace's edge share for the hour; counted at that share, the five
-services breach. The readings that differ violate a quotable sentence (SF1 against 2.2, SF2 against 2.3, SF3 against
-2.2) or converge on the same call (SF4 to SF14, asserted).
-
-## Oracles
-
-- The balancer's hourly counts: rung 3's weights rebuild them exactly by construction and the golden's to within
-  sampling noise; they arbitrate no route.
-- The balancer's 5xx counts: every route's weighted 5xx share matches them for every service; a control that ties under
-  every handling, never only under the golden.
-- The catalogue's crosswalk of names, target groups, components and tags: identity only.
-- No shipped figure is an SLI, a keep share, a weighting or a ranking of the services.
-
-## Ask sheet
-
-Re-sited at the rubric repair of 2026-11-08 (`## Tried and rejected` carries what the runs did to the old layer). Five
-asks, fourteen figures, beside the call's own figures (each service's SLI, budget and verdict, and the chart). Four read
-the SLI's own numerator, each service's over-threshold December requests (its weighted kept spans over its threshold,
-the SLI times its December requests), across the services the call names; the fifth reads the incident record over the
-same services. So a run off the deep step files a different value in every cell but one, and the run on it keeps them
-unless it misreads the incident clock. The pack is the shipped cut, unchanged (target.zip md5 596e59c5): the asks are
-re-sited in the prompt, the goldens and the answer blocks only.
-
-**Ask 1: the order the engineers start in** (5 figures, the services that ran over by their over-threshold December
-requests, most first).
-- Reads: the deep step's output directly; golden partner-gateway (438,700), places (336,200), journey-search (171,300),
-  seat-map (25,800), notifications (8,400); the default path files places, journey-search, seat-map and notifications,
-  every position different.
-- Second judgment: none of its own; it is coupled to the call. Landed run's risk: none (the closest pair, partner-gateway
-  and places, is 100,000 apart under every standing estimator).
-- Files and columns: the trace export (trace_id, span_id, parent_span_id, service_name, span_kind, start and end), the
-  balancer's July to December export (TimePeriodStart, TargetGroupName, RequestCount), the catalogue, PR-SLO-3 section 4.
-- Pin test: the prompt names the key (the most requests over the latency threshold in December); it names nothing about
-  the weighting.
-
-**Ask 2: each named service's share of all the services' over-threshold December requests** (5 figures, whole per
-cent).
-- Golden 40, 31, 16, 2 and 1; the default path 25 (partner-gateway, outside its list), 39, 20, 3 and 1: it keeps
-  notifications only. Every standing estimator lands each share in its bin (the closest, seat-map at 2.37, is 0.12 from
-  a line); the one-decimal SLIs move journey-search to 15 (SF15, closed by the prompt's rounding clause).
-
-**Ask 3: the share the services that ran over served together** (1 figure): golden 90; the default path 62.
-
-**Ask 4: how many more over-threshold requests than their budgets allow** (1 figure, nearest ten thousand): golden
-300,000 (300,831; 296,700 hour-calibrated); the default path 160,000 (164,856).
-
-**Ask 5: the minutes in each half of 2026 in which a customer-facing incident named at least one of them** (2 figures).
-- Golden 1,545 and 907 (sections 5.2 and 5.4: each incident matched to its status page post by component and time, its
-  end the last of its components back to operational, each service from the moment the timeline names it, each minute
-  once); the default path's four services give 1,518 and 755.
-- The naming clock is pinned in the prompt since the judge's 2026-11-08 finding (SF16), as are the minute unit (SF17)
-  and the joint share's base (SF18), so the ask has no judgment of its own left: it is coupled to the call through
-  partner-gateway and is lost only by a run off the call (the export's final lists, read from the declaration, would
-  give 1,571 and 1,067).
-- Files and columns: incidents_2026.csv, incident_timeline_2026.csv (the pack's 10 to 20 page CSV), the status page
-  history, the catalogue's components.
-- Mess on the path: the status page's Lisbon clock against the tool's UTC, the tool's administrative close after the
-  review, overlapping incidents counted once; every careful run handles them the same way.
-
-**Main population:** the call's rows carry no ask device; the asks read the call's own weighted spans. The review
-folder's change and cost records (production_deployments_2026.json, cluster_rollout_history_2026.csv,
-cloud_billing_2026.csv, cloud_invoices_2026.csv, cloud_resources_2026.csv) are unread distractors now, beside the
-capacity review, the app reviews and the January to June balancer export (`checks.py` deletes each and asserts the call
-and every ask unchanged).
-
-**Referee:** none arbitrates; the balancer's 5xx counts tie under every weighting.
-
-| Path (cracker = lands the call, runs the battery, executes filed documents) | Kept of 14 | Order | Shares | Together | Beyond | Minutes | Verdict |
-|---|---|---|---|---|---|---|---|
-| Landed run (cracker): the incident tool's final service lists from the declaration | 12 of 14 | 5 of 5 | 5 of 5 | 1 | 1 | 0 of 2 | miss |
-| Landed run: PR-SLO-3 5.2 read in full, each service from its naming time | 14 of 14 | 5 of 5 | 5 of 5 | 1 | 1 | 2 of 2 | keeps |
-| Shallow run (default path): each service's own spans by its own hour | 1 of 14 | 0 of 5 | 1 of 5 | 0 | 0 | 0 of 2 | miss |
-| Rung 2: an hour-of-day pooling | 1 of 14 | 0 of 5 | 1 of 5 | 0 | 0 | 0 of 2 | miss |
-| Rung 1: a day weighting | 0 of 14 | 0 of 5 | 0 of 5 | 0 | 0 | 0 of 2 | miss |
-| Rung 0: the kept spans' own share | 0 of 14 | 0 of 5 | 0 of 5 | 0 | 0 | 0 of 2 | miss |
-
-Shallow keep: 7.1 per cent of ask weight (one figure of fourteen, notifications' share).
-
-Pair ceiling: 58.0 (the landed run reading 5.2 in full at 100.0, the shallow run at 15.9, on 38, 7 and 55); 54.0 with the
-landed run on the export's final service lists (92.1). Above the paper target of 50: the landed run has no second
-judgment left on the asks in the shipped pack; with the incident clock pinned, 58.0 is the expected figure. The measured layer
-before the repair was 78.0 (runs 73 and 83).
-
-Measured by: generator/ceiling.py, run on the shipped pack.
-
-## Layer 1 inventory
-
-Each item is written by the platform's own systems; each is asserted neutral in `generator/checks.py` (the call
-unchanged under its natural mishandling).
-
-| Item | System and file | Natural mishandling | Assertion |
-|---|---|---|---|
-| Re-sent rows | the tracing store's export job, `trace_spans_2026-12.parquet` (a span twice under one `span_id`) | both copies counted | SF4 |
-| Kept health probes | the store keeps about one load balancer probe in 720, same file (`GET /healthz`) | probes counted as requests | SF3 |
-| Client spans beside server spans | every call leaves a client span in the caller | the caller's span read as the callee's duration | SF2 |
-| Error and not-found responses | the services' own statuses, same file and the balancer's 5xx counts | dropped from the SLI | SF9, SF13 |
-| Retried partner calls | callers retry a 5xx from the partner gateway once | first tries only | SF14 |
-| Nanosecond epoch clock against a Lisbon review | the store's clock, the standard's window | Lisbon offset applied in December | SF5 |
-| The balancer's two exports | the old billing tool to June (CRLF, processed gigabytes), the FinOps metrics export from July (renamed target groups, bytes, LCUs, 5xx counts) | the January to June file read for December, or the old target group names joined | the call reads December from the July to December export through the catalogue's July names (SEP) |
-
-On the incident ask's rows, the status page's Lisbon clock and the incident tool's administrative close are hazards its
-golden handles (the ask sheet); the change and cost records' staging and failed attempts, config redeploys, restarts,
-USD marketplace lines, VAT and the support plan sit in files no ask reads.
-
-## Pre-ship check
-
-- **Three rules.** Domain: a population share estimated from a cluster sample of traces whose inclusion probability is
-  set where each trace starts (general-statistics-data-science, missing data by design); the decisive step is an
-  estimate the field's correction gets wrong here (rung 3 files four services, partner-gateway 1.4 against 2.0); no
-  plant, no field reading and no executed rule decides it (checks: the analyst test on the clean truth, cheap routes
-  0 of 4).
-- **Free gates.** Generator checks 0 failures; verify PASS; two builds byte-identical; figures_check 117 of 117;
-  precut 61 checks, 0 FAIL; voice-check exit 0; leak.py REVIEW (ruled below); guard surface exit 0; heart exit 0 with
-  the WARN `repeat.gate_g` and `overuse.gate_g` answered in `## Draw`.
-- **leak.py REVIEW lines, ruled.** The capacity review is Platform Infrastructure's own record (harmless); the budgets
-  1.0, 0.5 and 2.0 in PR-SLO-3 are the standard's filed inputs, not answers (harmless); two figures inside hexadecimal
-  span ids in the parquet are coincidence (harmless); PR-SLO-3 sharing the call's words is its own section 3.3
-  decision rule (harmless); its six stump terms (requests, the balancer, its counts, December, partner-gateway) name
-  the population and the services, never the move (harmless); its column vocabulary (commit, component, cost,
-  deployment) is the standard's own section 5 (harmless).
-- **Distractors.** `capacity_review_2026-Q4.md` (Platform Infrastructure's pods, CPU and memory), `app_store_reviews_2026-H2.xlsx`
-  (customers' reviews of the app) and `lb_target_group_requests_2026-H1.csv` (the balancer's January to June counts,
-  ruled out by PR-SLO-3 3.1, which reads December): each relevant enough to weigh, none read by the call or an ask,
-  and none answers a graded quantity; `checks.py` deletes each in turn and asserts the call and every ask unchanged.
-- **Stage 4.** Leak reader: Q1 to Q4 none, Q5 the literal estimand (the golden's), Q6 an analytical choice, every
-  sweep line harmless; its two realism tells (13 review texts repeated 55 to 244 times; six pods for every service)
-  fixed in the generator (composed reviews in each country's language, pods scaled to each service's load and named
-  for each revision's replica set); its re-read on the shipped cut found nothing (Q1 to Q4 none, Q6 analytical, no
-  realism tell). Determinism judge: DETERMINISTIC, APPROVE; Gate G statistical_rigor,
-  analytical_non_defect; Gate H domain, layers pass, decisive step analytical; its one low finding (the January to
-  June distractor's deletion test) closed by the assertion above.
-- **Container.** Producer metadata scrubbed in the pack and the goldens (scrub audit clean); the parquet carries no
-  writer name.
-- **Rubric repair, 2026-11-08** (platform round 1: runs 73 and 83, average 78; runs/triage.md). The pack is the shipped
-  cut, untouched (target.zip md5 596e59c5; `build.py --golden-only` unpacks it and checks every member, because a rebuild
-  under later numpy and scipy moves a handful of rows in the span export and the July to December balancer file). The
-  prompt's ask sentences, the goldens and the answer blocks changed; the question sentence and the Final Recommendation
-  did not. Gates on the repaired build: generator checks 0 failures; verify PASS; goldens rebuilt byte-identical;
-  figures_check 98 of 98; voice-check exit 0; leak.py REVIEW on the four standing lines ruled above, the prompt sweep
-  clean; precut 72 checks, 1 FAIL, the pair ceiling at 58.0 against its paper target of 50 (the ask sheet says why);
-  freeze.py rubric mode FAIL on one item, the Critical Components numbers, because components 2 and 3 were replaced
-  under supplemental-stumping Part 6 (every main-call figure, the stump, the card, the ladder, the default path and the
-  call sentence unchanged); guard.py validate clean, heart BLOCK on one draw-level row that predates the repair,
-  the organisation family repeating task1 (the two structural tests cleared once the card's differentiation lines were
-  keyed to the Mark baseline's markNN numbers).
-- **Distractors after the repair.** Beside the three above, the review folder's change and cost records
-  (`production_deployments_2026.json`, `cluster_rollout_history_2026.csv`, `cloud_billing_2026.csv`,
-  `cloud_invoices_2026.csv`, `cloud_resources_2026.csv`) are no longer read by any ask; PR-SLO-3 section 5 still names
-  them as what the annual review reports, so they read as the folder's own records. The two large messy CSVs the client
-  asks for stay in use: the July to December balancer export (44,160 rows, the call) and the incident timeline (535
-  rows, the incident ask).
+PR-SLO-3 2.1 to 2.4, 3.1 to 3.4 and 5.2 executed word for word give the golden's population, windows and verdict rule;
+3.3 read literally puts each December incident on the service whose own handling failed, and the data date that
+failure (no shipped sentence names a December cause). The prompt's "counting it from when the incident tool added it"
+executes to the timeline's add times; "all our services' SLIs count" executes to the shares' base.
 
 ## Prompt contract
 
-What a voice rewrite of `prompt.txt` may not drop or change:
-- The question, word for word: "How many of our internal services ran over their 2026 latency error budget, and which
-  are they?"
-- The decision: each service that ran over gets a reliability engineer for the first half of 2027.
-- The start order's key: the one that served the most requests over its latency threshold in December starts first.
-- reliability_review_2026.docx: the services named in that order, each with its share of all our services'
-  over-threshold December requests; every service's SLI beside its budget; a chart of each SLI against its own budget
-  line; the share of those requests they served together; how many more than their budgets allow; for how long in
-  each half of 2026 a customer-facing incident named at least one of them, a service counting from when the incident
-  tool added it.
-- service_sli_2026.csv: a row per service with its SLI, its budget and whether it ran over.
-- Rounding: SLIs and budgets per cents to one decimal, shares whole per cents, time in whole minutes, the requests beyond budget
-  to the nearest ten thousand, each rounded once at the end.
-- No method, weighting, sampling or trace word, no warning, no count of services.
+A voice rewrite may not drop or change: the question (which internal services ran over their 2026 latency error
+budget); the engineers' order (the service whose SLI counts the most requests over its threshold first); in a short
+report each one's share of the over-threshold requests all the SLIs count, a 90 per cent confidence interval on each one's
+SLI, every service's SLI beside its budget and a chart, the service that owned the root cause of each customer-facing
+incident in December, and the requests beyond budget; a CSV with each service's SLI, budget, verdict and incident
+minutes in each half of 2026 counted from when the tool added it; the rounding (SLIs and budgets one decimal, intervals
+two, shares whole, minutes whole, requests to the nearest ten thousand). It must never add a method (weights, traces,
+sampling, onsets, load, self time), a warning, an attached file's name, a role, or a count the data hold.
+
+## Leak sweep rulings
+
+- `capacity_review_2026-Q4.md`: Platform Infrastructure's own record (pods, CPU, memory, autoscaling); a distractor that
+  describes no data and dates no December incident. Harmless.
+- PR-SLO-3's figures that match golden figures are its own budgets (0.5, 1.0, 2.0) and a section number (2.2): filed
+  inputs, not answers. Harmless.
+- PR-SLO-3 carries the call's service names because its threshold table lists every service. Harmless.
+- PR-SLO-3 names words that are also column names (Service, Tier, commit, component, cost, deployment): the standard's
+  own vocabulary in its own sections, describing no file. Harmless.
+- The as-of date is now in `metadata.json` (2027-01-06); the prompt's shell-quota warning is voice, for the author's
+  rewrite.
+- Architecture 7 reader (2026-11-09): PR-SLO-3 3.1 to 3.4 and 5.2 fix the SLI's window, population and the incident
+  exclusion, and 3.3 defines owning a root cause; they file the WHAT (the review's own standard), and no sentence says
+  how to find the owner or that the spans are a sample to be weighted. Harmless, as designed.
+- The capacity review's forward note names partner-gateway's connection pools: a capacity plan after two December
+  incidents it owned, beside journey-search's index move; no figure, no SLI, and a careful run that files
+  partner-gateway within budget on its own hourly count is not moved by it. Harmless.
+- The load balancer's hourly grid has no missing hour: a balancer's RequestCount is stored per minute and exported
+  whole, and the quietest target group serves 93 requests in its quietest hour, so no hour is empty. Harmless.
+- The incident titles read as templated (ten phrases, an "(N services)" suffix): fixed in the generator, each title now
+  the commander's phrasing of the first-named service's symptom, drawn from the incident id; no graded figure moved.
+
+## Pre-ship check
+
+- Hidden factor record against the cut data: the edge sampler's near-fixed hourly trace count shows for every edge
+  service in every hour, and the callers' mix moves every internal service's weighted SLI (payments down as well as
+  three up), so the weighting is no factor placed where it decides; the onset dating runs on every service each December
+  incident named; it decides INC-1611 (fares) and INC-1619 (notifications) and misreads INC-1579 for the hurried
+  pass where nothing turns on it, so the pattern is not placed only where it decides.
+- Margins: the over-budget intervals' lower ends sit at 1.15 (fares), 1.14 (notifications), 2.08 (partner-gateway),
+  1.56 (places) and 1.77 (seat-map) against budgets of 1.0, 1.0, 2.0, 1.0 and 1.0; the hurried routes sit at 0.9 or
+  under for fares and notifications.
+- Effort test against `effort.py` on the final cut: quick 7.0, careful but hurried 31.3, thorough 100; the largest hint
+  rescues 1 of 6; three distinct wrong lists over four shortcuts.
+- Judges (2026-11-09): pass 2 APPROVE on the cut before the incidents were reshaped; pass 3 DETERMINISTIC with a
+  minor SOLUTION_WRONG (the own-count contrast changed two things at once), fixed by stating it with the golden's
+  exclusions; pass 4 DETERMINISTIC, APPROVE, every graded figure and the restated contrast reproduced from the raw files.
+- Gates on the final cut (`gates.py task6 --full`): every gate green except `guard.py heart`, which BLOCKs on
+  ban.pairing against task2 v5. The pairing is the returned platform task's own subdomain and analysis type, which a
+  re-ship cannot change; the author accepted it for this re-ship on 2026-11-09.
 
 ## Tried and rejected
 
@@ -629,3 +405,9 @@ What a voice rewrite of `prompt.txt` may not drop or change:
   licensed alternative, and a loss there is a misread clause rather than an analytical one; the prompt now pins it
   (SF16), with the minute unit (SF17) and the joint share's base (SF18).
 - **Architecture 6, returned at final review (2026-11-09, version 17, every platform check passed).** The breach list turned on one thing: each kept span weighted by its root edge service's hourly keep share, which moved only partner-gateway (1.4 to 2.9 per cent against 2.0, four services over to five). The reviewer called it a shallow hidden factor (built into the data so it decides one service; a single weight once noticed) and asked for the sampling to touch several services partially and for the breach list to rest on several connected pieces (weighting, periods, incident attribution). Re-rooted to a results chain in the same world, on the reviewer's own direction.
+- **Architecture 7 at stage 2 (2026-11-09): five measured redesigns before the chain held.** An incident at the Cyber Week peak made journey-search and seat-map cross their budgets on attribution alone (an edge flip, the review's own example of a planted factor): the faults moved off the campaign peaks and journey-search's threshold to 1,500 ms. Notifications first flipped on the weighting alone (0.65 against 1.32): its slow operation moved to the thinly kept caller. "Most slow requests in the window" then attributed every flip correctly, so the root weighting alone rescued half the results: the 26 December incident gained the queueing of accounts' sign-ins behind the SMS calls, which out-slows the true cause on every simple measure but not on its onset. Seeds: 12 of 39 held the list, 3 of 20 every margin; seed 2711 chosen. Health probes were dropped from the export (as roots of internal services they gave absurd weights; the edge sampler never sees them), and the SMS incident's pre-symptom evidence was widened (the fault from 17:00, accounts' queueing from 18:30, more sign-ins sending a code) after the independent verifier dated it to accounts on five spans.
+- **INC-1619 as the only incident where a blocked caller outran the fault, rejected at stage 4 on 2026-11-09:** the
+  hurried attribution went wrong in that one incident, which alone decided notifications, the returned shape (one
+  constructed factor deciding one service) in the attribution leg; rebuilt with the same pattern in INC-1611 (deciding
+  fares) and INC-1579 (deciding nothing), every slowdown ramped from uneven times, and three faults strengthened so the
+  over-budget intervals clear their budgets by 0.08 or more.

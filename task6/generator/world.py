@@ -4,6 +4,7 @@ keeps a share of its requests that it resets at the top of every hour from its p
 request's whole trace is kept with it, the calls it made to the internal services included. The truth (every
 request's latency) never ships; the pack carries the kept spans and the counts."""
 import datetime as dt
+import zlib
 
 import numpy as np
 from scipy.optimize import brentq
@@ -64,6 +65,85 @@ def _g(rho, a):
 
 def callers(svc):
     return [(e, op, p) for e, (_, calls) in K.GRAPH.items() for c, op, p in calls if c == svc]
+
+
+def _sec(d, h, m, sec=0):
+    """Seconds from 1 December 00:00 UTC for a December day, hour and minute."""
+    return (d - 1) * 86400 + h * 3600 + m * 60 + sec
+
+
+def _ramped(t0, t1, f, up, down, wobble, key):
+    """One slowdown as it unfolds: the factor climbs from 1 to f over `up` minutes from t0 (evenly in log terms),
+    holds near f in ten-minute stretches that drift by up to `wobble` of its log, and falls back over `down` minutes
+    from t1. [(from s, to s, factor)], the drift drawn from the window's own key, never from the world's stream."""
+    rng = np.random.default_rng(zlib.crc32(key.encode()))
+    lf, segs = np.log(f), []
+    for k in range(up):
+        segs.append((t0 + 60 * k, t0 + 60 * (k + 1), float(np.exp(lf * (k + 0.5) / up))))
+    a_ = t0 + 60 * up
+    while a_ < t1:
+        b_ = min(t1, a_ + 600)
+        segs.append((a_, b_, float(np.exp(lf * (1 + wobble * rng.uniform(-1, 1))))))
+        a_ = b_
+    for k in range(down):
+        segs.append((t1 + 60 * k, t1 + 60 * (k + 1), float(np.exp(lf * (1 - (k + 0.5) / down)))))
+    return segs
+
+
+def windows():
+    """Each (service, operation) the December incidents slowed: [(from s, to s, factor)], the faults and the callers'
+    late blocking (operation "own"), each climbing in and falling away as `_ramped` describes."""
+    out = {}
+    for x in K.DEC_INCIDENTS:
+        t0, t1 = _sec(*x["onset"]), _sec(*x["end"])
+        up, down = x["ramp"]
+        for so in x["ops"]:
+            out.setdefault(so, []).extend(_ramped(t0, t1, x["mult"], up, down, 0.08, "%s %s %s" % (x["id"], *so)))
+        for svc, f, start, b_up in x["block"]:
+            out.setdefault((svc, "own"), []).extend(_ramped(_sec(*start), t1, f, b_up, 2, 0.12,
+                                                            "%s %s own" % (x["id"], svc)))
+    return out
+
+
+def _pieces(segs):
+    """The windows of one operation as a step function: the cut points and the factor from each cut to the next
+    (overlapping windows multiply), 1 before the first cut and after the last."""
+    cuts = sorted({a_ for a_, _, _ in segs} | {b_ for _, b_, _ in segs})
+    vals = []
+    for lo, hi in zip(cuts[:-1], cuts[1:]):
+        mid, v = (lo + hi) / 2, 1.0
+        for a_, b_, f in segs:
+            if a_ <= mid < b_:
+                v *= f
+        vals.append(v)
+    return np.array(cuts, dtype=float), np.array(vals + [1.0])
+
+
+WIN = windows()
+PIECES = {k: _pieces(v) for k, v in WIN.items()}
+
+
+def mult_at(svc, op, t):
+    """The incident factor on an operation's handling time for spans starting at t (seconds, scalar or array)."""
+    t = np.asarray(t, dtype=float)
+    if (svc, op) not in PIECES:
+        return np.ones_like(t)
+    cuts, vals = PIECES[(svc, op)]
+    i = np.searchsorted(cuts, t, side="right") - 1
+    return np.where(i < 0, 1.0, vals[np.clip(i, 0, len(vals) - 1)])
+
+
+def frac_in(svc, op, h):
+    """[(share of hour h at a factor, factor)] for an operation."""
+    out = []
+    if (svc, op) not in PIECES:
+        return out
+    cuts, vals = PIECES[(svc, op)]
+    for lo_, hi_, f in zip(cuts[:-1], cuts[1:], vals[:-1]):
+        lo, hi = max(lo_, h * 3600), min(hi_, (h + 1) * 3600)
+        if hi > lo and f != 1.0:
+            out.append(((hi - lo) / 3600.0, float(f)))
+    return out
 
 
 def medians():
@@ -194,7 +274,7 @@ class World:
                 if h >= 0:
                     self.Edec[s][h] += r.binomial(nn - kk, K.ERR[s])
                 t_start = h * 3600 + np.sort(r.uniform(0.05, 3599.95, kk))
-                own = np.exp(np.log(med_own[hh]) + sig_own * r.standard_normal(kk))
+                own = np.exp(np.log(med_own[hh]) + sig_own * r.standard_normal(kk)) * mult_at(s, "own", t_start)
                 err = r.random(kk) < K.ERR[s]
                 own = np.where(err, r.uniform(4, 40, kk), own)
                 end_calls = np.zeros(kk)
@@ -210,6 +290,9 @@ class World:
                     m_c, a_c, sig_c, _ = K.LAT[(c, op)]
                     med_c = self.base[(c, op)] * _g(load_i[c][hh], a_c)
                     pslow = (1 - K.ERR[c]) * (1 - norm.cdf((np.log(K.THRESHOLD[c]) - np.log(med_c)) / sig_c))
+                    for fr, fm in (frac_in(c, op, h) if h >= 0 else []):
+                        pslow += fr * (1 - K.ERR[c]) * (norm.cdf((np.log(K.THRESHOLD[c]) - np.log(med_c)) / sig_c) -
+                                                         norm.cdf((np.log(K.THRESHOLD[c]) - np.log(med_c * fm)) / sig_c))
                     retries_unkept = 0
                     if h >= 0 and mu:
                         e_un = r.binomial(mu, K.ERR[c])
@@ -227,7 +310,7 @@ class World:
                         while True:
                             code = 500 if r.random() < K.ERR[c] else 200
                             ms = float(r.uniform(6, 60)) if code == 500 else float(
-                                np.exp(np.log(med_c) + sig_c * r.standard_normal()))
+                                np.exp(np.log(med_c) + sig_c * r.standard_normal()) * mult_at(c, op, t_call))
                             net = float(np.exp(np.log(1.8) + 0.4 * r.standard_normal()))
                             child.append((i, t_call, ms + net, c, op, code, ms))
                             if h >= 0 or t_call + 0.0005 >= 0:
@@ -282,7 +365,7 @@ class World:
                 sel = (sp["svc"] == c) & (sp["op"] == op) & (sp["kind"] == "SERVER")
                 t = sp["t0"][sel]
                 hh = np.clip((t // 3600).astype(int) + 1, 0, H)
-                med_c = self.base[(c, op)] * _g(load_i[c][hh], a_c)
+                med_c = self.base[(c, op)] * _g(load_i[c][hh], a_c) * mult_at(c, op, t)
                 ps = (1 - K.ERR[c]) * (1 - norm.cdf((np.log(K.THRESHOLD[c]) - np.log(med_c)) / sig_c))
                 inwin = (t >= 0) & (t < H * 3600)
                 self.slow_true[c] += float(ps[inwin].sum())
@@ -292,13 +375,14 @@ class World:
         if not hasattr(self, "_mc"):
             self._mc = np.random.default_rng(self.seed + 999)
         R = 400
-        own = np.exp(np.log(med_own) + sig_own * self._mc.standard_normal(R))
+        tt = (hh - 1) * 3600 + self._mc.uniform(0, 3600, R)
+        own = np.exp(np.log(med_own) + sig_own * self._mc.standard_normal(R)) * mult_at(s, "own", tt)
         mode, calls = K.GRAPH.get(s, (None, []))
         parts = []
         for c, op, p in calls:
             m_c, a_c, sig_c, _ = K.LAT[(c, op)]
             med_c = self.base[(c, op)] * _g(self.load[c][hh], a_c)
-            d = np.exp(np.log(med_c) + sig_c * self._mc.standard_normal(R)) + 2.0
+            d = np.exp(np.log(med_c) + sig_c * self._mc.standard_normal(R)) * mult_at(c, op, tt) + 2.0
             parts.append(np.where(self._mc.random(R) < p, d, 0.0))
         if not parts:
             tot = own

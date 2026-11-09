@@ -1,32 +1,37 @@
 {
  "task": "task6",
- "status": "DESIGN",
+ "status": "READY",
  "domain": "general-statistics-data-science",
  "objective": "descriptive-distribution",
- "stage": 2,
- "stage_name": "design",
+ "stage": 5,
+ "stage_name": "ready",
  "updated": "2026-11-09",
  "stump": "",
  "architecture": 7,
  "loops": 0,
  "precut": {
-  "exit": null,
-  "date": ""
+  "exit": 0,
+  "date": "2026-11-09",
+  "note": "85 checks, 0 FAIL, 2 WARN; depth level 5"
  },
  "leak": {
-  "leak_py": "REVIEW (the four standing lines ruled at ship; prompt sweep clean)",
-  "reader": "not re-run: no pack document changed"
+  "leak_py": "REVIEW (every line ruled harmless in the design note)",
+  "reader": "architecture 7, 2026-11-09: no ranking, helping or answer file; the standard files the WHAT as designed; no one thing; the templated incident titles fixed in the generator, the balancer's full hourly grid and the capacity note's partner-gateway plan ruled harmless"
  },
  "duplicate_check": {
-  "heart": "BLOCK on one draw-level row: org_family (software_or_platform) against task1; the two structural rows cleared by renaming the card's differentiation keys to the Mark baseline's markNN numbers; WARN repeat.gate_g against task7 and overuse.gate_g",
-  "nearest": "mark474 v2 lineage, 0.10"
+  "heart": "BLOCK on ban.pairing against task2 v5 only, accepted by the author for this re-ship on 2026-11-09: the pairing is the returned platform task's own subdomain and analysis type, which a re-ship cannot change",
+  "surface": "clean",
+  "nearest": "mark474 v2 lineage"
  },
  "judge": {
-  "verdict": "NOT_DETERMINISTIC on ask 5 only (pre-fix prompt); asks 1 to 4, the CSV and the call forced, every figure recomputed",
-  "disposition": "SEND_BACK narrow, closed by the prompt pins (SF16 to SF18); final APPROVE on the shipped prompt, read literally, no second thread",
-  "gate_h": "domain pass, layers pass, decisive step analytical, chain 4, one-fact borderline",
-  "report": "task6/determinism_check_report.md",
-  "date": "2026-11-08"
+  "verdict": "DETERMINISTIC",
+  "disposition": "APPROVE",
+  "gate_h": "pass: no one thing; 6 results over 6 areas; one-fact 1 of 6 (the weighting sentence 0 of 6, measured; three fresh threads overclaimed it)",
+  "report": "task6/determinism_check_report_pass4.md",
+  "date": "2026-11-09",
+  "pass2": "DETERMINISTIC, APPROVE on the cut before the incidents were reshaped",
+  "pass3": "DETERMINISTIC with SOLUTION_WRONG (minor), FIX_NOW: every graded figure reproduced from the raw files, both contested causes included; fixed: the own-count contrast restated with the golden's exclusions (fares 0.9, partner-gateway 1.1, notifications 0.8), the note's weighting-alone rescue made explicit (0 of 6), the careful column graded up as a sensitivity (37.3); the minutes gap was the thread's own daylight-saving handling (the status page states Europe/Lisbon)",
+  "pass4": "DETERMINISTIC, APPROVE: the restated contrast reproduced to the decimal, every incident minute and partner-gateway's interval rebuilt independently"
  },
  "returned": [
   {
@@ -56,10 +61,10 @@
    "portal": "Failed final review (version 17): the breach list turns on one thing, each span weighted by its root service's hourly keep rate, which decides only partner-gateway (1.4 to 2.9 per cent, four services over to five); a shallow hidden factor",
    "review": "It was initially approved, but on a closer look the list of services over budget turns on one thing. The one thing: traces are kept whole at the edge, so each span should be weighted by its root service's hourly keep rate, not its own service's hourly request count. That matters only for the one service called from journey-search, seat-map and booking traces in a near-even 33/33/34 split. Weight by the root and its SLI goes from about 1.4% (within its 2.0% budget, four services over) to about 2.9% (five over). This is a shallow hidden factor: a sound idea, but built into the data so it decides only that service, and a single weight once noticed. What works well: seeing that kept spans undercount traffic unevenly by hour and reweighting to request counts is real analysis. How to fix: make the sampling affect several services in different, partial ways, each with a checkable SLI; let the breach list depend on several connected pieces (weighting, periods, incident attribution), not one weight; trace-level weighting can stay as one step among several, but it cannot decide the answer on its own.",
    "repair": "design (re-root to a results chain, the reviewer's own direction, same world)",
-   "commit": ""
+   "commit": "RESHIPPED (task6) 2026-11-09"
   }
  ],
- "resume": "stage 2: prototype the widened call graph and the seven December incidents (generator/seed_sweep.py), measure the SLI shifts, the crossings that need both the weights and the attribution, the per-window attribution margins and the interval gaps, then write the design note from the measured numbers",
+ "resume": "",
  "approved": null,
  "delivered": null,
  "portal": {
@@ -75,11 +80,11 @@
  "portal_status_date": "2026-11-09",
  "seed": "analytical_tasks/03_descriptive_distribution/DA18_quick-commerce-pilot-service-hours-population.md (header and Situation only)",
  "seed_world": 273,
- "zip_md5": "596e59c58e56743119f60b349b5c0e1c",
- "zip_sha256_16": "e6d4daff8f522ed8",
+ "zip_md5": "f92b4be141425dcdc94ebcba51710501",
+ "zip_sha256_16": "a40d4eda3a7f4000",
  "precut_exit": 1,
  "shipped": "2026-11-07",
- "call": "",
+ "call": "Put reliability engineers on places, partner-gateway, fares, seat-map, notifications, in that order: the five ran over their 2026 latency error budgets",
  "gates_at_ship": "checks 0 failures; verify PASS; rebuild byte-identical; figures_check 117 of 117; precut 61 checks 0 FAIL; voice-check exit 0; leak.py REVIEW (ruled harmless); leak reader clean on the shipped cut; determinism judge DETERMINISTIC, APPROVE; heart exit 0 (WARN gate_g repeat and overuse); surface exit 0, no promoted pair",
  "migrated_from": {
   "project": "Mark",
@@ -88,18 +93,8 @@
   "date": "2026-11-08",
   "note": "moved from Project Mark at the author's word: architecture 5 landed on the Mark portal and architecture 6 shipped there on 2026-11-07, pending; carried on here for the Sulfur bar"
  },
- "golden_zip_md5": "00985bc0f061568324cd3e28b5c90970",
- "paper_pair": {
-  "before": {
-   "claimed": 28.5,
-   "measured": 78.0
-  },
-  "after": {
-   "landed_full": 58.0,
-   "landed_final_lists": 54.0,
-   "shallow_keep_pct": 7.1
-  }
- },
+ "golden_zip_md5": "45a379a3871c8653791e308aea42ffa9",
+ "paper_pair": 31.3,
  "runs": {
   "run1": 73,
   "run2": 83,
@@ -113,7 +108,14 @@
   "recorded": "2026-11-08",
   "history": []
  },
- "gates_at_reship": "checks 0 failures; verify PASS; goldens byte-identical on rebuild; figures_check 98 of 98; voice-check exit 0; leak.py REVIEW (standing lines); precut 1 FAIL (pair ceiling 58.0); freeze rubric FAIL (Critical Components block); guard validate clean, heart BLOCK (one draw-level row, organisation family against task1)",
+ "gates_at_reship": "gates.py task6 --full, 2026-11-09 (reshaped incidents): checks, verify, rebuild byte-identical, precut, effort, figures, containers and surface PASS; voice and leak WARN (ruled); heart BLOCK on ban.pairing only",
  "doctrine": "throughout",
- "chain": "R1 each service's customer-facing incident minutes by half of 2026; R2 the service at fault in each December customer-facing incident; R3 every service's December latency SLI; R4 a 90 per cent interval on each over-budget service's SLI; R5 the services over budget; R6 the start order, shares, share together and requests beyond budget"
+ "chain": "R1 each service's customer-facing incident minutes by half of 2026; R2 the service at fault in each December customer-facing incident; R3 every service's December latency SLI; R4 a 90 per cent interval on each over-budget service's SLI; R5 the services over budget; R6 the start order, shares, share together and requests beyond budget",
+ "effort": {
+  "quick": 7.0,
+  "careful": 31.3,
+  "thorough": 100.0,
+  "largest_hint": "each December incident's cause is the named service whose own handling rose first, not the one furthest over its curve: rescues 1 of 6",
+  "routes": "3 distinct wrong lists over 4 shortcuts"
+ }
 }

@@ -2,108 +2,113 @@
 typed. The blocks run in the platform's order: Final Recommendation, Supplementary Questions, Critical Components,
 Step-by-Step."""
 import common as K
-from deliver import names
+from deliver import names, handling
+
+
+def poss(s):
+    return s + ("'" if s.endswith("s") else "'s")
 
 
 def write(R, F):
-    pg = "partner-gateway"
-    over = F["over"]
-    sli, bud, share = F["sli"], F["budget"], F["share_pct"]
-    kept, wtd = F["pg_kept_mix_pct"], F["pg_weighted_mix_pct"]
-    order = F["start_order"]
+    over, order = F["over"], F["start_order"]
+    sli, bud, share, ci, mins = F["sli"], F["budget"], F["share_pct"], F["ci"], F["minutes"]
+    csl, rsl = F["owncount_sli"], F["rootcareful_sli"]
     n_over = "five" if len(over) == 5 else str(len(over))
-    h1, h2 = F["incident_minutes_text"]
+    dec = [x for x in F["incidents"] if x["id"] in F["deciding"]]      # the misreadings that move a verdict
+    mis = [x for x in F["incidents"] if x["id"] in F["misread"]]       # every incident the whole-window reading misreads
+    pg, fa, no = "partner-gateway", "fares", "notifications"
+    falls = [rsl[x["cause"]] for x in dec]
+    fall = ("%s%% each" % falls[0]) if len(set(falls)) == 1 else names(["%s%%" % v for v in falls])
+    days = names([x["declared"].split(" ")[0] for x in dec]) + " December"
     L = ["## Tags", "",
          "**Domain:** General Statistics & Data Science (missing data, censoring and measurement error).",
          "**Analytical objective:** Descriptive & Distribution Analysis.", "",
          "## Final Recommendation", "",
-         "**Five internal services ran over their 2026 latency error budget and each gets a reliability engineer for "
-         "the first half of 2027: %s.**" % names(over),
-         "Partner-gateway's December SLI is %s%% against its %s%% budget once each kept span counts at its trace's "
-         "edge keep share. Not partner-gateway at %s%%, its own spans reweighted hour by hour on its own count, because "
-         "the store kept them with the traces journey-search, seat-map and booking started at very different shares. "
-         "Not the kept spans' own share, which passes journey-search, places, seat-map and partner-gateway (%s%%, "
-         "%s%%, %s%% and %s%%)." % (sli[pg], bud[pg], F["pg_service_hour"], F["kept_share"]["journey-search"],
-                                    F["kept_share"]["places"], F["kept_share"]["seat-map"], F["kept_share"][pg]),
+         "**Put reliability engineers on %s, in that order: the %s ran over their 2026 latency error budgets.** "
+         "Not %s alone, which each service's own spans reweighted on its own hourly count give even with every "
+         "incident's cause dated right (fares %s%%, "
+         "partner-gateway %s%%, notifications %s%%), and not without %s, which fall to %s when %s are put on %s, the "
+         "services furthest over their load curves, rather than on %s, whose own handling slowed first."
+         % (names(order), n_over, names(F["owncount_over"]), csl[fa], csl[pg], csl[no], names([x["cause"] for x in dec]),
+            fall, names([x["id"] for x in dec]), names([x["careful_cause"] for x in dec]),
+            names([x["cause"] for x in dec])),
          "", "## Supplementary Questions", "",
          "### %s" % K.DOCX_OUT, "",
-         "1. Names the services that ran over in the order their engineers start, the one with the most requests over "
-         "its latency threshold in December first, each with its share of all our services' over-threshold December "
-         "requests, whole per cent: %s." % names(["%s %s%%" % (s, share[s]) for s in order]),
+         "1. Names the services that ran over in the order their engineers start, the one whose SLI counts the most "
+         "requests over its threshold first, each with its share of the over-threshold requests all our services' SLIs "
+         "count (whole per cent) and a 90 per cent confidence interval on its SLI (per cent to two decimals): %s."
+         % "; ".join("%s %s%%, interval %s to %s" % (s, share[s], ci[s][0], ci[s][1]) for s in order),
          "2. A table of every service's December 2026 latency SLI beside its error budget, per cent to one decimal:"]
     for s in K.SVC:
         L.append("   - %s: SLI %s against a budget of %s, %s" % (s, sli[s], bud[s],
                                                                "over" if F["ran_over"][s] == "yes" else "within"))
-    L += ["3. A bar chart after that table, each service's SLI against its own budget line, the services over budget "
-          "in red.",
-          "4. The %s served %s%% of all our services' over-threshold December requests together and %s more "
-          "over-threshold requests than their budgets allow, to the nearest ten thousand." % (
-              n_over, F["over_share_pct"], F["beyond_budget"]),
-          "5. Customer-facing incidents named at least one of the %s for %s minutes in the first half of 2026 and %s "
-          "minutes in the second, each service counting from when the incident tool added it, whole minutes." % (
-              n_over, h1, h2),
+    L += ["3. A bar chart of each service's SLI against its own budget line, the services over budget in red.",
+          "4. The service that owned the root cause of each customer-facing incident in December:"]
+    for x in F["incidents"]:
+        L.append("   - %s, declared %s, naming %s: %s" % (x["id"], x["declared"], ", ".join(x["named"]), x["cause"]))
+    L += ["5. The %s served %s%% of the over-threshold requests all our services' SLIs count, and %s more than their "
+          "budgets allow, to the nearest ten thousand." % (n_over, F["together_pct"], F["beyond_budget"]),
           "", "### %s" % K.CSV_OUT, "",
-          "1. A row per service, columns service, latency_sli_pct, error_budget_pct and ran_over; SLI and budget per "
-          "cent to one decimal:"]
+          "1. A row per service, columns service, latency_sli_pct, error_budget_pct, ran_over, incident_minutes_h1 and "
+          "incident_minutes_h2; SLI and budget per cent to one decimal, minutes whole, each service counted from when "
+          "the incident tool added it:"]
     for s in K.SVC:
-        L.append("   - %s: SLI %s, budget %s, ran over %s" % (s, sli[s], bud[s], F["ran_over"][s]))
+        L.append("   - %s: SLI %s, budget %s, ran over %s, incident minutes %s and %s" % (
+            s, sli[s], bud[s], F["ran_over"][s], mins[s][0], mins[s][1]))
     L += ["", "## Critical Components", "",
-          "1. Partner-gateway's December 2026 latency SLI is **%s%%** against a **%s%%** budget." % (sli[pg], bud[pg]),
-          "2. Journey-search's traces carry **%s%%** of partner-gateway's December requests but only **%s%%** of its "
-          "kept spans, seat-map's **%s%%** against **%s%%** and booking's **%s%%** against **%s%%**, so each kept span "
-          "counts at its own trace's edge keep share." % (
-              wtd.get("journey-search", "0"), kept.get("journey-search", "0"), wtd.get("seat-map", "0"),
-              kept.get("seat-map", "0"), wtd.get("booking", "0"), kept.get("booking", "0")),
-          "3. Partner-gateway served **%s%%** of all our services' over-threshold December requests, the most of any "
-          "service, so its engineer starts first, then %s." % (
-              share[pg], names(["%s (**%s%%**)" % (s, share[s]) for s in order[1:]])),
-          "4. The %s served **%s%%** of all our services' over-threshold December requests between them, **%s** more "
-          "than their budgets allow." % (n_over, F["over_share_pct"], F["beyond_budget"]),
-          "", "## Step-by-Step", "",
-          "1. Read PR-SLO-3: a service's latency SLI is the share of the requests it handled in December 2026, in "
-          "Lisbon time (UTC all month), whose server span exceeded its section 4 threshold, whether or not the "
-          "tracing store kept a span for it; a breach is an SLI over its budget.",
-          "2. Kept the server spans in trace_spans_2026-12.parquet, dropping the GET /healthz probes and the rows "
-          "re-sent under a repeated span_id, and linked each to its trace's root, the server span with a blank "
-          "parent_span_id: every internal service's span sits in a whole trace an edge service started.",
-          "3. The reasonable correction that falls short: reweighting each service's own kept spans hour by hour on its "
-          "own RequestCount in lb_target_group_requests_2026-H2.csv (target groups through service_catalogue_2026.xlsx) "
-          "rebuilds every hourly count and the balancer's 5xx counts, and puts partner-gateway at %s%% against its %s%% "
-          "budget, four services." % (F["pg_service_hour"], bud[pg]),
-          "4. The traces overturn it: each edge service keeps a flat few dozen root spans an hour whatever its "
-          "traffic, and partner-gateway's kept spans are %s%% journey-search's traces, %s%% seat-map's and %s%% "
-          "booking's, while journey-search's traces, kept most thinly and carrying the slow availability lookups, "
-          "make %s%% of its requests." % (kept.get("journey-search", "0"), kept.get("seat-map", "0"),
-                                          kept.get("booking", "0"), wtd.get("journey-search", "0")),
-          "5. For each edge service and hour, divided its RequestCount by the root spans it kept, the weight of every "
-          "span in the traces it started that hour, then divided each service's weighted spans over its threshold by "
-          "its December RequestCount: partner-gateway %s%%, journey-search %s%%, places %s%%, seat-map %s%% and "
-          "notifications %s%%, the other five under budget, so those %s get an engineer." % (
-              sli[pg], sli["journey-search"], sli["places"], sli["seat-map"], sli["notifications"], n_over),
-          "6. Each service's weighted spans over its threshold are its over-threshold December requests: of all ten "
-          "services' total, %s, so the engineers start in that order; the %s served %s%% between them, and their "
-          "over-threshold requests less each budget times its December RequestCount come to %s." % (
-              names(["%s%s %s%%" % (s, " served" if i == 0 else "", share[s]) for i, s in enumerate(order)]),
-              n_over, F["over_share_pct"],
-              F["beyond_budget"]),
-          "7. Read on step 3's correction, the same figures name four services that served %s%%, %s first, with "
-          "partner-gateway at %s%% and outside the programme, and %s beyond budget." % (
-              F["shallow_over_share_pct"], F["shallow_order"][0], F["shallow_pg_share_pct"],
-              F["shallow_beyond_budget"]),
-          "8. Incident minutes (PR-SLO-3 sections 5.2 and 5.4): each incident in incidents_2026.csv matched to its "
-          "status page post by component and time, its end the last of its components back to operational, each "
-          "service counted from the moment incident_timeline_2026.csv names it, every minute in which an incident "
-          "named at least one of the %s counted once, the halves split at 1 July 00:00 Lisbon time: %s and %s "
-          "minutes." % (n_over, h1, h2),
-          "",
-          "No other conclusion survives. Every weighting the whole traces leave standing (each span at its trace's "
-          "edge keep share over the balancer's count or over the weighted kept count, the weights calibrated hour by "
-          "hour, the root's hour or the span's own, spans whose trace began in November dropped or reweighted) gives "
-          "the same one-decimal SLIs, the same start order, the same whole-per-cent shares, %s%% and %s. The kept "
-          "spans' own share, a day or hour-of-day weighting and each service's own spans reweighted on its own hourly "
-          "count all treat a span as kept at its own service's rate, which the store's whole-trace sampling at the "
-          "edge rules out; each passes partner-gateway and leaves it out of the programme." % (
-              F["over_share_pct"], F["beyond_budget"])]
-    text = "\n".join(L) + "\n"
-    F["sections"] = ["5.2", "5.4"]
-    return text, F
+          "1. %s were %s own failures: %s." % (
+              names([x["id"] for x in dec]), names([poss(x["cause"]) for x in dec]),
+              "; ".join("%s rose above its load curve from about **%s** and %s only from about **%s**" % (
+                  handling(x["cause"]), x["onset_about"][x["cause"]], handling(x["careful_cause"]),
+                  x["onset_about"][x["careful_cause"]]) for x in dec)),
+          "2. With each kept span counted at its trace root's hourly keep share, partner-gateway's December SLI is "
+          "**%s%%** against **%s%%**, fares' **%s%%** against **%s%%** and notifications' **%s%%** against **%s%%**; "
+          "on each service's own hourly count, with the same incident time left out, they are %s%%, %s%% and %s%%." % (
+              sli[pg], bud[pg], sli[fa], bud[fa], sli[no], bud[no], csl[pg], csl[fa], csl[no]),
+          "3. Partner-gateway's 90 per cent interval runs **%s%% to %s%%**, the traces taken as whole units within "
+          "each root service's hour." % tuple(ci[pg]),
+          "4. The %s served **%s%%** of the over-threshold requests the SLIs count, **%s** more than their budgets "
+          "allow." % (n_over, F["together_pct"], F["beyond_budget"]),
+          "", "## Step-by-Step", ""]
+    steps = [
+        "Kept the server spans in %s once each (a re-sent span id counted once) and linked each to its trace's root, "
+        "the server span with no parent; counted the roots each edge "
+        "service kept in each hour against its RequestCount in %s (target groups through %s)." % (
+            K.FILES["spans"], K.FILES["lb_h2"], K.FILES["catalogue"]),
+        "Reconciled %s, %s and %s: each customer-facing incident ends when the status page shows its last component "
+        "operational, a service counts from when the timeline adds it, halves split at 1 July 00:00 Lisbon time; "
+        "partner-gateway %s and %s minutes, notifications %s and %s." % (
+            K.FILES["incidents"], K.FILES["timeline"], K.FILES["status"], mins[pg][0], mins[pg][1], mins[no][0],
+            mins[no][1]),
+        "The reasonable route that falls short: each service's own spans reweighted on its own hourly count, with "
+        "each incident's cause dated as in step 5, puts fares at %s%%, partner-gateway at %s%% and notifications at "
+        "%s%%, so only %s ran over." % (csl[fa], csl[pg], csl[no], names(F["owncount_over"])),
+        "The traces overturn it: the store kept a near-fixed number of whole traces an hour per edge service, so an "
+        "internal service's kept spans carry its callers' keep shares; counted at its trace root's share (the root's "
+        "RequestCount over the roots kept that hour), each internal service's slow operations, called from busy and "
+        "thinly kept journey-search and accounts, weigh what they served.",
+        "Dated each December incident's cause: for every service it named, the own handling time of each span "
+        "(less the calls it waited on) against a load curve fitted on December's incident-free hours, a changepoint "
+        "on the residuals; the earliest sustained rise owns the cause. Over the whole incident %s ran furthest above "
+        "their curves, but each rose only after the service it calls: %s." % (
+            names(["%s in %s" % (x["careful_cause"], x["id"]) for x in mis]),
+            "; ".join("%s from about %s against %s" % (x["cause"], x["onset_about"][x["cause"]],
+                                                       x["onset_about"][x["careful_cause"]]) for x in mis)),
+        "Left each named service's requests out from when the timeline added it to the incident's end unless it "
+        "owned the cause (PR-SLO-3's incident and root-cause clauses): %s ran over." % names(over),
+        "Took each over-budget SLI's 90 per cent interval by linearisation over strata of root service and hour with "
+        "the kept traces as units: partner-gateway %s%% to %s%%." % tuple(ci[pg]),
+        "Each service's weighted spans over its threshold are the requests its SLI counts: the engineers start with "
+        "%s (%s%%), the %s served %s%% together and %s more than their budgets allow." % (
+            order[0], share[order[0]], n_over, F["together_pct"], F["beyond_budget"]),
+    ]
+    L += ["%d. %s" % (i, s) for i, s in enumerate(steps, 1)]
+    L += ["", "No other conclusion survives. Weighting each span by its own service's hourly count, or leaving the "
+          "spans unweighted, keeps the slow operations of fares, partner-gateway and notifications at their callers' "
+          "kept shares; putting each December incident on the service the responders named first or last, on the "
+          "one with the most slow requests, or on the one furthest over its load curve across the whole incident, "
+          "charges %s with %s own failures on %s. Every weighting the whole traces leave "
+          "standing (the balancer's count or the weighted kept count as the base, the root's hour or the span's own) "
+          "and every reasonable reading of the onset gives the same five, the same order and the same rounded "
+          "figures." % (names([x["careful_cause"] for x in dec]), names([poss(x["cause"]) for x in dec]), days), ""]
+    return "\n".join(L), F

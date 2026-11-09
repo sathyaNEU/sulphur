@@ -3,7 +3,7 @@ balancer's target groups, the tracing store's sampler, the people, the dates and
 import datetime as dt
 import os
 
-SEED = 2886
+SEED = 2711
 ORG = "Rotalinha"
 ORG_LTD = "Rotalinha Viagens, S.A."
 YEAR = 2026
@@ -19,7 +19,7 @@ TARGET_PER_HOUR = 24                                # the sampler's server spans
 # cost tag (current), cost tag (before 1 April), threshold ms, budget %
 SERVICES = [
     ("journey-search", "Search & Discovery", 1, "journey-search", "tg-jsearch-prd", "tg-search-prd", "Search",
-     "svc-journey-search", "team-search", 1300, 1.0),
+     "svc-journey-search", "team-search", 1500, 1.0),
     ("fares", "Marketplace", 1, "fares-api", "tg-fares-prd", "tg-fares-prd", "Search",
      "svc-fares", "team-marketplace", 300, 1.0),
     ("places", "Search & Discovery", 2, "places", "tg-places-prd", "tg-autocomplete-prd", "Search",
@@ -31,9 +31,9 @@ SERVICES = [
     ("payments", "Checkout", 1, "payments", "tg-payments-prd", "tg-payments-prd", "Booking and payments",
      "svc-payments", "team-checkout", 2000, 0.5),
     ("tickets", "Customer", 2, "ticketing", "tg-tickets-prd", "tg-tickets-prd", "Tickets and boarding passes",
-     "svc-tickets", "team-customer", 1000, 1.0),
+     "svc-tickets", "team-customer", 1500, 1.0),
     ("accounts", "Customer", 1, "accounts", "tg-accounts-prd", "tg-accounts-prd", "Sign-in and accounts",
-     "svc-accounts", "team-customer", 400, 1.0),
+     "svc-accounts", "team-customer", 600, 2.0),
     ("partner-gateway", "Marketplace", 2, "partner-gw", "tg-partners-prd", "tg-partners-prd", "Search",
      "svc-partner-gateway", "team-marketplace", 1000, 2.0),
     ("notifications", "Customer", 2, "notify", "tg-notify-prd", "tg-notify-prd", "Tickets and boarding passes",
@@ -77,34 +77,85 @@ SEASON.update({d: 1.25 for d in range(25, 30)})      # 26 to 30 December
 # the calls an edge request makes (internal service, operation, share of requests that make it), and how the edge
 # service makes them: "par" waits for all of them at once, "seq" makes them one after another
 GRAPH = {
-    "journey-search": ("par", [("fares", "quote", 0.97), ("partner-gateway", "availability", 0.985)]),
-    "seat-map": ("seq", [("partner-gateway", "seats", 1.0)]),
+    "journey-search": ("par", [("fares", "batch", 0.97), ("partner-gateway", "availability", 0.985)]),
+    "seat-map": ("seq", [("partner-gateway", "seats", 1.0), ("fares", "quote", 0.6)]),
     "booking": ("seq", [("fares", "quote", 0.995), ("partner-gateway", "reserve", 1.0),
                         ("payments", "authorise", 0.97), ("notifications", "email", 0.95)]),
+    "accounts": ("seq", [("payments", "wallet", 0.25), ("notifications", "verify", 0.45)]),
+    "tickets": ("seq", [("partner-gateway", "ticket", 0.8), ("notifications", "resend", 0.5)]),
 }
 RETRY = {"partner-gateway"}         # a 5xx from the partner gateway is retried once by its caller
 
 # capacity an hour; latency at zero load as (log-normal median ms, load sensitivity, spread) and the target December
-# slow share the median is set to (None: the edge service's own work at a fixed median); 5xx rate
+# slow share the median is set to (None: the operation's own work at a fixed median); 5xx rate
 CAP = {"journey-search": 40000, "places": 88000, "seat-map": 9800, "booking": 6000, "accounts": 26000,
        "tickets": 7000, "fares": 90000, "partner-gateway": 70000, "payments": 5000, "notifications": 9000}
 LAT = {
     ("journey-search", "own"): (110.0, 0.20, 0.45, None),
     ("places", "own"): (None, 0.24, 0.56, 1.52),
-    ("seat-map", "own"): (None, 0.32, 0.44, 1.45),
+    ("seat-map", "own"): (None, 0.32, 0.44, 1.86),
     ("booking", "own"): (None, 0.10, 0.40, 0.28),
-    ("accounts", "own"): (None, 0.08, 0.50, 0.70),
-    ("tickets", "own"): (None, 0.04, 0.45, 0.62),
-    ("fares", "quote"): (None, 0.05, 0.45, 0.60),
-    ("partner-gateway", "availability"): (None, 0.45, 0.40, 3.50),
+    ("accounts", "own"): (None, 0.08, 0.50, 1.30),
+    ("tickets", "own"): (None, 0.04, 0.45, 0.68),
+    ("fares", "batch"): (None, 0.05, 0.45, 0.85),
+    ("fares", "quote"): (None, 0.05, 0.40, 0.10),
+    ("partner-gateway", "availability"): (None, 0.45, 0.40, 2.05),
     ("partner-gateway", "seats"): (85.0, 0.10, 0.35, None),
-    ("partner-gateway", "reserve"): (None, 0.20, 0.45, 0.80),
-    ("payments", "authorise"): (None, 0.06, 0.38, 0.30),
-    ("notifications", "email"): (None, 0.02, 0.55, 1.42),
+    ("partner-gateway", "reserve"): (None, 0.20, 0.45, 0.60),
+    ("partner-gateway", "ticket"): (None, 0.12, 0.42, 0.50),
+    ("payments", "authorise"): (None, 0.06, 0.38, 0.45),
+    ("payments", "wallet"): (45.0, 0.04, 0.35, None),
+    ("notifications", "email"): (None, 0.02, 0.55, 0.30),
+    ("notifications", "verify"): (None, 0.03, 0.45, 0.90),
+    ("notifications", "resend"): (None, 0.02, 0.50, 0.50),
 }
 ERR = {"journey-search": 0.002, "places": 0.001, "seat-map": 0.002, "booking": 0.003, "accounts": 0.002,
        "tickets": 0.002, "fares": 0.002, "partner-gateway": 0.008, "payments": 0.004, "notifications": 0.003}
 RHO_MAX = 0.93
+
+# December's customer-facing incidents, as the world and the responders produced them. Each began in one service's
+# own handling (`fault`, the operations it slowed by `mult` from `onset` to `end`); the services calling it slowed
+# with it, and some callers' own handling slowed later as their workers waited for connections (`block`: service,
+# factor, from, minutes to build up), in three incidents further than the fault's own slowdown. Each slowdown climbs
+# in over `ramp` minutes and falls away after `end` (world._ramped). The
+# responders declared on the first alert and named services as they suspected them (`named`); the status page posted
+# its components from `posted` to `operational`. Times are December day, hour, minute (UTC, which is Lisbon time in
+# December); `named` and `declared` carry seconds. Post-incident reviews for December were still open at the review.
+DEC_INCIDENTS = [
+    {"id": "I2", "fault": "seat-map", "ops": [("seat-map", "own")], "mult": 1.6, "ramp": (6, 3),
+     "onset": (8, 12, 8), "end": (8, 13, 41), "block": [],
+     "declared": (8, 12, 24, 5), "named": [("partner-gateway", (8, 12, 24, 5)), ("seat-map", (8, 12, 47, 31))],
+     "posts": [("Booking and payments", (8, 12, 29), (8, 13, 49))], "sev": "SEV3"},
+    {"id": "I6", "fault": "partner-gateway", "ops": [("partner-gateway", "seats")], "mult": 1.8, "ramp": (5, 2),
+     "onset": (14, 12, 13), "end": (14, 13, 32), "block": [("seat-map", 3.9, (14, 12, 44), 7)],
+     "declared": (14, 12, 31, 48), "named": [("seat-map", (14, 12, 31, 48)), ("partner-gateway", (14, 12, 58, 2))],
+     "posts": [("Booking and payments", (14, 12, 35), (14, 13, 40))], "sev": "SEV3"},
+    {"id": "I1", "fault": "partner-gateway", "ops": [("partner-gateway", "availability")], "mult": 3.7, "ramp": (9, 3),
+     "onset": (15, 18, 56), "end": (15, 23, 53), "block": [("journey-search", 1.25, (15, 20, 7), 12)],
+     "declared": (15, 19, 41, 14), "named": [("journey-search", (15, 19, 41, 14)), ("partner-gateway", (15, 20, 6, 40)),
+                                            ("fares", (15, 20, 21, 9))],
+     "posts": [("Search", (15, 19, 45), (16, 0, 3))], "sev": "SEV2"},
+    {"id": "I3", "fault": "payments", "ops": [("payments", "authorise")], "mult": 1.8, "ramp": (7, 2),
+     "onset": (17, 20, 33), "end": (17, 22, 6), "block": [("booking", 1.2, (17, 21, 13), 9)],
+     "declared": (17, 20, 49, 22), "named": [("booking", (17, 20, 49, 22)), ("payments", (17, 21, 8, 9)),
+                                            ("notifications", (17, 21, 20, 44))],
+     "posts": [("Booking and payments", (17, 20, 53), (17, 22, 12))], "sev": "SEV2"},
+    {"id": "I4", "fault": "fares", "ops": [("fares", "batch"), ("fares", "quote")], "mult": 3.3, "ramp": (8, 3),
+     "onset": (21, 19, 37), "end": (21, 23, 12), "block": [("journey-search", 4.4, (21, 20, 22), 11),
+                                                          ("booking", 1.15, (21, 20, 41), 8)],
+     "declared": (21, 19, 46, 3), "named": [("journey-search", (21, 19, 46, 3)), ("fares", (21, 20, 4, 37)),
+                                           ("booking", (21, 20, 15, 12))],
+     "posts": [("Search", (21, 19, 50), (21, 23, 18))], "sev": "SEV2"},
+    {"id": "I5", "fault": "notifications", "ops": [("notifications", "verify")], "mult": 3.9, "ramp": (10, 3),
+     "onset": (26, 16, 53), "end": (26, 22, 28), "block": [("accounts", 5.0, (26, 18, 22), 13)],
+     "declared": (26, 18, 1, 51), "named": [("accounts", (26, 18, 1, 51)), ("notifications", (26, 18, 29, 26)),
+                                           ("payments", (26, 18, 42, 10))],
+     "posts": [("Sign-in and accounts", (26, 18, 5), (26, 22, 39))], "sev": "SEV2"},
+    {"id": "I7", "fault": "places", "ops": [("places", "own")], "mult": 1.8, "ramp": (4, 2),
+     "onset": (29, 10, 4), "end": (29, 11, 21), "block": [],
+     "declared": (29, 10, 12, 40), "named": [("places", (29, 10, 12, 40))],
+     "posts": [("Search", (29, 10, 16), (29, 11, 27))], "sev": "SEV3"},
+]
 # autoscaling: (fewest pods, most pods, requests an hour one pod carries before another is added)
 AUTOSCALE = {"journey-search": (4, 12, 5000), "fares": (4, 10, 7000), "places": (4, 14, 10000),
              "seat-map": (3, 8, 1500), "booking": (3, 6, 500), "payments": (3, 6, 600), "tickets": (3, 6, 800),
