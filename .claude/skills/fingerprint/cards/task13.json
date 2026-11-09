@@ -1,0 +1,99 @@
+{
+  "task": "task13",
+  "project": "sulfur",
+  "architecture": "v1",
+  "drawn": "2026-11-09",
+  "slot_note": "author-requested Energy Systems & Utilities build: highly unique, multi-layered deep reasoning interlocked with the domain, hard for frontier models; the reviewer's prompt rules (no method, no input file names, minimal context, no persona)",
+  "domain": "energy-systems-utilities",
+  "subdomain": "grid-reliability-outage-analysis",
+  "client_domain": "energy-systems-utilities",
+  "niche": "a New Zealand consumer-trust-owned lines company choosing the 11 kV feeders its 2027 vegetation catch-up goes to, judged on the sustained customer interruptions the catch-up avoids outside major event days in the 2027-28 regulatory year",
+  "objective": "anomaly-detection",
+  "shape": "01",
+  "decision_type": "ranked_slate_under_cap",
+  "answer_unit": "set_of_items",
+  "answer": "",
+  "answer_source": "",
+  "gap": [
+    "objective",
+    "time"
+  ],
+  "pattern": [
+    "A"
+  ],
+  "generators": [
+    "G14",
+    "G13",
+    "G17"
+  ],
+  "gate_g": "decomposition_attribution",
+  "calibration_form": "none",
+  "stump_strategy": "decomposition_attribution",
+  "decisive_rule_filed": false,
+  "official_decoy": false,
+  "validated_decoy": false,
+  "context_artifact": "published_series",
+  "stump_class": "analytical",
+  "analyst_test": "A strong analyst who cleans the outage records (entries made twice by the call centre and the field crew, planned outages in the same register, cause codes in three spellings, NZST and NZDT times without an offset), removes major event days with the regulator's boundary value and ranks the 11 kV feeders on tree-caused customer interruptions over 2024 to 2026, with the cycle log's years since trim beside them, funds the six highest: the southern hill-country feeders whose 2026 was the windiest in the record and the plantation feeders trimmed in 2024 and 2025; the catch-up's saving lies instead on the northern coastal feeders left longest untrimmed, whose interruptions 2026's calm held down.",
+  "domain_test": "The deciding quantity is the sustained customer interruptions a vegetation catch-up avoids on each 11 kV feeder in the 2027-28 regulatory year outside major event days, which needs each feeder's tree-caused interruption rate per unit of wind exposure (gust-hours at its weather station) split into the corridor base a feeder keeps straight after a cycle trim and the growth since its last trim that a catch-up removes; with another field's nouns the gust-hours, trim cycles, protective devices and major event days stop making sense.",
+  "layer2_family": "estimand_identification",
+  "layer2_pattern": "own:worst-feeders-selected-on-a-windy-year-and-a-dense-corridor-base",
+  "layer1": [
+    "outage records entered twice by the call centre and the field crew",
+    "planned outages in the same register as faults",
+    "cause codes in three spellings across a coding change",
+    "interruption times in NZST and NZDT with no offset recorded",
+    "customers interrupted counted at the protective device",
+    "weather station hours missing, one station reporting gusts in knots",
+    "vegetation jobs closed in the log weeks after the crew finished",
+    "feeders renamed at a zone substation rebuild"
+  ],
+  "stakeholder_role": "the lines company's network general manager, who takes the 2027 vegetation catch-up to the board",
+  "role_family": "operations_director",
+  "scoring_unit": "other",
+  "spine": {
+    "file": "outage records 2022 to 2026",
+    "rows": 0,
+    "entity": "one interruption at one protective device",
+    "grain": "interruption x device",
+    "source": "constructed (a fictional New Zealand lines company's outage management system, seeded world in task13/generator)"
+  },
+  "forum": "board_of_directors",
+  "forcing_event": "statutory_or_regulatory_filing",
+  "org_family": "cooperative_or_member_body",
+  "world": {
+    "geography": "New Zealand (lower North Island: a fictional lines company's coast, river plains and hill country)",
+    "currency": "NZD",
+    "org_type": "a consumer-trust-owned electricity distribution business (lines company) running 48 11 kV feeders",
+    "invented_names": [
+      "Kotuku Networks",
+      "Kotuku Electricity Consumer Trust"
+    ],
+    "people": [
+      "Tania Foley",
+      "Wayne Ward",
+      "Hoani Marshall",
+      "Kathryn Carter",
+      "Sean Chapman",
+      "Maria Hodson"
+    ]
+  },
+  "deliverables": [
+    "vegetation_catchup_2027_feeders.csv",
+    "vegetation_catchup_2027_board_note.docx"
+  ],
+  "opening_move": "question-first",
+  "question_form": "which",
+  "driver": "The decisive quantity is what restoring a unit's condition removes from its next-period event count, which is only the part of its event rate that has grown since the condition was last restored, per unit of an exposure that drives every event; the latest counts mix that growth with each unit's own base and with an exposure that moved in opposite directions across areas, so the units that look worst were selected on a high-exposure year or on a high base the restoration cannot touch, and the units with the most to gain look ordinary.",
+  "driver_concrete": "Each Kotuku feeder's tree-caused sustained interruptions scale with the gust-hours at its weather station and with the growth of its corridor since its last cycle trim; 2026 was calm on the northern coast, where the feeders left longest untrimmed sit, and the windiest year in the record in the southern hill country, where the plantation feeders trimmed in 2024 and 2025 carry a high base, so ranking on 2026 or on 2024 to 2026 interruptions funds southern feeders while the catch-up's saving lies on the northern ones.",
+  "stump": "A competent solver removes major event days, ranks feeders on tree-caused customer interruptions over 2024 to 2026 and funds the six highest, the southern windy and plantation feeders; one who normalises for wind still funds the dense plantation feeders, whose interruptions are the corridor base a catch-up cannot remove.",
+  "deep_chain": "(1) each feeder's tree-caused interruptions move with the gust-hours at its station, which fell in the north and rose in the south in 2026, so counts are read per unit of wind exposure; (2) a feeder's rate per gust-hour is its corridor's base, kept after a trim, times the growth since its last cycle trim, and only the growth is what a catch-up removes; (3) the growth with years since trim is read across feeders and years and the base per feeder; (4) the 2027-28 saving is each feeder's growth projected to the regulatory year at its station's long-run gust-hours, times its customers per tree interruption; (5) the six largest savings.",
+  "judgment": "two statistical judgments: an exposure judgment (counts normalised by each station's gust-hours, not by storm counts or calendar years, because the year's wind differed by area) and a decomposition judgment (each feeder's normalised rate split into a corridor base and a growth since its last trim, fitted across feeders and years, because only the growth is avoidable); the asks add the projection to 2027-28 and each feeder's customers per tree interruption.",
+  "one_fact_test": "The likeliest hint, 'normalise the tree outages for wind', leaves the solver ranking on rate per gust-hour, which funds the plantation feeders trimmed in 2024 and 2025 whose high rate is the base a catch-up cannot remove; the hint 'the catch-up removes only the growth since the last trim', without the wind, reads that growth off counts the calm north holds down; no single sentence does both.",
+  "strategy_label": "WORKS IN FORM",
+  "mechanism_source": "design_note",
+  "differentiation": {},
+  "lineage": [],
+  "notes": "Grid reliability is the one energy task type never drawn, and anomaly detection is one of the two objectives it serves. Axes against the last three live cards (task7, task2, task12): strategy decomposition_attribution (causal_design, composition_mix and population_selection are theirs), context artifact published_series (the met service station record the golden reads for exposure), forum board_of_directors, forcing event statutory_or_regulatory_filing (the 2027 asset management plan a New Zealand lines company must disclose before 1 April, which carries the vegetation programme; budget_or_appropriation was task7's), org family cooperative_or_member_body (a consumer-trust-owned lines company, which is what most New Zealand lines companies are). Deliverables csv and docx, away from the docx and xlsx set the last build used.",
+  "registered": "2026-11-09T05:10:25Z"
+}
