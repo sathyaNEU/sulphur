@@ -280,12 +280,24 @@ def _producer(b, name):
     offs = [int(o) for o in re.findall(rb"^(\d{10}) \d{5} n", b[x:], re.M)]
     assert max(offs) < m.start(1), "an object after the info dictionary"
     b = b[:m.start(1)] + new + b[m.end(1):]
-    # newer Writer releases repeat the Producer in the XMP stream: the release token is set at equal length there
-    xp = re.search(rb"<pdf:Producer>LibreOffice ([0-9.]+)", b)
+    # newer Writer releases repeat the Producer in the XMP packet: it is set to the same name there, the packet's own
+    # whitespace padding (before <?xpacket end) taking up the difference, so the stream keeps its length and every
+    # offset holds whatever the release token's length
+    xp = re.search(rb"<pdf:Producer>([^<]*)</pdf:Producer>", b)
     if xp:
-        tok = re.search(r"LibreOffice ([0-9.]+)", name).group(1).encode()
-        assert len(tok) == len(xp.group(1)), "producer release %r must match the export's %r" % (tok, xp.group(1))
-        b = b[:xp.start(1)] + tok + b[xp.end(1):]
+        val = name.encode()
+        d = len(val) - len(xp.group(1))
+        end = b.find(b"<?xpacket end", xp.end())
+        assert end > 0, "no xpacket end after the XMP producer"
+        pad = re.search(rb"[ \n]+$", b[xp.end():end])
+        assert pad and len(pad.group(0)) > d + 2, "the XMP packet's padding cannot absorb the producer"
+        ps = xp.end() + pad.start()
+        padding = b[ps:end]
+        if d > 0:
+            padding = padding[:-d] if padding.endswith(b" " * d) else padding.replace(b" " * d, b"", 1)
+        else:
+            padding = b" " * (-d) + padding
+        b = b[:xp.start(1)] + val + b[xp.end(1):ps] + padding + b[end:]
     s = re.search(rb"startxref\n(\d+)\n%%EOF", b)
     old = int(s.group(1))
     assert old == x + 1, (old, x)
