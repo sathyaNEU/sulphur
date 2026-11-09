@@ -189,6 +189,45 @@ pass that misses a dependency cannot be hand-graded Right downstream of it.
 **The paper is optimistic.** Mark measured paper ceilings of 35 and 39 that came back at 83, and the Sulfur runs
 modelled every mechanism a plot showed. So when unsure, grade the careful column up, not down.
 
+## Part 3b. The depth scale
+
+`guidelines/client/depth-scale-2026-11-09.md` is the client's own reading of 17 real submitted tasks on five levels:
+**1 lookup or rule-following** and **2 one-thing flip** are sent back; **3 one real method step** is a judgment call
+(about half were kept: kept when the insight is real, needs estimating, runs through the whole dataset, is distinctive
+and holds by a clear margin); **4 layered** (two or three connected judgments, each needing estimation) is the aim;
+**5 difficulty throughout** (many independent judgments, different shortcuts landing on different wrong answers, the
+answer holding across a sweep of variants) is the best. Learn from it; never template it: no build reuses an
+example's setting, chain, trap, detection, fix or deliverable set ("reusing an investigation skeleton is a send-back").
+
+**The level, in the note's `Depth level:` line.** Write down every step where a careful analyst has to choose; for each,
+would a reasonable shortcut change the answer or the key figure? Tell the solver the key insight: if the rest is now
+routine the task is at 1 or 2. If the hard part is something the data really show and it still needs estimating, it
+is 3 or higher. If different shortcuts land on different wrong answers, it is 5: `effort.json`'s `routes` record each
+shortcut's committed answer, and `effort.py` warns when fewer than two distinct wrong answers come out of them.
+
+**Moving a task up a level** (the page's own moves): make the size of an effect, not only its existence, decide; add a
+second independent judgment that also moves the margin, with its own checkable figure; widen the margin so no single
+adjustment flips the call alone; show in the golden how each later step works from the earlier figures (a routes
+table of each shortcut's figure beside the golden's) so careful partial work earns credit; spread the work over
+different analysis types, not one investigation template.
+
+**What the reviewers marked weak even at levels 4 and 5**, each a design or generator fix before the pack is cut:
+- constructed data, noted on every generated example: the data behave like the real thing throughout
+  (`dataset-generation` §2), and public data used as is is preferred where it fits;
+- a built-in hidden factor even when it runs everywhere (the robbery surge at the start of the patrols);
+- a generator setting visible in the data: a clean step at a round 60 minutes, a pattern too clean (one unit in every
+  past launch); effects ramp, start at uneven times and carry noise;
+- an idea hinted by a document (a legend's general warning, a comparability rule pointing at the break);
+- a call that is easy once the central idea is seen, or a margin so thin the range nearly reaches the line;
+- a figure that is the midpoint of two very different designs; deliverables so heavy the work sits away from the
+  deciding step; a prompt that is hard to read.
+
+**What they marked good:** real data with real export quirks; an insight from the field's own reasoning (the layout,
+the physics, the survey design), then quantified and cross-checked against independent evidence; an AND ("two
+independent method corrections are both needed; either one alone stays under 4.0"); different shortcuts naming
+different wrong answers; a routes sheet showing each shortcut's result; a reference solution that sweeps reasonable
+variants and holds; follow-up asks that use the completed intermediate result rather than read it.
+
 ## Part 4. The domain, used
 
 The results are quantities the assigned field estimates, models or tests, worked the way its task types work them

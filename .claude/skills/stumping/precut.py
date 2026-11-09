@@ -776,6 +776,12 @@ def check_throughout(task_dir, note_text, secs, dupes):
     if tt:
         ok, detail = task_type_serves(task, tt)
         row("task type serves the objective", ok, detail, warn=ok is None)
+    dl = labelled(dr, "Depth level")
+    lvl = re.match(r"\s*([1-5])\b", dl or "")
+    n_ = int(lvl.group(1)) if lvl else 0
+    row("depth level 4 or 5", n_ >= 4, ("level %d (guidelines/client/depth-scale-2026-11-09.md)" % n_) if n_ else
+        "no Depth level line opening with a level from 1 to 5 (the client's depth scale; aim at 4 or 5)",
+        warn=not dl or n_ == 3)
     sl = labelled(dr, "Strategy label")
     if sl:
         dead = re.search(r"does not work", sl, re.I)

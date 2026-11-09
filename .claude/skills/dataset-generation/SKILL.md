@@ -67,6 +67,10 @@ with many genuine patterns and noise, not one effect added for the solver to fin
    would put it there; `checks.py` asserts each factor's footprint outside the deciding units (the house rule in
    `stumping` 2.2).
 5. **Real breadth where it is natural.** Many runs, units, series or files, so deciding what to look at is work.
+6. **No generator setting in sight.** Effects ramp rather than step, start and end at uneven times, carry noise and vary
+   by unit; no response is a clean step at a round value and no pattern repeats exactly across past cases. The client's
+   reviewers marked "a clean step at a round 60 minutes, which reads like a generator setting" and "one unit in every
+   past launch" as weak on otherwise strong tasks (`guidelines/client/depth-scale-2026-11-09.md`).
 
 **Blocking:** never fabricate, corrupt, pad or truncate to make difficulty; never ship a long generated PDF, DOCX or
 PPTX (constructed documents are two to four pages of operational content); AI may write transforms and simulators,

@@ -26,6 +26,7 @@ effort.json:
                 "passes": {"quick": 5770, "careful": {"value": 11800, "grade": "partly", "why": "..."},
                            "thorough": 12984}}, ...],
    "hints": [{"sentence": "the station gust records are not stationary", "rescues": ["R2"]}],
+   "routes": [{"name": "the golden", "answer": [...], "golden": true}, {"name": "<a shortcut>", "answer": [...]}],
    "weights": {"recommendation": 14, "components": 24, "asks": 55, "instruction": 7}}
 
 Every result names its `figure`, the generator/figures.json key the answer blocks state it from, and the golden
@@ -35,8 +36,9 @@ unless `independent` names the input that lets the result be graded on its own. 
 end to end through the pass's own upstream figures is a measurement and stands as computed.
 
 A value is graded against the golden: a number inside `band` is Right, inside `partly` Partly; a list is Right when
-it equals the golden (as a set, or in order with "ordered": true), Partly when the two share half or more; a string
-must match. A pass may carry its own grade with a `why`. Weights default to the measured Mark split (the call and
+it equals the golden (as a set, or in order with "ordered": true), Partly when the two share half or more; a table
+(a dict of cells, each with an optional band in `bands`) is Right when every cell is inside its band, Partly when at
+least `partly_share` of them are (default a half); a string must match. A pass may carry its own grade with a `why`. Weights default to the measured Mark split (the call and
 the components 38, the asks 55, instruction-following 7 earned by every pass).
 
 Exit status: 0 the effort test holds, 1 a FAIL, 2 no effort.json.
@@ -64,7 +66,8 @@ def resolve(arg):
 def grade(entry, res):
     """(grade, value, why) for one pass entry against one result."""
     why = ""
-    if isinstance(entry, dict):
+    wrapper = isinstance(entry, dict) and entry and set(entry) <= {"value", "grade", "why"}
+    if wrapper:
         if entry.get("grade"):
             g = entry["grade"].lower()
             if g not in SCORE:
@@ -76,6 +79,22 @@ def grade(entry, res):
     gold, v = res.get("golden"), entry
     if v is None:
         return "missed", v, "no value filed"
+    if isinstance(gold, dict) and isinstance(v, dict):
+        # a table of cells (ten SLIs, twenty incident-minute cells): each cell inside its band, or equal
+        bands = res.get("bands") or {}
+        ok = 0
+        for cell, gv in gold.items():
+            pv = v.get(cell)
+            b = bands.get(cell)
+            if b is not None and isinstance(pv, (int, float)):
+                ok += b[0] <= pv <= b[1]
+            else:
+                ok += same_value(pv, gv) if pv is not None else 0
+        share = ok / float(len(gold) or 1)
+        why = "%d of %d cells" % (ok, len(gold))
+        if share >= 0.999:
+            return "right", v, why
+        return ("partly" if share >= res.get("partly_share", 0.5) else "missed"), v, why
     if isinstance(gold, (int, float)) and isinstance(v, (int, float)):
         band, partly = res.get("band"), res.get("partly")
         if band and band[0] <= v <= band[1]:
@@ -97,6 +116,8 @@ def grade(entry, res):
 
 
 def same_value(a, b):
+    if isinstance(a, dict) and isinstance(b, dict):
+        return set(a) == set(b) and all(same_value(a[k], b[k]) for k in a)
     if isinstance(a, (int, float)) and isinstance(b, (int, float)):
         return abs(a - b) <= 1e-9 * max(1.0, abs(a))
     if isinstance(a, list) and isinstance(b, list):
@@ -157,7 +178,7 @@ def measure(task_dir):
         line = by_id[r["id"]]
         for p in PASSES:
             entry = r["passes"].get(p)
-            is_hand = isinstance(entry, dict) and entry.get("grade")
+            is_hand = isinstance(entry, dict) and set(entry) <= {"value", "grade", "why"} and entry.get("grade")
             hand += 1 if is_hand else 0
             if not is_hand or line[p][0] != "right" or (r.get("independent") or "").strip():
                 continue
@@ -245,6 +266,15 @@ def main(argv):
     else:
         row("largest single hint recorded", False, "no `hints` in effort.json: name the most useful single sentence "
             "and the results it rescues")
+    E = json.load(open(os.path.join(task_dir, "generator", "effort.json")))
+    routes = E.get("routes") or []
+    if routes:
+        gold = next((r for r in routes if r.get("golden")), None)
+        wrong = {json.dumps(r["answer"], sort_keys=True) for r in routes if not r.get("golden") and
+                 (gold is None or json.dumps(r["answer"], sort_keys=True) != json.dumps(gold["answer"], sort_keys=True))}
+        row("different shortcuts land on different wrong answers", len(wrong) >= 2,
+            "%d distinct wrong answers over %d shortcuts (the depth scale's level-5 mark)" % (len(wrong), len(routes) - 1),
+            warn=True)
     if "--check-note" in argv:
         paper, pe = note_table(task_dir)
         if paper is None:

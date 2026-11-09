@@ -41,6 +41,8 @@ Pinned: <each result's rivals, run on the clean truth, landing inside its band o
 Run forecast: <where each run is expected to lose points: the result ids and the class at each (method shortcut,
   unfinished chain, first story, narrow look, dismissed own evidence, self-confirming check)>
 Strategy label: <the strategy's label in references/sulfur-strategies.md>
+Depth level: <4 or 5 on the client's depth scale (guidelines/client/depth-scale-2026-11-09.md): the independent
+  judgments counted, and the different wrong answers the shortcuts land on>
 Lesson: <what a model learns by getting every result right, and why no build on file already teaches it>
 
 ## Results chain

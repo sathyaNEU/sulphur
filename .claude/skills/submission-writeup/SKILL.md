@@ -124,6 +124,10 @@ standard domain knowledge, naming each rival method and the fact that rules it o
 - **Prefer code-produced artifacts** (a library chart, a script-written workbook, an emitted CSV); a chart in a text
   deliverable still comes from the script.
 - **Nothing extra**: no answer to an ask the prompt did not make, no AI disclaimer, no placeholder.
+- **Show the routes where the deliverable allows**: a short table in the golden of what each tempting shortcut gives
+  beside the golden's figure (the client's reviewers praised "a routes sheet shows each shortcut's result, so the
+  reasoning can be checked end to end"), so careful partial work earns visible credit; inside a requested file, never
+  as an extra one.
 
 ## Rejection causes
 

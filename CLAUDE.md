@@ -75,6 +75,12 @@ answer):
 6. **Single-fact surface stump**: one sentence of help makes the task routine.
 7. **Unpinned ambiguity**: two defensible readings or methods give different answers on any result.
 
+**The depth scale** (`guidelines/client/depth-scale-2026-11-09.md`, the client's reading of 17 real submitted tasks):
+levels 1 and 2 are sent back, level 3 (one real method step) is a judgment call kept about half the time, levels 4
+(two or three connected judgments) and 5 (many independent judgments, different shortcuts landing on different wrong
+answers) are the target. Every build names its level in the note and aims at 4 or 5. Learn from the examples, never
+template them.
+
 **Thinner, not banned.** A legitimate method choice that carries most of the score, with nothing planted, is a
 valid task but a thin one; the client asks for the results around that step. We build the results around it.
 
