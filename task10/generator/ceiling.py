@@ -1,18 +1,24 @@
-"""task10 architecture 5: the ceiling, run as code on the cut pack (supplemental-stumping Part 5): two rows scored on
-every ask figure.
+"""task10 architecture 5: the ceiling, run as code on the cut pack (supplemental-stumping Part 5), every ask scored.
 
-Shallow run: the default path (every mess item cleaned, every filed rule read): each zone's event-window fall at its
-primary against a weather-adjusted baseline, carried to the 2027/28 contracts at its average delivery per MW scheduled.
-Landed run (cracker): the call taken (each zone's fall netted of its linked primary's rise), but the provider's delivery
-averaged over the event days rather than read at the design condition, so every delivery and credit sits high.
-Each ask figure is a keep when it equals the golden at the prompt's rounding.
+Rows, each a complete route with every mess item cleaned and every filed rule read:
+  shallow       the default path: each zone's event-window fall at its primary against a weather-adjusted baseline,
+                carried to the 2027/28 contracts at its average delivery per MW scheduled
+  zone fall     the off-call route the platform measured (run 2): the zone's fall regressed on temperature and read at
+                each day assessed
+  cracker       the landed run that takes the deep step and the design day (both platform runs read minus 3.0 C) but
+                not the asks' own second judgment: the design day's credit carried to the colder working weekdays
+  cracker (avg) the design's first landed row: the fall netted of the linked rise, averaged over the event days
+  full includer every judgment taken (the golden's own route): the worst honest landed row
+Each figure is a keep when it equals the golden at the prompt's rounding; each Supplementary Questions item is a keep
+only when every figure it states is. Scores are on the house split (call and components 38, instruction 7, asks 55).
 
-    python3 ceiling.py [target]     prints the sheet, the shallow keep, the pair ceiling and the pack digest
+    python3 ceiling.py [target]     prints the sheet, the shallow keep, the pair ceilings and the pack digest
 """
-import copy
 import hashlib
 import os
 import sys
+
+import numpy as np
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
@@ -20,25 +26,40 @@ import estim as E   # noqa: E402
 import parse as PA  # noqa: E402
 
 
-def credit(G, delivery):
-    G = copy.deepcopy(G)
+def route(G, X, delivery, before=None):
+    """The golden-shaped result of a route: delivery(z, T) per MW scheduled at the design day and the colder days."""
+    zones = []
     for z in G["zones"]:
-        z["delivery"] = delivery(z)
-        z["credited"] = z["delivery"] * z["mw28"]
-        z["after"] = z["before"] - z["credited"]
-        z["over"] = z["after"] > z["firm"]
-    G["commit"] = [z["primary"] for z in G["zones"] if z["over"]]
-    return G
+        r1, r2 = X["rates"][z["code"]]
+        g = (1 + r1 / 100.0) * (1 + r2 / 100.0)
+        reg = X["growth"].get(z["code"], 0.0)
+        b_at = lambda T, z=z: (z["d26"] + z["slope"] * (max(0.0, E.BASE_T - T) - max(0.0, E.BASE_T - E.T_DESIGN))) * g + reg
+        d = delivery(z, E.T_DESIGN)
+        after = z["before"] - d * z["mw28"]
+        sens = {T: b_at(T) - delivery(z, T) * z["mw28"] > z["firm"] for T in E.SENS_TS}
+        zones.append(dict(primary=z["primary"], delivery=d, credited=d * z["mw28"], after=after, firm=z["firm"],
+                          over=after > z["firm"], over_by=after - z["firm"], sens=sens))
+    return dict(zones=zones, commit=[z["primary"] for z in zones if z["over"]],
+                sens={T: [z["primary"] for z in zones if z["sens"][T]] for T in E.SENS_TS})
 
 
-def cells(G):
-    out = {"the primaries to reinforce": "+".join(G["commit"]) or "none"}
-    for z in G["zones"]:
+def cells(R, golden_commit):
+    """Every figure the Supplementary Questions state, keyed by the item that states it."""
+    out = {}
+    call = "+".join(R["commit"]) or "none"
+    for z in R["zones"]:
         p = z["primary"]
-        out["%s delivery per MW" % p] = "%.1f" % z["delivery"]
-        out["%s credited MW" % p] = "%d" % round(z["credited"])
-        out["%s after flexibility MW" % p] = "%d" % round(z["after"])
-        out["%s over firm" % p] = "Yes" if z["over"] else "No"
+        out[(1, "%s delivery per MW" % p)] = "%.1f" % z["delivery"]
+        out[(2, "%s credited MW" % p)] = "%d" % round(z["credited"])
+        out[(3, "%s after flexibility MW" % p)] = "%d" % round(z["after"])
+    out[(3, "over firm capacity")] = call
+    out[(4, "chart: after above firm at")] = call
+    byp = {z["primary"]: z for z in R["zones"]}
+    for p in golden_commit:
+        out[(5, "%s exceeds firm by" % p)] = ("%d" % round(byp[p]["over_by"])) if byp[p]["over"] else "holds"
+    for T in E.SENS_TS:
+        out[(6, "over firm at %.1f C" % T)] = "+".join(R["sens"][T]) or "none"
+    out[(7, "slides name")] = call
     return out
 
 
@@ -49,28 +70,57 @@ def main(target):
     base = {z["code"]: E.delivery_records(prep, tm, ev, z["code"]) for z in G["zones"]}
     net = {z["code"]: (E.delivery_records(prep, tm, ev, z["code"], partner=z["linked_code"]) if z["linked_code"]
                        else base[z["code"]]) for z in G["zones"]}
-    rows = {"golden": cells(G),
-            "shallow": cells(credit(G, lambda z: E.delivery_at(base[z["code"]], net=False, temperature=False))),
-            "landed": cells(credit(G, lambda z: E.delivery_at(net[z["code"]], temperature=False)))}
-    keep = {"shallow": 0, "landed": 0}
-    print("%-42s %-28s %-24s %-24s" % ("ask figure", "golden", "shallow", "landed (cracker)"))
-    for k, v in rows["golden"].items():
-        out = []
-        for r in ("shallow", "landed"):
-            hit = rows[r][k] == v
-            keep[r] += hit
-            out.append("%s %s" % (rows[r][k][:14], "keep" if hit else "miss"))
-        print("%-42s %-28s %-24s %-24s" % (k, v[:28], out[0], out[1]))
-    n = len(rows["golden"])
-    sk, lk = keep["shallow"] / n, keep["landed"] / n
-    C = 38 + 7 + 55 * lk
-    S = 5 + 7 + 55 * sk
+
+    def fit(recs, netted):
+        y = np.array([((r[3] - r[4]) if netted else r[3]) / r[2] for r in recs])
+        c = np.polyfit(np.array([r[1] for r in recs]), y, 1)
+        return lambda T: float(np.polyval(c, T))
+    fn = {z["code"]: fit(net[z["code"]], True) for z in G["zones"]}
+    fg = {z["code"]: fit(base[z["code"]], False) for z in G["zones"]}
+    rows = {
+        "golden": route(G, X, lambda z, T: fn[z["code"]](T)),
+        "shallow": route(G, X, lambda z, T: E.delivery_at(base[z["code"]], net=False, temperature=False)),
+        "zone fall": route(G, X, lambda z, T: fg[z["code"]](T)),
+        "cracker": route(G, X, lambda z, T: fn[z["code"]](E.T_DESIGN)),
+        "cracker (avg)": route(G, X, lambda z, T: E.delivery_at(net[z["code"]], temperature=False)),
+        "full includer": route(G, X, lambda z, T: fn[z["code"]](T)),
+    }
+    gold = cells(rows["golden"], rows["golden"]["commit"])
+    items = sorted({k[0] for k in gold})
+    score = {}
+    print("%-44s %-22s %-14s %-14s %-14s %-14s %-14s" % ("ask figure", "golden", "shallow", "zone fall", "cracker",
+                                                           "cracker (avg)", "full includer"))
+    for k, v in gold.items():
+        line = "%-44s %-22s" % ("%d %s" % k, v[:22])
+        for r in ("shallow", "zone fall", "cracker", "cracker (avg)", "full includer"):
+            c = cells(rows[r], rows["golden"]["commit"])
+            hit = c[k] == v
+            line += " %-14s" % ("%s %s" % (c[k][:8], "keep" if hit else "miss"))
+        print(line)
+    for r in ("shallow", "zone fall", "cracker", "cracker (avg)", "full includer"):
+        c = cells(rows[r], rows["golden"]["commit"])
+        fig = sum(c[k] == v for k, v in gold.items()) / len(gold)
+        itm = sum(all(c[k] == v for k, v in gold.items() if k[0] == i) for i in items) / len(items)
+        score[r] = (fig, itm)
+    landed = lambda keep: 38 + 7 + 55 * keep
+    shallow = lambda keep: 5 + 7 + 55 * keep
+    pair = lambda a, b, j: (landed(score[a][j]) + shallow(score[b][j])) / 2
     h = hashlib.sha256()
     for f in sorted(os.listdir(target)):
         h.update(open(os.path.join(target, f), "rb").read())
-    print("shallow keep %.1f per cent; landed keep %.1f per cent; C %.1f, S %.1f, pair ceiling %.1f; pack %s"
-          % (100 * sk, 100 * lk, C, S, (C + S) / 2, h.hexdigest()[:16]))
-    return dict(shallow_keep=100 * sk, landed_keep=100 * lk, C=C, S=S, pair=(C + S) / 2, pack=h.hexdigest()[:16])
+    print("\nkeeps (share of figures, share of items):",
+          {r: "%.3f, %.3f" % s for r, s in score.items()})
+    out = dict(shallow_keep=100 * score["shallow"][0], shallow_keep_items=100 * score["shallow"][1],
+               pair=pair("cracker", "shallow", 0), pair_items=pair("cracker", "shallow", 1),
+               pair_avg=pair("cracker (avg)", "shallow", 0),
+               full_vs_zone=pair("full includer", "zone fall", 0), full_vs_zone_items=pair("full includer", "zone fall", 1),
+               cracker_vs_zone=pair("cracker", "zone fall", 0), pack=h.hexdigest()[:16])
+    print("shallow keep %.1f per cent of figures (%.1f of items); pair ceiling %.1f (cracker against the default path, by "
+          "figure; %.1f by item; %.1f with the averaging cracker); the full includer against the measured off-call route "
+          "%.1f by figure, %.1f by item; the cracker against it %.1f; pack %s"
+          % (out["shallow_keep"], out["shallow_keep_items"], out["pair"], out["pair_items"], out["pair_avg"],
+             out["full_vs_zone"], out["full_vs_zone_items"], out["cracker_vs_zone"], out["pack"]))
+    return out
 
 
 if __name__ == "__main__":

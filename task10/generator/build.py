@@ -41,23 +41,42 @@ def rungs(X, G):
         recs = E.delivery_records(prep, tm, ev, code, partner=linked) if linked else E.delivery_records(prep, tm, ev, code)
         avg = E.delivery_at(recs, net=True, temperature=False)
         out[z["primary"]] = dict(did=did, pair=pair, avg_delivery=avg, avg_credited=avg * z["mw28"])
-    return out
+    # the colder working weekday with the design day's credit held (the unfinished chain the write-up names)
+    held = E.golden_from(X, hold_credit=True)
+    hz = {z["primary"]: z for z in held["zones"]}
+    for p in out:
+        out[p]["held_after"] = {"%.1f" % -t: hz[p]["sens"][t]["after"] for t in held["sens_Ts"]}
+    return out, {"%.1f" % -t: held["commit_sens"][t] for t in held["sens_Ts"]}
+
+
+def form_validation(X, G):
+    """winter 2023/24 (no flexibility) checks the correction's form: the linear's largest mean error on its sub-zero
+    working weekdays, and the quadratic's range."""
+    fc = E.form_check(X, G["zones"])
+    return dict(by_zone=fc, linear_bias_max=max(abs(v["linear"]) for v in fc.values()),
+                quad_bias_min=min(v["quadratic"] for v in fc.values()),
+                quad_bias_max=max(v["quadratic"] for v in fc.values()))
 
 
 def figures(X, G, info):
-    rg = rungs(X, G)
+    rg, held_sets = rungs(X, G)
     zones = {}
     for z in G["zones"]:
         zones[z["primary"]] = dict(zone=z["zone"], code=z["code"], provider=z["provider"], mw28=z["mw28"], d26=z["d26"],
                                    before=z["before"], delivery=z["delivery"], credited=z["credited"], after=z["after"],
                                    firm=z["firm"], over=bool(z["over"]), measured=z["measured"], linked=z["linked"],
-                                   linked_rise=z["linked_rise"], n_events=z["n_events"], **rg[z["primary"]])
+                                   linked_rise=z["linked_rise"], n_events=z["n_events"], over_by=z["over_by"],
+                                   sens={"%.1f" % -t: dict(after=v["after"], over=bool(v["over"]), delivery=v["delivery"])
+                                         for t, v in z["sens"].items()}, **rg[z["primary"]])
     ev = X["events"]
     counts = {}
     for z in G["zones"]:
         counts[z["primary"]] = int(((ev["zone"] == z["code"]) & (ev["status"] == "Completed")).sum())
     shallow = [p for p, v in zones.items() if v["before"] - v["measured"] * v["mw28"] > v["firm"]]
     F = dict(call=G["commit"], default_call=shallow, zones=zones, steps=dict(events=counts),
+             sens={"%.1f" % -t: dict(degrees_below_zero=-t, commit=G["commit_sens"][t], held_credit_commit=held_sets["%.1f" % -t])
+                   for t in G["sens_Ts"]},
+             validation=form_validation(X, G),
              pack=dict(scada_rows=info["scada_rows"], event_rows=info["event_rows"], weather_rows=info["weather_rows"]),
              conventions=dict(design_day_degrees_below_zero=-E.T_DESIGN, heating_base_c=E.BASE_T),
              event_temperature_c=dict(coldest_below_zero=-min(r["T"] for r in G["evidence"]),

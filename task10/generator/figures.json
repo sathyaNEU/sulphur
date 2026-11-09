@@ -17,6 +17,34 @@
   "scada_rows": 196201,
   "weather_rows": 13372
  },
+ "sens": {
+  "4.5": {
+   "commit": [
+    "Ashcombe Road",
+    "Fenwick Street",
+    "Hartwell Common"
+   ],
+   "degrees_below_zero": 4.5,
+   "held_credit_commit": [
+    "Ashcombe Road",
+    "Hartwell Common"
+   ]
+  },
+  "6.0": {
+   "commit": [
+    "Ashcombe Road",
+    "Charlecote Way",
+    "Fenwick Street",
+    "Hartwell Common"
+   ],
+   "degrees_below_zero": 6.0,
+   "held_credit_commit": [
+    "Ashcombe Road",
+    "Fenwick Street",
+    "Hartwell Common"
+   ]
+  }
+ },
  "steps": {
   "events": {
    "Ashcombe Road": 90,
@@ -24,6 +52,37 @@
    "Fenwick Street": 82,
    "Hartwell Common": 91
   }
+ },
+ "validation": {
+  "by_zone": {
+   "Ashcombe Road": {
+    "linear": -0.021296,
+    "n_cold": 12,
+    "quadratic": 0.357513,
+    "train_min": 3.341667
+   },
+   "Charlecote Way": {
+    "linear": -0.004836,
+    "n_cold": 12,
+    "quadratic": 0.235739,
+    "train_min": 2.745833
+   },
+   "Fenwick Street": {
+    "linear": 0.168743,
+    "n_cold": 12,
+    "quadratic": 0.348157,
+    "train_min": 2.875
+   },
+   "Hartwell Common": {
+    "linear": 0.015052,
+    "n_cold": 12,
+    "quadratic": 0.225564,
+    "train_min": 2.875
+   }
+  },
+  "linear_bias_max": 0.168743,
+  "quad_bias_max": 0.357513,
+  "quad_bias_min": 0.225564
  },
  "zones": {
   "Ashcombe Road": {
@@ -37,14 +96,31 @@
    "delivery": 0.399594,
    "did": 0.959451,
    "firm": 23.0,
+   "held_after": {
+    "4.5": 27.091571,
+    "6.0": 27.990805
+   },
    "linked": "Tollbrook Lane",
    "linked_rise": 1.383026,
    "measured": 0.862843,
    "mw28": 9.5,
    "n_events": 89,
    "over": true,
+   "over_by": 3.192337,
    "pair": 0.399325,
    "provider": "Corvane Flex Ltd",
+   "sens": {
+    "4.5": {
+     "after": 27.714696,
+     "delivery": 0.334001,
+     "over": true
+    },
+    "6.0": {
+     "after": 29.237055,
+     "delivery": 0.268409,
+     "over": true
+    }
+   },
    "zone": "Ashcombe Road CMZ"
   },
   "Charlecote Way": {
@@ -58,14 +134,31 @@
    "delivery": 0.499759,
    "did": 0.613331,
    "firm": 22.5,
+   "held_after": {
+    "4.5": 21.613704,
+    "6.0": 22.156849
+   },
    "linked": "",
    "linked_rise": 0.022089,
    "measured": 0.613331,
    "mw28": 8.0,
    "n_events": 58,
    "over": false,
+   "over_by": -1.429441,
    "pair": 0.499759,
    "provider": "Quillon Energy Services Ltd",
+   "sens": {
+    "4.5": {
+     "after": 21.999901,
+     "delivery": 0.451485,
+     "over": false
+    },
+    "6.0": {
+     "after": 22.929244,
+     "delivery": 0.40321,
+     "over": true
+    }
+   },
    "zone": "Charlecote Way CMZ"
   },
   "Fenwick Street": {
@@ -79,14 +172,31 @@
    "delivery": 0.477334,
    "did": 0.985479,
    "firm": 30.5,
+   "held_after": {
+    "4.5": 30.297424,
+    "6.0": 31.292692
+   },
    "linked": "Wexley Hill",
    "linked_rise": 1.428554,
    "measured": 0.88754,
    "mw28": 14.0,
    "n_events": 79,
    "over": false,
+   "over_by": -1.197844,
    "pair": 0.476895,
    "provider": "Quillon Energy Services Ltd",
+   "sens": {
+    "4.5": {
+     "after": 31.053819,
+     "delivery": 0.423306,
+     "over": true
+    },
+    "6.0": {
+     "after": 32.805482,
+     "delivery": 0.369278,
+     "over": true
+    }
+   },
    "zone": "Fenwick Street CMZ"
   },
   "Hartwell Common": {
@@ -100,14 +210,31 @@
    "delivery": 0.384747,
    "did": 1.018768,
    "firm": 17.8,
+   "held_after": {
+    "4.5": 20.871937,
+    "6.0": 21.671214
+   },
    "linked": "Kestwick Fields",
    "linked_rise": 0.826039,
    "measured": 0.911618,
    "mw28": 7.5,
    "n_events": 91,
    "over": true,
+   "over_by": 2.272659,
    "pair": 0.383384,
    "provider": "Corvane Flex Ltd",
+   "sens": {
+    "4.5": {
+     "after": 21.397637,
+     "delivery": 0.314654,
+     "over": true
+    },
+    "6.0": {
+     "after": 22.722614,
+     "delivery": 0.24456,
+     "over": true
+    }
+   },
    "zone": "Hartwell Common CMZ"
   }
  }

@@ -1,76 +1,48 @@
 Response 2
-Reviewed 99 resources· 43m
-Recommendation. List the 12 hubs flagged Yes in the 2027 Availability Plan. Their lowest-point forecasts range from 97.58% to 98.65%, below the 99% contractual standard, on the post-renewal asset base of 68 high-power charge points.
-Final answers. Both requested files are saved under `/home/agent/workspace`.
-Each entry below gives the below-standard flag; lowest-point forecast; January-October 2026 charges; delivered energy. Every value appears in the corresponding `hub_code` row of `hub_availability_2027.csv` and in Annex A, Network Return, of `availability_plan_2027.pdf`.
+Reviewed 82 resources· 25m
+Recommendation. Commit reinforcement of Ashcombe Road only for winter 2027/28. After crediting contracted flexibility, its design-day demand is 24.134 MW against 23.000 MW firm capacity, leaving a 1.134 MW shortfall.
+Final Answers. The following results are recorded in `halverton_primary_capacity_2027-28.xlsx`, principally in `Zone Capacity`, with supporting estimates in `Demand Models` and `Flex Models`. Delivery rates are estimated primary-demand reductions per MW scheduled at -3.0 C.
 
-* NM103 Glenfad Shopping Centre: Yes; 98.35%; 3,533 charges; 108.4 MWh.
-* NM104 Ardcree Services: No; 99.30%; 7,733 charges; 238.7 MWh.
-* NM106 Ballyroe Town Park: No; 99.43%; 2,815 charges; 86.8 MWh.
-* NM109 Kilbeg Retail Park: Yes; 97.91%; 1,578 charges; 48.7 MWh.
-* NM112 Carrigvane Services: No; 99.86%; 4,839 charges; 149.4 MWh.
-* NM114 Dromkeen Square: No; 99.68%; 2,413 charges; 74.9 MWh.
-* NM117 Clonlea Leisure Centre: Yes; 97.81%; 2,790 charges; 86.1 MWh.
-* NM118 Shanbally Community Centre: No; 99.58%; 2,180 charges; 68.3 MWh.
-* NM119 Bunacurry Pier: Yes; 97.89%; 3,004 charges; 93.8 MWh.
-* NM121 Tullymore Market Square: Yes; 98.65%; 3,112 charges; 94.5 MWh.
-* NM122 Kilmeedy Church Street: No; 99.42%; 2,332 charges; 72.1 MWh.
-* NM125 Annagh Cross: No; 99.47%; 1,851 charges; 57.3 MWh.
-* NM127 Lismoy Services: No; 99.90%; 4,543 charges; 140.8 MWh.
-* NM129 Corrabeg Business Park: No; 99.53%; 1,232 charges; 37.6 MWh.
-* NM131 Portavaddy Seafront: Yes; 97.63%; 4,899 charges; 149.1 MWh.
-* NM133 Drumtane Services: No; 99.50%; 7,231 charges; 221.4 MWh.
-* NM135 Moyvalley Station: No; 99.31%; 1,285 charges; 39.9 MWh.
-* NM137 Eskerbrook Shopping Centre: No; 99.59%; 5,512 charges; 168.5 MWh.
-* NM138 Ballinkeel Main Street: Yes; 98.31%; 2,681 charges; 82.3 MWh.
-* NM141 Knockvane Services: No; 99.40%; 4,709 charges; 144.9 MWh.
-* NM144 Rossnabeg Harbour: Yes; 97.58%; 2,892 charges; 90.1 MWh.
-* NM146 Rathmoy Station Road: Yes; 98.45%; 1,616 charges; 48.4 MWh.
-* NM148 Gortnaclay Leisure Park: No; 99.74%; 1,312 charges; 40.9 MWh.
-* NM150 Derrylane Park and Ride: Yes; 98.65%; 1,373 charges; 41.4 MWh.
-* NM152 Lisduff Retail Park: No; 99.53%; 3,179 charges; 98.3 MWh.
-* NM155 Carrowkeel Business Park: Yes; 98.30%; 2,859 charges; 88.1 MWh.
-* NM158 Monaleen Services: No; 99.72%; 4,231 charges; 131.5 MWh.
-* NM160 Templederry Green: No; 99.85%; 994 charges; 30.6 MWh.
-* NM162 Cloonfin Crossroads: No; 99.72%; 2,607 charges; 80.5 MWh.
-* NM166 Tobernalt Road: Yes; 97.62%; 2,962 charges; 91.6 MWh.
+* Ashcombe Road CMZ, Corvane Flex Ltd: delivery is 0.6469 MW/MW at 17:30 and 0.6285 MW/MW at 18:00. Using the lower rate, the 9.500 MW award receives 5.971 MW of primary credit. Demand falls from 30.105 MW to 24.134 MW, exceeding 23.000 MW firm capacity by 1.134 MW. Reinforce.
+* Charlecote Way CMZ, Quillon Energy Services Ltd: delivery is 0.4786 MW/MW at 17:30 and 0.4761 MW/MW at 18:00. The 8.000 MW award receives 3.809 MW of credit. Demand falls from 25.025 MW to 21.216 MW, below 22.500 MW firm capacity, leaving 1.284 MW headroom. No capacity reinforcement.
+* Fenwick Street CMZ, Quillon Energy Services Ltd: delivery is 0.7430 MW/MW at 17:30 and 0.7396 MW/MW at 18:00. The 14.000 MW award receives 10.355 MW of credit. Demand falls from 36.014 MW to 25.660 MW, below 30.500 MW firm capacity, leaving 4.840 MW headroom. No capacity reinforcement.
+* Hartwell Common CMZ, Corvane Flex Ltd: delivery is 0.7322 MW/MW at 17:30 and 0.7114 MW/MW at 18:00. The 7.500 MW award receives 5.336 MW of credit. Demand falls from 22.915 MW to 17.579 MW, below 17.800 MW firm capacity, leaving 0.221 MW headroom. No capacity reinforcement under the specified rule, but delivery assurance is material.
 
-Network total: 94,297 charges and 2,905.0 MWh. The listed hubs account for 33,299 charges and 1,022.5 MWh. Individually rounded hub energy values sum to 2,904.9 MWh; the network total is rounded from the underlying meter readings, not from those displayed values.
-The covering letter names all 12 Yes hubs on page 1. Page 2, Remedial Commitments, proposes controlled power cycles at intervals no longer than 60 days, the first 2027 cycle no later than 29 January, manufacturer investigation, component-specific repairs and spares, and a 24-hour restoration target. It calls for plan submission by 30 November 2026 and maintenance notices at least seven days before each window. These proposed improvements are not credited in the baseline forecasts.
-Step-by-step process.
+The before-flexibility, after-flexibility and firm-capacity chart is on the workbook’s `Overview` sheet and slide 2 of `capex_review_2027-28.pptx`. Slides 1 and 7 explicitly identify Ashcombe Road as the reinforcement commitment; slide 6 presents Hartwell’s sensitivity.
+Step-by-Step Process.
 
-1. Established the contractual population and future assets. Read `concession_agreement_schedules_4_and_6.pdf`, `asset_renewal_programme_2027.pdf` and `charge_point_register.xlsx` from `input-assets/156.zip`. The standard applies separately to each point rated at least 150 kW. The register contains 58 high-power points and 30 RC50s across 30 hubs. The programme removes 12 RC50s, adds 10 HX150s, and retains 18 RC50s, producing the assessed population of 68 high-power points.
-2. Inspected the operational sources and excluded irrelevant evidence. Used `connector_status_history_2023-2026.csv` for recorded states, `planned_maintenance_schedule.xlsx` for maintenance windows, `supply_interruptions_2023-2026.csv` for DSO exclusions, `work_orders_2023-2026.xlsx` for physical interventions, and `charging_sessions_2026.csv` for usage. Inspected `customer_survey_2026.xlsx`, containing 1,262 responses, and `tariff_schedule_2026.pdf`, but did not use them to calculate contractual availability or metered energy. Their purposes and exclusions are documented in Annex B, Source Record.
-3. Reconstructed continuous asset histories. Mapped 176 old/current status IDs to 88 physical assets, preserving continuity across the June 2025 renaming. There were no unmatched IDs or duplicate status rows. The 26,382 status records, after collapsing 486 repeated consecutive states, formed 11,555 continuous unavailable episodes, including 6,712 at high-power points. All high-power points were Available at the observation cutoff; the six remaining fault states belonged to RC50s.
-4. Applied the contract’s interval arithmetic. Calculated `A = (T - E - D) / (T - E)`, using Irish-time boundaries and commissioning dates. Exclusions were the union of qualifying maintenance and DSO intervals, each extended by 30 minutes, clipped to service periods. Used 324 historical maintenance windows and 164 DSO interruptions. Accepted historical notification flags; all 72 dated 2026 notices met the seven-day requirement. Three points commissioned during 2023 received reduced historical exposure. An independent reconstruction matched all 232 point-year records.
-5. Prepared the usage return. Removed 212 exact duplicates from 111,797 session rows, leaving 111,585 distinct sessions. Excluded 13,478 low-power sessions, then 3,810 zero-energy high-power sessions, leaving 94,297 qualifying charges. No starts fell outside the Irish-time reporting window; no negative energy, negative duration or missing required meter/time fields were found. Retained 16,836 qualifying charges without an ID tag, because the contract does not require one. Summed full meter differences for each qualifying charge: 2,905,041,835 Wh, reported as 2,905.0 MWh. All 30 hub aggregates passed an independent integer-Wh reconciliation.
-6. Separated failure mechanisms from maintenance labels. Harmonized 3,546 work orders across the contractors, with no unmatched nonblank asset or hub keys. Ten jobs lacked attendance timestamps: five HX150 recoveries before attendance and five unresolved RC50 alarms; the latter also lacked closure. Two RC50 attendances on 1 November were retained as source records but did not create observed resets before the cutoff. Matching physical work to status interruptions identified 1,203 RC50 jobs across 25 hubs with synchronized high-power interruptions. In contrast, 285 RC50 visits were visual-only. HX150 evidence distinguished 100 attended controller-hang recoveries, five recoveries during shared interventions, 88 component repairs and 18 communications-hardware repairs.
-7. Modelled time since physical reset rather than simply extrapolating historical percentages. A censored Weibull model used 3,467 cycles and 97 known-age failures, with shape 13.550620 and scale 93.466736 days. Those failures occurred 76.36-105.48 days after an evidenced reset, with mean 88.22 days. Initial intervals with unknown powered-on age were excluded; intervals ending at another reset or the observation boundary were right-censored. The attended restart episodes supplied an empirical restoration-duration distribution with mean 2.153666 days.
-8. Forecast the approved asset base. Simulated 10,000 paths per point, preserving observed reset ages, applying approved renewal dates and the supplied maintenance calendar, and modelling component failures, supply interruptions and retained RC50 interventions. Ordinary short back-office losses remained counted downtime but did not reset the controller clock. A hub was flagged when any individual point’s mean availability fell below 99%. This produced the 12-hub list; existing points alone produced the same list.
-9. Checked predictive performance and sensitivity. A model fitted through 2025 using 2,703 cycles and 73 failures predicted 26.5 controller-hang incidents for January-October 2026, against 24 observed, with a 95% conditional prediction interval of 22-31. This check used the physical interventions that actually occurred. Seven one-at-a-time sensitivity tests all retained 12 listed hubs with no changed flags: repair durations 20% shorter or longer, runtime scale five days longer, no maintenance exclusions, fleet-pooled component assumptions, and doubled or halved DSO frequency. Nine targeted event/overlap tests passed. The largest Monte Carlo standard error was 0.012 percentage points; this measures simulation precision, not total forecast uncertainty.
-10. Verified the artifacts. Confirmed the CSV has 30 unique hub rows, whole-number charges, one-decimal MWh, 12 Yes flags, and a total of 68 future high-power points. Opened and inspected the five-page PDF, reconciled its hub values to the CSV, checked page boundaries and recommendation consistency, and removed the temporary analysis scripts.
+1. Read all source files in `input-assets/t10.zip`. The planning guideline supplied the design condition, growth calculation, firm capacities and decision rule. The contract notice supplied the zones, providers, awards and operating terms. The demand, weather and event CSVs supplied the estimation evidence. The primary register supplied SCADA aliases and DFES growth; the feeder workbook mapped connections; the growth register supplied new demand. I also reviewed the interruption, transformer-condition and DUoS files, but did not use them as physical capacity or flexibility credit. Their roles and exclusions are documented in `Sources`.
+2. Cleaned and reconciled demand records. From 196,201 records, I excluded 931 quality-`S` and 31 quality-`B` records, then removed 441 identical good-quality duplicate keys, retaining 194,798 unique good observations. All SCADA aliases mapped successfully; no conflicting good duplicates or missing retained MW values remained. Interval-ending timestamps were respected, including assigning an interval ending at midnight to the preceding operating day.
+3. Constructed daily GMT temperatures. From 13,372 weather records, retaining the highest hourly version removed 310 superseded records and left 13,062 readings. Of 547 observed days, 488 had all hourly readings; 52 lacked one hour and 7 lacked two. The main analysis excluded those 59 incomplete days rather than imputing temperatures. An interpolation sensitivity was assessed separately.
+4. Resolved dispatch revisions. The 372 event records reduced to 336 final instructions after removing 36 superseded revisions: 321 Completed schedules and 15 Cancelled instructions. Completed instructions use their final scheduled MW; cancellations receive zero exposure. Six provider labels were reconciled to the two contractual names. There were no duplicate final primary-date schedules.
+5. Screened connection growth. All 58 growth records mapped to primaries, including 5 legacy feeder references. I included 28 connections, comprising 20 Accepted and 8 Energised records, with effective energisation dates from 1 April 2026 through 31 October 2027. Exclusions were 2 superseded, 8 withdrawn, 3 quoted, 14 before-window and 3 after-window records. Included demand totals 10.170 MW across the group and 5.130 MW in the four CMZs. Actual energisation dates take precedence over planned dates; kW were converted to MW. Two non-data DFES rows were excluded.
+6. Forecast no-flex design demand. The calendar filter retained 298 eligible working days across the historical winters, of which 260 had complete weather. For the prescribed 2025/26 baseline, I excluded completed-schedule days and required complete demand and weather records. In Ashcombe, Charlecote, Fenwick and Hartwell order, this retained 41, 55, 44 and 42 days. Linear daily-maximum demand models evaluated at -3.0 C produced 26.621, 23.601, 33.855 and 20.881 MW. I compounded the two DFES growth rates, then added qualifying connections in full. The filtering counts, fitted models and forecast components are retained in the workbook.
+7. Estimated design-day flexibility. Separate models for each primary and target half-hour controlled for pre-service demand, temperature, calendar effects and screened contemporaneous Dunmore demand. They allowed baseline weather relationships and delivery performance to differ by winter. The latest winter’s estimated response was carried forward, rather than assuming unchanged performance across winters. Credit uses the lower target-slot estimate multiplied by the winter award. Conditional 95% confidence intervals for the binding 18:00 delivery rates are 0.5903-0.6667, 0.4408-0.5115, 0.7135-0.7657 and 0.6617-0.7611 MW/MW, respectively. These are parameter intervals, not delivery guarantees.
+8. Validated the analysis and artifacts. Held-out-week flexibility-model RMSE ranged from 0.098 to 0.166 MW. Additional validation held out seven untreated cold days. Sensitivities covered alternative controls, weather treatment, cancellations, recent-only performance, demand-model form and target-slot averaging. Independent review reproduced the main models and sensitivity calculations without finding a decision-changing error. Both deliverables passed package/XML checks; the workbook has no spreadsheet error cells, and the slides passed estimated text-fit checks. Native Office rendering was not performed.
 
-Assumptions and judgment calls.
+Assumptions and Judgment Calls.
 
-* Forecast meaning: “Below standard” means at least one point’s expected availability is below 99%. It is not a hub-average test, a breach-probability cutoff or a guarantee of the eventual outcome.
-* Renewal delivery: Approved works and commissioning dates are assumed to occur as scheduled. Delays require a reforecast.
-* Future maintenance: The baseline assumes timely notification and effective physical resets. All 84 planned 2027 visits currently lack notification dates. Removing maintenance exclusion eligibility did not change the list.
-* Reliability transfer: New HX150s use same-hub peers for component behaviour and the pooled reset-sensitive failure mechanism. Existing points alone yield the same recommendation, so the decision does not depend on new units inheriting that failure mode.
-* Sparse histories: Zero observed component failures produce a zero empirical baseline rate, not proof of zero future risk. The fleet-pooled sensitivity retained the same list.
-* Continuing operating conditions: Historical repair response, DSO patterns and reset effectiveness are assumed to remain informative. The sensitivity tests are individual tests, not guarantees under combined changes. A validated firmware remedy or materially changed recovery/reset arrangements could change the recommendation.
+* The governing decision is a point-estimate capacity test. Hartwell’s main case passes, but the recent-only model gives 18.012 MW and the combined upper-demand/lower-relief confidence-endpoint stress gives 18.070 MW, both above 17.800 MW firm capacity. These contrary results are prominent in `Sensitivity`, `Read Me` and slide 6. They justify delivery assurance, but do not replace the guideline’s stated decision rule.
+* Delivery is estimated at the primary, not measured on provider assets. Provider settlement-meter data was not supplied. The models estimate net primary relief associated with scheduling, conditional on the counterfactual assumptions.
+* Expanded awards scale linearly. Historical maximum schedules were 6.500, 4.500, 6.500 and 3.000 MW, all below the corresponding future awards. Applying estimated per-MW relief to the awards follows the guideline, but expanded-portfolio performance is unobserved.
+* Baseline demand requires temperature extrapolation. The prescribed unscheduled 2025/26 samples do not reach the design temperature. Quadratic and weekday-adjusted alternatives did not change the main reinforcement list.
+* The lower target-slot rate protects both specified half-hours. Using their mean also leaves Ashcombe as the only main-case reinforcement. Final cancellations are treated as unscheduled; excluding cancelled days does not change that decision.
+* Scope is capacity reinforcement in the four contracted CMZs. Asset-health replacement and reinforcement elsewhere in the primary group require separate decisions.
 
-Alternatives rejected.
+Alternatives Rejected.
 
-* Use historical availability alone. This would list only five hubs, missing the seven renewal hubs exposed when incidental RC50-related resets disappear.
-* Assume removing RC50s can only improve availability. It removes their interruption cost, but also removes evidenced resets that suppress HX150 controller hangs.
-* Treat every RC50 maintenance visit as a reset or exclusion. The records include 285 visual-only visits; contractual exclusions depend on eligible notified windows, not a contractor’s “planned” label.
-* Treat all Offline events as harmless communications loss. Work orders document frozen screens, failed starts and failed remote resets followed by recovery after local power cycling. Communications-hardware repairs were analysed separately.
-* List every renewal hub. NM104, NM112 and NM127 retain six planned site visits. NM125 and NM162 receive no replacement unit and have substantial recurring supply-interruption exposure. Their forecasts remain above 99%.
-* Assume resets solve every listed hub’s problem. The 88 component repairs and 18 communications-hardware repairs are evidence against a universal controller-only explanation. The letter therefore includes component-specific actions alongside reset prevention.
+* Full nameplate flexibility credit: this would show Ashcombe at 20.605 MW after flexibility and conceal its estimated shortfall. The guideline requires delivered primary relief, not the award alone.
+* Unadjusted event/non-event comparisons: dispatch targets colder, higher-demand days, so those comparisons confound delivery with demand conditions.
+* Using every non-flex primary as a control: Tollbrook, Kestwick and Wexley show event-associated increases of 1.271, 0.997 and 1.680 MW at the design temperature. They were excluded as controls. These associations do not prove physical transfers.
+* Reinforcing all four because gross demand exceeds capacity: credited flexibility brings Charlecote, Fenwick and Hartwell below firm capacity in the governing main case.
+* Treating Hartwell’s deferral as robust: its 0.221 MW headroom is small, and adverse cases exceed capacity. Its break-even delivery is 0.6820 MW/MW, against the main estimate of 0.7114 MW/MW.
+* Substituting transformer nameplate ratings, condition scores or charging bands for firm capacity: the authoritative threshold is the guideline’s winter-cyclic firm MW.
 
-Files produced.
+Ashcombe would require 0.7479 MW/MW delivery from its existing award, or 11.305 MW scheduled at the estimated delivery rate, to break even. Neither improvement is evidenced or currently contracted.
+Files Produced.
 
-* `/home/agent/workspace/hub_availability_2027.csv`: One row per hub with the forecast flag, future high-power population, lowest-point forecast, qualifying charges and one-decimal MWh.
-* `/home/agent/workspace/availability_plan_2027.pdf`: Partnership covering letter, named-hub remedial proposals, complete network return, evidence, methodology and validation annexes.
+* `halverton_primary_capacity_2027-28.xlsx`: formula-linked capacity ledger, comparison chart, model estimates, confidence intervals, sensitivity tests, source records and audit documentation.
+* `capex_review_2027-28.pptx`: nine-slide capex review covering the commitment, capacity balances, flexibility credit, forecast construction, Hartwell risk and required actions.
 
-Packages installed. Installed pandas, NumPy, SciPy, openpyxl, PyMuPDF and ReportLab, with dependencies, in a temporary environment because they were unavailable in the active interpreter. No dependency files were added to the workspace.
+Both files are saved under `/home/agent/workspace`. Temporary analysis scripts were removed.
+Packages Installed. Installed in a temporary virtual environment because the advertised analytics packages were unavailable in the active runtime: `numpy`, `pandas`, `scipy`, `statsmodels`, `openpyxl`, `python-pptx`, `pymupdf`, `matplotlib` and `xlsxwriter`, with their dependencies.

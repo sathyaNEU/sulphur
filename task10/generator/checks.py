@@ -413,6 +413,136 @@ def main():
           "interval_end_uk_local" % ("same call and figures" if graded(Gv) == g else "same call, moves %s"
                                      % {p: v for p, v in graded(Gv).items() if v != g[p]}))
 
+    # ------------------------------------------------------------------------------------------------ the asks (rubric repair)
+    # Each ask rides the deep step: the design-day exceedance at the primaries to reinforce, and the primaries over firm
+    # capacity on the two colder working weekdays, where the providers' reduction is read at the colder day's own mean.
+    TS = E.SENS_TS
+    want_sens = {-4.5: ["Ashcombe Road", "Fenwick Street", "Hartwell Common"],
+                 -6.0: ["Ashcombe Road", "Charlecote Way", "Fenwick Street", "Hartwell Common"]}
+    check("ask: colder days", G["commit_sens"] == want_sens, "over firm capacity after flexibility: %s"
+          % {"%.1f C" % t: "+".join(v) for t, v in G["commit_sens"].items()})
+    ob = {z["primary"]: z["over_by"] for z in G["zones"] if z["over"]}
+    check("ask: exceedance", {p: int(round(v)) for p, v in ob.items()} == {"Ashcombe Road": 3, "Hartwell Common": 2}
+          and all(edge(v) >= 0.15 for v in ob.values()),
+          "how far each primary to reinforce exceeds firm: %s" % {p: "%.2f (%.2f from its edge)" % (v, edge(v))
+                                                                  for p, v in ob.items()})
+    gap = {(z["primary"], t): z["sens"][t]["after"] - z["firm"] for z in G["zones"] for t in TS}
+    check("ask: colder-day margins", all(abs(v) >= 0.25 for v in gap.values()),
+          "after less firm at the colder days, nearest %s at %+.2f MW" % min(((k, v) for k, v in gap.items()),
+                                                                              key=lambda kv: abs(kv[1])))
+
+    def before_at(z, T, d26=None, slope=None, ungrown=False):
+        d26 = z["d26"] if d26 is None else d26
+        slope = z["slope"] if slope is None else slope
+        r1, r2 = X["rates"][z["code"]]
+        g_ = (1 + r1 / 100.0) * (1 + r2 / 100.0)
+        if ungrown:   # the design-day demand moved by the 2025/26 slope alone
+            return z["before"] + slope * (max(0.0, E.BASE_T - T) - max(0.0, E.BASE_T - E.T_DESIGN))
+        return (d26 + slope * (max(0.0, E.BASE_T - T) - max(0.0, E.BASE_T - E.T_DESIGN))) * g_ + X["growth"].get(z["code"], 0.0)
+
+    def colder(deliv, before=before_at):
+        return {T: [z["primary"] for z in G["zones"] if before(z, T) - deliv(z, T) * z["mw28"] > z["firm"]] for T in TS}
+
+    # the routes the ladder names, carried to the colder days
+    def fit_at(recs, net, did=False):
+        y = np.array([((r[3] - r[4]) if net else (r[3] + r[4] if did else r[3])) / r[2] for r in recs])
+        t_ = np.array([r[1] for r in recs])
+        c = np.polyfit(t_, y, 1)
+        return lambda T: float(np.polyval(c, T))
+    mean_of = lambda recs, net, did=False: float(np.mean([((r[3] - r[4]) if net else (r[3] + r[4] if did else r[3])) / r[2]
+                                                          for r in recs]))
+    sh = {
+        "rung 1 default": colder(lambda z, T: mean_of(rec[z["code"]]["base"], False)),
+        "rung 1b zone fall at the day": colder(lambda z, T: fit_at(rec[z["code"]]["base"], False)(T)),
+        "rung 2 neighbour as control": colder(lambda z, T: mean_of(rec[z["code"]]["did"], False, True)),
+        "rung 2b neighbour as control at the day": colder(lambda z, T: fit_at(rec[z["code"]]["did"], False, True)(T)),
+        "rung 3 net at the average event day": colder(lambda z, T: mean_of(rec[z["code"]]["net"], True)),
+        "the design day's credit held": colder(lambda z, T: z["delivery"]),
+    }
+    with patched("delivery_records", lambda prep, tm_, ev_, zone, partner=None, method="regression", partner_clean=True:
+                 dr(prep, tm_, ev_, zone, partner, method, False)):
+        Gd = E.golden_from(fresh())
+    sh["the neighbour's baseline on every workday"] = Gd["commit_sens"]
+    for k, v in sh.items():
+        check("ask miss: " + k[:28], all(v[t] != want_sens[t] for t in TS),
+              "files %s" % {"%.1f C" % t: "+".join(v[t]) or "none" for t in TS})
+    keep_ = colder(lambda z, T: fit_at(rec[z["code"]]["pair"], False)(T))
+    check("ask keep: the pair taken together", keep_ == want_sens, "the zone and its linked primary taken together at the "
+          "colder days: %s" % {"%.1f C" % t: "+".join(v) for t, v in keep_.items()})
+    byp_fit = {pv: fit_at(rr, True) for pv, rr in byp.items()}
+    keep_ = colder(lambda z, T: byp_fit[z["provider"]](T))
+    check("ask keep: one delivery per provider", keep_ == want_sens, "%s" % {"%.1f C" % t: "+".join(v)
+                                                                             for t, v in keep_.items()})
+    # the delivery family (16 estimators) by the three readings of guideline 3, at each colder day
+    def fam_fns(rr, pooled_):
+        T_ = np.array([r[1] for r in rr]); y = np.array([(r[3] - r[4]) / r[2] for r in rr]); w = np.array([r[2] for r in rr])
+        Tp = np.array([r[1] for r in pooled_]); yp = np.array([(r[3] - r[4]) / r[2] for r in pooled_])
+        pairs = [(y[j] - y[i]) / (T_[j] - T_[i]) for i in range(len(T_)) for j in range(i + 1, len(T_))
+                 if abs(T_[j] - T_[i]) > 0.2]
+        b = float(np.median(pairs)); a = float(np.median(y - b * T_))
+        return {"linear": np.poly1d(np.polyfit(T_, y, 1)), "pooled per provider": np.poly1d(np.polyfit(Tp, yp, 1)),
+                "quadratic": np.poly1d(np.polyfit(T_, y, 2)), "pooled quadratic": np.poly1d(np.polyfit(Tp, yp, 2)),
+                "Theil-Sen": np.poly1d([b, a]), "weighted by MW": np.poly1d(np.polyfit(T_, y, 1, w=np.sqrt(w))),
+                "linear below 2 C": np.poly1d(np.polyfit(T_[T_ < 2], y[T_ < 2], 1)),
+                "linear below 0 C": np.poly1d(np.polyfit(T_[T_ < 0], y[T_ < 0], 1))}
+
+    def readings(z):
+        code = z["code"]
+        allz = set(X["events"][X["events"]["zone"] == code]["date"])
+        done = set(X["events"][(X["events"]["zone"] == code) & (X["events"]["status"] == "Completed")]["date"])
+        out = [E.design_peak(prep, tm, code, exclude=allz, winters=["2025/26"]),
+               E.design_peak(prep, tm, code, exclude=done, winters=["2025/26"])]
+        with patched("daily_peaks", lambda p, c: p[(p["code"] == c) & (p["hh"].isin(E.CREDIT_HH))].groupby("ldate")["mw"].max()):
+            out.append(E.design_peak(prep, tm, code, exclude=allz, winters=["2025/26"]))
+        return out
+    worst = {}
+    for z in G["zones"]:
+        fns = fam_fns(rec[z["code"]]["net"], pooled[z["provider"]])
+        for d26_, sl_ in readings(z):
+            for nm, f in fns.items():
+                for t in TS:
+                    m = before_at(z, t, d26_, sl_) - float(f(t)) * z["mw28"] - z["firm"]
+                    k = (z["primary"], t)
+                    if k not in worst or abs(m) < abs(worst[k][0]):
+                        worst[k] = (m, nm)
+    flip = [k for k, (m, _) in worst.items() if (m > 0) != (gap[k] > 0)]
+    check("ask: colder-day family", not flip and all(abs(m) >= 0.2 for m, _ in worst.values()),
+          "%d estimators by 3 readings of guideline 3 keep every zone on its side of firm at both colder days; nearest %s"
+          % (len(fns), min(((k, round(m, 2), nm) for k, (m, nm) in worst.items()), key=lambda r: abs(r[1]))))
+    # SF23 the colder days' credit: the reduction the provider delivers on that day, against the design day's held
+    check("SF23", sh["the design day's credit held"] == {-4.5: ["Ashcombe Road", "Hartwell Common"],
+                                                          -6.0: ["Ashcombe Road", "Fenwick Street", "Hartwell Common"]},
+          "the design day's credit carried to the colder days files %s; ruled out by guideline 6 (the reduction the provider "
+          "will deliver on the day) and the providers' net reduction falling with cold (slopes %s per degree)"
+          % ({"%.1f C" % t: "+".join(v) for t, v in sh["the design day's credit held"].items()},
+             {pv: round(float(np.polyfit([r[1] for r in rr], [(r[3] - r[4]) / r[2] for r in rr], 1)[0]), 4)
+              for pv, rr in byp.items()}))
+    # SF24 the correction's form: straight below the base, against quadratic in the daily mean
+    fc = E.form_check(X, G["zones"])
+    check("SF24", all(abs(v["linear"]) < abs(v["quadratic"]) for v in fc.values())
+          and max(abs(v["linear"]) for v in fc.values()) < 0.25,
+          "winter 2023/24 (no flexibility), fitted on its working weekdays above each zone's 2025/26 coldest and read on "
+          "its sub-zero ones: linear %s, quadratic %s MW; the quadratic is ruled out by that winter"
+          % ({p[:9]: round(v["linear"], 2) for p, v in fc.items()}, {p[:9]: round(v["quadratic"], 2) for p, v in fc.items()}))
+    # SF25 the colder days' before-demand: the correction read at the day and grown, against the 2025/26 slope ungrown
+    v25 = colder(lambda z, T: z["sens"][T]["delivery"], before=lambda z, T: before_at(z, T, ungrown=True))
+    check("SF25", v25 == want_sens, "the design-day demand moved by the 2025/26 slope alone: %s"
+          % {"%.1f C" % t: "+".join(v) for t, v in v25.items()})
+    # SF26 "exceed" on the colder days: strictly, against at or over (no zone near firm under any estimator)
+    check("SF26", all(abs(v) >= 0.4 for v in gap.values()) and all(abs(m) >= 0.2 for m, _ in worst.values()),
+          "nearest zone to firm at the colder days %.2f MW on the golden, %.2f across the family: the same sets either way"
+          % (min(abs(v) for v in gap.values()), min(abs(m) for m, _ in worst.values())))
+    # SF27 the exceedance from the rounded figures, against the unrounded
+    check("SF27", all(int(round(round(z["after"]) - z["firm"])) == int(round(z["over_by"])) for z in G["zones"] if z["over"]),
+          "the rounded after less firm gives the same whole MW")
+    # SF28 the colder days' daily mean over the UK local day
+    with patched("daily_mean", local_mean):
+        Gl = E.golden_from(fresh())
+    check("SF28", Gl["commit_sens"] == want_sens, "daily mean over the UK local day: %s"
+          % {"%.1f C" % t: "+".join(v) for t, v in Gl["commit_sens"].items()})
+    check("ask: clean truth", GC["commit_sens"] == want_sens, "the colder days on the world before mess: %s"
+          % {"%.1f C" % t: "+".join(v) for t, v in GC["commit_sens"].items()})
+
     # ------------------------------------------------------------------------------------------------ Layer 1 neutrality
     raw = pd.read_csv(os.path.join(TARGET, PK.F_SCADA), dtype={"quality": str})
     pmap, names, rates = PA.register(TARGET)

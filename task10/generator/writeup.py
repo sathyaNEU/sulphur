@@ -29,25 +29,38 @@ def blocks(F):
                   A["linked"], H["linked"]))
     out.append("## Supplementary Questions\n")
     out.append("### halverton_primary_capacity_2027-28.xlsx\n")
+    zs = (("Ashcombe Road", A), ("Charlecote Way", C), ("Fenwick Street", Fz), ("Hartwell Common", H))
+    S1, S2 = F["sens"]["4.5"], F["sens"]["6.0"]
+
+    def names(ps):
+        return "all four" if len(ps) == 4 else ", ".join(ps[:-1]) + " and " + ps[-1]
     out.append("1. A Zones sheet with one row per flexibility zone, in the order Ashcombe Road CMZ, Charlecote Way CMZ, "
-               "Fenwick Street CMZ, Hartwell Common CMZ, giving the zone, its primary and asset code, the provider, the "
-               "megawatts contracted for 2027/28, the provider's delivery per megawatt scheduled on the design day (one "
-               "decimal), the flexibility credited (whole MW), the primary's design-day demand before and after the "
-               "credited flexibility (whole MW), its firm capacity and whether the demand after flexibility exceeds it.")
-    n = 2
-    for nm, Z in (("Ashcombe Road", A), ("Charlecote Way", C), ("Fenwick Street", Fz), ("Hartwell Common", H)):
-        out.append("%d. %s CMZ: delivery %s per MW scheduled; %s MW credited on the %s MW contracted; design-day demand "
-                   "after flexibility %s MW against %s MW firm; over firm capacity: %s."
-                   % (n, nm, r1(Z["delivery"]), r0(Z["credited"]), r1(Z["mw28"]), r0(Z["after"]), r1(Z["firm"]),
-                      "Yes" if Z["over"] else "No"))
-        n += 1
-    out.append("%d. A clustered column chart below the table: for each zone primary, its design-day demand before and "
-               "after the credited flexibility beside its firm capacity, in MW." % n)
-    n += 1
+               "Fenwick Street CMZ, Hartwell Common CMZ, giving the zone, its primary and asset code, the provider and "
+               "the megawatts contracted for 2027/28, then the provider's delivery per megawatt scheduled on the design "
+               "day: %s at Ashcombe Road, %s at Charlecote Way, %s at Fenwick Street and %s at Hartwell Common (Corvane "
+               "Flex %s at both its zones, Quillon Energy Services %s at both of its)."
+               % (r1(A["delivery"]), r1(C["delivery"]), r1(Fz["delivery"]), r1(H["delivery"]), r1(A["delivery"]),
+                  r1(C["delivery"])))
+    out.append("2. The megawatts credited to each primary on its 2027/28 contract: %s MW at Ashcombe Road, %s at "
+               "Charlecote Way, %s at Fenwick Street and %s at Hartwell Common."
+               % (r0(A["credited"]), r0(C["credited"]), r0(Fz["credited"]), r0(H["credited"])))
+    out.append("3. Each primary's design-day demand after the credited flexibility against its firm capacity: %s, so "
+               "%s exceed firm capacity and %s do not."
+               % ("; ".join("%s %s MW against %s MW" % (nm, r0(Z["after"]), r1(Z["firm"])) for nm, Z in zs),
+                  " and ".join(nm for nm, Z in zs if Z["over"]), " and ".join(nm for nm, Z in zs if not Z["over"])))
+    out.append("4. A clustered column chart below the table: for each zone primary, its design-day demand before and "
+               "after the credited flexibility beside its firm capacity, in MW, the after-flexibility column standing "
+               "above firm capacity at %s and below it at %s."
+               % (" and ".join(nm for nm, Z in zs if Z["over"]), " and ".join(nm for nm, Z in zs if not Z["over"])))
+    out.append("5. How far each primary to reinforce exceeds firm capacity on the design day: %s."
+               % " and ".join("%s by %s MW" % (nm, r0(Z["over_by"])) for nm, Z in zs if Z["over"]))
+    out.append("6. The primaries whose demand after their flexibility would exceed firm capacity on a working weekday "
+               "of winter 2027/28 at a daily mean of minus %s C: %s; at minus %s C: %s."
+               % (r1(S1["degrees_below_zero"]), names(S1["commit"]), r1(S2["degrees_below_zero"]), names(S2["commit"])))
     out.append("\n### capex_review_2027-28.pptx\n")
-    out.append("%d. Slides for the capital expenditure review that name Ashcombe Road and Hartwell Common as the primaries "
-               "to reinforce for winter 2027/28, state that Charlecote Way and Fenwick Street hold firm capacity with their "
-               "contracted flexibility, and carry the same chart of demand against firm capacity.\n" % n)
+    out.append("7. Slides for the capital expenditure review that name Ashcombe Road and Hartwell Common as the primaries "
+               "to reinforce for winter 2027/28, state that Charlecote Way and Fenwick Street hold firm capacity on the "
+               "design day with their contracted flexibility, and carry the same chart of demand against firm capacity.\n")
     out.append("## Critical Components\n")
     out.append("1. On the flexibility events at Ashcombe Road, Fenwick Street and Hartwell Common, the primary across an "
                "11 kV open point from each (%s, %s, %s) rose in the half-hours ending 17:30 and 18:00 by **%s**, **%s** "
@@ -67,23 +80,20 @@ def blocks(F):
                "capacity after their credited flexibility.\n" % (r0(C["after"]), r1(C["firm"]), r0(Fz["after"]),
                                                                    r1(Fz["firm"])))
     out.append("## Step-by-Step\n")
-    s = F["steps"]
+    T = F["event_temperature_c"]
     out.append("1. Mapped both SCADA point names in primary_demand_halfhourly_2023-2026.csv to asset codes through "
                "primary_substation_register.xlsx, kept each quality G half-hour once and read its end in UK local time.")
-    out.append("2. Kept the latest revision of each instruction in flexibility_events_2024-2026.csv: %s completed events "
-               "at Ashcombe Road, %s at Charlecote Way, %s at Fenwick Street and %s at Hartwell Common."
-               % (s["events"]["Ashcombe Road"], s["events"]["Charlecote Way"], s["events"]["Fenwick Street"],
-                  s["events"]["Hartwell Common"]))
-    out.append("3. Corrected each zone primary's daily peak on working weekdays outside 24 December to 2 January and "
-               "outside its scheduled days to the design condition (winter levels and one slope below 15.5 C on the daily "
-               "means of halverton_weather_hourly_2023-2026.csv, the station's checked reading for each hour) and grew it by "
-               "the DFES rates and the qualifying connections in load_growth_register_2026-27.xlsx: design-day demand "
-               "before flexibility %s, %s, %s and %s MW at Ashcombe Road, Charlecote Way, Fenwick Street and Hartwell "
-               "Common." % (r0(A["before"]), r0(C["before"]), r0(Fz["before"]), r0(H["before"])))
+    out.append("2. Kept the latest revision of each instruction in flexibility_events_2024-2026.csv, a cancelled one at "
+               "0.0 MW, and each hour of halverton_weather_hourly_2023-2026.csv at its checked reading, averaged over "
+               "the GMT day.")
+    out.append("3. Corrected each zone primary's 2025/26 daily peaks on working weekdays outside 24 December to 2 "
+               "January and outside its scheduled days to the design condition (a level and one slope below 15.5 C) "
+               "and grew the result by the DFES rates and the qualifying connections in "
+               "load_growth_register_2026-27.xlsx (guideline sections 3 and 4).")
     out.append("4. Measured each event's fall at the zone primary in the half-hours ending 17:30 and 18:00 against a "
-               "weather-adjusted baseline fitted on its other working weekdays: %s per MW scheduled at Ashcombe Road, %s at "
-               "Fenwick Street, %s at Hartwell Common and %s at Charlecote Way; carried to the 2027/28 contracts, that "
-               "keeps all four primaries within firm capacity and commits none (the shallow route)."
+               "weather-adjusted baseline fitted on its other working weekdays: %s per MW scheduled at Ashcombe Road, "
+               "%s at Fenwick Street, %s at Hartwell Common and %s at Charlecote Way; carried to the 2027/28 contracts, "
+               "that keeps all four primaries within firm capacity and commits none (the shallow route)."
                % (r1(A["measured"]), r1(Fz["measured"]), r1(H["measured"]), r1(C["measured"])))
     out.append("5. Read the same half-hours at every primary each zone's open points reach in network_feeders_11kv.xlsx, "
                "on a baseline fitted without the zone's event days: %s rose %s MW on Ashcombe Road's events, "
@@ -92,7 +102,6 @@ def blocks(F):
                "section 6 of the guideline does not credit to the provider."
                % (A["linked"], r1(A["linked_rise"]), Fz["linked"], r1(Fz["linked_rise"]), H["linked"],
                   r1(H["linked_rise"])))
-    T = F["event_temperature_c"]
     out.append("6. Netted each linked primary's rise from the zone's fall event by event and regressed the provider's "
                "reduction per MW scheduled on the event day's daily mean temperature: %s per MW for Corvane Flex at "
                "Ashcombe Road, %s at Hartwell Common, %s for Quillon Energy Services at Charlecote Way and %s at Fenwick "
@@ -102,10 +111,22 @@ def blocks(F):
                   r1(T["mildest"]), r1(A["avg_delivery"]), r1(H["avg_delivery"]), r1(C["avg_delivery"]),
                   r1(Fz["avg_delivery"])))
     out.append("7. Credited those on the megawatts in flexibility_contract_awards_2027-28.pdf and compared with Appendix A "
-               "of capacity_assessment_guideline_2026.pdf: Ashcombe Road %s MW against %s and Hartwell Common %s MW "
-               "against %s exceed firm capacity; Charlecote Way %s against %s and Fenwick Street %s against %s do not.\n"
-               % (r0(A["after"]), r1(A["firm"]), r0(H["after"]), r1(H["firm"]), r0(C["after"]), r1(C["firm"]),
-                  r0(Fz["after"]), r1(Fz["firm"])))
+               "of capacity_assessment_guideline_2026.pdf: Ashcombe Road at %s MW against %s exceeds firm capacity by "
+               "%s MW and Hartwell Common at %s MW against %s by %s MW; Charlecote Way at %s against %s and Fenwick "
+               "Street at %s against %s hold."
+               % (r0(A["after"]), r1(A["firm"]), r0(A["over_by"]), r0(H["after"]), r1(H["firm"]), r0(H["over_by"]),
+                  r0(C["after"]), r1(C["firm"]), r0(Fz["after"]), r1(Fz["firm"])))
+    out.append("8. Checked the correction's straight-line form on winter 2023/24, which ran no flexibility: fitted on its "
+               "working weekdays as mild as the 2025/26 days the correction uses, it meets that winter's sub-zero working "
+               "weekdays within %s MW on average at every zone primary, closer than a quadratic at each."
+               % r1(F["validation"]["linear_bias_max"]))
+    out.append("9. Read the same correction and the same provider regressions at daily means of minus %s and minus %s C: "
+               "each provider delivers less per MW scheduled on a colder day while the demand rises, so %s exceed firm "
+               "capacity at minus %s C and %s at minus %s C; carrying the design day's credit to those days instead "
+               "leaves Fenwick Street within firm capacity at minus %s C and Charlecote Way within it at minus %s C.\n"
+               % (r1(S1["degrees_below_zero"]), r1(S2["degrees_below_zero"]), names(S1["commit"]),
+                  r1(S1["degrees_below_zero"]), names(S2["commit"]), r1(S2["degrees_below_zero"]),
+                  r1(S1["degrees_below_zero"]), r1(S2["degrees_below_zero"])))
     out.append("No other conclusion survives the files. The zone primary's own fall, against a weather-adjusted baseline "
                "or the ten previous weekdays, counts the demand that rose at the neighbour, and the ten-day baseline also "
                "sits below the cold event days it is set against, so it files all four primaries; taking the linked "
@@ -113,10 +134,11 @@ def blocks(F):
                "zone and its linked primary taken together give the netting's provider reduction exactly (%s per MW at "
                "minus 3.0 C at Ashcombe Road). Crediting the providers at the average event day rather than at the design "
                "day keeps the same two primaries over firm capacity but credits %s, %s, %s and %s MW, which is not the "
-               "reduction section 6 of the guideline credits; on the design day's credit, Ashcombe Road and Hartwell "
-               "Common need reinforcement."
+               "reduction section 6 of the guideline credits, and like the zone's own fall it leaves Fenwick Street within "
+               "firm capacity at minus %s C; on the design day's credit, Ashcombe Road and Hartwell Common need "
+               "reinforcement."
                % (r1(A["did"]), r1(A["pair"]), r0(A["avg_credited"]), r0(C["avg_credited"]), r0(Fz["avg_credited"]),
-                  r0(H["avg_credited"])))
+                  r0(H["avg_credited"]), r1(S1["degrees_below_zero"])))
     return "\n".join(out) + "\n"
 
 

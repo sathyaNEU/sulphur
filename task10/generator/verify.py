@@ -163,6 +163,7 @@ def main():
     figs = json.load(open(os.path.join(HERE, "figures.json")))
     bad = []
     call = []
+    colder = {t: [] for t in (-4.5, -6.0)}
     for zone in ("Ashcombe Road", "Charlecote Way", "Fenwick Street", "Hartwell Common"):
         c = code_of[zone]
         days = [d for d in peak[c] if workday(d) and d in tmean and d not in sched[c] and count[c][d] >= 44]
@@ -189,7 +190,15 @@ def main():
         over = after > firm[c]
         if over:
             call.append(zone)
+        # the asks: how far a primary to reinforce exceeds firm, and the colder working weekdays read the same way
+        for tc in colder:
+            before_c = (b[0] + b[1] * (BASE - tc)) * (1 + dfes[c][0] / 100) * (1 + dfes[c][1] / 100) + growth[c]
+            if before_c - (k[0] + k[1] * tc) * contract[zone] > firm[c]:
+                colder[tc].append(zone)
         z = figs["zones"][zone]
+        if over and int(round(after - firm[c])) != int(round(z["over_by"])):
+            print("DIFF %s exceeds firm by %.2f (generator %.2f)" % (zone, after - firm[c], z["over_by"]))
+            bad.append(zone + " exceedance")
         mine = (round(delivery, 1), int(round(credited)), int(round(after)), over)
         theirs = (round(z["delivery"], 1), int(round(z["credited"])), int(round(z["after"])), z["over"])
         ok = mine == theirs and abs(delivery - z["delivery"]) < 0.002 and abs(after - z["after"]) < 0.02
@@ -201,6 +210,11 @@ def main():
     print("call %s (generator %s)" % (call, figs["call"]))
     if call != figs["call"]:
         bad.append("call")
+    for tc, zs in colder.items():
+        theirs = figs["sens"]["%.1f" % -tc]["commit"]
+        print("%-4s over firm at minus %.1f C: %s (generator %s)" % ("OK" if zs == theirs else "DIFF", -tc, zs, theirs))
+        if zs != theirs:
+            bad.append("colder %.1f" % tc)
     print("VERIFY %s" % ("PASS" if not bad else "FAIL: " + ", ".join(bad)))
     return 1 if bad else 0
 

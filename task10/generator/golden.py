@@ -37,7 +37,8 @@ def write_workbook(G, path):
     hdr = ["Constraint managed zone", "Primary substation", "Asset code", "Provider", "Contracted 2027/28 (MW)",
            "Provider delivery per MW scheduled, design day", "Flexibility credited (MW)",
            "Design-day demand before flexibility (MW)", "Design-day demand after flexibility (MW)", "Firm capacity (MW)",
-           "Over firm capacity after flexibility"]
+           "Over firm capacity after flexibility", "Exceeds firm capacity by (MW)"] + \
+          ["Over firm capacity, working weekday at minus %.1f C" % -t for t in G["sens_Ts"]]
     ws.append(hdr)
     for c in ws[1]:
         c.font = HEAD_FONT
@@ -46,14 +47,17 @@ def write_workbook(G, path):
     for z in G["zones"]:
         ws.append([z["zone"], z["primary"], z["code"], z["provider"], z["mw28"], round(z["delivery"], 1),
                    int(round(z["credited"])), int(round(z["before"])), int(round(z["after"])), z["firm"],
-                   "Yes" if z["over"] else "No"])
-    for i, wd in enumerate([24, 20, 11, 28, 13, 18, 13, 16, 16, 12, 14]):
+                   "Yes" if z["over"] else "No", int(round(z["over_by"])) if z["over"] else None] +
+                  ["Yes" if z["sens"][t]["over"] else "No" for t in G["sens_Ts"]])
+    for i, wd in enumerate([24, 20, 11, 28, 13, 18, 13, 16, 16, 12, 14, 13, 16, 16]):
         ws.column_dimensions[openpyxl.utils.get_column_letter(i + 1)].width = wd
     ws.row_dimensions[1].height = 48
     ws.freeze_panes = "A2"
     n = len(G["zones"])
     ws.cell(row=n + 3, column=1, value="Design day: a working weekday at a daily mean of minus 3.0 C at Halverton weather "
                                        "station (WPN-NP-G-014, issue 4). Demand in MW at the primary's SCADA total.")
+    ws.cell(row=n + 4, column=1, value="Colder working weekdays: the same 2025/26 correction and growth read at that daily "
+                                       "mean, less each provider's reduction at that temperature on its 2027/28 contract.")
     ch = BarChart()
     ch.type = "col"
     ch.title = "%s over firm capacity after flexibility (MW, 2027/28 design day)" % " and ".join(
@@ -133,6 +137,8 @@ def write_deck(G, path):
         "Credited at what each provider delivers on a minus 3 C day, the 2027/28 contracts take %s to %s."
         % (" and ".join(z["primary"] for z in commit),
            " and ".join("%d MW against %.1f MW firm" % (round(z["after"]), z["firm"]) for z in commit)),
+        "The reinforcements must cover %s." % " and ".join("%d MW at %s" % (round(z["over_by"]), z["primary"])
+                                                           for z in commit),
         "DSO capital expenditure review, December 2026. Prepared by the Halverton DSO planning team."], size=18)
 
     s = prs.slides.add_slide(blank)
@@ -172,12 +178,31 @@ def write_deck(G, path):
     _text(s, 600000, 1150000, W_ - 1200000, 5200000, lines, size=16)
 
     s = prs.slides.add_slide(blank)
+    t1, t2 = G["sens_Ts"]
+    first = [z for z in G["zones"] if z["sens"][t1]["over"] and not z["over"]]
+    second = [z for z in G["zones"] if z["sens"][t2]["over"] and not z["sens"][t1]["over"]]
+    _title(s, "A colder winter: %s would exceed firm capacity at minus %.1f C and %s at minus %.1f C"
+           % (" and ".join(z["primary"] for z in first), -t1, " and ".join(z["primary"] for z in second), -t2), 22)
+    lines = []
+    for t in G["sens_Ts"]:
+        over = [z["primary"] for z in G["zones"] if z["sens"][t]["over"]]
+        held = [z["primary"] for z in G["zones"] if not z["sens"][t]["over"]]
+        lines.append("Working weekday at minus %.1f C: %s over firm capacity after flexibility%s."
+                     % (-t, "all four" if not held else ", ".join(over[:-1]) + " and " + over[-1],
+                        "" if not held else "; %s holds" % " and ".join(held)))
+    lines.append("Both providers deliver less per MW scheduled on a colder day, so the credit falls as the demand rises.")
+    _text(s, 600000, 1150000, W_ - 1200000, 5200000, lines, size=18)
+
+    s = prs.slides.add_slide(blank)
     _title(s, "Recommendation and next steps", 22)
     _text(s, 600000, 1150000, W_ - 1200000, 5200000, [
         "Commit the reinforcement of %s at this review, for energisation before November 2027." %
         " and ".join(z["primary"] for z in commit),
         "Keep the 2027/28 flexibility contracts at %s; they hold firm capacity on the design day." %
         " and ".join(z["primary"] for z in hold),
+        "%s: its flexibility holds it on the design day but not at minus %.1f C, and %s not at minus %.1f C; review both "
+        "at next year's assessment." % (" and ".join(z["primary"] for z in first), -t1,
+                                         " and ".join(z["primary"] for z in second), -t2),
         "Ask the control room to log the switching state of the %s open points for each flexibility event."
         % ", ".join(z["linked"] for z in G["zones"] if z["linked"])],
           size=18)

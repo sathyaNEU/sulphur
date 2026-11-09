@@ -56,8 +56,9 @@ def write_guideline(target):
         P("1. Purpose", H2),
         P("Each autumn Network Planning assesses whether every primary substation in a constraint managed zone will hold its "
           "firm capacity on the design day of the winter after next, and recommends to the December capital expenditure "
-          "review the primaries whose reinforcement must be committed then. Reinforcement of a primary takes about eighteen "
-          "months from commitment to energisation, so a primary committed in December 2026 is reinforced for winter 2027/28.",
+          "review the primaries whose reinforcement must be committed then. A reinforcement committed at the December review "
+          "is energised by the end of the following October, so a primary committed in December 2026 is reinforced for "
+          "winter 2027/28.",
           BODY),
         P("2. Design condition", H2),
         P("The design day is a working weekday on which the daily mean air temperature at Halverton weather station is "

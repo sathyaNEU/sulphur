@@ -12,6 +12,7 @@ import pandas as pd
 UTC = dt.timezone.utc
 BASE_T = 15.5
 T_DESIGN = -3.0
+SENS_TS = (-4.5, -6.0)   # the prompt's two colder working weekdays of winter 2027/28 (daily means, guideline 2's station)
 CREDIT_HH = ("17:30", "18:00")
 WINDOW = ("16:30", "17:00", "17:30", "18:00", "18:30", "19:00", "19:30")   # half-hours ending, local
 BANK_HOLIDAYS = {dt.date(2023, 12, 25), dt.date(2023, 12, 26), dt.date(2024, 1, 1), dt.date(2024, 3, 29),
@@ -187,6 +188,33 @@ def pair_records(prep, tmean, events, zone, partner):
     return [(d, float(tmean[d]), ev[d], red[d], 0.0) for d in dates if red[d] is not None]
 
 
+def form_check(X, zones):
+    """The correction's form tested where the record allows it: winter 2023/24 ran no flexibility, so its cold working
+    weekdays are untouched. Fitted on its working weekdays at or above the coldest daily mean the zone's 2025/26
+    correction is fitted on (the extrapolation guideline 3 makes), each form predicts its working weekdays below 0 C;
+    returns, per zone, the mean error (predicted less recorded peak, MW) of the linear and the quadratic form."""
+    prep = X["_prep"]
+    tm = daily_mean(X["weather"])
+    ev = X["events"]
+    out = {}
+    for z in zones:
+        code = z["code"]
+        pk = daily_peaks(prep, code)
+        sched = set(ev[ev["zone"] == code]["date"])
+        t26 = min(tm[d] for d in pk.index if _workday(d) and d in tm.index and d not in sched
+                  and WINTER_OF(d) == "2025/26")
+        days = [d for d in pk.index if _workday(d) and d in tm.index and WINTER_OF(d) == "2023/24"]
+        T = np.array([tm[d] for d in days])
+        y = np.array([pk[d] for d in days])
+        fit, cold = T >= t26, T < 0.0
+        err = {}
+        for name, deg in (("linear", 1), ("quadratic", 2)):
+            c = np.polyfit(T[fit], y[fit], deg)
+            err[name] = float(np.mean(np.polyval(c, T[cold]) - y[cold]))
+        out[z["primary"]] = dict(train_min=float(t26), n_cold=int(cold.sum()), **err)
+    return out
+
+
 def forecast(before26, dfes_pct, register_mw, growth_years=2):
     return before26 * (1 + dfes_pct / 100.0) ** growth_years + register_mw
 
@@ -198,12 +226,15 @@ ZONE_LABEL = {"PS40617": "Ashcombe Road CMZ", "PS41108": "Charlecote Way CMZ", "
 MATERIAL_RISE = 0.3   # MW in the credited half-hours, averaged over the zone's events
 
 
-def golden_from(X, linked_rule="largest", temperature=True, design_T=T_DESIGN, base=BASE_T):
+def golden_from(X, linked_rule="largest", temperature=True, design_T=T_DESIGN, base=BASE_T, sens_Ts=SENS_TS,
+                hold_credit=False):
     """The golden on the parsed pack: each zone primary's 2025/26 design-day demand (event days excluded), grown to
     2027/28 by the guideline; each zone's events read at the zone and at every primary its open points reach, the
     neighbour whose demand rises in the same half-hours netted off; the provider's reduction per MW scheduled
     regressed on the event day's daily mean temperature and read at the design condition; credited on the 2027/28
-    contracts."""
+    contracts. The prompt's colder working weekdays (sens_Ts) are assessed the same way: the same 2025/26 correction
+    read at each daily mean and grown, less the provider's reduction read at that daily mean on the same contract
+    (hold_credit keeps the design day's credit instead, the unfinished chain the asks price)."""
     prep = X.get("_prep")
     if prep is None:
         prep = prepare(X["demand"])
@@ -242,9 +273,17 @@ def golden_from(X, linked_rule="largest", temperature=True, design_T=T_DESIGN, b
         credited = delivery * mw28
         after = before - credited
         firm = X["firm"][code]
+        # the colder working weekdays: the 2025/26 correction read at each daily mean, grown as guideline 4 grows it
+        sens = {}
+        for sT in sens_Ts:
+            d26_s = d26 + slope * (max(0.0, base - sT) - max(0.0, base - design_T))
+            before_s = d26_s * (1 + r1 / 100.0) * (1 + r2 / 100.0) + X["growth"].get(code, 0.0)
+            delivery_s = delivery if hold_credit else delivery_at(recs, net=True, temperature=temperature, at=sT)
+            sens[sT] = dict(before=before_s, delivery=delivery_s, after=before_s - delivery_s * mw28,
+                            over=before_s - delivery_s * mw28 > firm)
         zones.append(dict(zone=ZONE_LABEL[code], primary=name, code=code, provider=ZONE_PROVIDER[code], mw28=mw28,
                           d26=d26, slope=slope, before=before, delivery=delivery, credited=credited, after=after,
-                          firm=firm, over=after > firm, measured=measured,
+                          firm=firm, over=after > firm, measured=measured, over_by=after - firm, sens=sens,
                           linked=X["names"][linked] if linked else "", linked_code=linked or "",
                           linked_rise=rises[linked][0] if linked else max(m for m, _ in rises.values()),
                           rises={k: v[0] for k, v in rises.items()}, n_events=len(recs)))
@@ -252,4 +291,5 @@ def golden_from(X, linked_rule="largest", temperature=True, design_T=T_DESIGN, b
             evidence.append(dict(date=d, zone=ZONE_LABEL[code], mw=mw, T=T, fall=fall,
                                  linked=X["names"][linked] if linked else "none", rise=rise if linked else 0.0))
     evidence.sort(key=lambda r: (r["date"], r["zone"]))
-    return dict(zones=zones, evidence=evidence, commit=[z["primary"] for z in zones if z["over"]])
+    return dict(zones=zones, evidence=evidence, commit=[z["primary"] for z in zones if z["over"]],
+                commit_sens={sT: [z["primary"] for z in zones if z["sens"][sT]["over"]] for sT in sens_Ts}, sens_Ts=sens_Ts)
