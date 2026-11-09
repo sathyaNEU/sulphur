@@ -181,7 +181,7 @@ Pins: the WHAT is filed once in the portfolio review standard (the quantity, Can
 | SF2 | the category | every item the master places in plant-based beverages, own label included | oat only | 3.85 (expand) | standard 2(a) names the panel's plant-based beverages category |
 | SF3 | the 2027 window | panel weeks 2027-W01 to 2027-W52 | calendar days 1 January to 31 December | same call (2027-W01 starts 4 January) | standard 3(a); same call asserted |
 | SF4 | projection to Canada | each household's 2026 projection factor | unweighted panel shares | same call (2.30 against 2.37) | standard 2(c); same call asserted |
-| SF5 | households not yet buying | in the 2027 population, coming in at each price group's first-purchase rate in 2026-W43 and W44, the weeks that match the basis | none; the rate of the weeks between the listings | same call (2.33; 2.46) | standard 3(b) and 3(c); same call asserted |
+| SF5 | households not yet buying | in the 2027 population, coming in at each price group's first-purchase rate in 2026-W43 and W44, the only weeks that match the basis | none; W42 to W44; the weeks between the listings | same call (2.33; 2.38; 2.46); households 1,260,000, 1,330,000 and 1,410,000 | standard 3(b) puts them in; 3(c) names the basis (W42 is a media week, the weeks between the listings precede Loyal Grocer's listing); asserted |
 | SF6 | distribution at the review | each household's stocked-store share at the 2026-W44 distribution | the year's average distribution | same call (2.31) | standard 3(c) |
 | SF7 | everyday price, no promotion or media | 2027 carries no promoted or media weeks | the 2026 calendar repeated | the standard's basis; a repeated calendar is a different quantity | standard 3(c) |
 | SF8 | static panel | households reporting from 2024-W01 to 2026-W44 | every household in tab in 2026 | same call (2.35) | same call asserted |
@@ -344,7 +344,8 @@ two builds byte-identical).
 - **Deliverables.** The memo and the workbook the prompt names, one chart; golden-realism pass done (the chart titled
   with its finding); `audit_containers.py` PASS; the independent verifier 14 of 14.
 - **Determinism judge.** DETERMINISTIC, APPROVE (Gate G forecasting, analytical, no surface read; Gate H pass, one-fact
-  none). Its one note, the past-buyer count bracketed at 1.56 to 1.59 million, came from a projection scale no reader
+  none). The verdict predates the two fixes below, which moved every graded figure but not the call; the
+  independent verifier recomputes the fixed figures (14 of 14) and a fresh judge pass needs the author's word. Its one note, the past-buyer count bracketed at 1.56 to 1.59 million, came from a projection scale no reader
   could recover (the world's universe, not the register's): the golden now raises the static panel to the register's
   own 2026 factor total and step 1 states it (SF14).
 - **Reader's question 5.** The standard's 3(b), read literally, counts households that first buy in 2027; the golden

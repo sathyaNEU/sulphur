@@ -44,7 +44,9 @@ Stump terms swept: grocer, repeat, buyers, settled, buying, launch, household, c
 ## Solver's-eye read
 
 Isolated reader (Sonnet, medium), fresh copies of prompt.txt and target/ only, re-read 2026-11-08 after the banner
-rename (the first read, on the pack before it, found no leak either).
+rename. The first read, on the pack before it, found no leak either; its question 5 quoted the standard's 3(b) as
+counting households that first buy in 2027, which the golden did not then do, and the golden now brings them in at
+the basis weeks' first-purchase rate.
 
 1. Decisive step named: none. The nearest text is the standard's 3(b), which pins the population (households not yet
    buying included) and names no method.

@@ -195,6 +195,10 @@ def main():
     L27g, _ = G.litres27(D)
     _, litb, _, _ = G.trial27(D, tier, R['floors'], True, L27g, weeks=[t for t in range(V.wk(2026, 27), V.wk(2026, 38) + 1)])
     between = (R['share'] - R['new_share']) + (w * litb)[st].sum() / (w * L27g)[st].sum()
+    basis = [t for t in range(D['full_t'], G.END_T + 1) if t not in D['promo'] and t not in D['media']]
+    check('SF5 the weeks matching the standard\'s basis (every banner carrying the line at the review, no promotion, no media) are 2026-W43 and W44 only; earlier quiet weeks precede the Loyal Grocer listing and W42 is a media week',
+          basis == [V.wk(2026, 43), V.wk(2026, 44)] and D['full_t'] == V.wk(2026, 39) and V.wk(2026, 42) in D['media'],
+          ', '.join('2026-W%02d' % (t - 103) for t in basis))
     check('SF5 households not yet buying at the basis weeks\' first-purchase rate (the golden), at none, or at the rate between the listings keep the call',
           band(R['share']) == 'Hold' and band(none) == 'Hold' and band(between) == 'Hold',
           '%.2f, %.2f, %.2f' % (100 * R['share'], 100 * none, 100 * between))

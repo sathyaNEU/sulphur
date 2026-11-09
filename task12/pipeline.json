@@ -28,7 +28,7 @@
     "disposition": "APPROVE",
     "gate_h": "pass (decisive step analytical, one-fact none)",
     "report": "task12/determinism_check_report.md",
-    "note": "its past-buyer count note closed by the register-total projection scale (SF14); first-time buyers added after the judge (reader question 5), every graded figure re-verified by verify.py 14 of 14"
+    "scope": "the verdict was issued on the submission before two stage 4 fixes: first-time 2027 buyers (reader question 5, standard 3(b)) and the projection scale taken from the register's 2026 factor total (the judge's own note). They moved the share 2.3 to 2.4, litres 10.4 to 10.5 million, households 1,260,000 to 1,310,000 and purchases per buyer 5.2 to 5.1; the call did not move. verify.py recomputes every graded figure independently (14 of 14) and checks.py asserts the first-purchase window (SF5) and the scale (SF14); a fresh judge pass on this state needs the author's word (the agent runs on FIX_NOW or on request only)."
   },
   "paper_pair": 49.1,
   "runs": {
