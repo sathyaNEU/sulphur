@@ -138,7 +138,15 @@ or modelling). Then:
 
 In a generated world everything is constructed, so the record turns on the other two conditions: the factor shows
 across the data the way the process would produce it (not only in the deciding units, never alone with no noise or
-other patterns around it), and handling it takes modelling. **Calibrate on the client's seven designs** (the
+other patterns around it), and handling it takes modelling.
+
+**Screen the form that misleads, not the family.** A row names the pattern in the form that sends the hurried pass
+wrong, and counts two things: the units where the hurried route misreads, and the units where that misreading decides.
+When every misreading decides, the factor sits only where it decides whatever the family's footprint. task6's
+architecture 7 listed callers slowing late in five of seven incidents, a footprint that passed, while the form that
+misled (a blocked caller ending further over its curve than the faulting service) sat in one incident, which alone
+decided one service: the returned shape again. It was rebuilt with the form in three incidents, two deciding
+different services and one deciding nothing, and `checks.py` asserts a misreading where nothing turns on it. **Calibrate on the client's seven designs** (the
 deep-reasoning page's exercise): a 12 per cent dip added to the four control stores in the launch month, send back;
 a public discharge file needing risk adjustment, shrinkage, a decomposition and intervals, keep; a churn flag
 recoded in one region from the decision month, send back; a replaced river gauge found by comparing neighbours

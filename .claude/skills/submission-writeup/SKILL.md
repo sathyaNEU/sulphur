@@ -34,6 +34,10 @@ python3 .claude/skills/determinism-check/figures_check.py taskNN
 - **Reproducible, not low-level.** Steps name the file and the method that produce each result; they do not walk
   arithmetic, restate the files' conventions or narrate cleaning. A convention needing a paragraph belongs pinned in
   a shipped file.
+- **An estimate is stated at the grain its estimator supports.** A changepoint, an onset or a peak is given as "about
+  17:00" (the nearest five minutes, or whatever grain the data's density carries), never its raw minute, which a
+  sound rival method misses by a few and a grader then marks as a near miss; the generator asserts that the rounding
+  keeps every graded order (task6, SF19).
 
 **Order:** build, `determinism-check`, this skill, `golden-realism`; never before the analysis is done.
 

@@ -65,7 +65,8 @@ with many genuine patterns and noise, not one effect added for the solver to fin
    late-arriving fact, a revised vintage, a failover duplicate), plus benign oddities that decide nothing.
 4. **Nothing only where it decides.** Every factor a result needs appears across the units the way its process
    would put it there; `checks.py` asserts each factor's footprint outside the deciding units (the house rule in
-   `stumping` 2.2).
+   `stumping` 2.2), counted in the form that misleads: each hurried route's misreadings include one unit where the
+   misreading decides nothing.
 5. **Real breadth where it is natural.** Many runs, units, series or files, so deciding what to look at is work.
 6. **No generator setting in sight.** Effects ramp rather than step, start and end at uneven times, carry noise and vary
    by unit; no response is a clean step at a round value and no pattern repeats exactly across past cases. The client's
