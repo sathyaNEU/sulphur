@@ -837,30 +837,47 @@ def check_throughout(task_dir, note_text, secs, dupes):
                 bad_dep.append(r["id"])
         row("dependencies point at earlier results", not bad_dep,
             "every row" if not bad_dep else "a dependency that is not an earlier result on: " + ", ".join(bad_dep))
-        # A result most others hang on, directly or through others, is the one-thing flip carried inside the chain:
-        # the platform grades every figure against the golden, so a later result built on a wrong earlier figure is
-        # wrong unless it can be graded on an input of its own (a Depends on cell saying "independent: <input>").
-        # Foundation rows (assembly, discovery, framing) feed everything by nature and are not counted as hubs.
+        # A result most others hang on is the one-thing flip carried inside the chain: the platform grades every
+        # figure against the golden, so a later result built on a wrong earlier figure is wrong unless it can be
+        # graded on an input of its own (a Depends on cell saying "independent: <input>"). What makes a result one
+        # thing is being the ONLY analytical result standing between a run and the later ones: where a later result
+        # needs two analytical results (an AND), catching either alone carries nothing. So the count, for each
+        # analytical result X, is of the results whose analytical ancestors are X alone. Foundation rows (assembly,
+        # discovery, framing) feed everything by nature and are left out of the ancestor sets.
         foundation = {"assembly-reconciliation", "data-discovery", "framing"}
         area_of = dict(zip(ids, areas))
         indep = {r["id"] for r in res if re.search(r"independent\s*:?\s*\S.{8,}", r["depends"], re.I)}
-        def downstream(x, seen=None):
+        def ancestors(x, seen=None):
             seen = set() if seen is None else seen
-            for k, v in deps.items():
-                if x in v and k not in seen and k not in indep:
-                    seen.add(k)
-                    downstream(k, seen)
+            if x in indep:
+                return seen
+            for p_ in deps.get(x, []):
+                if p_ not in seen:
+                    seen.add(p_)
+                    ancestors(p_, seen)
             return seen
         hubs = [x for x in ids if area_of.get(x) not in foundation]
         if hubs:
-            hub = max(hubs, key=lambda x: len(downstream(x)))
-            nd = len(downstream(hub))
+            sole = {x: [y for y in ids if y != x and
+                        {a for a in ancestors(y) if area_of.get(a) not in foundation} == {x}] for x in hubs}
+            hub = max(hubs, key=lambda x: len(sole[x]))
+            nd = len(sole[hub])
             ok = nd <= (len(res) - 1) / 2.0
             row("no result carries most of the others", ok,
-                "the widest analytical result, %s, carries %d of the other %d" % (hub, nd, len(res) - 1) if ok else
-                "%s carries %d of the other %d results through the chain: a run that misses it loses them all, which "
-                "is one thing under another name; give later results inputs of their own (Depends on: "
-                "\"independent: <input>\") or move the weight" % (hub, nd, len(res) - 1))
+                "the widest analytical result, %s, is the only analytical input of %d of the other %d" % (hub, nd, len(res) - 1)
+                if ok else
+                "%s is the only analytical result behind %d of the other %d (%s): a run that misses it loses them all, "
+                "which is one thing under another name; give later results a second analytical input or an input of "
+                "their own (Depends on: \"independent: <input>\")" % (hub, nd, len(res) - 1, ", ".join(sole[hub])))
+            # A linear chain passes the count above when every link is called analytical; it is kept visible here, and
+            # the binding test is effort.py's largest single hint on the generator's own hurried passes.
+            reach = {x: [y for y in ids if y != x and x in ancestors(y)] for x in hubs}
+            wide = max(hubs, key=lambda x: len(reach[x]))
+            if len(reach[wide]) > (len(res) - 1) / 2.0:
+                row("results downstream of one analytical result", False,
+                    "%s sits upstream of %d of the other %d (%s): make sure each of them needs work of its own, or the "
+                    "largest single hint will show it" % (wide, len(reach[wide]), len(res) - 1, ", ".join(reach[wide])),
+                    warn=True)
         # The careful column is calibrated to the run record: frontier runs hold out, bootstrap, run the field's
         # textbook method and model any pattern one plot shows without being asked (task7 arch 5 held out 122
         # pairs and bootstrapped). A hurried failure that is only one of those moves is not a loss the runs make.
