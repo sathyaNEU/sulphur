@@ -1,26 +1,55 @@
 {
   "task": "task13",
-  "status": "DESIGN",
+  "status": "READY",
   "domain": "energy-systems-utilities",
   "subdomain": "grid-reliability-outage-analysis",
   "objective": "anomaly-detection",
-  "stage": 2,
-  "stage_name": "design",
+  "stage": 5,
+  "stage_name": "ready",
   "updated": "2026-11-09",
-  "call": "",
-  "stump": "A competent solver removes major event days, ranks feeders on tree-caused customer interruptions over 2024 to 2026 and funds the six highest, the southern windy and plantation feeders; one who normalises for wind still funds the dense plantation feeders, whose interruptions are the corridor base a catch-up cannot remove.",
+  "call": "PBY-10, HRK-03, HRK-05, WTK-02, PBY-11 and PBY-03 into the 2027 vegetation catch-up: 12,984 vegetation customer interruptions avoided in 2027-28 (0.33 SAIFI); rejects TOT-02, TIT-04, MKR-01, KWH-01, TIT-01 and TIT-03 (5,770)",
+  "stump": "A competent analyst who removes the major event days and ranks the feeders on vegetation customer interruptions since November 2023 funds TOT-02, TIT-04, MKR-01, KWH-01, TIT-01 and TIT-03 (5,770 avoided); normalising for wind still funds the plantation feeders (a dense corridor a catch-up leaves in place) and splitting corridor from growth without the wind funds the southern late-cycle feeders; the saving is on PBY-10, HRK-03, HRK-05, WTK-02, PBY-11 and PBY-03 (12,984).",
   "architecture": 1,
   "loops": 0,
-  "precut": {"exit": null, "date": ""},
-  "leak": {"leak_py": "", "reader": ""},
-  "duplicate_check": {"heart": "", "nearest": "mark196 0.06 (drivers)"},
-  "judge": {"verdict": "", "disposition": "", "gate_h": "", "report": ""},
-  "paper_pair": null,
-  "runs": {"run1": null, "run2": null, "average": null, "counterfactual_average": null,
-           "first_wrong_step": {"run1": "", "run2": ""}, "triage": "", "recorded": "", "history": []},
+  "precut": {
+    "exit": 0,
+    "date": "2026-11-09"
+  },
+  "leak": {
+    "leak_py": "REVIEW (2026-11-09, --asof 2026-11-03): no LEAK; REVIEW lines ruled in the design note",
+    "reader": "clean (2026-11-09): Q1 to Q4 none, Q5 programme terms 3(c) executes to the golden, Q6 analytical choice; sweep lines a to c harmless"
+  },
+  "duplicate_check": {
+    "heart": "WARN (repeat.gate_g vs task2, answered)",
+    "nearest": "mark196 / mark124 0.06 (drivers); surface: none promoted"
+  },
+  "judge": {
+    "verdict": "DETERMINISTIC",
+    "disposition": "APPROVE",
+    "gate_h": "pass: decisive step analytical, 6+ inferences, no one-fact rescue",
+    "report": "task13/determinism_check_report.md"
+  },
+  "paper_pair": 38.5,
+  "runs": {
+    "run1": null,
+    "run2": null,
+    "average": null,
+    "counterfactual_average": null,
+    "first_wrong_step": {
+      "run1": "",
+      "run2": ""
+    },
+    "triage": "",
+    "recorded": "",
+    "history": []
+  },
   "returned": [],
-  "resume": "stage 2: write the default path, deep reasoning, survivor anatomy, screens, fork and closure tables, ladder priced on the generator's clean truth, asks and prompt; precut.py exit 0",
+  "resume": "stage 6: the author uploads prompt.txt and target.zip, generates the two runs, then /triage-runs task13",
   "approved": null,
   "submitted": null,
-  "portal": {"status": "", "date": "", "note": ""}
+  "portal": {
+    "status": "",
+    "date": "",
+    "note": ""
+  }
 }

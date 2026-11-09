@@ -1,0 +1,142 @@
+{
+ "task": "task13",
+ "decision": "the six 11 kV feeders for Kotuku Networks' 2027 vegetation catch-up, judged on the sustained vegetation customer interruptions it avoids in the 2027-28 regulatory year outside major event days",
+ "deliverables": [
+  "vegetation_catchup_2027_feeders.csv",
+  "vegetation_catchup_2027_board_note.docx"
+ ],
+ "pull_date": "2026-11-03",
+ "as_of": "2026-11-03",
+ "files": [
+  {
+   "path": "target/oms_interruptions_2022-04_2026-10.csv",
+   "source": "Kotuku Networks outage management system interruption export (constructed operating layer)",
+   "covers": "one row per recorded interruption, April 2022 to October 2026: source, feeder, the protection that operated, local start and restore times, duration, customers interrupted, class and cause code",
+   "origin": "made by task13/generator from a seeded world (network, weather, corridors, interruptions); no LLM-written data",
+   "pulled_on": "2026-11-03",
+   "license": "constructed for this task; CC BY 4.0"
+  },
+  {
+   "path": "target/pou_aws_hourly/pou_aws_PBA_hourly_2006-2026.csv",
+   "source": "Pou Weather Services automatic weather station hourly record, Paua Bay (constructed operating layer)",
+   "covers": "hourly mean wind, maximum gust, direction, unit and quality flag, January 2006 to October 2026, UTC",
+   "origin": "made by task13/generator from a seeded world (network, weather, corridors, interruptions); no LLM-written data",
+   "pulled_on": "2026-11-03",
+   "license": "constructed for this task; CC BY 4.0"
+  },
+  {
+   "path": "target/pou_aws_hourly/pou_aws_MTF_hourly_2006-2026.csv",
+   "source": "Pou Weather Services automatic weather station hourly record, Mataroa Flats (constructed operating layer)",
+   "covers": "hourly mean wind, maximum gust, direction, unit and quality flag, January 2006 to October 2026, UTC",
+   "origin": "made by task13/generator from a seeded world (network, weather, corridors, interruptions); no LLM-written data",
+   "pulled_on": "2026-11-03",
+   "license": "constructed for this task; CC BY 4.0"
+  },
+  {
+   "path": "target/pou_aws_hourly/pou_aws_KWR_hourly_2006-2026.csv",
+   "source": "Pou Weather Services automatic weather station hourly record, Kowhai Ridge (constructed operating layer)",
+   "covers": "hourly mean wind, maximum gust, direction, unit and quality flag, January 2006 to October 2026, UTC",
+   "origin": "made by task13/generator from a seeded world (network, weather, corridors, interruptions); no LLM-written data",
+   "pulled_on": "2026-11-03",
+   "license": "constructed for this task; CC BY 4.0"
+  },
+  {
+   "path": "target/pou_aws_hourly/pou_aws_TSD_hourly_2006-2026.csv",
+   "source": "Pou Weather Services automatic weather station hourly record, Titi Saddle (constructed operating layer)",
+   "covers": "hourly mean wind, maximum gust, direction, unit and quality flag, January 2006 to October 2026, UTC; knots before July 2013",
+   "origin": "made by task13/generator from a seeded world (network, weather, corridors, interruptions); no LLM-written data",
+   "pulled_on": "2026-11-03",
+   "license": "constructed for this task; CC BY 4.0"
+  },
+  {
+   "path": "target/pou_aws_station_register.csv",
+   "source": "Pou Weather Services station register (constructed operating layer)",
+   "covers": "the four stations with coordinates, elevation, anemometer height, opening date and instrument notes",
+   "origin": "made by task13/generator from a seeded world (network, weather, corridors, interruptions); no LLM-written data",
+   "pulled_on": "2026-11-03",
+   "license": "constructed for this task; CC BY 4.0"
+  },
+  {
+   "path": "target/feeder_register_2026.xlsx",
+   "source": "Kotuku Networks 11 kV feeder register (constructed operating layer)",
+   "covers": "the 48 feeders with former codes, zone substation, district, overhead and underground km, ICPs, commissioning year and vegetation cycle; the zone substations with coordinates",
+   "origin": "made by task13/generator from a seeded world (network, weather, corridors, interruptions); no LLM-written data",
+   "pulled_on": "2026-11-03",
+   "license": "constructed for this task; CC BY 4.0"
+  },
+  {
+   "path": "target/protection_assets_2026-10.csv",
+   "source": "Kotuku Networks protection asset register (constructed operating layer)",
+   "covers": "every breaker, recloser and fuse with its feeder and the ICPs downstream of it",
+   "origin": "made by task13/generator from a seeded world (network, weather, corridors, interruptions); no LLM-written data",
+   "pulled_on": "2026-11-03",
+   "license": "constructed for this task; CC BY 4.0"
+  },
+  {
+   "path": "target/icp_counts_by_feeder_2022-04_2026-10.csv",
+   "source": "ICP registry month-end counts by feeder (constructed operating layer)",
+   "covers": "ICPs connected on each feeder at each month-end, April 2022 to October 2026",
+   "origin": "made by task13/generator from a seeded world (network, weather, corridors, interruptions); no LLM-written data",
+   "pulled_on": "2026-11-03",
+   "license": "constructed for this task; CC BY 4.0"
+  },
+  {
+   "path": "target/vegetation_cycle_log_2014-2026.xlsx",
+   "source": "Kotuku Networks vegetation cycle log (constructed operating layer)",
+   "covers": "every cycle trim job since 2014: feeder, crew started, crew finished, job closed, spans and km",
+   "origin": "made by task13/generator from a seeded world (network, weather, corridors, interruptions); no LLM-written data",
+   "pulled_on": "2026-11-03",
+   "license": "constructed for this task; CC BY 4.0"
+  },
+  {
+   "path": "target/reliability_reporting_standard.docx",
+   "source": "Kotuku Networks Reliability Reporting Standard, version 4 (constructed governing document)",
+   "covers": "definitions, counting rules, cause codes and the DPP3 and DPP4 major event day boundary values",
+   "origin": "made by task13/generator from a seeded world (network, weather, corridors, interruptions); no LLM-written data",
+   "pulled_on": "2026-11-03",
+   "license": "constructed for this task; CC BY 4.0"
+  },
+  {
+   "path": "target/vegetation_catchup_2027_programme_terms.docx",
+   "source": "Kotuku Networks 2027 Vegetation Catch-up: Programme Terms (constructed governing document)",
+   "covers": "the work, how the catch-up is judged, the comparison, eligibility and reporting",
+   "origin": "made by task13/generator from a seeded world (network, weather, corridors, interruptions); no LLM-written data",
+   "pulled_on": "2026-11-03",
+   "license": "constructed for this task; CC BY 4.0"
+  },
+  {
+   "path": "target/tree_notices_register_2024-2026.xlsx",
+   "source": "Kotuku Networks tree notices register (constructed operating layer)",
+   "covers": "notices issued to tree owners under the Electricity (Hazards from Trees) Regulations 2003, January 2024 to October 2026",
+   "origin": "made by task13/generator from a seeded world (network, weather, corridors, interruptions); no LLM-written data",
+   "pulled_on": "2026-11-03",
+   "license": "constructed for this task; CC BY 4.0"
+  },
+  {
+   "path": "target/ridgeline_2027_schedule_of_rates.docx",
+   "source": "Ridgeline Arborists 2027 schedule of rates (constructed commercial document)",
+   "covers": "per-span trimming rates by terrain class and rates for extras, valid for 2027",
+   "origin": "made by task13/generator from a seeded world (network, weather, corridors, interruptions); no LLM-written data",
+   "pulled_on": "2026-11-03",
+   "license": "constructed for this task; CC BY 4.0"
+  }
+ ],
+ "real_world_references": [
+  "Electricity (Hazards from Trees) Regulations 2003 (New Zealand), named in the tree notices register",
+  "Commerce Commission default price-quality paths (DPP3, DPP4), named in the reliability reporting standard as the source of the boundary values"
+ ],
+ "names": "organisations, places, stations and people are fictional; personas drawn with guard.py names --geo \"New Zealand\" --seed 1301",
+ "distractors": [
+  {
+   "path": "target/tree_notices_register_2024-2026.xlsx",
+   "why_it_looks_relevant": "vegetation hazard notices by feeder, the same corridors the catch-up trims",
+   "why_unused": "notices to tree owners say nothing about the interruptions a corridor trim avoids; no golden step reads it"
+  },
+  {
+   "path": "target/ridgeline_2027_schedule_of_rates.docx",
+   "why_it_looks_relevant": "the vegetation contractor's 2027 rates for the work the catch-up buys",
+   "why_unused": "the programme terms judge the catch-up on interruptions avoided, not cost; no golden step reads it"
+  }
+ ],
+ "labelled_in_pack": false
+}

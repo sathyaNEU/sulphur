@@ -12,8 +12,8 @@
   "shape": "01",
   "decision_type": "ranked_slate_under_cap",
   "answer_unit": "set_of_items",
-  "answer": "",
-  "answer_source": "",
+  "answer": "PBY-10, HRK-03, HRK-05, WTK-02, PBY-11 and PBY-03 (the six northern coastal feeders left longest since a cycle trim), avoiding about 12,984 vegetation customer interruptions in 2027-28, 0.33 of network SAIFI",
+  "answer_source": "task13/submission.md Final Recommendation; generator/figures.json",
   "gap": [
     "objective",
     "time"
@@ -34,7 +34,7 @@
   "validated_decoy": false,
   "context_artifact": "published_series",
   "stump_class": "analytical",
-  "analyst_test": "A strong analyst who cleans the outage records (entries made twice by the call centre and the field crew, planned outages in the same register, cause codes in three spellings, NZST and NZDT times without an offset), removes major event days with the regulator's boundary value and ranks the 11 kV feeders on tree-caused customer interruptions over 2024 to 2026, with the cycle log's years since trim beside them, funds the six highest: the southern hill-country feeders whose 2026 was the windiest in the record and the plantation feeders trimmed in 2024 and 2025; the catch-up's saving lies instead on the northern coastal feeders left longest untrimmed, whose interruptions 2026's calm held down.",
+  "analyst_test": "A strong analyst who cleans the outage export (call-centre records of logged operations, planned and momentary interruptions, the October 2023 cause recode, local times, Rangiora Street's renamed feeders), removes the major event days with the standard's boundary values and ranks the 11 kV feeders on vegetation customer interruptions over the three years to October 2026, with the cycle log's dates beside them, funds TOT-02, TIT-04, MKR-01, KWH-01, TIT-01 and TIT-03, the plantation feeders and a southern late-cycle feeder, which avoid 5,770 against the golden six's 12,984.",
   "domain_test": "The deciding quantity is the sustained customer interruptions a vegetation catch-up avoids on each 11 kV feeder in the 2027-28 regulatory year outside major event days, which needs each feeder's tree-caused interruption rate per unit of wind exposure (gust-hours at its weather station) split into the corridor base a feeder keeps straight after a cycle trim and the growth since its last trim that a catch-up removes; with another field's nouns the gust-hours, trim cycles, protective devices and major event days stop making sense.",
   "layer2_family": "estimand_identification",
   "layer2_pattern": "own:worst-feeders-selected-on-a-windy-year-and-a-dense-corridor-base",
@@ -52,11 +52,11 @@
   "role_family": "operations_director",
   "scoring_unit": "other",
   "spine": {
-    "file": "outage records 2022 to 2026",
-    "rows": 0,
+    "file": "oms_interruptions_2022-04_2026-10.csv",
+    "rows": 11396,
     "entity": "one interruption at one protective device",
     "grain": "interruption x device",
-    "source": "constructed (a fictional New Zealand lines company's outage management system, seeded world in task13/generator)"
+    "source": "constructed (a fictional New Zealand lines company's outage management system export, April 2022 to October 2026; seeded world in task13/generator)"
   },
   "forum": "board_of_directors",
   "forcing_event": "statutory_or_regulatory_filing",
@@ -83,13 +83,13 @@
     "vegetation_catchup_2027_board_note.docx"
   ],
   "opening_move": "question-first",
-  "question_form": "which",
+  "question_form": "where",
   "driver": "The decisive quantity is what restoring a unit's condition removes from its next-period event count, which is only the part of its event rate that has grown since the condition was last restored, per unit of an exposure that drives every event; the latest counts mix that growth with each unit's own base and with an exposure that moved in opposite directions across areas, so the units that look worst were selected on a high-exposure year or on a high base the restoration cannot touch, and the units with the most to gain look ordinary.",
-  "driver_concrete": "Each Kotuku feeder's tree-caused sustained interruptions scale with the gust-hours at its weather station and with the growth of its corridor since its last cycle trim; 2026 was calm on the northern coast, where the feeders left longest untrimmed sit, and the windiest year in the record in the southern hill country, where the plantation feeders trimmed in 2024 and 2025 carry a high base, so ranking on 2026 or on 2024 to 2026 interruptions funds southern feeders while the catch-up's saving lies on the northern ones.",
-  "stump": "A competent solver removes major event days, ranks feeders on tree-caused customer interruptions over 2024 to 2026 and funds the six highest, the southern windy and plantation feeders; one who normalises for wind still funds the dense plantation feeders, whose interruptions are the corridor base a catch-up cannot remove.",
-  "deep_chain": "(1) each feeder's tree-caused interruptions move with the gust-hours at its station, which fell in the north and rose in the south in 2026, so counts are read per unit of wind exposure; (2) a feeder's rate per gust-hour is its corridor's base, kept after a trim, times the growth since its last cycle trim, and only the growth is what a catch-up removes; (3) the growth with years since trim is read across feeders and years and the base per feeder; (4) the 2027-28 saving is each feeder's growth projected to the regulatory year at its station's long-run gust-hours, times its customers per tree interruption; (5) the six largest savings.",
+  "driver_concrete": "Each Kotuku feeder's vegetation interruptions scale with the gust load at its nearest weather station and with the growth of its corridor since its last cycle trim; in the three years to October 2026 the storm track sat south (a third of the usual damaging gusts on the northern coast, more than twice them in the southern hills, mean wind within 6 per cent), so ranking on recent interruptions funds the southern plantation and late-cycle feeders, and the plantation feeders cut in late 2025 keep most of their expected interruptions after any trim, while the catch-up's saving lies on the northern feeders left longest untrimmed.",
+  "stump": "A competent analyst who removes the major event days and ranks the feeders on vegetation customer interruptions since November 2023 funds TOT-02, TIT-04, MKR-01, KWH-01, TIT-01 and TIT-03 (avoiding 5,770); normalising for wind still funds the plantation feeders, whose expected interruptions are a dense corridor a catch-up leaves in place, and splitting the rate into corridor and growth without the wind funds the southern late-cycle feeders; the saving is on PBY-10, HRK-03, HRK-05, WTK-02, PBY-11 and PBY-03 (12,984).",
+  "deep_chain": "(1) the recent north-south swing in vegetation interruptions is the storm track, visible in damaging-gust hours and not in mean wind, so counts are read per unit of each feeder's station gust load; (2) on that scale a feeder's rate is its corridor's rate straight after a trim times a growth since the trim (15.5 per cent a year), fitted across feeders and months; (3) 2027-28 is projected at the station record's 2006-2025 gust load, not the recent years' or the outage record's own; (4) the saving is the growth the catch-up removes, in customer interruptions at each feeder's own customers per interruption; (5) the six largest.",
   "judgment": "two statistical judgments: an exposure judgment (counts normalised by each station's gust-hours, not by storm counts or calendar years, because the year's wind differed by area) and a decomposition judgment (each feeder's normalised rate split into a corridor base and a growth since its last trim, fitted across feeders and years, because only the growth is avoidable); the asks add the projection to 2027-28 and each feeder's customers per tree interruption.",
-  "one_fact_test": "The likeliest hint, 'normalise the tree outages for wind', leaves the solver ranking on rate per gust-hour, which funds the plantation feeders trimmed in 2024 and 2025 whose high rate is the base a catch-up cannot remove; the hint 'the catch-up removes only the growth since the last trim', without the wind, reads that growth off counts the calm north holds down; no single sentence does both.",
+  "one_fact_test": "The likeliest hint, 'normalise the tree interruptions for wind', leaves the run ranking on wind-normalised expected interruptions, which funds the plantation feeders whose corridor rate stays after a trim (1 of 6); 'the catch-up removes only the growth since the last trim', without the wind, reads that growth off counts the calm north holds down and funds the southern late-cycle feeders (0 to 1 of 6); no single sentence does both, and either still leaves the projection weather to choose.",
   "strategy_label": "WORKS IN FORM",
   "mechanism_source": "design_note",
   "differentiation": {},
