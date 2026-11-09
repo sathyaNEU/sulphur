@@ -1,100 +1,120 @@
 {
   "task": "task1",
   "project": "sulfur",
-  "architecture": "v1",
-  "drawn": "2026-11-07",
+  "architecture": "v2",
+  "drawn": "2026-11-09",
   "slot_note": "",
   "domain": "product-analytics",
   "subdomain": "retention-cohort-lifetime-value-modeling",
-  "niche": "a subscription language-tutoring platform deciding whether to re-run its autumn 2026 acquisition campaign at the same cost per paid member, judged on the cost of each campaign member still paying in their twelfth month, when the campaign's members were matched en masse to tutors onboarded in the autumn after a six-month onboarding pause",
+  "niche": "a Dutch seat-licensed diagramming SaaS forecasting its December 2027 annual recurring revenue for the board's 2027 plan, with a list price rise still landing at annual renewals, a new seat minimum on its monthly plan, seat right-sizing at renewal that follows how many licensed users actually work in the product, a sales pipeline that ages, and subsidiaries that leave together when a parent group consolidates vendors",
   "objective": "forecasting",
   "shape": "02",
-  "decision_type": "go_hold_or_stop",
+  "decision_type": "quantity_figure",
   "answer_unit": "currency",
-  "answer": "Do not book the January and February re-run of AUT26 on the same terms: about EUR 900 per twelfth-month member (about 950 paying a twelfth charge, 80 per cent range EUR 850 to 975) against the EUR 800 bar.",
-  "answer_source": "task1/submission.md block 1; task1/generator/figures.json (call, exp12, cost_per_12m_eur, range80_cost_eur)",
+  "answer": "",
+  "answer_source": "",
   "gap": [
-    "population",
-    "time"
+    "time",
+    "population"
   ],
   "pattern": [
     "none"
   ],
   "generators": [
-    "G14",
+    "G13",
+    "G4",
     "G6",
-    "G13"
+    "G9"
   ],
   "gate_g": "forecasting",
-  "calibration_form": "none",
-  "stump_strategy": "composition_mix",
+  "calibration_form": "existing_book_actuals",
+  "stump_strategy": "decomposition_attribution",
   "decisive_rule_filed": false,
   "official_decoy": false,
   "validated_decoy": false,
-  "context_artifact": "close_out_summary",
+  "context_artifact": "filed_model",
   "stump_class": "analytical",
-  "analyst_test": "A strong analyst who cleans the billing ledger (retries, refunds, replayed rows), applies the growth review standard's definitions, builds the members' paid-retention curve by membership month from every 2022 to 2026 membership, checks it against the spring 2025 campaign and last autumn's joiners and projects each autumn member to the twelfth charge files about EUR 725 per twelfth-month member (about 1,200 paying a twelfth charge) and books the re-run; the call is wrong because 91.5 per cent of the autumn members still paying sit with tutors in their first two teaching months, tutors stop at 21 to 26 per cent a month after four to six months of teaching against 0.8 past their first year, and a member whose tutor stops cancels 61.7 per cent of the time in the first month without the tutor and 26.7 the month after, so about 950 pay a twelfth charge and the cost is about EUR 900.",
-  "domain_test": "The deciding quantity is a campaign cohort's expected twelfth-month paid retention, projected from immature membership histories, the retention and lifetime-value task type's own estimate; what decides it is how a two-sided tutoring marketplace's supply churn carries into member churn through each member's tutor, so with another field's nouns the monthly billing clock, the campaign payback rule and the surge matching of new members to new tutors stop making sense.",
-  "layer2_family": "estimation_fit",
-  "layer2_pattern": "own:supply-linked-member-retention",
+  "analyst_test": "A careful but hurried analyst rebuilds the opening ARR correctly, then carries the book forward on trailing net revenue retention, recent monthly-plan churn and the CRM's stage probabilities with a band that treats accounts as independent, so the uplift is counted twice, padded monthly seats are run off too fast, the pipeline is credited at its stated odds and the 80 per cent figure sits above what the board can commit to.",
+  "domain_test": "Every result is a recurring-revenue retention quantity the cohort and lifetime-value task type estimates (price realisation at renewal, seat retention by utilisation and renewal number, a duration-dependent hazard on a shocked monthly cohort, pipeline conversion by stage and age, an ARR path with a band); swap in hospital or utility nouns and the annual renewal calendar, seat licences against active users and the list-price repricing at renewal stop making sense.",
+  "layer2_family": "forecast_uncertainty",
+  "layer2_pattern": "own:arr-forecast-by-renewal-mechanics",
   "layer1": [
-    "card charges retried up to three times inside a dunning window, the successful retry being the month's charge",
-    "first charges refunded in full inside the fourteen-day cooling-off period",
-    "webhook replays writing the same charge twice",
-    "an amount column renamed and moved to minor units in the 2025 billing export",
-    "plan codes renamed at the April 2025 price change",
-    "campaign codes in several cases and with channel suffixes in the attribution export",
-    "agency invoices in EUR and GBP, net and VAT lines, one credit note"
+    "contract amendments that supersede earlier lines (true-ups, co-terms) in one export",
+    "GBP contracts converted at the finance plan rate",
+    "workspace-to-account mapping with validity dates after account merges",
+    "Team invoices re-issued after a failed card payment",
+    "CRM opportunity amounts typed per month on some rows and per year on others",
+    "duplicate snapshot rows from a re-run export job"
   ],
-  "stakeholder_role": "the head of growth, who books or cancels the agency's spring flight",
-  "role_family": "product_manager",
+  "stakeholder_role": "the CFO, who puts the December 2027 ARR commitment in the board's 2027 plan",
+  "role_family": "finance_controller",
   "scoring_unit": "per active unit per period",
   "spine": {
-    "file": "billing_events_2022-01_2026-10.csv",
-    "rows": 203776,
-    "entity": "one billing event: a charge attempt, retry, refund or replayed webhook",
-    "grain": "member x billing event",
+    "file": "team_billing_2022-01_2026-10.csv",
+    "rows": 0,
+    "entity": "one monthly Team-plan invoice",
+    "grain": "account x month",
     "source": "synthetic"
   },
-  "forum": "line_manager_or_team",
-  "forcing_event": "purchase_order_or_contract",
+  "forum": "board_of_directors",
+  "forcing_event": "vote_or_meeting",
   "org_family": "software_or_platform",
   "world": {
-    "geography": "Germany (Berlin) with members in Germany, Austria, Switzerland, France, Spain, Italy, the Netherlands and the UK",
+    "geography": "the Netherlands (Utrecht) with customers across the EU and the UK",
     "currency": "EUR",
-    "org_type": "a subscription platform matching each member with a dedicated freelance language tutor",
+    "org_type": "a seat-licensed online diagramming and whiteboard software company",
     "invented_names": [
-      "Corvane",
-      "Fenwright Media"
+      "Tekenbord"
     ],
     "people": [
-      "Caroline Ritter",
-      "Marit Klemt",
-      "Veit Stadelmann"
+      "Naomi Weijters",
+      "Jelte Helmerhorst",
+      "Floortje Huisman"
     ]
   },
   "deliverables": [
-    "aut26_rerun_memo.docx",
-    "aut26_member_forecast.xlsx"
+    "arr_2027_forecast.xlsx",
+    "arr_2027_note.docx"
   ],
   "opening_move": "question-first",
-  "question_form": "whether",
-  "driver": "A unit's chance of reaching a milestone is set largely by whether the provider it is attached to keeps operating, providers stop at a rate that peaks a few months into their own tenure, and the forward group was attached almost wholly to providers in their first months, so an exit curve by the unit's own tenure, which validates on closed groups, overstates how many reach the milestone.",
-  "driver_concrete": "Each autumn 2026 campaign member's chance of paying a twelfth monthly charge is projected through their tutor: tutors stop at 21 to 26 per cent a month after four to six months of teaching against 0.8 per cent past their first year, a member whose tutor stops cancels 61.7 per cent of the time in the first month without the tutor and 26.7 the month after, and 91.5 per cent of the autumn members still paying are with tutors who began teaching in September or October 2026, so the expected twelfth-month members fall from about 1,200 on the membership-month curve to about 950 and the cost per twelfth-month member rises from about EUR 725 to about EUR 900.",
-  "stump": "A competent solver projects the autumn campaign's members on the platform's paid-retention curve by membership month, validated on the spring 2025 campaign and last autumn's joiners, and files about EUR 725 per twelfth-month member, inside the EUR 800 bar, and books the re-run; the step that lands it there is projecting each member on their own tenure when the member's cancellation rides on their tutor, and the autumn members' tutors are about to cross the months in which new tutors stop teaching.",
-  "deep_chain": "(1) rebuild each member's current tutor and each tutor's teaching months from the lesson log, which holds no tenure; (2) measure from every past tutor stop that a member whose tutor stops teaching cancels 61.7 per cent in the first month without the tutor and 26.7 the month after, against 5.5 in an ordinary month; (3) estimate tutors' stopping by months taught from every tutor's history, a hump after four to seven months; (4) recognise that 91.5 per cent of the autumn members still paying sit with tutors in their first two teaching months, a mix no earlier group had; (5) project each member to the twelfth charge through their tutor's stopping odds and their own cancellation curve estimated on months with an active tutor, so stops are not counted twice; (6) check the projection against the membership-month curve where they disagree (members of young tutors over six-month windows); (7) cost per twelfth-month member against EUR 800.",
-  "judgment": "That a member's retention is a function of their tutor's survival rather than of their own tenure alone, carried as a two-level projection; the data justify it through the cancellation spike after every tutor stop, the tutor stopping hump by teaching month, and the membership-month curve's miscalibration for members of young tutors on held-out 2026 months.",
-  "one_fact_test": "The likeliest hint is that members often leave when their tutor stops teaching; told that, a run still has to see that stopping depends on the tutor's months taught and that the autumn tutors are new (the member-weighted stop rate files about EUR 625 and the tutor-month rate EUR 739, both the re-run), estimate the members' own curve on active-tutor months so stops are not counted twice, and carry each member through the projection.",
-  "strategy_label": "WORKS IN FORM: heterogeneity decides through weighting to the forward group (the autumn members' tutor teaching months), the property rebuilt from the lesson log, never read off a column; outcomes not finished (the tutors' stops still to come)",
+  "question_form": "how-much",
+  "driver": "A forward total is the sum of several flows each set by its own mechanism (a step change still applying unit by unit at each unit's anniversary, a one-off shock whose excess exit rate decays with time since it hit, a size adjustment at each anniversary set by how much of its capacity each unit uses, a pipeline whose conversion falls with each item's age, and exits that arrive together within groups), so the trailing aggregate rate, the recent pooled rate, the stated conversion odds and an independent-unit band each misstate a different piece and the committed low quantile.",
+  "driver_concrete": "December 2027 ARR is the October 2026 book plus the March 2026 price rise still to land at Business renewals from November to February at the realised (not list) uplift, less the Team accounts padded to the new three-seat minimum running off on a hazard that falls with months since padding, less the seats Business accounts shed at renewal where utilisation is low (first renewals most), less logo churn that clusters by parent group, plus new Business ARR from a pipeline whose win rate falls with deal age, with the 80 per cent commitment read from a simulation that keeps a parent's accounts together.",
+  "stump": "A careful but hurried analyst rebuilds the October 2026 ARR, then projects December 2027 on the trailing twelve months' net revenue retention, the monthly plan's churn since April and the CRM's stage odds with accounts treated as independent, and tells the board the draft target can be committed, when the uplift in the trailing rate is mostly spent, the padded monthly seats run off on a falling hazard, the old open deals rarely close, low-utilisation accounts shed seats at their first renewal and parent groups leave together, so the figure with an 80 per cent chance of being met sits below the draft.",
+  "answer_shape": "forecast-bands-drivers",
+  "weight": "synthesis",
+  "chain_signature": [
+    "assembly-reconciliation",
+    "decomposition-attribution",
+    "missingness-measurement",
+    "investigation-loops",
+    "forecasting",
+    "uncertainty",
+    "synthesis"
+  ],
+  "results": "R1 opening ARR at 31 Oct 2026 by plan; R2 price uplift still to land at Business renewals; R3 the October Team book's ARR left in December 2027; R4 Business ARR lost to seat cuts and to non-renewal at 2027 renewals; R5 new Business ARR signed by December 2027; R6 the December 2027 ARR, its 80 per cent band and the figure with an 80 per cent chance of being met; R7 the monthly path and a bridge that adds back",
+  "one_fact_test": "the March price rise is mostly already in the book; rescues R2 and part of R6 at most (2 of 7 at the outside)",
+  "strategy_label": "WORKS IN FORM",
   "mechanism_source": "design_note",
   "differentiation": {
-    "task156": "task156 scales how often a fixed capacity is exceeded by the share of a network below a fluctuating level read from a second record; here nothing is exceeded and no level fluctuates: each member's chance of a twelfth charge runs through whether their tutor keeps teaching, a two-level survival carried member by member through the tutors' own stopping curve.",
-    "task134": "task134 prices each lot's rebuild chance against a payoff threshold and a cost step; here no payoff is computed: the yield is a member's survival conditioned on the survival of the tutor they were matched to, and the forward group's tutors sit at the start of their stopping hump.",
-    "task165": "task165 conditions an upgrade's gain on how much the old service level already treated, read from each unit's own record; here nothing is upgraded: the forward members were matched almost wholly to tutors in their first teaching months, and each member is projected through that tutor's chance of stopping.",
-    "task173": "task173 adds work-induced failure chances from a visit schedule (its first architecture conditioned comebacks on the opener's desk tenure); here the provider's tenure matters because the provider itself stops on a hump and takes about half its members with it, so the projection runs through the provider's survival rather than a rate conditioned on who served."
+    "mark162": "mark162's spent v1 had units taking a new version only at their next restart, a timing of one uptake; here a price step lands at each contract's anniversary as one of five flows (a decaying shock hazard, utilisation-driven seat change at renewal, age-decaying pipeline conversion and group-clustered exits), and no single flow carries the answer"
   },
-  "lineage": [],
-  "notes": "",
+  "lineage": [
+    {
+      "architecture": "v1",
+      "fate": "spent 2026-11-09: the project lead's review returned the single-deep-step design (one constructed factor, the tutors' stopping hump, placed in the forward cohort by an onboarding pause and surge; every graded figure came out of one projection)",
+      "driver": "A unit's chance of reaching a milestone is set largely by whether the provider it is attached to keeps operating, providers stop at a rate that peaks a few months into their own tenure, and the forward group was attached almost wholly to providers in their first months, so an exit curve by the unit's own tenure, which validates on closed groups, overstates how many reach the milestone.",
+      "stump": "A competent solver projects the autumn campaign's members on the platform's paid-retention curve by membership month, validated on the spring 2025 campaign and last autumn's joiners, and files about EUR 725 per twelfth-month member, inside the EUR 800 bar, and books the re-run; the step that lands it there is projecting each member on their own tenure when the member's cancellation rides on their tutor, and the autumn members' tutors are about to cross the months in which new tutors stop teaching.",
+      "shell": null
+    }
+  ],
+  "notes": "re-root of v1 (tutor-linked member retention, returned in kind by the 2026-11-09 review as one hidden constructed factor)",
   "client_domain": "product-analytics",
-  "registered": "2026-11-07T18:51:02Z"
+  "registered": "2026-11-09T23:52:54Z",
+  "shell": {
+    "question form": "whether",
+    "second-sentence opener": "the",
+    "rounding opener": "give",
+    "deliverable set": "docx+xlsx"
+  }
 }
