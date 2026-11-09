@@ -1,18 +1,17 @@
 {
  "task": "task6",
- "status": "RETURNED",
+ "status": "DESIGN",
  "domain": "general-statistics-data-science",
  "objective": "descriptive-distribution",
- "stage": 5,
- "stage_name": "ready",
+ "stage": 2,
+ "stage_name": "design",
  "updated": "2026-11-09",
- "stump": "A competent analyst who sees the trace store's sample thin in the busy hours reweights each service's kept server spans hour by hour by that service's own load balancer count, which lands the edge services, and passes partner-gateway at 1.4 per cent against its 2 per cent budget, because its spans were kept with the traces journey-search, seat-map and booking started at very different keep shares; weighted by each trace's own edge keep share, partner-gateway breaches at 2.9.",
- "architecture": 6,
- "loops": 1,
+ "stump": "",
+ "architecture": 7,
+ "loops": 0,
  "precut": {
-  "exit": 1,
-  "date": "2026-11-08",
-  "note": "72 checks, 1 FAIL: pair ceiling 58.0 against the paper target of 50 (54.0 with the landed run on the export's final service lists)"
+  "exit": null,
+  "date": ""
  },
  "leak": {
   "leak_py": "REVIEW (the four standing lines ruled at ship; prompt sweep clean)",
@@ -60,7 +59,7 @@
    "commit": ""
   }
  ],
- "resume": "re-root to a results chain at stage 2 (/build task6 from 2): the root keep-share weighting kept as one result among several, the sampling spread across the internal services, the breach list depending on the weighting, the incident windows and the attribution of each December incident to the service whose fault it was",
+ "resume": "stage 2: prototype the widened call graph and the seven December incidents (generator/seed_sweep.py), measure the SLI shifts, the crossings that need both the weights and the attribution, the per-window attribution margins and the interval gaps, then write the design note from the measured numbers",
  "approved": null,
  "delivered": null,
  "portal": {
@@ -80,7 +79,7 @@
  "zip_sha256_16": "e6d4daff8f522ed8",
  "precut_exit": 1,
  "shipped": "2026-11-07",
- "call": "Five internal services ran over their 2026 latency error budget and each gets a reliability engineer for the first half of 2027: journey-search, places, seat-map, partner-gateway and notifications.",
+ "call": "",
  "gates_at_ship": "checks 0 failures; verify PASS; rebuild byte-identical; figures_check 117 of 117; precut 61 checks 0 FAIL; voice-check exit 0; leak.py REVIEW (ruled harmless); leak reader clean on the shipped cut; determinism judge DETERMINISTIC, APPROVE; heart exit 0 (WARN gate_g repeat and overuse); surface exit 0, no promoted pair",
  "migrated_from": {
   "project": "Mark",
@@ -114,5 +113,7 @@
   "recorded": "2026-11-08",
   "history": []
  },
- "gates_at_reship": "checks 0 failures; verify PASS; goldens byte-identical on rebuild; figures_check 98 of 98; voice-check exit 0; leak.py REVIEW (standing lines); precut 1 FAIL (pair ceiling 58.0); freeze rubric FAIL (Critical Components block); guard validate clean, heart BLOCK (one draw-level row, organisation family against task1)"
+ "gates_at_reship": "checks 0 failures; verify PASS; goldens byte-identical on rebuild; figures_check 98 of 98; voice-check exit 0; leak.py REVIEW (standing lines); precut 1 FAIL (pair ceiling 58.0); freeze rubric FAIL (Critical Components block); guard validate clean, heart BLOCK (one draw-level row, organisation family against task1)",
+ "doctrine": "throughout",
+ "chain": "R1 each service's customer-facing incident minutes by half of 2026; R2 the service at fault in each December customer-facing incident; R3 every service's December latency SLI; R4 a 90 per cent interval on each over-budget service's SLI; R5 the services over budget; R6 the start order, shares, share together and requests beyond budget"
 }

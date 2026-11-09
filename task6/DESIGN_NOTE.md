@@ -1,9 +1,43 @@
-# task6 design note: Rotalinha's 2027 reliability programme, the internal services whose 2026 latency SLI breached its budget
+# task6: Rotalinha's internal services over their 2026 latency error budget (architecture 7)
 
-Architecture 6, a re-root begun 2026-11-07 in Descriptive & Distribution Analysis (the number's objective), after architecture
-5 (Corcally's Roastery 2027 sampling, marketing-consumer-research / segmentation-market-structure) landed on the portal with
-both responses on the golden (STATUS commit 134d71b8). Architectures 1 to 5 are in the card's lineage and in
-`## Tried and rejected`; architecture 5's design sections are in git history at 6e745ade.
+## Draw
+
+- **Card.** `.claude/skills/fingerprint/cards/task6.json`, architecture v7, registered 2026-11-09T16:23:04Z with
+  `--force` on one axis: `ban.pairing` against task2 (general-statistics-data-science with Descriptive & Distribution
+  Analysis). The platform assigned this returned task its domain and analysis type (task 4b456953, version 17, task
+  type match passed), so the re-root keeps the pairing; the reason is in the card's notes. Axes redrawn against the
+  window task2, task12, task13: stump_strategy population_selection to causal_design (task12 holds the old label, and
+  v7's flips rest on the incident attribution against load together with the weighting, not on the population
+  alone), context_artifact operations_log to monitoring_export (the balancer's metrics export and the trace store's
+  span export are what the review reads), org_family software_or_platform to retailer_or_ecommerce (Rotalinha sells
+  bus and ferry tickets online). WARNs answered: overuse.forum (the engineering leadership group that approved
+  PR-SLO-3 staffs the programme; no other forum holds the decision), repeat.deliverables csv+docx against task13 (a
+  per-service table and a review document is the genre of an SLO review).
+- **Why the same world.** The final review asked for this task to be fixed, not replaced: "make the sampling affect
+  several services in different, partial ways, each with a checkable SLI; let the breach list depend on several
+  connected pieces (weighting, periods, incident attribution), not one weight; trace-level weighting can stay as one
+  step among several." The world keeps its people, files and sampler; the call graph, the December incidents and the
+  standard's incident clause are what change.
+- **Pairing.** general-statistics-data-science / missing-data-censoring-measurement-error / descriptive-distribution.
+- **Analysis type:** Descriptive & Distribution Analysis (where each service's December latency share really sits,
+  once the sample's design weights and the incident time charged elsewhere are handled).
+- **Answer shape:** a flagged set with the evidence: the services over budget with each SLI, its interval and the
+  December incidents' faults behind it, in the order their engineers start.
+- **Weight:** a hard-to-measure quantity: each service's share of slow requests from a whole-trace sample whose
+  inclusion probability is recorded nowhere, with incident time charged to the service at fault. The last builds
+  leaned on attribution (task13), robustness (task2) and forecasting (task12).
+- **Decision.** Which internal services ran over their 2026 latency error budget; each gets a reliability engineer
+  for January to June 2027, the one whose SLI counts the most requests over its threshold first. Retrospective by
+  design: the SLO year closed on 31 December 2026 and the programme starts in January.
+- **Data-native sentence.** The trace store keeps whole traces at the edge, a fixed number an hour per edge service,
+  so every internal service's kept spans carry the keep shares of the several edge services that call it, in a mix
+  that differs from the traffic's; December's incidents were faults in one service's own handling that reached the
+  services calling it, at the evening peaks when every service is already slower with load, and the responders named
+  the services in the order they suspected them.
+- **People.** Teresa Nogueira (Head of Platform Reliability), Bruno Marques (FinOps), Ivo Pereira (SRE): the
+  personas drawn for architecture 5's world and kept with it.
+
+## Tried and rejected`; architecture 5's design sections are in git history at 6e745ade.
 
 ## Draw
 

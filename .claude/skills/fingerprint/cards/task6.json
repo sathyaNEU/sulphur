@@ -1,12 +1,12 @@
 {
   "task": "task6",
-  "architecture": "v6",
-  "drawn": "2026-11-07",
+  "architecture": "v7",
+  "drawn": "2026-11-09",
   "slot_note": "",
   "domain": "general-statistics-data-science",
   "subdomain": "missing-data-censoring-measurement-error",
   "client_domain": "general-statistics-data-science",
-  "niche": "a ticketing marketplace's internal service latency SLIs read from a trace store that keeps or drops whole traces at the edge, each edge service's keep rate reset every hour from its last hour of traffic, so a downstream service's kept spans carry the keep rate of the edge request that started their trace",
+  "niche": "a ticketing marketplace's internal service latency SLIs read from a trace store that keeps whole traces at the edge at an hourly reset keep rate, with December's customer-facing incidents charged to the service whose own handling caused them",
   "objective": "descriptive-distribution",
   "shape": "14",
   "decision_type": "designation_set",
@@ -14,7 +14,8 @@
   "answer": "Five internal services ran over their 2026 latency error budget and each gets a reliability engineer for the first half of 2027: journey-search, places, seat-map, partner-gateway and notifications.",
   "answer_source": "task6/submission.md block 1; golden/reliability_review_2026.docx; golden/service_sli_2026.csv",
   "gap": [
-    "population"
+    "population",
+    "time"
   ],
   "pattern": [
     "none"
@@ -26,16 +27,16 @@
   ],
   "gate_g": "method_or_model_selection",
   "calibration_form": "none",
-  "stump_strategy": "population_selection",
+  "stump_strategy": "causal_design",
   "decisive_rule_filed": false,
   "official_decoy": false,
   "validated_decoy": false,
-  "context_artifact": "operations_log",
+  "context_artifact": "monitoring_export",
   "stump_class": "analytical",
-  "analyst_test": "With every file conformed and every rule read, the easy route reweights each service's kept server spans hour by hour by its own load balancer count over its own kept spans, the standard post-stratified correction for a sample that thins under load, and passes partner-gateway, whose spans the store kept with the traces journey-search, seat-map and booking started at very different rates; the kept spans' own share passes journey-search, places and seat-map as well.",
-  "domain_test": "The deciding quantity is each service's latency SLI, a population share estimated from a cluster sample of traces whose inclusion probability is set at each trace's edge service hour by hour and recovered from that service's load balancer count; post-stratifying each service's own spans by hour, the textbook correction, treats the cluster sample as a stratified simple random sample of the service's requests and changes which services breach their budget.",
+  "analyst_test": "A careful run reweights each service's own kept spans hour by hour on its own load balancer count and puts each incident on the service the responders named first or the one with the most slow requests, so fares and partner-gateway fall under their budgets (measured at stage 2).",
+  "domain_test": "The field's own estimation from a cluster sample with unequal, unrecorded inclusion probabilities (each trace's root edge service and hour), cause against symptom in a call tree separated from load, and intervals that match the design; with a hospital's nouns the trace root, the keep share and the call tree have no meaning.",
   "layer2_family": "estimation_fit",
-  "layer2_pattern": "own:span-share-weighted-by-the-trace-roots-hourly-keep-rate-under-whole-trace-sampling",
+  "layer2_pattern": "own:cluster-sample-shares-weighted-by-trace-root-with-incident-time-charged-to-the-faulting-service",
   "layer1": [
     "span timestamps in microseconds since the epoch (UTC) against the SLO year in Lisbon time",
     "duplicate span rows from exporter batch retries",
@@ -57,7 +58,7 @@
   },
   "forum": "executive_team",
   "forcing_event": "budget_or_appropriation",
-  "org_family": "software_or_platform",
+  "org_family": "retailer_or_ecommerce",
   "world": {
     "geography": "Portugal (Lisbon)",
     "currency": "EUR",
@@ -74,10 +75,10 @@
     "service_sli_2026.csv"
   ],
   "opening_move": "question-first",
-  "question_form": "how-many",
-  "driver": "The decisive quantity is the share of a unit's events beyond a line, read from a store that keeps or drops whole chains of events by a decision taken where each chain starts, at a rate reset every hour from that starting unit's last hour of traffic; a downstream unit's kept events carry the inclusion probability of the unit that started their chain, recovered from that unit's hourly count in a separate usage record, and reweighting them by their own unit's hourly keep share under-weights the busiest upstream caller, whose calls are the slow ones.",
-  "driver_concrete": "Each internal service's December latency SLI weights every kept server span by the inverse of its trace's keep rate, the share of requests the edge service that started the trace kept that hour against the load balancer's count of them, because the trace store keeps or drops traces whole at the edge; partner-gateway's slow availability lookups come from journey-search's searches, kept at the smallest rate, so reweighting partner-gateway's spans hour by hour by its own count, or not at all, passes it.",
-  "stump": "A competent analyst who sees the trace store's sample thin in the busy hours reweights each service's kept server spans hour by hour by that service's own load balancer count, which lands the edge services, and passes partner-gateway, whose spans were kept with the traces that journey-search, seat-map and booking started at very different rates; journey-search's searches, which make partner-gateway's slow availability lookups, are kept at the smallest rate, so weighted by each trace's own edge keep rate partner-gateway breaches its 2 per cent budget.",
+  "question_form": "which",
+  "driver": "Several unit-level rates are estimated from a cluster sample whose inclusion probability is set by the stratum each cluster starts in, events are attributed to the unit whose own processing degraded first against its load-matched norm rather than to the first unit reported, the event time is removed only from the units that suffered it, and the intervals carry the clusters and the unequal weights, so the units over their limits need the weighting and the attribution together.",
+  "driver_concrete": "Each Rotalinha service's December latency SLI is estimated from the trace store's whole-trace edge sample with each kept span weighted by its root edge service's hourly keep share; each December customer-facing incident is put on the service whose own handling slowed first against its load-matched norm, not the service the responders named first; a service's incident time leaves its SLI only where another service was at fault; fares and partner-gateway run over only when the weights and the attribution are both right.",
+  "stump": "A careful run reweights each service's own kept spans hour by hour on its own load balancer count and puts each incident on the service the responders named first or the one with the most slow requests, so fares and partner-gateway fall under their budgets (measured at stage 2).",
   "mechanism_source": "design_note",
   "differentiation": {
     "mark245": "mark245 rebuilds whole recording periods a failing recorder lost, from each period's driver; here no hour is lost: the store keeps whole traces at a rate each edge service resets hourly, and a span's weight comes from the edge request that started its trace.",
@@ -87,7 +88,7 @@
     "mark270": "mark270 v1 corrects correlations among members picked in rank order of a weighted sum, and v6 joins sales to landings to place items outside their slot; here nothing is selected on the measured values: a span inherits the keep rate of its trace's edge service, recovered from that service's hourly count in a second system.",
     "mark452": "mark452 v2 weights reference points by the preliminary stratum they were drawn from after a reclassification; here the inclusion probability is recorded nowhere, belongs to the unit that started the trace rather than the unit measured, and is recovered hour by hour from the load balancer's count.",
     "mark264": "mark264 weights each sampled person by the inverse of an inclusion probability proportional to their own visit count; here a span's inclusion probability is not its own unit's at all but that of the edge service whose request started its trace, at that service's hourly keep share.",
-    "task6": "The card on file is this same architecture 6 as drawn before the prototype moved the sampler to the edge, with each service's spans kept at that service's own hourly rate; this card supersedes it: a span's keep rate is that of the edge request that started its trace, so the per-service hourly reweighting the old card made the golden is rung 3 here. No earlier architecture of the slot (1 to 5) shares the decisive gap, pattern and decision type."
+    "task6": "v7 keeps v6's world and its root keep-share weighting as one result among six; the services over budget now need the incident attribution as well, and the intervals, the incident minutes and the attribution are graded on their own"
   },
   "lineage": [
     {
@@ -231,6 +232,23 @@
       "layer2_pattern": "own:buyer-home-assembled-from-cards-and-accounts-sharing-a-payment-card",
       "architecture": "v5 (Corcally's Roastery 2027 sampling: the rival whose buying homes least often also bought the Roastery, homes assembled from Rewards cards and online accounts sharing a bank-card token in the acquirer's settlement file)",
       "fate": "spent 2026-11-07 at its first portal round: both responses named Oro Rosso, the golden, each building homes through the settlement file's shared card reference; filing the unit as the home announced the linkage, and leaving it unfiled forks the call"
+    },
+    {
+      "architecture": "v6 (Rotalinha's internal services over their 2026 latency error budget, each kept span weighted by its trace root's hourly keep share)",
+      "fate": "returned 2026-11-09 at final review (version 17, every platform check passed): one thing, the root keep-share weight decided partner-gateway alone (1.4 to 2.9 per cent against 2.0, four services over to five); re-rooted to a results chain in the same world on the reviewer's own direction",
+      "domain": "general-statistics-data-science",
+      "objective": "descriptive-distribution",
+      "gap": [
+        "population"
+      ],
+      "pattern": [
+        "none"
+      ],
+      "gate_g": "method_or_model_selection",
+      "decision_type": "designation_set",
+      "driver": "The decisive quantity is the share of a unit's events beyond a line, read from a store that keeps or drops whole chains of events by a decision taken where each chain starts, at a rate reset every hour from that starting unit's last hour of traffic; a downstream unit's kept events carry the inclusion probability of the unit that started their chain, recovered from that unit's hourly count in a separate usage record, and reweighting them by their own unit's hourly keep share under-weights the busiest upstream caller, whose calls are the slow ones.",
+      "driver_concrete": "Each internal service's December latency SLI weights every kept server span by the inverse of its trace's keep rate, the share of requests the edge service that started the trace kept that hour against the load balancer's count of them, because the trace store keeps or drops traces whole at the edge; partner-gateway's slow availability lookups come from journey-search's searches, kept at the smallest rate, so reweighting partner-gateway's spans hour by hour by its own count, or not at all, passes it.",
+      "stump": "A competent analyst who sees the trace store's sample thin in the busy hours reweights each service's kept server spans hour by hour by that service's own load balancer count, which lands the edge services, and passes partner-gateway, whose spans were kept with the traces that journey-search, seat-map and booking started at very different rates; journey-search's searches, which make partner-gateway's slow availability lookups, are kept at the smallest rate, so weighted by each trace's own edge keep rate partner-gateway breaches its 2 per cent budget."
     }
   ],
   "lineage_shells": [
@@ -245,12 +263,29 @@
       "second-sentence opener": "that",
       "rounding opener": "shares",
       "deliverable set": "csv+pptx"
+    },
+    {
+      "question form": "how-many",
+      "second-sentence opener": "each",
+      "rounding opener": "slis",
+      "deliverable set": "csv+docx"
     }
   ],
-  "notes": "Architecture 6, re-root 2026-11-07 after architecture 5 landed on the portal (both responses on the golden). Candidates 1 (inherited trace sampling, task452 v2) and 2 (onboarding critical path, task127 v2 and task472 v2) were set aside at the draw. This draw was prototyped on the clean truth before registration (scratch p1.py): the kept spans' own share and a day-by-day reweighting understate the busy services, hourly and minute weighting agree. WARN repeat.decision (designation_set against task156) answered in the note.",
-  "registered": "2026-11-07T22:59:26Z",
+  "notes": "Architecture 6, re-root 2026-11-07 after architecture 5 landed on the portal (both responses on the golden). Candidates 1 (inherited trace sampling, task452 v2) and 2 (onboarding critical path, task127 v2 and task472 v2) were set aside at the draw. This draw was prototyped on the clean truth before registration (scratch p1.py): the kept spans' own share and a day-by-day reweighting understate the busy services, hourly and minute weighting agree. WARN repeat.decision (designation_set against task156) answered in the note. v7 (2026-11-09): stump_strategy causal_design for the incident attribution against load (the result that, with the weighting, moves the list); population_selection (v6) is blocked by task12 inside the window and v7 is not decided by it. Axes redrawn at v7 against the window task2, task12, task13: context_artifact operations_log to monitoring_export (the load balancer's metrics export and the trace store's span export are what the review reads), org_family software_or_platform to retailer_or_ecommerce (Rotalinha sells bus and ferry tickets online). ban.pairing against task2 is forced: the platform fixed this returned task's domain and analysis type (task 4b456953, task type match passed), so the re-root cannot redraw the pairing.",
+  "answer_shape": "flagged-set",
+  "weight": "hard-to-measure",
+  "chain_signature": [
+    "assembly-reconciliation",
+    "investigation-loops",
+    "missingness-measurement",
+    "uncertainty",
+    "synthesis",
+    "decomposition-attribution"
+  ],
+  "results": "R1 each service's customer-facing incident minutes by half of 2026; R2 the service at fault in each December customer-facing incident; R3 every service's December latency SLI; R4 a 90 per cent interval on each over-budget service's SLI; R5 the services over budget; R6 the start order, shares, share together and requests beyond budget",
+  "registered": "2026-11-09T16:23:04Z",
   "shell": {
-    "question form": "how-many",
+    "question form": "which",
     "second-sentence opener": "each",
     "rounding opener": "slis",
     "deliverable set": "csv+docx"
