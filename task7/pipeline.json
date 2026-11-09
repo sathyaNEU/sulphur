@@ -1,34 +1,31 @@
 {
  "task": "task7",
- "status": "RETURNED",
+ "status": "DESIGN",
  "domain": "energy-systems-utilities",
  "objective": "experiment-causal",
- "stage": 5,
- "stage_name": "ready",
+ "stage": 2,
+ "stage_name": "design",
  "updated": "2026-11-09",
- "stump": "The plain lottery comparison (the works buildings against every owner the draw passed over, each against its own 2018/19 season) files 13, 2 and below zero and funds insulation alone, heating optimisation at EUR 280 a tonne; service visits reached most passed-over buildings district by district from August 2019, each followed by normal-weather use about 7 per cent lower, and no works building had one, so against passed-over buildings not yet visited, each dropped from its visit season, the rates are 16, 6 and 2 and heating optimisation is funded at EUR 90 a tonne.",
- "architecture": 6,
+ "stump": "",
+ "architecture": 7,
  "loops": 0,
  "precut": {
-  "exit": 0,
-  "date": "2026-11-08",
-  "checks": 75,
-  "note": "final cut, 0 FAIL, 0 WARN"
+  "exit": null,
+  "date": ""
  },
  "leak": {
-  "leak_py": "REVIEW, no LEAK (2026-11-08, --asof 2026-06-15, final cut): the measures named in the plan, rules and federal overview, generic stump terms; ruled in the solver's-eye read",
-  "reader": "2026-11-08 isolated reader twice (Sonnet, medium): no step named, no ranking or helper file, Q6 analytical; the plan's 4.2 averaging sentence reworded to each building's saving, averaged"
+  "leak_py": "",
+  "reader": ""
  },
  "duplicate_check": {
-  "heart": "BLOCK (2026-11-08, final cut, corpus at 8607c7e): ban.strategy causal_design and ban.org_family utility_or_infrastructure against task10 v5, which registered both axes at 17:16:44Z after this architecture drew them at 16:17:59Z (DRAWN 0a705d3); kept as the honest labels, the only unbanned pair being a relabel, and handed to the author at sign-off (reduce-house-fixes H27 and H31)",
-  "surface": "exit 0 (2026-11-08, final cut); personas Magda Peukert, Torben Roemer"
+  "heart": "",
+  "nearest": ""
  },
  "judge": {
-  "verdict": "DETERMINISTIC",
-  "disposition": "first pass NOT_DETERMINISTIC (the saving-rate construction unfiled), fixed by filing plan 4.2's construction; re-judge DETERMINISTIC, FIX_NOW on the solution text (the service-visit wording, the draw-balance figure, why the visit season is dropped), fixed in the generator; the one targeted re-judge of that FIX_NOW DETERMINISTIC, its refinements applied (balance within 1.5 per cent, the visit season 3 to 6 per cent below, step 9's reason stated from the data); pack and prompt untouched by both fixes",
-  "gate_g": "statistical_rigor (a comparison contaminated by a concurrent change), analytical_non_defect, surface_read_dependency no, sole_data_defect no",
-  "gate_h": "domain pass, layers pass, decisive_step analytical, chain 5 inferences, judgment comparison-group contamination and response timing by measure",
-  "report": "task7/determinism_check_report.md"
+  "verdict": "",
+  "disposition": "",
+  "gate_h": "",
+  "report": ""
  },
  "returned": [
   {
@@ -84,7 +81,7 @@
    "feedback": "task7/runs/review_2026-11-09.md"
   }
  ],
- "resume": "RETURNED: re-root at stage 1 as architecture 7 (results chain), the lottery and the per-measure projection kept",
+ "resume": "stage 2 design: the generator's world rebuilt (effects by type and works age, visits in both arms, late and withdrawn applications by measure), the golden and the hurried passes run on the clean truth, the note's bands and effort test filled, precut.py exit 0",
  "approved": null,
  "delivered": "2026-11-08",
  "portal": null,
@@ -188,6 +185,55 @@
    "portal_status": "FAILED_TO_STUMP",
    "portal_status_date": "2026-11-07",
    "fate": "FAILED_TO_STUMP at the portal 2026-11-07: both responses filed the golden split; re-rooted as architecture 4"
+  },
+  "architecture_6": {
+   "domain": "energy-systems-utilities",
+   "subdomain": "efficiency-savings-verification",
+   "objective": "experiment-causal",
+   "stage": "returned",
+   "stump": "The plain lottery comparison (the works buildings against every owner the draw passed over, each against its own 2018/19 season) files 13, 2 and below zero and funds insulation alone, heating optimisation at EUR 280 a tonne; service visits reached most passed-over buildings district by district from August 2019, each followed by normal-weather use about 7 per cent lower, and no works building had one, so against passed-over buildings not yet visited, each dropped from its visit season, the rates are 16, 6 and 2 and heating optimisation is funded at EUR 90 a tonne.",
+   "call": "Fund insulation and heating optimisation in the 2026 round, not heating controls: 16, 6 and 2 per cent, EUR 90, 90 and 220 of grant a tonne against the EUR 120 limit; about EUR 8 million and 90,000 lifetime tonnes once the offer closes; about 3,500 tonnes of CO2 saved in 2025/26.",
+   "precut": {
+    "exit": 0,
+    "date": "2026-11-08",
+    "checks": 75,
+    "note": "final cut, 0 FAIL, 0 WARN"
+   },
+   "leak": {
+    "leak_py": "REVIEW, no LEAK (2026-11-08, --asof 2026-06-15, final cut): the measures named in the plan, rules and federal overview, generic stump terms; ruled in the solver's-eye read",
+    "reader": "2026-11-08 isolated reader twice (Sonnet, medium): no step named, no ranking or helper file, Q6 analytical; the plan's 4.2 averaging sentence reworded to each building's saving, averaged"
+   },
+   "judge": {
+    "verdict": "DETERMINISTIC",
+    "disposition": "first pass NOT_DETERMINISTIC (the saving-rate construction unfiled), fixed by filing plan 4.2's construction; re-judge DETERMINISTIC, FIX_NOW on the solution text (the service-visit wording, the draw-balance figure, why the visit season is dropped), fixed in the generator; the one targeted re-judge of that FIX_NOW DETERMINISTIC, its refinements applied (balance within 1.5 per cent, the visit season 3 to 6 per cent below, step 9's reason stated from the data); pack and prompt untouched by both fixes",
+    "gate_g": "statistical_rigor (a comparison contaminated by a concurrent change), analytical_non_defect, surface_read_dependency no, sole_data_defect no",
+    "gate_h": "domain pass, layers pass, decisive_step analytical, chain 5 inferences, judgment comparison-group contamination and response timing by measure",
+    "report": "task7/determinism_check_report.md"
+   },
+   "duplicate_check": {
+    "heart": "BLOCK (2026-11-08, final cut, corpus at 8607c7e): ban.strategy causal_design and ban.org_family utility_or_infrastructure against task10 v5, which registered both axes at 17:16:44Z after this architecture drew them at 16:17:59Z (DRAWN 0a705d3); kept as the honest labels, the only unbanned pair being a relabel, and handed to the author at sign-off (reduce-house-fixes H27 and H31)",
+    "surface": "exit 0 (2026-11-08, final cut); personas Magda Peukert, Torben Roemer"
+   },
+   "gates": {
+    "date": "2026-11-08",
+    "checks": "79 of 79",
+    "figures_check": "100 of 100",
+    "precut": "exit 0, 75 checks",
+    "voice_check": "exit 0 (shell quota WARN: pptx+xlsx at 30 per cent)",
+    "leak_py": "REVIEW, no LEAK",
+    "surface": "exit 0",
+    "heart": "BLOCK, later-card collision recorded above",
+    "audit_containers": "exit 0, 0 FAIL, 0 WARN",
+    "byte_identical": "make.py --twice: target, golden, both zips, submission, metadata, figures.json SAME"
+   },
+   "build": {
+    "checks": "79 of 79 (generator/checks.py on the cut pack)",
+    "figures_check": "100 of 100",
+    "byte_identical": "make.py --twice: target, golden, both zips, submission, metadata, figures.json SAME",
+    "ceiling": "pair 45.8 (landed run 79.0, default path 12.5), shallow keep 9.9 per cent; one second judgment taken 52.3, both 56.2"
+   },
+   "zips_note": "target.zip and golden.zip of architecture 6 are in git at aa2fe65",
+   "fate": "RETURNED at the platform's preliminary review 2026-11-09 (version 17): one thing, the visits in the passed-over arm, the plan's formulas carrying the rest (runs/review_2026-11-09.md)"
   }
  },
  "restored": "2026-10-14: architecture 3 (a full refresh at the author's request) drew judge SEND_BACK at stage 4, and the author chose to restore this architecture as task7's live build (pack unchanged from SHIPPED 59aaaba)",
@@ -206,12 +252,11 @@
   "average": null,
   "counterfactual_average": null,
   "first_wrong_step": {
-   "run1": "none: every graded cell landed",
-   "run2": "not available"
+   "run1": "",
+   "run2": ""
   },
   "triage": "",
-  "recorded": "2026-11-08",
-  "report": "runs/arch5/run1.md",
+  "recorded": "",
   "history": [
    {
     "round": 1,
@@ -247,23 +292,14 @@
  },
  "paper_pair": null,
  "subdomain": "efficiency-savings-verification",
- "call": "Fund insulation and heating optimisation in the 2026 round, not heating controls: 16, 6 and 2 per cent, EUR 90, 90 and 220 of grant a tonne against the EUR 120 limit; about EUR 8 million and 90,000 lifetime tonnes once the offer closes; about 3,500 tonnes of CO2 saved in 2025/26.",
- "gates": {
-  "date": "2026-11-08",
-  "checks": "79 of 79",
-  "figures_check": "100 of 100",
-  "precut": "exit 0, 75 checks",
-  "voice_check": "exit 0 (shell quota WARN: pptx+xlsx at 30 per cent)",
-  "leak_py": "REVIEW, no LEAK",
-  "surface": "exit 0",
-  "heart": "BLOCK, later-card collision recorded above",
-  "audit_containers": "exit 0, 0 FAIL, 0 WARN",
-  "byte_identical": "make.py --twice: target, golden, both zips, submission, metadata, figures.json SAME"
+ "call": "",
+ "doctrine": "throughout",
+ "chain": "R1 each measure's saving by season against the passed-over owners; R2 its saving over its service life; R3 its saving by building type; R4 its lifetime saving rate on this year's applications; R5 grant per tonne and the funded set; R6 each grant per tonne's range and flip rate; R7 each measure's applications, grant and grant paid at close; R8 the pilot's 2025/26 CO2",
+ "effort": {
+  "quick": null,
+  "careful": null,
+  "thorough": null,
+  "largest_hint": ""
  },
- "build": {
-  "checks": "79 of 79 (generator/checks.py on the cut pack)",
-  "figures_check": "100 of 100",
-  "byte_identical": "make.py --twice: target, golden, both zips, submission, metadata, figures.json SAME",
-  "ceiling": "pair 45.8 (landed run 79.0, default path 12.5), shallow keep 9.9 per cent; one second judgment taken 52.3, both 56.2"
- }
+ "prompt_rewritten": false
 }
