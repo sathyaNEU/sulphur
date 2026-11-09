@@ -1,0 +1,107 @@
+{
+ "task": "task12",
+ "decision": "Northvale Oat's 2027 treatment under Northvale Oat Co.'s portfolio review standard, set from the line's forecast 2027 share of plant-based beverage litres",
+ "deliverables": [
+  "northvale_oat_2027_treatment.docx",
+  "northvale_oat_2027_forecast.xlsx"
+ ],
+ "pull_date": "2026-11-05",
+ "as_of": "2026-11-08",
+ "files": [
+  {
+   "path": "target/lcp_purchases_plant_beverages_2024w01_2026w44.csv",
+   "source": "Lakeshore Consumer Panel purchase-line export, plant-based beverages (constructed operating layer)",
+   "covers": "one row per item scanned from a panel household receipt, 2024-W01 to 2026-W44",
+   "origin": "made by task12/generator from a seeded weekly world; no LLM-written data",
+   "pulled_on": "2026-11-05",
+   "license": "constructed for this task; CC BY 4.0"
+  },
+  {
+   "path": "target/lcp_household_register_2026w44.csv",
+   "source": "Lakeshore Consumer Panel household register (constructed operating layer)",
+   "covers": "one row per household ever recruited: province, size, bands, joined and left weeks, yearly projection factors",
+   "origin": "made by task12/generator from a seeded weekly world; no LLM-written data",
+   "pulled_on": "2026-11-05",
+   "license": "constructed for this task; CC BY 4.0"
+  },
+  {
+   "path": "target/lcp_product_master_plant_beverages_2026-10.xlsx",
+   "source": "Lakeshore Consumer Panel product master, October 2026 refresh (constructed operating layer)",
+   "covers": "every item in the plant-based beverages category with brand, own label, segment and pack",
+   "origin": "made by task12/generator from a seeded weekly world; no LLM-written data",
+   "pulled_on": "2026-11-05",
+   "license": "constructed for this task; CC BY 4.0"
+  },
+  {
+   "path": "target/lcp_banner_codes.csv",
+   "source": "Lakeshore Consumer Panel banner code table (constructed operating layer)",
+   "covers": "banner codes, names, channels and the 2025 recode",
+   "origin": "made by task12/generator from a seeded weekly world; no LLM-written data",
+   "pulled_on": "2026-11-05",
+   "license": "constructed for this task; CC BY 4.0"
+  },
+  {
+   "path": "target/lcp_week_calendar_2024_2027.csv",
+   "source": "Lakeshore Consumer Panel week calendar (constructed operating layer)",
+   "covers": "panel weeks 2024-W01 to 2027-W52 with dates, retail periods and quarters",
+   "origin": "made by task12/generator from a seeded weekly world; no LLM-written data",
+   "pulled_on": "2026-11-05",
+   "license": "constructed for this task; CC BY 4.0"
+  },
+  {
+   "path": "target/mra_weighted_distribution_northvale_2026.csv",
+   "source": "Meridian Retail Audit weekly read of Northvale Oat (constructed operating layer)",
+   "covers": "weighted distribution and shelf prices by banner and item, 2026-W15 to 2026-W44",
+   "origin": "made by task12/generator from a seeded weekly world; no LLM-written data",
+   "pulled_on": "2026-11-05",
+   "license": "constructed for this task; CC BY 4.0"
+  },
+  {
+   "path": "target/northvale_trade_calendar_2026.xlsx",
+   "source": "Northvale Oat Co. trade marketing (constructed operating layer)",
+   "covers": "the 2026 funded promotion events by banner",
+   "origin": "made by task12/generator from a seeded weekly world; no LLM-written data",
+   "pulled_on": "2026-11-05",
+   "license": "constructed for this task; CC BY 4.0"
+  },
+  {
+   "path": "target/northvale_media_plan_2026.xlsx",
+   "source": "Halyard & Finch media flighting (constructed operating layer)",
+   "covers": "Northvale Oat 2026 media weeks as bought",
+   "origin": "made by task12/generator from a seeded weekly world; no LLM-written data",
+   "pulled_on": "2026-11-05",
+   "license": "constructed for this task; CC BY 4.0"
+  },
+  {
+   "path": "target/portfolio_review_standard_2026.docx",
+   "source": "Northvale Oat Co. Finance and Commercial (constructed operating layer)",
+   "covers": "the portfolio review standard, version 3.1",
+   "origin": "made by task12/generator from a seeded weekly world; no LLM-written data",
+   "pulled_on": "2026-11-05",
+   "license": "constructed for this task; CC BY 4.0"
+  },
+  {
+   "path": "target/brand_health_tracker_wave9_2026-09.xlsx",
+   "source": "Northvale Oat Co. insights team (constructed operating layer)",
+   "covers": "brand health tracker wave 9, September 2026",
+   "origin": "made by task12/generator from a seeded weekly world; no LLM-written data",
+   "pulled_on": "2026-11-05",
+   "license": "constructed for this task; CC BY 4.0"
+  },
+  {
+   "path": "target/halyard_finch_northvale_2027_support_proposal.docx",
+   "source": "Halyard & Finch (constructed operating layer)",
+   "covers": "the agency's 2027 support plan proposal for Northvale Oat",
+   "origin": "made by task12/generator from a seeded weekly world; no LLM-written data",
+   "pulled_on": "2026-11-05",
+   "license": "constructed for this task; CC BY 4.0"
+  }
+ ],
+ "distractor_files": [
+  "target/brand_health_tracker_wave9_2026-09.xlsx",
+  "target/halyard_finch_northvale_2027_support_proposal.docx"
+ ],
+ "domain": "Marketing & Consumer Research",
+ "objective": "Forecasting & Predictive Modeling",
+ "stated_inputs": []
+}

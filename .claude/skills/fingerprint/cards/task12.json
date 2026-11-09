@@ -12,8 +12,8 @@
   "shape": "02",
   "decision_type": "dial_setting",
   "answer_unit": "named_option",
-  "answer": "",
-  "answer_source": "",
+  "answer": "Hold: about 2.4 per cent of the plant-based beverage category's 2027 litres (2.1 to 2.6 across constructions), inside the 2.0 to below 2.9 hold band; 10.5 million litres, 1,310,000 households buying at 5.1 purchases each, about 50,000 of them first-time buyers",
+  "answer_source": "task12/generator/figures.json (golden.py: each buyer at its rebuilt price group's settled share per stocked litre, read from same-group buyers at 16 weeks or more of tenure, carried at its stocked-store share at the review, 2024-25 litres grown; households not yet buying at the first-purchase rate of the weeks matching the basis; the static panel raised to the register's 2026 factor total)",
   "gap": [
     "population",
     "time"
@@ -22,8 +22,8 @@
     "none"
   ],
   "generators": [
+    "G17",
     "G6",
-    "G14",
     "G13"
   ],
   "gate_g": "forecasting",
@@ -32,9 +32,9 @@
   "decisive_rule_filed": false,
   "official_decoy": false,
   "validated_decoy": false,
-  "context_artifact": "filed_standard",
+  "context_artifact": "operations_log",
   "stump_class": "analytical",
-  "analyst_test": "A strong analyst who cleans the panel's purchase lines (receipt rescans, returns, multibuy prices, EANs that lost their leading zero, the system migration's date format), restricts to continuously reporting households, fits the cumulative trial curve, reads repeat from the most mature trier cohort and the buying index from triers' 2026 category litres, and multiplies them (Parfitt-Collins with its textbook caveats) files about 3.0 per cent of 2027 category litres and puts the line in the support band; the call is wrong because the April cohort that gives the repeat rate is premium-tier heavy while a fifth of trier litres sit with value-tier households that tried when the discount banners listed the line and settle near 1 per cent, and because triers were caught in their own high-buying phases, so their 2026 litres overstate their 2027 weight; both corrected, the line holds about 2.0 per cent and sits in the hold band.",
+  "analyst_test": "A strong analyst who cleans the panel's purchase lines (receipt rescans, returns, multibuy totals on the first unit, item codes that lost a leading zero, the platform migration's date format, the banner recode), restricts to continuously reporting households and runs Parfitt-Collins with its textbook caveats (penetration reached 21.0 per cent, repeat read from the most mature launch-month cohort 17.1 per cent, buying index since launch 1.34) files 4.8 per cent of 2027 category litres and puts the line in the expand band; the call is wrong because the launch cohort is three-quarters premium-price litres while the Loyal Grocer wave, mostly mainstream, is still in its first weeks, so each buyer has to be carried at its own rebuilt price group's settled share read from long-standing buyers of that group: about 2.4 per cent, hold.",
   "domain_test": "The deciding quantity is a new grocery line's 2027 share of category litres projected from a household panel's trial and repeat, the consumer-panel new-product forecast (Parfitt-Collins penetration, repeat and buying index); what decides it is how each household's price tier, rebuilt from what it paid per litre against private label and the premium brands before launch, sets its long-run share of category requirements, and how a household's category buying falls back after the phase in which it tried, so with another field's nouns the litre-weighted share of requirements, private-label reversion and the banners' listing dates stop making sense.",
   "layer2_family": "estimand_identification",
   "layer2_pattern": "own:repeat-floor-set-by-pre-launch-price-tier-and-trier-buying-caught-high",
@@ -52,14 +52,14 @@
   "role_family": "research_desk",
   "scoring_unit": "other",
   "spine": {
-    "file": "panel_purchases_plant_beverages_2024w01_2026w44.csv",
-    "rows": 300000,
-    "entity": "one household purchase line: one product bought on one shopping trip",
-    "grain": "household x trip x EAN",
-    "source": "synthetic (a fictional Canadian household purchase panel)"
+    "file": "lcp_purchases_plant_beverages_2024w01_2026w44.csv",
+    "rows": 447844,
+    "entity": "one household purchase line: one item scanned from one shopping receipt",
+    "grain": "household x receipt x item",
+    "source": "constructed (a fictional Canadian household purchase panel, seeded world in task12/generator)"
   },
   "forum": "line_manager_or_team",
-  "forcing_event": "purchase_order_or_contract",
+  "forcing_event": "vote_or_meeting",
   "org_family": "manufacturer",
   "world": {
     "geography": "Canada (national: Atlantic, Quebec, Ontario, Prairies, British Columbia)",
@@ -72,7 +72,10 @@
     "people": [
       "Gabriel Sloan",
       "Angela Reyes",
-      "Brian Mueller"
+      "Brian Mueller",
+      "Kimberly Stanley",
+      "Eric Hernandez",
+      "Mary Gonzales"
     ]
   },
   "deliverables": [
@@ -81,12 +84,12 @@
   ],
   "opening_move": "question-first",
   "question_form": "how-much",
-  "driver": "The forward level is a weighted sum over units that have entered and units still to enter: each entered unit's response fades with time since its own entry to a floor set by a property rebuilt from its own pre-entry history, the earliest entrants are drawn mostly from the high-floor kind while a later wave opened by a second access route is drawn from the low-floor kind, and each entrant was caught during a transient high in its own activity that the forward window does not keep; reading the floor from the most mature entrants and the weight from the entry window overstates the forward level twice over, and either correction alone still leaves it above the bar.",
-  "driver_concrete": "Each Northvale Oat buyer's share of its own plant-beverage litres fades from its first-purchase high to a floor set by what the household paid per litre before launch (premium-tier households near 17 per cent, mainstream near 5, value near 1), the April triers who give the textbook repeat rate are premium-heavy while the households that tried when the discount banners listed the line in July are value-tier, and triers' 2026 category litres run about a fifth above their own 2024-25 rate while non-triers' do not, so the most-mature-cohort repeat and the 2026 buying index each overstate the 2027 share and only both corrected take it from the support band to the hold band.",
-  "stump": "A competent solver fits the cumulative trial curve, reads repeat from the most mature trier cohort and the buying index from triers' 2026 litres, files about 3.0 per cent of 2027 category litres and puts the line in the support band; the steps that land it there are carrying the premium-heavy April cohort's long-run share to every trier, including the value-tier households that tried at the discount listing and revert to private label, and weighting triers by litres bought during the high-buying phases in which they tried.",
-  "deep_chain": "(1) each household's price tier rebuilt from what it paid per litre in the category in 2024-25 against the product master's private-label and premium brands; (2) each trier's share of its own category litres traced by weeks since its own first purchase, the fade separated from cohort composition by comparing cohorts at equal tenure and within tier, and each tier's floor read where the tier has long tenure; (3) the 2027 trier base built by tier from the triers to date and the organic trial hazard of the households still to try; (4) each household's 2027 category litres taken from its own pre-launch rate grown with the category, not from the 2026 window in which it was selected; (5) the litre-weighted 2027 share by quarter against the portfolio standard's bands.",
-  "judgment": "two statistical judgments: a heterogeneity judgment (the long-run share of requirements differs by a tier no column holds, and the 2027 trier base's tier mix differs from the mature cohort's, shown by equal-tenure comparisons within tier) and a selection judgment (trial is caught during high-buying phases, shown by triers' 2026 litres against their own 2024-25 rate beside non-triers', so the buying index regresses).",
-  "one_fact_test": "The likeliest hint is that the discount-banner triers buy mostly private label; the solver still has to rebuild every household's tier, separate fade from composition at equal tenure, read each tier's floor, project the trier base, and still overstates the share by about a fifth unless it also sees that triers' buying was caught high; no single sentence covers both judgments.",
+  "driver": "The forward level is a weighted sum over units that have entered: each entered unit's response fades with time since its own entry to a floor set by a kind rebuilt from its own pre-entry history; the earliest entrants are drawn mostly from the high-floor kind, while the latest wave, opened by a second access route that reaches the units which mostly use that route, is drawn from a lower-floor kind and is still mid-fade at the decision date, so its floor has to be borrowed from long-entered units of its own kind; reading the floor from the most mature entrants, pooling the long-entered units, or reading the latest wave from its own weeks each overstates the forward level past the bar.",
+  "driver_concrete": "Each Northvale Oat buyer's share of its own plant-beverage litres fades from its first-purchase high to a level set by what the household paid per litre before launch (per litre bought where the line is stocked: premium 20.0, mainstream 8.6, value 0.9 per cent); the April buyers who give the textbook repeat rate are 76 per cent premium-price litres, the Loyal Grocer wave of late September is 74 per cent mainstream and buying at 32.0 per cent one to six weeks in, so the mature-cohort repeat, one pooled long-tenure level (3.1 to 3.3) or the April level lent to the young wave (3.0 to 3.3) all land in support or expand, and only each buyer at its own group's level lands in hold (2.4).",
+  "stump": "A competent solver runs Parfitt-Collins with its textbook caveats, files about 4.8 per cent of 2027 category litres and puts the line in the expand band; the steps that land it there are carrying the premium-heavy launch cohort's repeat to every buyer and reading the Loyal Grocer wave, still in its first weeks, at the share it is buying now; a solver who sees the honeymoon but lends the young wave the April level or one pooled long-tenure level still lands in support (3.0 to 3.3).",
+  "deep_chain": "(1) the Loyal Grocer wave's high and falling share is an unfinished honeymoon, so its level has to come from buyers who have finished; (2) each household's price group rebuilt from its 2024-W01 to 2026-W14 price paid per litre shows the waves are different households, so neither a pooled long-tenure level nor the April level transfers; (3) each group's settled share read from its buyers at 16 weeks or more, per litre bought where the line is stocked, every buyer carried at its own group's level and its stocked-store share at the review; (4) each household weighted by its own 2024-25 category litres grown to 2027, not the window in which it was caught buying high; (5) the litre-weighted 2027 share against the portfolio standard's bands.",
+  "judgment": "two statistical judgments: a maturity judgment (the Loyal Grocer wave's 32.0 per cent is a fade in progress whose own five weeks cannot identify its level, so the level is borrowed) and a heterogeneity judgment (the waves differ by a price kind no column holds, rebuilt from pre-launch purchase prices, and the borrowed level must be the young wave's own kind's, shown by the wave mixes and a pooled level that stays at 3.1 to 3.3 whatever tenure it is read from); the share figure adds a distribution read (per stocked litre at the review) and the asks a selection judgment (buyers caught high) and an incidence judgment.",
+  "one_fact_test": "The likeliest hint, \"the Loyal Grocer buyers are still in their honeymoon\", supplies maturity but not the level: lent the April wave's settled level the solver lands 3.0 to 3.3 (support), the discounter wave's 1.8 to 2.0 (delist), the mean of the two 2.4 to 2.7 (hold by the numbers with the price-group levels and buyer figures off); no single sentence also builds the price group.",
   "strategy_label": "WORKS IN FORM",
   "mechanism_source": "design_note",
   "differentiation": {
@@ -96,6 +99,6 @@
     "mark175": "mark175's take-up rises with the neighbours already built on a lot's own run and access reached well-built runs first; here there is no neighbour effect: a second access route (the discount banners' listing) brought value-tier households whose own floor is near zero, the floor is read within tier at equal tenure after each household's own fade, and the triers' buying weight regresses from its selection, which mark175 has no counterpart for."
   },
   "lineage": [],
-  "notes": "Subdomain is the house key new-product-innovation; the closest client task type serving forecasting is conjoint-choice-willingness-to-pay-analysis (revealed choice behaviour and segment response to price), named in the design note's Task type line. Axes redrawn against the last three live cards: forum (executive_team and committee_or_panel held by task10 and task5) is the brand director's delegated call under the portfolio standard; forcing event (vote_or_meeting, season_or_peak, budget_or_appropriation held) is the co-packer's 2027 slot schedule confirmation; strategy population_selection rather than composition_mix (overused) or maturity_censoring (task5), honest because both judgments are about who the early triers are and when they were caught.",
+  "notes": "Subdomain is the house key new-product-innovation; the closest client task type serving forecasting is conjoint-choice-willingness-to-pay-analysis (revealed choice behaviour and segment response to price), named in the design note's Task type line. Axes against the last three live cards (task10, task7, task2): the decisive pattern is G17 (the Loyal Grocer wave's level borrowed by kind because its own fade is not identified from its weeks) with G6 (composition) and G13 (the wave observed over a shorter horizon than its fade) behind it; the context artifact is the trade calendar and media flighting, the operations log the golden reads for its unpromoted weeks; the forcing event is the 23 November portfolio review meeting the standard sets; strategy population_selection rather than composition_mix (overused) or maturity_censoring (task5), honest because both judgments are about who the buyers of each wave are and when they were caught.",
   "registered": "2026-11-09T00:03:37Z"
 }

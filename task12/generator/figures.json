@@ -1,0 +1,214 @@
+{
+ "share_pct": 2.4,
+ "band": "Hold",
+ "share_range": [
+  2.1,
+  2.6
+ ],
+ "line27_ml": 10.5,
+ "line27_range_ml": [
+  9.3,
+  11.4
+ ],
+ "category27_ml": 444.1,
+ "category_quarters_ml": [
+  113.5,
+  106.3,
+  105.9,
+  118.4
+ ],
+ "quarters_ml": [
+  2.7,
+  2.5,
+  2.5,
+  2.8
+ ],
+ "quarter_share_pct": [
+  2.4,
+  2.4,
+  2.4,
+  2.4
+ ],
+ "buyers27": 1310000,
+ "buyers27_range": [
+  1250000,
+  1340000
+ ],
+ "per_buyer": 5.1,
+ "per_buyer_range": [
+  4.7,
+  5.3
+ ],
+ "floors_pct": [
+  20.0,
+  8.6,
+  0.9
+ ],
+ "cuts_ppl": [
+  2.12,
+  2.83
+ ],
+ "growth": 1.062,
+ "triers_panel": 1259,
+ "buyers_panel": 6085,
+ "static_panel": 12963,
+ "triers_ca": 1600000,
+ "waves": [
+  {
+   "label": "April launch, 2026-W15 to W23",
+   "households": 820000,
+   "recent_pct": 17.2,
+   "settled_pct": 14.1,
+   "litres27_ml": 6.2
+  },
+  {
+   "label": "Discounter listing to September, 2026-W24 to W38",
+   "households": 130000,
+   "recent_pct": 4.9,
+   "settled_pct": 3.9,
+   "litres27_ml": 0.6
+  },
+  {
+   "label": "Loyal Grocer listing, 2026-W39 to W44",
+   "households": 650000,
+   "recent_pct": 32.0,
+   "settled_pct": 6.5,
+   "litres27_ml": 3.5
+  }
+ ],
+ "rejected": {
+  "pc_careful": 4.8,
+  "pc_naive": 6.7,
+  "april_for_all": 4.4,
+  "cohort_recent": 5.8,
+  "unsupported_weeks": 1.7,
+  "last_week": 3.1,
+  "buying_index_one": 3.6,
+  "recent_share": 7.2,
+  "window_volumes": 2.5
+ },
+ "pc_terms": {
+  "P": 21.0,
+  "R": 17.1,
+  "B": 1.34
+ },
+ "category_quarters_raw": [
+  113512348.17253193,
+  106278679.12360288,
+  105916871.37994298,
+  118399117.24886295
+ ],
+ "quarters_raw": [
+  2685182.002711157,
+  2514066.5403278917,
+  2505507.8270481657,
+  2800780.5660958653
+ ],
+ "quarter_share_raw": [
+  0.02365541763465101,
+  0.02365541763465101,
+  0.02365541763465101,
+  0.02365541763465101
+ ],
+ "buyers27_raw": 1307755.578088464,
+ "per_buyer_raw": 5.053597538079534,
+ "bands_pct": [
+  2.0,
+  2.9,
+  3.8
+ ],
+ "growth_pct": 6.2,
+ "tenure_weeks": 16,
+ "raw": {
+  "share_pct": 2.2,
+  "floors_pct": [
+   16.4,
+   5.9,
+   0.8
+  ]
+ },
+ "availability_pct": [
+  85,
+  83,
+  81
+ ],
+ "carried_pct": [
+  16.5,
+  7.0,
+  0.7
+ ],
+ "rung2": {
+  "pooled_pct": 3.3,
+  "pooled_level_pct": 12.7,
+  "april_level_route_pct": 3.1,
+  "disc_level_route_k8_pct": 1.9,
+  "disc_level_route_pct": 1.8,
+  "no_tenure_cut_pct": 3.0,
+  "no_tenure_cut_raw_pct": 2.7,
+  "pooled_k8_pct": 3.1,
+  "pooled_k20_pct": 3.3
+ },
+ "wave_mix_pct": [
+  [
+   76,
+   23,
+   1
+  ],
+  [
+   13,
+   21,
+   66
+  ],
+  [
+   6,
+   74,
+   20
+  ]
+ ],
+ "households_2026": 16116449,
+ "static_scale": 1.207,
+ "new_trial": {
+  "buyers": 50000,
+  "points": 0.03,
+  "share_without_pct": 2.3,
+  "weeks": [
+   "2026-W43",
+   "2026-W44"
+  ]
+ },
+ "fixed_cuts_ppl": [
+  2.2,
+  2.95
+ ],
+ "tiers": [
+  {
+   "label": "Premium (2.83 and above)",
+   "households": 860000,
+   "settled_pct": 20.0,
+   "litres27_ml": 6.4
+  },
+  {
+   "label": "Mainstream (2.12 to 2.83)",
+   "households": 620000,
+   "settled_pct": 8.6,
+   "litres27_ml": 3.8
+  },
+  {
+   "label": "Value (below 2.12)",
+   "households": 120000,
+   "settled_pct": 0.9,
+   "litres27_ml": 0.2
+  }
+ ],
+ "dial_max_pct": 2.8,
+ "tier_purchases": [
+  5.7,
+  2.5,
+  0.5
+ ],
+ "tier_pbuy_pct": [
+  89,
+  73,
+  33
+ ]
+}

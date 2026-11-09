@@ -1,26 +1,62 @@
 {
   "task": "task12",
-  "status": "DESIGN",
+  "status": "READY",
   "domain": "marketing-consumer-research",
   "subdomain": "new-product-innovation (client task type: conjoint, choice and willingness-to-pay analysis)",
   "objective": "forecasting",
-  "stage": 2,
-  "stage_name": "design",
+  "stage": 5,
+  "stage_name": "ready",
   "updated": "2026-11-08",
-  "call": "",
-  "stump": "A competent solver fits the cumulative trial curve, reads repeat from the most mature trier cohort and the buying index from triers' 2026 litres, files about 3.0 per cent of 2027 category litres and puts the line in the support band; the steps that land it there are carrying the premium-heavy April cohort's long-run share to every trier, including the value-tier households that tried at the discount listing, and weighting triers by litres bought during the high-buying phases in which they tried.",
+  "call": "Hold: Northvale Oat takes about 2.4 per cent of the plant-based beverage category's 2027 litres (2.1 to 2.6), inside the 2.0 to below 2.9 hold band; 10.5 million litres, 1,310,000 households at 5.1 purchases each",
+  "stump": "A competent solver runs Parfitt-Collins with its textbook caveats (penetration 21.0 x launch-cohort repeat 17.1 x buying index 1.34), files 4.8 per cent and the expand band; a solver who sees the Loyal Grocer wave's honeymoon but lends it the April level or one pooled long-tenure level still lands in support (3.0 to 3.3); only each buyer at its own rebuilt price group's settled share, read per stocked litre from long-tenure same-group buyers, lands in hold (2.3).",
   "architecture": 1,
   "loops": 0,
-  "precut": {"exit": null, "date": ""},
-  "leak": {"leak_py": "", "reader": ""},
-  "duplicate_check": {"heart": "", "nearest": "mark175 (differentiated), task1"},
-  "judge": {"verdict": "", "disposition": "", "gate_h": "", "report": ""},
-  "paper_pair": null,
-  "runs": {"run1": null, "run2": null, "average": null, "counterfactual_average": null,
-           "first_wrong_step": {"run1": "", "run2": ""}, "triage": "", "recorded": "", "history": []},
+  "precut": {
+    "exit": 0,
+    "date": "2026-11-08"
+  },
+  "leak": {
+    "leak_py": "REVIEW (filed band edges, generic vocabulary, future calendar dates, shell quota warn; every line ruled harmless)",
+    "reader": "no leak on two reads (before and after the H21 banner rename); question 6 analytical; question 5 3(b) executed by the golden (first-time buyers)"
+  },
+  "duplicate_check": {
+    "heart": "WARN (no BLOCK, after redrawing pattern G17, operations_log, vote_or_meeting against task2)",
+    "nearest": "mark258 0.06 (drivers); differentiated against mark175, mark132, mark124, task1"
+  },
+  "judge": {
+    "verdict": "DETERMINISTIC",
+    "disposition": "APPROVE",
+    "gate_h": "pass (decisive step analytical, one-fact none)",
+    "report": "task12/determinism_check_report.md",
+    "note": "its past-buyer count note closed by the register-total projection scale (SF14); first-time buyers added after the judge (reader question 5), every graded figure re-verified by verify.py 14 of 14"
+  },
+  "paper_pair": 49.1,
+  "runs": {
+    "run1": null,
+    "run2": null,
+    "average": null,
+    "counterfactual_average": null,
+    "first_wrong_step": {
+      "run1": "",
+      "run2": ""
+    },
+    "triage": "",
+    "recorded": "",
+    "history": []
+  },
   "returned": [],
-  "resume": "stage 2: write the default path, deep reasoning, survivor anatomy, screens, fork and closure tables, ladder priced on the generator's clean truth, asks, prompt; precut.py exit 0",
+  "resume": "upload prompt.txt and target.zip, generate the two runs, then /triage-runs task12",
   "approved": null,
   "submitted": null,
-  "portal": {"status": "", "date": "", "note": ""}
+  "portal": {
+    "status": "",
+    "date": "",
+    "note": ""
+  },
+  "digests": {
+    "target": "2765a9e0efa0e39e",
+    "golden": "bb349b9080566616",
+    "target_zip": "8a9e3240e43c9dea",
+    "golden_zip": "a9f4b9a1fdf6c527"
+  }
 }
