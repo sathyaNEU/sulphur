@@ -56,11 +56,11 @@ def write(R, F):
         L.append("   - %s: SLI %s, budget %s, ran over %s, incident minutes %s and %s" % (
             s, sli[s], bud[s], F["ran_over"][s], mins[s][0], mins[s][1]))
     L += ["", "## Critical Components", "",
-          "1. %s were %s own failures: %s." % (
-              names([x["id"] for x in dec]), names([poss(x["cause"]) for x in dec]),
-              "; ".join("%s rose above its load curve from about **%s** and %s only from about **%s**" % (
-                  handling(x["cause"]), x["onset_about"][x["cause"]], handling(x["careful_cause"]),
-                  x["onset_about"][x["careful_cause"]]) for x in dec)),
+          "1. %s: %s rose above their load curves **first**, and %s only after them, though those ran further over "
+          "their curves across each incident." % (
+              names(["**%s** was **%s** own failure" % (dec[0]["id"], poss(dec[0]["cause"]))] +
+                    ["**%s** **%s**" % (x["id"], poss(x["cause"])) for x in dec[1:]]),
+              names([handling(x["cause"]) for x in dec]), names([handling(x["careful_cause"]) for x in dec])),
           "2. With each kept span counted at its trace root's hourly keep share, partner-gateway's December SLI is "
           "**%s%%** against **%s%%**, fares' **%s%%** against **%s%%** and notifications' **%s%%** against **%s%%**; "
           "on each service's own hourly count, with the same incident time left out, they are %s%%, %s%% and %s%%." % (
@@ -90,10 +90,8 @@ def write(R, F):
         "Dated each December incident's cause: for every service it named, the own handling time of each span "
         "(less the calls it waited on) against a load curve fitted on December's incident-free hours, a changepoint "
         "on the residuals; the earliest sustained rise owns the cause. Over the whole incident %s ran furthest above "
-        "their curves, but each rose only after the service it calls: %s." % (
-            names(["%s in %s" % (x["careful_cause"], x["id"]) for x in mis]),
-            "; ".join("%s from about %s against %s" % (x["cause"], x["onset_about"][x["cause"]],
-                                                       x["onset_about"][x["careful_cause"]]) for x in mis)),
+        "their curves, but each rose only after the service it calls had, by twenty minutes or more: %s own them." % (
+            names(["%s in %s" % (x["careful_cause"], x["id"]) for x in mis]), names([x["cause"] for x in mis])),
         "Left each named service's requests out from when the timeline added it to the incident's end unless it "
         "owned the cause (PR-SLO-3's incident and root-cause clauses): %s ran over." % names(over),
         "Took each over-budget SLI's 90 per cent interval by linearisation over strata of root service and hour with "

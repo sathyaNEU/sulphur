@@ -218,7 +218,7 @@ dated causes.
 | SF14 | the onset's lead window | two to four hours before the declaration | every lead gives the same causes | same call (checks R7) |
 | SF15 | the shares' base | all ten SLIs' counted over-threshold requests | that | the prompt ("all our services' SLIs count") |
 | SF16 | the interval's method | linearised or a trace bootstrap | either, within the band | same call (checks R7, the effort band) |
-| SF19 | an onset's time as stated | the changepoint's minute, or to the nearest five minutes | about, to five minutes | the answer blocks say "about"; R2 grades the service at fault, and the order of each pair of rises is all a time carries |
+| SF19 | an onset's clock time | the changepoint's minute, an "about" time, or none | none in the answer blocks: they grade the owner and the order of each pair of rises; the review's "about" times grade nothing | the verifier's rolling median dates every onset 15 to 55 minutes earlier with the same owner and order (verify.py; checks SF19 keeps the order at five minutes) |
 
 ## Closure table
 

@@ -80,8 +80,8 @@
  "portal_status_date": "2026-11-09",
  "seed": "analytical_tasks/03_descriptive_distribution/DA18_quick-commerce-pilot-service-hours-population.md (header and Situation only)",
  "seed_world": 273,
- "zip_md5": "f92b4be141425dcdc94ebcba51710501",
- "zip_sha256_16": "a40d4eda3a7f4000",
+ "zip_md5": "c976bbf81afca181c25f22bc7bc1c0c8",
+ "zip_sha256_16": "23e1bf1e8fdbf1af",
  "precut_exit": 1,
  "shipped": "2026-11-07",
  "call": "Put reliability engineers on places, partner-gateway, fares, seat-map, notifications, in that order: the five ran over their 2026 latency error budgets",
@@ -93,7 +93,7 @@
   "date": "2026-11-08",
   "note": "moved from Project Mark at the author's word: architecture 5 landed on the Mark portal and architecture 6 shipped there on 2026-11-07, pending; carried on here for the Sulfur bar"
  },
- "golden_zip_md5": "45a379a3871c8653791e308aea42ffa9",
+ "golden_zip_md5": "d036df2d6bd91f9e0394de0cce9c45ec",
  "paper_pair": 31.3,
  "runs": {
   "run1": 73,
