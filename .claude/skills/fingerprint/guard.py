@@ -1006,7 +1006,8 @@ def cmd_coverage(args):
     objs = LIVE_OBJECTIVES
     short = {"forecasting": "FCST", "root-cause": "RCA", "anomaly-detection": "ANOM",
              "experiment-causal": "EXP", "descriptive-distribution": "DESC", "etl": "ETL",
-             "opportunity-sizing-decision": "OPPS", "data-quality-monitoring": "DQM"}
+             "opportunity-sizing-decision": "OPPS", "data-quality-monitoring": "DQM",
+             "comparative-explanation": "COMP"}
     print("domain x objective (count, newest task)   '.' means never built")
     print("%-28s" % "" + "".join("%-13s" % short[o] for o in objs))
     for d in LIVE_DOMAINS:
