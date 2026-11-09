@@ -11,16 +11,15 @@
 
 ### halverton_primary_capacity_2027-28.xlsx
 
-1. A Zones sheet with one row per flexibility zone, in the order Ashcombe Road CMZ, Charlecote Way CMZ, Fenwick Street CMZ, Hartwell Common CMZ, giving the zone, its primary and asset code, the provider and the megawatts contracted for 2027/28, then the provider's delivery per megawatt scheduled on the design day: 0.4 at Ashcombe Road, 0.5 at Charlecote Way, 0.5 at Fenwick Street and 0.4 at Hartwell Common (Corvane Flex 0.4 at both its zones, Quillon Energy Services 0.5 at both of its).
-2. The megawatts credited to each primary on its 2027/28 contract: 4 MW at Ashcombe Road, 4 at Charlecote Way, 7 at Fenwick Street and 3 at Hartwell Common.
-3. Each primary's design-day demand after the credited flexibility against its firm capacity: Ashcombe Road 26 MW against 23.0 MW; Charlecote Way 21 MW against 22.5 MW; Fenwick Street 29 MW against 30.5 MW; Hartwell Common 20 MW against 17.8 MW, so Ashcombe Road and Hartwell Common exceed firm capacity and Charlecote Way and Fenwick Street do not.
-4. A clustered column chart below the table: for each zone primary, its design-day demand before and after the credited flexibility beside its firm capacity, in MW, the after-flexibility column standing above firm capacity at Ashcombe Road and Hartwell Common and below it at Charlecote Way and Fenwick Street.
-5. How far each primary to reinforce exceeds firm capacity on the design day: Ashcombe Road by 3 MW and Hartwell Common by 2 MW.
-6. The primaries whose demand after their flexibility would exceed firm capacity on a working weekday of winter 2027/28 at a daily mean of minus 6.0 C: all four.
+1. A Zones sheet with one row per flexibility zone, in the order Ashcombe Road CMZ, Charlecote Way CMZ, Fenwick Street CMZ, Hartwell Common CMZ, giving the zone, its primary and asset code, the provider, the megawatts contracted for 2027/28 and the megawatts of flexibility credited to the primary: 4 MW at Ashcombe Road, 4 at Charlecote Way, 7 at Fenwick Street and 3 at Hartwell Common.
+2. Each primary's design-day demand after the credited flexibility against its firm capacity: Ashcombe Road 26 MW against 23.0 MW; Charlecote Way 21 MW against 22.5 MW; Fenwick Street 29 MW against 30.5 MW; Hartwell Common 20 MW against 17.8 MW, so Ashcombe Road and Hartwell Common exceed firm capacity and Charlecote Way and Fenwick Street do not.
+3. A clustered column chart below the table: for each zone primary, its design-day demand before and after the credited flexibility beside its firm capacity, in MW, the after-flexibility column standing above firm capacity at Ashcombe Road and Hartwell Common and below it at Charlecote Way and Fenwick Street.
+4. How far each primary to reinforce exceeds firm capacity on the design day: Ashcombe Road by 3 MW and Hartwell Common by 2 MW.
+5. The primaries whose demand, flexibility included, would exceed firm capacity on a working weekday of winter 2027/28 with a daily mean of minus 6.0 C: all four.
 
 ### capex_review_2027-28.pptx
 
-7. Slides for the capital expenditure review that name Ashcombe Road and Hartwell Common as the primaries to reinforce for winter 2027/28, state that Charlecote Way and Fenwick Street hold firm capacity on the design day with their contracted flexibility, and carry the same chart of demand against firm capacity.
+6. Slides for the capital expenditure review that name Ashcombe Road and Hartwell Common as the primaries to reinforce for winter 2027/28, state that Charlecote Way and Fenwick Street hold firm capacity on the design day with their contracted flexibility, and carry the same chart of demand against firm capacity.
 
 ## Critical Components
 

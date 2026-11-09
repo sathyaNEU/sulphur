@@ -35,30 +35,25 @@ def blocks(F):
     def names(ps):
         return "all four" if len(ps) == 4 else ", ".join(ps[:-1]) + " and " + ps[-1]
     out.append("1. A Zones sheet with one row per flexibility zone, in the order Ashcombe Road CMZ, Charlecote Way CMZ, "
-               "Fenwick Street CMZ, Hartwell Common CMZ, giving the zone, its primary and asset code, the provider and "
-               "the megawatts contracted for 2027/28, then the provider's delivery per megawatt scheduled on the design "
-               "day: %s at Ashcombe Road, %s at Charlecote Way, %s at Fenwick Street and %s at Hartwell Common (Corvane "
-               "Flex %s at both its zones, Quillon Energy Services %s at both of its)."
-               % (r1(A["delivery"]), r1(C["delivery"]), r1(Fz["delivery"]), r1(H["delivery"]), r1(A["delivery"]),
-                  r1(C["delivery"])))
-    out.append("2. The megawatts credited to each primary on its 2027/28 contract: %s MW at Ashcombe Road, %s at "
-               "Charlecote Way, %s at Fenwick Street and %s at Hartwell Common."
+               "Fenwick Street CMZ, Hartwell Common CMZ, giving the zone, its primary and asset code, the provider, the "
+               "megawatts contracted for 2027/28 and the megawatts of flexibility credited to the primary: %s MW at "
+               "Ashcombe Road, %s at Charlecote Way, %s at Fenwick Street and %s at Hartwell Common."
                % (r0(A["credited"]), r0(C["credited"]), r0(Fz["credited"]), r0(H["credited"])))
-    out.append("3. Each primary's design-day demand after the credited flexibility against its firm capacity: %s, so "
+    out.append("2. Each primary's design-day demand after the credited flexibility against its firm capacity: %s, so "
                "%s exceed firm capacity and %s do not."
                % ("; ".join("%s %s MW against %s MW" % (nm, r0(Z["after"]), r1(Z["firm"])) for nm, Z in zs),
                   " and ".join(nm for nm, Z in zs if Z["over"]), " and ".join(nm for nm, Z in zs if not Z["over"])))
-    out.append("4. A clustered column chart below the table: for each zone primary, its design-day demand before and "
+    out.append("3. A clustered column chart below the table: for each zone primary, its design-day demand before and "
                "after the credited flexibility beside its firm capacity, in MW, the after-flexibility column standing "
                "above firm capacity at %s and below it at %s."
                % (" and ".join(nm for nm, Z in zs if Z["over"]), " and ".join(nm for nm, Z in zs if not Z["over"])))
-    out.append("5. How far each primary to reinforce exceeds firm capacity on the design day: %s."
+    out.append("4. How far each primary to reinforce exceeds firm capacity on the design day: %s."
                % " and ".join("%s by %s MW" % (nm, r0(Z["over_by"])) for nm, Z in zs if Z["over"]))
-    out.append("6. The primaries whose demand after their flexibility would exceed firm capacity on a working weekday "
-               "of winter 2027/28 at a daily mean of minus %s C: %s."
+    out.append("5. The primaries whose demand, flexibility included, would exceed firm capacity on a working weekday "
+               "of winter 2027/28 with a daily mean of minus %s C: %s."
                % (r1(S2["degrees_below_zero"]), names(S2["commit"])))
     out.append("\n### capex_review_2027-28.pptx\n")
-    out.append("7. Slides for the capital expenditure review that name Ashcombe Road and Hartwell Common as the primaries "
+    out.append("6. Slides for the capital expenditure review that name Ashcombe Road and Hartwell Common as the primaries "
                "to reinforce for winter 2027/28, state that Charlecote Way and Fenwick Street hold firm capacity on the "
                "design day with their contracted flexibility, and carry the same chart of demand against firm capacity.\n")
     out.append("## Critical Components\n")

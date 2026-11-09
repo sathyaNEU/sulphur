@@ -49,17 +49,16 @@ def cells(R, golden_commit):
     call = "+".join(R["commit"]) or "none"
     for z in R["zones"]:
         p = z["primary"]
-        out[(1, "%s delivery per MW" % p)] = "%.1f" % z["delivery"]
-        out[(2, "%s credited MW" % p)] = "%d" % round(z["credited"])
-        out[(3, "%s after flexibility MW" % p)] = "%d" % round(z["after"])
-    out[(3, "over firm capacity")] = call
-    out[(4, "chart: after above firm at")] = call
+        out[(1, "%s credited MW" % p)] = "%d" % round(z["credited"])
+        out[(2, "%s after flexibility MW" % p)] = "%d" % round(z["after"])
+    out[(2, "over firm capacity")] = call
+    out[(3, "chart: after above firm at")] = call
     byp = {z["primary"]: z for z in R["zones"]}
     for p in golden_commit:
-        out[(5, "%s exceeds firm by" % p)] = ("%d" % round(byp[p]["over_by"])) if byp[p]["over"] else "holds"
+        out[(4, "%s exceeds firm by" % p)] = ("%d" % round(byp[p]["over_by"])) if byp[p]["over"] else "holds"
     for T in E.SENS_TS:
-        out[(6, "over firm at %.1f C" % T)] = "+".join(R["sens"][T]) or "none"
-    out[(7, "slides name")] = call
+        out[(5, "over firm at %.1f C" % T)] = "+".join(R["sens"][T]) or "none"
+    out[(6, "slides name")] = call
     return out
 
 

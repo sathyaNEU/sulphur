@@ -313,6 +313,10 @@
   {
    "date": "2026-11-09",
    "event": "prompt rewritten for a human voice at the author's word (first person, direct); dropped only what the guideline already pins: 'counting the flexibility contracted for that winter' (guideline 6 and 7), 'on the design day' on the delivery and on the excess (guideline 6 reads the delivery on the design day, guideline 7 commits on it); every ask, unit, rounding, the working-weekday minus 6.0 C condition and both file names kept"
+  },
+  {
+   "date": "2026-11-09",
+   "event": "prompt cut to the minimum after the client's reviewers flagged spelled-out method, named files, extra context and a stated role: straight to the question, no file names (deliverables by type), outcomes only; the delivery per MW scheduled dropped as its own ask (it stays a critical component), Supplementary Questions six items; target.zip and golden.zip byte-identical; checks 103/103, verify PASS, figures_check 66/66, voice-check --rewrite PASS, leak.py REVIEW no LEAK, precut 1 FAIL (honest pair ceiling 54.0, was 54.5); freeze --mode rubric flags only the prompt's question sentence (reworded at the author's word, the call unchanged)"
   }
  ],
  "gates_stage5": {
@@ -333,5 +337,11 @@
   "target.zip": "a670e735c98c485a668ec8543aa170d2b4b073d0a2c784437d293f12a23560af",
   "golden.zip": "9af93f82b37ee4cbb57b5bc51efa02c83e18f70f00ebed1823ad7cda860d7878"
  },
- "prompt_rewritten": true
+ "prompt_rewritten": true,
+ "gates": {
+  "figures_check": "66 figures in blocks 1 to 4, 0 absent (2026-11-09, six-item Supplementary Questions)",
+  "voice_check": "PASS in rewrite mode (2026-11-09, minimal prompt, deliverables by type)",
+  "ceiling": "pair ceiling 54.0 by figure, 51.4 by item; shallow keep 0.0 per cent; full includer against the off-call route 59.9 by figure, 56.0 by item",
+  "freeze": "rubric mode: the prompt's question sentence moved (author's rewrite; the call, the critical components and figures.json unchanged)"
+ }
 }
