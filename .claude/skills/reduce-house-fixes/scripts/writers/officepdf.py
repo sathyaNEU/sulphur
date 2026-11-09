@@ -220,6 +220,22 @@ def build(path, story, title, author, subject, footer, created, modified, margin
     try:
         src = os.path.join(work, "document.docx")
         doc.save(src)
+        # Writer orders a document's embedded font subsets differently from run to run (26.x releases), so the
+        # same document can export to different bytes. The export is kept by its content (the Word document's
+        # parts, the producer and the two dates) under the repository's .cache, and the same content gives the
+        # same file on every build.
+        import zipfile
+        h = hashlib.sha256()
+        with zipfile.ZipFile(src) as zz:
+            for nm in sorted(zz.namelist()):
+                h.update(nm.encode())
+                h.update(zz.read(nm))
+        h.update(repr((producer, created.isoformat(), modified.isoformat())).encode())
+        cdir = os.path.join(_repo(), ".cache", "officepdf")
+        cpath = os.path.join(cdir, h.hexdigest() + ".pdf")
+        if os.path.exists(cpath):
+            open(path, "wb").write(open(cpath, "rb").read())
+            return
         prof = "file://" + os.path.join(work, "profile")
         subprocess.run(["soffice", "-env:UserInstallation=" + prof, "--headless", "--convert-to",
                         "pdf:writer_pdf_Export", "--outdir", work, src],
@@ -230,7 +246,18 @@ def build(path, story, title, author, subject, footer, created, modified, margin
     if producer:
         b = _producer(b, producer)
     b = _fix(b, created, modified)
+    os.makedirs(cdir, exist_ok=True)
+    open(cpath, "wb").write(b)
     open(path, "wb").write(b)
+
+
+def _repo():
+    d = os.path.dirname(os.path.abspath(__file__))
+    while d != os.path.dirname(d):
+        if os.path.isdir(os.path.join(d, ".git")):
+            return d
+        d = os.path.dirname(d)
+    return tempfile.gettempdir()
 
 
 def _pdfdate(d):
@@ -253,6 +280,12 @@ def _producer(b, name):
     offs = [int(o) for o in re.findall(rb"^(\d{10}) \d{5} n", b[x:], re.M)]
     assert max(offs) < m.start(1), "an object after the info dictionary"
     b = b[:m.start(1)] + new + b[m.end(1):]
+    # newer Writer releases repeat the Producer in the XMP stream: the release token is set at equal length there
+    xp = re.search(rb"<pdf:Producer>LibreOffice ([0-9.]+)", b)
+    if xp:
+        tok = re.search(r"LibreOffice ([0-9.]+)", name).group(1).encode()
+        assert len(tok) == len(xp.group(1)), "producer release %r must match the export's %r" % (tok, xp.group(1))
+        b = b[:xp.start(1)] + tok + b[xp.end(1):]
     s = re.search(rb"startxref\n(\d+)\n%%EOF", b)
     old = int(s.group(1))
     assert old == x + 1, (old, x)
@@ -269,6 +302,12 @@ def _fix(b, created, modified):
         new = created.astimezone(dt.timezone.utc).strftime("D:%Y%m%d%H%M%SZ'").encode()
         assert len(new) == len(m.group(1)), (new, m.group(1))
         b = b[:m.start(1)] + new + b[m.end(1):]
+    # newer Writer releases write the export clock into the XMP stream too: set from the document's own times
+    xc = created.astimezone(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ").encode()
+    xm = modified.astimezone(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ").encode()
+    for tag, val in ((rb"rdf:li", xc), (rb"xmp:CreateDate", xc), (rb"xmp:ModifyDate", xm), (rb"xmp:MetadataDate", xm)):
+        b = re.sub(rb"(<" + tag + rb">)(\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ)(</" + tag + rb">)",
+                   lambda m: m.group(1) + val + m.group(3), b)
     core = re.sub(rb"/ID\s*\[[^\]]*\]", b"", re.sub(rb"/DocChecksum\s*/[0-9A-Fa-f]+", b"", b))
     digest = hashlib.sha256(core).hexdigest().upper().encode()
     b = re.sub(rb"(/DocChecksum\s*/)([0-9A-Fa-f]+)", lambda m: m.group(1) + digest[-len(m.group(2)):], b)

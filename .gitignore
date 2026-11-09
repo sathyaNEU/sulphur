@@ -68,3 +68,6 @@ task*/.freeze.json
 
 # The harness's agent worktrees (one per isolated fork), runtime only
 .claude/worktrees/
+
+# The house PDF writer keeps each export by its content (officepdf.py), so rebuilds are byte-identical
+/.cache/
