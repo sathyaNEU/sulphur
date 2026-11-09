@@ -1,4 +1,4 @@
-"""task7 architecture 6: the pack's data files, written from the world (world.py) the way the utility's and the
+"""task7 architecture 7: the pack's data files, written from the world (world.py) the way the utility's and the
 council's systems would export them. The meter reads carry the billing system's own mess: periodic reads taken a few
 days off 30 April, interim reads, the service team's reads at its visits, meter exchanges, five-digit counters that roll
 over, estimates (some later corrected), customer reads corrected after a typo, rows imported twice, meters that count in
@@ -273,7 +273,7 @@ def write_register(P, target):
     rows = []
     for i in np.argsort(P.bid):
         rows.append([P.bid[i], P.address[i], P.postcode[int(w.district[i])], P.district[i], TYPE_LABEL[W.TYPES[w.typ[i]]],
-                     float(w.area[i]), int(P.built[i]), P.cust[i]])
+                     float(w.area[i, -1]), int(P.built[i]), P.cust[i]])
     wb = Workbook()
     wb_sheet(wb, "buildings", ["building_id", "address", "postcode", "district", "use", "heated_floor_area_m2",
                                "year_built", "customer_number"], rows, [12, 26, 9, 20, 12, 12, 10, 14], first=True)
@@ -302,12 +302,12 @@ def write_notices(P, target):
         for i in sorted(np.where(w.flag[:, k])[0], key=lambda x: P.bid[x]):
             n += 1
             offer = "pilot 2019" if (s == W.PILOT and w.offer[i, k]) else ("round 2026" if (s == W.PIPELINE and w.offer[i, k]) else "")
-            rows.append(["N%d-%05d" % (s, n), P.bid[i], season_label(s), ymd(nd),
+            rows.append(["N%d-%05d" % (s, n), P.bid[i], season_label(s), ymd(nd), "%.0f" % w.area[i, k],
                          "%.1f" % w.norm_intensity[i, k], "%.1f" % med[w.typ[i]], TYPE_LABEL[W.TYPES[w.typ[i]]], offer])
     P.n_notices = len(rows)
     write_csv(os.path.join(target, "benchmarking_notices_2019_2026.csv"),
-              ["notice_id", "building_id", "season", "sent", "normalised_use_kwh_per_m2", "median_for_use_kwh_per_m2",
-               "use", "grant_offer"], rows)
+              ["notice_id", "building_id", "season", "sent", "heated_floor_area_m2", "normalised_use_kwh_per_m2",
+               "median_for_use_kwh_per_m2", "use", "grant_offer"], rows)
 
 
 def write_pilot(P, target):
@@ -336,20 +336,31 @@ def write_pilot(P, target):
 
 
 def write_applications(P, target):
+    """the applications the Climate Protection Office passed on, received by 12 June; an owner who revised the quote
+    sent the application again, and the later one stands"""
     w = P.w
     rng = np.random.default_rng(SEED + 3)
     k = W.SI[W.PIPELINE]
-    idx = sorted(np.where(w.received26)[0], key=lambda x: (w.answer_date[W.PIPELINE][x], rng.random(), P.bid[x]))
+    entries = []
+    for i in np.where(w.received26)[0]:
+        i = int(i)
+        m = w.measure26[i]
+        ref = round(round(float(w.norm_intensity[i, k]), 1) * w.area[i, k])
+        rec = w.answer_date[W.PIPELINE][i]
+        if i in w.resubmit:
+            d2, c1, g1 = w.resubmit[i]
+            entries.append((rec, rng.random(), i, m, c1, g1, ref))
+            if d2 <= W.RECEIVED_TO:
+                entries.append((d2, rng.random(), i, m, float(w.cost[W.PIPELINE][i]), float(w.grant[W.PIPELINE][i]), ref))
+        else:
+            entries.append((rec, rng.random(), i, m, float(w.cost[W.PIPELINE][i]), float(w.grant[W.PIPELINE][i]), ref))
+    entries.sort(key=lambda e: (e[0], e[1], P.bid[e[2]]))
     rows = []
     P.pipe_rows = []
-    for n, i in enumerate(idx, 1):
-        rec = w.answer_date[W.PIPELINE][i]
-        ref = round(round(float(w.norm_intensity[i, k]), 1) * w.area[i])
-        m = w.measure26[i]
-        rows.append(["A26-%04d" % n, P.bid[i], ymd(rec), m, float(w.cost[W.PIPELINE][i]), float(w.grant[W.PIPELINE][i]),
-                     int(ref)])
-        P.pipe_rows.append({"no": "A26-%04d" % n, "b": int(i), "measure": m, "grant": float(w.grant[W.PIPELINE][i]),
-                            "ref_kwh": float(ref)})
+    for n, (rec, _, i, m, c, g, ref) in enumerate(entries, 1):
+        rows.append(["A26-%04d" % n, P.bid[i], ymd(rec), m, float(c), float(g), int(ref)])
+        P.pipe_rows.append({"no": "A26-%04d" % n, "b": int(i), "measure": m, "grant": float(g), "ref_kwh": float(ref),
+                            "date": rec})
     wb = Workbook()
     wb_sheet(wb, "applications", ["application_no", "building_id", "received", "measure", "quoted_cost_eur",
                                   "grant_eur", "reference_consumption_kwh"], rows, [14, 12, 11, 20, 14, 11, 16],
@@ -383,7 +394,7 @@ def write_distractors(P, target):
     for i in np.argsort(P.bid):
         if rng.random() < 0.55:
             continue
-        kwh = w.area[i] * float(rng.uniform(35, 110))
+        kwh = w.area[i, -1] * float(rng.uniform(35, 110))
         for y in range(2019, 2026):
             rows.append([P.cust[i], P.address[i], y, int(round(kwh * float(rng.normal(1, 0.06)))), "commercial"])
     write_csv(os.path.join(target, "electricity_customers_annual_2019_2025.csv"),
@@ -393,7 +404,7 @@ def write_distractors(P, target):
     for i in np.argsort(P.bid):
         if rng.random() < 0.7:
             continue
-        roof = w.area[i] / float(rng.uniform(1.5, 4.0))
+        roof = w.area[i, -1] / float(rng.uniform(1.5, 4.0))
         srows.append([P.address[i], P.postcode[int(w.district[i])], round(roof), round(roof * 0.55 * 0.19, 1),
                       round(roof * 0.55 * 0.19 * 950)])
     wb_sheet(wb, "rooftops", ["address", "postcode", "roof_area_m2", "pv_potential_kwp", "pv_yield_kwh_per_year"],

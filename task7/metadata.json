@@ -1,13 +1,13 @@
 {
  "task": "task7",
- "title": "Stadtwerke Haldenau: which retrofit measures the 2026 grant round should fund",
+ "title": "Stadtwerke Haldenau: which retrofit measures the 2026 grant round funds, and what it will pay",
  "domain": "Energy Systems & Utilities",
  "task_type": "energy efficiency and demand response evaluation",
  "objective": "Experiment & Causal Analysis",
  "as_of": "2026-06-15",
  "deliverables": [
-  "committee_briefing_retrofit_round_2026.pptx",
-  "retrofit_round_2026.xlsx"
+  "grant_round_2026_note.docx",
+  "grant_round_2026_appraisal.xlsx"
  ],
  "distractor_files": [
   "electricity_customers_annual_2019_2025.csv",
@@ -16,7 +16,7 @@
   "federal_funding_overview_2025.pdf"
  ],
  "input_gates": {
-  "files": 17,
+  "files": 18,
   "formats": [
    "csv",
    "docx",
@@ -24,9 +24,9 @@
    "xlsx"
   ],
   "largest_file": "gas_meter_reads_2013_2026.csv",
-  "largest_file_rows": 387978,
+  "largest_file_rows": 389104,
   "long_file": "benchmarking_notices_2019_2026.csv",
-  "long_file_rows": 37239
+  "long_file_rows": 37213
  },
  "sources": [
   {
@@ -40,119 +40,126 @@
   {
    "path": "applications_2026.xlsx",
    "format": "xlsx",
-   "bytes": 44975,
-   "covers": "the 2026 round's applications with their reference consumption",
+   "bytes": 47872,
+   "covers": "the 2026 round's applications received by 12 June, with their reference consumption",
    "made": "constructed by task7/generator/make.py (seeded, deterministic)"
   },
   {
    "path": "benchmarking_method_2022.pdf",
    "format": "pdf",
-   "bytes": 35506,
+   "bytes": 68702,
    "covers": "the utility's benchmarking method",
    "made": "constructed by task7/generator/make.py (seeded, deterministic)"
   },
   {
    "path": "benchmarking_notices_2019_2026.csv",
    "format": "csv",
-   "bytes": 2386991,
+   "bytes": 2550837,
    "covers": "every benchmarking notice sent, May 2019 to May 2026, with the grant offer",
    "made": "constructed by task7/generator/make.py (seeded, deterministic)"
   },
   {
    "path": "buildings_register_2026.xlsx",
    "format": "xlsx",
-   "bytes": 1308986,
+   "bytes": 1308688,
    "covers": "commercial buildings supplied with gas: address, district, use, floor area",
    "made": "constructed by task7/generator/make.py (seeded, deterministic)"
   },
   {
    "path": "calorific_values_2013_2026.csv",
    "format": "csv",
-   "bytes": 1701,
+   "bytes": 1700,
    "covers": "the billing calorific value by network area and season",
    "made": "constructed by task7/generator/make.py (seeded, deterministic)"
   },
   {
    "path": "climate_action_plan_2023_extract.pdf",
    "format": "pdf",
-   "bytes": 35606,
+   "bytes": 67708,
    "covers": "the climate action plan's section on efficiency grants",
    "made": "constructed by task7/generator/make.py (seeded, deterministic)"
   },
   {
    "path": "committee_request_2026-06-15.docx",
    "format": "docx",
-   "bytes": 9514,
+   "bytes": 9463,
    "covers": "the committee chair's request for the 2026 round",
    "made": "constructed by task7/generator/make.py (seeded, deterministic)"
   },
   {
    "path": "degree_days_haldenau.csv",
    "format": "csv",
-   "bytes": 3351,
+   "bytes": 3349,
    "covers": "monthly G20/15 degree days by season and the 1991 to 2020 means",
    "made": "constructed by task7/generator/make.py (seeded, deterministic)"
   },
   {
    "path": "electricity_customers_annual_2019_2025.csv",
    "format": "csv",
-   "bytes": 3559019,
+   "bytes": 3560286,
    "covers": "the utility's commercial electricity customers' annual use",
    "made": "constructed by task7/generator/make.py (seeded, deterministic)"
   },
   {
    "path": "federal_funding_overview_2025.pdf",
    "format": "pdf",
-   "bytes": 31882,
+   "bytes": 55606,
    "covers": "the regional energy agency's overview of federal grants",
    "made": "constructed by task7/generator/make.py (seeded, deterministic)"
   },
   {
    "path": "gas_meter_reads_2013_2026.csv",
    "format": "csv",
-   "bytes": 27346898,
+   "bytes": 27432102,
    "covers": "every read of every commercial gas meter point, 30 April 2013 to 30 April 2026",
+   "made": "constructed by task7/generator/make.py (seeded, deterministic)"
+  },
+  {
+   "path": "grant_offer_2026_terms.pdf",
+   "format": "pdf",
+   "bytes": 53735,
+   "covers": "the terms of the 2026 grant offer",
    "made": "constructed by task7/generator/make.py (seeded, deterministic)"
   },
   {
    "path": "meter_points_2026.csv",
    "format": "csv",
-   "bytes": 2088504,
+   "bytes": 2093646,
    "covers": "meter points, their buildings, meters, factors, z-numbers and network areas",
    "made": "constructed by task7/generator/make.py (seeded, deterministic)"
   },
   {
    "path": "municipal_heat_plan_2026_summary.pdf",
    "format": "pdf",
-   "bytes": 33440,
+   "bytes": 58048,
    "covers": "the municipal heat plan's summary",
    "made": "constructed by task7/generator/make.py (seeded, deterministic)"
   },
   {
    "path": "pilot_2019_responses_and_draw.xlsx",
    "format": "xlsx",
-   "bytes": 131004,
+   "bytes": 142637,
    "covers": "the 2019 pilot's responses, the draw, withdrawals and completion dates",
    "made": "constructed by task7/generator/make.py (seeded, deterministic)"
   },
   {
    "path": "pilot_2019_rules.pdf",
    "format": "pdf",
-   "bytes": 28451,
+   "bytes": 53237,
    "covers": "the terms of the 2019 pilot",
    "made": "constructed by task7/generator/make.py (seeded, deterministic)"
   },
   {
    "path": "solar_cadastre_rooftops_2024.xlsx",
    "format": "xlsx",
-   "bytes": 240475,
+   "bytes": 240444,
    "covers": "rooftop solar potential by address",
    "made": "constructed by task7/generator/make.py (seeded, deterministic)"
   },
   {
    "path": "weather_haldenau_daily_2013_2026.csv",
    "format": "csv",
-   "bytes": 74059,
+   "bytes": 73978,
    "covers": "the Haldenau station's daily mean temperature",
    "made": "constructed by task7/generator/make.py (seeded, deterministic)"
   }

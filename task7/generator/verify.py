@@ -1,4 +1,4 @@
-"""task7: the independent verifier. It reads only the pack under target/, rebuilds every building's normal-weather gas
+"""task7 architecture 7: the independent verifier. It reads only the pack under target/, rebuilds every building's normal-weather gas
 use season by season the way the utility's benchmarking method sets out, and hands the result to golden.py; checks.py
 asserts that the figures it yields are the golden's."""
 import csv
@@ -141,28 +141,54 @@ def load(target, pro_rate=True, estimates="as filed"):
     P.tune_season = tune
     P.bid = [r["building_id"] for r in reg]
     P.area = np.array([float(r["heated_floor_area_m2"]) for r in reg])
+    # the use each building had on its 2019 notice, the register's use where it had none
+    P.typ_register = P.typ.copy()
+    P.notice_area = {}
+    for r in rows(os.path.join(target, "benchmarking_notices_2019_2026.csv")):
+        b = bidx[r["building_id"]]
+        s_ = int(r["season"][:4]) + 1
+        P.notice_area[(b, s_)] = float(r["heated_floor_area_m2"])
+        if s_ == GD.PILOT:
+            P.typ[b] = TYPES.index(r["use"])
     pilot = sheet(os.path.join(target, "pilot_2019_responses_and_draw.xlsx"))
     P.answered = np.zeros(N, bool)
     P.drawn = np.zeros(N, bool)
     P.works = np.zeros(N, bool)
+    P.withdrawn = np.zeros(N, bool)
     P.measure = np.array([""] * N, dtype=object)
     P.answers19 = []
     for r in pilot:
         b = bidx[r["building_id"]]
-        P.answers19.append({"b": b, "measure": r["measure"], "date": d_(str(r["received"])[:10])})
+        drawn = r["draw_8_july_2019"] == "drawn"
+        wd = bool(r["withdrawn"])
+        works = drawn and bool(r["works_completed"])
+        P.answers19.append({"b": b, "measure": r["measure"], "date": d_(str(r["received"])[:10]),
+                            "cost": float(r["quoted_cost_eur"]), "grant": float(r["grant_eur"]), "drawn": drawn,
+                            "withdrawn": wd, "works": works})
         P.answered[b] = True
         P.measure[b] = r["measure"]
-        P.drawn[b] = r["draw_8_july_2019"] == "drawn"
-        P.works[b] = P.drawn[b] and bool(r["works_completed"])
+        P.drawn[b] = drawn
+        P.withdrawn[b] = wd
+        P.works[b] = works
     P.offered2019 = np.zeros(N, bool)
     for r in rows(os.path.join(target, "benchmarking_notices_2019_2026.csv")):
         if r["grant_offer"] == "pilot 2019":
             P.offered2019[bidx[r["building_id"]]] = True
-    P.pipe = []
+    # the 2026 applications received by 12 June; a later application for the same building and measure replaces the
+    # earlier one
+    P.pipe_raw = []
     for r in sheet(os.path.join(target, "applications_2026.xlsx")):
-        P.pipe.append({"no": r["application_no"], "b": bidx[r["building_id"]], "measure": r["measure"],
-                       "grant": float(r["grant_eur"]), "ref_kwh": float(r["reference_consumption_kwh"]),
-                       "date": d_(str(r["received"])[:10])})
+        P.pipe_raw.append({"no": r["application_no"], "b": bidx[r["building_id"]], "measure": r["measure"],
+                           "grant": float(r["grant_eur"]), "ref_kwh": float(r["reference_consumption_kwh"]),
+                           "date": d_(str(r["received"])[:10])})
+    latest = {}
+    for a in P.pipe_raw:
+        key = (a["b"], a["measure"])
+        if key not in latest or (a["date"], a["no"]) > (latest[key]["date"], latest[key]["no"]):
+            latest[key] = a
+    P.pipe = sorted(latest.values(), key=lambda a: a["no"])
+    for a in P.pipe:
+        a["typ"] = int(P.typ_register[a["b"]])
     P.G, P.G_LT, P.hvec = G, G_LT, hvec
     return P
 
@@ -170,4 +196,8 @@ def load(target, pro_rate=True, estimates="as filed"):
 if __name__ == "__main__":
     target = sys.argv[1] if len(sys.argv) > 1 else os.path.join(HERE, "..", "target")
     P = load(target)
-    print("golden", {m: round(100 * v, 2) for m, v in GD.golden_rates(P).items()})
+    for m in GD.MEASURES:
+        s = GD.season_savings(P, m)
+        A = GD.appraisal(P, m, GD.app_rates(P, m))
+        print(m, [round(100 * x, 1) for x in s], "life %.2f" % (100 * GD.lifetime(s, m)), "rate %.2f" % (100 * A["rate"]),
+              "eur/t %.1f" % A["eur_t"])

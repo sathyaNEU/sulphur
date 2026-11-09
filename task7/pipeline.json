@@ -1,31 +1,35 @@
 {
  "task": "task7",
- "status": "DESIGN",
+ "status": "READY",
  "domain": "energy-systems-utilities",
  "objective": "experiment-causal",
- "stage": 2,
- "stage_name": "design",
+ "stage": 5,
+ "stage_name": "ready",
  "updated": "2026-11-09",
  "stump": "",
  "architecture": 7,
  "loops": 0,
  "precut": {
-  "exit": null,
-  "date": ""
+  "exit": 0,
+  "date": "2026-11-09",
+  "checks": 85,
+  "note": "1 WARN (R1 upstream of seven results; the largest hint rescues 2 of 9)"
  },
  "leak": {
-  "leak_py": "",
-  "reader": ""
+  "leak_py": "REVIEW, no LEAK (2026-11-09, --asof 2026-06-24): the plan's section numbers, the measures' names, the field's ordinary words; ruled harmless",
+  "reader": "2026-11-09 isolated reader (Sonnet, medium) on target.zip 00c9970f: questions 1 to 4 none; question 5 definitions only; question 6 analysis throughout; nothing generated-looking. Prompt re-read after the R7 wording fix: one two-reading risk (paid once withdrawals are in, against the terms' two causes of non-payment) closed with the terms' own words, once the works are done, converging on the record (SF15)"
  },
  "duplicate_check": {
-  "heart": "",
-  "nearest": ""
+  "heart": "WARN 2026-11-09 (overuse.strategy, driver.near own lineage 0.13, overuse.gate_g), answered in the note",
+  "surface": "exit 0"
  },
  "judge": {
-  "verdict": "",
-  "disposition": "",
-  "gate_h": "",
-  "report": ""
+  "verdict": "DETERMINISTIC",
+  "disposition": "APPROVE",
+  "report": "task7/determinism_check_report_pass2.md",
+  "gate_g": "method_or_model_selection, decomposition_attribution, forecasting; analytical_non_defect; surface_read_dependency no; sole_data_defect no",
+  "gate_h": "domain pass, layers pass, results ten or more across five areas, one thing none, effort test separating the passes, the best single hint rescuing two or three of ten",
+  "scope": "APPROVE on target.zip 00c9970f and the blocks as judged; the R7 asking clause reworded afterwards (the grant the applications ask for, what would be paid on them, the funded round's totals) moved no graded figure (figures.json byte-identical) and closes a literal reading of a non-funded measure's row in the golden's favour"
  },
  "returned": [
   {
@@ -81,7 +85,7 @@
    "feedback": "task7/runs/review_2026-11-09.md"
   }
  ],
- "resume": "stage 2 design: the generator's world rebuilt (effects by type and works age, visits in both arms, late and withdrawn applications by measure), the golden and the hurried passes run on the clean truth, the note's bands and effort test filled, precut.py exit 0",
+ "resume": "READY: the author rewrites prompt.txt in their own words (the Prompt contract in the design note lists what it may not drop or add), re-gates it with voice-check.py --rewrite and leak.py, uploads it with target.zip, generates the two runs, then /triage-runs task7",
  "approved": null,
  "delivered": "2026-11-08",
  "portal": null,
@@ -290,16 +294,53 @@
    }
   ]
  },
- "paper_pair": null,
+ "paper_pair": 46.5,
  "subdomain": "efficiency-savings-verification",
- "call": "",
+ "call": "Fund insulation and heating controls in the 2026 round, not heating optimisation: €88, €99 and €158 of grant per lifetime tonne on the applications received against €120; the funded round asks about €7.7 million once the offer closes and pays about €7.3 million; the pilot's works saved about 3,300 tonnes of CO2 in 2025/26.",
  "doctrine": "throughout",
  "chain": "R1 each measure's saving by season against the passed-over owners; R2 its saving over its service life; R3 its saving by building type; R4 its lifetime saving rate on this year's applications; R5 grant per tonne and the funded set; R6 each grant per tonne's range and flip rate; R7 each measure's applications, grant and grant paid at close; R8 the pilot's 2025/26 CO2",
  "effort": {
-  "quick": null,
-  "careful": null,
-  "thorough": null,
-  "largest_hint": ""
+  "quick": 14.0,
+  "careful": 46.5,
+  "thorough": 100.0,
+  "largest_hint": "controls by use and this year's mix: rescues 2 of 9"
  },
- "prompt_rewritten": false
+ "prompt_rewritten": false,
+ "gates_stage3": {
+  "checks": "119 of 119",
+  "figures_check": "PASS, 152 figures",
+  "effort": "exit 0, pair 46.5, 3 distinct wrong funded sets",
+  "voice_check": "PASS (998 characters)",
+  "leak_py": "REVIEW, no LEAK (--asof 2026-06-24)",
+  "audit_containers": "exit 0",
+  "heart": "WARN (overuse.strategy, driver.near own lineage, overuse.gate_g)",
+  "surface": "exit 0",
+  "byte_identical": "make.py --twice: target, golden, both zips, submission, metadata, figures.json SAME",
+  "date": "2026-11-09"
+ },
+ "zips": {
+  "target.zip": {
+   "bytes": 7063901,
+   "members": 18,
+   "sha256": "00c9970f9f34a9ebe39f1e364da7ca504a28e4d3e309839afc4084a84ae51335"
+  },
+  "golden.zip": {
+   "bytes": 135620,
+   "members": 2,
+   "sha256": "5f30c671e5444ebc12a209c8bd3b61d1a40964806b45d189aeccfb90314919a3"
+  }
+ },
+ "gates_stage5": {
+  "checks": "120 of 120",
+  "precut": "exit 0, 85 checks, 1 WARN",
+  "effort": "exit 0, careful 46.5, quick 14.0, 3 distinct wrong funded sets, largest hint 2 of 9",
+  "voice_check": "PASS (998 characters)",
+  "leak_py": "REVIEW, no LEAK (--asof 2026-06-24)",
+  "figures_check": "PASS, 152 figures",
+  "audit_containers": "exit 0",
+  "heart": "WARN, answered in the note",
+  "surface": "exit 0",
+  "byte_identical": "make.py --twice SAME on every output",
+  "date": "2026-11-09"
+ }
 }

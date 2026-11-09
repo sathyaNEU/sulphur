@@ -1,4 +1,4 @@
-"""task7 build: the world, the pack under target/, the documents, the checks, the golden deliverables, figures.json,
+"""task7 architecture 7 build: the world, the pack under target/, the documents, the checks, the golden deliverables, figures.json,
 submission.md, metadata.json and both zips. `python3 make.py` builds in place; `python3 make.py --twice` builds twice
 into scratch folders and fails unless the two packs, goldens and zips are byte-identical."""
 import filecmp
@@ -32,13 +32,14 @@ COVERS = {
     "buildings_register_2026.xlsx": "commercial buildings supplied with gas: address, district, use, floor area",
     "benchmarking_notices_2019_2026.csv": "every benchmarking notice sent, May 2019 to May 2026, with the grant offer",
     "pilot_2019_responses_and_draw.xlsx": "the 2019 pilot's responses, the draw, withdrawals and completion dates",
-    "applications_2026.xlsx": "the 2026 round's applications with their reference consumption",
+    "applications_2026.xlsx": "the 2026 round's applications received by 12 June, with their reference consumption",
     "weather_haldenau_daily_2013_2026.csv": "the Haldenau station's daily mean temperature",
     "degree_days_haldenau.csv": "monthly G20/15 degree days by season and the 1991 to 2020 means",
     "climate_action_plan_2023_extract.pdf": "the climate action plan's section on efficiency grants",
     "pilot_2019_rules.pdf": "the terms of the 2019 pilot",
     "benchmarking_method_2022.pdf": "the utility's benchmarking method",
     "committee_request_2026-06-15.docx": "the committee chair's request for the 2026 round",
+    "grant_offer_2026_terms.pdf": "the terms of the 2026 grant offer",
     "electricity_customers_annual_2019_2025.csv": "the utility's commercial electricity customers' annual use",
     "solar_cadastre_rooftops_2024.xlsx": "rooftop solar potential by address",
     "municipal_heat_plan_2026_summary.pdf": "the municipal heat plan's summary",
@@ -93,10 +94,10 @@ def build(task_dir, gen_dir):
     WU.write(F, os.path.join(task_dir, "submission.md"))
     files = sorted(os.listdir(target))
     meta = {
-        "task": "task7", "title": "Stadtwerke Haldenau: which retrofit measures the 2026 grant round should fund",
+        "task": "task7", "title": "Stadtwerke Haldenau: which retrofit measures the 2026 grant round funds, and what it will pay",
         "domain": "Energy Systems & Utilities", "task_type": "energy efficiency and demand response evaluation",
         "objective": "Experiment & Causal Analysis", "as_of": "2026-06-15",
-        "deliverables": ["committee_briefing_retrofit_round_2026.pptx", "retrofit_round_2026.xlsx"],
+        "deliverables": ["grant_round_2026_note.docx", "grant_round_2026_appraisal.xlsx"],
         "distractor_files": DISTRACTORS,
         "input_gates": {"files": len(files), "formats": sorted({os.path.splitext(f)[1][1:] for f in files}),
                         "largest_file": "gas_meter_reads_2013_2026.csv", "largest_file_rows": counts["reads"],
@@ -150,11 +151,9 @@ def main():
         sys.exit(0 if ok else 1)
     F, C, counts = build(TASK, HERE)
     print(json.dumps(counts, indent=1))
-    print("funded %s; rates %s; eur/t %s; received funded %s applications, %s; at close %s million, %s t; "
-          "2025/26 saving %s t" % (F["call"]["funded"], F["rates_pct"], F["eur_per_tonne"],
-                                   F["call"]["received_funded_applications"], F["call"]["received_funded_grant_eur"],
-                                   F["call"]["at_close_grant_million"], F["call"]["at_close_tonnes"],
-                                   F["season_saving_2026"]["tonnes"]))
+    print("funded %s; eur/t %s; ranges %s; flip %s; rates %s; life %s; at close paid %s million; 2025/26 %s t"
+          % (F["funded"], F["R5_eur_per_tonne"], F["R6_range_eur"], F["R6_break_even_pct"],
+             F["R4_rate_on_applications_pct"], F["R2_life_saving_pct"], F["R7_funded_paid_million"], F["R8_tonnes"]))
     print("%d checks passed" % len(CK.RESULTS))
 
 

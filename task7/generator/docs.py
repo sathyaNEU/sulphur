@@ -1,7 +1,8 @@
-"""task7 architecture 6: the pack's documents. Each PDF is a Word document exported by LibreOffice Writer
-(officepdf.py); the committee request stays a Word document. They file the WHAT (the saving rate, normal weather, the
-appraisal, the limit, the pilot's terms, the utility's normalisation) and describe nothing of how a saving is to be
-estimated or which buildings compare."""
+"""task7 architecture 7: the pack's documents. Each PDF is a Word document exported by LibreOffice Writer
+(officepdf.py); the committee request stays a Word document. They file the WHAT (what a saving is, normal weather, a
+round's lifetime tonnes and grant per tonne, the limit, the pilot's and the 2026 round's terms, the annual report's
+season saving, the utility's normalisation) and describe nothing of how a saving is to be estimated, which buildings
+compare, how a saving carries over a measure's life or to a building, or how a round is projected."""
 import datetime as dt
 import os
 
@@ -48,27 +49,29 @@ def climate_plan(target):
            "hydraulic balancing, new pumps and a new heating curve (heating optimisation); or room-by-room and "
            "time-based controls (heating controls). The offer is made in Stadtwerke Haldenau's benchmarking notice. A "
            "round is set by the council's Committee for Climate and Environment."),
-         P("4.2 Saving rate", H2),
-         P("The saving rate of a measure is the share of a building's gas use in a season of long-term average weather "
-           "that the measure's works save. The council takes each measure's saving rate from the 2019 pilot: for each "
-           "building that had the works and each season since, its use as a share of its use in the 2018/19 season is "
-           "set against the average of that share over the comparison buildings, and one less the first over the second "
-           "is the saving that season; the rate is the average over those buildings and seasons, in whole per cent."),
+         P("4.2 Saving", H2),
+         P("A measure's saving in a season is the gas its works save, as a share of the gas the buildings that had "
+           "them would have used that season without them, both in a season of long-term average weather. The council "
+           "takes the evidence of each measure's saving from the 2019 pilot."),
          P("4.3 Normal weather", H2),
          P("A season runs from 1 May to 30 April. Gas use in a season of long-term average weather is the season's use "
            "normalised as Stadtwerke Haldenau normalises it for its benchmarking notices."),
          P("4.4 Appraisal of a round", H2),
-         P("An application's lifetime tonnes are its measure's saving rate times its reference consumption, times "
-           "0.201 tonnes of CO2 per MWh of gas, times the measure's service life. A measure's grant per tonne in a round "
-           "is the grant of all the round's applications for that measure divided by their lifetime tonnes. The council "
-           "funds a measure in a round when its grant per tonne is €120 or less, and then funds every application for "
-           "that measure in the round."),
+         P("An application's lifetime tonnes are the CO2 in the gas its measure's works would save in the building "
+           "applied for over the measure's service life, each year's saving taken on the application's reference "
+           "consumption, at 0.201 tonnes of CO2 per MWh of gas. A measure's saving rate on a round's applications is "
+           "their lifetime tonnes as a share of the tonnes their reference consumption carries over the same life. A "
+           "measure's grant per tonne in a round is the grant of the round's applications for it divided by their "
+           "lifetime tonnes. The council funds a measure in a round when its grant per tonne is €120 or less, and then "
+           "funds every application for that measure in the round."),
          T(lives, [140, 120]),
          P("4.5 Reference consumption", H2),
          P("An application's reference consumption is the normalised use per square metre printed on the notice that "
            "carried the offer, times the building's heated floor area in Stadtwerke Haldenau's register."),
          P("4.6 Monitoring", H2),
-         P("The Climate Protection Office reports each year on the programme's results to the committee.")]
+         P("The Climate Protection Office reports each year to the committee on the CO2 the programme's works saved in "
+           "the season just ended: the gas the buildings with works would have used that season without them, less what "
+           "they used, both in normal weather, at the factor in 4.4.")]
     path = os.path.join(target, "climate_action_plan_2023_extract.pdf")
     officepdf.build(path, s, "Climate Action Plan 2023: extract", "Klimaschutzstelle Stadt Haldenau",
                     "Climate Action Plan 2023", "Stadt Haldenau | Climate Action Plan 2023 | Section 4",
@@ -87,9 +90,9 @@ def pilot_rules(target):
          P("An owner responds by 30 June 2019, naming one measure (insulation, heating optimisation or heating controls) "
            "and enclosing a contractor's quote. The grant is 30 per cent of the quoted cost, at most €40,000."),
          P("3 The places", H2),
-         P("The pilot's budget funds about half of the responses expected. Places are drawn by lot among all responses at a "
-           "public draw at the town hall on 8 July 2019, under the eye of the city's legal office. Owners not drawn "
-           "may apply in a later round."),
+         P("The pilot's budget funds a little under half of the responses for each measure. Places are drawn by lot "
+           "among the responses for each measure at a public draw at the town hall on 8 July 2019, under the eye of the "
+           "city's legal office. Owners not drawn may apply in a later round."),
          P("4 The works", H2),
          P("A drawn owner has the works done by 30 September 2019, before the heating season, and sends the "
            "contractor's invoice. The grant is paid on completion; an owner who withdraws loses the place."),
@@ -100,6 +103,35 @@ def pilot_rules(target):
                     "Pilot 2019", "Stadt Haldenau | Pilot 2019 | Terms",
                     dt.datetime(2019, 4, 9, 16, 40, tzinfo=CEST), dt.datetime(2019, 4, 10, 9, 15, tzinfo=CEST),
                     producer="LibreOffice 6.2")
+
+
+def round_terms(target):
+    s = [P("Stadt Haldenau, Climate Protection Office", SMALL),
+         P("Efficiency grants for commercial buildings 2026: terms of the offer", H1),
+         P("As approved by the Committee for Climate and Environment on 21 April 2026.", SMALL),
+         P("1 The offer", H2),
+         P("The offer goes with Stadtwerke Haldenau's benchmarking notice of May 2026 to every commercial building whose "
+           "notice places it in the top fifth of its use type, except buildings that had works under the 2019 pilot. It "
+           "is open until 30 June 2026."),
+         P("2 Applications", H2),
+         P("An owner applies by 30 June 2026, naming one measure (insulation, heating optimisation or heating controls) "
+           "and enclosing a contractor's quote. The grant is 30 per cent of the quoted cost, at most €40,000. An owner "
+           "who revises the quote sends the application again; the later application replaces the earlier one."),
+         P("3 The round", H2),
+         P("The committee sets at its July meeting which measures the round funds, under section 4 of the climate action "
+           "plan. For a funded measure every application received by 30 June 2026 is granted; for any other measure "
+           "none is."),
+         P("4 The works", H2),
+         P("A granted owner has the works done by 30 September 2026 and sends the contractor's invoice. The grant is paid "
+           "on completion; an owner who withdraws, or whose works are not completed by then, receives nothing."),
+         P("5 Records", H2),
+         P("The Climate Protection Office keeps the applications and passes them to Stadtwerke Haldenau for the "
+           "appraisal.")]
+    path = os.path.join(target, "grant_offer_2026_terms.pdf")
+    officepdf.build(path, s, "Efficiency grants 2026: terms of the offer", "Klimaschutzstelle Stadt Haldenau",
+                    "Grant offer 2026", "Stadt Haldenau | Efficiency grants 2026 | Terms",
+                    dt.datetime(2026, 4, 21, 15, 10, tzinfo=CEST), dt.datetime(2026, 4, 22, 8, 55, tzinfo=CEST),
+                    producer="LibreOffice 25.2")
 
 
 def method(target, w):
@@ -125,7 +157,8 @@ def method(target, w):
          P("4 The notice", H2),
          P("Each May the notice goes to every commercial building supplied for the whole of the season just ended and "
            "the one before, whose normalised use per square metre of heated floor area is in the top fifth of its use "
-           "type. It prints the building's normalised use per square metre and the median for its use type.")]
+           "type. It prints the heated floor area the figure is taken on, the building's normalised use per square metre "
+           "and the median for its use type.")]
     path = os.path.join(target, "benchmarking_method_2022.pdf")
     officepdf.build(path, s, "Gas benchmarking for commercial customers: method", "Torben Römer", "Benchmarking method",
                     "Stadtwerke Haldenau | Energy Services | Benchmarking method v2",
@@ -150,7 +183,8 @@ def heat_plan(target):
     path = os.path.join(target, "municipal_heat_plan_2026_summary.pdf")
     officepdf.build(path, s, "Municipal heat plan 2026: summary", "Stadtplanungsamt Haldenau", "Heat plan",
                     "Stadt Haldenau | Heat plan 2026 | Summary",
-                    dt.datetime(2026, 3, 27, 9, 0, tzinfo=CET), dt.datetime(2026, 3, 27, 9, 40, tzinfo=CET))
+                    dt.datetime(2026, 3, 27, 9, 0, tzinfo=CET), dt.datetime(2026, 3, 27, 9, 40, tzinfo=CET),
+                    producer="LibreOffice 25.8")
 
 
 def federal_overview(target):
@@ -191,13 +225,12 @@ def committee_request(target):
         "The committee sets the 2026 round at its meeting on 9 July. The May notices carried the offer again, open to 30 "
         "June, and the Climate Protection Office has passed you the applications that came in by 12 June. Your paper goes "
         "out with the agenda on 26 June.",
-        "Under the climate action plan we fund a measure only where its grant per tonne of CO2, on the saving rate the "
-        "2019 pilot showed, is €120 or less. Before the meeting we need your view of which measures to fund, with each "
-        "measure's saving rate from the pilot and its grant per tonne on this year's applications, the workbook the office "
-        "will use to issue the grants, and what the round will come to once the offer has closed.",
-        "The plan's annual report also asks what the pilot's works saved in the season to April 2026: each measure's "
-        "saving rate on the gas its buildings would have used that season without the works, normalised as for the "
-        "notices, and its CO2 at the plan's factor.",
+        "Under the climate action plan we fund a measure only where its grant per tonne of CO2 on this year's "
+        "applications is €120 or less. Before the meeting we need your view of which measures to fund and how sure you "
+        "are of each, with what the pilot showed season by season, the workbook the office will use to issue the "
+        "grants, and what the round will actually pay once the offer has closed and the works are done.",
+        "The plan's annual report also needs the CO2 the pilot's works saved in the season to April 2026, as section 4.6 "
+        "sets it out.",
         "With thanks and best wishes,",
         "Magda Peukert"]
     for t in paras:
@@ -214,6 +247,7 @@ def committee_request(target):
 def write_all(target, w):
     climate_plan(target)
     pilot_rules(target)
+    round_terms(target)
     method(target, w)
     heat_plan(target)
     federal_overview(target)

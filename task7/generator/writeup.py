@@ -1,140 +1,164 @@
-"""task7 architecture 6: submission.md, the four answer blocks, drafted from figures.json so no figure is typed. Every
-figure a block states is one an independent rebuild reproduces at the stated precision."""
+"""task7 architecture 7: submission.md, the four answer blocks the author pastes into the platform, every figure taken
+from figures.json as the golden deliverables print it."""
 
 LABEL = {"insulation": "insulation", "heating optimisation": "heating optimisation", "heating controls": "heating controls"}
+MEAS = ["insulation", "heating optimisation", "heating controls"]
+POSS = {"insulation": "insulation's", "heating optimisation": "heating optimisation's", "heating controls": "heating controls'"}
 
 
 def n(v):
     return format(int(v), ",")
 
 
+def p(v):
+    return "%.1f%%" % v
+
+
 def write(F, path):
-    c, r, e, ev, ss, dp = F["call"], F["rates_pct"], F["eur_per_tonne"], F["evidence"], F["season_saving_2026"], F["default_path"]
-    ba, be, ab = F["before_after_pct"], F["break_even_pct"], F["answered_by_day_2019_pct"]
-    apps = F["applications_by_measure"]
-    gm, tm = F["grant_by_measure_eur"], F["tonnes_by_measure"]
-    riv = F["at_close_rivals"]
-    pf = riv["pooled over the funded measures"]
-    md = []
-    md += ["## Tags", "",
-           "**Domain:** Engineering and Physical Sciences, Energy Systems & Utilities, energy efficiency and demand "
-           "response evaluation (verified savings of commercial retrofit measures).",
-           "**Analytical objective:** Experiment & Causal Analysis.", ""]
-    md += ["## Final Recommendation", "",
-           "Fund **insulation and heating optimisation** in the 2026 round and **not heating controls**: set against the "
-           "owners the 2019 draw passed over, each up to the season before its first service visit, the pilot's works saved %d%%, %d%% and "
-           "%d%% of normal-weather gas, so this year's applications come to €%d, €%d and €%d of grant a tonne of CO2 "
-           "against the €120 limit. The plain lottery comparison (%d%%, %d%% and below zero, insulation alone funded) is "
-           "rejected because service visits reached most passed-over buildings from August 2019, each followed by normal-weather "
-           "use about %s%% lower, and no works building had one."
-           % (r["insulation"], r["heating optimisation"], r["heating controls"], e["insulation"], e["heating optimisation"],
-              e["heating controls"], dp["rates_pct"]["insulation"], dp["rates_pct"]["heating optimisation"],
-              ev["visit_step_pct"]), ""]
-    md += ["## Supplementary Questions", "", "### committee_briefing_retrofit_round_2026.pptx", "",
-           "1. The recommendation opens the deck: fund insulation and heating optimisation, not heating controls, with the "
-           "funded round once the offer closes at about €%d million of grant and %s tonnes of CO2 over the measures' lives."
-           % (c["at_close_grant_million"], n(c["at_close_tonnes"])),
-           "2. Each measure's saving rate from the 2019 pilot, in whole per cent: insulation %d%%, heating optimisation "
-           "%d%%, heating controls %d%%." % (r["insulation"], r["heating optimisation"], r["heating controls"]),
-           "3. Each measure's grant per tonne on the 2026 applications, to the nearest €10, charted as bars against a line "
-           "at the €120 limit: insulation €%d and heating optimisation €%d under it, heating controls €%d over it."
-           % (e["insulation"], e["heating optimisation"], e["heating controls"]),
-           "4. The CO2 the pilot's works saved in the 2025/26 season, each measure's saving rate on what its works "
-           "buildings would have used that season without the works: about %s tonnes, to the nearest 500."
-           % n(ss["tonnes"]),
-           "", "### retrofit_round_2026.xlsx", "",
-           "5. A sheet of measures, one row each with its saving rate, applications received by 12 June, grant to the "
-           "nearest €10,000, lifetime tonnes to the nearest 10, grant per tonne and whether to fund it: insulation %d%%, "
-           "%s applications, €%s, %s tonnes, €%d a tonne, fund; heating optimisation %d%%, %s applications, €%s, %s tonnes, "
-           "€%d a tonne, fund; heating controls %d%%, %s applications, €%s, %s tonnes, €%d a tonne, do not fund."
-           % (r["insulation"], n(apps["insulation"]), n(gm["insulation"]), n(tm["insulation"]), e["insulation"],
-              r["heating optimisation"], n(apps["heating optimisation"]), n(gm["heating optimisation"]),
-              n(tm["heating optimisation"]), e["heating optimisation"], r["heating controls"],
-              n(apps["heating controls"]), n(gm["heating controls"]), n(tm["heating controls"]), e["heating controls"]),
-           "6. A sheet of the %s funded applications received by 12 June (every insulation and heating optimisation "
-           "application), one row each with its grant, its expected annual saving in whole MWh (the measure's saving rate "
-           "times the application's reference consumption) and its lifetime tonnes to the nearest 10; together they "
-           "carry €%s of grant."
-           % (n(c["received_funded_applications"]), n(c["received_funded_grant_eur"])),
-           "7. The funded round once the offer closes on 30 June: about €%d million of grant and %s lifetime tonnes, each "
-           "funded measure's applications received by 12 June scaled up by the share of the 2019 responses for that measure "
-           "in by the same day after the notice (insulation %d%%, heating optimisation %d%%)."
-           % (c["at_close_grant_million"], n(c["at_close_tonnes"]), ab["insulation"], ab["heating optimisation"]), ""]
-    md += ["## Critical Components", "",
-           "1. The owners the 2019 draw passed over were not left alone: **%s of %s** had a service visit by April 2026, "
-           "district by district from August 2019, each visit cutting the building's normal-weather use by about "
-           "**%s%%** for good, and **none** of the %s works buildings had one."
-           % (n(ev["passed_over_visited"]), n(ev["passed_over"]), ev["visit_step_pct"], n(ev["works"])),
-           "2. Set against every passed-over owner, heating optimisation's saving appears to fade from **about %d points** "
-           "in 2019/20 to **under %d** in 2025/26; against passed-over owners not yet visited it holds at **about %d points** "
-           "every season, with no trend."
-           % (ev["lottery_gap_2020_whole"], ev["lottery_gap_2026_under"], ev["clean_gap_whole"]),
-           "3. The saving rates against owners not yet visited are **%d%%** for insulation, **%d%%** for heating "
-           "optimisation and **%d%%** for heating controls, against %d%%, %d%% and below zero on the plain lottery "
-           "comparison." % (r["insulation"], r["heating optimisation"], r["heating controls"], dp["rates_pct"]["insulation"],
-                            dp["rates_pct"]["heating optimisation"]),
-           "4. On the 2026 applications the grant per tonne is **€%d** for insulation, **€%d** for heating optimisation "
-           "and **€%d** for heating controls, against €%d for heating optimisation on the lottery comparison."
-           % (e["insulation"], e["heating optimisation"], e["heating controls"], dp["eur_per_tonne"]["heating optimisation"]),
-           ""]
-    md += ["## Step-by-Step", "",
-           "1. Built each building's gas use per season (1 May to 30 April) from gas_meter_reads_2013_2026.csv: index "
-           "differences between reads, carried across meter exchanges and counter rollovers, with corrections replacing "
-           "estimates and typos, reads off 30 April shared out as benchmarking_method_2022.pdf sets out, cubic metres "
-           "converted with each meter point's z-number and factor (meter_points_2026.csv) and the season's calorific value "
-           "(calorific_values_2013_2026.csv), and a building's meter points summed.",
-           "2. Normalised every season to long-term average weather as the notices do (VDI 3807, the use type's hot water "
-           "share held, degree_days_haldenau.csv).",
-           "3. Read the pilot from pilot_2019_responses_and_draw.xlsx: %s responses, %s drawn, %s with works done by 30 "
-           "September 2019; the draw balances the two groups on the 2018/19 season (the works buildings' mean use within "
-           "%s%% of the passed-over buildings', and each building is set against its own 2018/19 use) and on every season "
-           "before it." % (n(ev["answers"]), n(ev["drawn"]), n(ev["works"]), ev["draw_balance_pct"]),
-           "4. The insufficient route: the works buildings against every passed-over owner of the same measure, each "
-           "against its own 2018/19 season, every season since, gives %d%%, %d%% and below zero; under the plan's "
-           "appraisal heating optimisation then costs €%d a tonne and only insulation is funded, and the before and after "
-           "on the works buildings alone (%d%%, %d%%, %d%%) funds all three."
-           % (dp["rates_pct"]["insulation"], dp["rates_pct"]["heating optimisation"],
-              dp["eur_per_tonne"]["heating optimisation"], ba["insulation"], ba["heating optimisation"],
-              ba["heating controls"]),
-           "5. Found why that comparison narrows season by season: the service-visit reads in the meter file put %s of the "
-           "%s passed-over buildings under a visit by April 2026, district by district, each stepping down about %s%% "
-           "against unvisited buildings from its visit, and no works building has one; the narrowing tracks the visits, "
-           "not the works' age, which is the same for every works building."
-           % (n(ev["passed_over_visited"]), n(ev["passed_over"]), ev["visit_step_pct"]),
-           "6. Rebuilt the comparison season by season from the passed-over buildings not yet visited, each building "
-           "dropped from its visit season, because a visit falls part way through that season: against unvisited "
-           "buildings, use in the visit season sits %d%% to %d%% below the season before it (by visit season) and in the "
-           "season after about %s%% below, so the visit season is only partly treated; the gap now holds flat (heating "
-           "optimisation about %d "
-           "points every season), and "
-           "the saving rates as the plan's 4.2 sets them (each works building's use as a share of its 2018/19 use, against "
-           "the comparison buildings' average share, every season, averaged, in whole per cent) are %d%%, %d%% and %d%%."
-           % (ev["visit_season_step_lo"], ev["visit_season_step_hi"], ev["season_after_step_pct"], ev["clean_gap_whole"],
-              r["insulation"],
-              r["heating optimisation"], r["heating controls"]),
-           "7. Applied climate_action_plan_2023_extract.pdf 4.4 to applications_2026.xlsx: rate times reference "
-           "consumption times 0.201 t per MWh times 30, 15 or 10 years; grant per tonne €%d, €%d and €%d (break-even "
-           "saving rates %s%%, %s%% and %s%%), so insulation and heating optimisation are funded and heating controls is "
-           "not." % (e["insulation"], e["heating optimisation"], e["heating controls"], be["insulation"],
-                     be["heating optimisation"], be["heating controls"]),
-           "8. Projected the funded round to the offer's close on 30 June from the 2019 responses' dates: by the same day "
-           "after the notice %d%% of the insulation responses and %d%% of the heating optimisation responses had come in (an "
-           "insulation quote needs a survey), so each measure's received applications scale by their own share, giving "
-           "about €%d million and %s lifetime tonnes; one pooled share for both measures would give €%d million and %s, "
-           "because it scales the late-coming insulation applications too little."
-           % (ab["insulation"], ab["heating optimisation"], c["at_close_grant_million"], n(c["at_close_tonnes"]),
-              pf["grant_million"], n(pf["tonnes"])),
-           "9. Took the pilot's 2025/26 saving at the council's rates on what each works building would have used that "
-           "season without the works (its 2025/26 use divided by one less the rate): about %s tonnes of CO2; the rate on "
-           "the buildings' 2018/19 use would give about %s, because what the works buildings would have used in 2025/26 "
-           "without the works sits below their 2018/19 use."
-           % (n(ss["tonnes"]), n(ss["static_2019_use_display"])),
-           "",
-           "No other conclusion survives. The before and after carries the season the notice flagged and the pandemic and "
-           "price-shock years; the lottery and every comparison drawn from buildings outside the pilot's works keep "
-           "buildings after their service visit, which no works building had, so they understate every measure "
-           "alike; reading the narrowing as savings fading is refuted by the flat gap against unvisited buildings. Every "
-           "comparison that drops visited buildings from their visit season, on any baseline, pooled or by measure, funds "
-           "insulation and heating optimisation and leaves heating controls well over the limit."]
+    ins, ho, ct = MEAS
+    e, r1, r2, r4 = F["R5_eur_per_tonne"], F["R1_saving_by_season_pct"], F["R2_life_saving_pct"], F["R4_rate_on_applications_pct"]
+    rg, be = F["R6_range_eur"], F["R6_break_even_pct"]
+    flat = F["hurried_eur_per_tonne"]["the pilot's seven-season average"]
+    pooled = F["hurried_eur_per_tonne"]["the pilot's own mix, faded"]
+    typeflat = F["hurried_eur_per_tonne"]["each type's seven-season average"]
+    ba = F["hurried_eur_per_tonne"]["the works buildings' own before and after"]
+    t3 = F["R3_by_type_pct"]
+    rc = F["controls_round_clock_share_pct"]
+    seasons = F["season_labels"]
+    L = []
+    L.append("## Tags\n")
+    L.append("**Domain:** Engineering and Physical Sciences, Energy Systems & Utilities, energy efficiency and demand "
+             "response evaluation (verified gas savings of commercial retrofit measures, carried to a grant round).")
+    L.append("**Analytical objective:** Experiment & Causal Analysis.\n")
+    L.append("## Final Recommendation\n")
+    L.append("Fund **insulation and heating controls** in the 2026 round and **not heating optimisation**: priced at the "
+             "saving the 2019 lottery showed for each application's own building use, carried over each measure's "
+             "service life, the applications received come to €%d, €%d and €%d of grant per lifetime tonne of CO2 "
+             "against the €%d limit (insulation, controls, heating optimisation). The pilot's seven-season saving "
+             "carried flat at the pilot's own mix (€%d, €%d and €%d, funding insulation and heating optimisation and "
+             "not controls) is rejected, because heating optimisation's saving falls from %s in its first winter to "
+             "%s by the fourth and stays there, and %d%% of the pilot's controls buildings were hotels and care homes, "
+             "where controls save next to nothing, against %d%% of this year's controls applicants."
+             % (e[ins], e[ct], e[ho], F["limit_eur"], flat[ins], flat[ct], flat[ho], p(r1[ho][0]), p(r1[ho][3]),
+                rc["2019"], rc["2026"]))
+    L.append("")
+    L.append("## Supplementary Questions\n")
+    L.append("### grant_round_2026_note.docx\n")
+    L.append("1. A two-page note for the committee's paper that opens with the call (fund insulation and heating "
+             "controls, not heating optimisation, at €%d, €%d and €%d a tonne against €%d), then a table of the three "
+             "measures (saving over the life, saving rate on the applications received, grant per tonne, 90%% range, "
+             "the saving rate at which the call flips, fund or not), a chart of each measure's grant per tonne with its "
+             "range against a line at the limit beside the pilot's savings by season, what the round will pay, the "
+             "2025/26 saving for the annual report, and a short table of how the quicker readings of the pilot land."
+             % (e[ins], e[ct], e[ho], F["limit_eur"]))
+    L.append("")
+    L.append("### grant_round_2026_appraisal.xlsx\n")
+    for k, m in enumerate(MEAS, 2):
+        L.append("%d. Sheet \"savings by season\", %s saving against the owners the 2019 draw passed over, as a share "
+                 "of the gas its works buildings would have used, normal weather, %s to %s: %s."
+                 % (k, POSS[m], seasons[0], seasons[-1], ", ".join(p(v) for v in r1[m])))
+    L.append("5. Sheet \"measures\", each measure's saving rate on the applications received by 12 June over its "
+             "service life (lifetime tonnes as a share of the tonnes their reference consumption carries over the life): "
+             "insulation %s, heating optimisation %s, heating controls %s; beside the pilot buildings' own saving over "
+             "the life, %s, %s and %s." % (p(r4[ins]), p(r4[ho]), p(r4[ct]), p(r2[ins]), p(r2[ho]), p(r2[ct])))
+    L.append("6. Sheet \"measures\", each measure's grant per tonne on those applications with its 90%% range and the "
+             "saving rate at which its call would change: insulation €%d (€%d to €%d), flipping at %s; heating "
+             "optimisation €%d (€%d to €%d), flipping at %s; heating controls €%d (€%d to €%d), flipping at %s. "
+             "Insulation and controls are funded, heating optimisation is not."
+             % (e[ins], rg[ins][0], rg[ins][1], p(be[ins]), e[ho], rg[ho][0], rg[ho][1], p(be[ho]), e[ct], rg[ct][0],
+                rg[ct][1], p(be[ct])))
+    ac, gc, gp = F["R7_applications_at_close"], F["R7_grant_at_close_eur"], F["R7_grant_paid_eur"]
+    L.append("7. Sheet \"round at close\", one row per measure once the offer closes on 30 June, with the grant its "
+             "applications ask for and what would be paid on them once the works are done: insulation about %s "
+             "applications asking €%s, €%s paid; heating optimisation about %s asking €%s, €%s if it were funded; "
+             "heating controls about %s asking €%s, €%s paid. The funded round's totals: about €%.1f million asked and "
+             "about €%.1f million paid."
+             % (n(ac[ins]), n(gc[ins]), n(gp[ins]), n(ac[ho]), n(gc[ho]), n(gp[ho]), n(ac[ct]), n(gc[ct]), n(gp[ct]),
+                F["R7_funded_close_million"], F["R7_funded_paid_million"]))
+    L.append("8. Sheet \"funded applications\", one row for each of the %s insulation and heating controls "
+             "applications received by 12 June (a revised application replacing the earlier one), with its use, grant "
+             "and lifetime tonnes to the nearest 10, each priced at its own use's saving over the measure's life; "
+             "together €%s of grant and %s lifetime tonnes."
+             % (n(F["R9_funded_applications"]), n(F["R9_funded_grant_eur"]), n(F["R9_funded_tonnes"])))
+    L.append("9. Sheet \"2025-26 saving\": the pilot's works saved about %s tonnes of CO2 in the season to April "
+             "2026, the gas its works buildings would have used without the works less what they used, in normal "
+             "weather." % n(F["R8_tonnes"]))
+    L.append("")
+    L.append("## Critical Components\n")
+    L.append("1. Heating optimisation's saving falls from **%s** in its first winter to **%s** by the fourth and levels "
+             "off, so over its %d-year life it saves **%s** of the pilot buildings' gas, not the seven seasons' "
+             "average of %s." % (p(r1[ho][0]), p(r1[ho][3]), F["lives"][ho], p(r2[ho]), p(F["R2_seven_season_avg_pct"][ho])))
+    L.append("2. Heating controls save **%s** in offices, **%s** in shops and **%s** in workshops, and **%s** in hotels "
+             "and **%s** in care homes, which are heated round the clock."
+             % (p(t3[ct]["office"]), p(t3[ct]["retail"]), p(t3[ct]["workshop"]), p(t3[ct]["hotel"]), p(t3[ct]["care home"])))
+    L.append("3. On this year's applications heating controls save **%s** over their life, against **%s** at the "
+             "pilot's own mix of buildings, because hotels and care homes made up %d%% of the pilot's controls "
+             "buildings and %d%% of this year's applicants." % (p(r4[ct]), p(F["R4_pooled_life_pct"][ct]), rc["2019"],
+                                                                rc["2026"]))
+    L.append("4. Only **%d%%** of the 2019 insulation answers were in by the same day after the notice, the late ones "
+             "ran **%d%%** larger and **%s** of the late insulation places were withdrawn, so the funded round pays "
+             "about **€%.1f million**, not the €%s received by 12 June scaled up."
+             % (F["R7_share_by_day_pct"][ins], int(round(100 * (F["R7_late_size_ratio"][ins] - 1))),
+                p(F["R7_withdrawn_pct"][ins][1]), F["R7_funded_paid_million"], n(F["grant_received_funded_eur"])))
+    L.append("")
+    L.append("## Step-by-Step\n")
+    L.append("1. Built each building's gas use per season (1 May to 30 April) from gas_meter_reads_2013_2026.csv, "
+             "carrying index differences across meter exchanges, counter rollovers, estimates and corrections, sharing "
+             "reads off 30 April as benchmarking_method_2022.pdf sets out, converting cubic metres with "
+             "meter_points_2026.csv and calorific_values_2013_2026.csv, and normalising each season to long-term "
+             "weather with degree_days_haldenau.csv as the same method sets out (the use type's hot-water share held).")
+    L.append("2. Read the pilot from pilot_2019_responses_and_draw.xlsx (%s answers, %s drawn by lot within each "
+             "measure, %s with works) and set each measure's works buildings against the owners the draw passed over, "
+             "each against its own 2018/19 season, as a share of the gas the works buildings would have used (plan "
+             "4.2): insulation holds near %s, heating optimisation falls from %s to %s, controls ease from %s to %s. "
+             "The works buildings' own before and after (no comparison) books the pandemic, the 2022 price shock and "
+             "the service team's burner checks as savings and funds all three (€%d, €%d, €%d); the checks reached "
+             "%d%% of works and %d%% of passed-over buildings, so the lottery balances them."
+             % (n(F["answers_2019"]), n(F["drawn_2019"]), n(F["works_2019"]), p(r1[ins][-1]), p(r1[ho][0]), p(r1[ho][-1]),
+                p(r1[ct][0]), p(r1[ct][-1]), ba[ins], ba[ho], ba[ct], F["visited_share_pct"]["works"],
+                F["visited_share_pct"]["passed over"]))
+    L.append("3. Carried each measure's seasons over its life (plan 4.4 lives %d, %d and %d years) by fitting the "
+             "approach to the level the saving settles at: heating optimisation levels off at about %s from the fourth "
+             "season, so its life saving is %s, not the seven-season %s; an exponential fall to nothing misses the last "
+             "seasons and a straight line runs out before year fifteen. Carried flat, heating optimisation is €%d and "
+             "is wrongly funded." % (F["lives"][ins], F["lives"][ho], F["lives"][ct], p(F["R2_ho_floor_pct"]), p(r2[ho]),
+                                     p(F["R2_seven_season_avg_pct"][ho]), flat[ho]))
+    L.append("4. Split the pilot by the use on each building's 2019 notice: insulation saves least where hot water takes "
+             "the most gas (hotels %s, care homes %s, restaurants %s, against offices %s), and controls save almost "
+             "nothing in buildings heated round the clock (hotels %s, care homes %s)."
+             % (p(t3[ins]["hotel"]), p(t3[ins]["care home"]), p(t3[ins]["restaurant"]), p(t3[ins]["office"]),
+                p(t3[ct]["hotel"]), p(t3[ct]["care home"])))
+    L.append("5. Priced every application in applications_2026.xlsx (a revised application replacing the earlier one) "
+             "at its own use's saving, faded over the life as its measure's saving fades, on its reference "
+             "consumption at 0.201 t per MWh (plan 4.4 and 4.5): saving rates %s, %s and %s; grant per tonne €%d, €%d "
+             "and €%d. At the pilot's own mix controls would save %s and cost €%d a tonne; each use's saving carried flat "
+             "funds all three (heating optimisation €%d)."
+             % (p(r4[ins]), p(r4[ho]), p(r4[ct]), e[ins], e[ho], e[ct], p(F["R4_pooled_life_pct"][ct]), pooled[ct],
+                typeflat[ho]))
+    L.append("6. Drew the pilot's buildings again within each use and arm and repeated every step: 90%% ranges €%d to "
+             "€%d, €%d to €%d and €%d to €%d, each wholly on its call's side of €%d; the calls flip at saving rates of "
+             "%s, %s and %s." % (rg[ins][0], rg[ins][1], rg[ho][0], rg[ho][1], rg[ct][0], rg[ct][1], F["limit_eur"],
+                                 p(be[ins]), p(be[ho]), p(be[ct])))
+    L.append("7. Projected the round to the offer's close from the 2019 answers measure by measure (pilot_2019_rules.pdf, "
+             "grant_offer_2026_terms.pdf): %d%%, %d%% and %d%% were in by the same day; late insulation answers ran "
+             "%d%% larger; drawn owners withdrew %s and %s of early and late insulation places. The funded round's "
+             "applications ask for about €%.1f million and it pays about €%.1f million; one share for every measure, late jobs priced "
+             "like early ones or no withdrawals would each misstate it."
+             % (F["R7_share_by_day_pct"][ins], F["R7_share_by_day_pct"][ho], F["R7_share_by_day_pct"][ct],
+                int(round(100 * (F["R7_late_size_ratio"][ins] - 1))), p(F["R7_withdrawn_pct"][ins][0]),
+                p(F["R7_withdrawn_pct"][ins][1]), F["R7_funded_close_million"], F["R7_funded_paid_million"]))
+    L.append("8. Took the 2025/26 saving as plan 4.6 sets it, each works building's 2025/26 use grossed up by its "
+             "measure's 2025/26 saving: about %s tonnes; the seven-season average on the 2018/19 use gives about %s "
+             "and the 2025/26 saving on the 2018/19 use about %s, because the price shock, the burner checks and the "
+             "2018/19 season's own high reading left that use behind."
+             % (n(F["R8_tonnes"]), n(F["R8_hurried_tonnes"]["average on the 2018/19 use"]),
+                n(F["R8_hurried_tonnes"]["2025/26 rate on the 2018/19 use"])))
+    L.append("")
+    L.append("No other conclusion survives. The before and after funds all three on savings the comparison shows "
+             "every building made; carrying the pilot's seven seasons flat funds heating optimisation on winters it no "
+             "longer saves; the pilot's own mix fails controls on hotels and care homes few of this year's applicants "
+             "are; and every defensible variant (a two-season baseline, each use's comparison, the last seasons "
+             "carried, two occupancy classes) funds insulation and heating controls and leaves heating optimisation "
+             "over the limit.")
     with open(path, "w", encoding="utf-8") as fh:
-        fh.write("\n".join(md) + "\n")
+        fh.write("\n".join(L) + "\n")
