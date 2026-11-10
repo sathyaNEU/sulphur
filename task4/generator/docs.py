@@ -87,7 +87,6 @@ def quotation(path):
             ["Charging", "CCS2, up to 375 kW DC; on-board 43 kW AC"],
             ["Drive", "Three electric motors, continuous output 425 kW"],
             ["Unladen weight", "11,980 kg (tractor, fifth wheel, full equipment)"],
-            ["Power take-off", "Electric PTO, 400 V AC, up to 40 kW, for body and trailer equipment"],
             ["Warranty", "Battery 8 years or 1,000,000 km, to 75 per cent of usable capacity"],
             ["Price", "SEK 3,940,000 per tractor excluding VAT, delivered Värnamo"],
             ["Delivery", "January to February 2027 for orders placed by 11 December 2026"]]

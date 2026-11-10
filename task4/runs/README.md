@@ -12,3 +12,8 @@
   round trips are 266-355 km, compared with 202-241 km for the pilot routes, so this remains a transfer assumption."
   Run 2 not supplied. Route: REDESIGN in place (architecture 7: the order also needs the pilot's model carried to the
   Värnamo duties' faster runs).
+- `arch7/run1.md`, `arch7/run2.md`: architecture 7 (target.zip 76adf383), supplied by the author on 2026-11-09.
+  Both ordered 5 against the golden's 6 (V14 at 444.4 and 443.0 kWh against 442; the year's speed ratio).
+- `arch8/run1.md`, `arch8/run2.md`: architecture 8 (commit 50d36a3), summaries written 2026-11-10 from the author's
+  account. Both landed the golden exactly (order 7; payload 2.24 and 2.23, loss 3.78 and 3.79, every energy within
+  about 3 kWh). Route: REDESIGN (architecture 9).

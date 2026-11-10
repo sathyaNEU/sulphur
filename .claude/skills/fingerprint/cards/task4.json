@@ -1,8 +1,8 @@
 {
   "task": "task4",
   "project": "sulfur",
-  "architecture": 8,
-  "drawn": "2026-11-09",
+  "architecture": 9,
+  "drawn": "2026-11-10",
   "slot_note": "re-root of task4 after architecture 4 was landed on the platform; new world (Sweden, Småland, a road haulier), new dataset (a battery-electric pilot's duty-day telematics and a terminal weighbridge log), new shell (how-many | please | docx+xlsx)",
   "domain": "supply-chain-logistics",
   "client_domain": "general-statistics-data-science",
@@ -12,19 +12,19 @@
   "shape": "other",
   "decision_type": "quantity_figure",
   "answer_unit": "count",
-  "answer": "Order 7 battery-electric tractors, for V03, V05, V09, V11, V16, V18 and V33; V02, V07, V14, V21, V24, V27 and V30 stay on diesel",
+  "answer": "Order 8 battery-electric tractors, for V02, V03, V05, V09, V11, V14, V16 and V18; V07, V21, V24, V27, V30 and V33 stay on diesel",
   "answer_source": "task4/submission.md, Final Recommendation (generator/figures.json call_set)",
   "gap": [
-    "objective",
-    "time"
+    "population",
+    "objective"
   ],
   "pattern": [
     "none"
   ],
   "generators": [
+    "G16",
     "G1",
-    "G13",
-    "G16"
+    "G13"
   ],
   "gate_g": "forecasting",
   "calibration_form": "gold_standard_subsample",
@@ -34,10 +34,10 @@
   "validated_decoy": false,
   "context_artifact": "capacity_report",
   "stump_class": "analytical",
-  "analyst_test": "A strong analyst who cleans every file, calibrates the declared payloads, curves the cold, nets the loss of the cold and fits squared speed at the year's ratio carries the pilot per km and per departing tonne, never reads the trailer each day pulled, and orders 5: it loses the payload term (2.9), the fridge duties, the speed ratio, the combinations and drops, every multi-drop and double-deck energy and the order.",
-  "domain_test": "The deciding quantity is the energy one tonne of payload adds per loaded kilometre, a regression slope on a covariate the pilot records only as declared: estimating it needs the error structure of each shipper's declarations (scattered around the true weight, a fixed standard weight the true one scatters around, or the shipper's own weighbridge figure) read from the terminal's weighed loads and carried to the pilot's loads; with nurses and shifts in place of tractors and loads nothing is declared by a third party with its own error, so the step has nothing to stand on.",
+  "analyst_test": "The careful but hurried pass is the union of the four recorded runs' methods: it cleans every file, takes each pilot declaration to the terminal's weighed-on-declared line, carries the tare and the drops, curves the cold, fits squared speed at the year's ratio and a straight-line battery loss with tractor and cold terms, and computes then sets aside the within-duty slope (2.3), the same months a year apart (2.8) and the first-year-only loss (4.3). It files a payload term of 1.5 (the line pulls the pilot's part loads toward the terminal's full loads), a loss of 3.1 and a 445 kWh limit, energies 10 to 20 kWh high, and orders 5 (V02, V14, V18 out); at the design-day speed it orders 10 (V07, V21 in).",
+  "domain_test": "The results are a regression slope on a covariate the pilot records only as third-party declarations, whose calibration does not transport between the terminal's full-load runs and the pilot's regional part loads (classical error: the error model transports, the line does not); a capacity-fade curve read from an energy-per-SOC proxy net of a reversible cold effect; and a speed extrapolation through a weather-dependent ratio. With nurses and shifts in place of tractors and loads there is no declared weight, no battery and no air drag; the call stops making sense.",
   "layer2_family": "estimation_fit",
-  "layer2_pattern": "own:fitted-model-carried-through-register-covariates",
+  "layer2_pattern": "own:error-model-transported-not-the-calibration-line",
   "layer1": [
     "telematics duty-days uploaded twice after a modem reconnect",
     "ambient temperature sensor dropouts",
@@ -78,20 +78,20 @@
     "tractor_order_memo.pdf"
   ],
   "opening_move": "question-first",
-  "question_form": "how-many",
-  "driver": "A fitted physical model is carried to new units through covariates the old units' own records reveal only by joins to other registers: each new unit's speed (a planned figure corrected by a weather-dependent ratio), its whole moving mass on every leg (an equipment register's tare, read by item), the share of its route the load actually rides (each consignment taken off at its stop), and a time-based auxiliary draw present only on items whose equipment code says they take power from the unit; beside them a slope under source-specific measurement error and a degradation separated from a reversible seasonal effect.",
-  "driver_concrete": "Each Värnamo duty's January design-day energy is forecast from the Jönköping pilot: the declared payloads calibrated on the weighbridge, the combination's tare carried on every leg from the trailer register (double decks 22.5 to 22.7 t with the 2027 tractor against the pilot's 20.3), each note taken off at its stop (V03 and V11's loads ride 0.60 and 0.57 of their loaded km), the SR-60e ePTO fridge units drawing 4.4 kW for the whole duty (V24, V30) while the diesel and axle-generator units draw nothing (V33), and each duty's speed at the pilot's -5 C actual-to-planned ratio (0.77, against 0.89 over the year).",
-  "stump": "The careful pass the architecture 7 runs made (calibrated payloads, the curved cold form, the loss net of the cold, squared speed at the year's ratio, energy per km and per departing tonne) orders 5, pricing V03 and V11 near 500 kWh on a payload term of 2.9; with the trailer left out it orders 9 (V02, V14 in), with every load to the last drop 5 (V03, V11 out), without the fridge term 9 (V24, V30 in), with every reefer drawing 7 (V30 in, V33 out), at the routing tool's speed 0, at the year's ratio 4; only all of them lands the seven.",
-  "deep_chain": "(1) the payload term by regression calibration per shipper and note period, with the drops and the tare in the fit; (2) the first-year loss net of the cold; (3) the ePTO fridge units from the trailer register's equipment codes; (4) the design-day speed through the -5 C ratio; (5) each duty's combination and load share; (6) the energies; (7) the verdicts; (8) the order.",
-  "judgment": "four covariates carried to new units, each from another file: the combination's mass (a tonne of tare costs on every leg what a tonne of payload costs on the loaded one), the tonne-km a multi-drop load rides, which refrigeration units draw on the tractor (ePTO, not diesel, standby or axle generator) and by the hour, and the winter speed; plus the declared-payload measurement error and the loss net of the cold",
-  "one_fact_test": "the most useful single sentence (the duties drive slower than the routing tool plans on a -5 C day than over the year) rescues 1 of 8 results; the fridge sentence 1, the drops and tare sentences 0",
+  "question_form": "which",
+  "driver": "A fitted model is carried to new units through three estimates the old units' records support only after diagnostics: a slope on a covariate known through third-party reports whose error model transfers between two populations but whose calibration line does not, because the populations' true levels differ; a permanent decline whose early part a straight line misses and a checks-at-a-year-apart reading confirms wrongly; and a speed set by a planned figure corrected at the design condition rather than on average.",
+  "driver_concrete": "Each Värnamo duty's January design-day energy is forecast from the Jönköping pilot: the pilot's regional duties carry 75 to 89 per cent of the loads the same shippers declare at Värnamo, so each pilot duty's loads come from its own declarations with the shipper's declaration error read on the Värnamo weighbridge (payload term 1.9; the terminal's line gives 1.5, and Gränna Dryckes' scale days confirm the duties' own loads); the batteries lose 4.6 per cent in the first year, most of it in the first four months (a straight line gives 3.1, the same months a year apart 2.8); each duty runs at 0.76 of the routing tool's speed at -5 C (0.89 over the year).",
+  "stump": "The careful pass (the union of the recorded runs) orders 5, pricing V02, V14 and V18 at 450 kWh against its own 445 kWh limit; at the design-day speed it orders 10 (V07, V21 in on a payload term of 1.5); each of the three estimates put right alone still orders wrongly (2, 3 or 10 duties); only all three land the eight.",
+  "deep_chain": "(1) the payload term from each pilot duty's own loads, the declaration error transported from the weighbridge; (2) the first-year loss on a curved age form net of the cold; (3) the energies at the -5 C speed ratio with each duty's combination and load share; (4) the verdicts; (5) the order.",
+  "judgment": "three estimates each needing diagnostics the runs named and did not run: the calibration's transfer between depots (the pilot's part loads), the early-life loss behind a straight line and a year-apart check, and the winter speed; the within-duty slope the runs computed and dismissed agrees with the first",
+  "one_fact_test": "each of the three most useful sentences rescues at most 1 of 5 results (effort.py); each leaves the order wrong (2, 3 or 10 duties)",
   "strategy_label": "WORKS IN FORM",
   "mechanism_source": "design_note",
   "differentiation": {
     "mark140": "mark140 solves a residual guarantee jointly with a dependent service's load estimated from its own two drivers; nothing here is a residual or a dependency: the quantity is a regression slope whose covariate is recorded by third parties with source-specific error, recovered by calibrating each source on a second record that weighs the truth",
     "mark262": "mark262 de-attenuates one slope by a single classical noise variance carried from a selected subsample to the population; here there is no selected subsample and no variance to carry: each shipper's declarations err in a different structure (classical, Berkson, exact), identified from the direction of the declared-weighed regression on the weighbridge, so the one pooled reliability correction mark262's route takes is itself a wrong rung",
     "mark249": "mark249 recovers each unit's gain against references that agree only partly hour by hour by matching spreads; here the units are not calibrated against references: the fitted model's covariate is replaced by its expected true value given its source and its record",
-    "task4": "Same world by the client's instruction to keep the data package; architecture 7 turned on one covariate (the winter speed) and lost one duty by 1 to 3 kWh in both runs, architecture 8 adds three covariates read from other registers (the combination's tare by trailer, the tonne-km of a multi-drop load, the ePTO fridge units by equipment code), each flipping two duties of its own, with no duty within 13 kWh of the limit."
+    "task4": "Same world by the client's instruction to keep the data package; architecture 8 added three register joins the runs made on sight and both runs landed it. Architecture 9 removes the ePTO term and moves the work into the runs' recorded blind spots: the terminal's calibration line does not transport to the pilot's part loads (the within-duty slope the runs dismissed agrees with the transported error model), the battery's early-life loss behind a straight line and a year-apart check, and the winter speed; each alone leaves the order wrong."
   },
   "lineage": [
     {
@@ -248,22 +248,48 @@
       "weight": "measurement",
       "answer_shape": "allocation-sensitivity",
       "fate": "spent 2026-11-09 on the platform: both runs earned the payload term (1.98, 1.97), the loss (3.75) and the cold curve, fitted squared routing-tool speed (the year's ratio absorbed) and ordered 5, V14 excluded at 444.4 and 443.0 kWh against a 442 kWh limit (golden 435.4); one duty, one judgment, a knife-edge margin, and the 10 kWh band held both verdicts. Re-rooted in the same world as architecture 8."
+    },
+    {
+      "architecture": "v8",
+      "driver": "A fitted physical model is carried to new units through covariates the old units' own records reveal only by joins to other registers: each new unit's speed (a planned figure corrected by a weather-dependent ratio), its whole moving mass on every leg (an equipment register's tare, read by item), the share of its route the load actually rides (each consignment taken off at its stop), and a time-based auxiliary draw present only on items whose equipment code says they take power from the unit; beside them a slope under source-specific measurement error and a degradation separated from a reversible seasonal effect.",
+      "driver_concrete": "Each Värnamo duty's January design-day energy is forecast from the Jönköping pilot: the declared payloads calibrated on the weighbridge, the combination's tare carried on every leg from the trailer register (double decks 22.5 to 22.7 t with the 2027 tractor against the pilot's 20.3), each note taken off at its stop (V03 and V11's loads ride 0.60 and 0.57 of their loaded km), the SR-60e ePTO fridge units drawing 4.4 kW for the whole duty (V24, V30) while the diesel and axle-generator units draw nothing (V33), and each duty's speed at the pilot's -5 C actual-to-planned ratio (0.77, against 0.89 over the year).",
+      "stump": "The careful pass the architecture 7 runs made (calibrated payloads, the curved cold form, the loss net of the cold, squared speed at the year's ratio, energy per km and per departing tonne) orders 5, pricing V03 and V11 near 500 kWh on a payload term of 2.9; with the trailer left out it orders 9 (V02, V14 in), with every load to the last drop 5 (V03, V11 out), without the fridge term 9 (V24, V30 in), with every reefer drawing 7 (V30 in, V33 out), at the routing tool's speed 0, at the year's ratio 4; only all of them lands the seven.",
+      "answer": "Order 7 battery-electric tractors, for V03, V05, V09, V11, V16, V18 and V33; V02, V07, V14, V21, V24, V27 and V30 stay on diesel",
+      "chain_signature": [
+        "missingness-measurement",
+        "modeling",
+        "data-discovery",
+        "forecasting",
+        "assembly-reconciliation",
+        "forecasting",
+        "synthesis",
+        "synthesis"
+      ],
+      "weight": "measurement",
+      "answer_shape": "allocation-sensitivity",
+      "fate": "spent 2026-11-09 on the platform: both runs landed the golden exactly (order 7, V03 V05 V09 V11 V16 V18 V33; payload 2.24 and 2.23 against 2.2, loss 3.78 and 3.79 against 3.8, every energy within about 3 kWh). The hourly ePTO term made both runs time the design day, which is the winter speed correction; every new step was one join to a register the runs already read, announced by the new files, sheet and quotation line. Re-rooted in the same world as architecture 9.",
+      "shell": {
+        "question form": "how-many",
+        "second-sentence opener": "for",
+        "rounding opener": "energies",
+        "deliverable set": "docx+xlsx"
+      }
     }
   ],
-  "notes": "stump_strategy other: errors-in-variables with a source-specific error structure (classical, Berkson, exact) identified from a gold-standard record of the same sources | 2026-11-09 architecture 8: re-rooted in the same world on the client's instruction to keep the data package (architecture 5's review); four SME judgments added (combination mass, drops, ePTO fridge units, the winter speed kept), the knife-edge closed (no duty within 13 kWh).",
-  "registered": "2026-11-10T00:43:30Z",
-  "shell": {
-    "question form": "how-many",
-    "second-sentence opener": "for",
-    "rounding opener": "energies",
-    "deliverable set": "docx+xlsx"
-  },
+  "notes": "stump_strategy other: errors-in-variables with a source-specific error structure (classical, Berkson, exact) identified from a gold-standard record of the same sources | 2026-11-09 architecture 8: re-rooted in the same world on the client's instruction to keep the data package (architecture 5's review); four SME judgments added (combination mass, drops, ePTO fridge units, the winter speed kept), the knife-edge closed (no duty within 13 kWh). | 2026-11-10 architecture 9: re-rooted in the same world after both architecture 8 runs landed; the difficulty moved into what the runs named and did not test (the calibration's transfer to the pilot's part loads, the battery loss's form behind self-confirming checks, the winter speed); the hourly ePTO term, the Electric PTO quotation line and the ePTO units removed.",
+  "registered": "2026-11-10T02:15:26Z",
   "lineage_shells": [
     {
       "question form": "which",
       "second-sentence opener": "i'd",
       "rounding opener": "van",
       "deliverable set": "png+xlsx"
+    },
+    {
+      "question form": "how-many",
+      "second-sentence opener": "for",
+      "rounding opener": "energies",
+      "deliverable set": "docx+xlsx"
     }
   ],
   "answer_shape": "allocation-sensitivity",
@@ -271,9 +297,6 @@
   "chain_signature": [
     "missingness-measurement",
     "modeling",
-    "data-discovery",
-    "forecasting",
-    "assembly-reconciliation",
     "forecasting",
     "synthesis",
     "synthesis"
@@ -281,5 +304,11 @@
   "depth_level": 5,
   "doctrine": "throughout",
   "client_subdomain": "regression-classification-model-diagnostics",
-  "results": "R1 payload term 2.2 kWh/t/100 km (calibration, drops, tare); R2 first-year loss 3.8 per cent; R3 the duties whose fridge unit draws from the battery (V24, V30; ePTO only, 4.4 kW); R4 the winter speed ratio 0.77; R5 the combinations (V02 22.7 t, V14 22.5 t) and the load shares (V03 0.60, V11 0.57); R6 fourteen design-day energies; R7 the verdicts; R8 order 7"
+  "results": "R1 payload term 1.9 kWh/t/100 km (1.7 to 2.4; each pilot duty's own loads, the declaration error transported); R2 first-year loss 4.6 per cent (4.2 to 5.6; curved, net of the cold), limit 438 kWh; R3 fourteen design-day energies (at the -5 C speed ratio 0.76, with the tare and drops); R4 the verdicts; R5 order 8",
+  "shell": {
+    "question form": "which",
+    "second-sentence opener": "each",
+    "rounding opener": "energies",
+    "deliverable set": "docx+xlsx"
+  }
 }

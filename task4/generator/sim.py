@@ -8,6 +8,11 @@ import numpy as np
 import params as P
 
 
+def fcurve(age):
+    """the permanent loss at an age, as a share of the first year's: an early-life part that settles, then steady"""
+    return (P.FADE_A * (1 - math.exp(-age / P.FADE_TAU)) + P.FADE_B * age) / P.FADE_Y1
+
+
 def cond(t):
     """battery and cab conditioning: nothing in the mild months, coming in gradually around freezing and rising about
     linearly below it (a smooth hinge, so no setting shows as a corner in the data)"""
@@ -54,14 +59,12 @@ def dwell_mean(n_drops):
             + P.DWELL_LAST[0] + P.DWELL_LAST[1] / 2)
 
 
-def design_kwh(legs, climb, payload, t=None, v=None, combo_t=None, ph=1.0, etru=False, n_drops=1):
+def design_kwh(legs, climb, payload, t=None, v=None, combo_t=None, ph=1.0):
     t = P.DESIGN_T if t is None else t
     v = P.V_REF if v is None else v
     a, b, c = legs
     tot = a + b + c
     e = leg_kwh(tot, climb, t, payload * b * ph, v, combo_t)
-    if etru:
-        e += P.TRU_KW * (tot / v + dwell_mean(n_drops))
     return e
 
 
@@ -95,7 +98,7 @@ def temperatures(rng):
     return out
 
 
-def shortlist_km(code, mean_payload, combo_t, etru):
+def shortlist_km(code, mean_payload, combo_t):
     shipper, climb, town, cat = P.SHORT[code]
     rng = np.random.default_rng(P.SEED + 7 + int(code[1:]))
     a = int(rng.integers(6, 34))
@@ -103,9 +106,8 @@ def shortlist_km(code, mean_payload, combo_t, etru):
     vd = design_speed(code)
     drops = P.DROPS.get(code)
     ph = phi(drops) if drops else 1.0
-    nd = len(drops) if drops else 1
     target = P.TARGET[code]
-    f = lambda legs: design_kwh(legs, climb, mean_payload, v=vd, combo_t=combo_t, ph=ph, etru=etru, n_drops=nd)
+    f = lambda legs: design_kwh(legs, climb, mean_payload, v=vd, combo_t=combo_t, ph=ph)
     # energy is linear in b at fixed a and r: solve, then search the integers
     e0, e1 = f((a, 100, int(100 * r))), f((a, 200, int(200 * r)))
     b = 100 + (target - e0) * 100 / (e1 - e0)
@@ -154,7 +156,7 @@ def trailers():
             if units:
                 ks = sorted(units)
                 if dcode == "J05":
-                    unit = ["SR-60e ePTO", "SR-60e ePTO", "SR-60e ePTO", "SR-60 D", "SR-60 D", "AX-40 AGen"][k]
+                    unit = ["SR-60 D", "SR-60 D+SB", "AX-40 AGen", "SR-60 D", "SR-60 D+SB", "AX-40 AGen"][k]
                 else:
                     unit = ks[int(rng.choice(len(ks), p=[units[x] for x in ks]))]
                 ex = ["TRU " + unit] + [x for x in ex if not x.startswith("Coil")]
@@ -218,7 +220,7 @@ def world():
         for slot, i in enumerate(chosen):
             dcode = duties[i]
             ship, legs, climb, town = P.PILOT[dcode]
-            mu, sd = P.SHIPPERS[ship][3], P.SHIPPERS[ship][4]
+            mu, sd = P.SHIPPERS[ship][3] * P.LANE_F[dcode], P.SHIPPERS[ship][4]
             pay = float(np.clip(rng.normal(mu, sd), 0.4 * mu, 1.6 * mu))
             dec = declare(rng, ship, pay, day)
             start = 5.0 + 0.8 * rng.random()
@@ -246,20 +248,13 @@ def world():
                 start += dur + stops + ((P.DWELL_LOAD[0] + P.DWELL_LOAD[1] * rest) if leg == 0 else
                                         (P.DWELL_LAST[0] + P.DWELL_LAST[1] * rest))
             span = trips[-1]["end_h"] - t0
-            unit = tr[tl]["unit"]
-            etru = unit == "SR-60e ePTO"
-            if etru:   # the fridge unit runs from the battery from depot out to depot in
-                w = P.TRU_KW * span * (1 + rng.normal(0, 0.08))
-                for x in trips:
-                    x["kwh"] += w * (x["end_h"] - x["start_h"]) / span
-                trips[-1]["kwh"] += w * (1 - sum((x["end_h"] - x["start_h"]) for x in trips) / span)
             age = (day - P.PILOT_IN_SERVICE).days / 365.25
             tday = float(np.mean([x["t"] for x in trips]))
-            cap = P.PILOT_USABLE * (1 - fade[trc] * age) * (1 - P.CAP_COLD * max(0.0, 20 - tday)) * \
+            cap = P.PILOT_USABLE * (1 - fade[trc] * fcurve(age)) * (1 - P.CAP_COLD * max(0.0, 20 - tday)) * \
                 (1 + frng.normal(0, 0.004))
             pilot.append({"date": day, "duty": dcode, "tractor": trc, "shipper": ship, "payload": pay, "cap": cap,
                           "declared": dec, "trips": trips, "pallets": int(round(pay / 0.52 + rng.normal(0, 1.2))),
-                          "trailer": tl, "shares": shares, "phi": ph, "etru": etru, "combo": combo, "span": span})
+                          "trailer": tl, "shares": shares, "phi": ph, "combo": combo, "span": span})
     wdays = P.workdays(P.WB_START, P.WB_END)
     depart = []
     for code in ["V%02d" % k for k in range(1, 47)]:
@@ -281,16 +276,14 @@ def world():
         m = float(np.mean([round(x["payload"] * 1000 / 20) * 20 / 1000 for x in dd]))
         ttare = float(np.mean([tr[x["trailer"]]["tare"] for x in dd])) / 1000.0
         combo = P.TRACTOR_2027_TARE / 1000.0 + ttare
-        etru = all(tr[x["trailer"]]["unit"] == "SR-60e ePTO" for x in dd)
-        legs = shortlist_km(code, m, combo, etru)
-        short[code] = (P.SHORT[code][0], legs, P.SHORT[code][1], m, combo, etru)
+        legs = shortlist_km(code, m, combo)
+        short[code] = (P.SHORT[code][0], legs, P.SHORT[code][1], m, combo)
     return {"temps": temps, "pilot": pilot, "fade": fade, "route_u": route_u, "others": others, "depart": depart,
             "short": short, "trailers": tr, "pools": pools}
 
 
 def truth_design(w, code):
     """the shortlisted duty's true design-day energy (what the TARGET was set to)"""
-    ship, legs, climb, m, combo, etru = w["short"][code]
+    ship, legs, climb, m, combo = w["short"][code]
     drops = P.DROPS.get(code)
-    return design_kwh(legs, climb, m, v=design_speed(code), combo_t=combo, ph=phi(drops) if drops else 1.0,
-                      etru=etru, n_drops=len(drops) if drops else 1)
+    return design_kwh(legs, climb, m, v=design_speed(code), combo_t=combo, ph=phi(drops) if drops else 1.0)

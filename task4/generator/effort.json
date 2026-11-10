@@ -1,205 +1,257 @@
 {
+ "careful_assembly": {
+  "V02 combination t": 22.6,
+  "V03 load share": 0.6,
+  "V11 load share": 0.58,
+  "V14 combination t": 22.5
+ },
+ "careful_dismissed": {
+  "loss, same months a year apart": 2.8,
+  "loss, straight line on the first year's days": 4.3,
+  "within-duty payload slope": 2.3
+ },
+ "careful_variant_design_day_speed": {
+  "grades": {
+   "R1": "missed",
+   "R2": "missed",
+   "R3": "partly",
+   "R4": "partly",
+   "R5": "missed"
+  },
+  "values": {
+   "R1": 1.5,
+   "R2": 3.1,
+   "R3": {
+    "V02": 430,
+    "V03": 410,
+    "V05": 410,
+    "V07": 430,
+    "V09": 400,
+    "V11": 410,
+    "V14": 430,
+    "V16": 410,
+    "V18": 420,
+    "V21": 440,
+    "V24": 450,
+    "V27": 460,
+    "V30": 450,
+    "V33": 450
+   },
+   "R4": {
+    "V02": "yes",
+    "V03": "yes",
+    "V05": "yes",
+    "V07": "yes",
+    "V09": "yes",
+    "V11": "yes",
+    "V14": "yes",
+    "V16": "yes",
+    "V18": "yes",
+    "V21": "yes",
+    "V24": "no",
+    "V27": "no",
+    "V30": "no",
+    "V33": "no"
+   },
+   "R5": [
+    "V02",
+    "V03",
+    "V05",
+    "V07",
+    "V09",
+    "V11",
+    "V14",
+    "V16",
+    "V18",
+    "V21"
+   ],
+   "assembly": {
+    "V02 combination t": 22.6,
+    "V03 load share": 0.6,
+    "V11 load share": 0.58,
+    "V14 combination t": 22.5
+   },
+   "speed_ratio": 0.76
+  }
+ },
+ "careful_with_one_correction": {
+  "careful, curved loss": {
+   "assembly_cells_right": true,
+   "grades": {
+    "R1": "missed",
+    "R2": "right",
+    "R3": "missed",
+    "R4": "missed",
+    "R5": "missed"
+   },
+   "order": [
+    "V03",
+    "V09",
+    "V11"
+   ]
+  },
+  "careful, design-day speed": {
+   "assembly_cells_right": true,
+   "grades": {
+    "R1": "missed",
+    "R2": "missed",
+    "R3": "partly",
+    "R4": "partly",
+    "R5": "missed"
+   },
+   "order": [
+    "V02",
+    "V03",
+    "V05",
+    "V07",
+    "V09",
+    "V11",
+    "V14",
+    "V16",
+    "V18",
+    "V21"
+   ]
+  },
+  "careful, own-duty loads": {
+   "assembly_cells_right": true,
+   "grades": {
+    "R1": "right",
+    "R2": "missed",
+    "R3": "missed",
+    "R4": "missed",
+    "R5": "missed"
+   },
+   "order": [
+    "V09",
+    "V16"
+   ]
+  }
+ },
  "hints": [
   {
-   "order": 9,
-   "rescues": [
-    "R4"
+   "order": [
+    "V09",
+    "V16"
    ],
+   "rescues": [
+    "R1"
+   ],
+   "sentence": "the pilot's regional duties carry lighter loads than the same shippers' terminal runs, so the terminal's calibration line does not carry to them"
+  },
+  {
+   "order": [
+    "V03",
+    "V09",
+    "V11"
+   ],
+   "rescues": [
+    "R2"
+   ],
+   "sentence": "the batteries lose most of their first year's capacity in the first months"
+  },
+  {
+   "order": [
+    "V02",
+    "V03",
+    "V05",
+    "V07",
+    "V09",
+    "V11",
+    "V14",
+    "V16",
+    "V18",
+    "V21"
+   ],
+   "rescues": [],
    "sentence": "the duties drive slower than the routing tool plans on a -5 C day than over the year"
-  },
-  {
-   "order": 4,
-   "rescues": [
-    "R3"
-   ],
-   "sentence": "on the ePTO trailers the fridge unit runs from the tractor's battery for as long as the duty is out"
-  },
-  {
-   "order": 7,
-   "rescues": [],
-   "sentence": "a multi-drop duty's load comes off along the loaded run"
-  },
-  {
-   "order": 3,
-   "rescues": [],
-   "sentence": "a tonne of trailer costs on every leg what a tonne of payload costs on the loaded leg"
   }
  ],
  "results": [
   {
    "band": [
-    2.0,
+    1.7,
     2.4
    ],
    "depends": [],
    "figure": "payload_term",
-   "golden": 2.2,
+   "golden": 1.9,
    "graded_as": "Component 1",
    "id": "R1",
    "independent": "",
    "name": "payload term, kWh per t per 100 loaded km",
    "partly": [
-    1.8,
+    1.6,
     2.6
    ],
    "passes": {
-    "careful": 2.9,
+    "careful": 1.5,
     "quick": null,
-    "thorough": 2.2
+    "thorough": 1.9
    }
   },
   {
    "band": [
-    3.6,
-    4.0
+    4.2,
+    5.6
    ],
    "depends": [],
    "figure": "loss_pct",
-   "golden": 3.8,
+   "golden": 4.6,
    "graded_as": "Component 2",
    "id": "R2",
    "independent": "",
    "name": "first-year battery loss, per cent",
    "partly": [
-    2.8,
-    4.8
+    3.8,
+    6.0
    ],
    "passes": {
-    "careful": 3.8,
+    "careful": 3.1,
     "quick": null,
-    "thorough": 3.8
-   }
-  },
-  {
-   "depends": [],
-   "figure": "fridge_set",
-   "golden": [
-    "V24",
-    "V30"
-   ],
-   "graded_as": "Component 3",
-   "id": "R3",
-   "independent": "",
-   "name": "the duties whose fridge unit draws from the battery",
-   "passes": {
-    "careful": [],
-    "quick": [],
-    "thorough": [
-     "V24",
-     "V30"
-    ]
-   }
-  },
-  {
-   "band": [
-    0.75,
-    0.79
-   ],
-   "depends": [],
-   "figure": "speed_ratio_design",
-   "golden": 0.77,
-   "graded_as": "Component 4",
-   "id": "R4",
-   "independent": "",
-   "name": "actual over planned speed on a -5 C day",
-   "partly": [
-    0.72,
-    0.82
-   ],
-   "passes": {
-    "careful": 0.89,
-    "quick": null,
-    "thorough": 0.77
-   }
-  },
-  {
-   "bands": {
-    "V02 combination t": [
-     22.4,
-     23.0
-    ],
-    "V03 load share": [
-     0.57,
-     0.63
-    ],
-    "V11 load share": [
-     0.5399999999999999,
-     0.6
-    ],
-    "V14 combination t": [
-     22.2,
-     22.8
-    ]
-   },
-   "depends": [],
-   "figure": "combination_and_drops",
-   "golden": {
-    "V02 combination t": 22.7,
-    "V03 load share": 0.6,
-    "V11 load share": 0.57,
-    "V14 combination t": 22.5
-   },
-   "graded_as": "Component 5",
-   "id": "R5",
-   "independent": "",
-   "name": "the combination's weight and the load's share of the loaded run",
-   "passes": {
-    "careful": {
-     "V02 combination t": 20.3,
-     "V03 load share": 1.0,
-     "V11 load share": 1.0,
-     "V14 combination t": 20.3
-    },
-    "quick": null,
-    "thorough": {
-     "V02 combination t": 22.7,
-     "V03 load share": 0.6,
-     "V11 load share": 0.57,
-     "V14 combination t": 22.5
-    }
+    "thorough": 4.6
    }
   },
   {
    "bands": {
     "V02": [
-     450,
-     470
-    ],
-    "V03": [
      420,
      440
+    ],
+    "V03": [
+     410,
+     430
     ],
     "V05": [
      410,
      430
     ],
     "V07": [
-     450,
-     470
+     440,
+     460
     ],
     "V09": [
      400,
      420
     ],
     "V11": [
-     420,
-     440
-    ],
-    "V14": [
-     450,
-     470
-    ],
-    "V16": [
-     400,
-     420
-    ],
-    "V18": [
      410,
      430
     ],
+    "V14": [
+     420,
+     440
+    ],
+    "V16": [
+     410,
+     430
+    ],
+    "V18": [
+     420,
+     440
+    ],
     "V21": [
-     460,
-     480
+     440,
+     460
     ],
     "V24": [
      450,
@@ -214,130 +266,129 @@
      470
     ],
     "V33": [
-     420,
-     440
+     450,
+     470
     ]
    },
    "depends": [
-    "R1",
-    "R3",
-    "R4",
-    "R5"
+    "R1"
    ],
    "figure": "energy",
    "golden": {
-    "V02": 460,
-    "V03": 430,
+    "V02": 430,
+    "V03": 420,
     "V05": 420,
-    "V07": 460,
+    "V07": 450,
     "V09": 410,
-    "V11": 430,
-    "V14": 460,
-    "V16": 410,
-    "V18": 420,
-    "V21": 470,
+    "V11": 420,
+    "V14": 430,
+    "V16": 420,
+    "V18": 430,
+    "V21": 450,
     "V24": 460,
     "V27": 470,
     "V30": 460,
-    "V33": 430
+    "V33": 460
    },
    "graded_as": "Ask 1",
-   "id": "R6",
+   "id": "R3",
    "independent": "",
    "name": "the 14 design-day energies",
    "passes": {
     "careful": {
      "V02": 450,
-     "V03": 500,
+     "V03": 440,
      "V05": 440,
-     "V07": 500,
-     "V09": 420,
-     "V11": 500,
+     "V07": 450,
+     "V09": 430,
+     "V11": 440,
      "V14": 450,
      "V16": 440,
-     "V18": 430,
-     "V21": 490,
-     "V24": 450,
-     "V27": 510,
-     "V30": 450,
-     "V33": 440
+     "V18": 450,
+     "V21": 470,
+     "V24": 470,
+     "V27": 490,
+     "V30": 480,
+     "V33": 470
     },
     "quick": {
-     "V02": 460,
-     "V03": 400,
-     "V05": 410,
-     "V07": 380,
-     "V09": 350,
-     "V11": 410,
-     "V14": 450,
-     "V16": 400,
-     "V18": 410,
-     "V21": 430,
-     "V24": 400,
-     "V27": 460,
-     "V30": 390,
-     "V33": 410
+     "V02": 400,
+     "V03": 380,
+     "V05": 390,
+     "V07": 370,
+     "V09": 340,
+     "V11": 390,
+     "V14": 400,
+     "V16": 390,
+     "V18": 400,
+     "V21": 400,
+     "V24": 410,
+     "V27": 440,
+     "V30": 410,
+     "V33": 420
     },
     "thorough": {
-     "V02": 460,
-     "V03": 430,
+     "V02": 430,
+     "V03": 420,
      "V05": 420,
-     "V07": 460,
+     "V07": 450,
      "V09": 410,
-     "V11": 430,
-     "V14": 460,
-     "V16": 410,
-     "V18": 420,
-     "V21": 470,
+     "V11": 420,
+     "V14": 430,
+     "V16": 420,
+     "V18": 430,
+     "V21": 450,
      "V24": 460,
      "V27": 470,
      "V30": 460,
-     "V33": 430
+     "V33": 460
     }
    }
   },
   {
    "depends": [
     "R2",
-    "R6"
+    "R3"
    ],
    "figure": "verdict",
    "golden": {
-    "V02": "no",
+    "V02": "yes",
     "V03": "yes",
     "V05": "yes",
     "V07": "no",
     "V09": "yes",
     "V11": "yes",
-    "V14": "no",
+    "V14": "yes",
     "V16": "yes",
     "V18": "yes",
     "V21": "no",
     "V24": "no",
     "V27": "no",
     "V30": "no",
-    "V33": "yes"
+    "V33": "no"
    },
    "graded_as": "Ask 2",
-   "id": "R7",
+   "id": "R4",
    "independent": "",
    "name": "each duty's verdict",
+   "partly_share": 0.75,
+   "partly_share_why": "a constant answer (every duty electric) already gets 8 of 14 verdicts, so partial credit starts at three quarters of the duties",
    "passes": {
     "careful": {
      "V02": "no",
-     "V03": "no",
+     "V03": "yes",
      "V05": "yes",
      "V07": "no",
      "V09": "yes",
-     "V11": "no",
+     "V11": "yes",
      "V14": "no",
      "V16": "yes",
-     "V18": "yes",
+     "V18": "no",
      "V21": "no",
      "V24": "no",
      "V27": "no",
      "V30": "no",
-     "V33": "yes"
+     "V33": "no"
     },
     "quick": {
      "V02": "yes",
@@ -351,58 +402,59 @@
      "V18": "yes",
      "V21": "yes",
      "V24": "yes",
-     "V27": "no",
+     "V27": "yes",
      "V30": "yes",
      "V33": "yes"
     },
     "thorough": {
-     "V02": "no",
+     "V02": "yes",
      "V03": "yes",
      "V05": "yes",
      "V07": "no",
      "V09": "yes",
      "V11": "yes",
-     "V14": "no",
+     "V14": "yes",
      "V16": "yes",
      "V18": "yes",
      "V21": "no",
      "V24": "no",
      "V27": "no",
      "V30": "no",
-     "V33": "yes"
+     "V33": "no"
     }
    }
   },
   {
    "depends": [
     "R2",
-    "R6"
+    "R3"
    ],
    "figure": "call_set",
    "golden": [
+    "V02",
     "V03",
     "V05",
     "V09",
     "V11",
+    "V14",
     "V16",
-    "V18",
-    "V33"
+    "V18"
    ],
    "graded_as": "Recommendation",
-   "id": "R8",
+   "id": "R5",
    "independent": "",
    "name": "the order",
    "passes": {
     "careful": {
      "grade": "missed",
      "value": [
+      "V03",
       "V05",
       "V09",
-      "V16",
-      "V18",
-      "V33"
+      "V11",
+      "V16"
      ],
-     "why": "the order is graded as the count and the duties; 5 is not 7"
+     "why": "the order is graded as the count and the duties; 5 is not 8"
     },
     "quick": {
      "grade": "missed",
@@ -418,19 +470,21 @@
       "V18",
       "V21",
       "V24",
+      "V27",
       "V30",
       "V33"
      ],
-     "why": "the order is graded as the count and the duties; 13 is not 7"
+     "why": "the order is graded as the count and the duties; 14 is not 8"
     },
     "thorough": [
+     "V02",
      "V03",
      "V05",
      "V09",
      "V11",
+     "V14",
      "V16",
-     "V18",
-     "V33"
+     "V18"
     ]
    }
   }
@@ -438,13 +492,14 @@
  "routes": [
   {
    "answer": [
+    "V02",
     "V03",
     "V05",
     "V09",
     "V11",
+    "V14",
     "V16",
-    "V18",
-    "V33"
+    "V18"
    ],
    "golden": true,
    "name": "golden"
@@ -455,161 +510,7 @@
     "V05",
     "V09",
     "V11",
-    "V14",
-    "V16",
-    "V18",
-    "V30",
-    "V33"
-   ],
-   "golden": false,
-   "name": "no speed term"
-  },
-  {
-   "answer": [],
-   "golden": false,
-   "name": "the routing tool's speed"
-  },
-  {
-   "answer": [
-    "V05",
-    "V09",
-    "V16",
-    "V18"
-   ],
-   "golden": false,
-   "name": "the year's mean speed ratio"
-  },
-  {
-   "answer": [
-    "V03",
-    "V05",
-    "V07",
-    "V09",
-    "V11",
-    "V16",
-    "V18",
-    "V33"
-   ],
-   "golden": false,
-   "name": "declared weights"
-  },
-  {
-   "answer": [
-    "V03",
-    "V05",
-    "V09",
-    "V11",
-    "V16",
-    "V18",
-    "V33"
-   ],
-   "golden": false,
-   "name": "one pooled correction"
-  },
-  {
-   "answer": [
-    "V03",
-    "V05",
-    "V09",
-    "V11",
-    "V16",
-    "V18",
-    "V33"
-   ],
-   "golden": false,
-   "name": "one line over the pilot shippers"
-  },
-  {
-   "answer": [
-    "V03",
-    "V05",
-    "V09",
-    "V11",
-    "V14",
-    "V16",
-    "V18",
-    "V30",
-    "V33"
-   ],
-   "golden": false,
-   "name": "one cold rate"
-  },
-  {
-   "answer": [
-    "V03",
-    "V05",
-    "V09",
-    "V11",
-    "V14",
-    "V16",
-    "V18",
-    "V30",
-    "V33"
-   ],
-   "golden": false,
-   "name": "no first-year loss"
-  },
-  {
-   "answer": [
-    "V02",
-    "V03",
-    "V05",
-    "V09",
-    "V11",
-    "V14",
-    "V16",
-    "V18",
-    "V33"
-   ],
-   "golden": false,
-   "name": "no trailer weight"
-  },
-  {
-   "answer": [
-    "V03",
-    "V05",
-    "V09",
-    "V11",
-    "V16",
-    "V18",
-    "V24",
-    "V30",
-    "V33"
-   ],
-   "golden": false,
-   "name": "no fridge draw"
-  },
-  {
-   "answer": [
-    "V03",
-    "V05",
-    "V09",
-    "V11",
-    "V16",
-    "V18",
-    "V30"
-   ],
-   "golden": false,
-   "name": "every reefer draws"
-  },
-  {
-   "answer": [
-    "V05",
-    "V09",
-    "V16",
-    "V18",
-    "V33"
-   ],
-   "golden": false,
-   "name": "the load to the last drop"
-  },
-  {
-   "answer": [
-    "V05",
-    "V09",
-    "V16",
-    "V18",
-    "V33"
+    "V16"
    ],
    "golden": false,
    "name": "careful but hurried"
@@ -617,17 +518,108 @@
   {
    "answer": [
     "V02",
+    "V03",
     "V05",
+    "V07",
     "V09",
+    "V11",
     "V14",
     "V16",
     "V18",
-    "V24",
-    "V30",
-    "V33"
+    "V21"
    ],
    "golden": false,
-   "name": "the arch 7 golden"
+   "name": "careful, design-day speed"
+  },
+  {
+   "answer": [
+    "V09",
+    "V16"
+   ],
+   "golden": false,
+   "name": "careful, own-duty loads"
+  },
+  {
+   "answer": [
+    "V03",
+    "V09",
+    "V11"
+   ],
+   "golden": false,
+   "name": "careful, curved loss"
+  },
+  {
+   "answer": [
+    "V02",
+    "V03",
+    "V05",
+    "V07",
+    "V09",
+    "V11",
+    "V14",
+    "V16",
+    "V18"
+   ],
+   "golden": false,
+   "name": "the terminal's calibration line"
+  },
+  {
+   "answer": [
+    "V02",
+    "V03",
+    "V05",
+    "V07",
+    "V09",
+    "V11",
+    "V14",
+    "V16",
+    "V18"
+   ],
+   "golden": false,
+   "name": "declared weights"
+  },
+  {
+   "answer": [
+    "V02",
+    "V03",
+    "V05",
+    "V07",
+    "V09",
+    "V11",
+    "V14",
+    "V16",
+    "V18"
+   ],
+   "golden": false,
+   "name": "one pooled correction"
+  },
+  {
+   "answer": [
+    "V02",
+    "V03",
+    "V05",
+    "V09",
+    "V11",
+    "V14",
+    "V16",
+    "V18"
+   ],
+   "golden": false,
+   "name": "a straight-line loss"
+  },
+  {
+   "answer": [
+    "V02",
+    "V03",
+    "V05",
+    "V09",
+    "V11",
+    "V14",
+    "V16",
+    "V18"
+   ],
+   "golden": false,
+   "name": "the same months a year apart"
   },
   {
    "answer": [
@@ -642,6 +634,93 @@
     "V18",
     "V21",
     "V24",
+    "V30",
+    "V33"
+   ],
+   "golden": false,
+   "name": "no first-year loss"
+  },
+  {
+   "answer": [
+    "V09"
+   ],
+   "golden": false,
+   "name": "the year's mean speed ratio"
+  },
+  {
+   "answer": [],
+   "golden": false,
+   "name": "the routing tool's speed"
+  },
+  {
+   "answer": [
+    "V02",
+    "V03",
+    "V05",
+    "V09",
+    "V11",
+    "V14",
+    "V16",
+    "V18",
+    "V21",
+    "V30"
+   ],
+   "golden": false,
+   "name": "no speed term"
+  },
+  {
+   "answer": [
+    "V02",
+    "V03",
+    "V05",
+    "V09",
+    "V11",
+    "V14",
+    "V16",
+    "V18",
+    "V21"
+   ],
+   "golden": false,
+   "name": "one cold rate"
+  },
+  {
+   "answer": [
+    "V02",
+    "V05",
+    "V09",
+    "V14",
+    "V16",
+    "V18"
+   ],
+   "golden": false,
+   "name": "no trailer weight"
+  },
+  {
+   "answer": [
+    "V02",
+    "V05",
+    "V09",
+    "V14",
+    "V16",
+    "V18"
+   ],
+   "golden": false,
+   "name": "the load to the last drop"
+  },
+  {
+   "answer": [
+    "V02",
+    "V03",
+    "V05",
+    "V07",
+    "V09",
+    "V11",
+    "V14",
+    "V16",
+    "V18",
+    "V21",
+    "V24",
+    "V27",
     "V30",
     "V33"
    ],

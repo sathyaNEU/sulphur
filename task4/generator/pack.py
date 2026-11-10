@@ -204,7 +204,7 @@ def write_tms(w, path, fl):
             if x is not None:
                 vreg, dec, pal, tl, shares = bev[x["tractor"]], x["declared"], x["pallets"], x["trailer"], x["shares"]
             else:
-                mu, sd = P.SHIPPERS[ship][3], P.SHIPPERS[ship][4]
+                mu, sd = P.SHIPPERS[ship][3] * P.LANE_F[dcode], P.SHIPPERS[ship][4]
                 pay = float(np.clip(rng.normal(mu, sd), 0.4 * mu, 1.6 * mu))
                 dec = sim.declare(rng, ship, pay, day)
                 pal = int(round(pay / 0.52 + rng.normal(0, 1.2)))
@@ -344,8 +344,9 @@ def write_shippers(path):
         if "ek. för." in name:
             org = "7%05d-%04d" % (int(rng.integers(10000, 99999)), int(rng.integers(1000, 9999)))
         depots = "Jönköping, Värnamo" if code in ("TEN", "HWP", "BMJ", "VGL", "GDR", "LBY") else "Värnamo"
-        rows.append([code, name, org, town, depots, "30 days", "Full loads"])
-    _sheet(ws, ["Code", "Shipper", "Org. no", "Site", "Served from", "Payment terms", "Service"], rows,
+        agr = "Ramavtal %d" % (2022 + int(rng.integers(0, 4)))
+        rows.append([code, name, org, town, depots, "30 days", agr])
+    _sheet(ws, ["Code", "Shipper", "Org. no", "Site", "Served from", "Payment terms", "Agreement"], rows,
            [7, 28, 13, 14, 20, 12, 12])
     wb.save(path)
 

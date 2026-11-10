@@ -45,7 +45,7 @@ def metadata(target, n):
                       "source": "Constructed (seeded generator, task4/generator)", "pull_date": "2026-11-06",
                       "license": "CC0-1.0 (original work)"})
     return {
-        "task": "task4", "architecture": 8,
+        "task": "task4", "architecture": 9,
         "title": "How many battery-electric tractors a Småland road haulier should order for its Värnamo duties for "
                  "2027, and which duties they take, under its fleet electrification standard",
         "domain": "Supply Chain & Logistics (house domain) in General Statistics & Data Science",

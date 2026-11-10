@@ -36,147 +36,120 @@ def same(pk, model, g, lim=None, tol=10.0):
     return s and near, a
 
 
-GOLD_SET = ["V03", "V05", "V09", "V11", "V16", "V18", "V33"]
-# each shortcut's designed flips against the golden order
-FLIPS = {
-    "no speed term": {"V14", "V30"},
-    "the routing tool's speed": set(GOLD_SET),
-    "the year's mean speed ratio": {"V03", "V11", "V33"},
-    "declared weights": {"V07"},
-    "one cold rate": {"V14", "V30"},
-    "no first-year loss": {"V14", "V30"},
-    "no trailer weight": {"V02", "V14"},
-    "no fridge draw": {"V24", "V30"},
-    "every reefer draws": {"V30", "V33"},
-    "the load to the last drop": {"V03", "V11"},
-    "careful but hurried": {"V03", "V11"},
-}
-NEW = ("no trailer weight", "no fridge draw", "every reefer draws", "the load to the last drop")
-PAY_BAND = (1.95, 2.45)
+GOLD_SET = ["V02", "V03", "V05", "V09", "V11", "V14", "V16", "V18"]
+CAREFUL = "careful but hurried"
+HINTS = ("careful, own-duty loads", "careful, curved loss", "careful, design-day speed")
 
 
 def main(target):
     TARGET_DIR[0] = target
+    import writeup as WU
+    PAY_BAND, LOSS_BAND, RATIO_BAND = WU.PAY_BAND, WU.LOSS_BAND, WU.RATIO_BAND
     pk = A.load(target)
     g = A.golden(pk)
     M = g["models"]
     gold_set = g["set"]
     L = g["limit"]
-    ok("call", gold_set == GOLD_SET and g["count"] == 7, str(gold_set))
+    ok("call", gold_set == GOLD_SET and g["count"] == 8, str(gold_set))
     for c, v in g["assess"].items():
-        ok("margin %s 13 kWh or more" % c, abs(v["kwh"] - L) >= 13.0, "%.1f against %.1f" % (v["kwh"], L))
-    # the routes: each hurried step alone lands on its own wrong order, clear of the limit
+        ok("margin %s 10 kWh or more" % c, abs(v["kwh"] - L) >= 10.0, "%.1f against %.1f" % (v["kwh"], L))
     R = A.routes(pk)
-    sets = {k: A.chosen(A.assess(pk, m, lim=lm)) for k, (m, lm) in R.items()}
-    for k, want in FLIPS.items():
-        ok("route %s flips %s" % (k, sorted(want)), set(sets[k]) ^ set(gold_set) == want, str(sets[k]))
-    for k in NEW:
-        ok("new judgment %s flips two or more" % k, len(FLIPS[k]) >= 2)
+    AS = {k: A.assess(pk, m, lim=lm) for k, (m, lm) in R.items()}
+    sets = {k: A.chosen(a) for k, a in AS.items()}
+    # the careful pass (the recorded runs' union) loses the order by two or more duties, each 10 kWh or more from the
+    # golden's limit, and keeps a cushion of 4 kWh on its own wrong side
+    diff = set(sets[CAREFUL]) ^ set(gold_set)
+    ok("careful order differs by two or more duties", len(diff) >= 2, str(sorted(diff)))
+    for c in diff:
+        ok("careful flip %s 10 kWh or more from the golden limit" % c, abs(g["assess"][c]["kwh"] - L) >= 10.0)
+        ok("careful flip %s 4 kWh or more past its own limit" % c, abs(AS[CAREFUL][c]["kwh"] - R[CAREFUL][1]) >= 4.0,
+           "%.1f" % (AS[CAREFUL][c]["kwh"] - R[CAREFUL][1]))
+    dw = set(sets["careful, design-day speed"]) ^ set(gold_set)
+    ok("careful at the design-day speed differs by two or more duties", len(dw) >= 2, str(sorted(dw)))
+    ok("careful and its design-day variant name different wrong orders",
+       sets[CAREFUL] != sets["careful, design-day speed"])
+    for h in HINTS:
+        ok("one estimate put right still orders wrongly: %s" % h, sets[h] != gold_set, str(sets[h]))
     wrong = {tuple(v) for k, v in sets.items() if v != gold_set}
     ok("five or more distinct wrong orders", len(wrong) >= 5, str(len(wrong)))
-    for k, (m, lm) in R.items():
-        if k == "golden":
-            continue
-        a = A.assess(pk, m, lim=lm)
-        ok("route %s no duty within 1.5 kWh of its limit" % k, min(abs(a[c]["kwh"] - lm) for c in a) >= 1.5,
-           str({c: round(a[c]["kwh"] - lm, 1) for c in a if abs(a[c]["kwh"] - lm) < 1.5}))
-        if k in FLIPS and k != "no first-year loss":
-            out = [c for c in pk.short if abs(a[c]["kwh"] - g["assess"][c]["kwh"]) > 10]
-            ok("route %s misreads two or more energies by over 10 kWh" % k, len(out) >= 2, str(out))
-            moved = [c for c in out if c not in FLIPS[k]]
-            ok("route %s misreads a duty where nothing turns on it" % k, len(moved) >= 1 or k == "every reefer draws",
-               str(moved))
-    # R1: the payload term, every rival inside its band and every hurried route outside it
+    # the careful pass misreads energies where nothing turns on them (the factors run across the shortlist)
+    off = [c for c in pk.short if abs(AS[CAREFUL][c]["kwh"] - g["assess"][c]["kwh"]) > 10 and c not in diff]
+    ok("careful misreads three or more energies where nothing turns", len(off) >= 3, str(off))
+    # R1: the payload term
     pt = A.slope_per_100(M["golden"])
-    ok("payload term mid-band", PAY_BAND[0] + 0.1 < pt < PAY_BAND[1] - 0.1, "%.3f" % pt)
-    for k in ("declared weights", "one pooled correction", "no trailer weight", "no fridge draw",
-              "the load to the last drop", "careful but hurried", "no speed term"):
+    ok("payload term inside the band by 0.15", PAY_BAND[0] + 0.15 < pt < PAY_BAND[1] - 0.15, "%.3f" % pt)
+    for k in (CAREFUL, "the terminal's calibration line", "declared weights", "one pooled correction"):
         v = A.slope_per_100(R[k][0])
-        ok("payload term outside the band on %s" % k, not PAY_BAND[0] <= v <= PAY_BAND[1], "%.3f" % v)
-    gp = A.payloads(pk, "shipper")
+        ok("payload term outside the band by 0.15 on %s" % k, v < PAY_BAND[0] - 0.15 or v > PAY_BAND[1] + 0.15,
+           "%.3f" % v)
+    gp, cp = A.payloads(pk, "lane"), A.careful_payloads(pk)
     fe, fse = A.fe_slope_se(pk, gp)
-    ok("the within-duty slope's error four times the pooled fit's", fse >= 4 * A.golden_se(pk, gp),
-       "%.3f against %.3f" % (fse, A.golden_se(pk, gp)))
+    fec = A.fe_slope_se(pk, cp)[0]
+    ok("the within-duty fit agrees with the duties' own loads", PAY_BAND[0] <= fe <= PAY_BAND[1] and abs(fe - pt) < 0.2,
+       "%.2f" % fe)
+    ok("the within-duty fit on the terminal's line lands in the band (the runs' dismissed figure)",
+       PAY_BAND[0] <= fec <= PAY_BAND[1], "%.2f" % fec)
+    ok("payload term within 0.3 of the truth", abs(pt - 100 * P.LOAD) < 0.3, "%.3f" % pt)
     ok("tare and payload terms agree within 0.6 (a tonne is a tonne)", abs(g["tare_term"] - pt) < 0.6,
        "%.2f against %.2f" % (g["tare_term"], pt))
-    ok("payload term near the truth", abs(pt - 100 * P.LOAD) < 0.2, "%.3f" % pt)
-    # R3: the fridge unit, read from the pilot's dairy duty: the ePTO units draw, the others do not
-    ok("fridge draw near the truth", abs(g["tru_kw"] - P.TRU_KW) < 0.4, "%.2f" % g["tru_kw"])
-    y = np.array([d["kwh"] for d in pk.days])
-    X = A.design(pk, gp, g["model"]["o"])
-    res = y - X @ g["model"]["coef"]
-    other = np.array([d["reefer"] and not d["epto"] for d in pk.days])
-    ok("the diesel and axle-generator reefers' days show no draw", abs(res[other].mean()) < 3.0,
-       "%.2f" % res[other].mean())
-    ok("the shortlisted reefer duties: V24 and V30 ePTO, V33 diesel",
-       [c for c in pk.short if g["inputs"][c]["epto"] == 1.0] == ["V24", "V30"]
-       and [c for c in pk.short if g["inputs"][c]["reefer"] == 1.0] == ["V24", "V30", "V33"]
-       and all(g["inputs"][c]["epto"] in (0.0, 1.0) for c in pk.short))
-    # the footprints: every structure runs across the terminal, not only through the deciding duties
-    tr = pk.trailer
-    vdut = {c for c, v in pk.vdep.items() if any("ePTO" in tr[x["trailer"]]["equip"] for x in v)}
-    ok("ePTO units on Värnamo duties off the shortlist", len(vdut - set(pk.short)) >= 2, str(sorted(vdut)))
-    md = {c for c, v in pk.vdep.items() if len(pk.stops[c]) > 1}
-    ok("multi-drop duties off the shortlist", len(md - set(pk.short)) >= 6, str(len(md - set(pk.short))))
-    heavy = {r["duty"] for r in pk.wb if tr[r["trailer"]]["tare"] >= 10000}
-    ok("heavy trailers off the shortlist", len(heavy - set(pk.short)) >= 3, str(sorted(heavy - set(pk.short))))
-    ok("the pilot carries every structure", any(d["epto"] for d in pk.days) and any(d["n_drops"] > 1 for d in pk.days)
-       and np.std([d["combo"] for d in pk.days]) > 1.0)
-    # every route that takes all the steps: the same seven, every energy within 10 kWh
+    # the lane loads: a footprint on every pilot duty, the terminal's line too heavy on every one
+    lt = WU.lane_table(pk)
+    ok("every pilot duty lighter than its shipper's terminal loads", all(v["share"] < 0.93 for v in lt.values()),
+       str({k: v["share"] for k, v in lt.items()}))
+    ok("the terminal's line too heavy on every pilot duty by 0.3 t or more",
+       all(v["terminal_line"] - v["lane"] >= 0.3 for v in lt.values()),
+       str({k: round(v["terminal_line"] - v["lane"], 2) for k, v in lt.items()}))
+    sc = WU.scale_check(pk)
+    for du, v in sc.items():
+        ok("scale days %s bear out the duty's own loads" % du,
+           abs(v["scale_mean"] - v["own_before"]) < 0.8 and v["terminal_line_before"] - v["scale_mean"] > 1.0, str(v))
+        ok("scale days %s under 60" % du, 15 <= v["scale_days"] <= 60, str(v["scale_days"]))
+    cal = A.calibration(pk)
+    pilot = {d["shipper"] for d in pk.days}
+    est = [v[1] for (s, rr), v in cal.items() if s in pilot and P.SHIPPERS[s][2] == "est" and rr != "ticket"]
+    ok("estimating clerks' weighed-on-declared slopes under 0.3", all(0.05 <= x <= 0.3 for x in est), str(est))
+    ok("no pilot shipper's notes exact over the whole window", not any(
+        abs(v[1] - 1) < 0.05 for (s, r), v in cal.items() if s in pilot and r == "all"))
+    # R2: the first-year loss
+    f = g["fade"]
+    ok("loss inside the band by 0.2", LOSS_BAND[0] + 0.2 <= 100 * f <= LOSS_BAND[1] - 0.2, "%.3f" % (100 * f))
+    for h in A.LOSS_RIVALS + ("first_year",):
+        ok("loss form %s in the band" % h, LOSS_BAND[0] <= 100 * A.fade(pk, h) <= LOSS_BAND[1],
+           "%.3f" % (100 * A.fade(pk, h)))
+    for h in ("cold", "yoy", "age"):
+        ok("loss %s outside the partial band" % h, 100 * A.fade(pk, h) < 3.8 - 0.2, "%.3f" % (100 * A.fade(pk, h)))
+    ok("the straight line fits far worse than the curve", A.fade_fit(pk, "cold")[1] > 1.1 * A.fade_fit(pk, "curve")[1])
+    ok("loss within 0.4 of the truth", abs(f - float(np.mean(list(sim.world()["fade"].values())))) <= 0.004,
+       "%.4f" % f)
+    # the early loss on every tractor: each tractor's curve beats its straight line
+    for reg in sorted({d["reg"] for d in pk.days}):
+        sub = A.Pack()
+        sub.days = [d for d in pk.days if d["reg"] == reg]
+        ok("early-life loss on tractor %s" % reg, A.fade_fit(sub, "exp0.30")[0] > A.fade_fit(sub, "cold")[0] + 0.008)
+    ok("limit gap between the golden and the careful loss 5 kWh or more", R[CAREFUL][1] - L >= 5.0)
+    # R3: the speed ratio
+    rr = A.speed_ratio(pk)
+    ok("winter speed ratio near the truth", abs(rr - sim.ratio(P.DESIGN_T)) < 0.012, "%.3f" % rr)
+    ok("speed ratio inside the band", RATIO_BAND[0] < rr < RATIO_BAND[1], "%.3f" % rr)
+    ok("the year's ratio outside the band", A.speed_ratio(pk, how="mean") > RATIO_BAND[1] + 0.05)
+    vmax = max(d["v"] for d in pk.days)
+    ok("every shortlisted duty's routing-tool speed above any pilot day's actual",
+       min(A.plan_speed(pk, c) for c in pk.short) > vmax, "%.1f" % vmax)
+    # every route that takes all the steps: the same order, every energy within 10 kWh, each band held
     RV = A.rivals(pk)
     for name, (m, lm) in RV.items():
         a = A.assess(pk, m, lim=lm)
         ok("rival %s keeps the order" % name, A.chosen(a) == gold_set, str(A.chosen(a)))
-        ok("rival %s clear of the limit" % name, min(abs(a[c]["kwh"] - lm) for c in a) >= 1.5)
-        if name != "within-duty fit":
-            ok("rival %s energies within 10 kWh" % name,
-               max(abs(a[c]["kwh"] - g["assess"][c]["kwh"]) for c in a) <= 10.0)
-            v = A.slope_per_100(m)
-            ok("rival %s payload term in the band" % name, PAY_BAND[0] <= v <= PAY_BAND[1], "%.3f" % v)
+        ok("rival %s clear of the limit by 4 kWh" % name, min(abs(a[c]["kwh"] - lm) for c in a) >= 4.0)
+        ok("rival %s energies within 10 kWh" % name, max(abs(a[c]["kwh"] - g["assess"][c]["kwh"]) for c in a) <= 10.0)
+        v = A.slope_per_100(m)
+        ok("rival %s payload term in the band" % name, PAY_BAND[0] <= v <= PAY_BAND[1], "%.3f" % v)
+    for h in ("hinge8", "hinge12", "linear", "bins"):
+        ok("speed ratio form %s in the band" % h, RATIO_BAND[0] <= A.speed_ratio(pk, how=h) <= RATIO_BAND[1])
     # the cold form, out of sample
-    gp = A.payloads(pk, "shipper")
     b1, b2, bq = A.backtest(pk, gp, A.H1), A.backtest(pk, gp, A.H2), A.backtest(pk, gp, ("quad", 16))
-    ok("one cold rate under-forecasts held-out sub-zero days by 4 per cent or more", b1[0] <= -4.0, str(b1))
+    ok("one cold rate under-forecasts held-out sub-zero days by 3 per cent or more", b1[0] <= -3.0, str(b1))
     ok("two rates within 1.5 per cent", abs(b2[0]) <= 1.5 and abs(bq[0]) <= 1.5, str((b2, bq)))
-    bd = A.backtest(pk, A.payloads(pk, "declared"), A.H2)
-    ok("held-out days blind to the declarations", abs(bd[1] - b2[1]) < 1.0, str((bd, b2)))
-    # the first-year loss
-    f = g["fade"]
-    for how in ("linear", "quad", "cold15", "yoy"):
-        ok("loss %s within 0.2 points" % how, abs(A.fade(pk, how) - f) <= 0.002, "%.4f" % A.fade(pk, how))
-    ok("loss by age alone low by 0.4 points or more", A.fade(pk, "age") <= f - 0.004, "%.4f" % A.fade(pk, "age"))
-    ok("loss near the truth", abs(f - P.FADE_Y1) <= 0.003, "%.4f" % f)
-    # no free check: no pilot shipper declares exactly over the whole pilot, the drinks maker's scale days too few
-    import writeup as WU
-    cal = A.calibration(pk)
-    pilot = {d["shipper"] for d in pk.days}
-    ok("no pilot shipper's notes exact over the whole window", not any(
-        abs(v[1] - 1) < 0.05 for (s, r), v in cal.items() if s in pilot and r == "all"))
-    tm = A.ticket_months(pk, "GDR")
-    mk = np.array([d["shipper"] == "GDR" and (d["date"].year, d["date"].month) in tm for d in pk.days])
-    ok("scale-weight pilot days under 90", 20 < mk.sum() < 90, str(mk.sum()))
-    dp = A.payloads(pk, "declared")
-    X = A.design(pk, dp, form=A.H1, tare=None, tru=None)
-    y = np.array([d["kwh"] for d in pk.days])
-    keep = [k for k in range(X.shape[1]) if np.ptp(X[mk][:, k]) > 1e-9]
-    Xm = X[mk][:, keep]
-    c = np.linalg.lstsq(Xm, y[mk], rcond=None)[0]
-    r = y[mk] - Xm @ c
-    se = np.sqrt(r @ r / (mk.sum() - Xm.shape[1]) * np.linalg.inv(Xm.T @ Xm)[-1, -1]) * 100
-    ok("scale-weight days alone cannot pin the payload term", se >= 0.4, "%.2f" % se)
-    est = [v[1] for (s, rr), v in cal.items() if s in pilot and P.SHIPPERS[s][2] == "est" and rr != "ticket"]
-    ok("estimating clerks' slopes 0.1 to 0.25", all(0.1 <= x <= 0.25 for x in est), str(est))
-    # the battery never runs below its reserve on a pilot day
-    # the speed transfer: the pilot cannot show the Varnamo duties' speeds directly, and a model without speed
-    # validates on the pilot
-    nos = A.fit(pk, gp, A.H2, speed=None)
-    ok("speed term improves the pilot fit only modestly", 0.05 < nos["rmse_pct"] - g["model"]["rmse_pct"] < 0.6,
-       "%.2f against %.2f" % (nos["rmse_pct"], g["model"]["rmse_pct"]))
-    vmax = max(d["v"] for d in pk.days)
-    ok("every shortlisted duty's routing-tool speed above any pilot day's actual",
-       min(A.plan_speed(pk, c) for c in pk.short) > vmax, "%.1f" % vmax)
-    rr = A.speed_ratio(pk)
-    ok("winter speed ratio near the truth", abs(rr - sim.ratio(P.DESIGN_T)) < 0.01, "%.3f" % rr)
     ok("pilot SOC end at 5 per cent or more", min(d["soc1"] for d in pk.days) >= 5, str(min(d["soc1"] for d in pk.days)))
     # SF1 the design day's temperature: the trucks' ambient or the station's
     ok("SF1", same(pk, RV["station temperature"][0], g)[0])
@@ -242,17 +215,17 @@ def main(target):
     # SF12 rounding: every rival within 6 kWh of the golden (asserted above); energies graded within 10 kWh
     # SF13 one tractor per duty
     ok("SF13", g["count"] == len(gold_set))
-    # SF14 the fit window, SF15 the calibration window, SF16 within-duty fit, SF18 note periods, SF19 to SF22 the loss
-    for k in ("2025 only", "2026 only", "calibrated on the last 12 months",
-              "one shipper line over both note periods", "loss: the day's temperature",
-              "loss: temperature and its square", "loss: degrees below 15 C", "loss: the same months a year apart"):
+    # SF14 the fit window, SF15 the error model's window, SF16 within-duty fit, SF18 note periods, SF19 to SF22 the loss
+    for k in ("2025 only", "2026 only", "loads: error read on the last 12 months", "loads: additive declaration error",
+              "loads: each day at its duty's mean declared", "loss: the day's temperature", "loss: degrees below 15 C",
+              "loss: a straight line on the first year's days") + tuple("loss: %s" % h for h in A.LOSS_RIVALS):
         ok("SF %s" % k, same(pk, RV[k][0], g, RV[k][1])[0])
-    ok("SF18 the drinks maker's notes, one line over both periods",
-       same(pk, *[RV["one shipper line over both note periods"][i] for i in (0,)], g, RV["one shipper line over both note periods"][1])[0])
-    ok("SF19 the loss's temperature term", all(abs(A.fade(pk, h) - f) <= 0.002 for h in ("linear", "quad", "cold15")))
-    ok("SF20 the loss estimator: the same months a year apart", abs(A.fade(pk, "yoy") - f) <= 0.002)
-    # SF21 "permanently": the cold's loss returns each spring, so the age trend alone is low (asserted above)
-    ok("SF21 the cold's capacity loss is reversible", A.fade(pk, "age") < f - 0.004)
+    ok("SF18 the drinks maker's scale period kept apart", A.regime(pk, "GDR", dt.date(2026, 9, 15)) == "ticket"
+       and A.regime(pk, "GDR", dt.date(2026, 3, 16)) == "note")
+    ok("SF19 the loss's temperature term", all(abs(A.fade(pk, "curve", h) - f) <= 0.003 for h in ("linear", "cold15")))
+    ok("SF20 the loss estimator: the same months a year apart is ruled out (it starts a year after the early loss)",
+       A.fade(pk, "yoy") < f - 0.012)
+    ok("SF21 the cold's capacity loss is reversible", A.fade(pk, "age") < A.fade(pk, "cold") - 0.002)
     ok("SF22 the limit", abs(L - A.SHARE * A.USABLE * (1 - f)) < 1e-9)
     ok("SF24 the design-day speed: the routing tool's and the year's ratio each order otherwise",
        sets["the routing tool's speed"] != gold_set and sets["the year's mean speed ratio"] != gold_set
@@ -265,14 +238,14 @@ def main(target):
         wbt = np.mean([pk.trailer[r["trailer"]]["tare"] for r in pk.wb if r["duty"] == c and A.LAST12[0] <= r["date"] <= A.LAST12[1]])
         nt = np.mean([pk.trailer[x["trailer"]]["tare"] for x in pk.vdep[c]])
         ok("SF27 %s trailer tare from the bridge or the notes" % c, abs(wbt - nt) < 60, "%.0f %.0f" % (wbt, nt))
-    # SF28 which units draw from the battery: ePTO only (asserted with the routes: every reefer flips V30 and V33)
-    ok("SF28", sets["every reefer draws"] != gold_set and sets["no fridge draw"] != gold_set)
+    # SF28 the pilot's loads: each duty's own, or the terminal's line (ruled out by the scale days, asserted above)
+    ok("SF28", sets["the terminal's calibration line"] != gold_set)
     # SF29 the drops' shares: declared shares, or equal shares (inside the band, same call)
     ok("SF29", same(pk, RV["drops: equal shares"][0], g)[0])
     # SF30 the tare term: its own coefficient, or the payload's (same call, payload term in the band)
     ok("SF30", same(pk, RV["tare: one coefficient with the payload"][0], g)[0])
-    # SF31 the fridge unit's hours: depot out to depot in, driving hours, or per km (same call)
-    ok("SF31", same(pk, RV["fridge unit: by driving hours"][0], g)[0] and same(pk, RV["fridge unit: by km"][0], g)[0])
+    # SF31 the loss's age form: every curved form keeps the order (asserted with the rivals)
+    ok("SF35 the declaration error additive or multiplicative", same(pk, RV["loads: additive declaration error"][0], g)[0])
     # SF32 the 2027 tractor's own weight: the quotation's, or the pilot tractors' (same call)
     keep_t = A.TRACTOR_2027_KG
     A.TRACTOR_2027_KG = float(np.mean(list(pk.tractor_tare[r] for r in {d["reg"] for d in pk.days})))
@@ -311,13 +284,13 @@ def main(target):
                            capture_output=True, text=True).stdout.lower()
     for w in ["declared", "weighbridge", "calibrat", "regress", "scatter", "estimate the", "error", "shipper",
               "state of charge", "below 0", "freez", "trailer", "tare", "fridge", "refrig", "reefer", "pto", "speed",
-              "hour"]:
+              "hour", "part load", "regional", "early", "curve"]:
         ok("standard silent on %s" % w, w not in stext)
     ok("standard files the duty's drops (2.1)", "drops" in stext)
     ptext = open(os.path.join(os.path.dirname(HERE), "prompt.txt"), encoding="utf-8").read().lower()
     for w in ["declared", "weigh", "calibrat", "regress", "error", "shipper", "cold", "temperature", "hold",
               "scatter", "freez", "state of charge", "trailer", "tare", "fridge", "refrig", "reefer", "drop", "speed",
-              "weight of"]:
+              "weight of", "terminal", "regional", "part load", "full load", "early", "curve", "line"]:
         ok("prompt silent on %s" % w, w not in ptext)
     ok("prompt files the energy as a forecast from the pilot (H20)", "forecast from" in ptext and "pilot" in ptext)
 
@@ -338,10 +311,10 @@ def main(target):
     clean = clean_pack(w, pk)
     gc = A.golden(clean)
     ok("clean truth: golden order", gc["set"] == gold_set, str(gc["set"]))
-    ok("clean truth: loss", abs(gc["fade"] - f) < 0.003, "%.4f" % gc["fade"])
+    ok("clean truth: loss", abs(gc["fade"] - f) < 0.004, "%.4f" % gc["fade"])
     RC = A.routes(clean)
-    for k in ("declared weights", "one cold rate", "no first-year loss", "no trailer weight", "no fridge draw",
-              "the load to the last drop", "careful but hurried"):
+    for k in ("declared weights", "the terminal's calibration line", "no first-year loss", "the year's mean speed ratio",
+              CAREFUL, "careful, design-day speed") + HINTS:
         m, lm = RC[k]
         ok("clean truth: %s still wrong" % k, A.chosen(A.assess(clean, m, lim=lm)) != gold_set)
     ok("mess neutral", all(abs(gc["assess"][c]["kwh"] - g["assess"][c]["kwh"]) <= 7 for c in pk.short),
@@ -387,7 +360,7 @@ def clean_pack(w, pk):
                         "kwh": float(sum(tr["kwh"] for tr in x["trips"])), "t": t, "station_t": t, "t_filled": t,
                         "cap": x["cap"], "age": (x["date"] - A.IN_SERVICE).days / 365.25,
                         "v": sum(tr["km"] for tr in x["trips"]) / drive, "drive_h": drive, "span_h": x["span"],
-                        "combo": x["combo"], "epto": x["etru"], "reefer": tl["kind"] == "REEF",
+                        "combo": x["combo"], "epto": False, "reefer": tl["kind"] == "REEF",
                         "drops": drops, "phi": A.phi_of(pk, x["duty"], drops),
                         "phi_eq": A.phi_of(pk, x["duty"], drops, equal=True), "n_drops": len(drops)})
     return cp

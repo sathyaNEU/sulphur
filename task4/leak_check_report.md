@@ -1,21 +1,19 @@
 # leak check, task4
 
-**Verdict: REVIEW.** 13 files read, 20 golden figures and 7 candidate names taken from submission.md, 25 stump terms taken from the design note.
+**Verdict: REVIEW.** 13 files read, 19 golden figures and 7 candidate names taken from submission.md, 25 stump terms taken from the design note.
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: trailer, record, missed, fridge, orders, drifts, weight, station, stations, reader, equipment, careful, network, decisive, register, nothing, temperature, readings, routing, method, shortcut, graded, component, architecture, re-run
+Stump terms swept: careful, record, orders, drifts, station, missed, design-day, stations, reader, within-duty, terminal, readings, architecture, network, decisive, calibration, declared, winter, carries, golden, straight, result, temperature, months, graded
 
-## 3 answer figures in the pack (REVIEW 5)
-- **REVIEW** `fleet_electrification_standard_FES-2.pdf`: golden figure 4.4 appears: ...unexpected. Each duty assigned takes one tractor. 4.4 Duties are assessed each autumn for the following...
-- **REVIEW** `fleet_electrification_standard_FES-2.pdf`: golden figure 2.2 appears: ...makes on the way, and the run back to the depot. 2.2 A duty's energy is the energy the tractor draws f...
+## 3 answer figures in the pack (REVIEW 4)
+- **REVIEW** `fleet_electrification_standard_FES-2.pdf`: golden figure 4.2 appears: ...n ambient temperature of minus 5 degrees Celsius. 4.2 A duty's planning load is the mean net payload of...
 - **REVIEW** `quotation_bev_tractors_2027.pdf`: golden figure 540 appears: ...ttery Installed capacity 630 kWh; usable capacity 540 kWh Charging CCS2, up to 375 kW DC; on-board 43 k...
-- **REVIEW** `fleet_electrification_standard_FES-2.pdf`: carries 4 of 6 distinctive words of the committed call: 'Order 7 battery-electric tractors, for V03, V05, V09, V11, V16, V18, V33; V02, V07, V14, V21, V24, V27, V30 stay on dies'
-- **REVIEW** `quotation_bev_tractors_2027.pdf`: carries 4 of 6 distinctive words of the committed call: 'Order 7 battery-electric tractors, for V03, V05, V09, V11, V16, V18, V33; V02, V07, V14, V21, V24, V27, V30 stay on dies'
+- **REVIEW** `fleet_electrification_standard_FES-2.pdf`: carries 4 of 6 distinctive words of the committed call: 'Order 8 battery-electric tractors, for V02, V03, V05, V09, V11, V14, V16, V18; V07, V21, V24, V27, V30, V33 stay on dies'
+- **REVIEW** `quotation_bev_tractors_2027.pdf`: carries 4 of 6 distinctive words of the committed call: 'Order 8 battery-electric tractors, for V02, V03, V05, V09, V11, V14, V16, V18; V07, V21, V24, V27, V30, V33 stay on dies'
 
-## 4 design-note vocabulary (REVIEW 2)
-- **REVIEW** `fleet_electrification_standard_FES-2.pdf`: 3 of 25 stump-paragraph terms appear (record, register, temperature); read whether the document names the move
-- **REVIEW** `quotation_bev_tractors_2027.pdf`: 4 of 25 stump-paragraph terms appear (trailer, orders, weight, equipment); read whether the document names the move
+## 4 design-note vocabulary (REVIEW 1)
+- **REVIEW** `fleet_electrification_standard_FES-2.pdf`: 3 of 25 stump-paragraph terms appear (record, temperature, months); read whether the document names the move
 
 ## 9 dates after the setting (INFO 1)
 - **INFO** `-`: no --asof given, sweep skipped (pass the fiction's as-of date)
@@ -24,7 +22,7 @@ Stump terms swept: trailer, record, missed, fridge, orders, drifts, weight, stat
 - **INFO** `-`: container gate PASS (PASS: 0 FAIL, 0 WARN)
 
 ## 11 prompt gate (REVIEW 1)
-- **REVIEW** `prompt.txt`: shell quota: deliverable set 'docx+xlsx' at 21% of 14 prompts (cap 20%); reword at the role level, not the verb
+- **REVIEW** `prompt.txt`: shell quota: question form 'which' at 43% of 14 prompts (cap 30%); deliverable set 'docx+xlsx' at 21% of 14 prompts (cap 20%); reword at the role level, not the verb
 
 ## 12 client quality check (INFO 2)
 - **INFO** `-`: 13 usable files (10 or more required)
@@ -103,3 +101,18 @@ question-5 sentence fixes a WHAT and executes to the golden's estimand (FES-2 3.
 consumption figures from the energy estimate, while 2.3 takes the usable battery from the manufacturer, as the golden
 does). The reader's guess that the Jönköping notes may go unused is a solver's first impression, not a finding: they
 carry the pilot's declarations, trailers and drops. Every REVIEW line harmless (design note, Literal reader).
+
+## Solver's-eye read
+
+2026-11-10, one isolated reader (Sonnet, medium) on fresh copies of prompt.txt and target/ (target.zip 494b463c).
+
+1. No sentence or file says how any part of the analysis is done; the quotation is a price and specification sheet. FES-2 fixes definitions, windows and populations (see 5), none of them a method.
+2. No file ranks or scores the shortlisted duties: fleet_plan_2027.xlsx lists the fourteen with shipper, delivery and charging, no energy, flag or count.
+3. No helper file: the shipper register and the route register's Stops sheet are reference lookups the organisation keeps.
+4. Nothing reads as the answer; 540 kWh (quotation) and 520 kWh (fleet register) read as specification inputs.
+5. FES-2 2.2 (energy depot out to depot in), 2.3 (the loss from the company's own tractors), 4.1 (-5 C), 4.2 (mean net payload over the twelve months to the last full month), 4.3 (85 per cent, one tractor a duty): each fixes a WHAT; read literally each gives the golden's estimand (main thread: the golden executes every one as written).
+6. No one thing: every requested figure needs an estimate from the operating data; the payload term, the loss and the energies are analysis; the order follows the filed 4.3 rule once the energies and limit exist.
+7. A careful but hurried analyst would clean and join, compute planning loads, fit a linear energy model, apply 85 per cent: right on the broad pass and fail pattern, wrong or rough on the loss and the payload coefficient; the reader's estimate "roughly a third to 40 per cent of the graded detail", counting six pieces including the planning loads (not graded) and the order's direction. Main thread: result by result it agrees with effort.py (verdicts Partly, payload, loss and order missed); the gap is the denominator.
+8. No generation tells seen (ids, plates, stamps, remarks, mixed weight formats, document prose).
+
+Sweep REVIEW lines, ruled by the main thread: sweeps 3 and 4 on FES-2 and the quotation are clause numbers (4.2), the quoted 540 kWh input and ordinary words of an order and a specification (orders, terminal, weight, combination, record, temperature, months), naming no step; the reader found neither document names a method. Sweep 11's shell quota is a WARN for the author's rewrite.

@@ -5,30 +5,30 @@
  "objective": "forecasting",
  "stage": 5,
  "stage_name": "ready",
- "updated": "2026-11-09",
- "stump": "The careful pass both architecture 7 runs made (calibrated payloads, curved cold, loss net of cold, squared speed at the year's ratio, energy per km and per departing tonne) orders 5, V03 and V11 near 500 kWh on a payload term of 2.9; trailer left out 9, loads to the last drop 5, no fridge term 9, every reefer drawing 7, the year's ratio 4, the routing tool's speed 0",
- "architecture": 8,
+ "updated": "2026-11-10",
+ "stump": "The careful pass (the union of the four recorded runs' methods) files a payload term of 1.5 on the terminal's calibration line, a straight-line loss of 3.1 (limit 445) and the year's speed ratio, and orders 5 (V02, V14, V18 out); at the design-day speed it orders 10 (V07, V21 in); each estimate put right alone orders 2, 3 or 10; only all three land the eight",
+ "architecture": 9,
  "loops": 0,
  "precut": {
   "exit": 0,
-  "date": "2026-11-09",
+  "date": "2026-11-10",
   "checks": "84 of 84"
  },
  "leak": {
-  "leak_py": "REVIEW, no LEAK (2026-11-09, 19b6bec945fc8f80, as-of 2026-11-06): FES-2 clause numbers, the quoted 540 kWh, the quotation's spec lines; each answered in the note",
-  "reader": "2026-11-09 isolated Sonnet reader on 19b6bec945fc8f80: no leak, no ranking or helper file, no one thing; the quotation's electric PTO line read as an ordinary spec line"
+  "leak_py": "REVIEW, no LEAK (2026-11-10, target.zip 494b463c, as-of 2026-11-06): FES-2 clause 4.2, the quoted 540 kWh, ordinary order and specification words in the two PDFs; answered in the report",
+  "reader": "2026-11-10 isolated Sonnet reader on 494b463c: no leak, no ranking or helper file, no one thing, no generation tells; careful estimate 'a third to 40 per cent' on six pieces incl. ungraded planning loads, result by result in line with effort.py"
  },
  "duplicate_check": {
-  "check": "WARN 2026-11-09 (repeat.gate_g, overuse.gate_g, overuse.objective); own-lineage driver similarity 0.42 differentiated (same world on the client's instruction)",
-  "heart": "WARN 2026-11-09",
-  "surface": "exit 0 2026-11-09"
+  "check": "WARN 2026-11-10 (repeat.gate_g, repeat.question_form), answered in the note",
+  "heart": "WARN 2026-11-10",
+  "surface": "exit 0 2026-11-10"
  },
  "judge": {
-  "verdict": "DETERMINISTIC (2026-11-09, isolated thread on 19b6bec945fc8f80)",
-  "disposition": "APPROVE; minor: the combination-tare averaging convention unnamed (fixed: SF34 asserted, about 24 kg); the judge's one-fact estimate 2 of 8 (drops) recorded beside effort.py's 1 of 8",
-  "gate_g": "method_or_model_selection (secondary binding_constraint, decomposition_attribution), analytical_non_defect, surface_read_dependency no, sole_data_defect no",
-  "gate_h": "domain pass, layers pass, 8 results across 6+ areas, one_thing none",
-  "report": "task4/determinism_check_report_pass2.md"
+  "verdict": "DETERMINISTIC (2026-11-10, re-judge after FIX_NOW, isolated thread on 494b463c)",
+  "disposition": "APPROVE (both passes); pass 1 flagged the tare and drops as earned by reflex and its thread put a careful pass at 50 to 62 per cent: the component left the graded chain; the re-judge thread put the careful pass at about 1 of 6 (the -5 C ratio): that component left the graded chain too, no figure moved",
+  "gate_g": "method_or_model_selection / statistical_rigor (mixed), analytical_non_defect, surface_read_dependency no, sole_data_defect no",
+  "gate_h": "domain pass, layers pass, results across 4+ areas, one_thing none",
+  "report": "task4/determinism_check_report.md (re-judge); task4/determinism_check_report_pass3.md (pass 1)"
  },
  "returned": [
   {
@@ -51,9 +51,16 @@
    "repair": "design",
    "portal": "architecture 7 platform runs (author's account): both runs earned the payload term, the loss, the cold curve and 12 of 14 energies, fitted squared routing-tool speed at the year's ratio and ordered 5, V14 out at 444.4 and 443.0 kWh against 442 (golden 435.4); one duty, one judgment, a 1 to 3 kWh margin inside the 10 kWh band, run 2 naming the golden as a defensible alternative",
    "moves": "re-rooted in the same world as architecture 8 (level 5): three SME judgments added beside the winter speed, each with its own graded component and two duties of its own (the combination's tare on every leg from the trailer register: V02, V14; a multi-drop load taken off at its stops: V03, V11; ePTO fridge units drawing 4.4 kW from the tractor by the hour, diesel and axle-generator units not: V24, V30, V33); the order moves from 6 to 7; no duty within 13 kWh of the limit; the payload term's band 2.0 to 2.4 over every rival; new file tms_consignments_varnamo_2025-11_2026-10.csv, trailer registrations on the TMS and weighbridge, a Stops sheet, the trailer register's equipment codes, the quotation's unladen weight and electric PTO, FES-2 2.1's drops"
+  },
+  {
+   "date": "2026-11-10",
+   "source": "triage",
+   "repair": "design",
+   "portal": "architecture 8 platform runs (author's account): both landed the golden exactly (order 7; payload 2.24 and 2.23, loss 3.78 and 3.79, every energy within about 3 kWh); the hourly ePTO term made both runs time the design day (the winter speed), and every added step was one join to a register already read",
+   "moves": "re-rooted in the same world as architecture 9: the ePTO units, their hourly draw and the quotation's Electric PTO line removed; the pilot's regional duties carry part loads (75 to 89 per cent of the terminal's), so the terminal's calibration line does not carry and each duty's loads come from its own declarations with the error read on the weighbridge (1.9; the line 1.5); the batteries' early-life loss (4.6, a straight line 3.1); the winter speed kept; order 8; shell redrawn (which | each | docx+xlsx); careful pass (the recorded runs' union) orders 5, at the design-day speed 10, with any one estimate put right 2, 3 or 10"
   }
  ],
- "resume": "READY: the author rewrites prompt.txt in their own voice (voice-check.py --rewrite, leak.py), uploads it with target.zip as the next version, pastes the four blocks of submission.md, and /triage-runs once both platform runs are in",
+ "resume": "READY: the author rewrites prompt.txt in their own voice (voice-check.py --rewrite, leak.py), uploads it with target.zip as the next version, pastes the four blocks of submission.md, and /triage-runs once both platform runs are in. Residual risk recorded in the note: a run that both times the design day and carries the error model lands the order with only the loss wrong.",
  "approved": null,
  "delivered": null,
  "portal": null,
@@ -245,7 +252,7 @@
  },
  "subdomain": "regression-classification-model-diagnostics",
  "client_domain": "general-statistics-data-science",
- "call": "Order 7 battery-electric tractors for Värnamo duties V03, V05, V09, V11, V16, V18 and V33; V02, V07, V14, V21, V24, V27 and V30 stay on diesel",
+ "call": "Order 8 battery-electric tractors, for V02, V03, V05, V09, V11, V14, V16 and V18; V07, V21, V24, V27, V30 and V33 stay on diesel",
  "runs": {
   "run1": null,
   "run2": null,
@@ -300,13 +307,18 @@
  },
  "golden_zip_sha256_16": "8c1248ae1454b16b",
  "doctrine": "throughout",
- "chain": "R1 payload term 2.2 kWh/t/100 km (calibration, drops, tare), R2 first-year loss 3.8 per cent, R3 the ePTO fridge duties V24 and V30 (4.4 kW), R4 the -5 C speed ratio 0.77, R5 the combinations (V02 22.7 t, V14 22.5 t) and load shares (V03 0.60, V11 0.57), R6 fourteen design-day energies, R7 verdicts against 442 kWh, R8 the order of 7",
- "paper_pair": 39.3,
+ "chain": "R1 payload term 1.9 kWh/t/100 loaded km (1.7 to 2.4; each pilot duty's own loads, the terminal's declaration error carried); R2 first-year loss 4.6 per cent (4.2 to 5.6; curved, net of the cold), limit 438 kWh; R3 fourteen design-day energies (at the -5 C ratio 0.76, with the tare and drops); R4 the verdicts; R5 order 8",
+ "paper_pair": 20.8,
  "effort": {
-  "quick": 20.8,
-  "careful": 39.3,
-  "thorough": 100.0,
-  "largest_hint": "the duties drive slower than the routing tool plans on a -5 C day than over the year (1 of 8)",
-  "distinct_wrong": "10 over 15 shortcuts"
+  "quick": 0,
+  "careful": 0.5,
+  "thorough": 5,
+  "largest_hint": "rescues 1 of 5 (the duties' own loads; the curved loss); the winter speed none",
+  "careful_variant_design_day_speed": 34.5,
+  "careful_with_one_correction": {
+   "own-duty loads": 19.0,
+   "curved loss": 19.0,
+   "design-day speed": 34.5
+  }
  }
 }

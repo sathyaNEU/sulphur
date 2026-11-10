@@ -1,8 +1,8 @@
 """An independent recomputation of the golden from the shipped files, sharing no code with analysis.py: its own
-parsers, its own de-duplication, a per-shipper errors-in-variables correction by moments (the declared weight's
-error variance read from the weighbridge for each shipper and each period its notes keep one practice, removed from
-the pilot's within-shipper spread), normal equations solved directly, the batteries' first-year loss fitted tractor
-by tractor, and the FES-2 assessment. Exit 1 unless it gives the golden's duties and every energy within 10 kWh of
+parsers, its own de-duplication, a per-duty errors-in-variables correction by moments (the declared weight's relative
+error variance read from the weighbridge for each shipper and each period its notes keep one practice, scaled to the
+duty's own declarations and removed from the duty's own spread), normal equations solved directly, the batteries'
+first-year loss fitted tractor by tractor on a log-of-age and straight-line form, and the FES-2 assessment. Exit 1 unless it gives the golden's duties and every energy within 10 kWh of
 the golden's.
 
     python3 verify.py [target]
@@ -108,14 +108,11 @@ def main(target):
         if r["declared_kg"]:
             net = float(r["gross_kg"]) - float(r["tare_kg"])
             by_ship.setdefault(per(r["shipper"], r["weighed_at"][:7]), []).append((float(r["declared_kg"]), net))
-    # each shipper's declaration error: classical (variance of declared less weighed), standard (no spread) or nil
+    # each shipper's declaration error at each period: the variance of declared less weighed, as a share of the load
     err = {}
     for s, v in by_ship.items():
         D, W = np.array(v).T
-        if D.std() < 1.0:
-            err[s] = ("std", W.mean())
-        else:
-            err[s] = ("classical", np.var(D - W, ddof=1), D.mean(), W.mean())
+        err[s] = float(np.var((D - W) / W, ddof=1))
     # pilot days
     tms = {}
     with open(j("tms_consignments_jonkoping_2025-2026.csv"), encoding="utf-8") as f:
@@ -157,8 +154,7 @@ def main(target):
                      float(r["energy_used_kwh"]), float(r["ambient_mean_c"]) if r["ambient_mean_c"] else None,
                      station[k[1]], k[0], k[1], float(r["soc_start_pct"]) - float(r["soc_end_pct"]),
                      float(r["distance_km"]) / float(r["driving_time_h"]),
-                     (tractor[k[0]] + ttare) / 1000.0, ride(c["duty"], c["drops"]),
-                     span if "ePTO" in equip else 0.0, span - float(r["driving_time_h"]), len(c["drops"])))
+                     (tractor[k[0]] + ttare) / 1000.0, ride(c["duty"], c["drops"])))
     off = np.mean([x[5] - x[6] for x in rows if x[5] is not None])
     duty = np.array([x[0] for x in rows])
     ship = np.empty(len(rows), dtype=object)
@@ -169,30 +165,21 @@ def main(target):
     T = np.array([x[5] if x[5] is not None else x[6] + off for x in rows])
     lk = np.array([routes[d][1][1] for d in duty], float)
     cl = np.array([routes[d][2] for d in duty], float)
-    # the payload by moments: within each shipper, the pilot's declared spread less the error variance
+    # the payload by moments: within each pilot duty and period, the duty's declared spread less the error variance
     pay = np.zeros(len(rows))
-    for s in set(ship):
-        m = np.array([x == s for x in ship])
-        e = err[s]
-        if e[0] == "std":
-            pay[m] = e[1]
-        else:
-            vd = np.var(dec[m], ddof=1)
-            lam = max(0.0, vd - e[1]) / vd if vd > 0 else 1.0
-            pay[m] = dec[m].mean() + lam * (dec[m] - dec[m].mean())
+    for key in set(zip(duty, ship)):
+        m = np.array([(a, b) == key for a, b in zip(duty, ship)])
+        er = err[key[1]]
+        vd = np.var(dec[m], ddof=1)
+        ev = er * np.mean(dec[m] ** 2) / (1 + er)
+        lam = max(0.0, vd - ev) / vd if vd > 0 else 1.0
+        pay[m] = dec[m].mean() + lam * (dec[m] - dec[m].mean())
     pay /= 1000.0
     vday = np.array([x[10] for x in rows])
     combo = np.array([x[11] for x in rows])
     rideshare = np.array([x[12] for x in rows])
-    fridge_h = np.array([x[13] for x in rows])
     X = np.column_stack([km, km * cl, km * np.maximum(0, 16 - T), km * np.maximum(0, -T),
-                         km * (vday ** 2 - 65.0 ** 2) / 1000.0, km * (combo - 19.0), pay * lk * rideshare, fridge_h])
-    # time at the collection and the drops, by the number of drops: the mean of each group
-    stay = {}
-    for x in rows:
-        stay.setdefault(x[15], []).append(x[14])
-    stay = {n: float(np.mean(v)) for n, v in stay.items()}
-    per_drop = (stay[max(stay)] - stay[1]) / (max(stay) - 1)
+                         km * (vday ** 2 - 65.0 ** 2) / 1000.0, km * (combo - 19.0), pay * lk * rideshare])
     # the speed a duty keeps on a -5 C day: its routing-tool speed times the pilot's actual-to-planned ratio on the
     # days within 3 C of -5
     ratio = vday / np.array([routes[d][3] for d in duty])
@@ -206,9 +193,9 @@ def main(target):
     loss = []
     for g in sorted(set(regs)):
         m = regs == g
-        A = np.column_stack([np.ones(m.sum()), age[m], np.maximum(0, 20 - T[m])])
+        A = np.column_stack([np.ones(m.sum()), np.log1p(age[m] / 0.1), age[m], np.maximum(0, 20 - T[m])])
         b = np.linalg.solve(A.T @ A, A.T @ cap[m])
-        loss.append(-b[1] / b[0])
+        loss.append(-(b[1] * np.log1p(10.0) + b[2]) / b[0])
     loss = float(np.mean(loss))
     limit = 0.85 * 540 * (1 - loss)
     qt = subprocess.run(["pdftotext", "-layout", j("quotation_bev_tractors_2027.pdf"), "-"], capture_output=True, text=True).stdout
@@ -221,19 +208,17 @@ def main(target):
         v5 = vplan * rr
         notes = list(vnotes[c].values())
         rs = float(np.mean([ride(c, x["drops"]) for x in notes]))
-        epto = np.mean(["ePTO" in trl[x["t"]][1] for x in notes])
-        hours = tot / v5 + stay[1] + per_drop * (len(stops[c]) - 1)
         cb = t27 + np.mean(vtrl[c]) / 1000.0
         e = beta @ np.array([tot, tot * climb, tot * 21.0, tot * 5.0, tot * (v5 ** 2 - 65.0 ** 2) / 1000.0,
-                             tot * (cb - 19.0), np.mean(loads[c]) / 1000 * legs[1] * rs, epto * hours])
+                             tot * (cb - 19.0), np.mean(loads[c]) / 1000 * legs[1] * rs])
         res[c] = (float(e), e <= limit)
     go = sorted(c for c, v in res.items() if v[1])
     fig = json.load(open(os.path.join(HERE, "figures.json")))
     okset = go == fig["call_set"]
     far = {c: (round(v[0]), fig["energy"][c]) for c, v in res.items() if abs(v[0] - fig["energy"][c]) > 10}
-    okloss = abs(100 * loss - fig["loss_pct"]) <= 0.2
-    print("verify: %d pilot days, payload %.2f kWh per t per 100 km, fridge %.2f kW, loss %.2f per cent, limit %.1f, "
-          "%d tractors %s; set %s, energies %s, loss %s" % (len(rows), beta[-2] * 100, beta[-1], 100 * loss, limit,
+    okloss = fig["conventions"]["loss_band"][0] <= 100 * loss <= fig["conventions"]["loss_band"][1]
+    print("verify: %d pilot days, payload %.2f kWh per t per 100 km, loss %.2f per cent, limit %.1f, "
+          "%d tractors %s; set %s, energies %s, loss %s" % (len(rows), beta[-1] * 100, 100 * loss, limit,
                                                            len(go), go,
                                              "agree" if okset else "DIFFER", "within 10 kWh" if not far else
                                              "DIFFER " + str(far), "agrees" if okloss else "DIFFERS"))
