@@ -569,3 +569,17 @@ the name of any attached file; who is asking; how many swaps are open or still t
 - 2026-11-10, average realised variance since 1990 as a sound estimator of the expectation: it draws on years before the record, which D.5(a) and D.7(c) leave out; moved to the ruled-out routes, which lets a volatility forecast squared (3,015,000) sit 4 per cent above the band.
 - 2026-11-10, the careful pass granted the joint replay of the whole plan: with it the rebuild and the expectation together would have rescued the plan and the recommendation (6 of 11). It is priced instead on swaps not yet sold drawn one at a time from their ladder's record, the same reflex as its range of an average, while the open swaps' own joint replay stays granted.
 - 2026-11-10, the bands on each average's range drawn from blocks and lags alone: counting only the swaps that do not overlap (the full-sample spread over the number of sales divided by the swap's months) is a common correction and landed outside them (14,000 to 616,000 for the 12-month ladder); it is taken into the rival set, and a standard error with fewer lags than the months neighbouring swaps share (123,000 to 507,000) is named as a route that stays too narrow.
+- 2026-11-10, architecture 8 at stage 4 (cut 4a76ff2f): the leak reader found no one thing and the judge returned
+  DETERMINISTIC with FIX_NOW on two prompt-scope pins (the unit of the 12-month ladder's peak collateral, and which
+  ladder's size the collateral CSV uses), Gates G and H passing. The architecture is spent all the same, on Gate F: the
+  judge's own first pass, a medium-effort thread working before it opened the blocks, rebuilt the missing 3-month
+  strikes from both neighbouring indices, took each average's range from blocks of consecutive sales, read the open
+  swaps' expectation from realised against implied variance on the whole record, and counted the standing ladder's
+  two coming sales. Eleven of its fourteen figures sat inside the stated bands; it lost only the 6-month size and the
+  12-month peak, by reading the dealers' curve linear in volatility (200 a point and USD 0.06m outside), and did not
+  reach the plan's joint range. Every move the careful column priced as lost is the field's textbook on clean public
+  series, and a reflex that reaches the golden spends the stump: re-priced on that pass the pair estimate is about 75
+  to 80, not 34.5, and nothing short of a constructed pattern would change it. The two pins, the statements' wrapped
+  date cells and the step that quotes figures from the index's earlier public history (not recomputable from the
+  pack) are left unrepaired, since this cut is not uploaded. The next draw moves to another world, where the
+  difficulty is selection and composition across many real records, not a method choice on a handful of series.

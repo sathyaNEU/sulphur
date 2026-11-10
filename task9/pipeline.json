@@ -4,18 +4,32 @@
  "domain": "quantitative-finance",
  "subdomain": "volatility-derivatives-pricing (client task types: derivative pricing, market data and curve validation, counterparty exposure; a variance-swap ladder's room inside settlement and collateral limits, how firmly the record pins each ladder's average, and the sleeve's 2027 plan with its range)",
  "objective": "forecasting",
- "stage": 3,
- "stage_name": "build (complete; stage 4 not run)",
+ "stage": 1,
+ "stage_name": "draw",
  "updated": "2026-11-10",
  "call": "set the new 3-month ladder at USD 114,400 a point (collateral limit, 20 November 2008), not the 200,000 quoted for nor the 124,500 a 30-day stand-in for the missing strikes supports; carry USD 5,728,000 in the 2027 plan, four times in five between -4,203,000 and 12,204,000",
  "stump": "results chain of eleven on real market records: R1 the 3-month ladder's average settlement per sale on the record since 2007 with its early strikes rebuilt, R2 its worst calendar year, R3 the 12-month ladder's peak collateral, R4 the largest 3-month size inside both limits with what binds, R5 the largest 6-month size, R6 and R7 the 80 per cent range of each ladder's average, R8 the open swaps' expected 2027 settlement, R9 its range, R10 the 2027 plan by ladder over all 21 settlements with its joint range, R11 the recommendation",
  "architecture": 8,
  "loops": 0,
  "precut": "exit 0 (82 checks, 0 FAIL, 0 WARN) on 2026-11-10",
- "leak": "leak.py --asof 2026-11-10: REVIEW, no LEAK (four REVIEW kinds answered in the design note's Leak review line); the reader is stage 4",
+ "leak": {
+  "leak_py": "REVIEW (no LEAK), 2026-11-10, --asof 2026-11-10",
+  "reader": "2026-11-10 on cut 4a76ff2f: no ranking or answer file, no one thing; D.5(b) keeps the early sale dates and leaves the strike open (intended); realism: the statements' date cells wrap, not repaired on a cut that is not uploaded",
+  "report": "task9/leak_check_report.md"
+ },
  "duplicate_check": "guard.py heart and surface PASS with WARN (repeat.gate_g against task10, repeat.deliverables against task14)",
- "judge": null,
- "paper_pair": 34.5,
+ "judge": {
+  "verdict": "DETERMINISTIC",
+  "disposition": "FIX_NOW (two prompt-scope pins; not applied, the architecture is spent on Gate F)",
+  "date": "2026-11-10",
+  "cut": "4a76ff2f7a1a06df79268d72bfa793365bc9839bab42b327fd7ccf84ff29108c",
+  "order_kept": true,
+  "gate_g": "mechanism: method_or_model_selection (with forecasting and statistical_rigor), stumping_family: analytical_non_defect, surface_read_dependency: no, sole_data_defect: no",
+  "gate_h": "domain: pass, layers: pass, results: 9 graded across 6 areas, one_thing: none, effort: quick 2, careful 5, thorough 9 of 9, one_fact: rescues about 3 to 4 of 9",
+  "first_pass": "before the blocks were opened the thread landed 11 of 14 figures inside their bands: the two-sided strike rebuild, the block and lag ranges, the expectation from realised against implied, the two coming sales; it lost the 6-month size and the 12-month peak by a hair (dealers' curve read linear in volatility) and did not reach the plan's joint range",
+  "report": "task9/determinism_check_report.md"
+ },
+ "paper_pair": null,
  "runs": {
   "run1": null,
   "run2": null,
@@ -45,7 +59,7 @@
   ]
  },
  "returned": [],
- "resume": "stage 4: spawn the leak reader and the determinism judge on cut 4a76ff2f7a1a06df79268d72bfa793365bc9839bab42b327fd7ccf84ff29108c",
+ "resume": "stage 1: re-root to architecture 9 in another world (architecture 8 is spent on Gate F, see the last line of Tried and rejected). Evidence to design on: a medium-effort first pass lands textbook method choices on clean series and loses pooled readings where composition differs, effects outside the obvious window and selected units. Lead to verify at the draw, not a mandate: Cboe's option-strategy benchmark indices with the official base and launch dates in their methodology documents; on a first probe of the public histories (market-adjusted, dividends approximated) the back-tested years run 3 to 8 points a year above the live years for six of the eight indices launched in 2015 and 2016, against 1 to 2 points for indices already live over the same two periods, and the one index that buys protection moves the other way.",
  "approved": null,
  "submitted": null,
  "portal": {
@@ -524,7 +538,8 @@
    "the rebuild and dependence": 5,
    "the expectation and dependence": 2,
    "all three": 8
-  }
+  },
+  "note": "architecture 8's 34.5 is withdrawn: re-priced on the judge's first pass the careful column earns the rebuild, the ranges and the expectation, about 75 to 80"
  },
  "lineage_v7_results_chain": {
   "call": "buy neither note: Kestrel Lane 3.7 per cent at 15.0 per cent subordination, Ostvale 2.8 at 16.5 (the repair's cut), against MP-RN-2's 1 per cent test",
