@@ -1,345 +1,181 @@
-# task2 architecture 5: Larkmoor Speech, the 2027 heavy-correction ceiling for Shannonside Hospital Group
-
-General Statistics & Data Science, robustness analysis (distribution shift), Descriptive & Distribution Analysis.
-Re-root of the slot after the platform landed architecture 4 (one run filed Tier B with inverse-distance blocks,
-`runs/arch4_platform_feedback.md`): one architecture per world, so a new world, dataset and shell.
+# task2 architecture 6: the heavy-correction ceiling Larkmoor Speech commits to in Shannonside Hospital Group's 2027 quality schedule
 
 ## Draw
 
-- **Card:** `.claude/skills/fingerprint/cards/task2.json` v5, registered 2026-11-08T22:01:37Z at WARN; lineage carries
-  v1 to v4, the v4 shell (what, for, pptx and xlsx) among the dead shells. Answered: `overuse.strategy`
-  (composition_mix in 3 of the last 12): task3 v5 transfers a rare-event level between two basins by each event's own
-  threshold and task1 an exit curve by provider tenure; neither splits a steady aggregate into a cancelling
-  improvement and drift, and the label is the honest one because the ceiling is a mixture carried to a forward mix.
-  `repeat.gate_g` (decomposition_attribution, task7 v6): task7 splits a lottery gap into the works and a contaminating
-  visit; here the split is of a steady share into release steps and a composition drift, with no comparison group.
-- **Pairing:** a medical speech-recognition vendor commits a ceiling in a hospital group's 2027 quality schedule: the
-  share of a quarter's audited dictations whose word error rate exceeds 15 per cent (heavy correction) may not pass
-  the ceiling in any quarter, and the schedule offers ceilings of 10, 12, 14 and 16 per cent at falling fees.
-- **Shape:** 14, cuts of a distribution: each 2027 quarter's share above 15 per cent and its 90th-percentile word
-  error rate, each hospital's share in the fourth quarter, and the lowest offered ceiling no quarter breaches.
-- **Strategy:** composition_mix, Part A "Heterogeneity that pooling hides", WORKS IN FORM: the groups differ and the
-  decision weights them to a population whose mix the record never held, with the group property rebuilt from a
-  history (a clinician's start set against the hospital's compulsory date) and never read off a column; GSDS 02 (a
-  held-out record that does not look like deployment) in the live form, the deployment population rebuilt from the
-  record.
-- **Data-native sentence:** the audited share has held between about 6 and 8 per cent for four years because each
-  of the four model releases cut every clinician's error by 3 to 6 per cent while the dictation mix drifted toward
-  clinicians who began only once their hospital made dictation compulsory, whose heavy-correction share is about
-  eight times theirs; the six hospitals that went compulsory were small, with seven in ten of their clinicians
-  already dictating by choice, and the two that go compulsory in 2027 (Shannonside University on 1 February,
-  Ballykeel University on 1 October) are the teaching hospitals, larger than the other six together, where about
-  one in eight did, under a model frozen at release 6.0 for the platform migration.
-- **The lessons it is drawn against** (`sulfur-record.md`): a mechanism the rows visibly carry is modelled on sight,
-  so the structure here is one the rows in view hide (two effects cancelling inside the observed window) with the
-  deciding evidence in a second file at another grain (the contract's compulsory dates against each clinician's first
-  dictation); noticing was the whole stump in task7 arch 4 and task8 arch 17, so after the notice the 2027 mix still
-  has to be projected through turnover and two go-live ramps with the model frozen, and the cheap routes all err the
-  same way (low), so no intermediate shortcut can cross into the golden's ceiling by chance (architecture 4's death).
-- **People:** drawn with `guard.py names --geo ie --seed 5205`: Jody Cahir, Yasmine Ganley, Colum Wallace, Pearce
-  Stapleton, Alexander Sigerson, Kristopher McLoughlin.
-
-## Default path
-
-1. Build each 2023 to 2026 quarter's share of audited dictations above 15 per cent word error rate from
-   `dictation_audits_2023_2026.csv`, as the draft Schedule 4 defines it: the adjudicated score where a dictation was
-   re-audited, the rate recomputed from substitutions, deletions and insertions over the reference words, the three
-   release strings read as one release; the shares tie to `quality_reports_2023_2026.xlsx`.
-2. Read the record: the share sits between 6.3 and 7.9 per cent in every quarter, 6.3 to 7.7 since the middle of 2024;
-   no quarter has passed 10.
-3. Carry it to 2027 the field's way for a shifted deployment population: post-stratify each hospital's 2026 share to
-   its 2027 share of dictations, which the rollout plan sets when Shannonside University and Ballykeel University go
-   compulsory; their 2026 shares are a few per cent, so the 2027 quarters fall to 7.2, 6.2, 6.1 and 5.3 per cent.
-
-Ends on: commit to the 10 per cent ceiling (every quarter at or under 10).
-
-Golden: commit to 14 per cent; the expected shares are 8.9, 11.1, 11.4 and 13.1 per cent, so 10 is passed from the
-second quarter and 12 in the fourth, and nine in ten fourth-quarter dictations stay under 16 per cent.
-
-## Stump sentence
-
-The default path reweights the audited share's steady 7 per cent to 2027's hospital mix, sees it fall because the
-teaching hospitals' rows show a few per cent, and commits to the 10 per cent ceiling; the step that lands it there is
-reading those rows as the hospitals' 2027 clinicians, when today only the one in four who chose to dictate appear in
-them, and the clinicians who begin once a hospital is compulsory carry a heavy-correction share about eight times
-theirs under the frozen release, the steadiness of 2023 to 2026 being each release cancelling the drift toward such
-clinicians; with no release in 2027 and both teaching hospitals compulsory, the fourth quarter reaches about 13 per
-cent.
+Subdomain: Robustness analysis (distribution shift, out-of-distribution generalization, calibration)
+Analysis type: Descriptive & Distribution
+Answer shape: a distribution and where it is cut (each 2027 quarter's expected share of audited dictations above 15 per cent word error rate against the four offered ceilings, the fourth quarter's 90th percentile), with the 2023 to 2026 record bridged beside it
+Weight: hard-to-measure (the heavy-correction share of 1,549 clinicians who have never dictated and each university hospital's own effect on error, neither observed directly, both read through partial views: the volunteers, the smaller hospitals' whole staffs since their go-lives, and the clinicians who moved); redrawn at filing from modeling, which task10 v7 filed this morning; the last two live builds weigh allocation (task9 v8) and modeling (task10 v7)
+Data-native sentence: the university hospitals' 2027 dictations come from staffs that are mostly not dictating yet, whose levels the record shows only through who chose to dictate there (the few it worked best for), through the smaller hospitals' whole staffs since their go-lives, and through the 248 moves the register records under a new staff number, while every past go-live switched over department by department across four months.
+People: drawn with `guard.py names --geo ie --seed 5205` for this world: Jody Cahir, Yasmine Ganley, Colum Wallace, Pearce Stapleton, Alexander Sigerson, Kristopher McLoughlin.
 
 ## Deep reasoning
 
-- **Task type:** robustness analysis (distribution shift): a recognizer's tail error rate carried from the audited
-  population to a deployment population the record never held.
-- **Domain test:** the deciding quantity is a tail share of a mixture, each dictation's word error rate above 15 per
-  cent, estimated from each kind of clinician's dictation-level rates under the frozen release, weighted to each 2027
-  quarter's dictation mix; the field's estimator for a shifted population is post-stratification on the observed
-  covariates, which here moves the wrong way.
-- **Swap:** "the lowest handle-time ceiling a contact-centre vendor can commit to" with handle times for error rates:
-  the release steps, the compulsory start dates and the frozen release stop meaning anything, and a trend on a steady
-  aggregate is what is left.
-- **Layer 1:** re-audited dictations carrying a first and an adjudicated score (QA-07's adjudication), release strings
-  in three forms (two export formats and the adjudication rows), the error rate as a fraction before 2025 and in per
-  cent after, staff numbers reissued when clinicians move hospitals (the register's previous numbers), two months of
-  the volume export repeated by a re-run, unscorable audio; nothing placed to be caught, and none moves the ceiling
-  (asserted: first-pass scores and unlinked movers file every graded figure as the golden's).
-- **Layer 2:** composition_mix, heterogeneity weighted to a population whose mix the record never held: which kind of
-  clinician 2027's new dictators are, and so what each 2027 quarter's mix is, flips the ceiling.
-- **Decisive step:** separating the within-clinician release effect from the drift of the dictation mix toward
-  clinicians who began once their hospital was compulsory, then carrying the frozen release's mixture to the mix the
-  teaching hospitals' go-lives make.
-- **Not semantics:** every field, code, release string and definition read correctly still leaves the steady share and
-  its hospital reweighting at 7 and 5 to 7 per cent; the property that decides (a clinician's first dictation on or
-  after the hospital's compulsory date) is no field, and no definition says whom 2027's new dictators resemble.
-- **Not rule application:** no filed rule projects 2027 (the schedule defines the metric and the ceilings, the rollout
-  plan the dates and staff, the migration notice the frozen release); the enumerated family of projections spans 5.3 to
-  13.1 per cent in the fourth quarter (steady, reweighted, gap drift added, go-live step, average clinician, recent
-  starters, compulsory starters) and the standing family (the 6.0 audits alone or every audit carried by its release
-  step, turnover or none, the boundary a month either way, first-pass scores, movers linked or not, volumes from three
-  or six months) spans 12.54 to 13.11, every member on 14; the ruling-out is the data's own (the release steps within
-  clinicians, the go-lives' starters).
-- **Analyst test:** a strong analyst who cleans the audits and reads the schedule sees the share steady at about 7 per
-  cent, reweights it to 2027's hospital mix, which lowers it, and commits to 10 per cent; the fourth quarter reaches
-  about 13.
-- **Estimand:** the share of each 2027 quarter's audited dictations with a word error rate above 15 per cent, every
-  dictation made under the service in the quarter including those of clinicians not yet dictating on the as-of date,
-  and the lowest of the offered ceilings no quarter passes (draft Schedule 4, 4.2 and 4.3).
-- **No decoy:** nothing is planted: the quarterly reports state the record's shares truthfully, the release notes'
-  benchmark is labelled as Larkmoor's own set, no memo or briefing carries a 2027 figure, and the hospital reweighting
-  is the analyst's own construction.
-- **No certified replay:** no published figure is reproduced to recover a method; the quarterly reports agree with
-  every route on the record and decide nothing about 2027.
-- **Chain:** (1) each audited dictation's error read as its clinician's own level times the release in force, the
-  release steps measured within clinicians (4.0 about 3 per cent, 5.0 about 6, 5.2 and 6.0 about 3 each); (2) the steady
-  aggregate under falling clinician levels means the mix drifted, and the 2023 to 2024 release gap shows it (about 6.6
-  to 7.3 per cent with no release); (3) the drift is toward clinicians whose first dictation came on or after their
-  hospital's compulsory date, read from the volume file's first month against Schedule 2's dates: under release 6.0
-  19.2 per cent of their dictations need heavy correction against 2.4 for those who chose, at every one of the six
-  go-lives alike; (4) each 2027 quarter's mix: clinicians leaving at the record's rate (about 9 per cent a year) and
-  replaced by compulsory starters, and the teaching hospitals' 2,070 clinicians in post, 503 dictating today, starting
-  at their compulsory dates with the go-live ramp the record shows (about 23, 53 and 82 per cent of a full month); (5)
-  each kind's dictation-level rates weighted to each quarter give the share and the percentile, and the ceiling.
-- **Judgment:** whom 2027's new dictators resemble, justified by the record: the compulsory starters at each of the six
-  go-lives sit at one level whatever the hospital and the year (typical error 9.8 to 10.4 per cent under 6.0), unlike
-  those who chose, and the steady aggregate is shown to be cancellation, not stability, by the release steps within
-  clinicians; and the percentile needs each clinician's dictations' scatter, not the spread of clinicians' averages.
-- **Hidden by:** the rows in view mimic stability: the audited share is steady because releases cancel the drift, the
-  teaching hospitals' rows hold only those who chose to dictate, and the kind of clinician is a relation (first
-  dictation month against the compulsory date) across two files at different grains.
-- **After the notice:** once a run sees that compulsory starters sit higher, it still owes (1) each 2027 quarter's mix,
-  built from the record's turnover, the go-live ramp and the teaching hospitals' clinicians not yet dictating, (2) the
-  release held at 6.0 rather than the record's run of releases carried on, and (3) the starters' level taken from the
-  compulsory starters rather than the recent starters, who mix both kinds; the recent starters' average files 10.3 in
-  the fourth quarter and commits to 12.
-- **One-fact test:** the likeliest hint, "clinicians who begin once dictation is compulsory are harder to recognise",
-  still leaves the 2027 mix to be built from the rollout plan, the turnover and the ramp, and the release to be held;
-  the recent-starters shortcut keeps the call at 12, and a mix built without the ramp passes 10 a quarter early.
-- **No replay:** the call re-derives no published figure and no stated number is wrong.
-- **Pinned:** every rival a careful analyst would run is run on the cut pack (`generator/checks.py`): the steady share,
-  the hospital reweighting, the release gap's drift, the go-live step at the small hospitals and the average
-  clinician land on 10, the recent starters on 12; the standing family lands on 14 with every graded figure the same.
-- **Run forecast:** a method shortcut at rung 1 (the hospital reweighting) or a self-confirming check (the steady record
-  back-tested on itself); a run that finds the release steps and looks for the drift at the hospitals' go-lives carries
-  their few-point step and stops at 10 (unfinished chain).
-- **Strategy label:** WORKS IN FORM, heterogeneity that pooling hides, in the live form: the decision weights the groups
-  to a population whose mix the record never held, the group property rebuilt from a history (first dictation against
-  the compulsory date), never a column.
-- **Lesson:** a steady metric can be two moves cancelling, and a deployment-shift correction on observed covariates can
-  move the wrong way when a covariate's current rows hold only the self-selected; no build on file teaches the
-  cancellation read off release steps within clinicians.
+Task type: robustness analysis (distribution shift): a recognizer's tail error rate carried from the audited population to a deployment population the record never held.
+Domain test: the results are the field's own objects for a shifted deployment: a tail share of a mixture of per-clinician error distributions, the transport of that mixture to a new population once selection into the audited sample and the setting's own effect are separated, the go-live exposure that weights it, and a bridge of the observed metric into model changes and population change.
+Swap: "the lowest handle-time ceiling a contact-centre vendor can commit to" with handle times for error rates: the release steps measured within clinicians, the acoustic effect of a hospital, the selection into voluntary uptake and the switch-over all stop meaning anything, and a trend on an aggregate is what is left.
+Where the weight sits: R4 and R6, the university hospitals' 2027 staffs: their levels are built from the smaller hospitals' whole staffs by grade and specialty, moved by each hospital's own effect (measured within the clinicians who moved), less what the volunteers already carry, then weighted by the switch-over; each piece is long, and each has its own tempting shortcut.
+Layer 1: re-audited dictations with a first and an adjudicated score (QA-07 4); unscorable audio; the export's error rate as a fraction to 2024 and a percentage from 2025; release strings in three forms; the volume export for March and April 2025 run twice and both kept; staff numbers reissued on 248 moves between the group's hospitals (the register's previous_staff_no); the audit export holding only what had been scored by 8 January 2027. None decides a result on its own; the moves are load-bearing for R3 once linked.
+Not one thing: the strongest single piece is each university hospital's own effect (R3); a run that nails it still has to build the staffs less their volunteers (R4) rather than borrow the smaller hospitals' compelled clinicians, weight the go-lives by the switch-over (R5), and bridge the record within clinicians (R2); with R3 alone and the compelled rate the fourth quarter passes 16.
+One-fact test: the most useful single sentence is "the hospitals' own effects on error show in the clinicians who moved between them"; it rescues R3 alone (1 of 9), because the starters' rate, the switch-over and the bridge each need their own work. The nearest rival sentence, "the university hospitals' low rate is who chose to dictate, not the place", points a run at the smaller hospitals' whole staffs but without each hospital's own effect, which files the fourth quarter at 11.4 and Ceiling B; it rescues none of R4 to R9, which need R3, R4 and R5 together (the carry-forward), and it moves only the direction of the call.
+Not semantics: every field, code and clause read correctly still leaves the record carried at 9.0 per cent, the university hospitals at their volunteers' 4.1 and 4.4 per cent, and the starters at whichever comparison group looks closest; no definition says who the starters resemble, how a hospital moves a clinician's error, or how a go-live ramps.
+Not rule application: no filed procedure projects 2027 (Schedule 4 defines the metric and the ceilings, Schedule 2 and the rollout plan the dates and staff, SN-2026-14 the frozen release, QA-07 the audit); the hospital effects, the starters' rate, the switch-over and the bridge are estimated from the record.
+Estimand: the share of each 2027 quarter's audited dictations with a word error rate above 15 per cent, every dictation made under the service in the quarter including those of clinicians not yet dictating on the as-of date (Schedule 4.2), and the lowest offered ceiling no quarter passes (Schedule 4.3); each university hospital's expected fourth-quarter share and Ballykeel's fourth-quarter dictations on the same basis; the fourth quarter's 90th percentile of dictations (the prompt); the change in the audited share from the second quarter of 2023 to the last of 2026, split into the releases and everything else (the prompt).
+No decoy: nothing is written to carry a wrong answer: the quarterly reports state the record truthfully, the release notes label LCB-2 as Larkmoor's own benchmark, no memo or thread carries a 2027 figure, a hospital effect or a starters' rate.
+No replay: no result re-derives a published figure; R1 ties to the quarterly reports as a check and decides nothing.
+Pinned: every rival a careful analyst would run is run on the cut pack (`generator/checks.py`): first-pass scores, quarters by audit date, the dictators' rate from every audit carried by its release step, population cells by grade alone, the population from every clinician dictating after a go-live, the population read straight off the smaller hospitals' audits by grade, no calendar adjustment, the ramp from the four go-lives since 2023 and volume from six months all land every graded figure inside its band; the hospital effects agree with a joint three-way fit within 0.3 points; the fits on release 6.0 or on 2025 and 2026 alone are ruled out by named data (4 and 11, then 14 and 35, clinicians seen at two hospitals against 36 and 64); unlinked staff numbers leave no clinician at two hospitals.
+Run forecast: R2 lost by a method shortcut (the change put to the releases, the LCB-2 cuts or a shift-share by hospital); R3 by stopping at the first story (the university hospitals' volunteers read as the place); R4 by a narrow look (the smaller hospitals' compelled clinicians taken as the closest group, as both architecture 5 runs did); R5 by a method shortcut (full volume, or each clinician's own first months, from the date); R6 to R9 fall with them, at different calls.
+Strategy label: Heterogeneity that pooling hides, carried to the population the decision serves, with selection into the observed sample and the setting's own effect separated (`references/sulfur-strategies.md`, Machine Learning Research); the clean-comparison lesson enters through the moves.
+Depth level: 4, reaching 5: four independent judgments (the hospital effects through the moves, the staff less its volunteers, the switch-over, the releases within clinicians), the call needing the first three at once; the shortcuts land on four different wrong calls (10 from the record, 12 without the hospital effects, 16 from full-volume go-lives, none from the compelled clinicians' rate), and the call holds across the rivals' sweep (the fourth quarter 12.9 to 13.0).
+Lesson: a deployment population reached by compulsion is neither the self-selected users on record nor the hard core who held out elsewhere, and the place it moves into has its own effect that only the clinicians who moved can show; carried with the go-live's exposure, three corrections are needed together, and none alone lands the call.
 
-## Survivor anatomy
+## Results chain
 
-- **Actor:** the deciding property (a clinician began dictating on or after the hospital's compulsory date) has no
-  column: the volume file has months and staff numbers, the register grade, specialty and post dates, Schedule 2 a date
-  per hospital.
-- **Link:** read through the relation between each clinician's first month in the volume file and the hospital's
-  compulsory date in Schedule 2, at another grain; no key or sentence ties them, and the field's reweighting never asks
-  when a clinician began.
-- **Reflex:** the field's method (post-stratifying the audited share to the deployment mix by hospital) sits at rung 1
-  and lowers the share, because the teaching hospitals' current rows are those who chose to dictate.
-- **Back-test:** the steady route validates: 2026 back-cast from 2025's level holds within a point, and no quarter on
-  record passes 8 per cent since the middle of 2024.
-- **Second use:** the same mixture prices the fourth quarter's 90th percentile.
-- **Shock:** 2027 departs from the record twice: no release, and the two largest hospitals go compulsory.
-- **Pins:** Schedule 4 pins the metric (the share of a quarter's audited dictations above 15 per cent), the ceilings
-  and the quarters; nothing pins the projection, which the data force.
+| ID | Result (checkable) | Area | Pinned by | Band | Hurried analyst | Depends on | Graded as |
+|---|---|---|---|---|---|---|---|
+| R1 | the group's audited share in the second quarter of 2023 (10.1 per cent) and the last of 2026 (7.8), from the cleaned audits tied to every quarterly report | assembly-reconciliation | QA-07 3 and 4 (the adjudicated score, unscorable out, the rate from the counts); quality_reports_2023_2026.xlsx | each end within 0.1 | method shortcut: the first-pass score kept where a dictation was re-scored, every quarter moving off the reports | - | Ask 7 |
+| R2 | the change split: the releases about -4.1 points, everything else about +1.9 | decomposition-attribution | the releases measured within each clinician's stay at one hospital; the prompt's window | releases -4.7 to -3.5, the rest +1.2 to +2.5 (the two orders) | method shortcut: the whole change put to the releases (-2.2), the release notes' LCB-2 cuts (-5.9), a shift-share by hospital (-1.7) or the jumps at each release month (-2.1) | R1 | Component 4 |
+| R3 | each university hospital's own effect on a clinician's word error: Shannonside University +5.0 per cent, Ballykeel +8.6, against the six smaller hospitals' average | investigation-loops | the register's previous_staff_no (248 moves; 36 and 64 clinicians audited at a university hospital and another) | 3.5 to 6.5 and 7.0 to 10.0 | stopped at the first story: the university hospitals' current dictators (4.1 and 4.4 per cent heavy correction) read as the best places to dictate, or no hospital effect at all | - | Component 1 |
+| R4 | the heavy-correction share of each university hospital's 2027 starters: 18.2 and 21.7 per cent | causal-reasoning | the register's staff in post on 31 December 2026, the rollout plan's count; Schedule 4.2's population | 17.0 to 19.5 and 20.5 to 23.0 | narrow look: the smaller hospitals' compelled clinicians (27.7 per cent) taken as the closest group, though uptake there ran 58 to 87 per cent and the university hospitals' starters are most of their staff | R3 | Component 2 |
+| R5 | Ballykeel University Hospital's fourth-quarter dictations: about 88,000 | missingness-measurement | the six past go-lives in dictation_volumes_2022_2026.csv; the register's staff in post | 85,000 to 91,000 | method shortcut: every starter at full volume from 1 October (161,000), or at their own first months' volume from the date (133,000) | independent: the six past go-lives' volumes and the register's staff in post | Ask 5 |
+| R6 | each university hospital's expected fourth-quarter share: Shannonside University 14.9 per cent, Ballykeel 12.9 | forecasting | SN-2026-14 (release 6.0 through 2027); Schedule 2's dates; the staff in post held as on 31 December 2026 | 14.3 to 15.5 and 12.3 to 13.5 | unfinished chain: a hospital effect left uncarried (12.5 and 10.0), or the starters at the compelled rate with every clinician starting on the date (22.1 and 19.8) | R3, R4, R5 | Ask 4 |
+| R7 | each 2027 quarter's lowest ceiling: 10, 12, 12 and 14 per cent | forecasting | Schedule 4.2 and 4.3 | exact | method shortcut: the 2026 share carried (10, 10, 10, 10) or the compelled rate (12, 14, 16, none) | R6 | Ask 3 |
+| R8 | the word error rate nine in ten fourth-quarter dictations stay under: about 16.1 per cent | modeling | the prompt's "dictations" | 15.8 to 16.3 | method shortcut: read off clinicians' typical levels (13.5), dropping each clinician's own scatter | R4, R5 | Ask 6 |
+| R9 | the ceiling: 14 per cent (Ceiling C), 10 passed from the second quarter and 12 in the fourth | synthesis | Schedule 4.3 (the lowest offered ceiling no quarter passes) | exact | method shortcut, a different wrong call by route: 10 from the record, 12 without the hospital effects, 16 from full-volume go-lives, none from the compelled rate | R7 | Recommendation |
 
-## Readability screen
+Carry-forward: R1, R3 and R5 stand on inputs of their own (the reports, the moves, the past go-lives); R2 needs only R1's cleaning; R4 falls with R3; R6 needs R3, R4 and R5 together, so a run that gets any one of them right still misses R6 to R9, and a run that misses one keeps the others; R8 falls with R4 and R5, R7 and R9 with R6.
 
-| Rung | 1 Filed sentence | 2 Schema | 3 Reflex | 4 Control bench | 5 Hygiene | 6 Linear | 7 Dedicated organ | 8 Framing | Verdict |
-|---|---|---|---|---|---|---|---|---|---|
-| 0 the steady audited share carried forward | Schedule 4's metric | the audit file | yes, the last level | no | no | yes | no | no | readable |
-| 1 each hospital's share at 2027's hospital mix | the rollout plan's staff | site codes | yes, post-stratification | no | no | no | no | no | readable |
-| 2 the go-live step at the small hospitals carried to the teaching hospitals | Schedule 2's dates | site codes | yes, an event study | no | no | no | no | no | readable |
-| 3 (decisive) 2027's new dictators at the compulsory starters' level | no | no, first month against a date in another file | no, no field method asks when a clinician began | no | no | no | no | no, the prompt names only the ceilings and the quarters | silent |
+## Hidden factor record
+
+| Factor | Real or constructed | Only in deciding units | Found by | Fix depth | Verdict |
+|---|---|---|---|---|---|
+| selective uptake: who chose to dictate is who it worked for | constructed (simulated adoption on each clinician's own trial) | no: every hospital's voluntary period, six followed by a go-live in the record at uptakes of 58 to 87 per cent, the university hospitals at 13 and 15 | modelling (the chose, compelled and hired shares against each hospital's uptake; the whole staff less the volunteers) | modelling | keep |
+| each hospital's own acoustic effect | constructed (simulated per hospital) | no: all eight hospitals, the six smaller from -5.4 to +5.5 per cent | modelling (within-clinician comparisons through 248 moves, 103 clinicians audited at two hospitals) | modelling | keep |
+| the department-by-department switch-over | constructed (simulated waves over four months) | no: all six past go-lives | a targeted query (volume per clinician in post by month from each compulsory date, the calendar out) | modelling (the curve measured and carried to two go-lives) | keep |
+| the release steps | constructed (each release a factor on every clinician) | no: every clinician on record | modelling (within each clinician's stay) | modelling | keep |
+
+## Effort test
+
+| Result | Quick pass | Careful but hurried | Thorough |
+|---|---|---|---|
+| R1 the audited share at the bridge's two ends, from the cleaned audits tied to the quarterly reports | Right | Right | Right |
+| R2 the 2023 to 2026 change split into the releases and the mix of dictations | Missed | Right | Right |
+| R3 each university hospital's own effect on a clinician's word error, against the six smaller hospitals | Missed | Missed | Right |
+| R4 the heavy-correction share of each university hospital's 2027 starters | Missed | Missed | Right |
+| R5 Ballykeel University Hospital's fourth-quarter dictations | Missed | Missed | Right |
+| R6 each university hospital's expected fourth-quarter share | Missed | Missed | Right |
+| R7 each 2027 quarter's lowest ceiling | Missed | Missed | Right |
+| R8 the word error rate nine in ten fourth-quarter dictations stay under | Missed | Missed | Right |
+| R9 the ceiling | Missed | Missed | Right |
+| Roughly | 1 of 9 | 2 of 9 | 9 of 9 |
+
+Measured by: .claude/skills/stumping/effort.py on generator/effort.json
+Largest single hint: "The hospitals' own effects on error show in the clinicians who moved between them."; rescues 1 of 9 results
+Pair estimate: 26.0, the careful but hurried pass calibrated to this world's last platform round (both runs typed clinicians on sight, split the compulsory starters by appointment and gave the university hospitals' starters the incumbents' rate, one starting every go-live at full volume and one at each clinician's own first months)
+
+## Data provenance
+
+Source: generated by `task2/generator/world.py` from a simulated process (seed 60607): each post's occupants, their grades, specialties and own recognisability, adoption by each clinician's trial, moves within the group under a new staff number, each hospital's acoustic effect, the switch-over at each go-live, four releases, monthly dictations and QA-07's random 2.5 per cent audit with adjudication.
+Behaves like the real thing: speaker-dependent recognition error that is lognormal within and between speakers, release gains that apply to every speaker, adoption that selects on how well the system works for the user, setting effects from room acoustics and workflow, and phased clinical go-lives; the audited share moves between 7.8 and 11.3 per cent over sixteen quarters with no quarter since the middle of 2024 above 10.
+Genuine patterns: (1) release steps (4.0 about 1.7 per cent, 5.0 about 6.1, 5.2 about 2.2, 6.0 about 2.7, within clinicians) (2) selective uptake that differs by hospital (58 to 87 per cent at the smaller hospitals, 13 and 15 at the university hospitals) (3) each hospital's own acoustic effect (4) grade and specialty differences in error and in dictation volume (5) a calendar pattern in dictation volume (August and December low) (6) the switch-over waves at every go-live (7) turnover of about nine per cent a year and moves between hospitals.
+Problems by process: the second scoring and adjudication (QA-07 4); unscorable audio; the audit export's unit change at the 2025 format change; three release string forms across two export formats and the adjudication rows; the volume export re-run for March and April 2025 with both runs kept; a new staff number at every move; audits scored after 8 January 2027 missing from the export.
+Breadth: 13 files (two CSVs of 76,166 and 81,519 rows, five workbooks, five PDFs, one Word document), eight hospitals, 4,408 posts, 72 months of volumes, 48 months of audits; three distractors (the service desk tickets, the headset inventory, the EHR integration uptime).
+
+## Template check
+
+Chain signature: assembly-reconciliation, decomposition-attribution, investigation-loops, causal-reasoning, missingness-measurement, forecasting, forecasting, modeling, synthesis
+Question form: how much (how low a ceiling)
+Guard at filing (remote corpus, 2026-11-10): WARN only, overuse.weight against task3 v7 (a rare-event level carried between basins, nothing of selection or place), overuse.domain and overuse.gate_g; three axes redrawn at filing because task9 v8 and task10 v7 filed after the draw now hold them: the weight (modeling to hard-to-measure, the honester label for the heaviest results), the context artifact (close_out_summary to monitoring_export, the QA-07 audit export the head of quality works from) and the forcing event (launch_or_rollout to purchase_order_or_contract, the schedule returned by 15 January 2027).
+Nearest build: task17 (General Statistics, Descriptive & Distribution, a distribution cut): its chain is a queue simulation fed by four fitted inputs with a back-test and an uncertainty band; here the weight sits on transporting a population across selection and place, with a bridge and an exposure ramp, and no simulation. The lineage's architecture 5 typed clinicians by start against the compulsory date as its one step; that typing is now texture every run does.
 
 ## Semantic fork table
 
-| Id | Term or convention | Golden reading | Alternative | Call under it | Ruled out by |
-|---|---|---|---|---|---|
-| SF1 | "share of audited dictations" | the share among the quarter's audited dictations, expected | the share among all dictations | same call | QA-07 1: a random sample within hospital and month; equal in expectation |
-| SF2 | "word error rate" | substitutions, deletions and insertions over the reference words | the export's own column | same call | QA-07 3; the export's column agrees once its units are read |
-| SF3 | a re-audited dictation | the adjudicated score | the first pass | same call, every graded figure | asserted |
-| SF4 | a quarter | by the dictation's date | by the audit's date | same call, every graded figure | asserted |
-| SF5 | "above 15 per cent" | strictly above | at or above | same call | Schedule 4.1; C1 on the frozen rates |
-| SF6 | the 2027 population | every dictation under the service in the quarter | the clinicians dictating on the as-of date | 10 | Schedule 4.2 "every dictation made under the Service ... including hospitals where dictation becomes compulsory" |
-| SF7 | the release in 2027 | 6.0 throughout | a 2027 release | lower | SN-2026-14 |
-| SF8 | "passing" a ceiling | above it | at or above | same call | Schedule 4.3; C1 (the fourth quarter 0.9 from 14) |
-| SF9 | turnover | the record's leaving rate | none | same call, every graded figure | asserted |
-| SF10 | the go-live ramp | the record's first months at each go-live | full volume from the date | same ceiling; the first quarter past 10 and its band move | the six go-lives on record; the ask's second judgment |
-| SF11 | the kinds' rates under 6.0 | every audit carried by its release step | the 6.0 audits alone | same call, every graded figure | asserted |
-| SF12 | "the word error rate nine in ten fourth-quarter dictations stay under" | the 90th percentile of dictations | of clinicians' average rates | same call (the ask moves) | the prompt's "dictations" |
-| SF13 | the compulsory boundary | first dictation on or after the date | a month earlier | same call, every graded figure | asserted; a month later contradicts Schedule 2's first-of-month dates |
-| SF14 | movers between hospitals | linked through the register's previous staff numbers | treated as new clinicians | same call, every graded figure | asserted |
-| SF16 | the ceiling | the lowest offered ceiling at or above every quarter | the expected share rounded up | same call | Schedule 4.3 offers four ceilings |
-| SF17 | a clinician's volume | the last three months; a starter's from 2026 | the last six; a starter's from 2025 and 2026 | same call, every graded figure | asserted |
-| SF18 | "the word error rate nine in ten fourth-quarter dictations stay under" | the 90th percentile rounded to the nearest whole per cent (16) | the smallest whole rate with nine in ten under (17) | the ask moves | the prompt's "rounded to the nearest whole per cent" |
-| SF19 | a starter's early months | the same level as later months | a learning curve that lowers the first months | 12 if it held | asserted absent: the first three months within 0.05 (log) of later months across every release |
-
-## Ladder
-
-The pricing sequence, run on the cut pack (`generator/checks.py`, `generator/ceiling.py`):
-
-1. **The residue the filed WHAT leaves** is a method question, whom 2027's new dictators resemble and so what each
-   quarter's mix is, not a knob: the schedule files the metric and the ceilings, the rollout plan the dates and staff,
-   the migration notice the frozen release.
-2. **The move against the ceiling:** the fourth quarter must pass 12 per cent to move the call from 12 to 14; the
-   teaching hospitals' new dictators carry about 19 per cent against the 7 per cent the average clinician carries, and
-   they make about half of the fourth quarter's dictations.
-3. **The one-group-by route** is the hospital reweighting (rung 1), which files 5.3 per cent; the golden needs each
-   clinician's first month set against the compulsory date in another file and a 2027 mix built clinician by
-   clinician.
-4. **The family:** the standing family spans 12.54 to 13.11 in the fourth quarter (14), every route that skips the step
-   5.3 to 10.3 (10 or 12).
-
-| Rung | Route | 2027 quarters (per cent) | Ceiling |
-|---|---|---|---|
-| 0 | the 2026 share carried forward | 7.4, 7.4, 7.4, 7.4 | 10 |
-| 1 | each hospital's 2026 share at 2027's hospital mix | 7.2, 6.2, 6.1, 5.3 | 10 |
-| 1 | starters at the average clinician's level | 7.5, 7.2, 7.1, 6.9 | 10 |
-| 2 | the release gap's drift added | 7.9, 8.1, 8.4, 8.6 | 10 |
-| 2 | the go-live step at the small hospitals, in points, at the teaching hospitals | 7.7, 8.0, 8.0, 8.1 | 10 |
-| 2 | starters at the 2025 and 2026 starters' level | 8.2, 9.3, 9.4, 10.3 | 12 |
-| golden | starters at the compulsory starters' rates, turnover, ramp, release frozen | 8.9, 11.1, 11.4, 13.1 | 14 |
+| ID | Term or convention | Readings | Golden | Ruled out by |
+|---|---|---|---|---|
+| SF1 | "share of audited dictations" | among the audited; among all dictations | the audited, expected | same call: QA-07 1, a random sample within hospital and month |
+| SF2 | word error rate | the export's column; the counts over the reference words | the counts | same call: QA-07 3; the column agrees once its units are read |
+| SF3 | a re-audited dictation | first pass; adjudicated | adjudicated | same call, asserted: every graded figure inside its band |
+| SF4 | a quarter | by dictation date; by audit date | dictation date | same call, asserted |
+| SF5 | "above 15 per cent" | strictly above; at or above | strictly above | same call: Schedule 4.1 |
+| SF6 | the 2027 population | every dictation under the service; today's dictators | every dictation, the compulsory hospitals included | Schedule 4.2 |
+| SF7 | the release in 2027 | 6.0 throughout; a 2027 release | 6.0 | SN-2026-14 |
+| SF8 | "passing" a ceiling | above it; at or above | above | same call: Schedule 4.3 |
+| SF9 | the staff in post through 2027 | held as on 31 December 2026; the record's turnover with replacements at full volume | held, a leaver replaced like for like | the rollout plan counts the staff on the HR system at 31 December 2026; a replacement hired before a go-live switches over with the department |
+| SF10 | the ramp's go-lives | all six; the four since 2023 | all six | same call, asserted |
+| SF11 | the dictators' rate under 6.0 | their 6.0 audits; every audit carried by its release step | 6.0 audits | same call, asserted |
+| SF12 | "the word error rate nine in ten fourth-quarter dictations stay under" | of dictations; of clinicians' levels | dictations | the prompt's "dictations" |
+| SF13 | the population's cells | grade and specialty; grade alone | grade and specialty | same call, asserted |
+| SF14 | moves between hospitals | linked through previous_staff_no; left unlinked | linked | asserted: unlinked, no clinician is seen at two hospitals and the hospital effects cannot be measured |
+| SF15 | the audits the hospital effects rest on | every audit with its release step; release 6.0 alone; 2025 and 2026 alone | every audit | named data: 4 and 11, or 14 and 35, clinicians seen at two hospitals against 36 and 64 |
+| SF16 | the ceiling | the lowest offered at or above every quarter; the share rounded up | the lowest offered | Schedule 4.3 offers four ceilings |
+| SF17 | a dictator's settled volume | the last three months; the last six | three | same call, asserted |
+| SF18 | the population's members | the smaller hospitals' December 2026 staff; every clinician dictating there after a go-live | December 2026 | same call, asserted |
+| SF19 | the population's levels | the error model's cells; the smaller hospitals' audits by grade | the model | same call, asserted |
+| SF20 | the bridge's order | the two orders averaged; either order | averaged | the band spans both orders |
+| SF21 | the bridge's window | the second quarter of 2023 to the last of 2026 | as stated | the prompt |
+| SF22 | a hospital's own effect | against the six smaller hospitals' average; against one hospital | the six's average | the answer blocks state the basis |
+| SF23 | the calendar | dictation volume adjusted for the month; unadjusted | adjusted | same call, asserted |
 
 ## Closure table
 
-| Axis | Reading | Closure |
-|---|---|---|
-| 1 Population | every dictation made under the service in each 2027 quarter, clinicians not yet dictating included | filed (Schedule 4.2); SF6 |
-| 2 Unit of account | the audited dictation | filed (Schedule 4.1) |
-| 3 Attribution window | calendar quarters by the dictation's date | filed; SF4 asserted |
-| 4 As-of dating | the record to 31 December 2026; the schedule returned by 15 January 2027 | filed in the draft schedule |
-| 5 Version basis | the adjudicated score of a re-audited dictation | filed (QA-07 4); SF3 |
-| 6 Denominator | a quarter's audited dictations | filed (Schedule 4.2) |
-| 7 Weighting | each dictation alike | filed (Schedule 4.2) |
-| 8 Window length | four 2027 quarters | filed |
-| 9 Boundary inclusivity | above 15 per cent; a ceiling passed when the share is above it | C1 (SF5, SF8) |
-| 10 Rounding path | each quarter's band from its unrounded share; the percentile in whole per cent once | asserted; the prompt's rounding |
-| 11 Tie-break | none needed | one ceiling is the lowest at or above the highest quarter |
-| 12 Maturity and censoring | none: 2027 is projected whole; every 2026 audit is scored | filed (QA-07) |
-| 13 Order of operations | rates per release, then the mix, then the share | C1 across orders (asserted) |
-| 14 Row order | none | no rule reads row order |
-| 15 Duplicate resolution | the volume export's repeated rows counted once; re-audits by the adjudicated score | asserted (Layer 1) |
-| 16 Identity normalisation | staff numbers reissued on a move linked by the register | asserted (SF14) |
-| 17 Netting against gross | none | no netting in the metric |
-| 18 Dimensional units | the error rate as a fraction or per cent by export | asserted (Layer 1) |
-| 19 Code and status semantics | release strings in three forms read as one release | asserted (Layer 1) |
-| 20 Integerisation | the percentile in whole per cent | the prompt's rounding |
-| 21 Clause scope | Schedule 4 covers every hospital in Schedule 2 | filed |
-| 22 Forward window contents | the go-live dates and staff from the rollout plan and Schedule 2, release 6.0 from SN-2026-14 | filed |
+| Axis | Closure |
+|---|---|
+| 1 Population | every dictation under the service in each 2027 quarter, the not-yet-dictating staff included: Schedule 4.2 (SF6) |
+| 2 Unit of account | the audited dictation: Schedule 4.1 |
+| 3 Attribution window | calendar quarters by dictation date: asserted (SF4) |
+| 4 As-of dating | the record to 31 December 2026; the schedule returned by 15 January 2027: the draft schedule |
+| 5 Version basis | the adjudicated score: QA-07 4 (SF3) |
+| 6 Denominator | a quarter's audited dictations: Schedule 4.2 |
+| 7 Weighting | each dictation alike: Schedule 4.2 |
+| 8 Window length | four 2027 quarters; the bridge from 2023 Q2 to 2026 Q4: the prompt |
+| 9 Boundary inclusivity | above 15 per cent; a ceiling passed when the share is above it: Schedule 4.1 and 4.3 (SF5, SF8) |
+| 10 Rounding path | none dictated by the prompt; each figure stated once in the answer blocks with its band |
+| 11 Tie-break | none needed: one ceiling is the lowest at or above the highest quarter |
+| 12 Maturity and censoring | none: 2027 is projected whole; audits scored after 8 January 2027 are out of the export and of every figure |
+| 13 Order of operations | levels, then the staff, then the switch-over, then the share: every order asserted to the same figures |
+| 14 Row order | no rule reads row order |
+| 15 Duplicate resolution | the volume export's repeated rows once; re-audits by the adjudicated score |
+| 16 Identity normalisation | staff numbers linked through previous_staff_no (SF14) |
+| 17 Netting against gross | none in the metric |
+| 18 Dimensional units | the error rate as a fraction or a percentage by export format, read once |
+| 19 Code and status semantics | three release strings read as one release |
+| 20 Integerisation | dictations stated to the nearest thousand with their band |
+| 21 Clause scope | Schedule 4 covers every hospital in Schedule 2 |
+| 22 Forward window contents | the go-live dates (Schedule 2, the rollout plan), the staff in post (the register and the rollout plan), release 6.0 (SN-2026-14) |
 
 ## Literal reader
 
-Executed word for word, the prompt and Schedule 4 give the golden: the ceiling is the lowest of the offered ceilings
-that no 2027 quarter's share of audited dictations above 15 per cent passes, every dictation made under the service in
-the quarter counts (the teaching hospitals' compulsory clinicians included from their dates, as Schedule 2 and the
-rollout plan set them), and recognition stays at release 6.0 (SN-2026-14); the reweighting that reads the teaching
-hospitals' 2026 rows as their 2027 clinicians takes a population Schedule 4.2 does not (SF6), and every convention the
-projection needs has a fork row closed by a filed sentence or asserted as the same call with every graded figure.
-
-## Oracles
-
-- **The quarterly quality reports** state each 2023 to 2026 quarter's audited dictations and heavy-correction share;
-  they tie to the cleaned audits on every route and confirm the Layer 1 build, and say nothing of 2027.
-- **The release notes' benchmark figures** (each release's relative error reduction on Larkmoor's own LCB-2 set) agree
-  in direction with the within-clinician release steps and size none of them for this customer.
-- No document, control or reconciliation in the pack states a 2027 share, a ceiling or whom the new dictators resemble.
-
-## Ask sheet
-
-- **Ask 1, the PDF's opening (the call):** the 14 per cent ceiling; 10 passed from the second quarter, 12 in the fourth.
-- **Ask 2, the chart (four bands):** each quarter's expected share against the ceilings: under 10, between 10 and 12
-  twice, between 12 and 14.
-- **Ask 3, each quarter's lowest ceiling (four):** golden 10, 12, 12 and 14; a mix built without the go-live ramp 12,
-  12, 12 and 14 (its first quarter 10.2); the reweighting 10 each; the recent starters 10, 10, 10 and 12.
-- **Ask 4, the fourth quarter's 90th-percentile word error rate (whole per cent), its own second judgment:** the mixture
-  of dictation-level rates: golden 16; read off clinicians' average rates 15; the 2026 mix 14.
-- **Pair ceiling:** 44.3 (`ceiling.py` on the cut pack: the recommendation 20, four components 4.5 each,
-  instruction-following 7, the asks 55 over the four answers, each kept in proportion to its figures; the landed run
-  that takes the compulsory starters but starts the go-lives at full volume and reads the percentile off clinicians'
-  averages scores 74.8, the steady route 13.9).
-- **Shallow keep:** 12.5 per cent of the ask weight (the steady route keeps the first quarter's band).
-- **Measured by:** task2/generator/ceiling.py on the cut pack.
-
-| Ask figure | Golden | Landed run (compulsory starters found, go-lives at full volume, percentile of averages) | Shallow run (the steady share) | Cracker verdict on the landed run |
-|---|---|---|---|---|
-| the ceiling | 14 | 14 | 10 | keeps |
-| the first quarters past 10 and 12 | second; fourth | first; fourth | none | misses |
-| each quarter's lowest ceiling | 10, 12, 12, 14 | 12, 12, 12, 14 | 10, 10, 10, 10 | misses |
-| the fourth quarter's 90th percentile | 16 | 15 | 14 | misses |
-
-## Leak rulings
-
-The design-note vocabulary sweep's lines (`leak.py` sweep 4), ruled in the main thread and never handed to the reader:
-
-- `QA-07_recognition_quality_audit.pdf` (release, record, clinician, dictation): the audit's sampling, scoring and
-  adjudication in the procedure's own words; it names no kind of clinician and nothing about 2027. Harmless.
-- `draft_schedule4_quality_2027.docx` (hospitals, compulsory, record, clinician, dictation): 4.2 files the population
-  (every dictation under the service, hospitals going compulsory during the year included), the WHAT that closes SF6;
-  it says nothing of who dictates worse. Harmless.
-- `recognition_releases_2023_2026.pdf` (release, architecture, dictation, rebuilt): each release's changes and
-  Larkmoor's own benchmark, labelled as not a customer's. Harmless.
-- `services_agreement_schedule2_deployment.pdf` (hospitals, compulsory, record, clinician, dictation): the contract's
-  dates and its compulsory-use term (every clinician in post dictates from the date, and every later starter); it
-  says who dictates, never how well. Harmless.
-- The prompt's workbook sentence (quarter, dictation): the asks themselves. Harmless.
+Executed word for word, the prompt and Schedule 4 give the golden: the ceiling is the lowest of the offered ceilings that no 2027 quarter's share of audited dictations above 15 per cent passes, every dictation made under the service in the quarter counts (the university hospitals' staff from Schedule 2's dates, the rollout plan's count of staff in post), recognition stays at release 6.0 (SN-2026-14), each university hospital's fourth-quarter share and Ballykeel's fourth-quarter dictations are read on the same basis, the percentile is of dictations, and the bridge runs from the second quarter of 2023 to the last of 2026 with the releases' part and the rest; every convention the projection needs has a fork row closed by a filed sentence, a named count, or an assertion that every graded figure stays inside its band.
 
 ## Prompt contract
 
-A voice rewrite may not drop or change: the question (the lowest heavy-correction ceiling Larkmoor Speech can commit
-to); the ceilings offered (10, 12, 14 and 16 per cent in Shannonside Hospital Group's draft 2027 service schedule); the
-deciding outcome (no 2027 quarter's share of audited dictations above 15 per cent word error rate passing it);
-quality_schedule_2027_ceiling.pdf opening on the ceiling and the first quarter that would pass each lower one, with a
-chart of each quarter's expected share against the ceilings; heavy_correction_2027.xlsx with each 2027 quarter's lowest
-ceiling its share stays under and the word error rate nine in ten fourth-quarter dictations stay under; rates in whole
-per cent. It may never add the compulsory dates, the go-lives, the teaching hospitals, the clinicians' start, voluntary
-or compulsory use, a release, a frozen model or the migration, a projection, a mix, turnover, a ramp, reweighting, a
-count of hospitals or clinicians, or any hint that the steady record hides a change.
+A voice rewrite may not drop or change: the question (the lowest heavy-correction ceiling Larkmoor Speech can commit to); the ceilings offered (10, 12, 14 and 16 per cent in Shannonside Hospital Group's draft 2027 schedule); the deciding outcome (no 2027 quarter's share of audited dictations above 15 per cent word error rate passing it); a short memo opening on the ceiling and the first quarter that would pass each lower one, with a chart of each quarter's expected share against the ceilings; a workbook with each quarter's lowest ceiling, each university hospital's expected fourth-quarter share, Ballykeel University Hospital's dictations in that quarter, the word error rate nine in ten fourth-quarter dictations stay under, and how much of the change in the group's audited share between the second quarter of 2023 and the last quarter of 2026 came from the recognition releases and how much from everything else. It may never add a rounding instruction, the compulsory dates, the go-lives, the moves or staff numbers, voluntary or compulsory use, selection, a hospital's own effect, the switch-over or a ramp, a release step, a projection, a mix, a count of hospitals or clinicians, or any hint that the record hides a change.
+
+## Leak rulings
+
+`leak.py --asof 2027-01-11` (REVIEW, no LEAK), each line ruled in the main thread:
+
+- QA-07_recognition_quality_audit.pdf, 2.5: the audit's sampling rate in the procedure's own words; no result is a sampling rate. Harmless (the reader agrees).
+- draft_schedule4_quality_2027.docx, 4.1: a clause number of the schedule; it matches the dictators' share and the releases' part only by coincidence. Harmless (the reader agrees).
+- recognition_releases_2023_2026.pdf, 7.8: LCB-2's cut for release 5.0, equal to the 2026 Q4 audited share by coincidence; the release step the golden measures within clinicians is 6.1 for 5.0 and 10.6 for 4.0 to 6.0, none of them a benchmark figure. Harmless.
+- recognition_releases_2023_2026.pdf and service_notice_SN-2026-14.pdf, 6.0: the release's name. Harmless.
+- QA-07_recognition_quality_audit.pdf, design-note vocabulary (record, release, clinician): the procedure's sampling, scoring and adjudication in its own words; it names no kind of clinician, no hospital effect and nothing of 2027. Harmless.
+- draft_schedule4_quality_2027.docx, design-note vocabulary (hospitals, record, clinician): 4.2 files the population (every dictation under the service, compulsory hospitals included), the WHAT the literal reader executes; it says nothing of who dictates worse or why. Harmless.
+- services_agreement_schedule2_deployment.pdf, design-note vocabulary (hospitals, record, clinician): the contract's dates and its compulsory-use term; it says who dictates, never how well. Harmless.
+- prompt.txt, two stump terms in one sentence: the deliverables sentence asks for the results themselves (quarters, ceilings, the university hospitals' shares); it names no method. Harmless.
+- shannonside_dictation_rollout_2027.xlsx, three 2027 dates: the go-live and training dates the forward call needs, planned before the as-of date. Harmless (the reader agrees).
+- The reader's realism nit (the quality reports' shares stored to sixteen digits) is fixed in the generator: the reports hold each share to four decimals.
 
 ## Pre-ship check
 
-- The Sulfur standard re-read against the built pack: the call rests on the projection that types each clinician by
-  the first month dictated against the hospital's compulsory date, with the hospital reweighting at rung 1 and the
-  steady share at rung 0; no route that skips the typing lands the ceiling (Gate F, asserted); the asks ride the
-  same step, two of them with judgments of their own (the go-live ramp in the first quarter, the dictation-level
-  scatter in the percentile).
-- Free gates on the final cut: generator checks 37 of 37, figures_check 58 of 58, precut 75 with 0 FAIL and 0 WARN,
-  voice-check clean, leak.py REVIEW with no LEAK, the container gate clean, two byte-identical builds,
-  `guard.py surface` clean, `guard.py heart` WARN (repeat.gate_g against task7 v6, answered in the Draw).
-- Stage 4: the isolated leak reader found no decisive-step sentence, ranking, helper or answer file, read Schedule
-  4.2 literally as the golden's population and weighting, and called the deciding step an analytical modelling
-  choice; the judge's first pass returned DETERMINISTIC with a FIX_NOW (the percentile's rounding, closed by the
-  prompt's "rounded to the nearest whole per cent"; audit times after the as-of date, closed by holding the export
-  to what was scored by 8 January 2027; two figures stated finer than the data carry, restated), reproducing every
-  graded figure independently (the fourth quarter 12.4 to 13.3 across its variants); its closest fork, a learning
-  curve in a starter's first months, is asserted absent (SF19). The one targeted re-judge returned DETERMINISTIC
-  and APPROVE, its nit (the record's range to a tenth) restated as about 6 to 8 per cent
-  (`determinism_check_report.md`).
-- Pair ceiling 44.3 (`ceiling.py` on the cut pack), shallow keep 12.5 per cent.
+- Free gates on the final cut: generator checks 51 of 51, `figures_check.py` 0 absent, `precut.py` exit 0 (2 WARN: R3 upstream of five results, which `effort.py`'s largest hint shows no single sentence exploits; nearby chains on file), `effort.py` exit 0, `voice-check.py` exit 0 with no rounding instruction, `leak.py` REVIEW with no LEAK, `audit_containers.py` 0 FAIL, `guard.py surface` exit 0, `guard.py heart` WARN on the remote card corpus, two byte-identical builds.
+- The leak reader (one isolated Sonnet read of the prompt and the pack): no method sentence beyond the filed WHAT, no ranking or helper file, no answer-like figure, the filed sentences execute to the golden, and no one thing settles most of the asks; one realism nit fixed (the quality reports' shares to four decimals).
+- The determinism judge, run under the current protocol (the thread derived blind, then opened the blocks): DETERMINISTIC, APPROVE; Gate G analytical_non_defect with no surface-read dependency; Gate H one_thing none, stump power spread across at least three independently failable steps. An earlier pass the same day, under the older protocol, also returned DETERMINISTIC and APPROVE; its polish items are applied (the mover filter cut from Critical Component 1 as incidental, the one-fact line answering the rival hint).
+- The thread's blind first pass priced against the careful column: inside its band only R1 (the record's ends, 10.06 and 7.82); Shannonside University's fourth quarter 4 to 6 per cent (the volunteers read as the place), Ballykeel's fourth-quarter dictations 1,600 to 2,300 (the audit sample read as the dictations), the percentile 17 to 20, no figure for the bridge's split, the ceiling undecided between 12 and 14. R1 is already Right in the careful column, so the pair estimate stays 26.0.
+- The judge's hand-check: the selection insight alone (the staff less its volunteers, no hospital effect) is the generator's no-hospital-effect route, which files 11.4 in the fourth quarter and Ceiling B; it moves the direction of the call, not the call.
+- A caution on the paper estimate: a medium-effort blind pass is not a platform run; the platform's two runs are the measurement.
 
 ## Tried and rejected
-
 
 - The seed's own quantity (the Medicaid gap on the "would recommend" top-box rate across a state report's hospitals), every route screened at the draw: composition and patient mix settle the comparison population (WHAT screen); shrinkage of small cells repeats task253; design weighting repeats task264's lesson and task268 v2's reflex; nonresponse either fails determinacy or repeats the inverse-probability weighting of task264, task267 and task268; survey mode effects belong to Experiment & Causal Analysis; misclassification is the spent sensitivity-and-specificity family; nowcasting the late returns repeats task181; telescoping sits next to task453.
 - A race-probability (BISG) regression for the equity gap (prototype `p1.py`): a strong ladder, but the same linear unmixing of a mixed population as task263, a clone of its driver.
@@ -470,3 +306,11 @@ count of hospitals or clinicians, or any hint that the steady record hides a cha
 - 2026-11-08, architecture 5 build: a 1.2 per cent audit and a last release in June 2026: the 6.1 audits alone and the
   pooled estimate differed by up to a point; the audit is 2.5 per cent and the frozen release has been in force since
   November 2025.
+- 2026-11-10, architecture 5 on the platform: both runs typed clinicians on sight (their cohort counts matched the golden's typing to the audit, 16,307, 3,063 and 3,761), split the compulsory starters by appointment into compelled incumbents (21.25 per cent) and post-go-live hires (17.20), a gap the pack could not confirm (clinician-cluster permutation p 0.09; the world drew both from one distribution), gave the university hospitals' starters the incumbents' rate and, with one upward mix choice each (no ramp and no turnover; a per-clinician start and 2026 trends), filed 16 against the golden's 14; the call rested on one constructed subgroup found by one cross-tab (level 3 on the client's depth scale), so the slot was rebuilt as a results chain in the same world at the author's word.
+- 2026-11-10, architecture 6 build: the university hospitals' acoustic effects at +15 and +11 per cent put their starters at the smaller hospitals' compelled clinicians' rate, so that shortcut landed the call; cut to +6 and +8.
+- 2026-11-10, architecture 6 build: a specialty tilt at the university hospitals (radiology, oncology, cardiology) made the transport ride on noisy cell coefficients; removed, the grade mix kept.
+- 2026-11-10, architecture 6 build: moves drawn from every hospital alike left about 45 clinicians audited at two hospitals and Ballykeel's effect 3.7 points off; moves into the university hospitals now come mostly from the smaller hospitals, as careers run, giving 36 and 64.
+- 2026-11-10, architecture 6 build: a three-month switch-over moved no call (full-volume go-lives kept 14); the departments now switch over across four months, so a full-volume start passes 14 in the fourth quarter and 10 in the first.
+- 2026-11-10, architecture 6 build: leavers replaced by hires dictating at full volume from the go-live put Ballykeel's fourth quarter 10 per cent above the world's; a replacement hired before a go-live switches over with the department, so the staff is held like for like.
+- 2026-11-10, architecture 6 build: a seed search of twenty at the raised level; seed 60607 is the one whose golden sits mid-band (the fourth quarter 12.9 to 13.0 across the rivals) with the first quarter under 10 and the third under 12.
+- 2026-11-10, architecture 6 build: the uptake's selection also lands the smaller hospitals' pooled compulsory starters near the starters' rate, so that route keeps the call (14) while missing the third quarter, the first quarter past 12 and both university hospitals; kept as a route, not broken by tuning, because it ignores the 27.7 against 10.0 gap the record shows.

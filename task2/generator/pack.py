@@ -73,12 +73,18 @@ def write_audits(w, target, rng):
     return len(rows)
 
 
-RERUN = (W.mi(2025, 3), W.mi(2025, 4))   # the volume export for these months was run twice and both runs kept
+RERUN = (W.mi(2025, 3), W.mi(2025, 4))
+
+
+def pick(rng, table):
+    names = [a for a, _ in table]
+    pr = np.array([b for _, b in table], dtype=float)
+    return names[int(rng.choice(len(names), p=pr / pr.sum()))]   # the volume export for these months was run twice and both runs kept
 
 
 def write_volumes(w, target, rng):
     path = os.path.join(target, "dictation_volumes_2022_2026.csv")
-    site = {c["staff"]: c["h"] for c in w.clin}
+    site = {s: sp["h"] for s, (pp, sp) in w.spell_of.items()}
     rows = []
     for (staff, t), n in w.vol.items():
         mins = round(n * 1.62 * math.exp(rng.normal(0, 0.08)), 1)
@@ -107,36 +113,44 @@ def xl_header(ws, cols, widths=None):
     ws.freeze_panes = "A2"
 
 
+def month_date(t, rng):
+    """a day within month index t (which may fall before 2022)"""
+    y, m = W.START[0] + int(t // 12), int(t % 12) + 1
+    return dt.date(y, m, int(rng.integers(1, 28)))
+
+
 def write_register(w, target, rng):
+    """the group's HR register: every medical and advanced practice post held at one of the eight hospitals at any time
+    from 1 January 2022 to 31 December 2026, dictating or not, a move to another group hospital under a new number"""
     path = os.path.join(target, "clinician_register_2026.xlsx")
     wb = Workbook()
     ws = wb.active
     ws.title = "clinicians"
     xl_header(ws, ["staff_no", "site", "grade", "specialty", "in_post_from", "previous_staff_no", "status", "left_on"],
               [10, 7, 26, 26, 13, 17, 9, 12])
-    last_rec = W.mi(*W.REC_TO)
+    end_rec = W.DEC + 1
+    rows = []
+    for p in w.people:
+        for sp in p["spells"]:
+            if sp["end"] <= 0 or sp["start"] >= end_rec:
+                continue
+            rows.append((sp["staff"], sp, p))
     n = 0
-    for c in sorted(w.clin, key=lambda c: c["staff"]):
-        if c["first"] > last_rec:
-            continue
-        y, m = ym(max(-200, c["post_start"])) if c["post_start"] >= -200 else (2005, 1)
-        if c["post_start"] < 0:
-            yy = W.START[0] + (c["post_start"] // 12)
-            y, m = yy, (c["post_start"] % 12) + 1
-        start = dt.date(y, m, int(rng.integers(1, 28)))
-        status, left = ("in post", None) if c["last"] > last_rec else ("left", c["last"])
-        lo = None
-        if left is not None:
-            ly, lm = ym(left - 1)
-            lo = dt.date(ly, lm, int(rng.integers(1, 28)))
-        ws.append([c["staff"], c["h"], c["grade"], c["specialty"], start, c["prev"], status, lo])
+    for staff, sp, p in sorted(rows, key=lambda r: r[0]):
+        start = month_date(math.floor(sp["start"]), rng)
+        if sp["end"] >= end_rec:
+            status, lo = "in post", None
+        else:
+            status, lo = "left", month_date(math.floor(sp["end"]), rng)
+        ws.append([staff, sp["h"], p["grade"], p["spec"], start, sp["prev"], status, lo])
         n += 1
     for row in ws.iter_rows(min_row=2):
         row[4].number_format = "dd/mm/yyyy"
         row[7].number_format = "dd/mm/yyyy"
     wb.save(path)
     PP.normalize_ooxml(path, "Alexander Sigerson", "Alexander Sigerson", "2026-12-16T10:12:00Z", "2027-01-06T09:41:00Z",
-                       title="Clinician register (dictation users)", excel=True, company="Shannonside Hospital Group")
+                       title="Clinician register (medical and advanced practice staff)", excel=True,
+                       company="Shannonside Hospital Group")
     return n
 
 
@@ -147,7 +161,8 @@ def write_rollout(w, target):
     ws.title = "2027 go-lives"
     xl_header(ws, ["Hospital", "Site code", "Clinicians in post (HR, December 2026)", "Dictation compulsory from",
                    "Training from", "Ward lead"], [34, 10, 36, 26, 16, 22])
-    size = {h[0]: h[2] for h in W.HOSPITALS}
+    size = {c: sum(1 for pp in w.people for sp in pp["spells"]
+                   if sp["h"] == c and sp["start"] < W.DEC + 1 <= sp["end"]) for c in W.TEACHING}
     ws.append(["Shannonside University Hospital", "SSU", size["SSU"], dt.date(2027, 2, 1), dt.date(2026, 12, 14), "Colum Wallace"])
     ws.append(["Ballykeel University Hospital", "BKU", size["BKU"], dt.date(2027, 10, 1), dt.date(2027, 8, 16), "Pearce Stapleton"])
     for row in ws.iter_rows(min_row=2):
@@ -189,17 +204,17 @@ def write_quarterly(w, target):
         for q in (1, 2, 3, 4):
             ms = set(W.mi(y, 3 * (q - 1) + k + 1) for k in range(3))
             sel = [hv for t, h, hv in rows if t in ms]
-            ws.append(["%d Q%d" % (y, q), len(sel), sum(sel), sum(sel) / len(sel)])
+            ws.append(["%d Q%d" % (y, q), len(sel), sum(sel), round(sum(sel) / len(sel), 4)])
             ws.cell(ws.max_row, 4).number_format = "0.0%"
     ws2 = wb.create_sheet("By hospital")
     xl_header(ws2, ["Quarter", "Site", "Audited dictations", "Heavy correction", "Share"], [10, 7, 18, 16, 10])
     for y in range(2023, 2027):
         for q in (1, 2, 3, 4):
             ms = set(W.mi(y, 3 * (q - 1) + k + 1) for k in range(3))
-            for h in [x[0] for x in W.HOSPITALS]:
+            for h in W.CODES:
                 sel = [hv for t, hh, hv in rows if t in ms and hh == h]
                 if sel:
-                    ws2.append(["%d Q%d" % (y, q), h, len(sel), sum(sel), sum(sel) / len(sel)])
+                    ws2.append(["%d Q%d" % (y, q), h, len(sel), sum(sel), round(sum(sel) / len(sel), 4)])
                     ws2.cell(ws2.max_row, 5).number_format = "0.0%"
     wb.save(path)
     PP.normalize_ooxml(path, "Jody Cahir", "Jody Cahir", "2023-04-11T08:30:00Z", "2027-01-08T16:02:00Z",
@@ -211,7 +226,8 @@ def write_tickets(w, target, rng):
     path = os.path.join(target, "support_tickets_2024_2026.csv")
     cats = [("Login or account", 0.22), ("EHR integration", 0.16), ("Recognition accuracy", 0.18),
             ("Microphone or headset", 0.14), ("Mobile app", 0.12), ("Training request", 0.10), ("Other", 0.08)]
-    act = [c for c in w.clin if c["first"] <= W.mi(2026, 12)]
+    act = [dict(h=sp["h"], staff=sp["staff"], first=sp["first"], last=sp["end"]) for pp in w.people for sp in pp["spells"]
+           if sp["first"] is not None and sp["first"] <= W.mi(2026, 12)]
     rows = []
     tid = 880000
     for t in range(W.mi(2024, 1), W.mi(2026, 12) + 1):
@@ -223,7 +239,7 @@ def write_tickets(w, target, rng):
             cl = op + dt.timedelta(hours=float(rng.exponential(30)))
             tid += int(rng.integers(1, 5))
             pr = str(rng.choice(["P3", "P3", "P3", "P2", "P4", "P1"]))
-            rows.append([tid, op.strftime("%d/%m/%Y %H:%M"), c["h"], c["staff"], W.pick(rng, cats), pr,
+            rows.append([tid, op.strftime("%d/%m/%Y %H:%M"), c["h"], c["staff"], pick(rng, cats), pr,
                          cl.strftime("%d/%m/%Y %H:%M")])
     with open(path, "w", newline="", encoding="utf-8") as fh:
         wr = csv.writer(fh, lineterminator="\r\n")
@@ -242,11 +258,13 @@ def write_microphones(w, target, rng):
               ("Nuance PowerMic 4", 0.0), ("Jabra Evolve2 65", 0.24), ("Grundig Digta SonicMic 4", 0.16)]
     models = [m for m in models if m[1] > 0]
     tag = 52000
-    for c in sorted([c for c in w.clin if c["first"] <= W.mi(2026, 12) < c["last"]], key=lambda c: c["staff"]):
+    live = [dict(h=sp["h"], staff=sp["staff"], first=sp["first"]) for pp in w.people for sp in pp["spells"]
+            if sp["first"] is not None and sp["first"] <= W.mi(2026, 12) < sp["end"]]
+    for c in sorted(live, key=lambda c: c["staff"]):
         if rng.random() < 0.8:
             tag += int(rng.integers(1, 7))
             y, m = ym(max(0, c["first"]))
-            ws.append(["HS-%d" % tag, c["h"], c["staff"], W.pick(rng, models), dt.date(y, m, int(rng.integers(1, 28)))])
+            ws.append(["HS-%d" % tag, c["h"], c["staff"], pick(rng, models), dt.date(y, m, int(rng.integers(1, 28)))])
             ws.cell(ws.max_row, 5).number_format = "dd/mm/yyyy"
     wb.save(path)
     PP.normalize_ooxml(path, "Kristopher McLoughlin", "Kristopher McLoughlin", "2025-02-03T10:20:00Z", "2026-12-18T15:44:00Z",
@@ -262,7 +280,7 @@ def write_uptime(w, target, rng):
     for t in range(W.mi(2026, 1), W.mi(2026, 12) + 1):
         y, m = ym(t)
         days = (dt.date(y + (m == 12), m % 12 + 1, 1) - dt.date(y, m, 1)).days
-        for h in [x[0] for x in W.HOSPITALS]:
+        for h in W.CODES:
             down = int(rng.exponential(55))
             ws.append(["%04d-%02d" % (y, m), h, days * 1440, down, 1 - down / (days * 1440)])
             ws.cell(ws.max_row, 5).number_format = "0.000%"

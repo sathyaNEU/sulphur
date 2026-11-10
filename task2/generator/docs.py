@@ -36,7 +36,7 @@ def deployment(target):
     avail = {"CLM": dt.date(2021, 9, 6), "RTH": dt.date(2021, 9, 6), "KBR": dt.date(2021, 10, 4),
              "CSL": dt.date(2021, 10, 4), "KNA": dt.date(2021, 11, 1), "DRL": dt.date(2021, 11, 1),
              "SSU": dt.date(2021, 9, 6), "BKU": dt.date(2021, 10, 4)}
-    for code, name, _, _, comp in W.HOSPITALS:
+    for code, name, _, _, comp, _, _ in W.HOSPITALS:
         rows.append([name, code, avail[code].strftime("%-d %B %Y"), date_of(comp).strftime("%-d %B %Y")])
     s = [P("Shannonside Hospital Group and Larkmoor Speech Limited", SMALL),
          P("Medical dictation services agreement: Schedule 2, Deployment", H1),

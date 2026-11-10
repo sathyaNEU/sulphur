@@ -5,30 +5,43 @@
  "objective": "descriptive-distribution",
  "stage": 5,
  "stage_name": "ready",
- "updated": "2026-11-08",
- "stump": "A competent solver takes the steady audited share (or adds the 2024 release gap's climb, or the steps past go-lives at the small hospitals) and commits to the 10 or 12 per cent ceiling; the step that lands it there is reading the steadiness as stability, when releases cancelled a mix moving toward clinicians who began once dictation was compulsory, and with the model frozen and the two largest hospitals going compulsory the 2027 quarters pass 12 per cent.",
- "architecture": 5,
+ "updated": "2026-11-10",
+ "architecture": 6,
  "loops": 0,
  "precut": {
   "exit": 0,
-  "date": "2026-11-08",
-  "checks": 75,
-  "note": "final cut, 0 FAIL, 0 WARN"
+  "date": "2026-11-10",
+  "checks": 86,
+  "note": "results-chain contract, 0 FAIL, 2 WARN"
  },
  "leak": {
-  "leak_py": "REVIEW, no LEAK (2026-11-08, --asof 2027-01-11, final cut)",
-  "reader": "2026-11-08 isolated reader (Sonnet, medium): no step named, no ranking or helper file, Q5 reads Schedule 4.2 as the golden population and weighting, Q6 an analytical modelling choice; no finding"
+  "leak_py": "REVIEW, no LEAK (2026-11-10, --asof 2027-01-11): coincidences only (a section number 4.1, LCB-2's 7.8, the release name 6.0, the audit rate 2.5, the rollout plan's 2027 dates, generic words in the governing documents)",
+  "reader": "2026-11-10 isolated reader (Sonnet, medium, scratch copy only): Q1 only the filed WHAT (Schedule 4.2's measure and population, QA-07 4's adjudicated score), Q2 to Q4 none, Q5 Schedule 4.1 and QA-07 5 executed by the golden, Q6 none (every ask turns on analysis; the university hospitals' low shares are the subject of the decomposition ask, not a shortcut); one realism nit (the quality reports' shares to sixteen digits) fixed"
  },
  "duplicate_check": {
-  "heart": "WARN (2026-11-08, final cut): repeat.gate_g against task7 v6, answered in the Draw",
-  "surface": "exit 0"
+  "heart": "WARN on the remote view (template.chain_near, overuse.weight, repeat.gate_g, repeat.deliverables, repeat.question_form, answered in the note's Template check)",
+  "nearest": "task17 (chain and shape), task3 v7 and task14 v2 (gate_g)"
  },
  "judge": {
   "verdict": "DETERMINISTIC",
-  "disposition": "first pass DETERMINISTIC, FIX_NOW (the percentile rounding, audit times after the as-of date, two figures finer than the data carry), all fixed; the one targeted re-judge DETERMINISTIC, APPROVE, its nit restated",
-  "gate_g": "forecasting, analytical_non_defect, surface_read_dependency no, sole_data_defect no",
-  "gate_h": "domain pass, layers pass, decisive_step analytical, chain 5 inferences, one_fact none",
-  "report": "task2/determinism_check_report.md"
+  "disposition": "APPROVE",
+  "gate_h": "domain pass, layers pass, one_thing none, stump power spread across at least three independently failable steps; the thread's one-fact count (3 of 8) answered by the hand-check (selection alone files Ceiling B)",
+  "report": "task2/determinism_check_report.md",
+  "history": [
+   {
+    "date": "2026-11-10",
+    "protocol": "older local definition (graded blocks inlined in the thread's prompt)",
+    "verdict": "DETERMINISTIC",
+    "disposition": "APPROVE",
+    "gate_g": "forecasting and decomposition_attribution, analytical_non_defect, surface_read_dependency no, sole_data_defect no",
+    "gate_h": "pass; one_thing none; 9 results across 8 areas; the thread's careful pass guessed at 4 to 5 of 9 and its one-fact hint at 3 to 4 of 9 (read against the carry-forward, 1 of 9)",
+    "applied": "the mover filter named in Critical Component 1; the note's one-fact line answers the rival hint",
+    "why_rerun": "no blind first derivation, which the READY gate now prices against the careful column; the thread corroborated and did not re-fit R2, R3 and R6 to R8"
+   }
+  ],
+  "gate_g": "method_or_model_selection with decomposition_attribution and forecasting, analytical_non_defect, surface_read_dependency no, sole_data_defect no",
+  "protocol": "current: the thread derived blind into own_derivation.md before opening graded_blocks.md (order kept)",
+  "first_pass": "inside its band: R1 only; outside: Shannonside University's Q4 (4 to 6), Ballykeel's Q4 dictations (1,600 to 2,300), the percentile (17 to 20); no figure for the quarters or the bridge's split; ceiling undecided 12 or 14; careful column unchanged, pair 26.0"
  },
  "returned": [
   {
@@ -57,7 +70,7 @@
    "commit": ""
   }
  ],
- "resume": "stage 5 READY: the author uploads prompt.txt and target.zip; when the two runs come back, /triage-runs task2",
+ "resume": "READY: the author rewrites prompt.txt in their own words (voice-check.py task2 --rewrite), uploads it with target.zip, generates the two runs, and runs /triage-runs task2",
  "approved": null,
  "delivered": "2026-11-01",
  "portal": null,
@@ -88,20 +101,26 @@
   {
    "architecture": 5,
    "drawn": "2026-11-08",
+   "fate": "spent 2026-11-10 on the platform: both runs typed clinicians on sight and lost the call (16 against 14) only through an unpinned split of the compulsory starters with an upward mix choice each; the call rested on one constructed subgroup, level 3 on the client's depth scale"
+  },
+  {
+   "architecture": 6,
+   "drawn": "2026-11-10",
    "fate": ""
   }
  ],
  "gates": {
-  "date": "2026-11-08",
-  "checks": "37 of 37",
-  "figures_check": "58 of 58",
-  "precut": "exit 0, 75 checks, 0 WARN",
-  "voice_check": "exit 0",
-  "leak_py": "REVIEW, no LEAK",
-  "surface": "exit 0",
-  "heart": "WARN",
+  "date": "2026-11-10",
+  "checks": "51 of 51",
+  "figures_check": "119 figures, 0 absent",
+  "precut": "exit 0, 86 checks, 0 FAIL, 2 WARN (R3 upstream of five; nearest chains)",
+  "effort": "exit 0: quick 18.0, careful 26.0, thorough 100.0; largest hint 1 of 9; 4 distinct wrong calls",
+  "voice_check": "exit 0, no rounding instruction",
+  "leak_py": "REVIEW, no LEAK (--asof 2027-01-11)",
   "audit_containers": "exit 0, 0 FAIL, 0 WARN",
-  "byte_identical": "make.py --twice on the final generator"
+  "surface": "exit 0",
+  "heart": "WARN on the remote card corpus (origin/main plus this checkout's newer cards); BLOCK only on this checkout's stale corpus, where task17 is still in the window",
+  "byte_identical": "make.py --twice: target, golden, both zips, submission, metadata, figures.json and effort.json SAME"
  },
  "history": [
   {
@@ -125,7 +144,7 @@
   "note": "moved from Project Mark unstumped on the Mark portal; carried on here for the Sulfur bar"
  },
  "subdomain": "robustness-analysis",
- "call": "Commit to Ceiling C, 14 per cent: the expected share of audited dictations above 15 per cent word error rate stays under 10 per cent in 2027 Q1, between 10 and 12 in Q2 and Q3 and about 13 per cent in Q4; nine in ten Q4 dictations under 16 per cent",
+ "call": "Commit to Ceiling C, 14 per cent: the expected share of audited dictations above 15 per cent word error rate is about 9.6, 11.2, 11.6 and 13.0 per cent in the four quarters of 2027, so 10 is passed from the second quarter and 12 in the fourth",
  "runs": {
   "run1": null,
   "run2": null,
@@ -144,14 +163,28 @@
     "run1": "on the golden",
     "run2": "on the golden",
     "triage": "REDESIGN"
+   },
+   {
+    "architecture": 5,
+    "date": "2026-11-10",
+    "run1": "not reported, off the call (16; Q4 14.13)",
+    "run2": "not reported, off the call (16; Q4 14.52, Q1 10.47, percentile 16.67)",
+    "triage": "not run; read in session: both runs on the decisive step, the call lost to an unpinned fork"
    }
   ]
  },
  "build": {
-  "checks": "37 of 37 (generator/checks.py on the cut pack)",
-  "figures_check": "58 of 58",
-  "byte_identical": "make.py --twice: target, golden, both zips, submission, metadata, figures.json SAME (before the file renames; re-run after)",
-  "ceiling": "pair 44.3 (landed run 74.8, steady route 13.9), shallow keep 12.5 per cent",
-  "world": "seed 52515; small hospitals 70 per cent voluntary uptake; teaching hospitals 13 and 15 per cent at launch, 40 per cent for new hires; releases 0.975, 0.94, 0.975, 0.975; audit 2.5 per cent; frozen release 6.0"
+  "world": "seed 60607; base error 0.1048 at release 3.4; uptake at the smaller hospitals 0.55 to 0.86, the university hospitals 0.13 and 0.15, their later hires 0.40; acoustic effects -0.05 to +0.05 at the smaller hospitals, +0.06 and +0.08 at the university hospitals; a quarter of posts at the university hospitals filled by moves, mostly from the smaller hospitals; switch-over over four months; releases 0.975, 0.94, 0.975, 0.975; audit 2.5 per cent; frozen release 6.0",
+  "checks": "51 of 51 (generator/checks.py on the cut pack)"
+ },
+ "doctrine": "throughout",
+ "chain": "R1 the record's ends tied to the reports; R2 the change split into releases and the rest within clinicians; R3 each university hospital's own effect through the moves; R4 the 2027 starters as the staff less its volunteers; R5 Ballykeel's fourth-quarter dictations through the switch-over; R6 each university hospital's fourth-quarter share; R7 each quarter's lowest ceiling; R8 the fourth quarter's 90th percentile; R9 the ceiling",
+ "depth_level": "4, reaching 5 (four independent judgments; the shortcuts land on 10, 12, 16 and none)",
+ "paper_pair": 26.0,
+ "effort": {
+  "quick": 18.0,
+  "careful": 26.0,
+  "thorough": 100.0,
+  "largest_hint": "1 of 9 (R3)"
  }
 }

@@ -1,0 +1,358 @@
+{
+ "results": [
+  {
+   "id": "R1",
+   "name": "the audited share at the bridge's two ends, from the cleaned audits tied to the quarterly reports",
+   "graded_as": "Ask 7",
+   "figure": "r1_bridge_ends",
+   "depends": [],
+   "independent": "",
+   "golden": {
+    "start": 10.1,
+    "end": 7.8
+   },
+   "bands": {
+    "start": [
+     10.0,
+     10.2
+    ],
+    "end": [
+     7.7,
+     7.8999999999999995
+    ]
+   },
+   "passes": {
+    "quick": {
+     "start": 10.1,
+     "end": 7.8
+    },
+    "careful": {
+     "start": 10.1,
+     "end": 7.8
+    },
+    "thorough": {
+     "start": 10.1,
+     "end": 7.8
+    }
+   }
+  },
+  {
+   "id": "R2",
+   "name": "the 2023 to 2026 change split into the releases and the mix of dictations",
+   "graded_as": "Component 4",
+   "figure": "r2_bridge_split",
+   "depends": [
+    "R1"
+   ],
+   "independent": "",
+   "golden": {
+    "releases": -4.1,
+    "mix": 1.9
+   },
+   "bands": {
+    "releases": [
+     -4.7,
+     -3.5
+    ],
+    "mix": [
+     1.2,
+     2.5
+    ]
+   },
+   "passes": {
+    "quick": {
+     "releases": -2.2,
+     "mix": 0.0
+    },
+    "careful": {
+     "releases": -4.1,
+     "mix": 1.9
+    },
+    "thorough": {
+     "releases": -4.1,
+     "mix": 1.9
+    }
+   }
+  },
+  {
+   "id": "R3",
+   "name": "each university hospital's own effect on a clinician's word error, against the six smaller hospitals",
+   "graded_as": "Component 1",
+   "figure": "r3_hospital_effects",
+   "depends": [],
+   "independent": "",
+   "golden": {
+    "SSU": 5.0,
+    "BKU": 8.6
+   },
+   "bands": {
+    "SSU": [
+     3.5,
+     6.5
+    ],
+    "BKU": [
+     7.0,
+     10.0
+    ]
+   },
+   "passes": {
+    "quick": null,
+    "careful": {
+     "value": null,
+     "grade": "missed",
+     "why": "no hospital effect estimated: the university hospitals' dictators read at the smaller hospitals' acoustic level"
+    },
+    "thorough": {
+     "SSU": 5.0,
+     "BKU": 8.6
+    }
+   }
+  },
+  {
+   "id": "R4",
+   "name": "the heavy-correction share of each university hospital's 2027 starters",
+   "graded_as": "Component 2",
+   "figure": "r4_starters_share",
+   "depends": [
+    "R3"
+   ],
+   "independent": "",
+   "golden": {
+    "SSU": 18.2,
+    "BKU": 21.7
+   },
+   "bands": {
+    "SSU": [
+     17.0,
+     19.5
+    ],
+    "BKU": [
+     20.5,
+     23.0
+    ]
+   },
+   "passes": {
+    "quick": null,
+    "careful": {
+     "SSU": 27.7,
+     "BKU": 27.7
+    },
+    "thorough": {
+     "SSU": 18.2,
+     "BKU": 21.7
+    }
+   }
+  },
+  {
+   "id": "R5",
+   "name": "Ballykeel University Hospital's fourth-quarter dictations",
+   "graded_as": "Ask 5",
+   "figure": "r5_bku_q4_dictations",
+   "depends": [],
+   "independent": "independent: the six past go-lives' volumes and the register's staff in post",
+   "golden": 88000,
+   "band": [
+    85000,
+    91000
+   ],
+   "partly": [
+    80000,
+    96000
+   ],
+   "passes": {
+    "quick": 45000,
+    "careful": 133000,
+    "thorough": 88000
+   }
+  },
+  {
+   "id": "R6",
+   "name": "each university hospital's expected fourth-quarter share",
+   "graded_as": "Ask 4",
+   "figure": "r6_univ_q4_share",
+   "depends": [
+    "R3",
+    "R4",
+    "R5"
+   ],
+   "independent": "",
+   "golden": {
+    "SSU": 14.9,
+    "BKU": 12.9
+   },
+   "bands": {
+    "SSU": [
+     14.3,
+     15.5
+    ],
+    "BKU": [
+     12.3,
+     13.5
+    ]
+   },
+   "passes": {
+    "quick": {
+     "SSU": 4.0,
+     "BKU": 4.3
+    },
+    "careful": {
+     "SSU": 22.1,
+     "BKU": 19.8
+    },
+    "thorough": {
+     "SSU": 14.9,
+     "BKU": 12.9
+    }
+   }
+  },
+  {
+   "id": "R7",
+   "name": "each 2027 quarter's lowest ceiling",
+   "graded_as": "Ask 3",
+   "figure": "r7_lowest_ceilings",
+   "depends": [
+    "R6"
+   ],
+   "independent": "",
+   "golden": [
+    10,
+    12,
+    12,
+    14
+   ],
+   "ordered": true,
+   "passes": {
+    "quick": [
+     10,
+     10,
+     10,
+     10
+    ],
+    "careful": [
+     12,
+     16,
+     16,
+     null
+    ],
+    "thorough": [
+     10,
+     12,
+     12,
+     14
+    ]
+   }
+  },
+  {
+   "id": "R8",
+   "name": "the word error rate nine in ten fourth-quarter dictations stay under",
+   "graded_as": "Ask 6",
+   "figure": "r8_p90_q4",
+   "depends": [
+    "R4",
+    "R5"
+   ],
+   "independent": "",
+   "golden": 16.1,
+   "band": [
+    15.8,
+    16.3
+   ],
+   "partly": [
+    15.5,
+    16.6
+   ],
+   "passes": {
+    "quick": 14.1,
+    "careful": 17.4,
+    "thorough": 16.1
+   }
+  },
+  {
+   "id": "R9",
+   "name": "the ceiling",
+   "graded_as": "Recommendation",
+   "figure": "r9_ceiling",
+   "depends": [
+    "R7"
+   ],
+   "independent": "",
+   "golden": 14,
+   "passes": {
+    "quick": 10,
+    "careful": null,
+    "thorough": 14
+   }
+  }
+ ],
+ "hints": [
+  {
+   "sentence": "A university hospital's 2027 starters are most of its staff, so they look like the smaller hospitals' whole staffs rather than their compelled clinicians.",
+   "rescues": []
+  },
+  {
+   "sentence": "The hospitals' own effects on error show in the clinicians who moved between them.",
+   "rescues": [
+    "R3"
+   ]
+  },
+  {
+   "sentence": "At every go-live the departments switch over one after another for about four months.",
+   "rescues": [
+    "R5"
+   ]
+  }
+ ],
+ "routes": [
+  {
+   "name": "the golden",
+   "answer": 14,
+   "golden": true
+  },
+  {
+   "name": "R0 the 2026 share carried forward",
+   "answer": 10
+  },
+  {
+   "name": "R0 the record's highest quarter",
+   "answer": 12
+  },
+  {
+   "name": "R1 each hospital's late-2026 share at 2027's dictations",
+   "answer": 10
+  },
+  {
+   "name": "R2 the 2027 starters at the smaller hospitals' compelled clinicians' rate",
+   "answer": "none"
+  },
+  {
+   "name": "R2 the 2027 starters at the smaller hospitals' compulsory starters' rate, pooled",
+   "answer": 14
+  },
+  {
+   "name": "R2 the 2027 starters at the rate of those hired after a go-live",
+   "answer": 10
+  },
+  {
+   "name": "R3 no hospital effect (the university hospitals at the smaller hospitals' level)",
+   "answer": 12
+  },
+  {
+   "name": "R4 the go-lives at full volume from the date",
+   "answer": 16
+  },
+  {
+   "name": "R4 every clinician starting on the date at their own first months' volume",
+   "answer": 16
+  },
+  {
+   "name": "careful but hurried: the compelled rate, own first months, no hospital effect",
+   "answer": "none"
+  }
+ ],
+ "weights": {
+  "recommendation": 14,
+  "components": 24,
+  "asks": 55,
+  "instruction": 7
+ }
+}

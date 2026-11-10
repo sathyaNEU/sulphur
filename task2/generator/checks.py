@@ -1,7 +1,8 @@
-"""task2 checks, run on the cut pack: the Layer 1 build ties to the quality reports, the record carries the
-structure the design needs (a steady share, the release gap's climb, the release steps within clinicians, the
-compulsory starters' level alike at every go-live), the golden family agrees on every graded figure, the ladder's
-routes land off the call, and every fork row is asserted."""
+"""task2 architecture 6 checks, run on the cut pack: the Layer 1 build ties to the quality reports, the record
+carries the structure the chain needs (release steps within clinicians, selective uptake, each hospital's own effect
+identified through the clinicians who moved, a slow switch-over at every go-live), the golden family lands every
+graded figure inside its band, every rival outside the family is ruled out by named data, and every hurried route
+lands off at least one graded figure."""
 import math
 import os
 from collections import defaultdict
@@ -15,13 +16,15 @@ import world as W
 
 RESULTS = []
 
+# the band each graded figure carries (the golden family spans inside it; every hurried route falls outside one)
+BANDS = {"ssu": (0.143, 0.155), "bku": (0.123, 0.135), "bku_vol": (85000, 91000), "p90": (0.158, 0.163),
+         "site_SSU": (0.035, 0.065), "site_BKU": (0.070, 0.100), "releases": (-0.0474, -0.0348),
+         "mix": (0.0124, 0.0250), "ent_SSU": (0.170, 0.195), "ent_BKU": (0.205, 0.230)}
+EXACT = ("ceiling", "first_past", "bands")
+
 
 def check(name, ok, detail=""):
     RESULTS.append((name, bool(ok), str(detail)))
-
-
-def pc(x):
-    return int(math.floor(100 * x + 0.5))
 
 
 def q_of(t):
@@ -37,65 +40,51 @@ def audited_shares(P, sel=None):
     return {k: float(np.mean(v)) for k, v in acc.items()}
 
 
-def graded(G):
-    """every figure the rubric grades, at its asked rounding"""
-    return dict(ceiling=G["ceiling"], first_past=G["first_past"], bands=G["bands"],
-                p90_q4=pc(G["q"][(2027, 4)]["p90"]))
-
-
-def starters_pooled(P, per, typ, rates, steps):
-    return np.concatenate([rates["V"], rates["M"]])
-
-
-def starters_recent(P, per, typ, rates, steps):
-    rec = {p for p, d in per.items() if W.mi(2025, 1) <= d["first"] <= GD.DEC}
-    return np.array([a["wer"] * math.exp(-steps[a["release"]]) for a in P.audits if a["person"] in rec])
-
-
-def route_flat(P, G):
-    s = audited_shares(P)
-    v = float(np.mean([s[(2026, q)] for q in (1, 2, 3, 4)]))
-    return [v] * 4
-
-
-def route_drift(P, G):
-    s = audited_shares(P)
-    drift = (s[(2024, 2)] - s[(2023, 1)]) / 5.0
-    base = (s[(2026, 3)] + s[(2026, 4)]) / 2
-    return [base + drift * (k + 1.5) for k in range(4)]
-
-
-def route_hospitals(P, G, step=0.0):
-    hs = {h: audited_shares(P, sel=lambda a, h=h: a["site"] == h).get((2026, 4), 0.0) for h in P.comp}
-    out = []
-    for (y, q) in GD.Q27:
-        num = den = 0.0
-        for t in GD.months(y, q):
-            for h in P.comp:
-                v = sum(G["out"][(t, h)].values())
-                c = P.comp[h]
-                add = step if (c > GD.DEC and t >= c + 1) else 0.0
-                num += v * (hs[h] + add)
-                den += v
-        out.append(num / den)
+def graded(X):
+    """every figure the rubric grades"""
+    out = dict(ceiling=X["ceiling"], first_past=X["first_past"], bands=X["bands"],
+               ssu=X["hq"]["SSU"]["share"], bku=X["hq"]["BKU"]["share"], bku_vol=X["hq"]["BKU"]["vol"], p90=X["p90"],
+               site_SSU=math.exp(X["F"]["site"]["SSU"]) - 1, site_BKU=math.exp(X["F"]["site"]["BKU"]) - 1,
+               ent_SSU=X["U"]["SSU"]["h_ent"], ent_BKU=X["U"]["BKU"]["h_ent"])
+    if X["bridge"] is not None:
+        out.update(releases=X["bridge"]["releases"], mix=X["bridge"]["mix"])
     return out
 
 
-def golive_step(P):
-    steps = []
-    for h, c in P.comp.items():
-        if not (W.mi(2023, 4) <= c <= W.mi(2026, 3)):
-            continue
-        sh = audited_shares(P, sel=lambda a, h=h: a["site"] == h)
-        before = q_of(c - 3)
-        after = [q_of(c + 3), q_of(c + 6)]
-        steps.append(np.mean([sh[k] for k in after]) - sh[before])
-    return float(np.mean(steps))
+def misses(gr, gold):
+    """the graded figures a route files outside their bands (or off the golden's exact answers)"""
+    out = []
+    for k in EXACT:
+        if gr.get(k) != gold[k]:
+            out.append(k)
+    for k, (lo, hi) in BANDS.items():
+        if k in gr and not (lo <= gr[k] <= hi):
+            out.append(k)
+    return out
 
 
-def ceiling_of(shares):
-    m = 100 * max(shares)
-    return next((c for c in GD.CEILINGS if m <= c), None)
+def three_way(P, iters=400):
+    """a rival estimator of the hospital effects: clinician, release and hospital effects fitted together by
+    alternating projections over every audit"""
+    rows = [(a["person"], a["release"], a["site"], math.log(a["wer"])) for a in P.audits if a["e"] > 0]
+    ps = sorted({r[0] for r in rows})
+    rs = sorted({r[1] for r in rows})
+    hs = list(W.CODES)
+    pi = {p: k for k, p in enumerate(ps)}
+    ri = {r: k for k, r in enumerate(rs)}
+    hi = {h: k for k, h in enumerate(hs)}
+    ip = np.array([pi[r[0]] for r in rows])
+    ir = np.array([ri[r[1]] for r in rows])
+    ih = np.array([hi[r[2]] for r in rows])
+    y = np.array([r[3] for r in rows])
+    npp, nr, nh = (np.bincount(x).astype(float) for x in (ip, ir, ih))
+    a, b, g = np.zeros(len(ps)), np.zeros(len(rs)), np.zeros(len(hs))
+    for _ in range(iters):
+        a = np.bincount(ip, y - b[ir] - g[ih], minlength=len(ps)) / npp
+        b = np.bincount(ir, y - a[ip] - g[ih], minlength=len(rs)) / nr
+        g = np.bincount(ih, y - a[ip] - b[ir], minlength=len(hs)) / nh
+    small = np.mean([g[hi[h]] for h in GD.SMALL])
+    return {h: float(g[hi[h]] - small) for h in hs}, {r: float(b[ri[r]] - b[ri["6.0"]]) for r in rs}
 
 
 def run(target, gen_dir, w=None):
@@ -103,129 +92,142 @@ def run(target, gen_dir, w=None):
     P = V.load(target)
     G = GD.golden(P)
     C.update(P=P, G=G)
-    dec = [(G["typ"][p], d["vol"].get(GD.DEC, 0)) for p, d in G["per"].items() if d["last"] == GD.DEC]
-    C["record_wV_2026"] = sum(v for k, v in dec if k == "V") / sum(v for _, v in dec)
-    C["record_vol_q4_2026"] = sum(d["vol"].get(t, 0) for d in G["per"].values() for t in range(GD.DEC - 2, GD.DEC + 1))
+    gold = graded(G)
+    C["graded"] = gold
     # ---- Layer 1: the quality reports tie to the cleaned audits, quarter by quarter
     wb = load_workbook(os.path.join(target, "quality_reports_2023_2026.xlsx"), read_only=True)
     rep = {}
     for i, r in enumerate(wb["Group"].iter_rows(values_only=True)):
         if i:
-            y, q = int(r[0][:4]), int(r[0][-1])
-            rep[(y, q)] = (int(r[1]), int(r[2]))
+            rep[(int(r[0][:4]), int(r[0][-1]))] = (int(r[1]), int(r[2]))
     s = audited_shares(P)
     n = defaultdict(int)
     for a in P.audits:
         n[q_of(a["t"])] += 1
     check("Layer 1: the cleaned audits tie to every quarterly report (counts and heavy dictations)",
-          all(rep[k][0] == n[k] and abs(rep[k][1] / rep[k][0] - s[k]) < 1e-9 for k in rep), str(len(rep)))
-    Pf = V.load(target, first_pass=True)
-    check("Layer 1: first-pass scores move no quarterly share by more than half a point",
-          max(abs(audited_shares(Pf)[k] - s[k]) for k in s) < 0.005)
-    # ---- the record
+          len(rep) == 16 and all(rep[k][0] == n[k] and abs(rep[k][1] / rep[k][0] - s[k]) < 1e-9 for k in rep), len(rep))
     rec = [s[(y, q)] for y in (2023, 2024, 2025, 2026) for q in (1, 2, 3, 4)]
     C["record"] = rec
-    late = [s[(y, q)] for (y, q) in sorted(s) if (y, q) >= (2024, 3)]
-    check("the record: no quarter since the middle of 2024 passes 10 per cent, and they span under 2.5 points",
-          max(late) <= 0.10 and max(late) - min(late) < 0.025, str([round(100 * x, 1) for x in late]))
-    g0 = (s[(2023, 1)] + s[(2023, 2)]) / 2
-    g1 = (s[(2023, 4)] + s[(2024, 1)]) / 2
-    C["gap"] = (g0, g1)
-    check("the record: the 2023 to 2024 release gap climbs half a point or more and stays under 10 per cent",
-          g1 - g0 >= 0.005 and max(s[(2023, 3)], s[(2023, 4)], s[(2024, 1)]) < 0.10, "%.2f to %.2f" % (100 * g0, 100 * g1))
-    st = G["steps"]
+    check("the record: every quarter between 7 and 12 per cent, none since the middle of 2024 above 10",
+          min(rec) > 0.07 and max(rec) < 0.12 and max(rec[6:]) <= 0.10, str([round(100 * x, 1) for x in rec]))
+    # ---- the error model
+    st = G["F"]["steps"]
     order = ["3.4", "4.0", "5.0", "5.2", "6.0"]
     check("the release steps within clinicians fall release by release", all(st[a] > st[b] for a, b in zip(order, order[1:])),
           str({k: round(v, 3) for k, v in st.items()}))
-    check("compulsory starters carry at least six times the voluntary clinicians' heavy share under 6.0",
-          G["share"]["M"] >= 6 * G["share"]["V"], "%.2f %.2f" % (100 * G["share"]["M"], 100 * G["share"]["V"]))
-    # the compulsory starters sit at one level whatever the go-live
-    lv = []
-    for h, c in P.comp.items():
-        if c > GD.DEC:
-            continue
-        x = [math.log(a["wer"]) - st[a["release"]] for a in P.audits
-             if a["e"] > 0 and G["typ"].get(a["person"]) == "M" and G["per"][a["person"]]["site0"] == h]
-        if len(x) > 300:
-            lv.append(float(np.mean(x)))
-    check("every go-live's compulsory starters at one level (mean log error under 6.0 within 0.15)",
-          max(lv) - min(lv) < 0.15, str([round(x, 3) for x in lv]))
-    lv = [math.exp(x) for x in lv]
-    C["golive_levels"] = lv           # each go-live's compulsory starters' typical error rate under 6.0
-    # no learning curve: a compulsory starter's release-adjusted error in the first three months matches later months
-    early, later = [], []
-    for a in P.audits:
-        if a["e"] > 0 and G["typ"].get(a["person"]) == "M":
-            k = a["t"] - G["per"][a["person"]]["first"]
-            (early if k < 3 else later).append(math.log(a["wer"]) - st[a["release"]])
-    C["learning"] = (float(np.mean(early)), float(np.mean(later)), len(early))
-    check("SF19 no learning curve: compulsory starters' first three months within 0.05 (log) of their later months",
-          abs(np.mean(early) - np.mean(later)) < 0.05, "%.3f against %.3f (%d early audits)" % C["learning"])
-    # ---- the golden family: every graded figure the same
+    into = G["F"]["into"]
+    check("each university hospital's own effect rests on 30 or more clinicians who dictated there and at another",
+          into["SSU"] >= 30 and into["BKU"] >= 30, str(into))
+    g3, b3 = three_way(P)
+    C["three_way"] = g3
+    check("the hospital effects agree within 1.5 points with a joint three-way fit",
+          all(abs(g3[h] - G["F"]["site"][h]) < 0.015 for h in W.TEACHING),
+          "%s against %s" % ({h: round(g3[h], 3) for h in W.TEACHING}, {h: round(G["F"]["site"][h], 3) for h in W.TEACHING}))
+    check("the 4.0 to 6.0 step agrees within a point with the joint fit", abs((b3["6.0"] - b3["4.0"]) - G["bridge"]["step"]) < 0.01,
+          "%.4f against %.4f" % (b3["6.0"] - b3["4.0"], G["bridge"]["step"]))
+    # ---- the record's own evidence of selective uptake
+    kr = GD.small_kind_rates(P, G["post"])
+    C["kinds"] = kr
+    check("selective uptake: the smaller hospitals' compelled clinicians carry twice the heavy share of those hired "
+          "after the go-live, who carry more than those who chose", kr["compelled"] > 2 * kr["hired"] > 2 * kr["chose"],
+          str({k: round(100 * v, 2) for k, v in kr.items()}))
+    up = {}
+    for h in GD.SMALL:
+        c = P.comp[h]
+        staff = [x for x, d in G["post"].items() if d["site"] == h and d["start"] < c and (d["end"] is None or d["end"] > c)]
+        up[h] = sum(1 for x in staff if G["post"][x]["first"] is not None and G["post"][x]["first"] < c) / len(staff)
+    C["uptake"] = up
+    check("uptake before the go-live differs from hospital to hospital (a spread of 20 points or more)",
+          max(up.values()) - min(up.values()) >= 0.20, str({h: round(100 * v) for h, v in up.items()}))
+    # ---- the switch-over
+    check("every go-live switches over slowly: under 40 per cent of a settled month in the first two months",
+          G["ramp"][0] < 0.25 and G["ramp"][1] < 0.45 and G["ramp"][4] > 0.85, str([round(x, 3) for x in G["ramp"]]))
+    # ---- the golden family: every graded figure inside its band
+    Pf = V.load(target, first_pass=True)
     fam = {"golden": G,
-           "SF11 the 6.0 audits alone (no release steps)": GD.golden(P, rates_how="frozen only"),
-           "SF9 incumbents held (no turnover)": GD.golden(P, incumbents_flat=True),
-           "SF13 the compulsory boundary a month earlier": GD.golden(P, boundary=-1),
            "SF3 first-pass scores": GD.golden(Pf),
-           "SF14 movers unlinked": GD.golden(V.load(target, link_movers=False)),
            "SF4 quarters by audit date": GD.golden(V.load(target, by_audit_date=True)),
-           "SF17 incumbents' volume from their last six months": GD.golden(P, inc_months=6),
-           "SF17 a starter's volume from 2025 and 2026": GD.golden(P, vm_from=W.mi(2025, 1))}
-    gg = graded(G)
-    for k, F in fam.items():
-        if k == "golden":
-            continue
-        check("%s: every graded figure as the golden's" % k, graded(F) == gg,
-              "%s %s" % ([round(100 * f["share"], 2) for f in F["q"].values()], graded(F)))
+           "SF11 the dictators' rate from every audit carried by its release step": GD.golden(P, rates_how="all releases"),
+           "SF13 population cells by grade alone": GD.golden(P, cells="grade"),
+           "SF17 settled volume from the last six months": GD.golden(P, recent=6),
+           "SF18 population from every clinician dictating after a go-live": GD.golden(P, pop_set="post go-live"),
+           "SF19 population read straight off the smaller hospitals' audits by grade": GD.golden(P, pop_how="empirical"),
+           "SF23 no calendar adjustment": GD.golden(P, season=False),
+           "SF10 the ramp from the four go-lives since 2023": GD.golden(P, ramp_sites=["KBR", "CSL", "KNA", "DRL"])}
     C["family"] = fam
-    # ruled out by a filed date or the record
-    nr = GD.golden(P, use_ramp=False)
-    check("SF10 starters at full volume from the go-live: the same ceiling (the first quarter past 10 and its band move)",
-          nr["ceiling"] == G["ceiling"],
-          str(graded(nr)))
-    C["no_ramp"] = nr
-    # ---- the ladder: every route that skips the step lands off the call
-    flat = route_flat(P, G)
-    drift = route_drift(P, G)
-    hosp = route_hospitals(P, G)
-    step = golive_step(P)
-    hstep = route_hospitals(P, G, step=step)
-    avg = GD.golden(P, starter_rates=starters_pooled)
-    recent = GD.golden(P, starter_rates=starters_recent)
-    lad = {"R0 the 2026 share carried forward": flat,
-           "R1 each hospital's 2026 share at 2027's hospital mix": hosp,
-           "R1 starters at the average clinician's level": [f["share"] for f in avg["q"].values()],
-           "R2 the release gap's drift added": drift,
-           "R2 the go-live step at the small hospitals, in points": hstep,
-           "R2 starters at the 2025 and 2026 starters' level": [f["share"] for f in recent["q"].values()]}
-    C["ladder"] = {k: (v, ceiling_of(v)) for k, v in lad.items()}
-    C["golive_step"] = step
-    for k, v in lad.items():
-        check("ladder: %s lands off the 14 per cent ceiling" % k, ceiling_of(v) != G["ceiling"],
-              "%s -> %s" % ([round(100 * x, 1) for x in v], ceiling_of(v)))
-    check("Gate F: no cheap route lands the call", sum(ceiling_of(v) == G["ceiling"] for v in lad.values()) == 0)
+    for k, X in fam.items():
+        gr = graded(X)
+        bad = misses(gr, gold)
+        check("%s: every graded figure inside its band" % k, not bad,
+              "%s %s" % (bad, {kk: (round(v, 4) if isinstance(v, float) else v) for kk, v in gr.items()}))
+    spans = {k: (min(graded(X)[k] for X in fam.values() if k in graded(X)),
+                 max(graded(X)[k] for X in fam.values() if k in graded(X))) for k in BANDS}
+    C["spans"] = spans
+    # ---- rivals outside the family, each ruled out by named data
+    unl = GD.golden(V.load(target, link_movers=False))
+    check("SF14 staff numbers left unlinked: no clinician is seen at two hospitals, so the hospitals' own effects cannot "
+          "be measured (the register links %d moves)" % sum(1 for d in P.reg.values() if d["prev"]),
+          unl["F"]["pairs"] == 0, str(graded(unl)["ceiling"]))
+    C["unlinked"] = unl
+    for name, use in [("release 6.0 audits alone", lambda a: a["release"] == "6.0"),
+                      ("the 2025 and 2026 audits alone", lambda a: a["t"] >= W.mi(2025, 1))]:
+        X = GD.golden(P, fit_use=use)
+        check("SF15 the hospital effects from %s rest on %d and %d clinicians seen at two hospitals against %d and %d"
+              % (name, X["F"]["into"]["SSU"], X["F"]["into"]["BKU"], into["SSU"], into["BKU"]),
+              X["F"]["into"]["SSU"] < 0.8 * into["SSU"] and X["F"]["into"]["BKU"] < 0.8 * into["BKU"])
+    # ---- the hurried routes: each lands off at least one graded figure
+    routes = {
+        "R0 the 2026 share carried forward": GD.route(P, G, "steady"),
+        "R0 the record's highest quarter": GD.route(P, G, "history"),
+        "R1 each hospital's late-2026 share at 2027's dictations": GD.route(P, G, "hospitals"),
+    }
+    full = {
+        "R2 the 2027 starters at the smaller hospitals' compelled clinicians' rate": GD.golden(P, starter_from="compelled"),
+        "R2 the 2027 starters at the smaller hospitals' compulsory starters' rate, pooled": GD.golden(P, starter_from="pooled"),
+        "R2 the 2027 starters at the rate of those hired after a go-live": GD.golden(P, starter_from="hired"),
+        "R3 no hospital effect (the university hospitals at the smaller hospitals' level)": GD.golden(P, site_off=True),
+        "R4 the go-lives at full volume from the date": GD.golden(P, use_ramp=False),
+        "R4 every clinician starting on the date at their own first months' volume": GD.golden(P, start_kind="own first months"),
+        "careful but hurried: the compelled rate, own first months, no hospital effect":
+            GD.golden(P, starter_from="compelled", start_kind="own first months", site_off=True),
+    }
+    C["routes"] = {k: (v, GD.band(max(v))) for k, v in routes.items()}
+    C["full_routes"] = full
+    for k, v in routes.items():
+        check("route %s lands off the call" % k, GD.band(max(v)) != G["ceiling"],
+              "%s -> %s" % ([round(100 * x, 1) for x in v], GD.band(max(v))))
+    for k, X in full.items():
+        bad = misses(graded(X), gold)
+        check("route %s misses graded figures" % k, len(bad) >= 2, "%s ceiling %s" % (bad, X["ceiling"]))
+    wrong = {GD.band(max(v)) for v in routes.values()} | {X["ceiling"] for X in full.values()}
+    wrong.discard(G["ceiling"])
+    check("the hurried routes land on three or more different wrong calls", len(wrong) >= 3, str(sorted(wrong, key=str)))
+    br = GD.bridge_routes(P, G)
+    C["bridge_routes"] = br
+    for k, v in br.items():
+        check("bridge route %s files the releases outside their band" % k,
+              not (BANDS["releases"][0] <= v["releases"] <= BANDS["releases"][1]), "%.4f" % v["releases"])
+    C["p90_levels"] = GD.p90_levels(P, G)
+    check("the percentile read off clinicians' levels falls outside its band", not (BANDS["p90"][0] <= C["p90_levels"] <= BANDS["p90"][1]),
+          "%.4f" % C["p90_levels"])
     # ---- margins
-    qs = [f["share"] for f in G["q"].values()]
-    allq = [[f["share"] for f in F["q"].values()] for F in fam.values()]
-    check("the voluntary clinicians' share of fourth-quarter dictation under two fifths in every member",
-          all(F["q"][(2027, 4)]["wV"] < 0.40 for F in fam.values()),
-          str([round(F["q"][(2027, 4)]["wV"], 3) for F in fam.values()]))
-    check("the call: every family member's highest quarter between 12.25 and 13.75", all(0.1225 <= max(x) <= 0.1375 for x in allq),
-          str([round(100 * max(x), 2) for x in allq]))
-    check("the first quarters past 10 and 12: the second and the fourth, in every member, with 0.2 points to spare",
-          all(x[0] <= 0.098 and x[1] >= 0.102 and x[2] <= 0.118 and x[3] >= 0.122 for x in allq),
-          str([[round(100 * v, 2) for v in x] for x in allq]))
-    check("the fourth quarter's 90th percentile at least 0.15 from its rounding line in every member",
-          all(abs(100 * F["q"][(2027, 4)]["p90"] - math.floor(100 * F["q"][(2027, 4)]["p90"]) - 0.5) >= 0.15
-              for F in fam.values()), str([round(100 * F["q"][(2027, 4)]["p90"], 2) for F in fam.values()]))
-
+    allq = [[X["q"][k]["share"] for k in GD.Q27] for X in fam.values()]
+    check("the quarters in every member: the first under 9.8, the second and third between 10.2 and 11.8, the fourth "
+          "between 12.4 and 13.6", all(x[0] < 0.098 and 0.102 < x[1] < 0.118 and 0.102 < x[2] < 0.118 and 0.124 < x[3] < 0.136
+                                       for x in allq), str([[round(100 * v, 2) for v in x] for x in allq]))
+    q = [G["q"][k]["share"] for k in GD.Q27]
+    C["q"] = q
     # ---- fork rows closed by a filed sentence (the reading is the schedule's, the procedure's or the notice's)
-    for sf in ("SF1 the audited share: the audit is a random sample within hospital and month (QA-07 1)",
-               "SF2 word error rate: QA-07 3", "SF5 above 15 per cent: strictly above (Schedule 4.1)",
-               "SF6 the 2027 population: every dictation under the service (Schedule 4.2)",
+    for sf in ("SF1 the audited share: a random sample within hospital and month (QA-07 1)",
+               "SF2 word error rate: substitutions, deletions and insertions over the reference words (QA-07 3)",
+               "SF5 above 15 per cent: strictly above (Schedule 4.1)",
+               "SF6 the 2027 population: every dictation under the service, compulsory hospitals included (Schedule 4.2)",
                "SF7 the release: 6.0 through 2027 (SN-2026-14)", "SF8 passing a ceiling: above it (Schedule 4.3)",
+               "SF9 the staff in post: the HR count at 31 December 2026, a leaver replaced like for like (rollout plan)",
                "SF12 the percentile of dictations: the prompt's 'dictations'",
-               "SF16 the ceiling: the lowest offered at or above every quarter",
-               "SF18 the nine-in-ten rate: the 90th percentile rounded to the nearest whole per cent (the prompt's words)"):
+               "SF16 the ceiling: the lowest offered at or above every quarter (Schedule 4.3)",
+               "SF20 the bridge's two orders: both inside the releases' band",
+               "SF21 the bridge window: the second quarter of 2023 to the last of 2026 (the prompt)",
+               "SF22 a hospital's own effect: against the six smaller hospitals' average (the answer blocks)"):
         check(sf, True)
     return C

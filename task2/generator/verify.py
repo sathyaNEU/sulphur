@@ -38,7 +38,9 @@ def load(target, comp=None, first_pass=False, link_movers=True, by_audit_date=Fa
     for i, r in enumerate(ws.iter_rows(values_only=True)):
         if i == 0:
             continue
-        reg[int(r[0])] = dict(site=r[1], grade=r[2], specialty=r[3], prev=int(r[5]) if r[5] else None, status=r[6])
+        reg[int(r[0])] = dict(site=r[1], grade=r[2], specialty=r[3], prev=int(r[5]) if r[5] else None, status=r[6],
+                              start=W.mi(r[4].year, r[4].month) + (r[4].day - 1) / 31.0,
+                              end=(W.mi(r[7].year, r[7].month) + (r[7].day - 1) / 31.0) if r[7] else None)
     person = {}
     for s in reg:
         p = s
@@ -46,6 +48,8 @@ def load(target, comp=None, first_pass=False, link_movers=True, by_audit_date=Fa
             p = reg[p]["prev"]
         person[s] = p
     P.reg, P.person = reg, person
+    # in post on 31 December 2026: on the register, appointed by then and not left
+    P.in_post = {s: d for s, d in reg.items() if d["status"] == "in post" and d["start"] < W.DEC + 1}
     # deployment dates from Schedule 2
     txt = "" if comp is not None else subprocess.run(
         ["pdftotext", "-layout", os.path.join(target, "services_agreement_schedule2_deployment.pdf"), "-"],

@@ -1,17 +1,23 @@
-"""task2 architecture 5: the world behind the pack (Larkmoor Speech and Shannonside Hospital Group).
+"""task2 architecture 6: the world behind the pack (Larkmoor Speech and Shannonside Hospital Group).
 
-Eight hospitals offer Larkmoor's medical dictation; before a hospital's compulsory date its clinicians choose whether
-to dictate (the voluntary uptake), from that date every clinician in post dictates and every later starter does too.
-A clinician's own error level is drawn once: clinicians who began dictating before their hospital's compulsory date
-(chose it) sit lower than those who began on or after it. Each model release multiplies every clinician's level by
-its own factor. A dictation's word error rate scatters about the clinician's level at the release in force. The
-audit takes a random sample of each hospital's dictations each month. Recognition is frozen at the last 2026 release
-through 2027 (the platform migration), and the two teaching hospitals go compulsory in March and September 2027."""
+Eight hospitals offer Larkmoor's medical dictation. Every clinician has their own recognisability (their grade and
+specialty, their voice and habits); every hospital has its own acoustic conditions (wards, rooms, network), which
+raise or lower the error of whoever dictates there. Before a hospital's compulsory date its clinicians choose whether
+to dictate, and they choose by how well it works for them, so uptake is selective, and how many choose differs from
+hospital to hospital. From the compulsory date every clinician in post dictates, and so does every later starter;
+departments switch over in waves and a new user's first months are short ones. Clinicians move between the group's
+hospitals under a new staff number and keep dictating if they already did. Each recognition release multiplies every
+clinician's error by its own factor; recognition is frozen at release 6.0 through 2027 for the platform migration, and
+the two university hospitals go compulsory on 1 February and 1 October 2027."""
+import datetime as dt
 import math
 import os as _os
+from statistics import NormalDist
+
 import numpy as np
 
-SEED = int(__import__("os").environ.get("T2_SEED", "52515"))
+E = _os.environ.get
+SEED = int(E("T2_SEED", "60607"))
 START, END = (2022, 1), (2027, 12)          # months simulated; the pack records to December 2026
 REC_FROM, REC_TO = (2023, 1), (2026, 12)    # the audit record
 
@@ -22,40 +28,55 @@ def mi(y, m):
 
 NM = mi(*END) + 1
 ASOF = mi(2027, 1)                          # first month not on record
+DEC = mi(2026, 12)
 
-# code, name, size (clinicians in post), voluntary uptake, compulsory month
+# code, name, posts (clinicians in post), voluntary uptake, compulsory month, acoustic effect (log), university hospital
 HOSPITALS = [
-    ("CLM", "Clonmore General Hospital", 160, float(_os.environ.get("T2_UPS", "0.70")), mi(2022, 5)),
-    ("RTH", "Rathcullen Hospital", 140, float(_os.environ.get("T2_UPS", "0.70")), mi(2022, 11)),
-    ("KBR", "Kilbrannagh Regional Hospital", 200, float(_os.environ.get("T2_UPS", "0.70")), mi(2023, 6)),
-    ("CSL", "Castlelough Hospital", 150, float(_os.environ.get("T2_UPS", "0.70")), mi(2024, 6)),
-    ("KNA", "Knockarra Community Hospital", 190, float(_os.environ.get("T2_UPS", "0.70")), mi(2025, 1)),
-    ("DRL", "Drumleigh Hospital", 170, float(_os.environ.get("T2_UPS", "0.70")), mi(2025, 9)),
-    ("SSU", "Shannonside University Hospital", int(_os.environ.get("T2_SSU", "820")), float(_os.environ.get("T2_UPT", "0.13")), mi(2027, 2)),
-    ("BKU", "Ballykeel University Hospital", int(_os.environ.get("T2_BKU", "1250")), float(_os.environ.get("T2_UPT", "0.13")) + 0.02, mi(2027, 10)),
+    ("CLM", "Clonmore General Hospital", 160, float(E("U_CLM", "0.62")), mi(2022, 5), float(E("G_CLM", "-0.05")), False),
+    ("RTH", "Rathcullen Hospital", 140, float(E("U_RTH", "0.74")), mi(2022, 11), float(E("G_RTH", "0.03")), False),
+    ("KBR", "Kilbrannagh Regional Hospital", 200, float(E("U_KBR", "0.55")), mi(2023, 6), float(E("G_KBR", "0.00")), False),
+    ("CSL", "Castlelough Hospital", 150, float(E("U_CSL", "0.81")), mi(2024, 6), float(E("G_CSL", "0.05")), False),
+    ("KNA", "Knockarra Community Hospital", 190, float(E("U_KNA", "0.68")), mi(2025, 1), float(E("G_KNA", "-0.03")), False),
+    ("DRL", "Drumleigh Hospital", 170, float(E("U_DRL", "0.86")), mi(2025, 9), float(E("G_DRL", "0.02")), False),
+    ("SSU", "Shannonside University Hospital", 820, float(E("U_SSU", "0.13")), mi(2027, 2), float(E("G_SSU", "0.06")), True),
+    ("BKU", "Ballykeel University Hospital", 1250, float(E("U_BKU", "0.15")), mi(2027, 10), float(E("G_BKU", "0.08")), True),
 ]
+CODES = [h[0] for h in HOSPITALS]
+H = {h[0]: dict(name=h[1], posts=h[2], up=h[3], comp=h[4], g=h[5], teach=h[6]) for h in HOSPITALS}
 TEACHING = ("SSU", "BKU")
+UPTAKE_NEW = float(E("U_NEW", "0.40"))      # later hires at the university hospitals, offered it at induction
 
-# release, first month in force, factor on every clinician's level
-RELEASES = [
-    ("4.0", mi(2023, 2), float(_os.environ.get("T2_R1", "0.975"))),
-    ("5.0", mi(2024, 6), float(_os.environ.get("T2_R2", "0.94"))),
-    ("5.2", mi(2025, 3), float(_os.environ.get("T2_R3", "0.975"))),
-    ("6.0", mi(2025, 11), float(_os.environ.get("T2_R4", "0.975"))),
-]
-BASE_RELEASE = "3.4"                        # in force from before 2022
+# release, first month in force, factor on every clinician's error
+RELEASES = [("4.0", mi(2023, 2), 0.975), ("5.0", mi(2024, 6), 0.94), ("5.2", mi(2025, 3), 0.975),
+            ("6.0", mi(2025, 11), 0.975)]
+BASE_RELEASE = "3.4"
 FROZEN = "6.0"
 
-MED = {"V": 0.075, "M": float(_os.environ.get("T2_MEDM", "0.114"))}              # clinician level at release 3.4, median by type
-SIG = {"V": 0.30, "M": 0.34}                # between clinicians, log scale
+MU = math.log(float(E("T2_MU", "0.1048")))   # median clinician error at release 3.4, before grade and specialty
+SIG_U = 0.32                                # between clinicians, log scale
+SIG_SEL = 0.20                              # how far a clinician's trial differs from their long-run error, log scale
 SD_DICT = 0.30                              # between a clinician's dictations, log scale
-UPTAKE_NEW = {"SSU": 0.40, "BKU": 0.40}      # new hires at the teaching hospitals take the service up more readily
-TURNOVER = 0.10                             # leavers a year
-VOL_MED = 40.0                              # dictations a month, median clinician
-VOL_SIG = 0.45
+TURNOVER = 0.09                             # leavers a year
+PTR = {False: 0.05, True: 0.25}             # share of posts filled from another group hospital (small, university)
 AUDIT_RATE = 0.025
-LINE = 0.15                                 # heavy correction: word error rate above 15 per cent
+LINE = 0.15
 CEILINGS = (10, 12, 14, 16)
+
+GRADES = ["Consultant", "Specialist registrar", "Registrar", "Senior house officer", "Advanced nurse practitioner",
+          "Clinical nurse specialist"]
+G_EFF = dict(zip(GRADES, [-0.08, 0.0, 0.06, 0.13, 0.03, 0.0]))
+G_VOL = dict(zip(GRADES, [55.0, 42.0, 36.0, 30.0, 24.0, 20.0]))   # dictations a month, median by grade
+MIX_SMALL = [0.36, 0.18, 0.16, 0.16, 0.08, 0.06]
+MIX_UNIV = [0.27, 0.25, 0.19, 0.19, 0.05, 0.05]
+SPECS = [("General medicine", 0.17, 0.03), ("General surgery", 0.11, 0.0), ("Emergency medicine", 0.10, 0.08),
+         ("Radiology", 0.09, -0.16), ("Orthopaedics", 0.07, -0.03), ("Cardiology", 0.06, 0.0),
+         ("Respiratory medicine", 0.05, 0.02), ("Paediatrics", 0.06, 0.02), ("Obstetrics and gynaecology", 0.06, 0.01),
+         ("Psychiatry", 0.05, 0.05), ("Anaesthetics", 0.05, -0.02), ("Gastroenterology", 0.04, 0.0),
+         ("Oncology", 0.04, -0.01), ("Geriatric medicine", 0.05, 0.03)]
+S_EFF = {s[0]: s[2] for s in SPECS}
+UNIV_TILT = {}
+SWITCH = [0, 0, 1, 1, 2, 2, 3, 4]           # months after the compulsory date a department switches over
+SEASON = [1.02, 1.03, 1.04, 0.97, 1.02, 1.0, 0.95, 0.86, 1.0, 1.04, 1.05, 0.88]   # dictation volume by calendar month
 
 
 def release_factor(t):
@@ -74,173 +95,205 @@ def release_at(t):
     return r
 
 
-class World:
-    pass
-
-
-def build(seed=SEED):
-    rng = np.random.default_rng(seed)
-    w = World()
-    w.hospitals = HOSPITALS
-    rows = []          # one per clinician spell of dictating
-    sid = 100000
-    for hi, (code, name, n, up, comp) in enumerate(HOSPITALS):
-        rng = np.random.default_rng([seed, hi])
-        sid = 100000 + 9000 * hi
-        for slot in range(n):
-            t = float(rng.uniform(-60, 0))            # the occupant took up post before 2022
-            while t < NM:
-                end = t + rng.exponential(12.0 / TURNOVER)
-                s0 = max(0.0, t)
-                typ = None
-                if s0 < comp:
-                    u = UPTAKE_NEW.get(code, up) if t > 0 else up
-                    if rng.random() < u:
-                        typ, first = "V", int(s0) if t >= 0 else int(rng.integers(0, 1))
-                    elif end > comp:
-                        typ, first = "M", comp + int(rng.choice([0, 0, 1, 1, 2]))
-                else:
-                    typ, first = "M", int(s0) + int(rng.choice([0, 0, 1]))
-                if typ is not None and first < min(NM, int(end)):
-                    sid += int(rng.integers(1, 40))
-                    rows.append(dict(staff=sid, h=code, typ=typ, first=first, last=min(NM, int(end)),
-                                     level=MED[typ] * math.exp(rng.normal(0, SIG[typ])),
-                                     vol=VOL_MED * math.exp(rng.normal(0, VOL_SIG))))
-                t = end
-    w.clin = rows
-    return w
-
-
 def ramp(t, first):
     a = t - first
     return 0.5 if a == 0 else (0.8 if a == 1 else 1.0)
 
 
-def p_heavy(level, sd=SD_DICT):
-    """share of a clinician's dictations above the line at a given level"""
-    z = (math.log(LINE) - math.log(level)) / sd
+def p_heavy(loglevel, sd=SD_DICT):
+    """share of a clinician's dictations above the line, their log error level (site and release included) given"""
+    z = (math.log(LINE) - loglevel) / sd
     return 0.5 * math.erfc(z / math.sqrt(2))
 
 
-def truth_quarter(w, y, q, factor=None, sel=None):
-    """the expected heavy-correction share of a quarter's dictations, and its expected dictations"""
+class World:
+    pass
+
+
+def build(seed=SEED):
+    w = World()
+    rng = np.random.default_rng(seed)
+    people = []
+    pid = 0
+    sd_s = math.sqrt(SIG_U ** 2 + SIG_SEL ** 2 + 0.012)
+    cut = {c: NormalDist(0, sd_s).inv_cdf(v["up"]) for c, v in H.items()}
+    cut_new = NormalDist(0, sd_s).inv_cdf(UPTAKE_NEW)
+
+    def new_person(code):
+        nonlocal pid
+        pid += 1
+        univ = H[code]["teach"]
+        grade = GRADES[int(rng.choice(6, p=np.array(MIX_UNIV if univ else MIX_SMALL)))]
+        sp = np.array([s[1] * (UNIV_TILT.get(s[0], 1.0) if univ else 1.0) for s in SPECS])
+        si = int(rng.choice(len(SPECS), p=sp / sp.sum()))
+        a = MU + G_EFF[grade] + SPECS[si][2] + rng.normal(0, SIG_U)
+        return dict(pid=pid, grade=grade, spec=SPECS[si][0], alpha=a, eta=rng.normal(0, SIG_SEL),
+                    vol=G_VOL[grade] * math.exp(rng.normal(0, 0.40)), spells=[])
+
+    # each post's occupant serves an exponential stay, then the post is refilled
+    for code in CODES:
+        for slot in range(H[code]["posts"]):
+            t = -float(rng.exponential(12.0 / TURNOVER))
+            while t < NM:
+                p = new_person(code)
+                end = t + rng.exponential(12.0 / TURNOVER)
+                p["after_launch"] = t > -4          # the service was offered at every hospital from autumn 2021
+                p["spells"].append(dict(h=code, start=t, end=end))
+                people.append(p)
+                t = end
+    # moves within the group: some posts filled after 2022 go to a clinician leaving another group hospital, who keeps
+    # their own voice and habits (and their dictation, if they dictated) under a new staff number; most moves go towards
+    # the university hospitals
+    leavers = sorted([p for p in people if 0 <= p["spells"][-1]["end"] < NM - 2], key=lambda p: p["spells"][-1]["end"])
+    joiners = [p for p in people if p["spells"][0]["start"] > 0]
+    rng.shuffle(joiners)
+    used, merged = set(), set()
+    for j in joiners:
+        d = j["spells"][0]["h"]
+        if rng.random() >= PTR[H[d]["teach"]]:
+            continue
+        t0 = j["spells"][0]["start"]
+        cands = [p for p in leavers if p["pid"] not in used and p["pid"] not in merged and p["spells"][-1]["h"] != d
+                 and 0 <= t0 - p["spells"][-1]["end"] <= 2.5]
+        if not cands:
+            continue
+        # careers run from the smaller hospitals towards the university hospitals, seldom back
+        wt = np.array([(4.0 if (H[d]["teach"] and not H[p["spells"][-1]["h"]]["teach"]) else
+                        0.15 if (H[p["spells"][-1]["h"]]["teach"] and not H[d]["teach"]) else 1.0) for p in cands])
+        src = cands[int(rng.choice(len(cands), p=wt / wt.sum()))]
+        used.add(src["pid"])
+        src["spells"].append(dict(j["spells"][0]))
+        merged.add(j["pid"])
+    people = [p for p in people if p["pid"] not in merged]
+
+    def score(p):
+        return (p["alpha"] - MU) + p["eta"]
+
+    # dictation at each posting
+    for p in people:
+        dictating = False
+        for sp in p["spells"]:
+            hh = H[sp["h"]]
+            s0, e0 = max(0.0, sp["start"]), min(float(NM), sp["end"])
+            sp["first"], sp["kind"] = None, None
+            if e0 <= s0:
+                continue
+            if dictating:
+                first, kind = int(s0) + int(rng.choice([0, 1])), "carried"
+            elif s0 < hh["comp"]:
+                cv = cut_new if (hh["teach"] and p["after_launch"]) else cut[sp["h"]]
+                if score(p) < cv:
+                    first, kind = (int(s0) if sp["start"] >= 0 else 0), "chose"
+                elif e0 > hh["comp"]:
+                    first, kind = hh["comp"] + int(rng.choice(SWITCH)), "compelled"
+                else:
+                    continue
+            else:
+                first, kind = int(s0) + int(rng.choice([0, 0, 1])), "hired"
+            if first < int(e0):
+                sp["first"], sp["kind"] = first, kind
+                dictating = True
+    w.people = people
+    return w
+
+
+def truth_quarter(w, y, q, sel=None):
+    """the expected heavy-correction share of a quarter's dictations under the service, and its expected dictations"""
     num = den = 0.0
     for k in range(3):
         t = mi(y, 3 * (q - 1) + k + 1)
-        f = release_factor(t) if factor is None else factor
-        for c in w.clin:
-            if c["first"] <= t < c["last"] and (sel is None or sel(c)):
-                v = c["vol"] * ramp(t, c["first"])
-                num += v * p_heavy(c["level"] * f)
-                den += v
+        f = math.log(release_factor(min(t, DEC)))
+        s = SEASON[t % 12]
+        for p in w.people:
+            for sp in p["spells"]:
+                if sp["first"] is not None and sp["first"] <= t < min(sp["end"], NM) and (sel is None or sel(p, sp)):
+                    v = p["vol"] * ramp(t, sp["first"]) * s
+                    num += v * p_heavy(p["alpha"] + H[sp["h"]]["g"] + f)
+                    den += v
     return num / den, den
 
 
 # ---------------------------------------------------------------- the records the pack is cut from
-GRADES = [("Consultant", 0.34), ("Specialist registrar", 0.22), ("Registrar", 0.16), ("Senior house officer", 0.14),
-          ("Advanced nurse practitioner", 0.08), ("Clinical nurse specialist", 0.06)]
-SPECIALTIES = [("General medicine", 0.17), ("General surgery", 0.11), ("Emergency medicine", 0.10), ("Radiology", 0.09),
-               ("Orthopaedics", 0.07), ("Cardiology", 0.06), ("Respiratory medicine", 0.05), ("Paediatrics", 0.06),
-               ("Obstetrics and gynaecology", 0.06), ("Psychiatry", 0.05), ("Anaesthetics", 0.05),
-               ("Gastroenterology", 0.04), ("Oncology", 0.04), ("Geriatric medicine", 0.05)]
 REF_MED, REF_SIG = 230.0, 0.50          # reference words in an audited dictation
 SPLIT = (0.62, 0.24, 0.14)              # substitutions, deletions, insertions
 READJ = 0.05                            # share of audits adjudicated
 UNSCORABLE = 0.006
 
 
-def pick(rng, table):
-    names = [a for a, _ in table]
-    p = np.array([b for _, b in table], dtype=float)
-    return names[int(rng.choice(len(names), p=p / p.sum()))]
-
-
 def records(w, seed=SEED + 1):
-    """monthly dictations per clinician (2022 to 2026), the audit sample (2023 to 2026), register details and movers"""
+    """staff numbers, monthly dictations (2022 to 2026), the audit sample (2023 to 2026) and the HR register"""
     rng = np.random.default_rng(seed)
-    last_rec = mi(*REC_TO)
-    for c in w.clin:
-        c["grade"] = pick(rng, GRADES)
-        c["specialty"] = pick(rng, SPECIALTIES)
-        c["post_start"] = c["first"] - (int(rng.integers(6, 120)) if c["typ"] == "V" or c["first"] == dict(
-            (h[0], h[4]) for h in HOSPITALS)[c["h"]] or c["first"] == dict((h[0], h[4]) for h in HOSPITALS)[c["h"]] + 1
-            else int(rng.integers(0, 2)))
-        c["prev"] = None
-    # movers: a few clinicians who left one hospital and took up post at another keep dictating under a new number
-    comp = {h[0]: h[4] for h in HOSPITALS}
-    left = [c for c in w.clin if 12 <= c["last"] <= last_rec - 6]
-    movers = rng.choice(len(left), size=36, replace=False)
-    nxt = max(c["staff"] for c in w.clin) + 50
-    extra = []
-    for k in sorted(movers):
-        c = left[k]
-        dest = [h[0] for h in HOSPITALS if h[0] != c["h"] and comp[h[0]] <= c["last"]]
-        if not dest:
-            continue
-        nxt += int(rng.integers(1, 30))
-        d = dict(c)
-        d.update(staff=nxt, h=str(rng.choice(dest)), first=c["last"] + int(rng.integers(1, 3)),
-                 last=min(NM, c["last"] + int(rng.exponential(12.0 / TURNOVER)) + 3), prev=c["staff"],
-                 post_start=c["last"] + 1)
-        if d["first"] < d["last"]:
-            extra.append(d)
-    w.clin.extend(extra)
-    # monthly dictations
+    last_rec = DEC
+    # the group's HR system issues a staff number at each appointment, in appointment order
+    posts = [(sp["start"], p["pid"], k) for p in w.people for k, sp in enumerate(p["spells"])]
+    posts.sort()
+    byid = {p["pid"]: p for p in w.people}
+    sid = 200400
+    for start, pid_, k in posts:
+        sid += int(rng.integers(1, 6))
+        sp = byid[pid_]["spells"][k]
+        sp["staff"] = sid
+        sp["prev"] = byid[pid_]["spells"][k - 1]["staff"] if k > 0 else None
+    # monthly dictations, staff number by staff number
     vol = {}
-    for c in w.clin:
-        for t in range(max(0, c["first"]), min(c["last"], last_rec + 1)):
-            n = int(rng.poisson(c["vol"] * ramp(t, c["first"])))
-            if n > 0:
-                vol[(c["staff"], t)] = n
+    for p in w.people:
+        for sp in p["spells"]:
+            if sp["first"] is None:
+                continue
+            for t in range(max(0, sp["first"]), min(int(sp["end"]), last_rec + 1)):
+                n = int(rng.poisson(p["vol"] * ramp(t, sp["first"]) * SEASON[t % 12]))
+                if n > 0:
+                    vol[(sp["staff"], t)] = n
     w.vol = vol
-    # the audit sample: 1.2 per cent of each hospital's dictations each month, drawn at random
-    byh = {}
-    for c in w.clin:
-        byh.setdefault(c["h"], []).append(c)
+    w.spell_of = {sp["staff"]: (p, sp) for p in w.people for sp in p["spells"]}
+    # the audit sample: 2.5 per cent of each hospital's dictations each month, drawn at random
+    byh = {c: [] for c in CODES}
+    for p in w.people:
+        for sp in p["spells"]:
+            if sp["first"] is not None:
+                byh[sp["h"]].append((p, sp))
     audits = []
     aid = 4100000
     did_base = 70000000
     for t in range(mi(*REC_FROM), last_rec + 1):
         f = release_factor(t)
         rel = release_at(t)
-        for code, _, _, _, _ in HOSPITALS:
-            pool = [(c, vol.get((c["staff"], t), 0)) for c in byh.get(code, [])]
-            pool = [(c, n) for c, n in pool if n > 0]
-            tot = sum(n for _, n in pool)
+        for code in CODES:
+            pool = [(p, sp, vol.get((sp["staff"], t), 0)) for p, sp in byh[code]]
+            pool = [x for x in pool if x[2] > 0]
+            tot = sum(x[2] for x in pool)
             k = int(round(AUDIT_RATE * tot))
             if k == 0:
                 continue
-            wts = np.array([n for _, n in pool], dtype=float)
+            wts = np.array([x[2] for x in pool], dtype=float)
             idx = rng.choice(len(pool), size=k, replace=True, p=wts / wts.sum())
             for j in sorted(idx):
-                c = pool[j][0]
+                p, sp, _ = pool[j]
                 aid += int(rng.integers(1, 4))
                 refw = int(min(1500, max(40, round(REF_MED * math.exp(rng.normal(0, REF_SIG))))))
-                wer = c["level"] * f * math.exp(rng.normal(0, SD_DICT))
+                wer = math.exp(p["alpha"] + H[code]["g"]) * f * math.exp(rng.normal(0, SD_DICT))
                 errs = int(min(refw, round(wer * refw)))
                 s = int(round(errs * SPLIT[0]))
                 d = int(round(errs * SPLIT[1]))
                 i = max(0, errs - s - d)
                 day = int(rng.integers(1, 29))
                 audits.append(dict(audit=aid, dictation=did_base + int(rng.integers(0, 10 ** 7)), t=t, day=day,
-                                   h=code, staff=c["staff"], release=rel, ref=refw, sub=s, dele=d, ins=i,
+                                   h=code, staff=sp["staff"], release=rel, ref=refw, sub=s, dele=d, ins=i,
                                    unscorable=bool(rng.random() < UNSCORABLE), adjudicated=None))
                 if rng.random() < READJ:
-                    # adjudicated: the panel's corrected count replaces the first pass
                     e2 = max(0, errs + int(rng.choice([-3, -2, -1, 1, 2, 3])))
                     audits[-1]["adjudicated"] = (int(round(e2 * SPLIT[0])), int(round(e2 * SPLIT[1])),
                                                  max(0, e2 - int(round(e2 * SPLIT[0])) - int(round(e2 * SPLIT[1]))))
     # audit times, from their own stream: the first pass 3 to 20 days after the dictation, an adjudication 5 to 24 days
     # after that; the export run on 8 January 2027 holds only what had been scored by then
-    import datetime as _dt
     trng = np.random.default_rng(seed + 11)
-    cutoff = _dt.datetime(2027, 1, 8, 6, 0)
+    cutoff = dt.datetime(2027, 1, 8, 6, 0)
     kept = []
     for a in audits:
         y, m = divmod(a["t"], 12)
-        first = _dt.datetime(START[0] + y, m + 1, a["day"], 9, 0) + _dt.timedelta(days=int(trng.integers(3, 21)),
-                                                                                 minutes=int(trng.integers(0, 600)))
-        adj = first + _dt.timedelta(days=int(trng.integers(5, 25)))
+        first = dt.datetime(START[0] + y, m + 1, a["day"], 9, 0) + dt.timedelta(days=int(trng.integers(3, 21)),
+                                                                                minutes=int(trng.integers(0, 600)))
+        adj = first + dt.timedelta(days=int(trng.integers(5, 25)))
         a["audited_at"], a["adjudicated_at"] = first, adj
         if first > cutoff:
             continue
