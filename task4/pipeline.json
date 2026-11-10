@@ -11,7 +11,7 @@
  "doctrine": "throughout",
  "architecture": 10,
  "loops": 0,
- "call": "Order 18 battery-electric buses for M101, M107, M108, M113, M116, M119, M122, M123, M124, M129, M134, M135, M137, M139, M140, M142, M146 and M148; the plan's priority list is cut at M125, which the 690 kW night cannot recharge with the 18 above it",
+ "call": "Order 18 battery-electric buses for M101, M107, M108, M113, M116, M119, M122, M123, M125, M129, M134, M135, M137, M140, M142, M145, M146 and M148; the plan's priority list is cut at M124, the 19th, which the 690 kW night cannot recharge with the 18 above it",
  "chain": "R1 each weekday block's diesel use, l/100 scheduled km, tank to tank over the dispatch log (37.2 to 62.4); R2 the pilot blocks' gap to the rest (46.2 against 49.1, 2.9 l/100 km); R3 the pilot heaters' heat at -15 C (4.3 kW); R4 the 48 design-day energies through the diesel bridge and the 2027 heating (12.4 kW an hour out); R5 the first-winter loss (4.3 per cent); R6 the verdicts against 390.5 kWh (23 pass); R7 the qualifying blocks' night demand (8.7 MWh against 7.0 deliverable); R8 the order (18, the plan's priority order cut at M125)",
  "stump": "The careful pass (the union of the recorded runs) carries the pilot's fit on kilometres, climb and hours per km and reads the pilot's own cold response at -15 C, forecasts every hard block about 58 kWh light, passes 38 blocks and orders 21 under the night's capacity (38 without it); the pilot's cold-day consumption times kilometres orders 33; the diesel bridge put right alone orders 20 and the heaters' share alone 19; the verdicts summed order 23, the night on battery energy 20",
  "precut": {

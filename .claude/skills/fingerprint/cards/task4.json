@@ -12,7 +12,7 @@
  "shape": "07",
  "decision_type": "quantity_figure",
  "answer_unit": "count",
- "answer": "Order 18 battery-electric buses for M101, M107, M108, M113, M116, M119, M122, M123, M124, M129, M134, M135, M137, M139, M140, M142, M146 and M148; the plan's priority list is cut at M125, which the 690 kW night cannot recharge with the 18 above it",
+ "answer": "Order 18 battery-electric buses for M101, M107, M108, M113, M116, M119, M122, M123, M125, M129, M134, M135, M137, M140, M142, M145, M146 and M148; the plan's priority list is cut at M124, the 19th, which the 690 kW night cannot recharge with the 18 above it",
  "answer_source": "task4/submission.md block 1; task4/generator/figures.json (call_count, call_set, limit, refused_block)",
  "gap": [
   "population",
