@@ -1,4 +1,4 @@
-"""task7 architecture 7 build: the world, the pack under target/, the documents, the checks, the golden deliverables, figures.json,
+"""task7 architecture 8 build: the world, the pack under target/, the documents, the checks, the golden deliverables, figures.json,
 submission.md, metadata.json and both zips. `python3 make.py` builds in place; `python3 make.py --twice` builds twice
 into scratch folders and fails unless the two packs, goldens and zips are byte-identical."""
 import filecmp
@@ -23,8 +23,8 @@ import world as W  # noqa: E402
 import writeup as WU  # noqa: E402
 
 ZIP_TIME = (2026, 6, 24, 17, 20, 0)
-DISTRACTORS = ["electricity_customers_annual_2019_2025.csv", "solar_cadastre_rooftops_2024.xlsx",
-               "municipal_heat_plan_2026_summary.pdf", "federal_funding_overview_2025.pdf"]
+DISTRACTORS = ["electricity_customers_annual_2019_2025.csv", "municipal_heat_plan_2026_summary.pdf",
+               "federal_funding_overview_2025.pdf"]
 COVERS = {
     "gas_meter_reads_2013_2026.csv": "every read of every commercial gas meter point, 30 April 2013 to 30 April 2026",
     "meter_points_2026.csv": "meter points, their buildings, meters, factors, z-numbers and network areas",
@@ -41,7 +41,8 @@ COVERS = {
     "committee_request_2026-06-15.docx": "the committee chair's request for the 2026 round",
     "grant_offer_2026_terms.pdf": "the terms of the 2026 grant offer",
     "electricity_customers_annual_2019_2025.csv": "the utility's commercial electricity customers' annual use",
-    "solar_cadastre_rooftops_2024.xlsx": "rooftop solar potential by address",
+    "solar_cadastre_rooftops_2024.xlsx": "the state solar cadastre's roof faces by address: area, tilt, orientation, solar potential",
+    "electricity_load_profiles_2025.csv": "the meter operator's 2025 typical weeks for every commercial market location: mean kW by weekday and hour",
     "municipal_heat_plan_2026_summary.pdf": "the municipal heat plan's summary",
     "federal_funding_overview_2025.pdf": "the regional energy agency's overview of federal grants",
 }
@@ -56,6 +57,7 @@ EXPORTS = {  # the systems' exports, each written when its job ran (UTC)
     "degree_days_haldenau.csv": dt.datetime(2026, 6, 3, 6, 45, 9, tzinfo=UTC),
     "weather_haldenau_daily_2013_2026.csv": dt.datetime(2026, 6, 3, 6, 44, 32, tzinfo=UTC),
     "electricity_customers_annual_2019_2025.csv": dt.datetime(2026, 6, 12, 14, 31, 50, tzinfo=UTC),
+    "electricity_load_profiles_2025.csv": dt.datetime(2026, 6, 16, 6, 3, 27, tzinfo=UTC),
 }
 
 
@@ -101,7 +103,7 @@ def build(task_dir, gen_dir):
         "distractor_files": DISTRACTORS,
         "input_gates": {"files": len(files), "formats": sorted({os.path.splitext(f)[1][1:] for f in files}),
                         "largest_file": "gas_meter_reads_2013_2026.csv", "largest_file_rows": counts["reads"],
-                        "long_file": "benchmarking_notices_2019_2026.csv", "long_file_rows": counts["notices"]},
+                        "long_file": "electricity_load_profiles_2025.csv", "long_file_rows": counts["load_profile_rows"]},
         "sources": [{"files": "all files under target/",
                      "origin": "constructed for this task around a fictional German municipal utility, its commercial gas "
                                "customers, the city's retrofit grants and its weather station; every record and figure is "
@@ -151,9 +153,12 @@ def main():
         sys.exit(0 if ok else 1)
     F, C, counts = build(TASK, HERE)
     print(json.dumps(counts, indent=1))
-    print("funded %s; eur/t %s; ranges %s; flip %s; rates %s; life %s; at close paid EUR %s; 2025/26 %s t"
-          % (F["funded"], F["R5_eur_per_tonne"], F["R6_range_eur"], F["R6_break_even_pct"],
-             F["R4_rate_on_applications_pct"], F["R2_life_saving_pct"], F["R7_funded_paid_eur"], F["R8_tonnes"]))
+    print("funded %s; eur/t %s; by use %s; ranges %s; flip %s; rates %s; HO life %s; controls threshold %s, at 70 %s; "
+          "insulation heating at a full roof %s; empty week %s; roof %s; at close paid EUR %s; 2025/26 %s t"
+          % (F["funded"], F["R6_eur_per_tonne"], F["R6_by_use_eur_per_tonne"], F["R7_range_eur"], F["R7_break_even_pct"],
+             F["R5_rate_on_applications_pct"], F["R2_life_saving_pct"]["heating optimisation"],
+             F["R3_threshold_empty_pct"], F["R3_controls_at_empty_pct"]["70"], F["R4_heating_at_roof_pct"]["1"],
+             F["R3_empty_week_pct"], F["R4_roof_per_floor"], F["R8_funded_paid_eur"], F["R10_tonnes"]))
     print("%d checks passed" % len(CK.RESULTS))
 
 

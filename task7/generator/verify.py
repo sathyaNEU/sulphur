@@ -1,4 +1,4 @@
-"""task7 architecture 7: the independent verifier. It reads only the pack under target/, rebuilds every building's normal-weather gas
+"""task7 architecture 8: the independent verifier. It reads only the pack under target/, rebuilds every building's normal-weather gas
 use season by season the way the utility's benchmarking method sets out, and hands the result to golden.py; checks.py
 asserts that the figures it yields are the golden's."""
 import csv
@@ -39,7 +39,7 @@ def sheet(path):
     return [dict(zip(head, r)) for r in it]
 
 
-def load(target, pro_rate=True, estimates="as filed"):
+def load(target, pro_rate=True, estimates="as filed", threshold=0.5, outbuildings="kept"):
     """season x building normal-weather use (kWh), and the pilot and 2026 tables, as a golden.Panel"""
     reg = sheet(os.path.join(target, "buildings_register_2026.xlsx"))
     bidx = {r["building_id"]: k for k, r in enumerate(reg)}
@@ -190,14 +190,57 @@ def load(target, pro_rate=True, estimates="as filed"):
     for a in P.pipe:
         a["typ"] = int(P.typ_register[a["b"]])
     P.G, P.G_LT, P.hvec = G, G_LT, hvec
+    # each building's 2025 week of electricity, its market locations summed, and its roof per square metre of floor
+    cust_b = {r["customer_number"]: k for k, r in enumerate(reg)}
+    P.week = {}
+    for r in rows(os.path.join(target, "electricity_load_profiles_2025.csv")):
+        b = cust_b[r["customer_number"]]
+        wk = P.week.setdefault(b, np.zeros((7, 24)))
+        wk[WEEKDAYS.index(r["weekday"])] += [float(r["kw_%02d" % h]) for h in range(24)]
+    faces = defaultdict(list)
+    for r in sheet(os.path.join(target, "solar_cadastre_rooftops_2024.xlsx")):
+        faces[(street(r["address"]), str(r["postcode"]))].append(float(r["roof_face_area_m2"]))
+    roof = {}
+    for key, fs in faces.items():
+        if outbuildings == "dropped" and max(fs) >= 100.0:     # a garage or shed beside a main roof left out
+            fs = [f for f in fs if f >= 50.0]
+        roof[key] = sum(fs)
+    P.roof = np.full(N, np.nan)
+    for k, r in enumerate(reg):
+        a = roof.get((street(r["address"]), str(r["postcode"])))
+        if a:
+            P.roof[k] = a
+    P.empty, P.lived_in = empty_weeks(P, threshold)
+    P.roof_ratio = P.roof / P.area
     return P
 
 
-if __name__ == "__main__":
-    target = sys.argv[1] if len(sys.argv) > 1 else os.path.join(HERE, "..", "target")
-    P = load(target)
-    for m in GD.MEASURES:
-        s = GD.season_savings(P, m)
-        A = GD.appraisal(P, m, GD.app_rates(P, m))
-        print(m, [round(100 * x, 1) for x in s], "life %.2f" % (100 * GD.lifetime(s, m)), "rate %.2f" % (100 * A["rate"]),
-              "eur/t %.1f" % A["eur_t"])
+WEEKDAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+
+
+def street(a):
+    """the register writes Lindenstraße 12, the cadastre Lindenstr. 12"""
+    return a.replace("str. ", "straße ").strip()
+
+
+def empty_weeks(P, threshold=0.5, lived_rule="use", margin=0.08):
+    """the share of the week each building stands empty: the hours its load is under the point a share `threshold` of
+    the way from its lowest hour to its highest, none where the load never falls below three quarters of its highest
+    hour. Every hotel and care home is lived in round the clock, its guests or residents there at night whatever its
+    load does (lived_rule "use"); the rivals: "weekend" takes a hotel or care home as lived in only where its weekend
+    days (8:00 to 20:00) run more than `margin` above its weekend nights (0:00 to 5:00), "strict" only where every
+    weekend day hour runs above every weekend night hour, "none" reads every building off its load alone"""
+    e = np.full(len(P.typ_register), np.nan)
+    lived = np.zeros(len(P.typ_register), bool)
+    for b, kw in P.week.items():
+        lo, hi = kw.min(), kw.max()
+        e[b] = 1.0 - float((kw > lo + threshold * (hi - lo)).sum()) / 168.0
+        if lo >= 0.75 * hi:                  # never falls below three quarters of its peak: in use round the clock
+            e[b] = 0.0
+        if TYPES[P.typ_register[b]] in ("hotel", "care home") and lived_rule != "none":
+            day, night = kw[5:, 8:20], kw[5:, 0:5]
+            if (lived_rule == "use" or (lived_rule == "weekend" and day.mean() > (1.0 + margin) * night.mean())
+                    or (lived_rule == "strict" and day.min() > night.max())):
+                lived[b] = True
+                e[b] = 0.0
+    return e, lived

@@ -1,33 +1,41 @@
-"""task7 architecture 7: Stadtwerke Haldenau's commercial gas customers, the council's 2019 retrofit pilot and the
-2026 round, season by season from 2013/14 to 2025/26.
+"""task7 architecture 8: Stadtwerke Haldenau's commercial customers, the council's 2019 retrofit pilot and the 2026
+round, season by season from 2013/14 to 2025/26.
 
 A season runs from 1 May to 30 April and is named by the year it ends (season 2019 is May 2018 to April 2019). Each
 building's gas use in a season of long-term average weather is its type's level times its floor area times its own
-level, a slow part that drifts and fades by a tenth a season (a tenant's hours, a plant room run hard) and a fast part
-that comes and goes within the season. The actual use spreads the building's hot-water share evenly over the days and
-the rest over the season's degree days. Buildings change as buildings do: an extension or a roof storey adds heated
-floor area from the season after it is finished, and a floor stands empty for a season or three before it is let again.
+level and its envelope (a single-storey hall loses more heat per square metre than a block of five floors), a slow part
+that drifts and a fast part that comes and goes within the season. The actual use spreads the building's hot-water share
+evenly over the days and the rest over the season's degree days. Buildings change as buildings do: an extension adds
+heated floor area from the season after it is finished, and a floor stands empty for a season or three.
 
-Every May the utility's benchmarking notice goes to the buildings whose normalised use per square metre is in the top
-fifth of their type. The May 2019 notice carried the council's pilot offer; the owners who answered it, each naming one
-measure, were drawn by lot for the pilot's places, and the drawn buildings had their works that summer. What a measure's
-works save depends on the building: insulation cuts the heat a building loses, so it saves a share of the heating and
-none of the hot water; heating optimisation balances the system and lowers its heating curve, and caretakers turn the
-curve back up after complaints over the winters that follow, by building, until a part of the saving that stays is
-left; heating controls save by setting the heating back when a building is empty, so they save most in offices,
-workshops and shops and almost nothing in a care home or a hotel heated round the clock. Which measure an owner asks for
-depends on the building's use, and the 2026 applicants are not the pilot's: the pilot's controls answers came heavily
-from care homes and hotels, the 2026 ones mostly from offices, shops and workshops.
+Every building keeps a week of its own: an office open five days from about seven, a four-day office, a shop open six
+days or late every evening, a workshop on one, two or three shifts, a restaurant closed on Mondays; hotels and care homes
+are lived in round the clock, apart from the conference houses and day-care centres among them. Its electricity follows
+that week, a base load that never stops (servers, refrigeration, standby) and a load while it is in use. Its storeys set
+how much roof it has per square metre of floor.
 
-An answer or an application comes with a contractor's quote. A quote for insulation needs a survey of the roof or walls,
-longer on a larger building, so insulation answers come late in the offer's six weeks and the large ones latest; a
-drawn owner can still withdraw, likelier on a large job and on an answer sent close to the deadline. The pandemic
-winters and the 2022 gas price shock moved every building's use. From August 2019 the utility's service team offered
-its commercial customers a burner check district by district, free of charge, whatever their place in the pilot; most
-owners accepted, and a checked burner burns less gas for the same heat from the visit on, by however far out of tune it
-was. The May 2026 notice carries the offer of the 2026 round, open to 30 June; the applications received by 12 June are
-what the utility holds when the climate committee decides the round, and an owner who revises a quote sends the
-application again."""
+Every May the benchmarking notice goes to the buildings whose normalised gas use per square metre is in the top fifth of
+their type. The May 2019 notice carried the council's pilot offer; the owners who answered it, each naming one measure,
+were drawn by lot for the pilot's places within each measure, and the drawn buildings had their works that summer. What
+the works save depends on the building: insulation of the roof or top-floor ceiling cuts the heat lost through the roof,
+so it saves most where a building has much roof for its floor area and none of the hot water; heating optimisation
+balances the system and lowers its heating curve, and caretakers turn the curve back up after complaints over the
+winters that follow; heating controls set the heating back while a building stands empty, so they save with the length
+of the empty week and nothing in a building lived in round the clock. Which measure an owner asks for depends on the
+building's use and, a little in 2019 and much more in 2026 (the pilot's results by use were published in 2023 and the
+utility's portal has shown each customer its load profile since 2022), on what suits the building: this year's controls
+applicants stand empty for more of the week, and this year's insulation applicants have more roof per floor, than the
+pilot's buildings of the same use.
+
+An answer or an application comes with a contractor's quote, roof insulation priced on the roof's area and the other
+measures on the floor's. A quote for insulation needs a survey of the roof, longer on a larger building, so insulation
+answers come late in the offer's six weeks and the large ones latest; a drawn owner can still withdraw, likelier on a
+large job and on an answer sent close to the deadline. The pandemic winters and the 2022 gas price shock moved every
+building's use. From August 2019 the utility's service team offered its commercial customers a burner check district by
+district, free of charge, whatever their place in the pilot; most owners accepted, and a checked burner burns less gas
+for the same heat from the visit on, by however far out of tune it was. The May 2026 notice carries the offer of the
+2026 round, open to 30 June; the applications received by 12 June are what the utility holds when the climate committee
+decides the round, and an owner who revises a quote sends the application again."""
 import datetime as dt
 import math
 
@@ -66,15 +74,54 @@ MEASURE_P_2019 = {"office": [0.26, 0.40, 0.34], "retail": [0.28, 0.38, 0.34], "h
                   "workshop": [0.32, 0.36, 0.32], "care home": [0.10, 0.17, 0.73], "restaurant": [0.22, 0.38, 0.40]}
 MEASURE_P_2026 = {"office": [0.20, 0.22, 0.58], "retail": [0.27, 0.27, 0.46], "hotel": [0.38, 0.54, 0.08],
                   "workshop": [0.34, 0.28, 0.38], "care home": [0.38, 0.57, 0.05], "restaurant": [0.27, 0.33, 0.40]}
-# the cut a measure's works make in the heating part of a building's use (the hot-water part is untouched), as the type's
+# heating optimisation's cut in the heating part of a building's use (the hot-water part is untouched), as the type's
 # mean in the first season after the works; each building's own cut spreads around it
-EFFECT = {"insulation": {"office": 0.212, "retail": 0.200, "hotel": 0.188, "workshop": 0.150, "care home": 0.190,
-                         "restaurant": 0.176},
-          "heating optimisation": {"office": 0.158, "retail": 0.138, "hotel": 0.170, "workshop": 0.135,
-                                   "care home": 0.178, "restaurant": 0.150},
-          "heating controls": {"office": 0.125, "retail": 0.098, "hotel": 0.010, "workshop": 0.094,
-                               "care home": 0.006, "restaurant": 0.066}}
-EFFECT_SD = 0.26                           # log spread of a building's own cut around its type's
+EFFECT = {"heating optimisation": {"office": 0.158, "retail": 0.138, "hotel": 0.170, "workshop": 0.135,
+                                   "care home": 0.178, "restaurant": 0.150}}
+EFFECT_SD = 0.26                           # log spread of a building's own cut around its expected cut
+# insulation of the roof or top-floor ceiling cuts INS_C of the heating where the roof is as large as the floor, less
+# where there is less roof per floor; controls cut CTRL_C of the heating per unit of the week a building stands empty
+# beyond CTRL_E0 (short empty spells are spent heating the building up again), and next to nothing where it is lived in
+INS_C, INS_X = 0.2472, 0.75
+CTRL_C, CTRL_E0, CTRL_LIVED = 0.40, 0.40, 0.004
+ENV_X = 0.15                               # a building's use per square metre rises with its roof per floor
+# how strongly an owner's choice follows what suits the building (the empty week for controls, the log of the roof per
+# floor for insulation), in 2019 and in 2026
+PICK = {2019: {"insulation": 0.0, "heating controls": 0.5}, 2026: {"insulation": 7.0, "heating controls": 18.0}}
+# a building's week: the archetypes of each use (share, days open Monday to Sunday, opening hour, hours open)
+SCHEDULES = {
+    "office": [(0.56, "1111100", 7.3, 10.6), (0.18, "1111000", 7.4, 10.4), (0.10, "1111110", 7.2, 10.8),
+               (0.12, "1111100", 6.0, 15.0), (0.04, "1111111", 0.0, 24.0)],
+    "retail": [(0.53, "1111110", 8.6, 11.0), (0.25, "1111110", 7.0, 14.5), (0.13, "0111110", 9.0, 9.0),
+               (0.09, "1111111", 7.0, 15.5)],
+    "workshop": [(0.48, "1111100", 6.8, 9.6), (0.15, "1111110", 6.9, 9.4), (0.26, "1111100", 6.0, 16.0),
+                 (0.11, "1111100", 0.0, 24.0)],
+    "restaurant": [(0.55, "0111111", 10.8, 12.6), (0.25, "1111111", 10.6, 12.8), (0.15, "0011111", 11.0, 12.0),
+                   (0.05, "0111111", 16.0, 8.0)],
+    "hotel": [(0.95, "1111111", 0.0, 24.0), (0.05, "1111100", 7.0, 12.0)],
+    "care home": [(0.88, "1111111", 0.0, 24.0), (0.12, "1111100", 7.5, 9.5)]}
+LIVED_IN = ("hotel", "care home")
+# storeys by use (choices and shares)
+STOREYS = {"office": ([1, 2, 3, 4, 5, 6, 8], [0.08, 0.22, 0.26, 0.20, 0.12, 0.08, 0.04]),
+           "retail": ([1, 2, 3], [0.55, 0.35, 0.10]), "hotel": ([2, 3, 4, 5, 6], [0.10, 0.30, 0.30, 0.20, 0.10]),
+           "workshop": ([1, 2], [0.78, 0.22]), "care home": ([1, 2, 3, 4], [0.12, 0.38, 0.35, 0.15]),
+           "restaurant": ([1, 2, 3], [0.50, 0.35, 0.15])}
+# electricity: the base load and the load in use (W per square metre of floor), and the activity through the day of a
+# building lived in round the clock (share of its load in use, hour 0 to 23)
+ELEC_BASE = {"office": 3.5, "retail": 9.0, "hotel": 6.0, "workshop": 4.0, "care home": 5.0, "restaurant": 14.0}
+ELEC_USE = {"office": 13.0, "retail": 20.0, "hotel": 14.0, "workshop": 22.0, "care home": 12.0, "restaurant": 38.0}
+ACTIVITY = {"hotel": [0.42] * 6 + [0.60, 0.85, 0.85, 0.85] + [0.62] * 7 + [0.92] * 5 + [0.75, 0.55],
+            "care home": [0.48] * 6 + [0.75] + [1.0] * 6 + [0.90] * 6 + [0.80] * 3 + [0.60, 0.60]}
+# the shape of a working day's load in use, by the clock hour (lunch, the afternoon tail, a restaurant's afternoon lull,
+# a workshop's break); a building's own day leans more or less on it
+DAY_SHAPE = {"office": {7: 0.80, 8: 0.92, 12: 0.88, 13: 0.90, 16: 0.92, 17: 0.82, 18: 0.75, 19: 0.70},
+             "retail": {7: 0.80, 8: 0.85, 9: 0.92, 16: 1.05, 17: 1.08, 18: 1.06, 19: 0.95, 20: 0.90},
+             "restaurant": {10: 0.72, 11: 0.85, 12: 1.0, 13: 1.0, 14: 0.85, 15: 0.66, 16: 0.66, 17: 0.80, 18: 1.0,
+                            19: 1.0, 20: 1.0, 21: 0.95, 22: 0.82, 23: 0.75},
+             "workshop": {6: 0.88, 9: 0.94, 12: 0.82, 18: 0.92, 22: 0.90}}
+# 2025's public holidays in Baden-Wuerttemberg by weekday (Monday first), and the weekdays' counts in 2025
+HOLIDAYS_2025 = [3, 0, 1, 4, 3, 1, 0]
+WEEKDAYS_2025 = [52, 52, 53, 52, 52, 52, 52]
 # how much of the first season's cut a building keeps once its caretakers have turned the heating curve back up
 # (heating optimisation) or overridden the timers (controls), and how fast it falls there; insulation keeps it all
 KEEP = {"heating optimisation": (0.05, 0.04, 1.0), "heating controls": (0.80, 0.07, 2.0)}
@@ -105,8 +152,8 @@ COVID = {2020: {"office": 0.02, "retail": 0.03, "hotel": 0.06, "workshop": 0.01,
          2021: {"office": 0.08, "retail": 0.07, "hotel": 0.22, "workshop": 0.03, "care home": 0.0, "restaurant": 0.25},
          2022: {"office": 0.05, "retail": 0.03, "hotel": 0.08, "workshop": 0.01, "care home": 0.0, "restaurant": 0.08}}
 CRISIS = {2022: 0.020, 2023: 0.140, 2024: 0.110, 2025: 0.090, 2026: 0.072}
-# quoted cost per square metre of heated floor area (median, euro) and the grant terms
-COST_M2 = {"insulation": 54.5, "heating optimisation": 7.4, "heating controls": 8.2}
+# quoted cost per square metre (median, euro): of roof for insulation, of heated floor for the others; the grant terms
+COST_M2 = {"insulation": 119.0, "heating optimisation": 7.4, "heating controls": 10.6}   # insulation per m2 of roof
 COST_SD = 0.22
 GRANT_SHARE, GRANT_CAP = 0.30, 40000.0
 
@@ -177,6 +224,35 @@ def build(seed=SEED):
     area0 = np.clip(area0, 120.0, 14000.0)
     w.size_z = (np.log(area0) - math.log(880.0)) / 0.62
     w.level = rng.normal(0, SD_LEVEL, N)
+    # each building's week and storeys
+    rng_s = np.random.default_rng(seed + 29)
+    w.days_open = np.zeros((N, 7), bool)
+    w.open_h = np.zeros(N)
+    w.len_h = np.zeros(N)
+    w.arch = np.zeros(N, int)
+    for i in range(N):
+        opts = SCHEDULES[TYPES[w.typ[i]]]
+        j = int(rng_s.choice(len(opts), p=[o[0] for o in opts]))
+        _, days, o, ln = opts[j]
+        w.arch[i] = j
+        w.days_open[i] = [c == "1" for c in days]
+        if ln >= 24.0:
+            w.open_h[i], w.len_h[i] = 0.0, 24.0
+        else:
+            w.open_h[i] = round(float(np.clip(o + rng_s.normal(0, 0.45), 4.0, 18.0)) * 2) / 2
+            w.len_h[i] = round(float(np.clip(ln + rng_s.normal(0, 0.8), 4.0, 19.0)) * 2) / 2
+    w.lived_in = np.isin(tname, LIVED_IN) & (w.len_h >= 24.0)
+    w.hours = np.where(w.lived_in, 168.0, w.days_open.sum(1) * w.len_h)
+    w.empty = 1.0 - w.hours / 168.0
+    w.storeys = np.zeros(N, int)
+    for t in range(len(TYPES)):
+        idx = np.where(w.typ == t)[0]
+        ch, pr = STOREYS[TYPES[t]]
+        w.storeys[idx] = rng_s.choice(ch, len(idx), p=pr)
+    w.pitched = rng_s.random(N) < np.where(np.isin(tname, ["retail", "workshop"]), 0.25, 0.70)
+    pitch = np.where(w.pitched, rng_s.uniform(1.10, 1.30, N), rng_s.uniform(1.00, 1.04, N))
+    w.roof_ratio = np.clip(pitch / w.storeys * np.exp(rng_s.normal(0, 0.10, N)), 0.08, 1.6)
+    w.level = w.level + ENV_X * np.log(w.roof_ratio / 0.5)
     w.hw = np.array([HW_SHARE[TYPES[t]] for t in w.typ]) + rng.normal(0, 0.02, N)
     w.hw = np.clip(w.hw, 0.02, 0.45)
     w.first = np.full(N, SEASONS[0])
@@ -234,13 +310,17 @@ def build(seed=SEED):
     h_type = np.array([HW_SHARE[TYPES[t]] for t in w.typ])
     # each building's own cut for each measure (drawn once, used only if its works are done) and how much it keeps
     rng_e = np.random.default_rng(seed + 3)
-    w.cut = {m: np.array([EFFECT[m][t] for t in tname]) * np.exp(rng_e.normal(-0.5 * EFFECT_SD ** 2, EFFECT_SD, N))
-             for m in MEASURES}
+    noise = {m: np.exp(rng_e.normal(-0.5 * EFFECT_SD ** 2, EFFECT_SD, N)) for m in MEASURES}
+    w.cut = {"insulation": INS_C * w.roof_ratio ** INS_X * noise["insulation"],
+             "heating optimisation": np.array([EFFECT["heating optimisation"][t] for t in tname])
+             * noise["heating optimisation"],
+             "heating controls": np.where(w.lived_in, CTRL_LIVED, CTRL_C * np.clip(w.empty - CTRL_E0, 0.0, None)
+                                          + CTRL_LIVED) * noise["heating controls"]}
     w.keep_f = {m: np.ones(N) for m in MEASURES}
     for m, (fm, fs, tau) in KEEP.items():
         w.keep_f[m] = np.clip(rng_e.normal(fm, fs, N), 0.0, 1.0)
-    mi19 = np.array([rng.choice(3, p=MEASURE_P_2019[TYPES[t]]) for t in w.typ])
-    mi26 = np.array([rng.choice(3, p=MEASURE_P_2026[TYPES[t]]) for t in w.typ])
+    mi19 = pick_measures(w, MEASURE_P_2019, PICK[2019], np.random.default_rng(seed + 37))
+    mi26 = pick_measures(w, MEASURE_P_2026, PICK[2026], np.random.default_rng(seed + 41))
     w.normal = np.zeros((N, K))                # the building's own normal-weather use (kWh)
     w.underlying = np.zeros((N, K))            # use before any works or visit, in the season's own state (kWh)
     w.actual = np.zeros((N, K))                # metered use in the season's weather (kWh)
@@ -346,7 +426,8 @@ def build(seed=SEED):
         k = SI[s]
         for i in np.where(w.applied[:, k])[0]:
             m = meas[i]
-            c = COST_M2[m] * w.area[i, k] * math.exp(rq.normal(0, COST_SD))
+            per = w.roof_ratio[i] if m == "insulation" else 1.0       # roof insulation is quoted on the roof
+            c = COST_M2[m] * per * w.area[i, k] * math.exp(rq.normal(0, COST_SD))
             c = round(c / 10.0) * 10.0
             w.cost[s][i] = c
             w.grant[s][i] = min(GRANT_CAP, round(GRANT_SHARE * c / 10.0) * 10.0)
@@ -372,6 +453,78 @@ def build(seed=SEED):
         p = WITHDRAW[m] * math.exp(WITHDRAW_SIZE * w.size_z[i] + WITHDRAW_DAY * (dday - 23))
         w.withdraw26[i] = rw2.random() < min(0.6, p)
     return w
+
+
+def pick_measures(w, shares, pick, rng):
+    """the measure each building's owner would name if it answered: its use's shares, leaning towards controls the
+    longer the building stands empty and towards insulation the more roof it has per floor, by the strength in pick;
+    each use's shares are kept on average"""
+    out = np.zeros(w.N, int)
+    for t in range(len(TYPES)):
+        idx = np.where(w.typ == t)[0]
+        p = np.array(shares[TYPES[t]])
+        zc = np.exp(pick["heating controls"] * (w.empty[idx] - w.empty[idx].mean()))
+        pc = np.clip(p[2] * zc / zc.mean(), 0.0, 0.95)
+        lr = np.log(w.roof_ratio[idx])
+        zi = np.exp(pick["insulation"] * (lr - lr.mean()))
+        pi = np.minimum(np.clip(p[0] * zi / zi.mean(), 0.0, 0.95), 0.97 - pc)
+        pp = np.column_stack([pi, 1.0 - pc - pi, pc])
+        u = rng.random(len(idx))
+        out[idx] = (u[:, None] > np.cumsum(pp, 1)).sum(1)
+    return out
+
+
+def load_week(w, i, seed):
+    """building i's electricity in 2025 as Stadtwerke Haldenau Netz's meter data averages it: the mean load (kW) in
+    each hour of each weekday, Monday first (7 x 24); a base load that never stops (with outdoor lighting through the
+    night at some shops and workshops), a load while the building is in use shaped through the day, the hour before
+    opening and the hour after closing partly lit, a few staff on some Saturdays at buildings that close for the
+    weekend, and public holidays on the weekdays they fell"""
+    rng = np.random.default_rng(seed + 7919 * i)
+    t = TYPES[w.typ[i]]
+    a = w.area[i, SI[PIPELINE]]
+    base = a * ELEC_BASE[t] / 1000.0 * math.exp(rng.normal(0, 0.30))
+    use = a * ELEC_USE[t] / 1000.0 * math.exp(rng.normal(0, 0.30))
+    lean = float(rng.uniform(0.5, 1.0))
+    shape = np.ones(24)
+    for h, v in DAY_SHAPE.get(t, {}).items():
+        shape[h] = 1.0 + lean * (v - 1.0)
+    occ = np.zeros((7, 24))
+    if w.lived_in[i]:
+        act = np.array(ACTIVITY[t]) * np.exp(rng.normal(0, 0.05, 24))
+        occ[:] = np.clip(act, 0.2, 1.1)[None, :]
+    elif w.len_h[i] >= 24.0:
+        for d in range(7):
+            if w.days_open[i, d]:
+                occ[d] = 0.92 * np.where(np.arange(24) < 6, 0.88, 1.0) + rng.normal(0, 0.02, 24)
+    else:
+        o, c = w.open_h[i], w.open_h[i] + w.len_h[i]
+        after = 0.35 if t == "restaurant" else 0.22
+        for d in range(7):
+            if not w.days_open[i, d]:
+                continue
+            day = float(rng.normal(1.0, 0.03))
+            for h in range(24):
+                ov = max(0.0, min(h + 1.0, c) - max(float(h), o))
+                if ov <= 0.0:
+                    if o - 1.0 <= h < o:
+                        ov = 0.30
+                    elif c <= h < c + 1.0:
+                        ov = after
+                    occ[d, h] = ov
+                else:
+                    occ[d, h] = ov * shape[h] * day
+        if t in ("office", "workshop") and not w.days_open[i, 5] and rng.random() < 0.20:
+            for h in range(9, 13):
+                occ[5, h] = float(rng.uniform(0.10, 0.22))
+    for d in range(7):
+        occ[d] *= 1.0 - HOLIDAYS_2025[d] / float(WEEKDAYS_2025[d]) if not w.lived_in[i] else 1.0
+    night = np.zeros(24)
+    if t in ("retail", "workshop") and rng.random() < 0.40:
+        night[np.r_[0:6, 18:24]] = 0.06 * use
+    kw = (base + night[None, :]) * (1.0 + 0.03 * rng.normal(0, 1, (7, 24))) + \
+        use * occ * (1.0 + 0.03 * rng.normal(0, 1, (7, 24)))
+    return np.round(np.clip(kw, 0.1, None), 1)
 
 
 def answer_dates(w, s, seed):

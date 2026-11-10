@@ -1,4 +1,4 @@
-"""task7 architecture 7: the pack's data files, written from the world (world.py) the way the utility's and the
+"""task7 architecture 8: the pack's data files, written from the world (world.py) the way the utility's and the
 council's systems would export them. The meter reads carry the billing system's own mess: periodic reads taken a few
 days off 30 April, interim reads, the service team's reads at its visits, meter exchanges, five-digit counters that roll
 over, estimates (some later corrected), customer reads corrected after a typo, rows imported twice, meters that count in
@@ -387,31 +387,112 @@ def write_weather(P, target):
     write_csv(os.path.join(target, "degree_days_haldenau.csv"), ["season", "month", "g20_15"], out)
 
 
-def write_distractors(P, target):
+WEEKDAY_NAMES = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+PROFILE_SEED = 4242
+
+
+def profile_buildings(w):
+    """the buildings standing through calendar 2025, whose electricity the meter operator profiles (a building that
+    has left the gas network still draws electricity)"""
+    return [i for i in range(w.N) if w.first[i] <= 2025]
+
+
+def write_profiles(P, target):
+    """Stadtwerke Haldenau Netz's typical weeks for 2025: for every commercial market location, the mean load in each
+    hour of each weekday over the year's measured days; a building with an annex or a separately metered part has two
+    market locations, and a meter exchanged during the year leaves fewer measured days"""
     w = P.w
-    rng = np.random.default_rng(SEED + 4)
+    rng = np.random.default_rng(SEED + 5)
     rows = []
+    P.malo = {}
+    for i in profile_buildings(w):
+        kw = W.load_week(w, i, PROFILE_SEED)
+        parts = [(1.0, kw)]
+        if rng.random() < 0.06:
+            sh = float(rng.uniform(0.20, 0.35))
+            k2 = np.round(np.clip(kw * sh * (1.0 + 0.04 * rng.normal(0, 1, kw.shape)), 0.1, None), 1)
+            parts = [(1.0 - sh, np.round(np.clip(kw - k2, 0.1, None), 1)), (sh, k2)]
+        ids = []
+        for _, v in parts:
+            ml = "5%010d" % int(rng.integers(10 ** 9, 10 ** 10))
+            ids.append(ml)
+            gap = int(rng.integers(1, 9)) if rng.random() < 0.03 else 0
+            for d in range(7):
+                rows.append([ml, P.cust[i], 2025, WEEKDAY_NAMES[d], W.WEEKDAYS_2025[d] - gap]
+                            + ["%.1f" % x for x in v[d]])
+        P.malo[i] = ids
+    rows.sort(key=lambda r: (r[0], WEEKDAY_NAMES.index(r[3])))
+    P.n_profiles = len(rows)
+    write_csv(os.path.join(target, "electricity_load_profiles_2025.csv"),
+              ["market_location", "customer_number", "year", "weekday", "days_measured"]
+              + ["kw_%02d" % h for h in range(24)], rows)
+
+
+def cadastre_address(a):
+    return a.replace("straße ", "str. ")
+
+
+def write_cadastre(P, target):
+    """the state's solar cadastre (2023 flight), one row per roof face: a flat roof one face, a gable roof two, a hipped
+    roof four, and at some addresses a garage or outbuilding beside the main roof"""
+    w = P.w
+    rng = np.random.default_rng(SEED + 6)
+    rows = []
+    k = W.SI[2025]
+    orient = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"]
+    yield_by = {"N": 0, "NE": 560, "E": 820, "SE": 930, "S": 980, "SW": 930, "W": 820, "NW": 560, "flat": 900}
     for i in np.argsort(P.bid):
-        if rng.random() < 0.55:
+        if w.first[i] > 2023:
             continue
-        kwh = w.area[i, -1] * float(rng.uniform(35, 110))
-        for y in range(2019, 2026):
-            rows.append([P.cust[i], P.address[i], y, int(round(kwh * float(rng.normal(1, 0.06)))), "commercial"])
-    write_csv(os.path.join(target, "electricity_customers_annual_2019_2025.csv"),
-              ["customer_number", "supply_address", "year", "consumption_kwh", "tariff_group"], rows)
+        total = w.roof_ratio[i] * w.area[i, k]
+        faces = []
+        if not w.pitched[i]:
+            faces.append((total, float(rng.uniform(0, 4)), "flat"))
+        else:
+            tilt = float(rng.uniform(24, 45))
+            o = int(rng.integers(0, 8))
+            if rng.random() < 0.65:
+                faces += [(total / 2, tilt, orient[o]), (total / 2, tilt, orient[(o + 4) % 8])]
+            else:
+                big = float(rng.uniform(0.30, 0.38))
+                faces += [(total * big, tilt, orient[o]), (total * big, tilt, orient[(o + 4) % 8]),
+                          (total * (0.5 - big), tilt, orient[(o + 2) % 8]), (total * (0.5 - big), tilt, orient[(o + 6) % 8])]
+        if rng.random() < 0.10:
+            faces.append((float(rng.uniform(18, 45)), float(rng.uniform(0, 3)), "flat"))
+        for n, (ar, tl, ori) in enumerate(faces, 1):
+            ar = round(ar * float(rng.normal(1.0, 0.02)), 1)
+            good = ori == "flat" or ori in ("SE", "S", "SW")
+            fair = ori in ("E", "W")
+            suit = "very good" if good and tl < 40 else ("good" if good or fair else "not suitable")
+            kwp = round(ar * (0.62 if ori == "flat" else 0.80) * 0.19, 1) if suit != "not suitable" else 0.0
+            rows.append([cadastre_address(P.address[i]), P.postcode[int(w.district[i])], n, ar, round(tl), ori, suit,
+                         kwp, int(round(kwp * yield_by[ori]))])
     wb = Workbook()
-    srows = []
-    for i in np.argsort(P.bid):
-        if rng.random() < 0.7:
-            continue
-        roof = w.area[i, -1] / float(rng.uniform(1.5, 4.0))
-        srows.append([P.address[i], P.postcode[int(w.district[i])], round(roof), round(roof * 0.55 * 0.19, 1),
-                      round(roof * 0.55 * 0.19 * 950)])
-    wb_sheet(wb, "rooftops", ["address", "postcode", "roof_area_m2", "pv_potential_kwp", "pv_yield_kwh_per_year"],
-             srows, [26, 9, 12, 14, 18], first=True)
+    wb_sheet(wb, "roof faces", ["address", "postcode", "roof_face", "roof_face_area_m2", "tilt_deg", "orientation",
+                                "pv_suitability", "pv_potential_kwp", "pv_yield_kwh_per_year"],
+             rows, [26, 9, 9, 16, 8, 11, 14, 15, 18], first=True)
     path = os.path.join(target, "solar_cadastre_rooftops_2024.xlsx")
     wb.save(path)
     office(path, "Landesanstalt für Umwelt Baden-Württemberg", "2024-03-11T09:00:00Z", "2024-03-11T09:00:00Z")
+    P.n_roof_faces = len(rows)
+
+
+def write_distractors(P, target):
+    """the billing system's annual electricity consumption for customers on the commercial tariff, 2019 to 2025"""
+    w = P.w
+    rng = np.random.default_rng(SEED + 4)
+    rows = []
+    covid = {2020: 0.04, 2021: 0.07}
+    for i in np.argsort(P.bid):
+        if rng.random() < 0.55 or i not in P.malo:
+            continue
+        kwh = float(W.load_week(w, int(i), PROFILE_SEED).sum()) * 52.14
+        t = W.TYPES[w.typ[i]]
+        for y in range(2019, 2026):
+            f = 1.0 - (covid.get(y, 0.0) if t in ("office", "restaurant", "hotel") else 0.0) - (0.05 if y >= 2023 else 0.0)
+            rows.append([P.cust[i], P.address[i], y, int(round(kwh * f * float(rng.normal(1, 0.04)))), "commercial"])
+    write_csv(os.path.join(target, "electricity_customers_annual_2019_2025.csv"),
+              ["customer_number", "supply_address", "year", "consumption_kwh", "tariff_group"], rows)
 
 
 def write_all(w, target):
@@ -423,6 +504,9 @@ def write_all(w, target):
     write_pilot(P, target)
     write_applications(P, target)
     write_weather(P, target)
+    write_profiles(P, target)
+    write_cadastre(P, target)
     write_distractors(P, target)
-    counts = {"reads": P.n_reads, "notices": P.n_notices, "meter_points": len(P.mps), "applications_2026": len(P.pipe_rows)}
+    counts = {"reads": P.n_reads, "notices": P.n_notices, "meter_points": len(P.mps), "applications_2026": len(P.pipe_rows),
+              "load_profile_rows": P.n_profiles, "roof_faces": P.n_roof_faces}
     return P, counts

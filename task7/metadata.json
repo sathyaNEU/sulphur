@@ -11,12 +11,11 @@
  ],
  "distractor_files": [
   "electricity_customers_annual_2019_2025.csv",
-  "solar_cadastre_rooftops_2024.xlsx",
   "municipal_heat_plan_2026_summary.pdf",
   "federal_funding_overview_2025.pdf"
  ],
  "input_gates": {
-  "files": 18,
+  "files": 19,
   "formats": [
    "csv",
    "docx",
@@ -24,9 +23,9 @@
    "xlsx"
   ],
   "largest_file": "gas_meter_reads_2013_2026.csv",
-  "largest_file_rows": 389104,
-  "long_file": "benchmarking_notices_2019_2026.csv",
-  "long_file_rows": 37213
+  "largest_file_rows": 389105,
+  "long_file": "electricity_load_profiles_2025.csv",
+  "long_file_rows": 178514
  },
  "sources": [
   {
@@ -40,7 +39,7 @@
   {
    "path": "applications_2026.xlsx",
    "format": "xlsx",
-   "bytes": 47872,
+   "bytes": 44530,
    "covers": "the 2026 round's applications received by 12 June, with their reference consumption",
    "made": "constructed by task7/generator/make.py (seeded, deterministic)"
   },
@@ -54,7 +53,7 @@
   {
    "path": "benchmarking_notices_2019_2026.csv",
    "format": "csv",
-   "bytes": 2550837,
+   "bytes": 2552877,
    "covers": "every benchmarking notice sent, May 2019 to May 2026, with the grant offer",
    "made": "constructed by task7/generator/make.py (seeded, deterministic)"
   },
@@ -75,7 +74,7 @@
   {
    "path": "climate_action_plan_2023_extract.pdf",
    "format": "pdf",
-   "bytes": 67708,
+   "bytes": 67710,
    "covers": "the climate action plan's section on efficiency grants",
    "made": "constructed by task7/generator/make.py (seeded, deterministic)"
   },
@@ -96,8 +95,15 @@
   {
    "path": "electricity_customers_annual_2019_2025.csv",
    "format": "csv",
-   "bytes": 3560286,
+   "bytes": 3611956,
    "covers": "the utility's commercial electricity customers' annual use",
+   "made": "constructed by task7/generator/make.py (seeded, deterministic)"
+  },
+  {
+   "path": "electricity_load_profiles_2025.csv",
+   "format": "csv",
+   "bytes": 25994404,
+   "covers": "the meter operator's 2025 typical weeks for every commercial market location: mean kW by weekday and hour",
    "made": "constructed by task7/generator/make.py (seeded, deterministic)"
   },
   {
@@ -110,7 +116,7 @@
   {
    "path": "gas_meter_reads_2013_2026.csv",
    "format": "csv",
-   "bytes": 27432102,
+   "bytes": 27431912,
    "covers": "every read of every commercial gas meter point, 30 April 2013 to 30 April 2026",
    "made": "constructed by task7/generator/make.py (seeded, deterministic)"
   },
@@ -124,7 +130,7 @@
   {
    "path": "meter_points_2026.csv",
    "format": "csv",
-   "bytes": 2093646,
+   "bytes": 2093769,
    "covers": "meter points, their buildings, meters, factors, z-numbers and network areas",
    "made": "constructed by task7/generator/make.py (seeded, deterministic)"
   },
@@ -138,7 +144,7 @@
   {
    "path": "pilot_2019_responses_and_draw.xlsx",
    "format": "xlsx",
-   "bytes": 142637,
+   "bytes": 142153,
    "covers": "the 2019 pilot's responses, the draw, withdrawals and completion dates",
    "made": "constructed by task7/generator/make.py (seeded, deterministic)"
   },
@@ -152,8 +158,8 @@
   {
    "path": "solar_cadastre_rooftops_2024.xlsx",
    "format": "xlsx",
-   "bytes": 240444,
-   "covers": "rooftop solar potential by address",
+   "bytes": 2001744,
+   "covers": "the state solar cadastre's roof faces by address: area, tilt, orientation, solar potential",
    "made": "constructed by task7/generator/make.py (seeded, deterministic)"
   },
   {

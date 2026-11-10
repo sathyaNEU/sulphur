@@ -1,17 +1,18 @@
-"""task7 architecture 7: the golden analysis and its rivals, on a season-by-building table of normalised gas use read
-from the pack (verify.py). The same code runs on the generator's clean truth and on the cleaned pack, so a figure in the
-golden is the figure the pack yields.
+"""task7 architecture 8: the golden analysis and its rivals, on a season-by-building table of normalised gas use read
+from the pack (verify.py), with each building's 2025 week of electricity and its roof per square metre of floor. The same
+code runs on the generator's clean truth and on the cleaned pack, so a figure in the golden is the figure the pack yields.
 
 The pilot's places were drawn by lot among the owners who answered the May 2019 offer, within each measure, so for each
 measure and each season since the works the drawn buildings that had them are set against the owners the draw passed
-over, both against their own 2018/19 season (the notice season). A measure's works are not equally good everywhere and
-do not stay equally good: insulation saves a share of a building's heating and none of its hot water, controls save by
-setting the heating back when a building is empty, and heating optimisation's saving falls as heating curves are turned
-back up. So the golden carries each measure's season-by-season saving over its service life by fitting its approach to
-the level it settles at, takes each building type's own saving from the pilot, and prices every 2026 application at the
-saving its own type would make over the measure's life. The round once the offer closes is projected measure by measure
-from the 2019 answers: how many were in by the same day after the notice, how much larger the late ones were, and how
-many drawn owners withdrew, early and late."""
+over, both against their own 2018/19 season (the notice season). What a measure saves depends on the building: roof
+insulation saves with how much roof a building has for its floor, and none of its hot water; controls save while a
+building stands empty, nothing in one lived in round the clock; heating optimisation's saving falls as heating curves
+are turned back up. This year's owners chose their measures knowing their buildings, so the golden takes the saving
+along what each measure's saving follows (the empty week read off the building's load profile, the roof per floor off
+the solar cadastre and the register), fitted on the lottery's own buildings, and prices every 2026 application at its
+own building's, faded over the measure's life as its saving fades; heating optimisation is priced at its own use's
+saving. The round once the offer closes is projected measure by measure from the 2019 answers: how many were in by the
+same day after the notice, how much larger the late ones were, and how many drawn owners withdrew, early and late."""
 import datetime as dt
 import math
 
@@ -183,16 +184,127 @@ def class_levels(P, m, how="ratio_of_totals"):
     return {cl: float(season_savings(P, m, how, cls=cl).mean()) for cl in ("intermittent", "round the clock")}
 
 
+# ---------------------------------------------------------------- what suits the building
+
+DOSE_BINS = 6
+DRIVEN = ("insulation", "heating controls")
+
+
+def driver(P, m, empty=None):
+    """the building property a measure's saving follows: the share of the week a building stands empty (controls), the
+    logarithm of its roof area per square metre of heated floor (insulation)"""
+    if m == "heating controls":
+        return P.empty if empty is None else empty
+    if m == "insulation":
+        return np.log(P.roof_ratio)
+    return None
+
+
+def dose_groups(P, m, nb=DOSE_BINS, rows=None, x=None):
+    """the measure's answers in nb bands of its driver, cut at the quantiles of the works and passed-over buildings
+    together (controls: the buildings lived in round the clock a band of their own at no empty hours): a list of (works,
+    passed-over) index arrays"""
+    x = driver(P, m) if x is None else x
+    g, c = _arms(P, m) if rows is None else rows
+    g, c = g[np.isfinite(x[g])], c[np.isfinite(x[c])]
+    groups = []
+    if m == "heating controls":
+        lg, lc = g[x[g] <= 0.0], c[x[c] <= 0.0]
+        if len(lg) >= 3 and len(lc) >= 3:
+            groups.append((lg, lc))
+        g, c = g[x[g] > 0.0], c[x[c] > 0.0]
+    qs = np.quantile(np.concatenate([x[g], x[c]]), np.linspace(0, 1, nb + 1))
+    qs[0], qs[-1] = -np.inf, np.inf
+    for b in range(nb):
+        gb = g[(x[g] >= qs[b]) & (x[g] < qs[b + 1])]
+        cb = c[(x[c] >= qs[b]) & (x[c] < qs[b + 1])]
+        if len(gb) >= 3 and len(cb) >= 3:
+            groups.append((gb, cb))
+    return groups
+
+
+def dose_points(P, m, nb=DOSE_BINS, rows=None, x=None, heat_part=True):
+    """each band's seven-season saving, works against passed-over, as the plan sets a saving; insulation's taken on the
+    heating part (the band's works buildings' gas-weighted hot-water share, the benchmarking method's by use). Returns
+    (driver, saving, the band's 2018/19 gas) per band"""
+    x = driver(P, m) if x is None else x
+    k0 = P.si[PILOT]
+    pts = []
+    for gb, cb in dose_groups(P, m, nb, rows, x):
+        wts = np.nan_to_num(P.U[gb, k0])
+        sv = float(season_savings(P, m, rows=(gb, cb)).mean())
+        if m == "insulation" and heat_part:
+            sv = sv / (1.0 - float(np.average(P.hvec[gb], weights=wts)))
+        pts.append((float(np.average(x[gb], weights=wts)), sv, float(wts.sum())))
+    return pts
+
+
+def dose_fit(pts, m, form=None):
+    """controls: nothing up to a threshold of the empty week, then a straight rise (the threshold on a grid, the rise by
+    weighted least squares through the bands of buildings that close), the buildings lived in round the clock at their
+    own band's saving; insulation: a straight line in the log of the roof per floor"""
+    form = form or ("hinge" if m == "heating controls" else "line")
+    lived = [p for p in pts if p[0] <= 0.0] if m == "heating controls" else []
+    rest = [p for p in pts if p not in lived]
+    out = {"form": form, "pts": pts, "lived": (lived[0][1] if lived and form != "linear_all" else None)}
+    px, py, pw = (np.array(v) for v in zip(*(pts if form == "linear_all" else rest)))
+    if form == "hinge":
+        best = None
+        for e0 in np.arange(0.20, 0.6001, 0.005):
+            X = np.clip(px - e0, 0.0, None)
+            if (X > 0).sum() < 2:
+                continue
+            b = float((pw * X * py).sum() / (pw * X * X).sum())
+            sse = float((pw * (b * X - py) ** 2).sum())
+            if best is None or sse < best[0] - 1e-15:
+                best = (sse, float(e0), b)
+        out.update(e0=best[1], slope=best[2])
+    elif form in ("line", "linear", "linear_all"):
+        b1, b0 = np.polyfit(px, py, 1, w=np.sqrt(pw))
+        out.update(a=float(b0), b=float(b1))
+    elif form == "bins":
+        out["pts"] = sorted(rest)
+    else:
+        raise ValueError(form)
+    return out
+
+
+def dose_at(fit, x):
+    x = np.atleast_1d(np.asarray(x, float))
+    f = fit["form"]
+    if f == "hinge":
+        out = fit["slope"] * np.clip(x - fit["e0"], 0.0, None)
+    elif f == "line":
+        out = fit["a"] + fit["b"] * x
+    elif f in ("linear", "linear_all"):
+        out = np.clip(fit["a"] + fit["b"] * x, 0.0, None)
+    else:
+        pts = fit["pts"]
+        cuts = [(pts[k][0] + pts[k + 1][0]) / 2.0 for k in range(len(pts) - 1)]
+        out = np.array([pts[int(np.searchsorted(cuts, v))][1] for v in x])
+    if fit.get("lived") is not None:
+        out = np.where(x <= 0.0, fit["lived"], out)
+    return out
+
+
 def apps(P, m):
     return [a for a in P.pipe if a["measure"] == m]
 
 
-def app_rates(P, m, route="golden", persist="floor", how="ratio_of_totals", base="notice"):
+def app_rates(P, m, route="golden", persist="floor", how="ratio_of_totals", base="notice", nb=DOSE_BINS, form=None,
+              empty=None, heat_part=True):
     """each 2026 application's saving over the measure's life, as a share of its reference consumption"""
     s = season_savings(P, m, how, base)
     life_factor = lifetime(s, m, persist) / s.mean()
     A = apps(P, m)
-    if route == "golden":                   # its own type's saving, faded as the measure's saving fades
+    if route == "golden" and m in DRIVEN:   # its own building's saving along the measure's driver, faded
+        x = driver(P, m, empty)
+        fit = dose_fit(dose_points(P, m, nb, x=x, heat_part=heat_part), m, form)
+        r = dose_at(fit, np.array([x[a["b"]] for a in A]))
+        if m == "insulation" and heat_part:
+            r = r * np.array([1.0 - P.hvec[a["b"]] for a in A])
+        return r * life_factor
+    if route in ("golden", "use"):          # its own use's saving, faded as the measure's saving fades
         lv = type_levels(P, m, how, base)
         pooled = float(s.mean())
         return np.array([lv.get(TYPES[a["typ"]], pooled) * life_factor for a in A])
@@ -230,42 +342,40 @@ def funded_set(P, rate_fn):
     return tuple(out)
 
 
-def bootstrap(P, m, B=400, seed=2026, persist="floor"):
-    """the grant per tonne's spread when the pilot's buildings are drawn again within each type and arm, every step
-    repeated (the seasons' savings, their fit, the types' savings, the applications priced)"""
+def bootstrap(P, m, B=400, seed=2026, persist="floor", route="golden"):
+    """the grant per tonne's spread when the pilot's buildings are drawn again within each use and arm, every step
+    repeated (the seasons' savings, their fit, the driver's bands and their fit or the uses' savings, the applications
+    priced)"""
     rng = np.random.default_rng(seed + MEASURES.index(m))
     A = apps(P, m)
     ref = np.array([a["ref_kwh"] for a in A])
     gr = np.array([a["grant"] for a in A])
     L = LIFE[m]
     g_all, c_all = _arms(P, m)
-    k0 = P.si[PILOT]
-    ks = list(range(k0 + 1, len(P.seasons)))
-    def mats(idx):
-        base = P.U[idx, k0]
-        cur = P.U[np.ix_(idx, ks)]
-        ok = np.isfinite(cur) & np.isfinite(base)[:, None]
-        return np.where(ok, cur, 0.0), np.where(ok, base[:, None], 0.0)
-    Gc, Gb = mats(g_all)
-    Cc, Cb = mats(c_all)
     tg, tc = P.typ[g_all], P.typ[c_all]
-    def share(gc, gb, cc, cb):
-        return 1.0 - (gc.sum(0) / gb.sum(0)) / (cc.sum(0) / cb.sum(0))
+    types_g = {t: g_all[tg == t] for t in np.unique(tg)}
+    types_c = {t: c_all[tc == t] for t in np.unique(tc)}
+    x = driver(P, m)
+    hw_a = np.array([1.0 - P.hvec[a["b"]] for a in A])
+    xa = np.array([x[a["b"]] for a in A]) if m in DRIVEN else None
     vals = []
-    types_g = {t: np.where(tg == t)[0] for t in np.unique(tg)}
-    types_c = {t: np.where(tc == t)[0] for t in np.unique(tc)}
     for _ in range(B):
         gi = np.concatenate([rng.choice(v, len(v)) for v in types_g.values()])
         ci = np.concatenate([rng.choice(v, len(v)) for v in types_c.values()])
-        s = share(Gc[gi], Gb[gi], Cc[ci], Cb[ci])
+        s = season_savings(P, m, rows=(gi, ci))
         lf = float(profile(s, L, persist).mean() / s.mean())
-        lv = {}
-        for t in range(len(TYPES)):
-            a_ = gi[tg[gi] == t]
-            b_ = ci[tc[ci] == t]
-            if len(a_) >= 3 and len(b_) >= 3:
-                lv[t] = float(share(Gc[a_], Gb[a_], Cc[b_], Cb[b_]).mean())
-        r = np.array([lv.get(a["typ"], float(s.mean())) * lf for a in A])
+        if m in DRIVEN and route == "golden":
+            fit = dose_fit(dose_points(P, m, rows=(gi, ci)), m)
+            r = dose_at(fit, xa) * lf
+            if m == "insulation":
+                r = r * hw_a
+        else:
+            lv = {}
+            for t in range(len(TYPES)):
+                a_, b_ = gi[P.typ[gi] == t], ci[P.typ[ci] == t]
+                if len(a_) >= 3 and len(b_) >= 3:
+                    lv[t] = float(season_savings(P, m, rows=(a_, b_)).mean())
+            r = np.array([lv.get(a["typ"], float(s.mean())) * lf for a in A])
         vals.append(gr.sum() / (r * ref / 1000.0 * EF * L).sum())
     vals = np.array(vals)
     return float(np.percentile(vals, 5)), float(np.percentile(vals, 95)), vals

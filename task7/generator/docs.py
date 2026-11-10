@@ -1,4 +1,4 @@
-"""task7 architecture 7: the pack's documents. Each PDF is a Word document exported by LibreOffice Writer
+"""task7 architecture 8: the pack's documents. Each PDF is a Word document exported by LibreOffice Writer
 (officepdf.py); the committee request stays a Word document. They file the WHAT (what a saving is, normal weather, a
 round's lifetime tonnes and grant per tonne, the limit, the pilot's and the 2026 round's terms, the annual report's
 season saving, the utility's normalisation) and describe nothing of how a saving is to be estimated, which buildings
@@ -45,7 +45,7 @@ def climate_plan(target):
            "the buildings that use most are one of the plan's instruments."),
          P("4.1 The programme", H2),
          P("The council grants 30 per cent of a contractor's quoted cost, at most €40,000, for one of three measures in a "
-           "commercial building heated by gas: insulation of the roof, top-floor ceiling or walls (insulation); "
+           "commercial building heated by gas: insulation of the roof or the top-floor ceiling (insulation); "
            "hydraulic balancing, new pumps and a new heating curve (heating optimisation); or room-by-room and "
            "time-based controls (heating controls). The offer is made in Stadtwerke Haldenau's benchmarking notice. A "
            "round is set by the council's Committee for Climate and Environment."),

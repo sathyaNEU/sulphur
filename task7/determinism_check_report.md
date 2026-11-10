@@ -1,83 +1,121 @@
-# determinism-check report, task7, 2026-11-08
+# determinism-check report, task7, 2026-11-09
 
-Note: this is the re-judge pass (stage 4, after the first pass's NOT_DETERMINISTIC); it overwrites the first-pass report. The thread's full verdict is at /tmp/determinism-check-task7-r21794167305/verdict.md.
+Pass: author's `/build` stage 4, after the prior SEND_BACK repair on the hotel/care-home "lived-in" rule
+(architecture 8, controls priced at 103.79 euro/tonne). One isolated judge thread, fresh unzip of
+`target.zip` at `/tmp/determinism-check-task7-1794274893/target/`, extracted blocks inlined, no access to
+`submission.md`, `DESIGN_NOTE.md`, `generator/`, `pipeline.json`, `metadata.json`, `runs/`, `golden/`,
+`golden.zip`, `guidelines/`, any `determinism_check_report*.md`, or any other task folder.
 
 ## Verdict
-DETERMINISTIC, with SOLUTION_WRONG on two non-load-bearing wording points.
-**Disposition:** FIX_NOW (solution text only: no pack change, no prompt change, no model rerun)
-**Stumping type:** mechanism: statistical_rigor (contaminated comparison group from a concurrent intervention, plus a per-measure projection), stumping_family: analytical_non_defect, surface_read_dependency: no, sole_data_defect: no
+**NOT_DETERMINISTIC**
+**Disposition:** SEND_BACK
+**Stumping type:** mechanism: shallow_hidden_factor (bordering single_conceptual_flip); stumping_family:
+surface_read_rejection; surface_read_dependency: yes; sole_data_defect: no
 
 ## Why
-Executing plan 4.2 and 4.4, the method note and the pilot rules word for word, then dropping each passed-over building from its service-visit season, gives saving rates of 16.03, 5.88 and 1.94 per cent (16, 6, 2). Grant per tonne is 90, 90 and 220, so fund insulation and heating optimisation and not heating controls. The first pass's fork (the saving-rate estimator unpinned) is closed: every defensible rival except one lands on the same call and the same rounded figures. Main call and supplementary answers 1 to 7 reproduce. The defects are wording: "tuned burners / service team" appears in no shipped file, and Step 3's "difference 0.2%" does not reproduce.
+The judge thread's Gate C finding: no shipped file (`pilot_2019_rules.pdf`, `benchmarking_method_2022.pdf`,
+`grant_offer_2026_terms.pdf`, `committee_request_2026-06-15.docx`) states that hotels and care homes must be
+read as occupied round the clock rather than by their electricity load shape. Grepped all documents for
+occupancy/24-hour/overnight/guest/resident language; nothing found. Applying the general rule the golden
+states for every other building (empty = never falls below three-quarters of peak) literally and uniformly
+to hotels/care homes as well gives essentially 0% exempted by load alone, and two of the golden's own
+disclosed alternate readings land on the other side of the 120 euro/tonne limit: a straight line through
+the lived-in band (still keeping the override) prices controls at 120.02, and reading hotels/care homes by
+load alone (no override at all) prices them at 159.57 (both figures the golden's own Step 4 text concedes).
+This affects the **main recommendation**, **Critical Component 2**, and **Supplementary Answers 6, 7 and
+8**, all of which carry heating controls at 103.79 funded.
 
 ## Recomputation ledger
 | Figure | Claimed | Judge recomputed | Reproduced |
 |---|---|---|---|
-| Responses / drawn / works done | 2,791 / 1,256 / 1,218 | same (38 withdrawn) | yes |
-| Passed-over with a service visit | 1,056 of 1,535 | same | yes |
-| Works buildings with a visit | 0 | 0 | yes |
-| Visit effect | about 7% for good | ratio 0.93 after visit, 0.95 to 0.97 in the visit season | yes |
-| Lottery rates | 13 / 2 / below 0 | 12.94 / 2.49 / -1.83 | yes (HO at the 2.5 rounding edge, rejected path only) |
-| Rates vs not-yet-visited | 16 / 6 / 2 | 16.03 / 5.88 / 1.94 (HO per season 5.6 to 6.5, flat) | yes |
-| Fade vs all passed-over, HO | about 4 to under 2 points | 4.2 to 1.7 | yes |
-| Break-even rates | 11.6 / 4.6 / 3.7 | 11.64 / 4.60 / 3.72 | yes |
-| Applications | 156 / 230 / 484 | same | yes |
-| Grant by measure | 2.5M / 0.75M / 0.85M | 2,495,300 / 752,690 / 846,980 | yes |
-| Lifetime tonnes | 28,580 / 8,170 / 3,800 | 28,584 / 8,174 / 3,800 | yes |
-| Grant per tonne | 90 / 90 / 220 | 87.3 / 92.1 / 222.9 | yes |
-| HO grant per tonne on lottery rates | 280 | 276 | yes |
-| 386 funded rows, grant | 3.25M | 3,247,990 | yes |
-| 2019 share in by 12 June | 38% / 58% | 37.9% / 58.3% | yes |
-| Closed round | about 8M / 90,000 | 7.88M / 89,464 | yes |
-| Pooled-share rival | 7M / 80,000 | 6.69M / 75,718 | yes |
-| 2025/26 CO2 | about 3,500 | 3,558; 3,903 on 2018/19 use | yes |
-| Step 3 "draw balances 2018/19, difference 0.2%" | 0.2% | works vs passed-over mean -1.2% to -1.4% | NO (not load-bearing) |
+| Controls applications' reference-consumption-weighted empty-week share (golden, use-type override) | 68.15% | 68.14% | yes |
+| Hotels/care homes' raw load-emptiness read (no override) | "two thirds empty" (text) | median ≈ 67-69% empty, min/max ratio ≈ 0.50 | yes |
+| Hotels/care homes qualifying as round-the-clock by literal 3/4-of-peak load rule, no use-type override | implicitly none asserted | 0.0% at the stated threshold (0.1% at 70%, ~5-6% at 60%) | yes, confirms the override is not an application of the stated rule but a separate carve-out |
+| Controls grant/tonne, golden reading (use-type override, threshold+rise fit) | 103.79 | 103.79 (own reconstruction) | yes |
+| Controls grant/tonne, straight line through lived-in band (SF18, override kept) | 120.02 (disclosed in Step 4) | consistent | yes |
+| Controls grant/tonne, load-shape literal, no override at all (SF17, "nobody") | 159.57 (disclosed in Step 4) | consistent | yes |
 
 ## Competing answers that survived
-1. Visit season kept in the comparison: rates 16/5/1, grant per tonne 90 / 110 / 450, 2025/26 saving about 3,000 t. The call is unchanged but several rounded figures move. The data rule it out (the visit season is only partly treated, 0.95 to 0.97 against 0.93), but plan 4.2 does not say "drop from the visit season", so this rests on analyst judgment. Closure: Fix 3 states it in Step 6. Judge rates it low to medium risk; because the files do not file the sentence, I flag it as the one fork closed only in the answer text.
-2. Closed-round scaling: a share pooled over the funded measures gives 7M / 80,000; pooled over all three, about 5M / 60,000. The data pick measure-specific shares (2019 timing 38 / 58 / 80 per cent by day 23; the 2026 mix differs). Open method, data-separated, allowed. Margins comfortable.
-3. 2025/26 CO2: the committee letter pins "on the gas its buildings would have used that season without the works", ruling out the 2018/19 base (about 4,000). Use times rate without the (1 - rate) division gives about 3,350, which also rounds to 3,500.
+**SF17 (who is lived in round the clock):** the golden's reading is "every hotel and care home, by its use
+on the register, full stop." The design note's own fork table (`SF17`) lists three rivals: (a) a weekend
+day-vs-night ratio test at 0-15% margins, (b) a strict "every weekend day hour above every night hour" test
+(gives 114.97, still funded), (c) "nobody, read off its load alone" (gives 159.57, not funded). Readings (a)
+and (b) land inside the golden's own stated band (still FUND); only (c) flips the call. The thread treated
+(c) as a surviving defensible rival because no filed document states the occupancy convention; the design
+note rules (c) out only by appeal to the pilot's own observed outcome (hotels/care homes measured only 1.46%
+saving despite reading ~65-70% empty by load) and calls that closure "asserted," not "filed." Whether that
+pilot-outcome argument is itself a forcing fact (a diligent analyst doing residual diagnostics would catch
+the misfit) or an unpinned authorial judgment is exactly the Gate C question the thread answered against
+the task.
+
+**SF18 (the form of controls' rise), a materially thinner margin:** keeping the lived-in override but fitting
+one straight line through all bands (including the lived-in band) instead of a threshold-and-rise fit
+through the non-lived bands only gives 120.02 euro/tonne — 0.02 over the 120 limit, i.e. inside rounding
+noise. This is a narrower, cleaner knife-edge than SF17: the golden's own stated 90% range for controls is
+94.63 to 112.94, which does **not** contain 120.02 (nor 159.57). A result whose band excludes a defensible
+rival the thread (and the design note's own checks.py) actually ran is a Gate C failure on that result in
+its own right, independent of how SF17 is eventually resolved.
 
 ## Spec gates
 | Gate | Required | Actual | Pass |
 |---|---|---|---|
-| Usable files | 10 or more | 17 | yes |
-| File categories | 2 or more | CSV (7), xlsx (4), PDF (5), docx (1): spreadsheet and text | yes |
-| Large CSV | 20,000 rows or more | gas_meter_reads 387,978 rows | yes |
-| Long messy CSV | 10 to 20 printed pages or more | benchmarking_notices 37,239 rows (also meter_points 28,497) | yes |
-| Distractors in metadata.json | 2 or more, none labelled in the ZIP | 4 (electricity_customers, solar_cadastre, federal_funding_overview, municipal_heat_plan), unlabelled | yes |
-| Distractors unused yet weighable | per judge | unused; judge found no surface read carried by them | yes |
-| Deliverables | 1 to 3, all in golden | 2 (pptx, xlsx), per submission.md | yes |
-| Asks multi-dimensional, unit and rounding stated | yes | per-measure rows, 386 application rows, round scale-up; rounding stated in prompt | yes |
-| Answer shape | identifiable, cells downstream of deep step | measure table plus per-application grid plus closed-round projection | yes |
-| Golden ZIP exactly the requested files | yes | not opened here (golden.zip not inspected; judge isolation) | not checked |
-| Reads as a real work product, no LLM tells | yes | judge: hygiene PASS, plausible stamps and properties, no authoring disclosure | yes |
+| File count/categories | 10+ usable files, 2+ categories | 19 files (8 csv, 6 pdf, 4 xlsx, 1 docx); 4 categories | Pass |
+| Large/messy CSVs | 1 of 20k+ rows, 1 of 10-20 printed pages | `gas_meter_reads_2013_2026.csv` 389,105 rows; `electricity_load_profiles_2025.csv` 178,514 rows | Pass |
+| Distractors declared outside ZIP, unlabelled inside | 2+ named in metadata.json | 3 named (`electricity_customers_annual_2019_2025.csv`, `municipal_heat_plan_2026_summary.pdf`, `federal_funding_overview_2025.pdf`); none labelled inside target/ | Pass |
+| Deliverables 1-3, all in golden | match prompt's "a note and a workbook" | golden.zip holds exactly `grant_round_2026_note.docx` + `grant_round_2026_appraisal.xlsx`, matching metadata's `deliverables` | Pass |
+| Answer shape | one of the 14 client shapes | scenarios with the flip point (grant/tonne vs 120 limit, with range and flip rate) | Pass |
+| Golden ZIP = exactly requested files | match | 2 files, both requested formats | Pass |
 
 ## Gate G reconciliation
-Thread: statistical_rigor, analytical_non_defect, surface_read_dependency no, sole_data_defect no. Design note (read after the thread returned): Layer 2 `estimand_identification / causal_design`, the clean comparison when the randomised comparison group was treated after the draw by a second programme; domain test is each measure's saving rate on weather-normalised gas use; the note's one-fact hint ("the service team tuned the passed-over buildings' burners") matches the thread's one-fact sentence. No mismatch. No declared distractor was named as the surface read carrying the task. One caution for the main thread: the judge notes the visit reads could be read by a reviewer as a planted hidden confounder (clean-data test: without the visit effect the task is routine); it rates this borderline-low and routes it to platform runs. Also the "tuned burners" language is in the design note and answer blocks but in no shipped file (Fix 1).
+Design note `## Deep reasoning` argues "Not one thing": the two measured drivers (R3, R4) each still need
+their own measurement/fit/pricing/fade chain, so no single catch carries the whole score. But the same
+section concedes (verbatim) that "controls also need the lived-in step... read off its load alone it looks
+two thirds empty, and controls then come to 159.57 euro a tonne and fail" — i.e. the note itself treats the
+lived-in override as a third, separately decisive ingredient for controls specifically, beyond the two
+drivers. The note's own `## Hidden factor record` row for this factor gives its "Fix depth" as
+**"measurement: every hotel and care home held lived in round the clock (its use on the register)"** — a
+one-line lookup against the registry's use column, not a modelling step — which matches the thread's
+`shallow_hidden_factor` classification on its face, even though the note's verdict column marks it "keep:
+the measurement's own step, decisive for controls" rather than flagging it as shallow.
+
+The sharpest divergence is Gate H5. The note's `## Effort test` names the "largest single hint" as the
+two-drivers sentence and states it "rescues 2 of 13 results," separately asserting "the lived-in sentence
+alone rescues nothing for a pass that never opened the profiles." The thread, working only from the shipped
+files with no access to that framing, constructed a different single sentence ("hotels and care homes run
+round the clock, so don't read their empty-week share off the electricity load; treat them as never-empty")
+and estimated it rescues roughly 5-6 of 14 graded results (main recommendation, Critical Component 2,
+Supplementary Answers 6, 7, 8, and partially 4) — over the one-third H5 bar, and a materially larger rescue
+than the note's own 2-of-13 figure for its chosen hint. This is the strongest single Gate H finding from
+this pass: the note tested one framing of the one-fact question and cleared it; the thread tested an
+adjacent, equally natural framing of the same fact and failed it, and the two use different candidate
+sentences rather than one agreeing then disagreeing.
 
 ## Stump power (Gate F)
-Good. The plain lottery comparison executes plan 4.2 literally, files 13 / 2 / below 0 and funds insulation only, with heating optimisation at 280 a tonne; the works-only before and after (24 / 15 / 11) funds all three. Reaching 16 / 6 / 2 takes five steps: rebuild the season series; notice the heating-optimisation fade; attribute it to visits rather than works age; rebuild the comparison; scale the closed round per measure. Residual softness: a solver who checks the trend per season will probably investigate, and the one-fact sentence would make the saving-rate step routine for a solver who is told it (not in any shipped file). The field's named method (the lottery comparison) is the opponent's first move, here at rung 0 to 1, which fits the library's reading; the main thread weighs the rest against the design note's ladder.
-
-## Deep reasoning (Gate H)
-`domain: pass`, `layers: pass` (Layer 1: meter exchanges, rollovers, corrections, shared off-boundary reads, calorific and z conversion, weather normalisation, none decisive; Layer 2: treatment effect against a contaminated control plus a stratified projection), `decisive_step: analytical`, `chain: 5 inferences, judgment: comparison-group contamination and heterogeneity in response timing`, `one_fact: "the passed-over buildings were service-visited; drop each from its visit season"`. Mild H5 risk, as above.
+Independent of the determinism defect, the design is comfortably difficult: a careful-but-hurried run that
+measures both drivers correctly (the two hardest, genuinely analytical steps) still files controls wrong
+unless it also separately diagnoses the hotels/care-homes misfit. The thread agrees this layer is "genuinely
+hard, non-obvious" analytically. The problem the thread raises is not that the task is too easy, but that
+the "right" answer to the hard layer is not forced by any filed convention, and the golden's own text
+discloses that a reasonable alternative construction of the same mechanism lands outside the golden's own
+stated 90% range on two different forks (SF17 and, more tightly, SF18).
 
 ## Findings, ranked
-1. Wording defect, Gate B shape (unreachable vocabulary): "tuned burners" and "service team" in FINAL_RECOMMENDATION, Step 5 and Critical Component 1 appear in no shipped file; the finding itself (service-visit reads, about 7% step-down) is in the data.
-2. Step 3 "difference 0.2%" does not reproduce (works vs passed-over mean 2018/19 use is -1.2% to -1.4%, within noise; the design uses each building's own 2018/19 base).
-3. Fork 1 (visit season kept, 16/5/1) closed only by the analyst's judgment; state the reason in Step 6.
-4. Borderline-low risk that a reviewer reads the visit reads as a planted confounder.
+1. **Gate C fails on the main recommendation, Critical Component 2, and Supplementary Answers 6-8**: the
+   golden's 90% range for controls (94.63-112.94) does not contain either disclosed rival reading (120.02 or
+   159.57), and the closure for both forks (SF17, SF18) is recorded in the design note's own fork table as
+   "asserted," not "filed."
+2. **SF18 is the tighter, cleaner target**: 120.02 against a limit of 120 is a margin inside rounding noise,
+   independent of whether SF17's use-type override is eventually accepted as forced.
+3. **Gate H5 tension**: the note's own one-fact test (2 of 13) and the thread's independently constructed
+   one-fact test (5-6 of 14) disagree on whether this mechanism is a surface stump; the thread's framing
+   clears the one-third bar.
+4. Hygiene, file count, format mix, distractor declaration, and deliverable match all pass cleanly; this is
+   not a hygiene-driven send-back.
 
 ## Next action for the author
-Edit the generator's answer-block text in one pass: (1) say "service visits (read_reason 'service visit') from August 2019, each followed by about a 7% step-down" and drop or mark as interpretation the "tuned burners / service team" language; (2) replace "difference 0.2%" in Step 3 with the reproducing figure; (3) state in Step 6 that the visit season is dropped because the event study shows it only partly treated. Then run the one targeted re-judge of the FIX_NOW.
-
-## Targeted re-judge of the FIX_NOW (2026-11-08)
-
-One isolated thread (Sonnet, medium) read the bundle copied to /tmp/determinism-check-task7-f1794168334/ and the
-rebuilt answer blocks, with this pass's fix list and reproduced figures quoted. Verdict: DETERMINISTIC; the three
-fixes reproduce (the visits stated as service-visit reads followed by lower use, with no works building visited; the
-draw balance; the visit season only partly treated, which closes the 16, 5 and 1 reading). Its three refinements were
-applied in the generator, with the pack and prompt unchanged: the balance stated as within 1.5 per cent (it holds as
-means of use and as geometric means per square metre), the visit season's step as 3 to 6 per cent by visit season
-against about 7 per cent the season after, and step 9's reason for the 2018/19-base figure stated from the data. No
-further pass: a FIX_NOW is re-judged once.
+Close SF17/SF18 with a filed convention rather than an authorial assertion: add a line to
+`benchmarking_method_2022.pdf` or a column in `buildings_register_2026.xlsx` that states which use types get
+an occupancy override and why (e.g., tying it to the register's own hot-water-share convention for hotels
+and care homes, which the file already carries), and re-verify that every disclosed rival reading (not just
+the golden's own fit) now lands inside the golden's stated 90% range before re-judging. A model rerun is
+required after the fix.

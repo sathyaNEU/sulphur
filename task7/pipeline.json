@@ -1,10 +1,10 @@
 {
  "task": "task7",
- "status": "DESIGN",
+ "status": "READY",
  "domain": "energy-systems-utilities",
  "objective": "experiment-causal",
- "stage": 2,
- "stage_name": "design",
+ "stage": 5,
+ "stage_name": "ready",
  "updated": "2026-11-09",
  "stump": "",
  "architecture": 8,
@@ -13,21 +13,37 @@
   "exit": 0,
   "date": "2026-11-09",
   "checks": 85,
-  "note": "1 WARN (R1 upstream of seven results; the largest hint rescues 2 of 9)"
+  "note": "2 WARN: the both-drivers hint rescues 6 of 13 (over a third, under half; the build's level-4 risk, recorded at the author's choice); the batch's 'which' quota"
  },
  "leak": {
-  "leak_py": "",
-  "reader": ""
+  "leak_py": "REVIEW, no LEAK (2026-11-09, --asof 2026-06-24): the measures' names in the plan, the 2019 rules and the 2026 terms; the field's ordinary words; no rounding sentence at the author's word",
+  "reader": "2026-11-09 isolated reader (Sonnet, medium): questions 1 to 4 none beyond the filed WHAT; question 5 the golden's reading; question 6 analysis throughout, the profiles and the cadastre read as usable cross-file material; the profiles' standard-looking shapes repaired afterwards (data only)"
  },
  "duplicate_check": {
   "heart": "WARN 2026-11-09 (overuse.strategy, driver.near own lineage 0.13, overuse.gate_g), answered in the note",
   "surface": "exit 0"
  },
  "judge": {
-  "verdict": "",
-  "disposition": "",
-  "report": "",
-  "note": "architecture 7's APPROVE (determinism_check_report_pass2.md) is spent with that architecture"
+  "pass1": {
+   "verdict": "DETERMINISTIC",
+   "disposition": "APPROVE",
+   "report": "task7/determinism_check_report_pass1.md",
+   "finding": "Gate H open: a sentence naming both drivers rescued about half the chain; repaired by the lived-in buildings' honest activity, so controls also need the lived-in step (read off the load alone 156.47 euro a tonne)"
+  },
+  "pass2": {
+   "verdict": "NOT_DETERMINISTIC",
+   "disposition": "SEND_BACK",
+   "report": "task7/determinism_check_report_pass2.md",
+   "finding": "Gate B/C: the lived-in test (weekend days above nights) carried no margin; strict dominance held 2 per cent of hotels and care homes lived in and flipped controls",
+   "repair": "every hotel and care home lived in round the clock by its use on the register; the weekend test a rival family inside the band at every margin to 15 per cent (honest base loads for lived-in buildings); strict dominance inside R3's band, same call"
+  },
+  "pass3": {
+   "verdict": "NOT_DETERMINISTIC",
+   "disposition": "SEND_BACK",
+   "report": "task7/determinism_check_report.md",
+   "finding": "the lived-in step decisive for controls with no filed sentence making hotels and care homes lived in (load alone 159.57); the line through the lived-in band at 120.02"
+  },
+  "shipped": "at the author's choice (2026-11-09) the pass-1 form: the lived-in step moves controls' figures, not the call (load alone 114.12), every hotel and care home held lived in by use (no margin), the weekend test and strict dominance inside the band, the line through the lived-in band (120.02) ruled out by its sixfold misfit; no fourth pass was run; target.zip e9bdaf43"
  },
  "returned": [
   {
@@ -324,28 +340,20 @@
   "date": "2026-11-09"
  },
  "zips": {
-  "target.zip": {
-   "bytes": 7063901,
-   "members": 18,
-   "sha256": "00c9970f9f34a9ebe39f1e364da7ca504a28e4d3e309839afc4084a84ae51335"
-  },
-  "golden.zip": {
-   "bytes": 141351,
-   "members": 2,
-   "sha256": "ad58061f1ff16e744d64dff2afc81a32ccbccafd80499e753bfeeaeda4b17740"
-  }
+  "target.zip": "e9bdaf436a00c610a22faa6f56ba33d2ae7f2475674ff65e8f14a83512bbe203",
+  "golden.zip": "0634dbab2d6cdb631fc113d4823d61069a53087de84a50019c31428486f6428e"
  },
  "gates_stage5": {
-  "checks": "115 of 115 (the three rounding-edge checks retired with the rounding sentence)",
-  "precut": "exit 0, 85 checks, 1 WARN",
-  "effort": "exit 0, careful 46.5, quick 14.0, 3 distinct wrong funded sets, largest hint 2 of 9",
-  "voice_check": "exit 0, WARN no rounding words (the author's call)",
-  "leak_py": "REVIEW, no LEAK (--asof 2026-06-24)",
-  "figures_check": "PASS",
-  "audit_containers": "exit 0",
-  "heart": "WARN, answered in the note",
+  "date": "2026-11-09",
+  "checks": "218 of 218",
+  "precut": "exit 0 (2 WARN)",
+  "effort": "exit 0 (careful 47.4; hint 6 of 13 WARN)",
+  "figures_check": "156 of 156",
+  "voice": "PASS (WARN no rounding sentence, the author's call)",
+  "leak_py": "REVIEW, no LEAK",
+  "containers": "0 FAIL 0 WARN",
+  "heart": "WARN, answered",
   "surface": "exit 0",
-  "byte_identical": "make.py --twice SAME on every output",
-  "date": "2026-11-09"
+  "two_builds": "byte-identical"
  }
 }
