@@ -1,10 +1,10 @@
-"""task5 architecture 3: the fixed facts of the State of Franklin's unemployment insurance report census.
+"""task5 architecture 4: the fixed facts of the State of Franklin's unemployment insurance report census.
 
 Fourteen counties, the industries and their NAICS codes, the quarter calendar with due dates and flash cut-offs,
 the shipped file names and the people. Everything here is a fact of the fiction; sim.py draws the employers."""
 import datetime as dt
 
-SEED = 50327
+SEED = 50427
 
 STATE = "Franklin"
 EXTRACT = dt.datetime(2027, 2, 15, 23, 59, 59)       # the Division's extract: everything received by then
@@ -16,33 +16,30 @@ THRESHOLD = -2.0                                      # section 4: a change of m
 # accounts at the start of 2023, healthy trend a year, share of small employers filing through a payroll agent,
 # share of agent clients served by a statewide bureau, lake county (summer-seasonal resorts), LMI region
 COUNTIES = [
-    # code   name        n0     trend   agent  bureau  lake   region
-    ("001", "Bray",       1130, -0.00849, 0.60, 0.34, False, "Southern Tier"),
-    ("003", "Calder",     5380,  0.01576, 0.62, 0.58, False, "Capital"),
-    ("005", "Corliss",     840,  0.01226, 0.58, 0.30, False, "Southern Tier"),
-    ("007", "Fenwick",     990,  0.00358, 0.57, 0.33, False, "North Woods"),
-    ("009", "Garrow",     1880, -0.00371, 0.66, 0.22, False, "Capital"),
-    ("011", "Hadley",     1490,  0.01770, 0.60, 0.40, False, "Southern Tier"),
-    ("013", "Kittredge",   590, -0.00050, 0.61, 0.52, True,  "Lakes"),
-    ("015", "Linden",     2470,  0.00974, 0.63, 0.56, False, "Capital"),
-    ("017", "Merritt",    2880, -0.01278, 0.59, 0.36, False, "River"),
-    ("019", "Ostrom",     1290, -0.00490, 0.50, 0.30, False, "North Woods"),
-    ("021", "Pell",       1690,  0.00719, 0.60, 0.38, False, "River"),
-    ("023", "Talcott",     690,  0.00482, 0.62, 0.55, True,  "Lakes"),
-    ("025", "Whitcomb",   2080,  0.00831, 0.61, 0.44, False, "River"),
-    ("027", "Sayre",       500,  0.01924, 0.58, 0.31, False, "Lakes"),
+    # code   name        n0     target  agent  bureau  lake   region
+    ("001", "Bray",       1130, -0.0150, 0.60, 0.34, False, "Southern Tier"),
+    ("003", "Calder",     5380,  0.0160, 0.62, 0.58, False, "Capital"),
+    ("005", "Corliss",     840,  0.0070, 0.58, 0.30, False, "Southern Tier"),
+    ("007", "Fenwick",     990,  0.0020, 0.57, 0.33, False, "North Woods"),
+    ("009", "Garrow",     1880, -0.0320, 0.66, 0.22, False, "Capital"),
+    ("011", "Hadley",     1490,  0.0130, 0.60, 0.40, False, "Southern Tier"),
+    ("013", "Kittredge",   590, -0.0280, 0.61, 0.52, True,  "Lakes"),
+    ("015", "Linden",     2470,  0.0090, 0.63, 0.56, False, "Capital"),
+    ("017", "Merritt",    2880, -0.0080, 0.59, 0.36, False, "River"),
+    ("019", "Ostrom",     1290, -0.0260, 0.50, 0.30, False, "North Woods"),
+    ("021", "Pell",       1690,  0.0050, 0.60, 0.38, False, "River"),
+    ("023", "Talcott",     690,  0.0040, 0.62, 0.55, True,  "Lakes"),
+    ("025", "Whitcomb",   2080,  0.0060, 0.61, 0.44, False, "River"),
+    ("027", "Sayre",       500,  0.0150, 0.58, 0.31, False, "Lakes"),
 ]
 CODES = [c[0] for c in COUNTIES]
 # each county's employer sizes, as drawn, times this factor
-SCALE = {"001": 1.02060, "003": 1.00463, "005": 1.01013, "007": 1.01505, "009": 0.96684, "011": 1.02269,
-         "013": 1.03175, "015": 0.98651, "017": 0.98719, "019": 0.99774, "021": 0.99920, "023": 1.05802,
-         "025": 0.99665, "027": 1.05349}
-# each county's 2026 drift beyond the calibrated trend
-NUDGE = {"001": -0.000121, "003": 0.000197, "005": -0.000546, "007": 0.000234, "009": 0.001591, "011": -0.000548,
-         "013": -0.000461, "015": -0.000145, "017": -0.000523, "019": 0.001073, "021": 0.000730, "023": 0.000462,
-         "025": -0.000616, "027": 0.000539}
+SCALE = {c: 1.0 for c in CODES}
+# each county's 2026 drift beyond the calibrated target (set after the golden is measured)
+NUDGE = {c: 0.0 for c in CODES}
 NAMES = {c[0]: c[1] for c in COUNTIES}
-SHOCK = {"009": "garrow", "019": "ostrom"}             # the two counties hit in the fourth quarter of 2026
+LAKES = ("013", "023", "027")                          # the Lakes region: summer trade at the lake worksites
+NORTH = ("007", "019")                                 # the North Woods: outdoor work slows in winter
 
 # BLS supersectors: code, title, month factors Jan..Dec (pay period including the 12th)
 SUPERSECTORS = {
@@ -158,11 +155,22 @@ NAICS = [
 GOV_NAICS = [("611110", "Elementary and Secondary Schools", "1025"), ("921140", "Executive and Legislative Offices, Combined", "1028"),
              ("922120", "Police Protection", "1028"), ("921190", "Other General Government Support", "1028"),
              ("622110", "General Medical and Surgical Hospitals", "1025")]
-SHOCK_NAICS = {
-    "garrow": {"236115", "236118", "236220", "238110", "238160", "238210", "238220", "238310", "238320", "238910",
-               "238990", "423310", "444180", "321918", "337110", "332323"},
-    "ostrom": {"113310", "115310", "484220", "484110", "321113", "488410", "423810"},
+# county tilts toward an industry group (the weight of each listed industry times the factor)
+TILT = {
+    "009": (3.0, {"236115", "236118", "236220", "238110", "238160", "238210", "238220", "238310", "238320", "238910",
+                  "238990", "423310", "444180", "321918", "337110", "332323"}),
+    "019": (9.0, {"113310", "115310", "484220", "484110", "321113", "488410", "423810"}),
 }
+# the housing chain: residential and commercial building, the trades, and the wood that goes into them
+HOUSING_CHAIN = {"236115", "236118", "236220", "237310", "238110", "238160", "238210", "238220", "238310", "238320",
+                 "238910", "238990", "113310", "115310", "321113", "321918", "337110", "423310", "444180", "444190",
+                 "484220", "423810", "444110"}
+# the 2026 housing downturn: how many times the usual rate a small housing-chain employer got into trouble, by
+# quarter of 2026, and how much of the usual number of new housing-chain employers started up
+BUST_HAZARD = [1.5, 2.7, 5.0, 9.0]
+BUST_BIRTHS = [0.90, 0.72, 0.52, 0.38]
+OTHER_BIRTHS = [1.00, 0.97, 0.94, 0.91]
+BIRTH_RATE = 0.045                                      # new employers a quarter, as a share of a county's 2023 accounts
 LAKE_SEASONAL = {"713930", "713990", "721211", "721214", "721110", "722511", "722513", "722515", "459420"}
 
 # size classes: upper bound of employees and share of private accounts
@@ -218,8 +226,10 @@ FILES = {
     "population": "franklin_county_population_estimates_2025.csv",
 }
 DISTRACTORS = ["rates", "population"]
+PUBLISHED_CUT = dt.datetime(2026, 5, 31, 23, 59, 59)    # the published 2025 Q4 table: reports posted through this day
 
-DELIVERABLES = {"cert": "ctf_certification_december_2026.xlsx", "employers": "ctf_employer_jobs_december_2026.csv"}
+DELIVERABLES = {"cert": "ctf_certification_december_2026.xlsx", "employers": "ctf_employer_jobs_december_2026.csv",
+                "memo": "ctf_certification_memo_2027.docx"}
 
 PEOPLE = {
     "lmi_director": ("Danielle Fuller", "Director, Labor Market Information", "dfuller@labor.franklin.gov"),

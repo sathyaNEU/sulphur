@@ -1,6 +1,41 @@
-# task5 design note
+# task5: the counties the Department can certify for the 2027 Community Transition Fund, and the estimate behind them
 
-Architecture 3 (re-rooted 2026-11-08 after both platform runs landed architecture 2). Read `## Tried and rejected`
+Architecture 4 (re-rooted 2026-11-10 as a results chain in the same State of Franklin world, at the author's word,
+after architecture 3 was returned at review as turning on one thing). Read `## Tried and rejected` first. This note is
+completed at stage 2; the draw and the chain's sketch stand below.
+
+## Draw
+
+Subdomain: Survey Research & Official Statistics (Other), census, register and administrative-data quality
+Analysis type: Data Extraction & Conformation (ETL / Pipeline Build)
+Answer shape: a reconciled table plus findings (each county's December 2025 and December 2026 covered jobs, the December 2026 jobs split into reported and estimated, the change, reconciled to the published 2025 total and replayed on December 2025; the counties to designate on top)
+Weight: a hard-to-measure quantity: the December jobs the files do not yet hold (employers whose report is out, employers with no account yet, worksite splits not yet in); task7 sits on modeling, task4 on measurement, task1 on synthesis
+Data-native sentence: forty-five days after the quarter the Division's files run behind the employment they record in four different ways at once (reports in agents' late batches, reports that will never come, accounts not yet set up, worksite reports trailing the contribution reports), each with its own evidence in the closed quarters, and the 2026 housing downturn makes this quarter unlike those closed quarters.
+People: Danielle Fuller, director of the Labor Market Information section; Matthew Cox, the Department of Commerce's administrator for the Fund; William Robertson, chief of the Unemployment Insurance Tax Division (`guard.py names --geo "United States" --seed 501` and `--geo US --n 4 --seed 50327`, kept from architecture 3). None appears in the prompt.
+
+## Results chain
+
+Sketch at the draw (pins, bands and the hurried figures are filled at stage 2 from the generator's own passes):
+
+| ID | Result (checkable) | Area |
+|---|---|---|
+| R1 | the census at the cut-off (liable, received, outstanding) and the December 2025 total now on file against the published one, the difference by cause | assembly and reconciliation |
+| R2 | the outstanding reports by what their absence means (a late transmission, late as usual, missing alone, two quarters out) | missingness and measurement |
+| R3 | what employers missing alone keep of their September jobs, on quarters whose outcomes have landed | missingness and measurement |
+| R4 | this quarter's trouble carried to the employers in late transmissions | causal reasoning (transport) |
+| R5 | the jobs at employers liable for the quarter with no account yet | missingness and measurement |
+| R6 | the county split of multi-county employers whose worksite report is out | forecasting (each worksite's seasonal carry) |
+| R7 | each county's December 2026 jobs, reported and estimated | decomposition and attribution |
+| R8 | the changes on December 2025 and the counties to designate | synthesis |
+| R9 | the same estimate replayed on December 2025 from the files as they stood on 15 February 2026 | validation |
+
+One-fact test at the draw: the most useful single sentence (about two in three of a quarter's new employers have no
+account at the cut-off) rescues R5 alone; the worksite sentence R6 alone; the late-transmission sentence R4 alone.
+The designated set needs three of them at once: Ostrom comes in only when the missing-alone are read as in trouble,
+Bray stays out only with the unregistered employers counted, Kittredge comes in only with each worksite's own
+seasonal carry.
+
+## Tried and rejected`
 first. Figures marked as measured come from `generator/checks.py` on the built pack; the rest are design targets the
 generator asserts.
 
@@ -560,3 +595,16 @@ closure.
   exposed employers of two counties only, their filing channels were set so the missing-alone reading would see them,
   and one sentence (a report missing from a transmission that arrived marks an employer in trouble) left a measurement
   on closed quarters. Re-rooted to architecture 4 as a results chain in the same world at the author's word.
+- 2026-11-10, at the draw of architecture 4: a payroll bureau's change of reporting basis for the monthly counts (a mode
+  change found from wages per job by transmission) as a tenth result: the Act's outcome is the report's month-three
+  employment, so correcting a reported count is a reading of the outcome a literal judge could refuse; not drawn.
+- 2026-11-10, at the draw: PEO client reporting, unposted successions and a claims file as further results: each is
+  absorbed on average by the outcome measured on resolved quarters (a predecessor or a leased-out client ends at
+  nought there), so it would grade nothing of its own; successions stay as texture.
+- 2026-11-10, at the draw: uncertainty as its own result (a 90 per cent range per county, or the set of designations
+  not settled at 90 per cent): the range's width spreads by a factor of two across honest methods and a set near the
+  line asks for a thin margin; the replay on December 2025 carries how far the estimate can be out instead.
+- 2026-11-10, at the draw: year-end lateness drawn afresh for every agent each year put between 5 and 14 per cent of
+  jobs in late transmissions from one seed to the next and, at 14, moved small counties by 0.6 of a point on the
+  choice of comparison cell alone; the same agents are swamped every January now (five bureaus, a fifth of the local
+  accountants), which holds the share near 8 per cent in every fourth quarter.

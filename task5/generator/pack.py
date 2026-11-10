@@ -1,4 +1,4 @@
-"""task5 architecture 3: the Division's extract, as its systems write it.
+"""task5 architecture 4: the Division's extract, as its systems write it.
 
 The quarterly reports (originals, amendments, the odd resubmission), the employer account register, its status
 history, the multiple worksite reports, the county codes and the NAICS concordance, cut from the world in sim.py and
@@ -156,17 +156,16 @@ def name_for(w, i, r):
     return legal, trade
 
 
+
 # ------------------------------------------------------------------------------------------------------ tables
 def _version_rows(w):
-    """every report version received by the extract: the original (carrying a month in error where it was later
-    amended), the amendment, and a resubmission seconds after the original"""
+    """every report version of a registered account received by the extract: the original (carrying a month in error
+    where it was later amended), the amendment, and a resubmission seconds after the original"""
     rows = []
     for (i, q), t in w.recv.items():
-        if t > W.EXTRACT:
+        if t > W.EXTRACT or not w.registered[i]:
             continue
         m = w.jobs[i, 3 * q:3 * q + 3].astype(int).tolist()
-        if q >= w.xfer_q[i] >= 0:
-            continue
         orig = list(m)
         a = w.amend.get((i, q))
         if a is not None:
@@ -185,23 +184,32 @@ def tables(w):
     rn = sim.rng("names", w.seed)
     n = w.n
     # liability dates: initial accounts registered between 1972 and 2022, the rest on their liability day
-    liab = []
+    liab, estab = [], []
+    setup_lag = r.integers(4, 46, n)
     for i in range(n):
         if w.start_m[i] == 0 and not w.birth[i] and w.pred[i] < 0:
             y = int(r.integers(1972, 2023))
             d = dt.date(y, int(r.integers(1, 13)), int(r.integers(1, 29)))
+            e = d + dt.timedelta(days=int(setup_lag[i]))
         else:
-            md = sim.month_date(w.start_m[i])
-            d = dt.date(md.year, md.month, 1 if w.pred[i] >= 0 else int(w.liab_day[i]))   # a successor from its transfer
+            d = sim.liab_date(w, i)
+            e = w.established[i]
         liab.append(d)
+        estab.append(e)
     w.liab_date = liab
+    w.estab_date = estab
     w.liab_date_ord = np.array([d.toordinal() for d in liab])
-    acct = account_numbers(w, r)
-    w.acct = acct
+    # accounts are numbered as they are set up
+    order = np.argsort(np.array([e.toordinal() for e in estab]), kind="stable")
+    nums = np.zeros(n, int)
+    x = 1004000 + int(r.integers(0, 900))
+    for i in order:
+        x += int(r.integers(9, 260))
+        nums[i] = x
+    w.acct = nums
     fmt = lambda x: "%07d-%d" % (x, check_digit(x))
-    w.acct_s = [fmt(x) for x in acct]
+    w.acct_s = [fmt(x) for x in nums]
     names = [name_for(w, i, rn) for i in range(n)]
-    # NAICS as registered: many accounts registered before 2022 still carry the 2017 code
     old = {a[0]: a[4] for a in W.NAICS if a[4]}
     naics_reg = []
     for i in range(n):
@@ -210,7 +218,6 @@ def tables(w):
             naics_reg.append(old[c])
         else:
             naics_reg.append(c)
-    # status as at the extract
     status, sdate = ["ACTIVE"] * n, [""] * n
     ev = sorted([e for e in w.events if e[3] <= W.EXTRACT.date() and w.registered[e[0]]], key=lambda e: (e[3], e[0]))
     for e in ev:
@@ -218,7 +225,8 @@ def tables(w):
         if kind in ("INACTIVATED", "CLOSED", "TRANSFERRED"):
             status[i], sdate[i] = "INACTIVE", e[2].isoformat()
     acc = pd.DataFrame({
-        "_n": acct,
+        "_n": nums,
+        "_i": np.arange(n),
         "account_no": w.acct_s,
         "legal_name": [nm[0] for nm in names],
         "trade_name": [nm[1] for nm in names],
@@ -226,13 +234,13 @@ def tables(w):
         "naics_code": naics_reg,
         "county_code": [w.county[i] for i in range(n)],
         "liability_date": [d.strftime("%m/%d/%Y") for d in liab],
+        "account_established": [e.strftime("%m/%d/%Y") for e in estab],
         "account_status": status,
         "status_effective_date": sdate,
         "multi_worksite": ["Y" if i in w.sites else "N" for i in range(n)],
         "predecessor_account": [w.acct_s[w.pred[i]] if w.pred[i] >= 0 else "" for i in range(n)],
     })
     acc = acc[w.registered].sort_values("_n", kind="stable").reset_index(drop=True)
-    # the status history
     st = []
     for e in ev:
         i, kind, eff, proc, reason, other = e
@@ -260,41 +268,49 @@ def tables(w):
                                       "month2_employment", "month3_employment", "total_wages", "taxable_wages",
                                       "received_at", "_i", "_q"])
     reps = reps.sort_values(["account_no", "year", "quarter", "received_at"], kind="stable").reset_index(drop=True)
-    # multiple worksite reports: one row per worksite for each report version on file, the last version's split
+    # multiple worksite reports: one row per worksite, splitting the months of the report it was filed with
     ws = []
-    latest = {}
+    first = {}
     for (i, q, kind, m, t) in vr:
-        if i in w.sites and (latest.get((i, q)) is None or t > latest[i, q][1]):
-            latest[i, q] = (m, t)
-    for (i, q), (m, t) in sorted(latest.items(), key=lambda kv: (w.acct[kv[0][0]], kv[0][1])):
-        sites = w.sites[i]
-        split = _split(m, [s for _, s in sites], np.random.default_rng([w.seed, 33, int(i), int(q)]))
-        for k, (cc, _) in enumerate(sites):
-            town = TOWNS[cc][(int(w.acct[i]) + k) % len(TOWNS[cc])]
-            ws.append(("%07d%d" % (w.acct[i], check_digit(w.acct[i])), "%03d" % (k + 1), 2023 + q // 4, q % 4 + 1,
+        if i in w.sites and kind == "ORIGINAL" and (i, q) not in first:
+            first[i, q] = m
+    units = {}
+    for (i, q), m in sorted(first.items(), key=lambda kv: (w.acct[kv[0][0]], kv[0][1])):
+        md = w.mwr_recv.get((i, q))
+        if md is None or md > W.EXTRACT.date():
+            continue
+        rs = np.random.default_rng([w.seed, 33, int(i), int(q)])
+        per_month = [sim.site_weights(w, i, 3 * q + k) for k in range(3)]
+        cs = [c for c, _ in per_month[0]]
+        split = [[0, 0, 0] for _ in cs]
+        for k in range(3):
+            sh = np.array([v for _, v in per_month[k]]) * rs.uniform(0.97, 1.03, len(cs))
+            part = _whole(int(m[k]), sh)
+            for s in range(len(cs)):
+                split[s][k] = part[s]
+        book = units.setdefault(i, {})
+        for s, cc in enumerate(cs):
+            if cc not in book:
+                book[cc] = len(book) + 1
+            town = TOWNS[cc][(int(w.acct[i]) + book[cc]) % len(TOWNS[cc])]
+            ws.append(("%07d%d" % (w.acct[i], check_digit(w.acct[i])), "%03d" % book[cc], 2023 + q // 4, q % 4 + 1,
                        "%s COUNTY" % W.NAMES[cc].upper(), town.upper(), w.naics[i],
-                       split[k][0], split[k][1], split[k][2]))
+                       split[s][0], split[s][1], split[s][2], md.strftime("%m/%d/%Y")))
     work = pd.DataFrame(ws, columns=["uiacct", "reporting_unit", "year", "quarter", "worksite_county", "worksite_city",
-                                     "naics", "m1_emp", "m2_emp", "m3_emp"])
+                                     "naics", "m1_emp", "m2_emp", "m3_emp", "date_received"])
     return {"reports": reps, "accounts": acc, "status": stat, "worksites": work}
 
 
-def _split(m, shares, r):
-    """split each month's jobs across worksites in proportion to their shares, whole numbers summing to the month"""
-    out = [[0, 0, 0] for _ in shares]
-    sh = np.array(shares) / sum(shares)
-    for k in range(3):
-        tot = int(m[k])
-        raw = sh * tot * r.uniform(0.96, 1.04, len(sh))
-        raw = raw / raw.sum() * tot if raw.sum() else raw
-        base = np.floor(raw).astype(int)
-        rest = tot - base.sum()
-        order = np.argsort(-(raw - base))
-        for j in range(rest):
-            base[order[j % len(base)]] += 1
-        for s in range(len(sh)):
-            out[s][k] = int(base[s])
-    return out
+def _whole(tot, sh):
+    """split a whole number in proportion to shares, whole parts summing to it"""
+    sh = np.array(sh, float)
+    raw = sh / sh.sum() * tot if sh.sum() else sh
+    base = np.floor(raw).astype(int)
+    rest = tot - base.sum()
+    order = np.argsort(-(raw - base), kind="stable")
+    for j in range(rest):
+        base[order[j % len(base)]] += 1
+    return [int(b) for b in base]
 
 
 def counties_table():
@@ -338,41 +354,6 @@ def write_csv(df, path, cols=None):
 
 
 # ------------------------------------------------------------------------------------------------------ writers
-def published_q4_2025(T):
-    """the Section's published fourth-quarter 2025 county table: reporting units, monthly jobs, wages"""
-    rep = T["reports"]
-    x = rep[(rep["year"] == 2025) & (rep["quarter"] == 4)].sort_values("received_at", kind="stable")
-    last = x.groupby("account_no").tail(1).set_index("account_no")
-    acc = T["accounts"].set_index("account_no")
-    ws = T["worksites"]
-    wq = ws[(ws["year"] == 2025) & (ws["quarter"] == 4)]
-    cmap = {W.NAMES[c].upper() + " COUNTY": c for c in W.CODES}
-    out = {c: [0, 0.0, 0.0, 0.0, 0.0] for c in W.CODES}
-    multi = set(wq["uiacct"])
-    for a_, row in last.iterrows():
-        key = a_.replace("-", "")
-        if key in multi:
-            continue
-        c = acc.loc[a_, "county_code"]
-        out[c][0] += 1
-        out[c][1] += row["month1_employment"]; out[c][2] += row["month2_employment"]; out[c][3] += row["month3_employment"]
-        out[c][4] += float(row["total_wages"])
-    tw = dict(zip(last.index.str.replace("-", ""), last["total_wages"].astype(float)))
-    tot3 = dict(zip(last.index.str.replace("-", ""), last["month1_employment"] + last["month2_employment"] + last["month3_employment"]))
-    for _, row in wq.iterrows():
-        c = cmap[row["worksite_county"]]
-        out[c][0] += 1
-        out[c][1] += row["m1_emp"]; out[c][2] += row["m2_emp"]; out[c][3] += row["m3_emp"]
-        t3 = tot3.get(row["uiacct"], 0)
-        out[c][4] += tw.get(row["uiacct"], 0.0) * ((row["m1_emp"] + row["m2_emp"] + row["m3_emp"]) / t3 if t3 else 0)
-    rows = []
-    for c in W.CODES:
-        u, m1, m2, m3, wg = out[c]
-        aww = wg / ((m1 + m2 + m3) / 3.0) / 13.0 if m1 + m2 + m3 else 0
-        rows.append((c, W.NAMES[c] + " County", u, int(m1), int(m2), int(m3), round(wg), round(aww)))
-    return rows
-
-
 def write_published(rows, path):
     import openpyxl
     from openpyxl.styles import Alignment, Border, Font, Side
@@ -381,8 +362,9 @@ def write_published(rows, path):
     ws.title = "County"
     ws["A1"] = "Covered Employment and Wages by County, Fourth Quarter 2025"
     ws["A1"].font = Font(bold=True, size=12)
-    ws["A2"] = "Franklin Department of Labor, Labor Market Information. Final data, released September 10, 2026."
-    ws["A3"] = "Private and government employers covered by the Unemployment Insurance Law, by worksite county."
+    ws["A2"] = "Franklin Department of Labor, Labor Market Information. Released June 18, 2026."
+    ws["A3"] = ("Private and government employers covered by the Unemployment Insurance Law, by worksite county. "
+                "Reports posted to employer accounts through May 31, 2026.")
     head = ["County code", "County", "Reporting units", "October 2025 employment", "November 2025 employment",
             "December 2025 employment", "Total quarterly wages ($)", "Average weekly wage ($)"]
     for k, h in enumerate(head):
@@ -411,8 +393,7 @@ def write_published(rows, path):
     wb.save(path)
 
 
-def write_population(path, T):
-    rows = published_q4_2025(T)
+def write_population(path, rows):
     r = np.random.default_rng([W.SEED, 41])
     out = [("county_code", "county", "population_2025", "households_2025", "median_age_2025", "persons_per_sq_mile")]
     area = r.uniform(380, 1250, len(rows))
@@ -423,7 +404,7 @@ def write_population(path, T):
         csv.writer(f, lineterminator="\r\n").writerows(out)
 
 
-def write_pack(w, T, out):
+def write_pack(w, T, out, published_rows):
     """every data file into out; returns the row counts"""
     import os
     n = {}
@@ -434,6 +415,6 @@ def write_pack(w, T, out):
     n["worksites"] = write_csv(T["worksites"], f("worksites"))
     n["counties"] = write_csv(counties_table(), f("counties"))
     n["naics"] = write_csv(naics_table(), f("naics"))
-    write_published(published_q4_2025(T), f("published"))
-    write_population(f("population"), T)
+    write_published(published_rows, f("published"))
+    write_population(f("population"), published_rows)
     return n
