@@ -1,32 +1,63 @@
 {
  "task": "task15",
- "status": "DESIGN",
+ "status": "READY",
  "domain": "general-statistics-data-science",
  "subdomain": "General Statistics & Data Science (multiple testing and selective inference)",
  "objective": "comparative-explanation",
- "stage": 2,
- "stage_name": "design",
+ "stage": 5,
+ "stage_name": "ready",
  "updated": "2026-11-10",
  "doctrine": "throughout",
- "call": "",
- "chain": "R1 the conformed trial record and the shortfall on the completed nominations; R2 the part of the shortfall that is selection on noisy means; R3 the part that is the benchmark's larger gain per millimetre of season water; R4 the part that is lodging at the series' sites; R5 the bridge closed with what stays unexplained; R6 the corrected prediction's error on the past nominees; R7 every 2026 Stage 3 line's expected advantage in the 2027 and 2028 series with an 80 per cent band; R8 each nominee's chance of meeting the 103 per cent standard and the chance at least one does; R9 the three nominations and the lines they displace",
+ "call": "Nominate WI3554 and WI3559 to the High Rainfall Barley Series for 2026 sowing (the two Stage 3 lines to expect most from there, 113.4 and 109.5 against 103.4 for the next), not the index's WI3554 and WI3571; the 24 completed nominations were quoted at 113.0 and returned 101.6, a gap of 11.4 points: 3.4 the index, 5.5 the move to the Series, 2.1 lodging, 0.4 left",
+ "chain": "R1 the 24 completed nominations and the gap between the index quoted and the relative yield returned; R2 the index head (selection on noisy means); R3 the move to the Series, lodging apart; R4 every remaining Stage 3 line's expected lodging in the series; R5 the lodging head on the lodging recorded; R6 every remaining Stage 3 line's expected relative yield over two series seasons; R7 its 80 per cent range; R8 the two nominations; R9 the remainder the heads leave",
  "architecture": 1,
- "loops": 0,
- "precut": {"exit": null, "date": ""},
- "leak": {"leak_py": "", "reader": ""},
- "duplicate_check": {
-  "guard_check": "PASS 2026-11-10 on the registered card, after prompt shape 03 and context artifact published_series were redrawn to 01 and close_out_summary when task5 architecture 4 entered the window",
-  "heart": "",
-  "nearest": "mark258 0.05, task8 0.04, task7 0.04 (driver text); no structural match"
+ "loops": 2,
+ "precut": {
+  "exit": 0,
+  "date": "2026-11-10"
  },
- "judge": {"verdict": "", "disposition": "", "gate_h": "", "report": ""},
- "paper_pair": null,
- "effort": {"quick": null, "careful": null, "thorough": null, "largest_hint": ""},
- "runs": {"run1": null, "run2": null, "average": null, "counterfactual_average": null,
-          "first_wrong_step": {"run1": "", "run2": ""}, "triage": "", "recorded": "", "history": []},
+ "leak": {
+  "leak_py": "REVIEW 2026-11-10 with --asof 2026-02-12 (clause numbers, field nouns, standing documents and the corpus prompt quota; each line ruled in the design note)",
+  "reader": "clean 2026-11-10: two isolated reads of the final pack, the second on the final prompt; nothing quoted for questions 1 to 4, every question 5 sentence executes to the golden, the yardstick for the two lines closes by convergence (SF18)"
+ },
+ "duplicate_check": {
+  "guard_check": "PASS 2026-11-10 on the registered card, re-read after the last pull of main at 09a94ef (task3 architecture 7, task10 architecture 6, task14 architecture 2, task16 and task17 on file)",
+  "heart": "PASS 2026-11-10 after the same pull; surface PASS",
+  "nearest": "mark169 0.05, task7 0.04, mark258 0.04, task8 0.04, task3 0.04 (driver text); no structural match"
+ },
+ "judge": {
+  "verdict": "DETERMINISTIC on the final cut (the single re-judge after pass 3's FIX_NOW); pass 3 DETERMINISTIC, pass 1 and pass 2 NOT_DETERMINISTIC on earlier cuts",
+  "disposition": "APPROVE, no repair needed; pass 3 FIX_NOW (blocks only, repaired), pass 1 and pass 2 SEND_BACK with Gates G and H passing (each repaired in place as its Fix lines asked)",
+  "gate_h": "domain pass, layers pass, results 9 graded across 7 areas, one_thing none, effort quick 2, careful 5, thorough 9 of 9, one fact about 3 to 4 of 9 (borderline at a third); Gate G analytical_non_defect; stump power moderate, watch item: two runs that both find the season-water response could average over 60",
+  "report": "determinism_check_report.md (final cut); determinism_check_report_pass3.md and determinism_check_report_pass2.md (earlier passes)"
+ },
+ "paper_pair": 39.5,
+ "effort": {
+  "quick": 29.0,
+  "careful": 39.5,
+  "thorough": 100.0,
+  "largest_hint": "every line has its own response to season water against the benchmark's: rescues 3 of 9 (R7, R8, R9); sensitivity: the careful pass with the nominations earned 53.5, a response per line 59.0 to 70.0"
+ },
+ "runs": {
+  "run1": null,
+  "run2": null,
+  "average": null,
+  "counterfactual_average": null,
+  "first_wrong_step": {
+   "run1": "",
+   "run2": ""
+  },
+  "triage": "",
+  "recorded": "",
+  "history": []
+ },
  "returned": [],
  "resume": "",
  "approved": null,
  "submitted": null,
- "portal": {"status": "", "date": "", "note": ""}
+ "portal": {
+  "status": "",
+  "date": "",
+  "note": ""
+ }
 }

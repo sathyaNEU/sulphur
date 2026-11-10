@@ -1,0 +1,1845 @@
+{
+ "backtest_mean_error_points": 1.0,
+ "backtest_rmse_points": 4.9,
+ "bands": {
+  "high": {
+   "WI3499": [
+    87.3,
+    111.3
+   ],
+   "WI3503": [
+    88.8,
+    104.8
+   ],
+   "WI3504": [
+    92.6,
+    108.6
+   ],
+   "WI3505": [
+    80.4,
+    112.4
+   ],
+   "WI3508": [
+    95.6,
+    111.6
+   ],
+   "WI3510": [
+    95.6,
+    111.6
+   ],
+   "WI3512": [
+    95.7,
+    111.7
+   ],
+   "WI3528": [
+    100.1,
+    116.1
+   ],
+   "WI3537": [
+    82.2,
+    114.2
+   ],
+   "WI3541": [
+    96.5,
+    120.5
+   ],
+   "WI3544": [
+    97.5,
+    113.5
+   ],
+   "WI3545": [
+    89.0,
+    113.0
+   ],
+   "WI3547": [
+    86.5,
+    110.5
+   ],
+   "WI3549": [
+    94.1,
+    110.1
+   ],
+   "WI3552": [
+    76.9,
+    108.9
+   ],
+   "WI3554": [
+    110.3,
+    126.3
+   ],
+   "WI3556": [
+    95.0,
+    111.0
+   ],
+   "WI3559": [
+    106.3,
+    122.3
+   ],
+   "WI3562": [
+    90.9,
+    114.9
+   ],
+   "WI3563": [
+    94.0,
+    118.0
+   ],
+   "WI3567": [
+    81.5,
+    107.1
+   ],
+   "WI3571": [
+    94.2,
+    118.2
+   ],
+   "WI3574": [
+    87.9,
+    111.9
+   ],
+   "WI3578": [
+    92.5,
+    116.5
+   ],
+   "WI3581": [
+    83.8,
+    107.8
+   ],
+   "WI3582": [
+    89.7,
+    113.7
+   ],
+   "WI3583": [
+    93.4,
+    109.4
+   ],
+   "WI3585": [
+    81.7,
+    113.7
+   ]
+  },
+  "left": [
+   -0.9,
+   2.9
+  ],
+  "lodging": [
+   1.6,
+   3.8
+  ],
+  "lodging_pct": {
+   "WI3499": [
+    51.0,
+    67.0
+   ],
+   "WI3503": [
+    25.0,
+    37.0
+   ],
+   "WI3504": [
+    35.0,
+    49.0
+   ],
+   "WI3505": [
+    63.0,
+    75.0
+   ],
+   "WI3508": [
+    22.0,
+    36.0
+   ],
+   "WI3510": [
+    24.0,
+    36.0
+   ],
+   "WI3512": [
+    18.0,
+    30.0
+   ],
+   "WI3528": [
+    24.0,
+    36.0
+   ],
+   "WI3537": [
+    60.0,
+    72.0
+   ],
+   "WI3541": [
+    39.0,
+    55.0
+   ],
+   "WI3544": [
+    27.0,
+    43.0
+   ],
+   "WI3545": [
+    39.0,
+    57.0
+   ],
+   "WI3547": [
+    36.0,
+    54.0
+   ],
+   "WI3549": [
+    33.0,
+    49.0
+   ],
+   "WI3552": [
+    66.0,
+    78.0
+   ],
+   "WI3554": [
+    20.0,
+    36.0
+   ],
+   "WI3556": [
+    29.0,
+    45.0
+   ],
+   "WI3559": [
+    20.0,
+    34.0
+   ],
+   "WI3562": [
+    52.0,
+    68.0
+   ],
+   "WI3563": [
+    39.0,
+    57.0
+   ],
+   "WI3567": [
+    56.0,
+    70.0
+   ],
+   "WI3571": [
+    39.0,
+    57.0
+   ],
+   "WI3574": [
+    39.0,
+    57.0
+   ],
+   "WI3578": [
+    55.0,
+    69.0
+   ],
+   "WI3581": [
+    50.0,
+    66.0
+   ],
+   "WI3582": [
+    57.0,
+    71.0
+   ],
+   "WI3583": [
+    33.0,
+    51.0
+   ],
+   "WI3585": [
+    65.0,
+    77.0
+   ]
+  },
+  "low": {
+   "WI3499": [
+    74.1,
+    98.1
+   ],
+   "WI3503": [
+    75.1,
+    91.1
+   ],
+   "WI3504": [
+    80.6,
+    96.6
+   ],
+   "WI3505": [
+    68.9,
+    100.9
+   ],
+   "WI3508": [
+    83.8,
+    99.8
+   ],
+   "WI3510": [
+    84.4,
+    100.4
+   ],
+   "WI3512": [
+    84.5,
+    100.5
+   ],
+   "WI3528": [
+    90.4,
+    106.4
+   ],
+   "WI3537": [
+    68.2,
+    100.2
+   ],
+   "WI3541": [
+    85.3,
+    109.3
+   ],
+   "WI3544": [
+    85.1,
+    101.1
+   ],
+   "WI3545": [
+    76.6,
+    100.6
+   ],
+   "WI3547": [
+    72.5,
+    96.5
+   ],
+   "WI3549": [
+    81.6,
+    97.6
+   ],
+   "WI3552": [
+    64.3,
+    96.3
+   ],
+   "WI3554": [
+    100.4,
+    116.4
+   ],
+   "WI3556": [
+    82.5,
+    98.5
+   ],
+   "WI3559": [
+    96.7,
+    112.7
+   ],
+   "WI3562": [
+    80.0,
+    104.0
+   ],
+   "WI3563": [
+    83.3,
+    107.3
+   ],
+   "WI3567": [
+    69.0,
+    94.6
+   ],
+   "WI3571": [
+    83.2,
+    107.2
+   ],
+   "WI3574": [
+    75.2,
+    99.2
+   ],
+   "WI3578": [
+    82.1,
+    106.1
+   ],
+   "WI3581": [
+    71.6,
+    95.6
+   ],
+   "WI3582": [
+    79.4,
+    103.4
+   ],
+   "WI3583": [
+    81.8,
+    97.8
+   ],
+   "WI3585": [
+    70.5,
+    102.5
+   ]
+  },
+  "own": [
+   1.4,
+   4.3
+  ],
+  "rmse": [
+   4.2,
+   5.8
+  ],
+  "ry": {
+   "WI3499": [
+    83.9,
+    101.9
+   ],
+   "WI3503": [
+    85.6,
+    95.6
+   ],
+   "WI3504": [
+    89.9,
+    99.9
+   ],
+   "WI3505": [
+    77.7,
+    103.7
+   ],
+   "WI3508": [
+    93.1,
+    103.1
+   ],
+   "WI3510": [
+    93.4,
+    103.4
+   ],
+   "WI3512": [
+    93.5,
+    103.5
+   ],
+   "WI3528": [
+    98.4,
+    108.4
+   ],
+   "WI3537": [
+    78.3,
+    104.3
+   ],
+   "WI3541": [
+    94.0,
+    112.0
+   ],
+   "WI3544": [
+    94.5,
+    104.5
+   ],
+   "WI3545": [
+    86.0,
+    104.0
+   ],
+   "WI3547": [
+    82.9,
+    100.9
+   ],
+   "WI3549": [
+    91.1,
+    101.1
+   ],
+   "WI3552": [
+    73.7,
+    99.7
+   ],
+   "WI3554": [
+    108.4,
+    118.4
+   ],
+   "WI3556": [
+    92.1,
+    102.1
+   ],
+   "WI3559": [
+    104.5,
+    114.5
+   ],
+   "WI3562": [
+    88.4,
+    106.4
+   ],
+   "WI3563": [
+    91.7,
+    109.7
+   ],
+   "WI3567": [
+    78.3,
+    97.9
+   ],
+   "WI3571": [
+    91.8,
+    109.8
+   ],
+   "WI3574": [
+    84.8,
+    102.8
+   ],
+   "WI3578": [
+    90.3,
+    108.3
+   ],
+   "WI3581": [
+    80.8,
+    98.8
+   ],
+   "WI3582": [
+    87.5,
+    105.5
+   ],
+   "WI3583": [
+    90.8,
+    100.8
+   ],
+   "WI3585": [
+    79.0,
+    105.0
+   ]
+  },
+  "series": [
+   6.5,
+   8.6
+  ],
+  "water": [
+   3.9,
+   6.2
+  ]
+ },
+ "benchmark_water_response_points": 5.5,
+ "bridge": {
+  "WI3115": {
+   "expected_in_series": 90.2,
+   "lodging": 7.6,
+   "quoted": 118.0,
+   "realised": 89.2,
+   "sowing": 2017,
+   "water": 16.9,
+   "worth_at_own_sites": 114.6
+  },
+  "WI3119": {
+   "expected_in_series": 97.0,
+   "lodging": 1.9,
+   "quoted": 105.9,
+   "realised": 97.3,
+   "sowing": 2018,
+   "water": 2.0,
+   "worth_at_own_sites": 100.9
+  },
+  "WI3131": {
+   "expected_in_series": 93.3,
+   "lodging": 2.1,
+   "quoted": 101.6,
+   "realised": 91.9,
+   "sowing": 2018,
+   "water": 3.0,
+   "worth_at_own_sites": 98.4
+  },
+  "WI3139": {
+   "expected_in_series": 104.0,
+   "lodging": 1.5,
+   "quoted": 113.8,
+   "realised": 104.9,
+   "sowing": 2017,
+   "water": 7.4,
+   "worth_at_own_sites": 112.8
+  },
+  "WI3160": {
+   "expected_in_series": 92.1,
+   "lodging": 6.3,
+   "quoted": 112.8,
+   "realised": 86.7,
+   "sowing": 2017,
+   "water": 11.3,
+   "worth_at_own_sites": 109.8
+  },
+  "WI3204": {
+   "expected_in_series": 95.1,
+   "lodging": 2.9,
+   "quoted": 104.3,
+   "realised": 96.8,
+   "sowing": 2018,
+   "water": -1.7,
+   "worth_at_own_sites": 96.2
+  },
+  "WI3234": {
+   "expected_in_series": 100.8,
+   "lodging": 2.4,
+   "quoted": 110.3,
+   "realised": 100.3,
+   "sowing": 2020,
+   "water": 4.1,
+   "worth_at_own_sites": 107.2
+  },
+  "WI3236": {
+   "expected_in_series": 100.9,
+   "lodging": 3.9,
+   "quoted": 117.7,
+   "realised": 97.8,
+   "sowing": 2019,
+   "water": 9.6,
+   "worth_at_own_sites": 114.3
+  },
+  "WI3242": {
+   "expected_in_series": 105.4,
+   "lodging": -0.3,
+   "quoted": 108.7,
+   "realised": 103.6,
+   "sowing": 2020,
+   "water": 2.3,
+   "worth_at_own_sites": 107.3
+  },
+  "WI3271": {
+   "expected_in_series": 106.3,
+   "lodging": -5.6,
+   "quoted": 116.6,
+   "realised": 108.8,
+   "sowing": 2019,
+   "water": 8.0,
+   "worth_at_own_sites": 108.7
+  },
+  "WI3273": {
+   "expected_in_series": 95.6,
+   "lodging": 5.8,
+   "quoted": 115.4,
+   "realised": 96.0,
+   "sowing": 2019,
+   "water": 7.1,
+   "worth_at_own_sites": 108.5
+  },
+  "WI3286": {
+   "expected_in_series": 106.2,
+   "lodging": -0.6,
+   "quoted": 110.1,
+   "realised": 105.6,
+   "sowing": 2020,
+   "water": 3.4,
+   "worth_at_own_sites": 109.0
+  },
+  "WI3316": {
+   "expected_in_series": 105.7,
+   "lodging": 1.5,
+   "quoted": 116.7,
+   "realised": 100.9,
+   "sowing": 2021,
+   "water": 9.9,
+   "worth_at_own_sites": 117.2
+  },
+  "WI3318": {
+   "expected_in_series": 108.4,
+   "lodging": 0.6,
+   "quoted": 115.0,
+   "realised": 106.0,
+   "sowing": 2021,
+   "water": 6.4,
+   "worth_at_own_sites": 115.4
+  },
+  "WI3319": {
+   "expected_in_series": 99.0,
+   "lodging": 4.7,
+   "quoted": 108.5,
+   "realised": 96.2,
+   "sowing": 2022,
+   "water": 7.0,
+   "worth_at_own_sites": 110.7
+  },
+  "WI3325": {
+   "expected_in_series": 101.9,
+   "lodging": 4.1,
+   "quoted": 111.5,
+   "realised": 106.0,
+   "sowing": 2022,
+   "water": 4.6,
+   "worth_at_own_sites": 110.5
+  },
+  "WI3327": {
+   "expected_in_series": 101.2,
+   "lodging": 3.2,
+   "quoted": 115.0,
+   "realised": 99.5,
+   "sowing": 2021,
+   "water": 6.9,
+   "worth_at_own_sites": 111.2
+  },
+  "WI3383": {
+   "expected_in_series": 103.0,
+   "lodging": 2.5,
+   "quoted": 112.6,
+   "realised": 107.9,
+   "sowing": 2022,
+   "water": 4.0,
+   "worth_at_own_sites": 109.6
+  },
+  "WI3401": {
+   "expected_in_series": 113.0,
+   "lodging": 0.0,
+   "quoted": 121.4,
+   "realised": 112.9,
+   "sowing": 2023,
+   "water": 0.8,
+   "worth_at_own_sites": 113.9
+  },
+  "WI3402": {
+   "expected_in_series": 109.0,
+   "lodging": -1.2,
+   "quoted": 116.2,
+   "realised": 112.1,
+   "sowing": 2023,
+   "water": 0.7,
+   "worth_at_own_sites": 108.5
+  },
+  "WI3432": {
+   "expected_in_series": 111.9,
+   "lodging": -1.8,
+   "quoted": 114.6,
+   "realised": 110.6,
+   "sowing": 2023,
+   "water": 1.1,
+   "worth_at_own_sites": 111.2
+  },
+  "WI3461": {
+   "expected_in_series": 104.2,
+   "lodging": 1.8,
+   "quoted": 115.0,
+   "realised": 105.3,
+   "sowing": 2024,
+   "water": 6.5,
+   "worth_at_own_sites": 112.6
+  },
+  "WI3469": {
+   "expected_in_series": 99.4,
+   "lodging": 6.4,
+   "quoted": 115.9,
+   "realised": 96.9,
+   "sowing": 2024,
+   "water": 5.9,
+   "worth_at_own_sites": 111.8
+  },
+  "WI3475": {
+   "expected_in_series": 104.4,
+   "lodging": 1.6,
+   "quoted": 114.9,
+   "realised": 105.8,
+   "sowing": 2024,
+   "water": 5.5,
+   "worth_at_own_sites": 111.5
+  }
+ },
+ "bridge_by_sowing": {
+  "2017": {
+   "index_water_mm": 336,
+   "left": 1.8,
+   "lodging": 5.1,
+   "own": 2.5,
+   "quoted": 114.9,
+   "realised": 93.6,
+   "shortfall": 21.3,
+   "water": 11.9
+  },
+  "2018": {
+   "index_water_mm": 543,
+   "left": -0.2,
+   "lodging": 2.3,
+   "own": 5.4,
+   "quoted": 103.9,
+   "realised": 95.3,
+   "shortfall": 8.6,
+   "water": 1.1
+  },
+  "2019": {
+   "index_water_mm": 338,
+   "left": 0.1,
+   "lodging": 1.4,
+   "own": 6.0,
+   "quoted": 116.6,
+   "realised": 100.9,
+   "shortfall": 15.7,
+   "water": 8.2
+  },
+  "2020": {
+   "index_water_mm": 380,
+   "left": 1.1,
+   "lodging": 0.5,
+   "own": 1.8,
+   "quoted": 109.7,
+   "realised": 103.1,
+   "shortfall": 6.6,
+   "water": 3.2
+  },
+  "2021": {
+   "index_water_mm": 353,
+   "left": 2.9,
+   "lodging": 1.8,
+   "own": 1.0,
+   "quoted": 115.6,
+   "realised": 102.2,
+   "shortfall": 13.4,
+   "water": 7.7
+  },
+  "2022": {
+   "index_water_mm": 378,
+   "left": -2.1,
+   "lodging": 3.8,
+   "own": 0.6,
+   "quoted": 110.9,
+   "realised": 103.4,
+   "shortfall": 7.5,
+   "water": 5.2
+  },
+  "2023": {
+   "index_water_mm": 443,
+   "left": -0.6,
+   "lodging": -1.0,
+   "own": 6.2,
+   "quoted": 117.4,
+   "realised": 111.9,
+   "shortfall": 5.5,
+   "water": 0.9
+  },
+  "2024": {
+   "index_water_mm": 346,
+   "left": 0.0,
+   "lodging": 3.3,
+   "own": 3.3,
+   "quoted": 115.3,
+   "realised": 102.7,
+   "shortfall": 12.6,
+   "water": 6.0
+  }
+ },
+ "bridge_means": {
+  "advantage_at_index_trials_t_ha": 0.54,
+  "advantage_at_series_trials_t_ha": 0.34,
+  "byaduk_at_index_trials_t_ha": 4.7,
+  "byaduk_at_series_trials_t_ha": 5.54,
+  "lodging_over_byaduk_at_index_trials_pct": 6.1,
+  "lodging_over_byaduk_at_series_trials_pct": 13.6,
+  "water_at_index_trials_mm": 378,
+  "water_at_series_trials_mm": 500
+ },
+ "candidates": 28,
+ "closest_rival": {
+  "cut": 5.2
+ },
+ "completed_nominations": 24,
+ "constants": {
+  "moisture_pct": 12.5,
+  "per_mm": 100,
+  "range_pct": 80
+ },
+ "counts": {
+  "disease_rows": 196,
+  "entry_rows": 14795,
+  "files": 18,
+  "irrigations": 60,
+  "lost": 1,
+  "new_rows": 21903,
+  "nominations": 27,
+  "old_rows": 12912,
+  "quality_rows": 392,
+  "rain_gaps": 4,
+  "rain_rows": 1440,
+  "register_rows": 3597,
+  "reweighed": 153,
+  "seed_rows": 28,
+  "series_rows": 3511,
+  "site_seasons": 120,
+  "trials": 179
+ },
+ "cut_points": 6.0,
+ "estimate_only": {
+  "hi": [
+   116.7,
+   112.8
+  ],
+  "lo": [
+   110.1,
+   106.2
+  ],
+  "sd": [
+   2.6,
+   2.6
+  ]
+ },
+ "evidence": {
+  "abandoned": 156,
+  "abandoned_pct": 0.45,
+  "abandoned_pct_index_sites": 3.08,
+  "adv_driest_quarter": -0.75,
+  "adv_level_r2": 0.33,
+  "adv_level_t": 9.4,
+  "adv_per_100mm": 0.204,
+  "adv_water_r2": 0.35,
+  "adv_water_t": 9.7,
+  "adv_wettest_quarter": -0.3,
+  "advanced_lines": 809,
+  "advanced_stage1_over_checks": 0.53,
+  "advanced_stage2_over_checks": 0.46,
+  "bench_swing_sd_points": 1.7,
+  "bench_swing_sd_t_ha": 0.09,
+  "gain_per_tenth_across_plots": 0.587,
+  "gap_on_mean_of_site_percentages": 10.9,
+  "in_sample_rmse": 2.6,
+  "index_water_by_season": {
+   "2016": 336,
+   "2017": 543,
+   "2018": 338,
+   "2019": 380,
+   "2020": 353,
+   "2021": 378,
+   "2022": 443,
+   "2023": 346,
+   "2024": 376,
+   "2025": 351
+  },
+  "joint_level_t": 1.5,
+  "joint_water_t": 2.5,
+  "kerang_curve_at_rain_alone": 2.76,
+  "kerang_curve_with_waterings": 5.3,
+  "kerang_mean_yield": 5.3,
+  "kerang_rain_mm": 205,
+  "kerang_trials": 10,
+  "kerang_water_mm": 424,
+  "lines_with_abandoned": 86,
+  "lines_with_lodging_multiple": 1051,
+  "lodging_multiple_p10": 0.84,
+  "lodging_multiple_p90": 1.66,
+  "lodging_pct_abandoned": 81.1,
+  "lodging_pct_harvested": 3.3,
+  "loss_per_tenth_across_plots": -0.587,
+  "loss_per_tenth_within": 0.172,
+  "loss_per_tenth_within_trial": 0.142,
+  "plots": 34662,
+  "response_common_per_100mm": 0.24,
+  "response_df": 199,
+  "response_lines": 200,
+  "response_q": 1221,
+  "response_spread_ratio": 5.5,
+  "returned_mean_of_site_percentages": 102.1,
+  "sd_level_t_ha": 0.19,
+  "sd_response_per_100mm": 0.09,
+  "series_adv_per_100mm": 0.245,
+  "series_adv_water_t": 7.4,
+  "series_joint_level_t": -1.3,
+  "series_joint_water_t": 5.0,
+  "series_lines_joint_level_t": -2.7,
+  "series_lines_joint_water_t": 6.3,
+  "series_lines_trials": 90,
+  "series_seasons": 12,
+  "series_trials": 119,
+  "series_water_level_corr": 0.85,
+  "stage1_all_over_checks": 0.14,
+  "stage1_lines": 3597,
+  "standards_lodging_pct_index_trials": 17.0,
+  "standards_lodging_pct_series": 37.0,
+  "trials": 179,
+  "trials_with_abandoned": 12,
+  "water_level_corr": 0.92,
+  "water_mm_all_programme_trials": 267,
+  "water_mm_index_trials": 384,
+  "water_mm_series": 488
+ },
+ "expected_in_series_mean": 102.0,
+ "files": {
+  "book": "hrz_nominations_2026.xlsx",
+  "chart": "shortfall_bridge.png",
+  "deed": "option_deed_schedule_2.pdf",
+  "disease": "disease_nursery_scores_2023_2025.csv",
+  "entries": "trial_entry_lists_2014_2025.csv",
+  "handbook": "BGG_trial_handbook_2024.pdf",
+  "irrigation": "kerang_irrigation_2014_2025.csv",
+  "new": "plot_harvest_2019_2025.csv",
+  "nominations": "hrbs_nominations_2017_2025.xlsx",
+  "note": "hrz_nominations_2026_note.docx",
+  "old": "PlotHarvest_2014_2018.csv",
+  "protocol": "HRBS_trial_protocol_2023.pdf",
+  "quality": "grain_quality_stage3_2023_2025.csv",
+  "rain": "site_rainfall_monthly_2014_2025.csv",
+  "register": "line_register.xlsx",
+  "results": "HRBS_site_results_2014_2025.csv",
+  "review": "season_review_2025.docx",
+  "seasons": "HRBS_site_seasons_2014_2025.csv",
+  "seed": "seed_store_inventory_2026-02.xlsx",
+  "sites": "trial_sites.xlsx",
+  "trials": "trials_2014_2025.csv"
+ },
+ "first_left_out": "WI3528",
+ "hurried": {
+  "golden_ry_of_its_picks": [
+   92.9,
+   91.3
+  ],
+  "interval_half_width": 8.6,
+  "its_lodging_high": 50,
+  "its_lodging_low": 38,
+  "its_lodging_of_the_nominees": [
+   39,
+   39
+  ],
+  "its_ry_high": 105.0,
+  "its_ry_low": 101.9,
+  "its_ry_of_the_nominees": [
+   104.7,
+   103.2
+  ],
+  "left": 4.2,
+  "lodging": 2.2,
+  "nominate": [
+   "WI3499",
+   "WI3537"
+  ],
+  "own": 3.3,
+  "rmse": 9.3,
+  "ry_of_its_picks": [
+   105.0,
+   104.8
+  ],
+  "water": 1.6
+ },
+ "hurried_on_water": {
+  "bias": null,
+  "cut": 0.2,
+  "left": -1.5,
+  "left_t": null,
+  "left_years": null,
+  "left_years_positive": null,
+  "lodging": 2.2,
+  "nominate": [
+   "WI3499",
+   "WI3537"
+  ],
+  "own": 4.8,
+  "rmse": 7.9,
+  "ry_first_left_out": 101.6,
+  "ry_of_the_nominees": [
+   104.1,
+   102.4
+  ],
+  "water": 5.8
+ },
+ "index_rank": {
+  "WI3499": 18,
+  "WI3503": 26,
+  "WI3504": 22,
+  "WI3505": 20,
+  "WI3508": 7,
+  "WI3510": 16,
+  "WI3512": 12,
+  "WI3528": 14,
+  "WI3537": 19,
+  "WI3541": 6,
+  "WI3544": 8,
+  "WI3545": 11,
+  "WI3547": 23,
+  "WI3549": 10,
+  "WI3552": 27,
+  "WI3554": 1,
+  "WI3556": 15,
+  "WI3559": 5,
+  "WI3562": 13,
+  "WI3563": 9,
+  "WI3567": 28,
+  "WI3571": 2,
+  "WI3574": 21,
+  "WI3578": 3,
+  "WI3581": 25,
+  "WI3582": 24,
+  "WI3583": 17,
+  "WI3585": 4
+ },
+ "index_rmse_points": 13.3,
+ "index_route": {
+  "nominate": [
+   "WI3554",
+   "WI3571"
+  ],
+  "slope": 0.53
+ },
+ "index_would_nominate": [
+  "WI3554",
+  "WI3571"
+ ],
+ "left_over_points": 0.4,
+ "left_over_t": 0.7,
+ "lines": {
+  "WI3499": {
+   "expected_ry": 92.9,
+   "high": 99.3,
+   "index": 107.3,
+   "lodging_pct": 59,
+   "low": 86.1,
+   "stage3_seasons": 2
+  },
+  "WI3503": {
+   "expected_ry": 90.6,
+   "high": 96.8,
+   "index": 101.8,
+   "lodging_pct": 31,
+   "low": 83.1,
+   "stage3_seasons": 2
+  },
+  "WI3504": {
+   "expected_ry": 94.9,
+   "high": 100.6,
+   "index": 106.7,
+   "lodging_pct": 42,
+   "low": 88.6,
+   "stage3_seasons": 2
+  },
+  "WI3505": {
+   "expected_ry": 90.7,
+   "high": 96.4,
+   "index": 107.2,
+   "lodging_pct": 69,
+   "low": 84.9,
+   "stage3_seasons": 2
+  },
+  "WI3508": {
+   "expected_ry": 98.1,
+   "high": 103.6,
+   "index": 111.6,
+   "lodging_pct": 29,
+   "low": 91.8,
+   "stage3_seasons": 2
+  },
+  "WI3510": {
+   "expected_ry": 98.4,
+   "high": 103.6,
+   "index": 107.6,
+   "lodging_pct": 30,
+   "low": 92.4,
+   "stage3_seasons": 2
+  },
+  "WI3512": {
+   "expected_ry": 98.5,
+   "high": 103.7,
+   "index": 109.0,
+   "lodging_pct": 24,
+   "low": 92.5,
+   "stage3_seasons": 2
+  },
+  "WI3528": {
+   "expected_ry": 103.4,
+   "high": 108.1,
+   "index": 108.5,
+   "lodging_pct": 30,
+   "low": 98.4,
+   "stage3_seasons": 2
+  },
+  "WI3537": {
+   "expected_ry": 91.3,
+   "high": 98.2,
+   "index": 107.2,
+   "lodging_pct": 66,
+   "low": 84.2,
+   "stage3_seasons": 1
+  },
+  "WI3541": {
+   "expected_ry": 103.0,
+   "high": 108.5,
+   "index": 111.7,
+   "lodging_pct": 47,
+   "low": 97.3,
+   "stage3_seasons": 1
+  },
+  "WI3544": {
+   "expected_ry": 99.5,
+   "high": 105.5,
+   "index": 111.4,
+   "lodging_pct": 35,
+   "low": 93.1,
+   "stage3_seasons": 1
+  },
+  "WI3545": {
+   "expected_ry": 95.0,
+   "high": 101.0,
+   "index": 109.2,
+   "lodging_pct": 48,
+   "low": 88.6,
+   "stage3_seasons": 1
+  },
+  "WI3547": {
+   "expected_ry": 91.9,
+   "high": 98.5,
+   "index": 105.8,
+   "lodging_pct": 45,
+   "low": 84.5,
+   "stage3_seasons": 1
+  },
+  "WI3549": {
+   "expected_ry": 96.1,
+   "high": 102.1,
+   "index": 109.3,
+   "lodging_pct": 41,
+   "low": 89.6,
+   "stage3_seasons": 1
+  },
+  "WI3552": {
+   "expected_ry": 86.7,
+   "high": 92.9,
+   "index": 101.6,
+   "lodging_pct": 72,
+   "low": 80.3,
+   "stage3_seasons": 1
+  },
+  "WI3554": {
+   "expected_ry": 113.4,
+   "high": 118.3,
+   "index": 119.7,
+   "lodging_pct": 28,
+   "low": 108.4,
+   "stage3_seasons": 1
+  },
+  "WI3556": {
+   "expected_ry": 97.1,
+   "high": 103.0,
+   "index": 108.1,
+   "lodging_pct": 37,
+   "low": 90.5,
+   "stage3_seasons": 1
+  },
+  "WI3559": {
+   "expected_ry": 109.5,
+   "high": 114.3,
+   "index": 112.1,
+   "lodging_pct": 27,
+   "low": 104.7,
+   "stage3_seasons": 1
+  },
+  "WI3562": {
+   "expected_ry": 97.4,
+   "high": 102.9,
+   "index": 108.7,
+   "lodging_pct": 60,
+   "low": 92.0,
+   "stage3_seasons": 1
+  },
+  "WI3563": {
+   "expected_ry": 100.7,
+   "high": 106.0,
+   "index": 110.6,
+   "lodging_pct": 48,
+   "low": 95.3,
+   "stage3_seasons": 1
+  },
+  "WI3567": {
+   "expected_ry": 88.1,
+   "high": 94.3,
+   "index": 99.3,
+   "lodging_pct": 63,
+   "low": 81.8,
+   "stage3_seasons": 1
+  },
+  "WI3571": {
+   "expected_ry": 100.8,
+   "high": 106.2,
+   "index": 112.8,
+   "lodging_pct": 48,
+   "low": 95.2,
+   "stage3_seasons": 1
+  },
+  "WI3574": {
+   "expected_ry": 93.8,
+   "high": 99.9,
+   "index": 107.1,
+   "lodging_pct": 48,
+   "low": 87.2,
+   "stage3_seasons": 1
+  },
+  "WI3578": {
+   "expected_ry": 99.3,
+   "high": 104.5,
+   "index": 112.7,
+   "lodging_pct": 62,
+   "low": 94.1,
+   "stage3_seasons": 1
+  },
+  "WI3581": {
+   "expected_ry": 89.8,
+   "high": 95.8,
+   "index": 103.9,
+   "lodging_pct": 58,
+   "low": 83.6,
+   "stage3_seasons": 1
+  },
+  "WI3582": {
+   "expected_ry": 96.5,
+   "high": 101.7,
+   "index": 104.1,
+   "lodging_pct": 64,
+   "low": 91.4,
+   "stage3_seasons": 1
+  },
+  "WI3583": {
+   "expected_ry": 95.8,
+   "high": 101.4,
+   "index": 107.4,
+   "lodging_pct": 42,
+   "low": 89.8,
+   "stage3_seasons": 1
+  },
+  "WI3585": {
+   "expected_ry": 92.0,
+   "high": 97.7,
+   "index": 112.7,
+   "lodging_pct": 71,
+   "low": 86.5,
+   "stage3_seasons": 1
+  }
+ },
+ "lodging_points": 2.1,
+ "lodging_table": {
+  "WI3499": 59,
+  "WI3503": 31,
+  "WI3504": 42,
+  "WI3505": 69,
+  "WI3508": 29,
+  "WI3510": 30,
+  "WI3512": 24,
+  "WI3528": 30,
+  "WI3537": 66,
+  "WI3541": 47,
+  "WI3544": 35,
+  "WI3545": 48,
+  "WI3547": 45,
+  "WI3549": 41,
+  "WI3552": 72,
+  "WI3554": 28,
+  "WI3556": 37,
+  "WI3559": 27,
+  "WI3562": 60,
+  "WI3563": 48,
+  "WI3567": 63,
+  "WI3571": 48,
+  "WI3574": 48,
+  "WI3578": 62,
+  "WI3581": 58,
+  "WI3582": 64,
+  "WI3583": 42,
+  "WI3585": 71
+ },
+ "nominate": [
+  "WI3554",
+  "WI3559"
+ ],
+ "nominations_allowed": 3,
+ "one_fact": {
+  "every line has its own response to season water against the benchmark's": {
+   "bias": 3.2,
+   "cut": 2.1,
+   "left": 2.1,
+   "left_t": 2.7,
+   "left_years": 8,
+   "left_years_positive": 7,
+   "lodging": 0.0,
+   "nominate": [
+    "WI3554",
+    "WI3559"
+   ],
+   "own": 3.0,
+   "rmse": 6.3,
+   "ry_first_left_out": 102.7,
+   "ry_of_the_nominees": [
+    112.0,
+    108.4
+   ],
+   "water": 6.3
+  },
+  "weak-strawed lines lodge harder at the series' sites than at ours, and it costs them yield there": {
+   "bias": 7.8,
+   "cut": 0.2,
+   "left": 7.5,
+   "left_t": 7.2,
+   "left_years": 8,
+   "left_years_positive": 8,
+   "lodging": 2.1,
+   "nominate": [
+    "WI3554",
+    "WI3508"
+   ],
+   "own": -0.6,
+   "rmse": 10.2,
+   "ry_first_left_out": 112.5,
+   "ry_of_the_nominees": [
+    117.6,
+    114.7
+   ],
+   "water": 2.4
+  }
+ },
+ "overstated_at_own_sites_points": 3.4,
+ "past_meeting_standard": 5,
+ "places": 2,
+ "proportional_loss": {
+  "lodging": 3.3,
+  "share_per_tenth_pct": 3.5,
+  "water": 4.4
+ },
+ "quick": {
+  "nominate": [
+   "WI3554",
+   "WI3571"
+  ],
+  "own": 11.4
+ },
+ "quoted_mean": 113.0,
+ "range_table": {
+  "WI3499 high": 99.3,
+  "WI3499 low": 86.1,
+  "WI3503 high": 96.8,
+  "WI3503 low": 83.1,
+  "WI3504 high": 100.6,
+  "WI3504 low": 88.6,
+  "WI3505 high": 96.4,
+  "WI3505 low": 84.9,
+  "WI3508 high": 103.6,
+  "WI3508 low": 91.8,
+  "WI3510 high": 103.6,
+  "WI3510 low": 92.4,
+  "WI3512 high": 103.7,
+  "WI3512 low": 92.5,
+  "WI3528 high": 108.1,
+  "WI3528 low": 98.4,
+  "WI3537 high": 98.2,
+  "WI3537 low": 84.2,
+  "WI3541 high": 108.5,
+  "WI3541 low": 97.3,
+  "WI3544 high": 105.5,
+  "WI3544 low": 93.1,
+  "WI3545 high": 101.0,
+  "WI3545 low": 88.6,
+  "WI3547 high": 98.5,
+  "WI3547 low": 84.5,
+  "WI3549 high": 102.1,
+  "WI3549 low": 89.6,
+  "WI3552 high": 92.9,
+  "WI3552 low": 80.3,
+  "WI3554 high": 118.3,
+  "WI3554 low": 108.4,
+  "WI3556 high": 103.0,
+  "WI3556 low": 90.5,
+  "WI3559 high": 114.3,
+  "WI3559 low": 104.7,
+  "WI3562 high": 102.9,
+  "WI3562 low": 92.0,
+  "WI3563 high": 106.0,
+  "WI3563 low": 95.3,
+  "WI3567 high": 94.3,
+  "WI3567 low": 81.8,
+  "WI3571 high": 106.2,
+  "WI3571 low": 95.2,
+  "WI3574 high": 99.9,
+  "WI3574 low": 87.2,
+  "WI3578 high": 104.5,
+  "WI3578 low": 94.1,
+  "WI3581 high": 95.8,
+  "WI3581 low": 83.6,
+  "WI3582 high": 101.7,
+  "WI3582 low": 91.4,
+  "WI3583 high": 101.4,
+  "WI3583 low": 89.8,
+  "WI3585 high": 97.7,
+  "WI3585 low": 86.5
+ },
+ "rank": {
+  "WI3499": 20,
+  "WI3503": 25,
+  "WI3504": 18,
+  "WI3505": 24,
+  "WI3508": 11,
+  "WI3510": 10,
+  "WI3512": 9,
+  "WI3528": 3,
+  "WI3537": 23,
+  "WI3541": 4,
+  "WI3544": 7,
+  "WI3545": 17,
+  "WI3547": 22,
+  "WI3549": 15,
+  "WI3552": 28,
+  "WI3554": 1,
+  "WI3556": 13,
+  "WI3559": 2,
+  "WI3562": 12,
+  "WI3563": 6,
+  "WI3567": 27,
+  "WI3571": 5,
+  "WI3574": 19,
+  "WI3578": 8,
+  "WI3581": 26,
+  "WI3582": 14,
+  "WI3583": 16,
+  "WI3585": 21
+ },
+ "realised_mean": 101.6,
+ "references": {
+  "deed_clause": 2.1,
+  "handbook_index_section": 6,
+  "handbook_plots_section": 5,
+  "protocol_relative_yield_section": 7
+ },
+ "rivals": {
+  "a slope along the range as well as blocks": {
+   "bias": 1.2,
+   "cut": 6.3,
+   "left": 0.4,
+   "left_t": 0.8,
+   "left_years": 8,
+   "left_years_positive": 5,
+   "lodging": 2.1,
+   "nominate": [
+    "WI3554",
+    "WI3559"
+   ],
+   "own": 3.3,
+   "rmse": 5.0,
+   "ry_first_left_out": 103.4,
+   "ry_of_the_nominees": [
+    112.8,
+    109.6
+   ],
+   "water": 5.5
+  },
+  "blocks ignored (replicates only)": {
+   "bias": 0.3,
+   "cut": 5.7,
+   "left": -0.4,
+   "left_t": -0.8,
+   "left_years": 8,
+   "left_years_positive": 4,
+   "lodging": 2.2,
+   "nominate": [
+    "WI3554",
+    "WI3559"
+   ],
+   "own": 3.9,
+   "rmse": 4.6,
+   "ry_first_left_out": 102.0,
+   "ry_of_the_nominees": [
+    110.5,
+    109.1
+   ],
+   "water": 5.7
+  },
+  "each line fitted on its own trials alone (no pooling)": {
+   "bias": 3.3,
+   "cut": 5.6,
+   "left": 2.4,
+   "left_t": 3.5,
+   "left_years": 8,
+   "left_years_positive": 7,
+   "lodging": 2.1,
+   "nominate": [
+    "WI3554",
+    "WI3559"
+   ],
+   "own": 1.8,
+   "rmse": 5.4,
+   "ry_first_left_out": 104.7,
+   "ry_of_the_nominees": [
+    117.3,
+    110.3
+   ],
+   "water": 5.0
+  },
+  "lines taken as unrelated (no cross level)": {
+   "bias": 1.0,
+   "cut": 5.2,
+   "left": 0.4,
+   "left_t": 0.8,
+   "left_years": 8,
+   "left_years_positive": 6,
+   "lodging": 2.1,
+   "nominate": [
+    "WI3554",
+    "WI3559"
+   ],
+   "own": 3.3,
+   "rmse": 4.9,
+   "ry_first_left_out": 103.7,
+   "ry_of_the_nominees": [
+    115.0,
+    109.2
+   ],
+   "water": 5.5
+  },
+  "lodging above a dry-trial floor": {
+   "bias": 1.0,
+   "cut": 6.0,
+   "left": 0.4,
+   "left_t": 0.7,
+   "left_years": 8,
+   "left_years_positive": 4,
+   "lodging": 2.1,
+   "nominate": [
+    "WI3554",
+    "WI3559"
+   ],
+   "own": 3.4,
+   "rmse": 4.9,
+   "ry_first_left_out": 103.4,
+   "ry_of_the_nominees": [
+    113.4,
+    109.5
+   ],
+   "water": 5.5
+  },
+  "lodging fitted on every trial with any": {
+   "bias": 1.0,
+   "cut": 6.0,
+   "left": 0.4,
+   "left_t": 0.7,
+   "left_years": 8,
+   "left_years_positive": 4,
+   "lodging": 2.1,
+   "nominate": [
+    "WI3554",
+    "WI3559"
+   ],
+   "own": 3.4,
+   "rmse": 5.0,
+   "ry_first_left_out": 103.5,
+   "ry_of_the_nominees": [
+    113.5,
+    109.5
+   ],
+   "water": 5.5
+  },
+  "lodging fitted on the lushest trials only": {
+   "bias": 1.0,
+   "cut": 5.8,
+   "left": 0.4,
+   "left_t": 0.7,
+   "left_years": 8,
+   "left_years_positive": 4,
+   "lodging": 2.1,
+   "nominate": [
+    "WI3554",
+    "WI3559"
+   ],
+   "own": 3.4,
+   "rmse": 5.3,
+   "ry_first_left_out": 103.3,
+   "ry_of_the_nominees": [
+    113.1,
+    109.2
+   ],
+   "water": 5.5
+  },
+  "lodging multiples not shrunk": {
+   "bias": 1.3,
+   "cut": 6.6,
+   "left": 0.4,
+   "left_t": 0.7,
+   "left_years": 8,
+   "left_years_positive": 4,
+   "lodging": 2.1,
+   "nominate": [
+    "WI3554",
+    "WI3559"
+   ],
+   "own": 3.4,
+   "rmse": 5.1,
+   "ry_first_left_out": 103.6,
+   "ry_of_the_nominees": [
+    114.1,
+    110.3
+   ],
+   "water": 5.5
+  },
+  "lodging set against Byaduk's alone": {
+   "bias": 1.2,
+   "cut": 5.7,
+   "left": 0.4,
+   "left_t": 0.7,
+   "left_years": 8,
+   "left_years_positive": 4,
+   "lodging": 2.1,
+   "nominate": [
+    "WI3554",
+    "WI3559"
+   ],
+   "own": 3.4,
+   "rmse": 4.9,
+   "ry_first_left_out": 102.1,
+   "ry_of_the_nominees": [
+    111.7,
+    107.8
+   ],
+   "water": 5.5
+  },
+  "one prior for all cohorts": {
+   "bias": 0.9,
+   "cut": 5.9,
+   "left": 0.5,
+   "left_t": 0.8,
+   "left_years": 8,
+   "left_years_positive": 5,
+   "lodging": 2.1,
+   "nominate": [
+    "WI3554",
+    "WI3559"
+   ],
+   "own": 3.2,
+   "rmse": 5.1,
+   "ry_first_left_out": 103.1,
+   "ry_of_the_nominees": [
+    113.0,
+    109.0
+   ],
+   "water": 5.6
+  },
+  "the review's lodging head on fitted lodging": {
+   "bias": 1.0,
+   "cut": 6.0,
+   "left": -0.2,
+   "left_t": -0.2,
+   "left_years": 8,
+   "left_years_positive": 5,
+   "lodging": 2.5,
+   "nominate": [
+    "WI3554",
+    "WI3559"
+   ],
+   "own": 3.6,
+   "rmse": 4.9,
+   "ry_first_left_out": 103.4,
+   "ry_of_the_nominees": [
+    113.4,
+    109.5
+   ],
+   "water": 5.5
+  },
+  "the series' last six seasons only": {
+   "bias": 1.0,
+   "cut": 6.0,
+   "left": 0.4,
+   "left_t": 0.7,
+   "left_years": 8,
+   "left_years_positive": 4,
+   "lodging": 2.1,
+   "nominate": [
+    "WI3554",
+    "WI3559"
+   ],
+   "own": 3.4,
+   "rmse": 4.9,
+   "ry_first_left_out": 103.5,
+   "ry_of_the_nominees": [
+    113.3,
+    109.5
+   ],
+   "water": 5.5
+  }
+ },
+ "ruled_out": {
+  "Kerang's waterings left out of its season water": {
+   "bias": 0.9,
+   "cut": 4.7,
+   "left": 0.2,
+   "left_t": 0.3,
+   "left_years": 8,
+   "left_years_positive": 4,
+   "lodging": 2.1,
+   "nominate": [
+    "WI3554",
+    "WI3559"
+   ],
+   "own": 1.2,
+   "rmse": 5.0,
+   "ry_first_left_out": 104.7,
+   "ry_of_the_nominees": [
+    111.0,
+    109.5
+   ],
+   "water": 7.9
+  },
+  "response to the trial's yield level, not its season water": {
+   "bias": 4.1,
+   "cut": 4.0,
+   "left": 3.4,
+   "left_t": 4.4,
+   "left_years": 8,
+   "left_years_positive": 8,
+   "lodging": 2.1,
+   "nominate": [
+    "WI3554",
+    "WI3559"
+   ],
+   "own": 2.7,
+   "rmse": 6.9,
+   "ry_first_left_out": 108.0,
+   "ry_of_the_nominees": [
+    115.1,
+    112.0
+   ],
+   "water": 3.2
+  }
+ },
+ "ry_table": {
+  "WI3499": 92.9,
+  "WI3503": 90.6,
+  "WI3504": 94.9,
+  "WI3505": 90.7,
+  "WI3508": 98.1,
+  "WI3510": 98.4,
+  "WI3512": 98.5,
+  "WI3528": 103.4,
+  "WI3537": 91.3,
+  "WI3541": 103.0,
+  "WI3544": 99.5,
+  "WI3545": 95.0,
+  "WI3547": 91.9,
+  "WI3549": 96.1,
+  "WI3552": 86.7,
+  "WI3554": 113.4,
+  "WI3556": 97.1,
+  "WI3559": 109.5,
+  "WI3562": 97.4,
+  "WI3563": 100.7,
+  "WI3567": 88.1,
+  "WI3571": 100.8,
+  "WI3574": 93.8,
+  "WI3578": 99.3,
+  "WI3581": 89.8,
+  "WI3582": 96.5,
+  "WI3583": 95.8,
+  "WI3585": 92.0
+ },
+ "series_sites_points": 7.7,
+ "shortfall_points": 11.4,
+ "standard": 107.0,
+ "tolerances": {
+  "heavy_at_pct": 65,
+  "lodged_at_pct": 45,
+  "lodging_points": 6.0,
+  "range_extra_points": 3.0,
+  "ry_points": 5.0,
+  "ry_points_heavy": 13.0,
+  "ry_points_lodged": 9.0,
+  "wider_lodging": {
+   "WI3499": 8.0,
+   "WI3504": 7.0,
+   "WI3508": 7.0,
+   "WI3541": 8.0,
+   "WI3544": 8.0,
+   "WI3545": 9.0,
+   "WI3547": 9.0,
+   "WI3549": 8.0,
+   "WI3554": 8.0,
+   "WI3556": 8.0,
+   "WI3559": 7.0,
+   "WI3562": 8.0,
+   "WI3563": 9.0,
+   "WI3567": 7.0,
+   "WI3571": 9.0,
+   "WI3574": 9.0,
+   "WI3578": 7.0,
+   "WI3581": 8.0,
+   "WI3582": 7.0,
+   "WI3583": 9.0
+  },
+  "wider_ry": {
+   "WI3567": 9.8
+  }
+ },
+ "worst_year": {
+  "index_water_mm": 336,
+  "left": 1.8,
+  "lodging": 5.1,
+  "own": 2.5,
+  "quoted": 114.9,
+  "realised": 93.6,
+  "season": 2016,
+  "shortfall": 21.3,
+  "sow": 2017,
+  "water": 11.9
+ },
+ "worth_at_own_sites_mean": 109.7,
+ "years": {
+  "decision_sow": 2026,
+  "first_season": 2014,
+  "first_sow": 2017,
+  "last_completed_sow": 2024,
+  "last_season": 2025,
+  "pending": 3,
+  "pending_sow": 2025
+ }
+}

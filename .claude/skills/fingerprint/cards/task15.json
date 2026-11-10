@@ -1,110 +1,110 @@
 {
-  "task": "task15",
-  "project": "sulfur",
-  "architecture": "v1",
-  "drawn": "2026-11-10",
-  "slot_note": "",
-  "domain": "general-statistics-data-science",
-  "subdomain": "multiple-testing-selective-inference",
-  "client_domain": "general-statistics-data-science",
-  "niche": "a grower-owned dryland barley breeding company whose nominations to an independent high-rainfall trial series keep coming in under its own trial figures: the shortfall split between the luck that got each line picked, a benchmark variety that gains more per millimetre of season water than the company's lines, and lodging losses that grow at the series' sites, then this year's Stage 3 lines re-ranked for the 2027 nominations with the chance that a nominee meets the seed partner's uptake standard",
-  "objective": "comparative-explanation",
-  "shape": "01",
-  "decision_type": "ranked_slate_under_cap",
-  "answer_unit": "set_of_items",
-  "answer": "",
-  "answer_source": "",
-  "gap": [
-    "population",
-    "time"
+ "task": "task15",
+ "project": "sulfur",
+ "architecture": "v1",
+ "drawn": "2026-11-10",
+ "slot_note": "",
+ "domain": "general-statistics-data-science",
+ "subdomain": "multiple-testing-selective-inference",
+ "client_domain": "general-statistics-data-science",
+ "niche": "a grower-owned dryland barley breeding company whose nominations to an independent high-rainfall trial series keep coming in under the index it quotes for them: the gap set under the four heads its option deed files for a review (the index itself, the move to the series' wetter trials against a benchmark that gains more per millimetre of season water, lodging on the lodging recorded, the remainder), then this year's Stage 3 lines carried to the series, with the two to expect most from nominated for 2026",
+ "objective": "comparative-explanation",
+ "shape": "01",
+ "decision_type": "ranked_slate_under_cap",
+ "answer_unit": "set_of_items",
+ "answer": "Nominate WI3554 and WI3559 for 2026 sowing: they are the two Stage 3 lines to expect most from in the series (113.4 and 109.5 over two seasons, the next line WI3528 at 103.4), not the index's WI3554 and WI3571; the 24 completed nominations were quoted at 113.0 and returned 101.6, a gap of 11.4 points made of 3.4 for the index, 5.5 for the move to the Series, 2.1 for lodging and a remainder of 0.4.",
+ "answer_source": "task15/generator/figures.json",
+ "gap": [
+  "population",
+  "time"
+ ],
+ "pattern": [
+  "none"
+ ],
+ "generators": [
+  "G14",
+  "G6",
+  "G16"
+ ],
+ "gate_g": "decomposition_attribution",
+ "calibration_form": "realised_outcome_roster",
+ "stump_strategy": "uncertainty_hold",
+ "decisive_rule_filed": false,
+ "official_decoy": false,
+ "validated_decoy": false,
+ "context_artifact": "close_out_summary",
+ "stump_class": "analytical",
+ "analyst_test": "The careful but hurried pass conforms every file, rebuilds the index and the relative yield exactly, takes the deed's four heads as written, models the visible fall of the lines' advantage with yield level as one slope for all lines, shrinks each line toward its Stage 3 list, prices lodging inside line and trial, checks itself on the past nominations and takes the mean miss off; it earns the gap, the index head and the lodging head, files 1.6 for the move to the Series against 5.5, leaves 4.2 of the gap unexplained, keeps 11 of 28 lodging forecasts and 11 of 28 expected yields in band and nominates WI3499 and WI3537.",
+ "domain_test": "Every result is a statistical object of selective inference on a staged screening record: the selection bias of lines picked on noisy means, estimated from the whole unselected cohort; a random-slope response carried to a target set of environments; a loss per unit of a scored trait estimated within line and trial; a decomposition that closes on two fixed means; and a posterior predictive probability for a realised two-season mean with a shared reference; swap the nouns for a sales pipeline or a hospital league table and there is no replicated plot layout, no benchmark entry in every trial, no season water and no staged advancement to estimate any of them from.",
+ "layer2_family": "estimand_identification",
+ "layer2_pattern": "general-statistics-data-science/multiple-testing-selective-inference/3",
+ "layer1": [
+  "line codes renamed at promotion (stage code to release code) across entry lists",
+  "abandoned plots with no yield",
+  "two plot-export layouts across a harvest-system change",
+  "plot weights at field moisture with a moisture reading",
+  "trial sites whose rainfall and irrigation sit in separate files",
+  "duplicate plot rows from re-weighed samples"
+ ],
+ "stakeholder_role": "the breeding company's head of breeding, who signs the 2026 nominations to the high-rainfall series",
+ "role_family": "portfolio_manager",
+ "scoring_unit": "per accepted item",
+ "spine": {
+  "file": "plot_harvest_2019_2025.csv",
+  "rows": 21903,
+  "entity": "one trial plot at harvest (harvested or abandoned)",
+  "grain": "plot",
+  "source": "synthetic"
+ },
+ "forum": "customer_or_counterparty",
+ "forcing_event": "season_or_peak",
+ "org_family": "agriculture_or_food_producer",
+ "world": {
+  "geography": "Australia (western Victoria: the Mallee, the Wimmera and the south-west high-rainfall zone)",
+  "currency": "AUD",
+  "org_type": "a grower-owned barley breeding company and the independent variety trial series its lines are nominated to",
+  "invented_names": [
+   "Banyena Grain Genetics",
+   "High Rainfall Barley Series",
+   "Southern Cropping Trials Trust",
+   "Mount Rouse Seeds"
   ],
-  "pattern": [
-    "none"
-  ],
-  "generators": [
-    "G14",
-    "G6",
-    "G16"
-  ],
-  "gate_g": "decomposition_attribution",
-  "calibration_form": "realised_outcome_roster",
-  "stump_strategy": "uncertainty_hold",
-  "decisive_rule_filed": false,
-  "official_decoy": false,
-  "validated_decoy": false,
-  "context_artifact": "close_out_summary",
-  "stump_class": "analytical",
-  "analyst_test": "The careful but hurried pass puts the whole shortfall down to regression to the mean, scales the company's own high-rainfall index by the ratio the past nominees realised and nominates the same raw top three at a smaller figure, because that one story reconciles the average gap; it never estimates how much the benchmark gains per millimetre against each line, what lodging costs each line at the series' sites, or how widely two realised seasons scatter around an expected advantage, so its split of the gap, most of its line-by-line figures, its three nominations and its chance of meeting the standard are all off.",
-  "domain_test": "Every result is a statistical object of selective inference on a staged screening record: the selection bias of lines picked on noisy means, estimated from the whole unselected cohort; a random-slope response carried to a target set of environments; a loss per unit of a scored trait estimated within line and trial; a decomposition that closes on two fixed means; and a posterior predictive probability for a realised two-season mean with a shared reference; swap the nouns for a sales pipeline or a hospital league table and there is no replicated plot layout, no benchmark entry in every trial, no season water and no staged advancement to estimate any of them from.",
-  "layer2_family": "estimand_identification",
-  "layer2_pattern": "general-statistics-data-science/multiple-testing-selective-inference/3",
-  "layer1": [
-    "line codes renamed at promotion (stage code to release code) across entry lists",
-    "abandoned plots with no yield",
-    "two plot-export layouts across a harvest-system change",
-    "plot weights at field moisture with a moisture reading",
-    "trial sites whose rainfall and irrigation sit in separate files",
-    "duplicate plot rows from re-weighed samples"
-  ],
-  "stakeholder_role": "the breeding company's head of breeding, who signs the 2027 nominations to the high-rainfall series",
-  "role_family": "portfolio_manager",
-  "scoring_unit": "per accepted item",
-  "spine": {
-    "file": "plot_harvest_2015_2026.csv",
-    "rows": 0,
-    "entity": "one trial plot at harvest (harvested or abandoned)",
-    "grain": "plot",
-    "source": "synthetic"
-  },
-  "forum": "customer_or_counterparty",
-  "forcing_event": "season_or_peak",
-  "org_family": "agriculture_or_food_producer",
-  "world": {
-    "geography": "Australia (western Victoria: the Mallee, the Wimmera and the south-west high-rainfall zone)",
-    "currency": "AUD",
-    "org_type": "a grower-owned barley breeding company and the independent variety trial series its lines are nominated to",
-    "invented_names": [
-      "Banyena Grain Genetics",
-      "High Rainfall Barley Series",
-      "Southern Cropping Trials Trust",
-      "Mount Rouse Seeds"
-    ],
-    "people": [
-      "Meredith Cooke",
-      "Jesse Gibson",
-      "Michaela Baxter",
-      "John Morgan"
-    ]
-  },
-  "deliverables": [
-    "hrz_nominations_2027.xlsx",
-    "shortfall_bridge.png",
-    "hrz_nominations_2027_note.docx"
-  ],
-  "opening_move": "question-first",
-  "question_form": "other",
-  "driver": "Candidates picked each year on a noisy internal score keep underdelivering on an outside yardstick for three separate reasons that each have to be estimated from the whole internal record (the luck that got them picked, which shrinks by how much each was observed; a reference unit that gains more than they do along a condition the outside yardstick sits far up; and a recorded weakness whose cost grows there), so the gap between the two means is split into those parts and closes, the next picks are rebuilt from all three, and the chance of clearing the outside bar comes from the spread of realised results around the expectation with the reference shared, not from the spread of the estimate.",
-  "driver_concrete": "Banyena's nominations to the High Rainfall Barley Series promised about ten per cent over the benchmark Byaduk on the breeder's own high-rainfall index and realised about one: part is selection on noisy Stage 3 means (lines with one Stage 3 season shrink more than lines with two, the prior taken from the whole Stage 1 cohort), part is Byaduk gaining more yield per millimetre of season water than Banyena's dryland-bred lines at series sites far wetter than the programme's, and part is lodging, whose loss per score unit is estimated within line and trial and carried to the series' lodging pressure; the 2027 nominations are the three Stage 3 lines highest on all three together, and the chance that at least one meets the 103 per cent two-season standard is read from simulated seasons that share Byaduk and the weather.",
-  "stump": "A careful but hurried solver reproduces the shortfall, calls it regression to the mean, fits realised on promised across the past nominees and nominates the top three of the breeder's own high-rainfall index at the scaled figure; the step that lands it there is stopping at the first account that reconciles the average, when the shortfall differs line by line with how little water response and how much lodging each line carries, so the scaled index keeps weak-strawed and water-unresponsive lines on the list.",
-  "answer_shape": "bridge",
-  "weight": "attribution",
-  "chain_signature": [
-    "assembly-reconciliation",
-    "causal-reasoning",
-    "modeling",
-    "missingness-measurement",
-    "decomposition-attribution",
-    "validation",
-    "forecasting",
-    "uncertainty",
-    "synthesis"
-  ],
-  "results": "R1 the conformed trial record and the shortfall on the completed nominations (promised against realised); R2 the part of the shortfall that is selection on noisy means; R3 the part that is the benchmark's larger gain per millimetre of season water; R4 the part that is lodging at the series' sites; R5 the bridge closed with what stays unexplained and its range; R6 the corrected prediction's error on the past nominees against the breeder's index; R7 every 2026 Stage 3 line's expected advantage in the 2027 and 2028 series with an 80 per cent band; R8 each nominee's chance of meeting the 103 per cent standard and the chance at least one does; R9 the three nominations in order and the lines they displace",
-  "one_fact_test": "The most useful single sentence is 'the benchmark gains more yield per millimetre of season water than our lines': it rescues R3 and moves R7 part of the way, 2 of 9 results; the selection split, the lodging loss, the closed bridge, the validation and the chance of meeting the standard each still need their own work.",
-  "strategy_label": "WORKS IN FORM",
-  "mechanism_source": "design_note",
-  "differentiation": {},
-  "lineage": [],
-  "notes": "Axes redrawn on 2026-11-10 after main moved (task5 architecture 4 registered at 01:59Z): prompt shape 03 to 01 (the repeated unit the rubric grades is each Stage 3 candidate's row, in or out of the three nominations, with the bridge beside it), context artifact published_series to close_out_summary (the head of breeding works from the company's own season close-out and nomination dossiers; the series' published results are the realised outcomes, filed under calibration_form).",
-  "registered": "2026-11-10T02:07:15Z"
+  "people": [
+   "Meredith Cooke",
+   "Jesse Gibson",
+   "Michaela Baxter",
+   "John Morgan"
+  ]
+ },
+ "deliverables": [
+  "hrz_nominations_2026.xlsx",
+  "shortfall_bridge.png",
+  "hrz_nominations_2026_note.docx"
+ ],
+ "opening_move": "question-first",
+ "question_form": "other",
+ "driver": "Candidates picked each year on a noisy internal score keep underdelivering on an outside yardstick for three separate reasons that each have to be estimated from the whole internal record (the luck that got them picked, which shrinks by how much each was observed; a reference unit that gains more than they do along a condition the outside yardstick sits far up, by an amount that differs from candidate to candidate, a condition the internal record cannot tell from overall level and the outside record can; and a recorded weakness whose cost grows there), so the gap between the two means is split under filed heads until nothing is left of it, and the next candidates are rebuilt from all three and the ones to expect most from put up.",
+ "driver_concrete": "Banyena's nominations to the High Rainfall Barley Series were quoted at 13 per cent over the benchmark Byaduk on the breeder's own high-rainfall index and returned under 2: part is selection on noisy Stage 3 means (the prior taken from the whole Stage 1 intake by cohort and cross), part is Byaduk gaining more yield per millimetre of season water than Banyena's dryland-bred lines at series sites far wetter than the programme's, by a different amount for each line (season water and yield level move together at Banyena's trials and are told apart only in the series' own), and part is lodging, whose loss per tenth of a plot is estimated within line and trial and read on the lodging recorded; the 2026 nominations are the two Stage 3 lines with the highest expected relative yield in the series once every line has its own response and its lodging is carried to the series' pressure.",
+ "stump": "A careful but hurried solver reproduces the gap, fits one response to the trial's yield level for all lines, pulls each line toward its Stage 3 list, takes the average miss on past nominations off the top and nominates WI3499 and WI3537, which stand 20th and 23rd once each line has its own response (it puts every line between 101.9 and 105.0, the two right lines at 104.7 and 103.2), where the index would put up WI3554 with a weak-strawed line; it files 1.6 for the move to the Series against 5.5 with 4.2 of the gap left over, ranges of plus or minus 8.6 and a lodging forecast read off each line's own trials, because it never gives each line its own response to season water, never settles season water against yield level on the series' own trials, and never carries a line's lodging to the series' pressure.",
+ "answer_shape": "bridge",
+ "weight": "attribution",
+ "chain_signature": [
+  "assembly-reconciliation",
+  "causal-reasoning",
+  "modeling",
+  "missingness-measurement",
+  "decomposition-attribution",
+  "forecasting",
+  "uncertainty",
+  "synthesis",
+  "self-verification"
+ ],
+ "results": "R1 the 24 completed nominations and the gap between the index quoted and the relative yield returned (11.4 points); R2 the index head, selection on noisy means (3.4); R3 the move to the Series, lodging apart (5.5); R4 every remaining Stage 3 line's expected lodging in the series; R5 the lodging head on the lodging recorded (2.1); R6 every remaining Stage 3 line's expected relative yield over two series seasons; R7 its 80 per cent range; R8 the two nominations; R9 the remainder the heads leave (0.4)",
+ "one_fact_test": "The most useful single sentence is 'every line has its own response to season water against the benchmark's': it rescues R7, R8 and R9, 3 of 9 results; 'weak-strawed lines lodge harder at the series' sites than at ours, and it costs them yield there' rescues R4, 1 of 9; neither gives the move as the deed splits it or the lodging head (measured by effort.py on the generator's own passes).",
+ "strategy_label": "own chain (a selection-shortfall bridge on a staged trial record)",
+ "mechanism_source": "design_note",
+ "differentiation": {},
+ "lineage": [],
+ "notes": "Axes redrawn on 2026-11-10 after main moved (task5 architecture 4 registered at 01:59Z): prompt shape 03 to 01 (the repeated unit the rubric grades is each Stage 3 candidate's row, in or out of the three nominations, with the bridge beside it), context artifact published_series to close_out_summary (the head of breeding works from the company's own season close-out and nomination dossiers; the series' published results are the realised outcomes, filed under calibration_form). Repaired in place on 2026-11-10 after the determinism judge's first pass (not deterministic on what the parts of the gap were; Gates G and H passed): the gap is now set under the four heads the option deed files for a review, the decision is the lines to be expected at the deed's standard (at most three) on world 3153 with the standard at 107.0, the own-method back-test is no longer a result, and the chain is eight results (validation left the signature). No axis of the card moved. Second repair on 2026-11-10 after the determinism judge's second pass (its thread derived its own answer before seeing the blocks; not deterministic on a second nominee 2.5 points above a bar and on the chances, Gates G and H passed): the decision is now the two lines to expect most from, the chances left the asks, tolerances were widened to what sound fits span, the remainder is counted as a result, and the chain is nine results (self-verification joined the signature). No other axis of the card moved.",
+ "registered": "2026-11-10T02:07:15Z"
 }
