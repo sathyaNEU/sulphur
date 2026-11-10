@@ -1,4 +1,4 @@
-# task6: Rotalinha's internal services over their 2026 latency error budget (architecture 7)
+# task6: Rotalinha's internal services over their 2026 latency error budget (architecture 7, levelled up)
 
 ## Draw
 
@@ -20,13 +20,21 @@ The design of architecture 6 (the single deep step it was returned for) is in gi
   connected pieces (weighting, periods, incident attribution), not one weight; trace-level weighting can stay as one
   step among several." The world keeps its people, files and sampler; the call graph, the December incidents and the
   standard's incident clause are what change.
+- **Levelled up (2026-11-09).** The shipped architecture 7 met a strong run that dated every cause right and lost
+  only on the weighting, so on the run-calibrated pass one sentence rescued three or four of six results (level 3).
+  The level-up adds a second judgment the runs miss, from the same world's process: the tracing store keeps 31 days,
+  the review pulled December's spans on 12 January, and the store had already dropped everything before 12 December
+  10:00, so a third of December's requests have no spans and still count. The backup of the shipped cut is in
+  ~/Documents/task6_arch7_backup_2026-11-09.zip.
 - **Pairing.** general-statistics-data-science / missing-data-censoring-measurement-error / descriptive-distribution.
 Analysis type: Descriptive & Distribution Analysis (where each service's December latency share really sits, once the
-sample's design weights and the incident time charged elsewhere are handled).
+sample's design weights, the December hours the sample no longer covers and the incident time charged elsewhere are
+handled).
 Answer shape: a flagged set with the evidence: the services over budget with each SLI, its interval and the December
 incidents' root causes behind it, in the order their engineers start.
 Weight: a hard-to-measure quantity: each service's share of slow requests from a whole-trace sample whose inclusion
-probability is recorded nowhere, with incident time charged to the service that owned each incident's root cause. The
+probability is recorded nowhere and which no longer covers the month's first eleven days, with incident time charged to
+the service that owned each incident's root cause. The
 last builds leaned on attribution (task13), robustness (task2) and forecasting (task12).
 - **Decision.** Which internal services ran over their 2026 latency error budget; each gets a reliability engineer
   for January to June 2027, the one whose SLI counts the most requests over its threshold first. Retrospective by
@@ -35,7 +43,8 @@ last builds leaned on attribution (task13), robustness (task2) and forecasting (
   so every internal service's kept spans carry the keep shares of the several edge services that call it, in a mix
   that differs from the traffic's; December's incidents were faults in one service's own handling that reached the
   services calling it, at the evening peaks when every service is already slower with load, and the responders named
-  the services in the order they suspected them.
+  the services in the order they suspected them; and the store keeps 31 days, so by the January pull it had dropped
+  December's quieter first eleven days, whose requests the balancer still counts.
 - **People.** Teresa Nogueira (Head of Platform Reliability), Bruno Marques (FinOps), Ivo Pereira (SRE): the
   personas drawn for architecture 5's world and kept with it.
 
@@ -43,40 +52,42 @@ last builds leaned on attribution (task13), robustness (task2) and forecasting (
 
 Task type: missing-data-censoring-measurement-error (General Statistics & Data Science), serving Descriptive &
 Distribution Analysis: a population share estimated from a sample whose inclusion probability is set by another unit
-and recorded nowhere, with part of the population left out by a filed rule whose membership has to be established.
-Domain test: the field's own estimator for a share from a stratified cluster sample with unequal, unrecorded inclusion
+and recorded nowhere, which covers only part of the population's period, with part of the population left out by a
+filed rule whose membership has to be established.
+Domain test: the field's own estimators for a share from a stratified cluster sample with unequal, unrecorded inclusion
 probabilities (Horvitz-Thompson or Hajek, each trace weighted by its root edge service's hourly keep share), the
-design-based variance of a ratio from whole-trace clusters within root-service hours, and a changepoint on load-adjusted
-residuals to date which service's own handling degraded first.
+imputation of a period the sample does not cover from an auxiliary variable it does (each service's hourly load from
+the balancer, its over-threshold share by load band on the held hours), the design-based variance of the combined
+ratio, and a changepoint on load-adjusted residuals to date which service's own handling degraded first.
 Swap: "which hospital wards ran over their waiting-time budget" breaks at once: a ward has no trace root whose keep
-share sets every other ward's inclusion, no call tree that makes one ward slow because another is, and no responders
-naming wards in the order they suspected them.
+share sets every other ward's inclusion, no call tree that makes one ward slow because another is, and no store that
+drops a month's first weeks while the census still counts them.
 Where the weight sits: the hard-to-measure quantity, every service's December SLI: the kept spans are a cluster sample
 drawn at the edge, so four internal services carry their callers' keep shares (fares, partner-gateway and notifications
-up, payments down), and the incident time PR-SLO-3 3.2 leaves out depends on a root cause no review has
-recorded yet. The work is long because each piece has its own evidence, not because one piece is clever.
-Layer 1: re-sent span rows from the exporter's retries (the same span id twice, neutral, asserted); traces begun in
-the last hour of November whose root is not in the export (any handling, same one-decimal SLIs); the balancer's target
+up, payments down); a third of December's requests have no spans at all and have to be carried in at the share their
+hour's load gives; and the incident time PR-SLO-3 3.2 leaves out depends on a root cause no review has recorded yet.
+The work is long because each piece has its own evidence, not because one piece is clever.
+Layer 1: re-sent span rows from the exporter's retries (the same span id twice, neutral, asserted); traces begun in the
+hour before the export whose root the store had dropped (any handling, same one-decimal SLIs); the balancer's target
 groups renamed on 1 July (the catalogue's crosswalk); the status page in Lisbon local time against the incident tool's
-UTC (an hour apart in summer, the same in December); the incident export's final service lists against the timeline's
-add times; 404s, 5xx and a retried partner-gateway call counting as requests. None moves a graded result except the
-incident minutes, which grade the timeline reconciliation itself.
-Not one thing: the strongest single piece is the root keep-share weighting, and a run that has it still files the
-wrong list unless the 21 and 26 December incidents are put on fares and notifications (each 0.9 against 1.3 if they go
-to journey-search and accounts); a run that dates every incident right still files places and seat-map alone on its
-own hourly counts; the intervals, the minutes and the shares each need their own work.
-One-fact test: the most useful sentence is "each December incident's cause is the named service whose own handling
-rose first, not the one furthest over its curve"; applied alone to the careful pass it rescues R2 only, 1 of 6 results
-(effort.json, measured). "Each kept span counts at its trace root's hourly keep share" rescues none: the list still
-needs the attribution.
-Not semantics: every field, unit and clause read correctly (the re-sent rows, the windows, the halves) still leaves the
-own-hour weighting at fares 0.4, partner-gateway 1.1 and notifications 0.6, and the whole-window attribution on
-seat-map, journey-search and accounts in three incidents.
-Not rule application: PR-SLO-3 files what an SLI is, which incident time leaves it and what owning a root cause means;
-no filed rule weights a span, dates a degradation, or builds an interval. Executing every filed rule with the textbook
-own-hour reweighting and the incident tool's order files places and seat-map; the estimator family the rules leave open
-(HT on the balancer's count, Hajek, the root's or the span's hour, November orphans either way) spans 0.0 at one decimal
-on every SLI (checks R7), and the onset reads over two- and four-hour leads agree (checks R7).
+UTC; the incident export's final service lists against the timeline's add times; 404s, 5xx and a retried
+partner-gateway call counting as requests. None moves a graded result except the incident minutes, which grade the
+timeline reconciliation itself.
+Not one thing: three judgments each move the list, and each alone leaves it wrong. The trace roots' weights over the
+export's hours alone give six (journey-search over at 1.3); the dropped hours filled on each service's own hourly count
+give places and seat-map; the weights and the fill with each incident on the service furthest over its curve give
+journey-search, places, seat-map and partner-gateway. The intervals, the minutes and the shares each need their own work.
+One-fact test: on the careful pass calibrated to the run record (own hourly counts, every cause dated right, the
+export's hours alone), "each kept span counts at its trace root's hourly keep share" rescues none of six results, "the
+store had dropped December's first eleven days, which still count at their load" rescues none, and the dating sentence
+rescues nothing the run did not already earn (effort.json, measured).
+Not semantics: every field, unit and clause read correctly (the re-sent rows, the windows, the halves, the zones) still
+leaves the own-hour weighting at fares 1.2, partner-gateway 1.4 and notifications 0.7 and journey-search at 1.3 on the
+export's hours.
+Not rule application: PR-SLO-3 files what an SLI is, that a request counts whether or not the store kept a span, which
+incident time leaves it and what owning a root cause means; no filed rule weights a span, says the export is short,
+fills the hours it lacks, dates a degradation or builds an interval. Executing every filed rule with the textbook
+own-hour reweighting over the export's hours files journey-search, fares, places and seat-map.
 Estimand: PR-SLO-3 3.1 (December in Lisbon time), 2.1 to 2.4 (every request a service handled, kept or not, its server
 span's duration, by the time it started, errors counting), 3.2 (incident time from when the tool added the service to
 when the status page showed every component operational, left out unless the service owned the root cause), 3.3 (a
@@ -84,55 +95,65 @@ service owns it when the failure was in its own handling, systems outside the ca
 only because a catalogue service it called slowed does not), 3.4 (a breach is the SLI over the budget), 5.2 and 5.4
 (the minutes, the halves).
 No decoy: no memo, draft or stakeholder figure; the capacity review and the app reviews are context the golden never
-reads; the closed reviews record causes only for January to November, and nothing names December's.
+reads; the closed reviews record causes only for January to November, and nothing names December's; no shipped
+sentence mentions the store's retention.
 No replay: no shipped figure is re-derived; no stated number is wrong.
-Pinned: every rival estimator on every SLI lands on the same one-decimal value (checks R7: HT, span hour, November
-orphans dropped); the trace bootstrap lands within 0.04 of the linearised interval at both ends, the effort bands carry
-both; the onset over a two- and a four-hour lead puts every incident on the same service; the verifier's own rolling-
-median onset on its own code path agrees on all seven.
-Run forecast: a run loses R3 to R6 by method shortcut (each service's own spans reweighted on its own hourly count,
-fares 0.4, partner-gateway 1.1, notifications 0.6), or keeps the weights and loses R2, R5 and R6 by stopping at the
-first story (the 21 and 26 December incidents on journey-search and accounts and the 14 December one on seat-map, each
-furthest over its curve across the incident, so fares and notifications drop to 0.9); R4 falls to a method shortcut (a
-binomial interval on the own-hour SLIs, every interval off the golden's ends); R1 to a narrow look (the export's final
-service lists read from each declaration).
-Strategy label: WORKS IN FORM (variance and inclusion that the sample's design sets, `sulfur-strategies.md`'s clean
-comparison and heterogeneity rows read as results) for the weighting, and the client's own investigation shape for
-the attribution (dating onsets to separate cause from symptom), each one result among six.
-Depth level: 5 on the client's scale. Four judgments, each with its own checkable figure: the root keep-share weighting
-(R3: fares, partner-gateway and notifications up, payments down), each December incident's cause dated by load-adjusted
-own handling time (R2: INC-1611 to fares and INC-1619 to notifications, INC-1579 to partner-gateway where nothing
-turns on it), the incident windows from when the tool added each service (R1), and the design-based interval with
-traces as units (R4). The shortcuts land on three different wrong lists: seat-map alone (unweighted, first named),
-places and seat-map (own hourly count, with either attribution), and places, seat-map and partner-gateway (root
-weights, the cause furthest over its curve).
-Lesson: an estimate from a sample drawn somewhere else must carry that sample's design throughout (weights, units of
-the interval), and an incident's cause is the earliest degradation once load is taken out, not the service the
-responders named or the one that suffered most; no build on file pairs a design-weighted share with dated causes.
+Pinned: every rival estimator on every SLI lands on the same one-decimal value (checks R7: Horvitz-Thompson, the span's
+own hour, the orphans dropped); every way of filling the dropped hours at their load that the held hours support (ten
+or twenty load bands, an isotonic share, a quadratic logit, the called services' loads beside the service's own, and
+fitting windows two or four hours clear of incidents) gives the same one-decimal SLIs; a share linear in log load is
+rejected by the held hours (curvature, chi-square on one degree of freedom) wherever it would move a cell; the matches
+that ignore load (the same weekday and hour, the hour of day, weekday or weekend by hour, a flat share) and a load model
+with hour-of-day terms are ruled out out of sample: fitted from 18 December and predicting the export's own 12 to 17
+December, the load bands' mean log error is 0.28 against 0.41 to 2.9, and summed over services they predict 0.81 of
+the over-threshold requests seen against 1.30 to 1.96; the trace bootstrap with the fill refitted lands within 0.04 of
+the linearised interval. The onset rule (one sustained changepoint, a doubling) fires on 6 per cent of placebo windows
+(each incident's window moved by whole days onto the export's quiet stretches), and every rival detector calibrated
+the same way (ten-minute medians, half-hour and hour rolling medians) names the same seven owners or sees nothing;
+the onset over a two- and a four-hour lead does too. The verifier's changepoint is the golden's rule on its own code
+path, a check of the code, not rival evidence.
+Run forecast: a strong run loses R3 to R6 by method shortcut (each service's own spans reweighted on its own hourly
+count) and by a narrow look at broad data (December read from the export's twenty days: journey-search 1.3, over), as
+the run on file did on the first; a weaker run also stops at the first story on R2 (the 14, 21 and 26 December
+incidents on seat-map, journey-search and accounts); R4 falls to a method shortcut (a binomial interval, and no
+allowance for the filled hours); R1 to a narrow look (the export's final service lists read from each declaration).
+Strategy label: WORKS IN FORM (variance and inclusion that the sample's design sets, and missingness by design, from
+`sulfur-strategies.md`'s clean comparison and heterogeneity rows read as results) for the weighting and the fill, and
+the client's own investigation shape for the attribution (dating onsets to separate cause from symptom), each one
+result among six.
+Depth level: 5 on the client's scale, measured on the run-calibrated pass. Three judgments that each move the list and
+each need estimation (the trace roots' weights, the dropped hours carried in at their load, the causes dated by own
+handling against load), a fourth with its own figure (the design-based interval with the fill's uncertainty), and five
+distinct wrong lists from five shortcuts; the largest single hint rescues none of six results.
+Lesson: an estimate from a sample drawn somewhere else, over a period it no longer covers, must carry that sample's
+design and its coverage throughout (weights, the missing period filled from what still measures it, units of the
+interval), and an incident's cause is the earliest degradation once load is taken out, not the service the responders
+named or the one that suffered most; no build on file pairs a design-weighted share with a coverage gap and dated causes.
 
 ## Results chain
 
 | ID | Result (checkable) | Area | Pinned by | Band | Hurried analyst | Depends on | Graded as |
 |---|---|---|---|---|---|---|---|
 | R1 | each service's customer-facing incident minutes in each half of 2026 | Assembly and reconciliation | PR-SLO-3 5.2 and 5.4; the timeline's add times; the status page's last operational change | exact | narrow look at broad data: the export's final service lists read from each declaration, or the tool's resolve time as the end | - | Ask 1 |
-| R2 | the service that owned the root cause of each December customer-facing incident | Investigation loops | PR-SLO-3 3.3; own handling time against a load curve on incident-free hours; the earliest held rise | exact | stopped at the first story: the service named first, or the one furthest over its curve across the whole incident (14, 21 and 26 December on seat-map, journey-search and accounts) | R1 | Component 1 |
-| R3 | every service's December latency SLI | Missingness and measurement | PR-SLO-3 2 and 3.1 to 3.2; each span at its trace root's hourly keep share; the windows R2 leaves out | exact at one decimal (every rival) | method shortcut: each service's own spans reweighted on its own hourly count | R1, R2 | Ask 2 |
-| R4 | a 90 per cent confidence interval on each over-budget service's SLI | Uncertainty | the trace store's design: strata of root service and hour, whole traces as units | the linearised and bootstrapped ends, 0.02 either side | method shortcut: a binomial interval on the kept span count, ignoring the clusters and the weights' spread | R3 | Component 2 |
-| R5 | the services over budget | Synthesis | PR-SLO-3 3.4 on R3 | exact | unfinished chain: the weighted SLIs computed with each incident on the service that suffered most, fares and notifications dropped | R3 | Recommendation |
-| R6 | the start order, each one's share of the over-threshold requests the SLIs count, the share together and the requests beyond budget | Decomposition and attribution | the SLIs' weighted numerators and counted requests | exact at the asked rounding | method shortcut: shares of the kept over-threshold spans on the own-hour weights | R3, R5 | Ask 3 |
+| R2 | the service that owned the root cause of each December customer-facing incident | Investigation loops | PR-SLO-3 3.3; own handling time against a load curve on the export's incident-free hours; the earliest held rise | exact | stopped at the first story: the service named first, or the one furthest over its curve across the whole incident (14, 21 and 26 December on seat-map, journey-search and accounts) | R1 | Component 1 |
+| R3 | every service's December latency SLI | Missingness and measurement | PR-SLO-3 2.2 (kept or not), 3.1 and 3.2; each span at its trace root's hourly keep share; the dropped hours at their load band's held share; the windows R2 leaves out | exact at one decimal (every rival fill and weight) | method shortcut (own hourly counts) and a narrow look at broad data (the export's hours read as December) | R1, R2 | Ask 2 |
+| R4 | a 90 per cent confidence interval on each over-budget service's SLI | Uncertainty | the trace store's design: strata of root service and hour, whole traces as units, each also moving the fill's band shares | the linearised and bootstrapped ends, 0.02 either side | method shortcut: a binomial interval on the kept spans, no allowance for the clusters, the weights or the filled hours | R3 | Component 4 |
+| R5 | the services over budget | Synthesis | PR-SLO-3 3.4 on R3 | exact | unfinished chain: the SLIs from the export's hours (journey-search over) or on own counts (partner-gateway and notifications within) | R3 | Recommendation |
+| R6 | the start order, each one's share of the over-threshold requests the SLIs count, the share together and the requests beyond budget | Decomposition and attribution | the SLIs' weighted and filled numerators and counted requests | exact at the asked rounding | method shortcut: shares of the kept over-threshold spans on the own-hour weights over the export's hours | R3, R5 | Ask 3 |
 
 Carry-forward: R1 stands alone (the incident records only). R2 needs only R1's windows. R4, R5 and R6 fall with R3, and
-R3 needs both the weighting and R2: no single analytical result is the only one behind them (`precut.py`'s count), and
-the largest hint rescues one result (effort.json).
+R3 needs the weighting, the fill and R2 together: no single analytical result is the only one behind them
+(`precut.py`'s count), and the largest hint rescues no result (effort.json).
 
 ## Hidden factor record
 
 | Factor | Real or constructed | Only in deciding units | Found by | Fix depth | Verdict |
 |---|---|---|---|---|---|
-| whole traces kept at the edge, a near-fixed number an hour per edge service | constructed (the world's sampler) | no: it moves all four internal services (fares, partner-gateway and notifications up, payments down) and every interval | a targeted query: each kept span's root against the balancer's hourly counts | a reweight by the root's keep share, routine once seen | keep, one result among six |
-| December faults in one service's own handling, reaching the services that call it | constructed (seven incidents in six services) | no: nine services named, faults in six, one incident on a single service | modelling: own handling time against a load curve, a changepoint per span name | modelling | keep |
+| whole traces kept at the edge, a near-fixed 60 an hour per edge service | constructed (the world's sampler) | no: it moves all four internal services (fares, partner-gateway and notifications up, payments down) and every interval | a targeted query: each kept span's root against the balancer's hourly counts | a reweight by the root's keep share, routine once seen | keep, one result among six |
+| the store's 31 days: the export begins at 12 December 10:00, a third of December's requests without spans | constructed (the store's retention and the review's pull date) | no: every service loses the same hours, and the early weeks' lighter load moves each SLI by its own load sensitivity (journey-search 1.3 to 0.9, fares, places, seat-map, partner-gateway and notifications all move a tenth or more) | one look at the export's first span; the size of the gap by the balancer's counts | modelling: each service's over-threshold share by load band on the held, incident-free hours, carried to the dropped hours, with its uncertainty in the interval | keep |
+| December faults in one service's own handling (2.6 to 3.9 times its handling time), reaching the services that call it | constructed (seven incidents in six services) | no: nine services named, faults in six, one incident on a single service | modelling: own handling time against a load curve, a changepoint per span name | modelling | keep |
 | callers' workers waiting on a slow call late in an incident, in three incidents further over their curves than the fault | constructed (five of seven incidents; ramped, uneven onsets) | no: journey-search, seat-map, booking and accounts; the larger-than-the-fault form in INC-1579 (decides no verdict), INC-1611 and INC-1619 (fares and notifications) | modelling: onset order, not size | modelling | keep |
-| evening and campaign load raising every service's handling time | constructed (the world's queueing curve) | no: every service, every day | modelling: the load curve itself | modelling | keep |
+| evening, holiday and campaign load raising every service's handling time | constructed (the world's queueing curve, the Christmas weeks, two campaign evenings) | no: every service, every day | modelling: the load curve itself | modelling | keep |
 | the exporter re-sending a batch | constructed (one batch in three hundred) | no | a query: a repeated span id | routine | keep, texture (moves nothing, checks R2) |
 
 ## Effort test
@@ -140,53 +161,51 @@ the largest hint rescues one result (effort.json).
 | Result | Quick pass | Careful but hurried | Thorough |
 |---|---|---|---|
 | R1 incident minutes by half | Missed | Right | Right |
-| R2 root cause of each December incident | Missed | Partly | Right |
+| R2 root cause of each December incident | Missed | Right | Right |
 | R3 every service's December SLI | Missed | Missed | Right |
 | R4 intervals on the over-budget SLIs | Missed | Missed | Right |
-| R5 the services over budget | Missed | Missed | Right |
+| R5 the services over budget | Missed | Partly | Right |
 | R6 start order, shares, together, beyond | Missed | Missed | Right |
-| Roughly | 0 of 6 | 1.5 of 6 | 6 of 6 |
+| Roughly | 0 of 6 | 2.5 of 6 | 6 of 6 |
 
 Measured by: .claude/skills/stumping/effort.py on generator/effort.json (each pass's methods run end to end on the cut
-pack by generator/analysis.py: quick unweighted with the first-named service at fault and the export's lists from each
-declaration; careful on each service's own hourly count with each incident on the service furthest over its load curve
-across the whole incident, binomial intervals; thorough the golden).
-Largest single hint: each December incident's cause is the named service whose own handling rose first, not the one
-furthest over its curve; rescues 1 of 6 results.
-Pair estimate: 31.3
-Routes (`effort.json` routes, the golden's other-readings table): unweighted with the first-named cause gives seat-map;
-own hourly count gives places and seat-map whichever attribution it takes; root weights with the cause furthest over
-its curve give places, seat-map and partner-gateway; only the root weights with dated causes give the five.
-AND: R3, R5 and R6 need both the weighting and R2. The weighting alone (root keep shares, each incident on the
-service furthest over its curve) leaves fares and notifications at 0.9 per cent each and three over; the dating alone
-(own hourly counts, every cause dated right) leaves fares at 0.9, partner-gateway at 1.1 and notifications at 0.8 and
-places and seat-map over. **So "each kept span counts at its trace root's hourly keep share" rescues 0 of 6 results, not
-half: R3 still misses fares and notifications, and R4 to R6 fall with R3** (effort.json, measured; judge passes 2 and 3
-each found a fresh reader overclaiming this sentence).
-Graded up: a careful run that dates the onsets on raw own handling time, with no load curve, would earn R2 (judge pass
-3); the careful pass is then 2 of 6 and its rubric score 37.3, still under 50, because the list still needs the
-weighting.
+pack by generator/analysis.py: quick unweighted with the first-named service at fault, the export's hours alone and the
+export's lists from each declaration; careful calibrated to the run record, each service's own hourly count with every
+cause dated right, the export's hours read as December and binomial intervals; thorough the golden).
+Largest single hint: each kept span counts at its trace root's hourly keep share; rescues 0 of 6 results.
+Pair estimate: 44.3
+Routes (`effort.json` routes, the golden's other-readings table): unweighted, first named, export's hours: seat-map;
+own counts, dated, export's hours (the run on file): journey-search, fares, places and seat-map; root weights, dated,
+export's hours: those four with partner-gateway and notifications; own counts, dated, dropped hours filled: places and
+seat-map; root weights, whole-window causes, filled: journey-search, places, seat-map and partner-gateway; only the
+root weights with dated causes and the filled hours give the five.
+AND: R3, R5 and R6 need the weighting, the fill and R2 together; each sentence alone leaves the list wrong in a
+different way, so none rescues a result on the run-calibrated pass (judge passes 2 to 4 each found a fresh reader
+overclaiming the weighting sentence on the earlier cut; on this one it moves the list and still leaves journey-search
+over).
 
 ## Data provenance
 
 Source: generated by task6/generator from a simulated platform (seed 2711): hourly traffic for six edge services, the
-calls each request makes to four internal services, queueing latency under load, an edge sampler keeping about 24 whole
-traces an hour per edge service, and December's incidents as faults in one service's handling.
+calls each request makes to four internal services, queueing latency under load, an edge sampler keeping about 60 whole
+traces an hour per edge service, a tracing store that keeps 31 days, and December's incidents as faults in one
+service's handling.
 Behaves like the real thing: latencies are log-normal with a queueing curve in each service's hourly load, as service
-latency is; the sampler is head-based and per trace at the edge, as OpenTelemetry's rate-limiting samplers are; callers
-inherit their callees' slowness and queue behind them late in an incident, as thread-pool services do; responders name
-the paging service first and add the cause as they find it, as the closed reviews show (the first-named service owned
-the cause in a minority of them).
-Genuine patterns: (1) diurnal peaks per service and a weekend dip (2) December seasonality with three campaign evenings
-and the Christmas weeks (3) queueing under load, steepest for partner-gateway and seat-map (4) per-operation latency
-that differs by caller (5) incidents that start before they are declared and end after mitigation (6) a retried
-partner-gateway 5xx.
-Problems by process: the exporter re-sends a batch (repeated span ids); traces begun in November leave orphan spans in
-December's export; the balancer renamed its target groups on 1 July; the status page writes Lisbon local time and the
-incident tool UTC; the tool's export carries each incident's final service list while the timeline dates each addition;
-December's reviews were still open on the export date.
-Breadth: ten services, 744 hours, about 450,000 spans across 107,000 traces, 44,160 hourly balancer rows, 85 incidents
-with 581 timeline events and 41 status posts, so choosing what to read and at what grain is work.
+latency is; the sampler is head-based and per trace at the edge, as OpenTelemetry's rate-limiting samplers are; the
+store deletes whole hours past its retention, as block-based trace stores do, so a pull in January no longer holds
+early December; callers inherit their callees' slowness and queue behind them late in an incident, as thread-pool
+services do; responders name the paging service first and add the cause as they find it, as the closed reviews show.
+Genuine patterns: (1) diurnal peaks per service and a weekend dip (2) December seasonality: a quiet first fortnight,
+the Christmas weeks and two campaign evenings (16 and 28 December) (3) queueing under load, steepest for partner-gateway
+(4) per-operation latency that differs by caller (5) incidents that start before they are declared and end after
+mitigation (6) a retried partner-gateway 5xx.
+Problems by process: the exporter re-sends a batch (repeated span ids); the store's retention leaves the export
+starting at 12 December 10:00, with orphan spans of traces begun in the hour before; the balancer renamed its target
+groups on 1 July; the status page writes Lisbon local time and the incident tool UTC; the tool's export carries each
+incident's final service list while the timeline dates each addition; December's reviews were still open on the export
+date.
+Breadth: ten services, 744 December hours (470 of them in the export), 723,170 span rows across 174,121 traces, 44,160 hourly balancer
+rows, 85 incidents with 581 timeline events and 41 status posts, so choosing what to read and at what grain is work.
 
 ## Template check
 
@@ -211,23 +230,27 @@ dated causes.
 | SF7 | which window a request belongs to | its start or its end | its start | PR-SLO-3 2.4 |
 | SF8 | the weighting base | the balancer's count, or the weighted kept count | either | same call (checks R7) |
 | SF9 | the root's hour or the span's own hour | either | either | same call (checks R7) |
-| SF10 | spans of traces begun in November | weighted on their own hour, or dropped | either | same call (checks R7) |
+| SF10 | spans of traces begun before the export (their root dropped) | weighted on their own hour, or dropped | either | same call (checks R7) |
 | SF11 | when a named service's window starts | the declaration, or the timeline's add time | the add time | PR-SLO-3 3.2; the SLIs are the same either way (checks R2) |
 | SF12 | when an incident ends | the tool's resolve time, or the status page's last operational change | the status page | PR-SLO-3 3.2 and 5.2 |
 | SF13 | a December incident with no status post | left out or not | nothing left out | PR-SLO-3 5.2 (customer-facing means posted) |
 | SF14 | the onset's lead window | two to four hours before the declaration | every lead gives the same causes | same call (checks R7) |
 | SF15 | the shares' base | all ten SLIs' counted over-threshold requests | that | the prompt ("all our services' SLIs count") |
 | SF16 | the interval's method | linearised or a trace bootstrap | either, within the band | same call (checks R7, the effort band) |
+| SF20 | December's hours before the export's first span | left out (the export as December), or counted | counted, each service's requests at the over-threshold share its held, incident-free hours show at the same load | PR-SLO-3 2.2 ("whether or not the tracing store kept a span for it") and 3.1 (December); checks R3 and R5 |
+| SF21 | how the dropped hours are filled | ten or twenty load bands, an isotonic share, a quadratic logit, the called services' loads beside the service's own, fitting windows two or four hours clear of incidents; or a match that ignores load, or load with the hour of day | ten load bands | the load forms: same call (checks R7); a share linear in log load: rejected by the held hours' curvature; the load-free matches and the hour-adjusted model: ruled out by the backtest on the export's own 12 to 17 December (checks R7) |
+| SF23 | how an onset is dated | the golden's sustained changepoint, ten-minute medians, rolling medians, a CUSUM | the sustained changepoint at a doubling | every detector calibrated on placebo windows to one false alarm in fourteen names the same owners or abstains (checks R7); uncalibrated detectors fire on 15 to 98 per cent of placebo windows |
+| SF22 | where the export begins | the first span's hour | 12 December 10:00, a whole hour | checks R4 |
 | SF19 | an onset's clock time | the changepoint's minute, an "about" time, or none | none in the answer blocks: they grade the owner and the order of each pair of rises; the review's "about" times grade nothing | the verifier's rolling median dates every onset 15 to 55 minutes earlier with the same owner and order (verify.py; checks SF19 keeps the order at five minutes) |
 
 ## Closure table
 
 | # | Axis | Reading | Move |
 |---|---|---|---|
-| 1 | Population | every request each service handled in December, kept or not, incident time left out per 3.2 | filed 2.2, 3.2 |
+| 1 | Population | every request each service handled in December, kept or not (the dropped hours included), incident time left out per 3.2 | filed 2.2, 3.1, 3.2 (SF20) |
 | 2 | Unit of account | the request (a server span when kept) | filed 2.1 and 2.3 |
 | 3 | Attribution window | the time a request began | filed 2.4 (SF7) |
-| 4 | As-of dating | the export of 1 January 2027; reviews open then | one export, C1 |
+| 4 | As-of dating | the span export pulled on 12 January 2027 (holding from 12 December 10:00); reviews open then | one export, C1 (SF22) |
 | 5 | Version basis | one export, no revisions | C1 |
 | 6 | Denominator | the requests a service handled less those left out | filed 2.2 and 3.2; SF8 corridor |
 | 7 | Weighting | each span at its trace root's hourly keep share | the sample's design (R3); rivals same (SF8 to SF10) |
@@ -235,8 +258,8 @@ dated causes.
 | 9 | Boundary inclusivity | strictly over the threshold | filed 2.1 (SF2) |
 | 10 | Rounding path | SLIs to one decimal and compared as rounded; intervals two decimals; shares whole; the rest once at the end | prompt; checks M1 |
 | 11 | Tie-break | none needed: the order's neighbours differ by more than a tenth | checks M3 |
-| 12 | Maturity and censoring | the month is closed; December's reviews open, so causes are dated from the data | C1; filed 3.3 |
-| 13 | Order of operations | dedupe, link roots, weight, leave out, sum | C1 |
+| 12 | Maturity and censoring | the month is closed; December's reviews open, so causes are dated from the data; the hours the store dropped are filled at their load | C1; filed 3.3; SF20 and SF21 |
+| 13 | Order of operations | dedupe, link roots, weight, leave out, fill the dropped hours, sum | C1 |
 | 14 | Row order | export order | C1 |
 | 15 | Duplicate resolution | a re-sent span once | SF3 |
 | 16 | Identity normalisation | tracing names and target groups through the catalogue | the catalogue's crosswalk |
@@ -249,10 +272,12 @@ dated causes.
 
 ## Literal reader
 
-PR-SLO-3 2.1 to 2.4, 3.1 to 3.4 and 5.2 executed word for word give the golden's population, windows and verdict rule;
-3.3 read literally puts each December incident on the service whose own handling failed, and the data date that
-failure (no shipped sentence names a December cause). The prompt's "counting it from when the incident tool added it"
-executes to the timeline's add times; "all our services' SLIs count" executes to the shares' base.
+PR-SLO-3 2.1 to 2.4, 3.1 to 3.4 and 5.2 executed word for word give the golden's population, windows and verdict rule:
+2.2's "whether or not the tracing store kept a span for it" with 3.1's December puts the hours before the export's
+first span inside every SLI; 3.3 read literally puts each December incident on the service whose own handling failed,
+and the data date that failure (no shipped sentence names a December cause or the store's retention). The prompt's
+"counting it from when the incident tool added it" executes to the timeline's add times; "all our services' SLIs
+count" executes to the shares' base.
 
 ## Prompt contract
 
@@ -289,22 +314,27 @@ sampling, onsets, load, self time), a warning, an attached file's name, a role, 
 
 ## Pre-ship check
 
-- Hidden factor record against the cut data: the edge sampler's near-fixed hourly trace count shows for every edge
-  service in every hour, and the callers' mix moves every internal service's weighted SLI (payments down as well as
-  three up), so the weighting is no factor placed where it decides; the onset dating runs on every service each December
-  incident named; it decides INC-1611 (fares) and INC-1619 (notifications) and misreads INC-1579 for the hurried
-  pass where nothing turns on it, so the pattern is not placed only where it decides.
-- Margins: the over-budget intervals' lower ends sit at 1.15 (fares), 1.14 (notifications), 2.08 (partner-gateway),
-  1.56 (places) and 1.77 (seat-map) against budgets of 1.0, 1.0, 2.0, 1.0 and 1.0; the hurried routes sit at 0.9 or
-  under for fares and notifications.
-- Effort test against `effort.py` on the final cut: quick 7.0, careful but hurried 31.3, thorough 100; the largest hint
-  rescues 1 of 6; three distinct wrong lists over four shortcuts.
-- Judges (2026-11-09): pass 2 APPROVE on the cut before the incidents were reshaped; pass 3 DETERMINISTIC with a
-  minor SOLUTION_WRONG (the own-count contrast changed two things at once), fixed by stating it with the golden's
-  exclusions; pass 4 DETERMINISTIC, APPROVE, every graded figure and the restated contrast reproduced from the raw files.
-- Gates on the final cut (`gates.py task6 --full`): every gate green except `guard.py heart`, which BLOCKs on
-  ban.pairing against task2 v5. The pairing is the returned platform task's own subdomain and analysis type, which a
-  re-ship cannot change; the author accepted it for this re-ship on 2026-11-09.
+- Hidden factor record against the cut data: the edge sampler's hourly trace count shows for every edge service in
+  every held hour, and the callers' mix moves every internal service's SLI; the export's first span is at 12 December
+  10:00 for every service, and filling the dropped hours moves six or more one-decimal SLIs, the deciding one among
+  them (checks R5); the onset dating runs on every service each December incident named.
+- Effort test against `effort.py` on the final cut, the careful pass calibrated to the run on file: quick 7.0, careful
+  but hurried 44.3, thorough 100; the largest hint rescues 0 of 6; five distinct wrong lists over five shortcuts.
+- Rivals (checks R7): every weight base, every fill form the held hours support and both fitting windows give the same
+  one-decimal SLIs; the linear-in-log-load fill is rejected by curvature; the bootstrap with the fill refitted agrees
+  with the linearised interval within 0.04. The independent verifier reproduces every figure on its own code path.
+- Leak reader (2026-11-09, on the levelled-up cut): no sentence hands over a step, no ranking, helping or answer file, no
+  one thing; it read the export's gap as a tracing rollout that adds work. Its one realism note (the span export's
+  Parquet footer named no writer) is fixed: the footer names the store's own Go writer.
+- Judge pass 5 (2026-11-09, on the levelled-up cut before the onset rule was calibrated): DETERMINISTIC, every
+  load-bearing figure reproduced, no competing answer, every spec gate passed; SEND_BACK on Gate H, estimating that a
+  careful run earns the weighting on sight (the internal services never root a trace) and reading INC-1611 and
+  INC-1619 as one flip applied twice. The first estimate runs against the run on file, which saw the trace structure
+  (it dated causes by parent and child timing) and still weighted per service-hour; the careful column here is that run.
+  The second is right that the two incidents share one judgment, which is R2's own; the list rests on R2 beside the
+  weighting and the dropped days, each measured alone at no rescued result.
+- Gates on the final cut: `guard.py heart` BLOCKs on ban.pairing against task2 v5, accepted by the author for this
+  re-ship on 2026-11-09 (the returned platform task's own subdomain and analysis type).
 
 ## Tried and rejected
 
@@ -411,3 +441,21 @@ sampling, onsets, load, self time), a warning, an attached file's name, a role, 
   constructed factor deciding one service) in the attribution leg; rebuilt with the same pattern in INC-1611 (deciding
   fares) and INC-1579 (deciding nothing), every slowdown ramped from uneven times, and three faults strengthened so the
   over-budget intervals clear their budgets by 0.08 or more.
+- **The shipped architecture 7 against the strong run, measured on 2026-11-09:** a run dated every cause right and lost
+  only on the weighting; with the careful pass calibrated to it, the weighting sentence rescued three or four of six
+  results (level 3). Levelled up with the store's retention (the dropped first eleven days of December, filled at their
+  load), which the run's own habits do not catch; the cut is backed up in ~/Documents.
+- **Early-December campaigns at saturation (3 and 10 December), rejected while levelling up:** they drove
+  partner-gateway past anything the held days show, so every fill extrapolated and the forms disagreed by up to 0.27
+  (journey-search 0.63 to 0.90); the first fortnight is now ordinary trading, as the calendar has it.
+- **A New Year sale from 11:00, rejected:** its midday hours saturated seat-map and bent its load curve, losing
+  INC-1570's onset; the sale runs on the evening only.
+- **24 kept traces an hour, rejected:** the held hours' over-threshold counts were too sparse for the fill forms to
+  agree at one decimal (places 1.36 to 1.47); 60 an hour.
+- **The getaway push on the evening of 17 December, moved to the 16th:** it ran under INC-1594 and its load bent
+  notifications' curve, so a rolling-median dating flagged a false rise; the verifier now dates by its own changepoint.
+- **The onset rule at 1.4 times on any split, rejected:** it fired on 37 per cent of placebo windows, a last few noisy
+  spans passing for a rise; now one sustained changepoint (half an hour and twenty spans each side) at a doubling, 6 per
+  cent, and the four faults at 1.6 to 1.8 times that sat under the quiet days' floor are 2.6 to 2.8 times.
+- **The verifier's rolling median as the check of the owners, rejected:** it was rival evidence (no window got both
+  deciding incidents right uncalibrated); the rival detectors now sit in checks R7, calibrated on placebo windows.

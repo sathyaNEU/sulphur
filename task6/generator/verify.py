@@ -146,12 +146,21 @@ def run(task_dir):
                 if len(w) < 24:
                     continue
                 res = w["lo"].values - np.polyval(cf, np.log(np.array([N[(s, h)] for h in w["h"]]) + 1))
-                roll = pd.Series(res).rolling(12).median().values
-                for j in range(11, len(res) - 12):
-                    if roll[j] > np.log(1.4) and np.nanmin(roll[j:j + 12]) > np.log(1.25):
-                        tt = w["t"].values[j - 11]
-                        best = tt if best is None else min(best, tt)
-                        break
+                # one changepoint: the split of the time-ordered residuals that best separates two means, kept when the
+                # later mean sits 1.4 times above the earlier and 1.3 times above the load curve
+                n_ = len(res)
+                tv = w["t"].values
+                if n_ >= 40:
+                    c_ = np.concatenate([[0.0], np.cumsum(res)])
+                    ks_ = np.arange(20, n_ - 19)
+                    ks_ = ks_[(tv[-1] - tv[np.minimum(ks_, n_ - 1)]) >= 1800]
+                    if len(ks_):
+                        m1_ = c_[ks_] / ks_
+                        m2_ = (c_[-1] - c_[ks_]) / (n_ - ks_)
+                        j_ = int(np.argmax(ks_ * (n_ - ks_) / n_ * (m2_ - m1_) ** 2))
+                        if m2_[j_] - m1_[j_] >= np.log(2.0) and m2_[j_] >= np.log(1.75):
+                            tt = tv[ks_[j_]]
+                            best = tt if best is None else min(best, tt)
             if best is not None:
                 firsts[s] = best
         cause[x["id"]] = min(firsts, key=firsts.get) if firsts else None
@@ -169,6 +178,33 @@ def run(task_dir):
     k = dec[keep]
     num = (k["w"] * k["slow"]).groupby(k["svc"]).sum()
     den = k.groupby("svc")["w"].sum()
+    # December's hours before the export's first span: each service's requests there at the share over threshold its
+    # held, incident-free hours show in the same tenth of hourly load
+    cut = int(np.floor(dec["t"].min() / 3600))
+    quiet = np.ones(H, dtype=bool)
+    for x in decinc:
+        a_ = int((x["declared"] - DEC0).total_seconds() // 3600) - 3
+        b_ = int((x["end"] - DEC0).total_seconds() // 3600) + 1
+        quiet[max(0, a_):min(H, b_ + 1)] = False
+    hourly = k.assign(o=k["w"] * k["slow"]).groupby(["svc", "h"]).agg(o=("o", "sum"), c=("w", "sum"))
+    terms = {}
+    for s in svcs:
+        n_s = np.array([N.get((s, h_), 0.0) for h_ in range(H)])
+        x_s = np.log(n_s + 1)
+        O = np.zeros(H); C = np.zeros(H)
+        if s in hourly.index.get_level_values(0):
+            hs = hourly.loc[s]
+            O[hs.index.values] = hs["o"].values; C[hs.index.values] = hs["c"].values
+        fit = (np.arange(H) >= cut) & quiet & (C > 0)
+        edges = np.quantile(x_s[fit], np.linspace(0, 1, 11))
+        band = np.clip(np.searchsorted(edges, x_s, side="right") - 1, 0, 9)
+        gone = np.arange(H) < cut
+        pb = np.array([O[fit & (band == j)].sum() / max(C[fit & (band == j)].sum(), 1e-9) for j in range(10)])
+        Mb = np.array([n_s[gone & (band == j)].sum() for j in range(10)])
+        Cb = np.array([C[fit & (band == j)].sum() for j in range(10)])
+        num[s] = num[s] + float((Mb * pb).sum())
+        den[s] = den[s] + float(Mb.sum())
+        terms[s] = (pb[band], (Mb / np.maximum(Cb, 1e-9))[band], fit, float(Mb.sum()))
     sli = 100 * num / den
     for s in svcs:
         if "%.1f" % half_up(sli[s], "0.1") != F["sli"][s]:
@@ -189,9 +225,12 @@ def run(task_dir):
     for s in over:
         R = sli[s] / 100
         ks = k[k["svc"] == s].copy()
-        ks["z"] = ks["slow"].astype(float) - R
+        ph, Ah, fit, M = terms[s]
+        sl = ks["slow"].astype(float).values
+        hh = ks["h"].values
+        ks["z"] = (sl - R) + np.where(fit[hh], Ah[hh] * (sl - ph[hh]), 0.0)
         zt = ks.groupby("trace_id")["z"].sum()
-        X = ks["w"].sum()
+        X = ks["w"].sum() + M
         rr = roots[["trace_id", "svc", "h"]].copy()
         rr["z"] = rr["trace_id"].map(zt).fillna(0.0)
         rr["n"] = rr.groupby(["svc", "h"])["trace_id"].transform("size")
@@ -206,7 +245,7 @@ def run(task_dir):
             V += (1 - f) * n / (n - 1) * ((g["u"] - g["u"].mean()) ** 2).sum()
         orph = ks[ks["rsvc"].isna()]
         if len(orph) > 1:
-            u = orph["w"] * (orph["slow"].astype(float) - R) / X
+            u = orph["w"] * orph["z"] / X
             V += len(u) / (len(u) - 1) * ((u - u.mean()) ** 2).sum()
         se = 100 * np.sqrt(V)
         lo, hi = half_up(sli[s] - 1.6448536269514722 * se, "0.01"), half_up(sli[s] + 1.6448536269514722 * se, "0.01")

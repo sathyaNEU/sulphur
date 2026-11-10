@@ -12,8 +12,11 @@ TZ_NOTE = "Lisbon"                  # December is WET, UTC+0; summer is WEST, UT
 # the review period: December 2026 in Lisbon time (UTC+0 all month)
 REVIEW_START = dt.datetime(2026, 12, 1, 0, 0)
 REVIEW_HOURS = 31 * 24
+# the tracing store keeps 31 days, deleting whole hours; the review pulled its December spans on 12 January 2027 at
+# 10:00 UTC, by when everything that started before 12 December 10:00 had gone
+STORE_FROM_H = 11 * 24 + 10
 ASSEMBLED = dt.datetime(2027, 1, 6, 9, 30)          # the pack's file times
-TARGET_PER_HOUR = 24                                # the sampler's server spans per service per hour
+TARGET_PER_HOUR = 60                                # the sampler's server spans per service per hour
 
 # service, team, tier, tracing name, LB target group (Jul-Dec), LB target group (Jan-Jun), status page component,
 # cost tag (current), cost tag (before 1 April), threshold ms, budget %
@@ -68,9 +71,9 @@ TRAFFIC = {
     "accounts": (7000, [(9, 3, 0.8), (20, 3, 1.0)], 0, []),
     "tickets": (1300, [(8, 2, 1.0), (17, 3, 0.7)], 0, [(20, 6, 11, 1.7), (21, 6, 11, 1.8), (22, 6, 11, 1.6)]),
 }
-# the December campaigns (day index from 1 December, from hour, to hour, factor): the Cyber Week email on 3 December,
-# the ferry sale on 10 December, the Christmas getaway push on 17 December
-CAMPAIGNS = [(2, 19, 23, 1.9), (9, 12, 15, 1.7), (16, 20, 23, 1.8)]
+# the December campaigns (day index from 1 December, from hour, to hour, factor): the Christmas getaway push on the
+# evening of 16 December, the New Year sale on the evening of 28 December
+CAMPAIGNS = [(15, 20, 23, 1.8), (27, 19, 23, 1.75)]
 SEASON = {d: 1.35 for d in range(17, 23)}            # 18 to 23 December
 SEASON.update({d: 1.25 for d in range(25, 30)})      # 26 to 30 December
 
@@ -92,21 +95,21 @@ CAP = {"journey-search": 40000, "places": 88000, "seat-map": 9800, "booking": 60
        "tickets": 7000, "fares": 90000, "partner-gateway": 70000, "payments": 5000, "notifications": 9000}
 LAT = {
     ("journey-search", "own"): (110.0, 0.20, 0.45, None),
-    ("places", "own"): (None, 0.24, 0.56, 1.52),
-    ("seat-map", "own"): (None, 0.32, 0.44, 1.86),
-    ("booking", "own"): (None, 0.10, 0.40, 0.28),
-    ("accounts", "own"): (None, 0.08, 0.50, 1.30),
-    ("tickets", "own"): (None, 0.04, 0.45, 0.68),
-    ("fares", "batch"): (None, 0.05, 0.45, 0.85),
+    ("places", "own"): (None, 0.12, 0.56, 1.326),
+    ("seat-map", "own"): (None, 0.16, 0.44, 1.661),
+    ("booking", "own"): (None, 0.10, 0.40, 0.332),
+    ("accounts", "own"): (None, 0.08, 0.50, 1.2408),
+    ("tickets", "own"): (None, 0.04, 0.45, 0.6931),
+    ("fares", "batch"): (None, 0.05, 0.45, 0.8242),
     ("fares", "quote"): (None, 0.05, 0.40, 0.10),
-    ("partner-gateway", "availability"): (None, 0.45, 0.40, 2.05),
+    ("partner-gateway", "availability"): (None, 0.38, 0.40, 2.205),
     ("partner-gateway", "seats"): (85.0, 0.10, 0.35, None),
     ("partner-gateway", "reserve"): (None, 0.20, 0.45, 0.60),
-    ("partner-gateway", "ticket"): (None, 0.12, 0.42, 0.50),
-    ("payments", "authorise"): (None, 0.06, 0.38, 0.45),
+    ("partner-gateway", "ticket"): (None, 0.04, 0.42, 0.50),
+    ("payments", "authorise"): (None, 0.06, 0.38, 0.4584),
     ("payments", "wallet"): (45.0, 0.04, 0.35, None),
     ("notifications", "email"): (None, 0.02, 0.55, 0.30),
-    ("notifications", "verify"): (None, 0.03, 0.45, 0.90),
+    ("notifications", "verify"): (None, 0.03, 0.45, 0.9315),
     ("notifications", "resend"): (None, 0.02, 0.50, 0.50),
 }
 ERR = {"journey-search": 0.002, "places": 0.001, "seat-map": 0.002, "booking": 0.003, "accounts": 0.002,
@@ -122,12 +125,12 @@ RHO_MAX = 0.93
 # its components from `posted` to `operational`. Times are December day, hour, minute (UTC, which is Lisbon time in
 # December); `named` and `declared` carry seconds. Post-incident reviews for December were still open at the review.
 DEC_INCIDENTS = [
-    {"id": "I2", "fault": "seat-map", "ops": [("seat-map", "own")], "mult": 1.6, "ramp": (6, 3),
-     "onset": (8, 12, 8), "end": (8, 13, 41), "block": [],
-     "declared": (8, 12, 24, 5), "named": [("partner-gateway", (8, 12, 24, 5)), ("seat-map", (8, 12, 47, 31))],
-     "posts": [("Booking and payments", (8, 12, 29), (8, 13, 49))], "sev": "SEV3"},
-    {"id": "I6", "fault": "partner-gateway", "ops": [("partner-gateway", "seats")], "mult": 1.8, "ramp": (5, 2),
-     "onset": (14, 12, 13), "end": (14, 13, 32), "block": [("seat-map", 3.9, (14, 12, 44), 7)],
+    {"id": "I2", "fault": "seat-map", "ops": [("seat-map", "own")], "mult": 2.8, "ramp": (6, 3),
+     "onset": (13, 12, 8), "end": (13, 13, 41), "block": [],
+     "declared": (13, 12, 24, 5), "named": [("partner-gateway", (13, 12, 24, 5)), ("seat-map", (13, 12, 47, 31))],
+     "posts": [("Booking and payments", (13, 12, 29), (13, 13, 49))], "sev": "SEV3"},
+    {"id": "I6", "fault": "partner-gateway", "ops": [("partner-gateway", "seats")], "mult": 2.6, "ramp": (5, 2),
+     "onset": (14, 12, 13), "end": (14, 13, 32), "block": [("seat-map", 4.6, (14, 12, 44), 7)],
      "declared": (14, 12, 31, 48), "named": [("seat-map", (14, 12, 31, 48)), ("partner-gateway", (14, 12, 58, 2))],
      "posts": [("Booking and payments", (14, 12, 35), (14, 13, 40))], "sev": "SEV3"},
     {"id": "I1", "fault": "partner-gateway", "ops": [("partner-gateway", "availability")], "mult": 3.7, "ramp": (9, 3),
@@ -135,7 +138,7 @@ DEC_INCIDENTS = [
      "declared": (15, 19, 41, 14), "named": [("journey-search", (15, 19, 41, 14)), ("partner-gateway", (15, 20, 6, 40)),
                                             ("fares", (15, 20, 21, 9))],
      "posts": [("Search", (15, 19, 45), (16, 0, 3))], "sev": "SEV2"},
-    {"id": "I3", "fault": "payments", "ops": [("payments", "authorise")], "mult": 1.8, "ramp": (7, 2),
+    {"id": "I3", "fault": "payments", "ops": [("payments", "authorise")], "mult": 2.6, "ramp": (7, 2),
      "onset": (17, 20, 33), "end": (17, 22, 6), "block": [("booking", 1.2, (17, 21, 13), 9)],
      "declared": (17, 20, 49, 22), "named": [("booking", (17, 20, 49, 22)), ("payments", (17, 21, 8, 9)),
                                             ("notifications", (17, 21, 20, 44))],
@@ -151,7 +154,7 @@ DEC_INCIDENTS = [
      "declared": (26, 18, 1, 51), "named": [("accounts", (26, 18, 1, 51)), ("notifications", (26, 18, 29, 26)),
                                            ("payments", (26, 18, 42, 10))],
      "posts": [("Sign-in and accounts", (26, 18, 5), (26, 22, 39))], "sev": "SEV2"},
-    {"id": "I7", "fault": "places", "ops": [("places", "own")], "mult": 1.8, "ramp": (4, 2),
+    {"id": "I7", "fault": "places", "ops": [("places", "own")], "mult": 2.6, "ramp": (4, 2),
      "onset": (29, 10, 4), "end": (29, 11, 21), "block": [],
      "declared": (29, 10, 12, 40), "named": [("places", (29, 10, 12, 40))],
      "posts": [("Search", (29, 10, 16), (29, 11, 27))], "sev": "SEV3"},

@@ -52,7 +52,7 @@ def write_slo(path):
 
     _p(doc, "3  The annual review", bold=True, size=12)
     _p(doc, "3.1  The annual review reads each service's latency SLI over December, in Lisbon time: the month of the "
-            "heaviest traffic, and the 31 days the tracing store holds on the review date.")
+            "heaviest traffic.")
     _p(doc, "3.2  Requests a service handled while a customer-facing incident (5.2) named it, from the moment the "
             "incident tool added the service until the status page showed every component the incident affected "
             "operational again, are left out of the service's latency SLI for the review, unless the service owned "

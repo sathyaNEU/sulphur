@@ -11,7 +11,7 @@
   "shape": "14",
   "decision_type": "designation_set",
   "answer_unit": "set_of_items",
-  "answer": "Put reliability engineers on places, partner-gateway, fares, seat-map, notifications, in that order: the five ran over their 2026 latency error budgets",
+  "answer": "Put reliability engineers on partner-gateway, places, fares, seat-map and notifications, in that order: the five ran over their 2026 latency error budgets",
   "answer_source": "task6/submission.md, Final Recommendation",
   "gap": [
     "population",
@@ -33,7 +33,7 @@
   "validated_decoy": false,
   "context_artifact": "monitoring_export",
   "stump_class": "analytical",
-  "analyst_test": "A careful run reweights each service's own kept spans hour by hour on its own load balancer count (fares 0.4, partner-gateway 1.1, notifications 0.6) and puts each December incident on the named service furthest over its load curve across the incident (journey-search on 21 December, accounts on 26 December, seat-map on 14 December; fares and notifications 0.9 each): it files places and seat-map, or with the root weights places, seat-map and partner-gateway.",
+  "analyst_test": "A careful run, as the run on file did, reweights each service's own kept spans hour by hour on its own load balancer count over the hours the trace export holds and dates every December cause right: fares 1.2, partner-gateway 1.4, notifications 0.7 and journey-search 1.3, so it files journey-search, fares, places and seat-map. The export begins at 12 December 10:00 (the store keeps 31 days), so a third of December's requests have no spans and still count; with the trace roots' weights alone it files six, with the dropped hours filled alone places and seat-map.",
   "domain_test": "The field's own estimation from a cluster sample with unequal, unrecorded inclusion probabilities (each trace's root edge service and hour), cause against symptom in a call tree separated from load, and intervals that match the design; with a hospital's nouns the trace root, the keep share and the call tree have no meaning.",
   "layer2_family": "estimation_fit",
   "layer2_pattern": "own:cluster-sample-shares-weighted-by-trace-root-with-incident-time-charged-to-the-faulting-service",
@@ -51,7 +51,7 @@
   "scoring_unit": "other",
   "spine": {
     "file": "trace_spans_2026-12.parquet",
-    "rows": 458192,
+    "rows": 723170,
     "entity": "one span the trace store kept: a request an edge service handled or a call inside the trace it started",
     "grain": "span",
     "source": "synthetic (the tracing store's span export for December 2026)"
@@ -76,9 +76,9 @@
   ],
   "opening_move": "question-first",
   "question_form": "which",
-  "driver": "Several unit-level rates are estimated from a cluster sample whose inclusion probability is set by the stratum each cluster starts in, events are attributed to the unit whose own processing degraded first against its load-matched norm rather than to the first unit reported, the event time is removed only from the units that suffered it, and the intervals carry the clusters and the unequal weights, so the units over their limits need the weighting and the attribution together.",
-  "driver_concrete": "Each Rotalinha service's December latency SLI is estimated from the trace store's whole-trace edge sample with each kept span weighted by its root edge service's hourly keep share; each December customer-facing incident is put on the service whose own handling slowed first against its load-matched norm, not the service the responders named first; a service's incident time leaves its SLI only where another service was at fault; fares and notifications run over only when the weights and the attribution are both right, partner-gateway only with the weights.",
-  "stump": "A careful run reweights each service's own kept spans hour by hour on its own load balancer count (fares 0.4, partner-gateway 1.1, notifications 0.6) and puts each December incident on the named service furthest over its load curve across the incident (journey-search on 21 December, accounts on 26 December, seat-map on 14 December; fares and notifications 0.9 each): it files places and seat-map, or with the root weights places, seat-map and partner-gateway.",
+  "driver": "Several unit-level rates are estimated from a cluster sample whose inclusion probability is set by the stratum each cluster starts in and which no longer covers the period's first third, so the uncovered period is carried in at the rate its load gives; events are attributed to the unit whose own processing degraded first against its load-matched norm; the event time is removed only from the units that suffered it; and the intervals carry the clusters, the unequal weights and the carried-in period, so the units over their limits need the weighting, the coverage and the attribution together.",
+  "driver_concrete": "Each Rotalinha service's December latency SLI is estimated from the trace store's whole-trace edge sample with each kept span weighted by its root edge service's hourly keep share; the store had dropped December before 12 December 10:00, so those hours' requests are counted at the over-threshold share each service's held, incident-free hours show at the same load; each December customer-facing incident is put on the service whose own handling slowed first against its load-matched norm; journey-search is within budget only with the dropped hours counted, partner-gateway only with the weights, fares and notifications only with the weights and the dated causes.",
+  "stump": "A careful run, as the run on file did, reweights each service's own kept spans hour by hour on its own load balancer count over the hours the trace export holds and dates every December cause right: fares 1.2, partner-gateway 1.4, notifications 0.7 and journey-search 1.3, so it files journey-search, fares, places and seat-map. The export begins at 12 December 10:00 (the store keeps 31 days), so a third of December's requests have no spans and still count; with the trace roots' weights alone it files six, with the dropped hours filled alone places and seat-map.",
   "mechanism_source": "design_note",
   "differentiation": {
     "mark245": "mark245 rebuilds whole recording periods a failing recorder lost, from each period's driver; here no hour is lost: the store keeps whole traces at a rate each edge service resets hourly, and a span's weight comes from the edge request that started its trace.",
@@ -282,7 +282,7 @@
     "synthesis",
     "decomposition-attribution"
   ],
-  "results": "R1 each service's customer-facing incident minutes by half of 2026; R2 the service at fault in each December customer-facing incident; R3 every service's December latency SLI; R4 a 90 per cent interval on each over-budget service's SLI; R5 the services over budget; R6 the start order, shares, share together and requests beyond budget",
+  "results": "R1 each service's customer-facing incident minutes by half of 2026; R2 the service at fault in each December customer-facing incident; R3 every service's December latency SLI, the hours the store had dropped counted at their load; R4 a 90 per cent interval on each over-budget service's SLI; R5 the services over budget; R6 the start order, shares, share together and requests beyond budget",
   "registered": "2026-11-09T16:23:04Z",
   "shell": {
     "question form": "which",

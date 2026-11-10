@@ -12,7 +12,8 @@ def poss(s):
 def write(R, F):
     over, order = F["over"], F["start_order"]
     sli, bud, share, ci, mins = F["sli"], F["budget"], F["share_pct"], F["ci"], F["minutes"]
-    csl, rsl = F["owncount_sli"], F["rootcareful_sli"]
+    csl, rsl, hsl, rsw = F["owncount_sli"], F["rootcareful_sli"], F["heldonly_sli"], F["careful_sli"]
+    js = "journey-search"
     n_over = "five" if len(over) == 5 else str(len(over))
     dec = [x for x in F["incidents"] if x["id"] in F["deciding"]]      # the misreadings that move a verdict
     mis = [x for x in F["incidents"] if x["id"] in F["misread"]]       # every incident the whole-window reading misreads
@@ -25,13 +26,12 @@ def write(R, F):
          "**Analytical objective:** Descriptive & Distribution Analysis.", "",
          "## Final Recommendation", "",
          "**Put reliability engineers on %s, in that order: the %s ran over their 2026 latency error budgets.** "
-         "Not %s alone, which each service's own spans reweighted on its own hourly count give even with every "
-         "incident's cause dated right (fares %s%%, "
-         "partner-gateway %s%%, notifications %s%%), and not without %s, which fall to %s when %s are put on %s, the "
-         "services furthest over their load curves, rather than on %s, whose own handling slowed first."
-         % (names(order), n_over, names(F["owncount_over"]), csl[fa], csl[pg], csl[no], names([x["cause"] for x in dec]),
-            fall, names([x["id"] for x in dec]), names([x["careful_cause"] for x in dec]),
-            names([x["cause"] for x in dec])),
+         "Not %s, which each service's own spans reweighted on its own hourly count over the hours the trace export "
+         "holds give: journey-search's %s%% on those hours is %s%% across December once the %s days the store had "
+         "already dropped are counted at the share their load gives, and partner-gateway and notifications run over "
+         "only with each span at its trace root's keep share and each December incident on the service whose own "
+         "handling slowed first."
+         % (names(order), n_over, names(F["careful_over"]), hsl[js], sli[js], F["gone_days"]),
          "", "## Supplementary Questions", "",
          "### %s" % K.DOCX_OUT, "",
          "1. Names the services that ran over in the order their engineers start, the one whose SLI counts the most "
@@ -65,9 +65,13 @@ def write(R, F):
           "**%s%%** against **%s%%**, fares' **%s%%** against **%s%%** and notifications' **%s%%** against **%s%%**; "
           "on each service's own hourly count, with the same incident time left out, they are %s%%, %s%% and %s%%." % (
               sli[pg], bud[pg], sli[fa], bud[fa], sli[no], bud[no], csl[pg], csl[fa], csl[no]),
-          "3. Partner-gateway's 90 per cent interval runs **%s%% to %s%%**, the traces taken as whole units within "
-          "each root service's hour." % tuple(ci[pg]),
-          "4. The %s served **%s%%** of the over-threshold requests the SLIs count, **%s** more than their budgets "
+          "3. The trace export begins at **%s**: December's first %s days (%s%% of its edge requests) still count, "
+          "each service's requests in each of those hours at the share over threshold its held, incident-free hours "
+          "show at the same load, so journey-search's December SLI is **%s%%**, against **%s%%** on the export's "
+          "hours alone." % (F["held_from"], F["gone_days"], F["gone_pct"], sli[js], hsl[js]),
+          "4. Partner-gateway's 90 per cent interval runs **%s%% to %s%%**, the traces taken as whole units within "
+          "each root service's hour and the dropped hours' estimate carried with them." % tuple(ci[pg]),
+          "5. The %s served **%s%%** of the over-threshold requests the SLIs count, **%s** more than their budgets "
           "allow." % (n_over, F["together_pct"], F["beyond_budget"]),
           "", "## Step-by-Step", ""]
     steps = [
@@ -80,22 +84,33 @@ def write(R, F):
         "partner-gateway %s and %s minutes, notifications %s and %s." % (
             K.FILES["incidents"], K.FILES["timeline"], K.FILES["status"], mins[pg][0], mins[pg][1], mins[no][0],
             mins[no][1]),
-        "The reasonable route that falls short: each service's own spans reweighted on its own hourly count, with "
-        "each incident's cause dated as in step 5, puts fares at %s%%, partner-gateway at %s%% and notifications at "
-        "%s%%, so only %s ran over." % (csl[fa], csl[pg], csl[no], names(F["owncount_over"])),
+        "The reasonable route that falls short: each service's own spans reweighted on its own hourly count over the "
+        "hours the export holds, with each incident's cause dated as in step 6, puts journey-search at %s%%, fares at "
+        "%s%%, partner-gateway at %s%% and notifications at %s%%, so %s ran over." % (
+            rsw[js], rsw[fa], rsw[pg], rsw[no], names(F["careful_over"])),
         "The traces overturn it: the store kept a near-fixed number of whole traces an hour per edge service, so an "
         "internal service's kept spans carry its callers' keep shares; counted at its trace root's share (the root's "
         "RequestCount over the roots kept that hour), each internal service's slow operations, called from busy and "
         "thinly kept journey-search and accounts, weigh what they served.",
+        "The export overturns the period: its first span starts at %s, so December's first %s days, %s%% of its edge "
+        "requests, are not in it, and they still count (PR-SLO-3 2.2, kept or not). Counted each service's requests "
+        "in each of those hours, from %s, at the share over threshold its held, incident-free hours show in the same "
+        "band of hourly load (ten bands): the early weeks were quieter, so journey-search falls from %s%% on the "
+        "export's hours to %s%%, and every other SLI moves with it. Fitted on the export from 18 December, these bands "
+        "predict its own 12 to 17 December at %s of the over-threshold requests seen there, where matching the same "
+        "weekday and hour predicts %s, so the match that ignores load, which leaves journey-search over, is ruled "
+        "out." % (F["held_from"], F["gone_days"], F["gone_pct"], K.FILES["lb_h2"], hsl[js], sli[js],
+                  F["backtest_bands"], F["backtest_weekday_hour"]),
         "Dated each December incident's cause: for every service it named, the own handling time of each span "
-        "(less the calls it waited on) against a load curve fitted on December's incident-free hours, a changepoint "
+        "(less the calls it waited on) against a load curve fitted on the export's incident-free hours, a changepoint "
         "on the residuals; the earliest sustained rise owns the cause. Over the whole incident %s ran furthest above "
         "their curves, but each rose only after the service it calls had, by twenty minutes or more: %s own them." % (
             names(["%s in %s" % (x["careful_cause"], x["id"]) for x in mis]), names([x["cause"] for x in mis])),
         "Left each named service's requests out from when the timeline added it to the incident's end unless it "
         "owned the cause (PR-SLO-3's incident and root-cause clauses): %s ran over." % names(over),
         "Took each over-budget SLI's 90 per cent interval by linearisation over strata of root service and hour with "
-        "the kept traces as units: partner-gateway %s%% to %s%%." % tuple(ci[pg]),
+        "the kept traces as units, each trace also moving the band shares the dropped hours were counted at: "
+        "partner-gateway %s%% to %s%%." % tuple(ci[pg]),
         "Each service's weighted spans over its threshold are the requests its SLI counts: the engineers start with "
         "%s (%s%%), the %s served %s%% together and %s more than their budgets allow." % (
             order[0], share[order[0]], n_over, F["together_pct"], F["beyond_budget"]),
@@ -103,10 +118,14 @@ def write(R, F):
     L += ["%d. %s" % (i, s) for i, s in enumerate(steps, 1)]
     L += ["", "No other conclusion survives. Weighting each span by its own service's hourly count, or leaving the "
           "spans unweighted, keeps the slow operations of fares, partner-gateway and notifications at their callers' "
-          "kept shares; putting each December incident on the service the responders named first or last, on the "
-          "one with the most slow requests, or on the one furthest over its load curve across the whole incident, "
-          "charges %s with %s own failures on %s. Every weighting the whole traces leave "
-          "standing (the balancer's count or the weighted kept count as the base, the root's hour or the span's own) "
-          "and every reasonable reading of the onset gives the same five, the same order and the same rounded "
-          "figures." % (names([x["careful_cause"] for x in dec]), names([poss(x["cause"]) for x in dec]), days), ""]
+          "kept shares; reading December from the export's hours alone counts only the busy weeks and puts "
+          "journey-search over; putting each December incident on the service the responders named first or last, on "
+          "the one with the most slow requests, or on the one furthest over its load curve across the whole incident, "
+          "charges %s with %s own failures on %s. Every weighting the whole traces leave standing (the balancer's "
+          "count or the weighted kept count as the base, the root's hour or the span's own), every way of counting "
+          "the dropped hours at their load that the held hours support (ten or twenty bands, a share that never falls "
+          "as load rises, a curved logit, the called services' loads beside the service's own) and every reasonable "
+          "reading of the onset gives the same five, the same order and the same rounded figures; a share linear in "
+          "log load is ruled out by the held hours themselves, which bend at the busiest hours." % (
+              names([x["careful_cause"] for x in dec]), names([poss(x["cause"]) for x in dec]), days), ""]
     return "\n".join(L), F

@@ -106,7 +106,7 @@ def span_table(w):
     """The kept spans that started in December (UTC) and the exporter's re-sent batches, in export order."""
     r = np.random.default_rng(K.SEED + 404)
     sp = w.sp
-    keep = (sp["t0"] >= 0) & (sp["t0"] < K.REVIEW_HOURS * 3600)
+    keep = (sp["t0"] >= K.STORE_FROM_H * 3600) & (sp["t0"] < K.REVIEW_HOURS * 3600)
     idx = np.nonzero(keep)[0]
     pool = PodPool(w)
     tr_hex = {}
@@ -191,7 +191,7 @@ def write_spans(path, w):
     })
     pq.write_table(table, path, compression="zstd", row_group_size=131072, use_dictionary=True,
                    store_schema=False, write_statistics=True)
-    _drop_created_by(path)
+    _set_created_by(path, STORE_WRITER)
     return table.num_rows
 
 
@@ -303,7 +303,10 @@ def write_pack(out, w=None):
     return w, n, truths
 
 
-# ------------------------------------------------------------------ parquet footer without a writer name
+# ------------------------------------------------------------------ parquet footer with the store's own writer name
+# the tracing store writes its blocks with the Go Parquet library, so its export carries that writer's name, not the
+# Python library the generator happens to use
+STORE_WRITER = "github.com/parquet-go/parquet-go version 0.24.0"
 def _varint(b, i):
     v = s = 0
     while True:
@@ -353,9 +356,9 @@ def _skip(b, i, t):
     raise ValueError("thrift type %d" % t)
 
 
-def _drop_created_by(path):
-    """The span export carries no writer name: FileMetaData field 6 (created_by) is left out of the footer,
-    as the format allows, and the next field's header is re-based on the field before it."""
+def _set_created_by(path, writer):
+    """The span export's writer name: FileMetaData field 6 (created_by) rewritten in the footer as the tracing store's
+    own writer, every other field's header re-based on the field before it."""
     raw = open(path, "rb").read()
     assert raw[-4:] == b"PAR1"
     n = int.from_bytes(raw[-8:-4], "little")
@@ -372,6 +375,17 @@ def _drop_created_by(path):
         end = _skip(meta, j, t)
         if fid == 6:
             dropped = True
+            out += bytes([((fid - prev) << 4) | t]) if 0 < fid - prev <= 15 else bytes([t]) + _zz(fid)
+            wb = writer.encode()
+            ln, buf = len(wb), bytearray()
+            while True:
+                byte = ln & 0x7F
+                ln >>= 7
+                buf.append(byte | (0x80 if ln else 0))
+                if not ln:
+                    break
+            out += bytes(buf) + wb
+            prev = fid
         else:
             out += bytes([((fid - prev) << 4) | t]) if 0 < fid - prev <= 15 else bytes([t]) + _zz(fid)
             out += meta[j:end]

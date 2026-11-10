@@ -1,22 +1,22 @@
 {
  "task": "task6",
- "status": "READY",
+ "status": "PAUSED",
  "domain": "general-statistics-data-science",
  "objective": "descriptive-distribution",
- "stage": 5,
- "stage_name": "ready",
+ "stage": 4,
+ "stage_name": "check",
  "updated": "2026-11-09",
  "stump": "",
  "architecture": 7,
- "loops": 0,
+ "loops": 1,
  "precut": {
   "exit": 0,
   "date": "2026-11-09",
-  "note": "85 checks, 0 FAIL, 2 WARN; depth level 5"
+  "note": "85 checks, 0 FAIL, 2 WARN; depth level 5 on the run-calibrated pass"
  },
  "leak": {
-  "leak_py": "REVIEW (every line ruled harmless in the design note)",
-  "reader": "architecture 7, 2026-11-09: no ranking, helping or answer file; the standard files the WHAT as designed; no one thing; the templated incident titles fixed in the generator, the balancer's full hourly grid and the capacity note's partner-gateway plan ruled harmless"
+  "leak_py": "REVIEW (the same lines, ruled harmless)",
+  "reader": "clean on the levelled-up cut: no hand-over, ranking, helping or answer file, no one thing; the empty Parquet writer name fixed"
  },
  "duplicate_check": {
   "heart": "BLOCK on ban.pairing against task2 v5 only, accepted by the author for this re-ship on 2026-11-09: the pairing is the returned platform task's own subdomain and analysis type, which a re-ship cannot change",
@@ -25,13 +25,11 @@
  },
  "judge": {
   "verdict": "DETERMINISTIC",
-  "disposition": "APPROVE",
-  "gate_h": "pass: no one thing; 6 results over 6 areas; one-fact 1 of 6 (the weighting sentence 0 of 6, measured; three fresh threads overclaimed it)",
-  "report": "task6/determinism_check_report_pass4.md",
+  "disposition": "SEND_BACK (Gate H)",
+  "report": "task6/determinism_check_report_pass5.md",
   "date": "2026-11-09",
-  "pass2": "DETERMINISTIC, APPROVE on the cut before the incidents were reshaped",
-  "pass3": "DETERMINISTIC with SOLUTION_WRONG (minor), FIX_NOW: every graded figure reproduced from the raw files, both contested causes included; fixed: the own-count contrast restated with the golden's exclusions (fares 0.9, partner-gateway 1.1, notifications 0.8), the note's weighting-alone rescue made explicit (0 of 6), the careful column graded up as a sensitivity (37.3); the minutes gap was the thread's own daylight-saving handling (the status page states Europe/Lisbon)",
-  "pass4": "DETERMINISTIC, APPROVE: the restated contrast reproduced to the decimal, every incident minute and partner-gateway's interval rebuilt independently"
+  "gate_h": "pass 5, on the levelled-up cut before the onset rule was calibrated: the weighting read as found on sight (internal services never root a trace), INC-1611 and INC-1619 read as one flip applied twice",
+  "earlier": "passes 2 to 4 on the cut before the level-up: DETERMINISTIC, APPROVE"
  },
  "returned": [
   {
@@ -64,7 +62,7 @@
    "commit": "RESHIPPED (task6) 2026-11-09"
   }
  ],
- "resume": "",
+ "resume": "stage 4: the author rules on judge pass 5's Gate H SEND_BACK (the run on file contradicts its careful-run estimate; the two deciding incidents share R2's one judgment). Either re-judge this hardened cut (pass 6) and go READY and RESHIPPED, or harden further (scheduled-job roots on the internal services so the root split is not one group-by; a second deciding incident on different evidence), or re-root. Backup of the shipped cut: ~/Documents/task6_arch7_backup_2026-11-09.zip",
  "approved": null,
  "delivered": null,
  "portal": {
@@ -80,11 +78,11 @@
  "portal_status_date": "2026-11-09",
  "seed": "analytical_tasks/03_descriptive_distribution/DA18_quick-commerce-pilot-service-hours-population.md (header and Situation only)",
  "seed_world": 273,
- "zip_md5": "c976bbf81afca181c25f22bc7bc1c0c8",
+ "zip_md5": "b8177b9bc9e3845148aebe0fc3915220",
  "zip_sha256_16": "23e1bf1e8fdbf1af",
  "precut_exit": 1,
  "shipped": "2026-11-07",
- "call": "Put reliability engineers on places, partner-gateway, fares, seat-map, notifications, in that order: the five ran over their 2026 latency error budgets",
+ "call": "Put reliability engineers on partner-gateway, places, fares, seat-map and notifications, in that order: the five ran over their 2026 latency error budgets",
  "gates_at_ship": "checks 0 failures; verify PASS; rebuild byte-identical; figures_check 117 of 117; precut 61 checks 0 FAIL; voice-check exit 0; leak.py REVIEW (ruled harmless); leak reader clean on the shipped cut; determinism judge DETERMINISTIC, APPROVE; heart exit 0 (WARN gate_g repeat and overuse); surface exit 0, no promoted pair",
  "migrated_from": {
   "project": "Mark",
@@ -93,8 +91,8 @@
   "date": "2026-11-08",
   "note": "moved from Project Mark at the author's word: architecture 5 landed on the Mark portal and architecture 6 shipped there on 2026-11-07, pending; carried on here for the Sulfur bar"
  },
- "golden_zip_md5": "d036df2d6bd91f9e0394de0cce9c45ec",
- "paper_pair": 31.3,
+ "golden_zip_md5": "4f9f8968dee3830a9bd6514befee8b06",
+ "paper_pair": 44.3,
  "runs": {
   "run1": 73,
   "run2": 83,
@@ -108,14 +106,21 @@
   "recorded": "2026-11-08",
   "history": []
  },
- "gates_at_reship": "gates.py task6 --full, 2026-11-09 (reshaped incidents): checks, verify, rebuild byte-identical, precut, effort, figures, containers and surface PASS; voice and leak WARN (ruled); heart BLOCK on ban.pairing only",
+ "gates_at_reship": "gates.py task6 --full, 2026-11-09 (hardened): checks (incl. the backtest and placebo-calibrated detectors), verify, rebuild byte-identical, precut, effort, figures, containers, surface PASS; voice and leak WARN (ruled); heart BLOCK on ban.pairing only (accepted)",
  "doctrine": "throughout",
- "chain": "R1 each service's customer-facing incident minutes by half of 2026; R2 the service at fault in each December customer-facing incident; R3 every service's December latency SLI; R4 a 90 per cent interval on each over-budget service's SLI; R5 the services over budget; R6 the start order, shares, share together and requests beyond budget",
+ "chain": "R1 incident minutes by half; R2 the December incidents' owners dated by own handling against load; R3 every SLI with each span at its trace root's keep share and the hours the store had dropped counted at their load; R4 design-based intervals carrying the fill; R5 the five over budget; R6 the order, shares, together and beyond",
  "effort": {
   "quick": 7.0,
-  "careful": 31.3,
+  "careful": 44.3,
   "thorough": 100.0,
-  "largest_hint": "each December incident's cause is the named service whose own handling rose first, not the one furthest over its curve: rescues 1 of 6",
-  "routes": "3 distinct wrong lists over 4 shortcuts"
+  "calibration": "the careful pass is the run on file: own hourly counts, every cause dated right, the export's hours read as December",
+  "largest_hint": "each kept span counts at its trace root's hourly keep share: rescues 0 of 6",
+  "routes": "5 distinct wrong lists over 5 shortcuts"
+ },
+ "level_up": {
+  "date": "2026-11-09",
+  "backup": "~/Documents/task6_arch7_backup_2026-11-09.zip",
+  "why": "the shipped cut measured level 3 against the strong run (the weighting sentence rescued 3 to 4 of 6 on the run-calibrated pass)",
+  "added": "the store's 31-day retention: the export begins at 12 December 10:00 and the dropped hours are counted at their load; 60 kept traces an hour; the getaway push moved to 16 December; a New Year sale on the evening of 28 December"
  }
 }

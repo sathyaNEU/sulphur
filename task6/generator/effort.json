@@ -5,9 +5,11 @@
    "sentence": "each kept span counts at its trace root's hourly keep share"
   },
   {
-   "rescues": [
-    "R2"
-   ],
+   "rescues": [],
+   "sentence": "December's first eleven days, which the store had already dropped, still count, at the share each service's load gives them"
+  },
+  {
+   "rescues": [],
    "sentence": "each December incident's cause is the named service whose own handling rose first, not the one furthest over its curve"
   },
   {
@@ -130,7 +132,7 @@
      ],
      "partner-gateway": [
       "8898",
-      "10007"
+      "9839"
      ],
      "payments": [
       "14022",
@@ -142,7 +144,7 @@
      ],
      "seat-map": [
       "16404",
-      "4406"
+      "4239"
      ],
      "tickets": [
       "4217",
@@ -213,11 +215,11 @@
    "passes": {
     "careful": {
      "INC-1570": "seat-map",
-     "INC-1579": "seat-map",
+     "INC-1579": "partner-gateway",
      "INC-1588": "partner-gateway",
      "INC-1594": "payments",
-     "INC-1611": "journey-search",
-     "INC-1619": "accounts",
+     "INC-1611": "fares",
+     "INC-1619": "notifications",
      "INC-1627": "places"
     },
     "quick": {
@@ -247,100 +249,100 @@
    ],
    "figure": "sli",
    "golden": {
-    "accounts": "1.4",
+    "accounts": "1.3",
     "booking": "0.3",
     "fares": "1.3",
-    "journey-search": "0.5",
-    "notifications": "1.3",
+    "journey-search": "0.9",
+    "notifications": "1.2",
     "partner-gateway": "2.3",
     "payments": "0.2",
-    "places": "1.8",
+    "places": "1.4",
     "seat-map": "2.0",
-    "tickets": "0.6"
+    "tickets": "0.7"
    },
    "graded_as": "Ask 2",
    "id": "R3",
    "name": "every service's December SLI",
    "passes": {
     "careful": {
+     "accounts": "1.3",
+     "booking": "0.4",
+     "fares": "1.2",
+     "journey-search": "1.3",
+     "notifications": "0.7",
+     "partner-gateway": "1.4",
+     "payments": "0.5",
+     "places": "1.7",
+     "seat-map": "2.2",
+     "tickets": "0.7"
+    },
+    "quick": {
      "accounts": "1.8",
      "booking": "0.3",
      "fares": "0.4",
-     "journey-search": "0.9",
-     "notifications": "0.6",
-     "partner-gateway": "1.1",
-     "payments": "0.4",
-     "places": "1.8",
-     "seat-map": "2.1",
-     "tickets": "0.6"
-    },
-    "quick": {
-     "accounts": "1.6",
-     "booking": "0.3",
-     "fares": "0.4",
-     "journey-search": "0.6",
-     "notifications": "0.6",
+     "journey-search": "1.0",
+     "notifications": "0.5",
      "partner-gateway": "0.6",
-     "payments": "0.3",
-     "places": "0.9",
-     "seat-map": "1.3",
-     "tickets": "0.6"
+     "payments": "0.4",
+     "places": "1.0",
+     "seat-map": "1.8",
+     "tickets": "0.7"
     },
     "thorough": {
-     "accounts": "1.4",
+     "accounts": "1.3",
      "booking": "0.3",
      "fares": "1.3",
-     "journey-search": "0.5",
-     "notifications": "1.3",
+     "journey-search": "0.9",
+     "notifications": "1.2",
      "partner-gateway": "2.3",
      "payments": "0.2",
-     "places": "1.8",
+     "places": "1.4",
      "seat-map": "2.0",
-     "tickets": "0.6"
+     "tickets": "0.7"
     }
    }
   },
   {
    "bands": {
     "fares hi": [
-     1.43,
-     1.47
+     1.37,
+     1.42
     ],
     "fares lo": [
-     1.13,
-     1.18
+     1.17,
+     1.21
     ],
     "notifications hi": [
-     1.47,
-     1.55
+     1.26,
+     1.33
     ],
     "notifications lo": [
-     1.12,
-     1.16
+     1.06,
+     1.12
     ],
     "partner-gateway hi": [
-     2.4,
-     2.46
+     2.39,
+     2.44
     ],
     "partner-gateway lo": [
-     2.06,
-     2.13
+     2.17,
+     2.22
     ],
     "places hi": [
-     1.98,
-     2.03
+     1.49,
+     1.54
     ],
     "places lo": [
-     1.52,
-     1.58
+     1.22,
+     1.28
     ],
     "seat-map hi": [
-     2.24,
-     2.29
+     2.09,
+     2.16
     ],
     "seat-map lo": [
-     1.73,
-     1.79
+     1.8,
+     1.84
     ]
    },
    "depends": [
@@ -348,56 +350,56 @@
    ],
    "figure": "ci_cells",
    "golden": {
-    "fares hi": 1.45,
-    "fares lo": 1.15,
-    "notifications hi": 1.49,
-    "notifications lo": 1.14,
-    "partner-gateway hi": 2.44,
-    "partner-gateway lo": 2.08,
-    "places hi": 2.01,
-    "places lo": 1.56,
-    "seat-map hi": 2.26,
-    "seat-map lo": 1.77
+    "fares hi": 1.4,
+    "fares lo": 1.19,
+    "notifications hi": 1.31,
+    "notifications lo": 1.08,
+    "partner-gateway hi": 2.42,
+    "partner-gateway lo": 2.2,
+    "places hi": 1.52,
+    "places lo": 1.24,
+    "seat-map hi": 2.14,
+    "seat-map lo": 1.82
    },
    "graded_as": "Component 2",
    "id": "R4",
    "name": "intervals on the over-budget SLIs",
    "passes": {
     "careful": {
-     "fares hi": 0.49,
-     "fares lo": 0.39,
-     "notifications hi": 0.69,
-     "notifications lo": 0.55,
-     "partner-gateway hi": 1.16,
-     "partner-gateway lo": 1.03,
-     "places hi": 1.95,
-     "places lo": 1.63,
-     "seat-map hi": 2.29,
-     "seat-map lo": 1.94
+     "fares hi": 1.23,
+     "fares lo": 1.1,
+     "notifications hi": 0.78,
+     "notifications lo": 0.66,
+     "partner-gateway hi": 1.44,
+     "partner-gateway lo": 1.33,
+     "places hi": 1.82,
+     "places lo": 1.58,
+     "seat-map hi": 2.39,
+     "seat-map lo": 2.1
     },
     "quick": {
      "fares hi": 0.46,
-     "fares lo": 0.37,
-     "notifications hi": 0.64,
-     "notifications lo": 0.51,
-     "partner-gateway hi": 0.6,
-     "partner-gateway lo": 0.51,
-     "places hi": 1.03,
-     "places lo": 0.8,
-     "seat-map hi": 1.46,
-     "seat-map lo": 1.18
+     "fares lo": 0.38,
+     "notifications hi": 0.57,
+     "notifications lo": 0.47,
+     "partner-gateway hi": 0.67,
+     "partner-gateway lo": 0.59,
+     "places hi": 1.12,
+     "places lo": 0.93,
+     "seat-map hi": 1.96,
+     "seat-map lo": 1.7
     },
     "thorough": {
-     "fares hi": 1.45,
-     "fares lo": 1.15,
-     "notifications hi": 1.49,
-     "notifications lo": 1.14,
-     "partner-gateway hi": 2.44,
-     "partner-gateway lo": 2.08,
-     "places hi": 2.01,
-     "places lo": 1.56,
-     "seat-map hi": 2.26,
-     "seat-map lo": 1.77
+     "fares hi": 1.4,
+     "fares lo": 1.19,
+     "notifications hi": 1.31,
+     "notifications lo": 1.08,
+     "partner-gateway hi": 2.42,
+     "partner-gateway lo": 2.2,
+     "places hi": 1.52,
+     "places lo": 1.24,
+     "seat-map hi": 2.14,
+     "seat-map lo": 1.82
     }
    }
   },
@@ -418,6 +420,8 @@
    "name": "the services over budget",
    "passes": {
     "careful": [
+     "journey-search",
+     "fares",
      "places",
      "seat-map"
     ],
@@ -440,41 +444,43 @@
    ],
    "figure": "programme_cells",
    "golden": {
-    "beyond": "280,000",
-    "order": "places, partner-gateway, fares, seat-map, notifications",
-    "share fares": "16",
+    "beyond": "200,000",
+    "order": "partner-gateway, places, fares, seat-map, notifications",
+    "share fares": "17",
     "share notifications": "3",
-    "share partner-gateway": "31",
-    "share places": "36",
+    "share partner-gateway": "33",
+    "share places": "29",
     "share seat-map": "3",
-    "together": "89"
+    "together": "84"
    },
    "graded_as": "Ask 3",
    "id": "R6",
    "name": "start order, shares, together, beyond",
    "passes": {
     "careful": {
-     "beyond": "200,000",
-     "order": "places, seat-map",
-     "share places": "46",
+     "beyond": "160,000",
+     "order": "places, journey-search, fares, seat-map",
+     "share fares": "16",
+     "share journey-search": "16",
+     "share places": "37",
      "share seat-map": "4",
-     "together": "51"
+     "together": "72"
     },
     "quick": {
      "beyond": "0",
      "order": "seat-map",
-     "share seat-map": "13",
-     "together": "13"
+     "share seat-map": "16",
+     "together": "16"
     },
     "thorough": {
-     "beyond": "280,000",
-     "order": "places, partner-gateway, fares, seat-map, notifications",
-     "share fares": "16",
+     "beyond": "200,000",
+     "order": "partner-gateway, places, fares, seat-map, notifications",
+     "share fares": "17",
      "share notifications": "3",
-     "share partner-gateway": "31",
-     "share places": "36",
+     "share partner-gateway": "33",
+     "share places": "29",
      "share seat-map": "3",
-     "together": "89"
+     "together": "84"
     }
    }
   }
@@ -485,7 +491,29 @@
     "seat-map"
    ],
    "golden": false,
-   "name": "Kept spans unweighted; each incident on the service named first"
+   "name": "Kept spans unweighted; each incident on the service named first; the export's hours alone"
+  },
+  {
+   "answer": [
+    "journey-search",
+    "fares",
+    "places",
+    "seat-map"
+   ],
+   "golden": false,
+   "name": "Each service's spans on its own hourly count; causes dated by when own handling rose; the export's hours alone"
+  },
+  {
+   "answer": [
+    "journey-search",
+    "fares",
+    "places",
+    "seat-map",
+    "partner-gateway",
+    "notifications"
+   ],
+   "golden": false,
+   "name": "Each span at its trace root's keep share; causes dated; the export's hours alone"
   },
   {
    "answer": [
@@ -493,24 +521,29 @@
     "seat-map"
    ],
    "golden": false,
-   "name": "Each service's spans on its own hourly count; each incident on the service furthest over its load curve across the incident"
+   "name": "Each service's spans on its own hourly count; causes dated; the dropped hours counted at their load"
   },
   {
    "answer": [
+    "journey-search",
+    "fares",
     "places",
-    "seat-map"
+    "seat-map",
+    "partner-gateway",
+    "notifications"
    ],
    "golden": false,
-   "name": "Each service's spans on its own hourly count; causes dated by when own handling rose"
+   "name": "Each span at its trace root's keep share; causes dated; the dropped hours matched to the export's same weekday and hour"
   },
   {
    "answer": [
+    "journey-search",
     "places",
     "seat-map",
     "partner-gateway"
    ],
    "golden": false,
-   "name": "Each span at its trace root's keep share; each incident on the service furthest over its load curve"
+   "name": "Each span at its trace root's keep share; each incident on the service furthest over its load curve; the dropped hours counted at their load"
   },
   {
    "answer": [
@@ -521,7 +554,7 @@
     "notifications"
    ],
    "golden": true,
-   "name": "Each span at its trace root's keep share; causes dated by when own handling rose (this review)"
+   "name": "Each span at its trace root's keep share; causes dated; the dropped hours counted at their load (this review)"
   }
  ]
 }
