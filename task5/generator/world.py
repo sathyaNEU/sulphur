@@ -37,6 +37,7 @@ CODES = [c[0] for c in COUNTIES]
 SCALE = {c: 1.0 for c in CODES}
 # each county's 2026 drift beyond the calibrated target (set after the golden is measured)
 NUDGE = {c: 0.0 for c in CODES}
+NUDGE.update({"013": -0.0055, "019": -0.0028})
 NAMES = {c[0]: c[1] for c in COUNTIES}
 LAKES = ("013", "023", "027")                          # the Lakes region: summer trade at the lake worksites
 NORTH = ("007", "019")                                 # the North Woods: outdoor work slows in winter
@@ -168,8 +169,8 @@ HOUSING_CHAIN = {"236115", "236118", "236220", "237310", "238110", "238160", "23
 # the 2026 housing downturn: how many times the usual rate a small housing-chain employer got into trouble, by
 # quarter of 2026, and how much of the usual number of new housing-chain employers started up
 BUST_HAZARD = [1.5, 2.7, 5.0, 9.0]
-BUST_BIRTHS = [0.90, 0.72, 0.52, 0.38]
-OTHER_BIRTHS = [1.00, 0.97, 0.94, 0.91]
+BUST_BIRTHS = [0.86, 0.62, 0.42, 0.28]
+OTHER_BIRTHS = [0.99, 0.95, 0.90, 0.84]
 BIRTH_RATE = 0.045                                      # new employers a quarter, as a share of a county's 2023 accounts
 LAKE_SEASONAL = {"713930", "713990", "721211", "721214", "721110", "722511", "722513", "722515", "459420"}
 

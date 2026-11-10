@@ -85,6 +85,8 @@ class Pack:
         assert wk["county"].notna().all()
         wk["recv"] = pd.to_datetime(wk["date_received"], format="%m/%d/%Y")
         wk["unit"] = wk["reporting_unit"].astype(str)
+        for c in ("m1_emp", "m2_emp", "m3_emp"):
+            wk[c] = wk[c].astype(int)
         self.wk = wk[["acct", "unit", "q", "county", "m1_emp", "m2_emp", "m3_emp", "recv"]].copy()
         self.codes = list(counties["county_code"].astype(str).str.zfill(3))
         self._cache = {}
@@ -498,6 +500,8 @@ class Pack:
                 e[ig] = p[ig] * (m * (1 - a) + k_alone * a)
             elif rt["batch"] == "locf":
                 e[ig] = p[ig]
+            elif rt["batch"] == "zero_all":
+                e[ig] = 0.0
             else:
                 raise ValueError(rt["batch"])
         al = out["kind"] == "alone"
@@ -512,8 +516,12 @@ class Pack:
             e[al] = p[al] * k_alone
         tq = out["kind"] == "twoq"
         e[tq] = p[tq] * k_twoq
+        if rt["batch"] == "zero_all":
+            e[:] = 0.0
+        elif rt["classify"] == "none" and rt["batch"] == "locf":
+            e[tq] = 0.0
         nw = out["kind"] == "new"
-        if nw.any():
+        if nw.any() and rt["batch"] != "zero_all":
             if rt["new"] == "hist" and np.isfinite(ocm.get("new_mean", np.nan)):
                 e[nw] = ocm["new_mean"]
             else:
@@ -534,7 +542,7 @@ class Pack:
         tot, rows = self.to_counties(lt, q, asof, sites)
         return tot
 
-    def published_rows(self, q=W.BASE_QTR if hasattr(W, "BASE_QTR") else 11, cut=None):
+    def published_rows(self, q=W.BASE_Q, cut=None):
         """the Section's published county table for quarter q: reports posted through the cut, split by the worksite
         reports on file then (the latest on file where the quarter's had not come)"""
         cut = TS(cut or W.PUBLISHED_CUT)
@@ -556,3 +564,61 @@ def changes(total, base):
 
 def designated(ch):
     return [c for c in ch.index if round(float(ch[c]) + 1e-9, 1) <= W.THRESHOLD]
+
+
+# ---------------------------------------------------------------------------------------- the routes, by name
+# the standing family: every choice a careful analyst could defend inside the golden's method
+FAMILY = [
+    ("the golden", {}),
+    ("a transmission arrived when a third of its other reports are in", dict(thr=0.34)),
+    ("a transmission arrived when two thirds of its other reports are in", dict(thr=0.67)),
+    ("a transmission as two or more reports in one second", dict(batch_min=2)),
+    ("a transmission as four or more reports in one second", dict(batch_min=4)),
+    ("this quarter's trouble by supersector and size", dict(cells="ss_size")),
+    ("this quarter's trouble by supersector", dict(cells="ss")),
+    ("this quarter's trouble by three-digit industry and size", dict(cells="naics3_size")),
+    ("this quarter's trouble by housing chain alone", dict(cells="chain")),
+    ("this quarter's trouble by county and housing chain", dict(cells="county_chain")),
+    ("the resolved quarters without the earliest", dict(mature_drop="first")),
+    ("the resolved quarters without the latest", dict(mature_drop="last")),
+    ("resolved at 5 per cent of jobs outstanding", dict(mature_tol=0.05)),
+    ("the missing-alone share by size", dict(k_by="size")),
+    ("the missing-alone share by filing channel", dict(k_by="channel")),
+    ("the missing-alone share by housing chain", dict(k_by="chain")),
+    ("a seasonal business under half its September", dict(seasonal_ratio=0.5)),
+    ("a seasonal business under 0.7 of its September", dict(seasonal_ratio=0.7)),
+    ("a new account at this quarter's reporting new employers", dict(new="reporters")),
+    ("two quarters out at nought", dict(twoq="zero")),
+    ("the reporters' change in cells of five or more", dict(move_by="county_ss5")),
+    ("the reporters' change in cells of twenty or more", dict(move_by="county_ss20")),
+]
+# variants a named fact in the files rules out (checks.py asserts each fact); they sit outside the family
+RULED_OUT = [
+    ("unregistered employers from every earlier cut-off", dict(ibnr_pool="all")),
+    ("unregistered employers shared out by each county's accounts", dict(ibnr_by_county=False)),
+    ("the reporters' change by supersector statewide", dict(move_by="ss")),
+    ("the reporters' change by county alone", dict(move_by="county")),
+]
+# the shortcuts, each a complete estimate that stops short somewhere
+SHORTCUTS = [
+    ("the reports received alone", dict(classify="none", batch="zero_all", ibnr="none", sites="latest")),
+    ("September carried for every report outstanding, accounts on the register, the latest worksite reports",
+     dict(classify="none", batch="locf", ibnr="none", sites="latest")),
+    ("the reporting employers' change for every report outstanding, accounts on the register, the latest worksite reports",
+     dict(classify="none", batch="reporters", ibnr="none", sites="latest")),
+    ("outstanding reports read by cause; late transmissions at the reporters' change; accounts on the register; the latest worksite reports",
+     dict(batch="reporters", ibnr="none", sites="latest")),
+    ("the same with last year's unregistered jobs carried as they were",
+     dict(batch="reporters", ibnr="level", sites="latest")),
+    ("the full estimate without the employers that have no account yet", dict(ibnr="none")),
+    ("the full estimate with the latest worksite reports' split", dict(sites="latest")),
+    ("the full estimate with last December's worksite split", dict(sites="yearago")),
+    ("the full estimate with late transmissions at the reporters' change", dict(batch="reporters")),
+    ("the full estimate with the missing-alone share from every earlier quarter", dict(alone="allclosed")),
+    ("the reporting employers' change for every report outstanding, the rest as in the estimate",
+     dict(classify="none", batch="reporters")),
+    ("unregistered employers at the same share of jobs as at earlier cut-offs", dict(ibnr="ratio")),
+    ("unregistered employers at the size of the new employers already registered", dict(ibnr="regsize")),
+]
+QUICK = dict(classify="none", batch="locf", ibnr="none", sites="latest")
+CAREFUL = dict(batch="reporters", ibnr="level", sites="latest")

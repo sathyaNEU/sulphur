@@ -1,0 +1,705 @@
+{
+ "results": [
+  {
+   "id": "R1",
+   "name": "the census at the cut-off and December 2025 against the published total",
+   "graded_as": "Ask 6",
+   "figure": "r1_census_and_reconciliation",
+   "depends": [],
+   "independent": "",
+   "golden": {
+    "liable": 27897,
+    "received": 20777,
+    "outstanding": 7120,
+    "published": 455161,
+    "now": 455880,
+    "late_reports": 202,
+    "accounts_since": 516,
+    "amendments": 1
+   },
+   "passes": {
+    "quick": {
+     "liable": 27802,
+     "received": 20682,
+     "outstanding": 7120,
+     "published": 455161,
+     "now": 455880,
+     "late_reports": null,
+     "accounts_since": null,
+     "amendments": null
+    },
+    "careful": {
+     "liable": 27897,
+     "received": 20777,
+     "outstanding": 7120,
+     "published": 455161,
+     "now": 455880,
+     "late_reports": 202,
+     "accounts_since": 516,
+     "amendments": 1
+    },
+    "thorough": {
+     "liable": 27897,
+     "received": 20777,
+     "outstanding": 7120,
+     "published": 455161,
+     "now": 455880,
+     "late_reports": 202,
+     "accounts_since": 516,
+     "amendments": 1
+    }
+   }
+  },
+  {
+   "id": "R2",
+   "name": "the outstanding reports by cause, and what the missing-alone keep",
+   "graded_as": "Component 4",
+   "figure": "r2_outstanding_by_kind",
+   "depends": [
+    "R1"
+   ],
+   "independent": "",
+   "bands": {
+    "late_transmission": [
+     4740,
+     4950
+    ],
+    "missing_alone": [
+     820,
+     870
+    ],
+    "late_every_quarter": [
+     320,
+     350
+    ],
+    "two_quarters": [
+     970,
+     1020
+    ],
+    "new_account": [
+     80,
+     110
+    ],
+    "missing_alone_keep": [
+     0.27,
+     0.32
+    ]
+   },
+   "golden": {
+    "late_transmission": 4844,
+    "missing_alone": 846,
+    "late_every_quarter": 334,
+    "two_quarters": 999,
+    "new_account": 97,
+    "missing_alone_keep": 0.3
+   },
+   "passes": {
+    "quick": null,
+    "careful": {
+     "late_transmission": 4844,
+     "missing_alone": 846,
+     "late_every_quarter": 334,
+     "two_quarters": 999,
+     "new_account": 97,
+     "missing_alone_keep": 0.3
+    },
+    "thorough": {
+     "late_transmission": 4844,
+     "missing_alone": 846,
+     "late_every_quarter": 334,
+     "two_quarters": 999,
+     "new_account": 97,
+     "missing_alone_keep": 0.3
+    }
+   }
+  },
+  {
+   "id": "R3",
+   "name": "this quarter's trouble carried to the late transmissions (jobs)",
+   "graded_as": "Component 1",
+   "figure": "r3_late_transmission_jobs",
+   "depends": [
+    "R2"
+   ],
+   "independent": "",
+   "band": [
+    250.0,
+    600.0
+   ],
+   "partly": [
+    100.0,
+    800.0
+   ],
+   "golden": 530,
+   "passes": {
+    "quick": null,
+    "careful": 0,
+    "thorough": 530
+   }
+  },
+  {
+   "id": "R4",
+   "name": "the employers with no account yet",
+   "graded_as": "Component 2",
+   "figure": "r4_unregistered",
+   "depends": [],
+   "independent": "the register's liability and establishment dates",
+   "bands": {
+    "employers": [
+     560,
+     620
+    ],
+    "jobs": [
+     2300,
+     2600
+    ]
+   },
+   "golden": {
+    "employers": 590,
+    "jobs": 2500
+   },
+   "passes": {
+    "quick": null,
+    "careful": {
+     "employers": 840,
+     "jobs": 3500
+    },
+    "thorough": {
+     "employers": 590,
+     "jobs": 2500
+    }
+   }
+  },
+  {
+   "id": "R5",
+   "name": "the worksite split against the latest reports' (jobs by county)",
+   "graded_as": "Component 3",
+   "figure": "r5_worksite_split",
+   "depends": [],
+   "independent": "the worksite reports and their dates received",
+   "bands": {
+    "Kittredge": [
+     80.0,
+     120.0
+    ],
+    "Talcott": [
+     170.0,
+     210.0
+    ],
+    "Sayre": [
+     140.0,
+     180.0
+    ],
+    "Calder": [
+     -190.0,
+     -150.0
+    ],
+    "Linden": [
+     -180.0,
+     -140.0
+    ]
+   },
+   "golden": {
+    "Kittredge": 100,
+    "Talcott": 190,
+    "Sayre": 160,
+    "Calder": -170,
+    "Linden": -160
+   },
+   "passes": {
+    "quick": null,
+    "careful": {
+     "Kittredge": 0,
+     "Talcott": 0,
+     "Sayre": 0,
+     "Calder": 0,
+     "Linden": 0
+    },
+    "thorough": {
+     "Kittredge": 100,
+     "Talcott": 190,
+     "Sayre": 160,
+     "Calder": -170,
+     "Linden": -160
+    }
+   }
+  },
+  {
+   "id": "R6",
+   "name": "each county's December 2026 jobs",
+   "graded_as": "Ask 2",
+   "figure": "r6_county_jobs",
+   "depends": [
+    "R2",
+    "R3",
+    "R4",
+    "R5"
+   ],
+   "independent": "",
+   "bands": {
+    "Bray": [
+     21110.0,
+     21160.0
+    ],
+    "Calder": [
+     101430.0,
+     101620.0
+    ],
+    "Corliss": [
+     16350.0,
+     16400.0
+    ],
+    "Fenwick": [
+     16540.0,
+     16580.0
+    ],
+    "Garrow": [
+     35600.0,
+     35690.0
+    ],
+    "Hadley": [
+     27440.0,
+     27520.0
+    ],
+    "Kittredge": [
+     11500.0,
+     11560.0
+    ],
+    "Linden": [
+     48270.0,
+     48380.0
+    ],
+    "Merritt": [
+     58450.0,
+     58550.0
+    ],
+    "Ostrom": [
+     23660.0,
+     23720.0
+    ],
+    "Pell": [
+     36500.0,
+     36560.0
+    ],
+    "Talcott": [
+     12770.0,
+     12820.0
+    ],
+    "Whitcomb": [
+     36890.0,
+     36970.0
+    ],
+    "Sayre": [
+     9290.0,
+     9330.0
+    ]
+   },
+   "golden": {
+    "Bray": 21130,
+    "Calder": 101500,
+    "Corliss": 16370,
+    "Fenwick": 16560,
+    "Garrow": 35640,
+    "Hadley": 27470,
+    "Kittredge": 11530,
+    "Linden": 48310,
+    "Merritt": 58490,
+    "Ostrom": 23690,
+    "Pell": 36520,
+    "Talcott": 12790,
+    "Whitcomb": 36920,
+    "Sayre": 9310
+   },
+   "passes": {
+    "quick": {
+     "Bray": 21190,
+     "Calder": 101760,
+     "Corliss": 16400,
+     "Fenwick": 16630,
+     "Garrow": 36240,
+     "Hadley": 27690,
+     "Kittredge": 11970,
+     "Linden": 48380,
+     "Merritt": 58780,
+     "Ostrom": 23890,
+     "Pell": 36590,
+     "Talcott": 13330,
+     "Whitcomb": 37110,
+     "Sayre": 9580
+    },
+    "careful": {
+     "Bray": 21140,
+     "Calder": 101670,
+     "Corliss": 16340,
+     "Fenwick": 16650,
+     "Garrow": 35820,
+     "Hadley": 27590,
+     "Kittredge": 11740,
+     "Linden": 48330,
+     "Merritt": 58690,
+     "Ostrom": 23740,
+     "Pell": 36570,
+     "Talcott": 13060,
+     "Whitcomb": 37020,
+     "Sayre": 9520
+    },
+    "thorough": {
+     "Bray": 21130,
+     "Calder": 101500,
+     "Corliss": 16370,
+     "Fenwick": 16560,
+     "Garrow": 35640,
+     "Hadley": 27470,
+     "Kittredge": 11530,
+     "Linden": 48310,
+     "Merritt": 58490,
+     "Ostrom": 23690,
+     "Pell": 36520,
+     "Talcott": 12790,
+     "Whitcomb": 36920,
+     "Sayre": 9310
+    }
+   }
+  },
+  {
+   "id": "R7",
+   "name": "each county's change on December 2025",
+   "graded_as": "Ask 4",
+   "figure": "r7_changes",
+   "depends": [
+    "R6"
+   ],
+   "independent": "",
+   "bands": {
+    "Bray": [
+     -1.1,
+     -0.8
+    ],
+    "Calder": [
+     1.5,
+     1.8
+    ],
+    "Corliss": [
+     1.0,
+     1.3
+    ],
+    "Fenwick": [
+     0.3,
+     0.6
+    ],
+    "Garrow": [
+     -3.2,
+     -2.9
+    ],
+    "Hadley": [
+     1.0,
+     1.3
+    ],
+    "Kittredge": [
+     -2.9,
+     -2.5
+    ],
+    "Linden": [
+     0.7,
+     1.0
+    ],
+    "Merritt": [
+     -1.0,
+     -0.7
+    ],
+    "Ostrom": [
+     -3.0,
+     -2.7
+    ],
+    "Pell": [
+     0.6,
+     0.9
+    ],
+    "Talcott": [
+     0.6,
+     0.9
+    ],
+    "Whitcomb": [
+     0.5,
+     0.8
+    ],
+    "Sayre": [
+     0.9,
+     1.2
+    ]
+   },
+   "golden": {
+    "Bray": -1.0,
+    "Calder": 1.6,
+    "Corliss": 1.1,
+    "Fenwick": 0.5,
+    "Garrow": -3.1,
+    "Hadley": 1.1,
+    "Kittredge": -2.7,
+    "Linden": 0.8,
+    "Merritt": -0.9,
+    "Ostrom": -2.9,
+    "Pell": 0.8,
+    "Talcott": 0.7,
+    "Whitcomb": 0.6,
+    "Sayre": 1.1
+   },
+   "passes": {
+    "quick": {
+     "Bray": -0.6,
+     "Calder": 2.0,
+     "Corliss": 1.5,
+     "Fenwick": 1.0,
+     "Garrow": -1.4,
+     "Hadley": 2.1,
+     "Kittredge": 1.4,
+     "Linden": 1.2,
+     "Merritt": -0.2,
+     "Ostrom": -1.9,
+     "Pell": 1.0,
+     "Talcott": 5.0,
+     "Whitcomb": 1.3,
+     "Sayre": 3.9
+    },
+    "careful": {
+     "Bray": -0.9,
+     "Calder": 1.8,
+     "Corliss": 0.9,
+     "Fenwick": 1.0,
+     "Garrow": -2.6,
+     "Hadley": 1.5,
+     "Kittredge": -0.9,
+     "Linden": 0.8,
+     "Merritt": -0.6,
+     "Ostrom": -2.6,
+     "Pell": 0.9,
+     "Talcott": 2.8,
+     "Whitcomb": 0.9,
+     "Sayre": 3.3
+    },
+    "thorough": {
+     "Bray": -1.0,
+     "Calder": 1.6,
+     "Corliss": 1.1,
+     "Fenwick": 0.5,
+     "Garrow": -3.1,
+     "Hadley": 1.1,
+     "Kittredge": -2.7,
+     "Linden": 0.8,
+     "Merritt": -0.9,
+     "Ostrom": -2.9,
+     "Pell": 0.8,
+     "Talcott": 0.7,
+     "Whitcomb": 0.6,
+     "Sayre": 1.1
+    }
+   }
+  },
+  {
+   "id": "R8",
+   "name": "the counties to designate",
+   "graded_as": "Recommendation",
+   "figure": "r8_designated",
+   "depends": [
+    "R7"
+   ],
+   "independent": "",
+   "golden": [
+    "Garrow",
+    "Kittredge",
+    "Ostrom"
+   ],
+   "passes": {
+    "quick": [],
+    "careful": [
+     "Garrow",
+     "Ostrom"
+    ],
+    "thorough": [
+     "Garrow",
+     "Kittredge",
+     "Ostrom"
+    ]
+   }
+  },
+  {
+   "id": "R9",
+   "name": "the replay on December 2025",
+   "graded_as": "Ask 7",
+   "figure": "r9_replay",
+   "depends": [
+    "R2",
+    "R4",
+    "R5"
+   ],
+   "independent": "",
+   "bands": {
+    "state_difference": [
+     -0.2,
+     0.0
+    ],
+    "mean_county_difference": [
+     0.3,
+     0.45
+    ]
+   },
+   "golden": {
+    "state_difference": -0.12,
+    "mean_county_difference": 0.37
+   },
+   "passes": {
+    "quick": null,
+    "careful": {
+     "state_difference": -0.03,
+     "mean_county_difference": 0.41
+    },
+    "thorough": {
+     "state_difference": -0.12,
+     "mean_county_difference": 0.37
+    }
+   }
+  }
+ ],
+ "hints": [
+  {
+   "sentence": "More of a quarter's new employers get their account after the cut-off than by it, and the late ones are smaller.",
+   "rescues": [
+    "R4"
+   ]
+  },
+  {
+   "sentence": "An employer's worksites keep their own seasons, so the latest worksite report does not give December's split.",
+   "rescues": [
+    "R5"
+   ]
+  },
+  {
+   "sentence": "Employers missing alone hold several times their usual share of the housing chain's jobs this quarter, in the late transmissions as in the ones that arrived.",
+   "rescues": [
+    "R3"
+   ]
+  }
+ ],
+ "routes": [
+  {
+   "name": "the golden",
+   "answer": [
+    "Garrow",
+    "Kittredge",
+    "Ostrom"
+   ],
+   "golden": true
+  },
+  {
+   "name": "the reports received alone",
+   "answer": [
+    "Bray",
+    "Calder",
+    "Corliss",
+    "Fenwick",
+    "Garrow",
+    "Hadley",
+    "Kittredge",
+    "Linden",
+    "Merritt",
+    "Ostrom",
+    "Pell",
+    "Talcott",
+    "Whitcomb",
+    "Sayre"
+   ]
+  },
+  {
+   "name": "September carried for every report outstanding, accounts on the register, the latest worksite reports",
+   "answer": [
+    "Ostrom"
+   ]
+  },
+  {
+   "name": "the reporting employers' change for every report outstanding, accounts on the register, the latest worksite reports",
+   "answer": [
+    "Garrow",
+    "Ostrom"
+   ]
+  },
+  {
+   "name": "outstanding reports read by cause; late transmissions at the reporters' change; accounts on the register; the latest worksite reports",
+   "answer": [
+    "Garrow",
+    "Kittredge",
+    "Ostrom"
+   ]
+  },
+  {
+   "name": "the same with last year's unregistered jobs carried as they were",
+   "answer": [
+    "Garrow",
+    "Ostrom"
+   ]
+  },
+  {
+   "name": "the full estimate without the employers that have no account yet",
+   "answer": [
+    "Garrow",
+    "Kittredge",
+    "Ostrom"
+   ]
+  },
+  {
+   "name": "the full estimate with the latest worksite reports' split",
+   "answer": [
+    "Garrow",
+    "Ostrom"
+   ]
+  },
+  {
+   "name": "the full estimate with last December's worksite split",
+   "answer": [
+    "Garrow",
+    "Kittredge",
+    "Ostrom"
+   ]
+  },
+  {
+   "name": "the full estimate with late transmissions at the reporters' change",
+   "answer": [
+    "Garrow",
+    "Kittredge",
+    "Ostrom"
+   ]
+  },
+  {
+   "name": "the full estimate with the missing-alone share from every earlier quarter",
+   "answer": [
+    "Garrow",
+    "Kittredge",
+    "Ostrom"
+   ]
+  },
+  {
+   "name": "the reporting employers' change for every report outstanding, the rest as in the estimate",
+   "answer": []
+  },
+  {
+   "name": "unregistered employers at the same share of jobs as at earlier cut-offs",
+   "answer": [
+    "Garrow",
+    "Kittredge",
+    "Ostrom"
+   ]
+  },
+  {
+   "name": "unregistered employers at the size of the new employers already registered",
+   "answer": [
+    "Garrow",
+    "Kittredge",
+    "Ostrom"
+   ]
+  }
+ ],
+ "passes_are": {
+  "quick": "the register's active accounts, September carried for every outstanding report, the published table as the base, the latest worksite reports, no employer without an account",
+  "careful": "the outstanding reports read by cause and the missing-alone carried at the resolved quarters' share; the late transmissions at the reporting employers' change; last year's unregistered jobs carried as they were; the latest worksite reports' split; the same on the replay",
+  "thorough": "the golden"
+ }
+}

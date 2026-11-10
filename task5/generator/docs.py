@@ -1,10 +1,9 @@
-"""task5 architecture 3: the pack's documents in their issuers' genres.
+"""task5 architecture 4: the pack's documents in their issuers' genres.
 
 The Community Transition Fund Act (the Legislature's enrolled act), the data sharing agreement between the
 Unemployment Insurance Tax Division and the Labor Market Information section (its schedules list the fields the
 extract carries), the Fund administrator's request for the certification, and the Division's notice of 2027
-contribution rates. The PDFs are written with ReportLab, which they name as their producer; their dates are the
-issue dates, set at equal length so the cross-reference table holds and two builds are byte-identical."""
+contribution rates. Each is laid out by the house writer's Word stage and saved in Word's own form."""
 import datetime as dt
 import email.utils
 
@@ -107,12 +106,13 @@ ACT_SECTIONS = [
         "(a) “Board” means the Community Transition Fund Board established in section 3.",
         "(b) “Commissioner” means the Commissioner of Labor.",
         "(c) “Covered employment,” for a county and a month, means the number of workers in employment covered by "
-        "the Unemployment Insurance Law, as reported or estimated, for the payroll period that includes the twelfth day "
-        "of the month at worksites located in the county. It is the sum over every employer liable to report for the "
-        "calendar quarter that contains the month, whether or not the employer’s report for that quarter has been "
-        "received when the Commissioner certifies.",
-        "(d) “Employer liable to report” for a calendar quarter means an employer whose account under the "
-        "Unemployment Insurance Law is liable for contributions on any day of the quarter.",
+        "the Unemployment Insurance Law for the payroll period that includes the twelfth day of the month at worksites "
+        "located in the county. It is the sum over every employer subject to that Law on any day of the calendar "
+        "quarter that contains the month.",
+        "(d) “Employer subject to the Unemployment Insurance Law” has the meaning given in section 41-102 of that "
+        "Law. An employing unit is subject to the Law from the first day on which it has a worker in covered employment, "
+        "whether or not an account has been established for it, and remains subject until the day its account is closed, "
+        "inactivated or transferred takes effect.",
         "(e) “Fund year” means the calendar year in which grants under section 6 are made.",
     ]),
     ("Section 3. Fund; Board.", [
@@ -125,19 +125,30 @@ ACT_SECTIONS = [
     ]),
     ("Section 4. Designation.", [
         "For each fund year, the Board shall designate every county whose covered employment for December of the year "
-        "before the fund year changed, against its covered employment for December of the year before that, by minus "
-        "2.0 percent or lower, the change being expressed as a percent and rounded to one decimal place. A county "
-        "designated for a fund year is eligible for grants under section 6 in that year. The first fund year is 2027.",
+        "before the fund year, as certified under section 5, changed against its covered employment for December of the "
+        "year before that by minus 2.0 percent or lower, the change being expressed as a percent and rounded to one "
+        "decimal place. A county designated for a fund year is eligible for grants under section 6 in that year. The "
+        "first fund year is 2027.",
     ]),
     ("Section 5. Certification.", [
         "(a) Not later than March 1 of each fund year, the Commissioner shall certify to the Board, for each county, the "
-        "covered employment for each of the two months of December named in section 4 and the change between them, "
-        "from the quarterly contribution reports the Department of Labor has received by February 15 of the fund year.",
-        "(b) With the certification, the Commissioner shall deliver to the Board a list of the employers liable to "
-        "report for the fourth calendar quarter of the year before the fund year, showing for each employer and each "
-        "county in which it has a worksite the covered employment for December that the certification counts, and "
-        "whether the employer’s report for that quarter had been received. The list is confidential under section "
-        "41-712 of the Unemployment Insurance Law and may be used only for the Board’s audit of the certification.",
+        "Department of Labor’s best estimate of covered employment for December of the year before the fund year, made "
+        "from the records of the Unemployment Insurance Tax Division as they stand at the close of February 15 of the "
+        "fund year; covered employment for December of the year before that, from the same records as they stand at the "
+        "same date; and the change between the two.",
+        "(b) The certification shall count every employer subject to the Unemployment Insurance Law for the quarter, "
+        "whether or not its contribution report for the quarter has been received and whether or not an account has been "
+        "established for it when the Commissioner certifies, and shall state for each county how many of the jobs "
+        "certified are on reports received and how many are estimated.",
+        "(c) With the certification, the Commissioner shall report to the Board how the covered employment certified for "
+        "the earlier December differs from the figure the Department has published for it, and why; and what the same "
+        "estimate would have given for the earlier December from the Division’s records as they stood at the close of "
+        "February 15 of the year before the fund year, beside the figure certified for it.",
+        "(d) With the certification, the Commissioner shall deliver to the Board a list of the employers counted for "
+        "the fourth calendar quarter of the year before the fund year, showing for each employer and each county in "
+        "which it has a worksite the covered employment for December that the certification counts, and whether the "
+        "employer’s report for that quarter had been received. The list is confidential under section 41-712 of the "
+        "Unemployment Insurance Law and may be used only for the Board’s audit of the certification.",
     ]),
     ("Section 6. Grants.", [
         "(a) From the fund, the Board may make grants to a designated county, or to a nonprofit workforce board or "
@@ -195,33 +206,39 @@ AGREEMENT = [
 ]
 SCHED = {
     "A": ("Schedule A. Quarterly contribution reports",
-          "Every report received, including each amended report and any report received more than once. Each gives the "
-          "employer\u2019s account number, the year and quarter the report covers, whether it is the first report received "
-          "for the quarter (ORIGINAL) or a report that replaces an earlier one for the same quarter (AMENDED), the number of "
-          "covered workers who worked during or received pay for the payroll period that includes the twelfth day of each "
-          "month of the quarter, the wages paid in the quarter in dollars and the part subject to contributions, and the "
-          "date and time the Division\u2019s system received the report. A report received on paper carries the date it "
-          "was received, with the time recorded as 00:00:00."),
+          "Every report posted to an employer account, including each amended report and any report received more than "
+          "once. Each gives the employer’s account number, the year and quarter the report covers, whether it is the "
+          "first report received for the quarter (ORIGINAL) or a report that replaces an earlier one for the same quarter "
+          "(AMENDED), the number of covered workers who worked during or received pay for the payroll period that includes "
+          "the twelfth day of each month of the quarter, the wages paid in the quarter in dollars and the part subject to "
+          "contributions, and the date and time the Division’s system received the report. A report received on paper "
+          "carries the date it was received, with the time recorded as 00:00:00. A report received from an employing unit "
+          "that has no account is held, and is posted with the date and time it was received once the account is "
+          "established. The contribution report is the record of an account’s employment for the quarter."),
     "B": ("Schedule B. Employer accounts",
           "Every account, active or inactive, as at the date of the extract: the account number (seven digits, a hyphen "
-          "and a check digit); the employer\u2019s legal name and any name it trades under; its ownership (5 private, 3 "
+          "and a check digit); the employer’s legal name and any name it trades under; its ownership (5 private, 3 "
           "local government, 2 state government); the industry code assigned at registration or at the latest review, "
-          "which for a code assigned before 2022 may be a NAICS 2017 code; the county of the employer\u2019s principal "
-          "place of business in Franklin, or of its only worksite; the first day on which the account is liable for "
-          "contributions (month, day, year); whether the account is active or inactive, and the date that status took "
-          "effect; whether the employer reports its employment by worksite on the multiple worksite report; and, where "
-          "the account succeeded to another employer\u2019s business, that employer\u2019s account."),
+          "which for a code assigned before 2022 may be a NAICS 2017 code; the county of the employer’s principal "
+          "place of business in Franklin, or of its only worksite; the first day on which the employer had a worker in "
+          "covered employment, from which the account is liable for contributions (month, day, year); the date the "
+          "Division established the account (month, day, year); whether the account is active or inactive, and the date "
+          "that status took effect; whether the employer reports its employment by worksite on the multiple worksite "
+          "report; and, where the account succeeded to another employer’s business, that employer’s account."),
     "C": ("Schedule C. Account status history",
-          "Every change to an account\u2019s status: the account number; the change (LIABLE, a new liability for a new "
-          "employer or a successor; CLOSED, the employer has told the Division it has ceased business; INACTIVATED, the "
-          "Division has inactivated the account; TRANSFERRED, the employer\u2019s business has passed to a successor); "
-          "the date the change takes effect, which for a closure or an inactivation is the first day for which the "
-          "employer had no workers in covered employment and for a transfer the date of transfer; the date the Division "
-          "entered the change; and the Division\u2019s reason text."),
+          "Every change to an account’s status since January 1, 2023: the account number; the change (LIABLE, a new "
+          "liability for a new employer or a successor; CLOSED, the employer has told the Division it has ceased business; "
+          "INACTIVATED, the Division has inactivated the account; TRANSFERRED, the employer’s business has passed to a "
+          "successor); the date the change takes effect, which for a new liability is the first day of covered "
+          "employment, for a closure or an inactivation the first day for which the employer had no workers in covered "
+          "employment and for a transfer the date of transfer; the date the Division entered the change, which for a new "
+          "liability is the date the account was established; and the Division’s reason text."),
     "D": ("Schedule D. Multiple worksite reports",
-          "Every worksite on each multiple worksite report received: the account number, as digits only; the worksite\u2019s "
-          "reporting unit number within the account; the year and quarter; the worksite\u2019s county and city; its "
-          "industry code; and the worksite\u2019s share of the report\u2019s employment for each month of the quarter."),
+          "Every worksite on each multiple worksite report received: the account number, as digits only; the worksite’s "
+          "reporting unit number within the account; the year and quarter; the worksite’s county and city; its "
+          "industry code; the worksite’s employment for each month of the quarter; and the date the report was "
+          "received (month, day, year). The multiple worksite report distributes the employment on the account’s "
+          "contribution report among its worksites."),
 }
 
 
@@ -253,7 +270,9 @@ def write_agreement(path):
 # ------------------------------------------------------------------------------------------------ the request
 REQUEST_BODY = """Danielle,
 
-The Board meets on Thursday, March 4 to designate counties for the fund's first year. Under section 5 of the Act we need the Commissioner's certification by March 1: each county's covered employment for December 2026 and December 2025 and the change between them, and the list of liable employers the Board's auditor will sample.
+The Board meets on Thursday, March 4 to designate counties for the fund's first year. Under section 5 of the Act the Commissioner's certification is due by March 1: each county's covered employment for December 2026 and December 2025 and the change between them, with the employer list under 5(d).
+
+The Board will also want the two things 5(c) asks for in front of it, since this is the first time anyone has had to stand behind December numbers this early: how December 2025 now compares with what the Department published in June, and what you would have told us a year ago.
 
 A chart of the changes against the 2.0 percent line would help the discussion, and a workbook is fine for the figures.
 

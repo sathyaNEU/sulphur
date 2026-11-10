@@ -205,6 +205,8 @@ def tables(w):
     x = 1004000 + int(r.integers(0, 900))
     for i in order:
         x += int(r.integers(9, 260))
+        if 5550100 <= x <= 5550199:           # the block the telephone companies keep for fiction
+            x = 5550200 + int(r.integers(9, 260))
         nums[i] = x
     w.acct = nums
     fmt = lambda x: "%07d-%d" % (x, check_digit(x))
@@ -256,11 +258,11 @@ def tables(w):
            "45": 2700, "48": 4600, "49": 4100, "51": 7400, "52": 7800, "53": 4300, "54": 7900, "56": 3500, "61": 4400,
            "62": 4700, "71": 2500, "72": 1950, "81": 3200, "92": 5100}
     wage = {c: mw2.get(c[:2], 4000) for c in set(w.naics)}
-    rw = np.random.default_rng([w.seed, 32])
+    rw = np.random.default_rng([w.seed, 32]).uniform(0.82, 1.18, (w.n, W.NQ))    # one pay level per account and quarter
     rep = []
     for (i, q, kind, m, t) in vr:
         mw = wage.get(w.naics[i], 4200) * (1 + 0.06 * ((q // 4) - 1))
-        tw = sum(m) * mw * rw.uniform(0.82, 1.18)
+        tw = sum(m) * mw * rw[i, q]
         tax = min(tw, sum(m) / 3.0 * (14000 if q % 4 == 0 else (9000 if q % 4 == 1 else (3000 if q % 4 == 2 else 900))))
         rep.append((w.acct_s[i], 2023 + q // 4, q % 4 + 1, kind, m[0], m[1], m[2], "%.2f" % tw, "%.2f" % max(0, tax),
                     t.strftime("%Y-%m-%d %H:%M:%S"), i, q))

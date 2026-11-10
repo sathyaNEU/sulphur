@@ -1,15 +1,16 @@
 {
  "task": "task5",
- "architecture": 3,
- "title": "Each Franklin county's December 2026 covered jobs, certified from the unemployment insurance reports received by 15 February 2027, and the counties that qualify for the 2027 Community Transition Fund",
+ "architecture": 4,
+ "title": "Each Franklin county's December 2026 covered jobs for the Commissioner's certification to the 2027 Community Transition Fund, from the Unemployment Insurance Tax Division's records as they stood on 15 February 2027",
  "domain": "Survey Research & Official Statistics",
  "subdomain": "census-register-administrative-data-quality",
- "objective": "Data Extraction & Conformation (ETL)",
- "prompt_shape": "03: each county's December covered jobs, from the reports received to the certified figure, against December 2025",
+ "analysis_type": "Data Extraction & Conformation (ETL / Pipeline Build)",
+ "answer_shape": "a reconciled table plus findings",
  "as_of": "2027-02-15",
  "deliverables": [
   "ctf_certification_december_2026.xlsx",
-  "ctf_employer_jobs_december_2026.csv"
+  "ctf_employer_jobs_december_2026.csv",
+  "ctf_certification_memo_2027.docx"
  ],
  "distractor_files": [
   "ui_contribution_rate_notice_2027.docx",
@@ -25,10 +26,10 @@
   ],
   "largest_file": "ui_quarterly_reports_2023q1_2026q4.csv",
   "rows": {
-   "ui_quarterly_reports_2023q1_2026q4.csv": 416574,
-   "ui_employer_accounts_2027-02-15.csv": 31858,
-   "ui_account_status_history_2023-2027.csv": 12202,
-   "ui_multiple_worksite_reports_2023q1_2026q4.csv": 21846,
+   "ui_quarterly_reports_2023q1_2026q4.csv": 429471,
+   "ui_employer_accounts_2027-02-15.csv": 39227,
+   "ui_account_status_history_2023-2027.csv": 26803,
+   "ui_multiple_worksite_reports_2023q1_2026q4.csv": 17944,
    "franklin_county_codes.csv": 14,
    "naics_2017_2022_supersector_concordance.csv": 189
   }
@@ -36,7 +37,7 @@
  "sources": [
   {
    "files": "all files under target/",
-   "origin": "constructed for this task by task5/generator/build.py (seeded, deterministic) in the layouts of a US state unemployment insurance tax division's statistical extract (quarterly contribution reports, the employer account register and its status history, multiple worksite reports), a county code list, the NAICS 2017 and 2022 supersector concordance, an enrolled state act, a data sharing agreement, an email, a published county table, a contribution rate notice and county population estimates; the State of Franklin, its counties, agencies, employers and people are fictional and account numbers are not real",
+   "origin": "constructed for this task by task5/generator/build.py (seeded, deterministic): a simulation of a US state unemployment insurance tax division's filing and account processes, cut in the layouts of its statistical extract (quarterly contribution reports, the employer account register and its status history, multiple worksite reports), a county code list, the NAICS 2017 and 2022 supersector concordance, an enrolled state act, a data sharing agreement, an email, a published county table, a contribution rate notice and county population estimates; the State of Franklin, its counties, agencies, employers and people are fictional and account numbers are not real",
    "date": "2027-02-16",
    "license": "original work for this task; no third-party data",
    "naics_titles": "NAICS 2017 and 2022 code titles from the U.S. Census Bureau's public classification (public domain)"

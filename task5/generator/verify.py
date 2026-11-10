@@ -1,282 +1,416 @@
-"""task5 architecture 3: the independent verifier. It reads only the shipped bundle (target/, golden/, submission.md,
-generator/figures.json), shares no code with the generator's methods, recomputes each county's December 2026 covered
-jobs on the golden route, and checks every graded figure, the deliverables and every shipped format."""
+"""task5 architecture 4: the independent verifier. It reads only the shipped bundle (target/, golden/) and
+generator/figures.json, on its own code path (plain dictionaries and loops, no generator module), and recomputes the
+census, the outstanding reports by kind, what the missing-alone keep, the employers with no account, the worksite split,
+every county's December jobs and change, the designated set, the reconciliation to the published table and the replay."""
+import csv
+import datetime as dt
 import json
+import math
 import os
-import re
 import sys
-
-import numpy as np
-import pandas as pd
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 TASK = os.path.dirname(HERE)
-CUTOFF = {}          # quarter index -> cutoff timestamp
-for qi in range(16):
-    y, k = 2023 + qi // 4, qi % 4 + 1
-    m = 3 * k + 2
-    yy = y + (m > 12)
-    CUTOFF[qi] = pd.Timestamp(yy, (m - 1) % 12 + 1, 15, 23, 59, 59)
-FLASH, BASE = 15, 11
-EXTRACT = CUTOFF[FLASH]
-CLOSED = list(range(4, 11))
-OK = []
+RES = []
+CHAIN = {"236115", "236118", "236220", "237310", "238110", "238160", "238210", "238220", "238310", "238320", "238910",
+         "238990", "113310", "115310", "321113", "321918", "337110", "423310", "444180", "444190", "484220", "423810",
+         "444110"}
 
 
 def ok(name, cond, detail=""):
-    OK.append((name, bool(cond), detail))
+    RES.append((name, bool(cond), str(detail)))
 
 
 def qstart(q):
-    return pd.Timestamp(2023 + q // 4, 3 * (q % 4) + 1, 1)
+    return dt.datetime(2023 + q // 4, 3 * (q % 4) + 1, 1)
 
 
 def qend(q):
-    return qstart(q) + pd.offsets.QuarterEnd(0)
+    y, k = 2023 + q // 4, q % 4 + 1
+    return dt.datetime(y, 3 * k, [31, 30, 30, 31][k - 1])
 
 
-def load(target):
-    rd = lambda f: pd.read_csv(os.path.join(target, f), dtype=str, keep_default_na=False)
-    names = sorted(os.listdir(target))
-    pick = lambda pat: [f for f in names if re.search(pat, f)][0]
-    rep = rd(pick(r"quarterly_reports"))
-    rep["a"] = rep["account_no"].str.replace("-", "", regex=False)
-    rep["q"] = (rep["year"].astype(int) - 2023) * 4 + rep["quarter"].astype(int) - 1
-    rep["t"] = pd.to_datetime(rep["received_at"])
-    for c in ("month1_employment", "month2_employment", "month3_employment"):
-        rep[c] = rep[c].astype(int)
-    rep = rep.sort_values(["a", "q", "t"], kind="stable")
-    k = ["a", "q", "report_type", "month1_employment", "month2_employment", "month3_employment", "total_wages"]
-    pt = rep.groupby(k, sort=False)["t"].shift(1)
-    rep = rep[~(pt.notna() & ((rep["t"] - pt).dt.total_seconds() <= 120))]
-    acc = rd(pick(r"employer_accounts")).copy()
-    acc["a"] = acc["account_no"].str.replace("-", "", regex=False)
-    acc["liab"] = pd.to_datetime(acc["liability_date"], format="%m/%d/%Y")
-    nx = rd(pick(r"naics.*concordance"))
-    acc["ss"] = acc["naics_code"].map(dict(zip(nx["naics_code"], nx["supersector_code"])))
-    acc = acc.set_index("a")
-    st = rd(pick(r"status_history"))
-    st["a"] = st["account_no"].str.replace("-", "", regex=False)
-    st["eff"] = pd.to_datetime(st["effective_date"])
-    st["proc"] = pd.to_datetime(st["processed_date"])
-    ws = rd(pick(r"multiple_worksite"))
-    ws["q"] = (ws["year"].astype(int) - 2023) * 4 + ws["quarter"].astype(int) - 1
-    for c in ("m1_emp", "m3_emp"):
-        ws[c] = ws[c].astype(int)
-    cc = rd(pick(r"county_codes"))
-    ws["c"] = ws["worksite_county"].map({nm.upper(): c for c, nm in zip(cc["county_code"], cc["county_name"])})
-    return rep, acc, st, ws, list(cc["county_code"]), dict(zip(cc["county_code"], cc["county_name"].str.replace(" County", "")))
+def m3start(q):
+    return dt.datetime(2023 + q // 4, 3 * (q % 4) + 3, 1)
 
 
-class Flash:
-    def __init__(self, rep, acc, st, ws):
-        self.rep, self.acc, self.st, self.ws = rep, acc, st, ws
-        self.memo = {}
+def cutoff(q):
+    e = qend(q)
+    m, y = e.month + 2, e.year
+    if m > 12:
+        m, y = m - 12, y + 1
+    return dt.datetime(y, m, 15, 23, 59, 59)
 
-    def last(self, q, asof):
-        key = (q, asof)
-        if key not in self.memo:
-            x = self.rep[(self.rep["q"] == q) & (self.rep["t"] <= asof)]
-            l = x.groupby("a").tail(1).set_index("a")
-            o = x[x["report_type"] == "ORIGINAL"].groupby("a").head(1).set_index("a")
-            self.memo[key] = (l["month3_employment"], o["t"])
-        return self.memo[key]
+
+def mdy(s):
+    return dt.datetime.strptime(s, "%m/%d/%Y")
+
+
+class Files:
+    def __init__(self, target):
+        rd = lambda name: list(csv.DictReader(open(os.path.join(target, name), encoding="utf-8", newline="")))
+        names = sorted(os.listdir(target))
+        pick = lambda key: [f for f in names if key in f][0]
+        self.counties = {r["county_name"].upper(): r["county_code"] for r in rd(pick("county_codes"))}
+        self.codes = sorted(self.counties.values())
+        self.cname = {v: k.title().replace(" County", "") for k, v in self.counties.items()}
+        ss = {r["naics_code"]: r["supersector_code"] for r in rd(pick("naics"))}
+        self.acc = {}
+        for r in rd(pick("employer_accounts")):
+            a = r["account_no"].replace("-", "")
+            self.acc[a] = dict(county=r["county_code"], ss=ss[r["naics_code"]], chain=r["naics_code"] in CHAIN and r["ownership"] == "5",
+                               liab=mdy(r["liability_date"]), est=mdy(r["account_established"]), multi=r["multi_worksite"] == "Y",
+                               no=r["account_no"])
+        self.ends = {}
+        for r in rd(pick("status_history")):
+            if r["change_type"] in ("INACTIVATED", "CLOSED", "TRANSFERRED"):
+                a = r["account_no"].replace("-", "")
+                self.ends.setdefault(a, []).append((dt.datetime.strptime(r["effective_date"], "%Y-%m-%d"),
+                                                    dt.datetime.strptime(r["processed_date"], "%Y-%m-%d")))
+        self.rep = {}
+        for r in rd(pick("quarterly_reports")):
+            a = r["account_no"].replace("-", "")
+            q = (int(r["year"]) - 2023) * 4 + int(r["quarter"]) - 1
+            self.rep.setdefault(q, []).append((dt.datetime.strptime(r["received_at"], "%Y-%m-%d %H:%M:%S"), a, r["report_type"],
+                                               int(r["month3_employment"])))
+        for q in self.rep:
+            self.rep[q].sort(key=lambda x: x[0])
+        self.mwr = {}
+        for r in rd(pick("worksite")):
+            a = r["uiacct"]
+            q = (int(r["year"]) - 2023) * 4 + int(r["quarter"]) - 1
+            self.mwr.setdefault(a, {}).setdefault(q, dict(recv=mdy(r["date_received"]), units={}))["units"][r["reporting_unit"]] = \
+                (self.counties[r["worksite_county"].upper().strip()], int(r["m3_emp"]))
+        self._c = {}
+
+    # ---- as the files stood at a moment
+    def latest(self, q, asof):
+        key = ("L", q, asof)
+        if key not in self._c:
+            last, first = {}, {}
+            for t, a, kind, m3 in self.rep.get(q, []):
+                if t > asof:
+                    break
+                if self.acc[a]["est"] > asof:
+                    continue
+                last[a] = m3
+                if a not in first:
+                    first[a] = t
+            self._c[key] = (last, first)
+        return self._c[key]
 
     def liable(self, q, asof):
-        e = self.st[self.st["change_type"].isin(["INACTIVATED", "CLOSED", "TRANSFERRED"]) & (self.st["proc"] <= asof)]
-        gone = set(e.loc[e["eff"] <= qstart(q), "a"])
-        return set(self.acc.index[self.acc["liab"] <= qend(q)]) - gone
+        key = ("B", q, asof)
+        if key not in self._c:
+            out = set()
+            for a, r in self.acc.items():
+                if r["est"] > asof or r["liab"] > qend(q):
+                    continue
+                if any(eff <= qstart(q) and proc <= asof for eff, proc in self.ends.get(a, [])):
+                    continue
+                out.add(a)
+            self._c[key] = out
+        return self._c[key]
 
-    def trans(self, q, asof):
-        x = self.rep[(self.rep["q"] == q) & (self.rep["t"] <= asof) & (self.rep["report_type"] == "ORIGINAL")]
-        x = x.groupby("a").head(1)
-        x = x[x["t"].dt.strftime("%H:%M:%S") != "00:00:00"]
-        n = x.groupby("t")["a"].transform("size")
-        x = x[n >= 3]
-        return x.set_index("a")["t"]
+    def batches(self, q, asof):
+        first = self.latest(q, asof)[1]
+        by = {}
+        for a, t in first.items():
+            if t.hour + t.minute + t.second > 0:
+                by.setdefault(t, []).append(a)
+        return {a: t for t, ms in by.items() if len(ms) >= 3 for a in ms}
 
-    def classify(self, q):
-        asof = CUTOFF[q]
-        m3, _ = self.last(q, asof)
-        li = self.liable(q, asof)
-        m3 = m3[m3.index.isin(li)]
-        miss = sorted(li - set(m3.index))
-        prev, _ = self.last(q - 1, asof)
-        tr = self.trans(q - 1, asof)
-        groups = tr.groupby(tr).groups
-        late, onf = {}, {}
-        for h in range(max(0, q - 4), q):
-            _, ot = self.last(h, asof)
-            for a, t in ot.items():
-                onf[a] = onf.get(a, 0) + 1
-                late[a] = late.get(a, 0) + int(t > CUTOFF[h])
+    def census(self, q, asof):
+        key = ("V", q, asof)
+        if key in self._c:
+            return self._c[key]
+        L = self.liable(q, asof)
+        cur = self.latest(q, asof)[0]
+        prev = self.latest(q - 1, asof)[0]
+        bk = self.batches(q - 1, asof)
+        mem = {}
+        for a in L:
+            if a in bk:
+                mem.setdefault(bk[a], []).append(a)
         out = {}
-        for a in miss:
-            if a in prev.index:
-                p = float(prev[a])
-                if a in tr.index:
-                    mates = [m for m in groups[tr[a]] if m != a and m in li]
-                    share = np.mean([m in m3.index for m in mates]) if mates else 0.0
-                    out[a] = ("alone" if share >= 0.5 else "batch", p)
+        for a in L:
+            if a in cur:
+                out[a] = dict(kind="rep", m3=cur[a], prior=prev.get(a))
+                continue
+            if a in prev:
+                if a in bk:
+                    ms = mem[bk[a]]
+                    arrived = sum(1 for m in ms if m in cur) / max(1, len(ms) - 1) if len(ms) > 1 else 0.0
+                    kind = "alone" if arrived >= 0.5 else "batch"
                 else:
-                    habit = onf.get(a, 0) >= 2 and late.get(a, 0) == onf.get(a, 0)
-                    out[a] = ("habitual" if habit else "alone", p)
+                    on = late = 0
+                    for h in range(max(0, q - 4), q):
+                        f = self.latest(h, asof)[1].get(a)
+                        if f is not None:
+                            on += 1
+                            late += f > cutoff(h)
+                    kind = "habit" if (on >= 2 and late == on) else "alone"
+                out[a] = dict(kind=kind, prior=prev[a])
             else:
-                pq = None
+                pa = None
                 for h in range(q - 2, -1, -1):
-                    lh, _ = self.last(h, asof)
-                    if a in lh.index:
-                        pq = float(lh[a])
+                    x = self.latest(h, asof)[0].get(a)
+                    if x is not None:
+                        pa = x
                         break
-                out[a] = ("two_q", pq) if pq is not None else ("new", np.nan)
-        return out, m3, prev
+                out[a] = dict(kind="twoq" if pa is not None else "new", prior=pa)
+        self._c[key] = out
+        return out
 
-    def kept(self, kind):
-        num = den = 0.0
-        fin_all = {}
-        ended = self.st[self.st["change_type"].isin(["INACTIVATED", "CLOSED"]) & (self.st["proc"] <= EXTRACT)].groupby("a")["eff"].min()
-        for h in CLOSED:
-            cl, _, _ = self.classify(h)
-            fin, _ = self.last(h, EXTRACT)
-            m3d = qstart(h) + pd.DateOffset(months=2)
-            for a, (k, p) in cl.items():
-                if k != kind or not p or not np.isfinite(p) or p <= 0:
+    def eventual(self, q, know, a):
+        fin = self.latest(q, know)[0]
+        if a in fin:
+            return float(fin[a])
+        if any(eff <= m3start(q) and proc <= know for eff, proc in self.ends.get(a, [])):
+            return 0.0
+        return None
+
+    def mature(self, know, upto):
+        out = []
+        for h in range(4, upto):
+            if cutoff(h) >= know:
+                continue
+            V = self.census(h, cutoff(h))
+            tot = un = 0.0
+            for a, r in V.items():
+                if r["kind"] in ("alone", "twoq") and (r["prior"] or 0) > 0:
+                    tot += r["prior"]
+                    if self.eventual(h, know, a) is None:
+                        un += r["prior"]
+            if tot and un / tot <= 0.02:
+                out.append(h)
+        return out
+
+    def outcomes(self, quarters, know):
+        s = {}
+        new = []
+        for h in quarters:
+            for a, r in self.census(h, cutoff(h)).items():
+                if r["kind"] == "rep":
                     continue
-                if a in fin.index:
-                    num += float(fin[a]); den += p
-                elif a in ended.index and ended[a] <= m3d:
-                    den += p
-        return num / den
+                e = self.eventual(h, know, a)
+                if e is None:
+                    continue
+                if r["kind"] == "new":
+                    new.append(e)
+                elif (r["prior"] or 0) > 0:
+                    x = s.setdefault(r["kind"], [0.0, 0.0])
+                    x[0] += e
+                    x[1] += r["prior"]
+        out = {k: v[0] / v[1] for k, v in s.items()}
+        out["new_mean"] = sum(new) / len(new) if new else 0.0
+        return out
 
-    def estimate(self):
-        cl, m3, prev = self.classify(FLASH)
-        k_alone, k_two = self.kept("alone"), self.kept("two_q")
-        both = m3.index.intersection(prev.index)
-        df = pd.DataFrame({"n": m3[both].values, "b": prev[both].values}, index=both)
-        df["c"] = self.acc.loc[both, "county_code"].values
-        df["s"] = self.acc.loc[both, "ss"].values
-        cell = df.groupby(["c", "s"]).agg(n=("n", "sum"), b=("b", "sum"), k=("n", "size"))
-        cty = df.groupby("c").agg(n=("n", "sum"), b=("b", "sum"))
-        def ratio(c, s):
-            if (c, s) in cell.index and cell.loc[(c, s), "k"] >= 10 and cell.loc[(c, s), "b"] > 0:
-                return cell.loc[(c, s), "n"] / cell.loc[(c, s), "b"]
-            return cty.loc[c, "n"] / cty.loc[c, "b"]
-        own = {}
-        for a in cl:
-            rs = []
-            for d_, s_ in ((FLASH - 4, FLASH - 5), (FLASH - 8, FLASH - 9)):
-                ld, _ = self.last(d_, CUTOFF[FLASH])
-                ls, _ = self.last(s_, CUTOFF[FLASH])
-                if a in ld.index and a in ls.index and ls[a] > 0:
-                    rs.append(ld[a] / ls[a])
-            if len(rs) == 2 and max(rs) < 0.6:
-                own[a] = float(np.mean(rs))
-        newacc = self.acc.index[(self.acc["liab"] >= qstart(FLASH)) & (self.acc["liab"] <= qend(FLASH))]
-        got = m3.index.intersection(newacc)
-        newmean = float(m3[got].mean()) if len(got) else 0.0
-        est, kind = {a: float(v) for a, v in m3.items()}, {a: "reported" for a in m3.index}
-        for a, (k, p) in cl.items():
-            c, s = self.acc.loc[a, "county_code"], self.acc.loc[a, "ss"]
-            if k in ("batch", "habitual"):
-                est[a] = p * own[a] if a in own else p * ratio(c, s)
-            elif k == "alone":
-                est[a] = p * k_alone
-            elif k == "two_q":
-                est[a] = p * k_two
-            else:
-                est[a] = newmean
-            kind[a] = k
-        return est, kind, k_alone
+    def seasonal(self, q, asof, a):
+        rs = []
+        for d_, s_ in ((q - 4, q - 5), (q - 8, q - 9)):
+            if s_ < 0:
+                return None
+            x, y = self.latest(d_, asof)[0].get(a), self.latest(s_, asof)[0].get(a)
+            if x is None or y is None or y <= 0:
+                return None
+            rs.append(x / y)
+        return sum(rs) / 2 if max(rs) < 0.6 else None
 
-    def split(self, q, est):
-        tot = {}
-        mw = set(self.acc.index[self.acc["multi_worksite"] == "Y"])
-        wsq = self.ws[self.ws["q"] <= q]
-        lastq = wsq.groupby("uiacct")["q"].max()
+    def split(self, q, asof, a):
+        """county shares of account a for quarter q from the worksite reports on file at asof"""
+        qs = {h: r for h, r in self.mwr.get(a, {}).items() if h <= q and r["recv"] <= asof}
+        if not qs:
+            return None
+        if q in qs:
+            w = {}
+            for u, (c, m) in qs[q]["units"].items():
+                w[c] = w.get(c, 0.0) + m
+        else:
+            L = max(qs)
+            num = qs.get(q - 4, {}).get("units", {})
+            den = qs.get(L - 4, {}).get("units", {})
+            n_ = d_ = 0.0
+            for u in qs[L]["units"]:
+                if u in num and u in den and den[u][1] > 0:
+                    n_ += num[u][1]
+                    d_ += den[u][1]
+            er = n_ / d_ if d_ > 0 else 1.0
+            w = {}
+            for u, (c, m) in qs[L]["units"].items():
+                r = num[u][1] / den[u][1] if (u in num and u in den and den[u][1] > 0) else er
+                w[c] = w.get(c, 0.0) + m * r
+        tot = sum(w.values())
+        return {c: x / tot for c, x in w.items()} if tot > 0 else None
+
+    def to_counties(self, est, q, asof):
+        tot = {c: 0.0 for c in self.codes}
         for a, e in est.items():
-            if a in mw and a in lastq.index:
-                x = wsq[(wsq["uiacct"] == a) & (wsq["q"] == lastq[a])]
-                s = x.groupby("c")["m3_emp"].sum()
-                if s.sum() <= 0:
-                    s = x.groupby("c")["m1_emp"].sum()
-                if s.sum() > 0:
-                    for c, v in (s / s.sum()).items():
-                        tot[c] = tot.get(c, 0.0) + e * v
-                    continue
-            c = self.acc.loc[a, "county_code"]
-            tot[c] = tot.get(c, 0.0) + e
+            sh = self.split(q, asof, a) if self.acc[a]["multi"] else None
+            if sh:
+                for c, s in sh.items():
+                    tot[c] += e * s
+            else:
+                tot[self.acc[a]["county"]] += e
         return tot
+
+    def unregistered(self, q, asof, know):
+        n_own = n_old = j_own = j_old = reg_own = reg_prev = 0.0
+        for h in range(q - 4, 2, -4):
+            if cutoff(h) >= know:
+                continue
+            for a, r in self.acc.items():
+                if r["liab"] <= qend(h) and cutoff(h) < r["est"] <= know:
+                    e = self.eventual(h, know, a) or 0.0
+                    if r["liab"] >= qstart(h):
+                        n_own += 1
+                        j_own += e
+                    else:
+                        n_old += 1
+                        j_old += e
+                if r["est"] <= cutoff(h):
+                    if qstart(h) <= r["liab"] <= qend(h):
+                        reg_own += 1
+                    elif qstart(max(0, h - 4)) <= r["liab"] < qstart(h):
+                        reg_prev += 1
+        jobs = {c: 0.0 for c in self.codes}
+        n = 0.0
+        if not reg_own:
+            return jobs, 0.0
+        for a, r in self.acc.items():
+            if r["est"] <= asof:
+                if qstart(q) <= r["liab"] <= qend(q):
+                    jobs[r["county"]] += (n_own / reg_own) * (j_own / n_own)
+                    n += n_own / reg_own
+                elif qstart(max(0, q - 4)) <= r["liab"] < qstart(q):
+                    jobs[r["county"]] += (n_old / reg_prev) * (j_old / n_old)
+                    n += n_old / reg_prev
+        return jobs, n
+
+    def estimate(self, q, asof):
+        V = self.census(q, asof)
+        oc = self.outcomes(self.mature(asof, q), asof)
+        k = oc["alone"]
+        # the reporters' change by county and supersector, the seasonal businesses left out
+        cell, cty, tr, trs = {}, {}, {}, [0.0, 0.0]
+        seas = {a: self.seasonal(q, asof, a) for a in V}
+        for a, r in V.items():
+            p = r.get("prior")
+            if not p or p <= 0:
+                continue
+            A = self.acc[a]
+            if r["kind"] == "rep" and seas[a] is None:
+                x = cell.setdefault((A["county"], A["ss"]), [0.0, 0.0, 0])
+                x[0] += r["m3"]; x[1] += p; x[2] += 1
+                y = cty.setdefault(A["county"], [0.0, 0.0])
+                y[0] += r["m3"]; y[1] += p
+            if r["kind"] in ("rep", "alone"):
+                g = (A["chain"], 0 if p <= 9 else (1 if p <= 49 else 2))
+                z = tr.setdefault(g, [0.0, 0.0, 0])
+                al = p if r["kind"] == "alone" else 0.0
+                z[0] += al; z[1] += p; z[2] += 1
+                trs[0] += al; trs[1] += p
+        est, kinds = {}, {}
+        for a, r in V.items():
+            kd = r["kind"]
+            kinds[kd] = kinds.get(kd, 0) + 1
+            A = self.acc[a]
+            p = r.get("prior") or 0.0
+            if kd == "rep":
+                est[a] = float(r["m3"])
+            elif kd in ("batch", "habit"):
+                c = cell.get((A["county"], A["ss"]))
+                mv = c[0] / c[1] if (c and c[2] >= 10 and c[1] > 0) else cty[A["county"]][0] / cty[A["county"]][1]
+                if seas[a] is not None:
+                    mv = seas[a]
+                g = tr.get((A["chain"], 0 if p <= 9 else (1 if p <= 49 else 2)))
+                al = g[0] / g[1] if (g and g[2] >= 30) else trs[0] / trs[1]
+                est[a] = p * (mv * (1 - al) + k * al)
+            elif kd == "alone":
+                est[a] = p * k
+            elif kd == "twoq":
+                est[a] = p * oc.get("twoq", 0.0)
+            else:
+                est[a] = oc["new_mean"]
+        rep_tot = self.to_counties({a: e for a, e in est.items() if V[a]["kind"] == "rep"}, q, asof)
+        out_tot = self.to_counties({a: e for a, e in est.items() if V[a]["kind"] != "rep"}, q, asof)
+        un, n_un = self.unregistered(q, asof, asof)
+        tot = {c: rep_tot[c] + out_tot[c] + un[c] for c in self.codes}
+        return dict(total=tot, kinds=kinds, k=k, unreg=un, n_unreg=n_un, liable=len(V), received=kinds.get("rep", 0), est=est, V=V)
+
+    def base(self, q, asof):
+        return self.to_counties({a: float(m) for a, m in self.latest(q, asof)[0].items()}, q, asof)
+
+
+def r10(x):
+    return int(math.floor(x / 10.0 + 0.5)) * 10
 
 
 def main(task=TASK):
-    OK.clear()
-    target = os.path.join(task, "target")
+    RES.clear()
+    target, gold = os.path.join(task, "target"), os.path.join(task, "golden")
     figs = json.load(open(os.path.join(task, "generator", "figures.json")))
-    rep, acc, st, ws, codes, names = load(target)
-    F = Flash(rep, acc, st, ws)
-    est, kind, ka = F.estimate()
-    tot = F.split(FLASH, est)
-    b3, _ = F.last(BASE, EXTRACT)
-    base = F.split(BASE, {a: float(v) for a, v in b3.items()})
-    ch = {c: 100 * (tot[c] / base[c] - 1) for c in codes}
-    des = sorted(names[c] for c in codes if round(ch[c] + 1e-9, 1) <= -2.0)
-    ok("verify: the designated counties", des == sorted(figs["designated"]), des)
-    for c in codes:
-        f = figs["county." + names[c]]
-        ok("verify: %s change at one decimal" % names[c], round(ch[c] + 1e-9, 1) == f["change"], (round(ch[c], 3), f["change"]))
-        ok("verify: %s December 2026 jobs to the hundred" % names[c], int(round(tot[c] / 100.0)) * 100 == f["total"], (tot[c], f["total"]))
-        ok("verify: %s December 2025 base to the hundred" % names[c], int(round(base[c] / 100.0)) * 100 == f["base"], (base[c], f["base"]))
-    ok("verify: the missing-alone kept share", round(ka, 2) == figs["kept"]["alone"], (round(ka, 4), figs["kept"]["alone"]))
-    # the deliverables
-    gold = os.path.join(task, "golden")
-    emp = pd.read_csv(os.path.join(gold, [f for f in os.listdir(gold) if f.endswith(".csv")][0]), dtype={"county_code": str})
-    sums = emp.groupby("county_code")["december_2026_jobs"].sum()
-    ok("verify: the employer list sums to each county's December 2026 jobs, within ten and to the same hundred",
-       all(abs(sums[c] - tot[c]) < 10 and round(sums[c] / 100.0) == round(tot[c] / 100.0) for c in codes),
-       {names[c]: round(sums[c] - tot[c], 2) for c in codes})
-    rec_accts = {a for a in est if kind[a] == "reported"}
-    marked = set(emp.loc[emp["report_received"] == "Y", "account_no"].str.replace("-", "", regex=False))
-    ok("verify: the employer list marks a report received exactly where one arrived", marked == rec_accts,
-       (len(marked), len(rec_accts)))
+    F = Files(target)
+    EXTRACT = dt.datetime(2027, 2, 15, 23, 59, 59)
+    X = F.estimate(15, cutoff(15))
+    base = F.base(11, EXTRACT)
+    r1 = figs["r1_census_and_reconciliation"]
+    ok("census: liable, received and outstanding", (X["liable"], X["received"], X["liable"] - X["received"]) == (r1["liable"], r1["received"], r1["outstanding"]),
+       (X["liable"], X["received"]))
+    r2 = figs["r2_outstanding_by_kind"]
+    ok("outstanding by kind", (X["kinds"].get("batch"), X["kinds"].get("alone"), X["kinds"].get("habit"), X["kinds"].get("twoq"), X["kinds"].get("new")) ==
+       (r2["late_transmission"], r2["missing_alone"], r2["late_every_quarter"], r2["two_quarters"], r2["new_account"]), X["kinds"])
+    ok("what the missing-alone keep", abs(round(X["k"], 2) - r2["missing_alone_keep"]) < 1e-9, round(X["k"], 4))
+    r4 = figs["r4_unregistered"]
+    ok("employers with no account: count and jobs", int(round(X["n_unreg"], -1)) == r4["employers"] and abs(sum(X["unreg"].values()) - r4["jobs"]) <= 50,
+       (round(X["n_unreg"], 1), round(sum(X["unreg"].values()))))
+    name = F.cname
+    tot_ok = all(r10(X["total"][c]) == figs["r6_county_jobs"][name[c]] for c in F.codes)
+    ok("every county's December 2026 jobs", tot_ok, {name[c]: r10(X["total"][c]) for c in F.codes if r10(X["total"][c]) != figs["r6_county_jobs"][name[c]]})
+    ch = {c: 100 * (X["total"][c] / base[c] - 1) for c in F.codes}
+    ok("every county's change", all(abs(round(ch[c] + 1e-9, 1) - figs["r7_changes"][name[c]]) < 1e-9 for c in F.codes),
+       {name[c]: round(ch[c], 3) for c in F.codes})
+    ok("the designated counties", [name[c] for c in F.codes if round(ch[c] + 1e-9, 1) <= -2.0] == figs["r8_designated"],
+       [name[c] for c in F.codes if round(ch[c] + 1e-9, 1) <= -2.0])
+    # the reconciliation
+    cutp = dt.datetime(2026, 5, 31, 23, 59, 59)
+    pub, now = F.latest(11, cutp)[0], F.latest(11, EXTRACT)[0]
+    late = sum(m for a, m in now.items() if a not in pub and F.acc[a]["est"] <= cutp)
+    new = sum(m for a, m in now.items() if a not in pub and F.acc[a]["est"] > cutp)
+    am = sum(now[a] - pub[a] for a in pub if a in now)
+    ok("the reconciliation to the published table", (sum(pub.values()), sum(now.values()), late, new, am) ==
+       (r1["published"], r1["now"], r1["late_reports"], r1["accounts_since"], r1["amendments"]), (sum(pub.values()), sum(now.values()), late, new, am))
     import openpyxl
-    wb = openpyxl.load_workbook(os.path.join(gold, [f for f in os.listdir(gold) if f.endswith(".xlsx")][0]), data_only=False)
-    sh = wb["Certification"]
-    rows = {r[0]: r for r in sh.iter_rows(min_row=8, max_row=21, max_col=8, values_only=True) if r[0] in codes}
-    ok("verify: the certification table carries every county", len(rows) == len(codes))
-    for c in codes:
-        r = rows[c]
-        f = figs["county." + names[c]]
-        ok("verify: certification row %s agrees with figures.json" % names[c], (r[5], r[6], r[4]) == (f["total"], f["change"], f["estimated"]), (r, f))
-    ok("verify: the certification names the designated counties", all(nm in str(sh["A5"].value) for nm in figs["designated"]), sh["A5"].value)
-    ok("verify: the workbook carries its chart", len(sh._charts) == 1)
-    # every shipped format reads back, each with a positive control
+    wsp = openpyxl.load_workbook([os.path.join(target, f) for f in os.listdir(target) if f.endswith(".xlsx")][0])["County"]
+    pt = sum(int(r[5]) for r in wsp.iter_rows(min_row=6, values_only=True) if r[0] and str(r[0]).strip().isdigit())
+    ok("the published workbook's county rows add to the figure", pt == r1["published"], pt)
+    # the replay
+    R = F.estimate(11, cutoff(11))
+    sd = 100 * (sum(R["total"].values()) / sum(base.values()) - 1)
+    ma = sum(abs(100 * (R["total"][c] / base[c] - 1)) for c in F.codes) / len(F.codes)
+    r9 = figs["r9_replay"]
+    ok("the replay on December 2025", abs(round(sd, 2) - r9["state_difference"]) < 0.011 and abs(round(ma, 2) - r9["mean_county_difference"]) < 0.011, (round(sd, 3), round(ma, 3)))
+    # the deliverables read back
+    wb = openpyxl.load_workbook(os.path.join(gold, "ctf_certification_december_2026.xlsx"))
+    ws = wb["Certification"]
+    rows = {str(r[0]): r for r in ws.iter_rows(min_row=8, max_row=21, values_only=True)}
+    ok("workbook: county jobs and changes are the recomputed ones", all(rows[c][5] == r10(X["total"][c]) and abs(rows[c][6] - round(ch[c] + 1e-9, 1)) < 1e-9 for c in F.codes))
+    byc, nrow = {c: 0.0 for c in F.codes}, 0
+    for r in csv.DictReader(open(os.path.join(gold, "ctf_employer_jobs_december_2026.csv"), encoding="utf-8")):
+        byc[r["county_code"]] += float(r["december_2026_jobs"])
+        nrow += 1
+    ok("employer list: adds to the recomputed county totals", max(abs(byc[c] - X["total"][c]) for c in F.codes) < 40, round(max(abs(byc[c] - X["total"][c]) for c in F.codes), 1))
     from docx import Document
-    def txt(f):
-        d = Document(os.path.join(target, f))
-        parts = [p.text for p in d.paragraphs] + [c.text for t in d.tables for row in t.rows for c in row.cells]
-        return re.sub(r"\s+", " ", "\n".join(parts).replace("’", "'"))
-    pdfs = sorted(f for f in os.listdir(target) if f.endswith(".docx"))
-    act = txt([f for f in pdfs if "act" in f][0])
-    ok("verify: the Act reads back (positive control) and files the population and the cutoff",
-       "whether or not the employer's report for that quarter has been received" in act and "February 15" in act)
-    agr = txt([f for f in pdfs if "agreement" in f][0])
-    ok("verify: the agreement reads back (positive control)", "00:00:00" in agr)
-    ok("verify: neither governing document names an agent or a transmission",
-       not re.search(r"\bagents?\b|transmission|bureau(?! of Labor Statistics)|imput", act + agr, re.I))
-    eml = open(os.path.join(target, [f for f in os.listdir(target) if f.endswith(".eml")][0]), encoding="utf-8").read()
-    ok("verify: the request reads back", "March 1" in eml and "section 5" in eml)
-    pubf = [f for f in os.listdir(target) if f.endswith(".xlsx")][0]
-    pub = openpyxl.load_workbook(os.path.join(target, pubf)).active
-    pubd = {r[0]: r[5] for r in pub.iter_rows(min_row=6, max_row=19, values_only=True) if r[0] in codes}
-    ok("verify: the published Q4 2025 table equals the reports' December 2025 base", all(abs(pubd[c] - base[c]) < 0.5 for c in codes))
-    sub = open(os.path.join(task, "submission.md")).read()
-    ok("verify: the Final Recommendation names the designated counties", all(nm in sub.split("## Supplementary")[0] for nm in figs["designated"]))
-    good = all(x[1] for x in OK)
-    for name, g, d in OK:
-        if not g:
-            print("VERIFY FAIL", name, d)
-    print("verify: %d of %d pass" % (sum(x[1] for x in OK), len(OK)))
-    return good
+    memo = "\n".join(p.text for p in Document(os.path.join(gold, "ctf_certification_memo_2027.docx")).paragraphs)
+    ok("memo: reads back and names the designated counties", all(n_ in memo for n_ in figs["r8_designated"]), len(memo))
+    act = "\n".join(p.text for p in Document([os.path.join(target, f) for f in os.listdir(target) if "act_2026" in f][0]).paragraphs)
+    ok("Act: reads back with the population clause", "whether or not an account has been established" in act, len(act))
+    bad = [r for r in RES if not r[1]]
+    for nm, good, detail in RES:
+        if not good:
+            print("VERIFY FAIL  %s  %s" % (nm, detail[:300]))
+    print("verify: %d of %d" % (len(RES) - len(bad), len(RES)))
+    return not bad
 
 
 if __name__ == "__main__":

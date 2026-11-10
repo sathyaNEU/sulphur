@@ -23,12 +23,16 @@ REG_PROMPT, REG_REPORT, REG_FOUND = 1, 2, 3
 REG_SHARES = (0.28, 0.62, 0.10)
 REG_SIZE = {REG_PROMPT: [0.50, 0.28, 0.15, 0.07], REG_REPORT: [0.64, 0.24, 0.09, 0.03], REG_FOUND: [0.74, 0.20, 0.05, 0.01]}
 BASE_HAZARD = np.array([0.022, 0.014, 0.008, 0.0045, 0.0016, 0.0005, 0.0, 0.0])
-ORDERLY = np.array([0.034, 0.030, 0.016, 0.007, 0.001, 0.0, 0.0, 0.0])
+ORDERLY = np.array([0.036, 0.031, 0.009, 0.002, 0.0, 0.0, 0.0, 0.0])
 P_CEASE = 0.64
 # a lake worksite's month against its year (leisure and retail), and outdoor work in the North Woods
 LEISURE_LAKE = np.array([0.45, 0.45, 0.50, 0.62, 0.92, 1.26, 1.42, 1.40, 1.10, 0.70, 0.50, 0.46])
 RETAIL_LAKE = np.array([0.82, 0.80, 0.82, 0.88, 1.00, 1.15, 1.25, 1.24, 1.05, 0.92, 0.86, 0.88])
 OUTDOOR_NORTH = np.array([0.72, 0.70, 0.80, 0.98, 1.10, 1.15, 1.16, 1.15, 1.10, 1.04, 0.92, 0.78])
+# winter recreation in the North Woods, and the holiday trade at the metro's stores
+WINTER_NORTH = np.array([1.52, 1.50, 1.28, 0.88, 0.70, 0.74, 0.84, 0.86, 0.76, 0.80, 0.98, 1.38])
+HOLIDAY_METRO = np.array([0.95, 0.93, 0.94, 0.96, 0.98, 1.00, 1.00, 1.01, 0.98, 1.01, 1.13, 1.27])
+METRO = ("003", "015")
 PROJECT_NAICS = {"561320", "561720", "561730"}
 
 
@@ -265,7 +269,8 @@ def _sites(w, r):
         project = ss == "1012" or w.naics[i] in PROJECT_NAICS
         k = int(r.integers(2, 5))
         others = [c for c in W.CODES if c != home]
-        wt = np.array([(size[c] ** 0.5) * (5.5 if (c in W.LAKES and trade) else 1.0) for c in others])
+        wt = np.array([(size[c] ** 0.5) * (5.5 if (c in W.LAKES and trade) else (2.5 if (c in W.NORTH and ss == "1026") else 1.0))
+                       for c in others])
         extra = list(r.choice(others, k - 1, replace=False, p=wt / wt.sum()))
         shares = np.sort(r.dirichlet(np.ones(k) * 2.5))[::-1]
 
@@ -276,6 +281,10 @@ def _sites(w, r):
                 return "retail"
             if c in W.NORTH and (ss == "1012" or w.naics[i] == "561730"):
                 return "outdoor"
+            if c in W.NORTH and ss == "1026":
+                return "winter"
+            if c in METRO and ss == "1021":
+                return "holiday"
             return None
         sites = [dict(county=c, share=float(s), open=0, close=W.NQ + 9, season=season(c),
                       walk=np.cumsum(r.normal(0, 0.03, W.NQ))) for c, s in zip([home] + extra, shares)]
@@ -295,7 +304,8 @@ def _sites(w, r):
         w.sites[i] = sites
 
 
-SEASON = {"leisure": LEISURE_LAKE, "retail": RETAIL_LAKE, "outdoor": OUTDOOR_NORTH}
+SEASON = {"leisure": LEISURE_LAKE, "retail": RETAIL_LAKE, "outdoor": OUTDOOR_NORTH, "winter": WINTER_NORTH,
+          "holiday": HOLIDAY_METRO}
 
 
 def site_weights(w, i, m):
@@ -606,7 +616,9 @@ def _amendments(w, r):
     for (i, q), t in w.recv.items():
         u = U[i, q]
         if u < 0.028:
-            amend[i, q] = (t + dt.timedelta(days=int(DAYS[i, q]), seconds=int(SECS[i, q])), int(K[i, q]), int(DEL[i, q]))
+            # most corrections follow within weeks; a few come out of an audit months later
+            days = int(DAYS[i, q]) if u >= 0.004 else 76 + int(DAYS[i, q]) * 4 + int(SECS[i, q]) % 31
+            amend[i, q] = (t + dt.timedelta(days=days, seconds=int(SECS[i, q])), int(K[i, q]), int(DEL[i, q]))
         elif u < 0.034 and t.hour + t.minute + t.second > 0:
             dup[i, q] = t + dt.timedelta(seconds=int(DUPS[i, q]))
     w.amend, w.dup = amend, dup

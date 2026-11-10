@@ -1,243 +1,243 @@
 {
-  "task": "task5",
-  "project": "sulfur",
-  "architecture": "v4 (re-rooted as a results chain in the same State of Franklin world at the author's word after architecture 3 was returned at review: the Department's best estimate of each county's December 2026 covered jobs from the unemployment insurance files as they stood on 15 February 2027, reconciled to the published 2025 total, with the outstanding reports read by cause, this quarter's closures carried to the late transmissions, the employers liable but with no account yet, the worksite splits not yet in, and a replay on December 2025)",
-  "drawn": "2026-11-10",
-  "slot_note": "re-root of task5 in the same subdomain, analysis type and world after architecture 3's return at review (one thing); rebuilt as a results chain at the author's word",
-  "domain": "survey-research-official-statistics",
-  "subdomain": "census-register-administrative-data-quality",
-  "client_domain": "survey-research-official-statistics",
-  "niche": "a state labor market information section's first certified estimate of each county's December covered jobs from an unemployment insurance report census caught 45 days after the quarter: a quarter of the reports still out for different reasons, new employers' accounts not yet set up, worksite reports trailing the contribution reports, and a housing downturn that makes this quarter unlike the closed ones",
-  "objective": "etl",
-  "shape": "03",
-  "decision_type": "designation_set",
-  "answer_unit": "set_of_items",
-  "answer": "to be filled from submission.md at READY",
-  "answer_source": "task5/submission.md, Final Recommendation",
-  "gap": [
+ "task": "task5",
+ "project": "sulfur",
+ "architecture": "v4 (re-rooted as a results chain in the same State of Franklin world at the author's word after architecture 3 was returned at review: the Department's best estimate of each county's December 2026 covered jobs from the unemployment insurance files as they stood on 15 February 2027, reconciled to the published 2025 total, with the outstanding reports read by cause, this quarter's closures carried to the late transmissions, the employers liable but with no account yet, the worksite splits not yet in, and a replay on December 2025)",
+ "drawn": "2026-11-10",
+ "slot_note": "re-root of task5 in the same subdomain, analysis type and world after architecture 3's return at review (one thing); rebuilt as a results chain at the author's word",
+ "domain": "survey-research-official-statistics",
+ "subdomain": "census-register-administrative-data-quality",
+ "client_domain": "survey-research-official-statistics",
+ "niche": "a state labor market information section's first certified estimate of each county's December covered jobs from an unemployment insurance report census caught 45 days after the quarter: a quarter of the reports still out for different reasons, new employers' accounts not yet set up, worksite reports trailing the contribution reports, and a housing downturn that makes this quarter unlike the closed ones",
+ "objective": "etl",
+ "shape": "03",
+ "decision_type": "designation_set",
+ "answer_unit": "set_of_items",
+ "answer": "Certify Garrow, Kittredge and Ostrom (December 2026 covered jobs an estimated 3.1, 2.7 and 2.9 per cent below December 2025 on the records of 15 February 2027; Bray, the nearest other county, at minus 1.0; the state at plus 0.1)",
+ "answer_source": "task5/submission.md, Final Recommendation",
+ "gap": [
+  "time",
+  "population"
+ ],
+ "pattern": [
+  "none"
+ ],
+ "generators": [
+  "G3",
+  "G13",
+  "G12"
+ ],
+ "gate_g": "method_or_model_selection",
+ "calibration_form": "censored_or_lagged_release",
+ "stump_strategy": "maturity_censoring",
+ "decisive_rule_filed": false,
+ "official_decoy": false,
+ "validated_decoy": false,
+ "context_artifact": "published_series",
+ "stump_class": "analytical",
+ "analyst_test": "A strong analyst who conforms every file, rebuilds the agents' transmissions, reads an employer missing from a transmission that arrived as in trouble and measures what such employers kept on resolved quarters still carries the late transmissions at their reporting peers' change, counts only employers with an account, and splits multi-county employers by their latest worksite report: it loses this quarter's closures in the late transmissions, the employers not yet registered, the Lakes counties' split, most county cells, the designated set (Kittredge out) and the replay.",
+ "domain_test": "Every result is a quantity an official statistics office produces for an early estimate from an administrative census: the response status of the census at the cut-off, a nonresponse mechanism and the nonrespondents' outcome, a coverage adjustment for units not yet on the frame, an allocation of multi-establishment employers to areas, a revision analysis against the published and the later records. Swap employers for hospitals filing activity returns and no return is missing because the unit died, no account is set up weeks after the unit starts, and no worksite report distributes a total: the chain has nothing to estimate.",
+ "layer2_family": "field_method",
+ "layer2_pattern": "own:an-early-estimate-from-an-administrative-census-completed-component-by-component",
+ "layer1": [
+  "amended reports superseding originals and exact resubmissions",
+  "multiple worksite reports splitting an employer's jobs across counties",
+  "predecessor and successor accounts after transfers of business",
+  "seasonal accounts with zero-employment months",
+  "county names and codes written differently across the account register and the worksite reports",
+  "NAICS 2017 codes on older accounts beside NAICS 2022",
+  "employers missing two quarters not yet inactivated",
+  "habitual late filers",
+  "paper reports keyed by date only"
+ ],
+ "stakeholder_role": "the director of the state Department of Labor's labor market information section, who prepares the Commissioner's certification of each county's December covered employment for the Community Transition Fund",
+ "role_family": "statistical_office_head",
+ "scoring_unit": "other",
+ "spine": {
+  "file": "ui_quarterly_reports_2023q1_2026q4.csv",
+  "rows": 429471,
+  "entity": "one employer account's quarterly contribution report",
+  "grain": "account x quarter",
+  "source": "synthetic"
+ },
+ "forum": "minister_or_cabinet",
+ "forcing_event": "statutory_or_regulatory_filing",
+ "org_family": "research_or_statistics_office",
+ "world": {
+  "geography": "United States (the State of Franklin, fictional, and its fourteen counties)",
+  "currency": "USD",
+  "org_type": "state labor market information section",
+  "invented_names": [
+   "State of Franklin",
+   "Garrow County",
+   "Ostrom County",
+   "Community Transition Fund"
+  ],
+  "people": [
+   "Danielle Fuller",
+   "Matthew Cox",
+   "William Robertson"
+  ]
+ },
+ "deliverables": [
+  "ctf_certification_december_2026.xlsx",
+  "ctf_employer_jobs_december_2026.csv",
+  "ctf_certification_memo_2027.docx"
+ ],
+ "opening_move": "question-first",
+ "question_form": "what",
+ "driver": "A period total is estimated early from a census of unit reports, and the part not yet observed is completed component by component, each from its own evidence: units whose report is out are read by whether the intermediary batch they arrive in has come, and those missing alone are carried at what such units kept on periods old enough for their closures to be recorded; units in late batches are carried at the change of all units whose standing is visible this period, the missing-alone included, because this period's closure rate is several times the closed periods'; units liable but not yet on the register are counted from this period's early registrations and the closed periods' registration delays, at the late registrants' size; and each multi-site unit whose site report is out is split by each site's own seasonal change a year earlier. No one component gives the set of areas below the threshold.",
+ "driver_concrete": "Each Franklin county's December 2026 covered jobs are estimated from the unemployment insurance files as they stood on 15 February 2027: 7,120 of 27,897 liable employers' reports are out, 4,844 of them in payroll agents' late year-end transmissions and 846 missing from transmissions that arrived (kept 0.30 of September jobs on resolved quarters); the housing downturn puts 3.7 per cent of the housing chain's jobs with employers missing alone against about half a per cent in earlier fourth quarters, so the late transmissions are carried at the change of every employer whose standing shows (about 530 fewer jobs than the reporters' change); about 590 employers liable for the quarter have no account yet (2,500 jobs, counted from the quarter's 283 registrations so far and the delays of earlier fourth quarters, at the late registrants' 4.5 jobs); and the 159 multi-county employers whose worksite report is out are split by each worksite's own December-on-September change a year earlier, which takes about 100 jobs out of Kittredge, 190 out of Talcott and 160 out of Sayre.",
+ "stump": "The careful pass reads the outstanding reports by cause and carries the missing-alone at the resolved quarters' share, but carries the late transmissions at their reporting peers' change, last year's unregistered jobs as they were (3,500 against 2,500) and the latest worksite reports' split: it designates Garrow and Ostrom, leaves Kittredge at minus 0.9, and misses nine or more county figures. Every outstanding report at the reporters' change, the rest right, designates no county; the reports received alone designate all fourteen; September carried flat designates Ostrom alone.",
+ "deep_chain": "R1 census and reconciliation; R2 outstanding by cause; R3 the missing-alone outcome on resolved quarters; R4 this quarter's trouble carried to late transmissions; R5 the unregistered employers by development; R6 the worksite split by each site's seasonal carry; R7 the county table; R8 the designation; R9 the replay",
+ "judgment": "several: a nonresponse mechanism read from co-arrival; an outcome measured on mature cohorts; a transport of this quarter's trouble rate to units whose standing is not visible; a development estimate of units not yet registered; a seasonal carry of each worksite",
+ "one_fact_test": "the most useful single sentence (about two in three of a quarter's new employers have no account at the cut-off) rescues one result of nine on the careful pass; the worksite sentence one; the late-transmission sentence one",
+ "strategy_label": "WORKS IN FORM",
+ "mechanism_source": "design_note",
+ "differentiation": {
+  "mark253": "mark253's first architecture reweighted a sample's respondents within classes of a frame attribute that drove both response and the outcome; here no respondent stands in for a nonrespondent and no frame attribute defines the class: whether a missing report carries the outcome is read quarter by quarter from whether the employer's usual transmission-mates arrived, and the missing employers' December jobs come from earlier missing employers' own outcomes on quarters old enough for their closures to have been recorded.",
+  "task5": "architecture 3 priced one step (a report missing from a transmission that arrived) on a shock built into two counties; here that reading is one result of nine in a statewide downturn every county carries, and the designated set also needs the employers not yet registered (Bray stays out only with them) and each worksite's seasonal carry (Kittredge comes in only with it), with a reconciliation, a transport to the late transmissions and a replay graded on their own"
+ },
+ "lineage": [
+  {
+   "domain": "physical-environmental-sciences",
+   "subdomain": "emissions-inventory",
+   "objective": "etl",
+   "shape": "01",
+   "decision_type": "designation_set",
+   "answer_unit": "set_of_items",
+   "gap": [
+    "population"
+   ],
+   "pattern": [
+    "E"
+   ],
+   "generators": [
+    "G14",
+    "G12",
+    "G6"
+   ],
+   "gate_g": "decomposition_attribution",
+   "stump_strategy": "composition_mix",
+   "role_family": "policy_adviser",
+   "forum": "council_or_assembly",
+   "forcing_event": "budget_or_appropriation",
+   "org_family": "local_government",
+   "driver": "Activity at each site is seen through a sensor that records every event of some units and none of others, and the units it never records are spread unevenly across sites, so the missing activity is not a fixed share of what the sensor saw: it is rebuilt as the never-recorded units based at each site times the activity per such unit that the fully counted sites show, while one seen-to-counted ratio moves the missing activity from the sites holding those units to the sites whose units are all recorded.",
+   "calibration_form": "gold_standard_subsample",
+   "context_artifact": "operations_log",
+   "architecture": "v1 (the Corrisan Valley's untowered airfields qualifying for the district's 2027 Unleaded Avgas Transition Grants, each field's missed piston operations completed by the counted fields' unrecorded operations per never-broadcasting based airplane)",
+   "drawn": "2026-10-18",
+   "fate": "spent 2026-10-31 at the batch 1 repair: guard.py heart BLOCKed it against task242, registered ninety minutes earlier in another session, on strategy composition_mix, calibration gold_standard_subsample, forum council_or_assembly, forcing event budget_or_appropriation and organisation family local_government, and on pattern E against task197: the same core puzzle (a detector's capture calibrated on a gold-standard subsample and corrected by the composition of what it misses); shipped 2026-10-18, superseded before any portal result"
+  },
+  {
+   "domain": "survey-research-official-statistics",
+   "subdomain": "census-register-administrative-data-quality",
+   "objective": "etl",
+   "shape": "01",
+   "decision_type": "designation_set",
+   "answer_unit": "set_of_items",
+   "gap": [
+    "objective",
+    "population"
+   ],
+   "pattern": [
+    "none"
+   ],
+   "generators": [
+    "G3",
+    "G12"
+   ],
+   "gate_g": "method_or_model_selection",
+   "stump_strategy": "classification_error",
+   "role_family": "statistical_office_head",
+   "forum": "funder_or_donor",
+   "forcing_event": "budget_or_appropriation",
+   "org_family": "research_or_statistics_office",
+   "driver": "The decisive quantity is whether each unit was in use during a window, seen only through a continuous meter whose level and daily shape are both carried by a load that runs on a schedule whether or not anyone uses the unit, so use is a day departing from what the unit's own record repeats, beyond its scheduled load and noise.",
+   "calibration_form": "none",
+   "context_artifact": "planning_thread",
+   "layer2_family": "estimation_fit",
+   "layer2_pattern": "own:occupancy-from-a-day-departing-from-the-dwelling's-own-repeated-day-against-a-timed-heating-load",
+   "architecture": "v2",
+   "fate": "spent 2026-11-08: both platform runs (target.zip 14f7ae29) read occupancy from each dwelling's departure from its own typical day (day levels and clock-hour effects, residual cut) and filed the golden five with every register cell; the judge had sent the first form back on Gate H"
+  },
+  {
+   "architecture": "v3",
+   "driver": "The decisive quantity is a period total over units whose reports arrive late, where a missing report has two causes: the intermediary that files a whole batch was late, which says nothing about the unit, or the unit failed to report on its own, which marks a unit that has shrunk or closed; only a unit missing while its usual batch-mates arrived separates the two, and a closed unit's outcome shows only in a closure record months later, so only cohorts old enough for closures to have been recorded measure what a unit's own failure to report implies.",
+   "driver_concrete": "Each county's December 2026 covered jobs are estimated from the unemployment insurance quarterly reports received by 15 February 2027; payroll agents file their clients' reports in one transmission and at year end several statewide bureaus' transmissions come late, while an employer missing when its usual transmission arrived has usually shed jobs or stopped trading, and a stopped employer shows only in an account inactivation two or three quarters later, so its December jobs are read from quarters old enough for inactivations to have landed.",
+   "stump": "A competent solver conforms the reports, amendments and worksites, imputes each employer whose December report had not arrived as the field does (its September jobs moved by its county's reporting employers' change), treats an employer missing two quarters as ceased, sees that imputation back-test with a steady upward miss under 0.7 of a point on the closed quarters and files that no county fell 2.0 per cent; an employer missing while its usual transmission-mates arrived has usually shed jobs or stopped trading and keeps 0.29 of its September jobs on the quarters old enough for inactivations to have landed, which puts two counties past the line.",
+   "answer": "Garrow and Ostrom qualify (December 2026 covered jobs 3.0 and 3.1 per cent below December 2025); the field's imputation designates no county",
+   "shape": "03",
+   "decision_type": "designation_set",
+   "answer_unit": "set_of_items",
+   "gap": [
     "time",
     "population"
-  ],
-  "pattern": [
+   ],
+   "pattern": [
     "none"
-  ],
-  "generators": [
-    "G3",
+   ],
+   "generators": [
     "G13",
-    "G12"
-  ],
-  "gate_g": "method_or_model_selection",
-  "calibration_form": "censored_or_lagged_release",
-  "stump_strategy": "maturity_censoring",
-  "decisive_rule_filed": false,
-  "official_decoy": false,
-  "validated_decoy": false,
-  "context_artifact": "published_series",
-  "stump_class": "analytical",
-  "analyst_test": "A strong analyst who conforms every file, rebuilds the agents' transmissions, reads an employer missing from a transmission that arrived as in trouble and measures what such employers kept on resolved quarters still carries the late transmissions at their reporting peers' change, counts only employers with an account, and splits multi-county employers by their latest worksite report: it loses this quarter's closures in the late transmissions, the employers not yet registered, the Lakes counties' split, most county cells, the designated set (Kittredge out) and the replay.",
-  "domain_test": "Every result is a quantity an official statistics office produces for an early estimate from an administrative census: the response status of the census at the cut-off, a nonresponse mechanism and the nonrespondents' outcome, a coverage adjustment for units not yet on the frame, an allocation of multi-establishment employers to areas, a revision analysis against the published and the later records. Swap employers for hospitals filing activity returns and no return is missing because the unit died, no account is set up weeks after the unit starts, and no worksite report distributes a total: the chain has nothing to estimate.",
-  "layer2_family": "field_method",
-  "layer2_pattern": "own:an-early-estimate-from-an-administrative-census-completed-component-by-component",
-  "layer1": [
-    "amended reports superseding originals and exact resubmissions",
-    "multiple worksite reports splitting an employer's jobs across counties",
-    "predecessor and successor accounts after transfers of business",
-    "seasonal accounts with zero-employment months",
-    "county names and codes written differently across the account register and the worksite reports",
-    "NAICS 2017 codes on older accounts beside NAICS 2022",
-    "employers missing two quarters not yet inactivated",
-    "habitual late filers",
-    "paper reports keyed by date only"
-  ],
-  "stakeholder_role": "the director of the state Department of Labor's labor market information section, who prepares the Commissioner's certification of each county's December covered employment for the Community Transition Fund",
-  "role_family": "statistical_office_head",
-  "scoring_unit": "other",
-  "spine": {
-    "file": "ui_quarterly_reports_2023q1_2026q4.csv",
-    "rows": 432000,
-    "entity": "one employer account's quarterly contribution report",
-    "grain": "account x quarter",
-    "source": "synthetic"
-  },
-  "forum": "minister_or_cabinet",
-  "forcing_event": "statutory_or_regulatory_filing",
-  "org_family": "research_or_statistics_office",
-  "world": {
-    "geography": "United States (the State of Franklin, fictional, and its fourteen counties)",
-    "currency": "USD",
-    "org_type": "state labor market information section",
-    "invented_names": [
-      "State of Franklin",
-      "Garrow County",
-      "Ostrom County",
-      "Community Transition Fund"
-    ],
-    "people": [
-      "Danielle Fuller",
-      "Matthew Cox",
-      "William Robertson"
-    ]
-  },
-  "deliverables": [
+    "G12",
+    "G3"
+   ],
+   "gate_g": "method_or_model_selection",
+   "calibration_form": "censored_or_lagged_release",
+   "stump_strategy": "maturity_censoring",
+   "context_artifact": "register",
+   "forum": "committee_or_panel",
+   "forcing_event": "vote_or_meeting",
+   "org_family": "research_or_statistics_office",
+   "role_family": "statistical_office_head",
+   "question_form": "where",
+   "deliverables": [
     "ctf_certification_december_2026.xlsx",
-    "ctf_employer_jobs_december_2026.csv",
-    "ctf_certification_memo_2027.docx"
-  ],
-  "opening_move": "question-first",
-  "question_form": "what",
-  "driver": "A period total is estimated early from a census of unit reports, and the part not yet observed is completed component by component, each from its own evidence: units whose report is out are read by whether the intermediary batch they arrive in has come, and those missing alone are carried at what such units kept on periods old enough for their closures to be recorded; units in late batches are carried at the change of all units whose standing is visible this period, the missing-alone included, because this period's closure rate is several times the closed periods'; units liable but not yet on the register are counted from this period's early registrations and the closed periods' registration delays, at the late registrants' size; and each multi-site unit whose site report is out is split by each site's own seasonal change a year earlier. No one component gives the set of areas below the threshold.",
-  "driver_concrete": "Each Franklin county's December 2026 covered jobs are estimated from the unemployment insurance files as they stood on 15 February 2027: 6,300 of 28,000 liable employers' reports are out, 4,000 of them in payroll agents' late year-end transmissions and 900 missing from transmissions that arrived (kept 0.28 of September jobs on resolved quarters); the housing downturn puts 3.8 per cent of the housing chain's jobs with employers missing alone against about half a per cent in earlier fourth quarters, so the late transmissions' housing-chain employers are carried at 0.86, not the reporters' 0.90; about 700 employers liable for the quarter have no account yet (2,800 jobs, counted from the quarter's registrations so far and the delays of earlier years, at the late registrants' 4.5 jobs); and the employers whose worksite report is out are split by each worksite's own December-on-September change a year earlier, which takes about 130 jobs out of Kittredge.",
-  "stump": "The careful pass reads the outstanding reports by cause and carries the missing-alone at the resolved quarters' share, but carries the late transmissions at their reporting peers' change, counts only employers with an account and splits by the latest worksite report: it designates Bray, Garrow and Ostrom (or Garrow and Ostrom with last year's unregistered jobs carried flat), misses Kittredge, and misses most county figures and the replay. The textbook imputation with the same gaps designates Garrow alone; the full estimate without the unregistered employers adds Bray; with the latest worksite split it drops Kittredge.",
-  "deep_chain": "R1 census and reconciliation; R2 outstanding by cause; R3 the missing-alone outcome on resolved quarters; R4 this quarter's trouble carried to late transmissions; R5 the unregistered employers by development; R6 the worksite split by each site's seasonal carry; R7 the county table; R8 the designation; R9 the replay",
-  "judgment": "several: a nonresponse mechanism read from co-arrival; an outcome measured on mature cohorts; a transport of this quarter's trouble rate to units whose standing is not visible; a development estimate of units not yet registered; a seasonal carry of each worksite",
-  "one_fact_test": "the most useful single sentence (about two in three of a quarter's new employers have no account at the cut-off) rescues one result of nine on the careful pass; the worksite sentence one; the late-transmission sentence one",
-  "strategy_label": "WORKS IN FORM",
-  "mechanism_source": "design_note",
-  "differentiation": {
-    "mark253": "mark253's first architecture reweighted a sample's respondents within classes of a frame attribute that drove both response and the outcome; here no respondent stands in for a nonrespondent and no frame attribute defines the class: whether a missing report carries the outcome is read quarter by quarter from whether the employer's usual transmission-mates arrived, and the missing employers' December jobs come from earlier missing employers' own outcomes on quarters old enough for their closures to have been recorded.",
-    "task5": "architecture 3 priced one step (a report missing from a transmission that arrived) on a shock built into two counties; here that reading is one result of nine in a statewide downturn every county carries, and the designated set also needs the employers not yet registered (Bray stays out only with them) and each worksite's seasonal carry (Kittredge comes in only with it), with a reconciliation, a transport to the late transmissions and a replay graded on their own"
-  },
-  "lineage": [
-    {
-      "domain": "physical-environmental-sciences",
-      "subdomain": "emissions-inventory",
-      "objective": "etl",
-      "shape": "01",
-      "decision_type": "designation_set",
-      "answer_unit": "set_of_items",
-      "gap": [
-        "population"
-      ],
-      "pattern": [
-        "E"
-      ],
-      "generators": [
-        "G14",
-        "G12",
-        "G6"
-      ],
-      "gate_g": "decomposition_attribution",
-      "stump_strategy": "composition_mix",
-      "role_family": "policy_adviser",
-      "forum": "council_or_assembly",
-      "forcing_event": "budget_or_appropriation",
-      "org_family": "local_government",
-      "driver": "Activity at each site is seen through a sensor that records every event of some units and none of others, and the units it never records are spread unevenly across sites, so the missing activity is not a fixed share of what the sensor saw: it is rebuilt as the never-recorded units based at each site times the activity per such unit that the fully counted sites show, while one seen-to-counted ratio moves the missing activity from the sites holding those units to the sites whose units are all recorded.",
-      "calibration_form": "gold_standard_subsample",
-      "context_artifact": "operations_log",
-      "architecture": "v1 (the Corrisan Valley's untowered airfields qualifying for the district's 2027 Unleaded Avgas Transition Grants, each field's missed piston operations completed by the counted fields' unrecorded operations per never-broadcasting based airplane)",
-      "drawn": "2026-10-18",
-      "fate": "spent 2026-10-31 at the batch 1 repair: guard.py heart BLOCKed it against task242, registered ninety minutes earlier in another session, on strategy composition_mix, calibration gold_standard_subsample, forum council_or_assembly, forcing event budget_or_appropriation and organisation family local_government, and on pattern E against task197: the same core puzzle (a detector's capture calibrated on a gold-standard subsample and corrected by the composition of what it misses); shipped 2026-10-18, superseded before any portal result"
-    },
-    {
-      "domain": "survey-research-official-statistics",
-      "subdomain": "census-register-administrative-data-quality",
-      "objective": "etl",
-      "shape": "01",
-      "decision_type": "designation_set",
-      "answer_unit": "set_of_items",
-      "gap": [
-        "objective",
-        "population"
-      ],
-      "pattern": [
-        "none"
-      ],
-      "generators": [
-        "G3",
-        "G12"
-      ],
-      "gate_g": "method_or_model_selection",
-      "stump_strategy": "classification_error",
-      "role_family": "statistical_office_head",
-      "forum": "funder_or_donor",
-      "forcing_event": "budget_or_appropriation",
-      "org_family": "research_or_statistics_office",
-      "driver": "The decisive quantity is whether each unit was in use during a window, seen only through a continuous meter whose level and daily shape are both carried by a load that runs on a schedule whether or not anyone uses the unit, so use is a day departing from what the unit's own record repeats, beyond its scheduled load and noise.",
-      "calibration_form": "none",
-      "context_artifact": "planning_thread",
-      "layer2_family": "estimation_fit",
-      "layer2_pattern": "own:occupancy-from-a-day-departing-from-the-dwelling's-own-repeated-day-against-a-timed-heating-load",
-      "architecture": "v2",
-      "fate": "spent 2026-11-08: both platform runs (target.zip 14f7ae29) read occupancy from each dwelling's departure from its own typical day (day levels and clock-hour effects, residual cut) and filed the golden five with every register cell; the judge had sent the first form back on Gate H"
-    },
-    {
-      "architecture": "v3",
-      "driver": "The decisive quantity is a period total over units whose reports arrive late, where a missing report has two causes: the intermediary that files a whole batch was late, which says nothing about the unit, or the unit failed to report on its own, which marks a unit that has shrunk or closed; only a unit missing while its usual batch-mates arrived separates the two, and a closed unit's outcome shows only in a closure record months later, so only cohorts old enough for closures to have been recorded measure what a unit's own failure to report implies.",
-      "driver_concrete": "Each county's December 2026 covered jobs are estimated from the unemployment insurance quarterly reports received by 15 February 2027; payroll agents file their clients' reports in one transmission and at year end several statewide bureaus' transmissions come late, while an employer missing when its usual transmission arrived has usually shed jobs or stopped trading, and a stopped employer shows only in an account inactivation two or three quarters later, so its December jobs are read from quarters old enough for inactivations to have landed.",
-      "stump": "A competent solver conforms the reports, amendments and worksites, imputes each employer whose December report had not arrived as the field does (its September jobs moved by its county's reporting employers' change), treats an employer missing two quarters as ceased, sees that imputation back-test with a steady upward miss under 0.7 of a point on the closed quarters and files that no county fell 2.0 per cent; an employer missing while its usual transmission-mates arrived has usually shed jobs or stopped trading and keeps 0.29 of its September jobs on the quarters old enough for inactivations to have landed, which puts two counties past the line.",
-      "answer": "Garrow and Ostrom qualify (December 2026 covered jobs 3.0 and 3.1 per cent below December 2025); the field's imputation designates no county",
-      "shape": "03",
-      "decision_type": "designation_set",
-      "answer_unit": "set_of_items",
-      "gap": [
-        "time",
-        "population"
-      ],
-      "pattern": [
-        "none"
-      ],
-      "generators": [
-        "G13",
-        "G12",
-        "G3"
-      ],
-      "gate_g": "method_or_model_selection",
-      "calibration_form": "censored_or_lagged_release",
-      "stump_strategy": "maturity_censoring",
-      "context_artifact": "register",
-      "forum": "committee_or_panel",
-      "forcing_event": "vote_or_meeting",
-      "org_family": "research_or_statistics_office",
-      "role_family": "statistical_office_head",
-      "question_form": "where",
-      "deliverables": [
-        "ctf_certification_december_2026.xlsx",
-        "ctf_employer_jobs_december_2026.csv"
-      ],
-      "fate": "returned at review 2026-11-10 (the author's account: one hidden trap decides it; the client's level 5 asks for three or four pieces of genuine analytical rigor with nothing planted). Read against the bar of 2026-11-09: the fourth-quarter shock was built into two counties' exposed employers, whose filing channels were set so the missing-alone reading would see them, and one sentence left a measurement on closed quarters. Never run on the platform."
-    }
-  ],
-  "notes": "re-rooted 2026-11-10 as a results chain in the same world at the author's word (architecture 3 returned at review as turning on one thing). weight hard-to-measure: the December jobs the files do not yet hold. forum redrawn from committee_or_panel (task7 v8 in the window) to minister_or_cabinet: the estimate is prepared for the Commissioner of Labor's certification, which the Act requires by 1 March (statutory_or_regulatory_filing); the Board's designation follows it mechanically.",
-  "lineage_shells": [
-    {
-      "question form": "how-many",
-      "second-sentence opener": "put",
-      "rounding opener": "give",
-      "deliverable set": "csv+docx"
-    },
-    {
-      "question form": "which",
-      "second-sentence opener": "name",
-      "rounding opener": "shares",
-      "deliverable set": "docx+xlsx"
-    },
-    {
-      "question form": "where",
-      "second-sentence opener": "certify",
-      "rounding opener": "jobs",
-      "deliverable set": "csv+xlsx"
-    }
-  ],
-  "answer_shape": "reconciled-table",
-  "weight": "hard-to-measure",
-  "chain_signature": [
-    "assembly-reconciliation",
-    "missingness-measurement",
-    "missingness-measurement",
-    "causal-reasoning",
-    "missingness-measurement",
-    "forecasting",
-    "decomposition-attribution",
-    "synthesis",
-    "validation"
-  ],
-  "results": "R1 the census at the cut-off and the December 2025 total against the published one; R2 the outstanding reports by what their absence means; R3 what employers missing alone keep, on quarters whose outcomes have landed; R4 this quarter's trouble carried to the employers in late transmissions; R5 the jobs at employers liable but with no account yet; R6 the county split of employers whose worksite report is out; R7 each county's December 2026 jobs, reported and estimated; R8 the changes and the designated counties; R9 the same estimate replayed on December 2025",
-  "registered": "2026-11-10T01:59:25Z",
-  "shell": {
-    "question form": "which",
-    "second-sentence opener": "the",
-    "rounding opener": "jobs",
-    "deliverable set": "csv+docx"
+    "ctf_employer_jobs_december_2026.csv"
+   ],
+   "fate": "returned at review 2026-11-10 (the author's account: one hidden trap decides it; the client's level 5 asks for three or four pieces of genuine analytical rigor with nothing planted). Read against the bar of 2026-11-09: the fourth-quarter shock was built into two counties' exposed employers, whose filing channels were set so the missing-alone reading would see them, and one sentence left a measurement on closed quarters. Never run on the platform."
   }
+ ],
+ "notes": "re-rooted 2026-11-10 as a results chain in the same world at the author's word (architecture 3 returned at review as turning on one thing). weight hard-to-measure: the December jobs the files do not yet hold. forum redrawn from committee_or_panel (task7 v8 in the window) to minister_or_cabinet: the estimate is prepared for the Commissioner of Labor's certification, which the Act requires by 1 March (statutory_or_regulatory_filing); the Board's designation follows it mechanically.",
+ "lineage_shells": [
+  {
+   "question form": "how-many",
+   "second-sentence opener": "put",
+   "rounding opener": "give",
+   "deliverable set": "csv+docx"
+  },
+  {
+   "question form": "which",
+   "second-sentence opener": "name",
+   "rounding opener": "shares",
+   "deliverable set": "docx+xlsx"
+  },
+  {
+   "question form": "where",
+   "second-sentence opener": "certify",
+   "rounding opener": "jobs",
+   "deliverable set": "csv+xlsx"
+  }
+ ],
+ "answer_shape": "reconciled-table",
+ "weight": "hard-to-measure",
+ "chain_signature": [
+  "assembly-reconciliation",
+  "missingness-measurement",
+  "missingness-measurement",
+  "causal-reasoning",
+  "missingness-measurement",
+  "forecasting",
+  "decomposition-attribution",
+  "synthesis",
+  "validation"
+ ],
+ "results": "R1 the census at the cut-off and the December 2025 total against the published one; R2 the outstanding reports by what their absence means; R3 what employers missing alone keep, on quarters whose outcomes have landed; R4 this quarter's trouble carried to the employers in late transmissions; R5 the jobs at employers liable but with no account yet; R6 the county split of employers whose worksite report is out; R7 each county's December 2026 jobs, reported and estimated; R8 the changes and the designated counties; R9 the same estimate replayed on December 2025",
+ "registered": "2026-11-10T01:59:25Z",
+ "shell": {
+  "question form": "which",
+  "second-sentence opener": "the",
+  "rounding opener": "jobs",
+  "deliverable set": "csv+docx"
+ }
 }

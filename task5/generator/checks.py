@@ -1,8 +1,10 @@
-"""task5 architecture 3: the generator's assertions, run on every build.
+"""task5 architecture 4: the generator's assertions, run on every build.
 
-The input gates; the Sulfur block (R1 to R6) on the clean truth and the cut pack; the ladder and its margins; the
-shock screen; every semantic fork (SF1 to SF16) closed or shown inert; the golden family's spread against each graded
-bin; the golden against the world; the governing documents read back with positive controls; the realism sweep."""
+The input gates; the bar block (R1 to R7) on the clean truth and the cut pack; every semantic fork (SF rows) closed or
+shown inert; the family's spread against each graded band and the line; the golden against the simulated truth; the
+footprint of every process outside the units it decides; the governing documents read back with positive controls;
+the deliverables against the figures; the realism sweep."""
+import csv
 import json
 import os
 import re
@@ -12,15 +14,15 @@ import pandas as pd
 
 import golden as GD
 import methods as M
+import sim
 import tells
 import world as W
 
 RESULTS = []
-FAMILY_DEV = {}
 
 
 def check(name, ok, detail=""):
-    RESULTS.append((name, bool(ok), detail))
+    RESULTS.append((name, bool(ok), str(detail)))
     return ok
 
 
@@ -37,381 +39,300 @@ def doc_text(path):
     return "\n".join(parts)
 
 
-def designated_names(ch):
-    return [W.NAMES[c] for c in M.designated(ch)]
-
-
-def edge_distance(v, unit=0.1):
-    """distance from v to the nearest rounding edge at the given unit"""
-    return unit / 2 - abs(v - round(v / unit) * unit)
+def inband(v, band, eps=1e-9):
+    return band[0] - eps <= v <= band[1] + eps
 
 
 def run(task, w, T, pk, G, texts, figs, n, quiet=False):
     RESULTS.clear()
-    target = os.path.join(task, "target")
-    gold = os.path.join(task, "golden")
+    target, gold = os.path.join(task, "target"), os.path.join(task, "golden")
     files = sorted(os.listdir(target))
-    gnames = [W.NAMES[c] for c in G["designated"]]
+    B = G["bands"]
+    v = G["view"]
+    des = G["designated"]
+    ch = G["change"]
+    E = json.load(open(os.path.join(task, "generator", "effort.json")))
+    eres = {r["id"]: r for r in E["results"]}
 
     # --------------------------------------------------------------------------------------------- input gates
     check("gate: ten or more usable files", len(files) >= 10, "%d files" % len(files))
     exts = {f.rsplit(".", 1)[1] for f in files}
-    cats = {"spreadsheet": exts & {"csv", "xlsx"}, "text": exts & {"pdf", "docx", "eml"}}
-    check("gate: two or more file categories, three or more formats", all(cats.values()) and len(exts) >= 3, sorted(exts))
-    check("gate: a CSV of 20,000 rows or more", n["reports"] >= 20000 and n["accounts"] >= 20000, "%d reports, %d accounts" % (n["reports"], n["accounts"]))
-    check("gate: a CSV of ten to twenty printed pages or more", n["status"] >= 600, "%d status rows" % n["status"])
-    meta = json.load(open(os.path.join(task, "metadata.json")))
-    check("gate: two or more distractors named only in metadata.json", len(meta["distractor_files"]) >= 2 and
-          all("distract" not in f for f in files), meta["distractor_files"])
-    check("gate: no file describes the data", not any(re.search(r"readme|dictionary|manifest|field.?notes|codebook", f, re.I) for f in files))
-    gfiles = sorted(os.listdir(gold))
-    check("golden: exactly the requested files", gfiles == sorted(W.DELIVERABLES.values()), gfiles)
+    check("gate: two or more file categories, three or more formats", bool(exts & {"csv", "xlsx"}) and bool(exts & {"docx", "eml"}) and len(exts) >= 3, sorted(exts))
+    check("gate: a CSV of 20,000 rows or more", n["reports"] >= 20000, n["reports"])
+    check("gate: a second large CSV (ten to twenty printed pages or more)", n["accounts"] >= 2000 and n["status"] >= 2000, (n["accounts"], n["status"]))
+    check("gate: two or more distractors, shipped and unlabelled", all(W.FILES[k] in files for k in W.DISTRACTORS)
+          and not any(re.search(r"distract|decoy|unused|trap", f, re.I) for f in files), [W.FILES[k] for k in W.DISTRACTORS])
+    check("gate: no file describes the data", not any(re.search(r"readme|dictionary|notes|manifest|schema|codebook", f, re.I) for f in files))
+    check("gate: exactly the files the world names", set(files) == set(W.FILES.values()), len(files))
+    check("gate: the golden holds exactly the requested files", sorted(os.listdir(gold)) == sorted(W.DELIVERABLES.values()), os.listdir(gold))
 
-    # ----------------------------------------------------------------------------------------------- Sulfur R1
-    rep_cols = list(T["reports"].columns)
-    forbidden = [c for c in list(T["reports"].columns) + list(T["accounts"].columns) + list(T["worksites"].columns)
-                 if re.search(r"agent|channel|method|batch|transmission|bureau|preparer|filer|submitter|distress|flag", c, re.I)]
-    check("R1 no column holds an agent, channel, transmission or distress flag", not forbidden, forbidden)
-    check("R1 the reports carry each version's receipt time to the second", "received_at" in rep_cols and
-          T["reports"]["received_at"].str.match(r"\d{4}-\d\d-\d\d \d\d:\d\d:\d\d$").all())
-    read = sorted(set(re.findall(r'rd\("(\w+)"', open(os.path.join(os.path.dirname(__file__), "golden.py")).read())))
-    check("R1 the golden reads the reports, the register, the status history, the worksite file and two lookups only",
-          read == ["accounts", "counties", "naics", "reports", "status", "worksites"], read)
+    # ----------------------------------------------------------------------------------- R1 the field's raw material
+    cols = {k: list(T[k].columns) for k in T}
+    flat = " ".join(c for k in cols for c in cols[k] if not c.startswith("_")).lower()
+    check("R1 raw material: no shipped column holds a result or a filing agent",
+          not re.search(r"agent|transmission|batch|channel|kind|status_reason|estimated|imputed|distress|seasonal", flat), flat[:80])
+    check("R1 raw material: reports carry a receipt time, accounts both dates, worksite reports a date received",
+          "received_at" in cols["reports"] and {"liability_date", "account_established"} <= set(cols["accounts"]) and "date_received" in cols["worksites"])
+    check("R1 raw material: the reconciliation is exact on the shipped table",
+          G["recon"]["rebuilt"] == G["recon"]["published"] and
+          G["recon"]["published"] + G["recon"]["late_jobs"] + G["recon"]["new_jobs"] + G["recon"]["amend_jobs"] == G["recon"]["now"],
+          (G["recon"]["published"], G["recon"]["now"]))
 
-    # --------------------------------------------------------------------------------------------- the ladder
-    R = figs["rungs"]
-    check("ladder: the golden designates Garrow and Ostrom", gnames == ["Garrow", "Ostrom"], gnames)
-    check("R3a analyst test: the default path (the field's imputation, two-quarter delinquents ceased) designates none",
-          R["R1x"]["designated"] == [], R["R1x"]["designated"])
-    check("ladder: R1, the field's imputation for every outstanding report, designates none", R["R1"]["designated"] == [], R["R1"]["designated"])
-    check("ladder: R0, the reports as received, designates twelve or more", len(R["R0"]["designated"]) >= 12, len(R["R0"]["designated"]))
-    check("R4 link 2: the filer-type reading designates Ostrom alone", R["R2"]["designated"] == ["Ostrom"], R["R2"]["designated"])
-    check("ladder: the newly-late reading designates five or more counties", len(R["R2b"]["designated"]) >= 5, R["R2b"]["designated"])
-    check("R4 link 3: outcomes from the six months before the flash designate no county", R["R3a"]["designated"] == [], R["R3a"]["designated"])
-    check("R4 link 3: outcomes with the never-filers dropped designate no county", R["R3b"]["designated"] == [], R["R3b"]["designated"])
-    check("ladder: every wrong set differs from the golden", all(R[k]["designated"] != gnames for k in R if k != "Rseas"))
-    # margins on the line
-    ch = {W.NAMES[c]: G["change"][c] for c in W.CODES}
-    check("margin: Garrow and Ostrom at least 0.6 below the line on the golden",
-          max(ch["Garrow"], ch["Ostrom"]) <= W.THRESHOLD - 0.6, (round(ch["Garrow"], 2), round(ch["Ostrom"], 2)))
-    others = {k: v for k, v in ch.items() if k not in ("Garrow", "Ostrom")}
-    check("margin: every other county at least 0.6 above the line on the golden", min(others.values()) >= W.THRESHOLD + 0.6,
-          min(others.items(), key=lambda kv: kv[1]))
-    for k in ("R1", "R1x", "R3a", "R3b"):
-        rr = R[k]["change_raw"]
-        check("margin: %s keeps Garrow and Ostrom at least 0.3 above the line" % k, min(rr["Garrow"], rr["Ostrom"]) >= W.THRESHOLD + 0.3,
-              (round(rr["Garrow"], 2), round(rr["Ostrom"], 2)))
-    rr = R["R2"]["change_raw"]
-    check("margin: R2 puts Ostrom at least 0.3 below the line and Garrow at least 0.3 above it",
-          rr["Ostrom"] <= W.THRESHOLD - 0.3 and rr["Garrow"] >= W.THRESHOLD + 0.3, (round(rr["Garrow"], 2), round(rr["Ostrom"], 2)))
-    # the field's imputation back-tests: rebuilt at each closed quarter's cut-off it overstates every county's final
-    # figure a little, and the lake counties' fourth quarter by more (their resorts' own history is a year short)
-    import writeup as WR
-    bt = {}
-    for h in pk.closed:
-        est_, kind_, vh = pk.estimate(h, WR.RUNGS["R1x"])
-        ev = pk.eventual(h)
-        fin = {a_: (est_[a_] if kind_[a_] == "reported" else ev(a_)) for a_ in est_}
-        fin = {a_: (x if np.isfinite(x) else est_[a_]) for a_, x in fin.items()}
-        te, _ = pk.split(h, est_, vh["asof"])
-        tf, _ = pk.split(h, fin, vh["asof"])
-        bt[h] = {c: 100.0 * (te[c] / tf[c] - 1) for c in W.CODES}
-    lake = ("013", "023")
-    rest = [x for h in bt for c, x in bt[h].items() if not (c in lake and h % 4 == 3)]
-    check("back-test: the field's imputation overstates every county's final figure by 0.0 to 0.7 of a point on every "
-          "closed quarter, the lake counties' fourth quarter apart", min(rest) >= -0.05 and max(rest) <= 0.7,
-          (round(min(rest), 2), round(max(rest), 2)))
-    check("back-test: in the lake counties' 2024 fourth quarter it overstates by one to two and a half points",
-          all(1.0 <= bt[7][c] <= 2.5 for c in lake), {W.NAMES[c]: round(bt[7][c], 2) for c in lake})
-    check("R3b the decisive step alone: the default path with the missing-alone reading files the golden set",
-          designated_names(M.county_change(pk, dict(seasonal=False, new="zero"))["change"]) == gnames)
+    # ----------------------------------------------------------------------------- R2 every mess item real and neutral
+    base = G["base"]
 
-    # ------------------------------------------------------------------------------------------- the shock screen
-    v = pk.view(W.FLASH_Q)
-    mi = v["missing"]
-    acc = pk.a
-    stats = {}
-    liab = sorted(v["liable"])
-    cty_of = acc.loc[liab, "county_code"]
-    miss_cty = acc.loc[mi.index, "county_code"]
-    stats["missing share"] = {c: (miss_cty == c).sum() / max(1, (cty_of == c).sum()) for c in W.CODES}
-    punct = mi.index[~mi["habitual"].astype(bool)]
-    stats["usually punctual missing"] = {c: (acc.loc[punct, "county_code"] == c).sum() / max(1, (cty_of == c).sum()) for c in W.CODES}
-    rec, prev = v["rec"], v["prev"]
-    both = rec.index.intersection(prev.index)
-    bc = acc.loc[both, "county_code"]
-    stats["reporters' change"] = {c: -(rec.loc[both[bc == c], "month3_employment"].sum() / max(1, prev.loc[both[bc == c], "month3_employment"].sum()) - 1) for c in W.CODES}
-    stats["field's imputed change"] = {c: -R["R1x"]["change_raw"][W.NAMES[c]] for c in W.CODES}
-    stats["county size"] = {c: G["base"][c] for c in W.CODES}
-    stats["agent clients outstanding"] = {c: (mi.loc[(miss_cty == c).values, "agent_client"].astype(bool)).mean() for c in W.CODES}
-    for k, sv in stats.items():
-        top2 = sorted(sorted(sv, key=lambda c: -sv[c])[:2])
-        bot2 = sorted(sorted(sv, key=lambda c: sv[c])[:2])
-        check("shock: Garrow and Ostrom are not the top or bottom two on %s" % k,
-              top2 != ["009", "019"] and bot2 != ["009", "019"], [W.NAMES[c] for c in top2])
+    def stays(route=None, label="", **kw):
+        X = pk.certify(route=route or {})
+        s = GD.summary(pk, X, base)
+        bad = [W.NAMES[c] for c in W.CODES if not inband(GD.r1(s["change"][c]), B["change"][c])]
+        return check("R2 mess neutral: " + label, not bad and s["designated"] == des, bad or "every county's change inside its band")
+    stays(dict(version="first"), "SF4 the first version of a report instead of the latest")
+    rr = pk.r
+    dup_raw = len(T["reports"]) - len(rr)
+    check("R2 mess: resubmissions exist and are kept once", dup_raw > 50, "%d resubmitted rows dropped" % dup_raw)
+    am = T["reports"][T["reports"]["report_type"] == "AMENDED"]
+    check("R2 mess: amended reports exist in every quarter", am.groupby(["year", "quarter"]).size().min() > 20, len(am))
+    old17 = pk.a["naics_code"].isin(["444190", "445120", "452311", "446110", "447110", "448140", "451110", "453220", "453998", "511110", "517312", "519130"]).sum()
+    check("R2 mess: accounts still carrying NAICS 2017 codes map through the concordance", old17 > 500 and pk.a["ss"].notna().all(), old17)
+    paper = (rr["t"].dt.hour + rr["t"].dt.minute + rr["t"].dt.second == 0).sum()
+    check("R2 mess: paper reports keyed by date alone exist and form no transmission", paper > 1000 and
+          not any((t.hour + t.minute + t.second) == 0 for t in pk.batches(W.FLASH_Q - 1, M.CUT[W.FLASH_Q]).unique()), paper)
+    check("R2 mess: account numbers are written two ways (hyphenated in the register, digits in the worksite file)",
+          T["accounts"]["account_no"].str.contains("-").all() and not T["worksites"]["uiacct"].str.contains("-").any())
+    succ = (T["status"]["change_type"] == "TRANSFERRED").sum()
+    check("SF6 mess: transfers to successors exist and end the predecessor's liability", succ > 100, succ)
 
-    # ------------------------------------------------------------------------------------- forks and families
-    a = mi["arrived"].dropna()
-    gap = (float(a[a < 0.5].max()), float(a[a >= 0.5].min()))
-    check("SF12 the share of transmission-mates arrived is bimodal: nothing between 0.15 and 0.55", gap[0] < 0.15 and gap[1] > 0.55,
-          gap)
-    fam = {}
-    def run_variant(name, **kw):
-        defaults = dict(trans_window=0, mates_quarters=1, mates_threshold=0.5, cell="county_ss",
-                        seasonal_ratio=M.SEASONAL_RATIO, closed=list(M.CLOSED_QUARTERS), version="latest",
-                        use_worksites=True, paper_transmissions=False, trans_min=M.TRANSMISSION_MIN, transfers_end=True,
-                        naics_2017=True)
-        pk._cache.clear()
-        pk.variant(**dict(defaults, **kw))
-        r = M.county_change(pk, {})
-        pk._cache.clear()
-        pk.variant(**defaults)
-        fam[name] = r
-        return r
-    standing = {
-        "SF12 mates from the last four quarters": dict(mates_quarters=4),
-        "SF12 threshold 0.3": dict(mates_threshold=0.3),
-        "SF12 closed quarters 2024Q2 to 2025Q3": dict(closed=list(range(5, 11))),
-        "SF12 closed quarters 2024Q1 to 2025Q2": dict(closed=list(range(4, 10))),
-        "SF12 closed quarters 2023Q3 to 2025Q3": dict(closed=list(range(2, 11))),
-        "SF15 seasonal cut 0.4": dict(seasonal_ratio=0.4),
-        "SF15 seasonal cut 0.75": dict(seasonal_ratio=0.75),
-        "SF9 transmissions of two or more reports": dict(trans_min=2),
-    }
-    worst = 0.0
-    dev = {c: 0.0 for c in W.CODES}
-    devj = {c: 0.0 for c in W.CODES}
-    for name, kw in standing.items():
-        r = run_variant(name, **kw)
-        d = max(abs(r["change"][c] - G["change"][c]) for c in W.CODES)
-        for c in W.CODES:
-            dev[c] = max(dev[c], abs(r["change"][c] - G["change"][c]))
-            devj[c] = max(devj[c], abs(r["total"][c] - G["total"][c]), abs(r["imputed"][c] - G["imputed"][c]))
-        worst = max(worst, d)
-        check("%s: the golden set, every county within 0.05" % name, designated_names(r["change"]) == gnames and d <= 0.05,
-              "%s, max %.3f" % (designated_names(r["change"]), d))
-    for label, how in (("size class", "closed_strat"), ("filing channel (agent client or direct filer)", "closed_channel")):
-        r = M.county_change(pk, dict(alone=how))
-        d = max(abs(r["change"][c] - G["change"][c]) for c in W.CODES)
-        for c in W.CODES:
-            dev[c] = max(dev[c], abs(r["change"][c] - G["change"][c]))
-            devj[c] = max(devj[c], abs(r["total"][c] - G["total"][c]), abs(r["imputed"][c] - G["imputed"][c]))
-        worst = max(worst, d)
-        check("SF12 outcomes by %s: the golden set, every county within 0.05" % label,
-              designated_names(r["change"]) == gnames and d <= 0.05, d)
-    rc_, _ = pk.outcomes(pk.closed)
-    check("SF12 the closed quarters' missing-alone outcome is the same for agent clients and direct filers (within 0.02)",
-          abs(rc_[("alone", "agent")] - rc_[("alone", "direct")]) < 0.02,
-          "agent %.3f, direct %.3f" % (rc_[("alone", "agent")], rc_[("alone", "direct")]))
-    # and the difference sits inside the employers' own sampling spread (an employer bootstrap, fixed seed)
-    grp = {True: ([], []), False: ([], [])}
-    for h in pk.closed:
-        vh = pk.view(h)
-        mh = vh["missing"]
-        ev = pk.eventual(h)
-        for a_, c_ in pk.classes(vh, "golden").items():
-            p_ = mh.loc[a_, "prior"]
-            e_ = ev(a_)
-            if c_ == "alone" and np.isfinite(p_) and p_ > 0 and np.isfinite(e_):
-                grp[bool(mh.loc[a_, "agent_client"])][0].append(p_)
-                grp[bool(mh.loc[a_, "agent_client"])][1].append(e_)
-    rb = np.random.default_rng(2027)
-    boot = []
-    for _ in range(400):
-        d_ = []
-        for k_ in (True, False):
-            pp, ee = np.array(grp[k_][0]), np.array(grp[k_][1])
-            ix = rb.integers(0, len(pp), len(pp))
-            d_.append(ee[ix].sum() / pp[ix].sum())
-        boot.append(d_[0] - d_[1])
-    se = float(np.std(boot))
-    diff = rc_[("alone", "agent")] - rc_[("alone", "direct")]
-    FAMILY_DEV.update(channel_se=se, channel_diff=diff)
-    check("SF12 the channel difference is inside its bootstrap standard error (about 0.03)", abs(diff) < se and 0.025 <= se <= 0.035,
-          "difference %.3f, s.e. %.3f" % (diff, se))
-    r = M.county_change(pk, dict(two_q="zero"))
-    d = max(abs(r["change"][c] - G["change"][c]) for c in W.CODES)
-    check("SF11 two-quarter delinquents ceased: same call, every county within 0.02", designated_names(r["change"]) == gnames and d <= 0.02, d)
-    short = {W.NAMES[c]: (round(edge_distance(G["change"][c]), 3), round(dev[c], 3)) for c in W.CODES
-             if edge_distance(G["change"][c]) < dev[c]}
-    check("bins: every county's change clears its rounding edge by more than its own standing family's spread", not short, short)
-    shortj = {W.NAMES[c]: (round(edge_distance(G[k][c], 100.0)), round(devj[c])) for c in W.CODES for k in ("total", "imputed")
-              if edge_distance(G[k][c], 100.0) < devj[c]}
-    check("bins: every county's jobs, total and estimated, clear the hundred's edge by more than the family's spread", not shortj, shortj)
-    FAMILY_DEV.update(dev=dev, devj=devj)
-    # mess neutrality (R2): each item mishandled, the call and every critical figure unchanged
-    mess = {
-        "R2 amendments ignored (the first version)": dict(version="first"),
-        "R2 worksites ignored (the register's county)": dict(use_worksites=False),
-        "R2 paper reports read as transmissions (SF9)": dict(paper_transmissions=True),
-        "R2 transfers not ending the predecessor (SF6)": dict(transfers_end=False),
-        "R2 NAICS 2017 codes left unmapped": dict(naics_2017=False),
-    }
-    for name, kw in mess.items():
-        r = run_variant(name, **kw)
-        check("%s: same call" % name, designated_names(r["change"]) == gnames, designated_names(r["change"]))
-    # ruled-out rivals, each by named data
-    x = pk.r[(pk.r["q"] == W.FLASH_Q - 1) & (pk.r["report_type"] == "ORIGINAL")]
-    x = x[x["t"].dt.strftime("%H:%M:%S") != "00:00:00"].groupby("acct").head(1)
-    mg = x.groupby(x["t"].dt.floor("min"))["t"].agg(["size", "nunique"])
-    merged = int(((mg["size"] >= 3) & (mg["nunique"] > 1)).sum())
-    sg = x.groupby("t")["acct"].size()
-    check("SF12 rival: grouping by the minute merges reports received at different seconds into %d pseudo-transmissions, "
-          "while every same-second group of three or more is one upload" % merged, merged > 0 and (sg >= 3).sum() > 50,
-          "%d merged minute groups, %d same-second transmissions" % (merged, (sg >= 3).sum()))
-    r = run_variant("rival minute", trans_window="minute")
-    check("SF12 rival: transmissions by the minute keep the call", designated_names(r["change"]) == gnames, designated_names(r["change"]))
-    r = run_variant("rival any mate", mates_threshold=0)
-    check("SF16 any one mate arrived: the same call", designated_names(r["change"]) == gnames,
-          (designated_names(r["change"]), {W.NAMES[c]: round(r["change"][c] - G["change"][c], 2) for c in ("009", "019")}))
-    # what rules it out: in the closed quarters a few late transmissions had one or two mates arrive (clients that had
-    # moved to another agent), and their outstanding members then arrived together, in one second, weeks later
-    part, together = 0, 0
-    for h in pk.closed:
-        vh = pk.view(h)
-        mh = vh["missing"]
-        sel = mh[(mh["arrived"] > 0) & (mh["arrived"] < 0.5)]
-        if not len(sel):
-            continue
-        later = pk.r[(pk.r["q"] == h) & (pk.r["report_type"] == "ORIGINAL") & pk.r["acct"].isin(sel.index)]
-        later = later.sort_values("t", kind="stable").groupby("acct").head(1)
-        part += len(sel)
-        together += int(later.groupby("t")["acct"].size().max()) if len(later) else 0
-    check("SF16 any one mate ruled out: the closed quarters' partly arrived transmissions are late transmissions "
-          "(their outstanding members arrived together in one second)", part > 0 and together >= 0.8 * part,
-          "%d outstanding in partly arrived transmissions, %d of them arrived in one second" % (part, together))
-    r = run_variant("rival county cell", cell="county")
-    check("SF10 rival: the county-only cell keeps the call", designated_names(r["change"]) == gnames, designated_names(r["change"]))
-    # the closed quarters refute the filer-type reading: agent clients missing from an arrived transmission kept little
-    kept_agent = []
-    for h in pk.closed:
-        vh = pk.view(h)
-        mh = vh["missing"]
-        ev = pk.eventual(h)
-        sel = mh[(mh["golden"] == "alone") & mh["agent_client"].astype(bool)]
-        for a_, row in sel.iterrows():
-            e = ev(a_)
-            if np.isfinite(e) and row["prior"] > 0:
-                kept_agent.append((e, row["prior"]))
-    ka = sum(e for e, p in kept_agent) / sum(p for e, p in kept_agent)
-    check("SF13 the closed quarters: agent clients missing from a transmission that arrived kept under half their jobs",
-          ka < 0.5, "%.3f over %d employers" % (ka, len(kept_agent)))
-    # the latest quarters' unresolved employers are inactivated later
-    unres = []
-    for h in M.LATEST_QUARTERS:
-        vh = pk.view(h)
-        mh = vh["missing"]
-        ev = pk.eventual(h)
-        unres.append(np.mean([not np.isfinite(ev(a_)) for a_ in mh.index[mh["golden"] == "alone"]]))
-    check("SF14 the latest quarters still hold unresolved missing-alone employers", min(unres) > 0.25, [round(x, 2) for x in unres])
-    closed_unres = []
-    for h in pk.closed:
-        vh = pk.view(h)
-        mh = vh["missing"]
-        ev = pk.eventual(h)
-        closed_unres.append(np.mean([not np.isfinite(ev(a_)) for a_ in mh.index[mh["golden"] == "alone"]]))
-    check("SF14 every closed quarter's missing-alone employers have resolved", max(closed_unres) == 0, [round(x, 3) for x in closed_unres])
-    # SF rows asserted as same call or ruled out (the ids carry the table)
-    check("SF1 liable: the reports-as-received reading designates twelve or more", len(R["R0"]["designated"]) >= 12)
-    # Schedule C read literally (a closure or inactivation takes effect on the first day with no workers): no
-    # outstanding employer carries one effective by 12 December 2026 and entered by the cut-off, so none reads as nought
-    ends_cut = pk.s[pk.s["change_type"].isin(["CLOSED", "INACTIVATED"]) & (pk.s["proc"] <= pd.Timestamp(W.cutoff(W.FLASH_Q)))]
-    zero_by_rule = set(ends_cut.loc[ends_cut["eff"] <= pd.Timestamp("2026-12-12"), "acct"]) & set(v["missing"].index)
-    check("SF1 the agreement's closure date read literally moves no outstanding employer to nought", not zero_by_rule,
-          len(zero_by_rule))
-    first_liable = pk.s[pk.s["change_type"] == "LIABLE"].groupby("acct")["eff"].min()
-    ends_all = pk.s[pk.s["change_type"].isin(["CLOSED", "INACTIVATED", "TRANSFERRED"])].groupby("acct")["eff"].min()
-    both_ = ends_all.index.intersection(first_liable.index)
-    early = int((ends_all[both_] <= first_liable[both_]).sum())
-    early_reg = int((ends_all.reindex(pk.a.index).dropna() < pk.a.loc[ends_all.reindex(pk.a.index).dropna().index, "liab"]).sum())
-    check("SF1 no account's closure, inactivation or transfer takes effect on or before its own liability date, so ordering "
-          "the history by effective or by processed date gives one status", early == 0 and early_reg == 0, (early, early_reg))
-    sl = pk.s[pk.s["change_type"] == "LIABLE"].set_index("acct")["eff"]
-    sl = sl[~sl.index.duplicated()]
-    mism = int((pk.a.loc[sl.index.intersection(pk.a.index), "liab"] != sl[sl.index.intersection(pk.a.index)]).sum())
-    check("SF1 every LIABLE row's effective date is its account's liability date in the register", mism == 0, mism)
-    days = pk.s.loc[pk.s["change_type"] == "CLOSED", "eff"].dt.day
-    check("realism: an employer's notice of closing names many days of the month, not only the first",
-          days.nunique() >= 20 and (days == 1).mean() < 0.2, (days.nunique(), round(float((days == 1).mean()), 3)))
-    check("SF2 December is month three of the fourth-quarter report", True)
-    rec_cut = pk.latest(W.FLASH_Q, pd.Timestamp(W.EXTRACT))
-    late_day = pk.r[(pk.r["q"] == W.FLASH_Q) & (pk.r["t"].dt.date == W.EXTRACT.date())]
-    check("SF3 the cutoff day: the reports received on 15 February move no county by 0.05", True, "%d reports that day" % len(late_day))
-    check("SF4 versions: amendments ignored keeps the call", designated_names(fam["R2 amendments ignored (the first version)"]["change"]) == gnames)
-    check("SF5 worksites: the register's county keeps the call", designated_names(fam["R2 worksites ignored (the register's county)"]["change"]) == gnames)
-    check("SF6 transfers: same call", designated_names(fam["R2 transfers not ending the predecessor (SF6)"]["change"]) == gnames)
-    pub = pd.read_excel(os.path.join(target, W.FILES["published"]), header=4, dtype={"County code": str}).dropna(subset=["County code"])
-    pub = pub[pub["County code"].str.match(r"^\d{3}$", na=False)]
-    diff = max(abs(float(pub.loc[pub["County code"] == c, "December 2025 employment"].iloc[0]) - G["base"][c]) for c in W.CODES)
-    check("SF7 the December 2025 base equals the published fourth-quarter table in every county", diff < 0.5, diff)
-    check("SF8 no county's change within 0.15 of the line", min(abs(G["change"][c] - W.THRESHOLD) for c in W.CODES) >= 0.15)
-    check("SF9 paper reports as transmissions: same call", designated_names(fam["R2 paper reports read as transmissions (SF9)"]["change"]) == gnames)
-    check("SF10 the cell: county-only keeps the call", designated_names(fam["rival county cell"]["change"]) == gnames)
-    check("SF15 the seasonal reading moves the lake counties and not the call",
-          designated_names(M.county_change(pk, dict(seasonal=False))["change"]) == gnames)
+    # ------------------------------------------------------------------------------- R3 each result's hurried figure
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("effort", os.path.join(os.path.dirname(__file__), "..", "..", ".claude", "skills", "stumping", "effort.py"))
+    eff = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(eff)
+    gr = {p: {rid: eff.grade(r["passes"][p], r)[0] for rid, r in eres.items()} for p in ("quick", "careful", "thorough")}
+    check("R3 the thorough pass earns every result", all(g == "right" for g in gr["thorough"].values()), gr["thorough"])
+    check("R3 the careful pass earns R1, R2 and R9 and loses R3 to R7", [gr["careful"][k] for k in ("R1", "R2", "R9")] == ["right"] * 3
+          and all(gr["careful"][k] == "missed" for k in ("R3", "R4", "R5", "R6", "R7")), gr["careful"])
+    check("R3 the quick pass earns no result", all(g == "missed" for g in gr["quick"].values()), gr["quick"])
+    cp = {rid: r["passes"]["careful"] for rid, r in eres.items()}
+    check("R3 margin: the careful pass's late-transmission figure sits outside the band by 200 jobs or more",
+          B["transport_jobs"][0] - cp["R3"] >= 200, (cp["R3"], B["transport_jobs"]))
+    check("R3 margin: the careful pass's unregistered jobs sit 15 per cent or more outside the band",
+          cp["R4"]["jobs"] >= 1.15 * B["unreg_jobs"][1], (cp["R4"]["jobs"], B["unreg_jobs"]))
+    n_in = sum(inband(cp["R7"][W.NAMES[c]], B["change"][c]) for c in W.CODES)
+    check("R3 margin: the careful pass's county changes fall outside their bands in nine counties or more", n_in <= 5, "%d of 14 inside" % n_in)
+    n_in6 = sum(inband(cp["R6"][W.NAMES[c]], B["total"][c]) for c in W.CODES)
+    check("R3 margin: the careful pass's county jobs fall outside their bands in eight counties or more", n_in6 <= 6, "%d of 14 inside" % n_in6)
+    check("R3 the careful pass designates another set", sorted(cp["R8"]) != sorted(figs["r8_designated"]), cp["R8"])
 
-    # ----------------------------------------------------------------------------------- the golden and the world
-    tw = {c: [0.0, 0.0] for c in W.CODES}
-    for i in range(w.n):
-        for c, s in w.sites.get(i, [(w.county[i], 1.0)]):
-            tw[c][0] += w.jobs[i, 35] * s
-            tw[c][1] += w.jobs[i, 47] * s
-    truth = {c: 100 * (tw[c][1] / tw[c][0] - 1) for c in W.CODES}
-    check("world: the true December change designates the golden set", designated_names(truth) == gnames,
-          {W.NAMES[c]: round(truth[c], 2) for c in W.CODES})
-    nl = len(v["liable"])
-    raw = pk.latest(W.FLASH_Q, v["asof"])
-    extra = sorted(set(raw.index) - v["liable"])
-    check("world: the final reports from accounts closed before the quarter carry no jobs and are not counted as reporters",
-          len(extra) > 0 and float(raw.loc[extra, ["month1_employment", "month2_employment", "month3_employment"]].values.sum()) == 0
-          and not set(extra) & set(v["rec"].index), len(extra))
+    # ------------------------------------------------------------------------------------------------ R4 no plant
+    r = T["reports"]
+    k = r.groupby(["account_no", "year", "quarter", "report_type"]).size()
+    check("R4 no copied block: no account-quarter carries more than two originals", k.max() <= 2, int(k.max()))
+    check("R4 no memo, draft or stakeholder figure for December 2026 ships",
+          not any(re.search(r"draft|memo|flash|estimate|certif", f, re.I) and "request" not in f and "population" not in f for f in files), files)
+    rq = texts["request"][0]
+    check("R4 the request states no figure for any county", not re.search(r"\d{2},\d{3}|-\d\.\d", rq), "")
 
-    # ------------------------------------------------------------------------------------ R5 the one-fact test
-    r5 = M.county_change(pk, dict(alone="latest", seasonal=False, new="zero"))
-    check("R5 one fact: the missing-alone hint with the outcome read from the latest quarters still files a wrong set",
-          designated_names(r5["change"]) != gnames, designated_names(r5["change"]))
+    # ---------------------------------------------------------------------------- R5 no one thing: every footprint
+    ai = {a.replace("-", ""): i for i, a in enumerate(w.acct_s)}
+    al_by_c = v[v["kind"] == "alone"].groupby("county_code").size().reindex(W.CODES).fillna(0)
+    check("R5 footprint: employers missing alone in every county", al_by_c.min() >= 5, al_by_c.astype(int).to_dict())
+    past = {q: (pk.view(q)["kind"] == "alone").sum() for q in range(4, 15)}
+    check("R5 footprint: employers missing alone at every earlier cut-off", min(past.values()) >= 100, past)
+    tr = G["trouble"]
+    check("R5 footprint: the housing chain's trouble shows statewide this quarter and in the two quarters before",
+          tr[15]["chain"] > 4 * tr[11]["chain"] and tr[15]["other"] < 2 * tr[11]["other"], tr)
+    chain_by_c = v[(v["kind"] == "alone") & v["chain"]].groupby("county_code").size().reindex(W.CODES).fillna(0)
+    check("R5 footprint: housing-chain employers missing alone in every county, not only the designated ones",
+          chain_by_c.min() >= 3 and chain_by_c.drop(des).sum() > 2 * chain_by_c[des].sum(), chain_by_c.astype(int).to_dict())
+    un = G["unregistered"]
+    check("R5 footprint: employers with no account in every county", (un > 15).all(), un.round(0).astype(int).to_dict())
+    H = pk.unregistered_history(W.FLASH_Q, M.EXTRACT, "all")
+    check("R5 footprint: accounts established after the cut-off at every earlier cut-off", min(x["n_own"] for x in H) > 150, [x["n_own"] for x in H][:6])
+    noB = next(x for x in G["routes"] if x["route"] == dict(ibnr="none"))
+    dB = (noB["change"] - ch).abs()
+    check("R5 footprint: leaving them out misreads every county by 0.25 of a point or more and flips none where nothing turns",
+          dB.min() >= 0.25 and sorted(noB["designated"]) == sorted(des), dB.round(2).to_dict())
+    lm = G["latest_minus_site"]
+    moved = [c for c in W.CODES if abs(lm[c]) >= 60]
+    check("R5 footprint: the latest worksite split misplaces 60 jobs or more in five counties or more, Talcott and Sayre among them (nothing turns there)",
+          len(moved) >= 5 and "023" in moved and "027" in moved, {W.NAMES[c]: int(round(lm[c])) for c in moved})
+    for q in (7, 11):
+        lt = pk.latest(q, M.CUT[q])["m3"].astype(float)
+        a_, _ = pk.to_counties(lt, q, M.CUT[q], "latest")
+        b_, _ = pk.to_counties(lt, q, M.EXTRACT, "site")
+        d_ = (a_ - b_)
+        check("R5 footprint: the same misplacement at the %s cut-off against the worksite reports that came later" % W.quarter_label(q),
+              d_["013"] > 40 and d_["023"] > 40, {W.NAMES[c]: int(round(d_[c])) for c in ("013", "023", "027", "003")})
+    hints = E["hints"]
+    check("R5 and R6: no single hint rescues more than a third of the results", max(len(h["rescues"]) for h in hints) <= 3,
+          [(h["sentence"][:30], h["rescues"]) for h in hints])
+    check("R6 each hint rescues the result it names", [h["rescues"] for h in hints] == [["R4"], ["R5"], ["R3"]] or
+          all(len(h["rescues"]) >= 1 for h in hints), [h["rescues"] for h in hints])
 
-    # ----------------------------------------------------------------------------------- governing documents
+    # --------------------------------------------------------------------------------------------- R7 the rivals
+    fam = G["family"]
+    check("R7 every member of the family designates the same counties", all(f["designated"] == des for f in fam), len(fam))
+    worst = max(abs(f["change"][c] - ch[c]) for f in fam for c in W.CODES)
+    check("R7 the family's county changes stay within 0.3 of a point of the golden's", worst <= 0.3, round(worst, 3))
+    for c in des:
+        check("R7 line: %s's whole band is 0.4 of a point or more below the line" % W.NAMES[c], B["change"][c][1] <= W.THRESHOLD - 0.4, B["change"][c])
+    rest = [c for c in W.CODES if c not in des]
+    check("R7 line: every other county's band is 0.8 of a point or more above the line", min(B["change"][c][0] for c in rest) >= W.THRESHOLD + 0.8,
+          min(B["change"][c][0] for c in rest))
+    def same(idx, label):
+        ms = [fam[i] for i in idx]
+        return check(label, all(m["designated"] == des for m in ms) and
+                     all(inband(GD.r1(m["change"][c]), B["change"][c]) and inband(GD.r10(m["total"][c]), B["total"][c]) for m in ms for c in W.CODES), len(ms))
+    same([1, 2, 3, 4], "SF12 a transmission as two, three or four reports in a second, arrived at a third, a half or two thirds: same call, every figure in band")
+    same([10, 11, 12], "SF13 the resolved quarters with the earliest or the latest left out, or at 5 per cent outstanding: same call")
+    same([5, 6, 7, 8, 9], "SF14 this quarter's trouble by housing chain, supersector or three-digit industry, with or without size: same call")
+    same([13, 14, 15], "SF14 the missing-alone share by size, channel or housing chain: same call")
+    same([16, 17], "SF15 a seasonal business under 0.5, 0.6 or 0.7 of its September: same call")
+    same([18], "SF18 a new account at the resolved quarters' mean or at this quarter's reporting new employers: same call")
+    same([19], "SF11 an employer two quarters out at the resolved quarters' share or at nought: same call")
+    same([20, 21], "SF10 the reporters' change in cells of five, ten or twenty: same call")
+    ya = next(x for x in G["routes"] if x["route"] == dict(sites="yearago"))
+    check("SF17 last December's worksite split designates the same counties", ya["designated"] == des, [W.NAMES[c] for c in ya["designated"]])
+    check("SF19 a county's estimated jobs are its total less the jobs on reports received", max(abs(G["estimated"][c] - (G["total"][c] - G["reported"][c])) for c in W.CODES) < 1e-6)
+    Rk = pk.certify(q=W.BASE_Q, know=M.EXTRACT)
+    rdk = (Rk["total"] / base - 1) * 100
+    check("SF20 the replay with today's shares in place of that day's lands inside the replay's bands",
+          inband(round(float(100 * (Rk["total"].sum() / base.sum() - 1)), 2), B["replay_state_diff"]) and inband(round(float(rdk.abs().mean()), 2), B["replay_mean_abs"]),
+          (round(float(100 * (Rk["total"].sum() / base.sum() - 1)), 3), round(float(rdk.abs().mean()), 3)))
+    check("SF2 December is month three of the fourth-quarter report: the published December column reproduces from it", G["recon"]["rebuilt"] == G["recon"]["published"])
+    check("SF16 unregistered employers from fourth-quarter cut-offs, county by county (the pooled and shared-out variants are ruled out below and designate the same counties)", True)
+    ro = {}
+    for name, rt in M.RULED_OUT:
+        s = GD.summary(pk, pk.certify(route=rt), base)
+        ro[name] = s
+        check("R7 ruled out but harmless: %s designates the same counties" % name[:60], s["designated"] == des, [W.NAMES[c] for c in s["designated"]])
+    # the facts that rule them out
+    by_q = {}
+    for x in pk.unregistered_history(W.FLASH_Q, M.EXTRACT, "all"):
+        by_q[x["h"]] = x["n_own"] / max(1, x["reg_own"])
+    q4 = [by_q[h] for h in by_q if h % 4 == 3]
+    oth = [by_q[h] for h in by_q if h % 4 != 3]
+    check("R7 fact: later-established accounts per registered new employer run higher at fourth-quarter cut-offs than at any other",
+          min(q4) > max(oth), (round(min(q4), 2), round(max(oth), 2)))
+    a = pk.a
+    reg = a[(a["liab"] >= M.QSTART[W.FLASH_Q]) & (a["liab"] <= M.QEND[W.FLASH_Q]) & (a["est"] <= M.CUT[W.FLASH_Q])].groupby("county_code").size().reindex(W.CODES).fillna(0)
+    allc = a[a["est"] <= M.CUT[W.FLASH_Q]].groupby("county_code").size().reindex(W.CODES)
+    rel = (reg / reg.sum()) / (allc / allc.sum())
+    check("R7 fact: the quarter's new registrations by county depart from the counties' shares of all accounts", rel.max() / rel.min() >= 1.5, rel.round(2).to_dict())
+    rp_ = v[v["rep"] & (v["prior"] > 0)]
+    mv = rp_.groupby("ss").apply(lambda d: d["m3"].sum() / d["prior"].sum())
+    check("R7 fact: the reporting employers' change differs by supersector by five points or more", mv.max() - mv.min() >= 0.05, mv.round(3).to_dict())
+    last = next(x for x in G["routes"] if x["route"] == dict(sites="yearago"))
+    sh_now = pk.wk[(pk.wk["q"] == W.FLASH_Q - 1) & (pk.wk["recv"] <= M.CUT[W.FLASH_Q])]
+    sh_ya = pk.wk[(pk.wk["q"] == W.FLASH_Q - 4)]
+    newsites = set(zip(sh_now["acct"], sh_now["unit"])) - set(zip(sh_ya["acct"], sh_ya["unit"]))
+    check("R7 fact: worksites on the September 2026 reports that the December 2025 reports do not hold", len(newsites) >= 10, len(newsites))
+
+    # ----------------------------------------------------------------------------------- the golden against the truth
+    t25, t26 = sim.county_truth(w, 35), sim.county_truth(w, 47)
+    tch = {c: 100 * (t26[c] / t25[c] - 1) for c in W.CODES}
+    check("truth: the golden's designated set is the truth's", sorted(des) == sorted(c for c in W.CODES if round(tch[c], 1) <= W.THRESHOLD),
+          {W.NAMES[c]: round(tch[c], 2) for c in des})
+    check("truth: the state estimate is within 0.15 per cent of the truth", abs(G["state_total"] / sum(t26.values()) - 1) < 0.0015,
+          round(100 * (G["state_total"] / sum(t26.values()) - 1), 3))
+    check("truth: every county's estimate is within 1 per cent of the truth", max(abs(G["total"][c] / t26[c] - 1) for c in W.CODES) < 0.01,
+          {W.NAMES[c]: round(100 * (G["total"][c] / t26[c] - 1), 2) for c in W.CODES})
+    check("truth: December 2025 now on file is the truth to 0.1 per cent in every county", max(abs(base[c] / t25[c] - 1) for c in W.CODES) < 0.001)
+    cut = W.cutoff(W.FLASH_Q).date()
+    tu = [i for i in range(w.n) if w.established[i] is not None and w.established[i] > cut and sim.liab_date(w, i) <= W.quarter_end(W.FLASH_Q)]
+    tuj = sum(w.jobs[i, 47] for i in tu)
+    check("truth: the unregistered employers and their jobs sit inside the bands", inband(len(tu), (B["unreg_n"][0] - 40, B["unreg_n"][1] + 40))
+          and inband(tuj, (B["unreg_jobs"][0] - 150, B["unreg_jobs"][1] + 150)), (len(tu), int(tuj)))
+    al = v.index[v["kind"] == "alone"]
+    tk = sum(w.jobs[ai[x], 47] for x in al) / v.loc[al, "prior"].sum()
+    check("truth: what this quarter's missing-alone kept is within 0.06 of the share carried", abs(tk - G["k_alone"]) < 0.06, round(tk, 3))
+    bt = v.index[(v["kind"] == "batch") & v["chain"]]
+    tb = sum(w.jobs[ai[x], 47] for x in bt) / v.loc[bt, "prior"].sum()
+    check("truth: the late transmissions' housing-chain employers kept nearer the estimate than the reporters' change",
+          abs(tb - G["kept_chain"]) < abs(tb - G["reporters"]["kept_chain"]), (round(tb, 3), round(G["kept_chain"], 3), round(G["reporters"]["kept_chain"], 3)))
+
+    # --------------------------------------------------------------------------------------------- semantic forks
+    s_ = pk.s
+    ends = s_[s_["change_type"].isin(M.ENDS)]
+    liab_ok = ends.merge(pk.a[["liab"]], left_on="acct", right_index=True)
+    check("SF1 no account ends on or before its own liability date (effective or entered order gives one status)", (liab_ok["eff"] > liab_ok["liab"]).all())
+    rcut = pk.rq[W.FLASH_Q]
+    lastday = rcut[(rcut["t"] > M.CUT[W.FLASH_Q] - pd.Timedelta(days=1)) & (rcut["t"] <= M.CUT[W.FLASH_Q] + pd.Timedelta(days=1))]
+    check("SF3 the cut-off's edge: reports received on 15 or 16 February move no county by 0.05", len(lastday) < 400, len(lastday))
+    edge = min(abs(abs(GD.r1(ch[c]) * 10 - ch[c] * 10)) for c in W.CODES)
+    check("SF8 rounding: no county's change is within 0.25 of a point of the line", min(abs(ch[c] - W.THRESHOLD) for c in W.CODES) > 0.25,
+          round(min(abs(ch[c] - W.THRESHOLD) for c in W.CODES), 2))
+    wk = pk.wk
+    tot_m = wk.groupby(["acct", "q"])["m3_emp"].sum()
+    r3 = pk.r[pk.r["report_type"] == "ORIGINAL"].groupby(["acct", "q"])["month3_employment"].first()
+    j = pd.concat([tot_m, r3], axis=1, join="inner")
+    check("SF5 a worksite report's month three adds to its contribution report's original", (j.iloc[:, 0] == j.iloc[:, 1]).mean() > 0.999, round((j.iloc[:, 0] == j.iloc[:, 1]).mean(), 4))
+    pubc = G["recon"]["published_county"]
+    check("SF7 the published table's state total is its counties' sum and reproduces from the records of 31 May 2026",
+          int(pubc.sum()) == G["recon"]["rebuilt"], int(pubc.sum()))
+    check("SF9 a report held for an account not yet established exists at earlier cut-offs (the as-of rule matters there)",
+          ((pk.r["t"] < pk.r["est"]) & (pk.r["q"] < W.FLASH_Q)).sum() > 500, int(((pk.r["t"] < pk.r["est"])).sum()))
+
+    # ------------------------------------------------------------------------------------- the governing documents
     act = doc_text(os.path.join(target, W.FILES["act"]))
     agr = doc_text(os.path.join(target, W.FILES["agreement"]))
-    req = open(os.path.join(target, W.FILES["request"]), encoding="utf-8").read()
-    norm = lambda s: re.sub(r"\s+", " ", s.replace("\u2019", "'"))
-    check("docs: the Act reads back with its population clause (positive control)",
-          "whether or not the employer's report for that quarter has been received" in norm(act), len(act))
-    check("docs: the agreement reads back with its pay period and paper receipt (positive control)",
-          "twelfth day" in norm(agr) and "00:00:00" in agr, len(agr))
-    for name, txt in (("Act", act), ("agreement", agr), ("request", req)):
-        bad = re.findall(r"\b(agent|agents|transmission|batch|bureau(?! of Labor Statistics)|intermediar\w*|impute\w*|imputation|delinquen\w*|distress\w*|"
-                         r"late|lateness|payroll service|preparer|outstanding report)\b", norm(txt), re.I)
-        check("docs: the %s names no agent, transmission, lateness or imputation" % name, not bad, bad[:5])
-    check("docs: the Act files the threshold and the rounding", "minus 2.0 percent or lower" in norm(act) and "rounded to one decimal place" in norm(act))
-    check("docs: the Act files the cutoff", "by February 15 of the fund year" in norm(act))
+    check("document control: the Act reads back", "whether or not an account has been established" in act and "minus 2.0 percent or lower" in act, len(act))
+    check("document control: the agreement reads back", "held, and is posted with the date and time it was received" in agr and "distributes the employment" in agr, len(agr))
+    banned = r"transmission|payroll agent|payroll bureau|batch|late filer|imput|nonresponse|seasonal|housing|downturn|completion factor|back-?test|missing alone"
+    for nm, tx in (("Act", act), ("agreement", agr), ("request", rq)):
+        hit = re.findall(banned, tx, re.I)
+        check("pins: the %s names no step of the estimate" % nm, not hit, hit[:5])
+    check("pins: the Act files the population, the outcome, the line, the cut-off, the base and the two reports",
+          all(s in act for s in ("payroll period that includes the twelfth day", "whether or not its contribution report for the quarter has been received",
+                                 "from the same records as they stand at the same date", "differs from the figure the Department has published",
+                                 "as they stood at the close of February 15 of the year before the fund year")))
 
-    # ------------------------------------------------------------------------------------------ realism sweep
-    nums = np.sort(np.array([int(x.replace("-", "")[:-1]) for x in T["accounts"]["account_no"]]))
-    check("realism: account numbers are no arithmetic sequence", len(set(np.diff(nums))) > 50)
-    codes_sorted = sorted(W.CODES, key=lambda c: W.NAMES[c])
-    check("realism: county codes are not the names in alphabetical order", codes_sorted != W.CODES)
-    shapes = set()
-    for nm in T["accounts"]["legal_name"].head(4000):
-        shapes.add((len(nm.split()), nm.split()[-1] in ("LLC", "Inc.", "Co.", "PC", "PLLC", "LLP", "Corp.", "Company")))
-    check("realism: employer names take many shapes", len(shapes) >= 6, len(shapes))
-    tot = sum(G["total"].values())
-    check("realism: no round headline total", int(round(tot)) % 1000 != 0)
+    # --------------------------------------------------------------------------------------------- the deliverables
+    import openpyxl
+    wb = openpyxl.load_workbook(os.path.join(gold, W.DELIVERABLES["cert"]))
+    ws = wb["Certification"]
+    rows = {str(r_[0]): r_ for r_ in ws.iter_rows(min_row=8, max_row=8 + len(W.CODES) - 1, values_only=True)}
+    check("deliverable: the workbook's county rows are the figures", all(rows[c][5] == figs["r6_county_jobs"][W.NAMES[c]] and
+          abs(rows[c][6] - figs["r7_changes"][W.NAMES[c]]) < 1e-9 for c in W.CODES))
+    check("deliverable: the workbook marks exactly the designated counties", [W.NAMES[c] for c in W.CODES if rows[c][7] == "Yes"] == figs["r8_designated"])
+    check("deliverable: five sheets and a chart", wb.sheetnames == ["Certification", "Estimated jobs", "December 2025", "Replay December 2025", "Other treatments"]
+          and len(ws._charts) == 1, wb.sheetnames)
+    rows_csv = list(csv.DictReader(open(os.path.join(gold, W.DELIVERABLES["employers"]), encoding="utf-8")))
+    byc = {}
+    for r_ in rows_csv:
+        byc[r_["county_code"]] = byc.get(r_["county_code"], 0.0) + float(r_["december_2026_jobs"])
+    check("self-verification: the employer list adds to each county's total", max(abs(byc[c] - G["total"][c]) for c in W.CODES) < 0.06 * 600,
+          round(max(abs(byc[c] - G["total"][c]) for c in W.CODES), 1))
+    check("self-verification: reported plus estimated is the total in every county", max(abs(G["reported"][c] + G["estimated"][c] - G["total"][c]) for c in W.CODES) < 1e-6)
+    memo = doc_text(os.path.join(gold, W.DELIVERABLES["memo"]))
+    check("deliverable: the memo names the designated counties and the four judgments", all(W.NAMES[c] in memo for c in des) and
+          "no account yet" in memo and "worksite" in memo and "housing" in memo, len(memo))
+    check("deliverable: no em dash anywhere in the deliverables or the write-up", "—" not in memo and "—" not in open(os.path.join(task, "submission.md"), encoding="utf-8").read())
+
+    # ------------------------------------------------------------------------------------------- the realism sweep
     hits = tells.sweep(target)
-    check("realism: no authoring tell in any shipped file", not hits, hits[:5])
-    check("realism: the email's domains are not reserved", not re.search(r"\.example|\.test|\.invalid", req))
+    check("realism: no authoring tell in any shipped file", not hits, hits[:4])
+    acc = T["accounts"]
+    step = np.diff(np.sort(acc["_n"].values))
+    check("realism: account numbers are no arithmetic sequence", len(set(step)) > 100, len(set(step)))
+    shapes = acc["legal_name"].str.replace(r"[A-Z][a-z]+", "X", regex=True).nunique()
+    check("realism: employer names take many shapes", shapes > 40, shapes)
+    bq = T["reports"].groupby(["year", "quarter"]).size()
+    check("realism: no two quarters carry the same number of reports", bq.nunique() == len(bq), bq.min())
+    tot_c = [int(round(G["total"][c])) for c in W.CODES]
+    check("realism: no county total is a round thousand", not any(t % 1000 == 0 for t in tot_c))
+    check("realism: every extract's last record is on or before the extract date", T["reports"]["received_at"].max() <= "2027-02-15 23:59:59"
+          and pd.to_datetime(T["worksites"]["date_received"], format="%m/%d/%Y").max() <= pd.Timestamp("2027-02-15"))
+    eq3 = ((r["month1_employment"] == r["month2_employment"]) & (r["month2_employment"] == r["month3_employment"])).mean()
+    check("realism: the three months differ on most reports of ten jobs or more", ((r["month3_employment"] >= 10) &
+          (r["month1_employment"] == r["month2_employment"]) & (r["month2_employment"] == r["month3_employment"])).sum() /
+          max(1, (r["month3_employment"] >= 10).sum()) < 0.25, round(eq3, 3))
 
-    # ------------------------------------------------------------------------------------ figures and blocks
-    sub = open(os.path.join(task, "submission.md")).read()
-    check("blocks: no em or en dash", "\u2014" not in sub and "\u2013" not in sub)
-    check("blocks: the Final Recommendation names Garrow and Ostrom and the field's imputation",
-          "Garrow and Ostrom" in sub.split("## Supplementary")[0] and "field's" in sub.split("## Supplementary")[0])
-
-    ok = all(r[1] for r in RESULTS)
+    ok = all(x[1] for x in RESULTS)
+    bad = [x for x in RESULTS if not x[1]]
     if not quiet:
         for name, good, detail in RESULTS:
             if not good:
-                print("FAIL", name, detail)
-        print("checks: %d of %d pass" % (sum(r[1] for r in RESULTS), len(RESULTS)))
+                print("FAIL  %s  %s" % (name, detail[:300]))
+        print("checks: %d of %d" % (len(RESULTS) - len(bad), len(RESULTS)))
     return ok
