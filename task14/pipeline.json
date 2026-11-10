@@ -1,32 +1,18 @@
 {
  "task": "task14",
- "status": "RETURNED",
+ "status": "DRAWING",
  "domain": "survey-research-official-statistics",
  "objective": "etl",
- "stage": 5,
- "stage_name": "ship",
+ "stage": 2,
+ "stage_name": "design",
  "updated": "2026-11-10",
- "stump": "The default path files the whole-year docket (five faculty whose earlier December disclosures make them look like under-reporters in place of five who submitted their 2026 disclosures in early December) because it compares each disclosure with the register's whole program year although a disclosure carries only what each company had paid by the day it was submitted; counted to each submission's day, the December 2026 disclosures grossed up by the same manufacturer's share of the year by that date, the weighted matched-line ratio comes closest on 2025 and files the golden docket.",
- "architecture": 1,
+ "stump": "",
+ "architecture": 2,
  "loops": 1,
- "precut": {
-  "exit": 0,
-  "date": "2026-10-31",
-  "checks": 61
- },
- "leak": {
-  "leak_py": "REVIEW, no LEAK, on target.zip 745e4bab (2026-10-31), every line answered (leak_check_report.md)",
-  "reader": "10-31 reader on the reship cut: questions 1 to 4 none, question 6 an analytical choice validated by the filed back-test, every sweep line harmless"
- },
- "duplicate_check": {
-  "heart": "WARN 2026-10-31 once the card answered task268 v4, task271 v4, task458 and task455 with differentiation lines (driver.near 0.14 against its own v1, people.first Diana, overuse.objective, repeat.gate_g, overuse.gate_g)",
-  "surface": "exit 0 on 2026-10-31: 6 pairs promoted (task458 back to back, task455 two apart, task136, task268, task185, task80), each with a differentiation line on the card, left to the author's optional clone-check"
- },
- "judge": {
-  "pass_1": "DETERMINISTIC / FIX_NOW (ask wording: CSV population, the 2025 publication); stump moderate; Gate H pass",
-  "pass_2": "DETERMINISTIC / FIX_NOW (step 3's closeness claim; the sixteenth a near tie), both fixed in the generator (step 3 and the memo restated and asserted; the sixteenth left the prompt); stump strong; Gate G PASS; Gate H pass",
-  "pass_3": "DETERMINISTIC / APPROVE (10-31 on target.zip 745e4bab: 1,696 owed and 91 late at every cutoff tried, the nature and relationship tables, 9,994 rows, the back-test picks n/(n+2) at 523,180 against the whole-year reading's 708,830, the same fifteen with Baldwin 22K clear of the sixteenth); residual forks none flipping the docket (Ask C's entity list types, the conformed file's columns, the chart's order under other weightings, the docket's preparation date); Gate G method_or_model_selection, analytical_non_defect; Gate H pass; report determinism_check_report_pass2.md"
- },
+ "precut": {},
+ "leak": {},
+ "duplicate_check": {},
+ "judge": {},
  "returned": [
   {
    "date": "2026-10-31",
@@ -45,22 +31,12 @@
    "commit": "RETURNED (task14)"
   }
  ],
- "resume": "RETURNED on the platform's domain fit and prompt test (runs/review_2026-11-10.md). Re-root as architecture 2 in the same world: the question moves from a docket under a stated threshold to estimation about the disclosure registry itself (coverage, nonresponse, small areas, with uncertainty), a results chain at depth level 4 or 5; the prompt states the decision, names no file and spells out no slice. Next: stage 1 (fingerprint draw, card with answer_shape, weight and chain_signature), then stage 2 to precut.py exit 0.",
+ "resume": "Architecture 2 drawn (card registered 2026-11-10, WARN only): a coverage statement for 2025 (manufacturers checked against Open Payments, companies outside it estimated from the tax forms faculty uploaded, the forms' completeness measured on the manufacturer side over every faculty member, by named status, with agency-paid speaker fees traced to the manufacturers). Prototype in memory showed the estimate near the truth on average and six shortcuts between 0.4 and 1.25 times it. Next: stage 2 (results chain, fork and closure tables, prompt, precut.py exit 0), then the generator rebuilt from the prototype (people, register, disclosures, tax forms, documents through the house writers), goldens, effort.json.",
  "approved": null,
- "delivered": "2026-10-31",
+ "delivered": null,
  "portal": null,
  "source_note": "seed ET14 (analytical_tasks/07_data_extraction_conformation): the world, decision and quantity kept (a COI office's docket of fifteen, highest single-manufacturer remuneration first); the decoy-era traps are not used; pairing in Survey Research & Official Statistics, census-register-administrative-data-quality (see ## Draw)",
- "gates": {
-  "checks": "132 of 132",
-  "verify": "9 of 9",
-  "byte_identical": true,
-  "figures_check": "27 of 27",
-  "precut": 0,
-  "voice_check": "PASS",
-  "heart": "WARN only",
-  "container": "clean",
-  "ceiling": "generator/ceiling.py: pair 45.4"
- },
+ "gates": {},
  "history": [
   {
    "date": "2026-11-09",
@@ -69,6 +45,10 @@
   {
    "date": "2026-11-10",
    "event": "the author uploaded architecture 1 with a rewritten prompt; the platform returned the domain fit (compliance lookups under a stated rule, no estimation) and the prompt test (borderline 2 of 9, formatting fail); recorded RETURNED, architecture 1 spent"
+  },
+  {
+   "date": "2026-11-10",
+   "event": "architecture 2 drawn in the same world: Survey Research & Official Statistics, census-register-administrative-data-quality, ETL; weight assembly, answer shape bridge; the question moved from a docket under a threshold to the registry's coverage (card v2 registered, WARN only)"
   }
  ],
  "migrated_from": {
@@ -77,5 +57,6 @@
   "status_in_mark": "SHIPPED",
   "date": "2026-11-09",
   "note": "moved from Project Mark at the author's word: architecture 1 shipped there on 2026-10-31, pending, never run on the platform; carried on here for the Sulfur bar"
- }
+ },
+ "call": "to be filled when the pack is cut: the departments that go to verification on the 2025 coverage statement"
 }
