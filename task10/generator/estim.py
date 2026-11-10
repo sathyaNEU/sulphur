@@ -329,7 +329,8 @@ def event_table(X, code, method="regression", net_switching=True, exclude_switch
             continue
         w = WINTER_OF(d)
         rows.append(dict(date=d, winter=w, zone=code, T=float(tm[d]), scheduled=mw[d], contract=X["contract"][(code, w)],
-                         delivered=-float(np.mean(cred) if credit == "mean" else max(cred)), switch=d in sw,
+                         delivered=-float(np.mean(cred) if credit == "mean" else (x[CREDIT_HH[-1]] if credit == "last" else max(cred))),
+                         switch=d in sw,
                          **{"win_" + h: -x[h] for h in WINDOW}, **{"post_" + h: x[h] for h in POST}))
     t = pd.DataFrame(rows)
     if exclude_switch_days and len(t):
@@ -717,7 +718,7 @@ def backtest_all(evs, noise, below=COLD, form="linear", estimator="line", fit_be
 
 def golden_from(X, below=COLD, form="linear", pooled=True, net_noise=True, base=BASE_T, comeback_on=True,
                 spread="scaled", use_switching=True, credit="mean", baseline="regression", estimator="line",
-                fit_below=None, cancelled_in=False, scale="proportional"):
+                fit_below=None, cancelled_in=False, scale="proportional", window="events"):
     """The golden on the parsed pack, result by result. Options name the reasonable variants the bands are set by."""
     X = conform(X)
     prep, tm = X["_prep"], X["_tm"]
@@ -749,12 +750,19 @@ def golden_from(X, below=COLD, form="linear", pooled=True, net_noise=True, base=
         last = X["contract"][(c, "2025/26")]
         delivered = f["share"] * last * (award / last) ** elastic
         shape, back = fits[p]["shape"], (fits[p]["back"] if comeback_on else {})
+        if window == "flat":          # the megawatts quoted taken flat through every half-hour of the service window
+            shape = {h: 1.0 for h in WINDOW}
         day = with_flex(prof, delivered, shape, back)
         hh, peak = peak_of(day)
         cv_a = f["cv"]
         if spread == "constant":      # the megawatts of scatter seen in the record carried unchanged to the award
             e = evs[c][evs[c]["T"] <= below]
             cv_a = float(np.std(e["delivered"].values - line_share(f, e["T"].values) * e["contract"].values)) / delivered
+        elif spread == "share":       # the share's own scatter about its line, as measured, times the award
+            e = (pev[p] if pooled else evs[c])
+            e = e[e["T"] <= below]
+            res = e["delivered"].values / e["contract"].values - line_share(f, e["T"].values)
+            cv_a = float(np.std(res, ddof=len(f["beta"]))) * award / delivered
         p90, peaks = day_quantile(prof, delivered, shape, back, cv_a, cvb)
         zones.append(dict(zone=ZONE_LABEL[c], primary=X["names"][c], code=c, provider=p, award=award, firm=firm,
                           d26=d26, slope=slope, cv_base=cvb, n_base_days=nb, before=before, profile=prof,

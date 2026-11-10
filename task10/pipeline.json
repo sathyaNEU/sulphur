@@ -1,48 +1,61 @@
 {
  "task": "task10",
- "status": "PAUSED",
+ "status": "READY",
  "domain": "energy-systems-utilities/load-forecasting (client domain energy-systems-utilities; world: an English distribution network operator, Wealdmoor Power Networks, committing for winter 2027/28 the reinforcement of the Halverton primaries whose design-day peak, with the flexibility contracted for that winter called in full, would exceed firm capacity on more than one design day in ten)",
  "subdomain": "load-forecasting",
  "objective": "forecasting",
- "stage": 4,
- "stage_name": "check",
+ "stage": 5,
+ "stage_name": "ready",
  "updated": "2026-11-10",
  "call": "Commit reinforcement at Ashcombe Road, Fenwick Street and Hartwell Common for winter 2027/28; Charlecote Way stays within firm capacity on nine design days in ten with its 2027/28 contract",
  "architecture": 6,
- "loops": 0,
+ "loops": 1,
  "precut": {
   "exit": 0,
   "date": "2026-11-10",
   "note": "0 FAIL, 1 WARN (R2a upstream of seven results; the largest hint measured at 2 of 11)"
  },
  "leak": {
-  "leak_py": "",
-  "reader": ""
+  "leak_py": "REVIEW, no LEAK, on target.zip d84ca1b2 (2026-11-10); every line ruled in the design note",
+  "reader": "three cold reads at stage 4 (2026-11-10), the last on the final cut: no leak, no ranking file, no helper file; the guideline settles the demand side and the test (R1), the rest analysis; switching-log quarter-hours fixed, no figure moved"
  },
  "duplicate_check": {
-  "guard_check": "WARN 2026-11-10 on the registered card (driver.near 0.18 against this slot's architecture 5, overuse.forum, repeat.decision against task5), answered in the Draw",
-  "heart": "",
-  "surface": ""
+  "guard_check": "WARN 2026-11-10 on the re-registered card (driver.near 0.17 against this slot's architecture 5, overuse.forum, repeat.gate_g and overuse.gate_g against task16), answered in the Draw; forcing_event season_or_peak after the window moved twice",
+  "heart": "WARN, no BLOCK (gates.py, final cut)",
+  "surface": "PASS (gates.py, final cut)"
  },
  "judge": {
-  "verdict": "",
-  "disposition": "",
-  "gate_h": "",
-  "report": "task10/determinism_check_report.md (not yet rewritten for architecture 6)",
+  "verdict": "DETERMINISTIC (third isolated pass, own derivation first; the solution-side fix it prescribed applied, no golden figure moved)",
+  "disposition": "FIX_NOW applied; clear to proceed, no model rerun",
+  "gate_h": "domain pass | layers pass | results 9 graded across 6 areas (the thread's count; 11 in effort.json) | one_thing none | effort quick 2, careful 5, thorough 9 of 9 | one_fact: the share sentence rescues about 2 to 3 of 9 (2 of 11 whole results by effort.py)",
+  "report": "task10/determinism_check_report.md",
   "history": [
    {
     "pass_": "r1",
     "date": "2026-11-10",
     "pack": "a934f8e7",
     "verdict": "DETERMINISTIC (SOLUTION_WRONG on the backtest coverage count)",
-    "disposition": "FIX_NOW"
+    "disposition": "FIX_NOW",
+    "note": "the graded blocks sat inside its brief, so weaker evidence on Gate C",
+    "fix": "the count is no longer asked; every band the range of the variants run; a curved weather correction ruled out by asserted data"
    },
    {
     "pass_": "r2",
     "date": "2026-11-10",
     "pack": "9ba1c5b9",
     "verdict": "DETERMINISTIC SOLUTION_WRONG (wording and band arithmetic only; every graded figure inside its band)",
-    "disposition": "FIX_NOW"
+    "disposition": "FIX_NOW",
+    "note": "own derivation written before the blocks were opened; its first pass executed guideline 6 as a credit in two half-hours alone and reinforced all four",
+    "fix": "guideline 6 reworded in the pack (the service delivered through its window; the two half-hours are how megawatts are quoted); megawatts fitted over every event and the record's own scaling added to the family, the megawatts' floor at Ashcombe Road 7.3; the rounding path stated; the prompt names what the backtest's miss is measured on"
+   },
+   {
+    "pass_": "r3",
+    "date": "2026-11-10",
+    "pack": "1ee96fa6",
+    "verdict": "DETERMINISTIC",
+    "disposition": "FIX_NOW (solution side only)",
+    "note": "own derivation first: the same three primaries, every megawatt figure inside its band; its gross-scatter rival 0.1 to 0.4 MW above two nine-days-in-ten bands",
+    "fix": "applied as prescribed with no golden figure moved: the nine-days-in-ten bands reach 0.3 MW above the 22 variants, the backtest band 0.10 to 0.29, three clarifying sentences; the final cut d84ca1b2 differs from the judged pack only in the switching log, which no figure reads"
    }
   ]
  },
@@ -102,9 +115,17 @@
    "portal": "holistic audit: the call turns on one built-in factor (Tollbrook Lane, Wexley Hill and Kestwick Fields step up a flat 1.4, 1.4 and 0.8 MW on their zone's event days, whatever the MW scheduled, absent on cancelled days); once told, the fix is one subtraction; \"spotting the plant, not analysis\". Asked for: the transfer documented (switching log entries) and the call turning on judgments that each move a figure (the shape of the cold-weather delivery decline validated on held-out events; whether delivery scales to awards 1.5 to 2.5 times the largest historical dose; how baseline uncertainty is carried to Hartwell Common's margin)",
    "fix": "architecture 6: the same world rebuilt as a results chain (the transfer documented in a control room switching log and filed in guideline 3; eight results: demand before flexibility, the megawatts a contract called in full delivers, the backtest on last winter, the megawatts off the day's peak once load comes back, the expected peak, the nine-days-in-ten level, the primaries to reinforce, the bridge)",
    "commit": ""
+  },
+  {
+   "date": "2026-11-10",
+   "source": "platform holistic audit (runs/review_2026-11-10.md)",
+   "repair": "redesign in the same world (architecture 6)",
+   "portal": "the call turned on one built-in factor (open-point neighbours stepping up on event days); one sentence named it and one subtraction landed the call",
+   "fix": "the transfer documented (a control room switching log, filed in guideline 3) and no longer part of the answer; the call rebuilt as a results chain of eleven results on four judgments that each move a figure: the share of a contract available on a cold evening against megawatts per megawatt scheduled, carried to awards 1.9 to 2.8 times the 2025/26 contracts; the day rebuilt with the load that comes back; the day-to-day spread carried in proportion to the nine-days-in-ten level; the weather correction carried past its sample; backtested on a held-out winter",
+   "commit": "RESHIPPED (task10)"
   }
  ],
- "resume": "stage 4 on architecture 6, final cut target.zip 1ee96fa6: two FIX_NOW passes fixed in the generator (the backtest's range count no longer asked; every band the range of 20 variants; Ashcombe Road's award 21.0 MW; guideline 6 reworded so the service is delivered through its window; the prompt names what the backtest's miss is measured on). Running when paused: the third isolated judge thread (brief and blocks under /tmp/determinism-check-task10-r3/, own derivation first) and a third cold leak read. Next: read the thread's verdict.md; if APPROVE or wording-only, have the determinism-judge agent write determinism_check_report.md from it, add the reader's answers to leak_check_report.md, fill the r3 and gates lines of the note's Pre-ship check, run checks.py, verify.py, gates.py and audit_containers.py on the cut, set status READY and commit RESHIPPED (task10) on main with both zips and golden/ force-added; if it finds a fork, fix it in the generator first",
+ "resume": "READY on architecture 6 after the holistic-audit return: the author rewrites prompt.txt in their own words (voice-check.py --rewrite, then leak.py), uploads it with target.zip, pastes the four answer blocks and golden.zip; then /triage-runs task10 with both runs and the rubric",
  "approved": null,
  "submitted": null,
  "portal": {
@@ -391,15 +412,31 @@
   }
  ],
  "doctrine": "throughout",
- "chain": "R1 design-day demand before flexibility (30.1, 24.9, 35.5, 22.9 MW); R2 megawatts each 2027/28 contract delivers at 17:30 to 18:00 on the design day (6.2, 4.0, 5.4, 2.9; 0.39 and 0.54 of the megawatts contracted); R3 winter 2025/26 predicted from the winters before (0.19 MW mean absolute error, 37 of 50 freezing-day events inside the 80 per cent range); R4 megawatts off the day's peak (4.8, 4.0, 5.4, 2.9; Ashcombe Road peaking in the half-hour to 20:00); R5 expected peaks (25.3, 20.8, 30.1, 20.0); R6 nine-days-in-ten levels (25.8, 21.7, 31.2, 20.6); R7 the three primaries to reinforce; R8 the bridge from 41.0 MW contracted to 17.1 MW off the peaks",
+ "chain": "R1 design-day demand before flexibility (30.1, 24.9, 35.5, 22.9 MW); R2a the share of its contract each provider has available at minus 3 C (0.39, 0.54); R2 megawatts each 2027/28 contract delivers at 17:30 to 18:00 (8.1, 4.0, 5.4, 2.9); R3 winter 2025/26 predicted from the winters before (0.19 MW average miss); R4a megawatts coming back per megawatt delivered (0.32, 0.26); R4 megawatts off the day's peak (4.2, 4.0, 5.4, 2.9; Ashcombe Road peaking in the half-hour to 20:00); R5 expected peaks (25.9, 20.8, 30.1, 20.0); R6a the day-to-day spread (16 per cent of what is delivered); R6 nine-days-in-ten levels (26.5, 21.7, 31.2, 20.6); R7 the three primaries to reinforce; R8 the bridge from 46.0 MW contracted to 16.5 MW off the peaks",
  "effort": {
   "quick": 10.9,
   "careful": 38.4,
   "thorough": 100.0,
-  "largest_hint": "a provider can deliver no more than a share of its contracted megawatts on a cold evening, however many are scheduled: 2 of 11 results"
+  "largest_hint": "a provider can deliver no more than a share of its contracted megawatts on a cold evening, however many are scheduled: 2 of 11 results",
+  "range": "38 on the careful pass as built (megawatts per megawatt scheduled, megawatts of scatter unchanged); about 49 if the scatter is carried in proportion"
  },
  "zips": {
-  "target": "1ee96fa6f83fc639d719a28c29052a156b00d33fe206a8fb5965d57d3ea032e7",
+  "target": "d84ca1b2a318159c9bc0ab15d4d15a7d01ddf9474e8ae6fd473d2b2d00f78fb6",
   "golden": "525b765ba918e6832a4e422dfddf378a12324651b8e93481f4598703f04b6b48"
+ },
+ "prompt_rewritten": false,
+ "gates": {
+  "date": "2026-11-10",
+  "precut": "exit 0, 1 WARN",
+  "effort": "PASS, pair 38.4",
+  "voice": "PASS (766 characters)",
+  "figures": "PASS (187 figures)",
+  "leak": "REVIEW",
+  "heart": "WARN",
+  "surface": "PASS",
+  "checks": "62 of 62",
+  "verify": "PASS",
+  "rebuild": "two builds byte-identical",
+  "containers": "PASS, 0 FAIL, 0 WARN"
  }
 }

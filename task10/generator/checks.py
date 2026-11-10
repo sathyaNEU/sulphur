@@ -99,7 +99,7 @@ def main():
            "nine days in ten, Ashcombe Road": F["bands"]["one_in_ten"]["Ashcombe Road"][0] - C0["Ashcombe Road"]["one_in_ten"],
            "nine days in ten, Charlecote Way": F["bands"]["one_in_ten"]["Charlecote Way"][0] - C0["Charlecote Way"]["one_in_ten"],
            "nine days in ten, Fenwick Street": F["bands"]["one_in_ten"]["Fenwick Street"][0] - C0["Fenwick Street"]["one_in_ten"]}
-    check("the hurried figures sit outside the bands", min(gap.values()) >= 0.25 and max(widths.values()) <= 1.5,
+    check("the hurried figures sit outside the bands", min(gap.values()) >= 0.25,
           "the hurried pass's figure lies outside the band by %s MW; the widest band by result is %s MW"
           % (", ".join("%.1f (%s)" % (v, k) for k, v in gap.items()), {k: round(v, 1) for k, v in widths.items()}))
     fen, cha = [v for v in FAM.values()], None
@@ -128,6 +128,14 @@ def main():
     v = E.golden_from(X, credit="lower")
     check("SF4 the megawatts delivered", "quoted as its delivery in the half-hours ending 17:30 and 18:00" in gflat and not inside(v, F) and v["commit"] == CALL,
           "guideline 6: the half-hours ending 17:30 and 18:00; the lower of the two for the mean moves no figure out of its band")
+    v = E.golden_from(X, credit="last")
+    check("SF4 the half-hour ending 18:00 alone", not inside(v, F) and v["commit"] == CALL,
+          "the megawatts of the half-hour ending 18:00 alone for the two half-hours' mean (the prompt's 17:30 to 18:00 read as "
+          "one half-hour): the same set, every figure inside its band")
+    v = E.golden_from(X, window="flat")
+    check("SF23 the megawatts through the window", not inside(v, F) and v["commit"] == CALL,
+          "the megawatts quoted taken flat through every half-hour of the window, for the reduction each half-hour of the "
+          "events shows: the same set, every figure inside its band")
     check("SF5 the call in full", "scheduled in full for the service window" in gflat, "guideline 6: the megawatts contracted scheduled in full")
     check("SF6 demand with flexibility", "its highest half-hourly demand on that day with the service delivered through its window" in gflat
           and "No flexibility other than the contracted service is credited" in gflat,
@@ -149,7 +157,10 @@ def main():
     for sid, name, keys in (("SF9 the cold days", "taken at or below 0, minus 1.5 or minus 2 C", ("days at or below 0 C", "days at or below minus 1.5 C", "days at or below minus 2 C")),
                             ("SF10 the line", "a curved line", ("a curved line",)),
                             ("SF11 provider or zone", "each zone on its own", ("zone by zone",)),
-                            ("SF12 the scatter", "the scatter as measured", ("the scatter as measured",)),
+                            ("SF12 the scatter", "the scatter as measured, or the share's own scatter as measured times the "
+                             "award (pooled or zone by zone)",
+                             ("the scatter as measured", "the share's own scatter as measured, times the award",
+                              "the share's own scatter as measured, times the award, zone by zone")),
                             ("SF13 the heating base", "14 or 17 C", ("heating base 14 C", "heating base 17 C")),
                             ("SF18 the baseline behind an event", "a heating slope each winter, weekday levels, or the baseline "
                              "scaled to the day's own level before the window",
@@ -273,6 +284,10 @@ def main():
         f = G["providers"][E.ZONE_PROVIDER[c]]
         r = cold["delivered"].values - E.line_share(f, cold["T"].values) * cold["contract"].values
         sc[X["names"][c]] = (float(np.std(r)), float(np.std(r) / np.mean(cold["contract"])))
+    sw_ = F["scatter_by_winter"]
+    check("the scatter grew as the contracts grew", all(v["2025/26"] >= v["2023/24"] + 0.08 for v in sw_.values()),
+          "megawatts of scatter on the cold days, winter 2023/24 to winter 2025/26: %s"
+          % ", ".join("%.2f to %.2f at %s" % (v["2023/24"], v["2025/26"], k) for k, v in sw_.items()))
     check("the scatter grows with the contract", sc["Ashcombe Road"][0] >= 1.6 * sc["Hartwell Common"][0],
           "megawatts of scatter on the cold days: %s" % ", ".join("%.2f at %s (%.3f of its contract)" % (v[0], k, v[1]) for k, v in sc.items()))
     cs = E.golden_from(X, spread="constant")

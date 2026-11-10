@@ -168,8 +168,8 @@
   },
   {
    "band": [
-    0.12,
-    0.27
+    0.1,
+    0.29
    ],
    "depends": [
     "R2a"
@@ -330,11 +330,11 @@
    "bands": {
     "Corvane Flex Ltd": [
      12,
-     22
+     24
     ],
     "Quillon Energy Services Ltd": [
      13,
-     21
+     23
     ]
    },
    "depends": [],
@@ -363,19 +363,19 @@
    "bands": {
     "Ashcombe Road": [
      26.1,
-     26.8
+     27.0
     ],
     "Charlecote Way": [
      21.3,
-     22.0
+     22.2
     ],
     "Fenwick Street": [
      30.7,
-     31.6
+     31.8
     ],
     "Hartwell Common": [
      20.1,
-     20.9
+     21.1
     ]
    },
    "depends": [

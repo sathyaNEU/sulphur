@@ -71,8 +71,10 @@ def write(F, path):
            % j("%s MW at %s (%s)" % (f1(off[p]), p, band(B["off_peak"][p])) for p in ORDER),
            "4. Each primary's expected design-day peak with its 2027/28 contract called in full: %s."
            % j("%s MW at %s (%s)" % (f1(peak[p]), p, band(B["peak"][p])) for p in ORDER),
-           "5. The level each peak stays under on nine design days in ten, against firm capacity: %s."
-           % j("%s MW at %s (%s) against %s" % (f1(q90[p]), p, band(B["one_in_ten"][p]), f1(Z[p]["firm"])) for p in ORDER),
+           "5. The level each peak stays under on nine design days in ten, against firm capacity: %s. At %s the level is "
+           "that of the half-hour to %s, where the provider's spread arrives only through the load that comes back."
+           % (j("%s MW at %s (%s) against %s" % (f1(q90[p]), p, band(B["one_in_ten"][p]), f1(Z[p]["firm"])) for p in ORDER),
+              late[0], Z[late[0]]["peak_hh"]),
            "6. A Bridge sheet from the megawatts contracted to the megawatts taken off the day's peak, zone by zone and for "
            "the four together: %s; of %s MW contracted, %s MW are not available on the design day, %s MW are delivered at "
            "17:30 to 18:00 and %s MW come off the peaks."
@@ -81,8 +83,8 @@ def write(F, path):
                                                      f1(deliv[p] - lost(p))) for p in ORDER),
               f1(tot["contracted"]), f1(tot["not_available"]), f1(tot["delivered"]), f1(tot["off_peak"])),
            "7. A Backtest sheet with one row per completed event of winter 2025/26 (megawatts predicted, delivered and "
-           "the miss): fitted on winters 2023/24 and 2024/25 alone, the same approach is out by %.2f MW on average on "
-           "what that winter's events delivered at 17:30 to 18:00 (%s)."
+           "the miss): fitted on winters 2023/24 and 2024/25 alone, the same approach is out by %.2f MW on average (the "
+           "mean of the absolute misses) on what that winter's events delivered at 17:30 to 18:00 (%s)."
            % (F["r3_backtest"], band2(B["backtest"]["mae"])),
            "8. A clustered column chart on the Zones sheet: for each primary, demand before flexibility, the expected peak "
            "with flexibility and the nine-days-in-ten level beside firm capacity, in MW; the nine-days-in-ten column stands "
@@ -162,11 +164,14 @@ def write(F, path):
         "One day in ten: the scatter of delivered over contracted about its line on the cold days, less what the same "
         "measurement shows on days with nothing scheduled, is about %s; it is the same share "
         "at a small contract and a large one, so it is carried in proportion to the 2027/28 megawatts, with each primary's "
-        "day-to-day spread about its weather correction, and the day recomputed half-hour by half-hour: %s. The megawatts "
-        "of scatter the record shows, carried unchanged, would put %s under %s MW."
+        "day-to-day spread about its weather correction, and the day recomputed half-hour by half-hour: %s. %s's call "
+        "needs that proportion: megawatts per megawatt scheduled with the megawatts of scatter its fit leaves, carried "
+        "unchanged, put it under %s MW, inside firm capacity, and the megawatts of scatter grew with the megawatts "
+        "contracted at every zone between 2023/24 and 2025/26 (%.2f to %.2f MW at %s)."
         % (("%d per cent of the level at both providers" % cor["spread_pct"]) if same_spread else
            ("%d and %d per cent of the level" % (cor["spread_pct"], qui["spread_pct"])), j("%s MW at %s" % (f1(q90[p]), p) for p in ORDER),
-           pivot[0], f1(car[pivot[0]]["one_in_ten"])),
+           pivot[0], f1(car[pivot[0]]["one_in_ten"]), F["scatter_by_winter"][pivot[0]]["2023/24"],
+           F["scatter_by_winter"][pivot[0]]["2025/26"], pivot[0]),
         "Set against firm capacity (guideline 7): %s would exceed it on more than one design day in ten (their "
         "nine-days-in-ten levels stand %s over it); %s's stands %s MW inside it."
         % (j(call), j("%s MW" % f1(Z[p]["over_by"]) for p in call), j(hold), j(f1(Z[p]["inside_by"]) for p in hold)),
@@ -186,7 +191,8 @@ def write(F, path):
            "zone. The available share with the expected day alone would leave %s out (%s MW against %s); on nine design "
            "days in ten it stays under %s MW. A curved weather correction is not carried, because the cold days the record "
            "does hold sit on the straight line. Every variant tried (the cold days taken at or below 0, minus 1.5 or minus "
-           "2 C, a curved line through the share, each zone on its own, the scatter as measured, a heating base of 14 or 17 C, "
+           "2 C, a curved line through the share, each zone on its own, the scatter as measured or as the share's own, a "
+           "heating base of 14 or 17 C, "
            "a baseline with a slope each winter, with weekday levels or scaled to the day's own level before the window, a "
            "met call taken as a floor or left out, the megawatts fitted over every event, a cancelled instruction's day kept, "
            "the megawatts delivered carried to the award at the rate the three winters' record itself gives) reinforces the "

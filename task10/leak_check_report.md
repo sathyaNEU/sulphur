@@ -1,37 +1,39 @@
 # leak check, task10
 
-**Verdict: REVIEW.** 12 files read, 65 golden figures and 9 candidate names taken from submission.md, 25 stump terms taken from the design note.
+**Verdict: REVIEW.** 12 files read, 66 golden figures and 10 candidate names taken from submission.md, 25 stump terms taken from the design note.
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: megawatts, architecture, golden, record, ashcombe, scheduled, carried, guideline, street, window, contracted, delivered, fenwick, missed, forecast, half-hour, provider, carries, spread, megawatt, prompt, export, programme, repairs, half-hours
+Stump terms swept: megawatts, architecture, golden, record, ashcombe, carried, scheduled, guideline, street, fenwick, inside, window, contracted, megawatt, missed, measured, provider, half-hour, scatter, prompt, forecast, spread, primaries, carries, half-hours
 
-## 3 answer figures in the pack (REVIEW 14)
-- **REVIEW** `capacity_assessment_guideline_2026.pdf`: golden figure 21.0 appears: ...41108 20 + 20 22.5 Dunmore Street PS40852 20 + 23 21.0 Fenwick Street PS41474 27 + 27 30.5 Hartwell Comm...
-- **REVIEW** `capacity_assessment_guideline_2026.pdf`: golden figure 19.5 appears: ...1236 15 + 16 17.8 Kestwick Fields PS40508 17 + 17 19.5 Ravenhurst Park PS40391 15 + 15 17.5 Tollbrook La...
+## 3 answer figures in the pack (REVIEW 16)
+- **REVIEW** `capacity_assessment_guideline_2026.pdf`: golden figure 27.0 appears: ...| Page 1 of 2 Wexley Hill PS40975 24 + 24 27.0 Transformer ratings from the primary substation r...
 - **REVIEW** `capacity_assessment_guideline_2026.pdf`: golden figure 17.8 appears: ...1474 27 + 27 30.5 Hartwell Common PS41236 15 + 16 17.8 Kestwick Fields PS40508 17 + 17 19.5 Ravenhurst P...
+- **REVIEW** `capacity_assessment_guideline_2026.pdf`: golden figure 19.5 appears: ...1236 15 + 16 17.8 Kestwick Fields PS40508 17 + 17 19.5 Ravenhurst Park PS40391 15 + 15 17.5 Tollbrook La...
 - **REVIEW** `capacity_assessment_guideline_2026.pdf`: golden figure 23.0 appears: ...Firm capacity (MW) Ashcombe Road PS40617 20 + 20 23.0 Charlecote Way PS41108 20 + 20 22.5 Dunmore Stree...
 - **REVIEW** `capacity_assessment_guideline_2026.pdf`: golden figure 30.5 appears: ...40852 20 + 23 21.0 Fenwick Street PS41474 27 + 27 30.5 Hartwell Common PS41236 15 + 16 17.8 Kestwick Fie...
+- **REVIEW** `capacity_assessment_guideline_2026.pdf`: golden figure 21.0 appears: ...41108 20 + 20 22.5 Dunmore Street PS40852 20 + 23 21.0 Fenwick Street PS41474 27 + 27 30.5 Hartwell Comm...
 - **REVIEW** `capacity_assessment_guideline_2026.pdf`: golden figure 22.5 appears: ...40617 20 + 20 23.0 Charlecote Way PS41108 20 + 20 22.5 Dunmore Street PS40852 20 + 23 21.0 Fenwick Stree...
-- **REVIEW** `flexibility_contract_awards_2027-28.pdf`: golden figure 21.0 appears: ...Ashcombe Road CMZ Ashcombe Road Corvane Flex Ltd 21.0 6.40 312 Charlecote Way CMZ Charlecote Way Quillo...
 - **REVIEW** `flexibility_contract_awards_2027-28.pdf`: golden figure 10.0 appears: ...t CMZ Fenwick Street Quillon Energy Services Ltd 10.0 5.70 289 Hartwell Common CMZ Hartwell Common Cor...
-- **REVIEW** `flexibility_contract_awards_2027-28.pdf`: golden figure 4.0 appears: ...ecote Way CMZ Quillon Energy Services Ltd 2.5 3.0 4.0 Fenwick Street CMZ Quillon Energy Services Ltd 2....
-- **REVIEW** `flexibility_contract_awards_2027-28.pdf`: golden figure 4.5 appears: ...ck Street CMZ Quillon Energy Services Ltd 2.5 3.5 4.5 Hartwell Common CMZ Corvane Flex Ltd 2.0 2.5 3.0...
-- **REVIEW** `flexibility_contract_awards_2027-28.pdf`: golden figure 3.5 appears: ...ntract period on the contracted megawatts for the 3.5 hours of the service window. Utilisation is paid...
+- **REVIEW** `flexibility_contract_awards_2027-28.pdf`: golden figure 21.0 appears: ...Ashcombe Road CMZ Ashcombe Road Corvane Flex Ltd 21.0 6.40 312 Charlecote Way CMZ Charlecote Way Quillo...
 - **REVIEW** `flexibility_contract_awards_2027-28.pdf`: golden figure 7.5 appears: ...y CMZ Charlecote Way Quillon Energy Services Ltd 7.5 5.85 296 Fenwick Street CMZ Fenwick Street Quillo...
+- **REVIEW** `flexibility_contract_awards_2027-28.pdf`: golden figure 2.5 appears: ....5 Charlecote Way CMZ Quillon Energy Services Ltd 2.5 3.0 4.0 Fenwick Street CMZ Quillon Energy Service...
+- **REVIEW** `flexibility_contract_awards_2027-28.pdf`: golden figure 3.5 appears: ...ntract period on the contracted megawatts for the 3.5 hours of the service window. Utilisation is paid...
+- **REVIEW** `flexibility_contract_awards_2027-28.pdf`: golden figure 4.5 appears: ...ck Street CMZ Quillon Energy Services Ltd 2.5 3.5 4.5 Hartwell Common CMZ Corvane Flex Ltd 2.0 2.5 3.0...
+- **REVIEW** `flexibility_contract_awards_2027-28.pdf`: golden figure 4.0 appears: ...ecote Way CMZ Quillon Energy Services Ltd 2.5 3.0 4.0 Fenwick Street CMZ Quillon Energy Services Ltd 2....
 - **REVIEW** `capacity_assessment_guideline_2026.pdf`: carries 14 of 17 distinctive words of the committed call: 'Commit reinforcement at Ashcombe Road, Fenwick Street and Hartwell Common for winter 2027/28; Charlecote Way stays withi'
 - **REVIEW** `flexibility_contract_awards_2027-28.pdf`: carries 11 of 17 distinctive words of the committed call: 'Commit reinforcement at Ashcombe Road, Fenwick Street and Hartwell Common for winter 2027/28; Charlecote Way stays withi'
 
 ## 4 design-note vocabulary (REVIEW 2)
-- **REVIEW** `capacity_assessment_guideline_2026.pdf`: 14 of 25 stump-paragraph terms appear (megawatts, ashcombe, scheduled, guideline, street, window); read whether the document names the move
-- **REVIEW** `flexibility_contract_awards_2027-28.pdf`: 10 of 25 stump-paragraph terms appear (megawatts, ashcombe, scheduled, street, window, contracted); read whether the document names the move
+- **REVIEW** `capacity_assessment_guideline_2026.pdf`: 14 of 25 stump-paragraph terms appear (megawatts, ashcombe, scheduled, guideline, street, fenwick); read whether the document names the move
+- **REVIEW** `flexibility_contract_awards_2027-28.pdf`: 11 of 25 stump-paragraph terms appear (megawatts, ashcombe, scheduled, street, fenwick, window); read whether the document names the move
 
 ## 6 ranking artifacts (REVIEW 5)
-- **REVIEW** `capacity_assessment_guideline_2026.pdf`: names 4 of 9 answer-set candidates beside numbers; confirm it does not rank them on the decision question
-- **REVIEW** `flexibility_contract_awards_2027-28.pdf`: names 8 of 9 answer-set candidates beside numbers; confirm it does not rank them on the decision question
-- **REVIEW** `flexibility_events_2023-2026.csv`: names 8 of 9 answer-set candidates beside numbers; confirm it does not rank them on the decision question
-- **REVIEW** `primary_substation_register.xlsx`: names 4 of 9 answer-set candidates beside numbers; confirm it does not rank them on the decision question
-- **REVIEW** `primary_transformer_condition_2026.xlsx`: names 4 of 9 answer-set candidates beside numbers; confirm it does not rank them on the decision question
+- **REVIEW** `capacity_assessment_guideline_2026.pdf`: names 4 of 10 answer-set candidates beside numbers; confirm it does not rank them on the decision question
+- **REVIEW** `flexibility_contract_awards_2027-28.pdf`: names 8 of 10 answer-set candidates beside numbers; confirm it does not rank them on the decision question
+- **REVIEW** `flexibility_events_2023-2026.csv`: names 8 of 10 answer-set candidates beside numbers; confirm it does not rank them on the decision question
+- **REVIEW** `primary_substation_register.xlsx`: names 4 of 10 answer-set candidates beside numbers; confirm it does not rank them on the decision question
+- **REVIEW** `primary_transformer_condition_2026.xlsx`: names 4 of 10 answer-set candidates beside numbers; confirm it does not rank them on the decision question
 
 ## 9 dates after the setting (INFO 1)
 - **INFO** `-`: no --asof given, sweep skipped (pass the fiction's as-of date)
@@ -95,6 +97,21 @@ figure reads). The second read's answers, in its own words where quoted:
 The first read answered the same way on questions 1 to 6 and added, on question 7, that five workbooks were created
 before their latest content.
 
+A third read followed the second fix pass (guideline 6 reworded, the prompt naming what the backtest's miss is measured
+on; target.zip 1ee96fa6, from which the final cut d84ca1b2 differs only in the switching log's references, ammeter
+readings and two reasons, which no figure reads). On question 5 it executed section 6 word for word: "A word-for-word
+reader subtracts the delivered MW from the design-day half-hour profile across the whole service window, the 7
+half-hours ending 16:30 through 19:30 ... Then the primary's with-flexibility demand is the max of that reduced
+profile", and the megawatts delivered "refers to the contract's delivery in those half-hours". The credit in two
+half-hours alone, which the second judge's first pass took from the earlier wording, is gone. The options it still
+lists: the prompt's "17:30 to 18:00" read as one half-hour; a cancelled instruction's day; a transfer's days as the
+operation dates alone or every day from close to restore; the GMT day's hour labels. On question 6: "The only open
+piece is the delivery rate per contract ... Nothing in the pack is a planted trap that flips everything", with the
+megawatts delivered, the nine-days-in-ten level and the backtest read as analysis. On question 7: the switching log's
+references out of time order, its ammeter readings an exact function of the megawatts, and planned jobs over New
+Year; the contract history in half-megawatt lots with awards 2 to 2.8 times the last contract "reads as built"; the
+guideline of 15 September 2026 cites a notice dated 21 October.
+
 Verdict on each line (the design note's Leak rulings carry the reasons):
 
 - Questions 1 and 5: harmless, the WHAT of each result filed as designed; the cancelled-day option is SF20 (same call,
@@ -107,4 +124,14 @@ Verdict on each line (the design note's Leak rulings carry the reasons):
   content are living registers, each last saved after its latest record (checked); the switching log's quarter-hours
   FIXED in the generator (the minute as logged, figures.json and submission.md byte-identical before and after); the
   contract history's half-megawatt lots left as the tender's own.
+- The third read's options: the half-hour ending 18:00 alone for the two half-hours' mean (SF4) and the megawatts
+  taken flat through the window (SF23) each keep the call and every figure inside its band (asserted); a cancelled
+  day is SF20; a transfer's days read as the operation dates alone sit between the golden and SF2's extreme (the
+  logged days left in altogether, same call); the hour labels move the daily mean by under 0.07 C (judge r2).
+- The third read's realism lines: the switching log FIXED in the generator (references in time order, each ammeter
+  reading at its own busbar voltage and power factor, transfers made over Christmas, New Year or a bank holiday logged
+  as fault restoration; figures.json and submission.md byte-identical before and after). The half-megawatt lots are
+  the service's own step, and awards at multiples of the last contracts are the scenario's premise (the reviewer's
+  audit names them as the judgment to test): left. The guideline's "the contract award notice" is a standing reference
+  to each winter's notice: left.
 - Every REVIEW line of sweeps 3, 4 and 6: inputs and the service's own terms, ruled in the design note.

@@ -61,7 +61,7 @@
     "source": "synthetic"
   },
   "forum": "executive_team",
-  "forcing_event": "budget_or_appropriation",
+  "forcing_event": "season_or_peak",
   "org_family": "utility_or_infrastructure",
   "world": {
     "geography": "England (a fictional distribution network operator, licence area and city zone)",
@@ -334,7 +334,7 @@
       "deliverable set": "pptx+xlsx"
     }
   ],
-  "notes": "2026-11-10 architecture 6: re-rooted in the same world on the platform reviewer's instruction (runs/review_2026-11-10.md): the transfer documented in a control room switching log and filed in guideline 3, the single hidden factor replaced by a results chain; stump_strategy forecast_method_backtest: three readings of what a call of the whole contract delivers (per megawatt scheduled, a share of the megawatts contracted, the last contract's megawatts unchanged) separated by the record itself; weight validation, never yet drawn on file | forum executive_team and org_family utility_or_infrastructure kept from the world; forcing_event budget_or_appropriation: what forces the call now is the December capital expenditure review, the allocation round at which a reinforcement has to be committed to be energised before the winter (guideline 1); the winter peak is the object of the forecast, not the event (first filed as season_or_peak, which task15 holds in the window) | 2026-11-10 stage 4 fix pass (judge r1 FIX_NOW on the backtest's range count): the count is no longer asked, every band is the range of 17 variants, Ashcombe Road's award is 21.0 MW so no shortcut reaches the set, the asks are numbered as the prompt lists them (eleven results)",
+  "notes": "2026-11-10 architecture 6: re-rooted in the same world on the platform reviewer's instruction (runs/review_2026-11-10.md): the transfer documented in a control room switching log and filed in guideline 3, the single hidden factor replaced by a results chain; stump_strategy forecast_method_backtest: three readings of what a call of the whole contract delivers (per megawatt scheduled, a share of the megawatts contracted, the last contract's megawatts unchanged) separated by the record itself; weight validation, never yet drawn on file | forum executive_team and org_family utility_or_infrastructure kept from the world; forcing_event season_or_peak: the call is forced by the winter 2027/28 peak, through the December capital expenditure review at which a reinforcement has to be committed to be energised before it (guideline 1). The same event reads as budget_or_appropriation too, and the card carried that label for part of 2026-11-10 while task15 held season_or_peak in the window; task16, registered earlier and pulled later, holds budget_or_appropriation in the window now, and season_or_peak, the label first filed, is free again | 2026-11-10 stage 4 fix pass (judge r1 FIX_NOW on the backtest's range count): the count is no longer asked, every band is the range of 17 variants, Ashcombe Road's award is 21.0 MW so no shortcut reaches the set, the asks are numbered as the prompt lists them (eleven results)",
   "answer_shape": "forecast-bands-drivers",
   "weight": "validation",
   "chain_signature": [
@@ -354,7 +354,7 @@
   "doctrine": "throughout",
   "client_subdomain": "load-price-renewable-forecasting",
   "results": "R1 design-day demand before flexibility (30.1, 24.9, 35.5, 22.9 MW); R2a the share of its contracted megawatts each provider has available at minus 3 C (0.39 Corvane Flex, 0.54 Quillon); R2 megawatts each 2027/28 contract delivers at 17:30 to 18:00 on the design day (8.1, 4.0, 5.4, 2.9); R3 winter 2025/26's events predicted from the winters before (out by 0.19 MW on average); R4a megawatts coming back in the half-hour after the window per megawatt delivered (0.32, 0.26); R4 megawatts off the day's peak (4.2, 4.0, 5.4, 2.9; Ashcombe Road peaking in the half-hour to 20:00); R5 expected peaks (25.9, 20.8, 30.1, 20.0); R6a the day-to-day spread as a share of what is delivered (16 per cent at both providers); R6 nine-days-in-ten levels (26.5, 21.7, 31.2, 20.6 against firm 23.0, 22.5, 30.5, 17.8); R7 reinforce Ashcombe Road, Fenwick Street and Hartwell Common; R8 the bridge from 46.0 MW contracted (25.6 not available, 20.4 delivered, 3.9 lost as load comes back, 16.5 off the peaks)",
-  "registered": "2026-11-10T04:00:14Z",
+  "registered": "2026-11-10T04:24:39Z",
   "shell": {
     "question form": "whether",
     "second-sentence opener": "for",

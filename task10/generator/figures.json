@@ -15,8 +15,8 @@
     40
    ],
    "mae": [
-    0.12,
-    0.27
+    0.1,
+    0.29
    ]
   },
   "before": {
@@ -120,19 +120,19 @@
   "one_in_ten": {
    "Ashcombe Road": [
     26.1,
-    26.8
+    27.0
    ],
    "Charlecote Way": [
     21.3,
-    22.0
+    22.2
    ],
    "Fenwick Street": [
     30.7,
-    31.6
+    31.8
    ],
    "Hartwell Common": [
     20.1,
-    20.9
+    21.1
    ]
   },
   "peak": {
@@ -166,11 +166,11 @@
   "spread": {
    "Corvane Flex Ltd": [
     12,
-    22
+    24
    ],
    "Quillon Energy Services Ltd": [
     13,
-    21
+    23
    ]
   }
  },
@@ -397,6 +397,18 @@
     "Fenwick Street": 5.37,
     "Hartwell Common": 2.9
    },
+   "the share's own scatter as measured, times the award": {
+    "Ashcombe Road": 8.11,
+    "Charlecote Way": 4.03,
+    "Fenwick Street": 5.37,
+    "Hartwell Common": 2.9
+   },
+   "the share's own scatter as measured, times the award, zone by zone": {
+    "Ashcombe Road": 7.94,
+    "Charlecote Way": 3.86,
+    "Fenwick Street": 5.59,
+    "Hartwell Common": 2.95
+   },
    "the three winters' own scaling with the megawatts contracted": {
     "Ashcombe Road": 7.46,
     "Charlecote Way": 3.83,
@@ -435,6 +447,8 @@
    "the calls that fell short alone": 0.194,
    "the calls that fell short alone, every day": 0.236,
    "the scatter as measured": 0.193,
+   "the share's own scatter as measured, times the award": 0.193,
+   "the share's own scatter as measured, times the award, zone by zone": 0.193,
    "the three winters' own scaling with the megawatts contracted": 0.193,
    "weekday levels": 0.196,
    "zone by zone": 0.193
@@ -548,6 +562,18 @@
     "Fenwick Street": 31.35,
     "Hartwell Common": 20.7
    },
+   "the share's own scatter as measured, times the award": {
+    "Ashcombe Road": 26.56,
+    "Charlecote Way": 21.82,
+    "Fenwick Street": 31.37,
+    "Hartwell Common": 20.69
+   },
+   "the share's own scatter as measured, times the award, zone by zone": {
+    "Ashcombe Road": 26.42,
+    "Charlecote Way": 21.84,
+    "Fenwick Street": 31.26,
+    "Hartwell Common": 20.73
+   },
    "the three winters' own scaling with the megawatts contracted": {
     "Ashcombe Road": 26.26,
     "Charlecote Way": 21.86,
@@ -655,6 +681,16 @@
    "Hartwell Common"
   ],
   "the scatter as measured": [
+   "Ashcombe Road",
+   "Fenwick Street",
+   "Hartwell Common"
+  ],
+  "the share's own scatter as measured, times the award": [
+   "Ashcombe Road",
+   "Fenwick Street",
+   "Hartwell Common"
+  ],
+  "the share's own scatter as measured, times the award, zone by zone": [
    "Ashcombe Road",
    "Fenwick Street",
    "Hartwell Common"
@@ -845,6 +881,24 @@
   "events": 112,
   "standard_error": 0.09
  },
+ "scatter_by_winter": {
+  "Ashcombe Road": {
+   "2023/24": 0.32,
+   "2025/26": 0.48
+  },
+  "Charlecote Way": {
+   "2023/24": 0.23,
+   "2025/26": 0.34
+  },
+  "Fenwick Street": {
+   "2023/24": 0.25,
+   "2025/26": 0.54
+  },
+  "Hartwell Common": {
+   "2023/24": 0.15,
+   "2025/26": 0.26
+  }
+ },
  "totals": {
   "comeback_loss": 3.9,
   "contracted": 46.0,
@@ -862,7 +916,7 @@
    14,
    17
   ],
-  "n": 20,
+  "n": 22,
   "names": [
    "days at or below 0 C",
    "days at or below minus 1.5 C",
@@ -870,6 +924,8 @@
    "a curved line",
    "zone by zone",
    "the scatter as measured",
+   "the share's own scatter as measured, times the award",
+   "the share's own scatter as measured, times the award, zone by zone",
    "heating base 14 C",
    "heating base 17 C",
    "a heating slope each winter",

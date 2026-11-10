@@ -39,6 +39,8 @@ VARIANTS = [
     ("zone by zone", dict(pooled=False)),
     # SF12, the scatter
     ("the scatter as measured", dict(net_noise=False)),
+    ("the share's own scatter as measured, times the award", dict(spread="share")),
+    ("the share's own scatter as measured, times the award, zone by zone", dict(spread="share", pooled=False)),
     # SF13, the heating base
     ("heating base 14 C", dict(base=14.0)), ("heating base 17 C", dict(base=17.0)),
     # SF18, the baseline an event's megawatts are measured against
@@ -72,9 +74,9 @@ def family(X, G):
     return runs
 
 
-def band(vals, gold, pad=0.1, floor=None):
+def band(vals, gold, pad=0.1, floor=None, pad_hi=None):
     lo = math.floor((min(vals) - pad) * 10 + 1e-9) / 10.0
-    hi = math.ceil((max(vals) + pad) * 10 - 1e-9) / 10.0
+    hi = math.ceil((max(vals) + (pad if pad_hi is None else pad_hi)) * 10 - 1e-9) / 10.0
     lo, hi = min(lo, r1(gold) - (floor or 0)), max(hi, r1(gold) + (floor or 0))
     return [round(lo, 1), round(hi, 1)]
 
@@ -87,8 +89,19 @@ def figures(X, G, FAM, info):
     def tab(key):
         return {p: r1(Z[p][key]) for p in prim}
 
-    def bands(key, pad=0.1, floor=0.2):
-        return {p: band([fam[k][p][key] for k in fam], Z[p][key], pad, floor) for p in prim}
+    def bands(key, pad=0.1, floor=0.2, pad_hi=None):
+        return {p: band([fam[k][p][key] for k in fam], Z[p][key], pad, floor, pad_hi) for p in prim}
+
+    # megawatts of scatter about the share's line on the cold days, first winter and last, zone by zone
+    scat = {}
+    for z in G["zones"]:
+        e = G["events"][z["code"]]
+        e = e[e["T"] <= E.COLD]
+        f = G["providers"][z["provider"]]
+        scat[z["primary"]] = {w: round(float(np.std((e[e["winter"] == w]["delivered"].values -
+                                                      E.line_share(f, e[e["winter"] == w]["T"].values) *
+                                                      e[e["winter"] == w]["contract"].values), ddof=1)), 2)
+                              for w in ("2023/24", "2025/26")}
 
     bt = G["backtest_all"]
     maes = [v["backtest_all"]["mae"] for v in FAM.values()]
@@ -116,7 +129,7 @@ def figures(X, G, FAM, info):
         deliv_b[p] = [round(min(lo, math.floor(slo * Z[p]["award"] * 10 + 1e-9) / 10.0), 1),
                       round(max(hi, math.ceil(shi * Z[p]["award"] * 10 - 1e-9) / 10.0), 1)]
     spread_b = {p: [int(math.floor(100 * min(min(v["providers"][p]["cv"], v["providers"][p]["cv_raw"]) for v in FAM.values()) - 1)),
-                    int(math.ceil(100 * max(max(v["providers"][p]["cv"], v["providers"][p]["cv_raw"]) for v in FAM.values()) + 1))]
+                    int(math.ceil(100 * max(max(v["providers"][p]["cv"], v["providers"][p]["cv_raw"]) for v in FAM.values()) + 3))]
                 for p in provs}
     # the bridge is stated at the precision shown, so every bar is taken from the displayed megawatts and adds up
     bridge = {**{"%s, not available" % p: r1(Z[p]["award"] - r1(Z[p]["delivered"])) for p in prim},
@@ -145,13 +158,14 @@ def figures(X, G, FAM, info):
                          unscheduled_primaries_curve_t={X["names"].get(c, c): round(v["peak_curve_t"], 2)
                                                         for c, v in LE.items() if not v["zone"]}),
         scaling=dict(elasticity=round(el, 2), standard_error=round(el_se, 2), events=el_n),
+        scatter_by_winter=scat,
         c1_share={p: round(G["providers"][p]["share"], 2) for p in provs},
         c2_comeback={p: round(G["providers"][p]["back"]["20:00"], 2) for p in provs},
         c3_spread={p: int(round(G["providers"][p]["cv"] * 100)) for p in provs},
         bands=dict(before=bands("before", 0.1, 0.3), delivered=deliv_b, off_peak=bands("off_peak"),
-                   peak=bands("peak", 0.1, 0.3), one_in_ten=bands("p90", 0.1, 0.3), bridge=bb,
+                   peak=bands("peak", 0.1, 0.3), one_in_ten=bands("p90", 0.1, 0.3, pad_hi=0.3), bridge=bb,
                    share=share_b, comeback=back_b, spread=spread_b,
-                   backtest=dict(mae=pband(maes, round(bt["mae"], 2), 0.01),
+                   backtest=dict(mae=pband(maes, round(bt["mae"], 2), 0.03),
                                  inside=[int(min(ins)), int(max(ins))])),
         zones={p: dict(zone=Z[p]["zone"], code=Z[p]["code"], provider=Z[p]["provider"], award=Z[p]["award"], firm=Z[p]["firm"],
                        share=round(Z[p]["share"], 2), peak_hh=Z[p]["peak_hh"], over=bool(Z[p]["over"]),
