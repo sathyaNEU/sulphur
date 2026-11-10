@@ -837,7 +837,7 @@ def check_throughout(task_dir, note_text, secs, dupes):
         # Dependencies: earlier results only.
         bad_dep, deps = [], {}
         for i, r in enumerate(res):
-            d = re.findall(r"\b([A-Z]{1,2}\d{1,2})\b", r["depends"])
+            d = re.findall(r"\b([A-Z]{1,2}\d{1,2}[a-z]?)\b", r["depends"])
             deps[r["id"]] = d
             if any(x not in ids[:i] for x in d):
                 bad_dep.append(r["id"])

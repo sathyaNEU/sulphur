@@ -210,7 +210,7 @@ def note_table(task_dir):
         return None, None
     out = {}
     for r in rows:
-        m = re.match(r"([A-Z]{1,2}\d{1,2})\b", r["result"])
+        m = re.match(r"([A-Z]{1,2}\d{1,2}[a-z]?)\b", r["result"])
         if m:
             out[m.group(1)] = (r["quick"], r["careful"], r["thorough"])
     pe = P.labelled(P.section(secs, "Effort test") or "", "Pair estimate") or ""
