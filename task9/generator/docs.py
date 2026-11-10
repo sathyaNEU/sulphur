@@ -9,7 +9,7 @@ from reportlab.platypus import Paragraph, Spacer, Table, TableStyle
 import officepdf as O
 
 CET = dt.timezone(dt.timedelta(hours=1))
-SUB = {"KL": 0.150, "OS": 0.130}   # the enhancement each manager offers below its Class A notes
+SUB = {"KL": 0.150, "OS": 0.165}   # the enhancement each manager offers below its Class A notes
 GMT = dt.timezone(dt.timedelta(hours=0))
 
 
@@ -65,7 +65,9 @@ def standard(path):
          Paragraph("4. The record", h2),
          Paragraph("4.1 Default and recovery are taken from the record of comparable loans: the European sponsor-backed "
                    "first-lien mid-market loans in the Lenderbase database that Kadeweg licenses, from 2008 to the latest "
-                   "full year, with Lenderbase's workout file, its open workouts included. The five years are taken to "
+                   "full year, with Lenderbase's workout file, its open workouts included: a default whose workout is "
+                   "still open counts as a default, and what lenders recover is read from the default years whose "
+                   "workouts have all closed. The five years are taken to "
                    "be drawn from the same conditions as that record.", body),
          Paragraph("4.2 A borrower defaults in a year when its credit standing falls below the point its one-year "
                    "default chance sets. Credit standings are normally distributed and are correlated as far as the "
@@ -125,9 +127,8 @@ def term_sheet(path, who, par_eur_m, n_loans):
         ("2. Arranger and servicer", "Ostvale Capital AB, Stockholm, which originated and services the loans."),
         ("3. Notes offered", "Class A senior secured notes, EUR {:,.1f} million, floating rate.".format(note)),
         ("4. Credit enhancement", "The Class B notes and the equity retained by Ostvale together equal %.1f per cent of the " % (100 * SUB["OS"]) +
-                                  "collateral principal balance and absorb losses before the Class A notes. Kadeweg's request "
-                                  "for proposals set 15.0 per cent; Ostvale offers the thinner enhancement with the wider "
-                                  "margin below."),
+                                  "collateral principal balance, above the 15.0 per cent Kadeweg's request for proposals of 2 "
+                                  "October 2026 set, and absorb losses before the Class A notes."),
         ("5. Interest", "Three-month EURIBOR plus 255 basis points a year, quarterly in arrear."),
         ("6. Collateral", "%d first-lien loans to sponsor-backed companies in Europe, EUR {:,.0f} million principal at "
                           "31 December 2026, set out in ostvale_collateral_tape_20261231.xlsx.".format(par_eur_m) % n_loans),

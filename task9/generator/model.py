@@ -3,12 +3,14 @@
 A panel row is one company-year at risk: (company, year, fund, sector, rating, age, defaulted, house), age being the
 full years since the buyout that began the current ownership (or, for a rival, since the loan began). Default rates
 come from a probit on rating and age; dependence from random-effect probits fitted cluster by cluster (Gauss-Hermite
-quadrature), each layer conditioned on the one above it; the forward years from a Gaussian factor simulation.
+quadrature), each layer conditioned on the one above it; each sector's loading on the shared year from the marginal
+likelihood over the year and sector-year factors; the forward years from a Gaussian factor simulation.
 """
 import collections
 
 import numpy as np
-from scipy.optimize import minimize_scalar
+from scipy.optimize import minimize, minimize_scalar
+from scipy.special import log_ndtr, logsumexp
 from scipy.stats import norm
 
 GH_X, GH_W = np.polynomial.hermite_e.hermegauss(40)
@@ -122,18 +124,29 @@ def estimate(P):
                 n=int(len(P)), defaults=int(d.sum()))
 
 
+def per_loan(port, am, ak, aks=None):
+    """The economy's and the sector's shares for each loan: am a scalar or one loading per sector, aks (optional) one
+    own-factor share per sector in place of the common ak."""
+    k = port["k"]
+    am_i = np.full(len(k), float(am)) if np.isscalar(am) else np.asarray(am, dtype=float)[k]
+    ak_i = np.full(len(k), float(ak)) if aks is None else np.asarray(aks, dtype=float)[k]
+    return am_i, ak_i
+
+
 def simulate(port, pdt, am, ak=0.0, ah=0.0, af=0.0, aq=0.0, lgd=0.37, nsim=1_000_000, years=5, seed=27,
-             chunk=100_000, frozen=False, link=None):
+             chunk=100_000, frozen=False, link=None, aks=None):
     """Cumulative portfolio credit loss (share of par) at the end of each forward year, nsim paths.
 
     port: dict of arrays w (par weights summing to one), r (rating 0-3), a (full years since buyout at the start),
-    k (sector 0-15), h (house id), f (fund id). aq is a persistent fund effect drawn once for the five years.
-    link (a, bm, bh): each default recovers a + bm z_year + bh z_house of its exposure, from the same year and house
-    shocks that drew the default; without it every default loses lgd."""
+    k (sector 0-15), h (house id), f (fund id). am is the economy's share, one for every loan or one per sector; aks,
+    when given, replaces the common sector share ak sector by sector. aq is a persistent fund effect drawn once for
+    the five years. link (a, bm, bh): each default recovers a + bm z_year + bh z_house of its exposure, from the same
+    year and house shocks that drew the default; without it every default loses lgd."""
     n = len(port["w"])
     uh, hi = np.unique(port["h"], return_inverse=True)
     uf, fi = np.unique(port["f"], return_inverse=True)
-    resid = np.sqrt(max(1.0 - am - ak - ah - af - aq, 1e-12))
+    am_i, ak_i = per_loan(port, am, ak, aks)
+    resid = np.sqrt(np.maximum(1.0 - am_i - ak_i - ah - af - aq, 1e-12))
     rng = np.random.default_rng(seed)
     out = np.zeros((years, nsim))
     step = 0 if frozen else 1
@@ -145,9 +158,9 @@ def simulate(port, pdt, am, ak=0.0, ah=0.0, af=0.0, aq=0.0, lgd=0.37, nsim=1_000
         Q = rng.standard_normal((m, len(uf)))[:, fi] if aq > 0 else 0.0
         for t in range(years):
             zm = rng.standard_normal((m, 1))
-            x = (np.sqrt(am) * zm
-                 + np.sqrt(ak) * rng.standard_normal((m, NSECT))[:, port["k"]]
-                 + resid * rng.standard_normal((m, n)))
+            x = (np.sqrt(am_i)[None, :] * zm
+                 + np.sqrt(ak_i)[None, :] * rng.standard_normal((m, NSECT))[:, port["k"]]
+                 + resid[None, :] * rng.standard_normal((m, n)))
             zh = 0.0
             if ah > 0:
                 zh = rng.standard_normal((m, len(uh)))[:, hi]
@@ -181,7 +194,8 @@ def simulate_count(port, book, pdt, am, ak=0.0, ah=0.0, rec=None, whole=False, n
     uh, hi = np.unique(hh, return_inverse=True)
     onehot = np.zeros((N, len(uh)))
     onehot[np.arange(N), hi] = 1.0
-    resid = np.sqrt(max(1.0 - am - ak - ah, 1e-12))
+    am_i, ak_i = per_loan(dict(k=kk), am, ak)
+    resid = np.sqrt(np.maximum(1.0 - am_i - ak_i - ah, 1e-12))
     rng = np.random.default_rng(seed)
     out = np.zeros((years, nsim))
     thr = np.array([norm.ppf(pdt[rr, np.minimum(aa + t, pdt.shape[1] - 1)]) for t in range(years)])
@@ -190,10 +204,10 @@ def simulate_count(port, book, pdt, am, ak=0.0, ah=0.0, rec=None, whole=False, n
         loss = np.zeros(m)
         alive = np.ones((m, N), dtype=bool)
         for t in range(years):
-            x = (np.sqrt(am) * rng.standard_normal((m, 1))
-                 + np.sqrt(ak) * rng.standard_normal((m, NSECT))[:, kk]
+            x = (np.sqrt(am_i)[None, :] * rng.standard_normal((m, 1))
+                 + np.sqrt(ak_i)[None, :] * rng.standard_normal((m, NSECT))[:, kk]
                  + np.sqrt(ah) * rng.standard_normal((m, len(uh)))[:, hi]
-                 + resid * rng.standard_normal((m, N)))
+                 + resid[None, :] * rng.standard_normal((m, N)))
             dd = (x < thr[t][None, :]) & alive
             others = (dd.astype(float) @ onehot)[:, hi[:n]] - 1.0
             r = np.clip(rec(others), 0.0, 1.0)
@@ -271,3 +285,212 @@ def moment_dependence(P):
     ak = max(rho_ky - am, 0.0)
     ah = max(rho_hky - rho_ky, 0.0)
     return dict(am=am, ak=ak, ah=ah)
+
+
+# ---------------------------------------------------------------- each sector's loading on the shared year
+ZX, ZW = np.polynomial.hermite_e.hermegauss(20)
+LZW = np.log(ZW / ZW.sum())
+EX, EW = np.polynomial.hermite_e.hermegauss(10)
+LEW = np.log(EW / EW.sum())
+
+
+def _sector_cells(P, pdt):
+    """Company-years grouped by year, sector and rating-age threshold, with their counts and defaults."""
+    p = pdt[P[:, 4], np.minimum(P[:, 5], pdt.shape[1] - 1)]
+    t = np.round(norm.ppf(p), 8)
+    cells = collections.defaultdict(lambda: [0, 0])
+    for y, k, tt, d in zip(P[:, 1].tolist(), P[:, 3].tolist(), t.tolist(), P[:, 6].tolist()):
+        c = cells[(y, k, tt)]
+        c[0] += 1
+        c[1] += d
+    keys = sorted(cells)
+    years = sorted(set(k[0] for k in keys))
+    yi = {y: i for i, y in enumerate(years)}
+    Y = np.array([yi[k[0]] for k in keys])
+    S = np.array([k[1] for k in keys])
+    return dict(S=S, T=np.array([k[2] for k in keys]), N=np.array([cells[k][0] for k in keys], float),
+                D=np.array([cells[k][1] for k in keys], float), cell=Y * NSECT + S, ny=len(years))
+
+
+def _sector_loglik(l, k, dat):
+    """The record's log-likelihood with the year's shock shared by every sector, sector s loading l[s] on it, and a
+    sector-year shock of share k, both integrated out (Gauss-Hermite)."""
+    sl = np.sqrt(l[dat["S"]])
+    q = np.sqrt(np.maximum(1 - l[dat["S"]] - k, 1e-9))
+    arg = (dat["T"][:, None, None] - sl[:, None, None] * ZX[None, :, None] - np.sqrt(k) * EX[None, None, :]) / q[:, None, None]
+    g = dat["D"][:, None, None] * log_ndtr(arg) + (dat["N"] - dat["D"])[:, None, None] * log_ndtr(-arg)
+    acc = np.zeros((dat["ny"] * NSECT, len(ZX), len(EX)))
+    np.add.at(acc, dat["cell"], g)
+    inner = logsumexp(acc + LEW[None, None, :], axis=2)
+    yz = inner.reshape(dat["ny"], NSECT, len(ZX)).sum(axis=1)
+    return float(logsumexp(yz + LZW[None, :], axis=1).sum())
+
+
+def sector_loadings(P, pdt, groups=None):
+    """Each sector's loading on the year's shock (groups: sector -> parameter index, None for one loading per sector)
+    and the sector-year share, by maximum likelihood. Returns the loadings by sector, the share and the
+    log-likelihood."""
+    dat = _sector_cells(P, pdt)
+    g = np.arange(NSECT) if groups is None else np.asarray(groups)
+    ng = int(g.max()) + 1
+
+    def unpack(th):
+        return (0.6 / (1 + np.exp(-th[:ng])))[g], 0.3 / (1 + np.exp(-th[ng]))
+
+    def f(th):
+        l, k = unpack(th)
+        return -_sector_loglik(l, k, dat)
+    r = minimize(f, np.full(ng + 1, -1.5), method="L-BFGS-B", options={"maxiter": 400})
+    l, k = unpack(r.x)
+    return dict(l=l, k=float(k), loglik=float(-r.fun), groups=g.tolist())
+
+
+def house_share_latent(P, pKY, l, k):
+    """The house-year's share of each standing on the latent scale: inside its sector-year a company's correlation
+    with its house-year's other companies is ah / (1 - l_s - k), its sector's room once the year and the sector-year
+    are known."""
+    groups = collections.defaultdict(list)
+    for i, key in enumerate(zip(P[:, 1].tolist(), P[:, 7].tolist())):
+        groups[key].append(i)
+    idx = [np.array(v) for k_, v in sorted(groups.items()) if len(v) >= 2]
+    t = norm.ppf(np.clip(pKY, 1e-10, 1 - 1e-10))
+    room = 1 - np.asarray(l)[P[:, 3]] - k
+    d = P[:, 6]
+
+    def nll(ah):
+        tot = 0.0
+        for gi in idx:
+            c = np.clip(ah / room[gi], 1e-6, 0.999)
+            pu = norm.cdf((t[gi][:, None] - np.sqrt(c)[:, None] * GH_X[None, :]) / np.sqrt(1 - c)[:, None])
+            lk = np.where(d[gi][:, None] == 1, pu, 1 - pu)
+            tot += np.log(max((np.prod(lk, axis=0) * GH_W).sum(), 1e-300))
+        return -tot
+    r = minimize_scalar(nll, bounds=(1e-3, 0.6), method="bounded", options={"xatol": 1e-5})
+    return float(r.x)
+
+
+def moment_loadings(P):
+    """The rival loading estimator, pair moments with nothing integrated: for each two sectors, the share of their
+    company pairs at risk in the same year (held by different houses) that both defaulted, inverted through the
+    bivariate normal at each sector's own default rate to a latent correlation, and one loading per sector fitted to
+    those correlations as the product of the two sectors' square roots (least squares weighted by the pairs)."""
+    from scipy.optimize import brentq, least_squares
+    d = P[:, 6].astype(np.int64)
+    ns, dsum = np.zeros((NSECT, 1 + int(P[:, 1].max()) - int(P[:, 1].min()))), None
+    y0 = int(P[:, 1].min())
+    n_sy = np.zeros((NSECT, ns.shape[1]))
+    d_sy = np.zeros((NSECT, ns.shape[1]))
+    np.add.at(n_sy, (P[:, 3], P[:, 1] - y0), 1)
+    np.add.at(d_sy, (P[:, 3], P[:, 1] - y0), d)
+    N = n_sy @ n_sy.T
+    J = d_sy @ d_sy.T
+    # same-house pairs across sectors carry the house's year too: take them out
+    hy = collections.defaultdict(lambda: np.zeros((NSECT, 2)))
+    for row in P:
+        c = hy[(int(row[7]), int(row[1]))]
+        c[int(row[3]), 0] += 1
+        c[int(row[3]), 1] += int(row[6])
+    for c in hy.values():
+        N -= np.outer(c[:, 0], c[:, 0])
+        J -= np.outer(c[:, 1], c[:, 1])
+    pr = np.clip(d_sy.sum(axis=1) / n_sy.sum(axis=1), 1e-4, 0.5)
+    t = norm.ppf(pr)
+    rows, w, rho = [], [], []
+    for a in range(NSECT):
+        for b in range(a + 1, NSECT):
+            if N[a, b] <= 0:
+                continue
+            q = J[a, b] / N[a, b]
+            f = lambda r: _bvn(t[a], t[b], r) - q
+            lo_, hi_ = f(-0.5), f(0.95)
+            r = brentq(f, -0.5, 0.95) if lo_ < 0 < hi_ else (-0.5 if lo_ >= 0 else 0.95)
+            rows.append((a, b))
+            w.append(np.sqrt(N[a, b]))
+            rho.append(r)
+    rows, w, rho = np.array(rows), np.array(w), np.array(rho)
+    res = least_squares(lambda x: w * (x[rows[:, 0]] * x[rows[:, 1]] - rho), np.full(NSECT, 0.2),
+                        bounds=(0.0, 0.8))
+    return np.clip(res.x ** 2, 0.0, 0.6)
+
+
+def _bvn(a, b, rho):
+    from scipy.stats import multivariate_normal
+    return float(multivariate_normal(mean=[0, 0], cov=[[1, rho], [rho, 1]]).cdf([a, b]))
+
+
+def year_posterior(P, pdt, l, k):
+    """Each year's shock as its posterior mean given every sector's defaults that year, sector s loading l[s] on it
+    and the sector-year shock integrated out (the same likelihood as sector_loadings)."""
+    dat = _sector_cells(P, pdt)
+    sl = np.sqrt(np.asarray(l)[dat["S"]])
+    q = np.sqrt(np.maximum(1 - np.asarray(l)[dat["S"]] - k, 1e-9))
+    arg = (dat["T"][:, None, None] - sl[:, None, None] * ZX[None, :, None] - np.sqrt(k) * EX[None, None, :]) / q[:, None, None]
+    g = dat["D"][:, None, None] * log_ndtr(arg) + (dat["N"] - dat["D"])[:, None, None] * log_ndtr(-arg)
+    acc = np.zeros((dat["ny"] * NSECT, len(ZX), len(EX)))
+    np.add.at(acc, dat["cell"], g)
+    inner = logsumexp(acc + LEW[None, None, :], axis=2)
+    yz = inner.reshape(dat["ny"], NSECT, len(ZX)).sum(axis=1) + LZW[None, :]
+    w = np.exp(yz - yz.max(axis=1, keepdims=True))
+    post = (w * ZX[None, :]).sum(axis=1) / w.sum(axis=1)
+    years = sorted(set(P[:, 1].tolist()))
+    return {y: float(v) for y, v in zip(years, post)}
+
+
+def _bvn_grid(ta, tb, grid):
+    """Bivariate normal orthant probabilities P(X < ta, Y < tb) on a grid of correlations, by Gauss-Legendre on
+    Plackett's identity d/drho = phi2(ta, tb; rho)."""
+    gx, gw = np.polynomial.legendre.leggauss(24)
+    base = norm.cdf(ta) * norm.cdf(tb)
+    out = []
+    for r in grid:
+        u = 0.5 * r * (gx + 1)
+        w = 0.5 * r * gw
+        dens = np.exp(-(ta * ta - 2 * u * ta * tb + tb * tb) / (2 * (1 - u * u))) / (2 * np.pi * np.sqrt(1 - u * u))
+        out.append(base + float((w * dens).sum()))
+    return np.array(out)
+
+
+def moment_house_share(P, pdt, l, k):
+    """The house-year's share by pair moments: every pair of companies held by one house and at risk in the same year,
+    each pair's joint default chance through the bivariate normal at its two companies' own one-year rates (rating and
+    years since the buyout) and their correlation without the house (the product of their sectors' square-root loadings
+    on the year, plus the sector-year's share for a pair in one sector), the house's share the one number that makes the
+    expected joint defaults the record's."""
+    from scipy.optimize import brentq
+    cls = np.minimum(P[:, 5], MAXAGE) - 1 + MAXAGE * P[:, 4]
+    tcls = np.array([norm.ppf(pdt[c // MAXAGE, c % MAXAGE + 1]) for c in range(4 * MAXAGE)])
+    sl = np.sqrt(np.asarray(l))
+    cnt = collections.Counter()
+    joint = 0
+    groups = collections.defaultdict(list)
+    for row, c in zip(P, cls):
+        groups[(int(row[1]), int(row[7]))].append((int(c), int(row[3]), int(row[6])))
+    for g in groups.values():
+        n = len(g)
+        if n < 2:
+            continue
+        nd = sum(x[2] for x in g)
+        joint += nd * (nd - 1) // 2
+        for i_ in range(n):
+            for j_ in range(i_ + 1, n):
+                a, b = g[i_], g[j_]
+                base = sl[a[1]] * sl[b[1]] + (k if a[1] == b[1] else 0.0)
+                key = (min(a[0], b[0]), max(a[0], b[0]), round(base, 4))
+                cnt[key] += 1
+    keys = list(cnt)
+    ta = np.array([tcls[x[0]] for x in keys])
+    tb = np.array([tcls[x[1]] for x in keys])
+    bs = np.array([x[2] for x in keys])
+    nn = np.array([cnt[x] for x in keys], float)
+    gx, gw = np.polynomial.legendre.leggauss(24)
+
+    def expected(ah):
+        r = np.clip(bs + ah, 0.0, 0.97)
+        base = norm.cdf(ta) * norm.cdf(tb)
+        u = 0.5 * r[:, None] * (gx[None, :] + 1)
+        w = 0.5 * r[:, None] * gw[None, :]
+        dens = np.exp(-(ta[:, None] ** 2 - 2 * u * ta[:, None] * tb[:, None] + tb[:, None] ** 2) / (2 * (1 - u * u))) \
+            / (2 * np.pi * np.sqrt(1 - u * u))
+        return float((nn * (base + (w * dens).sum(axis=1))).sum())
+    f = lambda ah: expected(ah) - joint
+    return float(brentq(f, 0.0, 0.9)) if f(0.0) < 0 < f(0.9) else (0.0 if f(0.0) >= 0 else 0.9)

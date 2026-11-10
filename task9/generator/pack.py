@@ -308,7 +308,7 @@ def tapes(W, rng, out):
     ws.title = "Portfolio"
     _sheet_header(ws, "Kestrel Lane Credit Partners: KLCP Senior Loan Note 2027 static portfolio",
                   "Collateral data as at 31 December 2026. Par in loan currency, millions.")
-    hdr = ["Obligor", "LEI", "Country", "Industry", "Currency", "Par (m)", "Margin (bps)", "Rating (Moody's equivalent)",
+    hdr = ["Obligor", "LEI", "Country", "Industry", "Currency", "Par (m)", "Margin (bps)", "Rating at origination (Moody's equivalent)",
            "Facility", "Origination", "Maturity", "Purpose"]
     ws.append([])
     ws.append(hdr)
@@ -329,7 +329,7 @@ def tapes(W, rng, out):
     ws.title = "Collateral"
     _sheet_header(ws, "Ostvale Capital Senior Secured Note 2027-1", "Collateral tape, cut-off 31.12.2026")
     hdr = ["Borrower", "Borrower LEI", "Domicile", "GICS industry group", "CCY", "Commitment (CCY m)", "Margin (%)",
-           "S&P equivalent", "Close date", "Maturity", "Deal type"]
+           "S&P equivalent at close", "Close date", "Maturity", "Deal type"]
     ws.append([])
     ws.append(hdr)
     for c in sorted(W.Y, key=lambda c: (WD.SECTORS[W.comps[c]["ind"]][3], W.comps[c]["legal"])):

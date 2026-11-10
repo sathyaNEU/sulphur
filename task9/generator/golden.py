@@ -1,7 +1,6 @@
-"""task9: the golden deliverables, written from figures.json: the investment committee note (DOCX, with its chart)
-and the year-by-year chances (CSV). Every number comes from the analysis; nothing is typed."""
+"""task9: the golden deliverable, written from figures.json: the investment committee note (DOCX), with its chart and
+its table of the chances by year end. Every number comes from the analysis; nothing is typed."""
 import csv
-import datetime as dt
 import io
 import os
 
@@ -39,14 +38,15 @@ def chart(F, path):
     ax.axvline(sk, color=BLUE, lw=1, ls=(0, (4, 3)))
     ax.axvline(so, color=ORANGE, lw=1, ls=(0, (4, 3)))
     ax.axhline(F["bar_pct"], color=INK2, lw=1, ls=(0, (1, 2)))
-    ax.text(sk + 0.3, 40, "Kestrel Lane's subordination, %s%%" % pct(sk, 1), color=INK2, fontsize=7.5, va="center")
-    ax.text(so - 0.3, 40, "Ostvale's, %s%%" % pct(so, 1), color=INK2, fontsize=7.5, va="center", ha="right")
+    ax.text(min(sk, so) - 0.3, 40, "Kestrel Lane's subordination, %s%%" % pct(sk, 1), color=INK2, fontsize=7.5,
+            va="center", ha="right")
+    ax.text(max(sk, so) + 0.3, 40, "Ostvale's, %s%%" % pct(so, 1), color=INK2, fontsize=7.5, va="center")
     ax.text(29.6, F["bar_pct"] * 1.18, "MP-RN-2 test, %s%%" % pct(F["bar_pct"], 0), color=INK2, fontsize=7.5, ha="right")
     kl, os_ = F["golden"]["KL"]["p5_pct"], F["golden"]["OS"]["p5_pct"]
     ax.plot([sk], [kl], "o", ms=5, color=BLUE, mec="#fcfcfb", mew=1.5)
     ax.plot([so], [os_], "o", ms=5, color=ORANGE, mec="#fcfcfb", mew=1.5)
-    ax.annotate("%s%%" % pct(kl, 1), (sk, kl), xytext=(8, 6), textcoords="offset points", color=INK, fontsize=7.5)
-    ax.annotate("%s%%" % pct(os_, 1), (so, os_), xytext=(-30, 6), textcoords="offset points", color=INK, fontsize=7.5)
+    ax.annotate("%s%%" % pct(kl, 1), (sk, kl), xytext=(-30, 6), textcoords="offset points", color=INK, fontsize=7.5)
+    ax.annotate("%s%%" % pct(os_, 1), (so, os_), xytext=(8, 6), textcoords="offset points", color=INK, fontsize=7.5)
     ax.set_yscale("log")
     ax.set_ylim(0.01, 100)
     ax.set_xlim(0, 30)
@@ -60,8 +60,8 @@ def chart(F, path):
     for s in ("top", "right"):
         ax.spines[s].set_visible(False)
     ax.legend(frameon=False, loc="lower left", fontsize=7.5)
-    ax.set_title("Both portfolios' losses pass 15 per cent of par more often than the test allows", fontsize=9.5, color=INK,
-                 loc="left")
+    ax.set_title("Both portfolios' losses pass their notes' subordination more often than the test allows", fontsize=9.5,
+                 color=INK, loc="left")
     fig.tight_layout()
     fig.savefig(path, dpi=200, metadata={"Software": None})
     plt.close(fig)
@@ -138,9 +138,15 @@ def _table(doc, rows, widths, right_from=1):
     return t
 
 
+def names(lst):
+    lst = [x[0].lower() + x[1:] for x in lst]
+    return ", ".join(lst[:-1]) + " and " + lst[-1] if len(lst) > 1 else lst[0]
+
+
 def ic_note(F, path, png):
     G, D = F["golden"], F["default_path"]
     kl, os_ = G["KL"], G["OS"]
+    rg, S, SE = F["rungs"], F["sectors"], F["sector_evidence"]
     doc = Document()
     sec = doc.sections[0]
     sec.page_width, sec.page_height = Mm(210), Mm(297)
@@ -149,8 +155,8 @@ def ic_note(F, path, png):
     st = doc.styles["Normal"]
     st.font.name = FONT
     st.font.size = Pt(10)
-    hp = sec.header.paragraphs[0]
-    hr = hp.add_run("Kadeweg Fiduciair Beheer | Investment committee paper IC-2027-03 | Confidential")
+    hp_ = sec.header.paragraphs[0]
+    hr = hp_.add_run("Kadeweg Fiduciair Beheer | Investment committee paper IC-2027-03 | Confidential")
     hr.font.size, hr.font.name = Pt(7.5), FONT
     hr.font.color.rgb = RGBColor.from_string("666666")
     fp = sec.footer.paragraphs[0]
@@ -165,18 +171,19 @@ def ic_note(F, path, png):
     _para(doc, "Date: 18 February 2027, for the investment committee of 25 February and the board of 4 March 2027",
           9, after=0)
     _para(doc, "Subject: Class A senior notes offered by Kestrel Lane and Ostvale, under MP-RN-2", 9, after=10)
-    rg = F["rungs"]
-    hp, yl = rg["house_pooled_lgd"], rg["house_year_link"]
+    hp, sol, hlp = rg["house_pooled_lgd"], rg["sector_one_lgd"], rg["house_link_pooled"]
+    sk, so = F["subordination_pct"]["KL"], F["subordination_pct"]["OS"]
     _para(doc, "Buy neither note; both fail MP-RN-2's test", 15, bold=True, after=6)
     _para(doc, ("We recommend declining both offers and leaving the allocation in the cash and government bond sleeve "
                 "until the next round, as MP-RN-2 2.2 provides. Over 2027 to 2031 Kestrel Lane's Class A note has a %s "
-                "per cent chance of losing principal and Ostvale's a %s per cent chance, against the standard's test of "
-                "%s per cent. Kestrel Lane's note looks the safer of the two on its borrowers' ratings, but its loans "
-                "sit with %s sponsor houses, and the defaults that cluster in a house's bad year are the ones that "
-                "recover least. We expect credit losses over the five years of %s per cent of par on Kestrel Lane's "
-                "portfolio and %s per cent on Ostvale's.")
-          % (pct(kl["p5_pct"], 1), pct(os_["p5_pct"], 1), pct(F["bar_pct"], 0), word(kl["houses"]),
-             pct(kl["el_pct"], 1), pct(os_["el_pct"], 1)), 10)
+                "per cent chance of losing principal at its %s per cent subordination and Ostvale's a %s per cent "
+                "chance at %s per cent, against the standard's test of %s per cent. The two notes fail for different "
+                "reasons. Kestrel Lane's loans sit with %s sponsor houses, and the defaults that cluster in a house's "
+                "bad year are the ones that recover least. Ostvale lends only in the five sectors whose companies "
+                "default together when the economy turns. We expect credit losses over the five years of %s per cent "
+                "of par on Kestrel Lane's portfolio and %s per cent on Ostvale's.")
+          % (pct(kl["p5_pct"], 1), pct(sk, 1), pct(os_["p5_pct"], 1), pct(so, 1), pct(F["bar_pct"], 0),
+             word(kl["houses"]), pct(kl["el_pct"], 1), pct(os_["el_pct"], 1)), 10)
 
     rows = [["Note", "Loans", "Par, EUR m", "Subordination", "Chance of loss 2027-31", "Expected loss 2027-31",
              "Needed for 1.0%", "for 0.5%"]]
@@ -195,64 +202,75 @@ def ic_note(F, path, png):
     doc.add_picture(png, width=Mm(160))
     _para(doc, ("Figure 1. Chance that each portfolio's credit loss over 2027 to 2031 exceeds a given share of par. "
                 "Kestrel Lane's note starts losing principal at %s per cent and Ostvale's at %s per cent.")
-          % (pct(F["subordination_pct"]["KL"], 1), pct(F["subordination_pct"]["OS"], 1)), 7.5, italic=True, color="555555",
-          after=10)
+          % (pct(sk, 1), pct(so, 1)), 7.5, italic=True, color="555555", after=10)
 
+    ev, E = F["evidence"], F["estimates"]
     _para(doc, "Defaults cluster by sponsor house", 11.5, bold=True, after=4)
-    ev = F["evidence"]
-    E = F["estimates"]
     _para(doc, ("Lenderbase records %s company-years of European sponsor-backed first-lien loans from 2008 to 2026, with "
                 "%s defaults. Joined to Dealtrail's buyout records, every loan traces to the sponsor house whose fund "
                 "held the company. Pairs in the same house, sector and year defaulted together %s per cent of the time "
-                "against %s per cent for pairs in the same sector and year under different houses; pairs in the same "
-                "house in different years sit at the independence rate. The economy's year carries %s of the variance "
-                "of a borrower's standing, the sector's year %s, and the house's year %s of what those leave. Kestrel "
-                "Lane's %d loans sit with %s houses and Ostvale's %d with %d.")
+                "against %s per cent for pairs in the same sector and year under different houses, and the house's "
+                "year carries %s of a borrower's credit standing. Kestrel Lane's %d loans sit with %s houses and "
+                "Ostvale's %d with %d.")
           % ("{:,}".format(F["panel"]["company_years"]), "{:,}".format(F["panel"]["defaults"]),
              pct(ev["same_house_same_sector_year_pct"]), pct(ev["other_house_same_sector_year_pct"]),
-             pct(E["am"], 3), pct(E["ak"], 3), pct(E["ch"], 3), kl["n"], word(kl["houses"]), os_["n"],
-             os_["houses"]), 10)
+             pct(F["house_share"], 3), kl["n"], word(kl["houses"]), os_["n"], os_["houses"]), 10)
+
+    _para(doc, "Five sectors turn with the economy", 11.5, bold=True, after=4, before=4)
+    w0 = SE["worst_years"]
+    _para(doc, ("The economy's year does not weigh on every sector alike. Read sector by sector, %s default far more in "
+                "the economy's bad years and almost never in its good ones, and in the same years as each other: in %d "
+                "%s per cent of their companies defaulted against %s per cent elsewhere, in %d %s against %s. Their "
+                "loadings on the economy's year run %s to %s against at most %s for the other eleven sectors; one "
+                "loading for every sector (%s) fits the record %s log-likelihood points worse. Ostvale's portfolio, all "
+                "in those five sectors, loads %s on the economy's year and Kestrel Lane's %s.")
+          % (names(S["swing"]), w0[0], pct(SE["swing_rate_pct"][str(w0[0])], 1), pct(SE["rest_rate_pct"][str(w0[0])], 1),
+             w0[1], pct(SE["swing_rate_pct"][str(w0[1])], 1), pct(SE["rest_rate_pct"][str(w0[1])], 1),
+             pct(S["swing_min"], 2), pct(S["swing_max"], 2), pct(S["rest_max"], 2), pct(S["pooled_l"], 3),
+             pct(S["ll_gain"], 1), pct(os_["loading"], 2), pct(kl["loading"], 2)), 10)
 
     _para(doc, "The clustered defaults recover least", 11.5, bold=True, after=4, before=4)
     rb = F["recovery_by_other_defaults"]
     LK, Ly = F["link"], F["link_year_only"]
     L = F["lgd"]
+    gr, CK = F["grain"], F["count_link"]
     _para(doc, ("A house in a bad year stops putting money into its companies' restructurings, so lenders sell or wind "
                 "up the businesses instead. On the 2008 to 2019 defaults, whose workouts have all closed, a default with "
                 "no other default in its house that year recovered %s per cent of the loan; one with three or more "
-                "others recovered %s per cent. The recent clustered defaults are not yet in that comparison: they take "
-                "longer to work out, and %d workouts are still open. Inferring each house-year's shock from its own "
-                "defaults against what its companies' ratings, ages and sector-year expected, and the year's shock "
-                "from the year's default rate, recovery on the closed cohorts runs %s plus %s per unit of the year's "
-                "shock and %s per unit of the house-year's shock.")
-          % (pct(rb["0"]["recovery_pct"], 1), pct(rb["3"]["recovery_pct"], 1), L["open"], pct(LK["a"], 3),
-             pct(LK["bm"], 3), pct(LK["bh"], 3)), 10)
-    gr, CK, ci = F["grain"], F["count_link"], rg["count_in_portfolio"]
-    _para(doc, ("The comparison counts each default's companions across its house's whole book: a default in the record "
-                "shared its house-year with a median of %d of the house's companies. Ostvale's tape holds %s companies "
-                "of each house and Kestrel Lane's %s. Counted among each note's own loans, Ostvale's defaults would "
-                "nearly always look like lone ones and its note would pass at %s per cent, while Kestrel Lane's would "
-                "fail at %s; but what a default recovers depends on the year its house is having, not on how many of "
-                "the house's loans a note happens to hold, so the house-year's shock carries it into the simulation.")
-          % (CK["book_seen_median"], word(int(gr["OS"]["loans_per_house_median"])), word(int(gr["KL"]["loans_per_house_median"])),
-             pct(ci["OS"]["p5_pct"], 1), pct(ci["KL"]["p5_pct"], 1)), 10)
-    _para(doc, ("Simulated with each default recovering on the shocks that drew it, both notes fail. With one average "
-                "loss of %s per cent for every default, as the closed workouts give it, Kestrel Lane's note would pass "
-                "at %s per cent and be bought (Ostvale's is at %s); tying recovery to the economy's year leaves Kestrel "
-                "Lane at %s per cent, because a default recovers no less in the economy's bad years. It is the "
-                "house's year, which also clusters Kestrel Lane's defaults, that takes its tail past the test.")
-          % (pct(L["lgd_pct"], 1), pct(hp["KL"]["p5_pct"], 1), pct(hp["OS"]["p5_pct"], 1), pct(yl["KL"]["p5_pct"], 1)), 10)
-    bk, bo = F["band_pct"]["KL"], F["band_pct"]["OS"]
-    cb = rg["count_whole_book"]
-    _para(doc, ("Estimated other ways, the default rates from a cohort table, the dependence from pair counts, or each "
-                "house-year's shock read against the year's rates rather than the sector-year's, the chances run %s to "
-                "%s per cent for Kestrel Lane and %s to %s per cent for Ostvale; the record's co-default counts taken "
-                "over each house's whole book give %s and %s per cent. No sound estimate brings either note under the "
-                "test. Fitting the link on every closed workout instead of the closed cohorts would leave out the open "
-                "workouts, which MP-RN-2 4.1 keeps and which are the clustered defaults' long ones.")
-          % (pct(bk[0], 1), pct(bk[1], 1), pct(bo[0], 1), pct(bo[1], 1), pct(cb["KL"]["p5_pct"], 1), pct(cb["OS"]["p5_pct"], 1)), 10)
+                "others recovered %s per cent. The economy's year shows no such pattern (%s per unit of its shock): a "
+                "bad economy brings defaults from houses having ordinary years. The recent clustered defaults take "
+                "longer to work out, and %d workouts are still open. Those counts run over each house's whole book (a "
+                "median of %d companies in a defaulting house-year), while Ostvale's tape holds %s of each house's, so "
+                "each house-year's shock is inferred from its own defaults against what its companies' ratings, ages "
+                "and sector-year expected; on the closed cohorts recovery runs %s plus %s per unit of that shock.")
+          % (pct(rb["0"]["recovery_pct"], 1), pct(rb["3"]["recovery_pct"], 1), pct(Ly["bm"], 3), L["open"],
+             CK["book_seen_median"], word(int(gr["OS"]["loans_per_house_median"])), pct(LK["a"], 3),
+             pct(LK["bh"], 3)), 10)
 
-    _para(doc, "Table 2. Chance that the note has taken a loss by the end of each year", 9, bold=True, after=2, before=6)
+    _para(doc, "What each step does to the two notes", 11.5, bold=True, after=4, before=4)
+    rows = [["Analysis", "Kestrel Lane", "Ostvale", "The fund would"]]
+    for key, label in (("industry", "Economy and sector factors, one average loss"),
+                       ("house_pooled_lgd", "With the house's year, one average loss"),
+                       ("house_year_link", "Recovery tied to the economy's year"),
+                       ("sector_one_lgd", "Each sector's loading, one average loss"),
+                       ("house_link_pooled", "Recovery on the house-year's shock, one pooled loading"),
+                       ("count_in_portfolio", "Recovery read off each note's own co-defaults")):
+        r = D if key == "industry" else rg[key]
+        act = {"Kestrel Lane": "buy Kestrel Lane", "Ostvale": "buy Ostvale", "neither": "buy neither"}[r["call"]]
+        rows.append([label, "%s%%" % pct(r["KL"]["p5_pct2"], 2), "%s%%" % pct(r["OS"]["p5_pct2"], 2), act])
+    rows.append(["Both, each default recovering on the shocks that drew it", "%s%%" % pct(kl["p5_pct"], 1),
+                 "%s%%" % pct(os_["p5_pct"], 1), "buy neither"])
+    _para(doc, "Table 2. Chance of any loss of principal, 2027 to 2031, as the analysis is built up", 9, bold=True,
+          after=2, before=2)
+    _table(doc, rows, [76, 24, 22, 30])
+    bk, bo = F["band_pct"]["KL"], F["band_pct"]["OS"]
+    _para(doc, ("Estimated other ways (the default rates from a cohort table, each sector's loading by pair moments or "
+                "in two groups, each house-year's shock read against the year's rates or the year's shock, the house's "
+                "share on the pooled scale or by pair moments) the chances run %s to %s per cent for Kestrel Lane and "
+                "%s to %s per cent for Ostvale: no sound estimate brings either note under the test.")
+          % (pct(bk[0], 1), pct(bk[1], 1), pct(bo[0], 1), pct(bo[1], 1)), 7.5, italic=True, color="555555", after=8)
+
+    _para(doc, "Table 3. Chance that the note has taken a loss by the end of each year", 9, bold=True, after=2, before=6)
     rows = [["", "2027", "2028", "2029", "2030", "2031"]]
     for key, nm in (("KL", "Kestrel Lane"), ("OS", "Ostvale")):
         rows.append([nm] + ["%s%%" % pct(v, 1) for v in G[key]["by_year_pct"]])
@@ -262,8 +280,7 @@ def ic_note(F, path, png):
                 "2027, managers' tapes at 31 December 2026."), 7.5, italic=True, color="555555", after=8)
     _para(doc, ("To meet the test, Kestrel Lane's note would need %d per cent subordination against the %s it offers, "
                 "and Ostvale's %d per cent against its %s. Either manager may re-offer at that level in the next round.")
-          % (kl["need_pct"][0], pct(F["subordination_pct"]["KL"], 1), os_["need_pct"][0],
-             pct(F["subordination_pct"]["OS"], 1)), 10)
+          % (kl["need_pct"][0], pct(sk, 1), os_["need_pct"][0], pct(so, 1)), 10)
     doc.core_properties.author = "Ilse Lips"
     doc.core_properties.title = "IC-2027-03 Senior note purchase"
     doc.core_properties.last_modified_by = "Ilse Lips"
@@ -273,19 +290,8 @@ def ic_note(F, path, png):
                       company="Kadeweg Fiduciair Beheer")
 
 
-def by_year_csv(F, path):
-    with open(path, "w", newline="", encoding="utf-8") as fh:
-        w = csv.writer(fh, lineterminator="\n")
-        w.writerow(["note", "issuer", "subordination_pct", "year_end", "chance_of_loss_pct"])
-        for key, nm in (("KL", "KLCP Senior Loan Note 2027 DAC Class A"), ("OS", "Ostvale Senior Secured Note 2027-1 S.A. Class A")):
-            for y, v in zip(range(2027, 2032), F["golden"][key]["by_year_pct"]):
-                w.writerow([{"KL": "Kestrel Lane", "OS": "Ostvale"}[key], nm, pct(F["subordination_pct"][key], 1),
-                            "%d-12-31" % y, pct(v, 1)])
-
-
 def write(F, out, scratch):
     os.makedirs(out, exist_ok=True)
     png = os.path.join(scratch, "figure1.png")
     chart(F, png)
     ic_note(F, os.path.join(out, "ic_note_senior_notes_2027.docx"), png)
-    by_year_csv(F, os.path.join(out, "senior_note_loss_by_year.csv"))

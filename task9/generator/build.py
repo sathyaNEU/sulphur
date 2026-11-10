@@ -19,6 +19,7 @@ TASK = os.path.dirname(HERE)
 sys.path.insert(0, HERE)
 import analysis as A  # noqa: E402
 import docs as DC  # noqa: E402
+import effort_passes as EP  # noqa: E402
 import figures as FG  # noqa: E402
 import golden as GD  # noqa: E402
 import postprocess as PP  # noqa: E402
@@ -37,7 +38,6 @@ EXPORTS = {
     "lenderbase_loan_performance_2008-2026.csv": dt.datetime(2027, 2, 16, 7, 58, 19, tzinfo=UTC),
     "lenderbase_workout_recoveries_2008-2026.csv": dt.datetime(2027, 2, 16, 8, 3, 7, tzinfo=UTC),
     "lenderbase_sector_codes.json": dt.datetime(2024, 1, 1, 10, 15, 30, tzinfo=UTC),
-    "senior_note_loss_by_year.csv": dt.datetime(2027, 2, 18, 15, 41, 26, tzinfo=UTC),
 }
 DISTRACTORS = {
     "euribor_forward_curve_2026-12-31.csv": "the euro money market curve at the cut-off; looks relevant to the notes' "
@@ -89,11 +89,13 @@ def build_into(root, nsim=A.NSIM):
     DC.term_sheet(os.path.join(tgt, "ostvale_senior_note_term_sheet.pdf"), "OS", sum(L["size"] for L in os_), len(os_))
     R = A.run(tgt, nsim=nsim)
     F = FG.make(R)
+    EF = EP.attach(F)
     json.dump(F, open(os.path.join(root, "figures.json"), "w"), indent=1)
+    json.dump(EF, open(os.path.join(root, "effort.json"), "w"), indent=1)
     GD.write(F, gld, scratch)
     open(os.path.join(root, "submission.md"), "w").write(WU.text(F))
     meta = {"architecture": 7, "as_of": "2027-02-17", "call": F["call"],
-            "deliverables": ["ic_note_senior_notes_2027.docx", "senior_note_loss_by_year.csv"],
+            "deliverables": ["ic_note_senior_notes_2027.docx"],
             "distractors": sorted(DISTRACTORS), "distractor_notes": DISTRACTORS,
             "rows": {k: v for k, v in info.items() if k != "lb_id"},
             "files": {n: {"source": s, "date": d, "role": r,
@@ -115,7 +117,7 @@ def hashes(root):
     for sub in ("target", "golden"):
         for f in sorted(os.listdir(os.path.join(root, sub))):
             out["%s/%s" % (sub, f)] = sha(os.path.join(root, sub, f))
-    for f in ("figures.json", "submission.md", "metadata.json"):
+    for f in ("figures.json", "effort.json", "submission.md", "metadata.json"):
         out[f] = sha(os.path.join(root, f))
     return out
 
@@ -127,6 +129,7 @@ def install(root):
             shutil.rmtree(dst)
         shutil.copytree(os.path.join(root, sub), dst)
     shutil.copy(os.path.join(root, "figures.json"), os.path.join(HERE, "figures.json"))
+    shutil.copy(os.path.join(root, "effort.json"), os.path.join(HERE, "effort.json"))
     shutil.copy(os.path.join(root, "submission.md"), os.path.join(TASK, "submission.md"))
     shutil.copy(os.path.join(root, "metadata.json"), os.path.join(TASK, "metadata.json"))
     zipdir(os.path.join(TASK, "target"), os.path.join(TASK, "target.zip"))
@@ -136,10 +139,14 @@ def install(root):
 def main():
     once = "--once" in sys.argv
     a = tempfile.mkdtemp(prefix="task9a-")
-    build_into(a)
-    if not once:
+    if once:
+        build_into(a)
+    else:
+        # the two builds run side by side; each is a separate process with its own state
+        import concurrent.futures as cf
         b = tempfile.mkdtemp(prefix="task9b-")
-        build_into(b)
+        with cf.ProcessPoolExecutor(max_workers=2) as ex:
+            list(ex.map(build_into, [a, b]))
         ha, hb = hashes(a), hashes(b)
         diff = [k for k in ha if ha[k] != hb.get(k)]
         if diff:

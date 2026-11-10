@@ -1,0 +1,434 @@
+{
+ "results": [
+  {
+   "id": "R1",
+   "name": "the house-year's share of each standing",
+   "graded_as": "Component 1",
+   "figure": "result_house_share",
+   "depends": [],
+   "independent": "",
+   "golden": 0.395,
+   "band": [
+    0.34,
+    0.43
+   ],
+   "partly": [
+    0.26,
+    0.51
+   ],
+   "passes": {
+    "quick": null,
+    "careful": 0.403,
+    "thorough": 0.395
+   }
+  },
+  {
+   "id": "R2",
+   "name": "Ostvale's loading on the economy's year",
+   "graded_as": "Component 2",
+   "figure": "result_os_loading",
+   "depends": [],
+   "independent": "",
+   "golden": 0.251,
+   "band": [
+    0.21,
+    0.3
+   ],
+   "partly": [
+    0.15,
+    0.36
+   ],
+   "passes": {
+    "quick": 0.081,
+    "careful": {
+     "value": 0.065,
+     "grade": "partly",
+     "why": "names the five sectors whose yearly default rates swing hardest and gives each a larger factor of its own, so their bad years arrive one sector at a time while the economy's year keeps one pooled loading (0.065)"
+    },
+    "thorough": 0.251
+   }
+  },
+  {
+   "id": "R3",
+   "name": "recovery per unit of the house-year's shock",
+   "graded_as": "Component 3",
+   "figure": "result_link_slope",
+   "depends": [
+    "R1"
+   ],
+   "independent": "",
+   "golden": 0.313,
+   "band": [
+    0.26,
+    0.34
+   ],
+   "partly": [
+    0.2,
+    0.4
+   ],
+   "passes": {
+    "quick": 0.0,
+    "careful": 0.0,
+    "thorough": 0.313
+   }
+  },
+  {
+   "id": "R4",
+   "name": "Kestrel Lane's five-year chance of loss",
+   "graded_as": "Ask 2",
+   "figure": "result_kl_p5",
+   "depends": [
+    "R1",
+    "R3"
+   ],
+   "independent": "",
+   "golden": 3.7,
+   "band": [
+    2.3,
+    4.0
+   ],
+   "partly": [
+    1.0,
+    8.0
+   ],
+   "passes": {
+    "quick": 0.0,
+    "careful": 0.3,
+    "thorough": 3.7
+   }
+  },
+  {
+   "id": "R5",
+   "name": "Ostvale's five-year chance of loss",
+   "graded_as": "Ask 2",
+   "figure": "result_os_p5",
+   "depends": [
+    "R1",
+    "R2",
+    "R3"
+   ],
+   "independent": "",
+   "golden": 2.8,
+   "band": [
+    1.5,
+    3.0
+   ],
+   "partly": [
+    1.0,
+    6.0
+   ],
+   "passes": {
+    "quick": 0.2,
+    "careful": 0.4,
+    "thorough": 2.8
+   }
+  },
+  {
+   "id": "R6",
+   "name": "the recommendation",
+   "graded_as": "Recommendation",
+   "figure": "call",
+   "depends": [
+    "R4",
+    "R5"
+   ],
+   "independent": "",
+   "golden": "neither",
+   "passes": {
+    "quick": "Kestrel Lane",
+    "careful": "Kestrel Lane",
+    "thorough": "neither"
+   }
+  },
+  {
+   "id": "R7",
+   "name": "the subordination for 1 and 0.5 per cent",
+   "graded_as": "Ask 4",
+   "figure": "result_need",
+   "depends": [
+    "R1",
+    "R2",
+    "R3"
+   ],
+   "independent": "",
+   "golden": {
+    "KL 1": 20,
+    "KL 0.5": 22,
+    "OS 1": 19,
+    "OS 0.5": 21
+   },
+   "bands": {
+    "KL 1": [
+     18,
+     20
+    ],
+    "KL 0.5": [
+     20,
+     22
+    ],
+    "OS 1": [
+     18,
+     19
+    ],
+    "OS 0.5": [
+     19,
+     21
+    ]
+   },
+   "passes": {
+    "quick": {
+     "KL 1": 12,
+     "KL 0.5": 13,
+     "OS 1": 15,
+     "OS 0.5": 16
+    },
+    "careful": {
+     "KL 1": 14,
+     "KL 0.5": 15,
+     "OS 1": 16,
+     "OS 0.5": 17
+    },
+    "thorough": {
+     "KL 1": 20,
+     "KL 0.5": 22,
+     "OS 1": 19,
+     "OS 0.5": 21
+    }
+   }
+  },
+  {
+   "id": "R8",
+   "name": "the chance by each year end",
+   "graded_as": "Ask 5",
+   "figure": "result_path",
+   "depends": [
+    "R1",
+    "R2",
+    "R3"
+   ],
+   "independent": "",
+   "golden": {
+    "KL 2027": 0.2,
+    "KL 2028": 0.6,
+    "KL 2029": 1.3,
+    "KL 2030": 2.4,
+    "KL 2031": 3.7,
+    "OS 2027": 0.0,
+    "OS 2028": 0.2,
+    "OS 2029": 0.6,
+    "OS 2030": 1.4,
+    "OS 2031": 2.8
+   },
+   "bands": {
+    "KL 2027": [
+     0.1,
+     0.2
+    ],
+    "KL 2028": [
+     0.4,
+     0.6
+    ],
+    "KL 2029": [
+     0.8,
+     1.4
+    ],
+    "KL 2030": [
+     1.5,
+     2.6
+    ],
+    "KL 2031": [
+     2.3,
+     4.0
+    ],
+    "OS 2027": [
+     0.0,
+     0.0
+    ],
+    "OS 2028": [
+     0.1,
+     0.2
+    ],
+    "OS 2029": [
+     0.3,
+     0.7
+    ],
+    "OS 2030": [
+     0.7,
+     1.6
+    ],
+    "OS 2031": [
+     1.5,
+     3.0
+    ]
+   },
+   "passes": {
+    "quick": {
+     "KL 2027": 0.0,
+     "KL 2028": 0.0,
+     "KL 2029": 0.0,
+     "KL 2030": 0.0,
+     "KL 2031": 0.0,
+     "OS 2027": 0.0,
+     "OS 2028": 0.0,
+     "OS 2029": 0.0,
+     "OS 2030": 0.1,
+     "OS 2031": 0.2
+    },
+    "careful": {
+     "KL 2027": 0.0,
+     "KL 2028": 0.0,
+     "KL 2029": 0.0,
+     "KL 2030": 0.1,
+     "KL 2031": 0.3,
+     "OS 2027": 0.0,
+     "OS 2028": 0.0,
+     "OS 2029": 0.1,
+     "OS 2030": 0.2,
+     "OS 2031": 0.4
+    },
+    "thorough": {
+     "KL 2027": 0.2,
+     "KL 2028": 0.6,
+     "KL 2029": 1.3,
+     "KL 2030": 2.4,
+     "KL 2031": 3.7,
+     "OS 2027": 0.0,
+     "OS 2028": 0.2,
+     "OS 2029": 0.6,
+     "OS 2030": 1.4,
+     "OS 2031": 2.8
+    }
+   }
+  },
+  {
+   "id": "R9",
+   "name": "each portfolio's expected credit loss",
+   "graded_as": "Ask 3",
+   "figure": "result_el",
+   "depends": [
+    "R1",
+    "R3"
+   ],
+   "independent": "",
+   "golden": {
+    "KL": 5.9,
+    "OS": 7.6
+   },
+   "bands": {
+    "KL": [
+     5.3,
+     6.0
+    ],
+    "OS": [
+     6.9,
+     7.7
+    ]
+   },
+   "passes": {
+    "quick": {
+     "KL": 5.1,
+     "OS": 6.9
+    },
+    "careful": {
+     "KL": 5.1,
+     "OS": 6.9
+    },
+    "thorough": {
+     "KL": 5.9,
+     "OS": 7.6
+    }
+   }
+  }
+ ],
+ "hints": [
+  {
+   "sentence": "a sponsor house in a bad year lets its defaulted companies go for less, across the whole of its book",
+   "rescues": [
+    "R3",
+    "R4"
+   ]
+  },
+  {
+   "sentence": "the capital-goods, building, freight, chemicals and car-parts companies default together in the economy's bad years",
+   "rescues": [
+    "R2",
+    "R5"
+   ]
+  },
+  {
+   "sentence": "companies held by one sponsor house default in the same years",
+   "rescues": []
+  },
+  {
+   "sentence": "defaults and recoveries cluster in a sponsor house's year, and five sectors load on the economy",
+   "rescues": [
+    "R2",
+    "R4",
+    "R6",
+    "R9"
+   ],
+   "route": "recovery read off each house-year's co-defaults across the house's whole book, with the sector loadings and the house's year in the copula"
+  }
+ ],
+ "routes": [
+  {
+   "name": "the golden: sector loadings, the house's year, recovery on the house-year's shock",
+   "answer": "neither",
+   "golden": true
+  },
+  {
+   "name": "the agencies' copula, one average loss",
+   "answer": "Kestrel Lane",
+   "KL": 0.0,
+   "OS": 0.2
+  },
+  {
+   "name": "the house's year in the copula, one average loss",
+   "answer": "Ostvale",
+   "KL": 0.4,
+   "OS": 0.2
+  },
+  {
+   "name": "recovery tied to the economy's year",
+   "answer": "Ostvale",
+   "KL": 0.1,
+   "OS": 0.0
+  },
+  {
+   "name": "the sector loadings, one average loss",
+   "answer": "Kestrel Lane",
+   "KL": 0.4,
+   "OS": 2.8
+  },
+  {
+   "name": "larger sector factors of their own, one average loss",
+   "answer": "Kestrel Lane",
+   "KL": 0.3,
+   "OS": 0.4
+  },
+  {
+   "name": "recovery on the house-year's shock, one pooled loading",
+   "answer": "Ostvale",
+   "KL": 4.4,
+   "OS": 0.8
+  },
+  {
+   "name": "recovery on the house-year's shock, larger sector factors of their own",
+   "answer": "Ostvale",
+   "KL": 3.6,
+   "OS": 0.7
+  },
+  {
+   "name": "recovery read off the co-defaults among each note's own loans",
+   "answer": "Ostvale",
+   "KL": 2.1,
+   "OS": 0.0
+  }
+ ],
+ "weights": {
+  "recommendation": 14,
+  "components": 24,
+  "asks": 55,
+  "instruction": 7
+ }
+}

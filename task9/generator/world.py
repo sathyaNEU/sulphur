@@ -1,13 +1,16 @@
-"""task9, architecture 7: the truth behind the pack.
+"""task9, architecture 7 as a results chain: the truth behind the pack.
 
 Sponsor houses raise buyout funds one after another. A fund buys European mid-market companies during its five-year
 investment period, each with a first-lien loan at the buyout; companies refinance, are sold on to other houses' funds,
 are sold to trade buyers or listed, or default. A company defaults in a calendar year when its latent credit standing
 falls below the threshold its rating and its full years since the current owner's buyout set. The standing carries the
-economy's year, its industry's year and the year of the sponsor house whose fund holds it: a house decides across all
-the funds it runs, from one partnership's view of the year and its standing with its investors, whether to put more
-money into a company that breaches, so a house's companies fail in the same years. Nothing here is shipped; pack.py
-writes what each system would hold.
+economy's year, its industry's year and the year of the sponsor house whose fund holds it. The economy's year weighs
+on each industry by how its business follows the cycle: the capital-goods, building, freight, chemicals and car-parts
+chain orders less and is paid later in a bad year, so its companies breach together, while services, care, software,
+food and education barely move with it. A house decides across all the funds it runs, from one partnership's view of
+the year and its standing with its investors, whether to put more money into a company that breaches, so a house's
+companies fail in the same years, and in its bad years the lenders work out what is left with no fresh equity behind
+it. Nothing here is shipped; pack.py writes what each system would hold.
 """
 import collections
 import datetime as dt
@@ -21,7 +24,11 @@ Y0, Y1 = 1997, 2026          # simulated calendar years; the stock builds up bef
 DB0 = 2008                   # first year of Lenderbase's coverage
 AS_OF = dt.date(2026, 12, 31)
 NI = 16
-AM, AK, AH = 0.10, 0.07, 0.40
+AK, AH = 0.07, 0.40
+# each industry's loading on the economy's year (Lenderbase sector order): the capital-goods, building, freight,
+# chemicals and car-parts chain follows the cycle, electrical equipment and retail a little, the rest barely
+AM_S = [0.024, 0.012, 0.020, 0.253, 0.299, 0.028, 0.012, 0.230, 0.2415, 0.032, 0.016, 0.016, 0.048, 0.044, 0.032, 0.276]
+CYC = [3, 4, 7, 8, 15]       # the five industries that follow the cycle
 RATINGS = ["B+", "B", "B-", "CCC+"]
 MOODYS = ["B1", "B2", "B3", "Caa1"]
 BASE = np.array([0.0135, 0.0235, 0.0400, 0.0780])
@@ -169,8 +176,9 @@ def _date(rng, y, lo=0.0, hi=1.0):
     return d
 
 
-def simulate(seed=SEED, am=AM, ak=AK, ah=AH, nh=NH):
+def simulate(seed=SEED, am=None, ak=AK, ah=AH, nh=NH):
     rng = np.random.default_rng(seed)
+    am = list(AM_S) if am is None else ([am] * NI if np.isscalar(am) else list(am))
     W = World()
     W.seed, W.am, W.ak, W.ah = seed, am, ak, ah
     years = list(range(Y0, Y1 + 1))
@@ -212,9 +220,10 @@ def simulate(seed=SEED, am=AM, ak=AK, ah=AH, nh=NH):
                 continue
             age = y - C["buy_year"]
             h = BASE[C["rating"]] * SEAS[min(age, len(SEAS) - 1)]
-            x = (np.sqrt(am) * W.M[y] + np.sqrt(ak) * W.I[(C["ind"], y)]
+            amc = am[C["ind"]]
+            x = (np.sqrt(amc) * W.M[y] + np.sqrt(ak) * W.I[(C["ind"], y)]
                  + np.sqrt(ah) * W.F[(W.funds[owner[c]]["house"], y)]
-                 + np.sqrt(1 - am - ak - ah) * rng.standard_normal())
+                 + np.sqrt(1 - amc - ak - ah) * rng.standard_normal())
             dflt = bool(x < norm.ppf(h))
             W.cy.append((c, y, owner[c], C["ind"], C["rating"], age, int(dflt)))
             if dflt:
@@ -380,10 +389,11 @@ def _quota(cands, n, mix, W, rng):
     return out
 
 
-def _portfolios(W, rng, nXh=7, perh=14, nY=100, maxYh=2, core_n=5, yhouses=60,
+def _portfolios(W, rng, nXh=7, perh=14, nY=100, maxYh=2, nXc=12, yhouses=60,
                 mixX=(0.45, 0.45, 0.10, 0.0), mixY=(0.14, 0.44, 0.32, 0.10)):
-    """Kestrel Lane lends to seven houses' stronger companies across their funds; Ostvale lends in its five sectors
-    across many houses, to weaker credits. Each list holds the companies whose current loan sits in the manager's static portfolio."""
+    """Kestrel Lane lends to seven houses' stronger companies across their funds, choosing among the houses whose books
+    lean least on the cyclical industries; Ostvale lends in the five cyclical industries across many houses, to weaker
+    credits. Each list holds the companies whose current loan sits in the manager's static portfolio."""
     alive = sorted(W.alive)
     own = W.owner
     byh = collections.defaultdict(lambda: collections.defaultdict(list))
@@ -400,6 +410,10 @@ def _portfolios(W, rng, nXh=7, perh=14, nY=100, maxYh=2, core_n=5, yhouses=60,
     rates = {h: v[0] / v[1] for h, v in hy.items() if v[1] >= 60}
     med = float(np.median(list(rates.values())))
     cand = [h for h in cand if rates.get(h, med) <= med]
+    # Kestrel Lane's sponsors: among those, the twelve whose books lean least on the cyclical industries
+    def cshare(h):
+        return np.mean([W.comps[c]["ind"] in CYC for f in byh[h] for c in byh[h][f]])
+    cand = sorted(cand, key=cshare)[:max(nXh, nXc)]
     # the houses whose companies carry the better ratings: Kestrel Lane lends to its sponsors' stronger credits
     def quality(h):
         cs = [c for f in byh[h] for c in byh[h][f]]
@@ -412,8 +426,7 @@ def _portfolios(W, rng, nXh=7, perh=14, nY=100, maxYh=2, core_n=5, yhouses=60,
     for h in chosen:
         allc = sorted(c for f in byh[h] for c in byh[h][f])
         X += _quota(allc, perh, mixX, W, rng)
-    cnt = collections.Counter(W.comps[c]["ind"] for c in alive)
-    core = sorted(k for k, _ in cnt.most_common(core_n))
+    core = sorted(CYC)
     pool = [c for c in alive if W.funds[own[c]]["house"] not in chosen and W.comps[c]["ind"] in core]
     hp = collections.defaultdict(list)
     for c in pool:

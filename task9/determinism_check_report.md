@@ -1,60 +1,69 @@
-# determinism-check report, task9 (architecture 7), 2026-11-08, pass 2 on target.zip 7c395ae0
-
-Pass 1 (bed0980b, FIX_NOW) is determinism_check_report_pass1.md. This is the one re-judge after the fix. The main session spawned the single isolated judge (general-purpose, sonnet, medium) from my brief /tmp/determinism-check-task9-1794167282/judge_brief.md; its verdict is /tmp/determinism-check-task9-1794167282/verdict.md.
+# determinism-check report, task9, 2027-02-17 (run 2026-11-10; bundle sha256 prefix 29757c9b8be051ff)
 
 ## Verdict
-DETERMINISTIC (no SOLUTION_WRONG).
-**Disposition:** APPROVE
-**Stumping type:** mechanism: method_or_model_selection (with forecasting), stumping_family: analytical_non_defect, surface_read_dependency: no, sole_data_defect: no
+NOT_DETERMINISTIC (governing label margin_or_boundary_fragility on the Ostvale side, shading into competing_defensible_answer). The Kestrel Lane side holds. Gates A, B, E pass; Gate C fails on Ostvale's chance of loss and on the whole-percent subordination asks.
+**Disposition:** SEND_BACK. The fix changes what solvers see (standard text or prompt), so a rerun is required.
+**Stumping type:** mechanism: method_or_model_selection, stumping_family: analytical_non_defect, surface_read_dependency: no, sole_data_defect: no
 
 ## Why
-The call, buy neither, is forced. MP-RN-2 2.1, 2.2 and 4.2 require standings and recoveries correlated as far as the record shows; the record shows clustering by sponsor house and recovery tied to the house's year, not the economy's. Every house-linked estimator keeps both notes over 1 per cent. The rivals that buy Kestrel Lane (no house factor, one average loss, economy-linked recovery) or Ostvale (co-defaults counted among the note's own loans) are separated by shipped data (whole-book counts, median 13 at risk, against Ostvale's 1 to 4 per house). Pass 1's fork is closed: both notes now reconcile with par less stated enhancement.
+"Buy neither" needs both chances to exceed 1.0 per cent. Ostvale clears the line only through one fitted recovery slope (about 0.31 per unit of house-year shock) that has real estimation freedom. The golden's own rival, a link fitted on every closed workout, puts Ostvale at 0.77 per cent, which buys Ostvale. The design note closes it (SF8, SF17, closure axis 12) by saying MP-RN-2 4.1 "keeps the open workouts", but the judge read 4.1 as saying only that open workouts are included in the record. It gives no handling for an open workout with no recovery, and fitting the link on the 2008 to 2019 cohorts is a method argument (selection bias), not a filed rule. In the judge's cruder rebuild the Ostvale and Kestrel chances fall from about 1.6 to about 1.0 within two standard errors of the slope (0.22, SE 0.022; all-closed fit 0.17). The Ostvale band's low edge (1.1) sits 0.1 above the test line. This touches the recommendation and asks 1 to 6.
 
 ## Recomputation ledger
 | Figure | Claimed | Judge recomputed | Reproduced |
 |---|---|---|---|
-| Defaults | 578 | 578, each once, matches 578 workout rows | yes |
-| Company-years at risk | 16,712 | 20,590 loan-years (different at-risk definition) | no, immaterial to the call |
-| Mean closed 2008-2019 loss | 42.7 | 43.0 after unit fix | yes (noise) |
-| Recovery by co-defaults, lone / 3+ | 74.9 / 44.1 | 72.3 / 44.3 (cruder house join, 79 houses) | direction and size |
-| Houses; KLCP, Ostvale spread | 80; 7 houses, 66 houses | 79; 7 houses of 11 to 13 loans, about 60 to 66 houses of 1 to 4 | yes |
-| Kestrel note size | 1,597.5 (85 per cent) | 1,597.6 | yes |
-| Ostvale note size | 1,612.1 (87 per cent) | 1,612.1 | yes (pass 1 clash closed) |
-| Kestrel five-year chance | 3.9 | 3.2 to 3.3 (40k to 150k paths) | inside band 1.5 to 4.0 |
-| Ostvale five-year chance | 7.8 | 6.7 to 6.8 | inside band 2.3 to 7.8 |
-| Expected credit loss K / O | 5.7 / 8.2 | 5.6 / 7.9 | yes (noise) |
-| Subordination for 1 and 0.5 per cent, K / O | 20, 22 / 17, 18 | 19, 21 / 17, 18 | within one point |
-| Year-end chances | as in CSV | within 0.1 to 0.6 of golden | yes (noise) |
-| Rival: house factor, one average loss | 0.7 / 6.2 | 0.57 / 5.3 | buys Kestrel |
-| Rival: own-loan co-defaults | 1.8 / 0.1 | 1.4 / 0.17 | buys Ostvale |
+| Defaults after conforming | 537 | 537 (= workout rows) | Yes |
+| Loan-years at risk | 16,967 | 20,933 (join and window differences) | No, not pinned |
+| Houses | 80 | 80 managers; 514 of 537 defaults carry one | Mostly |
+| Kestrel tape / Ostvale tape | 7 houses x 14 / 2 each over about 63 houses | same | Yes |
+| EUR par | term sheets | 1,854.1 and 1,922.3 | Yes |
+| Same-house pair co-default | 0.61 vs 0.23 per cent | 0.42 vs 0.19 | Direction only |
+| Five-sector yearly correlation | 0.63 vs 0.09; 2009 21.7 vs 4.6 | 0.62 vs 0.09; 20.1 vs 4.0 | Yes |
+| Recovery, lone vs 3+ others | 74.7 / 38.3; mean loss 41.0 | 74.0 / 32.2; 40.8 | Close |
+| Recovery slope on inferred shock | 0.313 | 0.22 (all-closed 0.17) | No |
+| Chance of loss, Kestrel / Ostvale | 3.7 / 2.3 | 1.6 / 1.6 at slope 0.221; 3.0 / 3.3 at 0.313; 1.08 / 1.02 at 0.18; 0.75 / 0.72 at 0.15 | Qualitative only |
+| Expected credit loss | 5.9 / 7.6 | 6.8 to 9.6 (crude sim) | No |
 
 ## Competing answers that survived
-None that flips the call. Open workouts: fitting on all closed workouts gives 3.1 and 4.8, still neither. Own-loan counting is ruled out by named data (at-risk counts per house-year), an analytical error not a fork.
+1. Open workouts (MP-RN-2 4.1, 3.4): link on the 2008 to 2019 closed cohorts (Ostvale 2.3, neither) vs link on all closed workouts (Ostvale 0.77, buy Ostvale). The shipped text does not say how an open workout enters.
+2. Slope estimation: sound estimators span 2.3 to 4.0 (Kestrel) and 1.1 to 2.4 (Ostvale); the lower Ostvale edge is 0.1 above the line and the judge's own fits came within 0.02 to 0.08 of it.
+3. Rating basis: tapes give the current rating, Lenderbase the rating at origination; the mapping is not filed.
+4. Subordination asks and Table 3: tail quantiles rounded up to whole per cent; estimators spread over several points of par, so the figures rest on one fitted model. They are gradable only through the 20-variant band; the judge could not see that bands are filed.
+Resolved, not forks: recovery units, duplicate submissions, mixed dates, status codes, name joins.
 
 ## Spec gates
 | Gate | Required | Actual | Pass |
 |---|---|---|---|
-| Usable files | 10 or more | 13 | yes |
-| Categories | 2 or more | spreadsheet, text (csv x6, xlsx x3, pdf x3, json x1) | yes |
-| Large messy CSVs | 20,000 rows; 10 to 20 pages | Lenderbase 73,066 rows; Dealtrail 8,858 and LEI 4,485 rows | yes |
-| Distractors | 2 or more in metadata.json, unlabelled in ZIP | Euribor curve and PHL cashflows named; none labelled in ZIP | yes |
-| Deliverables | 1 to 3, all in golden | 2; golden.zip holds exactly the docx and csv | yes |
-| Asks | multi-dimensional, unit and rounding stated | yes | yes |
-| Answer shape | many gradable cells downstream of deep step | chances, ECL, subordinations, chart, 10-row table | yes |
-| Realism, no build tells | none | none seen by judge (golden docx not read by me) | yes |
+| Usable files | 10 or more | 13 | Yes |
+| Categories | 2 or more | spreadsheet (3 xlsx), text/CSV (6), PDF (3), JSON | Yes |
+| Large CSV | 20,000 rows or more | lenderbase 74,356 rows (11.8 MB) | Yes |
+| Second messy CSV | 10 to 20 printed pages or more | dealtrail 9,179 rows (1.5 MB), lei 4,641 rows, far over 20 pages | Yes |
+| Distractors in metadata.json | 2 or more, none labelled in the ZIP | euribor curve, phl cashflows; file names and contents carry no label | Yes |
+| Distractors unused yet weighable | arithmetic and a shipped fact rule it out | judge: interest excluded by 3.4; cashflows give no test figure | Yes |
+| Deliverables | 1 to 3, all in golden | one docx, present in golden/ | Yes |
+| Asks | multi-dimensional, unit and rounding stated | yes, in the prompt | Yes |
+| Answer shape | one of the fourteen, 4 or more checkable results | allocation/defined-metric style scenario call with nine results (R1 to R9) | Yes |
+| Golden = requested files | exactly | one file | Yes |
+| Realism / LLM-read | none | file hygiene clean per judge; golden docx not opened by me | Not checked |
+| Tolerances for rounded asks | filed bands | not verifiable from the shipped asks | Open |
 
 ## Gate G reconciliation
-Judge: mechanism method_or_model_selection, stumping_family analytical_non_defect, surface_read_dependency no, sole_data_defect no. Design note: severity tied to a latent shared shock at the owner's whole-book grain, no decoy, no replay, not semantics. They agree. The judge did not name a declared distractor as the surface read. No mismatch. Gate G passes.
+Judge: method_or_model_selection, analytical_non_defect, surface_read no, sole_data_defect no. Card stump_class "analytical" and the note's Hidden factor record (four constructed factors, none "only in deciding units", all marked keep) agree, so Gate G passes. Two points of tension: the judge found the five-sector loading sits wholly in the Ostvale book and the house-year effect in the Kestrel book (7 houses x 14), each visible in one group-by, which is the house rule's concern (a constructed factor in the deciding units), although the note records them across all 80 houses and 16 sectors; and the judge marks `one_thing: shallow_hidden_factor (borderline)` where the note claims difficulty throughout. Both are judgment calls for the main thread, not hard defects.
 
-Gate H line: domain pass; layers pass (L1 mixed units, name joins, resubmissions, owner tracing; L2 dependence and recovery modelling); decisive_step analytical; chain 5 inferences (house-year clustering, closed-cohort recovery link with censoring, shock inference at whole-book grain, joint simulation); one_fact none (the house-year hint still leaves shock inference, censoring and simulation). Matches the design note's domain, analyst and one-fact tests. The golden is not the field's standard method (the standard copula buys Kestrel Lane), so the analytical class is not an artefact of a textbook route.
+## Gate H line
+domain: pass; layers: pass; results: 6 graded across 5 areas (judge) vs 9 in the note; one_thing: shallow_hidden_factor (borderline); effort: quick 1, careful 3, thorough 6 of 6 (judge) vs note 0 / 2 / 9 of 9; one_fact: "defaults and recoveries cluster in a sponsor house's year, and five sectors load on the economy" rescues about 3 of 6 (judge) vs note's Largest single hint 2 of 9.
+Divergences that predict a send-back: the judge's careful pass (half) is above a third; its best single sentence rescues half, above the note's 2 of 9 and above the one-third limit; the Ostvale band's low edge (1.1) is too close to the line. The judge's quick-pass 1 of 6 is the recommendation or a component a hurried run can hit by luck, not a stated defect.
 
 ## Stump power (Gate F)
-Strong on paper. Three self-consistent wrong routes exist (standard copula 0.1, house factor with one average loss 0.7, own-loan co-default table buying Ostvale). No single hint makes the correct route routine. Weighed by the main session against the design note's ladder; no solver was run.
+Quick routes are wrong: agencies' copula gives Kestrel Lane (0.01 vs 0.02), house route gives Ostvale, sector-only gives Kestrel Lane, pooled loading gives Ostvale. A run that stops at one strand files the wrong buy. Results a careful hurried run reaches by standard method: the house-year share (R1) and the expected loss with an average loss (R9 partly). The weakness is Gate C, not too-easy: the call rests on one fitted slope.
 
 ## Findings, ranked
-1. Residual, not blocking: the one-decimal chances and whole-per-cent subordinations in asks 2 to 4 and 6 are estimator-dependent inside the stated bands (Kestrel 20 and 22 against the judge's 19 and 21). The rubric should accept values inside the bands where the comparison to 1 per cent is the same.
-2. The judge's simulation was approximate (40k to 150k paths); the 1,000,000-path figures remain the author's own, supported by figures_check.py.
-3. Company-year at-risk count differs by definition (16,712 against 20,590); immaterial to the call.
+1. Open-workout / link-sample fork (SF8, SF17) is closed only by a method argument, and it flips the call.
+2. Ostvale band low edge 1.1 against the 1.0 line, and the judge's own fits reach 1.02 to 1.08.
+3. Effort and one-fact grades exceed the note's table (careful 3 of 6, one sentence rescues 3 of 6).
+4. Whole-per-cent subordination and one-decimal Table 3 cells have no filed tolerance the judge could see.
+5. Rating basis mapping unfiled; loan-year count (16,967) not reproduced from the shipped files.
 
 ## Next action for the author
-Proceed to stage 5 on target.zip 7c395ae0 (no repair required). Optionally, state a tolerance for the point estimates when editing the rubric.
+Edit the filed standard (or prompt) so it states how an open workout enters the recovery estimate, or which cohorts the link is fitted on, and whether tape ratings are current or at origination; or widen the Ostvale margin so both notes clear the line under the all-closed fit. Rebuild, then re-judge once.
+
+Scratch: /tmp/determinism-check-task9-r024910/ (judge_brief.md, verdict.md).

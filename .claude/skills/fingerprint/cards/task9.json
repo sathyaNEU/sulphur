@@ -1,18 +1,18 @@
 {
   "task": "task9",
   "project": "sulfur",
-  "architecture": "v7 (deepened in the same world at the author's word after architecture 6 was landed: the sponsor house's year now also sets what its defaulted companies recover, a state of the house's whole book that a note holding a slice of the house cannot see in its own defaults, so the senior tail carries the clustered defaults at their low recoveries; the shock is read from each house-year's own default experience across its book)",
+  "architecture": "v7 as a results chain (2026-11-10, at the author's word to make it a level 5 task): the world, records and shell of architecture 7 kept; the house-state recovery strand kept as one result among nine; a second, independent strand added (each sector's loading on the economy's year, Ostvale lending wholly in the five sectors that follow the cycle, at 16.5 per cent subordination (17.0 until the stage-4 repair)), so the call needs both and each shortcut lands on another wrong call",
   "drawn": "2026-11-08",
-  "slot_note": "architecture 7 keeps architecture 6's world and records at the author's request (make task9 deeper); the shell is redrawn and the decisive step moves from the default dependence (now a lower rung) to the recovery a default earns in its sponsor house's year",
+  "slot_note": "architecture 7 rebuilt as a results chain after the client's bar of 2026-11-09; the world's truth adds per-sector loadings on the economy's year and Kestrel Lane's houses are drawn from those whose books lean least on the cyclical sectors",
   "domain": "quantitative-finance",
   "subdomain": "volatility-derivatives-pricing",
   "client_domain": "quantitative-finance",
-  "niche": "a Dutch pension fund pricing the chance of loss on two direct-lending managers' senior rated notes before buying one for its matching portfolio, when the buyout funds that own the borrowers decide from one pot of reserved equity whether to rescue each of their companies, so a fund's companies fail in the same years, and one manager lends to a handful of funds' companies",
+  "niche": "a Dutch pension fund pricing the chance of loss on two direct-lending managers' senior rated notes before buying one for its matching portfolio, when a buyout house's bad year both clusters its companies' defaults and cuts what they recover, and the economy's year weighs on the capital-goods and freight sectors far more than on services, so one note's tail runs through seven sponsors and the other's through five sectors",
   "objective": "forecasting",
-  "shape": "02",
+  "shape": "10",
   "decision_type": "go_hold_or_stop",
   "answer_unit": "named_option",
-  "answer": "Buy neither note: Kestrel Lane's chance of any loss over 2027 to 2031 is 3.9 per cent and Ostvale's 7.8, both above the 1 per cent test",
+  "answer": "Buy neither note: Kestrel Lane's chance of any loss over 2027 to 2031 is 3.7 per cent at 15.0 per cent subordination and Ostvale's 2.8 per cent at 16.5, both above the 1 per cent test",
   "answer_source": "task9/generator/figures.json: call, golden.KL.p5_pct, golden.OS.p5_pct",
   "gap": [
     "objective",
@@ -23,6 +23,7 @@
   ],
   "generators": [
     "G2",
+    "G5",
     "G17",
     "G13"
   ],
@@ -32,12 +33,12 @@
   "decisive_rule_filed": false,
   "official_decoy": false,
   "validated_decoy": false,
-  "context_artifact": "filed_standard",
+  "context_artifact": "register",
   "stump_class": "analytical",
-  "analyst_test": "A strong analyst who conforms Lenderbase, rebuilds sponsor ownership from Dealtrail, fits a survival model and a market, sector and house copula, corrects recovery for open workouts and simulates both static portfolios buys Kestrel Lane's note (0.7 per cent against Ostvale's 6.2); one who also finds that clustered defaults recover less and counts each default's co-defaults among the note's own loans buys Ostvale's (0.1 against 1.8); with recovery tied to the house-year's state across its whole book neither note passes.",
-  "domain_test": "The chance that a senior tranche of a loan portfolio loses money is a structured-credit pricing question set by default dependence: the field's own tool is a factor copula whose correlation structure must be estimated from the default record, and here the decisive structure is the buyout fund's own reserved equity and patience; with another field's nouns there is no tranche, no attachment point, no sponsor who decides whether to rescue a borrower and no default correlation to price.",
+  "analyst_test": "A careful analyst who conforms Lenderbase, rebuilds sponsor ownership from Dealtrail, fits a probit and a market, sector and house copula, gives the five swinging sectors larger factors of their own and prices one censoring-corrected recovery buys a note (Kestrel Lane 0.3 and Ostvale 0.3 per cent, both passing); with each sector's loading on the year but one recovery it buys Kestrel Lane; with recovery on the house-year's shock but one pooled loading it buys Ostvale; only both file neither",
+  "domain_test": "The chance that a senior tranche of a loan portfolio loses money is structured-credit pricing: a factor copula whose dependence (by economy, sector loading and sponsor house) and whose loss given default (tied to the sponsor house's state) are estimated from the default and workout record; swap the loans for patients and there is no tranche, no attachment and no owner whose bad year sets both how many fail and what each failure costs, and no sector chain that orders less in a downturn",
   "layer2_family": "estimation_fit",
-  "layer2_pattern": "own:recovery-conditioned-on-the-sponsor-house-year-across-its-book-in-a-senior-tranche",
+  "layer2_pattern": "own:tranche-tail-with-sponsor-state-recovery-and-sector-loadings-on-the-year",
   "layer1": [
     "a vendor loan-performance panel re-submitted quarter by quarter, with restated rows, two status vocabularies and a 2019 schema change",
     "amounts in five currencies converted at the ECB reference rate",
@@ -58,7 +59,7 @@
     "source": "synthetic"
   },
   "forum": "trustees_or_governors",
-  "forcing_event": "purchase_order_or_contract",
+  "forcing_event": "budget_or_appropriation",
   "org_family": "financial_institution",
   "world": {
     "geography": "Netherlands (Rotterdam)",
@@ -79,23 +80,23 @@
     ]
   },
   "deliverables": [
-    "ic_note_senior_notes_2027.docx",
-    "senior_note_loss_by_year.csv"
+    "ic_note_senior_notes_2027.docx"
   ],
   "opening_move": "question-first",
   "question_form": "whether",
-  "driver": "The decisive quantity is a tail probability of a sum of losses, each a default times a severity, where the severity falls in the very states that cluster the defaults, through the same latent shock of the shared owner, a state of the owner's whole book; a severity averaged over the record prices the tail at the average state, one tied to the economy alone misses the owner's shock, one read off the co-defaults inside the portfolio prices a thin slice of an owner as isolated failures, and only the severity conditioned on each owner-year's shock, inferred from that owner-year's default experience across its book, carries the tail.",
-  "driver_concrete": "Each note's chance of loss over 2027 to 2031 at its subordination (Kestrel Lane 15.0, Ostvale 13.0 per cent): a sponsor house in a bad year stops supporting its companies' restructurings, so the defaults that cluster in its year recover less (74.9 per cent alone against 44.1 with three or more others) and take longer; with one censoring-corrected recovery Kestrel Lane passes; counting co-defaults among each note's own loans Ostvale passes, because it holds 2 companies of houses whose books run to about 13; with recovery tied to the house-year's inferred shock neither passes.",
-  "stump": "A competent solver rebuilds each loan's sponsor house, fits the house-year dependence and one censoring-corrected recovery for every default and buys Kestrel Lane's note at 0.7 per cent; one who finds that clustered defaults recover less (74.9 per cent alone against 44.1) and counts each default's co-defaults among the note's own loans buys Ostvale's at 0.1, because the record's counts run over whole books (a median of 13 companies) and Ostvale holds 2 of each house's; with recovery tied to the house-year's inferred shock Kestrel Lane's chance is 3.9 per cent and Ostvale's 7.8, and the fund buys neither.",
-  "deep_chain": "(1) defaults cluster by sponsor house and year (the record's pair evidence), so the tail is a house-year event; (2) the defaults in a house's bad year recover less and work out longer, so the recent bad years are still open and the economy's year does not show it; (3) the record's co-default counts run over each house's whole book while a note holds a slice of it, so the recovery belongs to the house-year's latent state, not to the co-defaults a note sees; (4) each house-year's shock is inferred from its book's defaults against its companies' expected rates (an empirical Bayes posterior) and recovery regressed on it over the cohorts whose workouts have closed; (5) the forward simulation draws each default's recovery from the same shocks that drew the default, and neither note's five-year chance is under 1 per cent",
-  "judgment": "the joint model of default and recovery under a latent shared shock measured at the owner's grain: the house-year shock is a property of the house's whole book, identified through posterior means from each house-year's default counts (a regression calibration), estimated on mature cohorts so the long open workouts of clustered defaults do not bias it, and carried into the copula simulation whatever share of the house a note holds",
-  "one_fact_test": "the likeliest hint ('recoveries are lower in bad years') invites a downturn link to the economy's year, which the record shows flat or reversed and which leaves Kestrel Lane under 1 per cent; the stronger hint ('a sponsor house's bad year cuts recoveries') still leaves the grain to judge (the co-defaults a note sees buy Ostvale), the latent shock to infer house-year by house-year, the censoring to handle and the shocks to carry into the simulation",
-  "strategy_label": "WORKS IN FORM (Part A, variance beyond sampling noise, live form: the component the standard model omits, here the recovery's loading on the shared owner's shock at the owner's grain; Banking 07's correlated defaults are rung 1, landed in architecture 6)",
+  "driver": "The decisive quantity is a tail probability of a sum of losses on two pools, each concentrated on a different shared shock: one on a few owners whose bad years both cluster the failures and cut their severity, a state of each owner's whole book, the other on the classes of unit that load hardest on the common condition, whose failures arrive together and come with ordinary severities because their owners are having ordinary years; one average severity passes the first pool, one pooled loading passes the second, and only both together put each pool past its cushion",
+  "driver_concrete": "Kestrel Lane's 98 loans with seven houses at 15.0 per cent subordination and Ostvale's 100 in five cyclical sectors at 16.5: a house in a bad year cuts what its defaulted companies recover (lone defaults about 75 per cent against about 38 with three or more others), the five sectors load about 0.14 to 0.36 on the economy's year against at most 0.05 elsewhere, and the senior tail needs both",
+  "stump": "Every shortcut buys a note: the agencies' copula Kestrel Lane, the house's year with one recovery Ostvale, the sector loadings with one recovery Kestrel Lane, recovery on the house-year's shock with one pooled loading Ostvale, the co-defaults among a note's own loans Ostvale; with both strands carried into the simulation both notes fail and the fund buys neither",
+  "deep_chain": "(R1) the house-year's share of each standing from the record's same-house pairs; (R2) each sector's loading on the shared year, five far above the rest and moving together; (R3) recovery on the house-year's shock inferred across the house's whole book, on the closed cohorts; (R4, R5) each note's five-year chance with both strands; (R6) the call; (R7) the subordination for 1 and 0.5 per cent; (R8) the chance by year end; (R9) each portfolio's expected credit loss",
+  "judgment": "two independent modelling judgments, each needing estimation: the joint default-recovery model under the sponsor house's latent year (a regression calibration on posterior shocks at the whole-book grain, on the closed cohorts), and a loading per sector on the shared year (the marginal likelihood over the year and sector-year factors), whose economy-driven defaults recover well; one pooled loading or larger independent sector factors miss the second",
+  "one_fact_test": "the largest hint ('a sponsor house in a bad year lets its defaulted companies go for less, across its whole book') rescues R3 and R4 (Kestrel Lane's side); the sectors' hint rescues R2 and R5; neither rescues the call or the joint asks: two of nine results each",
+  "strategy_label": "WORKS IN FORM (Part A, variance beyond sampling noise in its live form, the recovery's loading on the shared owner's shock at the owner's grain; with Part A heterogeneity that pooling hides, the sector loadings weighted to the portfolio the decision serves; Banking 07's correlated defaults are the house-year result the runs earn)",
   "mechanism_source": "design_note",
   "differentiation": {
     "mark135": "mark135 (and its v1 lineage, a log-scale retransformation of a regression's mean) estimates a variance or a mean from one record's own values under an estimator correction; here the decisive quantity is a tail probability on a tranche, set by a dependence between borrowers that lives in which buyout fund held each company in each year, estimated as a fund-year variance component from the default record joined to the deal record, with nothing in any one series' values to correct.",
     "task7": "task7 values one borrower's rescue by the expected write-off it keeps off its dependants, a directional knock-on through payment flows and a linear expectation; here no borrower causes another's default, a common owner's year shock moves all its companies at once, and the call turns on the tail of a portfolio's five-year loss distribution against a senior note's subordination, which an expectation never sees.",
-    "task4": "task4 corrects a regression slope for a covariate's source-specific recording error; here no covariate is mismeasured: the severity of a loss is conditioned on a latent shared shock that also drives the counts"
+    "task4": "task4 corrects a regression slope for a covariate's source-specific recording error; here no covariate is mismeasured: the severity of a loss is conditioned on a latent shared shock that also drives the counts",
+    "task9": "the single-step form of this architecture decided the call on one strand (recovery on the sponsor house's year) with Ostvale failing on almost every route; the results chain grades nine results, adds an independent strand (each sector's loading on the economy's year) that alone decides Ostvale's side, puts the two notes at different attachments and makes the call need both strands, each shortcut landing on another wrong call"
   },
   "lineage": [
     {
@@ -324,9 +325,34 @@
         "deliverable set": "csv+docx"
       },
       "fate": "spent 2026-11-08 on the platform: the author reports not stumped; both runs reconstructed sponsor ownership from Dealtrail, fitted a sponsor factor and bought Ostvale (run 1 Kestrel 1.47, Ostvale 0.58; run 2 Kestrel 0.94, Ostvale 0.55); neither tied recovery to the year or the sponsor house"
+    },
+    {
+      "domain": "quantitative-finance",
+      "subdomain": "volatility-derivatives-pricing",
+      "objective": "forecasting",
+      "shape": "02",
+      "decision_type": "go_hold_or_stop",
+      "answer_unit": "named_option",
+      "gap": [
+        "objective",
+        "population"
+      ],
+      "pattern": [
+        "none"
+      ],
+      "generators": [
+        "G2",
+        "G17",
+        "G13"
+      ],
+      "gate_g": "forecasting",
+      "stump_strategy": "other",
+      "driver": "The decisive quantity is a tail probability of a sum of losses, each a default times a severity, where the severity falls in the very states that cluster the defaults, through the same latent shock of the shared owner, a state of the owner's whole book; a severity averaged over the record prices the tail at the average state, one tied to the economy alone misses the owner's shock, one read off the co-defaults inside the portfolio prices a thin slice of an owner as isolated failures, and only the severity conditioned on each owner-year's shock, inferred from that owner-year's default experience across its book, carries the tail.",
+      "stump": "A competent solver rebuilds each loan's sponsor house, fits the house-year dependence and one censoring-corrected recovery for every default and buys Kestrel Lane's note at 0.7 per cent; one who finds that clustered defaults recover less (74.9 per cent alone against 44.1) and counts each default's co-defaults among the note's own loans buys Ostvale's at 0.1, because the record's counts run over whole books (a median of 13 companies) and Ostvale holds 2 of each house's; with recovery tied to the house-year's inferred shock Kestrel Lane's chance is 3.9 per cent and Ostvale's 7.8, and the fund buys neither.",
+      "fate": "superseded before upload at the author's word on 2026-11-10: read as level 4 on the client's depth scale (one investigation, the sponsor house's year, carrying the call; three of its four shortcuts landing on one wrong call; Ostvale failing on almost every route) and cut under the retired single-deep-step design; the results chain keeps its recovery strand and adds an independent one"
     }
   ],
-  "notes": "stump_strategy other: severity conditioned on the latent shared shock that clusters the counts, measured at the owner's grain a portfolio's slice does not share (PD-LGD dependence at the sponsor level)",
+  "notes": "results chain: nine results across six areas; two independent strands under one call (house-state recovery decides Kestrel Lane, sector loadings decide Ostvale); depth level 5 by the client's scale; forcing event redrawn to budget_or_appropriation (the matching portfolio's senior-note allocation round, MP-RN-2 2.2, whose offers close on 12 March 2027; purchase_order_or_contract repeated mark162 v2 and vote_or_meeting task12) and the context artifact to register (the two managers' collateral tapes the call is priced on; filed_standard repeated task11); prompt shape redrawn to 10 (a scorecard against a threshold: each note's chance, loss and needed subordination against MP-RN-2's 1 per cent test; 02 repeated task12 and 14 task2) and the year-end chances asked as a table inside the memo, so the deliverable is one memo: the shell clears architecture 7's single-step shell (csv+docx) and the corpus cap on docx+xlsx; stage 4 (2026-11-10): the determinism judge sent the chain back on Gate C (the recovery sample unfiled, Ostvale's margin), the repair filed both, and the generator's R5 then failed on the judge's two-strand sentence (4 of 9 results): paused as spent pending the author's ruling",
   "lineage_shells": [
     {
       "question form": "whether",
@@ -363,13 +389,35 @@
       "second-sentence opener": "in",
       "rounding opener": "chances",
       "deliverable set": "csv+docx"
+    },
+    {
+      "question form": "whether",
+      "second-sentence opener": "the",
+      "rounding opener": "chances",
+      "deliverable set": "csv+docx"
     }
   ],
-  "registered": "2026-11-08T16:21:54Z",
+  "registered": "2026-11-10T01:51:04Z",
   "shell": {
     "question form": "whether",
-    "second-sentence opener": "the",
+    "second-sentence opener": "a",
     "rounding opener": "chances",
-    "deliverable set": "csv+docx"
-  }
+    "deliverable set": "docx"
+  },
+  "answer_shape": "distribution-cut",
+  "weight": "hard-to-measure",
+  "chain_signature": [
+    "modeling",
+    "exploration-triage",
+    "investigation-loops",
+    "forecasting",
+    "forecasting",
+    "synthesis",
+    "uncertainty",
+    "forecasting",
+    "forecasting"
+  ],
+  "depth_level": 5,
+  "doctrine": "throughout",
+  "client_subdomain": "volatility-derivatives-pricing"
 }

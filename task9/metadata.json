@@ -3,8 +3,7 @@
  "as_of": "2027-02-17",
  "call": "neither",
  "deliverables": [
-  "ic_note_senior_notes_2027.docx",
-  "senior_note_loss_by_year.csv"
+  "ic_note_senior_notes_2027.docx"
  ],
  "distractors": [
   "euribor_forward_curve_2026-12-31.csv",
@@ -15,10 +14,10 @@
   "phl_matching_portfolio_cashflows_2027-2076.xlsx": "the fund's projected benefit payments; looks relevant to what the notes are bought for but no figure is read from it"
  },
  "rows": {
-  "lenderbase_rows": 73066,
-  "workout_rows": 578,
-  "dealtrail_rows": 8858,
-  "lei_rows": 4485
+  "lenderbase_rows": 74356,
+  "workout_rows": 537,
+  "dealtrail_rows": 9179,
+  "lei_rows": 4641
  },
  "files": {
   "dealtrail_buyout_transactions_1997-2026.csv": {

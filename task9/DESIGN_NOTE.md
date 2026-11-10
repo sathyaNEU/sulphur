@@ -1,398 +1,343 @@
-# task9 design note
+# task9: Kestrel Lane's senior note, Ostvale's, or neither, for the matching portfolio
 
 ## Draw
 
-1. Card: `.claude/skills/fingerprint/cards/task9.json`, architecture 7, registered 2026-11-08; architecture 6 moved into
-   the card's lineage with its fate (landed on the platform: both runs rebuilt sponsor ownership, fitted a house factor
-   and bought Ostvale). At the author's word ("make it more complex, multi layered") architecture 7 keeps architecture
-   6's world and records and moves the deep step; the prompt's shell is redrawn (whether | the | csv+docx against what |
-   in | csv+docx). Guard on the registered card: WARN only (objective and Gate G overuse; the slot's assigned objective
-   is forecasting). Redrawn at the final heart screen: decisive generator G14 (BLOCK against task7 v6, registered after
-   this card) to G2 (the recovery is read at the default's grain while what sets it lives at the house-year's).
-2. Pairing: Quantitative Finance, task type derivative pricing (the vocabulary's volatility-derivatives-pricing key: the
-   price of a structured credit note is its loss distribution), objective Forecasting. The headline is each senior
-   note's chance of any loss of principal over 2027 to 2031, which decides the call.
-3. World, people and furniture: as architecture 6 (Stichting Pensioenfonds Havenbedrijf en Logistiek through Kadeweg
-   Fiduciair Beheer; Kestrel Lane Credit Partners and Ostvale Capital; Lenderbase with its workout file; Dealtrail; Ilse
-   Lips, Damian Schenkel, Liza Dekker in document control lines only). The world's truth changes in three places:
-   a sponsor house in a bad year stops putting money into its companies' restructurings, so its clustered defaults
-   recover less and take longer to work out (world.py REC_H, DUR_H; the economy's year moves how many default, not what
-   a default recovers); Kestrel Lane lends to seven houses' stronger credits (14 loans a house, most of each house's
-   book, houses with ordinary records); Ostvale lends to weaker credits across many houses (2 loans a house) and
-   offers 13.0 per cent subordination against the 15.0 its term sheet says Kadeweg's request set.
-4. Candidates: Kestrel Lane's senior note, Ostvale's senior note, or neither.
-5. Quantity: for each note, the probability that cumulative credit losses on its portfolio exceed its subordination
-   (Kestrel Lane 15.0 per cent, Ostvale 13.0) before the end of 2031, the portfolio static (MP-RN-2 3.2), each
-   default losing what is not recovered by the end of its workout (3.4), default and recovery taken from the record of
-   comparable loans, standings correlated and recoveries with them as far as the record shows (4.1, 4.2); the fund buys
-   the note under 1 per cent, the lower if both are, neither if none is (2.1, 2.2).
-6. Shape: 02, a forecast across periods: each note's chance of a loss by the end of each year (10 figures, one
-   decimal), each note's five-year chance (2), each portfolio's expected credit loss over the five years (2, one
-   decimal), the subordination for 1 and 0.5 per cent (4, whole per cent rounded up), the call, and the
-   loss-exceedance chart.
-7. Data-native sentence: a buyout house decides from one partnership's view of its year whether to put more money into
-   each of its companies when they breach, so the companies it holds fail in the same years, and in those years it lets
-   them go rather than fund their restructurings, so the lenders sell or wind them up and recover less, slowly; the
-   workout file keeps each default's own recovery and the deal file each company's buyers, no file joins a recovery to
-   the house-year it happened in, and each manager's tape holds only its own slice of a house's book.
-8. Abstraction sentence, written against the nearest builds and found not to be the same: architecture 6 (this slot)
-   prices a shared owner's year into the default dependence only; task4 corrects a slope for a covariate's
-   source-specific recording error; task7 values a rescue by the write-off it keeps off borrowers who draw on it. Here
-   the severity of each loss is conditioned on the latent shared shock that also clusters the counts, a property of the
-   owner-year across its whole book that a portfolio holding a slice of the book cannot observe in its own defaults, so
-   it is inferred owner-year by owner-year from the record and carried as a shock; no build on file conditions a loss's
-   severity on a latent shock measured at a grain the decision's portfolio does not share.
-9. Shell: question form whether ("Should the fund buy ... or neither"), second sentence opening on the committee note,
-   rounding sentence opening "Chances"; deliverables docx and csv; the asks coarsened to the precision the honest
-   family shares (one decimal for chances, whole per cent for subordination).
-10. Furniture: forum trustees_or_governors (the fund's board of trustees decides the purchase on its investment
-   committee's advice), forcing purchase_order_or_contract (both offers close on 12 March 2027), org
-   financial_institution (a pension fund), role portfolio_manager (Kadeweg's head of credit runs the credit sleeve and
-   asks). Stump strategy `other`: the decisive move is a severity conditioned on a latent shared shock at the owner's
-   grain, which no strategy key names; Gate G forecasting, pattern G2 decisive with G17 and G13 (the recovery is read
-   at the default's grain while what sets it lives at the house-year's across its book; the horizon is five years of a
-   pool, the record a year at a time of single loans).
-11. As of 17 February 2027, the day after the Lenderbase and Dealtrail extracts were pulled (16 and 15 February,
-   with the fourth quarter of 2026 filed); the investment committee meets on 25 February, the board of trustees on
-   4 March, and both offers close on 12 March 2027.
+Subdomain: Quantitative Finance (task type volatility and derivatives pricing: the price of a structured credit note
+  is its loss distribution)
+Analysis type: Forecasting & Predictive Modeling (each note's chance of any loss of principal over 2027 to 2031)
+Answer shape: A distribution and where it is cut: each portfolio's five-year credit-loss distribution, where each
+  note's subordination cuts it (the chance of loss, overall and by year end), where it would have to be cut for
+  chances of 1 and 0.5 per cent, and each portfolio's expected credit loss, with the recommendation on top
+Weight: a hard-to-measure quantity: a senior tranche's tail chance needs the joint law of defaults and recoveries at
+  two grains the record never prints (each sector's swing with the economy's year, and the sponsor house's year that
+  sets both how many of its companies fail and what they recover); the last builds' weights sit in synthesis (task1),
+  modeling (task7) and measurement (task4)
+Data-native sentence: a buyout house decides from one partnership's view of its year whether to fund each of its
+  companies' breaches, so its companies default in the same years and in those years are sold or wound up for less,
+  while the economy's year weighs on the capital-goods, building, freight, chemicals and car-parts chain far more
+  than on services and staples and costs those defaults nothing extra because their houses are having ordinary years;
+  the workout file keeps each recovery, the deal file each company's buyers, the performance file each sector's
+  years, and each manager's tape concentrates one of the two shocks, Kestrel Lane's on seven houses, Ostvale's on the
+  five sectors that follow the cycle
+People: Ilse Lips (head of credit, Kadeweg Fiduciair Beheer), Damian Schenkel (chair of the trustees), Liza Dekker
+  (document control), from `guard.py names` at the original draw
 
-## Default path
-
-The pipeline a competent credit quant builds from the prompt's words and the files' grain, the field's own method for
-the deciding quantity in it (stumping 1.1b).
-
-1. Conform the records: Lenderbase's latest submission of each loan-quarter, its pre-2019 and post-2019 codes, the
-   workout file's recoveries in one unit, both tapes in euros at the ECB rate of 31 December 2026 and on Lenderbase's
-   sectors through the crosswalk.
-2. Company-years at risk 2008 to 2026 and their defaults (16,712 and 578); one-year default chance by rating and
-   years since the buyout.
-3. Dependence, the field's method: a one-factor Gaussian copula fitted to the record's yearly default rates (0.109),
-   then the agencies' industry factor (0.059).
-4. Loss given default, the field's method: the average shortfall over the default years whose workouts have all
-   closed, 42.7 per cent (the open workouts are the long ones; MP-RN-2 4.1 keeps them in).
-5. Simulate five years for both portfolios at their subordination: Kestrel Lane 0.1 per cent, Ostvale 5.9 per
-   cent; MP-RN-2 2.2 buys Kestrel Lane.
-
-Ends on: buy Kestrel Lane's note at a 0.1 per cent chance of loss (Ostvale's fails at 5.9 per cent)
-Golden: buy neither note: Kestrel Lane's chance is 3.9 per cent and Ostvale's 7.8 per cent, both over the test
-
-## Stump sentence
-
-A competent solver who conforms the records, fits the field's copula and averages the closed workouts' shortfall
-buys Kestrel Lane's note at 0.1 per cent, and the arch 6 runs' route (the sponsor house's year added to the
-dependence, one average loss) still buys it at 0.7; the step that lands it there is pricing every default at one
-recovery, when the defaults that cluster in a sponsor house's bad year recover 74.9 per cent alone against 44.1
-per cent with three or more others; a solver who sees that and carries the table to the notes by counting each
-default's co-defaults among the note's own loans buys Ostvale at 0.1 per cent, because the table's counts run over
-a house's whole book (a median of 13 companies) and Ostvale holds 2 of each house's; with each default's
-recovery tied to its house-year's inferred shock Kestrel Lane's chance is 3.9 per cent and Ostvale's 7.8, both
-over the test, and the fund buys neither.
+1. Card: `.claude/skills/fingerprint/cards/task9.json`, architecture 7 rebuilt as a results chain, re-registered
+   2026-11-10: WARN only (objective and Gate G overuse; nearest drivers this slot's own lineage). Redrawn to
+   clear bans, each to the honester label: prompt shape 10 (a scorecard against a threshold; 02 repeated task12, 14
+   task2), forcing event budget_or_appropriation (the matching portfolio's senior-note allocation round, MP-RN-2 2.2;
+   purchase_order_or_contract repeated mark162 v2, vote_or_meeting task12), context artifact register (the two
+   collateral tapes the call is priced on; filed_standard repeated task11), the year-end chances asked as a table
+   inside the memo (one deliverable, clear of the single-step form's csv and docx shell and of the corpus cap on a
+   docx and xlsx set) and the prompt's second sentence reopened.
+2. Why this rebuild: the single-step form of architecture 7 reads as level 4 on the client's depth scale (one
+   investigation, the sponsor house's year, carried the call; three of its four shortcuts landed on one wrong call;
+   Ostvale failed on almost every route) and was cut under the retired single-deep-step design; the author asked
+   for a level 5 task. The world, records, people and documents are architecture 7's; the truth adds a loading per
+   sector on the economy's year (world.py AM_S: 0.23 to 0.30 for the five cyclical sectors, 0.01 to 0.05 elsewhere),
+   Kestrel Lane's seven houses are drawn from the twelve whose books lean least on those sectors, Ostvale lends only
+   in them, and Ostvale offers 16.5 per cent subordination (above the 15.0 per cent the
+   request for proposals set, for its weaker credits).
+3. As of 17 February 2027 (Lenderbase and Dealtrail pulled 16 and 15 February); the investment committee meets on 25
+   February, the trustees on 4 March, and both offers close on 12 March 2027.
 
 ## Deep reasoning
 
-Task type: volatility-derivatives-pricing (Quantitative Finance, derivative pricing: a structured note's price is its loss distribution), a task type the taxonomy tags for Forecasting & Predictive Modeling; the forecast is each note's chance of losing principal over 2027 to 2031.
-Domain test: the deciding quantity is a senior tranche's tail probability, the probability that a portfolio's credit loss passes its attachment, where loss is the sum of defaults times their loss given default; the field's object is the joint distribution of default and recovery, and the decisive judgment is that the severity is conditioned on the same latent sponsor shock that clusters the counts, a state of the sponsor's whole book; with patients and wards in place of loans and houses there is no tranche, no attachment and no owner whose bad year sets both how many fail and what each failure costs.
-Swap: "should the hospital trust buy cover from insurer A or B for its 2027 malpractice claims" keeps a tail probability but loses the sponsor house that both clusters the defaults and walks away from their restructurings; nothing would tie a claim's size to a shared shock measured across a book that each policy holds only a slice of, and the call stops reading the same.
-Layer 1: the systems produce it: Lenderbase resubmissions of a loan-quarter (latest kept), the 2019 change of status, purpose and rating codes, LEIs only from 2012 (older loans joined by name), recoveries reported in per cent by some lenders and as fractions by others, Dealtrail buyers named by fund or by house, withdrawn deals and add-ons, the managers' tapes in local currencies and on their own industry scales; each is neutral on the call (K1 to K3, SF21 asserted) and none is placed to be caught.
-Layer 2: estimation_fit: the loss given default enters the tail through its dependence on the shocks that cluster the defaults; the methodological choice is what each default's recovery is taken to be: one average (closed workouts or mature cohorts), one tied to the economy's year, one read off the co-defaults the note itself would see, or one tied to its sponsor house's year inferred from that house-year's own defaults across the house's book.
-Decisive step: each default's recovery is regressed on its house-year's shock, a latent quantity inferred as a posterior mean from the house-year's defaults across the house's whole book against the rates its companies' ratings, ages and sector-years expected, over the cohorts whose workouts have all closed, and the forward simulation draws each default's recovery from the same shocks that drew it, whatever share of the house's book the note holds.
-Not semantics: every field read right (the 2019 code change, the per-cent and fraction recoveries, the open workouts, the buyers' names, the tapes' scales) still leaves a solver pricing every default at one recovery: no field links a recovery to a house-year, the deal file and the workout file share only the borrower, and the mean recovery reconciles to the closed workouts; and a solver who links them still has to decide what the recovery responds to, the co-defaults a note sees or the house's state.
-Not rule application: MP-RN-2 files the WHAT (3.4 each default loses what its workout does not recover, 4.1 default and recovery from the record with its open workouts, 4.2 standings correlated and recoveries with them as far as the record shows) and nothing filed says which shock recovery moves with, at which grain, or how a latent shock is read. Enumerated family (one average over closed workouts or mature cohorts; a link to the economy's year; the record's co-default table carried to each note's own loans, as cells or a line; the same counts over each house's whole book; a link to the house-year's shock, inferred against the sector-year's or the year's rates, with or without the year's shock, under the cluster or the pair-moment dependence, fitted on the closed cohorts or on every closed workout): three calls (Kestrel Lane, Ostvale, neither); standing family (the house-state recoveries): 1.5 to 4.1 per cent for Kestrel Lane and 2.3 to 7.9 per cent for Ostvale, every one over the test, the call neither; the ruling-out is loud only to a solver who reads recovery against the house-year and asks what share of the house a note holds.
-Analyst test: a strong analyst who conforms Lenderbase, rebuilds sponsor ownership from Dealtrail, fits a survival model and a market, sector and house copula, takes one censoring-corrected recovery and simulates both static portfolios buys Kestrel Lane's note at 0.7 per cent, the default path's Ends on (the field's copula without the house files it too, at 0.1); on the generator's clean truth the same route files the same call (checks.py R3d).
-Estimand: MP-RN-2 2.1, 2.2, 3.2, 3.4, 4.1 and 4.2 (phl_rated_note_standard_2026.pdf): population each note's portfolio as on its tape, outcome the chance that cumulative loss passes the note's subordination by the end of 2031, window 2027 to 2031 drawn from the record's conditions, unit per cent, comparison each note against 1 per cent and the lower of two that pass.
-No decoy: nothing is planted: the workout file is Lenderbase's own, the deal file Dealtrail's, the term sheets the managers'; no memo, rating report or stakeholder figure states a chance of loss or a recovery by house, and no file exists to carry the wrong answer.
-No certified replay: the method is not recovered by reproducing a published figure; no file states a note's chance, a loss given default or a recovery link.
-Chain: (1) defaults cluster by sponsor house and year (same house, sector and year pairs default together 0.84 per cent of the time against 0.25 across houses), so the house's year enters the dependence and the tail is a house-year event; (2) on the closed 2008 to 2019 cohorts the defaults that cluster in a house's year recover less (74.9 per cent alone against 44.1 with three or more others) while the economy's year does not lower recovery (-0.061 per unit of its shock), and the clustered defaults' long workouts are the open ones in the later cohorts; (3) those counts run over each house's whole book (a median of 13 companies in a defaulting house-year) while Ostvale holds 2 of a house's companies and Kestrel Lane 14, so the recovery belongs to the house-year's state, not to the co-defaults a note sees, and is carried by the house-year's latent shock; (4) each house-year's shock is inferred from its book's defaults against its companies' expected rates and recovery regressed on it over the mature cohorts (0.298 per unit, intercept 0.953); (5) the forward simulation draws each default's recovery from the shocks that drew it, and Kestrel Lane's chance is 3.9 per cent and Ostvale's 7.8: neither note is bought.
-Judgment: the joint model of default and recovery under a latent shared shock measured at the sponsor's grain: the house-year shock is a property of the house's whole book, so a note holding two of its companies cannot read it from its own defaults; it is inferred by its posterior mean given the house-year's default experience under the fitted copula, which makes the regression of recovery on it a regression calibration, estimated on the cohorts whose workouts have closed so the long open workouts of clustered defaults do not bias it; the record shows each piece: the co-default table over whole books (V1), the books' size against the tapes' slices (V4), and the closed-workout link lifted (intercept 0.991 against 0.953, because the later cohorts' closed workouts are the quick ones).
-Hidden by: the rows in view mimic the wrong structure three times: the economy's year shows recoveries no lower in bad years (-0.061 per unit; a bad economy brings defaults from houses having ordinary years), which confirms one average to a run that tests the textbook downturn link; the record's co-default table (lone 74.9 per cent against 44.1) displays the clustering effect, but over whole books, a sampling property the notes do not share, so a run that carries its regressor to a note's own loans prices Ostvale's defaults as lone ones; and the pooled recovery reconciles to the closed workouts, whose later cohorts hold only the quick cases.
-After the notice: once a run has seen that clustered defaults recover less, three inferences remain: (1) the recovery follows the house's state across its whole book, not the co-defaults inside a note: counting co-defaults among a note's own loans, the obvious way into a portfolio simulation, buys Ostvale at 0.1 per cent (a line in the count, 0.8), so the state has to be carried by a latent shock inferred from the record's whole-book defaults (or the whole book simulated, which lands the same call); (2) the slope on that latent shock is a regression on its posterior mean fitted on the cohorts whose workouts have closed: a fit on every closed workout drops the open long workouts and lifts every recovery (Kestrel Lane 3.1 per cent against 3.9); (3) the same shocks draw default and recovery in the simulation, so the tail carries the clustered defaults at their low recoveries.
-One-fact test: the likeliest hint ("recoveries are lower in bad years") invites the textbook downturn link to the economy's year, which the record shows flat or reversed (-0.061) and which leaves Kestrel Lane at 0.2 per cent and bought; the stronger hint ("the sponsor house's bad year cuts recoveries") still leaves the grain to judge (the co-defaults a note sees buy Ostvale at 0.1), the latent shock to infer house-year by house-year, the censoring to handle and the shocks to carry into the copula simulation.
-No replay: the call does not re-derive any published figure, and no stated number in the pack is wrong.
-Pinned: run on the cut pack (analysis.py, checks.py, verify.py): the house-year shock inferred against the sector-year's or the year's rates, with and without the year's shock, under the cluster or the pair-moment dependence, a cohort table or a probit for the default rates, the record's co-default counts over each house's whole book (cells or a line), and verify.py's independent Gauss-Hermite inference: every one files neither, Kestrel Lane between 1.5 and 4.1 per cent and Ostvale between 2.3 and 7.9; one average loss, the closed-workout average and the economy's-year link file Kestrel Lane; the co-default counts carried to each note's own loans file Ostvale (cells 0.1, line 0.8), ruled out by the record's grain (V4: the counts run over books of a median 13 companies, Ostvale holds 2 of each) and by the same default recovering differently according to which note holds it; a link fitted on every closed workout drops the open workouts MP-RN-2 4.1 keeps and moves every figure down (SF8).
-Run forecast: method shortcut at rung 1 (one censoring-corrected recovery for every default, which the closed workouts confirm; a self-confirming check), the arch 6 runs' route; a run that suspects recovery moves with the cycle stops one inference short at rung 2 (the economy's year, flat), an unfinished chain; a run that finds the house-year table and carries it to each note's own loans buys Ostvale at 0.1 per cent at rung 2b, dismissing its own evidence that the table's counts are over whole books its tape holds two companies of.
-Strategy label: WORKS IN FORM (Part A, variance beyond sampling noise and Banking 07 correlated defaults, live form: the component the standard model omits, here the recovery's loading on the shared owner's shock, estimated from the record at the owner's grain, never filed).
-Lesson: in a portfolio's tail the severity of a loss can ride the same latent shock as the count, and that shock belongs to the shared owner's whole book, which a portfolio holding a slice of it cannot see in its own defaults; a severity averaged over the record prices the tail at the average state, one read off the portfolio's own co-defaults prices a thin slice as safe, and the shock has to be inferred owner-year by owner-year from the record's own counts; no build on file conditions severity on a latent shock measured at a grain the decision's portfolio does not share.
+Task type: volatility-derivatives-pricing (Quantitative Finance; the price of a senior note is its loss distribution),
+  a task type the taxonomy tags for Forecasting & Predictive Modeling; the forecast is each note's chance of losing
+  principal over 2027 to 2031.
+Domain test: the deciding quantities are a senior tranche's tail chances, the chance a portfolio's credit loss passes
+  its attachment, with loss the sum of defaults times their loss given default; the field estimates them with a
+  factor copula whose dependence and severity it calibrates on the default and workout record, and here both have to
+  be estimated at grains the record does not print: each sector's loading on the economy's year, and the sponsor
+  house's year, which also sets what a default recovers.
+Swap: "should the hospital trust buy cover from insurer A or B for its 2027 malpractice claims" keeps a tail
+  probability but loses the tranche and its attachment, the sponsor whose bad year sets both how many fail and what
+  each failure costs, and the sector chain that orders less in a downturn; the results stop reading the same.
+Where the weight sits: R4 and R5, each note's five-year chance: four estimated layers (default rates by rating and
+  years since the buyout; each sector's loading on the year; the house-year's share; recovery on the house-year's
+  latent shock read across the house's whole book on the closed cohorts) carried jointly through one simulation; it
+  is long because each layer is estimated from a record whose grain differs from the tapes'.
+Layer 1: Lenderbase resubmits loan-quarters (the latest kept), changed its status, purpose and rating codes and its
+  date format in 2019, and carries LEIs only from mid-2012 (older loans joined by name through the LEI extract); the
+  workout file reports recoveries in per cent for most lenders and as fractions for nine, and leaves open workouts
+  blank; Dealtrail names buyers by fund, by house or with a co-invest vehicle and carries withdrawn approaches and
+  add-ons; the tapes use their own layouts, rating scales and industry names in five currencies; each is neutral on
+  every result once conformed (checks.py K1 to K3, R2a, R2b).
+Not one thing: the strongest single piece is recovery's link to the sponsor house's year (R3); a run that nails it
+  buys Ostvale at 0.83 per cent unless it also estimates each sector's loading (R2),
+  and a run that nails R2 instead buys Kestrel Lane at 0.36 per cent; the call, the
+  subordination needed and the chances by year end need both, and R1 sits under both.
+One-fact test: the house's sentence, "a sponsor house in a bad year lets its defaulted companies go for less, across the whole of its book", rescues R3 and R4 (2 of
+  9); the sectors' sentence rescues R2 and R5; neither rescues the call or the joint asks. A
+  sentence naming both strands, "defaults and recoveries cluster in a sponsor house's year, and five sectors load on the economy" (the stage-4 judge's), measured on the route a run builds from
+  it (recovery read off each house-year's co-defaults across the house's whole book, with the sector loadings and the house's year in the copula), rescues R2, R4, R6, R9 (4 of 9, effort.py's WARN band): it
+  leaves R3, R5, R7, R8 to the latent house-year shock, which a co-default count does not measure, and a run that
+  counts the co-defaults among the note's own loans from the same sentence still buys
+  Ostvale (1.93 against 0.28 per cent).
+Not semantics: every field, unit and clause read right (the 2019 codes, the per cent and fraction recoveries, the open
+  workouts, the buyers' names, the tapes' scales) still leaves a run with one recovery for every default and one
+  loading for every sector: no field carries a house, a loading or a link, and the pooled figures reconcile to the
+  record (the closed cohorts' average recovery, the yearly default counts inside the copula's band).
+Not rule application: MP-RN-2 files the WHAT (3.4 each default's own loss over its workout; 4.1 the record with its open
+  workouts; 4.2 standings correlated, and recoveries with them, as far as the record shows) and nothing filed says
+  which shocks move defaults or recoveries, at which grain, or how a latent shock is read. The enumerated family
+  (one average recovery; a downturn link; the co-default table at the note's grain or the book's; the house-year's
+  shock on three bases, with or without the year's term, on the default years MP-RN-2 4.1 reads recovery from; one pooled
+  loading, larger independent sector factors, or a loading per sector by likelihood, pair moments or two groups)
+  spans three calls; the standing family (both strands carried, 20 members) spans 2.3 to 4.0 per
+  cent for Kestrel Lane and 1.5 to 3.0 for Ostvale, every member over the test; the ruling-out is loud
+  only to a run that reads recovery against the house-year and the sectors against the year.
+Estimand: MP-RN-2 2.1, 2.2, 3.2, 3.4, 3.5, 4.1 and 4.2 (phl_rated_note_standard_2026.pdf) and the prompt: population
+  each note's portfolio as on its tape; outcomes the chance that cumulative loss passes the note's subordination by
+  the end of 2031 and by each year end, the portfolio's mean five-year loss as a share of its par, and the five-year
+  loss quantiles at 1 and 0.5 per cent; window 2027 to 2031 drawn from the record's conditions; unit per cent;
+  comparison each note against 1 per cent and the lower of two that pass; subordination as each term sheet states it.
+No decoy: nothing planted: the workout file is Lenderbase's own, the deal file Dealtrail's, the term sheets the
+  managers'; no memo, rating report or stakeholder figure states a chance, a recovery by house or a sector's loading.
+No replay: no result re-derives a published figure, and no stated number in the pack is wrong.
+Pinned: each result's rivals run on the clean truth (analysis.py rivals and band, checks.py SF and R rows, verify.py's
+  own road): R1 by likelihood (0.395), on the pooled scale (0.403) or by pair
+  moments; R2 by likelihood, pair moments or two groups; R3 on three shock bases, with or without the year's term;
+  R4 to R9 across the 20 combinations; ruled out by named data: one recovery (V1), the economy's year (V3), the
+  note's own co-defaults (V4), independent sector factors (V5); by the text, the link on every closed workout (SF8:
+  MP-RN-2 4.1 reads recovery from the default years whose workouts have all closed, 2008 to 2019).
+Run forecast: R2 method shortcut (one pooled loading) or narrow look (the swing given to each sector as its own
+  factor); R3 first story (the economy's year tested, found flat, one recovery kept) or dismissed own evidence (the
+  co-default table seen, one recovery kept) or an unfinished chain (the table carried to each note's own loans);
+  R4 to R9 fall with the strand a run missed; R1 is earned.
+Strategy label: WORKS IN FORM (Part A variance beyond sampling noise, live form: the recovery's loading on the shared
+  owner's shock at the owner's grain; Part A heterogeneity that pooling hides, live form: the sector loadings weighted
+  to the portfolio the decision serves)
+Depth level: 5: seven judgments that each move a result (the house's share; each sector's loading and the five
+  sectors' moving together; recovery's link to the house's year rather than the economy's; its whole-book grain; the
+  closed-cohort sample; the joint carry), two independent strands both needed for the call, and the shortcuts land on
+  two different wrong calls: Kestrel Lane (the agencies' copula, one average loss; the sector loadings, one average loss; larger sector factors of their own, one average loss) and Ostvale
+  (the house's year in the copula, one average loss; recovery tied to the economy's year; recovery on the house-year's shock, one pooled loading; recovery on the house-year's shock, larger sector factors of their own; recovery read off the co-defaults among each note's own loans); the golden holds across 20 estimator variants.
+Lesson: a senior tranche's tail can run through two different shared shocks at once, an owner's year that also sets
+  severity and an economy's year that weighs by sector and does not, and each note's concentration decides which one
+  bites; one average severity hides the first, one pooled loading the second, and the defaults the economy drives
+  come from owners having ordinary years, so a loading carried with one severity overstates the second note.
 
-## Survivor anatomy
+## Results chain
 
-Actor: the deciding property, how a default's recovery moves with its sponsor house's year across the house's whole book, has no column in any file; it is a relation between a workout's recovery, the house that held the borrower (through Dealtrail) and the other defaults of that house's book in the same year.
-Link: each recovery is tied to its house-year only through the borrower, a key the workout file and the deal file each carry for their own reasons, and the house's book only through the borrowers of the performance file; no sentence joins a recovery to a house, a book or a year's shock.
-Reflex: the field's methods for the deciding quantity, a Gaussian copula with a censoring-corrected loss given default (rung 1, the arch 6 golden) and a downturn link to the economy's year (rung 2), file Kestrel Lane (Ends on).
-Back-test: the one-average route reconciles to the closed workouts and its copula reproduces the record's yearly, sector-year and house-year default counts (B1); the downturn regression finds no slope, which confirms the average; the in-portfolio co-default route reproduces the record's own table cell by cell.
-Second use: every file the step reads is in the pack for its own reason: the workout file is the loss given default's source (MP-RN-2 4.1), the deal file the house dependence's (arch 6's rung), the performance file the population and each house's book.
-Shock: nothing moves visibly: the recovery averages agree with the closed workouts; sorted on rating, sector diversity, house count or pooled chance, Kestrel Lane is the safer note, and Ostvale's thin slices of each house make it look the diversified one; only the joint tail at the house's grain reverses both.
-Pins: MP-RN-2 files the WHAT (each default's own loss, the record's conditions, standings and recoveries correlated as the record shows) in the fund's own standard; no filed sentence names a house, a sponsor, a year shock, a cluster, a book or a link (asserted: checks.py D1, L1).
+| ID | Result (checkable) | Area | Pinned by | Band | Hurried analyst | Depends on | Graded as |
+|---|---|---|---|---|---|---|---|
+| R1 | the house-year's share of each company's credit standing, 0.395 | modeling | the record's same-house pairs (0.61 against 0.23 per cent) and the random-effect likelihood on house-years given sector-years | 0.34 to 0.43 | method shortcut: the agencies' copula with no house at all (the runs of architecture 6 earned it) | - | Component 1 |
+| R2 | Ostvale's portfolio's loading on the economy's year, 0.251 (industrial machinery, building products and services, transport and logistics, chemicals and materials and automotive parts at 0.14 to 0.36, the rest at most 0.05) | exploration and triage | the sixteen sectors' yearly defaults and the marginal likelihood over the year and sector-year factors (one loading for all fits 54.5 points of 2 log-likelihood worse on 15) | 0.21 to 0.3 | method shortcut: one pooled loading (0.065); or a narrow look: each swinging sector given a larger factor of its own, so its bad years arrive one sector at a time | - | Component 2 |
+| R3 | recovery per unit of the house-year's shock, 0.313 (intercept 0.982) | investigation loops | the closed 2008 to 2019 cohorts: a lone default 74.7 per cent, three or more others 38.3; the economy's year alone -0.047; the shock as a posterior mean across the house's whole book | 0.26 to 0.34 | first story: the economy's year tested, found flat, one recovery kept; or dismissed own evidence: the co-default table seen and set aside | R1 | Component 3 |
+| R4 | Kestrel Lane's five-year chance of loss, 3.7 per cent at 15.0 | forecasting | MP-RN-2 2.1, 3.2 to 4.2; R1 and R3 carried into the simulation | 2.3 to 4.0 | unfinished chain: the house's year in the copula with one recovery, 0.39 | R1, R3 | Ask 2 |
+| R5 | Ostvale's five-year chance of loss, 2.8 per cent at 16.5 | forecasting | as R4, with R2 | 1.5 to 3.0 | method shortcut: recovery on the house's year with one pooled loading, 0.83 | R1, R2, R3 | Ask 2 |
+| R6 | the recommendation: neither | synthesis | MP-RN-2 2.1 and 2.2 | exact | unfinished chain: one strand carried, the other note bought | R4, R5 | Recommendation |
+| R7 | the subordination for 1 and 0.5 per cent: Kestrel Lane 20 and 22, Ostvale 19 and 21 | uncertainty | the five-year loss quantiles, whole per cent rounded up | each cell within its members' range | unfinished chain: quantiles of a loss law with one strand | R1, R2, R3 | Ask 4 |
+| R8 | the chance by each year end, 2027 to 2031, both notes | forecasting | the cumulative loss by year end against each subordination | each cell within its members' range | unfinished chain: one strand carried | R1, R2, R3 | Ask 5 |
+| R9 | each portfolio's expected credit loss, Kestrel Lane 5.9 and Ostvale 7.6 per cent of par | forecasting | MP-RN-2 3.4 and 3.5, each default's own shortfall | each cell within its members' range | method shortcut: one average recovery (41.0 per cent loss) for every default | R1, R3 | Ask 3 |
 
-## Readability screen
+Carry-forward: R1 and R2 stand on the record alone and R3 on R1; Kestrel Lane's figures (R4, its cells of R7 to R9)
+fall with R1 or R3 and not with R2, Ostvale's (R5, its cells) with R2 as well; the call falls with either strand. No
+analytical result is the only analytical input of more than one other (R1 behind R3).
 
-Seven tests per rung: 1 a filed sentence names the decisive quantity or sends the solver to it; 2 a column, key or
-marker makes it a row predicate or a header-found join; 3 an opponent reflex reaches it; 4 a control or corpus scores
-the rules or refutes the naive read; 5 the hygiene battery finds it; 6 one subtraction, ratio or half of a reported
-figure; 7 a file the step alone reads.
+## Hidden factor record
 
-| Rung | 1 Filed | 2 Schema | 3 Reflex | 4 Bench | 5 Hygiene | 6 Linear | 7 Second use | Verdict |
-|---|---|---|---|---|---|---|---|---|
-| 0 one-factor and industry copula, one average loss: Kestrel Lane | MP-RN-2 4.2 | yearly and sector rates | yes, the field's copula | the yearly counts back-test | no | a fit | none | readable |
-| 1 the house's year in the dependence, one average loss: Kestrel Lane | 4.2 "as the record shows" | the deal file's buyers | yes, the arch 6 runs took it | the house-year counts | no | a cluster fit | the deal file | readable |
-| 2 recovery tied to the economy's year: Kestrel Lane | 4.2 "and so is what lenders recover" | the default dates | yes, the downturn link | the slope reads flat | no | one regression | none | readable |
-| 2b recovery read off the co-defaults among the note's own loans: Ostvale | 4.2 "and so is what lenders recover" | the deal file's buyers and the workout file | a group-by of recovery on co-defaults | the record's table reproduces | no | a table carried to the simulation | the workout file | readable |
-| 3 (decisive) recovery tied to the house-year's inferred shock across its whole book, carried into the simulation | no sentence names a house, a book, a year shock or a cluster | no column joins a recovery to a house-year or a house's book | no: the reflexes are one average, the downturn link and the note's own co-defaults | nothing scores it; the average reconciles and the in-portfolio table reproduces | no | not linear: a posterior per house-year, a regression calibration and a joint simulation | the workout file is the loss given default's source | silent |
+| Factor | Real or constructed | Only in deciding units | Found by | Fix depth | Verdict |
+|---|---|---|---|---|---|
+| defaults clustering by sponsor house-year | constructed, simulated from each house's yearly decision | no: across all 80 houses and every year; Ostvale's 63 houses and Kestrel Lane's 7 alike | a targeted query (same house-year pairs, after rebuilding ownership from the deal file) | modelling (a random-effect layer in the copula) | keep: R1, earned by careful runs |
+| recovery falling in the house's bad year | constructed, simulated from the same decision | no: every house's defaults in both halves of the closed cohorts | modelling (each house-year's latent shock inferred across its whole book; the co-default table shows a gradient only at the book's grain) | modelling (a regression calibration on the closed cohorts, carried into the simulation) | keep: R3, one of several results |
+| five sectors' loading on the economy's year | constructed, simulated from each industry's tie to the cycle | no: every company of those sectors across 19 years and 80 houses (Kestrel Lane holds some too) | a targeted query (sixteen sectors read against the year) then modelling | modelling (a loading per sector by marginal likelihood, net of the sector-years, carried with the house-state recovery; larger independent sector factors miss the joint swing) | keep: R2, one of several results |
+| the clustered defaults' long, still-open workouts | constructed, simulated from the same decision | no: every house's recent defaults | modelling (the open workouts read against their house-years) | modelling (the link fitted on the closed cohorts, MP-RN-2 4.1 keeping the open ones) | keep: inside R3 |
+
+## Effort test
+
+| Result | Quick pass | Careful but hurried | Thorough |
+|---|---|---|---|
+| R1 the house-year's share of each standing | Missed | Right | Right |
+| R2 Ostvale's loading on the economy's year | Missed | Partly | Right |
+| R3 recovery per unit of the house-year's shock | Missed | Missed | Right |
+| R4 Kestrel Lane's five-year chance of loss | Missed | Missed | Right |
+| R5 Ostvale's five-year chance of loss | Missed | Missed | Right |
+| R6 the recommendation | Missed | Missed | Right |
+| R7 the subordination for 1 and 0.5 per cent | Missed | Missed | Right |
+| R8 the chance by each year end | Missed | Missed | Right |
+| R9 each portfolio's expected credit loss | Partly | Partly | Right |
+| Roughly | 0.5 of 9 | 2 of 9 | 9 of 9 |
+
+Measured by: .claude/skills/stumping/effort.py on generator/effort.json
+Largest single hint: "defaults and recoveries cluster in a sponsor house's year, and five sectors load on the economy"; rescues 4 of 9 results
+Pair estimate: 24.5
+
+## Data provenance
+
+Source: generated by task9/generator from a simulated process (world.py, pack.py): sponsor houses raising funds,
+  funds buying and selling companies, each company's loans and their quarterly reports to a lender consortium, the
+  defaults and their workouts, and two managers drawing their tapes from the companies alive at the end of 2026.
+Behaves like the real thing: default rates graded by rating and peaking three to four years after a buyout; yearly
+  default rates spiking in the economy's bad years (2009, 2020, 2012, 2023) and the capital-goods and freight chain
+  spiking hardest; a sponsor's companies failing together; recoveries falling and workouts lengthening in the
+  sponsor's bad years, with the latest workouts still open; resubmitted quarters, a 2019 change of codes, LEIs only
+  from 2012; each matches the published behaviour of European sponsor-backed mid-market loans.
+Genuine patterns: (1) default rates by rating and by years since the buyout (a seasoning hump); (2) the economy's
+  year, weighing by sector; (3) sponsor house-year clustering of defaults; (4) recovery falling with the house's year
+  and workouts lengthening; (5) secondary buyouts, refinancings and exits resetting ownership; (6) currencies and
+  margins by rating.
+Problems by process: resubmitted loan-quarters (lenders correcting drawn amounts or filing defaults late); the 2019
+  vocabulary change; LEIs missing before mid-2012 and for some lenders; recoveries in per cent or fractions by lender;
+  open workouts with no recovery yet; buyers named by fund, house or co-invest vehicle; withdrawn deals and add-ons in
+  the deal file; tapes in five currencies on two rating scales and two industry schemes.
+Breadth: 16,967 company-years over 19 years, 16 sectors and 80 houses
+  (493 funds); 74,356 loan-quarter rows; 537 workouts; 9,179 deals; two tapes of 98 and 100 loans;
+  thirteen files, two of them distractors; deciding which sectors, houses and years carry the tail is work.
+
+## Template check
+
+Chain signature: modeling, exploration-triage, investigation-loops, forecasting, forecasting, synthesis, uncertainty,
+  forecasting, forecasting
+Question form: whether (buy one of two notes or neither), the deliverable by type (a memo)
+Nearest build: task4 (allocation-sensitivity, measurement: a pilot model carried to duties under a battery limit) and
+  task7 (scenarios-flip, modeling); neither prices a tail through two shared shocks at different grains, and no
+  build on file has this chain with a distribution cut. Abstraction sentence tried against the nearest Mark build
+  (mark135, a variance of a weighted sum from asynchronously struck components): not writable, the deciding
+  quantities here are tail chances set by two dependence structures and a state-dependent severity.
 
 ## Semantic fork table
 
-| ID | Term or convention | Golden reading | Alternative | Call under it | Ruled out by |
-|---|---|---|---|---|---|
-| SF1 | any loss in the five years | the loss at the end of 2031 | a loss in any one year | same figure | cumulative losses never fall (asserted) |
-| SF2 | the portfolio | static, repaid loans replaced by identical ones | runoff | filed | MP-RN-2 3.2 (asserted) |
-| SF3 | a default's loss | its own shortfall by the end of its workout, booked at default | one average | moves the call | MP-RN-2 3.4 and 4.2 (asserted) |
-| SF4 | dependence | standings correlated as the record shows, recoveries with them | standings only | moves the call | MP-RN-2 4.2 (asserted) |
-| SF5 | conditions | the record's | stressed | filed | MP-RN-2 4.1 (asserted) |
-| SF6 | the FX date | 31 December 2026 | 30 December | same figures | asserted |
-| SF7 | default | Lenderbase's | rating-agency default | filed | MP-RN-2 3.3 (asserted) |
-| SF8 | the link's sample | the 2008 to 2019 cohorts, all closed | every closed workout | same call | asserted |
-| SF9 | the age clock | years since the buyout | loan age | same call | asserted |
-| SF10 | the sponsor grain | house-year | fund-year, lasting | fits worse | log-likelihood (asserted) |
-| SF11 | choosing between two | the lower chance | the higher spread | filed | MP-RN-2 2.2 (asserted) |
-| SF12 | subordination needed | the five-year loss quantile, rounded up | to nearest | same figures | the prompt; asserted |
-| SF13 | weights | euro par | loan count | same call | asserted |
-| SF14 | default chance | one-year | cumulative | filed | MP-RN-2 4.2 (asserted) |
-| SF15 | relending | to the same borrower | new borrowers | filed | the term sheets (asserted) |
-| SF16 | ageing | borrowers and loans grow older | frozen at the tape | same call | MP-RN-2 3.2; asserted |
-| SF17 | open workouts | in the record | dropped | same call | MP-RN-2 4.1 (asserted) |
-| SF18 | a defaulted loan | leaves, not replaced | replaced | filed | MP-RN-2 3.4 (asserted) |
-| SF19 | the house shock's basis | against the sector-year's rates | against the year's rates | same call | asserted |
-| SF20 | the year's shock in the link | in | out | same call | asserted |
-| SF21 | recovery units | per cent and fractions as one share | mixed | same figures | asserted |
-| SF22 | the co-defaults a recovery moves with | the house-year's across its whole book | the note's own loans | moves the call (Ostvale) | the record's counts run over whole books (V4) and one default recovers once whichever note holds it; asserted (R7, R8) |
-| SF23 | expected credit loss | the mean five-year loss as a share of par, each default's own shortfall | a note's expected loss | filed | the prompt and MP-RN-2 3.4 and 3.5 (asserted) |
-
-## Ladder
-
-| Rung | Construction | Answer | Dies to |
-|---|---|---|---|
-| 0 | one-factor and industry copula, one average loss of 42.7 per cent | Kestrel Lane at 0.1 per cent | the record's same-year house pairs |
-| 1 | the house's year in the dependence, one average loss | Kestrel Lane at 0.7 per cent (under the pair-moment dependence 0.67) | the clustered defaults' recoveries |
-| 2 | recovery tied to the economy's year (-0.061 per unit) | Kestrel Lane at 0.2 per cent | the house-year's recoveries |
-| 2b | the record's co-default table carried to each note's own loans (cells; a line in the count) | Ostvale at 0.1 per cent, Kestrel Lane 1.8 (line: 0.8 and 2.0) | the grain: the counts run over whole books of a median 13 companies and Ostvale holds 2 of each |
-| 3 (golden) | recovery tied to the house-year's inferred shock (0.298 per unit) over the closed cohorts, the shocks carried into the simulation | neither: Kestrel Lane 3.9, Ostvale 7.8 | |
-
-- **Margins.** The golden puts Kestrel Lane at 3.9 per cent and Ostvale at 7.8 (asserted at 1.5 times the bar);
-  every sound house-state route keeps both over 1.5 per cent; every rung without a house-linked recovery
-  keeps Kestrel Lane under 0.7 per cent; rung 2b keeps Ostvale under 0.8.
-- **Position.** Three layers act jointly: the house's year in the dependence alone files Kestrel Lane, the recovery
-  link needs it, and the link read at the note's grain files Ostvale; only the house-year's state, carried as a
-  shock, files neither.
-- **Worth.** The decisive step moves the call from Kestrel Lane (or Ostvale) to neither and Kestrel Lane's chance by
-  about 6 times against the arch 6 route.
+| ID | Term or convention | Readings | Golden | Ruled out by |
+|---|---|---|---|---|
+| SF1 | any loss in the five years | the loss at the end of 2031; a loss in any one year | the end of 2031 | same call: cumulative losses never fall (asserted) |
+| SF2 | the portfolio | static with repaid loans replaced; runoff | static | MP-RN-2 3.2 |
+| SF3 | a default's loss | its own shortfall by the end of its workout; one average | its own | MP-RN-2 3.4 and 4.2 |
+| SF4 | dependence | standings correlated as the record shows, recoveries with them; standings only | both | MP-RN-2 4.2 |
+| SF5 | conditions | the record's; stressed | the record's | MP-RN-2 4.1 |
+| SF6 | the FX date | 31 December; 30 December | 31 December | same call (asserted) |
+| SF7 | default | Lenderbase's; an agency's | Lenderbase's | MP-RN-2 3.3 |
+| SF8 | the link's sample | the default years whose workouts have all closed (2008 to 2019); every closed workout | the fully closed default years | MP-RN-2 4.1 ("what lenders recover is read from the default years whose workouts have all closed", asserted against the workout file); the open workouts are the clustered defaults' long ones (V2), so every closed workout would lighten every loss |
+| SF9 | the age clock | years since the buyout; loan age | years since the buyout | same call; the buyout clock fits better (asserted) |
+| SF10 | the sponsor grain | house-year; fund-year; lasting | house-year | the log-likelihood (asserted) |
+| SF11 | choosing between two | the lower chance; the wider margin | the lower chance | MP-RN-2 2.2 |
+| SF12 | subordination needed | the five-year loss quantile rounded up; to nearest | rounded up | the prompt |
+| SF13 | weights | euro par; loan count | euro par | same call (asserted) |
+| SF14 | default chance | one-year; cumulative | one-year | MP-RN-2 4.2 |
+| SF15 | relending | to the same borrower; to new borrowers | the same borrower | the term sheets |
+| SF16 | ageing | borrowers and loans grow older; frozen at the tape | they age | MP-RN-2 3.2; same call either way (SF16b) |
+| SF17 | open workouts | in the record as defaults; dropped | in the record as defaults | MP-RN-2 4.1 ("a default whose workout is still open counts as a default") |
+| SF18 | a defaulted loan | leaves, not replaced; replaced | leaves | MP-RN-2 3.4 |
+| SF19 | the house shock's basis | the sector-year's rates; the year's rates; each sector's rate moved by its loading on the year's shock | the sector-year's | same call (every member of the band) |
+| SF20 | the year's shock in the link | in; out | in | same call (asserted) |
+| SF21 | recovery units | per cent and fractions read as one share | one share | the values (a 0 to 1 share in every row) |
+| SF22 | the co-defaults a recovery moves with | the house-year's across its whole book; the note's own loans | the whole book | the grain (V4): the counts run over books of a median 12 companies and Ostvale holds 2 of each house's |
+| SF23 | expected credit loss | the portfolio's mean five-year loss over par; the note's expected loss | the portfolio's | the prompt and MP-RN-2 3.4 and 3.5 |
+| SF24 | each sector's loading | by likelihood; by pair moments; in two groups | by likelihood | same call (every member of the band) |
+| SF25 | the house's share | latent scale; pooled scale; pair moments | latent scale | same call (every member of the band) |
+| SF26 | the sectors' swing | a loading on the shared year; larger independent sector factors | a loading on the shared year | the five sectors' yearly rates move together (0.63 against 0.09 for the rest, V5), which independent factors cannot produce; they buy Ostvale |
+| SF27 | the two-group threshold | a loading above 0.10; any cut between the five and the rest | above 0.10 | same call; the per-sector fit needs none |
+| SF28 | each note's subordination | as its term sheet states (15.0 and 16.5); the request's 15.0 for both | as stated | the term sheets (Class A par less the stated enhancement, asserted) |
+| SF29 | the tapes' rating basis | at origination; current at the cut-off | at origination | both tapes' headers name it, and every tape loan the record holds carries the same rating as Lenderbase's rating_at_origination (asserted) |
 
 ## Closure table
 
-| Axis | Reading here | Move |
-|---|---|---|
-| 1 Population | each note's tape | filed, MP-RN-2 3.1 and 3.2 |
-| 2 Unit of account | a note | filed |
-| 3 Attribution window | 2027 to 2031 | filed, MP-RN-2 2.1 |
-| 4 As-of dating | the extracts of February 2027 | C1 |
-| 5 Version basis | MP-RN-2 | filed |
-| 6 Denominator | par | filed, 3.5 |
-| 7 Weighting | euro par | filed (SF13) |
-| 8 Window length | five years | filed |
-| 9 Boundary inclusivity | below 1.0 per cent | filed, 2.1 |
-| 10 Rounding path | one decimal for chances, whole per cent rounded up for subordination | the prompt (SF12) |
-| 11 Tie-break | the lower chance | filed, 2.2 |
-| 12 Maturity and censoring | open workouts in the record, the link on the closed cohorts | filed 4.1; C1 (SF8, SF17) |
-| 13 Order of operations | conform, link, fit, simulate | C1 |
-| 14 Row order | latest submission | C1 |
-| 15 Duplicate resolution | latest submission of a loan-quarter | C1 |
-| 16 Identity normalisation | LEI or name | C1 |
-| 17 Netting against gross | loss net of recovery | filed, 3.4 |
-| 18 Dimensional units | recoveries as shares | C1 (SF21) |
-| 19 Code and status semantics | the 2019 codes | C1 |
-| 20 Integerisation | none | n/a |
-| 21 Clause scope | MP-RN-2 2 to 4 | filed |
-| 22 Forward window contents | the record's conditions | filed (SF5) |
+| Axis | Closure |
+|---|---|
+| 1 | population: each note's tape, MP-RN-2 3.1 and 3.2 |
+| 2 | unit of account: a note |
+| 3 | attribution window: 2027 to 2031, MP-RN-2 2.1 |
+| 4 | as-of dating: the extracts of February 2027 (C1) |
+| 5 | version basis: MP-RN-2 |
+| 6 | denominator: par, MP-RN-2 3.5 |
+| 7 | weighting: euro par (SF13) |
+| 8 | window length: five years |
+| 9 | boundary inclusivity: below 1.0 per cent, MP-RN-2 2.1 |
+| 10 | rounding path: one decimal for chances and losses, whole per cent rounded up for subordination (the prompt; SF12) |
+| 11 | tie-break: the lower chance, MP-RN-2 2.2 |
+| 12 | maturity and censoring: open workouts in the record as defaults, recovery read from the default years whose workouts have all closed (MP-RN-2 4.1; SF8, SF17) |
+| 13 | order of operations: conform, link to houses, fit, simulate (C1) |
+| 14 | row order: the latest submission (C1) |
+| 15 | duplicate resolution: the latest submission of a loan-quarter (C1) |
+| 16 | identity normalisation: LEI, else the name through the LEI extract (C1) |
+| 17 | netting against gross: loss net of recovery, MP-RN-2 3.4 |
+| 18 | dimensional units: recoveries as shares (SF21) |
+| 19 | code and status semantics: the 2019 codes (C1) |
+| 20 | integerisation: none |
+| 21 | clause scope: MP-RN-2 2 to 4 |
+| 22 | forward window contents: the record's conditions (SF5) |
 
 ## Literal reader
 
 Executed word for word, MP-RN-2 2.1 to 4.2 price each note's chance that its static portfolio's losses, each default
-losing what its own workout does not recover, pass its subordination by the end of 2031, with default and recovery from
-the record of comparable loans, its open workouts included, standings Gaussian and correlated, and recoveries with
-them, as far as that record shows; the step the text leaves open is how the record shows recovery moving with the
-standings, and every route that reads it against the house-year that clusters the defaults, at the grain the record
-measures it, files neither, while one average and the economy's year price the clustered defaults at an ordinary
-recovery and a note's own co-defaults price a thin slice of a house as lone defaults. SF1 to SF23 close every term.
-
-## Oracles
-
-None. No file states a note's chance, a loss given default by house or year, or a recovery link; the EURIBOR curve
-and the matching portfolio's cash flows (distractors) rank nothing; the term sheets offer the subordination only.
-
-## Ask sheet
-
-Asks ride the joint tail and the recovery the house's state sets: each note's five-year chance (2), its portfolio's
-expected credit loss (2), its chance by each year end (10) and its subordination for 1 and 0.5 per cent (4), eighteen
-figures with the call. The expected loss carries the recovery link even where Ostvale's spread-out tail does not: one
-average recovery files 5.0 and 7.7 per cent, the note's own co-defaults 5.0 and 4.9, the
-golden 5.7 and 8.2. The second judgment on the asks is how each house-year's
-shock is read (against the sector-year's rates, the golden, or the year's alone, which lands the call with every
-figure lower) and how its slope is fitted (the closed cohorts, or every closed workout).
-
-| Ask | Figures | Deep-step output it reads | Second judgment | Shallow run against the golden | Landed run's risk | Mess on its path |
-|---|---|---|---|---|---|---|
-| 1 the call | 1 | the joint tail | the grain | Kestrel Lane (or Ostvale at rung 2b) | none | the code change |
-| 2 five-year chances | 2 | the joint tail | the shock's basis | both differ | both lower | the recoveries' units |
-| 2b expected credit losses | 2 | each default's recovery at its house's state | the link's sample and basis | both differ | both lower | the recoveries' units |
-| 3 chances by year end | 10 | the joint tail | the shock's basis | most differ | most lower | none |
-| 4 subordination needed | 4 | the loss quantiles | the shock's basis | all differ | some lower | none |
-
-| Ask figure | Golden | Shallow (one average loss) | Deeper (own co-defaults) | Cracker (house shocks against the year's rates) |
-|---|---|---|---|---|
-| the call | neither | miss | miss | keep |
-| five-year chances, Kestrel Lane and Ostvale | 3.9 and 7.8 | miss | miss | miss |
-| expected credit losses, both portfolios | 5.7 and 8.2 | miss | miss | miss |
-| chances by year end, 2027 to 2031, both notes | ten figures | keep 1 of 10 | keep 1 of 10 | keep 4 of 10 |
-| subordination for 1 and 0.5 per cent, both notes | four figures | keep 2 of 4 | miss | keep 3 of 4 |
-
-- Shallow keep: 16.7 per cent of ask weight (the arch 6 route the platform's runs took; the default path, the
-  field's copula without the house, keeps 22.2; the free cells are Ostvale's 2027 and 2028 chances and its two
-  subordination figures, which every route shares because Ostvale's spread-out tail barely moves with the recovery
-  link).
-- Pair ceiling: 38.3 (the landed run C = 54.4, the shallow run S = 22.2; the deeper run D = 22.1, a
-  landed and deeper pair 38.2).
-- Measured by: generator/ceiling.py on the cut pack.
+losing what its own workout does not recover, pass its subordination by the end of 2031, with default and recovery
+from the record of comparable loans, its open workouts included, standings Gaussian and correlated and recoveries with
+them as far as that record shows. What the text leaves open is how the record shows them correlated; every route that
+reads the standings against each sector's swing with the year and the house's year, and recovery against the house's
+year at the grain the record measures it, files neither; one average recovery, a downturn link, one pooled loading,
+larger independent sector factors and a note's own co-defaults each file one of the notes. SF1 to SF29 close every
+term; the prompt pins every result's unit and rounding.
 
 ## Prompt contract
 
-What the author's voice rewrite may not drop or change:
-- The question: whether the fund should buy Kestrel Lane Credit Partners' senior note or Ostvale Capital's for its
-  matching portfolio, or neither, under the 1 per cent test and the lower-risk rule.
-- Deliverables: ic_note_senior_notes_2027.docx (the recommendation, each note's five-year chance, its portfolio's
-  expected credit loss, the subordination for 1 and 0.5 per cent, the exceedance chart with both notes' subordination
-  marked) and senior_note_loss_by_year.csv
-  (each note's chance of a loss by each year end 2027 to 2031).
-- Units and rounding: chances in per cent to one decimal; expected losses in per cent of par to one decimal;
-  subordination in whole per cent of par rounded up.
-- Never add: a sponsor, a house, a recovery, a correlation, a cycle, a downturn, a cluster, a book, a slice, or any
-  method word.
-
-## Pre-ship check
-
-- The Sulfur standard re-read against the built pack: the call turns on the recovery the house-year's state sets,
-  carried at the house's grain (checks.py R3b, R4, R6, R7, R8); every route without a house-linked recovery files
-  Kestrel Lane and its copula back-tests on the record (R3a, R3d, R3e, B1, 17 of 19 years inside the band); the
-  record's co-default table carried to each note's own loans files Ostvale (R7), the same table over each house's
-  whole book files neither (R8), and the grain that separates them is in the record (V4); no document, column or
-  sentence names the house, the book or the link (R1, D1); the one-fact hint executed literally misses the call (R5);
-  the closed-workout link, the shock's basis and the dependence estimator move every figure and keep the call (SF8,
-  SF19, SF20, K13).
-- Mess neutral: the conformed pack gives the truth's 16,712 company-years exactly (K1), no loan unlinked (K2), the
-  houses partition the panel as the truth's do (K3), the 2008 to 2019 workouts all closed (K4), recoveries in per cent
-  and fractions read as one share (SF21).
-- Determinism: twenty-three forks closed and asserted (SF1 to SF23); the band refits the link under two default-rate
-  tables, two dependence estimators and three shock bases (Kestrel Lane 1.5 to 4.0 per cent,
-  Ostvale 2.3 to 7.8), every member over the test (K13); the verifier's independent road (pandas, a
-  cohort table, pair moments, its own Gauss-Hermite shocks) lands on the call inside the band (Kestrel Lane
-  1.60, Ostvale 2.40); the world's own process run forward over the record's years puts the two notes at 2.97 and
-  4.51 per cent, inside the band and over the test (T1).
-- The pack (final cut 3ec3c9ed): thirteen files in three categories (spreadsheet, text, code); the Lenderbase CSV
-  73,066 rows, the Dealtrail CSV 8,858 rows; two distractors named only in metadata.json; every file's source, pull
-  date and licence in metadata.json; two builds byte-identical over eighteen files; the container gate
-  (audit_containers.py) 0 FAIL, 0 WARN over the pack, the golden and both zips.
-- The goldens: exactly the two requested files; one set of numbers across the note, the CSV, the chart and the four
-  blocks (figures_check.py).
-
+The voice rewrite may not drop or change: the question (Kestrel Lane Credit Partners' senior note, Ostvale Capital's,
+or neither, for the matching portfolio, under the 1 per cent test with the lower-risk one when both qualify); the
+memo for the investment committee with the recommendation, each note's chance of any loss over 2027 to 2031, its
+portfolio's expected credit loss over them, the subordination for chances of 1 and 0.5 per cent, a table of each
+note's chance by each year end from 2027 to 2031 and the exceedance chart to 30 per cent of par with both
+subordinations marked; the rounding (chances and expected losses to one decimal in per cent, subordination in whole per cent
+of par rounded up). It must never add a sponsor, a house, a sector, the economy, a cycle, a recovery, a correlation,
+a loading, a workout, a file name or anything about who is asking.
 ## Stage 4
 
-leak.py on target.zip bed0980b and again on the final cut 7c395ae0 (--asof 2027-02-17): REVIEW, no LEAK, the same
-lines both times. The main thread's rulings, one line each:
-
-- Sweep 3, golden figures in the documents: 15.0 and 13.0 are the subordination each manager offers, an input the
-  call reads; 2.5 is Kestrel Lane's obligor limit; 1.0, 2.2 and 3.5 are MP-RN-2's test and section numbers; the
-  standard shares the call's words because it states the test the call answers; harmless.
-- Sweep 4, stump-paragraph terms in the term sheets and MP-RN-2 (recovery, default, record, workouts, sponsor,
-  companies, million): "sponsor" appears only in "sponsor-backed", the asset class's own name; MP-RN-2 3.4, 4.1 and
-  4.2 file the WHAT (each default's own loss over its workout, the record with its open workouts, standings and
-  recoveries correlated as the record shows); no sentence names a house, a book, a grain, a shock or a link;
-  harmless.
-- Sweep 9, dates after the setting: Lenderbase's 19,066 are its maturity_date column alone (no submission, report or
-  resolution date passes the pulls), the tapes' are maturities, the EURIBOR file's its forward dates; harmless.
-- Sweep 11, the prompt's shell quota and its two files named up front: voice warnings only; harmless.
-
-guard.py on the final cut 7c395ae0: heart WARN (objective and Gate G overuse; nearest driver this slot's own architecture 6 at
-0.07), not BLOCK; surface exit 0 with one promoted pair, task9 against task67, adjudicated side by side: task67 is a
-supply-chain duty-establishment forecast priced from a fixed-plus-variable cost structure on delivery extracts; it
-meets this build only on the card labels (gap objective, pattern G2, Gate G forecasting), with another domain, data
-structure and driver; not a duplicate. "Ireland Collateral" is PDF text ("incorporated in Ireland" running into the
-next row), not a persona.
-
-Leak reader, read 1 (isolated, Sonnet at medium, prompt and pack only, on bed0980b): question 1 none for the decisive step;
-the nearest sentences it found, MP-RN-2 3.4, 4.1 and 4.2, "name the model family (Gaussian latent-factor default and
-recovery, correlated, with open workouts included)", the filed WHAT the literal reading needs (without 4.2's
-recovery clause the golden's link is a method nothing in the pack forces, the reason architecture 5 came back), and
-nothing on which shock recovery moves with or at which grain; question 2 none; question 3 none (the sector crosswalk
-a vendor's utility); question 4 none; question 5 every MP-RN-2 sentence it quoted executes to the golden's
-construction (portfolio date, static pool with ageing, ECB rate of the cut-off, Lenderbase's defaults, each default's
-own loss booked at default, the record with its open workouts, Gaussian standings correlated and recoveries with them);
-question 6 an analytical choice (the default and recovery correlation estimated from the record, the open workouts),
-with 4.2 read as writing down the model's form, ruled as above. It took Dealtrail and the LEI extract for decoys. Its
-one finding, fixed: Ostvale's term sheet sized its Class A notes at 85 per cent of par against the 13.0 per cent
-enhancement it states (EUR 1,575.0 million on 1,853 million of collateral); both term sheets now size the notes as par
-less the stated enhancement, asserted (K19). Not changed: the standard's technical register (a fund's standard for
-rated notes states its model), the Ostvale sentence on the thinner enhancement and wider margin (a term sheet answering
-a request for proposals), the crosswalk.
-
-Leak reader, read 2 (isolated, Sonnet at medium, prompt and pack only, on the final cut 7c395ae0): question 1 none (the
-nearest, MP-RN-2 4.2, "hands over the model family (Gaussian-copula, correlated recovery) but not the estimation");
-questions 2 to 4 none; question 5 every MP-RN-2 sentence executes to the golden's construction; question 6 an
-analytical choice ("the standard states the model's form but not how to estimate it, so this is not rule
-application"), the cleaning texture, not the stump; both term sheets internally consistent (Kestrel Lane EUR 1,597.5
-million on about 1,879 million at 15.0 per cent, Ostvale 1,612.1 million on 1,853 million at 13.0); every sweep line
-harmless; realism: "reads like a real sourcing exercise", the two tapes' schemas and scales different, the ECB file a
-genuine download's thirty currencies.
-
-Determinism judge, pass 1 (isolated thread, Sonnet at medium, spawned by the main session from the judge agent's brief,
-on bed0980b; determinism_check_report_pass1.md): DETERMINISTIC on the call, FIX_NOW. Gate G method_or_model_selection
-(the dependence structure and the recovery link, with censoring), analytical_non_defect, surface_read_dependency no,
-sole_data_defect no; Gate H domain pass, layers pass, decisive_step analytical, a chain of five, the nearest one-fact
-hint ("defaults and recoveries cluster by sponsor house-year") shortening the task without making it routine. It
-reproduced the 578 defaults (345 "D" and 233 "Defaulted"; 500 workouts closed, 78 open), the 80 houses, both tapes
-(98 loans with seven houses of 14, 100 with 66 houses of at most two), the same-house same-year pair count (665) and
-the recovery gradient by co-defaults; it ruled every rival that buys Kestrel Lane or Ostvale out by named data (the
-whole-book counts against Ostvale's two loans a house) and the closed-cohort fit a licensed choice. Findings and the
-one-pass fix:
-1. Ostvale's Class A notes at 85 per cent of par against its 13.0 per cent enhancement (the leak reader's finding):
-   fixed as above (K19); the call, every figure and the asks unchanged, since the golden always read 13.0.
-2. The one-decimal figures come from one estimator inside the stated band: judged against the band and the call they
-   are deterministic; a sound run on another estimator can miss a decimal. Not changed: the band stands in critical
-   component 4 and the note's Pinned line, every member over the test (K13), and the world's own process sits inside
-   it (T1).
-3. Its own reading of the co-default table (68.5 per cent alone against 43.4 with three or more, "unweighted") did not
-   match 74.9 and 44.1; the golden's cells reproduce exactly with the co-defaults counted on the company-year panel or
-   in the workout file over the 2008 to 2019 cohorts; critical component 2 now pins the reading (a default's sponsor
-   house in the calendar year of its default).
-
-Determinism judge, pass 2 (the re-judge; isolated thread, Sonnet at medium, on the final cut 7c395ae0;
-determinism_check_report.md): DETERMINISTIC, APPROVE. Gate G method_or_model_selection, analytical_non_defect,
-surface_read_dependency no; Gate H domain pass, decisive step analytical, a chain of five, no single hint making it
-routine. Its own road reproduced the call and put every figure inside the stated band: recoveries in mixed units read
-as one share (the 2008 to 2019 closed loss 43.0 per cent against 42.7), a lone default recovering 72.3 per cent and
-one with three or more co-defaults 44.3 (against 74.9 and 44.1, its house reading finding 79 houses with defaults),
-recovery no lower in crisis years, both term sheets reconciling to par less the enhancement, its simulation at 40,000
-to 150,000 paths putting Kestrel Lane at 3.2 to 3.3 per cent and Ostvale at 6.7 to 6.8 (expected losses 5.6 and 7.9,
-the year-end chances tracking the CSV), the one-average route buying Kestrel Lane (0.57 against 5.3) and the
-own-loan co-default route buying Ostvale (0.17 against 1.4), "an analytical error the data separates out". Residual:
-the one-decimal chances and whole-per-cent subordinations depend on the estimator (its Kestrel Lane subordination 19
-and 21 against 20 and 22, Ostvale's 17 and 18 matching); none of its variants crossed the 1 per cent line. Not
-changed: the asks stay at the golden's estimator with the band stated in critical component 4.
-
-Container gate (reduce-house-fixes H1, audit_containers.py, filed as a ship gate after this build's first READY
-commit): 36 FAIL on 7c395ae0 (openpyxl's dialect, inline strings and build-clock entries in the three workbooks,
-python-docx's template parts in the golden note, one clock across each zip's entries). The generator now passes
-every workbook and the note through the house container writer (postprocess.py: shared strings, Excel's and Word's
-part order and dialect, each file's own creator, company and stamps) and cuts both zips at each file's own save time
-in Kadeweg's clock, the exports at the pulls that wrote them; 0 FAIL, 0 WARN on the final cut 3ec3c9ed. Every cell,
-sentence and figure is unchanged (each workbook's cells read identically before and after; figures.json
-byte-identical), so the leak reads and the judge's passes stand on it.
+- Leak reader (isolated, Sonnet, medium, on target.zip 29757c9b with a fresh prompt.txt): no LEAK. Questions 2 to 4
+  none (the term sheets give the offered terms only; the sector crosswalk reads as the vendor's utility for the two
+  tapes; 15.0, 17.0 and the 1.0 per cent test read as terms). Questions 1 and 6 name MP-RN-2 4.2 as the one sentence
+  that names the model family, leaving open "the estimation of PD, correlation and LGD": it names no shock, grain,
+  sector loading or owner, so it closes forks SF4 and SF14 and decides no result; kept, as the two reads of the
+  single-step form ruled it. Question 5's sentences (2.1, 2.2, 3.1 to 3.5, 4.1, 4.2) each execute to the golden's
+  construction. The reader took the deal file for a distractor, so nothing announces the sponsor-house strand. Its
+  one realism note (the standard is unusually well specified) is answered by the fork 4.2 closes. Every sweep line is
+  ruled harmless in `leak_check_report.md` (`## Solver's-eye read`): the offered subordination, the request for
+  proposals' floor, a section number, the test's own words, and the standard's definitions of default, loss and the
+  record.
+- The prompt's deliverable set (a memo and a workbook) sat at 4 of 13 prompts on file against the 20 per cent cap;
+  the year-end chances are now a table inside the memo, the one deliverable, and the prompt gate passes clean (904
+  characters).
+- Determinism judge, pass 1 (on target.zip 29757c9b; `determinism_check_report.md`, the thread spawned from the
+  judge's brief by the main session): NOT_DETERMINISTIC, SEND_BACK, margin_or_boundary_fragility on Ostvale's side;
+  Gate G passes (method_or_model_selection, analytical_non_defect, no surface read, no sole data defect), Gate H
+  borderline. Read against the gate table, the failing gate is C (`underspecified_objective`), which spends no
+  architecture; every finding repaired in one generator pass:
+  - the recovery sample: MP-RN-2 4.1 said only that the open workouts were in the record, so a link fitted on every
+    closed workout (Ostvale 0.77 per cent at 17.0, buying Ostvale) was a defensible reading. 4.1 now reads "a default
+    whose workout is still open counts as a default, and what lenders recover is read from the default years whose
+    workouts have all closed", which executes to 2008 to 2019 on the workout file (every later year has open
+    workouts; SF8 asserts it). The quick pass and its route lose that window's average (41.0 per cent), not every
+    closed workout's (37.0).
+  - the margin: the weakest sound estimator's 1 per cent loss quantile for Ostvale was 17.29 per cent of par, 0.29
+    points over its 17.0 (1.15 per cent). Ostvale now offers 16.5 per cent: every sound estimator fails it by 0.79
+    points or more (band 1.5 to 3.0 per cent), and the routes that buy Ostvale still do (one pooled loading, quantile
+    16.20; larger independent sector factors, 16.00).
+  - the rating basis: both tapes now name their rating as at origination, as Lenderbase's is, and every tape loan the
+    record holds (71 of Kestrel Lane's, 60 of Ostvale's) carries the same rating in both (SF29).
+  - the bands: the five-year chances, the expected credit losses, the subordination needed and the year-end chances
+    carry the sound estimators' range in the Supplementary Questions (figures.json `ask_bands`).
+  - Gate H: the judge's best sentence names both strands. Measured on the route a run builds from it (recovery read off
+    each house-year's co-defaults across the house's whole book), it rescues R2, R4, R6 and R9, 4 of 9, in effort.py's
+    WARN band. It leaves R3, R5, R7 and R8 to the latent house-year shock, and the same sentence read at the note's own
+    loans still buys Ostvale. Both factors run across the record: the five sectors' yearly rates move together over 19
+    years and 80 houses (the judge's own 0.62 against 0.09), and same-house pairs co-default in every sector. Each
+    note's concentration is its own offer. The sector strand moves Kestrel Lane too (4.38 per cent on one pooled
+    loading against 3.7).
+  - The judge's own road was in its words cruder than the golden's (independent per-loan recovery noise, loadings and
+    default rates not fitted by likelihood). It put both notes near 1.6 per cent at its own slope (0.22 against 0.313),
+    counted 20,933 loan-years against the golden's 16,967 company-years, and ran expected losses above the golden's.
+- The repair's cut (target.zip 4a97e7b6, two builds byte-identical) clears what Gate C found. Ostvale's band is 1.5 to
+  3.0 per cent at 16.5 with the golden at 2.8; the recovery sample is filed, the rating basis named and the asks
+  banded (figures_check 0 absent; the verifier not reached). It fails two of the generator's own bar checks:
+  - R5: the judge's sentence naming both strands rescues R2, R4, R6 and R9, 4 of 9 against the house's third, at any
+    subordination. Once both strands are told in one sentence, Gate H's one-fact test fails.
+  - R7e: at 16.5, the route with recovery on the house-year's shock and one pooled loading sits at 0.90 per cent on the
+    clean truth (0.83 on the pack). That is inside the 0.8 margin the check keeps so that the sector strand is needed
+    on Ostvale's side. The two margins share about one point of par (the pooled route's 1 per cent quantile is 16.20,
+    the weakest sound estimator's 17.29), so Gate C's margin and the level-5 route structure cannot both hold with room.
+- Read against the gate table, R5 is a Gate H failure, and a Gate H failure spends the architecture (`build-pipeline`:
+  re-root in another world, with another dataset and another shell). Paused for the author's ruling: re-root as
+  architecture 8 in a new world, or retire the slot. The leak reader did not re-read the repaired documents (4.1, the
+  Ostvale term sheet, the tape headers), because the build stops here.
 
 ## Tried and rejected
 
@@ -515,3 +460,30 @@ byte-identical), so the leak reads and the judge's passes stand on it.
   either way), so no estimate of either factor moved the call decisively. Re-shaped so the textbook advantage is the
   fund-concentrated note's own (more subordination, better ratings, more industries) and only the fund-year
   dependence takes it away; the industry-concentrated note's tail barely moves under either model.
+- 2026-11-10, architecture 7 as it stood (one investigation, the sponsor house's year, carrying the call) read against
+  the client's depth scale: a solid level 4, not 5, since three of its four shortcuts landed on the same wrong call
+  (buy Kestrel Lane) and Ostvale failed on almost every route; rebuilt as a results chain with a second, independent
+  strand (each sector's loading on the economy's year) so different shortcuts land on different wrong calls.
+- 2026-11-10, the results chain's first cut kept Ostvale at 13.0 per cent subordination: with recovery tied to the
+  posterior house-year shock, the link alone already put Ostvale over the test (2.0 per cent), so the sector strand
+  decided nothing on its side; Ostvale now offers 17.0 per cent, where the link alone passes it (0.6) and only the
+  sector loadings take it over.
+- 2026-11-10, the house's share estimated by pair moments pooled over the whole record (0.29, then 0.31 sector by
+  sector) sat well under the truth's 0.40 because a pooled loading mixes the swinging sectors with the rest; replaced
+  as a band member by the moment estimator over every same-house pair on the fitted sector loadings (0.37).
+- 2026-11-10, check V2 stated on co-default counts (the open workouts' defaults having more co-defaults than the
+  closed ones) did not separate (0.42 against 0.41 a default); restated on what the censoring is about, the closed
+  cohorts' workout durations by house-year shock (the worst third 4.2 years against 3.2 for the best) and the open
+  workouts' shocks against the closed (-1.33 against -1.16).
+- 2026-11-10, the first card kept architecture 7's forcing event (purchase order), context artifact (a filed
+  standard) and prompt shape 02, and guard.py blocked each as repeating mark162 v2, task11 and task12; redrawn to the
+  allocation round (budget_or_appropriation), the managers' collateral tapes (register) and shape 10.
+- 2026-11-10, the memo plus a workbook of the year-end chances put the prompt's deliverable set (docx and xlsx) at 4
+  of the 13 prompts on file against the 20 per cent cap; the year-end chances are asked as a table inside the memo,
+  which is the one deliverable.
+- 2026-11-10, the results chain at stage 4 with Ostvale at 17.0 per cent and the recovery sample left to the analysis:
+  the determinism judge returned NOT_DETERMINISTIC (SEND_BACK on Gate C, G passing, H borderline). MP-RN-2 4.1 said
+  only that the open workouts were in the record, so a link fitted on every closed workout, which bought Ostvale (0.77
+  per cent), was a defensible reading. Separately, the weakest sound estimator's 1 per cent loss quantile for Ostvale
+  (17.29 per cent of par) cleared its 17.0 by 0.29 points (1.15 per cent). 4.1 now reads recovery from the default
+  years whose workouts have all closed, and Ostvale offers 16.5 per cent.

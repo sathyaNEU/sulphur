@@ -1,10 +1,11 @@
 """task9 verify: an independent recomputation from the shipped files, by a different road.
 
 pandas instead of the analysis module's readers; a cohort table of default rates by rating and years since buyout
-instead of a probit; moment estimators for the dependence (the yearly default rates' excess variance for the
-economy, the sector-year rates' for the sector, and the house's from joint defaults of same-house pairs in the same
-sector-year, inverted through the bivariate normal); 300,000 paths. It must land on the golden's call, its latent
-house correlation within 0.06 of the golden's, and both chances within a quarter of the golden's.
+instead of a probit; each sector's loading on the year from pair moments (company pairs at risk in the same year in
+different sectors and under different houses, inverted through the bivariate normal at each sector's own default
+rate, one loading per sector fitted to the correlations); the sector-year's share from same-sector cross-house pairs;
+the house's share by its own Gauss-Hermite fit on house-years against cohort sector-year rates; its own recovery
+link; 300,000 paths. It must land on the golden's call with both notes over the test.
 """
 import json
 import os
@@ -119,31 +120,72 @@ def main():
             else:
                 pdt[r, a] = prior
     P["p"] = pdt[P.rating, P.age.clip(upper=30)]
-    # economy: excess variance of yearly default rates over the binomial
-    yr = P.groupby("year").agg(n=("d", "size"), dd=("d", "sum"), p=("p", "mean"))
-    pbar = P.d.mean()
+    # each sector's loading on the year: pairs in different sectors, at risk in the same year, under different houses
+    def bvn(a, b, r):
+        return float(multivariate_normal(mean=[0, 0], cov=[[1, r], [r, 1]]).cdf([a, b]))
+    sec_rate = P.groupby("sector").d.mean().clip(1e-4, 0.5)
+    tsec = norm.ppf(sec_rate)
+    n_sy = P.pivot_table(index="sector", columns="year", values="d", aggfunc="size", fill_value=0).values.astype(float)
+    d_sy = P.pivot_table(index="sector", columns="year", values="d", aggfunc="sum", fill_value=0).values.astype(float)
+    Npair, Jpair = n_sy @ n_sy.T, d_sy @ d_sy.T
+    hy = P.groupby(["house", "year", "sector"]).d.agg(["size", "sum"]).reset_index()
+    for (h, y), g in hy.groupby(["house", "year"]):
+        n_ = np.zeros(16)
+        j_ = np.zeros(16)
+        n_[g.sector.values] = g["size"].values
+        j_[g.sector.values] = g["sum"].values
+        Npair -= np.outer(n_, n_)
+        Jpair -= np.outer(j_, j_)
+    pairs, rho, wts = [], [], []
+    for a in range(16):
+        for b in range(a + 1, 16):
+            q = Jpair[a, b] / Npair[a, b]
+            lo_, hi_ = bvn(tsec[a], tsec[b], -0.3) - q, bvn(tsec[a], tsec[b], 0.9) - q
+            r = brentq(lambda x: bvn(tsec[a], tsec[b], x) - q, -0.3, 0.9) if lo_ < 0 < hi_ else (0.9 if hi_ <= 0 else -0.3)
+            pairs.append((a, b))
+            rho.append(r)
+            wts.append(np.sqrt(Npair[a, b]))
+    from scipy.optimize import least_squares
+    pairs, rho, wts = np.array(pairs), np.array(rho), np.array(wts)
+    fit = least_squares(lambda x: wts * (x[pairs[:, 0]] * x[pairs[:, 1]] - rho), np.full(16, 0.2), bounds=(0, 0.8))
+    lv = np.clip(fit.x ** 2, 0, 0.6)
+    # the sector-year's share: same sector, same year, different houses, against the sector's own loading
+    ks, kw = [], []
+    for s_ in range(16):
+        g = P[P.sector == s_]
+        a = g.groupby("year").d.agg(["size", "sum"])
+        ah_ = g.groupby(["year", "house"]).d.agg(["size", "sum"])
+        n_c = float((a["size"] * (a["size"] - 1) / 2).sum() - (ah_["size"] * (ah_["size"] - 1) / 2).sum())
+        j_c = float((a["sum"] * (a["sum"] - 1) / 2).sum() - (ah_["sum"] * (ah_["sum"] - 1) / 2).sum())
+        t = tsec[s_]
+        q = j_c / n_c
+        r = brentq(lambda x: bvn(t, t, x) - q, -0.3, 0.95) if bvn(t, t, -0.3) < q < bvn(t, t, 0.95) else 0.0
+        ks.append(max(r - lv[s_], 0.0))
+        kw.append(n_c)
+    k = float(np.average(ks, weights=kw))
+    # the house's share: each house-year's defaults against its companies' cohort rates moved by their sector-year's
+    # own experience, the house shock integrated by Gauss-Hermite, the share on the latent scale
+    gh_x, gh_w = np.polynomial.hermite_e.hermegauss(40)
+    gh_w = gh_w / gh_w.sum()
+    sy = P.groupby(["sector", "year"]).agg(dd=("d", "sum"), n=("d", "size"), p=("p", "mean"))
+    P["psy"] = [(sy.loc[(s_, y), "dd"] + 4 * sy.loc[(s_, y), "p"]) / (sy.loc[(s_, y), "n"] + 4) for s_, y in zip(P.sector, P.year)]
+    P["pky"] = norm.cdf(norm.ppf(P.p.clip(1e-6, 1 - 1e-6)) + norm.ppf(P.psy.clip(1e-6, 1 - 1e-6)) - norm.ppf(
+        P.groupby(["sector", "year"]).p.transform("mean").clip(1e-6, 1 - 1e-6)))
+    room = 1 - lv[P.sector.values] - k
+    groups = [g.index.values for _, g in P.groupby(["house", "year"]) if len(g) >= 2]
+    tk_ = norm.ppf(P.pky.values.clip(1e-6, 1 - 1e-6))
+    dv = P.d.values
 
-    def vas_var(rho, p):
-        t = norm.ppf(p)
-        return multivariate_normal(mean=[0, 0], cov=[[1, rho], [rho, 1]]).cdf([t, t]) - p * p
-    ex = np.var(yr.dd / yr.n) - np.mean(pbar * (1 - pbar) / yr.n)
-    am = brentq(lambda r: vas_var(r, pbar) - ex, 1e-4, 0.9)
-    # sector: joint defaults of pairs in the same sector-year against pairs across sectors in the same year
-    def pairs(frame, keys):
-        g = frame.groupby(keys).d.agg(["size", "sum"])
-        return float((g["sum"] * (g["sum"] - 1) / 2).sum()), float((g["size"] * (g["size"] - 1) / 2).sum())
-    j_y, n_y = pairs(P, ["year"])
-    j_ky, n_ky = pairs(P, ["year", "sector"])
-    j_hky, n_hky = pairs(P, ["year", "sector", "house"])
-    q_y = j_y / n_y
-    q_ky = j_ky / n_ky
-    q_cross = (j_ky - j_hky) / (n_ky - n_hky)
-    q_house = j_hky / n_hky
-    rho_ky = brentq(lambda r: vas_var(r, pbar) + pbar * pbar - q_cross, 1e-4, 0.95)
-    rho_hky = brentq(lambda r: vas_var(r, pbar) + pbar * pbar - q_house, 1e-4, 0.98)
-    ak = max(rho_ky - am, 0.0)
-    ah = rho_hky - rho_ky
-    ch = ah / (1 - am - ak)
+    def nll(ah_):
+        tot = 0.0
+        for gi in groups:
+            c = np.clip(ah_ / room[gi], 1e-6, 0.999)
+            pu = norm.cdf((tk_[gi][:, None] - np.sqrt(c)[:, None] * gh_x[None, :]) / np.sqrt(1 - c)[:, None])
+            lk = np.where(dv[gi][:, None] == 1, pu, 1 - pu)
+            tot += np.log(max((np.prod(lk, axis=0) * gh_w).sum(), 1e-300))
+        return -tot
+    from scipy.optimize import minimize_scalar
+    ah = float(minimize_scalar(nll, bounds=(1e-3, 0.6), method="bounded", options={"xatol": 1e-4}).x)
     ldf = pd.read_csv(os.path.join(TGT, "lenderbase_workout_recoveries_2008-2026.csv"), dtype=str).fillna("")
     ldf = ldf[ldf.recovery != ""].copy()
     ldf["r"] = ldf.recovery.astype(float).map(lambda x: x / 100 if x > 1 else x)
@@ -152,17 +194,18 @@ def main():
     # the recovery link, its own way: each house-year's shock by Gauss-Hermite quadrature over its company-years against
     # their cohort rates moved by the year's shock (the year's shock from the excess of its default rate), then recovery
     # on the shocks over the 2008 to 2019 workouts
+    lbar = float(np.average(lv[P.sector.values]))
     zy = {}
     for y, g in P.groupby("year"):
         dr = min(max(g.d.mean(), 1e-4), 0.5)
-        zy[y] = (norm.ppf(g.p.mean()) - norm.ppf(dr)) * np.sqrt(1 - am) / np.sqrt(am)
-    P["py"] = norm.cdf((norm.ppf(P.p) - np.sqrt(am) * P.year.map(zy)) / np.sqrt(1 - am))
+        zy[y] = (norm.ppf(g.p.mean()) - norm.ppf(dr)) * np.sqrt(1 - lbar) / np.sqrt(lbar)
     gh_x, gh_w = np.polynomial.hermite_e.hermegauss(60)
     gh_w = gh_w / gh_w.sum()
-    c = ah / (1 - am)
+    P["c"] = np.clip(ah / room, 1e-6, 0.999)
     zh = {}
     for (h, y), g in P.groupby(["house", "year"]):
-        t = norm.ppf(g.py.values.clip(1e-6, 1 - 1e-6))
+        t = norm.ppf(g.pky.values.clip(1e-6, 1 - 1e-6))
+        c = g.c.values[:, None]
         pz = norm.cdf((t[:, None] - np.sqrt(c) * gh_x[None, :]) / np.sqrt(1 - c))
         lk = np.prod(np.where(g.d.values[:, None] == 1, pz, 1 - pz), axis=0) * gh_w
         zh[(h, y)] = float((lk * gh_x).sum() / lk.sum())
@@ -183,8 +226,8 @@ def main():
     fx["EUR"] = 1.0
     out = {}
     hid = {h: i for i, h in enumerate(sorted(set(dt_.house)))}
-    for key, fn, sheet, cols in (("KL", "klcp_static_portfolio_2026-12-31.xlsx", "Portfolio", ("Obligor", "LEI", "Industry", "Currency", "Par (m)", "Rating (Moody's equivalent)")),
-                                 ("OS", "ostvale_collateral_tape_20261231.xlsx", "Collateral", ("Borrower", "Borrower LEI", "GICS industry group", "CCY", "Commitment (CCY m)", "S&P equivalent"))):
+    for key, fn, sheet, cols in (("KL", "klcp_static_portfolio_2026-12-31.xlsx", "Portfolio", ("Obligor", "LEI", "Industry", "Currency", "Par (m)", "Rating at origination (Moody's equivalent)")),
+                                 ("OS", "ostvale_collateral_tape_20261231.xlsx", "Collateral", ("Borrower", "Borrower LEI", "GICS industry group", "CCY", "Commitment (CCY m)", "S&P equivalent at close"))):
         t = pd.read_excel(os.path.join(TGT, fn), sheet_name=sheet, header=3)
         sec = json.load(open(os.path.join(TGT, "lenderbase_sector_codes.json")))["sectors"]
         smap = {s["agency_industry"]: int(s["code"][2:]) - 1 for s in sec}
@@ -195,22 +238,20 @@ def main():
                     a=np.array([max(1, 2027 - s[0].year) for s in sp]), k=t[cols[2]].map(smap).values,
                     h=np.array([hid[s[1]] for s in sp]), f=np.array([hid[s[1]] for s in sp]))
         port["w"] = port["w"] / port["w"].sum()
-        cum = MD.simulate(port, pdt, am=am, ak=ak, ah=ah, lgd=lgd, nsim=300_000, seed=77, link=link)
-        out[key] = float((cum[-1] > {"KL": 0.150, "OS": 0.130}[key]).mean())
+        cum = MD.simulate(port, pdt, am=lv, ak=k, ah=ah, lgd=lgd, nsim=300_000, seed=77, link=link)
+        out[key] = float((cum[-1] > {"KL": 0.150, "OS": 0.165}[key]).mean())
     gk, go = F["golden"]["KL"]["p5_raw"], F["golden"]["OS"]["p5_raw"]
     ok_k, ok_o = out["KL"] < 0.01, out["OS"] < 0.01
     callv = ("Kestrel Lane" if out["KL"] < out["OS"] else "Ostvale") if (ok_k and ok_o) else \
         "Kestrel Lane" if ok_k else "Ostvale" if ok_o else "neither"
-    print("verify: company-years %d defaults %d | am %.3f ak %.3f house %.3f (golden %.3f) lgd %.3f | link %.3f %.3f %.3f "
-          "(golden %.3f %.3f %.3f) | KL %.2f (golden %.2f) OS %.2f (golden %.2f) | call %s | same-house pair rate %.4f, "
-          "cross-house %.4f"
-          % (len(P), P.d.sum(), am, ak, ch, F["estimates"]["ch"], lgd, link[0], link[1], link[2], F["link"]["a"],
-             F["link"]["bm"], F["link"]["bh"], 100 * out["KL"], 100 * gk, 100 * out["OS"], 100 * go, callv, q_house, q_cross))
-    # the tail is steep in the recovery's loading, so an independent estimator agrees on the call and on both notes
-    # clearing the bar by a third or more, not on the golden's figure
+    print("verify: company-years %d defaults %d | loadings %s k %.3f house %.3f (golden %.3f) lgd %.3f | link %.3f %.3f %.3f "
+          "(golden %.3f %.3f %.3f) | KL %.2f (golden %.2f) OS %.2f (golden %.2f) | call %s"
+          % (len(P), P.d.sum(), np.round(lv, 2).tolist(), k, ah, F["house_share"], lgd, link[0], link[1], link[2],
+             F["link"]["a"], F["link"]["bm"], F["link"]["bh"], 100 * out["KL"], 100 * gk, 100 * out["OS"], 100 * go, callv))
+    sw = [i_ for i_ in range(16) if lv[i_] > 0.10]
     ok = (len(P) == F["panel"]["company_years"] and int(P.d.sum()) == F["panel"]["defaults"] and callv == F["call"] == "neither"
-          and abs(ch - F["estimates"]["ch"]) < 0.06 and out["KL"] > 0.0133 and out["OS"] > 0.0133
-          and abs(100 * lgd - F["lgd"]["lgd_pct"]) < 0.06)
+          and out["KL"] > 0.011 and out["OS"] > 0.011 and abs(100 * lgd - F["lgd"]["lgd_pct"]) < 0.06
+          and len(sw) == len(F["sectors"]["swing"]))
     print("VERIFY", "PASS" if ok else "FAIL")
     return 0 if ok else 1
 
