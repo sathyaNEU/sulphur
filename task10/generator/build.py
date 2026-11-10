@@ -1,11 +1,14 @@
-"""task10 architecture 6: builds the pack, the golden deliverables, figures.json, submission.md and metadata.json.
-python3 task10/generator/build.py"""
+"""task10 architecture 7: builds the pack, the golden deliverables, figures.json, effort.json, submission.md and
+metadata.json.
+
+    python3 task10/generator/build.py              # into the task folder
+    python3 task10/generator/build.py --out DIR    # the same build into DIR (the rebuild gate compares two of these)
+"""
 import json
 import math
 import os
 import shutil
 import sys
-import zipfile
 
 import numpy as np
 
@@ -23,41 +26,33 @@ import postprocess as PP    # noqa: E402
 import world as W           # noqa: E402
 import writeup as WU        # noqa: E402
 
-TARGET = os.path.join(TASK, "target")
-GOLDEN = os.path.join(TASK, "golden")
-
-
 # Every reasonable variant of the golden's own choices, one at a time, by the fork it answers (the design note's
-# semantic fork table): each is run on the pack and every stated band is the range they span.
+# semantic fork table): each is run on the pack, and every stated band is the range they span.
 VARIANTS = [
-    # SF9, the cold days
-    ("days at or below 0 C", dict(below=0.0)), ("days at or below minus 1.5 C", dict(below=-1.5)),
-    ("days at or below minus 2 C", dict(below=-2.0)),
-    # SF10, the line through the share
-    ("a curved line", dict(form="quadratic")),
-    # SF11, provider or zone
-    ("zone by zone", dict(pooled=False)),
-    # SF12, the scatter
-    ("the scatter as measured", dict(net_noise=False)),
-    ("the share's own scatter as measured, times the award", dict(spread="share")),
-    ("the share's own scatter as measured, times the award, zone by zone", dict(spread="share", pooled=False)),
-    # SF13, the heating base
-    ("heating base 14 C", dict(base=14.0)), ("heating base 17 C", dict(base=17.0)),
-    # SF18, the baseline an event's megawatts are measured against
-    ("a heating slope each winter", dict(baseline="by_winter")), ("weekday levels", dict(baseline="weekday")),
-    ("the baseline scaled to the day's own level before the window", dict(baseline="same_day")),
-    # SF19, a call that was met
-    ("the calls that fell short alone", dict(estimator="short", fit_below=E.COLD)),
-    ("the calls that fell short alone, every day", dict(estimator="short")),
-    ("met calls as floors, days at or below 2 C", dict(estimator="censored", fit_below=2.0)),
-    ("met calls as floors, every day", dict(estimator="censored")),
-    ("met calls as floors, every day, a curved line", dict(estimator="censored", form="quadratic")),
-    ("megawatts fitted over every event", dict(estimator="megawatts")),
-    ("megawatts fitted over every event, zone by zone", dict(estimator="megawatts", pooled=False)),
-    # SF20, a cancelled instruction's day
-    ("a cancelled instruction's day kept", dict(cancelled_in=True)),
-    # SF22, what is available against the megawatts contracted
-    ("the three winters' own scaling with the megawatts contracted", dict(scale="measured")),
+    # SF7, the form of the mornings' temperature response
+    ("mornings on two straight lines meeting at a knee the fit chooses", dict(mform="hinge")),
+    ("mornings curved below a knee the fit chooses", dict(mform="quadratic")),
+    ("mornings on a line through the days at or below 1 C alone", dict(mform="cold")),
+    # SF8, the hours taken as the morning
+    ("the morning taken as the half-hours ending 09:00 to 15:00", dict(morning="late")),
+    # SF9, the winters behind the latest winter's demand
+    ("the two latest winters", dict(winters=["2024/25", "2025/26"])),
+    ("the latest winter alone", dict(winters=["2025/26"])),
+    ("each winter's level allowed to drift, read at 15 January", dict(trend=True)),
+    # SF10, how an evening is tied to its morning
+    ("each half-hour regressed on the day's own morning", dict(anchor="ols")),
+    # SF12, a customer's own level and the build-up's shape
+    ("a customer's own level from its latest six months", dict(conn_months=6)),
+    ("every customer on its type's level, its own months set aside", dict(conn="type")),
+    ("a build-up without a slow start", dict(conn_shape="exp")),
+    # SF15, the record a site still to come is read on
+    ("each class's record with its own provider", dict(comm="class_provider")),
+    ("each class's days late as a fitted distribution", dict(comm="lognormal")),
+    ("sites withdrawn counted as still to come in the record", dict(comm="nolost")),
+    # SF17, the share's line and the calls that were met
+    ("the share curved in temperature", dict(avail_form="quadratic")),
+    ("the share flat above 2 C", dict(avail_form="hinge")),
+    ("the calls that fell short alone", dict(censor=False)),
 ]
 
 
@@ -66,149 +61,147 @@ def r1(v):
     return 0.0 if v == 0 else v
 
 
+def r2(v):
+    return round(float(v) + 1e-9, 2)
+
+
+def pct(v):
+    return int(round(100.0 * float(v)))
+
+
+def band_mw(vals, gold, pad=0.1, floor=0.2):
+    lo = math.floor((min(vals) - pad) * 10 + 1e-9) / 10.0
+    hi = math.ceil((max(vals) + pad) * 10 - 1e-9) / 10.0
+    return [round(min(lo, r1(gold) - floor), 1), round(max(hi, r1(gold) + floor), 1)]
+
+
+def band_share(vals, gold, pad, floor):
+    lo = math.floor((min(vals) - pad) * 100 + 1e-9) / 100.0
+    hi = math.ceil((max(vals) + pad) * 100 - 1e-9) / 100.0
+    return [round(min(lo, r2(gold) - floor), 2), round(max(hi, r2(gold) + floor), 2)]
+
+
+def band_pct(vals, gold, pad=3, floor=4):
+    lo = int(math.floor(100 * min(vals) - pad))
+    hi = int(math.ceil(100 * max(vals) + pad))
+    return [max(0, min(lo, pct(gold) - floor)), min(100, max(hi, pct(gold) + floor))]
+
+
 def family(X, G):
-    """Every reasonable variant of the golden's choices, run on the pack: the band each result carries."""
+    """The golden and every reasonable variant of its choices, run on the pack."""
     runs = {"golden": G}
     for name, o in VARIANTS:
-        runs[name] = E.golden_from(X, **o)
+        runs[name] = E.analyse(X, **o)
     return runs
 
 
-def band(vals, gold, pad=0.1, floor=None, pad_hi=None):
-    lo = math.floor((min(vals) - pad) * 10 + 1e-9) / 10.0
-    hi = math.ceil((max(vals) + (pad if pad_hi is None else pad_hi)) * 10 - 1e-9) / 10.0
-    lo, hi = min(lo, r1(gold) - (floor or 0)), max(hi, r1(gold) + (floor or 0))
-    return [round(lo, 1), round(hi, 1)]
-
-
 def figures(X, G, FAM, info):
-    prim = [z["primary"] for z in G["zones"]]
-    Z = {z["primary"]: z for z in G["zones"]}
-    fam = {k: {z["primary"]: z for z in v["zones"]} for k, v in FAM.items()}
+    codes = sorted(G["zones"], key=lambda c: G["zones"][c]["name"])
+    names = [G["zones"][c]["name"] for c in codes]
+    Z = {G["zones"][c]["name"]: G["zones"][c] for c in codes}
+    fam = {k: {q["name"]: q for q in v["zones"].values()} for k, v in FAM.items()}
+    provs = sorted(G["fits"])
+    disp = {p: next((W.PROVIDERS[k]["legal"] for k in W.PROVIDERS if PA.provider_key(W.PROVIDERS[k]["legal"]) == p), p)
+            for p in provs}
+    pname = {p: disp[p].replace(" Ltd", "") for p in provs}
 
-    def tab(key):
-        return {p: r1(Z[p][key]) for p in prim}
+    def tab(key, f=r1):
+        return {n: f(Z[n][key]) for n in names}
 
-    def bands(key, pad=0.1, floor=0.2, pad_hi=None):
-        return {p: band([fam[k][p][key] for k in fam], Z[p][key], pad, floor, pad_hi) for p in prim}
+    def bands(key, **kw):
+        return {n: band_mw([fam[k][n][key] for k in fam], Z[n][key], **kw) for n in names}
 
-    # megawatts of scatter about the share's line on the cold days, first winter and last, zone by zone
-    scat = {}
-    for z in G["zones"]:
-        e = G["events"][z["code"]]
-        e = e[e["T"] <= E.COLD]
-        f = G["providers"][z["provider"]]
-        scat[z["primary"]] = {w: round(float(np.std((e[e["winter"] == w]["delivered"].values -
-                                                      E.line_share(f, e[e["winter"] == w]["T"].values) *
-                                                      e[e["winter"] == w]["contract"].values), ddof=1)), 2)
-                              for w in ("2023/24", "2025/26")}
-
-    bt = G["backtest_all"]
-    maes = [v["backtest_all"]["mae"] for v in FAM.values()]
-    # the freezing-day count inside the 80 per cent range, under every variant and every construction of the range:
-    # carried in the workbook as context and not graded, because reasonable constructions spread this widely
-    ins = [E.backtest_all(v["events"], v["noise"], range_kind=rk, **v["fit_options"])[1]["n_inside"]
-           for v in FAM.values() for rk in E.RANGES]
-    provs = sorted(G["providers"])
-    zp = {p: [z["primary"] for z in G["zones"] if z["provider"] == p] for p in provs}
-
-    def pband(vals, gold, pad, nd=2):
-        q = 10 ** nd
-        return [round(math.floor((min(min(vals), gold) - pad) * q + 1e-9) / q, nd),
-                round(math.ceil((max(max(vals), gold) + pad) * q - 1e-9) / q, nd)]
-
-    share_b = {p: pband([v["providers"][p]["share"] for v in FAM.values()] +
-                        [fam[k][x]["share"] for k in fam for x in zp[p]], round(G["providers"][p]["share"], 2), 0.01) for p in provs}
-    back_b = {p: pband([v["providers"][p]["back"]["20:00"] for v in FAM.values()], round(G["providers"][p]["back"]["20:00"], 2), 0.05)
-              for p in provs}
-    # the megawatts delivered: the variants' range, and never narrower than the share's own band times the award
-    deliv_b = {}
-    for p in prim:
-        lo, hi = bands("delivered")[p]
-        slo, shi = share_b[Z[p]["provider"]]
-        deliv_b[p] = [round(min(lo, math.floor(slo * Z[p]["award"] * 10 + 1e-9) / 10.0), 1),
-                      round(max(hi, math.ceil(shi * Z[p]["award"] * 10 - 1e-9) / 10.0), 1)]
-    spread_b = {p: [int(math.floor(100 * min(min(v["providers"][p]["cv"], v["providers"][p]["cv_raw"]) for v in FAM.values()) - 1)),
-                    int(math.ceil(100 * max(max(v["providers"][p]["cv"], v["providers"][p]["cv_raw"]) for v in FAM.values()) + 3))]
-                for p in provs}
-    # the bridge is stated at the precision shown, so every bar is taken from the displayed megawatts and adds up
-    bridge = {**{"%s, not available" % p: r1(Z[p]["award"] - r1(Z[p]["delivered"])) for p in prim},
-              **{"%s, lost as load comes back" % p: r1(max(r1(Z[p]["delivered"]) - r1(Z[p]["off_peak"]), 0.0)) for p in prim}}
-    bb = {**{"%s, not available" % p: band([fam[k][p]["not_available"] for k in fam], Z[p]["not_available"], 0.1, 0.2) for p in prim},
-          **{"%s, lost as load comes back" % p: band([fam[k][p]["comeback_loss"] for k in fam], Z[p]["comeback_loss"], 0.1, 0.2) for p in prim}}
-    LE = E.line_evidence(X)
-    zl = {X["names"][c]: v for c, v in LE.items() if v["zone"]}
-    el, el_se, el_n = E.scaling(G["events"])
-    A = Z["Ashcombe Road"]
-    fA = G["providers"][A["provider"]]
-    limit = (A["profile"]["18:00"] - A["profile"]["20:00"]) / (fA["shape"]["18:00"] + fA["back"]["20:00"])
-    sets = {k: v["commit"] for k, v in FAM.items()}
+    share = {pname[p]: r2(G["fits"][p]["share"]) for p in provs}
+    back = {pname[p]: r2(float(np.sum(G["fits"][p]["reb"]))) for p in provs}
+    share_b = {pname[p]: band_share([v["fits"][p]["share"] for v in FAM.values()], G["fits"][p]["share"], 0.01, 0.02)
+               for p in provs}
+    back_b = {pname[p]: band_share([float(np.sum(v["fits"][p]["reb"])) for v in FAM.values()],
+                                   float(np.sum(G["fits"][p]["reb"])), 0.03, 0.04) for p in provs}
+    over_b = {n: band_pct([fam[k][n]["exceed"] for k in fam], Z[n]["exceed"]) for n in names}
+    B = dict(R1=bands("before26", floor=0.3), R2=bands("conn_add"), R3=bands("before28", floor=0.3),
+             R4=bands("commissioned"), R5=share_b, R6=bands("delivered"), R7=back_b,
+             R8=bands("mean_peak", floor=0.3), R9=bands("p90", floor=0.3), R10=over_b)
+    # the customers behind each primary's connections figure, and the sites still to come behind its megawatts in service
+    conn_rows, site_rows = {}, {}
+    for n in names:
+        rows = sorted(Z[n]["conn_rows"], key=lambda r: -abs(r[5]))
+        conn_rows[n] = [dict(reference=r[0], type=r[1], kva=r[2], energised=r[3].strftime("%d/%m/%Y"), on_supply=bool(r[4]),
+                             adds_mw=round(r[5], 2)) for r in rows]
+        by = {}
+        for s in Z[n]["sites"]:
+            c = by.setdefault(s[1], dict(sites=0, mw=0.0, expected_mw=0.0))
+            c["sites"] += 1
+            c["mw"] += s[2] / 1000.0
+            c["expected_mw"] += s[2] / 1000.0 * s[4]
+        site_rows[n] = {k: dict(sites=v["sites"], mw=round(v["mw"], 2), expected_mw=round(v["expected_mw"], 2),
+                                chance_pct=pct(v["expected_mw"] / v["mw"]) if v["mw"] else 0) for k, v in sorted(by.items())}
+    reg = E.register_as_at(X["assets"], X["register_date"])
+    inc = E.incidence(reg, X["register_date"], group=("cls",))
+    classes = {}
+    for (cls,), c in sorted(inc.items()):
+        classes[cls] = dict(sites=c["n"], commissioned=c["commissioned"], withdrawn=c["lost"],
+                            median_days_late=int(round(c["median_late"])),
+                            in_service_by_150_days_pct=pct(E._at(c["curve"], 150)[0]))
+    # what the mornings show at the cold end, primary by primary (two straight lines meeting at a fitted knee)
+    cold = {}
+    for c in codes:
+        Dd, Pp = X["_frames"][(c, "full")]
+        h = E._mfit(Dd, "hinge")
+        cold[G["zones"][c]["name"]] = dict(knee_c=round(h["knee"], 1), per_degree_above=round(-float(h["coef"][0]), 2),
+                                           per_degree_below=round(-float(h["coef"][0]) + float(h["coef"][1]), 2))
+    zones = {}
+    for n in names:
+        q = Z[n]
+        zones[n] = dict(code=[c for c in codes if G["zones"][c]["name"] == n][0], provider=disp[q["provider"]],
+                        firm=q["firm"], contracted=q["contracted"], peak_hh=q["peak_hh"], commit=bool(q["commit"]),
+                        margin=r1(q["p90"] - q["firm"]), over_or_under_by=r1(abs(q["p90"] - q["firm"])),
+                        off_peak=r1(q["off_peak"]), in_service_now=r1(q["commissioned_now"]),
+                        still_to_come_mw=r1(sum(s[2] for s in q["sites"]) / 1000.0), sites_still_to_come=len(q["sites"]),
+                        growth_pct=round(100 * (q["growth"] - 1), 1),
+                        days_without_service_2526=int(q["clean_days"]), coldest_without_service_2526=round(q["coldest_clean"], 1),
+                        days_without_service=int(q["clean_all"]), coldest_without_service=round(q["coldest_all"], 1),
+                        working_weekdays=int(q["morning_days"]), at_or_below_freezing=int(q["morning_cold"]),
+                        in_service_share_of_contract_pct=pct(q["commissioned"] / q["contracted"]),
+                        customers=len(q["conn_rows"]))
     F = dict(
-        call=list(G["commit"]), hold=[p for p in prim if p not in G["commit"]],
-        r1_before=tab("before"), r2_delivered=tab("delivered"), r4_off_peak=tab("off_peak"), r5_peak=tab("peak"),
-        r6_one_in_ten=tab("p90"),
-        r3_backtest=round(bt["mae"], 2),
-        r8_bridge=bridge,
-        r1_evidence=dict(coldest_unscheduled_c=round(min(v["coldest"] for v in zl.values()), 1),
-                         line_within_pct=int(math.ceil(max(abs(v["line_miss_pct"]) for v in zl.values()))),
-                         by_primary={p: dict(sample_days=v["n_sample"], coldest_c=round(v["coldest"], 1), cold_days=v["n_cold"],
-                                             line_miss_mw=round(v["line_miss"], 2), line_miss_pct=round(v["line_miss_pct"], 1),
-                                             curve_miss_mw=round(v["curve_miss"], 2), peak_curve_t=round(v["peak_curve_t"], 2))
-                                     for p, v in zl.items()},
-                         unscheduled_primaries_curve_t={X["names"].get(c, c): round(v["peak_curve_t"], 2)
-                                                        for c, v in LE.items() if not v["zone"]}),
-        scaling=dict(elasticity=round(el, 2), standard_error=round(el_se, 2), events=el_n),
-        scatter_by_winter=scat,
-        c1_share={p: round(G["providers"][p]["share"], 2) for p in provs},
-        c2_comeback={p: round(G["providers"][p]["back"]["20:00"], 2) for p in provs},
-        c3_spread={p: int(round(G["providers"][p]["cv"] * 100)) for p in provs},
-        bands=dict(before=bands("before", 0.1, 0.3), delivered=deliv_b, off_peak=bands("off_peak"),
-                   peak=bands("peak", 0.1, 0.3), one_in_ten=bands("p90", 0.1, 0.3, pad_hi=0.3), bridge=bb,
-                   share=share_b, comeback=back_b, spread=spread_b,
-                   backtest=dict(mae=pband(maes, round(bt["mae"], 2), 0.03),
-                                 inside=[int(min(ins)), int(max(ins))])),
-        zones={p: dict(zone=Z[p]["zone"], code=Z[p]["code"], provider=Z[p]["provider"], award=Z[p]["award"], firm=Z[p]["firm"],
-                       share=round(Z[p]["share"], 2), peak_hh=Z[p]["peak_hh"], over=bool(Z[p]["over"]),
-                       over_by=r1(Z[p]["over_by"]), margin=r1(Z[p]["p90"] - Z[p]["firm"]), inside_by=r1(abs(Z[p]["p90"] - Z[p]["firm"])),
-                       expected_margin=r1(Z[p]["peak"] - Z[p]["firm"]),
-                       exceed_days_in_ten=int(round(Z[p]["exceed"] * 10)), per_scheduled=round(Z[p]["per_scheduled"], 2),
-                       per_scheduled_mw=r1(Z[p]["per_scheduled"] * Z[p]["award"]), n_events=Z[p]["n_events"], n_cold=Z[p]["n_cold"],
-                       in_window=r1(Z[p]["in_window"]), after_window=r1(Z[p]["after_window"]), n_base_days=Z[p]["n_base_days"],
-                       largest_scheduled=float(G["events"][Z[p]["code"]]["scheduled"].max()),
-                       contract_2526=X["contract"][(Z[p]["code"], "2025/26")]) for p in prim},
-        providers={p: dict(share=round(f["share"], 2), slope_per_degree=round(f["beta"][1], 3), spread_pct=int(round(f["cv"] * 100)),
-                           spread_measured_pct=int(round(f["cv_raw"] * 100)), back_first=round(f["back"]["20:00"], 2),
-                           back_second=round(f["back"]["20:30"], 2), n_cold=f["n_cold"], cold_dates=f["cold_dates"],
-                           cold_met=f["cold_met"]) for p, f in G["providers"].items()},
-        backtest=dict(n=bt["n"], n_cold=bt["n_cold"], n_inside=bt["n_inside"], mae=round(bt["mae"], 2),
-                      mae_cold=round(bt["mae_cold"], 2), range_pct=int(E.RANGE * 100)),
-        totals=dict(contracted=r1(sum(Z[p]["award"] for p in prim)), delivered=r1(sum(r1(Z[p]["delivered"]) for p in prim)),
-                    off_peak=r1(sum(r1(Z[p]["delivered"]) - bridge["%s, lost as load comes back" % p] for p in prim)),
-                    not_available=r1(sum(bridge["%s, not available" % p] for p in prim)),
-                    comeback_loss=r1(sum(bridge["%s, lost as load comes back" % p] for p in prim))),
-        ashcombe_limit=r1(limit), family_sets={k: v for k, v in sets.items()},
-        variants=dict(cold_days_at_or_below=[0, 1.5, 2], heating_base_c=[14, 17], n=len(VARIANTS),
-                      names=[n for n, _ in VARIANTS]),
-        family=dict(delivered={k: {p: round(fam[k][p]["delivered"], 2) for p in prim} for k in fam},
-                    one_in_ten={k: {p: round(fam[k][p]["p90"], 2) for p in prim} for k in fam},
-                    mae={k: round(v["backtest_all"]["mae"], 3) for k, v in FAM.items()}),
-        cold_events=dict(total=int(sum(f["n_cold"] for f in G["providers"].values())),
-                         met=int(sum(f["cold_met"] for f in G["providers"].values()))),
-        conventions=dict(design_day_degrees_below_zero=-E.T_DESIGN, cold_days_at_or_below_minus=-E.COLD, assurance_days_in_ten=9,
-                         threshold_pct=92, credited_half_hours=["17:30", "18:00"]),
+        call=[n for n in names if Z[n]["commit"]], hold=[n for n in names if not Z[n]["commit"]],
+        order=names, providers_order=[pname[p] for p in provs],
+        r1_demand_2526=tab("before26"), r2_connections=tab("conn_add"), r3_before=tab("before28"),
+        r4_in_service=tab("commissioned"), r5_share=share, r6_delivered=tab("delivered"), r7_comeback=back,
+        r8_peak=tab("mean_peak"), r9_one_in_ten=tab("p90"), r10_share_over={n: pct(Z[n]["exceed"]) for n in names},
+        bands_by_result={k: v for k, v in B.items()},
+        zones=zones, customers=conn_rows, sites=site_rows, classes=classes, cold_end=cold,
+        providers={pname[p]: dict(key=p, legal=disp[p], share=r2(G["fits"][p]["share"]), spread_pct=pct(G["fits"][p]["cv"]),
+                                  back_first=r2(G["fits"][p]["reb"][0]), back_total=r2(float(np.sum(G["fits"][p]["reb"]))),
+                                  events=int(G["fits"][p]["n"]), fell_short=int(G["fits"][p]["n_short"]),
+                                  met=int(G["fits"][p]["n_met"]),
+                                  zones=[n for n in names if Z[n]["provider"] == p]) for p in provs},
+        family_sets={k: [n for n in names if fam[k][n]["commit"]] for k in fam},
+        family=dict(one_in_ten={k: {n: round(fam[k][n]["p90"], 2) for n in names} for k in fam},
+                    margin={k: {n: round(fam[k][n]["p90"] - Z[n]["firm"], 2) for n in names} for k in fam}),
+        variants=dict(n=len(VARIANTS), names=[n for n, _ in VARIANTS]),
+        totals=dict(contracted=r1(sum(Z[n]["contracted"] for n in names)),
+                    in_service=r1(sum(r1(Z[n]["commissioned"]) for n in names)),
+                    delivered=r1(sum(r1(Z[n]["delivered"]) for n in names))),
+        conventions=dict(design_day_degrees_below_zero=3.0, assurance_days_in_ten=9, credited_half_hours=["17:30", "18:00"],
+                         assessment_date="15 January 2028", latest_winter_date="15 January 2026",
+                         register_extract=X["register_date"].strftime("%d %B %Y").lstrip("0"), winters=3,
+                         window="16:00 to 19:30", post_window_half_hours=4),
         pack=dict(scada_rows=info["scada_rows"], event_rows=info["event_rows"], weather_rows=info["weather_rows"],
-                  switching_rows=info["switching_rows"]),
-        record=dict(completed={X["names"][c]: n for c, n in G["record"]["completed"].items()},
-                    completed_total=int(sum(G["record"]["completed"].values()))))
+                  switching_rows=info["switching_rows"], growth_rows=info["growth_rows"], monitor_rows=info["monitor_rows"],
+                  asset_rows=info["asset_rows"], register_sites=int(len(X["assets"])),
+                  register_customers=int(len(X["connections"]))))
     return F
 
 
 def round_floats(o, nd=6):
-    if isinstance(o, float):
-        return round(o, nd)
+    if isinstance(o, (float, np.floating)):
+        return round(float(o), nd)
+    if isinstance(o, (np.integer,)):
+        return int(o)
     if isinstance(o, dict):
         return {k: round_floats(v, nd) for k, v in o.items()}
-    if isinstance(o, list):
+    if isinstance(o, (list, tuple)):
         return [round_floats(v, nd) for v in o]
     return o
 
@@ -216,74 +209,87 @@ def round_floats(o, nd=6):
 def metadata(info):
     covers = {
         PK.F_SCADA: "The Halverton zone's SCADA historian export: the nine 33/11 kV primaries' half-hourly demand, "
-                    "November to March of winters 2023/24 to 2025/26, UTC.",
-        PK.F_EVENTS: "The DSO's flexibility dispatch log for the four Halverton constraint managed zones, winters 2023/24 to "
+                    "November to March of winters 2023/24 to 2025/26, UK local time.",
+        PK.F_EVENTS: "The DSO's flexibility dispatch log for the Halverton constraint managed zones, winters 2023/24 to "
                      "2025/26, UK local time.",
         PK.F_SWITCH: "The control room's 11 kV switching log for the Halverton zone, winters 2023/24 to 2025/26.",
         PK.F_WX: "Hourly observations at Halverton weather station, October to March of winters 2023/24 to 2025/26.",
         PK.F_REG: "The primary substation register (asset codes, SCADA points, transformers) and the DFES 2026 growth rates.",
         PK.F_FDR: "The 11 kV feeder schedule and normally-open points of the Halverton zone.",
-        PK.F_GROW: "The connections team's load growth register.",
-        PK.F_GUIDE: "Network Planning's winter capacity assessment guideline, issue 4, September 2026.",
-        PK.F_AWARD: "The DSO's flexibility contract award notice for winter 2027/28.",
+        PK.F_GROW: "The connections team's load growth register, as saved on 30 October 2026.",
+        PK.F_MON: "The settlement team's monthly summary of half-hourly metered customers in the Halverton zone, January "
+                  "2021 to October 2026.",
+        PK.F_ASSET: "The DSO's flexibility asset register for every constraint managed zone in the licence area, extracted "
+                    "4 November 2026.",
+        PK.F_GUIDE: "Network Planning's winter capacity assessment guideline, issue 5, September 2026.",
+        PK.F_AWARD: "The DSO's flexibility contract award notice for winter 2027/28, 21 October 2026.",
         PK.F_CI: "Customer interruptions and minutes lost by 11 kV feeder, regulatory year 2025/26.",
         PK.F_COND: "Primary transformer oil analysis and health indices, 2026.",
         PK.F_DUOS: "The use of system charging statement effective 1 April 2027.",
     }
-    files = [dict(path="target/" + f, source="constructed for task10; no real dataset", date="2026-11-03",
-                  licence="CC0 1.0 (constructed)", covers=covers[f]) for f in PK.FILES]
+    files = [dict(path="target/" + f, source="constructed for task10 by simulating the organisation's systems; no real dataset",
+                  date="2026-11-04", licence="CC0 1.0 (constructed)", covers=covers[f]) for f in PK.FILES]
     return dict(task="task10",
-                decision="the Halverton flexibility zones' primary substations whose reinforcement Wealdmoor Power Networks "
-                         "commits for winter 2027/28, with what each 2027/28 contract delivers and takes off the design day's "
-                         "peak, each peak expected and at the one-day-in-ten level, and last winter's backtest",
+                decision="the Halverton zone primary substations whose reinforcement Wealdmoor Power Networks commits for "
+                         "winter 2027/28, with each primary's design-day demand, what its flexibility contract delivers, "
+                         "its expected peak, the level the peak stays under on nine design days in ten and the share of "
+                         "design days over firm capacity",
                 deliverables=[GO.F_XLSX, GO.F_PPTX],
                 distractor_files=["target/" + f for f in PK.DISTRACTORS],
                 files=files,
                 rows=dict(scada=info["scada_rows"], events=info["event_rows"], weather=info["weather_rows"],
-                          switching=info["switching_rows"]))
+                          switching=info["switching_rows"], growth=info["growth_rows"], monthly_summary=info["monitor_rows"],
+                          asset_register=info["asset_rows"]))
 
 
-def main():
+def main(out=None):
+    task = out or TASK
+    target, golden = os.path.join(task, "target"), os.path.join(task, "golden")
+    gen = os.path.join(task, "generator") if not out else task
+    os.makedirs(gen, exist_ok=True)
     T = W.build()
-    shutil.rmtree(TARGET, ignore_errors=True)
-    os.makedirs(TARGET)
-    info = PK.write_data(T, TARGET)
-    D.write_docs(TARGET)
-    PP.own_mtimes(TARGET, PK.EXPORTED)
-    X = E.conform(PA.load(TARGET))
-    G = E.golden_from(X)
+    shutil.rmtree(target, ignore_errors=True)
+    os.makedirs(target)
+    info = PK.write_data(T, target)
+    D.write_docs(target)
+    PP.own_mtimes(target, PK.EXPORTED)
+    X = PA.load(target)
+    G = E.analyse(X)
     FAM = family(X, G)
     F = figures(X, G, FAM, info)
-    eff, C, Q = EP.effort_json(X, G, F)
+    eff, C, Q, runs = EP.effort_json(X, F, G)
+    names = F["order"]
+    pmap = {v["key"]: d for d, v in F["providers"].items()}
     F["routes"] = {r["name"]: r["answer"] for r in eff["routes"]}
-    F["careful"] = {p: {k: (r1(v) if isinstance(v, float) else v) for k, v in C[p].items()} for p in C if not p.startswith("_")}
-    F["careful_backtest"] = dict(mae=round(C["_backtest"]["mae"], 2), inside=C["_backtest"]["inside"],
-                                 inside_fit_range=C["_backtest"]["inside_fit_range"])
-    F["careful_call"] = C["_call"]
-    F["quick_call"] = Q["_call"]
-    gold_tab = {z["primary"]: dict(delivered=z["delivered"], off_peak=z["off_peak"], peak=z["peak"], one_in_ten=z["p90"],
-                                   over=z["over"]) for z in G["zones"]}
-    R = [("Every result of the chain", gold_tab),
-         ("Megawatts delivered per megawatt scheduled at minus 3.0 C applied to the contract, taken off the 17:30 to 18:00 "
-          "peak, the record's megawatts of scatter unchanged", {p: C[p] for p in gold_tab}),
-         ("The megawatts contracted at face value", {p: Q[p] for p in gold_tab})]
-    shutil.rmtree(GOLDEN, ignore_errors=True)
-    GO.write(G, F, R, GOLDEN)
-    PP.own_mtimes(GOLDEN, {})
-    json.dump(round_floats(F), open(os.path.join(HERE, "figures.json"), "w"), indent=1, sort_keys=True)
-    json.dump(round_floats(eff), open(os.path.join(HERE, "effort.json"), "w"), indent=1, sort_keys=True)
-    WU.write(F, os.path.join(TASK, "submission.md"))
-    json.dump(metadata(info), open(os.path.join(TASK, "metadata.json"), "w"), indent=1)
-    # the golden ZIP: exactly the two requested files, each entry at its own last save
-    PP.zip_folder(GOLDEN, os.path.join(TASK, "golden.zip"))
-    print("call:", G["commit"], "| backtest MAE %.3f inside %d of %d" % (G["backtest_all"]["mae"], G["backtest_all"]["n_inside"], G["backtest_all"]["n_cold"]))
-    for z in G["zones"]:
-        print("  %-16s before %.2f share %.3f delivered %.2f peak@%s %.2f off %.2f p90 %.2f firm %.1f over %s | careful %.2f %.2f"
-              % (z["primary"], z["before"], z["share"], z["delivered"], z["peak_hh"], z["peak"], z["off_peak"], z["p90"], z["firm"],
-                 z["over"], C[z["primary"]]["delivered"], C[z["primary"]]["one_in_ten"]))
-    print("  family sets:", {k: len(v) for k, v in F["family_sets"].items()}, "| careful call", C["_call"], "| quick", Q["_call"])
-    return T, X, G, F
+    F["careful"] = EP.results_of(C, names, pmap)
+    F["quick"] = EP.results_of(Q, names, pmap, quick=True)
+    F["route_figures"] = {name: {n: dict(before=r1(q["before28"]), in_service=r1(q["commissioned"]), delivered=r1(q["delivered"]), peak=r1(q["mean_peak"]),
+                                         one_in_ten=r1(q["p90"]), share_over=pct(q["exceed"]), commit=bool(q["commit"]))
+                                 for q in run["zones"].values() for n in [q["name"]]} for name, run in runs.items()}
+    F["route_margins"] = {name: {q["name"]: q["p90"] - q["firm"] for q in run["zones"].values()} for name, run in runs.items()}
+    F["sensitivity"] = eff["sensitivity"]
+    F["hints"] = [dict(sentence=h["sentence"], rescues=h["rescues"], commits=h["commits"]) for h in eff["hints"]]
+    for h in eff["hints"]:
+        h.pop("commits", None)
+    shutil.rmtree(golden, ignore_errors=True)
+    GO.write(G, F, golden)
+    PP.own_mtimes(golden, {})
+    json.dump(round_floats(F), open(os.path.join(gen, "figures.json"), "w"), indent=1, sort_keys=True)
+    json.dump(round_floats(eff), open(os.path.join(gen, "effort.json"), "w"), indent=1, sort_keys=True)
+    WU.write(F, os.path.join(task, "submission.md"))
+    json.dump(metadata(info), open(os.path.join(task, "metadata.json"), "w"), indent=1)
+    PP.zip_folder(golden, os.path.join(task, "golden.zip"))
+    PP.zip_folder(target, os.path.join(task, "target.zip"))
+    print("call:", F["call"], "| hold:", F["hold"])
+    for n in names:
+        z = F["zones"][n]
+        print("  %-16s 25/26 %.1f conn %.1f before %.1f in service %.1f delivered %.1f peak %.1f@%s nine-in-ten %.1f firm %.1f (%+.1f) over %d%%"
+              % (n, F["r1_demand_2526"][n], F["r2_connections"][n], F["r3_before"][n], F["r4_in_service"][n], F["r6_delivered"][n],
+                 F["r8_peak"][n], z["peak_hh"], F["r9_one_in_ten"][n], z["firm"], z["margin"], F["r10_share_over"][n]))
+    print("  share", F["r5_share"], "come-back", F["r7_comeback"])
+    print("  routes:", {k[:40]: "".join(x[0] for x in v) for k, v in F["routes"].items()})
+    return T, X, G, F, eff
 
 
 if __name__ == "__main__":
-    main()
+    main(sys.argv[sys.argv.index("--out") + 1] if "--out" in sys.argv else None)

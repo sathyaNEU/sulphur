@@ -1,4 +1,4 @@
-"""task10 architecture 6: the governing documents and the charging statement, written as Wealdmoor issues them
+"""task10 architecture 7: the governing documents and the charging statement, written as Wealdmoor issues them
 (a Word document exported to PDF by LibreOffice, dated to its issue)."""
 import datetime as dt
 import os
@@ -51,7 +51,7 @@ def write_guideline(target):
         firm_rows.append([p["name"], p["code"], "%d + %d" % tuple(onaf), "%.1f" % p["firm"]])
     story = letterhead("Network Planning") + [
         P("Primary Substation Capacity Assessment: Winter Planning Guideline", TITLE),
-        P("Document WPN-NP-G-014, issue 4. Applies to the 33/11 kV primary substations of the Halverton grid supply point "
+        P("Document WPN-NP-G-014, issue 5. Applies to the 33/11 kV primary substations of the Halverton grid supply point "
           "group from the assessment made in autumn 2026 for winter 2027/28.", BODY),
         P("1. Purpose", H2),
         P("Each autumn Network Planning assesses whether every primary substation in a constraint managed zone will hold its "
@@ -62,35 +62,50 @@ def write_guideline(target):
           BODY),
         P("2. Design condition", H2),
         P("The design day is a working weekday on which the daily mean air temperature at Halverton weather station is "
-          "minus 3.0 degrees Celsius. The daily mean is the mean of the station's hourly readings for the GMT day.", BODY),
-        P("3. Design-day demand", H2),
-        P("A primary's design-day demand is its highest half-hourly demand (MW, the SCADA total of its transformer "
-          "secondaries) on the design day. Before any flexibility it is forecast from the primary's 2025/26 winter "
-          "demand corrected to the design condition, using working weekdays outside the Christmas and New Year period "
-          "(24 December to 2 January), outside the days on which flexibility was scheduled in the primary's zone and "
-          "outside the days on which the control room's switching log shows load transferred to or from the primary.",
+          "minus 3.0 degrees Celsius. The daily mean is the mean of the station's hourly readings for the GMT day. A working "
+          "weekday is a Monday to Friday that is not a bank holiday and does not fall in the Christmas and New Year period "
+          "(24 December to 2 January). The assessment concerns every such day, whether or not a flexibility service would "
+          "be instructed on it. A winter's design day is assessed as at 15 January of that winter, the assessment date.",
           BODY),
-        P("4. Growth to the winter assessed", H2),
-        P("The 2025/26 design-day demand is grown to winter 2027/28 at the primary's underlying peak growth rates for 2026/27 "
-          "and 2027/28 in the Distribution Future Energy Scenarios best view, compounded, and the design-day demand of the "
-          "connections in the load growth register whose offer has been accepted, those already energised included, and "
-          "whose energisation date (the date energised where it has happened, the planned date otherwise) falls between "
-          "1 April 2026 and 31 October 2027 is then added in full. Every half-hour of the design day is taken to grow in "
-          "the proportion its highest half-hour grows.", BODY),
+        P("3. Design-day demand", H2),
+        P("A primary's design-day demand is its half-hourly demand (MW, the SCADA total of its transformer secondaries) on "
+          "the design day with no flexibility service delivered and with the network in its normal running arrangement, "
+          "no load transferred to or from the primary across a normally open point. Half-hours are named by the UK local "
+          "time at which they end, and the day's peak is its highest half-hour. Design-day demand is established for the "
+          "latest complete winter, 2025/26 for this assessment, from the primary's metered record.", BODY),
+        P("4. Demand in the winter assessed", H2),
+        P("Demand before flexibility in the winter assessed is the latest winter's design-day demand, increased at the "
+          "primary's underlying peak growth rates in the Distribution Future Energy Scenarios best view for each year "
+          "between the two winters, compounded, plus the demand that the customers on the load growth register will have "
+          "added to the primary's demand between the two assessment dates. The register as saved for the assessment is "
+          "taken as it stands: an offer counts once it is accepted, a customer not yet energised is taken to be energised "
+          "on the date the register holds for it, and offers withdrawn, superseded or only quoted are not counted. Every "
+          "customer on the register is half-hourly metered from the day it is energised, and the settlement team's monthly "
+          "summary gives each half-hourly metered customer's mean demand between 17:00 and 18:00 on working days. Every "
+          "half-hour of the design day is taken to grow in the proportion its highest half-hour grows.", BODY),
         P("5. Firm capacity", H2),
         P("Firm capacity is the capacity the primary keeps with its larger transformer out of service: the winter cyclic "
           "rating of the remaining transformer, expressed in MW at a power factor of 0.95. Appendix A lists it for each "
           "primary.", BODY),
         P("6. Contracted flexibility", H2),
-        P("Flexibility contracted for the winter assessed is taken at what its provider will deliver on the design day "
-          "with the megawatts contracted for that winter in the contract award notice scheduled in full for the service "
-          "window. A contract's megawatts delivered are quoted as its delivery in the half-hours ending 17:30 and 18:00. "
-          "The primary's design-day demand with flexibility is its highest half-hourly demand on that day with the service "
-          "delivered through its window. No flexibility other than the contracted service is credited.", BODY),
+        P("Where a flexibility contract is in place for the winter assessed, demand with flexibility is the design day's "
+          "demand with the contracted service instructed in full: the megawatts contracted for that winter in the contract "
+          "award notice, scheduled for the whole of the service window. The contract is credited with what the provider's "
+          "sites in service on the assessment date can be expected to deliver when so instructed. The flexibility asset "
+          "register records every site a provider has signed, the date it passed its commissioning test and its status; a "
+          "site is in service from the day it passes that test until it is withdrawn or leaves the service. A contract's "
+          "megawatts delivered are quoted as its mean delivery in the half-hours ending 17:30 and 18:00. What a service "
+          "delivered is taken only from days on which the primary was in its normal running arrangement. The primary's peak "
+          "with flexibility is its highest half-hourly demand on the design day with the service delivered through its "
+          "window, whichever half-hour that falls in. No flexibility other than the contracted service is credited.", BODY),
         P("7. Recommendation", H2),
-        P("Network Planning recommends that reinforcement be committed for each primary whose design-day demand with "
-          "flexibility would exceed its firm capacity on more than one design day in ten. The recommendation is reviewed "
-          "by the Head of DSO before the capital expenditure review.", BODY),
+        P("Design days are not alike: a primary's demand runs above or below its usual level for the temperature from one "
+          "day to the next, and what a provider has available varies from evening to evening. Network Planning recommends "
+          "that reinforcement be committed for each primary whose peak with flexibility would exceed its firm capacity on "
+          "more than one design day in ten, and reports for each primary the share of design days on which it would. The "
+          "one day in ten is taken over the variation from one design day to another as the record shows it, not over the "
+          "uncertainty of the assessment's own estimates. The recommendation is reviewed by the Head of DSO before the "
+          "capital expenditure review.", BODY),
         P("Appendix A. Firm capacity", H2),
         T(firm_rows, [46, 24, 42, 34]),
         P("Transformer ratings from the primary substation register; winter cyclic ratings from the 2025 thermal "
@@ -98,51 +113,56 @@ def write_guideline(target):
         KeepTogether([P("Document control", H2),
                       T([["Issue", "Date", "Change", "Approved"],
                          ["3", "04/09/2023", "Design condition restated for the Halverton station", "C. Evans"],
-                         ["4", "15/09/2026", "Contracted flexibility and the recommendation restated; Appendix A refreshed",
+                         ["4", "15/09/2025", "Contracted flexibility and the recommendation restated", "C. Evans"],
+                         ["5", "22/09/2026", "Assessment date, connections and sites in service restated; Appendix A refreshed",
                           "C. Evans"]], [14, 24, 92, 28]),
                       Spacer(1, 6),
                       P("Owner: Clifford Evans, Head of Network Planning. Reviewer: Marion Todd, Head of DSO.", SMALL)])]
     officepdf.build(os.path.join(target, PK.F_GUIDE), story, "Primary Substation Capacity Assessment: Winter Planning Guideline",
-                    "Network Planning", "WPN-NP-G-014 issue 4", "WPN-NP-G-014 issue 4  |  Wealdmoor Power Networks plc",
-                    aware("2026-09-15T13:02:41Z"), aware("2026-09-15T13:19:05Z"), producer="LibreOffice 7.6",
+                    "Network Planning", "WPN-NP-G-014 issue 5", "WPN-NP-G-014 issue 5  |  Wealdmoor Power Networks plc",
+                    aware("2026-09-22T13:02:41Z"), aware("2026-09-22T13:19:05Z"), producer="LibreOffice 7.6",
                     font="Liberation Sans", page_of=True)
+
+
+PRICES = {"A": (6.40, 312), "C": (5.85, 296), "D": (6.10, 305), "F": (5.70, 289), "H": (6.65, 318)}
 
 
 def write_awards(target):
     award = [["Constraint managed zone", "Primary", "Provider", "Contracted MW", "Availability (GBP per MW per hour)",
               "Utilisation (GBP per MWh)"]]
-    prices = {"A": (6.40, 312), "C": (5.85, 296), "F": (5.70, 289), "H": (6.65, 318)}
     for z in W.ZONES:
         p = W.BY[z["key"]]
-        award.append([PK.ZONE_NAME[z["key"]], p["name"], W.PROVIDERS[z["provider"]]["legal"], "%.1f" % z["mw28"],
-                      "%.2f" % prices[z["key"]][0], "%d" % prices[z["key"]][1]])
-    prev = [["Constraint managed zone", "Provider", "2023/24 contracted MW", "2024/25 contracted MW",
-             "2025/26 contracted MW"]]
+        award.append([PK.ZONE_NAME[z["key"]], p["name"], W.PROVIDERS[z["provider"]]["legal"], "%.1f" % z["mw"]["2027/28"],
+                      "%.2f" % PRICES[z["key"]][0], "%d" % PRICES[z["key"]][1]])
+    past = [w for w in W.CONTRACT_WINTERS if w != "2027/28"]
+    prev = [["Constraint managed zone", "Provider"] + ["%s contracted MW" % w for w in past]]
     for z in W.ZONES:
-        prev.append([PK.ZONE_NAME[z["key"]], W.PROVIDERS[z["provider"]]["legal"], "%.1f" % z["mw"]["2023/24"],
-                     "%.1f" % z["mw"]["2024/25"], "%.1f" % z["mw"]["2025/26"]])
+        prev.append([PK.ZONE_NAME[z["key"]], W.PROVIDERS[z["provider"]]["legal"]] + ["%.1f" % z["mw"][w] for w in past])
     story = letterhead("DSO, Flexibility Services") + [
         P("Flexibility Services: Contract Award Notice, Halverton Constraint Managed Zones, Winter 2027/28", TITLE),
         P("Reference WPN-DSO-FLX-2026-07. Tender issued 14 July 2026, closed 18 September 2026. Contracts run from 1 November "
           "2027 to 31 March 2028.", BODY),
         P("1. Service", H2),
-        P("Scheduled peak reduction. Utilisation is scheduled by the DSO day-ahead, by 15:30 UK local time, for any working "
+        P("Scheduled peak reduction. Utilisation is instructed by the DSO day-ahead, by 15:30 UK local time, for any working "
           "weekday from 1 November to 31 March, other than bank holidays and the period 24 December to 2 January, on which "
-          "the DSO's forecast of the primary's peak demand exceeds 92 per cent of its firm capacity, for the megawatts "
-          "that forecast stands above it, in steps of 0.5 MW from 1.0 MW up to the megawatts contracted. The service window "
-          "is 16:00 to 19:30 UK local time. A schedule may be revised or cancelled until 11:00 on the service day. "
-          "Contracted megawatts are the registered capacity of the assets the provider has enrolled in the zone for the "
-          "winter.", BODY),
+          "the DSO's forecast shows the primary's demand approaching its firm capacity, for the megawatts the forecast shows "
+          "are needed, in steps of 0.5 MW from 1.0 MW up to the megawatts contracted. The service window is 16:00 to 19:30 "
+          "UK local time. An instruction may be revised or cancelled until 11:00 on the service day. Contracted megawatts "
+          "are the capacity the provider has undertaken to make available for instruction in the zone for the winter. The "
+          "provider delivers them from sites entered on the flexibility asset register, and a site counts toward delivery "
+          "once it has passed its commissioning test.", BODY),
         P("2. Awards", H2),
         T(award, [36, 26, 36, 18, 22, 20]),
+        P("Each provider's schedule of sites for these awards was fixed at award. No site may be added to a 2027/28 schedule "
+          "after 16 October 2026, and a site the provider withdraws from its schedule is not replaced.", BODY),
         P("3. Payment", H2),
         P("Availability is paid for every working weekday in the contract period on the contracted megawatts for the 3.5 "
           "hours of the service window. Utilisation is paid on the energy the provider delivers in a scheduled window, "
           "measured on the provider's metered assets against the baseline methodology in the service terms, version 3.1.",
           BODY),
         P("4. Previous winters", H2),
-        T(prev, [40, 44, 28, 28, 28]),
-        P("The service has run at these zones since 1 November 2023 on the same terms.", SMALL),
+        T(prev, [38, 40, 23, 23, 23, 23]),
+        P("The service has run at these zones since winter 2023/24 on the same terms. Winter 2026/27 begins on 1 November 2026.", SMALL),
         Spacer(1, 10),
         P("Irene Carpenter, Flexibility Services Manager, 21 October 2026.", BODY)]
     officepdf.build(os.path.join(target, PK.F_AWARD), story,

@@ -1,13 +1,16 @@
-"""task10 architecture 6: the pack under target/, written from the clean truth the way Wealdmoor's systems record it.
+"""task10 architecture 7: the pack under target/, written from the clean truth the way Wealdmoor's systems record it.
 
 The SCADA historian's half-hourly export of the Halverton zone's nine primaries across the May 2024 asset ID
-migration (UTC, quality flags, comms gaps, a month the export re-sent), the DSO's flexibility dispatch log (UK local
-time, re-issued and cancelled instructions), the control room's 11 kV switching log, the reference weather station's
-hourly observations, the primary register, the 11 kV feeder and open point schedule, the load growth register, two governing documents and three
-files a planner would weigh and the assessment does not use."""
+migration (UK local time, quality flags, comms gaps, a month the export re-sent), the DSO's flexibility dispatch log
+(re-issued and cancelled instructions), the control room's 11 kV switching log, the reference weather station's
+hourly observations, the primary register, the 11 kV feeder and open point schedule, the connections team's load
+growth register, the settlement team's monthly summary of half-hourly metered customers, the DSO's flexibility asset
+register for every constraint managed zone in the licence area, two governing documents and three files a planner
+would weigh and the assessment does not use."""
 import csv
 import datetime as dt
 import io
+import math
 import os
 
 import numpy as np
@@ -25,26 +28,36 @@ F_WX = "halverton_weather_hourly_2023-2026.csv"
 F_REG = "primary_substation_register.xlsx"
 F_FDR = "network_feeders_11kv.xlsx"
 F_GROW = "load_growth_register_2026-27.xlsx"
+F_MON = "hh_customer_demand_monthly_2021-2026.csv"
+F_ASSET = "flexibility_asset_register_2026-11-04.csv"
 F_GUIDE = "capacity_assessment_guideline_2026.pdf"
 F_AWARD = "flexibility_contract_awards_2027-28.pdf"
 F_CI = "customer_interruptions_2025-26.xlsx"
 F_COND = "primary_transformer_condition_2026.xlsx"
 F_DUOS = "duos_charging_statement_2027-28.pdf"
-FILES = [F_SCADA, F_EVENTS, F_SWITCH, F_WX, F_REG, F_FDR, F_GROW, F_GUIDE, F_AWARD, F_CI, F_COND, F_DUOS]
+FILES = [F_SCADA, F_EVENTS, F_SWITCH, F_WX, F_REG, F_FDR, F_GROW, F_MON, F_ASSET, F_GUIDE, F_AWARD, F_CI, F_COND,
+         F_DUOS]
 DISTRACTORS = [F_CI, F_COND, F_DUOS]
 EXPORT = dt.datetime(2026, 11, 3, 8, 14, tzinfo=dt.timezone.utc)
 # the three exports carry no save stamp of their own: each file's time is when its system wrote it
 EXPORTED = {F_SCADA: dt.datetime(2026, 11, 3, 8, 14, 37, tzinfo=dt.timezone.utc),
             F_EVENTS: dt.datetime(2026, 11, 2, 16, 47, 22, tzinfo=dt.timezone.utc),
             F_SWITCH: dt.datetime(2026, 11, 2, 17, 5, 51, tzinfo=dt.timezone.utc),
-            F_WX: dt.datetime(2026, 11, 1, 6, 12, 5, tzinfo=dt.timezone.utc)}
+            F_WX: dt.datetime(2026, 11, 1, 6, 12, 5, tzinfo=dt.timezone.utc),
+            F_MON: dt.datetime(2026, 11, 2, 9, 26, 48, tzinfo=dt.timezone.utc),
+            F_ASSET: dt.datetime(2026, 11, 4, 15, 38, 19, tzinfo=dt.timezone.utc)}
 MIGRATION = dt.datetime(2024, 5, 14, tzinfo=dt.timezone.utc)
 UTC = dt.timezone.utc
 
-ZONE_NAME = {"A": "Ashcombe Road CMZ", "C": "Charlecote Way CMZ", "F": "Fenwick Street CMZ", "H": "Hartwell Common CMZ"}
+ZONE_NAME = {z["key"]: "%s CMZ" % W.BY[z["key"]]["name"] for z in W.ZONES}
 PROVIDER_SPELLINGS = {"Corvane": ["Corvane Flex Ltd", "Corvane Flex Ltd", "Corvane Flex Ltd", "CORVANE FLEX LTD", "Corvane Flex"],
                       "Quillon": ["Quillon Energy Services Ltd", "Quillon Energy Services Ltd", "Quillon Energy Services Ltd",
-                                  "Quillon Energy Services", "QUILLON ENERGY SERVICES LTD"]}
+                                  "Quillon Energy Services", "QUILLON ENERGY SERVICES LTD"],
+                      "Tessaly": ["Tessaly Grid Services Ltd", "Tessaly Grid Services Ltd", "Tessaly Grid Services Ltd",
+                                  "Tessaly Grid Services", "TESSALY GRID SERVICES LTD"],
+                      "Ormerod": ["Ormerod Flex Ltd", "Ormerod Flex Ltd", "Ormerod Flex Ltd", "Ormerod Flex", "ORMEROD FLEX LTD"],
+                      "Brackwell": ["Brackwell Demand Response Ltd", "Brackwell Demand Response Ltd",
+                                    "Brackwell Demand Response Ltd", "Brackwell Demand Response", "BRACKWELL DEMAND RESPONSE LTD"]}
 NEW_POINT = {p["key"]: "%s.P_TOT.MW" % p["code"] for p in W.PRIMARIES}
 PF = {"res": 0.972, "com": 0.951, "mix": 0.963}
 
@@ -100,11 +113,11 @@ def scada_rows(T, stream=SCADA_STREAM):
                 if e["zone"] == p["key"] and e["winter"] == w:
                     ix = W.window_indices(stamps, e["day"])
                     watched[max(ix[0] - 3, 0):ix[-1] + 7] = True
-            # comms outages: the historian holds the last good value, flagged S, for 2 to 9 half-hours
+            # comms outages: the historian holds the last good value, flagged S, for 2 to 5 half-hours
             for _ in range(int(rng.integers(5, 10))):
                 while True:
                     i0 = int(rng.integers(1, len(vals) - 12))
-                    n = int(rng.integers(2, 10))
+                    n = int(rng.integers(2, 6))
                     if not watched[i0:i0 + n].any():
                         break
                 mw[i0:i0 + n] = mw[i0 - 1]
@@ -257,10 +270,10 @@ def aware(s):
 
 # transformer nameplates: (ONAN, ONAF) MVA per unit; the guideline's firm capacity is the smaller unit's winter cyclic
 # rating, cyclic factor 1.21 on its ONAF rating, at a power factor of 0.95
-NAMEPLATE = {"A": ((12, 20), (12, 20)), "B": ((15, 23), (15, 23)), "C": ((12, 20), (12, 20)), "D": ((12, 20), (15, 23)),
-             "E": ((10, 15), (10, 15)), "F": ((15, 27), (15, 27)), "G": ((15, 24), (15, 24)), "H": ((10, 15), (12, 16)),
+NAMEPLATE = {"A": ((15, 24), (15, 24)), "B": ((15, 23), (15, 23)), "C": ((15, 22), (15, 22)), "D": ((12, 20), (15, 23)),
+             "E": ((10, 15), (10, 15)), "F": ((20, 30), (20, 30)), "G": ((15, 24), (15, 24)), "H": ((15, 21), (15, 21)),
              "I": ((10, 17), (10, 17))}
-CYCLIC = {"A": 1.2105, "B": 1.19, "C": 1.1842, "D": 1.1053, "E": 1.2281, "F": 1.1891, "G": 1.1842, "H": 1.2491, "I": 1.2074}
+CYCLIC = {"A": 1.2061, "B": 1.19, "C": 1.2249, "D": 1.0526, "E": 1.2281, "F": 1.2281, "G": 1.1842, "H": 1.2231, "I": 1.2074}
 COMMISSIONED = {"A": 1979, "B": 1988, "C": 1974, "D": 1983, "E": 1996, "F": 1981, "G": 1991, "H": 1977, "I": 2002}
 GSP = "Halverton 132/33 kV"
 
@@ -426,103 +439,212 @@ def write_switching(T, target, nop_rows):
 
 
 # load growth register
-APPLICANT_TYPES = ["Housing development (heat pumps)", "EV charging hub", "Commercial unit", "School extension",
-                   "Heat pump retrofit scheme", "Data hall", "Supermarket", "Care home", "Industrial unit",
-                   "Leisure centre electrification", "Bus depot charging"]
+SITE_FORMS = ["Land at %s Farm", "%s Business Park", "%s Retail Park", "Former %s Works", "%s Quarter", "%s Fields",
+              "%s Wharf", "%s Gardens", "Plot 4, %s Way", "%s Trading Estate", "Unit 7, %s Road", "%s Depot"]
+SITE_NAMES = ["Hollins", "Marsh", "Ferrers", "Coldwell", "Ashby", "Thorne", "Kelham", "Radford", "Sowerby", "Linden",
+              "Bramley", "Calder", "Netherton", "Oakham", "Pelham", "Whitlow", "Elsdon", "Garside", "Tansley", "Wyke",
+              "Orrell", "Dunston", "Flaxby", "Harle"]
 
 
-def write_growth(target, feeders):
-    """The connections team's register: offers, acceptances and energisations by 11 kV feeder; rows for connections
-    the assessment does not count (withdrawn, quoted only, energised before April 2026, due after October 2027) and a
-    few re-entered references, older rows on the circuit's legacy name."""
+def _mpan(rng, used):
+    while True:
+        m = "19%011d" % int(rng.integers(10 ** 9, 10 ** 11))
+        if m not in used:
+            used.add(m)
+            return m
+
+
+def growth_rows(T, feeders):
+    """The connections team's register: every offer since 2021 by 11 kV feeder, with the agreed supply capacity, the
+    meter point once energised and one date column (the date energised, or the planned date while the offer is only
+    accepted). Offers withdrawn or only quoted stay on the register, an accepted offer whose date has moved keeps its
+    earlier entry as superseded, and older rows carry the circuit's legacy name."""
     rng = np.random.default_rng([W.SEED, 79])
     byk = {}
     for f in feeders:
         byk.setdefault(f["key"], []).append(f)
-    rows = []
-    refs = set()
+    rows, refs, used, mpans = [], set(), set(), {}
 
     def ref(acc):
         """the application's reference, numbered in the year it went in (about four months before acceptance)"""
         while True:
-            rng.choice([2024, 2025, 2025, 2026])   # the old year draw, kept so the other draws do not move
             r = "LCG-%d-%05d" % ((acc - dt.timedelta(days=120)).year, int(rng.integers(10000, 99999)))
             if r not in refs:
                 refs.add(r)
                 return r
 
-    sites = ["Land at %s Farm", "%s Business Park", "%s Retail Park", "Former %s Works", "%s Quarter", "%s Fields",
-             "%s Wharf", "%s Gardens", "Plot 4, %s Way"]
-    names = ["Hollins", "Marsh", "Ferrers", "Coldwell", "Ashby", "Thorne", "Kelham", "Radford", "Sowerby", "Linden",
-             "Bramley", "Calder", "Netherton", "Oakham", "Pelham", "Whitlow", "Elsdon", "Garside"]
+    def site():
+        return SITE_FORMS[int(rng.integers(0, len(SITE_FORMS)))] % SITE_NAMES[int(rng.integers(0, len(SITE_NAMES)))]
+
+    def fmt(d):
+        return d.strftime("%d/%m/%Y")
+
+    for c in T["connections"]:
+        f = byk[c["key"]][int(rng.integers(0, len(byk[c["key"]])))]
+        acc = c["accepted"]
+        fid = f["legacy"] if acc < dt.date(2024, 5, 14) else f["fid"]
+        r, st = ref(acc), site()
+        mp = _mpan(rng, used) if c["energised"] else ""
+        mpans[c["id"]] = mp
+        when = c["energised"] or c["planned"]
+        if not c["energised"] and rng.random() < 0.3:   # the planned date moved once: the earlier entry is kept
+            rows.append([r, c["type"], st, fid, c["kva"], "", "Superseded", fmt(acc),
+                         fmt(when - dt.timedelta(days=int(rng.integers(28, 120))))])
+        rows.append([r, c["type"], st, fid, c["kva"], mp, "Energised" if c["energised"] else "Accepted", fmt(acc), fmt(when)])
+    types = list(W.CONN_TYPES)
     for p in W.PRIMARIES:
         k = p["key"]
-        target_kw = int(round(W.REGISTER_MW[k] * 1000))
-        n = int(rng.integers(2, 5))
-        cuts = np.sort(rng.choice(np.arange(60, target_kw - 60), n - 1, replace=False)) if target_kw > 300 else []
-        parts = np.diff(np.concatenate([[0], cuts, [target_kw]])).astype(int)
-        for part in parts:
+        for _ in range(int(rng.integers(2, 6))):
             f = byk[k][int(rng.integers(0, len(byk[k])))]
-            acc = dt.date(2025, 1, 1) + dt.timedelta(days=int(rng.integers(0, 560)))
-            plan = max(acc + dt.timedelta(days=150), dt.date(2026, 4, 1)) + dt.timedelta(days=int(rng.integers(0, 420)))
-            plan = min(plan, dt.date(2027, 10, 15))
-            energised = plan if plan < dt.date(2026, 10, 28) else None
-            status = "Energised" if energised else "Accepted"
-            r = ref(acc)
-            rows.append([r, APPLICANT_TYPES[int(rng.integers(0, len(APPLICANT_TYPES)))],
-                         sites[int(rng.integers(0, len(sites)))] % names[int(rng.integers(0, len(names)))],
-                         f["fid"], int(part), status, acc.strftime("%d/%m/%Y"), plan.strftime("%d/%m/%Y"),
-                         energised.strftime("%d/%m/%Y") if energised else ""])
-            if rng.random() < 0.18:   # re-entered when the planned date moved: same reference, later date, same kW
-                plan2 = plan + dt.timedelta(days=int(rng.integers(20, 60)))
-                if plan2 < dt.date(2027, 11, 1) and not energised:
-                    rows[-1][5] = "Superseded"
-                    rows.append([r, rows[-1][1], rows[-1][2], f["fid"], int(part), "Accepted", rows[-1][6],
-                                 plan2.strftime("%d/%m/%Y"), ""])
-        # connections the assessment does not count
-        for _ in range(int(rng.integers(2, 5))):
-            f = byk[k][int(rng.integers(0, len(byk[k])))]
-            kind = rng.choice(["Withdrawn", "Quoted", "Early", "Late"])
-            kw = int(rng.integers(120, 1800))
-            acc = dt.date(2024, 3, 1) + dt.timedelta(days=int(rng.integers(0, 700)))
+            kind = str(rng.choice(["Withdrawn", "Quoted", "Quoted", "Later"]))
+            kva = int(rng.choice([150, 200, 260, 320, 400, 500, 650, 800, 1000, 1600]))
+            acc = dt.date(2023, 9, 1) + dt.timedelta(days=int(rng.integers(0, 1100)))
             fid = f["legacy"] if acc < dt.date(2024, 5, 14) else f["fid"]
+            ctype = types[int(rng.integers(0, len(types)))]
             if kind == "Withdrawn":
-                rows.append([ref(acc), APPLICANT_TYPES[int(rng.integers(0, len(APPLICANT_TYPES)))],
-                             sites[int(rng.integers(0, len(sites)))] % names[int(rng.integers(0, len(names)))],
-                             fid, kw, "Withdrawn", acc.strftime("%d/%m/%Y"), "", ""])
+                rows.append([ref(acc), ctype, site(), fid, kva, "", "Withdrawn", fmt(acc), ""])
             elif kind == "Quoted":
-                rows.append([ref(acc), APPLICANT_TYPES[int(rng.integers(0, len(APPLICANT_TYPES)))],
-                             sites[int(rng.integers(0, len(sites)))] % names[int(rng.integers(0, len(names)))],
-                             fid, kw, "Quoted", "", "", ""])
-            elif kind == "Early":
-                en = dt.date(2024, 6, 1) + dt.timedelta(days=int(rng.integers(0, 640)))
-                en = min(en, dt.date(2026, 3, 20))
-                rows.append([ref(en - dt.timedelta(days=200)), APPLICANT_TYPES[int(rng.integers(0, len(APPLICANT_TYPES)))],
-                             sites[int(rng.integers(0, len(sites)))] % names[int(rng.integers(0, len(names)))],
-                             fid, kw, "Energised", (en - dt.timedelta(days=200)).strftime("%d/%m/%Y"),
-                             en.strftime("%d/%m/%Y"), en.strftime("%d/%m/%Y")])
-            else:
-                pl = dt.date(2027, 11, 20) + dt.timedelta(days=int(rng.integers(0, 400)))
-                # accepted before the register's last save (30 October 2026), never after it
-                acc_l = min(pl - dt.timedelta(days=500), dt.date(2026, 10, 23) - dt.timedelta(days=pl.toordinal() % 61))
-                rows.append([ref(acc_l), APPLICANT_TYPES[int(rng.integers(0, len(APPLICANT_TYPES)))],
-                             sites[int(rng.integers(0, len(sites)))] % names[int(rng.integers(0, len(names)))],
-                             f["fid"], kw, "Accepted", acc_l.strftime("%d/%m/%Y"),
-                             pl.strftime("%d/%m/%Y"), ""])
-    # a plot is numbered on its own site plan; the number is read from the application's reference, not drawn
+                rows.append([ref(acc + dt.timedelta(days=120)), ctype, site(), fid, kva, "", "Quoted", "", ""])
+            else:   # accepted, to be energised after the winter assessed
+                pl = dt.date(2028, 2, 14) + dt.timedelta(days=int(rng.integers(0, 330)))
+                acc_l = min(pl - dt.timedelta(days=int(rng.integers(420, 560))), dt.date(2026, 10, 23))
+                rows.append([ref(acc_l), ctype, site(), f["fid"], kva, "", "Accepted", fmt(acc_l), fmt(pl)])
+    # a plot is numbered on its own site plan and a unit on its own estate; the number is read from the reference
     for r in rows:
         if r[2].startswith("Plot 4, "):
             r[2] = "Plot %d, %s" % (1 + int(r[0][-5:]) % 23, r[2][len("Plot 4, "):])
-    rng.shuffle(rows)
-    rows.sort(key=lambda r: r[0])
+        if r[2].startswith("Unit 7, "):
+            r[2] = "Unit %d, %s" % (1 + int(r[0][-4:]) % 14, r[2][len("Unit 7, "):])
+    rows.sort(key=lambda r: (r[0], 0 if r[6] == "Superseded" else 1))
+    return rows, mpans
+
+
+def write_growth(T, target, feeders):
+    rows, mpans = growth_rows(T, feeders)
     wb = openpyxl.Workbook()
     ws = wb.active
     ws.title = "Register"
-    sheet(ws, ["Reference", "Applicant type", "Site", "11 kV feeder", "Design demand (kW)", "Status",
-               "Offer accepted", "Planned energisation", "Energised on"], rows, [16, 30, 30, 13, 16, 12, 14, 18, 14])
+    sheet(ws, ["Reference", "Customer type", "Site", "11 kV feeder", "Agreed supply capacity (kVA)", "MPAN core", "Status",
+               "Offer accepted", "Energisation date (planned if not yet energised)"], rows,
+          [16, 22, 30, 13, 16, 16, 12, 14, 22])
     save_book(wb, os.path.join(target, F_GROW), "Connections", "Connections",
               aware("2024-07-09T08:30:11Z"), aware("2026-10-30T16:05:38Z"))
-    return rows
+    return rows, mpans
+
+
+# ------------------------------------------------------------------------- half-hourly metered customers, monthly
+def monitor_rows(T, mpans):
+    """The settlement team's monthly summary of every half-hourly metered customer in the Halverton zone: the days
+    of data received, the mean demand between 17:00 and 18:00 on working days, the month's maximum demand and its
+    consumption. Customers on the growth register appear from the month after they were energised; the zone's
+    longer-standing half-hourly customers run from January 2021. A month the data collector returned nothing for is
+    absent, and a month with days missing is summarised on the days received."""
+    import calendar
+    rng = np.random.default_rng([W.SEED, 101])
+    M = W.monitor_table(T)
+    rows = []
+    last = dt.date(W.MONITOR_TO[0], W.MONITOR_TO[1], 1)
+
+    def emit(mp, month, kw, lf):
+        nd = calendar.monthrange(month.year, month.month)[1]
+        if month != last and rng.random() < 0.012:
+            return
+        days = nd if rng.random() > 0.06 else int(rng.integers(max(nd - 9, 18), nd))
+        md = kw * float(rng.uniform(1.22, 1.58))
+        kwh = kw * lf * 24.0 * days * float(np.exp(rng.normal(0, 0.03)))
+        rows.append((month, mp, [mp, month.strftime("%Y-%m"), str(days), "%.1f" % kw, "%.1f" % md, "%d" % round(kwh)]))
+
+    lfs = {}
+    for r in M.itertuples():
+        mp = mpans[r.conn]
+        lf = lfs.setdefault(mp, float(rng.uniform(0.42, 0.78)))
+        emit(mp, r.month, float(r.evening_kw), lf)
+    # customers connected before 2021: steady, with a slow drift of their own
+    used = set(mpans.values())
+    for _ in range(142):
+        mp = _mpan(rng, used)
+        level = float(np.exp(rng.normal(math.log(140.0), 0.75)))
+        drift = float(rng.normal(0.0, 0.012))
+        lf = float(rng.uniform(0.38, 0.82))
+        y, m, i = 2021, 1, 0
+        gone = int(rng.integers(30, 400)) if rng.random() < 0.06 else None    # a few closed their supply
+        while (y, m) <= W.MONITOR_TO:
+            if gone is not None and i >= gone:
+                break
+            kw = level * (1 + drift) ** (i / 12.0) * float(np.exp(rng.normal(0, 0.06)))
+            emit(mp, dt.date(y, m, 1), kw, lf)
+            i += 1
+            m += 1
+            if m > 12:
+                y, m = y + 1, 1
+    rows.sort(key=lambda r: (r[0], r[1]))
+    return [r[2] for r in rows]
+
+
+def write_monitor(T, target, mpans):
+    rows = monitor_rows(T, mpans)
+    write_csv(os.path.join(target, F_MON),
+              ["mpan_core", "month", "days_of_data", "mean_kw_1700_1800_working_days", "max_demand_kw", "consumption_kwh"],
+              rows)
+    return len(rows)
+
+
+# ------------------------------------------------------------------------------------ flexibility asset register
+CLASS_VARIANTS = {"Domestic heat pump aggregation": ["Domestic heat pump aggregation", "Domestic Heat Pump Aggregation"],
+                  "Battery storage": ["Battery storage", "Battery Storage"],
+                  "EV charging aggregation": ["EV charging aggregation", "EV Charging Aggregation"],
+                  "Commercial refrigeration": ["Commercial refrigeration", "Commercial Refrigeration"],
+                  "HVAC": ["HVAC", "Hvac"],
+                  "Process load": ["Process load", "Process Load"]}
+
+
+def asset_rows(T):
+    """The DSO's flexibility asset register as extracted on 4 November 2026: one row per site a provider has signed
+    for a constraint managed zone anywhere in the licence area, in the order the sites were entered, with the service
+    year the site was signed for, the commissioning date the provider gave then, the date it passed its commissioning
+    test and its status on the day of the extract. A site whose registered capacity was revised keeps its earlier
+    entry as superseded."""
+    rng = np.random.default_rng([W.SEED, 97])
+    used = set()
+    out = []
+    fmt = lambda d: d.strftime("%d/%m/%Y")
+    refs = {}
+    for a in sorted(T["assets"], key=lambda a: (a["signed"], a["code"], a["kw"], a["id"])):
+        if a["signed"] > W.REGISTER_DATE:
+            continue
+        while True:
+            ref = "FS-%05d" % int(rng.integers(10000, 99999))
+            if ref not in used:
+                used.add(ref)
+                break
+        refs[a["id"]] = ref
+        prov = PROVIDER_SPELLINGS[a["provider"]][int(rng.integers(0, 5))]
+        cls = CLASS_VARIANTS[a["cls"]][0 if rng.random() > 0.05 else 1]
+        seen = lambda d: d is not None and d <= W.REGISTER_DATE
+        comm = fmt(a["commissioned"]) if seen(a["commissioned"]) else ""
+        if seen(a["lost_on"]):
+            status, sdate = "Withdrawn", fmt(a["lost_on"])
+        elif seen(a["commissioned"]):
+            status, sdate = ("Left service", fmt(a["left"])) if seen(a["left"]) else ("Commissioned", "")
+        else:
+            status, sdate = "In delivery", ""
+        cmz = "%s CMZ" % a["zone_name"]
+        if rng.random() < 0.025:       # the capacity first registered, before the site survey revised it
+            first = int(round(a["kw"] * float(rng.choice([0.8, 0.85, 1.15, 1.25])) / 5.0) * 5)
+            out.append([ref, cmz, a["code"], prov, cls, str(first), a["winter"], fmt(a["signed"]), fmt(a["planned"]), "",
+                        "Superseded", fmt(a["signed"] + dt.timedelta(days=int(rng.integers(9, 45))))])
+        out.append([ref, cmz, a["code"], prov, cls, str(a["kw"]), a["winter"], fmt(a["signed"]), fmt(a["planned"]), comm,
+                    status, sdate])
+    return out, refs
+
+
+def write_assets(T, target):
+    rows, refs = asset_rows(T)
+    write_csv(os.path.join(target, F_ASSET),
+              ["site_ref", "constraint_managed_zone", "primary_asset", "provider", "asset_class", "registered_kw",
+               "service_year", "site_signed", "planned_commissioning", "commissioning_test_passed", "status", "status_date"],
+              rows)
+    return len(rows), refs
 
 
 def write_interruptions(target, feeders):
@@ -582,8 +704,10 @@ def write_data(T, target):
     write_register(target)
     feeders, nops = write_feeders(target)
     n_sw = write_switching(T, target, nops)
-    grow = write_growth(target, feeders)
+    grow, mpans = write_growth(T, target, feeders)
+    n_mon = write_monitor(T, target, mpans)
+    n_asset, site_refs = write_assets(T, target)
     write_interruptions(target, feeders)
     write_condition(target)
     return dict(scada_rows=n_scada, event_rows=n_ev, weather_rows=n_wx, switching_rows=n_sw, feeders=feeders, nops=nops,
-                growth=grow)
+                growth=grow, growth_rows=len(grow), monitor_rows=n_mon, asset_rows=n_asset, mpans=mpans, site_refs=site_refs)

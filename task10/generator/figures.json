@@ -1,1043 +1,2979 @@
 {
- "ashcombe_limit": 5.1,
- "backtest": {
-  "mae": 0.19,
-  "mae_cold": 0.36,
-  "n": 232,
-  "n_cold": 50,
-  "n_inside": 37,
-  "range_pct": 80
- },
- "bands": {
-  "backtest": {
-   "inside": [
-    25,
-    40
-   ],
-   "mae": [
-    0.1,
-    0.29
-   ]
-  },
-  "before": {
+ "bands_by_result": {
+  "R1": {
    "Ashcombe Road": [
-    29.8,
-    30.4
+    29.9,
+    30.8
    ],
    "Charlecote Way": [
-    24.6,
-    25.2
+    24.7,
+    25.4
+   ],
+   "Dunmore Street": [
+    21.9,
+    22.6
    ],
    "Fenwick Street": [
-    35.2,
-    35.8
+    36.5,
+    37.2
    ],
    "Hartwell Common": [
-    22.6,
+    22.4,
     23.2
    ]
   },
-  "bridge": {
-   "Ashcombe Road, lost as load comes back": [
-    2.9,
-    4.8
-   ],
-   "Ashcombe Road, not available": [
-    11.8,
-    13.7
-   ],
-   "Charlecote Way, lost as load comes back": [
-    -0.2,
-    0.2
-   ],
-   "Charlecote Way, not available": [
-    3.0,
-    3.8
-   ],
-   "Fenwick Street, lost as load comes back": [
-    -0.2,
-    0.2
-   ],
-   "Fenwick Street, not available": [
-    4.1,
-    5.1
-   ],
-   "Hartwell Common, lost as load comes back": [
-    -0.2,
-    0.2
-   ],
-   "Hartwell Common, not available": [
-    4.1,
-    5.0
-   ]
-  },
-  "comeback": {
-   "Corvane Flex Ltd": [
-    0.21,
-    0.39
-   ],
-   "Quillon Energy Services Ltd": [
-    0.16,
-    0.34
-   ]
-  },
-  "delivered": {
+  "R10": {
    "Ashcombe Road": [
+    86,
+    100
+   ],
+   "Charlecote Way": [
+    45,
+    72
+   ],
+   "Dunmore Street": [
+    63,
+    88
+   ],
+   "Fenwick Street": [
+    41,
+    65
+   ],
+   "Hartwell Common": [
+    0,
+    4
+   ]
+  },
+  "R2": {
+   "Ashcombe Road": [
+    0.5,
+    0.9
+   ],
+   "Charlecote Way": [
+    4.0,
+    4.7
+   ],
+   "Dunmore Street": [
+    0.0,
+    0.4
+   ],
+   "Fenwick Street": [
+    0.5,
+    0.9
+   ],
+   "Hartwell Common": [
+    0.5,
+    1.1
+   ]
+  },
+  "R3": {
+   "Ashcombe Road": [
+    31.9,
+    32.9
+   ],
+   "Charlecote Way": [
+    29.8,
+    30.7
+   ],
+   "Dunmore Street": [
+    22.7,
+    23.4
+   ],
+   "Fenwick Street": [
+    38.6,
+    39.3
+   ],
+   "Hartwell Common": [
+    24.0,
+    24.8
+   ]
+  },
+  "R4": {
+   "Ashcombe Road": [
+    17.2,
+    18.2
+   ],
+   "Charlecote Way": [
+    8.6,
+    9.0
+   ],
+   "Dunmore Street": [
+    6.0,
+    6.4
+   ],
+   "Fenwick Street": [
     7.3,
-    9.5
+    7.8
+   ],
+   "Hartwell Common": [
+    3.4,
+    3.8
+   ]
+  },
+  "R5": {
+   "Corvane Flex": [
+    0.4,
+    0.46
+   ],
+   "Quillon Energy Services": [
+    0.49,
+    0.55
+   ]
+  },
+  "R6": {
+   "Ashcombe Road": [
+    7.2,
+    8.0
    ],
    "Charlecote Way": [
+    4.3,
+    4.9
+   ],
+   "Dunmore Street": [
+    2.4,
+    2.9
+   ],
+   "Fenwick Street": [
     3.7,
-    4.5
-   ],
-   "Fenwick Street": [
-    4.9,
-    5.9
+    4.2
    ],
    "Hartwell Common": [
-    2.5,
-    3.4
+    1.3,
+    1.8
    ]
   },
-  "off_peak": {
+  "R7": {
+   "Corvane Flex": [
+    0.6,
+    0.71
+   ],
+   "Quillon Energy Services": [
+    0.26,
+    0.36
+   ]
+  },
+  "R8": {
    "Ashcombe Road": [
-    3.9,
-    4.6
+    28.2,
+    29.0
    ],
    "Charlecote Way": [
-    3.7,
-    4.5
-   ],
-   "Fenwick Street": [
-    4.9,
-    5.9
-   ],
-   "Hartwell Common": [
-    2.6,
-    3.4
-   ]
-  },
-  "one_in_ten": {
-   "Ashcombe Road": [
-    26.1,
-    27.0
-   ],
-   "Charlecote Way": [
-    21.3,
-    22.2
-   ],
-   "Fenwick Street": [
-    30.7,
-    31.8
-   ],
-   "Hartwell Common": [
-    20.1,
-    21.1
-   ]
-  },
-  "peak": {
-   "Ashcombe Road": [
-    25.6,
+    25.5,
     26.2
    ],
-   "Charlecote Way": [
-    20.4,
-    21.2
+   "Dunmore Street": [
+    20.1,
+    20.8
    ],
    "Fenwick Street": [
-    29.5,
-    30.5
+    34.7,
+    35.4
    ],
    "Hartwell Common": [
-    19.5,
-    20.4
+    22.5,
+    23.2
    ]
   },
-  "share": {
-   "Corvane Flex Ltd": [
-    0.36,
-    0.45
+  "R9": {
+   "Ashcombe Road": [
+    29.2,
+    30.0
    ],
-   "Quillon Energy Services Ltd": [
-    0.5,
-    0.59
-   ]
-  },
-  "spread": {
-   "Corvane Flex Ltd": [
-    12,
-    24
+   "Charlecote Way": [
+    26.6,
+    27.5
    ],
-   "Quillon Energy Services Ltd": [
-    13,
-    23
+   "Dunmore Street": [
+    20.8,
+    21.5
+   ],
+   "Fenwick Street": [
+    35.9,
+    36.6
+   ],
+   "Hartwell Common": [
+    23.1,
+    23.8
    ]
   }
- },
- "c1_share": {
-  "Corvane Flex Ltd": 0.39,
-  "Quillon Energy Services Ltd": 0.54
- },
- "c2_comeback": {
-  "Corvane Flex Ltd": 0.32,
-  "Quillon Energy Services Ltd": 0.26
- },
- "c3_spread": {
-  "Corvane Flex Ltd": 16,
-  "Quillon Energy Services Ltd": 16
  },
  "call": [
   "Ashcombe Road",
-  "Fenwick Street",
-  "Hartwell Common"
+  "Charlecote Way",
+  "Dunmore Street",
+  "Fenwick Street"
  ],
  "careful": {
-  "Ashcombe Road": {
-   "before": 30.1,
-   "comeback_loss": 0.0,
-   "delivered": 10.3,
-   "not_available": 10.7,
-   "off_peak": 10.3,
-   "one_in_ten": 20.5,
-   "one_in_ten_fit": 20.1,
-   "one_in_ten_relative": 22.6,
-   "over": false,
-   "over_fit": false,
-   "over_relative": false,
-   "peak": 19.8,
-   "peak_hh": "18:00",
-   "rate": 0.5,
-   "scatter_mw": 0.5,
-   "scatter_share": 0.0
+  "R1": {
+   "Ashcombe Road": 29.0,
+   "Charlecote Way": 24.8,
+   "Dunmore Street": 20.2,
+   "Fenwick Street": 36.4,
+   "Hartwell Common": 22.6
   },
-  "Charlecote Way": {
-   "before": 24.9,
-   "comeback_loss": 0.0,
-   "delivered": 5.0,
-   "not_available": 2.5,
-   "off_peak": 5.0,
-   "one_in_ten": 20.3,
-   "one_in_ten_fit": 20.0,
-   "one_in_ten_relative": 21.0,
-   "over": false,
-   "over_fit": false,
-   "over_relative": false,
-   "peak": 19.9,
-   "peak_hh": "18:00",
-   "rate": 0.7,
-   "scatter_mw": 0.3,
-   "scatter_share": 0.1
+  "R10": {
+   "Ashcombe Road": 76,
+   "Charlecote Way": 0,
+   "Dunmore Street": 0,
+   "Fenwick Street": 0,
+   "Hartwell Common": 62
   },
-  "Fenwick Street": {
-   "before": 35.5,
-   "comeback_loss": 0.0,
-   "delivered": 5.6,
-   "not_available": 4.4,
-   "off_peak": 5.6,
-   "one_in_ten": 30.4,
-   "one_in_ten_fit": 30.0,
-   "one_in_ten_relative": 31.2,
-   "over": false,
-   "over_fit": false,
-   "over_relative": true,
-   "peak": 29.8,
-   "peak_hh": "18:00",
-   "rate": 0.6,
-   "scatter_mw": 0.4,
-   "scatter_share": 0.1
+  "R11": [
+   "Ashcombe Road",
+   "Hartwell Common"
+  ],
+  "R2": {
+   "Ashcombe Road": 0.6,
+   "Charlecote Way": 0.0,
+   "Dunmore Street": 0.2,
+   "Fenwick Street": 0.6,
+   "Hartwell Common": 2.7
   },
-  "Hartwell Common": {
-   "before": 22.9,
-   "comeback_loss": 0.0,
-   "delivered": 2.8,
-   "not_available": 4.7,
-   "off_peak": 2.8,
-   "one_in_ten": 20.5,
-   "one_in_ten_fit": 20.3,
-   "one_in_ten_relative": 21.3,
-   "over": true,
-   "over_fit": true,
-   "over_relative": true,
-   "peak": 20.1,
-   "peak_hh": "18:00",
-   "rate": 0.4,
-   "scatter_mw": 0.3,
-   "scatter_share": 0.1
+  "R3": {
+   "Ashcombe Road": 30.9,
+   "Charlecote Way": 25.5,
+   "Dunmore Street": 21.0,
+   "Fenwick Street": 38.4,
+   "Hartwell Common": 26.2
+  },
+  "R4": {
+   "Ashcombe Road": 23.2,
+   "Charlecote Way": 9.4,
+   "Dunmore Street": 6.4,
+   "Fenwick Street": 14.3,
+   "Hartwell Common": 3.8
+  },
+  "R5": {
+   "Corvane Flex": 0.42,
+   "Quillon Energy Services": 0.51
+  },
+  "R6": {
+   "Ashcombe Road": 9.9,
+   "Charlecote Way": 4.8,
+   "Dunmore Street": 2.7,
+   "Fenwick Street": 7.4,
+   "Hartwell Common": 1.6
+  },
+  "R7": {
+   "Corvane Flex": 0.67,
+   "Quillon Energy Services": 0.31
+  },
+  "R8": {
+   "Ashcombe Road": 28.1,
+   "Charlecote Way": 21.4,
+   "Dunmore Street": 18.3,
+   "Fenwick Street": 31.6,
+   "Hartwell Common": 24.6
+  },
+  "R9": {
+   "Ashcombe Road": 29.3,
+   "Charlecote Way": 22.1,
+   "Dunmore Street": 18.9,
+   "Fenwick Street": 32.9,
+   "Hartwell Common": 25.3
   }
  },
- "careful_backtest": {
-  "inside": 29,
-  "inside_fit_range": 7,
-  "mae": 0.24
+ "classes": {
+  "Battery storage": {
+   "commissioned": 138,
+   "in_service_by_150_days_pct": 52,
+   "median_days_late": 120,
+   "sites": 168,
+   "withdrawn": 10
+  },
+  "Commercial refrigeration": {
+   "commissioned": 236,
+   "in_service_by_150_days_pct": 97,
+   "median_days_late": 29,
+   "sites": 245,
+   "withdrawn": 5
+  },
+  "Domestic heat pump aggregation": {
+   "commissioned": 235,
+   "in_service_by_150_days_pct": 83,
+   "median_days_late": 53,
+   "sites": 253,
+   "withdrawn": 8
+  },
+  "EV charging aggregation": {
+   "commissioned": 150,
+   "in_service_by_150_days_pct": 92,
+   "median_days_late": 31,
+   "sites": 161,
+   "withdrawn": 6
+  },
+  "HVAC": {
+   "commissioned": 182,
+   "in_service_by_150_days_pct": 88,
+   "median_days_late": 35,
+   "sites": 202,
+   "withdrawn": 7
+  },
+  "Process load": {
+   "commissioned": 104,
+   "in_service_by_150_days_pct": 26,
+   "median_days_late": 248,
+   "sites": 143,
+   "withdrawn": 9
+  }
  },
- "careful_call": [
-  "Hartwell Common"
- ],
- "cold_events": {
-  "met": 3,
-  "total": 115
+ "cold_end": {
+  "Ashcombe Road": {
+   "knee_c": 0.5,
+   "per_degree_above": 0.48,
+   "per_degree_below": 0.67
+  },
+  "Charlecote Way": {
+   "knee_c": 0.0,
+   "per_degree_above": 0.35,
+   "per_degree_below": 0.4
+  },
+  "Dunmore Street": {
+   "knee_c": 0.5,
+   "per_degree_above": 0.32,
+   "per_degree_below": 0.71
+  },
+  "Fenwick Street": {
+   "knee_c": 6.0,
+   "per_degree_above": 0.56,
+   "per_degree_below": 0.5
+  },
+  "Hartwell Common": {
+   "knee_c": 4.0,
+   "per_degree_above": 0.46,
+   "per_degree_below": 0.49
+  }
  },
  "conventions": {
+  "assessment_date": "15 January 2028",
   "assurance_days_in_ten": 9,
-  "cold_days_at_or_below_minus": 1.0,
   "credited_half_hours": [
    "17:30",
    "18:00"
   ],
   "design_day_degrees_below_zero": 3.0,
-  "threshold_pct": 92
+  "latest_winter_date": "15 January 2026",
+  "post_window_half_hours": 4,
+  "register_extract": "4 November 2026",
+  "window": "16:00 to 19:30",
+  "winters": 3
+ },
+ "customers": {
+  "Ashcombe Road": [
+   {
+    "adds_mw": 0.28,
+    "energised": "17/11/2025",
+    "kva": 620,
+    "on_supply": true,
+    "reference": "LCG-2024-65434",
+    "type": "Supermarket"
+   },
+   {
+    "adds_mw": 0.16,
+    "energised": "19/05/2026",
+    "kva": 500,
+    "on_supply": true,
+    "reference": "LCG-2025-26005",
+    "type": "Commercial unit"
+   },
+   {
+    "adds_mw": 0.15,
+    "energised": "14/09/2026",
+    "kva": 540,
+    "on_supply": true,
+    "reference": "LCG-2025-71044",
+    "type": "Commercial unit"
+   },
+   {
+    "adds_mw": 0.08,
+    "energised": "22/03/2027",
+    "kva": 800,
+    "on_supply": false,
+    "reference": "LCG-2026-74392",
+    "type": "EV charging hub"
+   },
+   {
+    "adds_mw": 0.07,
+    "energised": "02/10/2023",
+    "kva": 500,
+    "on_supply": true,
+    "reference": "LCG-2022-15051",
+    "type": "Data hall"
+   },
+   {
+    "adds_mw": -0.05,
+    "energised": "26/06/2022",
+    "kva": 1250,
+    "on_supply": true,
+    "reference": "LCG-2021-50271",
+    "type": "Commercial unit"
+   },
+   {
+    "adds_mw": 0.01,
+    "energised": "30/05/2021",
+    "kva": 1250,
+    "on_supply": true,
+    "reference": "LCG-2020-23966",
+    "type": "EV charging hub"
+   },
+   {
+    "adds_mw": -0.01,
+    "energised": "20/03/2021",
+    "kva": 1250,
+    "on_supply": true,
+    "reference": "LCG-2019-40455",
+    "type": "Leisure centre"
+   },
+   {
+    "adds_mw": -0.0,
+    "energised": "30/04/2021",
+    "kva": 400,
+    "on_supply": true,
+    "reference": "LCG-2020-79200",
+    "type": "Industrial unit"
+   },
+   {
+    "adds_mw": 0.0,
+    "energised": "14/07/2022",
+    "kva": 500,
+    "on_supply": true,
+    "reference": "LCG-2021-54946",
+    "type": "Supermarket"
+   },
+   {
+    "adds_mw": 0.0,
+    "energised": "19/05/2021",
+    "kva": 180,
+    "on_supply": true,
+    "reference": "LCG-2019-65797",
+    "type": "Industrial unit"
+   },
+   {
+    "adds_mw": -0.0,
+    "energised": "28/08/2022",
+    "kva": 1000,
+    "on_supply": true,
+    "reference": "LCG-2021-28516",
+    "type": "Cold store"
+   },
+   {
+    "adds_mw": 0.0,
+    "energised": "30/03/2022",
+    "kva": 250,
+    "on_supply": true,
+    "reference": "LCG-2021-91757",
+    "type": "Industrial unit"
+   },
+   {
+    "adds_mw": -0.0,
+    "energised": "10/04/2021",
+    "kva": 180,
+    "on_supply": true,
+    "reference": "LCG-2019-73265",
+    "type": "Leisure centre"
+   }
+  ],
+  "Charlecote Way": [
+   {
+    "adds_mw": 2.01,
+    "energised": "15/12/2025",
+    "kva": 3100,
+    "on_supply": true,
+    "reference": "LCG-2025-93392",
+    "type": "Cold store"
+   },
+   {
+    "adds_mw": 1.37,
+    "energised": "03/11/2025",
+    "kva": 5000,
+    "on_supply": true,
+    "reference": "LCG-2024-61551",
+    "type": "Commercial unit"
+   },
+   {
+    "adds_mw": 0.97,
+    "energised": "01/12/2025",
+    "kva": 3800,
+    "on_supply": true,
+    "reference": "LCG-2024-15096",
+    "type": "Industrial unit"
+   },
+   {
+    "adds_mw": 0.06,
+    "energised": "01/06/2023",
+    "kva": 650,
+    "on_supply": true,
+    "reference": "LCG-2022-53046",
+    "type": "Data hall"
+   },
+   {
+    "adds_mw": 0.05,
+    "energised": "19/12/2025",
+    "kva": 150,
+    "on_supply": true,
+    "reference": "LCG-2024-24189",
+    "type": "Data hall"
+   },
+   {
+    "adds_mw": 0.01,
+    "energised": "12/03/2024",
+    "kva": 320,
+    "on_supply": true,
+    "reference": "LCG-2023-90208",
+    "type": "Care home"
+   },
+   {
+    "adds_mw": 0.01,
+    "energised": "28/02/2023",
+    "kva": 400,
+    "on_supply": true,
+    "reference": "LCG-2021-11342",
+    "type": "Commercial unit"
+   },
+   {
+    "adds_mw": 0.01,
+    "energised": "30/09/2021",
+    "kva": 320,
+    "on_supply": true,
+    "reference": "LCG-2020-41147",
+    "type": "Commercial unit"
+   },
+   {
+    "adds_mw": 0.0,
+    "energised": "30/11/2022",
+    "kva": 400,
+    "on_supply": true,
+    "reference": "LCG-2021-91164",
+    "type": "Leisure centre"
+   },
+   {
+    "adds_mw": 0.0,
+    "energised": "13/06/2022",
+    "kva": 1250,
+    "on_supply": true,
+    "reference": "LCG-2021-83032",
+    "type": "Care home"
+   }
+  ],
+  "Dunmore Street": [
+   {
+    "adds_mw": 0.09,
+    "energised": "11/05/2026",
+    "kva": 300,
+    "on_supply": true,
+    "reference": "LCG-2025-68045",
+    "type": "Commercial unit"
+   },
+   {
+    "adds_mw": 0.06,
+    "energised": "17/05/2027",
+    "kva": 240,
+    "on_supply": false,
+    "reference": "LCG-2026-80326",
+    "type": "Care home"
+   },
+   {
+    "adds_mw": 0.04,
+    "energised": "25/08/2025",
+    "kva": 350,
+    "on_supply": true,
+    "reference": "LCG-2024-90493",
+    "type": "School or college"
+   },
+   {
+    "adds_mw": 0.03,
+    "energised": "20/03/2024",
+    "kva": 500,
+    "on_supply": true,
+    "reference": "LCG-2023-83861",
+    "type": "Bus depot charging"
+   },
+   {
+    "adds_mw": 0.01,
+    "energised": "07/12/2021",
+    "kva": 800,
+    "on_supply": true,
+    "reference": "LCG-2020-78809",
+    "type": "Bus depot charging"
+   },
+   {
+    "adds_mw": 0.01,
+    "energised": "05/05/2023",
+    "kva": 1000,
+    "on_supply": true,
+    "reference": "LCG-2022-46809",
+    "type": "Bus depot charging"
+   },
+   {
+    "adds_mw": 0.01,
+    "energised": "10/02/2021",
+    "kva": 1000,
+    "on_supply": true,
+    "reference": "LCG-2020-43887",
+    "type": "Bus depot charging"
+   },
+   {
+    "adds_mw": -0.01,
+    "energised": "06/09/2022",
+    "kva": 250,
+    "on_supply": true,
+    "reference": "LCG-2021-62323",
+    "type": "EV charging hub"
+   },
+   {
+    "adds_mw": -0.0,
+    "energised": "04/11/2022",
+    "kva": 500,
+    "on_supply": true,
+    "reference": "LCG-2021-21054",
+    "type": "Cold store"
+   },
+   {
+    "adds_mw": 0.0,
+    "energised": "29/05/2021",
+    "kva": 650,
+    "on_supply": true,
+    "reference": "LCG-2020-36843",
+    "type": "Cold store"
+   },
+   {
+    "adds_mw": 0.0,
+    "energised": "16/12/2022",
+    "kva": 320,
+    "on_supply": true,
+    "reference": "LCG-2021-20487",
+    "type": "School or college"
+   }
+  ],
+  "Fenwick Street": [
+   {
+    "adds_mw": 0.25,
+    "energised": "22/03/2026",
+    "kva": 500,
+    "on_supply": true,
+    "reference": "LCG-2025-24846",
+    "type": "Supermarket"
+   },
+   {
+    "adds_mw": 0.16,
+    "energised": "15/06/2026",
+    "kva": 520,
+    "on_supply": true,
+    "reference": "LCG-2025-16522",
+    "type": "Industrial unit"
+   },
+   {
+    "adds_mw": 0.09,
+    "energised": "19/05/2025",
+    "kva": 560,
+    "on_supply": true,
+    "reference": "LCG-2024-71820",
+    "type": "Leisure centre"
+   },
+   {
+    "adds_mw": 0.07,
+    "energised": "26/04/2027",
+    "kva": 380,
+    "on_supply": false,
+    "reference": "LCG-2026-17476",
+    "type": "Commercial unit"
+   },
+   {
+    "adds_mw": 0.06,
+    "energised": "27/01/2024",
+    "kva": 1250,
+    "on_supply": true,
+    "reference": "LCG-2022-42951",
+    "type": "Cold store"
+   },
+   {
+    "adds_mw": 0.03,
+    "energised": "16/09/2022",
+    "kva": 1000,
+    "on_supply": true,
+    "reference": "LCG-2021-50246",
+    "type": "Data hall"
+   },
+   {
+    "adds_mw": 0.03,
+    "energised": "11/01/2022",
+    "kva": 1000,
+    "on_supply": true,
+    "reference": "LCG-2020-31022",
+    "type": "Industrial unit"
+   },
+   {
+    "adds_mw": 0.03,
+    "energised": "30/06/2022",
+    "kva": 1250,
+    "on_supply": true,
+    "reference": "LCG-2021-58766",
+    "type": "EV charging hub"
+   },
+   {
+    "adds_mw": 0.0,
+    "energised": "29/10/2022",
+    "kva": 400,
+    "on_supply": true,
+    "reference": "LCG-2021-14330",
+    "type": "Supermarket"
+   },
+   {
+    "adds_mw": -0.0,
+    "energised": "28/09/2021",
+    "kva": 400,
+    "on_supply": true,
+    "reference": "LCG-2020-28017",
+    "type": "School or college"
+   },
+   {
+    "adds_mw": 0.0,
+    "energised": "17/08/2022",
+    "kva": 500,
+    "on_supply": true,
+    "reference": "LCG-2021-90663",
+    "type": "Bus depot charging"
+   }
+  ],
+  "Hartwell Common": [
+   {
+    "adds_mw": 0.37,
+    "energised": "13/09/2027",
+    "kva": 4000,
+    "on_supply": false,
+    "reference": "LCG-2026-20141",
+    "type": "Commercial unit"
+   },
+   {
+    "adds_mw": 0.08,
+    "energised": "11/10/2027",
+    "kva": 2000,
+    "on_supply": false,
+    "reference": "LCG-2026-66191",
+    "type": "Industrial unit"
+   },
+   {
+    "adds_mw": 0.07,
+    "energised": "04/02/2024",
+    "kva": 1250,
+    "on_supply": true,
+    "reference": "LCG-2022-36603",
+    "type": "Bus depot charging"
+   },
+   {
+    "adds_mw": 0.05,
+    "energised": "09/08/2027",
+    "kva": 1150,
+    "on_supply": false,
+    "reference": "LCG-2026-88769",
+    "type": "EV charging hub"
+   },
+   {
+    "adds_mw": 0.03,
+    "energised": "10/02/2025",
+    "kva": 260,
+    "on_supply": true,
+    "reference": "LCG-2023-99944",
+    "type": "Care home"
+   },
+   {
+    "adds_mw": 0.02,
+    "energised": "04/06/2023",
+    "kva": 1000,
+    "on_supply": true,
+    "reference": "LCG-2022-35339",
+    "type": "Bus depot charging"
+   },
+   {
+    "adds_mw": 0.02,
+    "energised": "08/11/2021",
+    "kva": 1250,
+    "on_supply": true,
+    "reference": "LCG-2020-27625",
+    "type": "Bus depot charging"
+   },
+   {
+    "adds_mw": 0.02,
+    "energised": "06/08/2021",
+    "kva": 800,
+    "on_supply": true,
+    "reference": "LCG-2020-20292",
+    "type": "Care home"
+   },
+   {
+    "adds_mw": 0.02,
+    "energised": "29/03/2023",
+    "kva": 1000,
+    "on_supply": true,
+    "reference": "LCG-2022-62771",
+    "type": "School or college"
+   },
+   {
+    "adds_mw": 0.01,
+    "energised": "13/12/2023",
+    "kva": 250,
+    "on_supply": true,
+    "reference": "LCG-2022-50269",
+    "type": "Bus depot charging"
+   },
+   {
+    "adds_mw": 0.01,
+    "energised": "01/02/2021",
+    "kva": 320,
+    "on_supply": true,
+    "reference": "LCG-2019-89591",
+    "type": "Commercial unit"
+   },
+   {
+    "adds_mw": 0.0,
+    "energised": "06/04/2022",
+    "kva": 180,
+    "on_supply": true,
+    "reference": "LCG-2020-71757",
+    "type": "Leisure centre"
+   },
+   {
+    "adds_mw": 0.0,
+    "energised": "23/01/2022",
+    "kva": 400,
+    "on_supply": true,
+    "reference": "LCG-2020-93855",
+    "type": "Leisure centre"
+   }
+  ]
  },
  "family": {
-  "delivered": {
-   "a cancelled instruction's day kept": {
-    "Ashcombe Road": 8.12,
-    "Charlecote Way": 3.97,
-    "Fenwick Street": 5.29,
-    "Hartwell Common": 2.9
+  "margin": {
+   "a build-up without a slow start": {
+    "Ashcombe Road": 2.01,
+    "Charlecote Way": 1.11,
+    "Dunmore Street": 1.09,
+    "Fenwick Street": 1.26,
+    "Hartwell Common": -0.74
    },
-   "a curved line": {
-    "Ashcombe Road": 8.01,
-    "Charlecote Way": 4.17,
-    "Fenwick Street": 5.56,
-    "Hartwell Common": 2.86
+   "a customer's own level from its latest six months": {
+    "Ashcombe Road": 1.95,
+    "Charlecote Way": 1.47,
+    "Dunmore Street": 1.07,
+    "Fenwick Street": 1.19,
+    "Hartwell Common": -1.0
    },
-   "a heating slope each winter": {
-    "Ashcombe Road": 8.05,
-    "Charlecote Way": 3.98,
-    "Fenwick Street": 5.3,
-    "Hartwell Common": 2.88
+   "each class's days late as a fitted distribution": {
+    "Ashcombe Road": 1.94,
+    "Charlecote Way": 1.46,
+    "Dunmore Street": 1.04,
+    "Fenwick Street": 1.28,
+    "Hartwell Common": -0.95
    },
-   "days at or below 0 C": {
-    "Ashcombe Road": 8.03,
-    "Charlecote Way": 4.05,
-    "Fenwick Street": 5.4,
-    "Hartwell Common": 2.87
+   "each class's record with its own provider": {
+    "Ashcombe Road": 1.88,
+    "Charlecote Way": 1.41,
+    "Dunmore Street": 1.06,
+    "Fenwick Street": 1.2,
+    "Hartwell Common": -0.96
    },
-   "days at or below minus 1.5 C": {
-    "Ashcombe Road": 8.04,
-    "Charlecote Way": 4.03,
-    "Fenwick Street": 5.38,
-    "Hartwell Common": 2.87
+   "each half-hour regressed on the day's own morning": {
+    "Ashcombe Road": 2.04,
+    "Charlecote Way": 1.63,
+    "Dunmore Street": 1.11,
+    "Fenwick Street": 1.35,
+    "Hartwell Common": -0.94
    },
-   "days at or below minus 2 C": {
-    "Ashcombe Road": 8.15,
-    "Charlecote Way": 4.16,
-    "Fenwick Street": 5.54,
-    "Hartwell Common": 2.91
+   "each winter's level allowed to drift, read at 15 January": {
+    "Ashcombe Road": 1.96,
+    "Charlecote Way": 1.34,
+    "Dunmore Street": 1.06,
+    "Fenwick Street": 1.21,
+    "Hartwell Common": -0.96
+   },
+   "every customer on its type's level, its own months set aside": {
+    "Ashcombe Road": 2.01,
+    "Charlecote Way": 1.47,
+    "Dunmore Street": 1.06,
+    "Fenwick Street": 1.2,
+    "Hartwell Common": -1.04
    },
    "golden": {
-    "Ashcombe Road": 8.11,
-    "Charlecote Way": 4.03,
-    "Fenwick Street": 5.37,
-    "Hartwell Common": 2.9
+    "Ashcombe Road": 1.96,
+    "Charlecote Way": 1.42,
+    "Dunmore Street": 1.06,
+    "Fenwick Street": 1.2,
+    "Hartwell Common": -0.95
    },
-   "heating base 14 C": {
-    "Ashcombe Road": 9.04,
-    "Charlecote Way": 4.3,
-    "Fenwick Street": 5.73,
-    "Hartwell Common": 3.23
+   "mornings curved below a knee the fit chooses": {
+    "Ashcombe Road": 1.92,
+    "Charlecote Way": 1.42,
+    "Dunmore Street": 0.93,
+    "Fenwick Street": 1.18,
+    "Hartwell Common": -0.96
    },
-   "heating base 17 C": {
-    "Ashcombe Road": 7.96,
-    "Charlecote Way": 3.99,
-    "Fenwick Street": 5.31,
-    "Hartwell Common": 2.84
+   "mornings on a line through the days at or below 1 C alone": {
+    "Ashcombe Road": 2.17,
+    "Charlecote Way": 1.5,
+    "Dunmore Street": 1.23,
+    "Fenwick Street": 1.41,
+    "Hartwell Common": -0.82
    },
-   "megawatts fitted over every event": {
-    "Ashcombe Road": 7.87,
-    "Charlecote Way": 4.1,
-    "Fenwick Street": 5.47,
-    "Hartwell Common": 2.81
+   "mornings on two straight lines meeting at a knee the fit chooses": {
+    "Ashcombe Road": 1.99,
+    "Charlecote Way": 1.43,
+    "Dunmore Street": 1.12,
+    "Fenwick Street": 1.07,
+    "Hartwell Common": -0.96
    },
-   "megawatts fitted over every event, zone by zone": {
-    "Ashcombe Road": 7.79,
-    "Charlecote Way": 3.92,
-    "Fenwick Street": 5.65,
-    "Hartwell Common": 2.96
-   },
-   "met calls as floors, days at or below 2 C": {
-    "Ashcombe Road": 8.08,
-    "Charlecote Way": 4.09,
-    "Fenwick Street": 5.46,
-    "Hartwell Common": 2.88
-   },
-   "met calls as floors, every day": {
-    "Ashcombe Road": 8.46,
-    "Charlecote Way": 4.33,
-    "Fenwick Street": 5.77,
-    "Hartwell Common": 3.02
-   },
-   "met calls as floors, every day, a curved line": {
-    "Ashcombe Road": 8.36,
-    "Charlecote Way": 4.28,
-    "Fenwick Street": 5.71,
-    "Hartwell Common": 2.99
-   },
-   "the baseline scaled to the day's own level before the window": {
-    "Ashcombe Road": 7.99,
-    "Charlecote Way": 3.87,
-    "Fenwick Street": 5.16,
-    "Hartwell Common": 2.85
+   "sites withdrawn counted as still to come in the record": {
+    "Ashcombe Road": 2.0,
+    "Charlecote Way": 1.39,
+    "Dunmore Street": 1.05,
+    "Fenwick Street": 1.17,
+    "Hartwell Common": -0.97
    },
    "the calls that fell short alone": {
-    "Ashcombe Road": 8.09,
-    "Charlecote Way": 4.06,
-    "Fenwick Street": 5.41,
-    "Hartwell Common": 2.89
+    "Ashcombe Road": 1.92,
+    "Charlecote Way": 1.48,
+    "Dunmore Street": 1.08,
+    "Fenwick Street": 1.25,
+    "Hartwell Common": -0.94
    },
-   "the calls that fell short alone, every day": {
-    "Ashcombe Road": 8.58,
-    "Charlecote Way": 4.2,
-    "Fenwick Street": 5.6,
-    "Hartwell Common": 3.07
+   "the latest winter alone": {
+    "Ashcombe Road": 2.37,
+    "Charlecote Way": 1.78,
+    "Dunmore Street": 1.38,
+    "Fenwick Street": 1.42,
+    "Hartwell Common": -0.78
    },
-   "the scatter as measured": {
-    "Ashcombe Road": 8.11,
-    "Charlecote Way": 4.03,
-    "Fenwick Street": 5.37,
-    "Hartwell Common": 2.9
+   "the morning taken as the half-hours ending 09:00 to 15:00": {
+    "Ashcombe Road": 1.99,
+    "Charlecote Way": 1.41,
+    "Dunmore Street": 1.11,
+    "Fenwick Street": 1.17,
+    "Hartwell Common": -0.93
    },
-   "the share's own scatter as measured, times the award": {
-    "Ashcombe Road": 8.11,
-    "Charlecote Way": 4.03,
-    "Fenwick Street": 5.37,
-    "Hartwell Common": 2.9
+   "the share curved in temperature": {
+    "Ashcombe Road": 2.06,
+    "Charlecote Way": 1.43,
+    "Dunmore Street": 0.95,
+    "Fenwick Street": 1.2,
+    "Hartwell Common": -1.02
    },
-   "the share's own scatter as measured, times the award, zone by zone": {
-    "Ashcombe Road": 7.94,
-    "Charlecote Way": 3.86,
-    "Fenwick Street": 5.59,
-    "Hartwell Common": 2.95
+   "the share flat above 2 C": {
+    "Ashcombe Road": 1.96,
+    "Charlecote Way": 1.42,
+    "Dunmore Street": 1.06,
+    "Fenwick Street": 1.2,
+    "Hartwell Common": -0.95
    },
-   "the three winters' own scaling with the megawatts contracted": {
-    "Ashcombe Road": 7.46,
-    "Charlecote Way": 3.83,
-    "Fenwick Street": 5.03,
-    "Hartwell Common": 2.69
-   },
-   "weekday levels": {
-    "Ashcombe Road": 8.11,
-    "Charlecote Way": 4.04,
-    "Fenwick Street": 5.38,
-    "Hartwell Common": 2.9
-   },
-   "zone by zone": {
-    "Ashcombe Road": 7.94,
-    "Charlecote Way": 3.86,
-    "Fenwick Street": 5.59,
-    "Hartwell Common": 2.95
+   "the two latest winters": {
+    "Ashcombe Road": 2.08,
+    "Charlecote Way": 1.54,
+    "Dunmore Street": 1.07,
+    "Fenwick Street": 1.25,
+    "Hartwell Common": -0.94
    }
   },
-  "mae": {
-   "a cancelled instruction's day kept": 0.193,
-   "a curved line": 0.256,
-   "a heating slope each winter": 0.208,
-   "days at or below 0 C": 0.189,
-   "days at or below minus 1.5 C": 0.193,
-   "days at or below minus 2 C": 0.207,
-   "golden": 0.193,
-   "heating base 14 C": 0.202,
-   "heating base 17 C": 0.193,
-   "megawatts fitted over every event": 0.188,
-   "megawatts fitted over every event, zone by zone": 0.188,
-   "met calls as floors, days at or below 2 C": 0.189,
-   "met calls as floors, every day": 0.196,
-   "met calls as floors, every day, a curved line": 0.197,
-   "the baseline scaled to the day's own level before the window": 0.134,
-   "the calls that fell short alone": 0.194,
-   "the calls that fell short alone, every day": 0.236,
-   "the scatter as measured": 0.193,
-   "the share's own scatter as measured, times the award": 0.193,
-   "the share's own scatter as measured, times the award, zone by zone": 0.193,
-   "the three winters' own scaling with the megawatts contracted": 0.193,
-   "weekday levels": 0.196,
-   "zone by zone": 0.193
-  },
   "one_in_ten": {
-   "a cancelled instruction's day kept": {
-    "Ashcombe Road": 26.55,
-    "Charlecote Way": 21.78,
-    "Fenwick Street": 31.41,
-    "Hartwell Common": 20.67
+   "a build-up without a slow start": {
+    "Ashcombe Road": 29.51,
+    "Charlecote Way": 26.71,
+    "Dunmore Street": 21.09,
+    "Fenwick Street": 36.26,
+    "Hartwell Common": 23.66
    },
-   "a curved line": {
-    "Ashcombe Road": 26.48,
-    "Charlecote Way": 21.57,
-    "Fenwick Street": 31.04,
-    "Hartwell Common": 20.67
+   "a customer's own level from its latest six months": {
+    "Ashcombe Road": 29.45,
+    "Charlecote Way": 27.07,
+    "Dunmore Street": 21.07,
+    "Fenwick Street": 36.19,
+    "Hartwell Common": 23.4
    },
-   "a heating slope each winter": {
-    "Ashcombe Road": 26.54,
-    "Charlecote Way": 21.82,
-    "Fenwick Street": 31.36,
-    "Hartwell Common": 20.68
+   "each class's days late as a fitted distribution": {
+    "Ashcombe Road": 29.44,
+    "Charlecote Way": 27.06,
+    "Dunmore Street": 21.04,
+    "Fenwick Street": 36.28,
+    "Hartwell Common": 23.45
    },
-   "days at or below 0 C": {
-    "Ashcombe Road": 26.48,
-    "Charlecote Way": 21.66,
-    "Fenwick Street": 31.16,
-    "Hartwell Common": 20.66
+   "each class's record with its own provider": {
+    "Ashcombe Road": 29.38,
+    "Charlecote Way": 27.01,
+    "Dunmore Street": 21.06,
+    "Fenwick Street": 36.2,
+    "Hartwell Common": 23.44
    },
-   "days at or below minus 1.5 C": {
-    "Ashcombe Road": 26.52,
-    "Charlecote Way": 21.66,
-    "Fenwick Street": 31.15,
-    "Hartwell Common": 20.7
+   "each half-hour regressed on the day's own morning": {
+    "Ashcombe Road": 29.54,
+    "Charlecote Way": 27.23,
+    "Dunmore Street": 21.11,
+    "Fenwick Street": 36.35,
+    "Hartwell Common": 23.46
    },
-   "days at or below minus 2 C": {
-    "Ashcombe Road": 26.58,
-    "Charlecote Way": 21.5,
-    "Fenwick Street": 30.94,
-    "Hartwell Common": 20.69
+   "each winter's level allowed to drift, read at 15 January": {
+    "Ashcombe Road": 29.46,
+    "Charlecote Way": 26.94,
+    "Dunmore Street": 21.06,
+    "Fenwick Street": 36.21,
+    "Hartwell Common": 23.44
+   },
+   "every customer on its type's level, its own months set aside": {
+    "Ashcombe Road": 29.51,
+    "Charlecote Way": 27.07,
+    "Dunmore Street": 21.06,
+    "Fenwick Street": 36.2,
+    "Hartwell Common": 23.36
    },
    "golden": {
-    "Ashcombe Road": 26.51,
-    "Charlecote Way": 21.7,
-    "Fenwick Street": 31.2,
-    "Hartwell Common": 20.63
+    "Ashcombe Road": 29.46,
+    "Charlecote Way": 27.02,
+    "Dunmore Street": 21.06,
+    "Fenwick Street": 36.2,
+    "Hartwell Common": 23.45
    },
-   "heating base 14 C": {
-    "Ashcombe Road": 26.2,
-    "Charlecote Way": 21.44,
-    "Fenwick Street": 30.86,
-    "Hartwell Common": 20.29
+   "mornings curved below a knee the fit chooses": {
+    "Ashcombe Road": 29.42,
+    "Charlecote Way": 27.02,
+    "Dunmore Street": 20.93,
+    "Fenwick Street": 36.18,
+    "Hartwell Common": 23.44
    },
-   "heating base 17 C": {
-    "Ashcombe Road": 26.54,
-    "Charlecote Way": 21.74,
-    "Fenwick Street": 31.25,
-    "Hartwell Common": 20.68
+   "mornings on a line through the days at or below 1 C alone": {
+    "Ashcombe Road": 29.67,
+    "Charlecote Way": 27.1,
+    "Dunmore Street": 21.23,
+    "Fenwick Street": 36.41,
+    "Hartwell Common": 23.58
    },
-   "megawatts fitted over every event": {
-    "Ashcombe Road": 26.41,
-    "Charlecote Way": 21.64,
-    "Fenwick Street": 31.12,
-    "Hartwell Common": 20.7
+   "mornings on two straight lines meeting at a knee the fit chooses": {
+    "Ashcombe Road": 29.49,
+    "Charlecote Way": 27.03,
+    "Dunmore Street": 21.12,
+    "Fenwick Street": 36.07,
+    "Hartwell Common": 23.44
    },
-   "megawatts fitted over every event, zone by zone": {
-    "Ashcombe Road": 26.32,
-    "Charlecote Way": 21.64,
-    "Fenwick Street": 31.08,
-    "Hartwell Common": 20.65
-   },
-   "met calls as floors, days at or below 2 C": {
-    "Ashcombe Road": 26.49,
-    "Charlecote Way": 21.65,
-    "Fenwick Street": 31.13,
-    "Hartwell Common": 20.64
-   },
-   "met calls as floors, every day": {
-    "Ashcombe Road": 26.64,
-    "Charlecote Way": 21.46,
-    "Fenwick Street": 30.88,
-    "Hartwell Common": 20.53
-   },
-   "met calls as floors, every day, a curved line": {
-    "Ashcombe Road": 26.61,
-    "Charlecote Way": 21.49,
-    "Fenwick Street": 30.92,
-    "Hartwell Common": 20.57
-   },
-   "the baseline scaled to the day's own level before the window": {
-    "Ashcombe Road": 26.49,
-    "Charlecote Way": 21.8,
-    "Fenwick Street": 31.34,
-    "Hartwell Common": 20.58
+   "sites withdrawn counted as still to come in the record": {
+    "Ashcombe Road": 29.5,
+    "Charlecote Way": 26.99,
+    "Dunmore Street": 21.05,
+    "Fenwick Street": 36.17,
+    "Hartwell Common": 23.43
    },
    "the calls that fell short alone": {
-    "Ashcombe Road": 26.5,
-    "Charlecote Way": 21.68,
-    "Fenwick Street": 31.17,
-    "Hartwell Common": 20.64
+    "Ashcombe Road": 29.42,
+    "Charlecote Way": 27.08,
+    "Dunmore Street": 21.08,
+    "Fenwick Street": 36.25,
+    "Hartwell Common": 23.46
    },
-   "the calls that fell short alone, every day": {
-    "Ashcombe Road": 26.69,
-    "Charlecote Way": 21.56,
-    "Fenwick Street": 31.02,
-    "Hartwell Common": 20.5
+   "the latest winter alone": {
+    "Ashcombe Road": 29.87,
+    "Charlecote Way": 27.38,
+    "Dunmore Street": 21.38,
+    "Fenwick Street": 36.42,
+    "Hartwell Common": 23.62
    },
-   "the scatter as measured": {
-    "Ashcombe Road": 26.57,
-    "Charlecote Way": 21.81,
-    "Fenwick Street": 31.35,
-    "Hartwell Common": 20.7
+   "the morning taken as the half-hours ending 09:00 to 15:00": {
+    "Ashcombe Road": 29.49,
+    "Charlecote Way": 27.01,
+    "Dunmore Street": 21.11,
+    "Fenwick Street": 36.17,
+    "Hartwell Common": 23.47
    },
-   "the share's own scatter as measured, times the award": {
-    "Ashcombe Road": 26.56,
-    "Charlecote Way": 21.82,
-    "Fenwick Street": 31.37,
-    "Hartwell Common": 20.69
+   "the share curved in temperature": {
+    "Ashcombe Road": 29.56,
+    "Charlecote Way": 27.03,
+    "Dunmore Street": 20.95,
+    "Fenwick Street": 36.2,
+    "Hartwell Common": 23.38
    },
-   "the share's own scatter as measured, times the award, zone by zone": {
-    "Ashcombe Road": 26.42,
-    "Charlecote Way": 21.84,
-    "Fenwick Street": 31.26,
-    "Hartwell Common": 20.73
+   "the share flat above 2 C": {
+    "Ashcombe Road": 29.46,
+    "Charlecote Way": 27.02,
+    "Dunmore Street": 21.06,
+    "Fenwick Street": 36.2,
+    "Hartwell Common": 23.45
    },
-   "the three winters' own scaling with the megawatts contracted": {
-    "Ashcombe Road": 26.26,
-    "Charlecote Way": 21.86,
-    "Fenwick Street": 31.47,
-    "Hartwell Common": 20.8
-   },
-   "weekday levels": {
-    "Ashcombe Road": 26.51,
-    "Charlecote Way": 21.7,
-    "Fenwick Street": 31.2,
-    "Hartwell Common": 20.63
-   },
-   "zone by zone": {
-    "Ashcombe Road": 26.38,
-    "Charlecote Way": 21.7,
-    "Fenwick Street": 31.12,
-    "Hartwell Common": 20.66
+   "the two latest winters": {
+    "Ashcombe Road": 29.58,
+    "Charlecote Way": 27.14,
+    "Dunmore Street": 21.07,
+    "Fenwick Street": 36.25,
+    "Hartwell Common": 23.46
    }
   }
  },
  "family_sets": {
-  "a cancelled instruction's day kept": [
+  "a build-up without a slow start": [
    "Ashcombe Road",
-   "Fenwick Street",
-   "Hartwell Common"
+   "Charlecote Way",
+   "Dunmore Street",
+   "Fenwick Street"
   ],
-  "a curved line": [
+  "a customer's own level from its latest six months": [
    "Ashcombe Road",
-   "Fenwick Street",
-   "Hartwell Common"
+   "Charlecote Way",
+   "Dunmore Street",
+   "Fenwick Street"
   ],
-  "a heating slope each winter": [
+  "each class's days late as a fitted distribution": [
    "Ashcombe Road",
-   "Fenwick Street",
-   "Hartwell Common"
+   "Charlecote Way",
+   "Dunmore Street",
+   "Fenwick Street"
   ],
-  "days at or below 0 C": [
+  "each class's record with its own provider": [
    "Ashcombe Road",
-   "Fenwick Street",
-   "Hartwell Common"
+   "Charlecote Way",
+   "Dunmore Street",
+   "Fenwick Street"
   ],
-  "days at or below minus 1.5 C": [
+  "each half-hour regressed on the day's own morning": [
    "Ashcombe Road",
-   "Fenwick Street",
-   "Hartwell Common"
+   "Charlecote Way",
+   "Dunmore Street",
+   "Fenwick Street"
   ],
-  "days at or below minus 2 C": [
+  "each winter's level allowed to drift, read at 15 January": [
    "Ashcombe Road",
-   "Fenwick Street",
-   "Hartwell Common"
+   "Charlecote Way",
+   "Dunmore Street",
+   "Fenwick Street"
+  ],
+  "every customer on its type's level, its own months set aside": [
+   "Ashcombe Road",
+   "Charlecote Way",
+   "Dunmore Street",
+   "Fenwick Street"
   ],
   "golden": [
    "Ashcombe Road",
-   "Fenwick Street",
-   "Hartwell Common"
+   "Charlecote Way",
+   "Dunmore Street",
+   "Fenwick Street"
   ],
-  "heating base 14 C": [
+  "mornings curved below a knee the fit chooses": [
    "Ashcombe Road",
-   "Fenwick Street",
-   "Hartwell Common"
+   "Charlecote Way",
+   "Dunmore Street",
+   "Fenwick Street"
   ],
-  "heating base 17 C": [
+  "mornings on a line through the days at or below 1 C alone": [
    "Ashcombe Road",
-   "Fenwick Street",
-   "Hartwell Common"
+   "Charlecote Way",
+   "Dunmore Street",
+   "Fenwick Street"
   ],
-  "megawatts fitted over every event": [
+  "mornings on two straight lines meeting at a knee the fit chooses": [
    "Ashcombe Road",
-   "Fenwick Street",
-   "Hartwell Common"
+   "Charlecote Way",
+   "Dunmore Street",
+   "Fenwick Street"
   ],
-  "megawatts fitted over every event, zone by zone": [
+  "sites withdrawn counted as still to come in the record": [
    "Ashcombe Road",
-   "Fenwick Street",
-   "Hartwell Common"
-  ],
-  "met calls as floors, days at or below 2 C": [
-   "Ashcombe Road",
-   "Fenwick Street",
-   "Hartwell Common"
-  ],
-  "met calls as floors, every day": [
-   "Ashcombe Road",
-   "Fenwick Street",
-   "Hartwell Common"
-  ],
-  "met calls as floors, every day, a curved line": [
-   "Ashcombe Road",
-   "Fenwick Street",
-   "Hartwell Common"
-  ],
-  "the baseline scaled to the day's own level before the window": [
-   "Ashcombe Road",
-   "Fenwick Street",
-   "Hartwell Common"
+   "Charlecote Way",
+   "Dunmore Street",
+   "Fenwick Street"
   ],
   "the calls that fell short alone": [
    "Ashcombe Road",
-   "Fenwick Street",
-   "Hartwell Common"
+   "Charlecote Way",
+   "Dunmore Street",
+   "Fenwick Street"
   ],
-  "the calls that fell short alone, every day": [
-   "Ashcombe Road",
-   "Fenwick Street",
-   "Hartwell Common"
-  ],
-  "the scatter as measured": [
-   "Ashcombe Road",
-   "Fenwick Street",
-   "Hartwell Common"
-  ],
-  "the share's own scatter as measured, times the award": [
-   "Ashcombe Road",
-   "Fenwick Street",
-   "Hartwell Common"
-  ],
-  "the share's own scatter as measured, times the award, zone by zone": [
-   "Ashcombe Road",
-   "Fenwick Street",
-   "Hartwell Common"
-  ],
-  "the three winters' own scaling with the megawatts contracted": [
-   "Ashcombe Road",
-   "Fenwick Street",
-   "Hartwell Common"
-  ],
-  "weekday levels": [
-   "Ashcombe Road",
-   "Fenwick Street",
-   "Hartwell Common"
-  ],
-  "zone by zone": [
-   "Ashcombe Road",
-   "Fenwick Street",
-   "Hartwell Common"
-  ]
- },
- "hold": [
-  "Charlecote Way"
- ],
- "pack": {
-  "event_rows": 697,
-  "scada_rows": 196213,
-  "switching_rows": 60,
-  "weather_rows": 13372
- },
- "providers": {
-  "Corvane Flex Ltd": {
-   "back_first": 0.32,
-   "back_second": 0.2,
-   "cold_dates": 31,
-   "cold_met": 2,
-   "n_cold": 57,
-   "share": 0.39,
-   "slope_per_degree": 0.046,
-   "spread_measured_pct": 18,
-   "spread_pct": 16
-  },
-  "Quillon Energy Services Ltd": {
-   "back_first": 0.26,
-   "back_second": 0.14,
-   "cold_dates": 31,
-   "cold_met": 1,
-   "n_cold": 58,
-   "share": 0.54,
-   "slope_per_degree": 0.021,
-   "spread_measured_pct": 18,
-   "spread_pct": 16
-  }
- },
- "quick_call": [],
- "r1_before": {
-  "Ashcombe Road": 30.1,
-  "Charlecote Way": 24.9,
-  "Fenwick Street": 35.5,
-  "Hartwell Common": 22.9
- },
- "r1_evidence": {
-  "by_primary": {
-   "Ashcombe Road": {
-    "cold_days": 13,
-    "coldest_c": 5.0,
-    "curve_miss_mw": 0.4,
-    "line_miss_mw": 0.16,
-    "line_miss_pct": 0.9,
-    "peak_curve_t": -0.72,
-    "sample_days": 26
-   },
-   "Charlecote Way": {
-    "cold_days": 13,
-    "coldest_c": 4.7,
-    "curve_miss_mw": 0.18,
-    "line_miss_mw": 0.04,
-    "line_miss_pct": 0.3,
-    "peak_curve_t": -1.48,
-    "sample_days": 41
-   },
-   "Fenwick Street": {
-    "cold_days": 11,
-    "coldest_c": 4.7,
-    "curve_miss_mw": 0.61,
-    "line_miss_mw": 0.13,
-    "line_miss_pct": 0.6,
-    "peak_curve_t": -1.6,
-    "sample_days": 35
-   },
-   "Hartwell Common": {
-    "cold_days": 13,
-    "coldest_c": 4.7,
-    "curve_miss_mw": 0.24,
-    "line_miss_mw": 0.07,
-    "line_miss_pct": 0.5,
-    "peak_curve_t": -1.37,
-    "sample_days": 37
-   }
-  },
-  "coldest_unscheduled_c": 4.7,
-  "line_within_pct": 1,
-  "unscheduled_primaries_curve_t": {
-   "Dunmore Street": 1.57,
-   "Kestwick Fields": 0.01,
-   "Ravenhurst Park": 0.19,
-   "Tollbrook Lane": -0.08,
-   "Wexley Hill": -0.01
-  }
- },
- "r2_delivered": {
-  "Ashcombe Road": 8.1,
-  "Charlecote Way": 4.0,
-  "Fenwick Street": 5.4,
-  "Hartwell Common": 2.9
- },
- "r3_backtest": 0.19,
- "r4_off_peak": {
-  "Ashcombe Road": 4.2,
-  "Charlecote Way": 4.0,
-  "Fenwick Street": 5.4,
-  "Hartwell Common": 2.9
- },
- "r5_peak": {
-  "Ashcombe Road": 25.9,
-  "Charlecote Way": 20.8,
-  "Fenwick Street": 30.1,
-  "Hartwell Common": 20.0
- },
- "r6_one_in_ten": {
-  "Ashcombe Road": 26.5,
-  "Charlecote Way": 21.7,
-  "Fenwick Street": 31.2,
-  "Hartwell Common": 20.6
- },
- "r8_bridge": {
-  "Ashcombe Road, lost as load comes back": 3.9,
-  "Ashcombe Road, not available": 12.9,
-  "Charlecote Way, lost as load comes back": 0.0,
-  "Charlecote Way, not available": 3.5,
-  "Fenwick Street, lost as load comes back": 0.0,
-  "Fenwick Street, not available": 4.6,
-  "Hartwell Common, lost as load comes back": 0.0,
-  "Hartwell Common, not available": 4.6
- },
- "record": {
-  "completed": {
-   "Ashcombe Road": 167,
-   "Charlecote Way": 121,
-   "Fenwick Street": 148,
-   "Hartwell Common": 159
-  },
-  "completed_total": 595
- },
- "routes": {
-  "every result of the chain (the golden)": [
-   "Ashcombe Road",
-   "Fenwick Street",
-   "Hartwell Common"
-  ],
-  "megawatts delivered per megawatt scheduled at minus 3.0 C applied to the contract, the fit's own range": [
-   "Hartwell Common"
-  ],
-  "megawatts delivered per megawatt scheduled, the record's megawatts of scatter unchanged": [
-   "Hartwell Common"
-  ],
-  "megawatts delivered per megawatt scheduled, the scatter in proportion, the credit off the 17:30 to 18:00 peak": [
-   "Fenwick Street",
-   "Hartwell Common"
-  ],
-  "the available share right, the credit off the 17:30 to 18:00 peak, the record's megawatts of scatter unchanged": [
-   "Fenwick Street",
-   "Hartwell Common"
-  ],
-  "the available share right, the expected day set against firm capacity": [
-   "Ashcombe Road",
-   "Hartwell Common"
-  ],
-  "the megawatts contracted taken at face value": [],
-  "the megawatts the 2025/26 contracts made available carried unchanged": [
+  "the latest winter alone": [
    "Ashcombe Road",
    "Charlecote Way",
-   "Fenwick Street",
-   "Hartwell Common"
+   "Dunmore Street",
+   "Fenwick Street"
+  ],
+  "the morning taken as the half-hours ending 09:00 to 15:00": [
+   "Ashcombe Road",
+   "Charlecote Way",
+   "Dunmore Street",
+   "Fenwick Street"
+  ],
+  "the share curved in temperature": [
+   "Ashcombe Road",
+   "Charlecote Way",
+   "Dunmore Street",
+   "Fenwick Street"
+  ],
+  "the share flat above 2 C": [
+   "Ashcombe Road",
+   "Charlecote Way",
+   "Dunmore Street",
+   "Fenwick Street"
+  ],
+  "the two latest winters": [
+   "Ashcombe Road",
+   "Charlecote Way",
+   "Dunmore Street",
+   "Fenwick Street"
   ]
  },
- "scaling": {
-  "elasticity": 0.92,
-  "events": 112,
-  "standard_error": 0.09
+ "hints": [
+  {
+   "commits": [
+    "Ashcombe Road",
+    "Dunmore Street",
+    "Hartwell Common"
+   ],
+   "rescues": [
+    "R1"
+   ],
+   "sentence": "the days without a service stop near 2 C and are the low-running ones, and the heating load steepens below freezing: read the cold end from the hours before the window, which every day carries"
+  },
+  {
+   "commits": [
+    "Ashcombe Road",
+    "Charlecote Way"
+   ],
+   "rescues": [
+    "R2"
+   ],
+   "sentence": "a customer draws a share of its agreed capacity that depends on its type and takes two to three years to reach it: count every register customer's rise between the two assessment dates"
+  },
+  {
+   "commits": [
+    "Ashcombe Road",
+    "Fenwick Street",
+    "Hartwell Common"
+   ],
+   "rescues": [
+    "R4",
+    "R6"
+   ],
+   "sentence": "a provider's availability follows the megawatts in service, and the sites still to come commission as late as their class has across the register, not on the planned dates"
+  },
+  {
+   "commits": [
+    "Ashcombe Road",
+    "Charlecote Way",
+    "Dunmore Street"
+   ],
+   "rescues": [
+    "R1",
+    "R2",
+    "R3"
+   ],
+   "sentence": "both of the first two sentences (the cold end and the customers' build-up)"
+  },
+  {
+   "commits": [
+    "Ashcombe Road",
+    "Dunmore Street",
+    "Fenwick Street",
+    "Hartwell Common"
+   ],
+   "rescues": [
+    "R1",
+    "R4",
+    "R6"
+   ],
+   "sentence": "both the cold end and the commissioning sentences"
+  },
+  {
+   "commits": [
+    "Ashcombe Road",
+    "Charlecote Way",
+    "Fenwick Street"
+   ],
+   "rescues": [
+    "R2",
+    "R4",
+    "R6"
+   ],
+   "sentence": "both the build-up and the commissioning sentences"
+  }
+ ],
+ "hold": [
+  "Hartwell Common"
+ ],
+ "order": [
+  "Ashcombe Road",
+  "Charlecote Way",
+  "Dunmore Street",
+  "Fenwick Street",
+  "Hartwell Common"
+ ],
+ "pack": {
+  "asset_rows": 1575,
+  "event_rows": 360,
+  "growth_rows": 136,
+  "monitor_rows": 13715,
+  "register_customers": 112,
+  "register_sites": 1536,
+  "scada_rows": 196240,
+  "switching_rows": 60,
+  "weather_rows": 13319
  },
- "scatter_by_winter": {
+ "providers": {
+  "Corvane Flex": {
+   "back_first": 0.32,
+   "back_total": 0.67,
+   "events": 171,
+   "fell_short": 62,
+   "key": "CORVANE FLEX",
+   "legal": "Corvane Flex Ltd",
+   "met": 109,
+   "share": 0.42,
+   "spread_pct": 12,
+   "zones": [
+    "Ashcombe Road",
+    "Dunmore Street",
+    "Hartwell Common"
+   ]
+  },
+  "Quillon Energy Services": {
+   "back_first": 0.16,
+   "back_total": 0.31,
+   "events": 123,
+   "fell_short": 44,
+   "key": "QUILLON ENERGY SERVICES",
+   "legal": "Quillon Energy Services Ltd",
+   "met": 79,
+   "share": 0.51,
+   "spread_pct": 17,
+   "zones": [
+    "Charlecote Way",
+    "Fenwick Street"
+   ]
+  }
+ },
+ "providers_order": [
+  "Corvane Flex",
+  "Quillon Energy Services"
+ ],
+ "quick": {
+  "R1": {
+   "Ashcombe Road": 29.0,
+   "Charlecote Way": 24.9,
+   "Dunmore Street": 20.3,
+   "Fenwick Street": 36.8,
+   "Hartwell Common": 22.8
+  },
+  "R10": {
+   "Ashcombe Road": 0,
+   "Charlecote Way": 0,
+   "Dunmore Street": 0,
+   "Fenwick Street": 0,
+   "Hartwell Common": 100
+  },
+  "R11": [
+   "Hartwell Common"
+  ],
+  "R2": {
+   "Ashcombe Road": 1.7,
+   "Charlecote Way": 0.0,
+   "Dunmore Street": 0.5,
+   "Fenwick Street": 1.3,
+   "Hartwell Common": 6.8
+  },
+  "R3": {
+   "Ashcombe Road": 32.0,
+   "Charlecote Way": 25.7,
+   "Dunmore Street": 21.3,
+   "Fenwick Street": 39.4,
+   "Hartwell Common": 30.5
+  },
+  "R4": {
+   "Ashcombe Road": 21.0,
+   "Charlecote Way": 8.5,
+   "Dunmore Street": 6.0,
+   "Fenwick Street": 13.0,
+   "Hartwell Common": 4.0
+  },
+  "R5": {
+   "Corvane Flex": 0.37,
+   "Quillon Energy Services": 0.54
+  },
+  "R6": {
+   "Ashcombe Road": 7.9,
+   "Charlecote Way": 4.6,
+   "Dunmore Street": 2.2,
+   "Fenwick Street": 7.0,
+   "Hartwell Common": 1.5
+  },
+  "R7": null,
+  "R8": {
+   "Ashcombe Road": 24.2,
+   "Charlecote Way": 21.1,
+   "Dunmore Street": 19.1,
+   "Fenwick Street": 32.5,
+   "Hartwell Common": 29.0
+  },
+  "R9": {
+   "Ashcombe Road": 24.2,
+   "Charlecote Way": 21.1,
+   "Dunmore Street": 19.1,
+   "Fenwick Street": 32.5,
+   "Hartwell Common": 29.0
+  }
+ },
+ "r10_share_over": {
+  "Ashcombe Road": 91,
+  "Charlecote Way": 62,
+  "Dunmore Street": 75,
+  "Fenwick Street": 50,
+  "Hartwell Common": 0
+ },
+ "r1_demand_2526": {
+  "Ashcombe Road": 30.2,
+  "Charlecote Way": 25.0,
+  "Dunmore Street": 22.2,
+  "Fenwick Street": 36.8,
+  "Hartwell Common": 22.7
+ },
+ "r2_connections": {
+  "Ashcombe Road": 0.7,
+  "Charlecote Way": 4.5,
+  "Dunmore Street": 0.2,
+  "Fenwick Street": 0.7,
+  "Hartwell Common": 0.7
+ },
+ "r3_before": {
+  "Ashcombe Road": 32.2,
+  "Charlecote Way": 30.3,
+  "Dunmore Street": 23.0,
+  "Fenwick Street": 38.9,
+  "Hartwell Common": 24.3
+ },
+ "r4_in_service": {
+  "Ashcombe Road": 17.8,
+  "Charlecote Way": 8.8,
+  "Dunmore Street": 6.2,
+  "Fenwick Street": 7.6,
+  "Hartwell Common": 3.6
+ },
+ "r5_share": {
+  "Corvane Flex": 0.42,
+  "Quillon Energy Services": 0.51
+ },
+ "r6_delivered": {
+  "Ashcombe Road": 7.6,
+  "Charlecote Way": 4.5,
+  "Dunmore Street": 2.6,
+  "Fenwick Street": 3.9,
+  "Hartwell Common": 1.5
+ },
+ "r7_comeback": {
+  "Corvane Flex": 0.67,
+  "Quillon Energy Services": 0.31
+ },
+ "r8_peak": {
+  "Ashcombe Road": 28.5,
+  "Charlecote Way": 25.9,
+  "Dunmore Street": 20.4,
+  "Fenwick Street": 35.0,
+  "Hartwell Common": 22.8
+ },
+ "r9_one_in_ten": {
+  "Ashcombe Road": 29.5,
+  "Charlecote Way": 27.0,
+  "Dunmore Street": 21.1,
+  "Fenwick Street": 36.2,
+  "Hartwell Common": 23.4
+ },
+ "route_figures": {
+  "careful but hurried: the line, the type's established share, the planned dates": {
+   "Ashcombe Road": {
+    "before": 30.9,
+    "commit": true,
+    "delivered": 9.9,
+    "in_service": 23.2,
+    "one_in_ten": 29.3,
+    "peak": 28.1,
+    "share_over": 76
+   },
+   "Charlecote Way": {
+    "before": 25.5,
+    "commit": false,
+    "delivered": 4.8,
+    "in_service": 9.4,
+    "one_in_ten": 22.1,
+    "peak": 21.4,
+    "share_over": 0
+   },
+   "Dunmore Street": {
+    "before": 21.0,
+    "commit": false,
+    "delivered": 2.7,
+    "in_service": 6.4,
+    "one_in_ten": 18.9,
+    "peak": 18.3,
+    "share_over": 0
+   },
+   "Fenwick Street": {
+    "before": 38.4,
+    "commit": false,
+    "delivered": 7.4,
+    "in_service": 14.3,
+    "one_in_ten": 32.9,
+    "peak": 31.6,
+    "share_over": 0
+   },
+   "Hartwell Common": {
+    "before": 26.2,
+    "commit": true,
+    "delivered": 1.6,
+    "in_service": 3.8,
+    "one_in_ten": 25.3,
+    "peak": 24.6,
+    "share_over": 62
+   }
+  },
+  "customers due after the latest winter, agreed capacity in full": {
+   "Ashcombe Road": {
+    "before": 33.3,
+    "commit": true,
+    "delivered": 7.6,
+    "in_service": 17.8,
+    "one_in_ten": 30.3,
+    "peak": 29.3,
+    "share_over": 99
+   },
+   "Charlecote Way": {
+    "before": 25.8,
+    "commit": false,
+    "delivered": 4.5,
+    "in_service": 8.8,
+    "one_in_ten": 22.5,
+    "peak": 21.7,
+    "share_over": 0
+   },
+   "Dunmore Street": {
+    "before": 23.3,
+    "commit": true,
+    "delivered": 2.6,
+    "in_service": 6.2,
+    "one_in_ten": 21.3,
+    "peak": 20.6,
+    "share_over": 88
+   },
+   "Fenwick Street": {
+    "before": 39.5,
+    "commit": true,
+    "delivered": 3.9,
+    "in_service": 7.6,
+    "one_in_ten": 36.8,
+    "peak": 35.6,
+    "share_over": 73
+   },
+   "Hartwell Common": {
+    "before": 30.4,
+    "commit": true,
+    "delivered": 1.5,
+    "in_service": 3.6,
+    "one_in_ten": 29.7,
+    "peak": 28.9,
+    "share_over": 100
+   }
+  },
+  "each class's record read from the sites commissioned alone": {
+   "Ashcombe Road": {
+    "before": 32.2,
+    "commit": true,
+    "delivered": 8.0,
+    "in_service": 18.9,
+    "one_in_ten": 29.6,
+    "peak": 28.6,
+    "share_over": 93
+   },
+   "Charlecote Way": {
+    "before": 30.3,
+    "commit": true,
+    "delivered": 4.6,
+    "in_service": 9.0,
+    "one_in_ten": 27.0,
+    "peak": 25.9,
+    "share_over": 59
+   },
+   "Dunmore Street": {
+    "before": 23.0,
+    "commit": true,
+    "delivered": 2.7,
+    "in_service": 6.3,
+    "one_in_ten": 21.0,
+    "peak": 20.3,
+    "share_over": 71
+   },
+   "Fenwick Street": {
+    "before": 38.9,
+    "commit": true,
+    "delivered": 4.3,
+    "in_service": 8.4,
+    "one_in_ten": 35.9,
+    "peak": 34.6,
+    "share_over": 34
+   },
+   "Hartwell Common": {
+    "before": 24.3,
+    "commit": false,
+    "delivered": 1.6,
+    "in_service": 3.7,
+    "one_in_ten": 23.4,
+    "peak": 22.8,
+    "share_over": 0
+   }
+  },
+  "each evening half-hour on a straight line through the days no service ran, three winters": {
+   "Ashcombe Road": {
+    "before": 31.0,
+    "commit": true,
+    "delivered": 7.6,
+    "in_service": 17.8,
+    "one_in_ten": 28.4,
+    "peak": 27.4,
+    "share_over": 46
+   },
+   "Charlecote Way": {
+    "before": 30.0,
+    "commit": true,
+    "delivered": 4.5,
+    "in_service": 8.8,
+    "one_in_ten": 26.8,
+    "peak": 25.7,
+    "share_over": 50
+   },
+   "Dunmore Street": {
+    "before": 21.0,
+    "commit": false,
+    "delivered": 2.6,
+    "in_service": 6.2,
+    "one_in_ten": 19.0,
+    "peak": 18.4,
+    "share_over": 0
+   },
+   "Fenwick Street": {
+    "before": 38.5,
+    "commit": true,
+    "delivered": 3.9,
+    "in_service": 7.6,
+    "one_in_ten": 35.8,
+    "peak": 34.6,
+    "share_over": 35
+   },
+   "Hartwell Common": {
+    "before": 24.2,
+    "commit": false,
+    "delivered": 1.5,
+    "in_service": 3.6,
+    "one_in_ten": 23.3,
+    "peak": 22.7,
+    "share_over": 0
+   }
+  },
+  "every customer at what the latest months show, no further build-up": {
+   "Ashcombe Road": {
+    "before": 32.0,
+    "commit": true,
+    "delivered": 7.6,
+    "in_service": 17.8,
+    "one_in_ten": 29.3,
+    "peak": 28.3,
+    "share_over": 85
+   },
+   "Charlecote Way": {
+    "before": 28.1,
+    "commit": false,
+    "delivered": 4.5,
+    "in_service": 8.8,
+    "one_in_ten": 24.9,
+    "peak": 23.9,
+    "share_over": 2
+   },
+   "Dunmore Street": {
+    "before": 22.9,
+    "commit": true,
+    "delivered": 2.6,
+    "in_service": 6.2,
+    "one_in_ten": 21.0,
+    "peak": 20.3,
+    "share_over": 72
+   },
+   "Fenwick Street": {
+    "before": 38.6,
+    "commit": true,
+    "delivered": 3.9,
+    "in_service": 7.6,
+    "one_in_ten": 35.9,
+    "peak": 34.7,
+    "share_over": 39
+   },
+   "Hartwell Common": {
+    "before": 26.4,
+    "commit": true,
+    "delivered": 1.5,
+    "in_service": 3.6,
+    "one_in_ten": 25.6,
+    "peak": 24.9,
+    "share_over": 82
+   }
+  },
+  "every working weekday with the megawatts scheduled as a regressor": {
+   "Ashcombe Road": {
+    "before": 30.1,
+    "commit": true,
+    "delivered": 7.6,
+    "in_service": 17.8,
+    "one_in_ten": 28.7,
+    "peak": 27.5,
+    "share_over": 52
+   },
+   "Charlecote Way": {
+    "before": 29.9,
+    "commit": true,
+    "delivered": 4.5,
+    "in_service": 8.8,
+    "one_in_ten": 26.7,
+    "peak": 25.6,
+    "share_over": 47
+   },
+   "Dunmore Street": {
+    "before": 20.7,
+    "commit": false,
+    "delivered": 2.6,
+    "in_service": 6.2,
+    "one_in_ten": 19.0,
+    "peak": 18.2,
+    "share_over": 0
+   },
+   "Fenwick Street": {
+    "before": 38.3,
+    "commit": true,
+    "delivered": 3.9,
+    "in_service": 7.6,
+    "one_in_ten": 35.7,
+    "peak": 34.5,
+    "share_over": 30
+   },
+   "Hartwell Common": {
+    "before": 24.2,
+    "commit": false,
+    "delivered": 1.5,
+    "in_service": 3.6,
+    "one_in_ten": 23.3,
+    "peak": 22.6,
+    "share_over": 0
+   }
+  },
+  "quick: the latest winter's line, agreed capacity in full, the contract at face value, the expected day": {
+   "Ashcombe Road": {
+    "before": 32.0,
+    "commit": false,
+    "delivered": 7.9,
+    "in_service": 21.0,
+    "one_in_ten": 24.2,
+    "peak": 24.2,
+    "share_over": 0
+   },
+   "Charlecote Way": {
+    "before": 25.7,
+    "commit": false,
+    "delivered": 4.6,
+    "in_service": 8.5,
+    "one_in_ten": 21.1,
+    "peak": 21.1,
+    "share_over": 0
+   },
+   "Dunmore Street": {
+    "before": 21.3,
+    "commit": false,
+    "delivered": 2.2,
+    "in_service": 6.0,
+    "one_in_ten": 19.1,
+    "peak": 19.1,
+    "share_over": 0
+   },
+   "Fenwick Street": {
+    "before": 39.4,
+    "commit": false,
+    "delivered": 7.0,
+    "in_service": 13.0,
+    "one_in_ten": 32.5,
+    "peak": 32.5,
+    "share_over": 0
+   },
+   "Hartwell Common": {
+    "before": 30.5,
+    "commit": true,
+    "delivered": 1.5,
+    "in_service": 4.0,
+    "one_in_ten": 29.0,
+    "peak": 29.0,
+    "share_over": 100
+   }
+  },
+  "the delivery taken off the 17:00 to 18:00 peak": {
+   "Ashcombe Road": {
+    "before": 32.2,
+    "commit": false,
+    "delivered": 7.6,
+    "in_service": 17.8,
+    "one_in_ten": 26.1,
+    "peak": 24.6,
+    "share_over": 0
+   },
+   "Charlecote Way": {
+    "before": 30.3,
+    "commit": true,
+    "delivered": 4.5,
+    "in_service": 8.8,
+    "one_in_ten": 27.0,
+    "peak": 25.7,
+    "share_over": 56
+   },
+   "Dunmore Street": {
+    "before": 23.0,
+    "commit": true,
+    "delivered": 2.6,
+    "in_service": 6.2,
+    "one_in_ten": 21.1,
+    "peak": 20.4,
+    "share_over": 74
+   },
+   "Fenwick Street": {
+    "before": 38.9,
+    "commit": true,
+    "delivered": 3.9,
+    "in_service": 7.6,
+    "one_in_ten": 36.2,
+    "peak": 35.0,
+    "share_over": 48
+   },
+   "Hartwell Common": {
+    "before": 24.3,
+    "commit": false,
+    "delivered": 1.5,
+    "in_service": 3.6,
+    "one_in_ten": 23.4,
+    "peak": 22.8,
+    "share_over": 0
+   }
+  },
+  "the megawatts contracted, at the share of megawatts in service": {
+   "Ashcombe Road": {
+    "before": 32.2,
+    "commit": true,
+    "delivered": 8.9,
+    "in_service": 21.0,
+    "one_in_ten": 30.0,
+    "peak": 28.9,
+    "share_over": 96
+   },
+   "Charlecote Way": {
+    "before": 30.3,
+    "commit": true,
+    "delivered": 4.4,
+    "in_service": 8.5,
+    "one_in_ten": 27.2,
+    "peak": 26.0,
+    "share_over": 67
+   },
+   "Dunmore Street": {
+    "before": 23.0,
+    "commit": true,
+    "delivered": 2.5,
+    "in_service": 6.0,
+    "one_in_ten": 21.1,
+    "peak": 20.4,
+    "share_over": 80
+   },
+   "Fenwick Street": {
+    "before": 38.9,
+    "commit": false,
+    "delivered": 6.7,
+    "in_service": 13.0,
+    "one_in_ten": 33.9,
+    "peak": 32.4,
+    "share_over": 1
+   },
+   "Hartwell Common": {
+    "before": 24.3,
+    "commit": false,
+    "delivered": 1.7,
+    "in_service": 4.0,
+    "one_in_ten": 23.3,
+    "peak": 22.6,
+    "share_over": 0
+   }
+  },
+  "the megawatts contracted, at the share the events delivered of their contract": {
+   "Ashcombe Road": {
+    "before": 32.2,
+    "commit": true,
+    "delivered": 8.1,
+    "in_service": 21.0,
+    "one_in_ten": 29.8,
+    "peak": 28.7,
+    "share_over": 92
+   },
+   "Charlecote Way": {
+    "before": 30.3,
+    "commit": true,
+    "delivered": 4.7,
+    "in_service": 8.5,
+    "one_in_ten": 26.9,
+    "peak": 25.8,
+    "share_over": 58
+   },
+   "Dunmore Street": {
+    "before": 23.0,
+    "commit": true,
+    "delivered": 2.3,
+    "in_service": 6.0,
+    "one_in_ten": 21.4,
+    "peak": 20.7,
+    "share_over": 87
+   },
+   "Fenwick Street": {
+    "before": 38.9,
+    "commit": false,
+    "delivered": 7.1,
+    "in_service": 13.0,
+    "one_in_ten": 33.5,
+    "peak": 32.2,
+    "share_over": 1
+   },
+   "Hartwell Common": {
+    "before": 24.3,
+    "commit": false,
+    "delivered": 1.5,
+    "in_service": 4.0,
+    "one_in_ten": 23.5,
+    "peak": 22.8,
+    "share_over": 0
+   }
+  },
+  "the same customers at the average share today's customers draw": {
+   "Ashcombe Road": {
+    "before": 32.2,
+    "commit": true,
+    "delivered": 7.6,
+    "in_service": 17.8,
+    "one_in_ten": 29.5,
+    "peak": 28.5,
+    "share_over": 91
+   },
+   "Charlecote Way": {
+    "before": 25.8,
+    "commit": false,
+    "delivered": 4.5,
+    "in_service": 8.8,
+    "one_in_ten": 22.5,
+    "peak": 21.7,
+    "share_over": 0
+   },
+   "Dunmore Street": {
+    "before": 22.9,
+    "commit": true,
+    "delivered": 2.6,
+    "in_service": 6.2,
+    "one_in_ten": 21.0,
+    "peak": 20.3,
+    "share_over": 72
+   },
+   "Fenwick Street": {
+    "before": 38.7,
+    "commit": true,
+    "delivered": 3.9,
+    "in_service": 7.6,
+    "one_in_ten": 36.0,
+    "peak": 34.8,
+    "share_over": 42
+   },
+   "Hartwell Common": {
+    "before": 26.3,
+    "commit": true,
+    "delivered": 1.5,
+    "in_service": 3.6,
+    "one_in_ten": 25.5,
+    "peak": 24.8,
+    "share_over": 75
+   }
+  },
+  "the same customers at their type's established share": {
+   "Ashcombe Road": {
+    "before": 32.1,
+    "commit": true,
+    "delivered": 7.6,
+    "in_service": 17.8,
+    "one_in_ten": 29.4,
+    "peak": 28.4,
+    "share_over": 89
+   },
+   "Charlecote Way": {
+    "before": 25.8,
+    "commit": false,
+    "delivered": 4.5,
+    "in_service": 8.8,
+    "one_in_ten": 22.5,
+    "peak": 21.7,
+    "share_over": 0
+   },
+   "Dunmore Street": {
+    "before": 22.9,
+    "commit": true,
+    "delivered": 2.6,
+    "in_service": 6.2,
+    "one_in_ten": 21.0,
+    "peak": 20.3,
+    "share_over": 73
+   },
+   "Fenwick Street": {
+    "before": 38.8,
+    "commit": true,
+    "delivered": 3.9,
+    "in_service": 7.6,
+    "one_in_ten": 36.1,
+    "peak": 34.9,
+    "share_over": 46
+   },
+   "Hartwell Common": {
+    "before": 26.3,
+    "commit": true,
+    "delivered": 1.5,
+    "in_service": 3.6,
+    "one_in_ten": 25.5,
+    "peak": 24.7,
+    "share_over": 74
+   }
+  },
+  "the same customers on their type's build-up": {
+   "Ashcombe Road": {
+    "before": 31.9,
+    "commit": true,
+    "delivered": 7.6,
+    "in_service": 17.8,
+    "one_in_ten": 29.2,
+    "peak": 28.2,
+    "share_over": 84
+   },
+   "Charlecote Way": {
+    "before": 25.8,
+    "commit": false,
+    "delivered": 4.5,
+    "in_service": 8.8,
+    "one_in_ten": 22.5,
+    "peak": 21.7,
+    "share_over": 0
+   },
+   "Dunmore Street": {
+    "before": 22.9,
+    "commit": true,
+    "delivered": 2.6,
+    "in_service": 6.2,
+    "one_in_ten": 21.0,
+    "peak": 20.3,
+    "share_over": 70
+   },
+   "Fenwick Street": {
+    "before": 38.6,
+    "commit": true,
+    "delivered": 3.9,
+    "in_service": 7.6,
+    "one_in_ten": 36.0,
+    "peak": 34.8,
+    "share_over": 41
+   },
+   "Hartwell Common": {
+    "before": 24.1,
+    "commit": false,
+    "delivered": 1.5,
+    "in_service": 3.6,
+    "one_in_ten": 23.2,
+    "peak": 22.6,
+    "share_over": 0
+   }
+  },
+  "the same line through the latest winter's days alone": {
+   "Ashcombe Road": {
+    "before": 31.0,
+    "commit": true,
+    "delivered": 7.6,
+    "in_service": 17.8,
+    "one_in_ten": 28.5,
+    "peak": 27.5,
+    "share_over": 51
+   },
+   "Charlecote Way": {
+    "before": 30.1,
+    "commit": true,
+    "delivered": 4.5,
+    "in_service": 8.8,
+    "one_in_ten": 27.1,
+    "peak": 25.8,
+    "share_over": 55
+   },
+   "Dunmore Street": {
+    "before": 21.0,
+    "commit": false,
+    "delivered": 2.6,
+    "in_service": 6.2,
+    "one_in_ten": 19.1,
+    "peak": 18.4,
+    "share_over": 0
+   },
+   "Fenwick Street": {
+    "before": 38.8,
+    "commit": true,
+    "delivered": 3.9,
+    "in_service": 7.6,
+    "one_in_ten": 36.1,
+    "peak": 34.9,
+    "share_over": 49
+   },
+   "Hartwell Common": {
+    "before": 24.4,
+    "commit": false,
+    "delivered": 1.5,
+    "in_service": 3.6,
+    "one_in_ten": 23.4,
+    "peak": 22.9,
+    "share_over": 0
+   }
+  },
+  "the sites still to come on the provider's record across its classes": {
+   "Ashcombe Road": {
+    "before": 32.2,
+    "commit": true,
+    "delivered": 8.6,
+    "in_service": 20.2,
+    "one_in_ten": 29.9,
+    "peak": 28.8,
+    "share_over": 95
+   },
+   "Charlecote Way": {
+    "before": 30.3,
+    "commit": true,
+    "delivered": 4.5,
+    "in_service": 8.7,
+    "one_in_ten": 27.1,
+    "peak": 25.9,
+    "share_over": 63
+   },
+   "Dunmore Street": {
+    "before": 23.0,
+    "commit": true,
+    "delivered": 2.6,
+    "in_service": 6.2,
+    "one_in_ten": 21.1,
+    "peak": 20.4,
+    "share_over": 75
+   },
+   "Fenwick Street": {
+    "before": 38.9,
+    "commit": false,
+    "delivered": 6.3,
+    "in_service": 12.3,
+    "one_in_ten": 34.2,
+    "peak": 32.7,
+    "share_over": 2
+   },
+   "Hartwell Common": {
+    "before": 24.3,
+    "commit": false,
+    "delivered": 1.6,
+    "in_service": 3.7,
+    "one_in_ten": 23.4,
+    "peak": 22.8,
+    "share_over": 0
+   }
+  },
+  "the sites still to come on the register's record across every class": {
+   "Ashcombe Road": {
+    "before": 32.2,
+    "commit": true,
+    "delivered": 8.5,
+    "in_service": 20.0,
+    "one_in_ten": 29.8,
+    "peak": 28.8,
+    "share_over": 95
+   },
+   "Charlecote Way": {
+    "before": 30.3,
+    "commit": true,
+    "delivered": 4.4,
+    "in_service": 8.6,
+    "one_in_ten": 27.1,
+    "peak": 26.0,
+    "share_over": 65
+   },
+   "Dunmore Street": {
+    "before": 23.0,
+    "commit": true,
+    "delivered": 2.6,
+    "in_service": 6.2,
+    "one_in_ten": 21.1,
+    "peak": 20.4,
+    "share_over": 76
+   },
+   "Fenwick Street": {
+    "before": 38.9,
+    "commit": false,
+    "delivered": 6.2,
+    "in_service": 12.0,
+    "one_in_ten": 34.3,
+    "peak": 32.8,
+    "share_over": 3
+   },
+   "Hartwell Common": {
+    "before": 24.3,
+    "commit": false,
+    "delivered": 1.5,
+    "in_service": 3.6,
+    "one_in_ten": 23.5,
+    "peak": 22.8,
+    "share_over": 0
+   }
+  },
+  "the sites still to come on their planned dates": {
+   "Ashcombe Road": {
+    "before": 32.2,
+    "commit": true,
+    "delivered": 9.9,
+    "in_service": 23.2,
+    "one_in_ten": 30.4,
+    "peak": 29.2,
+    "share_over": 98
+   },
+   "Charlecote Way": {
+    "before": 30.3,
+    "commit": true,
+    "delivered": 4.8,
+    "in_service": 9.4,
+    "one_in_ten": 26.8,
+    "peak": 25.7,
+    "share_over": 54
+   },
+   "Dunmore Street": {
+    "before": 23.0,
+    "commit": true,
+    "delivered": 2.7,
+    "in_service": 6.4,
+    "one_in_ten": 21.0,
+    "peak": 20.3,
+    "share_over": 70
+   },
+   "Fenwick Street": {
+    "before": 38.9,
+    "commit": false,
+    "delivered": 7.4,
+    "in_service": 14.3,
+    "one_in_ten": 33.3,
+    "peak": 32.0,
+    "share_over": 0
+   },
+   "Hartwell Common": {
+    "before": 24.3,
+    "commit": false,
+    "delivered": 1.6,
+    "in_service": 3.8,
+    "one_in_ten": 23.4,
+    "peak": 22.7,
+    "share_over": 0
+   }
+  },
+  "the zone's own past share of its contract in service in mid January": {
+   "Ashcombe Road": {
+    "before": 32.2,
+    "commit": true,
+    "delivered": 8.1,
+    "in_service": 19.2,
+    "one_in_ten": 29.7,
+    "peak": 28.7,
+    "share_over": 94
+   },
+   "Charlecote Way": {
+    "before": 30.3,
+    "commit": true,
+    "delivered": 4.6,
+    "in_service": 9.0,
+    "one_in_ten": 27.0,
+    "peak": 25.9,
+    "share_over": 60
+   },
+   "Dunmore Street": {
+    "before": 23.0,
+    "commit": true,
+    "delivered": 2.3,
+    "in_service": 5.3,
+    "one_in_ten": 21.4,
+    "peak": 20.7,
+    "share_over": 92
+   },
+   "Fenwick Street": {
+    "before": 38.9,
+    "commit": false,
+    "delivered": 7.1,
+    "in_service": 13.9,
+    "one_in_ten": 33.5,
+    "peak": 32.1,
+    "share_over": 0
+   },
+   "Hartwell Common": {
+    "before": 24.3,
+    "commit": false,
+    "delivered": 1.7,
+    "in_service": 4.0,
+    "one_in_ten": 23.3,
+    "peak": 22.6,
+    "share_over": 0
+   }
+  }
+ },
+ "route_margins": {
+  "careful but hurried: the line, the type's established share, the planned dates": {
+   "Ashcombe Road": 1.754159,
+   "Charlecote Way": -3.461022,
+   "Dunmore Street": -1.071869,
+   "Fenwick Street": -2.124946,
+   "Hartwell Common": 0.851647
+  },
+  "customers due after the latest winter, agreed capacity in full": {
+   "Ashcombe Road": 2.836298,
+   "Charlecote Way": -3.08621,
+   "Dunmore Street": 1.329508,
+   "Fenwick Street": 1.825667,
+   "Hartwell Common": 5.286452
+  },
+  "each class's record read from the sites commissioned alone": {
+   "Ashcombe Road": 2.140115,
+   "Charlecote Way": 1.355564,
+   "Dunmore Street": 0.999506,
+   "Fenwick Street": 0.851744,
+   "Hartwell Common": -0.987238
+  },
+  "each evening half-hour on a straight line through the days no service ran, three winters": {
+   "Ashcombe Road": 0.911006,
+   "Charlecote Way": 1.15085,
+   "Dunmore Street": -0.959884,
+   "Fenwick Street": 0.837295,
+   "Hartwell Common": -1.090792
+  },
+  "every customer at what the latest months show, no further build-up": {
+   "Ashcombe Road": 1.766373,
+   "Charlecote Way": -0.738362,
+   "Dunmore Street": 0.998129,
+   "Fenwick Street": 0.924439,
+   "Hartwell Common": 1.208517
+  },
+  "every working weekday with the megawatts scheduled as a regressor": {
+   "Ashcombe Road": 1.210804,
+   "Charlecote Way": 1.07528,
+   "Dunmore Street": -0.979287,
+   "Fenwick Street": 0.73788,
+   "Hartwell Common": -1.111883
+  },
+  "quick: the latest winter's line, agreed capacity in full, the contract at face value, the expected day": {
+   "Ashcombe Road": -3.337733,
+   "Charlecote Way": -4.505475,
+   "Dunmore Street": -0.932158,
+   "Fenwick Street": -2.531846,
+   "Hartwell Common": 4.617608
+  },
+  "the delivery taken off the 17:00 to 18:00 peak": {
+   "Ashcombe Road": -1.437362,
+   "Charlecote Way": 1.422759,
+   "Dunmore Street": 1.055119,
+   "Fenwick Street": 1.194538,
+   "Hartwell Common": -0.959183
+  },
+  "the megawatts contracted, at the share of megawatts in service": {
+   "Ashcombe Road": 2.488845,
+   "Charlecote Way": 1.564146,
+   "Dunmore Street": 1.132284,
+   "Fenwick Street": -1.113849,
+   "Hartwell Common": -1.099456
+  },
+  "the megawatts contracted, at the share the events delivered of their contract": {
+   "Ashcombe Road": 2.265856,
+   "Charlecote Way": 1.323472,
+   "Dunmore Street": 1.435564,
+   "Fenwick Street": -1.469194,
+   "Hartwell Common": -0.912071
+  },
+  "the same customers at the average share today's customers draw": {
+   "Ashcombe Road": 1.963208,
+   "Charlecote Way": -3.08621,
+   "Dunmore Street": 1.012189,
+   "Fenwick Street": 1.005826,
+   "Hartwell Common": 1.0722
+  },
+  "the same customers at their type's established share": {
+   "Ashcombe Road": 1.906951,
+   "Charlecote Way": -3.08621,
+   "Dunmore Street": 1.019564,
+   "Fenwick Street": 1.111074,
+   "Hartwell Common": 1.054591
+  },
+  "the same customers on their type's build-up": {
+   "Ashcombe Road": 1.717973,
+   "Charlecote Way": -3.08621,
+   "Dunmore Street": 0.96643,
+   "Fenwick Street": 0.972032,
+   "Hartwell Common": -1.15209
+  },
+  "the same line through the latest winter's days alone": {
+   "Ashcombe Road": 0.991372,
+   "Charlecote Way": 1.474576,
+   "Dunmore Street": -0.926661,
+   "Fenwick Street": 1.074049,
+   "Hartwell Common": -0.958879
+  },
+  "the sites still to come on the provider's record across its classes": {
+   "Ashcombe Road": 2.357109,
+   "Charlecote Way": 1.456443,
+   "Dunmore Street": 1.060452,
+   "Fenwick Street": -0.835104,
+   "Hartwell Common": -0.96321
+  },
+  "the sites still to come on the register's record across every class": {
+   "Ashcombe Road": 2.320231,
+   "Charlecote Way": 1.499229,
+   "Dunmore Street": 1.064986,
+   "Fenwick Street": -0.688836,
+   "Hartwell Common": -0.933937
+  },
+  "the sites still to come on their planned dates": {
+   "Ashcombe Road": 2.857871,
+   "Charlecote Way": 1.195616,
+   "Dunmore Street": 0.980804,
+   "Fenwick Street": -1.668036,
+   "Hartwell Common": -1.021185
+  },
+  "the zone's own past share of its contract in service in mid January": {
+   "Ashcombe Road": 2.188793,
+   "Charlecote Way": 1.362841,
+   "Dunmore Street": 1.391789,
+   "Fenwick Street": -1.494292,
+   "Hartwell Common": -1.106621
+  }
+ },
+ "routes": {
+  "careful but hurried: the line, the type's established share, the planned dates": [
+   "Ashcombe Road",
+   "Hartwell Common"
+  ],
+  "customers due after the latest winter, agreed capacity in full": [
+   "Ashcombe Road",
+   "Dunmore Street",
+   "Fenwick Street",
+   "Hartwell Common"
+  ],
+  "each class's record read from the sites commissioned alone": [
+   "Ashcombe Road",
+   "Charlecote Way",
+   "Dunmore Street",
+   "Fenwick Street"
+  ],
+  "each evening half-hour on a straight line through the days no service ran, three winters": [
+   "Ashcombe Road",
+   "Charlecote Way",
+   "Fenwick Street"
+  ],
+  "every customer at what the latest months show, no further build-up": [
+   "Ashcombe Road",
+   "Dunmore Street",
+   "Fenwick Street",
+   "Hartwell Common"
+  ],
+  "every result of the chain": [
+   "Ashcombe Road",
+   "Charlecote Way",
+   "Dunmore Street",
+   "Fenwick Street"
+  ],
+  "every working weekday with the megawatts scheduled as a regressor": [
+   "Ashcombe Road",
+   "Charlecote Way",
+   "Fenwick Street"
+  ],
+  "quick: the latest winter's line, agreed capacity in full, the contract at face value, the expected day": [
+   "Hartwell Common"
+  ],
+  "the delivery taken off the 17:00 to 18:00 peak": [
+   "Charlecote Way",
+   "Dunmore Street",
+   "Fenwick Street"
+  ],
+  "the megawatts contracted, at the share of megawatts in service": [
+   "Ashcombe Road",
+   "Charlecote Way",
+   "Dunmore Street"
+  ],
+  "the megawatts contracted, at the share the events delivered of their contract": [
+   "Ashcombe Road",
+   "Charlecote Way",
+   "Dunmore Street"
+  ],
+  "the same customers at the average share today's customers draw": [
+   "Ashcombe Road",
+   "Dunmore Street",
+   "Fenwick Street",
+   "Hartwell Common"
+  ],
+  "the same customers at their type's established share": [
+   "Ashcombe Road",
+   "Dunmore Street",
+   "Fenwick Street",
+   "Hartwell Common"
+  ],
+  "the same customers on their type's build-up": [
+   "Ashcombe Road",
+   "Dunmore Street",
+   "Fenwick Street"
+  ],
+  "the same line through the latest winter's days alone": [
+   "Ashcombe Road",
+   "Charlecote Way",
+   "Fenwick Street"
+  ],
+  "the sites still to come on the provider's record across its classes": [
+   "Ashcombe Road",
+   "Charlecote Way",
+   "Dunmore Street"
+  ],
+  "the sites still to come on the register's record across every class": [
+   "Ashcombe Road",
+   "Charlecote Way",
+   "Dunmore Street"
+  ],
+  "the sites still to come on their planned dates": [
+   "Ashcombe Road",
+   "Charlecote Way",
+   "Dunmore Street"
+  ],
+  "the zone's own past share of its contract in service in mid January": [
+   "Ashcombe Road",
+   "Charlecote Way",
+   "Dunmore Street"
+  ]
+ },
+ "sensitivity": {
+  "commits": [
+   "Ashcombe Road",
+   "Fenwick Street",
+   "Hartwell Common"
+  ],
+  "earned": 3.5,
+  "grades": {
+   "R1": "missed",
+   "R10": "missed",
+   "R11": "missed",
+   "R2": "partly",
+   "R3": "missed",
+   "R4": "partly",
+   "R5": "right",
+   "R6": "partly",
+   "R7": "right",
+   "R8": "missed",
+   "R9": "missed"
+  },
+  "hints": [
+   {
+    "commits": [
+     "Ashcombe Road",
+     "Dunmore Street",
+     "Fenwick Street",
+     "Hartwell Common"
+    ],
+    "rescues": [
+     "R1"
+    ],
+    "sentence": "the cold end read from the hours before the window"
+   },
+   {
+    "commits": [
+     "Ashcombe Road",
+     "Charlecote Way",
+     "Fenwick Street"
+    ],
+    "rescues": [
+     "R2"
+    ],
+    "sentence": "every register customer's rise on its type's build-up"
+   },
+   {
+    "commits": [
+     "Ashcombe Road",
+     "Fenwick Street",
+     "Hartwell Common"
+    ],
+    "rescues": [
+     "R4",
+     "R6"
+    ],
+    "sentence": "the sites still to come and the sites withdrawn counted in each class's record"
+   },
+   {
+    "commits": [
+     "Ashcombe Road",
+     "Charlecote Way",
+     "Dunmore Street",
+     "Fenwick Street"
+    ],
+    "rescues": [
+     "R1",
+     "R2",
+     "R3",
+     "R9",
+     "R11"
+    ],
+    "sentence": "the cold end and the build-up together"
+   },
+   {
+    "commits": [
+     "Ashcombe Road",
+     "Dunmore Street",
+     "Fenwick Street",
+     "Hartwell Common"
+    ],
+    "rescues": [
+     "R1",
+     "R4",
+     "R6"
+    ],
+    "sentence": "the cold end and the sites still to come together"
+   },
+   {
+    "commits": [
+     "Ashcombe Road",
+     "Charlecote Way",
+     "Fenwick Street"
+    ],
+    "rescues": [
+     "R2",
+     "R4",
+     "R6"
+    ],
+    "sentence": "the build-up and the sites still to come together"
+   }
+  ],
+  "margins": {
+   "Ashcombe Road": 1.034779,
+   "Charlecote Way": -3.386893,
+   "Dunmore Street": -1.053993,
+   "Fenwick Street": 0.396235,
+   "Hartwell Common": 0.885951
+  },
+  "name": "the careful but hurried pass with each class's lateness read from the sites commissioned alone",
+  "results": {
+   "R1": {
+    "Ashcombe Road": 29.0,
+    "Charlecote Way": 24.8,
+    "Dunmore Street": 20.2,
+    "Fenwick Street": 36.4,
+    "Hartwell Common": 22.6
+   },
+   "R10": {
+    "Ashcombe Road": 51,
+    "Charlecote Way": 0,
+    "Dunmore Street": 0,
+    "Fenwick Street": 19,
+    "Hartwell Common": 64
+   },
+   "R11": [
+    "Ashcombe Road",
+    "Fenwick Street",
+    "Hartwell Common"
+   ],
+   "R2": {
+    "Ashcombe Road": 0.6,
+    "Charlecote Way": 0.0,
+    "Dunmore Street": 0.2,
+    "Fenwick Street": 0.6,
+    "Hartwell Common": 2.7
+   },
+   "R3": {
+    "Ashcombe Road": 30.9,
+    "Charlecote Way": 25.5,
+    "Dunmore Street": 21.0,
+    "Fenwick Street": 38.4,
+    "Hartwell Common": 26.2
+   },
+   "R4": {
+    "Ashcombe Road": 18.9,
+    "Charlecote Way": 9.0,
+    "Dunmore Street": 6.3,
+    "Fenwick Street": 8.4,
+    "Hartwell Common": 3.7
+   },
+   "R5": {
+    "Corvane Flex": 0.42,
+    "Quillon Energy Services": 0.51
+   },
+   "R6": {
+    "Ashcombe Road": 8.0,
+    "Charlecote Way": 4.6,
+    "Dunmore Street": 2.7,
+    "Fenwick Street": 4.3,
+    "Hartwell Common": 1.6
+   },
+   "R7": {
+    "Corvane Flex": 0.67,
+    "Quillon Energy Services": 0.31
+   },
+   "R8": {
+    "Ashcombe Road": 27.5,
+    "Charlecote Way": 21.5,
+    "Dunmore Street": 18.3,
+    "Fenwick Street": 34.1,
+    "Hartwell Common": 24.6
+   },
+   "R9": {
+    "Ashcombe Road": 28.5,
+    "Charlecote Way": 22.2,
+    "Dunmore Street": 18.9,
+    "Fenwick Street": 35.4,
+    "Hartwell Common": 25.3
+   }
+  },
+  "score": 26.9
+ },
+ "sites": {
   "Ashcombe Road": {
-   "2023/24": 0.32,
-   "2025/26": 0.48
+   "Battery storage": {
+    "chance_pct": 56,
+    "expected_mw": 6.44,
+    "mw": 11.51,
+    "sites": 32
+   },
+   "Domestic heat pump aggregation": {
+    "chance_pct": 86,
+    "expected_mw": 1.25,
+    "mw": 1.46,
+    "sites": 15
+   },
+   "EV charging aggregation": {
+    "chance_pct": 88,
+    "expected_mw": 1.03,
+    "mw": 1.17,
+    "sites": 11
+   }
   },
   "Charlecote Way": {
-   "2023/24": 0.23,
-   "2025/26": 0.34
+   "Commercial refrigeration": {
+    "chance_pct": 96,
+    "expected_mw": 1.46,
+    "mw": 1.52,
+    "sites": 11
+   },
+   "HVAC": {
+    "chance_pct": 86,
+    "expected_mw": 0.93,
+    "mw": 1.08,
+    "sites": 9
+   },
+   "Process load": {
+    "chance_pct": 16,
+    "expected_mw": 0.06,
+    "mw": 0.38,
+    "sites": 1
+   }
+  },
+  "Dunmore Street": {
+   "Battery storage": {
+    "chance_pct": 63,
+    "expected_mw": 0.2,
+    "mw": 0.33,
+    "sites": 1
+   },
+   "Domestic heat pump aggregation": {
+    "chance_pct": 88,
+    "expected_mw": 0.44,
+    "mw": 0.5,
+    "sites": 6
+   },
+   "EV charging aggregation": {
+    "chance_pct": 92,
+    "expected_mw": 0.17,
+    "mw": 0.18,
+    "sites": 2
+   }
   },
   "Fenwick Street": {
-   "2023/24": 0.25,
-   "2025/26": 0.54
+   "Commercial refrigeration": {
+    "chance_pct": 97,
+    "expected_mw": 0.35,
+    "mw": 0.36,
+    "sites": 2
+   },
+   "HVAC": {
+    "chance_pct": 81,
+    "expected_mw": 0.27,
+    "mw": 0.34,
+    "sites": 3
+   },
+   "Process load": {
+    "chance_pct": 28,
+    "expected_mw": 2.59,
+    "mw": 9.25,
+    "sites": 33
+   }
   },
   "Hartwell Common": {
-   "2023/24": 0.15,
-   "2025/26": 0.26
+   "Battery storage": {
+    "chance_pct": 79,
+    "expected_mw": 0.37,
+    "mw": 0.47,
+    "sites": 2
+   },
+   "Domestic heat pump aggregation": {
+    "chance_pct": 86,
+    "expected_mw": 0.38,
+    "mw": 0.44,
+    "sites": 5
+   },
+   "EV charging aggregation": {
+    "chance_pct": 91,
+    "expected_mw": 0.08,
+    "mw": 0.09,
+    "sites": 1
+   }
   }
  },
  "totals": {
-  "comeback_loss": 3.9,
-  "contracted": 46.0,
-  "delivered": 20.4,
-  "not_available": 25.6,
-  "off_peak": 16.5
+  "contracted": 52.5,
+  "delivered": 20.1,
+  "in_service": 44.0
  },
  "variants": {
-  "cold_days_at_or_below": [
-   0,
-   1.5,
-   2
-  ],
-  "heating_base_c": [
-   14,
-   17
-  ],
-  "n": 22,
+  "n": 17,
   "names": [
-   "days at or below 0 C",
-   "days at or below minus 1.5 C",
-   "days at or below minus 2 C",
-   "a curved line",
-   "zone by zone",
-   "the scatter as measured",
-   "the share's own scatter as measured, times the award",
-   "the share's own scatter as measured, times the award, zone by zone",
-   "heating base 14 C",
-   "heating base 17 C",
-   "a heating slope each winter",
-   "weekday levels",
-   "the baseline scaled to the day's own level before the window",
-   "the calls that fell short alone",
-   "the calls that fell short alone, every day",
-   "met calls as floors, days at or below 2 C",
-   "met calls as floors, every day",
-   "met calls as floors, every day, a curved line",
-   "megawatts fitted over every event",
-   "megawatts fitted over every event, zone by zone",
-   "a cancelled instruction's day kept",
-   "the three winters' own scaling with the megawatts contracted"
+   "mornings on two straight lines meeting at a knee the fit chooses",
+   "mornings curved below a knee the fit chooses",
+   "mornings on a line through the days at or below 1 C alone",
+   "the morning taken as the half-hours ending 09:00 to 15:00",
+   "the two latest winters",
+   "the latest winter alone",
+   "each winter's level allowed to drift, read at 15 January",
+   "each half-hour regressed on the day's own morning",
+   "a customer's own level from its latest six months",
+   "every customer on its type's level, its own months set aside",
+   "a build-up without a slow start",
+   "each class's record with its own provider",
+   "each class's days late as a fitted distribution",
+   "sites withdrawn counted as still to come in the record",
+   "the share curved in temperature",
+   "the share flat above 2 C",
+   "the calls that fell short alone"
   ]
  },
  "zones": {
   "Ashcombe Road": {
-   "after_window": 25.9,
-   "award": 21.0,
+   "at_or_below_freezing": 40,
    "code": "PS40617",
-   "contract_2526": 7.5,
-   "exceed_days_in_ten": 10,
-   "expected_margin": 2.9,
-   "firm": 23.0,
-   "in_window": 22.0,
-   "inside_by": 3.5,
-   "largest_scheduled": 7.0,
-   "margin": 3.5,
-   "n_base_days": 26,
-   "n_cold": 28,
-   "n_events": 167,
-   "over": true,
-   "over_by": 3.5,
+   "coldest_without_service": 0.1,
+   "coldest_without_service_2526": 1.8,
+   "commit": true,
+   "contracted": 21.0,
+   "customers": 14,
+   "days_without_service": 184,
+   "days_without_service_2526": 39,
+   "firm": 27.5,
+   "growth_pct": 4.4,
+   "in_service_now": 9.1,
+   "in_service_share_of_contract_pct": 85,
+   "margin": 2.0,
+   "off_peak": 3.7,
+   "over_or_under_by": 2.0,
    "peak_hh": "20:00",
-   "per_scheduled": 0.49,
-   "per_scheduled_mw": 10.3,
    "provider": "Corvane Flex Ltd",
-   "share": 0.39,
-   "zone": "Ashcombe Road CMZ"
+   "sites_still_to_come": 58,
+   "still_to_come_mw": 14.1,
+   "working_weekdays": 291
   },
   "Charlecote Way": {
-   "after_window": 20.2,
-   "award": 7.5,
+   "at_or_below_freezing": 39,
    "code": "PS41108",
-   "contract_2526": 4.0,
-   "exceed_days_in_ten": 0,
-   "expected_margin": -1.7,
-   "firm": 22.5,
-   "in_window": 20.8,
-   "inside_by": 0.8,
-   "largest_scheduled": 4.0,
-   "margin": -0.8,
-   "n_base_days": 41,
-   "n_cold": 29,
-   "n_events": 121,
-   "over": false,
-   "over_by": -0.8,
+   "coldest_without_service": -3.5,
+   "coldest_without_service_2526": -2.6,
+   "commit": true,
+   "contracted": 8.5,
+   "customers": 10,
+   "days_without_service": 244,
+   "days_without_service_2526": 72,
+   "firm": 25.6,
+   "growth_pct": 3.0,
+   "in_service_now": 6.4,
+   "in_service_share_of_contract_pct": 104,
+   "margin": 1.4,
+   "off_peak": 4.5,
+   "over_or_under_by": 1.4,
    "peak_hh": "18:00",
-   "per_scheduled": 0.67,
-   "per_scheduled_mw": 5.0,
    "provider": "Quillon Energy Services Ltd",
-   "share": 0.54,
-   "zone": "Charlecote Way CMZ"
+   "sites_still_to_come": 21,
+   "still_to_come_mw": 3.0,
+   "working_weekdays": 285
+  },
+  "Dunmore Street": {
+   "at_or_below_freezing": 39,
+   "code": "PS40852",
+   "coldest_without_service": -0.6,
+   "coldest_without_service_2526": 0.3,
+   "commit": true,
+   "contracted": 6.0,
+   "customers": 11,
+   "days_without_service": 213,
+   "days_without_service_2526": 57,
+   "firm": 20.0,
+   "growth_pct": 2.6,
+   "in_service_now": 5.4,
+   "in_service_share_of_contract_pct": 103,
+   "margin": 1.1,
+   "off_peak": 2.6,
+   "over_or_under_by": 1.1,
+   "peak_hh": "18:00",
+   "provider": "Corvane Flex Ltd",
+   "sites_still_to_come": 9,
+   "still_to_come_mw": 1.0,
+   "working_weekdays": 285
   },
   "Fenwick Street": {
-   "after_window": 28.7,
-   "award": 10.0,
+   "at_or_below_freezing": 41,
    "code": "PS41474",
-   "contract_2526": 4.5,
-   "exceed_days_in_ten": 3,
-   "expected_margin": -0.4,
-   "firm": 30.5,
-   "in_window": 30.1,
-   "inside_by": 0.7,
-   "largest_scheduled": 4.5,
-   "margin": 0.7,
-   "n_base_days": 35,
-   "n_cold": 29,
-   "n_events": 148,
-   "over": true,
-   "over_by": 0.7,
+   "coldest_without_service": -0.6,
+   "coldest_without_service_2526": 1.2,
+   "commit": true,
+   "contracted": 13.0,
+   "customers": 11,
+   "days_without_service": 186,
+   "days_without_service_2526": 38,
+   "firm": 35.0,
+   "growth_pct": 3.6,
+   "in_service_now": 4.4,
+   "in_service_share_of_contract_pct": 58,
+   "margin": 1.2,
+   "off_peak": 3.9,
+   "over_or_under_by": 1.2,
    "peak_hh": "18:00",
-   "per_scheduled": 0.56,
-   "per_scheduled_mw": 5.6,
    "provider": "Quillon Energy Services Ltd",
-   "share": 0.54,
-   "zone": "Fenwick Street CMZ"
+   "sites_still_to_come": 38,
+   "still_to_come_mw": 9.9,
+   "working_weekdays": 291
   },
   "Hartwell Common": {
-   "after_window": 18.4,
-   "award": 7.5,
+   "at_or_below_freezing": 40,
    "code": "PS41236",
-   "contract_2526": 3.0,
-   "exceed_days_in_ten": 10,
-   "expected_margin": 2.2,
-   "firm": 17.8,
-   "in_window": 20.0,
-   "inside_by": 2.8,
-   "largest_scheduled": 3.0,
-   "margin": 2.8,
-   "n_base_days": 37,
-   "n_cold": 29,
-   "n_events": 159,
-   "over": true,
-   "over_by": 2.8,
+   "coldest_without_service": -4.6,
+   "coldest_without_service_2526": -2.8,
+   "commit": false,
+   "contracted": 4.0,
+   "customers": 13,
+   "days_without_service": 262,
+   "days_without_service_2526": 88,
+   "firm": 24.4,
+   "growth_pct": 4.0,
+   "in_service_now": 2.8,
+   "in_service_share_of_contract_pct": 91,
+   "margin": -1.0,
+   "off_peak": 1.5,
+   "over_or_under_by": 1.0,
    "peak_hh": "18:00",
-   "per_scheduled": 0.37,
-   "per_scheduled_mw": 2.8,
    "provider": "Corvane Flex Ltd",
-   "share": 0.39,
-   "zone": "Hartwell Common CMZ"
+   "sites_still_to_come": 8,
+   "still_to_come_mw": 1.0,
+   "working_weekdays": 290
   }
  }
 }

@@ -1,394 +1,417 @@
 {
-  "task": "task10",
-  "status": "DESIGN",
-  "domain": "energy-systems-utilities/load-forecasting (client domain energy-systems-utilities; world: an English distribution network operator, Wealdmoor Power Networks, committing for winter 2027/28 the reinforcement of the Halverton zone primaries whose design-day peak, with the flexibility contracted for that winter instructed in full, would exceed firm capacity on more than one design day in ten)",
-  "subdomain": "load-forecasting",
-  "objective": "forecasting",
-  "stage": 2,
-  "stage_name": "design",
-  "updated": "2026-11-10",
-  "call": "Commit reinforcement at Ashcombe Road, Charlecote Way, Dunmore Street and Fenwick Street for winter 2027/28; Hartwell Common stays within firm capacity on nine design days in ten (figures set at the build)",
-  "architecture": 7,
-  "loops": 0,
-  "precut": null,
-  "leak": null,
-  "duplicate_check": {
-    "guard_check": "WARN 2026-11-10 on the registered architecture 7 card (template.chain_near and overuse.weight against task17, driver.near against this slot's architectures 6 and 5, overuse.forum, repeat.decision, repeat.question_form), each answered in the Draw"
-  },
-  "judge": null,
-  "paper_pair": null,
-  "runs": {
+ "task": "task10",
+ "status": "PAUSED",
+ "domain": "energy-systems-utilities/load-forecasting (client domain energy-systems-utilities; world: an English distribution network operator, Wealdmoor Power Networks, committing for winter 2027/28 the reinforcement of the Halverton zone primaries whose design-day peak, with the flexibility contracted for that winter instructed in full, would exceed firm capacity on more than one design day in ten)",
+ "subdomain": "load-forecasting",
+ "objective": "forecasting",
+ "stage": 3,
+ "stage_name": "build",
+ "updated": "2026-11-10",
+ "call": "Commit reinforcement at Ashcombe Road, Charlecote Way, Dunmore Street and Fenwick Street for winter 2027/28 (peaks under 29.5, 27.0, 21.1, 36.2 MW on nine design days in ten against 27.5, 25.6, 20.0, 35.0 MW of firm capacity); Hartwell Common stays within firm capacity (23.4 MW against 24.4)",
+ "architecture": 7,
+ "loops": 0,
+ "precut": "exit 0 on the final cut: 85 checks, 0 FAIL, 1 WARN (nearest chains: task17 shares the answer shape and the weight, answered in the note's Template check)",
+ "leak": {
+  "verdict": "REVIEW, no LEAK",
+  "asof": "2026-11-04",
+  "review_lines": 17,
+  "ruled": "DESIGN_NOTE.md, Leak rulings",
+  "reader": "not run: stage 4"
+ },
+ "duplicate_check": {
+  "guard_check": "WARN 2026-11-10 on the registered architecture 7 card (template.chain_near and overuse.weight against task17, driver.near against this slot's architectures 6 and 5, overuse.forum, repeat.decision, repeat.question_form), each answered in the Draw",
+  "heart": "WARN 2026-11-10 on the final cut against the corpus at origin/main as fetched for the PAUSED commit, no BLOCK; surface exit 0 with one pair promoted (task14, read side by side in the note's Draw)"
+ },
+ "judge": null,
+ "paper_pair": 24.5,
+ "runs": {
+  "run1": null,
+  "run2": null,
+  "average": null,
+  "counterfactual_average": null,
+  "first_wrong_step": null,
+  "triage": null,
+  "recorded": "2026-11-10",
+  "history": [
+   {
+    "architecture": 4,
     "run1": null,
     "run2": null,
-    "average": null,
-    "counterfactual_average": null,
-    "first_wrong_step": null,
-    "triage": null,
+    "verdict": "REDESIGN",
+    "recorded": "2026-11-08",
+    "note": "both runs on the golden 12 hubs; not graded"
+   },
+   {
+    "architecture": 5,
+    "run1": null,
+    "run2": null,
+    "verdict": "FIX_ASKS",
+    "recorded": "2026-11-08",
+    "note": "run 1 on the golden call, run 2 off it (Ashcombe Road alone, dismissed own evidence); no rubric pasted; runs saved as runs/run1.md and run2.md, architecture 4's as runs/arch4_*.md"
+   },
+   {
+    "architecture": 5,
+    "round": 2,
+    "run1": null,
+    "run2": null,
+    "verdict": "REDESIGN (on the review)",
     "recorded": "2026-11-10",
-    "history": [
-      {
-        "architecture": 4,
-        "run1": null,
-        "run2": null,
-        "verdict": "REDESIGN",
-        "recorded": "2026-11-08",
-        "note": "both runs on the golden 12 hubs; not graded"
-      },
-      {
-        "architecture": 5,
-        "run1": null,
-        "run2": null,
-        "verdict": "FIX_ASKS",
-        "recorded": "2026-11-08",
-        "note": "run 1 on the golden call, run 2 off it (Ashcombe Road alone, dismissed own evidence); no rubric pasted; runs saved as runs/run1.md and run2.md, architecture 4's as runs/arch4_*.md"
-      },
-      {
-        "architecture": 5,
-        "round": 2,
-        "run1": null,
-        "run2": null,
-        "verdict": "REDESIGN (on the review)",
-        "recorded": "2026-11-10",
-        "note": "second architecture 5 pair, on the minimal prompt: both runs off the call at rung 1b (Ashcombe Road alone; a method shortcut and a self-confirming check); not scored; runs saved as runs/arch5_round2_run1.md and arch5_round2_run2.md, the first pair as runs/arch5_round1_*.md; the holistic audit of 2026-11-10 read the neighbour rise as a plant (runs/review_2026-11-10.md)"
-      },
-      {
-        "architecture": 6,
-        "run1": null,
-        "run2": null,
-        "verdict": "REDESIGN",
-        "recorded": "2026-11-10",
-        "note": "both runs on the golden call and every stated figure (0 of 11 results lost; about 97 estimated against a paper pair of 38.4); no score or rubric supplied; runs/arch6_run1.md, arch6_run2.md and arch6_triage.md"
-      }
-    ]
+    "note": "second architecture 5 pair, on the minimal prompt: both runs off the call at rung 1b (Ashcombe Road alone; a method shortcut and a self-confirming check); not scored; runs saved as runs/arch5_round2_run1.md and arch5_round2_run2.md, the first pair as runs/arch5_round1_*.md; the holistic audit of 2026-11-10 read the neighbour rise as a plant (runs/review_2026-11-10.md)"
+   },
+   {
+    "architecture": 6,
+    "run1": null,
+    "run2": null,
+    "verdict": "REDESIGN",
+    "recorded": "2026-11-10",
+    "note": "both runs on the golden call and every stated figure (0 of 11 results lost; about 97 estimated against a paper pair of 38.4); no score or rubric supplied; runs/arch6_run1.md, arch6_run2.md and arch6_triage.md"
+   }
+  ]
+ },
+ "returned": [
+  {
+   "date": "2026-11-09",
+   "source": "triage",
+   "repair": "rubric",
+   "portal": "first architecture 5 pair: run 1 on the call, run 2 off it (dismissed own evidence); the asks were the four-zone table alone, so run 2 kept Charlecote Way's row, the agreeing over-firm flags, the layout and the chart, and run 1 kept every ask (the designed second judgment, the design condition, read by both runs)",
+   "fix": "asks re-coupled: one Supplementary Questions item per quantity across the four zones (deliveries, credits, demand after against firm and the set over it), the chart graded on which after columns stand above firm, how far each primary to reinforce exceeds firm on the design day (3 and 2 MW), and the primaries over firm on working weekdays at minus 4.5 C (Ashcombe Road, Fenwick Street, Hartwell Common) and minus 6.0 C (all four), where the providers' net reduction re-read at the colder day decides and the straight correction is checked on winter 2023/24; upstream figures dropped from the blocks; the guideline's lead-time sentence made consistent with its winter; the call, the stump, the ladder and every frozen figure unchanged (freeze.py rubric PASS)",
+   "commit": ""
   },
-  "returned": [
-    {
-      "date": "2026-11-09",
-      "source": "triage",
-      "repair": "rubric",
-      "portal": "first architecture 5 pair: run 1 on the call, run 2 off it (dismissed own evidence); the asks were the four-zone table alone, so run 2 kept Charlecote Way's row, the agreeing over-firm flags, the layout and the chart, and run 1 kept every ask (the designed second judgment, the design condition, read by both runs)",
-      "fix": "asks re-coupled: one Supplementary Questions item per quantity across the four zones (deliveries, credits, demand after against firm and the set over it), the chart graded on which after columns stand above firm, how far each primary to reinforce exceeds firm on the design day (3 and 2 MW), and the primaries over firm on working weekdays at minus 4.5 C (Ashcombe Road, Fenwick Street, Hartwell Common) and minus 6.0 C (all four), where the providers' net reduction re-read at the colder day decides and the straight correction is checked on winter 2023/24; upstream figures dropped from the blocks; the guideline's lead-time sentence made consistent with its winter; the call, the stump, the ladder and every frozen figure unchanged (freeze.py rubric PASS)",
-      "commit": ""
-    },
-    {
-      "date": "2026-11-10",
-      "source": "review",
-      "repair": "design",
-      "portal": "holistic audit: the call turns on one built-in factor (Tollbrook Lane, Wexley Hill and Kestwick Fields step up a flat 1.4, 1.4 and 0.8 MW on their zone's event days, whatever the MW scheduled, absent on cancelled days); once told, the fix is one subtraction; \"spotting the plant, not analysis\". Asked for: the transfer documented (switching log entries) and the call turning on judgments that each move a figure (the shape of the cold-weather delivery decline validated on held-out events; whether delivery scales to awards 1.5 to 2.5 times the largest historical dose; how baseline uncertainty is carried to Hartwell Common's margin)",
-      "fix": "architecture 6: the same world rebuilt as a results chain (the transfer documented in a control room switching log and filed in guideline 3; eight results: demand before flexibility, the megawatts a contract called in full delivers, the backtest on last winter, the megawatts off the day's peak once load comes back, the expected peak, the nine-days-in-ten level, the primaries to reinforce, the bridge)",
-      "commit": ""
-    },
-    {
-      "date": "2026-11-10",
-      "source": "platform holistic audit (runs/review_2026-11-10.md)",
-      "repair": "redesign in the same world (architecture 6)",
-      "portal": "the call turned on one built-in factor (open-point neighbours stepping up on event days); one sentence named it and one subtraction landed the call",
-      "fix": "the transfer documented (a control room switching log, filed in guideline 3) and no longer part of the answer; the call rebuilt as a results chain of eleven results on four judgments that each move a figure: the share of a contract available on a cold evening against megawatts per megawatt scheduled, carried to awards 1.9 to 2.8 times the 2025/26 contracts; the day rebuilt with the load that comes back; the day-to-day spread carried in proportion to the nine-days-in-ten level; the weather correction carried past its sample; backtested on a held-out winter",
-      "commit": "RESHIPPED (task10)"
-    }
-  ],
-  "resume": "DRAWN architecture 7 (card registered 2026-11-10T07:44:07Z). Next: stage 2, the design note from Deep reasoning to Prompt contract and precut.py exit 0; then stage 3 in generator/ (world.py and estim.py are already architecture 7's; pack, docs, parse, checks, verify, golden, writeup, effort and build follow).",
-  "approved": null,
-  "submitted": null,
-  "portal": {
-    "status": "RETURNED",
-    "date": "2026-11-10",
-    "note": "holistic audit, runs/review_2026-11-10.md"
+  {
+   "date": "2026-11-10",
+   "source": "review",
+   "repair": "design",
+   "portal": "holistic audit: the call turns on one built-in factor (Tollbrook Lane, Wexley Hill and Kestwick Fields step up a flat 1.4, 1.4 and 0.8 MW on their zone's event days, whatever the MW scheduled, absent on cancelled days); once told, the fix is one subtraction; \"spotting the plant, not analysis\". Asked for: the transfer documented (switching log entries) and the call turning on judgments that each move a figure (the shape of the cold-weather delivery decline validated on held-out events; whether delivery scales to awards 1.5 to 2.5 times the largest historical dose; how baseline uncertainty is carried to Hartwell Common's margin)",
+   "fix": "architecture 6: the same world rebuilt as a results chain (the transfer documented in a control room switching log and filed in guideline 3; eight results: demand before flexibility, the megawatts a contract called in full delivers, the backtest on last winter, the megawatts off the day's peak once load comes back, the expected peak, the nine-days-in-ten level, the primaries to reinforce, the bridge)",
+   "commit": ""
   },
-  "history": [
+  {
+   "date": "2026-11-10",
+   "source": "platform holistic audit (runs/review_2026-11-10.md)",
+   "repair": "redesign in the same world (architecture 6)",
+   "portal": "the call turned on one built-in factor (open-point neighbours stepping up on event days); one sentence named it and one subtraction landed the call",
+   "fix": "the transfer documented (a control room switching log, filed in guideline 3) and no longer part of the answer; the call rebuilt as a results chain of eleven results on four judgments that each move a figure: the share of a contract available on a cold evening against megawatts per megawatt scheduled, carried to awards 1.9 to 2.8 times the 2025/26 contracts; the day rebuilt with the load that comes back; the day-to-day spread carried in proportion to the nine-days-in-ten level; the weather correction carried past its sample; backtested on a held-out winter",
+   "commit": "RESHIPPED (task10)"
+  }
+ ],
+ "resume": "stage 4: spawn the leak reader and the determinism judge on cut a40205c5885036d29a5249d80669347e074e379e6cde430b2e47856333d75e99 (target.zip sha256; golden.zip e39bfb44088576a2). Done on this cut: the card, the design note (precut exit 0), the generator (checks 76 of 76, verify 15 of 15, two byte-identical builds), gates.py --full with 0 FAIL, leak.py --asof 2026-11-04 REVIEW with every line ruled in the note. Not done: the stage 4 reader and judge and their fixes, the author's prompt rewrite, READY.",
+ "approved": null,
+ "submitted": null,
+ "portal": {
+  "status": "RETURNED",
+  "date": "2026-11-10",
+  "note": "holistic audit, runs/review_2026-11-10.md"
+ },
+ "history": [
+  {
+   "architecture": 1,
+   "domain": "product-analytics",
+   "objective": "forecasting",
+   "stump": "Carrying each site's reviewer pool from September 2026 at its own lapse rate of the last two years, with no new reviewers since access became invitation-only, files 41 FTE (40 on the last twelve months' rate, 38 on the last three); the step that lands it there is reading one stop rate off a pool that was still taking in newcomers, when reviewers stop at about 9 per cent a month in their first year and under one per cent from their fourth: carried on the stop rate of each reviewer's own tenure, counted from when the roster first sees them, the 10,607 active reviewers average about 8,800 a month in 2027 and the request is 32 FTE (27 with the tenure curve read from each grant date).",
+   "delivered": "2026-10-17",
+   "returned": [
     {
-      "architecture": 1,
-      "domain": "product-analytics",
-      "objective": "forecasting",
-      "stump": "Carrying each site's reviewer pool from September 2026 at its own lapse rate of the last two years, with no new reviewers since access became invitation-only, files 41 FTE (40 on the last twelve months' rate, 38 on the last three); the step that lands it there is reading one stop rate off a pool that was still taking in newcomers, when reviewers stop at about 9 per cent a month in their first year and under one per cent from their fourth: carried on the stop rate of each reviewer's own tenure, counted from when the roster first sees them, the 10,607 active reviewers average about 8,800 a month in 2027 and the request is 32 FTE (27 with the tenure curve read from each grant date).",
-      "delivered": "2026-10-17",
-      "returned": [
-        {
-          "date": "2026-10-27",
-          "portal": "FAILED_TO_STUMP: both responses landed the call (35 FTE, 9 above the envelope), building each site's capacity against its inbox at the saturated pace and carrying each pool at its own lapse rate with almost no new reviewers",
-          "repair": "design (loop 3): the capacity framing kept as the default path; the decisive step moved to how the pool is carried: two kinds of reviewer (most new reviewers casual, stopping at about 12 per cent a month, a steady core at about 0.5), grants following each site's question level until review access became invitation-only on 1 September 2026 (filed in the operations handbook), so the 2027 pool is a closed cohort carried on survival by tenure read from the left-truncated roster; the data dictionary, file list and markdown notes removed (a handbook and a question count standard carry the conventions); golden 32 FTE (5, 2, 6, 4, 4, 2, 4, 3, 2), 6 above the envelope; the asks unchanged",
-          "commit": "RESHIPPED (task10) on 2026-10-27, target.zip f17b387d"
-        }
-      ],
-      "leak": {
-        "leak_py": "REVIEW (no LEAK) on f17b387d, every line answered in the design note; sweep 1 clean (no file describes the data)",
-        "reader": "loop 3 (isolated, f17b387d): Q1 to Q4 none, Q5 the charter's need sentence as the estimand, Q6 analytical; REVIEW lines harmless"
-      },
-      "judge": {
-        "verdict": "DETERMINISTIC (pass 3, run r3 on f17b387d, the loop 3 pack)",
-        "disposition": "APPROVE (every main-call and ask figure reproduced; the open pool's rate, a constant pool and the grant-date curve ruled method errors; no fix)",
-        "report": "task10/determinism_check_report_pass3.md (round 1: determinism_check_report_round1.md; round 2: determinism_check_report.md)"
-      },
-      "answer": "Request 32 paid moderator FTE for 2027 (Frontend & Web 5, Mobile Apps 2, Data & ML 6, Databases 4, Infrastructure & DevOps 4, Game Development 2, Security 4, Embedded & Hardware 3, Scientific Computing 2), 6 above finance's 26-FTE envelope",
-      "fate": "spent 2026-10-31 at the batch 1 triage: loop 3 reshipped 10-27 (target.zip f17b387d) after the portal's FAILED_TO_STUMP on loops 1 and 2, keeping the world, prompt and asks the portal had solved once; re-rooted in a new world before any portal result on loop 3"
-    },
-    {
-      "architecture": 2,
-      "domain": "physical-environmental-sciences/hydrology-flood-frequency (client domain physical-environmental-sciences; world: a New Zealand district council's wastewater pump station and its discharge consent)",
-      "objective": "forecasting",
-      "stump": "Fitting one unit-hydrograph response per millimetre and the meter's own dry weather flow on 2024 to 2026 and replaying 2004 to 2023 files about 1 overflow a year with the subdivision (0.70), inside the consent's two, and connects it; the station's infiltration rises 4.2 L/s for every kilometre of sewer below the water table, which stood a median 0.2 km over the meter and 2.1 km over the replay, so the replay each day with its own water table files about 3 a year (3.20): hold the connection until the upgrade.",
-      "precut": {
-        "exit": 0,
-        "date": "2026-10-31",
-        "checks": "61 checks, 0 FAIL, 0 WARN"
-      },
-      "leak": {
-        "leak_py": "REVIEW, both lines ruled in the design note",
-        "reader": "read 1 on 200b0014: no leak, question 6 analytical"
-      },
-      "duplicate_check": {
-        "guard_check": "WARN 2026-10-31T18:27:04Z on the registered card after rebasing on main (repeat.question_form against task250, answered in the design note; test.same_driver_older differentiated against task134, task146, task165 and task173 v1); forum, forcing event and context artifact redrawn after task191 and task250 entered the window",
-        "heart": "WARN 2026-10-31 after the PAUSED rebase (repeat.question_form); forcing event and role family redrawn in place (other, capacity_planner) when task191 re-registered after this draw and task250 changed its role family; task130 v5 differentiated",
-        "surface": "personas are the three drawn names; five pairs promoted on card axes alone (task130, task134, task146, task165 differentiated; task154 on calibration and artifact, left for the author's adjudicated clone check)"
-      },
-      "judge": {
-        "verdict": "DETERMINISTIC",
-        "disposition": "APPROVE",
-        "report": "determinism_check_report.md (the card's stale replay years fixed; SF7 records ask 1's one-pump reading)"
-      },
-      "returned": [
-        {
-          "date": "2026-11-07",
-          "portal": "FAILED_TO_STUMP: both responses landed the hold call. Response 1 replayed 2004 to 2023 and filed 48 overflows against the 40 the consent allows, then 2 after the upgrade; Response 2 filed the same hold. Any full-record replay with the subdivision already breaks the consent, so the decisive step (each replay day's own water table) was never needed.",
-          "lesson": "The easy route has to be the one strong solvers actually file, and it has to land on the wrong side of the call: an exceedance count of rare events spreads with every modelling choice, and the designed naive replay (0.70 a year) was not the replay the solvers ran.",
-          "repair": "re-root (architecture 3) in a new domain and world, 2026-11-07"
-        }
-      ],
-      "gates_stage3": {
-        "checks": "59 assertions, 0 failed",
-        "verify": "independent verifier reproduces the three call figures and every ask figure, 0 failed",
-        "rebuild": "two consecutive builds byte-identical: target (20 files), 3 goldens, figures.json, submission.md",
-        "target_zip_sha256": "200b0014d310ee60e8a5fb9b86bb8eec3ea9b5845bbfc7ed7f5e4c3daf9f91e3",
-        "figures_check": "PASS, 45 figures in blocks 1 to 4, 0 absent",
-        "voice_check": "PASS (977 characters)",
-        "container": "scrub_producer_metadata audit clean on target",
-        "ceiling": {
-          "pair": 48.5,
-          "cracker": 65.0,
-          "mirror": 32.0,
-          "mirror_leakage": 36.4,
-          "script": "generator/ceiling.py"
-        },
-        "figures": {
-          "existing": 2.9,
-          "with_subdivision": 3.2,
-          "after_upgrade": 0.75,
-          "single_response": 0.7,
-          "seasonal": 0.85,
-          "bore_level_straight": 1.0
-        }
-      },
-      "zip_sha256_16": "200b0014d310ee60",
-      "answer": "Hold the Ngaio Road connection until the PS03 storage upgrade is commissioned (3.20 overflows a year with the subdivision against the consent's 2)",
-      "delivered": "2026-10-31",
-      "fate": "FAILED_TO_STUMP on the portal (2026-11-07): both responses landed the hold call; re-rooted as architecture 3 in a new domain and world the same day"
-    },
-    {
-      "architecture": 3,
-      "domain": "political-science-public-policy/election-polling-forecasting (client domain political-science-public-policy; world: a Victorian local government union branch choosing the councils at which it applies for protected action ballot orders for ballots opening 1 March 2027)",
-      "objective": "forecasting",
-      "stump": "Carrying each member's own voting history, calibrated to the 2021 and 2023-24 declared turnouts and checked on the 2023-24 round within a point, files 15 councils above half; the step that lands it there is reading each member's past votes as theirs alone when they rode the elected delegate in post at their worksite at the time, and the July 2026 delegate elections left worksites at six of those councils without one and filled worksites at two others, so with the 2026-28 delegates the set is 11.",
-      "precut": {
-        "exit": 0,
-        "date": "2026-11-07",
-        "checks": "61 checks, 0 FAIL, 0 WARN"
-      },
-      "leak": {
-        "leak_py": "REVIEW, no LEAK, on 4610bc97 (every line ruled in the design note)",
-        "reader": "round 1 (Sonnet, on e4be2d15): clean, no leak, Q6 analytical; FP-04 and the prompt changed since, copy refreshed at scratchpad/leak-task10/",
-        "reader_r2": "round 2 re-read clean (scratchpad leak-task10/reader_answers_r2.md)",
-        "pending": "the 2026-28 term moved into delegate_election_return_2026.xlsx after the round 2 re-read: one leak re-read owed before the ship counts (main thread)"
-      },
-      "duplicate_check": {
-        "guard_check": "PASS 2026-11-07 on the registered card (gap population, pattern A)",
-        "heart": "PASS 2026-11-07 after a final fetch of main (nearest drivers 0.05, task179 v5 and task177 v4)",
-        "surface": "no pair promoted for task10; people: Samantha Taylor, and \"Branch Secretary\" as a title in the guide (no name)"
-      },
-      "judge": {
-        "verdict": "DETERMINISTIC",
-        "disposition": "APPROVE after the step 8 rewording",
-        "gate_g": "forecasting, analytical_non_defect, surface_read_dependency no, sole_data_defect no",
-        "gate_h": "domain pass, layers pass, decisive_step analytical",
-        "report": "task10/determinism_check_report.md",
-        "round1": "FIX_NOW on the asks (2026-11-07, /tmp/determinism-check-task10-r1/verdict.md): call forced and reproduced, Gate G analytical_non_defect, Gate H pass; asks open on the dues window, the diary unit, the asks scope and ask 1 rounding",
-        "repair": "FP-04 files the Sunday period-end convention; the prompt files the diary unit and scopes both asks to the round (24 each, platform councils re-sited inside the round, no in-round figure moved); the guide and tracker file the ballot period close for each member's state; ask 1 asks the side only (five councils within 0.05 of a half point); freeze.py: main side unmoved, 12 out-of-round ask figures and block 4 turnout percentages dropped (allowed)",
-        "round2": "DETERMINISTIC (2026-11-07, /tmp/determinism-check-task10-r2/verdict.md, report task10/determinism_check_report.md): the call reproduced, 6 points either side, no respecification flipping a council; stump power moderate to high; FIX_NOW on step 8 wording only, applied"
-      },
-      "gates_stage3": {
-        "checks": "39 assertions, 0 failed",
-        "verify": "0 disagreements",
-        "rebuild": "two consecutive builds byte-identical: target (17 files), 2 goldens, figures.json, submission.md",
-        "target_zip_sha256": "4610bc9768a15a5be6815094628909eaa60860a47adf8b843af23037fa79bc0f",
-        "figures_check": "PASS, 52 figures",
-        "voice_check": "PASS (900 characters)",
-        "ceiling": {
-          "pair": 42.2,
-          "cracker": 58.8,
-          "mirror": 25.8,
-          "mirror_leakage": 25.0,
-          "script": "generator/ceiling.py"
-        },
-        "figures": {
-          "golden_set": 11,
-          "history_set": 15,
-          "delegate_lift_logit": 1.054,
-          "lift_points": 23.9,
-          "backtest_mae_points": 0.68
-        },
-        "precut": "61 checks, 0 FAIL, 0 WARN",
-        "heart": "PASS after round 1 repair",
-        "freeze": "PASS (determinism mode) on the round 2 pre-ship fixes",
-        "pdf_xref": "every PDF cross-reference offset verified; 2021 declarations Producer LibreOffice 7.1"
-      },
-      "returned": [
-        {
-          "date": "2026-11-07",
-          "portal": "FAILED_TO_STUMP: both responses landed the 11 councils. Each fitted a member-level turnout logit with worksite delegate coverage as a covariate from the start (the delegate register and the July 2026 election return joined to members on the worksite code), evaluated every covariate at the ballot close with the 2026-28 delegates in post, set one log-odds shift on the 32 declarations (0.8995 and 0.8985) and validated leaving each council out (0.70 points); both named the 2024-26 delegates carried forward as a rejected alternative that reverses eight councils. Asks: Response 2 matched all 48 dues and hours figures; Response 1 all 24 hours and 12 of 24 dues (it kept the Thursday-dated period ends as dated).",
-          "lesson": "A covariate the pack ships as its own register on a key the members already carry is in every strong solver's model, and a forecaster evaluates each covariate at the forecast date by reflex, so a recorded covariate that changes between the history and the window is rung 0, not a stump; the July 2026 election return had no use but the decisive step and its name dated the change. The designed default path (vote history without the covariate) was not the route either response ran. Ask devices the hygiene battery executes (the latest update per organiser, invitation and day; every organiser on a visit; one copy of a re-sent advice) held nothing; only the weekday pattern in the platform's advices held, on one response, and FP-04's Sunday sentence pointed at it.",
-          "repair": "re-root (architecture 4) in a new domain and world, 2026-11-07"
-        }
-      ],
-      "zip_sha256_16": "4610bc9768a15a5b",
-      "answer": "Apply for protected action ballot orders at 11 councils (Ardeen, Copeland Downs, Corrigan Valley, Fairholme, Halston, Lindale, Northvale, Pellham, Stanwick, Valmont, Westhaven)",
-      "delivered": "2026-11-07",
-      "fate": "FAILED_TO_STUMP on the portal (2026-11-07): both responses landed the 11 councils with the delegate coverage covariate evaluated at the ballot close; re-rooted as architecture 4 in a new domain and world on 2026-11-08, its build outputs removed from the folder at the draw (git history keeps them)"
-    },
-    {
-      "date": "2026-11-08",
-      "event": "migrated from Project Mark task156 to Project Sulfur as task10 at the author's word"
-    },
-    {
-      "architecture": 4,
-      "domain": "energy-systems-utilities/asset-condition-maintenance (client domain energy-systems-utilities; world: an Irish regional public rapid-charging operator naming, for its concession's 2027 review, the hubs whose high-power charge points will fall below 99 per cent availability once the partnership's programme removes the legacy 50 kW units at some hubs)",
-      "objective": "forecasting",
-      "stump": "Carrying each high-power charge point's controller-hang and fault rates from 2023 to 2026, validated leaving each unit out and on two back-tests, files 5 hubs below 99 per cent in 2027, the five whose HX150 units already hang two or three times a year; the step that lands it there is reading each unit's hang rate as its own, when a hang comes only after about 75 days without a power-up and the RC50's monthly cabinet service powers down every unit on its pillar, so only the units at those five hubs (on a pillar of their own) routinely ran that long, and at the seven standard programme hubs, which keep neither two-monthly visits nor frequent supply interruptions once the RC50 goes, the HX150 units will hang two or three times a year, as often as the five hubs' units already do, and the set is 12.",
-      "precut": {
-        "exit": 0,
-        "date": "2026-11-08",
-        "detail": "61 checks, 0 FAIL, 0 WARN (ship cut)"
-      },
-      "leak": {
-        "leak_py": "REVIEW 2026-11-08 (--asof 2026-11-06) on 5356713d: sweeps 4, 6 and 9, each ruled in the design note; sweep 11 (the prompt gate) clean; no LEAK; sweep 9 reads no dated stamp with a T or day-first date, so checks.py's dates sweep covers the records",
-        "reader": "round 2 (isolated, on 3a6e329b): questions 1 to 6 clean (no decisive-step sentence, no ranking, no helper file, no figure reading as the answer; Q5 Schedule 4.1, 4.3, 4.4, 4.6 and 6.2, 6.4 fix the WHAT; Q6 analytical); items a to d, f, g, h and j harmless, e harmless for the asks, i mild (about 90 per cent of the hang call-outs at the five own-pillar hubs) ruled the mechanism's own footprint; the ship pass changed no document's words and no prompt",
-        "reader_r1": "round 1 on 4bf9959c: questions 1 to 6 clean, item i mild, answered in the second stage-4 pass"
-      },
-      "duplicate_check": {
-        "guard_check": "WARN 2026-11-08 on the updated card (repeat.decision against task268, answered in the design note; the question form now where, its repeat.question_form WARN gone); test.same_puzzle_older (task451) and test.same_driver_older (task105 v1, task162 v2, task170 v1, task229 v3) differentiated on the card",
-        "heart": "WARN 2026-11-08 on 3a6e329b (repeat.decision against task268); shell where, return, csv+pdf",
-        "surface": "2026-11-08, guard.py surface on the full re-extract: 314 builds screened, 9 pairs promoted for adjudication on card axes or surface percentile (task157 back to back by number, task465, task488, task265, task136, task483, task229, task162, task451), each differentiated on the card in one line, left for the author's adjudicated clone check; people: Ailis Fee found in the pack, on the card, no BLOCK"
-      },
-      "judge": {
-        "verdict": "DETERMINISTIC (pass 2, r2, on 3a6e329b)",
-        "disposition": "APPROVE, no FIX_NOW; its optional items taken in the ship pass (the spurs' margin widened, SF17 to SF20 asserted)",
-        "gate_g": "forecasting, analytical_non_defect, surface_read_dependency no, sole_data_defect no",
-        "gate_h": "domain pass, layers pass, decisive_step analytical",
-        "report": "task10/determinism_check_report_pass2.md (round 1: task10/determinism_check_report.md)"
-      },
-      "gates_stage3": "ship cut 5356713d: checks.py 83 assertions 0 failed (Gate F 0 of 8 cheap routes on the golden, none holding more than one standard programme hub; standing family 6 of 6; margins 20 of 20 over redraws, closest 0.10, median 0.30; truth's closest 0.48, golden's 0.35; SF1 to SF20; the spurs at 99.56 and 99.76 per unit, 99.36 and 99.58 on the expected lowest unit, events 0.21 and 0.10, 99.53 and 99.75 on the fleet's hang spells; the calendar member on the same 12; the dates sweep clean); verify.py 0 disagreements (closest 0.34); two builds byte-identical (15 files) and the zip cut twice to one sha256; figures_check.py PASS (67); precut.py exit 0; voice-check.py PASS, no WARN; ceiling.py pair 28.5, mirror leakage 0.0, every route 0 of 60; heart WARN (repeat.decision); surface 314 screened, 9 promoted and differentiated on the card; people no BLOCK; leak.py REVIEW, no LEAK",
-      "zip_sha256_16": "5356713da0281cc4",
-      "answer": "List 12 hubs in the 2027 Availability Plan: Ballinkeel Main Street, Bunacurry Pier, Carrowkeel Business Park, Clonlea Leisure Centre, Derrylane Park and Ride, Glenfad Shopping Centre, Kilbeg Retail Park, Portavaddy Seafront, Rathmoy Station Road, Rossnabeg Harbour, Tobernalt Road and Tullymore Market Square.",
-      "delivered": "2026-11-08",
-      "migrated_from": {
-        "project": "Mark",
-        "task": "task156",
-        "status_in_mark": "SHIPPED",
-        "date": "2026-11-08",
-        "note": "moved from Project Mark at the author's word: architecture 4 shipped there on 2026-11-08 (462411f1), pending, never run on the platform; carried on here for the Sulfur bar"
-      },
-      "freeze": "freeze.py check task10 --mode determinism against the snapshot taken before the ship pass's first edit, --allow charges and energy_mwh of Annagh Cross and Cloonfin Crossroads (fix 5) and the ungraded pack.* record counts and salt.NM125: the call, the stump, the ladder, the default path, blocks 1 and 2 and every other figures.json value unmoved; one item printed, block 4's hub_availability_2027.csv, whose numbers differ from the snapshot's by exactly the four allowed figures (1738, 57.3, 2545, 81.9 out; 1786, 57.5, 2507, 81.0 in), the determinism mode comparing a block 4 file whole",
-      "returned": [
-        {
-          "date": "2026-11-08",
-          "source": "triage",
-          "portal": "FAILED_TO_STUMP: both platform runs landed the golden 12 hubs (the author reports not stumped; no rubric, no score). Run 1 (59 minutes) fitted a piecewise hazard on time since physical restart from the 97 hangs with a known prior restart (ages 76.356 to 105.482 days) and simulated the renewed network; run 2 (43 minutes) fitted a censored Weibull on time since evidenced reset (shape 13.55, scale 93.47 days); both back-tested on 2026. Asks lost by both (93,640 and 94,297 charges against 90,612) but a landed call is not graded.",
-          "lesson": "A mechanism the rows carry in one plot (the hang-age floor) with its remedy written in the work orders' narratives (frozen screen cleared by a local power cycle) is modelled on sight; the renewal programme's removal of the RC50s named the change the forecast had to carry.",
-          "repair": "redesign: re-root (architecture 5) in a new world inside the same client domain at the author's word, 2026-11-08",
-          "runs": "task10/runs/arch4_run1.md, arch4_run2.md, arch4_triage.md"
-        }
-      ],
-      "fate": "spent 2026-11-08 on the platform (both runs on the golden call); world spent"
-    },
-    {
-      "date": "2026-11-09",
-      "event": "prompt rewritten for a human voice at the author's word (first person, direct); dropped only what the guideline already pins: 'counting the flexibility contracted for that winter' (guideline 6 and 7), 'on the design day' on the delivery and on the excess (guideline 6 reads the delivery on the design day, guideline 7 commits on it); every ask, unit, rounding, the working-weekday minus 6.0 C condition and both file names kept"
-    },
-    {
-      "date": "2026-11-09",
-      "event": "prompt cut to the minimum after the client's reviewers flagged spelled-out method, named files, extra context and a stated role: straight to the question, no file names (deliverables by type), outcomes only; the delivery per MW scheduled dropped as its own ask (it stays a critical component), Supplementary Questions six items; target.zip and golden.zip byte-identical; checks 103/103, verify PASS, figures_check 66/66, voice-check --rewrite PASS, leak.py REVIEW no LEAK, precut 1 FAIL (honest pair ceiling 54.0, was 54.5); freeze --mode rubric flags only the prompt's question sentence (reworded at the author's word, the call unchanged)"
-    },
-    {
-      "architecture": 5,
-      "domain": "energy-systems-utilities/load-forecasting (client domain energy-systems-utilities; world: an English distribution network operator, Wealdmoor Power Networks, committing for winter 2027/28 the reinforcement of the Halverton primaries whose design-day demand, after the flexibility contracted for that winter is credited, exceeds firm capacity)",
-      "objective": "forecasting",
-      "stump": "Measuring each flexibility event's fall at its zone primary against a weather-adjusted baseline, validated on held-out non-event weekdays and stable across both winters, and crediting the 2027/28 contracts at the 0.9, 0.6, 0.9 and 0.9 per megawatt scheduled the event records show commits no primary; the step that lands it there is reading the primary's fall as the provider's delivery, when at Ashcombe Road, Fenwick Street and Hartwell Common the control room moved a feeder section across an open point to Tollbrook Lane, Wexley Hill and Kestwick Fields for each event window, so the providers' own reduction, net of the neighbour's rise and read at the design day's minus 3.0 C, is 0.4 and 0.5 per megawatt and Ashcombe Road and Hartwell Common must be reinforced.",
-      "call": "Commit reinforcement at Ashcombe Road and Hartwell Common for winter 2027/28; Charlecote Way and Fenwick Street hold firm capacity with the flexibility contracted for that winter",
-      "returned": [
-        {
-          "date": "2026-11-09",
-          "source": "triage",
-          "repair": "rubric",
-          "portal": "first architecture 5 pair: run 1 on the call, run 2 off it (dismissed own evidence); the asks were the four-zone table alone, so run 2 kept Charlecote Way's row, the agreeing over-firm flags, the layout and the chart, and run 1 kept every ask (the designed second judgment, the design condition, read by both runs)",
-          "fix": "asks re-coupled: one Supplementary Questions item per quantity across the four zones (deliveries, credits, demand after against firm and the set over it), the chart graded on which after columns stand above firm, how far each primary to reinforce exceeds firm on the design day (3 and 2 MW), and the primaries over firm on working weekdays at minus 4.5 C (Ashcombe Road, Fenwick Street, Hartwell Common) and minus 6.0 C (all four), where the providers' net reduction re-read at the colder day decides and the straight correction is checked on winter 2023/24; upstream figures dropped from the blocks; the guideline's lead-time sentence made consistent with its winter; the call, the stump, the ladder and every frozen figure unchanged (freeze.py rubric PASS)",
-          "commit": ""
-        },
-        {
-          "date": "2026-11-10",
-          "source": "review",
-          "repair": "design",
-          "portal": "holistic audit: the call turns on one built-in factor (Tollbrook Lane, Wexley Hill and Kestwick Fields step up a flat 1.4, 1.4 and 0.8 MW on their zone's event days, whatever the MW scheduled, absent on cancelled days); once told, the fix is one subtraction; \"spotting the plant, not analysis\". Asked for: the transfer documented (switching log entries) and the call turning on judgments that each move a figure (the shape of the cold-weather delivery decline validated on held-out events; whether delivery scales to awards 1.5 to 2.5 times the largest historical dose; how baseline uncertainty is carried to Hartwell Common's margin)",
-          "fix": "architecture 6: the same world rebuilt as a results chain (the transfer documented in a control room switching log and filed in guideline 3; eight results: demand before flexibility, the megawatts a contract called in full delivers, the backtest on last winter, the megawatts off the day's peak once load comes back, the expected peak, the nine-days-in-ten level, the primaries to reinforce, the bridge)",
-          "commit": ""
-        }
-      ],
-      "judge": {
-        "first": "DETERMINISTIC, FIX_NOW (wording: no control-room action claimed in the blocks); applied",
-        "rejudge": "DETERMINISTIC, APPROVE on target.zip a3ba2ac0 (2026-11-08); shipped 1350f12d differs by two texture fixes, graded files byte-identical",
-        "report": "determinism_check_report.md",
-        "rubric_repair": {
-          "pass": "2 (2026-11-09, on target.zip 203d2bf4, the thread kept the derive-first order)",
-          "verdict": "NOT_DETERMINISTIC",
-          "disposition": "SEND_BACK",
-          "gate_g": "decomposition_attribution, analytical_non_defect, surface_read_dependency no, sole_data_defect no",
-          "gate_h": "domain pass, layers pass, decisive_step analytical, chain 4 inferences, one_fact leaves the regression",
-          "findings": "ask 6 at minus 4.5 C margin-fragile (fixed: dropped, minus 6.0 C kept, robust under every variant); the excess's rounding unstated (fixed in the prompt); register acceptances after its save (fixed); guideline 6 read as the primary's whole fall, Ashcombe Road alone (contested: two earlier passes and the triage ruled it out; the closing now rebuts it; the judge's pin names the transfer and fails the fork-is-the-stump test; the author's decision)",
-          "report": "determinism_check_report_pass2.md",
-          "rejudge_left": 1
-        }
-      },
-      "paper_pair": {
-        "pair_ceiling": 54.5,
-        "pair_ceiling_by_item": 52.1,
-        "shallow_keep": 0.0,
-        "zone_fall_keep": 16.7,
-        "full_includer_vs_measured_off_call": 60.6,
-        "full_includer_vs_measured_off_call_by_item": 56.0,
-        "averaging_cracker": 33.1,
-        "measured_by": "generator/ceiling.py",
-        "before_repair": "landed_keep 29.4 and shallow_keep 11.8 on the old asks (pair 39.8 with the averaging cracker)"
-      },
-      "zips": {
-        "target.zip": "a670e735c98c485a668ec8543aa170d2b4b073d0a2c784437d293f12a23560af",
-        "golden.zip": "9af93f82b37ee4cbb57b5bc51efa02c83e18f70f00ebed1823ad7cda860d7878"
-      },
-      "fate": "spent 2026-11-10 on the platform's holistic audit (runs/review_2026-11-10.md): one built-in factor"
-    },
-    {
-      "architecture": 6,
-      "domain": "energy-systems-utilities",
-      "objective": "forecasting",
-      "stump": "The careful but hurried pass (megawatts delivered per megawatt scheduled regressed on temperature zone by zone, the minus 3 C rate applied to the megawatts contracted, the credit taken off the 17:30 to 18:00 peak, the megawatts of scatter its fit leaves carried unchanged, or the fit's own range) reinforces Hartwell Common alone; the same rate with the scatter carried in proportion reinforces Fenwick Street and Hartwell Common, as does the available share right with the credit off the 17:30 to 18:00 peak and megawatts of scatter unchanged; the megawatts contracted at face value reinforce nothing; the megawatts the 2025/26 contracts made available carried unchanged reinforce all four; the available share right with the expected day set against firm capacity reinforces Ashcombe Road and Hartwell Common; only every result of the chain reinforces Ashcombe Road, Fenwick Street and Hartwell Common.",
-      "fate": "landed on the platform 2026-11-10: both runs committed the golden list (Ashcombe Road, Fenwick Street and Hartwell Common, not Charlecote Way) with every headline figure, 0 of 11 results lost against a paper pair of 38.4. Unprompted, each run capped what a provider had available at the instruction, replayed the load that comes back over all 48 half-hours, took a predictive nine-in-ten level by joint resampling and back-tested on a held-out winter with the model chosen on the winter before; the chain's four judgments were all reflexes of a careful run, so the driver is spent. What the runs named as assumptions and never tested (a straight line carried eight degrees below the days it was fitted on, availability scaling with the megawatts contracted, connections applied in full) is where architecture 7 sits",
-      "paper_pair": 38.4,
-      "zips": {
-        "target": "d84ca1b2a318159c9bc0ab15d4d15a7d01ddf9474e8ae6fd473d2b2d00f78fb6",
-        "golden": "525b765ba918e6832a4e422dfddf378a12324651b8e93481f4598703f04b6b48"
-      }
+     "date": "2026-10-27",
+     "portal": "FAILED_TO_STUMP: both responses landed the call (35 FTE, 9 above the envelope), building each site's capacity against its inbox at the saturated pace and carrying each pool at its own lapse rate with almost no new reviewers",
+     "repair": "design (loop 3): the capacity framing kept as the default path; the decisive step moved to how the pool is carried: two kinds of reviewer (most new reviewers casual, stopping at about 12 per cent a month, a steady core at about 0.5), grants following each site's question level until review access became invitation-only on 1 September 2026 (filed in the operations handbook), so the 2027 pool is a closed cohort carried on survival by tenure read from the left-truncated roster; the data dictionary, file list and markdown notes removed (a handbook and a question count standard carry the conventions); golden 32 FTE (5, 2, 6, 4, 4, 2, 4, 3, 2), 6 above the envelope; the asks unchanged",
+     "commit": "RESHIPPED (task10) on 2026-10-27, target.zip f17b387d"
     }
-  ],
-  "doctrine": "throughout",
-  "chain": "R1 design-day demand in winter 2025/26 by primary; R2 megawatts the register's connections add by 15 January 2028; R3 demand before flexibility in winter 2027/28; R4 megawatts each provider will have in service on the assessment date; R5 the share of them available at minus 3 C; R6 megawatts delivered at 17:30 to 18:00; R7 megawatts coming back after the window per megawatt delivered; R8 expected peaks; R9 nine-days-in-ten levels against firm capacity; R10 the share of design days over firm capacity; R11 reinforce Ashcombe Road, Charlecote Way, Dunmore Street and Fenwick Street (figures set at the build)",
-  "effort": null,
-  "zips": null,
-  "prompt_rewritten": false,
-  "gates": null
+   ],
+   "leak": {
+    "leak_py": "REVIEW (no LEAK) on f17b387d, every line answered in the design note; sweep 1 clean (no file describes the data)",
+    "reader": "loop 3 (isolated, f17b387d): Q1 to Q4 none, Q5 the charter's need sentence as the estimand, Q6 analytical; REVIEW lines harmless"
+   },
+   "judge": {
+    "verdict": "DETERMINISTIC (pass 3, run r3 on f17b387d, the loop 3 pack)",
+    "disposition": "APPROVE (every main-call and ask figure reproduced; the open pool's rate, a constant pool and the grant-date curve ruled method errors; no fix)",
+    "report": "task10/determinism_check_report_pass3.md (round 1: determinism_check_report_round1.md; round 2: determinism_check_report.md)"
+   },
+   "answer": "Request 32 paid moderator FTE for 2027 (Frontend & Web 5, Mobile Apps 2, Data & ML 6, Databases 4, Infrastructure & DevOps 4, Game Development 2, Security 4, Embedded & Hardware 3, Scientific Computing 2), 6 above finance's 26-FTE envelope",
+   "fate": "spent 2026-10-31 at the batch 1 triage: loop 3 reshipped 10-27 (target.zip f17b387d) after the portal's FAILED_TO_STUMP on loops 1 and 2, keeping the world, prompt and asks the portal had solved once; re-rooted in a new world before any portal result on loop 3"
+  },
+  {
+   "architecture": 2,
+   "domain": "physical-environmental-sciences/hydrology-flood-frequency (client domain physical-environmental-sciences; world: a New Zealand district council's wastewater pump station and its discharge consent)",
+   "objective": "forecasting",
+   "stump": "Fitting one unit-hydrograph response per millimetre and the meter's own dry weather flow on 2024 to 2026 and replaying 2004 to 2023 files about 1 overflow a year with the subdivision (0.70), inside the consent's two, and connects it; the station's infiltration rises 4.2 L/s for every kilometre of sewer below the water table, which stood a median 0.2 km over the meter and 2.1 km over the replay, so the replay each day with its own water table files about 3 a year (3.20): hold the connection until the upgrade.",
+   "precut": {
+    "exit": 0,
+    "date": "2026-10-31",
+    "checks": "61 checks, 0 FAIL, 0 WARN"
+   },
+   "leak": {
+    "leak_py": "REVIEW, both lines ruled in the design note",
+    "reader": "read 1 on 200b0014: no leak, question 6 analytical"
+   },
+   "duplicate_check": {
+    "guard_check": "WARN 2026-10-31T18:27:04Z on the registered card after rebasing on main (repeat.question_form against task250, answered in the design note; test.same_driver_older differentiated against task134, task146, task165 and task173 v1); forum, forcing event and context artifact redrawn after task191 and task250 entered the window",
+    "heart": "WARN 2026-10-31 after the PAUSED rebase (repeat.question_form); forcing event and role family redrawn in place (other, capacity_planner) when task191 re-registered after this draw and task250 changed its role family; task130 v5 differentiated",
+    "surface": "personas are the three drawn names; five pairs promoted on card axes alone (task130, task134, task146, task165 differentiated; task154 on calibration and artifact, left for the author's adjudicated clone check)"
+   },
+   "judge": {
+    "verdict": "DETERMINISTIC",
+    "disposition": "APPROVE",
+    "report": "determinism_check_report.md (the card's stale replay years fixed; SF7 records ask 1's one-pump reading)"
+   },
+   "returned": [
+    {
+     "date": "2026-11-07",
+     "portal": "FAILED_TO_STUMP: both responses landed the hold call. Response 1 replayed 2004 to 2023 and filed 48 overflows against the 40 the consent allows, then 2 after the upgrade; Response 2 filed the same hold. Any full-record replay with the subdivision already breaks the consent, so the decisive step (each replay day's own water table) was never needed.",
+     "lesson": "The easy route has to be the one strong solvers actually file, and it has to land on the wrong side of the call: an exceedance count of rare events spreads with every modelling choice, and the designed naive replay (0.70 a year) was not the replay the solvers ran.",
+     "repair": "re-root (architecture 3) in a new domain and world, 2026-11-07"
+    }
+   ],
+   "gates_stage3": {
+    "checks": "59 assertions, 0 failed",
+    "verify": "independent verifier reproduces the three call figures and every ask figure, 0 failed",
+    "rebuild": "two consecutive builds byte-identical: target (20 files), 3 goldens, figures.json, submission.md",
+    "target_zip_sha256": "200b0014d310ee60e8a5fb9b86bb8eec3ea9b5845bbfc7ed7f5e4c3daf9f91e3",
+    "figures_check": "PASS, 45 figures in blocks 1 to 4, 0 absent",
+    "voice_check": "PASS (977 characters)",
+    "container": "scrub_producer_metadata audit clean on target",
+    "ceiling": {
+     "pair": 48.5,
+     "cracker": 65.0,
+     "mirror": 32.0,
+     "mirror_leakage": 36.4,
+     "script": "generator/ceiling.py"
+    },
+    "figures": {
+     "existing": 2.9,
+     "with_subdivision": 3.2,
+     "after_upgrade": 0.75,
+     "single_response": 0.7,
+     "seasonal": 0.85,
+     "bore_level_straight": 1.0
+    }
+   },
+   "zip_sha256_16": "200b0014d310ee60",
+   "answer": "Hold the Ngaio Road connection until the PS03 storage upgrade is commissioned (3.20 overflows a year with the subdivision against the consent's 2)",
+   "delivered": "2026-10-31",
+   "fate": "FAILED_TO_STUMP on the portal (2026-11-07): both responses landed the hold call; re-rooted as architecture 3 in a new domain and world the same day"
+  },
+  {
+   "architecture": 3,
+   "domain": "political-science-public-policy/election-polling-forecasting (client domain political-science-public-policy; world: a Victorian local government union branch choosing the councils at which it applies for protected action ballot orders for ballots opening 1 March 2027)",
+   "objective": "forecasting",
+   "stump": "Carrying each member's own voting history, calibrated to the 2021 and 2023-24 declared turnouts and checked on the 2023-24 round within a point, files 15 councils above half; the step that lands it there is reading each member's past votes as theirs alone when they rode the elected delegate in post at their worksite at the time, and the July 2026 delegate elections left worksites at six of those councils without one and filled worksites at two others, so with the 2026-28 delegates the set is 11.",
+   "precut": {
+    "exit": 0,
+    "date": "2026-11-07",
+    "checks": "61 checks, 0 FAIL, 0 WARN"
+   },
+   "leak": {
+    "leak_py": "REVIEW, no LEAK, on 4610bc97 (every line ruled in the design note)",
+    "reader": "round 1 (Sonnet, on e4be2d15): clean, no leak, Q6 analytical; FP-04 and the prompt changed since, copy refreshed at scratchpad/leak-task10/",
+    "reader_r2": "round 2 re-read clean (scratchpad leak-task10/reader_answers_r2.md)",
+    "pending": "the 2026-28 term moved into delegate_election_return_2026.xlsx after the round 2 re-read: one leak re-read owed before the ship counts (main thread)"
+   },
+   "duplicate_check": {
+    "guard_check": "PASS 2026-11-07 on the registered card (gap population, pattern A)",
+    "heart": "PASS 2026-11-07 after a final fetch of main (nearest drivers 0.05, task179 v5 and task177 v4)",
+    "surface": "no pair promoted for task10; people: Samantha Taylor, and \"Branch Secretary\" as a title in the guide (no name)"
+   },
+   "judge": {
+    "verdict": "DETERMINISTIC",
+    "disposition": "APPROVE after the step 8 rewording",
+    "gate_g": "forecasting, analytical_non_defect, surface_read_dependency no, sole_data_defect no",
+    "gate_h": "domain pass, layers pass, decisive_step analytical",
+    "report": "task10/determinism_check_report.md",
+    "round1": "FIX_NOW on the asks (2026-11-07, /tmp/determinism-check-task10-r1/verdict.md): call forced and reproduced, Gate G analytical_non_defect, Gate H pass; asks open on the dues window, the diary unit, the asks scope and ask 1 rounding",
+    "repair": "FP-04 files the Sunday period-end convention; the prompt files the diary unit and scopes both asks to the round (24 each, platform councils re-sited inside the round, no in-round figure moved); the guide and tracker file the ballot period close for each member's state; ask 1 asks the side only (five councils within 0.05 of a half point); freeze.py: main side unmoved, 12 out-of-round ask figures and block 4 turnout percentages dropped (allowed)",
+    "round2": "DETERMINISTIC (2026-11-07, /tmp/determinism-check-task10-r2/verdict.md, report task10/determinism_check_report.md): the call reproduced, 6 points either side, no respecification flipping a council; stump power moderate to high; FIX_NOW on step 8 wording only, applied"
+   },
+   "gates_stage3": {
+    "checks": "39 assertions, 0 failed",
+    "verify": "0 disagreements",
+    "rebuild": "two consecutive builds byte-identical: target (17 files), 2 goldens, figures.json, submission.md",
+    "target_zip_sha256": "4610bc9768a15a5be6815094628909eaa60860a47adf8b843af23037fa79bc0f",
+    "figures_check": "PASS, 52 figures",
+    "voice_check": "PASS (900 characters)",
+    "ceiling": {
+     "pair": 42.2,
+     "cracker": 58.8,
+     "mirror": 25.8,
+     "mirror_leakage": 25.0,
+     "script": "generator/ceiling.py"
+    },
+    "figures": {
+     "golden_set": 11,
+     "history_set": 15,
+     "delegate_lift_logit": 1.054,
+     "lift_points": 23.9,
+     "backtest_mae_points": 0.68
+    },
+    "precut": "61 checks, 0 FAIL, 0 WARN",
+    "heart": "PASS after round 1 repair",
+    "freeze": "PASS (determinism mode) on the round 2 pre-ship fixes",
+    "pdf_xref": "every PDF cross-reference offset verified; 2021 declarations Producer LibreOffice 7.1"
+   },
+   "returned": [
+    {
+     "date": "2026-11-07",
+     "portal": "FAILED_TO_STUMP: both responses landed the 11 councils. Each fitted a member-level turnout logit with worksite delegate coverage as a covariate from the start (the delegate register and the July 2026 election return joined to members on the worksite code), evaluated every covariate at the ballot close with the 2026-28 delegates in post, set one log-odds shift on the 32 declarations (0.8995 and 0.8985) and validated leaving each council out (0.70 points); both named the 2024-26 delegates carried forward as a rejected alternative that reverses eight councils. Asks: Response 2 matched all 48 dues and hours figures; Response 1 all 24 hours and 12 of 24 dues (it kept the Thursday-dated period ends as dated).",
+     "lesson": "A covariate the pack ships as its own register on a key the members already carry is in every strong solver's model, and a forecaster evaluates each covariate at the forecast date by reflex, so a recorded covariate that changes between the history and the window is rung 0, not a stump; the July 2026 election return had no use but the decisive step and its name dated the change. The designed default path (vote history without the covariate) was not the route either response ran. Ask devices the hygiene battery executes (the latest update per organiser, invitation and day; every organiser on a visit; one copy of a re-sent advice) held nothing; only the weekday pattern in the platform's advices held, on one response, and FP-04's Sunday sentence pointed at it.",
+     "repair": "re-root (architecture 4) in a new domain and world, 2026-11-07"
+    }
+   ],
+   "zip_sha256_16": "4610bc9768a15a5b",
+   "answer": "Apply for protected action ballot orders at 11 councils (Ardeen, Copeland Downs, Corrigan Valley, Fairholme, Halston, Lindale, Northvale, Pellham, Stanwick, Valmont, Westhaven)",
+   "delivered": "2026-11-07",
+   "fate": "FAILED_TO_STUMP on the portal (2026-11-07): both responses landed the 11 councils with the delegate coverage covariate evaluated at the ballot close; re-rooted as architecture 4 in a new domain and world on 2026-11-08, its build outputs removed from the folder at the draw (git history keeps them)"
+  },
+  {
+   "date": "2026-11-08",
+   "event": "migrated from Project Mark task156 to Project Sulfur as task10 at the author's word"
+  },
+  {
+   "architecture": 4,
+   "domain": "energy-systems-utilities/asset-condition-maintenance (client domain energy-systems-utilities; world: an Irish regional public rapid-charging operator naming, for its concession's 2027 review, the hubs whose high-power charge points will fall below 99 per cent availability once the partnership's programme removes the legacy 50 kW units at some hubs)",
+   "objective": "forecasting",
+   "stump": "Carrying each high-power charge point's controller-hang and fault rates from 2023 to 2026, validated leaving each unit out and on two back-tests, files 5 hubs below 99 per cent in 2027, the five whose HX150 units already hang two or three times a year; the step that lands it there is reading each unit's hang rate as its own, when a hang comes only after about 75 days without a power-up and the RC50's monthly cabinet service powers down every unit on its pillar, so only the units at those five hubs (on a pillar of their own) routinely ran that long, and at the seven standard programme hubs, which keep neither two-monthly visits nor frequent supply interruptions once the RC50 goes, the HX150 units will hang two or three times a year, as often as the five hubs' units already do, and the set is 12.",
+   "precut": {
+    "exit": 0,
+    "date": "2026-11-08",
+    "detail": "61 checks, 0 FAIL, 0 WARN (ship cut)"
+   },
+   "leak": {
+    "leak_py": "REVIEW 2026-11-08 (--asof 2026-11-06) on 5356713d: sweeps 4, 6 and 9, each ruled in the design note; sweep 11 (the prompt gate) clean; no LEAK; sweep 9 reads no dated stamp with a T or day-first date, so checks.py's dates sweep covers the records",
+    "reader": "round 2 (isolated, on 3a6e329b): questions 1 to 6 clean (no decisive-step sentence, no ranking, no helper file, no figure reading as the answer; Q5 Schedule 4.1, 4.3, 4.4, 4.6 and 6.2, 6.4 fix the WHAT; Q6 analytical); items a to d, f, g, h and j harmless, e harmless for the asks, i mild (about 90 per cent of the hang call-outs at the five own-pillar hubs) ruled the mechanism's own footprint; the ship pass changed no document's words and no prompt",
+    "reader_r1": "round 1 on 4bf9959c: questions 1 to 6 clean, item i mild, answered in the second stage-4 pass"
+   },
+   "duplicate_check": {
+    "guard_check": "WARN 2026-11-08 on the updated card (repeat.decision against task268, answered in the design note; the question form now where, its repeat.question_form WARN gone); test.same_puzzle_older (task451) and test.same_driver_older (task105 v1, task162 v2, task170 v1, task229 v3) differentiated on the card",
+    "heart": "WARN 2026-11-08 on 3a6e329b (repeat.decision against task268); shell where, return, csv+pdf",
+    "surface": "2026-11-08, guard.py surface on the full re-extract: 314 builds screened, 9 pairs promoted for adjudication on card axes or surface percentile (task157 back to back by number, task465, task488, task265, task136, task483, task229, task162, task451), each differentiated on the card in one line, left for the author's adjudicated clone check; people: Ailis Fee found in the pack, on the card, no BLOCK"
+   },
+   "judge": {
+    "verdict": "DETERMINISTIC (pass 2, r2, on 3a6e329b)",
+    "disposition": "APPROVE, no FIX_NOW; its optional items taken in the ship pass (the spurs' margin widened, SF17 to SF20 asserted)",
+    "gate_g": "forecasting, analytical_non_defect, surface_read_dependency no, sole_data_defect no",
+    "gate_h": "domain pass, layers pass, decisive_step analytical",
+    "report": "task10/determinism_check_report_pass2.md (round 1: task10/determinism_check_report.md)"
+   },
+   "gates_stage3": "ship cut 5356713d: checks.py 83 assertions 0 failed (Gate F 0 of 8 cheap routes on the golden, none holding more than one standard programme hub; standing family 6 of 6; margins 20 of 20 over redraws, closest 0.10, median 0.30; truth's closest 0.48, golden's 0.35; SF1 to SF20; the spurs at 99.56 and 99.76 per unit, 99.36 and 99.58 on the expected lowest unit, events 0.21 and 0.10, 99.53 and 99.75 on the fleet's hang spells; the calendar member on the same 12; the dates sweep clean); verify.py 0 disagreements (closest 0.34); two builds byte-identical (15 files) and the zip cut twice to one sha256; figures_check.py PASS (67); precut.py exit 0; voice-check.py PASS, no WARN; ceiling.py pair 28.5, mirror leakage 0.0, every route 0 of 60; heart WARN (repeat.decision); surface 314 screened, 9 promoted and differentiated on the card; people no BLOCK; leak.py REVIEW, no LEAK",
+   "zip_sha256_16": "5356713da0281cc4",
+   "answer": "List 12 hubs in the 2027 Availability Plan: Ballinkeel Main Street, Bunacurry Pier, Carrowkeel Business Park, Clonlea Leisure Centre, Derrylane Park and Ride, Glenfad Shopping Centre, Kilbeg Retail Park, Portavaddy Seafront, Rathmoy Station Road, Rossnabeg Harbour, Tobernalt Road and Tullymore Market Square.",
+   "delivered": "2026-11-08",
+   "migrated_from": {
+    "project": "Mark",
+    "task": "task156",
+    "status_in_mark": "SHIPPED",
+    "date": "2026-11-08",
+    "note": "moved from Project Mark at the author's word: architecture 4 shipped there on 2026-11-08 (462411f1), pending, never run on the platform; carried on here for the Sulfur bar"
+   },
+   "freeze": "freeze.py check task10 --mode determinism against the snapshot taken before the ship pass's first edit, --allow charges and energy_mwh of Annagh Cross and Cloonfin Crossroads (fix 5) and the ungraded pack.* record counts and salt.NM125: the call, the stump, the ladder, the default path, blocks 1 and 2 and every other figures.json value unmoved; one item printed, block 4's hub_availability_2027.csv, whose numbers differ from the snapshot's by exactly the four allowed figures (1738, 57.3, 2545, 81.9 out; 1786, 57.5, 2507, 81.0 in), the determinism mode comparing a block 4 file whole",
+   "returned": [
+    {
+     "date": "2026-11-08",
+     "source": "triage",
+     "portal": "FAILED_TO_STUMP: both platform runs landed the golden 12 hubs (the author reports not stumped; no rubric, no score). Run 1 (59 minutes) fitted a piecewise hazard on time since physical restart from the 97 hangs with a known prior restart (ages 76.356 to 105.482 days) and simulated the renewed network; run 2 (43 minutes) fitted a censored Weibull on time since evidenced reset (shape 13.55, scale 93.47 days); both back-tested on 2026. Asks lost by both (93,640 and 94,297 charges against 90,612) but a landed call is not graded.",
+     "lesson": "A mechanism the rows carry in one plot (the hang-age floor) with its remedy written in the work orders' narratives (frozen screen cleared by a local power cycle) is modelled on sight; the renewal programme's removal of the RC50s named the change the forecast had to carry.",
+     "repair": "redesign: re-root (architecture 5) in a new world inside the same client domain at the author's word, 2026-11-08",
+     "runs": "task10/runs/arch4_run1.md, arch4_run2.md, arch4_triage.md"
+    }
+   ],
+   "fate": "spent 2026-11-08 on the platform (both runs on the golden call); world spent"
+  },
+  {
+   "date": "2026-11-09",
+   "event": "prompt rewritten for a human voice at the author's word (first person, direct); dropped only what the guideline already pins: 'counting the flexibility contracted for that winter' (guideline 6 and 7), 'on the design day' on the delivery and on the excess (guideline 6 reads the delivery on the design day, guideline 7 commits on it); every ask, unit, rounding, the working-weekday minus 6.0 C condition and both file names kept"
+  },
+  {
+   "date": "2026-11-09",
+   "event": "prompt cut to the minimum after the client's reviewers flagged spelled-out method, named files, extra context and a stated role: straight to the question, no file names (deliverables by type), outcomes only; the delivery per MW scheduled dropped as its own ask (it stays a critical component), Supplementary Questions six items; target.zip and golden.zip byte-identical; checks 103/103, verify PASS, figures_check 66/66, voice-check --rewrite PASS, leak.py REVIEW no LEAK, precut 1 FAIL (honest pair ceiling 54.0, was 54.5); freeze --mode rubric flags only the prompt's question sentence (reworded at the author's word, the call unchanged)"
+  },
+  {
+   "architecture": 5,
+   "domain": "energy-systems-utilities/load-forecasting (client domain energy-systems-utilities; world: an English distribution network operator, Wealdmoor Power Networks, committing for winter 2027/28 the reinforcement of the Halverton primaries whose design-day demand, after the flexibility contracted for that winter is credited, exceeds firm capacity)",
+   "objective": "forecasting",
+   "stump": "Measuring each flexibility event's fall at its zone primary against a weather-adjusted baseline, validated on held-out non-event weekdays and stable across both winters, and crediting the 2027/28 contracts at the 0.9, 0.6, 0.9 and 0.9 per megawatt scheduled the event records show commits no primary; the step that lands it there is reading the primary's fall as the provider's delivery, when at Ashcombe Road, Fenwick Street and Hartwell Common the control room moved a feeder section across an open point to Tollbrook Lane, Wexley Hill and Kestwick Fields for each event window, so the providers' own reduction, net of the neighbour's rise and read at the design day's minus 3.0 C, is 0.4 and 0.5 per megawatt and Ashcombe Road and Hartwell Common must be reinforced.",
+   "call": "Commit reinforcement at Ashcombe Road and Hartwell Common for winter 2027/28; Charlecote Way and Fenwick Street hold firm capacity with the flexibility contracted for that winter",
+   "returned": [
+    {
+     "date": "2026-11-09",
+     "source": "triage",
+     "repair": "rubric",
+     "portal": "first architecture 5 pair: run 1 on the call, run 2 off it (dismissed own evidence); the asks were the four-zone table alone, so run 2 kept Charlecote Way's row, the agreeing over-firm flags, the layout and the chart, and run 1 kept every ask (the designed second judgment, the design condition, read by both runs)",
+     "fix": "asks re-coupled: one Supplementary Questions item per quantity across the four zones (deliveries, credits, demand after against firm and the set over it), the chart graded on which after columns stand above firm, how far each primary to reinforce exceeds firm on the design day (3 and 2 MW), and the primaries over firm on working weekdays at minus 4.5 C (Ashcombe Road, Fenwick Street, Hartwell Common) and minus 6.0 C (all four), where the providers' net reduction re-read at the colder day decides and the straight correction is checked on winter 2023/24; upstream figures dropped from the blocks; the guideline's lead-time sentence made consistent with its winter; the call, the stump, the ladder and every frozen figure unchanged (freeze.py rubric PASS)",
+     "commit": ""
+    },
+    {
+     "date": "2026-11-10",
+     "source": "review",
+     "repair": "design",
+     "portal": "holistic audit: the call turns on one built-in factor (Tollbrook Lane, Wexley Hill and Kestwick Fields step up a flat 1.4, 1.4 and 0.8 MW on their zone's event days, whatever the MW scheduled, absent on cancelled days); once told, the fix is one subtraction; \"spotting the plant, not analysis\". Asked for: the transfer documented (switching log entries) and the call turning on judgments that each move a figure (the shape of the cold-weather delivery decline validated on held-out events; whether delivery scales to awards 1.5 to 2.5 times the largest historical dose; how baseline uncertainty is carried to Hartwell Common's margin)",
+     "fix": "architecture 6: the same world rebuilt as a results chain (the transfer documented in a control room switching log and filed in guideline 3; eight results: demand before flexibility, the megawatts a contract called in full delivers, the backtest on last winter, the megawatts off the day's peak once load comes back, the expected peak, the nine-days-in-ten level, the primaries to reinforce, the bridge)",
+     "commit": ""
+    }
+   ],
+   "judge": {
+    "first": "DETERMINISTIC, FIX_NOW (wording: no control-room action claimed in the blocks); applied",
+    "rejudge": "DETERMINISTIC, APPROVE on target.zip a3ba2ac0 (2026-11-08); shipped 1350f12d differs by two texture fixes, graded files byte-identical",
+    "report": "determinism_check_report.md",
+    "rubric_repair": {
+     "pass": "2 (2026-11-09, on target.zip 203d2bf4, the thread kept the derive-first order)",
+     "verdict": "NOT_DETERMINISTIC",
+     "disposition": "SEND_BACK",
+     "gate_g": "decomposition_attribution, analytical_non_defect, surface_read_dependency no, sole_data_defect no",
+     "gate_h": "domain pass, layers pass, decisive_step analytical, chain 4 inferences, one_fact leaves the regression",
+     "findings": "ask 6 at minus 4.5 C margin-fragile (fixed: dropped, minus 6.0 C kept, robust under every variant); the excess's rounding unstated (fixed in the prompt); register acceptances after its save (fixed); guideline 6 read as the primary's whole fall, Ashcombe Road alone (contested: two earlier passes and the triage ruled it out; the closing now rebuts it; the judge's pin names the transfer and fails the fork-is-the-stump test; the author's decision)",
+     "report": "determinism_check_report_pass2.md",
+     "rejudge_left": 1
+    }
+   },
+   "paper_pair": {
+    "pair_ceiling": 54.5,
+    "pair_ceiling_by_item": 52.1,
+    "shallow_keep": 0.0,
+    "zone_fall_keep": 16.7,
+    "full_includer_vs_measured_off_call": 60.6,
+    "full_includer_vs_measured_off_call_by_item": 56.0,
+    "averaging_cracker": 33.1,
+    "measured_by": "generator/ceiling.py",
+    "before_repair": "landed_keep 29.4 and shallow_keep 11.8 on the old asks (pair 39.8 with the averaging cracker)"
+   },
+   "zips": {
+    "target.zip": "a670e735c98c485a668ec8543aa170d2b4b073d0a2c784437d293f12a23560af",
+    "golden.zip": "9af93f82b37ee4cbb57b5bc51efa02c83e18f70f00ebed1823ad7cda860d7878"
+   },
+   "fate": "spent 2026-11-10 on the platform's holistic audit (runs/review_2026-11-10.md): one built-in factor"
+  },
+  {
+   "architecture": 6,
+   "domain": "energy-systems-utilities",
+   "objective": "forecasting",
+   "stump": "The careful but hurried pass (megawatts delivered per megawatt scheduled regressed on temperature zone by zone, the minus 3 C rate applied to the megawatts contracted, the credit taken off the 17:30 to 18:00 peak, the megawatts of scatter its fit leaves carried unchanged, or the fit's own range) reinforces Hartwell Common alone; the same rate with the scatter carried in proportion reinforces Fenwick Street and Hartwell Common, as does the available share right with the credit off the 17:30 to 18:00 peak and megawatts of scatter unchanged; the megawatts contracted at face value reinforce nothing; the megawatts the 2025/26 contracts made available carried unchanged reinforce all four; the available share right with the expected day set against firm capacity reinforces Ashcombe Road and Hartwell Common; only every result of the chain reinforces Ashcombe Road, Fenwick Street and Hartwell Common.",
+   "fate": "landed on the platform 2026-11-10: both runs committed the golden list (Ashcombe Road, Fenwick Street and Hartwell Common, not Charlecote Way) with every headline figure, 0 of 11 results lost against a paper pair of 38.4. Unprompted, each run capped what a provider had available at the instruction, replayed the load that comes back over all 48 half-hours, took a predictive nine-in-ten level by joint resampling and back-tested on a held-out winter with the model chosen on the winter before; the chain's four judgments were all reflexes of a careful run, so the driver is spent. What the runs named as assumptions and never tested (a straight line carried eight degrees below the days it was fitted on, availability scaling with the megawatts contracted, connections applied in full) is where architecture 7 sits",
+   "paper_pair": 38.4,
+   "zips": {
+    "target": "d84ca1b2a318159c9bc0ab15d4d15a7d01ddf9474e8ae6fd473d2b2d00f78fb6",
+    "golden": "525b765ba918e6832a4e422dfddf378a12324651b8e93481f4598703f04b6b48"
+   }
+  }
+ ],
+ "doctrine": "throughout",
+ "chain": "R1 design-day demand in winter 2025/26 by primary (Dunmore Street 22.2 MW, Ashcombe Road 30.2); R2 megawatts the register's customers add by 15 January 2028 (Charlecote Way 4.5, Hartwell Common 0.7); R3 demand before flexibility in winter 2027/28 (32.2, 30.3, 23.0, 38.9, 24.3); R4 megawatts each provider will have in service on the assessment date (Fenwick Street 7.6 of 13.0 contracted, Ashcombe Road 17.8 of 21.0); R5 the share of them available at minus 3 C (0.42 and 0.51); R6 megawatts delivered between 17:00 and 18:00 (7.6, 4.5, 2.6, 3.9, 1.5); R7 megawatts coming back after the window per megawatt delivered (0.67 and 0.31); R8 expected peaks (28.5, 25.9, 20.4, 35.0, 22.8; Ashcombe Road's in the half-hour ending 20:00); R9 nine-days-in-ten levels (29.5, 27.0, 21.1, 36.2, 23.4) against firm capacity (27.5, 25.6, 20.0, 35.0, 24.4); R10 the share of design days over firm capacity (91, 62, 75, 50, 0 per cent); R11 reinforce Ashcombe Road, Charlecote Way, Dunmore Street, Fenwick Street, hold Hartwell Common",
+ "effort": {
+  "quick": 17.3,
+  "careful": 24.5,
+  "thorough": 100.0,
+  "results_earned": {
+   "quick": "1.5 of 11",
+   "careful": "3 of 11",
+   "thorough": "11 of 11"
+  },
+  "largest_single_hint": "2 of 11 (R4, R6)",
+  "strongest_compound_sentence": "3 of 11",
+  "wrong_lists": "7 different wrong lists over 18 shortcut routes",
+  "sensitivity": "if a run also groups the asset register by class and reads the commissioned sites alone: 3.5 of 11 results, 26.9, commits Ashcombe Road, Fenwick Street, Hartwell Common; single sentences rescue at most 2, the two remaining judgments named together rescue 5 of 11"
+ },
+ "zips": {
+  "target.zip": "a40205c5885036d29a5249d80669347e074e379e6cde430b2e47856333d75e99",
+  "golden.zip": "e39bfb44088576a2f553a25305ada04878c348fb67ad58c2584cf401e4d4060b"
+ },
+ "prompt_rewritten": false,
+ "gates": "gates.py task10 --full on the final cut (2026-11-10): 11 gates, 0 FAIL, 3 WARN (precut nearest chains, leak REVIEW, heart WARN with no BLOCK); checks.py 76 of 76; verify.py 15 of 15; two builds byte-identical and equal to the committed zips; figures_check PASS; audit_containers --asof 2026-11-04 PASS"
 }
