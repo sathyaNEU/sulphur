@@ -134,7 +134,7 @@ forcing it, two methods survive (`underspecified_objective`).
 
 ### 6.1 Pin authority
 
-Highest first: **0 the prompt** (states the question, each ask's unit and rounding; no convention, since it
+Highest first: **0 the prompt** (states the question and each ask's unit, never a rounding; no convention, since it
 outranks everything and hands the insight over); 1 governing standard, policy, regulatory terms; 2
 charter, SOW, contract, rate schedule; 3 decision memo; 4 method notes on an export; 5 thread or notes.
 No dictionary, field notes or manifest ships (`dataset-generation` §3). A pin sits at or above every sentence that could argue the other

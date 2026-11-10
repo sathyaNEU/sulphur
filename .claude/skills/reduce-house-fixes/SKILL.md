@@ -190,12 +190,13 @@ Entries: **Defect**, **Cost**, **Line** (where the rule stops), **Check**, **Rep
   review ran on the stale copy, say so in the resubmission.
 
 ## H12. A prompt whose precision pins read as a grading sheet
-- **Defect.** A rounding tag on every clause turns the request into a checklist of graded figures.
-- **Line.** Pins are Gate E load-bearing; only counts of discrete things need none.
-- **Check.** `voice-check.py` rounding-at-the-close rule: rounding words only in the last sentence, each rule
-  naming its figures. Classify every figure as natural integer or derived; every derived one is covered.
-- **Repair.** One closing rounding sentence; each dropped tag's figure is integer by construction or named
-  there.
+- **Defect.** A rounding tag on a clause turns the request into a checklist of graded figures, and grades a run on a
+  rounding convention rather than on the analysis.
+- **Line.** The prompt carries no rounding instruction at all; each graded figure's precision, with its band where
+  reasonable methods differ, is stated in the answer blocks, which is what the rubric grades against.
+- **Check.** `voice-check.py` no-rounding-instruction rule: no rounding words anywhere in the prompt (a FAIL in draft
+  mode, a WARN on the author's rewrite).
+- **Repair.** Drop the rounding words; give each derived figure its precision and band in the answer blocks.
 
 ## H13. A prompt whose committed call reads as one output among several
 - **Defect.** Equal paragraphs per deliverable, the call buried, the lead clause a series of figures.

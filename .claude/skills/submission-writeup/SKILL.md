@@ -72,8 +72,8 @@ the headline result and the action it supports. This block answers the main reco
 > lab's testing growth is separated out; Brenton leads on the raw count (63) only because its testing doubled.
 
 **2. Supplementary Questions.** One clearly labelled answer per sub-ask, numbered in the prompt's order, grouped by
-file under `### <file.ext>` (the golden file's own name; the prompt asks for it by type), in the exact unit and
-rounding asked. Where an ask is a requested file, the answer
+file under `### <file.ext>` (the golden file's own name; the prompt asks for it by type), in the exact unit asked,
+at one precision with its band where reasonable methods differ (the prompt dictates no rounding). Where an ask is a requested file, the answer
 **describes how that file should look**: its rows, columns, ordering, the figures in it and where the visual sits.
 Each answer is graded at the main call's bar: it reproduces and is uniquely forced.
 

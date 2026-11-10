@@ -6,8 +6,10 @@ persona, no roll call, no count the data hold), which the author asked the harne
 came out short and crisp, plus Sulfur's two leak rules: no method, comparison or adjustment named, and no warning to
 the solver. `--rewrite` (or `"prompt_rewritten": true` in the task's pipeline.json) checks the author's
 humanised rewrite: every leak rule still FAILs, and the voice and shape rules (length, paragraphs, question
-placement, persona, sequencing, LLM tells, roll call, rounding placement, shell quota) become WARNs, because the
-voice is the author's.
+placement, persona, sequencing, LLM tells, roll call, a rounding instruction, shell quota) become WARNs, because the
+voice is the author's. A prompt carries no rounding instruction: each graded figure's precision is the answer blocks'
+own, stated with its band where reasonable methods differ, so the rubric grades a figure against the band rather than
+against a rounding the prompt dictates.
 
     python3 .claude/skills/guide-to-prompt/references/voice-check.py task134        # the gate: exit 1 on any FAIL
     python3 .claude/skills/guide-to-prompt/references/voice-check.py                # the batch report, last 12 builds
@@ -105,7 +107,7 @@ COUNT_DISCLOSURE = [
 ]
 # The shell a reviewer reads across the corpus, and the share of shipped prompts any one class may hold. The portal
 # holds every accepted task with no window, so the quotas run over every prompt on file, not the last twelve.
-QUOTAS = {"question form": 0.30, "second-sentence opener": 0.20, "rounding opener": 0.20, "deliverable set": 0.20}
+QUOTAS = {"question form": 0.30, "second-sentence opener": 0.20, "deliverable set": 0.20}
 
 # Sulfur: the prompt "never names the method, the trap, the comparison group, the confounder, the adjustment or the
 # file that matters, and never warns". FAIL in both modes.
@@ -183,7 +185,7 @@ def templating_signals(text):
 
 # The rules a rewrite turns into WARNs: voice and shape, which the author owns.
 VOICE_RULES = {"one paragraph", "question first", "under 1,000 characters", "no persona or title", "no sequencing",
-               "no LLM tells", "no roll call", "rounding at the close", "shell quota"}
+               "no LLM tells", "no roll call", "no rounding instruction", "shell quota"}
 
 
 def rewritten(task):
@@ -351,14 +353,12 @@ def opener(sentence, words=1):
 
 
 def shell_of(text):
-    """The prompt's shell classes: question form, the second sentence's opening word, the rounding sentence's opening
-    word and the deliverable set (sorted extensions)."""
+    """The prompt's shell classes: question form, the second sentence's opening word and the deliverable set (sorted
+    extensions)."""
     sents = sentences(text)
-    r_sents = [s for s in sents if re.search(ROUNDING, s, re.I)]
     return {
         "question form": question_form(text),
         "second-sentence opener": opener(sents[1]) if len(sents) > 1 else "",
-        "rounding opener": opener(r_sents[-1]) if r_sents else "",
         "deliverable set": "+".join(sorted(f.rsplit(".", 1)[-1].lower() for f in deliverables(text))),
     }
 
@@ -509,14 +509,12 @@ def _gate(text, task=None, legacy=False):
     level = "FAIL" if len(beliefs) >= 2 else ("WARN" if beliefs else "PASS")
     rows.append(("no roll call", level, "%d attributed opinion(s)" % len(beliefs) if beliefs else "none"))
 
-    r_sents = [i for i, s in enumerate(sents) if re.search(ROUNDING, s, re.I)]
-    non_final = [i for i in r_sents if i < len(sents) - 1]
-    if not r_sents:
-        rows.append(("rounding at the close", "WARN", "no rounding words anywhere; every derived figure needs one, stated once at the end"))
-    elif len(non_final) >= 2 or (non_final and (len(sents) - 1) not in r_sents):
-        rows.append(("rounding at the close", "FAIL", "rounding stated in %d sentence(s) before the last; state each rule once at the end" % len(non_final)))
+    r_hits = [m.group(0) for s in sents for m in re.finditer(ROUNDING, s, re.I)]
+    if r_hits:
+        rows.append(("no rounding instruction", "FAIL", "the prompt dictates rounding (%s); drop it and state each graded "
+                     "figure's precision and band in the answer blocks" % ", ".join(dict.fromkeys(r_hits))))
     else:
-        rows.append(("rounding at the close", "PASS", "rounding stated once, at the close"))
+        rows.append(("no rounding instruction", "PASS", "none; precision lives in the answer blocks"))
 
     counts = count_disclosures(text)
     shipped = task_status(task) in ("SHIPPED", "SHIPPED_APPROVED", "RETIRED", "SUBMITTED", "APPROVED")
@@ -534,7 +532,7 @@ def _gate(text, task=None, legacy=False):
             over.append("%s %r at %d%% of %d prompts (cap %d%%)" % (k, v, round(share * 100), shares.get("n", 0), round(cap * 100)))
     rows.append(("shell quota", "WARN" if over else "PASS",
                  "; ".join(over) + "; reword at the role level, not the verb" if over else
-                 "question form, second-sentence opener, rounding opener and deliverable set all under their corpus caps"))
+                 "question form, second-sentence opener and deliverable set all under their corpus caps"))
 
     sig = templating_signals(text)
     rows.append(("templating signals", "FAIL" if len(sig) >= 2 else ("WARN" if sig else "PASS"),

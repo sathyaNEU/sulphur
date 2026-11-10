@@ -34,8 +34,8 @@ What that means for the design:
 ## Part 1. The ask doctrine
 
 1. **Every result is asked for.** One asking sentence (or one numbered sub-ask) per result, in the deliverable's
-   terms, with its unit and rounding inside the sentence; the answer blocks carry the result's figure at that
-   rounding. A result that is only a step toward another figure is either asked for or cut from the chain.
+   terms, with its unit inside the sentence and no rounding instruction; the answer blocks carry the result's figure at
+   its own precision, with its band where reasonable methods differ. A result that is only a step toward another figure is either asked for or cut from the chain.
 2. **Each ask is graded on its own.** Where the world allows, a later result is asked against an input of its own (a
    bridge against the forecast file and the actuals; a rule against its alert count on a stated history), so a run
    that slipped earlier still earns it by doing the step right. The platform grades against the golden, so this is

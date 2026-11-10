@@ -99,7 +99,7 @@ Read `verdict.md`, then do two things the thread cannot.
 - each distractor is unused by the solution yet relevant enough to weigh; one that answers a graded
   quantity reproduces arithmetically and a shipped fact rules it out
 - 1 to 3 deliverables requested, every one present in the golden; no format family required
-- asks multi-dimensional, not stacked lookups; every ask states unit and rounding
+- asks multi-dimensional, not stacked lookups; every ask states its unit and the prompt dictates no rounding (each graded figure's precision and band are the answer blocks')
 - the answer is a structured set of results in one of the client's fourteen shapes (ranked causes with
   contributions, a timeline, a forecast path with bands and drivers, a bridge, a flagged set with its false-alarm
   rate, a reconciled table, an allocation with its sensitivity, a ranked list under a cap, a schedule, a

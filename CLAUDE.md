@@ -246,9 +246,10 @@ three at Tier 2, six at Tier 3).
 - **The prompt: write it correctly, the author rewrites it for voice.** The project lead returns prompts that spell
   out the method, name the attached files, carry context the files already hold, or say who is asking, and runs a
   three-strike policy on LLM-sounding prompts (warning, then one task a week, then offboarding). So the draft is
-  short and direct (one plain paragraph under 1,000 characters, question first, rounding once at the end), and it is
+  short and direct (one plain paragraph under 1,000 characters, question first, no rounding instruction), and it is
   correct and leak-free: it pins the question, what each result is (population, outcome, window, unit), the
-  deliverables by type ("a spreadsheet and a short note") and the rounding, and never names the method, the
+  deliverables by type ("a spreadsheet and a short note"), never dictates rounding (each graded figure's precision
+  and band are stated in the answer blocks), and never names the method, the
   comparison, the adjustment or a step, never warns, never names an attached file ("see the attached ZIP" or
   nothing) and never says who is asking. The author always rewrites it in their own words; the rewrite comes back
   through `voice-check.py --rewrite` (leaks fail, voice only warns) and `leak.py` (`guide-to-prompt`, `leak-check`).
@@ -286,7 +287,8 @@ where the decision needs one; one to three files in formats a real analyst would
 them (not `analysis_report.pdf` by default); a visual where it makes the results read at a glance.
 
 **Asks**: the results, asked for. No cap and no target count; each is hard and multi-dimensional (many rows,
-periods, segments or calculations resolving to gradable answers), unit and rounding inside the asking sentence. A
+periods, segments or calculations resolving to gradable answers), its unit inside the asking sentence and no rounding
+instruction (the answer blocks state each figure's precision, with its band where reasonable methods differ). A
 run that skipped a result's work gets that result wrong, and only the results that depend on it
 (`supplemental-stumping`).
 

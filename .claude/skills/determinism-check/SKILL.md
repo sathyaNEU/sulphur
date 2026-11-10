@@ -22,8 +22,8 @@ row of the design note's `## Results chain`, not only to the recommendation:
 - **Each result is pinned** by the data or a stated convention, and its estimand (population, outcome, window, unit,
   comparison) is filed so the literal reading is the golden.
 - **Each result carries a band where reasonable methods differ.** Run every defensible rival on the clean truth
-  (the rivals file in the generator), take the band they span, and state it in the answer blocks at the rounding the
-  ask names. The band is the client's own device ("Pin the question, the outputs and the baseline... where reasonable
+  (the rivals file in the generator), take the band they span, and state it in the answer blocks beside the figure (the
+  prompt dictates no rounding, so the band is what the rubric grades against). The band is the client's own device ("Pin the question, the outputs and the baseline... where reasonable
   methods differ, use a band"). A band that excludes a defensible rival is a Gate C failure on that result; a band
   wide enough to hold the careful but hurried figure grades nothing, so the hurried figure sits outside every band by
   a margin `checks.py` asserts.
@@ -373,8 +373,8 @@ time). `precut.py` refuses an unresolved row; `checks.py` asserts every row.
   graded figure was forked. A design can pass the ranking test and fail Gate C on the figures the same
   ranking produces. Measure each figure's spread across the surviving candidates against its own printed
   unit, at the design stage, because the cure is a different decisive step rather than a repair.
-  **The cell width comes from the asking sentence's stated rounding, never from the quantity's natural
-  unit.** For a value `v` printed to unit `u` the cell centres on `round(v/u)*u` and the distance to
+  **The cell width comes from the precision the answer blocks print the figure at (the prompt states no
+  rounding), never from the quantity's natural unit.** For a value `v` printed to unit `u` the cell centres on `round(v/u)*u` and the distance to
   the nearest edge is `u/2 - abs(v - round(v/u)*u)`; the second term alone is the distance to the
   centre, and the two sum to `u/2`. Both halves of that have now been got wrong in one wave: one build
   measured the distance to the centre and called it the edge, and another measured a fee rounded to the
@@ -425,13 +425,14 @@ cannot see it.** It compares the write-up against `figures.json`, so a threshold
 agrees with itself while disagreeing with the pack the moment the generator's parameter changes.
 Every constant in `figures.json` is read from the generator's own parameters.
 
-**Every graded figure is printed at the precision its asking sentence states.** A figure printed coarser
-than the prompt asked for is a wrong figure, not a rounding preference: task182's prompt said to give the
+**Every graded figure is printed at one precision everywhere, with its band where methods differ.** Prompts
+carry no rounding instruction, so the answer blocks set each figure's precision; a figure printed coarser than its
+band supports is a wrong figure, not a rounding preference: task182's prompt said to give the
 air to one decimal and its write-up printed the six weekly figures whole, 689 for 689.2, so eighteen asked
 figures were wrong on the face of the submission while every gate stayed green. `figures_check.py` cannot
 see it, because it asks whether each number in the blocks is in `figures.json` and both carried the same
-coarse value. Read the prompt's rounding sentence, list the figures it governs, and check each one's
-printed precision against it by hand or in the verifier.
+coarse value. List the graded figures, and check each one's printed precision against its band by hand or in the
+verifier.
 
 **A robustness claim is graded over the whole range it names.** "Furthest above under every number of
 matched quarters" is checked at every number: task198's held for one to four quarters pooled and failed at
@@ -447,7 +448,7 @@ without the candidate list.
 
 **A graded figure the prompt never asked for is an open fork by construction.** The rubric can only owe
 what the question asks, so a figure that sits in Supplementary Questions without an ask behind it has no
-asking sentence to fix its basis, its population or its rounding, and a judge reads that as Gate E and
+asking sentence to fix its basis or its population, and a judge reads that as Gate E and
 Gate C at once. task192 graded a five-part decomposition and a per-fortnight shaded series the prompt
 never requested; both reproduced, and both were findings. Walk the prompt's own sentences against the
 Supplementary Questions block before the judge does: every number in it answers an ask, or it leaves. The call's components are

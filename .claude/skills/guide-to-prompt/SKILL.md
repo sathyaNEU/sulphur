@@ -1,12 +1,12 @@
 ---
 name: guide-to-prompt
-description: Decide what to ask, then write it. Fit the assigned Sulfur subdomain (one of 21) and a task type in it, the assigned analysis type (one of nine), and an answer that is a structured set of results in one of the client's fourteen answer shapes, with a forward-facing recommendation on top where the decision needs one; then write prompt.txt so it pins only the question, what each result is, the deliverables by type and the rounding, and never names the method, the comparison, the adjustment, a step or an attached file, never warns and never says who is asking. Written short and crisp (one plain paragraph under 1,000 characters, question first, rounding once at the end), gated by voice-check.py; the author then rewrites it in their own words (the project lead runs a three-strike policy on LLM-sounding prompts) and the rewrite is re-gated.
+description: Decide what to ask, then write it. Fit the assigned Sulfur subdomain (one of 21) and a task type in it, the assigned analysis type (one of nine), and an answer that is a structured set of results in one of the client's fourteen answer shapes, with a forward-facing recommendation on top where the decision needs one; then write prompt.txt so it pins only the question, what each result is, the deliverables by type, and never dictates rounding, names the method, the comparison, the adjustment, a step or an attached file, never warns and never says who is asking. Written short and crisp (one plain paragraph under 1,000 characters, question first, no rounding instruction), gated by voice-check.py; the author then rewrites it in their own words (the project lead runs a three-strike policy on LLM-sounding prompts) and the rewrite is re-gated.
 ---
 
 # Choosing what to ask, and writing it
 
 **The author rewrites every prompt for voice.** This skill's job on `prompt.txt` is that it is correct and leaks
-nothing: the right question, the decision and its bar pinned, every deliverable and ask with its unit and rounding,
+nothing: the right question, the decision and its bar pinned, every deliverable and ask with its unit (never a rounding),
 and no word that tells the solver how to get there. Voice is the author's; leaks and wrong content are ours. Every
 rewrite comes back through the gate (section 4) before upload.
 
@@ -89,30 +89,33 @@ their own analysis.
 
 **Write it the Mark way.** The author's instruction is to learn prompt writing mostly from Mark, whose prompts came out
 short, sweet and crisp: a person asking for help with a job they understand, the question first, the files wanted
-back, each unit beside its figure, rounding once at the end, in one paragraph under 1,000 characters. It says nothing
+back, each unit beside its figure, in one paragraph under 1,000 characters. **It carries no rounding instruction**
+(the author's rule since this harness's Sulfur prompts: a prompt that dictates rounding grades a run on a rounding
+convention rather than on the analysis, and runs report their own precision anyway); each graded figure's precision,
+with its band where reasonable methods differ, is stated in the answer blocks instead (`submission-writeup`). It says nothing
 a solver could use that the files do not also carry, and nothing about who is asking. Mark's best prompts, with where
 each one's difficulty hides, are in `references/mark-prompts.md`; read them before drafting. The author then rewrites the draft
 for a human voice, and the rewrite comes back through the gate in rewrite mode (section 4).
 
-Write it last, against the golden. Context, question, files, rounding, in one paragraph. **The ten rules:**
+Write it last, against the golden. Context, question, files, in one paragraph. **The ten rules:**
 
 1. **Lead with the question**, a direct question in the first two sentences.
 2. **Cut who and why:** no names, titles, roles ("I'm getting the recommendation together"), sign-offs, meetings or
    readers of the file; go straight into the problem.
 3. **Test every fact before cutting it:** a send date, extract date, cut-over or stop rule that bounds the answer stays.
-4. **Keep every ask exactly:** what each deliverable holds, its periods, units and rounding, in meaning.
+4. **Keep every ask exactly:** what each deliverable holds, its periods and units, in meaning.
 5. **Do not change meaning while smoothing:** "in cents" is not "dollars and cents"; "whether any, and if so how many"
    is not "how many".
 6. **One continuous paragraph**, list items joined by commas and semicolons, no "Then" or "Last".
-7. **Merge and shorten;** each rounding rule once, at the end, naming the figures it governs.
+7. **Merge and shorten;** no rounding rule anywhere; precision belongs to the answer blocks.
 8. **Ask, do not specify:** "what is", "put it in", "also give me", never "X is the file, one row per".
 9. **Drop claims made only to be rejected.** An opinion arguing the wrong answer is cut.
 10. **Run the bar check last:** does the answer ask for several results that each need their own analysis, or does
     it turn on a stated procedure, a field read correctly, a planted row, a built-in factor or one fact? If the
     latter, the build is not ready, whatever the prompt says.
 
-**The prompt pins only four things**: the question (with the decision and its threshold where there is one), what
-each result is (its population, outcome, window and unit, in plain words), the deliverables by type, and the
+**The prompt pins only three things**: the question (with the decision and its threshold where there is one), what
+each result is (its population, outcome, window and unit, in plain words) and the deliverables by type, and no
 rounding. **May say:** the question, with the candidate set and the hold on the same footing ("or none this
 cycle") where relevant; the forcing fact once (window, date, cut-over, stop rule); the threshold the call is held to;
 each deliverable by its type, as a person asks for it ("a spreadsheet with a before-and-after chart", "a few slides
@@ -138,7 +141,7 @@ voluntary").
   pack's own documents say that in the organisation's voice or nothing does;
 - **a presupposition**, an ask that only parses if a subset is non-empty or a move happened ("how many and what they
   cost", "the sites where it fell"): make "none" a grammatical answer ("whether any and, if so, how many and what
-  they cost") with every figure, unit and rounding kept, while a fact the requester knows before any analysis stays
+  they cost") with every figure and unit kept, while a fact the requester knows before any analysis stays
   (`reduce-house-fixes` H23).
 
 **What the client's reviewers return** (the project lead, 2026-11-09, verbatim in
@@ -160,9 +163,9 @@ spring file...", "Cluster by school...". After drafting, reread the prompt as th
 how to do the analysis, what to exclude, or what to watch for.
 
 **Budget.** 1,000 characters is about 150 to 170 words. Compress per sentence, never by deleting a requirement: one
-sentence with a list in it per file; cut every reason but one motive; rounding once; no role, meeting or pack
+sentence with a list in it per file; cut every reason but one motive; no rounding; no role, meeting or pack
 inventory; ask rather than specify. Never cut the repeated unit, the call, runner-up, gap or flip, a chart's named
-parts, a unit, a derived figure's rounding, or the forcing fact. After each pass walk the figure list, recount the
+parts, a unit, or the forcing fact. After each pass walk the figure list, recount the
 cells and rerun the gate.
 
 **Variety.** Two tasks on the same pattern with the same data structure are duplicates, and in Mark the one Duplicate
@@ -170,29 +173,29 @@ the portal returned named the prompt's shell (how many, a workbook with a count-
 bar, nearest N), not its nouns: 182 of 186 Mark prompts ran question, deliverable, side table, chart, rounding. So
 the shell is drawn with the world: the question's form from the decision (a count asks how many, a pick which, a gate
 whether, an amount how much, a date when); the second sentence led by the deliverable, the rule, the date or the use
-rather than "Put ... in" every time; the rounding sentence opened on the figures it governs; the deliverable set and
+rather than "Put ... in" every time; the deliverable set and
 the chart's species varied. `voice-check.py` holds corpus quotas (no question form over 30 per cent of prompts on
-file, no second-sentence opener, rounding opener or deliverable set over 20 per cent) as a WARN.
+file, no second-sentence opener or deliverable set over 20 per cent) as a WARN.
 
 **The client's templating checker.** The portal's pattern checker counts seven signals and marks a prompt
 templated at three, borderline at two: files listed up front; steps ("First... Then... Finally"); three or
 more stacked questions (two question-sentences in the opening already count); a closing one-sentence list of
 documents; a dictated method ("according to the standard"); lists inside the prompt; UK spelling. Write one
 question, ask for each deliverable only in the sentence that gives its reason, never close on a list of
-documents, and keep every ask's definition and rounding in flowing prose. Fold a second quantity into the one
+documents, and keep every ask's definition in flowing prose. Fold a second quantity into the one
 question ("judged on the bed-days each hospital's share would free") rather than asking it; prefer neutral
 wording to a UK-only spelling ("with every bar showing its value", not "labelled"). Mark's task127 scored four
 of seven. `voice-check.py` counts the signals and fails at two.
 
 **The results and the asks.** Each result of the chain is asked for: one sentence or one clause per result, in the
-deliverable's terms, its unit beside it and its rounding in the closing sentence. A recommendation, where the decision
+deliverable's terms, its unit beside it and no rounding. A recommendation, where the decision
 needs one, is one quotable sentence with its unit and rests on several results. An entity plus an aggregate names its
 grain. An ask a person could act on with no result of the chain behind it is a second decision (`reduce-house-fixes`
 H18). The asks are designed in `supplemental-stumping`.
 
 **The author's rewrite.** The design note's `## Prompt contract` lists, line by line, what a voice rewrite may not
 drop or change: the question, the threshold and hold option where there is one, every result asked for with its
-unit and rounding, every deliverable by type, the as-of date; and what it must never add (a method, a warning, an
+unit, every deliverable by type, the as-of date; and what it must never add (a rounding instruction, a method, a warning, an
 attached file's name, a role, a count the data hold). Hand it to the author with the draft. When the rewrite comes back, it
 replaces `prompt.txt`, `pipeline.json` gets `"prompt_rewritten": true`, and the gate runs in rewrite mode: every leak
 rule still fails it, the voice rules only warn. Then `leak.py` again, and the four answer blocks are re-read against
@@ -211,17 +214,16 @@ python3 .claude/skills/guide-to-prompt/references/voice-check.py                
 or emphasis outside a file name; a line break; no question mark in the first two sentences; 1,000 characters or
 more; an em or en dash; a persona from the card's `world.people`, a title, sign-off, board vote or reader; a sentence
 opening Then, Next, First, Second, Last, Finally, After that; an LLM tell (leverage, robust, comprehensive, seamless,
-delve, ensure, note that, in order to, furthermore, stakeholders); two attributed opinions; rounding outside the last
-sentence; zero or more than three deliverables (by file name or by type); a prompt that opens by saying who is
+delve, ensure, note that, in order to, furthermore, stakeholders); two attributed opinions; any rounding instruction
+(to the nearest, decimal places, whole numbers); zero or more than three deliverables (by file name or by type); a prompt that opens by saying who is
 asking; a count the data hold; a file in the pack named (by its name or its stem read as words). **And on Sulfur's
 two leak rules:** a method, comparison or adjustment named; a warning to the solver. It warns on a method hint word (cohort, holdout, matured,
-pooled, weighted, seasonal, spillover, comparison or control group), a shell class over its corpus quota and a missing
-rounding sentence.
+pooled, weighted, seasonal, spillover, comparison or control group) and a shell class over its corpus quota.
 
 **Rewrite mode** (`--rewrite`, or `"prompt_rewritten": true` in `pipeline.json`, which `precut.py` and `leak.py`
 read too) keeps every leak rule as a FAIL (markdown, em dash, method named, warning to the solver, count the data
 hold, deliverables, an attached file named, a stated role) and turns the voice rules (one paragraph, question first, length, persona, sequencing, LLM tells,
-roll call, rounding placement, shell quota) into WARNs. `leak.py` sweep 11 and `precut.py` run the same gate;
+roll call, a rounding instruction, shell quota) into WARNs. `leak.py` sweep 11 and `precut.py` run the same gate;
 `leak.py` sweeps 4 and 5 add the design note's vocabulary and announcement sentences. A failing draft is not
 done, and neither is a rewrite that fails.
 
@@ -230,8 +232,8 @@ done, and neither is a rewrite that fails.
 - [ ] Subdomain, task type, the assigned analysis type and `domain_test` fixed against the client's "what makes it
       deep" and "domain fit"
 - [ ] The answer shape picked (not the last build's), the results placed in its cells, the lost ones in different cells
-- [ ] The prompt pins the question, what each result is, the deliverables by type and the rounding, and nothing
+- [ ] The prompt pins the question, what each result is and the deliverables by type, with no rounding instruction and nothing
       about the method; no attached file named, no role, no warning
-- [ ] Every ask multi-dimensional with its unit and rounding; none presupposes what the data hold
+- [ ] Every ask multi-dimensional with its unit; none presupposes what the data hold
 - [ ] The draft is one paragraph under 1,000 characters, question first; `voice-check.py taskNN` exits 0
 - [ ] `## Prompt contract` written and handed over; the author's own rewrite passes `voice-check.py taskNN --rewrite`

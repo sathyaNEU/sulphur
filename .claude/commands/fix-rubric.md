@@ -34,7 +34,7 @@ lever.
 - **Critical components from different areas**, most of them results the hurried pass loses.
 - **No result is won or lost on a surface cause**: no result turns on a field reading, a filed rule, a planted row or
   a built-in factor. Mess stays texture or an assembly result of its own.
-- Change the prompt's wording only where a result must be asked differently, with unit and rounding kept and
+- Change the prompt's wording only where a result must be asked differently, with its unit kept, no rounding instruction added, and
   `leak.py` and `voice-check.py` green; the author re-voices the prompt afterwards.
 - Never touch the results that held, the files they read, or the Final Recommendation unless the call rests on a
   rebuilt result.

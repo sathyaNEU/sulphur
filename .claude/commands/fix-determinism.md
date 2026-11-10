@@ -49,7 +49,7 @@ hurried figure grades nothing, and the result is redesigned. Never keep a fork o
   C1.
 - A figure that does not recompute is fixed in the generator so `figures.json`, the golden and the write-up
   agree; the write-up is redrafted from `figures.json` (`submission-writeup`).
-- `prompt_ambiguity` on an ask: tighten that ask's wording only, unit and rounding kept, `voice-check.py`
+- `prompt_ambiguity` on an ask: tighten that ask's wording only, its unit kept and no rounding instruction added, `voice-check.py`
   green. The prompt's call sentence is frozen.
 
 **5. Assert, rebuild, prove the scope.** Add the `SFn` row to `checks.py` and `verify.py`, rebuild twice
