@@ -1,0 +1,117 @@
+{
+  "task": "task17",
+  "project": "sulfur",
+  "architecture": "v1",
+  "drawn": "2026-11-10",
+  "slot_note": "",
+  "domain": "general-statistics-data-science",
+  "subdomain": "resampling-simulation-monte-carlo-methods",
+  "niche": "a state research computing centre capping its 2027 GPU allocation round at the node-hours of grants whose expected use keeps the gpu partition's yearly 90th-percentile queue wait under four hours with 80 per cent probability, from the scheduler's accounting log, the node event log, the rack layout, the projects' grants and use, the partition configuration history and the 2027 partition plan",
+  "objective": "descriptive-distribution",
+  "shape": "14",
+  "decision_type": "dial_setting",
+  "answer_unit": "count",
+  "answer": "",
+  "answer_source": "",
+  "gap": [
+    "objective",
+    "time"
+  ],
+  "pattern": [
+    "none"
+  ],
+  "generators": [
+    "G17",
+    "G13",
+    "G12",
+    "G9"
+  ],
+  "gate_g": "method_or_model_selection",
+  "calibration_form": "prior_period_close_out",
+  "stump_strategy": "maturity_censoring",
+  "decisive_rule_filed": false,
+  "official_decoy": false,
+  "validated_decoy": false,
+  "context_artifact": "operations_log",
+  "stump_class": "analytical",
+  "analyst_test": "A careful but hurried analyst sizes the order from node-hours demanded over node-hours available at the average availability, or simulates Poisson submissions at the hourly mean with completed-job durations, a constant availability and no rework after node failures, backtests at about half the 2026 queue waits and explains the gap away as an unusual outage, and orders about half the nodes needed.",
+  "domain_test": "Every result is a Monte Carlo object of this subdomain: a fitted cluster arrival process, a censored duration model whose tail family is chosen by validation on a natural change in the censoring limit, a repairable-fleet outage process with common-cause clusters and repair-time distributions, a rework fraction built from two of those models, a discrete-event simulation validated on a held-out quarter and a required-capacity distribution cut at a stated confidence; swap in hospital nouns (beds, admissions, stays, ward closures) and the scheduler's backfill on requested walltimes, the walltime limit the plan raises, the requeue after a node failure with a checkpoint's lost work and rack-level outages stop making sense.",
+  "layer2_family": "forecast_uncertainty",
+  "layer2_pattern": "own:queue-capacity-from-four-fitted-inputs",
+  "layer1": [
+    "job ids that roll over when the scheduler's id counter wraps, so the same id names two jobs years apart",
+    "requeued jobs logged as several segments of one job (restart count), a segment per start",
+    "submit times in UTC and start and end times in local time across a summer-time change",
+    "node lists as compressed ranges (gpu[012-015,021])",
+    "time limits as day-hour strings (2-00:00:00)",
+    "state codes with suffixes (CANCELLED by 20311)",
+    "node event reason strings typed freely by operators with variants of the same cause",
+    "an accounting export re-run that duplicated one month's rows",
+    "scheduler restarts that cut node event intervals in two"
+  ],
+  "stakeholder_role": "the director of the centre, who puts the round's cap to the centre's board",
+  "role_family": "capacity_planner",
+  "scoring_unit": "units served",
+  "spine": {
+    "file": "slurm_jobs_2024-01_2026-11.csv",
+    "rows": 0,
+    "entity": "one scheduler job segment (a job's run between a start and an end, a requeue starting a new segment)",
+    "grain": "job x segment",
+    "source": "synthetic"
+  },
+  "forum": "trustees_or_governors",
+  "forcing_event": "vote_or_meeting",
+  "org_family": "research_or_statistics_office",
+  "world": {
+    "geography": "Germany (Baden-Wurttemberg), an invented technical university",
+    "currency": "EUR",
+    "org_type": "a university research computing centre running a shared GPU partition under a scheduler",
+    "invented_names": [
+      "Universitat Ravensfeld",
+      "Hochschulrechenzentrum Ravensfeld"
+    ],
+    "people": [
+      "Francesca Winkler",
+      "Mehdi Renner",
+      "Carolin Hofig"
+    ]
+  },
+  "deliverables": [
+    "gpu_round_2027.xlsx",
+    "gpu_round_2027_note.docx"
+  ],
+  "opening_move": "question-first",
+  "question_form": "how-many",
+  "driver": "A total a system can deliver at a service level comes out of a simulation fed by four fitted inputs (a bursty arrival process built from how commitments turn into use, durations censored at a limit the forward plan raises, a repairable fleet whose failures cluster by shared infrastructure and whose repairs take days, and the rework each failure forces on what was running), read as a distribution cut at a stated confidence; each input's shortcut lands the total higher by a different amount, and the arithmetic of hours available lands it highest.",
+  "driver_concrete": "The 2027 round's cap is the largest 10,000 node-hour step of grants whose expected use meets the service level in at least 80 per cent of simulated years, under the scheduler's filed backfill policy with submissions as project sessions (bursts, weekday and term pattern, the use of grants by project age and type), durations fitted under the 24 and 48 hour limits and extrapolated to the plan's 96 hours by the family that predicted the 24 to 48 hour mass, node outages as a repairable fleet with rack-level common-cause events and class-specific repair times, and the work lost to requeues after node failures by each project's checkpointing; the cap is about 30 per cent below what node-hours available over the pooled use ratio gives.",
+  "stump": "A careful but hurried analyst caps the round at node-hours available over the pooled use ratio, or simulates Poisson submissions at the hourly mean with completed-job durations, a constant 94 per cent availability and no rework, backtests at about half the 2026 queue wait and explains the gap away, and caps the round 15 to 40 per cent too high because every one of the four inputs understates the queue's variance or its load.",
+  "answer_shape": "distribution-cut",
+  "weight": "modeling",
+  "chain_signature": [
+    "assembly-reconciliation",
+    "modeling",
+    "missingness-measurement",
+    "investigation-loops",
+    "modeling",
+    "validation",
+    "uncertainty"
+  ],
+  "results": "R1 the Q3 2026 job record stitched (segments, requeue chains, id rollover) and reconciled to the capacity report; R2 the use projects make of grants by age, the burst index and the round's expected use at its requests; R3 the duration tail under the plan's 96 hour limit, the family chosen on the 24 to 48 hour change; R4 the 2026 outage record (node-days lost, the share in rack-level events, repair times by class); R5 the share of 2026's work redone after node failures by checkpointing behaviour; R6 the simulation backtested on Q3 2026 against the capacity report's 90th-percentile wait; R7 the cap as the largest 10,000 step met in 80 per cent of outcomes and the share of the requests cut",
+  "one_fact_test": "the plan raises the limit to 96 hours, so the duration tail beyond 48 hours has to be extrapolated; rescues R3 and moves R7 by about one step, 1 of 7 results",
+  "strategy_label": "WORKS IN FORM (Simulation checked out of sample; Forecasts and regime breaks; Persistence and clustered failures)",
+  "mechanism_source": "design_note",
+  "differentiation": {
+    "task10": "task10's spent v1 priced a paid tier's capacity from the periods a volunteer tier fell short, one censored capacity; here the capacity is a simulated queue fed by four separately fitted inputs, and the loss is spread over the inputs.",
+    "mark132": "mark132 summed a wear-out failure rate over positions with replacement restarting the curve; here failures are one of four inputs, cluster by shared infrastructure, and feed a queue simulation through repair times and rework, with the count read from a distribution's cut."
+  },
+  "lineage": [],
+  "notes": "The vocab has no 'uncertainty' weight; modeling is the honest free label (four fitted inputs with many parameters each). The analysis type is Descriptive & Distribution (the taxonomy serves this subdomain with DD): where the partition's deliverable total really sits once the duration tail, the clustered outages, the rework and the queue's variance are handled, read as a distribution cut at 80 per cent; the GS&DS x forecasting pairing is task16's in the window.",
+  "client_domain": "general-statistics-data-science",
+  "registered": "2026-11-10T03:33:57Z",
+  "shell": {
+    "question form": "how-many",
+    "second-sentence opener": "i",
+    "rounding opener": "hours",
+    "deliverable set": "xlsx"
+  }
+}
