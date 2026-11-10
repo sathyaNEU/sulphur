@@ -1,11 +1,11 @@
 {
  "task": "task10",
- "status": "READY",
+ "status": "PAUSED",
  "domain": "energy-systems-utilities/load-forecasting (client domain energy-systems-utilities; world: an English distribution network operator, Wealdmoor Power Networks, committing for winter 2027/28 the reinforcement of the Halverton primaries whose design-day peak, with the flexibility contracted for that winter called in full, would exceed firm capacity on more than one design day in ten)",
  "subdomain": "load-forecasting",
  "objective": "forecasting",
- "stage": 5,
- "stage_name": "ready",
+ "stage": 6,
+ "stage_name": "runs",
  "updated": "2026-11-10",
  "call": "Commit reinforcement at Ashcombe Road, Fenwick Street and Hartwell Common for winter 2027/28; Charlecote Way stays within firm capacity on nine design days in ten with its 2027/28 contract",
  "architecture": 6,
@@ -125,7 +125,7 @@
    "commit": "RESHIPPED (task10)"
   }
  ],
- "resume": "READY on architecture 6 after the holistic-audit return: the author rewrites prompt.txt in their own words (voice-check.py --rewrite, then leak.py), uploads it with target.zip, pastes the four answer blocks and golden.zip; then /triage-runs task10 with both runs and the rubric",
+ "resume": "RUNS back on architecture 6 (cut 5daf46a): both platform responses saved as runs/arch6_run1.md and arch6_run2.md, both on the golden call and headline figures, no score or rubric supplied; the run-triage agent is writing runs/arch6_triage.md; then record the verdict (REDESIGN expected), the run-record row, and redesign from stage 2 against the measured run capability",
  "approved": null,
  "submitted": null,
  "portal": {
