@@ -1,0 +1,128 @@
+{
+ "task": "task17",
+ "architecture": 1,
+ "title": "How many node-hours of GPU grants the Landesrechenzentrum Ravensfeld's 2027 allocation round can carry under its service level, and what share of the requests that cuts",
+ "domain": "General Statistics & Data Science",
+ "subdomain": "Resampling, simulation & Monte Carlo methods (sizing a shared GPU partition's allocation round under a queue-wait service level)",
+ "objective": "Descriptive & Distribution Analysis",
+ "as_of": "2026-11-16",
+ "deliverables": [
+  "gpu_round_2027.xlsx",
+  "gpu_round_2027_note.docx"
+ ],
+ "distractor_files": [
+  "storage_quota_report_2026-11.csv",
+  "helpdesk_tickets_2026.csv"
+ ],
+ "files": [
+  {
+   "path": "sacct_gpu_2024-01_2026-11.csv",
+   "format": "csv",
+   "bytes": 14762469,
+   "rows": 83562,
+   "source": "Constructed (seeded generator, task17/generator)",
+   "pull_date": "2026-11-16",
+   "license": "CC0-1.0 (original work)"
+  },
+  {
+   "path": "node_events_sturmvogel_2024-2026.csv",
+   "format": "csv",
+   "bytes": 700867,
+   "rows": 7673,
+   "source": "Constructed (seeded generator, task17/generator)",
+   "pull_date": "2026-11-16",
+   "license": "CC0-1.0 (original work)"
+  },
+  {
+   "path": "rack_layout_gpu.csv",
+   "format": "csv",
+   "bytes": 2803,
+   "rows": 64,
+   "source": "Constructed (seeded generator, task17/generator)",
+   "pull_date": "2026-11-16",
+   "license": "CC0-1.0 (original work)"
+  },
+  {
+   "path": "allocations_gpu_2023-2027.xlsx",
+   "format": "xlsx",
+   "bytes": 64994,
+   "rows": null,
+   "source": "Constructed (seeded generator, task17/generator)",
+   "pull_date": "2026-11-16",
+   "license": "CC0-1.0 (original work)"
+  },
+  {
+   "path": "maintenance_calendar_2024-2027.xlsx",
+   "format": "xlsx",
+   "bytes": 8343,
+   "rows": null,
+   "source": "Constructed (seeded generator, task17/generator)",
+   "pull_date": "2026-11-16",
+   "license": "CC0-1.0 (original work)"
+  },
+  {
+   "path": "gpu_capacity_report_2024-2026.xlsx",
+   "format": "xlsx",
+   "bytes": 14735,
+   "rows": null,
+   "source": "Constructed (seeded generator, task17/generator)",
+   "pull_date": "2026-11-16",
+   "license": "CC0-1.0 (original work)"
+  },
+  {
+   "path": "user_directory_2026-11.csv",
+   "format": "csv",
+   "bytes": 250086,
+   "rows": 2294,
+   "source": "Constructed (seeded generator, task17/generator)",
+   "pull_date": "2026-11-16",
+   "license": "CC0-1.0 (original work)"
+  },
+  {
+   "path": "slurm_config_history_sturmvogel.txt",
+   "format": "txt",
+   "bytes": 2242,
+   "rows": null,
+   "source": "Constructed (seeded generator, task17/generator)",
+   "pull_date": "2026-11-16",
+   "license": "CC0-1.0 (original work)"
+  },
+  {
+   "path": "gpu_allocation_policy_v3.pdf",
+   "format": "pdf",
+   "bytes": 60178,
+   "rows": null,
+   "source": "Constructed (seeded generator, task17/generator)",
+   "pull_date": "2026-11-16",
+   "license": "CC0-1.0 (original work)"
+  },
+  {
+   "path": "gpu_partition_plan_2027.pdf",
+   "format": "pdf",
+   "bytes": 55467,
+   "rows": null,
+   "source": "Constructed (seeded generator, task17/generator)",
+   "pull_date": "2026-11-16",
+   "license": "CC0-1.0 (original work)"
+  },
+  {
+   "path": "storage_quota_report_2026-11.csv",
+   "format": "csv",
+   "bytes": 24860,
+   "rows": 612,
+   "source": "Constructed (seeded generator, task17/generator)",
+   "pull_date": "2026-11-16",
+   "license": "CC0-1.0 (original work)"
+  },
+  {
+   "path": "helpdesk_tickets_2026.csv",
+   "format": "csv",
+   "bytes": 29408,
+   "rows": 248,
+   "source": "Constructed (seeded generator, task17/generator)",
+   "pull_date": "2026-11-16",
+   "license": "CC0-1.0 (original work)"
+  }
+ ],
+ "provenance": "Every file is constructed by the seeded generator in task17/generator: the organisation, its universities, people, projects, jobs, nodes, outages and figures are invented; German names come from a name generator. No real organisation's records are used."
+}

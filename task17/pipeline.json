@@ -1,6 +1,6 @@
 {
  "task": "task17",
- "status": "BUILD",
+ "status": "PAUSED",
  "domain": "general-statistics-data-science",
  "subdomain": "resampling-simulation-monte-carlo-methods",
  "objective": "descriptive-distribution",
@@ -8,7 +8,7 @@
  "stage_name": "build",
  "updated": "2026-11-10",
  "doctrine": "throughout",
- "call": "",
+ "call": "(provisional, not judged) cap the 2027 round at 340,000 node-hours of grants, cutting the 523,000 requested by 35 per cent",
  "chain": "R1 Q3 2026 record rebuilt and reconciled; R2 use of grants by age, burst index, the round's expected use; R3 duration tail under 96 h; R4 2026 outage record (node-days, rack share, repair times); R5 rework share; R6 backtest on Q3 2026; R7 the cap (largest 10,000 step met in 80 per cent of outcomes) and the share of requests cut",
  "architecture": 1,
  "loops": 0,
@@ -52,7 +52,7 @@
   "history": []
  },
  "returned": [],
- "resume": "stage 3: generator (sim, pack, analysis, passes, golden, checks, verify, writeup, make), gates.py task17 --full, then stages 4 and 5",
+ "resume": "stage 3, generator built and the golden computed (figures.json 2026-11-10 02:20; the build agent stopped at the API limit before checks, gates and stage 4). FIRST, before any more build work: the careful but hurried pass caps at 360,000 against the golden's 340,000, two 10,000 steps, the single-total risk task1 architecture 2 measured (an 80 per cent cut of one total averages every judgment below the honest methods' spread). Implement the recorded frontier-run methods as a route (clean everything, censor at the limit in force, a family by in-sample fit, Poisson or resampled submissions, mean availability, FIFO with backfill, a 2026 backtest, bootstrap) and grade it; if it lands within a step or two, redesign the decision toward a set or count (which projects or QoS classes the cap binds, a count over units) where each judgment flips units, rather than shipping. Then: make.py, checks.py, verify.py, effort.py, gates.py task17 --full, the leak reader and the determinism judge together, READY. The prompt carries no rounding instruction (the rule in the working tree's guide-to-prompt).",
  "approved": null,
  "submitted": null,
  "portal": {

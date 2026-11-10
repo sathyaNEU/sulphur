@@ -1,0 +1,259 @@
+{
+ "backtest_careful_h": 4,
+ "backtest_p90_h": 5,
+ "backtest_p90_median": 4.5,
+ "backtest_p90_raw": 4.65,
+ "backtest_routes": {
+  "EASY backfill": 4.63,
+  "careful but hurried": 4.31,
+  "constant availability": 4.31,
+  "independent node failures": 11.61,
+  "no parameter uncertainty": 4.68,
+  "no rework after failures": 3.48
+ },
+ "burst_index": 6,
+ "burst_index_raw": 5.96,
+ "burst_variants": {
+  "local": 6.0,
+  "ran": 5.83,
+  "raw_vmr": 7.79,
+  "utc": 5.96
+ },
+ "cap": 340000,
+ "cap_next_str": "350,000",
+ "cap_prev_str": "330,000",
+ "cap_str": "340,000",
+ "ckpt_mix": {
+  "0.0": 42,
+  "1.0": 35,
+  "6.0": 54
+ },
+ "conventions": {
+  "change_date": "2026-05-03",
+  "level_h": 4,
+  "limit_2027_h": 96,
+  "limit_before_h": 24,
+  "limit_now_h": 48,
+  "nodes": 64,
+  "probability_pct": 80,
+  "racks": 8,
+  "step": 10000
+ },
+ "cut48_mean96_h": 10,
+ "cut48_mean96_raw": 9.86,
+ "cut_share_pct": 35,
+ "expected_use_at_cap": 200000,
+ "expected_use_at_cap_str": "200,000",
+ "expected_use_grant": 520000,
+ "expected_use_pooled": 310000,
+ "expected_use_requests": 310000,
+ "expected_use_requests_str": "310,000",
+ "families": {
+  "gengamma": {
+   "mean96": 12.24,
+   "passes": false,
+   "share48_pct": 6.5,
+   "z": 6.48
+  },
+  "loglogistic": {
+   "mean96": 13.21,
+   "passes": true,
+   "share48_pct": 11.0,
+   "z": 2.59
+  },
+  "loglogistic_mix": {
+   "mean96": 13.17,
+   "passes": false,
+   "share48_pct": 10.9,
+   "z": 3.27
+  },
+  "lognormal": {
+   "mean96": 13.12,
+   "passes": true,
+   "share48_pct": 9.8,
+   "z": 2.99
+  },
+  "lognormal_mix": {
+   "mean96": 13.02,
+   "passes": false,
+   "share48_pct": 10.3,
+   "z": 4.1
+  },
+  "weibull": {
+   "mean96": 11.3,
+   "passes": false,
+   "share48_pct": 2.6,
+   "z": 11.42
+  },
+  "weibull_mix": {
+   "mean96": 12.98,
+   "passes": false,
+   "share48_pct": 9.6,
+   "z": 3.58
+  }
+ },
+ "family": "loglogistic",
+ "hazard_per_1000": [
+  1.74,
+  1.89,
+  2.34,
+  3.18,
+  4.33,
+  6.29,
+  7.41,
+  0.0
+ ],
+ "hw_per_node_year": 0.65,
+ "lost_by_quarter": {
+  "1": 150,
+  "2": 150,
+  "3": 130,
+  "4": 90
+ },
+ "lost_q_mean_str": "150",
+ "lost_raw": {
+  "1": 152.7,
+  "2": 151.7,
+  "3": 134.8,
+  "4": 94.8
+ },
+ "mean96_h": 13,
+ "mean96_raw": 13.21,
+ "mean_availability": 0.9588,
+ "multi_share_pct": 19,
+ "multi_share_raw": 18.86,
+ "n_futures": 2000,
+ "n_rack_events": 51,
+ "outage_counts": {
+  "admin": 64,
+  "hardware": 128,
+  "rack": 328,
+  "software": 3594
+ },
+ "p_at_cap_pct": 89,
+ "p_by_step": {
+  "330000": 0.951,
+  "340000": 0.887,
+  "350000": 0.778,
+  "360000": 0.632,
+  "370000": 0.454,
+  "380000": 0.296,
+  "390000": 0.151
+ },
+ "p_next_pct": 78,
+ "p_prev_pct": 95,
+ "passing_mean96_range": [
+  13.12,
+  13.21
+ ],
+ "passing_share48_range": [
+  9.8,
+  11.0
+ ],
+ "pdu_per_rack_year": 0.67,
+ "q3_delivered": 72303.4,
+ "q3_jobs": 6500,
+ "q3_jobs_by_submit": 6494,
+ "q3_jobs_raw": 6502,
+ "q3_nh": 71000,
+ "q3_nh_raw": 71391.2,
+ "q3_report_delivered": 72303.5,
+ "q3_segments": 6919,
+ "quick_cap": 920000,
+ "quick_cap_raw": 921530,
+ "repair_hardware_d": 4.0,
+ "repair_hardware_d_str": "4",
+ "repair_hardware_raw": 3.99,
+ "repair_rack_h": 16,
+ "repair_rack_raw": 16.28,
+ "repair_software_h": 1,
+ "repair_software_raw": 1.05,
+ "report_p90": 4.62,
+ "report_p90_h": 5,
+ "requests_str": "523,000",
+ "requests_total": 523000,
+ "rework_covered": 331,
+ "rework_frac": 0.641,
+ "rework_pct": 4,
+ "rework_raw": 4.4,
+ "rework_requeued": 656,
+ "rework_stem_raw": 4.39,
+ "rework_whole_raw": 6.87,
+ "rework_whole_segment_pct": 7,
+ "rivals": {
+  "4,000 futures": {
+   "cap": 340000,
+   "p_at_cap": 0.888,
+   "p_next": 0.782
+  },
+  "EASY backfill": {
+   "cap": 350000,
+   "p_at_cap": 0.936,
+   "p_next": 0.856
+  },
+  "family: lognormal": {
+   "cap": 350000,
+   "p_at_cap": 0.919,
+   "p_next": 0.839
+  },
+  "no parameter uncertainty": {
+   "cap": 340000,
+   "p_at_cap": 0.899,
+   "p_next": 0.787
+  }
+ },
+ "route_caps": {
+  "Poisson submissions": 360000,
+  "a Weibull tail by AIC": 350000,
+  "careful but hurried": 360000,
+  "constant availability": 350000,
+  "independent node failures": 270000,
+  "no rework after failures": 360000,
+  "node-hours arithmetic (quick)": 920000,
+  "one pooled use ratio": 350000,
+  "sessions spread evenly over the year": 350000,
+  "the tail cut at the limit": 390000
+ },
+ "route_careful_str": "360,000",
+ "route_const_str": "350,000",
+ "route_cuts_pct": {
+  "Poisson submissions": 31,
+  "a Weibull tail by AIC": 33,
+  "careful but hurried": 31,
+  "constant availability": 33,
+  "independent node failures": 48,
+  "no rework after failures": 31,
+  "node-hours arithmetic (quick)": 0,
+  "one pooled use ratio": 33,
+  "sessions spread evenly over the year": 33,
+  "the tail cut at the limit": 25
+ },
+ "route_flat_str": "350,000",
+ "route_indep_str": "270,000",
+ "route_norework_str": "360,000",
+ "route_notail_str": "390,000",
+ "route_poisson_str": "360,000",
+ "route_pooled_str": "350,000",
+ "route_quick_str": "920,000",
+ "route_weibull_str": "350,000",
+ "rows_not_rejoined": {
+  "hardware_d": 3.93,
+  "rack_h": 15.82,
+  "software_h": 1.05
+ },
+ "share48_pct": 10,
+ "share48_raw": 11.0,
+ "switch_per_rack_year": 1.6,
+ "use_cont_pct": 66,
+ "use_cont_raw": 0.6611,
+ "use_new_pct": 45,
+ "use_new_raw": 0.4494,
+ "use_pooled_pct": 58,
+ "validation_n": 2935,
+ "validation_n_beyond": 551,
+ "weibull_mean96_h": 11,
+ "weibull_mean96_raw": 11.3,
+ "weibull_share48_pct": 5,
+ "weibull_share48_raw": 2.6,
+ "weibull_z": 11.4
+}
