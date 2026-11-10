@@ -95,7 +95,7 @@ def run(task, w, T, pk, G, texts, figs, n, quiet=False):
     old17 = pk.a["naics_code"].isin(["444190", "445120", "452311", "446110", "447110", "448140", "451110", "453220", "453998", "511110", "517312", "519130"]).sum()
     check("R2 mess: accounts still carrying NAICS 2017 codes map through the concordance", old17 > 500 and pk.a["ss"].notna().all(), old17)
     paper = (rr["t"].dt.hour + rr["t"].dt.minute + rr["t"].dt.second == 0).sum()
-    check("R2 mess: paper reports keyed by date alone exist and form no transmission", paper > 1000 and
+    check("R2 mess: paper reports keyed by date alone exist and form no batch", paper > 1000 and
           not any((t.hour + t.minute + t.second) == 0 for t in pk.batches(W.FLASH_Q - 1, M.CUT[W.FLASH_Q]).unique()), paper)
     check("R2 mess: account numbers are written two ways (hyphenated in the register, digits in the worksite file)",
           T["accounts"]["account_no"].str.contains("-").all() and not T["worksites"]["uiacct"].str.contains("-").any())
@@ -109,19 +109,32 @@ def run(task, w, T, pk, G, texts, figs, n, quiet=False):
     spec.loader.exec_module(eff)
     gr = {p: {rid: eff.grade(r["passes"][p], r)[0] for rid, r in eres.items()} for p in ("quick", "careful", "thorough")}
     check("R3 the thorough pass earns every result", all(g == "right" for g in gr["thorough"].values()), gr["thorough"])
-    check("R3 the careful pass earns R1, R2 and R9 and loses R3 to R7", [gr["careful"][k] for k in ("R1", "R2", "R9")] == ["right"] * 3
-          and all(gr["careful"][k] == "missed" for k in ("R3", "R4", "R5", "R6", "R7")), gr["careful"])
+    check("R3 the careful pass earns R1 and R4, the county tables in part at most, and loses R2, R3, R5, R8 and R9",
+          [gr["careful"][k] for k in ("R1", "R4")] == ["right"] * 2 and all(gr["careful"][k] == "missed" for k in ("R2", "R3", "R5", "R8", "R9"))
+          and all(gr["careful"][k] != "right" for k in ("R6", "R7")), gr["careful"])
     check("R3 the quick pass earns no result", all(g == "missed" for g in gr["quick"].values()), gr["quick"])
     cp = {rid: r["passes"]["careful"] for rid, r in eres.items()}
-    check("R3 margin: the careful pass's late-transmission figure sits outside the band by 200 jobs or more",
-          B["transport_jobs"][0] - cp["R3"] >= 200, (cp["R3"], B["transport_jobs"]))
-    check("R3 margin: the careful pass's unregistered jobs sit 15 per cent or more outside the band",
-          cp["R4"]["jobs"] >= 1.15 * B["unreg_jobs"][1], (cp["R4"]["jobs"], B["unreg_jobs"]))
+    route = dict(zip(M.SHORTCUT_KEYS, G["routes"]))
+    check("R3 margin: the careful pass's one share for every outstanding report sits 0.3 or more above the band of what "
+          "employers outstanding on their own keep", cp["R2"]["on_its_own_keep"] - B["k_alone"][1] >= 0.3, (cp["R2"]["on_its_own_keep"], B["k_alone"]))
     n_in = sum(inband(cp["R7"][W.NAMES[c]], B["change"][c]) for c in W.CODES)
-    check("R3 margin: the careful pass's county changes fall outside their bands in nine counties or more", n_in <= 5, "%d of 14 inside" % n_in)
+    check("R3 margin: the careful pass's county changes fall outside their bands in five counties or more", n_in <= 9, "%d of 14 inside" % n_in)
     n_in6 = sum(inband(cp["R6"][W.NAMES[c]], B["total"][c]) for c in W.CODES)
-    check("R3 margin: the careful pass's county jobs fall outside their bands in eight counties or more", n_in6 <= 6, "%d of 14 inside" % n_in6)
+    check("R3 margin: the careful pass's county jobs fall outside their bands in five counties or more", n_in6 <= 9, "%d of 14 inside" % n_in6)
+    far = [W.NAMES[c] for c in W.CODES if abs(cp["R7"][W.NAMES[c]] - GD.r1(ch[c])) >= 0.7]
+    check("R3 margin: where the careful pass falls outside, it is by 0.7 of a point or more in four counties or more", len(far) >= 4, far)
     check("R3 the careful pass designates another set", sorted(cp["R8"]) != sorted(figs["r8_designated"]), cp["R8"])
+    check("R3 margin: the careful pass leaves Garrow and Kittredge above the line", cp["R7"]["Garrow"] >= W.THRESHOLD + 0.1
+          and cp["R7"]["Kittredge"] >= W.THRESHOLD + 0.5, (cp["R7"]["Garrow"], cp["R7"]["Kittredge"]))
+    check("R3 margin: the latest worksite reports' split leaves Kittredge half a point or more above the line",
+          route["latest"]["change"]["013"] >= W.THRESHOLD + 0.5, round(float(route["latest"]["change"]["013"]), 2))
+    pooled = [route[k_] for k_ in ("pooled_surv", "pooled_kept", "pooled_rep")]
+    check("R3 margin: every way of carrying the outstanding reports alike leaves Garrow above the line",
+          min(float(x["change"]["009"]) for x in pooled) > W.THRESHOLD + 0.05, [round(float(x["change"]["009"]), 2) for x in pooled])
+    check("R3 margin: last year's unregistered jobs carried as they were sit 15 per cent or more above the band",
+          route["level"]["unreg_jobs"] >= 1.15 * B["unreg_jobs"][1], (round(route["level"]["unreg_jobs"]), B["unreg_jobs"]))
+    check("R3 margin: the careful pass's replay sits outside the replay's bands", not inband(cp["R9"]["state_difference"], B["replay_state_diff"])
+          and not inband(cp["R9"]["mean_county_difference"], B["replay_mean_abs"]), cp["R9"])
 
     # ------------------------------------------------------------------------------------------------ R4 no plant
     r = T["reports"]
@@ -135,20 +148,25 @@ def run(task, w, T, pk, G, texts, figs, n, quiet=False):
     # ---------------------------------------------------------------------------- R5 no one thing: every footprint
     ai = {a.replace("-", ""): i for i, a in enumerate(w.acct_s)}
     al_by_c = v[v["kind"] == "alone"].groupby("county_code").size().reindex(W.CODES).fillna(0)
-    check("R5 footprint: employers missing alone in every county", al_by_c.min() >= 5, al_by_c.astype(int).to_dict())
+    check("R5 footprint: employers outstanding on their own in every county", al_by_c.min() >= 5, al_by_c.astype(int).to_dict())
     past = {q: (pk.view(q)["kind"] == "alone").sum() for q in range(4, 15)}
-    check("R5 footprint: employers missing alone at every earlier cut-off", min(past.values()) >= 100, past)
+    check("R5 footprint: employers outstanding on their own at every earlier cut-off", min(past.values()) >= 100, past)
     tr = G["trouble"]
-    check("R5 footprint: the housing chain's trouble shows statewide this quarter and in the two quarters before",
-          tr[15]["chain"] > 4 * tr[11]["chain"] and tr[15]["other"] < 2 * tr[11]["other"], tr)
-    chain_by_c = v[(v["kind"] == "alone") & v["chain"]].groupby("county_code").size().reindex(W.CODES).fillna(0)
-    check("R5 footprint: housing-chain employers missing alone in every county, not only the designated ones",
-          chain_by_c.min() >= 3 and chain_by_c.drop(des).sum() > 2 * chain_by_c[des].sum(), chain_by_c.astype(int).to_dict())
+    check("R5 footprint: construction's share at employers outstanding on their own is several times its earlier level "
+          "statewide this quarter, and was rising at the two cut-offs before",
+          tr[15]["constr"] > 4 * tr[11]["constr"] and tr[14]["constr"] > tr[13]["constr"] > 0.9 * tr[11]["constr"]
+          and tr[15]["other"] < 2.5 * tr[11]["other"], {q: (round(100 * x["constr"], 2), round(100 * x["other"], 2)) for q, x in tr.items()})
+    cons_by_c = v[(v["kind"] == "alone") & (v["ss"] == GD.CONSTRUCTION)].groupby("county_code").size().reindex(W.CODES).fillna(0)
+    check("R5 footprint: construction employers outstanding on their own in every county, not only the designated ones",
+          cons_by_c.min() >= 3 and cons_by_c.drop(des).sum() > 2 * cons_by_c[des].sum(), cons_by_c.astype(int).to_dict())
+    dS = (route["pooled_surv"]["change"] - ch).abs()
+    check("R5 footprint: carrying every outstanding report alike misreads three or more undesignated counties by half a "
+          "point or more", sum(dS[c] >= 0.5 for c in W.CODES if c not in des) >= 3, dS.round(2).to_dict())
     un = G["unregistered"]
     check("R5 footprint: employers with no account in every county", (un > 15).all(), un.round(0).astype(int).to_dict())
     H = pk.unregistered_history(W.FLASH_Q, M.EXTRACT, "all")
     check("R5 footprint: accounts established after the cut-off at every earlier cut-off", min(x["n_own"] for x in H) > 150, [x["n_own"] for x in H][:6])
-    noB = next(x for x in G["routes"] if x["route"] == dict(ibnr="none"))
+    noB = route["no_unreg"]
     dB = (noB["change"] - ch).abs()
     check("R5 footprint: leaving them out misreads every county by 0.25 of a point or more and flips none where nothing turns",
           dB.min() >= 0.25 and sorted(noB["designated"]) == sorted(des), dB.round(2).to_dict())
@@ -156,6 +174,8 @@ def run(task, w, T, pk, G, texts, figs, n, quiet=False):
     moved = [c for c in W.CODES if abs(lm[c]) >= 60]
     check("R5 footprint: the latest worksite split misplaces 60 jobs or more in five counties or more, Talcott and Sayre among them (nothing turns there)",
           len(moved) >= 5 and "023" in moved and "027" in moved, {W.NAMES[c]: int(round(lm[c])) for c in moved})
+    check("R5 footprint: the latest worksite split misreads Talcott's change by half a point or more",
+          abs(route["latest"]["change"]["023"] - ch["023"]) >= 0.5, round(float(route["latest"]["change"]["023"] - ch["023"]), 2))
     for q in (7, 11):
         lt = pk.latest(q, M.CUT[q])["m3"].astype(float)
         a_, _ = pk.to_counties(lt, q, M.CUT[q], "latest")
@@ -166,33 +186,54 @@ def run(task, w, T, pk, G, texts, figs, n, quiet=False):
     hints = E["hints"]
     check("R5 and R6: no single hint rescues more than a third of the results", max(len(h["rescues"]) for h in hints) <= 3,
           [(h["sentence"][:30], h["rescues"]) for h in hints])
-    check("R6 each hint rescues the result it names", [h["rescues"] for h in hints] == [["R4"], ["R5"], ["R3"]] or
-          all(len(h["rescues"]) >= 1 for h in hints), [h["rescues"] for h in hints])
+    check("R6 the cause sentence rescues the cause reading, the worksite sentence the worksite split, and neither the call",
+          hints[0]["rescues"] == ["R2"] and hints[1]["rescues"] == ["R5"] and not any("R8" in h["rescues"] for h in hints),
+          [h["rescues"] for h in hints])
 
     # --------------------------------------------------------------------------------------------- R7 the rivals
     fam = G["family"]
     check("R7 every member of the family designates the same counties", all(f["designated"] == des for f in fam), len(fam))
     worst = max(abs(f["change"][c] - ch[c]) for f in fam for c in W.CODES)
-    check("R7 the family's county changes stay within 0.3 of a point of the golden's", worst <= 0.3, round(worst, 3))
+    check("R7 the family's county changes stay within half a point of the golden's", worst <= 0.5, round(worst, 3))
     for c in des:
         check("R7 line: %s's whole band is 0.4 of a point or more below the line" % W.NAMES[c], B["change"][c][1] <= W.THRESHOLD - 0.4, B["change"][c])
+        check("R7 line: every member of the family puts %s 0.6 of a point or more below the line" % W.NAMES[c],
+              max(f["change"][c] for f in fam) <= W.THRESHOLD - 0.6, round(max(f["change"][c] for f in fam), 2))
     rest = [c for c in W.CODES if c not in des]
-    check("R7 line: every other county's band is 0.8 of a point or more above the line", min(B["change"][c][0] for c in rest) >= W.THRESHOLD + 0.8,
+    check("R7 line: every other county's band is 0.3 of a point or more above the line", min(B["change"][c][0] for c in rest) >= W.THRESHOLD + 0.3,
           min(B["change"][c][0] for c in rest))
+    check("R7 line: every member of the family puts every other county 0.6 of a point or more above the line",
+          min(f["change"][c] for f in fam for c in rest) >= W.THRESHOLD + 0.6, round(min(f["change"][c] for f in fam for c in rest), 2))
+    check("R7 every band on a county's change is at least half a point wide on each side of the figure",
+          all(ch[c] - B["change"][c][0] >= 0.5 - 1e-9 and B["change"][c][1] - ch[c] >= 0.5 - 1e-9 for c in W.CODES))
     def same(idx, label):
         ms = [fam[i] for i in idx]
         return check(label, all(m["designated"] == des for m in ms) and
                      all(inband(GD.r1(m["change"][c]), B["change"][c]) and inband(GD.r10(m["total"][c]), B["total"][c]) for m in ms for c in W.CODES), len(ms))
-    same([1, 2, 3, 4], "SF12 a transmission as two, three or four reports in a second, arrived at a third, a half or two thirds: same call, every figure in band")
-    same([10, 11, 12], "SF13 the resolved quarters with the earliest or the latest left out, or at 5 per cent outstanding: same call")
-    same([5, 6, 7, 8, 9], "SF14 this quarter's trouble by housing chain, supersector or three-digit industry, with or without size: same call")
-    same([13, 14, 15], "SF14 the missing-alone share by size, channel or housing chain: same call")
-    same([16, 17], "SF15 a seasonal business under 0.5, 0.6 or 0.7 of its September: same call")
-    same([18], "SF18 a new account at the resolved quarters' mean or at this quarter's reporting new employers: same call")
-    same([19], "SF11 an employer two quarters out at the resolved quarters' share or at nought: same call")
-    same([20, 21], "SF10 the reporters' change in cells of five, ten or twenty: same call")
-    ya = next(x for x in G["routes"] if x["route"] == dict(sites="yearago"))
-    check("SF17 last December's worksite split designates the same counties", ya["designated"] == des, [W.NAMES[c] for c in ya["designated"]])
+    names_ = [nm for nm, _ in M.FAMILY]
+    ix = lambda *keys: [i for i, (nm, rt) in enumerate(M.FAMILY) if any(k_ in rt for k_ in keys)]
+    same(ix("thr", "batch_min"), "SF12 a batch as two, three or four reports in a second, arrived at a third, a half or two thirds: same call, every figure in band")
+    same(ix("mature_drop", "mature_tol"), "SF13 the resolved quarters with the earliest or the latest left out, or at 5 per cent outstanding: same call")
+    same(ix("cells"), "SF14 this quarter's share by supersector, three-digit industry or a hand-picked group of housing industries, with or without size: same call")
+    same(ix("k_by"), "SF14 the share kept by size, channel or industry group: same call")
+    same(ix("carry"), "SF15 a late employer by its county and supersector or by its own change a year earlier: same call")
+    same(ix("new"), "SF18 a new account at the resolved quarters' mean or at this quarter's reporting new employers: same call")
+    same(ix("twoq"), "SF11 an employer two quarters out at the resolved quarters' share or at nought: same call")
+    same(ix("move_by"), "SF10 the reporters' change by county and supersector in cells of five, ten or twenty, or by supersector statewide: same call")
+    same(ix("ibnr_pool"), "SF16 unregistered employers developed on fourth-quarter cut-offs or on every cut-off, county by county: same call")
+    same(ix("sites"), "SF17 a worksite by its own change a year earlier or by last December's split: same call")
+    same(ix("habit"), "SF21 late every quarter as all or three of the last four reports: same call")
+    same(ix("alone"), "SF22 what employers outstanding on their own kept, on the resolved quarters or on every closed quarter with the unresolved left out or at nought: same call")
+    same(ix("batch"), "SF23 this quarter's share carried to the late batches or the late batches at the reporters' change: same call")
+    same(ix("habit_carry"), "SF24 the habitually late carried with the late batches or at the reporters' change: same call")
+    same([len(M.FAMILY)], "SF25 the employers still silent for December 2025 at nought or at their last report: same call")
+    check("SF25 employers still silent for December 2025 exist and hold a few hundred jobs at their last report",
+          5 <= G["base_silent"]["n"] <= 200 and 50 <= G["base_silent"]["jobs"] <= 1500, (G["base_silent"]["n"], round(G["base_silent"]["jobs"])))
+    check("SF22 the share kept under each reading sits inside its band", all(inband(round(x, 2), B["k_alone"]) for x in
+          (G["k_alone"], G["k_allzero"], G["k_allclosed"])), (round(G["k_alone"], 3), round(G["k_allzero"], 3), round(G["k_allclosed"], 3)))
+    check("R7 every member of the family is asserted", sorted(set(sum([ix(k_) for k_ in ("thr", "batch_min", "mature_drop", "mature_tol", "cells",
+          "k_by", "carry", "new", "twoq", "move_by", "ibnr_pool", "sites", "habit", "alone", "batch", "habit_carry")], []))) == list(range(1, len(M.FAMILY))),
+          len(M.FAMILY))
     check("SF19 a county's estimated jobs are its total less the jobs on reports received", max(abs(G["estimated"][c] - (G["total"][c] - G["reported"][c])) for c in W.CODES) < 1e-6)
     Rk = pk.certify(q=W.BASE_Q, know=M.EXTRACT)
     rdk = (Rk["total"] / base - 1) * 100
@@ -200,20 +241,12 @@ def run(task, w, T, pk, G, texts, figs, n, quiet=False):
           inband(round(float(100 * (Rk["total"].sum() / base.sum() - 1)), 2), B["replay_state_diff"]) and inband(round(float(rdk.abs().mean()), 2), B["replay_mean_abs"]),
           (round(float(100 * (Rk["total"].sum() / base.sum() - 1)), 3), round(float(rdk.abs().mean()), 3)))
     check("SF2 December is month three of the fourth-quarter report: the published December column reproduces from it", G["recon"]["rebuilt"] == G["recon"]["published"])
-    check("SF16 unregistered employers from fourth-quarter cut-offs, county by county (the pooled and shared-out variants are ruled out below and designate the same counties)", True)
     ro = {}
     for name, rt in M.RULED_OUT:
-        s = GD.summary(pk, pk.certify(route=rt), base)
-        ro[name] = s
-        check("R7 ruled out but harmless: %s designates the same counties" % name[:60], s["designated"] == des, [W.NAMES[c] for c in s["designated"]])
+        sm = GD.summary(pk, pk.certify(route=rt), base)
+        ro[name] = sm
+        check("R7 ruled out but harmless: %s designates the same counties" % name[:60], sm["designated"] == des, [W.NAMES[c] for c in sm["designated"]])
     # the facts that rule them out
-    by_q = {}
-    for x in pk.unregistered_history(W.FLASH_Q, M.EXTRACT, "all"):
-        by_q[x["h"]] = x["n_own"] / max(1, x["reg_own"])
-    q4 = [by_q[h] for h in by_q if h % 4 == 3]
-    oth = [by_q[h] for h in by_q if h % 4 != 3]
-    check("R7 fact: later-established accounts per registered new employer run higher at fourth-quarter cut-offs than at any other",
-          min(q4) > max(oth), (round(min(q4), 2), round(max(oth), 2)))
     a = pk.a
     reg = a[(a["liab"] >= M.QSTART[W.FLASH_Q]) & (a["liab"] <= M.QEND[W.FLASH_Q]) & (a["est"] <= M.CUT[W.FLASH_Q])].groupby("county_code").size().reindex(W.CODES).fillna(0)
     allc = a[a["est"] <= M.CUT[W.FLASH_Q]].groupby("county_code").size().reindex(W.CODES)
@@ -222,11 +255,17 @@ def run(task, w, T, pk, G, texts, figs, n, quiet=False):
     rp_ = v[v["rep"] & (v["prior"] > 0)]
     mv = rp_.groupby("ss").apply(lambda d: d["m3"].sum() / d["prior"].sum())
     check("R7 fact: the reporting employers' change differs by supersector by five points or more", mv.max() - mv.min() >= 0.05, mv.round(3).to_dict())
-    last = next(x for x in G["routes"] if x["route"] == dict(sites="yearago"))
     sh_now = pk.wk[(pk.wk["q"] == W.FLASH_Q - 1) & (pk.wk["recv"] <= M.CUT[W.FLASH_Q])]
     sh_ya = pk.wk[(pk.wk["q"] == W.FLASH_Q - 4)]
     newsites = set(zip(sh_now["acct"], sh_now["unit"])) - set(zip(sh_ya["acct"], sh_ya["unit"]))
-    check("R7 fact: worksites on the September 2026 reports that the December 2025 reports do not hold", len(newsites) >= 10, len(newsites))
+    check("pattern: worksites on the September 2026 reports that the December 2025 reports do not hold", len(newsites) >= 10, len(newsites))
+    lake = pk.wk[pk.wk["county"].isin(W.LAKES)]
+    fall = {}
+    for y in (0, 1, 2):
+        s3, s4 = lake[lake["q"] == 4 * y + 2]["m3_emp"].sum(), lake[lake["q"] == 4 * y + 3]["m3_emp"].sum()
+        fall[2023 + y] = round(s4 / s3, 3)
+    check("R7 fact: the lake counties' worksites held fewer jobs in December than in September in each earlier year",
+          max(fall.values()) < 0.9, fall)
 
     # ----------------------------------------------------------------------------------- the golden against the truth
     t25, t26 = sim.county_truth(w, 35), sim.county_truth(w, 47)
@@ -245,11 +284,11 @@ def run(task, w, T, pk, G, texts, figs, n, quiet=False):
           and inband(tuj, (B["unreg_jobs"][0] - 150, B["unreg_jobs"][1] + 150)), (len(tu), int(tuj)))
     al = v.index[v["kind"] == "alone"]
     tk = sum(w.jobs[ai[x], 47] for x in al) / v.loc[al, "prior"].sum()
-    check("truth: what this quarter's missing-alone kept is within 0.06 of the share carried", abs(tk - G["k_alone"]) < 0.06, round(tk, 3))
-    bt = v.index[(v["kind"] == "batch") & v["chain"]]
+    check("truth: what this quarter's employers outstanding on their own kept is within 0.06 of the share carried", abs(tk - G["k_alone"]) < 0.06, round(tk, 3))
+    bt = v.index[(v["kind"] == "batch") & (v["ss"] == GD.CONSTRUCTION)]
     tb = sum(w.jobs[ai[x], 47] for x in bt) / v.loc[bt, "prior"].sum()
-    check("truth: the late transmissions' housing-chain employers kept nearer the estimate than the reporters' change",
-          abs(tb - G["kept_chain"]) < abs(tb - G["reporters"]["kept_chain"]), (round(tb, 3), round(G["kept_chain"], 3), round(G["reporters"]["kept_chain"], 3)))
+    check("truth: the late batches' construction employers kept nearer the estimate than the reporters' change",
+          abs(tb - G["kept_constr"]) < abs(tb - G["reporters"]["kept_constr"]), (round(tb, 3), round(G["kept_constr"], 3), round(G["reporters"]["kept_constr"], 3)))
 
     # --------------------------------------------------------------------------------------------- semantic forks
     s_ = pk.s
@@ -306,7 +345,7 @@ def run(task, w, T, pk, G, texts, figs, n, quiet=False):
     check("self-verification: reported plus estimated is the total in every county", max(abs(G["reported"][c] + G["estimated"][c] - G["total"][c]) for c in W.CODES) < 1e-6)
     memo = doc_text(os.path.join(gold, W.DELIVERABLES["memo"]))
     check("deliverable: the memo names the designated counties and the four judgments", all(W.NAMES[c] in memo for c in des) and
-          "no account yet" in memo and "worksite" in memo and "housing" in memo, len(memo))
+          "no account yet" in memo and "worksite" in memo and "construction" in memo, len(memo))
     check("deliverable: no em dash anywhere in the deliverables or the write-up", "—" not in memo and "—" not in open(os.path.join(task, "submission.md"), encoding="utf-8").read())
 
     # ------------------------------------------------------------------------------------------- the realism sweep

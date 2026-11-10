@@ -1,10 +1,10 @@
 {
  "task": "task5",
- "status": "PAUSED",
+ "status": "READY",
  "domain": "survey-research-official-statistics",
  "objective": "etl",
- "stage": 4,
- "stage_name": "check",
+ "stage": 5,
+ "stage_name": "ready",
  "updated": "2026-11-10",
  "stump": "",
  "architecture": 4,
@@ -13,23 +13,34 @@
   "exit": 0,
   "date": "2026-11-10",
   "checks": 85,
-  "note": "1 WARN (R2 upstream of five results; the largest hint rescues 1 of 9)"
+  "note": "1 WARN (R2 upstream of five results; each needs work of its own and the largest hint rescues 1 of 9)"
  },
  "leak": {
-  "leak_py": "REVIEW 2026-11-10 on target.zip sha256 5f5cda294e7b7b52 (no LEAK; the rate notice's band edges, the Act's and the agreement's field nouns, the prompt's shell quota), each ruled in the note",
-  "reader": "2026-11-10, isolated Sonnet reader on the same cut: no sentence names a method, no ranking file, no helping file, no answer figure, every quoted clause executes to the golden's estimand, no one thing; realism findings owed to the generator (the request's wording reads written for the analyst; sixteen government accounts named alike in one county; a doubled 'Co. Co.' suffix)"
+  "leak_py": "REVIEW 2026-11-10 (--asof 2027-02-15) on target.zip sha256 c238169b094ad50a: no LEAK; the rate notice's band edges, the Act's and the agreement's field nouns, the prompt's shell quota, each ruled in the note",
+  "reader": "three isolated Sonnet reads at medium, 2026-11-10 (leak_check_report.md): the last, asked to separate what the files define from how anything not on file is worked out, found no how sentence, no ranking file, no answer figure and nothing planted; the two realism edits it asked for (a state account's name, one clause of the email) are in, both moving no figure"
  },
  "duplicate_check": {
-  "guard_check": "WARN 2026-11-10 on the registered card (overuse.weight against task6 v7, repeat.gate_g and repeat.decision against task7 v8), answered in the note",
-  "heart": "WARN 2026-11-10 on the built card (overuse.weight against task6 v7, repeat.gate_g and repeat.decision against task7 v8), answered in the note",
-  "surface": "exit 0, 2026-11-10"
+  "guard_check": "WARN 2026-11-10 on the refreshed card (overuse.weight, repeat.gate_g), answered in the note",
+  "heart": "WARN 2026-11-10 after the rebase onto main (overuse.weight against task6 v7 and task9 v7; repeat.gate_g and repeat.decision against task7 v8), answered in the note; the card keeps architecture 4's draw-time registration stamp (01:59:25Z), so task17 (drawn 03:33:57Z, same strategy and organisation family) is the later draw",
+  "surface": "exit 0, 2026-11-10 (NOTE: the email's sign-off read as a persona 'Matt Matthew'; it is Matthew Cox's first name above his signature)"
  },
  "judge": {
-  "verdict": "",
-  "disposition": "",
-  "gate_h": "",
-  "report": "",
-  "note": "pass 1 running: the determinism-judge agent prepared the brief (its runtime has no Agent tool) and the main session spawned the isolated thread from it; scratch /tmp/determinism-check-task5-024539/"
+  "pass1": {
+   "cut": "target.zip sha256 5f5cda294e7b7b52 (first cut)",
+   "verdict": "DETERMINISTIC",
+   "disposition": "FIX_NOW",
+   "finding": "the call reproduced but Kittredge sat 0.0 to 0.7 of a point clear of the line and concentrated on the seasonal lake resorts; three ranges narrower than an independent rebuild; one refutation claim not reproduced; three words of the blocks in no shipped file; one-fact borderline (about 4 of 9). Repaired by a second cut: the resorts removed, the world redrawn on seed 50431, bands with a floor"
+  },
+  "pass2": {
+   "cut": "target.zip sha256 eec3132c67fb5406 (second cut, before the realism edits)",
+   "verdict": "DETERMINISTIC",
+   "disposition": "FIX_NOW, answer blocks only, no pack change",
+   "gate_g": "forecasting, method_or_model_selection; analytical_non_defect; no surface-read dependency; no sole data defect",
+   "gate_h": "domain pass; layers pass; 13 graded items across 7 areas; one thing: none; effort quick 3, careful 7, thorough 12 of 13 (the judge's estimate); one fact about 4 of 13",
+   "finding": "the designated set forced under every cause-aware estimator (Garrow -2.7 to -3.2, Kittredge -2.8 to -3.1, Ostrom -2.6 to -3.45); stump power strong, three separate pieces of work each flipping a different county; ranges on county jobs, changes, the replay and the share kept narrower than its rebuild; two graded items on the author's conventions. Fixed in the answer blocks: every band floored at half a point, the family widened by its choices, the carry to the late batches no longer graded, three components, the conventions and the December 2025 silent employers stated. Not judged again (the one re-judge is spent)"
+  },
+  "report": "none for either pass of architecture 4: on pass 1 only the thread's verdict was taken; on pass 2 the determinism-judge agent that writes the report from the thread's verdict stopped on a model safeguard flag and the main thread did not write it in its place. The verdicts are summarised in the design note's Stage 4 section; re-run the determinism-judge agent to file determinism_check_report.md",
+  "judged_vs_shipped": "the pack differs from the cut pass 2 read in two files only (the request email, four legal names in the account register); generator/figures.json byte-identical across those edits"
  },
  "returned": [
   {
@@ -80,7 +91,7 @@
    "commit": ""
   }
  ],
- "resume": "stage 4: the isolated judge thread is running on target.zip sha256 5f5cda294e7b7b52 (brief and scratch at /tmp/determinism-check-task5-024539/; if the machine was recycled, re-run the determinism-judge agent on the rebuilt cut). When its verdict.md is in, re-invoke determinism-judge to write determinism_check_report.md, then fix every finding in the generator in one pass with the leak reader's realism findings (reword the request so it does not read written for the analyst; give each county's government accounts their own names; drop the doubled 'Co. Co.' suffix) and the staged bound fix in writeup.py (0.3 to 0.9, rounded toward the bound), rebuild, re-run gates.py, re-run the leak reader once (a document changed), write the pre-ship check in the note, then READY",
+ "resume": "READY: the author rewrites prompt.txt in their own words (the Prompt contract in the design note lists what it may not drop or add), re-gates it with voice-check.py --rewrite and leak.py, uploads it with target.zip, generates the two runs, then /triage-runs task5. Open item: determinism_check_report.md is not written (see judge.report)",
  "approved": null,
  "delivered": null,
  "portal": null,
@@ -216,9 +227,9 @@
   "note": "moved from Project Mark unstumped on the Mark portal; carried on here for the Sulfur bar"
  },
  "golden_zip_sha256_16": null,
- "call": "Certify Garrow, Kittredge and Ostrom for the 2027 Community Transition Fund (December 2026 covered jobs an estimated 3.1, 2.7 and 2.9 per cent below December 2025 on the records of 15 February 2027; Bray, the nearest other county, at minus 1.0; the state at plus 0.1)",
+ "call": "Certify Garrow, Kittredge and Ostrom for the 2027 Community Transition Fund: December 2026 covered jobs an estimated 3.0, 3.0 and 3.1 per cent below December 2025 on the records of 15 February 2027; Bray, the nearest other county, at -1.1; the state at +0.1; 473,500 jobs of which 39,900 estimated.",
  "subdomain": "census-register-administrative-data-quality",
- "paper_pair": 47.5,
+ "paper_pair": 37.0,
  "runs": {
   "run1": null,
   "run2": null,
@@ -233,34 +244,32 @@
   "history": []
  },
  "doctrine": "throughout",
- "chain": "R1 the census at the cut-off and the December 2025 total against the published one; R2 the outstanding reports by what their absence means; R3 what employers missing alone keep; R4 this quarter's trouble carried to the late transmissions; R5 the jobs at employers with no account yet; R6 the worksite split of employers whose worksite report is out; R7 each county's December 2026 jobs, reported and estimated; R8 the changes and the designated counties; R9 the replay on December 2025",
+ "chain": "R1 the census at the cut-off and December 2025 against the published total; R2 the outstanding reports by cause and what those outstanding on their own keep; R3 this quarter set against the closed ones; R4 the employers with no account yet; R5 the worksite split of employers whose worksite report is out; R6 each county's December 2026 jobs, reported and estimated; R7 each county's change; R8 the designated counties; R9 the replay on December 2025",
  "effort": {
   "quick": 7.0,
-  "careful": 47.5,
+  "careful": 37.0,
   "thorough": 100.0,
-  "largest_hint": "employers missing alone hold several times their usual share of the housing chain's jobs this quarter: rescues 1 of 9"
+  "largest_hint": "the worksite sentence, or the cause sentence: each rescues 1 of 9; neither rescues the call",
+  "wrong_sets": "5 distinct over 11 shortcuts",
+  "note": "the careful pass is the derivation the stage 4 judge wrote from the pack alone on each cut; the judge's own estimate on the second cut was careful 7 of 13 graded items, so the paper figure is not the claim"
  },
  "prompt_rewritten": false,
- "gates_stage3": {
-  "checks": "101 of 101",
-  "verify": "14 of 14",
-  "byte_identical": "PASS",
-  "figures_check": "PASS, 266 figures",
-  "precut": "exit 0, 85 checks, 1 WARN",
-  "effort": "exit 0, careful 47.5, quick 7.0, largest hint 1 of 9, 4 distinct wrong sets over 13 shortcuts",
-  "voice_check": "PASS (986 characters; WARN shell quota)",
-  "leak_py": "REVIEW, no LEAK (--asof 2027-02-15)",
-  "audit_containers": "exit 0",
-  "heart": "WARN (overuse.weight, repeat.gate_g, repeat.decision), answered in the note",
-  "surface": "exit 0",
-  "date": "2026-11-10"
- },
  "zips": {
-  "target.zip": {
-   "sha256": "5f5cda294e7b7b523a5a3c494387dcdbd765a680d13d81fd9f5ade20dee63623"
-  },
-  "golden.zip": {
-   "sha256": "16d82d088b300d653342150e975c79df618c2e0635d0f40e77fd0f7bd4fcca2e"
-  }
+  "target.zip": "c238169b094ad50afa50fd0ca7f5a2fc1ad093b2b1476e44091e20fddff4518a",
+  "golden.zip": "d811df74a18cd37c8108788cb3fef048f3ee9d344be0934d316a445977d5d78b"
+ },
+ "gates_stage5": {
+  "date": "2026-11-10",
+  "checks": "119 of 119",
+  "verify": "14 of 14 (independent code path)",
+  "two_builds": "byte-identical",
+  "precut": "exit 0 (1 WARN)",
+  "effort": "exit 0 (careful 37.0, hint 1 of 9)",
+  "figures_check": "284 of 284",
+  "voice": "PASS (986 characters; WARN shell quota, the author rewrites)",
+  "leak_py": "REVIEW, no LEAK",
+  "containers": "0 FAIL 0 WARN",
+  "heart": "WARN, answered",
+  "surface": "exit 0"
  }
 }

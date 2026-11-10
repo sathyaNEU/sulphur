@@ -48,9 +48,17 @@ def published_rows(T):
     """the Section's fourth-quarter 2025 county table as it published it: reports posted through May 31, 2026"""
     pk = M.Pack(T["reports"], T["accounts"], T["status"], T["worksites"], P.counties_table(), P.naics_table())
     emp, wg, units = pk.published_rows()
+    whole = {}
+    for col in ("m1", "m2", "m3"):       # whole jobs by county that add to the state's count (largest remainders)
+        x = emp[col]
+        base = {c: int(x[c] // 1) for c in W.CODES}
+        short = int(round(float(x.sum()))) - sum(base.values())
+        for c in sorted(W.CODES, key=lambda c: -(x[c] - base[c]))[:max(0, short)]:
+            base[c] += 1
+        whole[col] = base
     rows = []
     for c in W.CODES:
-        m1, m2, m3 = int(round(emp["m1"][c])), int(round(emp["m2"][c])), int(round(emp["m3"][c]))
+        m1, m2, m3 = whole["m1"][c], whole["m2"][c], whole["m3"][c]
         aww = wg[c] / ((m1 + m2 + m3) / 3.0) / 13.0 if m1 + m2 + m3 else 0
         rows.append((c, W.NAMES[c] + " County", int(units[c]), m1, m2, m3, int(round(wg[c])), int(round(aww))))
     return rows

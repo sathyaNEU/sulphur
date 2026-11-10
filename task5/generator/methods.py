@@ -24,8 +24,8 @@ EXTRACT = TS(W.EXTRACT)
 ENDS = ("INACTIVATED", "CLOSED", "TRANSFERRED")
 SIZE_EDGES = (9, 49)
 
-GOLDEN = dict(classify="mates", thr=0.5, batch_min=3, alone="mature", batch="transport", cells="chain_size",
-              seasonal=True, seasonal_ratio=0.6, twoq="hist", new="hist", ibnr="develop", ibnr_pool="same_quarter",
+GOLDEN = dict(classify="mates", thr=0.5, batch_min=3, habit="all", alone="mature", batch="transport", cells="ss_size",
+              carry="cell", twoq="hist", new="hist", ibnr="develop", ibnr_pool="same_quarter",
               sites="site", version="latest", mature_tol=0.02, mature_drop=None, k_by=None)
 
 
@@ -142,11 +142,11 @@ class Pack:
         return self._cache[k]
 
     # ------------------------------------------------------------------------------------------- the census
-    def view(self, q, asof=None, thr=0.5, batch_min=3, version="latest"):
+    def view(self, q, asof=None, thr=0.5, batch_min=3, version="latest", habit="all"):
         """quarter q's census at asof: every liable account, whether its report is on file, its jobs the quarter
         before, and for an outstanding report its kind (batch, habit, alone, twoq, new)"""
         asof = TS(asof) if asof is not None else CUT[q]
-        k = ("view", q, asof, thr, batch_min, version)
+        k = ("view", q, asof, thr, batch_min, version, habit)
         if k in self._cache:
             return self._cache[k]
         L = self.liable(q, asof)
@@ -164,14 +164,15 @@ class Pack:
         arrived = (n_rep / (n_mem - 1).clip(lower=1)).where(n_mem > 1, 0.0)
         df["mates"] = (n_mem - 1).reindex(L)
         df["arrived"] = arrived.reindex(L)
-        # habitual: every report on file for the four quarters before came after its quarter's cut-off (two at least)
         on = pd.Series(0, index=L)
         late = pd.Series(0, index=L)
         for h in range(max(0, q - 4), q):
             ot = self.latest(h, asof, version)["orig_t"].reindex(L)
             on = on + ot.notna().astype(int)
             late = late + (ot > CUT[h]).astype(int)
-        df["habit"] = (on >= 2) & (late == on)
+        # habitual: every report on file for the four quarters before came after its quarter's cut-off (two at
+        # least); the looser rule takes three of the four
+        df["habit"] = ((on >= 2) & (late == on)) if habit == "all" else (late >= 3)
         pa = pd.Series(np.nan, index=L)
         for h in range(q - 2, -1, -1):
             v = self.latest(h, asof, version)["m3"].reindex(L)
@@ -204,13 +205,13 @@ class Pack:
             self._cache[k] = pd.concat([fin, zero])
         return self._cache[k]
 
-    def mature(self, know, upto, tol=0.02, thr=0.5, batch_min=3):
+    def mature(self, know, upto, tol=0.02, thr=0.5, batch_min=3, habit="all"):
         """the closed quarters whose outstanding employers have (all but tol of their jobs) resolved by know"""
         out = []
         for h in range(4, upto):
             if CUT[h] >= know:
                 continue
-            v = self.view(h, CUT[h], thr, batch_min)
+            v = self.view(h, CUT[h], thr, batch_min, habit=habit)
             o = v[(v["kind"].isin(["alone", "twoq"])) & (v["prior"].fillna(v["prior_any"]) > 0)]
             ev = self.eventual(h, know).reindex(o.index)
             p = o["prior"].fillna(o["prior_any"])
@@ -218,20 +219,25 @@ class Pack:
                 out.append(h)
         return out
 
-    def outcomes(self, quarters, know, thr=0.5, batch_min=3, drop_unresolved=True):
+    def outcomes(self, quarters, know, thr=0.5, batch_min=3, drop_unresolved=True, habit="all"):
         """what the outstanding turned out to have, by kind, over the quarters' cut-off censuses: jobs kept and the
         jobs the quarter before, for alone also by size, chain and filing channel; for new the mean jobs"""
         acc = {}
         rows = []
         for h in quarters:
-            v = self.view(h, CUT[h], thr, batch_min)
+            v = self.view(h, CUT[h], thr, batch_min, habit=habit)
             o = v[~v["rep"]].copy()
             o["ev"] = self.eventual(h, know).reindex(o.index)
             o["p"] = o["prior"].fillna(o["prior_any"])
             o["h"] = h
             rows.append(o[["kind", "p", "ev", "size", "chain", "bkey", "h"]])
         allr = pd.concat(rows) if rows else pd.DataFrame(columns=["kind", "p", "ev", "size", "chain", "bkey", "h"])
-        res = allr[allr["ev"].notna()] if drop_unresolved else allr.assign(ev=allr["ev"].fillna(allr["p"]))
+        if drop_unresolved == "zero":
+            res = allr.assign(ev=allr["ev"].fillna(0.0))
+        elif drop_unresolved:
+            res = allr[allr["ev"].notna()]
+        else:
+            res = allr.assign(ev=allr["ev"].fillna(allr["p"]))
         out = {}
         for kd, g in res.groupby("kind"):
             gp = g[g["p"] > 0]
@@ -247,17 +253,19 @@ class Pack:
             out[("alone", "chain", c)] = g["ev"].sum() / g["p"].sum() if g["p"].sum() > 0 else np.nan
         for nm, g in (("agent", al[al["bkey"].notna()]), ("direct", al[al["bkey"].isna()])):
             out[("alone", "channel", nm)] = g["ev"].sum() / g["p"].sum() if g["p"].sum() > 0 else np.nan
+        g1 = res[res["kind"].isin(["alone", "batch", "habit"]) & (res["p"] > 0)]
+        out["pooled_survive"] = g1.loc[g1["ev"] > 0, "p"].sum() / g1["p"].sum() if len(g1) else np.nan
+        out["pooled_survive_n"] = {int(m): float((g["ev"] > 0).mean()) for m, g in g1.groupby(g1["h"] % 4)}
+        out["pooled_kept"] = {int(m): g["ev"].sum() / g["p"].sum() for m, g in g1.groupby(g1["h"] % 4)}
+        out["pooled_kept_all"] = g1["ev"].sum() / g1["p"].sum() if len(g1) else np.nan
         out["_rows"] = res
         return out
 
     # ------------------------------------------------------------------------------------- carrying the prior
-    def move(self, v, by="county_ss", leave_out=None):
+    def move(self, v, by="county_ss"):
         """the reporting employers' change from the quarter before, by county and supersector (the county where a
-        cell has fewer than ten reporters); leave_out names reporters kept out of it (the seasonal businesses, whose
-        own pattern carries them)"""
+        cell has fewer than ten reporters)"""
         r = v[v["rep"] & (v["prior"] > 0)]
-        if leave_out is not None and len(leave_out):
-            r = r[~r.index.isin(leave_out)]
         cell = r.groupby(["county_code", "ss"]).agg(now=("m3", "sum"), before=("prior", "sum"), n=("m3", "size"))
         cty = r.groupby("county_code").agg(now=("m3", "sum"), before=("prior", "sum"))
         cr = (cty["now"] / cty["before"])
@@ -301,20 +309,15 @@ class Pack:
             return np.where(np.isnan(x), tot, x)
         return f
 
-    def own_seasonal(self, v, ratio=0.6):
-        """an employer's own month three against the quarter before, in the two years before, where both are on file
-        and both run under ratio (a seasonal business)"""
+    def own_change(self, v, lo=0.25, hi=2.5):
+        """an employer's own month three against the quarter before a year earlier, where both are on file and the
+        ratio is neither under lo nor over hi"""
         q, asof = v.attrs["q"], v.attrs["asof"]
-        rs = []
-        for d_, s_ in ((q - 4, q - 5), (q - 8, q - 9)):
-            if s_ < 0:
-                return pd.Series(dtype=float)
-            a, b = self.latest(d_, asof)["m3"], self.latest(s_, asof)["m3"]
-            x = (a.reindex(v.index) / b.reindex(v.index).where(b.reindex(v.index) > 0))
-            rs.append(x)
-        both = pd.concat(rs, axis=1).dropna()
-        both = both[(both.max(axis=1) < ratio)]
-        return both.mean(axis=1)
+        if q - 5 < 0:
+            return pd.Series(dtype=float)
+        a, b = self.latest(q - 4, asof)["m3"].reindex(v.index), self.latest(q - 5, asof)["m3"].reindex(v.index)
+        x = (a / b.where(b > 0)).dropna()
+        return x[(x >= lo) & (x <= hi)]
 
     # -------------------------------------------------------------------------- employers with no account yet
     def unregistered_history(self, q, know, pool="same_quarter"):
@@ -448,34 +451,37 @@ class Pack:
         asof = TS(asof) if asof is not None else CUT[q]
         know = TS(know) if know is not None else asof
         thr, bm = rt["thr"], rt["batch_min"]
-        v = self.view(q, asof, thr, bm, rt["version"]).copy()
+        hb = rt["habit"]
+        v = self.view(q, asof, thr, bm, rt["version"], hb).copy()
         if rt["classify"] == "none":          # every outstanding report with a report the quarter before read alike
             v.loc[v["kind"].isin(["alone", "habit"]), "kind"] = "batch"
         elif rt["classify"] == "own":         # by the employer's own record alone: late as usual, or newly late
             v.loc[v["kind"] == "batch", "kind"] = "alone"
-        qs = self.mature(know, q, rt["mature_tol"], thr, bm)
+        qs = self.mature(know, q, rt["mature_tol"], thr, bm, hb)
         if rt["mature_drop"] == "first":
             qs = qs[1:]
         elif rt["mature_drop"] == "last":
             qs = qs[:-1]
         if rt["alone"] == "mature":
-            oc = self.outcomes(qs, know, thr, bm)
+            oc = self.outcomes(qs, know, thr, bm, habit=hb)
         elif rt["alone"] == "allclosed":      # every earlier quarter, the unresolved left out
-            oc = self.outcomes([h for h in range(4, q) if CUT[h] < know], know, thr, bm)
+            oc = self.outcomes([h for h in range(4, q) if CUT[h] < know], know, thr, bm, habit=hb)
+        elif rt["alone"] == "allzero":        # every earlier quarter, the unresolved taken at nought
+            oc = self.outcomes([h for h in range(4, q) if CUT[h] < know], know, thr, bm, drop_unresolved="zero", habit=hb)
         elif rt["alone"] == "latest":         # the four quarters before, the unresolved left out
-            oc = self.outcomes([h for h in range(max(4, q - 4), q)], know, thr, bm)
+            oc = self.outcomes([h for h in range(max(4, q - 4), q)], know, thr, bm, habit=hb)
         elif rt["alone"] == "assumed_alive":  # the unresolved taken at their earlier jobs
-            oc = self.outcomes([h for h in range(4, q) if CUT[h] < know], know, thr, bm, drop_unresolved=False)
+            oc = self.outcomes([h for h in range(4, q) if CUT[h] < know], know, thr, bm, drop_unresolved=False, habit=hb)
         else:
             raise ValueError(rt["alone"])
-        ocm = oc if rt["alone"] == "mature" else self.outcomes(qs, know, thr, bm)
+        ocm = oc if rt["alone"] == "mature" else self.outcomes(qs, know, thr, bm, habit=hb)
         k_alone = oc.get("alone", np.nan)
         k_twoq = ocm.get("twoq", 0.0) if rt["twoq"] == "hist" else 0.0
         k_batch_hist = ocm.get("batch", np.nan)
         if not np.isfinite(k_twoq):
             k_twoq = 0.0
-        seas = self.own_seasonal(v, rt["seasonal_ratio"]) if rt["seasonal"] else pd.Series(dtype=float)
-        mv = self.move(v, rt.get("move_by", "county_ss"), seas.index if rt.get("move_clean", True) else None)
+        mv = self.move(v, rt.get("move_by", "county_ss"))
+        own = self.own_change(v) if rt["carry"] == "own" else pd.Series(dtype=float)
         out = v[~v["rep"]]
         est = pd.Series(v["m3"].astype(float), index=v.index)
         kind = v["kind"].copy()
@@ -485,8 +491,8 @@ class Pack:
         if ig.any():
             d = out[ig]
             m = pd.Series(mv(d["county_code"].values, d["ss"].values), index=d.index)
-            if rt["seasonal"]:
-                sr = seas.reindex(d.index)
+            if rt["carry"] == "own":          # the employer's own change a year earlier where it has one
+                sr = own.reindex(d.index)
                 m = sr.where(sr.notna(), m)
             if rt["batch"] == "transport":
                 a = pd.Series(self.trouble(v, rt["cells"])(d), index=d.index)
@@ -498,12 +504,23 @@ class Pack:
             elif rt["batch"] == "state_trouble":
                 a = pd.Series(self.trouble(v, "state")(d), index=d.index)
                 e[ig] = p[ig] * (m * (1 - a) + k_alone * a)
+            elif rt["batch"] == "pooled_surv":   # the share of such employers that reported in the end, at the same
+                sv = ocm.get("pooled_survive_n", {})   # quarter's earlier cut-offs, times the reporters' change
+                e[ig] = p[ig] * m * sv.get(q % 4, 1.0)
+            elif rt["batch"] == "pooled_jobs":   # the same, weighted by jobs, over every resolved quarter
+                e[ig] = p[ig] * m * ocm.get("pooled_survive", 1.0)
+            elif rt["batch"] == "pooled_kept":   # what such employers kept at the same quarter's earlier cut-offs
+                pk_ = ocm.get("pooled_kept", {})
+                e[ig] = p[ig] * pk_.get(q % 4, ocm.get("pooled_kept_all", 1.0))
             elif rt["batch"] == "locf":
                 e[ig] = p[ig]
             elif rt["batch"] == "zero_all":
                 e[ig] = 0.0
             else:
                 raise ValueError(rt["batch"])
+            if rt.get("habit_carry") == "reporters":    # an employer that is late every quarter is no sign of trouble
+                hb = (out["kind"] == "habit").reindex(d.index).fillna(False)
+                e.loc[hb[hb].index] = (p.reindex(d.index) * m)[hb]
         al = out["kind"] == "alone"
         if rt["k_by"] in ("size", "chain"):
             col = out["size"] if rt["k_by"] == "size" else out["chain"]
@@ -570,55 +587,60 @@ def designated(ch):
 # the standing family: every choice a careful analyst could defend inside the golden's method
 FAMILY = [
     ("the golden", {}),
-    ("a transmission arrived when a third of its other reports are in", dict(thr=0.34)),
-    ("a transmission arrived when two thirds of its other reports are in", dict(thr=0.67)),
-    ("a transmission as two or more reports in one second", dict(batch_min=2)),
-    ("a transmission as four or more reports in one second", dict(batch_min=4)),
-    ("this quarter's trouble by supersector and size", dict(cells="ss_size")),
+    ("a batch arrived when a third of its other reports are in", dict(thr=0.34)),
+    ("a batch arrived when two thirds of its other reports are in", dict(thr=0.67)),
+    ("a batch as two or more reports in one second", dict(batch_min=2)),
+    ("a batch as four or more reports in one second", dict(batch_min=4)),
+    ("this quarter's trouble by housing industries and size", dict(cells="chain_size")),
     ("this quarter's trouble by supersector", dict(cells="ss")),
     ("this quarter's trouble by three-digit industry and size", dict(cells="naics3_size")),
-    ("this quarter's trouble by housing chain alone", dict(cells="chain")),
-    ("this quarter's trouble by county and housing chain", dict(cells="county_chain")),
+    ("this quarter's trouble by housing industries alone", dict(cells="chain")),
+    ("this quarter's trouble by county and housing industries", dict(cells="county_chain")),
+    ("late batches at the reporting employers' change, this quarter's trouble not carried to them", dict(batch="reporters")),
+    ("the habitually late at the reporting employers' change", dict(habit_carry="reporters")),
     ("the resolved quarters without the earliest", dict(mature_drop="first")),
     ("the resolved quarters without the latest", dict(mature_drop="last")),
     ("resolved at 5 per cent of jobs outstanding", dict(mature_tol=0.05)),
-    ("the missing-alone share by size", dict(k_by="size")),
-    ("the missing-alone share by filing channel", dict(k_by="channel")),
-    ("the missing-alone share by housing chain", dict(k_by="chain")),
-    ("a seasonal business under half its September", dict(seasonal_ratio=0.5)),
-    ("a seasonal business under 0.7 of its September", dict(seasonal_ratio=0.7)),
+    ("the share kept on every closed quarter, the unresolved left out", dict(alone="allclosed")),
+    ("the share kept on every closed quarter, the unresolved at nought", dict(alone="allzero")),
+    ("the share kept by size", dict(k_by="size")),
+    ("the share kept by filing channel", dict(k_by="channel")),
+    ("the share kept by housing industries", dict(k_by="chain")),
+    ("habitually late as three of the last four reports after the cut-off", dict(habit="3of4")),
+    ("each late employer by its own change a year earlier", dict(carry="own")),
     ("a new account at this quarter's reporting new employers", dict(new="reporters")),
     ("two quarters out at nought", dict(twoq="zero")),
     ("the reporters' change in cells of five or more", dict(move_by="county_ss5")),
     ("the reporters' change in cells of twenty or more", dict(move_by="county_ss20")),
+    ("the reporters' change by supersector statewide", dict(move_by="ss")),
+    ("unregistered employers developed on every earlier cut-off", dict(ibnr_pool="all")),
+    ("last December's worksite split", dict(sites="yearago")),
 ]
 # variants a named fact in the files rules out (checks.py asserts each fact); they sit outside the family
 RULED_OUT = [
-    ("unregistered employers from every earlier cut-off", dict(ibnr_pool="all")),
     ("unregistered employers shared out by each county's accounts", dict(ibnr_by_county=False)),
-    ("the reporters' change by supersector statewide", dict(move_by="ss")),
     ("the reporters' change by county alone", dict(move_by="county")),
 ]
-# the shortcuts, each a complete estimate that stops short somewhere
+# the hurried analyses, each a complete estimate that stops short somewhere
+POOLED = dict(classify="none", batch="pooled_surv", twoq="zero")
 SHORTCUTS = [
     ("the reports received alone", dict(classify="none", batch="zero_all", ibnr="none", sites="latest")),
     ("September carried for every report outstanding, accounts on the register, the latest worksite reports",
      dict(classify="none", batch="locf", ibnr="none", sites="latest")),
-    ("the reporting employers' change for every report outstanding, accounts on the register, the latest worksite reports",
-     dict(classify="none", batch="reporters", ibnr="none", sites="latest")),
-    ("outstanding reports read by cause; late transmissions at the reporters' change; accounts on the register; the latest worksite reports",
-     dict(batch="reporters", ibnr="none", sites="latest")),
-    ("the same with last year's unregistered jobs carried as they were",
-     dict(batch="reporters", ibnr="level", sites="latest")),
-    ("the full estimate without the employers that have no account yet", dict(ibnr="none")),
+    ("every report outstanding at the reporters' change by supersector and one survival share, unregistered employers "
+     "developed, the latest worksite reports", dict(POOLED, move_by="ss", ibnr_pool="all", sites="latest")),
+    ("every report outstanding at one survival share, the rest as in the estimate", dict(POOLED)),
+    ("every report outstanding at what such reports kept at earlier fourth-quarter cut-offs, the rest as in the estimate",
+     dict(classify="none", batch="pooled_kept", twoq="zero")),
+    ("every report outstanding at the reporters' change, the rest as in the estimate", dict(classify="none", batch="reporters")),
     ("the full estimate with the latest worksite reports' split", dict(sites="latest")),
-    ("the full estimate with last December's worksite split", dict(sites="yearago")),
-    ("the full estimate with late transmissions at the reporters' change", dict(batch="reporters")),
-    ("the full estimate with the missing-alone share from every earlier quarter", dict(alone="allclosed")),
-    ("the reporting employers' change for every report outstanding, the rest as in the estimate",
-     dict(classify="none", batch="reporters")),
+    ("the full estimate without the employers that have no account yet", dict(ibnr="none")),
+    ("the full estimate with last year's unregistered jobs carried as they were", dict(ibnr="level")),
     ("unregistered employers at the same share of jobs as at earlier cut-offs", dict(ibnr="ratio")),
     ("unregistered employers at the size of the new employers already registered", dict(ibnr="regsize")),
 ]
+SHORTCUT_KEYS = ["reports", "locf", "careful", "pooled_surv", "pooled_kept", "pooled_rep", "latest", "no_unreg", "level",
+                 "ratio", "regsize"]
+assert len(SHORTCUT_KEYS) == len(SHORTCUTS)
 QUICK = dict(classify="none", batch="locf", ibnr="none", sites="latest")
-CAREFUL = dict(batch="reporters", ibnr="level", sites="latest")
+CAREFUL = dict(POOLED, move_by="ss", ibnr_pool="all", sites="latest")

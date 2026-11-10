@@ -270,11 +270,9 @@ def write_agreement(path):
 # ------------------------------------------------------------------------------------------------ the request
 REQUEST_BODY = """Danielle,
 
-The Board meets on Thursday, March 4 to designate counties for the fund's first year. Under section 5 of the Act the Commissioner's certification is due by March 1: each county's covered employment for December 2026 and December 2025 and the change between them, with the employer list under 5(d).
+The Board meets on Thursday, March 4 to designate counties for the fund's first year. Under section 5 of the Act the Commissioner's certification is due by March 1, and the Board's packet goes out on February 25.
 
-The Board will also want the two things 5(c) asks for in front of it, since this is the first time anyone has had to stand behind December numbers this early: how December 2025 now compares with what the Department published in June, and what you would have told us a year ago.
-
-A chart of the changes against the 2.0 percent line would help the discussion, and a workbook is fine for the figures.
+Two members asked at the December meeting how firm a December figure can be in the middle of February, when the Department's own county table for a quarter does not come out until June. I told them the Department's answer would be in the packet.
 
 If anything in the timetable is a problem, let me know this month.
 
@@ -284,7 +282,6 @@ Matt
 Matthew Cox
 Administrator, Community Transition Fund
 Franklin Department of Commerce
-(612) 498-3317
 """
 
 

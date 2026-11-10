@@ -174,12 +174,6 @@ def structure(seed=W.SEED):
     w.pred = np.array([r.get("pred", -1) for r in rows])
     w.chain = np.isin(w.naics, list(W.HOUSING_CHAIN)) & ~w.gov
 
-    # seasonal lake resorts (long-standing businesses)
-    rse = rng("season", seed)
-    lake = np.isin(w.county, ["013", "023"]) & np.isin(w.naics, list(W.LAKE_SEASONAL)) & ~w.gov & (w.cls <= 3) \
-        & ~w.birth & (w.pred < 0)
-    w.seasonal = lake & (rse.random(n) < 0.55)
-
     # channels: twelve statewide payroll bureaus; local accountants in every county
     bureaus = 12
     w.bureaus = bureaus
@@ -203,8 +197,6 @@ def structure(seed=W.SEED):
         c = cinfo[w.county[i]]
         pa = p_agent_by_cls[w.cls[i]] * c[4] / 0.60
         pb = c[5]
-        if w.seasonal[i]:
-            pa, pb = 0.80, 0.85
         if rc.random() < pa:
             if rc.random() < pb:
                 w.agent[i] = int(rc.choice(bureaus, p=bw / bw.sum()))
@@ -220,7 +212,7 @@ def structure(seed=W.SEED):
     w.habitual &= ~w.birth                      # a new employer files on time until it has a record to keep
     for j in np.where(w.pred >= 0)[0]:
         i = w.pred[j]
-        w.agent[j], w.paper[j], w.habitual[j], w.seasonal[j] = w.agent[i], w.paper[i], False, w.seasonal[i]
+        w.agent[j], w.paper[j], w.habitual[j] = w.agent[i], w.paper[i], False
     # year end: some agents are swamped every January (wage statements, annual returns) and send late most years
     busy = np.zeros(na, bool)
     busy[rc.choice(bureaus, 5, replace=False)] = True
@@ -269,7 +261,7 @@ def _sites(w, r):
         project = ss == "1012" or w.naics[i] in PROJECT_NAICS
         k = int(r.integers(2, 5))
         others = [c for c in W.CODES if c != home]
-        wt = np.array([(size[c] ** 0.5) * (5.5 if (c in W.LAKES and trade) else (2.5 if (c in W.NORTH and ss == "1026") else 1.0))
+        wt = np.array([(size[c] ** 0.5) * (W.LAKE_SITES.get(c, 1.0) if trade else (2.5 if (c in W.NORTH and ss == "1026") else 1.0))
                        for c in others])
         extra = list(r.choice(others, k - 1, replace=False, p=wt / wt.sum()))
         shares = np.sort(r.dirichlet(np.ones(k) * 2.5))[::-1]
@@ -334,7 +326,6 @@ def _paths(w, r, offsets):
     lvl = np.zeros((n, W.NM))
     x = w.emp0.copy()
     sf = np.array([W.SUPERSECTORS[s][1] for s in w.ss])                 # n x 12
-    summer = np.array([0.14, 0.14, 0.16, 0.22, 0.62, 0.95, 1.00, 1.00, 0.86, 0.38, 0.16, 0.13])
     for m in range(W.NM):
         drift = (t + (off if m >= 36 else 0.0)) / 12 + r.normal(0, 0.012, n)
         if m >= 36:
@@ -343,12 +334,9 @@ def _paths(w, r, offsets):
             slide = -(0.0035 + 0.0008 * (m - 36))
             drift = drift + np.where(w.chain, slide * np.where(w.cls >= 4, 0.55, 1.0), 0.0)
         x = x * np.exp(drift - 0.012 ** 2 / 2)
-        s = sf[:, m % 12]
-        s = np.where(w.seasonal, summer[m % 12] / 0.62, s)
-        lvl[:, m] = x * s
+        lvl[:, m] = x * sf[:, m % 12]
     noise = r.normal(0, 1, (n, W.NM)) * np.sqrt(np.maximum(lvl, 1)) * 0.10
     jobs = np.maximum(0, np.round(lvl + noise))
-    jobs = np.where(w.seasonal[:, None], np.maximum(0, np.round(lvl)), jobs)
     for j in np.where(w.pred >= 0)[0]:
         i = w.pred[j]
         m0 = w.start_m[j]
@@ -356,9 +344,9 @@ def _paths(w, r, offsets):
         jobs[i, m0:] = 0
     alive = np.arange(W.NM)[None, :] >= w.start_m[:, None]
     jobs = np.where(alive, jobs, 0)
-    for i in range(n):                      # every non-seasonal employer has at least one worker in its first month
+    for i in range(n):                      # every employer has at least one worker in its first month
         m0 = w.start_m[i]
-        if jobs[i, m0] == 0 and not w.seasonal[i]:
+        if jobs[i, m0] == 0:
             jobs[i, m0] = 1
     w.jobs_healthy = jobs.astype(float)
 
@@ -381,8 +369,8 @@ def _distress(w, r, rb):
         live = (w.start_m <= m0) & (w.distress_q < 0) & (w.orderly_q < 0) & ((w.xfer_q < 0) | (q < w.xfer_q)) & ~w.gov
         h = BASE_HAZARD[w.cls]
         local = rb.gamma(70.0, 1 / 70.0, len(W.CODES))        # the downturn bites a little differently county to county
-        if q >= 12:
-            h = np.where(w.chain, h * W.BUST_HAZARD[q - 12] * local[ck], h)
+        if q >= 12:      # the downturn adds to a housing employer's usual risk, the small and the mid-sized alike
+            h = np.where(w.chain, h + W.BUST_HAZARD[q - 12] * np.array(W.BUST_SIZE)[w.cls] * local[ck], h)
         if q >= 14:
             h = np.where(w.cls >= 5, 0.0, h)
         # every employer's draws for the quarter, so a hazard tuned for one group moves no other employer's outcome

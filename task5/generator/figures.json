@@ -1,468 +1,515 @@
 {
- "amend_jobs": 1,
- "amend_jobs3": 1,
+ "amend_jobs": -7,
+ "amend_jobs3": -7,
  "amend_n": 29,
  "bands": {
   "change": {
    "Bray": [
-    -1.1,
-    -0.8
+    -1.6,
+    -0.5
    ],
    "Calder": [
-    1.5,
-    1.8
+    1.3,
+    2.4
    ],
    "Corliss": [
-    1.0,
-    1.3
+    -0.2,
+    0.9
    ],
    "Fenwick": [
-    0.3,
-    0.6
+    0.1,
+    1.2
    ],
    "Garrow": [
-    -3.2,
-    -2.9
+    -3.5,
+    -2.4
    ],
    "Hadley": [
-    1.0,
-    1.3
+    0.5,
+    1.6
    ],
    "Kittredge": [
-    -2.9,
+    -3.6,
     -2.5
    ],
    "Linden": [
-    0.7,
-    1.0
+    0.4,
+    1.5
    ],
    "Merritt": [
-    -1.0,
-    -0.7
+    -0.9,
+    0.2
    ],
    "Ostrom": [
-    -3.0,
-    -2.7
+    -3.6,
+    -2.5
    ],
    "Pell": [
-    0.6,
-    0.9
+    -0.3,
+    0.8
    ],
    "Sayre": [
     0.9,
-    1.2
+    2.0
    ],
    "Talcott": [
-    0.6,
-    0.9
+    0.2,
+    1.3
    ],
    "Whitcomb": [
-    0.5,
-    0.8
+    -0.2,
+    0.9
    ]
   },
   "county_jobs": {
    "Bray": [
-    21110,
-    21160
+    22560,
+    22800
    ],
    "Calder": [
-    101430,
-    101620
+    104890,
+    105930
    ],
    "Corliss": [
-    16350,
-    16400
+    17600,
+    17790
    ],
    "Fenwick": [
-    16540,
-    16580
+    18650,
+    18850
    ],
    "Garrow": [
-    35600,
-    35690
+    33650,
+    34010
    ],
    "Hadley": [
-    27440,
-    27520
+    30300,
+    30610
    ],
    "Kittredge": [
-    11500,
-    11560
+    14140,
+    14300
    ],
    "Linden": [
-    48270,
-    48380
+    50670,
+    51180
    ],
    "Merritt": [
-    58450,
-    58550
+    62230,
+    62860
    ],
    "Ostrom": [
-    23660,
-    23720
+    25360,
+    25640
    ],
    "Pell": [
-    36500,
-    36560
+    29470,
+    29770
    ],
    "Sayre": [
-    9290,
-    9330
+    8960,
+    9060
    ],
    "Talcott": [
-    12770,
-    12820
+    13980,
+    14130
    ],
    "Whitcomb": [
-    36890,
-    36970
+    38590,
+    38980
    ]
   },
   "estimated": {
    "Bray": [
-    1620,
-    1670
+    1880,
+    2110
    ],
    "Calder": [
-    13190,
-    13380
+    9740,
+    10780
    ],
    "Corliss": [
-    1300,
-    1350
+    1380,
+    1560
    ],
    "Fenwick": [
-    1210,
-    1260
+    1610,
+    1810
    ],
    "Garrow": [
-    2540,
-    2630
+    2190,
+    2550
    ],
    "Hadley": [
-    4230,
-    4310
+    3040,
+    3350
    ],
    "Kittredge": [
-    1430,
-    1490
+    920,
+    1080
    ],
    "Linden": [
-    5730,
-    5840
+    3170,
+    3680
    ],
    "Merritt": [
-    4980,
-    5080
+    3540,
+    4180
    ],
    "Ostrom": [
-    1670,
-    1740
+    1400,
+    1670
    ],
    "Pell": [
-    3030,
-    3090
+    2990,
+    3290
    ],
    "Sayre": [
-    480,
-    520
+    800,
+    900
    ],
    "Talcott": [
-    2110,
-    2150
+    1330,
+    1470
    ],
    "Whitcomb": [
-    4230,
-    4320
+    3470,
+    3870
    ]
   },
   "k_alone": [
-   0.27,
-   0.32
+   0.24,
+   0.37
   ],
-  "kept_chain": [
-   0.85,
-   0.88
+  "kept_constr": [
+   0.77,
+   0.86
   ],
   "latest_minus_site": {
    "Bray": [
-    -30,
+    -60,
     10
    ],
    "Calder": [
-    -190,
-    -150
+    -160,
+    -90
    ],
    "Corliss": [
-    -30,
-    10
-   ],
-   "Fenwick": [
-    -10,
+    -40,
     30
    ],
+   "Fenwick": [
+    -70,
+    0
+   ],
    "Garrow": [
-    -20,
-    20
+    -30,
+    40
    ],
    "Hadley": [
     -50,
-    -10
+    20
    ],
    "Kittredge": [
-    80,
-    120
+    190,
+    330
    ],
    "Linden": [
-    -180,
-    -140
+    -140,
+    -70
    ],
    "Merritt": [
-    -70,
-    -30
+    -90,
+    -20
    ],
    "Ostrom": [
-    -50,
-    -10
+    -130,
+    -60
    ],
    "Pell": [
-    -40,
+    -70,
     0
    ],
    "Sayre": [
-    140,
-    180
+    40,
+    110
    ],
    "Talcott": [
-    170,
-    210
+    100,
+    190
    ],
    "Whitcomb": [
-    0,
-    40
+    -40,
+    30
    ]
   },
   "n_alone": [
-   820,
-   870
+   750,
+   880
+  ],
+  "n_alone_habit": [
+   1140,
+   1200
   ],
   "n_batch": [
-   4740,
-   4950
+   3900,
+   4080
   ],
   "n_habit": [
-   320,
-   350
+   300,
+   420
   ],
   "n_new": [
-   80,
-   110
+   60,
+   90
   ],
   "n_twoq": [
-   970,
-   1020
+   790,
+   830
   ],
   "replay_mean_abs": [
-   0.3,
-   0.45
+   0.0,
+   0.35
   ],
   "replay_state_diff": [
-   -0.2,
-   0.0
-  ],
-  "state_change": [
-   0.0,
+   -0.3,
    0.2
   ],
+  "state_change": [
+   -0.1,
+   0.4
+  ],
   "state_estimated": [
-   47900,
-   48600
+   38900,
+   40900
   ],
   "state_total": [
-   456000,
-   456700
+   472500,
+   474500
   ],
   "transport_jobs": [
    250,
-   600
+   750
+  ],
+  "trouble_constr": [
+   7.4,
+   8.4
   ],
   "unreg_jobs": [
-   2300,
+   2000,
    2600
   ],
   "unreg_n": [
-   560,
-   620
+   500,
+   630
   ]
  },
- "base_state": 455900,
+ "base_silent_jobs": 230,
+ "base_silent_n": 36,
+ "base_state": 472900,
  "c_own": 1.3,
  "c_own3": 1.3,
+ "careful": {
+  "changes": {
+   "Bray": -0.3,
+   "Calder": 1.9,
+   "Corliss": 0.4,
+   "Fenwick": 0.8,
+   "Garrow": -1.9,
+   "Hadley": 1.0,
+   "Kittredge": -0.9,
+   "Linden": 0.8,
+   "Merritt": -0.1,
+   "Ostrom": -2.6,
+   "Pell": 0.4,
+   "Sayre": 2.2,
+   "Talcott": 2.4,
+   "Whitcomb": 0.8
+  },
+  "designated": [
+   "Ostrom"
+  ]
+ },
+ "careful_garrow": -1.9,
  "careful_kittredge": -0.9,
- "chg3_009": -3.1,
- "chg3_013": -2.7,
- "chg3_019": -2.9,
- "chg_009": 3.1,
- "chg_013": 2.7,
- "chg_019": 2.9,
- "chg_near": -1.0,
- "chg_near3": -1.0,
+ "chg3_009": -3.0,
+ "chg3_013": -3.0,
+ "chg3_019": -3.1,
+ "chg_009": 3.0,
+ "chg_013": 3.0,
+ "chg_019": 3.1,
+ "chg_near": -1.1,
+ "chg_near3": -1.1,
  "chg_state": 0.1,
- "chgs_001": -1.0,
- "chgs_003": 1.6,
- "chgs_005": 1.1,
- "chgs_007": 0.5,
- "chgs_009": -3.1,
+ "chgs_001": -1.1,
+ "chgs_003": 1.9,
+ "chgs_005": 0.4,
+ "chgs_007": 0.6,
+ "chgs_009": -3.0,
  "chgs_011": 1.1,
- "chgs_013": -2.7,
- "chgs_015": 0.8,
- "chgs_017": -0.9,
- "chgs_019": -2.9,
- "chgs_021": 0.8,
- "chgs_023": 0.7,
- "chgs_025": 0.6,
- "chgs_027": 1.1,
+ "chgs_013": -3.0,
+ "chgs_015": 0.9,
+ "chgs_017": -0.4,
+ "chgs_019": -3.1,
+ "chgs_021": 0.2,
+ "chgs_023": 0.8,
+ "chgs_025": 0.3,
+ "chgs_027": 1.4,
  "constants": {
   "arrived_share": 0.5,
+  "batch_min": 3,
   "cutoff": "15 February 2027",
   "published_cut": "31 May 2026",
   "replay_cutoff": "15 February 2026",
-  "seasonal_ratio": 0.6,
-  "threshold": 2.0,
-  "transmission_min": 3
+  "threshold": 2.0
  },
- "csv_rows": 28725,
- "est_001": 1640,
- "est_003": 13260,
- "est_005": 1320,
- "est_007": 1240,
- "est_009": 2580,
- "est_011": 4260,
- "est_013": 1460,
- "est_015": 5770,
- "est_017": 5030,
- "est_019": 1700,
- "est_021": 3050,
- "est_023": 2130,
- "est_025": 4270,
- "est_027": 500,
- "est_state": 48200,
- "j_own": 4.5,
- "j_own3": 4.5,
- "k_allclosed": 0.36,
- "k_alone": 0.3,
- "k_alone2": 0.3,
- "k_alone3": 0.3,
- "k_alone4": 0.3,
- "k_alone5": 0.3,
- "k_batch_hist": 0.95,
- "k_batch_hist3": 0.95,
+ "csv_rows": 28708,
+ "est_001": 2000,
+ "est_003": 10260,
+ "est_005": 1470,
+ "est_007": 1710,
+ "est_009": 2370,
+ "est_011": 3190,
+ "est_013": 1000,
+ "est_015": 3430,
+ "est_017": 3860,
+ "est_019": 1530,
+ "est_021": 3140,
+ "est_023": 1400,
+ "est_025": 3670,
+ "est_027": 850,
+ "est_state": 39900,
+ "j_own": 4.3,
+ "j_own3": 4.3,
+ "k_allclosed": 0.35,
+ "k_allzero": 0.27,
+ "k_alone": 0.29,
+ "k_alone2": 0.29,
+ "k_alone3": 0.29,
+ "k_alone4": 0.29,
+ "k_alone5": 0.29,
+ "k_batch_hist": 0.96,
+ "k_batch_hist3": 0.96,
+ "k_batch_hist5": 0.96,
  "k_twoq": 0.001,
- "kept_chain": 0.86,
- "kept_chain_reporters": 0.89,
- "late_jobs": 202,
- "late_jobs3": 202,
- "late_n": 40,
- "latest_kit": -1.9,
- "latest_kit2": -1.9,
- "latest_tal": 2.2,
- "liable": 27897,
- "liable3": 27897,
- "lm_cal": 170,
- "lm_kit": 100,
- "lm_lin": 160,
- "lm_say": 160,
- "lm_tal": 190,
- "margin_nearest": 0.9,
- "n_alone": 846,
- "n_alone2": 846,
- "n_alone3": 846,
- "n_batch": 4844,
- "n_batch2": 4844,
- "n_batch3": 4844,
- "n_habit": 334,
- "n_habit3": 334,
- "n_new": 97,
- "n_new3": 97,
- "n_twoq": 999,
- "n_twoq3": 999,
- "new_jobs": 516,
- "new_jobs3": 516,
- "new_n": 157,
+ "kept_constr": 0.79,
+ "kept_constr_reporters": 0.84,
+ "late_jobs": 173,
+ "late_jobs3": 173,
+ "late_n": 46,
+ "latest_kit": -1.2,
+ "latest_kit2": -1.2,
+ "latest_tal": 1.8,
+ "liable": 27796,
+ "liable3": 27796,
+ "lm_003": 120,
+ "lm_013": 260,
+ "lm_015": 110,
+ "lm_019": 90,
+ "lm_023": 150,
+ "lm_027": 80,
+ "margin_nearest": 0.8,
+ "n_alone": 815,
+ "n_alone3": 815,
+ "n_alone4": 815,
+ "n_alone5": 815,
+ "n_alone_2025": 309,
+ "n_alone_2025b": 309,
+ "n_alone_habit": 1170,
+ "n_alone_habit2": 1170,
+ "n_batch": 3992,
+ "n_batch2": 3992,
+ "n_batch3": 3992,
+ "n_habit": 355,
+ "n_habit3": 355,
+ "n_new": 79,
+ "n_new3": 79,
+ "n_twoq": 812,
+ "n_twoq3": 812,
+ "new_jobs": 502,
+ "new_jobs3": 502,
+ "new_n": 160,
  "noB_max": 0.8,
  "noB_max2": 0.8,
  "noB_min": 0.3,
  "noB_min2": 0.3,
- "noB_state": -0.5,
- "now": 455880,
- "now3": 455880,
- "outstanding": 7120,
- "outstanding2": 7120,
- "outstanding3": 7120,
- "published": 455161,
- "published3": 455161,
+ "noB_state": -0.4,
+ "now": 472867,
+ "now3": 472867,
+ "outstanding": 6053,
+ "outstanding2": 6053,
+ "outstanding3": 6053,
+ "outstanding_b": 6053,
+ "pooled_garrow_hi": -1.2,
+ "pooled_garrow_lo": -1.9,
+ "pooled_survive": 0.92,
+ "published": 472199,
+ "published3": 472199,
  "r1_census_and_reconciliation": {
-  "accounts_since": 516,
-  "amendments": 1,
-  "late_reports": 202,
-  "liable": 27897,
-  "now": 455880,
-  "outstanding": 7120,
-  "published": 455161,
-  "received": 20777
+  "accounts_since": 502,
+  "amendments": -7,
+  "late_reports": 173,
+  "liable": 27796,
+  "now": 472867,
+  "outstanding": 6053,
+  "published": 472199,
+  "received": 21743
  },
- "r2_outstanding_by_kind": {
-  "late_every_quarter": 334,
-  "late_transmission": 4844,
-  "missing_alone": 846,
-  "missing_alone_keep": 0.3,
-  "new_account": 97,
-  "two_quarters": 999
+ "r2_outstanding_by_cause": {
+  "batch_not_arrived": 3992,
+  "late_every_quarter": 355,
+  "new_account": 79,
+  "on_its_own": 815,
+  "on_its_own_keep": 0.29,
+  "two_quarters": 812
  },
- "r3_late_transmission_jobs": 530,
+ "r3_this_quarter": {
+  "a_year_earlier": 0.8,
+  "construction_share": 7.9
+ },
  "r4_unregistered": {
   "employers": 590,
-  "jobs": 2500
+  "jobs": 2400
  },
  "r5_worksite_split": {
-  "Calder": -170,
-  "Kittredge": 100,
-  "Linden": -160,
-  "Sayre": 160,
-  "Talcott": 190
+  "Calder": -120,
+  "Kittredge": 260,
+  "Linden": -110,
+  "Ostrom": -90,
+  "Sayre": 80,
+  "Talcott": 150
  },
  "r6_county_jobs": {
-  "Bray": 21130,
-  "Calder": 101500,
-  "Corliss": 16370,
-  "Fenwick": 16560,
-  "Garrow": 35640,
-  "Hadley": 27470,
-  "Kittredge": 11530,
-  "Linden": 48310,
-  "Merritt": 58490,
-  "Ostrom": 23690,
-  "Pell": 36520,
-  "Sayre": 9310,
-  "Talcott": 12790,
-  "Whitcomb": 36920
+  "Bray": 22680,
+  "Calder": 105410,
+  "Corliss": 17690,
+  "Fenwick": 18750,
+  "Garrow": 33830,
+  "Hadley": 30450,
+  "Kittredge": 14220,
+  "Linden": 50930,
+  "Merritt": 62550,
+  "Ostrom": 25500,
+  "Pell": 29620,
+  "Sayre": 9010,
+  "Talcott": 14050,
+  "Whitcomb": 38790
  },
  "r7_changes": {
-  "Bray": -1.0,
-  "Calder": 1.6,
-  "Corliss": 1.1,
-  "Fenwick": 0.5,
-  "Garrow": -3.1,
+  "Bray": -1.1,
+  "Calder": 1.9,
+  "Corliss": 0.4,
+  "Fenwick": 0.6,
+  "Garrow": -3.0,
   "Hadley": 1.1,
-  "Kittredge": -2.7,
-  "Linden": 0.8,
-  "Merritt": -0.9,
-  "Ostrom": -2.9,
-  "Pell": 0.8,
-  "Sayre": 1.1,
-  "Talcott": 0.7,
-  "Whitcomb": 0.6
+  "Kittredge": -3.0,
+  "Linden": 0.9,
+  "Merritt": -0.4,
+  "Ostrom": -3.1,
+  "Pell": 0.2,
+  "Sayre": 1.4,
+  "Talcott": 0.8,
+  "Whitcomb": 0.3
  },
  "r8_designated": [
   "Garrow",
@@ -470,37 +517,37 @@
   "Ostrom"
  ],
  "r9_replay": {
-  "mean_county_difference": 0.37,
-  "state_difference": -0.12
+  "mean_county_difference": 0.16,
+  "state_difference": -0.01
  },
- "received": 20777,
- "received3": 20777,
- "recon_diff": 719,
- "recon_diff3": 719,
- "reg_own": 283,
- "reg_own3": 283,
- "replay_diff": -0.12,
- "replay_diff3": -0.12,
- "replay_mean_abs": 0.37,
- "replay_mean_abs3": 0.37,
- "replay_state": 455400,
+ "received": 21743,
+ "received3": 21743,
+ "recon_diff": 668,
+ "recon_diff3": 668,
+ "reg_own": 309,
+ "reg_own3": 309,
+ "replay_diff": -0.01,
+ "replay_diff3": -0.01,
+ "replay_mean_abs": 0.16,
+ "replay_mean_abs3": 0.16,
+ "replay_state": 472800,
  "routes": [
   {
    "changes": {
-    "Bray": -8.7,
-    "Calder": -11.8,
-    "Corliss": -7.1,
-    "Fenwick": -6.9,
-    "Garrow": -10.1,
-    "Hadley": -14.7,
-    "Kittredge": -14.3,
-    "Linden": -11.5,
-    "Merritt": -9.5,
-    "Ostrom": -10.0,
-    "Pell": -7.7,
-    "Sayre": -2.6,
-    "Talcott": -14.8,
-    "Whitcomb": -11.0
+    "Bray": -9.8,
+    "Calder": -8.1,
+    "Corliss": -8.0,
+    "Fenwick": -8.7,
+    "Garrow": -9.8,
+    "Hadley": -9.6,
+    "Kittredge": -8.2,
+    "Linden": -6.1,
+    "Merritt": -6.6,
+    "Ostrom": -9.2,
+    "Pell": -10.5,
+    "Sayre": -7.4,
+    "Talcott": -8.2,
+    "Whitcomb": -9.2
    },
    "designated": [
     "Bray",
@@ -518,219 +565,249 @@
     "Whitcomb",
     "Sayre"
    ],
+   "key": "reports",
    "name": "the reports received alone",
-   "state_change": -10.5
+   "state_change": -8.3
   },
   {
    "changes": {
-    "Bray": -0.7,
-    "Calder": 1.9,
+    "Bray": 0.8,
+    "Calder": 2.6,
     "Corliss": 1.3,
-    "Fenwick": 0.9,
-    "Garrow": -1.4,
-    "Hadley": 1.9,
-    "Kittredge": 1.0,
-    "Linden": 0.9,
-    "Merritt": -0.4,
-    "Ostrom": -2.1,
-    "Pell": 1.0,
-    "Sayre": 3.9,
-    "Talcott": 4.9,
-    "Whitcomb": 1.2
+    "Fenwick": 1.5,
+    "Garrow": -1.0,
+    "Hadley": 2.0,
+    "Kittredge": -0.1,
+    "Linden": 1.2,
+    "Merritt": 0.2,
+    "Ostrom": -2.0,
+    "Pell": 0.9,
+    "Sayre": 2.9,
+    "Talcott": 3.6,
+    "Whitcomb": 1.7
    },
    "designated": [
     "Ostrom"
    ],
+   "key": "locf",
    "name": "September carried for every report outstanding, accounts on the register, the latest worksite reports",
-   "state_change": 0.8
+   "state_change": 1.2
   },
   {
    "changes": {
-    "Bray": -1.0,
-    "Calder": 1.5,
-    "Corliss": 0.9,
-    "Fenwick": 0.6,
-    "Garrow": -2.2,
-    "Hadley": 1.4,
-    "Kittredge": -1.3,
-    "Linden": 0.4,
-    "Merritt": -0.7,
-    "Ostrom": -2.4,
-    "Pell": 0.7,
-    "Sayre": 3.6,
-    "Talcott": 2.2,
-    "Whitcomb": 0.7
-   },
-   "designated": [
-    "Garrow",
-    "Ostrom"
-   ],
-   "name": "the reporting employers' change for every report outstanding, accounts on the register, the latest worksite reports",
-   "state_change": 0.3
-  },
-  {
-   "changes": {
-    "Bray": -1.5,
-    "Calder": 1.0,
-    "Corliss": 0.3,
-    "Fenwick": 0.0,
-    "Garrow": -3.3,
-    "Hadley": 0.7,
-    "Kittredge": -2.2,
-    "Linden": 0.0,
-    "Merritt": -1.3,
-    "Ostrom": -3.3,
-    "Pell": 0.3,
-    "Sayre": 2.6,
-    "Talcott": 1.8,
-    "Whitcomb": 0.2
-   },
-   "designated": [
-    "Garrow",
-    "Kittredge",
-    "Ostrom"
-   ],
-   "name": "outstanding reports read by cause; late transmissions at the reporters' change; accounts on the register; the latest worksite reports",
-   "state_change": -0.3
-  },
-  {
-   "changes": {
-    "Bray": -0.9,
-    "Calder": 1.8,
-    "Corliss": 0.9,
-    "Fenwick": 1.0,
-    "Garrow": -2.6,
-    "Hadley": 1.5,
+    "Bray": -0.3,
+    "Calder": 1.9,
+    "Corliss": 0.4,
+    "Fenwick": 0.8,
+    "Garrow": -1.9,
+    "Hadley": 1.0,
     "Kittredge": -0.9,
     "Linden": 0.8,
-    "Merritt": -0.6,
+    "Merritt": -0.1,
     "Ostrom": -2.6,
-    "Pell": 0.9,
-    "Sayre": 3.3,
-    "Talcott": 2.8,
+    "Pell": 0.4,
+    "Sayre": 2.2,
+    "Talcott": 2.4,
+    "Whitcomb": 0.8
+   },
+   "designated": [
+    "Ostrom"
+   ],
+   "key": "careful",
+   "name": "every report outstanding at the reporters' change by supersector and one survival share, unregistered employers developed, the latest worksite reports",
+   "state_change": 0.5
+  },
+  {
+   "changes": {
+    "Bray": -0.2,
+    "Calder": 2.0,
+    "Corliss": 0.4,
+    "Fenwick": 1.1,
+    "Garrow": -1.9,
+    "Hadley": 1.1,
+    "Kittredge": -2.8,
+    "Linden": 1.1,
+    "Merritt": 0.0,
+    "Ostrom": -2.3,
+    "Pell": 0.5,
+    "Sayre": 1.5,
+    "Talcott": 1.5,
     "Whitcomb": 0.9
    },
    "designated": [
-    "Garrow",
-    "Ostrom"
-   ],
-   "name": "the same with last year's unregistered jobs carried as they were",
-   "state_change": 0.4
-  },
-  {
-   "changes": {
-    "Bray": -1.5,
-    "Calder": 1.0,
-    "Corliss": 0.3,
-    "Fenwick": -0.1,
-    "Garrow": -3.4,
-    "Hadley": 0.6,
-    "Kittredge": -3.2,
-    "Linden": 0.2,
-    "Merritt": -1.3,
-    "Ostrom": -3.3,
-    "Pell": 0.3,
-    "Sayre": 0.8,
-    "Talcott": 0.1,
-    "Whitcomb": 0.0
-   },
-   "designated": [
-    "Garrow",
     "Kittredge",
     "Ostrom"
    ],
-   "name": "the full estimate without the employers that have no account yet",
-   "state_change": -0.5
+   "key": "pooled_surv",
+   "name": "every report outstanding at one survival share, the rest as in the estimate",
+   "state_change": 0.5
   },
   {
    "changes": {
-    "Bray": -1.0,
-    "Calder": 1.4,
-    "Corliss": 1.1,
-    "Fenwick": 0.5,
-    "Garrow": -3.1,
-    "Hadley": 1.0,
-    "Kittredge": -1.9,
-    "Linden": 0.5,
-    "Merritt": -1.0,
-    "Ostrom": -3.0,
-    "Pell": 0.7,
-    "Sayre": 2.9,
+    "Bray": 0.4,
+    "Calder": 2.5,
+    "Corliss": 1.0,
+    "Fenwick": 1.7,
+    "Garrow": -1.2,
+    "Hadley": 1.7,
+    "Kittredge": -2.1,
+    "Linden": 1.4,
+    "Merritt": 0.3,
+    "Ostrom": -1.8,
+    "Pell": 1.0,
+    "Sayre": 1.9,
     "Talcott": 2.2,
-    "Whitcomb": 0.7
+    "Whitcomb": 1.4
+   },
+   "designated": [
+    "Kittredge"
+   ],
+   "key": "pooled_kept",
+   "name": "every report outstanding at what such reports kept at earlier fourth-quarter cut-offs, the rest as in the estimate",
+   "state_change": 1.0
+  },
+  {
+   "changes": {
+    "Bray": 0.6,
+    "Calder": 2.8,
+    "Corliss": 1.1,
+    "Fenwick": 1.8,
+    "Garrow": -1.3,
+    "Hadley": 2.0,
+    "Kittredge": -2.2,
+    "Linden": 1.6,
+    "Merritt": 0.5,
+    "Ostrom": -1.8,
+    "Pell": 1.3,
+    "Sayre": 2.2,
+    "Talcott": 2.3,
+    "Whitcomb": 1.7
+   },
+   "designated": [
+    "Kittredge"
+   ],
+   "key": "pooled_rep",
+   "name": "every report outstanding at the reporters' change, the rest as in the estimate",
+   "state_change": 1.2
+  },
+  {
+   "changes": {
+    "Bray": -1.1,
+    "Calder": 1.8,
+    "Corliss": 0.3,
+    "Fenwick": 0.5,
+    "Garrow": -3.0,
+    "Hadley": 1.0,
+    "Kittredge": -1.2,
+    "Linden": 0.7,
+    "Merritt": -0.4,
+    "Ostrom": -3.4,
+    "Pell": 0.1,
+    "Sayre": 2.3,
+    "Talcott": 1.8,
+    "Whitcomb": 0.3
    },
    "designated": [
     "Garrow",
     "Ostrom"
    ],
+   "key": "latest",
    "name": "the full estimate with the latest worksite reports' split",
    "state_change": 0.1
   },
   {
    "changes": {
-    "Bray": -1.1,
-    "Calder": 1.5,
-    "Corliss": 1.1,
-    "Fenwick": 0.6,
-    "Garrow": -3.1,
-    "Hadley": 1.2,
-    "Kittredge": -2.9,
-    "Linden": 0.9,
-    "Merritt": -0.9,
-    "Ostrom": -2.9,
-    "Pell": 0.7,
-    "Sayre": 1.2,
-    "Talcott": 0.7,
-    "Whitcomb": 0.8
+    "Bray": -1.4,
+    "Calder": 1.3,
+    "Corliss": 0.0,
+    "Fenwick": -0.1,
+    "Garrow": -3.5,
+    "Hadley": 0.6,
+    "Kittredge": -3.4,
+    "Linden": 0.4,
+    "Merritt": -0.8,
+    "Ostrom": -3.4,
+    "Pell": -0.5,
+    "Sayre": 0.8,
+    "Talcott": 0.3,
+    "Whitcomb": -0.1
    },
    "designated": [
     "Garrow",
     "Kittredge",
     "Ostrom"
    ],
-   "name": "the full estimate with last December's worksite split",
-   "state_change": 0.1
+   "key": "no_unreg",
+   "name": "the full estimate without the employers that have no account yet",
+   "state_change": -0.4
   },
   {
    "changes": {
-    "Bray": -0.9,
-    "Calder": 1.7,
-    "Corliss": 1.2,
+    "Bray": -0.7,
+    "Calder": 2.2,
+    "Corliss": 0.5,
     "Fenwick": 0.6,
-    "Garrow": -2.9,
+    "Garrow": -2.6,
+    "Hadley": 1.2,
+    "Kittredge": -2.7,
+    "Linden": 1.0,
+    "Merritt": -0.1,
+    "Ostrom": -3.0,
+    "Pell": 0.2,
+    "Sayre": 1.8,
+    "Talcott": 1.1,
+    "Whitcomb": 0.6
+   },
+   "designated": [
+    "Garrow",
+    "Kittredge",
+    "Ostrom"
+   ],
+   "key": "level",
+   "name": "the full estimate with last year's unregistered jobs carried as they were",
+   "state_change": 0.3
+  },
+  {
+   "changes": {
+    "Bray": -0.6,
+    "Calder": 2.1,
+    "Corliss": 0.7,
+    "Fenwick": 0.6,
+    "Garrow": -2.8,
     "Hadley": 1.3,
-    "Kittredge": -2.6,
-    "Linden": 0.9,
-    "Merritt": -0.8,
+    "Kittredge": -2.8,
+    "Linden": 1.1,
+    "Merritt": -0.1,
     "Ostrom": -2.8,
-    "Pell": 0.8,
-    "Sayre": 1.2,
+    "Pell": 0.1,
+    "Sayre": 1.4,
     "Talcott": 0.9,
-    "Whitcomb": 0.8
+    "Whitcomb": 0.6
    },
    "designated": [
     "Garrow",
     "Kittredge",
     "Ostrom"
    ],
-   "name": "the full estimate with late transmissions at the reporters' change",
-   "state_change": 0.2
+   "key": "ratio",
+   "name": "unregistered employers at the same share of jobs as at earlier cut-offs",
+   "state_change": 0.3
   },
   {
    "changes": {
-    "Bray": -0.9,
-    "Calder": 1.7,
-    "Corliss": 1.2,
-    "Fenwick": 0.6,
-    "Garrow": -2.9,
-    "Hadley": 1.2,
-    "Kittredge": -2.6,
-    "Linden": 0.9,
-    "Merritt": -0.8,
+    "Bray": -0.8,
+    "Calder": 2.3,
+    "Corliss": 0.7,
+    "Fenwick": 1.2,
+    "Garrow": -2.6,
+    "Hadley": 1.4,
+    "Kittredge": -2.8,
+    "Linden": 1.3,
+    "Merritt": 0.0,
     "Ostrom": -2.8,
     "Pell": 0.8,
-    "Sayre": 1.2,
-    "Talcott": 0.8,
+    "Sayre": 1.9,
+    "Talcott": 1.1,
     "Whitcomb": 0.7
    },
    "designated": [
@@ -738,121 +815,51 @@
     "Kittredge",
     "Ostrom"
    ],
-   "name": "the full estimate with the missing-alone share from every earlier quarter",
-   "state_change": 0.2
-  },
-  {
-   "changes": {
-    "Bray": -0.4,
-    "Calder": 2.2,
-    "Corliss": 1.8,
-    "Fenwick": 1.2,
-    "Garrow": -1.8,
-    "Hadley": 2.1,
-    "Kittredge": -1.7,
-    "Linden": 1.3,
-    "Merritt": -0.2,
-    "Ostrom": -1.9,
-    "Pell": 1.3,
-    "Sayre": 2.1,
-    "Talcott": 1.3,
-    "Whitcomb": 1.3
-   },
-   "designated": [],
-   "name": "the reporting employers' change for every report outstanding, the rest as in the estimate",
-   "state_change": 0.8
-  },
-  {
-   "changes": {
-    "Bray": -0.7,
-    "Calder": 1.9,
-    "Corliss": 1.1,
-    "Fenwick": 0.6,
-    "Garrow": -2.7,
-    "Hadley": 1.3,
-    "Kittredge": -2.6,
-    "Linden": 1.0,
-    "Merritt": -0.5,
-    "Ostrom": -2.5,
-    "Pell": 1.1,
-    "Sayre": 1.5,
-    "Talcott": 0.7,
-    "Whitcomb": 0.8
-   },
-   "designated": [
-    "Garrow",
-    "Kittredge",
-    "Ostrom"
-   ],
-   "name": "unregistered employers at the same share of jobs as at earlier cut-offs",
-   "state_change": 0.3
-  },
-  {
-   "changes": {
-    "Bray": -0.7,
-    "Calder": 1.9,
-    "Corliss": 1.5,
-    "Fenwick": 0.8,
-    "Garrow": -2.8,
-    "Hadley": 1.4,
-    "Kittredge": -2.5,
-    "Linden": 1.1,
-    "Merritt": -0.7,
-    "Ostrom": -2.7,
-    "Pell": 1.0,
-    "Sayre": 1.3,
-    "Talcott": 1.0,
-    "Whitcomb": 1.0
-   },
-   "designated": [
-    "Garrow",
-    "Kittredge",
-    "Ostrom"
-   ],
+   "key": "regsize",
    "name": "unregistered employers at the size of the new employers already registered",
-   "state_change": 0.3
+   "state_change": 0.5
   }
  ],
  "rows": {
-  "accounts": 39227,
+  "accounts": 38999,
   "counties": 14,
   "naics": 189,
-  "reports": 429471,
-  "status": 26803,
-  "worksites": 17944
+  "reports": 427262,
+  "status": 26451,
+  "worksites": 19789
  },
- "sites_carried": 159,
- "sites_multi": 363,
- "sites_multi3": 363,
- "sites_own": 204,
+ "sites_carried": 185,
+ "sites_multi": 404,
+ "sites_multi3": 404,
+ "sites_own": 219,
  "state_change": 0.1,
  "state_change3": 0.1,
- "tot_001": 21130,
- "tot_003": 101500,
- "tot_005": 16370,
- "tot_007": 16560,
- "tot_009": 35640,
- "tot_011": 27470,
- "tot_013": 11530,
- "tot_015": 48310,
- "tot_017": 58490,
- "tot_019": 23690,
- "tot_021": 36520,
- "tot_023": 12790,
- "tot_025": 36920,
- "tot_027": 9310,
- "tot_state": 456300,
- "transport_jobs": 530,
- "transport_jobs2": 530,
- "trouble_chain_2023": 0.5,
- "trouble_chain_2024": 0.4,
- "trouble_chain_2025": 0.6,
- "trouble_chain_now": 3.7,
- "trouble_chain_now2": 3.7,
- "unreg_jobs": 2500,
- "unreg_jobs2": 2500,
- "unreg_jobs3": 2500,
- "unreg_level": 3500,
+ "tot_001": 22680,
+ "tot_003": 105410,
+ "tot_005": 17690,
+ "tot_007": 18750,
+ "tot_009": 33830,
+ "tot_011": 30450,
+ "tot_013": 14220,
+ "tot_015": 50930,
+ "tot_017": 62550,
+ "tot_019": 25500,
+ "tot_021": 29620,
+ "tot_023": 14050,
+ "tot_025": 38790,
+ "tot_027": 9010,
+ "tot_state": 473500,
+ "transport_jobs": 590,
+ "trouble_2023": 0.7,
+ "trouble_2024": 0.6,
+ "trouble_2025": 0.8,
+ "trouble_2025b": 0.8,
+ "trouble_now": 7.9,
+ "trouble_now2": 7.9,
+ "unreg_jobs": 2400,
+ "unreg_jobs2": 2400,
+ "unreg_jobs3": 2400,
+ "unreg_level": 3400,
  "unreg_n": 590,
  "unreg_n2": 590,
  "unreg_n3": 590

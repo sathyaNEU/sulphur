@@ -8,219 +8,234 @@
    "depends": [],
    "independent": "",
    "golden": {
-    "liable": 27897,
-    "received": 20777,
-    "outstanding": 7120,
-    "published": 455161,
-    "now": 455880,
-    "late_reports": 202,
-    "accounts_since": 516,
-    "amendments": 1
+    "liable": 27796,
+    "received": 21743,
+    "outstanding": 6053,
+    "published": 472199,
+    "now": 472867,
+    "late_reports": 173,
+    "accounts_since": 502,
+    "amendments": -7
    },
    "passes": {
     "quick": {
-     "liable": 27802,
-     "received": 20682,
-     "outstanding": 7120,
-     "published": 455161,
-     "now": 455880,
+     "liable": 27694,
+     "received": 21641,
+     "outstanding": 6053,
+     "published": 472199,
+     "now": 472867,
      "late_reports": null,
      "accounts_since": null,
      "amendments": null
     },
     "careful": {
-     "liable": 27897,
-     "received": 20777,
-     "outstanding": 7120,
-     "published": 455161,
-     "now": 455880,
-     "late_reports": 202,
-     "accounts_since": 516,
-     "amendments": 1
+     "liable": 27796,
+     "received": 21743,
+     "outstanding": 6053,
+     "published": 472199,
+     "now": 472867,
+     "late_reports": 173,
+     "accounts_since": 502,
+     "amendments": -7
     },
     "thorough": {
-     "liable": 27897,
-     "received": 20777,
-     "outstanding": 7120,
-     "published": 455161,
-     "now": 455880,
-     "late_reports": 202,
-     "accounts_since": 516,
-     "amendments": 1
+     "liable": 27796,
+     "received": 21743,
+     "outstanding": 6053,
+     "published": 472199,
+     "now": 472867,
+     "late_reports": 173,
+     "accounts_since": 502,
+     "amendments": -7
     }
    }
   },
   {
    "id": "R2",
-   "name": "the outstanding reports by cause, and what the missing-alone keep",
-   "graded_as": "Component 4",
-   "figure": "r2_outstanding_by_kind",
+   "name": "the outstanding reports by cause, and what those outstanding on their own keep",
+   "graded_as": "Component 1",
+   "figure": "r2_outstanding_by_cause",
    "depends": [
     "R1"
    ],
    "independent": "",
    "bands": {
-    "late_transmission": [
-     4740,
-     4950
+    "batch_not_arrived": [
+     3900,
+     4080
     ],
-    "missing_alone": [
-     820,
-     870
+    "on_its_own": [
+     750,
+     880
     ],
     "late_every_quarter": [
-     320,
-     350
+     300,
+     420
     ],
     "two_quarters": [
-     970,
-     1020
+     790,
+     830
     ],
     "new_account": [
-     80,
-     110
+     60,
+     90
     ],
-    "missing_alone_keep": [
-     0.27,
-     0.32
+    "on_its_own_keep": [
+     0.24,
+     0.37
     ]
    },
    "golden": {
-    "late_transmission": 4844,
-    "missing_alone": 846,
-    "late_every_quarter": 334,
-    "two_quarters": 999,
-    "new_account": 97,
-    "missing_alone_keep": 0.3
+    "batch_not_arrived": 3992,
+    "on_its_own": 815,
+    "late_every_quarter": 355,
+    "two_quarters": 812,
+    "new_account": 79,
+    "on_its_own_keep": 0.29
    },
    "passes": {
     "quick": null,
     "careful": {
-     "late_transmission": 4844,
-     "missing_alone": 846,
-     "late_every_quarter": 334,
-     "two_quarters": 999,
-     "new_account": 97,
-     "missing_alone_keep": 0.3
+     "batch_not_arrived": null,
+     "on_its_own": null,
+     "late_every_quarter": null,
+     "two_quarters": 812,
+     "new_account": 79,
+     "on_its_own_keep": 0.92
     },
     "thorough": {
-     "late_transmission": 4844,
-     "missing_alone": 846,
-     "late_every_quarter": 334,
-     "two_quarters": 999,
-     "new_account": 97,
-     "missing_alone_keep": 0.3
+     "batch_not_arrived": 3992,
+     "on_its_own": 815,
+     "late_every_quarter": 355,
+     "two_quarters": 812,
+     "new_account": 79,
+     "on_its_own_keep": 0.29
     }
    }
   },
   {
    "id": "R3",
-   "name": "this quarter's trouble carried to the late transmissions (jobs)",
-   "graded_as": "Component 1",
-   "figure": "r3_late_transmission_jobs",
+   "name": "this quarter set against the closed ones (construction's share at employers outstanding on their own)",
+   "graded_as": "Ask 9",
+   "figure": "r3_this_quarter",
    "depends": [
     "R2"
    ],
    "independent": "",
-   "band": [
-    250.0,
-    600.0
-   ],
-   "partly": [
-    100.0,
-    800.0
-   ],
-   "golden": 530,
+   "bands": {
+    "construction_share": [
+     7.4,
+     8.4
+    ],
+    "a_year_earlier": [
+     0.3,
+     1.2
+    ]
+   },
+   "golden": {
+    "construction_share": 7.9,
+    "a_year_earlier": 0.8
+   },
    "passes": {
     "quick": null,
-    "careful": 0,
-    "thorough": 530
+    "careful": null,
+    "thorough": {
+     "construction_share": 7.9,
+     "a_year_earlier": 0.8
+    }
    }
   },
   {
    "id": "R4",
    "name": "the employers with no account yet",
-   "graded_as": "Component 2",
+   "graded_as": "Component 3",
    "figure": "r4_unregistered",
    "depends": [],
    "independent": "the register's liability and establishment dates",
    "bands": {
     "employers": [
-     560,
-     620
+     500,
+     630
     ],
     "jobs": [
-     2300,
+     2000,
      2600
     ]
    },
    "golden": {
     "employers": 590,
-    "jobs": 2500
+    "jobs": 2400
    },
    "passes": {
     "quick": null,
     "careful": {
-     "employers": 840,
-     "jobs": 3500
+     "employers": 540,
+     "jobs": 2200
     },
     "thorough": {
      "employers": 590,
-     "jobs": 2500
+     "jobs": 2400
     }
    }
   },
   {
    "id": "R5",
    "name": "the worksite split against the latest reports' (jobs by county)",
-   "graded_as": "Component 3",
+   "graded_as": "Component 2",
    "figure": "r5_worksite_split",
    "depends": [],
    "independent": "the worksite reports and their dates received",
    "bands": {
-    "Kittredge": [
-     80.0,
-     120.0
-    ],
-    "Talcott": [
-     170.0,
-     210.0
-    ],
-    "Sayre": [
-     140.0,
-     180.0
-    ],
     "Calder": [
-     -190.0,
-     -150.0
+     -160.0,
+     -90.0
+    ],
+    "Kittredge": [
+     190.0,
+     330.0
     ],
     "Linden": [
-     -180.0,
-     -140.0
+     -140.0,
+     -70.0
+    ],
+    "Ostrom": [
+     -130.0,
+     -60.0
+    ],
+    "Talcott": [
+     100.0,
+     190.0
+    ],
+    "Sayre": [
+     40.0,
+     110.0
     ]
    },
    "golden": {
-    "Kittredge": 100,
-    "Talcott": 190,
-    "Sayre": 160,
-    "Calder": -170,
-    "Linden": -160
+    "Kittredge": 260,
+    "Talcott": 150,
+    "Sayre": 80,
+    "Calder": -120,
+    "Linden": -110,
+    "Ostrom": -90
    },
    "passes": {
     "quick": null,
     "careful": {
-     "Kittredge": 0,
-     "Talcott": 0,
-     "Sayre": 0,
      "Calder": 0,
-     "Linden": 0
+     "Kittredge": 0,
+     "Linden": 0,
+     "Ostrom": 0,
+     "Talcott": 0,
+     "Sayre": 0
     },
     "thorough": {
-     "Kittredge": 100,
-     "Talcott": 190,
-     "Sayre": 160,
-     "Calder": -170,
-     "Linden": -160
+     "Calder": -120,
+     "Kittredge": 260,
+     "Linden": -110,
+     "Ostrom": -90,
+     "Talcott": 150,
+     "Sayre": 80
     }
    }
   },
@@ -231,133 +246,132 @@
    "figure": "r6_county_jobs",
    "depends": [
     "R2",
-    "R3",
     "R4",
     "R5"
    ],
    "independent": "",
    "bands": {
     "Bray": [
-     21110.0,
-     21160.0
+     22560.0,
+     22800.0
     ],
     "Calder": [
-     101430.0,
-     101620.0
+     104890.0,
+     105930.0
     ],
     "Corliss": [
-     16350.0,
-     16400.0
+     17600.0,
+     17790.0
     ],
     "Fenwick": [
-     16540.0,
-     16580.0
+     18650.0,
+     18850.0
     ],
     "Garrow": [
-     35600.0,
-     35690.0
+     33650.0,
+     34010.0
     ],
     "Hadley": [
-     27440.0,
-     27520.0
+     30300.0,
+     30610.0
     ],
     "Kittredge": [
-     11500.0,
-     11560.0
+     14140.0,
+     14300.0
     ],
     "Linden": [
-     48270.0,
-     48380.0
+     50670.0,
+     51180.0
     ],
     "Merritt": [
-     58450.0,
-     58550.0
+     62230.0,
+     62860.0
     ],
     "Ostrom": [
-     23660.0,
-     23720.0
+     25360.0,
+     25640.0
     ],
     "Pell": [
-     36500.0,
-     36560.0
+     29470.0,
+     29770.0
     ],
     "Talcott": [
-     12770.0,
-     12820.0
+     13980.0,
+     14130.0
     ],
     "Whitcomb": [
-     36890.0,
-     36970.0
+     38590.0,
+     38980.0
     ],
     "Sayre": [
-     9290.0,
-     9330.0
+     8960.0,
+     9060.0
     ]
    },
    "golden": {
-    "Bray": 21130,
-    "Calder": 101500,
-    "Corliss": 16370,
-    "Fenwick": 16560,
-    "Garrow": 35640,
-    "Hadley": 27470,
-    "Kittredge": 11530,
-    "Linden": 48310,
-    "Merritt": 58490,
-    "Ostrom": 23690,
-    "Pell": 36520,
-    "Talcott": 12790,
-    "Whitcomb": 36920,
-    "Sayre": 9310
+    "Bray": 22680,
+    "Calder": 105410,
+    "Corliss": 17690,
+    "Fenwick": 18750,
+    "Garrow": 33830,
+    "Hadley": 30450,
+    "Kittredge": 14220,
+    "Linden": 50930,
+    "Merritt": 62550,
+    "Ostrom": 25500,
+    "Pell": 29620,
+    "Talcott": 14050,
+    "Whitcomb": 38790,
+    "Sayre": 9010
    },
    "passes": {
     "quick": {
-     "Bray": 21190,
-     "Calder": 101760,
-     "Corliss": 16400,
-     "Fenwick": 16630,
-     "Garrow": 36240,
-     "Hadley": 27690,
-     "Kittredge": 11970,
-     "Linden": 48380,
-     "Merritt": 58780,
-     "Ostrom": 23890,
-     "Pell": 36590,
-     "Talcott": 13330,
-     "Whitcomb": 37110,
-     "Sayre": 9580
+     "Bray": 23100,
+     "Calder": 106130,
+     "Corliss": 17850,
+     "Fenwick": 18900,
+     "Garrow": 34510,
+     "Hadley": 30740,
+     "Kittredge": 14650,
+     "Linden": 51040,
+     "Merritt": 62900,
+     "Ostrom": 25770,
+     "Pell": 29820,
+     "Talcott": 14450,
+     "Whitcomb": 39320,
+     "Sayre": 9140
     },
     "careful": {
-     "Bray": 21140,
-     "Calder": 101670,
-     "Corliss": 16340,
-     "Fenwick": 16650,
-     "Garrow": 35820,
-     "Hadley": 27590,
-     "Kittredge": 11740,
-     "Linden": 48330,
-     "Merritt": 58690,
-     "Ostrom": 23740,
-     "Pell": 36570,
-     "Talcott": 13060,
-     "Whitcomb": 37020,
-     "Sayre": 9520
+     "Bray": 22860,
+     "Calder": 105380,
+     "Corliss": 17700,
+     "Fenwick": 18780,
+     "Garrow": 34220,
+     "Hadley": 30430,
+     "Kittredge": 14530,
+     "Linden": 50880,
+     "Merritt": 62710,
+     "Ostrom": 25620,
+     "Pell": 29660,
+     "Talcott": 14280,
+     "Whitcomb": 38980,
+     "Sayre": 9080
     },
     "thorough": {
-     "Bray": 21130,
-     "Calder": 101500,
-     "Corliss": 16370,
-     "Fenwick": 16560,
-     "Garrow": 35640,
-     "Hadley": 27470,
-     "Kittredge": 11530,
-     "Linden": 48310,
-     "Merritt": 58490,
-     "Ostrom": 23690,
-     "Pell": 36520,
-     "Talcott": 12790,
-     "Whitcomb": 36920,
-     "Sayre": 9310
+     "Bray": 22680,
+     "Calder": 105410,
+     "Corliss": 17690,
+     "Fenwick": 18750,
+     "Garrow": 33830,
+     "Hadley": 30450,
+     "Kittredge": 14220,
+     "Linden": 50930,
+     "Merritt": 62550,
+     "Ostrom": 25500,
+     "Pell": 29620,
+     "Talcott": 14050,
+     "Whitcomb": 38790,
+     "Sayre": 9010
     }
    }
   },
@@ -372,126 +386,126 @@
    "independent": "",
    "bands": {
     "Bray": [
-     -1.1,
-     -0.8
+     -1.6,
+     -0.5
     ],
     "Calder": [
-     1.5,
-     1.8
+     1.3,
+     2.4
     ],
     "Corliss": [
-     1.0,
-     1.3
+     -0.2,
+     0.9
     ],
     "Fenwick": [
-     0.3,
-     0.6
+     0.1,
+     1.2
     ],
     "Garrow": [
-     -3.2,
-     -2.9
+     -3.5,
+     -2.4
     ],
     "Hadley": [
-     1.0,
-     1.3
+     0.5,
+     1.6
     ],
     "Kittredge": [
-     -2.9,
+     -3.6,
      -2.5
     ],
     "Linden": [
-     0.7,
-     1.0
+     0.4,
+     1.5
     ],
     "Merritt": [
-     -1.0,
-     -0.7
+     -0.9,
+     0.2
     ],
     "Ostrom": [
-     -3.0,
-     -2.7
+     -3.6,
+     -2.5
     ],
     "Pell": [
-     0.6,
-     0.9
+     -0.3,
+     0.8
     ],
     "Talcott": [
-     0.6,
-     0.9
+     0.2,
+     1.3
     ],
     "Whitcomb": [
-     0.5,
-     0.8
+     -0.2,
+     0.9
     ],
     "Sayre": [
      0.9,
-     1.2
+     2.0
     ]
    },
    "golden": {
-    "Bray": -1.0,
-    "Calder": 1.6,
-    "Corliss": 1.1,
-    "Fenwick": 0.5,
-    "Garrow": -3.1,
+    "Bray": -1.1,
+    "Calder": 1.9,
+    "Corliss": 0.4,
+    "Fenwick": 0.6,
+    "Garrow": -3.0,
     "Hadley": 1.1,
-    "Kittredge": -2.7,
-    "Linden": 0.8,
-    "Merritt": -0.9,
-    "Ostrom": -2.9,
-    "Pell": 0.8,
-    "Talcott": 0.7,
-    "Whitcomb": 0.6,
-    "Sayre": 1.1
+    "Kittredge": -3.0,
+    "Linden": 0.9,
+    "Merritt": -0.4,
+    "Ostrom": -3.1,
+    "Pell": 0.2,
+    "Talcott": 0.8,
+    "Whitcomb": 0.3,
+    "Sayre": 1.4
    },
    "passes": {
     "quick": {
-     "Bray": -0.6,
-     "Calder": 2.0,
-     "Corliss": 1.5,
-     "Fenwick": 1.0,
-     "Garrow": -1.4,
-     "Hadley": 2.1,
-     "Kittredge": 1.4,
-     "Linden": 1.2,
-     "Merritt": -0.2,
-     "Ostrom": -1.9,
+     "Bray": 0.9,
+     "Calder": 2.7,
+     "Corliss": 1.4,
+     "Fenwick": 1.6,
+     "Garrow": -0.8,
+     "Hadley": 2.2,
+     "Kittredge": 0.1,
+     "Linden": 1.3,
+     "Merritt": 0.3,
+     "Ostrom": -1.8,
      "Pell": 1.0,
-     "Talcott": 5.0,
-     "Whitcomb": 1.3,
-     "Sayre": 3.9
+     "Talcott": 3.8,
+     "Whitcomb": 1.9,
+     "Sayre": 3.0
     },
     "careful": {
-     "Bray": -0.9,
-     "Calder": 1.8,
-     "Corliss": 0.9,
-     "Fenwick": 1.0,
-     "Garrow": -2.6,
-     "Hadley": 1.5,
+     "Bray": -0.3,
+     "Calder": 1.9,
+     "Corliss": 0.4,
+     "Fenwick": 0.8,
+     "Garrow": -1.9,
+     "Hadley": 1.0,
      "Kittredge": -0.9,
      "Linden": 0.8,
-     "Merritt": -0.6,
+     "Merritt": -0.1,
      "Ostrom": -2.6,
-     "Pell": 0.9,
-     "Talcott": 2.8,
-     "Whitcomb": 0.9,
-     "Sayre": 3.3
+     "Pell": 0.4,
+     "Talcott": 2.4,
+     "Whitcomb": 0.8,
+     "Sayre": 2.2
     },
     "thorough": {
-     "Bray": -1.0,
-     "Calder": 1.6,
-     "Corliss": 1.1,
-     "Fenwick": 0.5,
-     "Garrow": -3.1,
+     "Bray": -1.1,
+     "Calder": 1.9,
+     "Corliss": 0.4,
+     "Fenwick": 0.6,
+     "Garrow": -3.0,
      "Hadley": 1.1,
-     "Kittredge": -2.7,
-     "Linden": 0.8,
-     "Merritt": -0.9,
-     "Ostrom": -2.9,
-     "Pell": 0.8,
-     "Talcott": 0.7,
-     "Whitcomb": 0.6,
-     "Sayre": 1.1
+     "Kittredge": -3.0,
+     "Linden": 0.9,
+     "Merritt": -0.4,
+     "Ostrom": -3.1,
+     "Pell": 0.2,
+     "Talcott": 0.8,
+     "Whitcomb": 0.3,
+     "Sayre": 1.4
     }
    }
   },
@@ -512,7 +526,6 @@
    "passes": {
     "quick": [],
     "careful": [
-     "Garrow",
      "Ostrom"
     ],
     "thorough": [
@@ -535,49 +548,51 @@
    "independent": "",
    "bands": {
     "state_difference": [
-     -0.2,
-     0.0
+     -0.3,
+     0.2
     ],
     "mean_county_difference": [
-     0.3,
-     0.45
+     0.0,
+     0.35
     ]
    },
    "golden": {
-    "state_difference": -0.12,
-    "mean_county_difference": 0.37
+    "state_difference": -0.01,
+    "mean_county_difference": 0.16
    },
    "passes": {
     "quick": null,
     "careful": {
-     "state_difference": -0.03,
-     "mean_county_difference": 0.41
+     "state_difference": -0.41,
+     "mean_county_difference": 0.47
     },
     "thorough": {
-     "state_difference": -0.12,
-     "mean_county_difference": 0.37
+     "state_difference": -0.01,
+     "mean_county_difference": 0.16
     }
    }
   }
  ],
  "hints": [
   {
-   "sentence": "More of a quarter's new employers get their account after the cut-off than by it, and the late ones are smaller.",
+   "sentence": "A report that is out with its payroll agent's whole batch says nothing about the employer; one that is out on its own usually means trouble, and such employers kept about three tenths of their jobs at earlier cut-offs.",
    "rescues": [
-    "R4"
+    "R2"
    ]
   },
   {
-   "sentence": "An employer's worksites keep their own seasons, so the latest worksite report does not give December's split.",
+   "sentence": "An employer's worksites keep their own seasons, so the latest worksite report on file does not give December's split.",
    "rescues": [
     "R5"
    ]
   },
   {
-   "sentence": "Employers missing alone hold several times their usual share of the housing chain's jobs this quarter, in the late transmissions as in the ones that arrived.",
-   "rescues": [
-    "R3"
-   ]
+   "sentence": "Employers outstanding on their own hold several times their usual share of construction jobs this quarter, in the late batches as in the ones that arrived.",
+   "rescues": []
+  },
+  {
+   "sentence": "More of a quarter's new employers get their account after the cut-off than by it, and the late ones are smaller.",
+   "rescues": []
   }
  ],
  "routes": [
@@ -616,22 +631,32 @@
    ]
   },
   {
-   "name": "the reporting employers' change for every report outstanding, accounts on the register, the latest worksite reports",
+   "name": "every report outstanding at the reporters' change by supersector and one survival share, unregistered employers developed, the latest worksite reports",
    "answer": [
-    "Garrow",
     "Ostrom"
    ]
   },
   {
-   "name": "outstanding reports read by cause; late transmissions at the reporters' change; accounts on the register; the latest worksite reports",
+   "name": "every report outstanding at one survival share, the rest as in the estimate",
    "answer": [
-    "Garrow",
     "Kittredge",
     "Ostrom"
    ]
   },
   {
-   "name": "the same with last year's unregistered jobs carried as they were",
+   "name": "every report outstanding at what such reports kept at earlier fourth-quarter cut-offs, the rest as in the estimate",
+   "answer": [
+    "Kittredge"
+   ]
+  },
+  {
+   "name": "every report outstanding at the reporters' change, the rest as in the estimate",
+   "answer": [
+    "Kittredge"
+   ]
+  },
+  {
+   "name": "the full estimate with the latest worksite reports' split",
    "answer": [
     "Garrow",
     "Ostrom"
@@ -646,39 +671,12 @@
    ]
   },
   {
-   "name": "the full estimate with the latest worksite reports' split",
-   "answer": [
-    "Garrow",
-    "Ostrom"
-   ]
-  },
-  {
-   "name": "the full estimate with last December's worksite split",
+   "name": "the full estimate with last year's unregistered jobs carried as they were",
    "answer": [
     "Garrow",
     "Kittredge",
     "Ostrom"
    ]
-  },
-  {
-   "name": "the full estimate with late transmissions at the reporters' change",
-   "answer": [
-    "Garrow",
-    "Kittredge",
-    "Ostrom"
-   ]
-  },
-  {
-   "name": "the full estimate with the missing-alone share from every earlier quarter",
-   "answer": [
-    "Garrow",
-    "Kittredge",
-    "Ostrom"
-   ]
-  },
-  {
-   "name": "the reporting employers' change for every report outstanding, the rest as in the estimate",
-   "answer": []
   },
   {
    "name": "unregistered employers at the same share of jobs as at earlier cut-offs",
@@ -699,7 +697,7 @@
  ],
  "passes_are": {
   "quick": "the register's active accounts, September carried for every outstanding report, the published table as the base, the latest worksite reports, no employer without an account",
-  "careful": "the outstanding reports read by cause and the missing-alone carried at the resolved quarters' share; the late transmissions at the reporting employers' change; last year's unregistered jobs carried as they were; the latest worksite reports' split; the same on the replay",
+  "careful": "every outstanding report carried alike at the reporting employers' change by supersector times the share of such employers that reported in the end at earlier fourth-quarter cut-offs; two quarters out at nought; the employers with no account yet developed on every earlier cut-off; the latest worksite reports' split; the same on the replay",
   "thorough": "the golden"
  }
 }

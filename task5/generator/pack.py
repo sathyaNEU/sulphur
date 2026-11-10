@@ -109,27 +109,71 @@ def account_numbers(w, r):
     return nums
 
 
-def name_for(w, i, r):
+HAMLETS = {
+    "001": ["Alder Springs", "Coldwater", "Dry Fork"],
+    "003": ["Fairhaven", "Grafton", "Hartwell", "Kingsley", "Newbury", "Orchard Park", "Rockport", "Thornbury"],
+    "005": ["Ironton", "Jasper Hill", "Larkspur"],
+    "007": ["Mossy Creek", "Plainfield", "Quincy Landing"],
+    "009": ["Sterling", "Union Grove", "Vernon"],
+    "011": ["Walden", "Yardley", "Addison"],
+    "013": ["Bellmont", "Clarendon", "Dover Plains"],
+    "015": ["Ellsworth", "Farrington", "Greenfield", "Holbrook", "Kenwood"],
+    "017": ["Lyndon", "Maysville", "Norwood", "Oxbow", "Preston"],
+    "019": ["Rosedale", "Shelby", "Trenton Falls"],
+    "021": ["Avondale", "Brookside", "Carlisle"],
+    "023": ["Edgewater", "Flint Hollow", "Gilead"],
+    "025": ["Hanover", "Inglewood", "Juniper Flats"],
+    "027": ["Kirkwood", "Lowell", "Marengo"],
+}
+STATE_NAMES = {"611110": ["University of Franklin", "Franklin Community College System"],
+               "622110": ["University of Franklin Health System", "Franklin Department of Health and Human Services"],
+               "921140": ["Franklin Department of Administration", "Franklin Judicial Branch"],
+               "922120": ["Franklin Department of Public Safety", "Franklin Department of Corrections"],
+               "921190": ["Franklin Department of Transportation", "Franklin Department of Natural Resources",
+                          "Franklin Department of Revenue"]}
+BARE = ("Bank", "Trust Company", "Credit Union", "Cooperative", "Church", "Congregation", "Parish", "Academy",
+        "School", "Medical Center", "Hospital")
+PLAIN = ("Ford", "Chevrolet", "Gazette", "Herald", "Courier-Journal", "Camp", "Mfg", "Power & Light")
+
+
+def government_names(c, naics):
+    """the public bodies of one county that keep an account of their own, the commonest first"""
+    cn, T, H = W.NAMES[c], TOWNS[c], HAMLETS[c]
+    if naics == "921140":
+        return (["%s County" % cn, "City of %s" % T[0]] + ["Town of %s" % t for t in T[1:]]
+                + ["Village of %s" % h for h in H] + ["%s Township" % t for t in T])
+    if naics == "611110":
+        return (["%s Public Schools" % T[0]] + ["%s School District" % t for t in T[1:]]
+                + ["%s County Career and Technical Center" % cn] + ["%s Union School District" % h for h in H]
+                + ["%s County Educational Service Agency" % cn, "%s Community College" % cn]
+                + ["%s Township Elementary School District" % t for t in T])
+    if naics == "922120":
+        return (["%s County Sheriff's Office" % cn] + ["%s Police Department" % t for t in T]
+                + ["%s Police Department" % h for h in H] + ["%s County Emergency Communications District" % cn]
+                + ["%s Township Police Department" % t for t in T])
+    if naics == "622110":
+        return (["%s County Hospital" % cn, "%s Regional Medical Center" % T[0]]
+                + ["%s Memorial Hospital" % t for t in T[1:]] + ["%s County Health Care Authority" % cn]
+                + ["%s Hospital District" % t for t in T] + ["%s Community Hospital" % h for h in H])
+    return (["%s County Road Commission" % cn, "%s Housing Authority" % T[0], "%s County Library District" % cn]
+            + ["%s Water and Sewer District" % t for t in T] + ["%s County Solid Waste Authority" % cn]
+            + ["%s Fire Protection District" % t for t in T[1:] + H] + ["%s County Conservation District" % cn]
+            + ["%s Public Library" % t for t in T] + ["%s Park District" % t for t in T])
+
+
+def _private_name(w, i, r):
     naics, c = w.naics[i], w.county[i]
     town = TOWNS[c][int(r.integers(0, len(TOWNS[c])))]
-    cname = W.NAMES[c]
-    if w.state[i]:
-        return ["Franklin Department of Transportation", "Franklin Department of Corrections",
-                "Franklin Department of Health and Human Services", "University of Franklin"][i % 4], ""
-    if w.gov[i]:
-        if naics == "611110":
-            return r.choice(["%s Public Schools", "%s Union School District", "%s Regional School District"]) % town, ""
-        if naics == "921140":
-            return r.choice(["Town of %s" % town, "City of %s" % town, "%s County" % cname]), ""
-        if naics == "922120":
-            return "%s Police Department" % town, ""
-        if naics == "622110":
-            return r.choice(["%s Regional Medical Center" % town, "%s County Hospital" % cname]), ""
-        return "%s County" % cname, ""
     words = IND.get(naics, ["Services"])
     iw = words[int(r.integers(0, len(words)))]
     suf = PRO_SUFFIX.get(naics, SUFFIX)
     sx = suf[int(r.integers(0, len(suf)))]
+    if iw.endswith(BARE):
+        sx = ""
+    elif iw.endswith(PLAIN):
+        sx = ["Inc.", "Inc.", "LLC", ""][int(r.integers(0, 4))]
+    elif iw.endswith("Co."):
+        sx = ["", "", "Inc.", "LLC"][int(r.integers(0, 4))]
     sn = SURNAMES[int(r.integers(0, len(SURNAMES)))]
     shape = r.random()
     if shape < 0.32:
@@ -151,9 +195,41 @@ def name_for(w, i, r):
         nm = "%s %s" % (sn, iw)
     legal = (nm + (" " + sx if sx else "")).replace("  ", " ")
     trade = ""
-    if r.random() < 0.28 and naics[:2] in ("72", "44", "45", "81", "71"):
-        trade = "The %s %s" % (FEATURES[int(r.integers(0, len(FEATURES)))].split()[0], iw)
+    if r.random() < 0.28 and naics[:2] in ("72", "44", "45", "81", "71") and naics != "813110":
+        place = FEATURES[int(r.integers(0, len(FEATURES)))]
+        trade = ("The %s %s" if naics[:2] == "72" else "%s %s") % (place, iw)
+        if trade.replace("The ", "") in legal:
+            trade = ""
     return legal, trade
+
+
+def employer_names(w, r):
+    """one legal name and, for some, a trade name per unit. A public body takes the next name its county has not used;
+    a private name that is already on the register is drawn again (twice at most, so a few names do recur)."""
+    names, used, taken = [], set(), {}
+    for i in range(w.n):
+        naics, c = w.naics[i], w.county[i]
+        if w.state[i]:
+            pool = STATE_NAMES.get(naics, STATE_NAMES["921190"]) + STATE_NAMES["921190"]
+            nm = next(x for x in pool if x not in used)
+            used.add(nm)
+            names.append((nm, ""))
+            continue
+        if w.gov[i]:
+            pool = government_names(c, naics if naics in ("921140", "611110", "922120", "622110") else "921190")
+            k = taken.get((c, naics), 0)
+            taken[c, naics] = k + 1
+            nm = pool[k] if k < len(pool) else "%s No. %d" % (pool[k % len(pool)], k // len(pool) + 1)
+            used.add(nm)
+            names.append((nm, ""))
+            continue
+        for _ in range(3):
+            legal, trade = _private_name(w, i, r)
+            if legal not in used:
+                break
+        used.add(legal)
+        names.append((legal, trade))
+    return names
 
 
 
@@ -211,7 +287,7 @@ def tables(w):
     w.acct = nums
     fmt = lambda x: "%07d-%d" % (x, check_digit(x))
     w.acct_s = [fmt(x) for x in nums]
-    names = [name_for(w, i, rn) for i in range(n)]
+    names = employer_names(w, rn)
     old = {a[0]: a[4] for a in W.NAICS if a[4]}
     naics_reg = []
     for i in range(n):

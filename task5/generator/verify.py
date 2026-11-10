@@ -1,7 +1,8 @@
 """task5 architecture 4: the independent verifier. It reads only the shipped bundle (target/, golden/) and
 generator/figures.json, on its own code path (plain dictionaries and loops, no generator module), and recomputes the
-census, the outstanding reports by kind, what the missing-alone keep, the employers with no account, the worksite split,
-every county's December jobs and change, the designated set, the reconciliation to the published table and the replay."""
+census, the outstanding reports by cause, what those outstanding on their own keep, the employers with no account, the
+worksite split, every county's December jobs and change, the designated set, the reconciliation to the published table
+and the replay."""
 import csv
 import datetime as dt
 import json
@@ -12,10 +13,6 @@ import sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 TASK = os.path.dirname(HERE)
 RES = []
-CHAIN = {"236115", "236118", "236220", "237310", "238110", "238160", "238210", "238220", "238310", "238320", "238910",
-         "238990", "113310", "115310", "321113", "321918", "337110", "423310", "444180", "444190", "484220", "423810",
-         "444110"}
-
 
 def ok(name, cond, detail=""):
     RES.append((name, bool(cond), str(detail)))
@@ -58,9 +55,8 @@ class Files:
         self.acc = {}
         for r in rd(pick("employer_accounts")):
             a = r["account_no"].replace("-", "")
-            self.acc[a] = dict(county=r["county_code"], ss=ss[r["naics_code"]], chain=r["naics_code"] in CHAIN and r["ownership"] == "5",
-                               liab=mdy(r["liability_date"]), est=mdy(r["account_established"]), multi=r["multi_worksite"] == "Y",
-                               no=r["account_no"])
+            self.acc[a] = dict(county=r["county_code"], ss=ss[r["naics_code"]], liab=mdy(r["liability_date"]),
+                               est=mdy(r["account_established"]), multi=r["multi_worksite"] == "Y", no=r["account_no"])
         self.ends = {}
         for r in rd(pick("status_history")):
             if r["change_type"] in ("INACTIVATED", "CLOSED", "TRANSFERRED"):
@@ -206,17 +202,6 @@ class Files:
         out["new_mean"] = sum(new) / len(new) if new else 0.0
         return out
 
-    def seasonal(self, q, asof, a):
-        rs = []
-        for d_, s_ in ((q - 4, q - 5), (q - 8, q - 9)):
-            if s_ < 0:
-                return None
-            x, y = self.latest(d_, asof)[0].get(a), self.latest(s_, asof)[0].get(a)
-            if x is None or y is None or y <= 0:
-                return None
-            rs.append(x / y)
-        return sum(rs) / 2 if max(rs) < 0.6 else None
-
     def split(self, q, asof, a):
         """county shares of account a for quarter q from the worksite reports on file at asof"""
         qs = {h: r for h, r in self.mwr.get(a, {}).items() if h <= q and r["recv"] <= asof}
@@ -291,21 +276,21 @@ class Files:
         V = self.census(q, asof)
         oc = self.outcomes(self.mature(asof, q), asof)
         k = oc["alone"]
-        # the reporters' change by county and supersector, the seasonal businesses left out
+        # the reporters' change by county and supersector; this quarter's share of jobs at employers outstanding on
+        # their own, by supersector and size
         cell, cty, tr, trs = {}, {}, {}, [0.0, 0.0]
-        seas = {a: self.seasonal(q, asof, a) for a in V}
         for a, r in V.items():
             p = r.get("prior")
             if not p or p <= 0:
                 continue
             A = self.acc[a]
-            if r["kind"] == "rep" and seas[a] is None:
+            if r["kind"] == "rep":
                 x = cell.setdefault((A["county"], A["ss"]), [0.0, 0.0, 0])
                 x[0] += r["m3"]; x[1] += p; x[2] += 1
                 y = cty.setdefault(A["county"], [0.0, 0.0])
                 y[0] += r["m3"]; y[1] += p
             if r["kind"] in ("rep", "alone"):
-                g = (A["chain"], 0 if p <= 9 else (1 if p <= 49 else 2))
+                g = (A["ss"], 0 if p <= 9 else (1 if p <= 49 else 2))
                 z = tr.setdefault(g, [0.0, 0.0, 0])
                 al = p if r["kind"] == "alone" else 0.0
                 z[0] += al; z[1] += p; z[2] += 1
@@ -321,9 +306,7 @@ class Files:
             elif kd in ("batch", "habit"):
                 c = cell.get((A["county"], A["ss"]))
                 mv = c[0] / c[1] if (c and c[2] >= 10 and c[1] > 0) else cty[A["county"]][0] / cty[A["county"]][1]
-                if seas[a] is not None:
-                    mv = seas[a]
-                g = tr.get((A["chain"], 0 if p <= 9 else (1 if p <= 49 else 2)))
+                g = tr.get((A["ss"], 0 if p <= 9 else (1 if p <= 49 else 2)))
                 al = g[0] / g[1] if (g and g[2] >= 30) else trs[0] / trs[1]
                 est[a] = p * (mv * (1 - al) + k * al)
             elif kd == "alone":
@@ -357,10 +340,10 @@ def main(task=TASK):
     r1 = figs["r1_census_and_reconciliation"]
     ok("census: liable, received and outstanding", (X["liable"], X["received"], X["liable"] - X["received"]) == (r1["liable"], r1["received"], r1["outstanding"]),
        (X["liable"], X["received"]))
-    r2 = figs["r2_outstanding_by_kind"]
-    ok("outstanding by kind", (X["kinds"].get("batch"), X["kinds"].get("alone"), X["kinds"].get("habit"), X["kinds"].get("twoq"), X["kinds"].get("new")) ==
-       (r2["late_transmission"], r2["missing_alone"], r2["late_every_quarter"], r2["two_quarters"], r2["new_account"]), X["kinds"])
-    ok("what the missing-alone keep", abs(round(X["k"], 2) - r2["missing_alone_keep"]) < 1e-9, round(X["k"], 4))
+    r2 = figs["r2_outstanding_by_cause"]
+    ok("outstanding by cause", (X["kinds"].get("batch"), X["kinds"].get("alone"), X["kinds"].get("habit"), X["kinds"].get("twoq"), X["kinds"].get("new")) ==
+       (r2["batch_not_arrived"], r2["on_its_own"], r2["late_every_quarter"], r2["two_quarters"], r2["new_account"]), X["kinds"])
+    ok("what employers outstanding on their own keep", abs(round(X["k"], 2) - r2["on_its_own_keep"]) < 1e-9, round(X["k"], 4))
     r4 = figs["r4_unregistered"]
     ok("employers with no account: count and jobs", int(round(X["n_unreg"], -1)) == r4["employers"] and abs(sum(X["unreg"].values()) - r4["jobs"]) <= 50,
        (round(X["n_unreg"], 1), round(sum(X["unreg"].values()))))

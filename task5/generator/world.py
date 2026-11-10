@@ -4,7 +4,7 @@ Fourteen counties, the industries and their NAICS codes, the quarter calendar wi
 the shipped file names and the people. Everything here is a fact of the fiction; sim.py draws the employers."""
 import datetime as dt
 
-SEED = 50427
+SEED = 50431
 
 STATE = "Franklin"
 EXTRACT = dt.datetime(2027, 2, 15, 23, 59, 59)       # the Division's extract: everything received by then
@@ -14,19 +14,19 @@ THRESHOLD = -2.0                                      # section 4: a change of m
 
 # county: FIPS-style code (alphabetical, Sayre formed in 1931 from Talcott and given the next number), name,
 # accounts at the start of 2023, healthy trend a year, share of small employers filing through a payroll agent,
-# share of agent clients served by a statewide bureau, lake county (summer-seasonal resorts), LMI region
+# share of agent clients served by a statewide bureau, lake county, LMI region
 COUNTIES = [
     # code   name        n0     target  agent  bureau  lake   region
-    ("001", "Bray",       1130, -0.0150, 0.60, 0.34, False, "Southern Tier"),
+    ("001", "Bray",       1130, -0.0100, 0.60, 0.34, False, "Southern Tier"),
     ("003", "Calder",     5380,  0.0160, 0.62, 0.58, False, "Capital"),
     ("005", "Corliss",     840,  0.0070, 0.58, 0.30, False, "Southern Tier"),
     ("007", "Fenwick",     990,  0.0020, 0.57, 0.33, False, "North Woods"),
-    ("009", "Garrow",     1880, -0.0320, 0.66, 0.22, False, "Capital"),
+    ("009", "Garrow",     1880, -0.0300, 0.66, 0.22, False, "Capital"),
     ("011", "Hadley",     1490,  0.0130, 0.60, 0.40, False, "Southern Tier"),
-    ("013", "Kittredge",   590, -0.0280, 0.61, 0.52, True,  "Lakes"),
+    ("013", "Kittredge",   590, -0.0315, 0.61, 0.52, True,  "Lakes"),
     ("015", "Linden",     2470,  0.0090, 0.63, 0.56, False, "Capital"),
     ("017", "Merritt",    2880, -0.0080, 0.59, 0.36, False, "River"),
-    ("019", "Ostrom",     1290, -0.0260, 0.50, 0.30, False, "North Woods"),
+    ("019", "Ostrom",     1290, -0.0305, 0.50, 0.30, False, "North Woods"),
     ("021", "Pell",       1690,  0.0050, 0.60, 0.38, False, "River"),
     ("023", "Talcott",     690,  0.0040, 0.62, 0.55, True,  "Lakes"),
     ("025", "Whitcomb",   2080,  0.0060, 0.61, 0.44, False, "River"),
@@ -37,9 +37,10 @@ CODES = [c[0] for c in COUNTIES]
 SCALE = {c: 1.0 for c in CODES}
 # each county's 2026 drift beyond the calibrated target (set after the golden is measured)
 NUDGE = {c: 0.0 for c in CODES}
-NUDGE.update({"013": -0.0055, "019": -0.0028})
 NAMES = {c[0]: c[1] for c in COUNTIES}
 LAKES = ("013", "023", "027")                          # the Lakes region: summer trade at the lake worksites
+# how much likelier a chain in trade or leisure is to keep a worksite in a lake county than its size alone would make it
+LAKE_SITES = {"013": 8.5, "023": 5.5, "027": 7.0}
 NORTH = ("007", "019")                                 # the North Woods: outdoor work slows in winter
 
 # BLS supersectors: code, title, month factors Jan..Dec (pay period including the 12th)
@@ -166,13 +167,14 @@ TILT = {
 HOUSING_CHAIN = {"236115", "236118", "236220", "237310", "238110", "238160", "238210", "238220", "238310", "238320",
                  "238910", "238990", "113310", "115310", "321113", "321918", "337110", "423310", "444180", "444190",
                  "484220", "423810", "444110"}
-# the 2026 housing downturn: how many times the usual rate a small housing-chain employer got into trouble, by
-# quarter of 2026, and how much of the usual number of new housing-chain employers started up
-BUST_HAZARD = [1.5, 2.7, 5.0, 9.0]
+# the 2026 housing downturn: the chance, on top of the usual one, that a housing-chain employer got into trouble in
+# each quarter of 2026 (by size class: the largest are spared), and how much of the usual number of new housing-chain
+# employers started up
+BUST_HAZARD = [0.004, 0.012, 0.035, 0.11]
+BUST_SIZE = [1.0, 0.95, 0.95, 0.95, 0.45, 0.0, 0.0, 0.0]
 BUST_BIRTHS = [0.86, 0.62, 0.42, 0.28]
 OTHER_BIRTHS = [0.99, 0.95, 0.90, 0.84]
 BIRTH_RATE = 0.045                                      # new employers a quarter, as a share of a county's 2023 accounts
-LAKE_SEASONAL = {"713930", "713990", "721211", "721214", "721110", "722511", "722513", "722515", "459420"}
 
 # size classes: upper bound of employees and share of private accounts
 SIZE_CLASSES = [(4, 0.48), (9, 0.21), (19, 0.14), (49, 0.10), (99, 0.04), (249, 0.022), (499, 0.0055), (1500, 0.0025)]

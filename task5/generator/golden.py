@@ -16,16 +16,17 @@ import world as W
 KIND_ORDER = ["batch", "habit", "alone", "twoq", "new"]
 KIND_LABEL = {
     "rep": "reported",
-    "batch": "estimated: report expected in a transmission not yet received",
+    "batch": "estimated: report expected in an agent's batch not yet received",
     "habit": "estimated: files after the cut-off every quarter",
-    "alone": "estimated: report missing while its usual transmission arrived, or late for the first time",
+    "alone": "estimated: report outstanding on its own (its usual batch arrived without it, or it files singly)",
     "twoq": "estimated: no report for two quarters",
     "new": "estimated: account established, first report not yet received",
     "unreg": "estimated: employers with no account yet",
 }
-KIND_SHORT = {"batch": "In a transmission not yet received", "habit": "Files after the cut-off every quarter",
-              "alone": "Missing while its usual transmission arrived, or late for the first time",
+KIND_SHORT = {"batch": "In an agent's batch not yet received", "habit": "Files after the cut-off every quarter",
+              "alone": "Outstanding on its own: its usual batch arrived without it, or it files singly",
               "twoq": "No report for two quarters", "new": "Account established, first report not yet received"}
+CONSTRUCTION = "1012"
 
 
 def load_pack(folder):
@@ -73,14 +74,17 @@ def summary(pk, X, base):
     v = X["view"]
     ch = M.changes(X["total"], base)
     b = v.index[v["kind"] == "batch"]
-    bc, bo = b[v.loc[b, "chain"].values], b[~v.loc[b, "chain"].values]
+    cons = (v.loc[b, "ss"] == CONSTRUCTION).values
+    bc, bo = b[cons], b[~cons]
+    o = v[(v["prior"] > 0) & v["kind"].isin(["rep", "alone"]) & (v["ss"] == CONSTRUCTION)]
+    tc = float(o.loc[o["kind"] == "alone", "prior"].sum() / o["prior"].sum()) if len(o) else float("nan")
     return dict(total=X["total"], reported=X["reported"], estimated=X["outstanding"] + X["unregistered"],
                 outstanding=X["outstanding"], unregistered=X["unregistered"], change=ch, designated=M.designated(ch),
                 state_total=float(X["total"].sum()), state_change=float(100 * (X["total"].sum() / base.sum() - 1)),
                 k_alone=float(X["k_alone"]), unreg_jobs=float(X["unregistered"].sum()), unreg_n=float(X["uinfo"].get("n", 0.0)),
                 counts={k: int((v["kind"] == k).sum()) for k in KIND_ORDER},
-                kept_chain=kept(X["est"], v, bc), kept_other=kept(X["est"], v, bo), kept_batch=kept(X["est"], v, b),
-                batch_jobs=float(X["est"][b].sum()))
+                kept_constr=kept(X["est"], v, bc), kept_other=kept(X["est"], v, bo), kept_batch=kept(X["est"], v, b),
+                batch_jobs=float(X["est"][b].sum()), trouble_constr=tc)
 
 
 def compute(pk, published, bands=True, quiet=True):
@@ -92,6 +96,16 @@ def compute(pk, published, bands=True, quiet=True):
     v = main["view"]
     G.update(main=main, base=base, view=v, **S)
     G["census"] = dict(liable=len(v), received=int(v["rep"].sum()), outstanding=int((~v["rep"]).sum()))
+    # December 2025: employers liable for that quarter whose report has still not come. They are counted at nought
+    # (silent five quarters; two quarters out keep next to nothing); carried at their last report they would add a few
+    # hundred jobs, which is the alternative base the bands allow for
+    vb = pk.view(W.BASE_Q, M.EXTRACT)
+    end = pk.ended(M.EXTRACT)
+    gone = set(end[end <= M.M3START[W.BASE_Q]].index)
+    sil = vb[(~vb["rep"]) & ~vb.index.isin(gone)]
+    carry = sil["prior"].fillna(sil["prior_any"]).fillna(0.0)
+    carry_c, _ = pk.to_counties(carry.astype(float), W.BASE_Q, M.EXTRACT, "site")
+    G["base_silent"] = dict(n=int(len(sil)), jobs=float(carry.sum()), by_county=carry_c)
     # the outstanding by kind
     kinds = {}
     for k in KIND_ORDER:
@@ -102,18 +116,27 @@ def compute(pk, published, bands=True, quiet=True):
     G["k_twoq"], G["k_batch_hist"], G["new_mean"], G["mature"] = main["k_twoq"], main["k_batch_hist"], main["new_mean"], main["mature"]
     # this quarter's trouble beside earlier fourth quarters
     tr = {}
-    for q in (3, 7, 11, 15):
+    for q in (3, 7, 11, 12, 13, 14, 15):
         vq = pk.view(q)
         o = vq[(vq["prior"] > 0) & vq["kind"].isin(["rep", "alone"])]
         al = o[o["kind"] == "alone"]
-        tr[q] = dict(chain=float(al[al["chain"]]["prior"].sum() / o[o["chain"]]["prior"].sum()),
-                     other=float(al[~al["chain"]]["prior"].sum() / o[~o["chain"]]["prior"].sum()))
+        c_ = o["ss"] == CONSTRUCTION
+        tr[q] = dict(constr=float(al[al["ss"] == CONSTRUCTION]["prior"].sum() / o[c_]["prior"].sum()),
+                     other=float(al[al["ss"] != CONSTRUCTION]["prior"].sum() / o[~c_]["prior"].sum()),
+                     n_alone=int(len(vq[vq["kind"] == "alone"])), n_out=int((~vq["rep"]).sum()))
     G["trouble"] = tr
     rep_route = pk.certify(route=dict(batch="reporters"))
     SR = summary(pk, rep_route, base)
-    G["reporters"] = dict(kept_chain=SR["kept_chain"], kept_other=SR["kept_other"], kept_batch=SR["kept_batch"],
+    G["reporters"] = dict(kept_constr=SR["kept_constr"], kept_other=SR["kept_other"], kept_batch=SR["kept_batch"],
                           batch_jobs=SR["batch_jobs"])
     G["transport_jobs"] = SR["batch_jobs"] - S["batch_jobs"]
+    # the share kept under the hurried reading (every closed quarter, the unresolved left out) and with the unresolved
+    # taken at nought
+    G["k_allclosed"] = float(pk.certify(route=dict(alone="allclosed"))["k_alone"])
+    G["k_allzero"] = float(pk.certify(route=dict(alone="allzero"))["k_alone"])
+    oc = main["outcomes"]
+    G["pooled"] = dict(survive=float(oc["pooled_survive_n"].get(W.FLASH_Q % 4, float("nan"))),
+                       kept=float(oc["pooled_kept"].get(W.FLASH_Q % 4, float("nan"))))
     # employers with no account yet
     G["uinfo"] = main["uinfo"]
     # worksite splits
@@ -154,7 +177,8 @@ def compute(pk, published, bands=True, quiet=True):
         s = summary(pk, X, base)
         routes.append(dict(name=name, route=rt, state_total=s["state_total"], state_change=s["state_change"],
                            designated=s["designated"], change=s["change"], total=s["total"], unreg_jobs=s["unreg_jobs"],
-                           k_alone=s["k_alone"], kept_chain=s["kept_chain"]))
+                           k_alone=s["k_alone"], kept_constr=s["kept_constr"], total_est=float(s["estimated"].sum()),
+                           estimated=s["estimated"], counts=s["counts"]))
         if not quiet:
             print("route %-60s %s" % (name[:60], ",".join(W.NAMES[c] for c in s["designated"])))
     G["routes"] = routes
@@ -172,47 +196,86 @@ def compute(pk, published, bands=True, quiet=True):
             d = (Rr["total"] / base - 1) * 100
             rfam.append(dict(name=name, state_diff=float(100 * (Rr["total"].sum() / base.sum() - 1)), mean_abs=float(d.abs().mean()),
                              total=Rr["total"], diff=d))
+        alt = dict(summary(pk, main, base + G["base_silent"]["by_county"]))
+        alt["name"] = "employers still silent for December 2025 carried at their last report"
+        alt["latest_minus_site"] = fam[0]["latest_minus_site"]
+        fam.append(alt)
         G["family"], G["replay_family"] = fam, rfam
         tot = pd.DataFrame({i: f["total"] for i, f in enumerate(fam)})
         est = pd.DataFrame({i: f["estimated"] for i, f in enumerate(fam)})
         chf = pd.DataFrame({i: f["change"] for i, f in enumerate(fam)})
-        pad = lambda lo, hi: 0.25 * (hi - lo)
+        # a band holds every member of the family, padded by a quarter of their spread, and never comes nearer the
+        # golden than a floor an independent rebuild of the same estimate stays inside: half a point on a county's
+        # change and the same share of its jobs (two rebuilds by the stage 4 judge sat up to 0.45 of a point away)
+        FLOOR = 0.5
         B = {}
-        B["total"] = {c: (down(tot.loc[c].min() - pad(tot.loc[c].min(), tot.loc[c].max()) - 8, 10),
-                          up(tot.loc[c].max() + pad(tot.loc[c].min(), tot.loc[c].max()) + 8, 10)) for c in W.CODES}
-        B["estimated"] = {c: (down(est.loc[c].min() - pad(est.loc[c].min(), est.loc[c].max()) - 8, 10),
-                              up(est.loc[c].max() + pad(est.loc[c].min(), est.loc[c].max()) + 8, 10)) for c in W.CODES}
-        B["change"] = {c: (round(down(chf.loc[c].min() - pad(chf.loc[c].min(), chf.loc[c].max()) - 0.03, 0.1), 1),
-                           round(up(chf.loc[c].max() + pad(chf.loc[c].min(), chf.loc[c].max()) + 0.03, 0.1), 1)) for c in W.CODES}
+        B["change"], B["total"], B["estimated"] = {}, {}, {}
+        for c in W.CODES:
+            lo, hi = chf.loc[c].min(), chf.loc[c].max()
+            pad = 0.25 * (hi - lo) + 0.03
+            lo, hi = min(lo - pad, S["change"][c] - FLOOR), max(hi + pad, S["change"][c] + FLOOR)
+            B["change"][c] = (round(down(lo, 0.1), 1), round(up(hi, 0.1), 1))
+            fl = FLOOR / 100.0 * base[c]
+            lo, hi = tot.loc[c].min(), tot.loc[c].max()
+            pad = 0.25 * (hi - lo) + 8
+            B["total"][c] = (down(min(lo - pad, S["total"][c] - fl), 10), up(max(hi + pad, S["total"][c] + fl), 10))
+            lo, hi = est.loc[c].min(), est.loc[c].max()
+            pad = 0.25 * (hi - lo) + 8
+            B["estimated"][c] = (down(min(lo - pad, S["estimated"][c] - fl), 10), up(max(hi + pad, S["estimated"][c] + fl), 10))
         st = [f["state_total"] for f in fam]
-        B["state_total"] = (down(min(st) - 100, 100), up(max(st) + 100, 100))
+        sfl = 0.002 * S["state_total"]          # a fifth of a per cent of the state's jobs
+        B["state_total"] = (down(min(min(st) - 100, S["state_total"] - sfl), 100), up(max(max(st) + 100, S["state_total"] + sfl), 100))
         se = [float(f["estimated"].sum()) for f in fam]
-        B["state_estimated"] = (down(min(se) - 100, 100), up(max(se) + 100, 100))
+        se0 = float(S["estimated"].sum())
+        B["state_estimated"] = (down(min(min(se) - 100, se0 - sfl), 100), up(max(max(se) + 100, se0 + sfl), 100))
         sc = [f["state_change"] for f in fam]
-        B["state_change"] = (round(down(min(sc) - 0.03, 0.1), 1), round(up(max(sc) + 0.03, 0.1), 1))
+        B["state_change"] = (round(down(min(min(sc) - 0.03, S["state_change"] - 0.2), 0.1), 1),
+                             round(up(max(max(sc) + 0.03, S["state_change"] + 0.2), 0.1), 1))
         ks = [f["k_alone"] for f in fam]
-        B["k_alone"] = (round(down(min(ks) - 0.008, 0.01), 2), round(up(max(ks) + 0.008, 0.01), 2))
+        B["k_alone"] = (round(down(min(min(ks) - 0.012, S["k_alone"] - 0.045), 0.01), 2),
+                        round(up(max(max(ks) + 0.012, S["k_alone"] + 0.045), 0.01), 2))
         uj = [f["unreg_jobs"] for f in fam]
-        B["unreg_jobs"] = (down(min(uj) - 100, 100), up(max(uj) + 100, 100))
+        B["unreg_jobs"] = (down(min(uj) - 150, 100), up(max(uj) + 150, 100))
         un = [f["unreg_n"] for f in fam]
-        B["unreg_n"] = (down(min(un) - 25, 10), up(max(un) + 25, 10))
+        B["unreg_n"] = (down(min(un) - 30, 10), up(max(un) + 30, 10))
         for k in KIND_ORDER:
             cs = [f["counts"][k] for f in fam]
             w_ = max(10, 0.02 * max(cs))
             B["n_" + k] = (int(down(min(cs) - w_, 10)), int(up(max(cs) + w_, 10)))
-        kc = [f["kept_chain"] for f in fam]
-        B["kept_chain"] = (round(down(min(kc) - 0.004, 0.01), 2), round(up(max(kc) + 0.004, 0.01), 2))
-        tj = [SR["batch_jobs"] - f["batch_jobs"] for f in fam if f["name"] not in ()]
-        B["transport_jobs"] = (down(min(tj) - 40, 50), up(max(tj) + 40, 50))
+        ah = [f["counts"]["alone"] + f["counts"]["habit"] for f in fam]
+        B["n_alone_habit"] = (int(down(min(ah) - 0.02 * max(ah), 10)), int(up(max(ah) + 0.02 * max(ah), 10)))
+        # the split between the two moves with the rule for "every quarter": a band of 15 per cent of the habitual
+        hb = [f["counts"]["habit"] for f in fam]
+        w_ = 0.15 * max(hb)
+        B["n_habit"] = (int(down(min(hb) - w_, 10)), int(up(max(hb) + w_, 10)))
+        al_ = [f["counts"]["alone"] for f in fam]
+        B["n_alone"] = (int(down(min(al_) - w_, 10)), int(up(max(al_) + w_, 10)))
+        tcs = [100 * f["trouble_constr"] for f in fam]
+        B["trouble_constr"] = (round(down(min(tcs) - 0.4, 0.1), 1), round(up(max(tcs) + 0.4, 0.1), 1))
+        kc = [f["kept_constr"] for f in fam]
+        B["kept_constr"] = (round(down(min(kc) - 0.012, 0.01), 2), round(up(max(kc) + 0.012, 0.01), 2))
+        tj = [SR["batch_jobs"] - f["batch_jobs"] for f in fam if f.get("batch_jobs") is not None and "trouble not carried" not in f["name"]]
+        B["transport_jobs"] = (down(min(min(tj) - 40, 0.75 * G["transport_jobs"]), 50), up(max(max(tj) + 40, 1.25 * G["transport_jobs"]), 50))
         ls = pd.DataFrame({i: f["latest_minus_site"] for i, f in enumerate(fam)})
-        B["latest_minus_site"] = {c: (down(ls.loc[c].min() - 15, 10), up(ls.loc[c].max() + 15, 10)) for c in W.CODES}
+        B["latest_minus_site"] = {}
+        for c in W.CODES:
+            g0 = float(G["latest_minus_site"][c])
+            w_ = max(30.0, 0.25 * abs(g0))
+            B["latest_minus_site"][c] = (down(min(ls.loc[c].min() - 15, g0 - w_), 10), up(max(ls.loc[c].max() + 15, g0 + w_), 10))
         rs = [f["state_diff"] for f in rfam]
-        B["replay_state_diff"] = (round(down(min(rs) - 0.04, 0.05), 2), round(up(max(rs) + 0.04, 0.05), 2))
+        r0 = G["replay"]["state_diff"]
+        # the replay moves with the method's own unregistered estimate on a year with less history behind it
+        B["replay_state_diff"] = (round(down(min(min(rs) - 0.04, r0 - 0.25), 0.05), 2), round(up(max(max(rs) + 0.04, r0 + 0.2), 0.05), 2))
         rm = [f["mean_abs"] for f in rfam]
-        B["replay_mean_abs"] = (round(down(min(rm) - 0.03, 0.05), 2), round(up(max(rm) + 0.03, 0.05), 2))
+        m0 = G["replay"]["mean_abs"]
+        B["replay_mean_abs"] = (round(max(0.0, down(min(min(rm) - 0.03, m0 - 0.12), 0.05)), 2), round(up(max(max(rm) + 0.03, m0 + 0.17), 0.05), 2))
         rt_ = pd.DataFrame({i: f["total"] for i, f in enumerate(rfam)})
-        B["replay_total"] = {c: (down(rt_.loc[c].min() - pad(rt_.loc[c].min(), rt_.loc[c].max()) - 8, 10),
-                                 up(rt_.loc[c].max() + pad(rt_.loc[c].min(), rt_.loc[c].max()) + 8, 10)) for c in W.CODES}
+        B["replay_total"] = {}
+        for c in W.CODES:
+            lo, hi = rt_.loc[c].min(), rt_.loc[c].max()
+            pad = 0.25 * (hi - lo) + 8
+            fl = FLOOR / 100.0 * base[c]
+            B["replay_total"][c] = (down(min(lo - pad, G["replay"]["total"][c] - fl), 10), up(max(hi + pad, G["replay"]["total"][c] + fl), 10))
         G["bands"] = B
     return G
 
@@ -363,10 +426,9 @@ def write_certification(pk, G, path):
                    "December 2026 jobs", "How estimated"])
     k_al, tr = G["k_alone"], G["trouble"]
     how = {
-        "batch": "September jobs moved by the change of every employer in its county and supersector whose standing the "
-                 "records show: the reporting employers' change, with this quarter's share of jobs at employers missing "
-                 "alone (by housing chain and size) carried at %.2f. A seasonal business by its own December on September "
-                 "in the two years before." % k_al,
+        "batch": "September jobs moved by the December-on-September change of the reporting employers in its county and "
+                 "supersector, except for the share of its supersector and size class's jobs that sits this quarter at "
+                 "employers outstanding on their own, which is carried at %.2f as in the third row." % k_al,
         "habit": "As the row above.",
         "alone": "September jobs times %.2f: what employers in the same position at the cut-offs of %s to %s kept in the "
                  "quarter's third month, every one since resolved by a late report, a closure or an inactivation."
@@ -396,12 +458,16 @@ def write_certification(pk, G, path):
     put(es, rr, 1, "Total estimated", b=True)
     put(es, rr, 5, r100(G["estimated"].sum()), "#,##0", True)
     rr += 2
-    put(es, rr, 1, "Housing-chain employers in late transmissions are carried at %.2f of their September jobs, other "
-                   "employers at %.2f; on the reporting employers' change alone they would be carried at %.2f and %.2f. "
-                   "Employers missing alone hold %.1f percent of the housing chain's jobs this quarter, against %.1f, %.1f "
-                   "and %.1f percent at the fourth-quarter cut-offs of 2023, 2024 and 2025."
-        % (G["kept_chain"], G["kept_other"], G["reporters"]["kept_chain"], G["reporters"]["kept_other"],
-           100 * tr[15]["chain"], 100 * tr[3]["chain"], 100 * tr[7]["chain"], 100 * tr[11]["chain"])).alignment = wrap
+    put(es, rr, 1, "A batch is three or more reports received in the same second, which is how a payroll agent's file "
+                   "arrives; an employer's batch is the one its third-quarter report came in, and it has arrived when at "
+                   "least half of the other employers in it have reported. Employers outstanding on their own hold %.1f "
+                   "percent of construction jobs this quarter, against %.1f, %.1f and %.1f percent at the fourth-quarter "
+                   "cut-offs of 2023, 2024 and 2025 (%.1f, %.1f and %.1f percent at the first three cut-offs of 2026), so "
+                   "construction employers in late batches are carried at %.2f of their September jobs; on the reporting "
+                   "employers' change alone they would be carried at %.2f."
+        % (100 * tr[15]["constr"], 100 * tr[3]["constr"], 100 * tr[7]["constr"], 100 * tr[11]["constr"],
+           100 * tr[12]["constr"], 100 * tr[13]["constr"], 100 * tr[14]["constr"],
+           G["kept_constr"], G["reporters"]["kept_constr"])).alignment = wrap
     rr += 2
     header(es, rr, ["County", "Reports outstanding", "No account yet", "Estimated, total",
                     "Change in the county's jobs if the latest worksite reports' split were used instead"])
@@ -452,6 +518,10 @@ def write_certification(pk, G, path):
     put(d5, 12 + len(W.CODES), 3, rc["now"], "#,##0", True)
     put(d5, 12 + len(W.CODES), 4, rc["now"] - rc["published"], "#,##0;-#,##0;0", True)
     put(d5, 14 + len(W.CODES), 1, "County figures also move where a worksite report for the quarter came in after May 31, 2026.")
+    bs = G["base_silent"]
+    put(d5, 15 + len(W.CODES), 1, "December 2025 as now on file is the reports on file. %d employers liable for that quarter have still "
+                                   "filed no report for it; silent for five quarters, they are counted at nought (their last reports "
+                                   "held %s jobs)." % (bs["n"], "{:,}".format(int(round(bs["jobs"], -1)))))
     d5.column_dimensions["A"].width = 78
     for col in "BCD":
         d5.column_dimensions[col].width = 15
@@ -523,23 +593,25 @@ def memo_story(G):
                     "for the 2027 Community Transition Fund" % W.PEOPLE["lmi_director"][:2], D.SANS),
           Spacer(1, 4),
           Paragraph("<b>Recommendation.</b> Certify %s as the counties whose covered jobs in December 2026 were 2.0 percent or "
-                    "more below December 2025. No other county is within half a point of the line; %s, the nearest, is at "
-                    "%.1f percent. The state as a whole is at %.1f percent."
-                    % (names, W.NAMES[near], r1(ch[near]), r1(G["state_change"])), D.SANS),
+                    "more below December 2025. No other county is within %.1f of a point of the line; %s, the nearest, is "
+                    "at %.1f percent. The state as a whole is at %+.1f percent."
+                    % (names, round(abs(r1(ch[near]) - W.THRESHOLD) - 0.1, 1), W.NAMES[near], r1(ch[near]), r1(G["state_change"])), D.SANS),
           D._table(rows, [1.6 * 72, 1.3 * 72, 1.3 * 72, 0.9 * 72]), Spacer(1, 6),
           Paragraph("<b>What the estimates rest on.</b> On February 15, %s of %s liable employers had reported. "
                     "Of the December jobs certified, %s are on those reports and %s are estimated."
                     % ("{:,}".format(G["census"]["received"]), "{:,}".format(G["census"]["liable"]),
                        "{:,}".format(r100(G["reported"].sum())), "{:,}".format(r100(G["estimated"].sum()))), D.SANS),
-          Paragraph("1. Reports that are out with a payroll agent's whole transmission (%s employers) say nothing about the "
-                    "employer. Reports missing from a transmission that did arrive (%s employers) mostly mean trouble: at "
-                    "earlier cut-offs such employers kept %.2f of their September jobs once their cases resolved, and we "
-                    "carry them at that."
+          Paragraph("1. A report that is out with a payroll agent's whole batch (%s employers; a batch is three or more "
+                    "reports received in the same second) says nothing about the employer. A report that is out on its own "
+                    "(%s employers), when the employer's usual batch arrived without it or it files singly, mostly means "
+                    "trouble: at earlier cut-offs such employers kept %.2f of their September jobs once their cases "
+                    "resolved, and we carry them at that."
                     % ("{:,}".format(G["kinds"]["batch"]["n"]), "{:,}".format(G["kinds"]["alone"]["n"]), G["k_alone"]), D.SANS),
-          Paragraph("2. This quarter is not like the closed ones. Employers missing alone hold %.1f percent of the housing "
-                    "chain's jobs, against about half a percent in earlier fourth quarters, so the housing-chain employers "
-                    "in late transmissions are carried at %.2f of September, not the %.2f their reporting peers show."
-                    % (100 * tr[15]["chain"], G["kept_chain"], G["reporters"]["kept_chain"]), D.SANS),
+          Paragraph("2. This quarter is not like the closed ones. Employers out on their own hold %.1f percent of "
+                    "construction jobs, against under one percent at earlier fourth-quarter cut-offs, so construction "
+                    "employers in late batches are carried at %.2f of September, not the %.2f their reporting peers show. "
+                    "The replay below cannot test this step: December 2025 had no such quarter."
+                    % (100 * tr[15]["constr"], G["kept_constr"], G["reporters"]["kept_constr"]), D.SANS),
           Paragraph("3. About %s employers liable for the quarter have no account yet. They add about %s jobs, counted from "
                     "this quarter's registrations so far and the delays of earlier years, at the %.1f jobs late registrants "
                     "have had." % ("{:,}".format(int(round(ui["n"], -1))), "{:,}".format(r100(G["unreg_jobs"])), ui["j_own"]), D.SANS),
