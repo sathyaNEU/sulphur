@@ -583,3 +583,19 @@ the name of any attached file; who is asking; how many swaps are open or still t
   date cells and the step that quotes figures from the index's earlier public history (not recomputable from the
   pack) are left unrepaired, since this cut is not uploaded. The next draw moves to another world, where the
   difficulty is selection and composition across many real records, not a method choice on a handful of series.
+- 2026-11-10, architecture 9's lead, explored on the real data and not drawn: Cboe's option-strategy benchmark
+  indices, 26 of them with official base and launch dates read from the methodology documents, as mandates for a
+  pick with a forecast. Market-adjusted against an S&P 500 total-return series (price plus dividends from a public
+  mirror of Shiller's monthly data) and bills, the back-tested years beat the live years at most indices launched in
+  2015 and 2016 (BXMD +1.8 then -1.0 points a year, CMBO +1.8 then -1.4, CNDR +2.4 then -1.7, SMILE +4.3 then -3.1),
+  but indices already live fell over the same years (BXM about +0.4 to +1.3 before mid 2015 and -1.1 to -1.8 since),
+  and paired against a live relative the change at launch is nil for the plain variants (CMBO less BXM -0.1 with a
+  standard error of 0.6, BXMD less BXY -0.3 (0.6), PUTY less PUT +0.9 (0.9)): the gap is the era, not the back-test.
+  That is one strong, pinned judgment (a first pass reads back-test inflation and haircuts the early years). The
+  regression of selected edges (a top third's +3.5 to +4.3 becoming +0.6 to +0.7 over the next three years) is real
+  but loosely pinned, the tail by window becomes a rule once filed, the exposure restated on a total-return basis is
+  textbook, and whether the shortfall since 2012 persists is unpinned. The pick is not separable: plan figures of 2.0
+  to 2.9 points a year over bills sit 0.15 to 0.5 apart against standard errors above 1. Two judgments and no
+  decidable pick fall short of four, so nothing was drawn. A draw here needs real records of investable funds or
+  other position-level records (implementation by structure, fund selection, closed funds), which sit on hosts this
+  environment does not allow.
