@@ -1,9 +1,9 @@
-"""task10 architecture 5: the pack under target/, written from the clean truth the way Wealdmoor's systems record it.
+"""task10 architecture 6: the pack under target/, written from the clean truth the way Wealdmoor's systems record it.
 
 The SCADA historian's half-hourly export of the Halverton zone's nine primaries across the May 2024 asset ID
 migration (UTC, quality flags, comms gaps, a month the export re-sent), the DSO's flexibility dispatch log (UK local
-time, re-issued and cancelled instructions), the reference weather station's hourly observations, the primary
-register, the 11 kV feeder and open point schedule, the load growth register, two governing documents and three
+time, re-issued and cancelled instructions), the control room's 11 kV switching log, the reference weather station's
+hourly observations, the primary register, the 11 kV feeder and open point schedule, the load growth register, two governing documents and three
 files a planner would weigh and the assessment does not use."""
 import csv
 import datetime as dt
@@ -19,7 +19,8 @@ import world as W
 
 ORG = "Wealdmoor Power Networks plc"
 F_SCADA = "primary_demand_halfhourly_2023-2026.csv"
-F_EVENTS = "flexibility_events_2024-2026.csv"
+F_EVENTS = "flexibility_events_2023-2026.csv"
+F_SWITCH = "control_room_switching_log_2023-2026.csv"
 F_WX = "halverton_weather_hourly_2023-2026.csv"
 F_REG = "primary_substation_register.xlsx"
 F_FDR = "network_feeders_11kv.xlsx"
@@ -29,12 +30,13 @@ F_AWARD = "flexibility_contract_awards_2027-28.pdf"
 F_CI = "customer_interruptions_2025-26.xlsx"
 F_COND = "primary_transformer_condition_2026.xlsx"
 F_DUOS = "duos_charging_statement_2027-28.pdf"
-FILES = [F_SCADA, F_EVENTS, F_WX, F_REG, F_FDR, F_GROW, F_GUIDE, F_AWARD, F_CI, F_COND, F_DUOS]
+FILES = [F_SCADA, F_EVENTS, F_SWITCH, F_WX, F_REG, F_FDR, F_GROW, F_GUIDE, F_AWARD, F_CI, F_COND, F_DUOS]
 DISTRACTORS = [F_CI, F_COND, F_DUOS]
 EXPORT = dt.datetime(2026, 11, 3, 8, 14, tzinfo=dt.timezone.utc)
 # the three exports carry no save stamp of their own: each file's time is when its system wrote it
 EXPORTED = {F_SCADA: dt.datetime(2026, 11, 3, 8, 14, 37, tzinfo=dt.timezone.utc),
             F_EVENTS: dt.datetime(2026, 11, 2, 16, 47, 22, tzinfo=dt.timezone.utc),
+            F_SWITCH: dt.datetime(2026, 11, 2, 17, 5, 51, tzinfo=dt.timezone.utc),
             F_WX: dt.datetime(2026, 11, 1, 6, 12, 5, tzinfo=dt.timezone.utc)}
 MIGRATION = dt.datetime(2024, 5, 14, tzinfo=dt.timezone.utc)
 UTC = dt.timezone.utc
@@ -86,18 +88,32 @@ def scada_rows(T, stream=SCADA_STREAM):
             mvar = vals * np.tan(np.arccos(np.clip(pf + q, 0.9, 0.995)))
             qual = np.array(["G"] * len(vals), dtype=object)
             mw = vals.copy()
+            # the evenings the DSO had flexibility scheduled at this primary: the outstation was polled on a second
+            # route for the service window, so the historian lost none of those half-hours
+            watched = np.zeros(len(vals), bool)
+            for e in T["events"]:
+                if e["zone"] == p["key"] and e["winter"] == w:
+                    ix = W.window_indices(stamps, e["day"])
+                    watched[max(ix[0] - 3, 0):ix[-1] + 7] = True
             # comms outages: the historian holds the last good value, flagged S, for 2 to 9 half-hours
             for _ in range(int(rng.integers(5, 10))):
-                i0 = int(rng.integers(1, len(vals) - 12))
-                n = int(rng.integers(2, 10))
+                while True:
+                    i0 = int(rng.integers(1, len(vals) - 12))
+                    n = int(rng.integers(2, 10))
+                    if not watched[i0:i0 + n].any():
+                        break
                 mw[i0:i0 + n] = mw[i0 - 1]
                 mvar[i0:i0 + n] = mvar[i0 - 1]
                 qual[i0:i0 + n] = "S"
             # gaps the outstation never filled (rows absent from the export)
             drop = np.zeros(len(vals), bool)
             for _ in range(int(rng.integers(3, 8))):
-                i0 = int(rng.integers(0, len(vals) - 6))
-                drop[i0:i0 + int(rng.integers(1, 6))] = True
+                while True:
+                    i0 = int(rng.integers(0, len(vals) - 6))
+                    n = int(rng.integers(1, 6))
+                    if not watched[i0:i0 + n].any():
+                        break
+                drop[i0:i0 + n] = True
             if p["key"] == "E" and w == "2024/25":
                 i0 = 48 * 70 + 19
                 mw[i0:i0 + 31] = 0.0
@@ -140,7 +156,7 @@ def event_rows(T):
     rng = np.random.default_rng([W.SEED, 47])
     evs = sorted(T["events"], key=lambda e: (e["day"], ORDER[e["zone"]]))
     out = []
-    seq = {"2024/25": 1146, "2025/26": 1389}
+    seq = {"2023/24": 873, "2024/25": 1146, "2025/26": 1389}
     for e in evs:
         w = e["winter"]
         seq[w] += int(rng.integers(1, 4))
@@ -285,10 +301,7 @@ def write_register(target):
 
 # 11 kV feeders and open points
 FEEDERS_PER = {"A": 8, "B": 7, "C": 8, "D": 6, "E": 6, "F": 9, "G": 7, "H": 6, "I": 6}
-NOPS = [("NOP-1172", "A", "B"), ("NOP-1088", "A", "D"), ("NOP-0948", "C", "D"), ("NOP-0815", "C", "E"),
-        ("NOP-1305", "F", "G"), ("NOP-0761", "H", "I"), ("NOP-0693", "H", "E"),
-        ("NOP-1260", "B", "G"), ("NOP-0877", "D", "E"), ("NOP-1351", "G", "I"), ("NOP-0722", "E", "I"),
-        ("NOP-1214", "D", "F")]
+NOPS = W.NOPS
 
 
 def feeder_table():
@@ -351,6 +364,44 @@ def write_feeders(target):
     save_book(wb, os.path.join(target, F_FDR), "Network Records", "Network Records",
               aware("2024-06-03T10:02:44Z"), aware("2026-08-19T13:37:05Z"))
     return feeders, nop_rows
+
+
+# ------------------------------------------------------------------------------------- control room switching log
+ENGINEERS = ["JT", "MB", "SK", "AD", "RP", "LW", "CH"]
+
+
+def switching_rows(T, nop_rows):
+    """The control room's 11 kV switching log for the Halverton zone: one row per operation, the transfer of a feeder
+    section across a normally-open point logged when it is made and again when the network is put back to normal,
+    with the load the control engineer read off the feeder ammeters at the time."""
+    rng = np.random.default_rng([W.SEED, 83])
+    side = {r[0]: {r[2]: r[1], r[4]: r[3]} for r in nop_rows}     # open point -> primary code -> feeder ID
+    out = []
+    n = 4100
+    for s in T["switching"]:
+        if s["mw_at_start"] <= 0:
+            continue
+        frm, to = W.BY[s["frm"]], W.BY[s["to"]]
+        f_from, f_to = side[s["nop"]][frm["code"]], side[s["nop"]][to["code"]]
+        eng = ENGINEERS[int(rng.integers(0, len(ENGINEERS)))]
+        n += int(rng.integers(3, 40))
+        amps = int(round(s["mw_at_start"] * 1000 / (1.732 * 11 * 0.97)))
+        out.append(["SW-%05d" % n, uk_label(s["start"]), eng, s["nop"], "Closed",
+                    f_from, frm["code"], f_to, to["code"], "%.2f" % s["mw_at_start"], str(amps), s["reason"]])
+        eng2 = ENGINEERS[int(rng.integers(0, len(ENGINEERS)))]
+        n += int(rng.integers(1, 30))
+        out.append(["SW-%05d" % n, uk_label(s["end"]), eng2, s["nop"], "Opened (normal)",
+                    f_from, frm["code"], f_to, to["code"], "", "", "Network restored to normal"])
+    return out
+
+
+def write_switching(T, target, nop_rows):
+    rows = switching_rows(T, nop_rows)
+    write_csv(os.path.join(target, F_SWITCH),
+              ["log_ref", "operation_time_uk_local", "control_engineer", "open_point", "operation", "section_from_feeder",
+               "section_from_primary", "section_to_feeder", "section_to_primary", "load_transferred_mw", "feeder_amps",
+               "reason"], rows)
+    return len(rows)
 
 
 # load growth register
@@ -509,7 +560,9 @@ def write_data(T, target):
     n_wx = write_weather(T, target)
     write_register(target)
     feeders, nops = write_feeders(target)
+    n_sw = write_switching(T, target, nops)
     grow = write_growth(target, feeders)
     write_interruptions(target, feeders)
     write_condition(target)
-    return dict(scada_rows=n_scada, event_rows=n_ev, weather_rows=n_wx, feeders=feeders, nops=nops, growth=grow)
+    return dict(scada_rows=n_scada, event_rows=n_ev, weather_rows=n_wx, switching_rows=n_sw, feeders=feeders, nops=nops,
+                growth=grow)

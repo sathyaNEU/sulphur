@@ -1,4 +1,4 @@
-"""task10 architecture 5: reads the pack back into clean tables, cleaning each Layer 1 item the way a careful analyst
+"""task10 architecture 6: reads the pack back into clean tables, cleaning each Layer 1 item the way a careful analyst
 does (both SCADA point names mapped through the register, S and B quality rows and the re-sent overlap dropped, the
 latest revision of each dispatch instruction kept, UK local dates parsed, the growth register filtered and
 de-duplicated by reference, feeder IDs mapped through both their codes)."""
@@ -46,7 +46,7 @@ def scada(target, pmap):
 
 
 def events(target):
-    e = pd.read_csv(os.path.join(target, "flexibility_events_2024-2026.csv"), dtype=str)
+    e = pd.read_csv(os.path.join(target, "flexibility_events_2023-2026.csv"), dtype=str)
     e["revision"] = e["revision"].astype(int)
     e = e.sort_values(["instruction_ref", "revision"]).groupby("instruction_ref", as_index=False).last()
     out = pd.DataFrame({
@@ -123,7 +123,30 @@ def contracts(target):
         m = re.match(r"\s*(Ashcombe Road|Charlecote Way|Fenwick Street|Hartwell Common) CMZ\s.*?\s(\d+\.\d)\s+(\d+\.\d\d)\s+(\d+)\s*$", line)
         if m:
             out[m.group(1)] = float(m.group(2))
-    return out, txt
+    prev = {}
+    # the previous winters' table: zone, provider, then one contracted figure per winter
+    for line in txt.splitlines():
+        m = re.match(r"\s*(Ashcombe Road|Charlecote Way|Fenwick Street|Hartwell Common) CMZ\s.*?\s(\d+\.\d)\s+(\d+\.\d)\s+(\d+\.\d)\s*$", line)
+        if m:
+            prev[m.group(1)] = dict(zip(("2023/24", "2024/25", "2025/26"), (float(m.group(i)) for i in (2, 3, 4))))
+    return out, txt, prev
+
+
+def switching(target):
+    """The control room's switching log: each transfer from the operation that closed the open point to the one that
+    put the network back to normal."""
+    s = pd.read_csv(os.path.join(target, "control_room_switching_log_2023-2026.csv"), dtype=str)
+    s["t"] = pd.to_datetime(s["operation_time_uk_local"]).dt.tz_localize("Europe/London").dt.tz_convert("UTC")
+    s = s.sort_values("t").reset_index(drop=True)
+    rows, open_at = [], {}
+    for r in s.itertuples():
+        if r.operation == "Closed":
+            open_at[r.open_point] = r
+        elif r.open_point in open_at:
+            a = open_at.pop(r.open_point)
+            rows.append(dict(nop=r.open_point, frm=a.section_from_primary, to=a.section_to_primary, start=a.t, end=r.t,
+                             mw=float(a.load_transferred_mw)))
+    return pd.DataFrame(rows).sort_values(["start", "nop"]).reset_index(drop=True)
 
 
 def load(target):
@@ -131,4 +154,4 @@ def load(target):
     fmap, links = feeders(target)
     return dict(demand=scada(target, pmap), events=events(target), weather=weather(target), names=names,
                 rates=rates, links=links, growth=growth(target, fmap), firm=firm_capacity(target),
-                contracts=contracts(target)[0])
+                contracts=contracts(target)[0], previous=contracts(target)[2], switching=switching(target))

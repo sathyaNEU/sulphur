@@ -1,6 +1,6 @@
 {
  "task": "task10",
- "decision": "the Halverton flexibility zones' primary substations whose reinforcement Wealdmoor Power Networks commits for winter 2027/28, with each zone's provider delivery, credited flexibility and design-day demand",
+ "decision": "the Halverton flexibility zones' primary substations whose reinforcement Wealdmoor Power Networks commits for winter 2027/28, with what each 2027/28 contract delivers and takes off the design day's peak, each peak expected and at the one-day-in-ten level, and last winter's backtest",
  "deliverables": [
   "halverton_primary_capacity_2027-28.xlsx",
   "capex_review_2027-28.pptx"
@@ -19,11 +19,18 @@
    "covers": "The Halverton zone's SCADA historian export: the nine 33/11 kV primaries' half-hourly demand, November to March of winters 2023/24 to 2025/26, UTC."
   },
   {
-   "path": "target/flexibility_events_2024-2026.csv",
+   "path": "target/flexibility_events_2023-2026.csv",
    "source": "constructed for task10; no real dataset",
    "date": "2026-11-03",
    "licence": "CC0 1.0 (constructed)",
-   "covers": "The DSO's flexibility dispatch log for the four Halverton constraint managed zones, winters 2024/25 and 2025/26, UK local time."
+   "covers": "The DSO's flexibility dispatch log for the four Halverton constraint managed zones, winters 2023/24 to 2025/26, UK local time."
+  },
+  {
+   "path": "target/control_room_switching_log_2023-2026.csv",
+   "source": "constructed for task10; no real dataset",
+   "date": "2026-11-03",
+   "licence": "CC0 1.0 (constructed)",
+   "covers": "The control room's 11 kV switching log for the Halverton zone, winters 2023/24 to 2025/26."
   },
   {
    "path": "target/halverton_weather_hourly_2023-2026.csv",
@@ -90,8 +97,9 @@
   }
  ],
  "rows": {
-  "scada": 196201,
-  "events": 372,
-  "weather": 13372
+  "scada": 196213,
+  "events": 697,
+  "weather": 13372,
+  "switching": 60
  }
 }

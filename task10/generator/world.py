@@ -1,10 +1,14 @@
-"""task10 architecture 5: the clean truth of Wealdmoor Power Networks' Halverton zone.
+"""task10 architecture 6: the clean truth of Wealdmoor Power Networks' Halverton zone, simulated as its process.
 
 Nine 33/11 kV primaries, three winters (October to March, 2023/24 to 2025/26) of half-hourly demand driven by the
-reference station's daily mean temperature, four flexibility zones whose providers were scheduled day-ahead from
-November 2024, each provider's own reduction falling as the event day gets colder, and the control room's
-pre-planned 11 kV transfer schemes, armed for the event window at three of the zones, moving a feeder section onto
-the neighbouring primary. Nothing here is written to the pack; pack.py writes what the systems record."""
+reference station's daily mean temperature. From November 2024 the DSO schedules flexibility day-ahead at four
+constraint managed zones, sized to what its forecast shows is needed to hold the primary at 95 per cent of firm
+capacity and never more than the megawatts contracted. A provider delivers what is scheduled while its enrolled
+assets can: what they have available that evening is a share of the contracted (registered) megawatts that falls as
+the day gets colder and varies from day to day, so a call above it delivers the available megawatts and no more.
+After the service window the curtailed load comes back for an hour or two. The control room's ordinary 11 kV
+switching (planned work, fault restoration) moves feeder sections between primaries and is logged. Nothing here is
+written to the pack; pack.py writes what the systems record."""
 import datetime as dt
 import math
 
@@ -49,27 +53,42 @@ PRIMARIES = [
 ]
 BY = {p["key"]: p for p in PRIMARIES}
 
-# Providers' own reduction per MW scheduled in the credited half-hours, by the event day's daily mean temperature.
+# What a provider's enrolled assets have available in the evening peak, as a share of the megawatts contracted
+# (their registered capacity), by the event day's daily mean temperature: the weather-dependent part of the
+# portfolio holds back as it gets colder. cv is the day-to-day spread of that availability; reb the share of the
+# megawatts delivered that comes back in each of the four half-hours after the window.
 PROVIDERS = {
-    "Corvane": dict(legal="Corvane Flex Ltd", at0=0.533, slope=0.044),      # domestic heat pumps and batteries
-    "Quillon": dict(legal="Quillon Energy Services Ltd", at0=0.600, slope=0.033),  # commercial demand response
+    "Corvane": dict(legal="Corvane Flex Ltd", a_hi=0.741, a_lo=0.094, t_mid=-2.2, w=4.2, cv=0.112,
+                    reb=(0.335, 0.205, 0.115, 0.045)),      # domestic heat pumps and batteries
+    "Quillon": dict(legal="Quillon Energy Services Ltd", a_hi=0.804, a_lo=0.222, t_mid=-3.0, w=4.6, cv=0.172,
+                    reb=(0.285, 0.155, 0.065, 0.02)),       # commercial refrigeration, HVAC and process load
 }
-# zone primary, provider, MW scheduled in 2024/25 and 2025/26, MW contracted for 2027/28, transfer share, partner
+MW28 = {"A": 16.0, "C": 7.5, "F": 10.0, "H": 7.5}
+# zone primary, provider, MW contracted in 2024/25 and 2025/26, MW contracted for 2027/28
 ZONES = [
-    dict(key="A", provider="Corvane", mw={"2024/25": 5.0, "2025/26": 6.5}, mw28=9.5, sigma=0.060, partner="B",
-         nop="NOP-1172"),
-    dict(key="C", provider="Quillon", mw={"2024/25": 4.0, "2025/26": 4.5}, mw28=8.0, sigma=0.0, partner="D",
-         nop="NOP-0948"),
-    dict(key="F", provider="Quillon", mw={"2024/25": 5.5, "2025/26": 6.5}, mw28=14.0, sigma=0.046, partner="G",
-         nop="NOP-1305"),
-    dict(key="H", provider="Corvane", mw={"2024/25": 2.5, "2025/26": 3.0}, mw28=7.5, sigma=0.045, partner="I",
-         nop="NOP-0761"),
+    dict(key="A", provider="Corvane", mw={"2023/24": 5.5, "2024/25": 6.5, "2025/26": 7.5}, mw28=MW28["A"], partner="B", nop="NOP-1172"),
+    dict(key="C", provider="Quillon", mw={"2023/24": 2.5, "2024/25": 3.0, "2025/26": 4.0}, mw28=MW28["C"], partner="D", nop="NOP-0948"),
+    dict(key="F", provider="Quillon", mw={"2023/24": 2.5, "2024/25": 3.5, "2025/26": 4.5}, mw28=MW28["F"], partner="G", nop="NOP-1305"),
+    dict(key="H", provider="Corvane", mw={"2023/24": 2.0, "2024/25": 2.5, "2025/26": 3.0}, mw28=MW28["H"], partner="I", nop="NOP-0761"),
 ]
 ZBY = {z["key"]: z for z in ZONES}
-SERVICE_START = {("A", "2024/25"): dt.date(2024, 11, 28), ("H", "2025/26"): dt.date(2025, 11, 10)}
+SERVICE_START = {("A", "2023/24"): dt.date(2023, 11, 27), ("C", "2023/24"): dt.date(2023, 11, 13), ("H", "2025/26"): dt.date(2025, 11, 10)}
 # accepted connections energising before 1 November 2027, MW at the design condition, by primary
 REGISTER_MW = {"A": 2.30, "B": 0.62, "C": 0.71, "D": 0.34, "E": 2.88, "F": 0.93, "G": 0.79, "H": 1.19, "I": 0.41}
 RAMP = np.array([0.55, 0.86, 1.0, 1.0, 1.0, 1.0, 0.92])   # half-hours ending 16:30 ... 19:30 local
+THRESHOLD = 0.92     # the DSO schedules when its forecast of the primary's peak exceeds this share of firm capacity
+STEP_MW = 0.5        # schedules are issued in half megawatts
+MIN_MW = 1.0         # the smallest schedule the service terms allow
+NOPS = [("NOP-1172", "A", "B"), ("NOP-1088", "A", "D"), ("NOP-0948", "C", "D"), ("NOP-0815", "C", "E"),
+        ("NOP-1305", "F", "G"), ("NOP-0761", "H", "I"), ("NOP-0693", "H", "E"),
+        ("NOP-1260", "B", "G"), ("NOP-0877", "D", "E"), ("NOP-1351", "G", "I"), ("NOP-0722", "E", "I"),
+        ("NOP-1214", "D", "F")]
+
+
+def availability(provider, T):
+    """Share of the contracted megawatts a provider's assets have available in the evening peak at daily mean T."""
+    p = PROVIDERS[provider]
+    return p["a_hi"] - (p["a_hi"] - p["a_lo"]) / (1.0 + math.exp((T - p["t_mid"]) / p["w"]))
 
 
 def last_sunday(year, month):
@@ -89,7 +108,7 @@ def uk_offset_hours(t_utc):
 
 ANCHORS = {
     ("res", False): [(0.5, .48), (3, .42), (5.5, .44), (7, .62), (8, .70), (9.5, .64), (12.5, .62), (14.5, .64),
-                     (15.5, .74), (16, .82), (16.5, .89), (17, .95), (17.5, .99), (18, 1.0), (18.5, .97), (19, .92),
+                     (15.5, .72), (16, .785), (16.5, .885), (17, .95), (17.5, .99), (18, 1.0), (18.5, .97), (19, .92),
                      (19.5, .85), (20, .77), (21, .69), (22, .61), (23, .54), (24, .49)],
     ("res", True): [(0.5, .50), (3, .43), (6, .43), (8, .55), (10, .68), (12.5, .66), (15, .67), (16, .76),
                     (17, .86), (17.5, .91), (18, .93), (18.5, .91), (19, .86), (20, .74), (22, .60), (24, .51)],
@@ -130,7 +149,9 @@ def daily_temperatures(rng):
             a[i] = 0.80 * a[i - 1] + e[i]
         t = seas + a
         # one or two cold spells per winter, as the record's coldest weeks
-        k = {"2023/24": [(105, 7, -4.6)], "2024/25": [(98, 6, -6.2), (128, 4, -1.5)], "2025/26": [(96, 8, -5.3)]}[w]
+        k = {"2023/24": [(105, 7, -4.6), (72, 5, -2.9)],
+             "2024/25": [(98, 6, -6.2), (128, 4, -1.5), (59, 6, -3.6), (141, 4, -2.4)],
+             "2025/26": [(96, 8, -5.3), (64, 6, -4.1), (123, 5, -2.8)]}[w]
         for start, length, low in k:
             for j in range(length):
                 i = start + j
@@ -196,10 +217,12 @@ def build():
             vals = lvl * shape + prng.normal(0, 0.07 if p["firm"] > 20 else 0.05, len(hh))
             own[(p["key"], w)] = vals
 
-    # flexibility events: scheduled day-ahead from the DNO's forecast, weekdays November to March, from 2024/25
+    # flexibility events: scheduled day-ahead from the DSO's forecast, working weekdays November to March, from
+    # 2024/25: the megawatts the forecast shows are needed to hold the primary at 95 per cent of firm capacity,
+    # in half megawatts, at least the service minimum and never more than the megawatts contracted
     events = []
     erng = np.random.default_rng(SEED + 77)
-    for w, d0, d1 in WINTERS[1:]:
+    for w, d0, d1 in WINTERS:
         days, _ = temps[w]
         for di, d in enumerate(days):
             xmas = (d.month == 12 and d.day >= 24) or (d.month == 1 and d.day <= 2)
@@ -211,17 +234,21 @@ def build():
                 a26 = p["d26"] - p["b"] * (TB - T_DESIGN)
                 lev = a26 - p["yoy"] * (2 - widx[w])
                 fc = lev + p["b"] * max(0.0, TB - (tday[w][di] + fc_err))
-                if fc > 0.95 * p["firm"]:
+                need = fc - THRESHOLD * p["firm"]
+                if need > 0:
+                    mw = min(z["mw"][w], max(MIN_MW, math.ceil(need / STEP_MW) * STEP_MW))
                     events.append(dict(winter=w, day=d, di=di, zone=z["key"], provider=z["provider"],
-                                       mw=z["mw"][w], T=float(tday[w][di])))
-    # some scheduled events are cancelled on the morning (no reduction, no transfer); some re-issued at a reduced MW
+                                       mw=mw, contract=z["mw"][w], T=float(tday[w][di])))
+    # some schedules are cancelled on the morning (no reduction); some re-issued at fewer megawatts
     for k, ev in enumerate(events):
         u = erng.random()
         ev["status"] = "Cancelled" if u < 0.045 else "Completed"
         ev["revised_mw"] = None
-        if ev["status"] == "Completed" and erng.random() < 0.07:
-            ev["revised_mw"] = round(ev["mw"] * float(erng.choice([0.75, 0.8, 0.85])) * 2) / 2
-        ev["eps"] = float(erng.normal(0, 0.045))
+        if ev["status"] == "Completed" and erng.random() < 0.07 and ev["mw"] >= 2.0:
+            ev["revised_mw"] = max(MIN_MW, round(ev["mw"] * float(erng.choice([0.75, 0.8, 0.85])) * 2) / 2)
+        ev["eps"] = float(erng.normal(0, 0.03))        # how closely the provider's dispatch tracks a schedule it can meet
+        ev["nu"] = float(erng.normal(0, 1.0))          # that evening's availability, in its own spread
+        ev["rb"] = [float(x) for x in erng.normal(0, 0.18, 4)]   # the evening's come-back, half-hour by half-hour
 
     # each zone's service ran from its contract start (Ashcombe Road's first on 28 November 2024, Hartwell Common's
     # 2025/26 contract on 10 November 2025) to the Friday before British Summer Time began; filtered after the draws,
@@ -231,7 +258,6 @@ def build():
 
     metered = {k: v.copy() for k, v in own.items()}
     relief = {}
-    transfer = {}
     for ev in events:
         if ev["status"] != "Completed":
             continue
@@ -239,18 +265,52 @@ def build():
         z = ZBY[ev["zone"]]
         prov = PROVIDERS[z["provider"]]
         sched = ev["revised_mw"] or ev["mw"]
-        delta = prov["at0"] + prov["slope"] * ev["T"]
+        avail = availability(z["provider"], ev["T"]) * ev["contract"] * math.exp(prov["cv"] * ev["nu"] - 0.5 * prov["cv"] ** 2)
+        delivered = min(sched * (1 + ev["eps"]), avail)
+        ev["available"], ev["delivered"], ev["capped"] = avail, delivered, bool(avail < sched * (1 + ev["eps"]))
         idx = window_indices(stamps[w], d)
-        r = delta * sched * RAMP * (1 + ev["eps"])
+        r = delivered * RAMP
         metered[(z["key"], w)][idx] -= r
-        relief[(ev["zone"], w, d)] = (idx, r, delta, sched)
-        if z["sigma"] > 0:
-            sec = z["sigma"] * own[(z["key"], w)][idx]
-            metered[(z["key"], w)][idx] -= sec
-            metered[(z["partner"], w)][idx] += sec
-            transfer[(ev["zone"], w, d)] = (idx, sec)
+        post = idx[-1] + 1 + np.arange(4)
+        back = delivered * np.array(prov["reb"]) * (1 + np.array(ev["rb"]))
+        metered[(z["key"], w)][post] += back
+        relief[(ev["zone"], w, d)] = (idx, r, delivered, sched, post, back)
+
+    # the control room's 11 kV switching: a feeder section moved across a normally-open point for planned work or
+    # fault restoration, from a quarter of a day to three days, logged at both operations
+    srng = np.random.default_rng(SEED + 191)
+    switching = []
+    for w, d0, d1 in WINTERS:
+        n = int(srng.integers(9, 13))
+        for _ in range(n):
+            nop, a, b = NOPS[int(srng.integers(0, len(NOPS)))]
+            frm, to = (a, b) if srng.random() < 0.5 else (b, a)
+            day = d0 + dt.timedelta(days=int(srng.integers(34, (d1 - d0).days - 3)))
+            start = dt.datetime.combine(day, dt.time(int(srng.integers(7, 10)), int(srng.choice([0, 15, 30, 45]))), UTC)
+            hours = float(srng.choice([4, 5, 6, 6.5, 7.5, 28, 33, 52], p=[.2, .2, .18, .15, .12, .07, .05, .03]))
+            share = float(srng.uniform(0.035, 0.075))
+            reason = str(srng.choice(["Planned: cable jointing", "Planned: switchgear maintenance", "Planned: RMU replacement",
+                                      "Fault restoration", "Planned: tree cutting outage", "Fault restoration"]))
+            switching.append(dict(winter=w, nop=nop, frm=frm, to=to, start=start, end=start + dt.timedelta(hours=hours),
+                                  share=share, reason=reason))
+    switching.sort(key=lambda s: s["start"])
+    moved = {}
+    for s in switching:
+        w = s["winter"]
+        st = stamps[w]
+        i0 = int(math.ceil((s["start"] - st[0]).total_seconds() / 1800.0)) + 1
+        i1 = int(math.floor((s["end"] - st[0]).total_seconds() / 1800.0)) + 1
+        i0, i1 = max(i0, 0), min(i1, len(st))
+        if i1 <= i0:
+            s["mw_at_start"] = 0.0
+            continue
+        sec = s["share"] * own[(s["frm"], w)][i0:i1]
+        metered[(s["frm"], w)][i0:i1] -= sec
+        metered[(s["to"], w)][i0:i1] += sec
+        s["mw_at_start"] = float(sec[0])
+        moved[(s["nop"], s["start"])] = (i0, i1, sec)
     return dict(temps=temps, hourly=hourly, tday=tday, stamps=stamps, own=own, metered=metered,
-                events=events, relief=relief, transfer=transfer)
+                events=events, relief=relief, switching=switching, moved=moved)
 
 
 def window_indices(stamps_w, day):
@@ -279,9 +339,10 @@ def design_truth():
     out = {}
     for z in ZONES:
         p = BY[z["key"]]
-        prov = PROVIDERS[z["provider"]]
         before = p["d26"] * (1 + p["dfes"] / 100.0) ** GROWTH_YEARS
-        out[z["key"]] = dict(delivery=prov["at0"] + prov["slope"] * T_DESIGN, before_ex_register=before)
+        av = availability(z["provider"], T_DESIGN)
+        out[z["key"]] = dict(available_share=av, delivered=av * z["mw28"], before_ex_register=before,
+                             cv=PROVIDERS[z["provider"]]["cv"], reb=PROVIDERS[z["provider"]]["reb"])
     return out
 
 
@@ -297,6 +358,8 @@ def tables(T=None):
     demand = pd.concat(rows, ignore_index=True)
     ev = pd.DataFrame([dict(zone=BY[e["zone"]]["code"], provider=e["provider"], date=e["day"],
                             scheduled_mw=(e["revised_mw"] or e["mw"]), status=e["status"]) for e in T["events"]])
+    sw = pd.DataFrame([dict(nop=s["nop"], frm=BY[s["frm"]]["code"], to=BY[s["to"]]["code"], start=s["start"], end=s["end"],
+                            mw=s["mw_at_start"]) for s in T["switching"]])
     wrows = []
     for w, d0, d1 in WINTERS:
         days, _ = T["temps"][w]
@@ -305,4 +368,4 @@ def tables(T=None):
                 wrows.append((dt.datetime.combine(d, dt.time(hr, 0), UTC), float(hv[hr])))
     weather = pd.DataFrame(wrows, columns=["t_utc", "temp_c"])
     weather["t_utc"] = pd.to_datetime(weather["t_utc"], utc=True)
-    return dict(demand=demand, events=ev, weather=weather)
+    return dict(demand=demand, events=ev, weather=weather, switching=sw)

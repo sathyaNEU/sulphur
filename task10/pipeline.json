@@ -1,64 +1,47 @@
 {
  "task": "task10",
- "status": "RETURNED",
- "domain": "energy-systems-utilities/load-forecasting (client domain energy-systems-utilities; world: an English distribution network operator, Wealdmoor Power Networks, committing for winter 2027/28 the reinforcement of the Halverton primaries whose design-day demand, after the flexibility contracted for that winter is credited, exceeds firm capacity)",
+ "status": "BUILD",
+ "domain": "energy-systems-utilities/load-forecasting (client domain energy-systems-utilities; world: an English distribution network operator, Wealdmoor Power Networks, committing for winter 2027/28 the reinforcement of the Halverton primaries whose design-day peak, with the flexibility contracted for that winter called in full, would exceed firm capacity on more than one design day in ten)",
  "subdomain": "load-forecasting",
  "objective": "forecasting",
- "stage": 1,
- "stage_name": "draw",
+ "stage": 3,
+ "stage_name": "build",
  "updated": "2026-11-10",
- "call": "Commit reinforcement at Ashcombe Road and Hartwell Common for winter 2027/28; Charlecote Way and Fenwick Street hold firm capacity with the flexibility contracted for that winter",
- "stump": "Measuring each flexibility event's fall at its zone primary against a weather-adjusted baseline, validated on held-out non-event weekdays and stable across both winters, and crediting the 2027/28 contracts at the 0.9, 0.6, 0.9 and 0.9 per megawatt scheduled the event records show commits no primary; the step that lands it there is reading the primary's fall as the provider's delivery, when at Ashcombe Road, Fenwick Street and Hartwell Common the control room moved a feeder section across an open point to Tollbrook Lane, Wexley Hill and Kestwick Fields for each event window, so the providers' own reduction, net of the neighbour's rise and read at the design day's minus 3.0 C, is 0.4 and 0.5 per megawatt and Ashcombe Road and Hartwell Common must be reinforced.",
- "architecture": 5,
- "loops": 1,
- "precut": "1 FAIL 2026-11-09 (75 checks: the pair ceiling at 54.5, the honest landed row, over the paper target of 50; task6's precedent at reship)",
+ "call": "Commit reinforcement at Ashcombe Road, Fenwick Street and Hartwell Common for winter 2027/28; Charlecote Way stays within firm capacity on nine design days in ten with its 2027/28 contract",
+ "architecture": 6,
+ "loops": 0,
+ "precut": {
+  "exit": 0,
+  "date": "2026-11-10",
+  "note": "85 checks, 0 FAIL, 1 WARN (R4 upstream of four results; the largest hint measured at 1 of 8)"
+ },
  "leak": {
-  "leak_py": "REVIEW 2026-11-09 on a670e735 (no LEAK; every line ruled in the design note)",
-  "reader": "2026-11-09 on 203d2bf4, questions 1 to 6 clean (no deciding sentence, no ranking file, question 5 the golden's WHAT with the estimator open, question 6 analytical); the colder temperatures' reason added to the prompt",
-  "reader_earlier": "2026-11-08 twice: no deciding sentence, no ranking file; realism tells fixed or ruled"
+  "leak_py": "",
+  "reader": ""
  },
  "duplicate_check": {
-  "guard_check": "WARN 2026-11-08 on the registered card (overuse.objective, repeat.gate_g against task4, overuse.gate_g, repeat.question_form against task3), answered in the design note",
-  "heart": "WARN 2026-11-09 (repeat.decision against task5, repeat.question_form against task3; answered in the Draw)",
-  "surface": "exit 0 2026-11-09 (people notes are a primary's name and a document-control line)"
+  "guard_check": "WARN 2026-11-10 on the registered card (driver.near 0.18 against this slot's architecture 5, overuse.forum, repeat.decision against task5), answered in the Draw",
+  "heart": "",
+  "surface": ""
  },
  "judge": {
-  "first": "DETERMINISTIC, FIX_NOW (wording: no control-room action claimed in the blocks); applied",
-  "rejudge": "DETERMINISTIC, APPROVE on target.zip a3ba2ac0 (2026-11-08); shipped 1350f12d differs by two texture fixes, graded files byte-identical",
-  "report": "determinism_check_report.md",
-  "rubric_repair": {
-   "pass": "2 (2026-11-09, on target.zip 203d2bf4, the thread kept the derive-first order)",
-   "verdict": "NOT_DETERMINISTIC",
-   "disposition": "SEND_BACK",
-   "gate_g": "decomposition_attribution, analytical_non_defect, surface_read_dependency no, sole_data_defect no",
-   "gate_h": "domain pass, layers pass, decisive_step analytical, chain 4 inferences, one_fact leaves the regression",
-   "findings": "ask 6 at minus 4.5 C margin-fragile (fixed: dropped, minus 6.0 C kept, robust under every variant); the excess's rounding unstated (fixed in the prompt); register acceptances after its save (fixed); guideline 6 read as the primary's whole fall, Ashcombe Road alone (contested: two earlier passes and the triage ruled it out; the closing now rebuts it; the judge's pin names the transfer and fails the fork-is-the-stump test; the author's decision)",
-   "report": "determinism_check_report_pass2.md",
-   "rejudge_left": 1
-  }
+  "verdict": "",
+  "disposition": "",
+  "gate_h": "",
+  "report": ""
  },
- "paper_pair": {
-  "pair_ceiling": 54.5,
-  "pair_ceiling_by_item": 52.1,
-  "shallow_keep": 0.0,
-  "zone_fall_keep": 16.7,
-  "full_includer_vs_measured_off_call": 60.6,
-  "full_includer_vs_measured_off_call_by_item": 56.0,
-  "averaging_cracker": 33.1,
-  "measured_by": "generator/ceiling.py",
-  "before_repair": "landed_keep 29.4 and shallow_keep 11.8 on the old asks (pair 39.8 with the averaging cracker)"
- },
+ "paper_pair": 42.5,
  "runs": {
   "run1": null,
   "run2": null,
   "average": null,
   "counterfactual_average": null,
   "first_wrong_step": {
-   "run1": "round 2, step 7: the provider delivery measured at the zone primary with a temperature interaction (0.67, 0.49, 0.75, 0.73 per MW, rung 1b), the open feeder ties read and set aside: method_shortcut; filed Ashcombe Road alone",
-   "run2": "round 2, step 8: the same estimator certified by pre-service placebo intervals and untreated-primary controls, the open-point records read only as transfer headroom: self_confirming_check; filed Ashcombe Road alone"
+   "run1": "",
+   "run2": ""
   },
-  "triage": "REDESIGN on the review (runs/review_2026-11-10.md): both round 2 runs lost at the deciding step for a reasoning reason and the holistic audit still read the step as one built-in factor",
-  "recorded": "2026-11-10",
+  "triage": "",
+  "recorded": "",
   "history": [
    {
     "architecture": 4,
@@ -101,14 +84,13 @@
    "source": "review",
    "repair": "design",
    "portal": "holistic audit: the call turns on one built-in factor (Tollbrook Lane, Wexley Hill and Kestwick Fields step up a flat 1.4, 1.4 and 0.8 MW on their zone's event days, whatever the MW scheduled, absent on cancelled days); once told, the fix is one subtraction; \"spotting the plant, not analysis\". Asked for: the transfer documented (switching log entries) and the call turning on judgments that each move a figure (the shape of the cold-weather delivery decline validated on held-out events; whether delivery scales to awards 1.5 to 2.5 times the largest historical dose; how baseline uncertainty is carried to Hartwell Common's margin)",
-   "fix": "",
+   "fix": "architecture 6: the same world rebuilt as a results chain (the transfer documented in a control room switching log and filed in guideline 3; eight results: demand before flexibility, the megawatts a contract called in full delivers, the backtest on last winter, the megawatts off the day's peak once load comes back, the expected peak, the nine-days-in-ten level, the primaries to reinforce, the bridge)",
    "commit": ""
   }
  ],
- "resume": "RETURNED 2026-11-10: architecture 5 spent on the holistic audit; re-root in the same world as architecture 6, a results chain to the bar of 2026-11-09 (the transfer documented in a switching log; the deciding results on the delivery shape in the cold, the scaling to the awards and the uncertainty at the margin), from stage 1",
+ "resume": "stage 3 build: generator, checks (52/52), verify, precut and effort green on the first cut; next the remaining free gates (gates.py --full), then stage 4 (leak reader and determinism judge together), stage 5 and RESHIPPED",
  "approved": null,
  "submitted": null,
- "delivered": null,
  "portal": {
   "status": "RETURNED",
   "date": "2026-11-10",
@@ -334,31 +316,70 @@
   {
    "date": "2026-11-09",
    "event": "prompt cut to the minimum after the client's reviewers flagged spelled-out method, named files, extra context and a stated role: straight to the question, no file names (deliverables by type), outcomes only; the delivery per MW scheduled dropped as its own ask (it stays a critical component), Supplementary Questions six items; target.zip and golden.zip byte-identical; checks 103/103, verify PASS, figures_check 66/66, voice-check --rewrite PASS, leak.py REVIEW no LEAK, precut 1 FAIL (honest pair ceiling 54.0, was 54.5); freeze --mode rubric flags only the prompt's question sentence (reworded at the author's word, the call unchanged)"
+  },
+  {
+   "architecture": 5,
+   "domain": "energy-systems-utilities/load-forecasting (client domain energy-systems-utilities; world: an English distribution network operator, Wealdmoor Power Networks, committing for winter 2027/28 the reinforcement of the Halverton primaries whose design-day demand, after the flexibility contracted for that winter is credited, exceeds firm capacity)",
+   "objective": "forecasting",
+   "stump": "Measuring each flexibility event's fall at its zone primary against a weather-adjusted baseline, validated on held-out non-event weekdays and stable across both winters, and crediting the 2027/28 contracts at the 0.9, 0.6, 0.9 and 0.9 per megawatt scheduled the event records show commits no primary; the step that lands it there is reading the primary's fall as the provider's delivery, when at Ashcombe Road, Fenwick Street and Hartwell Common the control room moved a feeder section across an open point to Tollbrook Lane, Wexley Hill and Kestwick Fields for each event window, so the providers' own reduction, net of the neighbour's rise and read at the design day's minus 3.0 C, is 0.4 and 0.5 per megawatt and Ashcombe Road and Hartwell Common must be reinforced.",
+   "call": "Commit reinforcement at Ashcombe Road and Hartwell Common for winter 2027/28; Charlecote Way and Fenwick Street hold firm capacity with the flexibility contracted for that winter",
+   "returned": [
+    {
+     "date": "2026-11-09",
+     "source": "triage",
+     "repair": "rubric",
+     "portal": "first architecture 5 pair: run 1 on the call, run 2 off it (dismissed own evidence); the asks were the four-zone table alone, so run 2 kept Charlecote Way's row, the agreeing over-firm flags, the layout and the chart, and run 1 kept every ask (the designed second judgment, the design condition, read by both runs)",
+     "fix": "asks re-coupled: one Supplementary Questions item per quantity across the four zones (deliveries, credits, demand after against firm and the set over it), the chart graded on which after columns stand above firm, how far each primary to reinforce exceeds firm on the design day (3 and 2 MW), and the primaries over firm on working weekdays at minus 4.5 C (Ashcombe Road, Fenwick Street, Hartwell Common) and minus 6.0 C (all four), where the providers' net reduction re-read at the colder day decides and the straight correction is checked on winter 2023/24; upstream figures dropped from the blocks; the guideline's lead-time sentence made consistent with its winter; the call, the stump, the ladder and every frozen figure unchanged (freeze.py rubric PASS)",
+     "commit": ""
+    },
+    {
+     "date": "2026-11-10",
+     "source": "review",
+     "repair": "design",
+     "portal": "holistic audit: the call turns on one built-in factor (Tollbrook Lane, Wexley Hill and Kestwick Fields step up a flat 1.4, 1.4 and 0.8 MW on their zone's event days, whatever the MW scheduled, absent on cancelled days); once told, the fix is one subtraction; \"spotting the plant, not analysis\". Asked for: the transfer documented (switching log entries) and the call turning on judgments that each move a figure (the shape of the cold-weather delivery decline validated on held-out events; whether delivery scales to awards 1.5 to 2.5 times the largest historical dose; how baseline uncertainty is carried to Hartwell Common's margin)",
+     "fix": "architecture 6: the same world rebuilt as a results chain (the transfer documented in a control room switching log and filed in guideline 3; eight results: demand before flexibility, the megawatts a contract called in full delivers, the backtest on last winter, the megawatts off the day's peak once load comes back, the expected peak, the nine-days-in-ten level, the primaries to reinforce, the bridge)",
+     "commit": ""
+    }
+   ],
+   "judge": {
+    "first": "DETERMINISTIC, FIX_NOW (wording: no control-room action claimed in the blocks); applied",
+    "rejudge": "DETERMINISTIC, APPROVE on target.zip a3ba2ac0 (2026-11-08); shipped 1350f12d differs by two texture fixes, graded files byte-identical",
+    "report": "determinism_check_report.md",
+    "rubric_repair": {
+     "pass": "2 (2026-11-09, on target.zip 203d2bf4, the thread kept the derive-first order)",
+     "verdict": "NOT_DETERMINISTIC",
+     "disposition": "SEND_BACK",
+     "gate_g": "decomposition_attribution, analytical_non_defect, surface_read_dependency no, sole_data_defect no",
+     "gate_h": "domain pass, layers pass, decisive_step analytical, chain 4 inferences, one_fact leaves the regression",
+     "findings": "ask 6 at minus 4.5 C margin-fragile (fixed: dropped, minus 6.0 C kept, robust under every variant); the excess's rounding unstated (fixed in the prompt); register acceptances after its save (fixed); guideline 6 read as the primary's whole fall, Ashcombe Road alone (contested: two earlier passes and the triage ruled it out; the closing now rebuts it; the judge's pin names the transfer and fails the fork-is-the-stump test; the author's decision)",
+     "report": "determinism_check_report_pass2.md",
+     "rejudge_left": 1
+    }
+   },
+   "paper_pair": {
+    "pair_ceiling": 54.5,
+    "pair_ceiling_by_item": 52.1,
+    "shallow_keep": 0.0,
+    "zone_fall_keep": 16.7,
+    "full_includer_vs_measured_off_call": 60.6,
+    "full_includer_vs_measured_off_call_by_item": 56.0,
+    "averaging_cracker": 33.1,
+    "measured_by": "generator/ceiling.py",
+    "before_repair": "landed_keep 29.4 and shallow_keep 11.8 on the old asks (pair 39.8 with the averaging cracker)"
+   },
+   "zips": {
+    "target.zip": "a670e735c98c485a668ec8543aa170d2b4b073d0a2c784437d293f12a23560af",
+    "golden.zip": "9af93f82b37ee4cbb57b5bc51efa02c83e18f70f00ebed1823ad7cda860d7878"
+   },
+   "fate": "spent 2026-11-10 on the platform's holistic audit (runs/review_2026-11-10.md): one built-in factor"
   }
  ],
- "gates_stage5": {
-  "checks": "81/81",
-  "verify": "PASS",
-  "precut": "75/75",
-  "voice_check": "PASS (2 WARN)",
-  "figures_check": "68/68",
-  "leak_py": "REVIEW, no LEAK",
-  "guard_heart": "WARN",
-  "guard_surface": "exit 0",
-  "containers": "audit_containers.py PASS",
-  "byte_identical": true,
-  "ceiling": 39.8,
-  "shallow_keep": 11.8
- },
- "zips": {
-  "target.zip": "a670e735c98c485a668ec8543aa170d2b4b073d0a2c784437d293f12a23560af",
-  "golden.zip": "9af93f82b37ee4cbb57b5bc51efa02c83e18f70f00ebed1823ad7cda860d7878"
- },
- "prompt_rewritten": true,
- "gates": {
-  "figures_check": "66 figures in blocks 1 to 4, 0 absent (2026-11-09, six-item Supplementary Questions)",
-  "voice_check": "PASS in rewrite mode (2026-11-09, minimal prompt, deliverables by type)",
-  "ceiling": "pair ceiling 54.0 by figure, 51.4 by item; shallow keep 0.0 per cent; full includer against the off-call route 59.9 by figure, 56.0 by item",
-  "freeze": "rubric mode: the prompt's question sentence moved (author's rewrite; the call, the critical components and figures.json unchanged)"
+ "doctrine": "throughout",
+ "chain": "R1 design-day demand before flexibility (30.1, 24.9, 35.5, 22.9 MW); R2 megawatts each 2027/28 contract delivers at 17:30 to 18:00 on the design day (6.2, 4.0, 5.4, 2.9; 0.39 and 0.54 of the megawatts contracted); R3 winter 2025/26 predicted from the winters before (0.19 MW mean absolute error, 37 of 50 freezing-day events inside the 80 per cent range); R4 megawatts off the day's peak (4.8, 4.0, 5.4, 2.9; Ashcombe Road peaking in the half-hour to 20:00); R5 expected peaks (25.3, 20.8, 30.1, 20.0); R6 nine-days-in-ten levels (25.8, 21.7, 31.2, 20.6); R7 the three primaries to reinforce; R8 the bridge from 41.0 MW contracted to 17.1 MW off the peaks",
+ "effort": {
+  "quick": 13.9,
+  "careful": 42.5,
+  "thorough": 100.0,
+  "largest_hint": "a provider can deliver no more than a share of its contracted megawatts on a cold evening, however many are scheduled: 1 of 8 results"
  }
 }

@@ -1,39 +1,44 @@
 # leak check, task10
 
-**Verdict: REVIEW.** 11 files read, 7 golden figures and 11 candidate names taken from submission.md, 25 stump terms taken from the design note.
+**Verdict: REVIEW.** 12 files read, 50 golden figures and 10 candidate names taken from submission.md, 25 stump terms taken from the design note.
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: architecture, guideline, golden, provider, design, delivery, record, baseline, neighbour, ashcombe, control, points, reduction, export, register, street, october, measured, carries, question, decisive, forecast, half-hours, graded, carried
+Stump terms swept: architecture, megawatts, golden, record, ashcombe, scheduled, guideline, forecast, contracted, delivered, carried, street, measured, primaries, fenwick, prompt, export, programme, repairs, window, missed, october, carries, points, provider
 
-## 3 answer figures in the pack (REVIEW 6)
-- **REVIEW** `capacity_assessment_guideline_2026.pdf`: golden figure 30.5 appears: ...40852 20 + 23 21.0 Fenwick Street PS41474 27 + 27 30.5 Hartwell Common PS41236 15 + 16 17.8 Kestwick Fie...
-- **REVIEW** `capacity_assessment_guideline_2026.pdf`: golden figure 22.5 appears: ...40617 20 + 20 23.0 Charlecote Way PS41108 20 + 20 22.5 Dunmore Street PS40852 20 + 23 21.0 Fenwick Stree...
+## 3 answer figures in the pack (REVIEW 11)
 - **REVIEW** `capacity_assessment_guideline_2026.pdf`: golden figure 23.0 appears: ...Firm capacity (MW) Ashcombe Road PS40617 20 + 20 23.0 Charlecote Way PS41108 20 + 20 22.5 Dunmore Stree...
 - **REVIEW** `capacity_assessment_guideline_2026.pdf`: golden figure 17.8 appears: ...1474 27 + 27 30.5 Hartwell Common PS41236 15 + 16 17.8 Kestwick Fields PS40508 17 + 17 19.5 Ravenhurst P...
-- **REVIEW** `capacity_assessment_guideline_2026.pdf`: carries 15 of 16 distinctive words of the committed call: 'Commit reinforcement at Ashcombe Road and Hartwell Common for winter 2027/28; Charlecote Way and Fenwick Street hold fir'
-- **REVIEW** `flexibility_contract_awards_2027-28.pdf`: carries 13 of 16 distinctive words of the committed call: 'Commit reinforcement at Ashcombe Road and Hartwell Common for winter 2027/28; Charlecote Way and Fenwick Street hold fir'
+- **REVIEW** `capacity_assessment_guideline_2026.pdf`: golden figure 30.5 appears: ...40852 20 + 23 21.0 Fenwick Street PS41474 27 + 27 30.5 Hartwell Common PS41236 15 + 16 17.8 Kestwick Fie...
+- **REVIEW** `capacity_assessment_guideline_2026.pdf`: golden figure 22.5 appears: ...40617 20 + 20 23.0 Charlecote Way PS41108 20 + 20 22.5 Dunmore Street PS40852 20 + 23 21.0 Fenwick Stree...
+- **REVIEW** `flexibility_contract_awards_2027-28.pdf`: golden figure 10.0 appears: ...t CMZ Fenwick Street Quillon Energy Services Ltd 10.0 5.70 289 Hartwell Common CMZ Hartwell Common Cor...
+- **REVIEW** `flexibility_contract_awards_2027-28.pdf`: golden figure 16.0 appears: ...Ashcombe Road CMZ Ashcombe Road Corvane Flex Ltd 16.0 6.40 312 Charlecote Way CMZ Charlecote Way Quillo...
+- **REVIEW** `flexibility_contract_awards_2027-28.pdf`: golden figure 3.5 appears: ...ntract period on the contracted megawatts for the 3.5 hours of the service window. Utilisation is paid...
+- **REVIEW** `flexibility_contract_awards_2027-28.pdf`: golden figure 4.0 appears: ...ecote Way CMZ Quillon Energy Services Ltd 2.5 3.0 4.0 Fenwick Street CMZ Quillon Energy Services Ltd 2....
+- **REVIEW** `flexibility_contract_awards_2027-28.pdf`: golden figure 7.5 appears: ...y CMZ Charlecote Way Quillon Energy Services Ltd 7.5 5.85 296 Fenwick Street CMZ Fenwick Street Quillo...
+- **REVIEW** `capacity_assessment_guideline_2026.pdf`: carries 14 of 17 distinctive words of the committed call: 'Commit reinforcement at Ashcombe Road, Fenwick Street and Hartwell Common for winter 2027/28; Charlecote Way stays withi'
+- **REVIEW** `flexibility_contract_awards_2027-28.pdf`: carries 11 of 17 distinctive words of the committed call: 'Commit reinforcement at Ashcombe Road, Fenwick Street and Hartwell Common for winter 2027/28; Charlecote Way stays withi'
 
 ## 4 design-note vocabulary (REVIEW 2)
-- **REVIEW** `capacity_assessment_guideline_2026.pdf`: 11 of 25 stump-paragraph terms appear (guideline, provider, design, ashcombe, control, reduction); read whether the document names the move
-- **REVIEW** `flexibility_contract_awards_2027-28.pdf`: 9 of 25 stump-paragraph terms appear (provider, baseline, ashcombe, reduction, register, street); read whether the document names the move
+- **REVIEW** `capacity_assessment_guideline_2026.pdf`: 13 of 25 stump-paragraph terms appear (megawatts, ashcombe, scheduled, guideline, forecast, contracted); read whether the document names the move
+- **REVIEW** `flexibility_contract_awards_2027-28.pdf`: 11 of 25 stump-paragraph terms appear (megawatts, ashcombe, scheduled, forecast, contracted, street); read whether the document names the move
 
 ## 6 ranking artifacts (REVIEW 5)
-- **REVIEW** `capacity_assessment_guideline_2026.pdf`: names 6 of 11 answer-set candidates beside numbers; confirm it does not rank them on the decision question
-- **REVIEW** `flexibility_contract_awards_2027-28.pdf`: names 9 of 11 answer-set candidates beside numbers; confirm it does not rank them on the decision question
-- **REVIEW** `flexibility_events_2024-2026.csv`: names 9 of 11 answer-set candidates beside numbers; confirm it does not rank them on the decision question
-- **REVIEW** `primary_substation_register.xlsx`: names 6 of 11 answer-set candidates beside numbers; confirm it does not rank them on the decision question
-- **REVIEW** `primary_transformer_condition_2026.xlsx`: names 6 of 11 answer-set candidates beside numbers; confirm it does not rank them on the decision question
+- **REVIEW** `capacity_assessment_guideline_2026.pdf`: names 4 of 10 answer-set candidates beside numbers; confirm it does not rank them on the decision question
+- **REVIEW** `flexibility_contract_awards_2027-28.pdf`: names 8 of 10 answer-set candidates beside numbers; confirm it does not rank them on the decision question
+- **REVIEW** `flexibility_events_2023-2026.csv`: names 8 of 10 answer-set candidates beside numbers; confirm it does not rank them on the decision question
+- **REVIEW** `primary_substation_register.xlsx`: names 4 of 10 answer-set candidates beside numbers; confirm it does not rank them on the decision question
+- **REVIEW** `primary_transformer_condition_2026.xlsx`: names 4 of 10 answer-set candidates beside numbers; confirm it does not rank them on the decision question
+
+## 9 dates after the setting (INFO 1)
+- **INFO** `-`: no --asof given, sweep skipped (pass the fiction's as-of date)
 
 ## 10 container metadata (INFO 1)
 - **INFO** `-`: container gate PASS (PASS: 0 FAIL, 0 WARN)
 
 ## 12 client quality check (INFO 2)
-- **INFO** `-`: 11 usable files (10 or more required)
+- **INFO** `-`: 12 usable files (10 or more required)
 - **INFO** `-`: 2 file categories: document, spreadsheet (2 or more required)
-
-## 13 task metadata (REVIEW 1)
-- **REVIEW** `metadata.json`: decision shares the design note's stump vocabulary (provider, design, delivery): say what the task decides, not how
 
 ## 1 file names (clean)
 
@@ -44,8 +49,6 @@ Stump terms swept: architecture, guideline, golden, provider, design, delivery, 
 ## 7 hidden content (clean)
 
 ## 8 column names (clean)
-
-## 9 dates after the setting (clean)
 
 ## 11 prompt gate (clean)
 

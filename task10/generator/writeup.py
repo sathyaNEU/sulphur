@@ -1,145 +1,157 @@
-"""task10 architecture 5: submission.md, the four platform blocks, drafted from figures.json only."""
-import json
-import os
+"""task10 architecture 6: submission.md, the four answer blocks, drafted from figures.json so no figure is typed.
+Every figure a block states is one an independent rebuild reproduces at the stated precision."""
+
+ORDER = ["Ashcombe Road", "Charlecote Way", "Fenwick Street", "Hartwell Common"]
 
 
-def r1(v):
+def j(items):
+    items = list(items)
+    return items[0] if len(items) == 1 else ", ".join(items[:-1]) + " and " + items[-1]
+
+
+def f1(v):
     return "%.1f" % v
 
 
-def r0(v):
-    return "%d" % int(round(v))
-
-
-def blocks(F):
-    z = {k: F["zones"][k] for k in ("Ashcombe Road", "Charlecote Way", "Fenwick Street", "Hartwell Common")}
-    A, C, Fz, H = z["Ashcombe Road"], z["Charlecote Way"], z["Fenwick Street"], z["Hartwell Common"]
-    out = []
-    out.append("## Tags\n")
-    out.append("**Domain:** Energy Systems & Utilities (load, price & renewable forecasting: distribution network design-day "
-               "peak demand).  \n**Analytical objective:** Forecasting & Predictive Modeling.\n")
-    out.append("## Final Recommendation\n")
-    out.append("**Commit reinforcement at Ashcombe Road and Hartwell Common for winter 2027/28; Charlecote Way and Fenwick "
-               "Street hold firm capacity with the flexibility contracted for that winter.** Credited at what Corvane Flex "
-               "delivers on the design day, %s per megawatt scheduled, the 2027/28 flexibility leaves Ashcombe Road at "
-               "%s MW against %s MW firm and Hartwell Common at %s MW against %s MW; the %s per megawatt their event "
-               "records show counts the demand that rose at %s and %s, across their 11 kV open points, in the same "
-               "half-hours, and on that figure no primary would be reinforced.\n"
-               % (r1(A["delivery"]), r0(A["after"]), r1(A["firm"]), r0(H["after"]), r1(H["firm"]), r1(A["measured"]),
-                  A["linked"], H["linked"]))
-    out.append("## Supplementary Questions\n")
-    out.append("### halverton_primary_capacity_2027-28.xlsx\n")
-    zs = (("Ashcombe Road", A), ("Charlecote Way", C), ("Fenwick Street", Fz), ("Hartwell Common", H))
-    S2 = F["sens"]["6.0"]
-
-    def names(ps):
-        return "all four" if len(ps) == 4 else ", ".join(ps[:-1]) + " and " + ps[-1]
-    out.append("1. A Zones sheet with one row per flexibility zone, in the order Ashcombe Road CMZ, Charlecote Way CMZ, "
-               "Fenwick Street CMZ, Hartwell Common CMZ, giving the zone, its primary and asset code, the provider, the "
-               "megawatts contracted for 2027/28 and the megawatts of flexibility credited to the primary: %s MW at "
-               "Ashcombe Road, %s at Charlecote Way, %s at Fenwick Street and %s at Hartwell Common."
-               % (r0(A["credited"]), r0(C["credited"]), r0(Fz["credited"]), r0(H["credited"])))
-    out.append("2. Each primary's design-day demand after the credited flexibility against its firm capacity: %s, so "
-               "%s exceed firm capacity and %s do not."
-               % ("; ".join("%s %s MW against %s MW" % (nm, r0(Z["after"]), r1(Z["firm"])) for nm, Z in zs),
-                  " and ".join(nm for nm, Z in zs if Z["over"]), " and ".join(nm for nm, Z in zs if not Z["over"])))
-    out.append("3. A clustered column chart below the table: for each zone primary, its design-day demand before and "
-               "after the credited flexibility beside its firm capacity, in MW, the after-flexibility column standing "
-               "above firm capacity at %s and below it at %s."
-               % (" and ".join(nm for nm, Z in zs if Z["over"]), " and ".join(nm for nm, Z in zs if not Z["over"])))
-    out.append("4. How far each primary to reinforce exceeds firm capacity on the design day: %s."
-               % " and ".join("%s by %s MW" % (nm, r0(Z["over_by"])) for nm, Z in zs if Z["over"]))
-    out.append("5. The primaries whose demand, flexibility included, would exceed firm capacity on a working weekday "
-               "of winter 2027/28 with a daily mean of minus %s C: %s."
-               % (r1(S2["degrees_below_zero"]), names(S2["commit"])))
-    out.append("\n### capex_review_2027-28.pptx\n")
-    out.append("6. Slides for the capital expenditure review that name Ashcombe Road and Hartwell Common as the primaries "
-               "to reinforce for winter 2027/28, state that Charlecote Way and Fenwick Street hold firm capacity on the "
-               "design day with their contracted flexibility, and carry the same chart of demand against firm capacity.\n")
-    out.append("## Critical Components\n")
-    out.append("1. On the flexibility events at Ashcombe Road, Fenwick Street and Hartwell Common, the primary across an "
-               "11 kV open point from each (%s, %s, %s) rose in the half-hours ending 17:30 and 18:00 by **%s**, **%s** "
-               "and **%s MW** on average as the zone primary fell, which is not a reduction its provider delivers "
-               "(section 6 of the guideline), so it is netted from the zone's fall; no neighbour of Charlecote Way rose."
-               % (A["linked"], Fz["linked"], H["linked"], r1(A["linked_rise"]), r1(Fz["linked_rise"]),
-                  r1(H["linked_rise"])))
-    out.append("2. Net of those rises the providers' own reduction falls as the day gets colder; at the design day's minus "
-               "3.0 C Corvane Flex delivers **%s** and Quillon Energy Services **%s** per MW scheduled, not the **%s** per "
-               "MW the event records show at Ashcombe Road, Fenwick Street and Hartwell Common."
-               % (r1(A["delivery"]), r1(C["delivery"]), r1(A["measured"])))
-    out.append("3. On the 2027/28 contracts the flexibility credits **%s**, **%s**, **%s** and **%s MW**, leaving "
-               "Ashcombe Road at **%s MW** against %s MW firm and Hartwell Common at **%s MW** against %s MW."
-               % (r0(A["credited"]), r0(C["credited"]), r0(Fz["credited"]), r0(H["credited"]), r0(A["after"]),
-                  r1(A["firm"]), r0(H["after"]), r1(H["firm"])))
-    out.append("4. Charlecote Way (**%s MW**, firm %s MW) and Fenwick Street (**%s MW**, firm %s MW) stay within firm "
-               "capacity after their credited flexibility.\n" % (r0(C["after"]), r1(C["firm"]), r0(Fz["after"]),
-                                                                   r1(Fz["firm"])))
-    out.append("## Step-by-Step\n")
-    T = F["event_temperature_c"]
-    out.append("1. Mapped both SCADA point names in primary_demand_halfhourly_2023-2026.csv to asset codes through "
-               "primary_substation_register.xlsx, kept each quality G half-hour once and read its end in UK local time.")
-    out.append("2. Kept the latest revision of each instruction in flexibility_events_2024-2026.csv, a cancelled one at "
-               "0.0 MW, and each hour of halverton_weather_hourly_2023-2026.csv at its checked reading, averaged over "
-               "the GMT day.")
-    out.append("3. Corrected each zone primary's 2025/26 daily peaks on working weekdays outside 24 December to 2 "
-               "January and outside its scheduled days to the design condition (a level and one slope below 15.5 C) "
-               "and grew the result by the DFES rates and the qualifying connections in "
-               "load_growth_register_2026-27.xlsx (guideline sections 3 and 4).")
-    out.append("4. Measured each event's fall at the zone primary in the half-hours ending 17:30 and 18:00 against a "
-               "weather-adjusted baseline fitted on its other working weekdays: %s per MW scheduled at Ashcombe Road, "
-               "%s at Fenwick Street, %s at Hartwell Common and %s at Charlecote Way; carried to the 2027/28 contracts, "
-               "that keeps all four primaries within firm capacity and commits none (the shallow route)."
-               % (r1(A["measured"]), r1(Fz["measured"]), r1(H["measured"]), r1(C["measured"])))
-    out.append("5. Read the same half-hours at every primary each zone's open points reach in network_feeders_11kv.xlsx, "
-               "on a baseline fitted without the zone's event days: %s rose %s MW on Ashcombe Road's events, "
-               "%s %s MW on Fenwick Street's and %s %s MW on Hartwell Common's, while no neighbour of "
-               "Charlecote Way rose, so each of those zones' fall includes demand that rose across the open point, which "
-               "section 6 of the guideline does not credit to the provider."
-               % (A["linked"], r1(A["linked_rise"]), Fz["linked"], r1(Fz["linked_rise"]), H["linked"],
-                  r1(H["linked_rise"])))
-    out.append("6. Netted each linked primary's rise from the zone's fall event by event and regressed the provider's "
-               "reduction per MW scheduled on the event day's daily mean temperature: %s per MW for Corvane Flex at "
-               "Ashcombe Road, %s at Hartwell Common, %s for Quillon Energy Services at Charlecote Way and %s at Fenwick "
-               "Street at minus 3.0 C, inside the event days' own range of minus %s to %s C (%s, %s, %s and %s on the "
-               "average event day)."
-               % (r1(A["delivery"]), r1(H["delivery"]), r1(C["delivery"]), r1(Fz["delivery"]), r1(T["coldest_below_zero"]),
-                  r1(T["mildest"]), r1(A["avg_delivery"]), r1(H["avg_delivery"]), r1(C["avg_delivery"]),
-                  r1(Fz["avg_delivery"])))
-    out.append("7. Credited those on the megawatts in flexibility_contract_awards_2027-28.pdf and compared with Appendix A "
-               "of capacity_assessment_guideline_2026.pdf: Ashcombe Road at %s MW against %s exceeds firm capacity by "
-               "%s MW and Hartwell Common at %s MW against %s by %s MW; Charlecote Way at %s against %s and Fenwick "
-               "Street at %s against %s hold."
-               % (r0(A["after"]), r1(A["firm"]), r0(A["over_by"]), r0(H["after"]), r1(H["firm"]), r0(H["over_by"]),
-                  r0(C["after"]), r1(C["firm"]), r0(Fz["after"]), r1(Fz["firm"])))
-    out.append("8. Checked the correction's straight-line form on winter 2023/24, which ran no flexibility: fitted on its "
-               "working weekdays as mild as the 2025/26 days the correction uses, it meets that winter's sub-zero working "
-               "weekdays within %s MW on average at every zone primary, closer than a quadratic at each."
-               % r1(F["validation"]["linear_bias_max"]))
-    held = [p for p in S2["commit"] if p not in S2["held_credit_commit"]]
-    out.append("9. Read the same correction and the same provider regressions at a daily mean of minus %s C: each provider "
-               "delivers less per MW scheduled on the colder day while the demand rises, so %s exceed firm capacity; "
-               "carrying the design day's credit to that day instead leaves %s within it, and the zone's own fall leaves "
-               "Fenwick Street within it.\n"
-               % (r1(S2["degrees_below_zero"]), names(S2["commit"]), " and ".join(held)))
-    fall = [p for p in F["fall_at_day_call"]]
-    out.append("No other conclusion survives the files. The zone primary's own fall, against a weather-adjusted baseline "
-               "or the ten previous weekdays, counts the demand that rose at the neighbour, and the ten-day baseline also "
-               "sits below the cold event days it is set against, so it files all four primaries. Read at minus 3.0 C, "
-               "the same fall credits %s, %s, %s and %s per MW and files %s alone (%s MW over firm), because it counts as "
-               "the providers' reduction the demand that rose across the open points, which is not a reduction its provider "
-               "delivers: section 6 of the guideline credits only that, and the award notice measures what a provider "
-               "delivers on its own metered assets. Taking the linked primary as the control adds that rise twice (%s per "
-               "MW at Ashcombe Road) and files none. The zone and its linked primary taken together give the netting's "
-               "provider reduction exactly (%s per MW at minus 3.0 C at Ashcombe Road). Crediting the providers at the "
-               "average event day rather than at the design day keeps the same two primaries over firm capacity but "
-               "credits %s, %s, %s and %s MW, which is not the reduction section 6 of the guideline credits, and at minus "
-               "%s C it leaves Charlecote Way and Fenwick Street within firm capacity; on the design day's credit, "
-               "Ashcombe Road and Hartwell Common need reinforcement."
-               % (r1(A["fall_delivery"]), r1(C["fall_delivery"]), r1(Fz["fall_delivery"]), r1(H["fall_delivery"]),
-                  " and ".join(fall), r1(A["fall_over_by"]), r1(A["did"]), r1(A["pair"]), r0(A["avg_credited"]),
-                  r0(C["avg_credited"]), r0(Fz["avg_credited"]), r0(H["avg_credited"]), r1(S2["degrees_below_zero"])))
-    return "\n".join(out) + "\n"
+def band(b):
+    return "%.1f to %.1f" % (b[0], b[1])
 
 
 def write(F, path):
-    open(path, "w", encoding="utf-8").write(blocks(F))
+    Z, P, B, bt = F["zones"], F["providers"], F["bands"], F["backtest"]
+    call, hold = F["call"], F["hold"]
+    before, deliv, off, peak, q90 = F["r1_before"], F["r2_delivered"], F["r4_off_peak"], F["r5_peak"], F["r6_one_in_ten"]
+    cor, qui = P["Corvane Flex Ltd"], P["Quillon Energy Services Ltd"]
+    car = F["careful"]
+    late = [p for p in ORDER if Z[p]["peak_hh"] != "18:00"]
+    early = [p for p in ORDER if Z[p]["peak_hh"] == "18:00"]
+    part = [p for p in ORDER if Z[p]["per_scheduled"] - Z[p]["share"] > 0.05]
+    tot = F["totals"]
+    md = []
+    md += ["## Tags", "",
+           "**Domain:** Energy Systems & Utilities (load, price & renewable forecasting: a distribution network's design-day "
+           "peak demand with contracted flexibility).  ",
+           "**Analysis type:** Forecasting & Predictive Modeling.", ""]
+    md += ["## Final Recommendation", "",
+           "**Commit reinforcement at %s for winter 2027/28; %s stays within firm capacity on nine design days in ten with "
+           "its 2027/28 contract.** With the contracts called in full on the design day, the peaks stay under %s on nine "
+           "days in ten against %s of firm capacity (%s %s MW against %s). Crediting what past events delivered per megawatt "
+           "scheduled, taken off the 17:30 to 18:00 peak with the fit's own range, would reinforce %s alone: it reads "
+           "%s's part calls as what a full call delivers, and it reads %s's expected day (%s MW) as its one in ten."
+           % (j(call), j(hold), j("%s MW" % f1(q90[p]) for p in call), j("%s MW" % f1(Z[p]["firm"]) for p in call),
+              j(hold), j(f1(q90[p]) for p in hold), j(f1(Z[p]["firm"]) for p in hold), j(F["careful_call"]),
+              "Ashcombe Road", "Fenwick Street", f1(peak["Fenwick Street"])), ""]
+    md += ["## Supplementary Questions", "",
+           "### The spreadsheet", "",
+           "1. A Zones sheet with one row per flexibility zone (%s), giving the megawatts contracted for 2027/28, firm "
+           "capacity and each primary's design-day demand before flexibility: %s."
+           % (j(Z[p]["zone"] for p in ORDER), j("%s MW at %s (%s)" % (f1(before[p]), p, band(B["before"][p])) for p in ORDER)),
+           "2. A Backtest sheet: the same approach fitted on winters 2023/24 and 2024/25 and set against winter 2025/26's "
+           "%d completed events is out by %.2f MW on average (%.2f to %.2f), and %d of that winter's %d events on days "
+           "below 0 C fall inside the %d per cent range it gives (%d to %d)."
+           % (bt["n"], bt["mae"], B["backtest"]["mae"][0], B["backtest"]["mae"][1], bt["n_inside"], bt["n_cold"],
+              bt["range_pct"], B["backtest"]["inside"][0], B["backtest"]["inside"][1]),
+           "3. Each primary's expected design-day peak with its 2027/28 contract called in full: %s."
+           % j("%s MW at %s (%s)" % (f1(peak[p]), p, band(B["peak"][p])) for p in ORDER),
+           "4. A Bridge sheet from the megawatts contracted to the megawatts taken off the day's peak, zone by zone and for "
+           "the four together: %s; of %s MW contracted, %s MW are not available on the design day, %s MW are delivered at "
+           "17:30 to 18:00 and %s MW come off the peaks."
+           % ("; ".join("%s %s MW contracted, %s not available, %s delivered, %s lost as load comes back after the "
+                        "window, %s off the peak" % (p, f1(Z[p]["award"]), f1(F["r8_bridge"]["%s, not available" % p]),
+                                                     f1(deliv[p]), f1(F["r8_bridge"]["%s, lost as load comes back" % p]),
+                                                     f1(off[p])) for p in ORDER),
+              f1(tot["contracted"]), f1(tot["not_available"]), f1(tot["delivered"]), f1(tot["off_peak"])),
+           "5. A clustered column chart on the Zones sheet: for each primary, demand before flexibility, the expected peak "
+           "with flexibility and the nine-days-in-ten level beside firm capacity, in MW; the nine-days-in-ten column stands "
+           "above firm capacity at %s and below it at %s." % (j(call), j(hold)),
+           "", "### The slides", "",
+           "6. A short deck for the capital expenditure review that names %s as the primaries to reinforce for winter "
+           "2027/28, states that %s stays within firm capacity on nine design days in ten, and carries the same chart."
+           % (j(call), j(hold)), ""]
+    md += ["## Critical Components", "",
+           "1. On the days at or below minus %.1f C every call outran what its provider had available (all but %d of %d "
+           "events fell short of the megawatts scheduled), and the megawatts delivered ran at **%.2f** (Corvane Flex) and "
+           "**%.2f** (Quillon Energy Services) of the megawatts contracted at minus %.1f C, whatever was scheduled. Called "
+           "in full, the 2027/28 contracts deliver %s at 17:30 to 18:00. Per megawatt scheduled the same events show %s, "
+           "where calls stopped short of the contract."
+           % (F["conventions"]["cold_days_at_or_below_minus"], cor["cold_met"] + qui["cold_met"], cor["n_cold"] + qui["n_cold"],
+              cor["share"], qui["share"], F["conventions"]["design_day_degrees_below_zero"],
+              j("**%s MW** at %s (%s; %s contracted)" % (f1(deliv[p]), p, band(B["delivered"][p]), f1(Z[p]["award"])) for p in ORDER),
+              j("%.2f at %s" % (Z[p]["per_scheduled"], p) for p in part)),
+           "2. Load comes back after the window: %.2f MW (Corvane Flex) and %.2f MW (Quillon Energy Services) in the first "
+           "half-hour for each megawatt delivered. With %s MW delivered, %s's design day peaks in the half-hour to %s, so "
+           "its contract takes **%s MW** off the day's peak (%s); %s keep their peak in the half-hour to 18:00 and take %s "
+           "off."
+           % (cor["back_first"], qui["back_first"], f1(deliv[late[0]]), late[0], Z[late[0]]["peak_hh"], f1(off[late[0]]),
+              band(B["off_peak"][late[0]]), j(early),
+              j("**%s MW** (%s)" % (f1(off[p]), band(B["off_peak"][p])) for p in early)),
+           "3. What a provider has available varies from one cold evening to the next by about %s of its level. Carried at "
+           "that proportion to the 2027/28 megawatts, with each primary's own day-to-day spread, the design-day peaks stay "
+           "under %s on nine design days in ten."
+           % (("%d per cent at both providers" % cor["spread_pct"]) if cor["spread_pct"] == qui["spread_pct"] else
+              ("%d per cent (Corvane Flex) and %d per cent (Quillon Energy Services)" % (cor["spread_pct"], qui["spread_pct"])),
+              j("**%s MW** at %s (%s)" % (f1(q90[p]), p, band(B["one_in_ten"][p])) for p in ORDER)), ""]
+    steps = [
+        "Cleaned the SCADA export (both point names mapped through the register, quality G half-hours kept once, UK local "
+        "time), the dispatch log (each instruction at its latest revision, a cancelled one at no megawatts), the weather "
+        "(each hour at its checked reading, averaged over the GMT day) and the switching log (each transfer from the "
+        "operation that closed the open point to the one that restored it): %d completed events at the four zones."
+        % F["record"]["completed_total"],
+        "Design-day demand before flexibility (guideline 2 to 5): each zone primary's 2025/26 daily peaks on working "
+        "weekdays outside 24 December to 2 January, outside its scheduled days and outside days with a logged transfer at "
+        "the primary, corrected to minus %.1f C and grown by the DFES rates and the qualifying connections: %s."
+        % (F["conventions"]["design_day_degrees_below_zero"], j("%s MW at %s" % (f1(before[p]), p) for p in ORDER)),
+        "Measured each completed event's megawatts delivered in the half-hours ending 17:30 and 18:00 against a "
+        "weather-adjusted baseline fitted on the primary's other working weekdays, days with a logged transfer left out.",
+        "The hurried reading: megawatts delivered per megawatt scheduled, regressed on temperature zone by zone and read "
+        "at minus %.1f C, applied to the megawatts contracted: %s. It lets %s."
+        % (F["conventions"]["design_day_degrees_below_zero"],
+           j("%s MW at %s" % (f1(car[p]["delivered"]), p) for p in ORDER),
+           "Ashcombe Road hold at %s MW" % f1(car["Ashcombe Road"]["peak"])),
+        "What the record shows: on mild days the megawatts scheduled were delivered; on the cold days the megawatts "
+        "delivered stopped at a share of the megawatts contracted that falls as it gets colder, the same share at both of "
+        "a provider's zones and in all three winters while the contracts grew. Regressed on temperature over the days at or "
+        "below minus %.1f C (%d and %d events), that share is %.2f for Corvane Flex and %.2f for Quillon Energy Services at "
+        "minus %.1f C, so the 2027/28 contracts deliver %s."
+        % (F["conventions"]["cold_days_at_or_below_minus"], cor["n_cold"], qui["n_cold"], cor["share"], qui["share"],
+           F["conventions"]["design_day_degrees_below_zero"], j("%s MW" % f1(deliv[p]) for p in ORDER)),
+        "Backtest: fitted on winters 2023/24 and 2024/25 alone and applied to winter 2025/26's larger contracts, the lesser "
+        "of the megawatts scheduled and that share of the megawatts contracted is out by %.2f MW on average over %d events, "
+        "and %d of the %d events on days below 0 C fall inside its %d per cent range."
+        % (bt["mae"], bt["n"], bt["n_inside"], bt["n_cold"], bt["range_pct"]),
+        "The design day half-hour by half-hour: each half-hour's 2025/26 level corrected to the design condition and grown "
+        "in the proportion the peak grows, less the window's reduction (the megawatts delivered through the window as the "
+        "events show them), plus what comes back after it (%.2f and %.2f MW in the two half-hours after the window for each "
+        "megawatt Corvane Flex delivers, %.2f and %.2f for Quillon Energy Services). %s peaks in the half-hour to %s at %s "
+        "MW (%s MW in the half-hour to 18:00); the others peak in the half-hour to 18:00: %s."
+        % (cor["back_first"], cor["back_second"], qui["back_first"], qui["back_second"], late[0], Z[late[0]]["peak_hh"],
+           f1(peak[late[0]]), f1(Z[late[0]]["in_window"]), j("%s MW at %s" % (f1(peak[p]), p) for p in early)),
+        "The megawatts off the day's peak are demand before flexibility less that peak: %s; the bridge from %s MW "
+        "contracted loses %s MW to what is not available and %s MW to the load that comes back."
+        % (j("%s MW at %s" % (f1(off[p]), p) for p in ORDER), f1(tot["contracted"]), f1(tot["not_available"]),
+           f1(tot["comeback_loss"])),
+        "One day in ten: the scatter of delivered over contracted about its line on the cold days, less what the same "
+        "measurement shows on days with nothing scheduled, is about %d and %d per cent of the level; it is the same share "
+        "at a small contract and a large one, so it is carried in proportion to the 2027/28 megawatts, with each primary's "
+        "day-to-day spread about its weather correction, and the day recomputed half-hour by half-hour: %s."
+        % (cor["spread_pct"], qui["spread_pct"], j("%s MW at %s" % (f1(q90[p]), p) for p in ORDER)),
+        "Set against firm capacity (guideline 7): %s exceed it on more than one design day in ten, by %s; %s stays %s MW "
+        "inside it at that level."
+        % (j(call), j("%s MW at %s" % (f1(Z[p]["over_by"]), p) for p in call), j(hold),
+           j(f1(Z[p]["inside_by"]) for p in hold)),
+    ]
+    md += ["## Step-by-Step", ""] + ["%d. %s" % (i + 1, s) for i, s in enumerate(steps)] + [""]
+    md += ["No other conclusion survives the files. The megawatts contracted taken at face value would reinforce nothing. "
+           "Megawatts delivered per megawatt scheduled carried to the contract, with the fit's own range, reinforces %s "
+           "alone: at Ashcombe Road and Charlecote Way the cold-day calls stopped at about four fifths of the contract, so "
+           "the megawatts delivered there read high per megawatt scheduled, and on equally cold days scheduling more did not "
+           "deliver more. The megawatts the 2025/26 contracts made available, carried unchanged, would reinforce all four, "
+           "but the megawatts delivered grew with the contracts in every zone, which the backtest on the larger 2025/26 "
+           "contracts confirms. The expected day alone would leave %s out (%s MW against %s); on nine design days in ten it "
+           "stays under %s MW, because what Quillon Energy Services has available on a cold evening varies by about %d per "
+           "cent. Every variant tried (the cold days taken at or below 0, minus 1.5 or minus 2 C, a curved line, each zone "
+           "on its own, the scatter as measured, a heating base of 14 or 17 C) reinforces the same three primaries."
+           % (j(F["careful_call"]), "Fenwick Street", f1(peak["Fenwick Street"]), f1(Z["Fenwick Street"]["firm"]),
+              f1(q90["Fenwick Street"]), qui["spread_pct"])]
+    with open(path, "w", encoding="utf-8") as fh:
+        fh.write("\n".join(md) + "\n")
