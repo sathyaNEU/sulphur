@@ -1,11 +1,11 @@
 {
  "task": "task10",
- "status": "BUILD",
+ "status": "PAUSED",
  "domain": "energy-systems-utilities/load-forecasting (client domain energy-systems-utilities; world: an English distribution network operator, Wealdmoor Power Networks, committing for winter 2027/28 the reinforcement of the Halverton primaries whose design-day peak, with the flexibility contracted for that winter called in full, would exceed firm capacity on more than one design day in ten)",
  "subdomain": "load-forecasting",
  "objective": "forecasting",
- "stage": 3,
- "stage_name": "build",
+ "stage": 4,
+ "stage_name": "check",
  "updated": "2026-11-10",
  "call": "Commit reinforcement at Ashcombe Road, Fenwick Street and Hartwell Common for winter 2027/28; Charlecote Way stays within firm capacity on nine design days in ten with its 2027/28 contract",
  "architecture": 6,
@@ -13,7 +13,7 @@
  "precut": {
   "exit": 0,
   "date": "2026-11-10",
-  "note": "85 checks, 0 FAIL, 1 WARN (R4 upstream of four results; the largest hint measured at 1 of 8)"
+  "note": "0 FAIL, 1 WARN (R2a upstream of seven results; the largest hint measured at 2 of 11)"
  },
  "leak": {
   "leak_py": "",
@@ -28,9 +28,25 @@
   "verdict": "",
   "disposition": "",
   "gate_h": "",
-  "report": ""
+  "report": "task10/determinism_check_report.md (not yet rewritten for architecture 6)",
+  "history": [
+   {
+    "pass_": "r1",
+    "date": "2026-11-10",
+    "pack": "a934f8e7",
+    "verdict": "DETERMINISTIC (SOLUTION_WRONG on the backtest coverage count)",
+    "disposition": "FIX_NOW"
+   },
+   {
+    "pass_": "r2",
+    "date": "2026-11-10",
+    "pack": "9ba1c5b9",
+    "verdict": "DETERMINISTIC SOLUTION_WRONG (wording and band arithmetic only; every graded figure inside its band)",
+    "disposition": "FIX_NOW"
+   }
+  ]
  },
- "paper_pair": 42.5,
+ "paper_pair": 38.4,
  "runs": {
   "run1": null,
   "run2": null,
@@ -88,7 +104,7 @@
    "commit": ""
   }
  ],
- "resume": "stage 3 build: generator, checks (52/52), verify, precut and effort green on the first cut; next the remaining free gates (gates.py --full), then stage 4 (leak reader and determinism judge together), stage 5 and RESHIPPED",
+ "resume": "stage 4 on architecture 6, final cut target.zip 1ee96fa6: two FIX_NOW passes fixed in the generator (the backtest's range count no longer asked; every band the range of 20 variants; Ashcombe Road's award 21.0 MW; guideline 6 reworded so the service is delivered through its window; the prompt names what the backtest's miss is measured on). Running when paused: the third isolated judge thread (brief and blocks under /tmp/determinism-check-task10-r3/, own derivation first) and a third cold leak read. Next: read the thread's verdict.md; if APPROVE or wording-only, have the determinism-judge agent write determinism_check_report.md from it, add the reader's answers to leak_check_report.md, fill the r3 and gates lines of the note's Pre-ship check, run checks.py, verify.py, gates.py and audit_containers.py on the cut, set status READY and commit RESHIPPED (task10) on main with both zips and golden/ force-added; if it finds a fork, fix it in the generator first",
  "approved": null,
  "submitted": null,
  "portal": {
@@ -377,9 +393,13 @@
  "doctrine": "throughout",
  "chain": "R1 design-day demand before flexibility (30.1, 24.9, 35.5, 22.9 MW); R2 megawatts each 2027/28 contract delivers at 17:30 to 18:00 on the design day (6.2, 4.0, 5.4, 2.9; 0.39 and 0.54 of the megawatts contracted); R3 winter 2025/26 predicted from the winters before (0.19 MW mean absolute error, 37 of 50 freezing-day events inside the 80 per cent range); R4 megawatts off the day's peak (4.8, 4.0, 5.4, 2.9; Ashcombe Road peaking in the half-hour to 20:00); R5 expected peaks (25.3, 20.8, 30.1, 20.0); R6 nine-days-in-ten levels (25.8, 21.7, 31.2, 20.6); R7 the three primaries to reinforce; R8 the bridge from 41.0 MW contracted to 17.1 MW off the peaks",
  "effort": {
-  "quick": 13.9,
-  "careful": 42.5,
+  "quick": 10.9,
+  "careful": 38.4,
   "thorough": 100.0,
-  "largest_hint": "a provider can deliver no more than a share of its contracted megawatts on a cold evening, however many are scheduled: 1 of 8 results"
+  "largest_hint": "a provider can deliver no more than a share of its contracted megawatts on a cold evening, however many are scheduled: 2 of 11 results"
+ },
+ "zips": {
+  "target": "1ee96fa6f83fc639d719a28c29052a156b00d33fe206a8fb5965d57d3ea032e7",
+  "golden": "525b765ba918e6832a4e422dfddf378a12324651b8e93481f4598703f04b6b48"
  }
 }

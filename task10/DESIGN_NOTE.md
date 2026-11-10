@@ -3,7 +3,8 @@
 Architecture 6, a results chain in the same world, re-rooted on 2026-11-10 at the platform reviewer's direction
 (`runs/review_2026-11-10.md`): "document the transfer, for example as switching log entries, and make the call turn on
 judgments that each move a figure". The world, the demand side and the pack's files are kept; the hidden transfer is
-gone (the control room's ordinary switching is logged and filed in guideline 3), and the answer is eight results.
+gone (the control room's ordinary switching is logged and filed in guideline 3), and the answer is eleven results:
+seven asks, the three findings they stand on and the call.
 
 ## Draw
 
@@ -13,88 +14,105 @@ Answer shape: a forecast with bands, plus its drivers (each zone primary's desig
   contract called in full, expected and at the nine-days-in-ten level, with what drives it: demand before flexibility,
   the megawatts delivered, the megawatts off the peak, the bridge from the megawatts contracted)
 Weight: validation. Fitting any of three readings of the record takes an hour; the work is proving which one carries
-  to a call of the whole contract on a cold day (the equal-temperature test of megawatts scheduled against megawatts
-  delivered, the two zones of each provider, the backtest on the larger 2025/26 contracts, the range's count on last
-  winter's freezing days). No build on file has put its weight there; the last three sit elsewhere (task5, task7, task4).
+  to a call of the whole of a contract far larger than any on record: megawatts scheduled varied at equal temperature
+  and megawatts delivered did not, each provider's two zones agree on a share of the contract and not on a rate per
+  megawatt scheduled, the share holds through three winters of stepped-up contracts, the weather correction's straight
+  line is checked on cold hours the guideline's sample does not hold, and the held-out winter is shown to be a test the
+  wrong reading also passes. No build on file has put its weight there; the last three sit elsewhere (task5, task15,
+  task4).
 Data-native sentence: three winters of calls sized to the day's need were mostly smaller than the contract and were
   met, so what a provider can deliver shows only on the cold days a call outran it, and the decision is about a call of
-  the whole of a contract twice the size of any on record.
+  the whole of a contract two to three times the size of any on record.
 People: Marion Todd, Clifford Evans, Irene Carpenter (drawn at architecture 5 with guard.py names, the same world)
 
-Guard: card registered 2026-11-10, WARN. driver.near 0.18 against this slot's own architecture 5: the world and the
-decision are the same at the reviewer's direction, the chain is not (architecture 5 netted one neighbour's rise; nothing
-here is netted, and the results are a forecast, a measured share, a backtest, a day profile, a spread, a bridge).
-overuse.forum (executive_team) and repeat.decision (designation_set, task5): the December capital expenditure review
-and the list of primaries are the world's own, kept with it.
+Guard: card re-registered 2026-11-10 04:00Z after the stage 4 fix pass, WARN. driver.near 0.17 against this slot's own architecture 5: the world and the decision are the same at the reviewer's direction, the chain is not (architecture 5 netted
+one neighbour's rise; nothing here is netted, and the results are a forecast, a measured share, a backtest, a day profile,
+a spread and a bridge). overuse.forum (executive_team): the December capital expenditure review is the world's own.
+repeat.gate_g (forecasting, task4): the analysis type assigned is forecasting; task4 carries a fitted model to new units
+through three corrected estimates, this build reads a limit from the calls that outran it and rebuilds one day. The
+forcing event was redrawn from season_or_peak, which task15 holds in the window, to budget_or_appropriation: what forces
+the call now is the December capital expenditure review, the allocation round at which a reinforcement has to be
+committed to be energised before the winter (guideline 1); the winter is the object of the forecast, not the event.
 
 ## Deep reasoning
 
 Task type: Load, price & renewable forecasting (Energy Systems & Utilities, `load-forecasting`), which serves Forecasting & Predictive Modeling: each result is a forecast for a winter not yet begun, or the evidence it holds.
 Domain test: a distribution planner forecasts a primary's design-day peak (a weather-corrected peak grown to the winter assessed), credits contracted flexibility at what it will deliver in the evening peak, checks the residual peak across the day's half-hours, and sets the level it stays under at a stated assurance against N-1 firm capacity; the field's own knowledge is that a demand-side provider's delivery is limited by what its enrolled assets have available on a cold evening (a de-rating of registered capacity), that curtailed heating and refrigeration load comes back after a service window, and that a design-day peak is a half-hourly quantity.
-Swap: "where do we need to commit a new ward for winter 2027/28, counting the locum cover contracted for that winter" keeps a capacity call and loses megawatts scheduled against a registered contracted capacity, the load that comes back after a service window, the half-hourly day shape that moves a peak from the half-hour ending 18:00 to the one ending 20:00, and a design day set by temperature; none of the eight results can be stated.
-Where the weight sits: R2 and R3 together. Three readings fit the record about equally well zone by zone (megawatts delivered per megawatt scheduled, a share of the megawatts contracted, the last contract's megawatts unchanged) and file 7.9, 6.2 and 2.9 MW at Ashcombe Road; choosing between them is long work on what the record can test: scheduled megawatts varied at equal temperature and delivered megawatts did not, the two zones of each provider agree on the share and not on the rate per megawatt scheduled, and the backtest on the larger 2025/26 contracts separates growth with the contract from none.
-Layer 1: the SCADA historian's asset ID migration on 14 May 2024 (two point names), values held through comms outages flagged S, a CT fault's zeros flagged B at Ravenhurst Park, rows the outstation never sent, the December 2024 extract re-sent over 30 November; the dispatch log's re-issued and cancelled instructions with superseded rows kept, provider names typed five ways, UK local time beside the weather station's UTC; the weather station's raw readings beside their checked versions and its logger gaps; the control room's switching log, two rows a transfer (closed, then opened to normal); the growth register's withdrawn, quoted and re-entered connections; feeders under their legacy circuit names. None decides a result: held values kept, weather versions averaged in and the first-issued megawatts move no figure out of its band (checks.py, L1 and SF14); the logged transfer days are filed in guideline 3 and, left in, move Ashcombe Road's demand before flexibility by 0.4 MW and no call (SF2).
-Not one thing: the strongest single piece is the share of the contract available on the design day (R2); a run that nails it still has to rebuild the day half-hour by half-hour with the load that comes back (R4, R5: Ashcombe Road's peak is 25.3 MW in the half-hour to 20:00, not 23.9), carry the day-to-day spread in proportion to the 2027/28 megawatts (R6: Fenwick Street's expected 30.1 MW is under firm, its nine-days-in-ten level 31.2 is over), build the bridge (R8) and prove the approach on last winter (R3).
-One-fact test: "a provider can deliver no more than a share of its contracted megawatts on a cold evening, however many are scheduled" rescues 1 of 8 results (R2); with it the careful pass still takes the credit off the 17:30 to 18:00 peak and reads the fit's own range, so R4 to R8 stay wrong and R3's range count stays wrong.
-Not semantics: every field read right (both point names, quality G, the UK clock, the latest revision, the megawatts scheduled and contracted, the daily mean, the logged transfers) still leaves the careful pass on megawatts delivered per megawatt scheduled, the 18:00 half-hour and the fit's own range; no field holds what a provider had available, what came back or how much either varies.
-Not rule application: the guideline files the WHAT of each result (the design day, the days behind the demand before flexibility, growth, the half-hours whose megawatts count as delivered, the contract scheduled in full, the day's highest half-hour, one design day in ten, firm capacity) and no document says how megawatts delivered relate to megawatts scheduled or contracted, that anything comes back, or how a day-to-day spread is measured or carried; with every filed rule applied, R2, R3, R4, R6 and R8 are still to be estimated. Enumerated family for R2 at Ashcombe Road: 7.9 (per megawatt scheduled), 6.2 (share of the contract), 2.9 (the 2025/26 megawatts unchanged), 16.0 (face value); standing family (nine variants of the share reading): 5.9 to 6.4.
-Estimand: guideline WPN-NP-G-014 issue 4 sections 2 to 7 and Appendix A, and award notice WPN-DSO-FLX-2026-07: population the four zone primaries; outcome each primary's highest half-hourly demand on the winter 2027/28 design day with its contracted megawatts scheduled in full; megawatts delivered those in the half-hours ending 17:30 and 18:00; window a working weekday at a daily mean of minus 3.0 C; unit MW; comparison firm capacity, exceeded on more than one design day in ten. The backtest's population, error and range are in the prompt.
+Swap: "where do we need to commit a new ward for winter 2027/28, counting the locum cover contracted for that winter" keeps a capacity call and loses megawatts scheduled against a registered contracted capacity, the load that comes back after a service window, the half-hourly day shape that moves a peak from the half-hour ending 18:00 to the one ending 20:00, and a design day set by temperature; none of the eleven results can be stated.
+Where the weight sits: R2a and the proof around it. Three readings fit the record about equally well zone by zone (megawatts delivered per megawatt scheduled, a share of the megawatts contracted, the last contract's megawatts unchanged) and file 10.3, 8.1 and 2.9 MW at Ashcombe Road; choosing between them is long work on what the record can test: megawatts scheduled varied at equal temperature and megawatts delivered did not, the two zones of each provider agree on the share and not on the rate per megawatt scheduled, the share is the same winter by winter as the contracts stepped up, and the held-out winter (R3) passes both the right reading and the wrong one.
+Layer 1: the SCADA historian's asset ID migration on 14 May 2024 (two point names), values held through comms outages flagged S, a CT fault's zeros flagged B at Ravenhurst Park, rows the outstation never sent, the December 2024 extract re-sent over 30 November; the dispatch log's re-issued and cancelled instructions with superseded rows kept, provider names typed five ways, UK local time beside the weather station's UTC; the weather station's raw readings beside their checked versions and its logger gaps; the control room's switching log, two rows a transfer (closed, then opened to normal), each at the minute it was made; the growth register's withdrawn, quoted and re-entered connections; feeders under their legacy circuit names. None decides a result: held values kept, weather versions averaged in and the first-issued megawatts move no figure out of its band (checks.py, L1 and SF14); the logged transfer days are filed in guideline 3 and, left in, change no call (SF2).
+Not one thing: the strongest single piece is the share of the contract available on the design day (R2a); a run that nails it still has to rebuild the day half-hour by half-hour with the load that comes back (R4a, R4, R5: Ashcombe Road's peak is 25.9 MW in the half-hour to 20:00, not the 22.0 MW of the half-hour to 18:00, which is under firm), carry the day-to-day spread in proportion to the 2027/28 megawatts (R6a, R6: Fenwick Street's expected 30.1 MW is under firm, its nine-days-in-ten level 31.2 is over) and build the bridge (R8). Told the share, a pass that still takes the credit off the 17:30 to 18:00 peak with the record's megawatts of scatter reinforces Fenwick Street and Hartwell Common, not the three (checks.py, one-fact test).
+One-fact test: "a provider can deliver no more than a share of its contracted megawatts on a cold evening, however many are scheduled" rescues 2 of 11 results (R2a and R2); the sentence about load coming back rescues R4a alone and the sentence about the spread R6a alone, because each later figure needs the others as well.
+Not semantics: every field read right (both point names, quality G, the UK clock, the latest revision, the megawatts scheduled and contracted, the daily mean, the logged transfers) still leaves the careful pass on megawatts delivered per megawatt scheduled, the 18:00 half-hour and megawatts of scatter carried unchanged; no field holds what a provider had available, what came back or how much either varies.
+Not rule application: the guideline files the WHAT of each result (the design day, the days behind the demand before flexibility, growth, the half-hours whose megawatts count as delivered, the contract scheduled in full, the day's highest half-hour, one design day in ten, firm capacity) and no document says how megawatts delivered relate to megawatts scheduled or contracted, that anything comes back, or how a day-to-day spread is measured or carried; with every filed rule applied, R2a, R2, R4a, R4, R5, R6a, R6 and R8 are still to be estimated (the stage 4 reader's own count: the guideline settles the demand side and the test, and the megawatts delivered, the megawatts off the peak, the nine-days-in-ten level and the backtest stay analysis). Enumerated family for R2 at Ashcombe Road: 21.0 (face value), 10.3 (per megawatt scheduled), 8.1 (share of the contract), 2.9 (the 2025/26 megawatts unchanged); standing family (20 variants of the share reading): 7.5 to 9.0.
+Estimand: guideline WPN-NP-G-014 issue 4 sections 2 to 7 and Appendix A, and award notice WPN-DSO-FLX-2026-07: population the four zone primaries; outcome each primary's highest half-hourly demand on the winter 2027/28 design day with its contracted megawatts scheduled in full; megawatts delivered quoted as the delivery in the half-hours ending 17:30 and 18:00, the service delivered through its window; window a working weekday at a daily mean of minus 3.0 C; unit MW; comparison firm capacity, exceeded on more than one design day in ten. The backtest's population and error are in the prompt.
 No decoy: nothing is written to carry a wrong answer: no memo, earlier assessment, provider claim or settlement figure states a delivery, a share, a peak or a ranking of the primaries.
 No replay: no result re-derives a published figure and no stated number in the pack is wrong.
-Pinned: each result's rivals run on the pack and the clean truth (checks.py, the family and SF2 to SF14): the cold days taken at or below 0, minus 1.5 or minus 2 C, a curved line, each zone on its own, the scatter as measured, a heating base of 14 or 17 C, the lower of the two credited half-hours, the first-issued megawatts, the logged days left in; every one reinforces the same three primaries and every figure sits inside its band. The readings outside the family are ruled out by named data: megawatts per megawatt scheduled by the equal-temperature test at Ashcombe Road (delivered share moves 0.11 per unit of share called against the 0.49 it implies, checks.py) and by the two zones of each provider; the last contract's megawatts unchanged by the backtest (winter 2025/26's cold days come 0.2 to 0.5 MW short on it, and within 0.1 with the contract).
-Run forecast: R2, method shortcut (megawatts delivered per megawatt scheduled read at minus 3.0 C and applied to the contract, both architecture 5 rounds' own method); R3, self-confirming check (the same model back-tested on a winter whose calls look like the ones it was fitted on, a range from the fit's own uncertainty); R4 and R5, unfinished chain (the credit taken off the 17:30 to 18:00 peak; round 2's run 1 named the come-back as "not a full simulation of rebound or a shifted residual daily peak" and went no further); R6, method shortcut (a bootstrap of the fitted mean read as the range; both round 2 runs reported one); R7 and R8 fall with them. Different runs are expected to lose in different places: one that plots megawatts delivered against megawatts scheduled may earn R2 and still lose R4 to R6.
-Strategy label: WORKS IN FORM (the client's Engineering strategy 6, a peak load forecast whose bands hold up, taken as direction only: the lesson that bands from a fit's residuals come out too narrow and have to be proved on history comes back; the structure does not: this is one winter, four primaries and a contracted intervention's effect on the peak).
-Depth level: 5. Four independent judgments each move figures (what a call of the whole contract delivers; the day's peak once load comes back; the spread carried in proportion to one day in ten; the proof on a winter not fitted on), with the demand forecast and the bridge around them; the shortcuts land on four different wrong sets (none, Hartwell Common alone, Ashcombe Road and Hartwell Common, all four), and nine variants of the golden's own choices keep the set.
-Lesson: a contracted intervention's effect at a size never called has to be read from what limited it on the occasions it was fully stretched, proved on a period it was not fitted on, and carried with its own day-to-day spread; no build on file forecasts a contract called in full from a record of part calls.
+Pinned: each result's rivals run on the pack and the clean truth (checks.py, the family and SF2 to SF22): the cold days taken at or below 0, minus 1.5 or minus 2 C, a curved line, each zone on its own, the scatter as measured, a heating base of 14 or 17 C, an event's baseline with a slope each winter, with weekday levels or scaled to the day's own level before the window, a met call left out or taken as a floor (five forms), the megawatts fitted over every event (pooled or zone by zone), a cancelled instruction's day kept, the megawatts delivered carried to the award at the rate the three winters' record itself gives, the lower of the two credited half-hours, the first-issued megawatts, the logged days left in; every one reinforces the same three primaries and every figure sits inside its band, which is the range those 20 variants span. The readings outside the family are ruled out by named data: megawatts per megawatt scheduled by the equal-temperature test at Ashcombe Road (the delivered share moves 0.15, standard error 0.12, per unit of share called against the 0.53 it implies) and by the two zones of each provider; megawatts that do not grow with the contract by three winters of stepped-up contracts (megawatts delivered move 0.92 per cent, standard error 0.09, for each per cent contracted: SF22; carried at that rate instead of in proportion, every figure stays inside its band); a curved weather correction by the cold hours the scheduled days do carry (SF21).
+Run forecast: R2a and R2, method shortcut (megawatts delivered per megawatt scheduled read at minus 3.0 C and applied to the contract, both architecture 5 rounds' own method); R4a, R4 and R5, unfinished chain (the credit taken off the 17:30 to 18:00 peak; round 2's run 1 named the come-back as "not a full simulation of rebound or a shifted residual daily peak" and went no further); R6a and R6, method shortcut (a range from the fit, or the megawatts of scatter its fit leaves carried unchanged to a contract two to three times the size; both round 2 runs reported a fit's interval); R7 and R8 fall with them; R1 and R3 are earned (R3 because the held-out winter passes megawatts per megawatt scheduled too). Different runs are expected to lose in different places: one that plots megawatts delivered against megawatts scheduled may earn R2a and still lose R4 to R6; one that carries the scatter in proportion earns R6a and Fenwick Street's level and still holds Ashcombe Road.
+Strategy label: WORKS IN FORM (the client's Engineering strategy 6, a peak load forecast whose bands hold up, taken as direction only: the lesson that bands from a fit's residuals come out too narrow comes back; the structure does not: this is one winter, four primaries and a contracted intervention's effect on the peak).
+Depth level: 5. Four independent judgments each move figures (what a call of the whole contract delivers; the day's peak once load comes back; the spread carried in proportion to one day in ten; the weather correction's line carried past its sample), with the demand forecast, the backtest and the bridge around them; seven shortcuts land on five different wrong sets and none on the golden's (none, Hartwell Common alone, Fenwick Street and Hartwell Common, Ashcombe Road and Hartwell Common, all four), Ashcombe Road needs two of the judgments together or the day rebuilt, and 20 variants of the golden's own choices keep the set.
+Lesson: a contracted intervention's effect at a size never called has to be read from what limited it on the occasions it was fully stretched, proved on tests the wrong reading fails (a held-out period is not one of them here), and carried with its own day-to-day spread; no build on file forecasts a contract called in full from a record of part calls.
 
 ## Results chain
 
 | ID | Result (checkable) | Area | Pinned by | Band | Hurried analyst | Depends on | Graded as |
 |---|---|---|---|---|---|---|---|
-| R1 | each zone primary's design-day demand before flexibility, winter 2027/28: 30.1, 24.9, 35.5 and 22.9 MW | forecasting | guideline 2 to 5 (the days, the correction to minus 3.0 C, DFES growth, the qualifying connections) | 0.3 MW each side (heating base 14 to 17 C, the logged days) | method shortcut: the highest half-hour on record grown to 2027/28, 1 to 3 MW low at three primaries (the quick pass); the careful pass earns it | - | Ask 1 |
-| R2 | megawatts each 2027/28 contract delivers at 17:30 to 18:00 on the design day: 6.2, 4.0, 5.4 and 2.9 MW (0.39 and 0.54 of the megawatts contracted) | missingness and measurement | guideline 6 (the half-hours, the contract scheduled in full); the cold days on which every call outran what was available; the award notice's contracted megawatts by winter | 5.9 to 6.4, 3.7 to 4.3, 5.2 to 5.7, 2.7 to 3.1 (nine variants) | method shortcut: megawatts delivered per megawatt scheduled at minus 3.0 C applied to the contract: 7.9 and 5.0 MW at Ashcombe Road and Charlecote Way, whose cold-day calls stopped short of the contract | - | Component 1 |
-| R3 | winter 2025/26's 232 completed events predicted from the winters before: 0.19 MW mean absolute error; 37 of the 50 events on days below 0 C inside the 80 per cent range | validation | the prompt (last winter from the winters before it, the average miss, days below 0 C, 80 per cent) | 0.15 to 0.23 MW; 34 to 40 events | self-confirming check: the per-megawatt model back-tested with the fit's own range, 0.24 MW and 7 of 50 | R2 | Ask 2 |
-| R4 | megawatts each contract takes off the day's peak: 4.8, 4.0, 5.4 and 2.9 MW, Ashcombe Road peaking in the half-hour to 20:00 | modeling | guideline 6 (the day's highest half-hour); the rise after the window per megawatt delivered, measured on every event | 4.6 to 5.0, 3.7 to 4.3, 5.2 to 5.8, 2.7 to 3.1 | unfinished chain: the megawatts delivered taken off the 17:30 to 18:00 peak (7.9 MW off at Ashcombe Road) | R2 (independent: the rise after the window per megawatt delivered, measured on the events themselves) | Component 2 |
-| R5 | each primary's expected design-day peak with flexibility: 25.3, 20.8, 30.1 and 20.0 MW | forecasting | guideline 3, 4 and 6; R1 and R4 | 0.3 to 0.4 MW each side | unfinished chain: 22.3 MW at Ashcombe Road and 19.9 at Charlecote Way on the per-megawatt credit off the 18:00 peak | R1, R4 | Ask 3 |
-| R6 | the level each peak stays under on nine design days in ten: 25.8, 21.7, 31.2 and 20.6 MW | uncertainty | guideline 7 (one design day in ten); the scatter of delivered over contracted on the cold days, the same share at a small contract and a large one; each primary's day-to-day spread | 25.5 to 26.1, 21.4 to 22.0, 30.8 to 31.5, 20.3 to 20.9 | method shortcut: the fitted mean's own range (22.5, 20.0, 30.0 and 20.3 MW); or the record's megawatts of scatter carried unchanged to the larger contract (Fenwick Street 0.3 MW low) | R5 | Component 3 |
-| R7 | the primaries to reinforce: Ashcombe Road, Fenwick Street and Hartwell Common (over firm at that level by 2.8, 0.7 and 2.8 MW); Charlecote Way 0.8 MW inside | synthesis | guideline 7 and Appendix A | the set exact | unfinished chain: Hartwell Common alone on the careful pass | R6 | Recommendation |
-| R8 | each contract's megawatts bridged to the megawatts off the peak: of 41.0 MW contracted, 22.5 not available on the design day, 18.5 delivered, 1.3 lost as load comes back at Ashcombe Road, 17.1 off the peaks | decomposition and attribution | the prompt's order (contracted, down to off the peak); R2 and R4 | each bar 0.2 to 0.3 MW each side | unfinished chain: a bridge with no come-back bar and the per-megawatt credit (8.1 MW not available at Ashcombe Road against 9.8) | R2, R4 | Ask 4 |
+| R1 | each zone primary's design-day demand before flexibility, winter 2027/28: 30.1, 24.9, 35.5 and 22.9 MW | forecasting | guideline 2 to 5 (the days, the correction to minus 3.0 C, DFES growth, the qualifying connections); the straight line by SF21 | 0.3 MW each side | method shortcut: the highest half-hour on record grown to 2027/28 (the quick pass, right at three primaries and 0.4 MW low at Fenwick Street); the careful pass earns it | - | Ask 1 |
+| R2a | the share of its contracted megawatts each provider has available at minus 3.0 C: 0.39 (Corvane Flex) and 0.54 (Quillon Energy Services) | missingness and measurement | the cold days on which nearly every call outran what was available; the award notice's contracted megawatts by winter (registered capacity) | 0.36 to 0.45; 0.50 to 0.59 (20 variants) | method shortcut: megawatts delivered per megawatt scheduled regressed on temperature and read as what a megawatt of contract delivers, 0.46 and 0.61 of the contracts | independent: the events, the contracts and the SCADA record | Component 1 |
+| R2 | megawatts each 2027/28 contract delivers at 17:30 to 18:00 on the design day: 8.1, 4.0, 5.4 and 2.9 MW | forecasting | guideline 6 (the half-hours, the contract scheduled in full); R2a carried to the award (SF22) | 7.3 to 9.5, 3.7 to 4.5, 4.9 to 5.9, 2.5 to 3.4 | method shortcut: 10.3 and 5.0 MW at Ashcombe Road and Charlecote Way, whose cold-day calls stopped short of the contract (0.8 and 0.5 MW outside the bands) | R2a | Ask 2 |
+| R3 | winter 2025/26's completed events predicted from the winters before: out by 0.19 MW on average | validation | the prompt (last winter's events from the winters before it, the average miss) | 0.12 to 0.27 MW | self-confirming check: megawatts per megawatt scheduled passes the same held-out winter (0.24 MW) because last winter's calls sat as far below their contracts as the earlier ones; the careful pass earns the figure | R2a | Ask 7 |
+| R4a | megawatts coming back in the half-hour after the window for each megawatt delivered: 0.32 (Corvane Flex) and 0.26 (Quillon Energy Services) | investigation loops | the half-hours after the window on every completed event | 0.21 to 0.39; 0.16 to 0.34 | unfinished chain: the measurement stops at the window's end and files nothing | independent: the half-hours after the window on the event days themselves | Component 2 |
+| R4 | megawatts each contract takes off the day's peak: 4.2, 4.0, 5.4 and 2.9 MW, Ashcombe Road peaking in the half-hour to 20:00 | modeling | guideline 6 (the day's highest half-hour); guideline 4 (every half-hour in the peak's proportion); R4a | 3.9 to 4.6, 3.7 to 4.5, 4.9 to 5.9, 2.6 to 3.4 | unfinished chain: the megawatts delivered taken off the 17:30 to 18:00 peak (10.3 MW off at Ashcombe Road) | R1, R2, R4a | Ask 3 |
+| R5 | each primary's expected design-day peak with flexibility: 25.9, 20.8, 30.1 and 20.0 MW | forecasting | guideline 3, 4 and 6; R1 and R4 | 0.3 to 0.6 MW each side | unfinished chain: 19.8 MW at Ashcombe Road and 19.9 at Charlecote Way on the per-megawatt credit off the 18:00 peak | R1, R4 | Ask 4 |
+| R6a | each provider's day-to-day spread as a share of what it delivers: 16 per cent at both | uncertainty | the scatter of delivered over contracted about its line on the cold days, net of the baseline's own noise; the same share at a small contract and a large one | 12 to 22; 13 to 21 | method shortcut: the megawatts of scatter its own fit leaves, carried unchanged (7 and 6 per cent of what it delivers), or the fit's own interval | independent: the cold days' scatter about the share's line | Component 3 |
+| R6 | the level each peak stays under on nine design days in ten: 26.5, 21.7, 31.2 and 20.6 MW | uncertainty | guideline 7 (one design day in ten); R6a carried in proportion with each primary's day-to-day spread, the day recomputed half-hour by half-hour | 26.1 to 26.8, 21.3 to 22.0, 30.7 to 31.6, 20.1 to 20.9 | method shortcut: 20.5, 20.3, 30.4 and 20.5 MW (Fenwick Street 0.3 MW under its band and under firm) | R5, R6a | Ask 5 |
+| R7 | the primaries to reinforce: Ashcombe Road, Fenwick Street and Hartwell Common (their nine-days-in-ten levels 3.5, 0.7 and 2.8 MW over firm); Charlecote Way 0.8 MW inside | synthesis | guideline 7 and Appendix A | the set exact | unfinished chain: Hartwell Common alone on the careful pass | R6 | Recommendation |
+| R8 | each contract's megawatts bridged to the megawatts off the peak: of 46.0 MW contracted, 25.6 not available on the design day, 20.4 delivered, 3.9 lost as load comes back at Ashcombe Road, 16.5 off the peaks | decomposition and attribution | the prompt's order (contracted, down to off the peak); R2 and R4 | each bar inside the range the 20 variants span (0.2 to 1.1 MW each side) | unfinished chain: a bridge with no come-back bar and the per-megawatt credit (10.7 MW not available at Ashcombe Road against 12.9) | R2, R4 | Ask 6 |
 
-Carry-forward: R1 stands on the demand side alone. R2 stands on the events and the contracts alone. R4 has an input of its own (what comes back per megawatt delivered) and needs R2's megawatts for its level, so a run with R2 wrong can still show the come-back and the half-hour that peaks. R5 needs R1 and R4; R6 adds the spread; R7 needs R6; R8 needs R2 and R4; R3 is the model of R2 set against a winter it was not fitted on. No analytical result is the only analytical input of more than two others (R2: R3 and R4).
+Carry-forward: R1 stands on the demand side alone. R2a stands on the events and the contracts alone, and R2 and R3 fall with it. R4a has an input of its own (what comes back per megawatt delivered), so a run with R2a wrong can still show the come-back; R4 needs R1, R2 and R4a. R6a has an input of its own (the cold days' scatter); R6 needs R5 and R6a. R7 needs R6 and R8 needs R2 and R4. No analytical result is the only analytical input of more than two others (R2a: R2 and R3).
 
 ## Hidden factor record
 
 | Factor | Real or constructed | Only in deciding units | Found by | Fix depth | Verdict |
 |---|---|---|---|---|---|
-| a provider delivers the megawatts scheduled until they outrun what its enrolled assets have available, a share of the megawatts contracted that falls as the evening gets colder | constructed as the provider's dispatch process, in every event | no: all four zones and all three winters (595 events; the share on the cold days sits within 0.07 of its provider's line in each of the 12 zone-winters, asserted). The form that misleads (megawatts per megawatt scheduled) misreads Ashcombe Road and Charlecote Way and decides Ashcombe Road alone; Charlecote Way holds either way (asserted) | modelling: megawatts delivered against megawatts scheduled and contracted by temperature, the cold days isolated, the contracts read from the award notice's table of winters | modelling: a share of the contract fitted where calls outran it, carried to a contract twice the size, proved by the equal-temperature test, the two zones and the backtest | keep: the heaviest result, one of four judgments |
-| curtailed load comes back in the hour or two after the service window | constructed as physics (thermal and refrigeration payback), after every completed event | no: every zone (0.25 to 0.33 MW per megawatt delivered in the first half-hour at each, asserted); left out it misreads Ashcombe Road's peak by 1.4 MW and changes no primary's call (asserted) | a targeted look at the half-hours after the window, once the day is rebuilt half-hour by half-hour | modelling: per megawatt delivered, carried to the larger delivery, the day's peak recomputed | keep |
-| what a provider has available varies from evening to evening in proportion to its level | constructed as customer and asset behaviour, in every event | no: both providers, every zone (megawatts of scatter 0.44 at Ashcombe Road against 0.19 at Hartwell Common, the same share of the contract, asserted); the misreading (megawatts of scatter unchanged, or the fit's own range) misreads every level and decides Fenwick Street alone | modelling: the scatter about the cold-day line, net of the baseline's own noise | modelling: carried in proportion to the 2027/28 megawatts with the baseline's spread, the day recomputed | keep |
-| calls sized to the day's need and capped at the contract | constructed as the DSO's scheduling process, filed in the award notice's service terms | no: every instruction | reading the award notice | none: it is why part calls and full calls both exist | keep, the process that makes R2 matter |
+| a provider delivers the megawatts scheduled until they outrun what its enrolled assets have available, a share of the megawatts contracted that falls as the evening gets colder | constructed as the provider's dispatch process, in every event | no: all four zones and all three winters (595 events measured; the share on the cold days sits within 0.05 of its provider's line in each of the 12 zone-winters, asserted). The form that misleads (megawatts per megawatt scheduled) misreads Ashcombe Road and Charlecote Way and decides Ashcombe Road alone; Charlecote Way holds either way (asserted) | modelling: megawatts delivered against megawatts scheduled and contracted by temperature, the cold days isolated, the contracts read from the award notice's table of winters | modelling: a share of the contract fitted where calls outran it, carried to a contract two to three times the size, proved by the equal-temperature test, the two zones and three winters of stepped-up contracts | keep: the heaviest result, one of four judgments |
+| curtailed load comes back in the hour or two after the service window | constructed as physics (thermal and refrigeration payback), after every completed event | no: every zone (0.25 to 0.33 MW per megawatt delivered in the first half-hour at each, asserted); left out with the day still rebuilt it misreads Ashcombe Road's peak by 2.1 MW and changes no primary's call (asserted) | a targeted look at the half-hours after the window, once the day is rebuilt half-hour by half-hour | modelling: per megawatt delivered, carried to the larger delivery, the day's peak recomputed | keep |
+| what a provider has available varies from evening to evening in proportion to its level | constructed as customer and asset behaviour, in every event | no: both providers, every zone (megawatts of scatter 0.38 at Ashcombe Road against 0.20 at Hartwell Common, asserted); the misreading (megawatts of scatter unchanged) misreads every level and, with megawatts per megawatt scheduled, leaves Fenwick Street under firm | modelling: the scatter about the cold-day line, net of the baseline's own noise | modelling: carried in proportion to the 2027/28 megawatts with the baseline's spread, the day recomputed | keep |
+| calls sized to the day's need and capped at the contract | constructed as the DSO's scheduling process, filed in the award notice's service terms | no: every instruction | reading the award notice | none: it is why part calls and full calls both exist | keep, the process that makes R2a matter |
 
 ## Effort test
 
 | Result | Quick pass | Careful but hurried | Thorough |
 |---|---|---|---|
 | R1 design-day demand before flexibility, MW | Partly | Right | Right |
+| R2a the share of its contracted megawatts each provider has available on the design day | Missed | Missed | Right |
 | R2 megawatts each contract delivers at 17:30 to 18:00 on the design day | Missed | Partly | Right |
-| R3 last winter predicted from the two before: mean absolute error and freezing-day events inside the range | Missed | Missed | Right |
+| R3 last winter predicted from the winters before: the average miss, MW | Missed | Right | Right |
+| R4a megawatts coming back in the half-hour after the window, per megawatt delivered | Missed | Missed | Right |
 | R4 megawatts each contract takes off the day's peak once the load that comes back is counted | Missed | Partly | Right |
 | R5 expected design-day peak with flexibility, MW | Missed | Partly | Right |
+| R6a each provider's day-to-day spread as a share of what it delivers, per cent | Missed | Missed | Right |
 | R6 the level each peak stays under on nine design days in ten, MW | Missed | Missed | Right |
 | R7 the primaries to reinforce | Missed | Missed | Right |
 | R8 each contract's megawatts bridged to the megawatts off the peak | Missed | Partly | Right |
-| Roughly | 0.5 of 8 | 3 of 8 | 8 of 8 |
+| Roughly | 0.5 of 11 | 4 of 11 | 11 of 11 |
 
 Measured by: .claude/skills/stumping/effort.py on generator/effort.json (generator/effort_passes.py runs each pass end to end on the cut pack; no cell hand-graded)
-Largest single hint: a provider can deliver no more than a share of its contracted megawatts on a cold evening, however many are scheduled; rescues 1 of 8 results
-Pair estimate: 42.5
+Largest single hint: a provider can deliver no more than a share of its contracted megawatts on a cold evening, however many are scheduled; rescues 2 of 11 results
+Pair estimate: 38.4
 
 The careful column is the platform runs' own method on this world (both architecture 5 rounds: every file cleaned, a
-weather-adjusted baseline, megawatts per megawatt scheduled with a temperature interaction, a bootstrap of the fit, a
-backtest on the last winter), with the logged days left out as guideline 3 files. It earns R1 and the cells of R2, R4,
-R5 and R8 at the two zones whose cold-day calls took the whole contract. The paper is optimistic: a run that plots
-megawatts delivered against megawatts scheduled sees the plateau, and one plot of the evening after the window shows
-the come-back; each still leaves the other results to earn.
+weather-adjusted baseline, megawatts per megawatt scheduled with a temperature interaction, a backtest on the last
+winter), graded up where the record leaves a doubt: its one-day-in-ten level uses the megawatts of scatter its own fit
+leaves on the freezing days with the demand's day-to-day spread (not the fit's interval both round 2 runs reported),
+and its backtest is earned. It earns R1, R3 and the cells of R2, R4, R5 and R8 at the two zones whose cold-day calls
+took the whole contract. The seven asks are numbered as the prompt lists them and the three components are the findings
+they stand on, so no result is priced twice. The paper is optimistic, and the price has a range: a run that carries
+the scatter in proportion to what it delivers (still per megawatt scheduled, still off the 18:00 peak) earns half of
+R6a and of the set (Fenwick Street and Hartwell Common) and prices at about 49; a run that plots megawatts delivered
+against megawatts scheduled sees the plateau, and one plot of the evening after the window shows the come-back; each
+still leaves the other results to earn.
 
 ## Data provenance
 
@@ -102,35 +120,40 @@ Source: generated by the generator from a simulated process (generator/world.py 
 Behaves like the real thing: the process simulated is a DSO's scheduled peak-reduction service: demand at nine primaries driven by the station's daily mean temperature with a day effect and a half-hourly shape by customer mix; a day-ahead forecast with its own error; calls sized to hold each primary at 92 per cent of firm capacity in half-megawatt steps and capped at the contract; a provider that delivers what is scheduled while its assets can and the available megawatts when they cannot, with the load coming back after the window; revisions and cancellations on the morning; ordinary 11 kV switching. It matches published behaviour of aggregated demand-side flexibility: delivery de-rated from registered capacity in cold weather, under-delivery concentrated on the largest calls, payback after thermal curtailment, day-to-day variability of a tenth to a fifth of the level.
 Genuine patterns: (1) seasonal and cold-spell temperature with day-to-day persistence, and demand rising with heating degrees at a slope by primary; (2) a weekday and weekend half-hourly shape by customer mix, a Christmas dip and year-on-year growth by primary; (3) calls larger on colder days and on bigger forecasts, met when mild and short when cold; (4) the share available falling as it gets colder, by provider; (5) load coming back after every event, larger for the heat-pump portfolio; (6) scatter in delivered megawatts that grows with the contract; (7) forecast error common to the zones on a day.
 Problems by process: point renames at the asset ID migration; held and bad values from comms outages and a CT fault; rows the outstation never sent; a monthly extract re-sent; superseded dispatch rows and provider names as typed; raw and checked weather readings; logger gaps; two-row transfers in the switching log; withdrawn and re-entered connections; legacy circuit names.
-Breadth: 196,213 SCADA rows (nine primaries, three winters, half-hourly), 697 dispatch rows (595 completed events), 13,372 weather rows, 60 switching rows, 12 files; the events have to be sorted by temperature, by megawatts scheduled against contracted and by zone and winter before any reading of them can be tested.
+Breadth: 196,213 SCADA rows (nine primaries, three winters, half-hourly), 697 dispatch rows (606 completed instructions, 595 measured), 13,372 weather rows, 60 switching rows, 12 files; the events have to be sorted by temperature, by megawatts scheduled against contracted and by zone and winter before any reading of them can be tested.
 
 ## Template check
 
-Chain signature: forecasting, missingness-measurement, validation, modeling, forecasting, uncertainty, synthesis, decomposition-attribution
+Chain signature: forecasting, missingness-measurement, forecasting, validation, investigation-loops, modeling, forecasting, uncertainty, uncertainty, synthesis, decomposition-attribution
 Question form: where (where in the zones reinforcement has to be committed), then each result asked for zone by zone
-Nearest build: task1 (forecast-bands-drivers, weight synthesis: a subscription book's ARR path built from five flows each with its own mechanism). What differs: the chain (task1 opens on a reconciliation and sums flows over months; this one measures a limit seen only when a call outruns it, proves it on a winter of larger contracts, rebuilds one day half-hour by half-hour and carries a spread), the weight (validation), the unit (four primaries on one design day, not a monthly path) and the data (telemetry and a dispatch log against contract ledgers). The abstraction sentence that would make them the same ("a forward figure with a range and its components") is the answer shape itself, not the chain.
+Nearest build: task1 (forecast-bands-drivers, weight synthesis: a subscription book's ARR path built from five flows each with its own mechanism). What differs: the chain (task1 opens on a reconciliation and sums flows over months; this one measures a limit seen only when a call outruns it, proves it on tests the wrong reading fails, rebuilds one day half-hour by half-hour and carries a spread), the weight (validation), the unit (four primaries on one design day, not a monthly path) and the data (telemetry and a dispatch log against contract ledgers). The abstraction sentence that would make them the same ("a forward figure with a range and its components") is the answer shape itself, not the chain.
 
 ## Semantic fork table
 
 | ID | Term or convention | Readings | Golden | Ruled out by |
 |---|---|---|---|---|
 | SF1 | the design day | a working weekday at a daily mean of minus 3.0 C, the GMT day's hourly mean; a local-day mean | the GMT-day mean | guideline 2 |
-| SF2 | the days behind the demand before flexibility | 2025/26 working weekdays outside Christmas, scheduled days and logged transfer days; the logged days left in | the logged days left out | guideline 3; left in, the same call and Ashcombe Road 0.4 MW higher (asserted) |
+| SF2 | the days behind the demand before flexibility | 2025/26 working weekdays outside Christmas, scheduled days and logged transfer days; the logged days left in | the logged days left out | guideline 3; left in, the same call (asserted) |
 | SF3 | growth to 2027/28 | DFES rates compounded, qualifying connections in full, every half-hour in the peak's proportion | as filed | guideline 4 |
-| SF4 | megawatts delivered | the mean of the half-hours ending 17:30 and 18:00; the lower of the two | the mean | same call, every figure inside its band (asserted) |
+| SF4 | a contract's megawatts delivered | its delivery in the half-hours ending 17:30 and 18:00, as their mean; the lower of the two | the mean | guideline 6 (quoted as its delivery in those half-hours); the lower of the two: same call, every figure inside its band (asserted) |
 | SF5 | megawatts scheduled on the design day | the contract in full; the megawatts the day would need | the contract in full | guideline 6 |
-| SF6 | demand with flexibility | the day's highest half-hour; the 17:30 to 18:00 half-hours | the day's highest half-hour | guideline 6 |
+| SF6 | demand with flexibility | the day's highest half-hour with the service delivered through its window; demand reduced in the half-hours ending 17:30 and 18:00 alone | the service through its window | guideline 6 as reworded after judge r2, whose own first pass took the earlier wording ("the megawatts delivered are those in the half-hours ending 17:30 and 18:00 ... no other measure is credited") as a credit in those two half-hours alone and reinforced all four: "with the service delivered through its window", the two half-hours being how a contract's megawatts are quoted (asserted on the PDF's text) |
 | SF7 | one design day in ten | the 0.9 quantile of the day recomputed half-hour by half-hour; a normal reading at the peaking half-hour | the day recomputed | guideline 7; the normal reading within 0.25 MW (asserted) |
 | SF8 | megawatts contracted in past winters | the award notice's table of three winters, registered capacity | as written | the award notice, sections 1 and 4 |
 | SF9 | the cold days | at or below minus 1.0 C; 0, minus 1.5 or minus 2 C | minus 1.0 C | same call, every figure inside its band (asserted) |
-| SF10 | the line through the share | straight in temperature; curved | straight | same call, inside the bands (asserted) |
+| SF10 | the line through the share | straight in temperature; curved | straight | same call, inside the bands (asserted); the curve's held-out miss is 0.26 MW against 0.19 |
 | SF11 | provider or zone | each provider's two zones together; each zone on its own | together | same call, inside the bands (asserted) |
 | SF12 | the scatter | net of the baseline's own noise; as measured | net | same call, inside the bands (asserted) |
-| SF13 | the heating base | 15.5 C; 14 or 17 C | 15.5 C | same call, inside the bands (asserted) |
+| SF13 | the heating base | 15.5 C; 14 or 17 C, carried through the events' baselines as well | 15.5 C | same call, inside the bands (asserted) |
 | SF14 | an instruction's megawatts | its latest revision; the megawatts first issued | the latest revision | same call, inside the bands (asserted) |
-| SF15 | the backtest | winter 2025/26's completed events from 2023/24 and 2024/25; the average miss; days below 0 C; an 80 per cent range | as the prompt says | the prompt |
+| SF15 | the backtest | winter 2025/26's completed events from winters 2023/24 and 2024/25; the average miss | as the prompt says | the prompt; the miss runs 0.13 to 0.26 MW across the variants, inside the stated 0.12 to 0.27 (asserted) |
 | SF16 | an event's temperature | the event day's daily mean at the station | the daily mean | guideline 2's measure |
 | SF17 | the bridge's bars | contracted, not available, delivered, lost as load comes back, off the peak, in that order | that order | the prompt (from each contract's megawatts down to the megawatts off the peak); the bars add up (asserted) |
+| SF18 | the baseline an event's megawatts are measured against | winter levels and one heating slope by half-hour; a slope each winter, weekday levels, or that baseline scaled to the day's own level in the half-hours before the window | winter levels and one slope | same call, inside the bands (asserted) |
+| SF19 | a call that was met | kept among the cold days as measured; left out, taken as a floor (over the cold days, the days at or below 2 C or every day, on a straight or a curved line), or the megawatts fitted over every event as the lesser of the megawatts scheduled and the share (pooled or zone by zone) | kept as measured | same call, inside the bands (asserted) |
+| SF20 | a cancelled instruction's day | a scheduled day, left out of the baselines; kept | left out | same call, inside the bands (asserted) |
+| SF21 | the weather correction | straight in heating degrees; curved | straight | named data: the guideline's 2025/26 sample holds no day colder than plus 4.7 C, and in the hours before the service window, which the scheduled days carry, the line fitted on such days lands the days at or below 0 C within 1 per cent at every zone primary while a curve misses them by more; the curve's t on the daily peak is under 2 at all nine primaries (asserted) |
+| SF22 | what is available against the megawatts contracted | in proportion (a share of registered capacity); at the rate the three winters' record itself gives (0.92 per cent for each per cent contracted); megawatts that do not grow | in proportion | the award notice (contracted megawatts are registered capacity); at the record's own rate: same call, inside the bands (asserted); megawatts that do not grow: named data, the rate's standard error is 0.09, so in proportion is inside two standard errors and none is ten away (asserted) |
 
 ## Closure table
 
@@ -141,21 +164,21 @@ Nearest build: task1 (forecast-bands-drivers, weight synthesis: a subscription b
 | 3 Attribution window | megawatts delivered in the half-hours ending 17:30 and 18:00; the day's highest half-hour for the peak; filed (guideline 6; SF4, SF6) |
 | 4 As-of dating | the exports of 1 to 3 November 2026, the awards of 21 October 2026; C1, no later record is read |
 | 5 Version basis | guideline issue 4, awards WPN-DSO-FLX-2026-07; filed |
-| 6 Denominator | megawatts contracted (registered capacity) by winter; filed in the award notice (SF8); megawatts scheduled is the rival ruled out by data |
+| 6 Denominator | megawatts contracted (registered capacity) by winter; filed in the award notice (SF8, SF22); megawatts scheduled is the rival ruled out by data |
 | 7 Weighting | each completed event once; C1 (SF11, zone or provider) |
 | 8 Window length | 2025/26 for the demand before flexibility (guideline 3); three winters of events; the backtest's split in the prompt (SF15) |
 | 9 Boundary inclusivity | "exceed" strictly; no primary within 0.3 MW of firm at the one-in-ten level across the variants (margins, asserted) |
-| 10 Rounding path | unrounded to the end, one decimal as the prompt says |
+| 10 Rounding path | unrounded to the end, MW to one decimal and the average miss to two, as the prompt says |
 | 11 Tie-break | none: no primary at its firm capacity |
-| 12 Maturity and censoring | winter 2025/26 complete to 31 March 2026; a met call shows only a floor on what was available, handled by the cold days on which calls outran it (SF9) |
+| 12 Maturity and censoring | winter 2025/26 complete to 31 March 2026; a met call shows only a floor on what was available, handled by the cold days on which calls outran it; left out or taken as a floor it moves no figure out of its band (SF9, SF19) |
 | 13 Order of operations | cleaned, corrected, grown, the day rebuilt, the spread carried; C1 |
 | 14 Row order | the dispatch log by reference and revision; the switching log by time; C1 (SF14) |
 | 15 Duplicate resolution | the re-sent SCADA overlap once; each weather hour at its checked version; C1 (L1) |
 | 16 Identity normalisation | SCADA points under both names; feeders under both codes; providers as typed; C1 (L1) |
 | 17 Netting against gross | none: nothing is netted; the logged transfer days are left out (guideline 3, SF2) |
 | 18 Dimensional units | MW of real power, not Mvar; filed (guideline 3) |
-| 19 Code and status semantics | quality G kept; status Completed; Accepted and Energised connections; filed and C1 (L1) |
-| 20 Integerisation | none: megawatts are continuous; the backtest's count of events is exact |
+| 19 Code and status semantics | quality G kept; status Completed; a cancelled instruction's day a scheduled day (SF20); Accepted and Energised connections; filed and C1 (L1) |
+| 20 Integerisation | none: megawatts are continuous and no count is graded |
 | 21 Clause scope | guideline 2 to 7 for the peaks and the call; the award notice's sections 1, 2 and 4 for the megawatts |
 | 22 Forward window contents | winter 2027/28: its contracts scheduled in full, growth to 31 October 2027, the design day at minus 3.0 C; filed (guideline 4 and 6; SF5) |
 
@@ -165,37 +188,149 @@ Guideline 2: the design day is a working weekday at a daily mean of minus 3.0 C 
 demand before flexibility from the 2025/26 working weekdays outside Christmas, scheduled days and logged transfer days,
 corrected to that day (R1). Guideline 4: DFES rates compounded, the qualifying connections in full, every half-hour in
 the peak's proportion (R1, and the day's half-hours for R4 and R5). Guideline 5 and Appendix A: firm capacity (R7).
-Guideline 6: what the provider will deliver with the megawatts contracted scheduled in full; megawatts delivered are
-those in the half-hours ending 17:30 and 18:00 (R2); demand with flexibility is the day's highest half-hour (R4, R5).
+Guideline 6: what the provider will deliver with the megawatts contracted scheduled in full for the service window; a
+contract's megawatts delivered are quoted as its delivery in the half-hours ending 17:30 and 18:00 (R2); demand with
+flexibility is the day's highest half-hour with the service delivered through its window (R4, R5).
 Guideline 7: reinforce where that would exceed firm capacity on more than one design day in ten (R6, R7). The award
 notice: megawatts contracted for 2027/28 and for the three winters past, registered capacity; calls sized to the
 forecast above 92 per cent of firm capacity, in steps, up to the contract. The prompt: each result named with its unit;
-last winter's events from the winters before it, the average miss in MW and the events on days below 0 C inside an 80
-per cent range (R3); from each contract's megawatts down to the megawatts off the peak (R8); MW to one decimal. Every
-sentence executes to the golden's quantity; none says how megawatts delivered are to be estimated, that load comes back,
-or how a spread is measured.
+what last winter's events delivered at 17:30 to 18:00 from the winters before it, as the average miss in MW (R3); from each contract's megawatts down to
+the megawatts off the peak (R8); MW to one decimal and the average miss to two. Every sentence executes to the golden's
+quantity; none says how megawatts delivered are to be estimated, that load comes back, or how a spread is measured.
+Judge r1 executed the same sentences from the bundle alone and reproduced the demand side to two decimals and every
+megawatt figure inside its band; the one figure it could not pin (a count of freezing-day events inside an 80 per cent
+range) is no longer asked. Judge r2, deriving before it saw the blocks, reproduced every figure again and showed that
+guideline 6's earlier wording could be executed as a credit in two half-hours alone (all four reinforced); the section
+now says the service is delivered through its window and that the two half-hours are how a contract's megawatts are
+quoted.
 
 ## Prompt contract
 
 A voice rewrite may not drop or change: the question (where to commit reinforcement for winter 2027/28, Halverton
 flexibility zones); for each zone the design-day demand before flexibility, the MW the 2027/28 contract delivers at
 17:30 to 18:00 on the design day, the MW taken off the day's peak, the expected peak, the level it stays under on nine
-design days in ten, against firm capacity; the walk from each contract's MW down to the MW off the peak; last winter's
-events predicted from the winters before it, as the average miss in MW and the count of events on days below 0 C
-inside its 80 per cent range; a spreadsheet with a chart and a few slides for the capex review; MW to one decimal. It
-must never add: a file name, who is asking, how megawatts delivered are to be estimated, the words share, available,
-come back, rebound or range from residuals, a temperature other than 0 C, a count of zones, winters or events.
+design days in ten, against firm capacity; the walk from each contract's MW down to the MW off the peak; how far out on
+average, in MW, the same approach would have been on what last winter's events delivered at 17:30 to 18:00, with only
+the winters before it to go on; a
+spreadsheet with a chart and a few slides for the capex review; MW to one decimal and the average miss to two. It must
+never add: a file name, who is asking, how megawatts delivered are to be estimated, the words share, available, come
+back, rebound or range from residuals, a temperature, a count of zones, winters or events.
 
 ## Leak rulings
 
-(written at stage 4 from leak.py's sweep lines and the reader's findings)
+leak.py on target.zip 1ee96fa6: REVIEW, no LEAK. Ruled in the main thread:
+
+- Answer figures in the pack (23.0, 22.5, 30.5, 17.8, and 21.0 and 19.5 for two primaries outside the zones; 21.0, 10.0,
+  7.5; 3.5; 4.0 and 4.5): the firm capacities of guideline Appendix A, the megawatts contracted in the award notice, the
+  service window's hours and past contracts. Each is an input every answer block quotes beside its results; none is a
+  result.
+- The committed call's words in the guideline and the award notice: the primaries' names, reinforcement, firm capacity
+  and winter 2027/28 are those documents' own subject; neither names a primary to reinforce.
+- Design-note vocabulary in the two documents (megawatts, scheduled, contracted, forecast, guideline, the primaries):
+  the service's own terms. No document says what a call delivers against the megawatts scheduled or contracted, that
+  load comes back after a window, or how a day-to-day spread is measured or carried (checks.py, documents name no
+  step). The award notice's availability fee (GBP per MW per hour) is its payment term.
+- Candidates beside numbers (the guideline, the award notice, the dispatch log, the register, the transformer
+  condition file): ratings, contracted megawatts, scheduled megawatts and oil results; none sets a primary's demand
+  with flexibility against its firm capacity (Gate G).
+- Single-use test: every file the results read has a use of its own (the SCADA export is the demand side's source and
+  the events' measure; the dispatch log is the DSO's instruction record; the switching log is filed in guideline 3; the
+  award notice carries the megawatts and the service terms). No file exists to carry a result.
+
+The stage 4 reader read the pack cold twice (the second time on the cut with the 21.0 MW award; its answers are in
+leak_check_report.md under Solver's-eye read). Ruled:
+
+- Questions 1 and 5: the guideline files the design day, the sample, growth, the credited half-hours, the day's highest
+  half-hour and the one-day-in-ten test, and the award notice the scheduling rule: the WHAT of each result, and each
+  literal execution is the golden's quantity. The one option the text leaves, whether a cancelled instruction's day is
+  a scheduled day, is SF20: the same call, every figure inside its band.
+- Questions 2, 3 and 4: no file ranks the primaries on the question, none exists only to help the analyst and no figure
+  reads as an answer.
+- Question 6: the reader names the guideline as what makes the demand side and the test routine, and the megawatts
+  delivered, the megawatts off the peak, the nine-days-in-ten level and the backtest as analysis. That is R1 and the
+  criterion, one earned result of eleven, not most of the chain; the judge's measurement of the routes agrees.
+- Question 7: workbook zip entries stamped 1980-01-01 are the application's own entry stamp (reduce-house-fixes H1);
+  the workbooks created before their latest content are living registers, each last saved after its latest record
+  (checked); switching operations on the quarter-hour were fixed in the generator (the minute as logged, no figure
+  moved); the award notice's contract history in half-megawatt lots is the tender's own lot size and is left, and the
+  21.0 MW award is an input.
 
 ## Pre-ship check
 
-(written at stage 5)
+Written 2026-11-10 on the final cut (target.zip 1ee96fa6), the bar re-read against the built pack.
+
+- The reviewer's direction, taken point by point. The transfer is documented: the control room's switching log is in
+  the pack, guideline 3 leaves its days out, and nothing in the answer is netted for it. The call turns on judgments
+  that each move a figure: the cold-weather decline of delivery (R2a: 0.39 and 0.54 of the megawatts contracted at
+  minus 3.0 C, a straight line whose held-out miss is 0.19 MW against 0.26 for a curve); whether delivery scales to
+  awards 1.9 to 2.8 times the 2025/26 contracts (R2 and SF22: 8.1 MW of 21.0 at Ashcombe Road, against 10.3 on
+  megawatts scheduled and 2.9 if nothing grew); how the uncertainty is carried to the margin (R6a and R6: Fenwick
+  Street 0.4 MW inside firm on the expected day and 0.7 over at the nine-days-in-ten level, and 0.1 inside if a small
+  contract's megawatts of scatter are carried unchanged with megawatts per megawatt scheduled). A fourth, the day
+  rebuilt with the load that comes back, moves Ashcombe Road's peak from 22.0 MW at 18:00 to 25.9 at 20:00.
+- Not one thing, measured on the cut: seven shortcuts give five different wrong sets and none gives the golden's;
+  Ashcombe Road needs the day rebuilt, or the share and the proportional spread together; Fenwick Street needs a
+  day-to-day spread carried in proportion; told the single most useful sentence, the careful pass still reinforces
+  Fenwick Street and Hartwell Common (2 of 11 results rescued).
+- The hidden factor record against the cut data: the share within 0.05 of its provider's line in all 12 zone-winters;
+  the come-back at every zone (0.25 to 0.33 MW per megawatt delivered); megawatts of scatter 0.38 at Ashcombe Road
+  against 0.20 at Hartwell Common. No effect sits only where it decides: megawatts per megawatt scheduled also misreads
+  Charlecote Way, where nothing turns on it, and the come-back runs at three zones whose peak it does not move.
+- The effort test against effort.py: quick 10.9, careful 38.4, thorough 100, no cell hand-graded; the careful pass is
+  graded up (its megawatts of scatter rather than the fit's interval, its backtest earned), and a run that carries the
+  scatter in proportion prices at about 49.
+- Determinism, three isolated passes on 2026-11-10. r1 (blocks inside its brief, so weaker on Gate C): every megawatt
+  figure inside its band, FIX_NOW on a count of freezing-day events inside an 80 per cent range; the count is no
+  longer asked. r2 (own derivation first): every graded figure inside its band, FIX_NOW on wording and on guideline
+  6's two half-hours, which its first pass executed as the whole credit; the section is reworded in the pack, the
+  megawatts' floor at Ashcombe Road follows its fits, and the prompt names what the backtest's miss is measured on.
+  r3 (the one re-judge, own derivation first, on the final cut): running when this build was paused; its verdict is
+  recorded here before the reship.
+- Leak: three cold reads, no file that ranks the primaries, no helper file, no figure that reads as an answer; the
+  guideline settles the demand side and the test (one earned result), the rest stays analysis by the reader's own
+  account.
+- Gates on the final cut: precut exit 0 with one WARN, effort PASS (pair 38.4, the note agreeing), the prompt gate PASS, figures
+  PASS, leak.py REVIEW with no LEAK, two builds byte-identical; checks.py, verify.py and the container gate were
+  re-running on this cut when the build was paused.
+- What stays uncertain: the careful column is calibrated on four architecture 5 runs made in another mechanism. A run
+  that plots megawatts delivered against megawatts scheduled sees the plateau, and one that rebuilds the day sees the
+  evening after the window; each of those earns its results and leaves the others. The platform's two runs are the
+  measurement.
 
 ## Tried and rejected
 
+- Architecture 6, guideline 6 worded "The megawatts delivered are those in the half-hours ending 17:30 and 18:00 ... No
+  other measure is credited": judge r2 (2026-11-10), deriving before it opened the blocks, credited the contract in
+  those two half-hours alone, let the peak slide to 18:30 and reinforced all four primaries. A filed sentence whose
+  literal execution gives another call is a fork whatever the events show, so the section now reads "A contract's
+  megawatts delivered are quoted as its delivery in the half-hours ending 17:30 and 18:00 ... its highest half-hourly
+  demand on that day with the service delivered through its window. No flexibility other than the contracted service
+  is credited."
+- Architecture 6, a floor of 7.8 MW on Ashcombe Road's megawatts delivered: judge r2's own fits (megawatts fitted over
+  the whole record, zone level) gave 7.5 to 7.7. Megawatts fitted over every event and the three winters' own scaling
+  joined the family (20 variants), the megawatts' band is never narrower than the share's band times the award, and the
+  floor is 7.3.
+- Architecture 6, the backtest's count of freezing-day events inside an 80 per cent range as a graded figure: judge r1
+  (2026-11-10) reproduced every megawatt figure and found the count at 29 to 45 of 50 under its own cuts; across this
+  generator's variants and six constructions of the range it runs 25 to 40. A figure reasonable methods spread that
+  widely is unpinned, so the prompt asks the average miss alone and no count is graded.
+- Architecture 6, bands set by nine variants of the golden's own choices: they left out the baseline an event's
+  megawatts are measured against, the handling of a met call and a cancelled instruction's day, and the heating base
+  was varied on the demand side only. A baseline scaled to the day's own level, a met call taken as a floor and a
+  heating base of 14 C carried through the events each landed outside a stated band. The family is 17 variants and every
+  band is the range they span.
+- Architecture 6, Ashcombe Road at 16.0 MW contracted: megawatts per megawatt scheduled with the scatter carried in
+  proportion reached the golden's three primaries with wrong megawatts (24.0 MW against firm 23.0), and the available
+  share alone put its 18:00 half-hour over firm. At 21.0 MW the 18:00 half-hour is 22.0 MW, so Ashcombe Road needs the
+  day rebuilt, or the share and the spread together, and none of seven shortcuts reaches the set.
+- Architecture 6, the careful pass with the fit's own range and R3 priced as a result it loses: graded up to the
+  megawatts of scatter its own fit leaves, carried unchanged, with its backtest earned (0.24 MW, inside the band: a
+  held-out winter passes megawatts per megawatt scheduled too). With the asks numbered as the prompt lists them and
+  the components as the findings they stand on, the pair estimate is 38.4 on eleven results (it was 42.5 on eight).
+- Architecture 6, switching operations logged on the quarter-hour with durations in round hours: the stage 4 reader
+  named the 15-minute steps; the log now carries the minute each operation was made, and no figure moved.
+- Architecture 6, a deck and a chart title saying the three primaries are over firm "on nine design days in ten":
+  Fenwick Street is over on about three; the titles now say "on more than one design day in ten" (guideline 7's words).
 - Architecture 6, a two-winter event record with calls of the whole contract every time (architecture 5's dispatch):
   there was no megawatts-scheduled variation to test, and with calls sized to need over two winters Quillon's zones
   fell short on too few days (the variants of its share spanned 0.36 to 0.52). Three winters of events, calls sized to

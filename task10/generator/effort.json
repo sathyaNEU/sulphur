@@ -3,18 +3,23 @@
   {
    "order": 1,
    "rescues": [
+    "R2a",
     "R2"
    ],
    "sentence": "a provider can deliver no more than a share of its contracted megawatts on a cold evening, however many are scheduled"
   },
   {
    "order": 2,
-   "rescues": [],
+   "rescues": [
+    "R4a"
+   ],
    "sentence": "for an hour or two after the service window the curtailed load comes back above normal"
   },
   {
    "order": 3,
-   "rescues": [],
+   "rescues": [
+    "R6a"
+   ],
    "sentence": "what a provider has available varies from one cold evening to the next by about a sixth of its level"
   }
  ],
@@ -73,50 +78,88 @@
   },
   {
    "bands": {
-    "Ashcombe Road": [
-     5.9,
-     6.4
+    "Corvane Flex Ltd": [
+     0.36,
+     0.45
     ],
-    "Charlecote Way": [
-     3.7,
-     4.3
-    ],
-    "Fenwick Street": [
-     5.2,
-     5.7
-    ],
-    "Hartwell Common": [
-     2.7,
-     3.1
+    "Quillon Energy Services Ltd": [
+     0.5,
+     0.59
     ]
    },
    "depends": [],
+   "figure": "c1_share",
+   "golden": {
+    "Corvane Flex Ltd": 0.39,
+    "Quillon Energy Services Ltd": 0.54
+   },
+   "graded_as": "Component 1",
+   "id": "R2a",
+   "independent": "the events, the contracts and the SCADA record",
+   "name": "the share of its contracted megawatts each provider has available on the design day",
+   "passes": {
+    "careful": {
+     "Corvane Flex Ltd": 0.46,
+     "Quillon Energy Services Ltd": 0.61
+    },
+    "quick": {
+     "Corvane Flex Ltd": 1.0,
+     "Quillon Energy Services Ltd": 1.0
+    },
+    "thorough": {
+     "Corvane Flex Ltd": 0.39,
+     "Quillon Energy Services Ltd": 0.54
+    }
+   }
+  },
+  {
+   "bands": {
+    "Ashcombe Road": [
+     7.3,
+     9.5
+    ],
+    "Charlecote Way": [
+     3.7,
+     4.5
+    ],
+    "Fenwick Street": [
+     4.9,
+     5.9
+    ],
+    "Hartwell Common": [
+     2.5,
+     3.4
+    ]
+   },
+   "depends": [
+    "R2a"
+   ],
    "figure": "r2_delivered",
    "golden": {
-    "Ashcombe Road": 6.2,
+    "Ashcombe Road": 8.1,
     "Charlecote Way": 4.0,
     "Fenwick Street": 5.4,
     "Hartwell Common": 2.9
    },
-   "graded_as": "Component 1",
+   "graded_as": "Ask 2",
    "id": "R2",
    "independent": "",
    "name": "megawatts each contract delivers at 17:30 to 18:00 on the design day",
    "passes": {
     "careful": {
-     "Ashcombe Road": 7.9,
+     "Ashcombe Road": 10.3,
      "Charlecote Way": 5.0,
      "Fenwick Street": 5.6,
      "Hartwell Common": 2.8
     },
     "quick": {
-     "Ashcombe Road": 16.0,
+     "Ashcombe Road": 21.0,
      "Charlecote Way": 7.5,
      "Fenwick Street": 10.0,
      "Hartwell Common": 7.5
     },
     "thorough": {
-     "Ashcombe Road": 6.2,
+     "Ashcombe Road": 8.1,
      "Charlecote Way": 4.0,
      "Fenwick Street": 5.4,
      "Hartwell Common": 2.9
@@ -124,88 +167,104 @@
    }
   },
   {
-   "bands": {
-    "freezing-day events inside the 80 per cent range": [
-     34,
-     40
-    ],
-    "mean absolute error, MW": [
-     0.15,
-     0.23
-    ]
-   },
+   "band": [
+    0.12,
+    0.27
+   ],
    "depends": [
-    "R2"
+    "R2a"
    ],
    "figure": "r3_backtest",
-   "golden": {
-    "freezing-day events inside the 80 per cent range": 37,
-    "mean absolute error, MW": 0.19
-   },
-   "graded_as": "Ask 2",
+   "golden": 0.19,
+   "graded_as": "Ask 7",
    "id": "R3",
    "independent": "",
-   "name": "last winter predicted from the two before: mean absolute error and freezing-day events inside the range",
+   "name": "last winter predicted from the winters before: the average miss, MW",
    "passes": {
-    "careful": {
-     "freezing-day events inside the 80 per cent range": 7,
-     "mean absolute error, MW": 0.24
-    },
+    "careful": 0.24,
+    "quick": null,
+    "thorough": 0.19
+   }
+  },
+  {
+   "bands": {
+    "Corvane Flex Ltd": [
+     0.21,
+     0.39
+    ],
+    "Quillon Energy Services Ltd": [
+     0.16,
+     0.34
+    ]
+   },
+   "depends": [],
+   "figure": "c2_comeback",
+   "golden": {
+    "Corvane Flex Ltd": 0.32,
+    "Quillon Energy Services Ltd": 0.26
+   },
+   "graded_as": "Component 2",
+   "id": "R4a",
+   "independent": "the half-hours after the window on the event days themselves",
+   "name": "megawatts coming back in the half-hour after the window, per megawatt delivered",
+   "passes": {
+    "careful": null,
     "quick": null,
     "thorough": {
-     "freezing-day events inside the 80 per cent range": 37,
-     "mean absolute error, MW": 0.19
+     "Corvane Flex Ltd": 0.32,
+     "Quillon Energy Services Ltd": 0.26
     }
    }
   },
   {
    "bands": {
     "Ashcombe Road": [
-     4.6,
-     5.0
+     3.9,
+     4.6
     ],
     "Charlecote Way": [
      3.7,
-     4.3
+     4.5
     ],
     "Fenwick Street": [
-     5.2,
-     5.8
+     4.9,
+     5.9
     ],
     "Hartwell Common": [
-     2.7,
-     3.1
+     2.6,
+     3.4
     ]
    },
    "depends": [
-    "R2"
+    "R2",
+    "R4a"
    ],
    "figure": "r4_off_peak",
    "golden": {
-    "Ashcombe Road": 4.8,
+    "Ashcombe Road": 4.2,
     "Charlecote Way": 4.0,
     "Fenwick Street": 5.4,
     "Hartwell Common": 2.9
    },
-   "graded_as": "Component 2",
+   "graded_as": "Ask 3",
    "id": "R4",
-   "independent": "the rise after the window per megawatt delivered, measured on the events themselves",
+   "independent": "",
    "name": "megawatts each contract takes off the day's peak once the load that comes back is counted",
    "passes": {
     "careful": {
-     "Ashcombe Road": 7.9,
+     "Ashcombe Road": 10.3,
      "Charlecote Way": 5.0,
      "Fenwick Street": 5.6,
      "Hartwell Common": 2.8
     },
     "quick": {
-     "Ashcombe Road": 16.0,
+     "Ashcombe Road": 21.0,
      "Charlecote Way": 7.5,
      "Fenwick Street": 10.0,
      "Hartwell Common": 7.5
     },
     "thorough": {
-     "Ashcombe Road": 4.8,
+     "Ashcombe Road": 4.2,
      "Charlecote Way": 4.0,
      "Fenwick Street": 5.4,
      "Hartwell Common": 2.9
@@ -215,20 +274,20 @@
   {
    "bands": {
     "Ashcombe Road": [
-     25.0,
-     25.6
+     25.6,
+     26.2
     ],
     "Charlecote Way": [
-     20.5,
+     20.4,
      21.2
     ],
     "Fenwick Street": [
-     29.7,
-     30.4
+     29.5,
+     30.5
     ],
     "Hartwell Common": [
-     19.7,
-     20.3
+     19.5,
+     20.4
     ]
    },
    "depends": [
@@ -237,30 +296,30 @@
    ],
    "figure": "r5_peak",
    "golden": {
-    "Ashcombe Road": 25.3,
+    "Ashcombe Road": 25.9,
     "Charlecote Way": 20.8,
     "Fenwick Street": 30.1,
     "Hartwell Common": 20.0
    },
-   "graded_as": "Ask 3",
+   "graded_as": "Ask 4",
    "id": "R5",
    "independent": "",
    "name": "expected design-day peak with flexibility, MW",
    "passes": {
     "careful": {
-     "Ashcombe Road": 22.3,
+     "Ashcombe Road": 19.8,
      "Charlecote Way": 19.9,
      "Fenwick Street": 29.8,
      "Hartwell Common": 20.1
     },
     "quick": {
-     "Ashcombe Road": 14.0,
+     "Ashcombe Road": 9.0,
      "Charlecote Way": 17.5,
      "Fenwick Street": 25.1,
      "Hartwell Common": 15.7
     },
     "thorough": {
-     "Ashcombe Road": 25.3,
+     "Ashcombe Road": 25.9,
      "Charlecote Way": 20.8,
      "Fenwick Street": 30.1,
      "Hartwell Common": 20.0
@@ -269,43 +328,77 @@
   },
   {
    "bands": {
+    "Corvane Flex Ltd": [
+     12,
+     22
+    ],
+    "Quillon Energy Services Ltd": [
+     13,
+     21
+    ]
+   },
+   "depends": [],
+   "figure": "c3_spread",
+   "golden": {
+    "Corvane Flex Ltd": 16,
+    "Quillon Energy Services Ltd": 16
+   },
+   "graded_as": "Component 3",
+   "id": "R6a",
+   "independent": "the cold days' scatter about the share's line, net of the baseline's own noise",
+   "name": "each provider's day-to-day spread as a share of what it delivers, per cent",
+   "passes": {
+    "careful": {
+     "Corvane Flex Ltd": 7,
+     "Quillon Energy Services Ltd": 6
+    },
+    "quick": null,
+    "thorough": {
+     "Corvane Flex Ltd": 16,
+     "Quillon Energy Services Ltd": 16
+    }
+   }
+  },
+  {
+   "bands": {
     "Ashcombe Road": [
-     25.5,
-     26.1
+     26.1,
+     26.8
     ],
     "Charlecote Way": [
-     21.4,
+     21.3,
      22.0
     ],
     "Fenwick Street": [
-     30.8,
-     31.5
+     30.7,
+     31.6
     ],
     "Hartwell Common": [
-     20.3,
+     20.1,
      20.9
     ]
    },
    "depends": [
-    "R5"
+    "R5",
+    "R6a"
    ],
    "figure": "r6_one_in_ten",
    "golden": {
-    "Ashcombe Road": 25.8,
+    "Ashcombe Road": 26.5,
     "Charlecote Way": 21.7,
     "Fenwick Street": 31.2,
     "Hartwell Common": 20.6
    },
-   "graded_as": "Component 3",
+   "graded_as": "Ask 5",
    "id": "R6",
    "independent": "",
    "name": "the level each peak stays under on nine design days in ten, MW",
    "passes": {
     "careful": {
-     "Ashcombe Road": 22.5,
-     "Charlecote Way": 20.0,
-     "Fenwick Street": 30.0,
-     "Hartwell Common": 20.3
+     "Ashcombe Road": 20.5,
+     "Charlecote Way": 20.3,
+     "Fenwick Street": 30.4,
+     "Hartwell Common": 20.5
     },
     "quick": {
      "Ashcombe Road": null,
@@ -314,7 +407,7 @@
      "Hartwell Common": null
     },
     "thorough": {
-     "Ashcombe Road": 25.8,
+     "Ashcombe Road": 26.5,
      "Charlecote Way": 21.7,
      "Fenwick Street": 31.2,
      "Hartwell Common": 20.6
@@ -350,19 +443,19 @@
   {
    "bands": {
     "Ashcombe Road, lost as load comes back": [
-     1.0,
-     1.5
+     2.9,
+     4.8
     ],
     "Ashcombe Road, not available": [
-     9.6,
-     10.1
+     11.8,
+     13.7
     ],
     "Charlecote Way, lost as load comes back": [
      -0.2,
      0.2
     ],
     "Charlecote Way, not available": [
-     3.2,
+     3.0,
      3.8
     ],
     "Fenwick Street, lost as load comes back": [
@@ -370,16 +463,16 @@
      0.2
     ],
     "Fenwick Street, not available": [
-     4.3,
-     4.8
+     4.1,
+     5.1
     ],
     "Hartwell Common, lost as load comes back": [
      -0.2,
      0.2
     ],
     "Hartwell Common, not available": [
-     4.4,
-     4.8
+     4.1,
+     5.0
     ]
    },
    "depends": [
@@ -388,8 +481,8 @@
    ],
    "figure": "r8_bridge",
    "golden": {
-    "Ashcombe Road, lost as load comes back": 1.3,
-    "Ashcombe Road, not available": 9.8,
+    "Ashcombe Road, lost as load comes back": 3.9,
+    "Ashcombe Road, not available": 12.9,
     "Charlecote Way, lost as load comes back": 0.0,
     "Charlecote Way, not available": 3.5,
     "Fenwick Street, lost as load comes back": 0.0,
@@ -397,14 +490,14 @@
     "Hartwell Common, lost as load comes back": 0.0,
     "Hartwell Common, not available": 4.6
    },
-   "graded_as": "Ask 4",
+   "graded_as": "Ask 6",
    "id": "R8",
    "independent": "",
    "name": "each contract's megawatts bridged to the megawatts off the peak",
    "passes": {
     "careful": {
      "Ashcombe Road, lost as load comes back": 0.0,
-     "Ashcombe Road, not available": 8.1,
+     "Ashcombe Road, not available": 10.7,
      "Charlecote Way, lost as load comes back": 0.0,
      "Charlecote Way, not available": 2.5,
      "Fenwick Street, lost as load comes back": 0.0,
@@ -423,8 +516,8 @@
      "Hartwell Common, not available": 0.0
     },
     "thorough": {
-     "Ashcombe Road, lost as load comes back": 1.3,
-     "Ashcombe Road, not available": 9.8,
+     "Ashcombe Road, lost as load comes back": 3.9,
+     "Ashcombe Road, not available": 12.9,
      "Charlecote Way, lost as load comes back": 0.0,
      "Charlecote Way, not available": 3.5,
      "Fenwick Street, lost as load comes back": 0.0,
@@ -459,6 +552,21 @@
   },
   {
    "answer": [
+    "Hartwell Common"
+   ],
+   "golden": false,
+   "name": "megawatts delivered per megawatt scheduled, the record's megawatts of scatter unchanged"
+  },
+  {
+   "answer": [
+    "Fenwick Street",
+    "Hartwell Common"
+   ],
+   "golden": false,
+   "name": "megawatts delivered per megawatt scheduled, the scatter in proportion, the credit off the 17:30 to 18:00 peak"
+  },
+  {
+   "answer": [
     "Ashcombe Road",
     "Hartwell Common"
    ],
@@ -467,12 +575,11 @@
   },
   {
    "answer": [
-    "Ashcombe Road",
     "Fenwick Street",
     "Hartwell Common"
    ],
    "golden": false,
-   "name": "megawatts delivered per megawatt scheduled, with a one-day-in-ten range, nothing coming back"
+   "name": "the available share right, the credit off the 17:30 to 18:00 peak, the record's megawatts of scatter unchanged"
   },
   {
    "answer": [

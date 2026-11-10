@@ -11,12 +11,12 @@
  "bands": {
   "backtest": {
    "inside": [
-    34,
+    25,
     40
    ],
    "mae": [
-    0.15,
-    0.23
+    0.12,
+    0.27
    ]
   },
   "before": {
@@ -39,19 +39,19 @@
   },
   "bridge": {
    "Ashcombe Road, lost as load comes back": [
-    1.0,
-    1.5
+    2.9,
+    4.8
    ],
    "Ashcombe Road, not available": [
-    9.6,
-    10.1
+    11.8,
+    13.7
    ],
    "Charlecote Way, lost as load comes back": [
     -0.2,
     0.2
    ],
    "Charlecote Way, not available": [
-    3.2,
+    3.0,
     3.8
    ],
    "Fenwick Street, lost as load comes back": [
@@ -59,90 +59,132 @@
     0.2
    ],
    "Fenwick Street, not available": [
-    4.3,
-    4.8
+    4.1,
+    5.1
    ],
    "Hartwell Common, lost as load comes back": [
     -0.2,
     0.2
    ],
    "Hartwell Common, not available": [
-    4.4,
-    4.8
+    4.1,
+    5.0
+   ]
+  },
+  "comeback": {
+   "Corvane Flex Ltd": [
+    0.21,
+    0.39
+   ],
+   "Quillon Energy Services Ltd": [
+    0.16,
+    0.34
    ]
   },
   "delivered": {
    "Ashcombe Road": [
-    5.9,
-    6.4
+    7.3,
+    9.5
    ],
    "Charlecote Way": [
     3.7,
-    4.3
+    4.5
    ],
    "Fenwick Street": [
-    5.2,
-    5.7
+    4.9,
+    5.9
    ],
    "Hartwell Common": [
-    2.7,
-    3.1
+    2.5,
+    3.4
    ]
   },
   "off_peak": {
    "Ashcombe Road": [
-    4.6,
-    5.0
+    3.9,
+    4.6
    ],
    "Charlecote Way": [
     3.7,
-    4.3
+    4.5
    ],
    "Fenwick Street": [
-    5.2,
-    5.8
+    4.9,
+    5.9
    ],
    "Hartwell Common": [
-    2.7,
-    3.1
+    2.6,
+    3.4
    ]
   },
   "one_in_ten": {
    "Ashcombe Road": [
-    25.5,
-    26.1
+    26.1,
+    26.8
    ],
    "Charlecote Way": [
-    21.4,
+    21.3,
     22.0
    ],
    "Fenwick Street": [
-    30.8,
-    31.5
+    30.7,
+    31.6
    ],
    "Hartwell Common": [
-    20.3,
+    20.1,
     20.9
    ]
   },
   "peak": {
    "Ashcombe Road": [
-    25.0,
-    25.6
+    25.6,
+    26.2
    ],
    "Charlecote Way": [
-    20.5,
+    20.4,
     21.2
    ],
    "Fenwick Street": [
-    29.7,
-    30.4
+    29.5,
+    30.5
    ],
    "Hartwell Common": [
-    19.7,
-    20.3
+    19.5,
+    20.4
+   ]
+  },
+  "share": {
+   "Corvane Flex Ltd": [
+    0.36,
+    0.45
+   ],
+   "Quillon Energy Services Ltd": [
+    0.5,
+    0.59
+   ]
+  },
+  "spread": {
+   "Corvane Flex Ltd": [
+    12,
+    22
+   ],
+   "Quillon Energy Services Ltd": [
+    13,
+    21
    ]
   }
+ },
+ "c1_share": {
+  "Corvane Flex Ltd": 0.39,
+  "Quillon Energy Services Ltd": 0.54
+ },
+ "c2_comeback": {
+  "Corvane Flex Ltd": 0.32,
+  "Quillon Energy Services Ltd": 0.26
+ },
+ "c3_spread": {
+  "Corvane Flex Ltd": 16,
+  "Quillon Energy Services Ltd": 16
  },
  "call": [
   "Ashcombe Road",
@@ -153,14 +195,20 @@
   "Ashcombe Road": {
    "before": 30.1,
    "comeback_loss": 0.0,
-   "delivered": 7.9,
-   "not_available": 8.1,
-   "off_peak": 7.9,
-   "one_in_ten": 22.5,
+   "delivered": 10.3,
+   "not_available": 10.7,
+   "off_peak": 10.3,
+   "one_in_ten": 20.5,
+   "one_in_ten_fit": 20.1,
+   "one_in_ten_relative": 22.6,
    "over": false,
-   "peak": 22.3,
+   "over_fit": false,
+   "over_relative": false,
+   "peak": 19.8,
    "peak_hh": "18:00",
-   "rate": 0.5
+   "rate": 0.5,
+   "scatter_mw": 0.5,
+   "scatter_share": 0.0
   },
   "Charlecote Way": {
    "before": 24.9,
@@ -168,11 +216,17 @@
    "delivered": 5.0,
    "not_available": 2.5,
    "off_peak": 5.0,
-   "one_in_ten": 20.0,
+   "one_in_ten": 20.3,
+   "one_in_ten_fit": 20.0,
+   "one_in_ten_relative": 21.0,
    "over": false,
+   "over_fit": false,
+   "over_relative": false,
    "peak": 19.9,
    "peak_hh": "18:00",
-   "rate": 0.7
+   "rate": 0.7,
+   "scatter_mw": 0.3,
+   "scatter_share": 0.1
   },
   "Fenwick Street": {
    "before": 35.5,
@@ -180,11 +234,17 @@
    "delivered": 5.6,
    "not_available": 4.4,
    "off_peak": 5.6,
-   "one_in_ten": 30.0,
+   "one_in_ten": 30.4,
+   "one_in_ten_fit": 30.0,
+   "one_in_ten_relative": 31.2,
    "over": false,
+   "over_fit": false,
+   "over_relative": true,
    "peak": 29.8,
    "peak_hh": "18:00",
-   "rate": 0.6
+   "rate": 0.6,
+   "scatter_mw": 0.4,
+   "scatter_share": 0.1
   },
   "Hartwell Common": {
    "before": 22.9,
@@ -192,15 +252,22 @@
    "delivered": 2.8,
    "not_available": 4.7,
    "off_peak": 2.8,
-   "one_in_ten": 20.3,
+   "one_in_ten": 20.5,
+   "one_in_ten_fit": 20.3,
+   "one_in_ten_relative": 21.3,
    "over": true,
+   "over_fit": true,
+   "over_relative": true,
    "peak": 20.1,
    "peak_hh": "18:00",
-   "rate": 0.4
+   "rate": 0.4,
+   "scatter_mw": 0.3,
+   "scatter_share": 0.1
   }
  },
  "careful_backtest": {
-  "inside": 7,
+  "inside": 29,
+  "inside_fit_range": 7,
   "mae": 0.24
  },
  "careful_call": [
@@ -220,8 +287,299 @@
   "design_day_degrees_below_zero": 3.0,
   "threshold_pct": 92
  },
+ "family": {
+  "delivered": {
+   "a cancelled instruction's day kept": {
+    "Ashcombe Road": 8.12,
+    "Charlecote Way": 3.97,
+    "Fenwick Street": 5.29,
+    "Hartwell Common": 2.9
+   },
+   "a curved line": {
+    "Ashcombe Road": 8.01,
+    "Charlecote Way": 4.17,
+    "Fenwick Street": 5.56,
+    "Hartwell Common": 2.86
+   },
+   "a heating slope each winter": {
+    "Ashcombe Road": 8.05,
+    "Charlecote Way": 3.98,
+    "Fenwick Street": 5.3,
+    "Hartwell Common": 2.88
+   },
+   "days at or below 0 C": {
+    "Ashcombe Road": 8.03,
+    "Charlecote Way": 4.05,
+    "Fenwick Street": 5.4,
+    "Hartwell Common": 2.87
+   },
+   "days at or below minus 1.5 C": {
+    "Ashcombe Road": 8.04,
+    "Charlecote Way": 4.03,
+    "Fenwick Street": 5.38,
+    "Hartwell Common": 2.87
+   },
+   "days at or below minus 2 C": {
+    "Ashcombe Road": 8.15,
+    "Charlecote Way": 4.16,
+    "Fenwick Street": 5.54,
+    "Hartwell Common": 2.91
+   },
+   "golden": {
+    "Ashcombe Road": 8.11,
+    "Charlecote Way": 4.03,
+    "Fenwick Street": 5.37,
+    "Hartwell Common": 2.9
+   },
+   "heating base 14 C": {
+    "Ashcombe Road": 9.04,
+    "Charlecote Way": 4.3,
+    "Fenwick Street": 5.73,
+    "Hartwell Common": 3.23
+   },
+   "heating base 17 C": {
+    "Ashcombe Road": 7.96,
+    "Charlecote Way": 3.99,
+    "Fenwick Street": 5.31,
+    "Hartwell Common": 2.84
+   },
+   "megawatts fitted over every event": {
+    "Ashcombe Road": 7.87,
+    "Charlecote Way": 4.1,
+    "Fenwick Street": 5.47,
+    "Hartwell Common": 2.81
+   },
+   "megawatts fitted over every event, zone by zone": {
+    "Ashcombe Road": 7.79,
+    "Charlecote Way": 3.92,
+    "Fenwick Street": 5.65,
+    "Hartwell Common": 2.96
+   },
+   "met calls as floors, days at or below 2 C": {
+    "Ashcombe Road": 8.08,
+    "Charlecote Way": 4.09,
+    "Fenwick Street": 5.46,
+    "Hartwell Common": 2.88
+   },
+   "met calls as floors, every day": {
+    "Ashcombe Road": 8.46,
+    "Charlecote Way": 4.33,
+    "Fenwick Street": 5.77,
+    "Hartwell Common": 3.02
+   },
+   "met calls as floors, every day, a curved line": {
+    "Ashcombe Road": 8.36,
+    "Charlecote Way": 4.28,
+    "Fenwick Street": 5.71,
+    "Hartwell Common": 2.99
+   },
+   "the baseline scaled to the day's own level before the window": {
+    "Ashcombe Road": 7.99,
+    "Charlecote Way": 3.87,
+    "Fenwick Street": 5.16,
+    "Hartwell Common": 2.85
+   },
+   "the calls that fell short alone": {
+    "Ashcombe Road": 8.09,
+    "Charlecote Way": 4.06,
+    "Fenwick Street": 5.41,
+    "Hartwell Common": 2.89
+   },
+   "the calls that fell short alone, every day": {
+    "Ashcombe Road": 8.58,
+    "Charlecote Way": 4.2,
+    "Fenwick Street": 5.6,
+    "Hartwell Common": 3.07
+   },
+   "the scatter as measured": {
+    "Ashcombe Road": 8.11,
+    "Charlecote Way": 4.03,
+    "Fenwick Street": 5.37,
+    "Hartwell Common": 2.9
+   },
+   "the three winters' own scaling with the megawatts contracted": {
+    "Ashcombe Road": 7.46,
+    "Charlecote Way": 3.83,
+    "Fenwick Street": 5.03,
+    "Hartwell Common": 2.69
+   },
+   "weekday levels": {
+    "Ashcombe Road": 8.11,
+    "Charlecote Way": 4.04,
+    "Fenwick Street": 5.38,
+    "Hartwell Common": 2.9
+   },
+   "zone by zone": {
+    "Ashcombe Road": 7.94,
+    "Charlecote Way": 3.86,
+    "Fenwick Street": 5.59,
+    "Hartwell Common": 2.95
+   }
+  },
+  "mae": {
+   "a cancelled instruction's day kept": 0.193,
+   "a curved line": 0.256,
+   "a heating slope each winter": 0.208,
+   "days at or below 0 C": 0.189,
+   "days at or below minus 1.5 C": 0.193,
+   "days at or below minus 2 C": 0.207,
+   "golden": 0.193,
+   "heating base 14 C": 0.202,
+   "heating base 17 C": 0.193,
+   "megawatts fitted over every event": 0.188,
+   "megawatts fitted over every event, zone by zone": 0.188,
+   "met calls as floors, days at or below 2 C": 0.189,
+   "met calls as floors, every day": 0.196,
+   "met calls as floors, every day, a curved line": 0.197,
+   "the baseline scaled to the day's own level before the window": 0.134,
+   "the calls that fell short alone": 0.194,
+   "the calls that fell short alone, every day": 0.236,
+   "the scatter as measured": 0.193,
+   "the three winters' own scaling with the megawatts contracted": 0.193,
+   "weekday levels": 0.196,
+   "zone by zone": 0.193
+  },
+  "one_in_ten": {
+   "a cancelled instruction's day kept": {
+    "Ashcombe Road": 26.55,
+    "Charlecote Way": 21.78,
+    "Fenwick Street": 31.41,
+    "Hartwell Common": 20.67
+   },
+   "a curved line": {
+    "Ashcombe Road": 26.48,
+    "Charlecote Way": 21.57,
+    "Fenwick Street": 31.04,
+    "Hartwell Common": 20.67
+   },
+   "a heating slope each winter": {
+    "Ashcombe Road": 26.54,
+    "Charlecote Way": 21.82,
+    "Fenwick Street": 31.36,
+    "Hartwell Common": 20.68
+   },
+   "days at or below 0 C": {
+    "Ashcombe Road": 26.48,
+    "Charlecote Way": 21.66,
+    "Fenwick Street": 31.16,
+    "Hartwell Common": 20.66
+   },
+   "days at or below minus 1.5 C": {
+    "Ashcombe Road": 26.52,
+    "Charlecote Way": 21.66,
+    "Fenwick Street": 31.15,
+    "Hartwell Common": 20.7
+   },
+   "days at or below minus 2 C": {
+    "Ashcombe Road": 26.58,
+    "Charlecote Way": 21.5,
+    "Fenwick Street": 30.94,
+    "Hartwell Common": 20.69
+   },
+   "golden": {
+    "Ashcombe Road": 26.51,
+    "Charlecote Way": 21.7,
+    "Fenwick Street": 31.2,
+    "Hartwell Common": 20.63
+   },
+   "heating base 14 C": {
+    "Ashcombe Road": 26.2,
+    "Charlecote Way": 21.44,
+    "Fenwick Street": 30.86,
+    "Hartwell Common": 20.29
+   },
+   "heating base 17 C": {
+    "Ashcombe Road": 26.54,
+    "Charlecote Way": 21.74,
+    "Fenwick Street": 31.25,
+    "Hartwell Common": 20.68
+   },
+   "megawatts fitted over every event": {
+    "Ashcombe Road": 26.41,
+    "Charlecote Way": 21.64,
+    "Fenwick Street": 31.12,
+    "Hartwell Common": 20.7
+   },
+   "megawatts fitted over every event, zone by zone": {
+    "Ashcombe Road": 26.32,
+    "Charlecote Way": 21.64,
+    "Fenwick Street": 31.08,
+    "Hartwell Common": 20.65
+   },
+   "met calls as floors, days at or below 2 C": {
+    "Ashcombe Road": 26.49,
+    "Charlecote Way": 21.65,
+    "Fenwick Street": 31.13,
+    "Hartwell Common": 20.64
+   },
+   "met calls as floors, every day": {
+    "Ashcombe Road": 26.64,
+    "Charlecote Way": 21.46,
+    "Fenwick Street": 30.88,
+    "Hartwell Common": 20.53
+   },
+   "met calls as floors, every day, a curved line": {
+    "Ashcombe Road": 26.61,
+    "Charlecote Way": 21.49,
+    "Fenwick Street": 30.92,
+    "Hartwell Common": 20.57
+   },
+   "the baseline scaled to the day's own level before the window": {
+    "Ashcombe Road": 26.49,
+    "Charlecote Way": 21.8,
+    "Fenwick Street": 31.34,
+    "Hartwell Common": 20.58
+   },
+   "the calls that fell short alone": {
+    "Ashcombe Road": 26.5,
+    "Charlecote Way": 21.68,
+    "Fenwick Street": 31.17,
+    "Hartwell Common": 20.64
+   },
+   "the calls that fell short alone, every day": {
+    "Ashcombe Road": 26.69,
+    "Charlecote Way": 21.56,
+    "Fenwick Street": 31.02,
+    "Hartwell Common": 20.5
+   },
+   "the scatter as measured": {
+    "Ashcombe Road": 26.57,
+    "Charlecote Way": 21.81,
+    "Fenwick Street": 31.35,
+    "Hartwell Common": 20.7
+   },
+   "the three winters' own scaling with the megawatts contracted": {
+    "Ashcombe Road": 26.26,
+    "Charlecote Way": 21.86,
+    "Fenwick Street": 31.47,
+    "Hartwell Common": 20.8
+   },
+   "weekday levels": {
+    "Ashcombe Road": 26.51,
+    "Charlecote Way": 21.7,
+    "Fenwick Street": 31.2,
+    "Hartwell Common": 20.63
+   },
+   "zone by zone": {
+    "Ashcombe Road": 26.38,
+    "Charlecote Way": 21.7,
+    "Fenwick Street": 31.12,
+    "Hartwell Common": 20.66
+   }
+  }
+ },
  "family_sets": {
+  "a cancelled instruction's day kept": [
+   "Ashcombe Road",
+   "Fenwick Street",
+   "Hartwell Common"
+  ],
   "a curved line": [
+   "Ashcombe Road",
+   "Fenwick Street",
+   "Hartwell Common"
+  ],
+  "a heating slope each winter": [
    "Ashcombe Road",
    "Fenwick Street",
    "Hartwell Common"
@@ -256,7 +614,57 @@
    "Fenwick Street",
    "Hartwell Common"
   ],
+  "megawatts fitted over every event": [
+   "Ashcombe Road",
+   "Fenwick Street",
+   "Hartwell Common"
+  ],
+  "megawatts fitted over every event, zone by zone": [
+   "Ashcombe Road",
+   "Fenwick Street",
+   "Hartwell Common"
+  ],
+  "met calls as floors, days at or below 2 C": [
+   "Ashcombe Road",
+   "Fenwick Street",
+   "Hartwell Common"
+  ],
+  "met calls as floors, every day": [
+   "Ashcombe Road",
+   "Fenwick Street",
+   "Hartwell Common"
+  ],
+  "met calls as floors, every day, a curved line": [
+   "Ashcombe Road",
+   "Fenwick Street",
+   "Hartwell Common"
+  ],
+  "the baseline scaled to the day's own level before the window": [
+   "Ashcombe Road",
+   "Fenwick Street",
+   "Hartwell Common"
+  ],
+  "the calls that fell short alone": [
+   "Ashcombe Road",
+   "Fenwick Street",
+   "Hartwell Common"
+  ],
+  "the calls that fell short alone, every day": [
+   "Ashcombe Road",
+   "Fenwick Street",
+   "Hartwell Common"
+  ],
   "the scatter as measured": [
+   "Ashcombe Road",
+   "Fenwick Street",
+   "Hartwell Common"
+  ],
+  "the three winters' own scaling with the megawatts contracted": [
+   "Ashcombe Road",
+   "Fenwick Street",
+   "Hartwell Common"
+  ],
+  "weekday levels": [
    "Ashcombe Road",
    "Fenwick Street",
    "Hartwell Common"
@@ -307,37 +715,83 @@
   "Fenwick Street": 35.5,
   "Hartwell Common": 22.9
  },
+ "r1_evidence": {
+  "by_primary": {
+   "Ashcombe Road": {
+    "cold_days": 13,
+    "coldest_c": 5.0,
+    "curve_miss_mw": 0.4,
+    "line_miss_mw": 0.16,
+    "line_miss_pct": 0.9,
+    "peak_curve_t": -0.72,
+    "sample_days": 26
+   },
+   "Charlecote Way": {
+    "cold_days": 13,
+    "coldest_c": 4.7,
+    "curve_miss_mw": 0.18,
+    "line_miss_mw": 0.04,
+    "line_miss_pct": 0.3,
+    "peak_curve_t": -1.48,
+    "sample_days": 41
+   },
+   "Fenwick Street": {
+    "cold_days": 11,
+    "coldest_c": 4.7,
+    "curve_miss_mw": 0.61,
+    "line_miss_mw": 0.13,
+    "line_miss_pct": 0.6,
+    "peak_curve_t": -1.6,
+    "sample_days": 35
+   },
+   "Hartwell Common": {
+    "cold_days": 13,
+    "coldest_c": 4.7,
+    "curve_miss_mw": 0.24,
+    "line_miss_mw": 0.07,
+    "line_miss_pct": 0.5,
+    "peak_curve_t": -1.37,
+    "sample_days": 37
+   }
+  },
+  "coldest_unscheduled_c": 4.7,
+  "line_within_pct": 1,
+  "unscheduled_primaries_curve_t": {
+   "Dunmore Street": 1.57,
+   "Kestwick Fields": 0.01,
+   "Ravenhurst Park": 0.19,
+   "Tollbrook Lane": -0.08,
+   "Wexley Hill": -0.01
+  }
+ },
  "r2_delivered": {
-  "Ashcombe Road": 6.2,
+  "Ashcombe Road": 8.1,
   "Charlecote Way": 4.0,
   "Fenwick Street": 5.4,
   "Hartwell Common": 2.9
  },
- "r3_backtest": {
-  "freezing-day events inside the 80 per cent range": 37,
-  "mean absolute error, MW": 0.19
- },
+ "r3_backtest": 0.19,
  "r4_off_peak": {
-  "Ashcombe Road": 4.8,
+  "Ashcombe Road": 4.2,
   "Charlecote Way": 4.0,
   "Fenwick Street": 5.4,
   "Hartwell Common": 2.9
  },
  "r5_peak": {
-  "Ashcombe Road": 25.3,
+  "Ashcombe Road": 25.9,
   "Charlecote Way": 20.8,
   "Fenwick Street": 30.1,
   "Hartwell Common": 20.0
  },
  "r6_one_in_ten": {
-  "Ashcombe Road": 25.8,
+  "Ashcombe Road": 26.5,
   "Charlecote Way": 21.7,
   "Fenwick Street": 31.2,
   "Hartwell Common": 20.6
  },
  "r8_bridge": {
-  "Ashcombe Road, lost as load comes back": 1.3,
-  "Ashcombe Road, not available": 9.8,
+  "Ashcombe Road, lost as load comes back": 3.9,
+  "Ashcombe Road, not available": 12.9,
   "Charlecote Way, lost as load comes back": 0.0,
   "Charlecote Way, not available": 3.5,
   "Fenwick Street, lost as load comes back": 0.0,
@@ -363,8 +817,14 @@
   "megawatts delivered per megawatt scheduled at minus 3.0 C applied to the contract, the fit's own range": [
    "Hartwell Common"
   ],
-  "megawatts delivered per megawatt scheduled, with a one-day-in-ten range, nothing coming back": [
-   "Ashcombe Road",
+  "megawatts delivered per megawatt scheduled, the record's megawatts of scatter unchanged": [
+   "Hartwell Common"
+  ],
+  "megawatts delivered per megawatt scheduled, the scatter in proportion, the credit off the 17:30 to 18:00 peak": [
+   "Fenwick Street",
+   "Hartwell Common"
+  ],
+  "the available share right, the credit off the 17:30 to 18:00 peak, the record's megawatts of scatter unchanged": [
    "Fenwick Street",
    "Hartwell Common"
   ],
@@ -380,12 +840,17 @@
    "Hartwell Common"
   ]
  },
+ "scaling": {
+  "elasticity": 0.92,
+  "events": 112,
+  "standard_error": 0.09
+ },
  "totals": {
-  "comeback_loss": 1.3,
-  "contracted": 41.0,
-  "delivered": 18.5,
-  "not_available": 22.5,
-  "off_peak": 17.1
+  "comeback_loss": 3.9,
+  "contracted": 46.0,
+  "delivered": 20.4,
+  "not_available": 25.6,
+  "off_peak": 16.5
  },
  "variants": {
   "cold_days_at_or_below": [
@@ -396,29 +861,52 @@
   "heating_base_c": [
    14,
    17
+  ],
+  "n": 20,
+  "names": [
+   "days at or below 0 C",
+   "days at or below minus 1.5 C",
+   "days at or below minus 2 C",
+   "a curved line",
+   "zone by zone",
+   "the scatter as measured",
+   "heating base 14 C",
+   "heating base 17 C",
+   "a heating slope each winter",
+   "weekday levels",
+   "the baseline scaled to the day's own level before the window",
+   "the calls that fell short alone",
+   "the calls that fell short alone, every day",
+   "met calls as floors, days at or below 2 C",
+   "met calls as floors, every day",
+   "met calls as floors, every day, a curved line",
+   "megawatts fitted over every event",
+   "megawatts fitted over every event, zone by zone",
+   "a cancelled instruction's day kept",
+   "the three winters' own scaling with the megawatts contracted"
   ]
  },
  "zones": {
   "Ashcombe Road": {
-   "after_window": 25.3,
-   "award": 16.0,
+   "after_window": 25.9,
+   "award": 21.0,
    "code": "PS40617",
    "contract_2526": 7.5,
    "exceed_days_in_ten": 10,
-   "expected_margin": 2.3,
+   "expected_margin": 2.9,
    "firm": 23.0,
-   "in_window": 23.9,
-   "inside_by": 2.8,
+   "in_window": 22.0,
+   "inside_by": 3.5,
    "largest_scheduled": 7.0,
-   "margin": 2.8,
+   "margin": 3.5,
    "n_base_days": 26,
    "n_cold": 28,
    "n_events": 167,
    "over": true,
-   "over_by": 2.8,
+   "over_by": 3.5,
    "peak_hh": "20:00",
    "per_scheduled": 0.49,
-   "per_scheduled_mw": 7.9,
+   "per_scheduled_mw": 10.3,
    "provider": "Corvane Flex Ltd",
    "share": 0.39,
    "zone": "Ashcombe Road CMZ"

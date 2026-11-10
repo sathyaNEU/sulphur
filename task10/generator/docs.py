@@ -84,8 +84,9 @@ def write_guideline(target):
         P("6. Contracted flexibility", H2),
         P("Flexibility contracted for the winter assessed is taken at what its provider will deliver on the design day "
           "with the megawatts contracted for that winter in the contract award notice scheduled in full for the service "
-          "window. The megawatts delivered are those in the half-hours ending 17:30 and 18:00. The primary's design-day "
-          "demand with flexibility is its highest half-hourly demand on that day. No other measure is credited.", BODY),
+          "window. A contract's megawatts delivered are quoted as its delivery in the half-hours ending 17:30 and 18:00. "
+          "The primary's design-day demand with flexibility is its highest half-hourly demand on that day with the service "
+          "delivered through its window. No flexibility other than the contracted service is credited.", BODY),
         P("7. Recommendation", H2),
         P("Network Planning recommends that reinforcement be committed for each primary whose design-day demand with "
           "flexibility would exceed its firm capacity on more than one design day in ten. The recommendation is reviewed "

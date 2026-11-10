@@ -26,6 +26,7 @@ CREDIT_HH = ("17:30", "18:00")
 WINDOW = ("16:30", "17:00", "17:30", "18:00", "18:30", "19:00", "19:30")   # half-hours ending, local
 POST = ("20:00", "20:30", "21:00", "21:30")
 EVENING = ("16:00",) + WINDOW + POST + ("22:00",)
+PRE = ("13:30", "14:00", "14:30", "15:00", "15:30", "16:00")   # the half-hours before the service window opens
 BANK_HOLIDAYS = {dt.date(2023, 12, 25), dt.date(2023, 12, 26), dt.date(2024, 1, 1), dt.date(2024, 3, 29),
                  dt.date(2024, 12, 25), dt.date(2024, 12, 26), dt.date(2025, 1, 1),
                  dt.date(2025, 12, 25), dt.date(2025, 12, 26), dt.date(2026, 1, 1)}
@@ -145,8 +146,57 @@ def hh_fits(prep, tmean, code, exclude, hhs, base=BASE_T, winters=None):
     return tab, fits
 
 
-def excess(prep, tmean, code, dates, exclude, hhs, base=BASE_T):
+def _rows(dates, tmean, base, kind, ws):
+    """The baseline's design matrix: winter levels and heating degrees, by the rival's own shape."""
+    T = np.array([tmean[d] for d in dates], float)
+    wn = np.array([WINTER_OF(d) for d in dates])
+    hdd = np.maximum(0.0, base - T)
+    cols = [(wn == w).astype(float) for w in ws]
+    if kind == "by_winter":                    # a heating slope of its own each winter
+        cols += [hdd * (wn == w) for w in ws]
+    elif kind == "weekday":                    # the day of the week as well
+        cols += [hdd] + [np.array([1.0 if d.weekday() == k else 0.0 for d in dates]) for k in range(1, 5)]
+    else:
+        cols += [hdd]
+    return np.column_stack(cols)
+
+
+def _excess_rival(prep, tmean, code, dates, exclude, hhs, base, kind):
+    """The same measurement against a rival baseline: a slope by winter, weekday levels, or the regression's
+    baseline scaled to the day's own level in the half-hours before the window opens ("same_day")."""
+    k0 = "regression" if kind == "same_day" else kind
+    need = list(hhs) + ([h for h in PRE if h not in hhs] if kind == "same_day" else [])
+    tab = hh_table(prep, code, need)
+    pred = {}
+    for h in need:
+        train = [d for d in tab.index if _workday(d) and d in tmean.index and d not in exclude and
+                 not np.isnan(tab.loc[d, h])]
+        ws = sorted(set(WINTER_OF(d) for d in train))
+        beta, *_ = np.linalg.lstsq(_rows(train, tmean, base, k0, ws), np.array([tab.loc[d, h] for d in train], float),
+                                   rcond=None)
+        ok = [d for d in dates if WINTER_OF(d) in ws]
+        pred[h] = dict(zip(ok, _rows(ok, tmean, base, k0, ws) @ beta)) if ok else {}
+    out = {}
+    for d in dates:
+        adj = 1.0
+        if kind == "same_day" and d in tab.index:
+            pair = [(tab.loc[d, h], pred[h].get(d, float("nan"))) for h in PRE]
+            pair = [(a, b) for a, b in pair if not (np.isnan(a) or np.isnan(b))]
+            if len(pair) >= 4:
+                adj = sum(a for a, _ in pair) / sum(b for _, b in pair)
+        row = {}
+        for h in hhs:
+            b = pred[h].get(d, float("nan"))
+            a = tab.loc[d, h] if d in tab.index else float("nan")
+            row[h] = float(a - b * adj) if not (np.isnan(a) or np.isnan(b)) else float("nan")
+        out[d] = row
+    return out
+
+
+def excess(prep, tmean, code, dates, exclude, hhs, base=BASE_T, baseline="regression"):
     """For each date and half-hour: actual minus the weather-adjusted baseline (NaN where the half-hour is absent)."""
+    if baseline != "regression":
+        return _excess_rival(prep, tmean, code, dates, exclude, hhs, base, baseline)
     tab, fits = hh_fits(prep, tmean, code, exclude, hhs, base)
     out = {}
     for d in dates:
@@ -173,21 +223,104 @@ def forecast(before26, r1, r2, register_mw):
     return before26 * (1 + r1 / 100.0) * (1 + r2 / 100.0) + register_mw
 
 
+BEFORE_WINDOW = ("08:00", "08:30", "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00", "12:30", "13:00",
+                 "13:30", "14:00", "14:30", "15:00", "15:30")
+
+
+def _tstat(Xm, y, k):
+    b, *_ = np.linalg.lstsq(Xm, y, rcond=None)
+    r = y - Xm @ b
+    s2 = float(r @ r) / (len(y) - Xm.shape[1])
+    cov = s2 * np.linalg.inv(Xm.T @ Xm)
+    return float(b[k] / math.sqrt(cov[k, k]))
+
+
+def line_evidence(X, winter="2025/26", base=BASE_T):
+    """Is the weather correction straight in heating degrees down to the design day? The guideline's sample (the
+    winter's working weekdays outside the scheduled and the logged transfer days) holds only mild days at a zone
+    primary, because the cold days were scheduled days. The hours before the service window on those scheduled days
+    are untouched by the service, so they carry the same primary down to the coldest days: a straight line fitted on
+    the days no colder than the sample's coldest is read on the days at or below 0 C, and a curve beside it. For the
+    primaries with nothing scheduled, the curve's t-statistic on the daily peak over the whole winter."""
+    X = conform(X)
+    prep, tm = X["_prep"], X["_tm"]
+    out = {}
+    for c in sorted(set(prep["code"])):
+        zone = c in ZONES
+        sched = scheduled_dates(X, c) if zone else set()
+        sw = switch_dates(X.get("switching"), c)
+        pk = daily_peaks(prep, c)
+        days = [d for d in pk.index if _workday(d) and d in tm.index and WINTER_OF(d) == winter and d not in sw]
+        uns = [d for d in days if d not in sched]
+        T = np.array([tm[d] for d in uns])
+        h = np.maximum(0.0, base - T)
+        y = np.array([pk[d] for d in uns])
+        row = dict(zone=zone, n_sample=len(uns), coldest=float(T.min()),
+                   peak_curve_t=_tstat(np.column_stack([np.ones(len(uns)), h, h ** 2]), y, 2))
+        if zone:
+            tab = hh_table(prep, c, BEFORE_WINDOW)
+            dd = [d for d in days if d in tab.index and not tab.loc[d].isna().any()]
+            Ta = np.array([tm[d] for d in dd])
+            ha = np.maximum(0.0, base - Ta)
+            ya = np.array([tab.loc[d].mean() for d in dd])
+            warm, cold = Ta >= T.min(), Ta <= 0.0
+            b1, *_ = np.linalg.lstsq(np.column_stack([np.ones(warm.sum()), ha[warm]]), ya[warm], rcond=None)
+            b2, *_ = np.linalg.lstsq(np.column_stack([np.ones(warm.sum()), ha[warm], ha[warm] ** 2]), ya[warm], rcond=None)
+            line = ya[cold] - (b1[0] + b1[1] * ha[cold])
+            curve = ya[cold] - (b2[0] + b2[1] * ha[cold] + b2[2] * ha[cold] ** 2)
+            row.update(n_cold=int(cold.sum()), line_miss=float(line.mean()), line_miss_pct=float(100 * line.mean() / ya[cold].mean()),
+                       curve_miss=float(curve.mean()), curve_miss_pct=float(100 * curve.mean() / ya[cold].mean()))
+        out[c] = row
+    return out
+
+
+def scaling(evs, below=None):
+    """Does what a provider has available grow with the megawatts contracted? The elasticity of the megawatts
+    delivered to the megawatts contracted over the three winters' cold days (the calls that fell short), zone levels
+    and each provider's slope in temperature held: 1 is in proportion, 0 is megawatts that do not grow."""
+    below = COLD if below is None else below
+    e = pd.concat([evs[c] for c in ZONES], ignore_index=True)
+    e = e[(e["T"] <= below) & (~met(e))]
+    zs = sorted(set(e["zone"]))
+    prov = np.array([ZONE_PROVIDER[z] for z in e["zone"]])
+    ps = sorted(set(prov))
+    cols = [(e["zone"] == z).values.astype(float) for z in zs] + [np.log(e["contract"].values)] + \
+           [e["T"].values * (prov == p) for p in ps]
+    Xm = np.column_stack(cols)
+    y = np.log(e["delivered"].values)
+    b, *_ = np.linalg.lstsq(Xm, y, rcond=None)
+    r = y - Xm @ b
+    s2 = float(r @ r) / (len(y) - Xm.shape[1])
+    cov = s2 * np.linalg.inv(Xm.T @ Xm)
+    k = len(zs)
+    return float(b[k]), float(math.sqrt(cov[k, k])), int(len(e))
+
+
 # ------------------------------------------------------------------------------------------------ the event record
-def event_table(X, code, method="regression", net_switching=True, exclude_switch_days=True, credit="mean"):
+def scheduled_dates(X, code, cancelled_in=False):
+    """The days on which flexibility was scheduled in the zone (a cancelled instruction's day too, unless the
+    rival reading keeps it)."""
+    e = X["events"][X["events"]["zone"] == code]
+    if cancelled_in:
+        e = e[e["status"] != "Cancelled"]
+    return set(e["date"])
+
+
+def event_table(X, code, method="regression", net_switching=True, exclude_switch_days=True, credit="mean",
+                base=BASE_T, baseline="regression", cancelled_in=False):
     """One row per completed event at the zone: date, winter, daily mean temperature, megawatts scheduled and
     contracted, megawatts delivered in the credited half-hours, the reduction in each window half-hour and the
     rise in each of the four half-hours after it."""
     prep, tm, ev = X["_prep"], X["_tm"], X["events"]
     e = ev[(ev["zone"] == code)]
-    allz = set(e["date"])                       # every scheduled day, cancelled included
+    allz = scheduled_dates(X, code, cancelled_in)       # every scheduled day, cancelled included
     sw = switch_dates(X.get("switching"), code)
     done = e[e["status"] == "Completed"]
     dates = sorted(d for d in done["date"] if d in tm.index)
     mw = {r.date: float(r.scheduled_mw) for r in done.itertuples()}
     excl = allz | (sw if exclude_switch_days else set())
     hhs = WINDOW + POST
-    ex = excess(prep, tm, code, dates, excl, hhs)
+    ex = excess(prep, tm, code, dates, excl, hhs, base=base, baseline=baseline)
     rows = []
     for d in dates:
         x = ex[d]
@@ -204,16 +337,16 @@ def event_table(X, code, method="regression", net_switching=True, exclude_switch
     return t
 
 
-def placebo_sd(X, code):
+def placebo_sd(X, code, base=BASE_T, baseline="regression", cancelled_in=False):
     """The spread of the same measurement on working weekdays with nothing scheduled and no switching: what an
     event's measured megawatts carry from the baseline alone."""
     prep, tm, ev = X["_prep"], X["_tm"], X["events"]
-    allz = set(ev[ev["zone"] == code]["date"])
+    allz = scheduled_dates(X, code, cancelled_in)
     sw = switch_dates(X.get("switching"), code)
     tab = hh_table(prep, code, CREDIT_HH)
     days = [d for d in tab.index if _workday(d) and d in tm.index and d not in allz and d not in sw and
             WINTER_OF(d) in ("2023/24", "2024/25", "2025/26")]
-    ex = excess(prep, tm, code, days, allz | sw, CREDIT_HH)
+    ex = excess(prep, tm, code, days, allz | sw, CREDIT_HH, base=base, baseline=baseline)
     v = [np.mean([ex[d][h] for h in CREDIT_HH]) for d in days if not any(math.isnan(ex[d][h]) for h in CREDIT_HH)]
     return float(np.std(v, ddof=2)), len(v)
 
@@ -270,6 +403,28 @@ def availability_fit(ev, form="linear", censor=True, tol_mw=0.2, tol_share=0.07,
     return dict(beta=beta, sigma=s, form=form, n_short=int(obs.sum()), n_met=int(c.sum()))
 
 
+def megawatts_fit(ev, form="linear", iters=80):
+    """The megawatts delivered fitted as the lesser of the megawatts scheduled and a share of the megawatts contracted
+    that moves with temperature, by least squares in megawatts over every event: the events the current line puts on
+    the share's side refit it until the split settles."""
+    s = ev["scheduled"].values.astype(float)
+    y = ev["delivered"].values.astype(float)
+    C = ev["contract"].values.astype(float)
+    B = _basis(ev["T"].values, form)
+    short = ~met(ev)
+    beta, *_ = np.linalg.lstsq(B[short], (y / C)[short], rcond=None)
+    for _ in range(iters):
+        cap = (B @ beta) * C < s
+        if cap.sum() < B.shape[1] + 3:
+            break
+        nb, *_ = np.linalg.lstsq(B[cap] * C[cap, None], y[cap], rcond=None)
+        done = float(np.max(np.abs(nb - beta))) < 1e-10
+        beta = nb
+        if done:
+            break
+    return dict(beta=beta, form=form)
+
+
 def share_at(fit, T=T_DESIGN):
     return float((_basis([T], fit["form"]) @ fit["beta"])[0])
 
@@ -284,8 +439,8 @@ def local_share(ev, T=T_DESIGN, half_width=2.0):
 
 
 def cold_share(ev, T=T_DESIGN, below=-1.0, form="linear", short_only=False):
-    """Delivered over contracted against temperature on the days at or below `below`, where every call outran what
-    was available; read at the design day."""
+    """Delivered over contracted against temperature on the days at or below `below`, where nearly every call
+    outran what was available; read at the design day."""
     e = ev[ev["T"] <= below]
     if short_only:
         e = e[~met(e)]
@@ -403,7 +558,7 @@ ZONE_LABEL = {"PS40617": "Ashcombe Road CMZ", "PS41108": "Charlecote Way CMZ", "
 ZONES = sorted(ZONE_LABEL, key=lambda c: ZONE_LABEL[c])
 TRAIN_WINTERS = ("2023/24", "2024/25")
 TEST_WINTER = "2025/26"
-COLD = -1.0          # the days on which every call outran what its provider had available
+COLD = -1.0          # the days on which nearly every call outran what its provider had available
 FREEZING = 0.0       # the backtest counts its range on last winter's days below 0 C
 RANGE = 0.80         # the range the backtest counts last winter's events inside
 G_GRID = 141
@@ -441,12 +596,20 @@ def day_quantile(profile, delivered, shape, back, cv_avail, cv_base, q=ASSURANCE
     return float(np.quantile(peaks, q)), peaks
 
 
-def provider_fit(ev, noise, below=COLD, form="linear", winters=None):
+def provider_fit(ev, noise, below=COLD, form="linear", winters=None, estimator="line", fit_below=None):
     """One provider's cold days: the line of delivered over contracted against temperature, its value on the design
-    day, the day-to-day spread about it net of the baseline's noise, the window's shape and what comes back."""
+    day, the day-to-day spread about it net of the baseline's noise, the window's shape and what comes back.
+    The rival estimators keep the cold days' spread and replace the line: "short" by a line through the calls that
+    fell short of their schedule alone, "censored" by a censored fit that takes a met call as a floor, each over the
+    days at or below `fit_below` (every day when it is None)."""
     e = ev if winters is None else ev[ev["winter"].isin(winters)]
     share, n, beta, resid, cold = cold_share(e, below=below, form=form)
     cv, raw, _ = cold_spread(e, below=below, form=form, noise_sd_by_zone=noise)
+    if estimator != "line":
+        fe = e if fit_below is None else e[e["T"] <= fit_below]
+        cf = megawatts_fit(fe, form=form) if estimator == "megawatts" else \
+            availability_fit(fe, form=form, censor=(estimator == "censored"))
+        share, beta = share_at(cf), cf["beta"]
     return dict(share=share, beta=[float(b) for b in beta], form=form, n_cold=int(n), cv=cv, cv_raw=raw,
                 shape=window_shape(e), back=comeback(e),
                 cold_dates=int(cold["date"].nunique()), cold_met=int(met(cold).sum()))
@@ -456,13 +619,17 @@ def line_share(fit, T):
     return _basis(np.atleast_1d(np.asarray(T, float)), fit["form"]) @ np.array(fit["beta"])
 
 
-def backtest(ev, noise, below=COLD, form="linear", model="share", rng_q=RANGE):
+RANGES = ("relative", "net", "empirical", "share", "share_tracked", "capped")
+
+
+def backtest(ev, noise, below=COLD, form="linear", model="share", rng_q=RANGE, estimator="line", fit_below=None,
+             range_kind="relative"):
     """Winter 2025/26's completed events predicted from the two winters before: megawatts delivered in the credited
     half-hours as the lesser of the megawatts scheduled and the share of the contract available that day. Returns
     the mean absolute error, the mean error, and the share of the events inside the central `rng_q` range."""
     tr = ev[ev["winter"].isin(TRAIN_WINTERS)]
     te = ev[ev["winter"] == TEST_WINTER]
-    f = provider_fit(tr, noise, below=below, form=form)
+    f = provider_fit(tr, noise, below=below, form=form, estimator=estimator, fit_below=fit_below)
     # on the days a call was met, how far the megawatts measured sat from the megawatts scheduled (by zone)
     mt = tr[met(tr)]
     track = {z: float(np.std((mt[mt["zone"] == z]["delivered"] - mt[mt["zone"] == z]["scheduled"]).values)) for z in sorted(set(tr["zone"]))}
@@ -497,34 +664,80 @@ def backtest(ev, noise, below=COLD, form="linear", model="share", rng_q=RANGE):
         tk = np.array([track[zz] for zz in te["zone"]])
         lo = np.minimum(s + tk * lo_z, avail * (1 + f["cv_raw"] * lo_z))
         hi = np.minimum(s + tk * hi_z, avail * (1 + f["cv_raw"] * hi_z))
+        if range_kind != "relative":
+            # the rival constructions of the same range, each scaled to the megawatts contracted
+            ctr = tr[tr["T"] <= below]
+            mu_tr = line_share(f, ctr["T"].values)
+            res = ctr["delivered"].values / ctr["contract"].values - mu_tr
+            if range_kind == "net":                 # the spread net of the baseline's own noise
+                lo = np.minimum(s + tk * lo_z, avail * (1 + f["cv"] * lo_z))
+                hi = np.minimum(s + tk * hi_z, avail * (1 + f["cv"] * hi_z))
+            elif range_kind == "empirical":         # the residuals' own tenth and ninetieth percentiles
+                rel = res / mu_tr
+                dm = (mt["delivered"] - mt["scheduled"]).values
+                lo = np.minimum(s + np.quantile(dm, (1 - rng_q) / 2.0), avail * (1 + np.quantile(rel, (1 - rng_q) / 2.0)))
+                hi = np.minimum(s + np.quantile(dm, 1 - (1 - rng_q) / 2.0), avail * (1 + np.quantile(rel, 1 - (1 - rng_q) / 2.0)))
+            elif range_kind in ("share", "share_tracked"):   # the spread of the share itself, in contracted megawatts
+                sd = float(np.std(res, ddof=len(f["beta"])))
+                t0 = tk if range_kind == "share_tracked" else 0.0
+                lo = np.minimum(s + t0 * lo_z, (mu + sd * lo_z) * C)
+                hi = np.minimum(s + t0 * hi_z, (mu + sd * hi_z) * C)
+            elif range_kind == "capped":            # the relative spread, capped at the megawatts scheduled
+                lo = np.minimum(s, avail * (1 + f["cv_raw"] * lo_z))
+                hi = np.minimum(s, avail * (1 + f["cv_raw"] * hi_z))
+            else:
+                raise ValueError(range_kind)
         ins = (y >= lo) & (y <= hi)
         inside = float(np.mean(ins[cold]))
         n_in = int(np.sum(ins[cold]))
         rows = [dict(date=te["date"].values[i], zone=te["zone"].values[i], T=float(te["T"].values[i]), scheduled=float(s[i]),
                      contract=float(C[i]), predicted=float(pred[i]), low=float(lo[i]), high=float(hi[i]),
-                     delivered=float(y[i]), inside=bool(ins[i])) for i in range(len(te)) if cold[i]]
+                     delivered=float(y[i]), inside=bool(ins[i]), freezing=bool(cold[i])) for i in range(len(te))]
     return dict(n=int(len(te)), mae=float(np.mean(np.abs(err))), bias=float(np.mean(err)), inside=inside, n_inside=n_in,
                 n_cold=int(cold.sum()), mae_cold=float(np.mean(np.abs(err[cold]))), bias_cold=float(np.mean(err[cold])),
                 fit=f, rows=rows)
 
 
+def backtest_all(evs, noise, below=COLD, form="linear", estimator="line", fit_below=None, range_kind="relative"):
+    """The backtest over both providers: winter 2025/26's completed events from the two winters before."""
+    provs = sorted(set(ZONE_PROVIDER.values()))
+    pev = {p: pd.concat([evs[c] for c in ZONES if ZONE_PROVIDER[c] == p], ignore_index=True) for p in provs}
+    bt = {p: backtest(pev[p], noise, below=below, form=form, estimator=estimator, fit_below=fit_below,
+                      range_kind=range_kind) for p in provs}
+    te_n = sum(bt[p]["n"] for p in provs)
+    nc = sum(bt[p]["n_cold"] for p in provs)
+    bt_all = dict(n=te_n, mae=sum(bt[p]["mae"] * bt[p]["n"] for p in provs) / te_n,
+                  bias=sum(bt[p]["bias"] * bt[p]["n"] for p in provs) / te_n, n_cold=nc,
+                  n_inside=sum(bt[p]["n_inside"] for p in provs),
+                  inside=sum(bt[p]["n_inside"] for p in provs) / float(nc),
+                  mae_cold=sum(bt[p]["mae_cold"] * bt[p]["n_cold"] for p in provs) / float(nc),
+                  bias_cold=sum(bt[p]["bias_cold"] * bt[p]["n_cold"] for p in provs) / float(nc))
+    return bt, bt_all
+
+
 def golden_from(X, below=COLD, form="linear", pooled=True, net_noise=True, base=BASE_T, comeback_on=True,
-                spread="scaled", use_switching=True, credit="mean"):
+                spread="scaled", use_switching=True, credit="mean", baseline="regression", estimator="line",
+                fit_below=None, cancelled_in=False, scale="proportional"):
     """The golden on the parsed pack, result by result. Options name the reasonable variants the bands are set by."""
     X = conform(X)
     prep, tm = X["_prep"], X["_tm"]
-    evs = {c: event_table(X, c, exclude_switch_days=use_switching, credit=credit) for c in ZONES}
-    noise = {c: placebo_sd(X, c)[0] for c in ZONES}
+    evs = {c: event_table(X, c, exclude_switch_days=use_switching, credit=credit, base=base, baseline=baseline,
+                          cancelled_in=cancelled_in) for c in ZONES}
+    noise = {c: placebo_sd(X, c, base=base, baseline=baseline, cancelled_in=cancelled_in)[0] for c in ZONES}
     provs = sorted(set(ZONE_PROVIDER.values()))
     pev = {p: pd.concat([evs[c] for c in ZONES if ZONE_PROVIDER[c] == p], ignore_index=True) for p in provs}
-    fits = {p: provider_fit(pev[p], noise if net_noise else None, below=below, form=form) for p in provs}
+    fkw = dict(below=below, form=form, estimator=estimator, fit_below=fit_below)
+    fits = {p: provider_fit(pev[p], noise if net_noise else None, **fkw) for p in provs}
     if not pooled:
-        zfits = {c: provider_fit(evs[c], noise if net_noise else None, below=below, form=form) for c in ZONES}
+        zfits = {c: provider_fit(evs[c], noise if net_noise else None, **fkw) for c in ZONES}
+    # what is available against the megawatts contracted: in proportion, or at the rate the three winters' record
+    # itself gives (megawatts delivered per cent for each per cent contracted), carried from the 2025/26 contract
+    elastic = scaling(evs)[0] if scale == "measured" else 1.0
     zones = []
     for c in ZONES:
         p = ZONE_PROVIDER[c]
         f = fits[p] if pooled else zfits[c]
-        excl = set(X["events"][X["events"]["zone"] == c]["date"]) | (switch_dates(X.get("switching"), c) if use_switching else set())
+        excl = scheduled_dates(X, c, cancelled_in) | (switch_dates(X.get("switching"), c) if use_switching else set())
         d26, slope, cvb, nb = design_peak(prep, tm, c, exclude=excl, base=base, winters=["2025/26"])
         r1, r2 = X["rates"][c]
         before = forecast(d26, r1, r2, X["growth"].get(c, 0.0))
@@ -533,7 +746,8 @@ def golden_from(X, below=COLD, form="linear", pooled=True, net_noise=True, base=
         top = max(raw.values())
         prof = {h: v * before / top for h, v in raw.items()}    # the day's highest half-hour is the guideline's figure
         award, firm = X["award"][c], X["firm"][c]
-        delivered = f["share"] * award
+        last = X["contract"][(c, "2025/26")]
+        delivered = f["share"] * last * (award / last) ** elastic
         shape, back = fits[p]["shape"], (fits[p]["back"] if comeback_on else {})
         day = with_flex(prof, delivered, shape, back)
         hh, peak = peak_of(day)
@@ -550,16 +764,7 @@ def golden_from(X, below=COLD, form="linear", pooled=True, net_noise=True, base=
                           not_available=award - delivered, comeback_loss=delivered - (before - peak),
                           n_events=int(len(evs[c])), n_cold=int((evs[c]["T"] <= below).sum()),
                           per_scheduled=rate_per_scheduled(evs[c]), noise=noise[c]))
-    bt = {p: backtest(pev[p], noise) for p in provs}
-    allev = pd.concat([pev[p] for p in provs], ignore_index=True)
-    te_n = sum(bt[p]["n"] for p in provs)
-    nc = sum(bt[p]["n_cold"] for p in provs)
-    bt_all = dict(n=te_n, mae=sum(bt[p]["mae"] * bt[p]["n"] for p in provs) / te_n,
-                  bias=sum(bt[p]["bias"] * bt[p]["n"] for p in provs) / te_n, n_cold=nc,
-                  n_inside=sum(bt[p]["n_inside"] for p in provs),
-                  inside=sum(bt[p]["n_inside"] for p in provs) / float(nc),
-                  mae_cold=sum(bt[p]["mae_cold"] * bt[p]["n_cold"] for p in provs) / float(nc),
-                  bias_cold=sum(bt[p]["bias_cold"] * bt[p]["n_cold"] for p in provs) / float(nc))
+    bt, bt_all = backtest_all(evs, noise, **fkw)
     cold_rows = []
     for c in ZONES:
         e = evs[c][evs[c]["T"] <= below]
@@ -568,5 +773,5 @@ def golden_from(X, below=COLD, form="linear", pooled=True, net_noise=True, base=
                                   delivered=r.delivered, share=r.delivered / r.contract))
     cold_rows.sort(key=lambda r: (r["date"], r["zone"]))
     return dict(zones=zones, providers=fits, backtest=bt, backtest_all=bt_all, events=evs, noise=noise, cold_rows=cold_rows,
-                commit=[z["primary"] for z in zones if z["over"]],
+                fit_options=fkw, commit=[z["primary"] for z in zones if z["over"]],
                 record=dict(completed={c: int(len(evs[c])) for c in ZONES}))

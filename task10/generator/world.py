@@ -63,7 +63,7 @@ PROVIDERS = {
     "Quillon": dict(legal="Quillon Energy Services Ltd", a_hi=0.804, a_lo=0.222, t_mid=-3.0, w=4.6, cv=0.172,
                     reb=(0.285, 0.155, 0.065, 0.02)),       # commercial refrigeration, HVAC and process load
 }
-MW28 = {"A": 16.0, "C": 7.5, "F": 10.0, "H": 7.5}
+MW28 = {"A": 21.0, "C": 7.5, "F": 10.0, "H": 7.5}
 # zone primary, provider, MW contracted in 2024/25 and 2025/26, MW contracted for 2027/28
 ZONES = [
     dict(key="A", provider="Corvane", mw={"2023/24": 5.5, "2024/25": 6.5, "2025/26": 7.5}, mw28=MW28["A"], partner="B", nop="NOP-1172"),

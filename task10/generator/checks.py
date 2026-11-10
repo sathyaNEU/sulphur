@@ -91,13 +91,23 @@ def main():
     check("bands hold every variant", not bad and all(v["commit"] == CALL for v in FAM.values()),
           "%d variants (%s): every figure inside its band, the same three primaries" % (len(FAM) - 1, ", ".join(k for k in FAM if k != "golden")))
     widths = {bk: max(F["bands"][bk][p][1] - F["bands"][bk][p][0] for p in Z) for _, bk in KEYS}
-    check("bands are narrow", all(w <= 0.9 for w in widths.values()), "widest band by result: %s MW" % {k: round(v, 1) for k, v in widths.items()})
+    C0 = EP.careful(X, G)
+    gap = {"megawatts delivered, Ashcombe Road": C0["Ashcombe Road"]["delivered"] - F["bands"]["delivered"]["Ashcombe Road"][1],
+           "megawatts delivered, Charlecote Way": C0["Charlecote Way"]["delivered"] - F["bands"]["delivered"]["Charlecote Way"][1],
+           "expected peak, Ashcombe Road": F["bands"]["peak"]["Ashcombe Road"][0] - C0["Ashcombe Road"]["peak"],
+           "expected peak, Charlecote Way": F["bands"]["peak"]["Charlecote Way"][0] - C0["Charlecote Way"]["peak"],
+           "nine days in ten, Ashcombe Road": F["bands"]["one_in_ten"]["Ashcombe Road"][0] - C0["Ashcombe Road"]["one_in_ten"],
+           "nine days in ten, Charlecote Way": F["bands"]["one_in_ten"]["Charlecote Way"][0] - C0["Charlecote Way"]["one_in_ten"],
+           "nine days in ten, Fenwick Street": F["bands"]["one_in_ten"]["Fenwick Street"][0] - C0["Fenwick Street"]["one_in_ten"]}
+    check("the hurried figures sit outside the bands", min(gap.values()) >= 0.25 and max(widths.values()) <= 1.5,
+          "the hurried pass's figure lies outside the band by %s MW; the widest band by result is %s MW"
+          % (", ".join("%.1f (%s)" % (v, k) for k, v in gap.items()), {k: round(v, 1) for k, v in widths.items()}))
     fen, cha = [v for v in FAM.values()], None
     fmin = min(z["p90"] - z["firm"] for v in FAM.values() for z in v["zones"] if z["primary"] == "Fenwick Street")
     fexp = max(z["peak"] - z["firm"] for v in FAM.values() for z in v["zones"] if z["primary"] == "Fenwick Street")
     cmax = max(z["p90"] - z["firm"] for v in FAM.values() for z in v["zones"] if z["primary"] == "Charlecote Way")
     amin = min(z["p90"] - z["firm"] for v in FAM.values() for z in v["zones"] if z["primary"] in ("Ashcombe Road", "Hartwell Common"))
-    check("margins", fmin >= 0.3 and fexp <= -0.2 and cmax <= -0.4 and amin >= 2.0,
+    check("margins", fmin >= 0.3 and fexp <= -0.05 and cmax <= -0.4 and amin >= 2.0,
           "across the variants Fenwick Street's one-in-ten level is at least %.2f MW over firm and its expected peak at least "
           "%.2f under; Charlecote Way at least %.2f inside; Ashcombe Road and Hartwell Common at least %.2f over"
           % (fmin, -fexp, -cmax, amin))
@@ -116,11 +126,13 @@ def main():
     check("SF3 growth", "compounded" in gflat and "added in full" in gflat and "in the proportion its highest half-hour grows" in gflat,
           "guideline 4: DFES rates compounded, qualifying connections in full, every half-hour in the peak's proportion")
     v = E.golden_from(X, credit="lower")
-    check("SF4 the megawatts delivered", "half-hours ending 17:30 and 18:00" in gflat and not inside(v, F) and v["commit"] == CALL,
+    check("SF4 the megawatts delivered", "quoted as its delivery in the half-hours ending 17:30 and 18:00" in gflat and not inside(v, F) and v["commit"] == CALL,
           "guideline 6: the half-hours ending 17:30 and 18:00; the lower of the two for the mean moves no figure out of its band")
     check("SF5 the call in full", "scheduled in full for the service window" in gflat, "guideline 6: the megawatts contracted scheduled in full")
-    check("SF6 demand with flexibility", "its highest half-hourly demand on that day" in gflat,
-          "guideline 6: the day's highest half-hour, whichever it is")
+    check("SF6 demand with flexibility", "its highest half-hourly demand on that day with the service delivered through its window" in gflat
+          and "No flexibility other than the contracted service is credited" in gflat,
+          "guideline 6: the day's highest half-hour, whichever it is, with the service delivered through its window; the two "
+          "half-hours are how a contract's megawatts are quoted, not the extent of the credit")
     qs = []
     for z in G["zones"]:
         f = G["providers"][z["provider"]]
@@ -138,7 +150,21 @@ def main():
                             ("SF10 the line", "a curved line", ("a curved line",)),
                             ("SF11 provider or zone", "each zone on its own", ("zone by zone",)),
                             ("SF12 the scatter", "the scatter as measured", ("the scatter as measured",)),
-                            ("SF13 the heating base", "14 or 17 C", ("heating base 14 C", "heating base 17 C"))):
+                            ("SF13 the heating base", "14 or 17 C", ("heating base 14 C", "heating base 17 C")),
+                            ("SF18 the baseline behind an event", "a heating slope each winter, weekday levels, or the baseline "
+                             "scaled to the day's own level before the window",
+                             ("a heating slope each winter", "weekday levels", "the baseline scaled to the day's own level before the window")),
+                            ("SF19 a call that was met", "left out, or taken as a floor (over the cold days, the days at or below "
+                             "2 C or every day, on a straight or a curved line)",
+                             ("the calls that fell short alone", "the calls that fell short alone, every day",
+                              "met calls as floors, days at or below 2 C", "met calls as floors, every day",
+                              "met calls as floors, every day, a curved line", "megawatts fitted over every event",
+                              "megawatts fitted over every event, zone by zone")),
+                            ("SF20 a cancelled instruction's day", "kept among the days behind the baselines",
+                             ("a cancelled instruction's day kept",)),
+                            ("SF22 the record's own scaling", "megawatts delivered carried to the award at the rate the three "
+                             "winters' record gives for each per cent contracted",
+                             ("the three winters' own scaling with the megawatts contracted",))):
         b = [inside(FAM[k], F) for k in keys]
         check(sid, not any(b) and all(FAM[k]["commit"] == CALL for k in keys), "%s: same set, every figure inside its band" % name)
     Y = fresh()
@@ -153,8 +179,37 @@ def main():
     nrev = int((raw["revision"] == "2").sum())
     check("SF14 the instruction's revision", not inside(v, F) and v["commit"] == CALL,
           "%d instructions carry a second row; the megawatts first issued for the latest move no figure out of its band" % nrev)
-    check("SF15 the backtest", F["backtest"]["n"] == int(sum((G["events"][c]["winter"] == E.TEST_WINTER).sum() for c in E.ZONES)),
-          "winter 2025/26's %d completed events, fitted on 2023/24 and 2024/25, an 80 per cent range (the prompt)" % F["backtest"]["n"])
+    maes = F["family"]["mae"]
+    check("SF15 the backtest", F["backtest"]["n"] == int(sum((G["events"][c]["winter"] == E.TEST_WINTER).sum() for c in E.ZONES))
+          and F["bands"]["backtest"]["mae"][0] <= min(maes.values()) and max(maes.values()) <= F["bands"]["backtest"]["mae"][1],
+          "winter 2025/26's completed events from winters 2023/24 and 2024/25 (the prompt): the average miss runs from %.2f to "
+          "%.2f MW across the %d variants (the baseline scaled to the day's own level lowest, a curved line highest), inside "
+          "the stated %.2f to %.2f" % (min(maes.values()), max(maes.values()), len(maes) - 1, F["bands"]["backtest"]["mae"][0],
+                                       F["bands"]["backtest"]["mae"][1]))
+    cb = F["careful_backtest"]
+    check("R3 the hurried reading's own backtest", F["bands"]["backtest"]["mae"][0] <= cb["mae"] <= F["bands"]["backtest"]["mae"][1],
+          "megawatts per megawatt scheduled is out by %.2f MW on the same held-out winter, inside the band: the backtest does "
+          "not tell the readings apart, so the careful column earns it; the freezing-day count inside an 80 per cent range "
+          "runs from %d to %d of %d across the variants and six constructions of the range (the workbook's context, not graded)"
+          % (cb["mae"], F["bands"]["backtest"]["inside"][0], F["bands"]["backtest"]["inside"][1], F["backtest"]["n_cold"]))
+    le = F["r1_evidence"]["by_primary"]
+    others = F["r1_evidence"]["unscheduled_primaries_curve_t"]
+    check("SF21 the weather correction's line",
+          all(abs(v["line_miss_pct"]) <= 1.2 and abs(v["curve_miss_mw"]) > abs(v["line_miss_mw"]) and abs(v["peak_curve_t"]) < 2.0
+              for v in le.values()) and all(abs(t) < 2.0 for t in others.values()) and len(others) == 5,
+          "the guideline's 2025/26 sample is %s days no colder than %s C; in the hours before the window the straight line "
+          "fitted on such days lands the days at or below 0 C within %s MW and a curve misses them by %s MW; the curve's t on "
+          "the daily peak is %s in those samples and %s at the five primaries with nothing scheduled, whose days reach minus 5 C"
+          % ("/".join(str(v["sample_days"]) for v in le.values()), "/".join("%+.1f" % v["coldest_c"] for v in le.values()),
+             "/".join("%+.2f" % v["line_miss_mw"] for v in le.values()), "/".join("%+.2f" % v["curve_miss_mw"] for v in le.values()),
+             "/".join("%+.1f" % v["peak_curve_t"] for v in le.values()), "/".join("%+.1f" % t for t in others.values())))
+    sc = F["scaling"]
+    check("SF22 megawatts that do not grow", abs(sc["elasticity"] - 1.0) <= 2 * sc["standard_error"] and
+          sc["elasticity"] >= 5 * sc["standard_error"] and "registered capacity of the assets" in aflat,
+          "over the three winters' %d cold-day calls that fell short, megawatts delivered move %.2f per cent for each per cent "
+          "of megawatts contracted (standard error %.2f): in proportion is inside two standard errors and megawatts that do "
+          "not grow is %.0f away; the award notice files the megawatts contracted as registered capacity"
+          % (sc["events"], sc["elasticity"], sc["standard_error"], sc["elasticity"] / sc["standard_error"]))
     check("SF16 an event's temperature", all(abs(r["T"] - float(X["_tm"][r["date"]])) < 1e-9 for r in G["cold_rows"][:50]),
           "the event day's daily mean at the station, guideline 2's measure")
     tot = F["totals"]
@@ -242,18 +297,21 @@ def main():
     wrong = {tuple(sorted(r["answer"])) for r in eff["routes"] if not r["golden"]}
     wrong.discard(tuple(sorted(CALL)))
     lucky = [r["name"] for r in eff["routes"] if not r["golden"] and sorted(r["answer"]) == sorted(CALL)]
-    check("routes", len(wrong) >= 3 and len(lucky) <= 1 and C["_call"] == ["Hartwell Common"],
-          "%d shortcuts, %d distinct wrong sets %s; reaching the set with every megawatt figure wrong: %s"
+    check("routes", len(wrong) >= 4 and not lucky and C["_call"] == ["Hartwell Common"],
+          "%d shortcuts, %d distinct wrong sets %s; reaching the golden's set: %s"
           % (len(eff["routes"]) - 1, len(wrong), sorted(wrong), lucky or "none"))
-    # the one-fact test, computed: the careful pass handed the available share
-    hint = []
-    for p in Z:
-        d = Z[p]["delivered"]
-        pk = Z[p]["before"] - d
-        hint.append((p, abs(pk - Z[p]["peak"]) <= 0.3))
-    check("one-fact test", sum(1 for _, ok in hint if not ok) >= 1 and F["careful_call"] != CALL,
-          "told the available share, a pass that still takes the credit off the 17:30 to 18:00 peak with the fit's own range "
-          "misreads Ashcombe Road's peak, every one-in-ten level and Fenwick Street's call: it rescues the megawatts delivered alone")
+    # the one-fact test, computed: the careful pass handed the available share (it still takes the credit off the
+    # 17:30 to 18:00 peak and carries the record's megawatts of scatter unchanged)
+    told = F["routes"]["the available share right, the credit off the 17:30 to 18:00 peak, the record's megawatts of scatter unchanged"]
+    pk_told = {p: Z[p]["before"] - Z[p]["delivered"] for p in Z}
+    off_band = [p for p in Z if not (F["bands"]["peak"][p][0] <= pk_told[p] <= F["bands"]["peak"][p][1])]
+    hints = {h["order"]: h["rescues"] for h in eff["hints"]}
+    check("one-fact test", sorted(told) != sorted(CALL) and off_band == ["Ashcombe Road"] and hints[1] == ["R2a", "R2"]
+          and max(len(v) for v in hints.values()) <= len(eff["results"]) / 3.0,
+          "told the available share, a pass that still takes the credit off the 17:30 to 18:00 peak with the record's megawatts "
+          "of scatter reads Ashcombe Road's peak at %.1f MW for %.1f and reinforces %s: the sentence rescues the share and the "
+          "megawatts delivered, %d of %d results" % (pk_told["Ashcombe Road"], Z["Ashcombe Road"]["peak"], " and ".join(told),
+                                                      len(hints[1]), len(eff["results"])))
 
     # ------------------------------------------------------------------------------------------------ Layer 1 neutrality
     rawd = pd.read_csv(os.path.join(TARGET, PK.F_SCADA), dtype={"quality": str})
@@ -286,8 +344,13 @@ def main():
           "%d rows of the December 2024 extract re-sent; each half-hour kept once" % dup)
     sw = X["switching"]
     tsw = sorted([s for s in T["switching"] if s["mw_at_start"] > 0], key=lambda s: (s["start"], s["nop"]))
-    check("L1 switching log", len(sw) == len(tsw) and all(abs(a - b["mw_at_start"]) < 0.006 for a, b in zip(sw["mw"], tsw)),
-          "%d logged transfers pair up (closed, then opened to normal), megawatts as logged" % len(sw))
+    made = {(s["nop"], s["start"].date()): s for s in tsw}
+    logged = {(r.nop, r.start.date()): r for r in sw.itertuples()}
+    late = max(abs((r.start.to_pydatetime() - made[k]["start"]).total_seconds()) for k, r in logged.items() if k in made) / 60.0
+    check("L1 switching log", len(sw) == len(tsw) and set(made) == set(logged) and late <= 8.0 and
+          all(abs(r.mw - made[k]["mw_at_start"]) < 0.006 for k, r in logged.items()),
+          "%d logged transfers pair up (closed, then opened to normal), megawatts as logged, each operation logged within "
+          "%d minutes of the switching" % (len(sw), int(round(late))))
     te_ = T["events"]
     done = [e for e in te_ if e["status"] == "Completed"]
     check("L1 dispatch log", int((X["events"]["status"] == "Completed").sum()) == len(done),

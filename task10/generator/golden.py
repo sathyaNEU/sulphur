@@ -48,6 +48,18 @@ def r1(v):
     return 0.0 if v == 0 else v
 
 
+PALETTE = ("A6A6A6", "5B9BD5", "1F3864", "C00000")   # before, expected, nine days in ten, firm capacity
+
+
+def _formats(ws, fmts, first=2):
+    """Number formats by column letter, from row `first` down."""
+    for col, fmt in fmts.items():
+        for cell in ws[col][first - 1:]:
+            if isinstance(cell.value, (int, float)):
+                cell.number_format = fmt
+                cell.alignment = Alignment(horizontal="right")
+
+
 def write_workbook(G, F, R, path):
     wb = openpyxl.Workbook()
     ws = wb.active
@@ -63,21 +75,33 @@ def write_workbook(G, F, R, path):
                    r1(z["delivered"]), z["peak_hh"], r1(z["off_peak"]), r1(z["peak"]), r1(z["p90"]), z["firm"],
                    "Yes" if z["over"] else "No", r1(z["over_by"]) if z["over"] else None])
     n = len(G["zones"])
+    _formats(ws, {"D": "0.0", "E": "0.0", "F": "0.00", "G": "0.0", "I": "0.0", "J": "0.0", "K": "0.0", "L": "0.0", "N": "0.0"})
     ws.cell(row=n + 3, column=1, value="Design day: a working weekday at a daily mean of minus 3.0 C at Halverton weather "
                                        "station, the 2027/28 contracts scheduled in full (WPN-NP-G-014, issue 4).")
     ws.cell(row=n + 4, column=1, value="Reinforce where the day's highest half-hour would exceed firm capacity on more than "
-                                       "one design day in ten.")
+                                       "one design day in ten (guideline 7).")
+    ws.cell(row=n + 6, column=1, value="Megawatts are rounded to one decimal after the arithmetic, so a figure can differ by 0.1 "
+                                       "from the difference of its rounded parts.")
+    ws.cell(row=n + 5, column=1, value="Demand before flexibility from the 2025/26 working weekdays outside 24 December to "
+                                       "2 January, scheduled days and days with a logged transfer at the primary: %s days."
+                                       % ", ".join(str(z["n_base_days"]) for z in G["zones"]))
     ch = BarChart()
     ch.type = "col"
     ch.grouping = "clustered"
-    ch.title = "Design-day peak against firm capacity, winter 2027/28 (MW)"
-    ch.y_axis.title = "MW"
+    ch.title = "%s exceed firm capacity on more than one design day in ten" % _join(z["primary"] for z in G["zones"] if z["over"])
+    ch.y_axis.title = "MW, winter 2027/28 design day"
+    ch.y_axis.number_format = "0"
+    ch.y_axis.scaling.min = 0
     cats = Reference(ws, min_col=2, min_row=2, max_row=n + 1)
     for col in (5, 10, 11, 12):
         ch.add_data(Reference(ws, min_col=col, min_row=1, max_row=n + 1), titles_from_data=True)
     ch.set_categories(cats)
+    for ser, colour in zip(ch.series, PALETTE):
+        ser.graphicalProperties.solidFill = colour
+        ser.graphicalProperties.line.solidFill = colour
+    ch.legend.position = "b"
     ch.height, ch.width = 9.5, 22
-    ws.add_chart(ch, "A%d" % (n + 7))
+    ws.add_chart(ch, "A%d" % (n + 9))
 
     br = wb.create_sheet("Bridge")
     _head(br, ["Constraint managed zone", "Contracted 2027/28 (MW)", "Not available on the design day (MW)",
@@ -85,27 +109,32 @@ def write_workbook(G, F, R, path):
                "Taken off the day's peak (MW)"], [24, 14, 16, 14, 18, 14])
     tot = [0.0] * 5
     for z in G["zones"]:
-        row = [z["award"], r1(z["not_available"]), r1(z["delivered"]), r1(z["comeback_loss"]), r1(z["off_peak"])]
+        na = F["r8_bridge"]["%s, not available" % z["primary"]]
+        lost = F["r8_bridge"]["%s, lost as load comes back" % z["primary"]]
+        row = [z["award"], na, r1(z["delivered"]), lost, r1(r1(z["delivered"]) - lost)]
         br.append([z["zone"]] + row)
         tot = [a + b for a, b in zip(tot, row)]
     br.append(["Four zones"] + [r1(v) for v in tot])
+    for c in br[br.max_row]:
+        c.font = HEAD_FONT
+    _formats(br, {"B": "0.0", "C": "0.0", "D": "0.0", "E": "0.0", "F": "0.0"})
 
     bt = wb.create_sheet("Backtest")
     b = G["backtest_all"]
     _head(bt, ["Service date", "Constraint managed zone", "Daily mean temperature (C)", "Scheduled (MW)", "Contracted (MW)",
-               "Predicted from 2023/24 and 2024/25 (MW)", "Range, low (MW)", "Range, high (MW)", "Delivered (MW)",
-               "Inside the range"], [12, 24, 12, 11, 11, 16, 11, 11, 11, 10])
+               "Predicted from 2023/24 and 2024/25 (MW)", "Delivered 17:30 to 18:00 (MW)", "Miss (MW)"],
+          [12, 24, 12, 11, 11, 16, 14, 10])
     rows = []
     for p in sorted(G["backtest"]):
         rows += G["backtest"][p]["rows"]
     for r in sorted(rows, key=lambda x: (x["date"], ZL[x["zone"]])):
         bt.append([r["date"].strftime("%d/%m/%Y"), ZL[r["zone"]], round(r["T"], 1), r["scheduled"], r["contract"],
-                   round(r["predicted"], 2), round(r["low"], 2), round(r["high"], 2), round(r["delivered"], 2),
-                   "Yes" if r["inside"] else "No"])
+                   round(r["predicted"], 2), round(r["delivered"], 2), round(abs(r["predicted"] - r["delivered"]), 2)])
+    _formats(bt, {"C": "0.0", "D": "0.0", "E": "0.0", "F": "0.00", "G": "0.00", "H": "0.00"})
     k = len(rows) + 3
-    bt.cell(row=k, column=1, value="Winter 2025/26, %d completed events: mean absolute error %.2f MW." % (b["n"], b["mae"]))
-    bt.cell(row=k + 1, column=1, value="Days below 0 C (the rows above): %d of %d events inside the 80 per cent range."
-                                       % (b["n_inside"], b["n_cold"]))
+    bt.cell(row=k, column=1, value="Winter 2025/26, %d completed events, each predicted from winters 2023/24 and 2024/25 alone: "
+                                   "the average miss is %.2f MW." % (b["n"], b["mae"]))
+    bt.auto_filter.ref = "A1:H%d" % (len(rows) + 1)
 
     cd = wb.create_sheet("Cold days")
     _head(cd, ["Service date", "Constraint managed zone", "Daily mean temperature (C)", "Scheduled (MW)", "Contracted (MW)",
@@ -113,6 +142,8 @@ def write_workbook(G, F, R, path):
     for r in G["cold_rows"]:
         cd.append([r["date"].strftime("%d/%m/%Y"), r["zone"], round(r["T"], 1), r["scheduled"], r["contract"],
                    round(r["delivered"], 2), round(r["share"], 3)])
+
+    _formats(cd, {"C": "0.0", "D": "0.0", "E": "0.0", "F": "0.00", "G": "0.000"})
 
     rt = wb.create_sheet("Routes")
     _head(rt, ["Route", "Zone", "Delivered 17:30 to 18:00 (MW)", "Taken off the day's peak (MW)",
@@ -122,6 +153,7 @@ def write_workbook(G, F, R, path):
             t = tab[z["primary"]]
             rt.append([name, z["primary"], r1(t["delivered"]), r1(t["off_peak"]), r1(t["peak"]),
                        r1(t["one_in_ten"]) if t["one_in_ten"] is not None else None, z["firm"], "Yes" if t["over"] else "No"])
+    _formats(rt, {"C": "0.0", "D": "0.0", "E": "0.0", "F": "0.0", "G": "0.0"})
     wb.save(path)
     PP.normalize_ooxml(path, "Marion Todd", "Marion Todd", _z(BOOK_CREATED), _z(BOOK_SAVED), excel=True, company=ORG)
 
@@ -179,16 +211,15 @@ def write_deck(G, F, path):
         "Commit reinforcement now at %s." % _join(z["primary"] for z in commit),
         "%s within firm capacity on nine design days in ten with the flexibility contracted for 2027/28." %
         (_join(z["primary"] for z in hold) + (" stays" if len(hold) == 1 else " stay")),
-        "With the contracts called in full on a minus 3 C day the peaks come to %s."
+        "With the contracts called in full on a minus 3 C day, nine days in ten the peaks stay under %s."
         % _join("%.1f MW at %s (firm %.1f)" % (r1(z["p90"]), z["primary"], z["firm"]) for z in commit),
-        "The providers have about %s of their contracted megawatts available on such an evening, and at Ashcombe Road "
-        "the load that comes back after the window sets the day's peak."
-        % " and ".join("%.2f" % f["share"] for _, f in sorted(G["providers"].items())),
+        "On such an evening %s; at Ashcombe Road the load that comes back after the window sets the day's peak."
+        % _join("%s has about %.2f of its contracted megawatts available" % (p.replace(" Ltd", ""), f["share"])
+                for p, f in sorted(G["providers"].items())),
         "DSO capital expenditure review, December 2026. Prepared by the Halverton DSO planning team."], size=18)
 
     s = prs.slides.add_slide(blank)
-    _title(s, "%s stay over firm capacity with their flexibility (MW, 2027/28 design day)"
-           % _join(z["primary"] for z in commit), 22)
+    _title(s, "%s go over firm capacity on more than one design day in ten" % _join(z["primary"] for z in commit), 22)
     cd = CategoryChartData()
     cd.categories = [z["primary"] for z in G["zones"]]
     cd.add_series("Before flexibility", [r1(z["before"]) for z in G["zones"]])
@@ -197,10 +228,17 @@ def write_deck(G, F, path):
     cd.add_series("Firm capacity", [z["firm"] for z in G["zones"]])
     gf = s.shapes.add_chart(XL_CHART_TYPE.COLUMN_CLUSTERED, Emu(700000), Emu(1100000), Emu(W_ - 1400000), Emu(5200000), cd)
     ch = gf.chart
+    ch.value_axis.has_title = True
+    ch.value_axis.axis_title.text_frame.text = "MW, winter 2027/28 design day"
+    ch.value_axis.axis_title.text_frame.paragraphs[0].font.size = Pt(11)
+    ch.value_axis.tick_labels.number_format = "0"
+    ch.value_axis.tick_labels.number_format_is_linked = False
     ch.has_legend = True
     ch.legend.position = XL_LEGEND_POSITION.BOTTOM
     ch.legend.include_in_layout = False
-    for ser in ch.plots[0].series:
+    for ser, colour in zip(ch.plots[0].series, PALETTE):
+        ser.format.fill.solid()
+        ser.format.fill.fore_color.rgb = RGBColor.from_string(colour)
         ser.data_labels.show_value = True
         ser.data_labels.number_format = "0.0"
         ser.data_labels.number_format_is_linked = False
@@ -217,26 +255,29 @@ def write_deck(G, F, path):
         else:
             t += ", all of it off the peak"
         lines.append(t + ".")
-    lines.append("On the cold days every call outran what the providers had: delivered megawatts tracked the megawatts "
-                 "contracted, not the megawatts scheduled.")
+    lines.append("On the cold days nearly every call came in short of the megawatts scheduled: what was delivered tracked "
+                 "the megawatts contracted, not the megawatts scheduled.")
     _text(s, 600000, 1150000, W_ - 1200000, 5200000, lines, size=17)
 
     s = prs.slides.add_slide(blank)
-    _title(s, "How sure: expected peaks, the one-day-in-ten level and last winter's check", 22)
+    pivot = [z for z in commit if z["peak"] <= z["firm"]]
+    _title(s, ("%s is inside firm capacity on the expected day but over it on more than one design day in ten"
+               % _join(z["primary"] for z in pivot)) if pivot else "Expected peaks and the nine-days-in-ten level", 22)
     lines = ["%s: expected %.1f MW, nine days in ten under %.1f MW, firm %.1f MW." % (z["primary"], r1(z["peak"]), r1(z["p90"]),
                                                                                  z["firm"]) for z in G["zones"]]
-    lines.append("Fitted on winters 2023/24 and 2024/25, the same approach puts winter 2025/26's %d events within %.2f MW on "
-                 "average, and %d of its %d events on days below 0 C inside the 80 per cent range." % (b["n"], b["mae"], b["n_inside"], b["n_cold"]))
+    lines.append("Fitted on winters 2023/24 and 2024/25 alone, the same approach is out by %.2f MW on average on winter "
+                 "2025/26's events." % b["mae"])
     _text(s, 600000, 1150000, W_ - 1200000, 5200000, lines, size=17)
 
     s = prs.slides.add_slide(blank)
-    _title(s, "Recommendation and next steps", 22)
+    _title(s, "Commit %s reinforcements at this review; keep %s on its flexibility contract"
+           % ({1: "one", 2: "two", 3: "three", 4: "four"}.get(len(commit), str(len(commit))), _join(z["primary"] for z in hold)), 22)
     _text(s, 600000, 1150000, W_ - 1200000, 5200000, [
         "Commit the reinforcement of %s at this review, for energisation before November 2027." % _join(z["primary"] for z in commit),
         "Keep the 2027/28 flexibility contract at %s; no reinforcement there this year." % _join(z["primary"] for z in hold),
-        "Ashcombe Road: megawatts beyond about %.0f delivered move the peak to the evening after the window; ask Corvane Flex "
-        "for a staggered release before the next tender." % F["ashcombe_limit"],
-        "Re-run the provider figures after winter 2026/27, when the first calls of the larger contracts are on record."],
+        "Ashcombe Road: beyond about %.0f MW delivered, the day's peak moves to the half-hour after the window; ask Corvane "
+        "Flex for a staggered release before the next tender." % F["ashcombe_limit"],
+        "Re-run the provider figures after winter 2026/27, with another winter of calls on record."],
           size=18)
     prs.save(path)
     PP.normalize_pptx(path, "Marion Todd", "Marion Todd", _z(DECK_CREATED), _z(DECK_SAVED),

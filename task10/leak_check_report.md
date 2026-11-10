@@ -1,34 +1,37 @@
 # leak check, task10
 
-**Verdict: REVIEW.** 12 files read, 50 golden figures and 10 candidate names taken from submission.md, 25 stump terms taken from the design note.
+**Verdict: REVIEW.** 12 files read, 65 golden figures and 9 candidate names taken from submission.md, 25 stump terms taken from the design note.
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: architecture, megawatts, golden, record, ashcombe, scheduled, guideline, forecast, contracted, delivered, carried, street, measured, primaries, fenwick, prompt, export, programme, repairs, window, missed, october, carries, points, provider
+Stump terms swept: megawatts, architecture, golden, record, ashcombe, scheduled, carried, guideline, street, window, contracted, delivered, fenwick, missed, forecast, half-hour, provider, carries, spread, megawatt, prompt, export, programme, repairs, half-hours
 
-## 3 answer figures in the pack (REVIEW 11)
-- **REVIEW** `capacity_assessment_guideline_2026.pdf`: golden figure 23.0 appears: ...Firm capacity (MW) Ashcombe Road PS40617 20 + 20 23.0 Charlecote Way PS41108 20 + 20 22.5 Dunmore Stree...
+## 3 answer figures in the pack (REVIEW 14)
+- **REVIEW** `capacity_assessment_guideline_2026.pdf`: golden figure 21.0 appears: ...41108 20 + 20 22.5 Dunmore Street PS40852 20 + 23 21.0 Fenwick Street PS41474 27 + 27 30.5 Hartwell Comm...
+- **REVIEW** `capacity_assessment_guideline_2026.pdf`: golden figure 19.5 appears: ...1236 15 + 16 17.8 Kestwick Fields PS40508 17 + 17 19.5 Ravenhurst Park PS40391 15 + 15 17.5 Tollbrook La...
 - **REVIEW** `capacity_assessment_guideline_2026.pdf`: golden figure 17.8 appears: ...1474 27 + 27 30.5 Hartwell Common PS41236 15 + 16 17.8 Kestwick Fields PS40508 17 + 17 19.5 Ravenhurst P...
+- **REVIEW** `capacity_assessment_guideline_2026.pdf`: golden figure 23.0 appears: ...Firm capacity (MW) Ashcombe Road PS40617 20 + 20 23.0 Charlecote Way PS41108 20 + 20 22.5 Dunmore Stree...
 - **REVIEW** `capacity_assessment_guideline_2026.pdf`: golden figure 30.5 appears: ...40852 20 + 23 21.0 Fenwick Street PS41474 27 + 27 30.5 Hartwell Common PS41236 15 + 16 17.8 Kestwick Fie...
 - **REVIEW** `capacity_assessment_guideline_2026.pdf`: golden figure 22.5 appears: ...40617 20 + 20 23.0 Charlecote Way PS41108 20 + 20 22.5 Dunmore Street PS40852 20 + 23 21.0 Fenwick Stree...
+- **REVIEW** `flexibility_contract_awards_2027-28.pdf`: golden figure 21.0 appears: ...Ashcombe Road CMZ Ashcombe Road Corvane Flex Ltd 21.0 6.40 312 Charlecote Way CMZ Charlecote Way Quillo...
 - **REVIEW** `flexibility_contract_awards_2027-28.pdf`: golden figure 10.0 appears: ...t CMZ Fenwick Street Quillon Energy Services Ltd 10.0 5.70 289 Hartwell Common CMZ Hartwell Common Cor...
-- **REVIEW** `flexibility_contract_awards_2027-28.pdf`: golden figure 16.0 appears: ...Ashcombe Road CMZ Ashcombe Road Corvane Flex Ltd 16.0 6.40 312 Charlecote Way CMZ Charlecote Way Quillo...
-- **REVIEW** `flexibility_contract_awards_2027-28.pdf`: golden figure 3.5 appears: ...ntract period on the contracted megawatts for the 3.5 hours of the service window. Utilisation is paid...
 - **REVIEW** `flexibility_contract_awards_2027-28.pdf`: golden figure 4.0 appears: ...ecote Way CMZ Quillon Energy Services Ltd 2.5 3.0 4.0 Fenwick Street CMZ Quillon Energy Services Ltd 2....
+- **REVIEW** `flexibility_contract_awards_2027-28.pdf`: golden figure 4.5 appears: ...ck Street CMZ Quillon Energy Services Ltd 2.5 3.5 4.5 Hartwell Common CMZ Corvane Flex Ltd 2.0 2.5 3.0...
+- **REVIEW** `flexibility_contract_awards_2027-28.pdf`: golden figure 3.5 appears: ...ntract period on the contracted megawatts for the 3.5 hours of the service window. Utilisation is paid...
 - **REVIEW** `flexibility_contract_awards_2027-28.pdf`: golden figure 7.5 appears: ...y CMZ Charlecote Way Quillon Energy Services Ltd 7.5 5.85 296 Fenwick Street CMZ Fenwick Street Quillo...
 - **REVIEW** `capacity_assessment_guideline_2026.pdf`: carries 14 of 17 distinctive words of the committed call: 'Commit reinforcement at Ashcombe Road, Fenwick Street and Hartwell Common for winter 2027/28; Charlecote Way stays withi'
 - **REVIEW** `flexibility_contract_awards_2027-28.pdf`: carries 11 of 17 distinctive words of the committed call: 'Commit reinforcement at Ashcombe Road, Fenwick Street and Hartwell Common for winter 2027/28; Charlecote Way stays withi'
 
 ## 4 design-note vocabulary (REVIEW 2)
-- **REVIEW** `capacity_assessment_guideline_2026.pdf`: 13 of 25 stump-paragraph terms appear (megawatts, ashcombe, scheduled, guideline, forecast, contracted); read whether the document names the move
-- **REVIEW** `flexibility_contract_awards_2027-28.pdf`: 11 of 25 stump-paragraph terms appear (megawatts, ashcombe, scheduled, forecast, contracted, street); read whether the document names the move
+- **REVIEW** `capacity_assessment_guideline_2026.pdf`: 14 of 25 stump-paragraph terms appear (megawatts, ashcombe, scheduled, guideline, street, window); read whether the document names the move
+- **REVIEW** `flexibility_contract_awards_2027-28.pdf`: 10 of 25 stump-paragraph terms appear (megawatts, ashcombe, scheduled, street, window, contracted); read whether the document names the move
 
 ## 6 ranking artifacts (REVIEW 5)
-- **REVIEW** `capacity_assessment_guideline_2026.pdf`: names 4 of 10 answer-set candidates beside numbers; confirm it does not rank them on the decision question
-- **REVIEW** `flexibility_contract_awards_2027-28.pdf`: names 8 of 10 answer-set candidates beside numbers; confirm it does not rank them on the decision question
-- **REVIEW** `flexibility_events_2023-2026.csv`: names 8 of 10 answer-set candidates beside numbers; confirm it does not rank them on the decision question
-- **REVIEW** `primary_substation_register.xlsx`: names 4 of 10 answer-set candidates beside numbers; confirm it does not rank them on the decision question
-- **REVIEW** `primary_transformer_condition_2026.xlsx`: names 4 of 10 answer-set candidates beside numbers; confirm it does not rank them on the decision question
+- **REVIEW** `capacity_assessment_guideline_2026.pdf`: names 4 of 9 answer-set candidates beside numbers; confirm it does not rank them on the decision question
+- **REVIEW** `flexibility_contract_awards_2027-28.pdf`: names 8 of 9 answer-set candidates beside numbers; confirm it does not rank them on the decision question
+- **REVIEW** `flexibility_events_2023-2026.csv`: names 8 of 9 answer-set candidates beside numbers; confirm it does not rank them on the decision question
+- **REVIEW** `primary_substation_register.xlsx`: names 4 of 9 answer-set candidates beside numbers; confirm it does not rank them on the decision question
+- **REVIEW** `primary_transformer_condition_2026.xlsx`: names 4 of 9 answer-set candidates beside numbers; confirm it does not rank them on the decision question
 
 ## 9 dates after the setting (INFO 1)
 - **INFO** `-`: no --asof given, sweep skipped (pass the fiction's as-of date)
@@ -55,74 +58,53 @@ Stump terms swept: architecture, megawatts, golden, record, ashcombe, scheduled,
 
 ## Solver's-eye read
 
-One isolated reader (general-purpose, sonnet, medium effort), 2026-11-08, on fresh copies of prompt.txt and target/
-only; it read the pack for leaks and did not solve the task.
+Architecture 6. One isolated reader each time (general-purpose, sonnet, medium effort) on fresh copies of prompt.txt
+and target/ only; it read the pack for leaks and did not solve the task. Two reads on 2026-11-10: the first on the
+stage 3 cut (target.zip a934f8e7), the second after the stage 4 fix pass changed the award notice and the prompt
+(target.zip 9ba1c5b9; the final cut 7ce57054 differs from it only in the minute of each switching-log entry, which no
+figure reads). The second read's answers, in its own words where quoted:
 
-1. Decisive step: no sentence names it. Closest is guideline section 6 ("Flexibility contracted for the winter
-   assessed is credited at the reduction in the primary's demand that its provider will deliver in the half-hours
-   ending 17:30 and 18:00 on the design day, for each megawatt scheduled ..."), which fixes what is credited.
-2. No file ranks or scores the candidates on the prompt's question (Appendix A gives firm capacity only; the award
-   notice gives contracted MW only; nothing gives a design-day demand or a before or after figure).
-3. capacity_assessment_guideline_2026.pdf "reads as a method sheet, but it is plausible as a governing document".
-4. Nothing reads as the answer; the award notice's four zone rows and contracted MW are context.
-5. Guideline 6 read literally: credit each primary with the delivered reduction per MW scheduled in the 17:30 and
-   18:00 half-hours on the design day times the 2027/28 MW, and nothing else; guideline 7 commits where demand after
-   the credit exceeds firm; guideline 3 and 4 fix the population. "s.6 fixes what to credit but not how to estimate
-   the delivery per MW. Only the demand data and events can give that."
-6. "The main answer is decided by an analytical choice: estimating delivery per scheduled MW from event history
-   against a counterfactual", with a procedure-following component for the WHAT; no planted-defect sentence.
+1. Method-telling text: "the capacity assessment guideline ... states most of the method, and the prompt itself names
+   none." It quotes guideline 2 (the design day and the GMT-day mean), 3 (the 2025/26 working weekdays outside
+   Christmas, the scheduled days and the logged transfer days), 4 (growth, the qualifying connections, every half-hour
+   in the peak's proportion), 5 (firm capacity), 6 ("what its provider will deliver on the design day with the megawatts
+   contracted ... scheduled in full", "the half-hours ending 17:30 and 18:00") and 7 ("more than one design day in
+   ten"), and the award notice's scheduling rule. "The open parts are how to turn contracted MW into delivered MW, the
+   spread behind 'nine design days in ten', and the back-test." "The prompt itself is clean."
+2. "No file ranks or scores the candidates on the question."
+3. "No file is made only for the analyst." The guideline and the award notice are in-world governing documents; the
+   charging statement, the interruptions workbook and the condition workbook read as plausible distractors.
+4. "Nothing reads as the answer." The award notice's contracted megawatts and Appendix A's firm capacities are inputs;
+   21.0 MW at Ashcombe Road against 7.5 in 2025/26 "is a striking jump. It is a contract fact and not a design-day
+   number."
+5. Filed sentences read literally: guideline 6 fixes the credited half-hours and the day's highest half-hour and "does
+   not say how the delivered MW relates to contracted MW"; guideline 3 fixes the SCADA total and the exclusions, where
+   "a scheduled day could be read as including Cancelled and Superseded rows ... a possible fork"; guideline 4 fixes
+   the register filter and the dates; guideline 2 the GMT day; the award notice the half-megawatt steps.
+6. "The pattern that makes most of it routine is the guideline's s3 to s7 ... What stays analytical is the
+   contracted-MW-to-delivered-MW conversion and the back-test." Ask by ask: the demand before flexibility "is largely
+   prescribed by s3, so it is a rule procedure with data cleaning"; the megawatts delivered "is the unspecified part
+   ... It turns on analysis and is the most open step"; the megawatts off the peak "partly rule following (s4
+   scaling), partly analysis"; the expected peak and the nine-days-in-ten level "Analysis"; the backtest "Analysis
+   with no filed method".
+7. Realism: every workbook's zip entries are stamped 1980-01-01; the PDFs are Writer and LibreOffice 7.6 with dates
+   that match; the switching log "is very regular: all Closed/Opened pairs, 15-minute steps"; the award notice's
+   contract history "is monotone in every zone ... a mild too-clean pattern"; no em dashes, no placeholder strings, file
+   names describe data.
 
-Sweep items: A harmless (contracted MW and zone names are the award notice's own content); B harmless, no ranking
-(firm capacity, contracted MW, scheduled MW, ratings and health indices); C harmless (the prompt names outputs and
-units, no method; "per megawatt scheduled" is the unit definition).
+The first read answered the same way on questions 1 to 6 and added, on question 7, that five workbooks were created
+before their latest content.
 
-Realism tells reported, and their disposition: the nine primaries' names ran alphabetically with the world's keys;
-feeder street names repeated across primaries; every zone's contract grew 0.5 MW a winter; growth references carried
-a year after their acceptance (all four fixed in the generator, every graded figure unchanged in its bin); provider
-names typed three ways and one letterhead on the three PDFs (kept: a control room's log and one organisation's
-documents). Rulings in DESIGN_NOTE.md, Leak rulings.
+Verdict on each line (the design note's Leak rulings carry the reasons):
 
-### Re-read on the final cut (after the stage 4 fixes)
-
-The same isolated reader brief, on fresh copies of the rebuilt prompt.txt and target/.
-
-1. Points at guideline section 6 and the guideline's sections 2 to 7 as the stated pipeline ("hands over the method").
-2. No file ranks the candidates; section 7 states the rule and computes nothing.
-3. The guideline (a procedure document); the award notice's previous-winters table.
-4. Nothing reads as a result.
-5. Guideline 3, 4 and 6 read literally fix the before-demand, growth and credit; "The literal text does not say how
-   delivery per MW is estimated from the events and demand data ... nor how the temperature correction is fitted. Those
-   are left to the analyst."
-6. "Mostly following a stated procedure in the guideline s2-s7. The open part is analytical (estimating delivery per
-   scheduled MW from history, the temperature correction ...)."
-
-Sweep items: A harmless on numbers (inputs, not results), the guideline flagged as method-heavy; B none ranks; C the
-prompt's "per megawatt scheduled" mirrors guideline 6's filed definition, a mild cue.
-
-Realism tells: 16:00 to 19:30 windows and few scheduled-MW values; contracted MW in 0.5 MW steps; codes PS40xxx, feeder
-IDs, LCG references; "Plot 4, X Way" repeated in the growth register; health indices not linked to age in the condition
-workbook. Rulings in DESIGN_NOTE.md, Leak rulings.
-
-### Rubric repair read (2026-11-09, on target.zip 203d2bf4)
-One isolated reader (general-purpose, sonnet, medium effort) on fresh copies of prompt.txt and target/ only, after the
-asks were re-sited and the guideline's section 1 lead-time sentence restated; it read for leaks and did not solve.
-1. Decisive step: none named. Nearest are guideline sections 3 and 6, which fix the before-demand's days and the
-   credit's unit and window "but not how to estimate delivery" from the dispatch log and the half-hourly demand.
-2. No file ranks or scores the candidates: Appendix A gives firm capacity only, the award notice contracted MW only.
-3. capacity_assessment_guideline_2026.pdf (design condition, procedure, firm capacity), the register's DFES sheet and
-   the award notice: the governing standard and its inputs, read as such.
-4. None: Appendix A's firm capacities and the awards' megawatts are inputs; no demand, credit or exceedance appears.
-5. Guideline sections 3, 4, 6 and 7 read literally give the golden's WHAT (the 2025/26 correction outside Christmas and
-   the scheduled days, DFES compounded, the accepted connections in full, the delivered reduction per MW scheduled in
-   the two credited half-hours on the 2027/28 MW, compared with Appendix A); "the delivery per scheduled MW is not
-   given ... the method of estimating it is left open".
-6. Mixed: the guideline's procedure for the WHAT, and "an analytical judgment on how much a provider really delivers
-   per scheduled MW (estimated from past events against a counterfactual)"; the register, SCADA rename, weather
-   versions and revised instructions read as texture.
-Items: a harmless (the stated threshold); b harmless, the shared nouns are the subject, section 6's half-hours and
-"per megawatt scheduled" are the WHAT, not the estimator; c no file ranks the candidates; d harmless (style).
-Realism tells: the prompt's two colder temperatures beside a guideline that knows only minus 3.0 C read task-driven
-(the ask now gives its reason, "should that winter bring days colder than the design day"); guideline issue 4's
-document-control row ("Flexibility credit restated per megawatt scheduled"), the award notice's "on the same terms"
-line, one weather station, PS4xxxx codes and the provider name variants were all read before and kept (rulings in
-DESIGN_NOTE.md, Leak rulings). The prompt names no method, comparison, adjustment or step.
+- Questions 1 and 5: harmless, the WHAT of each result filed as designed; the cancelled-day option is SF20 (same call,
+  every figure inside its band, asserted).
+- Questions 2, 3 and 4: clean.
+- Question 6: one earned result (the demand before flexibility) and the criterion, not most of the chain; the megawatts
+  delivered, the megawatts off the peak, the nine-days-in-ten level and the backtest stay analysis by the reader's own
+  account.
+- Question 7: the 1980 entry stamps are the application's own (reduce-house-fixes H1); workbooks created before their
+  content are living registers, each last saved after its latest record (checked); the switching log's quarter-hours
+  FIXED in the generator (the minute as logged, figures.json and submission.md byte-identical before and after); the
+  contract history's half-megawatt lots left as the tender's own.
+- Every REVIEW line of sweeps 3, 4 and 6: inputs and the service's own terms, ruled in the design note.

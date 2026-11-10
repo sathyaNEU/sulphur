@@ -375,22 +375,25 @@ def switching_rows(T, nop_rows):
     section across a normally-open point logged when it is made and again when the network is put back to normal,
     with the load the control engineer read off the feeder ammeters at the time."""
     rng = np.random.default_rng([W.SEED, 83])
+    clock = np.random.default_rng([W.SEED, 84])    # the minute the engineer logged each operation, a few either side
     side = {r[0]: {r[2]: r[1], r[4]: r[3]} for r in nop_rows}     # open point -> primary code -> feeder ID
     out = []
     n = 4100
     for s in T["switching"]:
         if s["mw_at_start"] <= 0:
             continue
+        t0 = s["start"] + dt.timedelta(minutes=int(clock.integers(-8, 9)))
+        t1 = s["end"] + dt.timedelta(minutes=int(clock.integers(-8, 9)))
         frm, to = W.BY[s["frm"]], W.BY[s["to"]]
         f_from, f_to = side[s["nop"]][frm["code"]], side[s["nop"]][to["code"]]
         eng = ENGINEERS[int(rng.integers(0, len(ENGINEERS)))]
         n += int(rng.integers(3, 40))
         amps = int(round(s["mw_at_start"] * 1000 / (1.732 * 11 * 0.97)))
-        out.append(["SW-%05d" % n, uk_label(s["start"]), eng, s["nop"], "Closed",
+        out.append(["SW-%05d" % n, uk_label(t0), eng, s["nop"], "Closed",
                     f_from, frm["code"], f_to, to["code"], "%.2f" % s["mw_at_start"], str(amps), s["reason"]])
         eng2 = ENGINEERS[int(rng.integers(0, len(ENGINEERS)))]
         n += int(rng.integers(1, 30))
-        out.append(["SW-%05d" % n, uk_label(s["end"]), eng2, s["nop"], "Opened (normal)",
+        out.append(["SW-%05d" % n, uk_label(t1), eng2, s["nop"], "Opened (normal)",
                     f_from, frm["code"], f_to, to["code"], "", "", "Network restored to normal"])
     return out
 

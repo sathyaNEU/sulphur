@@ -27,10 +27,36 @@ TARGET = os.path.join(TASK, "target")
 GOLDEN = os.path.join(TASK, "golden")
 
 
-VARIANTS = [("days at or below 0 C", dict(below=0.0)), ("days at or below minus 1.5 C", dict(below=-1.5)),
-            ("days at or below minus 2 C", dict(below=-2.0)), ("a curved line", dict(form="quadratic")),
-            ("zone by zone", dict(pooled=False)), ("the scatter as measured", dict(net_noise=False)),
-            ("heating base 14 C", dict(base=14.0)), ("heating base 17 C", dict(base=17.0))]
+# Every reasonable variant of the golden's own choices, one at a time, by the fork it answers (the design note's
+# semantic fork table): each is run on the pack and every stated band is the range they span.
+VARIANTS = [
+    # SF9, the cold days
+    ("days at or below 0 C", dict(below=0.0)), ("days at or below minus 1.5 C", dict(below=-1.5)),
+    ("days at or below minus 2 C", dict(below=-2.0)),
+    # SF10, the line through the share
+    ("a curved line", dict(form="quadratic")),
+    # SF11, provider or zone
+    ("zone by zone", dict(pooled=False)),
+    # SF12, the scatter
+    ("the scatter as measured", dict(net_noise=False)),
+    # SF13, the heating base
+    ("heating base 14 C", dict(base=14.0)), ("heating base 17 C", dict(base=17.0)),
+    # SF18, the baseline an event's megawatts are measured against
+    ("a heating slope each winter", dict(baseline="by_winter")), ("weekday levels", dict(baseline="weekday")),
+    ("the baseline scaled to the day's own level before the window", dict(baseline="same_day")),
+    # SF19, a call that was met
+    ("the calls that fell short alone", dict(estimator="short", fit_below=E.COLD)),
+    ("the calls that fell short alone, every day", dict(estimator="short")),
+    ("met calls as floors, days at or below 2 C", dict(estimator="censored", fit_below=2.0)),
+    ("met calls as floors, every day", dict(estimator="censored")),
+    ("met calls as floors, every day, a curved line", dict(estimator="censored", form="quadratic")),
+    ("megawatts fitted over every event", dict(estimator="megawatts")),
+    ("megawatts fitted over every event, zone by zone", dict(estimator="megawatts", pooled=False)),
+    # SF20, a cancelled instruction's day
+    ("a cancelled instruction's day kept", dict(cancelled_in=True)),
+    # SF22, what is available against the megawatts contracted
+    ("the three winters' own scaling with the megawatts contracted", dict(scale="measured")),
+]
 
 
 def r1(v):
@@ -66,11 +92,40 @@ def figures(X, G, FAM, info):
 
     bt = G["backtest_all"]
     maes = [v["backtest_all"]["mae"] for v in FAM.values()]
-    ins = [v["backtest_all"]["n_inside"] for v in FAM.values()]
-    bridge = {**{"%s, not available" % p: r1(Z[p]["not_available"]) for p in prim},
-              **{"%s, lost as load comes back" % p: r1(Z[p]["comeback_loss"]) for p in prim}}
+    # the freezing-day count inside the 80 per cent range, under every variant and every construction of the range:
+    # carried in the workbook as context and not graded, because reasonable constructions spread this widely
+    ins = [E.backtest_all(v["events"], v["noise"], range_kind=rk, **v["fit_options"])[1]["n_inside"]
+           for v in FAM.values() for rk in E.RANGES]
+    provs = sorted(G["providers"])
+    zp = {p: [z["primary"] for z in G["zones"] if z["provider"] == p] for p in provs}
+
+    def pband(vals, gold, pad, nd=2):
+        q = 10 ** nd
+        return [round(math.floor((min(min(vals), gold) - pad) * q + 1e-9) / q, nd),
+                round(math.ceil((max(max(vals), gold) + pad) * q - 1e-9) / q, nd)]
+
+    share_b = {p: pband([v["providers"][p]["share"] for v in FAM.values()] +
+                        [fam[k][x]["share"] for k in fam for x in zp[p]], round(G["providers"][p]["share"], 2), 0.01) for p in provs}
+    back_b = {p: pband([v["providers"][p]["back"]["20:00"] for v in FAM.values()], round(G["providers"][p]["back"]["20:00"], 2), 0.05)
+              for p in provs}
+    # the megawatts delivered: the variants' range, and never narrower than the share's own band times the award
+    deliv_b = {}
+    for p in prim:
+        lo, hi = bands("delivered")[p]
+        slo, shi = share_b[Z[p]["provider"]]
+        deliv_b[p] = [round(min(lo, math.floor(slo * Z[p]["award"] * 10 + 1e-9) / 10.0), 1),
+                      round(max(hi, math.ceil(shi * Z[p]["award"] * 10 - 1e-9) / 10.0), 1)]
+    spread_b = {p: [int(math.floor(100 * min(min(v["providers"][p]["cv"], v["providers"][p]["cv_raw"]) for v in FAM.values()) - 1)),
+                    int(math.ceil(100 * max(max(v["providers"][p]["cv"], v["providers"][p]["cv_raw"]) for v in FAM.values()) + 1))]
+                for p in provs}
+    # the bridge is stated at the precision shown, so every bar is taken from the displayed megawatts and adds up
+    bridge = {**{"%s, not available" % p: r1(Z[p]["award"] - r1(Z[p]["delivered"])) for p in prim},
+              **{"%s, lost as load comes back" % p: r1(max(r1(Z[p]["delivered"]) - r1(Z[p]["off_peak"]), 0.0)) for p in prim}}
     bb = {**{"%s, not available" % p: band([fam[k][p]["not_available"] for k in fam], Z[p]["not_available"], 0.1, 0.2) for p in prim},
           **{"%s, lost as load comes back" % p: band([fam[k][p]["comeback_loss"] for k in fam], Z[p]["comeback_loss"], 0.1, 0.2) for p in prim}}
+    LE = E.line_evidence(X)
+    zl = {X["names"][c]: v for c, v in LE.items() if v["zone"]}
+    el, el_se, el_n = E.scaling(G["events"])
     A = Z["Ashcombe Road"]
     fA = G["providers"][A["provider"]]
     limit = (A["profile"]["18:00"] - A["profile"]["20:00"]) / (fA["shape"]["18:00"] + fA["back"]["20:00"])
@@ -79,12 +134,25 @@ def figures(X, G, FAM, info):
         call=list(G["commit"]), hold=[p for p in prim if p not in G["commit"]],
         r1_before=tab("before"), r2_delivered=tab("delivered"), r4_off_peak=tab("off_peak"), r5_peak=tab("peak"),
         r6_one_in_ten=tab("p90"),
-        r3_backtest={"mean absolute error, MW": round(bt["mae"], 2), "freezing-day events inside the 80 per cent range": int(bt["n_inside"])},
+        r3_backtest=round(bt["mae"], 2),
         r8_bridge=bridge,
-        bands=dict(before=bands("before", 0.1, 0.3), delivered=bands("delivered"), off_peak=bands("off_peak"),
+        r1_evidence=dict(coldest_unscheduled_c=round(min(v["coldest"] for v in zl.values()), 1),
+                         line_within_pct=int(math.ceil(max(abs(v["line_miss_pct"]) for v in zl.values()))),
+                         by_primary={p: dict(sample_days=v["n_sample"], coldest_c=round(v["coldest"], 1), cold_days=v["n_cold"],
+                                             line_miss_mw=round(v["line_miss"], 2), line_miss_pct=round(v["line_miss_pct"], 1),
+                                             curve_miss_mw=round(v["curve_miss"], 2), peak_curve_t=round(v["peak_curve_t"], 2))
+                                     for p, v in zl.items()},
+                         unscheduled_primaries_curve_t={X["names"].get(c, c): round(v["peak_curve_t"], 2)
+                                                        for c, v in LE.items() if not v["zone"]}),
+        scaling=dict(elasticity=round(el, 2), standard_error=round(el_se, 2), events=el_n),
+        c1_share={p: round(G["providers"][p]["share"], 2) for p in provs},
+        c2_comeback={p: round(G["providers"][p]["back"]["20:00"], 2) for p in provs},
+        c3_spread={p: int(round(G["providers"][p]["cv"] * 100)) for p in provs},
+        bands=dict(before=bands("before", 0.1, 0.3), delivered=deliv_b, off_peak=bands("off_peak"),
                    peak=bands("peak", 0.1, 0.3), one_in_ten=bands("p90", 0.1, 0.3), bridge=bb,
-                   backtest=dict(mae=[round(min(maes) - 0.04, 2), round(max(maes) + 0.04, 2)],
-                                 inside=[int(min(ins)) - 3, int(max(ins)) + 3])),
+                   share=share_b, comeback=back_b, spread=spread_b,
+                   backtest=dict(mae=pband(maes, round(bt["mae"], 2), 0.01),
+                                 inside=[int(min(ins)), int(max(ins))])),
         zones={p: dict(zone=Z[p]["zone"], code=Z[p]["code"], provider=Z[p]["provider"], award=Z[p]["award"], firm=Z[p]["firm"],
                        share=round(Z[p]["share"], 2), peak_hh=Z[p]["peak_hh"], over=bool(Z[p]["over"]),
                        over_by=r1(Z[p]["over_by"]), margin=r1(Z[p]["p90"] - Z[p]["firm"]), inside_by=r1(abs(Z[p]["p90"] - Z[p]["firm"])),
@@ -101,11 +169,15 @@ def figures(X, G, FAM, info):
         backtest=dict(n=bt["n"], n_cold=bt["n_cold"], n_inside=bt["n_inside"], mae=round(bt["mae"], 2),
                       mae_cold=round(bt["mae_cold"], 2), range_pct=int(E.RANGE * 100)),
         totals=dict(contracted=r1(sum(Z[p]["award"] for p in prim)), delivered=r1(sum(r1(Z[p]["delivered"]) for p in prim)),
-                    off_peak=r1(sum(r1(Z[p]["off_peak"]) for p in prim)),
-                    not_available=r1(sum(r1(Z[p]["not_available"]) for p in prim)),
-                    comeback_loss=r1(sum(r1(Z[p]["comeback_loss"]) for p in prim))),
+                    off_peak=r1(sum(r1(Z[p]["delivered"]) - bridge["%s, lost as load comes back" % p] for p in prim)),
+                    not_available=r1(sum(bridge["%s, not available" % p] for p in prim)),
+                    comeback_loss=r1(sum(bridge["%s, lost as load comes back" % p] for p in prim))),
         ashcombe_limit=r1(limit), family_sets={k: v for k, v in sets.items()},
-        variants=dict(cold_days_at_or_below=[0, 1.5, 2], heating_base_c=[14, 17]),
+        variants=dict(cold_days_at_or_below=[0, 1.5, 2], heating_base_c=[14, 17], n=len(VARIANTS),
+                      names=[n for n, _ in VARIANTS]),
+        family=dict(delivered={k: {p: round(fam[k][p]["delivered"], 2) for p in prim} for k in fam},
+                    one_in_ten={k: {p: round(fam[k][p]["p90"], 2) for p in prim} for k in fam},
+                    mae={k: round(v["backtest_all"]["mae"], 3) for k, v in FAM.items()}),
         cold_events=dict(total=int(sum(f["n_cold"] for f in G["providers"].values())),
                          met=int(sum(f["cold_met"] for f in G["providers"].values()))),
         conventions=dict(design_day_degrees_below_zero=-E.T_DESIGN, cold_days_at_or_below_minus=-E.COLD, assurance_days_in_ten=9,
@@ -171,14 +243,15 @@ def main():
     eff, C, Q = EP.effort_json(X, G, F)
     F["routes"] = {r["name"]: r["answer"] for r in eff["routes"]}
     F["careful"] = {p: {k: (r1(v) if isinstance(v, float) else v) for k, v in C[p].items()} for p in C if not p.startswith("_")}
-    F["careful_backtest"] = dict(mae=round(C["_backtest"]["mae"], 2), inside=C["_backtest"]["inside"])
+    F["careful_backtest"] = dict(mae=round(C["_backtest"]["mae"], 2), inside=C["_backtest"]["inside"],
+                                 inside_fit_range=C["_backtest"]["inside_fit_range"])
     F["careful_call"] = C["_call"]
     F["quick_call"] = Q["_call"]
     gold_tab = {z["primary"]: dict(delivered=z["delivered"], off_peak=z["off_peak"], peak=z["peak"], one_in_ten=z["p90"],
                                    over=z["over"]) for z in G["zones"]}
     R = [("Every result of the chain", gold_tab),
          ("Megawatts delivered per megawatt scheduled at minus 3.0 C applied to the contract, taken off the 17:30 to 18:00 "
-          "peak, the fit's own range", {p: C[p] for p in gold_tab}),
+          "peak, the record's megawatts of scatter unchanged", {p: C[p] for p in gold_tab}),
          ("The megawatts contracted at face value", {p: Q[p] for p in gold_tab})]
     shutil.rmtree(GOLDEN, ignore_errors=True)
     GO.write(G, F, R, GOLDEN)
