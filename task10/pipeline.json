@@ -4,8 +4,8 @@
  "domain": "energy-systems-utilities/load-forecasting (client domain energy-systems-utilities; world: an English distribution network operator, Wealdmoor Power Networks, committing for winter 2027/28 the reinforcement of the Halverton primaries whose design-day peak, with the flexibility contracted for that winter called in full, would exceed firm capacity on more than one design day in ten)",
  "subdomain": "load-forecasting",
  "objective": "forecasting",
- "stage": 6,
- "stage_name": "runs",
+ "stage": 2,
+ "stage_name": "design",
  "updated": "2026-11-10",
  "call": "Commit reinforcement at Ashcombe Road, Fenwick Street and Hartwell Common for winter 2027/28; Charlecote Way stays within firm capacity on nine design days in ten with its 2027/28 contract",
  "architecture": 6,
@@ -66,11 +66,11 @@
   "average": null,
   "counterfactual_average": null,
   "first_wrong_step": {
-   "run1": "",
-   "run2": ""
+   "run1": "none",
+   "run2": "none analytical (one figure 0.1 MW above a printed band)"
   },
-  "triage": "",
-  "recorded": "",
+  "triage": "REDESIGN",
+  "recorded": "2026-11-10",
   "history": [
    {
     "architecture": 4,
@@ -96,6 +96,14 @@
     "verdict": "REDESIGN (on the review)",
     "recorded": "2026-11-10",
     "note": "second architecture 5 pair, on the minimal prompt: both runs off the call at rung 1b (Ashcombe Road alone; a method shortcut and a self-confirming check); not scored; runs saved as runs/arch5_round2_run1.md and arch5_round2_run2.md, the first pair as runs/arch5_round1_*.md; the holistic audit of 2026-11-10 read the neighbour rise as a plant (runs/review_2026-11-10.md)"
+   },
+   {
+    "architecture": 6,
+    "run1": null,
+    "run2": null,
+    "verdict": "REDESIGN",
+    "recorded": "2026-11-10",
+    "note": "both runs on the golden call and every stated figure (0 of 11 results lost; about 97 estimated against a paper pair of 38.4); no score or rubric supplied; runs/arch6_run1.md, arch6_run2.md and arch6_triage.md"
    }
   ]
  },
@@ -125,7 +133,7 @@
    "commit": "RESHIPPED (task10)"
   }
  ],
- "resume": "RUNS back on architecture 6 (cut 5daf46a): both platform responses saved as runs/arch6_run1.md and arch6_run2.md, both on the golden call and headline figures, no score or rubric supplied; the run-triage agent is writing runs/arch6_triage.md; then record the verdict (REDESIGN expected), the run-record row, and redesign from stage 2 against the measured run capability",
+ "resume": "PAUSED after triage: architecture 6 landed on the platform (both runs, 0 of 11 results lost; runs/arch6_triage.md, verdict REDESIGN). Next: architecture 7 in the same Halverton world, redesigned against the measured run capability. Three independent structural judgments, each deciding a different zone: design demand at the cold end (the no-service days are the mild ones; a convex heating response read through mornings the service never touches), what connections add by the design day (ramp and realisation from monitored connections, including the remaining ramp of recent ones), and what an enlarged contract can deliver (availability of commissioned capacity, with commissioning slip and withdrawals forecast from an asset register). The capped availability share, the come-back replay and the predictive spread are priced as earned. Draw, design note, precut, then the generator rebuild.",
  "approved": null,
  "submitted": null,
  "portal": {

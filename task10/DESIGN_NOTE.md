@@ -806,3 +806,10 @@ Written 2026-11-10 on the final cut (target.zip d84ca1b2), the bar re-read again
   and rebuts that route; the judge's own closure ("load picked up elsewhere across open points is not credited")
   names the transfer the deep step finds and fails the fork-is-the-stump test, so the main call is left for the
   author's decision rather than pinned in a rubric repair.
+- 2026-11-10, architecture 6 (the results chain of eleven: a share of the contract available on the cold days, the come-back after
+  the window, a spread in proportion, the bridge) landed on the platform: both runs committed the golden's three primaries with
+  every stated figure inside its band (0 of 11 results lost against a paper pair of 38.4). Each run fitted an availability
+  ceiling capped by the instruction, rebuilt the day half-hour by half-hour with the come-back, drew a predictive
+  nine-in-ten level and back-tested on the held-out winter, unprompted. All three mechanisms showed in the rows, and the
+  three things the runs named as untested assumptions (the contract scaling in proportion, the straight line carried eight
+  degrees below the clean days, no serial dependence) were true in the world, so assuming them cost nothing.
