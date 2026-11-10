@@ -156,103 +156,59 @@ def vendor_cells(rows, width, key="y"):
     return {k: (float(np.mean(v)), len(v)) for k, v in cells.items()}
 
 
-def route_model(rows, width=128, key="y", lr_fix="matched", hold_out_above=None, form="levels"):
-    """The vendor trials of one width read against expert labels at the same examples and learning rate.
-
-    Each cell's loss = the expert-equivalent level at its total examples + a cost per unit share for each route.
-    The level is known up to 128,000 examples (the expert ladder at the tuned rate) and free at each total beyond.
-    Returns the two costs and the expert-equivalent levels at every total."""
+def ladder_line(rows, width, key="y", lr_fix="matched"):
+    """One straight line in log examples through a width's expert ladder: (function, gain per doubling)."""
     f = expert_curve(rows, width, key, lr_fix)
+    xs = np.array(sorted(f), float); ys = np.array([f[int(t)] for t in xs])
+    slope, icpt = np.polyfit(np.log2(xs), ys, 1)
+    return (lambda n: float(icpt + slope * math.log2(n))), float(slope)
+
+
+def route_model(rows, width=128, key="y", lr_fix="matched", beyond="free", hold_out_above=None, weighted=True):
+    """The vendor trials of one width read against expert labels at the same examples.
+
+    Each cell's loss = the expert level at its total examples + a cost per unit share for each route.
+    lr_fix "matched": the expert level is the ladder put on the trials' own learning rate; "none": the ladder as it
+    was run. beyond "free": past the expert pool the level is whatever the cells need, one unknown per total;
+    "every": the level is its own unknown at every total the trials ran, the expert-label runs at the trials' own
+    rate entering as trials with no vendor labels (the costs then rest on contrasts between mixes at one total);
+    "line": the ladder's straight line is carried on past the pool."""
+    f = expert_curve(rows, width, key, lr_fix)
+    line, _ = ladder_line(rows, width, key, lr_fix)
     cells = vendor_cells(rows, width, key)
     if hold_out_above:
         cells = {k: v for k, v in cells.items() if sum(k) <= hold_out_above}
-    totals_free = sorted({sum(k) for k in cells if sum(k) not in f})
+    fit_cells = dict(cells)
+    if beyond == "every":
+        totals_free = sorted({sum(k) for k in cells})
+        for t in totals_free:
+            m, n = cell(rows, key, width=width, nA=t, nB=0, nC=0, lr=float(TUNED_LR[width]))
+            if m is not None:
+                fit_cells[(t, 0, 0)] = (m, n)
+    else:
+        totals_free = sorted({sum(k) for k in cells if sum(k) not in f}) if beyond == "free" else []
     cols = ["kB", "kC"] + ["g%d" % t for t in totals_free]
     A, y, w = [], [], []
-    for (a, b, c), (m, n) in sorted(cells.items()):
+    for (a, b, c), (m, n) in sorted(fit_cells.items()):
         t = a + b + c
-        row = [b / float(t), c / float(t)] + [1.0 if t == tf else 0.0 for tf in totals_free]
-        A.append(row); y.append(m - (f[t] if t in f else 0.0)); w.append(math.sqrt(n))
+        if t in totals_free:
+            known = 0.0
+        else:
+            known = f[t] if t in f else (line(t) if beyond == "line" else 0.0)
+        A.append([b / float(t), c / float(t)] + [1.0 if t == tf else 0.0 for tf in totals_free])
+        y.append(m - known); w.append(math.sqrt(n) if weighted else 1.0)
     A = np.array(A); y = np.array(y); w = np.array(w)
     sol, *_ = np.linalg.lstsq(A * w[:, None], y * w, rcond=None)
     res = y - A @ sol
-    out = dict(zip(cols, [float(s) for s in sol]))
+    out = dict(zip(cols, [float(v) for v in sol]))
     levels = dict(f)
     for tf in totals_free:
         levels[tf] = out["g%d" % tf]
-    return dict(kB=out["kB"], kC=out["kC"], levels=levels, resid_sd=float(np.sqrt((res ** 2).mean())), cells=cells)
+    return dict(kB=out["kB"], kC=out["kC"], levels=levels, resid_sd=float(np.sqrt((res ** 2).mean())), cells=cells,
+                line=line)
 
 
-def fit_floor(levels, lo=32000):
-    """Loss = floor + a * examples^-b through the expert-equivalent levels from `lo` examples up (three parameters,
-    a grid over the floor and least squares for the rest)."""
-    xs = np.array(sorted(t for t in levels if t >= lo), float)
-    ys = np.array([levels[int(t)] for t in xs])
-    best = None
-    for E in np.linspace(0.30, ys.min() - 0.004, 400):
-        z = np.log(ys - E)
-        slope, icpt = np.polyfit(np.log(xs), z, 1)
-        pred = E + np.exp(icpt) * xs ** slope
-        sse = float(((pred - ys) ** 2).sum())
-        if best is None or sse < best[0]:
-            best = (sse, float(E), float(np.exp(icpt)), float(-slope))
-    _, E, a, b = best
-    return lambda n: E + a * n ** (-b), dict(floor=E, a=a, b=b)
-
-
-def fit_quadratic(levels, lo=32000):
-    xs = np.array(sorted(t for t in levels if t >= lo), float)
-    ys = np.array([levels[int(t)] for t in xs])
-    c = np.polyfit(np.log2(xs), ys, 2)
-    return (lambda n: float(np.polyval(c, math.log2(n)))), dict(c=[float(v) for v in c])
-
-
-def fit_fading_slope(levels):
-    """Carry the last doubling's gain on, shrinking by the ratio the last two doublings showed."""
-    xs = sorted(levels)
-    ys = [levels[t] for t in xs]
-    d1 = ys[-1] - ys[-2]; d0 = ys[-2] - ys[-3]
-    ratio = min(0.95, max(0.3, d1 / d0)) if d0 < 0 else 0.6
-    n0, y0 = xs[-1], ys[-1]
-
-    def f(n):
-        k = math.log2(n / float(n0))
-        if k <= 0:
-            return float(np.interp(math.log2(n), [math.log2(t) for t in xs], ys))
-        whole, frac = int(k), k - int(k)
-        y, step = y0, d1
-        for _ in range(whole):
-            step *= ratio; y += step
-        return y + frac * step * ratio
-    return f, dict(ratio=ratio)
-
-
-def fit_line(levels, hi=128000):
-    """One straight line in log examples through the expert ladder (what the pilot's expert runs alone show)."""
-    xs = np.array(sorted(t for t in levels if t <= hi), float)
-    ys = np.array([levels[int(t)] for t in xs])
-    slope, icpt = np.polyfit(np.log2(xs), ys, 1)
-    return (lambda n: float(icpt + slope * math.log2(n))), dict(per_doubling=float(slope))
-
-
-FORMS = {"floor": fit_floor, "quadratic": fit_quadratic, "fading": fit_fading_slope}
-
-
-def width_gaps(rows, key="y", lr_fix="matched", rm128=None, rm256=None):
-    """How much lower a 256-wide model sits than a 128-wide one at each total (tuned rates, expert-equivalent),
-    and a 512-wide one than a 256-wide one where both were run."""
-    rm128 = rm128 or route_model(rows, 128, key, lr_fix)
-    rm256 = rm256 or route_model_fixed_costs(rows, 256, rm128, key)
-    g = {t: rm128["levels"][t] - rm256[t] for t in sorted(rm256) if t in rm128["levels"]}
-    g512 = {}
-    for nA in (32000, 128000):
-        a = expert_level(rows, 256, nA, TUNED_LR[256], key); b = expert_level(rows, 512, nA, TUNED_LR[512], key)
-        if a is not None and b is not None:
-            g512[nA] = a - b
-    return g, g512
-
-
-def route_model_fixed_costs(rows, width, rm, key="y"):
+def other_width_levels(rows, width, rm, key="y", hold_out_above=None):
     """Expert-equivalent levels of another width: its expert runs at the tuned rate, and its vendor trials with the
     routes' costs taken off."""
     out = {}
@@ -263,75 +219,152 @@ def route_model_fixed_costs(rows, width, rm, key="y"):
     per = {}
     for (a, b, c), (m, n) in vendor_cells(rows, width, key).items():
         t = a + b + c
+        if hold_out_above and t > hold_out_above:
+            continue
         per.setdefault(t, []).append((m - rm["kB"] * b / t - rm["kC"] * c / t, n))
     for t, vs in per.items():
         out[t] = float(sum(v * n for v, n in vs) / sum(n for _, n in vs))
     return out
 
 
-# ------------------------------------------------------------------------------------------------- the forecast
-def forecast(rows, shortlist, key="y", lr_fix="matched", form="floor", width_rule="grow", hold_out_above=None,
-             kind_done=None):
-    """Each shortlisted configuration's expected benchmark loss, and everything it rests on."""
-    rm = route_model(rows, 128, key, lr_fix, hold_out_above)
-    f128, fpar = FORMS[form](rm["levels"])
-    lv256 = route_model_fixed_costs(rows if not hold_out_above else [r for r in rows if total(r) <= hold_out_above],
-                                    256, rm, key)
-    gaps = {t: rm["levels"][t] - lv256[t] for t in lv256 if t in rm["levels"]}
-    ts = sorted(gaps)
-    gap512 = {}
+def top_floor(levels):
+    """Loss = floor + a * examples^-b through the three largest totals: each further doubling returns the share of
+    the last doubling's gain that the last doubling returned of the one before."""
+    xs = sorted(levels)[-3:]
+    ys = [levels[t] for t in xs]
+    d1 = ys[2] - ys[1]; d0 = ys[1] - ys[0]
+    k1 = math.log2(xs[2] / float(xs[1])); k0 = math.log2(xs[1] / float(xs[0]))
+    ratio = (d1 / k1) / (d0 / k0) if d0 < 0 else 0.6
+    ratio = min(0.97, max(0.2, ratio))
+    n0, y0 = xs[2], ys[2]
+    step = d1 / k1                                     # gain per doubling over the last interval
+
+    def f(n):
+        k = math.log2(n / float(n0))
+        if k <= 0:
+            return float(np.interp(math.log2(n), [math.log2(t) for t in sorted(levels)], [levels[t] for t in sorted(levels)]))
+        # the gain per doubling shrinks geometrically: integrate step * ratio^(u + 1/2) over u doublings
+        if abs(ratio - 1.0) < 1e-9:
+            return y0 + step * k
+        return y0 + step * math.sqrt(ratio) * (ratio ** k - 1.0) / math.log(ratio)
+    return f, dict(ratio=float(ratio), per_doubling_last=float(step))
+
+
+def wide_floor(levels, lo=32000):
+    """Loss = floor + a * examples^-b fitted by least squares to every level from `lo` examples up."""
+    xs = np.array(sorted(t for t in levels if t >= lo), float)
+    ys = np.array([levels[int(t)] for t in xs])
+    best = None
+    for E in np.linspace(0.30, ys.min() - 0.004, 400):
+        slope, icpt = np.polyfit(np.log(xs), np.log(ys - E), 1)
+        pred = E + np.exp(icpt) * xs ** slope
+        sse = float(((pred - ys) ** 2).sum())
+        if best is None or sse < best[0]:
+            best = (sse, float(E), float(np.exp(icpt)), float(-slope))
+    _, E, a, b = best
+    return (lambda n: E + a * n ** (-b)), dict(floor=E, a=a, b=b)
+
+
+def log_quadratic(levels, lo=32000):
+    xs = np.array(sorted(t for t in levels if t >= lo), float)
+    ys = np.array([levels[int(t)] for t in xs])
+    c = np.polyfit(np.log2(xs), ys, 2)
+    return (lambda n: float(np.polyval(c, math.log2(n)))), dict(c=[float(v) for v in c])
+
+
+def _through(levels):
+    ts = sorted(levels)
+    return lambda n: float(np.interp(math.log2(n), [math.log2(t) for t in ts], [levels[t] for t in ts]))
+
+
+def last_gain(levels):
+    """Past the largest total the last doubling's gain is carried on undiminished: the most a further doubling can
+    be taken to return once the gains have been seen to shrink."""
+    xs = sorted(levels)[-2:]
+    step = (levels[xs[1]] - levels[xs[0]]) / math.log2(xs[1] / float(xs[0]))
+    inside = _through(levels)
+    return (lambda n: inside(n) if n <= xs[1] else levels[xs[1]] + step * math.log2(n / float(xs[1]))), dict(per_doubling=float(step))
+
+
+def no_gain(levels):
+    """Past the largest total nothing more is gained: the least a further doubling can return."""
+    top = max(levels)
+    inside = _through(levels)
+    return (lambda n: inside(n) if n <= top else levels[top]), dict(per_doubling=0.0)
+
+
+FORMS = {"top": top_floor, "wide": wide_floor, "quadratic": log_quadratic, "last": last_gain, "none": no_gain}
+
+
+def width_steps(rows, rm, key="y", hold_out_above=None):
+    """What 256 wide gains on 128 wide at each total (expert-equivalent, tuned rates), and 512 on 256 where both ran."""
+    lv256 = other_width_levels(rows, 256, rm, key, hold_out_above)
+    g256 = {t: rm["levels"][t] - lv256[t] for t in sorted(lv256) if t in rm["levels"]}
+    g512 = {}
     for nA in (32000, 128000):
         a = expert_level(rows, 256, nA, TUNED_LR[256], key); b = expert_level(rows, 512, nA, TUNED_LR[512], key)
         if a is not None and b is not None:
-            gap512[nA] = a - b
+            g512[nA] = a - b
+    return g256, g512, lv256
+
+
+def level_fn(rows, rm, f128, key="y", width_rule="top", hold_out_above=None):
+    """The expert-equivalent loss of any width at any total: the 128-wide curve less what width was seen to buy."""
+    g256, g512, _ = width_steps(rows, rm, key, hold_out_above)
+    ts = sorted(g256)
 
     def gap256(n):
         if width_rule == "flat":
-            return float(np.mean([gaps[t] for t in ts]))
-        # the gap as the pilot shows it at the largest totals it reached, held there beyond them
-        big = [gaps[t] for t in ts if t >= 128000]
-        if n >= 128000:
-            return float(np.mean(big))
-        return float(np.interp(math.log2(n), [math.log2(t) for t in ts], [gaps[t] for t in ts]))
+            return float(np.mean(list(g256.values())))
+        big = [g256[t] for t in ts if t >= 128000]                      # what the largest totals reached showed
+        if n >= 128000 or len(ts) < 2:
+            return float(np.mean(big)) if big else float(np.mean(list(g256.values())))
+        return float(np.interp(math.log2(n), [math.log2(t) for t in ts], [g256[t] for t in ts]))
+
+    step512 = g512.get(128000, float(np.mean(list(g512.values()))))     # at the largest total both widths ran
 
     def level(width, n):
-        if width == 128:
-            return f128(n)
-        if width == 256:
-            return f128(n) - gap256(n)
-        if width == 512:
-            return f128(n) - gap256(n) - float(np.mean(list(gap512.values())))
-        if width == 1024:
-            # one more doubling of width at the gain the last doubling showed on the same examples
-            step = gap512.get(128000, float(np.mean(list(gap512.values()))))
-            return f128(n) - gap256(n) - float(np.mean(list(gap512.values()))) - step
-        raise ValueError(width)
+        base = f128(n)
+        if width >= 256:
+            base -= gap256(n)
+        if width >= 512:
+            base -= step512
+        if width >= 1024:
+            base -= step512                                             # one more doubling at the same gain
+        return base
+    return level, dict(g256=g256, g512=g512)
 
+
+def forecast(rows, shortlist, key="y", lr_fix="matched", beyond="free", form="top", width_rule="top", rm=None):
+    """Each shortlisted configuration's expected benchmark loss and what it rests on.
+    form "line" carries the 128-wide ladder's straight line; any other form is fitted to the route model's levels."""
+    rm = rm or route_model(rows, 128, key, lr_fix, beyond)
+    if form == "line":
+        f128, fpar = rm["line"], dict(per_doubling=ladder_line(rows, 128, key, lr_fix)[1])
+    else:
+        f128, fpar = FORMS[form](rm["levels"])
+    level, wpar = level_fn(rows, rm, f128, key, width_rule)
     out = {}
     for c in shortlist:
         n = c["nA"] + c["nB"] + c["nC"]
-        base = level(c["width"], n)
-        out[c["key"]] = dict(expected=base + rm["kB"] * c["nB"] / n + rm["kC"] * c["nC"] / n, level=base, total=n,
-                             cost=rm["kB"] * c["nB"] / n + rm["kC"] * c["nC"] / n)
-    return dict(forecast=out, routes=rm, form=fpar, gaps256=gaps, gap512=gap512, f128=f128, level=level)
+        cost = rm["kB"] * c["nB"] / n + rm["kC"] * c["nC"] / n
+        out[c["key"]] = dict(expected=level(c["width"], n) + cost, level=level(c["width"], n), cost=cost, total=n)
+    return dict(forecast=out, routes=rm, form=fpar, width=wpar, f128=f128, level=level)
 
 
-def backtest(rows, shortlist, hold_above=256000, key="y", lr_fix="matched", form="floor"):
-    """Hold out every pilot run above `hold_above` examples, forecast them from the rest, and return the misses
-    (forecast minus what the held-out cells showed) cell by cell."""
+def backtest(rows, hold_above=256000, key="y", lr_fix="matched", form="top", beyond="free"):
+    """Hold out every pilot run above `hold_above` examples, forecast those cells from the rest, and return the
+    misses (forecast minus what the held-out cells showed), cell by cell."""
     held = {}
     for r in rows:
         if r["stage"] == "vend" and total(r) > hold_above:
             held.setdefault((r["width"], r["nA"], r["nB"], r["nC"]), []).append(r[key])
     kept = [r for r in rows if not (r["stage"] == "vend" and total(r) > hold_above)]
-    rm = route_model(kept, 128, key, lr_fix)
-    f128, _ = FORMS[form](rm["levels"]) if form != "line" else fit_line(rm["levels"])
-    lv256 = route_model_fixed_costs(kept, 256, rm, key)
-    gaps = [rm["levels"][t] - lv256[t] for t in lv256 if t in rm["levels"] and t >= 128000]
-    gap = float(np.mean(gaps)) if gaps else 0.0
+    rm = route_model(kept, 128, key, lr_fix, "line" if form == "line" else ("every" if beyond == "every" else "free"))
+    f128 = rm["line"] if form == "line" else FORMS[form](rm["levels"])[0]
+    level, _ = level_fn(kept, rm, f128, key)
     miss = {}
     for (w, a, b, c), v in sorted(held.items()):
         n = a + b + c
-        pred = f128(n) - (gap if w == 256 else 0.0) + rm["kB"] * b / n + rm["kC"] * c / n
-        miss[(w, a, b, c)] = pred - float(np.mean(v))
+        miss[(w, a, b, c)] = level(w, n) + rm["kB"] * b / n + rm["kC"] * c / n - float(np.mean(v))
     return miss

@@ -1,41 +1,60 @@
 {
  "task": "task16",
- "status": "DESIGN",
+ "status": "READY",
  "domain": "general-statistics-data-science",
  "subdomain": "scaling-laws",
  "objective": "forecasting",
- "stage": 2,
- "stage_name": "design",
+ "stage": 5,
+ "stage_name": "ready",
  "updated": "2026-11-10",
  "doctrine": "throughout",
- "call": "",
- "chain": "R1 the pilot's finished runs and final-checkpoint benchmark scores; R2 the benchmark loss the largest vendor-label runs correspond to; R3 what map-transfer and contractor labels add at the same examples and settings; R4 the loss more expert-labelled examples would give past the expert pool; R5 the forecast checked on the pilot's largest runs held out; R6 the learning rate for the widest configuration and what width buys; R7 run-to-run spread and the range; R8 each shortlisted configuration's expected benchmark loss; R9 the configuration to name and its margin",
+ "call": "name configuration B (512 wide on the 128,000 expert and 128,000 contractor labels) and state 0.625, range 0.604 to 0.645; not C, which one scaling curve through every run puts first at 0.624 and which comes out at 0.670 (no lower than 0.653 with the last doubling's gain carried on undiminished)",
+ "chain": "R1 the benchmark loss the largest map trial corresponds to (0.685); R2 what each tenth of a training set moved to contractor or map-transfer labels costs (0.0020, 0.0114); R3 the loss 512,000 expert labels would give (0.600); R4 each configuration's expected loss (A 0.661, B 0.625, C 0.670, D 0.680); R5 the four-in-five range (0.604 to 0.645, half-width 0.021); R6 the configuration to name (B)",
  "architecture": 1,
  "loops": 0,
  "precut": {
-  "exit": null,
-  "date": ""
+  "exit": 0,
+  "date": "2026-11-10"
  },
  "leak": {
-  "leak_py": "",
-  "reader": ""
+  "leak_py": "REVIEW (no LEAK), 2026-11-10, --asof 2026-11-05",
+  "reader": "2026-11-10, second read on the six-ask prompt: question 1 none, no ranking file, no helping file, question 5 sentences execute to the golden's estimand, question 6 no one thing; two shortlist-sheet headers renamed (data only)"
  },
  "duplicate_check": {
-  "heart": "",
-  "nearest": "task11 at 0.06 (guard.py check at the draw, WARN: overuse.objective, repeat.gate_g, overuse.gate_g, answered in the note)"
+  "heart": "WARN 2026-11-10 (overuse.objective, repeat.gate_g, overuse.gate_g; no BLOCK), nearest task11 at 0.06, answered in the note",
+  "surface": "exit 0"
  },
  "judge": {
-  "verdict": "",
-  "disposition": "",
-  "gate_h": "",
-  "report": ""
+  "pass1": {
+   "verdict": "NOT_DETERMINISTIC (narrow: competing_defensible_answer on four asks)",
+   "disposition": "FIX_NOW",
+   "report": "task16/determinism_check_report_pass1.md",
+   "finding": "the main call forced, Gates G and H passing; the bands on the contractor's cost, the 512,000 level and option A excluded the judge's own data-direct readings, and the held-back gap proved a property of the solver's method",
+   "repair": "bands reset on a family of 49 run analyses that holds the judge's readings; the held-back gap, the run counts and the widest configuration's learning rate made working; the prompt cut from nine asks to six"
+  },
+  "pass2": {
+   "verdict": "DETERMINISTIC SOLUTION_WRONG (minor, point values only; every band closes the rivals run)",
+   "disposition": "FIX_NOW",
+   "report": "task16/determinism_check_report_pass2.md",
+   "finding": "Gates A to E, G and H passing, one_thing none, four traps named; three restatements asked for in the answer blocks (the contractor's cost on the same-total reading, B's range wider with its width step said to be carried, the cost linear in the share)",
+   "repair": "the same-total reading of the routes made the golden's own (contractor 0.0020, B 0.625, range 0.604 to 0.645); pack and prompt byte-identical"
+  },
+  "pass3": {
+   "verdict": "DETERMINISTIC",
+   "disposition": "APPROVE",
+   "report": "task16/determinism_check_report.md",
+   "finding": "no repair; the thread's own cold derivation fitted one curve through every run and named C (the analytical failure, not a fork); stump power high; advisory only: option A's learning rate is the solver's to choose, B's point leans on averaged width steps, the bands on C and D are extrapolation judgments"
+  },
+  "gate_g": "mechanism forecasting (with method_or_model_selection and decomposition_attribution), stumping_family analytical_non_defect, surface_read_dependency no, sole_data_defect no",
+  "gate_h": "domain pass, layers pass, results 6 graded across 5 areas, one_thing none, effort quick 1, careful 3, thorough 5 of 6, one_fact 'score only the expert-labelled dev items' rescues 2 of 6",
+  "shipped": "the pass-3 form, approved as judged: nothing graded moved after the verdict; target.zip abdda1af"
  },
- "paper_pair": null,
+ "paper_pair": 46.5,
  "effort": {
-  "quick": null,
-  "careful": null,
-  "thorough": null,
-  "largest_hint": ""
+  "quick": 7.0,
+  "careful": 46.5,
+  "thorough": 100.0,
+  "largest_hint": "a level of its own at every total, the routes' costs from mixes at one total: rescues 3 of 6 (R3, R4, R6), a sentence of method with nothing hidden; stopped at the pool it rescues 2 (R3, R6)"
  },
  "runs": {
   "run1": null,
@@ -51,7 +70,7 @@
   "history": []
  },
  "returned": [],
- "resume": "",
+ "resume": "READY: the author rewrites prompt.txt in their own words and re-gates it (voice-check.py task16 --rewrite, then leak.py), uploads the prompt and target.zip, and /triage-runs task16 reads the two runs",
  "approved": null,
  "submitted": null,
  "portal": {

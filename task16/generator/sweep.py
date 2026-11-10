@@ -13,9 +13,11 @@ LR_GRID = {64: (1e-3, 2e-3, 4e-3, 8e-3, 1.6e-2), 128: (5e-4, 1e-3, 2e-3, 4e-3, 8
            256: (2.5e-4, 5e-4, 1e-3, 2e-3, 4e-3), 512: (1.25e-4, 2.5e-4, 5e-4, 1e-3, 2e-3)}
 TUNED_LR = {128: 2e-3, 256: 1e-3, 512: 5e-4}            # what the group took from its learning-rate check
 LADDER_SIZES = (8000, 16000, 32000, 64000, 128000)
-VENDOR_CELLS = [(32, 32, 0), (32, 96, 0), (64, 64, 0), (128, 128, 0),
-                (32, 0, 32), (32, 0, 96), (32, 0, 224), (64, 0, 64), (64, 0, 192), (128, 0, 128), (128, 0, 384),
-                (128, 128, 256)]
+# the map-transfer labels were on hand from week 3; the contractor's lot arrived in the last week, in time for four
+# trials and none that mixed it with the map labels
+VENDOR_CELLS = [(32, 0, 32), (32, 0, 96), (32, 0, 224), (64, 0, 64), (64, 0, 192), (64, 0, 448), (128, 0, 128),
+                (128, 0, 384),
+                (32, 32, 0), (32, 96, 0), (64, 64, 0), (128, 128, 0)]
 
 
 def _lr_tag(lr):
@@ -50,7 +52,7 @@ def _spec(stage, width, lr, seed, a=0, b=0, c=0, logger=2, **kw):
 def _preempt(job, share_list):
     """Give a long job the preemptions the scheduler dealt it: it loses the steps since its last checkpoint."""
     st = job["train"]["steps"]
-    job["train"]["preempt_at"] = [int(round(st * x / 10.0)) * 10 + 7 for x in share_list]
+    job["train"]["preempt_at"] = [(int(st * x / 10.0) // 10) * 10 + 7 for x in share_list]
     return job
 
 
@@ -92,7 +94,7 @@ def pilot_specs():
     for a, b, c in VENDOR_CELLS:
         for sd in (1, 2, 3):
             jobs.append(_spec("vend", 128, TUNED_LR[128], sd, a=a * 1000, b=b * 1000, c=c * 1000))
-    for a, b, c in ((128, 128, 0), (128, 0, 384), (128, 128, 256)):
+    for a, b, c in ((128, 128, 0), (128, 0, 128), (128, 0, 384)):
         for sd in (1, 2):
             jobs.append(_spec("vend", 256, TUNED_LR[256], sd, a=a * 1000, b=b * 1000, c=c * 1000))
     bad4 = _spec("vend", 128, 2e-2, 1, a=64000, c=64000, stop_at=900)
@@ -107,9 +109,9 @@ def pilot_specs():
             "lrcheck-w256-exp128k-lr2e-3-s1": [5.6], "wide-w512-exp128k-lr1e-3-s1": [3.3, 7.8],
             "wide-w512-exp128k-lr5e-4-s2": [6.2], "wide-w1024-exp128k-lr5e-4-s1": [2.4],
             "vend-w128-exp128k-map384k-s1": [1.9, 6.7], "vend-w128-exp128k-map384k-s3": [5.2],
-            "vend-w128-exp128k-ctr128k-map256k-s2": [4.1], "vend-w128-exp64k-map192k-s2": [8.3],
+            "vend-w128-exp64k-map448k-s2": [4.1], "vend-w128-exp64k-map192k-s2": [8.3],
             "vend-w128-exp32k-map224k-s1": [3.7], "vend-w128-exp128k-ctr128k-s3": [6.4],
-            "vend-w256-exp128k-map384k-s1": [2.2, 5.9], "vend-w256-exp128k-ctr128k-map256k-s2": [4.8], "vend-w128-exp128k-map128k-s2": [7.4]}
+            "vend-w256-exp128k-map384k-s1": [2.2, 5.9], "vend-w256-exp128k-map128k-s2": [4.8], "vend-w128-exp128k-map128k-s2": [7.4]}
     for name, shares in plan.items():
         for j in by_name[name]:
             if "fate" not in j or j["fate"] == "timeout":
@@ -138,9 +140,9 @@ def truth_specs(seeds=(1, 2, 3)):
     author only, to check the forecast against what happens. Nothing here ships."""
     out = []
     for c in SHORTLIST:
-        lrs = (3.5e-4, 2.5e-4, 5e-4) if c["lr"] is None else (c["lr"],)
+        lrs = (3.5e-4, 2.5e-4, 5e-4, 2.74e-4, 1.8e-4) if c["lr"] is None else (c["lr"],)
         for lr in lrs:
-            for sd in (seeds if lr in (3.5e-4, c["lr"]) else seeds[:1]):
+            for sd in (seeds if lr in (3.5e-4, c["lr"]) else (seeds[:2] if lr in (2.74e-4, 1.8e-4) else seeds[:1])):
                 s = dict(width=c["width"], lr=lr, seed=sd, nA=c["nA"], nB=c["nB"], nC=c["nC"])
                 s["steps"] = planned_steps(s)
                 s["log_every"] = 20; s["eval_every"] = 1000; s["ckpt_every"] = 2000

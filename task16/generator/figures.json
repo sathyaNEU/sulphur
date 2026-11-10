@@ -1,0 +1,345 @@
+{
+ "call": "B",
+ "call_width": 512,
+ "runner_up": "A",
+ "margin": 0.036,
+ "expected": {
+  "A": 0.661,
+  "B": 0.625,
+  "C": 0.67,
+  "D": 0.68
+ },
+ "range_low": 0.604,
+ "range_high": 0.645,
+ "range_parts": {
+  "run": 0.0051,
+  "forecast": 0.014,
+  "yardstick": 0.0059
+ },
+ "range_sd": 0.016,
+ "lr_1024": 0.00027,
+ "lr_exponent": -1.1,
+ "lr_best": {
+  "64": 0.0066,
+  "128": 0.0025,
+  "256": 0.0012,
+  "512": 0.00065
+ },
+ "run_records": 134,
+ "runs_finished": 129,
+ "runs_unfinished": 5,
+ "runs_with_item_scores": 128,
+ "bench_rows": 32,
+ "bench_scored": 30,
+ "bench_final": 28,
+ "bench_part_way": 2,
+ "bench_repeats": 2,
+ "dev_items": 8000,
+ "dev_expert_items": 6000,
+ "trial_map384": 0.685,
+ "cal_intercept": 0.0078,
+ "cal_slope": 1.007,
+ "cal_sd": 0.0059,
+ "cal_n": 28,
+ "cal_offset": 0.012,
+ "cost_ctr": 0.002,
+ "cost_map": 0.0114,
+ "level_128k": 0.675,
+ "level_256k": 0.625,
+ "level_512k": 0.6,
+ "gain_first": 0.05,
+ "gain_second": 0.025,
+ "gain_ladder": 0.062,
+ "gap": 0.0132,
+ "gap_by_run": 0.014,
+ "gap_floor_ls": 0.0151,
+ "gap_quadratic": 0.013,
+ "gap_line": 0.0391,
+ "width_step_512": 0.0036,
+ "width_gap_256": {
+  "32": 0.0056,
+  "128": 0.0016,
+  "256": 0.0057,
+  "512": 0.0134
+ },
+ "hurried": {
+  "careful_pick": "C",
+  "careful_margin": 0.011,
+  "careful_expected": {
+   "A": 0.679,
+   "B": 0.635,
+   "C": 0.624,
+   "D": 0.639
+  },
+  "careful_level": 0.585,
+  "careful_gap": 0.027,
+  "careful_form": "quadratic",
+  "careful_range": [
+   0.612,
+   0.637
+  ],
+  "quick_pick": "C",
+  "quick_expected": {
+   "A": 0.667,
+   "B": 0.547,
+   "C": 0.416,
+   "D": 0.434
+  },
+  "quick_trial": 0.548,
+  "line_pick": "C",
+  "line_expected": {
+   "A": 0.673,
+   "B": 0.612,
+   "C": 0.564,
+   "D": 0.585
+  },
+  "line_level": 0.552,
+  "line_map": 0.0131,
+  "nomatch_ctr": -0.0003,
+  "nomatch_map": 0.0094,
+  "nomatch_level": 0.616,
+  "raw_expected_B": 0.615,
+  "floor_ls_expected": {
+   "A": 0.661,
+   "B": 0.631,
+   "C": 0.65,
+   "D": 0.661
+  },
+  "floor_ls_margin": 0.019,
+  "hint_levels_expected": {
+   "A": 0.666,
+   "B": 0.631,
+   "C": 0.643,
+   "D": 0.655
+  },
+  "hint_every_expected": {
+   "A": 0.66,
+   "B": 0.629,
+   "C": 0.663,
+   "D": 0.673
+  },
+  "quadratic_margin": 0.031,
+  "careful_half": 0.013,
+  "seed_half": 0.0065,
+  "seed_range": [
+   0.618,
+   0.631
+  ],
+  "scored_only_A": 0.666,
+  "last_rate": 0.0005,
+  "logged_gap_expert": [
+   0.082,
+   0.195
+  ],
+  "logged_gap_map": [
+   0.043,
+   0.062
+  ],
+  "lr_cost_128": 0.025
+ },
+ "counts": {
+  "finished": 129,
+  "final_scored": 28
+ },
+ "costs": {
+  "contractor": 0.002,
+  "map_transfer": 0.0114
+ },
+ "range": {
+  "B_low": 0.604,
+  "B_high": 0.645,
+  "half_width": 0.021
+ },
+ "range_half": 0.021,
+ "half_run_yardstick": 0.01,
+ "lead_over_C": 0.045,
+ "lead_central": [
+  0.027,
+  0.039
+ ],
+ "lead_least": 0.01,
+ "family_size": 49,
+ "family_names": [
+  "B"
+ ],
+ "bounds": {
+  "C": [
+   0.653,
+   0.686
+  ],
+  "D": [
+   0.664,
+   0.694
+  ]
+ },
+ "gap_family": [
+  0.0042,
+  0.0132
+ ],
+ "pool_reading": {
+  "ctr": 0.001,
+  "map": 0.0105,
+  "level_256k": 0.631,
+  "level_512k": 0.607,
+  "B": 0.624
+ },
+ "same_total_map": [
+  0.0115,
+  0.0114
+ ],
+ "same_total_ctr": [
+  0.0025,
+  0.0019
+ ],
+ "carried_B": 0.64,
+ "width_step_512_runs": 3,
+ "carried_A": 0.691,
+ "others_spread": 0.018,
+ "curve_ratio": 0.51,
+ "careful_c_cost": 0.093,
+ "c_examples_gain": 0.041,
+ "pooled": {
+  "C": [
+   0.59,
+   0.62
+  ],
+  "B": [
+   0.63,
+   0.64
+  ],
+  "level": [
+   0.56,
+   0.58
+  ],
+  "gap": 0.03,
+  "names": [
+   "C"
+  ]
+ },
+ "quick_C": 0.42,
+ "min_bench": 0.666,
+ "line_as_run_512k": 0.552,
+ "bands": {
+  "trial": [
+   0.68,
+   0.69
+  ],
+  "costs_contractor": [
+   0.0005,
+   0.0032
+  ],
+  "costs_map": [
+   0.0095,
+   0.0125
+  ],
+  "level": [
+   0.595,
+   0.613
+  ],
+  "rate": [
+   0.00017,
+   0.00036
+  ],
+  "expected": {
+   "A": [
+    0.65,
+    0.72
+   ],
+   "B": [
+    0.615,
+    0.65
+   ],
+   "C": [
+    0.648,
+    0.689
+   ],
+   "D": [
+    0.66,
+    0.697
+   ]
+  },
+  "range_low": [
+   0.58,
+   0.64
+  ],
+  "range_high": [
+   0.625,
+   0.69
+  ],
+  "range_half": [
+   0.01,
+   0.04
+  ]
+ },
+ "constants": {
+  "widths": [
+   64,
+   128,
+   256,
+   512,
+   1024
+  ],
+  "ladder_sizes": [
+   8000,
+   16000,
+   32000,
+   64000,
+   128000
+  ],
+  "bench_points": 20000,
+  "batch": 128,
+  "epochs": 12,
+  "slot_hours": 120,
+  "quota": 32,
+  "shortlist": [
+   {
+    "option": "A",
+    "width": 1024,
+    "expert": 128000,
+    "contractor": 0,
+    "map_transfer": 0,
+    "total": 128000,
+    "lr": null
+   },
+   {
+    "option": "B",
+    "width": 512,
+    "expert": 128000,
+    "contractor": 128000,
+    "map_transfer": 0,
+    "total": 256000,
+    "lr": 0.0005
+   },
+   {
+    "option": "C",
+    "width": 256,
+    "expert": 128000,
+    "contractor": 128000,
+    "map_transfer": 1024000,
+    "total": 1280000,
+    "lr": 0.001
+   },
+   {
+    "option": "D",
+    "width": 256,
+    "expert": 128000,
+    "contractor": 0,
+    "map_transfer": 1024000,
+    "total": 1152000,
+    "lr": 0.001
+   }
+  ],
+  "trial": [
+   128000,
+   0,
+   384000
+  ],
+  "held_above": 256000,
+  "level_at": 512000,
+  "level_lr": 0.002,
+  "held_totals": 512000,
+  "expert_pool": 128000,
+  "contractor_lot": 128000,
+  "map_lot": 1024000
+ }
+}

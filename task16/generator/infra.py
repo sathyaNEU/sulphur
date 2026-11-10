@@ -20,7 +20,8 @@ NODES = [("hugin-g01", 1.00), ("hugin-g02", 1.00), ("hugin-g03", 1.02), ("hugin-
 STEP_SECONDS = {64: 1.86, 128: 2.07, 256: 2.61, 512: 4.42, 1024: 9.35}
 EVAL_SECONDS = 37.0
 WALLTIME = 24 * 3600
-USER = {"ladder": "maas", "lrcheck": "maas", "wide": "maas", "vend": "maas"}
+# the PhD candidate ran the pilot; the research engineer put the week 43 wide jobs on the queue
+USER = {"ladder": "maas", "lrcheck": "maas", "wide": "tfredriksen", "vend": "maas"}
 
 # when each batch of the pilot went onto the queue (UTC); a batch is submitted by a script, a few seconds apart
 BATCH_START = {
@@ -145,18 +146,27 @@ def schedule(jobs):
         j["run_id"] = run_id(j["name"], j["submit"])
         done_end[id(j)] = attempts[-1]["end"]
 
-    for j in events:
+    # the queue in time order; a failed first launch puts its relaunch on the queue once somebody has seen it
+    import heapq
+    heap = [(j["submit"], k, j) for k, j in enumerate(events)]
+    heapq.heapify(heap)
+    waiting = {id(j["relaunch_of"]): j for j in relaunches}
+    k = len(heap)
+    while heap:
+        _, _, j = heapq.heappop(heap)
         place(j)
-    for j in sorted(relaunches, key=lambda j: done_end[id(j["relaunch_of"])]):
-        r = _rng("relaunch", j["name"])
-        seen = done_end[id(j["relaunch_of"])] + dt.timedelta(hours=float(r.uniform(1.5, 19)))
-        # nobody relaunches at night
-        if seen.hour < 7:
-            seen = seen.replace(hour=7, minute=int(r.integers(5, 55)))
-        elif seen.hour >= 21:
-            seen = (seen + dt.timedelta(days=1)).replace(hour=7, minute=int(r.integers(5, 55)))
-        j["submit"] = seen
-        place(j)
+        nxt = waiting.pop(id(j), None)
+        if nxt is not None:
+            r = _rng("relaunch", nxt["name"])
+            seen = done_end[id(j)] + dt.timedelta(hours=float(r.uniform(1.5, 19)))
+            # nobody relaunches at night
+            if seen.hour < 7:
+                seen = seen.replace(hour=7, minute=int(r.integers(5, 55)))
+            elif seen.hour >= 21:
+                seen = (seen + dt.timedelta(days=1)).replace(hour=7, minute=int(r.integers(5, 55)))
+            nxt["submit"] = seen
+            k += 1
+            heapq.heappush(heap, (seen, k, nxt))
     # scheduler job ids rise with the cluster's traffic (other users' jobs fall between ours)
     t0 = BATCH_START[("ladder", 64)]
     base = 4118203

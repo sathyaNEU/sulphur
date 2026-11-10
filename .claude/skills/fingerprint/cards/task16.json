@@ -1,108 +1,105 @@
 {
-  "task": "task16",
-  "project": "sulfur",
-  "architecture": "v1",
-  "drawn": "2026-11-10",
-  "slot_note": "",
-  "domain": "general-statistics-data-science",
-  "subdomain": "scaling-laws",
-  "niche": "a Norwegian university machine-learning group choosing which shortlisted training configuration to name in a national compute proposal for its seabed sediment classifier, forecasting each one's loss on the mapping programme's verified benchmark from a five-week pilot sweep of real training runs: an expert-label size ladder run at tabled learning rates, a learning-rate check, a few wide runs, and trials of a contractor's labels and of labels transferred from a legacy sediment map that the benchmark never scored",
-  "objective": "forecasting",
-  "shape": "01",
-  "decision_type": "pick_one_of_n",
-  "answer_unit": "named_option",
-  "answer": "",
-  "answer_source": "",
-  "gap": [
-    "objective",
-    "population"
+ "task": "task16",
+ "project": "sulfur",
+ "architecture": "v1",
+ "drawn": "2026-11-10",
+ "slot_note": "",
+ "domain": "general-statistics-data-science",
+ "subdomain": "scaling-laws",
+ "niche": "a Norwegian university machine-learning group choosing which shortlisted training configuration to name in a national compute proposal for its seabed sediment classifier, forecasting each one's loss on the mapping programme's verified benchmark from a five-week pilot sweep of real training runs: an expert-label size ladder run at tabled learning rates, a learning-rate check, a few wide runs, and trials of a contractor's labels and of labels transferred from a legacy sediment map that the benchmark never scored",
+ "objective": "forecasting",
+ "shape": "01",
+ "decision_type": "pick_one_of_n",
+ "answer_unit": "named_option",
+ "answer": "B",
+ "answer_source": "task16/generator/figures.json (call)",
+ "gap": [
+  "objective",
+  "population"
+ ],
+ "pattern": [
+  "none"
+ ],
+ "generators": [
+  "G1",
+  "G14",
+  "G16",
+  "G6"
+ ],
+ "gate_g": "forecasting",
+ "calibration_form": "parallel_run_overlap",
+ "stump_strategy": "other",
+ "decisive_rule_filed": false,
+ "official_decoy": false,
+ "validated_decoy": false,
+ "context_artifact": "planning_thread",
+ "stump_class": "analytical",
+ "analyst_test": "A careful but hurried analyst cleans every export, opens the per-item scores, scores each run on the expert-labelled development items and calibrates that to the benchmark, then fits the field's textbook object, one scaling-law regression over every finished run (a curve in examples, a term in width, each label route's share, a learning-rate term), chooses its form on the largest runs held back, reports the held-back misses although they all fall on one side, and names the configuration trained on every label it can get, at a loss the routes' costs and the bent return do not support.",
+ "domain_test": "Every result is a scaling-study quantity the field estimates from a sweep of training runs (a score on the target yardstick for runs that yardstick never saw, the loss a noisier label route costs at matched examples and learning rate, the return to more examples past the range run, the learning rate a wider model needs, run-to-run spread, a forecast with a range for configurations larger than any run, chosen because it holds when the largest runs are held out); swap in hospital or retail nouns and learning-rate tuning by width, a development split scored on vendor labels, examples seen and seeds stop making sense.",
+ "layer2_family": "forecast_uncertainty",
+ "layer2_pattern": "own:scale-up-forecast-from-a-staged-pilot-sweep",
+ "layer1": [
+  "trainer logs that repeat step ranges after a preempted job resumes from its last checkpoint",
+  "two logger versions with different scalar names and logging cadence",
+  "relaunched runs that share a name with a cancelled or failed first launch",
+  "benchmark uploads keyed by a truncated checkpoint digest, with repeats and part-way checkpoints",
+  "scheduler job attempts, requeues and cancelled jobs for one run",
+  "a re-delivered contractor shard whose first receipt stays in the register",
+  "an item dump lost to a scratch quota"
+ ],
+ "stakeholder_role": "the group lead who signs the compute proposal",
+ "role_family": "research_desk",
+ "scoring_unit": "index points",
+ "spine": {
+  "file": "tracking_metrics_export_2026-11-04.csv",
+  "rows": 190531,
+  "entity": "one logged training or evaluation scalar of one run",
+  "grain": "run x logged step x scalar",
+  "source": "synthetic"
+ },
+ "forum": "funder_or_donor",
+ "forcing_event": "budget_or_appropriation",
+ "org_family": "university_or_school",
+ "world": {
+  "geography": "Norway (the northern coast), a national seabed mapping programme with its own compute call",
+  "currency": "NOK",
+  "org_type": "a university machine-learning research group preparing a national compute allocation proposal",
+  "invented_names": [
+   "Lyngvær Geodata",
+   "MML group",
+   "National Seabed Sediment Mapping Programme"
   ],
-  "pattern": [
-    "none"
-  ],
-  "generators": [
-    "G1",
-    "G14",
-    "G16",
-    "G6"
-  ],
-  "gate_g": "forecasting",
-  "calibration_form": "parallel_run_overlap",
-  "stump_strategy": "other",
-  "decisive_rule_filed": false,
-  "official_decoy": false,
-  "validated_decoy": false,
-  "context_artifact": "planning_thread",
-  "stump_class": "analytical",
-  "analyst_test": "A careful but hurried analyst stitches the logs correctly, reads the learning-rate optimum off the sweeps and takes the programme's benchmark as the target, then fits one straight line in log examples to the benchmark scores of the expert-label ladder and carries it to every labelled example alike (or ranks the vendor trials on the development loss the trainer logged), so the configuration trained on all three label routes comes out best with a loss no model can reach, the ranges come from the fit's residuals, and the proposal names a configuration that scores worse on the verified benchmark than the expert-only runs.",
-  "domain_test": "Every result is a scaling-study quantity the field estimates from a sweep of training runs (a score on the target yardstick for runs that yardstick never saw, the loss a noisier label route costs at matched examples and learning rate, the return to more examples past the range run, the learning rate a wider model needs, run-to-run spread, a forecast with a range for configurations larger than any run, chosen because it holds when the largest runs are held out); swap in hospital or retail nouns and learning-rate tuning by width, a development split scored on vendor labels, examples seen and seeds stop making sense.",
-  "layer2_family": "forecast_uncertainty",
-  "layer2_pattern": "own:scale-up-forecast-from-a-staged-pilot-sweep",
-  "layer1": [
-    "trainer logs that repeat step ranges after a preempted job resumes from its last checkpoint",
-    "two logger versions with different column names and logging cadence",
-    "relaunched runs that share a configuration with a cancelled or diverged attempt",
-    "benchmark submissions keyed by a truncated checkpoint hash, with resubmissions and mid-run checkpoints",
-    "scheduler job attempts, requeues and cancelled jobs for one run",
-    "shard identifiers written differently by each label route, and a re-delivered shard",
-    "development item identifiers zero-padded in one export and not in the other"
-  ],
-  "stakeholder_role": "the group lead who signs the compute proposal",
-  "role_family": "research_desk",
-  "scoring_unit": "index points",
-  "spine": {
-    "file": "trainer_scalars.csv",
-    "rows": 0,
-    "entity": "one logged training or evaluation scalar row of one run",
-    "grain": "run x logged step",
-    "source": "synthetic"
-  },
-  "forum": "funder_or_donor",
-  "forcing_event": "budget_or_appropriation",
-  "org_family": "university_or_school",
-  "world": {
-    "geography": "Norway (the northern coast), a national seabed mapping programme with its own compute call",
-    "currency": "NOK",
-    "org_type": "a university machine-learning research group preparing a national compute allocation proposal",
-    "invented_names": [
-      "Lyngvær Geodata",
-      "MML group",
-      "National Seabed Sediment Mapping Programme"
-    ],
-    "people": [
-      "Helene Svendsen",
-      "Magne Aas",
-      "Tor Fredriksen"
-    ]
-  },
-  "deliverables": [
-    "scale_up_forecast.xlsx",
-    "proposal_evidence_note.docx"
-  ],
-  "opening_move": "question-first",
-  "question_form": "what",
-  "driver": "A forward level for configurations larger than any yet run is read from a staged pilot in which the return per added unit was measured only on the trusted source, while the configurations to be chosen among add units from cheaper sources whose yield differs: the target yardstick never scored a run that used them, the logged score is taken on a split that includes those sources' own labels and so rewards fitting their errors, their trials ran at other settings than the ladder they are compared with, and the return to more units bends just past the range the trusted source covers, so each source's yield has to be rebuilt on the trusted yardstick at matched settings and carried forward by a form that holds when the largest runs are held out.",
-  "driver_concrete": "Each shortlisted configuration's loss on the programme's verified benchmark is forecast from the pilot by scoring every final checkpoint on the expert-labelled development items calibrated to the benchmark submissions, separating at matched examples and learning rate what the contractor's and the map-transfer labels cost from what more examples return, letting that return bend as the mixed-label runs past 128,000 examples show, taking each width at the learning rate its own sweep supports, and choosing the forecasting form by how it predicts the largest pilot runs when they are held out; map labels that help a 32,000-example model then cost more than they return at a million.",
-  "stump": "A careful but hurried analyst scores the vendor trials on the expert-labelled development items, sees that map labels improved the small models, fits one straight line in log examples to the ladder and adds a per-route cost read against the ladder's own runs, and names the configuration trained on every label it can get, at a forecast loss no pilot run supports; the step that lands it there is carrying the return to more examples straight past the range the expert pool covers and reading the routes' cost against runs made at other learning rates, so labels that cost more than they return at scale look like the cheapest way down.",
-  "answer_shape": "ranked-list-cap",
-  "weight": "investigation",
-  "chain_signature": [
-    "assembly-reconciliation",
-    "missingness-measurement",
-    "investigation-loops",
-    "modeling",
-    "validation",
-    "modeling",
-    "uncertainty",
-    "forecasting",
-    "synthesis"
-  ],
-  "results": "R1 the pilot's finished runs and the benchmark scores that belong to a final checkpoint; R2 the benchmark loss the pilot's largest vendor-label configurations correspond to; R3 what map-transfer and contractor labels each add to benchmark loss at the same examples and settings; R4 the loss more expert-labelled examples would give past the expert pool; R5 the forecast checked on the pilot's largest runs held out; R6 the learning rate for the widest configuration; R7 the range around the named configuration; R8 each shortlisted configuration's expected benchmark loss; R9 the configuration to name and its margin over the next best",
-  "one_fact_test": "a map-labelled example is not worth an expert-labelled one, and the logged development loss is scored partly on the vendors' own labels; rescues R2 and part of R3 (2 of 9): the bend past the expert pool, the matched settings, the back-test, the widest configuration's learning rate, the range, the forecasts and the pick still have to be worked",
-  "strategy_label": "WORKS IN FORM",
-  "mechanism_source": "design_note",
-  "differentiation": {},
-  "lineage": [],
-  "notes": "strategy other: a staged-pilot scale-up forecast in which no one family carries the pick (a yardstick carried to runs it never scored, a route's cost read at matched examples and learning rate, a return to more examples that bends past the range, chosen by holding out the largest runs); calibration organ: the pilot's benchmark submissions overlap the trainer's development scores on the same final checkpoints (two yardsticks over the same runs); context artifact: the group's meeting notes that carry the shortlist; overuse.objective answered in the design note",
-  "registered": "2026-11-10T03:15:10Z"
+  "people": [
+   "Helene Svendsen",
+   "Magne Aas",
+   "Tor Fredriksen"
+  ]
+ },
+ "deliverables": [
+  "scale_up_forecast.xlsx",
+  "proposal_evidence_note.docx"
+ ],
+ "opening_move": "question-first",
+ "question_form": "what",
+ "driver": "A forward level for configurations larger than any yet run is read from a staged pilot in which the return per added unit was measured only on the trusted source, while the configurations to be chosen among add units from cheaper sources whose yield differs: the target yardstick never scored a run that used them, the logged score is taken on a split that includes those sources' own labels and so rewards fitting their errors, their trials ran at other settings than the ladder they are compared with, and the return to more units bends just past the range the trusted source covers, so each source's yield has to be rebuilt on the trusted yardstick at matched settings and carried forward by a form that holds when the largest runs are held out.",
+ "driver_concrete": "Each shortlisted configuration's loss on the programme's benchmark is forecast from the pilot by scoring every final checkpoint on the expert-labelled development items calibrated to the benchmark's own scores, reading what the contractor's and the map-transfer labels cost against expert-label runs of the same size, width and learning rate, taking the level at each total past the expert pool as its own unknown once those costs are out, carrying it past the largest trial no faster than the last doubling's gain and no slower than none, with the curve checked on the largest runs held back, and stating a range that carries run-to-run spread, the forecast's own error and the yardstick's error.",
+ "stump": "A careful but hurried analyst fits one scaling curve through every pilot run on the right yardstick, so the curve, which the expert-label ladder dominates, absorbs into the label routes' costs what is a return to more examples that bends just past the expert pool; it then carries that curve to a training set two and a half times the largest trial and names the all-labels configuration, whose forecast falls short of what such a run scores by more than its lead.",
+ "answer_shape": "ranked-list-cap",
+ "weight": "investigation",
+ "chain_signature": [
+  "missingness-measurement",
+  "investigation-loops",
+  "modeling",
+  "forecasting",
+  "uncertainty",
+  "synthesis"
+ ],
+ "results": "R1 the benchmark loss the largest map-transfer trial corresponds to; R2 what each tenth of a training set moved from expert to contractor or map-transfer labels adds to the benchmark loss; R3 the loss 512,000 expert labels would give; R4 each shortlisted configuration's expected benchmark loss; R5 the four-in-five range round the named one; R6 the configuration to name",
+ "one_fact_test": "past the expert pool, take the level at each total as its own unknown, read off the vendor trials once each route's cost is taken out; rescues R3 and R6 (2 of 6): the forecasts past the pilot's largest trial and the range still have to be worked",
+ "strategy_label": "WORKS IN FORM",
+ "mechanism_source": "design_note",
+ "differentiation": {},
+ "lineage": [],
+ "notes": "strategy other: a staged-pilot scale-up forecast in which no one family carries the pick (a yardstick carried to runs it never scored, a route's cost read at matched examples and learning rate, a return to more examples that bends past the range, chosen by holding out the largest runs); calibration organ: the pilot's benchmark submissions overlap the trainer's development scores on the same final checkpoints (two yardsticks over the same runs); context artifact: the group's meeting notes that carry the shortlist; overuse.objective answered in the design note",
+ "registered": "2026-11-10T03:15:10Z"
 }

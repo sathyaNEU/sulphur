@@ -1,7 +1,7 @@
 """Every constant of the task16 world. The generator reads nothing else for a number."""
 
 WORLD_SEED = 15
-WORLD_TAG = "v3"
+WORLD_TAG = "v4"
 
 # the population and the label process
 D_IN = 32
@@ -11,7 +11,7 @@ TEACHER_GAMMA = 0.6
 TEACHER_BETA = 8.0
 
 # labelling routes: the share of labels a route records wrongly (the expert route records the ground truth process)
-ROUTE_ERROR = {"A": 0.0, "B": 0.03, "C": 0.16}
+ROUTE_ERROR = {"A": 0.0, "B": 0.03, "C": 0.12}
 POOL = {"A": 128000, "B": 128000, "C": 1024000}
 SHARD = 4000
 DEV_MIX = {"A": 6000, "B": 1000, "C": 1000}

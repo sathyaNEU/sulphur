@@ -1,0 +1,171 @@
+{
+ "task": "task16",
+ "title": "MML group: which shortlisted training configuration to name for the NSSMP 2027 slot, and the benchmark loss to state",
+ "domain": "Machine Learning Research, General Statistics & Data Science",
+ "task_type": "scaling laws",
+ "objective": "Forecasting & Predictive Modeling",
+ "as_of": "2026-11-05",
+ "deliverables": [
+  "scale_up_forecast.xlsx",
+  "proposal_evidence_note.docx"
+ ],
+ "distractor_files": [
+  "gpu_throughput_probe_2026-09.csv",
+  "shard_class_counts.csv"
+ ],
+ "field_terms": [
+  "seed"
+ ],
+ "stated_inputs": [
+  "0.0005",
+  "0.001",
+  "512",
+  "256",
+  "1024",
+  "128",
+  "128,000",
+  "1,024,000",
+  "0.002"
+ ],
+ "input_gates": {
+  "files": 16,
+  "formats": [
+   "csv",
+   "md",
+   "sh",
+   "xlsx",
+   "yaml"
+  ],
+  "categories": [
+   "spreadsheet",
+   "text",
+   "code"
+  ],
+  "largest_file": "tracking_metrics_export_2026-11-04.csv",
+  "largest_file_rows": 190531,
+  "long_file": "checkpoint_store_listing_2026-11-04.csv",
+  "long_file_rows": 839
+ },
+ "sources": [
+  {
+   "files": "all files under target/",
+   "origin": "generated for this task. Every training run is a real optimisation run of a small classifier (the generator's own trainer) on a simulated population of survey points with three simulated labelling routes; the cluster, tracking, store and benchmark records are simulated around those runs. The research group, the contractor, the programme and the people are invented.",
+   "date": "2026-11-10",
+   "license": "CC BY 4.0 (original work)"
+  }
+ ],
+ "files": [
+  {
+   "path": "checkpoint_store_listing_2026-11-04.csv",
+   "format": "csv",
+   "bytes": 111228,
+   "covers": "the checkpoint store's listing for the pilot: periodic and final checkpoints and item dumps, with size, digest and time",
+   "made": "written by task16/generator/make.py from the cached training runs (deterministic)"
+  },
+  {
+   "path": "compute_call_2027_shortlist.xlsx",
+   "format": "xlsx",
+   "bytes": 7544,
+   "covers": "the shortlisted configurations with steps and timings for the slot",
+   "made": "written by task16/generator/make.py from the cached training runs (deterministic)"
+  },
+  {
+   "path": "dev_item_loss_final_checkpoints.csv",
+   "format": "csv",
+   "bytes": 7212445,
+   "covers": "the loss of each finished run's final checkpoint on every development item (one column per run)",
+   "made": "written by task16/generator/make.py from the cached training runs (deterministic)"
+  },
+  {
+   "path": "dev_split_items.csv",
+   "format": "csv",
+   "bytes": 272038,
+   "covers": "the development split: each item's hold-out shard, point reference and class",
+   "made": "written by task16/generator/make.py from the cached training runs (deterministic)"
+  },
+  {
+   "path": "gpu_throughput_probe_2026-09.csv",
+   "format": "csv",
+   "bytes": 14544,
+   "covers": "the engineer's September throughput probe by node, width and batch size",
+   "made": "written by task16/generator/make.py from the cached training runs (deterministic)"
+  },
+  {
+   "path": "label_routes.csv",
+   "format": "csv",
+   "bytes": 297,
+   "covers": "the three labelling routes and their source",
+   "made": "written by task16/generator/make.py from the cached training runs (deterministic)"
+  },
+  {
+   "path": "label_shard_register.csv",
+   "format": "csv",
+   "bytes": 19462,
+   "covers": "the register of label shards: route, points, lot, survey block, date registered, use",
+   "made": "written by task16/generator/make.py from the cached training runs (deterministic)"
+  },
+  {
+   "path": "launch_vendor_trials.sh",
+   "format": "sh",
+   "bytes": 3356,
+   "covers": "the batch script that submitted the vendor-label trials",
+   "made": "written by task16/generator/make.py from the cached training runs (deterministic)"
+  },
+  {
+   "path": "mml_group_meeting_2026-11-05.md",
+   "format": "md",
+   "bytes": 2537,
+   "covers": "the group's meeting notes of 5 November 2026: the slot's rules, the recipe, the shortlist, actions",
+   "made": "written by task16/generator/make.py from the cached training runs (deterministic)"
+  },
+  {
+   "path": "nssmp_benchmark_submissions_mml.csv",
+   "format": "csv",
+   "bytes": 2707,
+   "covers": "the benchmark server's record of the team's uploads in the pilot period: digest, score, status, quota left",
+   "made": "written by task16/generator/make.py from the cached training runs (deterministic)"
+  },
+  {
+   "path": "sediment_classes_folk.csv",
+   "format": "csv",
+   "bytes": 239,
+   "covers": "the ten Folk sediment classes the model predicts",
+   "made": "written by task16/generator/make.py from the cached training runs (deterministic)"
+  },
+  {
+   "path": "sedinet_train_defaults.yaml",
+   "format": "yaml",
+   "bytes": 558,
+   "covers": "the trainer's defaults file",
+   "made": "written by task16/generator/make.py from the cached training runs (deterministic)"
+  },
+  {
+   "path": "shard_class_counts.csv",
+   "format": "csv",
+   "bytes": 16007,
+   "covers": "data preparation's count of class labels in every shard",
+   "made": "written by task16/generator/make.py from the cached training runs (deterministic)"
+  },
+  {
+   "path": "slurm_accounting_mml-sedi_2026-09-21_2026-11-01.csv",
+   "format": "csv",
+   "bytes": 35130,
+   "covers": "scheduler accounting for the group's account, 21 September to 1 November 2026",
+   "made": "written by task16/generator/make.py from the cached training runs (deterministic)"
+  },
+  {
+   "path": "tracking_metrics_export_2026-11-04.csv",
+   "format": "csv",
+   "bytes": 9323806,
+   "covers": "every scalar the pilot's training jobs logged to the tracking server (training loss, learning rate, gradient norm, development loss and accuracy), 28 September to 1 November 2026",
+   "made": "written by task16/generator/make.py from the cached training runs (deterministic)"
+  },
+  {
+   "path": "tracking_runs_export_2026-11-04.csv",
+   "format": "csv",
+   "bytes": 23244,
+   "covers": "the tracking server's run records for the pilot: status, model width, learning rate, schedule, label shards, seed, logger and code revision",
+   "made": "written by task16/generator/make.py from the cached training runs (deterministic)"
+  }
+ ]
+}
