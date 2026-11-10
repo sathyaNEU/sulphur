@@ -1,0 +1,517 @@
+{
+ "band_churn": [
+  850000,
+  890000
+ ],
+ "band_contraction": [
+  190000,
+  200000
+ ],
+ "band_dec27": [
+  9950000,
+  10070000
+ ],
+ "band_new_bus": [
+  1350000,
+  1370000
+ ],
+ "band_new_open": [
+  630000,
+  660000
+ ],
+ "band_p10": [
+  9670000,
+  9780000
+ ],
+ "band_p90": [
+  10220000,
+  10350000
+ ],
+ "band_path": [
+  [
+   9110000,
+   9120000
+  ],
+  [
+   9240000,
+   9260000
+  ],
+  [
+   9370000,
+   9400000
+  ],
+  [
+   9510000,
+   9540000
+  ],
+  [
+   9530000,
+   9580000
+  ],
+  [
+   9580000,
+   9640000
+  ],
+  [
+   9630000,
+   9690000
+  ],
+  [
+   9680000,
+   9750000
+  ],
+  [
+   9700000,
+   9770000
+  ],
+  [
+   9720000,
+   9800000
+  ],
+  [
+   9770000,
+   9850000
+  ],
+  [
+   9800000,
+   9890000
+  ],
+  [
+   9870000,
+   9970000
+  ],
+  [
+   9950000,
+   10070000
+  ]
+ ],
+ "band_price": [
+  300000,
+  300000
+ ],
+ "band_team_left": [
+  1370000,
+  1390000
+ ],
+ "bridge": {
+  "Business accounts lost": -860000,
+  "Business seat additions": 550000,
+  "Business seat reductions": -200000,
+  "Change in Team": 10000,
+  "New Business": 1350000,
+  "Price": 300000
+ },
+ "bridge_gap": 0,
+ "churn": 860000,
+ "commitment": 9.9,
+ "commitment_hi": 9.9,
+ "commitment_lo": 9.8,
+ "contraction": 200000,
+ "conventions": {
+  "drift_windows": [
+   12,
+   18,
+   24
+  ],
+  "first_renewal": 1,
+  "list_rise_pct": 26.7,
+  "months": 14,
+  "pct": [
+   10,
+   20,
+   80,
+   90
+  ],
+  "per": 100,
+  "policy_sections": [
+   2.1,
+   2.2,
+   2.3,
+   2.4,
+   4.1,
+   4.3,
+   4.4,
+   4.5,
+   4.6
+  ],
+  "rounding": [
+   10000,
+   0.1
+  ],
+  "seats_ref": 20,
+  "team_min_seats": 3
+ },
+ "dec27": 10050000,
+ "draft": 10.2,
+ "draft_chance_pct": 24,
+ "draft_verdict": "no",
+ "expansion_bridge": 550000,
+ "kpi_sep_total": 8790000,
+ "lines_credited": 27,
+ "lines_dup": 114,
+ "lines_raw": 4280,
+ "new_bus": 1350000,
+ "new_future": 490000,
+ "new_open": 630000,
+ "new_split": {
+  "new_bus": 1350000,
+  "new_open": 630000
+ },
+ "new_upgrade": 230000,
+ "open_bus": 6970000,
+ "open_deals": 174,
+ "open_team": 1930000,
+ "open_total": 8900000,
+ "opening": {
+  "business": 6970000,
+  "team": 1930000
+ },
+ "p10": 9770000,
+ "p20": 9890000,
+ "p90": 10320000,
+ "path": [
+  9110000,
+  9240000,
+  9390000,
+  9520000,
+  9560000,
+  9610000,
+  9670000,
+  9720000,
+  9750000,
+  9780000,
+  9830000,
+  9870000,
+  9960000,
+  10050000
+ ],
+ "path_months": [
+  "Nov 2026",
+  "Dec 2026",
+  "Jan 2027",
+  "Feb 2027",
+  "Mar 2027",
+  "Apr 2027",
+  "May 2027",
+  "Jun 2027",
+  "Jul 2027",
+  "Aug 2027",
+  "Sep 2027",
+  "Oct 2027",
+  "Nov 2027",
+  "Dec 2027"
+ ],
+ "path_p10": [
+  9070000,
+  9180000,
+  9310000,
+  9420000,
+  9420000,
+  9460000,
+  9500000,
+  9540000,
+  9550000,
+  9550000,
+  9590000,
+  9620000,
+  9690000,
+  9770000
+ ],
+ "path_p90": [
+  9150000,
+  9300000,
+  9460000,
+  9620000,
+  9690000,
+  9760000,
+  9830000,
+  9900000,
+  9940000,
+  9990000,
+  10060000,
+  10120000,
+  10210000,
+  10320000
+ ],
+ "path_table": {
+  "Apr 2027": 9610000,
+  "Aug 2027": 9780000,
+  "Dec 2026": 9240000,
+  "Dec 2027": 10050000,
+  "Feb 2027": 9520000,
+  "Jan 2027": 9390000,
+  "Jul 2027": 9750000,
+  "Jun 2027": 9720000,
+  "Mar 2027": 9560000,
+  "May 2027": 9670000,
+  "Nov 2026": 9110000,
+  "Nov 2027": 9960000,
+  "Oct 2027": 9870000,
+  "Sep 2027": 9830000
+ },
+ "plan_rate": 1.16,
+ "price": 300000,
+ "quick_commitment": 11.6,
+ "quick_dec27": 11610000,
+ "quick_growth_pct": 25.6,
+ "r1_all_lines": 7120000,
+ "r1_team_all_rows": 1990000,
+ "renewal_lines": {
+  "churn": 860000,
+  "contraction": 200000
+ },
+ "renewals_used": 2224,
+ "repricings": 396,
+ "reps": 2000,
+ "route_April_excess_as_an_exponential_with_a_floor": {
+  "churn": 870000,
+  "commitment": 9.9,
+  "contraction": 200000,
+  "dec27": 10050000,
+  "new_bus": 1350000,
+  "new_open": 630000,
+  "p20": 9880000,
+  "price": 300000,
+  "team_left": 1380000
+ },
+ "route_April_excess_from_the_last_two_months": {
+  "churn": 870000,
+  "commitment": 9.9,
+  "contraction": 200000,
+  "dec27": 10060000,
+  "new_bus": 1350000,
+  "new_open": 630000,
+  "p20": 9890000,
+  "price": 300000,
+  "team_left": 1390000
+ },
+ "route_CRM_stage_probabilities": {
+  "churn": 870000,
+  "commitment": 10.2,
+  "contraction": 200000,
+  "dec27": 10380000,
+  "new_bus": 1690000,
+  "new_open": 970000,
+  "p20": 10210000,
+  "price": 300000,
+  "team_left": 1370000
+ },
+ "route_Team_rates_before_April": {
+  "churn": 870000,
+  "commitment": 9.9,
+  "contraction": 200000,
+  "dec27": 10120000,
+  "new_bus": 1350000,
+  "new_open": 630000,
+  "p20": 9950000,
+  "price": 300000,
+  "team_left": 1450000
+ },
+ "route_Team_rates_of_the_last_three_months": {
+  "churn": 870000,
+  "commitment": 9.9,
+  "contraction": 200000,
+  "dec27": 10030000,
+  "new_bus": 1350000,
+  "new_open": 630000,
+  "p20": 9860000,
+  "price": 300000,
+  "team_left": 1360000
+ },
+ "route_Team_rates_of_the_trailing_twelve_months": {
+  "churn": 870000,
+  "commitment": 9.9,
+  "contraction": 200000,
+  "dec27": 10020000,
+  "new_bus": 1350000,
+  "new_open": 630000,
+  "p20": 9850000,
+  "price": 300000,
+  "team_left": 1350000
+ },
+ "route_Team_rates_since_April": {
+  "churn": 870000,
+  "commitment": 9.8,
+  "contraction": 200000,
+  "dec27": 9950000,
+  "new_bus": 1350000,
+  "new_open": 630000,
+  "p20": 9780000,
+  "price": 300000,
+  "team_left": 1280000
+ },
+ "route_accounts_drawn_independently": {
+  "churn": 630000,
+  "commitment": 10.1,
+  "contraction": 210000,
+  "dec27": 10280000,
+  "new_bus": 1350000,
+  "new_open": 630000,
+  "p20": 10120000,
+  "price": 310000,
+  "team_left": 1370000
+ },
+ "route_careful_but_hurried": {
+  "churn": 890000,
+  "commitment": 10.2,
+  "contraction": 310000,
+  "dec27": 10430000,
+  "new_bus": 1690000,
+  "new_open": 970000,
+  "p20": 10230000,
+  "price": 370000,
+  "team_left": 1360000
+ },
+ "route_each_accounts_trailing_true-up_rate": {
+  "churn": 860000,
+  "commitment": 9.9,
+  "contraction": 190000,
+  "dec27": 10060000,
+  "new_bus": 1350000,
+  "new_open": 630000,
+  "p20": 9890000,
+  "price": 300000,
+  "team_left": 1370000
+ },
+ "route_list_rise_applied_flat": {
+  "churn": 870000,
+  "commitment": 10.0,
+  "contraction": 200000,
+  "dec27": 10170000,
+  "new_bus": 1350000,
+  "new_open": 630000,
+  "p20": 9990000,
+  "price": 430000,
+  "team_left": 1370000
+ },
+ "route_mean_uplift_applied_flat": {
+  "churn": 870000,
+  "commitment": 9.9,
+  "contraction": 200000,
+  "dec27": 10110000,
+  "new_bus": 1350000,
+  "new_open": 630000,
+  "p20": 9940000,
+  "price": 370000,
+  "team_left": 1370000
+ },
+ "route_no_utilisation_term_in_the_exit_model": {
+  "churn": 870000,
+  "commitment": 9.9,
+  "contraction": 200000,
+  "dec27": 10040000,
+  "new_bus": 1350000,
+  "new_open": 630000,
+  "p20": 9880000,
+  "price": 300000,
+  "team_left": 1370000
+ },
+ "route_own_drift_over_12_months": {
+  "churn": 850000,
+  "commitment": 9.8,
+  "contraction": 200000,
+  "dec27": 9970000,
+  "new_bus": 1350000,
+  "new_open": 630000,
+  "p20": 9810000,
+  "price": 300000,
+  "team_left": 1370000
+ },
+ "route_own_drift_over_18_months": {
+  "churn": 870000,
+  "commitment": 9.9,
+  "contraction": 200000,
+  "dec27": 10020000,
+  "new_bus": 1350000,
+  "new_open": 630000,
+  "p20": 9860000,
+  "price": 300000,
+  "team_left": 1370000
+ },
+ "route_pooled_renewal_rates": {
+  "churn": 890000,
+  "commitment": 9.9,
+  "contraction": 310000,
+  "dec27": 10070000,
+  "new_bus": 1350000,
+  "new_open": 630000,
+  "p20": 9890000,
+  "price": 300000,
+  "team_left": 1370000
+ },
+ "route_the_books_trailing_true-up_rate_near_seats": {
+  "churn": 860000,
+  "commitment": 9.8,
+  "contraction": 190000,
+  "dec27": 9950000,
+  "new_bus": 1350000,
+  "new_open": 630000,
+  "p20": 9790000,
+  "price": 300000,
+  "team_left": 1370000
+ },
+ "route_trailing_run-rate_of_new_ARR": {
+  "churn": 870000,
+  "commitment": 10.1,
+  "contraction": 200000,
+  "dec27": 10250000,
+  "new_bus": 1550000,
+  "new_open": 0,
+  "p20": 10080000,
+  "price": 300000,
+  "team_left": 1370000
+ },
+ "route_uplift_by_size_band": {
+  "churn": 870000,
+  "commitment": 9.9,
+  "contraction": 200000,
+  "dec27": 10040000,
+  "new_bus": 1350000,
+  "new_open": 630000,
+  "p20": 9870000,
+  "price": 300000,
+  "team_left": 1370000
+ },
+ "route_utilisation_in_bins": {
+  "churn": 890000,
+  "commitment": 9.8,
+  "contraction": 200000,
+  "dec27": 10020000,
+  "new_bus": 1350000,
+  "new_open": 630000,
+  "p20": 9840000,
+  "price": 300000,
+  "team_left": 1370000
+ },
+ "route_win_odds_by_stage_alone": {
+  "churn": 870000,
+  "commitment": 9.9,
+  "contraction": 200000,
+  "dec27": 10090000,
+  "new_bus": 1390000,
+  "new_open": 680000,
+  "p20": 9920000,
+  "price": 300000,
+  "team_left": 1370000
+ },
+ "route_win_odds_by_stage_and_deal_age": {
+  "churn": 870000,
+  "commitment": 9.9,
+  "contraction": 200000,
+  "dec27": 10070000,
+  "new_bus": 1370000,
+  "new_open": 660000,
+  "p20": 9920000,
+  "price": 300000,
+  "team_left": 1370000
+ },
+ "team_change": 10000,
+ "team_failed": 4220,
+ "team_left": 1370000,
+ "team_new": 570000,
+ "team_persist": 0.0276,
+ "team_persist_pts": 2.8,
+ "uplift_at_20": 0.25,
+ "uplift_mean": 0.229,
+ "uplift_share_pct": 94
+}

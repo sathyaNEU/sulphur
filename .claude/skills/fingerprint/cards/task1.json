@@ -11,8 +11,8 @@
   "shape": "02",
   "decision_type": "quantity_figure",
   "answer_unit": "currency",
-  "answer": "",
-  "answer_source": "",
+  "answer": "commit EUR 9.9 million of December 2027 ARR (80 per cent figure EUR 9,890,000), not the draft's EUR 10.2 million",
+  "answer_source": "task1/generator/figures.json commitment, p20",
   "gap": [
     "time",
     "population"
@@ -39,19 +39,21 @@
   "layer2_family": "forecast_uncertainty",
   "layer2_pattern": "own:arr-forecast-by-renewal-mechanics",
   "layer1": [
-    "contract amendments that supersede earlier lines (true-ups, co-terms) in one export",
+    "contract lines re-exported twice by the nightly billing job (exact duplicate rows)",
+    "renewal lines issued at list price, credited and re-issued",
+    "onboarding fees and part-term true-up charges on the contract export",
     "GBP contracts converted at the finance plan rate",
-    "workspace-to-account mapping with validity dates after account merges",
     "Team invoices re-issued after a failed card payment",
-    "CRM opportunity amounts typed per month on some rows and per year on others",
-    "duplicate snapshot rows from a re-run export job"
+    "CRM opportunity amounts typed per month by some owners and per year by others",
+    "duplicate snapshot rows from a re-run export job",
+    "company and parent account names typed several ways in the CRM"
   ],
   "stakeholder_role": "the CFO, who puts the December 2027 ARR commitment in the board's 2027 plan",
   "role_family": "finance_controller",
   "scoring_unit": "per active unit per period",
   "spine": {
-    "file": "team_billing_2022-01_2026-10.csv",
-    "rows": 0,
+    "file": "team_invoices_2022-01_2026-10.csv",
+    "rows": 160502,
     "entity": "one monthly Team-plan invoice",
     "grain": "account x month",
     "source": "synthetic"
@@ -80,7 +82,7 @@
   "question_form": "how-much",
   "driver": "A forward total is the sum of several flows each set by its own mechanism (a step change still applying unit by unit at each unit's anniversary, a one-off shock whose excess exit rate decays with time since it hit, a size adjustment at each anniversary set by how much of its capacity each unit uses, a pipeline whose conversion falls with each item's age, and exits that arrive together within groups), so the trailing aggregate rate, the recent pooled rate, the stated conversion odds and an independent-unit band each misstate a different piece and the committed low quantile.",
   "driver_concrete": "December 2027 ARR is the October 2026 book plus the March 2026 price rise still to land at Business renewals from November to February at the realised (not list) uplift, less the Team accounts padded to the new three-seat minimum running off on a hazard that falls with months since padding, less the seats Business accounts shed at renewal where utilisation is low (first renewals most), less logo churn that clusters by parent group, plus new Business ARR from a pipeline whose win rate falls with deal age, with the 80 per cent commitment read from a simulation that keeps a parent's accounts together.",
-  "stump": "A careful but hurried analyst rebuilds the October 2026 ARR, then projects December 2027 on the trailing twelve months' net revenue retention, the monthly plan's churn since April and the CRM's stage odds with accounts treated as independent, and tells the board the draft target can be committed, when the uplift in the trailing rate is mostly spent, the padded monthly seats run off on a falling hazard, the old open deals rarely close, low-utilisation accounts shed seats at their first renewal and parent groups leave together, so the figure with an 80 per cent chance of being met sits below the draft.",
+  "stump": "A careful but hurried analyst rebuilds the October 2026 ARR correctly, then applies the mean realised uplift to every contract still to reprice, pools renewal exit and seat-cut rates without utilisation, first renewals or group exits, carries the Team plan's last three months' exit rates, values the open pipeline at the CRM's stage probabilities and draws accounts independently for the band, and files EUR 10.2 million as the 80 per cent figure, clearing the draft, when large contracts negotiate the rise down, seat cuts follow utilisation, the April exits are fading, old open deals rarely close and parent groups leave together, so the figure is EUR 9.9 million.",
   "answer_shape": "forecast-bands-drivers",
   "weight": "synthesis",
   "chain_signature": [
@@ -93,7 +95,7 @@
     "synthesis"
   ],
   "results": "R1 opening ARR at 31 Oct 2026 by plan; R2 price uplift still to land at Business renewals; R3 the October Team book's ARR left in December 2027; R4 Business ARR lost to seat cuts and to non-renewal at 2027 renewals; R5 new Business ARR signed by December 2027; R6 the December 2027 ARR, its 80 per cent band and the figure with an 80 per cent chance of being met; R7 the monthly path and a bridge that adds back",
-  "one_fact_test": "the March price rise is mostly already in the book; rescues R2 and part of R6 at most (2 of 7 at the outside)",
+  "one_fact_test": "old open deals rarely close, so the CRM's stage odds overstate the pipeline; executed on the careful pass it rescues R5 and R6 (2 of 7, effort.json)",
   "strategy_label": "WORKS IN FORM",
   "mechanism_source": "design_note",
   "differentiation": {

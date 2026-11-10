@@ -1,41 +1,42 @@
 {
  "task": "task1",
- "status": "DESIGN",
+ "status": "PAUSED",
  "domain": "product-analytics",
  "subdomain": "retention-cohort-lifetime-value-modeling",
  "objective": "forecasting",
- "stage": 2,
- "stage_name": "design",
+ "stage": 5,
+ "stage_name": "ready",
  "updated": "2026-11-09",
  "doctrine": "throughout",
- "call": "",
+ "call": "commit EUR 9.9 million of December 2027 ARR (80 per cent figure EUR 9,890,000, expected EUR 10,050,000, range 9,770,000 to 10,320,000), not the draft's EUR 10.2 million",
  "chain": "R1 opening ARR by plan; R2 uplift still to land; R3 Team book left in Dec 2027; R4 seat cuts and non-renewal at 2027 Business renewals; R5 new Business ARR; R6 Dec 2027 ARR, band and 80 per cent commitment; R7 monthly path and bridge",
  "architecture": 2,
  "loops": 0,
  "precut": {
-  "exit": null,
-  "date": ""
+  "exit": 0,
+  "date": "2026-11-09",
+  "checks": "84, 0 FAIL, 2 WARN (forks and effort owed at stage 3)"
  },
  "leak": {
-  "leak_py": "",
-  "reader": ""
+  "leak_py": "REVIEW (sweeps 4 and 9, ruled harmless in the note), 2026-11-09",
+  "reader": "clean: no process sentence, no ranking or helper file, no one thing, 2026-11-09"
  },
  "duplicate_check": {
-  "heart": "",
-  "nearest": "task10 at 0.06"
+  "heart": "BLOCK 2026-11-09: ban.strategy (task13), ban.forum (task13), ban.forcing_event (task12), test.same_puzzle and test.same_driver (mark162 v1 lineage); all against cards drawn before task1",
+  "nearest": "task10 at 0.05; surface clean"
  },
  "judge": {
-  "verdict": "",
-  "disposition": "",
-  "gate_h": "",
-  "report": ""
+  "verdict": "DETERMINISTIC",
+  "disposition": "APPROVE",
+  "gate_h": "pass: 7 results across 5 areas, one_thing none, one fact rescues 1 to 2 of 7",
+  "report": "task1/determinism_check_report.md"
  },
- "paper_pair": null,
+ "paper_pair": 33.6,
  "effort": {
-  "quick": null,
-  "careful": null,
-  "thorough": null,
-  "largest_hint": ""
+  "quick": 0,
+  "careful": 2,
+  "thorough": 7,
+  "largest_hint": "old open deals rarely close, so the CRM's stage odds overstate the pipeline; rescues 2 of 7 (R5, R6)"
  },
  "runs": {
   "run1": null,
@@ -59,7 +60,7 @@
    "note": "single deep step returned in kind; re-rooted"
   }
  ],
- "resume": "stage 2: prototype the process, run the rivals per result, write the results chain and effort test, precut.py",
+ "resume": "stage 5 held only on guard.py heart BLOCK (draw axes: strategy and forum vs task13, forcing event vs task12, gap time and pattern G13 vs mark162 v1 lineage). Every other gate green on the final cut (make.py two byte-identical builds, checks 162/162, verify 34/34, effort pair 33.6, figures_check, audit_containers 0 FAIL, leak REVIEW ruled, surface clean, judge APPROVE). Author to rule: redraw the colliding axes (every honest forum and forcing event probed collides) or accept; then rerun python3 task1/generator/make.py and gates.py task1, set READY and commit with git add -f task1/target.zip task1/golden task1/golden.zip.",
  "approved": null,
  "submitted": null,
  "portal": {
@@ -75,6 +76,10 @@
   {
    "date": "2026-11-09",
    "event": "architecture 1 spent: returned in kind by the project lead's review (single constructed factor in the forward cohort); re-rooted to architecture 2, a results chain in a new world (Tekenbord, seat-licensed SaaS ARR forecast)"
+  },
+  {
+   "date": "2026-11-09",
+   "event": "stage 3 to 4 built: pack of 12 files, goldens, checks, verify, effort; leak reader clean, judge APPROVE; held at stage 5 on guard heart BLOCK on the draw's axes"
   }
  ]
 }

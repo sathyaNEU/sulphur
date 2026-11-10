@@ -1,0 +1,407 @@
+{
+ "hints": [
+  {
+   "rescues": [
+    "R5",
+    "R6"
+   ],
+   "sentence": "old open deals rarely close, so the CRM's stage odds overstate the pipeline"
+  },
+  {
+   "rescues": [
+    "R2"
+   ],
+   "sentence": "large contracts negotiate the price rise down at renewal"
+  },
+  {
+   "rescues": [],
+   "sentence": "seat cuts and exits at renewal follow how many people use the product, first renewals most"
+  },
+  {
+   "rescues": [],
+   "sentence": "accounts in one parent group leave together"
+  },
+  {
+   "rescues": [
+    "R3"
+   ],
+   "sentence": "the extra Team exits after April are fading"
+  },
+  {
+   "rescues": [],
+   "sentence": "seat additions follow each account's own growth in users"
+  }
+ ],
+ "results": [
+  {
+   "bands": {
+    "business": [
+     6970000,
+     6970000
+    ],
+    "team": [
+     1930000,
+     1930000
+    ]
+   },
+   "depends": [],
+   "figure": "opening",
+   "golden": {
+    "business": 6970000,
+    "team": 1930000
+   },
+   "graded_as": "Ask 1",
+   "id": "R1",
+   "independent": "",
+   "name": "ARR on the books 31 Oct 2026, Business and Team",
+   "partly_share": 0.5,
+   "passes": {
+    "careful": {
+     "business": 6970000,
+     "team": 1930000
+    },
+    "quick": {
+     "business": 7120000,
+     "team": 1990000
+    },
+    "thorough": {
+     "business": 6970000,
+     "team": 1930000
+    }
+   }
+  },
+  {
+   "band": [
+    300000,
+    300000
+   ],
+   "depends": [],
+   "figure": "price",
+   "golden": 300000,
+   "graded_as": "Component 1",
+   "id": "R2",
+   "independent": "",
+   "name": "price line of the bridge",
+   "partly": [
+    270000,
+    330000
+   ],
+   "passes": {
+    "careful": 370000,
+    "quick": null,
+    "thorough": 300000
+   }
+  },
+  {
+   "band": [
+    1370000,
+    1390000
+   ],
+   "depends": [],
+   "figure": "team_left",
+   "golden": 1370000,
+   "graded_as": "Ask 3",
+   "id": "R3",
+   "independent": "",
+   "name": "Dec 2027 Team ARR from the October Team accounts",
+   "partly": [
+    1330000,
+    1430000
+   ],
+   "passes": {
+    "careful": 1360000,
+    "quick": null,
+    "thorough": 1370000
+   }
+  },
+  {
+   "bands": {
+    "churn": [
+     850000,
+     890000
+    ],
+    "contraction": [
+     190000,
+     200000
+    ]
+   },
+   "depends": [],
+   "figure": "renewal_lines",
+   "golden": {
+    "churn": 860000,
+    "contraction": 200000
+   },
+   "graded_as": "Component 2",
+   "id": "R4",
+   "independent": "",
+   "name": "seat reductions and accounts lost",
+   "partly_share": 0.5,
+   "passes": {
+    "careful": {
+     "churn": 890000,
+     "contraction": 310000
+    },
+    "quick": null,
+    "thorough": {
+     "churn": 860000,
+     "contraction": 200000
+    }
+   }
+  },
+  {
+   "bands": {
+    "new_bus": [
+     1350000,
+     1370000
+    ],
+    "new_open": [
+     630000,
+     660000
+    ]
+   },
+   "depends": [],
+   "figure": "new_split",
+   "golden": {
+    "new_bus": 1350000,
+    "new_open": 630000
+   },
+   "graded_as": "Ask 4",
+   "id": "R5",
+   "independent": "",
+   "name": "new Business ARR and the open deals' part",
+   "partly_share": 0.5,
+   "passes": {
+    "careful": {
+     "new_bus": 1690000,
+     "new_open": 970000
+    },
+    "quick": null,
+    "thorough": {
+     "new_bus": 1350000,
+     "new_open": 630000
+    }
+   }
+  },
+  {
+   "band": [
+    9.8,
+    9.9
+   ],
+   "depends": [
+    "R2",
+    "R3",
+    "R4",
+    "R5"
+   ],
+   "figure": "commitment",
+   "golden": 9.9,
+   "graded_as": "Recommendation",
+   "id": "R6",
+   "independent": "",
+   "name": "Dec 2027 commitment (80 per cent)",
+   "passes": {
+    "careful": 10.2,
+    "quick": 11.6,
+    "thorough": 9.9
+   }
+  },
+  {
+   "bands": {
+    "Apr 2027": [
+     9580000,
+     9640000
+    ],
+    "Aug 2027": [
+     9720000,
+     9800000
+    ],
+    "Dec 2026": [
+     9240000,
+     9260000
+    ],
+    "Dec 2027": [
+     9950000,
+     10070000
+    ],
+    "Feb 2027": [
+     9510000,
+     9540000
+    ],
+    "Jan 2027": [
+     9370000,
+     9400000
+    ],
+    "Jul 2027": [
+     9700000,
+     9770000
+    ],
+    "Jun 2027": [
+     9680000,
+     9750000
+    ],
+    "Mar 2027": [
+     9530000,
+     9580000
+    ],
+    "May 2027": [
+     9630000,
+     9690000
+    ],
+    "Nov 2026": [
+     9110000,
+     9120000
+    ],
+    "Nov 2027": [
+     9870000,
+     9970000
+    ],
+    "Oct 2027": [
+     9800000,
+     9890000
+    ],
+    "Sep 2027": [
+     9770000,
+     9850000
+    ]
+   },
+   "depends": [
+    "R1",
+    "R2",
+    "R3",
+    "R4",
+    "R5"
+   ],
+   "figure": "path_table",
+   "golden": {
+    "Apr 2027": 9610000,
+    "Aug 2027": 9780000,
+    "Dec 2026": 9240000,
+    "Dec 2027": 10050000,
+    "Feb 2027": 9520000,
+    "Jan 2027": 9390000,
+    "Jul 2027": 9750000,
+    "Jun 2027": 9720000,
+    "Mar 2027": 9560000,
+    "May 2027": 9670000,
+    "Nov 2026": 9110000,
+    "Nov 2027": 9960000,
+    "Oct 2027": 9870000,
+    "Sep 2027": 9830000
+   },
+   "graded_as": "Ask 2",
+   "id": "R7",
+   "independent": "",
+   "name": "monthly path Nov 2026 to Dec 2027",
+   "partly_share": 0.5,
+   "passes": {
+    "careful": {
+     "Apr 2027": 9650000,
+     "Aug 2027": 9960000,
+     "Dec 2026": 9260000,
+     "Dec 2027": 10430000,
+     "Feb 2027": 9570000,
+     "Jan 2027": 9410000,
+     "Jul 2027": 9900000,
+     "Jun 2027": 9820000,
+     "Mar 2027": 9600000,
+     "May 2027": 9730000,
+     "Nov 2026": 9120000,
+     "Nov 2027": 10290000,
+     "Oct 2027": 10160000,
+     "Sep 2027": 10060000
+    },
+    "quick": {
+     "Apr 2027": 9980000,
+     "Aug 2027": 10760000,
+     "Dec 2026": 9240000,
+     "Dec 2027": 11610000,
+     "Feb 2027": 9600000,
+     "Jan 2027": 9420000,
+     "Jul 2027": 10560000,
+     "Jun 2027": 10360000,
+     "Mar 2027": 9790000,
+     "May 2027": 10170000,
+     "Nov 2026": 9070000,
+     "Nov 2027": 11390000,
+     "Oct 2027": 11180000,
+     "Sep 2027": 10970000
+    },
+    "thorough": {
+     "Apr 2027": 9610000,
+     "Aug 2027": 9780000,
+     "Dec 2026": 9240000,
+     "Dec 2027": 10050000,
+     "Feb 2027": 9520000,
+     "Jan 2027": 9390000,
+     "Jul 2027": 9750000,
+     "Jun 2027": 9720000,
+     "Mar 2027": 9560000,
+     "May 2027": 9670000,
+     "Nov 2026": 9110000,
+     "Nov 2027": 9960000,
+     "Oct 2027": 9870000,
+     "Sep 2027": 9830000
+    }
+   }
+  }
+ ],
+ "routes": [
+  {
+   "answer": 9.9,
+   "golden": true,
+   "name": "golden"
+  },
+  {
+   "answer": 11.6,
+   "name": "quick: trailing growth carried forward"
+  },
+  {
+   "answer": 10.2,
+   "name": "careful but hurried"
+  },
+  {
+   "answer": 9.9,
+   "name": "mean uplift applied flat"
+  },
+  {
+   "answer": 10.0,
+   "name": "list rise applied flat"
+  },
+  {
+   "answer": 9.9,
+   "name": "pooled renewal rates"
+  },
+  {
+   "answer": 10.1,
+   "name": "accounts drawn independently"
+  },
+  {
+   "answer": 9.8,
+   "name": "Team rates since April"
+  },
+  {
+   "answer": 9.9,
+   "name": "Team rates of the last three months"
+  },
+  {
+   "answer": 9.9,
+   "name": "Team rates of the trailing twelve months"
+  },
+  {
+   "answer": 9.9,
+   "name": "Team rates before April"
+  },
+  {
+   "answer": 10.2,
+   "name": "CRM stage probabilities"
+  },
+  {
+   "answer": 10.1,
+   "name": "trailing run-rate of new ARR"
+  },
+  {
+   "answer": 9.9,
+   "name": "win odds by stage alone"
+  }
+ ]
+}
