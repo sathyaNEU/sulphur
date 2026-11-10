@@ -1,25 +1,24 @@
 {
  "task": "task1",
- "status": "PAUSED",
+ "status": "DESIGN",
  "domain": "product-analytics",
  "subdomain": "retention-cohort-lifetime-value-modeling",
  "objective": "forecasting",
- "stage": 4,
- "stage_name": "check",
+ "stage": 2,
+ "stage_name": "design",
  "updated": "2026-11-10",
  "doctrine": "throughout",
- "call": "commit EUR 10.0 million of December 2027 ARR (the largest 0.1 million step met in at least 80 per cent of outcomes, 83 in 100; expected EUR 10,220,000, range EUR 9,940,000 to EUR 10,520,000), not the draft's EUR 10.3 million (met 36 in 100), which every trailing extrapolation clears (EUR 10,720,000 to EUR 11,490,000)",
- "chain": "R1 opening ARR by plan; R2 price uplift still to land at the November and December renewals; R3 the October Team book's ARR left in Dec 2027 on a calendar-indexed hazard with the faded January excess; R4 seat cuts and non-renewal at 2027 Business renewals; R5 new Business ARR and the open deals' part; R6 Dec 2027 ARR, the band as policy 5.2 files it and the largest 0.1 million step met in 80 per cent of outcomes against a draft every trailing view clears; R7 monthly path and bridge",
- "architecture": 2,
- "loops": 1,
+ "call": "",
+ "chain": "R1 paying subscribers by title at 31 Oct 2026; R2 realised 36-month net revenue per start of the Jul-Sep 2023 starts by channel (household returns included); R3 end-of-intro exit share per 2027 offer at 2026 prices; R4 its change at a full price 2 euros higher; R5 24-month survival of the Nov 2025-Apr 2026 starts by channel; R6 extra cancellations from the April 2027 rise among the Oct 2026 base by title; R7 expected 36-month net revenue per start for every 2027 line; R8 the funded lines under the budget; R9 the Oct 2026 base paying at 31 Dec 2027 by title",
+ "architecture": 3,
+ "loops": 0,
  "precut": {
-  "exit": 0,
-  "date": "2026-11-10",
-  "checks": "re-run on the repaired note"
+  "exit": null,
+  "date": ""
  },
  "leak": {
-  "leak_py": "REVIEW (sweeps 4 and 9, ruled harmless in the note), 2026-11-09",
-  "reader": "clean: no process sentence, no ranking or helper file, no one thing, 2026-11-09"
+  "leak_py": "",
+  "reader": ""
  },
  "duplicate_check": {
   "heart": "",
@@ -29,14 +28,14 @@
   "verdict": "",
   "disposition": "",
   "gate_h": "",
-  "report": "task1/determinism_check_report.md"
+  "report": ""
  },
- "paper_pair": 20.8,
+ "paper_pair": null,
  "effort": {
-  "quick": 0,
-  "careful": 1,
-  "thorough": 7,
-  "largest_hint": "old open deals rarely close, so the CRM's stage odds overstate the pipeline; rescues 2 of 7 (R5, R6)"
+  "quick": null,
+  "careful": null,
+  "thorough": null,
+  "largest_hint": ""
  },
  "runs": {
   "run1": null,
@@ -72,7 +71,7 @@
    "note": "the platform's holistic audit failed the uploaded cut on determinism (runs/arch2/holistic_audit.md): the commitment not forced by the rounding, the band's contents pinned by no file, two note figures stated as ranges, the draft failing a naive trailing view too; repaired in the generator (policy v5 section 5.2 and 5.3, the commitment as the largest 0.1 million step met in 80 per cent of outcomes, the January 2026 calendar, flat deal creation, a calendar index on Team cancellations, utilisation drifting at signing, estimation draws in the band, the world re-seeded)"
   }
  ],
- "resume": "architecture 2 is spent (see the note's last Tried and rejected line): the repair closed the audit's four determinism points (judge DETERMINISTIC APPROVE) but the uploaded run's own methods land the commitment (66.5 of 93 graded weight); re-root task1 at stage 1 to a new world in the same subdomain whose decision is a set or count, each judgment flipping units, priced against the recorded run behaviour before READY",
+ "resume": "stage 2: write the results chain with bands and pins, the hidden factor record, the effort test on paper, the fork and closure tables, the asks and prompt.txt; then precut.py",
  "approved": null,
  "submitted": null,
  "portal": {
@@ -100,6 +99,10 @@
   {
    "date": "2026-11-10",
    "event": "repair after the holistic audit built and judged (DETERMINISTIC APPROVE); measured against the uploaded run's methods it does not stump (66.5 of 93); held PAUSED for a re-root"
+  },
+  {
+   "date": "2026-11-10",
+   "event": "architecture 2 spent (single-total risk); re-rooted to architecture 3, Medienhaus Brückenhafen's 2027 digital acquisition lines ranked under a budget cap, nine results"
   }
  ]
 }
