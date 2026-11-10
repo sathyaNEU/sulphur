@@ -1,44 +1,376 @@
-# task9 design note (architecture 8)
+# task9: how large a 3-month variance-swap ladder the Carrow Fields sleeve can add for 2027 (architecture 8)
 
 ## Draw
 
-Analysis type: Forecasting & Predictive Modeling (assigned), in Quantitative Finance, task type
-volatility-derivatives-pricing (the client's derivative pricing, market data and curve validation, and counterparty
-exposure types).
-Answer shape: a schedule under capacity (the largest size of a new ladder the two limits leave room for, and the
-2027 receipts quarter by quarter at that size).
-Weight: allocation under constraints (the room two limits leave beside a standing ladder, measured on a record).
+Subdomain: Quantitative Finance (Quantitative Finance and Trading)
+Analysis type: Forecasting & Predictive Modeling (assigned), task type volatility-derivatives-pricing (the client's
+  derivative pricing, market data and curve validation, and counterparty exposure types).
+Answer shape: a schedule under capacity (the largest size of a new ladder that the two limits leave room for, and
+  the 2027 plan at that size with its range).
+Weight: allocation under constraints (the room two limits leave beside a standing ladder, taken off a record day
+  by day); none of the last three builds on file sat there.
+Data-native sentence: the policy measures both limits on the record since January 2007, the Cboe download of the
+  3-month index begins on 18 September 2009, on the days that set the limits that index sits below the 30-day index
+  it sits above in calm markets, and swaps sold a month apart share most of their days, so the ladder's 2008 has to
+  be rebuilt from both neighbours and every average and range has to keep neighbouring sales together.
+People: Stephanie Bowman (director of treasury), Edward Stewart (chief investment officer), Gloria Wilkins
+  (investment operations), from guard.py names --geo US --seed 908.
 
-1. World: the Carrow Fields Foundation's volatility-premium sleeve, which has sold one 12-month S&P 500 variance
-   swap every month since July 2021 (USD 50,000 a point, two confirmations a month with three dealers), and wants to
-   add a 3-month ladder from the January 2027 sale.
+1. World: the Carrow Fields Foundation's volatility-premium sleeve has sold one 12-month S&P 500 variance swap
+   every month since July 2021 (USD 50,000 a point, two confirmations a month with three dealers) and wants to add
+   a 3-month ladder from the January 2027 sale; the dealers' term sheet also quotes six months.
 2. Data: public market records used as is (the Cboe index history downloads for the S&P 500, the 9-day, 30-day,
-   3-month, 6-month and 1-year volatility indices, the VVIX and SKEW, pulled 2026-11-10 with closes to 2026-11-09);
-   the sleeve's swaps, statements and policy are authored paperwork and carry no pattern of their own.
-3. Data-native sentence: the policy measures both limits on the record since January 2007, the 3-month index is
-   published only from 18 September 2009, and in a crisis it sits below the 30-day index it sits above in calm
-   markets, so the ladder's 2008 has to be rebuilt from both neighbours before anything can be sized.
-4. Decision: one committed quantity, the largest vega per monthly 3-month sale that keeps the whole sleeve inside a
-   settlement-loss limit of USD 30m a calendar year and a collateral limit of USD 45m on any day of the record, with
-   the 2027 cash the sleeve should be expected to pay. Forward facing: the ladder launches on 19 January 2027.
-5. Results: ten, across eight areas (assembly and reconciliation, self-verification, missingness and measurement,
-   modeling, decomposition and attribution, synthesis, forecasting, uncertainty).
-6. Where a hurried analysis goes: the 3-month ladder run from October 2009 (about USD 139,000 a point), the missing
-   strikes proxied from the 30-day index alone (127,000 to 139,000), marks at each swap's own index (147,000), the
-   new ladder sized on its own (186,000), no cap in the mark (40,000), and the open swaps budgeted at their marks
-   (USD 1.9m against about 2.5m expected).
-7. Golden: about USD 116,600 a point, bound by collateral on 20 November 2008; about USD 5.5m of receipts in 2027.
-8. Card: shape 04, gap population then time, generators G12, G14, G13, Gate G forecasting, calibration form the
+   3-month, 6-month and 1-year volatility indices, the VVIX and SKEW, pulled 2026-11-10 with closes to 2026-11-09).
+   The sleeve's swaps, statements and policy are authored paperwork and carry no pattern of their own. The 3-month
+   index's earlier closes (4 December 2007 on) are public on FRED and are held beside the generator as a
+   cross-check, outside the pack.
+3. Decision: one committed quantity, the largest vega per monthly 3-month sale that keeps the whole sleeve inside a
+   settlement limit of 2.0 per cent of USD 1,487.6m (29.752m in a calendar year) and a collateral limit of 3.0 per
+   cent (44.628m on any day) on the record, with the sleeve's 2027 cash plan at that size and its 80 per cent range.
+   Forward facing: the ladder launches on 19 January 2027 and the size goes to the dealers first.
+4. Results: eleven, across six areas (missingness and measurement, validation, modeling, synthesis, uncertainty,
+   forecasting).
+5. Where a hurried analysis goes: the missing strikes stood in for by a regression on the 30-day index, which fits
+   the whole overlap (USD 124,500 a point), the ladder run only from its index's first date (136,600), each swap
+   valued at its own index (144,400), the new ladder sized on its own (184,100), no cap in the valuation (38,900),
+   the open swaps planned at their value (USD 1.883m against 2.494m), a forecast made in volatility and squared
+   (3.015m), each average's range from settlements resampled one at a time (228,000 to 400,000 against 63,000 to
+   552,000), and the standing ladder's two sales still to come left out of the plan.
+6. Golden: USD 114,400 a point, bound by the collateral limit on 20 November 2008; a 6-month ladder instead would
+   fit at 58,700; a 2027 plan of USD 5.728m (2.809m from the 12-month ladder, its November and December 2026 sales
+   included, and 2.919m from nine 3-month settlements), four times in five between a net payment of 4.203m and
+   receipts of 12.204m.
+7. Card: shape 04, gap population then time, generators G12, G14, G13, Gate G forecasting, calibration form the
    dealers' statements, context artifact the month-end close-out, forum the treasury and investment office
-   themselves, forcing event the ladder's launch, organisation a foundation, role finance and treasury.
-9. Guard: WARN only. repeat.deliverables (a memo, a workbook and a CSV, as task14): kept, because the third file is
+   themselves (schedule D.8), forcing event the ladder's launch, organisation a foundation, role finance and
+   treasury.
+8. Guard: WARN only. repeat.deliverables (a memo, a workbook and a CSV, as task14): kept, because the third file is
    the sleeve's collateral for every day of the record, which is what a risk reviewer checks the size against, and
-   the two-file set stood at 33 per cent of the prompts on file. test.same_puzzle_older against mark196 is
-   differentiated on the card (a capture-recapture count; nothing here is counted or matched). The forum
-   (committee, against task14), the forcing event (contract, against task3), the question form and one persona's
-   first name were redrawn at the check.
-10. Lineage: architectures 1 to 7 are spent (the card's lineage holds each fate); architecture 7's results chain died
-    at stage 4 on Gate H with two built-in strands, which is why this draw constructs no market pattern at all.
+   the two-file set stood at 33 per cent of the prompts on file. repeat.gate_g (forecasting, as task10): the
+   assigned analysis type is forecasting and the call is next year's ladder and plan, so the label is the honest
+   one. test.same_puzzle_older against mark196 is differentiated on the card (a capture-recapture count; nothing
+   here is counted or matched). The forum (committee, against task14), the forcing event (contract, against task3),
+   the question form and one persona's first name were redrawn at the check.
+9. Lineage: architectures 1 to 7 are spent (the card's lineage holds each fate); architecture 7's results chain died
+   at stage 4 on Gate H with two built-in strands, which is why this draw constructs no market pattern at all.
+10. Honest limit of the paper: the careful column prices three moves as lost (a one-index stand-in kept on a
+    whole-overlap check, the value read as the expectation, settlements resampled one at a time). Each is a move a
+    strong run makes some of the time, so the pair estimate below is a model and the platform's two runs are the
+    measurement.
+
+## Deep reasoning
+
+Task type: volatility-derivatives-pricing, serving forecasting: variance swaps struck off an implied term structure,
+  marked at accrued plus implied variance, their settlement forecast for the coming year.
+Domain test: every result is a quantity the field prices or forecasts: a strike read off the implied term
+  structure and rebuilt where the index is not published, realised variance accrued from closes, a seasoned swap's
+  mark (accrued plus implied variance for its remaining term, under a cap), the exposure a dealer would call
+  collateral on, the expected settlement of open swaps as distinct from their mark, and inference on overlapping
+  settlements (the client's own depth line for this field: correcting inference for overlapping returns).
+Swap: with hospital beds for swaps there is no strike, no accrued variance, no term structure that inverts in a
+  crisis, no overlap between one month's sale and the next, and no difference between what a position is marked at
+  and what it is expected to pay; the question stops making sense at the first result.
+Where the weight sits: R4, the room on the binding day. It needs every 3-month swap sold from January 2007 struck
+  (32 sale dates before its index file begins), both ladders' open swaps marked on each of 4,995 days at the
+  variance implied for each swap's own remaining term under the cap, and the standing ladder's own use of the limit
+  taken off day by day; the work is long, not clever.
+Layer 1: eight index histories as Cboe publishes them (month/day/year dates, five files with open, high, low and
+  close and three with a single column, each starting in a different year, index days with no S&P 500 close); a
+  blotter with a confirmation first booked at ten times its size and a novation that leaves a superseded row, both
+  on swaps that have since expired; one dealer quoting variance units and a variance strike; a valuation feed in
+  three date formats with a re-sent day and three missing dealer days; statements struck ten days before the review
+  date; an exchange holiday that moves a 2027 expiry. Each comes from how dealers, a custodian and an exchange keep
+  records, and none decides a result.
+Not one thing: the strongest single piece is rebuilding the 3-month strikes for 2007 to 2009 from both neighbours.
+  A run that nails it still has to mark seasoned swaps at their remaining terms under the cap through two crises
+  (R3, R5), take the standing ladder's use of each limit off day by day (R4), tell an expected settlement from a
+  mark (R8), keep neighbouring sales together when it ranges an average (R6, R7), count the standing ladder's two
+  sales still to come and the nine new settlements that fall in the year, and range all 21 settlements jointly
+  (R10). The recommendation needs all three priced moves at once.
+One-fact test: the most useful single sentence is "on the days that set the limit the 3-month index sits below the
+  30-day index, so the missing strikes have to come from the maturities on both sides of three months"; it rescues
+  R1, R2 and R4, 3 of 11. "An open swap's value is a price: expect what such swaps went on to pay on the record"
+  rescues R8, 1 of 11. "Keep neighbouring sales together when the record is resampled and run the swaps not yet
+  sold off the same start dates as the open ones" rescues R6, 1 of 11. Two moves at once (printed by checks.py as
+  information): the rebuild and the expectation 4 of 11, the rebuild and dependence 5 of 11, the expectation and
+  dependence 2 of 11; only all three rescue the plan and the recommendation (8 of 11). All are method choices on
+  public data used as is; nothing is hidden or built in.
+Not semantics: every field, unit and clause read correctly (vega against variance units, the cap, the sale and
+  expiry rules, the year a settlement falls in, the sleeve-wide collateral measure, the record's sale dates) still
+  leaves the 3-month ladder without strikes for 32 sale dates, leaves the mark where it is and leaves the
+  settlements overlapping; no reading supplies a strike, an expectation or a range.
+Not rule application: schedule D files what is measured (the record and its sale dates, the limits, the sleeve-wide
+  collateral, the plan's basis, which ranges are reported) and the confirmation files the payoff; no document says
+  how a strike is found where its index is not published, how a seasoned swap is valued, what an open swap is
+  expected to pay or how a range is taken. After every filed rule is applied those four remain to judge.
+Estimand: schedule D.2 and D.3 (sale date, expiry, strike index, cap, sizes in multiples of USD 100), D.4 (the two
+  limits and Reference Assets), D.5 (the record from January 2007 to the review date, every ladder at its size on
+  every sale date whether or not its index was yet published, settlement in the year of expiry, collateral the
+  sleeve-wide negative value at the close on the dealers' valuation basis, no discounting), D.7 (the plan: every
+  ladder's swaps that expire in the plan year, open swaps at the settlement amounts they are expected to pay as
+  estimated at the review date, unsold swaps at their ladder's average settlement per sale over the swaps that
+  would have expired by the review date, experience from the whole record, an average reported with the range the
+  average itself lies in four times in five, the plan with the range of the year's settlements), D.8 (the review
+  date); the master confirmation (realised volatility, the cap, the settlement amount); the credit support annex
+  summary (exposure never more than the capped settlement).
+No decoy: nothing in the pack argues for a size or a plan: the term sheet states the size the investment office
+  asked the dealers to quote (USD 200,000) and no file tests it; the statements carry valuations and say so.
+No replay: no result re-derives a published figure. The Cboe indices are inputs; the ladders, their marks and the
+  sleeve's room exist nowhere outside this pack.
+Pinned: analysis.py runs each result's rivals on the record. The 3-month ladder under six two-sided rebuilds
+  (regression on both neighbours in levels and logs, on the 30-day and 1-year pair, total variance, linear, and the
+  index's published earlier closes): 2.821 to 2.861 a sale and 156.5 to 163.9 for 2008. The 12-month peak under
+  six readings of the term structure, 25.84m to 26.49m. The 3-month size under 26 rebuild-by-marks combinations,
+  100,000 to 116,900, every one binding on the collateral limit on 20 November 2008; the 6-month size 54,100 to
+  58,800. Each average's range under nine ways of keeping neighbouring sales together (four block lengths, three
+  lag choices, calendar-year averages, a count of only the swaps that do not overlap). The expectation under ten estimators from the whole record, 2.394m to
+  2.888m. The plan's range under seven joint replays. Every hurried figure sits outside its band by a margin
+  checks.py asserts.
+Run forecast: R1, R2 and R4 lost to a self-confirming check (a regression on the 30-day index validated on the
+  whole overlap, where calm days outvote the stressed ones); R8 to a method shortcut (the value read as the
+  expectation, or a forecast made in volatility and squared); R6 and R7 to a method shortcut (settlements resampled
+  one at a time, dependence named as a caveat); R10 and R11 to an unfinished chain (all three, plus the standing
+  ladder's two sales still to come); R3 and R5 at risk of a method shortcut (each swap valued at its own index, or
+  the cap left out of the valuation). Calibration: each priced loss is a move a strong run makes some of the time.
+Strategy label: WORKS IN FORM (a forecast that has to earn its place, its invariant rebuilt from a record; F7
+  population in its legal form, a frame the published series leaves out rebuilt from histories and checked where it
+  can be; inference corrected for overlapping observations; public market data used as is).
+Depth level: 5 by structure, 4 by the careful column. Seven judgments each move a graded figure on their own (a
+  rebuild that holds in stress, the remaining-term mark, the cap in the mark, the standing ladder's use of the
+  limit, the expectation against the mark, dependence between neighbouring sales, the plan's population), and the
+  shortcuts land on different sizes and plans (124,500 and 5.562m, 136,600 and 7.298m, 144,400 and 6.494m, 184,100
+  and 7.507m, 114,400 and 5.117m, 114,400 and 6.249m); the careful column prices three of the seven as lost.
+Lesson: a limit measured on a record is only as long as the shortest series behind it, and the relation used to
+  lengthen that series has to be checked on the days that set the limit, where the average relation reverses; a
+  mark is a price, which the record shows to sit at the one-in-five low of what such swaps go on to pay; and 226
+  monthly settlements of 12-month swaps are closer to nineteen observations than to 226. No build on file rebuilds
+  a traded index from its neighbours, separates a derivative's mark from its expected settlement or ranges an
+  average of overlapping settlements.
+
+## Results chain
+
+| ID | Result (checkable) | Area | Pinned by | Band | Hurried analyst | Depends on | Graded as |
+|---|---|---|---|---|---|---|---|
+| R1 | the 3-month ladder's average settlement per sale on the record, USD 284,000 per USD 100,000 a point | missingness and measurement | schedule D.5(b): every monthly sale date from January 2007 counts whether or not the index was yet published; the 32 strikes before 18 September 2009 rebuilt from the 30-day and the 6-month or 1-year index | 282,000 to 287,000 | self-confirming check: stands the 30-day index in for the missing strikes by a regression that explains 0.94 of the 3-month index over the 4,312 days both are published (300,000) | independent: the index and price histories | Ask 2 |
+| R2 | the 3-month ladder's worst calendar year on the record, 2008 at a net USD 16,154,000 paid per USD 100,000 a point | validation | the same strikes, checked on the 102 overlap days the 30-day index closed above 35 (fit off by 1.35 points there; the one-index stand-in 2.3 points high) | 15,650,000 to 16,390,000 | self-confirming check: the stand-in's strikes are too high where the limit is set, so 2008 comes out milder (14,125,000) | independent: the index and price histories | Component 4 (Ask 2) |
+| R3 | the 12-month ladder's peak collateral on the record at its USD 50,000 a point, USD 25,876,000 (18 March 2020, with 20 November 2008 within 3 per cent) | modeling | schedule D.5(d): the open swaps valued together each day on the dealers' basis; the annex's cap on exposure | 25,800,000 to 26,500,000 | method shortcut: values each swap at the 1-year index (21,774,000), leaves the cap out of the valuation (30,067,000), or takes the worst calendar year of settlements (11,415,000) | independent: the index and price histories | Ask 4 |
+| R4 | the largest 3-month size inside both limits, USD 114,400 a point, bound by the collateral limit on 20 November 2008 | synthesis | schedule D.4 and D.5 (every ladder at its size, both limits, sizes in multiples of USD 100) on R2's strikes and R3's valuation | 100,000 to 117,000 | unfinished chain: sizes the ladder on the stand-in's strikes (124,500), on the years its index file covers (136,600), on its own without the standing ladder (184,100), or at each swap's own index (144,400) | R2, R3 | Component 1 |
+| R5 | the largest 6-month size instead, USD 58,700 a point, bound by the collateral limit on 20 November 2008 | modeling | the same schedule; the 6-month index is published from 2 January 2008 and the twelve strikes rebuilt before it move nothing | 54,000 to 59,000 | method shortcut: each swap valued at its own index (72,600) or the cap left out (28,200) | R3 | Ask 1 |
+| R6 | the 80 per cent range of the 12-month ladder's average settlement per sale (USD 315,000 per USD 100,000 a point): 63,000 to 552,000 | uncertainty | schedule D.7(d): the range the average itself lies in; 226 settlements of swaps that share eleven of their twelve months with the next sale (correlation 0.93), resampled in blocks of consecutive sales | low end 14,000 to 82,000; high end 537,000 to 616,000 | method shortcut: resamples the settlements one at a time and names serial dependence as a caveat (228,000 to 400,000), or allows for five lags where neighbouring swaps share eleven months (123,000 to 507,000) | independent: the 12-month ladder's settlements, which need no rebuilt strike | Ask 3 (12-month) |
+| R7 | the same range for the 3-month ladder's average: 143,000 to 413,000 | uncertainty | schedule D.7(d) on R1's settlements (correlation 0.64 between one sale and the next) | low end 131,000 to 159,000; high end 399,000 to 436,000 | method shortcut: resamples the settlements one at a time (194,000 to 370,000; 215,000 to 383,000 on the stand-in's strikes) | R1 | Ask 3 (3-month) |
+| R8 | what the open swaps that expire in 2027 should be expected to settle at, USD 2,494,000 | forecasting | schedule D.7(a) and (c): expected settlement as estimated at the review date, experience from the whole record; realised variance against implied for each swap's remaining term from every start date since January 2007 | 2,390,000 to 2,890,000 | method shortcut: reads the expectation off the swaps' value (1,883,000), forecasts volatility and squares it (3,015,000), or takes the typical start date (3,545,000) | independent: the open swaps and the record's start dates | Component 2 (Ask 5) |
+| R9 | the 80 per cent range of R8's total, USD 394,000 to 4,247,000 | uncertainty | the same start dates applied to all ten sale months at once | low end 200,000 to 420,000; high end 4,100,000 to 4,430,000 | method shortcut: draws the swaps independently (990,000 to 3,636,000); priced as earned, because strong runs replay fits jointly unprompted | independent: the start dates' replay, graded on its own ends | Ask 5 (range) |
+| R10 | the 2027 plan at that size by ladder: the 12-month ladder USD 2,809,000 (the open swaps and its November and December 2026 sales, still to come, at the ladder's average), the 3-month ladder 2,919,000 (nine settlements), the sleeve 5,728,000, four times in five between minus 4,203,000 and 12,204,000 | forecasting | schedule D.7 (every ladder's swaps that expire in the plan year, open or not yet sold) and D.7(e); all 21 settlements replayed from the same 4,717 start dates | 12-month 2,705,000 to 3,205,000; 3-month 2,530,000 to 3,030,000; sleeve 5,235,000 to 6,235,000; low end minus 4,300,000 to minus 1,900,000; high end 11,200,000 to 12,400,000 | unfinished chain: plans the open swaps at their value and the new ladder on the stand-in's size and average (2,198,000 and 3,364,000), draws the swaps not yet sold one at a time (minus 447,000 to 11,027,000), or leaves the standing ladder's two coming sales out (2,494,000) | R1, R4, R8 | Component 3 (Ask 6) |
+| R11 | the recommendation: add the 3-month ladder at no more than USD 114,400 a point, not the 200,000 quoted for, and carry USD 5,728,000 in the 2027 cash plan with its range of minus 4,203,000 to 12,204,000 | synthesis | R4 and R10 | the size in R4's band, the plan and its range in R10's | unfinished chain: a size from the stand-in's strikes and a plan from the marks (124,500 and 5,562,000, with a range that misses both ends) | R4, R10 | Recommendation |
+
+Carry-forward: R1, R2, R3, R6, R8 and R9 stand on inputs of their own (the index histories, the 12-month ladder's
+settlements, the open swaps). R4 falls with R2 or R3; R5 with R3 only (the 6-month index's late start moves
+nothing, so a run that mishandles the 3-month strikes still earns R5); R7 with R1; R10 with R1, R4 or R8; R11 with
+R4 or R10. A slip on the rebuild costs R1, R2, R4, R7, R10 and R11 and leaves R3, R5, R6, R8 and R9; a slip on the
+expectation costs R8, R10 and R11; a slip on dependence costs R6, R7, R10 and R11.
+
+## Hidden factor record
+
+| Factor | Real or constructed | Only in deciding units | Found by | Fix depth | Verdict |
+|---|---|---|---|---|---|
+| the Cboe download of the 3-month index begins on 18 September 2009 (the 6-month on 2 January 2008, the 9-day on 4 January 2011); the index's earlier closes from 4 December 2007 are public on FRED and are not in the foundation's folder | real (public data, used as is) | no: it shows on loading the file, and the 6-month and 9-day gaps sit beside it and decide nothing | one look at the file's first row | modelling: a strike series rebuilt from two neighbours and checked on the overlap; the public earlier closes land inside every band | keep |
+| the 3-month index stands 12.5 per cent above the 30-day index on average and 7.9 per cent below it on the 102 overlap days the 30-day index closed above 35 | real (public data, used as is) | no: it runs through every stressed stretch of the overlap (2010, 2011, 2015, 2018, 2020 and later) | a targeted query on the overlap's stressed days | modelling: the rebuild has to use both neighbours | keep |
+| realised variance has run below implied variance on the record (0.83 of it over one month, 0.67 over twelve), with a long left tail in what swaps pay | real (public data, used as is) | no: every start date since 2007 and every horizon | modelling: realised against implied by remaining term | modelling: an expectation and a joint range | keep |
+| settlements of swaps sold a month apart are tied (correlation 0.93 between one 12-month sale and the next, 0.64 for 3-month sales) | real (a property of any monthly ladder on any record) | no: every pair of neighbouring sales in both ladders | a lag-one correlation of the settlements | modelling: an average's range and a plan's range that keep neighbouring sales together | keep |
+
+## Effort test
+
+| Result | Quick pass | Careful but hurried | Thorough |
+|---|---|---|---|
+| R1 the 3-month ladder's average settlement per sale | Missed | Missed | Right |
+| R2 the 3-month ladder's worst calendar year | Missed | Missed | Right |
+| R3 the 12-month ladder's peak collateral | Missed | Right | Right |
+| R4 the largest 3-month size | Missed | Missed | Right |
+| R5 the largest 6-month size | Missed | Right | Right |
+| R6 the range of the 12-month ladder's average | Missed | Missed | Right |
+| R7 the range of the 3-month ladder's average | Missed | Missed | Right |
+| R8 the open swaps' expected settlement | Missed | Missed | Right |
+| R9 the open swaps' 80 per cent range | Missed | Right | Right |
+| R10 the 2027 plan by ladder with its range | Missed | Missed | Right |
+| R11 the recommendation | Missed | Missed | Right |
+| Roughly | 0 of 11 | 3 of 11 | 11 of 11 |
+
+Measured by: .claude/skills/stumping/effort.py on generator/effort.json
+Largest single hint: "on the days that set the limit the 3-month index sits below the 30-day index, so the missing strikes have to come from the maturities on both sides of three months"; rescues 3 of 11 results
+Pair estimate: 34.5 (the careful but hurried pass: instruction-following 7 and Asks 1, 4 and the open swaps' range of six)
+
+The careful column is priced up wherever strong runs make the move unprompted: every filed rule (the record's sale
+dates, both limits with the standing ladder beside the new one, the cap, the year of expiry, the schedule's basis
+for swaps not yet sold, the standing ladder's two coming sales), swaps valued on their remaining term, a stand-in
+checked on the overlap, and the open swaps replayed jointly for their range. It is priced as lost on three moves
+from the run record's list of what strong runs skip: a check that confirms itself (a one-index stand-in validated on
+the whole overlap), a risk-neutral figure taken where a real-world one is asked, and observations resampled one at a
+time with dependence left as a caveat. None is certain: a run that rebuilds from both neighbours earns R1, R2 and
+R4 (about 56), one that also forecasts from realised against implied earns R8 (about 62), and the plan and the
+recommendation need all three. Two moves at once rescue 4, 5 and 2 of 11 (checks.py prints them as information).
+
+## Data provenance
+
+Source: public, the Cboe Global Markets index history downloads (https://cdn.cboe.com/api/global/us_indices/daily_prices/
+  SPX, VIX, VIX9D, VIX3M, VIX6M, VIX1Y, VVIX and SKEW _History.csv), pulled 2026-11-10 with closes to 2026-11-09;
+  the exchange's holiday schedule for 2026 to 2028 as NYSE publishes it. The sleeve's swaps, the dealers'
+  statements, the custodian's ledger and the foundation's policy are authored positions and paperwork.
+Behaves like the real thing: every market value is the published close; the authored book is two confirmations a
+  month struck at the published 1-year index, valued, collateralised and settled by the confirmation's own formula
+  on those closes, so its history is what such a sleeve would have recorded.
+Genuine patterns: (1) volatility clusters, with 2008 and 2020 the two episodes that set every limit; (2) the term
+  structure slopes up in calm markets and inverts in stress; (3) implied variance exceeds realised variance on
+  average, more at long horizons, with a long left tail in what a seller is paid; (4) each index file starts in its
+  own year, and index days exist with no S&P 500 close; (5) a monthly ladder's settlements overlap, so they are
+  serially tied.
+Problems by process: the late-starting index files are Cboe's download history; the amended and novated
+  confirmations, the variance-unit statement, the three date formats, the re-sent and missing valuation files and
+  the month-end statement date are what a blotter, three dealers and a custodian produce; the moved expiry is the
+  exchange's observed holiday.
+License: Cboe index data are published by Cboe Global Markets for public download; the values are facts reproduced
+  unaltered for this analytical task with the source and pull date recorded in metadata.json. The S&P 500 is a
+  product of S&P Dow Jones Indices, whose closing levels Cboe republishes in the same download.
+Used as is: the eight index files ship byte for byte as downloaded (raw/manifest.json holds each file's URL, pull
+  date and sha256). Nothing is altered, filled, filtered or reordered.
+Cross-check: FRED series VXVCLS (the same 3-month index, published from 4 December 2007; raw_check/ holds the pull
+  and its sha256) equals the Cboe download on all 4,311 days both carry. It is not shipped and no golden figure
+  reads it. analysis.py runs it as a rival: on the published earlier closes the 3-month ladder averages USD 286,000
+  a sale with 2008 at 16,166,000 and sizes at 100,300 to 112,600, all inside the bands, and the golden's rebuilt
+  strikes sit 0.53 points from the published closes on average over the 21 sale dates the two can be compared
+  (20 October 2008: published 43.62, rebuilt 45.54, the one-index stand-in 50.25).
+Breadth: 21 files; eight index histories of 4,000 to 13,000 rows; 4,995 record days on which up to fifteen open
+  swaps are valued; 128 confirmations with 28,812 daily valuation rows; three candidate maturities; the binding day
+  has to be found among two crises and the room taken off day by day; 21 settlements fall in the plan year.
+Leak review: leak.py --asof 2026-11-10 returns REVIEW with no LEAK. (1) "ladder" in schedule D and the term sheet
+  is the program's own word, defined in D.2(a) and declared as a field term. (2) The same two documents carry the
+  words of the committed call (3-month, ladder, a point, monthly sale) because they are the program's vocabulary;
+  neither carries a size but the 200,000 the dealers quoted for, a stated input. (3) Six ordinary words of this note
+  (review, closed, published, November, schedule, carries) appear in schedule D; "published" sits in D.5's two
+  population sentences, which file what the record is and say nothing of how a strike is found. (4) The blotter's
+  and the exchange calendar's dates after the as-of date are the open swaps' expirations and the published holiday
+  schedule, forward-looking records the plan year needs. Single-use test: D.5(b)'s second sentence, D.7's lead and
+  D.7(d) and (e) each file a population or a quantity the decision cannot be read without (delete any one and a
+  second literal answer opens); none names a method.
+
+## Template check
+
+Chain signature: missingness-measurement, validation, modeling, synthesis, modeling, uncertainty, uncertainty,
+  forecasting, uncertainty, forecasting, synthesis
+Question form: what (the largest size, with the limit and day that bind)
+Nearest build: task4 (allocation-sensitivity, measurement) and task14 (bridge, assembly); neither sizes a position
+  against limits measured on a record, rebuilds a published series from its neighbours, forecasts a derivative's
+  settlement or ranges an average of overlapping observations, and no build on file shares this chain of areas or a
+  schedule under capacity.
+
+## Semantic fork table
+
+| ID | Term or convention | Readings | Golden | Ruled out by |
+|---|---|---|---|---|
+| SF1 | "sale" date of a month | the third Friday; the first business day after it | the first exchange business day after the third Friday | schedule D.2(b); every blotter trade date |
+| SF2 | expiry | the third Friday; the business day before when the exchange is shut | the preceding exchange business day (17 June 2027 for the March sale) | schedule D.2(c) with the exchange's holiday file |
+| SF3 | the strike | the index close on the sale date; the day before; another maturity's index | the closing level on the sale date of the Cboe index for the swap's maturity | schedule D.3; every blotter strike equals the 1-year index close of its trade date |
+| SF4 | realised volatility | 252 over the days observed with no mean taken; a sample standard deviation; calendar days | the confirmation's formula: 100 times the root of 252 over N times the sum of squared log returns | the master confirmation, section 3; the 104 settled confirmations reproduce |
+| SF5 | observation days | S&P 500 publishing days; days the volatility index files carry | days the S&P 500 publishes a close | the master confirmation, section 2; the index-only days carry no close to observe |
+| SF6 | the cap | on settlement only; also on the valuation | realised volatility capped at 2.5 times the strike at settlement, and exposure never above the capped settlement | schedule D.3; the master confirmation, section 4; the annex summary, exposure |
+| SF7 | the year a settlement falls in | the expiry's year; the payment date's; the sale's | the calendar year of expiry | schedule D.5(c) |
+| SF8 | the record | from January 2007; from each index's first date; the sleeve's own years | sale dates from January 2007 through the review date, closes to 9 November 2026 | schedule D.5(a) and (b), D.8 |
+| SF9 | the sleeve in the test | the new ladder alone; the new ladder with the 12-month ladder at USD 50,000 | every ladder of the sleeve at its size | schedule D.5(b); the blotter (two confirmations of 25,000 a month) |
+| SF10 | collateral on a day | per dealer; per swap; the sleeve's open swaps together | the amount by which the open swaps together are valued against the sleeve | schedule D.5(d) |
+| SF11 | the valuation basis | the swap's own maturity index; the 30-day index; implied variance for the remaining term | accrued variance plus implied variance for the remaining term, weighted by days | schedule D.5(d) (the dealers' basis); the valuation file's implied-to-expiry column, which differs swap by swap and reproduces every value to the dollar |
+| SF12 | reading the term structure between published terms | total variance; linear in volatility; the nearest term; with or without the 9-day index | total variance between the two nearest published terms | same call: R3, R4 and R5 stay inside their bands under each (analysis.py rivals) |
+| SF13 | a strike where the index is not published | rebuilt from both neighbours (regression, total variance, linear, logs); from the 30-day index alone | rebuilt from both neighbours | same call across the two-sided rebuilds; the one-sided stand-ins are 2.3 to 9.3 points high on the overlap's 102 stressed days (named data) and land outside the bands |
+| SF14 | the terms used to value swaps before an index is published | the terms published that day; rebuilt terms added | the terms published that day | same call: rebuilt terms move R4 to 110,300 and R5 to 57,000, inside both bands |
+| SF15 | the limits in dollars | 2.0 and 3.0 per cent of USD 1,487.6m; of another balance | 29,752,000 and 44,628,000 | schedule D.4(c); the audited statement of net assets at 30 June 2026 |
+| SF16 | "largest size" | rounded to the nearest 100; the largest multiple of 100 inside the limits | the largest multiple of USD 100 | schedule D.2(a); 114,400 either way for the 3-month ladder, 58,700 against 58,800 for the 6-month, both in band |
+| SF17 | average settlement per sale | over swaps expired by the review date; including open swaps at their marks | the swaps that would have expired by the review date (235) | schedule D.7(b) |
+| SF18 | worst calendar year | full years only; part years counted | every calendar year of the record | same call: 2008 under either |
+| SF19 | "expected to settle at" | the mark; an expectation on the record's experience | the expectation as estimated at the review date | schedule D.7(a) and (c); the mark sits below what the same swaps went on to pay from 80 per cent of the record's start dates (named data) |
+| SF20 | the experience behind the expectation | the whole record; the sleeve's own years; years before the record | the whole record | schedule D.7(c) and D.5(a) |
+| SF21 | "expected" | the mean; the median; a volatility forecast squared | the mean of the settlement | the word; the settlement amount is linear in variance (the confirmation, section 4), and the median (3,545,000) is the typical start date |
+| SF22 | the open swaps that expire in 2027 | expiry dates in 2027; all open swaps | the ten sale months January to October 2026 | the blotter's expiry dates; schedule D.7 (the year of expiry) |
+| SF23 | the new ladder's 2027 settlements | twelve; the nine whose expiry falls in 2027 | nine (sales 19 January to 20 September) | schedule D.7 (the year of expiry); the exchange calendar |
+| SF24 | the open swaps' 80 per cent range | 10th to 90th percentile of the total; of each swap | the 10th and 90th percentiles of the ten sale months' total | the asking sentence; same call with each swap's own percentile added |
+| SF25 | the review date | 30 October (the statements); 9 November | the 9 November close | schedule D.8 (the second Monday of November) |
+| SF26 | size of the standing ladder | 25,000; 50,000; 250,000 | USD 50,000 a point per monthly sale | the blotter's live rows (two confirmations of 25,000 for each trade date) |
+| SF27 | units on one dealer's lines | vega and volatility; variance units and variance | converted by the confirmation's definition (variance units are vega over twice the strike) | the master confirmation, section 1 |
+| SF28 | discounting | none; at a money-market rate | none | schedule D.5(e) |
+| SF29 | the dealers' own implied volatilities | used for the record; the published term structure | the published term structure (the dealers' figures exist only from July 2021) | schedule D.5(a) |
+| SF30 | a sale date whose strike index was not yet published | left out of the record; kept | kept | schedule D.5(b), second sentence |
+| SF31 | "80% range of the average" | the range single settlements fall in; the range the average itself lies in | the average's own range | schedule D.7(d) |
+| SF32 | the swaps in the plan | the open swaps and the new ladder; every ladder's swaps that expire in the year, sold or not | every ladder's, so the standing ladder's November and December 2026 sales count | schedule D.7 (lead and (b)); the term sheet (the 12-month ladder continues) |
+| SF33 | the plan's range | each ladder's range; the year's settlements together | the year's settlements together, receipts net of payments | schedule D.7(e) |
+| SF34 | the unit of the averages and their ranges | per USD 100,000 a point; at each ladder's size | per USD 100,000 a point | the asking sentence |
+| SF35 | the 3-month index's published earlier closes (public, not in the folder) | brought in; not brought in | either | same call: with them R1 is 286,000, R2 16,166,000 and R4 100,300 to 112,600, inside the bands |
+
+## Closure table
+
+| Axis | Closure |
+|---|---|
+| 1 Population | the record's sale dates from January 2007, published index or not (D.5(b), SF30); open swaps by expiry year (D.7); every ladder's unsold swaps by expiry year (D.7(b), SF32): filed, SF8, SF22, SF23 |
+| 2 Unit of account | US dollars a volatility point per monthly sale (D.2(a)); record figures per USD 100,000 a point (SF34); one dealer's variance units converted by definition (SF27) |
+| 3 Attribution window | a settlement falls in the calendar year of expiry (D.5(c)); no expiry sits on a year boundary |
+| 4 As-of dating | closes through the review date, 9 November 2026 (D.8); statements are at 30 October and are not the value date (SF25) |
+| 5 Version basis | the blotter's live rows (status column); the index files as pulled; the public earlier closes are a same-call rival (SF35) |
+| 6 Denominator | per sale, over the swaps expired by the review date (D.7(b), SF17); realised variance over N observation days (SF4) |
+| 7 Weighting | a ladder's swaps carry equal vega (D.2(a)); the mark weights accrued and implied variance by days (SF11) |
+| 8 Window length | the whole record for limits and for experience (D.5, D.7(c)); no shorter window is licensed (SF8, SF20) |
+| 9 Boundary inclusivity | observation days after the trade date to and including expiry (confirmation section 2); valuation days after the sale and before expiry |
+| 10 Rounding path | figures computed unrounded and rounded once for print; the plan is the sum of its stated parts; sizes floored to multiples of USD 100 (D.2(a), SF16) |
+| 11 Tie-break | none needed: one binding day (20 November 2008) under every sound valuation; R3's two episodes stated together and no day graded |
+| 12 Maturity and censoring | swaps open at the review date are outside the per-sale average (D.7(b)); they are forecast in R8; swaps not yet sold are in the plan (SF32) |
+| 13 Order of operations | the cap applies to realised volatility before the settlement amount (confirmation section 4) and bounds the valuation (annex) |
+| 14 Row order | no result depends on file order; the valuation feed is keyed by date and reference |
+| 15 Duplicate resolution | the re-sent valuation file repeats identical rows (C1); the superseded blotter row is marked and sits on an expired swap |
+| 16 Identity normalisation | ticket to dealer reference through the blotter; the novated confirmation has expired |
+| 17 Netting against gross | collateral is the sleeve's net negative value, swaps taken together (D.5(d), SF10); the plan's range is receipts net of payments (D.7(e), SF33) |
+| 18 Dimensional units | volatility points and variance points never added: the confirmation's variance units convert them (SF27); the expectation is taken of variance (SF21) |
+| 19 Code and status semantics | blotter statuses LIVE, SETTLED, SUPERSEDED and NOVATED read as written; never a result's difficulty |
+| 20 Integerisation | sizes in multiples of USD 100, floored (SF16); dollars to the nearest thousand |
+| 21 Clause scope | D.5 governs the limits, D.7 the plan; D.7(c) scopes experience to the whole record; D.7(d) scopes a range to the average, D.7(e) to the year |
+| 22 Forward window contents | 2027 holds ten open 12-month sale months' expiries, the standing ladder's two sales still to come and nine new 3-month expiries; the exchange calendar ships the dates |
+
+## Literal reader
+
+A reader executing the shipped sentences word for word:
+1. D.2 and D.3 with the blotter: the sleeve runs one ladder, 12 months at USD 50,000 a point per sale (two live
+   confirmations of 25,000 for each trade date).
+2. D.5(a) and (b): the 3-month ladder is sold on every sale date from January 2007, published index or not. The
+   3-month index file starts on 18 September 2009, so 32 strikes are not in it. No sentence says how to find them:
+   the reader has to rebuild them, and every rebuild from both neighbouring indices gives R1 and R2 inside their
+   bands, as do the index's published earlier closes.
+3. D.5(d) with the valuation file's implied-to-expiry column: a swap's value is its vega times strike squared less
+   (accrued variance and the variance implied for its remaining term, weighted by days) over twice the strike,
+   never worse than the capped settlement. On every day of the record the 12-month ladder's collateral peaks at
+   USD 25.9m (R3); with a 3-month ladder beside it the collateral limit of USD 44.628m binds first, on 20 November
+   2008, at USD 114,400 a point (R4); a 6-month ladder binds the same day at 58,700 (R5).
+4. D.7(d): the range the average itself lies in four times in five. No sentence says how; the settlements show one
+   sale tied to the next, and every way of keeping neighbouring sales together gives R6 and R7 inside their bands.
+5. D.7(a) and (c): open swaps at the settlement amounts they are expected to pay, from the whole record's
+   experience. Read as the value, the figure is USD 1,883,000; the record shows the same swaps paying more than
+   their value from four start dates in five, so the value is not what they are expected to pay, and the
+   expectation is USD 2,494,000 (R8) with its range (R9).
+6. D.7 (lead), (b) and (e) with the exchange calendar: the plan carries every ladder's swaps that expire in 2027:
+   the ten open sale months, the 12-month ladder's November and December 2026 sales at its average per sale, and
+   nine 3-month swaps sold from 19 January at theirs: USD 5,728,000, with the range of the year's settlements
+   taken together (R10).
+Every literal reading gives the golden or breaks a quoted sentence, except two places where the sentence files the
+quantity and the record decides the method: step 5's first reading, which the record's own outcomes rule out
+(SF19), and step 4's resampling of single settlements, which the settlements' own correlation rules out. Those are
+the places a judge may read a second answer, and they are reported.
+
+## Prompt contract
+
+A voice rewrite may not drop or change: the question (the largest size of a new 3-month ladder from the January
+2027 sale that keeps the sleeve inside both policy limits, with the limit and the day that bind); the same for a
+6-month ladder instead; on the policy's record and per USD 100,000 a point, the 3-month ladder's average settlement
+per sale and worst calendar year and the 80 per cent range of that average and of the 12-month ladder's; the
+12-month ladder's peak collateral; what the open swaps that expire in 2027 should be expected to settle at, with an
+80 per cent range; the sleeve's 2027 cash plan by ladder at that size, with its 80 per cent range; the three
+deliverables by type (a short memo, a spreadsheet, a CSV of the sleeve's collateral at that size for every day of
+the record); the rounding (dollars to the nearest thousand, sizes in multiples of USD 100 a point). It must never
+add: how a strike is found before its index is published; how a swap is valued; how a range is taken; the word
+mark, risk-neutral, premium, interpolate, rebuild, backfill, overlap, block or bootstrap; the years 2008 or 2020;
+the name of any attached file; who is asking; how many swaps are open or still to be sold.
 
 ## Tried and rejected
 
@@ -229,3 +561,11 @@ Weight: allocation under constraints (the room two limits leave beside a standin
   warned on the question form, and voice-check.py put the deliverable set at 33 per cent of the prompts on file.
   Redrawn to the treasury and investment office acting on it themselves, the ladder's January launch, a what
   question, and a third deliverable a risk reviewer uses, the sleeve's collateral for every day of the record.
+- 2026-11-10, the truncation route priced in the careful column (the 3-month ladder run only from its index file's first date, USD 136,600): a literal reader of D.5(a) could defend leaving out sale dates with no published strike, so D.5(b) now files that a sale date counts whether or not its index was yet published; truncation is ruled out by a sentence and the careful column is priced on the one-index stand-in, which its own whole-overlap check confirms.
+- 2026-11-10, the 3-month index treated as unpublished before September 2009: its closes from 4 December 2007 are public on FRED and equal the Cboe download on every day both carry. The pack stays as Cboe publishes it, the series is held as a cross-check beside the generator and outside the pack, and every band was widened to hold the answers on the published closes (the average's band top moved from 286,000 to 287,000).
+- 2026-11-10, two mechanical asks (each open swap's realised volatility, the book's value at the review close): dropped as asks and kept in the workbook; with no assembly result graded, the blotter's amended and novated confirmations were moved to swaps that have expired, so neither can cost a graded result.
+- 2026-11-10, the chain on two blocks (the frame and the expectation), where a run making either move scored about 70: a third, independent block added (the range of each ladder's average and the plan's range, which need neighbouring sales kept together), the plan made one joint result over all 21 settlements with the standing ladder's two coming sales in it, and the recommendation made to need all three.
+- 2026-11-10, the compound sentence as a hard gate (the sentence naming every priced move rescuing a third of the results or fewer): it cannot hold with a pair estimate of 50 or under, because a sentence that names all a pass missed rescues all of it. Single sentences are gated at a third and two moves at once are printed as information (4, 5 and 2 of 11).
+- 2026-11-10, average realised variance since 1990 as a sound estimator of the expectation: it draws on years before the record, which D.5(a) and D.7(c) leave out; moved to the ruled-out routes, which lets a volatility forecast squared (3,015,000) sit 4 per cent above the band.
+- 2026-11-10, the careful pass granted the joint replay of the whole plan: with it the rebuild and the expectation together would have rescued the plan and the recommendation (6 of 11). It is priced instead on swaps not yet sold drawn one at a time from their ladder's record, the same reflex as its range of an average, while the open swaps' own joint replay stays granted.
+- 2026-11-10, the bands on each average's range drawn from blocks and lags alone: counting only the swaps that do not overlap (the full-sample spread over the number of sales divided by the swap's months) is a common correction and landed outside them (14,000 to 616,000 for the 12-month ladder); it is taken into the rival set, and a standard error with fewer lags than the months neighbouring swaps share (123,000 to 507,000) is named as a route that stays too narrow.

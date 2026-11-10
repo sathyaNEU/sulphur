@@ -1,21 +1,21 @@
 {
  "task": "task9",
- "status": "DESIGN",
+ "status": "PAUSED",
  "domain": "quantitative-finance",
- "subdomain": "volatility-derivatives-pricing (client task types: derivative pricing, market data and curve validation, counterparty exposure; a variance-swap ladder's room inside settlement and collateral limits and its 2027 receipts)",
+ "subdomain": "volatility-derivatives-pricing (client task types: derivative pricing, market data and curve validation, counterparty exposure; a variance-swap ladder's room inside settlement and collateral limits, how firmly the record pins each ladder's average, and the sleeve's 2027 plan with its range)",
  "objective": "forecasting",
- "stage": 2,
- "stage_name": "design",
+ "stage": 3,
+ "stage_name": "build (complete; stage 4 not run)",
  "updated": "2026-11-10",
- "call": "",
- "stump": "results chain of ten on real market records: R1 the open swaps reconciled with each one's realised volatility to the review close, R2 the book's mark, R3 the 3-month ladder on the record since 2007 with its early strikes rebuilt, R4 the 12-month ladder's peak collateral, R5 that peak split and what the swaps then open paid, R6 the largest 3-month size inside both limits with what binds, R7 the open swaps' expected 2027 settlement, R8 the new ladder's 2027 receipts, R9 the 80 per cent range, R10 the recommendation",
+ "call": "set the new 3-month ladder at USD 114,400 a point (collateral limit, 20 November 2008), not the 200,000 quoted for nor the 124,500 a 30-day stand-in for the missing strikes supports; carry USD 5,728,000 in the 2027 plan, four times in five between -4,203,000 and 12,204,000",
+ "stump": "results chain of eleven on real market records: R1 the 3-month ladder's average settlement per sale on the record since 2007 with its early strikes rebuilt, R2 its worst calendar year, R3 the 12-month ladder's peak collateral, R4 the largest 3-month size inside both limits with what binds, R5 the largest 6-month size, R6 and R7 the 80 per cent range of each ladder's average, R8 the open swaps' expected 2027 settlement, R9 its range, R10 the 2027 plan by ladder over all 21 settlements with its joint range, R11 the recommendation",
  "architecture": 8,
  "loops": 0,
- "precut": null,
- "leak": null,
- "duplicate_check": null,
+ "precut": "exit 0 (82 checks, 0 FAIL, 0 WARN) on 2026-11-10",
+ "leak": "leak.py --asof 2026-11-10: REVIEW, no LEAK (four REVIEW kinds answered in the design note's Leak review line); the reader is stage 4",
+ "duplicate_check": "guard.py heart and surface PASS with WARN (repeat.gate_g against task10, repeat.deliverables against task14)",
  "judge": null,
- "paper_pair": null,
+ "paper_pair": 34.5,
  "runs": {
   "run1": null,
   "run2": null,
@@ -45,7 +45,7 @@
   ]
  },
  "returned": [],
- "resume": "stage 2: write the design note to the template (results chain, hidden factor record, effort test on paper, provenance, forks, closure, literal reader, prompt contract), run the rivals on the real record, precut.py exit 0; then stage 3",
+ "resume": "stage 4: spawn the leak reader and the determinism judge on cut 4a76ff2f7a1a06df79268d72bfa793365bc9839bab42b327fd7ccf84ff29108c",
  "approved": null,
  "submitted": null,
  "portal": {
@@ -345,9 +345,19 @@
   {
    "date": "2026-11-10",
    "event": "architecture 7 as a results chain spent at stage 4 on Gate H (the two-strand sentence, 4 of 9; checks R5 and R7e); re-rooted as architecture 8 on public Cboe and S&P 500 records used as is, the sleeve's swaps and paperwork authored"
+  },
+  {
+   "date": "2026-11-10",
+   "event": "architecture 8 built through stage 3 and hardened on the coordinator's measurements: the frame pinned as a population (D.5(b)), the careful column priced on a one-index stand-in, the range of each average and a joint 2027 plan added, the two mechanical asks dropped; paused before stage 4"
   }
  ],
- "build": null,
+ "build": {
+  "cut": "4a76ff2f7a1a06df79268d72bfa793365bc9839bab42b327fd7ccf84ff29108c",
+  "golden": "cbcd41e4bce7760001a43c8bc61b19245eb00c67cb05524ef00a71fb77f7cd39",
+  "date": "2026-11-10",
+  "files": 21,
+  "gates": "gates.py task9 --full: precut, effort, voice, figures, containers, heart, surface, checks (128 assertions), verify (38 assertions) and two byte-identical rebuilds PASS; leak WARN (REVIEW)"
+ },
  "lineage_v6": {
   "stump": "The default path buys Kestrel Lane's note at a 0.14 per cent chance of loss against Ostvale's 0.44 per cent (the field's copula, one factor fitted to the yearly default rates plus the agencies' industry factor, back-tested on the record); the step that lands it there is linking defaults only through the economy and the sector, when the companies held by one sponsor house's funds default in the same years (0.503 of the residual variance), and Kestrel Lane's 95 loans sit with five houses, so its note's chance is 1.33 per cent, over the bar, against Ostvale's 0.54.",
   "architecture": 6,
@@ -468,7 +478,54 @@
   }
  },
  "doctrine": "throughout",
- "effort": null,
+ "effort": {
+  "quick": "0 of 11 (7.0)",
+  "careful": "3 of 11 (34.5)",
+  "thorough": "11 of 11 (100.0)",
+  "hints": [
+   {
+    "rescues": 3,
+    "of": 11,
+    "sentence": "on the days that set the limit the 3-month index sits below the 30-day index, so the missing strikes have to come from the maturities on both sides of three months"
+   },
+   {
+    "rescues": 1,
+    "of": 11,
+    "sentence": "an open swap's value is a price: expect what such swaps went on to pay on the record"
+   },
+   {
+    "rescues": 1,
+    "of": 11,
+    "sentence": "sales a month apart share most of their days, so keep neighbouring sales together when the record is resampled and run the swaps not yet sold off the same start dates as the open ones"
+   },
+   {
+    "rescues": 0,
+    "of": 11,
+    "sentence": "value each open swap at the implied volatility for its remaining term, not at the index it was struck on"
+   },
+   {
+    "rescues": 0,
+    "of": 11,
+    "sentence": "the cap on realized volatility bounds the valuation as well as the settlement"
+   },
+   {
+    "rescues": 0,
+    "of": 11,
+    "sentence": "the standing ladder's November and December sales also settle in the plan year"
+   },
+   {
+    "rescues": 0,
+    "of": 11,
+    "sentence": "only the new ladder's sales to September settle inside the plan year"
+   }
+  ],
+  "two_moves_information": {
+   "the rebuild and the expectation": 4,
+   "the rebuild and dependence": 5,
+   "the expectation and dependence": 2,
+   "all three": 8
+  }
+ },
  "lineage_v7_results_chain": {
   "call": "buy neither note: Kestrel Lane 3.7 per cent at 15.0 per cent subordination, Ostvale 2.8 at 16.5 (the repair's cut), against MP-RN-2's 1 per cent test",
   "stump": "results chain of nine: R1 the house-year's share, R2 each sector's loading on the year (Ostvale's five sectors), R3 recovery on the house-year's shock at the whole-book grain on the closed cohorts, R4 and R5 each note's five-year chance, R6 the call, R7 the subordination for 1 and 0.5 per cent, R8 the chance by year end, R9 each portfolio's expected credit loss; every shortcut buys a note (Kestrel Lane or Ostvale), only both strands file neither",
@@ -521,5 +578,6 @@
   "resume_at_pause": "PAUSED at stage 4 for the author's ruling. Architecture 7 as a results chain cleared the leak reader, and one repair pass cleared what the determinism judge found on Gate C. It then fails Gate H's one-fact test once both strands are told in one sentence (checks.py R5: 4 of 9 results), and the repair's margin squeezes the level-5 route (R7e). Ostvale's subordination has about one point of par between the pooled-loading route (16.20) and the weakest sound estimator (17.29). By the gate table the architecture is spent: the house route is a re-root as architecture 8 in another world, with a new dataset and a new shell (build-pipeline), or the slot is retired on the author's word. Nothing in this folder is to be uploaded.",
   "fate": "spent 2026-11-10 at stage 4, before any upload: Gate C repaired in one pass, then Gate H (one sentence naming both constructed strands rescued 4 of 9 results; the margin window on Ostvale's subordination about one point of par); re-rooted on real market records as architecture 8"
  },
- "prompt_rewritten": false
+ "prompt_rewritten": false,
+ "cross_check": "FRED VXVCLS (the 3-month index from 4 December 2007) held in generator/raw_check, outside the pack; every band holds the answers on the published earlier closes (3-month average 286,000, 2008 at 16,166,000, sizes 100,300 to 112,600)"
 }

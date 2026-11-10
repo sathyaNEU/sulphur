@@ -1,0 +1,1287 @@
+{
+ "as_of": "2026-11-09",
+ "statement_date": "2026-10-30",
+ "policy": {
+  "reference_assets_usd": 1487600000,
+  "reference_assets_usd_m": 1487.6,
+  "settlement_limit_pct": 2.0,
+  "collateral_limit_pct": 3.0,
+  "settlement_limit_usd": 29752000,
+  "collateral_limit_usd": 44628000,
+  "cap_multiple": 2.5,
+  "standing_size_usd": 50000,
+  "confirmation_vega_usd": 25000,
+  "quoted_size_usd": 200000,
+  "per_usd": 100000,
+  "size_step_usd": 100,
+  "hot_level": 35.0,
+  "record_from": "2007-01-01"
+ },
+ "open_vols": {
+  "2025-11": 13.58,
+  "2025-12": 13.87,
+  "2026-01": 14.16,
+  "2026-02": 14.39,
+  "2026-03": 14.45,
+  "2026-04": 13.76,
+  "2026-05": 14.13,
+  "2026-06": 13.75,
+  "2026-07": 14.46,
+  "2026-08": 15.19,
+  "2026-09": 17.16,
+  "2026-10": 24.14
+ },
+ "statement_vols": {
+  "2025-11": 12.61,
+  "2025-12": 12.83,
+  "2026-01": 13.06,
+  "2026-02": 13.17,
+  "2026-03": 13.07,
+  "2026-04": 12.05,
+  "2026-05": 12.19,
+  "2026-06": 11.15,
+  "2026-07": 11.35,
+  "2026-08": 10.57,
+  "2026-09": 10.52,
+  "2026-10": 13.52
+ },
+ "open_swaps": [
+  {
+   "sale": "2025-11-24",
+   "expiry": "2026-11-20",
+   "strike": 24.66,
+   "days_elapsed": 240,
+   "days_remaining": 9,
+   "realized_vol": 13.58,
+   "implied_vol": 19.89,
+   "value_usd": 421689
+  },
+  {
+   "sale": "2025-12-22",
+   "expiry": "2026-12-18",
+   "strike": 22.3,
+   "days_elapsed": 221,
+   "days_remaining": 28,
+   "realized_vol": 13.87,
+   "implied_vol": 20.24,
+   "value_usd": 314483
+  },
+  {
+   "sale": "2026-01-20",
+   "expiry": "2027-01-15",
+   "strike": 23.54,
+   "days_elapsed": 203,
+   "days_remaining": 46,
+   "realized_vol": 14.16,
+   "implied_vol": 20.68,
+   "value_usd": 330945
+  },
+  {
+   "sale": "2026-02-23",
+   "expiry": "2027-02-19",
+   "strike": 24.71,
+   "days_elapsed": 180,
+   "days_remaining": 69,
+   "realized_vol": 14.39,
+   "implied_vol": 21.1,
+   "value_usd": 341447
+  },
+  {
+   "sale": "2026-03-23",
+   "expiry": "2027-03-19",
+   "strike": 26.52,
+   "days_elapsed": 160,
+   "days_remaining": 89,
+   "realized_vol": 14.45,
+   "implied_vol": 21.65,
+   "value_usd": 378675
+  },
+  {
+   "sale": "2026-04-20",
+   "expiry": "2027-04-16",
+   "strike": 23.95,
+   "days_elapsed": 141,
+   "days_remaining": 108,
+   "realized_vol": 13.76,
+   "implied_vol": 22.0,
+   "value_usd": 267835
+  },
+  {
+   "sale": "2026-05-18",
+   "expiry": "2027-05-21",
+   "strike": 23.69,
+   "days_elapsed": 121,
+   "days_remaining": 133,
+   "realized_vol": 14.13,
+   "implied_vol": 22.29,
+   "value_usd": 217163
+  },
+  {
+   "sale": "2026-06-22",
+   "expiry": "2027-06-17",
+   "strike": 23.54,
+   "days_elapsed": 98,
+   "days_remaining": 151,
+   "realized_vol": 13.75,
+   "implied_vol": 22.48,
+   "value_usd": 183993
+  },
+  {
+   "sale": "2026-07-20",
+   "expiry": "2027-07-16",
+   "strike": 23.67,
+   "days_elapsed": 79,
+   "days_remaining": 170,
+   "realized_vol": 14.46,
+   "implied_vol": 22.63,
+   "value_usd": 152313
+  },
+  {
+   "sale": "2026-08-24",
+   "expiry": "2027-08-20",
+   "strike": 22.69,
+   "days_elapsed": 54,
+   "days_remaining": 195,
+   "realized_vol": 15.19,
+   "implied_vol": 22.78,
+   "value_usd": 64463
+  },
+  {
+   "sale": "2026-09-21",
+   "expiry": "2027-09-17",
+   "strike": 21.8,
+   "days_elapsed": 35,
+   "days_remaining": 214,
+   "realized_vol": 17.16,
+   "implied_vol": 22.87,
+   "value_usd": -17853
+  },
+  {
+   "sale": "2026-10-19",
+   "expiry": "2027-10-15",
+   "strike": 22.3,
+   "days_elapsed": 15,
+   "days_remaining": 234,
+   "realized_vol": 24.14,
+   "implied_vol": 22.94,
+   "value_usd": -36413
+  }
+ ],
+ "open_sale_months": 12,
+ "open_confirmations": 24,
+ "confirmations": {
+  "total": 128,
+  "settled": 104,
+  "blotter_rows": 130,
+  "valuation_rows": 28828
+ },
+ "blotter": {
+  "amended_wrong_vega_usd": 250000,
+  "amended_month": "August 2023",
+  "novated_month": "March 2024",
+  "novation_month": "June 2024",
+  "novation_date": "2024-06-17"
+ },
+ "book_value_usd": 2619000,
+ "book_value_rivals": {
+  "total variance (the golden)": 2619000,
+  "linear in volatility": 2650000,
+  "nearest published term": 2634000
+ },
+ "book_value_hurried": {
+  "each swap at the 1-year index": 2452000,
+  "each swap at the 30-day index": 3278000,
+  "the statements' total at the month end": 2844000
+ },
+ "R1_avg_3m_usd": 284000,
+ "R1_band": [
+  282000,
+  287000
+ ],
+ "R1_partly": [
+  276000,
+  292000
+ ],
+ "R2_worst_year_loss_usd": 16154000,
+ "R2_worst_year": 2008,
+ "R2_band": [
+  15650000,
+  16390000
+ ],
+ "R2_partly": [
+  15180000,
+  16890000
+ ],
+ "ladder_rivals": {
+  "calibrated": {
+   "avg_per_sale_usd": 284000,
+   "worst_year": 2008,
+   "worst_year_loss_usd": 16154000
+  },
+  "variance": {
+   "avg_per_sale_usd": 283000,
+   "worst_year": 2008,
+   "worst_year_loss_usd": 16318000
+  },
+  "vol": {
+   "avg_per_sale_usd": 286000,
+   "worst_year": 2008,
+   "worst_year_loss_usd": 15850000
+  },
+  "calibrated-log": {
+   "avg_per_sale_usd": 282000,
+   "worst_year": 2008,
+   "worst_year_loss_usd": 16389000
+  },
+  "calibrated-1y": {
+   "avg_per_sale_usd": 286000,
+   "worst_year": 2008,
+   "worst_year_loss_usd": 15652000
+  },
+  "actual": {
+   "avg_per_sale_usd": 286000,
+   "worst_year": 2008,
+   "worst_year_loss_usd": 16166000
+  }
+ },
+ "ladder_hurried": {
+  "its index's own history": {
+   "avg_per_sale_usd": 365000,
+   "worst_year": 2020,
+   "worst_year_loss_usd": 5036000,
+   "first_sale": "2009-09-21",
+   "settled": 203
+  },
+  "30-day index as it stands": {
+   "avg_per_sale_usd": 291000,
+   "worst_year": 2008,
+   "worst_year_loss_usd": 15247000,
+   "first_sale": "2007-01-22",
+   "settled": 235
+  },
+  "30-day index times the average ratio": {
+   "avg_per_sale_usd": 332000,
+   "worst_year": 2008,
+   "worst_year_loss_usd": 11705000,
+   "first_sale": "2007-01-22",
+   "settled": 235
+  },
+  "regression on the 30-day index alone": {
+   "avg_per_sale_usd": 300000,
+   "worst_year": 2008,
+   "worst_year_loss_usd": 14125000,
+   "first_sale": "2007-01-22",
+   "settled": 235
+  }
+ },
+ "ladder_counts": {
+  "settled": 235,
+  "rebuilt": 32
+ },
+ "rebuild": {
+  "first_published": "2009-09-18",
+  "six_month_first": "2008-01-02",
+  "one_year_first": "2007-01-03",
+  "nine_day_first": "2011-01-04",
+  "overlap_days": 4312,
+  "hot_days": 102,
+  "rmse": 0.43,
+  "rmse_hot": 1.35,
+  "ratio_all_pct": 12.5,
+  "ratio_hot_pct": 7.9,
+  "coef": [
+   -0.806,
+   0.39,
+   0.639
+  ],
+  "proxy_r2": 0.94,
+  "proxy_rmse": 1.41,
+  "proxy_bias_hot": 2.3,
+  "proxy_rmse_hot": 3.97,
+  "ratio_bias_hot": 9.3,
+  "as_stands_bias_hot": 3.8
+ },
+ "cross_check": {
+  "first": "2007-12-04",
+  "overlap_days": 4311,
+  "max_diff": 0.0,
+  "sale_dates": 21,
+  "mean_abs": {
+   "calibrated": 0.53,
+   "variance": 0.89,
+   "vol": 0.8,
+   "calibrated-log": 0.52,
+   "calibrated-1y": 0.66
+  },
+  "proxy_bias": {
+   "30-day index as it stands": 0.49,
+   "30-day index times the average ratio": 4.7,
+   "regression on the 30-day index alone": 0.4
+  },
+  "stressed": [
+   {
+    "sale": "2008-10-20",
+    "actual": 43.62,
+    "calibrated": 45.54,
+    "variance": 42.91,
+    "proxy": 50.25
+   },
+   {
+    "sale": "2008-11-24",
+    "actual": 59.5,
+    "calibrated": 57.82,
+    "variance": 54.82,
+    "proxy": 60.4
+   },
+   {
+    "sale": "2008-12-22",
+    "actual": 43.71,
+    "calibrated": 45.52,
+    "variance": 45.14,
+    "proxy": 42.97
+   },
+   {
+    "sale": "2009-01-20",
+    "actual": 54.87,
+    "calibrated": 54.09,
+    "variance": 52.36,
+    "proxy": 53.43
+   },
+   {
+    "sale": "2009-02-23",
+    "actual": 50.43,
+    "calibrated": 49.89,
+    "variance": 48.27,
+    "proxy": 49.95
+   },
+   {
+    "sale": "2009-03-23",
+    "actual": 42.33,
+    "calibrated": 42.53,
+    "variance": 41.76,
+    "proxy": 41.82
+   },
+   {
+    "sale": "2009-04-20",
+    "actual": 39.41,
+    "calibrated": 39.65,
+    "variance": 39.33,
+    "proxy": 38.32
+   }
+  ],
+  "actual": {
+   "avg_per_sale_usd": 286000,
+   "worst_year": 2008,
+   "worst_year_loss_usd": 16166000
+  }
+ },
+ "ladders_per_100k": {
+  "3": {
+   "avg_per_sale_usd": 284000,
+   "worst_year": 2008,
+   "worst_year_loss_usd": 16154000,
+   "settled": 235,
+   "rebuilt": 32,
+   "by_year": {
+    "2007": -560000,
+    "2008": -16154000,
+    "2009": 9998000,
+    "2010": 6695000,
+    "2011": 1936000,
+    "2012": 8827000,
+    "2013": 4841000,
+    "2014": 3842000,
+    "2015": 3318000,
+    "2016": 5227000,
+    "2017": 6207000,
+    "2018": 89000,
+    "2019": 3618000,
+    "2020": -5036000,
+    "2021": 10995000,
+    "2022": 3702000,
+    "2023": 7351000,
+    "2024": 4165000,
+    "2025": 898000,
+    "2026": 6676000
+   }
+  },
+  "6": {
+   "avg_per_sale_usd": 285000,
+   "worst_year": 2020,
+   "worst_year_loss_usd": 18416000,
+   "settled": 232,
+   "rebuilt": 12,
+   "by_year": {
+    "2007": -1638000,
+    "2008": -10438000,
+    "2009": -6490000,
+    "2010": 7813000,
+    "2011": 5078000,
+    "2012": 10220000,
+    "2013": 7149000,
+    "2014": 5822000,
+    "2015": 3735000,
+    "2016": 6304000,
+    "2017": 8082000,
+    "2018": 2670000,
+    "2019": 2746000,
+    "2020": -18416000,
+    "2021": 12536000,
+    "2022": 6085000,
+    "2023": 9518000,
+    "2024": 5999000,
+    "2025": 1763000,
+    "2026": 7619000
+   }
+  },
+  "12": {
+   "avg_per_sale_usd": 315000,
+   "worst_year": 2009,
+   "worst_year_loss_usd": 22830000,
+   "settled": 226,
+   "rebuilt": 0,
+   "by_year": {
+    "2008": -8475000,
+    "2009": -22830000,
+    "2010": 13043000,
+    "2011": 9648000,
+    "2012": 7327000,
+    "2013": 11624000,
+    "2014": 7827000,
+    "2015": 5645000,
+    "2016": 5337000,
+    "2017": 10522000,
+    "2018": 4857000,
+    "2019": 3281000,
+    "2020": -19601000,
+    "2021": 6875000,
+    "2022": 7327000,
+    "2023": 10003000,
+    "2024": 9743000,
+    "2025": 2568000,
+    "2026": 6489000
+   }
+  }
+ },
+ "R3_old_peak_usd": 25876000,
+ "R3_old_peak_day": "2020-03-18",
+ "R3_band": [
+  25800000,
+  26500000
+ ],
+ "R3_partly": [
+  24500000,
+  27900000
+ ],
+ "old_peak_rivals": {
+  "total variance": {
+   "peak_usd": 25876000,
+   "day": "2020-03-18"
+  },
+  "linear in volatility": {
+   "peak_usd": 26494000,
+   "day": "2008-11-20"
+  },
+  "nearest published term": {
+   "peak_usd": 26281000,
+   "day": "2008-11-20"
+  },
+  "without the 9-day index": {
+   "peak_usd": 25835000,
+   "day": "2020-03-18"
+  },
+  "rebuilt terms in the gap": {
+   "peak_usd": 25876000,
+   "day": "2020-03-18"
+  },
+  "published 3-month closes in the gap": {
+   "peak_usd": 25876000,
+   "day": "2020-03-18"
+  }
+ },
+ "old_peak_hurried": {
+  "each swap at the 1-year index": 21774000,
+  "each swap at the 30-day index": 31604000,
+  "no cap in the mark": 30067000,
+  "its worst calendar year of settlements": 11415000,
+  "the sleeve's own ledger": 5160000
+ },
+ "old_peak_episodes": {
+  "2008": {
+   "peak_usd": 25287000,
+   "day": "2008-11-20"
+  },
+  "2020": {
+   "peak_usd": 25876000,
+   "day": "2020-03-18"
+  }
+ },
+ "R4_size_usd": 114400,
+ "R4_binds": {
+  "limit": "collateral",
+  "day": "2008-11-20"
+ },
+ "R4_band": [
+  100000,
+  117000
+ ],
+ "R4_partly": [
+  97000,
+  121000
+ ],
+ "R4_rivals": {
+  "calibrated strikes, total variance marks": 114400,
+  "calibrated strikes, linear in volatility marks": 103000,
+  "calibrated strikes, nearest published term marks": 102100,
+  "calibrated strikes, without the 9-day index marks": 114400,
+  "variance strikes, total variance marks": 112300,
+  "variance strikes, linear in volatility marks": 101000,
+  "variance strikes, nearest published term marks": 100000,
+  "variance strikes, without the 9-day index marks": 112300,
+  "vol strikes, total variance marks": 116800,
+  "vol strikes, linear in volatility marks": 105300,
+  "vol strikes, nearest published term marks": 104400,
+  "vol strikes, without the 9-day index marks": 116800,
+  "calibrated-log strikes, total variance marks": 114300,
+  "calibrated-log strikes, linear in volatility marks": 102800,
+  "calibrated-log strikes, nearest published term marks": 101800,
+  "calibrated-log strikes, without the 9-day index marks": 114300,
+  "calibrated-1y strikes, total variance marks": 113700,
+  "calibrated-1y strikes, linear in volatility marks": 102400,
+  "calibrated-1y strikes, nearest published term marks": 101500,
+  "calibrated-1y strikes, without the 9-day index marks": 113700,
+  "actual strikes, total variance marks": 112600,
+  "actual strikes, linear in volatility marks": 101200,
+  "actual strikes, nearest published term marks": 100300,
+  "actual strikes, without the 9-day index marks": 112600,
+  "calibrated strikes, rebuilt terms in the gap": 110300,
+  "published 3-month closes for strikes and terms in the gap": 109300
+ },
+ "R4_hurried": {
+  "its index's own history": 136600,
+  "marks at each swap's own index": 144400,
+  "marks at the 30-day index": 71500,
+  "no cap in the mark": 38900,
+  "the new ladder on its own": 184100,
+  "the settlement limit alone": 157900,
+  "its index's own history, marks at each swap's own index": 176600,
+  "its index's own history, the new ladder on its own": 325100,
+  "missing strikes from the 30-day index as it stands": 131800,
+  "missing strikes from the 30-day index times the average ratio": 136600,
+  "missing strikes from the regression on the 30-day index alone": 124500
+ },
+ "R4_rival_binds": [
+  [
+   "collateral",
+   "2008-11-20"
+  ]
+ ],
+ "R5_alt_size_usd": 58700,
+ "R5_binds": {
+  "limit": "collateral",
+  "day": "2008-11-20"
+ },
+ "R5_band": [
+  54000,
+  59000
+ ],
+ "R5_partly": [
+  52000,
+  61000
+ ],
+ "R5_rivals": {
+  "calibrated strikes, total variance marks": 58700,
+  "calibrated strikes, linear in volatility marks": 54000,
+  "calibrated strikes, nearest published term marks": 56500,
+  "calibrated strikes, without the 9-day index marks": 58700,
+  "variance strikes, total variance marks": 58700,
+  "variance strikes, linear in volatility marks": 54000,
+  "variance strikes, nearest published term marks": 56500,
+  "variance strikes, without the 9-day index marks": 58700,
+  "vol strikes, total variance marks": 58700,
+  "vol strikes, linear in volatility marks": 54000,
+  "vol strikes, nearest published term marks": 56500,
+  "vol strikes, without the 9-day index marks": 58700,
+  "calibrated-log strikes, total variance marks": 58700,
+  "calibrated-log strikes, linear in volatility marks": 54000,
+  "calibrated-log strikes, nearest published term marks": 56500,
+  "calibrated-log strikes, without the 9-day index marks": 58700,
+  "calibrated-1y strikes, total variance marks": 58700,
+  "calibrated-1y strikes, linear in volatility marks": 54000,
+  "calibrated-1y strikes, nearest published term marks": 56500,
+  "calibrated-1y strikes, without the 9-day index marks": 58700,
+  "actual strikes, total variance marks": 58700,
+  "actual strikes, linear in volatility marks": 54000,
+  "actual strikes, nearest published term marks": 56500,
+  "actual strikes, without the 9-day index marks": 58700,
+  "calibrated strikes, rebuilt terms in the gap": 57000,
+  "published 3-month closes for strikes and terms in the gap": 57300
+ },
+ "R5_hurried": {
+  "its index's own history": 58700,
+  "marks at each swap's own index": 72600,
+  "marks at the 30-day index": 35800,
+  "no cap in the mark": 28200,
+  "the new ladder on its own": 135500,
+  "the settlement limit alone": 108300,
+  "its index's own history, marks at each swap's own index": 72600,
+  "its index's own history, the new ladder on its own": 135500
+ },
+ "R5_rival_binds": [
+  [
+   "collateral",
+   "2008-11-20"
+  ]
+ ],
+ "quoted": {
+  "worst_year": 2008,
+  "worst_usd": 36545000,
+  "peak_usd": 59087000,
+  "peak_day": "2008-11-20",
+  "over_usd": 14459000
+ },
+ "at_size": {
+  "worst_year": 2008,
+  "worst_usd": 22718000,
+  "peak_usd": 44621000,
+  "peak_day": "2008-11-20",
+  "old_at_peak_usd": 25287000,
+  "new_at_peak_usd": 19334000,
+  "new_per_100k_at_peak_usd": 16900000,
+  "room_usd": 19341000
+ },
+ "alt_at_size": {
+  "worst_year": 2020,
+  "worst_usd": 20611000,
+  "peak_usd": 44609000,
+  "peak_day": "2008-11-20",
+  "old_at_peak_usd": 25287000,
+  "new_at_peak_usd": 19323000,
+  "new_per_100k_at_peak_usd": 32917000
+ },
+ "R6_avg_range_12m": {
+  "low_usd": 63000,
+  "high_usd": 552000
+ },
+ "R6_bands": {
+  "low_usd": [
+   14000,
+   82000
+  ],
+  "high_usd": [
+   537000,
+   616000
+  ]
+ },
+ "avg_12m": {
+  "n": 226,
+  "avg_per_sale_usd": 315000,
+  "next_sale_correlation": 0.93,
+  "block_sales": 24,
+  "methods": 9,
+  "few_lags": 5,
+  "shared_months": 11,
+  "sound": {
+   "circular blocks of 12 sales": {
+    "low_usd": 71000,
+    "high_usd": 537000
+   },
+   "circular blocks of 18 sales": {
+    "low_usd": 67000,
+    "high_usd": 550000
+   },
+   "circular blocks of 24 sales": {
+    "low_usd": 63000,
+    "high_usd": 552000
+   },
+   "circular blocks of 36 sales": {
+    "low_usd": 66000,
+    "high_usd": 553000
+   },
+   "Newey-West, 11 lags": {
+    "low_usd": 82000,
+    "high_usd": 549000
+   },
+   "Newey-West, 17 lags": {
+    "low_usd": 70000,
+    "high_usd": 560000
+   },
+   "Newey-West, 23 lags": {
+    "low_usd": 66000,
+    "high_usd": 564000
+   },
+   "averages by calendar year of expiry": {
+    "low_usd": 74000,
+    "high_usd": 562000
+   },
+   "counted as swaps that do not overlap": {
+    "low_usd": 14000,
+    "high_usd": 616000
+   }
+  },
+  "hurried": {
+   "single settlements resampled": {
+    "low_usd": 228000,
+    "high_usd": 400000
+   },
+   "normal, the standard error of unrelated sales": {
+    "low_usd": 228000,
+    "high_usd": 402000
+   },
+   "a standard error with too few lags": {
+    "low_usd": 123000,
+    "high_usd": 507000
+   }
+  }
+ },
+ "R7_avg_range_3m": {
+  "low_usd": 143000,
+  "high_usd": 413000
+ },
+ "R7_bands": {
+  "low_usd": [
+   131000,
+   159000
+  ],
+  "high_usd": [
+   399000,
+   436000
+  ]
+ },
+ "avg_3m": {
+  "n": 235,
+  "avg_per_sale_usd": 284000,
+  "next_sale_correlation": 0.64,
+  "block_sales": 6,
+  "methods": 9,
+  "few_lags": 1,
+  "shared_months": 2,
+  "sound": {
+   "circular blocks of 3 sales": {
+    "low_usd": 155000,
+    "high_usd": 404000
+   },
+   "circular blocks of 6 sales": {
+    "low_usd": 143000,
+    "high_usd": 413000
+   },
+   "circular blocks of 12 sales": {
+    "low_usd": 149000,
+    "high_usd": 409000
+   },
+   "circular blocks of 24 sales": {
+    "low_usd": 159000,
+    "high_usd": 399000
+   },
+   "Newey-West, 2 lags": {
+    "low_usd": 158000,
+    "high_usd": 409000
+   },
+   "Newey-West, 5 lags": {
+    "low_usd": 149000,
+    "high_usd": 418000
+   },
+   "Newey-West, 11 lags": {
+    "low_usd": 153000,
+    "high_usd": 414000
+   },
+   "averages by calendar year of expiry": {
+    "low_usd": 139000,
+    "high_usd": 426000
+   },
+   "counted as swaps that do not overlap": {
+    "low_usd": 132000,
+    "high_usd": 435000
+   }
+  },
+  "hurried": {
+   "single settlements resampled": {
+    "low_usd": 194000,
+    "high_usd": 370000
+   },
+   "normal, the standard error of unrelated sales": {
+    "low_usd": 196000,
+    "high_usd": 371000
+   },
+   "a standard error with too few lags": {
+    "low_usd": 171000,
+    "high_usd": 396000
+   }
+  },
+  "proxy": {
+   "hurried": {
+    "low_usd": 215000,
+    "high_usd": 383000
+   },
+   "blocks": {
+    "low_usd": 168000,
+    "high_usd": 422000
+   }
+  }
+ },
+ "R8_expected_usd": 2494000,
+ "R8_band": [
+  2390000,
+  2890000
+ ],
+ "R8_partly": [
+  2270000,
+  2980000
+ ],
+ "expect_rivals": {
+  "start dates replayed, ratio to implied (the golden)": 2494000,
+  "start dates replayed, realised level": 2536000,
+  "ratio of means at each remaining term": 2816000,
+  "mean of ratios at each remaining term": 2494000,
+  "regression of realised on implied variance": 2665000,
+  "start dates with implied within 4 points": 2437000,
+  "log regression, retransformed": 2588000,
+  "one ratio, measured at one month": 2394000,
+  "one ratio, measured at twelve months": 2888000,
+  "average realised variance since 2007": 2597000
+ },
+ "expect_hurried": {
+  "average realised variance since 1990 (before the record)": 2984000,
+  "the mark (implied variance for the remaining term)": 1883000,
+  "the median start date": 3545000,
+  "a volatility forecast, squared": 3015000,
+  "a volatility forecast from realised levels, squared": 3039000,
+  "ratio on the sleeve's own years": 3312000,
+  "the record's average per 12-month swap": 1575000,
+  "the last three months' realised variance carried on": 3694000
+ },
+ "plan_year": 2027,
+ "plan_sale_months": 10,
+ "open_per_swap": [
+  {
+   "sale": "2026-01-20",
+   "expiry": "2027-01-15",
+   "expected_usd": 345000,
+   "value_usd": 330945
+  },
+  {
+   "sale": "2026-02-23",
+   "expiry": "2027-02-19",
+   "expected_usd": 361000,
+   "value_usd": 341447
+  },
+  {
+   "sale": "2026-03-23",
+   "expiry": "2027-03-19",
+   "expected_usd": 405000,
+   "value_usd": 378675
+  },
+  {
+   "sale": "2026-04-20",
+   "expiry": "2027-04-16",
+   "expected_usd": 307000,
+   "value_usd": 267835
+  },
+  {
+   "sale": "2026-05-18",
+   "expiry": "2027-05-21",
+   "expected_usd": 269000,
+   "value_usd": 217163
+  },
+  {
+   "sale": "2026-06-22",
+   "expiry": "2027-06-17",
+   "expected_usd": 249000,
+   "value_usd": 183993
+  },
+  {
+   "sale": "2026-07-20",
+   "expiry": "2027-07-16",
+   "expected_usd": 229000,
+   "value_usd": 152313
+  },
+  {
+   "sale": "2026-08-24",
+   "expiry": "2027-08-20",
+   "expected_usd": 159000,
+   "value_usd": 64463
+  },
+  {
+   "sale": "2026-09-21",
+   "expiry": "2027-09-17",
+   "expected_usd": 91000,
+   "value_usd": -17853
+  },
+  {
+   "sale": "2026-10-19",
+   "expiry": "2027-10-15",
+   "expected_usd": 81000,
+   "value_usd": -36413
+  }
+ ],
+ "R9_range": {
+  "low_usd": 394000,
+  "high_usd": 4247000
+ },
+ "R9_bands": {
+  "low_usd": [
+   200000,
+   420000
+  ],
+  "high_usd": [
+   4100000,
+   4430000
+  ]
+ },
+ "open_range_rivals": {
+  "start dates replayed jointly, ratio to implied (the golden)": {
+   "low_usd": 394000,
+   "high_usd": 4247000
+  },
+  "start dates replayed jointly, realised level": {
+   "low_usd": 223000,
+   "high_usd": 4230000
+  },
+  "each swap's own percentile, added": {
+   "low_usd": 313000,
+   "high_usd": 4291000
+  },
+  "every fifth start date": {
+   "low_usd": 399000,
+   "high_usd": 4248000
+  }
+ },
+ "open_range_hurried": {
+  "swaps drawn independently": {
+   "low_usd": 990000,
+   "high_usd": 3636000
+  },
+  "normal, the swaps' spreads added in quadrature": {
+   "low_usd": 1063000,
+   "high_usd": 3926000
+  },
+  "the 12-month ladder's calendar years": {
+   "low_usd": -4922000,
+   "high_usd": 4522000
+  }
+ },
+ "replay": {
+  "start_dates": 4761,
+  "first_start": "2007-01-03",
+  "last_start": "2025-12-03",
+  "median_usd": 3545000,
+  "share_above_mark_pct": 80,
+  "share_below_zero_pct": 8.7,
+  "mark_usd": 1883000,
+  "one_month_ratio": 0.83,
+  "twelve_month_ratio": 0.67
+ },
+ "R10_plan": {
+  "twelve_month_usd": 2809000,
+  "three_month_usd": 2919000,
+  "total_usd": 5728000,
+  "low_usd": -4203000,
+  "high_usd": 12204000
+ },
+ "R10_bands": {
+  "twelve_month_usd": [
+   2705000,
+   3205000
+  ],
+  "three_month_usd": [
+   2530000,
+   3030000
+  ],
+  "total_usd": [
+   5235000,
+   6235000
+  ],
+  "low_usd": [
+   -4300000,
+   -1900000
+  ],
+  "high_usd": [
+   11200000,
+   12400000
+  ]
+ },
+ "plan": {
+  "settlements": 21,
+  "open_sale_months": 10,
+  "unsold_12m": 2,
+  "new_3m": 9,
+  "unsold_12m_usd": 315000,
+  "avg_12m_per_sale_usd": 158000,
+  "avg_12m_per_100k_usd": 315000,
+  "unsold_sales": [
+   "2026-11-23",
+   "2026-12-21"
+  ],
+  "unsold_expiries": [
+   "2027-11-19",
+   "2027-12-17"
+  ],
+  "low_paid_usd": 4203000,
+  "start_dates": 4717,
+  "first_start": "2007-01-03",
+  "last_start": "2025-10-01",
+  "replay_mean_usd": 5800000,
+  "worst_usd": 28122000,
+  "worst_start": "2008-05-16",
+  "share_below_zero_pct": 11,
+  "rivals": {
+   "every settlement from the same start dates (the golden)": {
+    "low_usd": -4203000,
+    "high_usd": 12204000
+   },
+   "open swaps on realised levels": {
+    "low_usd": -1960000,
+    "high_usd": 11269000
+   },
+   "every fifth start date": {
+    "low_usd": -4214000,
+    "high_usd": 12197000
+   },
+   "total-variance strikes": {
+    "low_usd": -4270000,
+    "high_usd": 12206000
+   },
+   "published 3-month closes in the gap": {
+    "low_usd": -4179000,
+    "high_usd": 12204000
+   },
+   "the size at the low end of its band": {
+    "low_usd": -4263000,
+    "high_usd": 11248000
+   },
+   "the size at the high end of its band": {
+    "low_usd": -4204000,
+    "high_usd": 12368000
+   }
+  },
+  "hurried": {
+   "settlements drawn independently": {
+    "low_usd": 498000,
+    "high_usd": 9763000
+   },
+   "unsold swaps drawn one by one from their ladder's record": {
+    "low_usd": -686000,
+    "high_usd": 10434000
+   },
+   "each part's spread added in quadrature": {
+    "low_usd": -2174000,
+    "high_usd": 13775000
+   },
+   "each part's own range, added": {
+    "low_usd": -2130000,
+    "high_usd": 13511000
+   },
+   "the standing ladder's unsold sales left out": {
+    "low_usd": -2567000,
+    "high_usd": 11151000
+   }
+  },
+  "unrelated_low_paid_usd": 686000
+ },
+ "new_calendar": {
+  "settlements_in_year": 9,
+  "sales_in_year": 12,
+  "first_sale": "2027-01-19",
+  "last_sale_settling_in_year": "2027-09-20",
+  "first_expiry": "2027-04-16",
+  "last_expiry_in_year": "2027-12-17",
+  "per_settlement_usd": 324000,
+  "twelve_usd": 3893000,
+  "rows": [
+   {
+    "sale": "2027-01-19",
+    "expiry": "2027-04-16",
+    "in_year": true
+   },
+   {
+    "sale": "2027-02-22",
+    "expiry": "2027-05-21",
+    "in_year": true
+   },
+   {
+    "sale": "2027-03-22",
+    "expiry": "2027-06-17",
+    "in_year": true
+   },
+   {
+    "sale": "2027-04-19",
+    "expiry": "2027-07-16",
+    "in_year": true
+   },
+   {
+    "sale": "2027-05-24",
+    "expiry": "2027-08-20",
+    "in_year": true
+   },
+   {
+    "sale": "2027-06-21",
+    "expiry": "2027-09-17",
+    "in_year": true
+   },
+   {
+    "sale": "2027-07-19",
+    "expiry": "2027-10-15",
+    "in_year": true
+   },
+   {
+    "sale": "2027-08-23",
+    "expiry": "2027-11-19",
+    "in_year": true
+   },
+   {
+    "sale": "2027-09-20",
+    "expiry": "2027-12-17",
+    "in_year": true
+   },
+   {
+    "sale": "2027-10-18",
+    "expiry": "2028-01-21",
+    "in_year": false
+   },
+   {
+    "sale": "2027-11-22",
+    "expiry": "2028-02-18",
+    "in_year": false
+   },
+   {
+    "sale": "2027-12-20",
+    "expiry": "2028-02-29",
+    "in_year": false
+   }
+  ]
+ },
+ "R11_call": {
+  "size_usd": 114400,
+  "plan_usd": 5728000,
+  "low_usd": -4203000,
+  "high_usd": 12204000
+ },
+ "R11_bands": {
+  "size_usd": [
+   100000,
+   117000
+  ],
+  "plan_usd": [
+   5235000,
+   6235000
+  ],
+  "low_usd": [
+   -4300000,
+   -1900000
+  ],
+  "high_usd": [
+   11200000,
+   12400000
+  ]
+ },
+ "hurried": {
+  "size_usd": 124500,
+  "avg_3m_usd": 300000,
+  "worst_year_loss_usd": 14125000,
+  "new_cash_usd": 3364000,
+  "open_usd": 1883000,
+  "plan_usd": 5562000,
+  "peak_on_record_usd": 46328000,
+  "peak_day": "2008-11-20",
+  "over_usd": 1700000
+ },
+ "own_history": {
+  "size_usd": 136600,
+  "first_sale": "2009-09-21",
+  "avg_3m_usd": 365000,
+  "worst_year": 2020,
+  "worst_year_loss_usd": 5036000,
+  "peak_on_record_usd": 48373000,
+  "peak_day": "2008-11-20"
+ },
+ "routes": [
+  {
+   "route": "the golden",
+   "size_usd": 114400,
+   "plan_usd": 5728000
+  },
+  {
+   "route": "missing strikes from a regression on the 30-day index alone, open swaps at their marks",
+   "size_usd": 124500,
+   "plan_usd": 5562000
+  },
+  {
+   "route": "missing strikes from a regression on the 30-day index alone",
+   "size_usd": 124500,
+   "plan_usd": 6173000
+  },
+  {
+   "route": "missing strikes from the 30-day index times its average ratio",
+   "size_usd": 136600,
+   "plan_usd": 6891000
+  },
+  {
+   "route": "missing strikes read straight off the 30-day index",
+   "size_usd": 131800,
+   "plan_usd": 6262000
+  },
+  {
+   "route": "the 3-month ladder run only from its index's first date",
+   "size_usd": 136600,
+   "plan_usd": 7298000
+  },
+  {
+   "route": "each swap valued at its own index",
+   "size_usd": 144400,
+   "plan_usd": 6494000
+  },
+  {
+   "route": "every swap valued at the 30-day index",
+   "size_usd": 71500,
+   "plan_usd": 4634000
+  },
+  {
+   "route": "no cap in the valuation",
+   "size_usd": 38900,
+   "plan_usd": 3802000
+  },
+  {
+   "route": "the new ladder sized on its own",
+   "size_usd": 184100,
+   "plan_usd": 7507000
+  },
+  {
+   "route": "the settlement limit alone",
+   "size_usd": 157900,
+   "plan_usd": 6839000
+  },
+  {
+   "route": "open swaps at their marks",
+   "size_usd": 114400,
+   "plan_usd": 5117000
+  },
+  {
+   "route": "open swaps on a volatility forecast, squared",
+   "size_usd": 114400,
+   "plan_usd": 6249000
+  },
+  {
+   "route": "open swaps at the median start date",
+   "size_usd": 114400,
+   "plan_usd": 6779000
+  },
+  {
+   "route": "the standing ladder's two sales still to come left out",
+   "size_usd": 114400,
+   "plan_usd": 5413000
+  },
+  {
+   "route": "twelve settlements counted for the new ladder",
+   "size_usd": 114400,
+   "plan_usd": 6702000
+  }
+ ],
+ "daily": {
+  "rows": 4995,
+  "first_day": "2007-01-03",
+  "last_day": "2026-11-09",
+  "peak_usd": 44621000,
+  "peak_day": "2008-11-20",
+  "days_with_collateral": 1046
+ }
+}

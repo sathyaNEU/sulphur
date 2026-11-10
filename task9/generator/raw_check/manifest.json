@@ -1,0 +1,12 @@
+{
+ "source": "Federal Reserve Bank of St. Louis, FRED, series VXVCLS (CBOE S&P 500 3-Month Volatility Index, daily close)",
+ "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=VXVCLS",
+ "pulled": "2026-11-10",
+ "sha256": "95b26c756bb939f6bd77bc85a4b2d95b9912eb4e57961b9d72537db9d9285984",
+ "bytes": 83102,
+ "rows": 4939,
+ "header": "observation_date,VXVCLS",
+ "first": "2007-12-04",
+ "last": "2026-11-06",
+ "note": "A cross-check only. The series is the same index as the Cboe download's VIX3M and reaches back to 2007-12-04; it is not in the pack and no golden figure reads it. analysis.py runs it as a rival so that every band holds the answer a solver gets with the published earlier levels."
+}

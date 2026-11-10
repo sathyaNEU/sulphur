@@ -1,7 +1,10 @@
-"""task9: the pack's PDFs, written the way an office writes them. A document's story (paragraphs,
-spacers, tables and page breaks) becomes a Word document, LibreOffice Writer exports it to PDF, and the PDF's
-dates and file identifier are set to the issue date at equal length, so the cross-reference table holds and two
-builds are byte-identical. Producer and Creator stay as Writer wrote them."""
+"""The house PDF writer (reduce-house-fixes H1): the issuing office's PDF, written the way an office writes it. A
+document's story (reportlab flowables used only as a description: paragraphs, spacers, tables, KeepTogether, page
+breaks) becomes a Word document, LibreOffice Writer exports it to PDF, and the PDF's dates and file identifier are
+set to the issue date at equal length, so the cross-reference table holds and two builds are byte-identical.
+Creator (Writer) and Producer (LibreOffice x.y) are what Writer wrote; producer= may name the release the office ran
+at the document's date (never one released after it). Copy this file into a build's generator; never write a
+shipped PDF with FPDF, ReportLab's canvas, matplotlib or any other library, and never relabel one."""
 import datetime as dt
 import hashlib
 import html
@@ -16,7 +19,7 @@ from docx.enum.text import WD_ALIGN_PARAGRAPH, WD_BREAK
 from docx.oxml import OxmlElement
 from docx.oxml.ns import qn
 from docx.shared import Mm, Pt, RGBColor
-from reportlab.platypus import Image, PageBreak, Paragraph, Spacer, Table
+from reportlab.platypus import KeepTogether, PageBreak, Paragraph, Spacer, Table
 
 FONT = "Liberation Sans"
 
@@ -85,9 +88,34 @@ def _border_below(cell):
     tcpr.append(b)
 
 
+def _keep(doc, flowables):
+    """A block kept on one page: every paragraph in it held to the next, the table's rows unsplit and each row held
+    to the one after it, so the heading and the table move together."""
+    for fl in flowables:
+        if isinstance(fl, Paragraph):
+            _paragraph(doc, fl)
+            doc.paragraphs[-1].paragraph_format.keep_with_next = True
+        elif isinstance(fl, Table):
+            tab = _table(doc, fl)
+            rows = tab.rows
+            for i, row in enumerate(rows):
+                trpr = row._tr.get_or_add_trPr()
+                cs = OxmlElement("w:cantSplit")
+                trpr.append(cs)
+                if i < len(rows) - 1:
+                    for cell in row.cells:
+                        for par in cell.paragraphs:
+                            par.paragraph_format.keep_with_next = True
+
+
 def _table(doc, t):
     rows = t._cellvalues
     widths = list(getattr(t, "_colWidths", []) or [])
+    if not widths or any(w is None for w in widths):
+        # no widths given: the text width shared evenly, as Word lays out an autofit table on first insert
+        sec = doc.sections[0]
+        text_pt = (sec.page_width - sec.left_margin - sec.right_margin) / 12700.0
+        widths = [text_pt / len(rows[0])] * len(rows[0])
     tab = doc.add_table(rows=len(rows), cols=len(rows[0]))
     tab.autofit = False
     tblpr = tab._tbl.tblPr
@@ -116,11 +144,12 @@ def _table(doc, t):
             if i == 0:
                 _border_below(cell)
     doc.add_paragraph().paragraph_format.space_after = Pt(0)
+    return tab
 
 
-def _page_field(par):
+def _page_field(par, field="PAGE"):
     r = par.add_run()
-    for kind, txt in (("begin", None), (None, "PAGE"), ("end", None)):
+    for kind, txt in (("begin", None), (None, field), ("end", None)):
         if kind:
             f = OxmlElement("w:fldChar")
             f.set(qn("w:fldCharType"), kind)
@@ -134,8 +163,12 @@ def _page_field(par):
     r.font.size = Pt(7)
 
 
-def build(path, story, title, author, subject, footer, created, modified, margin_mm=18, top_mm=17, bottom_mm=17):
+def build(path, story, title, author, subject, footer, created, modified, margin_mm=18, top_mm=17, bottom_mm=17,
+          producer=None, font="Liberation Sans", header=None, page_of=False, body_pt=9.2):
+    """producer: the LibreOffice release the issuing office ran at the document's date (default: the one installed)."""
     """created and modified: aware datetimes, the document's in-fiction issue and last-saved times."""
+    global FONT
+    FONT = font
     doc = Document()
     sec = doc.sections[0]
     sec.page_width, sec.page_height = Mm(210), Mm(297)
@@ -143,30 +176,40 @@ def build(path, story, title, author, subject, footer, created, modified, margin
     sec.top_margin, sec.bottom_margin = Mm(top_mm), Mm(bottom_mm)
     normal = doc.styles["Normal"]
     normal.font.name = FONT
-    normal.font.size = Pt(9.2)
+    normal.font.size = Pt(body_pt)
     first = True
     for fl in story:
         if isinstance(fl, Paragraph):
             _paragraph(doc, fl)
         elif isinstance(fl, Table):
             _table(doc, fl)
+        elif isinstance(fl, KeepTogether):
+            _keep(doc, fl._content)
         elif isinstance(fl, Spacer):
             sp = doc.add_paragraph()
             sp.paragraph_format.space_after = Pt(0)
             sp.paragraph_format.line_spacing = Pt(max(1, fl.height))
         elif isinstance(fl, PageBreak):
             doc.add_paragraph().add_run().add_break(WD_BREAK.PAGE)
-        elif isinstance(fl, Image):
-            par = doc.add_paragraph()
-            par.paragraph_format.space_after = Pt(4)
-            par.add_run().add_picture(fl.filename, width=Mm(fl.drawWidth / 72.0 * 25.4))
         first = False
+    if header:
+        hp = sec.header.paragraphs[0]
+        hr = hp.add_run(header)
+        hr.font.name = FONT
+        hr.font.size = Pt(7)
+        hr.font.color.rgb = RGBColor.from_string("555555")
     fp = sec.footer.paragraphs[0]
-    r = fp.add_run(footer + "\tPage ")
+    r = fp.add_run(footer + "     |     Page ")
     r.font.name = FONT
     r.font.size = Pt(7)
     r.font.color.rgb = RGBColor.from_string("555555")
     _page_field(fp)
+    if page_of:
+        r2 = fp.add_run(" of ")
+        r2.font.name = FONT
+        r2.font.size = Pt(7)
+        r2.font.color.rgb = RGBColor.from_string("555555")
+        _page_field(fp, "NUMPAGES")
     cp = doc.core_properties
     cp.title, cp.author, cp.subject = title, author, subject
     cp.last_modified_by = author
@@ -177,6 +220,22 @@ def build(path, story, title, author, subject, footer, created, modified, margin
     try:
         src = os.path.join(work, "document.docx")
         doc.save(src)
+        # Writer orders a document's embedded font subsets differently from run to run (26.x releases), so the
+        # same document can export to different bytes. The export is kept by its content (the Word document's
+        # parts, the producer and the two dates) under the repository's .cache, and the same content gives the
+        # same file on every build.
+        import zipfile
+        h = hashlib.sha256()
+        with zipfile.ZipFile(src) as zz:
+            for nm in sorted(zz.namelist()):
+                h.update(nm.encode())
+                h.update(zz.read(nm))
+        h.update(repr((producer, created.isoformat(), modified.isoformat())).encode())
+        cdir = os.path.join(_repo(), ".cache", "officepdf")
+        cpath = os.path.join(cdir, h.hexdigest() + ".pdf")
+        if os.path.exists(cpath):
+            open(path, "wb").write(open(cpath, "rb").read())
+            return
         prof = "file://" + os.path.join(work, "profile")
         subprocess.run(["soffice", "-env:UserInstallation=" + prof, "--headless", "--convert-to",
                         "pdf:writer_pdf_Export", "--outdir", work, src],
@@ -184,8 +243,21 @@ def build(path, story, title, author, subject, footer, created, modified, margin
         b = open(os.path.join(work, "document.pdf"), "rb").read()
     finally:
         shutil.rmtree(work, ignore_errors=True)
+    if producer:
+        b = _producer(b, producer)
     b = _fix(b, created, modified)
+    os.makedirs(cdir, exist_ok=True)
+    open(cpath, "wb").write(b)
     open(path, "wb").write(b)
+
+
+def _repo():
+    d = os.path.dirname(os.path.abspath(__file__))
+    while d != os.path.dirname(d):
+        if os.path.isdir(os.path.join(d, ".git")):
+            return d
+        d = os.path.dirname(d)
+    return tempfile.gettempdir()
 
 
 def _pdfdate(d):
@@ -193,6 +265,44 @@ def _pdfdate(d):
     sign = "+" if off >= dt.timedelta(0) else "-"
     mins = abs(int(off.total_seconds())) // 60
     return ("D:%s%s%02d'%02d'" % (d.strftime("%Y%m%d%H%M%S"), sign, mins // 60, mins % 60)).encode()
+
+
+def _producer(b, name):
+    """Set the info dictionary's Producer to the release the office ran, as Writer writes it (UTF-16 hex). The info
+    dictionary is the last object before the cross-reference table, so only startxref moves; every object offset
+    in the table is asserted to sit before the change."""
+    m = re.search(rb"/Producer<(FEFF[0-9A-F]*)>", b)
+    assert m, "no Producer in the export"
+    new = ("FEFF" + "".join("%04X" % ord(ch) for ch in name)).encode()
+    delta = len(new) - len(m.group(1))
+    x = b.rfind(b"\nxref\n")
+    assert m.end() < x
+    offs = [int(o) for o in re.findall(rb"^(\d{10}) \d{5} n", b[x:], re.M)]
+    assert max(offs) < m.start(1), "an object after the info dictionary"
+    b = b[:m.start(1)] + new + b[m.end(1):]
+    # newer Writer releases repeat the Producer in the XMP packet: it is set to the same name there, the packet's own
+    # whitespace padding (before <?xpacket end) taking up the difference, so the stream keeps its length and every
+    # offset holds whatever the release token's length
+    xp = re.search(rb"<pdf:Producer>([^<]*)</pdf:Producer>", b)
+    if xp:
+        val = name.encode()
+        d = len(val) - len(xp.group(1))
+        end = b.find(b"<?xpacket end", xp.end())
+        assert end > 0, "no xpacket end after the XMP producer"
+        pad = re.search(rb"[ \n]+$", b[xp.end():end])
+        assert pad and len(pad.group(0)) > d + 2, "the XMP packet's padding cannot absorb the producer"
+        ps = xp.end() + pad.start()
+        padding = b[ps:end]
+        if d > 0:
+            padding = padding[:-d] if padding.endswith(b" " * d) else padding.replace(b" " * d, b"", 1)
+        else:
+            padding = b" " * (-d) + padding
+        b = b[:xp.start(1)] + val + b[xp.end(1):ps] + padding + b[end:]
+    s = re.search(rb"startxref\n(\d+)\n%%EOF", b)
+    old = int(s.group(1))
+    assert old == x + 1, (old, x)
+    b = b[:s.start(1)] + str(old + delta).encode() + b[s.end(1):]
+    return b
 
 
 def _fix(b, created, modified):
@@ -204,6 +314,12 @@ def _fix(b, created, modified):
         new = created.astimezone(dt.timezone.utc).strftime("D:%Y%m%d%H%M%SZ'").encode()
         assert len(new) == len(m.group(1)), (new, m.group(1))
         b = b[:m.start(1)] + new + b[m.end(1):]
+    # newer Writer releases write the export clock into the XMP stream too: set from the document's own times
+    xc = created.astimezone(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ").encode()
+    xm = modified.astimezone(dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ").encode()
+    for tag, val in ((rb"rdf:li", xc), (rb"xmp:CreateDate", xc), (rb"xmp:ModifyDate", xm), (rb"xmp:MetadataDate", xm)):
+        b = re.sub(rb"(<" + tag + rb">)(\d{4}-\d\d-\d\dT\d\d:\d\d:\d\dZ)(</" + tag + rb">)",
+                   lambda m: m.group(1) + val + m.group(3), b)
     core = re.sub(rb"/ID\s*\[[^\]]*\]", b"", re.sub(rb"/DocChecksum\s*/[0-9A-Fa-f]+", b"", b))
     digest = hashlib.sha256(core).hexdigest().upper().encode()
     b = re.sub(rb"(/DocChecksum\s*/)([0-9A-Fa-f]+)", lambda m: m.group(1) + digest[-len(m.group(2)):], b)

@@ -1,0 +1,103 @@
+{
+ "source": "Cboe Global Markets, index history downloads (U.S. indices, daily prices)",
+ "pulled": "2026-11-10",
+ "note": "Files are kept byte for byte as downloaded; the build copies them into the pack unaltered and reads every market value from them.",
+ "files": [
+  {
+   "file": "SPX_History.csv",
+   "series": "S&P 500 Index",
+   "url": "https://cdn.cboe.com/api/global/us_indices/daily_prices/SPX_History.csv",
+   "pulled": "2026-11-10",
+   "sha256": "be08637a0bec621563fa1b180966cbd421f4ac10252b00c64a66befc749f1b24",
+   "bytes": 293608,
+   "rows": 13073,
+   "header": "DATE,SPX",
+   "first": "01/02/1975",
+   "last": "11/09/2026"
+  },
+  {
+   "file": "VIX_History.csv",
+   "series": "Cboe Volatility Index (30-day)",
+   "url": "https://cdn.cboe.com/api/global/us_indices/daily_prices/VIX_History.csv",
+   "pulled": "2026-11-10",
+   "sha256": "0fbd2010663102746b54b12bf96ab0ca4add0c922aebc4dabb0a84cd9c8b0e63",
+   "bytes": 474655,
+   "rows": 9312,
+   "header": "DATE,OPEN,HIGH,LOW,CLOSE",
+   "first": "01/02/1990",
+   "last": "11/09/2026"
+  },
+  {
+   "file": "VIX9D_History.csv",
+   "series": "Cboe S&P 500 9-Day Volatility Index",
+   "url": "https://cdn.cboe.com/api/global/us_indices/daily_prices/VIX9D_History.csv",
+   "pulled": "2026-11-10",
+   "sha256": "72dd97f9638f19e0fa372760942dcda236536bd30dcb01f62ba04eeb82c990b7",
+   "bytes": 202478,
+   "rows": 3986,
+   "header": "DATE,OPEN,HIGH,LOW,CLOSE",
+   "first": "01/04/2011",
+   "last": "11/09/2026"
+  },
+  {
+   "file": "VIX3M_History.csv",
+   "series": "Cboe S&P 500 3-Month Volatility Index",
+   "url": "https://cdn.cboe.com/api/global/us_indices/daily_prices/VIX3M_History.csv",
+   "pulled": "2026-11-10",
+   "sha256": "5c4eb471701cd7984d74c0aa0f8b2ee86a328583133942097543b79a4a8d5e2d",
+   "bytes": 219937,
+   "rows": 4312,
+   "header": "DATE,OPEN,HIGH,LOW,CLOSE",
+   "first": "09/18/2009",
+   "last": "11/09/2026"
+  },
+  {
+   "file": "VIX6M_History.csv",
+   "series": "Cboe S&P 500 6-Month Volatility Index",
+   "url": "https://cdn.cboe.com/api/global/us_indices/daily_prices/VIX6M_History.csv",
+   "pulled": "2026-11-10",
+   "sha256": "746953ab36cc8937c3b31374d68470042a0486c47759d4b7ade9fa20e94d4574",
+   "bytes": 241969,
+   "rows": 4744,
+   "header": "DATE,OPEN,HIGH,LOW,CLOSE",
+   "first": "01/02/2008",
+   "last": "11/09/2026"
+  },
+  {
+   "file": "VIX1Y_History.csv",
+   "series": "Cboe S&P 500 1-Year Volatility Index",
+   "url": "https://cdn.cboe.com/api/global/us_indices/daily_prices/VIX1Y_History.csv",
+   "pulled": "2026-11-10",
+   "sha256": "b95854e78abd504f81926b6e07350aed311c033cc1cb65c7eaaf9247740d5407",
+   "bytes": 254464,
+   "rows": 4989,
+   "header": "DATE,OPEN,HIGH,LOW,CLOSE",
+   "first": "01/03/2007",
+   "last": "11/09/2026"
+  },
+  {
+   "file": "VVIX_History.csv",
+   "series": "Cboe VIX of VIX Index",
+   "url": "https://cdn.cboe.com/api/global/us_indices/daily_prices/VVIX_History.csv",
+   "pulled": "2026-11-10",
+   "sha256": "3c8cc6f0cf74c81b5464c1b5da28c0899eca531f5ac01b548e7b8d5a352ea7a1",
+   "bytes": 109454,
+   "rows": 5143,
+   "header": "DATE,VVIX",
+   "first": "03/06/2006",
+   "last": "11/09/2026"
+  },
+  {
+   "file": "SKEW_History.csv",
+   "series": "Cboe SKEW Index",
+   "url": "https://cdn.cboe.com/api/global/us_indices/daily_prices/SKEW_History.csv",
+   "pulled": "2026-11-10",
+   "sha256": "6a70f2fd77d737f8b6be233bf10b81e61b35886816534b7deb0aacf9b347274c",
+   "bytes": 203862,
+   "rows": 9266,
+   "header": "DATE,SKEW",
+   "first": "01/02/1990",
+   "last": "11/09/2026"
+  }
+ ]
+}

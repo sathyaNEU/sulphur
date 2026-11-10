@@ -1,0 +1,555 @@
+{
+ "results": [
+  {
+   "id": "R1",
+   "name": "the 3-month ladder's average settlement per sale",
+   "graded_as": "Ask 2",
+   "figure": "R1_avg_3m_usd",
+   "depends": [],
+   "independent": "the index and price histories",
+   "golden": 284000,
+   "band": [
+    282000,
+    287000
+   ],
+   "partly": [
+    276000,
+    292000
+   ],
+   "passes": {
+    "quick": 365000,
+    "careful": 300000,
+    "thorough": 284000
+   }
+  },
+  {
+   "id": "R2",
+   "name": "the 3-month ladder's worst calendar year",
+   "graded_as": "Component 4 (Ask 2)",
+   "figure": "R2_worst_year_loss_usd",
+   "depends": [],
+   "independent": "the index and price histories",
+   "golden": 16154000,
+   "band": [
+    15650000,
+    16390000
+   ],
+   "partly": [
+    15180000,
+    16890000
+   ],
+   "passes": {
+    "quick": 5036000,
+    "careful": 14125000,
+    "thorough": 16154000
+   }
+  },
+  {
+   "id": "R3",
+   "name": "the 12-month ladder's peak collateral",
+   "graded_as": "Ask 4",
+   "figure": "R3_old_peak_usd",
+   "depends": [],
+   "independent": "the index and price histories",
+   "golden": 25876000,
+   "band": [
+    25800000,
+    26500000
+   ],
+   "partly": [
+    24500000,
+    27900000
+   ],
+   "passes": {
+    "quick": 5160000,
+    "careful": 25876000,
+    "thorough": 25876000
+   }
+  },
+  {
+   "id": "R4",
+   "name": "the largest 3-month size",
+   "graded_as": "Component 1",
+   "figure": "R4_size_usd",
+   "depends": [
+    "R2",
+    "R3"
+   ],
+   "independent": "",
+   "golden": 114400,
+   "band": [
+    100000,
+    117000
+   ],
+   "partly": [
+    97000,
+    121000
+   ],
+   "passes": {
+    "quick": 590700,
+    "careful": 124500,
+    "thorough": 114400
+   }
+  },
+  {
+   "id": "R5",
+   "name": "the largest 6-month size",
+   "graded_as": "Ask 1",
+   "figure": "R5_alt_size_usd",
+   "depends": [
+    "R3"
+   ],
+   "independent": "",
+   "golden": 58700,
+   "band": [
+    54000,
+    59000
+   ],
+   "partly": [
+    52000,
+    61000
+   ],
+   "passes": {
+    "quick": 161500,
+    "careful": 58700,
+    "thorough": 58700
+   }
+  },
+  {
+   "id": "R6",
+   "name": "the range of the 12-month ladder's average",
+   "graded_as": "Ask 3 (12-month)",
+   "figure": "R6_avg_range_12m",
+   "depends": [],
+   "independent": "the 12-month ladder's settlements, which need no rebuilt strike",
+   "golden": {
+    "low_usd": 63000,
+    "high_usd": 552000
+   },
+   "bands": {
+    "low_usd": [
+     14000,
+     82000
+    ],
+    "high_usd": [
+     537000,
+     616000
+    ]
+   },
+   "passes": {
+    "quick": null,
+    "careful": {
+     "low_usd": 228000,
+     "high_usd": 400000
+    },
+    "thorough": {
+     "low_usd": 63000,
+     "high_usd": 552000
+    }
+   }
+  },
+  {
+   "id": "R7",
+   "name": "the range of the 3-month ladder's average",
+   "graded_as": "Ask 3 (3-month)",
+   "figure": "R7_avg_range_3m",
+   "depends": [
+    "R1"
+   ],
+   "independent": "",
+   "golden": {
+    "low_usd": 143000,
+    "high_usd": 413000
+   },
+   "bands": {
+    "low_usd": [
+     131000,
+     159000
+    ],
+    "high_usd": [
+     399000,
+     436000
+    ]
+   },
+   "passes": {
+    "quick": null,
+    "careful": {
+     "low_usd": 215000,
+     "high_usd": 383000
+    },
+    "thorough": {
+     "low_usd": 143000,
+     "high_usd": 413000
+    }
+   }
+  },
+  {
+   "id": "R8",
+   "name": "the open swaps' expected settlement",
+   "graded_as": "Component 2 (Ask 5)",
+   "figure": "R8_expected_usd",
+   "depends": [],
+   "independent": "the open swaps and the record's start dates",
+   "golden": 2494000,
+   "band": [
+    2390000,
+    2890000
+   ],
+   "partly": [
+    2270000,
+    2980000
+   ],
+   "passes": {
+    "quick": 2067000,
+    "careful": 1883000,
+    "thorough": 2494000
+   }
+  },
+  {
+   "id": "R9",
+   "name": "the open swaps' 80 per cent range",
+   "graded_as": "Ask 5 (range)",
+   "figure": "R9_range",
+   "depends": [],
+   "independent": "the start dates' replay, graded on its own ends",
+   "golden": {
+    "low_usd": 394000,
+    "high_usd": 4247000
+   },
+   "bands": {
+    "low_usd": [
+     200000,
+     420000
+    ],
+    "high_usd": [
+     4100000,
+     4430000
+    ]
+   },
+   "passes": {
+    "quick": null,
+    "careful": {
+     "low_usd": 394000,
+     "high_usd": 4247000
+    },
+    "thorough": {
+     "low_usd": 394000,
+     "high_usd": 4247000
+    }
+   }
+  },
+  {
+   "id": "R10",
+   "name": "the 2027 plan by ladder with its range",
+   "graded_as": "Component 3 (Ask 6)",
+   "figure": "R10_plan",
+   "depends": [
+    "R1",
+    "R4",
+    "R8"
+   ],
+   "independent": "",
+   "golden": {
+    "twelve_month_usd": 2809000,
+    "three_month_usd": 2919000,
+    "total_usd": 5728000,
+    "low_usd": -4203000,
+    "high_usd": 12204000
+   },
+   "bands": {
+    "twelve_month_usd": [
+     2705000,
+     3205000
+    ],
+    "three_month_usd": [
+     2530000,
+     3030000
+    ],
+    "total_usd": [
+     5235000,
+     6235000
+    ],
+    "low_usd": [
+     -4300000,
+     -1900000
+    ],
+    "high_usd": [
+     11200000,
+     12400000
+    ]
+   },
+   "passes": {
+    "quick": {
+     "twelve_month_usd": 2067000,
+     "three_month_usd": 25880000,
+     "total_usd": 27947000,
+     "low_usd": null,
+     "high_usd": null
+    },
+    "careful": {
+     "twelve_month_usd": 2198000,
+     "three_month_usd": 3364000,
+     "total_usd": 5562000,
+     "low_usd": -447000,
+     "high_usd": 11027000
+    },
+    "thorough": {
+     "twelve_month_usd": 2809000,
+     "three_month_usd": 2919000,
+     "total_usd": 5728000,
+     "low_usd": -4203000,
+     "high_usd": 12204000
+    }
+   }
+  },
+  {
+   "id": "R11",
+   "name": "the recommendation",
+   "graded_as": "Recommendation",
+   "figure": "R11_call",
+   "depends": [
+    "R4",
+    "R10"
+   ],
+   "independent": "",
+   "golden": {
+    "size_usd": 114400,
+    "plan_usd": 5728000,
+    "low_usd": -4203000,
+    "high_usd": 12204000
+   },
+   "bands": {
+    "size_usd": [
+     100000,
+     117000
+    ],
+    "plan_usd": [
+     5235000,
+     6235000
+    ],
+    "low_usd": [
+     -4300000,
+     -1900000
+    ],
+    "high_usd": [
+     11200000,
+     12400000
+    ]
+   },
+   "passes": {
+    "quick": {
+     "size_usd": 590700,
+     "plan_usd": 27947000,
+     "low_usd": null,
+     "high_usd": null
+    },
+    "careful": {
+     "size_usd": 124500,
+     "plan_usd": 5562000,
+     "low_usd": -447000,
+     "high_usd": 11027000
+    },
+    "thorough": {
+     "size_usd": 114400,
+     "plan_usd": 5728000,
+     "low_usd": -4203000,
+     "high_usd": 12204000
+    }
+   }
+  }
+ ],
+ "hints": [
+  {
+   "sentence": "on the days that set the limit the 3-month index sits below the 30-day index, so the missing strikes have to come from the maturities on both sides of three months",
+   "rescues": [
+    "R1",
+    "R2",
+    "R4"
+   ]
+  },
+  {
+   "sentence": "an open swap's value is a price: expect what such swaps went on to pay on the record",
+   "rescues": [
+    "R8"
+   ]
+  },
+  {
+   "sentence": "sales a month apart share most of their days, so keep neighbouring sales together when the record is resampled and run the swaps not yet sold off the same start dates as the open ones",
+   "rescues": [
+    "R6"
+   ]
+  },
+  {
+   "sentence": "value each open swap at the implied volatility for its remaining term, not at the index it was struck on",
+   "rescues": []
+  },
+  {
+   "sentence": "the cap on realized volatility bounds the valuation as well as the settlement",
+   "rescues": []
+  },
+  {
+   "sentence": "the standing ladder's November and December sales also settle in the plan year",
+   "rescues": []
+  },
+  {
+   "sentence": "only the new ladder's sales to September settle inside the plan year",
+   "rescues": []
+  }
+ ],
+ "compounds": [
+  {
+   "moves": "the rebuild and the expectation",
+   "rescues": [
+    "R1",
+    "R2",
+    "R4",
+    "R8"
+   ]
+  },
+  {
+   "moves": "the rebuild and dependence",
+   "rescues": [
+    "R1",
+    "R2",
+    "R4",
+    "R6",
+    "R7"
+   ]
+  },
+  {
+   "moves": "the expectation and dependence",
+   "rescues": [
+    "R6",
+    "R8"
+   ]
+  },
+  {
+   "moves": "all three",
+   "rescues": [
+    "R1",
+    "R2",
+    "R4",
+    "R6",
+    "R7",
+    "R8",
+    "R10",
+    "R11"
+   ]
+  }
+ ],
+ "routes": [
+  {
+   "name": "the golden",
+   "answer": {
+    "size_usd": 114400,
+    "plan_usd": 5728000
+   },
+   "golden": true
+  },
+  {
+   "name": "missing strikes from a regression on the 30-day index alone, open swaps at their marks",
+   "answer": {
+    "size_usd": 124500,
+    "plan_usd": 5562000
+   }
+  },
+  {
+   "name": "missing strikes from a regression on the 30-day index alone",
+   "answer": {
+    "size_usd": 124500,
+    "plan_usd": 6173000
+   }
+  },
+  {
+   "name": "missing strikes from the 30-day index times its average ratio",
+   "answer": {
+    "size_usd": 136600,
+    "plan_usd": 6891000
+   }
+  },
+  {
+   "name": "missing strikes read straight off the 30-day index",
+   "answer": {
+    "size_usd": 131800,
+    "plan_usd": 6262000
+   }
+  },
+  {
+   "name": "the 3-month ladder run only from its index's first date",
+   "answer": {
+    "size_usd": 136600,
+    "plan_usd": 7298000
+   }
+  },
+  {
+   "name": "each swap valued at its own index",
+   "answer": {
+    "size_usd": 144400,
+    "plan_usd": 6494000
+   }
+  },
+  {
+   "name": "every swap valued at the 30-day index",
+   "answer": {
+    "size_usd": 71500,
+    "plan_usd": 4634000
+   }
+  },
+  {
+   "name": "no cap in the valuation",
+   "answer": {
+    "size_usd": 38900,
+    "plan_usd": 3802000
+   }
+  },
+  {
+   "name": "the new ladder sized on its own",
+   "answer": {
+    "size_usd": 184100,
+    "plan_usd": 7507000
+   }
+  },
+  {
+   "name": "the settlement limit alone",
+   "answer": {
+    "size_usd": 157900,
+    "plan_usd": 6839000
+   }
+  },
+  {
+   "name": "open swaps at their marks",
+   "answer": {
+    "size_usd": 114400,
+    "plan_usd": 5117000
+   }
+  },
+  {
+   "name": "open swaps on a volatility forecast, squared",
+   "answer": {
+    "size_usd": 114400,
+    "plan_usd": 6249000
+   }
+  },
+  {
+   "name": "open swaps at the median start date",
+   "answer": {
+    "size_usd": 114400,
+    "plan_usd": 6779000
+   }
+  },
+  {
+   "name": "the standing ladder's two sales still to come left out",
+   "answer": {
+    "size_usd": 114400,
+    "plan_usd": 5413000
+   }
+  },
+  {
+   "name": "twelve settlements counted for the new ladder",
+   "answer": {
+    "size_usd": 114400,
+    "plan_usd": 6702000
+   }
+  }
+ ]
+}

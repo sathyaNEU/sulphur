@@ -1,0 +1,261 @@
+{
+ "task": "task9",
+ "title": "Carrow Fields Foundation: how large a 3-month variance swap program the volatility sleeve can add from January 2027, and the sleeve's 2027 cash plan",
+ "domain": "Quantitative Finance and Trading, Quantitative Finance",
+ "task_type": "derivative pricing and collateral exposure",
+ "objective": "Forecasting & Predictive Modeling",
+ "as_of": "2026-11-10",
+ "deliverables": [
+  "sleeve_ladder_2027_memo.docx",
+  "sleeve_ladder_2027.xlsx",
+  "sleeve_collateral_on_record.csv"
+ ],
+ "distractor_files": [
+  "VVIX_History.csv",
+  "SKEW_History.csv"
+ ],
+ "field_terms": [
+  "ladder"
+ ],
+ "stated_inputs": [
+  "200,000",
+  "50,000",
+  "25,000",
+  "100,000",
+  "250,000",
+  "1,487.6"
+ ],
+ "input_gates": {
+  "files": 21,
+  "formats": [
+   "csv",
+   "pdf",
+   "xlsx"
+  ],
+  "categories": [
+   "spreadsheet",
+   "text"
+  ],
+  "largest_file": "Larkhill_DealerValuations_Daily.csv",
+  "largest_file_rows": 28812,
+  "long_file": "Larkhill_CollateralLedger.csv",
+  "long_file_rows": 3984
+ },
+ "sources": [
+  {
+   "files": "the eight *_History.csv files",
+   "origin": "Cboe Global Markets, index history downloads (U.S. indices, daily prices). Used as is: each file ships byte for byte as downloaded.",
+   "url": "https://cdn.cboe.com/api/global/us_indices/daily_prices/",
+   "date": "2026-11-10",
+   "license": "Published by Cboe Global Markets for public download. The values are facts, reproduced unaltered with the source and the pull date recorded. The S&P 500 is a product of S&P Dow Jones Indices, whose closing levels Cboe republishes in the same download."
+  },
+  {
+   "files": "NYSE_Holidays_2026_2028.csv",
+   "origin": "the New York Stock Exchange's published holiday and early-close schedule for 2026 to 2028, transcribed",
+   "url": "https://www.nyse.com/markets/hours-calendars",
+   "date": "2026-11-10",
+   "license": "public schedule, facts only"
+  },
+  {
+   "files": "every other file",
+   "origin": "written for this task. The foundation, its dealers, custodian, people, positions and paperwork are invented; every market value in them is computed from the published closes above.",
+   "date": "2026-11-10",
+   "license": "CC BY 4.0 (original work)"
+  }
+ ],
+ "cross_check_source": {
+  "series": "Federal Reserve Bank of St. Louis, FRED, series VXVCLS (CBOE S&P 500 3-Month Volatility Index, daily close)",
+  "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=VXVCLS",
+  "date": "2026-11-10",
+  "sha256": "95b26c756bb939f6bd77bc85a4b2d95b9912eb4e57961b9d72537db9d9285984",
+  "first": "2007-12-04",
+  "shipped": false,
+  "what": "The same index as VIX3M_History.csv, published back to 2007-12-04 (the Cboe download begins 2009-09-18) and equal to it on every day both carry. Held in the generator beside the pulls, outside the pack, and read by no golden figure; every graded band is checked to contain the answer obtained with it."
+ },
+ "files": [
+  {
+   "path": "Altamere_Statement_20261030.pdf",
+   "format": "pdf",
+   "bytes": 58942,
+   "covers": "Altamere's statement of open transactions at October 30, 2026",
+   "made": "written by task9/generator (pack.py, docs.py) from the authored positions and the published closes (deterministic)"
+  },
+  {
+   "path": "BreconSound_Statement_20261030.pdf",
+   "format": "pdf",
+   "bytes": 58517,
+   "covers": "Brecon Sound's statement of open transactions at October 30, 2026",
+   "made": "written by task9/generator (pack.py, docs.py) from the authored positions and the published closes (deterministic)"
+  },
+  {
+   "path": "CFF_Statement_of_Net_Assets_FY2026.pdf",
+   "format": "pdf",
+   "bytes": 34348,
+   "covers": "extract of the audited statement of net assets at June 30, 2026",
+   "made": "written by task9/generator (pack.py, docs.py) from the authored positions and the published closes (deterministic)"
+  },
+  {
+   "path": "CFF_VolPremium_Blotter.xlsx",
+   "format": "xlsx",
+   "bytes": 14999,
+   "covers": "the investment office's order blotter for the sleeve: every ticket since July 2021, and the dealer panel",
+   "made": "written by task9/generator (pack.py, docs.py) from the authored positions and the published closes (deterministic)",
+   "rows": 130
+  },
+  {
+   "path": "CFF_VolPremium_Settlements.csv",
+   "format": "csv",
+   "bytes": 11022,
+   "covers": "settlement advices for the sleeve's expired swaps",
+   "made": "written by task9/generator (pack.py, docs.py) from the authored positions and the published closes (deterministic)",
+   "rows": 104
+  },
+  {
+   "path": "CSA_Summary_Volatility_Sleeve.pdf",
+   "format": "pdf",
+   "bytes": 41163,
+   "covers": "treasury's summary of the three credit support annexes",
+   "made": "written by task9/generator (pack.py, docs.py) from the authored positions and the published closes (deterministic)"
+  },
+  {
+   "path": "IPS_Schedule_D_Volatility_Premium_Sleeve.pdf",
+   "format": "pdf",
+   "bytes": 42627,
+   "covers": "Investment Policy Statement, Schedule D (the sleeve's program, limits, measurement and cash plan)",
+   "made": "written by task9/generator (pack.py, docs.py) from the authored positions and the published closes (deterministic)"
+  },
+  {
+   "path": "Indicative_Terms_3M_6M_Variance_Swaps_2027.pdf",
+   "format": "pdf",
+   "bytes": 38420,
+   "covers": "the dealer panel's indicative terms for 3-month and 6-month ladders",
+   "made": "written by task9/generator (pack.py, docs.py) from the authored positions and the published closes (deterministic)"
+  },
+  {
+   "path": "Larkhill_CollateralLedger.csv",
+   "format": "csv",
+   "bytes": 111687,
+   "covers": "the custodian's collateral ledger for the sleeve, by dealer and day",
+   "made": "written by task9/generator (pack.py, docs.py) from the authored positions and the published closes (deterministic)",
+   "rows": 3984
+  },
+  {
+   "path": "Larkhill_DealerValuations_Daily.csv",
+   "format": "csv",
+   "bytes": 2671063,
+   "covers": "the custodian's file of the three dealers' daily valuations of each open swap, July 2021 to October 30, 2026",
+   "made": "written by task9/generator (pack.py, docs.py) from the authored positions and the published closes (deterministic)",
+   "rows": 28812
+  },
+  {
+   "path": "Master_Confirmation_SPX_Variance_Swap.pdf",
+   "format": "pdf",
+   "bytes": 40401,
+   "covers": "the master confirmation for the variance swap transactions",
+   "made": "written by task9/generator (pack.py, docs.py) from the authored positions and the published closes (deterministic)"
+  },
+  {
+   "path": "NYSE_Holidays_2026_2028.csv",
+   "format": "csv",
+   "bytes": 1465,
+   "covers": "New York Stock Exchange holidays and early closes, 2026 to 2028",
+   "made": "transcribed from the exchange's published holiday schedule",
+   "rows": 34
+  },
+  {
+   "path": "SKEW_History.csv",
+   "format": "csv",
+   "bytes": 203862,
+   "covers": "Cboe SKEW Index daily closing levels",
+   "made": "downloaded from Cboe Global Markets and shipped unaltered",
+   "url": "https://cdn.cboe.com/api/global/us_indices/daily_prices/SKEW_History.csv",
+   "pulled": "2026-11-10",
+   "sha256": "6a70f2fd77d737f8b6be233bf10b81e61b35886816534b7deb0aacf9b347274c",
+   "rows": 9266
+  },
+  {
+   "path": "SPX_History.csv",
+   "format": "csv",
+   "bytes": 293608,
+   "covers": "S&P 500 Index daily closing levels as Cboe publishes them",
+   "made": "downloaded from Cboe Global Markets and shipped unaltered",
+   "url": "https://cdn.cboe.com/api/global/us_indices/daily_prices/SPX_History.csv",
+   "pulled": "2026-11-10",
+   "sha256": "be08637a0bec621563fa1b180966cbd421f4ac10252b00c64a66befc749f1b24",
+   "rows": 13073
+  },
+  {
+   "path": "VIX1Y_History.csv",
+   "format": "csv",
+   "bytes": 254464,
+   "covers": "Cboe S&P 500 1-Year Volatility Index daily open, high, low and close",
+   "made": "downloaded from Cboe Global Markets and shipped unaltered",
+   "url": "https://cdn.cboe.com/api/global/us_indices/daily_prices/VIX1Y_History.csv",
+   "pulled": "2026-11-10",
+   "sha256": "b95854e78abd504f81926b6e07350aed311c033cc1cb65c7eaaf9247740d5407",
+   "rows": 4989
+  },
+  {
+   "path": "VIX3M_History.csv",
+   "format": "csv",
+   "bytes": 219937,
+   "covers": "Cboe S&P 500 3-Month Volatility Index daily open, high, low and close",
+   "made": "downloaded from Cboe Global Markets and shipped unaltered",
+   "url": "https://cdn.cboe.com/api/global/us_indices/daily_prices/VIX3M_History.csv",
+   "pulled": "2026-11-10",
+   "sha256": "5c4eb471701cd7984d74c0aa0f8b2ee86a328583133942097543b79a4a8d5e2d",
+   "rows": 4312
+  },
+  {
+   "path": "VIX6M_History.csv",
+   "format": "csv",
+   "bytes": 241969,
+   "covers": "Cboe S&P 500 6-Month Volatility Index daily open, high, low and close",
+   "made": "downloaded from Cboe Global Markets and shipped unaltered",
+   "url": "https://cdn.cboe.com/api/global/us_indices/daily_prices/VIX6M_History.csv",
+   "pulled": "2026-11-10",
+   "sha256": "746953ab36cc8937c3b31374d68470042a0486c47759d4b7ade9fa20e94d4574",
+   "rows": 4744
+  },
+  {
+   "path": "VIX9D_History.csv",
+   "format": "csv",
+   "bytes": 202478,
+   "covers": "Cboe S&P 500 9-Day Volatility Index daily open, high, low and close",
+   "made": "downloaded from Cboe Global Markets and shipped unaltered",
+   "url": "https://cdn.cboe.com/api/global/us_indices/daily_prices/VIX9D_History.csv",
+   "pulled": "2026-11-10",
+   "sha256": "72dd97f9638f19e0fa372760942dcda236536bd30dcb01f62ba04eeb82c990b7",
+   "rows": 3986
+  },
+  {
+   "path": "VIX_History.csv",
+   "format": "csv",
+   "bytes": 474655,
+   "covers": "Cboe Volatility Index (30-day) daily open, high, low and close",
+   "made": "downloaded from Cboe Global Markets and shipped unaltered",
+   "url": "https://cdn.cboe.com/api/global/us_indices/daily_prices/VIX_History.csv",
+   "pulled": "2026-11-10",
+   "sha256": "0fbd2010663102746b54b12bf96ab0ca4add0c922aebc4dabb0a84cd9c8b0e63",
+   "rows": 9312
+  },
+  {
+   "path": "VVIX_History.csv",
+   "format": "csv",
+   "bytes": 109454,
+   "covers": "Cboe VIX of VIX Index daily closing levels",
+   "made": "downloaded from Cboe Global Markets and shipped unaltered",
+   "url": "https://cdn.cboe.com/api/global/us_indices/daily_prices/VVIX_History.csv",
+   "pulled": "2026-11-10",
+   "sha256": "3c8cc6f0cf74c81b5464c1b5da28c0899eca531f5ac01b548e7b8d5a352ea7a1",
+   "rows": 5143
+  },
+  {
+   "path": "Wexcombe_Statement_20261030.pdf",
+   "format": "pdf",
+   "bytes": 60174,
+   "covers": "Wexcombe's statement of open transactions at October 30, 2026",
+   "made": "written by task9/generator (pack.py, docs.py) from the authored positions and the published closes (deterministic)"
+  }
+ ]
+}
