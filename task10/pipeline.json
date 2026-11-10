@@ -1,12 +1,12 @@
 {
  "task": "task10",
- "status": "PAUSED",
+ "status": "RETURNED",
  "domain": "energy-systems-utilities/load-forecasting (client domain energy-systems-utilities; world: an English distribution network operator, Wealdmoor Power Networks, committing for winter 2027/28 the reinforcement of the Halverton primaries whose design-day demand, after the flexibility contracted for that winter is credited, exceeds firm capacity)",
  "subdomain": "load-forecasting",
  "objective": "forecasting",
- "stage": 4,
- "stage_name": "check",
- "updated": "2026-11-09",
+ "stage": 1,
+ "stage_name": "draw",
+ "updated": "2026-11-10",
  "call": "Commit reinforcement at Ashcombe Road and Hartwell Common for winter 2027/28; Charlecote Way and Fenwick Street hold firm capacity with the flexibility contracted for that winter",
  "stump": "Measuring each flexibility event's fall at its zone primary against a weather-adjusted baseline, validated on held-out non-event weekdays and stable across both winters, and crediting the 2027/28 contracts at the 0.9, 0.6, 0.9 and 0.9 per megawatt scheduled the event records show commits no primary; the step that lands it there is reading the primary's fall as the provider's delivery, when at Ashcombe Road, Fenwick Street and Hartwell Common the control room moved a feeder section across an open point to Tollbrook Lane, Wexley Hill and Kestwick Fields for each event window, so the providers' own reduction, net of the neighbour's rise and read at the design day's minus 3.0 C, is 0.4 and 0.5 per megawatt and Ashcombe Road and Hartwell Common must be reinforced.",
  "architecture": 5,
@@ -54,11 +54,11 @@
   "average": null,
   "counterfactual_average": null,
   "first_wrong_step": {
-   "run1": "none: landed the golden (paired zone-and-neighbour totals netted the move, delivery read at minus 3.0 C: 0.3952 and 0.4967 per MW); lost only the neighbour rises and the 0.9 contrast it never stated",
-   "run2": "step 7: credited the zone's own fall (0.63, 0.48, 0.74, 0.71 per MW at minus 3.0 C, rung 1b) after measuring the neighbours' rise (1.271, 0.997, 1.680 MW) and setting it aside as not proving a transfer: dismissed_own_evidence; filed Ashcombe Road alone"
+   "run1": "round 2, step 7: the provider delivery measured at the zone primary with a temperature interaction (0.67, 0.49, 0.75, 0.73 per MW, rung 1b), the open feeder ties read and set aside: method_shortcut; filed Ashcombe Road alone",
+   "run2": "round 2, step 8: the same estimator certified by pre-service placebo intervals and untreated-primary controls, the open-point records read only as transfer headroom: self_confirming_check; filed Ashcombe Road alone"
   },
-  "triage": "FIX_ASKS (runs/triage.md): scores estimated because no rubric was pasted, about 92 and 31, average about 61, counterfactual about 67; the author's estimate near 68",
-  "recorded": "2026-11-08",
+  "triage": "REDESIGN on the review (runs/review_2026-11-10.md): both round 2 runs lost at the deciding step for a reasoning reason and the holistic audit still read the step as one built-in factor",
+  "recorded": "2026-11-10",
   "history": [
    {
     "architecture": 4,
@@ -75,6 +75,15 @@
     "verdict": "FIX_ASKS",
     "recorded": "2026-11-08",
     "note": "run 1 on the golden call, run 2 off it (Ashcombe Road alone, dismissed own evidence); no rubric pasted; runs saved as runs/run1.md and run2.md, architecture 4's as runs/arch4_*.md"
+   },
+   {
+    "architecture": 5,
+    "round": 2,
+    "run1": null,
+    "run2": null,
+    "verdict": "REDESIGN (on the review)",
+    "recorded": "2026-11-10",
+    "note": "second architecture 5 pair, on the minimal prompt: both runs off the call at rung 1b (Ashcombe Road alone; a method shortcut and a self-confirming check); not scored; runs saved as runs/arch5_round2_run1.md and arch5_round2_run2.md, the first pair as runs/arch5_round1_*.md; the holistic audit of 2026-11-10 read the neighbour rise as a plant (runs/review_2026-11-10.md)"
    }
   ]
  },
@@ -86,16 +95,24 @@
    "portal": "first architecture 5 pair: run 1 on the call, run 2 off it (dismissed own evidence); the asks were the four-zone table alone, so run 2 kept Charlecote Way's row, the agreeing over-firm flags, the layout and the chart, and run 1 kept every ask (the designed second judgment, the design condition, read by both runs)",
    "fix": "asks re-coupled: one Supplementary Questions item per quantity across the four zones (deliveries, credits, demand after against firm and the set over it), the chart graded on which after columns stand above firm, how far each primary to reinforce exceeds firm on the design day (3 and 2 MW), and the primaries over firm on working weekdays at minus 4.5 C (Ashcombe Road, Fenwick Street, Hartwell Common) and minus 6.0 C (all four), where the providers' net reduction re-read at the colder day decides and the straight correction is checked on winter 2023/24; upstream figures dropped from the blocks; the guideline's lead-time sentence made consistent with its winter; the call, the stump, the ladder and every frozen figure unchanged (freeze.py rubric PASS)",
    "commit": ""
+  },
+  {
+   "date": "2026-11-10",
+   "source": "review",
+   "repair": "design",
+   "portal": "holistic audit: the call turns on one built-in factor (Tollbrook Lane, Wexley Hill and Kestwick Fields step up a flat 1.4, 1.4 and 0.8 MW on their zone's event days, whatever the MW scheduled, absent on cancelled days); once told, the fix is one subtraction; \"spotting the plant, not analysis\". Asked for: the transfer documented (switching log entries) and the call turning on judgments that each move a figure (the shape of the cold-weather delivery decline validated on held-out events; whether delivery scales to awards 1.5 to 2.5 times the largest historical dose; how baseline uncertainty is carried to Hartwell Common's margin)",
+   "fix": "",
+   "commit": ""
   }
  ],
- "resume": "the author's decision on the stage 4 judge's main-call finding (determinism_check_report_pass2.md): guideline 6 read as the primary's whole fall files Ashcombe Road alone. Either (a) accept the existing closure (\"that its provider will deliver\", \"No other measure is credited\", the award notice's provider-metered delivery, now rebutted by name in the closing) and ship: re-read the rewritten prompt (2026-11-09, prompt_rewritten) with the leak reader, spend the one re-judge, set READY and commit RESHIPPED; or (b) /fix-determinism with a WHAT sentence that names no transfer, run the fork-is-the-stump test first; or (c) re-root. The ask layer is repaired and every free gate re-run on a670e735 (checks 103/103, verify PASS, byte-identical, figures_check 72/72, voice-check PASS, leak.py REVIEW no LEAK, audit PASS, freeze rubric PASS, precut 1 FAIL on the honest pair ceiling 54.5)",
+ "resume": "RETURNED 2026-11-10: architecture 5 spent on the holistic audit; re-root in the same world as architecture 6, a results chain to the bar of 2026-11-09 (the transfer documented in a switching log; the deciding results on the delivery shape in the cold, the scaling to the awards and the uncertainty at the margin), from stage 1",
  "approved": null,
  "submitted": null,
  "delivered": null,
  "portal": {
-  "status": "",
-  "date": "",
-  "note": ""
+  "status": "RETURNED",
+  "date": "2026-11-10",
+  "note": "holistic audit, runs/review_2026-11-10.md"
  },
  "history": [
   {

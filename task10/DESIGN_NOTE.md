@@ -424,6 +424,14 @@ later voice pass may not drop or change:
 
 ## Tried and rejected
 
+- Architecture 5 (the provider's reduction net of the load a control room moved to the primary across an open point,
+  read at minus 3.0 C; golden Ashcombe Road and Hartwell Common): spent on the platform's holistic audit of 2026-11-10.
+  Both runs lost at the deciding step (rung 1b, Ashcombe Road alone, 0.67 to 0.75 per MW at the zone meter; a method
+  shortcut and a self-confirming check) and the audit still read the step as a plant: the neighbours step up a flat
+  1.4, 1.4 and 0.8 MW on event days whatever the megawatts scheduled, absent on cancelled days, so one sentence names
+  it and one subtraction lands the call. A hidden concurrent action with a discrete signature is a planted factor
+  however analytical the netting; the transfer is now documented texture and the deciding step moves to judgments
+  the record has to settle (`runs/review_2026-11-10.md`).
 
 - A mix shift by author tenure (new accounts' posts carry most review items, and AI took the newcomers): rejected at the
   draw, because the account-age column makes the segmentation a reflex the opponent runs on every visible attribute.

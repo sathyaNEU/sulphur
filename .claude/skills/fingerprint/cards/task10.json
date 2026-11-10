@@ -1,320 +1,321 @@
 {
-  "task": "task10",
-  "project": "sulfur",
-  "architecture": "v5 (re-root after architecture 4's platform round, both runs on the golden call: an English distribution network operator's winter 2027/28 reinforcement list for its Halverton primary substations, flexibility credited at what the contracted providers deliver)",
-  "drawn": "2026-11-08",
-  "slot_note": "re-root of task10 in the same client domain (Energy Systems & Utilities) at the author's word and the same objective (Forecasting); architectures 1 to 4 in lineage, each spent on the platform",
-  "domain": "energy-systems-utilities",
-  "subdomain": "load-forecasting",
-  "client_domain": "energy-systems-utilities",
-  "niche": "an English distribution network operator's DSO function naming, for its December 2026 investment committee, the 33/11 kV primary substations in its Halverton city zone that must have reinforcement committed for winter 2027/28 because their design-day demand, after the flexibility contracted for that winter is credited, will exceed firm capacity; at three of the four flexibility zones the control room also moved an 11 kV feeder section to the neighbouring primary for every event window",
-  "objective": "forecasting",
-  "shape": "10",
-  "decision_type": "designation_set",
-  "answer_unit": "set_of_items",
-  "answer": "commit reinforcement at Ashcombe Road and Hartwell Common for winter 2027/28",
-  "answer_source": "task10/submission.md, Final Recommendation",
-  "gap": [
-    "objective",
-    "time"
+ "task": "task10",
+ "project": "sulfur",
+ "architecture": "v5 (re-root after architecture 4's platform round, both runs on the golden call: an English distribution network operator's winter 2027/28 reinforcement list for its Halverton primary substations, flexibility credited at what the contracted providers deliver)",
+ "drawn": "2026-11-08",
+ "slot_note": "re-root of task10 in the same client domain (Energy Systems & Utilities) at the author's word and the same objective (Forecasting); architectures 1 to 4 in lineage, each spent on the platform",
+ "domain": "energy-systems-utilities",
+ "subdomain": "load-forecasting",
+ "client_domain": "energy-systems-utilities",
+ "niche": "an English distribution network operator's DSO function naming, for its December 2026 investment committee, the 33/11 kV primary substations in its Halverton city zone that must have reinforcement committed for winter 2027/28 because their design-day demand, after the flexibility contracted for that winter is credited, will exceed firm capacity; at three of the four flexibility zones the control room also moved an 11 kV feeder section to the neighbouring primary for every event window",
+ "objective": "forecasting",
+ "shape": "10",
+ "decision_type": "designation_set",
+ "answer_unit": "set_of_items",
+ "answer": "commit reinforcement at Ashcombe Road and Hartwell Common for winter 2027/28",
+ "answer_source": "task10/submission.md, Final Recommendation",
+ "gap": [
+  "objective",
+  "time"
+ ],
+ "pattern": [
+  "none"
+ ],
+ "generators": [
+  "G4",
+  "G5",
+  "G3"
+ ],
+ "gate_g": "forecasting",
+ "calibration_form": "none",
+ "stump_strategy": "causal_design",
+ "decisive_rule_filed": false,
+ "official_decoy": false,
+ "validated_decoy": false,
+ "context_artifact": "monitoring_export",
+ "stump_class": "analytical",
+ "analyst_test": "A strong analyst who maps the renamed primary codes, aligns the half-hourly SCADA (UTC) with the event log (UK local time), weather-corrects each primary to the design day with the event windows excluded, and measures each flexibility zone's event-window reduction against a weather-adjusted baseline (and against neighbouring primaries as controls), validated on placebo days and held-out events, carries each zone's delivery per megawatt scheduled to the 2027/28 contracts and files only Elmstead for reinforcement; at Ashcombe Road and Fenwick Street a feeder section moved to the neighbouring primary for every event window, so the providers' own delivery is far lower and both primaries, with Elmstead, need reinforcement.",
+ "domain_test": "The deciding quantity is each primary's design-day demand after its contracted flexibility, worked the way distribution planning works it: a weather-corrected peak at the design condition, the flexibility's delivered reduction measured against a weather-adjusted baseline, and the group's N-1 firm capacity; in another field's nouns the counterfactual is no weather-driven load model, the neighbour's mirror is no power-flow identity across an 11 kV open point, and the design day's coincident peaks have no counterpart.",
+ "layer2_family": "estimand_identification",
+ "layer2_pattern": "own:flexibility-relief-net-of-control-room-transfers-mirrored-at-the-neighbour",
+ "layer1": [
+  "utc-local",
+  "id-rekey-crosswalk",
+  "duplicate-rows-at-clock-change",
+  "missing-intervals-flagged",
+  "re-issued-events",
+  "name-variants",
+  "withdrawn-and-duplicate-register-rows",
+  "pdf-tables",
+  "raw-and-checked-versions"
+ ],
+ "stakeholder_role": "the network operator's head of DSO for the Halverton zone, who takes the winter 2027/28 reinforcement list to the December investment committee",
+ "role_family": "operations_director",
+ "scoring_unit": "per active unit per period",
+ "spine": {
+  "file": "primary_demand_halfhourly_2023-2026.csv",
+  "rows": 196201,
+  "entity": "one row is one primary substation's metered demand in one half-hour, as its SCADA export writes it",
+  "grain": "primary substation x half-hour",
+  "source": "constructed for task10, no real dataset"
+ },
+ "forum": "executive_team",
+ "forcing_event": "season_or_peak",
+ "org_family": "utility_or_infrastructure",
+ "world": {
+  "geography": "England (a fictional distribution network operator, licence area and city zone)",
+  "currency": "GBP",
+  "org_type": "electricity distribution network operator",
+  "invented_names": [
+   "Wealdmoor Power Networks",
+   "Halverton",
+   "Corvane Flex",
+   "Quillon Energy Services"
   ],
-  "pattern": [
-    "none"
-  ],
-  "generators": [
-    "G4",
-    "G5",
-    "G3"
-  ],
-  "gate_g": "forecasting",
-  "calibration_form": "none",
-  "stump_strategy": "causal_design",
-  "decisive_rule_filed": false,
-  "official_decoy": false,
-  "validated_decoy": false,
-  "context_artifact": "monitoring_export",
-  "stump_class": "analytical",
-  "analyst_test": "A strong analyst who maps the renamed primary codes, aligns the half-hourly SCADA (UTC) with the event log (UK local time), weather-corrects each primary to the design day with the event windows excluded, and measures each flexibility zone's event-window reduction against a weather-adjusted baseline (and against neighbouring primaries as controls), validated on placebo days and held-out events, carries each zone's delivery per megawatt scheduled to the 2027/28 contracts and files only Elmstead for reinforcement; at Ashcombe Road and Fenwick Street a feeder section moved to the neighbouring primary for every event window, so the providers' own delivery is far lower and both primaries, with Elmstead, need reinforcement.",
-  "domain_test": "The deciding quantity is each primary's design-day demand after its contracted flexibility, worked the way distribution planning works it: a weather-corrected peak at the design condition, the flexibility's delivered reduction measured against a weather-adjusted baseline, and the group's N-1 firm capacity; in another field's nouns the counterfactual is no weather-driven load model, the neighbour's mirror is no power-flow identity across an 11 kV open point, and the design day's coincident peaks have no counterpart.",
-  "layer2_family": "estimand_identification",
-  "layer2_pattern": "own:flexibility-relief-net-of-control-room-transfers-mirrored-at-the-neighbour",
-  "layer1": [
-    "utc-local",
-    "id-rekey-crosswalk",
-    "duplicate-rows-at-clock-change",
-    "missing-intervals-flagged",
-    "re-issued-events",
-    "name-variants",
-    "withdrawn-and-duplicate-register-rows",
-    "pdf-tables",
-    "raw-and-checked-versions"
-  ],
-  "stakeholder_role": "the network operator's head of DSO for the Halverton zone, who takes the winter 2027/28 reinforcement list to the December investment committee",
-  "role_family": "operations_director",
-  "scoring_unit": "per active unit per period",
-  "spine": {
-    "file": "primary_demand_halfhourly_2023-2026.csv",
-    "rows": 196201,
-    "entity": "one row is one primary substation's metered demand in one half-hour, as its SCADA export writes it",
-    "grain": "primary substation x half-hour",
-    "source": "constructed for task10, no real dataset"
+  "people": [
+   "Marion Todd",
+   "Clifford Evans",
+   "Irene Carpenter"
+  ]
+ },
+ "deliverables": [
+  "halverton_primary_capacity_2027-28.xlsx",
+  "capex_review_2027-28.pptx"
+ ],
+ "opening_move": "question-first",
+ "question_form": "which",
+ "driver": "The decisive quantity is what a contracted intervention removes from a constrained unit's demand under a design condition, but on every occasion the record measured it the operator also moved part of the unit's load onto a neighbouring unit for the same hours, so the unit's measured reduction is the intervention plus the move and the neighbour, the natural comparison, rose by what was moved; only the intervention's own reduction, read where the move cancels, is credited under the design condition, when the neighbour has no room to take it.",
+ "driver_concrete": "On every flexibility event at Ashcombe Road, Fenwick Street and Hartwell Common the control room moved a feeder section across the 11 kV open point to Tollbrook Lane, Wexley Hill and Kestwick Fields for the event window, so each primary's event-window fall is the provider's reduction plus the section; the neighbour rose by the section in the same half-hours, so only the providers' own reduction, net of that rise and read at the design day's minus 3.0 C, counts toward firm capacity.",
+ "stump": "Measuring each flexibility event's fall at its zone primary against a weather-adjusted baseline, validated on held-out non-event weekdays and stable across both winters, and crediting the 2027/28 contracts at the 0.9, 0.6, 0.9 and 0.9 per megawatt scheduled the event records show commits no primary; the step that lands it there is reading the primary's fall as the provider's delivery, when at Ashcombe Road, Fenwick Street and Hartwell Common the control room moved a feeder section across an open point to Tollbrook Lane, Wexley Hill and Kestwick Fields for each event window, so the providers' own reduction, net of the neighbour's rise and read at the design day's minus 3.0 C, is 0.4 and 0.5 per megawatt and Ashcombe Road and Hartwell Common must be reinforced.",
+ "deep_chain": "(1) each zone's event-window reduction against a weather-adjusted baseline is the primary's drop; (2) the neighbouring primaries tied to Ashcombe Road and Fenwick Street by 11 kV open points rose in exactly those half-hours by what the zone shed beyond the provider's own response, so the drop is the provider plus a moved section; (3) the provider's own delivery is read where the move cancels (the pair combined, or the zone's drop less the neighbour's rise on a baseline built without those days); (4) only that delivery, carried to the 2027/28 contracts, is credited on the design day against each primary's weather-corrected, growth-carried demand.",
+ "judgment": "Choosing a comparison the concurrent operator action has not touched: the neighbour is the natural control and is itself contaminated; the data justify the clean comparison by the mirror (the neighbour's rise equals the zone's excess drop half-hour by half-hour) and by the zone whose events carried no move (Charlecote Way), where the same provider's delivery matches the clean estimate.",
+ "one_fact_test": "The likeliest hint, that Tollbrook Lane's demand rose during Ashcombe Road's events, still leaves the run to tie it to the open point, build a baseline for the neighbour on days the move did not happen, net the move from the zone's reduction, find the same at Fenwick Street, carry the provider's own delivery to the 2027/28 contracts and forecast every primary's design day.",
+ "strategy_label": "WORKS IN FORM (a comparison that is actually clean: the contamination visible only through a relation in the data, never a column or a filed sentence)",
+ "mechanism_source": "design_note",
+ "differentiation": {},
+ "lineage": [
+  {
+   "architecture": "v3 (re-root in batch 1: a Victorian local government union branch choosing the councils at which it applies for protected action ballot orders for ballots opening 1 March 2027, a ballot counting only if half the roll votes, each member's vote carried from the branch's own online votes and lifted where an elected workplace delegate is active at the member's worksite)",
+   "drawn": "2026-11-07",
+   "domain": "political-science-public-policy",
+   "subdomain": "election-polling-forecasting",
+   "objective": "forecasting",
+   "shape": "10",
+   "decision_type": "designation_set",
+   "answer_unit": "set_of_items",
+   "gap": [
+    "population"
+   ],
+   "pattern": [
+    "A"
+   ],
+   "generators": [
+    "G14",
+    "G13",
+    "G4"
+   ],
+   "gate_g": "forecasting",
+   "driver": "Each unit's chance of acting in a coming event is carried from its own record of past acts and lifted where a contact a separate dated register places at its site is in post, and the register's contacts changed after the last past act the record holds, so every route carried on the units' own record, each of which reproduces the last closed event, brings the old contacts into the coming event.",
+   "driver_concrete": "A member's chance of voting in a protected action ballot rises about 24 points where an elected delegate is active at their worksite, read from the branch's delegate register terms against each member's worksite on the roll; the July 2026 delegate elections, held after the last online vote in October 2025, left worksites at some councils with no delegate and filled others, so turnout carried from members' own votes over-forecasts the councils that lost delegates and under-forecasts those that gained them.",
+   "stump": "Carrying each member's own voting history, calibrated to the 2021 and 2023-24 declared turnouts and checked on the 2023-24 round within a point, files 15 councils above half; the step that lands it there is reading each member's past votes as theirs alone when they rode the elected delegate in post at their worksite at the time, and the July 2026 delegate elections left worksites at six of those councils without one and filled worksites at two others, so with the 2026-28 delegates the set is 11.",
+   "stump_strategy": "forecast_method_backtest",
+   "forum": "board_of_directors",
+   "forcing_event": "statutory_or_regulatory_filing",
+   "org_family": "cooperative_or_member_body",
+   "role_family": "research_desk",
+   "layer2_family": "forecast_uncertainty",
+   "layer2_pattern": "own:vote-history-turnout-carried-past-a-change-in-workplace-mobilisation",
+   "fate": "FAILED_TO_STUMP on the portal (2026-11-07): both responses landed the 11 councils; each put worksite delegate coverage in its member-level turnout logit from the start and evaluated it at the ballot close with the 2026-28 delegates, so the decisive step was a recorded covariate's forward value one join from the members' worksite code, and the July 2026 election return, read by nothing else, announced it; driver spent"
   },
-  "forum": "executive_team",
-  "forcing_event": "season_or_peak",
-  "org_family": "utility_or_infrastructure",
-  "world": {
-    "geography": "England (a fictional distribution network operator, licence area and city zone)",
-    "currency": "GBP",
-    "org_type": "electricity distribution network operator",
+  {
+   "domain": "physical-environmental-sciences",
+   "subdomain": "hydrology-flood-frequency",
+   "objective": "forecasting",
+   "shape": "other",
+   "decision_type": "go_hold_or_stop",
+   "answer_unit": "named_option",
+   "gap": [
+    "population",
+    "time"
+   ],
+   "pattern": [
+    "none"
+   ],
+   "generators": [
+    "G14",
+    "G16",
+    "G13"
+   ],
+   "gate_g": "forecasting",
+   "driver": "The decisive quantity is how often a fixed capacity is exceeded once a steady load is added, when both the standing load and the response each driving event adds scale with how much of a fixed network lies below a fluctuating level read from a separate record, so one response and one standing load read off a short record whose level mostly stayed low understate a long record whose level often rose past most of the network.",
+   "stump_strategy": "forecast_method_backtest",
+   "forum": "council_or_assembly",
+   "forcing_event": "other",
+   "org_family": "local_government",
+   "role_family": "capacity_planner",
+   "drawn": "2026-10-31",
+   "stump": "Fitting one unit-hydrograph response per millimetre and the meter's own dry weather flow on 2024 to 2026 and replaying 2004 to 2023 files about 1 overflow a year with the subdivision (0.70), inside the consent's two, and connects it; the step that lands it there is reading the station's response as fixed when its infiltration rises 4.2 L/s for every kilometre of sewer below the water table, which stood a median 0.2 km over the meter and 2.1 km over the replay.",
+   "layer2_family": "forecast_uncertainty",
+   "layer2_pattern": "own:submerged-length-conditioned-infiltration-chosen-out-of-sample",
+   "driver_concrete": "The infiltration reaching the pump station on a dry day and in a storm scales with the length of the catchment's sewers whose inverts lie below the water table that day, read from the regional bore's level against the asset register's invert levels; the 2024 to 2026 meter ran through years when the water table mostly stood below the low terrace's sewers, while the consent's 2004 to 2023 replay holds wet years with it above most of them, so one response per millimetre and the meter's base flow carried into the replay understate the overflows the subdivision's added flow takes past the consent.",
+   "architecture": "v2 (re-root in batch 1: a New Zealand district council's wastewater pump station, whether a subdivision can connect in 2027 within the station's consented overflows, the infiltration each storm and each dry day drives read from the length of sewer below the water table)",
+   "fate": "FAILED_TO_STUMP on the portal (2026-11-07): both responses landed the hold call; Response 1 replayed 2004 to 2023 and filed 48 overflows against the 40 allowed, then 2 after the upgrade, so any full-record replay with the subdivision already broke the consent and the water-table step was never needed; driver spent"
+  },
+  {
+   "domain": "product-analytics",
+   "subdomain": "retention-cohort-lifetime-value-modeling",
+   "objective": "forecasting",
+   "shape": "other",
+   "decision_type": "quantity_figure",
+   "answer_unit": "count",
+   "gap": [
+    "population",
+    "time"
+   ],
+   "pattern": [
+    "none"
+   ],
+   "generators": [
+    "G9",
+    "G6",
+    "G16"
+   ],
+   "gate_g": "forecasting",
+   "driver": "Members of a pool leave at their own steady rates, which differ widely, so the fast leavers go first and the pool's overall leaving rate falls as its members age; while new members kept arriving the overall rate held high, and once admission stops the closed pool sheds its newest members and then slows, so carrying the open pool's rate overstates the forward losses, and because the record opens part-way through most members' lives, the rate by tenure has to count each member from when the record first sees them.",
+   "stump_strategy": "forecast_method_backtest",
+   "forum": "council_or_assembly",
+   "forcing_event": "vote_or_meeting",
+   "org_family": "software_or_platform",
+   "role_family": "operations_director",
+   "architecture": "v1 loop 3 (Millrind's 2027 paid moderation pool, nine sites behind a closing volunteer review community, the 2027 pool carried on survival by tenure)",
+   "drawn": "2026-10-17",
+   "stump": "Carrying each site's reviewer pool from September 2026 at its own lapse rate of the last two years, with no new reviewers since access became invitation-only, files 41 FTE (40 on the last twelve months' rate, 38 on the last three); the step that lands it there is reading one stop rate off a pool that was still taking in newcomers, when reviewers stop at about 9 per cent a month in their first year and under one per cent from their fourth: carried on the stop rate of each reviewer's own tenure, counted from when the roster first sees them, the 10,607 active reviewers average about 8,800 a month in 2027 and the request is 32 FTE (27 with the tenure curve read from each grant date).",
+   "fate": "spent 2026-10-31 at the batch 1 triage: loop 3 was reshipped 10-27 after the portal's FAILED_TO_STUMP on loops 1 and 2 (both responses filed the then golden), keeping the world, the prompt and the asks the portal had already solved once; re-rooted in a new world before any portal result on loop 3"
+  },
+  {
+   "architecture": "v1 (loops 1 and 2)",
+   "drawn": "2026-10-17",
+   "fate": "solved, FAILED_TO_STUMP on the portal (2026-10-27): both responses filed 35 FTE, the then golden, by building each site's capacity against its inbox at the saturated pace and carrying each pool at its own lapse rate with almost no new reviewers; the capacity framing was the strong solver's default, so loop 3 moved the decisive step to how the pool is carried",
+   "driver": "Work reaches a paid tier only when a volunteer tier falls short, and the volunteer tier's capacity shows only in the periods it fell short, since in every other period it handled everything that arrived; with almost no new volunteers arriving, each pool shrinks at a steady exit rate, so units whose records show almost nothing reaching the paid tier cross below their arrivals inside the forward window, while a share of arrivals carried forward, a trend in the paid work, or capacity read from recent throughput each misses the crossing.",
+   "driver_concrete": "Every community review item at Millrind goes first to the volunteer reviewers and reaches the paid moderators only if no volunteer has reviewed it 72 hours after it entered the inbox; volunteers review at their own pace when the inbox is full and below it when it runs dry, so their pace shows only in months when items were routed (most sites in 2022, Security, Embedded & Hardware and Scientific Computing since 2025), and since almost no member has been granted review access after autumn 2024 every site's pool shrinks by about two per cent a month, which takes Data & ML, Databases, Infrastructure & DevOps and Game Development, with almost nothing routed since January 2024, below their 2027 inbox arrivals.",
+   "stump": "Carrying each site's paid queue hours per question over the last twelve months onto the 2027 question plan files a request of 23 FTE (25 to 28 with each site's routed share or its monthly paid hours trended forward), inside finance's 26-FTE envelope; the step that lands it there is treating routed items as a share of arrivals, when they are the arrivals each site's shrinking reviewer pool cannot review at the pace reviewers keep when the inbox is full, which puts four sites that have routed almost nothing since January 2024 short of their 2027 inbox and files 35 (31 with the pool trended over the platform's whole record, 53 with the pace read from 2026 throughput).",
+   "gate_g": "binding_constraint",
+   "gap": [
+    "time",
+    "population"
+   ],
+   "pattern": [
+    "none"
+   ],
+   "generators": [
+    "G5",
+    "G13",
+    "G16"
+   ],
+   "decision_type": "quantity_figure",
+   "stump_strategy": "binding_constraint",
+   "layer2_family": "allocation_constraints",
+   "layer2_pattern": "own:volunteer-review-capacity-projected-from-reviewer-retention-against-inbox-arrivals"
+  },
+  {
+   "domain": "energy-systems-utilities",
+   "subdomain": "asset-condition-maintenance",
+   "client_domain": "energy-systems-utilities",
+   "niche": "a regional public rapid-charging operator in Ireland preparing its concession's 2027 availability plan: which hubs will have a high-power charge point below the 99 per cent contract-year availability standard after the partnership's programme removes the end-of-life 50 kW units at some hubs, when the high-power units' controller hangs, which only an on-site power cycle clears, follow the days since the hub was last powered down",
+   "objective": "forecasting",
+   "shape": "10",
+   "decision_type": "designation_set",
+   "answer_unit": "set_of_items",
+   "gap": [
+    "time"
+   ],
+   "pattern": [
+    "none"
+   ],
+   "generators": [
+    "G7",
+    "G14",
+    "G13"
+   ],
+   "gate_g": "forecasting",
+   "calibration_form": "none",
+   "stump_strategy": "forecast_method_backtest",
+   "context_artifact": "monitoring_export",
+   "layer2_family": "estimation_fit",
+   "layer2_pattern": "own:hang-hazard-on-the-hub-power-down-clock-carried-through-a-changed-repair-regime",
+   "stakeholder_role": "the operator's network performance lead, who prepares the concession's 2027 availability plan for the partnership's annual review",
+   "role_family": "operations_director",
+   "forum": "customer_or_counterparty",
+   "forcing_event": "audit_or_inspection",
+   "org_family": "utility_or_infrastructure",
+   "world": {
+    "geography": "Ireland (a fictional operator, partnership and hubs)",
+    "currency": "EUR",
+    "org_type": "regional public rapid-charging operator under a local authority concession",
     "invented_names": [
-      "Wealdmoor Power Networks",
-      "Halverton",
-      "Corvane Flex",
-      "Quillon Energy Services"
+     "Ardvane Charge DAC",
+     "North Midlands Charging Partnership",
+     "Ardvane Rapid"
     ],
     "people": [
-      "Marion Todd",
-      "Clifford Evans",
-      "Irene Carpenter"
+     "Sorcha Jackman",
+     "Ailis Fee",
+     "Darcy McGlinchey",
+     "Domhnall Linehan"
     ]
-  },
-  "deliverables": [
-    "halverton_primary_capacity_2027-28.xlsx",
-    "capex_review_2027-28.pptx"
-  ],
-  "opening_move": "question-first",
-  "question_form": "which",
-  "driver": "The decisive quantity is what a contracted intervention removes from a constrained unit's demand under a design condition, but on every occasion the record measured it the operator also moved part of the unit's load onto a neighbouring unit for the same hours, so the unit's measured reduction is the intervention plus the move and the neighbour, the natural comparison, rose by what was moved; only the intervention's own reduction, read where the move cancels, is credited under the design condition, when the neighbour has no room to take it.",
-  "driver_concrete": "On every flexibility event at Ashcombe Road, Fenwick Street and Hartwell Common the control room moved a feeder section across the 11 kV open point to Tollbrook Lane, Wexley Hill and Kestwick Fields for the event window, so each primary's event-window fall is the provider's reduction plus the section; the neighbour rose by the section in the same half-hours, so only the providers' own reduction, net of that rise and read at the design day's minus 3.0 C, counts toward firm capacity.",
-  "stump": "Measuring each flexibility event's fall at its zone primary against a weather-adjusted baseline, validated on held-out non-event weekdays and stable across both winters, and crediting the 2027/28 contracts at the 0.9, 0.6, 0.9 and 0.9 per megawatt scheduled the event records show commits no primary; the step that lands it there is reading the primary's fall as the provider's delivery, when at Ashcombe Road, Fenwick Street and Hartwell Common the control room moved a feeder section across an open point to Tollbrook Lane, Wexley Hill and Kestwick Fields for each event window, so the providers' own reduction, net of the neighbour's rise and read at the design day's minus 3.0 C, is 0.4 and 0.5 per megawatt and Ashcombe Road and Hartwell Common must be reinforced.",
-  "deep_chain": "(1) each zone's event-window reduction against a weather-adjusted baseline is the primary's drop; (2) the neighbouring primaries tied to Ashcombe Road and Fenwick Street by 11 kV open points rose in exactly those half-hours by what the zone shed beyond the provider's own response, so the drop is the provider plus a moved section; (3) the provider's own delivery is read where the move cancels (the pair combined, or the zone's drop less the neighbour's rise on a baseline built without those days); (4) only that delivery, carried to the 2027/28 contracts, is credited on the design day against each primary's weather-corrected, growth-carried demand.",
-  "judgment": "Choosing a comparison the concurrent operator action has not touched: the neighbour is the natural control and is itself contaminated; the data justify the clean comparison by the mirror (the neighbour's rise equals the zone's excess drop half-hour by half-hour) and by the zone whose events carried no move (Charlecote Way), where the same provider's delivery matches the clean estimate.",
-  "one_fact_test": "The likeliest hint, that Tollbrook Lane's demand rose during Ashcombe Road's events, still leaves the run to tie it to the open point, build a baseline for the neighbour on days the move did not happen, net the move from the zone's reduction, find the same at Fenwick Street, carry the provider's own delivery to the 2027/28 contracts and forecast every primary's design day.",
-  "strategy_label": "WORKS IN FORM (a comparison that is actually clean: the contamination visible only through a relation in the data, never a column or a filed sentence)",
-  "mechanism_source": "design_note",
-  "differentiation": {},
-  "lineage": [
-    {
-      "architecture": "v3 (re-root in batch 1: a Victorian local government union branch choosing the councils at which it applies for protected action ballot orders for ballots opening 1 March 2027, a ballot counting only if half the roll votes, each member's vote carried from the branch's own online votes and lifted where an elected workplace delegate is active at the member's worksite)",
-      "drawn": "2026-11-07",
-      "domain": "political-science-public-policy",
-      "subdomain": "election-polling-forecasting",
-      "objective": "forecasting",
-      "shape": "10",
-      "decision_type": "designation_set",
-      "answer_unit": "set_of_items",
-      "gap": [
-        "population"
-      ],
-      "pattern": [
-        "A"
-      ],
-      "generators": [
-        "G14",
-        "G13",
-        "G4"
-      ],
-      "gate_g": "forecasting",
-      "driver": "Each unit's chance of acting in a coming event is carried from its own record of past acts and lifted where a contact a separate dated register places at its site is in post, and the register's contacts changed after the last past act the record holds, so every route carried on the units' own record, each of which reproduces the last closed event, brings the old contacts into the coming event.",
-      "driver_concrete": "A member's chance of voting in a protected action ballot rises about 24 points where an elected delegate is active at their worksite, read from the branch's delegate register terms against each member's worksite on the roll; the July 2026 delegate elections, held after the last online vote in October 2025, left worksites at some councils with no delegate and filled others, so turnout carried from members' own votes over-forecasts the councils that lost delegates and under-forecasts those that gained them.",
-      "stump": "Carrying each member's own voting history, calibrated to the 2021 and 2023-24 declared turnouts and checked on the 2023-24 round within a point, files 15 councils above half; the step that lands it there is reading each member's past votes as theirs alone when they rode the elected delegate in post at their worksite at the time, and the July 2026 delegate elections left worksites at six of those councils without one and filled worksites at two others, so with the 2026-28 delegates the set is 11.",
-      "stump_strategy": "forecast_method_backtest",
-      "forum": "board_of_directors",
-      "forcing_event": "statutory_or_regulatory_filing",
-      "org_family": "cooperative_or_member_body",
-      "role_family": "research_desk",
-      "layer2_family": "forecast_uncertainty",
-      "layer2_pattern": "own:vote-history-turnout-carried-past-a-change-in-workplace-mobilisation",
-      "fate": "FAILED_TO_STUMP on the portal (2026-11-07): both responses landed the 11 councils; each put worksite delegate coverage in its member-level turnout logit from the start and evaluated it at the ballot close with the 2026-28 delegates, so the decisive step was a recorded covariate's forward value one join from the members' worksite code, and the July 2026 election return, read by nothing else, announced it; driver spent"
-    },
-    {
-      "domain": "physical-environmental-sciences",
-      "subdomain": "hydrology-flood-frequency",
-      "objective": "forecasting",
-      "shape": "other",
-      "decision_type": "go_hold_or_stop",
-      "answer_unit": "named_option",
-      "gap": [
-        "population",
-        "time"
-      ],
-      "pattern": [
-        "none"
-      ],
-      "generators": [
-        "G14",
-        "G16",
-        "G13"
-      ],
-      "gate_g": "forecasting",
-      "driver": "The decisive quantity is how often a fixed capacity is exceeded once a steady load is added, when both the standing load and the response each driving event adds scale with how much of a fixed network lies below a fluctuating level read from a separate record, so one response and one standing load read off a short record whose level mostly stayed low understate a long record whose level often rose past most of the network.",
-      "stump_strategy": "forecast_method_backtest",
-      "forum": "council_or_assembly",
-      "forcing_event": "other",
-      "org_family": "local_government",
-      "role_family": "capacity_planner",
-      "drawn": "2026-10-31",
-      "stump": "Fitting one unit-hydrograph response per millimetre and the meter's own dry weather flow on 2024 to 2026 and replaying 2004 to 2023 files about 1 overflow a year with the subdivision (0.70), inside the consent's two, and connects it; the step that lands it there is reading the station's response as fixed when its infiltration rises 4.2 L/s for every kilometre of sewer below the water table, which stood a median 0.2 km over the meter and 2.1 km over the replay.",
-      "layer2_family": "forecast_uncertainty",
-      "layer2_pattern": "own:submerged-length-conditioned-infiltration-chosen-out-of-sample",
-      "driver_concrete": "The infiltration reaching the pump station on a dry day and in a storm scales with the length of the catchment's sewers whose inverts lie below the water table that day, read from the regional bore's level against the asset register's invert levels; the 2024 to 2026 meter ran through years when the water table mostly stood below the low terrace's sewers, while the consent's 2004 to 2023 replay holds wet years with it above most of them, so one response per millimetre and the meter's base flow carried into the replay understate the overflows the subdivision's added flow takes past the consent.",
-      "architecture": "v2 (re-root in batch 1: a New Zealand district council's wastewater pump station, whether a subdivision can connect in 2027 within the station's consented overflows, the infiltration each storm and each dry day drives read from the length of sewer below the water table)",
-      "fate": "FAILED_TO_STUMP on the portal (2026-11-07): both responses landed the hold call; Response 1 replayed 2004 to 2023 and filed 48 overflows against the 40 allowed, then 2 after the upgrade, so any full-record replay with the subdivision already broke the consent and the water-table step was never needed; driver spent"
-    },
-    {
-      "domain": "product-analytics",
-      "subdomain": "retention-cohort-lifetime-value-modeling",
-      "objective": "forecasting",
-      "shape": "other",
-      "decision_type": "quantity_figure",
-      "answer_unit": "count",
-      "gap": [
-        "population",
-        "time"
-      ],
-      "pattern": [
-        "none"
-      ],
-      "generators": [
-        "G9",
-        "G6",
-        "G16"
-      ],
-      "gate_g": "forecasting",
-      "driver": "Members of a pool leave at their own steady rates, which differ widely, so the fast leavers go first and the pool's overall leaving rate falls as its members age; while new members kept arriving the overall rate held high, and once admission stops the closed pool sheds its newest members and then slows, so carrying the open pool's rate overstates the forward losses, and because the record opens part-way through most members' lives, the rate by tenure has to count each member from when the record first sees them.",
-      "stump_strategy": "forecast_method_backtest",
-      "forum": "council_or_assembly",
-      "forcing_event": "vote_or_meeting",
-      "org_family": "software_or_platform",
-      "role_family": "operations_director",
-      "architecture": "v1 loop 3 (Millrind's 2027 paid moderation pool, nine sites behind a closing volunteer review community, the 2027 pool carried on survival by tenure)",
-      "drawn": "2026-10-17",
-      "stump": "Carrying each site's reviewer pool from September 2026 at its own lapse rate of the last two years, with no new reviewers since access became invitation-only, files 41 FTE (40 on the last twelve months' rate, 38 on the last three); the step that lands it there is reading one stop rate off a pool that was still taking in newcomers, when reviewers stop at about 9 per cent a month in their first year and under one per cent from their fourth: carried on the stop rate of each reviewer's own tenure, counted from when the roster first sees them, the 10,607 active reviewers average about 8,800 a month in 2027 and the request is 32 FTE (27 with the tenure curve read from each grant date).",
-      "fate": "spent 2026-10-31 at the batch 1 triage: loop 3 was reshipped 10-27 after the portal's FAILED_TO_STUMP on loops 1 and 2 (both responses filed the then golden), keeping the world, the prompt and the asks the portal had already solved once; re-rooted in a new world before any portal result on loop 3"
-    },
-    {
-      "architecture": "v1 (loops 1 and 2)",
-      "drawn": "2026-10-17",
-      "fate": "solved, FAILED_TO_STUMP on the portal (2026-10-27): both responses filed 35 FTE, the then golden, by building each site's capacity against its inbox at the saturated pace and carrying each pool at its own lapse rate with almost no new reviewers; the capacity framing was the strong solver's default, so loop 3 moved the decisive step to how the pool is carried",
-      "driver": "Work reaches a paid tier only when a volunteer tier falls short, and the volunteer tier's capacity shows only in the periods it fell short, since in every other period it handled everything that arrived; with almost no new volunteers arriving, each pool shrinks at a steady exit rate, so units whose records show almost nothing reaching the paid tier cross below their arrivals inside the forward window, while a share of arrivals carried forward, a trend in the paid work, or capacity read from recent throughput each misses the crossing.",
-      "driver_concrete": "Every community review item at Millrind goes first to the volunteer reviewers and reaches the paid moderators only if no volunteer has reviewed it 72 hours after it entered the inbox; volunteers review at their own pace when the inbox is full and below it when it runs dry, so their pace shows only in months when items were routed (most sites in 2022, Security, Embedded & Hardware and Scientific Computing since 2025), and since almost no member has been granted review access after autumn 2024 every site's pool shrinks by about two per cent a month, which takes Data & ML, Databases, Infrastructure & DevOps and Game Development, with almost nothing routed since January 2024, below their 2027 inbox arrivals.",
-      "stump": "Carrying each site's paid queue hours per question over the last twelve months onto the 2027 question plan files a request of 23 FTE (25 to 28 with each site's routed share or its monthly paid hours trended forward), inside finance's 26-FTE envelope; the step that lands it there is treating routed items as a share of arrivals, when they are the arrivals each site's shrinking reviewer pool cannot review at the pace reviewers keep when the inbox is full, which puts four sites that have routed almost nothing since January 2024 short of their 2027 inbox and files 35 (31 with the pool trended over the platform's whole record, 53 with the pace read from 2026 throughput).",
-      "gate_g": "binding_constraint",
-      "gap": [
-        "time",
-        "population"
-      ],
-      "pattern": [
-        "none"
-      ],
-      "generators": [
-        "G5",
-        "G13",
-        "G16"
-      ],
-      "decision_type": "quantity_figure",
-      "stump_strategy": "binding_constraint",
-      "layer2_family": "allocation_constraints",
-      "layer2_pattern": "own:volunteer-review-capacity-projected-from-reviewer-retention-against-inbox-arrivals"
-    },
-    {
-      "domain": "energy-systems-utilities",
-      "subdomain": "asset-condition-maintenance",
-      "client_domain": "energy-systems-utilities",
-      "niche": "a regional public rapid-charging operator in Ireland preparing its concession's 2027 availability plan: which hubs will have a high-power charge point below the 99 per cent contract-year availability standard after the partnership's programme removes the end-of-life 50 kW units at some hubs, when the high-power units' controller hangs, which only an on-site power cycle clears, follow the days since the hub was last powered down",
-      "objective": "forecasting",
-      "shape": "10",
-      "decision_type": "designation_set",
-      "answer_unit": "set_of_items",
-      "gap": [
-        "time"
-      ],
-      "pattern": [
-        "none"
-      ],
-      "generators": [
-        "G7",
-        "G14",
-        "G13"
-      ],
-      "gate_g": "forecasting",
-      "calibration_form": "none",
-      "stump_strategy": "forecast_method_backtest",
-      "context_artifact": "monitoring_export",
-      "layer2_family": "estimation_fit",
-      "layer2_pattern": "own:hang-hazard-on-the-hub-power-down-clock-carried-through-a-changed-repair-regime",
-      "stakeholder_role": "the operator's network performance lead, who prepares the concession's 2027 availability plan for the partnership's annual review",
-      "role_family": "operations_director",
-      "forum": "customer_or_counterparty",
-      "forcing_event": "audit_or_inspection",
-      "org_family": "utility_or_infrastructure",
-      "world": {
-        "geography": "Ireland (a fictional operator, partnership and hubs)",
-        "currency": "EUR",
-        "org_type": "regional public rapid-charging operator under a local authority concession",
-        "invented_names": [
-          "Ardvane Charge DAC",
-          "North Midlands Charging Partnership",
-          "Ardvane Rapid"
-        ],
-        "people": [
-          "Sorcha Jackman",
-          "Ailis Fee",
-          "Darcy McGlinchey",
-          "Domhnall Linehan"
-        ]
-      },
-      "deliverables": [
-        "hub_availability_2027.csv",
-        "availability_plan_2027.pdf"
-      ],
-      "question_form": "where",
-      "driver": "Each unit's failures run on a clock that its site's other units' repairs reset, so its recorded failure rate is a property of how often those neighbours were repaired, and a forward plan that removes the failing neighbours stops the resets and multiplies the survivors' failures, which every route carried on each unit's own record misses while it validates on the years the resets ran.",
-      "driver_concrete": "A high-power charge point's controller hangs only after about 75 days without a power-up, and the legacy 50 kW unit's monthly cabinet service isolates the supply pillar it shares with the high-power units at most hubs, so through 2023 to 2026 the units on a pillar of their own carried 95 of the record's 105 hangs; the partnership's programme removes the legacy units at some hubs in December 2026, after which those hubs are powered down only for planned visits and supply faults and, where visits are twice a year, their high-power units hang two or three times a year, as often as the units on a pillar of their own already do.",
-      "stump": "Carrying each high-power charge point's controller-hang and fault rates from 2023 to 2026, validated leaving each unit out and on two back-tests, files only the five hubs whose units already hang; the step that lands it there is reading each unit's hang rate as its own, when a hang comes only after about 75 days without a power-up and the legacy unit's monthly cabinet service powers down every unit on its pillar, so at the seven standard hubs the programme strips the high-power units will run months between power-ups and the set is twelve.",
-      "answer": "List 12 hubs in the 2027 Availability Plan: Ballinkeel Main Street, Bunacurry Pier, Carrowkeel Business Park, Clonlea Leisure Centre, Derrylane Park and Ride, Glenfad Shopping Centre, Kilbeg Retail Park, Portavaddy Seafront, Rathmoy Station Road, Rossnabeg Harbour, Tobernalt Road and Tullymore Market Square.",
-      "architecture": "v4 (architecture 4: an Irish regional rapid-charging operator's 2027 availability plan, the hubs whose high-power charge points fall below 99 per cent once the renewal programme removes the 50 kW units)",
-      "fate": "spent 2026-11-08 on the platform: both runs landed the golden 12 hubs (the author reports not stumped; no rubric). Both read the hang ages off the first histogram (no hang before day 76 after a power-up), fitted a censored hazard on time since restart with the work orders' power cycles as the remedy, simulated the renewed network and back-tested on 2026; a mechanism the rows carry in one plot, with its remedy written in the work orders, was modelled on sight",
-      "shell": {
-        "question form": "where",
-        "second-sentence opener": "return",
-        "rounding opener": "charges",
-        "deliverable set": "csv+pdf"
-      }
-    }
-  ],
-  "lineage_shells": [
-    {
-      "question form": "how-many",
-      "second-sentence opener": "put",
-      "rounding opener": "give",
-      "deliverable set": "pptx+xlsx"
-    },
-    {
-      "question form": "whether",
-      "second-sentence opener": "the",
-      "rounding opener": "overflows",
-      "deliverable set": "docx+png+xlsx"
-    },
-    {
-      "question form": "where",
-      "second-sentence opener": "the",
-      "rounding opener": "the",
-      "deliverable set": "docx+xlsx"
-    },
-    {
-      "question form": "where",
-      "second-sentence opener": "return",
-      "rounding opener": "charges",
-      "deliverable set": "csv+pdf"
-    }
-  ],
-  "notes": "forum executive_team and forcing_event season_or_peak (redrawn at stage 1 when task5 v3's committee_or_panel and vote_or_meeting entered the window): Wealdmoor's executive team commits load-related capex at its December review, and what forces the call now is the winter 2027/28 peak, for which a transformer has to be ordered this winter. role_family operations_director: the head of DSO runs the flexibility service and network operation (capacity_planner was the honest first label and is held by task3 in the last three). Architecture 4's identity (the rapid-charging availability plan) moved into lineage with its platform fate. subdomain moved from asset-condition-maintenance to load-forecasting because the deciding quantity is a design-day demand forecast, inside the same client domain the author fixed.",
-  "registered": "2026-11-08T17:17:43Z",
-  "shell": {
-    "question form": "which",
-    "second-sentence opener": "build",
-    "rounding opener": "demand",
-    "deliverable set": "pptx+xlsx"
+   },
+   "deliverables": [
+    "hub_availability_2027.csv",
+    "availability_plan_2027.pdf"
+   ],
+   "question_form": "where",
+   "driver": "Each unit's failures run on a clock that its site's other units' repairs reset, so its recorded failure rate is a property of how often those neighbours were repaired, and a forward plan that removes the failing neighbours stops the resets and multiplies the survivors' failures, which every route carried on each unit's own record misses while it validates on the years the resets ran.",
+   "driver_concrete": "A high-power charge point's controller hangs only after about 75 days without a power-up, and the legacy 50 kW unit's monthly cabinet service isolates the supply pillar it shares with the high-power units at most hubs, so through 2023 to 2026 the units on a pillar of their own carried 95 of the record's 105 hangs; the partnership's programme removes the legacy units at some hubs in December 2026, after which those hubs are powered down only for planned visits and supply faults and, where visits are twice a year, their high-power units hang two or three times a year, as often as the units on a pillar of their own already do.",
+   "stump": "Carrying each high-power charge point's controller-hang and fault rates from 2023 to 2026, validated leaving each unit out and on two back-tests, files only the five hubs whose units already hang; the step that lands it there is reading each unit's hang rate as its own, when a hang comes only after about 75 days without a power-up and the legacy unit's monthly cabinet service powers down every unit on its pillar, so at the seven standard hubs the programme strips the high-power units will run months between power-ups and the set is twelve.",
+   "answer": "List 12 hubs in the 2027 Availability Plan: Ballinkeel Main Street, Bunacurry Pier, Carrowkeel Business Park, Clonlea Leisure Centre, Derrylane Park and Ride, Glenfad Shopping Centre, Kilbeg Retail Park, Portavaddy Seafront, Rathmoy Station Road, Rossnabeg Harbour, Tobernalt Road and Tullymore Market Square.",
+   "architecture": "v4 (architecture 4: an Irish regional rapid-charging operator's 2027 availability plan, the hubs whose high-power charge points fall below 99 per cent once the renewal programme removes the 50 kW units)",
+   "fate": "spent 2026-11-08 on the platform: both runs landed the golden 12 hubs (the author reports not stumped; no rubric). Both read the hang ages off the first histogram (no hang before day 76 after a power-up), fitted a censored hazard on time since restart with the work orders' power cycles as the remedy, simulated the renewed network and back-tested on 2026; a mechanism the rows carry in one plot, with its remedy written in the work orders, was modelled on sight",
+   "shell": {
+    "question form": "where",
+    "second-sentence opener": "return",
+    "rounding opener": "charges",
+    "deliverable set": "csv+pdf"
+   }
   }
+ ],
+ "lineage_shells": [
+  {
+   "question form": "how-many",
+   "second-sentence opener": "put",
+   "rounding opener": "give",
+   "deliverable set": "pptx+xlsx"
+  },
+  {
+   "question form": "whether",
+   "second-sentence opener": "the",
+   "rounding opener": "overflows",
+   "deliverable set": "docx+png+xlsx"
+  },
+  {
+   "question form": "where",
+   "second-sentence opener": "the",
+   "rounding opener": "the",
+   "deliverable set": "docx+xlsx"
+  },
+  {
+   "question form": "where",
+   "second-sentence opener": "return",
+   "rounding opener": "charges",
+   "deliverable set": "csv+pdf"
+  }
+ ],
+ "notes": "forum executive_team and forcing_event season_or_peak (redrawn at stage 1 when task5 v3's committee_or_panel and vote_or_meeting entered the window): Wealdmoor's executive team commits load-related capex at its December review, and what forces the call now is the winter 2027/28 peak, for which a transformer has to be ordered this winter. role_family operations_director: the head of DSO runs the flexibility service and network operation (capacity_planner was the honest first label and is held by task3 in the last three). Architecture 4's identity (the rapid-charging availability plan) moved into lineage with its platform fate. subdomain moved from asset-condition-maintenance to load-forecasting because the deciding quantity is a design-day demand forecast, inside the same client domain the author fixed.",
+ "registered": "2026-11-08T17:17:43Z",
+ "shell": {
+  "question form": "which",
+  "second-sentence opener": "build",
+  "rounding opener": "demand",
+  "deliverable set": "pptx+xlsx"
+ },
+ "architecture_spent": true
 }
