@@ -2,220 +2,249 @@
 import numpy as np
 
 import analysis as A
-import golden as GD
+import params as P
 
-r10 = GD.r10
-
-
-def lane_table(pk):
-    """each pilot duty: its mean declared weight before any scale period, its shipper's mean declared weight at the
-    terminal, and the mean load the terminal's line and the duty's own declarations put on it"""
-    from collections import defaultdict
-    gp, cp = A.payloads(pk, "lane"), A.careful_payloads(pk)
-    tv = defaultdict(list)
-    for r in pk.wb:
-        if r["declared"] is not None and A.regime(pk, r["shipper"], r["date"]) != "ticket":
-            tv[r["shipper"]].append(r["declared"])
-    out = {}
-    for du in sorted({d["duty"] for d in pk.days}):
-        m = np.array([d["duty"] == du and A.regime(pk, d["shipper"], d["date"]) != "ticket" for d in pk.days])
-        s = pk.routes[du]["shipper"]
-        dec = float(np.mean([d["declared"] for d, k in zip(pk.days, m) if k])) / 1000
-        out[du] = {"shipper": s, "declared": round(dec, 2), "terminal_declared": round(float(np.mean(tv[s])) / 1000, 2),
-                   "share": round(dec / (float(np.mean(tv[s])) / 1000), 2), "lane": round(float(gp[m].mean()), 2),
-                   "terminal_line": round(float(cp[m].mean()), 2)}
-    return out
+R1_TOL, E_TOL, LOSS_BAND, HEAT_HALF, GAP_TOL, NIGHT_TOL = 0.7, 10, (3.8, 5.0), 0.4, 1.0, 0.3
 
 
-def scale_check(pk):
-    """the drinks maker's duties: the weighed loads on its notes once its dock scale wrote them, against the loads
-    the terminal's line and the duty's own declarations put on the same duty before"""
-    gp, cp = A.payloads(pk, "lane"), A.careful_payloads(pk)
-    out = {}
-    for du in ("J07", "J08"):
-        mt = np.array([d["duty"] == du and A.regime(pk, d["shipper"], d["date"]) == "ticket" for d in pk.days])
-        mn = np.array([d["duty"] == du and A.regime(pk, d["shipper"], d["date"]) == "note" for d in pk.days])
-        out[du] = {"scale_days": int(mt.sum()), "scale_mean": round(float(gp[mt].mean()), 1),
-                   "terminal_line_before": round(float(cp[mn].mean()), 1), "own_before": round(float(gp[mn].mean()), 1)}
-    return out
+def heat_band(heater_kw):
+    """the heaters' heat is graded within half a kW of the golden's figure at its rounding"""
+    return (round(round(heater_kw, 1) - HEAT_HALF, 1), round(round(heater_kw, 1) + HEAT_HALF, 1))
+
+
+def r10(x):
+    return int(round(x / 10.0) * 10)
 
 
 def figures(pk, g):
-    a = g["assess"]
-    R = {k: (m, lm, A.chosen(A.assess(pk, m, lim=lm))) for k, (m, lm) in A.routes(pk).items()}
-    gp = A.payloads(pk, "lane")
-    car = A.assess(pk, R["careful but hurried"][0], lim=R["careful but hurried"][1])
-    inp = g["inputs"]
-    m = g["model"]
-    rr = A.speed_ratio(pk)
-    dev = {k: {c: A.assess(pk, mm, lim=lm)[c]["kwh"] - a[c]["kwh"] for c in pk.short} for k, (mm, lm, _) in R.items()}
-    lt = lane_table(pk)
-    sc = scale_check(pk)
-    RV = A.rivals(pk)
-    loss_forms = {h: round(100 * A.fade(pk, h), 1) for h in A.LOSS_RIVALS + ("first_year",)}
+    car = A.careful(pk)
+    qk = A.quick(pk)
+    routes = A.routes(pk, g)
+    pilot = sorted(c for c, n in g["parts"]["days"].items() if c in pk.weekday and n >= 30)
+    others = [c for c in pk.weekday if c not in pilot]
+    rates = g["rates"]
+    taken = g["taken"]
+    # the year's diesel litres on the assigned blocks, from the rates and the dispatch log's kilometres
+    disp = pk.dispatch[(pk.dispatch["date"] >= A.REF[0]) & (pk.dispatch["date"] <= A.REF[1])]
+    km_year = disp.groupby("code")["planned_km"].sum().to_dict()
+    litres = sum(rates[c] / 100.0 * km_year.get(c, 0.0) for c in taken)
+    loss_forms = {f: round(100 * A.capacity_loss(pk, f)[0], 2) for f in ("curved", "linear", "sqrt", "log")}
+    bb, rmse, n = A.bridge(pk, g["parts"]["e_block"], g["parts"]["days"], rates)
+    bh, rmse_h, _ = A.bridge(pk, g["parts"]["e_block"], g["parts"]["days"], rates, with_hours=True)
+    Eh, _ = A.design_energies(pk, "golden", rates, bridge_hours=True)
+    Eall, _ = A.design_energies(pk, "golden", rates, own_min_days=10 ** 6)
+    short_km = [c for c in pk.weekday if pk.blocks[c]["km_old"] <= 225]
+    rank_all = sorted(pk.weekday, key=lambda c: rates[c])
+    rank_short = sorted(short_km, key=lambda c: rates[c])
     f = {
-        "call_count": g["count"],
-        "call_set": g["set"],
-        "stay_diesel": sorted(c for c in pk.short if not a[c]["go"]),
-        "energy": {c: r10(a[c]["kwh"]) for c in sorted(a)},
-        "energy_raw": {c: round(a[c]["kwh"], 1) for c in sorted(a)},
-        "planning_load": {c: round(A.planning_load(pk, c), 1) for c in sorted(pk.short)},
-        "verdict": {c: "yes" if a[c]["go"] else "no" for c in sorted(a)},
-        "payload_term": round(A.slope_per_100(m), 1),
-        "payload_term_declared": round(A.slope_per_100(R["declared weights"][0]), 1),
-        "payload_term_careful": round(A.slope_per_100(R["careful but hurried"][0]), 1),
-        "payload_term_fe": round(A.fe_slope_se(pk, gp)[0], 1),
-        "payload_term_fe_se": round(A.fe_slope_se(pk, gp)[1], 2),
-        "payload_term_fe_careful": round(A.fe_slope_se(pk, A.careful_payloads(pk))[0], 1),
-        "payload_term_add": round(A.slope_per_100(RV["loads: additive declaration error"][0]), 1),
-        "lane": lt,
-        "lane_share_lo": min(v["share"] for v in lt.values()),
-        "lane_share_hi": max(v["share"] for v in lt.values()),
-        "lane_share_lo_pct": int(round(100 * min(v["share"] for v in lt.values()))),
-        "lane_share_hi_pct": int(round(100 * max(v["share"] for v in lt.values()))),
-        "lane_gap_lo": round(min(v["terminal_line"] - v["lane"] for v in lt.values()), 1),
-        "lane_gap_hi": round(max(v["terminal_line"] - v["lane"] for v in lt.values()), 1),
-        "scale_check": sc,
-        "tare_term": round(g["tare_term"], 1),
-        "loss_pct": round(100 * g["fade"], 1),
-        "loss_tau_months": int(round(12 * g["tau"])),
-        "loss_pct_line": round(100 * A.careful_fade(pk), 1),
-        "loss_pct_yoy": round(100 * A.fade(pk, "yoy"), 1),
-        "loss_pct_age_only": round(100 * A.fade(pk, "age"), 1),
+        "call_count": len(taken),
+        "call_set": sorted(taken),
+        "stay_diesel": sorted(c for c in pk.weekday if c not in taken),
+        "qualifying_count": len(g["qualifying"]),
+        "refused_block": g["refused"],
+        "refused_short_kwh": int(round(g["short"] / 10.0) * 10),
+        "diesel": {c: round(rates[c], 1) for c in pk.weekday},
+        "diesel_min": round(min(rates[c] for c in pk.weekday), 1),
+        "diesel_max": round(max(rates[c] for c in pk.weekday), 1),
+        "pilot_blocks": pilot,
+        "pilot_diesel_mean": round(float(np.mean([rates[c] for c in pilot])), 1),
+        "others_diesel_mean": round(float(np.mean([rates[c] for c in others])), 1),
+        "pilot_gap": round(float(np.mean([rates[c] for c in others]) - np.mean([rates[c] for c in pilot])), 1),
+        "pilot_ranks_all": sorted(rank_all.index(c) + 1 for c in pilot),
+        "pilot_ranks_short": sorted(rank_short.index(c) + 1 for c in pilot),
+        "short_km_blocks": len(short_km),
+        "heater_kw": round(g["heater_kw"], 1),
+        "heater_lph": round(g["parts"]["heater_lph"], 2),
+        "heater_T0": g["parts"]["heater_T0"],
+        "heater_kwh_per_l": round(A.HEATER_KWH_PER_L, 2),
+        "heater_fault_check": [[fn, a.isoformat(), b.isoformat(), nd, round(v, 1)] for fn, a, b, nd, v in g["faults"]],
+        "pilot_hvac_kw_design": round(g["parts"]["h_pilot"], 1),
+        "heat_new_kw": round(g["parts"]["heat_new"], 1),
+        "energy": {c: r10(g["E"][c]) for c in pk.weekday},
+        "energy_bridge_hours": {c: r10(Eh[c]) for c in pk.weekday},
+        "energy_bridge_all": {c: r10(Eall[c]) for c in pk.weekday},
+        "verdict": {c: "yes" if g["verdict"][c] else "no" for c in pk.weekday},
+        "loss_pct": round(100 * g["loss"], 1),
         "loss_forms": loss_forms,
-        "loss_form_lo": min(loss_forms.values()),
-        "loss_form_hi": max(loss_forms.values()),
-        "usable_y1": int(round(g["usable_y1"])),
-        "limit": int(round(g["limit"])),
-        "limit_careful": int(round(R["careful but hurried"][1])),
-        "backtest_one_rate": round(A.backtest(pk, gp, A.H1)[0], 1),
-        "backtest_two_rates": round(A.backtest(pk, gp, A.H2)[0], 1),
-        "backtest_one_rate_abs": abs(round(A.backtest(pk, gp, A.H1)[0], 1)),
-        "duty_days": len(pk.days),
-        "route_count": {k: len(v[2]) for k, v in R.items()},
-        "route_set": {k: v[2] for k, v in R.items()},
-        "careful_count": len(R["careful but hurried"][2]),
-        "careful_energy": {c: r10(car[c]["kwh"]) for c in sorted(car)},
-        "rmse_pct": round(m["rmse_pct"], 2),
-        "speed_ratio_design": round(rr, 2),
-        "speed_ratio_year": round(A.speed_ratio(pk, how="mean"), 2),
-        "plan_speed_lo": int(round(min(A.plan_speed(pk, c) for c in pk.short))),
-        "plan_speed_hi": int(round(max(A.plan_speed(pk, c) for c in pk.short))),
-        "design_speed_lo": int(round(min(A.plan_speed(pk, c) for c in pk.short) * rr)),
-        "design_speed_hi": int(round(max(A.plan_speed(pk, c) for c in pk.short) * rr)),
-        "combination_t": {c: round(inp[c]["combo"], 1) for c in sorted(pk.short)},
-        "pilot_combination_t": round(g["pilot_combo"], 1),
-        "pilot_combination_lo": round(min(d["combo"] for d in pk.days), 1),
-        "pilot_combination_hi": round(max(d["combo"] for d in pk.days), 1),
-        "load_share": {c: round(inp[c]["phi"], 2) for c in sorted(pk.short) if inp[c]["n_drops"] > 1},
-        "combination_and_drops": {"V02 combination t": round(inp["V02"]["combo"], 1),
-                                  "V14 combination t": round(inp["V14"]["combo"], 1),
-                                  "V03 load share": round(inp["V03"]["phi"], 2),
-                                  "V11 load share": round(inp["V11"]["phi"], 2)},
-        "tractor_2027_t": round(A.TRACTOR_2027_KG / 1000, 2),
-        "dev": {k: {c: int(round(x)) for c, x in v.items()} for k, v in dev.items()},
-        "rival_maxdev": int(np.ceil(max(abs(A.assess(pk, mm, lim=lm)[c]["kwh"] - a[c]["kwh"])
-                                        for k, (mm, lm) in RV.items() for c in pk.short))),
-        "golden_se": round(A.golden_se(pk, gp), 2),
-        "margin_min": int(np.floor(min(abs(a[c]["kwh"] - g["limit"]) for c in a))),
-        "conventions": {"fes_sections": [2.1, 2.2, 2.3, 4.1, 4.2, 4.3], "usable_quoted": 540, "share_pct": 85,
-                        "per_km": 100, "capacity_ref_c": 20, "design_t": -5, "payload_band": list(PAY_BAND),
-                        "loss_band": list(LOSS_BAND), "energy_band": 10, "ratio_band": list(RATIO_BAND)},
+        "usable_y1": round(pk.usable_2027 * (1 - g["loss"]), 1),
+        "limit_kwh": round(g["limit"], 1),
+        "eta": round(g["eta"], 3),
+        "night_mwh": round(g["grid_kwh"] / 1000.0, 1),
+        "demand_mwh": round(g["demand_kwh"] / 1000.0, 1),
+        "demand_battery_mwh": round(sum(g["E"][c] for c in g["qualifying"]) / 1000.0, 1),
+        "night_capacity_mwh": round(pk.supply * 10 / 1000.0, 2),
+        "careful_demand_mwh": round(car["demand_kwh"] / 1000.0, 1),
+        "night_battery_mwh": round(sum(g["E"][c] for c in taken) / 1000.0, 1),
+        "supply_kw": int(pk.supply),
+        "bridge": {"a": round(float(bb[0]), 4), "b": round(float(bb[1]), 5), "rmse": round(rmse, 3), "blocks": n},
+        "bridge_hours": {"a": round(float(bh[0]), 4), "b": round(float(bh[1]), 5), "c": round(float(bh[2]), 4), "rmse": round(rmse_h, 3)},
+        "diesel_litres_assigned": int(round(litres / 1000.0) * 1000),
+        "careful_count": len(car["taken"]),
+        "careful_set": sorted(car["taken"]),
+        "careful_energy": {c: r10(car["E"][c]) for c in pk.weekday},
+        "careful_heat_kw": round(car["parts"]["heat_used"], 1),
+        "careful_loss_pct": round(100 * car["loss"], 1),
+        "careful_qualifying": len(car["qualifying"]),
+        "quick_count": len(qk["taken"]),
+        "quick_rate": round(qk["rate"], 2),
+        "routes": {k: len(v) for k, v in routes.items()},
+        "route_sets": {k: sorted(v) for k, v in routes.items()},
+        "weather_offset": round(pk.temp_offset, 2),
+        "stay_diesel_count": 48 - len(taken),
+        "weekday_blocks": 48,
+        "per_km": 100,
+        "des_sections": [2.1, 2.2, 2.3, 2.4, 3.2, 3.3, 4.1, 4.2, 4.3],
+        "sheet_count": 4,
+        "slide_count": 3,
+        "pilot_bus_count": 6,
+        "pilot_block_count": 9,
+        "short_km_threshold": 225,
+        "other_block_count": 39,
+        "conventions": {"share_pct": 85, "design_t": -15, "usable_quoted": int(pk.usable_2027), "charger_kw": 150,
+                        "night_period": "21:00-07:00", "ref_year": "2025-11-01 to 2026-10-31", "energy_tol": E_TOL,
+                        "diesel_tol": R1_TOL, "loss_band": list(LOSS_BAND), "heat_band": list(heat_band(g["heater_kw"])), "gap_tol": GAP_TOL,
+                        "night_tol": NIGHT_TOL, "heater_rating_kw": 35, "heater_rating_lph": 3.9},
     }
     return f
 
 
-PAY_BAND = (1.7, 2.4)
-LOSS_BAND = (4.2, 5.6)
-RATIO_BAND = (0.74, 0.79)
+def _rows(pk, g, f):
+    out = []
+    for c in sorted(pk.weekday, key=lambda c: pk.priority[c]):
+        out.append("%s (priority %d): %s l/100 km, %d kWh, %s%s" % (c, pk.priority[c], f["diesel"][c], f["energy"][c], f["verdict"][c],
+                                                                     ", assigned" if c in f["call_set"] else ""))
+    return out
 
 
 def write(path, pk, g, f):
-    E = f["energy"]
-    go, no = f["call_set"], f["stay_diesel"]
-    rs, rc = f["route_set"], f["route_count"]
-    order = sorted(pk.short)
-    ins = lambda k: sorted(set(rs[k]) - set(go))
-    outs = lambda k: sorted(set(go) - set(rs[k]))
-    flip = lambda k: ", ".join(["%s in" % x for x in ins(k)] + ["%s out" % x for x in outs(k)]) or "no duty moves"
-    cd = f["combination_and_drops"]
-    L_lines = "\n".join("   - %s: design day %d kWh, %s" % (c, E[c], "electric" if c in go else "stays diesel")
-                        for c in order)
-    rng = lambda cs: "%d to %d kWh" % (min(E[c] for c in cs), max(E[c] for c in cs))
-    car, carw = "careful but hurried", "careful, design-day speed"
-    ce = f["careful_energy"]
-    lt, sc = f["lane"], f["scale_check"]
-    lf = f["loss_forms"]
-    and_ = lambda xs: ", ".join(xs[:-1]) + " and " + xs[-1] if len(xs) > 1 else xs[0]
-    txt = """## Tags
-
-**Domain:** General Statistics & Data Science, Regression, classification & model diagnostics (fleet electrification, a road haulier's battery-electric duty assignment).
-**Analytical objective:** Forecasting & Predictive Modeling.
-
-## Final Recommendation
-
-**Order {n} battery-electric tractors, for {goset}; {noset} stay on diesel.** The {n} need {gor} on the January design day against a limit of **{lim} kWh** (85 per cent of the {uy1} kWh a 540 kWh battery keeps after a first-year loss of {loss} per cent), and the nearest diesel duty needs {nearno}. This rejects the {ccar} ({ccarset}) that a pilot model built on the terminal's calibration line, a straight-line battery loss and the year's speed ratio would order: it prices {carout} at {carout_e} kWh against its own {limc} kWh limit. It also rejects the {ccw} that the same model orders at the design-day speed, which lets in {cwin} on a payload term of {pcar}.
-
-## Supplementary Questions
-
-### ev_duty_assessment_2027.xlsx
-1. Sheet Assessment, one row per shortlisted duty in duty order, with shipper, delivery, the three legs and round trip km, climb, planning load, design-day energy (nearest 10 kWh; any figure within 10 kWh of the one below is acceptable), share of the first-year usable battery and whether it goes electric; below the rows the usable battery after the first year ({uy1} kWh), the limit ({lim} kWh), the tractors to order ({n}) and the duties.
-{lines}
-2. Sheet Energy model: the coefficients, with one tonne of payload adding **{pt} kWh per 100 loaded km** (any figure from {pb0} to {pb1} is acceptable), a tonne of combination tare {tt} kWh per 100 km on every leg, and the cold-form comparison on January and February 2026 held out.
-3. Sheet Payloads: each pilot duty's mean declared weight against its shipper's at the terminal, the error each shipper's notes carry on the Värnamo weighbridge, and the load each duty's declarations are taken to; beside it the drinks maker's scale-weighed days.
-4. Sheet Trailers and drops: each shortlisted duty's combination weight with the 2027 tractor, its stops and the share of the loaded run its load rides.
-5. Sheet Battery: the pilot batteries' first-year permanent loss, **{loss} per cent** (any figure from {lb0} to {lb1} is acceptable), the usable battery after the first year {uy1} kWh, the limit {lim} kWh, and the loss under each age form.
-6. Sheet Speed: each duty's routing-tool speed and its speed on a -5 C day.
-7. Sheet Routes: each shortcut's payload figure, loss, limit and order beside the assessment's.
-
-### tractor_order_memo.pdf
-8. One page to the management group: the order ({n} tractors, {goset}) first, the fourteen duties with design-day energy and verdict, the estimates that move the order (payload {pt} kWh per tonne per 100 loaded km, the {loss} per cent first-year loss and the {lim} kWh limit, the duties' speed on a -5 C day) and what each shortcut would order instead.
-
-## Critical Components
-
-1. One tonne of payload adds **{pt} kWh per 100 loaded km** ({pb0} to {pb1}). The pilot's regional duties carry {shlo} to {shhi} of the loads their shippers declare at the terminal, so the terminal's weighed-on-declared line, which pulls a clerk's estimate toward the terminal's loads, puts each pilot duty {glo} to {ghi} t too heavy and the term at **{pcar}**; taking each duty's loads from its own declarations, with the error each shipper's notes carry on the weighbridge removed, gives {pt}, the within-duty fit {pfe} (the same fit on the terminal's line {pfec}), and the drinks maker's own notes confirm it: from August 2026 its declarations equal the weighbridge's net load to the bridge's 20 kg, and on J07 and J08 they average {s7} and {s8} t, against {o7} and {o8} t from the duties' own earlier declarations and {t7} and {t8} t on the line.
-2. The pilot batteries lose **{loss} per cent** of their usable energy for good in their first year: most of it in the first months, settling over about {taum} months, then a steady loss. A straight line in age puts it at {lline} per cent and the same months a year apart at {lyoy}, both blind to the early loss; every curved form lands from {lflo} to {lfhi}. The 2027 tractor keeps **{uy1} kWh** and the limit is **{lim} kWh**, not {limc}.
-
-## Step-by-Step
-
-1. Cleaned bev_daily_summary_2025-03_2026-10.csv (a day uploaded twice kept once, ambient dropouts filled from the Jönköping station plus the mean offset) and joined tms_consignments_jonkoping_2025-2026.csv on registration and date, the day's notes summed: {days} pilot duty-days, each with its speed, the trailer it pulled and its drops.
-2. Planning loads from weighbridge_varnamo_2024-11_2026-10.csv per FES-2 4.2: the last weighing of each CMR, VMO-nn read as Vnn, gross less tare, November 2025 to October 2026.
-3. Compared each pilot duty's declarations with its shipper's at the terminal: the pilot's regional duties run at {shlo} to {shhi} of the terminal's loads. The clerks' estimates scatter widely around the weighed load, so the terminal's weighed-on-declared line pulls every declaration toward the terminal's loads and does not carry to the pilot. Read each shipper's declaration error on the weighbridge at each note period, removed it from the spread of each pilot duty's own declared weights, and took each declaration to its expected load on that duty. On the terminal's line the payload term is {pcar}, on the raw declarations {pdec}, on the duties' own loads **{pt}** (with the error additive, {padd}; within duty, {pfe}). The drinks maker's notes settle it: from August 2026 they carry the weighed load (they equal the weighbridge's net to its 20 kg), and on J07 and J08 they average {s7} and {s8} t, against {o7} and {o8} t from the same duties' earlier declarations and {t7} and {t8} t on the terminal's line.
-4. Joined each day's trailer to fleet_register_2026.xlsx (sheet Trailers) and the tractor's own tare: the pilot's combinations run {pclo} to {pchi} t, and a tonne of tare costs {tt} kWh per 100 km on every leg. Each shortlisted duty's combination is the quotation's {t27} t tractor plus the mean tare of the trailers it pulled at Värnamo (V02 and V14's double decks {c02} and {c14} t, against the pilot's {pc} t average); left out, the order is {cnt} ({fnt}).
-5. Took each note's weight off at its stop's km on route_register_2026.xlsx (sheet Stops): the load rides {s03} of V03's loaded km and {s11} of V11's (tms_consignments_varnamo_2025-11_2026-10.csv). Carried to the last drop, the order is {cld} ({fld}).
-6. Chose the cold form out of sample (one rate below 16 C under-forecasts January and February 2026's sub-zero days by {bt1n} per cent; a further rate below 0 C {bt2}).
-7. Fitted each day's energy per full charge on a level per tractor, the day's degrees below 20 C and an age form with an early-life loss that settles over a time scale the fit chooses (about {taum} months) and a steady loss: **{loss} per cent** in the first twelve months. A straight line in age fits far worse and gives {lline}; the same months a year apart compare ages a year on from the first months and give {lyoy}; every curved form gives {lflo} to {lfhi}. A straight-line loss alone orders {cline} ({fline}).
-8. Added the square of the day's speed and set each duty's design-day speed from its routing-tool driving time times the pilot's actual-to-planned ratio at -5 C ({rr}), so the Värnamo duties, planned at {pvl} to {pvh} km/h, run at {dvl} to {dvh} km/h. At the year's ratio ({ry}) the order is {cmn} ({fmn}); at the routing tool's speed {cpl}; with no speed term {cns} ({fns}).
-9. Forecast each duty at -5 C, its planning load, its design-day speed, its combination and its drops: {goset} at {gor}; {noset} at {nor}.
-10. Order {n} tractors. The terminal's calibration line alone orders {ccl} ({fcl}); with the straight-line loss and the year's ratio as well, {ccar} ({fcar}); with that line and loss at the design-day speed, {ccw} ({fcw}). Declared payloads order {cdec} ({fdec}), one cold rate {cone} ({fone}), no first-year loss {cnol} ({fnol}).
-
-No other order survives: the terminal's line does not carry to the pilot's own loads, the batteries lose most of their first year's capacity early, a winter day runs slower than the routing tool's plan or the year's ratio, a combination's tare costs on every leg and a multi-drop load does not ride the whole run. Each of the three estimates alone, put right inside the careful model, still orders wrongly ({h1} with the duties' own loads, {h2} with the curved loss, {h3} at the design-day speed). Every route that takes all the steps (knots at 14, 18, -2 or 2 C, a quadratic, temperature bins, the station's temperature, either year alone, the declaration error additive or read on the last twelve months, each day at its duty's mean declaration, the within-duty fit, every curved loss form and cold term, speed as a straight line, every form of the speed ratio, one coefficient for tare and payload, the drops at equal shares) orders the same {n}, with every energy within {rmax} kWh of those above.
-""".format(
-        n=f["call_count"], goset=", ".join(go), noset=", ".join(no), lim=f["limit"], uy1=f["usable_y1"],
-        loss=f["loss_pct"], gor=rng(go), nor=rng(no), nearno="%d kWh" % min(E[c] for c in no),
-        ccar=rc[car], ccarset=", ".join(rs[car]), carout=and_(outs(car)),
-        carout_e=and_(["%d" % ce[c] for c in outs(car)]), limc=f["limit_careful"], ccw=rc[carw],
-        cwin=and_(ins(carw)), pcar=f["payload_term_careful"], lines=L_lines, pt=f["payload_term"],
-        pb0=f["conventions"]["payload_band"][0], pb1=f["conventions"]["payload_band"][1], tt=f["tare_term"],
-        lb0=f["conventions"]["loss_band"][0], lb1=f["conventions"]["loss_band"][1], rr=f["speed_ratio_design"],
-        ry=f["speed_ratio_year"], shlo=f["lane_share_lo_pct"], shhi="%d per cent" % f["lane_share_hi_pct"], glo=f["lane_gap_lo"], ghi=f["lane_gap_hi"],
-        pfe=f["payload_term_fe"], pfec=f["payload_term_fe_careful"], pdec=f["payload_term_declared"],
-        padd=f["payload_term_add"], s7=sc["J07"]["scale_mean"], s8=sc["J08"]["scale_mean"],
-        o7=sc["J07"]["own_before"], o8=sc["J08"]["own_before"], t7=sc["J07"]["terminal_line_before"],
-        t8=sc["J08"]["terminal_line_before"], taum=f["loss_tau_months"], lline=f["loss_pct_line"],
-        lyoy=f["loss_pct_yoy"], lflo=f["loss_form_lo"], lfhi=f["loss_form_hi"],
-        pvl=f["plan_speed_lo"], pvh=f["plan_speed_hi"], dvl=f["design_speed_lo"], dvh=f["design_speed_hi"],
-        c02=cd["V02 combination t"], c14=cd["V14 combination t"], pc=f["pilot_combination_t"],
-        s03="%.2f" % cd["V03 load share"], s11="%.2f" % cd["V11 load share"], days=f["duty_days"],
-        pclo=f["pilot_combination_lo"], pchi=f["pilot_combination_hi"], t27=f["tractor_2027_t"],
-        cnt=rc["no trailer weight"], fnt=flip("no trailer weight"), cld=rc["the load to the last drop"],
-        fld=flip("the load to the last drop"), bt1n=f["backtest_one_rate_abs"], bt2="%+.1f" % f["backtest_two_rates"],
-        cline=rc["a straight-line loss"], fline=flip("a straight-line loss"),
-        cmn=rc["the year's mean speed ratio"], fmn=flip("the year's mean speed ratio"),
-        cpl=rc["the routing tool's speed"], cns=rc["no speed term"], fns=flip("no speed term"),
-        ccl=rc["the terminal's calibration line"], fcl=flip("the terminal's calibration line"),
-        fcar=flip(car), fcw=flip(carw), cdec=rc["declared weights"], fdec=flip("declared weights"),
-        cone=rc["one cold rate"], fone=flip("one cold rate"), cnol=rc["no first-year loss"],
-        fnol=flip("no first-year loss"), h1=rc["careful, own-duty loads"], h2=rc["careful, curved loss"], h3=rc[carw],
-        rmax=f["rival_maxdev"])
-    open(path, "w", encoding="utf-8").write(txt)
+    cs = ", ".join(f["call_set"])
+    L = []
+    L.append("# task4: Niittylä's 2027 battery-electric bus order\n")
+    L.append("## Tags\n")
+    L.append("**Domain:** General Statistics & Data Science, Regression, classification & model diagnostics (a bus operator's depot "
+             "electrification: forecasting each block's battery energy for buses that have never run it).\n")
+    L.append("**Analytical objective:** Forecasting & Predictive Modeling.\n")
+    L.append("## Final Recommendation\n")
+    L.append("Order %d battery-electric buses for the weekday blocks %s; the other %d weekday blocks stay on diesel until the "
+             "connection is reinforced. Not the %d buses that carrying the pilot's own fit to the blocks it never ran would order "
+             "(the pilot ran the thriftiest short blocks, and its battery record leaves out the cabin heat its fuel heaters "
+             "supplied), and not the %d blocks that pass the design-day limit on their own: the night period's %d kW recharges %d "
+             "of them in the plan's priority order, and %s, next on the list, cannot be recharged together with them under any schedule.\n"
+             % (f["call_count"], cs, 48 - f["call_count"], f["careful_count"], f["qualifying_count"], f["supply_kw"], f["call_count"],
+                f["refused_block"]))
+    L.append("## Supplementary Questions\n")
+    L.append("### niittyla_ebus_order_2027.xlsx\n")
+    L.append("The workbook has four sheets: Order (the count, the blocks, the limit, the loss, the night's figures), Blocks (one row "
+             "per weekday block in the plan's priority order: block, lines, zone, scheduled km, hours out, diesel l/100 km, design-day "
+             "energy kWh, qualifies, assigned 2027, pilot block), Night (the assigned blocks' return, departure, charging window and "
+             "energy at the connection point under a least-slack schedule, with the next block on the list and its shortfall) and "
+             "Model (the pilot's per-km energy by block with its electric days and diesel figure, the bridge, the heating figures). "
+             "The slides (niittyla_ebus_order_2027.pptx) carry the order, a bar chart of the 48 energies against the limit in priority "
+             "order, and what the figures rest on.\n")
+    L.append("1. Diesel use per weekday block over November 2025 to October 2026, litres per 100 scheduled km to one decimal "
+             "(workbook sheet Blocks, column \"Diesel l/100 km\"; graded within %.1f l/100 km): %s. The 48 figures run from %.1f to "
+             "%.1f; each block's figure is the litres on the fuel-card statement between the fills of every bus that ran it, "
+             "spread over the blocks the dispatch log shows between those fills, so a block that shared its buses' fills with "
+             "other blocks gets its own rate and not its buses' average.\n"
+             % (R1_TOL, "; ".join("%s %.1f" % (c, f["diesel"][c]) for c in sorted(pk.weekday)), f["diesel_min"], f["diesel_max"]))
+    L.append("2. Design-day energy per weekday block for the 2027 model, kWh to the nearest 10 (sheet Blocks, \"Design-day energy "
+             "kWh\"; graded within %d kWh): %s.\n" % (E_TOL, "; ".join("%s %d" % (c, f["energy"][c]) for c in sorted(pk.weekday))))
+    L.append("3. Whether each weekday block goes electric under DES-1 4.1, its design-day energy against %d kWh (85 per cent of %d kWh "
+             "usable after the first winter): %s. %d blocks qualify; the %d assigned are those the night period recharges in "
+             "priority order (sheet Blocks, \"Qualifies\" and \"Assigned 2027\").\n"
+             % (round(g["limit"]), round(f["usable_y1"]), "; ".join("%s %s" % (c, f["verdict"][c]) for c in sorted(pk.weekday)),
+                f["qualifying_count"], f["call_count"]))
+    L.append("4. The share of usable battery the company's own electric buses lose for good in their first twelve months in service: "
+             "%.1f per cent (sheet Order; graded within the band %.1f to %.1f that the curved age forms span). Usable battery for "
+             "planning %d kWh, limit %d kWh.\n" % (f["loss_pct"], LOSS_BAND[0], LOSS_BAND[1], round(f["usable_y1"]), round(g["limit"])))
+    L.append("5. Energy the depot would have to deliver at the connection point on the design night to recharge every weekday "
+             "block that passes the limit: %.1f MWh for the %d qualifying blocks (sheet Night; graded within %.1f MWh), %.1f MWh "
+             "into the batteries at the charging efficiency of %.2f the sessions show. The night period's %d kW delivers at most "
+             "%.2f MWh between 21:00 and 07:00, which is why the plan's list is cut at %d buses (%.1f MWh at the connection point "
+             "for those).\n"
+             % (f["demand_mwh"], f["qualifying_count"], NIGHT_TOL, f["demand_battery_mwh"], f["eta"], f["supply_kw"],
+                f["night_capacity_mwh"], f["call_count"], f["night_mwh"]))
+    L.append("## Critical Components\n")
+    L.append("1. The pilot ran the thrifty blocks: the nine blocks the six electric buses ran on weekdays average **%.1f** litres of diesel "
+             "per 100 km against **%.1f** for the other 39 (a gap of **%.1f** l/100 km, graded within %.1f); among the %d weekday blocks of "
+             "225 km or less on the 2024 timetable (the pilot buses' range) they sit in the thriftiest half, and none of the nine is among the "
+             "ten thriftiest of the 48 or among its hardest sixteen. Kilometres, climb and timetable speed do not carry that gap (the bridge from "
+             "diesel use to the pilot's energy per km, fitted over the %d blocks an electric bus ran with their diesel figures, has "
+             "a slope of %.4f kWh per km per l/100 km and a residual of %.3f kWh per km), so a fit carried on those covariates "
+             "forecasts the hard blocks light; the diesel figures carry every block's difficulty to the design day.\n"
+             % (f["pilot_diesel_mean"], f["others_diesel_mean"], f["pilot_gap"], GAP_TOL, f["short_km_blocks"], f["bridge"]["blocks"],
+                f["bridge"]["b"], f["bridge"]["rmse"]))
+    L.append("2. The pilot buses' fuel-fired cabin heaters supplied about **%.1f kW** of heat on a -15 C day (graded within the band %.1f "
+             "to %.1f kW): %.2f litres of HVO an hour, from the electric buses' HVO fills on the fuel-card statement tank to tank "
+             "against the days' hours and temperatures, at the heater's rating of 35 kW for 3.9 l/h. The 2027 model heats "
+             "electrically with resistive boosters below -10 C, so on the design day it draws that heat from the battery on top "
+             "of the %.1f kW the pilot's HVAC drew: %.1f kW of heating an hour out, %d to %d kWh a block.\n"
+             % (f["heater_kw"], f["conventions"]["heat_band"][0], f["conventions"]["heat_band"][1], f["heater_lph"], f["pilot_hvac_kw_design"], f["heat_new_kw"],
+                r10(min(pk.blocks[c]["hours"] for c in pk.weekday) * f["heater_kw"]), r10(max(pk.blocks[c]["hours"] for c in pk.weekday) * f["heater_kw"])))
+    L.append("## Step-by-Step\n")
+    steps = [
+        "Clean and join the operating records: the dispatch log's block codes before 11 August 2025 to the register's current "
+        "codes and its early-2024 registrations to fleet numbers; the fuel-card statement's cards to vehicles by the register's "
+        "validity dates, the night shift's spare cards by the fleet number typed at the pump; the telematics days the portal "
+        "uploaded twice dropped; blank ambient readings filled from the airport station (the town station less its %.2f C offset "
+        "where the airport has its April 2023 gap); the charging sessions' UTC stamps read against the local timetable." % f["weather_offset"],
+        "Diesel use per block (ask 1): for each diesel bus, consecutive diesel fills on the statement with a second swipe within "
+        "twelve minutes merged into one fill; the litres of each fill are the fuel burnt on the bus-days the dispatch log shows "
+        "between that fill and the one before, by departure time; over November 2025 to October 2026 the litres of every interval "
+        "are regressed on the scheduled kilometres each block contributed to it, giving one rate per block (%.1f to %.1f "
+        "l/100 km). Charging each fill to the block the bus ran on the day of the fill, or giving every block its commonest bus's "
+        "yearly rate, puts most blocks several litres off because the buses rotate over the blocks." % (f["diesel_min"], f["diesel_max"]),
+        "The pilot's record: the nine weekday blocks with 30 or more electric bus-days sit in the middle of the 48 by diesel use (none among "
+        "the ten thriftiest, none among the hardest sixteen) and in the thriftiest half of the %d blocks of 225 km or less on the 2024 "
+        "timetable (the planner picked the blocks from the fuel figures and the buses' range), averaging %.1f "
+        "against %.1f l/100 km for the rest (component 1). Beside them the electric buses ran three short stand-in blocks and the "
+        "weekend blocks, which give the bridge its reach over harder blocks." % (f["short_km_blocks"],
+                                                                                   f["pilot_diesel_mean"], f["others_diesel_mean"]),
+        "The pilot's energy model: on each electric bus-day the energy outside heating and cooling (energy used less HVAC) per "
+        "kilometre, by block, weighted by kilometres; the HVAC draw per hour out in 1 C bins of the day's ambient. The HVAC draw "
+        "flattens at about %.1f kW below -10 C on the pilot buses, because the vehicle register's fuel-fired heater (35 kW, 3.9 l/h) "
+        "carries the rest of the cabin's heat below about %.0f C: the electric buses' HVO fills on the statement, tank to tank over "
+        "the days between, fit %.2f l/h at -15 C, %.1f kW of heat (component 2; the two buses whose heater the workshop log shows "
+        "out in early 2026 drew the extra heat from the battery, %s kWh per litre against the rating's %.2f). The 2027 model has "
+        "no fuel heater and runs its boosters below -10 C, so its heating on the design day is %.1f kW an hour out." %
+        (f["pilot_hvac_kw_design"], f["heater_T0"], f["heater_lph"], f["heater_kw"],
+         " and ".join(str(v[4]) for v in f["heater_fault_check"]), f["heater_kwh_per_l"], f["heat_new_kw"]),
+        "The bridge and the energies (ask 2): the per-km energy of the %d blocks an electric bus ran regressed on their diesel rates "
+        "(a = %.4f, b = %.5f, residual %.3f kWh per km); for each weekday block the design-day energy is its scheduled km times the "
+        "bridged per-km energy (the block's own electric figure where it has 30 or more electric days) plus its hours out times "
+        "%.1f kW. Adding the hours per km to the bridge, or bridging every block, moves no energy by more than one 10 kWh bin. "
+        "Carrying the pilot's fit on kilometres, climb and timetable speed, with the pilot's own cold response read at -15 C, puts "
+        "the hard blocks %d kWh light on average and orders %d." %
+        (f["bridge"]["blocks"], f["bridge"]["a"], f["bridge"]["b"], f["bridge"]["rmse"], f["heat_new_kw"],
+         r10(float(np.mean([g["E"][c] for c in pk.weekday])) - float(np.mean([v for v in f["careful_energy"].values()]))), f["careful_count"]),
+        "The limit (asks 3 and 4): each electric bus-day's energy over its state-of-charge drop is the capacity the battery system "
+        "shows; on age in service with a cold term and a level per bus, a form with a fast early loss and a steady loss after it "
+        "(curved %.2f, square root %.2f, log %.2f per cent; a straight line in age %.2f) gives %.1f per cent in the first twelve "
+        "months, %d kWh usable on the 2027 model and a limit of %d kWh; %d blocks pass it." %
+        (f["loss_forms"]["curved"], f["loss_forms"]["sqrt"], f["loss_forms"]["log"], f["loss_forms"]["linear"], f["loss_pct"],
+         round(f["usable_y1"]), round(g["limit"]), f["qualifying_count"]),
+        "The night (ask 5 and the order): the %d qualifying blocks need %.1f MWh at the connection point (their energies over the "
+        "charging efficiency the sessions show, %.2f), against at most %.2f MWh the night period's %d kW can deliver between 21:00 "
+        "and 07:00. Taken in the fleet plan's priority order, each between its return and its departure inside the night period at "
+        "up to 150 kW a bus and %d kW in all, the list is cut at %s, the %dth, which the night cannot recharge together with the "
+        "%d above it under any schedule (the night's maximum flow over the blocks' windows falls short of it; a least-slack schedule "
+        "recharges the %d). The six pilot buses enter neither figure: "
+        "DES-1 4.3 orders one bus for each block assigned and 4.2 tests the night on the assigned blocks, so whatever they do after "
+        "the new buses arrive moves neither the count nor the night. Summing the per-block verdicts orders %d; scheduling on battery "
+        "energy without the charging losses orders %d. With the quoted capacity in place of the first winter's usable no block "
+        "changes side, so the loss is reported for the limit it sets and moves no verdict." %
+        (f["qualifying_count"], f["demand_mwh"], f["eta"], f["night_capacity_mwh"], f["supply_kw"], f["supply_kw"], f["refused_block"],
+         f["call_count"] + 1, f["call_count"], f["call_count"],
+         f["routes"]["the per-block verdicts summed, the night's supply ignored"],
+         f["routes"]["the night scheduled on battery energy (charging losses ignored)"]),
+        "Why no other conclusion survives: the pilot's own fit carried on the timetable's covariates and the pilot's cold response "
+        "orders %d (%d without the night's supply) and the pilot's cold-day consumption times kilometres orders %d; putting the "
+        "diesel bridge right alone orders %d and the heaters' share right alone orders %d; only both together, with the first "
+        "winter's loss, the charging losses and the night's capacity, land %d." %
+        (f["careful_count"], f["routes"]["the careful pass without the night's supply"], f["quick_count"],
+         f["routes"]["the pilot's cold response read as the new buses' (the fuel heaters' share left out)"],
+         f["routes"]["the pilot's fit carried on kilometres, climb and speed (the diesel bridge left out)"], f["call_count"]),
+    ]
+    for i, s in enumerate(steps, 1):
+        L.append("%d. %s\n" % (i, s))
+    open(path, "w", encoding="utf-8").write("\n".join(L))

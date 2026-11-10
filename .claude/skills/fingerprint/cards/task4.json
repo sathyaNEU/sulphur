@@ -1,314 +1,354 @@
 {
-  "task": "task4",
-  "project": "sulfur",
-  "architecture": 9,
-  "drawn": "2026-11-10",
-  "slot_note": "re-root of task4 after architecture 4 was landed on the platform; new world (Sweden, Småland, a road haulier), new dataset (a battery-electric pilot's duty-day telematics and a terminal weighbridge log), new shell (how-many | please | docx+xlsx)",
-  "domain": "supply-chain-logistics",
-  "client_domain": "general-statistics-data-science",
-  "subdomain": "transportation-network",
-  "niche": "fleet electrification of a road haulier's regular duties: a battery-electric tractor's energy on a cold day forecast from a pilot's telematics, where the load each pilot day carried is known only as the shipper declared it; client task type regression, classification and model diagnostics",
-  "objective": "forecasting",
-  "shape": "other",
-  "decision_type": "quantity_figure",
-  "answer_unit": "count",
-  "answer": "Order 8 battery-electric tractors, for V02, V03, V05, V09, V11, V14, V16 and V18; V07, V21, V24, V27, V30 and V33 stay on diesel",
-  "answer_source": "task4/submission.md, Final Recommendation (generator/figures.json call_set)",
-  "gap": [
-    "population",
-    "objective"
+ "task": "task4",
+ "project": "sulfur",
+ "architecture": 10,
+ "drawn": "2026-11-10",
+ "slot_note": "re-root of task4 after architecture 9 was landed by both platform runs; new world (Finland, a municipally owned regional bus operator's depot), new dataset (fuel-card transactions, a dispatch log, a six-bus electric pilot's daily summaries), new shell (how-many | every | pptx+xlsx)",
+ "domain": "supply-chain-logistics",
+ "client_domain": "general-statistics-data-science",
+ "subdomain": "transportation-network",
+ "niche": "depot electrification of a municipal bus operator's weekday duty blocks: each block's battery energy on the standard's design day, forecast for all-electric buses that have never run it, from a six-bus pilot the planner put on the thriftiest blocks; client task type regression, classification and model diagnostics",
+ "objective": "forecasting",
+ "shape": "07",
+ "decision_type": "quantity_figure",
+ "answer_unit": "count",
+ "answer": "Order 18 battery-electric buses for M101, M107, M108, M113, M116, M119, M122, M123, M124, M129, M134, M135, M137, M139, M140, M142, M146 and M148; the plan's priority list is cut at M125, which the 690 kW night cannot recharge with the 18 above it",
+ "answer_source": "task4/submission.md block 1; task4/generator/figures.json (call_count, call_set, limit, refused_block)",
+ "gap": [
+  "population",
+  "objective"
+ ],
+ "pattern": [
+  "none"
+ ],
+ "generators": [
+  "G6",
+  "G17",
+  "G1"
+ ],
+ "gate_g": "binding_constraint",
+ "calibration_form": "pilot_log",
+ "stump_strategy": "population_selection",
+ "decisive_rule_filed": false,
+ "official_decoy": false,
+ "validated_decoy": false,
+ "context_artifact": "capacity_report",
+ "stump_class": "analytical",
+ "analyst_test": "The careful but hurried pass is the union of the six recorded Fryele runs' methods: it cleans and crosswalks every file, reconstructs each block's diesel use tank to tank for the fuel-cost ask, fits the pilot's battery energy per bus-day on kilometres, hours, climb, timetable speed and a nonlinear temperature term with a block effect, reads the first-winter capacity loss off the state-of-charge records, holds out and bootstraps, and schedules the depot's night under the filed supply. It carries the pilot's fit to the thirty-nine blocks no electric bus has run on their kilometres, climb and speed, and extrapolates the pilot's flattened cold response to the design day, so every hard block's energy comes out 25 to 60 kWh light, more blocks clear the limit and more fit the night, and it orders about six buses too many; it dismisses the fuel-card file for the forecast because diesel litres do not measure battery energy, which is where the blocks' difficulty and the pilot heaters' share both sit.",
+ "domain_test": "The results are a forecast carried from a selected sample to the population it was drawn from, where the selection was made on the outcome's own determinant as the old technology recorded it (the planner put the pilot on the blocks with the lowest diesel use), so the pilot's covariates cannot identify the between-block effect and the old technology's consumption record is the measurement of it; beside it, a measurement gap in the pilot's own record (heat the pilot took from fuel that the new buses take from the battery) read from a second record, a degradation share from state-of-charge logs, and a capacity constraint summed over the forecasts. With wards and nurses in place of blocks and buses there is no fuel record, no fuel-fired heater and no overnight charging supply; the count stops making sense.",
+ "layer2_family": "estimand_identification",
+ "layer2_pattern": "own:pilot-selected-on-the-old-technology's-record",
+ "layer1": [
+  "fuel-card transactions capped at 250 litres and continued on a second swipe",
+  "cards reissued mid-period and a spare card used at the pump with the fleet number typed",
+  "odometer readings typed at the pump with slips and blanks",
+  "a dispatch log re-keyed when the planning system changed its block codes",
+  "telematics days uploaded twice after a portal outage",
+  "ambient sensor dropouts on the electric buses",
+  "a weather station gap filled from the neighbouring station",
+  "clock in UTC on the charging sessions and local time elsewhere"
+ ],
+ "stakeholder_role": "the company's electrification programme manager, who sizes the electric bus order the board approves in January",
+ "role_family": "programme_officer",
+ "scoring_unit": "other",
+ "spine": {
+  "file": "fuel_card_transactions_2024-01_2026-10.csv",
+  "rows": 20804,
+  "entity": "one fuel-card transaction of a depot vehicle at a pump",
+  "grain": "vehicle x transaction",
+  "source": "synthetic"
+ },
+ "forum": "board_of_directors",
+ "forcing_event": "purchase_order_or_contract",
+ "org_family": "local_government",
+ "world": {
+  "geography": "Finland (Vehkasalo, an invented town in the lake district)",
+  "currency": "EUR",
+  "org_type": "a municipally owned regional bus operator running the town's and the surrounding municipalities' lines from one depot",
+  "invented_names": [
+   "Vehkasalon Liikenne Oy",
+   "Niittylä depot",
+   "Pohjanmaan Bussihuolto Oy"
   ],
-  "pattern": [
+  "people": [
+   "Simo Virta",
+   "Eveliina Pajunen",
+   "Juhani Nousiainen",
+   "Kaarina Peltola"
+  ]
+ },
+ "deliverables": [
+  "niittyla_ebus_order_2027.xlsx",
+  "niittyla_ebus_order_2027.pptx"
+ ],
+ "opening_move": "question-first",
+ "question_form": "how-many",
+ "driver": "The decisive quantity is a count over many units of a per-unit forecast held against a limit and a shared nightly supply, where the units the forecast was fitted on were chosen for being the cheapest on the old technology, so the fit's covariates miss the difficulty the chooser selected on; that difficulty survives only in the old technology's consumption record, which the forecast's own data never mention and a solver dismisses as not measuring the new quantity, and the old units also took part of a load from a second energy source the new units take from the first; each unit's shortfall is small, the shortfalls all point one way, and the count comes out several units over.",
+ "driver_concrete": "Each of Niittylä's 48 weekday blocks needs its battery energy on the standard's -15 C design day for the all-electric 2027 buses; the six pilot buses ran the nine blocks the planner picked from the 2024 fuel figures among the short blocks (46.2 against 49.1 l/100 km for the rest), so a model carried on kilometres, climb and hours per km under-forecasts the stop-heavy blocks, which the blocks' diesel use (tank to tank from the fuel-card statement over the dispatch log) carries at 0.031 kWh per km per l/100 km; the pilot buses' fuel-fired heaters supplied about 4.3 kW of cabin heat at -15 C that the quoted all-electric buses take from the battery (0.48 l/h of HVO from the statement's fills, at the register's 35 kW for 3.9 l/h); the first-winter loss from the state-of-charge logs (4.3 per cent) sets the limit at 390.5 kWh; and the connection agreement's 700 kW night period over the blocks' own windows caps the order at 18 of the 23 qualifying blocks.",
+ "stump": "The careful pass (the union of the recorded runs) carries the pilot's fit on kilometres, climb and hours per km and reads the pilot's own cold response at -15 C, forecasts every hard block about 58 kWh light, passes 38 blocks and orders 21 under the night's capacity (38 without it); the pilot's cold-day consumption times kilometres orders 33; the diesel bridge put right alone orders 20 and the heaters' share alone 19; the verdicts summed order 23, the night on battery energy 20",
+ "deep_chain": "(1) each block's diesel use tank to tank; (2) the pilot blocks are the thriftiest of the 48; (3) the heat the pilot's fuel heaters supplied on the design day; (4) the 48 design-day energies through the diesel bridge; (5) the verdicts; (6) the first-winter loss; (7) the night's charging under the supply; (8) the count and the set.",
+ "judgment": "a forecast fitted on a sample selected on the outcome's own determinant, identified through the old technology's record; a load the pilot took from fuel; a capacity constraint over the forecasts",
+ "one_fact_test": "the strongest sentence (the pilot blocks were chosen for their low diesel use, and the diesel figures carry what the covariates miss) rescues the selection component and no energy, verdict, night or count: at most 1 of 8",
+ "strategy_label": "WORKS IN FORM",
+ "mechanism_source": "design_note",
+ "differentiation": {
+  "task4": "Architectures 5 to 9 forecast tractor duties from a pilot whose payloads were declared with error, a battery loss and a winter speed; every estimate was a per-unit mechanism a plot or a join showed and both runs landed it. Architecture 10 is a new world: the selection of the pilot's units on the old technology's own record, carried through a file the runs dismiss, accumulating over 48 units into a count under a shared supply; no declared weight, no calibration line, no speed ratio.",
+  "mark132": "mark132 sums a wear-out rate over positions whose failed items restart the curve; here nothing restarts: the forecast is carried from selected units to unselected ones through the old technology's consumption, and the count is capped by a shared nightly supply.",
+  "mark124": "mark124 reads a rate off units examined because they showed the outcome; here the units were selected on the determinant of the outcome by the planner, and the correction is a bridge through a second technology's record rather than the exhaustively examined groups' own rate.",
+  "task12": "task12 fades each entrant's response to a floor set by its pre-entry kind; here the selected units do not fade, they were simply the easiest, and the correction is the old technology's record of every unit.",
+  "mark175": "mark175 carries a take-up rate measured where access arrived first, to places whose runs are less taken; here nothing is a take-up or a run: the pilot's units were chosen on the old technology's own consumption record, the correction is a bridge through that record to units the pilot never ran, and the count is capped by a shared night supply.",
+  "task7": "task7 v7 instruments a lottery's passed-over arm; here there is no lottery and no arm: the pilot's blocks were picked on their diesel figures, and the diesel record of every block is the correction.",
+  "task9": "task9 v3 costs simulated storms at what a mutual's own claims show for storms like them; here nothing is simulated or a tail: a pilot's selected units are bridged to the unselected ones through the old technology's consumption record, and a count is capped by a night supply."
+ },
+ "lineage": [
+  {
+   "architecture": "v1",
+   "driver": "The decisive quantity is a count of alerts each unit raises when its departure from an estimate built from its nearest other units passes a limit set from that departure's past spread; when some units leave, the remaining units' estimates come from farther units and their departures spread wider while their limits stay at the spread measured with the old neighbours, so the alerts rise even as the units fall.",
+   "fate": "spent 2026-10-20 at stage 4: reader 1 re-ran the quality control with the 34 closing stations out of the neighbour pool and landed the call (4.0 at 9 a year, every setting within one of the golden 61/25/9/3); reader 2 replayed the record and filed 3.5 at 9; judge DETERMINISTIC APPROVE. The network re-run is now the first rung of architecture 2."
+  },
+  {
+   "architecture": "v2",
+   "domain": "physical-environmental-sciences",
+   "subdomain": "sensor-calibration-measurement",
+   "objective": "data-quality-monitoring",
+   "shape": "04",
+   "decision_type": "dial_setting",
+   "gap": [
+    "time",
+    "population"
+   ],
+   "pattern": [
     "none"
-  ],
-  "generators": [
-    "G16",
-    "G1",
-    "G13"
-  ],
-  "gate_g": "forecasting",
-  "calibration_form": "gold_standard_subsample",
-  "stump_strategy": "other",
-  "decisive_rule_filed": false,
-  "official_decoy": false,
-  "validated_decoy": false,
-  "context_artifact": "capacity_report",
-  "stump_class": "analytical",
-  "analyst_test": "The careful but hurried pass is the union of the four recorded runs' methods: it cleans every file, takes each pilot declaration to the terminal's weighed-on-declared line, carries the tare and the drops, curves the cold, fits squared speed at the year's ratio and a straight-line battery loss with tractor and cold terms, and computes then sets aside the within-duty slope (2.3), the same months a year apart (2.8) and the first-year-only loss (4.3). It files a payload term of 1.5 (the line pulls the pilot's part loads toward the terminal's full loads), a loss of 3.1 and a 445 kWh limit, energies 10 to 20 kWh high, and orders 5 (V02, V14, V18 out); at the design-day speed it orders 10 (V07, V21 in).",
-  "domain_test": "The results are a regression slope on a covariate the pilot records only as third-party declarations, whose calibration does not transport between the terminal's full-load runs and the pilot's regional part loads (classical error: the error model transports, the line does not); a capacity-fade curve read from an energy-per-SOC proxy net of a reversible cold effect; and a speed extrapolation through a weather-dependent ratio. With nurses and shifts in place of tractors and loads there is no declared weight, no battery and no air drag; the call stops making sense.",
-  "layer2_family": "estimation_fit",
-  "layer2_pattern": "own:error-model-transported-not-the-calibration-line",
-  "layer1": [
-    "telematics duty-days uploaded twice after a modem reconnect",
-    "ambient temperature sensor dropouts",
-    "declared weights keyed in kilograms and in tonnes",
-    "weighbridge re-weighs after a reload",
-    "duty codes re-keyed at the TMS upgrade",
-    "clock in UTC on the telematics and local time on the weighbridge",
-    "tractor swaps on service days"
-  ],
-  "stakeholder_role": "the haulier's fleet manager, who places the battery-electric tractor order the management group approves in December",
-  "role_family": "procurement_lead",
-  "scoring_unit": "other",
-  "spine": {
-    "file": "weighbridge_varnamo_2025-2026.csv",
-    "rows": 21430,
-    "entity": "one weighing of a departing truck at the Värnamo terminal",
-    "grain": "departure x weighing",
-    "source": "synthetic"
+   ],
+   "generators": [
+    "G12",
+    "G3",
+    "G17"
+   ],
+   "gate_g": "forecasting",
+   "calibration_form": "none",
+   "stump_strategy": "maturity_censoring",
+   "context_artifact": "monitoring_export",
+   "driver": "The decisive quantity is a count of alerts a less sensitive limit will raise, read from a record the current limit produced: every fault the current limit caught was repaired within days, so the record holds those faults cut short below the higher limit they would otherwise have reached, and the count is the record re-run on the units and estimate sources the next period will have plus one alert for every caught fault the re-run never alerted before its repair.",
+   "stump": "A competent solver re-runs the quality control on the 2025 to 2027 export with the 131 stations the network keeps and files 3.5 at 23 drift alerts a year, inside the field plan's 28 visits (22 with the cut-short drifts added to the record as it ran, 12 on the record replayed); 30 of the 35 drifts the sensor history shows repaired at kept stations never reached the 3.5 limit before their repair and would have kept growing until they did, which puts 3.5 at 33 and files 4.0 at 18.",
+   "forum": "line_manager_or_team",
+   "forcing_event": "cutover_or_migration",
+   "org_family": "cooperative_or_member_body",
+   "role_family": "capacity_planner",
+   "deliverables": [
+    "drift_alert_setting_2028.xlsx",
+    "alerts_by_setting_2028.png"
+   ],
+   "question_form": "which",
+   "fate": "spent 2026-10-31 at the batch 1 repair: the determinism judge sent it back (NOT_DETERMINISTIC, SEND_BACK): the 4.0 call counted every repaired drift the re-run never reached as one later alert, which no shipped file forces; a rate model from the sensor history (onset at the previous clean check) gives 14 to 16 a year at 4.0, not 18, and the new contractor's visit day rested on an inference",
+   "shell": {
+    "question form": "how-many",
+    "second-sentence opener": "in",
+    "deliverable set": "png+xlsx"
+   }
   },
-  "forum": "line_manager_or_team",
-  "forcing_event": "purchase_order_or_contract",
-  "org_family": "logistics_or_3pl",
-  "world": {
-    "geography": "Sweden (Jönköping and Värnamo, Småland)",
-    "currency": "SEK",
-    "org_type": "a regional road haulier running regular full-load duties for manufacturers",
-    "invented_names": [
-      "Fryele Åkeri AB"
-    ],
-    "people": [
-      "Georg Pålsson",
-      "Inger Norman",
-      "Pierre Kjellberg"
-    ]
+  {
+   "domain": "supply-chain-logistics",
+   "subdomain": "transportation-network",
+   "objective": "data-quality-monitoring",
+   "shape": "10",
+   "decision_type": "designation_set",
+   "gap": [
+    "time",
+    "population"
+   ],
+   "pattern": [
+    "none"
+   ],
+   "generators": [
+    "G17",
+    "G3",
+    "G12"
+   ],
+   "gate_g": "decomposition_attribution",
+   "calibration_form": "none",
+   "stump_strategy": "population_selection",
+   "context_artifact": "operations_log",
+   "forum": "committee_or_panel",
+   "forcing_event": "season_or_peak",
+   "org_family": "logistics_or_3pl",
+   "role_family": "operations_director",
+   "deliverables": [
+    "tracking_scorecard_2026-10.xlsx",
+    "scan_alerts_2026-10.pptx"
+   ],
+   "question_form": "whether",
+   "driver": "The decisive quantity is each node's share of the units that passed through it unrecorded, when which node an unrecorded unit passed is itself unrecorded: the plan of record assigns every unit a node, but on the nights one node overflowed part of its flow went through a second node and was handled there by hand, so that night's unrecorded units belong partly to each and only the batch a unit was unloaded in at its destination, whose recorded members all passed one node, says which; charged by the plan the overflowing node carries the second node's misses, and charged by the nights' excess over its usual rate the overflowing node sheds the misses its own overload caused.",
+   "stump": "A competent solver takes each parcel's hub from its sort scan or, where it has none, from the sort plan of its night and fires Sosnowiec and Pruszkow; Strykow sorted Pruszkow's overflow by hand on the heavy nights and sent it to the Warsaw depots on its own trailers, so the unscanned overflow parcels that route charges to Pruszkow came off Strykow's trailers, and only the trailer each unscanned parcel came off at its delivery depot fires Strykow as well.",
+   "shell": {
+    "question form": "whether",
+    "second-sentence opener": "the",
+    "rounding opener": "rates",
+    "deliverable set": "pptx+xlsx"
+   },
+   "architecture": "v3",
+   "fate": "spent 2026-11-08 on the platform: both runs reached the golden's call (alerts at HKTW, HLDZ and HWAW) and every graded figure, so the platform returned not stumped before any rubric; each read the Warsaw overflow off the observed hub within each delivery-depot, door and night cohort by a plan-against-observed cross-check, a work order rather than a judgment"
   },
-  "deliverables": [
-    "ev_duty_assessment_2027.xlsx",
-    "tractor_order_memo.pdf"
-  ],
-  "opening_move": "question-first",
-  "question_form": "which",
-  "driver": "A fitted model is carried to new units through three estimates the old units' records support only after diagnostics: a slope on a covariate known through third-party reports whose error model transfers between two populations but whose calibration line does not, because the populations' true levels differ; a permanent decline whose early part a straight line misses and a checks-at-a-year-apart reading confirms wrongly; and a speed set by a planned figure corrected at the design condition rather than on average.",
-  "driver_concrete": "Each Värnamo duty's January design-day energy is forecast from the Jönköping pilot: the pilot's regional duties carry 75 to 89 per cent of the loads the same shippers declare at Värnamo, so each pilot duty's loads come from its own declarations with the shipper's declaration error read on the Värnamo weighbridge (payload term 1.9; the terminal's line gives 1.5, and Gränna Dryckes' scale days confirm the duties' own loads); the batteries lose 4.6 per cent in the first year, most of it in the first four months (a straight line gives 3.1, the same months a year apart 2.8); each duty runs at 0.76 of the routing tool's speed at -5 C (0.89 over the year).",
-  "stump": "The careful pass (the union of the recorded runs) orders 5, pricing V02, V14 and V18 at 450 kWh against its own 445 kWh limit; at the design-day speed it orders 10 (V07, V21 in on a payload term of 1.5); each of the three estimates put right alone still orders wrongly (2, 3 or 10 duties); only all three land the eight.",
-  "deep_chain": "(1) the payload term from each pilot duty's own loads, the declaration error transported from the weighbridge; (2) the first-year loss on a curved age form net of the cold; (3) the energies at the -5 C speed ratio with each duty's combination and load share; (4) the verdicts; (5) the order.",
-  "judgment": "three estimates each needing diagnostics the runs named and did not run: the calibration's transfer between depots (the pilot's part loads), the early-life loss behind a straight line and a year-apart check, and the winter speed; the within-duty slope the runs computed and dismissed agrees with the first",
-  "one_fact_test": "each of the three most useful sentences rescues at most 1 of 5 results (effort.py); each leaves the order wrong (2, 3 or 10 duties)",
-  "strategy_label": "WORKS IN FORM",
-  "mechanism_source": "design_note",
-  "differentiation": {
-    "mark140": "mark140 solves a residual guarantee jointly with a dependent service's load estimated from its own two drivers; nothing here is a residual or a dependency: the quantity is a regression slope whose covariate is recorded by third parties with source-specific error, recovered by calibrating each source on a second record that weighs the truth",
-    "mark262": "mark262 de-attenuates one slope by a single classical noise variance carried from a selected subsample to the population; here there is no selected subsample and no variance to carry: each shipper's declarations err in a different structure (classical, Berkson, exact), identified from the direction of the declared-weighed regression on the weighbridge, so the one pooled reliability correction mark262's route takes is itself a wrong rung",
-    "mark249": "mark249 recovers each unit's gain against references that agree only partly hour by hour by matching spreads; here the units are not calibrated against references: the fitted model's covariate is replaced by its expected true value given its source and its record",
-    "task4": "Same world by the client's instruction to keep the data package; architecture 8 added three register joins the runs made on sight and both runs landed it. Architecture 9 removes the ePTO term and moves the work into the runs' recorded blind spots: the terminal's calibration line does not transport to the pilot's part loads (the within-duty slope the runs dismissed agrees with the transported error model), the battery's early-life loss behind a straight line and a year-apart check, and the winter speed; each alone leaves the order wrong."
+  {
+   "architecture": "v4",
+   "domain": "supply-chain-logistics",
+   "client_domain": "urban-regional-science",
+   "subdomain": "transportation-network",
+   "objective": "forecasting",
+   "shape": "other",
+   "decision_type": "designation_set",
+   "gap": [
+    "objective",
+    "population"
+   ],
+   "pattern": [
+    "none"
+   ],
+   "generators": [
+    "G5",
+    "G8",
+    "G16"
+   ],
+   "gate_g": "forecasting",
+   "calibration_form": "none",
+   "stump_strategy": "decomposition_attribution",
+   "context_artifact": "register",
+   "driver": "The decisive quantity is what handing a set of members of shared sequences to an outside provider saves, the time the sequences would no longer take: a member the sequence passes through on its way to others saves only its own stops beyond the direct run between its neighbours, and on a branch the near member saves the branch only when the members beyond it go too, so pricing each member at the time its own stops and the run into them take credits passed-through members with travel the sequences still make and, member by member, keeps the near member of a branch.",
+   "stump": "A competent solver prices each offered district at the van time its stops take and hands Leenane and Letterfrack to the courier with Mulranny, Achill, Bangor Erris, Belmullet, Louisburgh and Ballycastle, claiming about EUR 20,000; the Connemara van drives through Leenane and Letterfrack to reach Clifden, which stays, so they save only their own stops, and the solver who prices the run without them but one district at a time keeps Mulranny and Bangor Erris, which end the Achill and Erris runs once Achill and Belmullet go: only every combination priced on the run hands over Mulranny, Achill, Bangor Erris, Belmullet, Louisburgh and Ballycastle, about EUR 50,000 net in 2027.",
+   "forum": "committee_or_panel",
+   "forcing_event": "vote_or_meeting",
+   "org_family": "retailer_or_ecommerce",
+   "role_family": "operations_director",
+   "deliverables": [
+    "district_handover_2027.xlsx",
+    "handover_2027.png"
+   ],
+   "question_form": "which",
+   "shell": {
+    "question form": "which",
+    "second-sentence opener": "i'd",
+    "deliverable set": "png+xlsx"
+   },
+   "fate": "spent 2026-11-08 on the platform: the author reports both runs not stumped (the call landed); run texts not supplied to the repo. The counterfactual run time priced set by set is a mechanism the stop sequences visibly carry, modelled on sight."
   },
-  "lineage": [
-    {
-      "architecture": "v1",
-      "driver": "The decisive quantity is a count of alerts each unit raises when its departure from an estimate built from its nearest other units passes a limit set from that departure's past spread; when some units leave, the remaining units' estimates come from farther units and their departures spread wider while their limits stay at the spread measured with the old neighbours, so the alerts rise even as the units fall.",
-      "fate": "spent 2026-10-20 at stage 4: reader 1 re-ran the quality control with the 34 closing stations out of the neighbour pool and landed the call (4.0 at 9 a year, every setting within one of the golden 61/25/9/3); reader 2 replayed the record and filed 3.5 at 9; judge DETERMINISTIC APPROVE. The network re-run is now the first rung of architecture 2."
-    },
-    {
-      "architecture": "v2",
-      "domain": "physical-environmental-sciences",
-      "subdomain": "sensor-calibration-measurement",
-      "objective": "data-quality-monitoring",
-      "shape": "04",
-      "decision_type": "dial_setting",
-      "gap": [
-        "time",
-        "population"
-      ],
-      "pattern": [
-        "none"
-      ],
-      "generators": [
-        "G12",
-        "G3",
-        "G17"
-      ],
-      "gate_g": "forecasting",
-      "calibration_form": "none",
-      "stump_strategy": "maturity_censoring",
-      "context_artifact": "monitoring_export",
-      "driver": "The decisive quantity is a count of alerts a less sensitive limit will raise, read from a record the current limit produced: every fault the current limit caught was repaired within days, so the record holds those faults cut short below the higher limit they would otherwise have reached, and the count is the record re-run on the units and estimate sources the next period will have plus one alert for every caught fault the re-run never alerted before its repair.",
-      "stump": "A competent solver re-runs the quality control on the 2025 to 2027 export with the 131 stations the network keeps and files 3.5 at 23 drift alerts a year, inside the field plan's 28 visits (22 with the cut-short drifts added to the record as it ran, 12 on the record replayed); 30 of the 35 drifts the sensor history shows repaired at kept stations never reached the 3.5 limit before their repair and would have kept growing until they did, which puts 3.5 at 33 and files 4.0 at 18.",
-      "forum": "line_manager_or_team",
-      "forcing_event": "cutover_or_migration",
-      "org_family": "cooperative_or_member_body",
-      "role_family": "capacity_planner",
-      "deliverables": [
-        "drift_alert_setting_2028.xlsx",
-        "alerts_by_setting_2028.png"
-      ],
-      "question_form": "which",
-      "fate": "spent 2026-10-31 at the batch 1 repair: the determinism judge sent it back (NOT_DETERMINISTIC, SEND_BACK): the 4.0 call counted every repaired drift the re-run never reached as one later alert, which no shipped file forces; a rate model from the sensor history (onset at the previous clean check) gives 14 to 16 a year at 4.0, not 18, and the new contractor's visit day rested on an inference",
-      "shell": {
-        "question form": "how-many",
-        "second-sentence opener": "in",
-        "deliverable set": "png+xlsx"
-      }
-    },
-    {
-      "domain": "supply-chain-logistics",
-      "subdomain": "transportation-network",
-      "objective": "data-quality-monitoring",
-      "shape": "10",
-      "decision_type": "designation_set",
-      "gap": [
-        "time",
-        "population"
-      ],
-      "pattern": [
-        "none"
-      ],
-      "generators": [
-        "G17",
-        "G3",
-        "G12"
-      ],
-      "gate_g": "decomposition_attribution",
-      "calibration_form": "none",
-      "stump_strategy": "population_selection",
-      "context_artifact": "operations_log",
-      "forum": "committee_or_panel",
-      "forcing_event": "season_or_peak",
-      "org_family": "logistics_or_3pl",
-      "role_family": "operations_director",
-      "deliverables": [
-        "tracking_scorecard_2026-10.xlsx",
-        "scan_alerts_2026-10.pptx"
-      ],
-      "question_form": "whether",
-      "driver": "The decisive quantity is each node's share of the units that passed through it unrecorded, when which node an unrecorded unit passed is itself unrecorded: the plan of record assigns every unit a node, but on the nights one node overflowed part of its flow went through a second node and was handled there by hand, so that night's unrecorded units belong partly to each and only the batch a unit was unloaded in at its destination, whose recorded members all passed one node, says which; charged by the plan the overflowing node carries the second node's misses, and charged by the nights' excess over its usual rate the overflowing node sheds the misses its own overload caused.",
-      "stump": "A competent solver takes each parcel's hub from its sort scan or, where it has none, from the sort plan of its night and fires Sosnowiec and Pruszkow; Strykow sorted Pruszkow's overflow by hand on the heavy nights and sent it to the Warsaw depots on its own trailers, so the unscanned overflow parcels that route charges to Pruszkow came off Strykow's trailers, and only the trailer each unscanned parcel came off at its delivery depot fires Strykow as well.",
-      "shell": {
-        "question form": "whether",
-        "second-sentence opener": "the",
-        "rounding opener": "rates",
-        "deliverable set": "pptx+xlsx"
-      },
-      "architecture": "v3",
-      "fate": "spent 2026-11-08 on the platform: both runs reached the golden's call (alerts at HKTW, HLDZ and HWAW) and every graded figure, so the platform returned not stumped before any rubric; each read the Warsaw overflow off the observed hub within each delivery-depot, door and night cohort by a plan-against-observed cross-check, a work order rather than a judgment"
-    },
-    {
-      "architecture": "v4",
-      "domain": "supply-chain-logistics",
-      "client_domain": "urban-regional-science",
-      "subdomain": "transportation-network",
-      "objective": "forecasting",
-      "shape": "other",
-      "decision_type": "designation_set",
-      "gap": [
-        "objective",
-        "population"
-      ],
-      "pattern": [
-        "none"
-      ],
-      "generators": [
-        "G5",
-        "G8",
-        "G16"
-      ],
-      "gate_g": "forecasting",
-      "calibration_form": "none",
-      "stump_strategy": "decomposition_attribution",
-      "context_artifact": "register",
-      "driver": "The decisive quantity is what handing a set of members of shared sequences to an outside provider saves, the time the sequences would no longer take: a member the sequence passes through on its way to others saves only its own stops beyond the direct run between its neighbours, and on a branch the near member saves the branch only when the members beyond it go too, so pricing each member at the time its own stops and the run into them take credits passed-through members with travel the sequences still make and, member by member, keeps the near member of a branch.",
-      "stump": "A competent solver prices each offered district at the van time its stops take and hands Leenane and Letterfrack to the courier with Mulranny, Achill, Bangor Erris, Belmullet, Louisburgh and Ballycastle, claiming about EUR 20,000; the Connemara van drives through Leenane and Letterfrack to reach Clifden, which stays, so they save only their own stops, and the solver who prices the run without them but one district at a time keeps Mulranny and Bangor Erris, which end the Achill and Erris runs once Achill and Belmullet go: only every combination priced on the run hands over Mulranny, Achill, Bangor Erris, Belmullet, Louisburgh and Ballycastle, about EUR 50,000 net in 2027.",
-      "forum": "committee_or_panel",
-      "forcing_event": "vote_or_meeting",
-      "org_family": "retailer_or_ecommerce",
-      "role_family": "operations_director",
-      "deliverables": [
-        "district_handover_2027.xlsx",
-        "handover_2027.png"
-      ],
-      "question_form": "which",
-      "shell": {
-        "question form": "which",
-        "second-sentence opener": "i'd",
-        "deliverable set": "png+xlsx"
-      },
-      "fate": "spent 2026-11-08 on the platform: the author reports both runs not stumped (the call landed); run texts not supplied to the repo. The counterfactual run time priced set by set is a mechanism the stop sequences visibly carry, modelled on sight."
-    },
-    {
-      "architecture": "v5",
-      "spent": "2026-11-09 portal return (reward 68.5, not stumped): the order rested on one recognition, the declared payloads' dilution, with Tabergs Travaror's exact declarations a free check; the cold form never moved a duty",
-      "driver": "single deep step"
-    },
-    {
-      "architecture": "v6",
-      "spent": "2026-11-09 platform run 1 landed every graded result by three reflexes (measured error-variance correction, a temperature quadratic, a temperature-controlled capacity regression), naming the distance transfer as an untested assumption"
-    },
-    {
-      "architecture": "v7",
-      "driver": "A fitted physical model is carried to new units that sit outside its range on one covariate, whose value for the new units is itself an estimate: a planned figure corrected by a weather-dependent ratio the old units show; beside it, a slope under source-specific measurement error, a nonlinear response chosen out of sample and a degradation separated from a reversible seasonal effect.",
-      "driver_concrete": "Each Värnamo duty's battery energy on the January design day is forecast from the Jönköping pilot's telematics, whose payloads are the shippers' declared weights: the furniture and packaging shippers' clerks estimate them (scattered around the weighed load), the dairy declares a standard load the weighed one scatters around, and the timber merchant prints its own weighbridge figure, so the pilot's fitted payload slope is about 0.8 kWh per tonne per 100 km where the loads' true effect is about 2.1, and only each shipper's declarations calibrated on the Värnamo weighbridge's weighed loads give the slope that the heavy steel and aggregates duties and the light insulation duty turn on.",
-      "stump": "The careful pass that makes the platform run's three corrections (2.1 kWh per tonne per 100 km, a curved cold form, 3.8 per cent loss) forecasts in proportion to distance at the pilot's speeds and orders 9 (V03, V11, V30 in), every energy 9 to 21 kWh low; adding speed at the routing tool's figure orders 3 and at the year's actual-to-planned ratio 5; only the ratio read at -5 C (0.82) lands the six.",
-      "answer": "Order 6 battery-electric tractors for Värnamo duties V02, V05, V09, V14, V16 and V18; V03, V07, V11, V21, V24, V27, V30 and V33 stay on diesel",
-      "chain_signature": [
-        "missingness-measurement",
-        "modeling",
-        "forecasting",
-        "synthesis"
-      ],
-      "weight": "measurement",
-      "answer_shape": "allocation-sensitivity",
-      "fate": "spent 2026-11-09 on the platform: both runs earned the payload term (1.98, 1.97), the loss (3.75) and the cold curve, fitted squared routing-tool speed (the year's ratio absorbed) and ordered 5, V14 excluded at 444.4 and 443.0 kWh against a 442 kWh limit (golden 435.4); one duty, one judgment, a knife-edge margin, and the 10 kWh band held both verdicts. Re-rooted in the same world as architecture 8."
-    },
-    {
-      "architecture": "v8",
-      "driver": "A fitted physical model is carried to new units through covariates the old units' own records reveal only by joins to other registers: each new unit's speed (a planned figure corrected by a weather-dependent ratio), its whole moving mass on every leg (an equipment register's tare, read by item), the share of its route the load actually rides (each consignment taken off at its stop), and a time-based auxiliary draw present only on items whose equipment code says they take power from the unit; beside them a slope under source-specific measurement error and a degradation separated from a reversible seasonal effect.",
-      "driver_concrete": "Each Värnamo duty's January design-day energy is forecast from the Jönköping pilot: the declared payloads calibrated on the weighbridge, the combination's tare carried on every leg from the trailer register (double decks 22.5 to 22.7 t with the 2027 tractor against the pilot's 20.3), each note taken off at its stop (V03 and V11's loads ride 0.60 and 0.57 of their loaded km), the SR-60e ePTO fridge units drawing 4.4 kW for the whole duty (V24, V30) while the diesel and axle-generator units draw nothing (V33), and each duty's speed at the pilot's -5 C actual-to-planned ratio (0.77, against 0.89 over the year).",
-      "stump": "The careful pass the architecture 7 runs made (calibrated payloads, the curved cold form, the loss net of the cold, squared speed at the year's ratio, energy per km and per departing tonne) orders 5, pricing V03 and V11 near 500 kWh on a payload term of 2.9; with the trailer left out it orders 9 (V02, V14 in), with every load to the last drop 5 (V03, V11 out), without the fridge term 9 (V24, V30 in), with every reefer drawing 7 (V30 in, V33 out), at the routing tool's speed 0, at the year's ratio 4; only all of them lands the seven.",
-      "answer": "Order 7 battery-electric tractors, for V03, V05, V09, V11, V16, V18 and V33; V02, V07, V14, V21, V24, V27 and V30 stay on diesel",
-      "chain_signature": [
-        "missingness-measurement",
-        "modeling",
-        "data-discovery",
-        "forecasting",
-        "assembly-reconciliation",
-        "forecasting",
-        "synthesis",
-        "synthesis"
-      ],
-      "weight": "measurement",
-      "answer_shape": "allocation-sensitivity",
-      "fate": "spent 2026-11-09 on the platform: both runs landed the golden exactly (order 7, V03 V05 V09 V11 V16 V18 V33; payload 2.24 and 2.23 against 2.2, loss 3.78 and 3.79 against 3.8, every energy within about 3 kWh). The hourly ePTO term made both runs time the design day, which is the winter speed correction; every new step was one join to a register the runs already read, announced by the new files, sheet and quotation line. Re-rooted in the same world as architecture 9.",
-      "shell": {
-        "question form": "how-many",
-        "second-sentence opener": "for",
-        "rounding opener": "energies",
-        "deliverable set": "docx+xlsx"
-      }
-    }
-  ],
-  "notes": "stump_strategy other: errors-in-variables with a source-specific error structure (classical, Berkson, exact) identified from a gold-standard record of the same sources | 2026-11-09 architecture 8: re-rooted in the same world on the client's instruction to keep the data package (architecture 5's review); four SME judgments added (combination mass, drops, ePTO fridge units, the winter speed kept), the knife-edge closed (no duty within 13 kWh). | 2026-11-10 architecture 9: re-rooted in the same world after both architecture 8 runs landed; the difficulty moved into what the runs named and did not test (the calibration's transfer to the pilot's part loads, the battery loss's form behind self-confirming checks, the winter speed); the hourly ePTO term, the Electric PTO quotation line and the ePTO units removed.",
-  "registered": "2026-11-10T02:15:26Z",
-  "lineage_shells": [
-    {
-      "question form": "which",
-      "second-sentence opener": "i'd",
-      "rounding opener": "van",
-      "deliverable set": "png+xlsx"
-    },
-    {
-      "question form": "how-many",
-      "second-sentence opener": "for",
-      "rounding opener": "energies",
-      "deliverable set": "docx+xlsx"
-    }
-  ],
-  "answer_shape": "allocation-sensitivity",
-  "weight": "measurement",
-  "chain_signature": [
+  {
+   "architecture": "v5",
+   "spent": "2026-11-09 portal return (reward 68.5, not stumped): the order rested on one recognition, the declared payloads' dilution, with Tabergs Travaror's exact declarations a free check; the cold form never moved a duty",
+   "driver": "single deep step"
+  },
+  {
+   "architecture": "v6",
+   "spent": "2026-11-09 platform run 1 landed every graded result by three reflexes (measured error-variance correction, a temperature quadratic, a temperature-controlled capacity regression), naming the distance transfer as an untested assumption"
+  },
+  {
+   "architecture": "v7",
+   "driver": "A fitted physical model is carried to new units that sit outside its range on one covariate, whose value for the new units is itself an estimate: a planned figure corrected by a weather-dependent ratio the old units show; beside it, a slope under source-specific measurement error, a nonlinear response chosen out of sample and a degradation separated from a reversible seasonal effect.",
+   "driver_concrete": "Each Värnamo duty's battery energy on the January design day is forecast from the Jönköping pilot's telematics, whose payloads are the shippers' declared weights: the furniture and packaging shippers' clerks estimate them (scattered around the weighed load), the dairy declares a standard load the weighed one scatters around, and the timber merchant prints its own weighbridge figure, so the pilot's fitted payload slope is about 0.8 kWh per tonne per 100 km where the loads' true effect is about 2.1, and only each shipper's declarations calibrated on the Värnamo weighbridge's weighed loads give the slope that the heavy steel and aggregates duties and the light insulation duty turn on.",
+   "stump": "The careful pass that makes the platform run's three corrections (2.1 kWh per tonne per 100 km, a curved cold form, 3.8 per cent loss) forecasts in proportion to distance at the pilot's speeds and orders 9 (V03, V11, V30 in), every energy 9 to 21 kWh low; adding speed at the routing tool's figure orders 3 and at the year's actual-to-planned ratio 5; only the ratio read at -5 C (0.82) lands the six.",
+   "answer": "Order 6 battery-electric tractors for Värnamo duties V02, V05, V09, V14, V16 and V18; V03, V07, V11, V21, V24, V27, V30 and V33 stay on diesel",
+   "chain_signature": [
+    "missingness-measurement",
+    "modeling",
+    "forecasting",
+    "synthesis"
+   ],
+   "weight": "measurement",
+   "answer_shape": "allocation-sensitivity",
+   "fate": "spent 2026-11-09 on the platform: both runs earned the payload term (1.98, 1.97), the loss (3.75) and the cold curve, fitted squared routing-tool speed (the year's ratio absorbed) and ordered 5, V14 excluded at 444.4 and 443.0 kWh against a 442 kWh limit (golden 435.4); one duty, one judgment, a knife-edge margin, and the 10 kWh band held both verdicts. Re-rooted in the same world as architecture 8."
+  },
+  {
+   "architecture": "v8",
+   "driver": "A fitted physical model is carried to new units through covariates the old units' own records reveal only by joins to other registers: each new unit's speed (a planned figure corrected by a weather-dependent ratio), its whole moving mass on every leg (an equipment register's tare, read by item), the share of its route the load actually rides (each consignment taken off at its stop), and a time-based auxiliary draw present only on items whose equipment code says they take power from the unit; beside them a slope under source-specific measurement error and a degradation separated from a reversible seasonal effect.",
+   "driver_concrete": "Each Värnamo duty's January design-day energy is forecast from the Jönköping pilot: the declared payloads calibrated on the weighbridge, the combination's tare carried on every leg from the trailer register (double decks 22.5 to 22.7 t with the 2027 tractor against the pilot's 20.3), each note taken off at its stop (V03 and V11's loads ride 0.60 and 0.57 of their loaded km), the SR-60e ePTO fridge units drawing 4.4 kW for the whole duty (V24, V30) while the diesel and axle-generator units draw nothing (V33), and each duty's speed at the pilot's -5 C actual-to-planned ratio (0.77, against 0.89 over the year).",
+   "stump": "The careful pass the architecture 7 runs made (calibrated payloads, the curved cold form, the loss net of the cold, squared speed at the year's ratio, energy per km and per departing tonne) orders 5, pricing V03 and V11 near 500 kWh on a payload term of 2.9; with the trailer left out it orders 9 (V02, V14 in), with every load to the last drop 5 (V03, V11 out), without the fridge term 9 (V24, V30 in), with every reefer drawing 7 (V30 in, V33 out), at the routing tool's speed 0, at the year's ratio 4; only all of them lands the seven.",
+   "answer": "Order 7 battery-electric tractors, for V03, V05, V09, V11, V16, V18 and V33; V02, V07, V14, V21, V24, V27 and V30 stay on diesel",
+   "chain_signature": [
+    "missingness-measurement",
+    "modeling",
+    "data-discovery",
+    "forecasting",
+    "assembly-reconciliation",
+    "forecasting",
+    "synthesis",
+    "synthesis"
+   ],
+   "weight": "measurement",
+   "answer_shape": "allocation-sensitivity",
+   "fate": "spent 2026-11-09 on the platform: both runs landed the golden exactly (order 7, V03 V05 V09 V11 V16 V18 V33; payload 2.24 and 2.23 against 2.2, loss 3.78 and 3.79 against 3.8, every energy within about 3 kWh). The hourly ePTO term made both runs time the design day, which is the winter speed correction; every new step was one join to a register the runs already read, announced by the new files, sheet and quotation line. Re-rooted in the same world as architecture 9.",
+   "shell": {
+    "question form": "how-many",
+    "second-sentence opener": "for",
+    "rounding opener": "energies",
+    "deliverable set": "docx+xlsx"
+   }
+  },
+  {
+   "architecture": "v9",
+   "driver": "A fitted model is carried to new units through three estimates the old units' records support only after diagnostics: a slope on a covariate known through third-party reports whose error model transfers between two populations but whose calibration line does not, because the populations' true levels differ; a permanent decline whose early part a straight line misses and a checks-at-a-year-apart reading confirms wrongly; and a speed set by a planned figure corrected at the design condition rather than on average.",
+   "driver_concrete": "Each Värnamo duty's January design-day energy is forecast from the Jönköping pilot: the pilot's regional duties carry 75 to 89 per cent of the loads the same shippers declare at Värnamo, so each pilot duty's loads come from its own declarations with the shipper's declaration error read on the Värnamo weighbridge (payload term 1.9; the terminal's line gives 1.5, and Gränna Dryckes' scale days confirm the duties' own loads); the batteries lose 4.6 per cent in the first year, most of it in the first four months (a straight line gives 3.1, the same months a year apart 2.8); each duty runs at 0.76 of the routing tool's speed at -5 C (0.89 over the year).",
+   "stump": "The careful pass (the union of the recorded runs) orders 5, pricing V02, V14 and V18 at 450 kWh against its own 445 kWh limit; at the design-day speed it orders 10 (V07, V21 in on a payload term of 1.5); each of the three estimates put right alone still orders wrongly (2, 3 or 10 duties); only all three land the eight.",
+   "answer": "Order 8 battery-electric tractors, for V02, V03, V05, V09, V11, V14, V16 and V18; V07, V21, V24, V27, V30 and V33 stay on diesel",
+   "chain_signature": [
     "missingness-measurement",
     "modeling",
     "forecasting",
     "synthesis",
     "synthesis"
-  ],
-  "depth_level": 5,
-  "doctrine": "throughout",
-  "client_subdomain": "regression-classification-model-diagnostics",
-  "results": "R1 payload term 1.9 kWh/t/100 km (1.7 to 2.4; each pilot duty's own loads, the declaration error transported); R2 first-year loss 4.6 per cent (4.2 to 5.6; curved, net of the cold), limit 438 kWh; R3 fourteen design-day energies (at the -5 C speed ratio 0.76, with the tare and drops); R4 the verdicts; R5 order 8",
-  "shell": {
+   ],
+   "weight": "measurement",
+   "answer_shape": "allocation-sensitivity",
+   "shell": {
     "question form": "which",
     "second-sentence opener": "each",
     "rounding opener": "energies",
     "deliverable set": "docx+xlsx"
+   },
+   "fate": "spent 2026-11-10 on the platform: both runs landed the golden (order 8: V02 V03 V05 V09 V11 V14 V16 V18; run 1 payload 2.00, loss 5.08 by a square-root-age model, a separate winter driving-time model, unloading by pallet share, per-shipper calibration, 400 weekly bootstraps; run 2 payload 1.92, loss 4.51, a routing-hours-to-January-driving-hours model, a declaration regime split at 17 August 2026 found from the error, 600 bootstraps). Every estimate the design priced as a step the runs named and did not take was taken: the calibration's transfer to the pilot's part loads, the early-life loss and the winter speed were each a mechanism one file's plot or one join carried. The world is left after architectures 5 to 9."
   }
+ ],
+ "notes": "stump_strategy other: errors-in-variables with a source-specific error structure (classical, Berkson, exact) identified from a gold-standard record of the same sources | 2026-11-09 architecture 8: re-rooted in the same world on the client's instruction to keep the data package (architecture 5's review); four SME judgments added (combination mass, drops, ePTO fridge units, the winter speed kept), the knife-edge closed (no duty within 13 kWh). | 2026-11-10 architecture 9: re-rooted in the same world after both architecture 8 runs landed; the difficulty moved into what the runs named and did not test (the calibration's transfer to the pilot's part loads, the battery loss's form behind self-confirming checks, the winter speed); the hourly ePTO term, the Electric PTO quotation line and the ePTO units removed. | 2026-11-10 architecture 10: re-rooted in a new world after both architecture 9 runs landed; a Finnish municipal bus operator's depot electrification, the pilot's blocks selected on the diesel record, the heater's share, the night supply. 2026-11-10 heart: test.same_driver BLOCKed (objective, G6, forecasting) against task9 v3's lineage; redrawn to the honest labels: the decisive gap is the population (the pilot ran the blocks the planner picked from the fuel figures) and Gate G is binding_constraint, the determinism judge's own classification (the night's charging capacity under the connection agreement cuts the 23 qualifying blocks to 18, so the limit itself changes the naive pick).",
+ "lineage_shells": [
+  {
+   "question form": "which",
+   "second-sentence opener": "i'd",
+   "rounding opener": "van",
+   "deliverable set": "png+xlsx"
+  },
+  {
+   "question form": "how-many",
+   "second-sentence opener": "for",
+   "rounding opener": "energies",
+   "deliverable set": "docx+xlsx"
+  },
+  {
+   "question form": "which",
+   "second-sentence opener": "each",
+   "rounding opener": "energies",
+   "deliverable set": "docx+xlsx"
+  }
+ ],
+ "answer_shape": "schedule-capacity",
+ "weight": "hard-to-measure",
+ "chain_signature": [
+  "assembly-reconciliation",
+  "causal-reasoning",
+  "missingness-measurement",
+  "forecasting",
+  "modeling",
+  "synthesis",
+  "synthesis",
+  "synthesis"
+ ],
+ "depth_level": 5,
+ "doctrine": "throughout",
+ "client_subdomain": "regression-classification-model-diagnostics",
+ "results": "R1 each weekday block's diesel use, litres per 100 km, tank to tank over the dispatch log; R2 the pilot blocks' gap to the rest (the nine thriftiest short blocks); R3 the cabin heat the pilot's fuel heaters supplied at -15 C, kW; R4 the 48 design-day energies through the diesel bridge; R5 the first-winter capacity loss; R6 the verdicts; R7 the qualifying blocks' night demand under the supply; R8 the count and the set",
+ "shell": {
+  "question form": "how-many",
+  "second-sentence opener": "every",
+  "rounding opener": "diesel",
+  "deliverable set": "pptx+xlsx"
+ },
+ "architecture_spent": false,
+ "registered": "2026-11-10T04:39:46Z"
 }

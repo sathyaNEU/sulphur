@@ -1,202 +1,267 @@
-# task4: how many battery-electric tractors to order for the Värnamo duties in 2027, and which duties they take
+# task4: how many battery-electric buses to order for the Niittylä depot's weekday blocks in 2027, and which blocks they take
 
 ## Draw
 
-Subdomain: Regression, classification & model diagnostics (General Statistics & Data Science; house domain Supply Chain & Logistics, fleet electrification)
+Subdomain: Regression, classification & model diagnostics (General Statistics & Data Science; house domain Supply Chain & Logistics, a bus operator's depot electrification)
 Analysis type: Forecasting & Predictive Modeling
-Answer shape: An allocation plus its sensitivity (which shortlisted duties get the tractors, each duty's design-day energy against the limit, and the order each shortcut would place instead)
-Weight: measurement: the order turns on three quantities the pilot records only indirectly and the runs' own checks do not test (the loads the pilot's duties carried, known only as shippers' declarations whose terminal calibration does not carry to the pilot's part loads; the battery's permanent loss, read through an energy-per-SOC proxy whose early-life fall a straight line and a year-apart check both miss; the speed on a winter day, known only as a planned figure); task1 sits on synthesis and task7 on modeling
-Data-native sentence: the pilot's daily summaries carry one energy figure and two SOC readings per tractor-day, while the load each day carried exists only as a clerk's estimate on a note whose error the Värnamo weighbridge measures for loads of another size, so every quantity the order turns on is a measurement problem before it is a forecast.
-People: Georg Pålsson, fleet manager, who places the order (FES-2's owner); Inger Norman, transport planner, whose workbook and memo the golden are; Pierre Kjellberg, the dealer's key account manager, who signs the quotation (`guard.py names --geo Sweden --seed 505`). None appears in the prompt.
+Answer shape: A schedule under capacity (the weekday blocks a battery-electric bus can take, each with its design-day energy against the limit, scheduled under the depot's night charging capacity in the plan's priority order, with the count that comes out)
+Weight: a hard-to-measure quantity: each weekday block's battery energy on the design day for buses that have never run it, where the six pilot buses ran only the blocks the planner picked from the fuel figures, the pilot's battery record leaves out the heat its fuel-fired heaters supplied, and the block's difficulty survives only in the diesel fleet's fuel-card statement; task16 sits on investigation and task17 on modeling
+Data-native sentence: the pilot's telematics carry one energy figure per bus-day for nine thrifty blocks and the fuel-card statement carries every block's diesel use only as litres between fills of buses that rotate over the blocks, so the quantity the order turns on exists in no file and has to be built from two technologies' records joined over the dispatch log.
+People: Simo Virta, the electrification programme manager, whose workbook and slides the golden are and who signs the standard; Eveliina Pajunen, the fleet manager, the connection agreement's addressee; Juhani Nousiainen, the dealer's key account manager, who signs the quotation; Kaarina Peltola, the distribution company's connection engineer (`guard.py names --geo Finland --seed 1004`). None appears in the prompt.
 
-Architecture 9, 2026-11-10, in the same world (the client's instruction to keep the data package; the author's
-instruction to reship a level 5 task that is genuinely stumped). Architecture 8's two platform runs landed the
-golden exactly (`runs/arch8/`): every step it added was one join to a register the runs already read, and its hourly
-fridge term made both runs time the design day, which is the winter speed correction. This architecture removes the
-fridge draw and puts the deciding work where the four recorded runs (architectures 7 and 8) said what they assumed
-and did not test it, or computed the answer and set it aside: "Shipper calibration transfers between depots... no
-measured Jönköping payload sample directly verifies it"; "the duty-fixed-effects specification estimates 2.80...
-material model uncertainty" (dismissed for the pooled figure); year-over-year and first-year-only checks of a
-straight-line battery loss; "Target routes are longer and faster in routing terms than the pilot routes, so the
-forecasts involve extrapolation".
+Architecture 10, 2026-11-10, a new world after architecture 9 (the Fryele tractor order, the fifth architecture in that
+world) was landed by both platform runs (`runs/arch9/`): every estimate it priced was a per-unit mechanism one file's
+plot or one join carried, and the record of six runs in that world says what beats them is evidence in a file they
+dismiss on its face, a structure across files nothing names, a count over many units in which small sign-consistent
+biases accumulate, and selection in which units reached the training record. This architecture is designed on those
+four and nothing else.
 
 ## Deep reasoning
 
-Task type: regression, classification, model diagnostics (General Statistics & Data Science), serving Forecasting & Predictive Modeling: each shortlisted duty's 2027 battery energy on the January design day, forecast from a fitted energy model carried to duties the pilot never ran, against a limit that is itself an estimate of the ordered battery after a year in service.
-Domain test: the results are a regression slope on a covariate observed through third-party reports with classical error, where the error model transports between two populations and the calibration line does not (the regression diagnostic the subdomain is about: the within-duty and between-duty estimates disagree on the line and agree on the transported model); a degradation curve whose form is chosen by fit and read inside the observed ages, net of a reversible seasonal effect; and an extrapolation in speed through a weather-dependent ratio.
-Swap: "how many community nurses to hire and which rounds they take, from the pilot's visit times" keeps a fitted time model but loses the declared payload with its clerk's error, the battery's early-life fade read through state of charge, and air drag on a winter road's speed; the call stops making sense.
-Where the weight sits: R1 and R2, two measurement problems the pilot's records support only after diagnostics: comparing each pilot duty's declarations with its shipper's at the terminal and carrying the error model rather than the line (then confirming on the drinks maker's scale days and the within-duty fit), and fitting the battery's age form against a straight line and seeing why the year-apart check agrees with the wrong one.
-Layer 1: the dairy and the pallet maker declare their planned pallets at a standard weight each; the fleet portal uploads a day twice after a modem reconnect; the tractor's ambient sensor drops out (the station file covers it); the TMS types a declared weight three ways (12000, 12 000 kg, 12,00 t); the weighbridge re-weighs a CMR after an axle limit; the Värnamo duty codes were re-keyed at the April 2026 TMS upgrade; spare tractors change the stored tare; 1.2 per cent of weighings have no declaration; a multi-drop day's declared weight is split over several notes; SOC is logged in whole per cent. Each is asserted neutral (SF5 to SF8, SF27, SF33) and none decides a result.
-Not one thing: three estimates each move the order, and each put right alone inside the careful model still orders wrongly (the duties' own loads alone: 2 tractors; the curved loss alone: 3; the design-day speed alone: 10; effort.json hints); the strongest single piece rescues 1 of 5 results.
-One-fact test: the most useful single sentence ("the pilot's regional duties carry lighter loads than the same shippers' terminal runs, so the terminal's calibration line does not carry to them") rescues 1 of 5 results (R1) on the careful pass, which then orders 2; the loss sentence rescues 1 (R2, order 3), the winter speed sentence none (order 10). The re-judge thread's best sentence joined two of them ("control for ambient temperature and de-bias the declared payloads"), which is two hints.
-Not semantics: every field read right (the declared weights, the weighbridge's declared and weighed columns, the SOC readings, the routing tool's driving time) still leaves the terminal's line on the pilot's loads, a straight line in age and the year's speed ratio; nothing filed says the pilot's loads differ from the terminal's, that the battery fades fast early, or that winter roads run slower than the plan.
-Not rule application: FES-2 files the WHAT (2.1 the duty with its drops, 2.2 the energy the tractor draws, 2.3 the usable battery less the first year's permanent loss taken from the company's own tractors, 4.1 the design day, 4.2 the planning load, 4.3 the limit, one tractor a duty); nothing filed names a calibration, an error model, an age form, a speed, a ratio or a temperature form.
-Estimand: FES-2 2.1 to 2.3 and 4.1 to 4.3 with the quotation's 540 kWh usable and 11,980 kg tractor: population the fourteen shortlisted Värnamo duties (fleet_plan_2027.xlsx), outcome the battery energy of a round trip depot out to depot in with its drops, window a January working day at -5 C departing with the mean net payload weighed November 2025 to October 2026, unit kWh and tractors, comparison each duty against 85 per cent of 540 kWh less the share a battery permanently loses in its first twelve months in service as the company's own tractors show it; the duty's speed and combination on that day are part of the forecast, not filed figures.
-No decoy: no memo, draft or stakeholder figure; the quotation's warranty (75 per cent after 8 years) is a floor the dealer guarantees, not a first-year figure, and no file states a duty's design-day energy, a load factor, a consumption rate, a speed or a loss.
+Task type: Regression, classification & model diagnostics (General Statistics & Data Science), serving Forecasting & Predictive Modeling: each weekday block's 2027 battery energy on the January design day, forecast from a six-bus pilot that ran a selected ninth of the blocks, held against a limit that is itself an estimate (the usable battery after the first winter) and a night capacity summed over the blocks ordered.
+Domain test: the results are a forecast carried from a sample selected on the outcome's own determinant (the planner put the pilot on the blocks with the lowest diesel use, so the pilot's covariates cannot identify the between-block effect and the old technology's consumption record is the measurement of it: a selection-on-observables problem whose observable sits in another file); a measurement gap in the pilot's own record (heat the pilot took from fuel that the new buses take from the battery) read from a second record; a degradation share from state-of-charge logs with its form chosen by fit; and a capacity constraint over the forecasts that turns sign-consistent per-block shortfalls into buses. A careful statistician defends each as a statistical judgment; none is subject-matter arithmetic with a label.
+Swap: "how many community nurses to hire for the clinic's rounds, from the pilot team's visit times" keeps a forecast from a pilot but loses the fuel-card statement that carries each round's difficulty, the fuel-fired heater whose share the new units take from the battery, the state-of-charge logs and the night supply; the count stops making sense.
+Where the weight sits: R4, the 48 design-day energies, which take the longest work: the diesel rate per block has to be rebuilt tank to tank over the dispatch log (R1), the pilot's own record split into a per-km rate by block and a per-hour cabin draw by temperature, the heaters' share read from the HVO fills against the register's rating and the quotation's heating spec (R3), and the bridge from the diesel rate to the pilot's per-km rate fitted over the 49 blocks an electric bus ran and carried to the 39 it never ran. None of it is clever; all of it is long, and every piece ends in a figure that can be checked.
+Layer 1: the fuel-card provider caps a transaction at 250 litres and the night shift swipes again for the rest; eight cards were reissued mid-period and three spare cards are used with the fleet number typed at the pump; odometers are typed with slips and blanks; the dispatch log changed its block codes with the planning system on 11 August 2025 and exported registrations instead of fleet numbers in its first two months; the telematics portal uploaded four May days twice and the buses' ambient sensor drops out; the airport station has a three-week gap in April 2023 the town station covers; the charging sessions are stamped in UTC; the depot pump was out for a week in August 2025 and every fill went to a street station; six old buses were withdrawn in June 2025. Each is produced by its process, asserted neutral in `checks.py` (SF5 to SF10) and none decides a result.
+Not one thing: the strongest single piece is the diesel bridge (the pilot's selection on the fuel figures); a run that nails it alone still forecasts every block 4.3 kW of heating an hour light (the fuel heaters' share), passes 27 blocks and orders 20 under the night's capacity (effort.json hint 1); a run that nails the heaters alone orders 19; the verdicts summed without the night order 23; each result is graded on its own and the chain lands only when all of them do.
+One-fact test: the most useful single sentence ("the pilot blocks were chosen for their low diesel use, and the diesel figures carry the difficulty the timetable's kilometres, climb and speed miss") rescues 1 of 8 results (R2) on the careful pass, which then orders 20; the heaters' sentence rescues 1 (R3, order 19); the night's sentence none (the careful pass already schedules the night). Agrees with `effort.py`.
+Not semantics: every field read right (the statement's litres and timestamps, the dispatch log's codes and kilometres, the telematics' energy and HVAC columns, the sessions' UTC stamps, the register's heater line, the quotation's heating spec) still leaves the pilot's fit carried on its covariates, the pilot's own cold response read at -15 C, and the per-block verdicts summed; nothing filed says the pilot blocks were picked for their fuel figures, that the pilot's battery record leaves out the heaters' heat, or that the night cuts the list below the blocks that pass.
+Not rule application: DES-1 files the WHAT (2.1 the block, 2.2 the block's energy, 2.3 the usable battery less the first winter's loss from the company's own buses, 2.4 the design day, 3.2 depot charging under the connection agreement, 3.3 fuel per 100 scheduled km, 4.1 the 85 per cent rule, 4.2 the priority list cut at the first block the night cannot recharge, 4.3 one bus a block); the agreement files 690 kW from 21:00 to 07:00; the quotation files 480 kWh usable and all-electric heating with boosters below -10 C; the register files the heaters' 35 kW at 3.9 l/h. Nothing filed names a bridge, a selection, a deconvolution, an age form, a conversion of litres to heat, or a schedule.
+Estimand: DES-1 2.1 to 2.4, 3.2, 3.3 and 4.1 to 4.3 with the quotation's 480 kWh and the agreement's 690 kW: population the 48 weekday blocks of the 2027 fleet plan (all of them, none observed under the 2027 model), outcome each block's traction-battery energy depot out to depot in, window a January working day at a daily mean of -15 C at the town's station, unit kWh and buses, comparison each block against 85 per cent of 480 kWh less the share the company's own buses lose in their first twelve months, then the priority list cut at the first block the night period cannot recharge with those above it; the diesel figures over November 2025 to October 2026 per 100 scheduled km; the night demand of every qualifying block at the connection point.
+No decoy: no memo, draft or stakeholder figure; the fleet plan ranks the blocks by the city's zone priority, not on any energy or decision basis; the quotation's warranty (70 per cent at eight years) is a floor, not a first-year figure; no file states a block's design-day energy, a per-km rate, a heating load, a loss or a count.
 No replay: no result re-derives a published figure and no stated number in the pack is wrong.
-Pinned: run on the cut pack and the clean truth (checks.py, 353 assertions; verify.py's per-duty moments correction and per-tractor log-of-age loss): the payload term over the error additive or multiplicative, read on the last twelve months, each day at its duty's mean declaration and the within-duty fit, 1.89 to 2.00 (band 1.7 to 2.4); the loss over every curved age form (square root, square root and line, log and line, piecewise line with knots at 3, 6 and 12 months, early-loss time scales of 0.20 and 0.45 years, the straight line on the first year's days) and cold term, 4.3 to 5.5 (band 4.2 to 5.6); the speed ratio over five forms, 0.758 to 0.783 (band 0.74 to 0.79); knots at 14, 18, -2 and 2 C, a quadratic, temperature bins, the station's temperature, either year alone, speed as a straight line, one coefficient for tare and payload, the drops at equal shares: every one orders the eight with every energy within 8 kWh and clear of its limit by 4 kWh or more.
-Run forecast: R1 lost to dismissed own evidence and an unfinished chain (every recorded run took each declaration to the terminal's weighed-on-declared line by shipper and wrote that the transfer between depots was unverified; arch 8's runs computed the within-duty slope and set it aside; the careful pass files 1.5 and sets aside its own within-duty 2.3); R2 lost to a self-confirming check (every run fitted a straight line in age with tractor and cold terms and checked it against the same months a year apart, which agrees at 2.8 because it starts after the early loss; the first-year-only fit at 4.3 is computed and set aside); R3 lost to a method shortcut (both arch 7 runs fed the routing tool's speed at the year's ratio, energies 10 to 20 kWh high; arch 8's runs timed the design day only because of the hourly fridge term, now gone, and a run that times it is Partly here); R4 Partly; R5 lost (5 on the careful pass, 10 at the design-day speed).
-Strategy label: WORKS IN FORM (a forecast carried to a population the fit never saw, through a covariate whose calibration does not transport, beside a degradation whose form the record chooses).
-Depth level: 5. Three independent estimates each move the order and each alone leaves it wrong (2, 3 and 10 duties with one put right inside the careful model); the shortcuts land on 12 distinct wrong orders over 17 routes (effort.json); the careful pass orders 5 and its design-day variant 10, disagreeing with each other and with the eight.
-Lesson: a calibration estimated on one population is a model of that population's true values as well as of the instrument; under classical error only the error model carries, and a check that varies a nearby choice inherits the blind spot it was meant to test.
+Pinned: run on the cut pack and the clean truth (`checks.py`, 124 assertions; `verify.py` on its own code path): the diesel rates by least squares over fill intervals mapped by timestamp, by date, with and without the second swipes merged, 48 of 48 within 0.7 of each other (the fill-day and per-bus reads 30 or more blocks outside); the per-km rate bridged on the diesel figure alone, with the hours per km, or for every block, every energy within 10 kWh and the same order; the station's temperature in place of the sensor's, within 8 kWh; the loss over curved, square-root and log age forms 4.3 to 4.88 (band 3.8 to 5.0; a straight line 2.96); the heaters' heat from the fills at the register's rating (4.3 kW), the public lower heating value at 82 to 92 per cent (3.9 to 4.4), both inside 3.8 to 4.8, the fault weeks with the boosters capped at 7.1 to 8.0 kWh a litre as a confirmation of the order of magnitude; the band's edges and the loss band's edges each landing the same verdicts and the same 18 (SF27); the night by the exact flow between the blocks' returns and departures, a least-slack schedule, the period's energy and 10 or 20 minute plug-in margins all cut at the 19th, the 18 holding with energies 3 per cent higher and the 19th fitting only with them 2 per cent lower; no block within 26 kWh of the limit in the truth and 18 in the golden, so the 10 kWh grading tolerance stays on one side of the limit for every block.
+Run forecast: R1 earned (the runs reconstruct the fuel figures for the business-case ask, a reconciliation they do by reflex); R2 lost to dismissed own evidence (the fuel-card file set aside for the forecast because litres do not measure battery energy, so the pilot blocks are never set against the rest); R3 lost to narrow look at broad data (the pilot's own HVAC record read at -15 C, the register's heater line and the statement's HVO fills never joined to it); R4 lost to a method shortcut (the pilot's fit carried on kilometres, climb and hours per km, 58 kWh light on average); R5 earned (a curved age form is the runs' first move); R6 and R7 fall with R4 (38 blocks pass, 13.0 MWh); R8 Partly (21 against 18, the set sharing more than half).
+Strategy label: WORKS IN FORM (a forecast carried from a selected sample to the population through the old technology's own record, beside a measurement gap read from a second record and a capacity constraint over the forecasts).
+Depth level: 5. Four independent judgments each move the count (the bridge: 20 alone; the heaters' share: 19 alone; the night's capacity: 23 without it; the charging losses: 20 without them) and the first winter's loss sets the limit the verdicts are read against; the shortcuts land on seven distinct wrong answers over seven routes (effort.json routes), the careful pass orders 21 and the quick pass 33, and the honest family (three bridges, two temperatures, three age forms, three schedulers) lands the 18 every time.
+Lesson: a pilot whose units were chosen on the old technology's own record carries that record's information in its selection, so the forecast for the unselected units is identified by the old record and not by the covariates the pilot's data show; a load the pilot took from a second source is invisible in the pilot's own meter; and a capacity shared across many forecasts turns shortfalls too small to see per unit into whole units. No build on file teaches the first two.
 
 ## Results chain
 
 | ID | Result (checkable) | Area | Pinned by | Band | Hurried analyst | Depends on | Graded as |
 |---|---|---|---|---|---|---|---|
-| R1 | one tonne of payload adds 1.9 kWh per 100 loaded km | missingness and measurement | the weighbridge's declared and weighed loads per shipper and note period (the error model); each pilot duty's own declarations; the drinks maker's scale-weighed pilot days; the within-duty fit | 1.7 to 2.4 | dismissed own evidence: the terminal's weighed-on-declared line carried to the pilot, 1.5, its own within-duty 2.3 set aside | - | Component 1 |
-| R2 | the batteries' first-year permanent loss, 4.6 per cent (usable 515 kWh, limit 438 kWh) | modeling | FES-2 2.3; energy per full charge on a level per tractor, an age form chosen by fit and degrees below 20 C | 4.2 to 5.6 | self-confirming check: a straight line in age, 3.1, confirmed by the same months a year apart (2.8) | - | Component 2 |
-| R3 | the fourteen design-day energies, nearest 10 kWh (V02 430, V14 430, V18 430, V07 450, V21 450 ...) | forecasting | FES-2 4.1, 4.2; the model with every term (the combination's tare and the drops included, joins the recorded runs made), each duty at its design-day speed (the pilot's actual-to-planned ratio at -5 C, 0.76, band 0.74 to 0.79 over five forms) | each within 10 kWh | method shortcut: the routing tool's speed at the year's ratio (0.89, both arch 7 runs), 10 to 20 kWh high on most duties | R1 | Ask 1 |
-| R4 | each duty's verdict against 438 kWh | synthesis | FES-2 4.3 | exact per duty (partial credit from three quarters of the duties: an all-electric answer gets 8 of 14) | unfinished chain: 11 of 14 on the careful pass | R2, R3 | Ask 2 |
-| R5 | order 8: V02, V03, V05, V09, V11, V14, V16, V18 | synthesis | FES-2 4.3, one tractor a duty | exact | unfinished chain: 5 on the careful pass, 10 at the design-day speed, 2, 3 or 10 with one estimate put right | R2, R3 | Recommendation |
+| R1 | each weekday block's diesel use over November 2025 to October 2026, litres per 100 scheduled km (37.2 to 62.4; 48 cells) | assembly and reconciliation | DES-1 3.3; the fuel-card statement's fills tank to tank over the dispatch log's bus-days, by least squares over the intervals (the second swipe merged, the spare cards by the typed fleet number) | each within 0.7 of the golden (the timestamp, date and unmerged readings within 0.7 of each other) | method shortcut: each fill charged to the block run on the fill's day (30 or more blocks off by over 0.7), or every block given its commonest bus's yearly rate | - | Ask 1 |
+| R2 | the pilot blocks' diesel use against the rest: 46.2 against 49.1 l/100 km, a gap of 2.9; ranks 12 to 28 of the 48 and the thriftiest half of the 33 blocks of 225 km or less on the 2024 timetable | causal reasoning | R1's rates over the nine blocks with 30 or more electric weekdays against the other 39 | gap within 1.0 | dismissed own evidence: the fuel-card file set aside for the forecast because litres do not measure battery energy, so the comparison is never made and the selection never stated | R1 | Component 1 |
+| R3 | the heat the pilot buses' fuel-fired heaters supplied at -15 C: 4.3 kW (0.48 l/h of HVO at 35 kW for 3.9 l/h) | missingness and measurement | the electric buses' HVO fills on the statement tank to tank against the days' hours and temperatures (48 intervals), the register's heater rating, the quotation's all-electric heating below -10 C; the fault weeks in the workshop log, with the boosters capped, give 7.1 to 8.0 kWh a litre | 3.8 to 4.8 kW (half a kW either side of the golden) | narrow look at broad data: the pilot's own HVAC record read at -15 C (8.4 kW) and the fills never read as cabin heat | - | Component 2 |
+| R4 | the 48 design-day energies for the 2027 model, nearest 10 kWh (290 to 490) | forecasting | DES-1 2.2 and 2.4; the per-km rate outside HVAC by block, bridged from R1 over the 49 blocks an electric bus ran (slope 0.0309, residual 0.024 kWh per km), plus hours out times 12.4 kW (the pilot's 8.1 and R3's 4.3) | each within 10 kWh (the bridge with hours per km, the bridge for every block and the station's temperature all inside) | method shortcut: the pilot's fit carried on kilometres, climb and hours per km with the pilot's cold response read at -15 C, 58 kWh light on average, 46 of 48 cells outside | R1, R3 | Ask 2 |
+| R5 | the first-winter loss of usable battery, 4.3 per cent (usable 459.5 kWh for planning) | modeling | DES-1 2.3; each electric bus-day's energy over its state-of-charge drop on age with a cold term and a level per bus, a form with a fast early loss chosen by fit | 3.8 to 5.0 | self-confirming check: the quoted capacity taken as usable (the quick pass); a straight line in age at 2.96 checked against itself; the careful pass earns it on a curved form (4.57 by square root) | - | Ask 4 |
+| R6 | each block's verdict against 390.5 kWh (23 pass) | synthesis | DES-1 4.1 with the quotation's 480 kWh and R6 | exact per block (partial credit from four fifths of the blocks: an all-electric answer gets 23 of 48) | unfinished chain: 35 pass on the careful pass's energies | R4, R5 | Ask 3 |
+| R7 | the design night's demand of every qualifying block at the connection point: 8.7 MWh (8.0 into the batteries at 0.92), against 7.0 MWh the night period delivers | synthesis | DES-1 3.2 and the agreement's 690 kW from 21:00 to 07:00; the sessions' charging efficiency | within 0.3 MWh | unfinished chain: 38 blocks at 58 kWh light summed to 13.0 MWh (the careful pass); battery energy over 33 blocks with no losses (the quick pass) | R4, R6 | Ask 5 |
+| R8 | the order: 18 buses for M101, M107, M108, M113, M116, M119, M122, M123, M124, M129, M134, M135, M137, M139, M140, M142, M146 and M148 | synthesis | DES-1 4.2 and 4.3: the priority list cut at M125, which the night cannot recharge with the 18 above it (the exact flow falls about 150 kWh short of it between the blocks' returns and departures; the least-slack schedule recharges the 18) | exact (the honest family lands the 18 under three bridges, two temperatures and three schedulers) | unfinished chain: 21 on the careful pass (38 without the night), 23 with the verdicts summed, 20 without the charging losses, 20 with the bridge alone, 19 with the heaters alone; with the quoted capacity in place of the first winter's usable no block changes side | R4, R5 | Recommendation |
 
-Carry-forward: R1 and R2 stand alone on their own inputs (the bridge and the pilot's notes; the pilot's SOC records); R3 falls with R1 or the design-day speed; R4 and R5 fall with R2 or R3. No analytical result carries more than half of the others: R1 sits upstream of R3 to R5, but put right alone it rescues none of them (the careful pass then orders 2; effort.json hints), because R2 and the winter speed carry the same three. Two pieces of work stay in the model and the workbook and are not graded on their own, because the stage 4 judge put them within a careful run's reach: the combination's tare and the drops (V02 and V14 22.6 and 22.5 t with the 2027 tractor; V03 and V11's loads riding 0.60 and 0.58 of their loaded km), and the -5 C speed ratio (0.76; Critical Components and the Supplementary Questions no longer state it as a graded figure, Step 8 shows it).
+Carry-forward: R1, R3 and R5 stand on their own inputs (the statement over the dispatch log; the HVO fills with the register and the quotation; the telematics' state of charge). R2 falls with R1 only if the rates are wrong by more than the gap, which no hurried read of R1 achieves on the pilot blocks alone. R4 falls with R1 or R3 (the two independent judgments), and R6, R7 and R8 fall with R4; R6 and R8 also fall with R5 only where a block sits between the two limits, which none does on this pack (the loss sets the limit the verdicts are read against and is graded as its own ask). No analytical result is the sole ancestor of more than one other (R3 of R4 only); a run that gets the bridge right and the heaters wrong, or the reverse, still loses R4, R5, R7 and R8 by its own figures, which is the AND the chain is built on.
 
 ## Hidden factor record
 
 | Factor | Real or constructed | Only in deciding units | Found by | Fix depth | Verdict |
 |---|---|---|---|---|---|
-| the pilot's regional duties carry part loads (75 to 89 per cent of the same shippers' terminal loads), so the terminal's weighed-on-declared line, which shrinks a clerk's estimate toward the terminal's loads, overstates every pilot duty | constructed as a dispatch process on all nine pilot duties, six shippers | no: every pilot duty is misread (0.5 to 4.4 t), the payload term moves, and the careful pass misreads energies by over 10 kWh on duties where nothing turns (asserted) | a targeted comparison across two files (each duty's declarations against its shipper's at the terminal), then modelling (an error model carried in place of the line), confirmed on the drinks maker's scale days and the within-duty fit | modelling (a measurement-error model transported between populations) | keep: one of three, rescues 1 of 5 |
-| the battery's early-life loss: most of the first year's fade in the first months, then a steady loss | constructed as battery physics on all six tractors, each with its own rate | no: every tractor's curve beats its straight line (asserted); the year-apart check misses it by construction of the comparison, not by a planted event | modelling (an age form chosen by fit against the straight line, net of the reversible cold) | modelling | keep: thin alone (a form choice), one of three |
-| energy per km rising with the square of speed, and the routing tool's optimism larger on winter roads | constructed as physics and a planning process across every day | no: all nine pilot duties and every day; the year's ratio misreads all fourteen energies | modelling: a speed term, then a ratio fitted against temperature read at -5 C | modelling | keep: one of three |
-| the combination's tare on every leg; a multi-drop load taken off along the run | constructed as physics and a delivery process across every trailer and multi-drop duty | no | a join to the trailer register; the notes on the stops | modelling | keep in the model, not graded alone (earned by careful runs) |
-| shipper-specific declaration error; the sub-zero cold curve and the cold's reversible capacity loss | constructed by simulating how each shipper writes a note, and as physics | no: 19 shippers, every day | modelling | modelling | keep: earned by careful runs |
+| the pilot's blocks were picked by the planner from the 2024 fuel figures among the short blocks, so the pilot's covariates (kilometres, climb, hours per km) miss the difficulty the chooser selected on (the stand-in blocks are the next three on the planner's list) (stops, dwell with the doors open, loads), which survives in every block's diesel use | constructed as the planner's process (a dispatch simulation over 48 weekday and 48 weekend blocks, every bus rotating) | no: the hurried fit is light on every non-pilot block, the ones far over the limit included (asserted: 5 or more blocks 40 kWh or more over the limit under-forecast by 15 kWh or more, where nothing turns), and the gap shows in the weekend blocks the decision never covers | a targeted comparison across two files (each block's diesel figure, itself rebuilt tank to tank over the dispatch log, against the pilot's), then modelling (a bridge from the diesel rate to the pilot's per-km rate over the 49 blocks an electric bus ran, carried to the 39 it never ran) | modelling (a bridge between two technologies' records, estimated, carried, and checked against the blocks with their own electric days) | keep: one of four, rescues 1 of 8 |
+| the pilot buses' fuel-fired cabin heaters carried the heat above the small heat pump's capacity below about -3 C (the fit's enable point -2.5), so the pilot's battery record flattens in the cold while the 2027 model, all-electric with boosters below -10 C, takes that heat from the battery | constructed as the heating system's physics on every pilot bus-day (a capacity, a heat pump range, a fuel heater enabled below a set point) | no: the share sits on all 48 blocks (hours out times 4.3 kW, 35 kWh or more on each), on every winter day of the pilot, and in the 48 HVO fill intervals across both winters | modelling: the HVO fills on the statement tank to tank against the days' hours and temperatures, converted at the register's heater rating, read beside the quotation's heating spec; confirmed on the two buses whose heater the workshop log shows out | modelling (a load the pilot's own meter never saw, estimated from a second record and carried to the new units' physics) | keep: one of four, rescues 1 of 8 |
+| the night supply shared over the buses ordered, so that per-block shortfalls too small to flip a verdict accumulate into buses (the verdicts summed give 23, the night 18; the careful pass's 58 kWh per block become three buses) | filed (the connection agreement's 690 kW in the night period; DES-1 4.2) and the blocks' own returns and departures | no: every qualifying block is scheduled; the cut moves with every route's energies (routes land on 18 to 23 under it) | an exact schedule over the night (a maximum flow over the intervals, or a least-slack order), which three readings agree on and an earliest-departure heuristic misses by less than the 19th's shortfall | modelling (a feasibility computed over all the blocks taken together, never a per-block check) | keep: moves the count by five against the verdicts summed |
+| the first winter's loss: fast in the first months, steady after | constructed as battery physics on all six buses, each with its own level | no: every bus's curve; the loss shows at every age | modelling (an age form chosen by fit on the state-of-charge logs, net of the reversible cold) | modelling | keep, earned by careful runs (sets the limit; on this pack no block sits between the limits with and without it) |
+| the buses rotate daily over the blocks and fill every second or third night, so no block's fuel is ever observed directly | constructed as dispatch practice over every bus-day and every fill | no: all 48 weekday and 48 weekend blocks | a join and a deconvolution (least squares over the fill intervals against the blocks' kilometres between them) | modelling (a reconstruction, not a lookup) | keep, earned by careful runs (the assembly result R1) |
 
 ## Effort test
 
 | Result | Quick pass | Careful but hurried | Thorough |
 |---|---|---|---|
-| R1 payload term, kWh per t per 100 loaded km | Missed | Missed | Right |
-| R2 first-year battery loss, per cent | Missed | Missed | Right |
-| R3 the 14 design-day energies | Missed | Missed | Right |
-| R4 each duty's verdict | Missed | Partly | Right |
-| R5 the order | Missed | Missed | Right |
-| Roughly | 0 of 5 | 0.5 of 5 | 5 of 5 |
+| R1 diesel l/100 km per weekday block (48 cells) | Missed | Right | Right |
+| R2 the pilot blocks' diesel gap to the rest, l/100 km | Missed | Missed | Right |
+| R3 the fuel heaters' heat at -15 C, kW | Missed | Missed | Right |
+| R4 the 48 design-day energies | Missed | Missed | Right |
+| R5 first-winter loss of usable battery, per cent | Missed | Right | Right |
+| R6 each block's verdict | Missed | Missed | Right |
+| R7 the design night's demand of every qualifying block at the connection point, MWh | Missed | Missed | Right |
+| R8 the order: the count and the blocks | Partly | Partly | Right |
+| Roughly | 0.5 of 8 | 2.5 of 8 | 8 of 8 |
 
 Measured by: .claude/skills/stumping/effort.py on generator/effort.json (generator/effort_passes.py runs each pass end to end on the cut pack)
-Largest single hint: the pilot's regional duties carry lighter loads than the same shippers' terminal runs, so the terminal's calibration line does not carry to them; rescues 1 of 5 results
-Pair estimate: 20.8
+Largest single hint: the pilot blocks were chosen for their low diesel use, and the diesel figures carry the difficulty the timetable's kilometres, climb and speed miss; rescues 1 of 8 results (R2; the order then 20)
+Pair estimate: 36.0
 
-The careful column is the union of the four recorded runs' methods, implemented in `analysis.routes` as "careful but
-hurried": every file cleaned, the per-shipper weighed-on-declared calibration, the curved cold, the tare and the drops,
-squared speed at the year's ratio, a straight-line loss with tractor and cold terms; its within-duty slope (2.3), the
-year-apart loss (2.8) and the first-year-only loss (4.3) are computed and set aside (`effort.json` careful_dismissed).
-Read strictly, the union also contains arch 8's timing of the design day (which arrived only through the hourly fridge
-term, now removed): that variant (`careful_variant_design_day_speed`) is Partly on the energies and the verdicts and
-misses the payload term, the loss and the order (10 against 8): 34.5.
-Stage 4: the judge's first isolated thread put a careful pass at 50 to 62 per cent on an eight-result grid and
-flagged the tare and drops as earned by reflex; its re-judge thread put it at about one result of six, the -5 C speed
-ratio. Both pieces were taken out of the graded chain (they stay in the model and every energy), and the verdicts'
-partial credit set at three quarters of the duties (an all-electric answer gets 8 of 14). Executed on the cut pack,
-the careful pass scores 20.8; with one correction it scores 19.0 (the duties' own loads), 19.0 (the curved loss) or
-34.5 (the design-day speed) and loses the order every time (`effort.json` careful_with_one_correction). The residual
-risk, stated plainly: a run that both times the design day and carries the error model in place of the line lands
-the order with only the loss wrong (the straight-line loss alone moves the limit 7 kWh and flips no duty). Making
-the loss flip a duty alone needs a loss gap over 3 points, which widens the honest band of curved forms to about 4.2
-to 6.6 per cent and leaves under 2 kWh of cushion (stage 4 sweep, Tried and rejected).
+The careful column is the union of the six recorded Fryele runs' methods implemented on this pack
+(`analysis.careful`): every file cleaned, crosswalked and joined; the diesel rates tank to tank by least squares
+for the fuel ask (R1 right); the pilot's energy per km by block and its HVAC draw per hour by temperature; a
+piecewise-linear cold response fitted on the pilot's own record and read at -15 C (8.4 kW against the 2027 model's
+12.4); the pilot's fit carried to the 39 blocks it never ran on climb and hours per km; the first-winter loss on a
+curved age form (R5 right); the charging efficiency from the sessions; the night scheduled under the agreement's
+capacity in the plan's order. It orders 21 (the set sharing 17 of 18 with the golden's, so R8 Partly), passes 38
+blocks, files 13.0 MWh for the night and 46 of 48 energies outside their bins. The quick pass (the pilot's mean energy
+per km on days at or below -5 C times each block's kilometres against 85 per cent of 480 kWh, no night) orders 33 and
+scores 14.0. Executed hints: the bridge put right on the careful pass rescues R2 and orders 20 (R4 still 4.3 kW an hour
+light on every block); the heaters put right rescues R3 and orders 19; the night's cap rescues nothing, the careful
+pass already applies it.
+
+Pre-ship check (2026-11-10, the final cut 03a9cd41): the bar re-read against the built pack. The hidden factor record
+against the cut data: the pilot's selection shows on every non-pilot block (`checks.py` R5: the hurried fit is 15 kWh
+or more light on five or more blocks 40 kWh over the limit, where nothing turns, and on the weekend blocks the
+decision never covers); the heaters' share sits on all 48 blocks (35 kWh or more each) and in 48 HVO intervals over
+two winters; the night's cut moves with every route's energies (18 to 23); the loss shows at every age on all six
+buses. The effort test against `effort.py`: quick 14.0, careful 36.0, thorough 100.0, the note's table and pair
+estimate the measured ones, the largest hint 1 of 8. The rivals inside the bands (R7 of the bar block, 124
+assertions); the judge's two passes (one FIX_NOW fixed, one DETERMINISTIC with one item now asserted as SF27) and the
+three isolated reads (no leak, nothing planted, every realism line fixed in the generator) recorded in
+`determinism_check_report*.md` and `leak_check_report.md`; the free gates green on the final cut (`gates.py task4
+--full`: precut 85 of 85, effort, voice, leak REVIEW only, figures 181 of 181, containers, heart WARN, surface,
+checks 124 of 124, verify, two byte-identical builds).
 
 ## Data provenance
 
-Source: generated by task4/generator from a simulated process (sim.py, pack.py, docs.py), seed 5405; real Swedish town names, everything else invented.
-Behaves like the real thing: a battery-electric 64-tonne combination's energy per km rises with climb, cold (bending below freezing), the square of speed and the whole combination's mass on every leg, with the payload's tonne-km on the loaded run as each drop comes off; trip noise 3 per cent and a route effect per duty; the routing tool plans each duty's driving time and the trucks fall short of it, more so on winter days; the consignment notes carry what the shipper writes, one per drop; the regional pilot duties carry the day's orders, lighter than the terminal's long full-load runs; the bridge weighs every departure with its trailer; the battery loses capacity fastest early in service and then steadily, and the cold depresses each day's energy per full charge and gives it back.
-Genuine patterns: (1) seasonal temperature with persistence at two stations and a truck-against-station offset; (2) energy per km rising with climb, cold, speed and combination mass; (3) actual speed falling short of the plan, more in winter, with day-to-day noise; (4) declaration error by shipper practice, one practice changing in the window; (5) load size by lane: regional part loads against long-haul full loads for the same shippers; (6) capacity fade fast in the first months then steady, tractor by tractor, with a reversible cold effect; (7) trailer pools by goods with tare by build and equipment; (8) drop shares varying day to day around each customer's usual order.
-Problems by process: re-uploads after modem reconnects, sensor dropouts, three weight formats typed into the TMS, re-weighs after axle limits, duty codes re-keyed at the TMS upgrade, spare tractors, blank declarations, a day's weight split over several notes, SOC in whole per cent.
-Breadth: 13 files; the weighbridge holds about 21,400 weighings of 46 duties from 19 shippers; the Värnamo notes about 17,800 consignments; 2,334 pilot duty-days on six tractors; 145 trailers; the route register's 55 duties with their routing-tool times and stop lists; a ten-year temperature record at two stations; two distractors (the Värnamo fuel card statement and the workshop log).
+Source: generated by task4/generator from a simulated process (sim.py, pack.py, docs.py), seed 41007; Finnish naming and bus-industry vocabulary, every organisation, place, person, vehicle and record invented.
+Behaves like the real thing: a 12 metre bus's energy per kilometre rises with climb and with the block's difficulty (stops, dwell with the doors open, loads) and its cabin heat demand with the cold; a diesel bus burns fuel by the same block physics with an idle draw per hour and a fuel-fired heater below the engine's waste heat; a battery-electric bus heats with a small heat pump whose coefficient falls to one at -10 C and a fuel-fired heater above its capacity, loses usable capacity fastest in its first months, shows less on cold days and gets it back; the dispatcher rotates buses over blocks with day-to-day persistence; the night shift fuels buses when under half a tank and swipes twice when the pump stops at 250 litres; the chargers deliver in the night period at 92 per cent into the battery.
+Genuine patterns: (1) seasonal temperature with persistence at two stations and a bus-sensor offset; (2) energy per km rising with climb and difficulty, cabin draw rising with the cold then flattening on the pilot at its heat pump's capacity; (3) diesel use by block spanning 37 to 62 l/100 km with bus-level efficiency and a cold-engine penalty; (4) the pilot's blocks selected from the 2024 fuel figures among the short blocks, with three stand-in blocks and the weekend blocks beside them; (5) capacity fade fast then steady, bus by bus, with a reversible cold effect; (6) fills every second or third night at the depot and now and then at street stations; (7) heater fuel rising with the cold below about -3 C on the electric buses; (8) workshop visits at each bus's own rate, with two heater faults in the winter of 2025/26.
+Problems by process: a 250 litre cap and second swipes, reissued and spare fuel cards with the fleet number typed, odometer slips and blanks, block codes re-keyed at the planning system change, registrations in the dispatch log's first two months, telematics days uploaded twice, ambient dropouts, a station gap, UTC session stamps, a week of street fills while the depot pump was out, six buses withdrawn mid-period.
+Breadth: 14 files; the fuel-card statement holds 20,804 transactions on 60 vehicles and 71 cards; the dispatch log 41,790 bus-days over 96 blocks; 3,315 electric bus-days and 3,291 charging sessions; 3,957 station days; 841 work orders; the block register's 96 blocks and 28 lines; two distractors (tyre and brake costs by vehicle, the depot's electricity invoices).
 
 ## Template check
 
-Chain signature: missingness-measurement, modeling, forecasting, synthesis, synthesis
-Question form: which (the duties that go electric, with the order's size), with the payload figure and the loss asked as their own quantities
-Nearest build: task4 architecture 8 (the same world, kept on the client's instruction; differentiation filed on the card: there three register joins the runs made on sight, here the calibration's transport, the loss's form and the winter speed, each a step the runs named and did not take); against other builds, task1 (an ARR path, synthesis) and task7 (scenarios, modeling) differ in shape, weight and areas; the abstraction sentence against a build on file other than this slot's own lineage cannot be written. Guard WARNs answered: repeat.gate_g (forecasting is the assigned analysis type), repeat.question_form (the decision is a pick of duties; "which" is its honest form).
+Chain signature: assembly-reconciliation, causal-reasoning, missingness-measurement, forecasting, modeling, synthesis, synthesis, synthesis
+Question form: how many (the order's size, with the blocks it takes), the fuel figures, the energies, the verdicts, the loss and the night's demand asked as their own quantities
+Nearest build: task4 architectures 5 to 9 (the Fryele tractor order, the same assigned pairing): there a per-unit physical model carried through covariates and estimates a plot or a join showed; here the pilot's units were selected on the old technology's record, the correction is a bridge through a file the runs dismiss, the heaters' share is a structure across three files, and the count is capped by a shared night supply (a different answer shape, a different weight, no declared weight, no calibration line, no speed). Against other builds, task16 (a ranked list under a cap, investigation) and task10 (forecast bands, validation) differ in shape, weight and chain; the abstraction sentence against any build on file other than this slot's own lineage cannot be written. Guard WARNs answered: overuse.weight (hard-to-measure sat in task5 four builds ago; the quantity here exists in no file and is the honest label), repeat.gate_g (forecasting is the assigned analysis type), repeat.deliverables (a workbook and slides are what a board gets), repeat.question_form (a count asks how many).
 
 ## Semantic fork table
 
 | ID | Term or convention | Readings | Golden | Ruled out by |
 |---|---|---|---|---|
-| SF1 | the design day's temperature | the trucks' ambient (station-filled), or the station's throughout | trucks' ambient | same call, energies within 10 kWh (asserted) |
-| SF2 | a duty's energy | energy_used_kwh, or consumption times distance | energy_used_kwh | FES-2 2.2; identical within 0.5 kWh (asserted) |
-| SF3 | the planning load | mean weighed net payload, or mean declared | weighed | FES-2 4.2; same call (asserted) |
-| SF4 | the twelve months | Nov 2025 to Oct 2026, calendar 2025, or every month on the bridge | Nov 2025 to Oct 2026 | FES-2 4.2; same call (asserted) |
-| SF5 | a re-weighed CMR | the later weighing, or the first | later | same call (asserted) |
-| SF6 | a day uploaded twice | once, or twice | once | same call (asserted) |
-| SF7 | an ambient dropout | station day plus the mean offset, or the day dropped | filled | same call (asserted) |
-| SF8 | a declared weight in tonnes | parsed, or those days dropped | parsed | same call (asserted) |
-| SF9 | the battery the limit starts from | the quotation's 540 kWh, or the pilot's 520 | 540 | FES-2 2.3 and 4.3; the quotation (asserted) |
-| SF10 | the payload of a pilot day | the expected load given its declaration on its own duty, or the declaration | expected load | R1's own result; the declarations order 9 |
-| SF11 | the cold form | curved below freezing, or one rate below 16 C | curved | the January and February 2026 holdout (asserted) |
-| SF12 | rounding | energies to the nearest 10 kWh, graded within 10 kWh | as filed | every rival within 8 kWh (asserted) |
-| SF13 | tractors | one per duty assigned | one per duty | FES-2 4.3 (asserted) |
-| SF14 | the fit's window | Mar 2025 to Oct 2026, or one year | both | same call (asserted) |
-| SF15 | the error model's window | both years on the bridge, or the last twelve months | both | same call (asserted) |
-| SF16 | the fit's structure | one level per km with climb and tare, or a level per duty | one level | same call; the within-duty slope 1.9 against 1.9 (asserted) |
-| SF17 | the fit's km | odometer, or the route register's | either | same call (asserted) |
-| SF18 | the drinks maker's notes | its scale period kept apart from its estimating period | apart | the scale months' declarations equal the weighed loads (asserted) |
-| SF19 | the loss's cold term | degrees below 20 C, the day's temperature, degrees below 15 C | any | within 0.3 points, same call (asserted) |
-| SF20 | the loss estimator | an age form fitted on every day, or the same months a year apart | fitted | the year-apart comparison starts a year after entry into service and misses the early loss (asserted 1.2 points or more below) |
-| SF21 | "permanently loses in its first twelve months" | at like temperature from entry into service, or with the cold left in | like temperature | FES-2 2.3 "permanently"; the cold's loss returns each spring |
-| SF22 | the limit's arithmetic | 85 per cent of 540 less the loss share | as filed | FES-2 2.3 and 4.3 (asserted) |
-| SF23 | the usable battery after a year | 540 x (1 - loss) | as filed | asserted |
-| SF24 | a duty's speed on the design day | the routing tool's speed times the pilot's ratio at -5 C, or the routing tool's speed, or the year's ratio | ratio at -5 C | FES-2 4.1 files the day; the pilot's ratio falls with temperature (asserted); the other readings order 0 and 1 |
-| SF25 | the speed term's form | the square of speed, or a straight line | either | same call (asserted) |
-| SF26 | the ratio's form | a slope below 8, 10 or 12 C, on the temperature, or days within 2.5 C | any | same call, all in 0.74 to 0.79 (asserted) |
-| SF27 | the trailers a duty runs with | the bridge's trailer registrations, or the trailers on its notes | either | within 60 kg per duty (asserted) |
-| SF28 | the pilot's loads | each duty's own, or the terminal's line | each duty's own | the scale-weighed J07 and J08 days match the duties' own loads within 0.8 t and sit over 1 t under the line (asserted) |
-| SF29 | a multi-drop load's shares | each note's declared weight, or equal shares | either | same call, within 8 kWh (asserted) |
-| SF30 | the tare term | its own coefficient, or the payload's | either | same call (asserted) |
-| SF31 | the loss's age form | any curved form (early loss with a fitted time scale, square root, with a line, log and line, piecewise line) | the fitted time scale | same call, all in 4.2 to 5.6 (asserted); the straight line fits far worse (asserted) |
-| SF32 | the 2027 tractor's own weight | the quotation's 11,980 kg, or the pilot tractors' | quotation | same call (asserted); the quotation states it |
-| SF33 | a trailer's tare | the register's, or the bridge's stored tare less the diesel tractor's | either | identical for every trailer (asserted) |
-| SF34 | a duty's combination tare over several trailers | each departure's trailer (weighted by use), or each distinct trailer once | weighted by use | same call, within 0.3 t and 3 kWh on every duty (asserted) |
-| SF35 | the declaration error's form | multiplicative (a share of the load), or additive | either | same call, payload 1.9 both (asserted) |
+| SF1 | the design day | -15 C daily mean at the town's station, or the coldest day on record | -15 C | DES-1 2.4 (asserted) |
+| SF2 | the pilot blocks | the nine weekday blocks with 30 or more electric days, or every block an electric bus ran | the nine | the three stand-in blocks have 1 to 9 electric days; the gap is stated over the nine (asserted: the thriftiest half of the short blocks, none among the ten thriftiest or the hardest sixteen of the 48) |
+| SF3 | the limit's arithmetic | 85 per cent of 480 less the loss share, or 85 per cent of 480 | less the loss | DES-1 2.3 and 4.1 (asserted) |
+| SF4 | the diesel figure's kilometres | the dispatch log's scheduled km, or the odometer | scheduled | DES-1 3.3 (asserted) |
+| SF5 | the old block codes | mapped to the register's current codes, or the old-coded months dropped | mapped | same call: the reference year and the pilot's weekdays run on the new codes; the old months dropped move no energy by more than 10 kWh (asserted) |
+| SF6 | the telematics days uploaded twice | once, or twice | once | same call, no energy moves by more than 8 kWh (asserted) |
+| SF7 | the night shift's spare cards (the AdBlue purchases, the vehicle typed at the pump) | to the vehicle by the typed fleet number, or dropped | to the vehicle | same call: they carry no diesel, so dropped they move no block's figure (asserted) |
+| SF8 | a second swipe within minutes | merged into the fill, or a fill of its own | merged | same call, within 0.7 (asserted) |
+| SF9 | a fill's bus-days | by the fill's timestamp against departures, or by date | timestamp | same call, within 1.0 (asserted) |
+| SF10 | a bus-day's temperature | the bus's sensor filled from the airport station, or the station throughout | sensor | same call, within 8 kWh (asserted) |
+| SF11 | the heaters' fuel | the HVO fills on the electric buses' cards, tank to tank | the fills | 48 intervals (asserted); no other record carries it |
+| SF12 | litres to heat | the register's 35 kW at 3.9 l/h, the public lower heating value at a burner efficiency, or the fault weeks (8.0 and 7.1 kWh a litre, the boosters capped at 12 kW) | the register's rating | the rating and the public value inside 3.8 to 4.8 kW; the fault weeks a confirmation of the order of magnitude, not a figure (asserted) |
+| SF13 | preconditioning from the charger | block energy excludes it | excludes | DES-1 2.2 and the quotation (asserted) |
+| SF14 | the careful pass's own count | its energies under the night give 21, not 18 | 21 | the hurried pass is graded on its own figures (asserted) |
+| SF15 | the bridge's form | the diesel rate alone, or with the hours per km | either | same call, within 10 kWh, the same order (asserted) |
+| SF16 | the bridge's reach | every block bridged, or the pilot blocks on their own electric days | own days | same call, within 10 kWh, the same order (asserted) |
+| SF17 | the pilot blocks' verdicts | bridged or on their own days | either | no verdict changes (asserted) |
+| SF18 | the loss's age form | curved (early loss plus a line), square root, log, or a straight line | curved | the three curved forms inside 3.8 to 5.0; the straight line at 2.95 misses the first months and sits under the band (asserted) |
+| SF19 | the loss's rounding | 4.3 to 0.1 | 4.3 | mid-band (asserted) |
+| SF20 | the night demand | every qualifying block's energy over the sessions' efficiency, at 0.1 MWh | 8.7 | stated at 0.1; the family within 0.3 (asserted) |
+| SF21 | a block at the limit | none within 26 kWh in the truth, 18 in the golden (the 10 kWh grading tolerance and the rounding stay on one side) | clear | asserted |
+| SF22 | "cannot recharge" | the exact flow over the night's intervals between the blocks' returns and departures (the standard's words), a least-slack schedule, the period's energy, an earliest-departure heuristic, or 10 or 20 minutes allowed at plug-in and departure | feasibility (the flow, exact windows) | the flow, the least-slack schedule and the period's energy all cut at the 19th, with 10 or 20 minute margins too; earliest-departure leaves the 18 short by under 1.5 per cent and the 19th by more than twice that (asserted) |
+| SF23 | the cut's margin | the 18 hold with energies 2 per cent higher (3 measured); the 19th fits only 1.5 per cent lower (2 measured) | as filed | asserted |
+| SF27 | the graded bands' edges | the heaters' heat at 3.8 or 4.8 kW, the loss at 3.8 or 5.0 per cent | the golden mid-band | every edge lands the same verdicts and the same 18 (asserted) |
+| SF28 | "the town's weather station" | the airport series (DES-1 2.4 names it) or the town-centre series, for the sensor dropouts and the heater fit | airport | DES-1 2.4; the centre series moves no energy by more than 8 kWh and lands the order, the centre series throughout within 10 kWh (asserted) |
+| SF29 | "our own electric buses" | the six pooled, or one bus at a time | pooled | DES-1 2.3 (plural); each bus with a full year in service lands inside the band (asserted) |
+| SF24 | the usable battery | the quotation's 480 less the first winter's loss, or 480 | less the loss | DES-1 2.3; with 480 no block changes side on this pack (asserted), the loss is graded as its own ask |
+| SF25 | the night's energy | at the connection point (over the efficiency), or battery energy | connection point | the agreement's capacity is at the connection point; battery energy orders 20 (asserted) |
+| SF26 | the order's size | the priority list cut by the night, or the verdicts summed | cut | DES-1 4.2; the verdicts summed give 23 (asserted) |
+| SF30 | the six pilot buses after the new buses arrive | retired, kept as spares, or still charged on the design night | neither figure: the order is one bus a block assigned and the night recharges the assigned blocks | DES-1 4.2 and 4.3 (the count asserted one bus a block; the night computed on the assigned blocks only) |
 
 ## Closure table
 
 | Axis | Closure |
 |---|---|
-| 1 Population | the fourteen shortlisted Värnamo duties: filed, fleet_plan_2027.xlsx and FES-2 4.4 |
-| 2 Unit of account | a duty, one tractor each: FES-2 4.3 (SF13) |
-| 3 Attribution window | a January working day at -5 C: FES-2 4.1; the duty's speed on that day estimated (SF24) |
-| 4 As-of dating | extracts to 30 October 2026, the memo of 6 November: the call reads no later record |
-| 5 Version basis | FES-2 version 3 (September 2025), quotation Q-26-1187, the registers as saved in autumn 2026: filed |
-| 6 Denominator | 540 kWh less the first year's permanent loss: FES-2 2.3, 4.3 (SF9, SF22) |
-| 7 Weighting | each departure once in the planning load and the duty's trailer tare; each pilot day once in the fits: FES-2 4.2, C1 |
-| 8 Window length | twelve months for the load, the trailers and the notes (SF4); twelve months in service for the loss (FES-2 2.3) |
-| 9 Boundary inclusivity | no more than 85 per cent: FES-2 4.3; no duty within 10 kWh (asserted) |
-| 10 Rounding path | unrounded to the end; energies to 10 kWh, payload to 0.1, loss to 0.1 per cent: the prompt (SF12) |
-| 11 Tie-break | none: no duty at the limit (asserted) |
-| 12 Maturity and censoring | none: the records are complete to their last day |
-| 13 Order of operations | duplicates dropped, notes summed per tractor-day, joined, fitted: C1 (SF6) |
-| 14 Row order | weighings by time within a CMR: C1 (SF5) |
-| 15 Duplicate resolution | a re-uploaded day once, a re-weighed CMR at its later weighing: C1 (SF5, SF6) |
-| 16 Identity normalisation | duty codes VMO-nn to Vnn in the bridge log and the notes; trailers by registration: C1 |
-| 17 Netting against gross | net payload as gross less stored tare: the bridge's columns (SF33) |
-| 18 Dimensional units | kWh, km, tonnes, km/h, hours; three weight formats; SOC in per cent: C1 (SF8) |
-| 19 Code and status semantics | the remark on a first weighing (SF5); the drinks maker's scale months (SF18) |
-| 20 Integerisation | tractors are whole duties: FES-2 4.3 |
-| 21 Clause scope | FES-2 2.1 to 2.3 for the terms, 4.1 to 4.3 for the call |
-| 22 Forward window contents | the 2027 model's battery after a year and its weight, the shortlist, the design day, the duty's trailers, drops and speed on it: filed or estimated (SF11, SF21, SF24, SF27, SF32) |
+| 1 Population | the 48 weekday blocks of the 2027 fleet plan: filed, fleet_plan_2027.xlsx and DES-1 4.1 |
+| 2 Unit of account | a block, one bus each: DES-1 4.3 |
+| 3 Attribution window | a January working day at -15 C daily mean: DES-1 2.4; the diesel figures over November 2025 to October 2026: DES-1 3.3 |
+| 4 As-of dating | extracts to 31 October 2026 pulled 2 to 4 November, the quotation of 6 October: the call reads no later record |
+| 5 Version basis | DES-1 version 2 (August 2026), quotation 26-0931, connection agreement 2025-ND-117, the registers as saved in autumn 2026: filed |
+| 6 Denominator | 480 kWh usable less the first winter's loss (SF3, SF24); scheduled kilometres for the diesel figures (SF4) |
+| 7 Weighting | each fill interval once in the least squares; each electric bus-day once, blocks weighted by their days in the bridge; each qualifying block once in the night |
+| 8 Window length | twelve months for the diesel figures (DES-1 3.3); twelve months in service for the loss (DES-1 2.3); the night period 21:00 to 07:00 (the agreement) |
+| 9 Boundary inclusivity | no more than 85 per cent (DES-1 4.1); no block within 18 kWh of the limit in the golden (SF21); the 19th short by about 150 kWh under the exact flow (SF23, SF27) |
+| 10 Rounding path | unrounded to the end; diesel to 0.1, energies to 10 kWh, the loss to 0.1 per cent, the night to 0.1 MWh: the prompt |
+| 11 Tie-break | none: no block at the limit; the priority list orders the blocks (DES-1 4.2) |
+| 12 Maturity and censoring | none: the records are complete to their last day; every bus has served over twelve months by the as-of date except the June 2025 batch, whose first winter is in the record |
+| 13 Order of operations | duplicates dropped, cards and codes mapped, fills merged, intervals built, rates fitted, the pilot split, the bridge fitted, energies, verdicts, the night: Step-by-Step |
+| 14 Row order | fills by timestamp within a bus (SF9); the priority list in the plan's order |
+| 15 Duplicate resolution | a telematics day once (SF6); a second swipe merged (SF8) |
+| 16 Identity normalisation | old codes to current (SF5); registrations to fleet numbers; cards to vehicles by validity, spare cards by the typed number (SF7) |
+| 17 Netting against gross | energy at the connection point is battery energy over the sessions' efficiency (SF25) |
+| 18 Dimensional units | kWh, km, l/100 km, kW, MWh, hours; litres per transaction; SOC in whole per cent; UTC stamps on the sessions |
+| 19 Code and status semantics | the register's day types; the plan's priority; the workshop's heater fault and repair lines (SF12) |
+| 20 Integerisation | buses are whole blocks: DES-1 4.3 |
+| 21 Clause scope | DES-1 2.1 to 2.4 for the terms, 3.2 and 3.3 for charging and fuel, 4.1 to 4.3 for the call; the agreement for the capacity; the quotation for the model |
+| 22 Forward window contents | the 2027 model's usable battery after a year, its all-electric heating, the design day, the blocks' returns and departures, the night period: filed or estimated (SF3, SF12, SF22) |
 
 ## Literal reader
 
-FES-2 2.1 to 4.3 executed word for word: each shortlisted duty's round trip, with its drops, on a January working day at
--5 C departing with the mean weighed net payload of November 2025 to October 2026, the energy the tractor draws from its
-battery, against 85 per cent of 540 kWh less the share a battery permanently loses in its first twelve months in
-service as the company's own tractors show it: 438 kWh, eight duties, eight tractors. The route register's "Driving
-time h (routing tool)" is the planner's figure and says so; the daily summary's driving time is the tractor's. The
-TMS notes' declared weight is the shipper's; the bridge's gross and tare are weighed. The prompt's "forecast from what
-our Jönköping pilot tractors drew on their own duties" files the source, not a method.
+DES-1 2.1 to 4.3 executed word for word: each weekday block's traction-battery energy depot out to depot in on a
+January working day at -15 C, against 85 per cent of 480 kWh less the share the company's own buses lose in their
+first twelve months (4.3 per cent: 390.5 kWh), 23 blocks; the plan's priority list cut at the first block the night
+period's 690 kW cannot recharge with those above it, between each block's return and departure, at up to 150 kW a
+bus: M125, the 19th; 18 buses. The register's "Cabin heating" line is the equipment fitted, the quotation's heating
+row the 2027 model's, the agreement's capacity the installation's draw at the connection point in the night period.
+The statement's litres are the fuel bought; the dispatch log's planned km are the scheduled kilometres. The prompt's
+"a bus of the quoted 2027 model" names the model, not a method.
 
 ## Prompt contract
 
-A voice rewrite keeps: the question (which duties go electric, and the order's size), every shortlisted duty's
-design-day energy forecast from the pilot and its yes or no, the payload figure per tonne per 100 loaded km, the
-first-year permanent loss as a share of usable battery, a spreadsheet and a one-page PDF memo, and the rounding (10
-kWh, 0.1 kWh, 0.1 per cent). It never adds: speed, driving time, the routing tool, a trailer, tare, a drop or stop, a
-declaration, a weighbridge, a calibration, part or full loads, the terminal against the depot, an early loss or curve,
-a cold or temperature form, a holdout, state of charge, a shipper, a file name, the standard by its code, or who is
-asking. The first sentence keeps "which" (the shell is redrawn from architecture 8's "how many").
+A voice rewrite keeps: the question (how many buses to order for the Niittylä depot for 2027 and which weekday blocks
+they take under the depot electrification standard), every weekday block's diesel use over the last twelve months
+per 100 scheduled kilometres, its design-day energy for the quoted 2027 model, its yes or no, the first-year loss as
+a share of usable battery on the company's own electric buses, the energy the depot has to deliver on the design
+night for the blocks that pass, a workbook and slides for the board, and the rounding (0.1 l/100 km, 10 kWh, 0.1
+per cent, 0.1 MWh). It never adds: a fuel heater, a bridge, a selection, a pilot block, a covariate, a schedule, a
+regression, a tank, a fill, a temperature form, a holdout, state of charge, a file name, the standard by its code,
+the capacity figure, or who is asking.
+
+Leak sweeps answered (leak.py REVIEW lines, 2026-11-10; the third reader's lines: the standard's 2.4 now names the airport station, the outlets line reads as the 2027 to 2029 rollout, the prompt's loss ask is plural like DES-1 2.3, each asserted as SF28 and SF29): the agreement's 690 kW is the filed capacity the prompt's
+standard runs on, named in `stated_inputs`; the standard's clause numbers 4.1 and 4.3 are section labels, not the
+loss (4.3 per cent) or any figure; the six and five stump-paragraph terms in the standard and the quotation (record,
+station, capacity, register, dispatch, connection; heaters, capacity, quotation, orders, heating) are the
+organisation's own nouns and neither document names a bridge, a selection, a share or a schedule; the fleet plan's
+2027 timetable dates are the plan's own forward dates (a plan for the coming year carries them). The stage 4 reader's lines: the fleet plan's priority column is the city's zone order the standard's 4.2 walks, filed as a fact and not a ranking on any energy, cost or decision basis (Gate G); the plan's outlet count and the quotation's order range were moved off every route's count (26 outlets, four to thirty buses) so no stated figure reads as the answer (the first re-read found the two at 24 together; they now differ); the standard's 3.1, 4.1 and 4.2 are the organisation's own rules (the source, the threshold, the order and the cut), the WHAT, and leave every figure they operate on to the analysis.
 
 ## Tried and rejected
+
+- 2026-11-10, architecture 10 stage 4, the first judge pass (FIX_NOW): a rank list in component 1 that depended on
+  which blocks count as short (out of the blocks; the component states the means and the gap); the 19th block's kWh
+  shortfall, whose magnitude depended on the plug-in margins assumed (out of the blocks; the windows are now the
+  standard's words, each block's return to its departure inside the night period, the supply rescanned for
+  balanced margins under them); M111 within the 10 kWh grading tolerance of the limit (every block now 26 kWh clear in
+  the truth and 18 in the golden). The reader's figure 20 (outlets, the quotation's range) moved apart (26 outlets, four to thirty buses).
+- 2026-11-10, architecture 10 stage 4, the second judge pass (DETERMINISTIC, one item owed): the heaters' band edges
+  propagated to the cut, now asserted (SF27, both bands' edges land the same 18 and the same verdicts, the band half a
+  kW either side of the golden); the re-read's realism line (a session starting under zero state of charge): the
+  pilot's blocks, stand-ins and weekend blocks now pass the planner's own range check (the pilot buses' 480 kWh as the
+  quoted model's), the boosters on a heater-out day capped at 12 kW, no electric day ends under 15 per cent; the
+  stand-ins are the next three on the planner's list, so the pilot's record reaches no hard block; the heater fit
+  leaves the heater-out days' hours out of its intervals.
+- 2026-11-10, architecture 10 stage 3, the night's energy for the recommended buses as ask 5: every route capped by the
+  night lands near the capacity's energy (the careful pass's 21 lighter buses sum to the golden's 18), so the figure
+  graded nothing; replaced by the night demand of every qualifying block (8.7 MWh against 13.0 on the careful pass).
+- 2026-11-10, architecture 10 stage 3, the telematics days uploaded twice in March 2026 (cold days): kept, they halve
+  the heater fit's slope through the degree-days without litres and move every energy 7 to 11 kWh; the portal's outage
+  moved to May, where the duplicates touch nothing (SF6 asserted within 8 kWh).
+- 2026-11-10, architecture 10 stage 3, electric stand-ins on any short weekday block: 37 stand-in days spread over 30
+  blocks gave almost every qualifying block its own electric days and the hurried fit nothing to miss; the dispatcher
+  now keeps three approved stand-in blocks, so the bridge reaches the hard blocks through them and the weekend blocks
+  while the pilot's covariate fit stays light on the 39 blocks it never ran.
+- 2026-11-10, architecture 10 stage 3, the pilot's energy model with a per-hour auxiliary term beside block effects:
+  kilometres and hours are collinear within a block, the term was unidentified (15.7 kW against 2.2) and every block
+  effect biased; the per-km rate by block now carries the auxiliaries, and the diesel rate carries the idle draw the
+  same way, so the bridge is one line.
+- 2026-11-10, architecture 10 stage 3, charging allowed from the bus's return: the night's windows summed to 17 hours
+  and no realistic supply bound the order; the connection agreement's night period (21:00 to 07:00, the load-control
+  relay) is the operating arrangement, and the supply scanned at 5 kW steps for balanced margins (700 kW under the exact windows: the 18 hold
+  3 per cent up, the 19th fits only 2 per cent down, 10 or 20 minute plug-in margins cut at the same 18, and the heaters'
+  band edges leave the 18).
+- 2026-11-10, architecture 10 stage 3, the pilot blocks as the thriftiest of all 48: the planner also needs the range,
+  so the pick was from the blocks of 225 km or less, and the pilot sits at ranks 11 to 23 of the 48; the component
+  states the gap and the ranks among the short blocks as computed.
+- 2026-11-10, architecture 10 stage 2, the cold-day selection (the planner keeping the electric buses in on the
+  coldest days) as the heating judgment: with fuel heaters the pilot has no range problem on cold days, and a handful
+  of cold days the forecast missed would be outliers one residual plot shows; replaced by the heaters' share, which
+  sits on every winter day and in a file the runs dismiss.
+- 2026-11-10, architecture 10 stage 2, a 2027 timetable that re-cuts the blocks (line-level difficulty decomposed from
+  the 2026 blocks): a second attribution the task did not need and a re-keying a solver would read as a trap; the 2027
+  blocks are the 2026 autumn timetable's.
+- 2026-11-10, architecture 9 (the calibration's transfer to the pilot's part loads, the early-life loss, the winter
+  speed, in the Fryele world): both platform runs landed the golden exactly (`runs/arch9/`): run 1 by per-shipper
+  calibration carried to each duty's own declarations, a square-root age form and a separate winter driving-time
+  model; run 2 by the same with a declaration regime split found from the error itself. Each estimate the design
+  priced as a step the runs had named and not taken was a mechanism one file's plot or one join carried. The world is
+  left after five architectures; the lesson (what beats these runs is evidence in a file they dismiss, a structure
+  across files nothing names, a count over many units, and selection into the training record) is this
+  architecture's design.
 
 - 2026-11-10, stage 4 re-judge, a stronger early-life loss so the straight-line loss flips a duty on its own (early
   loss 4.0 to 5.0 per cent over 0.18 to 0.30 years): the limit gap reached only 11.7 to 12.5 kWh against margins of
@@ -452,3 +517,4 @@ Architecture 2 and earlier, carried from the agro-climatic note:
   the before and after figures were short by the break; the model now carries the break (never saved), found by the
   ceiling script against the run log.
 - Stage 4 fix pass (2026-11-08): the judge's independent fit put Leenane and Letterfrack at 118 to 124 van-hours against the golden's 110 and R04's saved hours 30 above the golden on a 2026-only fit, and read the offer's "in any combination" beside NPS-3 4.1 as a search order. Dropped the combination wording (NPS-3 4.3 now names the selection as an outcome), moved saved hours to 100-hour bins with the Achill road slowed (R04 to about 710 saved, 1,610 before) and Owenduff's price raised to EUR 13.40 to hold the net saving mid-bin; component 1 is now 'about 110 van-hours' against the hours Owenduff's charge would pay for. The call, the stump, the ladder and the default path did not move.
+- 2026-11-10, architecture 10 stage 4, pass 7 on target.zip 67186f2dd19abb65 (the 690 kW world): judge DETERMINISTIC APPROVE (17 needs a charging efficiency under 0.894, never observed; 19 needs 0.948 or more, one outlier session in 3,291; the heater band, 10 to 20 minute margins and both schedules land 18; careful but hurried about 2.5 of 8, ordering about 21; the diesel ask does not hand over the bridge). Its two findings: the six pilot buses after delivery, closed as SF30 (one bus a block assigned, the night on the assigned blocks); and the Step-by-Step's earliest-departure clause, which its thread could not reproduce because it took every block as in the depot the whole night (3 of the 18 are; the generator's least-slack schedule recharges the 18 and earliest-departure-first leaves 98 kWh short), so the clause is cut to the exact flow and the least-slack schedule. The fourth leak reader quoted no process sentence, found no helper file and no one thing, and noticed the fuel heaters on a read, so R3's notice is a careful-pass move and its price rests on the figure from the HVO fills. No graded figure and neither zip moved.

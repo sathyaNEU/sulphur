@@ -1,78 +1,122 @@
 {
  "task": "task4",
- "architecture": 9,
- "title": "How many battery-electric tractors a Sm\u00e5land road haulier should order for its V\u00e4rnamo duties for 2027, and which duties they take, under its fleet electrification standard",
+ "architecture": 10,
+ "title": "How many battery-electric buses a municipal bus operator should order for its Niittylä depot's weekday blocks for 2027, and which blocks they take, under its depot electrification standard",
  "domain": "Supply Chain & Logistics (house domain) in General Statistics & Data Science",
- "subdomain": "regression, classification & model diagnostics (fleet electrification: which regular duties battery-electric tractors can run on one charge)",
+ "subdomain": "regression, classification & model diagnostics (depot electrification: which weekday blocks battery-electric buses can run on one overnight charge)",
  "objective": "Forecasting & Predictive Modeling",
  "as_of": "2026-11-06",
  "deliverables": [
-  "ev_duty_assessment_2027.xlsx",
-  "tractor_order_memo.pdf"
+  "niittyla_ebus_order_2027.xlsx",
+  "niittyla_ebus_order_2027.pptx"
  ],
  "distractor_files": [
-  "fuel_card_statement_varnamo_2025-2026.csv",
-  "workshop_log_2025-2026.csv"
+  "tyre_and_brake_costs_2025.xlsx",
+  "depot_electricity_invoices_2025-01_2026-10.csv"
+ ],
+ "stated_inputs": [
+  85,
+  150,
+  480,
+  690,
+  35,
+  3.9
  ],
  "files": [
   {
-   "path": "weighbridge_varnamo_2024-11_2026-10.csv",
+   "path": "fuel_card_transactions_2024-01_2026-10.csv",
    "format": "csv",
-   "bytes": 1863067,
-   "rows": 21413,
+   "bytes": 2382285,
+   "rows": 20804,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-11-06",
    "license": "CC0-1.0 (original work)"
   },
   {
-   "path": "bev_daily_summary_2025-03_2026-10.csv",
+   "path": "depot_dispatch_log_2024-01_2026-10.csv",
    "format": "csv",
-   "bytes": 314957,
-   "rows": 2374,
+   "bytes": 1910110,
+   "rows": 41790,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-11-06",
    "license": "CC0-1.0 (original work)"
   },
   {
-   "path": "tms_consignments_jonkoping_2025-2026.csv",
-   "format": "csv",
-   "bytes": 569087,
-   "rows": 6613,
-   "source": "Constructed (seeded generator, task4/generator)",
-   "pull_date": "2026-11-06",
-   "license": "CC0-1.0 (original work)"
-  },
-  {
-   "path": "tms_consignments_varnamo_2025-11_2026-10.csv",
-   "format": "csv",
-   "bytes": 1616209,
-   "rows": 18072,
-   "source": "Constructed (seeded generator, task4/generator)",
-   "pull_date": "2026-11-06",
-   "license": "CC0-1.0 (original work)"
-  },
-  {
-   "path": "route_register_2026.xlsx",
+   "path": "block_register_2026.xlsx",
    "format": "xlsx",
-   "bytes": 13343,
+   "bytes": 14875,
    "rows": null,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-11-06",
    "license": "CC0-1.0 (original work)"
   },
   {
-   "path": "fleet_register_2026.xlsx",
+   "path": "vehicle_register_2026.xlsx",
    "format": "xlsx",
-   "bytes": 16766,
+   "bytes": 12975,
    "rows": null,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-11-06",
    "license": "CC0-1.0 (original work)"
   },
   {
-   "path": "shipper_register_2026.xlsx",
-   "format": "xlsx",
-   "bytes": 7523,
+   "path": "ebus_telematics_daily_2025-03_2026-10.csv",
+   "format": "csv",
+   "bytes": 189368,
+   "rows": 3315,
+   "source": "Constructed (seeded generator, task4/generator)",
+   "pull_date": "2026-11-06",
+   "license": "CC0-1.0 (original work)"
+  },
+  {
+   "path": "depot_charging_sessions_2025-03_2026-10.csv",
+   "format": "csv",
+   "bytes": 381545,
+   "rows": 3291,
+   "source": "Constructed (seeded generator, task4/generator)",
+   "pull_date": "2026-11-06",
+   "license": "CC0-1.0 (original work)"
+  },
+  {
+   "path": "weather_vehkasalo_daily_2016_2026.csv",
+   "format": "csv",
+   "bytes": 135270,
+   "rows": 3957,
+   "source": "Constructed (seeded generator, task4/generator)",
+   "pull_date": "2026-11-06",
+   "license": "CC0-1.0 (original work)"
+  },
+  {
+   "path": "workshop_orders_2024-01_2026-10.csv",
+   "format": "csv",
+   "bytes": 54730,
+   "rows": 841,
+   "source": "Constructed (seeded generator, task4/generator)",
+   "pull_date": "2026-11-06",
+   "license": "CC0-1.0 (original work)"
+  },
+  {
+   "path": "depot_electrification_standard_DES-1.pdf",
+   "format": "pdf",
+   "bytes": 59604,
+   "rows": null,
+   "source": "Constructed (seeded generator, task4/generator)",
+   "pull_date": "2026-11-06",
+   "license": "CC0-1.0 (original work)"
+  },
+  {
+   "path": "charging_connection_agreement_2025.pdf",
+   "format": "pdf",
+   "bytes": 57480,
+   "rows": null,
+   "source": "Constructed (seeded generator, task4/generator)",
+   "pull_date": "2026-11-06",
+   "license": "CC0-1.0 (original work)"
+  },
+  {
+   "path": "ebus_quotation_2027.pdf",
+   "format": "pdf",
+   "bytes": 61051,
    "rows": null,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-11-06",
@@ -81,57 +125,30 @@
   {
    "path": "fleet_plan_2027.xlsx",
    "format": "xlsx",
-   "bytes": 7140,
+   "bytes": 10582,
    "rows": null,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-11-06",
    "license": "CC0-1.0 (original work)"
   },
   {
-   "path": "daily_mean_temperature_2016-2026.csv",
-   "format": "csv",
-   "bytes": 214737,
-   "rows": 7914,
-   "source": "Constructed (seeded generator, task4/generator)",
-   "pull_date": "2026-11-06",
-   "license": "CC0-1.0 (original work)"
-  },
-  {
-   "path": "fleet_electrification_standard_FES-2.pdf",
-   "format": "pdf",
-   "bytes": 57510,
+   "path": "tyre_and_brake_costs_2025.xlsx",
+   "format": "xlsx",
+   "bytes": 8429,
    "rows": null,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-11-06",
    "license": "CC0-1.0 (original work)"
   },
   {
-   "path": "quotation_bev_tractors_2027.pdf",
-   "format": "pdf",
-   "bytes": 59524,
-   "rows": null,
-   "source": "Constructed (seeded generator, task4/generator)",
-   "pull_date": "2026-11-06",
-   "license": "CC0-1.0 (original work)"
-  },
-  {
-   "path": "fuel_card_statement_varnamo_2025-2026.csv",
+   "path": "depot_electricity_invoices_2025-01_2026-10.csv",
    "format": "csv",
-   "bytes": 768510,
-   "rows": 9357,
-   "source": "Constructed (seeded generator, task4/generator)",
-   "pull_date": "2026-11-06",
-   "license": "CC0-1.0 (original work)"
-  },
-  {
-   "path": "workshop_log_2025-2026.csv",
-   "format": "csv",
-   "bytes": 34292,
-   "rows": 504,
+   "bytes": 1139,
+   "rows": 22,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-11-06",
    "license": "CC0-1.0 (original work)"
   }
  ],
- "provenance": "Every file is constructed by the seeded generator in task4/generator; Swedish town names are real places used for realism (distances approximate), the organisations, people, vehicle registrations, consignments, weighings, temperatures and figures are invented. No real organisation's records, weather service data or domain is used."
+ "provenance": "Every file is constructed by the seeded generator in task4/generator; the town, the company, the distribution company, the dealer, the people, the vehicles, the blocks, the transactions, the telematics and the weather are invented (Finnish names from a name generator, Finnish bus-industry vocabulary). No real organisation's records are used."
 }

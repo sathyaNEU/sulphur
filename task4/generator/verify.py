@@ -1,228 +1,269 @@
-"""An independent recomputation of the golden from the shipped files, sharing no code with analysis.py: its own
-parsers, its own de-duplication, a per-duty errors-in-variables correction by moments (the declared weight's relative
-error variance read from the weighbridge for each shipper and each period its notes keep one practice, scaled to the
-duty's own declarations and removed from the duty's own spread), normal equations solved directly, the batteries'
-first-year loss fitted tractor by tractor on a log-of-age and straight-line form, and the FES-2 assessment. Exit 1 unless it gives the golden's duties and every energy within 10 kWh of
-the golden's.
-
-    python3 verify.py [target]
-"""
-import csv
+"""The independent verifier: reads only the shipped bundle (target/ and the goldens), on its own code path (different
+interval construction, normal equations, a square-root age form, the least-slack schedule, pypdf for the documents),
+and recomputes every graded figure against figures.json. Exit 1 on any disagreement."""
+import datetime as dt
 import json
 import os
-import subprocess
+import re
 import sys
 import zipfile
-from xml.etree import ElementTree as ET
 
 import numpy as np
+import pandas as pd
+from openpyxl import load_workbook
+from pypdf import PdfReader
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-NS = {"m": "http://schemas.openxmlformats.org/spreadsheetml/2006/main"}
+FAIL = []
 
 
-def sheet_rows(path, name):
-    z = zipfile.ZipFile(path)
-    wbx = ET.fromstring(z.read("xl/workbook.xml"))
-    rels = ET.fromstring(z.read("xl/_rels/workbook.xml.rels"))
-    rid = [s.get("{http://schemas.openxmlformats.org/officeDocument/2006/relationships}id")
-           for s in wbx.find("m:sheets", NS) if s.get("name") == name][0]
-    target = [r.get("Target") for r in rels if r.get("Id") == rid][0]
-    shared = []
-    if "xl/sharedStrings.xml" in z.namelist():
-        for si in ET.fromstring(z.read("xl/sharedStrings.xml")).findall("m:si", NS):
-            shared.append("".join(t.text or "" for t in si.iter("{%s}t" % NS["m"])))
-    ws = ET.fromstring(z.read("xl/" + target.lstrip("/").replace("xl/", "")))
-    out = []
-    for row in ws.find("m:sheetData", NS):
-        vals = []
-        for c in row:
-            col = 0
-            for ch in c.get("r"):
-                if ch.isalpha():
-                    col = col * 26 + ord(ch) - 64
-            while len(vals) < col - 1:
-                vals.append(None)
-            v = c.find("m:v", NS)
-            t = c.get("t")
-            if t == "s":
-                vals.append(shared[int(v.text)])
-            elif t == "inlineStr":
-                vals.append("".join(x.text or "" for x in c.iter("{%s}t" % NS["m"])))
-            else:
-                vals.append(None if v is None else float(v.text))
-        out.append(vals)
-    return out
+def ok(name, cond, detail=""):
+    if not cond:
+        FAIL.append("%s %s" % (name, detail))
 
 
-def weight(s):
-    s = s.strip().replace(" ", " ")
-    if s.endswith(" t"):
-        return float(s[:-2].replace(",", ".")) * 1000.0
-    return float(s.replace(" kg", "").replace(" ", ""))
+def mins(s):
+    h, m = s.split(":")
+    return int(h) * 60 + int(m)
+
+
+def text(path):
+    return re.sub(r"\s+", " ", "\n".join((p.extract_text() or "") for p in PdfReader(path).pages))
 
 
 def main(target):
-    j = lambda f: os.path.join(target, f)
-    routes = {}
-    for r in sheet_rows(j("route_register_2026.xlsx"), "Duties")[1:]:
-        routes[r[0]] = (r[3], (r[6], r[7], r[8]), r[10], (r[6] + r[7] + r[8]) / r[12])
-    short = [r[0] for r in sheet_rows(j("fleet_plan_2027.xlsx"), "Shortlist 2027")[1:]]
-    stops = {}
-    for r in sheet_rows(j("route_register_2026.xlsx"), "Stops")[1:]:
-        stops.setdefault(r[0], {})[r[2]] = r[3]
-    trl = {r[1]: (r[2], r[4] or "", r[7]) for r in sheet_rows(j("fleet_register_2026.xlsx"), "Trailers")[1:]}
-    tractor = {r[1]: r[7] for r in sheet_rows(j("fleet_register_2026.xlsx"), "Tractors")[1:] if r[7]}
-
-    def ride(duty, drops):
-        """tonne-km share of the loaded run: walk the stops in km order, taking each drop's note weight off"""
-        L = routes[duty][1][1]
-        tot = sum(w for _, w in drops)
-        acc, left, at = 0.0, 1.0, 0.0
-        for km, w in sorted((stops[duty][t], w) for t, w in drops):
-            acc += left * (km - at)
-            left -= w / tot
-            at = km
-        return acc / L
-    # weighbridge: per CMR the latest weighing
-    latest = {}
-    with open(j("weighbridge_varnamo_2024-11_2026-10.csv"), encoding="utf-8") as f:
-        for r in csv.DictReader(f):
-            if r["cmr_no"] not in latest or r["weighed_at"] > latest[r["cmr_no"]]["weighed_at"]:
-                latest[r["cmr_no"]] = r
-    by_ship = {}
-    loads = {}
-    month_gap = {}
-    for r in latest.values():
-        net = float(r["gross_kg"]) - float(r["tare_kg"])
-        duty = r["duty"].replace("VMO-", "V")
-        if "2025-11-01" <= r["weighed_at"][:10] <= "2026-10-31":
-            loads.setdefault(duty, []).append(net)
-        if r["declared_kg"]:
-            month_gap.setdefault((r["shipper"], r["weighed_at"][:7]), []).append(abs(float(r["declared_kg"]) - net))
-    # a month in which a shipper's notes carry its scale weight: the median gap is inside the bridge's resolution
-    ticket = {k for k, v in month_gap.items() if np.median(v) <= 20}
-    full = {s for s in {k[0] for k in month_gap} if all((s, m) in ticket for (ss, m) in month_gap if ss == s)}
-    per = lambda s, ym: (s, "t" if (s, ym) in ticket and s not in full else "n")
-    for r in latest.values():
-        if r["declared_kg"]:
-            net = float(r["gross_kg"]) - float(r["tare_kg"])
-            by_ship.setdefault(per(r["shipper"], r["weighed_at"][:7]), []).append((float(r["declared_kg"]), net))
-    # each shipper's declaration error at each period: the variance of declared less weighed, as a share of the load
-    err = {}
-    for s, v in by_ship.items():
-        D, W = np.array(v).T
-        err[s] = float(np.var((D - W) / W, ddof=1))
-    # pilot days
-    tms = {}
-    with open(j("tms_consignments_jonkoping_2025-2026.csv"), encoding="utf-8") as f:
-        for r in csv.DictReader(f):
-            k = (r["vehicle_reg"], r["collection_date"])
-            if k not in tms:
-                tms[k] = dict(r, drops=[])
-            tms[k]["drops"].append((r["delivery_town"], weight(r["declared_weight"])))
-    vnotes = {}
-    with open(j("tms_consignments_varnamo_2025-11_2026-10.csv"), encoding="utf-8") as f:
-        for r in csv.DictReader(f):
-            d = r["duty"].replace("VMO-", "V")
-            vnotes.setdefault(d, {}).setdefault(r["collection_date"], {"t": r["trailer_reg"], "drops": []})["drops"].append(
-                (r["delivery_town"], weight(r["declared_weight"])))
-    vtrl = {}
-    with open(j("weighbridge_varnamo_2024-11_2026-10.csv"), encoding="utf-8") as f:
-        for r in csv.DictReader(f):
-            if "2025-11-01" <= r["weighed_at"][:10] <= "2026-10-31" and not r["remark"]:
-                vtrl.setdefault(r["duty"].replace("VMO-", "V"), []).append(trl[r["trailer_reg"]][2])
-    station = {}
-    with open(j("daily_mean_temperature_2016-2026.csv"), encoding="utf-8") as f:
-        for r in csv.DictReader(f):
-            if r["station"] == "Jönköping":
-                station[r["date"]] = float(r["temperature (C)"])
-    days = {}
-    with open(j("bev_daily_summary_2025-03_2026-10.csv"), encoding="utf-8") as f:
-        for r in csv.DictReader(f):
-            days.setdefault((r["registration"], r["operating_date"]), r)
-    rows = []
-    for k, r in days.items():
-        c = tms.get(k)
-        if not c:
+    figs = json.load(open(os.path.join(HERE, "figures.json")))
+    task = os.path.dirname(target)
+    # ---- the documents' filed figures
+    std = text(os.path.join(target, "depot_electrification_standard_DES-1.pdf"))
+    agr = text(os.path.join(target, "charging_connection_agreement_2025.pdf"))
+    quo = text(os.path.join(target, "ebus_quotation_2027.pdf"))
+    share = int(re.search(r"no more than\s+(\d+) per cent", std).group(1)) / 100.0
+    design_t = -float(re.search(r"minus (\d+) degrees", std).group(1))
+    supply = float(re.search(r"(\d{3}) kW from 21:00 to 07:00", agr).group(1))
+    usable = float(re.search(r"usable capacity (\d+) kWh", quo).group(1))
+    charger = float(re.search(r"up to (\d+) kW to a bus", std).group(1))
+    ok("standard: 85 per cent", share == 0.85)
+    ok("standard: minus 15", design_t == -15.0)
+    ok("agreement: the night capacity equals the build's", supply == figs["supply_kw"])
+    ok("quotation: 480 kWh usable", usable == 480.0)
+    # ---- registers
+    wb = load_workbook(os.path.join(target, "block_register_2026.xlsx"), read_only=True)
+    blocks, old2new = {}, {}
+    for r in list(wb["Blocks"].iter_rows(values_only=True))[1:]:
+        if not r or r[0] is None:
             continue
-        import datetime as dt
-        span = (dt.datetime.fromisoformat(r["last_arrival_utc"][:19]) -
-                dt.datetime.fromisoformat(r["first_departure_utc"][:19])).total_seconds() / 3600
-        body, equip, ttare = trl[c["trailer_reg"]]
-        rows.append((c["duty"], per(c["shipper"], k[1][:7]), sum(w for _, w in c["drops"]), float(r["distance_km"]),
-                     float(r["energy_used_kwh"]), float(r["ambient_mean_c"]) if r["ambient_mean_c"] else None,
-                     station[k[1]], k[0], k[1], float(r["soc_start_pct"]) - float(r["soc_end_pct"]),
-                     float(r["distance_km"]) / float(r["driving_time_h"]),
-                     (tractor[k[0]] + ttare) / 1000.0, ride(c["duty"], c["drops"])))
-    off = np.mean([x[5] - x[6] for x in rows if x[5] is not None])
-    duty = np.array([x[0] for x in rows])
-    ship = np.empty(len(rows), dtype=object)
-    ship[:] = [x[1] for x in rows]
-    dec = np.array([x[2] for x in rows])
-    km = np.array([x[3] for x in rows])
-    y = np.array([x[4] for x in rows])
-    T = np.array([x[5] if x[5] is not None else x[6] + off for x in rows])
-    lk = np.array([routes[d][1][1] for d in duty], float)
-    cl = np.array([routes[d][2] for d in duty], float)
-    # the payload by moments: within each pilot duty and period, the duty's declared spread less the error variance
-    pay = np.zeros(len(rows))
-    for key in set(zip(duty, ship)):
-        m = np.array([(a, b) == key for a, b in zip(duty, ship)])
-        er = err[key[1]]
-        vd = np.var(dec[m], ddof=1)
-        ev = er * np.mean(dec[m] ** 2) / (1 + er)
-        lam = max(0.0, vd - ev) / vd if vd > 0 else 1.0
-        pay[m] = dec[m].mean() + lam * (dec[m] - dec[m].mean())
-    pay /= 1000.0
-    vday = np.array([x[10] for x in rows])
-    combo = np.array([x[11] for x in rows])
-    rideshare = np.array([x[12] for x in rows])
-    X = np.column_stack([km, km * cl, km * np.maximum(0, 16 - T), km * np.maximum(0, -T),
-                         km * (vday ** 2 - 65.0 ** 2) / 1000.0, km * (combo - 19.0), pay * lk * rideshare])
-    # the speed a duty keeps on a -5 C day: its routing-tool speed times the pilot's actual-to-planned ratio on the
-    # days within 3 C of -5
-    ratio = vday / np.array([routes[d][3] for d in duty])
-    rr = float(ratio[np.abs(T + 5.0) <= 3.0].mean())
-    beta = np.linalg.solve(X.T @ X, X.T @ y)
-    # the first-year loss, tractor by tractor: energy per full charge on age and degrees below 20 C
-    import datetime as dt
-    cap = y / np.array([x[9] for x in rows]) * 100
-    age = np.array([(dt.date.fromisoformat(x[8]) - dt.date(2025, 2, 17)).days / 365.25 for x in rows])
-    regs = np.array([x[7] for x in rows])
-    loss = []
-    for g in sorted(set(regs)):
-        m = regs == g
-        A = np.column_stack([np.ones(m.sum()), np.log1p(age[m] / 0.1), age[m], np.maximum(0, 20 - T[m])])
-        b = np.linalg.solve(A.T @ A, A.T @ cap[m])
-        loss.append(-(b[1] * np.log1p(10.0) + b[2]) / b[0])
-    loss = float(np.mean(loss))
-    limit = 0.85 * 540 * (1 - loss)
-    qt = subprocess.run(["pdftotext", "-layout", j("quotation_bev_tractors_2027.pdf"), "-"], capture_output=True, text=True).stdout
-    import re
-    t27 = float(re.search(r"Unladen weight\s+([\d,]+) kg", qt).group(1).replace(",", "")) / 1000.0
-    res = {}
-    for c in short:
-        s, legs, climb, vplan = routes[c]
-        tot = sum(legs)
-        v5 = vplan * rr
-        notes = list(vnotes[c].values())
-        rs = float(np.mean([ride(c, x["drops"]) for x in notes]))
-        cb = t27 + np.mean(vtrl[c]) / 1000.0
-        e = beta @ np.array([tot, tot * climb, tot * 21.0, tot * 5.0, tot * (v5 ** 2 - 65.0 ** 2) / 1000.0,
-                             tot * (cb - 19.0), np.mean(loads[c]) / 1000 * legs[1] * rs])
-        res[c] = (float(e), e <= limit)
-    go = sorted(c for c, v in res.items() if v[1])
-    fig = json.load(open(os.path.join(HERE, "figures.json")))
-    okset = go == fig["call_set"]
-    far = {c: (round(v[0]), fig["energy"][c]) for c, v in res.items() if abs(v[0] - fig["energy"][c]) > 10}
-    okloss = fig["conventions"]["loss_band"][0] <= 100 * loss <= fig["conventions"]["loss_band"][1]
-    print("verify: %d pilot days, payload %.2f kWh per t per 100 km, loss %.2f per cent, limit %.1f, "
-          "%d tractors %s; set %s, energies %s, loss %s" % (len(rows), beta[-1] * 100, 100 * loss, limit,
-                                                           len(go), go,
-                                             "agree" if okset else "DIFFER", "within 10 kWh" if not far else
-                                             "DIFFER " + str(far), "agrees" if okloss else "DIFFERS"))
-    return 0 if okset and not far and okloss else 1
+        ret = mins(r[8])
+        if ret <= mins(r[7]):
+            ret += 1440
+        blocks[r[0]] = {"dtype": r[2], "km": float(r[5]), "dep": mins(r[7]), "ret": ret, "hours": float(r[9]), "climb": float(r[10])}
+        old2new[str(r[1])] = r[0]
+    weekday = sorted(c for c, b in blocks.items() if b["dtype"] == "Mon-Fri")
+    wb = load_workbook(os.path.join(target, "fleet_plan_2027.xlsx"), read_only=True)
+    prio = {r[1]: int(r[0]) for r in list(wb["Weekday blocks 2027"].iter_rows(values_only=True))[1:] if r and r[1]}
+    wb = load_workbook(os.path.join(target, "vehicle_register_2026.xlsx"), read_only=True)
+    veh, reg2fn, cards = {}, {}, []
+    for r in list(wb["Vehicles"].iter_rows(values_only=True))[1:]:
+        if r and r[0] is not None:
+            veh[int(r[0])] = {"drive": r[3], "since": r[10].date() if hasattr(r[10], "date") else r[10], "heater": r[9]}
+            reg2fn[r[1]] = int(r[0])
+    for r in list(wb["Fuel cards"].iter_rows(values_only=True))[1:]:
+        if r and r[0] is not None:
+            cards.append((r[0], int(r[1]) if r[1] is not None else None, r[2].date() if hasattr(r[2], "date") else r[2],
+                          r[3].date() if hasattr(r[3], "date") else r[3]))
+    rating = re.search(r"(\d+) kW fuel-fired \(HVO, ([\d.]+) l/h", veh[1201]["heater"])
+    kwh_per_l = float(rating.group(1)) / float(rating.group(2))
+    # ---- the dispatch log and the fuel statement: tank to tank, mapped by the fill's timestamp
+    dl = pd.read_csv(os.path.join(target, "depot_dispatch_log_2024-01_2026-10.csv"), dtype={"block": str, "vehicle": str})
+    dl["date"] = pd.to_datetime(dl["operating_date"]).dt.date
+    dl["code"] = [old2new.get(c, c) for c in dl["block"]]
+    dl["fn"] = [int(v) if v.isdigit() else reg2fn.get(v) for v in dl["vehicle"]]
+    dl["dep_dt"] = [pd.Timestamp(d) + pd.Timedelta(minutes=mins(t)) for d, t in zip(dl["date"], dl["depot_departure"])]
+    fu = pd.read_csv(os.path.join(target, "fuel_card_transactions_2024-01_2026-10.csv"), dtype={"card_no": str, "vehicle_entered": str})
+    fu["time"] = pd.to_datetime(fu["transaction_time"])
+    fu["date"] = fu["time"].dt.date
+    bycard = {}
+    for c in cards:
+        bycard.setdefault(c[0], []).append(c)
+    fn_col = []
+    for card, d, ent in zip(fu["card_no"], fu["date"], fu["vehicle_entered"].fillna("")):
+        f = None
+        for _, vfn, a, b in bycard.get(card, []):
+            if vfn is not None and a <= d and (b is None or d <= b):
+                f = vfn
+        if f is None and ent.strip().isdigit() and int(ent) in veh:
+            f = int(ent)
+        fn_col.append(f)
+    fu["fn"] = fn_col
+    up = fu["product"].str.upper()
+    fu["kind"] = np.where(up.str.contains("HVO"), "hvo", np.where(up.str.contains("DIESEL"), "diesel", "adblue"))
+    ref0, ref1 = dt.date(2025, 11, 1), dt.date(2026, 10, 31)
+    rows_A, rows_y, codes = [], [], {}
+    for fn, g in fu[(fu["kind"] == "diesel") & fu["fn"].notna()].groupby("fn"):
+        fn = int(fn)
+        if veh[fn]["drive"] != "diesel":
+            continue
+        g = g.sort_values("time")
+        fills = []
+        for t, l in zip(g["time"], g["litres"]):
+            if fills and (t - fills[-1][0]) <= pd.Timedelta(minutes=10):
+                fills[-1][1] += l
+            else:
+                fills.append([t, l])
+        days = dl[dl["fn"] == fn].sort_values("dep_dt")
+        for (t0, _), (t1, l) in zip(fills[:-1], fills[1:]):
+            sub = days[(days["dep_dt"] > t0) & (days["dep_dt"] <= t1)]
+            if len(sub) == 0 or not (ref0 <= t1.date() <= ref1) or sub["date"].min() < ref0:
+                continue
+            kms = sub.groupby("code")["planned_km"].sum().to_dict()
+            for c in kms:
+                codes.setdefault(c, len(codes))
+            rows_A.append(kms)
+            rows_y.append(l)
+    A = np.zeros((len(rows_A), len(codes)))
+    for i, kms in enumerate(rows_A):
+        for c, k in kms.items():
+            A[i, codes[c]] = k / 100.0
+    y = np.array(rows_y)
+    beta = np.linalg.solve(A.T @ A, A.T @ y)
+    rates = {c: float(beta[i]) for c, i in codes.items()}
+    dmax = max(abs(rates[c] - figs["diesel"][c]) for c in weekday)
+    ok("R1: every weekday block's diesel figure within 0.7 of the golden", dmax <= 0.7, "%.2f" % dmax)
+    # ---- the pilot: energy per km outside HVAC by block, HVAC per hour by temperature, the heater fuel
+    eb = pd.read_csv(os.path.join(target, "ebus_telematics_daily_2025-03_2026-10.csv")).drop_duplicates()
+    eb["date"] = pd.to_datetime(eb["date"]).dt.date
+    wx = pd.read_csv(os.path.join(target, "weather_vehkasalo_daily_2016_2026.csv"))
+    wx["date"] = pd.to_datetime(wx["date"]).dt.date
+    both = wx.dropna(subset=["t_mean_airport_c", "t_mean_keskusta_c"])
+    off = float((both["t_mean_keskusta_c"] - both["t_mean_airport_c"]).mean())
+    st = dict(zip(wx["date"], wx["t_mean_airport_c"].where(wx["t_mean_airport_c"].notna(), wx["t_mean_keskusta_c"] - off)))
+    amb = eb["ambient_mean_c"].astype(float).values
+    s_ = np.array([st.get(d, np.nan) for d in eb["date"]])
+    offb = float(np.nanmean(amb - s_))
+    eb["t"] = np.where(np.isnan(amb), s_ + offb, amb)
+    eb["hours"] = eb["moving_h"] + eb["idle_h"]
+    key = {(int(r.fn), r.date): r.code for r in dl.itertuples()}
+    eb["code"] = [key.get((int(v), d)) for v, d in zip(eb["vehicle"], eb["date"])]
+    eb = eb.dropna(subset=["code"])
+    ws = pd.read_csv(os.path.join(target, "workshop_orders_2024-01_2026-10.csv"))
+    bad = set()
+    for _, f in ws[ws["description"].str.contains("heater does not start", case=False)].iterrows():
+        rep = ws[(ws["vehicle"] == f["vehicle"]) & ws["description"].str.contains("heater repaired", case=False) & (pd.to_datetime(ws["opened"]) > pd.to_datetime(f["opened"]))]
+        a, b = pd.to_datetime(f["opened"]).date(), pd.to_datetime(rep.iloc[0]["opened"]).date()
+        d = a
+        while d < b:
+            bad.add((int(f["vehicle"]), d))
+            d += dt.timedelta(days=1)
+    keep = np.array([(int(v), d) not in bad for v, d in zip(eb["vehicle"], eb["date"])])
+    e_block = ((eb["energy_used_kwh"] - eb["hvac_kwh"]).groupby(eb["code"]).sum() / eb["distance_km"].groupby(eb["code"]).sum()).to_dict()
+    days = eb["code"].value_counts().to_dict()
+    ebh = eb[keep]
+    near = ebh[np.abs(ebh["t"] - design_t) <= 2.0]
+    h_pilot = float((near["hvac_kwh"] / near["hours"]).mean())
+    # heater fuel: HVO fills tank to tank on the electric buses
+    hv = fu[(fu["kind"] == "hvo") & fu["fn"].notna()]
+    iv = []
+    for fn, g in hv.groupby("fn"):
+        fn = int(fn)
+        if veh[fn]["drive"] != "electric":
+            continue
+        g = g.sort_values("time")
+        fl = list(zip(g["time"], g["litres"]))
+        dd = eb[eb["vehicle"] == fn]
+        for (t0, _), (t1, l) in zip(fl[:-1], fl[1:]):
+            sub = dd[(dd["date"] > t0.date()) & (dd["date"] <= t1.date())]
+            if len(sub):
+                hrs = np.array([0.0 if (fn, d) in bad else h for h, d in zip(sub["hours"], sub["date"])])
+                iv.append((l, hrs, sub["t"].values))
+    best = None
+    for T0 in np.arange(-12, 2.01, 0.5):
+        x = np.array([float(np.sum(h * np.maximum(0, T0 - t))) for _, h, t in iv])
+        yv = np.array([l for l, _, _ in iv])
+        k = float(x @ yv / (x @ x))
+        sse = float(np.sum((yv - k * x) ** 2))
+        if best is None or sse < best[0]:
+            best = (sse, k, T0)
+    lph = best[1] * max(0.0, best[2] - design_t)
+    heater_kw = lph * kwh_per_l
+    ok("R3: the heaters' heat within 0.3 kW of the golden", abs(heater_kw - figs["heater_kw"]) <= 0.3, "%.2f vs %.2f" % (heater_kw, figs["heater_kw"]))
+    heat_new = h_pilot + heater_kw
+    # the bridge by weighted polyfit over the blocks an electric bus ran
+    xs = np.array([rates[c] for c in e_block if c in rates])
+    ys = np.array([e_block[c] for c in e_block if c in rates])
+    wts = np.array([days[c] for c in e_block if c in rates], float)
+    b1, b0 = np.polyfit(xs, ys, 1, w=np.sqrt(wts))
+    E = {}
+    for c in weekday:
+        e = e_block[c] if days.get(c, 0) >= 30 else b0 + b1 * rates[c]
+        E[c] = blocks[c]["km"] * e + blocks[c]["hours"] * heat_new
+    emax = max(abs(E[c] - figs["energy"][c]) for c in weekday)
+    ok("R4: every design-day energy within 10 kWh of the golden", emax <= 10, "%.1f" % emax)
+    # the loss: a square-root age form with a cold term and bus levels
+    d = (eb["soc_start_pct"] - eb["soc_end_pct"]).values.astype(float)
+    m = d >= 30
+    cap = eb["energy_used_kwh"].values[m] / (d[m] / 100.0)
+    age = np.array([(dd - veh[int(v)]["since"]).days for v, dd in zip(eb["vehicle"], eb["date"])])[m] / 365.25
+    cold = np.maximum(0, 10 - eb["t"].values[m])
+    bus = eb["vehicle"].values[m]
+    B = np.column_stack([(bus == b).astype(float) for b in sorted(set(bus))])
+    X = np.column_stack([B, np.sqrt(age), cold])
+    bb, *_ = np.linalg.lstsq(X, cap, rcond=None)
+    loss = -bb[B.shape[1]] / np.mean(bb[:B.shape[1]])
+    ok("R6: a square-root age form lands inside the loss band", figs["conventions"]["loss_band"][0] <= 100 * loss <= figs["conventions"]["loss_band"][1], "%.2f" % (100 * loss))
+    lim = share * usable * (1 - figs["loss_pct"] / 100.0)
+    ok("limit within 1 kWh", abs(lim - figs["limit_kwh"]) <= 1.0)
+    verdict = {c: "yes" if E[c] <= lim else "no" for c in weekday}
+    ok("R5: every verdict agrees", verdict == figs["verdict"], str([c for c in weekday if verdict[c] != figs["verdict"][c]]))
+    # the charging efficiency from the sessions and the night by the least-slack schedule
+    se = pd.read_csv(os.path.join(target, "depot_charging_sessions_2025-03_2026-10.csv"))
+    se["date"] = pd.to_datetime(se["plug_in_utc"]).dt.date
+    day = {(int(r.vehicle), r.date): (r.energy_used_kwh, r.soc_start_pct - r.soc_end_pct) for r in eb.itertuples()}
+    num = den = 0.0
+    for v, dd, si, so, kwh in zip(se["vehicle"], se["date"], se["soc_in_pct"], se["soc_out_pct"], se["energy_kwh"]):
+        r = day.get((int(v), dd)) or day.get((int(v), dd - dt.timedelta(days=1)))
+        if r and r[1] >= 30 and so - si >= 30:
+            num += (so - si) / 100.0 * r[0] / (r[1] / 100.0)
+            den += kwh
+    eta = num / den
+    ok("eta within 0.01", abs(eta - figs["eta"]) <= 0.01, "%.3f" % eta)
+    q = [c for c in sorted(weekday, key=lambda c: prio[c]) if E[c] <= lim]
+    taken = []
+    for c in q:
+        jobs = [(x, E[x] / eta, max(blocks[x]["ret"], 21 * 60), min(blocks[x]["dep"] + 1440, 7 * 60 + 1440)) for x in taken + [c]]
+        rem = {x: e for x, e, _, _ in jobs}
+        mnt = min(j[2] for j in jobs)
+        end = max(j[3] for j in jobs)
+        while mnt < end:
+            avail = supply * 5 / 60.0
+            live = sorted([j for j in jobs if j[2] <= mnt and mnt + 5 <= j[3] and rem[j[0]] > 1e-9],
+                          key=lambda j: (j[3] - mnt) - rem[j[0]] / charger * 60.0)
+            for x, e, a, b in live:
+                take = min(rem[x], charger * 5 / 60.0, avail)
+                rem[x] -= take
+                avail -= take
+                if avail <= 1e-9:
+                    break
+            mnt += 5
+        if sum(rem.values()) > 1.0:
+            break
+        taken.append(c)
+    ok("R8: the order by the least-slack schedule equals the golden", sorted(taken) == figs["call_set"], str(sorted(taken)))
+    ok("R7: the night's energy for the order within 0.2 MWh", abs(sum(E[c] / eta for c in taken) / 1000 - figs["night_mwh"]) <= 0.2)
+    ok("R7: the qualifying blocks' night demand within 0.3 MWh", abs(sum(E[c] / eta for c in q) / 1000 - figs["demand_mwh"]) <= 0.3)
+    # the goldens
+    gold = os.path.join(task, "golden")
+    wb = load_workbook(os.path.join(gold, "niittyla_ebus_order_2027.xlsx"), read_only=True)
+    rows = {r[0]: r[1] for r in wb["Order"].iter_rows(values_only=True) if r and r[0]}
+    ok("golden workbook: the count", rows.get("Buses to order") == figs["call_count"])
+    ok("golden workbook: the night energy", rows.get("Design night: energy at the connection point for the buses ordered, MWh") == figs["night_mwh"])
+    with zipfile.ZipFile(os.path.join(gold, "niittyla_ebus_order_2027.pptx")) as z:
+        names = z.namelist()
+        s1 = z.read("ppt/slides/slide1.xml").decode("utf-8")
+    ok("golden deck: three slides with the count on the first", sum(1 for n_ in names if re.match(r"ppt/slides/slide\d+\.xml$", n_)) == 3 and ("Order %d " % figs["call_count"]) in s1)
+    print("verify: %s" % ("PASS" if not FAIL else "FAIL"))
+    for f in FAIL:
+        print("FAIL", f)
+    return 1 if FAIL else 0
 
 
 if __name__ == "__main__":

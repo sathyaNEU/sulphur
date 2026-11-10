@@ -2,65 +2,62 @@
  "task": "task4",
  "status": "READY",
  "domain": "supply-chain-logistics",
+ "subdomain": "regression-classification-model-diagnostics",
+ "client_domain": "general-statistics-data-science",
  "objective": "forecasting",
  "stage": 5,
  "stage_name": "ready",
  "updated": "2026-11-10",
- "stump": "The careful pass (the union of the four recorded runs' methods) files a payload term of 1.5 on the terminal's calibration line, a straight-line loss of 3.1 (limit 445) and the year's speed ratio, and orders 5 (V02, V14, V18 out); at the design-day speed it orders 10 (V07, V21 in); each estimate put right alone orders 2, 3 or 10; only all three land the eight",
- "architecture": 9,
+ "doctrine": "throughout",
+ "architecture": 10,
  "loops": 0,
+ "call": "Order 18 battery-electric buses for M101, M107, M108, M113, M116, M119, M122, M123, M124, M129, M134, M135, M137, M139, M140, M142, M146 and M148; the plan's priority list is cut at M125, which the 690 kW night cannot recharge with the 18 above it",
+ "chain": "R1 each weekday block's diesel use, l/100 scheduled km, tank to tank over the dispatch log (37.2 to 62.4); R2 the pilot blocks' gap to the rest (46.2 against 49.1, 2.9 l/100 km); R3 the pilot heaters' heat at -15 C (4.3 kW); R4 the 48 design-day energies through the diesel bridge and the 2027 heating (12.4 kW an hour out); R5 the first-winter loss (4.3 per cent); R6 the verdicts against 390.5 kWh (23 pass); R7 the qualifying blocks' night demand (8.7 MWh against 7.0 deliverable); R8 the order (18, the plan's priority order cut at M125)",
+ "stump": "The careful pass (the union of the recorded runs) carries the pilot's fit on kilometres, climb and hours per km and reads the pilot's own cold response at -15 C, forecasts every hard block about 58 kWh light, passes 38 blocks and orders 21 under the night's capacity (38 without it); the pilot's cold-day consumption times kilometres orders 33; the diesel bridge put right alone orders 20 and the heaters' share alone 19; the verdicts summed order 23, the night on battery energy 20",
  "precut": {
-  "exit": 0,
-  "date": "2026-11-10",
-  "checks": "84 of 84"
+  "exit": null,
+  "date": "",
+  "checks": ""
  },
  "leak": {
-  "leak_py": "REVIEW, no LEAK (2026-11-10, target.zip 494b463c, as-of 2026-11-06): FES-2 clause 4.2, the quoted 540 kWh, ordinary order and specification words in the two PDFs; answered in the report",
-  "reader": "2026-11-10 isolated Sonnet reader on 494b463c: no leak, no ranking or helper file, no one thing, no generation tells; careful estimate 'a third to 40 per cent' on six pieces incl. ungraded planning loads, result by result in line with effort.py"
+  "leak_py": "REVIEW, no LEAK (2026-11-10, as-of 2026-11-06)",
+  "reader": "fourth pass 2026-11-10: no process sentence, no helper file, no one thing; the fuel heaters noticed on a read"
  },
  "duplicate_check": {
-  "check": "WARN 2026-11-10 (repeat.gate_g, repeat.question_form), answered in the note",
-  "heart": "WARN 2026-11-10",
-  "surface": "exit 0 2026-11-10"
+  "heart": "WARN (2026-11-10, after the Gate G redraw to binding_constraint)",
+  "nearest": "see guard.py heart"
  },
  "judge": {
-  "verdict": "DETERMINISTIC (2026-11-10, re-judge after FIX_NOW, isolated thread on 494b463c)",
-  "disposition": "APPROVE (both passes); pass 1 flagged the tare and drops as earned by reflex and its thread put a careful pass at 50 to 62 per cent: the component left the graded chain; the re-judge thread put the careful pass at about 1 of 6 (the -5 C ratio): that component left the graded chain too, no figure moved",
-  "gate_g": "method_or_model_selection / statistical_rigor (mixed), analytical_non_defect, surface_read_dependency no, sole_data_defect no",
-  "gate_h": "domain pass, layers pass, results across 4+ areas, one_thing none",
-  "report": "task4/determinism_check_report.md (re-judge); task4/determinism_check_report_pass3.md (pass 1)"
+  "verdict": "DETERMINISTIC (pass 7, 2026-11-10, target.zip 67186f2dd19abb65)",
+  "disposition": "APPROVE",
+  "gate_g": "binding_constraint, secondarily method_or_model_selection; analytical_non_defect; no surface read; no sole defect",
+  "gate_h": "pass: 8 results over 5 or more areas, one_thing none, careful about 2.5 of 8",
+  "report": "task4/determinism_check_report.md"
+ },
+ "paper_pair": 36.0,
+ "effort": {
+  "quick": 14.0,
+  "careful": 36.0,
+  "thorough": 100.0,
+  "largest_hint": "the pilot buses heated the cabin with fuel below about -4 C; rescues 1 of 8 (R3)"
  },
  "returned": [
   {
-   "date": "2026-11-08",
-   "portal": "Domains Fit (General Statistics & Data Science): read as a stated battery limit applied to route energy and a count of qualifying duties; no estimate, model or uncertainty seen in the prompt",
-   "repair": "domain_fit (H20)",
-   "moves": "prompt.txt: each duty's energy filed as 'forecast from what our Jönköping pilot tractors drew on their own duties' (the data FES-2 3.1 already names, no model, covariate or correction); the design note's prompt contract carries the clause; checks.py asserts it (117 assertions, 0 failed on target.zip ce9fbb1b); voice-check PASS (draft and the author's voice version); leak.py prompt sweep REVIEW only. The call, the stump, the ladder, every figure, the pack and the golden unchanged",
-   "owed": "leak.py sweep 10 and audit_containers.py fail on containers (openpyxl dialect in the five workbooks, one zip clock for every entry): the generator's local postprocess.py predates the house writers (SKILLS 7833045); migrate make.py and build.py to reduce-house-fixes/scripts/writers, rebuild, then RESHIPPED"
-  },
-  {
-   "date": "2026-11-09",
-   "source": "review",
-   "repair": "design",
-   "portal": "task f8e700dc, version 13, reward 68.5, stumped failed, determinism and solution passed: sent back as not difficult enough; the order rested on one recognition (the declared payloads' dilution), Tabergs Travaror's exact declarations confirmed the corrected term for free, and the cold form never moved a duty",
-   "moves": "re-rooted in the same world on the client's instruction (architecture 6, a results chain at depth level 5): Tabergs out of the pilot, Granna Dryckes' notes on its dock scale from 17 Aug 2026, a smooth sub-zero curve the held-out winter chooses, FES-2 2.3 charging the first year's permanent battery loss read from the pilot's SOC records; each of the three estimates moves the order alone (8, 8, 9)"
-  },
-  {
-   "date": "2026-11-09",
+   "date": "2026-11-10",
    "source": "triage",
    "repair": "design",
-   "portal": "architecture 7 platform runs (author's account): both runs earned the payload term, the loss, the cold curve and 12 of 14 energies, fitted squared routing-tool speed at the year's ratio and ordered 5, V14 out at 444.4 and 443.0 kWh against 442 (golden 435.4); one duty, one judgment, a 1 to 3 kWh margin inside the 10 kWh band, run 2 naming the golden as a defensible alternative",
-   "moves": "re-rooted in the same world as architecture 8 (level 5): three SME judgments added beside the winter speed, each with its own graded component and two duties of its own (the combination's tare on every leg from the trailer register: V02, V14; a multi-drop load taken off at its stops: V03, V11; ePTO fridge units drawing 4.4 kW from the tractor by the hour, diesel and axle-generator units not: V24, V30, V33); the order moves from 6 to 7; no duty within 13 kWh of the limit; the payload term's band 2.0 to 2.4 over every rival; new file tms_consignments_varnamo_2025-11_2026-10.csv, trailer registrations on the TMS and weighbridge, a Stops sheet, the trailer register's equipment codes, the quotation's unladen weight and electric PTO, FES-2 2.1's drops"
+   "portal": "architecture 9 platform runs (author's account): both runs landed the golden (order 8; run 1 payload 2.00, loss 5.08 by a square-root-age model, a winter driving-time model, unloading by pallet share, 400 weekly bootstraps; run 2 payload 1.92, loss 4.51, a routing-hours-to-January-driving-hours model, a declaration regime split at 17 August 2026 found from the error, 600 bootstraps); every estimate the design priced as a step the runs named and did not take was a mechanism one plot or one join carried",
+   "moves": "re-rooted in a new world as architecture 10: a Finnish municipal bus operator's depot, the pilot's blocks selected on the diesel record (the evidence in the fuel-card file the runs dismiss), the pilot heaters' share of the design day's heat (a structure across the register, the statement and the quotation that nothing names), the night supply over 48 blocks (the accumulation of small sign-consistent shortfalls into buses), each moving the count; new shell (how-many | every | pptx+xlsx)"
   },
   {
    "date": "2026-11-10",
    "source": "triage",
    "repair": "design",
-   "portal": "architecture 8 platform runs (author's account): both landed the golden exactly (order 7; payload 2.24 and 2.23, loss 3.78 and 3.79, every energy within about 3 kWh); the hourly ePTO term made both runs time the design day (the winter speed), and every added step was one join to a register already read",
-   "moves": "re-rooted in the same world as architecture 9: the ePTO units, their hourly draw and the quotation's Electric PTO line removed; the pilot's regional duties carry part loads (75 to 89 per cent of the terminal's), so the terminal's calibration line does not carry and each duty's loads come from its own declarations with the error read on the weighbridge (1.9; the line 1.5); the batteries' early-life loss (4.6, a straight line 3.1); the winter speed kept; order 8; shell redrawn (which | each | docx+xlsx); careful pass (the recorded runs' union) orders 5, at the design-day speed 10, with any one estimate put right 2, 3 or 10"
+   "commit": "",
+   "note": "architecture 9 landed by both platform runs (order 8 exact); re-rooted to architecture 10, the Niittyla depot"
   }
  ],
- "resume": "READY: the author rewrites prompt.txt in their own voice (voice-check.py --rewrite, leak.py), uploads it with target.zip as the next version, pastes the four blocks of submission.md, and /triage-runs once both platform runs are in. Residual risk recorded in the note: a run that both times the design day and carries the error model lands the order with only the loss wrong.",
+ "resume": "READY: the author rewrites prompt.txt in their own voice (voice-check.py task4 --rewrite, leak.py), uploads it with target.zip, pastes the four blocks of submission.md, then /triage-runs task4 once both runs are in",
  "approved": null,
  "delivered": null,
  "portal": null,
@@ -73,186 +70,30 @@
    "event": "architecture 1 spent at stage 4 (reader 1 landed the network re-run, 4.0 at 9 a year; judge DETERMINISTIC APPROVE); re-rooted to architecture 2 (two keys) and redrawn"
   },
   {
-   "date": "2026-10-20",
-   "event": "ask layer v3 after judge pass 3 SEND_BACK and reader D's 24 of 24: late cancellations and lost orders removed; workshop checks of a spare sensor as the silent device"
-  },
-  {
-   "date": "2026-10-20",
-   "event": "stage 4 rounds 3 to 5 on the v3 ask layer: judge pass 4 SEND_BACK (growth after a check unfiled) answered with QC-02 section 9; pass 5 FIX_NOW (the plan's in-place check, a step against the spring round) answered; pass 6 APPROVE; readers E to J all missed the call, asks 2 to 4 of 24"
-  },
-  {
-   "date": "2026-10-20",
-   "event": "SHIPPED: run the 4.0 setting, 18 drift alerts a year within the plan's 28 visits"
-  },
-  {
    "date": "2026-10-31",
-   "event": "architecture 2 spent at the batch 1 repair: determinism judge NOT_DETERMINISTIC, SEND_BACK (the 4.0 call's one-alert-per-cut-short-drift count unforced by the shipped files; the new contractor's visit day an inference)"
-  },
-  {
-   "date": "2026-10-31",
-   "event": "DRAWN architecture 3: a regional parcel carrier's October missed sort scans by hub (Poland), supply-chain-logistics in general-statistics-data-science, missing-data-censoring-measurement-error; guard WARN only"
-  },
-  {
-   "date": "2026-10-31",
-   "event": "stage 3 complete: generator rebuilt (sim, pack, docs, golden, rungs, checks, verify, ceiling, writeup, make), 157 checks, the verifier, two byte-identical builds, figures_check, precut 61 of 61, voice-check, leak.py REVIEW, guard heart WARN and surface exit 0; heart first BLOCKed G3 and statistical_office_head against task5's later re-draw, cleared by re-reading the decisive generator as G17 and redrawing the requester"
-  },
-  {
-   "date": "2026-10-31",
-   "event": "PAUSED at stage 4 for the main thread: the leak reader and the determinism judge cannot be spawned from a fork"
+   "event": "architecture 2 spent at the batch 1 repair: determinism judge NOT_DETERMINISTIC, SEND_BACK; DRAWN architecture 3 (a regional parcel carrier's October missed sort scans by hub)"
   },
   {
    "date": "2026-11-08",
-   "event": "architecture 3 spent on the platform: both runs reached the golden's call (alerts at HKTW, HLDZ and HWAW) and every graded figure, not stumped, no rubric generated; runs saved under runs/",
-   "architecture_3_record": {
-    "stump": "A competent solver takes each parcel's hub from its sort scan or, where it has none, from the sort plan of its night, and ends on alerts at Sosnowiec and Pruszkow with Strykow under the line; Strykow sorted Pruszkow's overflow by hand on the heavy nights and sent it to the Warsaw depots on its own trailers, so the unscanned overflow parcels that route charges to Pruszkow came off Strykow's trailers, and only the unloading each unscanned parcel came off at its delivery depot fires Strykow as well.",
-    "precut": {
-     "exit": 0,
-     "date": "2026-10-31"
-    },
-    "leak": {
-     "leak_py": "REVIEW, no LEAK (2026-11-07, bd959e1c): TDS-4's 1.00 tolerance and population words, the plan's Q4 dates, each ruled in the note",
-     "reader": "2026-11-07 Sonnet reader on d5630ad1: no leak; the prompt's interval basis read as a dictated method and the workbook sentence as a field list (templating), both fixed; one re-read of the final pack owed to the main thread"
-    },
-    "duplicate_check": {
-     "heart": "WARN (2026-10-31): repeat.decision and repeat.question_form only, after the redraw of the decisive generator (G17) and the requester (operations_director)",
-     "surface": "exit 0 (2026-10-31): no surface overlap; one card-axis pair promoted against task480 (gap time, G17, designation_set), the card's differentiation line names how the driver differs",
-     "heart_2026-11-07": "BLOCK on the recency window only (ban.strategy population_selection and ban.forcing_event season_or_peak against task273 v5); WARN at ship on 10-31; the card is unchanged by this repair and was not relabelled",
-     "surface_2026-11-07": "exit 0"
-    },
-    "judge": {
-     "verdict": "DETERMINISTIC (2026-11-07, Sonnet thread on target.zip d5630ad1): every rate, the 300 unloadings, the intervals' sides under five methods and every depot count reproduced",
-     "disposition": "APPROVE, no repair; the residual fork on the hub of an unsorted parcel ruled settled by the unloading structure (SF11)",
-     "gate_g": "decomposition_attribution, analytical_non_defect, surface_read_dependency no, sole_data_defect no (borderline)",
-     "gate_h": "domain pass, layers pass, decisive_step analytical",
-     "report": "task4/determinism_check_report.md",
-     "after_judge": "the interval's basis moved from the prompt into october_scorecard_request.eml and the workbook sentence rewritten as a request; meaning unchanged, freeze.py PASS"
-    },
-    "returned": [
-     {
-      "date": "2026-11-07",
-      "portal": "portal input check: both parquet extracts carried the pandas and pyarrow creator metadata. Domains Fit: read as a stated tolerance applied to rates, with counting asks",
-      "repair": "metadata",
-      "zip": "7dd4b6b4",
-      "moves": "both extracts written with no pandas or Arrow schema metadata and no created_by in the footer (generator/parquetio.py), every column a string so no value moved; only the two parquet files moved, no figure moved. Domains Fit left for the author's call",
-      "checks": "generator checks, verify and the byte-identical rebuild; no reader, judge or clone check (author's minor-fix rule)",
-      "domains_fit": "prompt reworded: the deciding figure is each hub's rate over the parcels it handled with a 90 per cent interval, each parcel an independent chance of a missed sort scan, graded as lying wholly above, across or wholly below the tolerance (SF24: Wald, Wilson, Clopper-Pearson, Jeffreys, Agresti-Coull and a parcel bootstrap agree, every bound at least 0.05 points from the line; the bounds themselves are not graded); TDS-4 exported by LibreOffice Writer; the call, the stump, the ladder and every existing figure unchanged (freeze.py: only the interval sides and the level 90 added)",
-      "reshipped": "bd959e1c"
-     }
-    ],
-    "zip_sha256_16": "bd959e1ca7171cbd"
-   }
+   "event": "architecture 3 spent on the platform (both runs on the golden); architecture 4 (the Irish retailer's districts) drawn, built, READY, spent on the platform (not stumped)"
   },
   {
    "date": "2026-11-08",
-   "event": "DRAWN architecture 4: an Irish online farm, pet and garden retailer's own van runs from Castlebar, which outlying districts go to a regional courier for 2027 (supply-chain-logistics in urban-regional-science, forecasting); guard WARN only (repeat.gate_g)"
-  },
-  {
-   "date": "2026-11-08",
-   "event": "stage 4 (leak reader no leak; judge DETERMINISTIC APPROVE), one fix pass, stage 5: READY on target.zip 4a9ccea1"
-  },
-  {
-   "date": "2026-11-08",
-   "event": "architecture 4 spent on the platform: the author reports not stumped (the call landed); run texts not supplied to the repo",
-   "architecture_4_record": {
-    "stump": "A competent solver prices each offered district at the van time its stops take and hands Leenane and Letterfrack to the courier with Mulranny, Achill, Bangor Erris, Belmullet, Louisburgh and Ballycastle, claiming about EUR 20,000; the Connemara van drives through Leenane and Letterfrack to reach Clifden, which stays, so they save only their own stops, and the solver who prices the run without them but one district at a time keeps Mulranny and Bangor Erris, which end the Achill and Erris runs once Achill and Belmullet go: only every combination priced on the run hands over Mulranny, Achill, Bangor Erris, Belmullet, Louisburgh and Ballycastle, about EUR 50,000 net in 2027.",
-    "call": "Hand Mulranny, Achill, Bangor Erris, Belmullet, Louisburgh and Ballycastle to Owenduff from January 2027 and keep Leenane, Letterfrack, Clifden, Cong and Charlestown: about EUR 50,000 net saving in 2027",
-    "precut": {
-     "exit": 0,
-     "date": "2026-11-08",
-     "checks": "72 of 72"
-    },
-    "leak": {
-     "leak_py": "REVIEW, no LEAK (2026-11-08, 4a9ccea1): the offer names the candidates, generic shared words, the 2027 calendar's dates",
-     "reader": "2026-11-08 isolated Sonnet reader on 20a4d41e: no leak; NPS-3 4.1 and 4.3 file the estimand without the method; re-read owed on the offer and NPS-3 4.3 reworded at stage 4"
-    },
-    "duplicate_check": {
-     "check": "WARN 2026-11-08 (repeat.gate_g at the draw)",
-     "heart": "WARN 2026-11-08 after the forum redraw (executive_team BLOCKed against task6, now committee_or_panel): repeat.decision against task6",
-     "surface": "exit 0 2026-11-08; one pair promoted for the author: task4 against task5's re-draw (decisive gap objective and designation_set back to back), both in flight"
-    },
-    "judge": {
-     "verdict": "DETERMINISTIC (2026-11-08, Sonnet thread on 20a4d41e): the list, EUR 50,000 and every run figure reproduced by an independent run-day model",
-     "disposition": "APPROVE; minor: component 1 at 118 to 124 h against 110, R04 and R07 saved hours near a 50-hour edge on single-year fits, the offer's 'any combination' read as a search order; all three fixed",
-     "gate_g": "forecasting with model selection, surface_read_dependency no, sole_data_defect no",
-     "gate_h": "domain, layers and decisive step pass, analytical",
-     "report": "task4/determinism_check_report.md"
-    },
-    "returned": [
-     {
-      "date": "2026-11-08",
-      "source": "judge",
-      "repair": "determinism",
-      "moves": "the offer's 'in any combination' dropped; NPS-3 4.3 'the selection from the partner's offer whose hand-over lowers the year's delivery cost most'; saved hours to the nearest 100 (prompt and asks), Achill road slowed and Owenduff's price to EUR 13.40 so every graded figure sits mid-bin; component 1 'about 110 van-hours' against the hours Owenduff's charge would pay for",
-      "freeze": "freeze.py check --mode rubric FAIL, 8 items, all this fix's: the Critical Components numbers (charges at EUR 13.40, component 1's range, 700), pieces achill_h 650 to 700, ban, corridor, lee_let and mul charges, runs_saved_h R04 650 to 700, and the default path's price text (12.60 to 13.40); the call sentence, the stump and the ladder did not move",
-      "zip": "4a9ccea1"
-     }
-    ],
-    "gates": {
-     "checks": "262 assertions",
-     "verify": "PASS (run-day regression: same list, EUR 50,000, every run's saved and before hours)",
-     "byte_identical": "two builds",
-     "figures_check": "56 of 56",
-     "voice_check": "PASS, 555 characters, WARN which-quota and files up front",
-     "precut": "72 of 72",
-     "ceiling": {
-      "shallow_keep": 8.7,
-      "landed_keep": 30.4,
-      "pair": 39.3,
-      "script": "generator/ceiling.py"
-     },
-     "backtest": "fit 2025, forecast 2026 Jan to Oct: 21 van-hours against 177 for the proportional carry",
-     "container": "clean (scrub audit, target and golden)"
-    },
-    "zip_sha256_16": "4a9ccea1839b45a0",
-    "golden_zip_sha256_16": "801703c83306e234",
-    "subdomain": "transportation-network",
-    "client_domain": "urban-regional-science"
-   }
-  },
-  {
-   "date": "2026-11-08",
-   "event": "DRAWN architecture 5: a Smaland road haulier's battery-electric tractor order for 2027, each Varnamo duty's January design-day energy forecast from a pilot whose payloads are shipper declarations (supply-chain-logistics in general-statistics-data-science, regression-classification-model-diagnostics, forecasting); guard WARN only (repeat.gate_g)"
-  },
-  {
-   "date": "2026-11-08",
-   "event": "stage 4 (leak reader no leak; judge DETERMINISTIC APPROVE), forum and context artifact redrawn on the final heart screen, stage 5: READY on target.zip ce9fbb1bf6928e8f"
-  },
-  {
-   "date": "2026-11-08",
-   "event": "RETURNED on Domains Fit (read as a battery limit applied to route arithmetic); prompt reworded to file each duty's energy as a forecast from the pilot tractors, no figure moved"
+   "event": "architecture 5 (the Fryele tractor order, one deep step) READY on ce9fbb1b; RETURNED on Domains Fit, prompt reworded"
   },
   {
    "date": "2026-11-09",
-   "event": "architecture 5 returned by the portal (reward 68.5, not stumped, one thing); re-rooted to architecture 6 in the same world as a results chain (six results, five areas, depth level 5), card redrawn (allocation-sensitivity, measurement), stage 3 gates green, stage 4 reader and judge spawned"
+   "event": "architecture 5 returned by the portal (reward 68.5, one thing); architectures 6, 7 and 8 built in the same world as results chains; 6 and 8 landed by the runs, 7 lost on one duty by 1 to 3 kWh"
   },
   {
-   "date": "2026-11-09",
-   "event": "stage 4: reader no leak, judge DETERMINISTIC APPROVE; the judge's FIX_NOW (a constant standard declaration) fixed in the generator, every gate re-run; stage 5: READY on target.zip b8f03fbc0bbd9ef3"
+   "date": "2026-11-10",
+   "event": "architecture 9 (the calibration's transfer, the early-life loss, the winter speed) READY on 19b6bec9; both platform runs landed the golden exactly (runs/arch9/)"
   },
   {
-   "date": "2026-11-09",
-   "event": "architecture 6 landed by platform run 1 (three reflexes; the distance transfer left as an untested assumption); re-designed in place as architecture 7 (the speed transfer), stage 3 gates green, stage 4 reader and judge spawned"
-  },
-  {
-   "date": "2026-11-09",
-   "event": "stage 4 on architecture 7: reader no leak, judge DETERMINISTIC APPROVE; READY on target.zip 76adf383c1395b39"
-  },
-  {
-   "date": "2026-11-09",
-   "event": "architecture 7 spent on the platform (both runs lost V14 alone, by 1 to 3 kWh); re-rooted to architecture 8 in the same world; stage 3 gates green; stage 4 reader no leak, judge DETERMINISTIC APPROVE, SF34 added; READY on target.zip 19b6bec945fc8f80"
+   "date": "2026-11-10",
+   "event": "DRAWN architecture 10 in a new world (Finland, Vehkasalon Liikenne's Niittyl\u00e4 depot): the card registered after every axis BLOCK was redrawn; stage 3 generator built (112 checks, verify PASS, two byte-identical builds, effort 36.0)"
   }
  ],
- "zip_sha256_16": "19b6bec945fc8f80",
- "migrated_from": {
-  "project": "Mark",
-  "task": "task250",
-  "status_in_mark": "SHIPPED",
-  "date": "2026-11-08",
-  "note": "moved from Project Mark unstumped on the Mark portal; carried on here for the Sulfur bar"
- },
- "subdomain": "regression-classification-model-diagnostics",
- "client_domain": "general-statistics-data-science",
- "call": "Order 8 battery-electric tractors, for V02, V03, V05, V09, V11, V14, V16 and V18; V07, V21, V24, V27, V30 and V33 stay on diesel",
  "runs": {
   "run1": null,
   "run2": null,
@@ -270,7 +111,7 @@
     "date": "2026-11-08",
     "graded": false,
     "verdict": "not stumped before the rubric phase; both runs on the golden call and every graded figure",
-    "texts": "runs/run1.md, runs/run2.md"
+    "texts": "runs/arch3_run1.md, runs/arch3_run2.md"
    },
    {
     "architecture": 4,
@@ -292,33 +133,41 @@
     "graded": false,
     "verdict": "both runs off the call (5 of 6), V14 alone at 444.4 and 443.0 against 442; the year's speed ratio",
     "texts": "runs/arch7/run1.md, runs/arch7/run2.md (summaries)"
+   },
+   {
+    "architecture": 8,
+    "date": "2026-11-10",
+    "graded": false,
+    "verdict": "both runs landed the golden exactly (order 7)",
+    "texts": "runs/arch8/run1.md, runs/arch8/run2.md (summaries)"
+   },
+   {
+    "architecture": 9,
+    "date": "2026-11-10",
+    "graded": false,
+    "verdict": "both runs landed the golden exactly (order 8; payload 2.00 and 1.92, loss 5.08 and 4.51, the winter speed modelled by both)",
+    "texts": "runs/arch9/run1.md, runs/arch9/run2.md (summaries)"
    }
   ]
  },
  "gates": {
-  "checks": "344 assertions",
-  "verify": "PASS (moments correction, group-mean dwell, tractor-by-tractor loss: the same seven, every energy within 10 kWh, payload 2.25, fridge 4.42 kW)",
-  "byte_identical": "two builds",
-  "figures_check": "100 figures, 0 absent",
-  "voice_check": "PASS, WARN shell quota",
-  "precut": "84 of 84",
+  "checks": "124 assertions",
+  "verify": "PASS (normal equations on timestamp-mapped intervals, a square-root age form, polyfit bridge, the least-slack schedule, the documents read by pypdf)",
+  "byte_identical": "two builds (target 58dd4b87, golden 0f4d16b2)",
+  "effort": "quick 14.0, careful 36.0, thorough 100.0",
+  "figures_check": "181 of 181",
+  "voice_check": "PASS, 794 characters",
+  "precut": "85 of 85, one WARN (R3 upstream of four results; the hint test shows its sentence rescues one)",
   "containers": "audit_containers exit 0",
   "guard": "check WARN, heart WARN, surface exit 0"
  },
- "golden_zip_sha256_16": "8c1248ae1454b16b",
- "doctrine": "throughout",
- "chain": "R1 payload term 1.9 kWh/t/100 loaded km (1.7 to 2.4; each pilot duty's own loads, the terminal's declaration error carried); R2 first-year loss 4.6 per cent (4.2 to 5.6; curved, net of the cold), limit 438 kWh; R3 fourteen design-day energies (at the -5 C ratio 0.76, with the tare and drops); R4 the verdicts; R5 order 8",
- "paper_pair": 20.8,
- "effort": {
-  "quick": 0,
-  "careful": 0.5,
-  "thorough": 5,
-  "largest_hint": "rescues 1 of 5 (the duties' own loads; the curved loss); the winter speed none",
-  "careful_variant_design_day_speed": 34.5,
-  "careful_with_one_correction": {
-   "own-duty loads": 19.0,
-   "curved loss": 19.0,
-   "design-day speed": 34.5
-  }
+ "zip_sha256_16": "03a9cd417a94546a",
+ "golden_zip_sha256_16": "b36585d902a8c975",
+ "migrated_from": {
+  "project": "Mark",
+  "task": "task250",
+  "status_in_mark": "SHIPPED",
+  "date": "2026-11-08",
+  "note": "moved from Project Mark unstumped on the Mark portal; carried on here for the Sulfur bar"
  }
 }

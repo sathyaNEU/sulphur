@@ -1,727 +1,598 @@
-"""Every figure the build owes, computed from the shipped files alone (never from sim.py): the cleaning, the energy
-model on the pilot's daily summaries, the payload calibration on the Varnamo weighbridge, each rung of the ladder and
-each rival the design note runs.
-
-    load(target) -> Pack      the cleaned files
-    golden(pk) -> dict        the golden model and every shortlisted duty's design-day energy
-"""
-import csv
+"""Everything computed from the shipped pack, on the solver's side of the files: the pack loaded and cleaned, each
+block's diesel use tank to tank over the dispatch log (R1), the pilot blocks' rank (R2), the pilot's battery energy
+model and the heat its fuel heaters supplied (R3), the diesel bridge and the 48 design-day energies (R4), the
+verdicts (R5), the first-winter capacity loss (R6), the night under the connection agreement (R7) and the order
+(R8); beside the golden, the hurried passes (quick; careful but hurried, the union of the recorded runs) and the
+rivals on every result. Nothing here reads the generator's truth."""
 import datetime as dt
+import math
 import os
 import re
-from collections import defaultdict
+import sys
 
 import numpy as np
+import pandas as pd
 from openpyxl import load_workbook
 
-DESIGN_T = -5.0
-SHARE = 0.85
+HERE = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, HERE)
+import night  # noqa: E402
+
 FILES = {
-    "weighbridge": "weighbridge_varnamo_2024-11_2026-10.csv",
-    "bev": "bev_daily_summary_2025-03_2026-10.csv",
-    "tms": "tms_consignments_jonkoping_2025-2026.csv",
-    "tmsv": "tms_consignments_varnamo_2025-11_2026-10.csv",
-    "fleet": "fleet_register_2026.xlsx",
-    "routes": "route_register_2026.xlsx",
-    "plan": "fleet_plan_2027.xlsx",
-    "temps": "daily_mean_temperature_2016-2026.csv",
-}
-LAST12 = (dt.date(2025, 11, 1), dt.date(2026, 10, 31))
-USABLE = 540.0   # the quotation's usable battery, read into the checks from the PDF text (checks.py)
-IN_SERVICE = dt.date(2025, 2, 17)   # the pilot tractors' in-service date (fleet register)
-TRACTOR_2027_KG = 11980.0   # the quotation's unladen weight, read into the checks from the PDF text (checks.py)
-TARE_REF = 19.0             # t: the tare term is centred here so the per-km level reads at an ordinary combination
-
-
-def rd(path):
-    with open(path, encoding="utf-8") as f:
-        return list(csv.DictReader(f))
-
-
-def kg(s):
-    s = (s or "").strip()
-    if not s:
-        return None
-    if s.endswith("t"):
-        return float(s[:-1].strip().replace(",", ".")) * 1000
-    return float(s.replace("kg", "").replace(" ", "").replace(",", "."))
+    "fuel": "fuel_card_transactions_2024-01_2026-10.csv", "dispatch": "depot_dispatch_log_2024-01_2026-10.csv",
+    "blocks": "block_register_2026.xlsx", "vehicles": "vehicle_register_2026.xlsx",
+    "ebus": "ebus_telematics_daily_2025-03_2026-10.csv", "sessions": "depot_charging_sessions_2025-03_2026-10.csv",
+    "weather": "weather_vehkasalo_daily_2016_2026.csv", "workshop": "workshop_orders_2024-01_2026-10.csv",
+    "plan": "fleet_plan_2027.xlsx"}
+# the standard's and the agreement's filed figures (read back from the PDFs by verify.py; constants here)
+SHARE, DESIGN_T, CHARGER_KW = 0.85, -15.0, 150.0
+NIGHT_FROM, NIGHT_TO = 21 * 60, 7 * 60
+REF = (dt.date(2025, 11, 1), dt.date(2026, 10, 31))
+NEW_CODES = dt.date(2025, 8, 11)
+HEATER_KWH_PER_L = 35.0 / 3.9          # the register's heater: 35 kW at 3.9 l/h
+HP_FLOOR_T = -10.0                      # the quotation: heat pump to -10 C, boosters below
 
 
 class Pack:
     pass
 
 
-def load(target):
+def _mins(s):
+    h, m = s.split(":")
+    return int(h) * 60 + int(m)
+
+
+def load(target, supply_kw=690.0, usable_2027=480.0):
     pk = Pack()
-    F = {k: os.path.join(target, v) for k, v in FILES.items()}
-    # route register: the duties and the routing tool's stop list
-    wb = load_workbook(F["routes"], read_only=True)
-    pk.routes = {}
-    for r in list(wb["Duties"].iter_rows(values_only=True))[1:]:
-        pk.routes[r[0]] = {"old": r[1], "depot": r[2], "shipper": r[3], "delivery": r[5], "legs": (r[6], r[7], r[8]),
-                          "climb": r[10], "plan_h": float(r[12])}
-    pk.stops = defaultdict(list)
-    for r in list(wb["Stops"].iter_rows(values_only=True))[1:]:
-        pk.stops[r[0]].append((r[2], float(r[3])))
-    wb = load_workbook(F["plan"], read_only=True)
-    pk.short = [r[0] for r in list(wb["Shortlist 2027"].iter_rows(values_only=True))[1:]]
-    # fleet register: tractors' and trailers' tare, the trailers' body and equipment
-    wb = load_workbook(F["fleet"], read_only=True)
-    pk.tractor_tare = {r[1]: float(r[7]) for r in list(wb["Tractors"].iter_rows(values_only=True))[1:] if r[7]}
-    pk.trailer = {}
-    for r in list(wb["Trailers"].iter_rows(values_only=True))[1:]:
-        pk.trailer[r[1]] = {"body": str(r[2]), "type": r[3], "equip": r[4] or "", "tare": float(r[7])}
-    # weighbridge: the last weighing of each departure (a re-weigh after a reload replaces the first)
-    last = {}
-    for r in rd(F["weighbridge"]):
-        k = r["cmr_no"]
-        if k not in last or r["weighed_at"] >= last[k]["weighed_at"]:
-            last[k] = r
-    pk.wb = []
-    for r in last.values():
-        duty = r["duty"]
-        if duty.startswith("VMO-"):
-            duty = "V" + duty[4:]
-        pk.wb.append({"date": dt.date.fromisoformat(r["weighed_at"][:10]), "duty": duty, "shipper": r["shipper"],
-                      "declared": kg(r["declared_kg"]), "net": (float(r["gross_kg"]) - float(r["tare_kg"])),
-                      "trailer": r["trailer_reg"]})
-    pk.wb_raw_rows = sum(1 for _ in open(F["weighbridge"], encoding="utf-8")) - 1
-    # station temperatures
-    pk.station = {}
-    for r in rd(F["temps"]):
-        pk.station[(r["date"], r["station"])] = float(r["temperature (C)"])
-    # TMS consignments: one note per drop, grouped to the vehicle's day
-    tms = {}
-    for r in rd(F["tms"]):
-        k = (r["vehicle_reg"], r["collection_date"])
-        t = tms.setdefault(k, {"duty": r["duty"], "shipper": r["shipper"], "trailer": r["trailer_reg"], "drops": []})
-        t["drops"].append((r["delivery_town"], kg(r["declared_weight"])))
-    # the Varnamo consignments: one departure is a duty's notes on one day
-    pk.vdep = defaultdict(list)
-    vd = {}
-    for r in rd(F["tmsv"]):
-        duty = "V" + r["duty"][4:] if r["duty"].startswith("VMO-") else r["duty"]
-        vd.setdefault((duty, r["collection_date"]), {"trailer": r["trailer_reg"], "drops": []})["drops"].append(
-            (r["delivery_town"], kg(r["declared_weight"])))
-    for (duty, day), v in sorted(vd.items()):
-        pk.vdep[duty].append(v)
-    # battery-electric daily summaries: a day uploaded twice is one day
-    seen = {}
-    for r in rd(F["bev"]):
-        k = (r["registration"], r["operating_date"])
-        if k not in seen or r["uploaded_utc"] < seen[k]["uploaded_utc"]:
-            seen[k] = r
-    days = []
-    for k, r in sorted(seen.items(), key=lambda kv: (kv[0][1], kv[0][0])):
-        c = tms.get(k)
-        if c is None:
+    pk.supply = supply_kw
+    pk.usable_2027 = usable_2027
+    # blocks
+    wb = load_workbook(os.path.join(target, FILES["blocks"]), read_only=True)
+    rows = list(wb["Blocks"].iter_rows(values_only=True))[1:]
+    pk.blocks = {}
+    pk.old2new = {}
+    for r in rows:
+        if not r or r[0] is None:
             continue
-        t = r["ambient_mean_c"]
-        t0 = dt.datetime.fromisoformat(r["first_departure_utc"].replace("Z", ""))
-        t1 = dt.datetime.fromisoformat(r["last_arrival_utc"].replace("Z", ""))
-        tl = pk.trailer[c["trailer"]]
-        days.append({"date": dt.date.fromisoformat(r["operating_date"]), "reg": r["registration"],
-                     "duty": c["duty"], "shipper": c["shipper"], "declared": sum(x[1] for x in c["drops"]),
-                     "drops": c["drops"], "trailer": c["trailer"],
-                     "combo": (pk.tractor_tare[r["registration"]] + tl["tare"]) / 1000.0,
-                     "epto": "ePTO" in tl["equip"], "reefer": tl["body"] == "04",
-                     "km": float(r["distance_km"]), "kwh": float(r["energy_used_kwh"]),
-                     "drive_h": float(r["driving_time_h"]), "span_h": (t1 - t0).total_seconds() / 3600.0,
-                     "v": float(r["distance_km"]) / float(r["driving_time_h"]),
-                     "t": float(t) if t else None, "station_t": pk.station[(r["operating_date"], "Jönköping")],
-                     "soc0": float(r["soc_start_pct"]), "soc1": float(r["soc_end_pct"])})
-    # an ambient sensor dropout takes the station's day, moved by the mean truck-against-station offset
-    off = np.mean([d["t"] - d["station_t"] for d in days if d["t"] is not None])
-    for d in days:
-        d["t_filled"] = d["t"] if d["t"] is not None else d["station_t"] + off
-    for d in days:
-        d["cap"] = d["kwh"] / (d["soc0"] - d["soc1"]) * 100   # the battery's energy per full charge that day
-        d["age"] = (d["date"] - IN_SERVICE).days / 365.25
-        d["phi"] = phi_of(pk, d["duty"], d["drops"])
-        d["phi_eq"] = phi_of(pk, d["duty"], d["drops"], equal=True)
-        d["n_drops"] = len(d["drops"])
-    pk.days = days
-    pk.offset = float(off)
+        code, old, dtype, lines, trips, km, km_old, dep, ret, hours, climb, zone = r
+        dtp = {"Mon-Fri": "M", "Sat": "L", "Sun/holiday": "S"}[dtype]
+        pk.blocks[code] = {"code": code, "old": str(old), "daytype": dtp, "lines": str(lines), "trips": trips, "km": float(km),
+                           "km_old": float(km_old), "dep": _mins(dep), "ret": _mins(ret) if _mins(ret) > _mins(dep) else _mins(ret) + 1440,
+                           "hours": float(hours), "climb": float(climb), "zone": int(zone)}
+        if pk.blocks[code]["ret"] < pk.blocks[code]["dep"]:
+            pk.blocks[code]["ret"] += 1440
+        pk.old2new[str(old)] = code
+    pk.weekday = sorted(c for c, b in pk.blocks.items() if b["daytype"] == "M")
+    # the plan's priority
+    wb = load_workbook(os.path.join(target, FILES["plan"]), read_only=True)
+    pk.priority = {}
+    for r in list(wb["Weekday blocks 2027"].iter_rows(values_only=True))[1:]:
+        if r and r[1]:
+            pk.priority[r[1]] = int(r[0])
+    # vehicles and cards
+    wb = load_workbook(os.path.join(target, FILES["vehicles"]), read_only=True)
+    pk.vehicles = {}
+    pk.reg2fn = {}
+    for r in list(wb["Vehicles"].iter_rows(values_only=True))[1:]:
+        if not r or r[0] is None:
+            continue
+        fn = int(r[0])
+        pk.vehicles[fn] = {"fn": fn, "reg": r[1], "model": r[2], "drive": r[3], "year": r[4], "tank": r[7], "battery": r[8],
+                           "heater": r[9], "since": r[10].date() if hasattr(r[10], "date") else r[10],
+                           "retired": r[11].date() if hasattr(r[11], "date") else r[11]}
+        pk.reg2fn[r[1]] = fn
+    pk.cards = []
+    for r in list(wb["Fuel cards"].iter_rows(values_only=True))[1:]:
+        if not r or r[0] is None:
+            continue
+        vf = r[2].date() if hasattr(r[2], "date") else r[2]
+        vt = r[3].date() if hasattr(r[3], "date") else r[3]
+        pk.cards.append({"card": r[0], "fn": int(r[1]) if r[1] is not None else None, "from": vf, "to": vt, "type": r[4]})
+    pk.ebuses = sorted(fn for fn, v in pk.vehicles.items() if v["drive"] == "electric")
+    # weather: the airport series, its gap filled from the town station less the mean offset
+    wx = pd.read_csv(os.path.join(target, FILES["weather"]))
+    wx["date"] = pd.to_datetime(wx["date"]).dt.date
+    both = wx.dropna(subset=["t_mean_airport_c", "t_mean_keskusta_c"])
+    off = float((both["t_mean_keskusta_c"] - both["t_mean_airport_c"]).mean())
+    t = wx["t_mean_airport_c"].where(wx["t_mean_airport_c"].notna(), wx["t_mean_keskusta_c"] - off)
+    pk.temp = dict(zip(wx["date"], t.astype(float)))
+    pk.temp_offset = off
+    # dispatch log: codes to the current register, vehicles to fleet numbers
+    dl = pd.read_csv(os.path.join(target, FILES["dispatch"]), dtype={"block": str, "vehicle": str})
+    dl["date"] = pd.to_datetime(dl["operating_date"]).dt.date
+    dl["code"] = [pk.old2new.get(c, c) for c in dl["block"]]
+    dl["fn"] = [pk.reg2fn.get(v, None) if not str(v).isdigit() else int(v) for v in dl["vehicle"]]
+    dl = dl.dropna(subset=["fn"])
+    dl["fn"] = dl["fn"].astype(int)
+    dl["dep_min"] = [_mins(x) for x in dl["depot_departure"]]
+    dl["dep_dt"] = [dt.datetime(d.year, d.month, d.day) + dt.timedelta(minutes=int(m)) for d, m in zip(dl["date"], dl["dep_min"])]
+    pk.dispatch = dl[["date", "code", "fn", "planned_km", "dep_dt"]].reset_index(drop=True)
+    # fuel transactions: card to vehicle by validity, spare cards by the typed fleet number
+    fu = pd.read_csv(os.path.join(target, FILES["fuel"]), dtype={"card_no": str, "odometer_km": str, "vehicle_entered": str})
+    fu["time"] = pd.to_datetime(fu["transaction_time"])
+    fu["date"] = fu["time"].dt.date
+    cards_by_no = {}
+    for c in pk.cards:
+        cards_by_no.setdefault(c["card"], []).append(c)
+    fns = []
+    for card, d, ent in zip(fu["card_no"], fu["date"], fu["vehicle_entered"].fillna("")):
+        fn = None
+        for c in cards_by_no.get(card, []):
+            if c["fn"] is not None and c["from"] <= d and (c["to"] is None or d <= c["to"]):
+                fn = c["fn"]
+        if fn is None and ent.strip().isdigit() and int(ent) in pk.vehicles:
+            fn = int(ent)
+        fns.append(fn)
+    fu["fn"] = fns
+    prod = fu["product"].str.upper()
+    fu["kind"] = np.where(prod.str.contains("HVO"), "hvo", np.where(prod.str.contains("DIESEL"), "diesel", "adblue"))
+    pk.fuel = fu
+    # telematics: exact duplicates dropped, ambient from the station where the sensor was blank
+    eb = pd.read_csv(os.path.join(target, FILES["ebus"]))
+    eb = eb.drop_duplicates().reset_index(drop=True)
+    eb["date"] = pd.to_datetime(eb["date"]).dt.date
+    eb["hours"] = eb["moving_h"] + eb["idle_h"]
+    st = np.array([pk.temp.get(d, np.nan) for d in eb["date"]])
+    amb = eb["ambient_mean_c"].astype(float).values
+    ok = ~np.isnan(amb)
+    off_bus = float(np.nanmean(amb[ok] - st[ok]))
+    eb["t"] = np.where(ok, amb, st + off_bus)
+    eb["t_station"] = st
+    pk.ebus_offset = off_bus
+    # the block each electric bus-day ran, from the dispatch log
+    key = {(r.fn, r.date): r.code for r in pk.dispatch.itertuples()}
+    eb["code"] = [key.get((int(v), d)) for v, d in zip(eb["vehicle"], eb["date"])]
+    eb = eb.dropna(subset=["code"]).reset_index(drop=True)
+    eb["age"] = [(d - pk.vehicles[int(v)]["since"]).days for v, d in zip(eb["vehicle"], eb["date"])]
+    pk.ebus = eb
+    se = pd.read_csv(os.path.join(target, FILES["sessions"]))
+    pk.sessions = se
+    pk.workshop = pd.read_csv(os.path.join(target, FILES["workshop"]))
     return pk
 
 
-def phi_of(pk, duty, drops, equal=False):
-    """the share of the loaded run's km the departing load rides: each drop's declared share taken off at its stop's
-    km on the routing tool's stop list"""
-    st = dict(pk.stops[duty])
-    L = float(pk.routes[duty]["legs"][1])
-    tot = sum(x[1] for x in drops)
-    pos = sorted(((st[t], w) for t, w in drops), key=lambda z: z[0])
-    rem, prev, acc = 1.0, 0.0, 0.0
-    for p, w in pos:
-        acc += rem * (p - prev)
-        rem -= (1.0 / len(pos)) if equal else w / tot
-        prev = p
-    return acc / L
-
-
-# ---------------------------------------------------------------- the payload each pilot day carried
-
-def ticket_months(pk, shipper):
-    """the months in which a shipper's notes carry its own scale weight: nearly every departure's declaration equals
-    the weighed load to the bridge's 20 kg"""
-    cache = pk.__dict__.setdefault("_tickets", {})
-    if shipper in cache:
-        return cache[shipper]
-    m = defaultdict(list)
-    for r in pk.wb:
-        if r["shipper"] == shipper and r["declared"] is not None:
-            m[(r["date"].year, r["date"].month)].append(abs(r["declared"] - r["net"]) <= 20)
-    cache[shipper] = {k for k, v in m.items() if np.mean(v) > 0.9}
-    return cache[shipper]
-
-
-def regime(pk, shipper, day):
-    t = ticket_months(pk, shipper)
-    if not t:
-        return "all"
-    return "ticket" if (day.year, day.month) in t else "note"
-
-
-def calibration(pk, mode="shipper", window=None, split=True):
-    """E[weighed net payload | declared, shipper] from the Varnamo weighbridge.
-    mode shipper: a line per shipper (a constant declaration takes the shipper's mean weighed load);
-    mode pooled: one line over every departure; mode mean: every load at its shipper's mean weighed load."""
-    rows = [r for r in pk.wb if r["declared"] is not None and (window is None or window[0] <= r["date"] <= window[1])]
-    by = defaultdict(list)
-    for r in rows:
-        key = (r["shipper"], regime(pk, r["shipper"], r["date"]) if split else "all")
-        by[key].append((r["declared"], r["net"]))
-    out = {}
-    if mode == "pooled":
-        D = np.array([r["declared"] for r in rows])
-        W = np.array([r["net"] for r in rows])
-        lam = np.cov(D, W)[0, 1] / np.var(D, ddof=1)
-        for s in by:
-            out[s] = (W.mean() - lam * D.mean(), lam)
-        return out
-    for s, v in by.items():
-        D, W = map(np.array, zip(*v))
-        if mode == "mean" or np.var(D) < 1e-6:
-            out[s] = (W.mean(), 0.0)
-        else:
-            lam = np.cov(D, W)[0, 1] / np.var(D, ddof=1)
-            out[s] = (W.mean() - lam * D.mean(), lam)
-    return out
-
-
-def error_model(pk, window=None):
-    """each shipper's declaration error at each note period, from the Varnamo weighings: the variance of declared less
-    weighed (additive) and of the same as a share of the weighed load (multiplicative)"""
-    by = defaultdict(list)
-    for r in pk.wb:
-        if r["declared"] is None or (window is not None and not window[0] <= r["date"] <= window[1]):
-            continue
-        by[(r["shipper"], regime(pk, r["shipper"], r["date"]))].append((r["declared"], r["net"]))
-    out = {}
-    for k, v in by.items():
-        D, W = map(np.array, zip(*v))
-        out[k] = (float(np.var(D - W)), float(np.var((D - W) / W)))
-    return out
-
-
-def lane_payloads(pk, err="mult", window=None):
-    """the load each pilot day carried, from its own duty's declarations: the shipper's declaration error (read on the
-    Varnamo bridge) removed from the spread of the duty's own declared weights at that note period, each declaration
-    taken to the expected load given it on that duty (the error carries from the bridge, the loads do not)"""
-    em = error_model(pk, window)
-    lane = defaultdict(list)
-    for i, d in enumerate(pk.days):
-        lane[(d["duty"], regime(pk, d["shipper"], d["date"]))].append(i)
-    out = np.zeros(len(pk.days))
-    for (duty, rg), idx in lane.items():
-        D = np.array([pk.days[i]["declared"] for i in idx], float)
-        m, v = D.mean(), D.var()
-        ea, er = em[(pk.days[idx[0]]["shipper"], rg)]
-        s2 = ea if err == "add" else er * np.mean(D ** 2) / (1 + er)
-        lam = max(0.0, (v - s2) / v) if v > 0 else 0.0
-        out[idx] = (m + lam * (D - m)) / 1000
-    return out
-
-
-def payloads(pk, how, split=True, window=None):
-    """the payload (t) each pilot day carried, by the route's basis: lane (the golden), lane_add, shipper (the
-    terminal's weighed-on-declared line per shipper and note period), pooled, mean, declared"""
-    if how == "declared":
-        return np.array([d["declared"] / 1000 for d in pk.days])
-    if how in ("lane", "lane_add"):
-        return lane_payloads(pk, "add" if how == "lane_add" else "mult", window)
-    cal = calibration(pk, how, window, split)
+# ----------------------------------------------------------------------------------------------- R1: diesel per block
+def fuel_intervals(pk, merge_minutes=12, include_street=True, by_timestamp=True, window=REF):
+    """tank to tank per diesel bus: consecutive diesel fills, the bus-days between them from the dispatch log.
+    Returns a list of (litres, {code: km}) over intervals that start and end inside the window."""
+    fu = pk.fuel[(pk.fuel["kind"] == "diesel") & pk.fuel["fn"].notna()].copy()
+    fu["fn"] = fu["fn"].astype(int)
+    if not include_street:
+        fu = fu[fu["station_id"] == 9001]
     out = []
-    for d in pk.days:
-        k = (d["shipper"], regime(pk, d["shipper"], d["date"]) if split else "all")
-        if how == "pooled":
-            k = next(iter(cal))
-        a, b = cal[k]
-        out.append((a + b * d["declared"]) / 1000)
-    return np.array(out)
-
-
-# ---------------------------------------------------------------- the energy model
-
-V_REF = 65.0
-GOLD = {"form": ("hinge2", 16, 0), "temp": "truck", "speed": "sq", "vmode": "hinge10", "tare": "sep",
-        "drops": "yes", "tru": None, "hours": "span"}
-
-
-def opts(**kw):
-    o = dict(GOLD)
-    o.update(kw)
-    return o
-
-
-def speed_term(v, speed):
-    """the energy model's speed column per km: air drag rising with the square of speed (sq), a straight line (lin),
-    or none"""
-    v = np.asarray(v, float)
-    if speed == "sq":
-        return [(v * v - V_REF ** 2) / 1000.0]
-    if speed == "lin":
-        return [v - V_REF]
-    return []
-
-
-def columns(tot, cl, T, v, lk, pay, ph, combo, flag, hours, o):
-    """the model's columns, the same for a pilot day and a shortlisted duty's design day; returns (columns, index of
-    the payload column)"""
-    cols = [tot, tot * cl] + [tot * c for c in cold_terms(T, o["form"])] + [tot * c for c in speed_term(v, o["speed"])]
-    tare = tot * (combo - TARE_REF)
-    if o["tare"] == "sep":
-        cols.append(tare)
-    load = pay * lk * ph
-    cols.append(load + tare if o["tare"] == "shared" else load)
-    ip = len(cols) - 1
-    if o["tru"]:
-        cols.append(flag * hours)
-    return cols, ip
-
-
-def day_arrays(pk, o, pay):
-    D = pk.days
-    tot = np.array([d["km"] for d in D])
-    lk = np.array([pk.routes[d["duty"]]["legs"][1] for d in D], float)
-    cl = np.array([pk.routes[d["duty"]]["climb"] for d in D], float)
-    T = np.array([d["t_filled"] if o["temp"] == "truck" else d["station_t"] for d in D])
-    v = np.array([d["v"] for d in D])
-    ph = np.array([{"yes": d["phi"], "no": 1.0, "equal": d["phi_eq"]}[o["drops"]] for d in D])
-    combo = np.array([d["combo"] for d in D])
-    flag = np.array([float(d["epto"] if o["tru"] == "epto" else d["reefer"]) for d in D])
-    hours = np.array([{"span": d["span_h"], "drive": d["drive_h"], "km": d["km"]}[o["hours"]] for d in D])
-    return tot, cl, T, v, lk, pay, ph, combo, flag, hours
-
-
-def design(pk, pay, o=None, **kw):
-    o = opts(**kw) if o is None else o
-    cols, ip = columns(*day_arrays(pk, o, pay), o)
-    return np.column_stack(cols)
-
-
-def plan_speed(pk, duty):
-    r = pk.routes[duty]
-    return sum(r["legs"]) / r["plan_h"]
-
-
-def speed_ratio(pk, t=DESIGN_T, how="hinge10"):
-    """actual over planned speed, fitted on the pilot days against the day's temperature, read at t.
-    how hinge10: a slope below 10 C; hinge8, hinge12; linear: on the temperature; bins: the mean of days within 2.5 C
-    of t; mean: the year's mean ratio, whatever the weather; plan: the routing tool's speed as it stands (1.0)"""
-    if how == "plan":
-        return 1.0
-    r = np.array([d["v"] / plan_speed(pk, d["duty"]) for d in pk.days])
-    T = np.array([d["t_filled"] for d in pk.days])
-    if how == "mean":
-        return float(r.mean())
-    if how == "bins":
-        return float(r[np.abs(T - t) <= 2.5].mean())
-    if how == "linear":
-        b = np.polyfit(T, r, 1)
-        return float(np.polyval(b, t))
-    k = float(how[5:])
-    X = np.column_stack([np.ones(len(T)), np.maximum(0, k - T)])
-    c = np.linalg.lstsq(X, r, rcond=None)[0]
-    return float(c[0] + c[1] * max(0.0, k - t))
-
-
-def cold_terms(T, form):
-    T = np.asarray(T, float)
-    if form[0] == "hinge1":
-        return [np.maximum(0, form[1] - T)]
-    if form[0] == "linear":
-        return [form[1] - T]
-    if form[0] == "hinge2":
-        return [np.maximum(0, form[1] - T), np.maximum(0, form[2] - T)]
-    if form[0] == "quad":
-        u = np.maximum(0, form[1] - T)
-        return [u, u * u]
-    if form[0] == "bins":
-        edges = form[1]
-        return [np.clip(edges[i] - T, 0, edges[i] - edges[i + 1] if i + 1 < len(edges) else 99)
-                for i in range(len(edges))]
-    raise ValueError(form)
-
-
-def dwell(pk):
-    """time at the collection and the drops (first departure to last arrival less driving), on the drops beyond the
-    first: (base, per extra drop)"""
-    n = np.array([d["n_drops"] - 1 for d in pk.days], float)
-    s = np.array([d["span_h"] - d["drive_h"] for d in pk.days])
-    b = np.polyfit(n, s, 1)
-    return float(b[1]), float(b[0])
-
-
-def fit(pk, pay, form=("hinge2", 16, 0), mask=None, temp="truck", speed="sq", vmode="hinge10", **kw):
-    """vmode: how each shortlisted duty's speed on the design day is set (speed_ratio's how); kw: tare (sep, shared or
-    None), drops (yes, no, equal), tru (epto, all or None), hours (span, drive, km)"""
-    o = opts(form=form, temp=temp, speed=speed, vmode=vmode, **kw)
-    cols, ip = columns(*day_arrays(pk, o, pay), o)
-    X = np.column_stack(cols)
-    y = np.array([d["kwh"] for d in pk.days])
-    m = np.ones(len(y), bool) if mask is None else mask
-    c, *_ = np.linalg.lstsq(X[m], y[m], rcond=None)
-    resid = y[m] - X[m] @ c
-    return {"coef": c, "form": o["form"], "speed": o["speed"], "vmode": o["vmode"], "o": o, "ip": ip,
-            "dwell": dwell(pk), "rmse_pct": float(np.sqrt(np.mean((resid / y[m]) ** 2)) * 100)}
-
-
-def duty_inputs(pk, c):
-    """what a shortlisted duty brings to the design day: its trailers' mean tare with the 2027 tractor, the share of
-    the loaded run its load rides (from its Varnamo notes and the routing tool's stops), and whether its trailers' unit
-    runs from the tractor (ePTO) or is a reefer at all"""
-    dd = [r for r in pk.wb if r["duty"] == c and LAST12[0] <= r["date"] <= LAST12[1]]
-    combo = TRACTOR_2027_KG / 1000.0 + float(np.mean([pk.trailer[r["trailer"]]["tare"] for r in dd])) / 1000.0
-    deps = pk.vdep[c]
-    ph = float(np.mean([phi_of(pk, c, x["drops"]) for x in deps]))
-    ph_eq = float(np.mean([phi_of(pk, c, x["drops"], equal=True) for x in deps]))
-    epto = float(np.mean(["ePTO" in pk.trailer[x["trailer"]]["equip"] for x in deps]))
-    reef = float(np.mean([pk.trailer[x["trailer"]]["body"] == "04" for x in deps]))
-    return {"combo": combo, "phi": ph, "phi_eq": ph_eq, "epto": epto, "reefer": reef, "n_drops": len(pk.stops[c])}
-
-
-def predict(model, legs, climb, load_t, t=DESIGN_T, v=V_REF, inp=None):
-    o = model.get("o", GOLD)
-    a, b, cc = legs
-    tot = float(a + b + cc)
-    inp = inp or {"combo": TARE_REF, "phi": 1.0, "phi_eq": 1.0, "epto": 0.0, "reefer": 0.0, "n_drops": 1}
-    ph = {"yes": inp["phi"], "no": 1.0, "equal": inp["phi_eq"]}[o["drops"]]
-    flag = inp["epto"] if o["tru"] == "epto" else inp["reefer"]
-    d0, d1 = model.get("dwell", (0.0, 0.0))
-    hours = {"span": tot / v + d0 + d1 * (inp["n_drops"] - 1), "drive": tot / v, "km": tot}[o["hours"]]
-    cols, ip = columns(np.array([tot]), np.array([float(climb)]), np.array([t]), np.array([v]), np.array([float(b)]),
-                       np.array([load_t]), np.array([ph]), np.array([inp["combo"]]), np.array([flag]),
-                       np.array([hours]), o)
-    return float(np.dot(model["coef"], np.array([float(np.ravel(x)[0]) for x in cols])))
-
-
-# ---------------------------------------------------------------- the battery a 2027 tractor has after a year
-
-FADE_TAUS = [round(0.08 + 0.02 * k, 2) for k in range(37)]
-
-
-def _age_cols(age, how):
-    """the age terms of each loss form, as (columns, function of one age)"""
-    if how in ("cold", "linear", "quad", "cold15", "age", "first_year"):
-        return [age], lambda a: np.array([a])
-    if how == "sqrt":
-        return [np.sqrt(age)], lambda a: np.array([np.sqrt(a)])
-    if how == "sqrtlin":
-        return [np.sqrt(age), age], lambda a: np.array([np.sqrt(a), a])
-    if how == "loglin":
-        return [np.log1p(age / 0.1), age], lambda a: np.array([np.log1p(a / 0.1), a])
-    if how == "spline":
-        kn = (0.25, 0.5, 1.0)
-        return [age] + [np.maximum(0, age - k) for k in kn], lambda a: np.array([a] + [max(0.0, a - k) for k in kn])
-    if how.startswith("exp"):
-        t = float(how[3:])
-        return [1 - np.exp(-age / t), age], lambda a: np.array([1 - np.exp(-a / t), a])
-    raise ValueError(how)
-
-
-def fade_fit(pk, how="curve", temp="cold"):
-    """energy per full charge (energy used over the state of charge it took) on a level per tractor, an age form and
-    the day's cold, which takes capacity for the day and gives it back. Returns (loss over the first twelve months as
-    a share of the level at entry into service, residual sum of squares, parameters)."""
-    cap = np.array([d["cap"] for d in pk.days])
-    age = np.array([d["age"] for d in pk.days])
-    T = np.array([d["t_filled"] for d in pk.days])
-    regs = sorted({d["reg"] for d in pk.days})
-    R = np.column_stack([[1.0 if d["reg"] == g else 0.0 for d in pk.days] for g in regs])
-    if how == "curve":   # the early-life time scale chosen by the fit itself
-        best = min(((fade_fit(pk, "exp%.2f" % t, temp)[1], t) for t in FADE_TAUS))
-        return fade_fit(pk, "exp%.2f" % best[1], temp)
-    m = np.ones(len(cap), bool) if how != "first_year" else age <= 1.0
-    cols, f = _age_cols(age, how)
-    tcols = {"cold": [np.maximum(0, 20 - T)], "cold15": [np.maximum(0, 15 - T)], "linear": [T], "quad": [T, T * T],
-             "none": []}[temp]
-    X = np.column_stack([R] + cols + tcols)[m]
-    c = np.linalg.lstsq(X, cap[m], rcond=None)[0]
-    r = cap[m] - X @ c
-    lev = c[:len(regs)]
-    if temp in ("linear", "quad"):   # the level at 20 C
-        lev = lev + c[len(regs) + len(cols)] * 20 + (c[len(regs) + len(cols) + 1] * 400 if temp == "quad" else 0)
-    k = c[len(regs):len(regs) + len(cols)]
-    f0, f1 = f(0.0), f(1.0)
-    loss = float(-(k @ f1 - k @ f0) / (lev.mean() + k @ f0))
-    return loss, float(r @ r), how
-
-
-def fade(pk, how="curve", temp="cold"):
-    """the share of its usable energy a pilot battery permanently loses in its first twelve months in service.
-    how curve (the golden): an early-life loss that settles over a time scale the fit chooses, then a steady loss;
-    cold: a straight line in age (temperature below 20 C and a level per tractor beside it, the runs' fit); age: the
-    straight line with no temperature term; first_year: the straight line on the first year's days; yoy: the same
-    months a year apart; sqrt, sqrtlin, loglin, spline, expT: other curved forms; temp: the cold term's form"""
-    if how == "yoy":
-        cap = np.array([d["cap"] for d in pk.days])
-        mo = np.array([d["date"].month for d in pk.days])
-        yr = np.array([d["date"].year for d in pk.days])
-        r = [cap[(yr == 2026) & (mo == m)].mean() / cap[(yr == 2025) & (mo == m)].mean() for m in range(3, 11)]
-        return float(1 - np.mean(r))
-    if how == "age":
-        return fade_fit(pk, "cold", "none")[0]
-    if how in ("linear", "quad", "cold15"):   # the straight line with another temperature term
-        return fade_fit(pk, "cold", how)[0]
-    return fade_fit(pk, how, temp)[0]
-
-
-def fade_tau(pk):
-    return float(fade_fit(pk, "curve")[2][3:])
-
-
-def limit(pk, f=None):
-    """FES-2 2.3 and 4.3: 85 per cent of the ordered model's usable battery less its first year's loss"""
-    f = fade(pk) if f is None else f
-    return SHARE * USABLE * (1 - f)
-
-
-def planning_load(pk, duty, basis="net"):
-    v = [r[basis] for r in pk.wb if r["duty"] == duty and LAST12[0] <= r["date"] <= LAST12[1] and r[basis] is not None]
-    return float(np.mean(v)) / 1000
-
-
-def assess(pk, model, basis="net", t=DESIGN_T, lim=None):
-    lim = limit(pk) if lim is None else lim
-    rr = speed_ratio(pk, t, model.get("vmode", "hinge10")) if model.get("speed") else 1.0
-    cache = pk.__dict__.setdefault("_inp", {})
-    out = {}
-    for c in pk.short:
-        r = pk.routes[c]
-        if c not in cache:
-            cache[c] = duty_inputs(pk, c)
-        v = plan_speed(pk, c) * rr
-        e = predict(model, r["legs"], r["climb"], planning_load(pk, c, basis), t, v, cache[c])
-        out[c] = {"kwh": e, "go": e <= lim}
+    disp = pk.dispatch
+    for fn, g in fu.groupby("fn"):
+        if pk.vehicles[fn]["drive"] != "diesel":
+            continue
+        g = g.sort_values("time")
+        fills = []
+        for t, lit in zip(g["time"], g["litres"]):
+            if fills and (t - fills[-1][0]).total_seconds() <= merge_minutes * 60:
+                fills[-1] = (fills[-1][0], fills[-1][1] + lit)
+            else:
+                fills.append((t, lit))
+        days = disp[disp["fn"] == fn].sort_values("dep_dt")
+        dts = days["dep_dt"].values
+        dates = days["date"].values
+        for (t0, _), (t1, lit) in zip(fills[:-1], fills[1:]):
+            if by_timestamp:
+                m = (dts > np.datetime64(t0)) & (dts <= np.datetime64(t1))
+            else:
+                d0, d1 = t0.date(), t1.date()
+                m = (dates > d0) & (dates <= d1)
+            sub = days[m]
+            if len(sub) == 0 or t1.date() < window[0] or t1.date() > window[1]:
+                continue
+            if sub["date"].min() < window[0]:
+                continue
+            kms = {}
+            for c, km in zip(sub["code"], sub["planned_km"]):
+                kms[c] = kms.get(c, 0.0) + float(km)
+            out.append((float(lit), kms))
     return out
 
 
-def chosen(a):
-    return sorted(c for c, v in a.items() if v["go"])
+def diesel_rates(pk, intervals=None, bus_effects=False, **kw):
+    """litres per 100 scheduled km per block by least squares over the fill intervals (R1)"""
+    iv = intervals if intervals is not None else fuel_intervals(pk, **kw)
+    codes = sorted({c for _, kms in iv for c in kms})
+    idx = {c: i for i, c in enumerate(codes)}
+    A = np.zeros((len(iv), len(codes)))
+    y = np.zeros(len(iv))
+    for i, (lit, kms) in enumerate(iv):
+        for c, km in kms.items():
+            A[i, idx[c]] = km / 100.0
+        y[i] = lit
+    beta, *_ = np.linalg.lstsq(A, y, rcond=None)
+    return {c: float(beta[idx[c]]) for c in codes}
 
 
-H2 = ("hinge2", 16, 0)   # the golden cold form: a rate below 16 C and a further rate below 0 C
-H1 = ("hinge1", 16)      # the field's degree-day form: one rate below 16 C
+def diesel_rates_fill_day(pk, window=REF):
+    """the hurried read: each fill's litres charged to the block the bus ran on the day of the fill"""
+    fu = pk.fuel[(pk.fuel["kind"] == "diesel") & pk.fuel["fn"].notna()].copy()
+    fu["fn"] = fu["fn"].astype(int)
+    fu = fu[(fu["date"] >= window[0]) & (fu["date"] <= window[1])]
+    key = {(r.fn, r.date): (r.code, r.planned_km) for r in pk.dispatch.itertuples()}
+    lit, km = {}, {}
+    for fn, d, l in zip(fu["fn"], fu["date"], fu["litres"]):
+        if pk.vehicles[fn]["drive"] != "diesel":
+            continue
+        k = key.get((fn, d)) or key.get((fn, d - dt.timedelta(days=1)))
+        if not k:
+            continue
+        lit[k[0]] = lit.get(k[0], 0.0) + l
+    disp = pk.dispatch[(pk.dispatch["date"] >= window[0]) & (pk.dispatch["date"] <= window[1])]
+    for c, g in disp.groupby("code"):
+        kmv = float(g["planned_km"].sum())
+        km[c] = kmv
+    return {c: lit.get(c, 0.0) / km[c] * 100.0 for c in km if km[c] > 0}
 
 
-def rung0(pk, lim=None):
-    """the pilot's average consumption on January-like days (ambient -8 to -2 C), times each duty's route km"""
-    v = [d["kwh"] / d["km"] for d in pk.days if -8 <= d["t_filled"] <= -2]
-    rate = float(np.mean(v))
-    lim = SHARE * USABLE if lim is None else lim
+def diesel_rates_per_bus(pk, window=REF):
+    """the other hurried read: a rate per bus over the year, each block given its commonest bus's rate"""
+    fu = pk.fuel[(pk.fuel["kind"] == "diesel") & pk.fuel["fn"].notna()].copy()
+    fu["fn"] = fu["fn"].astype(int)
+    fu = fu[(fu["date"] >= window[0]) & (fu["date"] <= window[1])]
+    lit = fu.groupby("fn")["litres"].sum().to_dict()
+    disp = pk.dispatch[(pk.dispatch["date"] >= window[0]) & (pk.dispatch["date"] <= window[1])]
+    km = disp.groupby("fn")["planned_km"].sum().to_dict()
+    rate = {fn: lit.get(fn, 0.0) / km[fn] * 100 for fn in km if km[fn] > 0 and pk.vehicles[fn]["drive"] == "diesel"}
     out = {}
-    for c in pk.short:
-        e = rate * sum(pk.routes[c]["legs"])
-        out[c] = {"kwh": e, "go": e <= lim}
-    return out, rate
+    for c, g in disp.groupby("code"):
+        g = g[g["fn"].isin(rate.keys())]
+        if len(g) == 0:
+            continue
+        top = g["fn"].value_counts().index[0]
+        out[c] = rate[top]
+    return out
 
 
-def pilot_pooled(pk):
-    """one weighed-on-declared line over the weighbridge departures of the pilot's own shippers"""
-    ps = {d["shipper"] for d in pk.days}
-    rows = [r for r in pk.wb if r["declared"] is not None and r["shipper"] in ps]
-    D = np.array([r["declared"] for r in rows])
-    W = np.array([r["net"] for r in rows])
-    lam = np.cov(D, W)[0, 1] / np.var(D, ddof=1)
-    return np.array([(W.mean() + lam * (d["declared"] - D.mean())) / 1000 for d in pk.days])
+# ----------------------------------------------------------------------------------------------- the pilot's model
+def heater_fault_days(pk):
+    """(vehicle, date) pairs between a fuel heater's logged failure and its logged repair, from the workshop orders"""
+    ws = pk.workshop
+    faults = ws[ws["description"].str.contains("heater", case=False) & ws["description"].str.contains("not start|does not start|fails", case=False)]
+    repairs = ws[ws["description"].str.contains("heater repaired", case=False)]
+    out = set()
+    for _, f in faults.iterrows():
+        fn = int(f["vehicle"])
+        a = pd.to_datetime(f["opened"]).date()
+        rr = repairs[(repairs["vehicle"] == fn) & (pd.to_datetime(repairs["opened"]).dt.date > a)]
+        if len(rr) == 0:
+            continue
+        b = pd.to_datetime(rr.iloc[0]["opened"]).date()
+        d = a
+        while d < b:
+            out.add((fn, d))
+            d += dt.timedelta(days=1)
+    return out
 
 
-def backtest(pk, pay, form, months=((2026, 1), (2026, 2))):
-    """fit without the held-out months, forecast their working days: mean error in per cent on the days below 0 C"""
-    ho = np.array([(d["date"].year, d["date"].month) in months for d in pk.days])
-    sub = np.array([d["t_filled"] < 0 for d in pk.days])
-    m = fit(pk, pay, form, mask=~ho)
-    X = design(pk, pay, m["o"])
-    y = np.array([d["kwh"] for d in pk.days])
-    e = (X @ m["coef"] - y) / y
-    return float(100 * e[ho & sub].mean()), float(100 * e[ho].mean())
+def ebus_model(pk, exclude_faults=True):
+    """per block, the battery energy per kilometre outside the cabin's heating and cooling (traction and the
+    auxiliaries), over the days an electric bus ran it, weighted by kilometres; the HVAC draw per hour by ambient
+    temperature in 1-degree bins, the days a fuel heater was logged out left out of the table (the golden) or kept
+    (the hurried read). Returns (e_block, days per block, h(T) table)."""
+    eb = pk.ebus
+    if exclude_faults:
+        bad = heater_fault_days(pk)
+        keep = np.array([(int(v), d) not in bad for v, d in zip(eb["vehicle"], eb["date"])])
+        eb_h = eb[keep]
+    else:
+        eb_h = eb
+    num = (eb["energy_used_kwh"] - eb["hvac_kwh"]).groupby(eb["code"]).sum()
+    den = eb["distance_km"].groupby(eb["code"]).sum()
+    e = {c: float(num[c] / den[c]) for c in num.index}
+    days = eb["code"].value_counts().to_dict()
+    tb = np.floor(eb_h["t"].values).astype(int)
+    hv = (eb_h["hvac_kwh"] / eb_h["hours"]).values
+    table = {}
+    for b in range(int(tb.min()), int(tb.max()) + 1):
+        m = tb == b
+        if m.sum() >= 3:
+            table[b] = (float(hv[m].mean()), int(m.sum()))
+    return e, days, table
 
 
-def careful_payloads(pk):
-    """the runs' payload: each pilot declaration taken to the weighed load it stands for on the terminal's
-    weighed-on-declared line for its shipper and note period"""
-    return payloads(pk, "shipper")
+def hvac_at(table, t, width=2):
+    """the pilot's HVAC draw per hour at ambient t: the mean of the bins within width degrees"""
+    vals, n = [], 0
+    for b, (v, k) in table.items():
+        if abs(b + 0.5 - t) <= width:
+            vals.append(v * k)
+            n += k
+    return sum(vals) / n if n else float("nan")
 
 
-def careful_fade(pk):
-    """the runs' loss: a straight line in age beside a level per tractor and the day's cold"""
-    return fade(pk, "cold")
+def hvac_fit(pk):
+    """a smooth form a careful run fits to the pilot's HVAC draw: piecewise linear in temperature with knots, used to
+    read the draw at the design day from the pilot's own record (the hurried read of the cold response)"""
+    eb = pk.ebus
+    t = eb["t"].values
+    hv = (eb["hvac_kwh"] / eb["hours"]).values
+    knots = [-20, -10, -5, 0, 5, 10, 15, 20, 25]
+    X = np.column_stack([np.ones_like(t)] + [np.maximum(0, t - k) for k in knots])
+    beta, *_ = np.linalg.lstsq(X, hv, rcond=None)
+
+    def f(tt):
+        x = np.array([1.0] + [max(0.0, tt - k) for k in knots])
+        return float(x @ beta)
+    return f
 
 
-def routes(pk):
-    """each pass's and each shortcut's committed answer, (model, limit): the golden, the careful but hurried pass (the
-    union of the recorded runs' methods), that pass with each one step done right (the hints), and each shortcut with
-    every other step done the golden's way"""
-    gp, cp, dp = payloads(pk, "lane"), careful_payloads(pk), payloads(pk, "declared")
-    L = limit(pk)
-    Lc = limit(pk, careful_fade(pk))
-    return {
-        "golden": (fit(pk, gp, H2), L),
-        "careful but hurried": (fit(pk, cp, H2, vmode="mean"), Lc),
-        "careful, design-day speed": (fit(pk, cp, H2), Lc),
-        "careful, own-duty loads": (fit(pk, gp, H2, vmode="mean"), Lc),
-        "careful, curved loss": (fit(pk, cp, H2, vmode="mean"), L),
-        "the terminal's calibration line": (fit(pk, cp, H2), L),
-        "declared weights": (fit(pk, dp, H2), L),
-        "one pooled correction": (fit(pk, payloads(pk, "pooled"), H2), L),
-        "a straight-line loss": (fit(pk, gp, H2), Lc),
-        "the same months a year apart": (fit(pk, gp, H2), limit(pk, fade(pk, "yoy"))),
-        "no first-year loss": (fit(pk, gp, H2), SHARE * USABLE),
-        "the year's mean speed ratio": (fit(pk, gp, H2, vmode="mean"), L),
-        "the routing tool's speed": (fit(pk, gp, H2, vmode="plan"), L),
-        "no speed term": (fit(pk, gp, H2, speed=None), L),
-        "one cold rate": (fit(pk, gp, H1), L),
-        "no trailer weight": (fit(pk, gp, H2, tare=None), L),
-        "the load to the last drop": (fit(pk, gp, H2, drops="no"), L),
-    }
+# ----------------------------------------------------------------------------------------------- R3: the fuel heaters
+def heater_fuel(pk):
+    """the electric buses' HVO fills tank to tank against the days between, fitted as l/h = k x max(0, T0 - T) with T0
+    profiled; returns (k, T0, l/h at the design day, the intervals)"""
+    fu = pk.fuel[(pk.fuel["kind"] == "hvo") & pk.fuel["fn"].notna()].copy()
+    fu["fn"] = fu["fn"].astype(int)
+    fu = fu[[pk.vehicles[f]["drive"] == "electric" for f in fu["fn"]]]
+    eb = pk.ebus
+    bad = heater_fault_days(pk)          # the days a heater was logged out burnt no fuel
+    iv = []
+    for fn, g in fu.groupby("fn"):
+        g = g.sort_values("time")
+        fills = list(zip(g["time"], g["litres"]))
+        days = eb[eb["vehicle"] == fn]
+        for (t0, _), (t1, lit) in zip(fills[:-1], fills[1:]):
+            sub = days[(days["date"] > t0.date()) & (days["date"] <= t1.date())]
+            if len(sub) == 0:
+                continue
+            hrs = np.array([0.0 if (int(fn), d) in bad else h for h, d in zip(sub["hours"], sub["date"])])
+            iv.append((float(lit), hrs, sub["t"].values, fn, t0.date(), t1.date()))
+    best = None
+    for T0 in np.arange(-12.0, 2.01, 0.5):
+        x = np.array([float(np.sum(h * np.maximum(0.0, T0 - t))) for _, h, t, *_ in iv])
+        y = np.array([l for l, *_ in iv])
+        if x.sum() <= 0:
+            continue
+        k = float(x @ y / (x @ x))
+        sse = float(np.sum((y - k * x) ** 2))
+        if best is None or sse < best[0]:
+            best = (sse, k, T0)
+    _, k, T0 = best
+    return k, T0, k * max(0.0, T0 - DESIGN_T), iv
 
 
-def models(pk):
-    gp = payloads(pk, "lane")
-    return {
-        "golden": fit(pk, gp, H2),
-        "naive": fit(pk, payloads(pk, "declared"), H2),
-        "careful": fit(pk, careful_payloads(pk), H2, vmode="mean"),
-        "golden_1h": fit(pk, gp, H1),
-        "no_speed": fit(pk, gp, H2, speed=None),
-    }
+def heater_from_faults(pk):
+    """the conversion checked on the two buses whose heater was out: the extra HVAC draw per hour on fault days against
+    like days, divided by the heater fuel those days would have taken"""
+    ws = pk.workshop
+    faults = ws[ws["description"].str.contains("heater", case=False) & ws["description"].str.contains("not start|does not start|fails", case=False)]
+    repairs = ws[ws["description"].str.contains("heater repaired", case=False)]
+    k, T0, _, _ = heater_fuel(pk)
+    eb = pk.ebus
+    out = []
+    for _, f in faults.iterrows():
+        fn = int(f["vehicle"])
+        a = pd.to_datetime(f["opened"]).date()
+        rr = repairs[repairs["vehicle"] == fn]
+        rr = rr[pd.to_datetime(rr["opened"]).dt.date > a]
+        if len(rr) == 0:
+            continue
+        b = pd.to_datetime(rr.iloc[0]["opened"]).date()
+        on = eb[(eb["vehicle"] == fn) & (eb["date"] >= a) & (eb["date"] < b) & (eb["t"] < T0 - 2)]
+        if len(on) < 5:
+            continue
+        others = eb[(eb["vehicle"] != fn) & (eb["date"] >= a - dt.timedelta(days=45)) & (eb["date"] <= b + dt.timedelta(days=45))]
+        excess, fuel = [], []
+        for h, t, hv in zip(on["hours"], on["t"], on["hvac_kwh"]):
+            ref = others[np.abs(others["t"] - t) <= 1.5]
+            if len(ref) < 3:
+                continue
+            excess.append(hv / h - float((ref["hvac_kwh"] / ref["hours"]).mean()))
+            fuel.append(k * max(0.0, T0 - t))
+        if fuel and sum(fuel) > 0:
+            out.append((fn, a, b, len(excess), float(np.sum(excess) / np.sum(fuel))))
+    return out
+
+
+# ----------------------------------------------------------------------------------------------- R6: the first winter
+def capacity_loss(pk, form="curved", min_dsoc=30):
+    """the share of usable capacity lost in the first twelve months: each bus-day's energy over its state-of-charge
+    drop as the capacity shown, on age with a cold term, per bus levels; the form in age chosen by fit"""
+    eb = pk.ebus
+    d = (eb["soc_start_pct"] - eb["soc_end_pct"]).values.astype(float)
+    m = d >= min_dsoc
+    cap = eb["energy_used_kwh"].values[m] / (d[m] / 100.0)
+    age = eb["age"].values[m] / 365.25
+    t = eb["t"].values[m]
+    cold = np.maximum(0.0, 10.0 - t)
+    bus = eb["vehicle"].values[m]
+    buses = sorted(set(bus))
+    B = np.column_stack([(bus == b).astype(float) for b in buses])
+    if form == "linear":
+        F = np.column_stack([age])
+    elif form == "sqrt":
+        F = np.column_stack([np.sqrt(age)])
+    elif form == "log":
+        F = np.column_stack([np.log1p(age * 12)])
+    else:
+        F = np.column_stack([1 - np.exp(-age * 12 / 4.0), age])
+    X = np.column_stack([B, F, cold])
+    beta, *_ = np.linalg.lstsq(X, cap, rcond=None)
+    nb = len(buses)
+    lvl = float(np.mean(beta[:nb]))
+    def at(a):
+        if form == "linear":
+            return a * beta[nb]
+        if form == "sqrt":
+            return math.sqrt(a) * beta[nb]
+        if form == "log":
+            return math.log1p(a * 12) * beta[nb]
+        return (1 - math.exp(-a * 12 / 4.0)) * beta[nb] + a * beta[nb + 1]
+    loss = -(at(1.0) - at(0.0)) / lvl
+    resid = cap - X @ beta
+    return float(loss), float(np.sqrt(np.mean(resid ** 2))), lvl
+
+
+def charging_efficiency(pk, usable_new=420.0, min_dsoc=30):
+    """energy into the battery over energy through the charger meter, on the sessions"""
+    se = pk.sessions
+    eb = pk.ebus
+    loss_curve = capacity_loss(pk)[0]
+    d = (se["soc_out_pct"] - se["soc_in_pct"]).values.astype(float)
+    m = d >= min_dsoc
+    # the capacity each bus shows at the session's date: from the day's own record (energy over soc drop)
+    day = {(int(r.vehicle), r.date): r for r in eb.itertuples()}
+    num, den = 0.0, 0.0
+    for v, t, dd, kwh in zip(se["vehicle"].values[m], se["plug_in_utc"].values[m], d[m], se["energy_kwh"].values[m]):
+        date = pd.to_datetime(t).date()
+        r = day.get((int(v), date)) or day.get((int(v), date - dt.timedelta(days=1)))
+        if r is None or (r.soc_start_pct - r.soc_end_pct) < min_dsoc:
+            continue
+        cap = r.energy_used_kwh / ((r.soc_start_pct - r.soc_end_pct) / 100.0)
+        num += dd / 100.0 * cap
+        den += kwh
+    return num / den
+
+
+# ----------------------------------------------------------------------------------------------- R4: the energies
+def bridge(pk, e_block, days, rates, min_days=1, with_climb=False, with_hours=False):
+    """block energy per km outside HVAC on diesel litres per 100 km over the blocks an electric bus ran, weighted by
+    days; rivals add the climb or the hours per km"""
+    xs, ys, ws, cl, hk = [], [], [], [], []
+    for c, e in e_block.items():
+        if c in rates and days.get(c, 0) >= min_days:
+            xs.append(rates[c])
+            ys.append(e)
+            ws.append(days[c])
+            cl.append(pk.blocks[c]["climb"])
+            hk.append(pk.blocks[c]["hours"] / pk.blocks[c]["km"])
+    xs, ys, ws, cl, hk = map(np.array, (xs, ys, ws, cl, hk))
+    W = np.sqrt(ws)
+    cols = [np.ones_like(xs), xs] + ([cl] if with_climb else []) + ([hk] if with_hours else [])
+    X = np.column_stack(cols)
+    beta, *_ = np.linalg.lstsq(X * W[:, None], ys * W, rcond=None)
+    pred = X @ beta
+    rmse = float(np.sqrt(np.average((ys - pred) ** 2, weights=ws)))
+    return beta, rmse, len(xs)
+
+
+def covariate_model(pk, e_block, days):
+    """the hurried transfer: block rate on climb and hours per kilometre (the timetable's speed) over the blocks an
+    electric bus ran, weighted by days"""
+    xs, ys, ws = [], [], []
+    for c, e in e_block.items():
+        b = pk.blocks[c]
+        xs.append([1.0, b["climb"], b["hours"] / b["km"]])
+        ys.append(e)
+        ws.append(days[c])
+    xs, ys, ws = np.array(xs), np.array(ys), np.array(ws, float)
+    W = np.sqrt(ws)
+    beta, *_ = np.linalg.lstsq(xs * W[:, None], ys * W, rcond=None)
+    return beta
+
+
+def design_energies(pk, how="golden", rates=None, own_min_days=30, bridge_hours=False):
+    """the 48 weekday blocks' battery energy on the design day for the 2027 model, kWh, by the named route"""
+    e_block, days, table = ebus_model(pk)
+    if rates is None:
+        rates = diesel_rates(pk)
+    h_pilot = hvac_at(table, DESIGN_T)
+    k, T0, lph, _ = heater_fuel(pk)
+    heat_new = h_pilot + lph * HEATER_KWH_PER_L / 1.0        # below the heat pump's range the boosters supply it 1:1
+    if how in ("golden", "j2_wrong"):
+        beta, _, _ = bridge(pk, e_block, days, rates, with_hours=bridge_hours)
+        def e_of(b):
+            c = b["code"]
+            if days.get(c, 0) >= own_min_days:
+                return e_block[c]
+            x = [1.0, rates[c]] + ([b["hours"] / b["km"]] if bridge_hours else [])
+            return float(np.array(x) @ beta)
+    else:
+        cb = covariate_model(pk, e_block, days)
+        def e_of(b):
+            c = b["code"]
+            if c in e_block:
+                return e_block[c]
+            return float(cb[0] + cb[1] * b["climb"] + cb[2] * b["hours"] / b["km"])
+    heat = heat_new if how in ("golden", "j1_wrong") else (hvac_fit(pk)(DESIGN_T) if how == "careful" else h_pilot)
+    out = {}
+    for c in pk.weekday:
+        b = pk.blocks[c]
+        out[c] = b["km"] * e_of(b) + b["hours"] * heat
+    return out, {"e_block": e_block, "days": days, "h_pilot": h_pilot, "heater_lph": lph, "heater_k": k,
+                 "heater_T0": T0, "heat_new": heat_new, "heat_used": heat}
+
+
+def quick_energies(pk):
+    eb = pk.ebus
+    cold = eb[eb["t"] <= -5]
+    rate = float(cold["energy_used_kwh"].sum() / cold["distance_km"].sum())
+    return {c: pk.blocks[c]["km"] * rate for c in pk.weekday}, rate
+
+
+# ----------------------------------------------------------------------------------------------- R5 to R8
+def limit(pk, loss):
+    return SHARE * pk.usable_2027 * (1 - loss)
+
+
+def windows(pk, codes, energies, eta, pad=0):
+    """each block's charging job: energy at the connection point, from its return to its next departure inside the
+    night period (the standard's 3.2 and 4.2, read literally: pad 0); pad minutes at each end are a rival reading"""
+    return [(c, energies[c] / eta, max(pk.blocks[c]["ret"] + pad, NIGHT_FROM), min(pk.blocks[c]["dep"] + 1440 - pad, NIGHT_TO + 1440))
+            for c in codes]
+
+
+def night_cut(pk, energies, lim, eta, supply=None, pad=0):
+    """the standard's 4.2: qualifying blocks in priority order, cut at the first the night cannot recharge with those
+    above it; returns (taken codes, refused code, shortfall kWh, the taken set's energy at the connection point)"""
+    supply = pk.supply if supply is None else supply
+    q = [c for c in sorted(pk.weekday, key=lambda c: pk.priority[c]) if energies[c] <= lim]
+    cands = windows(pk, q, energies, eta, pad)
+    taken, refused, short = night.cut_by_priority(cands, CHARGER_KW, supply)
+    grid = sum(energies[c] / eta for c in taken)
+    return taken, refused, short, grid, q
 
 
 def golden(pk):
-    M = models(pk)
-    f = fade(pk)
-    lim = limit(pk, f)
-    a = assess(pk, M["golden"], lim=lim)
-    m = M["golden"]
-    return {"model": m, "assess": a, "set": chosen(a), "count": len(chosen(a)), "models": M,
-            "fade": f, "limit": lim, "usable_y1": USABLE * (1 - f), "inputs": dict(pk._inp),
-            "tare_term": float(m["coef"][m["ip"] - 1] * 100), "tau": fade_tau(pk),
-            "pilot_combo": float(np.mean([d["combo"] for d in pk.days]))}
+    rates = diesel_rates(pk)
+    loss, rmse, lvl = capacity_loss(pk)
+    eta = charging_efficiency(pk)
+    E, parts = design_energies(pk, "golden", rates)
+    lim = limit(pk, loss)
+    taken, refused, short, grid, q = night_cut(pk, E, lim, eta)
+    verdict = {c: E[c] <= lim for c in pk.weekday}
+    faults = heater_from_faults(pk)
+    return {"rates": rates, "loss": loss, "eta": eta, "E": E, "limit": lim, "taken": taken, "refused": refused, "short": short,
+            "grid_kwh": grid, "qualifying": q, "demand_kwh": sum(E[c] / eta for c in q), "verdict": verdict, "parts": parts,
+            "faults": faults, "cap_rmse": rmse, "heater_kw": parts["heater_lph"] * HEATER_KWH_PER_L}
 
 
-def _fe_design(pk, pay, form=("hinge2", 16, 0)):
-    o = opts(form=form)
-    tot, cl, T, v, lk, pay_, ph, combo, flag, hours = day_arrays(pk, o, pay)
-    duties = sorted({d["duty"] for d in pk.days})
-    du = np.array([d["duty"] for d in pk.days])
-    cm = np.array([combo[du == d].mean() for d in du])
-    X = np.column_stack([tot * (du == k) for k in duties] + [tot * c for c in cold_terms(T, form)]
-                        + [tot * c for c in speed_term(v, "sq")] + [tot * (combo - cm)] + [pay * lk * ph])
-    return X, duties, du, combo, o
+def careful(pk):
+    """the careful but hurried pass: the union of the recorded runs' methods"""
+    rates = diesel_rates(pk)
+    loss, _, _ = capacity_loss(pk)
+    eta = charging_efficiency(pk)
+    E, parts = design_energies(pk, "careful", rates)
+    lim = limit(pk, loss)
+    taken, refused, short, grid, q = night_cut(pk, E, lim, eta)
+    return {"rates": rates, "loss": loss, "eta": eta, "E": E, "limit": lim, "taken": taken, "grid_kwh": grid, "qualifying": q,
+            "demand_kwh": sum(E[c] / eta for c in q), "verdict": {c: E[c] <= lim for c in pk.weekday}, "parts": parts}
 
 
-def fe_slope_se(pk, pay):
-    """the within-duty fit's payload slope and its standard error (per 100 km)"""
-    X, duties, du, combo, o = _fe_design(pk, pay)
-    y = np.array([d["kwh"] for d in pk.days])
-    c, *_ = np.linalg.lstsq(X, y, rcond=None)
-    r = y - X @ c
-    cov = r @ r / (len(y) - X.shape[1]) * np.linalg.inv(X.T @ X)
-    k = X.shape[1] - 1
-    return float(c[k] * 100), float(np.sqrt(cov[k, k]) * 100)
+def quick(pk):
+    E, rate = quick_energies(pk)
+    lim = SHARE * pk.usable_2027
+    q = [c for c in sorted(pk.weekday, key=lambda c: pk.priority[c]) if E[c] <= lim]
+    return {"E": E, "limit": lim, "taken": q, "rate": rate, "verdict": {c: E[c] <= lim for c in pk.weekday},
+            "grid_kwh": sum(E[c] for c in q), "demand_kwh": sum(E[c] for c in q)}
 
 
-def golden_se(pk, pay):
-    """the golden fit's payload slope standard error (per 100 km)"""
-    m = fit(pk, pay, H2)
-    X = design(pk, pay, m["o"])
-    y = np.array([d["kwh"] for d in pk.days])
-    r = y - X @ m["coef"]
-    cov = r @ r / (len(y) - X.shape[1]) * np.linalg.inv(X.T @ X)
-    return float(np.sqrt(cov[m["ip"], m["ip"]]) * 100)
-
-
-def slope_per_100(model):
-    return float(model["coef"][model.get("ip", -1)] * 100)
-
-
-def fit_fe(pk, pay, form=("hinge2", 16, 0)):
-    """within-duty fit (a level per duty for each km), the duty levels then explained by climb and the duty's mean
-    combination tare"""
-    X, duties, du, combo, o = _fe_design(pk, pay, form)
-    y = np.array([d["kwh"] for d in pk.days])
-    c, *_ = np.linalg.lstsq(X, y, rcond=None)
-    lev = c[:len(duties)]
-    cl_d = np.array([pk.routes[k]["climb"] for k in duties], float)
-    cb_d = np.array([combo[du == k].mean() - TARE_REF for k in duties])
-    Z = np.column_stack([np.ones(len(duties)), cl_d, cb_d])
-    a = np.linalg.lstsq(Z, lev, rcond=None)[0]
-    rest = c[len(duties):]
-    nc = len(cold_terms([0.0], form))
-    coef = np.concatenate([[a[0], a[1]], rest[:nc + 1], [a[2]], rest[nc + 2:]])
-    return {"coef": coef, "form": form, "speed": "sq", "vmode": "hinge10", "o": o, "ip": 2 + nc + 1 + 1,
-            "dwell": dwell(pk), "rmse_pct": None}
-
-
-LOSS_RIVALS = ("sqrt", "sqrtlin", "loglin", "spline", "exp0.20", "exp0.45")
-
-
-def rivals(pk):
-    """every route that takes all the steps, each (model, limit); the golden's call must hold under all of them"""
-    gp = payloads(pk, "lane")
-    lim = limit(pk)
-    y25 = np.array([d["date"].year == 2025 for d in pk.days])
-    out = {
-        "golden": (fit(pk, gp, H2), lim),
-        "station temperature": (fit(pk, gp, H2, temp="station"), lim),
-        "2025 only": (fit(pk, gp, H2, mask=y25), lim),
-        "2026 only": (fit(pk, gp, H2, mask=~y25), lim),
-        "hinges 14 and 0": (fit(pk, gp, ("hinge2", 14, 0)), lim),
-        "hinges 18 and 0": (fit(pk, gp, ("hinge2", 18, 0)), lim),
-        "hinges 16 and -2": (fit(pk, gp, ("hinge2", 16, -2)), lim),
-        "hinges 16 and 2": (fit(pk, gp, ("hinge2", 16, 2)), lim),
-        "quadratic below 16": (fit(pk, gp, ("quad", 16)), lim),
-        "bins at 16, 8, 0, -8": (fit(pk, gp, ("bins", [16, 8, 0, -8])), lim),
-        "loads: additive declaration error": (fit(pk, payloads(pk, "lane_add"), H2), lim),
-        "loads: error read on the last 12 months": (fit(pk, payloads(pk, "lane", window=LAST12), H2), lim),
-        "loads: each day at its duty's mean declared": (fit(pk, lane_mean(pk), H2), lim),
-        "within-duty fit": (fit_fe(pk, gp), lim),
-        "speed: a straight line": (fit(pk, gp, H2, speed="lin"), lim),
-        "speed ratio: slope below 8 C": (fit(pk, gp, H2, vmode="hinge8"), lim),
-        "speed ratio: slope below 12 C": (fit(pk, gp, H2, vmode="hinge12"), lim),
-        "speed ratio: on the temperature": (fit(pk, gp, H2, vmode="linear"), lim),
-        "speed ratio: days within 2.5 C": (fit(pk, gp, H2, vmode="bins"), lim),
-        "tare: one coefficient with the payload": (fit(pk, gp, H2, tare="shared"), lim),
-        "drops: equal shares": (fit(pk, gp, H2, drops="equal"), lim),
-        "loss: the day's temperature": (fit(pk, gp, H2), limit(pk, fade(pk, "curve", "linear"))),
-        "loss: degrees below 15 C": (fit(pk, gp, H2), limit(pk, fade(pk, "curve", "cold15"))),
-        "loss: a straight line on the first year's days": (fit(pk, gp, H2), limit(pk, fade(pk, "first_year"))),
-    }
-    for h in LOSS_RIVALS:
-        out["loss: %s" % h] = (fit(pk, gp, H2), limit(pk, fade(pk, h)))
-    return out
-
-
-def lane_mean(pk):
-    """every pilot day at its duty's mean declared weight in its note period"""
-    lane = defaultdict(list)
-    for i, d in enumerate(pk.days):
-        lane[(d["duty"], regime(pk, d["shipper"], d["date"]))].append(i)
-    out = np.zeros(len(pk.days))
-    for k, idx in lane.items():
-        out[idx] = np.mean([pk.days[i]["declared"] for i in idx]) / 1000
-    out[[i for i, d in enumerate(pk.days) if regime(pk, d["shipper"], d["date"]) == "ticket"]] = \
-        [d["declared"] / 1000 for d in pk.days if regime(pk, d["shipper"], d["date"]) == "ticket"]
+def routes(pk, g=None):
+    """every route's count and set: the golden, the two passes, and each shortcut alone on the golden's path"""
+    g = g or golden(pk)
+    out = {}
+    out["golden"] = g["taken"]
+    out["careful but hurried"] = careful(pk)["taken"]
+    out["quick"] = quick(pk)["taken"]
+    E1, _ = design_energies(pk, "j1_wrong", g["rates"])
+    out["the pilot's fit carried on kilometres, climb and speed (the diesel bridge left out)"] = night_cut(pk, E1, g["limit"], g["eta"])[0]
+    E2, _ = design_energies(pk, "j2_wrong", g["rates"])
+    out["the pilot's cold response read as the new buses' (the fuel heaters' share left out)"] = night_cut(pk, E2, g["limit"], g["eta"])[0]
+    out["the per-block verdicts summed, the night's supply ignored"] = [c for c in sorted(pk.weekday, key=lambda c: pk.priority[c]) if g["E"][c] <= g["limit"]]
+    out["the night scheduled on battery energy (charging losses ignored)"] = night_cut(pk, g["E"], g["limit"], 1.0)[0]
+    Ec, _ = design_energies(pk, "careful", g["rates"])
+    out["the careful pass without the night's supply"] = [c for c in sorted(pk.weekday, key=lambda c: pk.priority[c]) if Ec[c] <= g["limit"]]
     return out

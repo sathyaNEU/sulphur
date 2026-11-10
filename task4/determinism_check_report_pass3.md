@@ -66,12 +66,12 @@ single-factor removals, which the thread read as evidence against a single hidde
 | File count / categories | 10+ usable files, 2+ categories | 13 files; CSV x7, XLSX x4, PDF x2 (3 categories) | Pass |
 | Large messy files | 1 CSV >=20,000 rows, 1 CSV 10-20 printed pages | `weighbridge_varnamo_2024-11_2026-10.csv` 21,413 data rows (12 cols); several mid-size, wide CSVs (`tms_consignments_jonkoping` 6,613 rows x 11 cols, `bev_daily_summary` 2,374 rows x 15 cols) comfortably clear 10+ printed pages | Pass |
 | metadata.json names 2+ distractors, none labelled in-ZIP | 2+ named, none inside the ZIP | `fuel_card_statement_varnamo_2025-2026.csv`, `workshop_log_2025-2026.csv` named in `metadata.json`; grep of the fresh unzip for "distractor", "benchmark", "synthetic", "generated" etc. returned zero hits | Pass |
-| Distractors unused but relevant, with the arithmetic-trap sub-case | Each distractor unused by the solution yet relevant enough to weigh; one should reproduce a graded quantity arithmetically before a shipped fact rules it out | Confirmed unused and plausibly relevant (diesel fuel cost and maintenance records are germane-looking to an electrification call); neither distractor was checked to reproduce a graded quantity arithmetically before being ruled out by a named fact — this specific sub-case was not exercised in this build | Partial / not fully verified |
+| Distractors unused but relevant, with the arithmetic-trap sub-case | Each distractor unused by the solution yet relevant enough to weigh; one should reproduce a graded quantity arithmetically before a shipped fact rules it out | Confirmed unused and plausibly relevant (diesel fuel cost and maintenance records are germane-looking to an electrification call); neither distractor was checked to reproduce a graded quantity arithmetically before being ruled out by a named fact, this specific sub-case was not exercised in this build | Partial / not fully verified |
 | 1-3 deliverables, all present in golden | `ev_duty_assessment_2027.xlsx`, `tractor_order_memo.pdf` | Both present in `golden/` and in `golden.zip`, no extra files | Pass |
 | Asks multi-dimensional with unit and rounding | every ask states unit/rounding | Ask 1 (nearest 10 kWh, band), ask 5 (0.1%, band), prompt's closing rounding line (10 kWh / 0.1 kWh / 0.1%) | Pass |
 | Answer shape is one of the fourteen | structured set of results, 4+ checkable | "An allocation plus its sensitivity" (DESIGN_NOTE Draw); 7 checkable results (R1-R7) | Pass |
 | Golden ZIP holds exactly the requested files | 2 files, requested formats | `golden.zip` contains exactly `ev_duty_assessment_2027.xlsx` and `tractor_order_memo.pdf` | Pass |
-| Not LLM-looking / real work product | — | Not independently re-checked this pass (owned by golden-realism / leak-check, not re-derived here); judge thread's hygiene read on the input files found no LLM-authorship tells | Pass (by input-file read; golden realism not re-audited this pass) |
+| Not LLM-looking / real work product |, | Not independently re-checked this pass (owned by golden-realism / leak-check, not re-derived here); judge thread's hygiene read on the input files found no LLM-authorship tells | Pass (by input-file read; golden realism not re-audited this pass) |
 
 ## Gate G reconciliation
 
@@ -80,7 +80,7 @@ allocation); `stumping_family: analytical_non_defect`; `surface_read_dependency:
 
 DESIGN_NOTE.md's Draw and Deep reasoning sections: Strategy label `WORKS IN FORM` (a forecast carried to a
 population the fit never saw, through a covariate whose calibration does not transport, beside a degradation
-whose form the record chooses) — "Domain test," "Not rule application," "No decoy," "No replay" all argue the
+whose form the record chooses), "Domain test," "Not rule application," "No decoy," "No replay" all argue the
 same analytical_non_defect / method-and-forecasting shape the thread independently reached with no access to
 the note. The two accounts agree: no surface read is being caught as wrong anywhere in this chain (the "terminal
 calibration line" and "straight-line loss" the solution rejects are naive *methods* a solver might choose, not a
@@ -108,7 +108,7 @@ ablation reading (the same documented sweep) both show *different* single-factor
 wrong orders (9, 5, 10, 13, 6, 1, 0), which is the client's own test for "not one thing," not a shared finding
 that happens to coincide by construction.
 
-Effort (H4) — the one real discrepancy worth recording. The quick-pass figures broadly agree in direction
+Effort (H4), the one real discrepancy worth recording. The quick-pass figures broadly agree in direction
 (thread's blind ~1-2 of 8, roughly 12-25%, against the note's measured 0.5 of 7, roughly 7%; both comfortably
 clear the "about a third or fewer" ceiling, no finding). The careful-but-hurried figures diverge sharply: the
 thread's blind estimate is ~4-5 of 8 (50-62%), nearly three times the note's own effort.py-calibrated figure of
@@ -117,8 +117,8 @@ below its own 100% thorough figure, so H4's ordering requirement, quick < carefu
 either account), and it does not change the one_thing verdict. But it is exactly the kind of mismatch the
 contract calls out as reliably predictive of trouble at review: a blind, independent read of what a careful but
 hurried run can reflexively assemble lands meaningfully higher than the generator's own calibration. Given this
-task's history — architecture 8's recorded platform runs "landed the golden exactly" (both runs, order 7, not
-stumped) before this re-root removed the fridge draw — the gap between the thread's blind estimate and the
+task's history, architecture 8's recorded platform runs "landed the golden exactly" (both runs, order 7, not
+stumped) before this re-root removed the fridge draw, the gap between the thread's blind estimate and the
 note's 21 per cent is a real signal that architecture 9's actual two platform runs could land closer to 40-55
 per cent than to the 26.8 pair estimate the generator computed. That would still very likely clear the client's
 under-60-per-cent bar, but with much less margin than the design claims, and is worth the author's attention
@@ -127,10 +127,10 @@ before upload rather than after a second return.
 One-fact (H5): a related, smaller version of the same gap. The thread's blind one-fact estimate (~2-3 of 8,
 roughly 31-37%) sits close to or just over the "about a third" ceiling, versus the note's calibrated 1 of 7
 (14%). Both namings of the hint point at the same mechanism (the terminal calibration line does not transport
-to the pilot's own loads), so this is not a different hint being found — it is the same hint being judged, blind,
+to the pilot's own loads), so this is not a different hint being found, it is the same hint being judged, blind,
 to rescue more of the chain than the generator's own measurement says it does.
 
-## Stump power (Gate F) — the seven graded results, careful-but-hurried pass
+## Stump power (Gate F), the seven graded results, careful-but-hurried pass
 
 Reconciling the judge thread's blind, result-by-result read with `DESIGN_NOTE.md`'s own effort.py-calibrated
 Effort test table (the authoritative source, since it is measured from `generator/effort_passes.py`'s actual
@@ -149,7 +149,7 @@ implementation of the "careful but hurried" route on the cut pack, not estimated
 **Rough rubric share for a careful-but-hurried strong model: approximately 1.5 of 7 results (about 21 per cent),
 per the generator's own calibrated measurement** (`effort.py` pair estimate 26.8, which also folds in
 instruction-following and partial credit on near-miss figures). The judge thread's own blind estimate was
-notably more generous (roughly 50-62 per cent on its differently-counted 8 results) — see the Gate H
+notably more generous (roughly 50-62 per cent on its differently-counted 8 results), see the Gate H
 reconciliation above for why this gap matters and is flagged rather than silently resolved in the generator's
 favour.
 
@@ -158,7 +158,7 @@ settle, only joining registers a careful run already reads for other reasons, ma
 "first move." R6 earns partial, incidental credit on some duties only because its underlying wrong energies
 still happen to clear a non-marginal verdict threshold, not because the verdict logic itself is a reflex result.
 R1, R2, R3, R5 and R7 all require a result the task's own recorded prior runs (architectures 6, 7 and 8) explicitly
-computed, named as uncertain or untested, and then set aside — the textbook definition of a result a careful but
+computed, named as uncertain or untested, and then set aside, the textbook definition of a result a careful but
 hurried run reaches the wrong way.
 
 ## Findings, ranked
@@ -186,7 +186,7 @@ hurried run reaches the wrong way.
 ## Next action for the author
 
 Ship as-is (no model rerun required for determinism or Gate H), but before upload re-run or sanity-check
-`effort.py`'s careful-but-hurried pass once more against the judge thread's reading above — specifically confirm
+`effort.py`'s careful-but-hurried pass once more against the judge thread's reading above, specifically confirm
 R1, R2 and R3 are genuinely not reachable by a reflex application of the field's textbook method now that
-architecture 8's fridge-draw forcing function is gone — since this pass's independent estimate suggests less
+architecture 8's fridge-draw forcing function is gone, since this pass's independent estimate suggests less
 margin under the 60 per cent bar than the generator currently claims.

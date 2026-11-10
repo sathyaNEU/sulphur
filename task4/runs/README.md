@@ -17,3 +17,7 @@
 - `arch8/run1.md`, `arch8/run2.md`: architecture 8 (commit 50d36a3), summaries written 2026-11-10 from the author's
   account. Both landed the golden exactly (order 7; payload 2.24 and 2.23, loss 3.78 and 3.79, every energy within
   about 3 kWh). Route: REDESIGN (architecture 9).
+- `arch9/run1.md`, `arch9/run2.md`: architecture 9 (commit af4ff11, target.zip 19b6bec9), summaries written
+  2026-11-10 from the author's account. Both landed the golden exactly (order 8; payload 2.00 and 1.92 against 1.9,
+  loss 5.08 and 4.51 against 4.6, the winter speed modelled by both). Route: REDESIGN in a new world (architecture
+  10, a Finnish bus depot's electric order).
