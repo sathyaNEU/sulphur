@@ -1,0 +1,62 @@
+{
+ "task": "task16",
+ "status": "DESIGN",
+ "domain": "general-statistics-data-science",
+ "subdomain": "scaling-laws",
+ "objective": "forecasting",
+ "stage": 2,
+ "stage_name": "design",
+ "updated": "2026-11-10",
+ "doctrine": "throughout",
+ "call": "",
+ "chain": "R1 the pilot's finished runs and final-checkpoint benchmark scores; R2 the benchmark loss the largest vendor-label runs correspond to; R3 what map-transfer and contractor labels add at the same examples and settings; R4 the loss more expert-labelled examples would give past the expert pool; R5 the forecast checked on the pilot's largest runs held out; R6 the learning rate for the widest configuration and what width buys; R7 run-to-run spread and the range; R8 each shortlisted configuration's expected benchmark loss; R9 the configuration to name and its margin",
+ "architecture": 1,
+ "loops": 0,
+ "precut": {
+  "exit": null,
+  "date": ""
+ },
+ "leak": {
+  "leak_py": "",
+  "reader": ""
+ },
+ "duplicate_check": {
+  "heart": "",
+  "nearest": "task11 at 0.06 (guard.py check at the draw, WARN: overuse.objective, repeat.gate_g, overuse.gate_g, answered in the note)"
+ },
+ "judge": {
+  "verdict": "",
+  "disposition": "",
+  "gate_h": "",
+  "report": ""
+ },
+ "paper_pair": null,
+ "effort": {
+  "quick": null,
+  "careful": null,
+  "thorough": null,
+  "largest_hint": ""
+ },
+ "runs": {
+  "run1": null,
+  "run2": null,
+  "average": null,
+  "counterfactual_average": null,
+  "first_wrong_step": {
+   "run1": "",
+   "run2": ""
+  },
+  "triage": "",
+  "recorded": "",
+  "history": []
+ },
+ "returned": [],
+ "resume": "",
+ "approved": null,
+ "submitted": null,
+ "portal": {
+  "status": "",
+  "date": "",
+  "note": ""
+ }
+}
