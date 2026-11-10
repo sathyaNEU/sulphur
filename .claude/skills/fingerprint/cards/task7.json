@@ -1,285 +1,324 @@
 {
- "task": "task7",
- "project": "sulfur",
- "architecture": "v7",
- "drawn": "2026-11-09",
- "slot_note": "re-root after the 2026-11-09 review returned architecture 6 on one thing; the Haldenau world and its lottery kept at the reviewer's direction, every result rebuilt as a results chain",
- "domain": "energy-systems-utilities",
- "subdomain": "efficiency-savings-verification",
- "niche": "a municipal retrofit lottery's measured savings carried by building type and works age to the next grant round's applicants, and the round's settled cost once late applications and withdrawals are in",
- "objective": "experiment-causal",
- "shape": "13",
- "decision_type": "designation_set",
- "answer_unit": "set_of_items",
- "answer": "Fund insulation and heating controls in the 2026 round, not heating optimisation: on the applications received €88.24, €98.60 and €157.82 of grant per lifetime tonne against €120 (90% ranges €83.12 to €93.38, €90.27 to €109.84, €122.26 to €229.48); the funded round's applications ask for €7,738,505 and it pays €7,262,823; the pilot's works saved 3,303 tonnes of CO2 in 2025/26",
- "answer_source": "task7/submission.md, Final Recommendation; task7/generator/figures.json",
- "gap": [
-  "population",
-  "time"
- ],
- "pattern": [
-  "none"
- ],
- "generators": [
-  "G6",
-  "G13",
-  "G17"
- ],
- "gate_g": "forecasting",
- "calibration_form": "pilot_log",
- "stump_strategy": "composition_mix",
- "decisive_rule_filed": false,
- "official_decoy": false,
- "validated_decoy": false,
- "context_artifact": "filed_standard",
- "stump_class": "analytical",
- "analyst_test": "A careful but hurried analyst cleans the meter reads, normalises each season as the utility does and reads the lottery as drawn, which gets each measure's saving by season right, then takes each measure's pooled seven-season saving, carries it flat over the measure's life, prices this year's applications at that one rate per measure and scales the received grant by the 2019 share in by 12 June: it funds insulation and heating optimisation and not controls, and books the round below what it will pay, because heating optimisation's saving fades with the works' age, the pilot's controls rate is diluted by round-the-clock buildings few of this year's applicants are, and the late insulation applications run larger and withdraw more.",
- "domain_test": "The results are measurement and verification quantities on weather-normalised gas use: a lottery's metered savings by works age, their persistence over a measure's service life, their dependence on how a building is occupied and how much of its gas goes to hot water, carried into grant per lifetime tonne of CO2; with another field's nouns there is no degree-day normalisation, no hot-water share that caps what insulation can save, no setback that saves nothing in a building heated round the clock, and no heating curve that creeps back up after an optimisation.",
- "layer2_family": "estimation_fit",
- "layer2_pattern": "own:lottery-effects-carried-by-type-and-age-to-a-new-round",
- "layer1": [
-  "meter points re-keyed at meter exchanges",
-  "estimated reads between actual reads",
-  "billing periods not aligned to calendar months",
-  "tenant changes on the same building",
-  "duplicate read loads",
-  "a weather station gap filled from a neighbour"
- ],
- "stakeholder_role": "head of energy services at the municipal utility, for the city council's climate committee",
- "role_family": "programme_officer",
- "scoring_unit": "per accepted item",
- "spine": {
-  "file": "gas_meter_reads_2013_2026.csv",
-  "rows": 389104,
-  "entity": "one gas meter read",
-  "grain": "meter point x read date",
-  "source": "synthetic"
- },
- "forum": "committee_or_panel",
- "forcing_event": "launch_or_rollout",
- "org_family": "local_government",
- "world": {
-  "geography": "Germany (Baden-Wuerttemberg)",
-  "currency": "EUR",
-  "org_type": "municipal utility (Stadtwerke)",
-  "invented_names": [
-   "Haldenau",
-   "Stadtwerke Haldenau"
-  ],
-  "people": [
-   "Torben Römer",
-   "Magda Peukert"
-  ]
- },
- "deliverables": [
-  "grant_round_2026_note.docx",
-  "grant_round_2026_appraisal.xlsx"
- ],
- "opening_move": "question-first",
- "question_form": "which",
- "driver": "The decisive quantities are a randomised effect carried to a forward population and horizon the trial never observed: each option's effect differs by the kind of unit and fades with the treatment's age at rates that differ by option, so the trial's pooled average misstates what the forward round's own units would gain over each option's life, and the round's settled cost needs the late arrivals, which run larger and drop out more, projected by option; different shortcuts fund different options.",
- "driver_concrete": "Haldenau's 2019 retrofit lottery gives each measure's normal-weather gas saving against the passed-over owners season by season; heating optimisation's saving fades with the works' age, heating controls save almost nothing in the care homes and hotels that made up much of the pilot's controls buildings but few of this year's applicants, and late insulation applications run larger and withdraw more, so the 2026 round funds insulation and controls, not heating optimisation, and the round's settled grant is projected measure by measure.",
- "stump": "A careful but hurried solver takes each measure's pooled seven-season lottery saving, carries it flat over the measure's life, prices this year's applications at that rate and scales the received grant by the 2019 share in by 12 June: it funds insulation and heating optimisation and not controls and books the round short, because heating optimisation's saving fades, the pilot's controls rate is diluted by round-the-clock buildings, and the late applications run larger and withdraw more.",
- "differentiation": {
-  "mark124": "mark124 carries a rate measured on samples drawn toward the outcome to unexamined units by kind and cohort; here the effect comes from a lottery and is unbiased inside the trial, and the work is carrying it by occupancy type to a new applicant mix and by works age over a service life, beside the round's settled cost, with no selected sample anywhere.",
-  "mark132": "mark132 ages a wear-out failure rate and corrects it for renewal by a new item; here a treatment effect fades with the works' age and is integrated over a service life with no renewal, and that is one result of eight beside a transport by type, the round projected at close and the pilot's season saving.",
-  "mark175": "mark175 reads each unit's take-up at its own run's fill and carries it to new places; here a randomised saving is carried by how a building is occupied to this year's applicants and by works age over each measure's life, and the round's grant is projected from the pilot's response timing, sizes and withdrawals."
- },
- "lineage": [
-  {
-   "domain": "nonprofit-grant-making",
-   "subdomain": "giving-strategy-program-funding",
-   "objective": "opportunity-sizing-decision",
-   "shape": "05",
-   "decision_type": "allocation_to_total",
-   "answer_unit": "count",
-   "gap": [
-    "time",
-    "objective",
-    "population"
-   ],
-   "pattern": [
-    "none",
-    "C",
-    "E"
-   ],
-   "generators": [
-    "G7",
-    "G8",
-    "G14",
-    "G16"
-   ],
-   "gate_g": "binding_constraint",
-   "driver": "The decisive quantity is how many of the period's placeable units a fixed team can finish before the period closes, because each unit counts only once that team performs one last step for it, the team's spare weekly capacity is visible only as the ceiling it held through an earlier unrelated surge, and the decision's own volume, bunched by its filed calendar into weeks no closed period approached, queues the later units past the close; the closed record's lag and an annual capacity check both pass, so the placeable count overstates the in-period total wherever the team is small and the units are many.",
-   "architecture": "v1 (heat-pump rebate slots across six co-ops, the crew meter-set queue)",
-   "drawn": "2026-10-10",
-   "fate": "spent 2026-10-10: the determinism judge returned SEND_BACK (binding_constraint, analytical_non_defect): the participation terms' 'an install proceeds only where the feeder has that capacity remaining' read literally fills capped feeders in date order, which moves Uplands from 170 to 200 slots, a competing defensible answer on the main call"
-  },
-  {
-   "domain": "actuarial-science-insurance",
-   "subdomain": "reserving-development-triangles",
-   "objective": "forecasting",
-   "shape": "14",
-   "decision_type": "quantity_figure",
-   "answer_unit": "currency",
-   "gap": [
-    "time"
-   ],
-   "pattern": [
-    "none"
-   ],
-   "generators": [
-    "G16",
-    "G14"
-   ],
-   "gate_g": "forecasting",
-   "driver": "The decisive quantity is a forward total projected from a history of cumulative progress by age in which the units carrying most of the amount began resolving more slowly partway through the record; the share of the amount settled tracks the share of units resolved rather than age, so the history has to be restated at the resolution shares the latest observations show before its age-to-age ratios are carried forward, and carrying them unrestated, or taking them from the latest periods alone, understates the total.",
-   "stump_strategy": "forecast_method_backtest",
-   "architecture": "v3 (Ninebark Mutual motor bodily injury reserve at year end 2026, the paid development restated at the latest closed shares)",
-   "drawn": "2026-10-14",
-   "fate": "spent 2026-10-14: the determinism judge returned NOT_DETERMINISTIC, SEND_BACK (method_or_model_selection, analytical_non_defect, competing_defensible_answer): the reserving basis leaves the method to the actuary, and frequency-severity on paid per closed feature carries $350 million against the restatement's $400 million with nothing shipped selecting between them; the author restored architecture 2"
-  },
-  {
-   "domain": "healthcare-delivery-health-economics",
-   "subdomain": "patient-flow-beds-workforce-optimization",
-   "objective": "opportunity-sizing-decision",
-   "shape": "05",
-   "decision_type": "allocation_to_total",
-   "answer_unit": "count",
-   "gap": [
+  "task": "task7",
+  "project": "sulfur",
+  "architecture": "v8",
+  "drawn": "2026-11-09",
+  "slot_note": "re-root after the author's platform run of architecture 7 landed the call: every move it needed was one a frontier run makes unprompted (the lottery read as drawn, each use's saving, a fade carried, the round projected); the Haldenau world and its lottery kept, the transport rebuilt on what each measure's saving follows, read from two records the gas files do not carry",
+  "domain": "energy-systems-utilities",
+  "subdomain": "efficiency-savings-verification",
+  "niche": "a municipal retrofit lottery's savings carried to the next grant round's self-selected applicants along what each measure's saving follows: the share of the week a building stands empty, read off its electricity load profile with the buildings lived in round the clock told apart, and the roof it has per square metre of floor, from the state solar cadastre; beside each measure's persistence over its life and the round's settled cost",
+  "objective": "experiment-causal",
+  "shape": "13",
+  "decision_type": "designation_set",
+  "answer_unit": "set_of_items",
+  "answer": "Fund insulation and heating controls in the 2026 round, not heating optimisation: on the applications received €108.74, €104.40 and €196.03 of grant per lifetime tonne against €120 (90% ranges €103.54 to €114.44, €94.96 to €113.74, €152.00 to €264.64); priced at each use's pilot saving insulation comes to €132.06 and controls to €128.67 and nothing is funded; the funded round's applications ask for €11,451,661 and it pays €10,759,494; the pilot's works saved 3,216 tonnes of CO2 in 2025/26",
+  "answer_source": "task7/submission.md, Final Recommendation; task7/generator/figures.json",
+  "gap": [
     "population",
-    "objective"
-   ],
-   "pattern": [
-    "C"
-   ],
-   "generators": [
-    "G3",
-    "G11",
-    "G8"
-   ],
-   "gate_g": "decomposition_attribution",
-   "driver": "The decisive quantity is the part of each unit's recorded wait that the offered intervention removes, because the recorded wait fuses the step the intervention replaces with a concurrent step it leaves in place, so only the replaced step's excess over the concurrent one, built by joining separate operational logs, counts; ranking units by the recorded wait, or by the replaced step measured from the same start, credits the units whose concurrent step is slowest.",
-   "stump_strategy": "decomposition_attribution",
-   "architecture": "v2 (re-root after SEND_BACK: winter discharge-to-assess packages across five hospitals)",
-   "drawn": "2026-10-12",
-   "fate": "spent 2026-11-07 at the portal (FAILED_TO_STUMP): both responses filed the golden split exactly (Royal Marchford 508, Wendlebury 350, Holmford 120, Cleeve Park 222, Ashby Vale none, 6,816 bed-days); the equipment wait running alongside the care wait was a hidden overlap a careful response found by joining the depot's deliveries to the covered patients"
-  },
-  {
-   "domain": "banking-credit-financial-risk",
-   "subdomain": "expected-credit-loss-provisioning",
-   "objective": "opportunity-sizing-decision",
-   "shape": "05",
-   "decision_type": "ranked_slate_under_cap",
-   "answer_unit": "set_of_items",
-   "gap": [
-    "objective",
-    "population"
-   ],
-   "pattern": [
-    "E"
-   ],
-   "generators": [
-    "G14",
-    "G16",
-    "G3"
-   ],
-   "gate_g": "method_or_model_selection",
-   "driver": "The decisive quantity is what preventing one unit's failure removes across a population of units, when some units draw most of their inflow from that unit and in the population's own record failed at a high rate within months of their main payer's failure, so a value read on the unit's own expected loss misses the failures it would set off; the dependence comes from the flows between units and the conditional failure rate from the population's past failures, neither stored in any field.",
-   "stump_strategy": "causal_design",
-   "drawn": "2026-11-07",
-   "architecture": "v4 (Ruahine Bank business support packages, the write-off a package keeps off dependent borrowers)",
-   "fate": "spent 2026-11-08: platform round 1 run 1 98 on the call, run 2 58 off it after computing the dependants and declining to price them (FIX_ASKS); round 2 on the re-sited asks both runs landed Kinloch Engineering and Matai Valley Foods (REDESIGN); the payer dependence was visible in the transactions and the default register"
-  },
-  {
-   "architecture": "v5",
-   "fate": "spent 2026-11-08: platform run 1 landed every graded cell (the memo's V sentence sent it to the record of inspections at default; it fitted the golden's age-and-book model and validated it out of sample)",
-   "driver": "The decisive quantity is what a unit's security fetches if the unit fails, which the record measures by an inspection made at the failure while the forward units carry only a market index rolled forward from an earlier inspection; the security of units that fail falls behind the index by more the longer since that inspection, and the forward units were inspected longer ago than the record's failures mostly were, so the rolled-forward index overstates what the failing units will fetch.",
-   "domain": "banking-credit-financial-risk",
-   "subdomain": "expected-credit-loss-provisioning",
-   "gap": [
-    "objective",
-    "population"
-   ],
-   "pattern": [
+    "time"
+  ],
+  "pattern": [
     "none"
-   ],
-   "generators": [
-    "G14",
+  ],
+  "generators": [
+    "G2",
     "G6",
-    "G3"
-   ],
-   "gate_g": "method_or_model_selection",
-   "stump_strategy": "population_selection",
-   "shell": null
+    "G13"
+  ],
+  "gate_g": "method_or_model_selection",
+  "calibration_form": "pilot_log",
+  "stump_strategy": "population_selection",
+  "decisive_rule_filed": false,
+  "official_decoy": false,
+  "validated_decoy": false,
+  "context_artifact": "filed_standard",
+  "stump_class": "analytical",
+  "analyst_test": "A careful but hurried analyst cleans the meter reads, reads the lottery as drawn, carries heating optimisation's fade over its life, prices each application at the saving its own use showed in the pilot and projects the round measure by measure, which is what the platform's architecture 7 run did; it then puts insulation at 132 and controls at 129 euro a tonne and funds nothing, because this year's owners chose their measures knowing their buildings: the controls applicants stand empty 70 per cent of the week against the pilot's 42, the insulation applicants have 1.13 square metres of roof per square metre of floor against 0.79, each measure's saving rises with them, and neither property is in the gas records.",
+  "domain_test": "The results are measurement and verification quantities on weather-normalised gas use: a lottery's metered savings by works age, their persistence over a measure's service life, a setback saving that grows with the hours a building stands empty and is nil where it is lived in round the clock, a roof insulation saving bounded by the roof's share of the building's heat loss and by the hot water it never touches, carried into grant per lifetime tonne of CO2; with another field's nouns there is no degree-day normalisation, no load profile whose night dip is sleep rather than absence, no roof per floor and no heating curve creeping back up.",
+  "layer2_family": "estimation_fit",
+  "layer2_pattern": "own:lottery-effects-carried-along-each-measures-driver-to-a-self-selected-round",
+  "layer1": [
+    "meter points re-keyed at meter exchanges",
+    "estimated reads between actual reads",
+    "billing periods not aligned to calendar months",
+    "duplicate read loads",
+    "market locations summed per customer",
+    "addresses abbreviated differently between registers",
+    "roof faces per address including outbuildings",
+    "a meter exchanged mid-year leaving fewer measured days"
+  ],
+  "stakeholder_role": "head of energy services at the municipal utility, for the city council's climate committee",
+  "role_family": "programme_officer",
+  "scoring_unit": "per accepted item",
+  "spine": {
+    "file": "gas_meter_reads_2013_2026.csv",
+    "rows": 389104,
+    "entity": "one gas meter read",
+    "grain": "meter point x read date",
+    "source": "synthetic"
   },
-  {
-   "architecture": "v6",
-   "drawn": "2026-11-08",
-   "domain": "energy-systems-utilities",
-   "subdomain": "efficiency-savings-verification",
-   "objective": "experiment-causal",
-   "gap": [
-    "time",
-    "population"
-   ],
-   "pattern": [
-    "none"
-   ],
-   "generators": [
-    "G5",
-    "G16",
-    "G17"
-   ],
-   "gate_g": "decomposition_attribution",
-   "stump_strategy": "causal_design",
-   "decision_type": "designation_set",
-   "driver": "The decisive quantity is the effect of a treatment assigned by lottery, where the units the lottery passed over were reached one area at a time by a second programme that skipped the winners and moved the same outcome for good, so the randomised comparison narrows period by period as if the effect faded; only passed-over units the second programme had not yet reached give the counterfactual, and the effect then decides which options a forward round funds against a cost-per-unit limit.",
-   "driver_concrete": "Haldenau's 2019 retrofit pilot drew its places by lot among the owners who answered the benchmarking notice's offer, so the owners passed over are the natural comparison; but the utility's service team tuned the burners of most of them, district by district from September 2019, and skipped every building with pilot works, so the passed-over buildings' gas use steps down and the measures' savings appear to fade; set against passed-over buildings not yet tuned, the savings hold, and heating optimisation clears the council's cost-per-tonne limit.",
-   "stump": "A competent solver reads the pilot as the randomised trial it was drawn as, measures each measure's saving as the works buildings' weather-normalised gas use against the passed-over buildings' on the notice season, sees the gap narrow every season and averages it or reads it as savings fading, and funds insulation alone in 2026; the step that lands it there is trusting a comparison whose buildings the service team was tuning district by district while it skipped the works buildings, when against passed-over buildings not yet tuned heating optimisation saves about six per cent and clears the limit.",
-   "fate": "spent 2026-11-09 at the platform's preliminary review (sent back for fixes): the funding answer turned on one thing, the service visits in the lottery's passed-over arm (constructed, only in the comparison arm, fixed by one exclusion), and the plan's filed formulas carried every figure past it"
-  }
- ],
- "lineage_shells": [
-  {
-   "question form": "whether",
-   "second-sentence opener": "the",
-   "rounding opener": "packages",
-   "deliverable set": "svg+xlsx"
+  "forum": "committee_or_panel",
+  "forcing_event": "launch_or_rollout",
+  "org_family": "local_government",
+  "world": {
+    "geography": "Germany (Baden-Wuerttemberg)",
+    "currency": "EUR",
+    "org_type": "municipal utility (Stadtwerke)",
+    "invented_names": [
+      "Haldenau",
+      "Stadtwerke Haldenau"
+    ],
+    "people": [
+      "Torben Römer",
+      "Magda Peukert"
+    ]
   },
-  {
-   "question form": "how-much",
-   "second-sentence opener": "that",
-   "rounding opener": "write",
-   "deliverable set": "docx+xlsx"
+  "deliverables": [
+    "grant_round_2026_note.docx",
+    "grant_round_2026_appraisal.xlsx"
+  ],
+  "opening_move": "question-first",
+  "question_form": "which",
+  "driver": "The decisive quantities are a randomised effect carried to a forward population that chose its treatment knowing what it would gain: each option's effect rises along a property of the unit that the trial's own outcome records do not carry, measurable only from a second record at another grain (an hourly load profile, a roof survey), and the forward units sit far up that property against the trial's units of the same kind, so carrying the trial's effect by kind of unit understates both options that clear the limit and funds neither; carrying one property alone funds only its option.",
+  "driver_concrete": "Haldenau's 2019 retrofit lottery gives each measure's normal-weather gas saving against the passed-over owners; heating controls save with the share of the week a building stands empty (read off the meter operator's 2025 typical weeks, hotels and care homes lived in round the clock told apart from their night dip) and roof insulation with the roof per square metre of floor (the state solar cadastre over the register), this year's controls applicants stand empty 70 per cent of the week against 42 and this year's insulation applicants have 1.13 square metres of roof per floor against 0.79, so priced on their own buildings both clear 120 euro a tonne while each use's pilot saving fails both; heating optimisation's fade fails it on every route.",
+  "stump": "A careful but hurried solver prices this year's applications at each use's pilot saving, faded over the life, and funds nothing (insulation about 132, controls about 129 euro a tonne), because the owners who applied this year chose the measure their building suits: the controls applicants' buildings stand empty far more of the week and the insulation applicants' have far more roof per floor than the pilot's buildings of the same use, and both savings rise along those properties, which only the electricity load profiles and the solar cadastre carry.",
+  "differentiation": {
+    "mark124": "mark124 carries a rate measured on samples drawn toward the outcome to unexamined units by kind and cohort; here the effect comes from a lottery and is unbiased inside the trial, and the work is carrying it by occupancy type to a new applicant mix and by works age over a service life, beside the round's settled cost, with no selected sample anywhere.",
+    "mark132": "mark132 ages a wear-out failure rate and corrects it for renewal by a new item; here a treatment effect fades with the works' age and is integrated over a service life with no renewal, and that is one result of eight beside a transport by type, the round projected at close and the pilot's season saving.",
+    "mark175": "mark175 reads each unit's take-up at its own run's fill and carries it to new places; here a randomised saving is carried by how a building is occupied to this year's applicants and by works age over each measure's life, and the round's grant is projected from the pilot's response timing, sizes and withdrawals.",
+    "task7": "architecture 7 carried the lottery's saving by the use on the notice, a property every gas record carries and a frontier run split on unprompted; here the decisive properties (the empty week, the roof per floor) are in no gas record, sit at another grain (a building's hourly typical week, the roof faces at its address) and need measuring before any transport, and the applicants chose on them within each use",
+    "mark253": "mark253 splits a voucher between two uses on a published rule; here a randomised saving is carried to self-selected applicants along two physical properties measured from records at another grain, the hourly load profile and the roof survey, beside a persistence fit and a round projection",
+    "mark120": "mark120's first architecture rebuilt a unit no file stores from a two-hop join of household records before cutting percentiles; here no unit is rebuilt: each building's own empty week and roof per floor are measured from records at another grain and carry a randomised saving to applicants who chose their measure on them"
   },
-  {
-   "question form": "how-much",
-   "second-sentence opener": "counting",
-   "rounding opener": "round",
-   "deliverable set": "csv+pptx"
-  }
- ],
- "notes": "architecture 7 (2026-11-09): the results chain replaces architecture 6's single deep step (the visits in the passed-over arm). The service team's visits stay as the process's texture: they reach both arms district by district, independent of the draw, with an uneven effect per burner, so the lottery balances them; they matter only to the works buildings' own before and after and to the 2025/26 counterfactual. Forcing event: the round's offer is live to 30 June and its grant letters go out once the committee sets it; budget_or_appropriation (task6) and vote_or_meeting (task12) are as honest and are in the ban window, launch_or_rollout names the round going out.",
- "answer_shape": "scenarios-flip",
- "weight": "modeling",
- "chain_signature": [
-  "causal-reasoning",
-  "forecasting",
-  "modeling",
-  "causal-reasoning",
-  "synthesis",
-  "uncertainty",
-  "forecasting",
-  "synthesis"
- ],
- "results": "R1 each measure's saving by season against the passed-over owners; R2 each measure's saving over its service life; R3 the savings by building type; R4 each measure's lifetime saving rate on this year's applications; R5 grant per tonne and the funded set; R6 the range of each grant per tonne and the saving rate where each call flips; R7 each measure's applications, grant and grant paid once the offer closes and withdrawals are in; R8 the CO2 the pilot's works saved in 2025/26",
- "architecture_spent": false,
- "registered": "2026-11-09T18:32:18Z",
- "shell": {
-  "question form": "which",
-  "second-sentence opener": "see",
-  "rounding opener": "savings",
-  "deliverable set": "xlsx"
- }
+  "lineage": [
+    {
+      "domain": "nonprofit-grant-making",
+      "subdomain": "giving-strategy-program-funding",
+      "objective": "opportunity-sizing-decision",
+      "shape": "05",
+      "decision_type": "allocation_to_total",
+      "answer_unit": "count",
+      "gap": [
+        "time",
+        "objective",
+        "population"
+      ],
+      "pattern": [
+        "none",
+        "C",
+        "E"
+      ],
+      "generators": [
+        "G7",
+        "G8",
+        "G14",
+        "G16"
+      ],
+      "gate_g": "binding_constraint",
+      "driver": "The decisive quantity is how many of the period's placeable units a fixed team can finish before the period closes, because each unit counts only once that team performs one last step for it, the team's spare weekly capacity is visible only as the ceiling it held through an earlier unrelated surge, and the decision's own volume, bunched by its filed calendar into weeks no closed period approached, queues the later units past the close; the closed record's lag and an annual capacity check both pass, so the placeable count overstates the in-period total wherever the team is small and the units are many.",
+      "architecture": "v1 (heat-pump rebate slots across six co-ops, the crew meter-set queue)",
+      "drawn": "2026-10-10",
+      "fate": "spent 2026-10-10: the determinism judge returned SEND_BACK (binding_constraint, analytical_non_defect): the participation terms' 'an install proceeds only where the feeder has that capacity remaining' read literally fills capped feeders in date order, which moves Uplands from 170 to 200 slots, a competing defensible answer on the main call"
+    },
+    {
+      "domain": "actuarial-science-insurance",
+      "subdomain": "reserving-development-triangles",
+      "objective": "forecasting",
+      "shape": "14",
+      "decision_type": "quantity_figure",
+      "answer_unit": "currency",
+      "gap": [
+        "time"
+      ],
+      "pattern": [
+        "none"
+      ],
+      "generators": [
+        "G16",
+        "G14"
+      ],
+      "gate_g": "forecasting",
+      "driver": "The decisive quantity is a forward total projected from a history of cumulative progress by age in which the units carrying most of the amount began resolving more slowly partway through the record; the share of the amount settled tracks the share of units resolved rather than age, so the history has to be restated at the resolution shares the latest observations show before its age-to-age ratios are carried forward, and carrying them unrestated, or taking them from the latest periods alone, understates the total.",
+      "stump_strategy": "forecast_method_backtest",
+      "architecture": "v3 (Ninebark Mutual motor bodily injury reserve at year end 2026, the paid development restated at the latest closed shares)",
+      "drawn": "2026-10-14",
+      "fate": "spent 2026-10-14: the determinism judge returned NOT_DETERMINISTIC, SEND_BACK (method_or_model_selection, analytical_non_defect, competing_defensible_answer): the reserving basis leaves the method to the actuary, and frequency-severity on paid per closed feature carries $350 million against the restatement's $400 million with nothing shipped selecting between them; the author restored architecture 2"
+    },
+    {
+      "domain": "healthcare-delivery-health-economics",
+      "subdomain": "patient-flow-beds-workforce-optimization",
+      "objective": "opportunity-sizing-decision",
+      "shape": "05",
+      "decision_type": "allocation_to_total",
+      "answer_unit": "count",
+      "gap": [
+        "population",
+        "objective"
+      ],
+      "pattern": [
+        "C"
+      ],
+      "generators": [
+        "G3",
+        "G11",
+        "G8"
+      ],
+      "gate_g": "decomposition_attribution",
+      "driver": "The decisive quantity is the part of each unit's recorded wait that the offered intervention removes, because the recorded wait fuses the step the intervention replaces with a concurrent step it leaves in place, so only the replaced step's excess over the concurrent one, built by joining separate operational logs, counts; ranking units by the recorded wait, or by the replaced step measured from the same start, credits the units whose concurrent step is slowest.",
+      "stump_strategy": "decomposition_attribution",
+      "architecture": "v2 (re-root after SEND_BACK: winter discharge-to-assess packages across five hospitals)",
+      "drawn": "2026-10-12",
+      "fate": "spent 2026-11-07 at the portal (FAILED_TO_STUMP): both responses filed the golden split exactly (Royal Marchford 508, Wendlebury 350, Holmford 120, Cleeve Park 222, Ashby Vale none, 6,816 bed-days); the equipment wait running alongside the care wait was a hidden overlap a careful response found by joining the depot's deliveries to the covered patients"
+    },
+    {
+      "domain": "banking-credit-financial-risk",
+      "subdomain": "expected-credit-loss-provisioning",
+      "objective": "opportunity-sizing-decision",
+      "shape": "05",
+      "decision_type": "ranked_slate_under_cap",
+      "answer_unit": "set_of_items",
+      "gap": [
+        "objective",
+        "population"
+      ],
+      "pattern": [
+        "E"
+      ],
+      "generators": [
+        "G14",
+        "G16",
+        "G3"
+      ],
+      "gate_g": "method_or_model_selection",
+      "driver": "The decisive quantity is what preventing one unit's failure removes across a population of units, when some units draw most of their inflow from that unit and in the population's own record failed at a high rate within months of their main payer's failure, so a value read on the unit's own expected loss misses the failures it would set off; the dependence comes from the flows between units and the conditional failure rate from the population's past failures, neither stored in any field.",
+      "stump_strategy": "causal_design",
+      "drawn": "2026-11-07",
+      "architecture": "v4 (Ruahine Bank business support packages, the write-off a package keeps off dependent borrowers)",
+      "fate": "spent 2026-11-08: platform round 1 run 1 98 on the call, run 2 58 off it after computing the dependants and declining to price them (FIX_ASKS); round 2 on the re-sited asks both runs landed Kinloch Engineering and Matai Valley Foods (REDESIGN); the payer dependence was visible in the transactions and the default register"
+    },
+    {
+      "architecture": "v5",
+      "fate": "spent 2026-11-08: platform run 1 landed every graded cell (the memo's V sentence sent it to the record of inspections at default; it fitted the golden's age-and-book model and validated it out of sample)",
+      "driver": "The decisive quantity is what a unit's security fetches if the unit fails, which the record measures by an inspection made at the failure while the forward units carry only a market index rolled forward from an earlier inspection; the security of units that fail falls behind the index by more the longer since that inspection, and the forward units were inspected longer ago than the record's failures mostly were, so the rolled-forward index overstates what the failing units will fetch.",
+      "domain": "banking-credit-financial-risk",
+      "subdomain": "expected-credit-loss-provisioning",
+      "gap": [
+        "objective",
+        "population"
+      ],
+      "pattern": [
+        "none"
+      ],
+      "generators": [
+        "G14",
+        "G6",
+        "G3"
+      ],
+      "gate_g": "method_or_model_selection",
+      "stump_strategy": "population_selection",
+      "shell": null
+    },
+    {
+      "architecture": "v6",
+      "drawn": "2026-11-08",
+      "domain": "energy-systems-utilities",
+      "subdomain": "efficiency-savings-verification",
+      "objective": "experiment-causal",
+      "gap": [
+        "time",
+        "population"
+      ],
+      "pattern": [
+        "none"
+      ],
+      "generators": [
+        "G5",
+        "G16",
+        "G17"
+      ],
+      "gate_g": "decomposition_attribution",
+      "stump_strategy": "causal_design",
+      "decision_type": "designation_set",
+      "driver": "The decisive quantity is the effect of a treatment assigned by lottery, where the units the lottery passed over were reached one area at a time by a second programme that skipped the winners and moved the same outcome for good, so the randomised comparison narrows period by period as if the effect faded; only passed-over units the second programme had not yet reached give the counterfactual, and the effect then decides which options a forward round funds against a cost-per-unit limit.",
+      "driver_concrete": "Haldenau's 2019 retrofit pilot drew its places by lot among the owners who answered the benchmarking notice's offer, so the owners passed over are the natural comparison; but the utility's service team tuned the burners of most of them, district by district from September 2019, and skipped every building with pilot works, so the passed-over buildings' gas use steps down and the measures' savings appear to fade; set against passed-over buildings not yet tuned, the savings hold, and heating optimisation clears the council's cost-per-tonne limit.",
+      "stump": "A competent solver reads the pilot as the randomised trial it was drawn as, measures each measure's saving as the works buildings' weather-normalised gas use against the passed-over buildings' on the notice season, sees the gap narrow every season and averages it or reads it as savings fading, and funds insulation alone in 2026; the step that lands it there is trusting a comparison whose buildings the service team was tuning district by district while it skipped the works buildings, when against passed-over buildings not yet tuned heating optimisation saves about six per cent and clears the limit.",
+      "fate": "spent 2026-11-09 at the platform's preliminary review (sent back for fixes): the funding answer turned on one thing, the service visits in the lottery's passed-over arm (constructed, only in the comparison arm, fixed by one exclusion), and the plan's filed formulas carried every figure past it"
+    },
+    {
+      "architecture": "v7",
+      "drawn": "2026-11-09",
+      "domain": "energy-systems-utilities",
+      "subdomain": "efficiency-savings-verification",
+      "objective": "experiment-causal",
+      "gap": [
+        "population",
+        "time"
+      ],
+      "pattern": [
+        "none"
+      ],
+      "generators": [
+        "G6",
+        "G13",
+        "G17"
+      ],
+      "gate_g": "forecasting",
+      "stump_strategy": "composition_mix",
+      "decision_type": "designation_set",
+      "driver": "The decisive quantities are a randomised effect carried to a forward population and horizon the trial never observed: each option's effect differs by the kind of unit and fades with the treatment's age at rates that differ by option, so the trial's pooled average misstates what the forward round's own units would gain over each option's life, and the round's settled cost needs the late arrivals, which run larger and drop out more, projected by option; different shortcuts fund different options.",
+      "driver_concrete": "Haldenau's 2019 retrofit lottery gives each measure's normal-weather gas saving against the passed-over owners season by season; heating optimisation's saving fades with the works' age, heating controls save almost nothing in the care homes and hotels that made up much of the pilot's controls buildings but few of this year's applicants, and late insulation applications run larger and withdraw more, so the 2026 round funds insulation and controls, not heating optimisation, and the round's settled grant is projected measure by measure.",
+      "stump": "A careful but hurried solver takes each measure's pooled seven-season lottery saving, carries it flat over the measure's life, prices this year's applications at that rate and scales the received grant by the 2019 share in by 12 June: it funds insulation and heating optimisation and not controls and books the round short, because heating optimisation's saving fades, the pilot's controls rate is diluted by round-the-clock buildings, and the late applications run larger and withdraw more.",
+      "fate": "spent 2026-11-09 on the author's platform run (no score pasted, read as not stumped): the run read the lottery as drawn (instrumented on completion), priced each use's saving to this year's applications, carried heating optimisation's fade on its last three seasons and projected the round measure by measure, landing the call at 87, 95 and 139 euro a tonne; it lost only the round's insulation count and heating optimisation's figure, every judgment of the chain being a move a frontier run makes unprompted"
+    }
+  ],
+  "lineage_shells": [
+    {
+      "question form": "whether",
+      "second-sentence opener": "the",
+      "rounding opener": "packages",
+      "deliverable set": "svg+xlsx"
+    },
+    {
+      "question form": "how-much",
+      "second-sentence opener": "that",
+      "rounding opener": "write",
+      "deliverable set": "docx+xlsx"
+    },
+    {
+      "question form": "how-much",
+      "second-sentence opener": "counting",
+      "rounding opener": "round",
+      "deliverable set": "csv+pptx"
+    },
+    {
+      "question form": "which",
+      "second-sentence opener": "see",
+      "rounding opener": "savings",
+      "deliverable set": "xlsx"
+    }
+  ],
+  "notes": "architecture 8 (2026-11-09): the author's platform run of architecture 7 made every one of its judgments unprompted (the lottery, each use's saving, the fade, the projection), so the transport is rebuilt on what each measure's saving follows. Controls save with the empty week and insulation with the roof per floor across every pilot building of every use (asserted within offices, shops and workshops), the 2019 owners chose only weakly on either, and this year's chose strongly, the pilot's results by use having been published in 2023 and the utility's portal showing each customer its load profile since 2022; the load profiles and the solar cadastre have their own uses (the meter operator's billing and network planning, the state's rooftop solar survey) and no shipped sentence links either to a measure's saving.",
+  "answer_shape": "scenarios-flip",
+  "weight": "modeling",
+  "chain_signature": [
+    "causal-reasoning",
+    "forecasting",
+    "missingness-measurement",
+    "modeling",
+    "causal-reasoning",
+    "synthesis",
+    "uncertainty",
+    "forecasting",
+    "synthesis",
+    "synthesis"
+  ],
+  "results": "R1 each measure's saving by season against the passed-over owners; R2 heating optimisation's saving over its service life; R3 controls' saving along the share of the week a building stands empty, read off the load profiles; R4 insulation's saving along the roof per floor, from the solar cadastre; R5 each measure's saving rate on this year's applications; R6 grant per tonne and the funded set; R7 the range of each grant per tonne and the saving rate where each call flips; R8 each measure's applications, grant and grant paid once the offer closes, and the funded round's totals; R9 every application's lifetime tonnes; R10 the CO2 the pilot's works saved in 2025/26",
+  "architecture_spent": false,
+  "shell": {
+    "question form": "which",
+    "second-sentence opener": "i",
+    "rounding opener": "",
+    "deliverable set": "xlsx"
+  },
+  "registered": "2026-11-10T00:50:26Z"
 }

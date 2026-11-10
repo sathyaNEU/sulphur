@@ -1,13 +1,13 @@
 {
  "task": "task7",
- "status": "READY",
+ "status": "DESIGN",
  "domain": "energy-systems-utilities",
  "objective": "experiment-causal",
- "stage": 5,
- "stage_name": "ready",
+ "stage": 2,
+ "stage_name": "design",
  "updated": "2026-11-09",
  "stump": "",
- "architecture": 7,
+ "architecture": 8,
  "loops": 0,
  "precut": {
   "exit": 0,
@@ -16,20 +16,18 @@
   "note": "1 WARN (R1 upstream of seven results; the largest hint rescues 2 of 9)"
  },
  "leak": {
-  "leak_py": "REVIEW, no LEAK (2026-11-09, --asof 2026-06-24): the plan's section numbers, the measures' names, the field's ordinary words; ruled harmless",
-  "reader": "2026-11-09 isolated reader (Sonnet, medium) on target.zip 00c9970f: questions 1 to 4 none; question 5 definitions only; question 6 analysis throughout; nothing generated-looking. Prompt re-read after the R7 wording fix: one two-reading risk (paid once withdrawals are in, against the terms' two causes of non-payment) closed with the terms' own words, once the works are done, converging on the record (SF15)"
+  "leak_py": "",
+  "reader": ""
  },
  "duplicate_check": {
   "heart": "WARN 2026-11-09 (overuse.strategy, driver.near own lineage 0.13, overuse.gate_g), answered in the note",
   "surface": "exit 0"
  },
  "judge": {
-  "verdict": "DETERMINISTIC",
-  "disposition": "APPROVE",
-  "report": "task7/determinism_check_report_pass2.md",
-  "gate_g": "method_or_model_selection, decomposition_attribution, forecasting; analytical_non_defect; surface_read_dependency no; sole_data_defect no",
-  "gate_h": "domain pass, layers pass, results ten or more across five areas, one thing none, effort test separating the passes, the best single hint rescuing two or three of ten",
-  "scope": "APPROVE on target.zip 00c9970f; afterwards the R7 asking clause was reworded to the 2026 terms' own words and, at the author's word, the prompt's rounding sentence was dropped and every figure restated at its natural precision; no value moved (the judge's own derivation computed these unrounded values, e.g. 157.8 euro a tonne), the pack is unchanged"
+  "verdict": "",
+  "disposition": "",
+  "report": "",
+  "note": "architecture 7's APPROVE (determinism_check_report_pass2.md) is spent with that architecture"
  },
  "returned": [
   {
@@ -239,7 +237,13 @@
    "zips_note": "target.zip and golden.zip of architecture 6 are in git at aa2fe65",
    "fate": "RETURNED at the platform's preliminary review 2026-11-09 (version 17): one thing, the visits in the passed-over arm, the plan's formulas carrying the rest (runs/review_2026-11-09.md)"
   },
-  "2026-11-09 natural precision": "prompt's rounding sentence dropped at the author's word; the answer blocks and the golden restated at natural precision (percentages to two decimals, grant per tonne to the cent, money to the euro, counts and totals whole, an application's tonnes to a tenth); target.zip unchanged"
+  "2026-11-09 natural precision": "prompt's rounding sentence dropped at the author's word; the answer blocks and the golden restated at natural precision (percentages to two decimals, grant per tonne to the cent, money to the euro, counts and totals whole, an application's tonnes to a tenth); target.zip unchanged",
+  "architecture_7": {
+   "date": "2026-11-09",
+   "verdict": "READY, judge APPROVE (determinism_check_report_pass2.md, target.zip 00c9970f)",
+   "platform": "the author's test run (task7/runs/arch7/run1.md) landed the call at 87, 95 and 139 euro a tonne; lost only the round's insulation count and heating optimisation's figure; read by the author as not stumped",
+   "fate": "re-rooted as architecture 8 at the author's choice: the transport rebuilt on each measure's driver, read from the electricity load profiles and the solar cadastre"
+  }
  },
  "restored": "2026-10-14: architecture 3 (a full refresh at the author's request) drew judge SEND_BACK at stage 4, and the author chose to restore this architecture as task7's live build (pack unchanged from SHIPPED 59aaaba)",
  "portal_status": "",
