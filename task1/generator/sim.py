@@ -38,6 +38,16 @@ class World:
                     "events": []}
         self.flows = None
         self.cut_ids = set()
+        # the Team plan's cancellations run with the calendar: an autumn peak, a late-winter trough, with a fixed
+        # offset per calendar month and month-to-month noise, so no two years repeat
+        r = self.rng
+        off = r.normal(0, P.TEAM_SEASON_NOISE[0], 12)
+        self.season = {}
+        for m in range(-48, 96):
+            cal = ym(m)[1]
+            f = 1.0 + P.TEAM_SEASON_AMP * math.cos(2 * math.pi * (cal - P.TEAM_SEASON_PEAK) / 12.0) + off[cal - 1] \
+                + r.normal(0, P.TEAM_SEASON_NOISE[1])
+            self.season[m] = float(max(f, 0.45))
 
     # ------------------------------------------------------------------ ids
     def nid(self, k, step=None):
@@ -62,7 +72,8 @@ class World:
 
     def new_business(self, m, seats_need, currency, parent, source, team_ws=None):
         r = self.rng
-        u = float(np.clip(r.normal(P.UTIL_MEAN, P.UTIL_SD), 0.38, 0.99))
+        u = float(np.clip(r.normal(trend(P.UTIL_AT_SIGNING[0], P.UTIL_AT_SIGNING[1], m, -36, P.CUT), P.UTIL_SD),
+                          0.38, 0.99))
         seats = max(5, int(math.ceil(seats_need / u)))
         disc = float(np.clip(0.04 + 0.035 * math.log(max(seats, 5) / 20.0) + r.normal(0, 0.035), 0.0, 0.28))
         if source == "upgrade":
@@ -142,7 +153,7 @@ class World:
         for a in self.bus:
             if not a["active"] or a["start"] == m:
                 continue
-            a["need"] *= math.exp(a["g"] / 12.0 + r.normal(0, 0.008))
+            a["need"] *= math.exp(a["g"] / 12.0 + r.normal(0, P.NEED_NOISE))
             A = self.active_users(a, m)
             a["hist"].append((m, A))
             age = m - a["start"]
@@ -209,6 +220,7 @@ class World:
                 (P.TEAM_HAZARD_2 if t["members"] == 2 else 0)
             if age <= 3:
                 h *= P.TEAM_YOUNG_MULT
+            h *= self.season[m]
             if t["padded"] is not None:
                 k = m - t["padded"]
                 h += P.PAD_SHOCK * math.exp(-k / P.PAD_DECAY) + P.PAD_PERSIST
@@ -281,10 +293,7 @@ class World:
                 o["mis"] += 1
             still.append(o)
         self.opps = still
-        if m < P.PRICE_RISE:
-            lam = trend(P.OPP_RATE[0] * 0.75, P.OPP_RATE[1], m, -36, P.PRICE_RISE - 1)
-        else:
-            lam = P.OPP_RATE[2]
+        lam = trend(P.OPP_RATE[0] * 0.75, P.OPP_RATE[1], m, -36, P.OPP_TREND_END)
         lam *= 1.0 + 0.12 * math.cos(2 * math.pi * (ym(m)[1] - 3) / 12.0)
         for _ in range(r.poisson(lam)):
             seats_need = float(np.clip(r.lognormal(math.log(P.SEAT_MEDIAN), P.SEAT_SIGMA), 8, 900))

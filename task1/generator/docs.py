@@ -1,6 +1,7 @@
-"""Tekenbord's ARR reporting policy, version 4: the finance team's Word document exported to PDF by LibreOffice
+"""Tekenbord's ARR reporting policy, version 5: the finance team's Word document exported to PDF by LibreOffice
 Writer (officepdf.build). It files what ARR is, the plan rate, what is left out, how a Team subscription's ARR is
-read, and the movement categories in their order; it says nothing about how a forecast is made."""
+read, the movement categories in their order, and for a plan forecast what its range carries and how a commitment
+is read from it; it says nothing about how a forecast is made."""
 import datetime as dt
 
 from reportlab.lib import colors
@@ -59,10 +60,15 @@ POLICY = [
         "5.1 ARR figures in the plan and in board reports for months that have not ended are forecasts made from "
         "the company's own records: the billing system, the product's usage data and the CRM. Finance reviews "
         "every plan figure before it goes to the board.",
-        "5.2 A figure put to the board as a commitment states the chance of meeting it."]),
+        "5.2 A plan forecast of ARR at a month end is stated with its 80 per cent range: the 10th to the 90th "
+        "percentile of the ARR at that month end over the outcomes of the accounts and deals on the books and of "
+        "those that join before it. The rates estimated from the company's records for those outcomes carry their "
+        "own estimation uncertainty in the range. No allowance is added to the range beyond what the records show.",
+        "5.3 A figure put to the board as a commitment is the largest EUR 0.1 million step that is met or beaten in "
+        "at least 80 per cent of the outcomes, and is stated with that chance."]),
     ("6. Ownership and review", [
         "6.1 The CFO owns this policy. Revenue operations prepares the monthly ARR report and its movement; Finance "
-        "reconciles it to the billing system each month.",
+        "reconciles it to the billing system within five working days of the month end.",
         "6.2 The policy is reviewed every year before the plan cycle. Questions to the finance team."]),
 ]
 
@@ -79,7 +85,7 @@ def policy(path):
     cell = ParagraphStyle("cell", fontName="Helvetica", fontSize=8.4, leading=10.2)
     s = [Paragraph("Tekenbord B.V., Finance", small),
          Paragraph("ARR reporting policy", h1),
-         Paragraph("Version 4, approved 9 February 2026 by Naomi Weijters, CFO. Replaces version 3 (February 2025).",
+         Paragraph("Version 5, approved 21 September 2026 by Naomi Weijters, CFO. Replaces version 4 (February 2026).",
                    small), Spacer(1, 4)]
     for head, paras in POLICY:
         s.append(Paragraph(head, h2))
@@ -88,11 +94,13 @@ def policy(path):
     rows = [["Version", "Date", "Change"],
             ["2", "March 2024", "Team plan ARR added"],
             ["3", "February 2025", "Movement categories split into seat additions, price and seat reductions"],
-            ["4", "February 2026", "Plan rate for 2026 and the 2027 plan; one-off charges listed"]]
+            ["4", "February 2026", "Plan rate for 2026 and the 2027 plan; one-off charges listed"],
+            ["5", "September 2026", "Plan forecasts: what the 80 per cent range carries; how a commitment is read; the "
+             "month-end reconciliation's deadline"]]
     t = Table([[Paragraph(c, cell) for c in r] for r in rows], colWidths=[50, 80, 330], repeatRows=1)
     t.setStyle(TableStyle([("GRID", (0, 0), (-1, -1), 0.4, colors.HexColor("#9AA0AB")),
                            ("VALIGN", (0, 0), (-1, -1), "TOP")]))
     s += [Spacer(1, 6), Paragraph("Document history", h2), t]
-    O.build(path, s, "ARR reporting policy", "Naomi Weijters", "ARR reporting policy, version 4",
-            "Tekenbord B.V. | ARR reporting policy v4", dt.datetime(2026, 2, 9, 9, 40, tzinfo=CET),
-            dt.datetime(2026, 2, 9, 11, 2, tzinfo=CET), producer="LibreOffice 25.8.4.2")
+    O.build(path, s, "ARR reporting policy", "Naomi Weijters", "ARR reporting policy, version 5",
+            "Tekenbord B.V. | ARR reporting policy v5", dt.datetime(2026, 9, 21, 9, 40, tzinfo=CET),
+            dt.datetime(2026, 9, 21, 11, 2, tzinfo=CET), producer="LibreOffice 25.8.4.2")

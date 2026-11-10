@@ -21,7 +21,7 @@ PACK = list(FILES)
 DISTRACTORS = pack.DISTRACTORS
 ORG = "Tekenbord B.V."
 OFFICE = {"crm": ("2026-11-02T07:12:00Z", "2026-11-02T07:12:00Z", "Floortje Huisman"),
-          "price": ("2025-12-03T10:31:00Z", "2026-01-14T15:06:00Z", "Naomi Weijters"),
+          "price": ("2025-11-27T10:31:00Z", "2025-12-03T15:06:00Z", "Naomi Weijters"),
           "kpi": ("2026-01-08T08:45:00Z", "2026-10-06T09:27:00Z", "Niels Thout")}
 CET = dt.timezone(dt.timedelta(hours=1))
 # the exports carry no stamp of their own: each file's time is when its system wrote it

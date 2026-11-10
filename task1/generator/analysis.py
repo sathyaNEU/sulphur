@@ -26,7 +26,10 @@ def logit_fit(X, y, iters=50, ridge=1e-6):
         b += step
         if np.abs(step).max() < 1e-9:
             break
-    return b
+    p = 1 / (1 + np.exp(-X @ b))
+    W = p * (1 - p)
+    cov = np.linalg.inv((X * W[:, None]).T @ X + ridge * np.eye(len(b)))
+    return b, cov
 
 
 def logit_p(b, X):
@@ -164,28 +167,72 @@ def fit_business(E, use_util=True, use_sib=True, use_first=True, since=1, util_f
     if use_sib:
         cols.append(E["sib"].values)
     X = np.column_stack(cols) if cols else np.zeros((len(E), 0))
-    b = logit_fit(X, 1 - E["renewed"].values)
+    b, cov = logit_fit(X, 1 - E["renewed"].values)
     R = E[E["renewed"] == 1].copy()
     R["ratio"] = R["new_seats"] / R["seats"]
     R["ub"] = pd.cut(R["U"], U_BINS, labels=False) if use_util else 0
     R["f"] = R["first"] if use_first else 0
-    ratio = R.groupby(["ub", "f"])["ratio"].mean().to_dict()
+    rg = R.groupby(["ub", "f"])["ratio"]
+    ratio = rg.mean().to_dict()
+    ratio_se = (rg.std().fillna(0.0) / np.sqrt(rg.size().clip(lower=1))).to_dict()
     up = E[(E["k"] >= P.PRICE_RISE) & (E["renewed"] == 1)].copy()
     up = up[up["price"] < (up["new_price"] - 0.005)]
     up["r"] = up["new_price"] / up["price"] - 1
     xs = np.log(np.maximum(up["seats"].values, 5) / 20.0)
-    ub = np.polyfit(xs, up["r"].values, 1)
+    ub, ucov = np.polyfit(xs, up["r"].values, 1, cov=True)
     bands = up.groupby(pd.cut(up["seats"], UP_BANDS, labels=False))["r"].mean().to_dict()
-    if uplift_form == "bands":
+    bands_se = (up.groupby(pd.cut(up["seats"], UP_BANDS, labels=False))["r"].std().fillna(0.0) /
+                np.sqrt(up.groupby(pd.cut(up["seats"], UP_BANDS, labels=False))["r"].size().clip(lower=1))).to_dict()
+    return {"b": b, "cov": cov, "ratio": ratio, "ratio_se": ratio_se, "util": use_util, "sib": use_sib,
+            "first": use_first, "uplift": ub, "uplift_cov": ucov, "uplift_fn": uplift_function(uplift_form, ub, bands,
+                                                                                                float(up["r"].mean())),
+            "uplift_form": uplift_form, "util_form": util_form, "uplift_bands": bands, "uplift_bands_se": bands_se,
+            "uplift_mean": float(up["r"].mean()), "uplift_n": len(up)}
+
+
+def uplift_function(form, ub, bands, mean):
+    if form == "bands":
         def ufn(seats):
             k = int(np.digitize([seats], UP_BANDS[1:-1])[0])
-            return bands.get(k, float(up["r"].mean()))
+            return bands.get(k, mean)
     else:
         def ufn(seats):
             return float(np.polyval(ub, math.log(max(seats, 5) / 20.0)))
-    return {"b": b, "ratio": ratio, "util": use_util, "sib": use_sib, "first": use_first, "uplift": ub,
-            "uplift_fn": ufn, "util_form": util_form, "uplift_bands": bands,
-            "uplift_mean": float(up["r"].mean()), "uplift_n": len(up)}
+    return ufn
+
+
+def perturb_business(fit, rng):
+    """The fitted renewal model redrawn from its own sampling error (the policy's estimation uncertainty): the exit
+    model's coefficients from their covariance, the uplift fit from its covariance, each seat-ratio cell from its
+    standard error. Routes that override the uplift (flat or list) keep their override."""
+    f = dict(fit)
+    f["b"] = rng.multivariate_normal(fit["b"], fit["cov"])
+    f["ratio"] = {k: float(np.clip(v + rng.normal(0, fit["ratio_se"].get(k, 0.0)), 0.3, 1.0))
+                  for k, v in fit["ratio"].items()}
+    if not fit.get("uplift_override"):
+        if fit["uplift_form"] == "bands":
+            bands = {k: v + rng.normal(0, fit["uplift_bands_se"].get(k, 0.0)) for k, v in fit["uplift_bands"].items()}
+            f["uplift_fn"] = uplift_function("bands", fit["uplift"], bands, fit["uplift_mean"])
+        else:
+            ub = rng.multivariate_normal(fit["uplift"], fit["uplift_cov"])
+            f["uplift_fn"] = uplift_function("log", ub, fit["uplift_bands"], fit["uplift_mean"])
+    return f
+
+
+def normal_cdf(x):
+    return 0.5 * (1.0 + np.vectorize(math.erf)(x / math.sqrt(2.0)))
+
+
+def commitment(draws, step=1e5, chance=0.80):
+    """The largest multiple of the step that is met or beaten in at least the stated share of the outcomes, with the
+    share met at that step and the one above it."""
+    d = np.asarray(draws, float)
+    x = math.floor(np.percentile(d, 100 * (1 - chance)) / step) * step
+    while np.mean(d >= x) < chance:
+        x -= step
+    while np.mean(d >= x + step) >= chance:
+        x += step
+    return float(x), float(np.mean(d >= x)), float(np.mean(d >= x + step))
 
 
 def growth_model(F, A, T):
@@ -267,10 +314,11 @@ def account_drift(F, A, state, growth, window=18, min_age=4, min_months=6):
 
 
 def simulate_business(F, fit, state, A, growth, reps, rng, per_account=False, independent=False, consolidating=None,
-                      exp_rate=None, acc_rate=None, drift=None):
+                      exp_rate=None, acc_rate=None, drift=None, param_unc=True, common=None):
     """Monte Carlo of the fitted renewal model over the book in force at the cut; returns per-rep flows and the
     December 2027 ARR. Siblings' churn feeds each account's next renewal through the sibling term unless
-    independent is set."""
+    independent is set. With param_unc each replication redraws the fitted model from its sampling error; common
+    adds a Gaussian common factor (its correlation) to every exit draw, the allowance the policy rules out."""
     acc = F["acc"].set_index("acc")
     st = state[state.index.isin(acc.index)]
     ids = st.index.values
@@ -291,9 +339,10 @@ def simulate_business(F, fit, state, A, growth, reps, rng, per_account=False, in
     for a, mm in ch.items():
         p = par_all[a]
         lastch[p] = max(lastch.get(p, -99), mm)
-    b = fit["b"]
     out = []
     for _ in range(reps):
+        fr = perturb_business(fit, rng) if param_unc else fit
+        b = fr["b"]
         seats = seats0.copy()
         price = price0.copy()
         alive = np.ones(len(ids), bool)
@@ -313,6 +362,7 @@ def simulate_business(F, fit, state, A, growth, reps, rng, per_account=False, in
                 a = a * np.exp(gr)
             due = alive & (anniv == m)
             idx = np.where(due)[0]
+            z = rng.normal() if common else 0.0
             for i in idx:
                 U = a[i] / seats[i]
                 feats = []
@@ -324,18 +374,22 @@ def simulate_business(F, fit, state, A, growth, reps, rng, per_account=False, in
                     feats.append(1.0 if (not independent and lc.get(par[i], -99) >= m - 12) else 0.0)
                 pch = float(logit_p(b, np.array([feats]))[0]) if feats else float(1 / (1 + math.exp(-b[0])))
                 arr_i = seats[i] * price[i] * 12 * fx[i]
-                if rng.random() < pch:
+                if common:
+                    u = 0.5 * (1.0 + math.erf((math.sqrt(common) * z + math.sqrt(1 - common) * rng.normal()) / math.sqrt(2)))
+                else:
+                    u = rng.random()
+                if u < pch:
                     alive[i] = False
                     fl["churn"] += arr_i
                     lc[par[i]] = m
                     continue
                 ub = int(np.digitize([U], U_BINS[1:-1])[0]) if fit["util"] else 0
                 f = (1 if rc[i] == 1 else 0) if fit["first"] else 0
-                ratio = fit["ratio"].get((ub, f), 1.0)
+                ratio = fr["ratio"].get((ub, f), 1.0)
                 ns = max(5.0, min(seats[i], seats[i] * ratio))
                 np_ = price[i]
                 if not rep[i]:
-                    upl = fit["uplift_fn"](seats[i])
+                    upl = fr["uplift_fn"](seats[i])
                     upl = min(max(upl, 0.0), P.UPLIFT_FULL)
                     np_ = price[i] * (1 + upl)
                     rep[i] = True
@@ -382,39 +436,85 @@ def team_panel(F):
     pad = set(mar[mar < P.TEAM_MIN_SEATS].index)
     T["padded"] = T["acc"].isin(pad) & (T["m"] >= P.TEAM_MIN - 1)
     T["k"] = T["m"] + 1 - P.TEAM_MIN
+    T["cal"] = (P.M0_MONTH - 1 + T["m"] + 1) % 12 + 1   # calendar month of the transition month (m + 1)
     T["mb"] = np.minimum(T["members"], 3)
     T["ab"] = np.select([T["age"] < 3, T["age"] < 12], [0, 1], 2)
     return T
 
 
-def fit_team(Tp, mode="golden"):
+def season_index(rows, base, form):
+    """Multiplicative calendar index of the cancel hazard, read against the base cells: observed cancels over the
+    cancels the base cells expect, by calendar month (form month), by quarter, or the monthly index smoothed over
+    three months (circular); none gives a flat index. Normalised to an exposure-weighted mean of one."""
+    cal = rows["cal"].values
+    exp = np.array([base.get((a, b), np.nan) for a, b in zip(rows["mb"], rows["ab"])])
+    obs = rows["cancel"].values.astype(float)
+    keep = ~np.isnan(exp)
+    cal, exp, obs = cal[keep], exp[keep], obs[keep]
+    if form == "none":
+        return {c: 1.0 for c in range(1, 13)}, {c: (0.0, 0.0) for c in range(1, 13)}
+    if form == "quarter":
+        grp = (cal - 1) // 3
+    else:
+        grp = cal - 1
+    o = np.bincount(grp, weights=obs, minlength=12 if form != "quarter" else 4)
+    e = np.bincount(grp, weights=exp, minlength=12 if form != "quarter" else 4)
+    idx = o / np.maximum(e, 1e-9)
+    if form == "quarter":
+        idx = np.repeat(idx, 3)
+        o, e = np.repeat(o, 3), np.repeat(e, 3)
+    if form == "smooth":
+        idx = np.array([(idx[(i - 1) % 12] + idx[i] + idx[(i + 1) % 12]) / 3.0 for i in range(12)])
+    w = np.bincount(cal - 1, weights=exp, minlength=12)
+    idx = idx / float((idx * w).sum() / w.sum())
+    return {c + 1: float(idx[c]) for c in range(12)}, {c + 1: (float(o[c]), float(e[c])) for c in range(12)}
+
+
+def fit_team(Tp, mode="golden", season="month"):
     """Hazard of leaving the Team plan next month. The base hazard by members and age is read on months before the
-    minimum (or on all months for the pooled rivals); padded accounts carry an excess by months since padding."""
+    minimum, with the calendar index of the cancel rate fitted alongside it (the golden forms); padded accounts carry
+    an excess by months since padding over that base. The pooled rivals read one window flat, with no index."""
     hist = Tp[(Tp["m"] < CUT)]
+    flat = {c: 1.0 for c in range(1, 13)}
     if mode == "recent_pooled":
         rec = hist[hist["m"] >= P.TEAM_MIN - 1]
-        h = rec.groupby(["mb", "ab"])["cancel"].mean().to_dict()
-        return {"base": h, "excess": {}, "persist": 0.0}
+        return {"base": rec.groupby(["mb", "ab"])["cancel"].mean().to_dict(), "excess": {}, "persist": 0.0,
+                "season": flat, "stats": None}
     if mode == "long_pooled":
         pre = hist[hist["m"] < P.TEAM_MIN - 1]
-        return {"base": pre.groupby(["mb", "ab"])["cancel"].mean().to_dict(), "excess": {}, "persist": 0.0}
+        return {"base": pre.groupby(["mb", "ab"])["cancel"].mean().to_dict(), "excess": {}, "persist": 0.0,
+                "season": flat, "stats": None}
     if mode == "last3_pooled":
         rec = hist[hist["m"] >= CUT - 3]
-        return {"base": rec.groupby(["mb", "ab"])["cancel"].mean().to_dict(), "excess": {}, "persist": 0.0}
+        return {"base": rec.groupby(["mb", "ab"])["cancel"].mean().to_dict(), "excess": {}, "persist": 0.0,
+                "season": flat, "stats": None}
     if mode == "trailing12":
         rec = hist[hist["m"] >= CUT - 12]
-        return {"base": rec.groupby(["mb", "ab"])["cancel"].mean().to_dict(), "excess": {}, "persist": 0.0}
-    pre = hist[(hist["m"] < P.TEAM_MIN - 1) & (hist["m"] >= 12)]
+        return {"base": rec.groupby(["mb", "ab"])["cancel"].mean().to_dict(), "excess": {}, "persist": 0.0,
+                "season": flat, "stats": None}
+    pre = hist[(hist["m"] < P.TEAM_MIN - 1) & (hist["m"] >= 12)].copy()
     base = pre.groupby(["mb", "ab"])["cancel"].mean().to_dict()
+    sidx = flat
+    for _ in range(4):
+        sidx, counts = season_index(pre, base, season)
+        sv = pre["cal"].map(sidx).values
+        g = pre.assign(sv=sv).groupby(["mb", "ab"])
+        base = (g["cancel"].sum() / g["sv"].sum()).to_dict()
+    cell = pre.assign(sv=pre["cal"].map(sidx).values).groupby(["mb", "ab"]).agg(k=("cancel", "sum"), n=("sv", "sum"))
     pd_ = hist[hist["padded"] & (hist["k"] >= 0)].copy()
-    pd_["pred"] = [base.get((a, b), np.nan) for a, b in zip(pd_["mb"], pd_["ab"])]
-    ex = (pd_.groupby("k")["cancel"].mean() - pd_.groupby("k")["pred"].mean()).to_dict()
+    pd_["pred"] = [base.get((a, b), np.nan) * sidx[c] for a, b, c in zip(pd_["mb"], pd_["ab"], pd_["cal"])]
+    byk = pd_.groupby("k")
+    ex = (byk["cancel"].mean() - byk["pred"].mean()).to_dict()
+    exn = byk.size().to_dict()
     ks = sorted(ex)
     if mode == "golden":
-        persist = float(np.mean([ex[k] for k in ks[-3:]]))
+        last = ks[-3:]
     elif mode == "golden_last2":
-        persist = float(np.mean([ex[k] for k in ks[-2:]]))
-    elif mode == "golden_expfit":
+        last = ks[-2:]
+    else:
+        last = ks[-3:]
+    persist = float(np.mean([ex[k] for k in last]))
+    if mode == "golden_expfit":
         best = None
         for tau in np.arange(1.0, 6.01, 0.1):
             xs = np.array([math.exp(-k / tau) for k in ks])
@@ -424,9 +524,33 @@ def fit_team(Tp, mode="golden"):
             if best is None or sse < best[0]:
                 best = (sse, coef, tau)
         persist = float(best[1][0])
-    else:
-        persist = 0.0
-    return {"base": base, "excess": ex, "persist": persist}
+    pk = {k: float(byk["cancel"].mean()[k]) for k in last}
+    persist_se = float(math.sqrt(sum(pk[k] * (1 - pk[k]) / exn[k] for k in last)) / len(last))
+    return {"base": base, "excess": ex, "persist": persist, "season": sidx,
+            "stats": {"cell": {k: (float(r.k), float(r.n)) for k, r in cell.iterrows()}, "season_counts": counts,
+                      "season_form": season, "persist_se": persist_se}}
+
+
+def perturb_team(fit, rng):
+    """The Team hazard model redrawn from its sampling error: each base cell from its cancels and exposure, the
+    calendar index from its observed and expected cancels, the lasting excess from its standard error."""
+    st = fit.get("stats")
+    if not st:
+        return fit
+    f = dict(fit)
+    f["base"] = {k: float(rng.gamma(kk + 0.5, 1.0 / max(n, 1e-9))) for k, (kk, n) in st["cell"].items()}
+    if st["season_form"] != "none":
+        raw = {c: rng.gamma(o + 0.5, 1.0 / max(e, 1e-9)) for c, (o, e) in st["season_counts"].items()}
+        if st["season_form"] == "quarter":
+            raw = {c: float(np.mean([raw[q] for q in range(((c - 1) // 3) * 3 + 1, ((c - 1) // 3) * 3 + 4)]))
+                   for c in range(1, 13)}
+        elif st["season_form"] == "smooth":
+            raw = {c: (raw[(c - 2) % 12 + 1] + raw[c] + raw[c % 12 + 1]) / 3.0 for c in range(1, 13)}
+        w = {c: st["season_counts"][c][1] for c in range(1, 13)}
+        norm = sum(raw[c] * w[c] for c in w) / max(sum(w.values()), 1e-9)
+        f["season"] = {c: float(raw[c] / norm) for c in range(1, 13)}
+    f["persist"] = float(fit["persist"] + rng.normal(0, st["persist_se"]))
+    return f
 
 
 def team_moves(Tp):
@@ -443,7 +567,7 @@ def team_moves(Tp):
     return {"up": up, "upsize": upsize, "two": two, "down": dn}
 
 
-def simulate_team(Tp, fit, moves, reps, rng, upgrade_rate):
+def simulate_team(Tp, fit, moves, reps, rng, upgrade_rate, param_unc=True):
     cur = Tp[Tp["m"] == CUT]
     mem0 = cur["members"].values
     age0 = cur["age"].values
@@ -453,6 +577,7 @@ def simulate_team(Tp, fit, moves, reps, rng, upgrade_rate):
     res = []
     paths = []
     for _ in range(reps):
+        fr = perturb_team(fit, rng) if param_unc else fit
         mem = mem0.copy()
         alive = np.ones(len(mem), bool)
         path = []
@@ -460,9 +585,10 @@ def simulate_team(Tp, fit, moves, reps, rng, upgrade_rate):
             age = age0 + (m - CUT)
             mb = np.minimum(mem, 3)
             ab = np.select([age < 3, age < 12], [0, 1], 2)
-            h = np.array([fit["base"].get((x, y), 0.03) for x, y in zip(mb, ab)])
+            cal = (P.M0_MONTH - 1 + m) % 12 + 1
+            h = np.array([fr["base"].get((x, y), 0.03) for x, y in zip(mb, ab)]) * fr["season"][cal]
             k = m - P.TEAM_MIN
-            h = h + np.where(pad, fit["excess"].get(k, fit["persist"]) if k in fit["excess"] else fit["persist"], 0.0)
+            h = h + np.where(pad, fr["excess"].get(k, fr["persist"]) if k in fr["excess"] else fr["persist"], 0.0)
             h = h + np.where(mem >= P.UPGRADE_AT, upgrade_rate, 0.0)
             leave = rng.random(len(mem)) < np.clip(h, 0, 1)
             alive &= ~leave

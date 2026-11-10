@@ -18,8 +18,8 @@
   {
    "path": "billing_contract_lines_2022-01_2026-10.csv",
    "format": "csv",
-   "bytes": 489953,
-   "rows": 4280,
+   "bytes": 456755,
+   "rows": 3953,
    "covers": "billing system export of Business contract lines (subscriptions, true-ups, onboarding fees, credit notes), January 2022 to October 2026, with the lines in force at January 2022",
    "source": "Constructed (seeded generator, task1/generator)",
    "pull_date": "2026-11-03",
@@ -28,8 +28,8 @@
   {
    "path": "team_invoices_2022-01_2026-10.csv",
    "format": "csv",
-   "bytes": 12568151,
-   "rows": 160502,
+   "bytes": 12343072,
+   "rows": 157622,
    "covers": "Team plan invoices, January 2022 to October 2026",
    "source": "Constructed (seeded generator, task1/generator)",
    "pull_date": "2026-11-03",
@@ -38,8 +38,8 @@
   {
    "path": "workspace_monthly_activity_2022-01_2026-10.csv",
    "format": "csv",
-   "bytes": 5154507,
-   "rows": 206037,
+   "bytes": 5139769,
+   "rows": 205333,
    "covers": "monthly active users and boards edited per workspace, January 2022 to October 2026",
    "source": "Constructed (seeded generator, task1/generator)",
    "pull_date": "2026-11-03",
@@ -48,8 +48,8 @@
   {
    "path": "workspace_account_links.csv",
    "format": "csv",
-   "bytes": 458806,
-   "rows": 11294,
+   "bytes": 455626,
+   "rows": 11207,
    "covers": "which billing account each workspace belongs to, with dates",
    "source": "Constructed (seeded generator, task1/generator)",
    "pull_date": "2026-11-03",
@@ -58,7 +58,7 @@
   {
    "path": "crm_accounts_export_2026-11-02.xlsx",
    "format": "xlsx",
-   "bytes": 67862,
+   "bytes": 71057,
    "rows": null,
    "covers": "CRM account export: Business accounts, parent accounts, country, industry, lead source, status",
    "source": "Constructed (seeded generator, task1/generator)",
@@ -68,8 +68,8 @@
   {
    "path": "pipeline_snapshots_2023-01_2026-10.csv",
    "format": "csv",
-   "bytes": 1205647,
-   "rows": 10684,
+   "bytes": 1341402,
+   "rows": 11951,
    "covers": "month-end snapshots of open sales opportunities, January 2023 to October 2026",
    "source": "Constructed (seeded generator, task1/generator)",
    "pull_date": "2026-11-03",
@@ -78,8 +78,8 @@
   {
    "path": "opportunities_closed_2022-01_2026-10.csv",
    "format": "csv",
-   "bytes": 209936,
-   "rows": 1734,
+   "bytes": 235308,
+   "rows": 1951,
    "covers": "closed sales opportunities, January 2022 to October 2026",
    "source": "Constructed (seeded generator, task1/generator)",
    "pull_date": "2026-11-03",
@@ -88,9 +88,9 @@
   {
    "path": "price_book_2026.xlsx",
    "format": "xlsx",
-   "bytes": 6884,
+   "bytes": 6872,
    "rows": null,
-   "covers": "2026 price book",
+   "covers": "2026 price book (list prices and the Team plan's minimum billed seats, with effective dates)",
    "source": "Constructed (seeded generator, task1/generator)",
    "pull_date": "2026-11-03",
    "license": "CC0-1.0 (original work)"
@@ -98,9 +98,9 @@
   {
    "path": "arr_reporting_policy_2026.pdf",
    "format": "pdf",
-   "bytes": 72728,
+   "bytes": 76205,
    "rows": null,
-   "covers": "ARR reporting policy, version 4",
+   "covers": "ARR reporting policy, version 5",
    "source": "Constructed (seeded generator, task1/generator)",
    "pull_date": "2026-11-03",
    "license": "CC0-1.0 (original work)"
@@ -108,7 +108,7 @@
   {
    "path": "kpi_monthly_2026-01_2026-09.xlsx",
    "format": "xlsx",
-   "bytes": 6836,
+   "bytes": 6838,
    "rows": null,
    "covers": "monthly revenue KPI export, January to September 2026",
    "source": "Constructed (seeded generator, task1/generator)",
@@ -118,8 +118,8 @@
   {
    "path": "support_tickets_2026.csv",
    "format": "csv",
-   "bytes": 818129,
-   "rows": 7599,
+   "bytes": 819106,
+   "rows": 7608,
    "covers": "support tickets opened in 2026",
    "source": "Constructed (seeded generator, task1/generator)",
    "pull_date": "2026-11-03",
@@ -128,7 +128,7 @@
   {
    "path": "nps_responses_2026-q3.csv",
    "format": "csv",
-   "bytes": 110443,
+   "bytes": 110459,
    "rows": 2430,
    "covers": "NPS survey responses, July to September 2026",
    "source": "Constructed (seeded generator, task1/generator)",

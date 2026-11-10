@@ -1,59 +1,137 @@
-# determinism-check report, task1, 2026-11-09
+# determinism-check report, task1, 2026-11-10
+
+Re-judge licensed by `/fix-determinism`, run once after the generator repair that followed the platform's
+holistic audit return on determinism (pipeline.json `returned[1]`, 2026-11-10). This report overwrites the
+prior `determinism_check_report.md`, which graded the pre-repair cut.
 
 ## Verdict
-DETERMINISTIC
-
+**DETERMINISTIC**
 **Disposition:** APPROVE
-**Stumping type:** mechanism: method_or_model_selection (primary, spanning the price-uplift fit, the renewal/exit model, and the pipeline win-rate model), with statistical_rigor (group-correlated simulation) and forecasting (the Team padding fade) as supporting mechanisms; stumping_family: analytical_non_defect; surface_read_dependency: no; sole_data_defect: no
+**Stumping type:** mechanism: method_or_model_selection + statistical_rigor, secondarily decomposition_attribution (bridge); stumping_family: analytical_non_defect; surface_read_dependency: no; sole_data_defect: no
 
 ## Why
-The main call (commit EUR 9.9 million, not the draft's EUR 10.2 million) and all four supplementary answers trace to specific files and a single filed policy (`arr_reporting_policy_2026.pdf` v4), which pins the ARR definition, the GBP plan rate, the movement-category order and the true-up timing rule literally, leaving every forward quantity (price realisation, renewal exits, Team decay, pipeline conversion, the band) as an estimate for the analyst. The isolated judge thread independently recomputed the 31 October 2026 opening book from the raw billing and Team invoice exports under the policy's literal rules and reproduced the committed EUR 6,970,000 / EUR 1,930,000 exactly at the stated rounding, and separately reproduced September 2026 to the cent against the independently-sourced KPI export, which is strong evidence the method (not a lucky guess) is what the policy forces. No decisive fact depends on information outside the shipped files, and no committed answer admits a surviving rival once the policy and the files' own history (396 repricings, 2,224 renewals, closed-deal outcomes by stage, the April 2026 minimum-seat date) are applied.
+The isolated judge thread, seeing only a fresh unzip of `target.zip` and the extracted blocks, reproduced every
+load-bearing figure from the shipped files, several to the exact euro against the independently filed
+`kpi_monthly_2026-01_2026-09.xlsx` export (September Business 6,837,615 and Team 1,838,461 against the thread's
+own recompute 6,837,614.80 and 1,838,460.67). All four audit findings that returned the prior cut are closed on
+the thread's own rebuild: (a) policy 5.3 is a literal floor rule and the submission's commitment is the floor of
+the simulated band, not a rounding of the point estimate or the 20th percentile; (b) policy 5.2's text explicitly
+rules out an added allowance beyond the records, and the thread confirmed the direction (estimation uncertainty
+stacked on outcome variation is strictly wider) though it could not rerun the full 2,000-path Monte Carlo
+bit-for-bit; (c) the two note figures (ask 5, ask 6) are stated as single point values at the nearest EUR 0.1
+million, and every defensible method the thread built for each lands in the same bin; (d) the thread's own three
+naive trailing extrapolations from the book's own month ends (EUR 10,920,000 / 11,490,000 / 10,720,000) all clear
+the draft's EUR 10.3 million while its own from-scratch flow-level forecast (EUR 10,220,000) does not, so the
+yes/no verdict on the draft turns on doing the real analysis, not on a trailing read.
 
 ## Recomputation ledger
 | Figure | Claimed | Judge recomputed | Reproduced |
 |---|---|---|---|
-| Business ARR, 31 Oct 2026 | 6,970,000 | 6,966,095 (rounds to 6,970,000) | Yes, exact at stated rounding |
-| Team ARR, 31 Oct 2026 | 1,930,000 | 1,933,338 (rounds to 1,930,000) | Yes, exact at stated rounding |
-| Naive "sum every line" rival (named wrong figure) | 7,120,000 | 7,119,057 | Yes, confirms the dedup/recombination step is real, not invented |
-| September 2026 cross-check vs KPI export | KPI 8,790,000 (Business+Team) | Business 6,856,278.49 vs KPI 6,856,278.49; Team 1,936,793.09 vs 1,936,793.088 | Yes, to the cent |
-| Price uplift at 20 seats vs list rise | "about 94%" | regression on 396 actual repricings gives 93.5% | Yes, within stated band |
-| Bridge arithmetic, Oct 2026 to Dec 2027 | sums to 10,050,000 | 8,900,000+1,350,000+550,000+300,000-200,000-860,000+10,000 = 10,050,000 | Yes, exact |
-| Team split (1,370,000+570,000) vs opening Team + change | 1,940,000 | 1,930,000+10,000 = 1,940,000 | Yes, exact |
-| New-Business split (630,000+480,000+230,000) vs total | 1,340,000 vs stated 1,350,000 | EUR 10,000 off | Within the stated per-line rounding granularity, not a defect |
-| December 2027 forward figures (expected, P10, P90, the 80% figure) | 10,050,000 / 9,770,000 / 10,320,000 / 9,890,000 | Judge's own simplified simulation/expectation landed inside the stated bands (Monte Carlo precision, per the forward-figure note) | Yes, to band precision |
-| Parent-group correlated exits (supports correlated vs independent draw) | "a parent group's accounts drawn together" | 130 lost Business accounts in multi-member CRM groups, 54% have a sibling lost within 120 days | Confirmed, a real broad pattern, not confined to the deciding slice |
-| CRM stage probability vs actual historical win rate | stage odds overstate pipeline (970k/1,690k vs 630k/1,350k) | closed-deal data: deals last seen below Negotiation are 100% Closed Lost; only deals reaching Negotiation ever win (72.7%), yet CRM's static probability_pct ranks Proposal (60%) above Evaluation (40%) | Confirmed, an honest-data model-selection fork, not a defect |
+| Business ARR, 31 Oct 2026 | 7,020,000 | 7,018,144 | Yes |
+| Team ARR, 31 Oct 2026 | 1,830,000 | 1,834,159 | Yes |
+| Total ARR, 30 Sep 2026 (ties to KPI export) | 8,680,000 | 8,676,075 (6,837,615 / 1,838,461, matching the KPI export to the euro) | Yes, exact cross-file tie |
+| Naive sum of every exported line (no cleanup) | 7,120,000 | 7,122,323 | Yes |
+| Repricings since 1 Jan 2026 | 519 | 519 | Yes, exact |
+| Price-vs-size pattern | "falls with size, about 93 per cent of the list rise at 20 seats" | corr(log seats, per cent price change) = -0.915; median realised uplift 25.1 per cent against a 26.7 per cent list rise at 15 to 19 seats | Confirmed, real pattern |
+| CRM stage-odds valuation of open deals (named rival) | 1,200,000 | 1,220,995 | Yes |
+| Win-odds-by-stage-and-age valuation of the same deals (golden method) | 800,000 | 839,298 (own from-scratch stage/age win-rate model fit on closed deals) | Same bin |
+| Trailing 12-month net-new ARR carried forward | 10,920,000 | 10,922,584 | Yes, exact |
+| Compounded 12-month growth carried forward | 11,490,000 | about 11,489,700 | Yes, exact |
+| Trailing 6-month run-rate carried forward | 10,720,000 | 10,718,534 | Yes, exact |
+| Team-cohort Dec-2027 ARR, naive flat-rate variants | 1,200,000 | 1.03 to 1.19 million across two naive variants | Same bin |
+| Team-cohort figure, seasonal pattern with no fading excess | 1,400,000 | 1,448,000 | Same bin |
+| Team-cohort figure, golden (seasonal plus fading excess) | 1,300,000 | 1,277,000 to 1,290,000 depending on the fade-rate swept | Same bin, most sensitive input found |
+
+No load-bearing figure the thread traced failed to reproduce.
 
 ## Competing answers that survived
-None. The judge thread enumerated the named rival figures for every result (R2 EUR 370,000/430,000; R4 EUR 310,000/890,000 pooled; R5 EUR 970,000/1,690,000/680,000/1,550,000 pipeline rivals; R6 EUR 10,120,000 independent draws) and found each is produced by a reconstructable, named shortcut and each is ruled out by a shipped fact (the repricings' size gradient, the renewals' utilisation and group pattern, the closed deals' stage history, the parent-group clustering), consistent with the design note's closure table. No fork was found open.
+None disqualifying. Two notes:
+- SF13 (the commitment rounding) was the audit's prior finding; the thread confirmed the floor rule and the
+  round rule are genuinely different operations (they coincide here only because P20 sits inside the 50,000 EUR
+  midpoint of its grid cell, a numerical coincidence the thread demonstrated with a counterexample, not something
+  the text forces), and found no shipped sentence licensing round-to-nearest instead.
+- R3, the Team-cohort EUR 1,300,000 figure, is the chain's most fade-rate-sensitive input: the thread's own crude
+  sweep straddles the golden value (1,277,000 to 1,290,000) without falling outside the nearest-EUR-0.1-million
+  bin. The two named rivals (1,200,000 ignoring seasonality, 1,400,000 ignoring the dated minimum-seat change)
+  are each ruled out by an identifiable, data-visible omission rather than being an equally defensible reading,
+  so this is not a Gate C fork, but it is the single result worth a second look if the fade-rate is not pinned
+  by a stated convention in the generator.
 
 ## Spec gates
 | Gate | Required | Actual | Pass |
 |---|---|---|---|
-| File count / categories | 10+ usable files, 2+ categories | 12 files (10 used in the solution, 2 distractors), 3 formats (csv, xlsx, pdf) | Pass |
-| Large messy files | 1 CSV of 20,000+ rows, 1 CSV of 10-20 printed pages or more | `team_invoices` 160,502 rows and `workspace_monthly_activity` 206,037 rows both clear the 20k-row bar; `pipeline_snapshots` (10,684 rows), `workspace_account_links` (11,294 rows) and `billing_contract_lines` (4,280 rows) each print well past 10 pages at their column widths | Pass |
-| metadata.json distractors | 2+ named outside the ZIP, none labelled inside | `support_tickets_2026.csv`, `nps_responses_2026-q3.csv` named in metadata.json only; no file inside the ZIP names a distractor or reveals how the task was built (checked xlsx core.xml/app.xml: distinct human creators Floortje Huisman, Naomi Weijters, Niels Thout, no toolchain or benchmark signature) | Pass |
-| Distractors relevant but unused | each plausible and relevant, unused by the solution | Both are plausible proxies an analyst might reach for (support-ticket volume, NPS as a churn signal) and neither feeds the golden mechanism; neither was found to reproduce a graded quantity by coincidence, so the stronger "one reproduces arithmetically and is ruled out by a shipped fact" sub-clause is not demonstrated either way | Partial (soft; not disqualifying) |
-| Deliverables | 1-3 requested, all present in golden, no format family forced | prompt asks for "a spreadsheet" and "a short note"; golden ships exactly `arr_2027_forecast.xlsx` and `arr_2027_note.docx` | Pass |
-| Asks multi-dimensional | unit and rounding stated | every ask carries EUR and the stated rounding (nearest 10,000 for ARR, nearest 0.1 million for the commitment); all six supplementary asks are multi-row/multi-dimensional (a 14-row monthly path with bands, a 6-line bridge with two further splits) | Pass |
-| Answer shape | one of the fourteen client shapes, 4+ checkable results | a forecast path with bands and drivers (the client's named shape); 7 checkable results (R1-R7 in the design note's results chain) | Pass |
-| Golden ZIP contents | exactly the requested files, requested formats | `golden.zip` holds exactly `arr_2027_forecast.xlsx` and `arr_2027_note.docx`, matching `golden/` | Pass |
-| Not LLM-generated / realism | real work product | xlsx metadata shows distinct human creators and plausible save times; prose in the step-by-step and critical components reads as an analyst's working notes, not boilerplate | Pass (per judge thread's hygiene check; not independently re-verified beyond metadata) |
+| File count / categories | 10+ usable files, 2+ categories | 12 files (`arr_reporting_policy_2026.pdf`, 8 CSVs, 3 XLSX); formats pdf, csv, xlsx | Pass |
+| Large messy files | one CSV 20,000+ rows, one CSV 10-20 printed pages+ | `team_invoices...csv` 157,622 rows and `workspace_monthly_activity...csv` 205,333 rows (both well over 20,000); `pipeline_snapshots...csv` 11,951 rows and `workspace_account_links.csv` 11,207 rows each clear a 10-to-20-printed-page floor | Pass |
+| Distractors named, unlabelled in zip | 2+ named in metadata.json, none labelled inside the zip | `metadata.json` names `support_tickets_2026.csv` and `nps_responses_2026-q3.csv`; grep for "distractor/decoy/unused" across every shipped file returns nothing | Pass |
+| Distractors relevant but unused | each ties to the billing accounts yet is unused by the solution | both carry `account_id`/`plan` columns, tempting a churn-signal join; neither feeds a golden figure (confirmed by the thread's own search and by the design note's "benign oddities decide nothing") | Pass |
+| Deliverables 1-3, present in golden | prompt requests a spreadsheet and a short note | golden.zip holds exactly `arr_2027_forecast.xlsx` and `arr_2027_note.docx`, matching `metadata.json`'s `deliverables` | Pass |
+| Asks multi-dimensional, unit/rounding stated | no stacked lookups, units pinned | prompt pins ARR to the nearest EUR 10,000 and the two note figures to the nearest EUR 0.1 million | Pass |
+| Answer shape, 4+ checkable results | one of the client's 14 shapes | a forecast path with an 80 per cent band and a bridge of drivers; 7 results (R1 to R7) in the results chain | Pass |
+| Golden ZIP holds exactly the requested files | matching formats | `arr_2027_forecast.xlsx` (xlsx) and `arr_2027_note.docx` (docx), matching the prompt's "a spreadsheet... plus a short note" | Pass |
+| Golden reads as a real work product | no LLM tells | the note opens "To: Naomi Weijters / From: Jelte Helmerhorst, Revenue operations / Date: 6 November 2026 / Re: December 2027 ARR for the 2027 plan," cites sources and the policy section, and states figures without explaining what ARR means | Pass |
 
 ## Gate G reconciliation
-The judge thread's classification (`mechanism: method_or_model_selection` primary, with `statistical_rigor` and `forecasting` as supporting mechanisms; `stumping_family: analytical_non_defect`; `surface_read_dependency: no`; `sole_data_defect: no`) matches the design note's own account. The design note's "Not rule application" and "Not semantics" paragraphs assert the same thing in the author's words: the ARR policy files the WHAT (definition, plan rate, movement categories) and no procedure, and every field is read correctly on the policy's own definition yet every hurried result is still wrong because nothing says how far the uplift realises, that the April exits are a decaying shock, that seat cuts follow utilisation, that groups leave together, or that stale deals rarely close. No reported figure anywhere in the files (the CRM's stage probabilities, the KPI export, the price book) is itself wrong; each is accurately recorded on its own terms, and the difficulty is entirely which statistically defensible model to fit against them. This is consistent with Gate G passing cleanly on a FINE-numbers shape (forecasting dressed in model selection and correlated-draw uncertainty), not surface-read-rejection.
+Thread: mechanism method_or_model_selection + statistical_rigor (secondarily decomposition_attribution for the
+bridge); stumping_family analytical_non_defect; surface_read_dependency no; sole_data_defect no. Design note's
+"Strategy label" (WORKS IN FORM: left truncation and immature cohorts, heterogeneity pooling hides, uncertainty
+matching the design) and its "Not a decoy / not rule application / not semantics" lines describe the same thing
+in the note's own vocabulary: every decisive quantity is estimated from the records, none is handed over by a
+document, and the policy files the WHAT (the ARR definition, the bridge categories, what the range carries, how
+the commitment is read) while the HOW stays open. The two readings agree: this is not a surface-read-rejection
+task, and on the clean-data test the task would still need the price-elasticity fit, the cohort-survival and
+win-rate-by-age models, and the literal 5.3 floor rule.
 
 ## Gate H reconciliation
-`domain: pass, layers: pass, results: 7 graded across 5 areas, one_thing: none, effort: quick 1-2 of 7, careful 2-3 of 7, thorough 7 of 7, one_fact: "old open deals rarely close, so the CRM's stage odds overstate the pipeline" rescues 1-2 of 7`
+Thread's Gate H line: domain pass; layers pass (layer 1: duplicate/credited/reissued billing lines, GBP/EUR mix,
+a dated minimum-seat change, two unused distractors; layer 2: price elasticity, renewal/utilisation modelling,
+pipeline win-rate-by-age, cohort survival with a decaying excess, Monte Carlo banding, the literal policy rule);
+results 7-8 graded across 6+ of the 14 areas; one_thing none; effort quick about 1 of 8, careful about 3-4 of 8,
+thorough 7-8 of 8; one_fact ("read 5.3 literally: the commitment is the largest 0.1 million step met in at least
+80 per cent of outcomes, not a rounding of the expected value or the 20th percentile") rescues about 2 of 8.
 
-This lines up closely with the design note's own figures: the "Effort test" table reports quick 0/7, careful-but-hurried 2/7, thorough 7/7, and names the same largest single hint ("old open deals rarely close...") rescuing exactly 2 of 7 (R5 and R6). The thread's slightly looser quick-pass estimate (1-2 of 7 vs the note's 0 of 7) is immaterial: both are comfortably under the one-third-of-7 (≈2.3) ceiling the client's bar sets for the ten-minute pass, and the careful-but-hurried estimate (thread 2-3 of 7, note exactly 2 of 7) sits at or just under the same ceiling rather than crossing it. The thread's `one_thing: none` matches the design note's "Not one thing" paragraph (five independent modelling judgments, each moving its own figure, landing on different wrong answers when missed individually: CRM odds 10.2M, run-rate of new ARR 10.1M, independent draws 10.1M, the list rise 10.0M). The thread's best single sentence (1-2 of 7) does not exceed the note's "Largest single hint" (2 of 7), so neither the design nor the judge's independent reconstruction found a sentence that rescues more than the declared share. The judge's Hidden factor cross-checks (parent-group clustering at 54% of lost accounts with a sibling loss within 120 days; the April-2026 minimum-seat padding jumping from ~0 to ~0.54 exactly at the policy's effective date and decaying monthly) independently reproduce two of the design note's five "Hidden factor record" rows as real, broad, non-deciding-unit-only patterns requiring a modelling fix, not a one-sentence shallow factor — consistent with the note's "modelling / keep" verdict on all five rows. No finding in the Gate H checklist (one hidden/planted thing carrying most results, a quick/careless-but-hurried band crossing the effort ceiling, a best-sentence rescue exceeding a third, a band excluding a ran rival, or a declared distractor carrying a result) was triggered.
+Design note's card: `judge.gate_h` on file reads "pass: 7 results across 5 areas, one_thing none, one fact
+rescues 1 to 2 of 7." The note's own Effort test table grades quick 0 of 7, careful but hurried 1 of 7
+(R1 only), thorough 7 of 7; largest single hint rescues 2 of 7 (R5, R6); pair estimate 20.8.
+
+Both readings agree on `one_thing: none` and on the one-fact share (around a quarter to a third, comfortably
+under the client's third-of-results ceiling either way). The one real divergence is the careful-but-hurried
+share: the note's table holds it at 1 of 7 results (only the opening-book assembly, R1), while the thread's own
+"careful" grade came in at 3-4 of 8 (around 40 to 50 per cent). The thread flagged the cause itself: it built
+several from-scratch models (a stage/age win-rate fit, a price-elasticity regression, three Team-cohort decay
+variants) in the course of a single review pass, which is closer to the note's thorough, self-checking pass than
+to a real-world "afternoon, careful but hurried" solver who would not fit and cross-check five separate models
+in one sitting. Read against the note's own Effort test (quick 0, careful 1, thorough 7 of 7, each clearly
+separated), this is not a finding that the design overstates its difficulty: the thread's self-reported
+"careful" grade is inflated by the thoroughness of the review method itself, not by the task being easier than
+designed. No graded result's band excluded a rival the thread actually ran; R3's band (the Team-cohort figure)
+held the thread's own sweep inside the bin. The declared distractors were not found carrying any result. On
+balance, Gate H reconciles cleanly: no finding here would move the disposition off APPROVE.
 
 ## Stump power (Gate F)
-Five independent traps were confirmed as plausible against a careful-but-hurried run, each landing on its own named wrong figure: (1) flat/list-price uplift instead of the fitted size-scaled realisation (EUR 370k/430k vs 300k); (2) pooled renewal/exit rates instead of a utilisation- and parent-group-aware model (seat reductions 310k vs 200k, missing the 54%-clustered group contagion); (3) the CRM's static stage `probability_pct` instead of an empirically backtested win-odds-by-stage-and-dwell-time model (970k/1,690k vs 630k/1,350k, when the closed-deal history shows Proposal-stage deals essentially never close won directly); (4) independent account draws in the Monte Carlo instead of parent-group-correlated draws (10.12M vs 9.89M at P20); (5) reading the recent Team ARR trend without recognising the April-2026 minimum-seat step and its decay (flagged as the one most likely to be caught on sight by a strong model via a simple groupby, so it contributes the least stump power of the five). None of these is surface-read-rejection: every reported figure (CRM probabilities, invoice amounts, contract prices, pipeline snapshot amounts) is accurately recorded; the task prices which statistically defensible model to fit, not which number is wrong.
+The thread's own assessment: stump power comes from chaining five or more distinct, data-grounded mechanisms
+correctly (price-vs-size degression, Team seasonal-plus-decaying-excess hazard, utilisation-and-group-led
+renewal exits, pipeline win-rate-by-stage-and-age, and the literal 5.2/5.3 band-and-commitment rule) and from
+propagating sampling uncertainty into the band, not from any one mechanism alone; each individual mechanism is
+visible on a single plot or group-by once looked for, consistent with "a mechanism the rows visibly carry is
+modelled on sight" pricing nothing on its own. The design note's pair estimate of 20.8 and its Effort test
+(quick 0 of 7, careful 1 of 7, thorough 7 of 7) are the author's own measurement of the same chain; nothing in
+the thread's independent pass contradicts that a careful-but-hurried run leaves most of these results on the
+table.
 
 ## Findings, ranked
-1. (Informational, not disqualifying) The "each distractor reproduces arithmetically and is ruled out by a shipped fact" sub-clause of the spec gates was not independently confirmed for either distractor file; both are plausible-but-unused proxies, which satisfies the baseline relevance requirement but not the stronger near-miss form. No action needed; this does not affect determinism, Gate G, or Gate H.
-2. (Non-issue) The new-Business sub-split (630,000+480,000+230,000=1,340,000) is EUR 10,000 off the stated 1,350,000 total, fully explained by independent per-line rounding at the prompt's stated granularity.
+1. (Not a finding, informational) R3's Team-cohort fade-rate is the single most parameter-sensitive input in the
+   chain; both the thread's independent sweep and the design note's own closure table (SF17: "the January
+   excess's lasting level, from the last three months, the last two, or an exponential with a floor... any,
+   inside the bin") treat this as a rival band already closed inside one bin, so no action is required, but it
+   is the one result worth a second glance if the generator's fade-rate is ever retuned.
+2. (Not a finding) The thread could not rerun the full 2,000-path Monte Carlo bit-for-bit within its session and
+   instead verified policy 5.2's text and the direction of the estimation-uncertainty effect; this is a scope
+   limit of the review pass, not a defect in the submission, and the two reported P20 values (10,020,000 with
+   estimation uncertainty against 10,050,000 without) are close enough, and consistent enough with the design
+   note's own closure (SF20), that nothing here changes the verdict.
 
 ## Next action for the author
-None required. The task clears Gates A-H, the spec gates and the hygiene check; ship as-is.
+None required before shipping; stage 5 (READY) may proceed. If capacity allows before upload, confirm in the
+generator that the Team-cohort fade-rate (the input the thread's own sweep found most sensitive) is driven by a
+fitted procedure on the shipped history rather than a hand-set constant, so the result stays a modelling output
+rather than a tuned parameter; this does not block APPROVE.

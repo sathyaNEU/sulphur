@@ -454,18 +454,18 @@ def write_price(path):
     ws = wb.active
     ws.title = "Price book 2026"
     rows = [
-        ["Business", "Annual contract", "EUR", 15.00, "per seat per month", "2024-01-01", "2026-02-28", ""],
-        ["Business", "Annual contract", "GBP", 13.00, "per seat per month", "2024-01-01", "2026-02-28", ""],
-        ["Business", "Annual contract", "EUR", 19.00, "per seat per month", "2026-03-01", "",
-         "New contracts from 1 March 2026; existing contracts at their first renewal on or after 1 March 2026"],
-        ["Business", "Annual contract", "GBP", 16.50, "per seat per month", "2026-03-01", "",
-         "New contracts from 1 March 2026; existing contracts at their first renewal on or after 1 March 2026"],
+        ["Business", "Annual contract", "EUR", 15.00, "per seat per month", "2024-01-01", "2025-12-31", ""],
+        ["Business", "Annual contract", "GBP", 13.00, "per seat per month", "2024-01-01", "2025-12-31", ""],
+        ["Business", "Annual contract", "EUR", 19.00, "per seat per month", "2026-01-01", "",
+         "New contracts from 1 January 2026; existing contracts at their first renewal on or after 1 January 2026"],
+        ["Business", "Annual contract", "GBP", 16.50, "per seat per month", "2026-01-01", "",
+         "New contracts from 1 January 2026; existing contracts at their first renewal on or after 1 January 2026"],
         ["Business", "Onboarding (one-off)", "EUR", 1500.00, "per contract", "2024-01-01", "", ""],
         ["Business", "Onboarding (one-off)", "GBP", 1300.00, "per contract", "2024-01-01", "", ""],
         ["Team", "Monthly", "EUR", 12.00, "per seat per month", "2023-01-01", "", ""],
         ["Team", "Monthly", "GBP", 10.40, "per seat per month", "2023-01-01", "", ""],
-        ["Team", "Minimum billed seats", "", 3, "seats", "2026-04-01", "",
-         "From the first invoice dated on or after 1 April 2026; before that date, one seat"],
+        ["Team", "Minimum billed seats", "", 3, "seats", "2026-01-01", "",
+         "From the first invoice dated on or after 1 January 2026; before that date, one seat"],
     ]
     _sheet(ws, ["Plan", "Item", "Currency", "List price", "Unit", "Effective from", "Effective to", "Applies to"],
            rows, [10, 22, 9, 10, 18, 13, 13, 70])
@@ -474,7 +474,7 @@ def write_price(path):
             if isinstance(c.value, float):
                 c.number_format = "#,##0.00"
     ws.append([])
-    ws.append(["Approved by Naomi Weijters (CFO), 14 January 2026. Prices exclude VAT."])
+    ws.append(["Approved by Naomi Weijters (CFO), 3 December 2025. Prices exclude VAT."])
     wb.save(path)
 
 
@@ -491,7 +491,7 @@ def write_kpi(F, path):
     wb = Workbook()
     ws = wb.active
     ws.title = "ARR month end"
-    ws.append(["Tekenbord B.V., revenue KPIs at month end (ARR on the ARR reporting policy v4, GBP at the plan rate). "
+    ws.append(["Tekenbord B.V., revenue KPIs at month end (ARR on the ARR reporting policy v5, GBP at the plan rate). "
                "Refreshed 6 October 2026, Finance."])
     ws["A1"].font = Font(bold=True)
     ws.append([])

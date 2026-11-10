@@ -6,7 +6,8 @@ author's implementation of a named method, run end to end on the shipped files; 
   careful    what a frontier run does unprompted: every file cleaned (the opening book right), the mean realised uplift
              applied to every contract still to reprice, pooled renewal exit and seat rates, the Team plan's last
              three months' rates, each account's trailing true-up rate, the open pipeline at the CRM's stage
-             probabilities, accounts drawn independently for the band
+             probabilities, accounts drawn independently for the band (the estimation uncertainty kept, as the policy
+             files it)
   thorough   the golden
 """
 import json
@@ -19,15 +20,17 @@ import golden as GD
 import params as P
 import writeup as WU
 
-r10k, r100k = GD.r10k, GD.r100k
+r10k, r100k, r50k, commit_m, rk = GD.r10k, GD.r100k, GD.r50k, GD.commit_m, GD.rk
 
 
 def values(f, figs, months):
-    """What a pass files at each result, from one route's figures (the opening book cleaned)."""
-    return {"R1": figs["opening"], "R2": r10k(f["price"]), "R3": r10k(f["team_left"]),
-            "R4": {"contraction": r10k(f["contraction"]), "churn": r10k(f["churn"])},
-            "R5": {"new_bus": r10k(f["new_bus"]), "new_open": r10k(f["new_open"])},
-            "R6": r100k(f["p20"]), "R7": {m: r10k(v) for m, v in zip(months, f["path"])}}
+    """What a pass files at each result, from one route's figures (the opening book cleaned), at each result's
+    stated rounding: the components R2 at 10,000, R3, R4 and R5's open deals at 50,000, the commitment as the
+    largest 0.1 million step met in 80 per cent of the route's own outcomes."""
+    return {"R1": figs["opening"], "R2": r10k(f["price"]), "R3": rk("team_left")(f["team_left"]),
+            "R4": {"contraction": rk("contraction")(f["contraction"]), "churn": rk("churn")(f["churn"])},
+            "R5": {"new_bus": r10k(f["new_bus"]), "new_open": rk("new_open")(f["new_open"])},
+            "R6": commit_m(f), "R7": {m: r10k(v) for m, v in zip(months, f["path"])}}
 
 
 def grade(res, v):
@@ -67,26 +70,26 @@ def build(F, B, g, R, figs):
                     "careful": figs["opening"], "thorough": figs["opening"]}},
         {"id": "R2", "name": "price line of the bridge", "graded_as": "Component 1", "figure": "price",
          "depends": [], "independent": "", "golden": figs["price"], "band": figs["band_price"],
-         "partly": [figs["band_price"][0] - 30000, figs["band_price"][1] + 30000],
+         "partly": [figs["band_price"][0] - 20000, figs["band_price"][1] + 20000],
          "passes": {"quick": None, "careful": r10k(car["price"]), "thorough": figs["price"]}},
         {"id": "R3", "name": "Dec 2027 Team ARR from the October Team accounts", "graded_as": "Ask 3", "figure": "team_left",
          "depends": [], "independent": "", "golden": figs["team_left"], "band": figs["band_team_left"],
-         "partly": [figs["band_team_left"][0] - 40000, figs["band_team_left"][1] + 40000],
-         "passes": {"quick": None, "careful": r10k(car["team_left"]), "thorough": figs["team_left"]}},
+         "passes": {"quick": None, "careful": rk("team_left")(car["team_left"]), "thorough": figs["team_left"]}},
         {"id": "R4", "name": "seat reductions and accounts lost", "graded_as": "Component 2",
          "figure": "renewal_lines", "depends": [], "independent": "", "golden": figs["renewal_lines"],
          "bands": {"contraction": figs["band_contraction"], "churn": figs["band_churn"]}, "partly_share": 0.5,
-         "passes": {"quick": None, "careful": {"contraction": r10k(car["contraction"]), "churn": r10k(car["churn"])},
+         "passes": {"quick": None, "careful": {"contraction": rk("contraction")(car["contraction"]),
+                                              "churn": rk("churn")(car["churn"])},
                     "thorough": figs["renewal_lines"]}},
         {"id": "R5", "name": "new Business ARR and the open deals' part", "graded_as": "Ask 4",
          "figure": "new_split", "depends": [], "independent": "", "golden": figs["new_split"],
          "bands": {"new_bus": figs["band_new_bus"], "new_open": figs["band_new_open"]}, "partly_share": 0.5,
-         "passes": {"quick": None, "careful": {"new_bus": r10k(car["new_bus"]), "new_open": r10k(car["new_open"])},
+         "passes": {"quick": None, "careful": {"new_bus": r10k(car["new_bus"]), "new_open": rk("new_open")(car["new_open"])},
                     "thorough": figs["new_split"]}},
         {"id": "R6", "name": "Dec 2027 commitment (80 per cent)", "graded_as": "Recommendation",
          "figure": "commitment", "depends": ["R2", "R3", "R4", "R5"], "independent": "",
          "golden": figs["commitment"], "band": [figs["commitment_lo"], figs["commitment_hi"]],
-         "passes": {"quick": figs["quick_commitment"], "careful": r100k(car["p20"]), "thorough": figs["commitment"]}},
+         "passes": {"quick": figs["quick_commitment"], "careful": commit_m(car), "thorough": figs["commitment"]}},
         {"id": "R7", "name": "monthly path Nov 2026 to Dec 2027", "graded_as": "Ask 2", "figure": "path_table",
          "depends": ["R1", "R2", "R3", "R4", "R5"], "independent": "", "golden": path_g, "bands": path_bands,
          "partly_share": 0.5,
@@ -97,7 +100,10 @@ def build(F, B, g, R, figs):
               {"name": "careful but hurried", "answer": r100k(car["p20"])}]
     for k, v in R.items():
         if v.get("kind") == "hurried":
-            routes.append({"name": k, "answer": r100k(v["p20"])})
+            routes.append({"name": k, "answer": commit_m(v)})
+    for k, v in R["naive"].items():
+        if k != "kind":
+            routes.append({"name": "naive: " + k, "answer": r100k(v)})
     hints = []
     for k, v in R.items():
         if v.get("kind") != "hint":

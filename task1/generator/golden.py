@@ -25,7 +25,7 @@ import sim
 
 XLSX = "arr_2027_forecast.xlsx"
 DOCX = "arr_2027_note.docx"
-DRAFT = 10.2           # the draft plan's December 2027 ARR, EUR million (the prompt)
+DRAFT = 10.3           # the draft plan's December 2027 ARR, EUR million (the prompt)
 ORG = "Tekenbord B.V."
 AUTHOR = "Jelte Helmerhorst"
 
@@ -36,6 +36,39 @@ def r10k(x):
 
 def r100k(x):
     return round(round(x / 1e5) / 10.0, 1)
+
+
+def r50k(x):
+    return int(round(x / 5e4)) * 50000
+
+
+def r100k_eur(x):
+    return int(round(x / 1e5)) * 100000
+
+
+# the precision each coarser figure is stated at: the two note figures as the prompt asks them, the renewal
+# components as the Critical Components state them (each the precision the defensible methods pin)
+ROUND = {"team_left": 1e5, "new_open": 1e5, "contraction": 1e5, "churn": 5e4}
+UNIT_WORD = {1e4: "nearest EUR 10,000", 5e4: "nearest EUR 50,000", 1e5: "nearest EUR 0.1 million"}
+
+
+def rk(key):
+    """The rounding function for a figure key."""
+    step = ROUND.get(key, 1e4)
+    return (lambda x: int(round(x / step)) * int(step))
+
+
+def eurk(key, x):
+    return "EUR {:,}".format(rk(key)(x))
+
+
+def eur50(x):
+    return "EUR {:,}".format(r50k(x))
+
+
+def commit_m(f):
+    """The commitment in EUR million: the largest 0.1 million step met in at least 80 per cent of the outcomes."""
+    return round(f["commitment"] / 1e6, 1)
 
 
 def eur(x):
@@ -96,6 +129,7 @@ def _compute(target, rivals=True):
         R["careful but hurried"] = dict(PS.golden(B, reps=RT.REPS, seed=RT.SEED, variant=RT.CAREFUL),
                                         kind="careful")
         R["quick"] = dict(PS.topdown(B), kind="quick")
+        R["naive"] = dict(PS.naive(B), kind="naive")
         for h, fix in RT.HINTS.items():
             R["hint: " + h] = dict(PS.golden(B, reps=RT.RIVAL_REPS, seed=RT.SEED, variant=RT.careful_with(fix)),
                                    kind="hint", sentence=h)
@@ -121,7 +155,7 @@ def write_xlsx(path, B, g, R):
     ws.title = "Forecast"
     ws["A1"] = "Tekenbord ARR forecast to December 2027 (EUR, plan rate EUR 1.16 per GBP)"
     ws["A1"].font = Font(bold=True, size=12)
-    ws["A2"] = "Month-end ARR on the ARR reporting policy v4. Data to 31 October 2026, prepared 6 November 2026."
+    ws["A2"] = "Month-end ARR on the ARR reporting policy v5. Data to 31 October 2026, prepared 6 November 2026."
     ws.append([])
     ws.append(["Month end", "Expected ARR", "80% range, low", "80% range, high"])
     _head(ws, 4)
@@ -133,20 +167,29 @@ def write_xlsx(path, B, g, R):
         for c in row[1:]:
             c.number_format = "#,##0"
     ws.append([])
-    ws.append(["October 2026 is on the books. The range is the 10th to 90th percentile of %d simulated paths."
-               % RT.REPS])
+    ws.append(["October 2026 is on the books. The range is the 10th to 90th percentile of %d simulated paths "
+               "(policy v5, 5.2: the accounts' and deals' outcomes, with each estimated rate redrawn from its own "
+               "sampling error; nothing added beyond the records)." % RT.REPS])
     ws.append([])
     ws.append(["December 2027", "EUR"])
     _head(ws, ws.max_row)
     for k, v in (("Expected ARR", r10k(g["dec27"])), ("80% range, low (P10)", r10k(g["p10"])),
-                 ("80% range, high (P90)", r10k(g["p90"])), ("80% chance of meeting or beating (P20)",
-                                                            r10k(g["p20"]))):
+                 ("80% range, high (P90)", r10k(g["p90"])), ("20th percentile", r10k(g["p20"]))):
         ws.append([k, v])
         ws.cell(ws.max_row, 2).number_format = "#,##0"
-    ws.append(["Commitment, EUR million", r100k(g["p20"])])
+    ws.append(["Commitment, EUR million (largest 0.1m step met in at least 80% of outcomes, policy 5.3)",
+               commit_m(g)])
+    ws.cell(ws.max_row, 2).number_format = "0.0"
+    ws.append(["Share of outcomes at or above the commitment", round(g["commitment_met"], 3)])
+    ws.cell(ws.max_row, 2).number_format = "0.0%"
+    ws.append(["Share of outcomes at or above the next step up", round(g["commitment_next_met"], 3)])
+    ws.cell(ws.max_row, 2).number_format = "0.0%"
     ws.append(["Draft plan figure, EUR million", DRAFT])
-    ws.append(["Draft clears the 80% bar", "No" if r100k(g["p20"]) < DRAFT else "Yes"])
-    for i, wd in enumerate([38, 16, 16, 16], 1):
+    ws.cell(ws.max_row, 2).number_format = "0.0"
+    ws.append(["Share of outcomes at or above the draft", round(float(np.mean(np.array(g["draws"]) >= DRAFT * 1e6)), 3)])
+    ws.cell(ws.max_row, 2).number_format = "0.0%"
+    ws.append(["Draft clears the 80% bar", "No" if commit_m(g) < DRAFT else "Yes"])
+    for i, wd in enumerate([62, 16, 16, 16], 1):
         ws.column_dimensions[get_column_letter(i)].width = wd
     ws.freeze_panes = "A5"
 
@@ -166,29 +209,20 @@ def write_xlsx(path, B, g, R):
     for row in wb2.iter_rows(min_row=4, max_row=wb2.max_row):
         row[1].number_format = "#,##0;-#,##0"
     wb2.append([])
-    wb2.append(["New Business split", "EUR"])
+    wb2.append(["Behind two of the lines (each to the %s)" % UNIT_WORD[ROUND["new_open"]], "EUR"])
     _head(wb2, wb2.max_row)
-    nf = r10k(g["new_bus"]) - r10k(g["new_open"]) - r10k(g["new_upgrade"])
-    for k, v in (("Deals open at 31 October 2026", r10k(g["new_open"])), ("Deals created from November 2026", nf),
-                 ("Team accounts moving to Business", r10k(g["new_upgrade"]))):
+    for k, v in (("New Business from deals open at 31 October 2026", rk("new_open")(g["new_open"])),
+                 ("Team ARR in December 2027 from accounts on Team at 31 October 2026", rk("team_left")(g["team_left"]))):
         wb2.append([k, v])
         wb2.cell(wb2.max_row, 2).number_format = "#,##0"
     wb2.append([])
-    wb2.append(["Change in Team split", "EUR"])
-    _head(wb2, wb2.max_row)
-    for k, v in (("Team ARR 31 October 2026", g["open_team"]),
-                 ("Accounts on Team at 31 Oct 2026, their ARR in December 2027", g["team_left"]),
-                 ("Team accounts signing from November 2026, December 2027", g["team_new"])):
-        wb2.append([k, r10k(v)])
-        wb2.cell(wb2.max_row, 2).number_format = "#,##0"
-    wb2.append([])
-    wb2.append(["Lines to the nearest EUR 10,000; seat additions carry the bridge's rounding (%s) and deals created "
-                "from November 2026 the new Business split's." % ("EUR {:,}".format(gap) if gap else "none needed")])
+    wb2.append(["Lines to the nearest EUR 10,000; seat additions carry the bridge's rounding (%s)."
+                % ("EUR {:,}".format(gap) if gap else "none needed")])
     wb2.column_dimensions["A"].width = 52
     wb2.column_dimensions["B"].width = 16
 
     w3 = wb.create_sheet("Inputs")
-    w3.append(["Opening book and the estimates behind each line"])
+    w3.append(["Opening book and the estimates behind each line (policy v5)"])
     w3["A1"].font = Font(bold=True, size=12)
     w3.append([])
     w3.append(["Item", "Value", "Basis"])
@@ -199,7 +233,7 @@ def write_xlsx(path, B, g, R):
         ("Team ARR 31 Oct 2026, EUR", r10k(g["open_team"]), "October paid invoices, seats billed"),
         ("Business contracts in force", int(len(B.st)), ""),
         ("Renewals since Jan 2022 used for the exit and seat models", int(len(B.E)), "contract lines and workspace activity"),
-        ("Repricings since 1 Mar 2026 used for the uplift", int(An.fit_business(B.E)["uplift_n"]), ""),
+        ("Repricings since 1 Jan 2026 used for the uplift", int(An.fit_business(B.E)["uplift_n"]), ""),
         ("Realised uplift at 20 seats", round(float(up[1]), 3), "per-seat price change at renewal"),
         ("Realised uplift, change per doubling of seats", round(float(up[0]) * np.log(2), 3), "log-linear in seats"),
         ("Mean realised uplift (all repricings)", round(An.fit_business(B.E)["uplift_mean"], 3), "not used"),
@@ -208,9 +242,11 @@ def write_xlsx(path, B, g, R):
         ("  per point of utilisation below 0.70", round(g["churn_fit"][2], 2), "active users over seats, last 3 months"),
         ("  a group sibling left in the last 12 months", round(g["churn_fit"][3], 2), "CRM parent account"),
         ("Team: lasting extra monthly exit, accounts padded to 3 seats", round(g["team_persist"], 4),
-         "excess over the pre-April rate, mean of the last three months"),
+         "excess over the pre-January rate at the calendar index, mean of the last three months"),
+        ("Team: calendar index of cancellations, Oct / Mar", "%.2f / %.2f" % (g["team_season"][10], g["team_season"][3]),
+         "pre-January history, exposure-weighted mean 1"),
         ("Open deals 31 Oct 2026", int((B.S["m"] == P.CUT).sum()), "pipeline snapshot"),
-        ("New Business ARR per quoted seat, deals won since Mar 2026, EUR", round(B.per_seat, 1), "first contracts"),
+        ("New Business ARR per quoted seat, deals won since Jan 2026, EUR", round(B.per_seat, 1), "first contracts"),
     ]
     for r in rows:
         w3.append(list(r))
@@ -222,36 +258,50 @@ def write_xlsx(path, B, g, R):
             row[1].number_format = "#,##0"
 
     w4 = wb.create_sheet("Routes")
-    w4.append(["What each shortcut gives (EUR; commitment in EUR million)"])
+    w4.append(["What each shortcut gives (EUR; the commitment in EUR million)"])
     w4["A1"].font = Font(bold=True, size=12)
     w4.append([])
-    w4.append(["Route", "Price", "Seat reductions", "Accounts lost", "Oct Team accounts, Dec 2027", "New Business",
-               "Expected Dec 2027", "Commitment"])
+    w4.append(["Route", "Price", "Seat reductions", "Accounts lost", "Oct Team accounts, Dec 2027 (0.1m)",
+               "Open deals' new Business (0.1m)", "New Business", "Expected Dec 2027", "Commitment"])
     _head(w4, 3)
 
     def line(name, f):
-        return [name, r10k(f["price"]), r10k(f["contraction"]), r10k(f["churn"]), r10k(f["team_left"]),
-                r10k(f["new_bus"]), r10k(f["dec27"]), r100k(f["p20"])]
+        return [name, r10k(f["price"]), r10k(f["contraction"]), r10k(f["churn"]), rk("team_left")(f["team_left"]),
+                rk("new_open")(f["new_open"]), r10k(f["new_bus"]), r10k(f["dec27"]), commit_m(f)]
     w4.append(line("This forecast", g))
-    show = ["mean uplift applied flat", "list rise applied flat", "pooled renewal rates", "accounts drawn independently",
-            "Team rates since April", "Team rates of the trailing twelve months", "CRM stage probabilities",
-            "trailing run-rate of new ARR", "win odds by stage alone", "careful but hurried"]
-    names = {"careful but hurried": "All of the above shortcuts that a quick model would take together"}
+    show = ["mean uplift applied flat", "list rise applied flat",
+            "pooled renewal rates", "accounts drawn independently", "Team rates of the last three months",
+            "Team rates since April", "Team rates of the trailing twelve months", "Team rates before April",
+            "CRM stage probabilities", "win odds by stage alone", "trailing run-rate of new ARR",
+            "the book's trailing true-up rate near seats", "band without the estimation uncertainty",
+            "an assumed common factor of 0.25 added", "careful but hurried"]
+    names = {"careful but hurried": "The shortcuts a quick model would take together",
+             "Team rates since April": "Team rates since January 2026", "Team rates before April":
+             "Team rates before January 2026, no lasting excess"}
     for k in show:
         if k in R:
             w4.append(line(names.get(k, k[0].upper() + k[1:]), R[k]))
-    if "quick" in R:
-        w4.append(["Last twelve months' growth carried forward", None, None, None, None, None,
-                   r10k(R["quick"]["dec27"]), None])
     for row in w4.iter_rows(min_row=4, max_row=w4.max_row):
-        for c in row[1:7]:
+        for c in row[1:8]:
             c.number_format = "#,##0"
+        if len(row) > 8 and isinstance(row[8].value, (int, float)):
+            row[8].number_format = "0.0"
     w4.append([])
-    w4.append(["Each row changes one step against this forecast; the second-last row combines the flat uplift, pooled "
-               "renewal rates, the last three months' Team rates, CRM probabilities and independent draws."])
-    w4.column_dimensions["A"].width = 50
-    for i in range(2, 9):
-        w4.column_dimensions[get_column_letter(i)].width = 13
+    w4.append(["Trailing extrapolations (point forecasts of December 2027, EUR)", ""])
+    _head(w4, w4.max_row)
+    if "naive" in R:
+        for k, v in R["naive"].items():
+            if k == "kind":
+                continue
+            w4.append([k[0].upper() + k[1:], r10k(v)])
+            w4.cell(w4.max_row, 2).number_format = "#,##0"
+    w4.append([])
+    w4.append(["Each row changes one step against this forecast; the last route row combines the flat uplift, pooled "
+               "renewal rates, the last three months' Team rates, CRM probabilities and independent draws. Every "
+               "trailing extrapolation clears the draft; the forecast does not."])
+    w4.column_dimensions["A"].width = 62
+    for i in range(2, 10):
+        w4.column_dimensions[get_column_letter(i)].width = 14
     wb.save(path)
 
 
@@ -262,7 +312,8 @@ def write_docx(path, B, g, R):
     st.font.name = "Calibri"
     st.font.size = Pt(10.5)
     raw, rounded, gap = bridge(g)
-    c = r100k(g["p20"])
+    c = commit_m(g)
+    draft_pct = int(round(100 * np.mean(np.array(g["draws"]) >= DRAFT * 1e6)))
     p = doc.add_paragraph()
     r = p.add_run("To: Naomi Weijters\nFrom: Jelte Helmerhorst, Revenue operations\nDate: 6 November 2026\n"
                   "Re: December 2027 ARR for the 2027 plan")
@@ -272,17 +323,20 @@ def write_docx(path, B, g, R):
     hr.bold = True
     hr.font.size = Pt(13)
     doc.add_paragraph(
-        "We have an 80 per cent chance of ending 2027 at or above %s, so the figure to put in the plan is EUR %.1f "
-        "million. The draft's EUR %.1f million does not clear that bar: on this forecast we would meet it about %d "
-        "times in 100. Expected ARR at 31 December 2027 is %s, with an 80 per cent range of %s to %s."
-        % (eur(g["p20"]), c, DRAFT, int(round(100 * np.mean(np.array(g["draws"]) >= DRAFT * 1e6))),
-           eur(g["dec27"]), eur(g["p10"]), eur(g["p90"])))
+        "EUR %.1f million is the largest 0.1 million step we meet or beat in at least 80 per cent of outcomes (%d in "
+        "100; the next step up, EUR %.1f million, only %d in 100), so it is the figure for the plan under policy "
+        "5.3. The draft's EUR %.1f million does not clear that bar: on this forecast we would meet it about %d times "
+        "in 100. Expected ARR at 31 December 2027 is %s, with an 80 per cent range of %s to %s."
+        % (c, int(round(100 * g["commitment_met"])), c + 0.1, int(round(100 * g["commitment_next_met"])), DRAFT,
+           draft_pct, eur(g["dec27"]), eur(g["p10"]), eur(g["p90"])))
     doc.add_paragraph(
         "ARR on the books at 31 October 2026 is %s: %s Business and %s Team. The accounts on the Team plan at the end of "
-        "October bring %s of Team ARR in December 2027. New Business signed from November 2026 to December 2027 comes to "
-        "%s, of which %s from deals already open at the end of October."
-        % (eur(g["open_total"]), eur(g["open_bus"]), eur(g["open_team"]), eur(g["team_left"]), eur(g["new_bus"]),
-           eur(g["new_open"])))
+        "October bring %s of Team ARR in December 2027 (to the %s). New Business signed from November "
+        "2026 to December 2027 comes to %s, of which %s (to the %s) from deals already open at the end "
+        "of October."
+        % (eur(g["open_total"]), eur(g["open_bus"]), eur(g["open_team"]), eurk("team_left", g["team_left"]),
+           UNIT_WORD[ROUND["team_left"]], eur(g["new_bus"]), eurk("new_open", g["new_open"]),
+           UNIT_WORD[ROUND["new_open"]]))
     t = doc.add_table(rows=1, cols=2)
     t.style = "Table Grid"
     t.rows[0].cells[0].text = "Bridge, 31 Oct 2026 to 31 Dec 2027"
@@ -297,37 +351,49 @@ def write_docx(path, B, g, R):
         for run in cell.paragraphs[0].runs:
             run.bold = True
     src = doc.add_paragraph()
-    sr = src.add_run("Movement categories and order as in the ARR reporting policy v4, section 4; GBP at EUR 1.16. Lines "
+    sr = src.add_run("Movement categories and order as in the ARR reporting policy v5, section 4; GBP at EUR 1.16. Lines "
                      "to the nearest EUR 10,000, seat additions carrying the rounding. Sources: billing contract lines "
                      "and Team invoices to 31 October 2026, workspace activity, CRM accounts, pipeline snapshots.")
     sr.font.size = Pt(8.5)
     sr.italic = True
-    cr = R.get("careful but hurried", {})
+    nv = R.get("naive", {})
     wp = doc.add_paragraph()
     wp.add_run("Why lower than the draft. ").bold = True
     wp.add_run(
-        "Four things in the records pull the trailing numbers up. Price: renewals since "
-        "March have kept about %.0f per cent of the list rise on contracts of 20 seats and less on large ones, which "
-        "negotiate; applying the average rise to every contract still to renew gives %s of price, not %s. Seats and "
-        "exits: renewals cut seats toward the people who use the product, first renewals most, and a group whose "
-        "subsidiary has left tends to take the others with it; pooled renewal rates put seat reductions at %s "
-        "against %s. Pipeline: deals that have sat in a stage for months rarely close, so the CRM's stage "
-        "probabilities make the open pipeline worth %s against %s on our own win history. The band: subsidiaries "
-        "of one group leave together, so their exits are drawn together; drawn one account at a time the 80 per "
-        "cent figure would be about %s."
-        % (100 * g["uplift_fit"][1] / (P.BUS_LIST_NEW["EUR"] / P.BUS_LIST_OLD["EUR"] - 1),
-           eur(R["mean uplift applied flat"]["price"]) if R else "", eur(g["price"]),
-           eur(R["pooled renewal rates"]["contraction"]) if R else "", eur(g["contraction"]),
-           eur(R["CRM stage probabilities"]["new_open"]) if R else "", eur(g["new_open"]),
-           eur(R["accounts drawn independently"]["p20"]) if R else ""))
+        "Carried forward, the last twelve months give %s (compounded) and the last six months %s, and every "
+        "trailing view clears EUR %.1f million; they carry the January price rise, which has now landed on every "
+        "contract but the November and December renewals. Taken flow by flow the book does not get there. Price: "
+        "renewals since January have kept about %.0f per cent of the list rise on contracts of 20 seats and less on "
+        "large ones, which negotiate; the rise still to land is %s, and applying the average realised rise to the "
+        "remaining contracts would give %s. Seats and exits: the accounts signed in the last two years were sold "
+        "more seats per working user than the older book, renewals cut seats toward the people who use the product "
+        "(first renewals most) and exit more often where use is low, and a group whose subsidiary has left tends to "
+        "take the others with it; pooled renewal rates put accounts lost at %s against %s. Pipeline: deals that "
+        "have sat in a stage for months rarely close, so the CRM's stage probabilities make the open pipeline worth "
+        "%s against %s on our own win history. The band: each estimated rate is redrawn from its own sampling error "
+        "and subsidiaries of one group leave together; drawn one account at a time the commitment would read EUR "
+        "%.1f million, and no allowance is added beyond what the records show (policy 5.2)."
+        % (eur(nv.get("trailing twelve months' growth compounded", 0)),
+           eur(nv.get("trailing six months' net new ARR carried forward", 0)), DRAFT,
+           100 * g["uplift_fit"][1] / (P.BUS_LIST_NEW["EUR"] / P.BUS_LIST_OLD["EUR"] - 1), eur(g["price"]),
+           eur(R["mean uplift applied flat"]["price"]) if R else "",
+           eurk("churn", R["pooled renewal rates"]["churn"]) if R else "", eurk("churn", g["churn"]),
+           eurk("new_open", R["CRM stage probabilities"]["new_open"]) if R else "", eurk("new_open", g["new_open"]),
+           commit_m(R["accounts drawn independently"]) if R else 0.0))
     tp_ = doc.add_paragraph()
     tp_.add_run("Team. ").bold = True
     tp_.add_run(
-        "The three-seat minimum from April pushed out many one- and two-person teams, but the extra exits have "
-        "fallen back month by month; read as the new normal, the months since April would put the October accounts' Team ARR "
-        "in December 2027 at %s, against %s." % (eur(R["Team rates since April"]["team_left"]) if R else "",
-                                              eur(g["team_left"])))
-    doc.add_paragraph("Monthly path, ranges and the effect of each shortcut are in arr_2027_forecast.xlsx.")
+        "Cancellations on the Team plan run with the calendar (the autumn months carry about %.0f per cent more "
+        "than the year's average, late winter about %.0f per cent less), and the three-seat minimum from January "
+        "pushed out many one- and two-person teams in the first months, an excess that has faded to a small "
+        "lasting level. Carrying the last three months' rates forward would put the October accounts' Team ARR in "
+        "December 2027 at %s (the whole year since January carried forward, %s), against %s."
+        % (100 * (max(g["team_season"].values()) - 1), 100 * (1 - min(g["team_season"].values())),
+           eurk("team_left", R["Team rates of the last three months"]["team_left"]) if R else "",
+           ("the same" if R and eurk("team_left", R["Team rates since April"]["team_left"]) ==
+            eurk("team_left", R["Team rates of the last three months"]["team_left"]) else
+            eurk("team_left", R["Team rates since April"]["team_left"])) if R else "", eurk("team_left", g["team_left"])))
+    doc.add_paragraph("Monthly path, ranges, the inputs and the effect of each shortcut are in arr_2027_forecast.xlsx.")
     fp = doc.sections[0].footer.paragraphs[0]
     fp.text = "Tekenbord B.V. | Revenue operations | 2027 plan"
     for r_ in fp.runs:

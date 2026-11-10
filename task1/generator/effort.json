@@ -36,19 +36,19 @@
   {
    "bands": {
     "business": [
-     6970000,
-     6970000
+     7020000,
+     7020000
     ],
     "team": [
-     1930000,
-     1930000
+     1830000,
+     1830000
     ]
    },
    "depends": [],
    "figure": "opening",
    "golden": {
-    "business": 6970000,
-    "team": 1930000
+    "business": 7020000,
+    "team": 1830000
    },
    "graded_as": "Ask 1",
    "id": "R1",
@@ -57,78 +57,74 @@
    "partly_share": 0.5,
    "passes": {
     "careful": {
-     "business": 6970000,
-     "team": 1930000
+     "business": 7020000,
+     "team": 1830000
     },
     "quick": {
      "business": 7120000,
-     "team": 1990000
+     "team": 1880000
     },
     "thorough": {
-     "business": 6970000,
-     "team": 1930000
+     "business": 7020000,
+     "team": 1830000
     }
    }
   },
   {
    "band": [
-    300000,
-    300000
+    180000,
+    180000
    ],
    "depends": [],
    "figure": "price",
-   "golden": 300000,
+   "golden": 180000,
    "graded_as": "Component 1",
    "id": "R2",
    "independent": "",
    "name": "price line of the bridge",
    "partly": [
-    270000,
-    330000
+    160000,
+    200000
    ],
    "passes": {
-    "careful": 370000,
+    "careful": 220000,
     "quick": null,
-    "thorough": 300000
+    "thorough": 180000
    }
   },
   {
    "band": [
-    1370000,
-    1390000
+    1300000,
+    1300000
    ],
    "depends": [],
    "figure": "team_left",
-   "golden": 1370000,
+   "golden": 1300000,
    "graded_as": "Ask 3",
    "id": "R3",
    "independent": "",
    "name": "Dec 2027 Team ARR from the October Team accounts",
-   "partly": [
-    1330000,
-    1430000
-   ],
    "passes": {
-    "careful": 1360000,
+    "careful": 1200000,
     "quick": null,
-    "thorough": 1370000
+    "thorough": 1300000
    }
   },
   {
    "bands": {
     "churn": [
-     850000,
-     890000
+     800000,
+     800000
     ],
     "contraction": [
-     190000,
+     200000,
      200000
     ]
    },
    "depends": [],
    "figure": "renewal_lines",
    "golden": {
-    "churn": 860000,
+    "churn": 800000,
     "contraction": 200000
    },
    "graded_as": "Component 2",
@@ -138,12 +134,12 @@
    "partly_share": 0.5,
    "passes": {
     "careful": {
-     "churn": 890000,
-     "contraction": 310000
+     "churn": 750000,
+     "contraction": 300000
     },
     "quick": null,
     "thorough": {
-     "churn": 860000,
+     "churn": 800000,
      "contraction": 200000
     }
    }
@@ -151,19 +147,19 @@
   {
    "bands": {
     "new_bus": [
-     1350000,
-     1370000
+     1840000,
+     1870000
     ],
     "new_open": [
-     630000,
-     660000
+     800000,
+     800000
     ]
    },
    "depends": [],
    "figure": "new_split",
    "golden": {
-    "new_bus": 1350000,
-    "new_open": 630000
+    "new_bus": 1870000,
+    "new_open": 800000
    },
    "graded_as": "Ask 4",
    "id": "R5",
@@ -172,20 +168,20 @@
    "partly_share": 0.5,
    "passes": {
     "careful": {
-     "new_bus": 1690000,
-     "new_open": 970000
+     "new_bus": 2250000,
+     "new_open": 1200000
     },
     "quick": null,
     "thorough": {
-     "new_bus": 1350000,
-     "new_open": 630000
+     "new_bus": 1870000,
+     "new_open": 800000
     }
    }
   },
   {
    "band": [
-    9.8,
-    9.9
+    10.0,
+    10.0
    ],
    "depends": [
     "R2",
@@ -194,74 +190,74 @@
     "R5"
    ],
    "figure": "commitment",
-   "golden": 9.9,
+   "golden": 10.0,
    "graded_as": "Recommendation",
    "id": "R6",
    "independent": "",
    "name": "Dec 2027 commitment (80 per cent)",
    "passes": {
-    "careful": 10.2,
-    "quick": 11.6,
-    "thorough": 9.9
+    "careful": 10.4,
+    "quick": 11.5,
+    "thorough": 10.0
    }
   },
   {
    "bands": {
     "Apr 2027": [
-     9580000,
-     9640000
+     9470000,
+     9500000
     ],
     "Aug 2027": [
-     9720000,
-     9800000
+     9850000,
+     9890000
     ],
     "Dec 2026": [
-     9240000,
-     9260000
+     9190000,
+     9190000
     ],
     "Dec 2027": [
-     9950000,
-     10070000
+     10200000,
+     10230000
     ],
     "Feb 2027": [
-     9510000,
-     9540000
+     9300000,
+     9320000
     ],
     "Jan 2027": [
-     9370000,
-     9400000
+     9230000,
+     9240000
     ],
     "Jul 2027": [
-     9700000,
-     9770000
+     9780000,
+     9810000
     ],
     "Jun 2027": [
-     9680000,
+     9720000,
      9750000
     ],
     "Mar 2027": [
-     9530000,
-     9580000
+     9390000,
+     9410000
     ],
     "May 2027": [
-     9630000,
-     9690000
+     9580000,
+     9610000
     ],
     "Nov 2026": [
-     9110000,
-     9120000
+     9040000,
+     9050000
     ],
     "Nov 2027": [
-     9870000,
-     9970000
+     10070000,
+     10110000
     ],
     "Oct 2027": [
-     9800000,
-     9890000
+     9970000,
+     10010000
     ],
     "Sep 2027": [
-     9770000,
-     9850000
+     9900000,
+     9940000
     ]
    },
    "depends": [
@@ -273,20 +269,20 @@
    ],
    "figure": "path_table",
    "golden": {
-    "Apr 2027": 9610000,
-    "Aug 2027": 9780000,
-    "Dec 2026": 9240000,
-    "Dec 2027": 10050000,
-    "Feb 2027": 9520000,
-    "Jan 2027": 9390000,
-    "Jul 2027": 9750000,
-    "Jun 2027": 9720000,
-    "Mar 2027": 9560000,
-    "May 2027": 9670000,
-    "Nov 2026": 9110000,
-    "Nov 2027": 9960000,
-    "Oct 2027": 9870000,
-    "Sep 2027": 9830000
+    "Apr 2027": 9490000,
+    "Aug 2027": 9880000,
+    "Dec 2026": 9190000,
+    "Dec 2027": 10220000,
+    "Feb 2027": 9310000,
+    "Jan 2027": 9240000,
+    "Jul 2027": 9800000,
+    "Jun 2027": 9740000,
+    "Mar 2027": 9410000,
+    "May 2027": 9600000,
+    "Nov 2026": 9040000,
+    "Nov 2027": 10090000,
+    "Oct 2027": 10000000,
+    "Sep 2027": 9930000
    },
    "graded_as": "Ask 2",
    "id": "R7",
@@ -295,88 +291,96 @@
    "partly_share": 0.5,
    "passes": {
     "careful": {
-     "Apr 2027": 9650000,
-     "Aug 2027": 9960000,
-     "Dec 2026": 9260000,
-     "Dec 2027": 10430000,
-     "Feb 2027": 9570000,
-     "Jan 2027": 9410000,
-     "Jul 2027": 9900000,
-     "Jun 2027": 9820000,
-     "Mar 2027": 9600000,
-     "May 2027": 9730000,
-     "Nov 2026": 9120000,
-     "Nov 2027": 10290000,
-     "Oct 2027": 10160000,
-     "Sep 2027": 10060000
+     "Apr 2027": 9490000,
+     "Aug 2027": 10020000,
+     "Dec 2026": 9270000,
+     "Dec 2027": 10660000,
+     "Feb 2027": 9370000,
+     "Jan 2027": 9320000,
+     "Jul 2027": 9880000,
+     "Jun 2027": 9740000,
+     "Mar 2027": 9420000,
+     "May 2027": 9600000,
+     "Nov 2026": 9110000,
+     "Nov 2027": 10470000,
+     "Oct 2027": 10310000,
+     "Sep 2027": 10160000
     },
     "quick": {
-     "Apr 2027": 9980000,
-     "Aug 2027": 10760000,
-     "Dec 2026": 9240000,
-     "Dec 2027": 11610000,
-     "Feb 2027": 9600000,
-     "Jan 2027": 9420000,
-     "Jul 2027": 10560000,
-     "Jun 2027": 10360000,
-     "Mar 2027": 9790000,
-     "May 2027": 10170000,
-     "Nov 2026": 9070000,
-     "Nov 2027": 11390000,
-     "Oct 2027": 11180000,
-     "Sep 2027": 10970000
+     "Apr 2027": 9900000,
+     "Aug 2027": 10660000,
+     "Dec 2026": 9190000,
+     "Dec 2027": 11490000,
+     "Feb 2027": 9540000,
+     "Jan 2027": 9360000,
+     "Jul 2027": 10470000,
+     "Jun 2027": 10270000,
+     "Mar 2027": 9710000,
+     "May 2027": 10080000,
+     "Nov 2026": 9020000,
+     "Nov 2027": 11280000,
+     "Oct 2027": 11070000,
+     "Sep 2027": 10860000
     },
     "thorough": {
-     "Apr 2027": 9610000,
-     "Aug 2027": 9780000,
-     "Dec 2026": 9240000,
-     "Dec 2027": 10050000,
-     "Feb 2027": 9520000,
-     "Jan 2027": 9390000,
-     "Jul 2027": 9750000,
-     "Jun 2027": 9720000,
-     "Mar 2027": 9560000,
-     "May 2027": 9670000,
-     "Nov 2026": 9110000,
-     "Nov 2027": 9960000,
-     "Oct 2027": 9870000,
-     "Sep 2027": 9830000
+     "Apr 2027": 9490000,
+     "Aug 2027": 9880000,
+     "Dec 2026": 9190000,
+     "Dec 2027": 10220000,
+     "Feb 2027": 9310000,
+     "Jan 2027": 9240000,
+     "Jul 2027": 9800000,
+     "Jun 2027": 9740000,
+     "Mar 2027": 9410000,
+     "May 2027": 9600000,
+     "Nov 2026": 9040000,
+     "Nov 2027": 10090000,
+     "Oct 2027": 10000000,
+     "Sep 2027": 9930000
     }
    }
   }
  ],
  "routes": [
   {
-   "answer": 9.9,
+   "answer": 10.0,
    "golden": true,
    "name": "golden"
   },
   {
-   "answer": 11.6,
+   "answer": 11.5,
    "name": "quick: trailing growth carried forward"
   },
   {
-   "answer": 10.2,
+   "answer": 10.5,
    "name": "careful but hurried"
   },
   {
-   "answer": 9.9,
-   "name": "mean uplift applied flat"
+   "answer": 10.0,
+   "name": "band without the estimation uncertainty"
   },
   {
    "answer": 10.0,
-   "name": "list rise applied flat"
+   "name": "an assumed common factor of 0.25 added"
   },
   {
-   "answer": 9.9,
-   "name": "pooled renewal rates"
+   "answer": 10.0,
+   "name": "mean uplift applied flat"
   },
   {
    "answer": 10.1,
+   "name": "list rise applied flat"
+  },
+  {
+   "answer": 10.2,
+   "name": "pooled renewal rates"
+  },
+  {
+   "answer": 10.3,
    "name": "accounts drawn independently"
   },
   {
-   "answer": 9.8,
+   "answer": 9.9,
    "name": "Team rates since April"
   },
   {
@@ -388,20 +392,56 @@
    "name": "Team rates of the trailing twelve months"
   },
   {
-   "answer": 9.9,
+   "answer": 10.0,
    "name": "Team rates before April"
   },
   {
-   "answer": 10.2,
+   "answer": 10.4,
    "name": "CRM stage probabilities"
   },
   {
-   "answer": 10.1,
+   "answer": 9.9,
    "name": "trailing run-rate of new ARR"
   },
   {
-   "answer": 9.9,
+   "answer": 10.0,
    "name": "win odds by stage alone"
+  },
+  {
+   "answer": 10.0,
+   "name": "the book's trailing true-up rate near seats"
+  },
+  {
+   "answer": 11.5,
+   "name": "naive: trailing twelve months' growth compounded"
+  },
+  {
+   "answer": 10.9,
+   "name": "naive: trailing twelve months' net new ARR carried forward"
+  },
+  {
+   "answer": 10.7,
+   "name": "naive: trailing six months' net new ARR carried forward"
+  },
+  {
+   "answer": 11.2,
+   "name": "naive: trailing three months' net new ARR carried forward"
+  },
+  {
+   "answer": 10.9,
+   "name": "naive: movement lines at their trailing twelve-month rates"
+  },
+  {
+   "answer": 10.7,
+   "name": "naive: movement lines at their trailing six-month rates"
+  },
+  {
+   "answer": 11.2,
+   "name": "naive: movement lines at their trailing monthly rates since January 2026"
+  },
+  {
+   "answer": 11.0,
+   "name": "naive: new Business at its run-rate since January 2026, other lines at their trailing twelve-month rates"
   }
  ]
 }
