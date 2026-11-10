@@ -1,0 +1,358 @@
+{
+ "results": [
+  {
+   "id": "R1",
+   "name": "the harbor gauge's expected days at its minor flood threshold, 2027-28",
+   "graded_as": "Ask 1",
+   "figure": "harbor_exp",
+   "depends": [],
+   "independent": "",
+   "golden": 27.0,
+   "band": [
+    25.94,
+    27.53
+   ],
+   "partly": [
+    22.94,
+    30.53
+   ],
+   "passes": {
+    "quick": 10.8,
+    "careful": 27.0,
+    "thorough": 27.0
+   }
+  },
+  {
+   "id": "R2",
+   "name": "its 90 per cent range over the weather years",
+   "graded_as": "Ask 2",
+   "figure": "harbor_range",
+   "depends": [
+    "R1"
+   ],
+   "independent": "",
+   "golden": {
+    "lo": 22,
+    "hi": 31
+   },
+   "bands": {
+    "lo": [
+     19.35,
+     22.5
+    ],
+    "hi": [
+     30.5,
+     33.95
+    ]
+   },
+   "passes": {
+    "quick": null,
+    "careful": {
+     "lo": 19,
+     "hi": 36
+    },
+    "thorough": {
+     "lo": 22,
+     "hi": 31
+    }
+   }
+  },
+  {
+   "id": "R3",
+   "name": "the harbor's change from 2025-26 split into sea level, tides and weather",
+   "graded_as": "Ask 3",
+   "figure": "bridge",
+   "depends": [
+    "R1"
+   ],
+   "independent": "",
+   "golden": {
+    "sea": 5.8,
+    "tides": -0.7,
+    "weather": 1.0,
+    "total": 6.0
+   },
+   "bands": {
+    "sea": [
+     3.8,
+     7.3
+    ],
+    "tides": [
+     -3.3,
+     2.0
+    ],
+    "weather": [
+     -1.0,
+     2.5999999999999996
+    ],
+    "total": [
+     5.0,
+     7.0
+    ]
+   },
+   "passes": {
+    "quick": null,
+    "careful": {
+     "sea": 5.0,
+     "tides": -3.0,
+     "weather": 0.2,
+     "total": 2.2
+    },
+    "thorough": {
+     "sea": 5.8,
+     "tides": -0.7,
+     "weather": 1.0,
+     "total": 6.0
+    }
+   }
+  },
+  {
+   "id": "R4",
+   "name": "Front Street's 2025-26 tidal flood days from its street sensor",
+   "graded_as": "Component 3",
+   "figure": "front_hind",
+   "depends": [],
+   "independent": "the street sensor and the harbor's verified high waters",
+   "golden": 21,
+   "band": [
+    20,
+    22
+   ],
+   "passes": {
+    "quick": 44,
+    "careful": 21,
+    "thorough": 21
+   }
+  },
+  {
+   "id": "R5",
+   "name": "Marsh Road's and Oyster Creek Road's 2025-26 days through their overmarsh transfers",
+   "graded_as": "Component 1",
+   "figure": "marsh_hind",
+   "depends": [],
+   "independent": "each campaign and the harbor's high waters",
+   "golden": {
+    "marsh": 17,
+    "oyster": 8
+   },
+   "bands": {
+    "marsh": [
+     16,
+     20
+    ],
+    "oyster": [
+     7,
+     9
+    ]
+   },
+   "passes": {
+    "quick": {
+     "marsh": 34,
+     "oyster": 32
+    },
+    "careful": {
+     "marsh": 26,
+     "oyster": 13
+    },
+    "thorough": {
+     "marsh": 17,
+     "oyster": 8
+    }
+   }
+  },
+  {
+   "id": "R6",
+   "name": "River Road's 2025-26 days through its flow-dependent transfer",
+   "graded_as": "Component 2",
+   "figure": "river_hind",
+   "depends": [],
+   "independent": "the campaign, the river's daily flows and the harbor's high waters",
+   "golden": 10,
+   "band": [
+    9,
+    12
+   ],
+   "passes": {
+    "quick": 36,
+    "careful": 26,
+    "thorough": 10
+   }
+  },
+  {
+   "id": "R7",
+   "name": "the five low points' expected 2027-28 tidal flood days",
+   "graded_as": "Ask 4",
+   "figure": "exp",
+   "depends": [
+    "R1",
+    "R4",
+    "R5",
+    "R6"
+   ],
+   "independent": "",
+   "golden": {
+    "front": 26.3,
+    "marsh": 14.3,
+    "river": 15.9,
+    "wharf": 32.3,
+    "oyster": 1.2
+   },
+   "bands": {
+    "front": [
+     25.11,
+     26.78
+    ],
+    "marsh": [
+     13.22,
+     18.03
+    ],
+    "river": [
+     14.08,
+     16.97
+    ],
+    "wharf": [
+     31.31,
+     32.75
+    ],
+    "oyster": [
+     0.5,
+     1.92
+    ]
+   },
+   "passes": {
+    "quick": {
+     "front": 61.6,
+     "marsh": 45.8,
+     "river": 51.0,
+     "wharf": 32.3,
+     "oyster": 43.0
+    },
+    "careful": {
+     "front": 26.3,
+     "marsh": 33.6,
+     "river": 36.7,
+     "wharf": 32.3,
+     "oyster": 9.3
+    },
+    "thorough": {
+     "front": 26.3,
+     "marsh": 14.3,
+     "river": 15.9,
+     "wharf": 32.3,
+     "oyster": 1.2
+    }
+   }
+  },
+  {
+   "id": "R8",
+   "name": "the two low points funded",
+   "graded_as": "Recommendation",
+   "figure": "call_pair",
+   "depends": [
+    "R7"
+   ],
+   "independent": "",
+   "golden": [
+    "Wharf Street at Market Lane",
+    "Front Street at Ferry Lane"
+   ],
+   "passes": {
+    "quick": [
+     "Front Street at Ferry Lane",
+     "River Road at Hensley Landing"
+    ],
+    "careful": [
+     "River Road at Hensley Landing",
+     "Marsh Road at Pellam Creek"
+    ],
+    "thorough": [
+     "Wharf Street at Market Lane",
+     "Front Street at Ferry Lane"
+    ]
+   }
+  },
+  {
+   "id": "R9",
+   "name": "how many of the 36 weather years keep the funded pair on top",
+   "graded_as": "Ask 5",
+   "figure": "pair_hold",
+   "depends": [
+    "R7",
+    "R8"
+   ],
+   "independent": "",
+   "golden": 30,
+   "band": [
+    28,
+    32
+   ],
+   "passes": {
+    "quick": null,
+    "careful": 36,
+    "thorough": 30
+   }
+  }
+ ],
+ "hints": [
+  {
+   "sentence": "River Road's high waters ride on the river's flow, and its campaign sat in a wet late winter",
+   "rescues": [
+    "R6"
+   ]
+  },
+  {
+   "sentence": "Marsh Road's creek rises ever more slowly once the tide tops the marsh",
+   "rescues": [
+    "R5"
+   ]
+  },
+  {
+   "sentence": "the harbor's days cluster within a year, so its range comes from the weather years, not a Poisson count",
+   "rescues": [
+    "R2"
+   ]
+  }
+ ],
+ "routes": [
+  {
+   "name": "golden",
+   "answer": [
+    "Wharf Street at Market Lane",
+    "Front Street at Ferry Lane"
+   ],
+   "golden": true
+  },
+  {
+   "name": "marsh straight line",
+   "answer": [
+    "Marsh Road at Pellam Creek",
+    "Wharf Street at Market Lane"
+   ],
+   "golden": false
+  },
+  {
+   "name": "river one offset",
+   "answer": [
+    "River Road at Hensley Landing",
+    "Wharf Street at Market Lane"
+   ],
+   "golden": false
+  },
+  {
+   "name": "both (careful but hurried)",
+   "answer": [
+    "River Road at Hensley Landing",
+    "Marsh Road at Pellam Creek"
+   ],
+   "golden": false
+  },
+  {
+   "name": "no transfer, drain rim (quick)",
+   "answer": [
+    "Front Street at Ferry Lane",
+    "River Road at Hensley Landing"
+   ],
+   "golden": false
+  }
+ ]
+}

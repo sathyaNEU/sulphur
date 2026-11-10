@@ -18,6 +18,249 @@ Data-native sentence: the harbor gauge holds seventy years of verified high wate
 People: Cheryl Olsen (stormwater utility engineer), Marcus Kidd (capital program manager)
 As-of: 2026-11-10 (data through 2026-10-31)
 
+## Deep reasoning
+
+Task type: climate-weather-extremes (extreme-value and environmental-hazard analysis: tidal high-water exceedance at
+  low points without long records), serving Forecasting & Predictive Modeling
+Domain test: every result is a count of tidal high waters reaching a level, built the way coastal flood analysis builds
+  it (the tide year's astronomical predictions, a planning mean sea level, each past high water's departure from its
+  prediction less its year's mean sea level) and carried to each low point through a simultaneous record of its own;
+  the coastal engineer's moves are the datum work, the residual at high water, the site's high-water transfer and its
+  bend above the marsh platform, and the river's lift on an upriver reach
+Swap: "fund the two of five stores with the most expected stock-out days next year, carried from the warehouse's
+  long record through each store's few weeks of sales" breaks at once: there is no astronomical forecast of next
+  year's drivers, no marsh platform that bends a store's response above a level, no river whose flow lifts one store,
+  and no lane elevation that a high water reaches or does not
+Where the weight sits: R4 to R6, carrying the harbor's high waters to each low point from a few weeks or months of its
+  own record taken in one season; each needs its own model, checked where the decision lives (above the marsh, at the
+  autumn's flows), not where the campaign's bulk sat
+Layer 1: the hourly export carries October 2026 as preliminary (the verified high waters stop at September); five gauge
+  outages in storms; the high and low waters carry NOAA type codes on local standard time; the three logger exports keep
+  the GMT offset set at launch across a change of daylight time; the Pellam Creek logger sits dry at low water and
+  flatlines; the street sensor reads vehicles as one-sample spikes, ponds in heavy rain at any tide and lost two spells
+  to its battery, one through the 2025 king tides; the inventory is in NAVD88 and the gauge in MLLW; the river file has
+  provisional and estimated days; the 311 export spells each address five ways. None of them decides a result: each is
+  cleaned by reflex and the results that price the task sit after the cleaning
+Not one thing: the strongest single piece is Marsh Road's bend, and a run that nails it still owes River Road's flow
+  transfer, Front Street's lane and outage, the harbor's expected days, range and bridge, every low point's count and
+  the pair's stability; the call needs both site transfers right at once (either alone keeps a wrong pair)
+One-fact test: the most useful single sentence a reviewer could give a careful run ("River Road's high waters ride on
+  the river's flow, and its campaign sat in a wet late winter") rescues R6 only, 1 of 9; the marsh sentence rescues R5
+  only; the call and the counts still need the other
+Not semantics: with every field read correctly (the lane, not the rim; local standard time; NAVD88 to MLLW at 3.42 ft;
+  the weather years 1990-91 to 2025-26; the planning sea level) a straight line through Marsh Road's campaign, one
+  offset from River Road's and a Poisson range still file R2, R5, R6, R7, R8 and R9 wrong
+Not rule application: the guidelines file the WHAT (the tide year, a tidal flood day, the lane as the flooding
+  elevation and the sensor where the lane was not surveyed, the expected days over the weather years on the published
+  predictions at the planning sea level, the 90 per cent range as nine weather years in ten, the top two funded); no
+  filed sentence transfers a harbor high water to a low point, builds the residual at high water, splits the change or
+  counts the pair's years
+Estimand: the guidelines sections 3 and 4 and the prompt fix each result's population (the five low points; the harbor
+  gauge), outcome (tidal flood days, a calendar day in local standard time with the water at or above the lane), window
+  (the 2025-26 tide year observed; the 2027-28 tide year expected), unit (days) and comparison (the ranking; the 2025-26
+  count against the 2027-28 expectation)
+No decoy: no memo, draft or filed figure ranks the low points or states a count; the inventory's rim is labelled a rim
+  beside the lane; the 311 log is the city's service-request export with every category it holds
+No replay: no published figure is re-derived; the planning sea level is an input the program adopts; the harbor's
+  2025-26 count is read from the verified high waters as the bridge's start
+Pinned: R1 inside 25.9 to 27.5 across residual alignments (interpolated 27.0, nearest 26.9) and detrending by month
+  (26.4); a day's largest residual on both its high waters fails the 2025-26 replay (24 against the observed 21). R2
+  across percentile estimators. R3's shares across the six orders. R4 by the sensor (the lane to 0.03 ft). R5 across
+  the hinge, quadratic, cubic and upper-half straight line (8.70 to 8.76 ft at Marsh Road); one straight line is refuted
+  by its own residuals: it runs above all 13 high waters where the harbor reached 8.3 ft or more, by 0.18 ft on
+  average, its residuals three times the bending transfer's (0.10 against 0.03 ft). R6 by the power and linear flow forms (sums of
+  squares 1.00 and 1.02; 10 and 11 days); the logarithmic form is refuted (1.93); drift is refuted by the staff checks
+  (0.01 at deployment, 0.02 at retrieval). R7, R8 and R9 across the whole family, the funded pair never moving
+Run forecast: R2 method shortcut (a Poisson range around the mean); R3 unfinished chain (the three changes taken one
+  at a time from 2025-26, adding to 2.2 of the 6.0 days); R5 self-confirming check (one straight line through the
+  campaign, its fit statistics dominated by the tides below the marsh); R6 narrow look (the campaign's single offset,
+  set in a wet late winter, carried to the whole year); R7 to R9 fall with R5 and R6
+Strategy label: Heterogeneity that pooling hides (WORKS IN FORM): each low point responds to the harbor in its own way
+  and the decision weights each response to the tide year's conditions (the king tides above the marsh, the season's
+  flows), never read off a column
+Depth level: 5. Six independent judgments each move a result (Marsh Road's bend, River Road's flow transfer carried to
+  the year's flows, Front Street's lane and outage from the sensor, the residual at high water without the sea level
+  counted twice, the range from the weather years, the bridge's allocation), and the shortcuts land on four different
+  wrong pairs (Marsh Road and Wharf Street; River Road and Wharf Street; River Road and Marsh Road; Front Street and
+  River Road)
+Lesson: a long reference record reaches short-record sites only through each site's own physics checked where the
+  decision lives; the fit that looks best over a campaign's bulk is the wrong carrier when the decision sits above the
+  marsh or in another season's flows, and no build on file carries one reference to several sites by different laws
+
+## Results chain
+
+| ID | Result (checkable) | Area | Pinned by | Band | Hurried analyst | Depends on | Graded as |
+|---|---|---|---|---|---|---|---|
+| R1 | the harbor gauge's expected days at its 8.6 ft minor flood threshold in the 2027-28 tide year: 27.0 | forecasting | guidelines 4 (the weather years, the predictions, the planning sea level 0.70 ft) and the record | 25.9 to 27.5 | method shortcut: the count trend over 1990-91 to 2025-26 files 10.8 | - | Ask 1 |
+| R2 | its 90 per cent range: 22 to 31 days | uncertainty | guidelines 4 (nine weather years in ten) | low 19.4 to 22.5, high 30.5 to 34.0 | method shortcut: a Poisson range around the mean, 19 to 36 | R1 | Ask 2 |
+| R3 | the change from the 2025-26 count (21) to 27.0 split into sea level +5.8, tides -0.7, weather +1.0 days, adding to +6.0 | decomposition-attribution | the record and the six orders of applying the changes | sea level 3.8 to 7.3; tides -3.3 to 2.0; weather -1.0 to 2.6; the total 5.0 to 7.0 | unfinished chain: each change taken from 2025-26 alone (+5.0, -3.0, +0.2), adding to 2.2 | R1 | Ask 3 |
+| R4 | Front Street's 2025-26 tidal flood days: 21 (its lane at 5.19 ft NAVD88; 15 recorded by the sensor, 6 in its outage) | missingness-measurement | guidelines 4 (the lane; the sensor where it was not surveyed) and the sensor | 20 to 22 | dismissed own evidence: the drain rim files 44; the sensor alone misses its outage (15) | independent: the street sensor and the harbor's verified high waters | Component 3 |
+| R5 | Marsh Road's and Oyster Creek Road's 2025-26 days: 17 and 8 (Marsh Road floods at a harbor high water of 8.75 ft) | modeling | each campaign's high waters above the marsh platform (data) | Marsh Road 16 to 20, Oyster Creek 7 to 9 | self-confirming check: one straight line through the campaign (Marsh Road 26 at 8.54 ft, Oyster Creek 13) | independent: each campaign and the harbor's verified high waters | Component 1 |
+| R6 | River Road's 2025-26 days: 10, carried day by day on the Brayle's flows | investigation-loops | the campaign's offset against the river's flow, drift ruled out by the staff checks (data) | 9 to 12 | narrow look: the wet late-winter campaign's single offset carried to the whole year (26) | independent: the campaign, the river's daily flows and the harbor's verified high waters | Component 2 |
+| R7 | the five low points' expected 2027-28 days: Wharf Street 32.3, Front Street 26.3, River Road 15.9, Marsh Road 14.3, Oyster Creek Road 1.2 | forecasting | guidelines 4 and each low point's transfer | Wharf 31.3 to 32.8; Front 25.1 to 26.8; River 14.1 to 17.0; Marsh 13.2 to 18.0; Oyster 0.5 to 1.9 | unfinished chain: the harbor's machinery run right but carried through the straight-line and single-offset transfers (Marsh 33.6, River 36.7, Oyster 9.3) | R1, R4, R5, R6 | Ask 4 |
+| R8 | the two funded: Wharf Street at Market Lane and Front Street at Ferry Lane | synthesis | guidelines 3 (the top two) | exact | unfinished chain: River Road at Hensley Landing and Marsh Road at Pellam Creek | R7 | Recommendation |
+| R9 | the weather years that keep the funded pair on top: 30 of 36 (River Road takes Front Street's place in the other 6) | uncertainty | guidelines 4 (the same weather years) | 28 to 32 | self-confirming check: the hurried pair counted on the hurried transfers holds in 36 | R7, R8 | Ask 5 |
+
+Carry-forward: R4, R5 and R6 are each graded on inputs of their own (a low point's record with the harbor's observed
+2025-26 high waters) and stand whatever the harbor's forecast; R2 and R3 fall only with R1's machinery, which the careful
+pass earns; R7 needs R1 and every low point's transfer together, so a run that gets one site transfer right keeps that
+low point's 2025-26 count and its row of R7 and loses the others'; R8 needs both site transfers (either alone keeps a
+wrong pair); R9 follows R7.
+
+## Hidden factor record
+
+| Factor | Real or constructed | Only in deciding units | Found by | Fix depth | Verdict |
+|---|---|---|---|---|---|
+| a marsh creek's high water rising ever more slowly once the tide tops the marsh platform | constructed (marsh storage simulated at both marsh creeks) | no: Oyster Creek bends the same way and is in no route's funded pair; the inventory's marsh platforms place both bends | modelling: a transfer fitted on each campaign's high waters, a straight line's residuals at the top | modelling: a bending transfer with its break estimated (the client's curved-response example, a legitimate method choice) | keep |
+| River Road's high waters lifted by the river's flow | constructed (setup simulated on the whole upriver reach; the harbor carries a faint lift by month) | no: it runs through the whole campaign and every day of the year | modelling with a second file (the daily flows) and a rival ruled out (logger drift, by the staff checks) | modelling: a flow term carried to each weather year's flows | keep |
+| Front Street's lane standing above its drain rim | constructed (each low point's geometry) | no: every low point's rim sits below its lane in the inventory | measurement: the sensor's water depth against the harbor at each wet tide | estimation from a noisy, gappy record | keep |
+| the tide delayed under a surge, so hourly residuals swing through the tide | constructed (the harbor's whole record) | no | the residual at high water against the residual at every hour | routine for a careful run | keep, earned |
+| the sensor's battery outage through the 2025 king tides | constructed (two outages, one in summer) | no: it drops days of every kind | one look at the record's dates | a fill from the harbor at the lane level | keep, texture with a count |
+
+## Effort test
+
+| Result | Quick pass | Careful but hurried | Thorough |
+|---|---|---|---|
+| R1 the harbor gauge's expected days at its minor flood threshold, 2027-28 | Missed | Right | Right |
+| R2 its 90 per cent range over the weather years | Missed | Missed | Right |
+| R3 the harbor's change from 2025-26 split into sea level, tides and weather | Missed | Partly | Right |
+| R4 Front Street's 2025-26 tidal flood days from its street sensor | Missed | Right | Right |
+| R5 Marsh Road's and Oyster Creek Road's 2025-26 days through their overmarsh transfers | Missed | Missed | Right |
+| R6 River Road's 2025-26 days through its flow-dependent transfer | Missed | Missed | Right |
+| R7 the five low points' expected 2027-28 tidal flood days | Missed | Missed | Right |
+| R8 the two low points funded | Missed | Missed | Right |
+| R9 how many of the 36 weather years keep the funded pair on top | Missed | Missed | Right |
+| Roughly | 0 of 9 | 2.5 of 9 | 9 of 9 |
+
+Measured by: .claude/skills/stumping/effort.py on generator/effort.json (each pass computed end to end by
+  analysis.run on the cut pack: the quick pass the count trend, the drain rim and untransferred harbor; the careful
+  pass the harbor's machinery right, a Poisson range, the one-at-a-time bridge, the sensor's lane, straight-line marsh
+  transfers and one river offset)
+Largest single hint: "River Road's high waters ride on the river's flow, and its campaign sat in a wet late winter";
+  rescues 1 of 9 results
+Pair estimate: 31.5
+
+## Data provenance
+
+Source: generated by task3/generator from a simulated process: the astronomical tide at the harbor (nineteen
+  constituents on the real lunar and solar arguments with nodal factors), the station's mean sea level (a secular rise
+  accelerating after 1995, a slow ocean-dynamic anomaly, a fast monthly one and a faint river lift), the weather's surge
+  (a background, nor'easters from October to April, tropical systems from August to October, the tide delayed under a
+  positive surge), the Brayle's daily flow (seasonal and log-normal with rain events), and each low point's water level
+  carried from the harbor's by its own physics
+Behaves like the real thing: a semidiurnal tide of about 6.8 ft with spring-neap and perigean cycles on the real dates,
+  the 18.6-year nodal cycle showing in the flood counts (more days around 2015, fewer around 2024); relative sea level
+  rising about 6 mm a year by the 2020s with multi-year anomalies like the US Southeast's in the 2010s; tidal flooding at
+  the minor threshold growing from a few days a year in the 1990s to 20 to 30; the seasonal cycle peaking in October;
+  a river high in late winter and low in autumn
+Genuine patterns: (1) the nodal and perigean cycles in the counts; (2) the seasonal sea level cycle and the autumn king
+  tides; (3) the river's late-winter flows and their year-to-year swing; (4) flood days clustered in storms and king-tide
+  runs; (5) the acceleration of sea level rise and its persistent anomalies
+Problems by process: gauge outages in storms (1979, 1989, 2004, 2016, 2022); October 2026 still preliminary; loggers
+  holding their launch-time GMT offset across the end of daylight time; the creek logger out of water at low tide; the
+  street sensor's vehicle reflections, rain ponding and two battery outages; USGS provisional and estimated days; 311
+  addresses spelled several ways
+License: synthetic, CC0
+Breadth: 15 files; five low points and the gauge; 101,000 verified high and low waters over 72 years, 235,000 hourly
+  heights, 219,000 sensor readings, three campaigns, 13,000 days of flow; three files (the 311 log, the sea level
+  scenarios and the rainfall) look relevant and are not needed, so deciding what to read is work
+
+## Template check
+
+Chain signature: forecasting, uncertainty, decomposition-attribution, missingness-measurement, modeling,
+  investigation-loops, forecasting, synthesis, uncertainty
+Question form: which two of five, ranked, with counts, a range, a split and a count of years
+Nearest build: task4 architecture 8 (a fitted model carried to new units through covariates from other registers); here
+  one reference record is carried to five sites by different laws read from each site's own short record, the
+  reference's forecast is built from astronomy, a planning sea level and the residual at high water, and the answer is a
+  ranked list under a cap with its stability
+Abstraction sentence: "carry a long reference record's threshold-exceedance forecast to several short-record units,
+  each through its own unit-specific response law estimated where the decision lives, then rank under a cap" is not
+  writable against task4 (one model, many units, register covariates), task1 (a forecast path built from flows) or the
+  client's design-flood strategy (a frequency curve from neighbours)
+
+## Semantic fork table
+
+| ID | Term or convention | Readings | Golden | Ruled out by |
+|---|---|---|---|---|
+| SF1 | tide year | May to April; calendar year; water year | 1 May to 30 April | guidelines 4 |
+| SF2 | tidal flood day | any reading; a high water; local daylight or standard time | a calendar day in Eastern Standard Time with the water at or above the flooding elevation | guidelines 4 |
+| SF3 | flooding elevation | drain rim; lane; harbor threshold | the lane low point; Front Street's from the sensor | guidelines 4 |
+| SF4 | rain ponding on Front Street | counted; not counted | not counted | guidelines 4 (rain alone does not make a tidal flood day) |
+| SF5 | expected days | the latest years; the whole record; the weather years | the average over the tide years 1990-91 to 2025-26 | guidelines 4 |
+| SF6 | the sea level for the tide year | a fitted trend; the latest year; the planning value | 0.70 ft above the 1983-2001 mean sea level | guidelines 4 |
+| SF7 | the 90 per cent range | Poisson; the weather years' 5th to 95th; a bootstrap | nine of the weather years in ten | guidelines 4; every percentile estimator inside the band |
+| SF8 | the residual's sea level | each high water's month; its tide year | its tide year's mean (the planning value is a year's mean) | same call (26.4 against 27.0, inside the band) |
+| SF9 | aligning a weather year's residuals | interpolated; nearest high water; the day's largest | interpolated | same call for nearest; the day's largest fails the 2025-26 replay (24 against the observed 21) |
+| SF10 | Marsh Road's transfer | one straight line; a hinge; a smooth bend | a hinge with its break estimated | same call for quadratic, cubic and the upper half; the straight line above all 13 high waters at harbor 8.3 ft or more |
+| SF11 | River Road's flow form | linear; power; logarithmic | power (best fit) | same call for linear (sum of squares 1.02 against 1.00); logarithmic refuted (1.93) |
+| SF12 | logger drift at River Road | drift; none | none | the staff checks at deployment and retrieval (0.01 and 0.02 ft) |
+| SF13 | logger clocks | local daylight time; the launch offset | the launch offset in each header | the header; pairing by the nearest high water within three hours |
+| SF14 | NAVD88 to MLLW | 3.42 ft; a regional conversion | 3.42 ft | the datums page |
+| SF15 | the bridge's allocation | one order; one at a time; every order averaged | every order averaged, the orders' range reported | same call within the band; one at a time does not add up |
+| SF16 | the harbor's 2025-26 count | the hourly series; the verified high waters | the verified high waters (21) | same call (the hourly maxima give 21) |
+| SF17 | the river's flows in the forecast | the latest year; the climate; each weather year's own | each weather year's own flows beside its weather | guidelines 4 (weather and river flows of the same years) |
+| SF18 | the pair count's years | the weather years; the record | the same 36 weather years | guidelines 4 and the prompt |
+| SF19 | the October 2026 preliminary data | used; not | not needed (the 2025-26 tide year and the weather years end in April 2026) | same call |
+| SF20 | a tie in the ranking | - | none (Front Street 26.3 against River Road 15.9) | margins asserted |
+
+## Closure table
+
+| Axis | Closure |
+|---|---|
+| 1 Population | the five low points in guidelines 2; the harbor gauge (8673718) |
+| 2 Unit of account | the low point; a tidal flood day |
+| 3 Attribution window | the tide year (SF1) |
+| 4 As-of dating | data through October 2026; the verified high waters through September |
+| 5 Version basis | verified over preliminary (SF19) |
+| 6 Denominator | none (counts) |
+| 7 Weighting | each weather year equally (SF5) |
+| 8 Window length | the 36 weather years 1990-91 to 2025-26 |
+| 9 Boundary inclusivity | at or above the flooding elevation (SF2) |
+| 10 Rounding path | expected days to one decimal, counts whole, levels to 0.01 ft (the prompt) |
+| 11 Tie-break | none needed (SF20) |
+| 12 Maturity and censoring | 2025-26 closed; 2027-28 forward |
+| 13 Order of operations | datums, residuals, transfers, the weather years, rank |
+| 14 Row order | export order |
+| 15 Duplicate resolution | none in the files used |
+| 16 Identity normalisation | low points by LP ID; 311 addresses not used |
+| 17 Netting against gross | none |
+| 18 Dimensional units | feet; NAVD88 to MLLW at 3.42 ft (SF14); inches of water on the lane to feet |
+| 19 Code and status semantics | high and low water types; provisional and estimated flows read |
+| 20 Integerisation | counts whole; expectations averaged |
+| 21 Clause scope | guidelines 4 for every low point and the gauge |
+| 22 Forward window contents | the 2027-28 predicted high waters, the planning sea level and each weather year's residuals and flows |
+
+## Literal reader
+
+Guidelines 3 ranks the low points on expected tidal flood days and funds the top two: executed on the golden counts it
+funds Wharf Street and Front Street. Guidelines 4 defines the flood day at the lane and, for Front Street, as the sensor
+records water on the lane: executed, it gives 5.19 ft NAVD88 and 21 days. Guidelines 4 fixes the weather years, the
+predictions and the planning sea level: executed with the residual at high water, the harbor expects 27.0 days. No filed
+sentence says how a harbor high water reaches Marsh Road or River Road; the campaigns do.
+
+## Prompt contract
+
+A voice rewrite keeps the question (which two of the five low points get the FY2028 valves), the ranking on expected
+tidal flood days in the May 2027 to April 2028 tide year, the count of weather years keeping the same two on top, each
+low point's tidal flood days in the May 2025 to April 2026 tide year, the harbor gauge's expected days at its minor flood
+threshold with a 90 per cent range, the split of its change into sea level, tides and weather, the deliverables by type
+and the rounding. It never names a file, a method (a transfer, a hinge, a flow term, a residual, a Poisson range), a
+low point's physics (the marsh, the river's lift, the sensor's outage) or who is asking.
+
+## Leak review
+
+leak.py --asof 2026-11-10 on the cut pack, REVIEW lines answered (each harmless):
+- the datums page and the USGS RDB file are text files: each is the agency's own export, neither describes the pack;
+- the guidelines carry 8 of the call's 10 distinctive words and 9 candidate names: they list all five low points in
+  section 2 and rank none; six stump terms (record, sensor, carried, guidelines, planning, elevation) are the program's
+  own vocabulary, and the one sentence on the sensor defines Front Street's flooding elevation (the WHAT), not a step;
+- the 311 export and the inventory name the low points beside numbers: addresses, request numbers and elevations, no
+  ranking on expected days;
+- device_id in the street sensor export is the vendor's own column;
+- the predictions run past the as-of date because tide predictions are published ahead (the file's purpose);
+- the prompt's shell quota is a batch warning on the deliverable mix (a spreadsheet and a memo), not a leak.
+
 ## Tried and rejected
 
 

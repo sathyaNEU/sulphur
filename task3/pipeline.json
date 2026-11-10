@@ -1,21 +1,32 @@
 {
  "task": "task3",
- "status": "DESIGN",
+ "status": "PAUSED",
  "domain": "physical-environmental-sciences",
  "subdomain": "climate-weather-extremes",
  "objective": "forecasting",
- "stage": 2,
- "stage_name": "design",
+ "stage": 4,
+ "stage_name": "check",
  "updated": "2026-11-10",
- "call": "",
- "stump": "",
+ "call": "Fund the FY2028 tide valves at Wharf Street at Market Lane (32.3 expected tidal flood days in 2027-28) and Front Street at Ferry Lane (26.3); River Road 15.9, Marsh Road 14.3, Oyster Creek Road 1.2; the pair holds in 30 of 36 weather years",
+ "stump": "Straight-line campaign transfers fund River Road (36.7) and Marsh Road (33.6); the drain rim and the untransferred harbor fund Front Street and River Road",
  "architecture": 7,
  "loops": 0,
- "precut": {},
- "leak": {},
+ "precut": {
+  "exit": 0,
+  "date": "2026-11-10",
+  "checks": "86 checks, 0 FAIL, 4 WARN"
+ },
+ "leak": {
+  "leak_py": "REVIEW (agency text exports, the round guidelines listing the five low points, the sensor's device_id, forward predictions; each answered in the design note)",
+  "reader": "round 1 (target.zip 5cc1927b): no sentence names a step, no file ranks the low points; two realism defects fixed (River Road campaign dates in the inventory, 30-minute logger steps)"
+ },
  "duplicate_check": {},
- "judge": {},
- "paper_pair": null,
+ "judge": {
+  "verdict": "pending",
+  "round": 1,
+  "bundle": "target.zip 5cc1927b843a50224a47f84691d032aa (before the reader's fixes)"
+ },
+ "paper_pair": 31.5,
  "runs": {
   "run1": null,
   "run2": null,
@@ -120,7 +131,7 @@
    "commit": ""
   }
  ],
- "resume": "stage 2: design note results chain, effort test, forks; generator from the scratch prototype",
+ "resume": "stage 4: the determinism judge's isolated thread (round 1, on target.zip 5cc1927b) is running; when its verdict.md returns, hand it to the judge agent for the Gate G and H reconciliation, fix every finding in the generator in one pass, rebuild (python3 task3/generator/build.py), re-run gates.py, and judge once more on the final cut before READY",
  "approved": null,
  "submitted": null,
  "portal": {
@@ -199,16 +210,7 @@
   "date": "2026-11-08",
   "note": "moved from Project Mark unstumped on the Mark portal; carried on here for the Sulfur bar"
  },
- "gates": {
-  "checks": "99 of 99",
-  "verify": "PASS",
-  "byte_identical": "22 files",
-  "figures_check": "110 of 110",
-  "containers": "PASS 0 FAIL",
-  "precut": "75 checks, 0 FAIL",
-  "target_zip": "d36f20530360d72d",
-  "golden_zip": "0a32091e50d5e3f5"
- },
+ "gates": "gates.py 0 FAIL, 4 WARN; checks 98 PASS; verify 7 PASS; two builds byte-identical over 21 files",
  "revision": 2,
  "paper_note": "a run taking the foothill gauge's median concurrent ratio scores about 84 (pair with a shallow run 52.1)",
  "draw": {
@@ -216,5 +218,9 @@
   "weight": "hard-to-measure",
   "depth_level": 5,
   "world": "Port Tolliver, Georgia: five tidal low points carried from the harbor tide gauge"
+ },
+ "final_cut": {
+  "target_zip_md5": "1c1fb1fe4292178e3d163bc056131b55",
+  "golden_zip_md5": "7840bc7b941344d8819c93f403f222de"
  }
 }

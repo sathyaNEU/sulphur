@@ -1,423 +1,429 @@
 {
-  "task": "task3",
-  "project": "sulfur",
-  "architecture": 7,
-  "drawn": "2026-11-10",
-  "slot_note": "re-root after architecture 6 was landed on the platform (both runs on every graded figure) and returned in kind by the 2026-11-09 review (one insight carried the task): one architecture per world, so a new world (a Georgia port's tidal low points), dataset (a harbor tide gauge's verified record, published predictions, short logger campaigns, a street sensor and a river discharge record) and shell (which two of five, ranked under a cap, with per-site counts and a harbor bridge)",
-  "domain": "physical-environmental-sciences",
-  "subdomain": "climate-weather-extremes",
-  "client_domain": "physical-environmental-sciences",
-  "niche": "a city stormwater division choosing which two of five tidal low points get inline check valves before the May 2027 to April 2028 tide year, ranked on each low point's expected tidal flood days, carried from the harbor tide gauge to each low point through its own short water-level record (Sulfur task type: extreme-value and environmental-hazard analysis; tidal high-water exceedance)",
-  "objective": "forecasting",
-  "shape": "other",
-  "decision_type": "ranked_slate_under_cap",
-  "answer_unit": "set_of_items",
-  "answer": "",
-  "answer_source": "task3/submission.md, Final Recommendation (generator/figures.json call_pair)",
-  "gap": [
+ "task": "task3",
+ "project": "sulfur",
+ "architecture": 7,
+ "drawn": "2026-11-10",
+ "slot_note": "re-root after architecture 6 was landed on the platform (both runs on every graded figure) and returned in kind by the 2026-11-09 review (one insight carried the task): one architecture per world, so a new world (a Georgia port's tidal low points), dataset (a harbor tide gauge's verified record, published predictions, short logger campaigns, a street sensor and a river discharge record) and shell (which two of five, ranked under a cap, with per-site counts and a harbor bridge)",
+ "domain": "physical-environmental-sciences",
+ "subdomain": "climate-weather-extremes",
+ "client_domain": "physical-environmental-sciences",
+ "niche": "a city stormwater division choosing which two of five tidal low points get inline check valves before the May 2027 to April 2028 tide year, ranked on each low point's expected tidal flood days, carried from the harbor tide gauge to each low point through its own short water-level record (Sulfur task type: extreme-value and environmental-hazard analysis; tidal high-water exceedance)",
+ "objective": "forecasting",
+ "shape": "other",
+ "decision_type": "ranked_slate_under_cap",
+ "answer_unit": "set_of_items",
+ "answer": "Fund the FY2028 tide valves at Wharf Street at Market Lane (35.0 expected tidal flood days in 2027-28) and Front Street at Ferry Lane (26.3); River Road 18.5, Marsh Road 16.8, Oyster Creek Road 1.0; the pair holds in 29 of 36 weather years; harbor 27.0 days (22 to 31), +6.0 from 2025-26's 21 (sea level +5.8, tides -0.7, weather +1.0)",
+ "answer_source": "task3/submission.md, Final Recommendation (generator/figures.json call_pair)",
+ "gap": [
+  "population",
+  "time"
+ ],
+ "pattern": [
+  "none"
+ ],
+ "generators": [
+  "G16",
+  "G14",
+  "G6"
+ ],
+ "gate_g": "method_or_model_selection",
+ "calibration_form": "none",
+ "stump_strategy": "other",
+ "decisive_rule_filed": false,
+ "official_decoy": false,
+ "validated_decoy": false,
+ "context_artifact": "published_series",
+ "stump_class": "analytical",
+ "analyst_test": "The careful but hurried pass runs the harbor's expected days correctly from the predictions, the planning sea level and the record's surges at high water, then carries them to Marsh Road with one straight line fitted to its campaign and to River Road with one offset from its wet-spring campaign, and funds Marsh Road and River Road over Wharf Street and Front Street.",
+ "domain_test": "The deciding quantities are tidal high-water exceedances at sites without long records, worked the way coastal flood analysis works them (astronomical predictions, mean sea level and non-tidal surge at high water, carried to each site through simultaneous records); swap the nouns and there is no tide, marsh platform, river setup or high water to exceed.",
+ "layer2_family": "estimation_fit",
+ "layer2_pattern": "own:tidal-high-water-exceedance-carried-to-sites-through-short-records",
+ "layer1": [
+  "a tide gauge's verified hourly heights with outage gaps and a sensor change, in local standard time",
+  "high and low waters with NOAA-style type codes, the predictions on the 1983-2001 epoch with the seasonal constituents",
+  "logger exports in NAVD88 with a re-installed sensor step, a vendor header and daylight-saving local time",
+  "a street sensor's 6-minute stream with vehicle spikes, rain ponding and a battery outage",
+  "an inventory in NAVD88 beside a gauge in MLLW, a river discharge file with provisional and estimated codes"
+ ],
+ "stakeholder_role": "the city's stormwater utility, ranking the FY2028 tide valve round for council",
+ "role_family": "programme_officer",
+ "scoring_unit": "other",
+ "spine": {
+  "file": "harbor hourly verified and predicted heights",
+  "rows": 0,
+  "entity": "one hourly height at the harbor gauge",
+  "grain": "hourly",
+  "source": "synthetic (seeded astronomical tide, sea level and surge simulation)"
+ },
+ "forum": "council_or_assembly",
+ "forcing_event": "purchase_order_or_contract",
+ "org_family": "local_government",
+ "world": {
+  "geography": "United States, Georgia coast (Port Tolliver, a fictional city on the fictional Brayle River estuary)",
+  "currency": "USD",
+  "org_type": "a city stormwater utility (a city department)",
+  "invented_names": [
+   "Port Tolliver",
+   "Brayle River",
+   "Pellam Creek",
+   "Oyster Creek Road",
+   "Hensley Landing",
+   "Ferry Lane",
+   "Wharf Street"
+  ],
+  "people": [
+   "Cheryl Olsen",
+   "Marcus Kidd"
+  ]
+ },
+ "deliverables": [
+  "fy2028_tide_valve_ranking.xlsx",
+  "fy2028_tide_valve_memo.pdf"
+ ],
+ "opening_move": "question-first",
+ "question_form": "which",
+ "driver": "A forecast of threshold exceedances at a long-recorded reference is carried to several unrecorded units through each unit's own short record, where each unit's response to the reference departs from a straight copy in its own way (bending above a level, riding on a second driver whose short record sat at one extreme, or known only through a noisy, gappy detector), so each unit's count needs its own model before the units can be ranked.",
+ "driver_concrete": "Port Tolliver funds tide valves at the two of five low points with the most expected tidal flood days in the 2027-28 tide year; the harbor gauge's published predictions, the planning sea level and the record's weather give the harbor's exceedances, but Marsh Road's creek rises ever more slowly once the tide tops the marsh, River Road's high waters ride on the river's flow and its only logger campaign sat in a wet spring, and Front Street's flooding level and missing winter days come only from a street sensor.",
+ "stump": "The careful but hurried pass fits Marsh Road's campaign with one straight line and River Road's with one offset, and funds Marsh Road and River Road (or one of them beside Wharf Street); only each low point's own model funds Wharf Street and Front Street.",
+ "deep_chain": "(1) the river's floods drain only the area below each storm's snow line, placed storm by storm from the valley and SNOTEL temperatures with the storm lapse rate; (2) the creek's basin lies below that line in nearly every storm, so its rain-contributing area per storm is a different function of the snow line from the river's; (3) the transfer factor varies by storm and is smallest for the warm storms behind the river's largest floods, so every storm is transferred at its own snow line, never at a typical one; (4) the frequency curve of the creek's transferred annual series gives its 1 per cent flood and the span",
+ "judgment": "the response model linking each storm's flood to its rain-contributing volume (rain over the area below the snow line, with the orographic gradient the stations show), fitted on the river's events against the drainage-area model, and the snow line itself (the storm lapse rate from valley and SNOTEL pairs, the rain-snow temperature from the SNOTEL record's rain and snow days)",
+ "one_fact_test": "the most useful single sentence (River Road's high waters ride on the river's flow, and its campaign sat in a wet late winter) rescues R6 only, 1 of 9; the marsh sentence R5 only; neither moves the funded pair alone",
+ "strategy_label": "UNTESTED",
+ "mechanism_source": "design_note",
+ "differentiation": {},
+ "lineage": [
+  {
+   "architecture": "v6",
+   "drawn": "2026-11-08",
+   "domain": "physical-environmental-sciences",
+   "subdomain": "hydrology-flood-frequency",
+   "objective": "forecasting",
+   "shape": "04",
+   "decision_type": "pick_one_of_n",
+   "answer_unit": "named_option",
+   "answer": "build the 185 ft span; the creek's 1 per cent flood about 25,000 cfs (50 per cent about 10,000), the spans' rated flows (20,500, 29,000, 40,000 cfs) exceeded once in 10 to 100, once in 100 to 1,000 and less often than once in 1,000 years, the creek's two largest floods in water years 2008 and 2011",
+   "gap": [
     "population",
-    "time"
-  ],
-  "pattern": [
+    "objective"
+   ],
+   "pattern": [
     "none"
-  ],
-  "generators": [
-    "G16",
+   ],
+   "generators": [
+    "G6",
     "G14",
-    "G6"
-  ],
-  "gate_g": "method_or_model_selection",
-  "calibration_form": "none",
-  "stump_strategy": "other",
-  "decisive_rule_filed": false,
-  "official_decoy": false,
-  "validated_decoy": false,
-  "context_artifact": "published_series",
-  "stump_class": "analytical",
-  "analyst_test": "The careful but hurried pass runs the harbor's expected days correctly from the predictions, the planning sea level and the record's surges at high water, then carries them to Marsh Road with one straight line fitted to its campaign and to River Road with one offset from its wet-spring campaign, and funds Marsh Road and River Road over Wharf Street and Front Street.",
-  "domain_test": "The deciding quantities are tidal high-water exceedances at sites without long records, worked the way coastal flood analysis works them (astronomical predictions, mean sea level and non-tidal surge at high water, carried to each site through simultaneous records); swap the nouns and there is no tide, marsh platform, river setup or high water to exceed.",
-  "layer2_family": "estimation_fit",
-  "layer2_pattern": "own:tidal-high-water-exceedance-carried-to-sites-through-short-records",
-  "layer1": [
-    "a tide gauge's verified hourly heights with outage gaps and a sensor change, in local standard time",
-    "high and low waters with NOAA-style type codes, the predictions on the 1983-2001 epoch with the seasonal constituents",
-    "logger exports in NAVD88 with a re-installed sensor step, a vendor header and daylight-saving local time",
-    "a street sensor's 6-minute stream with vehicle spikes, rain ponding and a battery outage",
-    "an inventory in NAVD88 beside a gauge in MLLW, a river discharge file with provisional and estimated codes"
-  ],
-  "stakeholder_role": "the city's stormwater utility, ranking the FY2028 tide valve round for council",
-  "role_family": "capacity_planner",
-  "scoring_unit": "other",
-  "spine": {
-    "file": "harbor hourly verified and predicted heights",
-    "rows": 0,
-    "entity": "one hourly height at the harbor gauge",
-    "grain": "hourly",
-    "source": "synthetic (seeded astronomical tide, sea level and surge simulation)"
-  },
-  "forum": "council_or_assembly",
-  "forcing_event": "budget_or_appropriation",
-  "org_family": "utility_or_infrastructure",
-  "world": {
-    "geography": "United States, Georgia coast (Port Tolliver, a fictional city on the fictional Brayle River estuary)",
+    "G1"
+   ],
+   "gate_g": "method_or_model_selection",
+   "stump_strategy": "composition_mix",
+   "driver": "The decisive quantity is a rare-event level at an unmeasured unit transferred from a measured neighbour whose events each drew on only the part of it below a threshold that moved from event to event, while the unmeasured unit lies almost wholly below that threshold: transferring by size undersizes it, a ratio read at a typical event oversizes it because the largest events drew on nearly all of the neighbour, and only transferring every event at its own threshold lands the level.",
+   "driver_concrete": "The Coyner River's floods drain rain only below each storm's snow line, a median half of its high basin and three fifths in its largest floods, while Durrow Creek's foothill basin drains whole in almost every storm; carried by drainage area the river's record files 18,700 cfs and the 140 ft span, carried flood by flood at the ratio of the two basins' storm rain below the snow line (placed by the stations' storm lapse rate and the snow pillows' rain-snow temperature, with the orographic rise) it files 27,200 cfs and the 185 ft span, and the same carry with the textbook lapse rate or without the orographic rise files the 240 ft span.",
+   "stump": "A strong analyst carries the Coyner River's Bulletin 17C curve to Durrow Creek by drainage area, back-tests it between the region's high gauges and builds the 140 ft span on about 18,700 cfs; only carrying every flood at the ratio of the two basins' storm rain below its snow line, placed from the stations, files about 27,200 cfs and the 185 ft span, and the textbook lapse rate files the 240 ft span.",
+   "world": {
+    "geography": "United States, Washington, western Cascades (Pelton County, a fictional county; Tessel, a fictional town)",
     "currency": "USD",
-    "org_type": "a city stormwater utility",
+    "org_type": "a county department of public works and the state's local-assistance structures office",
     "invented_names": [
-      "Port Tolliver",
-      "Brayle River",
-      "Pellam Creek",
-      "Oyster Creek Road",
-      "Hensley Landing",
-      "Ferry Lane",
-      "Wharf Street"
+     "Pelton County",
+     "Tessel",
+     "Coyner River",
+     "Durrow Creek",
+     "Ransom Bar Road",
+     "Durrow Ridge",
+     "Hatchet Meadow",
+     "Corbel Ridge",
+     "Tarrow River",
+     "Gorham Creek",
+     "Quillen River",
+     "Pinnell Creek",
+     "Hess Hydraulic Engineering",
+     "Tessel Field Airport"
     ],
     "people": [
-      "Cheryl Olsen",
-      "Marcus Kidd"
+     "Amy Rasmussen",
+     "Frederick Hess"
     ]
+   },
+   "deliverables": [
+    "durrow_creek_bridge_hydrology_report.pdf",
+    "durrow_creek_estimated_annual_peaks.csv"
+   ],
+   "question_form": "which",
+   "fate": "landed on the platform (2026-11-09): both runs filed the 185 ft span, 10,000 and 25,000 cfs, all three exceedance bands, water years 2008 and 2011 and the 75-row annual-peaks file; each calibrated the snow-line carry on the Selby Creek gauge, validated it leave-one-out and bootstrapped it unasked; one insight carried every graded figure (single-deep-step design), so the world is spent",
+   "shell": {
+    "question form": "which",
+    "second-sentence opener": "durrow",
+    "rounding opener": "flows",
+    "deliverable set": "csv+pdf",
+    "deliverables": "pdf+csv"
+   }
   },
-  "deliverables": [
-    "fy2028_tide_valve_ranking.xlsx",
-    "fy2028_tide_valve_memo.pdf"
-  ],
-  "opening_move": "question-first",
-  "question_form": "which",
-  "driver": "A forecast of threshold exceedances at a long-recorded reference is carried to several unrecorded units through each unit's own short record, where each unit's response to the reference departs from a straight copy in its own way (bending above a level, riding on a second driver whose short record sat at one extreme, or known only through a noisy, gappy detector), so each unit's count needs its own model before the units can be ranked.",
-  "driver_concrete": "Port Tolliver funds tide valves at the two of five low points with the most expected tidal flood days in the 2027-28 tide year; the harbor gauge's published predictions, the planning sea level and the record's weather give the harbor's exceedances, but Marsh Road's creek rises ever more slowly once the tide tops the marsh, River Road's high waters ride on the river's flow and its only logger campaign sat in a wet spring, and Front Street's flooding level and missing winter days come only from a street sensor.",
-  "stump": "The careful but hurried pass fits Marsh Road's campaign with one straight line and River Road's with one offset, and funds Marsh Road and River Road (or one of them beside Wharf Street); only each low point's own model funds Wharf Street and Front Street.",
-  "deep_chain": "(1) the river's floods drain only the area below each storm's snow line, placed storm by storm from the valley and SNOTEL temperatures with the storm lapse rate; (2) the creek's basin lies below that line in nearly every storm, so its rain-contributing area per storm is a different function of the snow line from the river's; (3) the transfer factor varies by storm and is smallest for the warm storms behind the river's largest floods, so every storm is transferred at its own snow line, never at a typical one; (4) the frequency curve of the creek's transferred annual series gives its 1 per cent flood and the span",
-  "judgment": "the response model linking each storm's flood to its rain-contributing volume (rain over the area below the snow line, with the orographic gradient the stations show), fitted on the river's events against the drainage-area model, and the snow line itself (the storm lapse rate from valley and SNOTEL pairs, the rain-snow temperature from the SNOTEL record's rain and snow days)",
-  "one_fact_test": "the most useful single sentence (River Road's high waters ride on the river's flow) rescues R6 and River Road's row of R7 in the careful pass, 1 to 2 of 8; the Marsh Road sentence the same; neither fixes the funded pair alone",
-  "strategy_label": "UNTESTED",
-  "mechanism_source": "design_note",
-  "differentiation": {},
-  "lineage": [
-    {
-      "architecture": "v6",
-      "drawn": "2026-11-08",
-      "domain": "physical-environmental-sciences",
-      "subdomain": "hydrology-flood-frequency",
-      "objective": "forecasting",
-      "shape": "04",
-      "decision_type": "pick_one_of_n",
-      "answer_unit": "named_option",
-      "answer": "build the 185 ft span; the creek's 1 per cent flood about 25,000 cfs (50 per cent about 10,000), the spans' rated flows (20,500, 29,000, 40,000 cfs) exceeded once in 10 to 100, once in 100 to 1,000 and less often than once in 1,000 years, the creek's two largest floods in water years 2008 and 2011",
-      "gap": [
-        "population",
-        "objective"
-      ],
-      "pattern": [
-        "none"
-      ],
-      "generators": [
-        "G6",
-        "G14",
-        "G1"
-      ],
-      "gate_g": "method_or_model_selection",
-      "stump_strategy": "composition_mix",
-      "driver": "The decisive quantity is a rare-event level at an unmeasured unit transferred from a measured neighbour whose events each drew on only the part of it below a threshold that moved from event to event, while the unmeasured unit lies almost wholly below that threshold: transferring by size undersizes it, a ratio read at a typical event oversizes it because the largest events drew on nearly all of the neighbour, and only transferring every event at its own threshold lands the level.",
-      "driver_concrete": "The Coyner River's floods drain rain only below each storm's snow line, a median half of its high basin and three fifths in its largest floods, while Durrow Creek's foothill basin drains whole in almost every storm; carried by drainage area the river's record files 18,700 cfs and the 140 ft span, carried flood by flood at the ratio of the two basins' storm rain below the snow line (placed by the stations' storm lapse rate and the snow pillows' rain-snow temperature, with the orographic rise) it files 27,200 cfs and the 185 ft span, and the same carry with the textbook lapse rate or without the orographic rise files the 240 ft span.",
-      "stump": "A strong analyst carries the Coyner River's Bulletin 17C curve to Durrow Creek by drainage area, back-tests it between the region's high gauges and builds the 140 ft span on about 18,700 cfs; only carrying every flood at the ratio of the two basins' storm rain below its snow line, placed from the stations, files about 27,200 cfs and the 185 ft span, and the textbook lapse rate files the 240 ft span.",
-      "world": {
-        "geography": "United States, Washington, western Cascades (Pelton County, a fictional county; Tessel, a fictional town)",
-        "currency": "USD",
-        "org_type": "a county department of public works and the state's local-assistance structures office",
-        "invented_names": [
-          "Pelton County",
-          "Tessel",
-          "Coyner River",
-          "Durrow Creek",
-          "Ransom Bar Road",
-          "Durrow Ridge",
-          "Hatchet Meadow",
-          "Corbel Ridge",
-          "Tarrow River",
-          "Gorham Creek",
-          "Quillen River",
-          "Pinnell Creek",
-          "Hess Hydraulic Engineering",
-          "Tessel Field Airport"
-        ],
-        "people": [
-          "Amy Rasmussen",
-          "Frederick Hess"
-        ]
-      },
-      "deliverables": [
-        "durrow_creek_bridge_hydrology_report.pdf",
-        "durrow_creek_estimated_annual_peaks.csv"
-      ],
-      "question_form": "which",
-      "fate": "landed on the platform (2026-11-09): both runs filed the 185 ft span, 10,000 and 25,000 cfs, all three exceedance bands, water years 2008 and 2011 and the 75-row annual-peaks file; each calibrated the snow-line carry on the Selby Creek gauge, validated it leave-one-out and bootstrapped it unasked; one insight carried every graded figure (single-deep-step design), so the world is spent",
-      "shell": {
-        "question form": "which",
-        "second-sentence opener": "durrow",
-        "rounding opener": "flows",
-        "deliverable set": "csv+pdf",
-        "deliverables": "pdf+csv"
-      }
-    },
-    {
-      "domain": "urban-regional-science",
-      "subdomain": "municipal-service-demand-resource-allocation",
-      "objective": "forecasting",
-      "shape": "single-figure",
-      "decision_type": "quantity_figure",
-      "answer_unit": "count",
-      "gap": [
-        "population",
-        "time"
-      ],
-      "pattern": [
-        "none"
-      ],
-      "generators": [
-        "G14",
-        "G6",
-        "G13"
-      ],
-      "gate_g": "forecasting",
-      "driver": "The extra input an upgraded service level puts into a unit is the part of the unit the old level left untreated, so the average gain measured on units upgraded earlier, chosen because the old level already treated much of them, understates the gain for units the old level barely reached, while their upgraded level less the new units' present input overstates it; only the gain conditioned on how much of each unit the old level already treated, read from each unit's own record under it, carries across to the new units.",
-      "stump_strategy": "composition_mix",
-      "forum": "council_or_assembly",
-      "forcing_event": "purchase_order_or_contract",
-      "org_family": "local_government",
-      "role_family": "operations_director",
-      "drawn": "2026-10-18",
-      "stump": "A competent solver takes the Priority 1 collectors' salt per lane-km per severity point less the 424 lane-km's own Priority 2 salt and files 2,600 t at the planning severity, or takes the before-and-after gain of the collectors moved to Priority 1 since 2022 and files 1,500 to 1,600 t; the step that lands it there is carrying an average across streets whose Priority 2 coverage differs, when the gain is the length Priority 2 left untreated and the earlier moves were mostly hill, school and inner-suburb streets Priority 2 had already salted along much of their length, so only the gain conditioned on each street's own Priority 2 salt files 2,200 t.",
-      "layer2_family": "estimation_fit",
-      "layer2_pattern": "own:service-upgrade-gain-conditioned-on-prior-partial-coverage",
-      "driver_concrete": "Quellbrook's Priority 2 trucks salt a collector only at its intersections, hills and curves, so a collector's gain on moving to Priority 1 is mostly the stretch between them at the Priority 1 rate; the collectors moved from 2022 to 2025 were mostly hill, school and hospital-access streets whose Priority 2 salt already covered much of their length, while the redesign's 424 lane-km are long flat outer-suburb grid collectors whose Priority 2 trucks salted about a sixth of them, so the moved streets' average gain understates theirs and the Priority 1 collectors' rate less the new streets' own Priority 2 salt overstates it; only the gain read off each moved street's own Priority 2 salt, at the new streets' Priority 2 salt, carries across.",
-      "architecture": "v1 (loops 2)",
-      "fate": "landed on the portal (2026-11-07): one response filed the golden 2,200 t by regressing each earlier move's gain on its own Priority 2 salt and reading it at the new streets' (100 per cent), the other filed the default 2,600 t and still kept 70 per cent on the asks; conditioning a carried gain on a covariate each unit's history prints is the strong solver's reflex, so the world is spent"
-    },
-    {
-      "architecture": "v2",
-      "drawn": "2026-11-07",
-      "fate": "spent 2026-11-08 on the platform: both runs bounded the tank's dewatering by the Southside plant's hourly headroom and landed Alternative C and every ask (REDESIGN)",
-      "domain": "physical-environmental-sciences",
-      "subdomain": "hydrology-flood-frequency",
-      "objective": "forecasting",
-      "shape": "08",
-      "gap": [
-        "time"
-      ],
-      "pattern": [
-        "none"
-      ],
-      "generators": [
-        "G7",
-        "G3"
-      ],
-      "gate_g": "binding_constraint",
-      "stump_strategy": "binding_constraint",
-      "driver": "A storage buffer that captures a discharge until it is full empties only through a receiving channel whose spare capacity vanishes for one to several days after each wet event, so in a run of events the buffer meets the next one still partly full; counting each event against an empty buffer, or a buffer emptied at its outlet's rated pace, understates how often it spills, and only replaying the record with the outlet bounded by the receiving channel's spare capacity, read from that channel's own record, prices the size the limit needs.",
-      "driver_concrete": "Clay Street's tank is pumped out into the Southside interceptor at the plant headworks, and the Southside plant, its sewershed full of groundwater and inflow, takes its 140 MGD hydraulic limit for one to four days after most storms from March to June; the Northside tank, whose plant has room within hours, empties at its pumps' rating and its overflows replay exactly that way, but Clay Street's pumps can only send what Southside has room for, so in a wet spell the tank meets the next storm still full and the 26 MG alternative that clears four events at its pumps' rating leaves 6.8 a year; only the 38 MG tank, at 2.9, meets the decree.",
-      "stump": "A competent solver replays Outfall 014's metered overflows through each tank pumped out at its station's rated dewatering flow (the continuous simulation the decree evaluates by, which reproduces the Northside tank's overflows since 2020) and selects Alternative B, the 26 MG tank, at 2.8 events a year; the step that lands it there is taking the pumps' rating as the pace the tank empties, when it empties into the Southside interceptor at the headworks of a plant that sits at its 140 MGD limit for days after wet-season storms, so only a replay bounded by Southside's own headroom hour by hour shows the 20 MG tank at 6.8 events and selects Alternative C, the 38 MG tank, at 2.9.",
-      "answer": "Select Alternative C, the 38 MG tank: it leaves Outfall 014 2.9 untreated overflow events a year, where the 26 MG Alternative B leaves 6.8.",
-      "shell": {
-        "question form": "how-much",
-        "second-sentence opener": "alongside",
-        "rounding opener": "the",
-        "deliverable set": "docx+xlsx"
-      }
-    },
-    {
-      "architecture": "v3",
-      "drawn": "2026-11-08",
-      "domain": "physical-environmental-sciences",
-      "subdomain": "hydrology-flood-frequency",
-      "objective": "forecasting",
-      "shape": "other",
-      "gap": [
-        "population",
-        "time"
-      ],
-      "pattern": [
-        "none"
-      ],
-      "generators": [
-        "G13",
-        "G16"
-      ],
-      "gate_g": "method_or_model_selection",
-      "stump_strategy": "forecast_method_backtest",
-      "driver": "The decisive quantity is a long-horizon response to a sustained load, when a short trial's response carries two opposing far-field effects that cancel inside its window and part only over years: the trial's own model fits it closely and overstates the long response, so the far field must be calibrated on the record a nearby load has already left, read against a natural baseline from references beyond that load's reach, because the nearest reference sits inside it and a fitted trend absorbs the response.",
-      "driver_concrete": "Each requested rate's greatest monthly drawdown at OW-S in 2046 from a bounded leaky aquifer whose leakage factor is calibrated on the drawdown the Mill Street wells caused at MS-MW and OW-S from 2009 to 2026, each well's natural level carried from the far network wells CV-02 and CV-11; not the 72-hour test's Theis fit extrapolated, and not a calibration against the readings' own pre-pumping levels, the nearest network well CV-07 (inside the Mill Street cone) or a fitted trend, each of which credits the region's wet years to leakage.",
-      "stump": "A strong analyst who sees the test's Theis forecast overshoot the Mill Street record recalibrates the leakage against the nearest network well CV-07 (or the wells' own pre-pumping levels, or a fitted trend) and files 1,250 gpm, every schedule under 3.5 ft at OW-S; only the natural level carried from CV-02 and CV-11 beyond the cone files 1,000 gpm.",
-      "world": {
-        "geography": "United States, Indiana (the Corrin Valley, a fictional buried bedrock valley; Harlow Springs, a fictional city)",
-        "currency": "USD",
-        "org_type": "a city water utility and a regional water conservancy district",
-        "invented_names": [
-          "Corrin Valley",
-          "Corrin Valley Water Conservancy District",
-          "Harlow Springs",
-          "Harlow Springs Utilities",
-          "Reidel Road well field",
-          "Mill Street wells",
-          "Tillbrook Hydrogeologic",
-          "Kestrel Foods",
-          "Little Ossey"
-        ],
-        "people": [
-          "Mitchell Munoz",
-          "Todd Robinson",
-          "Wendy Ruiz",
-          "Mary Alvarez",
-          "John Ponce"
-        ]
-      },
-      "shell": {
-        "question form": "whether",
-        "second-sentence opener": "the",
-        "rounding opener": "events",
-        "deliverable set": "pptx+xlsx"
-      },
-      "fate": "spent 2026-11-08 on the platform: both runs fitted the leaky strip with the plate's walls and took the remote wells CV-02 and CV-11 as the natural-level control, landing 1,000 gpm and every ask (REDESIGN); the author rolled task3 back to it once, then re-rooted"
-    },
-    {
-      "architecture": "v4",
-      "drawn": "2026-11-08",
-      "domain": "physical-environmental-sciences",
-      "subdomain": "hydrology-flood-frequency",
-      "objective": "forecasting",
-      "shape": "other",
-      "gap": [
-        "time",
-        "population"
-      ],
-      "pattern": [
-        "none"
-      ],
-      "generators": [
-        "G12",
-        "G14",
-        "G13"
-      ],
-      "gate_g": "decomposition_attribution",
-      "stump_strategy": "maturity_censoring",
-      "driver": "The decisive quantity is a blended output's level over the coming years, fed by inputs whose change at the source travels through a stage no measurement of the output or of the medium sees, at a pace set by each source's own depth through that stage; a recent change sits on sources deeper than the earlier changes that matured, so the output's own history, one delay fitted to it, the downstream travel time a filed model gives, and an event study on the recent change all show no effect and set it near nil, and only the matured changes' delays, read against each source's depth and carried to each recent source, show the rise arriving inside the decision window.",
-      "driver_concrete": "Each year's 2027 to 2040 entry-point nitrate is the pumping plan's blend of Wells 3, 5, 6 and 7, each a recharge-weighted mix of its protection-area parcels' water-table nitrate delayed by the wellhead model's groundwater travel time, where a parcel's water-table nitrate is its land cover's leachate delayed by its unsaturated thickness times the sand's moisture over the recharge; the Sallow Ridge parcels cleared for irrigated vegetables from 2017 to 2021 sit over 57 to 94 ft of sand, so their leachate reaches the wells late in 2030, not by 2024 as the travel time or the wells' own lag would put it.",
-      "stump": "A strong analyst who finds the ridge clearing tests it against the wells and the county wells under recent clearings, sees no rise where the wellhead model's travel time or the wells' own fitted lag says it should already be, sets the clearing's effect near nil and files the 2031 cycle with the blend near 5.5 mg/L through 2040; only each parcel's delay through its own unsaturated thickness, read from the county's older conversions, puts the rise at the wells late in 2030 and the blend at 10 in 2031.",
-      "world": {
-        "geography": "United States, Wisconsin (Ravell County, a fictional county on the central sand plain; Corlinden, a fictional city)",
-        "currency": "USD",
-        "org_type": "a city water utility, its utility commission and a county land and water conservation department",
-        "invented_names": [
-          "Corlinden",
-          "Corlinden Water Utility",
-          "Ravell County",
-          "Ravell County Land and Water Conservation Department",
-          "Sallow Road well field",
-          "Sallow Ridge",
-          "Cadle River",
-          "Fenwright Hydrogeologic",
-          "Pellow Analytical Services",
-          "Hartvale Produce"
-        ],
-        "people": [
-          "Chloe Griffin",
-          "Dennis Diaz",
-          "Patricia Gaines"
-        ]
-      },
-      "shell": {
-        "question form": "whether",
-        "second-sentence opener": "corlinden's",
-        "rounding opener": "nitrate",
-        "deliverable set": "pdf+png+xlsx"
-      },
-      "fate": "built to READY 2026-11-08 (0931661), then rolled back to v3 at the author's word before any platform round; the nitrate world is not reused"
-    },
-    {
-      "domain": "physical-environmental-sciences",
-      "subdomain": "hydrology-flood-frequency",
-      "objective": "forecasting",
-      "shape": "04",
-      "decision_type": "pick_one_of_n",
-      "answer_unit": "named_option",
-      "gap": [
-        "population",
-        "time"
-      ],
-      "pattern": [
-        "none"
-      ],
-      "generators": [
-        "G6",
-        "G14",
-        "G13"
-      ],
-      "gate_g": "decomposition_attribution",
-      "driver": "The decisive quantity is a rare-event level for a coming window, estimated from a record whose response to its driver rose gradually while the driver itself weakened, so the two offset in the record's maxima and every check on the maxima passes; only pairing each event with its driver separates them, and re-running the whole driver record through today's response gives the level.",
-      "stump_strategy": "causal_design",
-      "forum": "regulator_or_inspector",
-      "forcing_event": "statutory_or_regulatory_filing",
-      "org_family": "local_government",
-      "role_family": "capacity_planner",
-      "drawn": "2026-11-08",
-      "stump": "A strong analyst fits Bulletin 17C to the 70 annual peaks, finds no trend (p = 0.79) and picks Alternative A at 5,090 cfs; truncating to the developed years or regressing the peaks on the paved fraction keeps it there; only setting each flood against its storm and rebuilding the record on today's watershed files Alternative B at 10,570 cfs.",
-      "layer2_family": "forecast_uncertainty",
-      "layer2_pattern": "own:a-flood-record-whose-response-rose-while-its-storms-weakened",
-      "driver_concrete": "Ollery Creek's annual peaks look stationary because the paved fraction rose from 6 to 30 per cent (storm drains halving the time to peak) while the storms since 1990 ran about a quarter lighter; paired with the rain gauge's storm totals, the same storm now makes a far larger flood, and putting all 70 years of storms through today's watershed moves the 1 per cent flood from about 7,000 to about 10,000 cfs.",
-      "answer": "Build Alternative B, the triple 10 ft x 9 ft box (capacity 13,380 cfs): the design flow at Kinnard Road is about 10,570 cfs once the record's storms are run through today's watershed.",
-      "architecture": "v5",
-      "fate": "built to READY 2026-11-08 by a parallel session (a19fc6c: Alternative B at Kinnard Road, about 10,570 cfs; judge DETERMINISTIC, APPROVE), never uploaded; superseded the same day at the author's word, a total rework of the slot"
-    }
-  ],
-  "notes": "architecture 7 drawn 2026-11-10 under the 2026-11-09 doctrine (results chain, depth level 5)",
-  "lineage_shells": [
-    {
-      "question form": "how-much",
-      "second-sentence opener": "alongside",
-      "rounding opener": "the",
-      "deliverable set": "docx+xlsx"
-    },
-    {
-      "question form": "whether",
-      "second-sentence opener": "the",
-      "rounding opener": "events",
-      "deliverable set": "pptx+xlsx"
-    },
-    {
-      "question form": "whether",
-      "second-sentence opener": "corlinden's",
-      "rounding opener": "nitrate",
-      "deliverable set": "pdf+png+xlsx"
-    },
-    {
-      "question form": "whether",
-      "second-sentence opener": "the",
-      "rounding opener": "drawdowns",
-      "deliverable set": "pdf+xlsx"
-    },
-    {
-      "question form": "which",
-      "second-sentence opener": "durrow",
-      "rounding opener": "flows",
-      "deliverable set": "csv+pdf",
-      "deliverables": "pdf+csv"
-    }
-  ],
-  "architecture_spent": false,
-  "status": "READY",
-  "answer_shape": "ranked-list-cap",
-  "weight": "hard-to-measure",
-  "chain_signature": [
-    "forecasting",
-    "uncertainty",
-    "decomposition-attribution",
-    "missingness-measurement",
-    "modeling",
-    "investigation-loops",
-    "forecasting",
-    "synthesis"
-  ],
-  "results": "R1 the harbor gauge's expected days at its minor flood threshold in the 2027-28 tide year; R2 its 90 per cent range; R3 the harbor's change from its 2025-26 count split into sea level, tides and weather; R4 Front Street's 2025-26 tidal flood days from its street sensor with the outage filled; R5 Marsh Road's and Oyster Creek Road's 2025-26 days through their overmarsh transfers; R6 River Road's 2025-26 days through its flow-dependent transfer; R7 the five low points' expected 2027-28 days; R8 the two funded",
-  "depth_level": 5,
-  "doctrine": "throughout",
-  "client_subdomain": "extreme-value-environmental-hazard",
-  "registered": "2026-11-10T04:30:13Z"
+  {
+   "domain": "urban-regional-science",
+   "subdomain": "municipal-service-demand-resource-allocation",
+   "objective": "forecasting",
+   "shape": "single-figure",
+   "decision_type": "quantity_figure",
+   "answer_unit": "count",
+   "gap": [
+    "population",
+    "time"
+   ],
+   "pattern": [
+    "none"
+   ],
+   "generators": [
+    "G14",
+    "G6",
+    "G13"
+   ],
+   "gate_g": "forecasting",
+   "driver": "The extra input an upgraded service level puts into a unit is the part of the unit the old level left untreated, so the average gain measured on units upgraded earlier, chosen because the old level already treated much of them, understates the gain for units the old level barely reached, while their upgraded level less the new units' present input overstates it; only the gain conditioned on how much of each unit the old level already treated, read from each unit's own record under it, carries across to the new units.",
+   "stump_strategy": "composition_mix",
+   "forum": "council_or_assembly",
+   "forcing_event": "purchase_order_or_contract",
+   "org_family": "local_government",
+   "role_family": "operations_director",
+   "drawn": "2026-10-18",
+   "stump": "A competent solver takes the Priority 1 collectors' salt per lane-km per severity point less the 424 lane-km's own Priority 2 salt and files 2,600 t at the planning severity, or takes the before-and-after gain of the collectors moved to Priority 1 since 2022 and files 1,500 to 1,600 t; the step that lands it there is carrying an average across streets whose Priority 2 coverage differs, when the gain is the length Priority 2 left untreated and the earlier moves were mostly hill, school and inner-suburb streets Priority 2 had already salted along much of their length, so only the gain conditioned on each street's own Priority 2 salt files 2,200 t.",
+   "layer2_family": "estimation_fit",
+   "layer2_pattern": "own:service-upgrade-gain-conditioned-on-prior-partial-coverage",
+   "driver_concrete": "Quellbrook's Priority 2 trucks salt a collector only at its intersections, hills and curves, so a collector's gain on moving to Priority 1 is mostly the stretch between them at the Priority 1 rate; the collectors moved from 2022 to 2025 were mostly hill, school and hospital-access streets whose Priority 2 salt already covered much of their length, while the redesign's 424 lane-km are long flat outer-suburb grid collectors whose Priority 2 trucks salted about a sixth of them, so the moved streets' average gain understates theirs and the Priority 1 collectors' rate less the new streets' own Priority 2 salt overstates it; only the gain read off each moved street's own Priority 2 salt, at the new streets' Priority 2 salt, carries across.",
+   "architecture": "v1 (loops 2)",
+   "fate": "landed on the portal (2026-11-07): one response filed the golden 2,200 t by regressing each earlier move's gain on its own Priority 2 salt and reading it at the new streets' (100 per cent), the other filed the default 2,600 t and still kept 70 per cent on the asks; conditioning a carried gain on a covariate each unit's history prints is the strong solver's reflex, so the world is spent"
+  },
+  {
+   "architecture": "v2",
+   "drawn": "2026-11-07",
+   "fate": "spent 2026-11-08 on the platform: both runs bounded the tank's dewatering by the Southside plant's hourly headroom and landed Alternative C and every ask (REDESIGN)",
+   "domain": "physical-environmental-sciences",
+   "subdomain": "hydrology-flood-frequency",
+   "objective": "forecasting",
+   "shape": "08",
+   "gap": [
+    "time"
+   ],
+   "pattern": [
+    "none"
+   ],
+   "generators": [
+    "G7",
+    "G3"
+   ],
+   "gate_g": "binding_constraint",
+   "stump_strategy": "binding_constraint",
+   "driver": "A storage buffer that captures a discharge until it is full empties only through a receiving channel whose spare capacity vanishes for one to several days after each wet event, so in a run of events the buffer meets the next one still partly full; counting each event against an empty buffer, or a buffer emptied at its outlet's rated pace, understates how often it spills, and only replaying the record with the outlet bounded by the receiving channel's spare capacity, read from that channel's own record, prices the size the limit needs.",
+   "driver_concrete": "Clay Street's tank is pumped out into the Southside interceptor at the plant headworks, and the Southside plant, its sewershed full of groundwater and inflow, takes its 140 MGD hydraulic limit for one to four days after most storms from March to June; the Northside tank, whose plant has room within hours, empties at its pumps' rating and its overflows replay exactly that way, but Clay Street's pumps can only send what Southside has room for, so in a wet spell the tank meets the next storm still full and the 26 MG alternative that clears four events at its pumps' rating leaves 6.8 a year; only the 38 MG tank, at 2.9, meets the decree.",
+   "stump": "A competent solver replays Outfall 014's metered overflows through each tank pumped out at its station's rated dewatering flow (the continuous simulation the decree evaluates by, which reproduces the Northside tank's overflows since 2020) and selects Alternative B, the 26 MG tank, at 2.8 events a year; the step that lands it there is taking the pumps' rating as the pace the tank empties, when it empties into the Southside interceptor at the headworks of a plant that sits at its 140 MGD limit for days after wet-season storms, so only a replay bounded by Southside's own headroom hour by hour shows the 20 MG tank at 6.8 events and selects Alternative C, the 38 MG tank, at 2.9.",
+   "answer": "Select Alternative C, the 38 MG tank: it leaves Outfall 014 2.9 untreated overflow events a year, where the 26 MG Alternative B leaves 6.8.",
+   "shell": {
+    "question form": "how-much",
+    "second-sentence opener": "alongside",
+    "rounding opener": "the",
+    "deliverable set": "docx+xlsx"
+   }
+  },
+  {
+   "architecture": "v3",
+   "drawn": "2026-11-08",
+   "domain": "physical-environmental-sciences",
+   "subdomain": "hydrology-flood-frequency",
+   "objective": "forecasting",
+   "shape": "other",
+   "gap": [
+    "population",
+    "time"
+   ],
+   "pattern": [
+    "none"
+   ],
+   "generators": [
+    "G13",
+    "G16"
+   ],
+   "gate_g": "method_or_model_selection",
+   "stump_strategy": "forecast_method_backtest",
+   "driver": "The decisive quantity is a long-horizon response to a sustained load, when a short trial's response carries two opposing far-field effects that cancel inside its window and part only over years: the trial's own model fits it closely and overstates the long response, so the far field must be calibrated on the record a nearby load has already left, read against a natural baseline from references beyond that load's reach, because the nearest reference sits inside it and a fitted trend absorbs the response.",
+   "driver_concrete": "Each requested rate's greatest monthly drawdown at OW-S in 2046 from a bounded leaky aquifer whose leakage factor is calibrated on the drawdown the Mill Street wells caused at MS-MW and OW-S from 2009 to 2026, each well's natural level carried from the far network wells CV-02 and CV-11; not the 72-hour test's Theis fit extrapolated, and not a calibration against the readings' own pre-pumping levels, the nearest network well CV-07 (inside the Mill Street cone) or a fitted trend, each of which credits the region's wet years to leakage.",
+   "stump": "A strong analyst who sees the test's Theis forecast overshoot the Mill Street record recalibrates the leakage against the nearest network well CV-07 (or the wells' own pre-pumping levels, or a fitted trend) and files 1,250 gpm, every schedule under 3.5 ft at OW-S; only the natural level carried from CV-02 and CV-11 beyond the cone files 1,000 gpm.",
+   "world": {
+    "geography": "United States, Indiana (the Corrin Valley, a fictional buried bedrock valley; Harlow Springs, a fictional city)",
+    "currency": "USD",
+    "org_type": "a city water utility and a regional water conservancy district",
+    "invented_names": [
+     "Corrin Valley",
+     "Corrin Valley Water Conservancy District",
+     "Harlow Springs",
+     "Harlow Springs Utilities",
+     "Reidel Road well field",
+     "Mill Street wells",
+     "Tillbrook Hydrogeologic",
+     "Kestrel Foods",
+     "Little Ossey"
+    ],
+    "people": [
+     "Mitchell Munoz",
+     "Todd Robinson",
+     "Wendy Ruiz",
+     "Mary Alvarez",
+     "John Ponce"
+    ]
+   },
+   "shell": {
+    "question form": "whether",
+    "second-sentence opener": "the",
+    "rounding opener": "events",
+    "deliverable set": "pptx+xlsx"
+   },
+   "fate": "spent 2026-11-08 on the platform: both runs fitted the leaky strip with the plate's walls and took the remote wells CV-02 and CV-11 as the natural-level control, landing 1,000 gpm and every ask (REDESIGN); the author rolled task3 back to it once, then re-rooted"
+  },
+  {
+   "architecture": "v4",
+   "drawn": "2026-11-08",
+   "domain": "physical-environmental-sciences",
+   "subdomain": "hydrology-flood-frequency",
+   "objective": "forecasting",
+   "shape": "other",
+   "gap": [
+    "time",
+    "population"
+   ],
+   "pattern": [
+    "none"
+   ],
+   "generators": [
+    "G12",
+    "G14",
+    "G13"
+   ],
+   "gate_g": "decomposition_attribution",
+   "stump_strategy": "maturity_censoring",
+   "driver": "The decisive quantity is a blended output's level over the coming years, fed by inputs whose change at the source travels through a stage no measurement of the output or of the medium sees, at a pace set by each source's own depth through that stage; a recent change sits on sources deeper than the earlier changes that matured, so the output's own history, one delay fitted to it, the downstream travel time a filed model gives, and an event study on the recent change all show no effect and set it near nil, and only the matured changes' delays, read against each source's depth and carried to each recent source, show the rise arriving inside the decision window.",
+   "driver_concrete": "Each year's 2027 to 2040 entry-point nitrate is the pumping plan's blend of Wells 3, 5, 6 and 7, each a recharge-weighted mix of its protection-area parcels' water-table nitrate delayed by the wellhead model's groundwater travel time, where a parcel's water-table nitrate is its land cover's leachate delayed by its unsaturated thickness times the sand's moisture over the recharge; the Sallow Ridge parcels cleared for irrigated vegetables from 2017 to 2021 sit over 57 to 94 ft of sand, so their leachate reaches the wells late in 2030, not by 2024 as the travel time or the wells' own lag would put it.",
+   "stump": "A strong analyst who finds the ridge clearing tests it against the wells and the county wells under recent clearings, sees no rise where the wellhead model's travel time or the wells' own fitted lag says it should already be, sets the clearing's effect near nil and files the 2031 cycle with the blend near 5.5 mg/L through 2040; only each parcel's delay through its own unsaturated thickness, read from the county's older conversions, puts the rise at the wells late in 2030 and the blend at 10 in 2031.",
+   "world": {
+    "geography": "United States, Wisconsin (Ravell County, a fictional county on the central sand plain; Corlinden, a fictional city)",
+    "currency": "USD",
+    "org_type": "a city water utility, its utility commission and a county land and water conservation department",
+    "invented_names": [
+     "Corlinden",
+     "Corlinden Water Utility",
+     "Ravell County",
+     "Ravell County Land and Water Conservation Department",
+     "Sallow Road well field",
+     "Sallow Ridge",
+     "Cadle River",
+     "Fenwright Hydrogeologic",
+     "Pellow Analytical Services",
+     "Hartvale Produce"
+    ],
+    "people": [
+     "Chloe Griffin",
+     "Dennis Diaz",
+     "Patricia Gaines"
+    ]
+   },
+   "shell": {
+    "question form": "whether",
+    "second-sentence opener": "corlinden's",
+    "rounding opener": "nitrate",
+    "deliverable set": "pdf+png+xlsx"
+   },
+   "fate": "built to READY 2026-11-08 (0931661), then rolled back to v3 at the author's word before any platform round; the nitrate world is not reused"
+  },
+  {
+   "domain": "physical-environmental-sciences",
+   "subdomain": "hydrology-flood-frequency",
+   "objective": "forecasting",
+   "shape": "04",
+   "decision_type": "pick_one_of_n",
+   "answer_unit": "named_option",
+   "gap": [
+    "population",
+    "time"
+   ],
+   "pattern": [
+    "none"
+   ],
+   "generators": [
+    "G6",
+    "G14",
+    "G13"
+   ],
+   "gate_g": "decomposition_attribution",
+   "driver": "The decisive quantity is a rare-event level for a coming window, estimated from a record whose response to its driver rose gradually while the driver itself weakened, so the two offset in the record's maxima and every check on the maxima passes; only pairing each event with its driver separates them, and re-running the whole driver record through today's response gives the level.",
+   "stump_strategy": "causal_design",
+   "forum": "regulator_or_inspector",
+   "forcing_event": "statutory_or_regulatory_filing",
+   "org_family": "local_government",
+   "role_family": "capacity_planner",
+   "drawn": "2026-11-08",
+   "stump": "A strong analyst fits Bulletin 17C to the 70 annual peaks, finds no trend (p = 0.79) and picks Alternative A at 5,090 cfs; truncating to the developed years or regressing the peaks on the paved fraction keeps it there; only setting each flood against its storm and rebuilding the record on today's watershed files Alternative B at 10,570 cfs.",
+   "layer2_family": "forecast_uncertainty",
+   "layer2_pattern": "own:a-flood-record-whose-response-rose-while-its-storms-weakened",
+   "driver_concrete": "Ollery Creek's annual peaks look stationary because the paved fraction rose from 6 to 30 per cent (storm drains halving the time to peak) while the storms since 1990 ran about a quarter lighter; paired with the rain gauge's storm totals, the same storm now makes a far larger flood, and putting all 70 years of storms through today's watershed moves the 1 per cent flood from about 7,000 to about 10,000 cfs.",
+   "answer": "Build Alternative B, the triple 10 ft x 9 ft box (capacity 13,380 cfs): the design flow at Kinnard Road is about 10,570 cfs once the record's storms are run through today's watershed.",
+   "architecture": "v5",
+   "fate": "built to READY 2026-11-08 by a parallel session (a19fc6c: Alternative B at Kinnard Road, about 10,570 cfs; judge DETERMINISTIC, APPROVE), never uploaded; superseded the same day at the author's word, a total rework of the slot"
+  }
+ ],
+ "notes": "architecture 7 drawn 2026-11-10 under the 2026-11-09 doctrine (results chain, depth level 5) | 2026-11-10 stage 3: role, forcing event and organisation family redrawn after task16, task17 and task10 registered in parallel sessions (programme_officer, purchase_order_or_contract, local_government)",
+ "lineage_shells": [
+  {
+   "question form": "how-much",
+   "second-sentence opener": "alongside",
+   "rounding opener": "the",
+   "deliverable set": "docx+xlsx"
+  },
+  {
+   "question form": "whether",
+   "second-sentence opener": "the",
+   "rounding opener": "events",
+   "deliverable set": "pptx+xlsx"
+  },
+  {
+   "question form": "whether",
+   "second-sentence opener": "corlinden's",
+   "rounding opener": "nitrate",
+   "deliverable set": "pdf+png+xlsx"
+  },
+  {
+   "question form": "whether",
+   "second-sentence opener": "the",
+   "rounding opener": "drawdowns",
+   "deliverable set": "pdf+xlsx"
+  },
+  {
+   "question form": "which",
+   "second-sentence opener": "durrow",
+   "rounding opener": "flows",
+   "deliverable set": "csv+pdf",
+   "deliverables": "pdf+csv"
+  }
+ ],
+ "architecture_spent": false,
+ "status": "READY",
+ "answer_shape": "ranked-list-cap",
+ "weight": "hard-to-measure",
+ "chain_signature": [
+  "forecasting",
+  "uncertainty",
+  "decomposition-attribution",
+  "missingness-measurement",
+  "modeling",
+  "investigation-loops",
+  "forecasting",
+  "synthesis"
+ ],
+ "results": "R1 harbor expected days 27.0; R2 its range 22 to 31; R3 the change from 21 split sea level +5.8, tides -0.7, weather +1.0; R4 Front Street 21 days in 2025-26 (lane 5.19 ft NAVD88 from the sensor, 6 in its outage); R5 Marsh Road 19 and Oyster Creek 7 through the overmarsh transfer (Marsh floods at harbor 8.71 ft); R6 River Road 10 through the flow-dependent transfer; R7 expected 2027-28 Wharf 35.0, Front 26.3, River 18.5, Marsh 16.8, Oyster 1.0; R8 Wharf Street and Front Street funded; R9 the pair on top in 29 of 36 weather years",
+ "depth_level": 5,
+ "doctrine": "throughout",
+ "client_subdomain": "extreme-value-environmental-hazard",
+ "registered": "2026-11-10T05:02:54Z",
+ "shell": {
+  "question form": "whether",
+  "second-sentence opener": "they",
+  "rounding opener": "expected",
+  "deliverable set": "docx+xlsx"
+ }
 }

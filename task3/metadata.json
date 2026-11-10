@@ -1,0 +1,140 @@
+{
+ "task": "task3",
+ "architecture": 7,
+ "as_of": "2026-11-10",
+ "decision": "which two of Port Tolliver's five tidal low points get the FY2028 tide valves",
+ "deliverables": [
+  "fy2028_tide_valve_ranking.xlsx",
+  "fy2028_tide_valve_memo.pdf"
+ ],
+ "distractors": [
+  "311_service_requests_2023-2026.csv",
+  "ghcnd_USW00003817_2023-2026.csv",
+  "slr_scenarios_8673718.csv"
+ ],
+ "distractor_notes": {
+  "311_service_requests_2023-2026.csv": "the city's 311 service requests 2023-2026: street flooding reports beside potholes and clogged inlets; they look like an observed flood count but residents report a fraction of daytime floods and almost none at night",
+  "slr_scenarios_8673718.csv": "long-range relative sea level scenarios to 2100 for the gauge; they look like the sea level for the tide year but the program fixes the planning value",
+  "ghcnd_USW00003817_2023-2026.csv": "the airport's daily rainfall and temperature; it looks needed to separate rain ponding from tidal water on Front Street, which the harbor's high waters already separate"
+ },
+ "stated_inputs": [
+  "0.70",
+  "8.6",
+  "8673718",
+  "02203560",
+  "2027",
+  "2028",
+  "2025",
+  "2026",
+  "1990",
+  "2001",
+  "1983"
+ ],
+ "field_terms": [],
+ "rows": {
+  "8673718_high_low_1955-2026.csv": 101489,
+  "8673718_high_low_predictions_1955-2028.csv": 103508,
+  "8673718_hourly_heights_2000-2026.csv": 235224,
+  "8673718_monthly_means_1955-2026.csv": 861,
+  "usgs_02203560_brayle_r_hensley_daily.txt": 13180,
+  "PEL-MR-24.csv": 6428,
+  "OYS-CR-25.csv": 6356,
+  "HEN-RR-25.csv": 8628,
+  "ghcnd_USW00003817_2023-2026.csv": 1400,
+  "pt-front-01_2024-05-14_2026-10-31.csv": 209260,
+  "311_service_requests_2023-2026.csv": 848,
+  "slr_scenarios_8673718.csv": 45
+ },
+ "files": {
+  "311_service_requests_2023-2026.csv": {
+   "source": "City 311 service requests export",
+   "role": "distractor",
+   "pull_date": "2026-11-04",
+   "license": "synthetic, CC0, generated for this task by task3/generator (a seeded tide, sea level, surge, river and low point simulation)"
+  },
+  "8673718_datums.txt": {
+   "source": "NOAA CO-OPS datums page, station 8673718 (1983-2001 epoch)",
+   "role": "evidence",
+   "pull_date": "2026-11-02",
+   "license": "synthetic, CC0, generated for this task by task3/generator (a seeded tide, sea level, surge, river and low point simulation)"
+  },
+  "8673718_high_low_1955-2026.csv": {
+   "source": "NOAA CO-OPS verified high and low waters, station 8673718",
+   "role": "evidence",
+   "pull_date": "2026-11-02",
+   "license": "synthetic, CC0, generated for this task by task3/generator (a seeded tide, sea level, surge, river and low point simulation)"
+  },
+  "8673718_high_low_predictions_1955-2028.csv": {
+   "source": "NOAA CO-OPS high and low tide predictions, station 8673718",
+   "role": "evidence",
+   "pull_date": "2026-11-02",
+   "license": "synthetic, CC0, generated for this task by task3/generator (a seeded tide, sea level, surge, river and low point simulation)"
+  },
+  "8673718_hourly_heights_2000-2026.csv": {
+   "source": "NOAA CO-OPS water levels page export, verified and preliminary hourly heights with predictions, station 8673718",
+   "role": "evidence",
+   "pull_date": "2026-11-02",
+   "license": "synthetic, CC0, generated for this task by task3/generator (a seeded tide, sea level, surge, river and low point simulation)"
+  },
+  "8673718_monthly_means_1955-2026.csv": {
+   "source": "NOAA CO-OPS monthly means, station 8673718",
+   "role": "evidence",
+   "pull_date": "2026-11-02",
+   "license": "synthetic, CC0, generated for this task by task3/generator (a seeded tide, sea level, surge, river and low point simulation)"
+  },
+  "HEN-RR-25.csv": {
+   "source": "City logger campaign export, River Road at Hensley Landing, Jan-Apr 2025",
+   "role": "evidence",
+   "pull_date": "2025-04-21",
+   "license": "synthetic, CC0, generated for this task by task3/generator (a seeded tide, sea level, surge, river and low point simulation)"
+  },
+  "OYS-CR-25.csv": {
+   "source": "City logger campaign export, Oyster Creek Road, Aug-Oct 2025",
+   "role": "evidence",
+   "pull_date": "2025-10-31",
+   "license": "synthetic, CC0, generated for this task by task3/generator (a seeded tide, sea level, surge, river and low point simulation)"
+  },
+  "PEL-MR-24.csv": {
+   "source": "City logger campaign export (vented pressure logger), Marsh Road at Pellam Creek, Sep-Nov 2024",
+   "role": "evidence",
+   "pull_date": "2024-11-22",
+   "license": "synthetic, CC0, generated for this task by task3/generator (a seeded tide, sea level, surge, river and low point simulation)"
+  },
+  "fy2028_tide_valve_round_guidelines.pdf": {
+   "source": "Port Tolliver Stormwater Utility, FY2028 tide valve round guidelines",
+   "role": "governing",
+   "pull_date": "2026-10-16",
+   "license": "synthetic, CC0, generated for this task by task3/generator (a seeded tide, sea level, surge, river and low point simulation)"
+  },
+  "ghcnd_USW00003817_2023-2026.csv": {
+   "source": "NOAA NCEI GHCN-Daily, Port Tolliver Municipal Airport",
+   "role": "distractor",
+   "pull_date": "2026-11-03",
+   "license": "synthetic, CC0, generated for this task by task3/generator (a seeded tide, sea level, surge, river and low point simulation)"
+  },
+  "pt-front-01_2024-05-14_2026-10-31.csv": {
+   "source": "City ultrasonic street sensor PT-FRONT-01 export, Front Street at Ferry Lane",
+   "role": "evidence",
+   "pull_date": "2026-11-03",
+   "license": "synthetic, CC0, generated for this task by task3/generator (a seeded tide, sea level, surge, river and low point simulation)"
+  },
+  "slr_scenarios_8673718.csv": {
+   "source": "Relative sea level scenarios for the gauge (interagency 2022 framework)",
+   "role": "distractor",
+   "pull_date": "2026-08-19",
+   "license": "synthetic, CC0, generated for this task by task3/generator (a seeded tide, sea level, surge, river and low point simulation)"
+  },
+  "tidal_low_points_inventory_2026-10.xlsx": {
+   "source": "Port Tolliver Stormwater Utility tidal low point inventory export",
+   "role": "evidence",
+   "pull_date": "2026-10-02",
+   "license": "synthetic, CC0, generated for this task by task3/generator (a seeded tide, sea level, surge, river and low point simulation)"
+  },
+  "usgs_02203560_brayle_r_hensley_daily.txt": {
+   "source": "USGS NWIS daily mean discharge, Brayle River near Hensley, GA (02203560)",
+   "role": "evidence",
+   "pull_date": "2026-11-02",
+   "license": "synthetic, CC0, generated for this task by task3/generator (a seeded tide, sea level, surge, river and low point simulation)"
+  }
+ }
+}
