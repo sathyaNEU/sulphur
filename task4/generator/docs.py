@@ -44,8 +44,8 @@ def standard(path):
             "applies to every depot and to every order of battery-electric tractors put to the management group."]),
         ("2. Terms", [
             "2.1 A duty is a regular round trip from a depot as the route register records it: the run from the "
-            "depot to the collection, the loaded run from the collection to the delivery and the run back to the "
-            "depot.",
+            "depot to the collection, the loaded run from the collection to the delivery, with any drops it makes "
+            "on the way, and the run back to the depot.",
             "2.2 A duty's energy is the energy the tractor draws from its battery for the round trip, depot out to "
             "depot in, in kWh, as the tractor's own battery system reports it.",
             "2.3 The usable battery of a tractor model is the usable energy its manufacturer states for it, less the "
@@ -86,6 +86,8 @@ def quotation(path):
             ["Battery", "Installed capacity 630 kWh; usable capacity %d kWh" % P.USABLE_2027],
             ["Charging", "CCS2, up to 375 kW DC; on-board 43 kW AC"],
             ["Drive", "Three electric motors, continuous output 425 kW"],
+            ["Unladen weight", "11,980 kg (tractor, fifth wheel, full equipment)"],
+            ["Power take-off", "Electric PTO, 400 V AC, up to 40 kW, for body and trailer equipment"],
             ["Warranty", "Battery 8 years or 1,000,000 km, to 75 per cent of usable capacity"],
             ["Price", "SEK 3,940,000 per tractor excluding VAT, delivered Värnamo"],
             ["Delivery", "January to February 2027 for orders placed by 11 December 2026"]]

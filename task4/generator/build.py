@@ -21,6 +21,7 @@ SE = dt.timezone(dt.timedelta(hours=1))
 EXPORTED = {"weighbridge": dt.datetime(2026, 11, 2, 6, 14, 22, tzinfo=SE),
             "bev": dt.datetime(2026, 11, 2, 7, 3, 51, tzinfo=SE),
             "tms": dt.datetime(2026, 11, 3, 13, 26, 9, tzinfo=SE),
+            "tmsv": dt.datetime(2026, 11, 3, 13, 31, 44, tzinfo=SE),
             "temps": dt.datetime(2026, 11, 2, 9, 40, 37, tzinfo=SE),
             "fuel": dt.datetime(2026, 11, 4, 11, 2, 15, tzinfo=SE),
             "workshop": dt.datetime(2026, 11, 4, 14, 48, 3, tzinfo=SE)}

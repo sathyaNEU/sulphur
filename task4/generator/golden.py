@@ -99,7 +99,9 @@ def write_xlsx(path, pk, g, target):
     for t, v, u in (("Per km driven", m[0], "kWh/km"), ("Climb", m[1], "kWh/km per m/100 km"),
                     ("Below 16 C", m[2], "kWh/km per degree"), ("Further, below 0 C", m[3], "kWh/km per degree"),
                     ("Speed, (v squared - 65 squared)/1000", m[4], "kWh/km per (km/h)^2/1000"),
-                    ("Payload on the loaded run", m[5] * 100, "kWh per tonne per 100 km")):
+                    ("Combination tare above 19 t, every km", m[5] * 100, "kWh per tonne per 100 km"),
+                    ("Payload, tonne-km on the loaded run", m[6] * 100, "kWh per tonne per 100 km"),
+                    ("ePTO fridge unit, depot out to depot in", m[7], "kW")):
         ws2.append([t, round(float(v), 5 if abs(v) < 0.1 else 2), u])
     ws2.append([])
     ws2.append(["Cold form, Jan-Feb 2026 held out", "Error, days below 0 C", "Error, all held-out days"])
@@ -145,6 +147,32 @@ def write_xlsx(path, pk, g, target):
     for i, wd in enumerate([8, 26, 22, 11, 12, 12, 12, 24], 1):
         ws3.column_dimensions[get_column_letter(i)].width = wd
 
+    wst = wb.create_sheet("Trailers and drops")
+    wst.append(["Each duty with the 2027 tractor (%.2f t, quotation Q-26-1187) and the trailers it pulled at Värnamo, "
+                "Nov 2025 to Oct 2026" % (A.TRACTOR_2027_KG / 1000)])
+    wst["A1"].font = Font(bold=True, size=12)
+    wst.append(["Pilot combinations %.1f to %.1f t, mean %.1f t. Load share: tonne-km the departing load rides over "
+                "the loaded run, each note taken off at its stop (TMS notes, routing tool's stops)." %
+                (min(d["combo"] for d in pk.days), max(d["combo"] for d in pk.days), g["pilot_combo"])])
+    wst.append([])
+    wst.append(["Duty", "Trailer kind", "Combination t", "Refrigeration unit", "Unit on the tractor's battery",
+                "Stops", "Load share of loaded km", "Fridge kWh, design day"])
+    _head(wst, 4, fill)
+    rr0 = A.speed_ratio(pk)
+    d0, d1 = g["model"]["dwell"]
+    for c in sorted(pk.short):
+        inp = g["inputs"][c]
+        deps = pk.vdep[c]
+        kinds = sorted({pk.trailer[x["trailer"]]["type"] for x in deps})
+        units = sorted({e.strip() for x in deps for e in pk.trailer[x["trailer"]]["equip"].split(";")
+                        if e.strip().startswith("TRU")})
+        hrs = sum(pk.routes[c]["legs"]) / (A.plan_speed(pk, c) * rr0) + d0 + d1 * (inp["n_drops"] - 1)
+        wst.append([c, "; ".join(kinds), round(inp["combo"], 1), "; ".join(u[4:] for u in units) or "none",
+                    "Yes" if inp["epto"] == 1.0 else "No", inp["n_drops"], round(inp["phi"], 2),
+                    int(round(g["tru_kw"] * hrs)) if inp["epto"] == 1.0 else 0])
+    for i, wd in enumerate([7, 38, 12, 22, 14, 7, 12, 12], 1):
+        wst.column_dimensions[get_column_letter(i)].width = wd
+
     ws4 = wb.create_sheet("Battery")
     ws4.append(["Energy per full charge: kWh used / (SOC start - SOC end), per duty-day"])
     ws4["A1"].font = Font(bold=True, size=12)
@@ -178,20 +206,23 @@ def write_xlsx(path, pk, g, target):
     ws5 = wb.create_sheet("Routes")
     ws5.append(["Route", "Payload kWh/t/100 km", "First-year loss", "Limit kWh", "Tractors", "Duties"])
     _head(ws5, 1, fill)
-    show = {"golden": "As assessed: weighed-equivalent loads, two cold rates, loss net of cold",
+    show = {"golden": "As assessed",
             "declared weights": "Declared weights", "one pooled correction": "One correction line over the bridge",
-            "one line over the pilot shippers": "One correction line over the pilot shippers",
             "one cold rate": "One cold rate below 16 C", "no first-year loss": "No first-year loss",
             "no speed term": "No speed term (energy in proportion to distance)",
             "the routing tool's speed": "Speed at the routing tool's planned speed",
-            "the year's mean speed ratio": "Speed at the year's mean actual-to-planned ratio"}
+            "the year's mean speed ratio": "Speed at the year's mean actual-to-planned ratio",
+            "no trailer weight": "Trailer left out (pilot's average combination)",
+            "the load to the last drop": "Every load carried to the last drop",
+            "no fridge draw": "No fridge unit term", "every reefer draws": "Every reefer unit drawing",
+            "careful but hurried": "Per km and per departing tonne, at the year's speed ratio"}
     for k, (mod, lm) in A.routes(pk).items():
         if k not in show:
             continue
         aa = A.assess(pk, mod, lim=lm)
         loss = 1 - lm / (A.SHARE * A.USABLE)
         ws5.append([show[k], round(A.slope_per_100(mod), 1), "%.1f%%" % (100 * loss), round(lm), len(A.chosen(aa)),
-                    ", ".join(A.chosen(aa))])
+                    ", ".join(A.chosen(aa)) or "none"])
     for i, wd in enumerate([34, 12, 11, 9, 9, 52], 1):
         ws5.column_dimensions[get_column_letter(i)].width = wd
 
@@ -202,6 +233,7 @@ def write_xlsx(path, pk, g, target):
                  "Declared weights read in kg or tonnes (decimal comma).",
                  "Ambient: the tractor's reading; on sensor dropouts the Jönköping station mean plus %.1f C." % pk.offset,
                  "Weighbridge: the last weighing of each CMR; duty codes VMO-nn read as Vnn.",
+                 "TMS notes: one per drop; a pilot day's declared weight is the sum of its notes.",
                  "One tractor per duty assigned (FES-2 4.3)."]:
         ws6.append([line])
     ws6.column_dimensions["A"].width = 110
@@ -227,44 +259,47 @@ def write_pdf(path, pk, g, target):
                            ("VALIGN", (0, 0), (-1, -1), "TOP")]))
     R = {k: (m, lm, A.chosen(A.assess(pk, m, lim=lm))) for k, (m, lm) in A.routes(pk).items()}
     go = g["set"]
-    near = sorted({c for k, v in R.items() if k in ("declared weights", "no speed term", "no first-year loss")
-                   for c in v[2]} - set(go))
-    rest = [c for c in sorted(pk.short) if not a[c]["go"] and c not in near]
-    dec, one, nol = R["declared weights"], R["one cold rate"], R["no first-year loss"]
-    nsp, pln = R["no speed term"], R["the routing tool's speed"]
+    no = [c for c in sorted(pk.short) if c not in go]
     rr = A.speed_ratio(pk)
+    inp = g["inputs"]
+    cnt = lambda k: len(R[k][2])
+    fr = [c for c in sorted(pk.short) if inp[c]["epto"] == 1.0]
     s = [Paragraph("Fryele Åkeri AB | To the management group | 6 November 2026", small),
          Paragraph("Battery-electric tractors for Värnamo, 2027: order %d" % g["count"], h1),
-         Paragraph("<b>Recommendation.</b> Order %d tractors under quotation Q-26-1187, for %s. Not more: the "
-                   "duties %s need %d to %d kWh on the January design day against a limit of %d kWh, and %s "
-                   "are further over." % (g["count"], ", ".join(go), ", ".join(near),
-                                          min(r10(a[c]["kwh"]) for c in near), max(r10(a[c]["kwh"]) for c in near),
-                                          lim, ", ".join(rest)), body),
+         Paragraph("<b>Recommendation.</b> Order %d tractors under quotation Q-26-1187, for %s. The other seven "
+                   "duties need %d to %d kWh on the January design day against a limit of %d kWh." %
+                   (g["count"], ", ".join(go), min(r10(a[c]["kwh"]) for c in no), max(r10(a[c]["kwh"]) for c in no),
+                    lim), body),
          t, Spacer(1, 2),
          Paragraph("Energies to the nearest 10 kWh at -5 C and each duty's planning load. Limit: 85 per cent of the "
                    "%d kWh a 540 kWh battery keeps after its first year." % round(g["usable_y1"]), small),
          Spacer(1, 5),
-         Paragraph("<b>Basis.</b> A model of each pilot duty-day's energy (%d days) on distance, climb, cold, "
-                   "speed and payload. Four things move the order. (1) The pilot's payloads are shippers' declarations; at "
-                   "Värnamo, where the same shippers' loads are weighed, the clerks' figures scatter widely around "
-                   "the weighed load, and the dairy declares its planned pallets at a standard weight each. Fitted on the declarations a "
-                   "tonne costs %.1f kWh per 100 loaded km; taking each declaration to the weighed load it stands "
-                   "for, shipper by shipper, %.1f. (2) Below freezing the draw rises faster: one rate below 16 C "
-                   "fitted without Jan-Feb 2026 under-forecast those sub-zero days by %.1f per cent, a further rate "
-                   "below 0 C by %+.1f. (3) The pilot batteries lost %.1f per cent of their capacity for good in "
-                   "their first year, once the cold days' temporary loss is taken out. (4) The Värnamo duties are "
-                   "long runs on the E4, E6, 25 and 27, planned faster than any pilot day ran, and each 10 km/h costs about "
-                   "%.0f kWh per 100 km at their speeds; on a -5 C day the pilot drove at %.0f per cent of the "
-                   "routing tool's speed, so each duty is forecast at that share of its own." %
-                   (len(pk.days), A.slope_per_100(dec[0]), A.slope_per_100(g["model"]),
-                    -A.backtest(pk, A.payloads(pk, "shipper"), A.H1)[0],
-                    A.backtest(pk, A.payloads(pk, "shipper"), A.H2)[0], 100 * g["fade"],
-                    100 * g["model"]["coef"][4] * (2 * 68 * 10 + 100) / 1000, 100 * rr), body),
-         Paragraph("<b>If any one is skipped.</b> No speed term: %d tractors (%s in). The routing tool's speed: "
-                   "%d. Declared weights: %d (%s in, V14 out). One cold rate: %d. No first-year loss: %d. The "
-                   "workbook has each route, the model, the calibration and the speeds." %
-                   (len(nsp[2]), ", ".join(c for c in nsp[2] if c not in go), len(pln[2]), len(dec[2]),
-                    ", ".join(c for c in dec[2] if c not in go), len(one[2]), len(nol[2])), body),
+         Paragraph("<b>Basis.</b> A model of each pilot duty-day's energy (%d days) on distance, climb, cold, speed, "
+                   "the combination's weight, the payload and the trailer's fridge unit. (1) The pilot's payloads are "
+                   "shippers' declarations; taken to the loads the Värnamo weighbridge shows they stand for, a tonne "
+                   "costs %.1f kWh per 100 loaded km (%.1f on the declarations). (2) The tractor and trailer weigh "
+                   "on every leg: the pilot's combinations ran %.1f to %.1f t, and V02 and V14's double decks with "
+                   "the 2027 tractor weigh %.1f and %.1f t. (3) A multi-drop load comes off along the run: V03's "
+                   "rides %.0f per cent of its loaded km, V11's %.0f. (4) The ePTO fridge units run from the "
+                   "battery, about %.1f kW for the whole duty: %s pull them; the diesel units on %s draw nothing. "
+                   "(5) Below freezing the draw rises faster (a second rate below 0 C, chosen on Jan-Feb 2026 held "
+                   "out). (6) The batteries lost %.1f per cent for good in their first year, net of the cold. (7) On "
+                   "a -5 C day the pilot drove at %.0f per cent of the routing tool's speed, against %.0f over the "
+                   "year." % (len(pk.days), A.slope_per_100(g["model"]), A.slope_per_100(R["declared weights"][0]),
+                             min(d["combo"] for d in pk.days), max(d["combo"] for d in pk.days),
+                             inp["V02"]["combo"], inp["V14"]["combo"], 100 * inp["V03"]["phi"],
+                             100 * inp["V11"]["phi"], g["tru_kw"], " and ".join(fr),
+                             ", ".join(c for c in sorted(pk.short) if inp[c]["reefer"] == 1.0 and inp[c]["epto"] == 0.0),
+                             100 * g["fade"], 100 * rr, 100 * A.speed_ratio(pk, how="mean")), body),
+         Paragraph("<b>If one is skipped.</b> Trailer left out: %d tractors. Loads to the last drop: %d. No fridge "
+                   "term: %d. Every reefer drawing: %d (%s). The year's speed ratio: %d; the routing tool's speed: %d; no "
+                   "speed term: %d. Declared weights: %d. One cold rate: %d. No first-year loss: %d. Trailer, drops "
+                   "and fridge units all left out, at the year's speed ratio: %d. The workbook has each route." %
+                   (cnt("no trailer weight"), cnt("the load to the last drop"), cnt("no fridge draw"),
+                    cnt("every reefer draws"), "%s in, %s out" % (", ".join(sorted(set(R["every reefer draws"][2]) - set(go))),
+                                                                 ", ".join(sorted(set(go) - set(R["every reefer draws"][2])))), cnt("the year's mean speed ratio"), cnt("the routing tool's speed"),
+                    cnt("no speed term"), cnt("declared weights"), cnt("one cold rate"), cnt("no first-year loss"),
+                    cnt("careful but hurried")), body),
          Paragraph("Inger Norman, Transport planning", small)]
     O.build(path, s, "Battery-electric tractors for Värnamo, 2027", "Inger Norman", "Tractor order memo",
             "Fryele Åkeri AB | Management group, December 2026", dt.datetime(2026, 11, 6, 10, 12, tzinfo=SE),

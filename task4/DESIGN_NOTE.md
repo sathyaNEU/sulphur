@@ -5,98 +5,107 @@
 Subdomain: Regression, classification & model diagnostics (General Statistics & Data Science; house domain Supply Chain & Logistics, fleet electrification)
 Analysis type: Forecasting & Predictive Modeling
 Answer shape: An allocation plus its sensitivity (which shortlisted duties get the tractors, each duty's design-day energy against the limit, and the order each shortcut would place instead)
-Weight: measurement: the order turns on carrying a model fitted on one population (the pilot's slow regional runs) to another (long motorway duties on a winter day), with the speed each duty will actually keep measured from the routing tool's plan and the pilot's record of how far reality falls short of it; task6 sat on a hard-to-measure quantity and task7 on causal savings
-Data-native sentence: the pilot never drove as fast as the Värnamo duties will, and the only record of their speed is a routing tool whose times the pilot shows to be optimistic, more so on winter roads, so the energy a duty needs on the design day has to be carried from the pilot through a speed the files never state.
+Weight: measurement: the order turns on carrying a model fitted on one population (the pilot's regional runs) to another (the Värnamo duties on a winter day) through four covariates each duty's own records never show directly, each measured from another file (the speed through the pilot's winter ratio, the combination's tare through the trailer register, the tonne-km a multi-drop load rides through the notes and the routing tool's stops, the fridge unit's draw through the trailers' equipment codes); task1 sits on synthesis and task7 on modeling
+Data-native sentence: the pilot's daily summaries carry one energy figure per tractor-day, and what each day really hauled (which trailer, how heavy, which unit on it, where the load came off) sits in three other registers, so carrying the pilot to a Värnamo duty means rebuilding each duty's combination, load profile, fridge unit and winter speed from files the pilot model never reads.
 People: Georg Pålsson, fleet manager, who places the order (FES-2's owner); Inger Norman, transport planner, whose workbook and memo the golden are; Pierre Kjellberg, the dealer's key account manager, who signs the quotation (`guard.py names --geo Sweden --seed 505`). None appears in the prompt.
 
-Architecture 7, 2026-11-09, in the same world. Architecture 6 went to the platform and run 1 landed every graded
-result by three reflexes (`runs/arch6/run1.md`). The client's review of architecture 5 asked to keep the data
-package; the run's own assumptions list named the transfer it left untested, which is the failure the client's
-level-5 examples record (runs that "named vintage drift only as an untested assumption", "applied network rates to
-the high-risk picks as an untested assumption"). The world stays; the three reflex steps stay in the chain as
-results a careful run earns; the order now also needs the speed transfer, in two layers, and the prompt no longer
-asks for the planning loads (assembly every run earns).
+Architecture 8, 2026-11-09, in the same world. The client's review of architecture 5 asked to keep the data package, so
+the world stays (`## Template check`); architecture 7's two platform runs lost in one place, by 1 to 3 kWh on one duty
+(`runs/arch7/`). The chain keeps every result the runs earned and adds three judgments a heavy-truck and fleet
+specialist makes on sight and a careful generalist does not: a tonne of trailer costs on every leg what a tonne of
+payload costs on the loaded leg; a multi-drop load does not ride the whole loaded run; and only an ePTO refrigeration
+unit runs from the tractor's battery, by the hour. Each is present across the whole terminal and the pilot, each needs
+a join to another register, and each flips two duties of its own.
 
 ## Deep reasoning
 
-Task type: regression, classification, model diagnostics (General Statistics & Data Science), serving Forecasting & Predictive Modeling: each shortlisted duty's 2027 battery energy on the January design day, forecast from a fitted energy model carried to duties faster than any pilot day, against a limit that is itself a forecast of the ordered battery after a year in service.
-Domain test: the results are a regression slope on an error-prone covariate, a nonlinear temperature response chosen on a held-out season, a degradation separated from a reversible seasonal effect, and an extrapolation in a covariate (speed) whose value for the new units is itself predicted from a planned figure through a ratio that depends on the weather; a statistician carrying a fitted model to a new population does exactly this.
-Swap: "how many community nurses to hire and which rounds they take, from the pilot's visit times" keeps a fitted time model but loses the physics that makes energy per km rise with the square of speed, the routing tool's plan against the pilot's driving times, and the third-party declarations; the call stops making sense.
-Where the weight sits: the speed transfer (R3): the speed term fitted on the pilot's day-to-day speed variation (the fit improves only from 2.88 to 2.51 per cent, so it is easy to leave out), then each Värnamo duty's design-day speed from the routing tool's driving time times the pilot's actual-to-planned ratio fitted against temperature and read at -5 C (0.82, against 0.91 over the year).
-Layer 1: the dairy and the pallet maker declare their planned pallets at a standard weight each; the fleet portal uploads a day twice after a modem reconnect; the tractor's ambient sensor drops out (the station file covers it); the TMS types a declared weight three ways (12000, 12 000 kg, 12,00 t); the weighbridge re-weighs a CMR after an axle limit; the Värnamo duty codes were re-keyed at the April 2026 TMS upgrade; spare tractors change the tare; 1.2 per cent of weighings have no declaration; SOC is logged in whole per cent. Each is asserted neutral on every graded figure (SF5 to SF8) and none decides a result.
-Not one thing: four estimates each move the order on their own (no speed term 9, the routing tool's speed 3, the year's mean speed ratio 5, declared payloads 8, one cold rate 9, no first-year loss 10); a run that makes the three corrections the platform run made still orders 9, and one that adds speed at the routing tool's figure orders 3.
-One-fact test: the most useful sentence ("the Värnamo duties drive faster than the pilot and energy per km rises with speed") leaves the careful pass ordering 3 at the routing tool's speed, with every energy 16 to 28 kWh high: it rescues no graded result on its own (effort.py: 0 of 5); a second sentence about winter roads is needed, and either alone fails.
-Not semantics: every field read right (the route register's driving time is the routing tool's, the summary's driving time the tractor's) still leaves the forecast in proportion to distance: nothing says energy rises with speed, that the duties will drive faster than the pilot, or how far the plan overstates a winter day's speed.
-Not rule application: FES-2 files the WHAT (2.2 the energy, 2.3 the usable battery less the share permanently lost in the first twelve months, 4.1 the design day, 4.2 the planning load, 4.3 the limit, one tractor a duty); nothing filed names a calibration, a cold form, a speed, a ratio or a temperature control.
-Estimand: FES-2 2.1 to 2.3 and 4.1 to 4.3 with the quotation's 540 kWh usable: population the fourteen shortlisted Värnamo duties (fleet_plan_2027.xlsx), outcome the battery energy of a round trip depot out to depot in, window a January working day at -5 C carrying the mean net payload weighed November 2025 to October 2026, unit kWh and tractors, comparison each duty against 85 per cent of 540 kWh less the first year's permanent loss as the company's own tractors show it; the duty's speed on that day is part of the forecast, not a filed figure.
-No decoy: the routing tool's driving times are the planner's ordinary reference data, used by the transport planner for every duty; no file states a duty's design-day energy, speed, a consumption rate or a loss.
+Task type: regression, classification, model diagnostics (General Statistics & Data Science), serving Forecasting & Predictive Modeling: each shortlisted duty's 2027 battery energy on the January design day, forecast from a fitted energy model carried to duties the pilot never ran, against a limit that is itself a forecast of the ordered battery after a year in service.
+Domain test: the results are a regression slope on an error-prone covariate identified alongside a mass term, an auxiliary power read from an equipment code and carried by the hour, a degradation separated from a reversible seasonal effect, and an extrapolation in speed whose value is predicted from a plan through a weather-dependent ratio; a fleet energy engineer carrying a pilot to new duties does exactly this.
+Swap: "how many community nurses to hire and which rounds they take, from the pilot's visit times" keeps a fitted time model but loses rolling resistance on the whole combination's mass, the payload's tonne-km on a multi-drop run, a trailer's fridge unit fed from the tractor's battery, air drag on the square of speed and the third-party declarations; the call stops making sense.
+Where the weight sits: rebuilding each duty's design-day inputs from the registers (R3, R4, R5) and fitting the terms that carry them on the pilot (R1): the trailer each pilot day pulled, its tare and unit from the fleet register, each day's notes taken off at their stops; then each Värnamo duty's trailers from the weighbridge and its notes from the Värnamo TMS export.
+Layer 1: the dairy and the pallet maker declare their planned pallets at a standard weight each; the fleet portal uploads a day twice after a modem reconnect; the tractor's ambient sensor drops out (the station file covers it); the TMS types a declared weight three ways (12000, 12 000 kg, 12,00 t); the weighbridge re-weighs a CMR after an axle limit; the Värnamo duty codes were re-keyed at the April 2026 TMS upgrade (in the bridge log and the Värnamo notes alike); spare tractors change the stored tare; 1.2 per cent of weighings have no declaration; a multi-drop day's declared weight is split over several notes; SOC is logged in whole per cent. Each is asserted neutral (SF5 to SF8, SF27, SF33) and none decides a result.
+Not one thing: the strongest single piece (the winter speed ratio) rescues 1 of 8 results; a run that nails it still loses the payload term, the fridge duties, the combinations and drops, the energies of seven duties and the order. Four estimates each flip two duties of their own: trailer weight (V02, V14), drops (V03, V11), the fridge units (V24, V30; every reefer drawing flips V30, V33), the winter speed (V03, V11, V33 at the year's ratio; V14, V30 with none).
+One-fact test: the most useful sentence ("the duties drive slower than the routing tool plans on a -5 C day than over the year") rescues 1 of 8 results (R4) on the careful pass, which still orders 5 (effort.py); the fridge sentence rescues 1 (R3), the drops and tare sentences 0 alone, because the payload term needs both. The stage 4 judge's independent estimate put the drops sentence at 2 of 8 (R1 and R5 read generously); either count is under a third.
+Not semantics: every field read right (the trailer register's tare and equipment, the notes' towns and weights, the stops' km, the route register's routing-tool driving time) still leaves a model in proportion to distance and departing payload: nothing filed says a trailer's tare costs energy, that a load comes off along the run, which unit draws on the tractor or that a winter day runs slower than the plan.
+Not rule application: FES-2 files the WHAT (2.1 the duty with its drops, 2.2 the energy the tractor draws, 2.3 the usable battery less the first year's permanent loss, 4.1 the design day, 4.2 the planning load, 4.3 the limit, one tractor a duty); nothing filed names a calibration, a mass term, a stop, a fridge unit, a speed, a ratio or a temperature form.
+Estimand: FES-2 2.1 to 2.3 and 4.1 to 4.3 with the quotation's 540 kWh usable and 11,980 kg tractor: population the fourteen shortlisted Värnamo duties (fleet_plan_2027.xlsx), outcome the battery energy of a round trip depot out to depot in with its drops, window a January working day at -5 C departing with the mean net payload weighed November 2025 to October 2026, unit kWh and tractors, comparison each duty against 85 per cent of 540 kWh less the first year's permanent loss as the company's own tractors show it; the duty's trailers, drops and speed on that day are part of the forecast, not filed figures.
+No decoy: the routing tool's driving times and stop list are the planner's reference data; the trailer register is the fleet's own; no file states a duty's design-day energy, speed, a consumption rate, a draw or a loss.
 No replay: no result re-derives a published figure and no stated number in the pack is wrong.
-Pinned: run on the cut pack and the clean truth (checks.py, 178 assertions; verify.py's independent moments correction, tractor-by-tractor loss and a design-day speed ratio from the days within 3 C of -5): knots at 14, 18, -2 and 2 C, a quadratic, temperature bins, the station's temperature, either year alone, a within-duty fit, the calibration on the last twelve months, each load at its shipper's mean, one shipper line over both note periods, every temperature-controlled loss fit, speed as a straight line, and the ratio's slope below 8 or 12 C, on the temperature or over days within 2.5 C: every one orders the six with every energy within 7 kWh.
-Run forecast: R1 and R2 earned (the platform run made both); R3 lost to an unfinished chain (the transfer to faster duties named and left untested, or speed added at the routing tool's figure, a self-confirming plan); R4 Partly; R5 lost.
-Strategy label: WORKS IN FORM (a forecast carried to a population the fit never saw, through a covariate whose value for the new units is itself an estimate), beside measurement error read from the pack's own gold-standard record.
-Depth level: 5. Four independent estimates each move the order (speed: 9, 3 or 5 depending on how it is carried; payload 8; cold 9; loss 10); effort.json records 6 distinct wrong orders over 11 shortcuts; strong runs get most steps and lose on the transfer.
-Lesson: a model that validates on its own stream can still be wrong where it is used; carrying it to new units means asking which covariates the new units leave the fitted range on, and estimating their values there rather than reading a plan.
+Pinned: run on the cut pack and the clean truth (checks.py, 330 assertions; verify.py's moments correction, group-mean dwell and tractor-by-tractor loss): knots at 14, 18, -2 and 2 C, a quadratic, temperature bins, the station's temperature, either year alone, the calibration on the last twelve months, each load at its shipper's mean, one shipper line over both note periods, every temperature-controlled loss fit, speed as a straight line, five forms of the speed ratio, one coefficient for tare and payload, the fridge unit by driving hours or by km, the drops at equal shares: every one orders the seven with every energy within 9 kWh and the payload term from 2.0 to 2.25. A within-duty fit also orders the seven; its slope (2.8, standard error 0.19 against the pooled 0.04) rests on the dairy duty's pallet counts alone, and is ruled out by that precision.
+Run forecast: R2 earned (the runs made it); R1 lost to a method shortcut (per departing tonne, the trailer never read: 2.9); R3 lost to a narrow look at broad data (the equipment column never read, or every reefer drawing); R4 lost to a method shortcut (the year's ratio, as both arch 7 runs did); R5 lost to an unfinished chain; R6 Partly; R7 Partly; R8 lost. A run that catches one of the three new judgments loses the other two in different duties.
+Strategy label: WORKS IN FORM (a forecast carried to a population the fit never saw, through covariates whose values for the new units are themselves estimates from other registers), beside measurement error read from the pack's own gold-standard record.
+Depth level: 5. Six estimates each move the order or a graded figure on their own (trailer weight 9, drops 5, fridge 9 or 7, winter speed 0, 4 or 9, declarations 8, cold 9, loss 9); effort.json records 10 distinct wrong answers over 15 shortcuts; the careful pass orders 5.
+Lesson: a pilot model carried to new duties is carried through every covariate the duties differ on, and in a truck fleet those live in the trailer, the drop list and the equipment codes, not in the energy log; a model that validates on its own stream says nothing about the inputs it never saw.
 
 ## Results chain
 
 | ID | Result (checkable) | Area | Pinned by | Band | Hurried analyst | Depends on | Graded as |
 |---|---|---|---|---|---|---|---|
-| R1 | one tonne of payload adds 2.1 kWh per 100 loaded km | missingness and measurement | the weighbridge's weighed-on-declared lines per pilot shipper and note period; the regression-calibrated refit | 1.9 to 2.1 | self-confirming check: the declared fit (1.2) validated on held-out pilot days that carry the same declarations (the platform run did not make it) | - | Component 1 |
-| R2 | the batteries' first-year permanent loss, 3.8 per cent (usable 520 kWh, limit 442 kWh) | modeling | FES-2 2.3; energy per full charge with a level per tractor, age and degrees below 20 C | 3.6 to 4.0 | method shortcut: the age trend alone, 3.2 | - | Component 2 |
-| R3 | the fourteen design-day energies, nearest 10 kWh (V03 450, V07 460, V11 450, V14 440, V30 460 ...) | forecasting | FES-2 4.1, 4.2; the speed term fitted on the pilot, each duty's routing-tool speed times the pilot's actual-to-planned ratio at -5 C; the cold form chosen on January and February 2026 held out | each within 10 kWh | unfinished chain: energy in proportion to distance at the pilot's own speeds, 9 to 21 kWh low (the transfer named as an assumption); or speed added at the routing tool's figure, 16 to 28 high | R1 | Ask 1 |
-| R4 | each duty's verdict against 442 kWh | synthesis | FES-2 4.3 | exact per duty | unfinished chain: 11 of 14 on the speed-less forecast | R2, R3 | Ask 2 |
-| R5 | order 6: V02, V05, V09, V14, V16, V18 | synthesis | FES-2 4.3, one tractor a duty | exact | unfinished chain: 9 without speed, 3 at the routing tool's speed, 5 at the year's ratio | R2, R3 | Recommendation |
+| R1 | one tonne of payload adds 2.2 kWh per 100 loaded km | missingness and measurement | the weighbridge's weighed-on-declared lines per pilot shipper and note period; the tare and drops in the same fit | 2.0 to 2.4 | method shortcut: per departing tonne with the trailer never read, 2.9 (1.3 on the declarations, 1.9 to the last drop, 3.1 without the trailer) | - | Component 1 |
+| R2 | the batteries' first-year permanent loss, 3.8 per cent (usable 519 kWh, limit 442 kWh) | modeling | FES-2 2.3; energy per full charge with a level per tractor, age and degrees below 20 C | 3.6 to 4.0 | method shortcut: the age trend alone, 3.2 | - | Component 2 |
+| R3 | the shortlisted duties whose fridge unit draws on the battery: V24 and V30 (ePTO units, 4.4 kW from depot out to depot in); V33's diesel units draw nothing | data discovery | the fleet register's Trailers sheet (Equipment), the trailers on the Värnamo notes; the pilot's dairy days with and without the ePTO unit | exact set | narrow look at broad data: the Equipment column never read (no duty), or every reefer drawing (V24, V30, V33) | - | Component 3 |
+| R4 | actual over planned speed on a -5 C day, 0.77 | forecasting | the pilot's speeds against the routing tool's driving times, fitted against temperature | 0.75 to 0.79 | method shortcut: the year's ratio, 0.89 (both arch 7 runs) | - | Component 4 |
+| R5 | V02 and V14 haul 22.7 and 22.5 t combinations with the 2027 tractor (pilot 20.3 t); V03 and V11's loads ride 0.60 and 0.57 of their loaded km | assembly and reconciliation | the weighbridge's trailer registrations and the register's tare; the Värnamo notes on the routing tool's stops | 0.3 t; 0.03 | unfinished chain: the pilot's average combination and the full loaded run for every duty | - | Component 5 |
+| R6 | the fourteen design-day energies, nearest 10 kWh (V03 430, V11 430, V33 430, V02 460, V14 460, V24 460, V30 460 ...) | forecasting | FES-2 4.1, 4.2; the model with every term, each duty's inputs from R3 to R5 at its design-day speed | each within 10 kWh | unfinished chain: V03 and V11 near 500, every speed-sensitive energy 12 to 20 high at the year's ratio | R1, R3, R4, R5 | Ask 1 |
+| R7 | each duty's verdict against 442 kWh | synthesis | FES-2 4.3 | exact per duty | unfinished chain: 12 of 14 on the careful pass | R2, R6 | Ask 2 |
+| R8 | order 7: V03, V05, V09, V11, V16, V18, V33 | synthesis | FES-2 4.3, one tractor a duty | exact | unfinished chain: 5 on the careful pass; 9 without the trailer or the fridge term, 5 to the last drop, 0 at the routing tool's speed | R2, R6 | Recommendation |
 
-Carry-forward: R1 and R2 stand alone on their own inputs (the bridge and the pilot; the pilot's SOC records); R3 falls with R1 and with the speed transfer and the cold form; R4 and R5 fall with R2 or R3. No analytical result carries more than two of the four others.
+Carry-forward: R1 to R5 stand alone on their own inputs (the bridge and the pilot; the pilot's SOC records; the trailer register and the dairy days; the pilot's speeds; the registers and the notes); R6 falls with R1 and R3 to R5; R7 and R8 fall with R2 or R6. No analytical result carries more than half of the others.
 
 ## Hidden factor record
 
 | Factor | Real or constructed | Only in deciding units | Found by | Fix depth | Verdict |
 |---|---|---|---|---|---|
-| energy per km rising with the square of speed (air drag) | constructed as physics across every pilot day | no: every pilot day carries it through its day-to-day speed (traffic, roadworks, winter); the speed-less route misreads all fourteen shortlisted energies by 9 to 21 kWh and flips three | modelling: a speed term on the pilot's day-to-day variation, then a forecast outside the pilot's speeds | modelling (a covariate carried to new values) | keep: the fit barely improves on the pilot, so finding it is analysis, and it is one of four |
-| the routing tool's optimism, larger on winter roads | constructed as a planning process across every duty | no: all nine pilot duties and every day show it; the routing-tool route misreads all fourteen by 16 to 28 kWh and flips three, the year's ratio misreads all by 11 to 13 and flips one | modelling: actual over planned speed on the pilot fitted against temperature, read at -5 C | modelling (a ratio model carried to new units) | keep: needs the speed term first, and is graded through the energies |
-| shipper-specific declaration error | constructed by simulating how each shipper writes a note | no: 17 shippers, 46 duties, two years | modelling: weighed-on-declared regressions per shipper and period | modelling | keep: earned by careful runs, one of four |
+| energy per km rising with the square of speed, and the routing tool's optimism larger on winter roads | constructed as physics and a planning process across every day | no: all nine pilot duties and every day; the year's ratio misreads all fourteen shortlisted energies by 12 to 20 kWh and flips three | modelling: a speed term, then a ratio fitted against temperature read at -5 C | modelling | keep: one of four |
+| the combination's tare on every leg | constructed as physics across every trailer | no: every pilot day (combinations 17.6 to 22.7 t, mixed pools) and every Värnamo duty; leaving it out misreads eight shortlisted energies by 10 kWh or more and flips two (V02, V14), and misreads V03, V07, V11 and V21 where nothing turns | modelling: join each day's trailer to the register, a mass term on every km | modelling (a covariate carried by item) | keep |
+| a multi-drop load taken off along the run | constructed as a delivery process on 4 pilot duties and 22 Värnamo duties | no: carried to the last drop the payload term falls to 1.9 and every heavy energy moves; flips V03 and V11, misreads V07 and V21 where nothing turns | modelling: each note's weight off at its stop's km, the tonne-km in the fit | modelling | keep |
+| ePTO refrigeration units drawing on the tractor's battery by the hour | constructed as equipment across the fleet's reefers (ePTO, diesel, diesel with standby, axle generator) | no: the pilot dairy duty's pool mixes all three unit kinds, three Värnamo duties off the shortlist pull ePTO units; leaving it out flips V24 and V30 and moves the payload term to 1.7 | a targeted read of the Equipment codes, then modelling (a power term by the hour, the dairy days with and without the unit) | modelling | keep: found by reading the codes as an SME, fixed by a term the pilot must estimate |
+| shipper-specific declaration error | constructed by simulating how each shipper writes a note | no: 19 shippers, 46 duties, two years | modelling: weighed-on-declared regressions per shipper and period | modelling | keep: earned by careful runs |
 | the sub-zero cold curve and the cold's temporary capacity loss | constructed as physics across every day | no: every day below about 3 C and 20 C | modelling, a held-out season | modelling | keep: earned by careful runs |
 
 ## Effort test
 
 | Result | Quick pass | Careful but hurried | Thorough |
 |---|---|---|---|
-| R1 payload term, kWh per t per 100 km | Missed | Right | Right |
+| R1 payload term, kWh per t per 100 loaded km | Missed | Missed | Right |
 | R2 first-year battery loss, per cent | Missed | Right | Right |
-| R3 the 14 design-day energies | Missed | Missed | Right |
-| R4 each duty's verdict | Partly | Partly | Right |
-| R5 the order | Missed | Missed | Right |
-| Roughly | 0.5 of 5 | 2.5 of 5 | 5 of 5 |
+| R3 the duties whose fridge unit draws from the battery | Missed | Missed | Right |
+| R4 actual over planned speed on a -5 C day | Missed | Missed | Right |
+| R5 the combination's weight and the load's share of the loaded run | Missed | Missed | Right |
+| R6 the 14 design-day energies | Missed | Partly | Right |
+| R7 each duty's verdict | Partly | Partly | Right |
+| R8 the order | Missed | Missed | Right |
+| Roughly | 0.5 of 8 | 2 of 8 | 8 of 8 |
 
 Measured by: .claude/skills/stumping/effort.py on generator/effort.json (generator/effort_passes.py runs each pass end to end on the cut pack)
-Largest single hint: the Värnamo duties drive faster than the pilot and energy per km rises with speed; rescues 0 of 5 results
-Pair estimate: 44.8
+Largest single hint: the duties drive slower than the routing tool plans on a -5 C day than over the year; rescues 1 of 8 results
+Pair estimate: 39.3
 
-The careful column is the architecture 6 platform run's own method on this pack: it earns R1 and R2 and forecasts in
-proportion to distance at the pilot's speeds (9 tractors). A run that adds speed and reads the routing tool's figure
-orders 3 with every energy 16 to 28 kWh high; one that applies the year's ratio orders 5 with every energy 11 to 13
-high. Only the ratio read at -5 C lands the six.
+The careful column is both architecture 7 platform runs' own method on this pack (calibrated payloads, the curved cold
+form, the loss net of the cold, squared speed at the year's ratio, energy per km and per departing tonne): it earns R2
+and orders 5. The paper is optimistic and a frontier run reads every file; a run that also joins the trailers earns
+part of R5 and moves V02 and V14, one that reads the Equipment codes earns R3, and each still loses the others' duties,
+so the expected spread is losses in different places rather than a landing.
 
 ## Data provenance
 
 Source: generated by task4/generator from a simulated process (sim.py, pack.py, docs.py), seed 5405; real Swedish town names, everything else invented.
-Behaves like the real thing: a battery-electric 64-tonne combination's energy per km rises with climb, payload on the loaded leg, cold and the square of speed, with trip noise of 3 per cent and a route effect per duty; the routing tool plans each duty's driving time and the trucks fall short of it, more so on winter days; the consignment note carries what the shipper writes; the bridge weighs every departure; the battery loses capacity in service and the cold depresses each day's energy per full charge.
-Genuine patterns: (1) seasonal temperature with persistence at two stations and a truck-against-station offset; (2) energy per km rising with climb, cold (bending below freezing), payload and speed; (3) actual speed falling short of the plan, more in winter, with day-to-day traffic noise; (4) declaration error by shipper practice, one practice changing in the window; (5) capacity loss with age and a reversible cold effect, tractor by tractor; (6) per-duty route effects and duty rotation over six tractors.
-Problems by process: re-uploads after modem reconnects, sensor dropouts, three weight formats typed into the TMS, re-weighs after axle limits, duty codes re-keyed at the TMS upgrade, spare tractors, blank declarations, SOC in whole per cent.
-Breadth: 12 files; the weighbridge holds 21,442 weighings of 46 duties from 17 shippers; 2,334 pilot duty-days on six tractors; the route register's 55 duties with their routing-tool driving times; a ten-year temperature record at two stations; two distractors (the Värnamo fuel card statement and the workshop log).
+Behaves like the real thing: a battery-electric 64-tonne combination's energy per km rises with climb, cold (bending below freezing), the square of speed and the whole combination's mass on every leg, with the payload's tonne-km on the loaded run as each drop comes off; an ePTO fridge unit draws about 4.4 kW from depot out to depot in; trip noise 3 per cent and a route effect per duty; the routing tool plans each duty's driving time and the trucks fall short of it, more so on winter days; the consignment notes carry what the shipper writes, one per drop; the bridge weighs every departure with its trailer; the battery loses capacity in service and the cold depresses each day's energy per full charge.
+Genuine patterns: (1) seasonal temperature with persistence at two stations and a truck-against-station offset; (2) energy per km rising with climb, cold, speed and combination mass; (3) actual speed falling short of the plan, more in winter, with day-to-day noise; (4) declaration error by shipper practice, one practice changing in the window; (5) capacity loss with age and a reversible cold effect, tractor by tractor; (6) trailer pools by goods (box, mega, double deck, reefer, flatbed with and without a truck-mounted forklift, tipper, inloader) with tare by build and equipment; (7) drop shares varying day to day around each customer's usual order; (8) dwell at the collection and each drop.
+Problems by process: re-uploads after modem reconnects, sensor dropouts, three weight formats typed into the TMS, re-weighs after axle limits, duty codes re-keyed at the TMS upgrade, spare tractors, blank declarations, a day's weight split over several notes, SOC in whole per cent.
+Breadth: 13 files; the weighbridge holds 21,417 weighings of 46 duties from 19 shippers; the Värnamo notes 17,839 consignments; 2,334 pilot duty-days on six tractors; 145 trailers with 73 distinct equipment strings; the route register's 55 duties with their routing-tool times and stop lists; a ten-year temperature record at two stations; two distractors (the Värnamo fuel card statement and the workshop log).
 
 ## Template check
 
-Chain signature: missingness-measurement, modeling, forecasting, synthesis
+Chain signature: missingness-measurement, modeling, data-discovery, forecasting, assembly-reconciliation, forecasting, synthesis, synthesis
 Question form: how-many, then which (the order and its duties), with the payload figure and the loss asked as their own quantities
-Nearest build: task6 (v7, a flagged set of services from cluster-sampled SLIs): different shape, weight and areas; the client's level-5 examples carry a population transfer (network rates to high-risk picks, pooled vintages), but none carries a fitted physical model to new values of a covariate predicted from a plan through a weather-dependent ratio; the abstraction sentence is not writable against a build on file.
+Nearest build: task4 architecture 7 (the same world, kept on the client's instruction; differentiation filed on the card: one covariate there, four here, three of them read from other registers); against other builds, task6 (a flagged set from cluster-sampled SLIs) and task1 (an ARR path with drivers) differ in shape, weight and areas; the abstraction sentence against a build on file other than this slot's own lineage cannot be written.
 
 ## Semantic fork table
 
 | ID | Term or convention | Readings | Golden | Ruled out by |
 |---|---|---|---|---|
-| SF1 | the design day's temperature | the trucks' ambient (station-filled), or the station's throughout | trucks' ambient | same call, energies within 7 kWh (asserted) |
+| SF1 | the design day's temperature | the trucks' ambient (station-filled), or the station's throughout | trucks' ambient | same call, energies within 10 kWh (asserted) |
 | SF2 | a duty's energy | energy_used_kwh, or consumption times distance | energy_used_kwh | FES-2 2.2; identical within 0.5 kWh (asserted) |
 | SF3 | the planning load | mean weighed net payload, or mean declared | weighed | FES-2 4.2; same call (asserted) |
 | SF4 | the twelve months | Nov 2025 to Oct 2026, calendar 2025, or every month on the bridge | Nov 2025 to Oct 2026 | FES-2 4.2; same call (asserted) |
@@ -105,13 +114,13 @@ Nearest build: task6 (v7, a flagged set of services from cluster-sampled SLIs): 
 | SF7 | an ambient dropout | station day plus the mean offset, or the day dropped | filled | same call (asserted) |
 | SF8 | a declared weight in tonnes | parsed, or those days dropped | parsed | same call (asserted) |
 | SF9 | the battery the limit starts from | the quotation's 540 kWh, or the pilot's 520 | 540 | FES-2 2.3 and 4.3; the quotation (asserted) |
-| SF10 | the payload of a pilot day | the weighed load the declaration stands for, or the declaration | weighed equivalent | the bridge's per-shipper lines; R1's own result |
+| SF10 | the payload of a pilot day | the weighed load the day's notes stand for, or the declaration | weighed equivalent | the bridge's per-shipper lines; R1's own result |
 | SF11 | the cold form | curved below freezing, or one rate below 16 C | curved | the January and February 2026 holdout (asserted) |
-| SF12 | rounding | energies to the nearest 10 kWh, graded within 10 kWh | as filed | every rival within 7 kWh (asserted) |
+| SF12 | rounding | energies to the nearest 10 kWh, graded within 10 kWh | as filed | every rival within 9 kWh (asserted) |
 | SF13 | tractors | one per duty assigned | one per duty | FES-2 4.3 (asserted) |
 | SF14 | the fit's window | Mar 2025 to Oct 2026, or one year | both | same call (asserted) |
 | SF15 | the calibration's window | both years on the bridge, or the last twelve months | both | same call (asserted) |
-| SF16 | the fit's structure | one level per km with climb, or a level per duty | either | same call (asserted) |
+| SF16 | the fit's structure | one level per km with climb and tare, or a level per duty | one level | the within-duty slope's standard error is four times the pooled fit's and rests on one duty (asserted); it keeps the order (asserted) |
 | SF17 | the fit's km | odometer, or the route register's | either | same call (asserted) |
 | SF18 | the drinks maker's notes | one line per note period, or one over both | either | same call (asserted) |
 | SF19 | the loss's temperature term | degrees below 20 C, the day's temperature, its square, degrees below 15 C | any | within 0.2 points, same call (asserted) |
@@ -119,9 +128,17 @@ Nearest build: task6 (v7, a flagged set of services from cluster-sampled SLIs): 
 | SF21 | "permanently loses in its first twelve months" | at like temperature, or with the cold left in | like temperature | FES-2 2.3 "permanently"; the cold's loss returns each spring |
 | SF22 | the limit's arithmetic | 85 per cent of 540 less the loss share | as filed | FES-2 2.3 and 4.3 (asserted) |
 | SF23 | the usable battery after a year | 540 x (1 - loss) | as filed | asserted |
-| SF24 | a duty's speed on the design day | the routing tool's speed times the pilot's actual-to-planned ratio at -5 C, or the routing tool's speed, or the year's ratio | ratio at -5 C | FES-2 4.1 files the day (a January working day at -5 C); the pilot's ratio falls with temperature (asserted); the other readings order 3 and 5 |
+| SF24 | a duty's speed on the design day | the routing tool's speed times the pilot's ratio at -5 C, or the routing tool's speed, or the year's ratio | ratio at -5 C | FES-2 4.1 files the day; the pilot's ratio falls with temperature (asserted); the other readings order 0 and 4 |
 | SF25 | the speed term's form | the square of speed, or a straight line | either | same call (asserted) |
 | SF26 | the ratio's form | a slope below 8, 10 or 12 C, on the temperature, or days within 2.5 C | any | same call (asserted) |
+| SF27 | the trailers a duty runs with | the bridge's trailer registrations, or the trailers on its notes | either | within 60 kg per duty (asserted) |
+| SF28 | which fridge units draw on the battery | ePTO only, or every reefer | ePTO | the dairy days with diesel and axle-generator units show no draw (asserted); the quotation's electric PTO |
+| SF29 | a multi-drop load's shares | each note's declared weight, or equal shares | either | same call, within 9 kWh (asserted) |
+| SF30 | the tare term | its own coefficient, or the payload's | either | same call, payload term 2.0 to 2.25 (asserted) |
+| SF31 | the fridge unit's basis | hours depot out to depot in, driving hours, or km | any | same call, within 9 kWh (asserted) |
+| SF32 | the 2027 tractor's own weight | the quotation's 11,980 kg, or the pilot tractors' | quotation | same call (asserted); the quotation states it |
+| SF33 | a trailer's tare | the register's, or the bridge's stored tare less the diesel tractor's | either | identical for every trailer (asserted) |
+| SF34 | a duty's combination tare over several trailers | each departure's trailer (weighted by use), or each distinct trailer once | weighted by use | same call, within 0.3 t and 3 kWh on every duty (asserted; the judge measured about 24 kg) |
 
 ## Closure table
 
@@ -131,42 +148,74 @@ Nearest build: task6 (v7, a flagged set of services from cluster-sampled SLIs): 
 | 2 Unit of account | a duty, one tractor each: FES-2 4.3 (SF13) |
 | 3 Attribution window | a January working day at -5 C: FES-2 4.1; the duty's speed on that day estimated (SF24) |
 | 4 As-of dating | extracts to 30 October 2026, the memo of 6 November: the call reads no later record |
-| 5 Version basis | FES-2 version 3 (September 2025), quotation Q-26-1187, the route register as saved in October 2026: filed |
+| 5 Version basis | FES-2 version 3 (September 2025), quotation Q-26-1187, the registers as saved in autumn 2026: filed |
 | 6 Denominator | 540 kWh less the first year's permanent loss: FES-2 2.3, 4.3 (SF9, SF22) |
-| 7 Weighting | each departure once in the planning load; each pilot day once in the fits: FES-2 4.2, C1 |
-| 8 Window length | twelve months for the load (SF4); twelve months in service for the loss (FES-2 2.3) |
-| 9 Boundary inclusivity | no more than 85 per cent: FES-2 4.3; no duty within 5 kWh (asserted) |
+| 7 Weighting | each departure once in the planning load and the duty's trailer tare; each pilot day once in the fits: FES-2 4.2, C1 |
+| 8 Window length | twelve months for the load, the trailers and the notes (SF4); twelve months in service for the loss (FES-2 2.3) |
+| 9 Boundary inclusivity | no more than 85 per cent: FES-2 4.3; no duty within 13 kWh (asserted) |
 | 10 Rounding path | unrounded to the end; energies to 10 kWh, payload to 0.1, loss to 0.1 per cent: the prompt (SF12) |
 | 11 Tie-break | none: no duty at the limit (asserted) |
 | 12 Maturity and censoring | none: the records are complete to their last day |
-| 13 Order of operations | duplicates dropped, joined, fitted: C1 (SF6) |
+| 13 Order of operations | duplicates dropped, notes summed per tractor-day, joined, fitted: C1 (SF6) |
 | 14 Row order | weighings by time within a CMR: C1 (SF5) |
 | 15 Duplicate resolution | a re-uploaded day once, a re-weighed CMR at its later weighing: C1 (SF5, SF6) |
-| 16 Identity normalisation | duty codes through the register's crosswalk: C1 |
-| 17 Netting against gross | net payload as gross less tare: the bridge's columns |
-| 18 Dimensional units | kWh, km, tonnes, km/h, hours; three weight formats; SOC in per cent: C1 (SF8) |
-| 19 Code and status semantics | the remark on a first weighing: C1 (SF5) |
+| 16 Identity normalisation | duty codes VMO-nn to Vnn in the bridge log and the notes; trailers by registration: C1 |
+| 17 Netting against gross | net payload as gross less stored tare: the bridge's columns (SF33) |
+| 18 Dimensional units | kWh, km, tonnes, km/h, hours, kW; three weight formats; SOC in per cent: C1 (SF8) |
+| 19 Code and status semantics | the remark on a first weighing (SF5); the trailers' equipment codes (SF28) |
 | 20 Integerisation | tractors are whole duties: FES-2 4.3 |
 | 21 Clause scope | FES-2 2.1 to 2.3 for the terms, 4.1 to 4.3 for the call |
-| 22 Forward window contents | the 2027 model's battery after a year, the shortlist, the design day and the speed kept on it: filed or estimated (SF11, SF21, SF24) |
+| 22 Forward window contents | the 2027 model's battery after a year and its weight, the shortlist, the design day, the duty's trailers, drops and speed on it: filed or estimated (SF11, SF21, SF24, SF27, SF32) |
 
 ## Literal reader
 
-FES-2 4.1 to 4.3 executed word for word: each shortlisted duty's energy on a January working day at -5 C carrying the
-mean weighed net payload of November 2025 to October 2026, against 85 per cent of 540 kWh less the share a battery
-permanently loses in its first twelve months: 442 kWh, six duties, six tractors. The route register's "Driving time h
-(routing tool)" is the planner's figure and says so; the daily summary's driving time is the tractor's. The prompt's
-"forecast from what our Jönköping pilot tractors drew on their own duties" files the source, not a method.
+FES-2 2.1 to 4.3 executed word for word: each shortlisted duty's round trip, with its drops, on a January working day at
+-5 C departing with the mean weighed net payload of November 2025 to October 2026, the energy the tractor draws from its
+battery, against 85 per cent of 540 kWh less the share a battery permanently loses in its first twelve months: 442 kWh,
+seven duties, seven tractors. The route register's "Driving time h (routing tool)" and "Km from collection (routing
+tool)" are the planner's figures and say so; the daily summary's driving time is the tractor's. The prompt's "forecast
+from what our Jönköping pilot tractors drew on their own duties" files the source, not a method.
+
+leak.py REVIEW lines (19b6bec9): FES-2's clause numbers 2.2 and 4.4 coincide with the payload term and the fridge
+draw (clause numbers, not figures); 540 kWh is the quotation's usable battery, an input the limit is built from; the
+call's words in FES-2 and the quotation (battery-electric, tractors, duties, order) and the stump words in them
+(record, register, temperature; trailer, weight, equipment, in the quotation's specification lines "Unladen weight"
+and "Electric PTO ... for body and trailer equipment", a dealer's ordinary lines that SF28 and SF32 rest on) name no
+step; the shell quota is the author's rewrite to vary.
 
 ## Prompt contract
 
 A voice rewrite keeps: the question (how many and which), every shortlisted duty's design-day energy forecast from
 the pilot and its verdict, the payload figure per tonne per 100 loaded km, the first-year permanent loss as a share
 of usable battery, a spreadsheet and a one-page PDF memo, and the rounding (10 kWh, 0.1 kWh, 0.1 per cent). It never
-adds: speed, driving time, the routing tool, a declaration, a weighbridge, a calibration, a cold or temperature form,
-a holdout, state of charge, a shipper, a file name or who is asking.
+adds: speed, driving time, the routing tool, a trailer, tare, weight of the combination, a drop or stop, a fridge or
+reefer unit, a declaration, a weighbridge, a calibration, a cold or temperature form, a holdout, state of charge, a
+shipper, a file name, the standard by its code, or who is asking.
 
 ## Tried and rejected
+
+- 2026-11-09, architecture 7 (the speed transfer as the deciding step beside the three reflex steps): both platform runs
+  (`runs/arch7/run1.md`, `run2.md`, summaries) earned the payload term (1.98, 1.97), the loss (3.75), the cold curve and
+  12 of 14 energies, fitted squared routing-tool speed (the year's ratio absorbed) and ordered 5, V14 out at 444.4 and
+  443.0 kWh against the 442 kWh limit (golden 435.4). One duty, one judgment, 1 to 3 kWh: a thin level 3, and the
+  graded 10 kWh band held both verdicts on V14; run 2 offered the golden's answer as a defensible alternative. Re-rooted
+  as architecture 8: three more covariates the pilot's own rows do not show (the combination's tare by trailer, the
+  tonne-km of a multi-drop load, the ePTO fridge units), each flipping two duties of its own, and no duty within 13 kWh.
+- 2026-11-09, stage 2 pricing, the trailer pools one kind per pilot duty: the tare term (1.6) and the payload term (2.4)
+  were confounded between duties and one shared coefficient gave 2.0, a 0.4 spread on R1; mixed pools (a mega on a box
+  duty, a forklift on half the building-materials flatbeds) identify the tare within duty and bring the spread to 0.2.
+- 2026-11-09, stage 2 pricing, the fridge unit at 3.4 kW: "every reefer draws" moved V33 13 kWh, no flip at a 13 kWh
+  margin; at 4.4 kW it flips V30 and V33 clear of the limit.
+- 2026-11-09, stage 2 pricing, V11 with two drops (0.56 at 44 per cent of the run): carried to the last drop it moved only
+  9 kWh; three drops with a first stop at a fifth of the run move it 18.
+- 2026-11-09, stage 2 pricing, the winter ratio at 0.0100 a degree and drag 0.046: the year's ratio moved every energy
+  11 to 13 kWh and flipped nothing at a 13 kWh margin; at 0.0120 and 0.054 it moves 12 to 20 and flips V03, V11, V33.
+- 2026-11-09, stage 2, a payload elevation term (the loaded leg's net descent): within-duty payload spread times a fixed
+  elevation is under 1 kWh against 7 kWh of trip noise, so the term is set by physics constants (an efficiency and a
+  regeneration share) the pack cannot pin: a fork, dropped.
+- 2026-11-09, stage 2, a 2027 annual electricity figure over a normal year (the convexity of the cold curve): the gap
+  between the year's energy at the mean temperature and over the ten-year distribution is about 2.5 per cent, inside the
+  honest family's spread; dropped.
 
 - 2026-11-09, architecture 6 (three estimates each moving the order: the payload term under declaration error, the
   sub-zero cold curve, the first-year battery loss net of the cold): the platform's run 1 landed the call and every

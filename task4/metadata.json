@@ -1,6 +1,6 @@
 {
  "task": "task4",
- "architecture": 7,
+ "architecture": 8,
  "title": "How many battery-electric tractors a Sm\u00e5land road haulier should order for its V\u00e4rnamo duties for 2027, and which duties they take, under its fleet electrification standard",
  "domain": "Supply Chain & Logistics (house domain) in General Statistics & Data Science",
  "subdomain": "regression, classification & model diagnostics (fleet electrification: which regular duties battery-electric tractors can run on one charge)",
@@ -18,8 +18,8 @@
   {
    "path": "weighbridge_varnamo_2024-11_2026-10.csv",
    "format": "csv",
-   "bytes": 1862397,
-   "rows": 21407,
+   "bytes": 1863417,
+   "rows": 21417,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-11-06",
    "license": "CC0-1.0 (original work)"
@@ -27,7 +27,7 @@
   {
    "path": "bev_daily_summary_2025-03_2026-10.csv",
    "format": "csv",
-   "bytes": 315109,
+   "bytes": 315064,
    "rows": 2374,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-11-06",
@@ -36,8 +36,17 @@
   {
    "path": "tms_consignments_jonkoping_2025-2026.csv",
    "format": "csv",
-   "bytes": 276401,
-   "rows": 3501,
+   "bytes": 570748,
+   "rows": 6613,
+   "source": "Constructed (seeded generator, task4/generator)",
+   "pull_date": "2026-11-06",
+   "license": "CC0-1.0 (original work)"
+  },
+  {
+   "path": "tms_consignments_varnamo_2025-11_2026-10.csv",
+   "format": "csv",
+   "bytes": 1616629,
+   "rows": 18074,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-11-06",
    "license": "CC0-1.0 (original work)"
@@ -45,7 +54,7 @@
   {
    "path": "route_register_2026.xlsx",
    "format": "xlsx",
-   "bytes": 10511,
+   "bytes": 13342,
    "rows": null,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-11-06",
@@ -54,7 +63,7 @@
   {
    "path": "fleet_register_2026.xlsx",
    "format": "xlsx",
-   "bytes": 11271,
+   "bytes": 16752,
    "rows": null,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-11-06",
@@ -63,7 +72,7 @@
   {
    "path": "shipper_register_2026.xlsx",
    "format": "xlsx",
-   "bytes": 7360,
+   "bytes": 7484,
    "rows": null,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-11-06",
@@ -72,7 +81,7 @@
   {
    "path": "fleet_plan_2027.xlsx",
    "format": "xlsx",
-   "bytes": 7098,
+   "bytes": 7140,
    "rows": null,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-11-06",
@@ -90,7 +99,7 @@
   {
    "path": "fleet_electrification_standard_FES-2.pdf",
    "format": "pdf",
-   "bytes": 57484,
+   "bytes": 57510,
    "rows": null,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-11-06",
@@ -99,7 +108,7 @@
   {
    "path": "quotation_bev_tractors_2027.pdf",
    "format": "pdf",
-   "bytes": 58208,
+   "bytes": 60535,
    "rows": null,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-11-06",

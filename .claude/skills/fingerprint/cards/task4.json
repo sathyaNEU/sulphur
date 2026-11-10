@@ -1,7 +1,7 @@
 {
   "task": "task4",
   "project": "sulfur",
-  "architecture": "v7 (the Fryele world on the architecture 6 platform run's own untested assumption: the order now needs the pilot's model carried to faster duties, a speed term fitted on the pilot and each duty's design-day speed from the routing tool's plan through the pilot's winter actual-to-planned ratio, beside the payload calibration, the cold curve and the battery loss)",
+  "architecture": 8,
   "drawn": "2026-11-09",
   "slot_note": "re-root of task4 after architecture 4 was landed on the platform; new world (Sweden, Småland, a road haulier), new dataset (a battery-electric pilot's duty-day telematics and a terminal weighbridge log), new shell (how-many | please | docx+xlsx)",
   "domain": "supply-chain-logistics",
@@ -12,8 +12,8 @@
   "shape": "other",
   "decision_type": "quantity_figure",
   "answer_unit": "count",
-  "answer": "Order 6 battery-electric tractors for Värnamo duties V02, V05, V09, V14, V16 and V18; V03, V07, V11, V21, V24, V27, V30 and V33 stay on diesel",
-  "answer_source": "generator/figures.json (call_count, call_set)",
+  "answer": "Order 7 battery-electric tractors, for V03, V05, V09, V11, V16, V18 and V33; V02, V07, V14, V21, V24, V27 and V30 stay on diesel",
+  "answer_source": "task4/submission.md, Final Recommendation (generator/figures.json call_set)",
   "gap": [
     "objective",
     "time"
@@ -34,10 +34,10 @@
   "validated_decoy": false,
   "context_artifact": "capacity_report",
   "stump_class": "analytical",
-  "analyst_test": "A strong analyst who cleans the pilot telematics and the weighbridge log and reads the electrification standard correctly fits the pilot's duty-day energy on distance, climb, cold and the declared payload on the loaded leg, validates it on held-out pilot days and on the weighbridge's finding that declarations are unbiased on average, applies it to each Värnamo duty's average weighed load on the January design day and orders too many tractors, sending heavy duties the battery cannot cover and keeping a light long one it can.",
+  "analyst_test": "A strong analyst who cleans every file, calibrates the declared payloads, curves the cold, nets the loss of the cold and fits squared speed at the year's ratio carries the pilot per km and per departing tonne, never reads the trailer each day pulled, and orders 5: it loses the payload term (2.9), the fridge duties, the speed ratio, the combinations and drops, every multi-drop and double-deck energy and the order.",
   "domain_test": "The deciding quantity is the energy one tonne of payload adds per loaded kilometre, a regression slope on a covariate the pilot records only as declared: estimating it needs the error structure of each shipper's declarations (scattered around the true weight, a fixed standard weight the true one scatters around, or the shipper's own weighbridge figure) read from the terminal's weighed loads and carried to the pilot's loads; with nurses and shifts in place of tractors and loads nothing is declared by a third party with its own error, so the step has nothing to stand on.",
   "layer2_family": "estimation_fit",
-  "layer2_pattern": "own:declared-covariate-error-structure-by-source",
+  "layer2_pattern": "own:fitted-model-carried-through-register-covariates",
   "layer1": [
     "telematics duty-days uploaded twice after a modem reconnect",
     "ambient temperature sensor dropouts",
@@ -79,18 +79,19 @@
   ],
   "opening_move": "question-first",
   "question_form": "how-many",
-  "driver": "A fitted physical model is carried to new units that sit outside its range on one covariate, whose value for the new units is itself an estimate: a planned figure corrected by a weather-dependent ratio the old units show; beside it, a slope under source-specific measurement error, a nonlinear response chosen out of sample and a degradation separated from a reversible seasonal effect.",
-  "driver_concrete": "Each Värnamo duty's battery energy on the January design day is forecast from the Jönköping pilot's telematics, whose payloads are the shippers' declared weights: the furniture and packaging shippers' clerks estimate them (scattered around the weighed load), the dairy declares a standard load the weighed one scatters around, and the timber merchant prints its own weighbridge figure, so the pilot's fitted payload slope is about 0.8 kWh per tonne per 100 km where the loads' true effect is about 2.1, and only each shipper's declarations calibrated on the Värnamo weighbridge's weighed loads give the slope that the heavy steel and aggregates duties and the light insulation duty turn on.",
-  "stump": "The careful pass that makes the platform run's three corrections (2.1 kWh per tonne per 100 km, a curved cold form, 3.8 per cent loss) forecasts in proportion to distance at the pilot's speeds and orders 9 (V03, V11, V30 in), every energy 9 to 21 kWh low; adding speed at the routing tool's figure orders 3 and at the year's actual-to-planned ratio 5; only the ratio read at -5 C (0.82) lands the six.",
-  "deep_chain": "(1) the payload term by regression calibration per shipper and note period; (2) the first-year loss net of the cold; (3) the speed term on the pilot's day-to-day speeds, each duty's design-day speed from the routing tool through the pilot's actual-to-planned ratio at -5 C, the cold form out of sample, and each duty's energy; (4) the verdicts; (5) the order.",
-  "judgment": "errors-in-variables: whether the declared payload's error is classical, Berkson or nil differs by shipper and is identified from the direction of the regression between declared and weighed loads on the Värnamo weighbridge; the regression-calibrated slope is checked against the pilot days of the shipper that declares from its own weighbridge",
-  "one_fact_test": "the most useful sentence ('the Värnamo duties drive faster than the pilot and energy rises with speed') leaves the careful pass ordering 3 at the routing tool's speed: 0 of 5 results rescued",
+  "driver": "A fitted physical model is carried to new units through covariates the old units' own records reveal only by joins to other registers: each new unit's speed (a planned figure corrected by a weather-dependent ratio), its whole moving mass on every leg (an equipment register's tare, read by item), the share of its route the load actually rides (each consignment taken off at its stop), and a time-based auxiliary draw present only on items whose equipment code says they take power from the unit; beside them a slope under source-specific measurement error and a degradation separated from a reversible seasonal effect.",
+  "driver_concrete": "Each Värnamo duty's January design-day energy is forecast from the Jönköping pilot: the declared payloads calibrated on the weighbridge, the combination's tare carried on every leg from the trailer register (double decks 22.5 to 22.7 t with the 2027 tractor against the pilot's 20.3), each note taken off at its stop (V03 and V11's loads ride 0.60 and 0.57 of their loaded km), the SR-60e ePTO fridge units drawing 4.4 kW for the whole duty (V24, V30) while the diesel and axle-generator units draw nothing (V33), and each duty's speed at the pilot's -5 C actual-to-planned ratio (0.77, against 0.89 over the year).",
+  "stump": "The careful pass the architecture 7 runs made (calibrated payloads, the curved cold form, the loss net of the cold, squared speed at the year's ratio, energy per km and per departing tonne) orders 5, pricing V03 and V11 near 500 kWh on a payload term of 2.9; with the trailer left out it orders 9 (V02, V14 in), with every load to the last drop 5 (V03, V11 out), without the fridge term 9 (V24, V30 in), with every reefer drawing 7 (V30 in, V33 out), at the routing tool's speed 0, at the year's ratio 4; only all of them lands the seven.",
+  "deep_chain": "(1) the payload term by regression calibration per shipper and note period, with the drops and the tare in the fit; (2) the first-year loss net of the cold; (3) the ePTO fridge units from the trailer register's equipment codes; (4) the design-day speed through the -5 C ratio; (5) each duty's combination and load share; (6) the energies; (7) the verdicts; (8) the order.",
+  "judgment": "four covariates carried to new units, each from another file: the combination's mass (a tonne of tare costs on every leg what a tonne of payload costs on the loaded one), the tonne-km a multi-drop load rides, which refrigeration units draw on the tractor (ePTO, not diesel, standby or axle generator) and by the hour, and the winter speed; plus the declared-payload measurement error and the loss net of the cold",
+  "one_fact_test": "the most useful single sentence (the duties drive slower than the routing tool plans on a -5 C day than over the year) rescues 1 of 8 results; the fridge sentence 1, the drops and tare sentences 0",
   "strategy_label": "WORKS IN FORM",
   "mechanism_source": "design_note",
   "differentiation": {
     "mark140": "mark140 solves a residual guarantee jointly with a dependent service's load estimated from its own two drivers; nothing here is a residual or a dependency: the quantity is a regression slope whose covariate is recorded by third parties with source-specific error, recovered by calibrating each source on a second record that weighs the truth",
     "mark262": "mark262 de-attenuates one slope by a single classical noise variance carried from a selected subsample to the population; here there is no selected subsample and no variance to carry: each shipper's declarations err in a different structure (classical, Berkson, exact), identified from the direction of the declared-weighed regression on the weighbridge, so the one pooled reliability correction mark262's route takes is itself a wrong rung",
-    "mark249": "mark249 recovers each unit's gain against references that agree only partly hour by hour by matching spreads; here the units are not calibrated against references: the fitted model's covariate is replaced by its expected true value given its source and its record"
+    "mark249": "mark249 recovers each unit's gain against references that agree only partly hour by hour by matching spreads; here the units are not calibrated against references: the fitted model's covariate is replaced by its expected true value given its source and its record",
+    "task4": "Same world by the client's instruction to keep the data package; architecture 7 turned on one covariate (the winter speed) and lost one duty by 1 to 3 kWh in both runs, architecture 8 adds three covariates read from other registers (the combination's tare by trailer, the tonne-km of a multi-drop load, the ePTO fridge units by equipment code), each flipping two duties of its own, with no duty within 13 kWh of the limit."
   },
   "lineage": [
     {
@@ -231,10 +232,26 @@
     {
       "architecture": "v6",
       "spent": "2026-11-09 platform run 1 landed every graded result by three reflexes (measured error-variance correction, a temperature quadratic, a temperature-controlled capacity regression), naming the distance transfer as an untested assumption"
+    },
+    {
+      "architecture": "v7",
+      "driver": "A fitted physical model is carried to new units that sit outside its range on one covariate, whose value for the new units is itself an estimate: a planned figure corrected by a weather-dependent ratio the old units show; beside it, a slope under source-specific measurement error, a nonlinear response chosen out of sample and a degradation separated from a reversible seasonal effect.",
+      "driver_concrete": "Each Värnamo duty's battery energy on the January design day is forecast from the Jönköping pilot's telematics, whose payloads are the shippers' declared weights: the furniture and packaging shippers' clerks estimate them (scattered around the weighed load), the dairy declares a standard load the weighed one scatters around, and the timber merchant prints its own weighbridge figure, so the pilot's fitted payload slope is about 0.8 kWh per tonne per 100 km where the loads' true effect is about 2.1, and only each shipper's declarations calibrated on the Värnamo weighbridge's weighed loads give the slope that the heavy steel and aggregates duties and the light insulation duty turn on.",
+      "stump": "The careful pass that makes the platform run's three corrections (2.1 kWh per tonne per 100 km, a curved cold form, 3.8 per cent loss) forecasts in proportion to distance at the pilot's speeds and orders 9 (V03, V11, V30 in), every energy 9 to 21 kWh low; adding speed at the routing tool's figure orders 3 and at the year's actual-to-planned ratio 5; only the ratio read at -5 C (0.82) lands the six.",
+      "answer": "Order 6 battery-electric tractors for Värnamo duties V02, V05, V09, V14, V16 and V18; V03, V07, V11, V21, V24, V27, V30 and V33 stay on diesel",
+      "chain_signature": [
+        "missingness-measurement",
+        "modeling",
+        "forecasting",
+        "synthesis"
+      ],
+      "weight": "measurement",
+      "answer_shape": "allocation-sensitivity",
+      "fate": "spent 2026-11-09 on the platform: both runs earned the payload term (1.98, 1.97), the loss (3.75) and the cold curve, fitted squared routing-tool speed (the year's ratio absorbed) and ordered 5, V14 excluded at 444.4 and 443.0 kWh against a 442 kWh limit (golden 435.4); one duty, one judgment, a knife-edge margin, and the 10 kWh band held both verdicts. Re-rooted in the same world as architecture 8."
     }
   ],
-  "notes": "stump_strategy other: errors-in-variables with a source-specific error structure (classical, Berkson, exact) identified from a gold-standard record of the same sources",
-  "registered": "2026-11-09T22:03:24Z",
+  "notes": "stump_strategy other: errors-in-variables with a source-specific error structure (classical, Berkson, exact) identified from a gold-standard record of the same sources | 2026-11-09 architecture 8: re-rooted in the same world on the client's instruction to keep the data package (architecture 5's review); four SME judgments added (combination mass, drops, ePTO fridge units, the winter speed kept), the knife-edge closed (no duty within 13 kWh).",
+  "registered": "2026-11-10T00:43:30Z",
   "shell": {
     "question form": "how-many",
     "second-sentence opener": "for",
@@ -254,10 +271,15 @@
   "chain_signature": [
     "missingness-measurement",
     "modeling",
+    "data-discovery",
     "forecasting",
+    "assembly-reconciliation",
+    "forecasting",
+    "synthesis",
     "synthesis"
   ],
   "depth_level": 5,
   "doctrine": "throughout",
-  "client_subdomain": "regression-classification-model-diagnostics"
+  "client_subdomain": "regression-classification-model-diagnostics",
+  "results": "R1 payload term 2.2 kWh/t/100 km (calibration, drops, tare); R2 first-year loss 3.8 per cent; R3 the duties whose fridge unit draws from the battery (V24, V30; ePTO only, 4.4 kW); R4 the winter speed ratio 0.77; R5 the combinations (V02 22.7 t, V14 22.5 t) and the load shares (V03 0.60, V11 0.57); R6 fourteen design-day energies; R7 the verdicts; R8 order 7"
 }

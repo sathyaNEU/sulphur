@@ -1,16 +1,21 @@
 # leak check, task4
 
-**Verdict: REVIEW.** 12 files read, 18 golden figures and 6 candidate names taken from submission.md, 25 stump terms taken from the design note.
+**Verdict: REVIEW.** 13 files read, 20 golden figures and 7 candidate names taken from submission.md, 25 stump terms taken from the design note.
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: record, routing, orders, drifts, station, stations, reader, temperature, network, decisive, fitted, graded, missed, readings, transfer, result, platform, architecture, re-run, overflow, pruszkow, golden, driving, design-day, careful
+Stump terms swept: trailer, record, missed, fridge, orders, drifts, weight, station, stations, reader, equipment, careful, network, decisive, register, nothing, temperature, readings, routing, method, shortcut, graded, component, architecture, re-run
 
-## 3 answer figures in the pack (REVIEW 4)
-- **REVIEW** `fleet_electrification_standard_FES-2.pdf`: golden figure 2.1 appears: ...ic tractors put to the management group. 2. Terms 2.1 A duty is a regular round trip from a depot as th...
+## 3 answer figures in the pack (REVIEW 5)
+- **REVIEW** `fleet_electrification_standard_FES-2.pdf`: golden figure 4.4 appears: ...unexpected. Each duty assigned takes one tractor. 4.4 Duties are assessed each autumn for the following...
+- **REVIEW** `fleet_electrification_standard_FES-2.pdf`: golden figure 2.2 appears: ...makes on the way, and the run back to the depot. 2.2 A duty's energy is the energy the tractor draws f...
 - **REVIEW** `quotation_bev_tractors_2027.pdf`: golden figure 540 appears: ...ttery Installed capacity 630 kWh; usable capacity 540 kWh Charging CCS2, up to 375 kW DC; on-board 43 k...
-- **REVIEW** `fleet_electrification_standard_FES-2.pdf`: carries 4 of 6 distinctive words of the committed call: 'Order 6 battery-electric tractors, for V02, V05, V09, V14, V16, V18; V03, V07, V11, V21, V24, V27, V30, V33 stay on dies'
-- **REVIEW** `quotation_bev_tractors_2027.pdf`: carries 4 of 6 distinctive words of the committed call: 'Order 6 battery-electric tractors, for V02, V05, V09, V14, V16, V18; V03, V07, V11, V21, V24, V27, V30, V33 stay on dies'
+- **REVIEW** `fleet_electrification_standard_FES-2.pdf`: carries 4 of 6 distinctive words of the committed call: 'Order 7 battery-electric tractors, for V03, V05, V09, V11, V16, V18, V33; V02, V07, V14, V21, V24, V27, V30 stay on dies'
+- **REVIEW** `quotation_bev_tractors_2027.pdf`: carries 4 of 6 distinctive words of the committed call: 'Order 7 battery-electric tractors, for V03, V05, V09, V11, V16, V18, V33; V02, V07, V14, V21, V24, V27, V30 stay on dies'
+
+## 4 design-note vocabulary (REVIEW 2)
+- **REVIEW** `fleet_electrification_standard_FES-2.pdf`: 3 of 25 stump-paragraph terms appear (record, register, temperature); read whether the document names the move
+- **REVIEW** `quotation_bev_tractors_2027.pdf`: 4 of 25 stump-paragraph terms appear (trailer, orders, weight, equipment); read whether the document names the move
 
 ## 9 dates after the setting (INFO 1)
 - **INFO** `-`: no --asof given, sweep skipped (pass the fiction's as-of date)
@@ -19,17 +24,15 @@ Stump terms swept: record, routing, orders, drifts, station, stations, reader, t
 - **INFO** `-`: container gate PASS (PASS: 0 FAIL, 0 WARN)
 
 ## 11 prompt gate (REVIEW 1)
-- **REVIEW** `prompt.txt`: shell quota: deliverable set 'docx+xlsx' at 29% of 14 prompts (cap 20%); reword at the role level, not the verb
+- **REVIEW** `prompt.txt`: shell quota: deliverable set 'docx+xlsx' at 21% of 14 prompts (cap 20%); reword at the role level, not the verb
 
 ## 12 client quality check (INFO 2)
-- **INFO** `-`: 12 usable files (10 or more required)
+- **INFO** `-`: 13 usable files (10 or more required)
 - **INFO** `-`: 2 file categories: document, spreadsheet (2 or more required)
 
 ## 1 file names (clean)
 
 ## 2 author vocabulary (clean)
-
-## 4 design-note vocabulary (clean)
 
 ## 5 announcements (clean)
 
@@ -40,143 +43,63 @@ Stump terms swept: record, routing, orders, drifts, station, stations, reader, t
 ## 8 column names (clean)
 
 
-## Solver's-eye read
+## Solver's-eye read (architecture 8, target.zip 19b6bec945fc8f80)
 
-Architecture 3, read 1 on target.zip 1b8dcbc7 and read 2 after the prompt's courier-event pin (isolated Sonnet
-readers, a fresh copy of prompt.txt and target/ only each time).
+**1. Which sentence or file tells you how any part of the analysis should be done (a step, a comparison, an adjustment, a grouping, a population, a window, a model term)? Quote it. Say "none" if none.**
 
-1. Decisive step: no sentence names it; the nearest is TDS-4 2.1 (a month's parcels are those the delivery depots
-   unloaded on its mornings, a hub's those it sorted the night before), which files the population, not which hub
-   sorted a parcel with no sort event.
-2. Ranking file: none; the sorter availability file carries downtime minutes only and the claims no hub verdict.
-3. Helping file: none; the sort plan and the network register are the reference data a hub analyst works from, the
-   request email a cover note.
-4. Answer figure or name: none; the standard's 1.00 per cent tolerance only.
-5. Population sentences: TDS-4 2.1 to 2.3 (unloaded parcels by sorting hub, a missed scan a parcel with no sort
-   event, the alert above 1.00 per cent); 3.1 and 3.2 for the courier events; 4.1 to 4.4 for the pre-advices.
-6. What decides: read 1, the analytical choice of the unit and its denominator, the population rebuilt across
-   systems; read 2 put it nearest rule application with the sort plan's mapping. Ruled analytical: the sort plan is
-   the easy route the record contradicts (Strykow sorted Pruszkow's overflow), and only the unloading each parcel
-   came off at its depot places it; both judge passes read Gate H as analytical.
+Nothing names a step, model term, comparison or adjustment. `fleet_electrification_standard_FES-2.pdf` fixes several *definitions* used to frame the question (see Q5), but it never says how to estimate anything (no regression, no grouping variable, no formula). No sentence anywhere says "adjust for temperature," "use a regression," "group by shipper," "exclude duty X," or similar. None found in any CSV/XLSX header, comment or cell either.
 
-Sweep lines: the standard's 1.00 per cent is its own tolerance; the sort plan's December dates are its planned window
-ends; both harmless. Read 2 found the phrase "the extract's courier events" a natural request (the email names the
-October extract; "courier event" is TDS-4's own term).
+**2. Which file already ranks or scores the candidate duties on the prompt's question?**
 
-Realism: nothing generated-looking; the register's uniform reader type and door pairs read as one vendor's estate.
+None. `fleet_plan_2027.xlsx`, sheet "Shortlist 2027," lists the 14 candidate Värnamo duties (V02, V03, V05, V07, V09, V11, V14, V16, V18, V21, V24, V27, V30, V33) with only Duty, Shipper code/name, Delivery town, Days a week 2027, and Charging location text. No energy figure, no score, no flag for "goes electric," no order count anywhere in this or any other file.
 
-## Solver's-eye read
+**3. Which file or sheet exists only to help the analyst (a dictionary, notes, a manifest, commentary on what a column means)?**
 
-Isolated Sonnet reader, medium effort, 2026-11-08, on target.zip f1a47765 (prompt and pack only).
+`shipper_register_2026.xlsx` ("Shippers") is the closest thing to a pure reference table: code-to-name-to-site lookup with payment terms and service type, used only to resolve shipper codes (ANE, BMJ, KCY, etc.) that appear elsewhere. It carries no commentary on methodology, just entity lookup data. No file contains a literal "data dictionary" or "notes" tab explaining what a column means.
 
-Leak read (no solving). Files read: prompt, both PDFs, all five XLSX (every sheet, visible), heads of all CSVs.
+**4. Which figure or name reads as the answer rather than context?**
 
-1. Decisive step: no sentence names it. Closest are filed rules, not the step: FES-2 3.1 "Energy figures for planning are estimated from the company's own operating records of its battery-electric tractors. Manufacturers' range and consumption figures are not used for planning." and 4.3 (design day, 85 per cent of usable battery). These say the source and threshold, not how to model load, temperature and Jonkoping-to-Varnamo transfer. Verdict on whether that is too much help: see Q5.
+None found. No cell, filename, or sentence states a tractor count, an order size, a duty-by-duty "electric: yes/no" verdict, or a kWh figure presented as a final result. The quotation PDF states "valid for any number of tractors from one to twelve" (a vendor's capacity statement, not a recommendation), and nothing else resembles a pre-computed answer.
 
-2. No file ranks or scores the Varnamo candidates. fleet_plan_2027.xlsx is only the shortlist (14 duties, days/week, charger). The BEV summary gives Jonkoping per-day energy and consumption, which are raw records, not per-duty verdicts. Quotation gives capacity only, no consumption or range.
+**5. Which filed sentence, read literally, fixes how any graded figure is computed or over which population? Quote it and state what it fixes literally (in words, no computation).**
 
-3. Helper-only files: none are readmes or dictionaries. route_register_2026.xlsx carries the "Duty (before 13 Apr 2026)" rename column, which is a join aid (weighbridge uses VMO-nn codes), natural in a register. shipper_register is a plain lookup. No notes file.
+From `fleet_electrification_standard_FES-2.pdf`:
+- "2.2 A duty's energy is the energy the tractor draws from its battery for the round trip, depot out to depot in, in kWh, as the tractor's own battery system reports it." — Fixes the unit and boundary (depot-to-depot round trip) for the energy figure; fixes the source as the tractor's own battery system data (i.e., the BEV daily summary file), not a derived or modeled distance-based quantity.
+- "2.3 The usable battery of a tractor model is the usable energy its manufacturer states for it, less the share of its usable energy a battery permanently loses in its first twelve months in service. That share is taken from the company's own battery-electric tractors." — Fixes the population for the "first-year loss share" figure as the company's own existing BEV tractors (the Jönköping pilot fleet), not the new model being quoted, and fixes the window as the first twelve months in service.
+- "3.1 Energy figures for planning are estimated from the company's own operating records of its battery-electric tractors. Manufacturers' range and consumption figures are not used for planning." — Fixes the data source (own operating records) and explicitly excludes the manufacturer's spec sheet figures (the quotation's 630/540 kWh line) from use in the energy estimate.
+- "4.1 The January design day is a working day with a mean ambient temperature of minus 5 degrees Celsius." — Fixes the temperature condition that defines the design-day window for the energy forecast.
+- "4.2 A duty's planning load is the mean net payload of its departures in the twelve months to the end of the last full month before the assessment." — Fixes the population (a duty's own departures) and window (trailing twelve months to the last full month) for the payload figure used in the energy comparison.
+- "4.3 A duty is assigned to a battery-electric tractor when its energy on the January design day, carrying its planning load, is no more than 85 per cent of the usable battery of the tractor model being ordered... Each duty assigned takes one tractor." — Fixes the comparison (energy vs. 85% of usable battery) and the unit-of-tractor-count rule (one tractor per assigned duty), i.e., what counts as "goes electric" and how duty count maps to tractor count.
 
-4. Answer-like names or figures: none. The only figures that read as hard numbers are standard and quote parameters (minus 5 C, 85 per cent, usable 540 kWh), which are inputs. No tractor count anywhere.
+These all fix the WHAT (population, window, unit, comparison) of a result, not the HOW (no formula, model or adjustment is specified for forecasting a duty's design-day energy from the pilot fleet's recorded energy).
 
-5. Filed sentences that fix the computation:
-- FES-2 2.1/2.2: duty = depot-out to depot-in round trip per the route register; energy = battery draw, as the tractor's own battery system reports it (fixes the unit and the energy basis: battery-side, not diesel-equivalent or manufacturer).
-- 4.1: design day = working day at a mean ambient of minus 5 C (fixes the temperature condition).
-- 4.2: planning load = mean net payload of the duty's departures over the twelve months to the end of the last full month before assessment (fixes the load and window; the assessment date is not stated in the file, only "each autumn", so the window end is inferred from the Oct 2026 data/quote date; likely the fork table's job).
-- 4.3: assigned when energy is no more than 85 per cent of usable battery of the model ordered; each duty takes one tractor (fixes the threshold, the battery denominator and the count rule).
-- 2.3 + quotation: usable battery = manufacturer-stated usable energy, 540 kWh quoted; fleet_register states a different battery for the existing Jonkoping units (540 installed, 468 usable). The ordered model is the quoted one.
-- 3.1: planning energy from the company's own BEV records, not manufacturer figures.
-The ordering and arithmetic of the threshold is fully filed. The model for energy given load, temperature and distance is not.
+**6. Is there one thing that, once noticed, would make most of what the prompt asks routine? For each ask: analysis, or reading a field/rule/planted thing?**
 
-6. What decides the main answer: an analytical choice. A solver must build a per-duty energy model from Jonkoping BEV records (energy vs distance, ambient, load via TMS payload), extrapolate to Varnamo duties (different distances, climb, tare differences, payload from weighbridge with declared vs measured), at minus 5 C, then apply the filed rule. The rule application itself is mechanical (4.3), but nothing in the files states how to get energy for a Varnamo duty; the BEV summary has no payload, no duty or route, so the load and route link must be reconstructed from TMS (declared_weight, mixed units like "9 350 kg") and fleet registers. Risk: much of the difficulty is cleaning (units, rename, tare), and the final step after the model is a filed threshold; if the model is simple, the decision may reduce to rule application plus cleaning. Not a leak, a design note for the author.
+No single file, sentence, or column does this. The pieces needed are spread across files that must each be analyzed on their own terms:
+- Forecasting each shortlisted duty's January design-day energy from the Jönköping pilot tractors' recorded daily energy (`bev_daily_summary_2025-03_2026-10.csv`) requires relating energy to distance, temperature (`daily_mean_temperature_2016-2026.csv`), payload, and route profile (climb, route register) — this is genuine modeling, not a lookup.
+- The payload-energy relationship (kWh per tonne per 100 loaded km) requires a regression/derivation across the pilot's own trips, not a stated figure.
+- The first-year usable-battery loss share requires inferring degradation from the pilot fleet's own operating history over its time in service (no explicit "degradation %" column anywhere) — this is analysis, not a reading.
+- The "goes electric" call is a straightforward rule application (FES-2 4.3) once a duty's design-day energy figure is actually computed — but computing that figure is itself the hard analytical step, so the rule by itself settles nothing without the upstream work.
+- Separately, the Värnamo duty-numbering change on 13 April 2026 (route register's "Duty (before 13 Apr 2026)" column, vs. `VMO-xx` codes still used in parts of `tms_consignments_varnamo...csv` and `weighbridge_varnamo...csv`) is a reconciliation step that must be done correctly to join trip/weighbridge records to the right shortlisted duties, but the mapping itself is given in the route register, so it is assembly work, not a hidden trap.
 
-Flagged files:
-- fleet_electrification_standard_FES-2.pdf: harmless. It files the estimand and the rule, which determinism requires; it does not name the energy model, the temperature or payload dependence, the Jonkoping-to-Varnamo extrapolation, or any hygiene step. "Manufacturers' range and consumption figures are not used" points at the data source but the quote carries none anyway.
-- quotation_bev_tractors_2027.pdf: harmless. Capacity (630 installed, 540 usable), price, delivery; no range or consumption. The 540 vs fleet register 468 usable is a real difference between models, resolved by FES-2 2.3, not a trap sentence.
-- prompt: harmless. It asks the count and assignment, pins the design day, FES-2, files and rounding (10 kWh). It names no method, comparison or step.
+No single sentence or file collapses this into a lookup; nothing here reads as a shortcut that would make "most of" the asks routine.
 
-## Solver's-eye read
+**7. Realism checks.**
 
-Reader 1, isolated Sonnet, medium effort, 2026-11-08, on target.zip f1a47765 (prompt and pack only):
+All four workbooks have distinct, plausible `docProps/core.xml` authorship and dates (Inger Norman, Georg Pålsson, Ekonomi; created 2020–2022, modified through late 2026), not a single uniform stamp. Both PDFs are produced by LibreOffice Writer with distinct creation timestamps, authors and page counts consistent with their content (fleet standard dated 22 Sep 2025; quotation dated 2 Oct 2026), nothing FPDF/ReportLab-flavoured.
 
-Leak read (no solving). Files read: prompt, both PDFs, all five XLSX (every sheet, visible), heads of all CSVs.
+Quotation `quotation_bev_tractors_2027.pdf` specification table: read line by line (Tractor, Battery, Charging, Drive, Unladen weight, Power take-off, Warranty, Price, Delivery) — every line reads as an ordinary dealer quotation line (model configuration, capacity numbers, charging standard, warranty terms, price and delivery conditions). None of the lines is phrased as guidance to the analyst; nothing says "use this figure for planning" or similar. (Note, for cross-reference only, not as a leak: the "Power take-off: Electric PTO, 400 V AC, up to 40 kW, for body and trailer equipment" line is an ordinary spec item that happens to be thematically consistent with the "TRU SR-60e ePTO" reefer trailers seen in the fleet register's Trailers sheet — a real-world detail, not a planted pointer.)
 
-1. Decisive step: no sentence names it. Closest are filed rules, not the step: FES-2 3.1 "Energy figures for planning are estimated from the company's own operating records of its battery-electric tractors. Manufacturers' range and consumption figures are not used for planning." and 4.3 (design day, 85 per cent of usable battery). These say the source and threshold, not how to model load, temperature and Jonkoping-to-Varnamo transfer. Verdict on whether that is too much help: see Q5.
+Fleet register's Trailers sheet Equipment column: reads like a genuine fleet register. It mixes `None` (empty) with varied, semicolon-separated equipment strings ("Stanchions 12; Strap winches", "Tail lift 2,500 kg", "TRU SR-60e ePTO; ADR kit", "Coil well; Load bars; ADR kit; Truck-mounted forklift"), several distinct reefer unit model names (TRU SR-60e ePTO, TRU SR-60 D, TRU SR-60 D+SB, TRU AX-40 AGen), non-uniform tare weights, and irregular fleet-number spacing (T-104, 107, 111, 114, 116, 119, 121...). This does not read as templated or auto-generated; it has the irregularity of a real asset register.
 
-2. No file ranks or scores the Varnamo candidates. fleet_plan_2027.xlsx is only the shortlist (14 duties, days/week, charger). The BEV summary gives Jonkoping per-day energy and consumption, which are raw records, not per-duty verdicts. Quotation gives capacity only, no consumption or range.
+**8. Distractors: which files look relevant but seem unused for the question?**
 
-3. Helper-only files: none are readmes or dictionaries. route_register_2026.xlsx carries the "Duty (before 13 Apr 2026)" rename column, which is a join aid (weighbridge uses VMO-nn codes), natural in a register. shipper_register is a plain lookup. No notes file.
+- `fuel_card_statement_varnamo_2025-2026.csv` — diesel fuel purchases (litres, SEK/l, station) keyed to diesel vehicle registrations only (checked: none of the six Jönköping BEV registrations appear in it). Looks like an operating-cost file but the prompt asks only about battery energy, electrification calls, payload-energy relationship and first-year battery loss — no cost figure is requested, so this file's diesel-cost data has no apparent role.
+- `workshop_log_2025-2026.csv` — maintenance work orders across the whole fleet (tyres, tail-lift repairs, BEV "Service, battery-electric" jobs with labour hours and SEK cost). Contains no battery-capacity or degradation figures, just routine maintenance costs; looks like it could matter for a battery-health question but carries no capacity/energy data, only cost and labour time.
+- `tms_consignments_jonkoping_2025-2026.csv` — Jönköping delivery consignments (not Värnamo), relevant to the Jönköping *pilot duties* in principle, but the prompt's shortlist and order question are entirely about Värnamo duties; its role (if any) is limited to characterizing the pilot's own payload pattern, and it may simply sit alongside the BEV daily summary as unused once the pilot's energy and payload relationship is drawn from the daily summary and weighbridge-style records instead.
 
-4. Answer-like names or figures: none. The only figures that read as hard numbers are standard and quote parameters (minus 5 C, 85 per cent, usable 540 kWh), which are inputs. No tractor count anywhere.
-
-5. Filed sentences that fix the computation:
-- FES-2 2.1/2.2: duty = depot-out to depot-in round trip per the route register; energy = battery draw, as the tractor's own battery system reports it (fixes the unit and the energy basis: battery-side, not diesel-equivalent or manufacturer).
-- 4.1: design day = working day at a mean ambient of minus 5 C (fixes the temperature condition).
-- 4.2: planning load = mean net payload of the duty's departures over the twelve months to the end of the last full month before assessment (fixes the load and window; the assessment date is not stated in the file, only "each autumn", so the window end is inferred from the Oct 2026 data/quote date; likely the fork table's job).
-- 4.3: assigned when energy is no more than 85 per cent of usable battery of the model ordered; each duty takes one tractor (fixes the threshold, the battery denominator and the count rule).
-- 2.3 + quotation: usable battery = manufacturer-stated usable energy, 540 kWh quoted; fleet_register states a different battery for the existing Jonkoping units (540 installed, 468 usable). The ordered model is the quoted one.
-- 3.1: planning energy from the company's own BEV records, not manufacturer figures.
-The ordering and arithmetic of the threshold is fully filed. The model for energy given load, temperature and distance is not.
-
-6. What decides the main answer: an analytical choice. A solver must build a per-duty energy model from Jonkoping BEV records (energy vs distance, ambient, load via TMS payload), extrapolate to Varnamo duties (different distances, climb, tare differences, payload from weighbridge with declared vs measured), at minus 5 C, then apply the filed rule. The rule application itself is mechanical (4.3), but nothing in the files states how to get energy for a Varnamo duty; the BEV summary has no payload, no duty or route, so the load and route link must be reconstructed from TMS (declared_weight, mixed units like "9 350 kg") and fleet registers. Risk: much of the difficulty is cleaning (units, rename, tare), and the final step after the model is a filed threshold; if the model is simple, the decision may reduce to rule application plus cleaning. Not a leak, a design note for the author.
-
-Flagged files:
-- fleet_electrification_standard_FES-2.pdf: harmless. It files the estimand and the rule, which determinism requires; it does not name the energy model, the temperature or payload dependence, the Jonkoping-to-Varnamo extrapolation, or any hygiene step. "Manufacturers' range and consumption figures are not used" points at the data source but the quote carries none anyway.
-- quotation_bev_tractors_2027.pdf: harmless. Capacity (630 installed, 540 usable), price, delivery; no range or consumption. The 540 vs fleet register 468 usable is a real difference between models, resolved by FES-2 2.3, not a trap sentence.
-- prompt: harmless. It asks the count and assignment, pins the design day, FES-2, files and rounding (10 kWh). It names no method, comparison or step.
-
-Reader 2, the same brief, 2026-11-08, on target.zip ce9fbb1b (after the forum noun changed in FES-2 and the prompt):
-
-Leak read, reader6 (no solving done)
-
-1. Decisive step: no sentence names it. Closest: FES-2 3.1 "Energy figures for planning are estimated from the company's own operating records of its battery-electric tractors. Manufacturers' range and consumption figures are not used for planning." This fixes the source of evidence, not how to model it (temperature, payload, distance, climb, Jonkoping-only fleet carried to Varnamo duties). Method is left open.
-
-2. No file ranks or scores the duties. bev_daily_summary has per-day energy and consumption for Jonkoping BEVs only; the route register has km and climb; the quotation has battery size. None states a duty energy or a feasibility verdict.
-
-3. Helper-only files: none in the sense of readme/dictionary/notes. fleet_plan_2027.xlsx is the shortlist (needed, not a hint). Shipper register and fleet register are plain reference data. Quotation and FES-2 are governing documents, not method guides.
-
-4. Nothing reads as the answer. No duty count, no kWh per duty, no verdict anywhere. The only near-figures are 540 kWh usable (quotation), 85 per cent and minus 5 C (FES-2), all inputs.
-
-5. Filed sentences that fix the computation (in words only):
-- FES-2 2.2 "A duty's energy is the energy the tractor draws from its battery for the round trip, depot out to depot in ... as the tractor's own battery system reports it." Fixes the quantity as battery-reported round-trip energy.
-- 4.1 "working day with a mean ambient temperature of minus 5 degrees Celsius." Fixes the design temperature.
-- 4.2 "mean net payload of its departures in the twelve months to the end of the last full month before the assessment." Fixes the payload population and window (assessment date is autumn 2026, so the last full month is the pack's final one).
-- 4.3 "no more than 85 per cent of the usable battery of the tractor model being ordered. Each duty assigned takes one tractor." Fixes the threshold and that tractor count equals assigned duties.
-- 2.3 and the quotation "usable capacity 540 kWh" fix the ordered model's usable battery; the fleet register's "468 kWh usable" for the existing Jonkoping model is a different model (a contrast, not a leak).
-- 3.2 no road charging, so each duty is a single depot-to-depot charge.
-These are rule statements about the estimand; they do not say how to estimate energy for Varnamo duties from Jonkoping data.
-
-6. What decides the answer: an analytical choice. Energy per duty must be modelled from the Jonkoping BEV log (temperature, load, distance/climb, and extrapolation to longer Varnamo duties and to a larger battery model), with payload per duty derived from weighbridge records (gross minus tare, declared weights as a distractor) and net of tare gaps. Rule-following (FES-2) is the frame but the cutoff sensitivity comes from the fit. Mild data-semantics risk: usable 468 vs 540, and old duty codes VMO-nn vs Vnn.
-
-Flagged file verdicts:
-- fleet_electrification_standard_FES-2.pdf: harmless. It files the estimand and thresholds; no figures or method.
-- quotation_bev_tractors_2027.pdf: harmless. Supplies battery size and price; "usable 540" is a necessary input. Sentence "Your existing fleet portal account will show the new tractors' daily summaries as it does for the Jonkoping tractors" is texture. Its 24 Sept meeting reference is dated before the setting.
-- prompt.txt: harmless. Pins question, deliverables and rounding; names no method. It does say "under FES-2", pointing to the governing standard, which is fine.
-
-Architecture 6, 2026-11-09, isolated Sonnet reader on target.zip 9d65a333 (a fresh copy of prompt.txt and target/
-only).
-1. How to do it: FES-2 4.2 and 4.3 (the planning load's population and window, the 85 per cent test against the
-   ordered model): filed conventions, the WHAT; the forecast and the loss estimate left open.
-2. Ranking file: none; the shortlist carries no score, energy or verdict.
-3. Helping file: none; every file is an operational register or governing document.
-4. Answer figure or name: none; the 540 and 520 kWh capacities are inputs.
-5. Literal sentences: FES-2 4.2 (each duty's own departures, the trailing twelve months, gross less tare), 4.3 (the
-   ordered model's usable battery), 2.3 (the loss share from the company's own tractors), 4.1 (-5 C, inside the
-   observed range): each fixes the population or the target, none a figure; executed, they give the golden's basis.
-6. One thing: none; the planning load is assembly, the energy, the payload coefficient and the loss are each
-   separate estimation, and only the final verdict is the filed rule applied to them.
-Sweep rulings: the quotation's 540 kWh harmless (the ordered model's specification); the shared words of the call
-harmless (the topic's ordinary nouns); the shell quota harmless (a style fingerprint, no disclosure).
-
-Architecture 7, 2026-11-09, isolated Sonnet reader on target.zip 76adf383 (a fresh copy of prompt.txt and target/
-only).
-1. How to do it: FES-2 2.2, 2.3, 3.1, 4.1 to 4.3 (the energy's source, the loss's population, the design day, the
-   planning load's window, the 85 per cent test): the WHAT; the forecast, the payload figure and the loss left open.
-2. Ranking file: none. 3. Helping file: none. 4. Answer figure: none (540, 520 and the 75 per cent warranty are inputs
-   or a ruled-out shortcut).
-5. Literal sentences: FES-2 4.3 and 4.2 fix the comparison and the load's window; executed they give the golden's basis.
-6. One thing: none; FES-2 settles the rule, while the energies, the payload figure and the loss each need estimation
-   on the large files.
-Sweep rulings: the quotation's 540 kWh harmless (a specification); the call's shared words harmless (the topic's
-nouns); the route register's "Driving time h (routing tool)" harmless: its header and values say nothing of how it is
-used, and the reader took it for a likely distractor beside the energy chain.
+Main thread's ruling (2026-11-09): no question-1 quote, no ranking file, no helper file, no answer figure; every
+question-5 sentence fixes a WHAT and executes to the golden's estimand (FES-2 3.1 bars the manufacturer's range and
+consumption figures from the energy estimate, while 2.3 takes the usable battery from the manufacturer, as the golden
+does). The reader's guess that the Jönköping notes may go unused is a solver's first impression, not a finding: they
+carry the pilot's declarations, trailers and drops. Every REVIEW line harmless (design note, Literal reader).

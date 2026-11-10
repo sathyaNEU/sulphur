@@ -68,6 +68,22 @@ def main(target):
     for r in sheet_rows(j("route_register_2026.xlsx"), "Duties")[1:]:
         routes[r[0]] = (r[3], (r[6], r[7], r[8]), r[10], (r[6] + r[7] + r[8]) / r[12])
     short = [r[0] for r in sheet_rows(j("fleet_plan_2027.xlsx"), "Shortlist 2027")[1:]]
+    stops = {}
+    for r in sheet_rows(j("route_register_2026.xlsx"), "Stops")[1:]:
+        stops.setdefault(r[0], {})[r[2]] = r[3]
+    trl = {r[1]: (r[2], r[4] or "", r[7]) for r in sheet_rows(j("fleet_register_2026.xlsx"), "Trailers")[1:]}
+    tractor = {r[1]: r[7] for r in sheet_rows(j("fleet_register_2026.xlsx"), "Tractors")[1:] if r[7]}
+
+    def ride(duty, drops):
+        """tonne-km share of the loaded run: walk the stops in km order, taking each drop's note weight off"""
+        L = routes[duty][1][1]
+        tot = sum(w for _, w in drops)
+        acc, left, at = 0.0, 1.0, 0.0
+        for km, w in sorted((stops[duty][t], w) for t, w in drops):
+            acc += left * (km - at)
+            left -= w / tot
+            at = km
+        return acc / L
     # weighbridge: per CMR the latest weighing
     latest = {}
     with open(j("weighbridge_varnamo_2024-11_2026-10.csv"), encoding="utf-8") as f:
@@ -104,7 +120,21 @@ def main(target):
     tms = {}
     with open(j("tms_consignments_jonkoping_2025-2026.csv"), encoding="utf-8") as f:
         for r in csv.DictReader(f):
-            tms[(r["vehicle_reg"], r["collection_date"])] = r
+            k = (r["vehicle_reg"], r["collection_date"])
+            if k not in tms:
+                tms[k] = dict(r, drops=[])
+            tms[k]["drops"].append((r["delivery_town"], weight(r["declared_weight"])))
+    vnotes = {}
+    with open(j("tms_consignments_varnamo_2025-11_2026-10.csv"), encoding="utf-8") as f:
+        for r in csv.DictReader(f):
+            d = r["duty"].replace("VMO-", "V")
+            vnotes.setdefault(d, {}).setdefault(r["collection_date"], {"t": r["trailer_reg"], "drops": []})["drops"].append(
+                (r["delivery_town"], weight(r["declared_weight"])))
+    vtrl = {}
+    with open(j("weighbridge_varnamo_2024-11_2026-10.csv"), encoding="utf-8") as f:
+        for r in csv.DictReader(f):
+            if "2025-11-01" <= r["weighed_at"][:10] <= "2026-10-31" and not r["remark"]:
+                vtrl.setdefault(r["duty"].replace("VMO-", "V"), []).append(trl[r["trailer_reg"]][2])
     station = {}
     with open(j("daily_mean_temperature_2016-2026.csv"), encoding="utf-8") as f:
         for r in csv.DictReader(f):
@@ -119,10 +149,16 @@ def main(target):
         c = tms.get(k)
         if not c:
             continue
-        rows.append((c["duty"], per(c["shipper"], k[1][:7]), weight(c["declared_weight"]), float(r["distance_km"]),
+        import datetime as dt
+        span = (dt.datetime.fromisoformat(r["last_arrival_utc"][:19]) -
+                dt.datetime.fromisoformat(r["first_departure_utc"][:19])).total_seconds() / 3600
+        body, equip, ttare = trl[c["trailer_reg"]]
+        rows.append((c["duty"], per(c["shipper"], k[1][:7]), sum(w for _, w in c["drops"]), float(r["distance_km"]),
                      float(r["energy_used_kwh"]), float(r["ambient_mean_c"]) if r["ambient_mean_c"] else None,
                      station[k[1]], k[0], k[1], float(r["soc_start_pct"]) - float(r["soc_end_pct"]),
-                     float(r["distance_km"]) / float(r["driving_time_h"])))
+                     float(r["distance_km"]) / float(r["driving_time_h"]),
+                     (tractor[k[0]] + ttare) / 1000.0, ride(c["duty"], c["drops"]),
+                     span if "ePTO" in equip else 0.0, span - float(r["driving_time_h"]), len(c["drops"])))
     off = np.mean([x[5] - x[6] for x in rows if x[5] is not None])
     duty = np.array([x[0] for x in rows])
     ship = np.empty(len(rows), dtype=object)
@@ -146,8 +182,17 @@ def main(target):
             pay[m] = dec[m].mean() + lam * (dec[m] - dec[m].mean())
     pay /= 1000.0
     vday = np.array([x[10] for x in rows])
+    combo = np.array([x[11] for x in rows])
+    rideshare = np.array([x[12] for x in rows])
+    fridge_h = np.array([x[13] for x in rows])
     X = np.column_stack([km, km * cl, km * np.maximum(0, 16 - T), km * np.maximum(0, -T),
-                         km * (vday ** 2 - 65.0 ** 2) / 1000.0, pay * lk])
+                         km * (vday ** 2 - 65.0 ** 2) / 1000.0, km * (combo - 19.0), pay * lk * rideshare, fridge_h])
+    # time at the collection and the drops, by the number of drops: the mean of each group
+    stay = {}
+    for x in rows:
+        stay.setdefault(x[15], []).append(x[14])
+    stay = {n: float(np.mean(v)) for n, v in stay.items()}
+    per_drop = (stay[max(stay)] - stay[1]) / (max(stay) - 1)
     # the speed a duty keeps on a -5 C day: its routing-tool speed times the pilot's actual-to-planned ratio on the
     # days within 3 C of -5
     ratio = vday / np.array([routes[d][3] for d in duty])
@@ -166,21 +211,30 @@ def main(target):
         loss.append(-b[1] / b[0])
     loss = float(np.mean(loss))
     limit = 0.85 * 540 * (1 - loss)
+    qt = subprocess.run(["pdftotext", "-layout", j("quotation_bev_tractors_2027.pdf"), "-"], capture_output=True, text=True).stdout
+    import re
+    t27 = float(re.search(r"Unladen weight\s+([\d,]+) kg", qt).group(1).replace(",", "")) / 1000.0
     res = {}
     for c in short:
         s, legs, climb, vplan = routes[c]
         tot = sum(legs)
         v5 = vplan * rr
+        notes = list(vnotes[c].values())
+        rs = float(np.mean([ride(c, x["drops"]) for x in notes]))
+        epto = np.mean(["ePTO" in trl[x["t"]][1] for x in notes])
+        hours = tot / v5 + stay[1] + per_drop * (len(stops[c]) - 1)
+        cb = t27 + np.mean(vtrl[c]) / 1000.0
         e = beta @ np.array([tot, tot * climb, tot * 21.0, tot * 5.0, tot * (v5 ** 2 - 65.0 ** 2) / 1000.0,
-                             np.mean(loads[c]) / 1000 * legs[1]])
+                             tot * (cb - 19.0), np.mean(loads[c]) / 1000 * legs[1] * rs, epto * hours])
         res[c] = (float(e), e <= limit)
     go = sorted(c for c, v in res.items() if v[1])
     fig = json.load(open(os.path.join(HERE, "figures.json")))
     okset = go == fig["call_set"]
     far = {c: (round(v[0]), fig["energy"][c]) for c, v in res.items() if abs(v[0] - fig["energy"][c]) > 10}
     okloss = abs(100 * loss - fig["loss_pct"]) <= 0.2
-    print("verify: %d pilot days, payload %.2f kWh per t per 100 km, loss %.2f per cent, limit %.1f, %d tractors %s;"
-          " set %s, energies %s, loss %s" % (len(rows), beta[-1] * 100, 100 * loss, limit, len(go), go,
+    print("verify: %d pilot days, payload %.2f kWh per t per 100 km, fridge %.2f kW, loss %.2f per cent, limit %.1f, "
+          "%d tractors %s; set %s, energies %s, loss %s" % (len(rows), beta[-2] * 100, beta[-1], 100 * loss, limit,
+                                                           len(go), go,
                                              "agree" if okset else "DIFFER", "within 10 kWh" if not far else
                                              "DIFFER " + str(far), "agrees" if okloss else "DIFFERS"))
     return 0 if okset and not far and okloss else 1

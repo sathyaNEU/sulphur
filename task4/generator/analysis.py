@@ -20,6 +20,8 @@ FILES = {
     "weighbridge": "weighbridge_varnamo_2024-11_2026-10.csv",
     "bev": "bev_daily_summary_2025-03_2026-10.csv",
     "tms": "tms_consignments_jonkoping_2025-2026.csv",
+    "tmsv": "tms_consignments_varnamo_2025-11_2026-10.csv",
+    "fleet": "fleet_register_2026.xlsx",
     "routes": "route_register_2026.xlsx",
     "plan": "fleet_plan_2027.xlsx",
     "temps": "daily_mean_temperature_2016-2026.csv",
@@ -27,6 +29,8 @@ FILES = {
 LAST12 = (dt.date(2025, 11, 1), dt.date(2026, 10, 31))
 USABLE = 540.0   # the quotation's usable battery, read into the checks from the PDF text (checks.py)
 IN_SERVICE = dt.date(2025, 2, 17)   # the pilot tractors' in-service date (fleet register)
+TRACTOR_2027_KG = 11980.0   # the quotation's unladen weight, read into the checks from the PDF text (checks.py)
+TARE_REF = 19.0             # t: the tare term is centred here so the per-km level reads at an ordinary combination
 
 
 def rd(path):
@@ -50,14 +54,23 @@ class Pack:
 def load(target):
     pk = Pack()
     F = {k: os.path.join(target, v) for k, v in FILES.items()}
-    # route register
+    # route register: the duties and the routing tool's stop list
     wb = load_workbook(F["routes"], read_only=True)
     pk.routes = {}
     for r in list(wb["Duties"].iter_rows(values_only=True))[1:]:
         pk.routes[r[0]] = {"old": r[1], "depot": r[2], "shipper": r[3], "delivery": r[5], "legs": (r[6], r[7], r[8]),
                           "climb": r[10], "plan_h": float(r[12])}
+    pk.stops = defaultdict(list)
+    for r in list(wb["Stops"].iter_rows(values_only=True))[1:]:
+        pk.stops[r[0]].append((r[2], float(r[3])))
     wb = load_workbook(F["plan"], read_only=True)
     pk.short = [r[0] for r in list(wb["Shortlist 2027"].iter_rows(values_only=True))[1:]]
+    # fleet register: tractors' and trailers' tare, the trailers' body and equipment
+    wb = load_workbook(F["fleet"], read_only=True)
+    pk.tractor_tare = {r[1]: float(r[7]) for r in list(wb["Tractors"].iter_rows(values_only=True))[1:] if r[7]}
+    pk.trailer = {}
+    for r in list(wb["Trailers"].iter_rows(values_only=True))[1:]:
+        pk.trailer[r[1]] = {"body": str(r[2]), "type": r[3], "equip": r[4] or "", "tare": float(r[7])}
     # weighbridge: the last weighing of each departure (a re-weigh after a reload replaces the first)
     last = {}
     for r in rd(F["weighbridge"]):
@@ -70,16 +83,28 @@ def load(target):
         if duty.startswith("VMO-"):
             duty = "V" + duty[4:]
         pk.wb.append({"date": dt.date.fromisoformat(r["weighed_at"][:10]), "duty": duty, "shipper": r["shipper"],
-                      "declared": kg(r["declared_kg"]), "net": (float(r["gross_kg"]) - float(r["tare_kg"]))})
+                      "declared": kg(r["declared_kg"]), "net": (float(r["gross_kg"]) - float(r["tare_kg"])),
+                      "trailer": r["trailer_reg"]})
     pk.wb_raw_rows = sum(1 for _ in open(F["weighbridge"], encoding="utf-8")) - 1
     # station temperatures
     pk.station = {}
     for r in rd(F["temps"]):
         pk.station[(r["date"], r["station"])] = float(r["temperature (C)"])
-    # TMS consignments keyed by vehicle and day
+    # TMS consignments: one note per drop, grouped to the vehicle's day
     tms = {}
     for r in rd(F["tms"]):
-        tms[(r["vehicle_reg"], r["collection_date"])] = r
+        k = (r["vehicle_reg"], r["collection_date"])
+        t = tms.setdefault(k, {"duty": r["duty"], "shipper": r["shipper"], "trailer": r["trailer_reg"], "drops": []})
+        t["drops"].append((r["delivery_town"], kg(r["declared_weight"])))
+    # the Varnamo consignments: one departure is a duty's notes on one day
+    pk.vdep = defaultdict(list)
+    vd = {}
+    for r in rd(F["tmsv"]):
+        duty = "V" + r["duty"][4:] if r["duty"].startswith("VMO-") else r["duty"]
+        vd.setdefault((duty, r["collection_date"]), {"trailer": r["trailer_reg"], "drops": []})["drops"].append(
+            (r["delivery_town"], kg(r["declared_weight"])))
+    for (duty, day), v in sorted(vd.items()):
+        pk.vdep[duty].append(v)
     # battery-electric daily summaries: a day uploaded twice is one day
     seen = {}
     for r in rd(F["bev"]):
@@ -92,9 +117,16 @@ def load(target):
         if c is None:
             continue
         t = r["ambient_mean_c"]
+        t0 = dt.datetime.fromisoformat(r["first_departure_utc"].replace("Z", ""))
+        t1 = dt.datetime.fromisoformat(r["last_arrival_utc"].replace("Z", ""))
+        tl = pk.trailer[c["trailer"]]
         days.append({"date": dt.date.fromisoformat(r["operating_date"]), "reg": r["registration"],
-                     "duty": c["duty"], "shipper": c["shipper"], "declared": kg(c["declared_weight"]),
+                     "duty": c["duty"], "shipper": c["shipper"], "declared": sum(x[1] for x in c["drops"]),
+                     "drops": c["drops"], "trailer": c["trailer"],
+                     "combo": (pk.tractor_tare[r["registration"]] + tl["tare"]) / 1000.0,
+                     "epto": "ePTO" in tl["equip"], "reefer": tl["body"] == "04",
                      "km": float(r["distance_km"]), "kwh": float(r["energy_used_kwh"]),
+                     "drive_h": float(r["driving_time_h"]), "span_h": (t1 - t0).total_seconds() / 3600.0,
                      "v": float(r["distance_km"]) / float(r["driving_time_h"]),
                      "t": float(t) if t else None, "station_t": pk.station[(r["operating_date"], "Jönköping")],
                      "soc0": float(r["soc_start_pct"]), "soc1": float(r["soc_end_pct"])})
@@ -105,9 +137,27 @@ def load(target):
     for d in days:
         d["cap"] = d["kwh"] / (d["soc0"] - d["soc1"]) * 100   # the battery's energy per full charge that day
         d["age"] = (d["date"] - IN_SERVICE).days / 365.25
+        d["phi"] = phi_of(pk, d["duty"], d["drops"])
+        d["phi_eq"] = phi_of(pk, d["duty"], d["drops"], equal=True)
+        d["n_drops"] = len(d["drops"])
     pk.days = days
     pk.offset = float(off)
     return pk
+
+
+def phi_of(pk, duty, drops, equal=False):
+    """the share of the loaded run's km the departing load rides: each drop's declared share taken off at its stop's
+    km on the routing tool's stop list"""
+    st = dict(pk.stops[duty])
+    L = float(pk.routes[duty]["legs"][1])
+    tot = sum(x[1] for x in drops)
+    pos = sorted(((st[t], w) for t, w in drops), key=lambda z: z[0])
+    rem, prev, acc = 1.0, 0.0, 0.0
+    for p, w in pos:
+        acc += rem * (p - prev)
+        rem -= (1.0 / len(pos)) if equal else w / tot
+        prev = p
+    return acc / L
 
 
 # ---------------------------------------------------------------- the payload each pilot day carried
@@ -178,6 +228,14 @@ def payloads(pk, how, split=True, window=None):
 # ---------------------------------------------------------------- the energy model
 
 V_REF = 65.0
+GOLD = {"form": ("hinge2", 16, 0), "temp": "truck", "speed": "sq", "vmode": "hinge10", "tare": "sep",
+        "drops": "yes", "tru": "epto", "hours": "span"}
+
+
+def opts(**kw):
+    o = dict(GOLD)
+    o.update(kw)
+    return o
 
 
 def speed_term(v, speed):
@@ -191,14 +249,38 @@ def speed_term(v, speed):
     return []
 
 
-def design(pk, pay, form=("hinge2", 16, 0), temp="truck", speed="sq"):
-    tot = np.array([d["km"] for d in pk.days])
-    lk = np.array([pk.routes[d["duty"]]["legs"][1] for d in pk.days], float)
-    cl = np.array([pk.routes[d["duty"]]["climb"] for d in pk.days], float)
-    T = np.array([d["t_filled"] if temp == "truck" else d["station_t"] for d in pk.days])
-    v = np.array([d["v"] for d in pk.days])
-    cols = ([tot, tot * cl] + [tot * c for c in cold_terms(T, form)] + [tot * c for c in speed_term(v, speed)]
-            + [pay * lk])
+def columns(tot, cl, T, v, lk, pay, ph, combo, flag, hours, o):
+    """the model's columns, the same for a pilot day and a shortlisted duty's design day; returns (columns, index of
+    the payload column)"""
+    cols = [tot, tot * cl] + [tot * c for c in cold_terms(T, o["form"])] + [tot * c for c in speed_term(v, o["speed"])]
+    tare = tot * (combo - TARE_REF)
+    if o["tare"] == "sep":
+        cols.append(tare)
+    load = pay * lk * ph
+    cols.append(load + tare if o["tare"] == "shared" else load)
+    ip = len(cols) - 1
+    if o["tru"]:
+        cols.append(flag * hours)
+    return cols, ip
+
+
+def day_arrays(pk, o, pay):
+    D = pk.days
+    tot = np.array([d["km"] for d in D])
+    lk = np.array([pk.routes[d["duty"]]["legs"][1] for d in D], float)
+    cl = np.array([pk.routes[d["duty"]]["climb"] for d in D], float)
+    T = np.array([d["t_filled"] if o["temp"] == "truck" else d["station_t"] for d in D])
+    v = np.array([d["v"] for d in D])
+    ph = np.array([{"yes": d["phi"], "no": 1.0, "equal": d["phi_eq"]}[o["drops"]] for d in D])
+    combo = np.array([d["combo"] for d in D])
+    flag = np.array([float(d["epto"] if o["tru"] == "epto" else d["reefer"]) for d in D])
+    hours = np.array([{"span": d["span_h"], "drive": d["drive_h"], "km": d["km"]}[o["hours"]] for d in D])
+    return tot, cl, T, v, lk, pay, ph, combo, flag, hours
+
+
+def design(pk, pay, o=None, **kw):
+    o = opts(**kw) if o is None else o
+    cols, ip = columns(*day_arrays(pk, o, pay), o)
     return np.column_stack(cols)
 
 
@@ -246,24 +328,56 @@ def cold_terms(T, form):
     raise ValueError(form)
 
 
-def fit(pk, pay, form=("hinge2", 16, 0), mask=None, temp="truck", speed="sq", vmode="hinge10"):
-    """vmode: how each shortlisted duty's speed on the design day is set (speed_ratio's how)"""
-    X = design(pk, pay, form, temp, speed)
+def dwell(pk):
+    """time at the collection and the drops (first departure to last arrival less driving), on the drops beyond the
+    first: (base, per extra drop)"""
+    n = np.array([d["n_drops"] - 1 for d in pk.days], float)
+    s = np.array([d["span_h"] - d["drive_h"] for d in pk.days])
+    b = np.polyfit(n, s, 1)
+    return float(b[1]), float(b[0])
+
+
+def fit(pk, pay, form=("hinge2", 16, 0), mask=None, temp="truck", speed="sq", vmode="hinge10", **kw):
+    """vmode: how each shortlisted duty's speed on the design day is set (speed_ratio's how); kw: tare (sep, shared or
+    None), drops (yes, no, equal), tru (epto, all or None), hours (span, drive, km)"""
+    o = opts(form=form, temp=temp, speed=speed, vmode=vmode, **kw)
+    cols, ip = columns(*day_arrays(pk, o, pay), o)
+    X = np.column_stack(cols)
     y = np.array([d["kwh"] for d in pk.days])
     m = np.ones(len(y), bool) if mask is None else mask
     c, *_ = np.linalg.lstsq(X[m], y[m], rcond=None)
     resid = y[m] - X[m] @ c
-    return {"coef": c, "form": form, "speed": speed, "vmode": vmode,
-            "rmse_pct": float(np.sqrt(np.mean((resid / y[m]) ** 2)) * 100)}
+    return {"coef": c, "form": o["form"], "speed": o["speed"], "vmode": o["vmode"], "o": o, "ip": ip,
+            "dwell": dwell(pk), "rmse_pct": float(np.sqrt(np.mean((resid / y[m]) ** 2)) * 100)}
 
 
-def predict(model, legs, climb, load_t, t=DESIGN_T, v=V_REF):
-    c, form = model["coef"], model["form"]
+def duty_inputs(pk, c):
+    """what a shortlisted duty brings to the design day: its trailers' mean tare with the 2027 tractor, the share of
+    the loaded run its load rides (from its Varnamo notes and the routing tool's stops), and whether its trailers' unit
+    runs from the tractor (ePTO) or is a reefer at all"""
+    dd = [r for r in pk.wb if r["duty"] == c and LAST12[0] <= r["date"] <= LAST12[1]]
+    combo = TRACTOR_2027_KG / 1000.0 + float(np.mean([pk.trailer[r["trailer"]]["tare"] for r in dd])) / 1000.0
+    deps = pk.vdep[c]
+    ph = float(np.mean([phi_of(pk, c, x["drops"]) for x in deps]))
+    ph_eq = float(np.mean([phi_of(pk, c, x["drops"], equal=True) for x in deps]))
+    epto = float(np.mean(["ePTO" in pk.trailer[x["trailer"]]["equip"] for x in deps]))
+    reef = float(np.mean([pk.trailer[x["trailer"]]["body"] == "04" for x in deps]))
+    return {"combo": combo, "phi": ph, "phi_eq": ph_eq, "epto": epto, "reefer": reef, "n_drops": len(pk.stops[c])}
+
+
+def predict(model, legs, climb, load_t, t=DESIGN_T, v=V_REF, inp=None):
+    o = model.get("o", GOLD)
     a, b, cc = legs
-    tot = a + b + cc
-    terms = ([tot, tot * climb] + [tot * float(np.ravel(x)[0]) for x in cold_terms([t], form)]
-             + [tot * float(np.ravel(x)[0]) for x in speed_term([v], model.get("speed"))] + [load_t * b])
-    return float(np.dot(c, terms))
+    tot = float(a + b + cc)
+    inp = inp or {"combo": TARE_REF, "phi": 1.0, "phi_eq": 1.0, "epto": 0.0, "reefer": 0.0, "n_drops": 1}
+    ph = {"yes": inp["phi"], "no": 1.0, "equal": inp["phi_eq"]}[o["drops"]]
+    flag = inp["epto"] if o["tru"] == "epto" else inp["reefer"]
+    d0, d1 = model.get("dwell", (0.0, 0.0))
+    hours = {"span": tot / v + d0 + d1 * (inp["n_drops"] - 1), "drive": tot / v, "km": tot}[o["hours"]]
+    cols, ip = columns(np.array([tot]), np.array([float(climb)]), np.array([t]), np.array([v]), np.array([float(b)]),
+                       np.array([load_t]), np.array([ph]), np.array([inp["combo"]]), np.array([flag]),
+                       np.array([hours]), o)
+    return float(np.dot(model["coef"], np.array([float(np.ravel(x)[0]) for x in cols])))
 
 
 # ---------------------------------------------------------------- the battery a 2027 tractor has after a year
@@ -308,11 +422,14 @@ def planning_load(pk, duty, basis="net"):
 def assess(pk, model, basis="net", t=DESIGN_T, lim=None):
     lim = limit(pk) if lim is None else lim
     rr = speed_ratio(pk, t, model.get("vmode", "hinge10")) if model.get("speed") else 1.0
+    cache = pk.__dict__.setdefault("_inp", {})
     out = {}
     for c in pk.short:
         r = pk.routes[c]
+        if c not in cache:
+            cache[c] = duty_inputs(pk, c)
         v = plan_speed(pk, c) * rr
-        e = predict(model, r["legs"], r["climb"], planning_load(pk, c, basis), t, v)
+        e = predict(model, r["legs"], r["climb"], planning_load(pk, c, basis), t, v, cache[c])
         out[c] = {"kwh": e, "go": e <= lim}
     return out
 
@@ -352,16 +469,19 @@ def backtest(pk, pay, form, months=((2026, 1), (2026, 2))):
     ho = np.array([(d["date"].year, d["date"].month) in months for d in pk.days])
     sub = np.array([d["t_filled"] < 0 for d in pk.days])
     m = fit(pk, pay, form, mask=~ho)
-    X = design(pk, pay, form)
+    X = design(pk, pay, m["o"])
     y = np.array([d["kwh"] for d in pk.days])
     e = (X @ m["coef"] - y) / y
     return float(100 * e[ho & sub].mean()), float(100 * e[ho].mean())
 
 
+HURRIED = {"tare": None, "tru": None, "drops": "no"}   # the platform runs' energy model: no trailer, no drops
+
+
 def routes(pk):
     """each shortcut's committed answer: (model, limit) for the golden and every hurried route effort.json records"""
     gp, dp = payloads(pk, "shipper"), payloads(pk, "declared")
-    f, fa = fade(pk), fade(pk, "age")
+    f = fade(pk)
     L = limit(pk, f)
     return {
         "golden": (fit(pk, gp, H2), L),
@@ -373,8 +493,12 @@ def routes(pk):
         "one line over the pilot shippers": (fit(pk, pilot_pooled(pk), H2), L),
         "one cold rate": (fit(pk, gp, H1), L),
         "no first-year loss": (fit(pk, gp, H2), SHARE * USABLE),
-        "careful but hurried": (fit(pk, gp, H2, speed=None), L),
-        "the arch 6 golden": (fit(pk, gp, H2, speed=None), L),
+        "no trailer weight": (fit(pk, gp, H2, tare=None), L),
+        "no fridge draw": (fit(pk, gp, H2, tru=None), L),
+        "every reefer draws": (fit(pk, gp, H2, tru="all"), L),
+        "the load to the last drop": (fit(pk, gp, H2, drops="no"), L),
+        "careful but hurried": (fit(pk, gp, H2, vmode="mean", **HURRIED), L),
+        "the arch 7 golden": (fit(pk, gp, H2, **HURRIED), L),
     }
 
 
@@ -386,8 +510,10 @@ def models(pk):
         "pilot_pooled": fit(pk, pilot_pooled(pk), H2),
         "golden": fit(pk, gp, H2),
         "golden_1h": fit(pk, gp, H1),
-        "naive_1h": fit(pk, dp, H1),
         "no_speed": fit(pk, gp, H2, speed=None),
+        "hurried": fit(pk, gp, H2, **HURRIED),
+        "no_tare": fit(pk, gp, H2, tare=None),
+        "no_drops": fit(pk, gp, H2, drops="no"),
     }
 
 
@@ -396,54 +522,70 @@ def golden(pk):
     f = fade(pk)
     lim = limit(pk, f)
     a = assess(pk, M["golden"], lim=lim)
-    return {"model": M["golden"], "assess": a, "set": chosen(a), "count": len(chosen(a)), "models": M,
-            "fade": f, "limit": lim, "usable_y1": USABLE * (1 - f)}
+    m = M["golden"]
+    return {"model": m, "assess": a, "set": chosen(a), "count": len(chosen(a)), "models": M,
+            "fade": f, "limit": lim, "usable_y1": USABLE * (1 - f), "inputs": dict(pk._inp),
+            "tru_kw": float(m["coef"][-1]), "tare_term": float(m["coef"][m["ip"] - 1] * 100),
+            "pilot_combo": float(np.mean([d["combo"] for d in pk.days]))}
+
+
+def fe_slope_se(pk, pay):
+    """the within-duty fit's payload slope and its standard error (per 100 km)"""
+    o = opts()
+    tot, cl, T, v, lk, pay_, ph, combo, flag, hours = day_arrays(pk, o, pay)
+    duties = sorted({d["duty"] for d in pk.days})
+    du = np.array([d["duty"] for d in pk.days])
+    X = np.column_stack([tot * (du == k) for k in duties] + [tot * c for c in cold_terms(T, o["form"])]
+                        + [tot * c for c in speed_term(v, "sq")] + [tot * (combo - np.array(
+                            [combo[du == d].mean() for d in du]))] + [pay * lk * ph] + [flag * hours])
+    y = np.array([d["kwh"] for d in pk.days])
+    c, *_ = np.linalg.lstsq(X, y, rcond=None)
+    r = y - X @ c
+    cov = r @ r / (len(y) - X.shape[1]) * np.linalg.inv(X.T @ X)
+    k = X.shape[1] - 2
+    return float(c[k] * 100), float(np.sqrt(cov[k, k]) * 100)
+
+
+def golden_se(pk, pay):
+    """the golden fit's payload slope standard error (per 100 km)"""
+    m = fit(pk, pay, H2)
+    X = design(pk, pay, m["o"])
+    y = np.array([d["kwh"] for d in pk.days])
+    r = y - X @ m["coef"]
+    cov = r @ r / (len(y) - X.shape[1]) * np.linalg.inv(X.T @ X)
+    return float(np.sqrt(cov[m["ip"], m["ip"]]) * 100)
 
 
 def slope_per_100(model):
-    return float(model["coef"][-1] * 100)
+    return float(model["coef"][model.get("ip", -1)] * 100)
 
 
 def fit_fe(pk, pay, form=("hinge2", 16, 0)):
-    """within-duty fit (a level per duty for each km), the duty levels then explained by climb"""
+    """within-duty fit (a level per duty for each km), the duty levels then explained by climb and the duty's mean
+    combination tare"""
+    o = opts(form=form)
+    tot, cl, T, v, lk, pay_, ph, combo, flag, hours = day_arrays(pk, o, pay)
     duties = sorted({d["duty"] for d in pk.days})
-    tot = np.array([d["km"] for d in pk.days])
-    lk = np.array([pk.routes[d["duty"]]["legs"][1] for d in pk.days], float)
-    T = np.array([d["t_filled"] for d in pk.days])
-    v = np.array([d["v"] for d in pk.days])
     du = np.array([d["duty"] for d in pk.days])
     X = np.column_stack([tot * (du == k) for k in duties] + [tot * c for c in cold_terms(T, form)]
-                        + [tot * c for c in speed_term(v, "sq")] + [pay * lk])
+                        + [tot * c for c in speed_term(v, "sq")] + [tot * (combo - np.array(
+                            [combo[du == d].mean() for d in du]))] + [pay * lk * ph] + [flag * hours])
     y = np.array([d["kwh"] for d in pk.days])
     c, *_ = np.linalg.lstsq(X, y, rcond=None)
     lev = c[:len(duties)]
-    cl = np.array([pk.routes[k]["climb"] for k in duties], float)
-    a, b = np.polyfit(cl, lev, 1)[::-1]
-    return {"coef": np.concatenate([[a, b], c[len(duties):]]), "form": form, "speed": "sq", "vmode": "hinge10",
-            "rmse_pct": None}
-
-
-def fit_exact_slope(pk, form=("hinge2", 16, 0)):
-    """the payload slope from the one pilot shipper whose declarations the weighbridge shows exact, the rest of the
-    model refitted with that slope held"""
-    cal = calibration(pk)
-    exact = {s for s, v in cal.items() if abs(v[1] - 1) < 0.02 and abs(v[0]) < 100}
-    dec = np.array([d["declared"] / 1000 for d in pk.days])
-    m = np.array([d["shipper"] in exact for d in pk.days])
-    tot = np.array([d["km"] for d in pk.days])
-    lk = np.array([pk.routes[d["duty"]]["legs"][1] for d in pk.days], float)
-    T = np.array([d["t_filled"] for d in pk.days])
-    y = np.array([d["kwh"] for d in pk.days])
-    Xe = np.column_stack([tot, *[tot * c for c in cold_terms(T, form)], dec * lk])[m]
-    b = np.linalg.lstsq(Xe, y[m], rcond=None)[0][-1]
-    pay = payloads(pk, "shipper")
-    X = design(pk, pay, form)[:, :-1]
-    c = np.linalg.lstsq(X, y - b * pay * lk, rcond=None)[0]
-    return {"coef": np.concatenate([c, [b]]), "form": form, "rmse_pct": None}
+    cl_d = np.array([pk.routes[k]["climb"] for k in duties], float)
+    cb_d = np.array([combo[du == k].mean() - TARE_REF for k in duties])
+    Z = np.column_stack([np.ones(len(duties)), cl_d, cb_d])
+    a = np.linalg.lstsq(Z, lev, rcond=None)[0]
+    rest = c[len(duties):]
+    nc = len(cold_terms([0.0], form))
+    coef = np.concatenate([[a[0], a[1]], rest[:nc + 1], [a[2]], rest[nc + 2:]])
+    return {"coef": coef, "form": form, "speed": "sq", "vmode": "hinge10", "o": o, "ip": 2 + nc + 1 + 1,
+            "dwell": dwell(pk), "rmse_pct": None}
 
 
 def rivals(pk):
-    """every route that takes all three steps, each (model, limit); the golden's call must hold under all of them"""
+    """every route that takes all the steps, each (model, limit); the golden's call must hold under all of them"""
     gp = payloads(pk, "shipper")
     lim = limit(pk)
     y25 = np.array([d["date"].year == 2025 for d in pk.days])
@@ -471,4 +613,8 @@ def rivals(pk):
         "speed ratio: slope below 12 C": (fit(pk, gp, H2, vmode="hinge12"), lim),
         "speed ratio: on the temperature": (fit(pk, gp, H2, vmode="linear"), lim),
         "speed ratio: days within 2.5 C": (fit(pk, gp, H2, vmode="bins"), lim),
+        "tare: one coefficient with the payload": (fit(pk, gp, H2, tare="shared"), lim),
+        "fridge unit: by driving hours": (fit(pk, gp, H2, hours="drive"), lim),
+        "fridge unit: by km": (fit(pk, gp, H2, hours="km"), lim),
+        "drops: equal shares": (fit(pk, gp, H2, drops="equal"), lim),
     }
