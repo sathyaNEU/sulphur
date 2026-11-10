@@ -1,43 +1,43 @@
 {
   "task": "task10",
   "project": "sulfur",
-  "architecture": "v6 (re-root in the same world at the reviewer's direction after the holistic audit of 2026-11-10: the Halverton primaries' winter 2027/28 reinforcement rebuilt as a results chain, the logged switching documented texture)",
+  "architecture": "v7 (re-root in the same world after architecture 6 landed on the platform: the Halverton primaries' winter 2027/28 reinforcement on three structural judgments that each run across the whole record, design-day demand read where the service never ran, what the register's customers still have to add, and what an enlarged contract's sites will have commissioned by their class)",
   "drawn": "2026-11-10",
-  "slot_note": "re-root of task10 in the same world and data package at the platform reviewer's direction (document the transfer, move the call onto judgments that each move a figure); architectures 1 to 5 in lineage",
+  "slot_note": "re-root of task10 in the same world after both platform runs landed architecture 6 (runs/arch6_triage.md); architectures 1 to 6 in lineage",
   "domain": "energy-systems-utilities",
   "subdomain": "load-forecasting",
   "client_domain": "energy-systems-utilities",
-  "niche": "an English distribution network operator's DSO planning team forecasting, for its December 2026 capital expenditure review, each constrained 33/11 kV primary's design-day peak for winter 2027/28 with its flexibility contract called in full, expected and at the one-day-in-ten level, from three winters of dispatch and SCADA records in which calls were mostly smaller than the contract",
+  "niche": "an English distribution network operator's DSO planning team deciding, for its December 2026 capital expenditure review, which constrained 33/11 kV primaries need a reinforcement committed for winter 2027/28: each primary's design-day peak with its flexibility contract instructed in full, as a distribution cut at firm capacity, from three winters in which the service ran on the cold days, a connections register whose customers build up over years, and a licence-wide register of the sites providers signed, commissioned late or lost",
   "objective": "forecasting",
-  "shape": "07",
+  "shape": "10",
   "decision_type": "designation_set",
   "answer_unit": "set_of_items",
-  "answer": "Commit reinforcement at Ashcombe Road, Fenwick Street and Hartwell Common for winter 2027/28; Charlecote Way stays within firm capacity on nine design days in ten",
-  "answer_source": "task10/submission.md, Final Recommendation (generator/figures.json call)",
+  "answer": "Commit reinforcement at Ashcombe Road, Charlecote Way, Dunmore Street and Fenwick Street for winter 2027/28; Hartwell Common stays within firm capacity on nine design days in ten (figures set at the build)",
+  "answer_source": "task10/submission.md, Final Recommendation (generator/figures.json call), updated at stage 3",
   "gap": [
-    "population",
-    "time"
+    "time",
+    "population"
   ],
   "pattern": [
     "none"
   ],
   "generators": [
-    "G4",
-    "G5",
-    "G3"
+    "G6",
+    "G9",
+    "G7"
   ],
   "gate_g": "forecasting",
   "calibration_form": "none",
-  "stump_strategy": "forecast_method_backtest",
+  "stump_strategy": "composition_mix",
   "decisive_rule_filed": false,
   "official_decoy": false,
   "validated_decoy": false,
-  "context_artifact": "monitoring_export",
+  "context_artifact": "register",
   "stump_class": "analytical",
-  "analyst_test": "A strong analyst who cleans every file, leaves the logged switching days out, measures each event against a weather-adjusted baseline, regresses megawatts delivered per megawatt scheduled on temperature zone by zone, applies the minus 3 C rate to the megawatts contracted, takes the credit off the 17:30 to 18:00 peak and carries the megawatts of scatter that fit leaves to the one-day-in-ten level reinforces Hartwell Common alone: it earns the demand before flexibility and its own backtest, and loses the megawatts delivered at the two zones whose cold-day calls stopped short of the contract, Ashcombe Road's peak after the window, every one-day-in-ten level but Hartwell Common's, the bridge and the set.",
-  "domain_test": "The deciding quantities are a distribution planner's: a primary's design-day peak before flexibility (a weather-corrected peak grown to the winter assessed), what a demand-side flexibility contract delivers in the evening peak when called in full (limited by what the provider's enrolled assets have available on a cold evening, not by what is scheduled), the residual peak once the curtailed load comes back after the service window, and the level that peak stays under on nine design days in ten against N-1 firm capacity; with clinics and locum cover in place of primaries and flexibility nothing is scheduled in megawatts against a contracted registered capacity, nothing comes back after a window, and no half-hourly day shape moves a peak from one half-hour to another.",
+  "analyst_test": "A strong analyst who cleans every file, leaves the logged switching days out, fits each evening half-hour against temperature on the working weekdays no service ran and carries the line to minus 3 C, grows it at the DFES rate, adds the customers due after the latest winter at the share of agreed capacity today's customers draw, credits each contract with the share its events delivered of the megawatts the register's planned dates put in service by the assessment date, replays the load that comes back and takes the nine-days-in-ten level commits Ashcombe Road and Hartwell Common. It earns the available share and the come-back, and loses Dunmore Street's design-day demand (the days without a service stop near 2 C and the heating load steepens below freezing), Charlecote Way's connections (three 2025 customers with most of their build-up still to come) and Hartwell Common's (three that will have barely started), Fenwick Street's and Ashcombe Road's commissioned megawatts (process load and batteries commission months late, and the awards are made of them), and with them the megawatts delivered, the peaks, the nine-in-ten levels, the shares of days over firm capacity and the list.",
+  "domain_test": "The deciding quantities are a distribution planner's: a primary's design-day evening peak before flexibility, which a weather correction can only read where demand-side response was not dispatched, so the sensitivity at the design temperature has to come from the hours the service never touches; the diversified demand a new connection adds to that peak, a share of its agreed capacity that depends on the customer type and builds up over two to three years; and what a flexibility contract delivers at the peak, a cold-evening share of the megawatts actually commissioned, with the day rebuilt half-hour by half-hour once the curtailed load comes back, set against N-1 firm capacity on nine design days in ten. With clinics and locum cover in place of primaries and providers nothing has a temperature knee, an agreed supply capacity or a commissioning test, and no half-hourly day shape moves a peak past a service window.",
   "layer2_family": "estimation_fit",
-  "layer2_pattern": "own:contract-called-in-full-forecast-from-part-calls-with-comeback-and-one-in-ten-level",
+  "layer2_pattern": "own:design-day-peak-from-service-selected-days-immature-connections-and-class-level-commissioning",
   "layer1": [
     "utc-local",
     "id-rekey-crosswalk",
@@ -48,7 +48,9 @@
     "withdrawn-and-duplicate-register-rows",
     "pdf-tables",
     "raw-and-checked-versions",
-    "paired-log-operations"
+    "paired-log-operations",
+    "register-status-history",
+    "monthly-summary-gaps"
   ],
   "stakeholder_role": "the network operator's head of DSO for the Halverton zone, who takes the winter 2027/28 reinforcement list to the December investment committee",
   "role_family": "operations_director",
@@ -71,7 +73,10 @@
       "Wealdmoor Power Networks",
       "Halverton",
       "Corvane Flex",
-      "Quillon Energy Services"
+      "Quillon Energy Services",
+      "Tessaly Grid Services",
+      "Ormerod Flex",
+      "Brackwell Demand Response"
     ],
     "people": [
       "Marion Todd",
@@ -80,21 +85,74 @@
     ]
   },
   "deliverables": [
-    "halverton_primary_capacity_2027-28.xlsx",
+    "halverton_primary_assessment_2027-28.xlsx",
     "capex_review_2027-28.pptx"
   ],
   "opening_move": "question-first",
-  "question_form": "where",
-  "driver": "A contracted intervention is called in units up to a contracted amount, and the record's calls were mostly smaller than the contract and were met; what the intervention can remove shows only on the occasions a call outran it, as a share of the contracted amount that falls with a condition and varies from occasion to occasion in proportion to its level; part of what is removed returns just after the intervention's window and can move the constrained unit's peak there; each of these, and the forecast of the unit's peak before the intervention, is carried to a larger contract called in full under a design condition, as an expected peak and a one-occasion-in-ten level, and checked by predicting the latest period's occasions from the earlier ones.",
-  "driver_concrete": "Each Halverton zone primary's design-day peak for winter 2027/28 with its flexibility contract scheduled in full: the megawatts delivered at 17:30 to 18:00 are the share of the contracted megawatts the provider has available at minus 3 C (0.39 Corvane Flex, 0.54 Quillon, read from the cold days on which nearly every call outran it, the same at both of a provider's zones and through three winters of growing contracts), not the megawatts delivered per megawatt scheduled that the part calls at Ashcombe Road and Charlecote Way show; the day is rebuilt half-hour by half-hour with the load that comes back after the window, which moves Ashcombe Road's peak to the half-hour ending 20:00 (25.9 MW against 22.0 at 18:00 and firm 23.0); the day-to-day spread of what is available is carried in proportion to the 2027/28 megawatts to the nine-days-in-ten level, which puts Fenwick Street over firm; the approach is back-tested on winter 2025/26 from the two winters before, a test megawatts per megawatt scheduled also passes.",
-  "stump": "The careful but hurried pass (megawatts delivered per megawatt scheduled regressed on temperature zone by zone, the minus 3 C rate applied to the megawatts contracted, the credit taken off the 17:30 to 18:00 peak, the megawatts of scatter its fit leaves carried unchanged, or the fit's own range) reinforces Hartwell Common alone; the same rate with the scatter carried in proportion reinforces Fenwick Street and Hartwell Common, as does the available share right with the credit off the 17:30 to 18:00 peak and megawatts of scatter unchanged; the megawatts contracted at face value reinforce nothing; the megawatts the 2025/26 contracts made available carried unchanged reinforce all four; the available share right with the expected day set against firm capacity reinforces Ashcombe Road and Hartwell Common; only every result of the chain reinforces Ashcombe Road, Fenwick Street and Hartwell Common.",
-  "deep_chain": "(1) design-day demand before flexibility on the guideline's days, the weather correction's line checked on cold hours the sample does not hold; (2) the share of its contracted megawatts each provider has available on the design day, from the cold days on which calls outran it; (3) the megawatts each contract delivers; (4) the same model fitted on the two earlier winters set against the last; (5) what comes back after the window; (6) the megawatts off the day's peak and the half-hour that then peaks; (7) the expected peak; (8) the day-to-day spread as a share of what is delivered; (9) the nine-days-in-ten level; (10) the primaries to reinforce; (11) each contract's megawatts bridged to the megawatts off the peak.",
-  "judgment": "four judgments, each moving figures: megawatts delivered follow the megawatts contracted, not the megawatts scheduled, once a call outruns what is available (settled by the equal-temperature test, the two zones of each provider and three winters of stepped-up contracts; a held-out winter passes both readings); the day's peak is its highest half-hour with the load that comes back (measured on every event, carried to the larger delivery); the spread of what is available scales with its level (the same share at a 3 MW and a 7.5 MW contract) and is carried with the baseline's to one day in ten; the weather correction's straight line is carried past a sample that holds no cold day, on the evidence of the hours before the service window.",
-  "one_fact_test": "the most useful single sentence (a provider can deliver no more than a share of its contracted megawatts on a cold evening, however many are scheduled) rescues 2 of 11 results (the share and the megawatts delivered); told it, a pass that still takes the credit off the 17:30 to 18:00 peak with the record's megawatts of scatter reinforces Fenwick Street and Hartwell Common; the come-back sentence rescues the come-back rate alone and the spread sentence the spread alone",
-  "strategy_label": "WORKS IN FORM (the client's Engineering strategy 6, a peak load forecast whose bands hold up, as direction only: here the forecast is of a contracted intervention's effect on a peak, the bands carry a provider's day-to-day availability, and the backtest is on a winter of larger contracts)",
+  "question_form": "which",
+  "driver": "A constrained unit's peak under a design condition, with a contracted intervention called in full, is forecast as a distribution cut at a fixed limit, from three quantities none of which the record shows directly and each of which the natural reading gets wrong in its own direction: the unit's load under the condition, which the record holds without the intervention only on mild occasions because the intervention is called on the severe ones, and which steepens below the range those occasions cover, so it is read from the part of every occasion the intervention never reaches; what recently attached members add by the target date, a share of their stated size that depends on their kind and builds up over years, so those attached just before the base period still owe most of their rise and those attached just before the target have barely begun; and what the enlarged contract can remove, which follows the capacity brought into service, not the capacity contracted, with the pieces still to come arriving late at rates that depend on their kind and the new award made of a slower mix of kinds than the unit's own past.",
+  "driver_concrete": "Each Halverton zone primary's design-day peak for winter 2027/28 with its flexibility contract instructed in full. Demand at minus 3 C is read from the mornings of every working weekday (the service never runs before 16:00) and carried to the evening by the relation the days without a service show, because those days stop near 2 C and the heating load steepens below freezing (most at Dunmore Street). The connections register adds each customer's rise between 15 January 2026 and 15 January 2028 on its type's build-up from the large-customer summary: Charlecote Way's three 2025 customers still have most of theirs to come, Hartwell Common's three 2027 customers will have barely started. A contract is credited with the cold-evening share of the megawatts in service, and the sites still to come commission on their class's record across the licence area's register: Fenwick Street's award is mostly process load and Ashcombe Road's mostly batteries, which commission months late, so about three fifths of Fenwick Street's 12.5 MW will be in service on the assessment date. The day is rebuilt half-hour by half-hour with the load that comes back, and the peak's distribution is cut at firm capacity.",
+  "stump": "The careful but hurried pass (each evening half-hour on a straight line through the days no service ran, the customers due after the latest winter at today's average share of agreed capacity, the megawatts the register's planned dates put in service) commits Ashcombe Road and Hartwell Common. Each single missed judgment files its own wrong list: the line through the days without a service drops Dunmore Street; the connections read as the customers due after the latest winter drop Charlecote Way and, at a mature or average share or in full, add Hartwell Common; the megawatts contracted, the planned dates, the zone's own past ratio or one commissioning record across every class drop Fenwick Street; taking the delivery off the 17:30 to 18:00 peak drops Ashcombe Road. Only all of it commits Ashcombe Road, Charlecote Way, Dunmore Street and Fenwick Street and leaves Hartwell Common.",
+  "deep_chain": "(1) design-day demand in the latest winter on the guideline's days, read where the service never ran; (2) megawatts the register's connections add between the two assessment dates; (3) demand before flexibility in winter 2027/28; (4) megawatts each provider will have in service on the assessment date; (5) the share of them available on the design day; (6) megawatts each contract delivers at 17:30 to 18:00; (7) megawatts that come back after the window per megawatt delivered; (8) the expected peak; (9) the nine-days-in-ten level; (10) the share of design days over firm capacity; (11) the primaries to reinforce.",
+  "judgment": "three structural judgments, each across the whole record and each moving a different primary's call: the days without a service are not a sample of design days (they are the mild and low-running ones), so the cold end comes from the hours the service never touches; a connection's draw is a share of agreed capacity that depends on its type and builds up over years, so the register's addition is every customer's rise between the two dates; a provider's availability follows the megawatts in service, and what will be in service is each pending site's class record, not the plan and not one pooled record. Earned by a careful run and kept in the chain: the available share capped at the instruction, the come-back replayed over the day, the predictive nine-in-ten level.",
+  "one_fact_test": "the most useful single sentence (availability follows the megawatts in service, and the sites still to come commission as late as their class has across the register) rescues 2 of 11 results (megawatts in service and megawatts delivered); the cold-end sentence rescues the latest winter's design-day demand alone and the build-up sentence the connections' megawatts alone; the strongest two-strand sentence rescues 3 of 11; every peak, level, share of days and the list need all three",
+  "strategy_label": "DIRECTION ONLY (the client's energy strategy on peak load forecasts whose bands hold up, and the depth scale's list of what stumps a careful run: a rate from the average applied to units selected for being extreme, pooling where composition differs, a risk named and never sized); the chain is the Halverton record's own: a service dispatched on the cold days, customers that build up, sites that commission late by class",
   "mechanism_source": "design_note",
-  "differentiation": {},
+  "differentiation": {
+    "task10 v6": "architecture 6 turned on how a contract's delivery is read from part calls and validated on a held-out winter, all of which both runs did by reflex; architecture 7 keeps those as earned results and puts the weight on three structural models the runs named as assumptions and never tested (the cold end of demand where the service always ran, the build-up of connections, commissioning by class), in a different chain order, a different answer shape (a distribution cut at firm capacity), five zones and a redrawn prompt shell",
+    "task17": "task17 cuts a resampled distribution of a statistic; here the distribution is each primary's design-day peak, built from three structural models, and the cut is the guideline's firm capacity rule"
+  },
   "lineage": [
+    {
+      "architecture": "v6 (re-root in the same world at the reviewer's direction after the holistic audit of 2026-11-10: the Halverton primaries' winter 2027/28 reinforcement rebuilt as a results chain, the logged switching documented texture)",
+      "drawn": "2026-11-10",
+      "domain": "energy-systems-utilities",
+      "subdomain": "load-forecasting",
+      "objective": "forecasting",
+      "shape": "07",
+      "decision_type": "designation_set",
+      "answer_unit": "set_of_items",
+      "gap": [
+        "population",
+        "time"
+      ],
+      "pattern": [
+        "none"
+      ],
+      "generators": [
+        "G4",
+        "G5",
+        "G3"
+      ],
+      "gate_g": "forecasting",
+      "stump_strategy": "forecast_method_backtest",
+      "forum": "executive_team",
+      "forcing_event": "season_or_peak",
+      "org_family": "utility_or_infrastructure",
+      "role_family": "operations_director",
+      "layer2_family": "estimation_fit",
+      "layer2_pattern": "own:contract-called-in-full-forecast-from-part-calls-with-comeback-and-one-in-ten-level",
+      "answer_shape": "forecast-bands-drivers",
+      "weight": "validation",
+      "chain_signature": [
+        "forecasting",
+        "missingness-measurement",
+        "forecasting",
+        "validation",
+        "investigation-loops",
+        "modeling",
+        "forecasting",
+        "uncertainty",
+        "uncertainty",
+        "synthesis",
+        "decomposition-attribution"
+      ],
+      "driver": "A contracted intervention is called in units up to a contracted amount, and the record's calls were mostly smaller than the contract and were met; what the intervention can remove shows only on the occasions a call outran it, as a share of the contracted amount that falls with a condition and varies from occasion to occasion in proportion to its level; part of what is removed returns just after the intervention's window and can move the constrained unit's peak there; each of these, and the forecast of the unit's peak before the intervention, is carried to a larger contract called in full under a design condition, as an expected peak and a one-occasion-in-ten level, and checked by predicting the latest period's occasions from the earlier ones.",
+      "driver_concrete": "Each Halverton zone primary's design-day peak for winter 2027/28 with its flexibility contract scheduled in full: the megawatts delivered at 17:30 to 18:00 are the share of the contracted megawatts the provider has available at minus 3 C (0.39 Corvane Flex, 0.54 Quillon, read from the cold days on which nearly every call outran it, the same at both of a provider's zones and through three winters of growing contracts), not the megawatts delivered per megawatt scheduled that the part calls at Ashcombe Road and Charlecote Way show; the day is rebuilt half-hour by half-hour with the load that comes back after the window, which moves Ashcombe Road's peak to the half-hour ending 20:00 (25.9 MW against 22.0 at 18:00 and firm 23.0); the day-to-day spread of what is available is carried in proportion to the 2027/28 megawatts to the nine-days-in-ten level, which puts Fenwick Street over firm; the approach is back-tested on winter 2025/26 from the two winters before, a test megawatts per megawatt scheduled also passes.",
+      "stump": "The careful but hurried pass (megawatts delivered per megawatt scheduled regressed on temperature zone by zone, the minus 3 C rate applied to the megawatts contracted, the credit taken off the 17:30 to 18:00 peak, the megawatts of scatter its fit leaves carried unchanged, or the fit's own range) reinforces Hartwell Common alone; the same rate with the scatter carried in proportion reinforces Fenwick Street and Hartwell Common, as does the available share right with the credit off the 17:30 to 18:00 peak and megawatts of scatter unchanged; the megawatts contracted at face value reinforce nothing; the megawatts the 2025/26 contracts made available carried unchanged reinforce all four; the available share right with the expected day set against firm capacity reinforces Ashcombe Road and Hartwell Common; only every result of the chain reinforces Ashcombe Road, Fenwick Street and Hartwell Common.",
+      "answer": "Commit reinforcement at Ashcombe Road, Fenwick Street and Hartwell Common for winter 2027/28; Charlecote Way stays within firm capacity on nine design days in ten",
+      "fate": "landed on the platform 2026-11-10: both runs committed the golden list (Ashcombe Road, Fenwick Street and Hartwell Common, not Charlecote Way) with every headline figure, 0 of 11 results lost against a paper pair of 38.4. Unprompted, each run capped what a provider had available at the instruction, replayed the load that comes back over all 48 half-hours, took a predictive nine-in-ten level by joint resampling and back-tested on a held-out winter with the model chosen on the winter before; the chain's four judgments were all reflexes of a careful run, so the driver is spent. What the runs named as assumptions and never tested (a straight line carried eight degrees below the days it was fitted on, availability scaling with the megawatts contracted, connections applied in full) is where architecture 7 sits"
+    },
     {
       "architecture": "v5 (the same world: each provider's reduction net of the load the control room moved to the primary across an open point, read at minus 3.0 C)",
       "domain": "energy-systems-utilities",
@@ -332,32 +390,44 @@
       "second-sentence opener": "build",
       "rounding opener": "demand",
       "deliverable set": "pptx+xlsx"
+    },
+    {
+      "question form": "whether",
+      "second-sentence opener": "for",
+      "rounding opener": "mw",
+      "deliverable set": "pptx+xlsx"
+    },
+    {
+      "question form": "where",
+      "second-sentence opener": "for",
+      "rounding opener": "mw",
+      "deliverable set": "pptx+xlsx"
     }
   ],
-  "notes": "2026-11-10 architecture 6: re-rooted in the same world on the platform reviewer's instruction (runs/review_2026-11-10.md): the transfer documented in a control room switching log and filed in guideline 3, the single hidden factor replaced by a results chain; stump_strategy forecast_method_backtest: three readings of what a call of the whole contract delivers (per megawatt scheduled, a share of the megawatts contracted, the last contract's megawatts unchanged) separated by the record itself; weight validation, never yet drawn on file | forum executive_team and org_family utility_or_infrastructure kept from the world; forcing_event season_or_peak: the call is forced by the winter 2027/28 peak, through the December capital expenditure review at which a reinforcement has to be committed to be energised before it (guideline 1). The same event reads as budget_or_appropriation too, and the card carried that label for part of 2026-11-10 while task15 held season_or_peak in the window; task16, registered earlier and pulled later, holds budget_or_appropriation in the window now, and season_or_peak, the label first filed, is free again | 2026-11-10 stage 4 fix pass (judge r1 FIX_NOW on the backtest's range count): the count is no longer asked, every band is the range of 17 variants, Ashcombe Road's award is 21.0 MW so no shortcut reaches the set, the asks are numbered as the prompt lists them (eleven results)",
-  "answer_shape": "forecast-bands-drivers",
-  "weight": "validation",
+  "notes": "2026-11-10 architecture 7: re-rooted in the same world after both platform runs landed architecture 6 (runs/arch6_triage.md, REDESIGN). stump_strategy composition_mix: of the three structural judgments the one with the label nearest a single family is the award's class mix against one pooled commissioning record; the other two are selection of the days without a service and the immaturity of recent connections, named in driver and judgment | weight modeling: specification carries each of the three (the form of the cold end, the build-up curve by type, commissioning by class against a pooled record); answer shape distribution-cut: each primary's design-day peak as a distribution cut at firm capacity under the guideline's one-day-in-ten rule | a fifth constraint managed zone (Dunmore Street) joins the four, the asset register covers the whole licence area, and the prompt shell is redrawn (which, a second sentence led by the design day; a workbook and a few slides) | gap time first and generator G6 first: the measurement is three winters back and the call is two winters forward, and what differs between them is composition (the design day against the days measured without a service, the award classes against the record, the customers ages against today) | forum executive_team, org_family utility_or_infrastructure and forcing_event season_or_peak kept from the world",
+  "answer_shape": "distribution-cut",
+  "weight": "modeling",
   "chain_signature": [
-    "forecasting",
+    "causal-reasoning",
     "missingness-measurement",
     "forecasting",
-    "validation",
-    "investigation-loops",
     "modeling",
+    "missingness-measurement",
+    "forecasting",
+    "investigation-loops",
     "forecasting",
     "uncertainty",
     "uncertainty",
-    "synthesis",
-    "decomposition-attribution"
+    "synthesis"
   ],
   "depth_level": 5,
   "doctrine": "throughout",
   "client_subdomain": "load-price-renewable-forecasting",
-  "results": "R1 design-day demand before flexibility (30.1, 24.9, 35.5, 22.9 MW); R2a the share of its contracted megawatts each provider has available at minus 3 C (0.39 Corvane Flex, 0.54 Quillon); R2 megawatts each 2027/28 contract delivers at 17:30 to 18:00 on the design day (8.1, 4.0, 5.4, 2.9); R3 winter 2025/26's events predicted from the winters before (out by 0.19 MW on average); R4a megawatts coming back in the half-hour after the window per megawatt delivered (0.32, 0.26); R4 megawatts off the day's peak (4.2, 4.0, 5.4, 2.9; Ashcombe Road peaking in the half-hour to 20:00); R5 expected peaks (25.9, 20.8, 30.1, 20.0); R6a the day-to-day spread as a share of what is delivered (16 per cent at both providers); R6 nine-days-in-ten levels (26.5, 21.7, 31.2, 20.6 against firm 23.0, 22.5, 30.5, 17.8); R7 reinforce Ashcombe Road, Fenwick Street and Hartwell Common; R8 the bridge from 46.0 MW contracted (25.6 not available, 20.4 delivered, 3.9 lost as load comes back, 16.5 off the peaks)",
-  "registered": "2026-11-10T04:24:39Z",
+  "results": "R1 design-day demand in winter 2025/26 by primary; R2 megawatts the register's connections add by 15 January 2028; R3 demand before flexibility in winter 2027/28; R4 megawatts each provider will have in service on the assessment date; R5 the share of them available at minus 3 C; R6 megawatts delivered at 17:30 to 18:00; R7 megawatts coming back after the window per megawatt delivered; R8 expected peaks; R9 nine-days-in-ten levels against firm capacity; R10 the share of design days over firm capacity; R11 reinforce Ashcombe Road, Charlecote Way, Dunmore Street and Fenwick Street (figures set at the build)",
+  "registered": "2026-11-10T07:44:07Z",
   "shell": {
-    "question form": "whether",
-    "second-sentence opener": "for",
+    "question form": "which",
+    "second-sentence opener": "on",
     "rounding opener": "mw",
     "deliverable set": "pptx+xlsx"
   }
