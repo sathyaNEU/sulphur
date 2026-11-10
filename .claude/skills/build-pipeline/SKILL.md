@@ -50,6 +50,15 @@ that says the task hinges on one thing, a factor was planted, or the domain is a
   nothing structural until both are in. Where they disagree on what a shipped sentence licenses, the judge
   recomputed and the reader did not, so the judge settles it. A reader finding is evidence of what a solver sees,
   which is Gate F, not Gate C.
+- **The judge thread's own first pass is read against the careful column before READY.** Its `own_derivation.md`,
+  written before it opened the blocks, is a medium-effort run of the task. Every result it lands inside the stated
+  band is priced Right in the careful column, whatever the note priced, and the pair estimate is read again on that
+  pricing; over 50, the build goes back to stage 2 whatever the verdict and Gate H say. task9's architecture 8 came
+  back DETERMINISTIC with Gate H passing after that pass had landed 11 of 14 figures (the three moves the note
+  priced as lost), and was paused before upload; task10's architecture 7 came back APPROVE after it had earned the
+  two results the note priced as its strongest losses and lost three the note priced as earned, and its pre-ship
+  check carries that as a caution on the paper estimate. Have the wrapper list the first pass's figures against the
+  bands in its report.
 - **The free gates come first, always:** nothing with a token cost runs on a pack the scripts have not passed.
 - **No author checkpoints before READY.** The draw is shown in ten lines and the build carries on; the author can
   stop or redraw at any point, and `/approve` remains for a manual sign-off before upload.

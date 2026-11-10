@@ -69,3 +69,14 @@ is designed is moved into the skill it governs in a `SKILLS:` commit, and its li
   screen all certified that the step was hidden, which is exactly what the client now returns. Moved into every skill
   in the `SKILLS:` commit of 2026-11-09: the results chain, the hidden factor record, the effort test (`effort.py`),
   the template check, the prompt rules (no attached file named, no role), and Gate H of the judge.
+- **Textbook method choices on clean series are landed; pooled readings, the window's edge and selected units are
+  lost** (the stage 4 judges' own first passes on task9 arch 8 and task10 arch 7, 2026-11-10: medium effort, about
+  eleven minutes each, written before the blocks were opened; evidence of a run, not platform rows). On task9 arch 8
+  (public index series, the difficulty in three method choices) the pass rebuilt the missing strikes from both
+  neighbouring indices, ranged the averages by blocks and lags and read the expectation from realised against
+  implied on the whole record: 11 of 14 figures inside their bands, and the build was paused before upload. On
+  task10 arch 7 it rebuilt the cold evenings from a half-hour before the window and read the customers' build-up by
+  type from the monthly file, and lost one lateness record pooled across asset classes where the award's mix
+  differs, one share pooled across providers, and the load that comes back after the window. Moved into
+  `../../build-pipeline/SKILL.md` (Running the stages): the first pass is read against the careful column before
+  READY.
