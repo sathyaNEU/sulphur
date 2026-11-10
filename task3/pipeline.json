@@ -1,38 +1,21 @@
 {
  "task": "task3",
- "status": "READY",
+ "status": "DESIGN",
  "domain": "physical-environmental-sciences",
- "subdomain": "hydrology-flood-frequency",
+ "subdomain": "climate-weather-extremes",
  "objective": "forecasting",
- "stage": 5,
- "stage_name": "ready",
- "updated": "2026-11-09",
- "call": "Build the 185 ft span: Durrow Creek's 1 per cent flood is about 25,000 cfs once the Coyner River's record is carried flood by flood at the snow line the airport's hourly temperature places for each storm (by drainage area it files the 140 ft span at about 18,700)",
- "stump": "Carrying the Coyner River's record to Durrow Creek by drainage area builds the 140 ft span on about 18,700 cfs; each flood carried at the ratio of the two basins' rain below its snow line files about 25,000 cfs, the 185 ft span, and names the creek's largest floods as 2008 and 2011",
- "architecture": 6,
+ "stage": 2,
+ "stage_name": "design",
+ "updated": "2026-11-10",
+ "call": "",
+ "stump": "",
+ "architecture": 7,
  "loops": 0,
- "precut": {
-  "exit": 0,
-  "date": "2026-11-08",
-  "checks": "75 checks, 0 FAIL, 0 WARN"
- },
- "leak": {
-  "leak_py": "REVIEW (USGS text records, generic terms in the two filed documents, shell quota)",
-  "reader": "round 4: no sentence names the decisive step; no file ranks the spans"
- },
- "duplicate_check": {
-  "heart": "WARN",
-  "surface": "task68 (labels only, differentiated); task2 (G6, drawn after this build, differentiated)"
- },
- "judge": {
-  "verdict": "DETERMINISTIC (round 4)",
-  "disposition": "APPROVE",
-  "gate_h": "domain pass, layers pass, decisive_step analytical, chain 5 inferences, one_fact none",
-  "gate_g": "method_or_model_selection, analytical_non_defect, surface_read_dependency no, sole_data_defect no",
-  "report": "task3/determinism_check_report.md",
-  "rounds": 4
- },
- "paper_pair": 23.8,
+ "precut": {},
+ "leak": {},
+ "duplicate_check": {},
+ "judge": {},
+ "paper_pair": null,
  "runs": {
   "run1": null,
   "run2": null,
@@ -58,6 +41,13 @@
     "run1": "on the golden",
     "run2": "on the golden",
     "triage": "REDESIGN"
+   },
+   {
+    "architecture": 6,
+    "date": "2026-11-09",
+    "run1": "on the golden (every graded figure)",
+    "run2": "on the golden (every graded figure)",
+    "triage": "REDESIGN (author: both models landed the ground truth; runs/arch6/runs.md)"
    }
   ]
  },
@@ -130,7 +120,7 @@
    "commit": ""
   }
  ],
- "resume": "upload prompt.txt and target.zip, generate the two runs, then /triage-runs task3",
+ "resume": "stage 2: design note results chain, effort test, forks; generator from the scratch prototype",
  "approved": null,
  "submitted": null,
  "portal": {
@@ -220,5 +210,11 @@
   "golden_zip": "0a32091e50d5e3f5"
  },
  "revision": 2,
- "paper_note": "a run taking the foothill gauge's median concurrent ratio scores about 84 (pair with a shallow run 52.1)"
+ "paper_note": "a run taking the foothill gauge's median concurrent ratio scores about 84 (pair with a shallow run 52.1)",
+ "draw": {
+  "answer_shape": "ranked-list-cap",
+  "weight": "hard-to-measure",
+  "depth_level": 5,
+  "world": "Port Tolliver, Georgia: five tidal low points carried from the harbor tide gauge"
+ }
 }
