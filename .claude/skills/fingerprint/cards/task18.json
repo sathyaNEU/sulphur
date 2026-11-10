@@ -1,0 +1,106 @@
+{
+  "task": "task18",
+  "project": "sulfur",
+  "architecture": "v1",
+  "drawn": "2026-11-10",
+  "slot_note": "energy x root-cause, never built; the regulator's investigation of an island grid's under-frequency event and the 2027 fast-response holding it directs",
+  "domain": "energy-systems-utilities",
+  "subdomain": "grid-reliability-outage-analysis",
+  "niche": "a system disturbance on an island grid: the losses the frequency saw (metered infeeds and the embedded solar its loss-of-mains protection tripped), the inertia it fell against, the response providers' delivery, the load the first under-frequency stage really shed, and the fast response a recurrence in 2027's lowest-inertia hours would need",
+  "objective": "root-cause",
+  "shape": "18",
+  "decision_type": "quantity_figure",
+  "answer_unit": "count",
+  "answer": "",
+  "answer_source": "",
+  "gap": [
+    "population"
+  ],
+  "pattern": [
+    "none"
+  ],
+  "generators": [
+    "G3",
+    "G13",
+    "G16"
+  ],
+  "gate_g": "decomposition_attribution",
+  "calibration_form": "physical_verification",
+  "stump_strategy": "decomposition_attribution",
+  "decisive_rule_filed": false,
+  "official_decoy": false,
+  "validated_decoy": false,
+  "context_artifact": "operations_log",
+  "stump_class": "analytical",
+  "analyst_test": "The careful but hurried pass books the two metered infeed losses as the event, sizes the unmetered embedded loss from minute averages or the register (both off), takes inertia from the unit register, measures providers against flat pre-event baselines, splits the fall by megawatt shares and scales 2027 linearly, so its 2027 holding lands well short of or past the golden's.",
+  "domain_test": "Frequency containment physics decides every result (the swing equation at the centre of inertia, loss-of-mains vector-shift and rate-of-change protection, droop and fast-response contracts, load relief, the under-frequency scheme's net against gross demand); a hospital or a warehouse has no inertia, no protection that trips on the fall itself and no response held against a loss.",
+  "layer2_family": "estimation_fit",
+  "layer2_pattern": "own:unmetered-loss-and-inertia-carried-into-a-containment-requirement",
+  "layer1": [
+    "recorder clocks offset against the GPS-timed PMUs",
+    "PMU data gaps and GPS-unlocked frames",
+    "SCADA values frozen at the last good value",
+    "grid supply point flows in mixed sign conventions",
+    "unit names that differ between the register, the telemetry and the event records",
+    "an embedded register with conversions dated after commissioning",
+    "interval-ending and interval-beginning timestamps"
+  ],
+  "stakeholder_role": "the regulator's director of system security",
+  "role_family": "compliance_or_audit",
+  "scoring_unit": "other",
+  "spine": {
+    "file": "pmu_frequency_2026-06-14.csv",
+    "rows": 0,
+    "entity": "one PMU frame at one substation",
+    "grain": "substation x 20 ms",
+    "source": "synthetic"
+  },
+  "forum": "regulator_or_inspector",
+  "forcing_event": "incident_or_complaint",
+  "org_family": "government_agency",
+  "world": {
+    "geography": "Corvenna, a self-governing North Atlantic island with its own synchronous grid",
+    "currency": "EUR",
+    "org_type": "energy regulator",
+    "invented_names": [
+      "Corvenna",
+      "Corvenna Utilities Regulation Authority",
+      "Corvenna Transmission Operator"
+    ],
+    "people": [
+      "Orlaith Ganley",
+      "Kieran Rabbitte"
+    ]
+  },
+  "deliverables": [
+    "investigation report (pdf)",
+    "workbook (xlsx)"
+  ],
+  "opening_move": "question-first",
+  "question_form": "how-much",
+  "driver": "The decisive quantities are the part of a system's loss no meter records, estimated from where it shows on the flows at the boundary once the response it provoked is taken out, and the stored energy the system fell against, read from the first moments of the fall at the system's weighted centre, both then carried into a dynamic model of the next occurrence, where the lower store makes the fall steeper and the steeper fall trips a further band of the unrecorded loss.",
+  "driver_concrete": "Embedded solar tripped by vector-shift and rate-of-change-of-frequency loss-of-mains protection is estimated from each grid supply point's flow steps net of load relief and the voltage-dependent dip, inertia from the centre-of-inertia RoCoF with that loss included, providers against their instructed trajectories, the nadir split by a calibrated swing model in the order the losses came, and the 2027 fast-response holding found by simulating the same sequence at 2027's lowest inertia, where the higher RoCoF trips the 0.5 Hz/s band as well.",
+  "stump": "A competent solver books the wind farm and the steam turbine as the loss, estimates the embedded loss from minute averages, takes inertia from the unit register, measures providers against flat baselines and scales the 2026 event linearly to 2027, and files a 2027 fast-response holding far from the one that keeps the recurrence above the first load-shedding stage.",
+  "answer_shape": "ranked-causes",
+  "weight": "investigation",
+  "chain_signature": [
+    "assembly-reconciliation",
+    "missingness-measurement",
+    "modeling",
+    "exploration-triage",
+    "decomposition-attribution",
+    "missingness-measurement",
+    "forecasting"
+  ],
+  "results": "R1 the reconciled sequence of losses; R2 the embedded generation lost by mechanism; R3 the inertia at the event; R4 each response provider's delivery against contract and those short; R5 the fall below 50 Hz split by cause in the order the causes came; R6 the net and gross demand the first under-frequency stage removed against its design; R7 the 2027 fast-response holding for a recurrence at the lowest inertia",
+  "one_fact_test": "to be measured on the generator",
+  "strategy_label": "UNTESTED",
+  "mechanism_source": "design_note",
+  "differentiation": {
+    "mark126": "mark126 splits record-linked units a succession table joins and reads a duration median; here no record is split or joined: an unmetered physical loss is estimated from the boundary flows it moved and carried, with the inertia it fell against, into a dynamic model of a forward event.",
+    "task8": "task8 carries item parameters calibrated on another population into a pass mark; here nothing is calibrated on another population: the event's own flows, frequency and telemetry measure the hidden loss, the inertia and each provider, and a swing model carries them to 2027, where lower inertia trips a further protection band."
+  },
+  "lineage": [],
+  "notes": "org_family government_agency and role compliance_or_audit because the analysis is the regulator's own investigation (the transmission operator is in task10's window as utility_or_infrastructure, and the regulator is the honest owner of the 2027 direction); context artifact operations_log (the event records and dispatch log) rather than monitoring_export, which task2 holds in the window.",
+  "registered": "2026-11-10T22:01:04Z"
+}
