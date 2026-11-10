@@ -4,7 +4,7 @@
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: careful, yardstick, forecast, examples, trials, largest, ladder, scored, results, nothing, result, carried, routes, golden, scores, logged, missed, scaling, return, development, prompt, priced, forecasting, vendor, method
+Stump terms swept: careful, yardstick, forecast, examples, trials, largest, ladder, results, scored, nothing, routes, result, carried, golden, scores, logged, prompt, missed, scaling, ranked, return, development, priced, forecasting, vendor
 
 ## 1 file names (REVIEW 2)
 - **REVIEW** `launch_vendor_trials.sh`: code shipped in the input pack, confirm it is in-fiction and carries no construction of the answer
@@ -12,22 +12,25 @@ Stump terms swept: careful, yardstick, forecast, examples, trials, largest, ladd
 
 ## 3 answer figures in the pack (REVIEW 8)
 - **REVIEW** `dev_item_loss_final_checkpoints.csv`: golden figure 0.0140 appears: ...,0.0821,0.0549,0.0922,0.0655,0.0287,0.0454,0.0318,0.0140,0.0298,0.0183,0.0112,0.0297,0.0167,0.0617,0.0165,...
+- **REVIEW** `dev_item_loss_final_checkpoints.csv`: golden figure 0.0032 appears: ...3613,0.4278,0.2390 62,0.0116,0.0074,0.0049,0.0033,0.0032,0.0025,0.0055,0.0028,0.0155,0.0150,0.0030,0.0229,...
+- **REVIEW** `dev_item_loss_final_checkpoints.csv`: golden figure 0.0059 appears: ...,0.0129,0.0043,0.0048,0.0107,0.0026,0.0011,0.0046,0.0059,0.0072,0.0836,0.2424,0.0943,0.0998,0.1187,0.0075,...
+- **REVIEW** `dev_item_loss_final_checkpoints.csv`: golden figure 0.0051 appears: ...,0.0103,0.1678,0.0876,0.0645,0.0409,0.0192,0.0219,0.0051,0.0118,0.1181,0.0666,0.0854,0.0644,0.0233,0.0228,...
 - **REVIEW** `dev_item_loss_final_checkpoints.csv`: golden figure 0.0125 appears: ...,0.0862,0.0139,0.1197,0.0511,0.0180,0.0259,0.0153,0.0125,0.0090,0.0284,0.1160,0.0821,0.0549,0.0922,0.0655,...
+- **REVIEW** `dev_item_loss_final_checkpoints.csv`: golden figure 0.0095 appears: ...,0.0177,0.0128,0.0029,0.0026,0.0011,0.0438,0.0058,0.0095,0.0075,0.0014,0.0063,0.0013,0.0121,0.0036,0.1520,...
 - **REVIEW** `dev_item_loss_final_checkpoints.csv`: golden figure 0.0020 appears: ...,0.0084,0.1190,0.0357,0.0307,0.0163,0.0048,0.0040,0.0020,0.0045,0.1005,0.0344,0.0242,0.0101,0.0026,0.0031,...
 - **REVIEW** `dev_item_loss_final_checkpoints.csv`: golden figure 0.0114 appears: ...,0.0344,0.0982,0.0610,0.0750,0.0535,0.0111,0.1132,0.0114,0.0376,0.0992,0.0846,0.0860,0.0179,0.1033,0.0176,...
-- **REVIEW** `dev_item_loss_final_checkpoints.csv`: golden figure 0.0032 appears: ...3613,0.4278,0.2390 62,0.0116,0.0074,0.0049,0.0033,0.0032,0.0025,0.0055,0.0028,0.0155,0.0150,0.0030,0.0229,...
-- **REVIEW** `dev_item_loss_final_checkpoints.csv`: golden figure 0.0095 appears: ...,0.0177,0.0128,0.0029,0.0026,0.0011,0.0438,0.0058,0.0095,0.0075,0.0014,0.0063,0.0013,0.0121,0.0036,0.1520,...
-- **REVIEW** `dev_item_loss_final_checkpoints.csv`: golden figure 0.0051 appears: ...,0.0103,0.1678,0.0876,0.0645,0.0409,0.0192,0.0219,0.0051,0.0118,0.1181,0.0666,0.0854,0.0644,0.0233,0.0228,...
-- **REVIEW** `dev_item_loss_final_checkpoints.csv`: golden figure 0.0059 appears: ...,0.0129,0.0043,0.0048,0.0107,0.0026,0.0011,0.0046,0.0059,0.0072,0.0836,0.2424,0.0943,0.0998,0.1187,0.0075,...
 
 ## 4 design-note vocabulary (REVIEW 1)
-- **REVIEW** `mml_group_meeting_2026-11-05.md`: 4 of 25 stump-paragraph terms appear (scored, nothing, result, scores); read whether the document names the move
+- **REVIEW** `mml_group_meeting_2026-11-05.md`: 5 of 25 stump-paragraph terms appear (scored, nothing, result, scores, ranked); read whether the document names the move
 
 ## 8 column names (REVIEW 1)
 - **REVIEW** `tracking_runs_export_2026-11-04.csv`: columns a generator names and an organisation does not: seed
 
 ## 10 container metadata (INFO 1)
 - **INFO** `-`: container gate PASS (PASS: 0 FAIL, 0 WARN)
+
+## 11 prompt gate (REVIEW 1)
+- **REVIEW** `prompt.txt`: shell quota: question form 'whether' at 31% of 16 prompts (cap 30%); deliverable set 'xlsx' at 25% of 16 prompts (cap 20%); reword at the role level, not the verb
 
 ## 12 client quality check (INFO 2)
 - **INFO** `-`: 16 usable files (10 or more required)
@@ -42,8 +45,6 @@ Stump terms swept: careful, yardstick, forecast, examples, trials, largest, ladd
 ## 7 hidden content (clean)
 
 ## 9 dates after the setting (clean)
-
-## 11 prompt gate (clean)
 
 
 ## Solver's-eye read

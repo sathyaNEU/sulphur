@@ -21,7 +21,7 @@
   "reader": "2026-11-10, second read on the six-ask prompt: question 1 none, no ranking file, no helping file, question 5 sentences execute to the golden's estimand, question 6 no one thing; two shortlist-sheet headers renamed (data only)"
  },
  "duplicate_check": {
-  "heart": "WARN 2026-11-10 (overuse.objective, repeat.gate_g, overuse.gate_g; no BLOCK), nearest task11 at 0.06, answered in the note",
+  "heart": "WARN 2026-11-10 (repeat.gate_g against task4: the assigned analysis type's own mechanism, answered in the note); ban.shape against task15 appeared after another build's card was filed again and was cleared by redrawing the prompt shape to other, the honester label for a results chain behind a pick; nearest driver task11 at 0.06",
   "surface": "exit 0"
  },
  "judge": {

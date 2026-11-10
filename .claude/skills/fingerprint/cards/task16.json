@@ -8,7 +8,7 @@
  "subdomain": "scaling-laws",
  "niche": "a Norwegian university machine-learning group choosing which shortlisted training configuration to name in a national compute proposal for its seabed sediment classifier, forecasting each one's loss on the mapping programme's verified benchmark from a five-week pilot sweep of real training runs: an expert-label size ladder run at tabled learning rates, a learning-rate check, a few wide runs, and trials of a contractor's labels and of labels transferred from a legacy sediment map that the benchmark never scored",
  "objective": "forecasting",
- "shape": "01",
+ "shape": "other",
  "decision_type": "pick_one_of_n",
  "answer_unit": "named_option",
  "answer": "B",
@@ -100,6 +100,6 @@
  "mechanism_source": "design_note",
  "differentiation": {},
  "lineage": [],
- "notes": "strategy other: a staged-pilot scale-up forecast in which no one family carries the pick (a yardstick carried to runs it never scored, a route's cost read at matched examples and learning rate, a return to more examples that bends past the range, chosen by holding out the largest runs); calibration organ: the pilot's benchmark submissions overlap the trainer's development scores on the same final checkpoints (two yardsticks over the same runs); context artifact: the group's meeting notes that carry the shortlist; overuse.objective answered in the design note",
+ "notes": "strategy other: a staged-pilot scale-up forecast in which no one family carries the pick (a yardstick carried to runs it never scored, a route's cost read at matched examples and learning rate, a return to more examples that bends past the range, chosen by holding out the largest runs); calibration organ: the pilot's benchmark submissions overlap the trainer's development scores on the same final checkpoints (two yardsticks over the same runs); context artifact: the group's meeting notes that carry the shortlist; overuse.objective answered in the design note; prompt shape redrawn from 01 to other on 2026-11-10 when the window moved (another build's card was re-filed after this draw and pulled task15, a true ranked slate under a cap, into the last two): the answer is a results chain behind a pick of one in four, with twelve gradable cells of which four come from the ranked list (the four expected losses), three from the range, four from the drivers (the trial's loss, the two routes' costs, the level) and one from the call; no cap runs out mid-list and nothing is trimmed, so the library's ranked list under a cap was the looser label",
  "registered": "2026-11-10T03:15:10Z"
 }
