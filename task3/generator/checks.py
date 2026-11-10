@@ -71,14 +71,18 @@ def main():
        "Front Street's lane is not in the inventory and its rim sits below the lane")
     # SF4 rain ponding not counted
     sen = A.read_sensor(TGT)
-    dep = sen.depth_in.rolling(5, center=True, min_periods=3).median()
+    wl = sen.water_level_ft_navd88
+    wet = wl.notna()
+    sus = wl[wet & wet.rolling(3, center=True, min_periods=1).sum().ge(2)]
     hw = A.Harbor(TGT).year_hw(2025, "obs")
     wet_any = 0
     for tt, h in hw.items():
-        w = dep[(dep.index >= tt - pd.Timedelta(hours=2)) & (dep.index <= tt + pd.Timedelta(hours=2))]
-        wet_any += int(len(w) >= 30 and w.max() >= 0.5 and h < R["front_level"])
+        w = sus[(sus.index >= tt - pd.Timedelta(hours=2)) & (sus.index <= tt + pd.Timedelta(hours=2))]
+        wet_any += int(len(w) >= 2 and h < R["front_level"])
     ok("SF4", wet_any >= 1 and F["front_sensor_days"] + F["front_outage_days"] == F["hind"]["front"],
        "%d high tides below the lane met rain ponding on the sensor and are not counted" % wet_any)
+    ok("SF4b", len(set(round(v, 2) for v in R["front_variants"].values())) == 1,
+       "Front Street's lane reads the same by the lowest and the first-percentile persistent reading")
     # SF5 the weather years
     ok("SF5", A.WX_YEARS == list(range(1990, 2026)), "36 weather years, 1990-91 to 2025-26")
     # SF6 the planning sea level
@@ -114,11 +118,19 @@ def main():
     ok("SF10b", (resid < 0).all() and len(past) >= 10 and F["marsh_sd"][1] >= 2.5 * F["marsh_sd"][0],
        "the straight line runs above all %d high waters at harbor 8.3 ft or more; residuals %.2f against %.2f" %
        (len(past), F["marsh_sd"][1], F["marsh_sd"][0]))
-    # SF11 river flow forms
+    # SF11 river flow forms: those fitting within 20 per cent of the best kept, the others refuted by the fit; the slope held
+    # at one and flows lagged a day or two refuted too
     rf = R["river_fit"]
-    ok("SF11", inside(R["var"]["river_lin"]["hind"], B["hind_river"]) and inside(R["var"]["river_lin"]["exp"], B["exp_river"])
-       and rf["log"]["sse"] > 1.5 * rf["pow"]["sse"], "linear inside the bands; logarithmic refuted (%.2f against %.2f)" %
-       (rf["log"]["sse"], rf["pow"]["sse"]))
+    best = min(rf[f]["sse"] for f in rf)
+    kept = R["river_forms_kept"]
+    ok("SF11", set(kept) >= {"lin", "pow"} and rf["log"]["sse"] > 1.5 * best and rf["sqrt"]["sse"] > 1.4 * best,
+       "kept %s; square root %.3f and logarithmic %.3f against the best %.3f" % (kept, rf["sqrt"]["sse"], rf["log"]["sse"], best))
+    ok("SF11c", R["river_slope1_sd"] >= 2.5 * min(R["river_sd"].values()) and min(R["river_lag_sse"].values()) >= 5 * best,
+       "slope one sd %.3f against %.3f; lagged flows %s against %.3f" % (R["river_slope1_sd"], min(R["river_sd"].values()),
+                                                                        R["river_lag_sse"], best))
+    for f in kept:
+        hv = R["hind_variants"]["river|%s" % f]
+        ok("SF11b", inside(hv, B["hind_river"]), "River Road 2025-26 by the %s form: %d" % (f, hv))
     # SF12 drift ruled out
     from openpyxl import load_workbook
     ws = load_workbook(os.path.join(TGT, A.F_INV), data_only=True)["Logger campaigns"]
@@ -147,11 +159,16 @@ def main():
     # SF19 nothing preliminary in the counts
     hl = A.read_hilo(TGT, A.F_HL)
     ok("SF19", hl.t.max() < pd.Timestamp("2026-10-01"), "verified high waters stop at September 2026")
-    # SF20 margins across the family
-    for nm, f in R["family"].items():
-        top = sorted(A.ORDER, key=lambda k: -f[k])
-        ok("SF20", set(top[:2]) == set(F["call_keys"]) and f[top[1]] >= 1.25 * f[top[2]],
-           "%s: %s then %s at %.1f against %.1f" % (nm, top[0], top[1], f[top[1]], f[top[2]]))
+    # SF20 the funded pair and its margin under every variant of the sweep
+    sw = R["sweep"]
+    ok("SF20", all(set(s["pair"]) == set(F["call_keys"]) for s in sw), "the same pair in all %d variants" % len(sw))
+    mm = min(s["means"][s["pair"][1]] / max(s["means"][k] for k in A.ORDER if k not in s["pair"]) for s in sw)
+    ok("SF20b", mm >= 1.25, "the second leads the third by at least %.2f times in every variant" % mm)
+    for s in sw:
+        for k in A.ORDER:
+            ok("SF20c", inside(s["means"][k], B["exp_" + k]), "%s under %s/%s/%s/%s/%s: %.2f" % (
+                k, s["align"], s["detrend"], s["river"], s["marsh"], s["front"], s["means"][k]))
+        ok("SF20d", inside(s["hold"], B["pair_hold"]), "the pair's years %d" % s["hold"])
     # the bar block: each hurried figure outside its band, the routes' pairs distinct
     V = F["variants_hind"]
     ok("H1", not inside(V["marsh_linear"], B["hind_marsh"]) and not inside(F["route_exp"]["marsh straight line"]["marsh"], B["exp_marsh"]),
@@ -162,7 +179,8 @@ def main():
        "the drain rim %d and the sensor alone %d against %s" % (V["front_rim"], F["front_sensor_days"], B["hind_front"]))
     ok("H4", not inside(F["harbor_count_trend"], B["harbor_exp"]) and not inside(F["harbor_raw_skew"], B["harbor_exp"]),
        "the count trend %.1f and the raw residuals %.1f" % (F["harbor_count_trend"], F["harbor_raw_skew"]))
-    ok("H5", not inside(F["harbor_poisson"][1], B["harbor_hi"]) and not inside(F["harbor_poisson"][0], B["harbor_lo"]),
+    ok("H5", not inside(F["harbor_poisson"][1], B["harbor_hi"]) and not inside(F["harbor_poisson"][0], B["harbor_lo"])
+       and inside(F["harbor_lo"], B["harbor_lo"]) and inside(F["harbor_hi"], B["harbor_hi"]),
        "the Poisson range %s" % F["harbor_poisson"])
     pairs = [tuple(sorted(p)) for k, p in F["routes"].items() if k != "golden"]
     ok("H6", len(set(pairs)) == len(pairs) and tuple(sorted(F["routes"]["golden"])) not in pairs,

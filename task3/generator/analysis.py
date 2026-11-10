@@ -173,9 +173,11 @@ class Harbor:
 
 
 def count_days(times, levels, thr):
-    t = pd.DatetimeIndex(times)
-    hit = pd.Series(levels >= thr, index=t.floor("D")).groupby(level=0).any()
-    return int(hit.sum())
+    d = pd.DatetimeIndex(times).floor("D").values.astype("datetime64[D]").astype(np.int64)
+    hit = np.asarray(levels) >= thr
+    if not hit.any():
+        return 0
+    return int(len(np.unique(d[hit])))
 
 
 # ---------------------------------------------------------------- site transfers
@@ -247,17 +249,25 @@ def linear_inverse(f, L):
     return (L - f["a"]) / f["b"]
 
 
+GFORM = {"lin": lambda q: q / 1e4, "log": lambda q: np.log(q / 1e4), "pow": lambda q: (q / 1e4) ** 0.85,
+         "sqrt": lambda q: np.sqrt(q / 1e4), "linq": lambda q: q / 1e4}
+
+
 def fit_river(d, form="lin"):
-    g = {"lin": d.Q.values / 1e4, "log": np.log(d.Q.values / 1e4), "pow": (d.Q.values / 1e4) ** 0.85}[form]
-    X = np.column_stack([np.ones(len(d)), g, d.harbor.values - d.M.values])
+    g = GFORM[form](d.Q.values)
+    cols = [np.ones(len(d)), g, d.harbor.values - d.M.values]
+    if form == "linq":
+        cols.append((d.harbor.values - d.M.values) ** 2)
+    X = np.column_stack(cols)
     co, *_ = np.linalg.lstsq(X, d.site.values - d.M.values, rcond=None)
     res = d.site.values - d.M.values - X @ co
-    return dict(form=form, c0=float(co[0]), c1=float(co[1]), r=float(co[2]), sse=float((res ** 2).sum()), n=len(d))
+    return dict(form=form, c0=float(co[0]), c1=float(co[1]), r=float(co[2]), c3=float(co[3]) if form == "linq" else 0.0,
+                sse=float((res ** 2).sum()), n=len(d))
 
 
 def river_level(f, H, M, Q):
-    g = {"lin": Q / 1e4, "log": np.log(Q / 1e4), "pow": (Q / 1e4) ** 0.85}[f["form"]]
-    return M + f["c0"] + f["c1"] * g + f["r"] * (H - M)
+    g = GFORM[f["form"]](Q)
+    return M + f["c0"] + f["c1"] * g + f["r"] * (H - M) + f.get("c3", 0.0) * (H - M) ** 2
 
 
 def fit_pooled(d):
@@ -267,34 +277,34 @@ def fit_pooled(d):
 
 
 def front_level(H, sen):
-    """Front Street's flooding elevation (as a harbor high water): the harbor high water less the water depth the
-    sensor recorded on the lane at that high tide, over the high tides that put water on the lane."""
-    # a vehicle under the beam reads as one deep sample; water on the lane persists for many readings
-    dep = sen.depth_in.rolling(5, center=True, min_periods=3).median()
+    """Front Street's flooding elevation: the lowest water level the street sensor records on the lane in readings
+    that persist (a vehicle under the beam is one reading), as a harbor-equivalent MLLW level and in NAVD88."""
+    wl = sen.water_level_ft_navd88
+    wet = wl.notna()
+    run = wet & (wet.shift(1, fill_value=False) | wet.shift(-1, fill_value=False))
+    sustained = wl[run & wet.rolling(3, center=True, min_periods=1).sum().ge(2)]
+    lane = float(sustained.min())
     hw = H.hw[(H.hw.index >= sen.index[0]) & (H.hw.index <= sen.index[-1])]
-    rows = []
+    wet_tides = 0
     for t, h in hw.items():
-        w = dep[(dep.index >= t - pd.Timedelta(hours=2)) & (dep.index <= t + pd.Timedelta(hours=2))]
-        if len(w) < 30:
-            continue
-        rows.append((t, h, float(w.max())))
-    d = pd.DataFrame(rows, columns=["t", "h", "dmax"]).set_index("t")
-    wet = d[d.dmax >= 0.5]
-    est = wet.h - wet.dmax / 12.0
-    return float(np.median(est)), d, int(len(wet))
+        w = sustained[(sustained.index >= t - pd.Timedelta(hours=2)) & (sustained.index <= t + pd.Timedelta(hours=2))]
+        wet_tides += int(len(w) >= 2 and h - H.nav >= lane - 0.05)
+    return lane + H.nav, sustained, wet_tides
 
 
 def front_sensor_days(H, sen, LA, y):
     """Front Street's tidal flood days in tide year y that the sensor itself recorded: water on the lane within two
     hours of a harbor high water at or above the lane (rain ponding at a lower tide is not tidal)."""
-    dep = sen.depth_in.rolling(5, center=True, min_periods=3).median()
+    wl = sen.water_level_ft_navd88
+    wet = wl.notna()
+    sustained = wl[wet & wet.rolling(3, center=True, min_periods=1).sum().ge(2)]
     hw = H.year_hw(y, "obs")
     days = set()
     for t, h in hw.items():
         if h < LA:
             continue
-        w = dep[(dep.index >= t - pd.Timedelta(hours=2)) & (dep.index <= t + pd.Timedelta(hours=2))]
-        if len(w) >= 30 and w.max() >= 0.5:
+        w = sustained[(sustained.index >= t - pd.Timedelta(hours=2)) & (sustained.index <= t + pd.Timedelta(hours=2))]
+        if len(w) >= 2:
             days.add(t.floor("D"))
     return len(days)
 
@@ -375,7 +385,7 @@ def run(tgt):
     # River Road: the flow-dependent transfer from its campaign
     s = read_logger(tgt, "river")
     dR = pair_site(H, hilo_series(s), nav, H.monthly, Q)
-    rf = {form: fit_river(dR, form) for form in ("lin", "log", "pow")}
+    rf = {form: fit_river(dR, form) for form in ("lin", "log", "pow", "sqrt", "linq")}
     best_form = min(rf, key=lambda k: rf[k]["sse"])
     pooled = fit_pooled(dR)
     out["river_fit"] = rf
@@ -397,7 +407,7 @@ def run(tgt):
             if variant == "golden":
                 f = rf[best_form]
                 return lambda Hh, M, Qq: river_level(f, Hh, M, Qq) - lane["river"]
-            if variant in ("lin", "log", "pow"):
+            if variant in ("lin", "log", "pow", "sqrt", "linq"):
                 f = rf[variant]
                 return lambda Hh, M, Qq: river_level(f, Hh, M, Qq) - lane["river"]
             if variant == "pooled":
@@ -469,7 +479,7 @@ def run(tgt):
                                      exp=summary(E.counts(site_fn(site, "linear")))["mean"])
         var[site + "_none"] = dict(hind=count_days(hw25.index, site_fn(site, "none")(hw25.values, M25, Q25), 0.0),
                                    exp=summary(E.counts(site_fn(site, "none")))["mean"])
-    for v in ("pooled", "none", "lin", "log", "pow"):
+    for v in ("pooled", "none", "lin", "log", "pow", "sqrt", "linq"):
         var["river_" + v] = dict(hind=count_days(hw25.index, site_fn("river", v)(hw25.values, M25, Q25), 0.0),
                                  exp=summary(E.counts(site_fn("river", v)))["mean"])
     # the harbor by the count trend (log-linear on 1990-91 to 2025-26) and a Poisson range
@@ -486,6 +496,91 @@ def run(tgt):
     # raw skew surges on the planning sea level (the sea level counted twice)
     Er = Ensemble(H, Q, resid_col="sk")
     var["harbor_raw_skew"] = float(np.mean(Er.counts(lambda Hh, M, Qq: Hh - HARBOR_MINOR)))
+    # the sweep: every defensible combination of alignment, detrending, River Road's flow form, Marsh Road's bend form
+    # and Front Street's lane reading; the funded pair, each low point's expected days and the pair's years under each
+    good_forms = [f for f in rf if rf[f]["sse"] <= 1.20 * rf[best_form]["sse"]]
+    out["river_forms_kept"] = good_forms
+    # the slope held at one (the river's offset alone, the tide passing undamped) and flows lagged a day or two
+    Xs = np.column_stack([np.ones(len(dR)), dR.Q.values / 1e4])
+    cs, *_ = np.linalg.lstsq(Xs, dR.site.values - dR.harbor.values, rcond=None)
+    rs = dR.site.values - dR.harbor.values - Xs @ cs
+    out["river_slope1_sd"] = float(rs.std())
+    out["river_sd"] = {f: float(np.sqrt(rf[f]["sse"] / rf[f]["n"])) for f in rf}
+    lag_sse = {}
+    for lag in (1, 2):
+        dl = pair_site(H, hilo_series(s), nav, H.monthly, Q.shift(lag, freq="D"))
+        lag_sse[lag] = fit_river(dl, best_form)["sse"]
+    out["river_lag_sse"] = lag_sse
+    wl = sen.water_level_ft_navd88
+    wet = wl.notna()
+    sus = wl[wet & wet.rolling(3, center=True, min_periods=1).sum().ge(2)]
+    front_variants = {"lowest": LA, "1st percentile": float(np.percentile(sus, 1)) + nav}
+    Hs = np.arange(5.0, 12.0, 0.0005)
+    from openpyxl import load_workbook
+    wsc = load_workbook(_p(tgt, F_INV), data_only=True)["Tidal creeks"]
+    plat = {r[0]: r[4] for r in wsc.iter_rows(min_row=2, values_only=True) if r[0]}
+    platforms = {"marsh": plat["Pellam Creek"], "oyster": plat["Oyster Creek"]}
+    marsh_variants = {}
+    for site in ("marsh", "oyster"):
+        d = fits[site]["pairs"]
+        L = lane[site]
+        mv = {"hinge": fits[site]["Hstar"]}
+        c = np.polyfit(d.harbor.values, d.site.values, 2)
+        mv["quadratic"] = float(Hs[np.argmax(np.polyval(c, Hs) >= L)])
+        top = d[d.harbor >= 7.0]
+        c = np.polyfit(top.harbor.values, top.site.values, 1)
+        mv["upper-half line"] = float((L - c[1]) / c[0])
+        ps = platforms[site] + nav  # the site's level at its marsh platform (inventory, Tidal creeks)
+        low = d[d.site < ps]
+        c = np.polyfit(low.harbor.values, low.site.values, 1)
+        P = (ps - c[1]) / c[0]
+        X = np.column_stack([np.ones(len(d)), d.harbor.values, np.maximum(d.harbor.values - P, 0.0)])
+        co, *_ = np.linalg.lstsq(X, d.site.values, rcond=None)
+        mv["hinge at the platform"] = float(Hs[np.argmax(co[0] + co[1] * Hs + co[2] * np.maximum(Hs - P, 0.0) >= L)])
+        marsh_variants[site] = mv
+    sweep = []
+    for al, rc in (("interp", "r"), ("nearest", "r"), ("interp", "r_month")):
+        e = Ensemble(H, Q, align=al, resid_col=rc)
+        harbor_c = e.counts(lambda Hh, M, Qq: Hh - HARBOR_MINOR)
+        base = {}
+        for fv_name, fv in front_variants.items():
+            base[("front", fv_name)] = e.counts(lambda Hh, M, Qq, L=fv: Hh - L)
+        base[("wharf", "-")] = e.counts(lambda Hh, M, Qq: Hh - lane["wharf"])
+        for site in ("marsh", "oyster"):
+            for mv_name, h in marsh_variants[site].items():
+                base[(site, mv_name)] = e.counts(lambda Hh, M, Qq, h=h: Hh - h)
+        for f in good_forms:
+            ff = rf[f]
+            base[("river", f)] = e.counts(lambda Hh, M, Qq, ff=ff: river_level(ff, Hh, M, Qq) - lane["river"])
+        for fv_name in front_variants:
+            for mv_name in marsh_variants["marsh"]:
+                for f in good_forms:
+                    per = {"front": base[("front", fv_name)], "wharf": base[("wharf", "-")],
+                           "marsh": base[("marsh", mv_name)], "oyster": base[("oyster", mv_name)], "river": base[("river", f)]}
+                    means = {k: float(np.mean(v)) for k, v in per.items()}
+                    pair = sorted(ORDER, key=lambda k: -means[k])[:2]
+                    hold = 0
+                    for i in range(len(e.years)):
+                        top = sorted(ORDER, key=lambda k: (-per[k][i], ORDER.index(k)))[:2]
+                        hold += set(top) == set(pair)
+                    sweep.append(dict(align=al, detrend=("tide year" if rc == "r" else "month"), river=f, marsh=mv_name,
+                                      front=fv_name, means=means, pair=pair, hold=int(hold),
+                                      harbor=float(np.mean(harbor_c)), harbor_lo=float(np.percentile(harbor_c, 5)),
+                                      harbor_hi=float(np.percentile(harbor_c, 95))))
+    out["sweep"] = sweep
+    out["front_variants"] = front_variants
+    out["marsh_variants"] = marsh_variants
+    # the 2025-26 counts under each variant
+    hv = {}
+    for fv_name, fv in front_variants.items():
+        hv[("front", fv_name)] = count_days(hw25.index, hw25.values - fv, 0.0)
+    for site in ("marsh", "oyster"):
+        for mv_name, h in marsh_variants[site].items():
+            hv[(site, mv_name)] = count_days(hw25.index, hw25.values - h, 0.0)
+    for f in good_forms:
+        hv[("river", f)] = count_days(hw25.index, river_level(rf[f], hw25.values, M25, Q25) - lane["river"], 0.0)
+    out["hind_variants"] = {"%s|%s" % k: v for k, v in hv.items()}
+
     # the defensible family each band is set on
     fam = {}
     for nm, kw in (("interp", {}), ("nearest", dict(align="nearest")), ("month_detrend", dict(resid_col="r_month"))):

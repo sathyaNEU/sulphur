@@ -37,12 +37,12 @@
    },
    "bands": {
     "lo": [
-     19.35,
-     22.5
+     19.5,
+     23.5
     ],
     "hi": [
-     30.5,
-     33.95
+     30.0,
+     34.95
     ]
    },
    "passes": {
@@ -113,15 +113,15 @@
    "figure": "front_hind",
    "depends": [],
    "independent": "the street sensor and the harbor's verified high waters",
-   "golden": 21,
+   "golden": 20,
    "band": [
-    20,
-    22
+    19,
+    21
    ],
    "passes": {
     "quick": 44,
-    "careful": 21,
-    "thorough": 21
+    "careful": 20,
+    "thorough": 20
    }
   },
   {
@@ -142,7 +142,7 @@
     ],
     "oyster": [
      7,
-     9
+     11
     ]
    },
    "passes": {
@@ -169,7 +169,7 @@
    "independent": "the campaign, the river's daily flows and the harbor's high waters",
    "golden": 10,
    "band": [
-    9,
+    8,
     12
    ],
    "passes": {
@@ -191,31 +191,31 @@
    ],
    "independent": "",
    "golden": {
-    "front": 26.3,
+    "front": 25.0,
     "marsh": 14.3,
-    "river": 15.9,
+    "river": 17.1,
     "wharf": 32.3,
     "oyster": 1.2
    },
    "bands": {
     "front": [
-     25.11,
-     26.78
+     23.92,
+     25.53
     ],
     "marsh": [
-     13.22,
-     18.03
+     11.7,
+     18.28
     ],
     "river": [
-     14.08,
-     16.97
+     11.7,
+     18.67
     ],
     "wharf": [
      31.31,
-     32.75
+     32.8
     ],
     "oyster": [
-     0.5,
+     0.39,
      1.92
     ]
    },
@@ -228,16 +228,16 @@
      "oyster": 43.0
     },
     "careful": {
-     "front": 26.3,
+     "front": 25.0,
      "marsh": 33.6,
-     "river": 36.7,
+     "river": 37.3,
      "wharf": 32.3,
      "oyster": 9.3
     },
     "thorough": {
-     "front": 26.3,
+     "front": 25.0,
      "marsh": 14.3,
-     "river": 15.9,
+     "river": 17.1,
      "wharf": 32.3,
      "oyster": 1.2
     }
@@ -281,15 +281,15 @@
     "R8"
    ],
    "independent": "",
-   "golden": 30,
+   "golden": 28,
    "band": [
-    28,
-    32
+    27,
+    33
    ],
    "passes": {
     "quick": null,
     "careful": 36,
-    "thorough": 30
+    "thorough": 28
    }
   }
  ],

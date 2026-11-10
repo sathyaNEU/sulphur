@@ -122,15 +122,16 @@ def guidelines(path):
          Paragraph("4. Definitions", h2),
          Paragraph("<b>Tide year.</b> 1 May to 30 April. The 2027-28 tide year runs from 1 May 2027 to 30 April 2028.", body),
          Paragraph("<b>Tidal flood day.</b> A calendar day, in Eastern Standard Time, on which the tide brings the water "
-                   "at a low point to or above its flooding elevation. Rain alone does not make a tidal flood day.", body),
+                   "at the low point itself, at its outfall, to or above its flooding elevation. Rain alone does not make a "
+                   "tidal flood day.", body),
          Paragraph("<b>Flooding elevation.</b> The elevation of the travel lane's low point, in feet NAVD88, as surveyed "
                    "for the utility's low point inventory. Where the lane has not been surveyed, it is the water level at "
                    "which the utility's street sensor over the travel lane records water on the lane.", body),
-         Paragraph("<b>Expected tidal flood days.</b> The average number of tidal flood days in the tide year over the "
-                   "weather and river flows of the tide years 1990-91 to 2025-26, on the published tide predictions of the "
-                   "Port Tolliver harbor gauge (NOAA station %s) for the tide year, with the gauge's mean sea level for "
-                   "the tide year at the program's planning value. The 90 per cent range is the range the tide year's "
-                   "count falls within in nine of every ten of those weather years." % "8673718", body),
+         Paragraph("<b>Expected tidal flood days.</b> A low point's average number of tidal flood days in the tide year "
+                   "over the weather and river flows of the tide years 1990-91 to 2025-26, with the tide year's astronomical "
+                   "tide taken from the published predictions of the Port Tolliver harbor gauge (NOAA station %s) and the "
+                   "gauge's mean sea level for the tide year at the program's planning value. The 90 per cent range is the "
+                   "range the tide year's count falls within in nine of every ten of those weather years." % "8673718", body),
          Paragraph("<b>Planning mean sea level.</b> For the 2027-28 tide year the program plans on the harbor gauge's mean "
                    "sea level standing %.2f ft above its 1983-2001 mean sea level, the value of the regional sea level "
                    "outlook the utility adopted on 14 October 2026." % PLANNING_MSL, body),

@@ -46,7 +46,8 @@ Not one thing: the strongest single piece is Marsh Road's bend, and a run that n
   the pair's stability; the call needs both site transfers right at once (either alone keeps a wrong pair)
 One-fact test: the most useful single sentence a reviewer could give a careful run ("River Road's high waters ride on
   the river's flow, and its campaign sat in a wet late winter") rescues R6 only, 1 of 9; the marsh sentence rescues R5
-  only; the call and the counts still need the other
+  only. A sentence naming both site transfers carries two facts, each its own modelling judgment on its own evidence,
+  and even then R2's range and R3's split stay to be earned (5 of 9 rescued, the call among them)
 Not semantics: with every field read correctly (the lane, not the rim; local standard time; NAVD88 to MLLW at 3.42 ft;
   the weather years 1990-91 to 2025-26; the planning sea level) a straight line through Marsh Road's campaign, one
   offset from River Road's and a Poisson range still file R2, R5, R6, R7, R8 and R9 wrong
@@ -65,11 +66,13 @@ No replay: no published figure is re-derived; the planning sea level is an input
   2025-26 count is read from the verified high waters as the bridge's start
 Pinned: R1 inside 25.9 to 27.5 across residual alignments (interpolated 27.0, nearest 26.9) and detrending by month
   (26.4); a day's largest residual on both its high waters fails the 2025-26 replay (24 against the observed 21). R2
-  across percentile estimators. R3's shares across the six orders. R4 by the sensor (the lane to 0.03 ft). R5 across
+  across percentile estimators. R3's shares across the six orders. R4 by the sensor (its lowest persistent reading and its first percentile read the same lane, 5.20 ft NAVD88). R5 across
   the hinge, quadratic, cubic and upper-half straight line (8.70 to 8.76 ft at Marsh Road); one straight line is refuted
   by its own residuals: it runs above all 13 high waters where the harbor reached 8.3 ft or more, by 0.18 ft on
-  average, its residuals three times the bending transfer's (0.10 against 0.03 ft). R6 by the power and linear flow forms (sums of
-  squares 1.00 and 1.02; 10 and 11 days); the logarithmic form is refuted (1.93); drift is refuted by the staff checks
+  average, its residuals three times the bending transfer's (0.10 against 0.03 ft). R6 by the flow forms that fit within a fifth of the best (power 0.196, linear curved in the harbor's height 0.222,
+  linear 0.230; 10, 11 and 11 days); the square-root (0.322) and logarithmic (1.102) forms, the tide passing undamped (sd 0.115
+  against 0.034 ft) and flows lagged a day or two (1.66 and 3.75) are refuted by the fit; the round 2 judge's own
+  implementation (12.2 days at River Road, 12.2 at Marsh Road, 32 years) sits inside the bands; drift is refuted by the staff checks
   (0.01 at deployment, 0.02 at retrieval). R7, R8 and R9 across the whole family, the funded pair never moving
 Run forecast: R2 method shortcut (a Poisson range around the mean); R3 unfinished chain (the three changes taken one
   at a time from 2025-26, adding to 2.2 of the 6.0 days); R5 self-confirming check (one straight line through the
@@ -92,14 +95,14 @@ Lesson: a long reference record reaches short-record sites only through each sit
 | ID | Result (checkable) | Area | Pinned by | Band | Hurried analyst | Depends on | Graded as |
 |---|---|---|---|---|---|---|---|
 | R1 | the harbor gauge's expected days at its 8.6 ft minor flood threshold in the 2027-28 tide year: 27.0 | forecasting | guidelines 4 (the weather years, the predictions, the planning sea level 0.70 ft) and the record | 25.9 to 27.5 | method shortcut: the count trend over 1990-91 to 2025-26 files 10.8 | - | Ask 1 |
-| R2 | its 90 per cent range: 22 to 31 days | uncertainty | guidelines 4 (nine weather years in ten) | low 19.4 to 22.5, high 30.5 to 34.0 | method shortcut: a Poisson range around the mean, 19 to 36 | R1 | Ask 2 |
+| R2 | its 90 per cent range: 22 to 31 days | uncertainty | guidelines 4 (nine weather years in ten) | low 19.5 to 23.5, high 30.0 to 35.0 | method shortcut: a Poisson range around the mean, 19 to 36 | R1 | Ask 2 |
 | R3 | the change from the 2025-26 count (21) to 27.0 split into sea level +5.8, tides -0.7, weather +1.0 days, adding to +6.0 | decomposition-attribution | the record and the six orders of applying the changes | sea level 3.8 to 7.3; tides -3.3 to 2.0; weather -1.0 to 2.6; the total 5.0 to 7.0 | unfinished chain: each change taken from 2025-26 alone (+5.0, -3.0, +0.2), adding to 2.2 | R1 | Ask 3 |
-| R4 | Front Street's 2025-26 tidal flood days: 21 (its lane at 5.19 ft NAVD88; 15 recorded by the sensor, 6 in its outage) | missingness-measurement | guidelines 4 (the lane; the sensor where it was not surveyed) and the sensor | 20 to 22 | dismissed own evidence: the drain rim files 44; the sensor alone misses its outage (15) | independent: the street sensor and the harbor's verified high waters | Component 3 |
-| R5 | Marsh Road's and Oyster Creek Road's 2025-26 days: 17 and 8 (Marsh Road floods at a harbor high water of 8.75 ft) | modeling | each campaign's high waters above the marsh platform (data) | Marsh Road 16 to 20, Oyster Creek 7 to 9 | self-confirming check: one straight line through the campaign (Marsh Road 26 at 8.54 ft, Oyster Creek 13) | independent: each campaign and the harbor's verified high waters | Component 1 |
-| R6 | River Road's 2025-26 days: 10, carried day by day on the Brayle's flows | investigation-loops | the campaign's offset against the river's flow, drift ruled out by the staff checks (data) | 9 to 12 | narrow look: the wet late-winter campaign's single offset carried to the whole year (26) | independent: the campaign, the river's daily flows and the harbor's verified high waters | Component 2 |
-| R7 | the five low points' expected 2027-28 days: Wharf Street 32.3, Front Street 26.3, River Road 15.9, Marsh Road 14.3, Oyster Creek Road 1.2 | forecasting | guidelines 4 and each low point's transfer | Wharf 31.3 to 32.8; Front 25.1 to 26.8; River 14.1 to 17.0; Marsh 13.2 to 18.0; Oyster 0.5 to 1.9 | unfinished chain: the harbor's machinery run right but carried through the straight-line and single-offset transfers (Marsh 33.6, River 36.7, Oyster 9.3) | R1, R4, R5, R6 | Ask 4 |
+| R4 | Front Street's 2025-26 tidal flood days: 20 (its lane at 5.20 ft NAVD88; 15 recorded by the sensor, 5 in its outage) | missingness-measurement | guidelines 4 (the lane; the sensor where it was not surveyed) and the sensor | 19 to 21 | dismissed own evidence: the drain rim files 44; the sensor alone misses its outage (15) | independent: the street sensor and the harbor's verified high waters | Component 3 |
+| R5 | Marsh Road's and Oyster Creek Road's 2025-26 days: 17 and 8 (Marsh Road floods at a harbor high water of 8.75 ft) | modeling | each campaign's high waters above the marsh platform (data) | Marsh Road 16 to 20, Oyster Creek 7 to 11 | self-confirming check: one straight line through the campaign (Marsh Road 26 at 8.54 ft, Oyster Creek 13) | independent: each campaign and the harbor's verified high waters | Component 1 |
+| R6 | River Road's 2025-26 days: 10, carried day by day on the Brayle's flows | investigation-loops | the campaign's offset against the river's flow, drift ruled out by the staff checks (data) | 8 to 12 | narrow look: the wet late-winter campaign's single offset carried to the whole year (26) | independent: the campaign, the river's daily flows and the harbor's verified high waters | Component 2 |
+| R7 | the five low points' expected 2027-28 days: Wharf Street 32.3, Front Street 25.0, River Road 17.1, Marsh Road 14.3, Oyster Creek Road 1.2 | forecasting | guidelines 4 and each low point's transfer | Wharf 31.3 to 32.8; Front 23.9 to 25.5; River 11.7 to 18.7; Marsh 11.7 to 18.3; Oyster 0.4 to 1.9 | unfinished chain: the harbor's machinery run right but carried through the straight-line and single-offset transfers (Marsh 33.6, River 37.3, Oyster 9.3) | R1, R4, R5, R6 | Ask 4 |
 | R8 | the two funded: Wharf Street at Market Lane and Front Street at Ferry Lane | synthesis | guidelines 3 (the top two) | exact | unfinished chain: River Road at Hensley Landing and Marsh Road at Pellam Creek | R7 | Recommendation |
-| R9 | the weather years that keep the funded pair on top: 30 of 36 (River Road takes Front Street's place in the other 6) | uncertainty | guidelines 4 (the same weather years) | 28 to 32 | self-confirming check: the hurried pair counted on the hurried transfers holds in 36 | R7, R8 | Ask 5 |
+| R9 | the weather years that keep the funded pair on top: 28 of 36 (River Road takes Front Street's place in the other 8) | uncertainty | guidelines 4 (the same weather years) | 27 to 33 | self-confirming check: the hurried pair counted on the hurried transfers holds in 36 | R7, R8 | Ask 5 |
 
 Carry-forward: R4, R5 and R6 are each graded on inputs of their own (a low point's record with the harbor's observed
 2025-26 high waters) and stand whatever the harbor's forecast; R2 and R3 fall only with R1's machinery, which the careful
@@ -113,7 +116,7 @@ wrong pair); R9 follows R7.
 |---|---|---|---|---|---|
 | a marsh creek's high water rising ever more slowly once the tide tops the marsh platform | constructed (marsh storage simulated at both marsh creeks) | no: Oyster Creek bends the same way and is in no route's funded pair; the inventory's marsh platforms place both bends | modelling: a transfer fitted on each campaign's high waters, a straight line's residuals at the top | modelling: a bending transfer with its break estimated (the client's curved-response example, a legitimate method choice) | keep |
 | River Road's high waters lifted by the river's flow | constructed (setup simulated on the whole upriver reach; the harbor carries a faint lift by month) | no: it runs through the whole campaign and every day of the year | modelling with a second file (the daily flows) and a rival ruled out (logger drift, by the staff checks) | modelling: a flow term carried to each weather year's flows | keep |
-| Front Street's lane standing above its drain rim | constructed (each low point's geometry) | no: every low point's rim sits below its lane in the inventory | measurement: the sensor's water depth against the harbor at each wet tide | estimation from a noisy, gappy record | keep |
+| Front Street's lane standing above its drain rim | constructed (each low point's geometry) | no: every low point's rim sits below its lane in the inventory | measurement: the lowest water level the sensor records on the lane in readings that persist | estimation from a noisy, gappy record | keep |
 | the tide delayed under a surge, so hourly residuals swing through the tide | constructed (the harbor's whole record) | no | the residual at high water against the residual at every hour | routine for a careful run | keep, earned |
 | the sensor's battery outage through the 2025 king tides | constructed (two outages, one in summer) | no: it drops days of every kind | one look at the record's dates | a fill from the harbor at the lane level | keep, texture with a count |
 
@@ -185,15 +188,15 @@ Abstraction sentence: "carry a long reference record's threshold-exceedance fore
 |---|---|---|---|---|
 | SF1 | tide year | May to April; calendar year; water year | 1 May to 30 April | guidelines 4 |
 | SF2 | tidal flood day | any reading; a high water; local daylight or standard time | a calendar day in Eastern Standard Time with the water at or above the flooding elevation | guidelines 4 |
-| SF3 | flooding elevation | drain rim; lane; harbor threshold | the lane low point; Front Street's from the sensor | guidelines 4 |
+| SF3 | flooding elevation | drain rim; lane; harbor threshold; Front Street's onset or a regression intercept | the lane low point; Front Street's as the lowest water level its sensor records on the lane | guidelines 4; the sensor reports the water level on the lane, so the lowest persistent reading and its first percentile agree |
 | SF4 | rain ponding on Front Street | counted; not counted | not counted | guidelines 4 (rain alone does not make a tidal flood day) |
 | SF5 | expected days | the latest years; the whole record; the weather years | the average over the tide years 1990-91 to 2025-26 | guidelines 4 |
 | SF6 | the sea level for the tide year | a fitted trend; the latest year; the planning value | 0.70 ft above the 1983-2001 mean sea level | guidelines 4 |
 | SF7 | the 90 per cent range | Poisson; the weather years' 5th to 95th; a bootstrap | nine of the weather years in ten | guidelines 4; every percentile estimator inside the band |
 | SF8 | the residual's sea level | each high water's month; its tide year | its tide year's mean (the planning value is a year's mean) | same call (26.4 against 27.0, inside the band) |
 | SF9 | aligning a weather year's residuals | interpolated; nearest high water; the day's largest | interpolated | same call for nearest; the day's largest fails the 2025-26 replay (24 against the observed 21) |
-| SF10 | Marsh Road's transfer | one straight line; a hinge; a smooth bend | a hinge with its break estimated | same call for quadratic, cubic and the upper half; the straight line above all 13 high waters at harbor 8.3 ft or more |
-| SF11 | River Road's flow form | linear; power; logarithmic | power (best fit) | same call for linear (sum of squares 1.02 against 1.00); logarithmic refuted (1.93) |
+| SF10 | Marsh Road's transfer | one straight line; a hinge; a hinge fixed at the inventory's marsh platform; a smooth bend | a hinge with its break estimated | same call for the platform-fixed hinge, quadratic and upper-half line (all in the sweep, the bands cover the round 2 judge's 12.2); the straight line above all 13 high waters at harbor 8.3 ft or more |
+| SF11 | River Road's flow form | power; linear; linear curved in height; square root; logarithmic; the tide undamped; lagged flows | power (best fit) | same call for linear and curved (sums of squares 0.230 and 0.222 against 0.196, inside the bands); square root (0.322), logarithmic (1.102), the tide undamped (sd 0.115 against 0.034) and flows lagged one or two days (1.66, 3.75) refuted by the fit |
 | SF12 | logger drift at River Road | drift; none | none | the staff checks at deployment and retrieval (0.01 and 0.02 ft) |
 | SF13 | logger clocks | local daylight time; the launch offset | the launch offset in each header | the header; pairing by the nearest high water within three hours |
 | SF14 | NAVD88 to MLLW | 3.42 ft; a regional conversion | 3.42 ft | the datums page |
@@ -202,7 +205,7 @@ Abstraction sentence: "carry a long reference record's threshold-exceedance fore
 | SF17 | the river's flows in the forecast | the latest year; the climate; each weather year's own | each weather year's own flows beside its weather | guidelines 4 (weather and river flows of the same years) |
 | SF18 | the pair count's years | the weather years; the record | the same 36 weather years | guidelines 4 and the prompt |
 | SF19 | the October 2026 preliminary data | used; not | not needed (the 2025-26 tide year and the weather years end in April 2026) | same call |
-| SF20 | a tie in the ranking | - | none (Front Street 26.3 against River Road 15.9) | margins asserted |
+| SF20 | a tie in the ranking | - | none (Front Street 25.0 against River Road 17.1) | margins asserted |
 
 ## Closure table
 
@@ -235,7 +238,7 @@ Abstraction sentence: "carry a long reference record's threshold-exceedance fore
 
 Guidelines 3 ranks the low points on expected tidal flood days and funds the top two: executed on the golden counts it
 funds Wharf Street and Front Street. Guidelines 4 defines the flood day at the lane and, for Front Street, as the sensor
-records water on the lane: executed, it gives 5.19 ft NAVD88 and 21 days. Guidelines 4 fixes the weather years, the
+records water on the lane: executed, it gives 5.20 ft NAVD88 and 20 days. Guidelines 4 fixes the weather years, the
 predictions and the planning sea level: executed with the residual at high water, the harbor expects 27.0 days. No filed
 sentence says how a harbor high water reaches Marsh Road or River Road; the campaigns do.
 
@@ -260,6 +263,9 @@ leak.py --asof 2026-11-10 on the cut pack, REVIEW lines answered (each harmless)
 - device_id in the street sensor export is the vendor's own column;
 - the predictions run past the as-of date because tide predictions are published ahead (the file's purpose);
 - the prompt's shell quota is a batch warning on the deliverable mix (a spreadsheet and a memo), not a leak.
+- two judge rounds reported Marsh Road's logger reading below its sensor elevation: each logger floors exactly at its
+  inventory sensor elevation (PEL-MR-24 at -1.35 ft, 2,027 dry readings; OYS-CR-25 at -1.10, 1,829; HEN-RR-25 never
+  drains to its -4.80 ft sensor, its lowest reading -3.11), so the report misread a file.
 
 ## Tried and rejected
 
@@ -582,3 +588,18 @@ Architecture 6 (the Durrow Creek bridge):
   or 1996, quadratics from 1955 or 1980, with or without an AR(1) carry of the latest anomaly, annual or monthly) spread the
   harbor's expected days 13.9 to 29.0 on one world, so no band could hold it; the planning sea level is filed instead, the
   regional outlook's figure the program adopts, and the forecasting judgments sit where the data pin them.
+- Architecture 7 round 1 (target.zip 5cc1927b), the judge NOT_DETERMINISTIC narrowly: "rank all five" graded ranks 3
+  and 4, which River Road's flow form moves (linear 15.9 against curved 18.3 days, the fits alike); the ask now takes each
+  low point's expected days and the funded two, and every flow form within 6 per cent of the best fit sits in the band.
+- Front Street's sensor reporting depth over its dry-road baseline: the onset (8.61 ft) and a depth-on-harbor regression
+  intercept (8.66 ft) read the guideline two ways and moved Front Street by 2 to 5 days; the sensor now reports the water
+  level on the lane, and its lowest persistent reading is the lane.
+- The logger exports sampled at 30 minutes (the common multiple of the 6-minute model and a 15-minute mask) and the
+  inventory's River Road campaign left at an earlier window; both found by the leak reader, the loggers interpolated to 15
+  minutes and the inventory set to 20 January to 20 April 2025; the site levels re-set for margins (Marsh Road 8.42,
+  River Road 8.37, Wharf Street 8.555 ft) so four shortcuts still name four different pairs.
+- Architecture 7 round 2 (target.zip 521db5d2), the judge DETERMINISTIC with FIX_NOW: River Road's figures did not
+  reproduce (12.2 to 13.5 expected days against 18.7) and the pair's years (32 against 28). The world had read each
+  day's river flow by its UTC date while the USGS file and every analyst read local days, which is why a three-day
+  smoothed flow fitted better than the day's own; flows are now local days (the fits tighten five-fold, the power
+  form leads), every form within a fifth of the best sits in the sweep, and the bands cover the judge's figures.

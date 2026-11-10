@@ -217,7 +217,7 @@ def write_datums(path, S):
 
 def write_river(path, S):
     days, Q = S["days"], S["Q"]
-    m = (days >= np.datetime64("1990-10-01")) & (days <= np.datetime64("2026-10-31"))
+    m = (days >= np.datetime64("1985-10-01")) & (days <= np.datetime64("2026-10-31"))
     rng = W.rngs(8)
     est = set()
     for a in (np.datetime64("1998-01-04"), np.datetime64("2011-08-19"), np.datetime64("2019-12-02")):
@@ -251,7 +251,7 @@ def site_series(S, site, t_from, t_to):
     H = S["obs6"][a - lag:b - lag]
     M = W.low_frequency(None, S["obs6"][a - 8000:b + 8000])[8000:-8000]
     days = S["days"]
-    di = np.searchsorted(days, th6[a:b].astype("datetime64[D]"))
+    di = np.searchsorted(days, (th6[a:b] - LST).astype("datetime64[D]"))  # USGS daily means are local days
     Q = S["Q"][np.clip(di, 0, len(days) - 1)]
     return th6[a:b], W.site_level(site, H, M, Q)
 
@@ -349,14 +349,31 @@ def write_sensor(path, S, prcp_days, prcp):
     dist = base + drift_mm - (depth_ft + pond) * 304.8 + rng.normal(0, 1.6, n)
     spike = rng.random(n) < 0.012
     dist[spike] = rng.uniform(1650, 3600, spike.sum())
-    depth_in = np.maximum(0.0, (base - dist) / 25.4)
-    depth_in = np.where(depth_in < 0.25, 0.0, depth_in)
-    batt = 3.62 - 0.000004 * np.arange(n) % 0.35 + rng.normal(0, 0.004, n)
+    depth_mm = base - dist
+    lane_navd88 = s["level"] + W.NAVD88_OF_MLLW
+    wet = depth_mm >= 6.0  # the vendor's detection threshold over the dry-road baseline
+    wl = np.where(wet, lane_navd88 + depth_mm / 304.8, np.nan)
+    # the battery sags over the weeks before each outage and is replaced after it; the device flags weak echoes and
+    # its first reading after a restart
+    batt = 3.64 + rng.normal(0, 0.004, n)
+    status = np.array(["OK"] * n, dtype=object)
+    for a_, b_ in W.SENSOR_OUT:
+        a_, b_ = np.datetime64(a_), np.datetime64(b_)
+        before = (th < a_) & (th >= a_ - np.timedelta64(21, "D"))
+        frac = ((th[before] - (a_ - np.timedelta64(21, "D"))) / np.timedelta64(21, "D")).astype(float)
+        batt[before] -= 0.42 * frac ** 2
+        status[before & (batt < 3.35)] = "BATTERY_LOW"
+        after = np.where(th >= b_)[0]
+        if len(after):
+            status[after[0]] = "RESTART"
+    weak = rng.random(n) < 0.0025
+    status[weak & (status == "OK")] = "LOW_SIGNAL"
     with open(path, "w", newline="") as f:
         w = csv.writer(f, lineterminator="\n")
-        w.writerow(["timestamp_utc", "device_id", "distance_mm", "depth_in", "battery_v", "status"])
-        for tt, dm, di, bv in zip(th, dist, depth_in, batt):
-            w.writerow([str(tt.astype("datetime64[s]")) + "Z", "PT-FRONT-01", "%d" % round(dm), "%.2f" % di, "%.2f" % bv, "OK"])
+        w.writerow(["timestamp_utc", "device_id", "distance_mm", "water_level_ft_navd88", "battery_v", "status"])
+        for tt, dm, v, bv, st in zip(th, dist, wl, batt, status):
+            w.writerow([str(tt.astype("datetime64[s]")) + "Z", "PT-FRONT-01", "%d" % round(dm),
+                        "" if np.isnan(v) else "%.3f" % v, "%.2f" % bv, st])
     return n
 
 

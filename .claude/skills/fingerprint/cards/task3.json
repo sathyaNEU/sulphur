@@ -12,7 +12,7 @@
  "shape": "other",
  "decision_type": "ranked_slate_under_cap",
  "answer_unit": "set_of_items",
- "answer": "Fund the FY2028 tide valves at Wharf Street at Market Lane (35.0 expected tidal flood days in 2027-28) and Front Street at Ferry Lane (26.3); River Road 18.5, Marsh Road 16.8, Oyster Creek Road 1.0; the pair holds in 29 of 36 weather years; harbor 27.0 days (22 to 31), +6.0 from 2025-26's 21 (sea level +5.8, tides -0.7, weather +1.0)",
+ "answer": "Fund the FY2028 tide valves at Wharf Street at Market Lane (32.3 expected tidal flood days in 2027-28) and Front Street at Ferry Lane (25.0); River Road 17.1, Marsh Road 14.3, Oyster Creek Road 1.2; the pair on top in 28 of 36 weather years and under all 72 variants; harbor 27.0 days (22 to 31), +6.0 from 2025-26's 21 (sea level +5.8, tides -0.7, weather +1.0)",
  "answer_source": "task3/submission.md, Final Recommendation (generator/figures.json call_pair)",
  "gap": [
   "population",
@@ -84,7 +84,7 @@
  "question_form": "which",
  "driver": "A forecast of threshold exceedances at a long-recorded reference is carried to several unrecorded units through each unit's own short record, where each unit's response to the reference departs from a straight copy in its own way (bending above a level, riding on a second driver whose short record sat at one extreme, or known only through a noisy, gappy detector), so each unit's count needs its own model before the units can be ranked.",
  "driver_concrete": "Port Tolliver funds tide valves at the two of five low points with the most expected tidal flood days in the 2027-28 tide year; the harbor gauge's published predictions, the planning sea level and the record's weather give the harbor's exceedances, but Marsh Road's creek rises ever more slowly once the tide tops the marsh, River Road's high waters ride on the river's flow and its only logger campaign sat in a wet spring, and Front Street's flooding level and missing winter days come only from a street sensor.",
- "stump": "The careful but hurried pass fits Marsh Road's campaign with one straight line and River Road's with one offset, and funds Marsh Road and River Road (or one of them beside Wharf Street); only each low point's own model funds Wharf Street and Front Street.",
+ "stump": "The careful but hurried pass fits Marsh Road's campaign with one straight line and River Road's with one offset, and funds River Road and Marsh Road (37.3 and 33.6 days); only each low point's own model funds Wharf Street and Front Street.",
  "deep_chain": "(1) the river's floods drain only the area below each storm's snow line, placed storm by storm from the valley and SNOTEL temperatures with the storm lapse rate; (2) the creek's basin lies below that line in nearly every storm, so its rain-contributing area per storm is a different function of the snow line from the river's; (3) the transfer factor varies by storm and is smallest for the warm storms behind the river's largest floods, so every storm is transferred at its own snow line, never at a typical one; (4) the frequency curve of the creek's transferred annual series gives its 1 per cent flood and the span",
  "judgment": "the response model linking each storm's flood to its rain-contributing volume (rain over the area below the snow line, with the orographic gradient the stations show), fitted on the river's events against the drainage-area model, and the snow line itself (the storm lapse rate from valley and SNOTEL pairs, the rain-snow temperature from the SNOTEL record's rain and snow days)",
  "one_fact_test": "the most useful single sentence (River Road's high waters ride on the river's flow, and its campaign sat in a wet late winter) rescues R6 only, 1 of 9; the marsh sentence R5 only; neither moves the funded pair alone",
@@ -415,7 +415,7 @@
   "forecasting",
   "synthesis"
  ],
- "results": "R1 harbor expected days 27.0; R2 its range 22 to 31; R3 the change from 21 split sea level +5.8, tides -0.7, weather +1.0; R4 Front Street 21 days in 2025-26 (lane 5.19 ft NAVD88 from the sensor, 6 in its outage); R5 Marsh Road 19 and Oyster Creek 7 through the overmarsh transfer (Marsh floods at harbor 8.71 ft); R6 River Road 10 through the flow-dependent transfer; R7 expected 2027-28 Wharf 35.0, Front 26.3, River 18.5, Marsh 16.8, Oyster 1.0; R8 Wharf Street and Front Street funded; R9 the pair on top in 29 of 36 weather years",
+ "results": "R1 harbor expected days 27.0; R2 its range 22 to 31; R3 the change from 21 split sea level +5.8, tides -0.7, weather +1.0; R4 Front Street 20 days in 2025-26 (lane 5.20 ft NAVD88 from the sensor, 5 in its outage); R5 Marsh Road 17 and Oyster Creek 8 through the overmarsh transfer (Marsh floods at harbor 8.75 ft); R6 River Road 10 through the flow-dependent transfer; R7 expected 2027-28 Wharf 32.3, Front 25.0, River 17.1, Marsh 14.3, Oyster 1.2; R8 Wharf Street and Front Street funded; R9 the pair on top in 28 of 36 weather years",
  "depth_level": 5,
  "doctrine": "throughout",
  "client_subdomain": "extreme-value-environmental-hazard",

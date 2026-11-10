@@ -7,8 +7,8 @@
  "stage": 4,
  "stage_name": "check",
  "updated": "2026-11-10",
- "call": "Fund the FY2028 tide valves at Wharf Street at Market Lane (32.3 expected tidal flood days in 2027-28) and Front Street at Ferry Lane (26.3); River Road 15.9, Marsh Road 14.3, Oyster Creek Road 1.2; the pair holds in 30 of 36 weather years",
- "stump": "Straight-line campaign transfers fund River Road (36.7) and Marsh Road (33.6); the drain rim and the untransferred harbor fund Front Street and River Road",
+ "call": "Fund the FY2028 tide valves at Wharf Street at Market Lane (32.3 expected tidal flood days in 2027-28) and Front Street at Ferry Lane (25.0); River Road 17.1, Marsh Road 14.3, Oyster Creek Road 1.2; the pair holds in 28 of 36 weather years and under all 72 variants",
+ "stump": "Straight-line campaign transfers fund River Road (37.3) and Marsh Road (33.6); the drain rim and the untransferred harbor fund Front Street and River Road",
  "architecture": 7,
  "loops": 0,
  "precut": {
@@ -17,14 +17,27 @@
   "checks": "86 checks, 0 FAIL, 4 WARN"
  },
  "leak": {
-  "leak_py": "REVIEW (agency text exports, the round guidelines listing the five low points, the sensor's device_id, forward predictions; each answered in the design note)",
-  "reader": "round 1 (target.zip 5cc1927b): no sentence names a step, no file ranks the low points; two realism defects fixed (River Road campaign dates in the inventory, 30-minute logger steps)"
+  "leak_py": "REVIEW (each line answered in the design note)",
+  "reader": "three reads; round 3: no step named, no ranking file, the literal flood day executes to each low point's own water; realism fixes applied"
  },
  "duplicate_check": {},
  "judge": {
-  "verdict": "pending",
-  "round": 1,
-  "bundle": "target.zip 5cc1927b843a50224a47f84691d032aa (before the reader's fixes)"
+  "round1": {
+   "bundle": "5cc1927b",
+   "verdict": "NOT_DETERMINISTIC (narrowly)",
+   "disposition": "SEND_BACK",
+   "fixed": "ranking ask dropped; Front's sensor reports the water level; river forms in the band; river record from 1985; bands stated"
+  },
+  "round2": {
+   "bundle": "521db5d2",
+   "verdict": "DETERMINISTIC with SOLUTION_WRONG (River Road, pair years)",
+   "disposition": "FIX_NOW",
+   "fixed": "river flows by local day; forms within a fifth of the best in the sweep; platform hinge; bands cover the judge's figures"
+  },
+  "round3": {
+   "bundle": "0d54ea15f6144e05bef9a00526795bfe",
+   "verdict": "pending"
+  }
  },
  "paper_pair": 31.5,
  "runs": {
@@ -131,7 +144,7 @@
    "commit": ""
   }
  ],
- "resume": "stage 4: the determinism judge's isolated thread (round 1, on target.zip 5cc1927b) is running; when its verdict.md returns, hand it to the judge agent for the Gate G and H reconciliation, fix every finding in the generator in one pass, rebuild (python3 task3/generator/build.py), re-run gates.py, and judge once more on the final cut before READY",
+ "resume": "stage 4: the round 3 re-judge's isolated thread on target.zip 0d54ea15 is running; when its verdict.md returns, hand it to the round 3 judge agent for the gates and the Gate G and H reconciliation, then stage 5 READY (re-run every gate, commit READY with target.zip, golden.zip and golden/ added with -f, push main and the session branch)",
  "approved": null,
  "submitted": null,
  "portal": {
@@ -220,7 +233,7 @@
   "world": "Port Tolliver, Georgia: five tidal low points carried from the harbor tide gauge"
  },
  "final_cut": {
-  "target_zip_md5": "1c1fb1fe4292178e3d163bc056131b55",
-  "golden_zip_md5": "7840bc7b941344d8819c93f403f222de"
+  "target_zip_md5": "0d54ea15f6144e05bef9a00526795bfe",
+  "golden_zip_md5": "2a3e0a54d6b112825368f99f3c54c9e2"
  }
 }

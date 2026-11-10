@@ -115,6 +115,26 @@ def workbook(F, inv_lane, path):
     y.column_dimensions["H"].width = 30
     y.freeze_panes = "B3"
 
+    v = wb.create_sheet("Variants")
+    v.append(["The method under every defensible variant: expected tidal flood days 2027-28 and the funded pair"])
+    v.append(["Weather-year alignment", "Residual sea level", "River Road flow form", "Marsh Road bend", "Front Street lane",
+              "Front St", "Marsh Rd", "River Rd", "Wharf St", "Oyster Ck Rd", "Funded pair", "Years the pair leads"])
+    form_names = {"lin": "linear", "pow": "power", "linq": "linear, curved in height", "sqrt": "square root", "log": "logarithmic"}
+    for s_ in F["sweep"]:
+        v.append([s_["align"], s_["detrend"], form_names.get(s_["river"], s_["river"]), s_["marsh"], s_["front"]]
+                 + [s_["means"][k] for k in A.ORDER] + [" and ".join(p.split(" at ")[0] for p in s_["pair"]), s_["hold"]])
+    for c in v[2]:
+        c.font = Font(bold=True)
+        c.fill = PatternFill("solid", fgColor="DDE4EE")
+        c.alignment = Alignment(wrap_text=True, vertical="top")
+    v["A1"].font = Font(bold=True, size=12)
+    for col, w in zip("ABCDEFGHIJKL", (12, 12, 22, 16, 14, 9, 9, 9, 9, 10, 28, 10)):
+        v.column_dimensions[col].width = w
+    for rr in v.iter_rows(min_row=3, max_row=v.max_row):
+        for c in rr[5:10]:
+            c.number_format = "0.0"
+    v.freeze_panes = "A3"
+
     r = wb.create_sheet("Routes")
     r.append(["The funded pair under the shortcuts the records rule out"])
     r.append(["Route", "Front St", "Marsh Rd", "River Rd", "Wharf St", "Oyster Ck Rd", "Funded pair", "Ruled out by"])
@@ -200,10 +220,11 @@ def memo(F, inv_lane, path):
          Spacer(1, 4),
          Paragraph("Fund the FY2028 valves at %s (%.1f expected tidal flood days in the 2027-28 tide year) and %s (%.1f). "
                    "%s (%.1f), %s (%.1f) and %s (%.1f) go to the FY2029 round. The same two come out on top in %d of the %d "
-                   "weather years; in the other %d, all of them wet late winters on the Brayle, River Road takes Front Street's place."
+                   "weather years (in the others, wet late winters on the Brayle, River Road takes Front Street's place) and "
+                   "under all %d variants of the method we could defend, by at least %.2f times."
                    % (n[w1], F["exp"][w1], n[w2], F["exp"][w2], n[others[0]], F["exp"][others[0]], n[others[1]], F["exp"][others[1]],
-                      n[others[2]], F["exp"][others[2]], F["pair_hold"], F["n_weather_years"],
-                      F["n_weather_years"] - F["pair_hold"]), body),
+                      n[others[2]], F["exp"][others[2]], F["pair_hold"], F["n_weather_years"], F["sweep_n"],
+                      F["sweep_margin"]), body),
          t, Spacer(1, 6), img, Spacer(1, 4),
          Paragraph("<b>Harbor gauge.</b> At its %.1f ft minor flood threshold the gauge expects %.1f days in 2027-28 (%d to %d in "
                    "nine weather years in ten) against %d observed in 2025-26. The planning sea level, %.2f ft above the "
@@ -212,11 +233,11 @@ def memo(F, inv_lane, path):
                    "three changes; sea level adds %.1f to %.1f across them)."
                    % (F["harbor_minor"], F["harbor_exp"], F["harbor_lo"], F["harbor_hi"], F["harbor_2025"], F["plan"], F["A25"],
                       b["sea"], -b["tides"], b["weather"], b["total"], F["bridge_range"]["sea"][0], F["bridge_range"]["sea"][1]), body),
-         Paragraph("<b>Front Street.</b> The lane sits at %.2f ft NAVD88, read from the %d high tides that put water under the "
-                   "street sensor; the inlet rim is lower but the program counts the lane. The sensor itself recorded %d of "
-                   "the %d tidal flood days of 2025-26; the other %d fell in its September-October outage and come from the "
-                   "harbor's high waters." % (F["front_level_navd88"], F["front_wet_tides"], F["front_sensor_days"],
-                                               F["hind"]["front"], F["front_outage_days"]), body),
+         Paragraph("<b>Front Street.</b> The lane sits at %.2f ft NAVD88, the lowest water level the street sensor records on "
+                   "it in readings that persist; the inlet rim is lower but the program counts the lane. The sensor itself "
+                   "recorded %d of the %d tidal flood days of 2025-26; the other %d fell in its September-October outage and "
+                   "come from the harbor's high waters." % (F["front_level_navd88"], F["front_sensor_days"],
+                                                            F["hind"]["front"], F["front_outage_days"]), body),
          Paragraph("<b>Marsh Road and Oyster Creek Road.</b> Pellam Creek's high water follows the harbor's at %.2f ft per foot "
                    "until the tide tops the marsh (harbor about %.2f ft) and at %.2f above it, so Marsh Road floods at a harbor "
                    "high water of %.2f ft, not the %.2f ft one straight line through the 2024 campaign gives (%d of its %d "
