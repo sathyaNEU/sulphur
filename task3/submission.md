@@ -18,7 +18,7 @@
 3. Tidal flood days in the 2025-26 tide year: Front Street at Ferry Lane 20 (19 to 21); Marsh Road at Pellam Creek 17 (16 to 20); River Road at Hensley Landing 10 (8 to 12); Wharf Street at Market Lane 26 (25 to 27); Oyster Creek Road 8 (7 to 11).
 4. Wharf Street at Market Lane and Front Street at Ferry Lane are the top two in 28 of the 36 weather years (27 to 33 across the variants); in the others River Road takes Front Street's place.
 5. The harbor gauge expects about 27.0 days at its 8.6 ft minor flood threshold in 2027-28 (25.9 to 27.5 across the variants), with a 90 per cent range of 22 to 31 days (low end 19.5 to 23.5, high end 30.0 to 35.0).
-6. From 21 days in 2025-26 to about 27.0 in 2027-28 (a change of about +6.0): sea level about +5.8 days, tides about -0.7, weather about +1.0, the parts adding to the change; the split depends on the order the three changes are applied, and across the six orders sea level runs +4.1 to +7.0, tides -3.0 to +1.7 and weather -0.7 to +2.3 (the figures given are the average over the orders).
+6. From 21 days in 2025-26 to about 27.0 in 2027-28 (a change of about +6.0), sea level adds about +5.8 days (+4.1 to +7.0 whichever order the three changes are applied in); the tides and the weather share the rest, and their shares turn on the order: the tides between -3.0 and +1.7 and the weather between -0.7 and +2.3 (-0.7 and +1.0 averaged over the six orders), the three parts adding to the change in every order.
 
 ### fy2028_tide_valve_memo.pdf
 
@@ -27,7 +27,7 @@
 ## Critical Components
 
 1. Marsh Road floods at a harbor high water of about **8.75 ft** (8.70 to 8.76 across the bending forms), not the 8.54 ft one straight line through its 2024 campaign gives, so it flooded on about **17** days in 2025-26 (not 26) and expects about **14.3** in 2027-28 (not 33.6).
-2. River Road's high waters stand about **0.47 ft** higher at 25,000 cfs than at 5,000 cfs, and its campaign ran at 24,900 cfs on average, so carried day by day on the Brayle's flows it flooded on about **10** days in 2025-26 (the campaign's single offset gives 26) and expects about **17.1** in 2027-28 (not 37.3).
+2. River Road's high waters stand about **0.47 ft** higher at 25,000 cfs than at 5,000 cfs, and its campaign ran at 24,900 cfs on average, so carried day by day on the Brayle's flows it flooded on about **10** days in 2025-26 (8 to 12 across the flow forms the campaign fits; the campaign's single offset gives 26) and expects **11.7 to 18.7** days in 2027-28 (17.1 by the best-fitting form), far below the single offset's 37.3.
 3. Front Street's lane sits at **5.20 ft NAVD88**, the lowest water level its street sensor records on the lane; it flooded on **20** days in 2025-26, 15 of them recorded by the sensor and 5 in its outage.
 4. Wharf Street at Market Lane (**32.3**) and Front Street at Ferry Lane (**25.0**) lead the other three by at least **1.35 times** under every one of the 72 defensible variants, and the pair holds in about **28 of 36** weather years.
 

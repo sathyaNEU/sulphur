@@ -55,12 +55,12 @@ def text(F):
       "with a 90 per cent range of %d to %d days (low end %s, high end %s)."
       % (F["harbor_exp"], F["harbor_minor"], _b(B["harbor_exp"]), F["harbor_lo"], F["harbor_hi"], _b(B["harbor_lo"]),
          _b(B["harbor_hi"])))
-    a("6. From %d days in 2025-26 to about %.1f in 2027-28 (a change of about %+.1f): sea level about %+.1f days, tides about "
-      "%+.1f, weather about %+.1f, the parts adding to the change; the split depends on the order the three changes are "
-      "applied, and across the six orders sea level runs %+.1f to %+.1f, tides %+.1f to %+.1f and weather %+.1f to %+.1f "
-      "(the figures given are the average over the orders)."
-      % (F["harbor_2025"], F["harbor_exp"], b["total"], b["sea"], b["tides"], b["weather"], br["sea"][0], br["sea"][1],
-         br["tides"][0], br["tides"][1], br["weather"][0], br["weather"][1]))
+    a("6. From %d days in 2025-26 to about %.1f in 2027-28 (a change of about %+.1f), sea level adds about %+.1f days "
+      "(%+.1f to %+.1f whichever order the three changes are applied in); the tides and the weather share the rest, and "
+      "their shares turn on the order: the tides between %+.1f and %+.1f and the weather between %+.1f and %+.1f (%+.1f and "
+      "%+.1f averaged over the six orders), the three parts adding to the change in every order."
+      % (F["harbor_2025"], F["harbor_exp"], b["total"], b["sea"], br["sea"][0], br["sea"][1], br["tides"][0],
+         br["tides"][1], br["weather"][0], br["weather"][1], b["tides"], b["weather"]))
     a("")
     a("### fy2028_tide_valve_memo.pdf")
     a("")
@@ -77,10 +77,11 @@ def text(F):
       % (F["marsh_Hstar"], min(F["marsh_variants"].values()), max(F["marsh_variants"].values()), F["marsh_Hlin"], h["marsh"],
          V["marsh_linear"], e["marsh"], ro["marsh straight line"]["marsh"]))
     a("2. River Road's high waters stand about **%.2f ft** higher at 25,000 cfs than at 5,000 cfs, and its campaign ran at "
-      "%s cfs on average, so carried day by day on the Brayle's flows it flooded on about **%d** days in 2025-26 (the campaign's "
-      "single offset gives %d) and expects about **%.1f** in 2027-28 (not %.1f)."
-      % (F["river_setup_25k"], "{:,}".format(F["river_q"][2]), h["river"], V["river_pooled"], e["river"],
-         ro["river one offset"]["river"]))
+      "%s cfs on average, so carried day by day on the Brayle's flows it flooded on about **%d** days in 2025-26 (%s across the "
+      "flow forms the campaign fits; the campaign's single offset gives %d) and expects **%s** days in 2027-28 (%.1f by the "
+      "best-fitting form), far below the single offset's %.1f."
+      % (F["river_setup_25k"], "{:,}".format(F["river_q"][2]), h["river"], _b(B["hind_river"], "%d"), V["river_pooled"],
+         _b(B["exp_river"]), e["river"], ro["river one offset"]["river"]))
     a("3. Front Street's lane sits at **%.2f ft NAVD88**, the lowest water level its street sensor records on the lane; it "
       "flooded on **%d** days in 2025-26, %d of them recorded by the sensor and %d in its outage."
       % (F["front_level_navd88"], h["front"], F["front_sensor_days"], F["front_outage_days"]))

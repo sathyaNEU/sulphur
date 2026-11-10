@@ -162,3 +162,81 @@ Good: the straight-line transfer files River and Marsh as the pair (36.7, 33.6),
 
 ## Next action for the author
 Update DESIGN_NOTE.md to the 0d54 cut (14 results, final figures and bands, effort table from effort.py, hint count), add the slope-1 offset and the Marsh hinge to the fork table, then run the round 3 re-judge on 0d54ea15f6144e05bef9a00526795bfe.
+
+
+---
+
+# determinism-check report, task3, round 3 (the FIX_NOW re-judge), 2026-11-10
+
+Bundle: target.zip md5 0d54ea15f6144e05bef9a00526795bfe (unchanged since round 2's rebuild). Thread: one sonnet medium judge, scratch /tmp/determinism-check-task3-r3/, verdict at /tmp/determinism-check-task3-r3/verdict.md.
+
+## Verdict
+DETERMINISTIC (main call and supplementary answers 2 to 5 and 7 forced by the files). No SOLUTION_WRONG.
+**Disposition:** FIX_NOW, solution blocks only: grade answer 6 (tides, weather) as bands with the order-average convention stated, and grade River Road's expected days on its band 11.7 to 18.7. No rerun, no prompt or input change. The main thread is restating answer 6 and the River Road component accordingly.
+**Stumping type:** mechanism: forecasting (with decomposition_attribution and method_or_model_selection), stumping_family: analytical_non_defect, surface_read_dependency: no, sole_data_defect: no.
+
+## Why
+The funded pair reproduces from the shipped harbor, logger, sensor and flow files. The rivals (straight-line Marsh and River transfers, drain rim, count trend, doubled sea level) are ruled out by named data and by the guidelines' definitions. The round 2 findings are closed: River Road's expected days and the pair-years count now fall inside their bands (13.5 to 13.8 against 11.7 to 18.7; 31 against 27 to 33), and the Marsh hinge and Oyster quadratic forms are no longer outside the bands.
+
+## Recomputation ledger
+| Figure | Claimed | Judge recomputed | Reproduced |
+|---|---|---|---|
+| Harbor 2025-26 days | 21 | 21 | yes |
+| MSL above epoch 2025-26 | 0.63 | 0.63 | yes |
+| Raw departure double count | 38.9 | 39.1 (62 on the replay) | yes |
+| Harbor expected 2027-28 | 27.0 (25.9 to 27.5) | 26.9 | yes |
+| Harbor 90 per cent range | 22 to 31 | 21 to 31.3 | yes in band |
+| Front lane / 2025-26 days | 5.20 / 20 | 5.200 / 20 | yes |
+| Wharf 2025-26; Wharf / Front expected | 26; 32.3 / 25.0 | 26; 32.3 / 24.6 | yes |
+| Marsh threshold, 2025-26, expected | 8.75, 17, 14.3 | 8.74 to 8.77, 17, 14.5 | yes |
+| Marsh straight line | 8.54, 26, 33.6 | 8.54, 26, 33.3 | yes |
+| Oyster threshold, 2025-26, expected | 9.11, 8, 1.2 | 9.12 to 9.17, 8 (7 at 9.17), 1.4 | yes in band |
+| River flow lift; campaign mean flow | 0.47 ft per 20,000 cfs; 24,900 | 0.42 ft; 24.6 to 24.9 kcfs | yes in band (component text says 0.47) |
+| River 2025-26 | 10 (8 to 12) | 9 (sqrt 7, log 5 fit worse) | yes in band |
+| River expected | 17.1 (11.7 to 18.7) | 13.5 to 13.8; 12.9 sqrt | in band, point not matched |
+| Pair holds in weather years | 28 (27 to 33) | 31 | in band |
+| Split (sea level, tides, weather) | +5.8, -0.7, +1.0 | +5.6, -1.5, +1.85 (Shapley average) | sea level yes; tides and weather inside order ranges, not at the golden's averages |
+
+## Competing answers that survived
+1. Answer 6, split order: the prompt does not say how to attribute an interacting change. Sea level is stable (+4.1 to +7.0 over the six orders); the tides sign is order-dependent (-3.0 to +1.7). Soft fork on supplementary 6 only, closed by grading the three parts as bands and stating the averaging convention in the blocks. A hard pin would need a prompt phrase ("averaged over the orders in which the three changes can be applied") and a rerun.
+2. River Road expected days: the point 17.1 is the top of the judge's reproductions (13.5 to 13.8). Logger lag assumptions move the result between 9.9 (0.75 h) and 13.8 (1.25 h); the ranking does not change. Closed by grading on the band.
+Weather-year alignment, logger clock and the extrapolation of the flow form move results under 0.5 day or inside the bands. No fork changes a rank or the funded pair.
+
+## Spec gates
+| Gate | Required | Actual | Pass |
+|---|---|---|---|
+| Usable files / categories | 10+ / 2+ | 15 / csv, txt, xlsx, pdf | yes |
+| Large messy CSVs | 20k rows plus one of 10 to 20 pages | sensor 209,260 rows; hourly heights 235,224 rows (both far past the page count) | yes |
+| metadata.json distractors | 2+, none labelled in the ZIP | 3 (311 requests, GHCND rainfall, SLR scenarios), unlabelled; judge found none carrying a result. Each is unused and weighable: 311 reads as a flood count but undercounts; SLR looks like the planning value but the guidelines fix 0.70 ft; rainfall looks needed for Front Street but the harbor already separates it | yes |
+| Distractor wording | no file reveals the build | judge flags none; the judge also listed hourly heights among distractors, but metadata names it evidence (it is used for the residual-at-every-hour check); not a defect | yes |
+| Deliverables | 1 to 3, all in the golden, no format family | 2 (xlsx, pdf), golden.zip holds exactly these | yes |
+| Asks: unit and rounding | stated | one decimal and whole days in the prompt | yes |
+| Prompt | one paragraph under 1,000 characters, no method or file named | 790 characters, none named | yes |
+| Answer shape | one of the fourteen, 4+ checkable results | allocation with sensitivity (ranked list under a cap); judge counts 15 graded results over 6 areas | yes |
+| Asks multi-dimensional | not stacked lookups | five low points by two years, plus range, split and robustness count | yes |
+| Realism / LLM-read | | not re-audited this pass (golden-realism owns it); judge found no authoring language in the PDF or xlsx; minor: series run to 31 Oct 2026 past the PDF's 16 Oct issue date | n/a |
+
+## Gate G reconciliation
+Thread: method_or_model_selection, analytical_non_defect, surface_read_dependency no, sole_data_defect no. The note's `## Hidden factor record` agrees (all five factors marked not only in the deciding units: Oyster Creek bends too, the river flow runs the whole campaign and year, every rim sits below its lane). Gate G holds: no shipped artifact ranks the pair wrongly, and the difficulty survives deleting wrong numbers because the 311, rim and trend values are not graded results. House-rule point to keep watching: the Marsh bend and River flow lift are constructed; the thread did not raise them as shallow, since each took a fitted transfer with a validated form and a second file, and neither alone decides the pair (the pair needs the harbor machinery, the lane and both transfers).
+
+## Gate H line
+domain: pass; layers: pass (L1 datums, clocks, outage, unsurveyed lane, rim decoy; L2 residual forecast, two bending or flow-dependent transfers, attribution); results: 15 graded across 6 areas (note lists 9 in 8 areas, same set grouped differently); one_thing: none; effort: quick 4, careful 9, thorough 14 of 15; one_fact: "Marsh and River do not sit on a straight line to the harbor" rescues 5 of 15 (a third); "do not let the sea level enter twice" rescues about 7 of 15 (47 per cent) but needs the weather-year build anyway.
+Reconciliation with the note (now current: River 17.1 with band 11.7 to 18.7, R6 10 (8 to 12), R9 27 to 33, matching submission.md):
+- Effort test mismatch. Note: quick 0 of 9, careful 2.5 of 9 (28 per cent), thorough 9. Thread: quick 4 of 15 (27 per cent), careful 9 of 15 (60 per cent). The thread's careful pass reaches more than twice the note's share; the note's table separates the passes, the thread's does not separate careful from thorough by much (9 against 14). Per the bar, a careful-hurried share above a third is a send-back risk; the main thread must weigh effort.py's computed column against this and decide whether to keep the note or redesign.
+- Hint count. The note's Largest single hint (River's flow, 1 of 9) is lower than the thread's best sentence (the sea-level-twice hint, 7 of 15, or the straight-line hint, 5 of 15). The note must name the largest by the thread's count; 7 of 15 exceeds a third by a small margin and the thread called it borderline.
+- Bands against rivals (Gate C). River's expected band (11.7 to 18.7) now spans the judge's 13.5 to 13.8 and still excludes the hurried 37.3; the pair-years band spans 31. Answer 6's tides band crosses zero, which makes it a weak grader; keep it a band, with sea level as the stable graded share.
+- Distractor load: none carries a result.
+- Largest effect on the price: the thread reached the harbor figures, the lane and the Wharf and Front counts by standard method; the results it reaches only with judgment are the Marsh and Oyster bend, River's flow term, and the split. Hurried figures: raw departure 38.9, straight-line Marsh 26 and 33.6, single-offset River 26 and 37.3, drain rim 44, count trend 10.8.
+
+## Stump power (Gate F)
+Good. The hurried failures differ per result and are analytical: doubled sea level, straight-line Marsh, single-offset River, rim as elevation, count trend, one-at-a-time bridge. A careful run still has to choose the alignment, lag and flow form and will file figures a few days off at River Road and in the split, where legitimate band-edge losses occur. The thread's estimate: a good chance both runs land under 60. Results a careful hurried run earns by the field's standard method: harbor expected days and its 2025-26 count, the Front lane, the Wharf row.
+
+## Findings, ranked
+1. Effort table: thread's careful pass 9 of 15 (60 per cent) against the note's 28 per cent; reconcile with effort.py's column before READY.
+2. One-fact count: the sea-level-twice sentence rescues about 7 of 15; the note's hint line names a weaker one. Update the note or redesign.
+3. Answer 6 split and River's point: grade as bands (FIX_NOW, in hand by the main thread).
+4. The prompt does not fix the averaging of an order-dependent split; kept as a soft fork unless a prompt phrase is added (rerun).
+5. River flow lift in the components (0.47 ft) against the thread's 0.42 ft on 20,000 cfs; inside the band but restate it as a band.
+
+## Next action for the author
+Apply the answer 6 and River Road band edits to submission.md, then reconcile the note's effort table and `Largest single hint:` with the thread's counts (careful 9 of 15, sea-level-twice 7 of 15) against effort.py before READY.

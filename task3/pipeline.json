@@ -1,11 +1,11 @@
 {
  "task": "task3",
- "status": "PAUSED",
+ "status": "READY",
  "domain": "physical-environmental-sciences",
  "subdomain": "climate-weather-extremes",
  "objective": "forecasting",
- "stage": 4,
- "stage_name": "check",
+ "stage": 5,
+ "stage_name": "ready",
  "updated": "2026-11-10",
  "call": "Fund the FY2028 tide valves at Wharf Street at Market Lane (32.3 expected tidal flood days in 2027-28) and Front Street at Ferry Lane (25.0); River Road 17.1, Marsh Road 14.3, Oyster Creek Road 1.2; the pair holds in 28 of 36 weather years and under all 72 variants",
  "stump": "Straight-line campaign transfers fund River Road (37.3) and Marsh Road (33.6); the drain rim and the untransferred harbor fund Front Street and River Road",
@@ -36,7 +36,10 @@
   },
   "round3": {
    "bundle": "0d54ea15f6144e05bef9a00526795bfe",
-   "verdict": "pending"
+   "verdict": "DETERMINISTIC",
+   "disposition": "FIX_NOW on the solution blocks only (the split's tides and weather and River Road's expected days graded as bands), applied; no rerun",
+   "gate_g": "forecasting with decomposition and method selection, analytical_non_defect, surface_read_dependency no, sole_data_defect no",
+   "gate_h": "domain pass, layers pass, 15 graded across 6 areas, one_thing none, borderline one-fact (two-fact sentence 5 of 15)"
   }
  },
  "paper_pair": 31.5,
@@ -144,7 +147,7 @@
    "commit": ""
   }
  ],
- "resume": "stage 4: the round 3 re-judge's isolated thread on target.zip 0d54ea15 is running; when its verdict.md returns, hand it to the round 3 judge agent for the gates and the Gate G and H reconciliation, then stage 5 READY (re-run every gate, commit READY with target.zip, golden.zip and golden/ added with -f, push main and the session branch)",
+ "resume": "upload prompt.txt (after the author's voice rewrite, re-gated by voice-check.py --rewrite and leak.py) and target.zip, generate the two runs, then /triage-runs task3",
  "approved": null,
  "submitted": null,
  "portal": {
@@ -223,7 +226,7 @@
   "date": "2026-11-08",
   "note": "moved from Project Mark unstumped on the Mark portal; carried on here for the Sulfur bar"
  },
- "gates": "gates.py 0 FAIL, 4 WARN; checks 98 PASS; verify 7 PASS; two builds byte-identical over 21 files",
+ "gates": "precut 86 checks 0 FAIL; gates.py 0 FAIL 4 WARN; checks 534 PASS; verify 7 PASS; audit_containers PASS; effort --check-note PASS; two builds byte-identical over 21 files",
  "revision": 2,
  "paper_note": "a run taking the foothill gauge's median concurrent ratio scores about 84 (pair with a shallow run 52.1)",
  "draw": {

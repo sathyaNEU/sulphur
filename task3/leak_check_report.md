@@ -4,7 +4,7 @@
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: record, sensor, missed, design, campaign, waters, architecture, transfer, carried, guidelines, golden, planning, inside, platform, elevation, carries, sentence, funded, floods, result, residual, export, storms, transfers, different
+Stump terms swept: sensor, record, missed, design, campaign, waters, architecture, transfer, carried, guidelines, golden, elevation, planning, inside, platform, carries, sentence, funded, reading, floods, result, residual, export, storms, inventory
 
 ## 1 file names (REVIEW 2)
 - **REVIEW** `8673718_datums.txt`: a text file in the pack: confirm it is the organisation's own record (a thread, a log, a letter) and does not describe the data
@@ -14,7 +14,7 @@ Stump terms swept: record, sensor, missed, design, campaign, waters, architectur
 - **REVIEW** `fy2028_tide_valve_round_guidelines.pdf`: carries 9 of 10 distinctive words of the committed call: 'Fund the valves at Wharf Street at Market Lane and Front Street at Ferry Lane.'
 
 ## 4 design-note vocabulary (REVIEW 1)
-- **REVIEW** `fy2028_tide_valve_round_guidelines.pdf`: 6 of 25 stump-paragraph terms appear (record, sensor, carried, guidelines, planning, elevation); read whether the document names the move
+- **REVIEW** `fy2028_tide_valve_round_guidelines.pdf`: 7 of 25 stump-paragraph terms appear (sensor, record, carried, guidelines, elevation, planning); read whether the document names the move
 
 ## 6 ranking artifacts (REVIEW 2, INFO 1)
 - **REVIEW** `311_service_requests_2023-2026.csv`: names 8 of 14 answer-set candidates beside numbers; confirm it does not rank them on the decision question
