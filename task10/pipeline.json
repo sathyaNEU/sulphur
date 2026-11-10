@@ -1,6 +1,6 @@
 {
  "task": "task10",
- "status": "READY",
+ "status": "RETURNED",
  "domain": "energy-systems-utilities/load-forecasting (client domain energy-systems-utilities; world: an English distribution network operator, Wealdmoor Power Networks, committing for winter 2027/28 the reinforcement of the Halverton zone primaries whose design-day peak, with the flexibility contracted for that winter instructed in full, would exceed firm capacity on more than one design day in ten)",
  "subdomain": "load-forecasting",
  "objective": "forecasting",
@@ -106,15 +106,24 @@
    "portal": "the call turned on one built-in factor (open-point neighbours stepping up on event days); one sentence named it and one subtraction landed the call",
    "fix": "the transfer documented (a control room switching log, filed in guideline 3) and no longer part of the answer; the call rebuilt as a results chain of eleven results on four judgments that each move a figure: the share of a contract available on a cold evening against megawatts per megawatt scheduled, carried to awards 1.9 to 2.8 times the 2025/26 contracts; the day rebuilt with the load that comes back; the day-to-day spread carried in proportion to the nine-days-in-ten level; the weather correction carried past its sample; backtested on a held-out winter",
    "commit": "RESHIPPED (task10)"
+  },
+  {
+   "date": "2026-11-10",
+   "source": "review",
+   "architecture": 7,
+   "portal": "holistic audit: not stumped for an analytical reason (the commit and hold split reproduced on all five zone primaries; the runs also assessed the four non-zone primaries); the shares loosely pinned (Charlecote Way 45 to 72, Ashcombe Road 54 against 91); add a checkable decision the trap does not settle (the contracted MW Fenwick Street needs to fall under one day in ten; whether Hartwell Common holds if its accepted connections energise on time) and say how the share is estimated",
+   "runs": "arch7_run1.md (the golden split on the five, 54/84/84/51/0 per cent) and arch7_run2.md (Ashcombe Road held at 5 per cent, 53/22/45/0 at the other four); both rebuilt the cold evening, matured the customers, forecast commissioning with censoring, capped availability and replayed the come back; both took availability as independent of the day's demand",
+   "repair": "design (level-up in the same world at the reviewer's direction)",
+   "commit": ""
   }
  ],
- "resume": "READY: the author rewrites prompt.txt in their own words and re-gates it (voice-check.py task10 --rewrite, then leak.py --asof 2026-11-04), uploads the prompt and target.zip (505a8deb), and /triage-runs task10 reads the two runs",
+ "resume": "stage 2: level the chain up at the reviewer's direction (a decision the trap does not settle, the share's estimation pinned) on the architecture 7 generator; back up the READY cut first",
  "approved": null,
  "submitted": null,
  "portal": {
   "status": "RETURNED",
   "date": "2026-11-10",
-  "note": "holistic audit, runs/review_2026-11-10.md"
+  "note": "holistic audit of architecture 7, runs/arch7_review_2026-11-10.md: a strong solver's independent attempt reached the same commit and hold split on the five zone primaries; the shares loosely pinned (Ashcombe Road 54 against 91); add a decision the trap does not settle and pin how the share is estimated"
  },
  "history": [
   {
