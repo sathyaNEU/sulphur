@@ -1,11 +1,11 @@
 {
  "task": "task14",
- "status": "PAUSED",
+ "status": "RETURNED",
  "domain": "survey-research-official-statistics",
  "objective": "etl",
  "stage": 5,
  "stage_name": "ship",
- "updated": "2026-11-09",
+ "updated": "2026-11-10",
  "stump": "The default path files the whole-year docket (five faculty whose earlier December disclosures make them look like under-reporters in place of five who submitted their 2026 disclosures in early December) because it compares each disclosure with the register's whole program year although a disclosure carries only what each company had paid by the day it was submitted; counted to each submission's day, the December 2026 disclosures grossed up by the same manufacturer's share of the year by that date, the weighted matched-line ratio comes closest on 2025 and files the golden docket.",
  "architecture": 1,
  "loops": 1,
@@ -35,9 +35,17 @@
    "moves": "the field definitions workbook and the export contents list withdrawn (files describing the data), the prompt without the docket's size and with a fresh shell, the metadata prose neutralised, the survivor anatomy written, the ceiling measured on the cut pack (generator/ceiling.py: pair 45.4, mirror leakage 30.8 per cent), differentiation lines for task268 v4, task271 v4, task458 and task455",
    "freeze": "no main-call figure, stump, ladder, default path or call sentence moved, and no ask figure moved",
    "commit": "RESHIPPED (task14): describing files withdrawn, prompt without the docket's size, ceiling measured"
+  },
+  {
+   "date": "2026-11-10",
+   "source": "platform checks on the submitted task (runs/review_2026-11-10.md): domain fit and the LLM prompt test; no run reported",
+   "repair": "redesign in the same world (architecture 2)",
+   "portal": "domain fit: \"the task is entirely about applying stated policy rules: checking who crosses a remuneration threshold, counting who filed disclosures on time, and tabulating Open Payments figures by category ... no estimation, modeling, forecasting, or uncertainty is involved\"; a Survey Research & Official Statistics task \"would instead ask something like estimating undercoverage or nonresponse bias in a disclosure registry, or using small-area or administrative-data methods to adjust for missing or misreported payment data\". Prompt test: BORDERLINE, 2 of 9 signals (methodology spelled out: the tables' breakdowns, the year range, the two sources to compare; closes on a list of documents), formatting FAIL (backslash-escaped underscores in the docket's file name)",
+   "fix": "",
+   "commit": "RETURNED (task14)"
   }
  ],
- "resume": "migrated from Project Mark task457 (architecture 1, shipped there 2026-10-31, never run on the platform); re-read the build against the Sulfur standard (deep reasoning: three or more dependent inferences with a real modeling judgment, the one-fact test, the banned kinds) and the Sulfur submission shape (golden ZIP, four answer blocks), run the container gate (audit_containers.py), then /build task14 from the stage that fails",
+ "resume": "RETURNED on the platform's domain fit and prompt test (runs/review_2026-11-10.md). Re-root as architecture 2 in the same world: the question moves from a docket under a stated threshold to estimation about the disclosure registry itself (coverage, nonresponse, small areas, with uncertainty), a results chain at depth level 4 or 5; the prompt states the decision, names no file and spells out no slice. Next: stage 1 (fingerprint draw, card with answer_shape, weight and chain_signature), then stage 2 to precut.py exit 0.",
  "approved": null,
  "delivered": "2026-10-31",
  "portal": null,
@@ -57,6 +65,10 @@
   {
    "date": "2026-11-09",
    "event": "migrated from Project Mark task457 to Project Sulfur as task14 at the author's word"
+  },
+  {
+   "date": "2026-11-10",
+   "event": "the author uploaded architecture 1 with a rewritten prompt; the platform returned the domain fit (compliance lookups under a stated rule, no estimation) and the prompt test (borderline 2 of 9, formatting fail); recorded RETURNED, architecture 1 spent"
   }
  ],
  "migrated_from": {

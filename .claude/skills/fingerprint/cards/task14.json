@@ -99,5 +99,6 @@
   "genuine overlap: one payment reported by a manufacturer and its affiliate's agent, disclosures resubmitted after correction",
   "real coverage: faculty joining and leaving during the years, a manufacturer outside Open Payments' reach (no product covered by Medicare or Medicaid) seen only in the disclosures"
  ],
- "registered": "2026-10-14T20:10:18Z"
+ "registered": "2026-10-14T20:10:18Z",
+ "architecture_spent": true
 }
