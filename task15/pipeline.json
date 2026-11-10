@@ -1,0 +1,32 @@
+{
+ "task": "task15",
+ "status": "DESIGN",
+ "domain": "general-statistics-data-science",
+ "subdomain": "General Statistics & Data Science (multiple testing and selective inference)",
+ "objective": "comparative-explanation",
+ "stage": 2,
+ "stage_name": "design",
+ "updated": "2026-11-10",
+ "doctrine": "throughout",
+ "call": "",
+ "chain": "R1 the conformed trial record and the shortfall on the completed nominations; R2 the part of the shortfall that is selection on noisy means; R3 the part that is the benchmark's larger gain per millimetre of season water; R4 the part that is lodging at the series' sites; R5 the bridge closed with what stays unexplained; R6 the corrected prediction's error on the past nominees; R7 every 2026 Stage 3 line's expected advantage in the 2027 and 2028 series with an 80 per cent band; R8 each nominee's chance of meeting the 103 per cent standard and the chance at least one does; R9 the three nominations and the lines they displace",
+ "architecture": 1,
+ "loops": 0,
+ "precut": {"exit": null, "date": ""},
+ "leak": {"leak_py": "", "reader": ""},
+ "duplicate_check": {
+  "guard_check": "PASS 2026-11-10 on the registered card, after prompt shape 03 and context artifact published_series were redrawn to 01 and close_out_summary when task5 architecture 4 entered the window",
+  "heart": "",
+  "nearest": "mark258 0.05, task8 0.04, task7 0.04 (driver text); no structural match"
+ },
+ "judge": {"verdict": "", "disposition": "", "gate_h": "", "report": ""},
+ "paper_pair": null,
+ "effort": {"quick": null, "careful": null, "thorough": null, "largest_hint": ""},
+ "runs": {"run1": null, "run2": null, "average": null, "counterfactual_average": null,
+          "first_wrong_step": {"run1": "", "run2": ""}, "triage": "", "recorded": "", "history": []},
+ "returned": [],
+ "resume": "",
+ "approved": null,
+ "submitted": null,
+ "portal": {"status": "", "date": "", "note": ""}
+}
