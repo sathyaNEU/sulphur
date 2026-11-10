@@ -442,6 +442,14 @@ def main():
     check("documents: dates in order", "22/09/2026" in gflat and "21 October 2026" in aflat and X["register_date"] == dt.date(2026, 11, 4)
           and max(c for c in X["assets"]["commissioned"] if E._isdate(c)) <= X["register_date"],
           "guideline 22 September, award notice 21 October, register extract 4 November 2026; no site passes its test after the extract")
+    cn = X["connections"]
+    gl = [(r.planned - r.accepted).days for r in cn.itertuples() if r.accepted is not None]
+    on = cn[cn.energised.notna()]
+    check("growth register: dates in order",
+          cn.accepted.notna().all() and max(cn.accepted) <= W.GROWTH_SAVED and (on.energised <= W.GROWTH_SAVED).all()
+          and min(gl) > 60 and min(gl) < 130 and max(gl) > 540 and all(a.weekday() < 5 for a in cn.accepted),
+          "no offer accepted and no customer energised after the register's last save (30 October 2026); acceptance to "
+          "energisation runs from %d to %d days over %d live rows, on working days" % (min(gl), max(gl), len(gl)))
 
     # ------------------------------------------------------------------------------------------------ deliverables
     gz = zipfile.ZipFile(os.path.join(TASK, "golden.zip"))

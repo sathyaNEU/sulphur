@@ -63,17 +63,17 @@ def write(F, path):
            "**Analysis type:** Forecasting & Predictive Modeling.", ""]
     hc = car["R11"]
     md += ["## Final Recommendation", "",
-           "**Commit reinforcement at %s for winter 2027/28; %s within firm capacity on nine design days in ten with its "
-           "2027/28 contract (%s MW against %s).** With each contract instructed in full on the design day the %s peaks stay "
-           "under %s on nine days in ten against %s of firm capacity. The assessment a careful analyst in a hurry files "
-           "(each evening half-hour on a straight line through the days no service ran, the customers due after the latest "
-           "winter at their type's established share of agreed capacity, the sites still to come on their planned dates) "
-           "would commit %s instead: it puts Dunmore Street's 2025/26 design-day demand at %s MW where the mornings give %s, "
-           "counts %s MW of customers at Charlecote Way where the register's customers add %s and %s MW at Hartwell Common "
-           "where they add %s, and credits Fenwick Street with %s MW in service where its sites' record gives %s."
-           % (j(call), j(hold) + (" stays" if len(hold) == 1 else " stay"), j(f1(q90[n]) for n in hold),
-              j(f1(Z[n]["firm"]) for n in hold), {4: "four", 3: "three", 2: "two", 5: "five"}.get(len(call), str(len(call))),
-              j("%s MW" % f1(q90[n]) for n in call), j("%s MW" % f1(Z[n]["firm"]) for n in call), j(hc),
+           "**Commit reinforcement at %s for winter 2027/28 and hold %s: with each contract instructed in full on the "
+           "design day the %s peaks stay under %s on nine days in ten against %s of firm capacity, and %s under %s MW "
+           "against %s.** The list a careful analyst in a hurry files, %s, is rejected: it rests on a straight line "
+           "through the days no service ran (Dunmore Street's 2025/26 design-day demand at %s MW where the mornings give "
+           "%s), on the customers due after the latest winter at their type's established share of agreed capacity (%s MW "
+           "at Charlecote Way where the register's customers add %s, and %s MW at Hartwell Common where they add %s) and "
+           "on the planned dates of the sites still to come (%s MW in service at Fenwick Street where the sites' record "
+           "gives %s)."
+           % (j(call), j(hold), {4: "four", 3: "three", 2: "two", 5: "five"}.get(len(call), str(len(call))),
+              j("%s MW" % f1(q90[n]) for n in call), j("%s MW" % f1(Z[n]["firm"]) for n in call),
+              j(hold), j(f1(q90[n]) for n in hold), j(f1(Z[n]["firm"]) for n in hold), j(hc),
               f1(car["R1"]["Dunmore Street"]), f1(d26["Dunmore Street"]),
               f1(car["R2"]["Charlecote Way"]), f1(conn["Charlecote Way"]),
               f1(car["R2"]["Hartwell Common"]), f1(conn["Hartwell Common"]),

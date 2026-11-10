@@ -365,7 +365,7 @@
     "energised": "17/11/2025",
     "kva": 620,
     "on_supply": true,
-    "reference": "LCG-2024-65434",
+    "reference": "LCG-2025-65434",
     "type": "Supermarket"
    },
    {
@@ -421,7 +421,7 @@
     "energised": "20/03/2021",
     "kva": 1250,
     "on_supply": true,
-    "reference": "LCG-2019-40455",
+    "reference": "LCG-2018-40455",
     "type": "Leisure centre"
    },
    {
@@ -487,7 +487,7 @@
     "energised": "03/11/2025",
     "kva": 5000,
     "on_supply": true,
-    "reference": "LCG-2024-61551",
+    "reference": "LCG-2023-61551",
     "type": "Commercial unit"
    },
    {
@@ -495,7 +495,7 @@
     "energised": "01/12/2025",
     "kva": 3800,
     "on_supply": true,
-    "reference": "LCG-2024-15096",
+    "reference": "LCG-2023-15096",
     "type": "Industrial unit"
    },
    {
@@ -511,7 +511,7 @@
     "energised": "19/12/2025",
     "kva": 150,
     "on_supply": true,
-    "reference": "LCG-2024-24189",
+    "reference": "LCG-2025-24189",
     "type": "Data hall"
    },
    {
@@ -527,7 +527,7 @@
     "energised": "28/02/2023",
     "kva": 400,
     "on_supply": true,
-    "reference": "LCG-2021-11342",
+    "reference": "LCG-2022-11342",
     "type": "Commercial unit"
    },
    {
@@ -543,7 +543,7 @@
     "energised": "30/11/2022",
     "kva": 400,
     "on_supply": true,
-    "reference": "LCG-2021-91164",
+    "reference": "LCG-2020-91164",
     "type": "Leisure centre"
    },
    {
@@ -749,7 +749,7 @@
     "energised": "11/10/2027",
     "kva": 2000,
     "on_supply": false,
-    "reference": "LCG-2026-66191",
+    "reference": "LCG-2025-66191",
     "type": "Industrial unit"
    },
    {
@@ -765,7 +765,7 @@
     "energised": "09/08/2027",
     "kva": 1150,
     "on_supply": false,
-    "reference": "LCG-2026-88769",
+    "reference": "LCG-2025-88769",
     "type": "EV charging hub"
    },
    {
@@ -837,7 +837,7 @@
     "energised": "23/01/2022",
     "kva": 400,
     "on_supply": true,
-    "reference": "LCG-2020-93855",
+    "reference": "LCG-2021-93855",
     "type": "Leisure centre"
    }
   ]

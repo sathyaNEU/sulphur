@@ -1,28 +1,42 @@
 {
  "task": "task10",
- "status": "PAUSED",
+ "status": "READY",
  "domain": "energy-systems-utilities/load-forecasting (client domain energy-systems-utilities; world: an English distribution network operator, Wealdmoor Power Networks, committing for winter 2027/28 the reinforcement of the Halverton zone primaries whose design-day peak, with the flexibility contracted for that winter instructed in full, would exceed firm capacity on more than one design day in ten)",
  "subdomain": "load-forecasting",
  "objective": "forecasting",
- "stage": 3,
- "stage_name": "build",
+ "stage": 5,
+ "stage_name": "ready",
  "updated": "2026-11-10",
  "call": "Commit reinforcement at Ashcombe Road, Charlecote Way, Dunmore Street and Fenwick Street for winter 2027/28 (peaks under 29.5, 27.0, 21.1, 36.2 MW on nine design days in ten against 27.5, 25.6, 20.0, 35.0 MW of firm capacity); Hartwell Common stays within firm capacity (23.4 MW against 24.4)",
  "architecture": 7,
  "loops": 0,
- "precut": "exit 0 on the final cut: 85 checks, 0 FAIL, 1 WARN (nearest chains: task17 shares the answer shape and the weight, answered in the note's Template check)",
+ "precut": {
+  "exit": 0,
+  "date": "2026-11-10",
+  "note": "85 checks, 0 FAIL, 1 WARN (nearest chains: task17, answered in the note's Template check)"
+ },
  "leak": {
-  "verdict": "REVIEW, no LEAK",
-  "asof": "2026-11-04",
-  "review_lines": 17,
-  "ruled": "DESIGN_NOTE.md, Leak rulings",
-  "reader": "not run: stage 4"
+  "leak_py": "REVIEW (no LEAK), 2026-11-10, --asof 2026-11-04, 16 lines, each ruled in the note's Leak rulings",
+  "reader": "2026-11-10 on cut a40205c5: no ranking file, no answer figure, nothing planted; it read the guideline as a recipe (answered against the generator's careful pass and the judge's first pass, neither of which reaches the list); its realism note on the growth register's acceptance dates fixed, with one acceptance date that postdated the register; data-only change since, checked by leak.py",
+  "report": "task10/leak_check_report.md"
  },
  "duplicate_check": {
   "guard_check": "WARN 2026-11-10 on the registered architecture 7 card (template.chain_near and overuse.weight against task17, driver.near against this slot's architectures 6 and 5, overuse.forum, repeat.decision, repeat.question_form), each answered in the Draw",
   "heart": "WARN 2026-11-10 on the final cut against the corpus at origin/main as fetched for the PAUSED commit, no BLOCK; surface exit 0 with one pair promoted (task14, read side by side in the note's Draw)"
  },
- "judge": null,
+ "judge": {
+  "verdict": "DETERMINISTIC",
+  "disposition": "APPROVE",
+  "date": "2026-11-10",
+  "cut": "a40205c5885036d29a5249d80669347e074e379e6cde430b2e47856333d75e99",
+  "order_kept": true,
+  "gate_g": "mechanism: forecasting; stumping_family: analytical_non_defect; surface_read_dependency: no; sole_data_defect: no",
+  "gate_h": "domain: pass; layers: pass; results: 12 graded across 7 areas; one_thing: none; effort: quick 3, careful 7, thorough 11 of 12; one_fact: rescues 3 of 12",
+  "first_pass": "before the blocks were opened it committed Charlecote Way and Dunmore Street (one lateness record across every class, one share for both providers, no load coming back); it earned R1 at four primaries of five, R2 and R3",
+  "notes": "corrected re-run inside or at the edge of every band except three Ashcombe Road figures (expected peak, nine days in ten, share), where the call has 1.9 MW of margin; two optional notes, no repair required",
+  "scope": "APPROVE is on cut a40205c5; the final cut 505a8deb differs in the growth register's printed acceptance dates (no result reads them) and the Final Recommendation's wording; figures.json differs only in ten customer references",
+  "report": "task10/determinism_check_report.md"
+ },
  "paper_pair": 24.5,
  "runs": {
   "run1": null,
@@ -94,7 +108,7 @@
    "commit": "RESHIPPED (task10)"
   }
  ],
- "resume": "stage 4: spawn the leak reader and the determinism judge on cut a40205c5885036d29a5249d80669347e074e379e6cde430b2e47856333d75e99 (target.zip sha256; golden.zip e39bfb44088576a2). Done on this cut: the card, the design note (precut exit 0), the generator (checks 76 of 76, verify 15 of 15, two byte-identical builds), gates.py --full with 0 FAIL, leak.py --asof 2026-11-04 REVIEW with every line ruled in the note. Not done: the stage 4 reader and judge and their fixes, the author's prompt rewrite, READY.",
+ "resume": "READY: the author rewrites prompt.txt in their own words and re-gates it (voice-check.py task10 --rewrite, then leak.py --asof 2026-11-04), uploads the prompt and target.zip (505a8deb), and /triage-runs task10 reads the two runs",
  "approved": null,
  "submitted": null,
  "portal": {
@@ -406,12 +420,13 @@
   "largest_single_hint": "2 of 11 (R4, R6)",
   "strongest_compound_sentence": "3 of 11",
   "wrong_lists": "7 different wrong lists over 18 shortcut routes",
-  "sensitivity": "if a run also groups the asset register by class and reads the commissioned sites alone: 3.5 of 11 results, 26.9, commits Ashcombe Road, Fenwick Street, Hartwell Common; single sentences rescue at most 2, the two remaining judgments named together rescue 5 of 11"
+  "sensitivity": "if a run also groups the asset register by class and reads the commissioned sites alone: 3.5 of 11 results, 26.9, commits Ashcombe Road, Fenwick Street, Hartwell Common; single sentences rescue at most 2, the two remaining judgments named together rescue 5 of 11",
+  "judge_first_pass": "a medium-effort judge thread earned R1 to R3 unprompted and lost R4, R5 and R7: R1 and R2 are not certain losses, R4 is the likeliest"
  },
  "zips": {
-  "target.zip": "a40205c5885036d29a5249d80669347e074e379e6cde430b2e47856333d75e99",
-  "golden.zip": "e39bfb44088576a2f553a25305ada04878c348fb67ad58c2584cf401e4d4060b"
+  "target.zip": "505a8debbc22afd79da7bf383c64e87a295e181fe65816422824d0e92619d3a5",
+  "golden.zip": "4f0468e4c94e0b7ec10876f45500ae0dfc42f80d7b76f61c27bc7709416e8d4e"
  },
  "prompt_rewritten": false,
- "gates": "gates.py task10 --full on the final cut (2026-11-10): 11 gates, 0 FAIL, 3 WARN (precut nearest chains, leak REVIEW, heart WARN with no BLOCK); checks.py 76 of 76; verify.py 15 of 15; two builds byte-identical and equal to the committed zips; figures_check PASS; audit_containers --asof 2026-11-04 PASS"
+ "gates": "gates.py task10 --full on the final cut 505a8deb (2026-11-10): 11 gates, 0 FAIL, 3 WARN (precut nearest chains, leak REVIEW, heart WARN with no BLOCK); checks.py 77 of 77; verify.py 15 of 15; two builds byte-identical; figures_check PASS; leak.py --asof 2026-11-04 REVIEW with no LEAK; audit_containers --asof 2026-11-04 PASS"
 }

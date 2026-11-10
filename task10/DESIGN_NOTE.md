@@ -268,8 +268,23 @@ zones, winters, customers or sites, or a warning of any kind.
 
 ## Leak rulings
 
-leak.py --asof 2026-11-04 on target.zip a40205c5: REVIEW, no LEAK (sweeps 1, 2, 5, 7 to 12 clean). Ruled in the main
-thread; the stage 4 reader has not read this cut.
+leak.py --asof 2026-11-04 on the final cut (target.zip 505a8deb): REVIEW, no LEAK (sweeps 1, 2, 5, 7 to 12 clean), the
+same lines as on a40205c5, each ruled below. The stage 4 reader read cut a40205c5 on 2026-11-10; the only change since is
+the growth register's printed acceptance dates, a data-only repair that leak.py checks alone. Its answers and the
+rulings on them are in leak_check_report.md under the solver's-eye read:
+
+- Reader, questions 2 and 4: no file ranks or scores the primaries and no figure reads as the answer.
+- Reader, questions 1, 3, 5 and 6: it quoted guideline sections 2 to 7 and the award notice's two site rules and read
+  the guideline as a recipe ("what remains is execution of a filed procedure"). Each quoted sentence files what a
+  result is and closes a fork (SF3 to SF6, SF11, SF13, SF14, SF16, SF18 to SF20); none says how the cold end is read,
+  how a customer's demand relates to its agreed capacity or its age, or how late a site commissions. The reader ran
+  nothing; the generator's measurement of the route it describes (the careful pass: every filed sentence executed
+  with the methods both architecture 6 runs used) commits Ashcombe Road and Hartwell Common and earns 3 of 11
+  results, and the judge's own first pass, executing the same sentences, committed Charlecote Way and Dunmore Street.
+- Reader, question 7: the growth register's flat 9 to 15 months from acceptance to energisation, fixed in the
+  generator with an acceptance date that postdated the register (Tried and rejected); its other notes describe how
+  such records look (round transformer ratings, one cutover date for the SCADA point names, a short switching log).
+
 
 - Answer figures in the pack (27.5, 25.6, 20.0, 35.0 and 24.4, and 27.0 for a primary with no zone): the firm
   capacities of guideline Appendix A, which every answer block quotes beside its levels. Each is an input; none is a
@@ -300,6 +315,47 @@ thread; the stage 4 reader has not read this cut.
   days on which the primary was in its normal running arrangement") files which days count, a convention both
   architecture 6 runs applied unprompted; deleted, the list is unchanged and five figures leave their bands (SF4). It
   names none of the three judgments.
+
+## Pre-ship check
+
+- Hidden factor record against the cut data (checks.py BAR R5 on the final cut): demand rises faster per degree below
+  the knee at 7 of 9 primaries, the four with no flexibility zone among them (Fenwick Street and Hartwell Common are the
+  two where it does not), and the line through the days without a service misreads 2025/26 demand at Ashcombe Road,
+  Dunmore Street and Fenwick Street while it decides Dunmore Street alone; 10 of 10 customer types draw under three
+  quarters of their established share in their first nine months, and at the four primaries with no zone the short
+  reading is off by 0.05, 0.00, 0.49 and 0.33 MW and decides nothing; median days late by class run 29, 31, 35, 53, 120
+  and 248 across 29 zones, and the planned dates misread the megawatts in service at Ashcombe Road, Charlecote Way and
+  Fenwick Street while they decide Fenwick Street alone. No factor sits only where it decides.
+- Effort test against effort.py on the final cut: quick 17.3, careful but hurried 24.5, thorough 100; told one
+  sentence the careful pass recovers 1, 1 or 2 of the 9 results it loses, told two, 3; 18 shortcuts file 7 different
+  wrong lists.
+- What the judge's own first pass adds to that calibration (2026-11-10, a medium-effort thread, before it opened the
+  blocks): it rebuilt each cold evening from the half-hour ending 15:00 and the evening's ratio to it on the days no
+  service ran, read each customer type's draw and build-up from the monthly summary and counted the customers already
+  on supply for what they still add, which earned R1 at four primaries of five (Ashcombe Road 0.05 MW over its band),
+  R2 and R3. It then took one lateness record across every asset class, one share for both providers and no load
+  coming back, and committed Charlecote Way and Dunmore Street, a list none of the 18 shortcuts files. So R1 and R2
+  are moves a strong run can make, and R4, R5 and R7 are moves it can miss: the 24.5 priced here is the reading both
+  architecture 6 runs gave, not a floor. A run that makes the first two moves and keeps a pooled or planned record
+  commits Ashcombe Road, Charlecote Way and Dunmore Street with R1 to R3, R5 and R7 earned; a run that also reads
+  lateness by class lands the list. The platform's two runs are the measurement.
+- Rivals (checks.py BAR R7, verify.py): 17 variants of the golden's own choices commit the same list with every figure
+  inside its band on the pack and on the clean truth, and an independent rebuild by other methods reproduces 15 of 15.
+  The judge's corrected re-run, made after it opened the blocks, lands inside or at the edge of every band except three
+  Ashcombe Road figures (expected peak 28.0 against 28.2 to 29.0, nine days in ten 28.7 against 29.2 to 30.0, share 81
+  against 86 to 100), with one share averaged over the events that fell short (0.47) where the events' own cold end
+  gives 0.42 and a shorter come-back (0.57 to 0.63 against 0.67). Ashcombe Road sits 1.9 MW over firm capacity under
+  every variant, so no reading of those figures moves the list, and the bands stand on the variants and the verifier.
+- Leak reader (2026-11-10, cut a40205c5): no ranking file, no answer figure, nothing that reads as planted; its reading
+  of the guideline as a recipe and its realism note are answered in the Leak rulings.
+- Judge (2026-11-10, cut a40205c5, own derivation written before the blocks were opened): DETERMINISTIC, APPROVE.
+  Gate G: mechanism forecasting, analytical_non_defect, no surface read, no sole data defect. Gate H: domain pass, layers
+  pass, 12 results across 7 areas, one thing none, effort quick 3, careful 7, thorough 11 of 12, one fact rescues 3 of
+  12. Its two optional notes: Ashcombe Road's call rests on the load that comes back (R7 and step 8 state it), and
+  Fenwick Street's share band is wide because its expected peak sits at firm capacity (the one-day-in-ten rule decides
+  it, at 41 per cent or more under every variant). The two changes made after its pass (the growth register's printed
+  acceptance dates and the Final Recommendation in two sentences) move no graded figure: figures.json differs only in
+  ten customer references.
 
 ## Tried and rejected
 
@@ -811,3 +867,12 @@ thread; the stage 4 reader has not read this cut.
 - Architecture 7, the asset register extracted on 27 November and the awards dated 24 November 2026, with goldens saved in December: every stamp sat after the day the build ships; the register is now the extract of 4 November, the award notice 21 October with its schedules closed on 16 October, and the goldens are saved by 9 November.
 - Architecture 7, the prompt's "between 17:30 and 18:00" beside guideline 6's half-hours ending 17:30 and 18:00: read literally the prompt named one half-hour and the guideline two; the prompt and every label now say 17:00 to 18:00, and either half-hour alone is within 0.05 MW of the mean of the two (SF25).
 - Architecture 7, restructuring the register so that a class read from its commissioned sites alone drops Fenwick Street (most process load sites in recent, unfinished cohorts): it needs a gap of about 1.5 MW at the nine-days-in-ten level between that reading and the golden, and the scheduled-megawatts route already sits 0.5 MW under the golden on the commit side, so no firm capacity holds 0.6 MW on both sides; the reading stays a route that keeps the list and loses megawatts, and its effect on the effort test is recorded as a sensitivity.
+- Architecture 7, stage 4 (2026-11-10), offer acceptance dates drawn evenly from 170 to 420 days before energisation:
+  the reader named the flat 9 to 15 months, and one offer (the 4,000 kVA unit due at Hartwell Common in September
+  2027) carried an acceptance date of 20/01/2027 in a register saved on 30 October 2026, which the ISO-date sweep
+  cannot see in dd/mm/yyyy. The register now prints acceptance from about three months to over two years before
+  energisation, large supplies longer, on working days and never after its last save (checks.py, growth register:
+  dates in order). No result reads the column: no figure in figures.json moved, and ten customer references in the
+  golden's working sheet carry the application year their new acceptance date gives.
+- Architecture 7, stage 4 (2026-11-10), the Final Recommendation in three sentences: recast in two (the call with its
+  levels, then the list it rejects and why), on the same figures.

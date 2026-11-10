@@ -12,6 +12,7 @@ import datetime as dt
 import io
 import math
 import os
+import zlib
 
 import numpy as np
 import openpyxl
@@ -479,9 +480,22 @@ def growth_rows(T, feeders):
     def fmt(d):
         return d.strftime("%d/%m/%Y")
 
+    def offer_date(c):
+        """The acceptance date the register holds. A connection takes from about three months to two years from
+        acceptance to energisation, a large supply longer, and no offer is accepted after the register's last save.
+        The date is printed only: nothing in the assessment reads it, and it draws on no random stream."""
+        when = c["energised"] or c["planned"]
+        u = min(max(((when - c["accepted"]).days - 170) / 250.0, 0.0), 1.0)
+        h = (zlib.crc32(("%s|%s|%d" % (c["key"], when.isoformat(), c["kva"])).encode()) % 997) / 997.0
+        lag = 85 + 255 * u + 360 * u ** 5 + (60 + 120 * h if c["kva"] >= 1000 else 0)
+        acc = min(when - dt.timedelta(days=int(round(lag))), W.GROWTH_SAVED - dt.timedelta(days=6 + int(h * 40)))
+        while acc.weekday() > 4:                      # the connections team accepts on working days
+            acc -= dt.timedelta(days=1)
+        return acc
+
     for c in T["connections"]:
         f = byk[c["key"]][int(rng.integers(0, len(byk[c["key"]])))]
-        acc = c["accepted"]
+        acc = offer_date(c)
         fid = f["legacy"] if acc < dt.date(2024, 5, 14) else f["fid"]
         r, st = ref(acc), site()
         mp = _mpan(rng, used) if c["energised"] else ""
