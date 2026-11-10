@@ -161,9 +161,10 @@ def method(target, w):
            "and the median for its use type.")]
     path = os.path.join(target, "benchmarking_method_2022.pdf")
     officepdf.build(path, s, "Gas benchmarking for commercial customers: method", "Torben Römer", "Benchmarking method",
-                    "Stadtwerke Haldenau | Energy Services | Benchmarking method v2",
+                    "Benchmarking method, version 2, May 2022",
                     dt.datetime(2022, 5, 3, 10, 2, tzinfo=CEST), dt.datetime(2022, 5, 9, 15, 30, tzinfo=CEST),
-                    producer="LibreOffice 7.3")
+                    producer="LibreOffice 7.3", font="Carlito", body_pt=9.6, margin_mm=21, top_mm=15,
+                    header="Stadtwerke Haldenau  Energy Services", page_of=True, page_sep="          Page ")
 
 
 def heat_plan(target):
@@ -182,9 +183,10 @@ def heat_plan(target):
            "Elsewhere the plan expects heat pumps to carry most new installations from 2028.")]
     path = os.path.join(target, "municipal_heat_plan_2026_summary.pdf")
     officepdf.build(path, s, "Municipal heat plan 2026: summary", "Stadtplanungsamt Haldenau", "Heat plan",
-                    "Stadt Haldenau | Heat plan 2026 | Summary",
+                    "Stadtplanungsamt Haldenau, Kommunale Wärmeplanung, March 2026",
                     dt.datetime(2026, 3, 27, 9, 0, tzinfo=CET), dt.datetime(2026, 3, 27, 9, 40, tzinfo=CET),
-                    producer="LibreOffice 25.8")
+                    producer="LibreOffice 25.8", font="DejaVu Sans", body_pt=8.8, margin_mm=24, top_mm=20,
+                    bottom_mm=20, page_sep=", page ")
 
 
 def federal_overview(target):
@@ -202,9 +204,10 @@ def federal_overview(target):
            "area. Gas boilers have not been funded since 2024.")]
     path = os.path.join(target, "federal_funding_overview_2025.pdf")
     officepdf.build(path, s, "Federal funding for efficiency in buildings: overview 2025", "Energieagentur Region Haldenau",
-                    "Funding overview", "Energieagentur Region Haldenau | Funding overview 2025",
+                    "Funding overview", "Information sheet 1/2025",
                     dt.datetime(2025, 1, 14, 13, 20, tzinfo=CET), dt.datetime(2025, 1, 15, 8, 5, tzinfo=CET),
-                    producer="LibreOffice 24.8")
+                    producer="LibreOffice 24.8", font="Caladea", body_pt=9.8, margin_mm=25, top_mm=18,
+                    header="Energieagentur Region Haldenau", page_sep="  ·  ")
 
 
 def committee_request(target):
@@ -225,10 +228,14 @@ def committee_request(target):
         "The committee sets the 2026 round at its meeting on 9 July. The May notices carried the offer again, open to 30 "
         "June, and the Climate Protection Office has passed you the applications that came in by 12 June. Your paper goes "
         "out with the agenda on 26 June.",
-        "Under the climate action plan we fund a measure only where its grant per tonne of CO2 on this year's "
-        "applications is €120 or less. Before the meeting we need your view of which measures to fund and how sure you "
-        "are of each, with what the pilot showed season by season, the workbook the office will use to issue the "
-        "grants, and what the round will actually pay once the offer has closed and the works are done.",
+        "We set the round on the applications that came in by 12 June: under the climate action plan we fund a measure "
+        "only where its grant per tonne of CO2 on them is €120 or less. The council has budgeted €8.2 million for the "
+        "grants the round pays out this year. If the measures that meet the limit would together pay more than that, we "
+        "fund them from the lowest grant per tonne up, each only where the budget still covers what its applications "
+        "will be paid once the offer has closed and the works are done.",
+        "Before the meeting we need your view of which measures to fund and how sure you are of each, with what the "
+        "pilot showed season by season, the workbook the office will use to issue the grants, and what the round will "
+        "actually pay.",
         "The plan's annual report also needs the CO2 the pilot's works saved in the season to April 2026, as section 4.6 "
         "sets it out.",
         "With thanks and best wishes,",

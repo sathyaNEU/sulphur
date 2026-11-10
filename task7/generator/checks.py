@@ -4,6 +4,7 @@ careful but hurried pass and the quick pass (effort.json); every row of the sema
 asserted, and the bar block (dataset-generation 7.1, labelled "bar" below); the figures the deliverables and the answer
 blocks print are made here."""
 import copy
+import datetime as dt
 import math
 import os
 import sys
@@ -46,6 +47,12 @@ def appr(P, m, **kw):
 
 def fset(R):
     return tuple(m for m in MEAS if R[m]["eur_t"] <= GD.LIMIT)
+
+
+def budget_set(R, paid):
+    """the measures that meet the limit, then the budget: from the lowest grant per tonne up, each where the budget
+    still covers what its applications will be paid"""
+    return GD.funded_within_budget(fset(R), {m: R[m]["eur_t"] for m in MEAS}, paid)
 
 
 def at_empty(fit):
@@ -140,7 +147,18 @@ def results(P, quick=False):
     C["A"] = A
     C["R5"] = {m: A[m]["rate"] for m in MEAS}
     C["R6"] = {m: A[m]["eur_t"] for m in MEAS}
-    C["funded"] = fset(A)
+    C["passing"] = fset(A)
+    # R8c and R11 what each measure's applications at close would be paid once the works are done, and how many: each
+    # firm's 2019 rate of work fitted to this year's jobs between 13 July and 30 September
+    C["R8c"] = {m: GD.round_paid(P, m) for m in MEAS}
+    C["R8c_rivals"] = {h: {m: GD.round_paid(P, m, h) for m in MEAS}
+                       for h in ("pooled", "late by rate", "quoted roof", "late by grant")}
+    C["R8c_rivals"]["the works from 20 July"] = {m: GD.round_paid(P, m, start=dt.date(2026, 7, 20)) for m in MEAS}
+    C["R8c_hurried"] = {h: {m: GD.round_paid(P, m, h) for m in MEAS} for h in ("jobs", "none")}
+    C["paid"] = {m: C["R8c"][m]["paid"] for m in MEAS}
+    C["paid_none"] = {m: C["R8c_hurried"]["none"][m]["paid"] for m in MEAS}
+    C["paid_jobs"] = {m: C["R8c_hurried"]["jobs"][m]["paid"] for m in MEAS}
+    C["funded"] = GD.funded_within_budget(C["passing"], C["R6"], C["paid"])
     riv = {"four bands of each driver": {"nb": 4}, "eight bands of each driver": {"nb": 8},
            "each driver's bands as steps": {"form": "bins"},
            "a straight line through the bands of buildings that close": {"form": "linear"},
@@ -177,8 +195,9 @@ def results(P, quick=False):
     C["R8_rivals"] = {h: {m: GD.at_close(P, m, h) for m in MEAS} for h in ("one withdrawal rate",)}
     C["R8_hurried"] = {h: {m: GD.at_close(P, m, h) for m in MEAS} for h in ("count", "pooled", "no withdrawals",
                                                                             "received")}
-    C["R8_funded_paid"] = sum(C["R8"][m]["paid"] for m in C["funded"])
+    C["R8_funded_paid"] = sum(C["paid"][m] for m in C["funded"])
     C["R8_funded_close"] = sum(C["R8"][m]["grant_close"] for m in C["funded"])
+    C["R11"] = {m: C["R8c"][m]["n_paid"] for m in MEAS}
     # R9 every application received, its grant and lifetime tonnes
     C["apps"] = []
     for m in MEAS:
@@ -236,14 +255,15 @@ def wald_seasons(P, m):
     return np.array(out)
 
 
-def apps_route(P, C, route):
-    """a route's lifetime tonnes for every application received, and its funded set"""
+def apps_route(P, C, route, paid):
+    """a route's lifetime tonnes for every application received, and its funded set (the limit, then the budget on the
+    route's own reading of what the round pays)"""
     R = C["R56_hurried"][route] if route in C["R56_hurried"] else C["R56_rivals"][route]
     rows = {}
     for m in MEAS:
         for a, t in zip(GD.apps(P, m), R[m]["app_tonnes"]):
             rows[a["no"]] = float(t)
-    return fset(R), rows
+    return budget_set(R, paid), rows
 
 
 # ---------------------------------------------------------------- the assertions
@@ -424,8 +444,9 @@ def run(target, gen_dir, quick=False):
     band6 = {"insulation": 0.05, "heating optimisation": 0.10, "heating controls": 0.05}
     C["R5_band"], C["R6_band"] = band5, band6
     for name, R in C["R56_rivals"].items():
-        fs = fset(R)
-        check("SF7 SF16 SF17 SF18 SF19 R6 %s: the same funded set" % name, fs == C["funded"], str(fs))
+        fs = budget_set(R, C["paid"])
+        check("SF7 SF16 SF17 SF18 SF19 R6 %s: the same funded set" % name, fs == C["funded"] and fset(R) == C["passing"],
+              str(fs))
         for m in MEAS:
             check("SF7 R5 %s: %s's rate within its band" % (name, m), abs(R[m]["rate"] - A[m]["rate"]) <= band5[m],
                   "%.2f against %.2f" % (100 * R[m]["rate"], 100 * A[m]["rate"]))
@@ -436,7 +457,11 @@ def run(target, gen_dir, quick=False):
     check("margins: insulation and controls 8 per cent or more under the limit, heating optimisation 25 per cent over",
           A[IM]["eur_t"] <= 0.92 * GD.LIMIT and A[CM]["eur_t"] <= 0.92 * GD.LIMIT and A[HM]["eur_t"] >= 1.25 * GD.LIMIT,
           str({m: round(A[m]["eur_t"], 1) for m in MEAS}))
-    sets = {name: fset(R) for name, R in C["R56_hurried"].items()}
+    # the careful routes take each job as done, as the 2019 works were; the golden's pricing beside them, every job done
+    # or the roofers' jobs counted whatever their size
+    sets = {name: budget_set(R, C["paid_none"]) for name, R in C["R56_hurried"].items()}
+    sets["each building's own saving, every job done as in 2019"] = budget_set(A, C["paid_none"])
+    sets["each building's own saving, the roofers' jobs counted whatever their size"] = budget_set(A, C["paid_jobs"])
     C["route_sets"] = sets
     use = C["R56_hurried"]["each use's saving, faded"]
     check("bar R3 each use's saving, faded (the pilot's lesson by use, carried to this year's applications) funds nothing",
@@ -446,12 +471,21 @@ def run(target, gen_dir, quick=False):
           "%.1f and %.1f" % (use[IM]["eur_t"], use[CM]["eur_t"]))
     check("bar R3 the pilot's seven-season average carried flat funds heating optimisation alone",
           sets["the pilot's seven-season average"] == (HM,), str(sets["the pilot's seven-season average"]))
-    check("bar R3 the before and after funds all three", sets["the works buildings' own before and after"] == tuple(MEAS),
+    ba_r = C["R56_hurried"]["the works buildings' own before and after"]
+    check("bar R3 the before and after passes all three, and with every job done the budget takes heating optimisation "
+          "and controls", fset(ba_r) == tuple(MEAS) and sets["the works buildings' own before and after"] == (HM, CM),
           str(sets["the works buildings' own before and after"]))
-    check("bar R6 the empty week alone funds controls only, the roof alone insulation only",
-          sets["controls on its empty week, insulation by use"] == (CM,) and
-          sets["insulation on its roof, controls by use"] == (IM,),
+    check("bar R6 the empty week alone funds controls only; the roof alone passes insulation alone, which with every "
+          "job done runs over the budget", sets["controls on its empty week, insulation by use"] == (CM,) and
+          fset(C["R56_hurried"]["insulation on its roof, controls by use"]) == (IM,) and
+          sets["insulation on its roof, controls by use"] == (),
           "%s, %s" % (sets["controls on its empty week, insulation by use"], sets["insulation on its roof, controls by use"]))
+    check("bar R6 each building's own saving with every job done as in 2019, or the roofers' jobs counted whatever their "
+          "size, funds controls only: the budget needs the works done by 30 September",
+          sets["each building's own saving, every job done as in 2019"] == (CM,) and
+          sets["each building's own saving, the roofers' jobs counted whatever their size"] == (CM,),
+          "%s, %s" % (sets["each building's own saving, every job done as in 2019"],
+                      sets["each building's own saving, the roofers' jobs counted whatever their size"]))
     wrong = {v for v in sets.values() if v != C["funded"]}
     check("bar R3 different shortcuts land on four or more different wrong funded sets", len(wrong) >= 4, str(sorted(wrong)))
     for name in ("each use's saving, faded", "the pilot's own mix, faded", "the empty week read off the load alone",
@@ -515,11 +549,87 @@ def run(target, gen_dir, quick=False):
           "%.3f, %.3f against %.3f" % (R8[IM]["size"], R8[IM]["w_late"], R8[IM]["w_early"]))
     kp = W.SI[W.PIPELINE]
     true_paid = {m: sum(w.grant[W.PIPELINE][i] for i in range(w.N) if w.applied[i, kp] and w.measure26[i] == m
-                        and not w.withdraw26[i]) for m in MEAS}
+                        and not w.withdraw26[i] and w.done26.get(i, W.WORK_BY[2026] + dt.timedelta(1)) <= W.WORK_BY[2026])
+                 for m in FUNDED}
     C["R8_truth_paid"] = true_paid
     tp = sum(true_paid[m] for m in FUNDED)
-    check("the golden projection lands within 15 per cent of what the world's round pays (the round's own sampling)",
-          abs(C["R8_funded_paid"] / tp - 1) < 0.15, "%.3f against %.3f million" % (C["R8_funded_paid"] / 1e6, tp / 1e6))
+    check("the golden projection lands within 10 per cent of what the world's round pays once its works are done (the "
+          "round's own sampling)", abs(C["R8_funded_paid"] / tp - 1) < 0.10,
+          "%.3f against %.3f million" % (C["R8_funded_paid"] / 1e6, tp / 1e6))
+    # ---- R8c R11 the works done by 30 September: the roofers' 2019 pace, this year's roofs, the budget
+    B = GD.BUDGET
+    a19 = [a for a in P.answers19 if a["works"]]
+    check("the record: every drawn 2019 owner who kept the place had the works done by 30 September 2019",
+          all(a["done"] <= GD.WORK_BY[GD.PILOT] for a in a19), "latest %s" % max(a["done"] for a in a19))
+    corr = []
+    by_f = {}
+    for a in a19:
+        if a["measure"] == IM:
+            by_f.setdefault(a["firm"], []).append(a)
+    for f, js in by_f.items():
+        js = sorted(js, key=lambda a: (a["done"], a["date"]))
+        prev, xs, ys = GD.WORK_FROM[GD.PILOT], [], []
+        for a in js:
+            xs.append(P.roof[a["b"]])
+            ys.append(GD.workdays(prev, a["done"]) - (0 if prev == GD.WORK_FROM[GD.PILOT] else 1))
+            prev = a["done"]
+        if len(js) >= 6:
+            corr.append(float(np.corrcoef(xs, ys)[0, 1]))
+    C["roof_days_corr"] = float(np.median(corr))
+    check("SF24 bar R5 a roofer's 2019 jobs took it longer the larger the roof (within each firm the working days between "
+          "completions follow the roof's square metres, median correlation 0.7 or more): job counts do not measure its "
+          "work", C["roof_days_corr"] >= 0.7, "%.2f over %d firms" % (C["roof_days_corr"], len(corr)))
+    f19 = {a["firm"] for a in a19 if a["measure"] == IM}
+    f26 = {a["firm"] for a in GD.apps(P, IM)}
+    C["roofers"] = (len(f19), len(f26))
+    check("SF28 bar R4 the roofers quoting this year are a minority of those who did the 2019 jobs, every one of them "
+          "among them once a name typed without its legal form is read as the firm's", len(f26) < 0.6 * len(f19) and
+          f26 <= f19, "%d of %d" % (len(f26), len(f19)))
+    from docx import Document
+    req = " ".join(p_.text for p_ in Document(os.path.join(target, "committee_request_2026-06-15.docx")).paragraphs)
+    check("SF21 the committee's request files the €120 test on the applications that came in by 12 June",
+          "We set the round on the applications that came in by 12 June" in req)
+    check("SF22 the committee's request files the budget and its order (from the lowest grant per tonne up, each where "
+          "the budget covers what it will pay)", "€8.2 million" in req and "from the lowest grant per tonne up" in req
+          and abs(GD.BUDGET - 8.2e6) < 1)
+    roof19 = float(np.mean([P.roof[a["b"]] for a in a19 if a["measure"] == IM]))
+    roof26 = float(np.mean([P.roof[a["b"]] for a in GD.apps(P, IM)]))
+    C["roof_sizes"] = (roof19, roof26)
+    check("this year's insulation roofs run 30 per cent or more larger than the 2019 works' (this year's owners chose "
+          "insulation where the roof is large)", roof26 >= 1.3 * roof19, "%.0f against %.0f m2" % (roof26, roof19))
+    jobs_share = C["R8c_hurried"]["jobs"][IM]["share"]
+    check("bar R3 R8c the roofers' jobs counted whatever their size read 2019's pace as room for 80 per cent or more "
+          "of this year's insulation grant", jobs_share >= 0.80, "%.3f" % jobs_share)
+    gold_tot = sum(C["paid"][m] for m in FUNDED)
+    check("margin: insulation and controls pay 8 per cent or more under the budget once the works are done",
+          gold_tot <= 0.92 * B, "%.3f against %.1f million" % (gold_tot / 1e6, B / 1e6))
+    sf = {"pooled": "SF26", "late by rate": "SF25", "quoted roof": "SF24", "late by grant": "SF27",
+          "the works from 20 July": "SF23"}
+    for name, RR in C["R8c_rivals"].items():
+        tot = sum(RR[m]["paid"] for m in FUNDED)
+        check("%s R8c %s: insulation's payment within 10 per cent, controls' and heating optimisation's within 1, the pair "
+              "8 per cent or more under the budget" % (sf[name], name),
+              abs(RR[IM]["paid"] / C["paid"][IM] - 1) <= 0.10 and abs(RR[CM]["paid"] / C["paid"][CM] - 1) <= 0.01
+              and abs(RR[HM]["paid"] / C["paid"][HM] - 1) <= 0.01 and tot <= 0.92 * B,
+              "%.3f, pair %.3f million" % (RR[IM]["paid"] / 1e6, tot / 1e6))
+    for name in ("jobs", "none"):
+        tot = sum(C["R8c_hurried"][name][m]["paid"] for m in FUNDED)
+        check("bar R3 R8c %s: the pair 8 per cent or more over the budget" % name, tot >= 1.08 * B,
+              "%.3f against %.1f million" % (tot / 1e6, B / 1e6))
+    check("bar R6 insulation alone, every job done, 8 per cent or more over the budget; on its works done by 30 "
+          "September 8 per cent or more under", C["paid_none"][IM] >= 1.08 * B and C["paid"][IM] <= 0.92 * B,
+          "%.3f and %.3f million" % (C["paid_none"][IM] / 1e6, C["paid"][IM] / 1e6))
+    joint = GD.heating_joint_load(P)
+    C["heating_joint_load"] = joint
+    check("the heating firms fit this year's controls and heating optimisation by 30 September, each on its own and the "
+          "two together on the same firms (each paid in full)",
+          C["R8c"][CM]["share"] >= 0.999 and C["R8c"][HM]["share"] >= 0.999 and joint <= 0.92,
+          "%.3f %.3f, the busiest firm at %.0f%% of its room with both" % (C["R8c"][CM]["share"], C["R8c"][HM]["share"],
+                                                                         100 * joint))
+    room = min(GD.workdays(max(a["done"] for a in js), GD.WORK_BY[GD.PILOT]) for js in by_f.values())
+    C["roofers_2019_last"] = max(max(a["done"] for a in js) for js in by_f.values())
+    check("bar R4 the 2019 roofers had room: the busiest finished its last pilot roof a working week or more before 30 "
+          "September 2019", room >= 6, "%d working days to spare, the last on %s" % (room - 1, C["roofers_2019_last"]))
     # ---- R10 the 2025/26 saving
     for name, v in C["R10_rivals"].items():
         check("SF10 R10 %s: within 3 per cent of the golden" % name, abs(v / C["R10"] - 1) <= 0.03,
@@ -677,7 +787,30 @@ def figures(C):
         "R7_by_use_range_eur": {m: [round(v, 2) for v in C["R7_careful"][m]] for m in GD.DRIVEN},
         "R8_applications_at_close": {m: int(round(C["R8"][m]["n_close"])) for m in MEAS},
         "R8_grant_at_close_eur": {m: int(round(C["R8"][m]["grant_close"])) for m in MEAS},
-        "R8_grant_paid_eur": {m: int(round(C["R8"][m]["paid"])) for m in MEAS},
+        "R8_grant_paid_eur": {m: int(round(C["paid"][m])) for m in MEAS},
+        "R8_paid_every_job_done_eur": {m: int(round(C["paid_none"][m])) for m in MEAS},
+        "R8_paid_jobs_rule_eur": {m: int(round(C["paid_jobs"][m])) for m in MEAS},
+        "R8_paid_share_pct": {m: pct(C["R8c"][m]["share"]) for m in MEAS},
+        "R8_jobs_rule_share_pct": pct(C["R8c_hurried"]["jobs"][IM]["share"]),
+        "R11_applications_paid": {m: int(round(C["R11"][m])) for m in MEAS},
+        "R11_applications_net_of_withdrawals": {m: int(round(C["R8c_hurried"]["none"][m]["n_paid"])) for m in MEAS},
+        "budget_eur": int(GD.BUDGET),
+        "funded_paid_share_of_budget_pct": pct(C["R8_funded_paid"] / GD.BUDGET),
+        "every_job_done_funded_pair_paid_eur": int(round(sum(C["paid_none"][m] for m in FUNDED))),
+        "jobs_rule_funded_pair_paid_eur": int(round(sum(C["paid_jobs"][m] for m in FUNDED))),
+        "roofers_2019_2026": list(C["roofers"]),
+        "roof_mean_m2_2019_2026": [int(round(v)) for v in C["roof_sizes"]],
+        "roof_days_corr": round(C["roof_days_corr"], 2),
+        "roofers_2019_last_done": "%d %s" % (C["roofers_2019_last"].day, C["roofers_2019_last"].strftime("%B")),
+        "passing": list(C["passing"]),
+        "R8_bands": {
+            "insulation applications at close": [int(round(0.9 * round(C["R8"][IM]["n_close"]))),
+                                                 int(round(1.1 * round(C["R8"][IM]["n_close"])))],
+            "insulation grant asked, million": [round(0.9 * C["R8"][IM]["grant_close"] / 1e6, 1),
+                                                round(1.1 * C["R8"][IM]["grant_close"] / 1e6, 1)],
+            "insulation applications paid": [int(round(0.9 * round(C["R11"][IM]))), int(round(1.1 * round(C["R11"][IM])))],
+            "insulation paid, million": [round(0.9 * C["paid"][IM] / 1e6, 1), round(1.1 * C["paid"][IM] / 1e6, 1)],
+            "funded round paid, million": [round(0.9 * C["R8_funded_paid"] / 1e6, 1), round(1.1 * C["R8_funded_paid"] / 1e6, 1)]},
         "R8_funded_paid_eur": int(round(C["R8_funded_paid"])),
         "R8_funded_close_eur": int(round(C["R8_funded_close"])),
         "R8_share_by_day_pct": {m: pct(C["R8"][m]["share"]) for m in MEAS},
@@ -708,8 +841,9 @@ def effort(C, F):
     M = MEAS
     car = C["R56_hurried"]["each use's saving, faded"]
     qk = C["R56_hurried"]["the works buildings' own before and after"]
-    fs_c, rows_c = apps_route(P, C, "each use's saving, faded")
-    fs_q, rows_q = apps_route(P, C, "the works buildings' own before and after")
+    q_paid = {m: C["R8_hurried"]["pooled"][m]["paid"] for m in M}
+    fs_c, rows_c = apps_route(P, C, "each use's saving, faded", C["paid_none"])
+    fs_q, rows_q = apps_route(P, C, "the works buildings' own before and after", q_paid)
     gold_rows = {a["no"]: a["life_t"] for a in C["apps"]}
 
     def rows_value(rows):
@@ -791,13 +925,13 @@ def effort(C, F):
                          "careful": car_r7, "thorough": gold_r7}})
     gold_r8, r8_bands = {}, {}
     for m in M:
-        for key in ("n_close", "grant_close", "paid"):
+        for key in ("n_close", "grant_close"):
             v = round(C["R8"][m][key], 0)
             gold_r8["%s %s" % (m, key)] = v
             r8_bands["%s %s" % (m, key)] = [v * 0.90, v * 1.10]
 
     def r8_of(RR):
-        return {"%s %s" % (m, key): round(RR[m][key], 0) for m in M for key in ("n_close", "grant_close", "paid")}
+        return {"%s %s" % (m, key): round(RR[m][key], 0) for m in M for key in ("n_close", "grant_close")}
     R.append({"id": "R8a", "name": "each measure's round at close", "graded_as": "Ask 5",
               "figure": "R8_table", "depends": [], "independent": "the 2019 responses and the 2026 applications",
               "golden": gold_r8, "bands": r8_bands, "partly_share": 0.4,
@@ -806,9 +940,22 @@ def effort(C, F):
                                      "why": "the platform's architecture 7 run projected the round measure by measure "
                                             "with late quotes larger and completion by size and timing"},
                          "thorough": gold_r8}})
+    gold_r8c = {m: round(C["paid"][m], 0) for m in M}
+    R.append({"id": "R8c", "name": "what each measure's round pays once the works are done", "graded_as": "Ask 5",
+              "figure": "R8c_table", "depends": [], "independent": "the 2019 completions and the 2026 quotes' firms",
+              "golden": gold_r8c, "bands": {k: [v * 0.90, v * 1.10] for k, v in gold_r8c.items()}, "partly_share": 0.4,
+              "passes": {"quick": {m: round(q_paid[m], 0) for m in M},
+                         "careful": {m: round(C["paid_none"][m], 0) for m in M}, "thorough": gold_r8c}})
+    gold_r11 = {m: round(C["R11"][m], 0) for m in M}
+    none_n = {m: round(C["R8c_hurried"]["none"][m]["n_paid"], 0) for m in M}
+    R.append({"id": "R11", "name": "how many of each measure's applications are paid", "graded_as": "Ask 5",
+              "figure": "R11_table", "depends": [], "independent": "the 2019 completions and the 2026 quotes' firms",
+              "golden": gold_r11, "bands": {k: [v * 0.90, v * 1.10] for k, v in gold_r11.items()}, "partly_share": 0.4,
+              "passes": {"quick": {m: round(C["R8_hurried"]["pooled"][m]["n_close"], 0) for m in M},
+                         "careful": none_n, "thorough": gold_r11}})
     tot = {"asked": round(C["R8_funded_close"], 0), "paid": round(C["R8_funded_paid"], 0)}
     car_tot = {"asked": round(sum(C["R8"][m]["grant_close"] for m in fs_c), 0),
-               "paid": round(sum(C["R8"][m]["paid"] for m in fs_c), 0)}
+               "paid": round(sum(C["paid_none"][m] for m in fs_c), 0)}
     q_tot = {"asked": round(sum(C["R8_hurried"]["pooled"][m]["grant_close"] for m in fs_q), 0),
              "paid": round(sum(C["R8_hurried"]["pooled"][m]["paid"] for m in fs_q), 0)}
     R.append({"id": "R8b", "name": "the funded round's grant asked and paid", "graded_as": "Component 4",
@@ -833,7 +980,10 @@ def effort(C, F):
     hints = [{"sentence": "this year's owners chose the measure that suits their building, so price controls along the share "
                           "of the week each building stands empty, from its load profile, and roof insulation along its "
                           "roof per floor, from the cadastre and the register",
-              "rescues": ["R3", "R4", "R5a", "R5c", "R6", "R8b"]},
+              "rescues": ["R3", "R4", "R5a", "R5c", "R7"]},
+             {"sentence": "this year's roofers cannot finish every roof the round grants by 30 September: under half of "
+                          "2019's roofers still quote, this year's roofs are larger, and each firm's 2019 pace in square "
+                          "metres of roof shows how much it can do", "rescues": ["R8c", "R11"]},
              {"sentence": "a hotel's or care home's load dips while its guests or residents sleep, so its profile reads it "
                           "as empty when it is lived in", "rescues": []},
              {"sentence": "controls save only while a building stands empty, nothing until about two fifths of the week, "

@@ -39,21 +39,21 @@
   {
    "path": "applications_2026.xlsx",
    "format": "xlsx",
-   "bytes": 44530,
+   "bytes": 48512,
    "covers": "the 2026 round's applications received by 12 June, with their reference consumption",
    "made": "constructed by task7/generator/make.py (seeded, deterministic)"
   },
   {
    "path": "benchmarking_method_2022.pdf",
    "format": "pdf",
-   "bytes": 68702,
+   "bytes": 64698,
    "covers": "the utility's benchmarking method",
    "made": "constructed by task7/generator/make.py (seeded, deterministic)"
   },
   {
    "path": "benchmarking_notices_2019_2026.csv",
    "format": "csv",
-   "bytes": 2552877,
+   "bytes": 2552881,
    "covers": "every benchmarking notice sent, May 2019 to May 2026, with the grant offer",
    "made": "constructed by task7/generator/make.py (seeded, deterministic)"
   },
@@ -81,7 +81,7 @@
   {
    "path": "committee_request_2026-06-15.docx",
    "format": "docx",
-   "bytes": 9463,
+   "bytes": 9613,
    "covers": "the committee chair's request for the 2026 round",
    "made": "constructed by task7/generator/make.py (seeded, deterministic)"
   },
@@ -109,14 +109,14 @@
   {
    "path": "federal_funding_overview_2025.pdf",
    "format": "pdf",
-   "bytes": 55606,
+   "bytes": 34478,
    "covers": "the regional energy agency's overview of federal grants",
    "made": "constructed by task7/generator/make.py (seeded, deterministic)"
   },
   {
    "path": "gas_meter_reads_2013_2026.csv",
    "format": "csv",
-   "bytes": 27431912,
+   "bytes": 27431877,
    "covers": "every read of every commercial gas meter point, 30 April 2013 to 30 April 2026",
    "made": "constructed by task7/generator/make.py (seeded, deterministic)"
   },
@@ -137,14 +137,14 @@
   {
    "path": "municipal_heat_plan_2026_summary.pdf",
    "format": "pdf",
-   "bytes": 58048,
+   "bytes": 55169,
    "covers": "the municipal heat plan's summary",
    "made": "constructed by task7/generator/make.py (seeded, deterministic)"
   },
   {
    "path": "pilot_2019_responses_and_draw.xlsx",
    "format": "xlsx",
-   "bytes": 142153,
+   "bytes": 155176,
    "covers": "the 2019 pilot's responses, the draw, withdrawals and completion dates",
    "made": "constructed by task7/generator/make.py (seeded, deterministic)"
   },

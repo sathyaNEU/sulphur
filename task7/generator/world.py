@@ -30,7 +30,13 @@ pilot's buildings of the same use.
 An answer or an application comes with a contractor's quote, roof insulation priced on the roof's area and the other
 measures on the floor's. A quote for insulation needs a survey of the roof, longer on a larger building, so insulation
 answers come late in the offer's six weeks and the large ones latest; a drawn owner can still withdraw, likelier on a
-large job and on an answer sent close to the deadline. The pandemic winters and the 2022 gas price shock moved every
+large job and on an answer sent close to the deadline. The quote comes from a roofer for insulation and from a heating
+firm for the others, the larger firms quoting more often, and a granted job waits its turn: each firm takes its jobs in
+the order its owners answered, a roofer insulating so many square metres of roof a working day, a heating firm giving
+each job to its first free fitter. In 2019 every firm was done well before 30 September; under half the roofers who
+quoted then still take council work in 2026, and this year's insulation applicants have larger roofs, so the roofers
+cannot finish every roof the round grants by 30 September, and a job not finished then is not paid. The pandemic
+winters and the 2022 gas price shock moved every
 building's use. From August 2019 the utility's service team offered its commercial customers a burner check district by
 district, free of charge, whatever their place in the pilot; most owners accepted, and a checked burner burns less gas
 for the same heat from the visit on, by however far out of tune it was. The May 2026 notice carries the offer of the
@@ -156,6 +162,38 @@ CRISIS = {2022: 0.020, 2023: 0.140, 2024: 0.110, 2025: 0.090, 2026: 0.072}
 COST_M2 = {"insulation": 119.0, "heating optimisation": 7.4, "heating controls": 10.6}   # insulation per m2 of roof
 COST_SD = 0.22
 GRANT_SHARE, GRANT_CAP = 0.30, 40000.0
+# the contractors: a quote for roof insulation comes from a roofer, one for heating optimisation or controls from a
+# heating firm, the larger firms quoting more often; a granted job waits its turn, each firm working through its jobs in
+# the order its owners answered, a roofer at its own pace in square metres of roof a working day, a heating firm with
+# its own fitters, each job to the first one free. Of the firms that quoted in 2019 under half the roofers and nine in
+# ten heating firms still take council work in 2026 (surnames from guard.py names --geo Germany, seeds 53 and 59)
+ROOFERS = ["Dachdeckerei Hande GmbH", "Paffrath Bedachungen", "Trupp Dach und Wand GmbH", "Holzbau und Dach Klingelhöfer",
+           "Metz Dachtechnik", "Dachbau Becker GmbH & Co. KG", "Dachdeckerei Geisler", "Kaul Bedachungen GmbH",
+           "Weimer Dach und Wand", "Holzbau und Dach Hein", "Etzler Dachtechnik GmbH", "Dachbau Patberg",
+           "Dachdeckerei Seifert GmbH", "Speer Bedachungen", "Blümel Dach und Wand GmbH", "Holzbau und Dach Holsten",
+           "Conradi Dachtechnik", "Dachbau Lehmann GmbH & Co. KG", "Dachdeckerei Mangold", "Sontag Bedachungen GmbH",
+           "Förster Dach und Wand", "Holzbau und Dach Seidel", "Heidrich Dachtechnik GmbH", "Dachbau Beckmann",
+           "Dachdeckerei Steinberg GmbH", "Kraus Bedachungen"]
+HEATING_FIRMS = ["Siering Haustechnik GmbH", "Mies Heizung Sanitär", "SHK Barkholz GmbH", "Wärmetechnik Scholtz",
+                 "Neureuther Gebäudetechnik", "Reising Heizungsbau GmbH", "Wesack Haustechnik", "Vollbrecht Heizung Sanitär GmbH",
+                 "SHK Kambs", "Wärmetechnik Gierschner GmbH", "Putz Gebäudetechnik", "Drewes Heizungsbau",
+                 "Köhler Haustechnik GmbH", "Benthin Heizung Sanitär", "SHK Jopich GmbH", "Wärmetechnik Gröttner",
+                 "Schmidtke Gebäudetechnik GmbH", "Huhn Heizungsbau", "Stahr Haustechnik", "Weihmann Heizung Sanitär GmbH",
+                 "SHK Eckbauer", "Wärmetechnik Lachmann GmbH", "Wulff Gebäudetechnik", "Mentzel Heizungsbau GmbH",
+                 "Hecker Haustechnik", "Plath Heizung Sanitär", "SHK Kuhl GmbH", "Wärmetechnik Jäkel", "Stumpf Gebäudetechnik",
+                 "Wilms Heizungsbau GmbH"]
+STILL_TRADING = {"roofers": 12, "heating": 27}
+ROOF_PACE = (380.0, 0.30)                  # square metres of roof a firm insulates a working day: median, log sd
+FITTERS = ([1, 2, 3], [0.15, 0.45, 0.40])
+# a roofer loses the days it rains (one working day in seven over the summer, the same days for every firm), starts its
+# first granted roof a few days late if it is finishing other work, and a roof goes faster or slower than its area alone
+# says (access, the old covering, the crew on the day)
+RAIN_P = 0.14
+START_LAG = [0, 0, 0, 1, 2, 3, 4]
+ROOF_SD = 0.15
+WORK_FROM = {2019: dt.date(2019, 7, 15), 2026: dt.date(2026, 7, 13)}   # the Monday after the draw, after the meeting
+WORK_BY = {2019: dt.date(2019, 9, 30), 2026: dt.date(2026, 9, 30)}
+FIRM_SEED_OFFSET = 53
 
 # weather: Haldenau station, daily means; the anomaly a season's winter ran against the 1991 to 2020 normal
 WINTER = {2014: 1.1, 2015: 0.2, 2016: 1.3, 2017: -0.4, 2018: -0.2, 2019: 0.6, 2020: 1.9, 2021: -0.3, 2022: 0.9,
@@ -409,9 +447,18 @@ def build(seed=SEED):
                     p = WITHDRAW[m] * math.exp(WITHDRAW_SIZE * w.size_z[i] + WITHDRAW_DAY * (dday - 23))
                     w.withdrawn[i] = rw.random() < min(0.6, p)
                 w.works = w.drawn & ~w.withdrawn
-                summer = [d for d in season_days(PILOT + 1) if dt.date(2019, 7, 15) <= d <= dt.date(2019, 9, 30)]
+                # each answer's quote names its contractor; the drawn jobs are done firm by firm in the order the
+                # owners answered
+                firms(w, seed)
+                rf = np.random.default_rng(seed + FIRM_SEED_OFFSET + 1)
+                w.firm = {PILOT: {}, PIPELINE: {}}
+                for i in idx:
+                    w.firm[PILOT][int(i)] = choose_firm(w, rf, w.measure[i], PILOT)
+                jobs = [(int(i), w.measure[i], w.firm[PILOT][int(i)], w.answer_date[PILOT][i], job_size(w, i, w.measure[i], k))
+                        for i in np.where(w.works)[0]]
+                done = schedule(w, jobs, PILOT)
                 for i in np.where(w.works)[0]:
-                    w.done_date[i] = summer[int(rng2.integers(0, len(summer)))]
+                    w.done_date[i] = done[int(i)]
             elif s == PIPELINE:
                 w.offer[:, k] = w.flag[:, k] & ~w.works
                 take = w.offer[:, k] & (rng.random(N) < APPLY_2026)
@@ -452,7 +499,94 @@ def build(seed=SEED):
         dday = (w.answer_date[PIPELINE][i] - day0).days
         p = WITHDRAW[m] * math.exp(WITHDRAW_SIZE * w.size_z[i] + WITHDRAW_DAY * (dday - 23))
         w.withdraw26[i] = rw2.random() < min(0.6, p)
+    # the 2026 quotes come from the firms still taking council work; the round the committee sets (insulation and
+    # heating controls) is done firm by firm from 13 July, and a job not finished by 30 September is not paid (the
+    # world's own outcome, never shipped)
+    rf = np.random.default_rng(seed + FIRM_SEED_OFFSET + 2)
+    for i in np.where(w.applied[:, kp])[0]:
+        w.firm[PIPELINE][int(i)] = choose_firm(w, rf, w.measure26[i], PIPELINE)
+    jobs = [(int(i), w.measure26[i], w.firm[PIPELINE][int(i)], w.answer_date[PIPELINE][i],
+             job_size(w, i, w.measure26[i], kp))
+            for i in np.where(w.applied[:, kp] & ~w.withdraw26)[0] if w.measure26[i] in ("insulation", "heating controls")]
+    w.done26 = schedule(w, jobs, PIPELINE)
     return w
+
+
+def workdays(d0, n):
+    """the first n working days (Monday to Friday) from d0 on"""
+    out, d = [], d0
+    while len(out) < n:
+        if d.weekday() < 5:
+            out.append(d)
+        d += dt.timedelta(days=1)
+    return out
+
+
+def firms(w, seed):
+    """the roofers and heating firms: each roofer's pace in square metres of roof a working day, each heating firm's
+    fitters, and which of them still take council work in 2026"""
+    rng = np.random.default_rng(seed + FIRM_SEED_OFFSET)
+    w.roofers = [{"name": n, "pace": float(ROOF_PACE[0] * math.exp(rng.normal(0, ROOF_PACE[1])))} for n in ROOFERS]
+    w.heating = [{"name": n, "fitters": int(rng.choice(FITTERS[0], p=FITTERS[1]))} for n in HEATING_FIRMS]
+    w.trading = {"insulation": sorted(rng.permutation(len(ROOFERS))[:STILL_TRADING["roofers"]].tolist()),
+                 "heating": sorted(rng.permutation(len(HEATING_FIRMS))[:STILL_TRADING["heating"]].tolist())}
+
+
+def choose_firm(w, rng, m, year):
+    """the firm an owner's quote comes from: a roofer for insulation, a heating firm otherwise, the larger firms (a
+    roofer's pace, a heating firm's fitters) more often"""
+    if m == "insulation":
+        idx = list(range(len(ROOFERS))) if year == PILOT else w.trading["insulation"]
+        wts = np.array([w.roofers[j]["pace"] for j in idx])
+    else:
+        idx = list(range(len(HEATING_FIRMS))) if year == PILOT else w.trading["heating"]
+        wts = np.array([w.heating[j]["fitters"] for j in idx], float)
+    return int(idx[int(rng.choice(len(idx), p=wts / wts.sum()))])
+
+
+def job_size(w, i, m, k):
+    """a job's size: insulation the building's roof in square metres, heating optimisation and controls the fitter's
+    days (a balancing two to five days by the floor area, controls one or two)"""
+    if m == "insulation":
+        return float(w.roof_ratio[i] * w.area[i, k])
+    if m == "heating optimisation":
+        return int(min(5, max(2, round(1.5 + w.area[i, k] / 1000.0))))
+    return 1 if w.area[i, k] < 2500.0 else 2
+
+
+def schedule(w, jobs, year):
+    """the day each job is done: jobs are (i, measure, firm, answer date, size); each firm takes its jobs in the order
+    its owners answered, a roofer insulating at its pace in square metres a working day, a heating firm giving each job
+    to its first free fitter; a job is done on the working day its last square metre or day falls"""
+    days = workdays(WORK_FROM[year], 400)
+    done = {}
+    by_firm = {}
+    for j in jobs:
+        by_firm.setdefault((j[1] == "insulation", j[2]), []).append(j)
+    rain = np.random.default_rng(w.seed + FIRM_SEED_OFFSET + 20 + year).random(len(days)) < RAIN_P
+    r_lag = np.random.default_rng(w.seed + FIRM_SEED_OFFSET + 30 + year)
+    r_job = np.random.default_rng(w.seed + FIRM_SEED_OFFSET + 40 + year)
+    for (roof, f), js in sorted(by_firm.items()):
+        js.sort(key=lambda j: (j[3], j[0]))
+        if roof:
+            pace = w.roofers[f]["pace"]
+            k = int(r_lag.choice(START_LAG))      # the firm's first working day on the round's roofs
+            got = 0.0                             # square metres insulated so far
+            need = 0.0
+            for i, _m, _f, _d, size in js:
+                need += size * math.exp(r_job.normal(0.0, ROOF_SD))
+                while got < need - 1e-9:
+                    if not rain[k]:
+                        got += pace
+                    k += 1
+                done[i] = days[k - 1]
+        else:
+            free = [0] * w.heating[f]["fitters"]
+            for i, _m, _f, _d, size in js:
+                k = int(np.argmin(free))
+                free[k] += size
+                done[i] = days[free[k] - 1]
+    return done
 
 
 def pick_measures(w, shares, pick, rng):
@@ -546,7 +680,14 @@ def answer_dates(w, s, seed):
             day = 1 + int(span * rng3.random())
         else:
             day = span - int(10 * rng3.beta(1.0, 2.0))
-        w.answer_date[s][i] = notice + dt.timedelta(days=min(span, max(1, day)))
+        d = notice + dt.timedelta(days=min(span, max(1, day)))
+        if d.weekday() >= 5:
+            # the 2019 responses came by post and e-mail and were logged on working days; the 2026 portal takes
+            # applications every day, though most owners send theirs on a working day
+            if not (s == PIPELINE and (int(i) * 2654435761) % 1000 < 350):
+                d2 = d + dt.timedelta(days=7 - d.weekday())
+                d = d2 if d2 <= dt.date(s, *CLOSE_MD) else d - dt.timedelta(days=d.weekday() - 4)
+        w.answer_date[s][i] = d
 
 
 def daily_kwh(w, i, s):

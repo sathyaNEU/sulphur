@@ -5,7 +5,7 @@
  "objective": "experiment-causal",
  "stage": 5,
  "stage_name": "ready",
- "updated": "2026-11-09",
+ "updated": "2026-11-10",
  "stump": "",
  "architecture": 8,
  "loops": 0,
@@ -17,7 +17,8 @@
  },
  "leak": {
   "leak_py": "REVIEW, no LEAK (2026-11-09, --asof 2026-06-24): the measures' names in the plan, the 2019 rules and the 2026 terms; the field's ordinary words; no rounding sentence at the author's word",
-  "reader": "2026-11-09 isolated reader (Sonnet, medium): questions 1 to 4 none beyond the filed WHAT; question 5 the golden's reading; question 6 analysis throughout, the profiles and the cadastre read as usable cross-file material; the profiles' standard-looking shapes repaired afterwards (data only)"
+  "reader": "2026-11-09 isolated reader (Sonnet, medium): questions 1 to 4 none beyond the filed WHAT; question 5 the golden's reading; question 6 analysis throughout, the profiles and the cadastre read as usable cross-file material; the profiles' standard-looking shapes repaired afterwards (data only)",
+  "reader_2026_11_10": "clean after the level-up: no sentence hands over a step, no ranking or helper file, no figure reads as the answer, no one thing ('There is no single fact that unlocks most of this'); it read the payment as the pilot's completion pattern carried over, the hurried route; realism tells fixed: weekday-shaped received dates (none at weekends in 2019, about a third of the weekday rate in 2026), each issuer's PDFs in their own style; the committee letter's list of asks mirroring the prompt ruled natural"
  },
  "duplicate_check": {
   "heart": "WARN 2026-11-09 (overuse.strategy, driver.near own lineage 0.13, overuse.gate_g), answered in the note",
@@ -43,7 +44,24 @@
    "report": "task7/determinism_check_report.md",
    "finding": "the lived-in step decisive for controls with no filed sentence making hotels and care homes lived in (load alone 159.57); the line through the lived-in band at 120.02"
   },
-  "shipped": "at the author's choice (2026-11-09) the pass-1 form: the lived-in step moves controls' figures, not the call (load alone 114.12), every hotel and care home held lived in by use (no margin), the weekend test and strict dominance inside the band, the line through the lived-in band (120.02) ruled out by its sixfold misfit; no fourth pass was run; target.zip e9bdaf43"
+  "shipped": "at the author's choice (2026-11-09) the pass-1 form: the lived-in step moves controls' figures, not the call (load alone 114.12), every hotel and care home held lived in by use (no margin), the weekend test and strict dominance inside the band, the line through the lived-in band (120.02) ruled out by its sixfold misfit; no fourth pass was run; target.zip e9bdaf43",
+  "pass4": {
+   "verdict": "DETERMINISTIC, SOLUTION_WRONG (ask 7 and Component 4 only)",
+   "disposition": "FIX_NOW",
+   "report": "task7/determinism_check_report_pass4.md",
+   "gate_g": "forecasting, analytical_non_defect, surface_read_dependency no",
+   "gate_h": "pass: one_thing none, one-fact about 4 of 13",
+   "finding": "the round-at-close and works-by-30-September figures stated as bare points; the start date and the queue rivals land within the design's tenth but no band was published",
+   "repair": "the bands published in Supplementary 7, Component 4, the workbook's round-at-close sheet and the note; the works' start stated (13 July, as the 2019 works began the Monday after the draw)"
+  },
+  "pass5": {
+   "verdict": "DETERMINISTIC",
+   "disposition": "APPROVE",
+   "report": "task7/determinism_check_report_pass5.md",
+   "gate_g": "method_or_model_selection, analytical_non_defect, surface_read_dependency no",
+   "gate_h": "pass: one_thing none, one-fact about 3 of 9",
+   "note": "read the cut before the data-only realism pass that followed it (the 2019 roofing record's rain days, late starts and per-roof pace; more heating fitters); the generator's assertions, leak.py and every gate re-run after it, every graded figure inside its published band"
+  }
  },
  "returned": [
   {
@@ -99,7 +117,7 @@
    "feedback": "task7/runs/review_2026-11-09.md"
   }
  ],
- "resume": "READY: the author rewrites prompt.txt in their own words (the Prompt contract in the design note lists what it may not drop or add), re-gates it with voice-check.py --rewrite and leak.py, uploads it with target.zip, generates the two runs, then /triage-runs task7",
+ "resume": "READY: the author rewrites prompt.txt in their own words (the Prompt contract in the design note lists what it may not drop or add, the budget among them), re-gates it with voice-check.py --rewrite and leak.py, uploads it with target.zip, generates the two runs, then /triage-runs task7",
  "approved": null,
  "delivered": "2026-11-08",
  "portal": null,
@@ -315,16 +333,16 @@
    }
   ]
  },
- "paper_pair": 46.5,
+ "paper_pair": 46.0,
  "subdomain": "efficiency-savings-verification",
- "call": "Fund insulation and heating controls in the 2026 round, not heating optimisation: €88.24, €98.60 and €157.82 of grant per lifetime tonne on the applications received against €120; the funded round's applications ask for €7,738,505 once the offer closes and it pays €7,262,823; the pilot's works saved 3,303 tonnes of CO2 in 2025/26.",
+ "call": "Fund insulation and heating controls in the 2026 round, not heating optimisation: EUR 108.69, 103.25 and 193.18 of grant per lifetime tonne on the applications received against EUR 120, each priced on its own building; once the works are done by 30 September the pair pays EUR 6,992,958 (EUR 6.3 to 7.7 million), within the EUR 8.2 million budget, the 12 roofers still quoting finishing about 172 of 275 roofs; paid in full (EUR 10,759,494) or with the roofers' work counted in jobs (EUR 8,930,359) the budget funds controls alone",
  "doctrine": "throughout",
  "chain": "R1 each measure's saving by season against the passed-over owners; R2 its saving over its service life; R3 its saving by building type; R4 its lifetime saving rate on this year's applications; R5 grant per tonne and the funded set; R6 each grant per tonne's range and flip rate; R7 each measure's applications, grant and grant paid at close; R8 the pilot's 2025/26 CO2",
  "effort": {
-  "quick": 14.0,
-  "careful": 46.5,
+  "quick": 16.8,
+  "careful": 46.0,
   "thorough": 100.0,
-  "largest_hint": "controls by use and this year's mix: rescues 2 of 9"
+  "largest_hint": "both drivers: rescues 5 of 15"
  },
  "prompt_rewritten": false,
  "gates_stage3": {
@@ -340,20 +358,22 @@
   "date": "2026-11-09"
  },
  "zips": {
-  "target.zip": "e9bdaf436a00c610a22faa6f56ba33d2ae7f2475674ff65e8f14a83512bbe203",
-  "golden.zip": "0634dbab2d6cdb631fc113d4823d61069a53087de84a50019c31428486f6428e"
+  "target.zip": "6deffed9ceb38157a1f7579ddecd068ec39b2d18f98b429dc74c400ab98748f8",
+  "golden.zip": "97def1b903b90b7d4a2a8216379f65edbc7ae2c8e38a02766cd97b5e7633e82b"
  },
  "gates_stage5": {
-  "date": "2026-11-09",
-  "checks": "218 of 218",
-  "precut": "exit 0 (2 WARN)",
-  "effort": "exit 0 (careful 47.4; hint 6 of 13 WARN)",
-  "figures_check": "156 of 156",
-  "voice": "PASS (WARN no rounding sentence, the author's call)",
-  "leak_py": "REVIEW, no LEAK",
-  "containers": "0 FAIL 0 WARN",
-  "heart": "WARN, answered",
-  "surface": "exit 0",
-  "two_builds": "byte-identical"
+  "date": "2026-11-10",
+  "checks": "237 of 237",
+  "make_twice": "SAME (target, golden, both zips, submission, metadata, figures)",
+  "gates_py": "0 FAIL, 4 WARN (precut R1 upstream; voice no rounding sentence at the author's word; leak REVIEW no LEAK; heart WARN as before)",
+  "effort": "careful 46.0, quick 16.8, hint 5 of 15, 4 wrong funded sets",
+  "pdf_readers": "pypdf strict and pymupdf agree on all six PDFs"
+ },
+ "level_up": {
+  "date": "2026-11-10",
+  "backup": "~/Documents/task7_arch8_backup_2026-11-09.zip",
+  "why": "a run on the READY cut lost only on the drivers (level 3 in practice); one sentence would have given it the call",
+  "added": "contractors on every quote, the 2019 completions by firm, 12 of 26 roofers still quoting, an EUR 8.2 million budget with its order and the EUR 120 basis filed in the committee's request; R8c and R11 (what the round pays and how many applications are paid once the works are done by 30 September)",
+  "gates": "make.py 237 checks; make.py --twice SAME; gates.py 0 FAIL 4 WARN (precut R1 upstream, voice no rounding sentence at the author's word, leak REVIEW no LEAK, heart WARN as before); effort careful 46.0, hint 5 of 15, 4 wrong sets"
  }
 }

@@ -18,6 +18,16 @@ def e(v):
     return "€%.2f" % v
 
 
+def band_n(v):
+    """a count's band, a tenth either side, whole"""
+    return "%s to %s" % (format(int(round(0.9 * v)), ","), format(int(round(1.1 * v)), ","))
+
+
+def band_m(v):
+    """a sum's band, a tenth either side, to a tenth of a million euro"""
+    return "€%.1f million to €%.1f million" % (0.9 * v / 1e6, 1.1 * v / 1e6)
+
+
 def write(F, path):
     ins, ho, ct = MEAS
     eu, r1, r2, r5 = F["R6_eur_per_tonne"], F["R1_saving_by_season_pct"], F["R2_life_saving_pct"], F["R5_rate_on_applications_pct"]
@@ -33,6 +43,10 @@ def write(F, path):
     h4, rf = F["R4_heating_at_roof_pct"], F["R4_roof_per_floor"]
     seasons = F["season_labels"]
     ac, gc, gp = F["R8_applications_at_close"], F["R8_grant_at_close_eur"], F["R8_grant_paid_eur"]
+    np_ = F["R11_applications_paid"]
+    bud = F["budget_eur"] / 1e6
+    r19, r26 = F["roofers_2019_2026"]
+    m19, m26 = F["roof_mean_m2_2019_2026"]
     L = []
     L.append("## Tags\n")
     L.append("**Domain:** Engineering and Physical Sciences, Energy Systems & Utilities, energy efficiency and demand "
@@ -48,21 +62,29 @@ def write(F, path):
              "rejected, because this year's controls applications stand empty %s of the week against %s for the pilot's "
              "controls buildings and this year's insulation applications have %.2f square metres of roof per square "
              "metre of floor against %.2f (applications weighted by reference consumption, the pilot's buildings by "
-             "their 2018/19 gas), and each measure's saving rises with them."
+             "their 2018/19 gas), and each measure's saving rises with them. Once the offer has closed and the works are "
+             "done the pair pays about €%s (%s on every reasonable reading of the works), within the council's €%.1f "
+             "million budget, because the roofers can finish by 30 September only about %d (%s) of the %d insulation "
+             "jobs that go ahead (%d applications at close, less withdrawals); paying every job in full, as the 2019 "
+             "works were, puts the pair at €%s, over the budget, and is rejected, as it would fund controls alone."
              % (e(eu[ins]), e(eu[ct]), e(eu[ho]), F["limit_eur"], e(byuse[ins]), e(byuse[ct]), p(ew["2026"]),
-                p(ew["pilot"]), rf["2026"], rf["pilot"]))
+                p(ew["pilot"]), rf["2026"], rf["pilot"], n(F["R8_funded_paid_eur"]), band_m(F["R8_funded_paid_eur"]),
+                bud, np_[ins], band_n(np_[ins]), F["R11_applications_net_of_withdrawals"][ins], ac[ins],
+                n(F["every_job_done_funded_pair_paid_eur"])))
     L.append("")
     L.append("## Supplementary Questions\n")
     L.append("### grant_round_2026_note.docx\n")
-    L.append("1. A two-page note for the committee's paper that opens with the call (fund insulation and heating "
+    L.append("1. A short note for the committee's paper that opens with the call (fund insulation and heating "
              "controls, not heating optimisation, at %s, %s and %s a tonne against €%d), then why (controls' saving "
              "along the share of the week a building stands empty, insulation's along its roof per floor, this year's "
              "applications against the pilot's on each, heating optimisation's saving falling back), a table of the "
              "three measures (saving over the life, saving rate on the applications received, grant per tonne, 90%% "
              "range, the saving rate at which the call flips, fund or not), a chart of each grant per tonne with its "
              "range against a line at the limit beside controls' saving by empty week and insulation's by roof per "
-             "floor, what the round will pay, the 2025/26 saving for the annual report, and a short table of how the "
-             "quicker readings of the pilot land." % (e(eu[ins]), e(eu[ct]), e(eu[ho]), F["limit_eur"]))
+             "floor and a panel of what the funded pair pays against the €%.1f million budget, what the round will pay "
+             "once the works are done by 30 September (the roofers' 2019 pace against this year's roofs), the 2025/26 "
+             "saving for the annual report, and a short table of how the quicker readings land."
+             % (e(eu[ins]), e(eu[ct]), e(eu[ho]), F["limit_eur"], bud))
     L.append("")
     L.append("### grant_round_2026_appraisal.xlsx\n")
     for k, m in enumerate(MEAS, 2):
@@ -80,11 +102,17 @@ def write(F, path):
              % (e(eu[ins]), e(rg[ins][0]), e(rg[ins][1]), p(be[ins]), e(eu[ho]), e(rg[ho][0]), e(rg[ho][1]), p(be[ho]),
                 e(eu[ct]), e(rg[ct][0]), e(rg[ct][1]), p(be[ct])))
     L.append("7. Sheet \"round at close\", one row per measure once the offer closes on 30 June, with the grant its "
-             "applications ask for and what would be paid on them once the works are done: insulation about %s "
-             "applications asking €%s, €%s paid; heating optimisation about %s asking €%s, €%s if it were funded; "
-             "heating controls about %s asking €%s, €%s paid. The funded round's totals: €%s asked and €%s paid."
-             % (n(ac[ins]), n(gc[ins]), n(gp[ins]), n(ac[ho]), n(gc[ho]), n(gp[ho]), n(ac[ct]), n(gc[ct]), n(gp[ct]),
-                n(F["R8_funded_close_eur"]), n(F["R8_funded_paid_eur"])))
+             "applications ask for, how many of them are paid and what is paid on them once the works are done by 30 "
+             "September, each a projection that the reasonable readings of the 2019 record (when the works start, one "
+             "queue or each firm's own, how the late applications are shared among the firms, each roof read off the "
+             "cadastre or its quote) keep within about a tenth either way: insulation about %s applications (%s) asking "
+             "€%s (%s), about %s paid (%s), €%s (%s); heating optimisation about %s asking €%s, about %s paid, €%s if it "
+             "were funded; heating controls about %s asking €%s, about %s paid, €%s. The funded round's totals: €%s "
+             "asked and €%s paid (%s), within the €%.1f million budget at either end (the sheet \"works by 30 "
+             "September\" carries each roofer's 2019 pace against this year's roofs)."
+             % (n(ac[ins]), band_n(ac[ins]), n(gc[ins]), band_m(gc[ins]), n(np_[ins]), band_n(np_[ins]), n(gp[ins]),
+                band_m(gp[ins]), n(ac[ho]), n(gc[ho]), n(np_[ho]), n(gp[ho]), n(ac[ct]), n(gc[ct]), n(np_[ct]), n(gp[ct]),
+                n(F["R8_funded_close_eur"]), n(F["R8_funded_paid_eur"]), band_m(F["R8_funded_paid_eur"]), bud))
     L.append("8. Sheet \"applications\", one row for each of the %s applications received by 12 June (a revised "
              "application replacing the earlier one), with its use, measure, grant, reference consumption, saving rate "
              "over the life and lifetime tonnes, controls rows also showing the share of the week the building stands "
@@ -113,9 +141,17 @@ def write(F, path):
              "per square metre of floor (weighted by reference consumption), the pilot's insulation buildings %.2f "
              "(weighted by their 2018/19 gas)."
              % (p(h4["1"]), p(h4["0.5"]), p(h4["0.25"]), rf["2026"], rf["pilot"]))
-    L.append("4. Once the offer closes the funded round's applications ask for **€%s** and it pays **€%s** once the "
-             "works are done, the late insulation applications larger (%s in 2019) and more often withdrawn."
-             % (n(F["R8_funded_close_eur"]), n(F["R8_funded_paid_eur"]), p(F["R8_late_size_premium_pct"][ins])))
+    L.append("4. Once the offer closes the funded round's applications ask for **€%s**, but the %d roofers quoting this "
+             "year (of the %d who did the 2019 roofs) can insulate, at their 2019 pace in square metres of roof a working "
+             "day, only about **%d** (%s) of the %d insulation roofs that go ahead by 30 September (%d applications at "
+             "close, less withdrawals; this year's roofs average %s square metres, 2019's %s): insulation pays **€%s** "
+             "(%s) and the funded round **€%s** (%s), within the **€%.1f million** budget at either end; every job paid "
+             "as in 2019 would be €%s, and the roofers' work counted in jobs would leave room for %s of insulation's "
+             "grant." % (n(F["R8_funded_close_eur"]), r26, r19, np_[ins], band_n(np_[ins]),
+                         F["R11_applications_net_of_withdrawals"][ins], ac[ins], n(m26), n(m19),
+                         n(gp[ins]), band_m(gp[ins]), n(F["R8_funded_paid_eur"]), band_m(F["R8_funded_paid_eur"]), bud,
+                                                     n(F["every_job_done_funded_pair_paid_eur"]),
+                                                     p(F["R8_jobs_rule_share_pct"])))
     L.append("")
     L.append("## Step-by-Step\n")
     L.append("1. Built each building's gas use per season (1 May to 30 April) from gas_meter_reads_2013_2026.csv, "
@@ -167,21 +203,42 @@ def write(F, path):
     L.append("8. Projected the round to the offer's close from the 2019 answers measure by measure (pilot_2019_rules.pdf, "
              "grant_offer_2026_terms.pdf): %s, %s and %s were in by the same day; late insulation answers ran %s "
              "larger; drawn owners withdrew %s and %s of early and late insulation places. The funded round's "
-             "applications ask for €%s and it pays €%s."
+             "applications ask for €%s once the offer closes."
              % (p(F["R8_share_by_day_pct"][ins]), p(F["R8_share_by_day_pct"][ho]), p(F["R8_share_by_day_pct"][ct]),
                 p(F["R8_late_size_premium_pct"][ins]), p(F["R8_withdrawn_pct"][ins][0]), p(F["R8_withdrawn_pct"][ins][1]),
-                n(F["R8_funded_close_eur"]), n(F["R8_funded_paid_eur"])))
-    L.append("9. Took the 2025/26 saving as plan 4.6 sets it, each works building's 2025/26 use grossed up by its "
+                n(F["R8_funded_close_eur"])))
+    L.append("9. Matched each quote's contractor across pilot_2019_responses_and_draw.xlsx and applications_2026.xlsx "
+             "(the office types some without the legal form): %d roofers did the 2019 roofs, the last finished on %s, "
+             "and %d of them quote this year. Each roofer's 2019 pace is its pilot roofs' area in the cadastre over the "
+             "working days from 15 July to its last completion (a roof took a firm longer the larger it was, so jobs do "
+             "not measure its work); at that pace from 13 July to 30 September, taking its jobs in the order its owners "
+             "applied (the received applications, then its share of the late ones, each net of the 2019 withdrawal "
+             "rates; the works from 13 July, the Monday after the committee's meeting, as the 2019 works began the Monday "
+             "after the draw), the roofers finish about %d of the %d insulation roofs that go ahead, %s of its grant: insulation pays "
+             "€%s, controls (the heating firms have room) €%s, and the pair €%s, within the €%.1f million budget the "
+             "committee set (from the lowest grant per tonne up, each measure where the budget still covers what it "
+             "pays). Paid in full as in 2019 the pair comes to €%s and with the work counted in jobs to €%s, both over "
+             "the budget, which then funds controls alone."
+             % (r19, F["roofers_2019_last_done"], r26, np_[ins], F["R11_applications_net_of_withdrawals"][ins],
+                p(F["R8_paid_share_pct"][ins]),
+                n(gp[ins]), n(gp[ct]), n(F["R8_funded_paid_eur"]), bud, n(F["every_job_done_funded_pair_paid_eur"]),
+                n(F["jobs_rule_funded_pair_paid_eur"])))
+    L.append("10. Took the 2025/26 saving as plan 4.6 sets it, each works building's 2025/26 use grossed up by its "
              "measure's 2025/26 saving: %s tonnes; the seven-season average on the 2018/19 use gives %s."
              % (n(F["R10_tonnes"]), n(F["R10_hurried_tonnes"]["average on the 2018/19 use"])))
     L.append("")
-    L.append("No other conclusion survives. The before and after funds all three on savings the comparison shows every "
-             "building made; the pilot's seven seasons carried flat fund heating optimisation on winters it no longer "
-             "saves; each use's saving, or the pilot's own mix, prices this year's controls and insulation applications "
-             "at buildings that stand empty less and have less roof than theirs and funds nothing; carrying only one of "
-             "the two drivers funds only that measure; and every defensible variant (four or eight bands, the bands as "
+    L.append("No other conclusion survives. The before and after passes all three on savings the comparison shows every "
+             "building made, and the budget then takes heating optimisation and controls; the pilot's seven seasons "
+             "carried flat fund heating optimisation on winters it no longer saves; each use's saving, or the pilot's "
+             "own mix, prices this year's controls and insulation applications at buildings that stand empty less and "
+             "have less roof than theirs and funds nothing; carrying only the empty week funds controls alone, and "
+             "carrying only the roof passes insulation alone, which paid in full runs over the budget; each building's "
+             "own saving with every job paid, or with the roofers' work counted in jobs, runs the pair over the budget "
+             "and funds controls alone. Every defensible variant of the pricing (four or eight bands, the bands as "
              "steps, the empty week read at 40 or 60 per cent of the load's range, every hotel and care home taken as "
-             "lived in, insulation on its share of the gas, a two-season baseline, the last seasons carried) funds "
-             "insulation and heating controls and leaves heating optimisation over the limit.")
+             "lived in, insulation on its share of the gas, a two-season baseline, the last seasons carried) and of the "
+             "works (the firms' work in one queue, the late applications shared by the firms' pace, each roof read off "
+             "its quote, the late roofs larger by their grant, the works starting a week later) funds insulation and "
+             "heating controls within the budget and leaves heating optimisation over the limit.")
     with open(path, "w", encoding="utf-8") as fh:
         fh.write("\n".join(L) + "\n")

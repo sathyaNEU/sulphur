@@ -79,7 +79,7 @@
  ],
  "opening_move": "question-first",
  "question_form": "which",
- "driver": "The decisive quantities are a randomised effect carried to a forward population that chose its treatment knowing what it would gain: each option's effect rises along a property of the unit that the trial's own outcome records do not carry, measurable only from a second record at another grain (an hourly load profile, a roof survey), and the forward units sit far up that property against the trial's units of the same kind, so carrying the trial's effect by kind of unit understates both options that clear the limit and funds neither; carrying one property alone funds only its option.",
+ "driver": "The decisive quantities are a randomised effect carried to a forward population that chose its treatment knowing what it would gain: each option's effect rises along a property of the unit that the trial's own outcome records do not carry, measurable only from a second record at another grain (an hourly load profile, a roof survey), and the forward units sit far up that property against the trial's units of the same kind, so carrying the trial's effect by kind of unit understates both options that clear the limit and funds neither; carrying one property alone funds only its option. The round's payment is the second judgment the call needs: under a budget for what the round pays, a forward round's payment is the work its contractors can finish by the deadline, measured in the unit the work takes (a roof's area, not the job) off each firm's own completion record, which the same choice made larger this year; every job paid as before, or the work counted in jobs, runs the two options over the budget and funds one.",
  "driver_concrete": "Haldenau's 2019 retrofit lottery gives each measure's normal-weather gas saving against the passed-over owners; heating controls save with the share of the week a building stands empty (read off the meter operator's 2025 typical weeks, hotels and care homes lived in round the clock told apart from their night dip) and roof insulation with the roof per square metre of floor (the state solar cadastre over the register), this year's controls applicants stand empty 70 per cent of the week against 42 and this year's insulation applicants have 1.13 square metres of roof per floor against 0.79, so priced on their own buildings both clear 120 euro a tonne while each use's pilot saving fails both; heating optimisation's fade fails it on every route.",
  "stump": "A careful but hurried solver prices this year's applications at each use's pilot saving, faded over the life, and funds nothing (insulation about 132, controls about 129 euro a tonne), because the owners who applied this year chose the measure their building suits: the controls applicants' buildings stand empty far more of the week and the insulation applicants' have far more roof per floor than the pilot's buildings of the same use, and both savings rise along those properties, which only the electricity load profiles and the solar cadastre carry.",
  "differentiation": {
@@ -297,7 +297,7 @@
    "deliverable set": "xlsx"
   }
  ],
- "notes": "architecture 8 (2026-11-09): the author's platform run of architecture 7 made every one of its judgments unprompted (the lottery, each use's saving, the fade, the projection), so the transport is rebuilt on what each measure's saving follows. Controls save with the empty week and insulation with the roof per floor across every pilot building of every use (asserted within offices, shops and workshops), the 2019 owners chose only weakly on either, and this year's chose strongly, the pilot's results by use having been published in 2023 and the utility's portal showing each customer its load profile since 2022; the load profiles and the solar cadastre have their own uses (the meter operator's billing and network planning, the state's rooftop solar survey) and no shipped sentence links either to a measure's saving. Stage 4 (2026-11-09): judge pass 1 DETERMINISTIC APPROVE with the both-drivers hint open; passes 2 and 3 sent back a lived-in step made decisive for controls (unfiled, it forked; filed, it would be a definition read); at the author's choice the step moves controls' figures, not the call, and the both-drivers hint is recorded at 6 of 13 as the build's level-4 risk.",
+ "notes": "architecture 8 (2026-11-09): the author's platform run of architecture 7 made every one of its judgments unprompted (the lottery, each use's saving, the fade, the projection), so the transport is rebuilt on what each measure's saving follows. Controls save with the empty week and insulation with the roof per floor across every pilot building of every use (asserted within offices, shops and workshops), the 2019 owners chose only weakly on either, and this year's chose strongly, the pilot's results by use having been published in 2023 and the utility's portal showing each customer its load profile since 2022; the load profiles and the solar cadastre have their own uses (the meter operator's billing and network planning, the state's rooftop solar survey) and no shipped sentence links either to a measure's saving. Stage 4 (2026-11-09): judge pass 1 DETERMINISTIC APPROVE with the both-drivers hint open; passes 2 and 3 sent back a lived-in step made decisive for controls (unfiled, it forked; filed, it would be a definition read); at the author's choice the step moves controls' figures, not the call, and the both-drivers hint is recorded at 6 of 13 as the build's level-4 risk. Level-up (2026-11-10, the author's direction after a platform-style run lost only on the drivers): the committee's request files the €120 test on the applications received by 12 June and an €8.2 million budget for what the round pays, from the lowest grant per tonne up; each quote names its contractor, the 2019 completions show each firm's pace, 12 of the 26 roofers still quote and this year's roofs are larger, so the roofers finish about 172 of 275 roofs by 30 September and the pair pays EUR 6.99 million (85 per cent of the budget); paid in full it is 10.76 (131) and counted in jobs 8.93 (109), each funding controls alone. Judge passes 4 (FIX_NOW: the round's figures published with their bands) and 5 (APPROVE).",
  "answer_shape": "scenarios-flip",
  "weight": "modeling",
  "chain_signature": [
@@ -306,9 +306,14 @@
   "missingness-measurement",
   "modeling",
   "causal-reasoning",
+  "causal-reasoning",
+  "causal-reasoning",
+  "forecasting",
+  "forecasting",
+  "forecasting",
   "synthesis",
   "uncertainty",
-  "forecasting",
+  "synthesis",
   "synthesis",
   "synthesis"
  ],

@@ -157,14 +157,17 @@ def load(target, pro_rate=True, estimates="as filed", threshold=0.5, outbuilding
     P.withdrawn = np.zeros(N, bool)
     P.measure = np.array([""] * N, dtype=object)
     P.answers19 = []
+    P.firm_names = {}
     for r in pilot:
+        P.firm_names[firm_key(r["contractor"])] = str(r["contractor"])
         b = bidx[r["building_id"]]
         drawn = r["draw_8_july_2019"] == "drawn"
         wd = bool(r["withdrawn"])
         works = drawn and bool(r["works_completed"])
         P.answers19.append({"b": b, "measure": r["measure"], "date": d_(str(r["received"])[:10]),
                             "cost": float(r["quoted_cost_eur"]), "grant": float(r["grant_eur"]), "drawn": drawn,
-                            "withdrawn": wd, "works": works})
+                            "withdrawn": wd, "works": works, "firm": firm_key(r["contractor"]),
+                            "done": d_(str(r["works_completed"])[:10]) if works else None})
         P.answered[b] = True
         P.measure[b] = r["measure"]
         P.drawn[b] = drawn
@@ -180,7 +183,8 @@ def load(target, pro_rate=True, estimates="as filed", threshold=0.5, outbuilding
     for r in sheet(os.path.join(target, "applications_2026.xlsx")):
         P.pipe_raw.append({"no": r["application_no"], "b": bidx[r["building_id"]], "measure": r["measure"],
                            "grant": float(r["grant_eur"]), "ref_kwh": float(r["reference_consumption_kwh"]),
-                           "date": d_(str(r["received"])[:10])})
+                           "date": d_(str(r["received"])[:10]), "firm": firm_key(r["contractor"]),
+                           "cost": float(r["quoted_cost_eur"])})
     latest = {}
     for a in P.pipe_raw:
         key = (a["b"], a["measure"])
@@ -216,6 +220,12 @@ def load(target, pro_rate=True, estimates="as filed", threshold=0.5, outbuilding
 
 
 WEEKDAYS = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+
+
+def firm_key(name):
+    """a contractor as the quotes name it, with or without its legal form (the office types some off the letterhead
+    without it)"""
+    return str(name).replace(" GmbH & Co. KG", "").replace(" GmbH", "").strip()
 
 
 def street(a):

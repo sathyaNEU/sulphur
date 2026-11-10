@@ -164,7 +164,8 @@ def _page_field(par, field="PAGE"):
 
 
 def build(path, story, title, author, subject, footer, created, modified, margin_mm=18, top_mm=17, bottom_mm=17,
-          producer=None, font="Liberation Sans", header=None, page_of=False, body_pt=9.2):
+          producer=None, font="Liberation Sans", header=None, page_of=False, body_pt=9.2,
+          page_sep="     |     Page "):
     """producer: the LibreOffice release the issuing office ran at the document's date (default: the one installed)."""
     """created and modified: aware datetimes, the document's in-fiction issue and last-saved times."""
     global FONT
@@ -199,7 +200,7 @@ def build(path, story, title, author, subject, footer, created, modified, margin
         hr.font.size = Pt(7)
         hr.font.color.rgb = RGBColor.from_string("555555")
     fp = sec.footer.paragraphs[0]
-    r = fp.add_run(footer + "     |     Page ")
+    r = fp.add_run(footer + page_sep)
     r.font.name = FONT
     r.font.size = Pt(7)
     r.font.color.rgb = RGBColor.from_string("555555")

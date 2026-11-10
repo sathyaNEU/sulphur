@@ -421,6 +421,153 @@ def at_close(P, m, how="golden"):
             "n_close": n_close, "grant_close": grant_close, "paid": paid}
 
 
+# ---------------------------------------------------------------- what the round pays: the works done by 30 September
+
+BUDGET = 8200000.0         # euro the council has budgeted for the grants the round pays this year
+WORK_FROM = {PILOT: dt.date(2019, 7, 15), PIPELINE: dt.date(2026, 7, 13)}   # the Monday after the draw, the meeting
+WORK_BY = {PILOT: dt.date(2019, 9, 30), PIPELINE: dt.date(2026, 9, 30)}
+
+
+def workdays(d0, d1):
+    """the working days (Monday to Friday) from d0 to d1, both counted"""
+    n, d = 0, d0
+    while d <= d1:
+        n += d.weekday() < 5
+        d += dt.timedelta(days=1)
+    return n
+
+
+def firm_rates(P, m, unit="m2", start=None):
+    """each firm's rate of work on the pilot, from the start of the works to its last completion: a roofer's square
+    metres of roof (the cadastre's) a working day, or jobs a working day (unit "jobs", and every heating firm)"""
+    roof = m == "insulation"
+    jobs = {}
+    for a in P.answers19:
+        if a["works"] and (a["measure"] == "insulation") == roof:
+            jobs.setdefault(a["firm"], []).append(a)
+    out = {}
+    for f, js in jobs.items():
+        nd = workdays(start or WORK_FROM[PILOT], max(a["done"] for a in js))
+        size = sum(P.roof[a["b"]] for a in js) if (roof and unit == "m2") else float(len(js))
+        out[f] = size / nd
+    return out
+
+
+def round_paid(P, m, how="golden", start=None):
+    """what the measure's applications at close would be paid once the works are done: each firm takes its jobs in the
+    order its owners applied (the applications received, then its share of the late ones, each counted net of the
+    2019 withdrawal rates), and a job is paid only if the firm's 2019 rate of work fits it into the working days from
+    13 July to 30 September. how: "golden" (a roofer by square metres of roof), "jobs" (by jobs, whatever their size),
+    "pooled" (the firms' work summed into one queue), "late by rate" (the late applications shared by the firms' rates
+    of work), "none" (every job done, as in 2019), "quoted roof" (each roof's area read off its quote at the median
+    price a square metre), "late by grant" (the late roofs larger by the 2019 late answers' grant, not their roofs).
+    Returns {"paid", "share" (of the grant net of withdrawals), "n_paid" (the applications paid, expected)}"""
+    r = at_close(P, m)
+    if how == "none":
+        return {"paid": r["paid"], "share": 1.0,
+                "n_paid": r["n"] * (1 - r["w_early"]) + (r["n_close"] - r["n"]) * (1 - r["w_late"])}
+    unit_jobs = how == "jobs" or m != "insulation"
+    rate = firm_rates(P, m, "jobs" if unit_jobs else "m2")
+    nd = workdays(start or WORK_FROM[PIPELINE], WORK_BY[PIPELINE])
+    A = sorted(apps(P, m), key=lambda a: (a["date"], a["no"]))
+
+    if how == "quoted roof" and m == "insulation":
+        per = float(np.median([a["cost"] / P.roof[a["b"]] for a in P.answers19 if a["measure"] == m]))
+        quote = {a["b"]: a["cost"] / per for a in P.answers19 if a["measure"] == m}
+        quote.update({a["b"]: a["cost"] / per for a in apps(P, m)})
+        P = _with_roof(P, quote)
+        rate = firm_rates(P, m, "m2")
+
+    def size(a):
+        return 1.0 if unit_jobs else float(P.roof[a["b"]])
+    _, e_m, l_m = pilot_timing(P, m)
+    if unit_jobs:
+        ratio = 1.0
+    elif how == "late by grant":
+        ratio = float(np.mean([a["grant"] for a in l_m]) / np.mean([a["grant"] for a in e_m]))
+    else:
+        ratio = float(np.mean([P.roof[a["b"]] for a in l_m]) / np.mean([P.roof[a["b"]] for a in e_m]))
+    n = len(A)
+    late_n = r["n_close"] - n
+    late_size = float(np.mean([size(a) for a in A])) * ratio
+    late_grant = r["grant_close"] - r["grant"]
+    we, wl = r["w_early"], r["w_late"]
+    firms = sorted({a["firm"] for a in A})
+    mean_rate = float(np.mean(list(rate.values())))
+    cap = {f: rate.get(f, mean_rate) * nd for f in firms}
+    if how == "late by rate":
+        tot = sum(rate.get(f, mean_rate) for f in firms)
+        share = {f: rate.get(f, mean_rate) / tot for f in firms}
+    else:
+        share = {f: sum(1 for a in A if a["firm"] == f) / float(n) for f in firms}
+    queues = {"all": A} if how == "pooled" else {f: [a for a in A if a["firm"] == f] for f in firms}
+    if how == "pooled":
+        cap, share = {"all": sum(cap.values())}, {"all": 1.0}
+    paid = n_paid = 0.0
+    detail = []
+    for f, js in queues.items():
+        used, full = 0.0, False
+        e_paid = e_n = 0.0
+        for a in js:
+            need = size(a) * (1 - we)
+            if used + need > cap[f] + 1e-9:
+                full = True
+                break
+            used += need
+            e_paid += a["grant"] * (1 - we)
+            e_n += 1 - we
+        late_need = late_n * share[f] * late_size * (1 - wl)
+        frac = 0.0 if full else (min(1.0, (cap[f] - used) / late_need) if late_need > 0 else 1.0)
+        l_paid = late_grant * share[f] * (1 - wl) * frac
+        l_n = late_n * share[f] * (1 - wl) * frac
+        paid += e_paid + l_paid
+        n_paid += e_n + l_n
+        detail.append({"firm": f, "rate": cap[f] / nd, "room": cap[f], "received": len(js),
+                       "received_size": float(sum(size(a) for a in js)), "late_size": late_need / (1 - wl) if wl < 1 else 0.0,
+                       "late_done": frac, "paid": e_paid + l_paid, "n_paid": e_n + l_n})
+    return {"paid": paid, "share": paid / r["paid"], "n_paid": n_paid, "firms": detail, "workdays": nd,
+            "late_size_each": late_size, "late_n": late_n}
+
+
+def _with_roof(P, roof_by_b):
+    """a copy of the panel with each pilot answer's and application's roof read from elsewhere"""
+    import copy
+    Q = copy.copy(P)
+    Q.roof = P.roof.copy()
+    for b, v in roof_by_b.items():
+        Q.roof[b] = v
+    return Q
+
+
+def heating_joint_load(P):
+    """the heating firms' work were both heating measures funded: each firm's controls and heating optimisation
+    applications at close (the received ones and its share of the late ones, net of the 2019 withdrawal rates) against
+    its 2019 jobs a working day from 13 July to 30 September; the largest firm's load as a share of its room"""
+    rate = firm_rates(P, "heating controls", "jobs")
+    nd = workdays(WORK_FROM[PIPELINE], WORK_BY[PIPELINE])
+    mean_rate = float(np.mean(list(rate.values())))
+    load = {}
+    for m in ("heating optimisation", "heating controls"):
+        A = apps(P, m)
+        r = at_close(P, m)
+        n = len(A)
+        for f in {a["firm"] for a in A}:
+            c = sum(1 for a in A if a["firm"] == f)
+            load[f] = load.get(f, 0.0) + c * (1 - r["w_early"]) + (r["n_close"] - n) * c / float(n) * (1 - r["w_late"])
+    return max(load[f] / (rate.get(f, mean_rate) * nd) for f in load)
+
+
+def funded_within_budget(passing, eur_t, paid, budget=BUDGET):
+    """the measures that meet the limit, taken from the lowest grant per tonne up, each only where the budget still
+    covers what its applications will be paid"""
+    out, spent = [], 0.0
+    for m in sorted(passing, key=lambda x: eur_t[x]):
+        if spent + paid[m] <= budget:
+            out.append(m)
+            spent += paid[m]
+    return tuple(x for x in MEASURES if x in out)
+
+
 # ---------------------------------------------------------------- the pilot's saving in the season to April 2026
 
 def season_saving_2026(P, how="golden", rates=None):

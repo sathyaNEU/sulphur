@@ -324,15 +324,22 @@ def write_pilot(P, target):
             wd = ymd(W.DRAW_DATE + dt.timedelta(days=int(rng.integers(3, 45))))
         elif w.works[i]:
             done = ymd(w.done_date[i])
-        rows.append(["P19-%04d" % n, P.bid[i], ymd(ans), w.measure[i], float(w.cost[W.PILOT][i]),
-                     float(w.grant[W.PILOT][i]), "drawn" if w.drawn[i] else "not drawn", wd, done])
+        rows.append(["P19-%04d" % n, P.bid[i], ymd(ans), w.measure[i], contractor(w, i, W.PILOT),
+                     float(w.cost[W.PILOT][i]), float(w.grant[W.PILOT][i]), "drawn" if w.drawn[i] else "not drawn", wd,
+                     done])
     wb = Workbook()
-    wb_sheet(wb, "responses", ["response_no", "building_id", "received", "measure", "quoted_cost_eur", "grant_eur",
-                             "draw_8_july_2019", "withdrawn", "works_completed"], rows,
-             [11, 12, 11, 20, 14, 11, 16, 11, 14], first=True)
+    wb_sheet(wb, "responses", ["response_no", "building_id", "received", "measure", "contractor", "quoted_cost_eur",
+                             "grant_eur", "draw_8_july_2019", "withdrawn", "works_completed"], rows,
+             [11, 12, 11, 20, 30, 14, 11, 16, 11, 14], first=True)
     path = os.path.join(target, "pilot_2019_responses_and_draw.xlsx")
     wb.save(path)
     office(path, "Stadt Haldenau", "2019-07-08T15:05:00Z", "2019-10-07T08:31:00Z")
+
+
+def contractor(w, i, year):
+    """the firm the owner's quote came from"""
+    f = w.firm[year][int(i)]
+    return W.ROOFERS[f] if (w.measure if year == W.PILOT else w.measure26)[i] == "insulation" else W.HEATING_FIRMS[f]
 
 
 def write_applications(P, target):
@@ -357,14 +364,18 @@ def write_applications(P, target):
     entries.sort(key=lambda e: (e[0], e[1], P.bid[e[2]]))
     rows = []
     P.pipe_rows = []
+    rv = np.random.default_rng(SEED + 31)
     for n, (rec, _, i, m, c, g, ref) in enumerate(entries, 1):
-        rows.append(["A26-%04d" % n, P.bid[i], ymd(rec), m, float(c), float(g), int(ref)])
+        firm = contractor(w, i, W.PIPELINE)
+        if rv.random() < 0.06:              # typed off the quote's letterhead without the legal form
+            firm = firm.replace(" GmbH & Co. KG", "").replace(" GmbH", "")
+        rows.append(["A26-%04d" % n, P.bid[i], ymd(rec), m, firm, float(c), float(g), int(ref)])
         P.pipe_rows.append({"no": "A26-%04d" % n, "b": int(i), "measure": m, "grant": float(g), "ref_kwh": float(ref),
                             "date": rec})
     wb = Workbook()
-    wb_sheet(wb, "applications", ["application_no", "building_id", "received", "measure", "quoted_cost_eur",
-                                  "grant_eur", "reference_consumption_kwh"], rows, [14, 12, 11, 20, 14, 11, 16],
-             first=True)
+    wb_sheet(wb, "applications", ["application_no", "building_id", "received", "measure", "contractor",
+                                  "quoted_cost_eur", "grant_eur", "reference_consumption_kwh"], rows,
+             [14, 12, 11, 20, 30, 14, 11, 16], first=True)
     path = os.path.join(target, "applications_2026.xlsx")
     wb.save(path)
     office(path, "Stadt Haldenau", "2026-05-21T08:40:00Z", "2026-06-15T16:22:00Z")
