@@ -554,3 +554,9 @@ closure.
   writer's Word stage and saved in Word's form (postprocess.normalize_docx), each with its own author and its drafting
   and last-save stamps, and both zips are cut by the house zip_folder with each file at its own save time. No
   sentence, cell or figure moved.
+- 2026-11-10, architecture 3 returned at review (the author's account: one hidden trap decides it; the client's level 5
+  wants three or four pieces of genuine analytical rigor, nothing planted, messy and ambiguous data with no rule to
+  apply). Read against the bar of 2026-11-09 it is the returned shape: the fourth-quarter shock was built into the
+  exposed employers of two counties only, their filing channels were set so the missing-alone reading would see them,
+  and one sentence (a report missing from a transmission that arrived marks an employer in trouble) left a measurement
+  on closed quarters. Re-rooted to architecture 4 as a results chain in the same world at the author's word.

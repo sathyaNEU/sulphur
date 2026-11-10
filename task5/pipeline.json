@@ -1,11 +1,11 @@
 {
  "task": "task5",
- "status": "READY",
+ "status": "RETURNED",
  "domain": "survey-research-official-statistics",
  "objective": "etl",
- "stage": 5,
- "stage_name": "ready",
- "updated": "2026-11-08",
+ "stage": 2,
+ "stage_name": "design",
+ "updated": "2026-11-10",
  "stump": "A competent solver conforms the reports, amendments and worksites, imputes each employer whose December report had not arrived as the field does (its September jobs moved by its county's reporting employers' change), treats an employer missing two quarters as ceased, sees that imputation back-test with a steady upward miss under 0.7 of a point on the closed quarters and files that no county qualifies; a report missing from a transmission that arrived marks an employer that has shed jobs or stopped trading, which keeps 0.29 of its September jobs on the quarters old enough for inactivations to have landed, and that puts Garrow and Ostrom past the line.",
  "architecture": 3,
  "loops": 0,
@@ -69,9 +69,17 @@
    "portal": "both platform runs on target.zip 14f7ae29 landed the call (the golden five, 396 vacant) and the register cells; scores not reported, the author's word: not stumped",
    "moves": "re-rooted to architecture 3 in a new world, dataset and shell (a fictional US state's December 2026 covered-employment flash from unemployment insurance quarterly reports, the 2027 Community Transition Fund)",
    "commit": ""
+  },
+  {
+   "date": "2026-11-10",
+   "source": "review",
+   "repair": "design",
+   "portal": "architecture 3 sent back at review; the author's account of the feedback (the review text itself was not pasted into the session): the task stumps by one hidden trap; the client's level 5 asks for three or four pieces of genuine analytical rigor, nothing planted, data that is messy and ambiguous without a rule that turns it into rule application, and runs that fail because they missed three or four analytical procedures (the project lead's review of 2026-11-09, guidelines/client/project-lead-review-2026-11-09.md and depth-scale-2026-11-09.md)",
+   "moves": "re-rooted to architecture 4 as a results chain in the same State of Franklin world at the author's word (keep the task, build on top of it, make it harder): the missing-alone reading stays as one result among nine, the fourth-quarter shock built into two counties' exposed employers is replaced by a statewide housing downturn every county carries by its industry mix, and the chain adds the reconciliation to the published total, this quarter's closures carried to the late transmissions, the employers liable but not yet registered, the seasonal split of worksites whose report is outstanding and a replay on December 2025",
+   "commit": ""
   }
  ],
- "resume": "stage 6 runs: the author uploads prompt.txt and target.zip; /triage-runs task5 when the two runs come back",
+ "resume": "stage 1 draw: architecture 4, a results chain in the same world (card redrawn with answer_shape, weight and chain_signature), then stage 2 design and precut.py",
  "approved": null,
  "delivered": null,
  "portal": null,
@@ -202,5 +210,6 @@
   "triage": "",
   "recorded": "",
   "history": []
- }
+ },
+ "doctrine": "throughout"
 }
