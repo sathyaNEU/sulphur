@@ -433,25 +433,38 @@ def cmd_selftest():
     else:
         ok = False
         print("  FAIL  task4 lineage skeletons for architectures 6 and 7 missing")
-    t14 = {arch_num(l.get("architecture")): l for l in (cards.get("task14") or {}).get("lineage") or []
-           if isinstance(l, dict) and l.get("skeleton")}
-    t6 = (cards.get("task6") or {}).get("skeleton")
-    if t6 and "1" in t14:
-        expect("task6 v7 vs task457 (task14 arch 1), both approved", t6, t14["1"]["skeleton"], 0)
-        expect("task457 (task14 arch 1) vs task6 v7", t14["1"]["skeleton"], t6, 0)
-    else:
+    # The approved builds, read from corpus/approved.json wherever their skeleton sits (a card or a lineage entry):
+    # every pair stays apart, and each passes as a new draw against everything else on file.
+    try:
+        rows = json.load(open(APPROVED)).get("approved", [])
+    except Exception:
+        rows = []
+    appr = []
+    for a in rows:
+        c = cards.get(a["task"]) or {}
+        sk = c.get("skeleton") if arch_num(c.get("architecture")) == str(a["architecture"]) else None
+        for l in c.get("lineage") or []:
+            if sk is None and isinstance(l, dict) and l.get("skeleton") and arch_num(l.get("architecture")) == str(a["architecture"]):
+                sk = l["skeleton"]
+        appr.append(("%s v%s%s" % (a["task"], a["architecture"], (" (%s)" % a["alias"]) if a.get("alias") else ""), a["task"], sk))
+    if len(appr) < 2 or any(sk is None for _, _, sk in appr):
         ok = False
-        print("  FAIL  task6 skeleton or task14 lineage arch 1 skeleton missing")
+        print("  FAIL  an approved build in corpus/approved.json has no skeleton on its card or lineage: %s"
+              % ", ".join(lab for lab, _, sk in appr if sk is None) or "fewer than two approved builds")
+    else:
+        for i, (la, _, sa) in enumerate(appr):
+            for lb, _, sb in appr[i + 1:]:
+                expect("%s vs %s, both approved" % (la, lb), sa, sb, 0)
+                expect("%s vs %s" % (lb, la), sb, sa, 0)
     allc = load_cards()
-    for label, sk in (("task6 v7 as a new draw", t6), ("task457 as a new draw", (t14.get("1") or {}).get("skeleton"))):
+    for label, task, sk in appr:
         if not sk:
             continue
         probe = {"task": "probe_selftest", "architecture": 1, "skeleton": sk}
-        blocks = [f for f in findings(probe, [c for c in allc if c.get("task") not in ("task6", "task14")])
-                  if f["level"] == "BLOCK"]
+        blocks = [f for f in findings(probe, [c for c in allc if c.get("task") != task]) if f["level"] == "BLOCK"]
         good = not blocks
         ok &= good
-        print("  %s  %-58s %s" % ("PASS" if good else "FAIL", label + " meets no skeleton BLOCK",
+        print("  %s  %-58s %s" % ("PASS" if good else "FAIL", label + " as a new draw meets no skeleton BLOCK",
               "; ".join(f["rule"] + ": " + f["msg"][:90] for f in blocks) if blocks else "no BLOCK"))
     # Every accepted client task at depth 4 or 5 and every example passes as a new draw against the corpus minus
     # itself, with every rule on: the guard must never refuse what the client accepts.
