@@ -1,11 +1,11 @@
 {
  "task": "task7",
- "status": "READY",
+ "status": "RETURNED",
  "domain": "energy-systems-utilities",
  "objective": "experiment-causal",
  "stage": 5,
  "stage_name": "ready",
- "updated": "2026-11-10",
+ "updated": "2026-11-11",
  "stump": "",
  "architecture": 8,
  "loops": 0,
@@ -115,9 +115,16 @@
    "portal": "version 17: stumped, determinism (main, supp), solution (main, supp), task type and stumped type passed; prelim verdict sent back for fixes: the funding answer turns on one thing (the service visits, about 7 per cent off most passed-over buildings and none of the works buildings), and past it the plan's saving-rate and appraisal formulas carry the rest",
    "repair": "design (re-root to a results chain, architecture 7, same world at the reviewer's direction)",
    "feedback": "task7/runs/review_2026-11-09.md"
+  },
+  {
+   "date": "2026-11-11",
+   "source": "review",
+   "portal": "returned at review: the deciding step (insulation's payout under roofer capacity, 12 of the 26 roofers on this year's larger roofs) is one constructed hidden factor whose fix is routine once named, and it bit only in insulation; the test responses reproduced the pilot seasons, both per-building transports, the fade, the close counts and every carbon call. The holistic audit on the same version had passed it (level 5, DEEP, pinned; loss concentration high, information only).",
+   "repair": "design (re-root to architecture 9 in the same world at the reviewer's direction: the call moved onto analysis, the capacity out of the decision)",
+   "feedback": "task7/runs/review_2026-11-11.md"
   }
  ],
- "resume": "READY: the author rewrites prompt.txt in their own words (the Prompt contract in the design note lists what it may not drop or add, the budget among them), re-gates it with voice-check.py --rewrite and leak.py, uploads it with target.zip, generates the two runs, then /triage-runs task7",
+ "resume": "re-root at stage 1 (architecture 9): the call on the service checks reaching the passed-over owners (heating optimisation, the forward window without them) and the owner-level draw (the 90 per cent range), capacity out of the decision",
  "approved": null,
  "delivered": "2026-11-08",
  "portal": null,
@@ -280,8 +287,8 @@
   }
  },
  "restored": "2026-10-14: architecture 3 (a full refresh at the author's request) drew judge SEND_BACK at stage 4, and the author chose to restore this architecture as task7's live build (pack unchanged from SHIPPED 59aaaba)",
- "portal_status": "",
- "portal_status_date": "",
+ "portal_status": "RETURNED",
+ "portal_status_date": "2026-11-11",
  "migrated_from": {
   "project": "Mark",
   "task": "task127",

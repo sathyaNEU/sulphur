@@ -526,3 +526,12 @@ May not drop or change: the question (which measures, under €120 of grant per 
   firms given more fitters so the two heating measures together would fit (the busiest firm at 81 per cent of its
   room); a data-only change, re-checked by the generator's assertions and leak.py, every graded figure moving by under a
   per cent bar the round's payment (6.99 million, inside the published bands).
+- 2026-11-11, platform review of architecture 8 (returned; the holistic audit on the same version had passed it at
+  level 5, pinned): the deciding step was one constructed hidden factor, the roofers' capacity on this year's larger
+  roofs, which bit only in insulation (the heating firms had room) and left one routine step once named (pace times
+  working days per firm; every reading within a tenth). The test responses reproduced the pilot seasons, both
+  per-building transports (the empty week from the load profiles with the lived-in buildings, the roof per floor from
+  the cadastre), the fade, the round at close and every carbon call, so the effort test's careful column, which priced
+  both transports as lost, was 40 to 60 points optimistic as the run record warns. Agreed with the return, no
+  rebuttal (`runs/review_2026-11-11.md`); re-rooted at stage 1 as architecture 9 in the same world at the reviewer's
+  direction, the call moved onto analysis and the capacity out of the decision.
