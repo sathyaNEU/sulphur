@@ -1,12 +1,12 @@
 {
  "task": "task9",
- "status": "PAUSED",
+ "status": "RETURNED",
  "domain": "quantitative-finance",
  "subdomain": "volatility-derivatives-pricing (client task types: derivative pricing, market data and curve validation, counterparty exposure; a variance-swap ladder's room inside settlement and collateral limits, how firmly the record pins each ladder's average, and the sleeve's 2027 plan with its range)",
  "objective": "forecasting",
  "stage": 1,
  "stage_name": "draw",
- "updated": "2026-11-10",
+ "updated": "2026-11-11",
  "call": "set the new 3-month ladder at USD 114,400 a point (collateral limit, 20 November 2008), not the 200,000 quoted for nor the 124,500 a 30-day stand-in for the missing strikes supports; carry USD 5,728,000 in the 2027 plan, four times in five between -4,203,000 and 12,204,000",
  "stump": "results chain of eleven on real market records: R1 the 3-month ladder's average settlement per sale on the record since 2007 with its early strikes rebuilt, R2 its worst calendar year, R3 the 12-month ladder's peak collateral, R4 the largest 3-month size inside both limits with what binds, R5 the largest 6-month size, R6 and R7 the 80 per cent range of each ladder's average, R8 the open swaps' expected 2027 settlement, R9 its range, R10 the 2027 plan by ladder over all 21 settlements with its joint range, R11 the recommendation",
  "architecture": 8,
@@ -55,11 +55,27 @@
     "graded": false,
     "verdict": "not stumped (author's report); both runs bought Ostvale",
     "texts": "runs/arch6_run1.md, runs/arch6_run2.md"
+   },
+   {
+    "architecture": 8,
+    "date": "2026-11-11",
+    "graded": false,
+    "verdict": "landed: both runs on the golden's call and every headline figure inside its band (3-month 111,500 and 111,000 bound by collateral on 20 November 2008; 6-month 57,500 and 57,300; open swaps 2,618,000 and 2,487,000); the only losses a defensible alternative on R1 (281,000) and on the predictive ranges' forecast basis (R9 low end in both, R10's range in run 1); no score or rubric supplied",
+    "texts": "runs/arch8_run1.md, runs/arch8_run2.md, runs/arch8_holistic_audit.md, runs/arch8_triage.md"
    }
   ]
  },
- "returned": [],
- "resume": "stage 1: architecture 9 is not drawn. Architecture 8 is spent on Gate F and the first lead for 9 (Cboe's option-strategy benchmark indices, back-tested against live years) was explored on the real data and stopped at NO-GO: one strong pinned judgment (the gap at launch is the era, not the back-test), one loose one, and no separable pick (both in Tried and rejected, with the numbers). Design on what the two stage 4 judges' first passes showed: textbook method choices on clean public series are landed; pooled readings where composition differs, effects outside the obvious window and selected units are lost. That needs real position-level or fund-level records, and every such source tried (Treasury auction results, the New York Fed's holdings, fund price histories) is on a host this environment's network does not allow: the author chooses the source and approves the host before the next draw.",
+ "returned": [
+  {
+   "date": "2026-11-11",
+   "source": "review",
+   "repair": "design",
+   "portal": "holistic audit: a careful, competent build reaches the headline answers (a total-variance rebuild gives 112,600, a log-ratio model 111,500, both in band; the 6-month size does not depend on the rebuild); the separating asks loosely pinned (R1's band excludes a defensible 281,000; the predictive ranges move outside their bands under a vol-scaled joint replay); asked for a wider band or a stated rebuild convention, the forecast basis pinned in D.7(e), and a decisive checkable judgment such as a stressed dealer-quote overlay or a collateral funding constraint that changes the binding day",
+   "fix": "re-rooted at the author's word: measured on the real series, the stressed dealer basis (skew-index jump term) moves the size 114,400 to about 104,000 with the day unchanged and a proportional markup lands on it by coincidence; the world is spent and architecture 9 draws another world",
+   "commit": ""
+  }
+ ],
+ "resume": "stage 1: architecture 9 to draw in another world (quantitative finance, forecasting); architecture 8 returned at the platform's holistic audit and spent (runs/arch8_triage.md); FRED and the Cboe index downloads are reachable from this environment",
  "approved": null,
  "submitted": null,
  "portal": {

@@ -599,3 +599,14 @@ the name of any attached file; who is asking; how many swaps are open or still t
   decidable pick fall short of four, so nothing was drawn. A draw here needs real records of investable funds or
   other position-level records (implementation by structure, fund selection, closed funds), which sit on hosts this
   environment does not allow.
+- 2026-11-11, architecture 8 on the platform (the author uploaded the 4a76ff2f cut): both runs landed the call and every
+  headline figure (3-month 111,500 and 111,000 bound by collateral on 20 November 2008; 6-month 57,500 and 57,300; open
+  swaps 2,618,000 and 2,487,000; 12-month peak 25,877,000 and 25,876,000), losing only a defensible 281,000 on R1 and the
+  predictive ranges' low ends under their own joint replays (runs/arch8_triage.md). The holistic audit asked for a wider R1
+  band, the forecast basis pinned in D.7(e) and a decisive judgment such as a stressed dealer-quote overlay or a funding
+  constraint that moves the binding day. Measured before deciding: a dealer basis tied to the skew index (the jump term a
+  variance swap prices and the 30-day index omits; 0.6 to 1.1 points in the dealer window, 3 to 7 on its stressed days)
+  moves the 3-month size from 114,400 to 104,000 with the day unchanged, a proportional markup fitted on the window lands at
+  104,500 (the skew index's rise since 2014 offsets the crisis levels), and the cap fixes every 3-month swap open on 20
+  November 2008 at 2.625 times its strike, so no mark-side judgment moves that ladder; conditioning the expectation on the
+  review date's state moves nothing beyond its noise. Spent; re-rooted at the author's word into another world.
