@@ -1,41 +1,42 @@
 {
  "task": "task1",
- "status": "DESIGN",
+ "status": "READY",
  "domain": "product-analytics",
  "subdomain": "retention-cohort-lifetime-value-modeling",
  "objective": "forecasting",
- "stage": 2,
- "stage_name": "design",
+ "stage": 5,
+ "stage_name": "ready",
  "updated": "2026-11-10",
  "doctrine": "throughout",
- "call": "",
- "chain": "R1 paying subscribers by title at 31 Oct 2026; R2 realised 36-month net revenue per start of the Jul-Sep 2023 starts by channel (household returns included); R3 end-of-intro exit share per 2027 offer at 2026 prices; R4 its change at a full price 2 euros higher; R5 24-month survival of the Nov 2025-Apr 2026 starts by channel; R6 extra cancellations from the April 2027 rise among the Oct 2026 base by title; R7 expected 36-month net revenue per start for every 2027 line; R8 the funded lines under the budget; R9 the Oct 2026 base paying at 31 Dec 2027 by title",
+ "call": "fund 8 of the plan's 18 lines (APP-BHR, PART-GAZ, SEA-BHR, SEA-ELN, SEA-GAZ, SEA-KBO, TEL-BHR, TEL-KBO) for EUR 84,308, each at least 3.5 times its planned cost per start in expected 36-month net revenue; not the 14 lines for EUR 141,575 the careful but hurried reading funds",
+ "chain": "R1 paying subscribers by title at 31 Oct 2026; R2 realised 36-month value of the Jul-Sep 2023 starts by channel with household returns; R3 end-of-intro exit share per 2027 offer at 2026 prices; R4 points the April 2027 prices add; R5 three-year survival of the Nov 2025-Apr 2026 starts by channel; R6 extra cancellations from the April 2027 rise among the Oct 2026 base by title; R7 expected 36-month net revenue per start per line; R8 the funded lines and budget; R9 the plan's 2027 starts paying on 31 Dec 2027 by channel",
  "architecture": 3,
  "loops": 0,
  "precut": {
-  "exit": null,
-  "date": ""
+  "exit": 0,
+  "date": "2026-11-10",
+  "checks": "85 checks, 0 FAIL, 2 WARN"
  },
  "leak": {
-  "leak_py": "",
-  "reader": ""
+  "leak_py": "REVIEW (answer figure 3.5 is the filed bar; ranking flags rank nothing), 2026-11-10",
+  "reader": "pass 1 and pass 2 clean of process sentences and ranking files; no one thing; survey free text, channel code list and plan formulas fixed, 2026-11-10"
  },
  "duplicate_check": {
-  "heart": "",
-  "nearest": ""
+  "heart": "WARN (overuse.weight, overuse.forum, repeat.deliverables; answered in the card's notes)",
+  "nearest": "task8 v4 lineage 0.09"
  },
  "judge": {
-  "verdict": "",
-  "disposition": "",
-  "gate_h": "",
-  "report": ""
+  "verdict": "DETERMINISTIC",
+  "disposition": "APPROVE",
+  "gate_h": "pass (one_thing none; one fact rescues about 2 of 15 graded units)",
+  "report": "task1/determinism_check_report.md (re-judge after the R5 and R9 change; order not kept by the thread, its own first pass priced accordingly)"
  },
- "paper_pair": null,
+ "paper_pair": 34.6,
  "effort": {
-  "quick": null,
-  "careful": null,
-  "thorough": null,
-  "largest_hint": ""
+  "quick": 7.0,
+  "careful": 34.6,
+  "thorough": 100.0,
+  "largest_hint": "the April 2025 rise also raised the share leaving at the end of the introductory price; rescues 2 of 9 (R3, R4)"
  },
  "runs": {
   "run1": null,
@@ -71,7 +72,7 @@
    "note": "the platform's holistic audit failed the uploaded cut on determinism (runs/arch2/holistic_audit.md): the commitment not forced by the rounding, the band's contents pinned by no file, two note figures stated as ranges, the draft failing a naive trailing view too; repaired in the generator (policy v5 section 5.2 and 5.3, the commitment as the largest 0.1 million step met in 80 per cent of outcomes, the January 2026 calendar, flat deal creation, a calendar index on Team cancellations, utilisation drifting at signing, estimation draws in the band, the world re-seeded)"
   }
  ],
- "resume": "stage 2: write the results chain with bands and pins, the hidden factor record, the effort test on paper, the fork and closure tables, the asks and prompt.txt; then precut.py",
+ "resume": "READY: the author rewrites prompt.txt in their own words (voice-check.py task1 --rewrite), uploads it with target.zip, generates the two runs, then /triage-runs task1",
  "approved": null,
  "submitted": null,
  "portal": {
@@ -103,6 +104,10 @@
   {
    "date": "2026-11-10",
    "event": "architecture 2 spent (single-total risk); re-rooted to architecture 3, Medienhaus Brückenhafen's 2027 digital acquisition lines ranked under a budget cap, nine results"
+  },
+  {
+   "date": "2026-11-10",
+   "event": "architecture 3 built and checked: fund 8 of 18 lines for EUR 84,308; careful but hurried pass 34.6 (14 lines for EUR 141,575), six distinct wrong sets over eleven shortcuts; judge DETERMINISTIC APPROVE twice; READY"
   }
  ]
 }

@@ -1,39 +1,51 @@
 # leak check, task1
 
-**Verdict: REVIEW.** 12 files read, 60 golden figures and 7 candidate names taken from submission.md, 25 stump terms taken from the design note.
+**Verdict: REVIEW.** 18 files read, 140 golden figures and 4 candidate names taken from submission.md, 25 stump terms taken from the design note.
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: trailing, policy, months, commitment, nearest, renewal, carries, pooled, creation, golden, january, hurried, history, inside, chosen, account, graded, minimum, utilisation, family, forward, priced, growth, asserted, calendar
+Stump terms swept: million, trailing, golden, pooled, carries, reading, accounts, creation, chosen, priced, family, commitment, graded, carried, hurried, missed, uploaded, history, nearest, careful, social, account, growth, standard, inside
+
+## 3 answer figures in the pack (REVIEW 2)
+- **REVIEW** `digital_subscription_kpi_standard.pdf`: golden figure 5.1 appears: ...d is not a line of the plan. 5. Monthly reporting 5.1 Controlling reports, for each title and month, th...
+- **REVIEW** `digital_subscription_kpi_standard.pdf`: golden figure 3.5 appears: ...xpected 36-month value of its starts is at least 3.5 times its planned cost per start, the plan's spen...
 
 ## 4 design-note vocabulary (REVIEW 1)
-- **REVIEW** `arr_reporting_policy_2026.pdf`: 8 of 25 stump-paragraph terms appear (policy, months, commitment, renewal, carries, history); read whether the document names the move
+- **REVIEW** `digital_subscription_kpi_standard.pdf`: 4 of 25 stump-paragraph terms appear (carries, accounts, account, standard); read whether the document names the move
 
-## 9 dates after the setting (INFO 1)
-- **INFO** `-`: no --asof given, sweep skipped (pass the fiction's as-of date)
+## 6 ranking artifacts (REVIEW 3, INFO 2)
+- **REVIEW** `marketing_spend_2023-01_2026-10.csv`: names 3 of 4 answer-set candidates beside numbers; confirm it does not rank them on the decision question
+- **REVIEW** `media_plan_2027.xlsx`: names 3 of 4 answer-set candidates beside numbers; confirm it does not rank them on the decision question
+- **REVIEW** `print_circulation_2023-2026.csv`: names 3 of 4 answer-set candidates beside numbers; confirm it does not rank them on the decision question
+- **INFO** `digital_subscription_kpi_standard.pdf`: names 3 of 4 answer-set candidates; confirm it does not rank them on the decision question
+- **INFO** `price_list_digital_2027.pdf`: names 3 of 4 answer-set candidates; confirm it does not rank them on the decision question
+
+## 9 dates after the setting (REVIEW 5)
+- **REVIEW** `logins.csv`: 173 ISO dates after 2026-11-04, e.g. 2026-11-05, 2026-11-06, 2026-11-07, 2026-11-08, 2026-11-09
+- **REVIEW** `payment_exceptions_2023-01_2026-10.csv`: 16 ISO dates after 2026-11-04, e.g. 2026-11-05, 2026-11-06, 2026-11-08, 2026-11-09, 2026-11-11
+- **REVIEW** `payment_methods.csv`: 148 ISO dates after 2026-11-04, e.g. 2026-11-05, 2026-11-06, 2026-11-07, 2026-11-08, 2026-11-09
+- **REVIEW** `price_periods_2023-01_2026-10.csv`: 251 ISO dates after 2026-11-04, e.g. 2026-11-05, 2026-11-06, 2026-11-07, 2026-11-08, 2026-11-09
+- **REVIEW** `subscriptions_2023-01_2026-10.csv`: 1794 ISO dates after 2026-11-04, e.g. 2026-11-05, 2026-11-06, 2026-11-07, 2026-11-08, 2026-11-09
 
 ## 10 container metadata (INFO 1)
 - **INFO** `-`: container gate PASS (PASS: 0 FAIL, 0 WARN)
 
+## 11 prompt gate (REVIEW 1)
+- **REVIEW** `prompt.txt`: shell quota: question form 'which' at 33% of 15 prompts (cap 30%); reword at the role level, not the verb
+
 ## 12 client quality check (INFO 2)
-- **INFO** `-`: 12 usable files (10 or more required)
+- **INFO** `-`: 18 usable files (10 or more required)
 - **INFO** `-`: 2 file categories: document, spreadsheet (2 or more required)
 
 ## 1 file names (clean)
 
 ## 2 author vocabulary (clean)
 
-## 3 answer figures in the pack (clean)
-
 ## 5 announcements (clean)
-
-## 6 ranking artifacts (clean)
 
 ## 7 hidden content (clean)
 
 ## 8 column names (clean)
-
-## 11 prompt gate (clean)
 
 
 ## Solver's-eye read

@@ -1,710 +1,576 @@
 {
- "band_churn": [
-  800000,
-  800000
- ],
- "band_contraction": [
-  200000,
-  200000
- ],
- "band_dec27": [
-  10200000,
-  10230000
- ],
- "band_new_bus": [
-  1840000,
-  1870000
- ],
- "band_new_open": [
-  800000,
-  800000
- ],
- "band_p10": [
-  9910000,
-  9960000
- ],
- "band_p90": [
-  10480000,
-  10550000
- ],
- "band_path": [
-  [
-   9040000,
-   9050000
-  ],
-  [
-   9190000,
-   9190000
-  ],
-  [
-   9230000,
-   9240000
-  ],
-  [
-   9300000,
-   9320000
-  ],
-  [
-   9390000,
-   9410000
-  ],
-  [
-   9470000,
-   9500000
-  ],
-  [
-   9580000,
-   9610000
-  ],
-  [
-   9720000,
-   9750000
-  ],
-  [
-   9780000,
-   9810000
-  ],
-  [
-   9850000,
-   9890000
-  ],
-  [
-   9900000,
-   9940000
-  ],
-  [
-   9970000,
-   10010000
-  ],
-  [
-   10070000,
-   10110000
-  ],
-  [
-   10200000,
-   10230000
-  ]
- ],
- "band_price": [
-  180000,
-  180000
- ],
- "band_team_left": [
-  1300000,
-  1300000
- ],
- "bridge": {
-  "Business accounts lost": -810000,
-  "Business seat additions": 220000,
-  "Business seat reductions": -220000,
-  "Change in Team": 130000,
-  "New Business": 1870000,
-  "Price": 180000
- },
- "bridge_gap": 0,
- "churn": 800000,
- "churn_10k": 810000,
- "commitment": 10.0,
- "commitment_hi": 10.0,
- "commitment_lo": 10.0,
- "commitment_met_pct": 83,
- "commitment_next": 10.1,
- "commitment_next_met_pct": 69,
- "contraction": 200000,
- "contraction_10k": 220000,
- "conventions": {
-  "common_factor": 0.25,
-  "drift_windows": [
-   12,
-   18,
-   24
-  ],
-  "first_renewal": 1,
-  "list_rise_pct": 26.7,
-  "months": 14,
-  "pct": [
-   10,
-   20,
-   80,
-   90
-  ],
-  "per": 100,
-  "policy_sections": [
-   2.1,
-   2.2,
-   2.3,
-   2.4,
-   4.1,
-   4.3,
-   4.4,
-   4.5,
-   4.6,
-   5.2,
-   5.3
-  ],
-  "precision": {
-   "churn": 50000,
-   "contraction": 100000,
-   "new_open": 100000,
-   "team_left": 100000
+ "bands": {
+  "R2": {
+   "APP": [
+    177.0,
+    180.0
+   ],
+   "DIR": [
+    262.0,
+    265.0
+   ],
+   "PART": [
+    219.0,
+    229.0
+   ],
+   "SEA": [
+    217.0,
+    223.0
+   ],
+   "SOC": [
+    149.0,
+    150.0
+   ],
+   "TEL": [
+    123.0,
+    131.0
+   ]
   },
-  "price_rise_month": 1,
-  "rounding": [
-   10000,
-   50000,
-   100000,
-   0.1
+  "R3": {
+   "G3": [
+    71.9,
+    72.5
+   ],
+   "H6": [
+    25.7,
+    29.2
+   ],
+   "J12": [
+    21.0,
+    26.7
+   ],
+   "M3E1": [
+    57.5,
+    57.9
+   ],
+   "PM1": [
+    66.7,
+    67.0
+   ]
+  },
+  "R4": {
+   "G3": [
+    5.1,
+    5.7
+   ],
+   "H6": [
+    5.9,
+    8.1
+   ],
+   "J12": [
+    5.4,
+    7.6
+   ],
+   "M3E1": [
+    6.3,
+    6.7
+   ],
+   "PM1": [
+    5.8,
+    6.1
+   ]
+  },
+  "R5": {
+   "APP": [
+    12.1,
+    12.4
+   ],
+   "DIR": [
+    28.5,
+    29.0
+   ],
+   "PART": [
+    13.3,
+    13.6
+   ],
+   "SEA": [
+    27.1,
+    27.6
+   ],
+   "SOC": [
+    9.9,
+    10.2
+   ],
+   "TEL": [
+    8.7,
+    9.1
+   ]
+  },
+  "R6": {
+   "BHR": [
+    170.0,
+    176.0
+   ],
+   "ELN": [
+    49.0,
+    51.0
+   ],
+   "GAZ": [
+    101.0,
+    105.0
+   ],
+   "KBO": [
+    88.0,
+    92.0
+   ]
+  },
+  "R7": {
+   "APP-BHR": [
+    284.0,
+    290.0
+   ],
+   "APP-GAZ": [
+    109.0,
+    114.0
+   ],
+   "APP-KBO": [
+    134.0,
+    139.0
+   ],
+   "PART-BHR": [
+    221.0,
+    227.0
+   ],
+   "PART-GAZ": [
+    259.0,
+    268.0
+   ],
+   "PART-KBO": [
+    204.0,
+    211.0
+   ],
+   "SEA-BHR": [
+    370.0,
+    375.0
+   ],
+   "SEA-ELN": [
+    182.0,
+    187.0
+   ],
+   "SEA-GAZ": [
+    203.0,
+    209.0
+   ],
+   "SEA-KBO": [
+    333.0,
+    338.0
+   ],
+   "SOC-BHR": [
+    126.0,
+    132.0
+   ],
+   "SOC-ELN": [
+    192.0,
+    201.0
+   ],
+   "SOC-GAZ": [
+    216.0,
+    225.0
+   ],
+   "SOC-KBO": [
+    111.0,
+    118.0
+   ],
+   "TEL-BHR": [
+    301.0,
+    314.0
+   ],
+   "TEL-ELN": [
+    96.0,
+    100.0
+   ],
+   "TEL-GAZ": [
+    98.0,
+    103.0
+   ],
+   "TEL-KBO": [
+    272.0,
+    282.0
+   ]
+  },
+  "R9": {
+   "APP": [
+    254.0,
+    255.0
+   ],
+   "PART": [
+    369.0,
+    372.0
+   ],
+   "SEA": [
+    478.0,
+    480.0
+   ],
+   "SOC": [
+    402.0,
+    407.0
+   ],
+   "TEL": [
+    497.0,
+    498.0
+   ]
+  }
+ },
+ "budget": 84308,
+ "careful": {
+  "line_value": {
+   "APP-BHR": 295,
+   "APP-GAZ": 114,
+   "APP-KBO": 142,
+   "PART-BHR": 256,
+   "PART-GAZ": 290,
+   "PART-KBO": 238,
+   "SEA-BHR": 354,
+   "SEA-ELN": 180,
+   "SEA-GAZ": 203,
+   "SEA-KBO": 327,
+   "SOC-BHR": 156,
+   "SOC-ELN": 227,
+   "SOC-GAZ": 257,
+   "SOC-KBO": 150,
+   "TEL-BHR": 314,
+   "TEL-ELN": 98,
+   "TEL-GAZ": 111,
+   "TEL-KBO": 289
+  },
+  "plan_paying_total": 2083,
+  "rise_extra_total": 229,
+  "survival_36": {
+   "APP": 12.1,
+   "DIR": 28.6,
+   "PART": 15.6,
+   "SEA": 25.5,
+   "SOC": 12.0,
+   "TEL": 9.1
+  },
+  "value_2023q3": {
+   "APP": 171,
+   "DIR": 249,
+   "PART": 217,
+   "SEA": 204,
+   "SOC": 128,
+   "TEL": 111
+  }
+ },
+ "careful_budget": 141575,
+ "careful_funded": [
+  "APP-BHR",
+  "PART-BHR",
+  "PART-GAZ",
+  "PART-KBO",
+  "SEA-BHR",
+  "SEA-ELN",
+  "SEA-GAZ",
+  "SEA-KBO",
+  "SOC-BHR",
+  "SOC-ELN",
+  "SOC-GAZ",
+  "SOC-KBO",
+  "TEL-BHR",
+  "TEL-KBO"
+ ],
+ "funded": [
+  "APP-BHR",
+  "PART-GAZ",
+  "SEA-BHR",
+  "SEA-ELN",
+  "SEA-GAZ",
+  "SEA-KBO",
+  "TEL-BHR",
+  "TEL-KBO"
+ ],
+ "hurdle": 3.5,
+ "line_cost": {
+  "APP-BHR": 58.5,
+  "APP-GAZ": 53.0,
+  "APP-KBO": 41.51,
+  "PART-BHR": 67.5,
+  "PART-GAZ": 52.0,
+  "PART-KBO": 62.51,
+  "SEA-BHR": 60.0,
+  "SEA-ELN": 50.49,
+  "SEA-GAZ": 56.0,
+  "SEA-KBO": 49.0,
+  "SOC-BHR": 41.0,
+  "SOC-ELN": 59.0,
+  "SOC-GAZ": 67.5,
+  "SOC-KBO": 36.5,
+  "TEL-BHR": 72.5,
+  "TEL-ELN": 69.5,
+  "TEL-GAZ": 63.0,
+  "TEL-KBO": 69.49
+ },
+ "line_multiple": {
+  "APP-BHR": 4.92,
+  "APP-GAZ": 2.12,
+  "APP-KBO": 3.27,
+  "PART-BHR": 3.3,
+  "PART-GAZ": 5.09,
+  "PART-KBO": 3.29,
+  "SEA-BHR": 6.2,
+  "SEA-ELN": 3.67,
+  "SEA-GAZ": 3.69,
+  "SEA-KBO": 6.82,
+  "SOC-BHR": 3.13,
+  "SOC-ELN": 3.32,
+  "SOC-GAZ": 3.29,
+  "SOC-KBO": 3.08,
+  "TEL-BHR": 4.19,
+  "TEL-ELN": 1.41,
+  "TEL-GAZ": 1.61,
+  "TEL-KBO": 3.93
+ },
+ "line_spend": {
+  "APP-BHR": 10588,
+  "APP-GAZ": 5777,
+  "APP-KBO": 4026,
+  "PART-BHR": 13636,
+  "PART-GAZ": 7540,
+  "PART-KBO": 7439,
+  "SEA-BHR": 16680,
+  "SEA-ELN": 4898,
+  "SEA-GAZ": 9408,
+  "SEA-KBO": 7056,
+  "SOC-BHR": 11849,
+  "SOC-ELN": 6431,
+  "SOC-GAZ": 12218,
+  "SOC-KBO": 5694,
+  "TEL-BHR": 16602,
+  "TEL-ELN": 7576,
+  "TEL-GAZ": 11403,
+  "TEL-KBO": 11536
+ },
+ "line_value": {
+  "APP-BHR": 288,
+  "APP-GAZ": 113,
+  "APP-KBO": 136,
+  "PART-BHR": 223,
+  "PART-GAZ": 265,
+  "PART-KBO": 205,
+  "SEA-BHR": 372,
+  "SEA-ELN": 185,
+  "SEA-GAZ": 207,
+  "SEA-KBO": 334,
+  "SOC-BHR": 129,
+  "SOC-ELN": 196,
+  "SOC-GAZ": 222,
+  "SOC-KBO": 113,
+  "TEL-BHR": 303,
+  "TEL-ELN": 98,
+  "TEL-GAZ": 101,
+  "TEL-KBO": 273
+ },
+ "lines_in_plan": 18,
+ "n_funded": 8,
+ "paying_oct": {
+  "BHR": 5112,
+  "ELN": 1491,
+  "GAZ": 3060,
+  "KBO": 2667
+ },
+ "paying_oct_total": 12330,
+ "plan_paying": {
+  "APP": 255,
+  "PART": 370,
+  "SEA": 478,
+  "SOC": 403,
+  "TEL": 498
+ },
+ "plan_paying_total": 2004,
+ "plan_starts": {
+  "APP": 387,
+  "PART": 466,
+  "SEA": 687,
+  "SOC": 735,
+  "TEL": 685
+ },
+ "plan_starts_total": 2960,
+ "plan_total": 170357,
+ "rise_extra": {
+  "BHR": 174,
+  "ELN": 51,
+  "GAZ": 104,
+  "KBO": 91
+ },
+ "rise_extra_total": 420,
+ "routes_funded": {
+  "careful": [
+   "APP-BHR",
+   "PART-BHR",
+   "PART-GAZ",
+   "PART-KBO",
+   "SEA-BHR",
+   "SEA-ELN",
+   "SEA-GAZ",
+   "SEA-KBO",
+   "SOC-BHR",
+   "SOC-ELN",
+   "SOC-GAZ",
+   "SOC-KBO",
+   "TEL-BHR",
+   "TEL-KBO"
   ],
-  "seats_ref": 20,
-  "team_min_month": 1,
-  "team_min_seats": 3
+  "careful, full price carried": [
+   "APP-BHR",
+   "PART-BHR",
+   "PART-GAZ",
+   "PART-KBO",
+   "SEA-BHR",
+   "SEA-KBO",
+   "SOC-ELN",
+   "SOC-GAZ",
+   "SOC-KBO",
+   "TEL-BHR",
+   "TEL-KBO"
+  ],
+  "careful, households linked": [
+   "APP-BHR",
+   "APP-KBO",
+   "PART-BHR",
+   "PART-GAZ",
+   "PART-KBO",
+   "SEA-BHR",
+   "SEA-ELN",
+   "SEA-GAZ",
+   "SEA-KBO",
+   "SOC-BHR",
+   "SOC-ELN",
+   "SOC-GAZ",
+   "SOC-KBO",
+   "TEL-BHR",
+   "TEL-KBO"
+  ],
+  "careful, reading used": [
+   "APP-BHR",
+   "PART-BHR",
+   "PART-GAZ",
+   "SEA-BHR",
+   "SEA-ELN",
+   "SEA-GAZ",
+   "SEA-KBO",
+   "SOC-ELN",
+   "SOC-GAZ",
+   "TEL-BHR",
+   "TEL-KBO"
+  ],
+  "careful, rise months left out": [
+   "APP-BHR",
+   "PART-BHR",
+   "PART-GAZ",
+   "PART-KBO",
+   "SEA-BHR",
+   "SEA-ELN",
+   "SEA-GAZ",
+   "SEA-KBO",
+   "SOC-BHR",
+   "SOC-ELN",
+   "SOC-GAZ",
+   "SOC-KBO",
+   "TEL-BHR",
+   "TEL-KBO"
+  ],
+  "careful, the 2025 rise read in full": [
+   "APP-BHR",
+   "PART-BHR",
+   "PART-GAZ",
+   "PART-KBO",
+   "SEA-BHR",
+   "SEA-ELN",
+   "SEA-GAZ",
+   "SEA-KBO",
+   "SOC-BHR",
+   "SOC-ELN",
+   "SOC-GAZ",
+   "SOC-KBO",
+   "TEL-BHR",
+   "TEL-KBO"
+  ],
+  "completion on each channel's older starts": [
+   "APP-BHR",
+   "PART-BHR",
+   "PART-GAZ",
+   "PART-KBO",
+   "SEA-BHR",
+   "SEA-GAZ",
+   "SEA-KBO",
+   "SOC-ELN",
+   "SOC-GAZ",
+   "SOC-KBO",
+   "TEL-BHR",
+   "TEL-KBO"
+  ],
+  "no full-price term at the intro's end": [
+   "APP-BHR",
+   "APP-KBO",
+   "PART-BHR",
+   "PART-GAZ",
+   "PART-KBO",
+   "SEA-BHR",
+   "SEA-ELN",
+   "SEA-GAZ",
+   "SEA-KBO",
+   "SOC-BHR",
+   "SOC-ELN",
+   "SOC-GAZ",
+   "SOC-KBO",
+   "TEL-BHR",
+   "TEL-KBO"
+  ],
+  "no returns": [
+   "APP-BHR",
+   "PART-GAZ",
+   "SEA-BHR",
+   "SEA-KBO",
+   "TEL-BHR",
+   "TEL-KBO"
+  ],
+  "returns on the customer number only": [
+   "APP-BHR",
+   "PART-GAZ",
+   "SEA-BHR",
+   "SEA-KBO",
+   "TEL-BHR",
+   "TEL-KBO"
+  ],
+  "the 2025 rise read from April, pooled": [
+   "APP-BHR",
+   "PART-GAZ",
+   "SEA-BHR",
+   "SEA-ELN",
+   "SEA-GAZ",
+   "SEA-KBO",
+   "TEL-BHR",
+   "TEL-KBO"
+  ]
  },
- "dec27": 10220000,
- "draft": 10.3,
- "draft_chance_pct": 36,
- "draft_verdict": "no",
- "expansion_bridge": 220000,
- "kpi_sep_total": 8680000,
- "lines_credited": 30,
- "lines_dup": 119,
- "lines_raw": 3953,
- "naive": {
-  "movement lines at their trailing monthly rates since January 2026": 11170000,
-  "movement lines at their trailing six-month rates": 10720000,
-  "movement lines at their trailing twelve-month rates": 10920000,
-  "new Business at its run-rate since January 2026, other lines at their trailing twelve-month rates": 10970000,
-  "trailing six months' net new ARR carried forward": 10720000,
-  "trailing three months' net new ARR carried forward": 11200000,
-  "trailing twelve months' growth compounded": 11490000,
-  "trailing twelve months' net new ARR carried forward": 10920000
+ "stepup_added": {
+  "G3": 5.6,
+  "H6": 5.9,
+  "J12": 5.5,
+  "M3E1": 6.6,
+  "PM1": 6.0
  },
- "naive_min": 10720000,
- "new_bus": 1870000,
- "new_open": 800000,
- "new_split": {
-  "new_bus": 1870000,
-  "new_open": 800000
+ "stepup_share": {
+  "G3": 72.2,
+  "H6": 29.2,
+  "J12": 26.7,
+  "M3E1": 57.8,
+  "PM1": 67.0
  },
- "new_upgrade": 270000,
- "open_bus": 7020000,
- "open_deals": 245,
- "open_team": 1830000,
- "open_total": 8850000,
- "opening": {
-  "business": 7020000,
-  "team": 1830000
+ "survival_36": {
+  "APP": 12.3,
+  "DIR": 28.8,
+  "PART": 13.5,
+  "SEA": 27.3,
+  "SOC": 10.1,
+  "TEL": 8.9
  },
- "p10": 9940000,
- "p20": 10020000,
- "p90": 10520000,
- "path": [
-  9040000,
-  9190000,
-  9240000,
-  9310000,
-  9410000,
-  9490000,
-  9600000,
-  9740000,
-  9800000,
-  9880000,
-  9930000,
-  10000000,
-  10090000,
-  10220000
- ],
- "path_months": [
-  "Nov 2026",
-  "Dec 2026",
-  "Jan 2027",
-  "Feb 2027",
-  "Mar 2027",
-  "Apr 2027",
-  "May 2027",
-  "Jun 2027",
-  "Jul 2027",
-  "Aug 2027",
-  "Sep 2027",
-  "Oct 2027",
-  "Nov 2027",
-  "Dec 2027"
- ],
- "path_p10": [
-  8980000,
-  9110000,
-  9140000,
-  9210000,
-  9290000,
-  9340000,
-  9440000,
-  9570000,
-  9610000,
-  9660000,
-  9700000,
-  9750000,
-  9830000,
-  9940000
- ],
- "path_p90": [
-  9100000,
-  9260000,
-  9330000,
-  9410000,
-  9520000,
-  9630000,
-  9750000,
-  9910000,
-  9990000,
-  10080000,
-  10160000,
-  10250000,
-  10370000,
-  10520000
- ],
- "path_table": {
-  "Apr 2027": 9490000,
-  "Aug 2027": 9880000,
-  "Dec 2026": 9190000,
-  "Dec 2027": 10220000,
-  "Feb 2027": 9310000,
-  "Jan 2027": 9240000,
-  "Jul 2027": 9800000,
-  "Jun 2027": 9740000,
-  "Mar 2027": 9410000,
-  "May 2027": 9600000,
-  "Nov 2026": 9040000,
-  "Nov 2027": 10090000,
-  "Oct 2027": 10000000,
-  "Sep 2027": 9930000
- },
- "plan_rate": 1.16,
- "price": 180000,
- "quick_commitment": 11.5,
- "quick_dec27": 11490000,
- "quick_growth_pct": 25.1,
- "r1_all_lines": 7120000,
- "r1_team_all_rows": 1880000,
- "renewal_lines": {
-  "churn": 800000,
-  "contraction": 200000
- },
- "renewals_used": 2321,
- "repricings": 519,
- "reps": 2000,
- "route_April_excess_as_an_exponential_with_a_floor": {
-  "churn": 800000,
-  "churn_10k": 800000,
-  "commitment": 10.0,
-  "contraction": 200000,
-  "contraction_10k": 220000,
-  "dec27": 10230000,
-  "new_bus": 1870000,
-  "new_open": 800000,
-  "p10": 9960000,
-  "p20": 10060000,
-  "p90": 10550000,
-  "price": 180000,
-  "team_left": 1300000
- },
- "route_April_excess_from_the_last_two_months": {
-  "churn": 800000,
-  "churn_10k": 800000,
-  "commitment": 10.0,
-  "contraction": 200000,
-  "contraction_10k": 220000,
-  "dec27": 10230000,
-  "new_bus": 1870000,
-  "new_open": 800000,
-  "p10": 9950000,
-  "p20": 10050000,
-  "p90": 10540000,
-  "price": 180000,
-  "team_left": 1300000
- },
- "route_CRM_stage_probabilities": {
-  "churn": 800000,
-  "churn_10k": 800000,
-  "commitment": 10.4,
-  "contraction": 200000,
-  "contraction_10k": 220000,
-  "dec27": 10620000,
-  "new_bus": 2250000,
-  "new_open": 1200000,
-  "p10": 10290000,
-  "p20": 10410000,
-  "p90": 10920000,
-  "price": 180000,
-  "team_left": 1300000
- },
- "route_Team_calendar_index_by_quarter": {
-  "churn": 800000,
-  "churn_10k": 800000,
-  "commitment": 10.0,
-  "contraction": 200000,
-  "contraction_10k": 220000,
-  "dec27": 10220000,
-  "new_bus": 1870000,
-  "new_open": 800000,
-  "p10": 9940000,
-  "p20": 10040000,
-  "p90": 10530000,
-  "price": 180000,
-  "team_left": 1300000
- },
- "route_Team_calendar_index_smoothed": {
-  "churn": 800000,
-  "churn_10k": 800000,
-  "commitment": 10.0,
-  "contraction": 200000,
-  "contraction_10k": 220000,
-  "dec27": 10230000,
-  "new_bus": 1870000,
-  "new_open": 800000,
-  "p10": 9940000,
-  "p20": 10050000,
-  "p90": 10530000,
-  "price": 180000,
-  "team_left": 1300000
- },
- "route_Team_rates_before_April": {
-  "churn": 800000,
-  "churn_10k": 800000,
-  "commitment": 10.0,
-  "contraction": 200000,
-  "contraction_10k": 220000,
-  "dec27": 10260000,
-  "new_bus": 1870000,
-  "new_open": 800000,
-  "p10": 9980000,
-  "p20": 10080000,
-  "p90": 10550000,
-  "price": 180000,
-  "team_left": 1400000
- },
- "route_Team_rates_of_the_last_three_months": {
-  "churn": 800000,
-  "churn_10k": 800000,
-  "commitment": 9.9,
-  "contraction": 200000,
-  "contraction_10k": 220000,
-  "dec27": 10130000,
-  "new_bus": 1870000,
-  "new_open": 800000,
-  "p10": 9850000,
-  "p20": 9940000,
-  "p90": 10420000,
-  "price": 180000,
-  "team_left": 1200000
- },
- "route_Team_rates_of_the_trailing_twelve_months": {
-  "churn": 800000,
-  "churn_10k": 800000,
-  "commitment": 9.9,
-  "contraction": 200000,
-  "contraction_10k": 220000,
-  "dec27": 10140000,
-  "new_bus": 1870000,
-  "new_open": 800000,
-  "p10": 9860000,
-  "p20": 9950000,
-  "p90": 10430000,
-  "price": 180000,
-  "team_left": 1200000
- },
- "route_Team_rates_since_April": {
-  "churn": 800000,
-  "churn_10k": 800000,
-  "commitment": 9.9,
-  "contraction": 200000,
-  "contraction_10k": 220000,
-  "dec27": 10130000,
-  "new_bus": 1870000,
-  "new_open": 800000,
-  "p10": 9850000,
-  "p20": 9940000,
-  "p90": 10420000,
-  "price": 180000,
-  "team_left": 1200000
- },
- "route_accounts_drawn_independently": {
-  "churn": 550000,
-  "churn_10k": 550000,
-  "commitment": 10.3,
-  "contraction": 200000,
-  "contraction_10k": 220000,
-  "dec27": 10490000,
-  "new_bus": 1870000,
-  "new_open": 800000,
-  "p10": 10230000,
-  "p20": 10320000,
-  "p90": 10760000,
-  "price": 190000,
-  "team_left": 1300000
- },
- "route_an_assumed_common_factor_of_0.25_added": {
-  "churn": 800000,
-  "churn_10k": 800000,
-  "commitment": 10.0,
-  "contraction": 200000,
-  "contraction_10k": 220000,
-  "dec27": 10230000,
-  "new_bus": 1870000,
-  "new_open": 800000,
-  "p10": 9860000,
-  "p20": 10010000,
-  "p90": 10620000,
-  "price": 180000,
-  "team_left": 1300000
- },
- "route_band_without_the_estimation_uncertainty": {
-  "churn": 800000,
-  "churn_10k": 800000,
-  "commitment": 10.0,
-  "contraction": 200000,
-  "contraction_10k": 220000,
-  "dec27": 10230000,
-  "new_bus": 1870000,
-  "new_open": 800000,
-  "p10": 9950000,
-  "p20": 10050000,
-  "p90": 10500000,
-  "price": 180000,
-  "team_left": 1300000
- },
- "route_careful_but_hurried": {
-  "churn": 750000,
-  "churn_10k": 740000,
-  "commitment": 10.4,
-  "contraction": 300000,
-  "contraction_10k": 250000,
-  "dec27": 10660000,
-  "new_bus": 2250000,
-  "new_open": 1200000,
-  "p10": 10360000,
-  "p20": 10470000,
-  "p90": 10960000,
-  "price": 220000,
-  "team_left": 1200000
- },
- "route_deal_creation_over_the_trailing_eighteen_months": {
-  "churn": 800000,
-  "churn_10k": 800000,
-  "commitment": 10.0,
-  "contraction": 200000,
-  "contraction_10k": 220000,
-  "dec27": 10210000,
-  "new_bus": 1850000,
-  "new_open": 800000,
-  "p10": 9940000,
-  "p20": 10030000,
-  "p90": 10520000,
-  "price": 180000,
-  "team_left": 1300000
- },
- "route_each_accounts_trailing_true-up_rate": {
-  "churn": 800000,
-  "churn_10k": 800000,
-  "commitment": 10.0,
-  "contraction": 200000,
-  "contraction_10k": 210000,
-  "dec27": 10210000,
-  "new_bus": 1870000,
-  "new_open": 800000,
-  "p10": 9930000,
-  "p20": 10030000,
-  "p90": 10530000,
-  "price": 180000,
-  "team_left": 1300000
- },
- "route_list_rise_applied_flat": {
-  "churn": 800000,
-  "churn_10k": 810000,
-  "commitment": 10.1,
-  "contraction": 200000,
-  "contraction_10k": 220000,
-  "dec27": 10280000,
-  "new_bus": 1870000,
-  "new_open": 800000,
-  "p10": 10020000,
-  "p20": 10120000,
-  "p90": 10590000,
-  "price": 250000,
-  "team_left": 1300000
- },
- "route_mean_uplift_applied_flat": {
-  "churn": 800000,
-  "churn_10k": 810000,
-  "commitment": 10.0,
-  "contraction": 200000,
-  "contraction_10k": 220000,
-  "dec27": 10250000,
-  "new_bus": 1870000,
-  "new_open": 800000,
-  "p10": 9990000,
-  "p20": 10090000,
-  "p90": 10550000,
-  "price": 210000,
-  "team_left": 1300000
- },
- "route_no_utilisation_term_in_the_exit_model": {
-  "churn": 800000,
-  "churn_10k": 800000,
-  "commitment": 10.0,
-  "contraction": 200000,
-  "contraction_10k": 220000,
-  "dec27": 10220000,
-  "new_bus": 1870000,
-  "new_open": 800000,
-  "p10": 9930000,
-  "p20": 10030000,
-  "p90": 10540000,
-  "price": 180000,
-  "team_left": 1300000
- },
- "route_own_drift_over_12_months": {
-  "churn": 800000,
-  "churn_10k": 800000,
-  "commitment": 10.0,
-  "contraction": 200000,
-  "contraction_10k": 210000,
-  "dec27": 10220000,
-  "new_bus": 1870000,
-  "new_open": 800000,
-  "p10": 9940000,
-  "p20": 10040000,
-  "p90": 10530000,
-  "price": 180000,
-  "team_left": 1300000
- },
- "route_own_drift_over_18_months": {
-  "churn": 800000,
-  "churn_10k": 800000,
-  "commitment": 10.0,
-  "contraction": 200000,
-  "contraction_10k": 220000,
-  "dec27": 10220000,
-  "new_bus": 1870000,
-  "new_open": 800000,
-  "p10": 9940000,
-  "p20": 10040000,
-  "p90": 10530000,
-  "price": 180000,
-  "team_left": 1300000
- },
- "route_pooled_renewal_rates": {
-  "churn": 750000,
-  "churn_10k": 740000,
-  "commitment": 10.2,
-  "contraction": 200000,
-  "contraction_10k": 250000,
-  "dec27": 10380000,
-  "new_bus": 1870000,
-  "new_open": 800000,
-  "p10": 10100000,
-  "p20": 10200000,
-  "p90": 10650000,
-  "price": 180000,
-  "team_left": 1300000
- },
- "route_the_books_trailing_true-up_rate_near_seats": {
-  "churn": 800000,
-  "churn_10k": 800000,
-  "commitment": 10.0,
-  "contraction": 200000,
-  "contraction_10k": 210000,
-  "dec27": 10180000,
-  "new_bus": 1870000,
-  "new_open": 800000,
-  "p10": 9900000,
-  "p20": 10010000,
-  "p90": 10500000,
-  "price": 180000,
-  "team_left": 1300000
- },
- "route_trailing_run-rate_of_new_ARR": {
-  "churn": 800000,
-  "churn_10k": 800000,
-  "commitment": 9.9,
-  "contraction": 200000,
-  "contraction_10k": 220000,
-  "dec27": 10170000,
-  "new_bus": 1810000,
-  "new_open": 0,
-  "p10": 9880000,
-  "p20": 9980000,
-  "p90": 10430000,
-  "price": 180000,
-  "team_left": 1300000
- },
- "route_uplift_by_size_band": {
-  "churn": 800000,
-  "churn_10k": 810000,
-  "commitment": 10.0,
-  "contraction": 200000,
-  "contraction_10k": 220000,
-  "dec27": 10220000,
-  "new_bus": 1870000,
-  "new_open": 800000,
-  "p10": 9950000,
-  "p20": 10050000,
-  "p90": 10520000,
-  "price": 180000,
-  "team_left": 1300000
- },
- "route_utilisation_in_bins": {
-  "churn": 800000,
-  "churn_10k": 820000,
-  "commitment": 10.0,
-  "contraction": 200000,
-  "contraction_10k": 220000,
-  "dec27": 10210000,
-  "new_bus": 1870000,
-  "new_open": 800000,
-  "p10": 9950000,
-  "p20": 10030000,
-  "p90": 10510000,
-  "price": 180000,
-  "team_left": 1300000
- },
- "route_win_odds_by_stage_alone": {
-  "churn": 800000,
-  "churn_10k": 800000,
-  "commitment": 10.0,
-  "contraction": 200000,
-  "contraction_10k": 220000,
-  "dec27": 10260000,
-  "new_bus": 1900000,
-  "new_open": 900000,
-  "p10": 9980000,
-  "p20": 10080000,
-  "p90": 10550000,
-  "price": 180000,
-  "team_left": 1300000
- },
- "route_win_odds_by_stage_and_deal_age": {
-  "churn": 800000,
-  "churn_10k": 800000,
-  "commitment": 10.0,
-  "contraction": 200000,
-  "contraction_10k": 220000,
-  "dec27": 10200000,
-  "new_bus": 1840000,
-  "new_open": 800000,
-  "p10": 9910000,
-  "p20": 10010000,
-  "p90": 10480000,
-  "price": 180000,
-  "team_left": 1300000
- },
- "season_high_pct": 31,
- "season_low_pct": 27,
- "team_change": 130000,
- "team_failed": 4084,
- "team_left": 1300000,
- "team_new": 640000,
- "team_persist": 0.0169,
- "team_persist_pts": 1.7,
- "uplift_at_20": 0.249,
- "uplift_mean": 0.23,
- "uplift_share_pct": 93
+ "value_2023q3": {
+  "APP": 179,
+  "DIR": 265,
+  "PART": 228,
+  "SEA": 222,
+  "SOC": 150,
+  "TEL": 131
+ }
 }

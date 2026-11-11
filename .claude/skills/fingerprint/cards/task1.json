@@ -7,13 +7,13 @@
   "domain": "product-analytics",
   "client_domain": "product-analytics",
   "subdomain": "retention-cohort-lifetime-value-modeling",
-  "niche": "a German regional newspaper group with four titles deciding which of its 2027 paid digital-subscription acquisition lines (title by channel: paid social, paid search, cashback partners, outbound telemarketing, app-store campaigns) to fund from a fixed budget, ranked by each line's expected 36-month net revenue per euro, where the 2027 lines run new introductory offers, a list-price rise lands in April 2027, the newest social and partner starts read far less than earlier ones while search starts read more, and lapsed readers come back under new customer accounts",
+  "niche": "a German regional newspaper group with four titles deciding which of its 2027 paid digital-subscription acquisition lines (title by channel: paid social, paid search, cashback partners, outbound telemarketing, app-store campaigns) to fund, each line against 3.5 times its planned cost per start in expected 36-month net revenue, where the 2027 lines run new introductory offers, a list-price rise lands in April 2027, the newest social and partner starts read far less than earlier ones while search starts read more, and lapsed readers come back under new customer accounts",
   "objective": "forecasting",
   "shape": "01",
-  "decision_type": "ranked_slate_under_cap",
+  "decision_type": "designation_set",
   "answer_unit": "set_of_items",
-  "answer": "",
-  "answer_source": "task1/generator/figures.json funded",
+  "answer": "fund 8 of the plan's 18 lines (APP-BHR, PART-GAZ, SEA-BHR, SEA-ELN, SEA-GAZ, SEA-KBO, TEL-BHR, TEL-KBO) for a budget of EUR 84,308, each at least 3.5 times its planned cost per start over 36 months; not the 14 lines for EUR 141,575 the careful but hurried reading funds",
+  "answer_source": "task1/generator/figures.json funded, budget, careful_funded",
   "gap": [
     "time",
     "population"
@@ -52,10 +52,10 @@
   "role_family": "finance_controller",
   "scoring_unit": "per active unit per period",
   "spine": {
-    "file": "",
-    "rows": 0,
-    "entity": "one billing period of one digital subscription",
-    "grain": "subscription x price period",
+    "file": "subscriptions_2023-01_2026-10.csv",
+    "rows": 32473,
+    "entity": "one subscription",
+    "grain": "subscription",
     "source": "synthetic"
   },
   "forum": "executive_team",
@@ -79,15 +79,15 @@
     ]
   },
   "deliverables": [
-    "akquise_2027_linien.xlsx",
-    "akquise_2027_vermerk.pdf"
+    "acquisition_lines_2027.xlsx",
+    "acquisition_note_2027.pdf"
   ],
   "opening_move": "question-first",
   "question_form": "which",
   "driver": "Each candidate's value per unit of cost is the payment stream of its future entrants, whose first large drop sits at a price step set by the candidate's own terms and the full price it steps to, whose later decline follows a usage trait the newest entrants carry differently from the record (seen only in a second log at another grain, never in their early survival), which a scheduled price change cuts again at a size read only from an earlier change's whole window and the entrants' tenure at it, and which continues through returns recorded under other identities, so a ranking under a fixed budget on each candidate's own history funds a different set.",
   "driver_concrete": "Each 2027 acquisition line's expected 36-month net revenue per start, set by its 2027 introductory offer and the April 2027 list price at the step-up, the usage its newest starts show in the reading log (social and partner down since late 2025, search up since spring 2025), the April 2027 rise's excess cancellations read from the April 2025 rise including the notice-letter exits and the larger response of first-year subscribers, and later subscriptions by the same household under new customer numbers, ranked per euro of planned spend until the budget is spent.",
-  "stump": "A careful but hurried analyst completes each line's newest starts on its older starts' survival, prices the April 2027 rise at the 2025 rise's after-the-date excess pooled over tenure, and counts later subscriptions only on the same customer number, so the social and partner lines' value per euro is overstated, the search lines' understated, and the funded list swaps several lines across the budget's cut.",
-  "answer_shape": "ranked-list-cap",
+  "stump": "A careful but hurried analyst completes each line's newest starts on its older starts' survival, reads the April 2025 jump in end-of-intro exits as a period rather than as the full price, reads the 2025 rise's cancellations from April on pooled over tenure and counts later subscriptions on the customer number, so the four paid social lines and two cashback lines clear 3.5 times their cost and the plan funds 14 lines for EUR 141,575 instead of 8 for EUR 84,308.",
+  "answer_shape": "flagged-set",
   "weight": "modeling",
   "chain_signature": [
     "assembly-reconciliation",
@@ -100,8 +100,8 @@
     "synthesis",
     "forecasting"
   ],
-  "results": "R1 paying subscribers by title at 31 Oct 2026; R2 realised 36-month net revenue per start of the Jul-Sep 2023 starts by channel, later subscriptions by the household included; R3 end-of-intro exit share for each 2027 offer at 2026 prices; R4 the change in that share a 2 euro higher full price makes; R5 share of the Nov 2025-Apr 2026 starts still paying 24 months after starting, by channel; R6 extra cancellations the April 2027 rise brings by Dec 2027 among the October 2026 base, by title; R7 expected 36-month net revenue per start for every 2027 line; R8 the funded lines under the budget; R9 the October 2026 base still paying at 31 Dec 2027, by title",
-  "one_fact_test": "",
+  "results": "R1 paying subscribers by title at 31 Oct 2026; R2 realised 36-month net revenue per start of the Jul-Sep 2023 starts by channel, household returns included; R3 end-of-intro exit share per 2027 offer at 2026 prices; R4 the points the April 2027 prices add; R5 two-year survival of the Nov 2025-Apr 2026 starts by channel; R6 extra cancellations from the April 2027 rise among the Oct 2026 base by title; R7 expected 36-month net revenue per start for every 2027 line; R8 the funded lines and their budget; R9 the Oct 2026 intro subscribers paying full price at Dec 2027 by title",
+  "one_fact_test": "the April 2025 rise also raised the share leaving at the end of the introductory price; rescues 2 of 9 (R3, R4); no hint rescues the funded set",
   "strategy_label": "WORKS IN FORM",
   "mechanism_source": "design_note",
   "differentiation": {},

@@ -1,584 +1,464 @@
-"""Write the data files of the pack from the world's records, with the mess Tekenbord's systems produce: the billing
-system's contract lines (nightly re-exports, credit notes and re-issues, onboarding fees), the Team plan's invoices
-(card payments that failed and were re-issued), the product's workspace activity and its dated workspace links, the
-CRM's account export (parent groups, lead source, names typed several ways), the sales pipeline's month-end snapshots
-(re-run exports, amounts typed per month by some owners) and its closed opportunities, the 2026 price book, the
-finance team's monthly KPI export, and two files the forecast never reads (support tickets and the third quarter's
-NPS responses)."""
-import calendar
+"""The data files of the pack, written from the world (world.history()).
+
+Each of the group's systems writes its own export: the subscription system (subscriptions, price periods, payment
+exceptions, customers, payment methods), the analytics platform (reading by login, the login register), the marketing
+system (spend and attributed starts by line and month, its channel codes renamed in March 2025, German number
+formats), finance (the monthly KPI workbook, docs.py) and the neighbouring departments' files the analysis does not
+use. Each carries what that system really does to its records; none of it decides a graded figure."""
 import csv
 import datetime as dt
-import math
-import os
+import hashlib
 
 import numpy as np
-from faker import Faker
-from openpyxl import Workbook
-from openpyxl.styles import Alignment, Font, PatternFill
-from openpyxl.utils import get_column_letter
 
-import analysis as An
 import params as P
 import sim
-import tables
 
 FILES = {
-    "lines": "billing_contract_lines_2022-01_2026-10.csv",
-    "team": "team_invoices_2022-01_2026-10.csv",
-    "activity": "workspace_monthly_activity_2022-01_2026-10.csv",
-    "links": "workspace_account_links.csv",
-    "crm": "crm_accounts_export_2026-11-02.xlsx",
-    "snap": "pipeline_snapshots_2023-01_2026-10.csv",
-    "closed": "opportunities_closed_2022-01_2026-10.csv",
-    "price": "price_book_2026.xlsx",
-    "policy": "arr_reporting_policy_2026.pdf",
-    "kpi": "kpi_monthly_2026-01_2026-09.xlsx",
-    "tickets": "support_tickets_2026.csv",
-    "nps": "nps_responses_2026-q3.csv",
+    "subs": "subscriptions_2023-01_2026-10.csv",
+    "periods": "price_periods_2023-01_2026-10.csv",
+    "exceptions": "payment_exceptions_2023-01_2026-10.csv",
+    "customers": "customers.csv",
+    "methods": "payment_methods.csv",
+    "reading": "reading_by_login_2024-01_2026-10.csv",
+    "logins": "logins.csv",
+    "spend": "marketing_spend_2023-01_2026-10.csv",
+    "offers": "offer_catalogue.csv",
+    "codes": "marketing_channel_codes.csv",
+    "plan": "media_plan_2027.xlsx",
+    "standard": "digital_subscription_kpi_standard.pdf",
+    "prices": "price_list_digital_2027.pdf",
+    "kpi": "kpi_digital_2026.xlsx",
+    "print": "print_circulation_2023-2026.csv",
+    "newsletter": "newsletter_signups_2025-2026.csv",
+    "survey": "reader_survey_2026.csv",
+    "ads": "digital_ad_revenue_2025-2026.csv",
 }
-DISTRACTORS = ["tickets", "nps"]
-STAGES = P.STAGES
-OWNERS = ["Stijn Totwiller", "Isis Kloppert", "Cornelis Adriaansen", "Indy Smits", "Lois Jansen", "Noud Geertsen",
-          "Duncan Reed", "Sandra Garner", "Reimund Budig", "Erika Buchholz"]
-MONTHLY_TYPERS = {"Duncan Reed", "Erika Buchholz"}
-AGENTS = ["Siem Cammel", "Jinthe Kwaadland", "Bente Verbruggen", "Senna Lutterveld"]
-INDUSTRIES = ["Architecture", "Engineering services", "Software", "Higher education", "Management consulting",
-              "Construction", "Marketing and media", "Logistics", "Public sector", "Industrial design",
-              "Financial services", "Healthcare"]
+DISTRACTORS = ["print", "newsletter", "survey", "ads"]
+
+STREETS = ["Hauptstraße", "Bahnhofstraße", "Lindenweg", "Kirchstraße", "Schulstraße", "Gartenstraße", "Dorfstraße",
+           "Bergstraße", "Mühlenweg", "Birkenweg", "Am Deich", "Hafenstraße", "Marktplatz", "Wiesenweg", "Ringstraße",
+           "Lange Straße", "Feldstraße", "Rosenstraße", "Eichenweg", "Weserblick", "Am Markt", "Kiefernweg",
+           "Friedhofstraße", "Moorweg", "Ahornweg", "Poststraße", "Brunnenstraße", "Heideweg", "Schillerstraße",
+           "Goethestraße", "Am Hafen", "Fischerstraße", "Kanalstraße", "Uferstraße", "Schützenstraße", "Waldweg",
+           "Deichstraße", "Kastanienallee", "Im Winkel", "Lüttje Straße", "Bremer Straße", "Hamburger Straße",
+           "Querweg", "Sandweg", "Neue Straße", "Kreuzstraße", "Grüner Weg", "Sielstraße", "Kampweg", "Holzweg",
+           "Amselweg", "Drosselgang", "Finkenstraße", "Meisenweg", "Lerchenstraße", "Starenweg", "Buchenweg",
+           "Erlenstraße", "Tannenweg", "Weidenstraße", "Pappelallee", "Ulmenweg", "Lessingstraße", "Mozartstraße",
+           "Beethovenstraße", "Bachstraße", "Händelweg", "Am Sportplatz", "Am Bahnhof", "An der Kirche",
+           "Zum Hafen", "Kapitän-Haase-Straße", "Werftstraße", "Ankerweg", "Lotsenstraße", "Fährstraße",
+           "Am Wall", "Burgstraße", "Torstraße", "Mittelstraße", "Oststraße", "Weststraße", "Nordstraße",
+           "Südstraße", "Industriestraße", "Gewerbering", "Schmiedestraße", "Bäckerstraße", "Gerberstraße",
+           "Wassermühle", "Am Mühlenteich", "Heidkamp", "Brookweg", "Fleetstraße", "Marschweg", "Geestweg"]
+TOWNS = {"BHR": [("Brückenhafen", 27561, 27583), ("Wremsiel", 27585, 27590)],
+         "GAZ": [("Grevenau", 27612, 27624), ("Hollwede", 27627, 27632), ("Lunkhusen", 27633, 27638)],
+         "KBO": [("Ostheide", 29640, 29652), ("Rehmsloh", 29654, 29661), ("Kirchdorf an der Aue", 29662, 29668)],
+         "ELN": [("Elmsbach", 27711, 27716), ("Ottersande", 27717, 27721)]}
+ROUTE_WORD = {"SEPA": "SEPA", "PAYPAL": "PAYPAL", "CARD": "CARD", "APPLE": "APPLE", "GOOGLE": "GOOGLE"}
 
 
-def ymd(m, day):
-    y, mo = sim.ym(m)
-    return dt.date(y, mo, min(day, calendar.monthrange(y, mo)[1]))
+def add_months(d, k):
+    y = d.year + (d.month - 1 + k) // 12
+    mo = (d.month - 1 + k) % 12 + 1
+    last = (dt.date(y + (mo == 12), mo % 12 + 1, 1) - dt.timedelta(days=1)).day
+    return dt.date(y, mo, min(d.day, last))
 
 
-def month_end(m):
-    y, mo = sim.ym(m)
-    return dt.date(y, mo, calendar.monthrange(y, mo)[1])
+def hexid(*parts, n=16):
+    return hashlib.sha1("|".join(str(p) for p in parts).encode()).hexdigest()[:n]
 
 
-def rng_for(*keys):
-    return np.random.default_rng([P.SEED] + [int(k) for k in keys])
+def euro_de(x):
+    s = f"{x:,.2f}"
+    return s.replace(",", "X").replace(".", ",").replace("X", ".")
 
 
-def write_csv(path, header, rows):
+def write_csv(path, header, rows, delimiter=","):
     with open(path, "w", newline="", encoding="utf-8") as f:
-        wr = csv.writer(f, lineterminator="\n")
-        wr.writerow(header)
-        wr.writerows(rows)
+        w = csv.writer(f, delimiter=delimiter, lineterminator="\n")
+        w.writerow(header)
+        w.writerows(rows)
     return len(rows)
 
 
-def money(x):
-    return "%.2f" % x
+def iso(d):
+    return "" if d is None else d.isoformat()
 
 
-def bid(a):
-    return "BA-%06d" % a
+class Pack:
+    """Every record the exports are cut from, with dates, identifiers, accounts, addresses and logins."""
 
-
-def tid(t):
-    return "TA-%07d" % t
-
-
-def wid(w):
-    import hashlib
-    return "WS-" + hashlib.sha1(("tekenbord-ws-%d" % w).encode()).hexdigest()[:8].upper()
-
-
-def oid(o):
-    return "OPP-%07d" % o
-
-
-def gid(p):
-    return "GRP-%05d" % ((p * 37 + 1201) % 99991)
-
-
-# ------------------------------------------------------------------------------------------------ names
-class Names:
-    """Company names from Faker's Dutch, German and British locales; parent groups typed several ways in the CRM."""
-
-    def __init__(self, w):
-        self.f = {"nl": Faker("nl_NL"), "de": Faker("de_DE"), "gb": Faker("en_GB")}
-        for i, k in enumerate(sorted(self.f)):
-            self.f[k].seed_instance(P.SEED + 50 + i)
-        self.used = set()
-        self.acc, self.country, self.parent_name = {}, {}, {}
-        par = {p["id"]: p for p in w.parents}
-        r = np.random.default_rng(P.SEED + 60)
-        for p in w.parents:
-            if p["group"]:
-                loc = "gb" if r.random() < 0.18 else ("de" if r.random() < 0.4 else "nl")
-                self.parent_name[p["id"]] = (self.company(loc, group=True), loc)
-        for a in sorted(w.bus, key=lambda x: x["id"]):
-            p = par[a["parent"]]
-            if a["cur"] == "GBP":
-                loc = "gb"
-            elif p["group"]:
-                loc = self.parent_name[p["id"]][1] if self.parent_name[p["id"]][1] != "gb" else \
-                    ("nl" if r.random() < 0.6 else "de")
+    def __init__(self, S, seed):
+        self.S = S
+        self.rng = np.random.default_rng(seed)
+        n = len(S["start"])
+        self.n = n
+        rng = self.rng
+        self.day = rng.integers(1, 29, size=n)
+        # subscription ids: drawn, never a sequence
+        ids = rng.choice(np.arange(1000000, 9999999), size=n + 3000, replace=False)
+        self.sid = ["DA%07d" % x for x in ids[:n]]
+        self.spare_ids = ["DA%07d" % x for x in ids[n:]]
+        self.start_date = []
+        for i in range(n):
+            if S["kind"][i] == "base":
+                sd = add_months(dt.date(2023, 1, int(self.day[i])), -int(S["tenure0"][i]))
             else:
-                loc = "de" if r.random() < 0.38 else "nl"
-            if p["group"]:
-                base = self.parent_name[p["id"]][0].split(" ")[0]
-                self.acc[a["id"]] = self.subsidiary(base, loc, r)
-            else:
-                self.acc[a["id"]] = self.company(loc)
-            self.country[a["id"]] = {"gb": "United Kingdom", "de": "Germany", "nl": "Netherlands"}[loc]
-            if loc == "de" and r.random() < 0.12:
-                self.country[a["id"]] = "Austria" if r.random() < 0.5 else "Switzerland"
-            if loc == "nl" and r.random() < 0.10:
-                self.country[a["id"]] = "Belgium"
+                y, mo = sim.ym(int(S["start"][i]))
+                sd = dt.date(y, mo, int(self.day[i]))
+            self.start_date.append(sd)
+        self.households()
 
-    def company(self, loc, group=False):
-        for _ in range(200):
-            n = self.f[loc].company()
-            if group:
-                stem = n.split(" ")[0].strip(",")
-                n = {"nl": "%s Groep" % stem, "de": "%s Gruppe" % stem, "gb": "%s Group plc" % stem}[loc]
-            if n not in self.used:
-                self.used.add(n)
-                return n
-        raise RuntimeError("names exhausted")
-
-    def subsidiary(self, base, loc, r):
-        tails = {"nl": ["Nederland B.V.", "Ingenieurs B.V.", "Advies B.V.", "Bouw B.V.", "Projecten B.V.",
-                        "Infra B.V.", "Vastgoed B.V.", "Digital B.V."],
-                 "de": ["Deutschland GmbH", "Engineering GmbH", "Planung GmbH", "Consulting GmbH", "Bau GmbH",
-                        "Services GmbH", "Digital GmbH"],
-                 "gb": ["UK Ltd", "Engineering Ltd", "Consulting Ltd", "Projects Ltd", "Digital Ltd"]}[loc]
-        for _ in range(60):
-            n = "%s %s" % (base, tails[int(r.integers(0, len(tails)))])
-            if n not in self.used:
-                self.used.add(n)
-                return n
-        return self.company(loc)
-
-    def parent_spelling(self, pid, r):
-        n = self.parent_name[pid][0]
-        x = r.random()
-        if x < 0.70:
-            return n
-        if x < 0.80:
-            return n.upper()
-        if x < 0.90:
-            return n.replace(" Groep", " Groep B.V.").replace(" Gruppe", " Gruppe GmbH").replace(" Group plc",
-                                                                                                    " Group")
-        return n.replace(" Groep", " groep").replace(" Gruppe", "-Gruppe").replace(" plc", " PLC")
-
-    def prospect(self, o):
-        r = rng_for(7, o["id"])
-        loc = "gb" if o["cur"] == "GBP" else ("de" if r.random() < 0.38 else "nl")
-        return self.company(loc)
-
-
-# ------------------------------------------------------------------------------------------------ contract lines
-def write_lines(w, path, names):
-    """One row per billing line as the billing system exports it each night. Subscription lines are invoiced on their
-    service start; a true-up's charge runs to the end of the term; onboarding fees are one-off. About one renewal
-    line in twenty-five from 2024 went out at list price without the contract's agreed price, was credited and
-    re-issued; the nightly job re-exported part of a day's lines a second time on some nights."""
-    r = np.random.default_rng(P.SEED + 70)
-    L = sorted(w.log["lines"], key=lambda x: (x["m"], x["day"], x["acc"], x["type"]))
-    out = []
-    lid = 1400000
-    inv = 0
-    for x in L:
-        a = x["acc"]
-        cur = x["cur"]
-        m = x["m"]
-        if x["type"] == "true_up":
-            rr = rng_for(11, a, m + 100)
-            start = ymd(m, int(rr.integers(1, 29)))
-            # the term the true-up joins ends on the day before the contract's next anniversary
-            anniv = ymd(m + x["months"], x["day"])
-            end = anniv - dt.timedelta(days=1)
-            kind = "Seat true-up"
-            qty = x["seats"]
-            amount = qty * x["price"] * x["months"]
-        elif x["type"] == "onboarding_fee":
-            start = ymd(m, x["day"])
-            end = start
-            kind = "Onboarding fee"
-            qty = 1
-            amount = x["price"]
-        else:
-            start = ymd(m, x["day"])
-            end = ymd(m + 12, x["day"]) - dt.timedelta(days=1)
-            kind = "Subscription - new" if x["type"] == "new" else "Subscription - renewal"
-            qty = x["seats"]
-            amount = qty * x["price"] * 12
-        lid += int(r.integers(1, 6))
-        inv += int(r.integers(1, 5))
-        invno = "INV-%d-%05d" % (start.year if start.year >= 2022 else 2021, 1000 + inv % 90000)
-        row = [lid, invno, bid(a), names.acc[a], kind, start.isoformat(), end.isoformat(),
-               qty, money(x["price"]) if kind != "Onboarding fee" else money(x["price"]), cur, money(amount), ""]
-        if x["type"] == "renewal" and 24 <= m < P.PRICE_RISE and not x.get("opening") and r.random() < 0.035:
-            lst = (P.BUS_LIST_NEW if m >= P.PRICE_RISE else P.BUS_LIST_OLD)[cur]
-            if abs(lst - x["price"]) > 0.05:
-                wrong = list(row)
-                wrong[8] = money(lst)
-                wrong[10] = money(qty * lst * 12)
-                out.append(wrong)
-                lid += int(r.integers(1, 6))
-                cn = [lid, "CN-%d-%04d" % (start.year, 100 + inv % 9000), bid(a), names.acc[a], "Credit note",
-                      start.isoformat(), end.isoformat(), -qty, money(lst), cur, money(-qty * lst * 12), wrong[0]]
-                out.append(cn)
-                lid += int(r.integers(1, 6))
-                row[0] = lid
-                row[1] = "INV-%d-%05d" % (start.year, 1000 + (inv + 45000) % 90000)
-        out.append(row)
-    # the nightly job's re-exports: a run of consecutive lines written twice
-    final = []
-    i = 0
-    while i < len(out):
-        final.append(out[i])
-        if r.random() < 0.006:
-            k = int(r.integers(2, 9))
-            block = out[i + 1:i + 1 + k]
-            final.extend(block)
-            final.extend(block)
-            i += 1 + k
-            continue
-        i += 1
-    n = write_csv(path, ["line_id", "document_no", "billing_account", "customer_name", "line_type", "service_start",
-                         "service_end", "quantity", "unit_price", "currency", "line_amount", "credits_line_id"], final)
-    return n
-
-
-# ------------------------------------------------------------------------------------------------ team invoices
-def write_team(w, path):
-    """The Team plan bills each account monthly in advance on its billing day. A card payment that fails is retried
-    under a new invoice a few days later; the failed invoice stays in the export."""
-    r = np.random.default_rng(P.SEED + 71)
-    rows = []
-    n = 3100000
-    for x in sorted(w.log["team_inv"], key=lambda z: (z["m"], z["day"], z["acc"])):
-        m = x["m"]
-        start = ymd(m, x["day"])
-        end = ymd(m + 1, x["day"]) - dt.timedelta(days=1)
-        price = P.TEAM_PRICE[x["cur"]]
-        n += int(r.integers(1, 4))
-        base = [tid(x["acc"]), start.isoformat(), end.isoformat(), x["members"], x["seats"], money(price),
-                x["cur"], money(price * x["seats"])]
-        if r.random() < 0.027:
-            rows.append(["T%d" % n, start.isoformat()] + base + ["payment_failed"])
-            n += int(r.integers(1, 4))
-            retry = min(start + dt.timedelta(days=int(r.integers(3, 8))), dt.date(2026, 11, 2))
-            rows.append(["T%d" % n, retry.isoformat()] + base + ["paid"])
-        else:
-            rows.append(["T%d" % n, start.isoformat()] + base + ["paid"])
-    return write_csv(path, ["invoice_no", "invoice_date", "team_account", "period_start", "period_end",
-                            "active_members", "seats_billed", "price_per_seat", "currency", "amount", "status"], rows)
-
-
-# ------------------------------------------------------------------------------------------------ product data
-def write_activity(w, path):
-    r = np.random.default_rng(P.SEED + 72)
-    rows = []
-    for x in sorted(w.log["ws"], key=lambda z: (z["m"], z["ws"])):
-        y, mo = sim.ym(x["m"])
-        boards = int(r.poisson(max(x["active"], 0) * 5.4)) if x["active"] else 0
-        rows.append([wid(x["ws"]), "%04d-%02d" % (y, mo), x["active"], boards])
-    return write_csv(path, ["workspace_id", "month", "active_users", "boards_edited"], rows)
-
-
-def write_links(w, path):
-    rows = []
-    bus = {a["id"]: a for a in w.bus}
-    team = {t["id"]: t for t in w.team}
-    for x in sorted(w.log["ws_map"], key=lambda z: (z["ws"], z["from"])):
-        o = x["owner"]
-        if o in bus:
-            acc, plan, day = bid(o), "Business", bus[o]["day"]
-        else:
-            acc, plan, day = tid(o), "Team", team[o]["billing_day"]
-        d0 = ymd(x["from"], day)
-        if x["to"] is None:
-            d1 = ""
-        else:
-            # the Team link closes the day before the workspace joins its Business account
-            nxt = [z for z in w.log["ws_map"] if z["ws"] == x["ws"] and z["from"] == x["to"] + 1]
-            d1 = (ymd(x["to"] + 1, bus[nxt[0]["owner"]]["day"]) - dt.timedelta(days=1)).isoformat()
-        rows.append([wid(x["ws"]), acc, plan, d0.isoformat(), d1])
-    return write_csv(path, ["workspace_id", "account_id", "plan", "linked_from", "linked_to"], rows)
-
-
-# ------------------------------------------------------------------------------------------------ CRM
-def _sheet(ws, header, rows, widths):
-    ws.append(header)
-    for c in ws[1]:
-        c.font = Font(bold=True)
-        c.fill = PatternFill("solid", fgColor="DCE6F1")
-        c.alignment = Alignment(wrap_text=True, vertical="top")
-    for row in rows:
-        ws.append(row)
-    for i, wd in enumerate(widths, 1):
-        ws.column_dimensions[get_column_letter(i)].width = wd
-    ws.freeze_panes = "A2"
-
-
-def write_crm(w, path, names):
-    r = np.random.default_rng(P.SEED + 73)
-    par = {p["id"]: p for p in w.parents}
-    rows = []
-    for a in sorted(w.bus, key=lambda x: x["start"] * 100 + x["day"]):
-        p = par[a["parent"]]
-        if a["source"] == "upgrade":
-            src = "Team upgrade"
-        else:
-            u = r.random()
-            src = "Outbound" if u < 0.42 else ("Inbound - website" if u < 0.74 else ("Partner" if u < 0.88 else
-                                                                                       "Event"))
-        since = ymd(a["start"], a["day"])
-        status = "Customer" if a["active"] else "Former customer"
-        rows.append(["001%07d" % (a["id"] * 3 + 11), bid(a["id"]), names.acc[a["id"]],
-                     names.parent_spelling(p["id"], r) if p["group"] else "", gid(p["id"]) if p["group"] else "",
-                     names.country[a["id"]], INDUSTRIES[int(r.integers(0, len(INDUSTRIES)))], src,
-                     since.isoformat(), status, OWNERS[int(r.integers(0, len(OWNERS)))]])
-    wb = Workbook()
-    ws = wb.active
-    ws.title = "Accounts"
-    _sheet(ws, ["Account ID", "Billing account", "Account name", "Parent account", "Parent account ID", "Country",
-                "Industry", "Lead source", "Customer since", "Account status", "Account owner"], rows,
-           [13, 12, 34, 30, 12, 13, 20, 16, 12, 15, 18])
-    wb.save(path)
-    return len(rows)
-
-
-# ------------------------------------------------------------------------------------------------ pipeline
-def opp_dates(o):
-    """Created date and the day each stage was entered, fixed per opportunity."""
-    rr = rng_for(9, o["id"])
-    created = ymd(o["created"], int(rr.integers(1, 29)))
-    days = [int(rr.integers(1, 29)) for _ in range(4)]
-    return created, days
-
-
-def stage_entered(o, m, stage, mis, created, days):
-    ms = m - mis
-    d = ymd(ms, days[stage])
-    if d < created:
-        d = created
-    return d
-
-
-def opp_owner(o):
-    return OWNERS[int(rng_for(13, o["id"]).integers(0, len(OWNERS)))]
-
-
-def amount_of(seats, cur, m, owner):
-    lst = (P.BUS_LIST_NEW if m >= P.PRICE_RISE else P.BUS_LIST_OLD)[cur]
-    if owner in MONTHLY_TYPERS:
-        return money(seats * lst), "Monthly"
-    return money(seats * lst * 12), "Annual"
-
-
-def write_snapshots(w, path, names, opp_names):
-    r = np.random.default_rng(P.SEED + 74)
-    rows = []
-    rerun = {int(x) for x in r.choice(np.arange(12, P.CUT + 1), 4, replace=False)}
-    for m in range(12, P.CUT + 1):
-        snap = [x for x in w.log["snap"] if x["m"] == m]
-        snap.sort(key=lambda x: x["id"])
-        block = []
-        for x in snap:
-            o = {"id": x["id"], "created": x["created"], "cur": x["cur"]}
-            created, days = opp_dates(o)
-            owner = opp_owner(o)
-            amt, per = amount_of(x["seats"], x["cur"], m, owner)
-            block.append([month_end(m).isoformat(), oid(x["id"]), opp_names[x["id"]], owner, STAGES[x["stage"]],
-                          stage_entered(o, m, x["stage"], x["mis"], created, days).isoformat(),
-                          created.isoformat(), x["seats"], amt, per, x["cur"], P.CRM_PROB[x["stage"]]])
-        rows.extend(block)
-        if m in rerun:
-            # the export was re-run that month and both runs were appended to the archive
-            k = int(len(block) * (0.35 + 0.5 * r.random()))
-            rows.extend(block[:k])
-    return write_csv(path, ["snapshot_date", "opportunity_id", "opportunity_name", "owner", "stage", "stage_entered",
-                            "created_date", "seats_quoted", "amount", "amount_period", "currency", "probability_pct"],
-                     rows)
-
-
-def write_closed(w, path, opp_names):
-    rows = []
-    bus = {a["id"]: a for a in w.bus}
-    reasons = ["No decision", "Price", "Competitor", "Timing", "Went dark", "Budget"]
-    for x in sorted(w.log["opp_closed"], key=lambda z: (z["closed"][1], z["id"])):
-        o = {"id": x["id"], "created": x["created"], "cur": x["cur"]}
-        created, days = opp_dates(o)
-        owner = opp_owner(o)
-        m = x["closed"][1]
-        rr = rng_for(17, x["id"])
-        if x["closed"][0] == "won":
-            a = bus[x["closed"][2]]
-            closed = ymd(m, max(1, a["day"] - int(rr.integers(0, 6))))
-            acc, outcome, reason = bid(a["id"]), "Closed Won", ""
-        else:
-            closed = ymd(m, int(rr.integers(1, 29)))
-            acc, outcome = "", "Closed Lost"
-            reason = reasons[int(rr.integers(0, len(reasons)))]
-        if closed < created:
-            closed = created
-        amt, per = amount_of(x["quote_seats"], x["cur"], m, owner)
-        rows.append([oid(x["id"]), opp_names[x["id"]], owner, created.isoformat(), closed.isoformat(), outcome,
-                     STAGES[x["stage"]], x["quote_seats"], amt, per, x["cur"], acc, reason])
-    return write_csv(path, ["opportunity_id", "opportunity_name", "owner", "created_date", "close_date", "outcome",
-                            "last_stage", "seats_quoted", "amount", "amount_period", "currency", "billing_account",
-                            "loss_reason"], rows)
-
-
-def opportunity_names(w, names):
-    out = {}
-    won = {}
-    for x in w.log["opp_closed"]:
-        if x["closed"][0] == "won":
-            won[x["id"]] = x["closed"][2]
-    ids = sorted({x["id"] for x in w.log["snap"]} | {x["id"] for x in w.log["opp_closed"]})
-    cur = {}
-    for x in w.log["snap"]:
-        cur[x["id"]] = x["cur"]
-    for x in w.log["opp_closed"]:
-        cur[x["id"]] = x["cur"]
-    for i in ids:
-        if i in won:
-            out[i] = names.acc[won[i]]
-        else:
-            out[i] = names.prospect({"id": i, "cur": cur[i]})
-    return out
-
-
-# ------------------------------------------------------------------------------------------------ price book and KPIs
-def write_price(path):
-    wb = Workbook()
-    ws = wb.active
-    ws.title = "Price book 2026"
-    rows = [
-        ["Business", "Annual contract", "EUR", 15.00, "per seat per month", "2024-01-01", "2025-12-31", ""],
-        ["Business", "Annual contract", "GBP", 13.00, "per seat per month", "2024-01-01", "2025-12-31", ""],
-        ["Business", "Annual contract", "EUR", 19.00, "per seat per month", "2026-01-01", "",
-         "New contracts from 1 January 2026; existing contracts at their first renewal on or after 1 January 2026"],
-        ["Business", "Annual contract", "GBP", 16.50, "per seat per month", "2026-01-01", "",
-         "New contracts from 1 January 2026; existing contracts at their first renewal on or after 1 January 2026"],
-        ["Business", "Onboarding (one-off)", "EUR", 1500.00, "per contract", "2024-01-01", "", ""],
-        ["Business", "Onboarding (one-off)", "GBP", 1300.00, "per contract", "2024-01-01", "", ""],
-        ["Team", "Monthly", "EUR", 12.00, "per seat per month", "2023-01-01", "", ""],
-        ["Team", "Monthly", "GBP", 10.40, "per seat per month", "2023-01-01", "", ""],
-        ["Team", "Minimum billed seats", "", 3, "seats", "2026-01-01", "",
-         "From the first invoice dated on or after 1 January 2026; before that date, one seat"],
-    ]
-    _sheet(ws, ["Plan", "Item", "Currency", "List price", "Unit", "Effective from", "Effective to", "Applies to"],
-           rows, [10, 22, 9, 10, 18, 13, 13, 70])
-    for row in ws.iter_rows(min_row=2, min_col=4, max_col=4):
-        for c in row:
-            if isinstance(c.value, float):
-                c.number_format = "#,##0.00"
-    ws.append([])
-    ws.append(["Approved by Naomi Weijters (CFO), 3 December 2025. Prices exclude VAT."])
-    wb.save(path)
-
-
-def kpi_rows(F):
-    out = []
-    for m in range(P.CUT - 9, P.CUT):
-        b, t, nb, nt = An.arr_at(F, m)
+    def bill(self, i, m):
+        """The billing date of subscription i in month m."""
         y, mo = sim.ym(m)
-        out.append([dt.date(y, mo, 1).strftime("%b %Y"), round(b, 2), round(t, 2), round(b + t, 2), nb, nt])
-    return out
+        return dt.date(y, mo, int(self.day[i]))
 
+    def households(self):
+        S, rng = self.S, self.rng
+        n = self.n
+        # an address per address id, a variant spelling now and then on a new account
+        self.addr = {}
+        self.cust_addr = {}
+        self.cust_title = {}
+        self.cust_created = {}
+        self.email = {}
+        for i in range(n):
+            c = int(S["customer"][i])
+            if c in self.cust_addr:
+                continue
+            a = int(S["address"][i])
+            t = P.TITLES[int(S["title"][i])]
+            if a not in self.addr:
+                town, lo, hi = TOWNS[t][int(rng.integers(0, len(TOWNS[t])))]
+                street = STREETS[int(rng.integers(0, len(STREETS)))]
+                no = str(int(rng.integers(1, 260)))
+                if rng.random() < 0.08:
+                    no += "abc"[int(rng.integers(0, 3))]
+                self.addr[a] = (street, no, str(int(rng.integers(lo, hi + 1))), town)
+            street, no, pc, town = self.addr[a]
+            if S["parent"][i] >= 0 and S["newacc"][i] and rng.random() < 0.5:
+                street = variant(street, rng)
+            self.cust_addr[c] = (street, no, pc, town)
+            self.cust_title[c] = t
+            self.cust_created[c] = self.start_date[i]
+            self.email[c] = hexid("mail", c, int(rng.integers(0, 10 ** 6)), n=40)
 
-def write_kpi(F, path):
-    wb = Workbook()
-    ws = wb.active
-    ws.title = "ARR month end"
-    ws.append(["Tekenbord B.V., revenue KPIs at month end (ARR on the ARR reporting policy v5, GBP at the plan rate). "
-               "Refreshed 6 October 2026, Finance."])
-    ws["A1"].font = Font(bold=True)
-    ws.append([])
-    rows = kpi_rows(F)
-    hdr = ["Month", "Business ARR (EUR)", "Team ARR (EUR)", "Total ARR (EUR)", "Business accounts", "Team accounts"]
-    ws.append(hdr)
-    for c in ws[3]:
-        c.font = Font(bold=True)
-        c.fill = PatternFill("solid", fgColor="DCE6F1")
-    for r in rows:
-        ws.append(r)
-        for c in ws[ws.max_row][1:4]:
-            c.number_format = "#,##0"
-    for i, wd in enumerate([11, 18, 16, 16, 17, 14], 1):
-        ws.column_dimensions[get_column_letter(i)].width = wd
-    wb.save(path)
-    return rows
-
-
-# ------------------------------------------------------------------------------------------------ the two unused files
-def write_tickets(w, path):
-    r = np.random.default_rng(P.SEED + 75)
-    cats = ["Login and SSO", "Billing question", "Export to PDF", "Performance", "Permissions", "Integrations",
-            "Templates", "Bug report", "Seat management", "Data import"]
-    pr = ["Low", "Normal", "Normal", "Normal", "High", "Urgent"]
-    rows = []
-    n = 58000
-    bus = [a for a in w.bus if a["active"] or (a["end"] is not None and a["end"] >= 48)]
-    team = [t for t in w.team if t["active"] or (t["end"] is not None and t["end"] >= 48)]
-    for m in range(48, P.CUT + 1):
-        y, mo = sim.ym(m)
-        dim = calendar.monthrange(y, mo)[1]
-        k = int(r.poisson(640 + 25 * (m - 48)))
-        for _ in range(k):
-            if r.random() < 0.55:
-                a = bus[int(r.integers(0, len(bus)))]
-                acc, plan = bid(a["id"]), "Business"
+    # ---------------------------------------------------------------- the subscription system
+    def subscriptions(self):
+        S = self.S
+        rows = []
+        self.end_date = []
+        for i in range(self.n):
+            sd = self.start_date[i]
+            L = int(S["L"][i])
+            e = int(S["end"][i])
+            kind = S["kind"][i]
+            ch = P.CHANNELS[int(S["channel"][i])]
+            if kind == "base":
+                code = ""
             else:
-                t = team[int(r.integers(0, len(team)))]
-                acc, plan = tid(t["id"]), "Team"
-            n += int(r.integers(1, 4))
-            d = dt.datetime(y, mo, int(r.integers(1, dim + 1)), int(r.integers(7, 21)), int(r.integers(0, 60)))
-            fr = round(float(r.lognormal(1.1, 0.9)), 1)
-            res = d + dt.timedelta(hours=float(r.lognormal(3.0, 1.1)))
-            status = "Solved" if res < dt.datetime(2026, 10, 31, 23, 59) else "Open"
-            rows.append(["SR-%06d" % n, acc, plan, d.strftime("%Y-%m-%d %H:%M"), cats[int(r.integers(0, len(cats)))],
-                         pr[int(r.integers(0, len(pr)))], fr, res.strftime("%Y-%m-%d %H:%M") if status == "Solved"
-                         else "", status, AGENTS[int(r.integers(0, len(AGENTS)))]])
-    return write_csv(path, ["ticket_id", "account_id", "plan", "opened_at", "category", "priority",
-                            "first_response_hours", "solved_at", "status", "assignee"], rows)
+                m0 = int(S["start"][i])
+                code = P.OLD_CODE[ch] if m0 < P.CODE_SWITCH else ch
+            offer = sim.OFFER_CODES[int(S["offer"][i])] if S["offer"][i] >= 0 else ""
+            intro_end = add_months(sd, L) - dt.timedelta(days=1) if L > 0 else None
+            reason = S["reason"][i]
+            if e == -1:
+                ed = sd + dt.timedelta(days=int(self.rng.integers(2, 14)))
+                req = ed
+            elif e == -2:
+                ed, req = None, None
+            else:
+                base_shift = int(S["tenure0"][i]) if kind == "base" else 0
+                k_end = e - int(S["start"][i]) + 1 + base_shift
+                ed = add_months(sd, k_end) - dt.timedelta(days=1)
+                if reason == "PAYMENT_FAILED":
+                    req = None
+                elif S["rise_exit"][i] == P.RISE_2025 - 1:
+                    req = dt.date(2025, 2, 1) + dt.timedelta(days=int(self.rng.integers(9, 46)))
+                elif S["su_exit"][i]:
+                    req = max(sd, ed - dt.timedelta(days=int(self.rng.integers(1, max(3, 30 * L)))))
+                else:
+                    req = max(sd, ed - dt.timedelta(days=int(self.rng.integers(3, 40))))
+            if req is not None:
+                req = min(req, dt.date(2026, 11, 2))
+            self.end_date.append(ed)
+            rows.append([self.sid[i], int(S["customer"][i]), P.TITLES[int(S["title"][i])], "DIGITAL", code, offer,
+                         iso(sd), iso(intro_end), iso(req), iso(ed), reason if e != -2 else "",
+                         ROUTE_WORD[sim.ROUTES[int(S["route"][i])]], 1])
+        rows += self.texture_subscriptions()
+        # the nightly export was re-run on some days and appended
+        k = int(round(P.DUP_SHARE * len(rows)))
+        dup = self.rng.choice(len(rows), size=k, replace=False)
+        rows = rows + [list(rows[j]) for j in sorted(dup)]
+        order = self.rng.permutation(len(rows))
+        rows = [rows[j] for j in order]
+        rows.sort(key=lambda r: (r[6], r[0]))
+        return rows
+
+    def texture_subscriptions(self):
+        """Staff access, gift subscriptions, company licences and the IT department's test accounts: real rows of the
+        same export that are not consumer subscriptions."""
+        rng = self.rng
+        rows = []
+        self.texture_periods = []
+        self.texture_customers = []
+        nxt = iter(self.spare_ids)
+        cno = iter(rng.permutation(rng.choice(np.arange(900000, 989999), size=2200, replace=False)))
+        for k in range(P.STAFF):
+            t = P.TITLES[int(rng.choice(4, p=[0.45, 0.22, 0.2, 0.13]))]
+            sd = dt.date(2015, 1, 1) + dt.timedelta(days=int(rng.integers(0, 4300)))
+            ed = None if rng.random() < 0.85 else min(sd + dt.timedelta(days=int(rng.integers(200, 1500))),
+                                                       dt.date(2026, 10, 20))
+            sid, c = next(nxt), int(next(cno))
+            rows.append([sid, c, t, "DIGITAL_STAFF", "", "", iso(sd), "", "", iso(ed), "STAFF_END" if ed else "",
+                         "NONE", 1])
+            self.texture_periods.append([sid, iso(max(sd, dt.date(2023, 1, 1))), iso(ed), "0.00", "STAFF"])
+            self.texture_customers.append((c, sd, "STAFF", t))
+        for m in range(0, P.CUT + 1):
+            y, mo = sim.ym(m)
+            for g in range(int(rng.poisson(P.GIFTS_A_MONTH * (1.8 if mo == 12 else 1.0)))):
+                t = P.TITLES[int(rng.choice(4, p=[0.42, 0.24, 0.21, 0.13]))]
+                months = int(rng.choice([3, 6, 12], p=[0.5, 0.3, 0.2]))
+                sd = dt.date(y, mo, int(rng.integers(1, 29)))
+                ed = add_months(sd, months) - dt.timedelta(days=1)
+                done = ed <= dt.date(2026, 10, 31)
+                sid, c = next(nxt), int(next(cno))
+                price = {3: 39.0, 6: 74.0, 12: 139.0}[months]
+                rows.append([sid, c, t, "DIGITAL_GIFT", "", "", iso(sd), "", "", iso(ed) if done else "",
+                             "GIFT_END" if done else "", "CARD" if rng.random() < 0.6 else "PAYPAL", 1])
+                self.texture_periods.append([sid, iso(sd), iso(ed), "%.2f" % (price / months), "GIFT"])
+                self.texture_customers.append((c, sd, "CONSUMER", t))
+        for k in range(P.GROUPS):
+            t = P.TITLES[int(rng.choice(4, p=[0.5, 0.2, 0.2, 0.1]))]
+            seats = int(rng.choice([5, 8, 10, 12, 15, 20, 25, 30, 40, 60, 80]))
+            sd = dt.date(2019, 1, 1) + dt.timedelta(days=int(rng.integers(0, 2700)))
+            sid, c = next(nxt), int(next(cno))
+            rows.append([sid, c, t, "DIGITAL_GROUP", "", "", iso(sd), "", "", "", "", "SEPA", seats])
+            self.texture_periods.append([sid, iso(max(sd, dt.date(2023, 1, 1))), "", "%.2f" % (seats * 9.90),
+                                         "GROUP"])
+            self.texture_customers.append((c, sd, "BUSINESS", t))
+        for k in range(P.TESTS):
+            t = P.TITLES[int(rng.integers(0, 4))]
+            sd = dt.date(2023, 1, 9) + dt.timedelta(days=int(rng.integers(0, 1380)))
+            ed = None if rng.random() < 0.4 else min(sd + dt.timedelta(days=int(rng.integers(1, 60))),
+                                                      dt.date(2026, 10, 30))
+            sid, c = next(nxt), int(next(cno))
+            off = str(rng.choice(["PM1", "M3E1", "H6"]))
+            rows.append([sid, c, t, "DIGITAL", "DIR" if sd >= dt.date(2025, 3, 1) else "ORG", off, iso(sd), "",
+                         iso(ed), iso(ed), "CANCELLED" if ed else "", "CARD", 1])
+            self.texture_periods.append([sid, iso(sd), iso(ed), "0.99" if off == "PM1" else "1.00", "INTRO"])
+            self.texture_customers.append((c, sd, "TEST", t))
+        return rows
+
+    def price_periods(self):
+        """Contiguous runs of one gross monthly price per subscription, as the billing system stores them."""
+        S = self.S
+        g = S["gross"]
+        rows = []
+        for i in range(self.n):
+            e = int(S["end"][i])
+            if e == -1:
+                rows.append([self.sid[i], iso(self.start_date[i]), iso(self.end_date[i]),
+                             "%.2f" % S["ip"][i], "INTRO"])
+                continue
+            st = int(S["start"][i])
+            last = P.CUT if e == -2 else e
+            L = int(S["L"][i])
+            cur, frm, typ = None, None, None
+            for m in range(st, last + 1):
+                k = m - st
+                v = round(float(g[i, m]), 2)
+                kind = "INTRO" if k < L else "FULL"
+                if cur is None or v != cur or kind != typ:
+                    if cur is not None:
+                        rows.append([self.sid[i], iso(frm), iso(self.bill(i, m) - dt.timedelta(days=1)),
+                                     "%.2f" % cur, typ])
+                    cur, frm, typ = v, self.bill(i, m), kind
+            if cur is not None:
+                rows.append([self.sid[i], iso(frm), "" if e == -2 else iso(self.end_date[i]), "%.2f" % cur, typ])
+        rows += self.texture_periods
+        rows.sort(key=lambda r: (r[0], r[1]))
+        return rows
+
+    def exceptions(self):
+        """Debits returned and collected again, debits that ended a subscription, refunds of withdrawals."""
+        S, rng = self.S, self.rng
+        rows = []
+        word = {"SEPA": "RETURN_DEBIT", "PAYPAL": "PAYMENT_DECLINED", "CARD": "CARD_DECLINED",
+                "APPLE": "STORE_BILLING_RETRY", "GOOGLE": "STORE_BILLING_RETRY"}
+        for i, m in S["recovered"]:
+            r = sim.ROUTES[int(S["route"][i])]
+            b = self.bill(i, m)
+            amt = S["gross"][i, m]
+            rows.append([self.sid[i], iso(b + dt.timedelta(days=int(rng.integers(2, 6)))), word[r], "%.2f" % amt])
+            rows.append([self.sid[i], iso(b + dt.timedelta(days=int(rng.integers(8, 16)))), "COLLECTED", "%.2f" % amt])
+        for i in range(self.n):
+            if S["reason"][i] == "PAYMENT_FAILED" and S["end"][i] >= 0:
+                r = sim.ROUTES[int(S["route"][i])]
+                b = self.end_date[i] + dt.timedelta(days=1)
+                price = sim.full_price(np.array([S["title"][i]]), np.array([S["end"][i] + 1]))[0]
+                rows.append([self.sid[i], iso(b + dt.timedelta(days=int(rng.integers(2, 6)))), word[r],
+                             "%.2f" % price])
+                rows.append([self.sid[i], iso(b + dt.timedelta(days=int(rng.integers(20, 30)))), "WRITTEN_OFF",
+                             "%.2f" % price])
+            if S["end"][i] == -1:
+                rows.append([self.sid[i], iso(self.end_date[i] + dt.timedelta(days=int(rng.integers(1, 5)))),
+                             "REFUND_WITHDRAWAL", "%.2f" % S["ip"][i]])
+        rows.sort(key=lambda r: (r[1], r[0]))
+        return rows
+
+    def customers(self):
+        rows = []
+        for c, (street, no, pc, town) in self.cust_addr.items():
+            rows.append([c, iso(self.cust_created[c]), "CONSUMER", self.email[c], street, no, pc, town])
+        for c, sd, typ, t in self.texture_customers:
+            town, lo, hi = TOWNS[t][0]
+            rows.append([c, iso(sd), typ, hexid("mail", c, typ, n=40),
+                         "Am Pressehaus" if typ in ("STAFF", "TEST") else STREETS[int(self.rng.integers(0, 50))],
+                         str(int(self.rng.integers(1, 40))), str(int(self.rng.integers(lo, hi + 1))), town])
+        rows.sort(key=lambda r: r[0])
+        return rows
+
+    def payment_methods(self):
+        """One row per customer and payment method, with the payment fingerprint the payment service provider
+        returns (a hash of the IBAN, the card or the PayPal payer; the store's account token)."""
+        S = self.S
+        seen = {}
+        for i in range(self.n):
+            c = int(S["customer"][i])
+            r = sim.ROUTES[int(S["route"][i])]
+            key = (c, r)
+            fp = hexid("fp", int(S["fingerprint"][i]), r, n=20)
+            sd = self.start_date[i] if S["kind"][i] != "base" else dt.date(2023, 1, 1)
+            ed = self.end_date[i] if self.end_date[i] is not None else dt.date(2026, 10, 31)
+            if key not in seen:
+                seen[key] = [c, r, fp, sd, ed]
+            else:
+                seen[key][3] = min(seen[key][3], sd)
+                seen[key][4] = max(seen[key][4], ed)
+        rows = [[c, r, fp, iso(a), iso(b)] for (c, r, fp, a, b) in seen.values()]
+        rows.sort(key=lambda x: (x[0], x[1]))
+        return rows
+
+    # ---------------------------------------------------------------- the analytics platform
+    def logins(self):
+        """Each customer's web login, and for some a second login (the app's or an older one) that carries part of
+        their reading."""
+        rng = self.rng
+        self.login_of = {}
+        rows = []
+        ids = rng.choice(np.arange(10 ** 7, 10 ** 8), size=2 * len(self.cust_addr) + 10, replace=False)
+        it = iter(ids)
+        for c in sorted(self.cust_addr):
+            a = "u%d" % next(it)
+            self.login_of[c] = [a]
+            rows.append([a, c, iso(self.cust_created[c]), "WEB"])
+            if rng.random() < P.SECOND_LOGIN:
+                b = "u%d" % next(it)
+                self.login_of[c].append(b)
+                rows.append([b, c, iso(self.cust_created[c] + dt.timedelta(days=int(rng.integers(0, 200)))),
+                             "APP"])
+        rows.sort(key=lambda r: r[0])
+        return rows
+
+    def reading(self):
+        S, rng = self.S, self.rng
+        R = S["reading"]
+        rows = []
+        for i in range(self.n):
+            c = int(S["customer"][i])
+            logs = self.login_of[c]
+            for m in np.nonzero(R[i])[0]:
+                d = int(R[i, m])
+                y, mo = sim.ym(int(m))
+                ms = "%04d-%02d" % (y, mo)
+                if len(logs) == 2:
+                    d2 = int(rng.binomial(d, 0.3))
+                    parts = [(logs[0], d - d2), (logs[1], d2)]
+                else:
+                    parts = [(logs[0], d)]
+                for lg, dd in parts:
+                    if dd <= 0:
+                        continue
+                    art = int(rng.poisson(P.ARTICLES_PER_DAY * dd * np.exp(0.15 * S["h"][i])))
+                    app = int(rng.binomial(dd, 0.35 if lg != logs[0] else 0.12))
+                    rows.append([lg, ms, dd, max(art, dd), app])
+        rows.sort(key=lambda r: (r[1], r[0]))
+        return rows
+
+    # ---------------------------------------------------------------- the marketing system
+    def spend(self):
+        """Spend and the ad platforms' attributed starts by line and month, as the marketing tool exports them."""
+        S, rng = self.S, self.rng
+        rows = []
+        new = S["kind"] != "base"
+        for m in range(0, P.CUT + 1):
+            y, mo = sim.ym(m)
+            for (c, t) in P.LINES:
+                sel = new & (S["start"] == m) & (S["channel"] == sim.C_IDX[c]) & (S["title"] == sim.T_IDX[t])
+                gross_starts = int(sel.sum())
+                season = {11: 1.10, 12: 1.08, 7: 0.95, 8: 0.95}.get(mo, 1.0)
+                trend = 0.93 + 0.07 * m / P.CUT
+                cost = gross_starts * P.CPA[(c, t)] * season * trend * float(np.exp(rng.normal(0, 0.06)))
+                attr = max(0, int(round(gross_starts * float(np.exp(rng.normal(0.02, 0.07))))))
+                clicks = int(rng.poisson(max(gross_starts, 1) * {"SOC": 55, "SEA": 38, "PART": 24, "TEL": 0,
+                                                                  "APP": 41}[c]))
+                code = P.OLD_CODE[c] if m < P.CODE_SWITCH else c
+                rows.append(["%02d.%04d" % (mo, y), code, P.TITLE_NAME[t], euro_de(cost), attr,
+                             "" if c == "TEL" else clicks])
+        return rows
+
+    def offers(self):
+        rows = []
+        first = {"PM1": "2019-03-01", "M3E1": "2021-09-01", "H6": "2020-06-01", "G3": "2022-02-01",
+                 "J12": "2023-02-01"}
+        for code, spec in P.OFFERS.items():
+            rule = ("fixed %.2f" % spec["fixed"]) if "fixed" in spec else ("%.0f%% of list" % (100 * spec["share"]))
+            rows.append([code, spec["name"], spec["months"], rule, first[code]])
+        rows.append(["HB3", "3 Monate halber Preis", 3, "50% of list", "2018-11-01"])
+        return rows
 
 
-def write_nps(w, path):
-    r = np.random.default_rng(P.SEED + 76)
-    rows = []
-    act = [a for a in w.bus if a["start"] <= 56 and (a["active"] or (a["end"] or 0) >= 54)]
-    tact = [t for t in w.team if t["start"] <= 56 and (t["active"] or (t["end"] or 0) >= 54)]
-    roles = ["Admin", "Editor", "Viewer", "Owner"]
-    n = 0
-    for plan, pool, k in (("Business", act, 1450), ("Team", tact, 980)):
-        for _ in range(k):
-            x = pool[int(r.integers(0, len(pool)))]
-            n += 1
-            mm = 54 + int(r.integers(0, 3))
-            y, mo = sim.ym(mm)
-            d = dt.date(y, mo, int(r.integers(1, calendar.monthrange(y, mo)[1] + 1)))
-            score = int(np.clip(round(r.normal(7.6 if plan == "Business" else 7.1, 2.0)), 0, 10))
-            rows.append(["R%06d" % (410000 + n * 3 + int(r.integers(0, 3))), bid(x["id"]) if plan == "Business"
-                         else tid(x["id"]), plan, d.isoformat(), roles[int(r.integers(0, len(roles)))], score])
-    rows.sort(key=lambda z: (z[3], z[0]))
-    return write_csv(path, ["response_id", "account_id", "plan", "submitted", "respondent_role", "score"], rows)
+def variant(street, rng):
+    """The same street typed another way on a new account."""
+    s = street
+    if s.endswith("straße") and rng.random() < 0.7:
+        return s[:-6] + ("str." if rng.random() < 0.6 else "strasse")
+    if s.endswith("weg") and rng.random() < 0.5:
+        return s.lower()
+    return s.upper() if rng.random() < 0.2 else s + " "
 
 
-def write_tables(w, target):
+def write_all(S, target, seed=P.SEED + 101):
+    import os
+    pk = Pack(S, seed)
     F = {k: os.path.join(target, v) for k, v in FILES.items()}
-    names = Names(w)
-    opp_names = opportunity_names(w, names)
     n = {}
-    n["lines"] = write_lines(w, F["lines"], names)
-    n["team"] = write_team(w, F["team"])
-    n["activity"] = write_activity(w, F["activity"])
-    n["links"] = write_links(w, F["links"])
-    n["crm"] = write_crm(w, F["crm"], names)
-    n["snap"] = write_snapshots(w, F["snap"], names, opp_names)
-    n["closed"] = write_closed(w, F["closed"], opp_names)
-    write_price(F["price"])
-    n["kpi"] = write_kpi(tables.frames(w), F["kpi"])
-    n["tickets"] = write_tickets(w, F["tickets"])
-    n["nps"] = write_nps(w, F["nps"])
-    return n
+    n["subs"] = write_csv(F["subs"], ["subscription_id", "customer_no", "title", "product", "channel", "offer_code",
+                                      "start_date", "intro_end_date", "cancel_received", "end_date", "end_reason",
+                                      "payment_route", "seats"], pk.subscriptions())
+    n["periods"] = write_csv(F["periods"], ["subscription_id", "valid_from", "valid_to", "monthly_price_eur",
+                                            "period_type"], pk.price_periods())
+    n["exceptions"] = write_csv(F["exceptions"], ["subscription_id", "event_date", "event", "amount_eur"],
+                                pk.exceptions())
+    n["customers"] = write_csv(F["customers"], ["customer_no", "created", "account_type", "email_sha1", "street",
+                                                "house_no", "postcode", "town"], pk.customers())
+    n["methods"] = write_csv(F["methods"], ["customer_no", "method", "fingerprint", "first_used", "last_used"],
+                             pk.payment_methods())
+    n["logins"] = write_csv(F["logins"], ["login_id", "customer_no", "created", "type"], pk.logins())
+    n["reading"] = write_csv(F["reading"], ["login_id", "month", "reading_days", "articles", "app_days"],
+                             pk.reading())
+    n["spend"] = write_csv(F["spend"], ["Monat", "Kanal", "Titel", "Kosten_EUR", "Starts_attribuiert", "Klicks"],
+                           pk.spend(), delimiter=";")
+    n["offers"] = write_csv(F["offers"], ["offer_code", "offer_name", "intro_months", "intro_price_rule",
+                                          "in_use_since"], pk.offers())
+    codes = []
+    for c in P.CHANNELS:
+        codes.append([P.OLD_CODE[c], "2019-01-01", "2025-02-28", c])
+        codes.append([c, "2025-03-01", "", ""])
+    codes.sort(key=lambda r: (r[1], r[0]))
+    n["codes"] = write_csv(F["codes"], ["channel_code", "valid_from", "valid_to", "replaced_by"], codes)
+    import distractors
+    n.update(distractors.write(S, F, pk.rng))
+    return pk, n

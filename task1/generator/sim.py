@@ -1,414 +1,311 @@
-"""The process behind Tekenbord's files, simulated month by month.
+"""The process behind Medienhaus Brückenhafen's digital subscriptions (task1 architecture 3).
 
-Business accounts hold annual seat contracts: they true up seats mid-term when more people need the product than
-they licensed, and at each anniversary they renew (repricing to the new list from March 2026 at a negotiated
-uplift), cut seats toward the people actually working in the product, or leave. Parent groups that consolidate their
-software vendors take their subsidiaries' accounts with them at each one's next renewal. Team accounts pay monthly
-per member, from April 2026 for at least three seats, upgrade to Business once they grow, and cancel on a hazard
-that falls with age. Sales opportunities move through four stages and go cold when they stall. Every file is a view
-of this one process; nothing is added where a result is decided."""
-import copy
+Households carry a reading habit h and a price sensitivity p. A household starts a subscription on one title through
+one channel at the offer that channel ran that month; it pays the introductory price, decides at the first full-price
+billing whether to stay (the decision rides on the discount it is losing, how long the introduction lasted, the full
+price it is stepping up to, its price sensitivity and a little on its habit), then cancels month by month at a rate
+that falls with time on the full price and with its habit. Debits fail and are re-presented or end the subscription.
+A list-price rise takes effect at each subscription's first billing on or after the 1st of April; the notice letters
+of February move part of the extra leaving to the end of March. A household that has left may come back through the
+paywall, under its old customer number or a new one.
+
+engine() steps any batch of subscriptions month by month and is used for the history, the base's future and the
+clean-truth value of the 2027 lines; history() builds the record the pack is cut from."""
 import math
 
 import numpy as np
 
 import params as P
 
+T_IDX = {t: i for i, t in enumerate(P.TITLES)}
+C_IDX = {c: i for i, c in enumerate(P.CHANNELS)}
+ROUTES = ["SEPA", "PAYPAL", "CARD", "APPLE", "GOOGLE"]
+R_IDX = {r: i for i, r in enumerate(ROUTES)}
+OFFER_CODES = list(P.OFFERS)
+O_IDX = {o: i for i, o in enumerate(OFFER_CODES)}
+
 
 def ym(m):
-    y, mo = divmod(P.M0_MONTH - 1 + m, 12)
-    return P.M0_YEAR + y, mo + 1
+    return P.M0_YEAR + (P.M0_MONTH - 1 + m) // 12, (P.M0_MONTH - 1 + m) % 12 + 1
 
 
-def trend(a, b, m, m_a, m_b):
-    t = min(max((m - m_a) / float(m_b - m_a), 0.0), 1.0)
-    return a + (b - a) * t
+def cal_month(m):
+    return ym(m)[1]
 
 
-class World:
-    def __init__(self, seed):
-        self.rng = np.random.default_rng(seed)
-        self.parents = []
-        self.bus = []
-        self.team = []
-        self.opps = []
-        self.next_id = {"P": 4100, "B": 20000, "T": 700000, "O": 310000, "W": 5000}
-        self.record = True
-        self.log = {"lines": [], "team_inv": [], "ws": [], "snap": [], "opp_closed": [], "ws_map": [],
-                    "events": []}
-        self.flows = None
-        self.cut_ids = set()
-        # the Team plan's cancellations run with the calendar: an autumn peak, a late-winter trough, with a fixed
-        # offset per calendar month and month-to-month noise, so no two years repeat
-        r = self.rng
-        off = r.normal(0, P.TEAM_SEASON_NOISE[0], 12)
-        self.season = {}
-        for m in range(-48, 96):
-            cal = ym(m)[1]
-            f = 1.0 + P.TEAM_SEASON_AMP * math.cos(2 * math.pi * (cal - P.TEAM_SEASON_PEAK) / 12.0) + off[cal - 1] \
-                + r.normal(0, P.TEAM_SEASON_NOISE[1])
-            self.season[m] = float(max(f, 0.45))
+def days_in(m):
+    y, mo = ym(m)
+    if mo == 12:
+        return 31
+    import datetime as dt
+    return (dt.date(y, mo + 1, 1) - dt.date(y, mo, 1)).days
 
-    # ------------------------------------------------------------------ ids
-    def nid(self, k, step=None):
-        r = self.rng
-        self.next_id[k] += int(step if step else r.integers(1, 9))
-        return self.next_id[k]
 
-    # ------------------------------------------------------------------ parents and accounts
-    def new_parent(self, group):
-        r = self.rng
-        pid = self.nid("P", 3)
-        self.parents.append({"id": pid, "group": group, "consolidating": False, "cons_month": None,
-                             "country": None})
-        return self.parents[-1]
+def full_price(title_idx, m):
+    """Gross full price in force at month m (arrays allowed)."""
+    t = np.asarray(title_idx)
+    m = np.asarray(m)
+    tab = np.array([P.PRICE[x] for x in P.TITLES])          # titles x 3
+    era = np.where(m >= P.RISE_2027, 2, np.where(m >= P.RISE_2025, 1, 0))
+    return tab[t, era]
 
-    def new_workspace(self, owner, m, share):
-        wid = self.nid("W", 1)
-        ws = {"id": wid, "share": share, "owner": owner, "from": m, "noise": float(self.rng.normal(0, 0.05))}
-        if self.record:
-            self.log["ws_map"].append({"ws": wid, "owner": owner, "from": m, "to": None})
-        return ws
 
-    def new_business(self, m, seats_need, currency, parent, source, team_ws=None):
-        r = self.rng
-        u = float(np.clip(r.normal(trend(P.UTIL_AT_SIGNING[0], P.UTIL_AT_SIGNING[1], m, -36, P.CUT), P.UTIL_SD),
-                          0.38, 0.99))
-        seats = max(5, int(math.ceil(seats_need / u)))
-        disc = float(np.clip(0.04 + 0.035 * math.log(max(seats, 5) / 20.0) + r.normal(0, 0.035), 0.0, 0.28))
-        if source == "upgrade":
-            disc = float(np.clip(r.normal(0.02, 0.02), 0.0, 0.08))
-        lst = (P.BUS_LIST_NEW if m >= P.PRICE_RISE else P.BUS_LIST_OLD)[currency]
-        price = round(lst * (1 - disc), 2)
-        aid = self.nid("B")
-        nws = 1 if seats < 25 else int(r.choice([1, 2, 2, 3, 4], p=[0.25, 0.3, 0.2, 0.15, 0.1]))
-        shares = r.dirichlet(np.ones(nws) * 3.0)
-        acc = {"id": aid, "parent": parent["id"], "cur": currency, "start": m, "day": int(r.integers(1, 29)),
-               "seats": seats, "price": price, "disc": disc, "u": u, "need": float(seats_need),
-               "g": float(r.normal(P.NEED_GROWTH_MEAN, P.NEED_GROWTH_SD)), "rc": 0, "active": True,
-               "repriced": m >= P.PRICE_RISE, "hist": [], "source": source, "ws": [], "end": None,
-               "line": None}
-        if team_ws is not None:
-            team_ws["owner"] = aid
-            if self.record:
-                for row in self.log["ws_map"]:
-                    if row["ws"] == team_ws["id"] and row["to"] is None:
-                        row["to"] = m - 1
-                self.log["ws_map"].append({"ws": team_ws["id"], "owner": aid, "from": m, "to": None})
-            team_ws["share"] = float(shares[0])
-            acc["ws"].append(team_ws)
-            shares = shares[1:]
-        for s in shares:
-            acc["ws"].append(self.new_workspace(aid, m, float(s)))
-        self.bus.append(acc)
-        self.write_line(acc, m, "new", seats, price)
-        if self.record and r.random() < (0.55 if seats >= 40 else 0.18) and source != "upgrade":
-            self.log["lines"].append({"acc": aid, "type": "onboarding_fee", "m": m, "day": acc["day"],
-                                      "seats": 0, "price": P.ONBOARDING_FEE[currency], "cur": currency,
-                                      "months": 0})
-        return acc
+def intro_price(offer_idx, title_idx, start_m):
+    """Gross monthly introductory price, fixed at the start."""
+    o = np.asarray(offer_idx)
+    out = np.zeros(o.shape)
+    fp = full_price(title_idx, start_m)
+    for code, i in O_IDX.items():
+        sel = o == i
+        spec = P.OFFERS[code]
+        out[sel] = spec["fixed"] if "fixed" in spec else np.round(spec["share"] * fp[sel], 2)
+    return out
 
-    def write_line(self, acc, m, typ, seats, price, months=12):
-        if self.flows is not None:
-            return
-        if self.record:
-            self.log["lines"].append({"acc": acc["id"], "type": typ, "m": m, "day": acc["day"], "seats": seats,
-                                      "price": price, "cur": acc["cur"], "months": months})
 
-    def active_users(self, acc, m):
-        age = m - acc["start"]
-        ramp = 1.0 - P.RAMP_DEPTH * math.exp(-age / P.RAMP_TAU)
-        return acc["need"] * ramp
+def intro_months(offer_idx):
+    tab = np.array([P.OFFERS[c]["months"] for c in OFFER_CODES])
+    return tab[np.asarray(offer_idx)]
 
-    # ------------------------------------------------------------------ team accounts
-    def new_team(self, m, members, currency):
-        tid = self.nid("T")
-        acc = {"id": tid, "cur": currency, "start": m, "members": members, "active": True, "padded": None,
-               "end": None, "ws": None, "upgraded": None, "billing_day": int(self.rng.integers(1, 29))}
-        acc["ws"] = self.new_workspace(tid, m, 1.0)
-        self.team.append(acc)
-        return acc
 
-    def team_seats(self, acc, m):
-        if m >= P.TEAM_MIN:
-            return max(acc["members"], P.TEAM_MIN_SEATS)
-        return acc["members"]
+def sig(x):
+    return 1.0 / (1.0 + np.exp(-x))
 
-    # ------------------------------------------------------------------ one month
-    def step(self, m):
-        r = self.rng
-        fl = self.flows
-        # parent groups start consolidating vendors
-        counts = {}
-        for a in self.bus:
-            if a["active"]:
-                counts[a["parent"]] = counts.get(a["parent"], 0) + 1
-        for p in self.parents:
-            if not p["consolidating"] and counts.get(p["id"], 0) >= 2 and r.random() < P.CONSOLIDATION_HAZARD:
-                p["consolidating"] = True
-                p["cons_month"] = m
-        pmap = {p["id"]: p for p in self.parents}
 
-        # Business accounts: needs drift, true-ups, renewals
-        for a in self.bus:
-            if not a["active"] or a["start"] == m:
-                continue
-            a["need"] *= math.exp(a["g"] / 12.0 + r.normal(0, P.NEED_NOISE))
-            A = self.active_users(a, m)
-            a["hist"].append((m, A))
-            age = m - a["start"]
-            if age % 12 == 0:
-                a["rc"] += 1
-                recent = [x for (mm, x) in a["hist"][-3:]]
-                A3 = sum(recent) / len(recent)
-                U = A3 / a["seats"]
-                p_ch = P.CHURN_BASE + (P.CHURN_FIRST if a["rc"] == 1 else 0.0) + P.CHURN_UTIL * max(0.0, 0.70 - U)
-                par = pmap[a["parent"]]
-                if par["consolidating"]:
-                    p_ch = max(p_ch, P.CONSOLIDATION_CHURN)
-                old_arr = self.arr_bus(a)
-                if r.random() < p_ch:
-                    a["active"] = False
-                    a["end"] = m
-                    if fl is not None:
-                        fl["churn"] += old_arr
-                        fl["churn_n"] += 1
-                    if self.record:
-                        self.log["events"].append({"acc": a["id"], "type": "non_renewal", "m": m})
-                    continue
-                new_seats = a["seats"]
-                if U < P.RIGHTSIZE_BELOW:
-                    q = P.RIGHTSIZE_P_FIRST if a["rc"] == 1 else P.RIGHTSIZE_P_LATER
-                    if r.random() < q:
-                        new_seats = max(5, int(math.ceil(A3 / P.RIGHTSIZE_HEADROOM)))
-                        new_seats = min(new_seats, a["seats"])
-                new_price = a["price"]
-                if m >= P.PRICE_RISE and not a["repriced"]:
-                    up = P.UPLIFT_FULL - P.UPLIFT_SLOPE * math.log(max(a["seats"], 5) / 20.0) + r.normal(0, P.UPLIFT_SD)
-                    up = float(np.clip(up, P.UPLIFT_FLOOR, P.UPLIFT_FULL))
-                    new_price = round(a["price"] * (1 + up), 2)
-                    a["repriced"] = True
-                fx = P.PLAN_RATE_GBP if a["cur"] == "GBP" else 1.0
-                if fl is not None:
-                    fl["price"] += a["seats"] * (new_price - a["price"]) * 12 * fx
-                    fl["contraction"] += (a["seats"] - new_seats) * new_price * 12 * fx
-                    if m <= P.PRICE_RISE + 11 + 0 and not a.get("_counted"):
-                        pass
-                a["seats"], a["price"] = new_seats, new_price
-                self.write_line(a, m, "renewal", new_seats, new_price)
-                A = self.active_users(a, m)
-            if A > a["seats"] * 1.0:
-                add = int(math.ceil(A * 1.04 - a["seats"]))
-                if add > 0:
-                    months_left = 12 - (age % 12)
-                    if fl is not None:
-                        fx = P.PLAN_RATE_GBP if a["cur"] == "GBP" else 1.0
-                        fl["expansion"] += add * a["price"] * 12 * fx
-                        if a["id"] in self.cut_ids:
-                            fl["expansion_book"] += add * a["price"] * 12 * fx
-                    a["seats"] += add
-                    self.write_line(a, m, "true_up", add, a["price"], months=months_left)
+def engine(S, m_end, rng, rise_months=(P.RISE_2025, P.RISE_2027), record=False):
+    """Step subscriptions S (dict of equal-length arrays) month by month to m_end inclusive.
 
-        # Team accounts
-        for t in self.team:
-            if not t["active"] or t["start"] == m:
-                continue
-            age = m - t["start"]
-            if m == P.TEAM_MIN and t["members"] < P.TEAM_MIN_SEATS:
-                t["padded"] = m
-            h = P.TEAM_HAZARD + (P.TEAM_HAZARD_1 if t["members"] == 1 else 0) + \
-                (P.TEAM_HAZARD_2 if t["members"] == 2 else 0)
-            if age <= 3:
-                h *= P.TEAM_YOUNG_MULT
-            h *= self.season[m]
-            if t["padded"] is not None:
-                k = m - t["padded"]
-                h += P.PAD_SHOCK * math.exp(-k / P.PAD_DECAY) + P.PAD_PERSIST
-            u = r.random()
-            if u < h:
-                t["active"] = False
-                t["end"] = m
-                if fl is not None:
-                    fl["team_churn"] += self.team_seats(t, m - 1) * P.TEAM_PRICE[t["cur"]] * 12 * \
-                        (P.PLAN_RATE_GBP if t["cur"] == "GBP" else 1.0)
-                continue
-            x = r.random()
-            if x < 0.052:
-                t["members"] += 1 if r.random() < 0.8 else 2
-            elif x < 0.052 + 0.028 and t["members"] > 1:
-                t["members"] -= 1
-            if t["members"] >= P.UPGRADE_AT and r.random() < P.UPGRADE_P:
-                t["active"] = False
-                t["end"] = m
-                t["upgraded"] = m
-                par = self.new_parent(False)
-                acc = self.new_business(m, t["members"] * float(r.uniform(0.95, 1.25)), t["cur"], par, "upgrade",
-                                        team_ws=t["ws"])
-                if fl is not None:
-                    fl["new_upgrade"] += self.arr_bus(acc)
-                continue
-        # Team sign-ups
-        lam = trend(P.TEAM_SIGNUPS[0] * 0.6, P.TEAM_SIGNUPS[1], m, -36, P.CUT)
-        lam *= 1.0 + 0.10 * math.cos(2 * math.pi * (ym(m)[1] - 2) / 12.0)
-        n = r.poisson(lam)
-        for _ in range(n):
-            mem = int(min(1 + r.geometric(0.42) - 1, 30))
-            mem = max(1, mem)
-            if m >= P.TEAM_MIN and mem < 3 and r.random() < P.SMALL_SIGNUP_DROP:
-                continue
-            cur = "GBP" if r.random() < 0.17 else "EUR"
-            self.new_team(m, mem, cur)
+    S keys: start (month index), title, channel, offer (-1 for none: a returning household on its old account pays
+    full price at once), route, h, p, su_shock, post_shock, tenure0 (months already paid before month 'start' for
+    the subscriptions running in January 2023, else 0), lead (paid months before start for the base, so the store
+    fee clock and tenure count from the real start).
+    Returns end (last month the subscription is billed, -1 if withdrawn), reason, gross (N x T charges), and the
+    step-up month, with month 0 of the gross matrix at min(start)."""
+    N = len(S["start"])
+    m0 = int(S["start"].min()) if N else 0
+    T = m_end - m0 + 1
+    start = S["start"].astype(int)
+    L = np.where(S["offer"] >= 0, intro_months(np.maximum(S["offer"], 0)), 0)
+    ip = np.where(S["offer"] >= 0, intro_price(np.maximum(S["offer"], 0), S["title"], start), 0.0)
+    alive = np.ones(N, bool)
+    end = np.full(N, 10 ** 6)
+    reason = np.full(N, "", dtype=object)
+    gross = np.zeros((N, T))
+    failed_recovered = []                  # (index, month) of re-presented debits, for the texture
+    rise_exit = np.full(N, -1)             # month the rise's extra leaving takes effect
+    su_exit = np.zeros(N, bool)
+    ch = S["channel"].astype(int)
+    ti = S["title"].astype(int)
+    route = S["route"].astype(int)
+    h, p = S["h"], S["p"]
+    tenure0 = S.get("tenure0", np.zeros(N, int)).astype(int)
+    stepup_m = start + L
+    inv = np.array([P.INVOL[r] for r in ROUTES])
+    wd = np.array([P.WITHDRAW[c] for c in P.CHANNELS])
+    su_ch = np.array([P.SU_CH[c] for c in P.CHANNELS])
+    su_ti = np.array([P.SU_TITLE[t] for t in P.TITLES])
+    post_ch = np.array([P.POST_CH[c] for c in P.CHANNELS])
+    base_price = np.array([P.PRICE[t][0] for t in P.TITLES])
+    depth = np.where(S["offer"] >= 0, 1.0, 0.0)
+    for m in range(m0, m_end + 1):
+        j = m - m0
+        act = alive & (start <= m)
+        if not act.any():
+            continue
+        k = m - start + 1                              # billed month of this subscription (1 at start)
+        first = act & (k == 1)
+        # withdrawal in the first 14 days
+        if first.any():
+            w = first & (S["offer"] >= 0) & (rng.random(N) < wd[ch])
+            alive[w] = False
+            end[w] = -1
+            reason[w] = "WITHDRAWN"
+            act = act & ~w
+        # the decision at the first full-price billing
+        su = act & (S["offer"] >= 0) & (k == L + 1)
+        if su.any():
+            fp = full_price(ti, m)
+            d = 1.0 - ip / fp
+            x = (P.SU_A0 + su_ch[ch] + su_ti[ti] + P.SU_DEPTH * d * depth + P.SU_LEN * np.log(np.maximum(L, 1))
+                 + P.SU_PRICE * np.log(fp / base_price[ti]) + P.SU_P * p + P.SU_H * h + S["su_shock"])
+            leave = su & (rng.random(N) < sig(x))
+            alive[leave] = False
+            end[leave] = m - 1
+            reason[leave] = "CANCELLED"
+            su_exit[leave] = True
+            act = act & ~leave
+        if not act.any():
+            continue
+        # the rise: decided on the notice (the month before the new price), for those already on the full price
+        for R in rise_months:
+            if m == R - 1:
+                on_full = act & (k >= L + 1) & (rise_exit < 0)
+                paid_ten = k + tenure0
+                x = (P.RISE_X0 + P.RISE_YOUNG * (paid_ten < 12) + P.RISE_MID * ((paid_ten >= 12) & (paid_ten < 36))
+                     + P.RISE_P * p + P.RISE_H * h)
+                go = on_full & (rng.random(N) < sig(x))
+                tm = rng.choice(3, size=N, p=list(P.RISE_TIMING))
+                rise_exit[go] = R - 1 + tm[go]
+        # charge the month
+        intro = act & (k <= L)
+        fullm = act & (k > L)
+        gross[intro, j] = ip[intro]
+        gross[fullm, j] = full_price(ti[fullm], m)
+        # a failed debit: re-presented next month, or the end
+        fail = act & (gross[:, j] > 0) & (k >= 2) & (rng.random(N) < inv[route])
+        rec = fail & (rng.random(N) < P.RECOVER)
+        for i in np.where(rec)[0]:
+            failed_recovered.append((i, m))
+        lost = fail & ~rec
+        gross[lost, j] = 0.0
+        alive[lost] = False
+        end[lost] = m - 1
+        reason[lost] = "PAYMENT_FAILED"
+        act = act & ~lost
+        # the rise's leaving takes effect after the month it is due
+        r_go = act & (rise_exit == m)
+        alive[r_go] = False
+        end[r_go] = m
+        reason[r_go] = "CANCELLED"
+        act = act & ~r_go
+        # cancelling at the end of the month
+        haz = np.zeros(N)
+        haz[intro] = P.INTRO_HAZ
+        jj = (k - L + tenure0)[fullm].astype(float)
+        hz = (P.POST_BASE * (P.POST_FLOOR + (1 - P.POST_FLOOR) * np.exp(-(jj - 1) / P.POST_TAU))
+              * post_ch[ch[fullm]] * np.exp(-P.POST_H * h[fullm] + P.POST_P * p[fullm] + S["post_shock"][fullm])
+              * P.SUMMER.get(cal_month(m), 1.0))
+        haz[fullm] = np.minimum(hz, 0.6)
+        go = act & (rng.random(N) < haz)
+        alive[go] = False
+        end[go] = m
+        reason[go] = "CANCELLED"
+    end = np.where(end == 10 ** 6, -2, end)            # -2: still running at m_end
+    return {"end": end, "reason": reason, "gross": gross, "m0": m0, "L": L, "ip": ip, "stepup": stepup_m,
+            "su_exit": su_exit, "recovered": failed_recovered, "rise_exit": rise_exit}
 
-        # pipeline
-        self.pipeline_step(m)
 
-        if self.record:
-            self.log_month(m)
+def store_net(gross, route, lead=None):
+    """Net revenue matrix: gross less VAT, less the store's fee (Apple 30 per cent for a subscription's first 12
+    paid months, then 15; Google 15)."""
+    net = gross / (1.0 + P.VAT)
+    paid = (gross > 0).cumsum(axis=1)
+    if lead is not None:
+        paid = paid + lead[:, None]
+    for r, (f1, f2) in P.STORE_FEE.items():
+        sel = route == R_IDX[r]
+        if sel.any():
+            fee = np.where(paid[sel] <= 12, f1, f2)
+            net[sel] = net[sel] * (1 - fee)
+    return net
 
-    def pipeline_step(self, m):
-        r = self.rng
-        fl = self.flows
-        still = []
-        for o in self.opps:
-            s = o["stage"]
-            stale = max(0, o["mis"] - P.TYPICAL[s])
-            p_adv = P.ADV[s] * math.exp(-stale / P.STALE_DECAY)
-            p_lost = P.LOST[s] + P.STALE_LOSS * stale
-            if o["age"] >= P.CLEANUP_AGE:
-                p_lost += P.CLEANUP_P
-            u = r.random()
-            o["age"] += 1
-            if u < p_adv:
-                if s == 3:
-                    self.win(o, m)
-                    continue
-                o["stage"] += 1
-                o["mis"] = 0
-            elif u < p_adv + p_lost:
-                o["closed"] = ("lost", m)
-                if self.record:
-                    self.log["opp_closed"].append(dict(o))
-                continue
-            else:
-                o["mis"] += 1
-            still.append(o)
-        self.opps = still
-        lam = trend(P.OPP_RATE[0] * 0.75, P.OPP_RATE[1], m, -36, P.OPP_TREND_END)
-        lam *= 1.0 + 0.12 * math.cos(2 * math.pi * (ym(m)[1] - 3) / 12.0)
-        for _ in range(r.poisson(lam)):
-            seats_need = float(np.clip(r.lognormal(math.log(P.SEAT_MEDIAN), P.SEAT_SIGMA), 8, 900))
-            o = {"id": self.nid("O"), "created": m, "stage": 0, "mis": 0, "age": 0, "need": seats_need,
-                 "cur": "GBP" if r.random() < 0.16 else "EUR", "closed": None, "orig": None,
-                 "_new": fl is not None}
-            o["quote_seats"] = int(math.ceil(seats_need / P.UTIL_MEAN))
-            self.opps.append(o)
 
-    def win(self, o, m):
-        r = self.rng
-        groups = [p for p in self.parents if p["group"]]
-        if groups and r.random() < P.SUBSIDIARY_SHARE:
-            par = groups[int(r.integers(0, len(groups)))]
+def draw_hp(n, h_mean, p_mean, rng):
+    z1 = rng.standard_normal(n)
+    z2 = rng.standard_normal(n)
+    h = h_mean + z1
+    p = p_mean + P.HP_CORR * z1 + math.sqrt(1 - P.HP_CORR ** 2) * z2
+    return h, p
+
+
+def h_shift(channel, m):
+    if channel not in P.DRIFT:
+        return 0.0
+    a, b, s = P.DRIFT[channel]
+    if m < a:
+        return 0.0
+    if m >= b:
+        return s
+    return s * (m - a + 1) / (b - a + 1)
+
+
+def dir_offer(m):
+    if m in P.DIR_BF_ANNUAL:
+        return "J12"
+    return P.DIR_OFFER[cal_month(m)]
+
+
+def line_offer(channel, title, m):
+    if channel == "DIR":
+        return dir_offer(m)
+    hist = P.LINES[(channel, title)][0]
+    cur = hist[0][1]
+    for frm, o in hist:
+        if m >= frm:
+            cur = o
+    return cur
+
+
+def routes_for(channel, n, rng):
+    if channel == "APP":
+        mix = P.ROUTE_MIX_APP
+    elif channel == "DIR":
+        app = rng.random(n) < P.DIR_APP_SHARE
+        a = rng.choice([R_IDX[r] for r in P.ROUTE_MIX_APP], size=n, p=list(P.ROUTE_MIX_APP.values()))
+        w = rng.choice([R_IDX[r] for r in P.ROUTE_MIX_WEB], size=n, p=list(P.ROUTE_MIX_WEB.values()))
+        return np.where(app, a, w)
+    else:
+        mix = P.ROUTE_MIX_WEB
+    return rng.choice([R_IDX[r] for r in mix], size=n, p=list(mix.values()))
+
+
+def new_starts(lines_months, rng, plan=None, ref_window=None):
+    """New subscriptions for (channel, title, month, count) tuples: households drawn with the line's habit mean, its
+    drift and a line-month shock shared by everyone the month brought in."""
+    cols = {k: [] for k in ["start", "title", "channel", "offer", "route", "h", "p", "su_shock", "post_shock",
+                            "tenure0", "cohort"]}
+    for (c, t, m, n, offer) in lines_months:
+        if n <= 0:
+            continue
+        eta = rng.normal(0, P.COHORT_SD)
+        su_s = rng.normal(0, P.COHORT_SU_SD)
+        po_s = rng.normal(0, P.COHORT_POST_SD)
+        if ref_window is None:
+            hm = P.H_MEAN[c] + P.TITLE_H[t] + h_shift(c, min(m, P.CUT)) + eta
         else:
-            par = self.new_parent(r.random() < 0.10)
-        acc = self.new_business(m, o["need"], o["cur"], par, "sales")
-        o["closed"] = ("won", m, acc["id"])
-        if self.record:
-            self.log["opp_closed"].append(dict(o))
-        if self.flows is not None:
-            key = "new_new" if o.get("_new") else "new_open"
-            self.flows[key] += self.arr_bus(acc)
-
-    # ------------------------------------------------------------------ ARR
-    def arr_bus(self, a):
-        fx = P.PLAN_RATE_GBP if a["cur"] == "GBP" else 1.0
-        return a["seats"] * a["price"] * 12 * fx
-
-    def arr(self, m):
-        b = sum(self.arr_bus(a) for a in self.bus if a["active"])
-        t = sum(self.team_seats(x, m) * P.TEAM_PRICE[x["cur"]] * 12 * (P.PLAN_RATE_GBP if x["cur"] == "GBP" else 1.0)
-                for x in self.team if x["active"])
-        return b, t
-
-    # ------------------------------------------------------------------ the month's records
-    def log_month(self, m):
-        r = self.rng
-        if m < 0:
-            return
-        for t in self.team:
-            if t["active"] and t["start"] <= m:
-                seats = self.team_seats(t, m)
-                self.log["team_inv"].append({"acc": t["id"], "m": m, "day": t["billing_day"], "members": t["members"],
-                                             "seats": seats, "cur": t["cur"]})
-        for a in self.bus:
-            if a["active"] and a["start"] <= m:
-                A = self.active_users(a, m) if a["start"] < m else a["need"] * (1 - P.RAMP_DEPTH)
-                for w in a["ws"]:
-                    val = A * w["share"] * math.exp(w["noise"] + r.normal(0, 0.06))
-                    self.log["ws"].append({"ws": w["id"], "m": m, "active": max(0, int(round(val)))})
-        for t in self.team:
-            if t["active"] and t["start"] <= m:
-                val = t["members"] * float(np.clip(r.normal(0.82, 0.18), 0.2, 1.0))
-                self.log["ws"].append({"ws": t["ws"]["id"], "m": m, "active": max(0, int(round(val)))})
-        for o in self.opps:
-            self.log["snap"].append({"id": o["id"], "m": m, "created": o["created"], "stage": o["stage"],
-                                     "mis": o["mis"], "seats": o["quote_seats"], "cur": o["cur"]})
+            # a 2027 start resembles the line's starts of a month drawn from the reference window
+            refs = rng.integers(ref_window[0], ref_window[1] + 1, size=n)
+            hm = P.H_MEAN[c] + P.TITLE_H[t] + np.array([h_shift(c, int(x)) for x in refs]) + eta
+        h, p = draw_hp(n, hm, P.P_MEAN[c], rng)
+        cols["start"].append(np.full(n, m))
+        cols["title"].append(np.full(n, T_IDX[t]))
+        cols["channel"].append(np.full(n, C_IDX[c]))
+        cols["offer"].append(np.full(n, O_IDX[offer]))
+        cols["route"].append(routes_for(c, n, rng))
+        cols["h"].append(h)
+        cols["p"].append(p)
+        cols["su_shock"].append(np.full(n, su_s))
+        cols["post_shock"].append(np.full(n, po_s))
+        cols["tenure0"].append(np.zeros(n, int))
+        cols["cohort"].append(np.full(n, eta))
+    return {k: np.concatenate(v) if v else np.zeros(0) for k, v in cols.items()}
 
 
-def build_history():
-    w = World(P.SEED)
-    r = w.rng
-    w.record = False
-    # the book at the start of the warm-up (January 2019)
-    for _ in range(int(P.BUS_INITIAL * 0.55)):
-        par = w.new_parent(r.random() < 0.26)
-        need = float(np.clip(r.lognormal(math.log(P.SEAT_MEDIAN), P.SEAT_SIGMA), 8, 700))
-        a = w.new_business(-36 - int(r.integers(0, 12)), need, "GBP" if r.random() < 0.15 else "EUR", par, "sales")
-        a["rc"] = int(r.integers(0, 3))
-    for p in w.parents[:60]:
-        if p["group"]:
-            for _ in range(int(r.integers(2, 6))):
-                need = float(np.clip(r.lognormal(math.log(P.SEAT_MEDIAN * 1.6), P.SEAT_SIGMA), 8, 900))
-                w.new_business(-36 - int(r.integers(0, 12)), need, "EUR", p, "sales")
-    for _ in range(int(P.TEAM_INITIAL * 0.45)):
-        w.new_team(-36 - int(r.integers(0, 12)), max(1, int(r.geometric(0.42))), "GBP" if r.random() < 0.17 else "EUR")
-    for m in range(-36, 0):
-        w.step(m)
-    w.record = True
-    # the live book at January 2022 opens the export: one line per account in force, dated at its last anniversary
-    for a in w.bus:
-        if a["active"]:
-            age = (0 - a["start"]) % 12
-            w.log["lines"].append({"acc": a["id"], "type": "renewal" if a["start"] < -12 else "new",
-                                   "m": -age if age else -12, "day": a["day"], "seats": a["seats"], "price": a["price"],
-                                   "cur": a["cur"], "months": 12, "opening": True})
-        for ws in a["ws"]:
-            w.log["ws_map"].append({"ws": ws["id"], "owner": a["id"], "from": min(a["start"], 0), "to": None})
-    for t in w.team:
-        w.log["ws_map"].append({"ws": t["ws"]["id"], "owner": t["id"], "from": min(t["start"], 0), "to": None})
-    for m in range(0, P.CUT + 1):
-        w.step(m)
-    return w
-
-
-def forward(w, seed, months=None):
-    """One forward replication from the cut; returns ARR by month and the flows."""
-    v = copy.deepcopy(w)
-    v.rng = np.random.default_rng(seed)
-    v.record = False
-    v.log = {"lines": [], "team_inv": [], "ws": [], "snap": [], "opp_closed": [], "ws_map": [], "events": []}
-    for o in v.opps:
-        o["_new"] = False
-    v.flows = {"price": 0.0, "contraction": 0.0, "churn": 0.0, "churn_n": 0, "expansion": 0.0, "team_churn": 0.0,
-               "new_open": 0.0, "new_new": 0.0, "new_upgrade": 0.0}
-    team_ids = {t["id"] for t in v.team if t["active"]}
-    v.cut_ids = {a["id"] for a in v.bus if a["active"]}
-    v.flows["expansion_book"] = 0.0
-    path = []
-    for m in range(P.CUT + 1, (months or P.HORIZON) + 1):
-        v.step(m)
-        path.append(v.arr(m))
-    v.flows["book_dec27"] = sum(v.arr_bus(a) for a in v.bus if a["active"] and a["id"] in v.cut_ids)
-    team_left = sum(v.team_seats(t, P.HORIZON) * P.TEAM_PRICE[t["cur"]] * 12 *
-                    (P.PLAN_RATE_GBP if t["cur"] == "GBP" else 1.0)
-                    for t in v.team if t["active"] and t["id"] in team_ids)
-    return path, v.flows, team_left
+def returns_of(S, res, m_end, rng):
+    """Each household that left (not withdrawn) may come back through the paywall: under a new customer number at
+    that month's paywall offer, or on its old account at the full price."""
+    end = res["end"]
+    left = np.where(end >= 0)[0]
+    left = left[end[left] < m_end]
+    if len(left) == 0:
+        return None, left, None
+    h = S["h"][left]
+    lam = P.RET_R0 * np.exp(P.RET_H * h) * P.RET_TAU
+    u = rng.random(len(left))
+    tot = 1 - np.exp(-lam)
+    back = u < tot
+    # invert H(s) = lam (1 - exp(-s / tau)) = -log(1 - u)
+    s = np.full(len(left), 10 ** 6, float)
+    val = 1 - (-np.log(1 - u[back])) / lam[back]
+    s[back] = np.ceil(-P.RET_TAU * np.log(np.maximum(val, 1e-12)))
+    rm = end[left] + np.maximum(s, 1).astype(int)
+    ok = back & (rm <= m_end)
+    idx = left[ok]
+    rm = rm[ok]
+    n = len(idx)
+    newacc = rng.random(n) < P.RET_NEW_ACCOUNT
+    offer = np.array([O_IDX[dir_offer(int(x))] for x in rm]) if n else np.zeros(0, int)
+    R = {"start": rm, "title": S["title"][idx], "channel": np.full(n, C_IDX["DIR"]),
+         "offer": np.where(newacc, offer, -1), "route": S["route"][idx], "h": S["h"][idx], "p": S["p"][idx],
+         "su_shock": np.zeros(n), "post_shock": np.zeros(n), "tenure0": np.zeros(n, int),
+         "cohort": np.zeros(n)}
+    return R, idx, newacc

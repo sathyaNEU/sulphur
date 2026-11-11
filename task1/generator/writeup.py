@@ -1,280 +1,201 @@
-"""figures.json and submission.md, every figure emitted from the golden and the routes on the shipped pack (never
-typed)."""
-import numpy as np
+"""figures.json and submission.md, both written from the golden's own objects (every figure in the four answer blocks
+is printed from here, at its stated precision, with its band where reasonable methods differ)."""
+import json
 
-import analysis as An
 import golden as GD
 import params as P
-import routes as RT
 
-r10k, r100k, r50k, commit_m, rk, ROUND, UNIT_WORD = GD.r10k, GD.r100k, GD.r50k, GD.commit_m, GD.rk, GD.ROUND, GD.UNIT_WORD
-
-
-def c(x):
-    return "{:,}".format(x)
+CH_SHORT = {"SOC": "paid social", "SEA": "paid search", "PART": "cashback partners", "TEL": "telemarketing",
+            "APP": "app-store campaigns", "DIR": "direct"}
 
 
-def figures(F, B, g, R):
-    raw, rounded, gap = GD.bridge(g)
-    rl = F["raw_lines"]
-    rt = F["raw_team"]
-    months = [GD.label(m).strftime("%b %Y") for m in range(P.CUT + 1, P.HORIZON + 1)]
-    kpi_sep = An.arr_at(F, P.CUT - 1)
-    hur = {k: v for k, v in R.items() if v.get("kind") in ("hurried", "careful", "rival")}
-    draws = np.array(g["draws"])
-    f = {
-        "open_bus": r10k(g["open_bus"]), "open_team": r10k(g["open_team"]), "open_total": r10k(g["open_total"]),
-        "price": r10k(g["price"]), "contraction": rk("contraction")(g["contraction"]), "churn": rk("churn")(g["churn"]),
-        "contraction_10k": r10k(g["contraction"]), "churn_10k": r10k(g["churn"]),
-        "expansion_bridge": dict(rounded)["Business seat additions"],
-        "team_change": dict(rounded)["Change in Team"],
-        "new_bus": r10k(g["new_bus"]), "new_open": rk("new_open")(g["new_open"]),
-        "new_upgrade": r10k(g["new_upgrade"]), "team_left": rk("team_left")(g["team_left"]), "team_new": r10k(g["team_new"]),
-        "dec27": r10k(g["dec27"]), "p10": r10k(g["p10"]), "p90": r10k(g["p90"]), "p20": r10k(g["p20"]),
-        "commitment": commit_m(g), "commitment_met_pct": int(round(100 * g["commitment_met"])),
-        "commitment_next": round(commit_m(g) + 0.1, 1),
-        "commitment_next_met_pct": int(round(100 * g["commitment_next_met"])),
-        "draft": GD.DRAFT,
-        "draft_verdict": "no" if commit_m(g) < GD.DRAFT else "yes",
-        "draft_chance_pct": int(round(100 * np.mean(draws >= GD.DRAFT * 1e6))),
-        "bridge": {k: v for k, v in rounded},
-        "bridge_gap": gap,
-        "path_months": months,
-        "path": [r10k(x) for x in g["path"]],
-        "path_p10": [r10k(x) for x in g["path_p10"]],
-        "path_p90": [r10k(x) for x in g["path_p90"]],
-        "uplift_at_20": round(float(g["uplift_fit"][1]), 3),
-        "uplift_share_pct": int(round(100 * g["uplift_fit"][1] / (P.BUS_LIST_NEW["EUR"] / P.BUS_LIST_OLD["EUR"] - 1))),
-        "uplift_mean": round(An.fit_business(B.E)["uplift_mean"], 3),
-        "renewals_used": int(len(B.E)),
-        "repricings": int(An.fit_business(B.E)["uplift_n"]),
-        "team_persist": round(g["team_persist"], 4),
-        "team_persist_pts": round(100 * g["team_persist"], 1),
-        "season_high_pct": int(round(100 * (max(g["team_season"].values()) - 1))),
-        "season_low_pct": int(round(100 * (1 - min(g["team_season"].values())))),
-        "kpi_sep_total": r10k(kpi_sep[0] + kpi_sep[1]),
-        "lines_raw": int(len(rl)), "lines_dup": int(rl.duplicated().sum()),
-        "lines_credited": int((rl["line_type"] == "Credit note").sum()),
-        "team_failed": int((rt["status"] != "paid").sum()),
-        "open_deals": int((B.S["m"] == P.CUT).sum()),
-        "plan_rate": P.PLAN_RATE_GBP,
-        "conventions": {"policy_sections": [2.1, 2.2, 2.3, 2.4, 4.1, 4.3, 4.4, 4.5, 4.6, 5.2, 5.3], "pct": [10, 20, 80, 90],
-                        "rounding": [10000, 50000, 100000, 0.1], "per": 100, "first_renewal": 1, "list_rise_pct": 26.7,
-                        "precision": {k: int(v) for k, v in ROUND.items()},
-                        "seats_ref": 20, "team_min_seats": 3, "months": 14, "drift_windows": [12, 18, 24],
-                        "common_factor": 0.25, "price_rise_month": 1, "team_min_month": 1},
-    }
-    for k, v in hur.items():
-        f["route_" + k.replace(" ", "_").replace("'", "")] = {
-            "price": r10k(v["price"]), "contraction": rk("contraction")(v["contraction"]), "churn": rk("churn")(v["churn"]),
-            "contraction_10k": r10k(v["contraction"]), "churn_10k": r10k(v["churn"]),
-            "team_left": rk("team_left")(v["team_left"]), "new_open": rk("new_open")(v["new_open"]), "new_bus": r10k(v["new_bus"]),
-            "dec27": r10k(v["dec27"]), "p20": r10k(v["p20"]), "p10": r10k(v["p10"]), "p90": r10k(v["p90"]),
-            "commitment": commit_m(v)}
-    f["naive"] = {k: r10k(v) for k, v in R["naive"].items() if k != "kind"}
-    f["naive_min"] = min(f["naive"].values())
-    f["opening"] = {"business": f["open_bus"], "team": f["open_team"]}
-    f["renewal_lines"] = {"contraction": f["contraction"], "churn": f["churn"]}
-    f["new_split"] = {"new_bus": f["new_bus"], "new_open": f["new_open"]}
-    f["path_table"] = dict(zip(f["path_months"], f["path"]))
-    fam = [g] + [v for v in R.values() if v.get("kind") == "rival"]
-    for k, rd in (("price", r10k), ("contraction", rk("contraction")), ("churn", rk("churn")), ("team_left", rk("team_left")),
-                  ("new_open", rk("new_open")), ("new_bus", r10k), ("dec27", r10k), ("p10", r10k), ("p90", r10k)):
-        f["band_" + k] = [min(rd(x[k]) for x in fam), max(rd(x[k]) for x in fam)]
-    f["band_path"] = [[min(r10k(x["path"][i]) for x in fam), max(r10k(x["path"][i]) for x in fam)]
-                      for i in range(len(months))]
-    riv = [commit_m(v) for v in R.values() if v.get("kind") == "rival"] + [f["commitment"]]
-    f["commitment_lo"], f["commitment_hi"] = min(riv), max(riv)
-    f["reps"] = RT.REPS
-    f["quick_dec27"] = r10k(R["quick"]["dec27"])
-    f["quick_commitment"] = r100k(R["quick"]["dec27"])
-    f["quick_growth_pct"] = round(100 * (R["quick"]["growth12"] - 1), 1)
-    # the hurried assembly: every subscription line in force summed as exported, failed Team invoices kept
-    f["r1_all_lines"] = r10k(all_lines_arr(F))
-    f["r1_team_all_rows"] = r10k(team_all_rows(F))
-    return f
+def pct(x):
+    return "%.1f" % (100 * x)
 
 
-def all_lines_arr(F):
-    """Business ARR with every subscription and true-up line in force summed as exported (re-exported duplicates,
-    credited lines and credit notes all kept)."""
-    import pandas as pd
-    L = F["raw_lines"]
-    s = pd.to_datetime(L["service_start"])
-    e = pd.to_datetime(L["service_end"])
-    cut = pd.Timestamp(2026, 10, 31)
-    x = L[(s <= cut) & (e >= cut) & L["line_type"].isin(["Subscription - new", "Subscription - renewal",
-                                                            "Seat true-up", "Credit note"])]
-    fx = x["currency"].map({"EUR": 1.0, "GBP": P.PLAN_RATE_GBP})
-    return float((x["quantity"] * x["unit_price"] * 12 * fx).sum())
+def figures(G):
+    g, b = G["golden"], G["bands"]
+    F = {"hurdle": P.HURDLE, "budget": g["budget"], "plan_total": int(sum(G["spend"].values())),
+         "lines_in_plan": len(G["plan"]), "funded": [GD.key(l) for l in g["R8"]], "n_funded": len(g["R8"]),
+         "careful_funded": [GD.key(l) for l in G["routes"]["careful"]["R8"]],
+         "careful_budget": int(sum(G["spend"][l] for l in G["routes"]["careful"]["R8"])),
+         }
+    F["paying_oct"] = {t: int(v) for t, v in g["R1"].items()}
+    F["paying_oct_total"] = int(sum(g["R1"].values()))
+    F["value_2023q3"] = {c: int(round(v)) for c, v in g["R2"].items()}
+    F["stepup_share"] = {o: round(100 * v, 1) for o, v in g["R3"].items()}
+    F["stepup_added"] = {o: round(100 * v, 1) for o, v in g["R4"].items()}
+    F["survival_36"] = {c: round(100 * v, 1) for c, v in g["R5"].items()}
+    F["rise_extra"] = {t: int(round(v)) for t, v in g["R6"].items()}
+    F["rise_extra_total"] = int(round(sum(g["R6"].values())))
+    F["plan_paying"] = {c: int(round(v)) for c, v in g["R9"].items()}
+    F["plan_paying_total"] = int(sum(F["plan_paying"].values()))
+    F["plan_starts"] = G["n_plan_starts"]
+    F["plan_starts_total"] = int(sum(G["n_plan_starts"].values()))
+    F["line_value"] = {GD.key(l): int(round(v)) for l, v in g["R7"].items()}
+    F["line_cost"] = {GD.key(l): round(G["cps"][l], 2) for l in G["plan"]}
+    F["line_multiple"] = {GD.key(l): round(g["R7"][l] / G["cps"][l], 2) for l in G["plan"]}
+    F["line_spend"] = {GD.key(l): int(G["spend"][l]) for l in G["plan"]}
+    bands = {}
+    for r, scale, nd in [("R2", 1, 0), ("R3", 100, 1), ("R4", 100, 1), ("R5", 100, 1), ("R6", 1, 0), ("R7", 1, 0),
+                         ("R9", 1, 0)]:
+        bands[r] = {GD.key(k): [round(lo * scale, nd), round(hi * scale, nd)] for k, (lo, hi) in b[r].items()}
+    F["bands"] = bands
+    F["careful"] = {"line_value": {GD.key(l): int(round(v)) for l, v in G["routes"]["careful"]["R7"].items()},
+                    "survival_36": {c: round(100 * v, 1) for c, v in G["routes"]["careful"]["R5"].items()},
+                    "rise_extra_total": int(round(sum(G["routes"]["careful"]["R6"].values()))),
+                    "value_2023q3": {c: int(round(v)) for c, v in G["routes"]["careful"]["R2"].items()},
+                    "plan_paying_total": int(round(sum(G["routes"]["careful"]["R9"].values())))}
+    F["routes_funded"] = {nm: [GD.key(l) for l in r["R8"]] for nm, r in G["routes"].items()}
+    return F
 
 
-def team_all_rows(F):
-    import pandas as pd
-    T = F["raw_team"]
-    s = pd.to_datetime(T["period_start"])
-    e = pd.to_datetime(T["period_end"])
-    cut = pd.Timestamp(2026, 10, 31)
-    x = T[(s <= cut) & (e >= cut)]
-    fx = x["currency"].map({"EUR": 1.0, "GBP": P.PLAN_RATE_GBP})
-    return float((x["seats_billed"] * x["price_per_seat"] * 12 * fx).sum())
+def band_txt(F, r, k, unit=""):
+    lo, hi = F["bands"][r][k]
+    if r in ("R3", "R4", "R5"):
+        return "%.1f to %.1f%s" % (lo, hi, unit)
+    return "%s to %s%s" % (f"{int(lo):,}", f"{int(hi):,}", unit)
 
 
-def write(path, f):
-    rt = lambda k: f["route_" + k.replace(" ", "_").replace("'", "")]
-    flat, lst = rt("mean uplift applied flat"), rt("list rise applied flat")
-    pooled, indep = rt("pooled renewal rates"), rt("accounts drawn independently")
-    since, t12, l3 = rt("Team rates since April"), rt("Team rates of the trailing twelve months"), \
-        rt("Team rates of the last three months")
-    crm, runr, stage = rt("CRM stage probabilities"), rt("trailing run-rate of new ARR"), rt("win odds by stage alone")
-    common, nop = rt("an assumed common factor of 0.25 added"), rt("band without the estimation uncertainty")
-    car = rt("careful but hurried")
-    b = f["bridge"]
-    nv = f["naive"]
-    E = lambda x: "EUR " + c(x)
-    L = []
-    L.append("## Tags\n")
-    L.append("**Domain:** Product Analytics, Cohort and LTV modeling (retention curves, customer lifetime value).")
-    L.append("**Task type:** forecast of a seat-licensed SaaS book's December 2027 ARR, built flow by flow, with an "
-             "80 per cent band, a bridge and the commitment the board can be given.")
-    L.append("**Analytical objective:** Forecasting & Predictive Modeling.\n")
+def submission(F, path):
+    order = sorted(F["line_value"], key=lambda k: -F["line_multiple"][k])
+    funded = [k for k in order if k in F["funded"]]
+    extra = [k for k in F["careful_funded"] if k not in F["funded"]]
+    unf = [k for k in order if k not in F["funded"]]
+    near = [k for k in unf if F["line_multiple"][k] >= 3.0]
+    L = ["# task1: Medienhaus Brückenhafen, 2027 digital acquisition lines\n", "## Tags\n",
+         "**Domain:** Product Analytics, Product Analytics (Cohort and LTV modeling: retention curves, customer "
+         "lifetime value).", "**Analytical objective:** Forecasting & Predictive Modeling.\n"]
     L.append("## Final Recommendation\n")
-    L.append("**Commit EUR %.1f million of December 2027 ARR in the 2027 plan, not the draft's EUR %.1f million**: "
-             "EUR %.1f million is the largest EUR 0.1 million step met or beaten in at least 80 per cent of outcomes "
-             "(%d in 100; EUR %.1f million only %d in 100), the draft is met about %d times in 100, and expected ARR "
-             "is %s with an 80 per cent range of %s to %s. Every trailing extrapolation clears the draft (the last "
-             "twelve months carried forward give %s to %s), and a forecast that applies the average price rise to "
-             "the remaining renewals, pools renewal rates, carries the Team plan's last three months, values the "
-             "pipeline at the CRM's stage probabilities and draws accounts independently puts the commitment at "
-             "EUR %.1f million; the flows the files carry do not get there.\n"
-             % (f["commitment"], f["draft"], f["commitment"], f["commitment_met_pct"], f["commitment_next"],
-                f["commitment_next_met_pct"], f["draft_chance_pct"], E(f["dec27"]), E(f["p10"]), E(f["p90"]),
-                E(nv["trailing twelve months' net new ARR carried forward"]),
-                E(nv["trailing twelve months' growth compounded"]), car["commitment"]))
-    L.append("## Supplementary Questions\n")
-    L.append("### arr_2027_forecast.xlsx\n")
-    path_txt = "; ".join("%s %s (%s to %s)" % (m, c(v), c(lo), c(hi)) for m, v, lo, hi in
-                         zip(f["path_months"], f["path"], f["path_p10"], f["path_p90"]))
-    L.append("1. Sheet Forecast: one row per month end from October 2026 (on the books, %s) to December 2027, "
-             "columns month end, expected ARR, 80 per cent range low (10th percentile) and high (90th percentile), "
-             "EUR to the nearest 10,000: %s. Below it the December 2027 summary: expected %s, P10 %s, P90 %s, "
-             "20th percentile %s, commitment EUR %.1f million (met in %d of 100 outcomes; EUR %.1f million in %d), "
-             "draft EUR %.1f million (met in %d of 100), draft clears: No."
-             % (c(f["open_total"]), path_txt, c(f["dec27"]), c(f["p10"]), c(f["p90"]), c(f["p20"]), f["commitment"],
-                f["commitment_met_pct"], f["commitment_next"], f["commitment_next_met_pct"], f["draft"],
-                f["draft_chance_pct"]))
-    L.append("2. Sheet Bridge: ARR 31 October 2026 %s; new Business %s; Business seat additions %s; price %s; "
-             "Business seat reductions %s; Business accounts lost %s; change in Team %s; expected ARR 31 December "
-             "2027 %s, the lines adding up exactly at the nearest EUR 10,000. Further sheets list the inputs, what "
-             "each shortcut gives and what each trailing extrapolation gives.\n"
-             % (E(f["open_total"]), E(b["New Business"]), E(b["Business seat additions"]), E(b["Price"]),
-                "-" + E(-b["Business seat reductions"]), "-" + E(-b["Business accounts lost"]),
-                E(b["Change in Team"]), E(f["dec27"])))
-    L.append("### arr_2027_note.docx\n")
-    L.append("3. The call: commit EUR %.1f million, the largest EUR 0.1 million step met or beaten in at least 80 per "
-             "cent of outcomes (%d in 100); the draft's EUR %.1f million does not clear the bar (met about %d times "
-             "in 100)." % (f["commitment"], f["commitment_met_pct"], f["draft"], f["draft_chance_pct"]))
-    L.append("4. ARR on the books at 31 October 2026: Business %s, Team %s (total %s)." %
-             (E(f["open_bus"]), E(f["open_team"]), E(f["open_total"])))
-    L.append("5. Team ARR in December 2027 from accounts already on the Team plan at 31 October 2026: %s (to the "
-             "%s)." % (E(f["team_left"]), UNIT_WORD[ROUND["team_left"]]))
-    L.append("6. New Business ARR signed November 2026 to December 2027 from deals open at 31 October 2026: %s (to "
-             "the %s), of %s new Business in all.\n" % (E(f["new_open"]), UNIT_WORD[ROUND["new_open"]], E(f["new_bus"])))
-    L.append("## Critical Components\n")
-    L.append("1. The price line is **%s** (nearest EUR 10,000): the realised uplift at renewal falls with contract "
-             "size (about %d per cent of the list rise at 20 seats), so the average realised uplift applied flat "
-             "(%s) or the list rise (%s) overstates what the November and December renewals still bring."
-             % (E(f["price"]), f["uplift_share_pct"], E(flat["price"]), E(lst["price"])))
-    L.append("2. Business seat reductions are **%s** (%s) and Business accounts lost **%s** (%s), from a renewal "
-             "model on utilisation (workspace activity through the dated links), first renewals and group exits; "
-             "pooled renewal rates put accounts lost at %s and drawing accounts independently of their group at %s."
-             % (E(f["contraction"]), UNIT_WORD[ROUND["contraction"]], E(f["churn"]), UNIT_WORD[ROUND["churn"]],
-                E(pooled["churn"]), E(indep["churn"])))
-    L.append("3. New Business is **%s** (nearest EUR 10,000), of which **%s** (%s) from deals open at "
-             "31 October 2026, on win odds by stage and time in stage; the CRM's stage probabilities value the open "
-             "deals at %s." % (E(f["new_bus"]), E(f["new_open"]), UNIT_WORD[ROUND["new_open"]], E(crm["new_open"])))
-    L.append("4. The Team accounts on the plan at 31 October 2026 bring **%s** (%s) in December 2027, "
-             "on the calendar pattern of cancellations (the autumn months about %d per cent above the year's "
-             "average) and the January minimum's excess exits, now faded to %.1f points a month; %s."
-             % (E(f["team_left"]), UNIT_WORD[ROUND["team_left"]], f["season_high_pct"], f["team_persist_pts"],
-                ("the last three months carried forward, and the months since January, both give %s" % E(l3["team_left"]))
-                if l3["team_left"] == since["team_left"] else
-                ("the last three months carried forward give %s and the months since January %s"
-                 % (E(l3["team_left"]), E(since["team_left"])))))
-    L.append("5. The commitment is **EUR %.1f million**: the 80 per cent range %s to %s carries the accounts' and "
-             "deals' outcomes with each estimated rate redrawn from its own sampling error (policy 5.2); without the "
-             "estimation uncertainty the commitment is the same step (20th percentile %s against %s), and an assumed "
-             "common factor of 0.25 across accounts, which the policy rules out, widens the range to %s to %s."
-             % (f["commitment"], E(f["p10"]), E(f["p90"]), E(f["p20"]), E(nop["p20"]), E(common["p10"]),
-                E(common["p90"])))
+    L.append("Fund %d of the plan's %d lines (%s) for a budget of EUR %s: each is expected to bring at least %.1f "
+             "times its planned cost per start over 36 months (%.2f to %.2f), while the closest lines left out run "
+             "%.2f to %.2f. Not the %d lines for EUR %s that a reading of each line's newest starts on its older "
+             "starts' survival, of the end of the introductory price without the April 2027 list prices and of "
+             "returns on the customer number puts over the bar, which adds %s." % (
+                 F["n_funded"], F["lines_in_plan"], ", ".join(funded), f"{F['budget']:,}", F["hurdle"],
+                 min(F["line_multiple"][k] for k in funded), max(F["line_multiple"][k] for k in funded),
+                 min(F["line_multiple"][k] for k in near), max(F["line_multiple"][k] for k in near),
+                 len(F["careful_funded"]), f"{F['careful_budget']:,}", ", ".join(extra)))
+    L.append("\n## Supplementary Questions\n")
+    L.append("### acquisition_lines_2027.xlsx\n")
+    L.append("1. Sheet Lines 2027 has one row per line of the plan, %d rows ordered by multiple of cost, highest "
+             "first, with columns line, channel, title, 2027 offer, planned starts, planned spend (EUR), planned "
+             "cost per start (EUR), expected 36-month net revenue per start (EUR), multiple of cost and funded "
+             "(yes or no), then the budget for the funded lines. The expected 36-month net revenue per start, in "
+             "euros (band in brackets): " % F["lines_in_plan"] + "; ".join(
+                 "%s %s (%s)" % (k, f"{F['line_value'][k]:,}", band_txt(F, "R7", k)) for k in order) + ".")
+    L.append("2. The planned cost per start is the plan's spend on the line over its planned starts; the multiple of "
+             "cost is the expected value over it, and the funded column reads yes on %s." % ", ".join(funded))
+    L.append("\n### acquisition_note_2027.pdf\n")
+    q = []
+    q.append("One page. It opens with the lines to fund, %s, and the budget they need, EUR %s, with a table of the "
+             "funded lines' cost per start, 36-month value and multiple." % (", ".join(funded), f"{F['budget']:,}"))
+    q.append("Paying digital subscribers at 31 October 2026, by title (exact): " + "; ".join(
+        "%s %s" % (P.TITLE_NAME[t], f"{F['paying_oct'][t]:,}") for t in P.TITLES) + "; %s in all." % (
+        f"{F['paying_oct_total']:,}"))
+    q.append("Of the plan's 2027 starts, with every line run as planned, the number still paying on 31 December "
+             "2027, by channel: " + "; ".join(
+                 "%s %s of %s (%s)" % (CH_SHORT[c], f"{F['plan_paying'][c]:,}", f"{F['plan_starts'][c]:,}",
+                                       band_txt(F, "R9", c)) for c in P.PAID) + "; %s of %s in all." % (
+                 f"{F['plan_paying_total']:,}", f"{F['plan_starts_total']:,}"))
+    q.append("For each 2027 offer, the share of its starts leaving when the introductory price ends at 2026 list "
+             "prices, in per cent: " + "; ".join(
+                 "%s %.1f (%s)" % (o, F["stepup_share"][o], band_txt(F, "R3", o)) for o in F["stepup_share"]) + ".")
+    q.append("The percentage points the April 2027 list prices add to that share: " + "; ".join(
+        "%s %.1f (%s)" % (o, F["stepup_added"][o], band_txt(F, "R4", o)) for o in F["stepup_added"]) + ".")
+    q.append("Extra cancellations the April 2027 rise brings by 31 December 2027 among the subscriptions paying at "
+             "31 October 2026, by title: " + "; ".join(
+                 "%s %s (%s)" % (P.TITLE_NAME[t], F["rise_extra"][t], band_txt(F, "R6", t)) for t in P.TITLES)
+             + "; %s in all." % F["rise_extra_total"])
+    q.append("Share of the November 2025 to April 2026 starts still paying three years after they started, in per "
+             "cent, by channel: " + "; ".join(
+                 "%s %.1f (%s)" % (CH_SHORT[c], F["survival_36"][c], band_txt(F, "R5", c)) for c in P.CHANNELS) + ".")
+    q.append("Net revenue per start the July to September 2023 starts brought in over their first 36 months, with "
+             "later subscriptions by the same household, in euros, by channel: " + "; ".join(
+                 "%s %s (%s)" % (CH_SHORT[c], F["value_2023q3"][c], band_txt(F, "R2", c)) for c in P.CHANNELS) + ".")
+    for i, x in enumerate(q, 3):
+        L.append("%d. %s" % (i, x))
+    L.append("\n## Critical Components\n")
+    soc = sorted(k for k in F["line_value"] if k.startswith("SOC"))
+    L.append("1. Every line's expected 36-month net revenue per start (forecasting): the funded lines run **%.2f to "
+             "%.2f** times their cost; the paid social lines come to %s and the cashback lines at the Rundschau and "
+             "the Kreisblatt to **EUR %s** and **EUR %s**, all under 3.5 times their cost." % (
+                 min(F["line_multiple"][k] for k in funded), max(F["line_multiple"][k] for k in funded),
+                 ", ".join("%s **EUR %s**" % (k, F["line_value"][k]) for k in soc), F["line_value"]["PART-BHR"],
+                 F["line_value"]["PART-KBO"]))
+    L.append("2. The newest starts' survival (missingness and measurement): **%.1f per cent** of the paid social "
+             "starts of November 2025 to April 2026 and **%.1f per cent** of the cashback starts are still paying two "
+             "years in (%.1f and %.1f on their channels' older starts' survival); paid search's **%.1f per cent** is "
+             "above its older starts' %.1f." % (F["survival_36"]["SOC"], F["survival_36"]["PART"],
+                                                F["careful"]["survival_36"]["SOC"], F["careful"]["survival_36"]["PART"],
+                                                F["survival_36"]["SEA"], F["careful"]["survival_36"]["SEA"]))
+    L.append("3. The full price at the end of the introduction (causal reasoning): the April 2027 list prices add "
+             "**%.1f to %.1f points** to the share leaving when an introductory price ends." % (
+                 min(F["stepup_added"].values()), max(F["stepup_added"].values())))
+    L.append("4. Returns by household (data discovery): the July to September 2023 starts brought **EUR %s** per "
+             "start on paid social and **EUR %s** direct over 36 months counted by household (EUR %s and EUR %s on "
+             "the customer number alone)." % (F["value_2023q3"]["SOC"], F["value_2023q3"]["DIR"],
+                                              F["careful"]["value_2023q3"]["SOC"], F["careful"]["value_2023q3"]["DIR"]))
+    L.append("\n## Step-by-Step\n")
+    for i, s_ in enumerate(STEPS(F), 1):
+        L.append("%d. %s" % (i, s_))
     L.append("")
-    L.append("## Step-by-Step\n")
-    st = [
-        "Opening book (billing_contract_lines_2022-01_2026-10.csv, team_invoices_2022-01_2026-10.csv): re-exported "
-        "lines counted once, credited lines replaced by their re-issues, onboarding fees and part-term true-up charges "
-        "left out, failed card payments dropped, GBP at the plan rate (policy 2): Business %s and Team %s at 31 "
-        "October 2026; September's figure reproduces the KPI export (%s). Summing every exported line gives %s for "
-        "Business." % (E(f["open_bus"]), E(f["open_team"]), E(f["kpi_sep_total"]), E(f["r1_all_lines"])),
-        "Trailing extrapolations, for the record: the last twelve months' net new ARR carried forward gives %s, "
-        "compounded %s, the last six months %s; all clear the draft, and all carry the January 2026 price rise, "
-        "which has landed on every contract except those renewing in November and December."
-        % (E(nv["trailing twelve months' net new ARR carried forward"]), E(nv["trailing twelve months' growth compounded"]),
-           E(nv["trailing six months' net new ARR carried forward"])),
-        "Price: from the %d repricings since 1 January 2026, the per-seat price change at renewal fitted on log seats "
-        "(%d per cent of the list rise at 20 seats, less on larger contracts) and applied to each contract still to "
-        "reprice: %s. The mean uplift applied flat gives %s, the list rise %s." %
-        (f["repricings"], f["uplift_share_pct"], E(f["price"]), E(flat["price"]), E(lst["price"])),
-        "Renewals: workspace activity joined to accounts through workspace_account_links.csv on the dated links, "
-        "utilisation at each of the %s renewals since 2022, CRM parent groups from crm_accounts_export_2026-11-02.xlsx; "
-        "exits modelled on utilisation, first renewal and a sibling's recent exit, seat cuts on utilisation and "
-        "renewal number, the accounts signed in the last two years carrying more seats per working user than the "
-        "older book: seat reductions %s (%s), accounts lost %s (%s); %s and %s in the bridge. Pooled rates "
-        "give %s and %s; drawing accounts independently of their group %s lost." %
-        (c(f["renewals_used"]), E(f["contraction"]), UNIT_WORD[ROUND["contraction"]], E(f["churn"]),
-         UNIT_WORD[ROUND["churn"]], E(f["contraction_10k"]), E(f["churn_10k"]),
-         E(pooled["contraction"]), E(pooled["churn"]), E(indep["churn"])),
-        "Seat additions: each account's own drift in active users projected against its seats, true-ups when users "
-        "pass seats: %s in the bridge." % E(f["expansion_bridge"]),
-        "Team: monthly exit rates by members and age from the history before January 2026 with a calendar index of "
-        "cancellations (autumn about %d per cent above the year's average, late winter %d per cent below), plus the "
-        "excess on the accounts padded to three seats, which fell month by month to a lasting %.1f points a month; "
-        "December 2027 Team ARR from the October accounts %s. %s; the pre-January rates with no excess give %s." %
-        (f["season_high_pct"], f["season_low_pct"], f["team_persist_pts"], E(f["team_left"]),
-         ("The last three months carried forward, the months since January and the trailing twelve months all give %s"
-          % E(l3["team_left"])) if l3["team_left"] == since["team_left"] == t12["team_left"] else
-         ("The last three months carried forward give %s, the months since January %s, the trailing twelve months %s"
-          % (E(l3["team_left"]), E(since["team_left"]), E(t12["team_left"]))),
-         E(rt("Team rates before April")["team_left"])),
-        "Pipeline (pipeline_snapshots_2023-01_2026-10.csv, opportunities_closed_2022-01_2026-10.csv): re-run snapshot "
-        "rows once, monthly amounts set aside for quoted seats priced at won deals' first contracts, win timing by "
-        "stage and months in stage from snapshots with a full 14-month follow-up, deals not yet created at the "
-        "trailing twelve months' creation rate: open deals %s, all new Business %s. The CRM's probabilities give %s "
-        "and %s." % (E(f["new_open"]), E(f["new_bus"]), E(crm["new_open"]), E(crm["new_bus"])),
-        "Band: %d simulated paths, each with every estimated rate redrawn from its sampling error and each parent "
-        "group's exits feeding its siblings' next renewals, new deals and sign-ups drawn as whole deals and teams: "
-        "P10 %s, 20th percentile %s, P90 %s; the largest EUR 0.1 million step met in at least 80 per cent of the "
-        "paths is EUR %.1f million (%d in 100). Without the estimation uncertainty the step is the same (20th "
-        "percentile %s); an added common factor of 0.25, which policy 5.2 rules out, widens the range to %s to %s; "
-        "independent draws give EUR %.1f million." %
-        (f["reps"], E(f["p10"]), E(f["p20"]), E(f["p90"]), f["commitment"], f["commitment_met_pct"], E(nop["p20"]),
-         E(common["p10"]), E(common["p90"]), indep["commitment"]),
-        "Path and bridge: the monthly expected path and its range from the same paths, the six lines in the "
-        "policy's order adding from %s to %s; the draft's EUR %.1f million is met in %d of 100 paths and does not "
-        "clear the bar." % (E(f["open_total"]), E(f["dec27"]), f["draft"], f["draft_chance_pct"]),
-    ]
-    for i, s in enumerate(st, 1):
-        L.append("%d. %s" % (i, s))
-    L.append("")
-    L.append("No other figure survives the files. The trailing views (%s to %s) clear the draft because they carry "
-             "the January price rise and the Team minimum's padded seats as if they recurred; the shortcuts taken "
-             "together (flat uplift, pooled renewals, the last three months' Team rates, CRM probabilities, "
-             "independent draws) give a commitment of EUR %.1f million; each is ruled out by the repricings' size "
-             "gradient, the renewals' utilisation and group pattern, the calendar pattern and the decline of the "
-             "January excess on the Team plan, the closed deals' history and policy 5.2 on what the range carries. "
-             "The rivals a careful analyst can defend (uplift by size band, utilisation in bins, the January excess "
-             "from two months or an exponential, the calendar index by quarter or smoothed, utilisation in bins or left "
-             "out of the exit model, win odds by stage and deal age, deal creation over eighteen months, seat additions "
-             "from 12 or 18 months of drift or each account's own trailing rate) all land on EUR %.1f million."
-             % (E(f["naive_min"]), E(nv["trailing twelve months' growth compounded"]), car["commitment"],
-                f["commitment"]))
+    L.append("No other conclusion survives the records. Completing the newest starts on their channel's older "
+             "survival is ruled out by the reading log, where the starts of the twelve months to October 2026 read "
+             "less (paid social, cashback) or more (paid search) and the leaving rate follows reading; an "
+             "end-of-intro model without the full price is ruled out by the step-ups either side of April 2025; the "
+             "customer number as the household is ruled out by the payment fingerprints and addresses that customer "
+             "numbers share; and every reasonable variant of the reading measure, the tenure terms, the offer terms "
+             "and the household links funds the same %d lines." % F["n_funded"])
     open(path, "w").write("\n".join(L) + "\n")
+
+
+def STEPS(F):
+    return [
+        "From subscriptions_2023-01_2026-10.csv, price_periods_2023-01_2026-10.csv and customers.csv, drop the "
+        "repeated export rows, the staff, gift and company products and the test accounts (the KPI standard), map the "
+        "renamed channel codes, and count the subscriptions charged on 31 October 2026: %s in all (Rundschau %s), "
+        "where every exported row charged in October gives more." % (f"{F['paying_oct_total']:,}",
+                                                                      f"{F['paying_oct']['BHR']:,}"),
+        "Link households across customer numbers through payment_methods.csv (the payment fingerprint) and "
+        "customers.csv (the normalised address), as the KPI standard counts households: the July to September 2023 starts "
+        "brought EUR %s per start on paid social over 36 months, not the EUR %s on the customer number alone." % (
+            F["value_2023q3"]["SOC"], F["careful"]["value_2023q3"]["SOC"]),
+        "Fit the end of the introductory price on every step-up in the record by offer, channel and title with a "
+        "term for the full price the start steps up to (offer_catalogue.csv, price_list_digital_2027.pdf), which "
+        "the step-ups either side of the April 2025 rise identify: at 2026 prices the 2027 offers lose %.1f "
+        "(Probemonat) to %.1f per cent (free quarter), and the April 2027 prices add %.1f to %.1f points, where a "
+        "period term for the 2025 jump adds nothing." % (F["stepup_share"]["PM1"], F["stepup_share"]["G3"],
+                                                         min(F["stepup_added"].values()),
+                                                         max(F["stepup_added"].values())),
+        "Join reading_by_login_2024-01_2026-10.csv to logins.csv and sum each customer's logins; fit the "
+        "full-price leaving rate on months since the step-up, channel and the first three months' reading, and "
+        "complete the young starts on their own reading: %.1f per cent of the paid social starts of November 2025 "
+        "to April 2026 are still paying three years in, not the %.1f their channel's older starts imply." % (
+            F["survival_36"]["SOC"], F["careful"]["survival_36"]["SOC"]),
+        "Read the April 2025 rise's extra cancellations from the cancellations received after the February 2025 "
+        "notice letters through the second month at the new price, against each paid-tenure band's own rate, and "
+        "carry them to each subscription's paid tenure at the April 2027 rise, which gives %s extra cancellations "
+        "by 31 December 2027 (the KPI standard's extra cancellations), not the %s an after-the-date, pooled reading gives." % (
+            F["rise_extra_total"], F["careful"]["rise_extra_total"]),
+        "Carry the plan's %s planned starts month by month through their introductory prices, the end of intro at "
+        "the April 2027 list prices and the full-price leaving rate on their own reading: %s still paying on 31 "
+        "December 2027 (paid social %s of %s), where the shortcuts above leave %s." % (
+            f"{F['plan_starts_total']:,}", f"{F['plan_paying_total']:,}", F["plan_paying"]["SOC"],
+            F["plan_starts"]["SOC"], f"{F['careful']['plan_paying_total']:,}"),
+        "Value each line of media_plan_2027.xlsx by survival arithmetic over its planned start months, the reading "
+        "and payment routes of its starts in the twelve months to October 2026 (as the KPI standard takes them), its 2027 offer at "
+        "the April 2027 prices, the store fees and the household's first return through the paywall inside "
+        "the 36 months: from EUR %s per start (SEA-BHR) down to EUR %s (TEL-ELN)." % (
+            F["line_value"]["SEA-BHR"], F["line_value"]["TEL-ELN"]),
+        "Fund the lines at 3.5 times their planned cost per start or more (the KPI standard): %d lines for EUR %s; the "
+        "shortcuts above together fund %d lines for EUR %s." % (F["n_funded"], f"{F['budget']:,}",
+                                                               len(F["careful_funded"]), f"{F['careful_budget']:,}"),
+    ]
+
+
+def write(G, fig_path, sub_path):
+    F = figures(G)
+    json.dump(F, open(fig_path, "w"), indent=1, sort_keys=True, ensure_ascii=False)
+    submission(F, sub_path)
+    return F
