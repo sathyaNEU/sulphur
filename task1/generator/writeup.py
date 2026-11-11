@@ -124,7 +124,7 @@ def submission(F, path):
                  ", ".join("%s **EUR %s**" % (k, F["line_value"][k]) for k in soc), F["line_value"]["PART-BHR"],
                  F["line_value"]["PART-KBO"]))
     L.append("2. The newest starts' survival (missingness and measurement): **%.1f per cent** of the paid social "
-             "starts of November 2025 to April 2026 and **%.1f per cent** of the cashback starts are still paying two "
+             "starts of November 2025 to April 2026 and **%.1f per cent** of the cashback starts are still paying three "
              "years in (%.1f and %.1f on their channels' older starts' survival); paid search's **%.1f per cent** is "
              "above its older starts' %.1f." % (F["survival_36"]["SOC"], F["survival_36"]["PART"],
                                                 F["careful"]["survival_36"]["SOC"], F["careful"]["survival_36"]["PART"],

@@ -7,8 +7,8 @@ LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's sol
 Stump terms swept: million, trailing, golden, pooled, carries, reading, accounts, creation, chosen, priced, family, commitment, graded, carried, hurried, missed, uploaded, history, nearest, careful, social, account, growth, standard, inside
 
 ## 3 answer figures in the pack (REVIEW 2)
-- **REVIEW** `digital_subscription_kpi_standard.pdf`: golden figure 5.1 appears: ...d is not a line of the plan. 5. Monthly reporting 5.1 Controlling reports, for each title and month, th...
 - **REVIEW** `digital_subscription_kpi_standard.pdf`: golden figure 3.5 appears: ...xpected 36-month value of its starts is at least 3.5 times its planned cost per start, the plan's spen...
+- **REVIEW** `digital_subscription_kpi_standard.pdf`: golden figure 5.1 appears: ...d is not a line of the plan. 5. Monthly reporting 5.1 Controlling reports, for each title and month, th...
 
 ## 4 design-note vocabulary (REVIEW 1)
 - **REVIEW** `digital_subscription_kpi_standard.pdf`: 4 of 25 stump-paragraph terms appear (carries, accounts, account, standard); read whether the document names the move
