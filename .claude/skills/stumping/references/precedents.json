@@ -520,6 +520,46 @@
    "move": "a register's young members matured to their type's established level (build-up curves by type, scaled to each member's own level)",
    "source": "task10/runs/arch7_run1.md, arch7_run2.md (task10 removed from the tree; in git at 3d6b8ec)",
    "quote": "customer-type saturation curves (held-out error 0.0415 kW/kVA against 0.1498 for constant utilisation), 8.8 MW registered increment with 7.0 MW from maturation"
+  },
+  {
+   "id": "L37",
+   "kind": "loss",
+   "class": "self-confirming check",
+   "move": "a pooled forecast-bias factor certified by a held-out error that cannot see the bias's dependence on the forecast's own planned growth",
+   "source": "task4/runs/arch11/run1.md (platform run on architecture 11, pasted by the author)",
+   "quote": "Held-out demand WAPE fell from 21.88% for raw budgets to 12.11% after calendar alignment and 10.11% after held-out bias correction."
+  },
+  {
+   "id": "N08",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "one forecaster's error factors assumed to transfer to a new stream with no record of its own",
+   "source": "task4/runs/arch11/run1.md (platform run on architecture 11, pasted by the author)",
+   "quote": "Kotikaari's forecast-error factors transfer to Huippu. The budget states that they share forecasting governance, but there is no equivalent Huippu year-ahead archive."
+  },
+  {
+   "id": "R23",
+   "kind": "reflex",
+   "class": "measurement",
+   "move": "a week-numbered profile re-keyed to the date-anchored event after a 53-week year",
+   "source": "task4/runs/arch11/run1.md (platform run on architecture 11, pasted by the author)",
+   "quote": "Black Friday falls on 26 November 2027, ISO week 47, whereas the supplied budget uses 2025's week-48 phasing. Swapped the relevant budget weeks and daily profiles, preserving total demand."
+  },
+  {
+   "id": "R24",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "a congestion term fitted on a logged density with the mix held fixed, at the record's finest grain",
+   "source": "task4/runs/arch11/run1.md (platform run on architecture 11, pasted by the author)",
+   "quote": "Fitted task minutes using handling-class mix, extra units and a nonlinear logged-picker-density term, allowing for the January 2024 aisle expansion."
+  },
+  {
+   "id": "R25",
+   "kind": "reflex",
+   "class": "causal",
+   "move": "a pilot's selected assortment read at the target population's own mix",
+   "source": "task4/runs/arch11/run1.md (platform run on architecture 11, pasted by the author)",
+   "quote": "At the forecast peak mix, Huippu averages 1.371 TASK minutes per line, versus Kotikaari's 1.320, a difference of +0.051 minutes per line. Holding zone and density comparable gives +0.129 minutes."
   }
  ]
 }
