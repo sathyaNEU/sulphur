@@ -1,0 +1,142 @@
+{
+  "task": "task20",
+  "project": "sulfur",
+  "architecture": "v1",
+  "drawn": "2026-11-11",
+  "slot_note": "Drawn from the author's concept note of 2026-11-11 (Concept 1, why the desk breached VaR), moved from a fully generated credit book to an equity market-making desk on the real S&P 500, Nasdaq-100 and VIX tape so the market moves and the volatility regime are published records; the desk's names, books and systems are simulated.",
+  "domain": "quantitative-finance",
+  "subdomain": "factor-return-attribution",
+  "client_domain": "quantitative-finance",
+  "niche": "Risk modeling (VaR/ES): a market-making desk's one-day 99% historical-simulation VaR backtest, every exception in the year traced to its cause for the supervisor's classification",
+  "objective": "root-cause",
+  "shape": "18",
+  "decision_type": "root_cause_named",
+  "answer_unit": "count",
+  "answer": "",
+  "answer_source": "",
+  "gap": [
+    "objective",
+    "population"
+  ],
+  "pattern": [
+    "none"
+  ],
+  "generators": [
+    "G3",
+    "G16",
+    "G17"
+  ],
+  "gate_g": "decomposition_attribution",
+  "calibration_form": "parallel_run_overlap",
+  "stump_strategy": "causal_design",
+  "decisive_rule_filed": false,
+  "official_decoy": false,
+  "validated_decoy": false,
+  "context_artifact": "filed_standard",
+  "stump_class": "analytical",
+  "analyst_test": "The careful but hurried pass rebuilds the clean P&L and re-runs a full own-name and a volatility-filtered VaR, but charges the breaches that fall on outage days to wrong inputs without re-running them, sets aside the small daily mismatches between the engine's book and the end-of-day book as timing (one of them a late-booked block that caused breaches), ranks the names to fix by their own size and volatility rather than by what each adds to the desk's VaR net of its hedges and offsets, and scales the add-on to the planned book in proportion to its gross although the growth sits in the names the engine proxies, so its inputs class, its fix list and its add-on are each wrong in a different place.",
+  "domain_test": "Replicating a historical-simulation VaR engine from its snapshot, mapping and price history, rebuilding the P&L the forecast was about from prior-close positions, and running counterfactual engines (current inputs, full own-name risk, a volatility-filtered window) to classify each exception is market-risk model validation; with another field's nouns there is no quantile forecast, no static book, no supervisor's exception classes and nothing to re-run.",
+  "layer2_family": "field_method",
+  "layer2_pattern": "own:var-exception-classification",
+  "layer1": [
+    "two position systems stamping in different clocks",
+    "late bookings and amendments with original value dates",
+    "vendor-filled closes flagged",
+    "mapping vintages with effective dates",
+    "ledger lines posted next day under the original value date",
+    "repeated rows on a system cutover"
+  ],
+  "stakeholder_role": "the bank's head of market risk control, who files the quarter's exception classification with the supervisor (not named in the prompt)",
+  "role_family": "compliance_or_audit",
+  "scoring_unit": "per episode",
+  "spine": {
+    "file": "positions_eod.csv",
+    "rows": 0,
+    "entity": "one row is one instrument's end-of-day holding in one position system",
+    "grain": "instrument x business day x position system",
+    "source": "synthetic, on the published S&P 500, Nasdaq-100 and VIX closes"
+  },
+  "forum": "regulator_or_inspector",
+  "forcing_event": "audit_or_inspection",
+  "org_family": "financial_institution",
+  "world": {
+    "geography": "United States",
+    "currency": "USD",
+    "org_type": "broker-dealer subsidiary of a regional bank holding company",
+    "invented_names": [
+      "Tarrant Hale Securities"
+    ],
+    "people": [
+      "Nancy Ayala",
+      "Christopher Reilly"
+    ]
+  },
+  "deliverables": [
+    "exception_classification_2025Q2.xlsx",
+    "backtesting_memo_2025Q2.pdf"
+  ],
+  "opening_move": "question-first",
+  "question_form": "other",
+  "driver": "The decisive quantities are the outcomes the forecast was actually about, rebuilt from the prior holdings rather than the booked totals, and each miss's survival under counterfactual forecasts that each restore one thing production lacked (the inputs it should have read, the components it left out, a scale that follows the recent spread), with the misses charged in a fixed order so the classes add back to the whole population of misses.",
+  "driver_concrete": "Hypothetical P&L rebuilt from prior-close positions and the day's closes replaces the booked P&L, the engine's snapshots are reconciled to the book to find both the outage days and the late-booked blocks the cutoff dropped, and a full own-name engine and a volatility-filtered engine are re-run on the same days so every exception (booked or masked) sits under one heading and the corrected count follows.",
+  "stump": "A competent solver files the outage-day breaches as wrong inputs, books the late-block breaches under the proxies, names the ten largest proxied positions to fix, and carries the year's proxy shortfall to the planned book in proportion, so the classification, the fix list and the add-on each land on a different wrong answer.",
+  "answer_shape": "timeline",
+  "weight": "investigation",
+  "chain_signature": [
+    "framing",
+    "assembly-reconciliation",
+    "investigation-loops",
+    "modeling",
+    "decomposition-attribution",
+    "modeling",
+    "synthesis",
+    "exploration-triage",
+    "forecasting"
+  ],
+  "results": "R1 the official count and zone; R2 the breaches of the P&L the VaR forecast (the prior-close book revalued at the day's closes), with the masked days and the booked days that drop out; R3 the engine runs that read a book other than the prior close (outage reruns, late-booked blocks left out by the cutoff) and the breaches each caused; R4 the reported VaR as a share of a full own-name VaR across the year; R5 the breaches the proxies answer for; R6 the breaches a volatility-responsive VaR answers for; R7 every breach date under one heading adding to the total, the count a sound model shows and its zone; R8 the ten names to move onto their own history first, by what each adds to the VaR the desk's book misses; R9 the VaR to add to the desk's planned second-half 2025 book until the names are moved",
+  "one_fact_test": "\"the engine only sees trades booked before its 18:30 cutoff\" rescues the late-booking half of R3 and nothing else: 1 of 9",
+  "strategy_label": "WORKS IN FORM",
+  "mechanism_source": "design_note",
+  "differentiation": {},
+  "lineage": [],
+  "notes": "Root-cause on the client's Quantitative Finance strategies 1 and 2 lesson (risk systems simplify; volatility arrives in clusters), with neither shape: the question is the supervisor's exception classes for a VaR backtest, not a P&L explain or a monitoring rule. Re-filed as task20 on 2026-11-11 after another session filed task19 first; the skeleton and Frontier rules of 2026-11-11 applied at re-filing. Forcing event drawn as the supervisor's review of the red-zone result (audit_or_inspection), not a scheduled filing: task19 holds the filing axis, and the classification is asked for because the quarter's count reached the red zone. The prompt opens on why the desk breached so often (question_form other: a why question).",
+  "skeleton": {
+    "decision_form": "per_unit_diagnosis",
+    "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
+    "lessons": [
+      "unmetered_component",
+      "record_as_of_its_date",
+      "non_additive_aggregation",
+      "heterogeneity_carried_to_decision"
+    ],
+    "mechanisms": [
+      "proxy_beta_mapping_drops_names_own_risk",
+      "snapshot_cutoff_drops_late_booked_blocks",
+      "snapshot_outage_reuses_an_older_book",
+      "booked_pnl_carries_same_day_trading_and_income",
+      "two_year_window_lags_a_volatility_rise",
+      "planned_growth_sits_in_proxied_names"
+    ],
+    "detection": [
+      "second_source_at_other_grain",
+      "residual_by_subgroup",
+      "record_time_against_event_time"
+    ],
+    "moves": [
+      "replay_event_by_event",
+      "bridge_by_contribution",
+      "stratify_by_mix_and_reweight_to_target"
+    ],
+    "file_roles": [
+      "governing_standard",
+      "incumbent_figure_or_method",
+      "primary_record",
+      "second_grain_source",
+      "reference_register",
+      "event_timeline",
+      "schedule_or_plan",
+      "unused_distractor"
+    ]
+  },
+  "registered": "2026-11-11T17:46:15Z"
+}
