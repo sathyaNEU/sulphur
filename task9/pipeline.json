@@ -1,41 +1,41 @@
 {
   "task": "task9",
-  "status": "PAUSED",
+  "status": "DESIGN",
   "domain": "general-statistics-data-science",
-  "subdomain": "bayesian-modeling-posterior-inference",
-  "objective": "forecasting",
-  "stage": 4,
-  "stage_name": "check",
+  "subdomain": "interpretability",
+  "objective": "root-cause",
+  "stage": 2,
+  "stage_name": "design",
   "updated": "2026-11-11",
   "doctrine": "throughout",
-  "call": "plan about 2,483 replacements for 2026-Q4 to 2027-Q3 (80% interval 2,266 to 2,713); migrate B16, B17, B18, B19 in Q4 2026 and run B15; order 402 spares for Q4",
-  "chain": "R1 DC-3's four-quarter replacements (ages rebuilt); R2 the bad-build batch (HX-8 builds of 2024 weeks 16 to 30, not the HX8.2.0 firmware) with its drives in service and July to September 2026 rate; R3 its four-quarter replacements; R4 the surviving OM-6 vaults' four-quarter replacements; R5 the fleet's quarterly path with its 80% interval; R6 the coverage of intervals built the same way at 30 September 2025; R7 the Q4 spare order per family; R8 the vaults to migrate, each on its own 24-month replacements, and the doubling time at which migration stops paying",
-  "architecture": 1,
+  "call": null,
+  "chain": "R1 the ring's loss 1 April to 31 August in points of mean sort yield; R2 the loss in good die by product; R3 the causes ranked with their shares; R4 the onset in conditioner-disk usage and the slope; R5 the retaining ring's and the pad's terms; R6 the edge removal-rate check's onset; R7 the loss split between Rev F's extension, the EW-118 reused disks and the old rule's own exposure; R8 the disk-only change interval for each unit group and its annual saving",
+  "architecture": 2,
   "loops": 0,
   "precut": {
-    "exit": 0,
-    "date": "2026-11-11"
+    "exit": null,
+    "date": ""
   },
   "leak": {
-    "leak_py": "REVIEW (no LEAK)",
-    "reader": "no leak; nothing planted; no single item makes the asks routine"
+    "leak_py": "",
+    "reader": ""
   },
   "duplicate_check": {
     "heart": "",
     "nearest": ""
   },
   "judge": {
-    "verdict": "NOT_DETERMINISTIC",
-    "disposition": "SEND_BACK",
-    "gate_h": "pass on domain and layers; one_thing shallow_hidden_factor (the build window) limited to R2, R3, R8",
-    "report": "task9/determinism_check_report.md"
+    "verdict": "",
+    "disposition": "",
+    "gate_h": "",
+    "report": ""
   },
-  "paper_pair": 40.2,
+  "paper_pair": null,
   "effort": {
-    "quick": 10.0,
-    "careful": 40.2,
-    "thorough": 100.0,
-    "largest_hint": "The vaults retired at the reviews were the ones failing fastest (rescues 2 of 8)"
+    "quick": null,
+    "careful": null,
+    "thorough": null,
+    "largest_hint": ""
   },
   "runs": {
     "run1": null,
@@ -51,7 +51,7 @@
     "history": []
   },
   "returned": [],
-  "resume": "stage 4 returned SEND_BACK on the migration call (R8): the cost convention, the decision unit, the batch vaults' levels and a plateau reading of the batch's path are open, and the judge found the bad build window at once, so R2 is earned and the honest cited pair is near 58 to 65. Repairing determinism alone (pin the costs in the YAML, per-vault wording in the prompt, vault levels from every drive, a capped ramp in the model average, a seed with a clean ramp) does not bring the difficulty to the bar. The author decides: redesign Concept 1 around new lessons (for example a defective sub-population that depletes, so the pooled rising trend overstates the batch's path), build Concept 2 or 3 instead, or retire the slot. Every free gate passed on the seed 9017 build before the judge (precut 0 FAIL, effort cited pair 40.2 on the firmware-story careful route, figures, containers, heart, surface; leak REVIEW only).",
+  "resume": "stage 2: write the Fab 2 simulator (dispatch, clustered random defects, edge roll-off, the conditioner-disk ring with per-unit wear, the pad term, the PM timeline with decoupled episodes, metrology, the classifier, the selected die-map sample), the golden analysis and the hurried routes, run the rivals on the clean truth, then the note to precut",
   "approved": null,
   "submitted": null,
   "portal": {
@@ -60,8 +60,8 @@
     "note": ""
   },
   "prompt_rewritten": false,
-  "source": "the author's Concept 1 (/root/.claude/uploads/2ddb3641-4769-5139-aa6d-71f6eadaeff9/453e2ae7-4.md, prepared 2026-11-10)",
-  "slot_history": "the author cleared the slot on 2026-11-11; architectures 1 to 10 of the old task9 (quantitative finance) are in git history and in the card's lineage",
+  "source": "the author's Concept 2, \"The edge-ring on Fab 2's wafers\" (/root/.claude/uploads/2ddb3641-4769-5139-aa6d-71f6eadaeff9/453e2ae7-4.md, prepared 2026-11-10)",
+  "slot_history": "the author cleared the slot on 2026-11-11; the quantitative-finance architectures are in git history and the card's lineage; architecture 1 of the cleared slot (Concept 1, drive replacements) was spent at stage 4 on 2026-11-11 (PAUSED commit 1614e25, determinism judge SEND_BACK)",
   "history": [
     {
       "date": "2026-11-11",
@@ -78,7 +78,10 @@
     {
       "date": "2026-11-11",
       "event": "stage 4: leak reader clean; determinism judge NOT_DETERMINISTIC, SEND_BACK on the migration call; paused for the author's decision"
+    },
+    {
+      "date": "2026-11-11",
+      "event": "re-rooted to the author's Concept 2 (Fab 2's wafer edge-ring) at the author's word after Concept 1's SEND_BACK; card registered"
     }
-  ],
-  "seed": 9017
+  ]
 }
