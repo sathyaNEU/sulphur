@@ -140,9 +140,9 @@ def write(F, path):
                        ("At %s every further megawatt only raises the peak after the window: it is lowest as awarded, %d per "
                         "cent of design days over firm." % (n, F["r12_lowest"][n]["share_pct"]))
                        for n in none_)),
-           "8. %s scheduled short of its contract for the whole window: %s MW (%s) gives the fewest design days over firm "
-           "capacity, and nine days in ten its peak still stays under only %s MW (%s) against %s, so no schedule keeps it "
-           "within one design day in ten and its reinforcement stands."
+           "8. %s scheduled short of its contract for the whole window, in the service terms' steps of 0.5 MW: %s MW (%s) "
+           "gives the fewest design days over firm capacity, and nine days in ten its peak still reaches %s MW (%s) against "
+           "%s, so no schedule keeps it within one design day in ten and its reinforcement stands."
            % (sd["primary"], f1(sched["schedule"]), b1(B["R12"]["schedule"]), f1(sched["one_in_ten"]),
               b1(B["R12"]["one_in_ten"]), f1(sd["firm"])),
            "9. %s with a %s kVA %s energised on %s: it adds %s MW (%s) to the evening peak by %s, and nine days in ten the "
@@ -234,12 +234,17 @@ def write(F, path):
         "The day with the service. The reduction through the window and the load that comes back in the four half-hours "
         "after it were read from the same events, each half-hour's come-back regressed on the megawatts delivered (%s of a "
         "megawatt back per megawatt delivered), and the design day rebuilt half-hour by half-hour. The come-back is in "
-        "proportion to what the window delivered, and the design day delivers far more than the record's events did: "
+        "proportion to what the window delivered (Corvane Flex's %d events brought back %s and %s MW per MW delivered in the "
+        "half-hour ending 20:00 on the smaller and the larger half of their deliveries, %s and %s MW in all), and the design "
+        "day delivers far more than the record's events did: "
         "Ashcombe Road's events delivered a mean of %s MW and brought back %s MW in the half-hour ending 20:00, where its "
         "design day delivers %s and brings back %s. Replaying the record's megawatts would hold Ashcombe Road at %s MW on "
         "nine days in ten, and taking the delivery off the 17:00 to 18:00 peak at %s; rebuilt, its peak moves to the "
         "half-hour ending %s. Expected peaks: %s."
-        % (j("%s %s" % (p, f2(back[p])) for p in provs), f1(Z["Ashcombe Road"]["event_mean_delivered"]),
+        % (j("%s %s" % (p, f2(back[p])) for p in provs), F["comeback_evidence"]["events"],
+           f2(F["comeback_evidence"]["per_mw_small"]), f2(F["comeback_evidence"]["per_mw_large"]),
+           f2(F["comeback_evidence"]["mw_small"]), f2(F["comeback_evidence"]["mw_large"]),
+           f1(Z["Ashcombe Road"]["event_mean_delivered"]),
            f2(Z["Ashcombe Road"]["back_2000_record"]), f1(deliv["Ashcombe Road"]), f2(Z["Ashcombe Road"]["back_2000_design"]),
            f1(RF[FIXED]["Ashcombe Road"]["one_in_ten"]), f1(RF[NOREPLAY]["Ashcombe Road"]["one_in_ten"]),
            Z["Ashcombe Road"]["peak_hh"], each(peak)),
@@ -263,9 +268,10 @@ def write(F, path):
            j(none_), f1(RC[ZONE_RATIO]["further"]["Fenwick Street"]), f1(RC[LINEAR_F]["further"]["Fenwick Street"])),
         "%s's schedule. A schedule short of what is available is delivered as scheduled (the events that met their "
         "instruction show it), so a shorter schedule trades the window's peak against the come-back's and takes the "
-        "provider's evening-to-evening spread out of the delivery: on the same design days the fewest days over firm "
-        "capacity come at %s MW, %s MW on nine days in ten against %s. Instructed in full it is %s; with the come-back read "
-        "as the record's megawatts no schedule beats the contract in full."
+        "provider's evening-to-evening spread out of the delivery: on the same design days, among the schedules the service "
+        "terms allow (steps of 0.5 MW from 1.0 MW up to the contract), the fewest days over firm capacity come at %s MW, %s "
+        "MW on nine days in ten against %s. Instructed in full it is %s; with the come-back read as the record's megawatts "
+        "no schedule beats the contract in full."
         % (sd["primary"], f1(sched["schedule"]), f1(sched["one_in_ten"]), f1(sd["firm"]), f1(q90[sd["primary"]])),
         "%s with the %s. A %s kVA %s energised on %s is %s months old on %s; on its type's build-up (%s customers of the "
         "type in the settlement summary) it draws %d per cent of its type's established %s kW per kVA by then and adds %s "

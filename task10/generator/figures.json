@@ -55,12 +55,12 @@
   },
   "R12": {
    "one_in_ten": [
-    28.1,
+    28.2,
     29.0
    ],
    "schedule": [
-    4.6,
-    5.0
+    4.5,
+    5.5
    ]
   },
   "R13": {
@@ -386,6 +386,15 @@
    "per_degree_above": 0.46,
    "per_degree_below": 0.49
   }
+ },
+ "comeback_evidence": {
+  "delivered_large": 2.4,
+  "delivered_small": 1.1,
+  "events": 171,
+  "mw_large": 0.76,
+  "mw_small": 0.33,
+  "per_mw_large": 0.32,
+  "per_mw_small": 0.3
  },
  "compound": [
   {
@@ -1623,7 +1632,6 @@
    "rescues": [
     "R7",
     "R11",
-    "R12",
     "R14"
    ],
    "sentence": "the load that comes back after the window is in proportion to what the window delivered, and the design day delivers several times what the record's events did"
@@ -1855,11 +1863,11 @@
   "holds": false,
   "mean_peak": 27.7,
   "primary": "Ashcombe Road",
-  "share_pct": 60
+  "share_pct": 62
  },
  "r13_schedule": {
-  "one_in_ten": 28.4,
-  "schedule": 4.8
+  "one_in_ten": 28.5,
+  "schedule": 5.0
  },
  "r14_customer": {
   "adds": 0.4,
@@ -1945,9 +1953,9 @@
     "Dunmore Street": 2.4,
     "Fenwick Street": 6.6
    },
-   "schedule": 4.8,
+   "schedule": 5.0,
    "schedule_full": false,
-   "schedule_one_in_ten": 28.4,
+   "schedule_one_in_ten": 28.5,
    "verdicts": [
     "Ashcombe Road: reinforce, or contract more flexibility",
     "Charlecote Way: reinforce, or contract more flexibility",
@@ -1966,9 +1974,9 @@
     "Dunmore Street": "none",
     "Fenwick Street": 4.8
    },
-   "schedule": 4.8,
+   "schedule": 5.0,
    "schedule_full": false,
-   "schedule_one_in_ten": 28.4,
+   "schedule_one_in_ten": 28.5,
    "verdicts": [
     "Ashcombe Road: reinforce, no further flexibility would do",
     "Charlecote Way: reinforce, no further flexibility would do",
@@ -2029,9 +2037,9 @@
     "Dunmore Street": "none",
     "Fenwick Street": 4.5
    },
-   "schedule": 4.8,
+   "schedule": 5.0,
    "schedule_full": false,
-   "schedule_one_in_ten": 28.4,
+   "schedule_one_in_ten": 28.5,
    "verdicts": [
     "Ashcombe Road: reinforce, no further flexibility would do",
     "Charlecote Way: reinforce, no further flexibility would do",
@@ -2050,9 +2058,9 @@
     "Dunmore Street": 0.0,
     "Fenwick Street": 5.4
    },
-   "schedule": 4.7,
+   "schedule": 4.5,
    "schedule_full": false,
-   "schedule_one_in_ten": 27.3,
+   "schedule_one_in_ten": 27.4,
    "verdicts": [
     "Ashcombe Road: reinforce, no further flexibility would do",
     "Charlecote Way: reinforce, no further flexibility would do",
@@ -2071,9 +2079,9 @@
     "Dunmore Street": "none",
     "Fenwick Street": 6.0
    },
-   "schedule": 4.8,
+   "schedule": 5.0,
    "schedule_full": false,
-   "schedule_one_in_ten": 28.2,
+   "schedule_one_in_ten": 28.3,
    "verdicts": [
     "Ashcombe Road: reinforce, no further flexibility would do",
     "Charlecote Way: hold",
@@ -2092,9 +2100,9 @@
     "Dunmore Street": "none",
     "Fenwick Street": 2.8
    },
-   "schedule": 4.8,
+   "schedule": 5.0,
    "schedule_full": false,
-   "schedule_one_in_ten": 28.4,
+   "schedule_one_in_ten": 28.5,
    "verdicts": [
     "Ashcombe Road: reinforce, no further flexibility would do",
     "Charlecote Way: reinforce, no further flexibility would do",
@@ -2176,9 +2184,9 @@
     "Dunmore Street": "none",
     "Fenwick Street": 7.8
    },
-   "schedule": 4.8,
+   "schedule": 5.0,
    "schedule_full": false,
-   "schedule_one_in_ten": 28.4,
+   "schedule_one_in_ten": 28.5,
    "verdicts": [
     "Ashcombe Road: reinforce, no further flexibility would do",
     "Charlecote Way: reinforce, no further flexibility would do",
@@ -2197,9 +2205,9 @@
     "Dunmore Street": "none",
     "Fenwick Street": 7.8
    },
-   "schedule": 4.8,
+   "schedule": 5.0,
    "schedule_full": false,
-   "schedule_one_in_ten": 28.4,
+   "schedule_one_in_ten": 28.5,
    "verdicts": [
     "Ashcombe Road: reinforce, no further flexibility would do",
     "Charlecote Way: reinforce, no further flexibility would do",
@@ -2218,9 +2226,9 @@
     "Dunmore Street": "none",
     "Fenwick Street": 7.8
    },
-   "schedule": 4.8,
+   "schedule": 5.0,
    "schedule_full": false,
-   "schedule_one_in_ten": 28.4,
+   "schedule_one_in_ten": 28.5,
    "verdicts": [
     "Ashcombe Road: reinforce, no further flexibility would do",
     "Charlecote Way: reinforce, no further flexibility would do",
@@ -2260,9 +2268,9 @@
     "Dunmore Street": "none",
     "Fenwick Street": 0.0
    },
-   "schedule": 4.8,
+   "schedule": 5.0,
    "schedule_full": false,
-   "schedule_one_in_ten": 28.4,
+   "schedule_one_in_ten": 28.5,
    "verdicts": [
     "Ashcombe Road: reinforce, no further flexibility would do",
     "Charlecote Way: reinforce, no further flexibility would do",
@@ -2281,9 +2289,9 @@
     "Dunmore Street": "none",
     "Fenwick Street": 0.0
    },
-   "schedule": 4.8,
+   "schedule": 5.0,
    "schedule_full": false,
-   "schedule_one_in_ten": 28.4,
+   "schedule_one_in_ten": 28.5,
    "verdicts": [
     "Ashcombe Road: reinforce, no further flexibility would do",
     "Charlecote Way: reinforce, no further flexibility would do",
@@ -2302,7 +2310,7 @@
     "Dunmore Street": "none",
     "Fenwick Street": 7.1
    },
-   "schedule": 4.9,
+   "schedule": 5.0,
    "schedule_full": false,
    "schedule_one_in_ten": 28.1,
    "verdicts": [
@@ -2323,9 +2331,9 @@
     "Dunmore Street": "none",
     "Fenwick Street": 6.6
    },
-   "schedule": 4.8,
+   "schedule": 5.0,
    "schedule_full": false,
-   "schedule_one_in_ten": 28.4,
+   "schedule_one_in_ten": 28.5,
    "verdicts": [
     "Ashcombe Road: reinforce, no further flexibility would do",
     "Charlecote Way: hold",
@@ -2344,7 +2352,7 @@
     "Dunmore Street": "none",
     "Fenwick Street": 7.2
    },
-   "schedule": 4.8,
+   "schedule": 5.0,
    "schedule_full": false,
    "schedule_one_in_ten": 28.4,
    "verdicts": [
@@ -2365,7 +2373,7 @@
     "Dunmore Street": "none",
     "Fenwick Street": 6.3
    },
-   "schedule": 4.8,
+   "schedule": 5.0,
    "schedule_full": false,
    "schedule_one_in_ten": 28.2,
    "verdicts": [
@@ -2386,7 +2394,7 @@
     "Dunmore Street": 0.0,
     "Fenwick Street": 7.1
    },
-   "schedule": 4.6,
+   "schedule": 4.5,
    "schedule_full": false,
    "schedule_one_in_ten": 27.4,
    "verdicts": [
@@ -2407,9 +2415,9 @@
     "Dunmore Street": "none",
     "Fenwick Street": 0.0
    },
-   "schedule": 4.8,
+   "schedule": 5.0,
    "schedule_full": false,
-   "schedule_one_in_ten": 28.4,
+   "schedule_one_in_ten": 28.5,
    "verdicts": [
     "Ashcombe Road: reinforce, no further flexibility would do",
     "Charlecote Way: reinforce, no further flexibility would do",
@@ -2428,9 +2436,9 @@
     "Dunmore Street": "none",
     "Fenwick Street": 0.0
    },
-   "schedule": 4.8,
+   "schedule": 5.0,
    "schedule_full": false,
-   "schedule_one_in_ten": 28.4,
+   "schedule_one_in_ten": 28.5,
    "verdicts": [
     "Ashcombe Road: reinforce, no further flexibility would do",
     "Charlecote Way: reinforce, no further flexibility would do",
@@ -2449,9 +2457,9 @@
     "Dunmore Street": "none",
     "Fenwick Street": 0.0
    },
-   "schedule": 4.8,
+   "schedule": 5.0,
    "schedule_full": false,
-   "schedule_one_in_ten": 28.4,
+   "schedule_one_in_ten": 28.5,
    "verdicts": [
     "Ashcombe Road: reinforce, no further flexibility would do",
     "Charlecote Way: reinforce, no further flexibility would do",
@@ -2470,9 +2478,9 @@
     "Dunmore Street": "none",
     "Fenwick Street": 0.0
    },
-   "schedule": 4.8,
+   "schedule": 5.0,
    "schedule_full": false,
-   "schedule_one_in_ten": 28.4,
+   "schedule_one_in_ten": 28.5,
    "verdicts": [
     "Ashcombe Road: reinforce, no further flexibility would do",
     "Charlecote Way: reinforce, no further flexibility would do",

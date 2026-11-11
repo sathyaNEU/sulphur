@@ -161,7 +161,9 @@ def main():
                                                                                          *Bd["R11"]["Fenwick Street"]))
     sch = [(name, by_name(run)[E.SCHEDULE_AT[0]]["schedule"]) for name, run in list(fam_t.items()) + [("golden", GT)]]
     check("R13 the schedule, and no schedule holds Ashcombe Road", all(not v["full"] and v["p90"] > F["zones"][E.SCHEDULE_AT[0]]["firm"] + 0.3
-                                                                  for _, v in sch),
+                                                                  and abs(v["schedule"] * 2 - round(v["schedule"] * 2)) < 1e-9
+                                                                  and v["schedule"] >= 1.0 for _, v in sch)
+          and "in steps of 0.5 MW from 1.0 MW up to the megawatts contracted" in " ".join(X["award_text"].split()),
           "every variant schedules %.1f to %.1f MW and stays %.2f MW or more over firm capacity nine days in ten"
           % (min(v["schedule"] for _, v in sch), max(v["schedule"] for _, v in sch),
              min(v["p90"] for _, v in sch) - F["zones"][E.SCHEDULE_AT[0]]["firm"]))
@@ -223,9 +225,9 @@ def main():
     # recorded, not the gate: a run that reads the cold end as the golden does and still replays the record's megawatts
     # misses one judgment, and told it, recovers everything it lost (the note's Effort test says so)
     check("sensitivity: the careful pass with the cold end read as a curve", sens["score"] < 60.0 and
-          sens["commits"] == car_sens_verdicts(names) and set(sens["hints"][0]["rescues"]) == {"R7", "R8", "R9", "R10", "R11", "R12", "R14"},
-          "verdicts as the careful pass's; scores %.1f, under the bar; told the come-back sentence it recovers %s (half the "
-          "results: the one judgment it misses)" % (sens["score"], ", ".join(sens["hints"][0]["rescues"])))
+          sens["commits"] == car_sens_verdicts(names) and {"R7", "R11", "R14"} <= set(sens["hints"][0]["rescues"]),
+          "verdicts as the careful pass's; scores %.1f, under the bar; told the come-back sentence it recovers %s (the one "
+          "judgment it misses)" % (sens["score"], ", ".join(sens["hints"][0]["rescues"])))
     wrong = {tuple(v) for k, v in R.items() if v != F["r11_verdicts"]}
     careful_name = [n for n, o in EP.SHORTCUTS if o is EP.CAREFUL][0]
     car_v = dict(v.split(": ", 1) for v in R[careful_name])
@@ -250,7 +252,7 @@ def main():
     lost = [r["id"] for r in eff["results"] if EP.grade(r["id"], r["passes"]["careful"], r["golden"], Bd) != "right"]
     worst = max(len(h["rescues"]) for h in hints)
     check("BAR R6 the one-fact test, computed", worst <= len(eff["results"]) / 3.0
-          and hints[0]["rescues"] == ["R7", "R11", "R12", "R14"] and hints[1]["rescues"] == ["R1", "R3", "R6"]
+          and {"R7", "R11", "R14"} <= set(hints[0]["rescues"]) <= {"R7", "R11", "R12", "R14"} and hints[1]["rescues"] == ["R1", "R3", "R6"]
           and all(not h["rescues"] for h in hints[2:]),
           "the careful pass loses %d of %d results; told one sentence it recovers %s; the two together, %d"
           % (len(lost), len(eff["results"]), ", ".join("%d" % len(h["rescues"]) for h in hints),

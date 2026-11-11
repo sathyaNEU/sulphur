@@ -90,6 +90,20 @@ def band_pct(vals, gold, pad=3, floor=4):
 verdicts, further_tab = EP.verdicts, EP.further_tab
 
 
+def comeback_evidence(G, codes):
+    """Corvane Flex's events in the half-hour ending 20:00: what came back per megawatt delivered and in megawatts, on
+    the smaller and the larger half of what the events delivered."""
+    prov = G["zones"][[c for c in codes if G["zones"][c]["name"] == E.SCHEDULE_AT[0]][0]]["provider"]
+    ev = G["events"]
+    mine = ev[ev["code"].isin([c for c in codes if G["zones"][c]["provider"] == prov]) & (ev["delivered"] > 0.5)]
+    first = np.array([p[0] for p in mine["post"]])
+    dl = mine["delivered"].values
+    small, large = dl <= np.median(dl), dl > np.median(dl)
+    return dict(events=int(len(dl)), per_mw_small=r2(first[small].sum() / dl[small].sum()),
+                per_mw_large=r2(first[large].sum() / dl[large].sum()), mw_small=r2(first[small].mean()),
+                mw_large=r2(first[large].mean()), delivered_small=r1(dl[small].mean()), delivered_large=r1(dl[large].mean()))
+
+
 def family(X, G):
     """The golden and every reasonable variant of its choices, run on the pack."""
     runs = {"golden": G}
@@ -133,8 +147,11 @@ def figures(X, G, FAM, info):
     # R12: every variant's further megawatts; a primary where no amount does it has no band, only "none"
     B["R11"] = {n: (band_mw([fam[k][n]["further"] for k in fam], Z[n]["further"], pad=0.3, floor=0.5)
                     if Z[n].get("further") is not None else None) for n in call}
-    B["R12"] = dict(schedule=band_mw([fam[k][sched_at]["schedule"]["schedule"] for k in fam],
-                                     Z[sched_at]["schedule"]["schedule"], pad=0.1, floor=0.2),
+    # schedules come in the service terms' half-megawatt steps and the share is flat near its lowest, so the band is the
+    # golden's step and one step either side (every variant and every careless reading of the mess lands inside it)
+    sch_g = Z[sched_at]["schedule"]["schedule"]
+    sch_f = [fam[k][sched_at]["schedule"]["schedule"] for k in fam]
+    B["R12"] = dict(schedule=[round(min(min(sch_f), sch_g - E.STEP_MW), 1), round(max(max(sch_f), sch_g + E.STEP_MW), 1)],
                     one_in_ten=band_mw([fam[k][sched_at]["schedule"]["p90"] for k in fam],
                                        Z[sched_at]["schedule"]["p90"], floor=0.3))
     B["R13"] = dict(adds=band_mw([fam[k][cust_at]["customer"]["adds"] for k in fam], Z[cust_at]["customer"]["adds"],
@@ -207,6 +224,7 @@ def figures(X, G, FAM, info):
                         holds=bool(Z[sched_at]["schedule"]["p90"] <= Z[sched_at]["firm"])),
         r14_customer=dict(adds=r1(Z[cust_at]["customer"]["adds"]), one_in_ten=r1(Z[cust_at]["customer"]["p90"])),
         fenwick_process_pct=pct(float(step_f[step_f["cls"] == "Process load"]["kw"].sum()) / float(step_f["kw"].sum())),
+        comeback_evidence=comeback_evidence(G, codes),
         customer_age_months=r1(E.months_between(E.CUSTOMER["energised"], E.ASSESS)),
         customer_type_n=int(G["buildup"][E.CUSTOMER["type"]]["n_conn"]),
         r14_detail=dict(primary=cust_at, type=E.CUSTOMER["type"], kva=E.CUSTOMER["kva"],

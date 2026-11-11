@@ -21,7 +21,6 @@
    "rescues": [
     "R7",
     "R11",
-    "R12",
     "R14"
    ],
    "sentence": "the load that comes back after the window is in proportion to what the window delivered, and the design day delivers several times what the record's events did"
@@ -656,12 +655,12 @@
   {
    "bands": {
     "one_in_ten": [
-     28.1,
+     28.2,
      29.0
     ],
     "schedule": [
-     4.6,
-     5.0
+     4.5,
+     5.5
     ]
    },
    "depends": [
@@ -671,8 +670,8 @@
    ],
    "figure": "r13_schedule",
    "golden": {
-    "one_in_ten": 28.4,
-    "schedule": 4.8
+    "one_in_ten": 28.5,
+    "schedule": 5.0
    },
    "graded_as": "Ask 7",
    "id": "R12",
@@ -688,8 +687,8 @@
      "schedule": 21.0
     },
     "thorough": {
-     "one_in_ten": 28.4,
-     "schedule": 4.8
+     "one_in_ten": 28.5,
+     "schedule": 5.0
     }
    }
   },

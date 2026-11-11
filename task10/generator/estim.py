@@ -834,17 +834,18 @@ def linear_further(z, per_mw):
     return round(float((z["p90"] - z["firm"]) / max(z["share"] * per_mw, 1e-9)), 1)
 
 
+STEP_MW, MIN_MW = 0.5, 1.0     # the award notice: instructions in steps of 0.5 MW from 1.0 MW up to the megawatts contracted
+
+
 def best_schedule(days, z, fixed=None):
-    """The megawatts to schedule for the whole window, at most the contract, that make the share of design days over
-    firm capacity smallest (the lower nine-days-in-ten level breaking a tie, then the larger schedule): the schedule,
-    its mean peak, nine-days-in-ten level and share."""
+    """The schedule for the whole window, among those the service terms allow (steps of 0.5 MW from 1.0 MW up to the
+    megawatts contracted), that makes the share of design days over firm capacity smallest (the lower nine-days-in-ten
+    level breaking a tie, then the larger schedule): the schedule, its mean peak, nine-days-in-ten level and share."""
     def at(s):
         m, p90, ex = days.stats(z["delivered"], firm=z["firm"], cap=z["contracted"], sched=s, fixed=fixed)
         return (ex, round(p90, 9), -s, m)
-    coarse = [(s,) + at(s) for s in list(np.arange(0.0, z["contracted"], 0.5)) + [z["contracted"]]]
-    s0 = min(coarse, key=lambda t: t[1:4])[0]
-    fine = [(s,) + at(s) for s in np.arange(max(s0 - 0.5, 0.0), min(s0 + 0.5, z["contracted"]) + 1e-9, 0.1)]
-    s, ex, p90, _, m = min(coarse + fine, key=lambda t: t[1:4])
+    grid = [MIN_MW + STEP_MW * k for k in range(int(round((z["contracted"] - MIN_MW) / STEP_MW)) + 1)]
+    s, ex, p90, _, m = min(((s_,) + at(s_) for s_ in grid), key=lambda t: t[1:4])
     return dict(schedule=round(float(s), 1), mean=m, p90=p90, exceed=ex, full=bool(s >= z["contracted"] - 1e-9))
 
 

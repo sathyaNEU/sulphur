@@ -14,7 +14,8 @@ python3 task10/generator/verify.py
   the day     the reduction through the window and the load coming back as ratios of sums; twenty thousand design days
   the choices a further contract on the award's terms scanned in half-megawatt steps on the same days, each step site
               given its class's share in service by its planned date's distance from the assessment date; the schedule
-              scanned in tenths; the data hall at its type's mean share of agreed capacity at its age
+              scanned in the service terms' half-megawatt steps; the data hall at its type's mean share of agreed capacity
+              at its age
 """
 import datetime as dt
 import json
@@ -275,7 +276,7 @@ def main():
     # R13: Ashcombe Road's schedule
     sa = "Ashcombe Road"
     c = code[sa]
-    sched = [(s_, *day_stats(sa, res[sa]["R6"], X["contracts_code"][c], sched=s_)) for s_ in np.arange(0.0, X["contracts_code"][c] + 1e-9, 0.1)]
+    sched = [(s_, *day_stats(sa, res[sa]["R6"], X["contracts_code"][c], sched=s_)) for s_ in np.arange(1.0, X["contracts_code"][c] + 1e-9, 0.5)]
     s_best = min(sched, key=lambda t: (t[2], t[1], -t[0]))
     ok13 = B["R12"]["schedule"][0] - 0.1 <= s_best[0] <= B["R12"]["schedule"][1] + 0.1 and s_best[1] > X["firm"][c]
     # R14: Hartwell Common with the data hall, at the type's mean share of agreed capacity at its age
