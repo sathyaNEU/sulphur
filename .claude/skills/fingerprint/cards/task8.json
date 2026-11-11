@@ -1,19 +1,19 @@
 {
   "task": "task8",
   "project": "sulfur",
-  "architecture": "v18 (re-root into a Canadian adult numeracy awarding body: the pass mark of its 2027 Level 1 Numeracy paper, pre-equated from its concurrent Rasch bank, when the paper borrows twelve items from the Level 2 pool calibrated on Level 2 candidates)",
-  "drawn": "2026-11-08",
-  "slot_note": "re-root of task8 in the same subdomain and objective after architecture 17 (the New Zealand trust's Year 10 science paper choice) landed in both platform runs; new world (adult numeracy certification across Manitoba and Saskatchewan), new dataset, new generator and new shell (what, docx+xlsx)",
+  "architecture": "v19",
+  "drawn": "2026-11-11",
+  "slot_note": "re-root of task8 in the same subdomain and objective (Education & Learning Sciences, test equating, Data Extraction & Conformation); architecture 18 (a Rasch-bank pass mark, Canada) was cut under the retired single-deep-step design and never uploaded; a new world, dataset and shell",
   "domain": "education-learning-sciences",
   "client_domain": "education-learning-sciences",
   "subdomain": "item-response-theory-test-equating",
-  "niche": "a not-for-profit adult credentials board setting the pass mark of its 2027 Level 1 Numeracy paper, which for the first time fills its new patterns and relationships strand with long abstract word problems from the Level 2 pool, each pre-equated from a concurrent Rasch bank whose Level 2 items were calibrated on Level 2 candidates and linked to Level 1 through the Level 2 items earlier Level 1 papers carried",
+  "niche": "an English multi-academy trust putting its secondary academies' Year 7 entry reading results, taken on three different commercial tests with different standardisation samples, in a fixed-order transition trial and at July transition days, on one reading basis to place students in its reading programme and staff it",
   "objective": "etl",
   "shape": "15",
-  "decision_type": "dial_setting",
-  "answer_unit": "count",
-  "answer": "a 2027 Level 1 pass mark of 19 of 40 (expected mark 19.09 at the standard), rejecting the bank's 22 (21.57)",
-  "answer_source": "",
+  "decision_type": "conformed_dataset",
+  "answer_unit": "dataset",
+  "answer": "",
+  "answer_source": "task8/generator/figures.json",
   "gap": [
     "population"
   ],
@@ -21,77 +21,81 @@
     "none"
   ],
   "generators": [
-    "G3",
-    "G16",
-    "G14"
+    "G1",
+    "G7",
+    "G16"
   ],
-  "gate_g": "decomposition_attribution",
-  "calibration_form": "parallel_run_overlap",
-  "stump_strategy": "decomposition_attribution",
+  "gate_g": "etl_conformance",
+  "calibration_form": "pilot_log",
+  "stump_strategy": "grain_or_unit",
   "decisive_rule_filed": false,
   "official_decoy": false,
   "validated_decoy": false,
-  "context_artifact": "filed_model",
+  "context_artifact": "register",
   "stump_class": "analytical",
-  "analyst_test": "A strong analyst who conforms the response export's two item-code schemes, the paper layouts and the bank, reads the specification and the 2022 standard-setting record correctly, and pre-equates the 2027 paper by the Rasch test characteristic curve from the Board's final 2026 concurrent calibration, after screening the Level 2 items that earlier Level 1 papers carried and setting aside the few everyday-money items Level 1 candidates found easier, files a pass mark about three marks too high; the Level 2 items' difficulties do not hold for Level 1 candidates, who gain on everyday contexts and lose on long stems, the two cancelling on the long everyday items the earlier papers carried, so the 2027 paper's long abstract items are harder for them than banked.",
-  "domain_test": "The deciding quantity is the 2027 paper's expected mark at the Level 1 standard under the Rasch model, the true-score pre-equating an assessment programme runs from its calibrated item bank; the decisive step is whether the Level 2 items' difficulties carry to Level 1 candidates (item parameter invariance across levels), worked as differential item functioning explained by each item's recorded context and stem length and carried to items Level 1 candidates have never sat. A noun swap breaks it: no other field's instrument borrows calibrated items across ability levels whose takers differ in how they read and what contexts they know.",
+  "analyst_test": "A careful but hurried analyst cleans and joins the three exports and the census, places Quill students on their own standardised scores or on a regression from KS2, converts Brightway results through the trial's pairs as they stand, and takes the July Lexis sittings as entry reading, so the Quill, Brightway and July academies' programmes come out short by different amounts and the trust's tutor time with them.",
+  "domain_test": "Every result is a test-linking quantity: norm-referenced scores from different standardisation samples put on one basis through a common anchor by equating rather than prediction, a single-group linking trial corrected for the gain its fixed second sitting carries, and sittings before the start of Year 7 brought to it; swap the nouns for triage tools or credit scores and the national KS2 anchor, the norm samples and the second-sitting gain stop meaning anything.",
   "layer2_family": "estimation_fit",
-  "layer2_pattern": "own:feature-explained-dif-cancelling-on-the-linking-items",
+  "layer2_pattern": "own:anchor-linked-multi-test-conformation",
   "layer1": [
-    "the response export keys items by paper position on the 2022 and 2023 papers and by bank code after the 2024 platform change",
-    "attempt timestamps in UTC while centres sat in Central Standard Time",
-    "duplicate response rows where an online session reconnected",
-    "candidate records registered twice under a centre code and a regional office code",
-    "withdrawn and absent registrations kept in the register",
-    "a preliminary and a final calibration run of the bank overlapping in the bank file"
+    "three entry-test exports in three layouts (a platform CSV keyed by UPN, a US-dated vendor CSV keyed by its own student number, a staff-typed workbook with one sheet per academy and no UPN)",
+    "a vendor rostering map that misses some students, joined through admission numbers",
+    "students re-tested after a failed online session, and students who moved academy between sittings",
+    "an adaptive session log whose short sessions the results export still scores",
+    "KS2 results with absence and below-the-test codes, and arrivals with no KS2 at all",
+    "names typed with preferred forenames, apostrophes and hyphens against the census's legal names"
   ],
-  "stakeholder_role": "the Board's assessment manager, who recommends each paper's pass mark to the Awards Committee",
+  "stakeholder_role": "the trust's director of education, who takes the tutor budget to the trust board",
   "role_family": "programme_officer",
-  "scoring_unit": "other",
+  "scoring_unit": "units served",
   "spine": {
-    "file": "pacb_numeracy_responses_2022_2026.csv",
-    "rows": 400052,
-    "entity": "one scored response of one candidate to one item at one online sitting",
-    "grain": "candidate x item (a re-answered item after a reconnect has two rows)",
-    "source": "synthetic"
+    "file": "census_year7_2026-10-01.csv",
+    "rows": 0,
+    "entity": "one Year 7 student on roll at the October 2026 census",
+    "grain": "student",
+    "source": "synthetic (a simulated multi-academy trust)"
   },
-  "forum": "committee_or_panel",
-  "forcing_event": "launch_or_rollout",
-  "org_family": "nonprofit_or_charity",
+  "forum": "trustees_or_governors",
+  "forcing_event": "budget_or_appropriation",
+  "org_family": "university_or_school",
   "world": {
-    "geography": "Canada (Manitoba and Saskatchewan; a fictional not-for-profit adult credentials board and fictional learning centres)",
-    "currency": "CAD",
-    "org_type": "a not-for-profit awarding body certifying adult numeracy and literacy for community learning centres",
-    "invented_names": [
-      "Prairie Adult Credentials Board"
-    ],
+    "geography": "England (South Yorkshire and the East Midlands)",
+    "currency": "GBP",
+    "org_type": "multi-academy trust",
+    "invented_names": [],
     "people": [
-      "Yvette Clark",
-      "Shawn Simpson",
-      "Andrew Adams"
+      "Rosemary Collier",
+      "Annette McDonald",
+      "Josephine Sykes"
     ]
   },
   "deliverables": [
-    "pass_mark_2027.docx",
-    "l1_2027_items.xlsx"
+    "reading_forward_entry_2026.xlsx",
+    "reading_forward_tutor_time_2026.pdf"
   ],
   "opening_move": "question-first",
-  "question_form": "what",
-  "driver": "A fixed level's expected score on a new instrument is built from parameters its borrowed parts were given on a different population; the borrowed parts already used with the target population showed no shift because two of their recorded features moved them in opposite directions there, a cancellation only parts carrying one feature without the other reveal, and the new instrument's borrowed parts carry only the feature that makes them harder for the target population.",
-  "driver_concrete": "Each Level 2 item's difficulty for Level 1 candidates is its Level 2 calibration plus a reading cost that grows with its stem's length less an everyday-context advantage, estimated jointly from the Level 2 items the 2023 to 2026 Level 1 papers carried (short everyday items easier for Level 1 candidates, long everyday items unchanged because the two effects cancel, short abstract items unchanged), and carried to the 2027 paper's long abstract items, which take the cost without the advantage.",
-  "stump": "The default path pre-equates the 2027 paper from the Board's concurrent Rasch bank, screens the earlier Level 1 papers' Level 2 items and finds only a few short everyday-money items drifting easier for Level 1 candidates, sets them aside or credits Level 1 candidates with an everyday advantage the 2027 abstract items do not offer, and files a pass mark about three marks too high; the long everyday items held only because a reading cost cancelled the advantage on them, so the 2027 paper's long abstract Level 2 items are harder for Level 1 candidates than banked and the pass mark falls.",
-  "deep_chain": "(1) the Level 2 items earlier Level 1 papers carried look invariant for Level 1 candidates except a few short everyday items, which favour them; (2) the long everyday items should show that advantage and do not, so a cost that grows with stem length offsets it there, and the short abstract items fix the link; (3) the joint model of context and length is the only one that fits all three kinds, and it puts the 2027 paper's long abstract items harder for Level 1 candidates than banked; (4) the 2027 test characteristic curve at the 2022 standard then gives the pass mark",
-  "judgment": "a differential item functioning model with two causes, the everyday-context advantage and the reading cost of stem length, justified because only the joint model fits the short everyday, long everyday and short abstract bridging items together, and the single-cause models leave one kind misfitting",
-  "one_fact_test": "the likeliest hint, that Level 1 candidates lose marks on long stems, still leaves the run to see that the long everyday items hide the cost behind the everyday advantage, estimate both effects and the link jointly from the bridging items, and carry the cost to items Level 1 candidates have never sat",
-  "strategy_label": "WORKS IN FORM (separating two explanations for one pattern: the long everyday items' null shift is invariance or two opposing effects, separated by a like-for-like comparison across the short everyday and short abstract items)",
+  "question_form": "how-much",
+  "driver": "Each unit's count below a fixed level is read from scores taken on three instruments whose reference populations, sitting order and timing differ, so each instrument's scores are rebuilt on one basis through a common earlier measure by equating rather than prediction, a fixed-order paired trial is cleared of the gain its second sitting carries, measured where the order switched, and readings taken before the reference date are shifted by the gap the common measure shows.",
+  "driver_concrete": "Every Year 7 student's entry reading is put on the Lexis 2019 basis: Quill's softer 2024 norms through KS2 by equating, Brightway through the September trial's pairs once the Lexis trial sitting's second-sitting gain, measured at the academy where the order switched, is taken out, and the July transition-day Lexis sittings shifted by the dip KS2 shows against the September academies; then the programme counts set the tutor time.",
+  "stump": "A careful run files each academy's programme on its own test's standardised score below 85, or on the trial's pairs as they stand and the July sittings as entry reading, so the Quill, Brightway and July academies come out short and the trust's tutor time with them.",
+  "answer_shape": "reconciled-table",
+  "weight": "measurement",
+  "chain_signature": [
+    "assembly-reconciliation",
+    "missingness-measurement",
+    "modeling",
+    "validation",
+    "missingness-measurement",
+    "synthesis",
+    "decomposition-attribution",
+    "uncertainty",
+    "synthesis"
+  ],
+  "results": "R1 valid entry results by academy reconciled to the census; R2 the trial's second-sitting gain; R3 the Lexis score of Brightway results at six points; R4 the Lexis score of Quill results at six points; R5 the July transition-day dip; R6 programme students by academy; R7 the change from each academy's own-test list, by test; R8 the trust total's range; R9 tutor time by academy and the budget",
+  "one_fact_test": "'Quill's standardised scores come from a softer 2024 sample than Lexis's 2019 one' rescues the Quill link and the Quill academies' counts only (R4 and part of R6); the Brightway trial's second-sitting gain, the July dip and every trust total stay wrong",
+  "strategy_label": "WORKS IN FORM (a quantity the files never publish, recovered from a common anchor and a trial, carried to a decision)",
   "mechanism_source": "design_note",
-  "differentiation": {
-    "mark101": "there a threshold is cut from a distribution the decision's own earlier payments have since entered; here a fixed level's expected score is built from borrowed items whose difficulty for the target population differs from their calibration by two opposing feature-driven shifts that cancel on the linking items",
-    "mark178": "its lineage rating relation changes form above a level few measurements reach; here no relation changes form, two recorded item features shift difficulty in opposite directions for one population and cancel on the items that link the populations",
-    "mark469": "there task overruns are seen only past each task's own allowance, a censoring; here nothing is censored, the item shift is hidden by cancellation on the linking items and recovered by a two-cause model",
-    "mark121": "its lineage reaches units filed as newcomers through a reference chain to established accounts; here the property is each borrowed item's difficulty for a different population, estimated from the items both populations sat",
-    "mark464": "there a loss grows with the square of the flow through a replaced segment; here an item's difficulty for one population moves with its stem length and context, two effects that cancel on the linking items"
-  },
+  "differentiation": {},
   "lineage": [
     {
       "architecture": "v1",
@@ -605,6 +609,95 @@
       },
       "fate": "spent 2026-11-08 on its first platform round: both runs filed Paper C and every regional figure; the August-calibration versus November-sitting gap in the prompt announced the mechanism, the course outline and Appendix B's per-school sequences handed over the join, adjusting for taught content is a textbook IRT reflex, and every ask device was a hygiene item both runs caught (runs/triage.md)",
       "architecture_spent": true
+    },
+    {
+      "architecture": "v18",
+      "drawn": "2026-11-08",
+      "slot_note": "re-root of task8 in the same subdomain and objective after architecture 17 (the New Zealand trust's Year 10 science paper choice) landed in both platform runs; new world (adult numeracy certification across Manitoba and Saskatchewan), new dataset, new generator and new shell (what, docx+xlsx)",
+      "domain": "education-learning-sciences",
+      "client_domain": "education-learning-sciences",
+      "subdomain": "item-response-theory-test-equating",
+      "niche": "a not-for-profit adult credentials board setting the pass mark of its 2027 Level 1 Numeracy paper, which for the first time fills its new patterns and relationships strand with long abstract word problems from the Level 2 pool, each pre-equated from a concurrent Rasch bank whose Level 2 items were calibrated on Level 2 candidates and linked to Level 1 through the Level 2 items earlier Level 1 papers carried",
+      "objective": "etl",
+      "shape": "15",
+      "decision_type": "dial_setting",
+      "answer_unit": "count",
+      "answer": "a 2027 Level 1 pass mark of 19 of 40 (expected mark 19.09 at the standard), rejecting the bank's 22 (21.57)",
+      "answer_source": "",
+      "gap": [
+        "population"
+      ],
+      "pattern": [
+        "none"
+      ],
+      "generators": [
+        "G3",
+        "G16",
+        "G14"
+      ],
+      "gate_g": "decomposition_attribution",
+      "calibration_form": "parallel_run_overlap",
+      "stump_strategy": "decomposition_attribution",
+      "decisive_rule_filed": false,
+      "official_decoy": false,
+      "validated_decoy": false,
+      "context_artifact": "filed_model",
+      "stump_class": "analytical",
+      "analyst_test": "A strong analyst who conforms the response export's two item-code schemes, the paper layouts and the bank, reads the specification and the 2022 standard-setting record correctly, and pre-equates the 2027 paper by the Rasch test characteristic curve from the Board's final 2026 concurrent calibration, after screening the Level 2 items that earlier Level 1 papers carried and setting aside the few everyday-money items Level 1 candidates found easier, files a pass mark about three marks too high; the Level 2 items' difficulties do not hold for Level 1 candidates, who gain on everyday contexts and lose on long stems, the two cancelling on the long everyday items the earlier papers carried, so the 2027 paper's long abstract items are harder for them than banked.",
+      "domain_test": "The deciding quantity is the 2027 paper's expected mark at the Level 1 standard under the Rasch model, the true-score pre-equating an assessment programme runs from its calibrated item bank; the decisive step is whether the Level 2 items' difficulties carry to Level 1 candidates (item parameter invariance across levels), worked as differential item functioning explained by each item's recorded context and stem length and carried to items Level 1 candidates have never sat. A noun swap breaks it: no other field's instrument borrows calibrated items across ability levels whose takers differ in how they read and what contexts they know.",
+      "stakeholder_role": "the Board's assessment manager, who recommends each paper's pass mark to the Awards Committee",
+      "role_family": "programme_officer",
+      "forum": "committee_or_panel",
+      "forcing_event": "launch_or_rollout",
+      "org_family": "nonprofit_or_charity",
+      "world": {
+        "geography": "Canada (Manitoba and Saskatchewan; a fictional not-for-profit adult credentials board and fictional learning centres)",
+        "currency": "CAD",
+        "org_type": "a not-for-profit awarding body certifying adult numeracy and literacy for community learning centres",
+        "invented_names": [
+          "Prairie Adult Credentials Board"
+        ],
+        "people": [
+          "Yvette Clark",
+          "Shawn Simpson",
+          "Andrew Adams"
+        ]
+      },
+      "deliverables": [
+        "pass_mark_2027.docx",
+        "l1_2027_items.xlsx"
+      ],
+      "question_form": "what",
+      "driver": "A fixed level's expected score on a new instrument is built from parameters its borrowed parts were given on a different population; the borrowed parts already used with the target population showed no shift because two of their recorded features moved them in opposite directions there, a cancellation only parts carrying one feature without the other reveal, and the new instrument's borrowed parts carry only the feature that makes them harder for the target population.",
+      "driver_concrete": "Each Level 2 item's difficulty for Level 1 candidates is its Level 2 calibration plus a reading cost that grows with its stem's length less an everyday-context advantage, estimated jointly from the Level 2 items the 2023 to 2026 Level 1 papers carried (short everyday items easier for Level 1 candidates, long everyday items unchanged because the two effects cancel, short abstract items unchanged), and carried to the 2027 paper's long abstract items, which take the cost without the advantage.",
+      "stump": "The default path pre-equates the 2027 paper from the Board's concurrent Rasch bank, screens the earlier Level 1 papers' Level 2 items and finds only a few short everyday-money items drifting easier for Level 1 candidates, sets them aside or credits Level 1 candidates with an everyday advantage the 2027 abstract items do not offer, and files a pass mark about three marks too high; the long everyday items held only because a reading cost cancelled the advantage on them, so the 2027 paper's long abstract Level 2 items are harder for Level 1 candidates than banked and the pass mark falls.",
+      "skeleton": {
+        "decision_form": "dial_or_cap_setting",
+        "answer_pattern": "figure_crosses_bar",
+        "lessons": [
+          "cancellation_of_offsetting_effects",
+          "transport_effect_modifiers"
+        ],
+        "mechanisms": [
+          "reading_cost_with_stem_length",
+          "everyday_context_advantage"
+        ],
+        "detection": [
+          "residual_by_subgroup"
+        ],
+        "moves": [
+          "transport_by_effect_modifiers",
+          "fixed_plus_covariate_fit"
+        ],
+        "file_roles": [
+          "reference_register",
+          "primary_record",
+          "governing_standard",
+          "test_or_trial_register",
+          "unused_distractor"
+        ]
+      },
+      "fate": "spent 2026-11-11 before upload: cut under the retired single-deep-step design on 2026-11-08 (one pass mark carried by one decomposition of the borrowed items' shift), re-rooted to a results chain for the 2026-11-09 bar on the author's word; never uploaded"
     }
   ],
   "lineage_shells": [
@@ -631,40 +724,58 @@
       "second-sentence opener": "write",
       "rounding opener": "expected",
       "deliverable set": "docx+png+xlsx"
+    },
+    {
+      "question form": "whether",
+      "second-sentence opener": "i",
+      "rounding opener": "pass",
+      "deliverable set": "docx+xlsx"
     }
   ],
-  "notes": "architecture 18 drawn 2026-11-08 after architecture 17 landed on the platform; world, dataset, generator and shell redrawn; people redrawn from guard.py names --geo CA --seed 8 after the seed 818 first names repeated older builds",
-  "registered": "2026-11-08T05:32:52Z",
-  "shell": {
-    "question form": "whether",
-    "second-sentence opener": "i",
-    "rounding opener": "pass",
-    "deliverable set": "docx+xlsx"
-  },
+  "notes": "question form how-much: the decision is an amount of tutor time; context artifact register (the census roll), the trust's programme policy being a filed standard that ban.artifact holds against task20 this window; strategy grain_or_unit WARN answered on analyst_test: every field and filed rule read correctly, the hurried routes still convert through the nominal scores, a regression or the trial pairs as they stand",
   "skeleton": {
-    "decision_form": "dial_or_cap_setting",
-    "answer_pattern": "figure_crosses_bar",
+    "decision_form": "count_to_standard",
+    "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
     "lessons": [
-      "cancellation_of_offsetting_effects",
-      "transport_effect_modifiers"
+      "measurement_basis_break",
+      "concurrent_change_in_comparison",
+      "seasonal_shift_calibration",
+      "measurement_error_attenuation",
+      "frame_population_mismatch"
     ],
     "mechanisms": [
-      "reading_cost_with_stem_length",
-      "everyday_context_advantage"
+      "norm_samples_from_different_years",
+      "second_sitting_practice_gain",
+      "transition_day_dip",
+      "untested_students_placed_on_ks2",
+      "regression_link_shrinks_toward_mean"
     ],
     "detection": [
-      "residual_by_subgroup"
+      "second_source_at_other_grain",
+      "record_time_against_event_time",
+      "natural_experiment_in_record"
     ],
     "moves": [
-      "transport_by_effect_modifiers",
-      "fixed_plus_covariate_fit"
+      "rebuild_on_unchanged_signals",
+      "paired_differences_of_planned_design",
+      "frame_reconciliation_with_register",
+      "link_records_by_parsed_key"
     ],
     "file_roles": [
-      "reference_register",
+      "frame_or_roster",
       "primary_record",
-      "governing_standard",
+      "second_grain_source",
       "test_or_trial_register",
+      "governing_standard",
+      "crosswalk_or_migration_map",
+      "reference_register",
       "unused_distractor"
     ]
+  },
+  "registered": "2026-11-11T18:53:23Z",
+  "shell": {
+    "question form": "how-much",
+    "second-sentence opener": "how",
+    "deliverable set": "xlsx"
   }
 }
