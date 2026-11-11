@@ -13,7 +13,7 @@
  "shape": "other",
  "decision_type": "allocation_to_total",
  "answer_unit": "currency",
- "answer": "Plan USD 665 million of net P&L for 2027 at the draft (80 per cent range USD 270 million to 999 million) and drop the increases for HC1051, HC1059, HC1090, HC1124, whose added dollar earns below the 1.5 per cent hurdle",
+ "answer": "Plan USD 594 million of net P&L for 2027 at the draft (80 per cent range USD 37 million to 1077 million) and drop the increases for HC1054, HC1058, HC1062, HC1082, HC1098, HC1107, HC1132, HC1135, whose added dollar earns below the 1.5 per cent hurdle",
  "answer_source": "task9/generator/figures.json",
  "gap": [
   "objective",
@@ -51,7 +51,7 @@
  "scoring_unit": "other",
  "spine": {
   "file": "risk_pnl_daily_legacy_20170103_20230630.csv",
-  "rows": 114928,
+  "rows": 114983,
   "entity": "one pod on one trading day",
   "grain": "pod x trading day",
   "source": "synthetic on real market and carry returns (FRED, Cboe)"
@@ -77,8 +77,8 @@
  "opening_move": "question-first",
  "question_form": "how-much",
  "driver": "The decisive quantities are each unit's own return once the shared flows and the carry its record rides on are taken out, the coming year's spread at the year's own horizon from daily records whose serial dependence differs by flow, and what an added unit of resource earns when the return per unit falls with the resource, against a bar on the added unit; read off the raw record or the unit's own average return, the plan runs high and narrow and the bar passes units whose added resource earns below it.",
- "driver_concrete": "Harbourne's draft 2027 capital plan raises 26 pods, but part of what its credit pods earned is the Baa spread a passive holding earns, which the risk model's factors leave in alpha; credit spreads trend for weeks, so a year built from single days understates the bad years; and with a pod's alpha per dollar falling about a quarter per doubling of capital, the added dollar of four credit increases earns 0.1 to 0.9 per cent against the 1.5 per cent hurdle while the pods' own returns at their new sizes clear it.",
- "stump": "The careful but hurried review reads alpha on the risk model's factors, builds the year from days drawn one at a time and judges each increase on the pod's return at its new size, so it plans 2027 at USD 733 million against USD 665 million, puts the 10th percentile at USD 414 million against 270 million and passes every increase, where four credit increases add less than the hurdle on the capital they add.",
+ "driver_concrete": "Harbourne's draft 2027 capital plan raises 27 pods, but part of what its credit pods earned is the Baa spread a passive holding earns, which the risk model's factors leave in alpha; credit spreads trend for weeks, so a year built from single days understates the bad years; and with a pod's alpha per dollar falling about a quarter per doubling of capital, the added dollar of eight credit and currency increases earns 0.3 to 1.1 per cent against the 1.5 per cent hurdle while most of the pods' own returns at their new sizes clear it.",
+ "stump": "The careful but hurried review reads alpha on the risk model's factors, builds the year from days drawn one at a time and judges each increase on the pod's return at its new size, so it plans 2027 at USD 712 million against USD 594 million, puts the 10th percentile at USD 244 million against 37 million and passes every increase, where eight credit and currency increases add less than the hurdle on the capital they add.",
  "answer_shape": "allocation-sensitivity",
  "weight": "allocation",
  "chain_signature": [

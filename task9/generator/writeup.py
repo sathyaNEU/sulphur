@@ -26,7 +26,23 @@ def pband(b, k=2):
 
 def joined(xs):
     xs = list(xs)
+    if not xs:
+        return ""
     return xs[0] if len(xs) == 1 else ", ".join(xs[:-1]) + " and " + xs[-1]
+
+
+NUMBER = {1: "one", 2: "two", 3: "three", 4: "four", 5: "five", 6: "six", 7: "seven", 8: "eight", 9: "nine", 10: "ten", 11: "eleven", 12: "twelve"}
+
+
+def kinds(F, pods):
+    """The strategy groups a set of increases belongs to, as words ("credit and currency")."""
+    word = {"Credit": "credit", "Currencies": "currency", "Equity long/short": "equity", "Quantitative equity": "quantitative equity",
+            "Rates": "rates", "Commodities": "commodity", "Volatility": "volatility"}
+    g = []
+    for x in F["increases"]:
+        if x["pod"] in pods and word[x["group"]] not in g:
+            g.append(word[x["group"]])
+    return g[0] if len(g) == 1 else ", ".join(g[:-1]) + " and " + g[-1]
 
 
 def write(F, path):
@@ -52,7 +68,7 @@ def write(F, path):
              "were priced, and the %s that comes from reading alpha on the risk model's factors and drawing the year a day at a time, "
              "with each increase judged on the pod's return at its new size, a reading that passes %s." % (
                  um(F["R4_net"]), band(F["R4_band"]), um(F["R5_range"]["P10"]), um(F["R5_range"]["P90"]), joined(fail),
-                 "four credit" if len(fail) == 4 else "the", um(added), min(inc[p]["per_dollar"] for p in fail), max(inc[p]["per_dollar"] for p in fail),
+                 "%s %s" % (NUMBER.get(len(fail), str(len(fail))), kinds(F, fail)), um(added), min(inc[p]["per_dollar"] for p in fail), max(inc[p]["per_dollar"] for p in fail),
                  joined(either), "s" if len(either) == 1 else "", "it" if len(either) == 1 else "them",
                  um(F["quick"]["mean"]), um(rt["careful but hurried"]["mean"]),
                  joined([p for p in fail if p not in rt["careful but hurried"]["fail"]])))
@@ -67,7 +83,7 @@ def write(F, path):
                          um(F["R5_range"]["P10"]), um(F["R5_range"]["P90"]), band(F["R5_bands"]["P10"]), band(F["R5_bands"]["P90"])))
     L.append("2. The pods whose increases fall short of the 1.5%% hurdle: **%s**, each with its 2026 and 2027 capital, the capital it adds "
              "and the net P&L each dollar of it is expected to add a year (%s). %s are borderline: their margin over the hurdle is inside "
-             "what sound methods differ by, so either call stands. The other %d increases clear it. Without the four, the plan expects %s "
+             "what sound methods differ by, so either call stands. The other %d increases clear it. Without the failing ones, the plan expects %s "
              "(%s): the increases add little P&L, and the point is the %s of capital they would tie up below the hurdle." % (
                  joined(fail), "; ".join("%s %.2f%%" % (p, inc[p]["per_dollar"]) for p in fail), joined(either),
                  len(F["R6_pass"]), um(F["R7_net"]), band(F["R7_band"]), um(added)))
@@ -78,7 +94,7 @@ def write(F, path):
     L.append("5. The workbook also carries every increase, every pod's expected edge and 2027 P&L, the groups' alpha beside the risk "
              "model's specific P&L, and a sensitivity sheet that changes one judgment at a time.")
     L.append("\n### %s\n" % DECK)
-    L.append("6. About six slides for the committee: the plan and the four increases to drop on the first; a bridge from the pods' "
+    L.append("6. About six slides for the committee: the plan and the increases to drop on the first; a bridge from the pods' "
              "trading P&L to net P&L; each increase's net P&L per dollar added against the hurdle, the failing ones marked; alpha by "
              "strategy group with the risk model's figure beside it; capacity within pods against across them; and what the plan "
              "rests on, with the figure each shorter route gives.")
@@ -109,9 +125,11 @@ def write(F, path):
     L.append("3. Capacity (policy 8e) is fitted as alpha per dollar falling by the same share at any size, alpha = a(K/150m)^-b, on "
              "pod-years with 120 or more trading days and a separate a for each pod: b = %.3f, %.1f%% per doubling. Across pods (one a "
              "for all) b = %.3f, %.1f%%: the committee gives more capital to stronger records (policy section 2), so across pods size "
-             "and skill rise together. Weighting pod-years by days, pod-quarters and the onboarding steps alone give %.1f%% to %.1f%%." % (
+             "and skill rise together. Weighting pod-years by days, pod-quarters, pod-years of 200 days or more, the onboarding steps "
+             "alone and the first year after them give %.1f%% to %.1f%%." % (
                  F["theta"]["pod"], F["R3_fall"], F["theta"]["pooled"], F["R3_rivals"]["pooled"],
-                 min(F["R3_rivals"][k] for k in ("pod-weighted", "pod-quarter", "ramp")), max(F["R3_rivals"][k] for k in ("pod-weighted", "pod-quarter", "ramp"))))
+                 min(F["R3_rivals"][k] for k in ("pod-weighted", "pod-quarter", "ramp", "onboard", "pod200")),
+                 max(F["R3_rivals"][k] for k in ("pod-weighted", "pod-quarter", "ramp", "onboard", "pod200"))))
     L.append("4. Each pod's edge at USD 150 million is read from its own residual, each day weighted by its capital's capacity factor, "
              "and pulled toward its group's by how much the group's pods really differ beyond their records' noise (a normal prior "
              "per group). The draft raises the pods with the best three-year records, and part of a short record is luck: taken at face "
@@ -130,27 +148,33 @@ def write(F, path):
                  um(rt["daily resampling"]["p10"]), um(rt["risk model's factors"]["mean"]), um(rt["each pod's own record"]["mean"]),
                  um(rt["no drawdown rules"]["mean"]), um(rt["careful but hurried"]["mean"]), um(rt["careful but hurried"]["p10"]),
                  um(rt["careful but hurried"]["p90"]), um(rt["careful but hurried, carry netted"]["p10"]), um(rt["careful but hurried, carry netted"]["p90"])))
+    avg_f = rt["average return at the new size"]["fail"]
+    risk_clear = [p for p in fail if p not in rt["risk model's factors"]["fail"]]
+    own_clear = [p for p in fail if p not in rt["each pod's own record"]["fail"]]
+    pooled_f = rt["capacity across pods"]["fail"]
+
+    def these(xs, one, many, none):
+        return (joined(xs) + " " + (one if len(xs) == 1 else many)) if xs else none
     L.append("6. The hurdle (policy section 9): each increase is run at its 2026 and its 2027 capital on the same simulated years, and "
              "the difference in its expected net P&L after payout and funding is divided by the capital it adds. %s come to %s. Judged "
              "instead on the pod's net return on its whole new capital, which is not what the added dollar earns once alpha per dollar "
-             "falls with size, %s fail%s. On the risk model's factors %s clear%s the hurdle, and with each record at face value %s "
-             "do%s; read across pods, only %s fails." % (
+             "falls with size, %s. On the risk model's factors %s, and with each pod's record taken at face value %s; read across "
+             "pods, %s." % (
                  joined(fail), joined(["%.2f%%" % inc[p]["per_dollar"] for p in fail]),
-                 joined(rt["average return at the new size"]["fail"]) or "none", "s" if len(rt["average return at the new size"]["fail"]) == 1 else "",
-                 joined([p for p in fail if p not in rt["risk model's factors"]["fail"]]) or "none",
-                 "s" if len([p for p in fail if p not in rt["risk model's factors"]["fail"]]) == 1 else "",
-                 joined([p for p in fail if p not in rt["each pod's own record"]["fail"]]) or "none",
-                 "es" if len([p for p in fail if p not in rt["each pod's own record"]["fail"]]) == 1 else "",
-                 joined(rt["capacity across pods"]["fail"]) or "none"))
-    L.append("7. `%s` shows what the house pricing has done before: each plan since 2018 expected more of its pods than they went on "
-             "to earn in %d of the %d completed years, by %s a year on average (`%s`, net of payouts, less each year's platform "
-             "costs)." % (PK.F["plans"], len(over), len(pp), um(gap), PK.F["admin"]))
+                 these(avg_f, "alone fails", "alone fail", "no increase fails"),
+                 these(risk_clear, "clears the hurdle", "clear the hurdle", "every one of them still fails"),
+                 these(own_clear, "clears it", "clear it", "every one still fails"),
+                 these(pooled_f, "alone fails", "alone fail", "no increase fails")))
+    L.append("7. `%s` shows what the house pricing has done before: each plan since 2018 expected more than the pods it listed went "
+             "on to earn in %d of the %d completed years, by %s a year on average (those pods' net P&L for the year in `%s`, "
+             "payouts included, less the year's platform costs; pods hired during the year left out)." % (
+                 PK.F["plans"], len(over), len(pp), um(gap), PK.F["admin"]))
     L.append("")
     L.append("No other plan survives the files. The policy plans alpha with the markets at zero, so a pod's return on capital, which "
              "carries the market and carry returns it rode, is not what a pod is expected to earn, and the past plans priced that way "
              "ran ahead of their pods in %d years of %d. Credit's spread is what a passive holding earns, so it cannot be a credit "
              "pod's alpha; capital has always followed records, so only the pods' own histories show what size costs; a record of a "
              "few years is part luck, and the draft rewards the luckiest; and the drawdown rules and pod-by-pod payouts are part of "
-             "the year the policy plans. Every sound way of reading each of those lands the plan %s and the same four increases below "
-             "the hurdle." % (len(over), len(pp), band(F["R4_band"])))
+             "the year the policy plans. Every sound way of reading each of those lands the plan %s and the same %s increases below "
+             "the hurdle." % (len(over), len(pp), band(F["R4_band"]), NUMBER.get(len(fail), str(len(fail)))))
     open(path, "w").write("\n".join(L) + "\n")

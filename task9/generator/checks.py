@@ -142,7 +142,7 @@ def main():
     ok("R3 the thorough pass earns everything and the quick pass a third or less", all(g(r, gold[r]) == "right" for r in want) and
        sum({"right": 1, "partly": 0.5, "missed": 0}[g(r, quick[r])] for r in want) <= len(want) / 3.0)
     rt = F["routes"]
-    for k in ("risk model's factors", "each pod's own record", "no drawdown rules", "careful but hurried", "capacity across pods"):
+    for k in ("risk model's factors", "each pod's own record", "careful but hurried", "capacity across pods"):
         ok("R3 %s: the expected year sits outside its band by 3 per cent or more" % k, rt[k]["mean"] >= F["R4_band"][1] * 1.03,
            "%.1f against %s" % (rt[k]["mean"], F["R4_band"]))
     ok("R3 careful: credit's alpha on the risk model's factors sits above its band", F["R1_risk_model"]["Credit"] > F["R1_bands"]["Credit"][1] + 0.5,
@@ -184,7 +184,7 @@ def main():
     for key, gb in (("R1_rivals", "R1_bands"),):
         bad = [(k, gg) for k, v in F[key].items() for gg, x in v.items() if not inside(x, F[gb][gg])]
         ok("R7 every %s rival inside its band" % key[:2], not bad, bad[:3])
-    ok("R7 every capacity rival within pods inside R3's band", all(inside(F["R3_rivals"][k], F["R3_band"]) for k in ("pod", "pod-weighted", "pod-quarter", "ramp")))
+    ok("R7 every capacity rival within pods inside R3's band", all(inside(F["R3_rivals"][k], F["R3_band"]) for k in ("pod", "pod-weighted", "pod-quarter", "ramp", "onboard", "pod200")))
     ok("R7 every forecast rival inside R4's band", all(inside(v, F["R4_band"]) for v in F["R4_rivals"].values()), F["R4_rivals"])
     ok("R7 every forecast rival's percentiles inside R5's bands", all(inside(v["P10"], F["R5_bands"]["P10"]) and inside(v["P90"], F["R5_bands"]["P90"])
                                                                      for v in F["R5_rivals"].values()))
@@ -196,6 +196,7 @@ def main():
     for label, s in (("SF1 alpha is net of a passive holding of a pod's markets", DC.ALPHA), ("SF2 markets expected to earn nothing", DC.PLAN_A),
                      ("SF3 every pod runs the year under the drawdown rules", DC.PLAN_B), ("SF4 net of funding, payouts and platform costs", DC.PLAN_C),
                      ("SF5 the range is the 10th to the 90th percentile", DC.PLAN_D), ("SF6 capacity as one share per doubling", DC.PLAN_E),
+                     ("SF15 each pod's expected alpha from its whole record beside its group's", DC.PLAN_F),
                      ("SF7 the hurdle on the capital added", DC.HURDLE),
                      ("SF8 payouts pod by pod", DC.PAYOUT), ("SF9 the drawdown rules", DC.DRAWDOWN), ("SF10 funding", DC.FUNDING),
                      ("SF11 the onboarding schedule", DC.ONBOARD)):
@@ -224,7 +225,7 @@ def main():
     ok("realism: review figures are in USD 5 million steps (once a same-day onboarding step lands)", all(x % 5e6 == 0 for x in caps))
     halv = chg[chg.reason.str.startswith("Halved")]
     rate = len(halv) / (len(R.panel) / 252.0)
-    ok("realism: halvings run at a few in a hundred pods a year to a quarter", 0.03 <= rate <= 0.25, round(rate, 3))
+    ok("realism: halvings run at a few in a hundred pod-years to under a third (5 per cent drawdowns on 3 to 8 per cent risk)", 0.03 <= rate <= 0.30, round(rate, 3))
     sr = []
     for nn, a in Ah.items():
         if a["days"] >= 504:

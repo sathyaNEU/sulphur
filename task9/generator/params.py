@@ -61,16 +61,16 @@ LEAVE_RATE = 0.12      # a year: PM teams that leave the platform for reasons of
 # strategy groups: launch count, factor loadings (mean, sd), idiosyncratic volatility a year, base edge (mean, sd),
 # and the hiring weight (gy, a common edge shock for the group each year, is kept at zero)
 GROUPS = {
-    "EQLS":   dict(name="Equity long/short", n0=15, load={"MKT": (0.10, 0.05), "TECH": (0.0, 0.12)}, iv=0.050, a0=(0.105, 0.030), hire=0.22, gy=0.0),
+    "EQLS":   dict(name="Equity long/short", n0=12, load={"MKT": (0.10, 0.05), "TECH": (0.0, 0.12)}, iv=0.050, a0=(0.105, 0.030), hire=0.20, gy=0.0),
     "QEQ":    dict(name="Quantitative equity", n0=5, load={"MKT": (0.0, 0.03)}, iv=0.045, a0=(0.100, 0.025), hire=0.09, gy=0.0),
-    "RATES":  dict(name="Rates", n0=6, load={"RATES": (0.0, 0.22), "CURVE": (0.0, 0.15)}, iv=0.045, a0=(0.090, 0.025), hire=0.11, gy=0.0),
-    "FX":     dict(name="Currencies", n0=7, load={"FXCARRY": (0.75, 0.12), "USD": (0.0, 0.18)}, iv=0.045, a0=(0.050, 0.020), hire=0.14, gy=0.0),
-    "CREDIT": dict(name="Credit", n0=15, load={"CREDIT": (1.15, 0.20), "MKT": (0.03, 0.02)}, iv=0.030, a0=(0.040, 0.015), hire=0.26, gy=0.0),
-    "COMDTY": dict(name="Commodities", n0=6, load={"OIL": (0.0, 0.035)}, iv=0.055, a0=(0.100, 0.030), hire=0.09, gy=0.0),
-    "VOLARB": dict(name="Volatility", n0=6, load={"VOL": (0.05, 0.02), "MKT": (0.02, 0.02)}, iv=0.050, a0=(0.095, 0.025), hire=0.09, gy=0.0),
+    "RATES":  dict(name="Rates", n0=5, load={"RATES": (0.0, 0.22), "CURVE": (0.0, 0.15)}, iv=0.045, a0=(0.090, 0.025), hire=0.10, gy=0.0),
+    "FX":     dict(name="Currencies", n0=6, load={"FXCARRY": (0.75, 0.12), "USD": (0.0, 0.18)}, iv=0.045, a0=(0.050, 0.020), hire=0.12, gy=0.0),
+    "CREDIT": dict(name="Credit", n0=20, load={"CREDIT": (1.45, 0.20), "MKT": (0.03, 0.02)}, iv=0.030, a0=(0.040, 0.015), hire=0.34, gy=0.0),
+    "COMDTY": dict(name="Commodities", n0=6, load={"OIL": (0.0, 0.035)}, iv=0.055, a0=(0.100, 0.030), hire=0.07, gy=0.0),
+    "VOLARB": dict(name="Volatility", n0=6, load={"VOL": (0.05, 0.02), "MKT": (0.02, 0.02)}, iv=0.050, a0=(0.095, 0.025), hire=0.08, gy=0.0),
 }
 GROUP_ORDER = ["EQLS", "QEQ", "RATES", "FX", "CREDIT", "COMDTY", "VOLARB"]
-SEED = 319
+SEED = 403
 
 # the 2023 risk system migration: the new export reports P&L in USD thousands and capital in USD millions
 MIGRATION = pd.Timestamp("2023-07-03")

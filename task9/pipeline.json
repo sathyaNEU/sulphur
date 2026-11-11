@@ -7,14 +7,14 @@
  "stage": 4,
  "stage_name": "check",
  "updated": "2026-11-11",
- "call": "plan USD 665 million of 2027 net P&L at the draft (80% range USD 270 million to 999 million) and drop the increases for HC1051, HC1059, HC1090 and HC1124",
+ "call": "plan USD 594 million of 2027 net P&L at the draft (80% range USD 37 million to 1,077 million) and drop the increases for HC1054, HC1058, HC1062, HC1082, HC1098, HC1107, HC1132 and HC1135 (HC1039 and HC1125 either way)",
  "stump": "results chain of six on real market and carry returns: R1 each group's alpha net of what a passive holding earned (carry), R2 alpha per dollar given up per doubling (within pods), R3 the expected 2027 net P&L at the draft plan, R4 its 80 per cent range (the year's horizon), R5 the increases whose added dollar earns below the 1.5 per cent hurdle, R6 the recommendation",
  "architecture": 9,
  "loops": 0,
  "precut": null,
- "leak": "leak.py REVIEW, no LEAK (2026-11-11, cut 9a328d82); reader: no ranking file, nothing reads as the answer, no single thing settles most of it; rulings in the note",
- "duplicate_check": "guard.py check WARN only (overuse.gate_g, repeat.question_form), answered in the note",
- "judge": null,
+ "leak": "leak.py --asof 2026-11-09 REVIEW, no LEAK (2026-11-11, cut 5378a624); two readers (cuts 9a328d82 and 5378a624): no ranking file, nothing reads as the answer, no single thing settles most of it; rulings in the note",
+ "duplicate_check": "guard.py heart WARN only (overuse.gate_g, repeat.question_form), answered in the note; surface exit 0",
+ "judge": "pass 1 (2026-11-11): NOT_DETERMINISTIC on a narrow fork with G and H passing, read as a Gate C repair (policy 8f filed, carry-bearing credit book, wider bands, count-driven golden text; determinism_check_report_arch9_pass1.md); pass 2, the one re-judge, running on cut 5378a624",
  "paper_pair": 28.8,
  "runs": {
   "run1": null,
@@ -61,7 +61,7 @@
    "commit": ""
   }
  ],
- "resume": "stage 4: the determinism judge's thread is running on /tmp/determinism-check-task9-051419/judge_brief.md; on its verdict.md, re-invoke the judge for the spec gates and Gate G/H, re-price the careful column on its own_derivation.md, fix findings in one pass, rebuild twice, gates, then READY",
+ "resume": "stage 4: the re-judge thread (the one allowed after pass 1's repair) is running on /tmp/determinism-check-task9-062652/judge_brief.md; on its verdict.md, re-invoke the wrapper for the spec gates and Gate G/H and determinism_check_report.md, re-price the careful column on its own_derivation.md (over 50 goes back to stage 2), fix any finding in the generator in one pass with no further re-judge, write the note's Pre-ship check, gates on the final cut, audit_containers last, then READY",
  "approved": null,
  "submitted": null,
  "portal": {
@@ -367,7 +367,7 @@
    "event": "architecture 8 built through stage 3 and hardened on the coordinator's measurements: the frame pinned as a population (D.5(b)), the careful column priced on a one-index stand-in, the range of each average and a joint 2027 plan added, the two mechanical asks dropped; paused before stage 4"
   }
  ],
- "build": null,
+ "build": "cut 5378a624 (golden.zip 98459fa5): two builds byte-identical, gates.py 0 FAIL 3 WARN, checks 76 of 76, verify 13 of 13, figures_check PASS, containers PASS",
  "lineage_v6": {
   "stump": "The default path buys Kestrel Lane's note at a 0.14 per cent chance of loss against Ostvale's 0.44 per cent (the field's copula, one factor fitted to the yearly default rates plus the agencies' industry factor, back-tested on the record); the step that lands it there is linking defaults only through the economy and the sector, when the companies held by one sponsor house's funds default in the same years (0.503 of the residual variance), and Kestrel Lane's 95 loans sit with five houses, so its note's chance is 1.33 per cent, over the bar, against Ostvale's 0.54.",
   "architecture": 6,
@@ -488,7 +488,7 @@
   }
  },
  "doctrine": "throughout",
- "effort": null,
+ "effort": "effort.py on cut 5378a624: quick 0.5, careful 1.5, thorough 6 of 6; pair 28.8; largest hint 2 of 6; 8 distinct wrong answers",
  "lineage_v7_results_chain": {
   "call": "buy neither note: Kestrel Lane 3.7 per cent at 15.0 per cent subordination, Ostvale 2.8 at 16.5 (the repair's cut), against MP-RN-2's 1 per cent test",
   "stump": "results chain of nine: R1 the house-year's share, R2 each sector's loading on the year (Ostvale's five sectors), R3 recovery on the house-year's shock at the whole-book grain on the closed cohorts, R4 and R5 each note's five-year chance, R6 the call, R7 the subordination for 1 and 0.5 per cent, R8 the chance by year end, R9 each portfolio's expected credit loss; every shortcut buys a note (Kestrel Lane or Ostvale), only both strands file neither",

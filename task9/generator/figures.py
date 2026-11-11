@@ -17,6 +17,7 @@ M_TAIL = 12e6          # the same for a percentile of the plan year, USD
 M_ALPHA = 0.0015       # a group's alpha a year
 M_RISK = 0.04          # a group's risk over a year, as a share of the golden
 M_FALL = 0.01          # the fall per doubling
+SOUND_THETA = ("pod", "pod-weighted", "pod-quarter", "ramp", "onboard", "pod200")
 EPS = 0.0015           # an increase whose margin over the hurdle any rival comes within this of is either way
 
 
@@ -30,27 +31,29 @@ class Run:
         self.A = AN.Analysis(self.R)
         self.sims = sims
         A = self.A
-        self.theta = {h: A.capacity(h) for h in ("pod", "pod-weighted", "pod-quarter", "ramp", "pooled")}
+        self.theta = {h: A.capacity(h) for h in ("pod", "pod-weighted", "pod-quarter", "ramp", "onboard", "pod200", "pooled")}
+        sound = [self.theta[h] for h in SOUND_THETA]
+        self.theta_lo, self.theta_hi = min(sound), max(sound)
         self.paths = {b: A.year_paths(sims=sims, block=b) for b in (21, 63, 126)}
         self.paths["iid"] = A.year_paths(sims=sims, iid=True)
         self.KP = A.capital_paths(A.draft)
 
-    def plan(self, fac="hold", theta=None, shrink="group", stops=True, block=63, hurdle="marginal"):
+    def plan(self, fac="hold", theta=None, shrink="group", stops=True, block=63, hurdle="marginal", est="ls"):
         """The draft year under one set of choices: mean, P10, P90 and each increase's net P&L per dollar added (or,
         hurdle="average", its net return on its whole 2027 capital)."""
         A = self.A
         th = self.theta["pod"] if theta is None else theta
-        E, _ = A.expected_edges(th, fac, shrink)
+        E, _ = A.expected_edges(th, fac, shrink, est)
         paths = self.paths[block]
         r = A.simulate(self.KP, E, th, fac, paths=paths, stops=stops)
         m = A.marginals(A.draft, E, th, fac, paths=paths, stops=stops, how=hurdle)
         out = dict(mean=r["mean"], p10=r["p10"], p90=r["p90"], marg=m, edges=E, sim=r)
         return out
 
-    def without(self, fail, fac="hold", theta=None, shrink="group", stops=True, block=63, hurdle=None):
+    def without(self, fail, fac="hold", theta=None, shrink="group", stops=True, block=63, hurdle=None, est="ls"):
         A = self.A
         th = self.theta["pod"] if theta is None else theta
-        E, _ = A.expected_edges(th, fac, shrink)
+        E, _ = A.expected_edges(th, fac, shrink, est)
         KP = dict(self.KP)
         for n in fail:
             KP[n] = np.full(A.H, A.draft[n]["k2026"])
@@ -91,18 +94,19 @@ def compute(tgt, sims=SIMS):
     fall = {k: AN.fall_per_doubling(v) for k, v in X.theta.items()}
     F["theta"] = {k: rnd(v, 3) for k, v in X.theta.items()}
     F["R3_fall"] = rnd(fall["pod"] * 100, 1)
-    lo = min(fall[k] for k in ("pod", "pod-weighted", "pod-quarter", "ramp"))
-    hi = max(fall[k] for k in ("pod", "pod-weighted", "pod-quarter", "ramp"))
+    lo = min(fall[k] for k in SOUND_THETA)
+    hi = max(fall[k] for k in SOUND_THETA)
     F["R3_band"] = [rnd((lo - M_FALL) * 100, 1), rnd((hi + M_FALL) * 100, 1)]
     F["R3_partly"] = [rnd((lo - 4 * M_FALL) * 100, 1), rnd((hi + 4 * M_FALL) * 100, 1)]
     F["R3_rivals"] = {k: rnd(v * 100, 1) for k, v in fall.items()}
     # ---- R4, R5, R6: the draft year
     g0 = X.plan()
-    rivals = {"capacity read with pod-years weighted by days": dict(theta=X.theta["pod-weighted"]),
-              "capacity read on pod-quarters": dict(theta=X.theta["pod-quarter"]),
-              "capacity read on the onboarding steps": dict(theta=X.theta["ramp"]),
+    rivals = {"capacity at the lowest sound estimate": dict(theta=X.theta_lo),
+              "capacity at the highest sound estimate": dict(theta=X.theta_hi),
               "group priors fitted by maximum likelihood": dict(shrink="group-ml"),
               "one spread for every group's prior": dict(shrink="pooled-tau"),
+              "a simple average of the group's pods as the prior's centre": dict(shrink="group-simple"),
+              "each pod's edge as the average of its days scaled to USD 150 million": dict(est="ratio"),
               "markets resampled a month at a time": dict(block=21),
               "markets resampled half a year at a time": dict(block=126)}
     rv = {k: X.plan(**v) for k, v in rivals.items()}

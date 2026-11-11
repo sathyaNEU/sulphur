@@ -57,44 +57,44 @@
   {
    "bands": {
     "Commodities": [
-     9.35,
-     10.11
+     7.84,
+     12.86
     ],
     "Credit": [
-     3.89,
-     4.7
+     3.48,
+     4.14
     ],
     "Currencies": [
-     5.67,
-     6.57
+     5.06,
+     6.3
     ],
     "Equity long/short": [
-     8.64,
+     8.58,
      9.49
     ],
     "Quantitative equity": [
-     7.8,
-     8.58
+     7.96,
+     9.12
     ],
     "Rates": [
-     8.09,
-     8.9
+     7.42,
+     8.31
     ],
     "Volatility": [
-     8.87,
-     9.81
+     7.72,
+     8.91
     ]
    },
    "depends": [],
    "figure": "R1_alpha",
    "golden": {
-    "Commodities": 9.51,
-    "Credit": 4.31,
-    "Currencies": 6.09,
-    "Equity long/short": 9.17,
-    "Quantitative equity": 8.01,
-    "Rates": 8.58,
-    "Volatility": 9.18
+    "Commodities": 11.41,
+    "Credit": 3.64,
+    "Currencies": 5.48,
+    "Equity long/short": 8.88,
+    "Quantitative equity": 8.67,
+    "Rates": 8.03,
+    "Volatility": 7.87
    },
    "graded_as": "Ask 2",
    "id": "R1",
@@ -102,90 +102,90 @@
    "name": "each group's alpha a year since 2017",
    "passes": {
     "careful": {
-     "Commodities": 9.53,
-     "Credit": 6.42,
-     "Currencies": 6.35,
-     "Equity long/short": 9.18,
-     "Quantitative equity": 8.03,
-     "Rates": 8.64,
-     "Volatility": 9.13
+     "Commodities": 11.31,
+     "Credit": 6.39,
+     "Currencies": 6.28,
+     "Equity long/short": 8.95,
+     "Quantitative equity": 8.67,
+     "Rates": 7.93,
+     "Volatility": 7.88
     },
     "quick": {
-     "Commodities": 9.83,
-     "Credit": 6.4,
-     "Currencies": 7.56,
-     "Equity long/short": 10.91,
-     "Quantitative equity": 8.19,
-     "Rates": 8.42,
-     "Volatility": 9.31
+     "Commodities": 11.15,
+     "Credit": 6.77,
+     "Currencies": 7.47,
+     "Equity long/short": 9.75,
+     "Quantitative equity": 8.91,
+     "Rates": 8.12,
+     "Volatility": 8.03
     },
     "thorough": {
-     "Commodities": 9.51,
-     "Credit": 4.31,
-     "Currencies": 6.09,
-     "Equity long/short": 9.17,
-     "Quantitative equity": 8.01,
-     "Rates": 8.58,
-     "Volatility": 9.18
+     "Commodities": 11.41,
+     "Credit": 3.64,
+     "Currencies": 5.48,
+     "Equity long/short": 8.88,
+     "Quantitative equity": 8.67,
+     "Rates": 8.03,
+     "Volatility": 7.87
     }
    }
   },
   {
    "band": [
-    24.8,
-    27.3
+    21.6,
+    26.5
    ],
    "depends": [],
    "figure": "R3_fall",
-   "golden": 26.3,
+   "golden": 25.5,
    "graded_as": "Component 3",
    "id": "R2",
    "independent": "the daily record and the capital history",
    "name": "alpha per dollar given up per doubling",
    "partly": [
-    21.8,
-    30.3
+    18.6,
+    29.5
    ],
    "passes": {
-    "careful": 26.3,
-    "quick": 5.1,
-    "thorough": 26.3
+    "careful": 25.5,
+    "quick": 2.7,
+    "thorough": 25.5
    }
   },
   {
    "band": [
-    643.1,
-    685.7
+    548.8,
+    648.6
    ],
    "depends": [
     "R1",
     "R2"
    ],
    "figure": "R4_net",
-   "golden": 665.2,
+   "golden": 594.4,
    "graded_as": "Component 1",
    "id": "R3",
    "independent": "",
    "name": "the expected 2027 net P&L at the draft",
    "partly": [
-    609.8,
-    719.0
+    519.1,
+    678.3
    ],
    "passes": {
-    "careful": 732.8,
-    "quick": 1304.1,
-    "thorough": 665.2
+    "careful": 711.7,
+    "quick": 1213.2,
+    "thorough": 594.4
    }
   },
   {
    "bands": {
     "P10": [
-     244.5,
-     292.4
+     -8.0,
+     89.1
     ],
     "P90": [
-     962.4,
-     1046.7
+     1016.0,
+     1161.2
     ]
    },
    "depends": [
@@ -193,8 +193,8 @@
    ],
    "figure": "R5_range",
    "golden": {
-    "P10": 269.9,
-    "P90": 998.8
+    "P10": 36.7,
+    "P90": 1076.8
    },
    "graded_as": "Ask 1 (range)",
    "id": "R4",
@@ -202,13 +202,13 @@
    "name": "its 80 per cent range",
    "passes": {
     "careful": {
-     "P10": 413.8,
-     "P90": 1049.4
+     "P10": 243.8,
+     "P90": 1179.6
     },
     "quick": null,
     "thorough": {
-     "P10": 269.9,
-     "P90": 998.8
+     "P10": 36.7,
+     "P90": 1076.8
     }
    }
   },
@@ -219,10 +219,14 @@
    ],
    "figure": "R6_fail",
    "golden": [
-    "HC1051",
-    "HC1059",
-    "HC1090",
-    "HC1124"
+    "HC1054",
+    "HC1058",
+    "HC1062",
+    "HC1082",
+    "HC1098",
+    "HC1107",
+    "HC1132",
+    "HC1135"
    ],
    "graded_as": "Component 2",
    "id": "R5",
@@ -232,22 +236,28 @@
     "careful": {
      "grade": "missed",
      "value": [],
-     "why": "0 of the 4 failing increases flagged, 0 clear passes flagged"
+     "why": "0 of the 8 failing increases flagged, 0 clear passes flagged"
     },
     "quick": {
      "grade": "missed",
-     "value": [],
-     "why": "0 of the 4 failing increases flagged, 0 clear passes flagged"
+     "value": [
+      "HC1107"
+     ],
+     "why": "1 of the 8 failing increases flagged, 0 clear passes flagged"
     },
     "thorough": {
      "grade": "right",
      "value": [
-      "HC1051",
-      "HC1059",
-      "HC1090",
-      "HC1124"
+      "HC1054",
+      "HC1058",
+      "HC1062",
+      "HC1082",
+      "HC1098",
+      "HC1107",
+      "HC1132",
+      "HC1135"
      ],
-     "why": "flags all 4 failing increases and no clear pass"
+     "why": "flags all 8 failing increases and no clear pass"
     }
    }
   },
@@ -259,12 +269,16 @@
    "figure": "REC",
    "golden": {
     "drop": [
-     "HC1051",
-     "HC1059",
-     "HC1090",
-     "HC1124"
+     "HC1054",
+     "HC1058",
+     "HC1062",
+     "HC1082",
+     "HC1098",
+     "HC1107",
+     "HC1132",
+     "HC1135"
     ],
-    "plan": 665.2
+    "plan": 594.4
    },
    "graded_as": "Recommendation",
    "id": "R6",
@@ -275,30 +289,36 @@
      "grade": "missed",
      "value": {
       "drop": [],
-      "plan": 732.8
+      "plan": 711.7
      },
-     "why": "plan outside the band; 0 of the 4 failing increases flagged, 0 clear passes flagged"
+     "why": "plan outside the band; 0 of the 8 failing increases flagged, 0 clear passes flagged"
     },
     "quick": {
      "grade": "missed",
      "value": {
-      "drop": [],
-      "plan": 1304.1
+      "drop": [
+       "HC1107"
+      ],
+      "plan": 1213.2
      },
-     "why": "plan outside the band; 0 of the 4 failing increases flagged, 0 clear passes flagged"
+     "why": "plan outside the band; 1 of the 8 failing increases flagged, 0 clear passes flagged"
     },
     "thorough": {
      "grade": "right",
      "value": {
       "drop": [
-       "HC1051",
-       "HC1059",
-       "HC1090",
-       "HC1124"
+       "HC1054",
+       "HC1058",
+       "HC1062",
+       "HC1082",
+       "HC1098",
+       "HC1107",
+       "HC1132",
+       "HC1135"
       ],
-      "plan": 665.2
+      "plan": 594.4
      },
-     "why": "plan inside the band; flags all 4 failing increases and no clear pass"
+     "why": "plan inside the band; flags all 8 failing increases and no clear pass"
     }
    }
   }
@@ -307,94 +327,112 @@
   {
    "answer": {
     "drop": [
-     "HC1051",
-     "HC1059",
-     "HC1090",
-     "HC1124"
+     "HC1054",
+     "HC1058",
+     "HC1062",
+     "HC1082",
+     "HC1098",
+     "HC1107",
+     "HC1132",
+     "HC1135"
     ],
-    "plan": 665.2
+    "plan": 594.4
    },
    "golden": true,
    "name": "the golden"
   },
   {
    "answer": {
-    "drop": [],
-    "plan": 1304.1
+    "drop": [
+     "HC1107"
+    ],
+    "plan": 1213.2
    },
    "name": "priced the way past plans were"
   },
   {
    "answer": {
     "drop": [],
-    "plan": 732.8
+    "plan": 711.7
    },
    "name": "careful but hurried"
   },
   {
    "answer": {
     "drop": [
-     "HC1051",
-     "HC1090",
-     "HC1124"
+     "HC1098",
+     "HC1107",
+     "HC1132"
     ],
-    "plan": 720.1
+    "plan": 721.9
    },
    "name": "risk model's factors"
   },
   {
    "answer": {
     "drop": [
-     "HC1051",
-     "HC1059",
-     "HC1090"
+     "HC1039",
+     "HC1054",
+     "HC1058",
+     "HC1062",
+     "HC1082",
+     "HC1107",
+     "HC1132",
+     "HC1135"
     ],
-    "plan": 776.4
+    "plan": 728.4
    },
    "name": "each pod's own record"
   },
   {
    "answer": {
-    "drop": [
-     "HC1051"
-    ],
-    "plan": 1135.1
+    "drop": [],
+    "plan": 1025.5
    },
    "name": "capacity across pods"
   },
   {
    "answer": {
     "drop": [
-     "HC1051",
-     "HC1059",
-     "HC1090",
-     "HC1119",
-     "HC1124"
+     "HC1054",
+     "HC1058",
+     "HC1062",
+     "HC1082",
+     "HC1098",
+     "HC1107",
+     "HC1125",
+     "HC1132",
+     "HC1135"
     ],
-    "plan": 732.7
+    "plan": 647.1
    },
    "name": "no drawdown rules"
   },
   {
    "answer": {
     "drop": [
-     "HC1051",
-     "HC1090"
+     "HC1107",
+     "HC1132"
     ],
-    "plan": 665.2
+    "plan": 594.4
    },
    "name": "average return at the new size"
   },
   {
    "answer": {
     "drop": [
-     "HC1051",
-     "HC1059",
-     "HC1090",
-     "HC1119",
-     "HC1124"
+     "HC1039",
+     "HC1054",
+     "HC1058",
+     "HC1062",
+     "HC1082",
+     "HC1098",
+     "HC1107",
+     "HC1125",
+     "HC1132",
+     "HC1135"
     ],
-    "plan": 676.9
+    "plan": 580.5
    },
    "name": "daily resampling"
   }

@@ -263,7 +263,7 @@ def plans_workbook(B, tgt, tables):
                        "On onboarding schedule" if r.onboarding else None])
         ws.append([])
         ws.append(["Expected P&L, pods", None, round(T["table"].k.sum() / 1e6, 1), None, round(T["table"].exp.sum() / 1e6, 2)])
-        ws.append(["Funding charge (bill rate %.2f%% plus 0.35%% on 20%% of capital)" % (T["bill"] * 100), None, None, None, round(-T["funding"] / 1e6, 2)])
+        ws.append(["Funding charge (bill rate %.2f%% at the end of November, plus 0.35%%, on 20%% of capital)" % (T["bill"] * 100), None, None, None, round(-T["funding"] / 1e6, 2)])
         ws.append(["PM payouts at 18%", None, None, None, round(-T["payouts"] / 1e6, 2)])
         ws.append(["Platform costs", None, None, None, round(-T["costs"] / 1e6, 2)])
         ws.append(["Expected net P&L", None, None, None, round(T["net"] / 1e6, 2)])

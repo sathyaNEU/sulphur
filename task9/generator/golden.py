@@ -29,6 +29,20 @@ HEAD_FILL = PatternFill("solid", fgColor="E9EEF4")
 THIN = Side(style="thin", color="B8BEC6")
 
 
+NUMBER = {1: "one", 2: "two", 3: "three", 4: "four", 5: "five", 6: "six", 7: "seven", 8: "eight", 9: "nine", 10: "ten", 11: "eleven", 12: "twelve"}
+
+
+def kinds(F, pods):
+    """The strategy groups a set of increases belongs to, as words ("credit and currency")."""
+    word = {"Credit": "credit", "Currencies": "currency", "Equity long/short": "equity", "Quantitative equity": "quantitative equity",
+            "Rates": "rates", "Commodities": "commodity", "Volatility": "volatility"}
+    g = []
+    for x in F["increases"]:
+        if x["pod"] in pods and word[x["group"]] not in g:
+            g.append(word[x["group"]])
+    return g[0] if len(g) == 1 else ", ".join(g[:-1]) + " and " + g[-1]
+
+
 def m(v):
     """USD millions as the committee reads them."""
     return "USD %s million" % "{:,.0f}".format(v)
@@ -205,12 +219,13 @@ def write_deck(path, F):
     fail_added = sum(x["added"] for x in F["increases"] if x["pod"] in fail)
     # 1. the answer
     s = pr.slides.add_slide(pr.slide_layouts[5])
-    _title_of(s, "Plan %s of net P&L for 2027, and drop four credit increases" % m(F["R4_net"]))
+    _title_of(s, "Plan %s of net P&L for 2027, and drop %s %s increases" % (m(F["R4_net"]), NUMBER.get(len(fail), str(len(fail))), kinds(F, fail)))
     _text(s, Inches(0.6), Inches(1.6), Inches(12.1), Inches(4.8), [
         "Expected 2027 net P&L at the draft plan: %s after funding, PM payouts and platform costs; four years in five between %s and %s." % (
             m(F["R4_net"]), m(F["R5_range"]["P10"]), mb(F["R5_range"]["P90"])),
-        "%s of the draft's %d increases add less than 1.5%% a year on the money they add: %s, all credit pods, %s of capital between them. "
-        "Without them the plan expects %s." % ("Four" if len(fail) == 4 else str(len(fail)), pl["increases"], joined(fail), m(fail_added), m(F["R7_net"])),
+        "%s of the draft's %d increases add less than 1.5%% a year on the money they add: %s, %s pods with %s of capital between them. "
+        "Without them the plan expects %s." % (NUMBER.get(len(fail), str(len(fail))).capitalize(), pl["increases"], joined(fail), kinds(F, fail),
+                                               m(fail_added), m(F["R7_net"])),
         "Priced the way past plans were (each pod's three-year return on capital times its new capital), the draft would show %s. That figure "
         "counts market and carry returns as the pods' own, assumes a pod earns as much per dollar at its new size, and takes the luckiest "
         "records at face value." % mb(F["quick"]["mean"]),
@@ -266,7 +281,7 @@ def write_deck(path, F):
     _source(s, "Funding at the bill rate on the review date (%.2f%%) plus 0.35%% on 20%% of capital; platform costs from the 2027 budget." % pl["bill"])
     # 3. the hurdle
     s = pr.slides.add_slide(blank_title)
-    _title_of(s, "The four credit increases fall short of the 1.5% hurdle")
+    _title_of(s, "The %s increases fall short of the 1.5%% hurdle" % kinds(F, fail))
     inc = sorted(F["increases"], key=lambda x: x["per_dollar"])
     cd = CategoryChartData()
     cd.categories = [x["pod"] for x in inc]
@@ -338,8 +353,8 @@ def write_deck(path, F):
     _title_of(s, "A pod gives up about a quarter of its alpha per dollar when its capital doubles")
     _text(s, Inches(0.6), Inches(1.6), Inches(12.1), Inches(4.8), [
         "Read within each pod, as its capital moved (onboarding steps, reviews, halvings), alpha per dollar fell by %s for each doubling of capital "
-        "(sound alternatives on the same record: %s to %s)." % (pct(F["R3_fall"]), pct(min(F["R3_rivals"][k] for k in ("pod-weighted", "pod-quarter", "ramp"))),
-                                                               pct(max(F["R3_rivals"][k] for k in ("pod-weighted", "pod-quarter", "ramp")))),
+        "(sound alternatives on the same record: %s to %s)." % (pct(F["R3_fall"]), pct(min(F["R3_rivals"][k] for k in ("pod-weighted", "pod-quarter", "ramp", "onboard", "pod200"))),
+                                                               pct(max(F["R3_rivals"][k] for k in ("pod-weighted", "pod-quarter", "ramp", "onboard", "pod200")))),
         "Across pods the record shows almost no fall (%s per doubling): the committee has always given more capital to stronger records and "
         "hired larger pods for better ones, so the biggest pods are the best pods, not pods that grew without cost." % pct(F["R3_rivals"]["pooled"]),
         "At the draft's sizes this is what separates a pod's average return from what its next dollar earns: an increase earns the pod's "

@@ -38,9 +38,9 @@
    "text"
   ],
   "largest_file": "risk_pnl_daily_legacy_20170103_20230630.csv",
-  "largest_file_rows": 114928,
+  "largest_file_rows": 114983,
   "long_file": "risk_pnl_daily_20230703_20261106.csv",
-  "long_file_rows": 77447
+  "long_file_rows": 77544
  },
  "sources": [
   {
@@ -68,7 +68,7 @@
   {
    "path": "Capital_Review_Policy_2026.pdf",
    "format": "pdf",
-   "bytes": 36021,
+   "bytes": 36349,
    "covers": "the capital review policy (2026 edition)",
    "made": "written by task9/generator (pack.py, docs.py) from the simulated books and the published series (deterministic)"
   },
@@ -423,56 +423,56 @@
   {
    "path": "allocation_plans_2018_2026.xlsx",
    "format": "xlsx",
-   "bytes": 35218,
+   "bytes": 35238,
    "covers": "the allocation plans the committee approved for 2018 to 2026",
    "made": "written by task9/generator (pack.py, docs.py) from the simulated books and the published series (deterministic)"
   },
   {
    "path": "book_code_map_20220401.csv",
    "format": "csv",
-   "bytes": 1966,
+   "bytes": 2016,
    "covers": "the map from the old pod codes to the book ids issued on 1 April 2022",
    "made": "written by task9/generator (pack.py, docs.py) from the simulated books and the published series (deterministic)"
   },
   {
    "path": "capital_changes_20170103_20261106.csv",
    "format": "csv",
-   "bytes": 67802,
+   "bytes": 69807,
    "covers": "every change to a pod's capital, with its effective date and reason",
    "made": "written by task9/generator (pack.py, docs.py) from the simulated books and the published series (deterministic)"
   },
   {
    "path": "draft_allocation_plan_2027.xlsx",
    "format": "xlsx",
-   "bytes": 10201,
+   "bytes": 10225,
    "covers": "the draft allocation plan for 2027 and the 2027 platform budget",
    "made": "written by task9/generator (pack.py, docs.py) from the simulated books and the published series (deterministic)"
   },
   {
    "path": "kestrel_month_end_statements_201701_202610.csv",
    "format": "csv",
-   "bytes": 595757,
+   "bytes": 596644,
    "covers": "the administrator's month-end statements by sleeve, January 2017 to October 2026",
    "made": "written by task9/generator (pack.py, docs.py) from the simulated books and the published series (deterministic)"
   },
   {
    "path": "pod_register_20261106.csv",
    "format": "csv",
-   "bytes": 16303,
+   "bytes": 16732,
    "covers": "every pod the platform has run, its strategy group, first and last trading day and status",
    "made": "written by task9/generator (pack.py, docs.py) from the simulated books and the published series (deterministic)"
   },
   {
    "path": "risk_pnl_daily_20230703_20261106.csv",
    "format": "csv",
-   "bytes": 2397338,
+   "bytes": 2401363,
    "covers": "the new risk system's daily P&L and allocated capital by book, July 2023 to 6 November 2026",
    "made": "written by task9/generator (pack.py, docs.py) from the simulated books and the published series (deterministic)"
   },
   {
    "path": "risk_pnl_daily_legacy_20170103_20230630.csv",
    "format": "csv",
-   "bytes": 4392749,
+   "bytes": 4392227,
    "covers": "the risk system's daily P&L and capital by pod, January 2017 to the June 2023 migration",
    "made": "written by task9/generator (pack.py, docs.py) from the simulated books and the published series (deterministic)"
   }

@@ -30,8 +30,8 @@ PAYOUT = ("A pod's PM team is paid 18 per cent of the pod's P&amp;L for the cale
           "that P&amp;L is positive, and nothing when it is negative. A pod that is closed, or whose PM team leaves, "
           "during the year is paid on its P&amp;L to its last trading day. Each pod is paid on its own result.")
 ALPHA = ("A pod's alpha is the P&amp;L it earns beyond what a passive holding of the markets it trades would have earned "
-         "over the same days, measured on the published market series the platform keeps, and is stated as a per cent "
-         "of its capital a year.")
+         "over the same days, the holding sized to the pod's exposures over its whole record on the platform and measured "
+         "on the published market series the platform keeps, and is stated as a per cent of its capital a year.")
 PLAN_A = ("The plan budgets alpha only: it expects the markets themselves to earn nothing over the plan year.")
 PLAN_B = ("Each pod in the plan runs the whole year at its planned capital, a pod on its onboarding schedule at its "
           "scheduled capital, under the drawdown rules. The plan does not anticipate departures or new pods.")
@@ -40,6 +40,8 @@ PLAN_C = ("The plan's net P&amp;L is after funding, at the bill rate on the revi
 PLAN_D = "The plan's range is the 10th to the 90th percentile of the year's net P&amp;L."
 PLAN_E = ("Capacity is stated as the share of its alpha per dollar a pod gives up when its capital doubles, the same "
           "share at any size.")
+PLAN_F = ("The plan reads each pod's expected alpha from its whole record on the platform together with its strategy "
+          "group's, giving the pod's own record the more weight the longer and less noisy it is.")
 HURDLE = ("An increase in a pod's capital is approved only if the plan expects it to add at least 1.5 per cent a year of "
           "net P&amp;L, after the pod's PM payout and funding, on the capital it adds.")
 RECORDS = ("The risk system's daily P&amp;L and capital are the record for the review. The administrator's month-end "
@@ -92,7 +94,7 @@ def policy(path):
          Paragraph("The plan the committee approves sets out each pod's capital for the year and the platform's expected "
                    "net P&amp;L with its range.", body),
          Paragraph("(a) " + PLAN_A, body), Paragraph("(b) " + PLAN_B, body), Paragraph("(c) " + PLAN_C, body),
-         Paragraph("(d) " + PLAN_D, body), Paragraph("(e) " + PLAN_E, body),
+         Paragraph("(d) " + PLAN_D, body), Paragraph("(e) " + PLAN_E, body), Paragraph("(f) " + PLAN_F, body),
          Paragraph("9. Increases", head), Paragraph(HURDLE, body),
          Paragraph("10. Records", head), Paragraph(RECORDS, body),
          Spacer(1, 8),

@@ -163,7 +163,7 @@ class Analysis:
                 rows.append(dict(n=n, g=a["g"], y=str(y), alpha=float(res[m].mean() * YEAR), K=float(k[m].mean()), w=int(m.sum())))
         return pd.DataFrame(rows)
 
-    def ramp_phases(self, factors="hold"):
+    def ramp_phases(self, factors="hold", upto=504):
         A = self.attribution(factors=factors)
         start = self.start_i
         rows = []
@@ -172,7 +172,7 @@ class Analysis:
                 continue
             res, k = a["resid"], a["capital"]
             age = np.arange(len(res))
-            for lo, hi in [(0, 126), (126, 252), (252, 504)]:
+            for lo, hi in [(lo_, hi_) for lo_, hi_ in [(0, 126), (126, 252), (252, 504)] if hi_ <= upto]:
                 m = (age >= lo) & (age < hi)
                 if m.sum() < 60:
                     continue
@@ -213,6 +213,11 @@ class Analysis:
             return self.fit_theta(self.pod_years(factors, per="Q", floor=40), by="n")
         if how == "ramp":
             return self.fit_theta(self.ramp_phases(factors), by="n")
+        if how == "onboard":
+            D = self.ramp_phases(factors, upto=252)
+            return self.fit_theta(D[D.n.map(D.n.value_counts()) >= 2], by="n")
+        if how == "pod200":
+            return self.fit_theta(self.pod_years(factors, floor=200), by="n")
         if how == "loglinear":
             # alpha on log2 capital with a constant per pod; the fall per doubling at the average alpha, as theta
             D = self.pod_years(factors)
@@ -225,25 +230,33 @@ class Analysis:
         raise ValueError(how)
 
     # ------------------------------------------------------------------ each pod's base edge, and what to expect of it
-    def base_edges(self, theta, factors="hold"):
-        """Each pod's edge a year at C0 from its residual on the record, each day weighted by its capital's
-        (K/C0)^-theta, with the edge's standard error from the pod's own residual noise."""
+    def base_edges(self, theta, factors="hold", est="ls"):
+        """Each pod's edge a year at C0 from its residual on the record: est "ls" fits the residual on (K/C0)^-theta
+        by least squares, "ratio" averages each day's residual scaled back to C0; with the edge's standard error
+        from the pod's own residual noise."""
         out = {}
         for n, a in self.attribution(factors=factors).items():
             x = (a["capital"].values / P.C0) ** (-theta)
             r = a["resid"].values
-            b = float((r * x).sum() / (x * x).sum())
-            e = r - b * x
-            sd = float(e.std() * np.sqrt(YEAR))
-            out[n] = dict(g=a["g"], a=b * YEAR, se=sd / np.sqrt((x * x).sum() / YEAR), sd=sd, days=a["days"])
+            if est == "ls":
+                b = float((r * x).sum() / (x * x).sum())
+                e = r - b * x
+                sd = float(e.std() * np.sqrt(YEAR))
+                se = sd / np.sqrt((x * x).sum() / YEAR)
+            else:
+                z = r / x
+                b = float(z.mean())
+                sd = float(z.std() * np.sqrt(YEAR))
+                se = sd / np.sqrt(len(z) / YEAR)
+            out[n] = dict(g=a["g"], a=b * YEAR, se=se, sd=sd, days=a["days"])
         return out
 
-    def expected_edges(self, theta, factors="hold", shrink="group"):
+    def expected_edges(self, theta, factors="hold", shrink="group", est="ls"):
         """The edge to expect of each pod: its own estimate pulled toward its group's by the share of its spread the
         group's pods really differ by (empirical Bayes, a normal prior per group). shrink "group" fits each group's
         prior by the method of moments, "group-ml" by maximum likelihood, "pooled-tau" with one spread for every
         group around its own mean; None takes each pod's own estimate as it stands."""
-        E = self.base_edges(theta, factors)
+        E = self.base_edges(theta, factors, est)
         if shrink is None:
             out = {n: e["a"] for n, e in E.items()}
             for n, g in self.groups.items():
@@ -280,6 +293,10 @@ class Analysis:
         prior = {}
         if shrink == "group":
             prior = {g: moments(*fit[g]) for g in P.GROUP_ORDER}
+        elif shrink == "group-simple":
+            for g in P.GROUP_ORDER:
+                a_, v_ = fit[g]
+                prior[g] = (float(a_.mean()), max(0.0, float(((a_ - a_.mean()) ** 2).mean() - v_.mean())))
         elif shrink == "group-ml":
             prior = {g: ml(*fit[g]) for g in P.GROUP_ORDER}
         elif shrink == "pooled-tau":
