@@ -109,11 +109,14 @@ def workbook(path, fig, GD, cv, win):
         c.font = BOLD
         c.fill = HEAD
     ws.append(["Under 25", fig["u25_rise"] / 100.0, round(fig["u25_lr_at_rise"] / 100.0, 4), fig["u25_policies_at_rise"],
-               fig["u25_premium_at_rise_m"], "Rise; the team's +%d%% leaves the loss ratio at %.1f%%" %
-               (fig["constants"]["proposal_u25"], fig["u25_lr_at_proposal"])])
+               fig["u25_premium_at_rise_m"], "Rise; the team's +%d%% leaves the loss ratio at %.1f%%. New-business "
+               "underwriting profit £%.2fm at the rise, £%.2fm held (PLN-2027-03 6.3)" %
+               (fig["constants"]["proposal_u25"], fig["u25_lr_at_proposal"], fig["u25_profit_rise_m"],
+                fig["u25_profit_hold_m"])])
     ws.append(["25 to 64", fig["mid_rise"] / 100.0, round(fig["mid_lr_at_rise"] / 100.0, 4), fig["mid_policies_at_rise"],
-               fig["mid_premium_at_rise_m"], "80%% range on the loss ratio %.1f%% to %.1f%%" % (fig["mid_range_lo"],
-                                                                                             fig["mid_range_hi"])])
+               fig["mid_premium_at_rise_m"], "80%% range on the loss ratio %.1f%% to %.1f%%. New-business underwriting "
+               "profit £%.2fm at the rise, £%.2fm held (6.3)" % (fig["mid_range_lo"], fig["mid_range_hi"],
+                                                             fig["mid_profit_rise_m"], fig["mid_profit_hold_m"])])
     ws.append(["65 and over", 0.0, None, fig["o65_policies_at_hold"], None,
                "Hold: the 3%% cut would lower 2027 underwriting profit by £%.2fm" % fig["cut_net_loss_m"]])
     for r in range(4, 7):
@@ -278,7 +281,12 @@ def deck(path, fig, GD, cv, win):
              "priced over a full year." % (fig["mid_rise"], fig["mid_lr_at_rise"], fig["mid_range_lo"],
                                           fig["mid_range_hi"]),
              "65 and over: hold. The 3%% cut adds £%.2fm on new business and costs £%.2fm on renewals, £%.2fm less in all."
-             % (fig["cut_nb_m"], fig["cut_ren_loss_m"], fig["cut_net_loss_m"])]
+             % (fig["cut_nb_m"], fig["cut_ren_loss_m"], fig["cut_net_loss_m"]),
+             "Both rises lower 2027 new-business underwriting profit as well as the loss ratio, so they come to the "
+             "executive with both figures (PLN-2027-03 6.3): under 25 £%.2fm against £%.2fm held, 25 to 64 £%.2fm "
+             "against £%.2fm, as the business each rise keeps shrinks." % (fig["u25_profit_rise_m"],
+                                                                     fig["u25_profit_hold_m"], fig["mid_profit_rise_m"],
+                                                                     fig["mid_profit_hold_m"])]
     for k, line in enumerate(lines):
         p = tf.paragraphs[0] if k == 0 else tf.add_paragraph()
         p.text = line

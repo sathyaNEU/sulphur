@@ -62,6 +62,9 @@ def run(target):
     for k in ("nb0", "nb1", "rp0", "rp1"):
         fig["cut_%s_m" % k] = round(GD["cut"][k] / 1e6, 2)
     fig["cut_net_loss_m"] = -fig["cut_net_m"]
+    for g in ("u25", "mid"):
+        fig[g + "_profit_hold_m"] = round(GD[g + "_profit"][0] / 1e6, 2)
+        fig[g + "_profit_rise_m"] = round(GD[g + "_profit"][1] / 1e6, 2)
     fig["mid_range_lo"] = round(GD["mid_range"][0] * 100, 1)
     fig["mid_range_hi"] = round(GD["mid_range"][1] * 100, 1)
     for g in M.SEGS:

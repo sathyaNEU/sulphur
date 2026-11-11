@@ -77,20 +77,24 @@
   {
    "date": "2026-11-11",
    "event": "READY: stage 4 leak reader (twice) and determinism judge (re-judged DETERMINISTIC, APPROVE); the prompt's stale 15 per cent fixed, the deployment log's comparability sentence dropped, renewal ages at renewal, each site's own quote counter, renewal premiums named ex IPT, extracts carry nothing dated after 31 October; owed: the author's prompt rewrite through voice-check --rewrite, then upload"
+  },
+  {
+   "date": "2026-11-11",
+   "event": "RESHIPPED before upload: the unclipped policy-level Poisson fit joined the family (under-25 bands +25 to +30 and 77.9 to 83.2 per cent; the hurried routes still at or under +22 and 75.1); the rises' 2027 new-business underwriting profit added to the golden workbook and deck under PLN-2027-03 6.3; checks.py P0 ties the prompt's figures to the world; target.zip unchanged"
   }
  ],
  "gates": {
   "date": "2026-11-11",
   "summary": "gates.py --full on the final cut: 11 gates, 0 FAIL, 4 WARN (precut nearest chains, voice roll call and shell quota, leak REVIEW, heart WARNs answered in the Draw)",
-  "checks": "60 assertions, 0 failures",
+  "checks": "61 assertions, 0 failures (P0: the prompt's per-cent figures are the world's)",
   "verify": "31 figures recomputed independently, 0 failures",
   "rebuild": "byte-identical"
  },
  "bundle": {
   "target_zip_md5": "31bab4c0600bae50400ca5af195a332e",
-  "golden_zip_md5": "1c8de1f316f50336b43d46715ad637c1",
+  "golden_zip_md5": "6da59f3b315ebe81c8e26637419d3d8e",
   "target_zip_bytes": 30922156,
-  "golden_zip_bytes": 68624,
+  "golden_zip_bytes": 70169,
   "target_files": 17,
   "golden_files": [
    "pcw_rate_review_2027.xlsx",

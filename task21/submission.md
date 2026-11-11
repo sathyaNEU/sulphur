@@ -11,9 +11,9 @@
 
 ### pcw_rate_review_2027.xlsx
 
-1. Sheet Calls, one row per segment with its 2027 change, expected 2027 loss ratio, policies and written premium; the expected loss ratio at a segment's smallest rise is at or just under the target (74.0 to 75.0 per cent at the rise given). Under 25: a rise of 27 per cent (any rise from 26 to 30 per cent is accepted), expected loss ratio 74.5 per cent, 2,050 policies and £2.8 million written premium (at the accepted rises, 1,620 to 2,340 policies and £2.3 to £3.2 million). 25 to 64: a rise of 7 per cent (5 to 11 per cent accepted), expected loss ratio 74.9 per cent, 48,440 policies and £29.3 million (28,570 to 62,040 policies and £17.8 to £36.9 million). 65 and over: hold.
+1. Sheet Calls, one row per segment with its 2027 change, expected 2027 loss ratio, policies and written premium; the expected loss ratio at a segment's smallest rise is at or just under the target (74.0 to 75.0 per cent at the rise given). Under 25: a rise of 27 per cent (any rise from 25 to 30 per cent is accepted), expected loss ratio 74.5 per cent, 2,050 policies and £2.8 million written premium (at the accepted rises, 1,620 to 2,440 policies and £2.3 to £3.3 million). 25 to 64: a rise of 7 per cent (5 to 11 per cent accepted), expected loss ratio 74.9 per cent, 48,440 policies and £29.3 million (28,570 to 62,040 policies and £17.8 to £36.9 million). 65 and over: hold.
 2. The 80 per cent range on the 25-to-64 2027 loss ratio at the 7 per cent rise: 72.9 to 77.1 per cent (each end within 1.5 points).
-3. The 2027 loss ratio of the under-25 business the team's 21 per cent would win: 79.0 per cent (between 78.3 and 83.2 per cent across sound constructions).
+3. The 2027 loss ratio of the under-25 business the team's 21 per cent would win: 79.0 per cent (between 77.9 and 83.2 per cent across sound constructions).
 4. Policies the two proposals would write in 2027: under-25s at a 21 per cent rise 3,650; over-65s at the 3 per cent cut 32,270, against 21,840 if their rates are held (each within 8 per cent).
 5. What the over-65 cut does to 2027 underwriting profit: it lowers it by £1.37 million in all (within £0.4 million, the direction exact), adding £0.62 million on new business and losing £1.99 million on renewals.
 6. Sheet 2026 by segment, quotes priced (unsold quotes counted at their extract weight), sales and conversion, January to October 2026, one row per segment:
@@ -28,7 +28,7 @@
 
 ## Critical Components
 
-1. Under-25 sales run at **1.44** claims per predicted claim where the price sat furthest below the cheapest rival and **1.13** where it sat closest, so the business the team's 21 per cent would keep runs at **79.0 per cent** in 2027 (sound constructions 78.3 to 83.2), not the 74.4 per cent the loss-ratio method gives.
+1. Under-25 sales run at **1.44** claims per predicted claim where the price sat furthest below the cheapest rival and **1.13** where it sat closest, so the business the team's 21 per cent would keep runs at **79.0 per cent** in 2027 (sound constructions 77.9 to 83.2), not the 74.4 per cent the loss-ratio method gives.
 2. The 25-to-64 rise is **7 per cent** (5 to 11) on the business HPM v7 priced, completed over a full year of seasons; the latest twelve months give 26 per cent and the 2026 business read to date no rise at all.
 3. The over-65 cut lowers 2027 underwriting profit by **£1.37 million**: it adds **£0.62 million** on new business and loses **£1.99 million** on renewals whose equivalent new-business price falls with it.
 

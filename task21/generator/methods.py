@@ -304,7 +304,7 @@ def ae_frame(pol, clm_dev, expo, s_cnt, sales, upto=dt.date(2026, 9, 30)):
     return out
 
 
-def gap_curve(af, form="loglinear", bins=10):
+def gap_curve(af, form="loglinear", bins=10, clip=True):
     """Claims per predicted claim against the price gap to the cheapest rival."""
     a = af[af.exp_cnt > 0]
     q = np.quantile(a.gap, np.linspace(0, 1, bins + 1))
@@ -326,7 +326,7 @@ def gap_curve(af, form="loglinear", bins=10):
             p = p + step
             if np.abs(step).max() < 1e-10:
                 break
-        lo, hi = np.quantile(gx, 0.005), np.quantile(gx, 0.995)
+        lo, hi = (np.quantile(gx, 0.005), np.quantile(gx, 0.995)) if clip else (-np.inf, np.inf)
         return (lambda g: np.exp(p[0] + p[1] * np.clip(g, lo, hi))), dict(slope=p[1], x=x, y=y)
     edges = q
 

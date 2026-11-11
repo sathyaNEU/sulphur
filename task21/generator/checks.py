@@ -141,6 +141,13 @@ def main():
     hint = max(len(h["rescues"]) for h in E["hints"])
     check("R10", hint * 3 <= len(E["results"]), "the largest single hint rescues %d of %d" % (hint, len(E["results"])))
 
+    ptxt = open(os.path.join(TASK, "prompt.txt")).read()
+    pcts = sorted({int(x) for x in re.findall(r"(\d+) per cent", ptxt)})
+    team = [int(x) for x in re.findall(r"team(?:'s)?(?: wants)? (\d+) per cent", ptxt)]
+    check("P0", set(pcts) <= {PROP, 3, 75, 80} and team and all(t == PROP for t in team),
+          "the prompt's per-cent figures %s are the world's; the team's rise is named %d time(s), each +%d" %
+          (pcts, len(team), PROP))
+
     # ---- the forks the note closes --------------------------------------------------------------------------------
     pln, cmp_ = pdf_text("PLN-2027-03"), pdf_text("CMP-RP-04")
     filed = [("SF1", pln, "each claim capped at £%s" % format(int(M.CAP), ",")),

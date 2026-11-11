@@ -88,6 +88,22 @@ def o65_cut(D, S, L=PROPOSAL_O65, slope_mult=1.0):
                 nb0=nb0, nb1=nb1, rp0=rp0, rp1=rp1)
 
 
+def nb_profit(D, S, L):
+    """2027 underwriting profit on a segment's comparison-site new business at change L (PLN-2027-03 6.1): every quote
+    since 1 February 2026 at its weight and the conversion its new rank carries, its claims read off the gap curve."""
+    seg = S["cur"].seg.iloc[0]
+    f = D["feeds"][(D["feeds"].seg == seg) & (D["feeds"].date >= M.CURRENT_FROM)]
+    cur = S["cur"]
+    load = np.median(cur.written_premium_gbp.values / cur.risk_premium_gbp.values)
+    k = S["base"] * cur.written_premium_gbp.sum() / (cur.risk_premium_gbp.values * S["curve"](cur.gap.values)).sum()
+    rk = M.new_rank(f.gross.values, f.r1.values, f.r2.values, f.r3.values, L)
+    n = np.array([S["conv"][x] for x in rk]) * f.w.values * M.SCALE
+    net = f.gross.values / 1.12
+    claims = net / load * S["curve"](f.gap.values) * k * (1 + M.INFL)
+    com = np.array([D["comm"][s] for s in f.site])
+    return (n * (net * (1 + L) - claims - com - M.SERVICING)).sum()
+
+
 def lr_range(D, S, L, draws=1500, seed=20271):
     """80 per cent range of the segment's 2027 loss ratio at change L: the year's policies (the replayed book at its
     expected count) each drawing its claims, numbers from its expected frequency and costs from the segment's own
@@ -141,6 +157,8 @@ def compute(target):
     out["vol_o65_proposal"] = M.volumes(D["feeds"], "o65", S["o65"]["conv"], PROPOSAL_O65)
     out["vol_o65_hold"] = M.volumes(D["feeds"], "o65", S["o65"]["conv"], 0.0)
     out["mid_range"] = lr_range(D, S["mid"], out["mid_rise"] / 100.0)
+    for g in ("u25", "mid"):
+        out[g + "_profit"] = (nb_profit(D, S[g], 0.0), nb_profit(D, S[g], out[g + "_rise"] / 100.0))
     out["r1"] = r1_table(D)
     return out
 
@@ -258,7 +276,8 @@ def family(D, S, seg):
     af = D["af"][D["af"].seg == seg]
     pool = V7_FROM if seg == "mid" else dt.date(2025, 1, 1)
     curves = {"loglinear": M.gap_curve(af[af.date >= pool], "loglinear")[0],
-              "poisson": M.gap_curve(af[af.date >= pool], "poisson")[0]}
+              "poisson": M.gap_curve(af[af.date >= pool], "poisson")[0],
+              "poisson_unclipped": M.gap_curve(af[af.date >= pool], "poisson", clip=False)[0]}
     if seg != "mid":           # for 25-to-64s the golden's own curve is already HPM v7's 2026 sales
         curves["loglinear_2026"] = M.gap_curve(af[af.date >= dt.date(2026, 1, 1)], "loglinear")[0]
     step, info = M.gap_curve(af[af.date >= pool], "deciles")

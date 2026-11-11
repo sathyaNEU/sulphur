@@ -4,29 +4,28 @@
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: claims, renewal, change, planning, policy, months, method, experience, prices, twelve, missed, february, priced, result, capped, latest, golden, million, selection, completed, seasons, rivals, halvergate, driver, loss-ratio
+Stump terms swept: claims, renewal, change, planning, policy, months, method, experience, prices, twelve, missed, february, priced, result, capped, latest, golden, million, selection, completed, seasons, rivals, halvergate, weight, family
 
 ## 1 file names (REVIEW 1)
 - **REVIEW** `hpm_model_deployments.txt`: a text file in the pack: confirm it is the organisation's own record (a thread, a log, a letter) and does not describe the data
 
 ## 3 answer figures in the pack (REVIEW 2)
-- **REVIEW** `CMP-RP-04_renewal_pricing_policy.pdf`: golden figure 3.2 appears: ...t sold, at the new-business rates then in force. 3.2 The renewal system compares each renewal premium...
+- **REVIEW** `CMP-RP-04_renewal_pricing_policy.pdf`: golden figure 3.3 appears: ...ces the premium to that price where it is higher. 3.3 Compliance attests each quarter to the board that...
 - **REVIEW** `PLN-2027-03_pcw_rate_plan_2027_planning_basis.pdf`: golden figure 2.3 appears: ...to 2027 cost levels by raising them 5.5 per cent. 2.3 Halvergate's 2027 premium for a risk is the premi...
 
 ## 4 design-note vocabulary (REVIEW 3)
 - **REVIEW** `CMP-RP-04_renewal_pricing_policy.pdf`: 4 of 25 stump-paragraph terms appear (claims, renewal, policy, halvergate); read whether the document names the move
-- **REVIEW** `PLN-2027-03_pcw_rate_plan_2027_planning_basis.pdf`: 14 of 25 stump-paragraph terms appear (claims, renewal, change, planning, policy, months); read whether the document names the move
-- **REVIEW** `hpm_model_deployments.txt`: 4 of 25 stump-paragraph terms appear (claims, change, halvergate, driver); read whether the document names the move
+- **REVIEW** `PLN-2027-03_pcw_rate_plan_2027_planning_basis.pdf`: 13 of 25 stump-paragraph terms appear (claims, renewal, change, planning, policy, months); read whether the document names the move
+- **REVIEW** `hpm_model_deployments.txt`: 3 of 25 stump-paragraph terms appear (claims, change, halvergate); read whether the document names the move
 
-## 9 dates after the setting (REVIEW 1)
-- **REVIEW** `pcw_nb_policies_sold_2025-01_2026-10.csv`: 153462 ISO dates after 2026-11-04, e.g. 2026-11-05, 2026-11-06, 2026-11-07, 2026-11-08, 2026-11-09
+## 9 dates after the setting (INFO 1)
+- **INFO** `-`: no --asof given, sweep skipped (pass the fiction's as-of date)
 
 ## 10 container metadata (INFO 1)
 - **INFO** `-`: container gate PASS (PASS: 0 FAIL, 0 WARN)
 
-## 11 prompt gate (REVIEW 2)
+## 11 prompt gate (REVIEW 1)
 - **REVIEW** `prompt.txt`: no roll call: 1 attributed opinion(s)
-- **REVIEW** `prompt.txt`: shell quota: question form 'whether' at 33% of 18 prompts (cap 30%); deliverable set 'pptx+xlsx' at 22% of 18 prompts (cap 20%); reword at the role level, not the verb
 
 ## 12 client quality check (INFO 2)
 - **INFO** `-`: 17 usable files (10 or more required)

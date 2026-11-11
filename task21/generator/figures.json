@@ -71,6 +71,8 @@
   17.8,
   36.9
  ],
+ "mid_profit_hold_m": 4.26,
+ "mid_profit_rise_m": 3.28,
  "mid_range_hi": 77.1,
  "mid_range_lo": 72.9,
  "mid_replay_latest12_rise": 27,
@@ -168,22 +170,24 @@
  "u25_conv_3": 0.41,
  "u25_conv_4": 0.09,
  "u25_family_hi": 30,
- "u25_family_lo": 26,
+ "u25_family_lo": 25,
  "u25_lr15_hi": 83.2,
- "u25_lr15_lo": 78.3,
+ "u25_lr15_lo": 77.9,
  "u25_lr_at_proposal": 79.0,
  "u25_lr_at_rise": 74.5,
  "u25_policies_at_proposal": 3650,
  "u25_policies_at_rise": 2050,
  "u25_policies_band": [
   1620,
-  2340
+  2440
  ],
  "u25_premium_at_rise_m": 2.8,
  "u25_premium_band_m": [
   2.3,
-  3.2
+  3.3
  ],
+ "u25_profit_hold_m": 1.32,
+ "u25_profit_rise_m": 0.57,
  "u25_rise": 27,
  "u25_slope": -0.76
 }
