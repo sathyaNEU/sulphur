@@ -1,0 +1,63 @@
+{
+ "task": "task19",
+ "status": "DESIGN",
+ "domain": "survey-research-official-statistics",
+ "subdomain": "nonresponse-calibration-measurement-error-adjustment",
+ "objective": "descriptive-distribution",
+ "stage": 2,
+ "stage_name": "design",
+ "updated": "2026-11-11",
+ "doctrine": "throughout",
+ "call": "",
+ "chain": "R1 the share of usual residents held on their own district's list, net of missed and false links; R2 the register's erroneous entries by district; R3 residents listed in another district; R4 the dependence factor for men aged 18 to 44 from the sex-ratio benchmark; R5 the twelve district estimates and the national total; R6 their 90 per cent intervals; R7 the qualifying districts, the close ones and their probabilities; R8 each register count bridged to its estimate; R9 the rolled-forward national estimate bridged to the estimate",
+ "architecture": 1,
+ "loops": 0,
+ "precut": {
+  "exit": null,
+  "date": ""
+ },
+ "leak": {
+  "leak_py": "",
+  "reader": ""
+ },
+ "duplicate_check": {
+  "heart": "",
+  "nearest": ""
+ },
+ "judge": {
+  "verdict": "",
+  "disposition": "",
+  "gate_h": "",
+  "report": ""
+ },
+ "paper_pair": null,
+ "effort": {
+  "quick": null,
+  "careful": null,
+  "thorough": null,
+  "largest_hint": ""
+ },
+ "runs": {
+  "run1": null,
+  "run2": null,
+  "average": null,
+  "counterfactual_average": null,
+  "first_wrong_step": {
+   "run1": "",
+   "run2": ""
+  },
+  "triage": "",
+  "recorded": "",
+  "history": []
+ },
+ "returned": [],
+ "resume": "stage 2: write the design note in full (results chain, bands from rivals on the clean truth, effort test, frontier check, fork and closure tables) and the prompt; the world simulation (world.py, sample.py) is drafted and calibrating",
+ "approved": null,
+ "submitted": null,
+ "portal": {
+  "status": "",
+  "date": "",
+  "note": ""
+ },
+ "source_note": "the author's concept note of 11 November 2026 (task 2: counting people without a census), taken as the starting point and re-engineered to the house bar"
+}

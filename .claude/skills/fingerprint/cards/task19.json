@@ -1,0 +1,166 @@
+{
+  "task": "task19",
+  "project": "sulfur",
+  "architecture": "v1",
+  "drawn": "2026-11-11",
+  "slot_note": "",
+  "domain": "survey-research-official-statistics",
+  "subdomain": "nonresponse-calibration-measurement-error-adjustment",
+  "client_domain": "survey-research-official-statistics",
+  "client_subdomain": "Survey Research & Official Statistics (Other)",
+  "niche": "a national statistics office's first admin-based district population estimates: the health register's list counts corrected for its erroneous entries by a field follow-up and for the people it misses by a coverage survey linked to it without a shared key, under a funding line of 25,000 residents",
+  "objective": "descriptive-distribution",
+  "shape": "10",
+  "decision_type": "designation_set",
+  "answer_unit": "count",
+  "answer": "",
+  "answer_source": "",
+  "gap": [
+    "population",
+    "objective"
+  ],
+  "pattern": [
+    "none"
+  ],
+  "generators": [
+    "G17",
+    "G12",
+    "G5"
+  ],
+  "gate_g": "method_or_model_selection",
+  "calibration_form": "gold_standard_subsample",
+  "stump_strategy": "population_selection",
+  "decisive_rule_filed": true,
+  "official_decoy": false,
+  "validated_decoy": false,
+  "context_artifact": "published_series",
+  "stump_class": "analytical",
+  "analyst_test": "The careful but hurried pass links the survey to the register and measures its own recall on the clerical sample but files the linked share as coverage, assumes the register and the survey miss people independently within each age and sex group, resamples only the survey blocks for its intervals and reads its estimate's closeness to the rolled-forward figure as confirmation, so it files the district estimates, the intervals, the probabilities, the call and the official bridge wrong while getting the follow-up's erroneous entries and the residents recorded elsewhere right.",
+  "domain_test": "Every result is a quantity an official statistics office produces when it estimates population from an administrative register with a coverage survey: erroneous enumerations from a follow-up of listed records, a dual-system coverage ratio on a linked survey corrected for the linkage's own errors, a demographic-analysis sex-ratio adjustment for correlation bias, intervals that carry the estimation errors every district shares, and the reconciliation to the register and to the rolled-forward series; swap the nouns into another field and the dual-system machinery, the sex-ratio benchmark from births and the usual-residence rule stop making sense.",
+  "layer2_family": "field_method",
+  "layer2_pattern": "own:dual-system-estimation-on-an-administrative-register-with-linkage-error-correlation-bias-and-a-shared-error-benchmark",
+  "layer1": [
+    "name and date-of-birth differences between the survey and the register (nicknames, surname changes, day-month swaps, typing slips)",
+    "two or three romanisations of transliterated names",
+    "register addresses left behind by people who moved",
+    "duplicate registrations",
+    "follow-up records with no contact at the address",
+    "survey households not reached and members not listed",
+    "births not yet registered with a practice",
+    "serving personnel outside the register",
+    "students registered at their parents' practice",
+    "the 2024 list validation's step in the list counts",
+    "postcode formats that drift between systems"
+  ],
+  "stakeholder_role": "head of population statistics at the Kilvarra Statistics Office, preparing the first admin-based mid-2026 district estimates for the 2027/28 local government grant determination",
+  "role_family": "statistical_office_head",
+  "scoring_unit": "per covered member",
+  "spine": {
+    "file": "health_register_extract_20260630.csv",
+    "rows": 0,
+    "entity": "one record on the national health register's patient list on 30 June 2026",
+    "grain": "register record",
+    "source": "synthetic (simulated population, migration, practices' registration and list maintenance)"
+  },
+  "forum": "committee_or_panel",
+  "forcing_event": "statutory_or_regulatory_filing",
+  "org_family": "research_or_statistics_office",
+  "world": {
+    "geography": "Kilvarra, a fictional self-governing island state in the North Atlantic (Irish-style setting and names)",
+    "currency": "EUR",
+    "org_type": "national statistics office, population statistics division",
+    "invented_names": [
+      "Kilvarra",
+      "Kilvarra Statistics Office",
+      "Local Government Grants Commission",
+      "Port Ardain",
+      "Ballinrea",
+      "Drumcastle",
+      "Fort Larrick",
+      "Tullaghvane",
+      "Carnmoyle",
+      "Newbrook",
+      "Rossmullan",
+      "Glenarra",
+      "Loughmeen",
+      "Ardvale",
+      "Fennabeg"
+    ],
+    "people": [
+      "Grainne Grennan",
+      "Carla McCaffrey"
+    ]
+  },
+  "deliverables": [
+    "kilvarra_district_population_mid2026.xlsx",
+    "district_estimates_note_mid2026.docx"
+  ],
+  "opening_move": "question-first",
+  "question_form": "how-many",
+  "driver": "A population no list holds is rebuilt from a list and an independent sample linked without a shared key: the list's erroneous entries come from a follow-up of a sample of its entries, the sample's link rate becomes a coverage rate only once the linkage's own misses measured on a verified subsample are divided out, both sources miss the same hard-to-reach group so the two-source estimate is pulled down until a ratio from a third source at another grain restores it, and the incumbent figure agrees with the uncorrected estimate because it shares one of the list's errors.",
+  "driver_concrete": "Kilvarra's mid-2026 district populations are each district's correct register entries (the field follow-up's outcomes, unresolved records imputed from their activity) divided by the share of coverage-survey residents held on that district's list, that share corrected for the links the matcher misses on the clerical sample, with young men raised to the sex ratio that births and survival give; the rolled-forward national estimate carries the register's unrecorded emigration and so sits near the uncorrected figure.",
+  "stump": "The careful pass files its linked share as coverage and assumes independence, so its estimates sit about 2 per cent above the golden and close to the rolled-forward estimate (read as confirmation), Carnmoyle reads too close to call and Newbrook qualifies, and its block bootstrap gives a national interval about a third of the honest width.",
+  "answer_shape": "reconciled-table",
+  "weight": "hard-to-measure",
+  "chain_signature": [
+    "assembly-reconciliation",
+    "missingness-measurement",
+    "assembly-reconciliation",
+    "modeling",
+    "modeling",
+    "uncertainty",
+    "synthesis",
+    "decomposition-attribution",
+    "investigation-loops"
+  ],
+  "results": "R1 the share of usual residents held on their own district's list, by nationality, net of the linkage's missed and false links; R2 the register's erroneous entries by district (people who left, died or live elsewhere, and duplicates); R3 the residents each district's list misses because they are listed elsewhere; R4 the dependence factor for men aged 18 to 44 from the sex-ratio benchmark; R5 the twelve district estimates and the national total; R6 their 90 per cent intervals; R7 the qualifying districts, the ones too close to call and each close one's probability; R8 each district's register count bridged to its estimate in parts that add up; R9 the national rolled-forward estimate bridged to the estimate, unrecorded emigration sized from the border and follow-up records",
+  "one_fact_test": "",
+  "strategy_label": "UNTESTED (an admin-based population estimate: dual-system estimation on a register with linkage error, correlation bias and a benchmark that shares the register's error; no Sulfur round has run one)",
+  "mechanism_source": "design_note",
+  "differentiation": {},
+  "lineage": [],
+  "notes": "Drawn from the author's concept note of 11 November 2026 (counting people without a census), re-engineered to the house bar: the district official estimates are not shipped (only the national series and its components), so no shipped artifact ranks the districts against the line; the census-2021 link is a distractor rather than a graded trap; the call's margins are set so the honest interval decides it. Two skeleton vocabulary keys added (lesson common_error_benchmark, move ratio_benchmark_adjustment): no existing key says that a benchmark sharing the estimate's error validates nothing, and no move says a ratio is restored to an independent benchmark at another grain.",
+  "depth_level": 5,
+  "doctrine": "results-chain-2026-11-09",
+  "skeleton": {
+    "decision_form": "act_if_interval_clears_line",
+    "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
+    "lessons": [
+      "dependent_capture_channels",
+      "linkage_missing_not_at_random",
+      "common_error_benchmark",
+      "uncertainty_at_shared_unit"
+    ],
+    "mechanisms": [
+      "young_men_missed_by_register_and_survey",
+      "matcher_misses_transliterated_and_changed_names",
+      "students_registered_at_parents_practice",
+      "emigrants_left_on_list_and_off_official_accounts",
+      "linkage_recall_error_shared_by_every_district"
+    ],
+    "detection": [
+      "second_source_at_other_grain",
+      "naive_depends_on_what_it_should_not",
+      "units_move_together"
+    ],
+    "moves": [
+      "ratio_benchmark_adjustment",
+      "deflate_by_detection_rate",
+      "frame_reconciliation_with_register",
+      "impute_by_model_at_own_drivers",
+      "cluster_resample_shared_unit",
+      "bridge_by_contribution"
+    ],
+    "file_roles": [
+      "primary_record",
+      "panel_or_survey_sample",
+      "sampling_dispositions",
+      "second_grain_source",
+      "incumbent_figure_or_method",
+      "governing_standard",
+      "reference_register",
+      "unused_distractor"
+    ]
+  },
+  "registered": "2026-11-11T17:12:53Z"
+}
