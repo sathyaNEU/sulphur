@@ -1,24 +1,24 @@
 {
  "task": "task15",
- "status": "DESIGN",
+ "status": "PAUSED",
  "domain": "general-statistics-data-science",
  "subdomain": "General Statistics & Data Science (benchmarking and ablations)",
  "objective": "comparative-explanation",
- "stage": 2,
- "stage_name": "design",
+ "stage": 4,
+ "stage_name": "check",
  "updated": "2026-11-11",
  "doctrine": "throughout",
- "call": "to be filled when the pack is cut: the board paper's rollout option for Kornblomst's fresh forecast in 2027 (all stores, Super and neighbourhood, Super only, or stay on AutoOrdre), each format's expected yearly saving per store against the licence, and the ranked causes of the pilot stores' fresh sales and waste gaps",
- "chain": "R1 the pilot stores' two headline gaps from the reconciled record; R2 the units each store group could not sell because the shelf was empty, by period; R3 the share of those the paired item recaptured, by format; R4 the competitor openings' effect, separated with the ambient record; R5 the sales growth gap split into its causes; R6 the waste gap split into its causes; R7 what the forecast's saving depends on in a store, with the evidence; R8 each format's expected yearly saving per store; R9 its 80 per cent range; R10 the rollout option",
+ "call": "Switch the Super and Kvarter stores to Kornblomst's fresh forecast for 2027 and keep To Go on AutoOrdre: Super 40,200, Kvarter 28,000, To Go 2,400 DKK a store and year against licences of 27,000, 20,000 and 9,000; the careful but hurried reading (each format off its own pilot stores, every sale counted) switches Super and To Go",
+ "chain": "R1 the two headline gaps from the reconciled record; R2 the units the pilot stores' empty shelves turned away; R3 that estimate checked on in-stock days; R4 the discounter openings off the ambient trade; R5 the sales gap split; R6 the waste gap split; R7 what the saving depends on (the trading week); R8 each format's expected yearly saving per store; R9 its 80 per cent range; R10 the formats to switch",
  "architecture": 2,
  "loops": 0,
  "precut": {
-  "exit": null,
-  "date": ""
+  "exit": 0,
+  "date": "2026-11-11"
  },
  "leak": {
-  "leak_py": "",
-  "reader": ""
+  "leak_py": "REVIEW (every line ruled harmless in the note's Pre-ship check), 2026-11-11",
+  "reader": "one isolated read 2026-11-11: no method, ranking, helper or answer leak, question 6 none; realism tell (To Go carried raw meat) and the service-factor label fixed in the generator"
  },
  "duplicate_check": {
   "heart": "",
@@ -30,12 +30,12 @@
   "gate_h": "",
   "report": ""
  },
- "paper_pair": null,
+ "paper_pair": 46.0,
  "effort": {
-  "quick": null,
-  "careful": null,
-  "thorough": null,
-  "largest_hint": ""
+  "quick": 18.0,
+  "careful": 46.0,
+  "thorough": 100.0,
+  "largest_hint": "the plain turned-away estimate overstates small counts (2 of 10); the trading-week sentence rescues 2 and half of R9"
  },
  "runs": {
   "run1": null,
@@ -51,7 +51,7 @@
   "history": []
  },
  "returned": [],
- "resume": "",
+ "resume": "stage 4: the determinism judge thread was started on /tmp/determinism-check-task15-381148/ (brief rebuilt by the determinism-judge agent from the 2026-11-11 cut after the leak read's fixes); when its verdict.md is in, re-invoke the determinism-judge agent with it to write determinism_check_report.md, fix every finding in the generator in one pass (re-judge once on a FIX_NOW), re-run gates.py task15 --full, then cut target.zip and golden.zip and commit READY. If the scratch is gone, rebuild the bundle with generator/build.py and run the judge afresh.",
  "approved": null,
  "submitted": null,
  "portal": {

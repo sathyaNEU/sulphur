@@ -1,0 +1,558 @@
+{
+ "results": [
+  {
+   "id": "R1",
+   "name": "the pilot stores' two headline gaps against the other stores",
+   "graded_as": "Ask 1",
+   "figure": "headline_gaps",
+   "depends": [],
+   "independent": "",
+   "golden": {
+    "sales": -2.0,
+    "waste": -17.5
+   },
+   "bands": {
+    "sales": [
+     -2.1,
+     -1.9
+    ],
+    "waste": [
+     -17.7,
+     -17.3
+    ]
+   },
+   "passes": {
+    "quick": {
+     "sales": -2.0,
+     "waste": -17.5
+    },
+    "careful": {
+     "sales": -2.0,
+     "waste": -17.5
+    },
+    "thorough": {
+     "sales": -2.0,
+     "waste": -17.5
+    }
+   }
+  },
+  {
+   "id": "R2",
+   "name": "the units the pilot stores' empty shelves turned away, pilot weeks and the same weeks of 2025",
+   "graded_as": "Component 1",
+   "figure": "lost_units",
+   "depends": [
+    "R1"
+   ],
+   "independent": "the daily record's closing stock and last-sale times and the hourly profile",
+   "golden": {
+    "pilot_2026": 94100,
+    "pilot_2025": 81300
+   },
+   "bands": {
+    "pilot_2026": [
+     90300,
+     104700
+    ],
+    "pilot_2025": [
+     78000,
+     91100
+    ]
+   },
+   "passes": {
+    "quick": {
+     "pilot_2026": 0,
+     "pilot_2025": 0
+    },
+    "careful": {
+     "pilot_2026": 125000,
+     "pilot_2025": 109200
+    },
+    "thorough": {
+     "pilot_2026": 94100,
+     "pilot_2025": 81300
+    }
+   }
+  },
+  {
+   "id": "R3",
+   "name": "the turned-away estimate checked on the days the shelf did not run out",
+   "graded_as": "Component 2",
+   "figure": "check_plain_over_pct",
+   "depends": [],
+   "independent": "the in-stock days",
+   "golden": 9.7,
+   "band": [
+    8.0,
+    14.0
+   ],
+   "passes": {
+    "quick": {
+     "value": null,
+     "grade": "missed",
+     "why": "no turned-away estimate is made, so none is checked"
+    },
+    "careful": {
+     "value": null,
+     "grade": "missed",
+     "why": "the plain estimate is used unchecked; the in-stock days are never read back"
+    },
+    "thorough": 9.7
+   }
+  },
+  {
+   "id": "R4",
+   "name": "each competitor opening's effect on its store's trade",
+   "graded_as": "Component 4",
+   "figure": "competitor_effect_pct",
+   "depends": [],
+   "independent": "the ambient weekly sales",
+   "golden": {
+    "2131": -7.0,
+    "2146": -0.5,
+    "3012": -1.6,
+    "3031": -4.7,
+    "3114": -6.6,
+    "4224": -4.3
+   },
+   "bands": {
+    "2131": [
+     -9.0,
+     -5.0
+    ],
+    "2146": [
+     -2.5,
+     1.5
+    ],
+    "3012": [
+     -3.6,
+     0.4
+    ],
+    "3031": [
+     -6.7,
+     -2.7
+    ],
+    "3114": [
+     -8.6,
+     -4.6
+    ],
+    "4224": [
+     -6.3,
+     -2.3
+    ]
+   },
+   "partly_share": 0.5,
+   "passes": {
+    "quick": {
+     "2131": 0.0,
+     "2146": 0.0,
+     "3012": 0.0,
+     "3031": 0.0,
+     "3114": 0.0,
+     "4224": 0.0
+    },
+    "careful": {
+     "2131": -7.0,
+     "2146": -0.5,
+     "3012": -1.6,
+     "3031": -4.7,
+     "3114": -6.6,
+     "4224": -4.3
+    },
+    "thorough": {
+     "2131": -7.0,
+     "2146": -0.5,
+     "3012": -1.6,
+     "3031": -4.7,
+     "3114": -6.6,
+     "4224": -4.3
+    }
+   }
+  },
+  {
+   "id": "R5",
+   "name": "the sales growth gap split into its causes",
+   "graded_as": "Ask 1",
+   "figure": "sales_split_parts",
+   "depends": [
+    "R1",
+    "R4"
+   ],
+   "independent": "",
+   "golden": {
+    "forecast": -0.7,
+    "competitors": -0.4,
+    "format_mix": -0.6
+   },
+   "bands": {
+    "forecast": [
+     -1.05,
+     -0.55
+    ],
+    "competitors": [
+     -0.6,
+     -0.2
+    ],
+    "format_mix": [
+     -0.8,
+     -0.4
+    ]
+   },
+   "partly_share": 0.6,
+   "passes": {
+    "quick": {
+     "forecast": -2.0,
+     "competitors": 0.0,
+     "format_mix": 0.0
+    },
+    "careful": {
+     "forecast": -1.0,
+     "competitors": -0.4,
+     "format_mix": -0.6
+    },
+    "thorough": {
+     "forecast": -0.7,
+     "competitors": -0.4,
+     "format_mix": -0.6
+    }
+   }
+  },
+  {
+   "id": "R6",
+   "name": "the waste gap split into its causes",
+   "graded_as": "Ask 2",
+   "figure": "waste_split_parts",
+   "depends": [
+    "R1"
+   ],
+   "independent": "",
+   "golden": {
+    "forecast": -15.7,
+    "competitors": -0.3,
+    "format_mix": -1.2
+   },
+   "bands": {
+    "forecast": [
+     -16.5,
+     -14.9
+    ],
+    "competitors": [
+     -0.5,
+     -0.1
+    ],
+    "format_mix": [
+     -1.6,
+     -0.8
+    ]
+   },
+   "passes": {
+    "quick": {
+     "forecast": -17.5,
+     "competitors": 0.0,
+     "format_mix": 0.0
+    },
+    "careful": {
+     "forecast": -15.7,
+     "competitors": -0.3,
+     "format_mix": -1.2
+    },
+    "thorough": {
+     "forecast": -15.7,
+     "competitors": -0.3,
+     "format_mix": -1.2
+    }
+   }
+  },
+  {
+   "id": "R7",
+   "name": "what the forecast's saving depends on in a store: its trading week",
+   "graded_as": "Component 3",
+   "figure": "waste_rate_pct",
+   "depends": [],
+   "independent": "the stores' own weekly trade and the shadow forecasts",
+   "golden": {
+    "weekend": 19.7,
+    "commuter": -1.3
+   },
+   "bands": {
+    "weekend": [
+     16.0,
+     24.0
+    ],
+    "commuter": [
+     -4.5,
+     2.0
+    ]
+   },
+   "passes": {
+    "quick": {
+     "value": null,
+     "grade": "missed",
+     "why": "one saving rate from the dashboard for every store"
+    },
+    "careful": {
+     "value": null,
+     "grade": "missed",
+     "why": "each format's rate read off its own pilot stores; the trading week never enters"
+    },
+    "thorough": {
+     "weekend": 19.7,
+     "commuter": -1.3
+    }
+   }
+  },
+  {
+   "id": "R8",
+   "name": "each format's expected yearly saving per store",
+   "graded_as": "Ask 3",
+   "figure": "saving",
+   "depends": [
+    "R2",
+    "R4",
+    "R7"
+   ],
+   "independent": "",
+   "golden": {
+    "Super": 40200,
+    "Kvarter": 28000,
+    "To Go": 2400
+   },
+   "bands": {
+    "Super": [
+     28300,
+     47000
+    ],
+    "Kvarter": [
+     24300,
+     31900
+    ],
+    "To Go": [
+     -6300,
+     6400
+    ]
+   },
+   "partly_share": 0.6,
+   "passes": {
+    "quick": {
+     "Super": 60200,
+     "Kvarter": 45500,
+     "To Go": 23400
+    },
+    "careful": {
+     "Super": 33100,
+     "Kvarter": 16800,
+     "To Go": 23800
+    },
+    "thorough": {
+     "Super": 40200,
+     "Kvarter": 28000,
+     "To Go": 2400
+    }
+   }
+  },
+  {
+   "id": "R9",
+   "name": "the 80 per cent range on each format's saving",
+   "graded_as": "Ask 3",
+   "figure": "range_ends",
+   "depends": [
+    "R8"
+   ],
+   "independent": "",
+   "golden": {
+    "Super_lo": 22200,
+    "Kvarter_lo": 17800,
+    "To Go_lo": -4000,
+    "Super_hi": 55800,
+    "Kvarter_hi": 37700,
+    "To Go_hi": 8300
+   },
+   "bands": {
+    "Super_lo": [
+     17200,
+     27500
+    ],
+    "Super_hi": [
+     50100,
+     60800
+    ],
+    "Kvarter_lo": [
+     12800,
+     22800
+    ],
+    "Kvarter_hi": [
+     32700,
+     42700
+    ],
+    "To Go_lo": [
+     -9000,
+     1000
+    ],
+    "To Go_hi": [
+     3300,
+     13300
+    ]
+   },
+   "partly_share": 0.65,
+   "passes": {
+    "quick": {
+     "value": null,
+     "grade": "missed",
+     "why": "a point figure from the dashboard, no range"
+    },
+    "careful": {
+     "Super_lo": -2800,
+     "Kvarter_lo": 4100,
+     "To Go_lo": 19700,
+     "Super_hi": 70700,
+     "Kvarter_hi": 28500,
+     "To Go_hi": 27700
+    },
+    "thorough": {
+     "Super_lo": 22200,
+     "Kvarter_lo": 17800,
+     "To Go_lo": -4000,
+     "Super_hi": 55800,
+     "Kvarter_hi": 37700,
+     "To Go_hi": 8300
+    }
+   }
+  },
+  {
+   "id": "R10",
+   "name": "the formats to switch for 2027",
+   "graded_as": "Recommendation",
+   "figure": "switch",
+   "depends": [
+    "R8"
+   ],
+   "independent": "",
+   "golden": [
+    "Super",
+    "Kvarter"
+   ],
+   "passes": {
+    "quick": {
+     "value": [
+      "Super",
+      "Kvarter",
+      "To Go"
+     ],
+     "grade": "missed",
+     "why": "switches To Go as well, whose stores the forecast does not pay for; the call is one set"
+    },
+    "careful": {
+     "value": [
+      "Super",
+      "To Go"
+     ],
+     "grade": "missed",
+     "why": "switches To Go and keeps the Kvarter stores on AutoOrdre; the call is one set"
+    },
+    "thorough": [
+     "Super",
+     "Kvarter"
+    ]
+   }
+  }
+ ],
+ "hints": [
+  {
+   "sentence": "the plain turned-away estimate overstates small counts, as the days the shelf did not run out show",
+   "rescues": [
+    "R2",
+    "R3"
+   ]
+  },
+  {
+   "sentence": "the new forecast reads every store's week like a big weekend store's, so its saving follows a store's trading week, not its format",
+   "rescues": [
+    "R7",
+    "R10"
+   ]
+  },
+  {
+   "sentence": "two discounters opened near pilot stores during the pilot",
+   "rescues": []
+  }
+ ],
+ "routes": [
+  {
+   "name": "the golden",
+   "answer": [
+    "Super",
+    "Kvarter"
+   ],
+   "golden": true
+  },
+  {
+   "name": "careful but hurried",
+   "answer": [
+    "Super",
+    "To Go"
+   ]
+  },
+  {
+   "name": "the dashboard",
+   "answer": [
+    "Super",
+    "Kvarter",
+    "To Go"
+   ]
+  },
+  {
+   "name": "by_format",
+   "answer": [
+    "Super",
+    "Kvarter",
+    "To Go"
+   ]
+  },
+  {
+   "name": "plain_type",
+   "answer": [
+    "Super",
+    "Kvarter"
+   ]
+  },
+  {
+   "name": "instock_type",
+   "answer": [
+    "Super",
+    "Kvarter"
+   ]
+  },
+  {
+   "name": "waste_only_type",
+   "answer": [
+    "Super",
+    "Kvarter"
+   ]
+  },
+  {
+   "name": "single_sales_type",
+   "answer": [
+    "Super"
+   ]
+  },
+  {
+   "name": "single_waste_type",
+   "answer": [
+    "Super",
+    "Kvarter"
+   ]
+  },
+  {
+   "name": "pooled_sales",
+   "answer": [
+    "Super"
+   ]
+  }
+ ],
+ "weights": {
+  "recommendation": 14,
+  "components": 24,
+  "asks": 55,
+  "instruction": 7
+ }
+}

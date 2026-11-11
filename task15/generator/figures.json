@@ -1,0 +1,811 @@
+{
+ "pilot_growth_pct": 3.9,
+ "other_growth_pct": 5.9,
+ "gap_sales_pp": -2.0,
+ "pilot_waste_change_pct": -9.6,
+ "other_waste_change_pct": 7.9,
+ "gap_waste_pp": -17.5,
+ "headline_gaps": {
+  "sales": -2.0,
+  "waste": -17.5
+ },
+ "pilot_sales_2026_dkk": 42591200,
+ "pilot_sales_2025_dkk": 41003600,
+ "other_sales_2026_dkk": 40255700,
+ "other_sales_2025_dkk": 38019600,
+ "pilot_waste_2026_dkk": 1952100,
+ "pilot_waste_2025_dkk": 2159700,
+ "other_waste_2026_dkk": 2827800,
+ "other_waste_2025_dkk": 2620500,
+ "duplicate_rows_2025": 840,
+ "sales_split": {
+  "forecast": -0.7,
+  "competitors": -0.4,
+  "format_mix": -0.6,
+  "rest": -0.3,
+  "gap": -2.0
+ },
+ "waste_split": {
+  "forecast": -15.7,
+  "competitors": -0.3,
+  "format_mix": -1.2,
+  "rest": -0.3,
+  "gap": -17.5
+ },
+ "sales_split_parts": {
+  "forecast": -0.7,
+  "competitors": -0.4,
+  "format_mix": -0.6
+ },
+ "waste_split_parts": {
+  "forecast": -15.7,
+  "competitors": -0.3,
+  "format_mix": -1.2
+ },
+ "sales_split_residual_forecast": -1.0,
+ "waste_split_residual_forecast": -16.0,
+ "growth_by_format_pct": {
+  "Kvarter": 4.8,
+  "Super": 4.8,
+  "To Go": 10.8
+ },
+ "waste_change_by_format_pct": {
+  "Kvarter": 6.9,
+  "Super": 4.7,
+  "To Go": 11.6
+ },
+ "lost_units": {
+  "pilot_2026": 94100,
+  "pilot_2025": 81300
+ },
+ "lost_units_other": {
+  "other_2026": 74800,
+  "other_2025": 73200
+ },
+ "lost_units_plain": {
+  "pilot_2026": 125000,
+  "pilot_2025": 109200
+ },
+ "lost_units_clipped": {
+  "pilot_2026": 99700,
+  "pilot_2025": 86800
+ },
+ "lost_share_pilot_2026_pct": 5.6,
+ "lost_share_pilot_2025_pct": 4.9,
+ "check_plain_over_pct": 9.7,
+ "check_plain_over_small_pct": 40.9,
+ "check_os_over_pct": 0.2,
+ "check_os_over_small_pct": 1.3,
+ "check_clip_over_pct": 3.3,
+ "check_days": 449049,
+ "competitor_effect_pct": {
+  "2131": -7.0,
+  "2146": -0.5,
+  "3012": -1.6,
+  "3031": -4.7,
+  "3114": -6.6,
+  "4224": -4.3
+ },
+ "waste_rate_pct": {
+  "weekend": 19.7,
+  "commuter": -1.3
+ },
+ "margin_rate_pct": {
+  "weekend": -0.32,
+  "commuter": -0.19
+ },
+ "weekend_cut": 0.23,
+ "n_commuter": {
+  "Super": 0,
+  "Kvarter": 4,
+  "To Go": 12
+ },
+ "n_stores": {
+  "Super": 8,
+  "Kvarter": 18,
+  "To Go": 16
+ },
+ "n_commuter_pilot": {
+  "Super": 0,
+  "Kvarter": 3,
+  "To Go": 0
+ },
+ "n_pilot": {
+  "Super": 4,
+  "Kvarter": 9,
+  "To Go": 3
+ },
+ "shadow_ratio": {
+  "commuter": 2.42,
+  "weekend": 0.91
+ },
+ "saving": {
+  "Super": 40200,
+  "Kvarter": 28000,
+  "To Go": 2400
+ },
+ "range": {
+  "Super": [
+   22200,
+   55800
+  ],
+  "Kvarter": [
+   17800,
+   37700
+  ],
+  "To Go": [
+   -4000,
+   8300
+  ]
+ },
+ "range_ends": {
+  "Super_lo": 22200,
+  "Kvarter_lo": 17800,
+  "To Go_lo": -4000,
+  "Super_hi": 55800,
+  "Kvarter_hi": 37700,
+  "To Go_hi": 8300
+ },
+ "licence": {
+  "Super": 27000,
+  "Kvarter": 20000,
+  "To Go": 9000
+ },
+ "switch": [
+  "Super",
+  "Kvarter"
+ ],
+ "keep": [
+  "To Go"
+ ],
+ "margin_over_licence": {
+  "Super": 13200,
+  "Kvarter": 8000,
+  "To Go": -6600
+ },
+ "routes": {
+  "by_format": {
+   "saving": {
+    "Super": 39700,
+    "Kvarter": 20800,
+    "To Go": 30700
+   },
+   "switch": [
+    "Super",
+    "Kvarter",
+    "To Go"
+   ]
+  },
+  "plain_type": {
+   "saving": {
+    "Super": 28800,
+    "Kvarter": 23400,
+    "To Go": 800
+   },
+   "switch": [
+    "Super",
+    "Kvarter"
+   ]
+  },
+  "instock_type": {
+   "saving": {
+    "Super": 74200,
+    "Kvarter": 42600,
+    "To Go": 8100
+   },
+   "switch": [
+    "Super",
+    "Kvarter"
+   ]
+  },
+  "waste_only_type": {
+   "saving": {
+    "Super": 67800,
+    "Kvarter": 38600,
+    "To Go": 5700
+   },
+   "switch": [
+    "Super",
+    "Kvarter"
+   ]
+  },
+  "single_sales_type": {
+   "saving": {
+    "Super": 57500,
+    "Kvarter": 16600,
+    "To Go": 1600
+   },
+   "switch": [
+    "Super"
+   ]
+  },
+  "single_waste_type": {
+   "saving": {
+    "Super": 45800,
+    "Kvarter": 24300,
+    "To Go": 900
+   },
+   "switch": [
+    "Super",
+    "Kvarter"
+   ]
+  },
+  "pooled_sales": {
+   "saving": {
+    "Super": 46000,
+    "Kvarter": 19400,
+    "To Go": 7300
+   },
+   "switch": [
+    "Super"
+   ]
+  }
+ },
+ "rivals": {
+  "clip_type": {
+   "saving": {
+    "Super": 38700,
+    "Kvarter": 27600,
+    "To Go": 2400
+   },
+   "switch": [
+    "Super",
+    "Kvarter"
+   ]
+  },
+  "unc_fxt": {
+   "saving": {
+    "Super": 39700,
+    "Kvarter": 26200,
+    "To Go": 3500
+   },
+   "switch": [
+    "Super",
+    "Kvarter"
+   ]
+  },
+  "clip_fxt": {
+   "saving": {
+    "Super": 39000,
+    "Kvarter": 25800,
+    "To Go": 3100
+   },
+   "switch": [
+    "Super",
+    "Kvarter"
+   ]
+  },
+  "unc_type_units": {
+   "saving": {
+    "Super": 40100,
+    "Kvarter": 27700,
+    "To Go": 2900
+   },
+   "switch": [
+    "Super",
+    "Kvarter"
+   ]
+  },
+  "unc_type_lostm": {
+   "saving": {
+    "Super": 39800,
+    "Kvarter": 30300,
+    "To Go": -400
+   },
+   "switch": [
+    "Super",
+    "Kvarter"
+   ]
+  },
+  "clip_type_units": {
+   "saving": {
+    "Super": 38600,
+    "Kvarter": 27300,
+    "To Go": 2900
+   },
+   "switch": [
+    "Super",
+    "Kvarter"
+   ]
+  },
+  "clip_type_lostm": {
+   "saving": {
+    "Super": 39500,
+    "Kvarter": 29500,
+    "To Go": -1200
+   },
+   "switch": [
+    "Super",
+    "Kvarter"
+   ]
+  },
+  "unc_fxt_units": {
+   "saving": {
+    "Super": 39800,
+    "Kvarter": 26100,
+    "To Go": 3800
+   },
+   "switch": [
+    "Super",
+    "Kvarter"
+   ]
+  },
+  "unc_fxt_lostm": {
+   "saving": {
+    "Super": 40800,
+    "Kvarter": 26500,
+    "To Go": 1400
+   },
+   "switch": [
+    "Super",
+    "Kvarter"
+   ]
+  },
+  "unc_type_mean": {
+   "saving": {
+    "Super": 40400,
+    "Kvarter": 29600,
+    "To Go": 3000
+   },
+   "switch": [
+    "Super",
+    "Kvarter"
+   ]
+  },
+  "clip_type_mean": {
+   "saving": {
+    "Super": 38100,
+    "Kvarter": 28900,
+    "To Go": 2900
+   },
+   "switch": [
+    "Super",
+    "Kvarter"
+   ]
+  },
+  "unc_linear": {
+   "saving": {
+    "Super": 44800,
+    "Kvarter": 29100,
+    "To Go": -5300
+   },
+   "switch": [
+    "Super",
+    "Kvarter"
+   ]
+  },
+  "recorded_type": {
+   "saving": {
+    "Super": 30500,
+    "Kvarter": 28500,
+    "To Go": 5400
+   },
+   "switch": [
+    "Super",
+    "Kvarter"
+   ]
+  },
+  "unc_type_noadj": {
+   "saving": {
+    "Super": 43700,
+    "Kvarter": 29800,
+    "To Go": 2700
+   },
+   "switch": [
+    "Super",
+    "Kvarter"
+   ]
+  }
+ },
+ "careful": {
+  "saving": {
+   "Super": 33100,
+   "Kvarter": 16800,
+   "To Go": 23800
+  },
+  "switch": [
+   "Super",
+   "To Go"
+  ],
+  "range": {
+   "Super": [
+    -2800,
+    70700
+   ],
+   "Kvarter": [
+    4100,
+    28500
+   ],
+   "To Go": [
+    19700,
+    27700
+   ]
+  }
+ },
+ "quick": {
+  "saving": {
+   "Super": 60200,
+   "Kvarter": 45500,
+   "To Go": 23400
+  },
+  "switch": [
+   "Super",
+   "Kvarter",
+   "To Go"
+  ],
+  "dashboard_rate_pct": 17.5
+ },
+ "careful_waste_rate_by_format_pct": {
+  "Kvarter": 10.7,
+  "Super": 18.9,
+  "To Go": 32.3
+ },
+ "by_format_waste_rate_pct": {
+  "Kvarter": 10.7,
+  "Super": 18.9,
+  "To Go": 32.3
+ },
+ "pilot_store_saving": {
+  "2104": {
+   "format": "Super",
+   "type": "weekend",
+   "waste_saving": 77200,
+   "margin_change": -23800,
+   "saving_26wk": 53400
+  },
+  "2117": {
+   "format": "Super",
+   "type": "weekend",
+   "waste_saving": 28500,
+   "margin_change": -26000,
+   "saving_26wk": 2400
+  },
+  "2131": {
+   "format": "Super",
+   "type": "weekend",
+   "waste_saving": -2800,
+   "margin_change": -1900,
+   "saving_26wk": -4700
+  },
+  "2158": {
+   "format": "Super",
+   "type": "weekend",
+   "waste_saving": 36100,
+   "margin_change": -3700,
+   "saving_26wk": 32400
+  },
+  "3012": {
+   "format": "Kvarter",
+   "type": "weekend",
+   "waste_saving": 23800,
+   "margin_change": -3400,
+   "saving_26wk": 20400
+  },
+  "3027": {
+   "format": "Kvarter",
+   "type": "weekend",
+   "waste_saving": 29400,
+   "margin_change": -900,
+   "saving_26wk": 28600
+  },
+  "3031": {
+   "format": "Kvarter",
+   "type": "weekend",
+   "waste_saving": 10200,
+   "margin_change": -6300,
+   "saving_26wk": 3900
+  },
+  "3048": {
+   "format": "Kvarter",
+   "type": "weekend",
+   "waste_saving": 20800,
+   "margin_change": -7200,
+   "saving_26wk": 13600
+  },
+  "3128": {
+   "format": "Kvarter",
+   "type": "weekend",
+   "waste_saving": 27200,
+   "margin_change": -2000,
+   "saving_26wk": 25200
+  },
+  "3136": {
+   "format": "Kvarter",
+   "type": "weekend",
+   "waste_saving": 21900,
+   "margin_change": -3600,
+   "saving_26wk": 18300
+  },
+  "3157": {
+   "format": "Kvarter",
+   "type": "commuter",
+   "waste_saving": -12900,
+   "margin_change": -8300,
+   "saving_26wk": -21300
+  },
+  "3165": {
+   "format": "Kvarter",
+   "type": "commuter",
+   "waste_saving": -2000,
+   "margin_change": -1500,
+   "saving_26wk": -3500
+  },
+  "3189": {
+   "format": "Kvarter",
+   "type": "commuter",
+   "waste_saving": 9600,
+   "margin_change": -1000,
+   "saving_26wk": 8600
+  },
+  "4326": {
+   "format": "To Go",
+   "type": "weekend",
+   "waste_saving": 29900,
+   "margin_change": -20800,
+   "saving_26wk": 9100
+  },
+  "4331": {
+   "format": "To Go",
+   "type": "weekend",
+   "waste_saving": 21500,
+   "margin_change": -6600,
+   "saving_26wk": 14900
+  },
+  "4345": {
+   "format": "To Go",
+   "type": "weekend",
+   "waste_saving": 20300,
+   "margin_change": -5200,
+   "saving_26wk": 15000
+  }
+ },
+ "saving_band": {
+  "Super": [
+   28300,
+   47000
+  ],
+  "Kvarter": [
+   24300,
+   31900
+  ],
+  "To Go": [
+   -6300,
+   6400
+  ]
+ },
+ "saving_rival_span": {
+  "Super": [
+   30500,
+   44800
+  ],
+  "Kvarter": [
+   25800,
+   30300
+  ],
+  "To Go": [
+   -5300,
+   5400
+  ]
+ },
+ "range_band": {
+  "Super_lo": [
+   17200,
+   27500
+  ],
+  "Super_hi": [
+   50100,
+   60800
+  ],
+  "Kvarter_lo": [
+   12800,
+   22800
+  ],
+  "Kvarter_hi": [
+   32700,
+   42700
+  ],
+  "To Go_lo": [
+   -9000,
+   1000
+  ],
+  "To Go_hi": [
+   3300,
+   13300
+  ]
+ },
+ "recorded_route_spread": {
+  "Kvarter": {
+   "recorded_sd": 8000,
+   "turned_away_sd": 3900,
+   "stores": 9
+  },
+  "Super": {
+   "recorded_sd": 20600,
+   "turned_away_sd": 5800,
+   "stores": 4
+  },
+  "To Go": {
+   "recorded_sd": 7000,
+   "turned_away_sd": 3800,
+   "stores": 13
+  }
+ },
+ "waste_to_sales_2025_pct": {
+  "Super": 3.9,
+  "Kvarter": 7.1,
+  "To Go": 9.6
+ },
+ "n_stores_total": 42,
+ "opening_stores": [
+  2131,
+  2146,
+  3012,
+  3031,
+  3114,
+  4224
+ ],
+ "pilot_opening_stores": [
+  2131,
+  3012,
+  3031
+ ],
+ "pilot_weeks": [
+  10,
+  35
+ ],
+ "pilot_waste_fall_pct": 9.6,
+ "weekend_pilot_super_over_kvarter": {
+  "margin": 3.6,
+  "sales": 2.3,
+  "waste": 1.4
+ },
+ "weekend_pilot_saving_share": {
+  "Super": {
+   "of_sales_pct": 0.44,
+   "of_waste_pct": 11.3
+  },
+  "Kvarter": {
+   "of_sales_pct": 0.88,
+   "of_waste_pct": 14.0
+  },
+  "To Go": {
+   "of_sales_pct": 1.08,
+   "of_waste_pct": 17.6
+  }
+ },
+ "agreement_clauses": [
+  4.1,
+  4.2,
+  4.3
+ ],
+ "range_level_pct": 80,
+ "resamples": 400,
+ "bands": {
+  "gap_sales": [
+   -2.1,
+   -1.9
+  ],
+  "gap_waste": [
+   -17.7,
+   -17.3
+  ],
+  "lost_units": {
+   "pilot_2026": [
+    90300,
+    104700
+   ],
+   "pilot_2025": [
+    78000,
+    91100
+   ]
+  },
+  "check_plain_over": [
+   8.0,
+   14.0
+  ],
+  "competitor_effect": {
+   "2131": [
+    -9.0,
+    -5.0
+   ],
+   "2146": [
+    -2.5,
+    1.5
+   ],
+   "3012": [
+    -3.6,
+    0.4
+   ],
+   "3031": [
+    -6.7,
+    -2.7
+   ],
+   "3114": [
+    -8.6,
+    -4.6
+   ],
+   "4224": [
+    -6.3,
+    -2.3
+   ]
+  },
+  "sales_split": {
+   "forecast": [
+    -1.05,
+    -0.55
+   ],
+   "competitors": [
+    -0.6,
+    -0.2
+   ],
+   "format_mix": [
+    -0.8,
+    -0.4
+   ]
+  },
+  "waste_split": {
+   "forecast": [
+    -16.5,
+    -14.9
+   ],
+   "competitors": [
+    -0.5,
+    -0.1
+   ],
+   "format_mix": [
+    -1.6,
+    -0.8
+   ]
+  },
+  "waste_rate": {
+   "weekend": [
+    16.0,
+    24.0
+   ],
+   "commuter": [
+    -4.5,
+    2.0
+   ]
+  },
+  "saving": {
+   "Super": [
+    28300,
+    47000
+   ],
+   "Kvarter": [
+    24300,
+    31900
+   ],
+   "To Go": [
+    -6300,
+    6400
+   ]
+  },
+  "range": {
+   "Super_lo": [
+    17200,
+    27500
+   ],
+   "Super_hi": [
+    50100,
+    60800
+   ],
+   "Kvarter_lo": [
+    12800,
+    22800
+   ],
+   "Kvarter_hi": [
+    32700,
+    42700
+   ],
+   "To Go_lo": [
+    -9000,
+    1000
+   ],
+   "To Go_hi": [
+    3300,
+    13300
+   ]
+  }
+ }
+}

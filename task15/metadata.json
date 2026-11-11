@@ -1,0 +1,147 @@
+{
+ "task": "task15",
+ "architecture": 2,
+ "title": "Which Fjordkob store formats move their fresh ordering to Kornblomst's forecast for 2027, and why the pilot stores' fresh sales grew less and their waste fell further than the other stores'",
+ "domain": "Machine Learning Research, General Statistics & Data Science",
+ "task_type": "benchmarking and ablations (controlled evaluation, isolating component effects)",
+ "objective": "Comparative Analysis & Explanation",
+ "as_of": "2026-09-07",
+ "deliverables": [
+  "fresh_forecast_rollout_2027.xlsx",
+  "fresh_forecast_board_2027.pptx"
+ ],
+ "distractor_files": [
+  "vejr_dmi_2025_2026.csv",
+  "personaletimer_frisk_2026.csv"
+ ],
+ "stated_inputs": [
+  "27,000",
+  "20,000",
+  "9,000"
+ ],
+ "input_gates": {
+  "files": 13,
+  "formats": [
+   "csv",
+   "pdf",
+   "xlsx"
+  ],
+  "categories": [
+   "spreadsheet",
+   "text"
+  ],
+  "largest_file": "dagssalg_frisk_2025.csv",
+  "largest_file_rows": 389960,
+  "long_file": "bi_uge_butik_kategori.csv",
+  "long_file_rows": 19656
+ },
+ "sources": [
+  {
+   "files": "all files under target/",
+   "origin": "generated for this task by simulating the process that makes the files: customers arriving through each store's trading day and buying what is on the shelf, the ERP's order-up-to rule ordering on AutoOrdre's or Kornblomst's forecast, write-offs at the end of shelf life, the systems' exports, a regional weather and event signal, the formats' trends and seasons, and discounter openings. The chain, its stores' figures, the vendor, the documents and the people are invented; the towns are real.",
+   "date": "2026-11-11",
+   "license": "CC BY 4.0 (original work)"
+  }
+ ],
+ "files": [
+  {
+   "path": "bi_uge_butik_kategori.csv",
+   "format": "csv",
+   "bytes": 797710,
+   "rows": 19656,
+   "covers": "business intelligence's weekly history by store and category, fresh and ambient, from 2025 week 10",
+   "made": "written by task15/generator/build.py from the simulated process (deterministic)"
+  },
+  {
+   "path": "butiksregister.xlsx",
+   "format": "xlsx",
+   "bytes": 9097,
+   "covers": "the store register: format, address, opening hours, sales area",
+   "made": "written by task15/generator/build.py from the simulated process (deterministic)"
+  },
+  {
+   "path": "dagssalg_frisk_2025.csv",
+   "format": "csv",
+   "bytes": 17849740,
+   "rows": 389960,
+   "covers": "the ERP's daily store and fresh item extract for 2025 in the old export layout (from 3 March 2025)",
+   "made": "written by task15/generator/build.py from the simulated process (deterministic)"
+  },
+  {
+   "path": "dagssalg_frisk_2026.csv",
+   "format": "csv",
+   "bytes": 14752762,
+   "rows": 309760,
+   "covers": "the ERP's daily store and fresh item extract for 2026 in the new export layout (to 30 August 2026)",
+   "made": "written by task15/generator/build.py from the simulated process (deterministic)"
+  },
+  {
+   "path": "kampagneplan_2025_2026.xlsx",
+   "format": "xlsx",
+   "bytes": 13865,
+   "covers": "the weekly leaflet plan for 2025 and 2026",
+   "made": "written by task15/generator/build.py from the simulated process (deterministic)"
+  },
+  {
+   "path": "konkurrentaabninger.csv",
+   "format": "csv",
+   "bytes": 740,
+   "rows": 10,
+   "covers": "market intelligence's log of competitor openings and closures near Fjordkob stores",
+   "made": "written by task15/generator/build.py from the simulated process (deterministic)"
+  },
+  {
+   "path": "ordreforslag_2026.csv",
+   "format": "csv",
+   "bytes": 14860873,
+   "rows": 309760,
+   "covers": "the order proposal log from 1 January 2026: both forecasts, the safety stock, the order and its basis",
+   "made": "written by task15/generator/build.py from the simulated process (deterministic)"
+  },
+  {
+   "path": "personaletimer_frisk_2026.csv",
+   "format": "csv",
+   "bytes": 35204,
+   "rows": 1470,
+   "covers": "weekly fresh department and ordering hours by store in 2026",
+   "made": "written by task15/generator/build.py from the simulated process (deterministic)"
+  },
+  {
+   "path": "pilot_dashboard_uge35.xlsx",
+   "format": "xlsx",
+   "bytes": 11611,
+   "covers": "business intelligence's pilot dashboard to week 35",
+   "made": "written by task15/generator/build.py from the simulated process (deterministic)"
+  },
+  {
+   "path": "pilotaftale_kornblomst_2026.pdf",
+   "format": "pdf",
+   "bytes": 58371,
+   "covers": "the pilot agreement with Kornblomst Analytics, with the 2027 price list",
+   "made": "written by task15/generator/build.py from the simulated process (deterministic)"
+  },
+  {
+   "path": "timeprofil_salg_frisk.csv",
+   "format": "csv",
+   "bytes": 55162,
+   "rows": 1435,
+   "covers": "the hourly fresh sales profile by format, category and weekday behind the store app's empty-shelf alert",
+   "made": "written by task15/generator/build.py from the simulated process (deterministic)"
+  },
+  {
+   "path": "vareregister_frisk.xlsx",
+   "format": "xlsx",
+   "bytes": 8804,
+   "covers": "the fresh item register: numbers, pairs, shelf life, case packs, prices and costs",
+   "made": "written by task15/generator/build.py from the simulated process (deterministic)"
+  },
+  {
+   "path": "vejr_dmi_2025_2026.csv",
+   "format": "csv",
+   "bytes": 233829,
+   "rows": 7224,
+   "covers": "daily weather by town from the chain's weather service",
+   "made": "written by task15/generator/build.py from the simulated process (deterministic)"
+  }
+ ]
+}
