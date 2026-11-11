@@ -1,44 +1,41 @@
 {
  "task": "task20",
- "status": "PAUSED",
+ "status": "DRAWING",
  "domain": "quantitative-finance",
- "subdomain": "factor-return-attribution",
- "objective": "root-cause",
- "stage": 2,
- "stage_name": "design",
+ "subdomain": "strategy-backtesting-evaluation",
+ "objective": "forecasting",
+ "stage": 1,
+ "stage_name": "draw",
  "updated": "2026-11-11",
  "doctrine": "throughout",
- "call": "19 exceptions in the 250 days to 30 June 2025, 14 against the model (11 risks not in the model, 2 volatility, 1 model accuracy), 4 the inputs' (closing allocations booked after ERE's extract; the 27 reused-extract runs caused none), 1 other income; a sound model shows 2 (green, 0 to 2); add-on USD 0.32m in July falling to nil by December",
- "chain": "R1 exceptions on either P&L (19); R2 runs on an older extract (27); R3 inputs exceptions (4, all post-cut allocations; reused none); R4 risks not in the model (11 dated); R5 volatility heading, sound count and zone (2, 2, green); R6 every exception under one heading; R7 July add-on on the planned book (0.32m); R8 add-on August to December (0.27, 0.11, 0.08, 0.03, 0.00); R9 the call",
- "architecture": 1,
+ "call": "to be set at stage 2: Brindle & Moss's Q4 FY2025 revenue with an 80 per cent range against the street's figure",
+ "chain": "R1 panel spend for the reporting entity on the fiscal calendar; R2 completion of the immature weeks; R3 growth on comparable cards; R4 growth at the company's regional mix; R5 the card-visible share's drift; R6 the backtest scorecard; R7 the forecast with its range; R8 each adjustment's worth; R9 the call",
+ "architecture": 2,
  "loops": 0,
  "precut": {
-  "exit": 0,
-  "date": "2026-11-11",
-  "checks": "93 checks, 0 FAIL"
+  "exit": null,
+  "date": ""
  },
  "leak": {
-  "leak_py": "REVIEW (author vocabulary and design-note vocabulary in the two governing documents; forward dates in the plan calendar and contract expiries; the prompt's shell quota)",
-  "reader": "round 1 (sonnet, medium): question 1 quoted only the standard's and note's estimands and the plan's basis, nothing on the extracts' cut or the allocations; question 6 named the standard's nested counterfactuals (the estimand) and read the add-on as close to rule application; every REVIEW line harmless; realism tells fixed in the generator (blotter and ledger text, vendor volumes, the plan's basis wording, the documents' governance sections)"
+  "leak_py": "",
+  "reader": ""
  },
  "duplicate_check": {
   "heart": "WARN (skeleton.lesson_taught heterogeneity_carried_to_decision, a supporting step here; house_lesson forward_window_structure_change and heterogeneity_carried_to_decision)",
   "nearest": "task18 by chain; task4 0.04 on driver text"
  },
  "judge": {
-  "verdict": "NOT_DETERMINISTIC (competing_defensible_answer: the 4(d) EWMA timing convention)",
-  "disposition": "FIX_NOW in the judge's terms; overtaken by the careful-column repricing",
-  "gate_h": "pass in the judge's terms (9 results, 6 areas, one thing none, best sentence 3 of 9)",
-  "report": "determinism_check_report.md",
-  "first_pass": "before opening the answer blocks the thread replicated ERE to the dollar, found the extracts' cutoff through product control's hypothetical P&L, classified (a) 1, (b) 4, (c) 11 on the golden's dates and computed the add-on path 0.324, 0.273, 0.114, 0.076, 0.035, 0; priced on it the careful column is near 95"
+  "verdict": "",
+  "disposition": "",
+  "gate_h": "",
+  "report": ""
  },
- "paper_pair": 45.6,
+ "paper_pair": null,
  "effort": {
-  "quick": 7.0,
-  "careful": 45.6,
-  "thorough": 100.0,
-  "largest_hint": "ERE's position extracts are cut as each run starts, before the middle office books the day's closing-auction allocations; rescues 3 of 9 (R3, R4, R6)",
-  "careful_repriced_on_judge_pass": "about 95 (R1 to R4 and R6 to R9 landed; R5 inside a band widened for the EWMA timing)"
+  "quick": null,
+  "careful": null,
+  "thorough": null,
+  "largest_hint": ""
  },
  "runs": {
   "run1": null,
@@ -53,8 +50,15 @@
   "recorded": "",
   "history": []
  },
- "returned": [],
- "resume": "stage 2 (back from stage 4 on the careful-column repricing): the determinism judge's isolated thread, at medium effort and before opening the answer blocks, landed R1 to R4 and R6 to R9 (it found the extracts' cutoff by reconciling product control's hypothetical P&L with the extracts, and read the month-by-month add-on straight off MRS-4 6), so the careful column prices near 95. Redesign so the deciding judgments are estimates no record holds and no filed rule executes (the approved builds' anatomy), either a new question on this desk world (for example the zone and add-on through the 31 December review, with the volatility persistence, the planned mix and the mapping's graduations as banded judgments) or a re-root inside Risk modeling; carry the judge's five determinism findings (DESIGN_NOTE.md, Tried and rejected, last line). The generator, pack writer and checks are reusable. File the judge's report (determinism_check_report.md) with the next commit.",
+ "returned": [
+  {
+   "date": "2026-11-11",
+   "source": "judge",
+   "repair": "design",
+   "commit": "e483b2e"
+  }
+ ],
+ "resume": "stage 2: simulate Brindle & Moss on the Census furniture-store series, the Kestrel panel (issuers, card cohorts, tenure decay, attrition, posting lags) and the tender drift; measure each result and its shortcut; design note, prompt, precut",
  "approved": null,
  "submitted": null,
  "portal": {
@@ -62,5 +66,5 @@
   "date": "",
   "note": ""
  },
- "source_concept": "Quant_Finance_Deep_Reasoning_Concepts.md, Concept 1 (author's note of 2026-11-11)"
+ "source_concept": "Quant_Finance_Deep_Reasoning_Concepts.md, Concept 3 (author's note of 2026-11-11)"
 }

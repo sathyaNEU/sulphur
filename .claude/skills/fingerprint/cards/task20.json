@@ -1,145 +1,200 @@
 {
- "task": "task20",
- "project": "sulfur",
- "architecture": "v1",
- "drawn": "2026-11-11",
- "slot_note": "Drawn from the author's concept note of 2026-11-11 (Concept 1, why the desk breached VaR), moved from a fully generated credit book to an equity market-making desk on the real S&P 500, Nasdaq-100 and VIX tape so the market moves and the volatility regime are published records; the desk's names, books and systems are simulated.",
- "domain": "quantitative-finance",
- "subdomain": "factor-return-attribution",
- "client_domain": "quantitative-finance",
- "niche": "Risk modeling (VaR/ES): a market-making desk's one-day 99% historical-simulation VaR backtest, every exception in the year traced to its cause for the supervisor's classification",
- "objective": "root-cause",
- "shape": "18",
- "decision_type": "root_cause_named",
- "answer_unit": "count",
- "answer": "",
- "answer_source": "",
- "gap": [
-  "objective",
-  "population"
- ],
- "pattern": [
-  "none"
- ],
- "generators": [
-  "G3",
-  "G16",
-  "G17"
- ],
- "gate_g": "decomposition_attribution",
- "calibration_form": "parallel_run_overlap",
- "stump_strategy": "causal_design",
- "decisive_rule_filed": false,
- "official_decoy": false,
- "validated_decoy": false,
- "context_artifact": "filed_standard",
- "stump_class": "analytical",
- "analyst_test": "The careful but hurried pass takes both P&Ls, replicates ERE from its methodology note on the extract each run read (matching the run log to the dollar), re-runs the 27 reused-extract nights on that day's extract and the own-history and volatility-filtered counterfactuals in the standard's order, and builds the plan's book by segment; it takes the extracts as the book held, so the two reused nights go to inputs and the four allocation nights to the model, and it prices the plan's ramp on the 30 June mapping, so the add-on rises to 0.40 instead of falling to nil.",
- "domain_test": "Replicating a historical-simulation VaR engine from its snapshot, mapping and price history, rebuilding the P&L the forecast was about from prior-close positions, and running counterfactual engines (current inputs, full own-name risk, a volatility-filtered window) to classify each exception is market-risk model validation; with another field's nouns there is no quantile forecast, no static book, no supervisor's exception classes and nothing to re-run.",
- "layer2_family": "field_method",
- "layer2_pattern": "own:var-exception-classification",
- "layer1": [
-  "a position system's schema migration with new instrument ids, a crosswalk and its cutover day in both exports",
-  "a vendor's re-sent days loaded twice and a ticker change under a stable vendor id",
-  "blotter versions: fat-finger amendments, duplicate tickets cancelled, allocations moved between client accounts",
-  "client tickets booked the next morning under their trade date",
-  "an export that repeats some lines",
-  "product control restatements mirrored by next-day ledger postings under the original value date",
-  "failed engine runs re-run on the same extract",
-  "futures snapshots stamped in UTC"
- ],
- "stakeholder_role": "the bank's head of market risk control, who files the quarter's exception classification with the supervisor (not named in the prompt)",
- "role_family": "compliance_or_audit",
- "scoring_unit": "per episode",
- "spine": {
-  "file": "eqx_position_extract_v1/v2 and oms_trade_blotter",
-  "rows": 78306,
-  "entity": "one row is one instrument's position in one nightly extract, or one version of one ticket",
-  "grain": "instrument x extract (cut as the engine's run starts); ticket x version with its booking time",
-  "source": "synthetic, on the published S&P 500 (Cboe) and Nasdaq-100 (FRED) closes"
- },
- "forum": "regulator_or_inspector",
- "forcing_event": "audit_or_inspection",
- "org_family": "financial_institution",
- "world": {
-  "geography": "United States",
-  "currency": "USD",
-  "org_type": "broker-dealer subsidiary of a regional bank holding company",
-  "invented_names": [
-   "Tarrant Hale Securities"
+  "task": "task20",
+  "project": "sulfur",
+  "architecture": "v2",
+  "drawn": "2026-11-11",
+  "slot_note": "Re-root of task20 (architecture 1, the VaR exception classification, spent 2026-11-11: the determinism judge's isolated first pass landed nearly every result) onto the author's Concept 3 from the same concept note: a card-transaction panel's nowcast of a retailer's quarterly revenue before it reports. A new world, dataset and shell; the Quantitative Finance claim moves to Forecasting & Predictive Modeling.",
+  "domain": "quantitative-finance",
+  "subdomain": "strategy-backtesting-evaluation",
+  "client_domain": "quantitative-finance",
+  "niche": "Alpha research (finding and validating return-predictive signals): a card-transaction panel nowcast of a home-furnishings retailer's holiday-quarter revenue three weeks before it reports, with a range that has held on past quarters",
+  "objective": "forecasting",
+  "shape": "single-figure",
+  "decision_type": "go_hold_or_stop",
+  "answer_unit": "currency",
+  "answer": "",
+  "answer_source": "",
+  "gap": [
+    "time",
+    "population"
   ],
-  "people": [
-   "Nancy Ayala",
-   "Christopher Reilly"
-  ]
- },
- "deliverables": [
-  "exception_classification_2025Q2.xlsx",
-  "backtesting_note_2025Q2.pdf"
- ],
- "opening_move": "question-first",
- "question_form": "other",
- "driver": "The decisive quantities are the outcomes the forecast was actually about, rebuilt from the prior holdings rather than the booked totals, and each miss's survival under counterfactual forecasts that each restore one thing production lacked (the inputs it should have read, the components it left out, a scale that follows the recent spread), with the misses charged in a fixed order so the classes add back to the whole population of misses.",
- "driver_concrete": "The book the nightly forecast was about rebuilt from each extract plus the blotter's bookings made after its cut; the engine replicated from its methodology and re-run on that book, with every name on its own history and with volatility-scaled scenarios, to classify each exception under the standard's headings; the planned book priced month by month on the mapping the store rule gives for each month's first VaR.",
- "stump": "A careful solver files 16 of the 19 exceptions as the model's and the two reused-extract nights as wrong inputs, and holds an add-on that rises with the plan's ramp to USD 0.40 million, because it takes the engine's extracts as the book held and keeps the 30 June mapping through the half.",
- "answer_shape": "timeline",
- "weight": "investigation",
- "chain_signature": [
-  "assembly-reconciliation",
-  "investigation-loops",
-  "investigation-loops",
-  "decomposition-attribution",
-  "modeling",
-  "synthesis",
-  "forecasting",
-  "forecasting",
-  "synthesis"
- ],
- "results": "R1 every exception on either P&L (19: 15 booked, 18 hypothetical); R2 the 27 runs on an older extract; R3 the exceptions the inputs caused (4, all closing allocations booked after the extract; the reused extracts none); R4 risks not in the model (11); R5 the volatility heading (2), a sound model's count (2) and zone (green); R6 every exception under one heading; R7 the July add-on on the planned book (USD 0.32m); R8 the add-on August to December (0.27, 0.11, 0.08, 0.03, nil); R9 the call",
- "one_fact_test": "\"ERE's position extracts are cut as each run starts, before the middle office books the day's closing-auction allocations\" rescues R3, R4 and R6: 3 of 9",
- "strategy_label": "WORKS IN FORM",
- "mechanism_source": "design_note",
- "differentiation": {},
- "lineage": [],
- "notes": "Root-cause on the client's Quantitative Finance strategies 1 and 2 lesson (risk systems simplify; volatility arrives in clusters), with neither shape: the question is the supervisor's exception classes for a VaR backtest, not a P&L explain or a monitoring rule. Re-filed as task20 on 2026-11-11 after another session filed task19 first; the skeleton and Frontier rules of 2026-11-11 applied at re-filing. Forcing event drawn as the supervisor's review of the red-zone result (audit_or_inspection), not a scheduled filing: task19 holds the filing axis, and the classification is asked for because the quarter's count reached the red zone. The prompt opens on why the desk breached so often (question_form other: a why question).",
- "skeleton": {
-  "decision_form": "per_unit_diagnosis",
-  "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
-  "lessons": [
-   "unmetered_component",
-   "record_as_of_its_date",
-   "forward_window_structure_change",
-   "heterogeneity_carried_to_decision"
+  "pattern": [
+    "none"
   ],
-  "mechanisms": [
-   "proxy_beta_mapping_drops_names_own_risk",
-   "nightly_snapshot_misses_late_booked_allocations",
-   "snapshot_outage_reuses_an_older_book",
-   "booked_pnl_carries_same_day_trading_and_income",
-   "two_year_window_lags_a_volatility_rise",
-   "planned_growth_sits_in_proxied_names",
-   "store_500_day_rule_moves_names_off_proxies"
+  "generators": [
+    "G6",
+    "G16",
+    "G17"
   ],
-  "detection": [
-   "second_source_at_other_grain",
-   "residual_by_subgroup",
-   "record_time_against_event_time"
+  "gate_g": "forecasting",
+  "calibration_form": "censored_or_lagged_release",
+  "stump_strategy": "forecast_method_backtest",
+  "decisive_rule_filed": false,
+  "official_decoy": false,
+  "validated_decoy": false,
+  "context_artifact": "published_series",
+  "stump_class": "analytical",
+  "analyst_test": "The careful but hurried pass classifies the descriptors, aligns the panel to the fiscal calendar, completes the immature weeks from the delivery vintages, keeps the issuers present in both years and compares the same cards year on year, fits revenue to the panel over the reported quarters and backtests on rolling origins; it carries the panel's own regional mix, holds the card-visible share of revenue at its trailing level, and its same-card index passes its backtest because no past origin held an issuer leaving the panel.",
+  "domain_test": "Nowcasting a company's reported revenue from a consumer card panel before the release, with the panel's churn, ageing cards, immature weeks and its coverage of the company's tender rebuilt so the growth index tracks revenue, and the range earned on rolling origins, is what an alternative-data research desk does to size a position into an earnings release.",
+  "layer2_family": "forecast_uncertainty",
+  "layer2_pattern": "own:card-panel-revenue-nowcast",
+  "layer1": [
+    "weekly panel deliveries restating their latest weeks",
+    "issuer onboarding and offboarding inside the record",
+    "merchant descriptors mixing company stores, the web, licensed shop-in-shops and an acquired banner",
+    "a 4-5-4 fiscal calendar with a 53-week year",
+    "re-sent delivery rows",
+    "card cohorts keyed by open quarter"
   ],
-  "moves": [
-   "replay_event_by_event",
-   "bridge_by_contribution",
-   "stratify_by_mix_and_reweight_to_target"
+  "stakeholder_role": "a consumer-sector analyst on a long-short fund's research desk, whose investment committee sizes positions into earnings releases only when the whole range clears the street's figure (not named in the prompt)",
+  "role_family": "research_desk",
+  "scoring_unit": "per episode",
+  "spine": {
+    "file": "panel_weekly_latest.csv",
+    "rows": 0,
+    "entity": "one row is one week's spend at one descriptor group by one issuer's cards of one opening cohort in one region",
+    "grain": "week x issuer x region x card cohort x descriptor group",
+    "source": "synthetic, on the published Census Bureau monthly retail sales for furniture and home furnishings stores"
+  },
+  "forum": "committee_or_panel",
+  "forcing_event": "period_close",
+  "org_family": "financial_institution",
+  "world": {
+    "geography": "United States",
+    "currency": "USD",
+    "org_type": "long-short equity fund's research desk; the subject a listed home-furnishings retailer",
+    "invented_names": [
+      "Brindle & Moss",
+      "Kestrel Spend Panel",
+      "Larkhill Partners"
+    ],
+    "people": [
+      "Audrey Hanson",
+      "Robert Campbell"
+    ]
+  },
+  "deliverables": [
+    "bmh_q4fy25_revenue_nowcast.xlsx",
+    "bmh_q4fy25_nowcast_note.docx"
   ],
-  "file_roles": [
-   "governing_standard",
-   "incumbent_figure_or_method",
-   "primary_record",
-   "second_grain_source",
-   "reference_register",
-   "event_timeline",
-   "schedule_or_plan",
-   "unused_distractor"
-  ]
- },
- "registered": "2026-11-11T17:46:15Z"
+  "opening_move": "question-first",
+  "question_form": "whether",
+  "driver": "The decisive quantity is a revenue the record does not yet hold, estimated from a sample whose membership, age and coverage of the target all move, so the growth index has to be rebuilt on comparable units and its link to the target allowed to drift, and the range has to be earned on past origins that include the kind of membership change the target period carries.",
+  "driver_concrete": "Same-tenure card cohorts compared year on year within issuers present in both years and within region, recombined at the company's regional revenue mix; the immature last weeks completed from the delivery vintages; the card-visible share of revenue carried forward with its drift from the filed own-card share; the range from rolling-origin errors that include an issuer's exit.",
+  "stump": "A careful solver files the same-card or per-active-card growth on the panel's own regional mix with a fixed card-visible share, and a range that held in its backtest, because it never sees that ageing cards and a falling own-card share offset each other in every past origin while the target quarter loses an issuer.",
+  "answer_shape": "forecast-bands-drivers",
+  "weight": "validation",
+  "chain_signature": [
+    "assembly-reconciliation",
+    "missingness-measurement",
+    "missingness-measurement",
+    "modeling",
+    "modeling",
+    "validation",
+    "forecasting",
+    "decomposition-attribution",
+    "synthesis"
+  ],
+  "results": "R1 panel spend for the reporting entity on the fiscal calendar; R2 completion of the immature weeks; R3 growth on comparable cards; R4 growth at the company's regional mix; R5 the card-visible share's drift; R6 the backtest scorecard; R7 the forecast with its range; R8 each adjustment's worth; R9 the call",
+  "one_fact_test": "to be measured at stage 2",
+  "strategy_label": "WORKS IN FORM",
+  "mechanism_source": "design_note",
+  "differentiation": {},
+  "lineage": [
+    {
+      "architecture": "v1",
+      "status": "spent",
+      "date": "2026-11-11",
+      "why": "the determinism judge's isolated first pass (medium effort, before the answer blocks) replicated the engine, found the extracts' cutoff by reconciling product control's hypothetical P&L and executed the add-on path from the standard; the careful column priced near 95",
+      "driver": "The decisive quantities are the outcomes the forecast was actually about, rebuilt from the prior holdings rather than the booked totals, and each miss's survival under counterfactual forecasts that each restore one thing production lacked (the inputs it should have read, the components it left out, a scale that follows the recent spread), with the misses charged in a fixed order so the classes add back to the whole population of misses.",
+      "skeleton": {
+        "decision_form": "per_unit_diagnosis",
+        "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
+        "lessons": [
+          "unmetered_component",
+          "record_as_of_its_date",
+          "forward_window_structure_change",
+          "heterogeneity_carried_to_decision"
+        ],
+        "mechanisms": [
+          "proxy_beta_mapping_drops_names_own_risk",
+          "nightly_snapshot_misses_late_booked_allocations",
+          "snapshot_outage_reuses_an_older_book",
+          "booked_pnl_carries_same_day_trading_and_income",
+          "two_year_window_lags_a_volatility_rise",
+          "planned_growth_sits_in_proxied_names",
+          "store_500_day_rule_moves_names_off_proxies"
+        ],
+        "detection": [
+          "second_source_at_other_grain",
+          "residual_by_subgroup",
+          "record_time_against_event_time"
+        ],
+        "moves": [
+          "replay_event_by_event",
+          "bridge_by_contribution",
+          "stratify_by_mix_and_reweight_to_target"
+        ],
+        "file_roles": [
+          "governing_standard",
+          "incumbent_figure_or_method",
+          "primary_record",
+          "second_grain_source",
+          "reference_register",
+          "event_timeline",
+          "schedule_or_plan",
+          "unused_distractor"
+        ]
+      }
+    }
+  ],
+  "notes": "Concept 3 of the author's note of 2026-11-11, chosen at the re-root because its answer is an estimate no record holds (the release comes after the call), the anatomy of the two approved builds; the call is the quarter's revenue with a range and a backtest, beside the street's figure.",
+  "skeleton": {
+    "decision_form": "act_if_interval_clears_line",
+    "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
+    "lessons": [
+      "unmetered_component",
+      "survivor_selected_sample",
+      "validation_cannot_see_condition",
+      "reporting_lag_nowcast"
+    ],
+    "mechanisms": [
+      "card_spend_decays_with_tenure",
+      "issuer_entry_and_exit_break_panel",
+      "posting_lag_leaves_latest_weeks_short",
+      "own_brand_card_share_falls",
+      "panel_regional_mix_differs_from_company",
+      "licensed_and_acquired_descriptors",
+      "fiscal_53rd_week_base_quarter"
+    ],
+    "detection": [
+      "back_test_on_held_out_period",
+      "second_source_at_other_grain",
+      "record_time_against_event_time",
+      "residual_by_subgroup"
+    ],
+    "moves": [
+      "per_cohort_curves",
+      "nowcast_from_same_point_prior_years",
+      "stratify_by_mix_and_reweight_to_target",
+      "back_test_select_estimator",
+      "bridge_by_contribution"
+    ],
+    "file_roles": [
+      "primary_record",
+      "panel_or_survey_sample",
+      "second_grain_source",
+      "changeover_note",
+      "reference_register",
+      "calendar_or_closures",
+      "incumbent_figure_or_method",
+      "unused_distractor"
+    ]
+  },
+  "registered": "2026-11-11T21:06:01Z",
+  "shell": {
+    "question form": "how-many",
+    "second-sentence opener": "we",
+    "deliverable set": "xlsx"
+  }
 }
