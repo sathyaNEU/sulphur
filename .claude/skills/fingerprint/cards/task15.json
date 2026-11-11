@@ -1,110 +1,142 @@
 {
  "task": "task15",
  "project": "sulfur",
- "architecture": "v1",
- "drawn": "2026-11-10",
+ "architecture": "v2",
+ "drawn": "2026-11-11",
  "slot_note": "",
  "domain": "general-statistics-data-science",
- "subdomain": "multiple-testing-selective-inference",
+ "subdomain": "benchmarking-and-ablations",
  "client_domain": "general-statistics-data-science",
- "niche": "a grower-owned dryland barley breeding company whose nominations to an independent high-rainfall trial series keep coming in under the index it quotes for them: the gap set under the four heads its option deed files for a review (the index itself, the move to the series' wetter trials against a benchmark that gains more per millimetre of season water, lodging on the lodging recorded, the remainder), then this year's Stage 3 lines carried to the series, with the two to expect most from nominated for 2026",
+ "niche": "a regional grocery chain's six-month field trial of a vendor's machine-learning forecast for fresh ordering in hand-picked stores, read against the stores that kept the ERP's own forecast: why the pilot stores' fresh sales grew less and their waste fell much more than the rest, split into causes, then what switching would save a year in each store format and which formats to switch for 2027",
  "objective": "comparative-explanation",
- "shape": "01",
- "decision_type": "ranked_slate_under_cap",
- "answer_unit": "set_of_items",
- "answer": "Nominate WI3554 and WI3559 for 2026 sowing: they are the two Stage 3 lines to expect most from in the series (113.4 and 109.5 over two seasons, the next line WI3528 at 103.4), not the index's WI3554 and WI3571; the 24 completed nominations were quoted at 113.0 and returned 101.6, a gap of 11.4 points made of 3.4 for the index, 5.5 for the move to the Series, 2.1 for lodging and a remainder of 0.4.",
+ "shape": "11",
+ "decision_type": "pick_one_of_n",
+ "answer_unit": "named_option",
+ "answer": "to be filled when the pack is cut: the store formats Fjordkob switches to the new fresh forecast for 2027, each format's expected yearly saving per store against the licence, and the causes of the pilot stores' two gaps",
  "answer_source": "task15/generator/figures.json",
  "gap": [
-  "population",
-  "time"
+  "objective",
+  "population"
  ],
  "pattern": [
   "none"
  ],
  "generators": [
-  "G14",
   "G6",
+  "G3",
   "G16"
  ],
  "gate_g": "decomposition_attribution",
- "calibration_form": "realised_outcome_roster",
- "stump_strategy": "uncertainty_hold",
+ "calibration_form": "pilot_log",
+ "stump_strategy": "decomposition_attribution",
  "decisive_rule_filed": false,
  "official_decoy": false,
  "validated_decoy": false,
- "context_artifact": "close_out_summary",
+ "context_artifact": "monitoring_export",
  "stump_class": "analytical",
- "analyst_test": "The careful but hurried pass conforms every file, rebuilds the index and the relative yield exactly, takes the deed's four heads as written, models the visible fall of the lines' advantage with yield level as one slope for all lines, shrinks each line toward its Stage 3 list, prices lodging inside line and trial, checks itself on the past nominations and takes the mean miss off; it earns the gap, the index head and the lodging head, files 1.6 for the move to the Series against 5.5, leaves 4.2 of the gap unexplained, keeps 11 of 28 lodging forecasts and 11 of 28 expected yields in band and nominates WI3499 and WI3537.",
- "domain_test": "Every result is a statistical object of selective inference on a staged screening record: the selection bias of lines picked on noisy means, estimated from the whole unselected cohort; a random-slope response carried to a target set of environments; a loss per unit of a scored trait estimated within line and trial; a decomposition that closes on two fixed means; and a posterior predictive probability for a realised two-season mean with a shared reference; swap the nouns for a sales pipeline or a hospital league table and there is no replicated plot layout, no benchmark entry in every trial, no season water and no staged advancement to estimate any of them from.",
+ "analyst_test": "The careful but hurried pass conforms both daily extracts and the weekly history, reproduces the dashboard's two gaps, separates the competitor openings and the formats' different growth, then prices empty shelves from in-stock weekday averages with nothing recaptured and reads each format's saving off that format's pilot stores, so it lands the competitor and format components and misses the units lost to empty shelves, the recapture, what the saving depends on, two of the three format savings and the call.",
+ "domain_test": "Every result is a statistician's object on a field trial with a capped outcome and a hand-picked sample: demand rebuilt from sales capped by stock through each stockout's last-sale time and an in-stock intraday profile, a recapture rate estimated from paired items' sales on the days the other ran out, a difference-in-differences separated from a concurrent shock with an outcome the trial cannot touch, and a heterogeneous effect carried to the population it would be rolled out to through a moderator rebuilt from each store's own history; swap the nouns for hospital wards or call centres and there is no stock that caps the recorded outcome, no paired item that recovers part of it and no weekly trading shape for a chain-wide model to misread.",
  "layer2_family": "estimand_identification",
- "layer2_pattern": "general-statistics-data-science/multiple-testing-selective-inference/3",
+ "layer2_pattern": "own:capped-outcome-pilot-carried-to-the-rollout-population",
  "layer1": [
-  "line codes renamed at promotion (stage code to release code) across entry lists",
-  "abandoned plots with no yield",
-  "two plot-export layouts across a harvest-system change",
-  "plot weights at field moisture with a moisture reading",
-  "trial sites whose rainfall and irrigation sit in separate files",
-  "duplicate plot rows from re-weighed samples"
+  "two daily extract layouts across an ERP export change (semicolons and decimal commas against a dotted export)",
+  "store-days re-sent by the extract job (the same store, item and date twice)",
+  "waste scanned the next morning and booked to the following day",
+  "last-sale time blank on days with no sale",
+  "a weekly business-intelligence history whose category codes were renamed at the 2026 range review",
+  "closing stock below zero on a few rows where a delivery was booked late"
  ],
- "stakeholder_role": "the breeding company's head of breeding, who signs the 2026 nominations to the high-rainfall series",
- "role_family": "portfolio_manager",
- "scoring_unit": "per accepted item",
+ "stakeholder_role": "the chain's head of supply chain planning, who takes the 2027 fresh-forecast licence to the board",
+ "role_family": "procurement_lead",
+ "scoring_unit": "per active unit per period",
  "spine": {
-  "file": "plot_harvest_2019_2025.csv",
-  "rows": 21903,
-  "entity": "one trial plot at harvest (harvested or abandoned)",
-  "grain": "plot",
+  "file": "to be filled when the pack is cut",
+  "rows": 0,
+  "entity": "one store, fresh item and day",
+  "grain": "store x item x day",
   "source": "synthetic"
  },
- "forum": "customer_or_counterparty",
- "forcing_event": "season_or_peak",
- "org_family": "agriculture_or_food_producer",
+ "forum": "board_of_directors",
+ "forcing_event": "purchase_order_or_contract",
+ "org_family": "retailer_or_ecommerce",
  "world": {
-  "geography": "Australia (western Victoria: the Mallee, the Wimmera and the south-west high-rainfall zone)",
-  "currency": "AUD",
-  "org_type": "a grower-owned barley breeding company and the independent variety trial series its lines are nominated to",
+  "geography": "Denmark (East Jutland: Aarhus, Randers, Horsens, Silkeborg, Skanderborg and Vejle)",
+  "currency": "DKK",
+  "org_type": "a regional grocery chain with three store formats (Super, neighbourhood and To Go at stations and office districts) and a central fresh warehouse",
   "invented_names": [
-   "Banyena Grain Genetics",
-   "High Rainfall Barley Series",
-   "Southern Cropping Trials Trust",
-   "Mount Rouse Seeds"
+   "Fjordkob",
+   "Fjordkob Super",
+   "Fjordkob To Go",
+   "Kornblomst Analytics"
   ],
   "people": [
-   "Meredith Cooke",
-   "Jesse Gibson",
-   "Michaela Baxter",
-   "John Morgan"
+   "Jakob Lauritsen",
+   "Elna Johnsen",
+   "Dorthe Bruun",
+   "Ludvig Bertelsen"
   ]
  },
  "deliverables": [
-  "hrz_nominations_2026.xlsx",
-  "shortfall_bridge.png",
-  "hrz_nominations_2026_note.docx"
+  "friskprognose_2027.xlsx",
+  "friskprognose_bestyrelse.pdf"
  ],
  "opening_move": "question-first",
- "question_form": "other",
- "driver": "Candidates picked each year on a noisy internal score keep underdelivering on an outside yardstick for three separate reasons that each have to be estimated from the whole internal record (the luck that got them picked, which shrinks by how much each was observed; a reference unit that gains more than they do along a condition the outside yardstick sits far up, by an amount that differs from candidate to candidate, a condition the internal record cannot tell from overall level and the outside record can; and a recorded weakness whose cost grows there), so the gap between the two means is split under filed heads until nothing is left of it, and the next candidates are rebuilt from all three and the ones to expect most from put up.",
- "driver_concrete": "Banyena's nominations to the High Rainfall Barley Series were quoted at 13 per cent over the benchmark Byaduk on the breeder's own high-rainfall index and returned under 2: part is selection on noisy Stage 3 means (the prior taken from the whole Stage 1 intake by cohort and cross), part is Byaduk gaining more yield per millimetre of season water than Banyena's dryland-bred lines at series sites far wetter than the programme's, by a different amount for each line (season water and yield level move together at Banyena's trials and are told apart only in the series' own), and part is lodging, whose loss per tenth of a plot is estimated within line and trial and read on the lodging recorded; the 2026 nominations are the two Stage 3 lines with the highest expected relative yield in the series once every line has its own response and its lodging is carried to the series' pressure.",
- "stump": "A careful but hurried solver reproduces the gap, fits one response to the trial's yield level for all lines, pulls each line toward its Stage 3 list, takes the average miss on past nominations off the top and nominates WI3499 and WI3537, which stand 20th and 23rd once each line has its own response (it puts every line between 101.9 and 105.0, the two right lines at 104.7 and 103.2), where the index would put up WI3554 with a weak-strawed line; it files 1.6 for the move to the Series against 5.5 with 4.2 of the gap left over, ranges of plus or minus 8.6 and a lodging forecast read off each line's own trials, because it never gives each line its own response to season water, never settles season water against yield level on the series' own trials, and never carries a line's lodging to the series' pressure.",
- "answer_shape": "bridge",
- "weight": "attribution",
+ "question_form": "which",
+ "driver": "A trial of a new decision system in hand-picked units looks better than it is for three separate reasons, each estimated from a different file: the outcome each unit records is capped by the system's own choices, so the loss it causes never appears and is rebuilt from when each capped record stopped and how the rest of such a day normally runs, with part of the loss recovered by a paired alternative at a rate that differs by unit type; a concurrent shock and a composition difference sit inside the same comparison and are separated with a record the system cannot touch; and the units tried were picked for a property that also governs how much the system helps, so the benefit for the population it would be rolled out to is carried through a moderator rebuilt from each unit's own history rather than read off the trial's own units.",
+ "driver_concrete": "Fjordkob's fresh-forecast pilot shows its 16 pilot stores cutting waste far more than the other 32 while their fresh sales grew less: the vendor's lean forecast empties shelves earlier in the day, which the dashboard's at-close availability barely registers, so the units lost are rebuilt from each stockout's last-sale time against the in-stock hourly profile and netted of what the paired item recaptured, which differs by format; competitor openings near some stores and the formats' different growth sit in the same gap and are separated with the ambient sales record the forecast never touches; and the regional managers picked their busiest, weekend-trading stores while the vendor's chain-wide weekly pattern over-orders weekends and under-orders weekdays in commuter-week stores, so each format's yearly saving is carried through each store's own weekend share, not read off the pilot stores of that format.",
+ "stump": "A careful but hurried solver reproduces the dashboard, runs the before-and-after against the other stores by format, prices empty shelves from in-stock weekday averages or not at all and nets nothing for the paired item, and reads the To Go format off its three pilot stores, so it switches every format, or Super alone if it prices each lost unit at full margin, because it never rebuilds the lost units from the stockout times, never nets the recapture and never asks whether the pilot's To Go stores trade like the format's commuter stores.",
+ "answer_shape": "ranked-causes",
+ "weight": "synthesis",
  "chain_signature": [
   "assembly-reconciliation",
-  "causal-reasoning",
-  "modeling",
   "missingness-measurement",
+  "modeling",
+  "causal-reasoning",
   "decomposition-attribution",
+  "decomposition-attribution",
+  "investigation-loops",
   "forecasting",
   "uncertainty",
-  "synthesis",
-  "self-verification"
+  "synthesis"
  ],
- "results": "R1 the 24 completed nominations and the gap between the index quoted and the relative yield returned (11.4 points); R2 the index head, selection on noisy means (3.4); R3 the move to the Series, lodging apart (5.5); R4 every remaining Stage 3 line's expected lodging in the series; R5 the lodging head on the lodging recorded (2.1); R6 every remaining Stage 3 line's expected relative yield over two series seasons; R7 its 80 per cent range; R8 the two nominations; R9 the remainder the heads leave (0.4)",
- "one_fact_test": "The most useful single sentence is 'every line has its own response to season water against the benchmark's': it rescues R7, R8 and R9, 3 of 9 results; 'weak-strawed lines lodge harder at the series' sites than at ours, and it costs them yield there' rescues R4, 1 of 9; neither gives the move as the deed splits it or the lodging head (measured by effort.py on the generator's own passes).",
- "strategy_label": "own chain (a selection-shortfall bridge on a staged trial record)",
+ "results": "R1 the pilot stores' two headline gaps reproduced from the reconciled record (fresh sales growth and waste change against the same weeks of 2025, pilot against the rest); R2 the units each store group could not sell because the shelf was empty, by period; R3 the share of those units customers bought as the paired item instead, by format; R4 the competitor openings' effect on fresh sales growth, separated with the ambient record; R5 the sales growth gap split into its causes; R6 the waste gap split into its causes; R7 what the forecast's saving depends on in a store (its own weekend share) with the evidence; R8 each format's expected yearly saving per store from switching; R9 its 80 per cent range; R10 the formats to switch",
+ "one_fact_test": "to be measured by effort.py once the pack is cut; designed so the most useful single sentence ('the new forecast reads every store's week like a big weekend store's') rescues R7, R8 and R10 at most, 3 of 10",
+ "strategy_label": "WORKS IN FORM (heterogeneity that pooling hides, weighted to the population the decision serves, with the group property rebuilt from history; outcomes that have not finished happening read as demand the stock cut off), own chain",
  "mechanism_source": "design_note",
- "differentiation": {},
- "lineage": [],
- "notes": "Axes redrawn on 2026-11-10 after main moved (task5 architecture 4 registered at 01:59Z): prompt shape 03 to 01 (the repeated unit the rubric grades is each Stage 3 candidate's row, in or out of the three nominations, with the bridge beside it), context artifact published_series to close_out_summary (the head of breeding works from the company's own season close-out and nomination dossiers; the series' published results are the realised outcomes, filed under calibration_form). Repaired in place on 2026-11-10 after the determinism judge's first pass (not deterministic on what the parts of the gap were; Gates G and H passed): the gap is now set under the four heads the option deed files for a review, the decision is the lines to be expected at the deed's standard (at most three) on world 3153 with the standard at 107.0, the own-method back-test is no longer a result, and the chain is eight results (validation left the signature). No axis of the card moved. Second repair on 2026-11-10 after the determinism judge's second pass (its thread derived its own answer before seeing the blocks; not deterministic on a second nominee 2.5 points above a bar and on the chances, Gates G and H passed): the decision is now the two lines to expect most from, the chances left the asks, tolerances were widened to what sound fits span, the remainder is counted as a result, and the chain is nine results (self-verification joined the signature). No other axis of the card moved.",
- "registered": "2026-11-10T02:07:15Z"
+ "differentiation": {
+  "task15": "architecture 1 split a quoted index's shortfall under filed heads on a staged breeding record (selection on noisy means, a transported response to season water, lodging) and nominated two lines; architecture 2 is a retail field trial whose recorded outcome is capped by the system on trial, with a concurrent shock, a recapture rate and a moderator carried to the rollout population, decided per store format, in another world, dataset and shell"
+ },
+ "lineage": [
+  {
+   "architecture": "v1",
+   "fate": "spent 2026-11-11 at the author's word before upload: the judge's Gate H read the stump power as moderate (a run giving every line its own response to season water earns the nominations, 59.0 to 70.0 on the paper scale), and the author asked for a re-root with at least three major analytical failure points in new areas",
+   "driver": "Candidates picked each year on a noisy internal score keep underdelivering on an outside yardstick for three separate reasons that each have to be estimated from the whole internal record (the luck that got them picked, which shrinks by how much each was observed; a reference unit that gains more than they do along a condition the outside yardstick sits far up, by an amount that differs from candidate to candidate, a condition the internal record cannot tell from overall level and the outside record can; and a recorded weakness whose cost grows there), so the gap between the two means is split under filed heads until nothing is left of it, and the next candidates are rebuilt from all three and the ones to expect most from put up.",
+   "gap": [
+    "population",
+    "time"
+   ],
+   "pattern": [
+    "none"
+   ],
+   "generators": [
+    "G14",
+    "G6",
+    "G16"
+   ],
+   "gate_g": "decomposition_attribution",
+   "answer_shape": "bridge",
+   "weight": "attribution",
+   "subdomain": "multiple-testing-selective-inference",
+   "world": "Australia (western Victoria), Banyena Grain Genetics"
+  }
+ ],
+ "lineage_shells": [
+  {
+   "question form": "other",
+   "second-sentence opener": "for",
+   "deliverable set": "docx+png+xlsx"
+  }
+ ],
+ "notes": "Re-rooted on 2026-11-11 at the author's word: architecture 1 (Banyena barley nominations) was READY and not yet run; the author asked for a much stronger stump with at least three major analytical failure points in new areas, never task6's strategy. New world (Denmark, a grocery chain), new dataset (a simulated fresh-ordering field trial) and new shell. The task type moved from multiple-testing-selective-inference to benchmarking-and-ablations (controlled evaluation of a system, isolating its effect from everything else in the comparison); the analysis type stays Comparative Analysis & Explanation. Redrawn on 2026-11-11 after the rebase onto main: task14 architecture 3 registered with decisive pattern G3 and entered this card's window (ban.pattern), so the decisive generator moved to G6 composition shift, the honest first label for the call (the To Go format turns on the pilot's stores not being the format's stores), with G3 record against operation second.",
+ "registered": "2026-11-11T04:47:38Z"
 }
