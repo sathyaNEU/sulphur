@@ -119,7 +119,8 @@
     "unmetered_component": "part of what the decision unit will draw or lose was supplied or lost through a source no meter records, so the recorded figure misses it",
     "left_truncated_ages": "units enter the record mid-life (a migration resets their recorded start), so ages and hazards read from first sight are wrong",
     "device_clock_drift": "each device keeps its own drifting clock and short memory, so its events are matched to an independent record on its own clock",
-    "linkage_missing_not_at_random": "a link key is captured less often exactly when the outcome surges, so linked counts are reweighted by the capture share at their own conditions"
+    "linkage_missing_not_at_random": "a link key is captured less often exactly when the outcome surges, so linked counts are reweighted by the capture share at their own conditions",
+    "common_error_benchmark": "the benchmark an estimate is checked against shares one of its errors (the same unrecorded leavers on both), so their agreement validates nothing and the benchmark's own gap is sized from a third source"
   },
   "detections": {
     "naive_depends_on_what_it_should_not": "the naive figure moves with something it should be free of",
@@ -194,7 +195,8 @@
     "bridge_by_contribution": "each component's contribution computed so the pieces add to the total",
     "degradation_curve_fit": "an early-life degradation form fitted and carried to the decision date",
     "extrapolate_form_chosen_at_edge": "the functional form chosen on the record's own edge and carried past it",
-    "instrument_on_assignment": "assignment used as the instrument for receipt"
+    "instrument_on_assignment": "assignment used as the instrument for receipt",
+    "ratio_benchmark_adjustment": "a raising factor set so the estimate's ratio between two groups matches an independent benchmark built at another grain (births by sex rolled forward with survival)"
   },
   "file_roles": {
     "governing_standard": "a standard, policy, rule or terms that file the WHAT",
