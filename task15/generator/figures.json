@@ -119,6 +119,16 @@
   "commuter": 2.42,
   "weekend": 0.91
  },
+ "shadow_ratio_range": {
+  "commuter": [
+   2.0,
+   2.6
+  ],
+  "weekend": [
+   0.85,
+   1.0
+  ]
+ },
  "saving": {
   "Super": 40200,
   "Kvarter": 28000,
@@ -227,6 +237,16 @@
    },
    "switch": [
     "Super",
+    "Kvarter"
+   ]
+  },
+  "recorded_fxt": {
+   "saving": {
+    "Super": -10800,
+    "Kvarter": 45100,
+    "To Go": 7900
+   },
+   "switch": [
     "Kvarter"
    ]
   },
@@ -658,6 +678,19 @@
   "margin": 3.6,
   "sales": 2.3,
   "waste": 1.4
+ },
+ "store_2158_margin_change": {
+  "recorded": -63000,
+  "turned_away": -3700
+ },
+ "store_2158_margin_shortfall": {
+  "store": 2158,
+  "recorded": 63000,
+  "turned_away": 3700
+ },
+ "super_margin_noise_per_year": {
+  "recorded": 20600,
+  "turned_away": 5800
  },
  "weekend_pilot_saving_share": {
   "Super": {

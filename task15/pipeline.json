@@ -25,10 +25,10 @@
   "nearest": "guard.py check WARN 2026-11-11 on the registered card after the rebase (overuse.forum, answered in the note); test.same_puzzle and test.same_driver BLOCKs on two drafts cleared by redrawing the gap and the decision type, and ban.pattern against task14 v3 cleared by moving the decisive generator to G6; nearest driver task13 at 0.06"
  },
  "judge": {
-  "verdict": "",
-  "disposition": "",
-  "gate_h": "",
-  "report": ""
+  "verdict": "pass 1 DETERMINISTIC",
+  "disposition": "FIX_NOW (applied 2026-11-11: conventions named, the format-by-format recorded-margin route ruled out by named data, gaps stated as differences of rates, shadow ratios ranged); one re-judge pending",
+  "gate_h": "domain pass; layers pass; results 9 graded across 6 areas; one_thing none; effort quick 2, careful 4, thorough 8 of 9 before the fix; one_fact about 3 of 9",
+  "report": "task15/determinism_check_report.md"
  },
  "paper_pair": 46.0,
  "effort": {
@@ -51,7 +51,7 @@
   "history": []
  },
  "returned": [],
- "resume": "stage 4: the determinism judge thread was started on /tmp/determinism-check-task15-381148/ (brief rebuilt by the determinism-judge agent from the 2026-11-11 cut after the leak read's fixes); when its verdict.md is in, re-invoke the determinism-judge agent with it to write determinism_check_report.md, fix every finding in the generator in one pass (re-judge once on a FIX_NOW), re-run gates.py task15 --full, then cut target.zip and golden.zip and commit READY. If the scratch is gone, rebuild the bundle with generator/build.py and run the judge afresh.",
+ "resume": "stage 4: the one re-judge after pass 1's FIX_NOW; the determinism-judge agent prepares a fresh run folder from the current bundle, the main session spawns its thread and re-invokes the agent with verdict.md; then gates.py task15 --full and READY with target.zip, golden.zip and golden/ force-added.",
  "approved": null,
  "submitted": null,
  "portal": {

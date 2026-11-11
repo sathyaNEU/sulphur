@@ -608,6 +608,7 @@ ROUTES = {
     "waste_only_type": dict(lost="unc", transport="type", money="waste_only"),
     "single_sales_type": dict(lost="unc", transport="single_sales"),
     "single_waste_type": dict(lost="unc", transport="single_waste"),
+    "recorded_fxt": dict(lost="recorded", transport="fxt"),
     "pooled_sales": dict(lost="unc", transport="pooled_sales"),
 }
 

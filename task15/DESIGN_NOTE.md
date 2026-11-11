@@ -139,6 +139,7 @@ No decoy: nothing is written to carry a wrong answer: the dashboard answers its 
 No replay: no result re-derives a published figure; the dashboard's two headline changes are R1's inputs, not its
   graded content, and every graded figure is estimated
 Pinned: R2's two forms (clipped at zero or not) and the simulation's truth inside its bands, the plain form outside;
+  the margin part read off the recorded gross margin format by format ruled out by named data (SF15);
   R4 under ramps of 2 to 6 weeks and both comparison sets; R5's residual reading (-1.0) and the truth (-0.85) inside;
   R7 under ratio and mean weighting; R8 under fourteen rivals (estimator form, grouping by trading week or by format
   within it, the margin part on sales, units or the 2025 turned-away margin, ratio or mean weights, a line in the
@@ -271,6 +272,9 @@ Nearest build: task12 (heterogeneity that pooling hides, carried to a buyer base
 | SF11 | comparison stores for the savings | stores with an opening in the record left out; every store on the openings log left out | the former | same call: the latter stays inside every band (asserted) |
 | SF12 | the trading-week cut | anywhere between the two groups' weekend shares | the widest gap (0.23) | same call: no store has a weekend share between 0.205 and 0.253 (asserted) |
 | SF13 | "an 80% range" | the 10th and 90th percentiles of a resampling of the stores with every step redone | as stated | the prompt; three resampling variants inside every end's band (asserted) |
+| SF14 | how the pilot stores' rates are grouped | pooled by trading week across formats; format by format within the trading week | pooled by trading week | same call: format by format gives Super 39,700, Kvarter 26,200, To Go 3,500, inside every band (asserted); the blocks name both |
+| SF15 | where the margin part of the saving is read from | the units the empty shelves turned away; the recorded gross margin | the turned-away units | named data: the forecast moves a store's sales only on days its shelf empties, and store 2158's recorded margin fell 63,000 against its format while its turned-away units account for 3,700; on the stores that kept AutoOrdre the recorded route spreads 20,600 a Super store against 5,800, about 20,600 a store-year of noise on four Super pilot stores against Super's 13,200 over its licence (asserted); pooled by trading week the recorded route stays inside every band (30,500) |
+| SF16 | "a gap in percentage points" | the difference of the two groups' growth rates; the change in waste as a share of sales | the difference of the rates | the prompt's "grew less" and "fell further than the other stores'"; the blocks state it in asks 1 and 2 |
 
 ## Closure table
 
@@ -507,3 +511,10 @@ Ruled in the main thread on `leak.py`'s REVIEW lines (2026-11-11, the stage 4 cu
 - The forecast's part of each gap labelled as the forecast alone (the first leak read): the recommended service
   factor changed with it in every pilot store and the record cannot part the two, so the part is labelled the
   forecast at its recommended setting, which is the package agreement 4.2 prices.
+- The first stage 4 judge pass (DETERMINISTIC, FIX_NOW, `determinism_check_report.md`): its thread read the margin
+  part off the recorded gross margin with a Super-only rate and put Super at about 20,600, under the licence, and
+  found the golden's two conventions (rates pooled by trading week, the margin part from units turned away) stated as
+  results. Both are now named in the blocks and rows of the fork table (SF14, SF15), the Super-only recorded route is
+  ruled out by store 2158's record and the route's noise on four stores (asserted), the gaps are stated as
+  differences of growth rates (SF16), and the shadow forecasts' weekend ratios are given with the range poolings span
+  (2.0 to 2.6, 0.85 to 1.0) where the thread had 0.97 against the stated 0.91. No band moved and the pack is unchanged.

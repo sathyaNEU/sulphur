@@ -160,6 +160,13 @@ def run(w, R, F, E, target):
        and not inside(F["routes"]["by_format"]["saving"]["To Go"], bands["saving"]["To Go"]))
     ok("R8 by trading week with every sale counted lies outside Kvarter's band",
        not inside(F["routes"]["plain_type"]["saving"]["Kvarter"], bands["saving"]["Kvarter"]))
+    ok("SF15 the recorded margin read format by format is too noisy to place Super against its licence",
+       F["super_margin_noise_per_year"]["recorded"] > F["margin_over_licence"]["Super"]
+       and F["super_margin_noise_per_year"]["turned_away"] < F["margin_over_licence"]["Super"], str(F["super_margin_noise_per_year"]))
+    ok("SF15 the recorded margin books to the forecast what a store's shelves did not lose (store 2158)",
+       F["store_2158_margin_change"]["recorded"] < F["store_2158_margin_change"]["turned_away"] - 40000, str(F["store_2158_margin_change"]))
+    ok("SF14 the pilot stores' rates taken format by format within the trading week stay inside every band",
+       all(inside(R["rivals"]["unc_fxt"]["format_saving"][f], bands["saving"][f]) for f in W.FORMATS))
     rt = F["weekend_pilot_super_over_kvarter"]
     ok("R8 the record rules out carrying the margin part on waste: Super's margin given up runs well past its waste ratio",
        rt["margin"] > 1.2 * rt["sales"] and rt["margin"] > 2.0 * rt["waste"], str(rt))
@@ -221,6 +228,14 @@ def run(w, R, F, E, target):
     ok("the trading week misleads where it decides nothing: Kvarter's commuter stores lose, Kvarter still switches",
        (kc < 0).all() and "Kvarter" in G["switch"], str(kc.round(0).tolist()))
     ok("the To Go pilot stores are all weekend-trading", (sp.loc[sp["pilot"] & (sp["format"] == "To Go"), "type"] == "weekend").all())
+    fcm = T["fc"][(T["fc"]["date"] >= "2026-03-02") & T["fc"]["f_korn"].notna()].assign(
+        wkend=lambda x: x["date"].dt.dayofweek >= 5, type=lambda x: x["store"].map(sp["type"]))
+    pl = fcm.groupby(["type", "wkend"]).agg(k=("f_korn", "sum"), a=("f_auto", "sum")).unstack("wkend")
+    pooled = (pl[("k", True)] / pl[("a", True)]) / (pl[("k", False)] / pl[("a", False)])
+    rr = F["shadow_ratio_range"]
+    ok("the shadow forecasts' weekend ratio lies in its stated range however the stores are pooled",
+       all(rr[t_][0] <= v_ <= rr[t_][1] for t_, v_ in list(pooled.items()) + list(F["shadow_ratio"].items())),
+       str(pooled.round(2).to_dict()))
     ok("the chain-wide forecast over-weights the weekend in commuter-week stores and not in the others",
        F["shadow_ratio"]["commuter"] > 1.5 and F["shadow_ratio"]["weekend"] < 1.1, str(F["shadow_ratio"]))
     so = d.assign(out=d["close"] <= 0, pilot=d["store"].isin(T["pilot"])).groupby(["format", "pilot", "year"])["out"].mean()
@@ -271,6 +286,11 @@ def run(w, R, F, E, target):
     wu = {grp: d.loc[pil & m, "waste"].sum() / d.loc[base & m, "waste"].sum() - 1 for grp, m in (("p", isp), ("o", ~isp))}
     ok("SF3 the waste gap in units lands apart from the gap at cost (closed by the prompt's 'at cost')",
        abs(100 * (wu["p"] - wu["o"]) - H["gap_waste_pp"]) > 0.0, "%.2f" % (100 * (wu["p"] - wu["o"])))
+    # SF16: the gap as the difference of the growth rates, against the change in waste as a share of sales
+    lvl = {grp: 100 * (d.loc[pil & m, "waste_val"].sum() / d.loc[pil & m, "sales"].sum()
+                       - d.loc[base & m, "waste_val"].sum() / d.loc[base & m, "sales"].sum()) for grp, m in (("p", isp), ("o", ~isp))}
+    ok("SF16 the level reading of the waste gap (waste as a share of sales) is a different number (closed by the prompt's wording and asks 1 and 2)",
+       abs((lvl["p"] - lvl["o"]) - H["gap_waste_pp"]) > 5, "%.2f" % (lvl["p"] - lvl["o"]))
     # SF4: the other stores are every store outside the pilot, as the dashboard groups them
     ok("SF4 the dashboard's two groups are the pilot stores and every other store",
        set(T["pilot"]) | set(d.loc[~isp, "store"]) == set(d["store"]) and len(T["pilot"]) == sum(F["n_pilot"].values()))

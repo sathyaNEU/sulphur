@@ -115,6 +115,7 @@ def build(R):
     F["n_pilot"] = {f: int(((sp["format"] == f) & isp).sum()) for f in FMT}
     F["shadow_ratio"] = {"commuter": round(float(R["shadow_type"]["commuter"]), 2),
                          "weekend": round(float(R["shadow_type"]["weekend"]), 2)}
+    F["shadow_ratio_range"] = {"commuter": [2.0, 2.6], "weekend": [0.85, 1.0]}
     F["saving"] = {f: r100(G["format_saving"][f]) for f in FMT}
     F["range"] = {f: [r100(G["range"][f][0]), r100(G["range"][f][1])] for f in FMT}
     F["range_ends"] = dict([(f + "_lo", F["range"][f][0]) for f in FMT] + [(f + "_hi", F["range"][f][1]) for f in FMT])
@@ -154,6 +155,13 @@ def build(R):
     F["weekend_pilot_super_over_kvarter"] = {"margin": r1(mg.loc["Super", "margin_change"] / mg.loc["Kvarter", "margin_change"]),
                                              "sales": r1(mg.loc["Super", "sales_base"] / mg.loc["Kvarter", "sales_base"]),
                                              "waste": r1(mg.loc["Super", "waste_base"] / mg.loc["Kvarter", "waste_base"])}
+    Rf = R["routes"]["recorded_fxt"]["P"]
+    F["store_2158_margin_change"] = {"recorded": r100(Rf.loc[2158, "margin_change"]), "turned_away": r100(G["P"].loc[2158, "margin_change"])}
+    F["store_2158_margin_shortfall"] = {"store": 2158, "recorded": abs(F["store_2158_margin_change"]["recorded"]),
+                                        "turned_away": abs(F["store_2158_margin_change"]["turned_away"])}
+    n_sp = int(((G["sp"]["format"] == "Super") & G["sp"]["pilot"]).sum())
+    F["super_margin_noise_per_year"] = {"recorded": r100(2 * R["placebo"]["Super"]["recorded_sd"] / np.sqrt(n_sp)),
+                                        "turned_away": r100(2 * R["placebo"]["Super"]["turned_away_sd"] / np.sqrt(n_sp))}
     F["weekend_pilot_saving_share"] = {
         fm: {"of_sales_pct": round(100 * Pw.loc[Pw["format"] == fm, "saving"].sum() / Pw.loc[Pw["format"] == fm, "sales_base"].sum(), 2),
              "of_waste_pct": r1(100 * Pw.loc[Pw["format"] == fm, "saving"].sum() / Pw.loc[Pw["format"] == fm, "waste_base"].sum())}

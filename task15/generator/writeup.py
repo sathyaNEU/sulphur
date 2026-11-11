@@ -51,7 +51,8 @@ def write(F, workbook, note, task_dir=TASK):
     a("### %s" % workbook)
     a("")
     a("1. The fresh sales growth gap, in percentage points of the pilot stores' fresh sales in the same weeks of 2025: the "
-      "pilot stores' fresh sales grew %s per cent against %s per cent in the other stores, a gap of **%s** (%s), split into:"
+      "pilot stores' fresh sales grew %s per cent against %s per cent in the other stores, a gap of **%s** (%s), the "
+      "difference of the two growth rates, split into:"
       % (p1(F["pilot_growth_pct"]), p1(F["other_growth_pct"]), p1(ss["gap"]), b(bd["gap_sales"])))
     a("   - Kornblomst's forecast at its recommended safety-stock setting, the sales the pilot stores' empty shelves turned "
       "away beyond their 2025 level carried by their format's change: **%s** (%s);" % (p1(ss["forecast"]), b(bd["sales_split"]["forecast"], lambda x: "%.2f" % x)))
@@ -62,7 +63,8 @@ def write(F, workbook, note, task_dir=TASK):
     a("   - the discounter openings near pilot stores: **%s** (%s);" % (p1(ss["competitors"]), b(bd["sales_split"]["competitors"])))
     a("   - not explained by the three: %s." % p1(ss["rest"]))
     a("2. The fresh waste gap, in percentage points of the pilot stores' 2025 waste at cost: their waste fell %s per cent "
-      "while the other stores' rose %s per cent, a gap of **%s** (%s): Kornblomst's forecast at its recommended setting "
+      "while the other stores' rose %s per cent, a gap of **%s** (%s), the difference of the two rates of change: "
+      "Kornblomst's forecast at its recommended setting "
       "**%s** (%s), the format mix "
       "**%s** (%s), the discounter openings **%s** (%s), not explained %s."
       % (p1(F["pilot_waste_fall_pct"]), p1(F["other_waste_change_pct"]), p1(ws["gap"]), b(bd["gap_waste"]),
@@ -110,11 +112,12 @@ def write(F, workbook, note, task_dir=TASK):
          p1(F["check_os_over_pct"])))
     a("3. The saving follows a store's trading week, not its format: weekend-trading pilot stores avoided **%s per cent** of "
       "the fresh waste they would have written off (%s) and commuter-week pilot stores **%s per cent** (%s), because "
-      "Kornblomst's chain-wide model weights a commuter-week store's weekend %.2f times as heavily as the store's own week "
-      "does (%.2f in weekend-trading stores); the To Go stores in the pilot all trade through the weekend, while most To Go "
-      "stores trade a commuter week."
+      "Kornblomst's chain-wide model weights a commuter-week store's weekend about %.1f times as heavily as the store's "
+      "own week does (%.1f to %.1f however the stores are pooled) and a weekend-trading store's about as heavily (%.2f to "
+      "%.1f); the To Go stores in the pilot all trade through the weekend, while most To Go stores trade a commuter week."
       % (p1(F["waste_rate_pct"]["weekend"]), b(bd["waste_rate"]["weekend"]), p1(F["waste_rate_pct"]["commuter"]),
-         b(bd["waste_rate"]["commuter"]), F["shadow_ratio"]["commuter"], F["shadow_ratio"]["weekend"]))
+         b(bd["waste_rate"]["commuter"]), F["shadow_ratio"]["commuter"], F["shadow_ratio_range"]["commuter"][0],
+         F["shadow_ratio_range"]["commuter"][1], F["shadow_ratio_range"]["weekend"][0], F["shadow_ratio_range"]["weekend"][1]))
     a("4. The discounter openings, read from each store's ambient weekly sales against the same weeks of 2025 and its "
       "format's stores with no opening, took (per cent of trade, each within 2 points) %s among the pilot stores, and %s "
       "elsewhere." % (eff_txt(pil), eff_txt(oth)))
@@ -169,15 +172,22 @@ def write(F, workbook, note, task_dir=TASK):
     a("8. The pilot stores' savings follow their weekend share, not their format. The 2025 weekend share of each store's "
       "fresh units splits the stores at its widest gap (%.2f): weekend-trading pilot stores saved %s per cent of their "
       "waste, the commuter-week ones (all Kvarter) %s. The shadow forecasts in `ordreforslag_2026.csv` show why: "
-      "Kornblomst's weekend-to-weekday ratio, as a multiple of AutoOrdre's (which reads each store's own week), is %.2f in "
-      "commuter-week stores and %.2f in weekend-trading ones. Most To Go stores trade a commuter week; the pilot's To Go "
-      "stores are high-street stores that do not."
+      "Kornblomst's weekend-to-weekday ratio, as a multiple of AutoOrdre's (which reads each store's own week), averages "
+      "%.2f over the commuter-week stores and %.2f over the weekend-trading ones (%.1f to %.1f and %.2f to %.1f however the "
+      "stores are pooled). Most To Go stores trade a commuter week; the pilot's To Go stores are high-street stores that do "
+      "not."
       % (F["weekend_cut"], p1(F["waste_rate_pct"]["weekend"]), p1(F["waste_rate_pct"]["commuter"]),
-         F["shadow_ratio"]["commuter"], F["shadow_ratio"]["weekend"]))
+         F["shadow_ratio"]["commuter"], F["shadow_ratio"]["weekend"], F["shadow_ratio_range"]["commuter"][0],
+         F["shadow_ratio_range"]["commuter"][1], F["shadow_ratio_range"]["weekend"][0], F["shadow_ratio_range"]["weekend"][1]))
     a("9. Carried every store by its own trading week (4.3): the waste part at its type's rate on the store's 2025 waste, "
       "the margin part at %.2f or %.2f per cent of its 2025 fresh sales, twice the 26 weeks, averaged over each format's "
-      "stores: Super %s, Kvarter %s, To Go %s."
-      % (F["margin_rate_pct"]["weekend"], F["margin_rate_pct"]["commuter"], k(sv["Super"]), k(sv["Kvarter"]), k(sv["To Go"])))
+      "stores: Super %s, Kvarter %s, To Go %s. Two conventions carry this: the pilot stores' rates are pooled by trading "
+      "week across formats (taken format by format within the trading week they give Super %s, Kvarter %s and To Go %s, "
+      "inside every band), and the margin part is read from the units the empty shelves turned away, not from the recorded "
+      "gross margin."
+      % (F["margin_rate_pct"]["weekend"], F["margin_rate_pct"]["commuter"], k(sv["Super"]), k(sv["Kvarter"]), k(sv["To Go"]),
+         k(F["rivals"]["unc_fxt"]["saving"]["Super"]), k(F["rivals"]["unc_fxt"]["saving"]["Kvarter"]),
+         k(F["rivals"]["unc_fxt"]["saving"]["To Go"])))
     a("10. Ranged by %s resamples of the stores, the pilot stores within their trading week and the others within their "
       "format, every step redone: the 80 per cent ranges in answer 4." % k(F["resamples"]))
     a("")
@@ -190,14 +200,22 @@ def write(F, workbook, note, task_dir=TASK):
       "fresh sales in Super, Kvarter and To Go, because waste avoided is a share of waste and a Super store writes off %s "
       "per cent of its fresh sales against %s for a Kvarter store. Carrying it all on waste (Kvarter %s) fails the other "
       "way: the weekend-trading Super pilot stores gave up %s times the margin of the Kvarter ones, with %s times their "
-      "fresh sales and %s times their waste. Reading the margin part off the recorded gross margin (Super %s) still clears every licence the answer "
-      "clears, but on the stores that kept AutoOrdre that route spreads %s DKK a Super store over the 26 weeks against %s "
-      "for units turned away."
+      "fresh sales and %s times their waste. Reading the margin part off the recorded gross margin pooled by trading week "
+      "(Super %s) still clears every licence the answer clears; read format by format it puts Super at %s, but the forecast "
+      "moves a store's sales only on the days its shelf empties, and the recorded margin books to it what the shelves did "
+      "not lose: store %d's recorded margin ran %s below its format's over the 26 weeks while its turned-away units "
+      "account for %s of that. On the stores that kept AutoOrdre that route spreads %s DKK a Super store over the 26 weeks against "
+      "%s for units turned away, so with four Super pilot stores it carries about %s a store and year of noise, more than "
+      "the %s by which Super clears its licence, where the turned-away route carries %s."
       % (k(F["routes"]["single_sales_type"]["saving"]["Kvarter"]), sh["Super"]["of_sales_pct"], sh["Kvarter"]["of_sales_pct"],
          sh["To Go"]["of_sales_pct"], p1(F["waste_to_sales_2025_pct"]["Super"]), p1(F["waste_to_sales_2025_pct"]["Kvarter"]),
          k(F["routes"]["single_waste_type"]["saving"]["Kvarter"]), p1(F["weekend_pilot_super_over_kvarter"]["margin"]),
          p1(F["weekend_pilot_super_over_kvarter"]["sales"]), p1(F["weekend_pilot_super_over_kvarter"]["waste"]),
-         k(F["rivals"]["recorded_type"]["saving"]["Super"]), k(rc["recorded_sd"]), k(rc["turned_away_sd"])))
+         k(F["rivals"]["recorded_type"]["saving"]["Super"]), k(F["routes"]["recorded_fxt"]["saving"]["Super"]),
+         F["store_2158_margin_shortfall"]["store"], k(F["store_2158_margin_shortfall"]["recorded"]),
+         k(F["store_2158_margin_shortfall"]["turned_away"]),
+         k(rc["recorded_sd"]), k(rc["turned_away_sd"]), k(F["super_margin_noise_per_year"]["recorded"]),
+         k(F["margin_over_licence"]["Super"]), k(F["super_margin_noise_per_year"]["turned_away"])))
     a("")
     txt = "\n".join(L)
     open(os.path.join(task_dir, "submission.md"), "w", encoding="utf-8").write(txt)

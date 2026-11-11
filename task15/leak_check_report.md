@@ -4,18 +4,18 @@
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: record, result, inside, margin, careful, missed, estimate, decision, agreement, second, licence, prompt, kvarter, openings, turned-away, graded, trials, series, in-stock, reading, lodging, method, comparison, trading, cannot
+Stump terms swept: record, margin, result, inside, careful, missed, estimate, decision, licence, agreement, second, prompt, kvarter, openings, turned-away, graded, trials, series, in-stock, trading, reading, lodging, method, comparison, golden
 
 ## 3 answer figures in the pack (REVIEW 6)
 - **REVIEW** `dagssalg_frisk_2026.csv`: golden figure 33,100 appears: ...18,8,0,8 2026-03-18,3072,451819,106,1028.20,20:47:33,100,0,18 2026-03-18,3072,451826,16,262.40,20:45:31,20...
 - **REVIEW** `dagssalg_frisk_2026.csv`: golden figure 50,100 appears: ...47,40,0,19 2026-02-21,2179,451819,43,528.90,18:54:50,100,0,76 2026-02-21,2179,451826,45,738.00,13:54:52,30...
 - **REVIEW** `pilotaftale_kornblomst_2026.pdf`: golden figure 4.2 appears: ...taken for all of its stores or for none of them. 4.2 The saving of a store is the change in its fresh...
-- **REVIEW** `pilotaftale_kornblomst_2026.pdf`: golden figure 014 appears: ...st in Fjordkøb's fresh ordering Agreement FK-2026-014, signed 19 February 2026. Annex 2 replaced on 1 S...
 - **REVIEW** `pilotaftale_kornblomst_2026.pdf`: golden figure 4.3 appears: ...uding VAT less the cost price of the units sold. 4.3 A year is 52 weeks, taken as twice the 26 weeks o...
+- **REVIEW** `pilotaftale_kornblomst_2026.pdf`: golden figure 014 appears: ...st in Fjordkøb's fresh ordering Agreement FK-2026-014, signed 19 February 2026. Annex 2 replaced on 1 S...
 - **REVIEW** `pilotaftale_kornblomst_2026.pdf`: carries 9 of 10 distinctive words of the committed call: "Switch the Super and Kvarter stores to Kornblomst's fresh forecast for 2027 and keep the To Go stores on AutoOrdre."
 
 ## 4 design-note vocabulary (REVIEW 1)
-- **REVIEW** `pilotaftale_kornblomst_2026.pdf`: 6 of 25 stump-paragraph terms appear (result, margin, decision, agreement, licence, kvarter); read whether the document names the move
+- **REVIEW** `pilotaftale_kornblomst_2026.pdf`: 6 of 25 stump-paragraph terms appear (margin, result, decision, licence, agreement, kvarter); read whether the document names the move
 
 ## 9 dates after the setting (INFO 1)
 - **INFO** `-`: no --asof given, sweep skipped (pass the fiction's as-of date)
@@ -24,7 +24,7 @@ Stump terms swept: record, result, inside, margin, careful, missed, estimate, de
 - **INFO** `-`: container gate PASS (PASS: 0 FAIL, 0 WARN)
 
 ## 11 prompt gate (REVIEW 1)
-- **REVIEW** `prompt.txt`: shell quota: deliverable set 'pptx+xlsx' at 29% of 17 prompts (cap 20%); reword at the role level, not the verb
+- **REVIEW** `prompt.txt`: shell quota: question form 'whether' at 35% of 17 prompts (cap 30%); deliverable set 'pptx+xlsx' at 24% of 17 prompts (cap 20%); reword at the role level, not the verb
 
 ## 12 client quality check (INFO 2)
 - **INFO** `-`: 13 usable files (10 or more required)
@@ -41,6 +41,7 @@ Stump terms swept: record, result, inside, margin, careful, missed, estimate, de
 ## 7 hidden content (clean)
 
 ## 8 column names (clean)
+
 
 ## Solver's-eye read
 
