@@ -284,6 +284,13 @@ Caution on the paper: the cited pair is 38.2, and paper estimates have come back
   fallout baseline), R5 (the rules re-run) and R7 (Rev F's steady state) are each a judgment a careful run can make, so
   two of them earned puts the pair near 60. The judge thread's own first pass is read against the careful column below
   before READY.
+Judge (stage 4, 2026-11-11): DETERMINISTIC, FIX_NOW (answer blocks only: the PU-3 and PU-4 lower bands, bands on the
+  per-pair savings, ask 3's candidate list, the volume split stated). Its own first pass, written from the pack before it
+  opened the blocks, landed every result inside its band: the loss 1.32 to 1.33 points against each product's fallout at
+  a fresh disk, the die by product, the disk as the only driver with the retaining ring at none, onsets 1,224, 1,201, 975
+  and 768 with climbs 15.1 to 22.2, the rules' shares 25.3, 33.3 and 41.5 per cent by running each rule on the units' own
+  sequences, counts 1,543, 1,489, 1,245 and 1,104, and a saving of 279,000 to 307,000 at Rev F's own cycle. Re-priced on
+  that pass the careful column earns R1 to R7 (about 96), over 50, so the build returns to stage 2 whatever the verdict.
 
 ## Tried and rejected
 
@@ -338,3 +345,8 @@ Caution on the paper: the cited pair is 38.2, and paper estimates have come back
 - 2026-11-11, onset and slope bands of 6 per cent: under the disk spread each unit's own fit sits up to 10 per cent from
   its pair's, a defensible reading of "each unit", so the dose bands are 12 per cent and the counts' 8 per cent, with the
   fleet's one count of 1,375 outside both pairs.
+- 2026-11-11, Concept 2's chain as built (seven results, the careful pair priced at 38.2 on the pre-April baseline, the
+  wafer-level ring share, the sliced bridge and the summer's rate): the determinism judge's blind first pass at medium
+  effort made none of those moves; it measured against the fresh-disk fallout, read the ring off its residuals and swaps,
+  re-ran each rule on the units' own sequences and priced Rev F at its own cycle, landing all seven results inside their
+  bands, so the careful column is about 96 and the chain goes back to stage 2.

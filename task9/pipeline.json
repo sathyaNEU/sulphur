@@ -4,8 +4,8 @@
   "domain": "general-statistics-data-science",
   "subdomain": "interpretability",
   "objective": "root-cause",
-  "stage": 4,
-  "stage_name": "check",
+  "stage": 2,
+  "stage_name": "design",
   "updated": "2026-11-11",
   "doctrine": "throughout",
   "call": "take the conditioner disk out of the full PM and change it at about 1,570 wafers on PU-1 and PU-2 and 1,200 on PU-3 and PU-4, saving about USD 288,000 a year against Rev F",
@@ -25,17 +25,19 @@
     "nearest": "task15 (shape), mark115 skeleton (severity none)"
   },
   "judge": {
-    "verdict": "",
-    "disposition": "",
-    "gate_h": "",
-    "report": ""
+    "verdict": "DETERMINISTIC",
+    "disposition": "FIX_NOW",
+    "gate_h": "domain pass, layers pass, 7 results in 5 areas, one_thing none; stump power moderate with a too-easy risk",
+    "report": "task9/determinism_check_report.md",
+    "first_pass": "landed R1 to R7 inside their bands (R4's PU-4 onset 768 against a floor of 770)"
   },
-  "paper_pair": 38.2,
+  "paper_pair": 96,
   "effort": {
     "quick": 7.0,
     "careful": 38.2,
     "thorough": 100.0,
-    "largest_hint": "the ring already costing yield before April (rescues R1, R2: 2 of 7)"
+    "largest_hint": "the ring already costing yield before April (rescues R1, R2: 2 of 7)",
+    "careful_repriced_on_judge": 96
   },
   "runs": {
     "run1": null,
@@ -51,7 +53,7 @@
     "history": []
   },
   "returned": [],
-  "resume": "stage 4: the leak reader ran (nothing hands over a method or an answer; its two realism tells, the cost file's costing paragraph and the Rev G draft's wording, are rewritten and re-gated, gates.py --full 0 FAIL). The determinism judge's wrapper had no Agent tool, so its isolated thread was spawned from /tmp/determinism-check-task9-210105/judge_brief.md and is deriving. Next: re-invoke the wrapper with that folder's verdict.md and own_derivation.md to write determinism_check_report.md; fix every finding in one generator pass; re-run the reader once (two documents changed); read the thread's first-pass figures against the careful column; then READY with both zips",
+  "resume": "stage 2: the stage 4 judge's blind first pass landed R1 to R7 inside their bands (careful column re-priced to about 96); redesign the chain around judgments a blind careful pass does not make, or re-root at the author's word; the judge's answer-block fixes (PU-3 and PU-4 lower bands, per-pair saving bands, ask 3's candidate list, the volume split) carry into whichever chain follows; the author's choice is pending: redesign this chain at stage 2, re-root to Concept 3, or ship to measure",
   "approved": null,
   "submitted": null,
   "portal": {
@@ -94,6 +96,10 @@
     {
       "date": "2026-11-11",
       "event": "stage 3 closed: verify.py 23 of 23, golden-realism pass on the deck, gates.py --full 0 FAIL; stage 4 launched"
+    },
+    {
+      "date": "2026-11-11",
+      "event": "stage 4: leak reader clean of method and answer leaks (two realism tells fixed); judge DETERMINISTIC FIX_NOW, but its blind first pass landed every result, so back to stage 2"
     }
   ]
 }
