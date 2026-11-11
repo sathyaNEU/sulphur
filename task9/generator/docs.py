@@ -41,8 +41,7 @@ vault_events). A retired vault's drives are removed with reason `DECOM` over a f
 
 ## DC-3
 
-DC-3 joined the fleet with the Brightstore acquisition. Its drives were moved into Halden's inventory on 2024-03-01
-and its telemetry starts that day; the handover workbook from Brightstore is the record of what came across.
+DC-3 joined the fleet with the Brightstore acquisition; its racks were moved into Halden's inventory on 2024-03-01.
 """.format(rel=P.PEOPLE["reliability"])
 
 KESTREL = dict(

@@ -1,0 +1,142 @@
+{
+ "task": "task9",
+ "title": "Halden Vault's drive replacements for 2026-Q4 to 2027-Q3: the quarterly path with its range, the fourth quarter's spare order and the HX-8 bad builds' migration",
+ "domain": "General Statistics & Data Science, Bayesian modeling & posterior inference",
+ "task_type": "Bayesian modeling and posterior inference (a posterior predictive forecast of replacement counts from a hierarchical hazard model)",
+ "objective": "Forecasting & Predictive Modeling",
+ "as_of": "2026-11-11",
+ "setting_date": "2026-09-30",
+ "deliverables": [
+  "halden_replacement_forecast_2026Q4_2027Q3.xlsx",
+  "halden_replacement_path_2026Q4_2027Q3.png"
+ ],
+ "distractor_files": [
+  "dc_environment_daily.csv",
+  "vendor_datasheets.pdf",
+  "ssd_boot_drive_stats.csv"
+ ],
+ "input_gates": {
+  "files": 13,
+  "formats": [
+   "csv",
+   "md",
+   "pdf",
+   "png",
+   "xlsx",
+   "yaml"
+  ],
+  "categories": [
+   "code",
+   "image",
+   "spreadsheet",
+   "text"
+  ],
+  "largest_file": "drive_quarter_stats.csv",
+  "largest_file_rows": 979011,
+  "long_file": "drive_inventory.csv",
+  "long_file_rows": 84507,
+  "tickets_rows": 5810,
+  "events_rows": 147
+ },
+ "sources": [
+  {
+   "files": "every file",
+   "origin": "written for this task. Halden Vault, Brightstore, Kestrel Data Products, Meridian, Tamsin, Borealis, the drives, vaults, tickets and paperwork are invented; the fleet is simulated day by day per vault (manufacture batches and deploy lags, family wear-out hazards with an infant term, vault and batch frailty, one manufacturing window whose hazard ramps with age, chassis power and cooling incidents, SMART precursors and two health-pull policies, replacements into the same slot, selective decommissioning, and an acquired data centre whose records start at its migration), and every record is written from that process.",
+   "date": "2026-11-11",
+   "license": "CC BY 4.0 (original work)"
+  }
+ ],
+ "files": [
+  {
+   "path": "brightstore_handover.xlsx",
+   "format": "xlsx",
+   "bytes": 446243,
+   "covers": "Brightstore's handover workbook: the rack manifest, purchase batches and its own failure summary",
+   "made": "written by task9/generator (world.py, pack.py, docs.py) from the simulated fleet (deterministic)"
+  },
+  {
+   "path": "capacity_plan_2027.xlsx",
+   "format": "xlsx",
+   "bytes": 6230,
+   "covers": "the vault installs scheduled for 2026-Q4 to 2027-Q3",
+   "made": "written by task9/generator (world.py, pack.py, docs.py) from the simulated fleet (deterministic)"
+  },
+  {
+   "path": "dc_environment_daily.csv",
+   "format": "csv",
+   "bytes": 166514,
+   "covers": "daily temperature and humidity by data centre",
+   "made": "written by task9/generator (world.py, pack.py, docs.py) from the simulated fleet (deterministic)"
+  },
+  {
+   "path": "drive_inventory.csv",
+   "format": "csv",
+   "bytes": 11733389,
+   "covers": "every serial seen in a vault slot since 2022: model, vault, chassis, slot, install, first and last seen, removal date and reason, firmware, purchase order",
+   "made": "written by task9/generator (world.py, pack.py, docs.py) from the simulated fleet (deterministic)"
+  },
+  {
+   "path": "drive_quarter_stats.csv",
+   "format": "csv",
+   "bytes": 55273927,
+   "covers": "each drive's telemetry rolled up by quarter: days observed, replacement flag, SMART maxima, power-on hours, temperature, firmware",
+   "made": "written by task9/generator (world.py, pack.py, docs.py) from the simulated fleet (deterministic)"
+  },
+  {
+   "path": "fleet_reliability_q3_2026.png",
+   "format": "png",
+   "bytes": 73690,
+   "covers": "the Q3 2026 fleet reliability close-out page: quarterly replacement rates by data centre",
+   "made": "written by task9/generator (world.py, pack.py, docs.py) from the simulated fleet (deterministic)"
+  },
+  {
+   "path": "kestrel_fe118_serial_numbers_and_firmware.pdf",
+   "format": "pdf",
+   "bytes": 34328,
+   "covers": "the drive vendor's field guide to its serial numbers and factory firmware",
+   "made": "written by task9/generator (world.py, pack.py, docs.py) from the simulated fleet (deterministic)"
+  },
+  {
+   "path": "ops_policy_wiki.md",
+   "format": "md",
+   "bytes": 1755,
+   "covers": "the operations wiki page defining replacements, the health-pull policies, spares and decommissioning",
+   "made": "written by task9/generator (world.py, pack.py, docs.py) from the simulated fleet (deterministic)"
+  },
+  {
+   "path": "procurement_and_costs.yaml",
+   "format": "yaml",
+   "bytes": 678,
+   "covers": "spares on hand, lead time, unit costs, the vault-migration and failure-handling costs, the stock-out tolerance",
+   "made": "written by task9/generator (world.py, pack.py, docs.py) from the simulated fleet (deterministic)"
+  },
+  {
+   "path": "removal_tickets.csv",
+   "format": "csv",
+   "bytes": 792616,
+   "covers": "the data-centre technicians' removal tickets with their free-text notes",
+   "made": "written by task9/generator (world.py, pack.py, docs.py) from the simulated fleet (deterministic)"
+  },
+  {
+   "path": "ssd_boot_drive_stats.csv",
+   "format": "csv",
+   "bytes": 220155,
+   "covers": "boot SSD telemetry",
+   "made": "written by task9/generator (world.py, pack.py, docs.py) from the simulated fleet (deterministic)"
+  },
+  {
+   "path": "vault_events.csv",
+   "format": "csv",
+   "bytes": 11123,
+   "covers": "vault life events: commissioning, the Brightstore migration, decommissioning reviews and work, logged chassis power events and cooling excursions",
+   "made": "written by task9/generator (world.py, pack.py, docs.py) from the simulated fleet (deterministic)"
+  },
+  {
+   "path": "vendor_datasheets.pdf",
+   "format": "pdf",
+   "bytes": 41077,
+   "covers": "the drive vendors' published reliability specifications",
+   "made": "written by task9/generator (world.py, pack.py, docs.py) from the simulated fleet (deterministic)"
+  }
+ ]
+}

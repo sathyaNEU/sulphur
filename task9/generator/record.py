@@ -148,8 +148,98 @@ class Record:
         d["age_source"] = ""
         for i, _, how in rebuilt:
             d.at[i, "age_source"] = how
-        d["hot"] = (d.family == "HX-8") & d.build.notna() & (d.build >= pd.Timestamp(dt.date.fromisocalendar(*P.HOT["first"], 1))) & \
-            (d.build <= pd.Timestamp(dt.date.fromisocalendar(*P.HOT["last"], 7))) & (d.firmware == P.HOT["firmware"])
+
+    # ---- the batch carrying the elevated hazard, found from the last year's replacements at a cut
+    def hot_flags(self, cut, how="scan", min_llr=25.0, widen=0):
+        """A boolean per drive: the HX-8 drives whose replacement rate over the year to `cut` stands out. `scan` finds the
+        contiguous run of build weeks (from the serial) with the largest likelihood ratio against the rest of the
+        family; `firmware` takes the firmware release with the largest one; `vaults` the vaults whose rates stand
+        out. Nothing is flagged when the evidence is under `min_llr`."""
+        d = self.d
+        cut = pd.Timestamp(cut)
+        a = cut - pd.Timedelta(days=365)
+        flags = pd.Series(False, index=d.index)
+        hx = d[(d.family == "HX-8") & (d.entry <= cut)]
+        if not len(hx):
+            return flags
+        lo = np.maximum(hx.entry.values.astype("datetime64[D]"), np.datetime64(a.date()))
+        ex_c = hx.exit.where(hx.exit <= cut, cut)
+        hi = np.minimum(ex_c.values.astype("datetime64[D]"), np.datetime64(cut.date()))
+        X = np.clip((hi - lo).astype(float), 0, None) / 365.25
+        O = (hx.event & (hx.removal_date > a) & (hx.removal_date <= cut)).values.astype(float)
+        # each vault's own level over the record before that year, shrunk to the family (ten events' weight)
+        lo0 = hx.entry.values.astype("datetime64[D]")
+        hi0 = np.minimum(ex_c.values.astype("datetime64[D]"), np.datetime64(a.date()))
+        X0 = np.clip((hi0 - lo0).astype(float), 0, None) / 365.25
+        O0 = (hx.event & (hx.removal_date <= a)).values.astype(float)
+        vs = hx.vault_id.values
+        r0 = O0.sum() / max(X0.sum(), 1e-9)
+        lvl = {}
+        for v in np.unique(vs):
+            m = vs == v
+            lvl[v] = (O0[m].sum() + 10.0) / (X0[m].sum() * r0 + 10.0) if r0 > 0 else 1.0
+        X = X * np.array([lvl[v] for v in vs])
+        self.hot_levels = lvl
+        tot_o, tot_x = O.sum(), X.sum()
+        if tot_o <= 0 or tot_x <= 0:
+            return flags
+
+        def llr(o, x):
+            oo, xx = tot_o - o, tot_x - x
+            if o <= 0 or x <= 0 or xx <= 0 or o / x <= oo / max(xx, 1e-9):
+                return 0.0
+            r0 = tot_o / tot_x
+            v = o * np.log(o / x / r0) + (oo * np.log(oo / xx / r0) if oo > 0 else 0.0)
+            return float(v)
+        if how == "scan":
+            wk = hx.build
+            ok = wk.notna().values
+            idx = ((wk[ok] - pd.Timestamp(2020, 12, 28)).dt.days // 7).astype(int).values
+            weeks = np.unique(idx)
+            o_w = np.array([O[ok][idx == w].sum() for w in weeks])
+            x_w = np.array([X[ok][idx == w].sum() for w in weeks])
+            co, cx = np.concatenate([[0], np.cumsum(o_w)]), np.concatenate([[0], np.cumsum(x_w)])
+            best = (0.0, None)
+            for i in range(len(weeks)):
+                for j in range(i, len(weeks)):
+                    v = llr(co[j + 1] - co[i], cx[j + 1] - cx[i])
+                    if v > best[0]:
+                        best = (v, (weeks[i], weeks[j]))
+            self.hot_scan = dict(llr=best[0], window=None)
+            if best[1] is None or best[0] < min_llr:
+                return flags
+            w0, w1 = best[1][0] - widen, best[1][1] + widen
+            start = pd.Timestamp(2020, 12, 28) + pd.Timedelta(weeks=int(w0))
+            end = pd.Timestamp(2020, 12, 28) + pd.Timedelta(weeks=int(w1), days=6)
+            self.hot_scan["window"] = (start, end)
+            flags.loc[hx.index[ok]] = ((wk[ok] >= start) & (wk[ok] <= end)).values
+            return flags
+        if how == "firmware":
+            best = (0.0, None)
+            for fw in hx.firmware.unique():
+                m = (hx.firmware == fw).values
+                v = llr(O[m].sum(), X[m].sum())
+                if v > best[0]:
+                    best = (v, fw)
+            if best[1] is None or best[0] < min_llr:
+                return flags
+            flags.loc[hx.index[(hx.firmware == best[1]).values]] = True
+            return flags
+        if how == "vaults":
+            vs = hx.vault_id.values
+            rates = sorted(((O[vs == v].sum() / max(X[vs == v].sum(), 1e-9), v) for v in np.unique(vs)), reverse=True)
+            best = (0.0, [])
+            for k in range(1, len(rates)):
+                take = [v for _, v in rates[:k]]
+                m = np.isin(vs, take)
+                val = llr(O[m].sum(), X[m].sum())
+                if val > best[0]:
+                    best = (val, take)
+            if best[0] < min_llr:
+                return flags
+            flags.loc[hx.index[np.isin(vs, best[1])]] = True
+            return flags
+        raise ValueError(how)
 
     def _first_poh(self):
         q = pd.read_csv(os.path.join(self.tgt, PK.F["quarters"]), usecols=["serial", "quarter", "days_observed", "smart_9_hours_end"],

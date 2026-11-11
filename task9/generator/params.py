@@ -8,7 +8,7 @@ records. The analysis never reads this file's world parameters; it reads the pac
 """
 import datetime as dt
 
-SEED = 9011
+SEED = 9017
 FIRM = "Halden Vault"
 ACQUIRED = "Brightstore"
 ZONE = "America/Chicago"
@@ -60,10 +60,10 @@ SPARE_LAG = (150.0, 0.45)              # a spare's manufacture to its install as
 REPLACE_DAYS = (1, 6)                  # a failed or pulled drive's slot is refilled this many days later
 
 VAULT_FRAILTY = (6.0, 1 / 6.0)          # gamma shape and scale: mean 1, cv 0.41
-BATCH_FRAILTY = (12.0, 1 / 12.0)       # gamma shape and scale: mean 1, cv 0.29
+BATCH_FRAILTY = (30.0, 1 / 30.0)       # gamma shape and scale: mean 1, cv 0.18
 BATCH_WEEKS = 8                        # a manufacturing batch is an eight-week build window
 
-HOT = dict(family="HX-8", first=(2024, 14), last=(2024, 30), firmware="HX8.2.0", fixed="HX8.2.3",
+HOT = dict(family="HX-8", first=(2024, 16), last=(2024, 30), firmware="HX8.2.0", fixed="HX8.2.3",
            onset_months=13.0, doubling_months=6.0, cap=25.0)
 FIRMWARE = {"HX-8": [((2023, 1), "HX8.1.4"), ((2024, 10), "HX8.2.0"), ((2024, 31), "HX8.2.3")],
             "KS-10": [((2018, 1), "KS10.3.2")], "VB-12": [((2019, 1), "BV12.07")],

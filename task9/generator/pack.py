@@ -5,7 +5,7 @@
   removal_tickets.csv                 the data-centre technicians' tickets
   vault_events.csv                    vault life events (commissioning, migration, reviews, decommissioning, incidents)
   brightstore_handover.xlsx           Brightstore's handover workbook (rack manifest, purchase batches, failure summary)
-  kestrel_serial_and_firmware_notes.pdf   the vendor's field guide
+  kestrel_fe118_serial_numbers_and_firmware.pdf   the vendor's field guide
   ops_policy_wiki.md                  the operations wiki page on replacements, health pulls and decommissioning
   capacity_plan_2027.xlsx             installs scheduled for the year ahead
   procurement_and_costs.yaml          spares on hand, lead time and costs
@@ -33,7 +33,7 @@ UTC = dt.timezone.utc
 CT = dt.timezone(dt.timedelta(hours=-5))
 F = {
     "inventory": "drive_inventory.csv", "quarters": "drive_quarter_stats.csv", "tickets": "removal_tickets.csv",
-    "events": "vault_events.csv", "handover": "brightstore_handover.xlsx", "kestrel": "kestrel_serial_and_firmware_notes.pdf",
+    "events": "vault_events.csv", "handover": "brightstore_handover.xlsx", "kestrel": "kestrel_fe118_serial_numbers_and_firmware.pdf",
     "wiki": "ops_policy_wiki.md", "capacity": "capacity_plan_2027.xlsx", "costs": "procurement_and_costs.yaml",
     "closeout": "fleet_reliability_q3_2026.png", "env": "dc_environment_daily.csv", "datasheets": "vendor_datasheets.pdf",
     "ssd": "ssd_boot_drive_stats.csv",
@@ -233,8 +233,8 @@ class Pack:
     # ---- drive_quarter_stats.csv
     def quarters(self, path):
         rng = self.rng
-        cols = ["serial", "quarter", "vault_id", "days_observed", "replaced_flag", "smart_5_max", "smart_187_max",
-                "smart_197_max", "smart_198_max", "smart_9_hours_end", "temp_c_mean", "firmware"]
+        cols = ["serial", "quarter", "vault_id", "days_observed", "replaced_in_qtr", "smart_5_max", "smart_187_max",
+                "smart_197_max", "smart_198_max", "smart_9_hours_end", "avg_temp_c", "firmware"]
         n = 0
         with open(path, "w", newline="") as fh:
             w = csv.writer(fh)
@@ -532,7 +532,7 @@ class Pack:
         rng = self.rng
         with open(path, "w", newline="") as fh:
             w = csv.writer(fh)
-            w.writerow(["date", "dc", "inlet_temp_c_mean", "inlet_temp_c_max", "rel_humidity_pct"])
+            w.writerow(["date", "dc", "inlet_avg_c", "inlet_max_c", "rel_humidity_pct"])
             d = P.REC_START
             while d <= P.END:
                 for dc, base in (("DC-1", 22.0), ("DC-2", 23.1), ("DC-3", 24.0)):
@@ -560,7 +560,7 @@ class Pack:
         n = 0
         with open(path, "w", newline="") as fh:
             w = csv.writer(fh)
-            w.writerow(["serial", "quarter", "dc", "host", "wear_level_pct", "media_errors", "power_on_hours", "temp_c_mean"])
+            w.writerow(["serial", "quarter", "dc", "host", "wear_level_pct", "media_errors", "power_on_hours", "avg_temp_c"])
             for i in range(380):
                 s = "SB%09d" % rng.integers(0, 10 ** 9)
                 dc = ["DC-1", "DC-2", "DC-3"][i % 3]

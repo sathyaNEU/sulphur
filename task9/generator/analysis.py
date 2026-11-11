@@ -16,7 +16,7 @@ import params as P
 
 FAMS = ["OM-6", "M-14", "M-16", "T-20", "W-22", "HX-8", "KS-10", "VB-12"]
 DCS = ["DC-1", "DC-2", "DC-3"]
-BAND_Y = 0.5                     # age bands of half a year for the hazard fit
+BAND_Y = 0.5                     # age bands of half a year for the hazard fit (months in the first year)
 INFANT_MONTHS = 6.0
 
 
@@ -58,14 +58,21 @@ def poisson_glm(X, y, off, w=None, iters=60):
 
 class Analysis:
     def __init__(self, rec, cut=P.END, spur_from=dt.date(2025, 9, 1), frailty=True, ages="rebuilt", events="split",
-                 hot="bma", spread="overdispersed", seed=P.SEED, infant=None, shrink=True):
+                 hot="bma", spread="overdispersed", seed=P.SEED, infant=None, shrink=True, hot_set="scan", hot_scale=1.0,
+                 ramp_slow=1.0, migrate_rule="vault"):
         self.rec = rec
+        self.hot_set = hot_set
+        self.hot_scale, self.ramp_slow = hot_scale, ramp_slow     # perturbations: the batch's level, its forward growth
+        self.migrate_rule = migrate_rule      # "vault": each vault on its own replacements; "batch": every batch vault on the batch's share
         self.cut = pd.Timestamp(cut)
         self.spur_from = pd.Timestamp(spur_from)
         self.frailty, self.ages, self.events, self.hot_mode, self.spread = frailty, ages, events, hot, spread
         self.infant_fixed, self.shrink = infant, shrink
         self.rng = np.random.default_rng(seed)
         d = rec.d.copy()
+        how, _, widen = hot_set.partition(":")
+        d["hot"] = rec.hot_flags(cut, how, widen=int(widen or 0)).values
+        self.hot_window = getattr(rec, "hot_scan", {}).get("window") if how == "scan" else None
         if ages == "first_seen":
             d["install"] = d.install_date
         d = d[d.entry <= self.cut].copy()
@@ -96,12 +103,13 @@ class Analysis:
             m = (fam == f) & ok
             if not m.any():
                 continue
-            nb = int(np.ceil(max(a1[m].max(), 0.5) / BAND_Y)) + 1
-            edges = np.arange(nb + 1) * BAND_Y
+            top = int(np.ceil(max(a1[m].max(), 1.0) / BAND_Y)) + 1
+            edges = np.concatenate([np.arange(12) / 12.0, np.arange(1.0 / BAND_Y, top + 1) * BAND_Y])
+            nb = len(edges) - 1
             expo = np.zeros(nb)
             for k in range(nb):
                 expo[k] = np.clip(np.minimum(a1[m], edges[k + 1]) - np.maximum(a0[m], edges[k]), 0, None).sum()
-            cnt = np.bincount(np.clip((evage[m & e] / BAND_Y).astype(int), 0, nb - 1), minlength=nb)
+            cnt = np.bincount(np.clip(np.searchsorted(edges, evage[m & e], side="right") - 1, 0, nb - 1), minlength=nb)
             for k in range(nb):
                 if expo[k] > 0.5:
                     rows.append((f, (edges[k] + edges[k + 1]) / 2, expo[k], cnt[k]))
@@ -382,18 +390,21 @@ class Analysis:
                     continue
                 e = self._cum(f, a0[m], a1[m])
                 mid = (a0[m] + a1[m]) / 2
-                la = np.log(np.maximum(mid, 0.05))
+                la = np.log(np.maximum(mid, 1.0 / 24))      # a draw's slope is read where the curves were fitted
                 inf = np.exp(-mid * 12.0 / self.infant_months)
                 hotm = live.hot.values[m]
                 mon = ((a + (b - a) / 2) - live.build[m]).dt.days.values / 30.4375
+                if self.ramp_slow != 1.0:
+                    mcut = (self.cut - live.build[m]).dt.days.values / 30.4375
+                    mon = mcut + (mon - mcut) / self.ramp_slow
                 vv = live.vault_id.values[m]
                 for v in np.unique(vv):
                     for hv in (False, True):
                         mv = (vv == v) & (hotm == hv)
                         if not mv.any():
                             continue
-                        ab = self.vault_ab.get((f, v), (1.0, 1.0))
-                        zbar = ab[0] / ab[1]
+                        ab = self.vault_ab.get((f, v))          # None: no frailty fitted, the vault at its family's level
+                        zbar = ab[0] / ab[1] if ab else 1.0
                         ev = e[mv]
                         w = ev / max(ev.sum(), 1e-12)
                         row = dict(q=q, family=f, vault=v, hot=hv, dc=live.dc.values[m][mv][0], drives=int(mv.sum()),
@@ -416,7 +427,7 @@ class Analysis:
                 x0, x1 = max((qa - mid).days, 0) / 365.25, max((qb - mid).days, 0) / 365.25
                 e = self._cum("W-22", np.array([x0]), np.array([x1]))[0] * n * P.VAULT_DRIVES
                 rows.append(dict(q=q, family=fam, vault="NEW-%s-%s" % (qq, dc), hot=False, dc=dc, drives=n * P.VAULT_DRIVES,
-                                 base=float(e), zbar=1.0, ab=None, L=float(np.log(max((x0 + x1) / 2, 0.05))),
+                                 base=float(e), zbar=1.0, ab=None, L=float(np.log(max((x0 + x1) / 2, 1.0 / 24))),
                                  I=float(np.exp(-(x0 + x1) / 2 * 12 / self.infant_months)), spur=self.spur * (x1 - x0) * n * P.VAULT_DRIVES,
                                  ramp=None, curve="W-22"))
         return rows
@@ -482,9 +493,9 @@ class Analysis:
                     rm = np.array([r["ramp"][o][0] for o in opts])[pick]
                     xb = np.array([r["ramp"][o][1] for o in opts])[pick]
                     dh = np.array([hd[opts[p]][i] for i, p in enumerate(pick)])
-                    base = base * np.minimum(rm * np.exp(np.clip(dh[:, 0] + dh[:, 1] * xb, -20, 20)), 60.0)
+                    base = base * np.minimum(rm * np.exp(np.clip(dh[:, 0] + dh[:, 1] * xb, -20, 20)), 60.0) * self.hot_scale
                 else:
-                    base = base * sum(self._mean_ramp(r, k) * w for k, w in self.hot["weights"].items())
+                    base = base * sum(self._mean_ramp(r, k) * w for k, w in self.hot["weights"].items()) * self.hot_scale
             mean[:, j] = base + r["spur"]
         mean = self._deplete(rows, quarters, mean)
         echo = self._echo(rows, quarters, mean)
@@ -580,7 +591,7 @@ def backtest(rec, sims=2000, **kw):
     """Intervals built the same way at 30 September 2025, scored on the four quarters to 30 September 2026: the share of
     family-quarter cells whose count fell inside its 80 per cent interval."""
     A = Analysis(rec, cut=P.BACKTEST_CUT, **kw)
-    rows, counts, mean = A.simulate(P.BACKTEST_Q, sims=sims, draws=(A.spread == "overdispersed"))
+    rows, counts, mean = A.simulate(P.BACKTEST_Q, sims=sims, draws=(A.spread != "poisson"))
     stayed = stayed_vaults(rec, P.BACKTEST_CUT)
     act = quarter_actuals(rec, P.BACKTEST_Q, vaults=stayed)
     cells = []
@@ -599,7 +610,7 @@ def backtest(rec, sims=2000, **kw):
 
 def decisions(A, sims=4000):
     """The fourth-quarter spare order per family at the stock-out tolerance, and the hot batch's migrate call."""
-    rows, counts, mean = A.simulate(P.FORECAST_Q, sims=sims, draws=(A.spread == "overdispersed"))
+    rows, counts, mean = A.simulate(P.FORECAST_Q, sims=sims, draws=(A.spread != "poisson"))
     q4 = P.FORECAST_Q[0]
     spares = {}
     for f in FAMS + ["X-24"]:
@@ -609,16 +620,31 @@ def decisions(A, sims=4000):
         t = counts[:, idx].sum(axis=1)
         need = float(np.percentile(t, 100 * (1 - P.COSTS["stockout"])))
         spares[f] = dict(p90=need, mean=float(t.mean()), order=max(int(np.ceil(need)) - P.SPARES_ON_HAND.get(f, 0), 0))
-    # migrate: the hot vaults' replacements over 24 months against the break-even fraction
+    # migrate: over the 24 months from 1 October 2026 a vault pays when its replacements exceed the break-even share of its
+    # 1,200 drives; the batch's own share is the same test for a vault made wholly of the batch
     qs8 = P.FORECAST_Q + ["2027Q4", "2028Q1", "2028Q2", "2028Q3"]
-    r8, c8, m8 = A.simulate(qs8, sims=sims, draws=(A.spread == "overdispersed"))
+    r8, c8, m8 = A.simulate(qs8, sims=sims, draws=(A.spread != "poisson"))
     hot = [j for j, r in enumerate(r8) if r["hot"]]
     drives = sum(r["drives"] for r in r8 if r["hot"] and r["q"] == qs8[0])
     frac = c8[:, hot].sum(axis=1) / max(drives, 1)
     be = P.COSTS["migrate_vault"] / (P.VAULT_DRIVES * P.COSTS["failure_handling"])
+    line = be * P.VAULT_DRIVES
+    vaults = {}
+    for v in sorted({r["vault"] for r in r8 if r["hot"]}):
+        idx = [j for j, r in enumerate(r8) if r["vault"] == v]
+        n_hot = sum(r["drives"] for r in r8 if r["vault"] == v and r["hot"] and r["q"] == qs8[0])
+        n_all = sum(r["drives"] for r in r8 if r["vault"] == v and r["q"] == qs8[0])
+        if n_all <= 0 or n_hot < 0.10 * n_all:
+            continue
+        x = c8[:, idx].sum(axis=1)
+        vaults[v] = dict(drives=int(n_all), batch=int(n_hot), mean=float(x.mean()), p_pays=float((x > line).mean()))
+    if A.migrate_rule == "vault":
+        pick = sorted(v for v, s in vaults.items() if s["mean"] > line)
+    else:
+        pick = sorted(vaults) if float(frac.mean()) > be else []
     return dict(spares=spares, frac_mean=float(frac.mean()), frac_p10=float(np.percentile(frac, 10)),
                 frac_p90=float(np.percentile(frac, 90)), p_pays=float((frac > be).mean()), breakeven=be, hot_drives=int(drives),
-                flip_doubling=flip_doubling(A, be))
+                flip_doubling=flip_doubling(A, be), vaults=vaults, migrate=pick, line=line)
 
 
 def flip_doubling(A, be):

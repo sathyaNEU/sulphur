@@ -4,38 +4,38 @@
   "domain": "general-statistics-data-science",
   "subdomain": "bayesian-modeling-posterior-inference",
   "objective": "forecasting",
-  "stage": 2,
-  "stage_name": "design",
+  "stage": 4,
+  "stage_name": "check",
   "updated": "2026-11-11",
   "doctrine": "throughout",
-  "call": null,
-  "chain": "R1 DC-3's replacements over the four quarters (ages rebuilt from serials); R2 the hot batch named with its current annualized rate; R3 its four-quarter replacements with the doubling time; R4 the surviving OM-6 vaults' forward rate and count; R5 the fleet's quarterly path; R6 its 80% bands; R7 the back-test coverage of intervals built the same way; R8 the Q4 spare order per family and the migrate call with its flip point",
+  "call": "plan about 2,483 replacements for 2026-Q4 to 2027-Q3 (80% interval 2,266 to 2,713); migrate B16, B17, B18, B19 in Q4 2026 and run B15; order 402 spares for Q4",
+  "chain": "R1 DC-3's four-quarter replacements (ages rebuilt); R2 the bad-build batch (HX-8 builds of 2024 weeks 16 to 30, not the HX8.2.0 firmware) with its drives in service and July to September 2026 rate; R3 its four-quarter replacements; R4 the surviving OM-6 vaults' four-quarter replacements; R5 the fleet's quarterly path with its 80% interval; R6 the coverage of intervals built the same way at 30 September 2025; R7 the Q4 spare order per family; R8 the vaults to migrate, each on its own 24-month replacements, and the doubling time at which migration stops paying",
   "architecture": 1,
   "loops": 0,
   "precut": {
-    "exit": null,
-    "date": ""
+    "exit": 0,
+    "date": "2026-11-11"
   },
   "leak": {
-    "leak_py": "",
-    "reader": ""
+    "leak_py": "REVIEW (no LEAK)",
+    "reader": "no leak; nothing planted; no single item makes the asks routine"
   },
   "duplicate_check": {
     "heart": "",
     "nearest": ""
   },
   "judge": {
-    "verdict": "",
-    "disposition": "",
-    "gate_h": "",
-    "report": ""
+    "verdict": "NOT_DETERMINISTIC",
+    "disposition": "SEND_BACK",
+    "gate_h": "pass on domain and layers; one_thing shallow_hidden_factor (the build window) limited to R2, R3, R8",
+    "report": "task9/determinism_check_report.md"
   },
-  "paper_pair": null,
+  "paper_pair": 40.2,
   "effort": {
-    "quick": null,
-    "careful": null,
-    "thorough": null,
-    "largest_hint": ""
+    "quick": 10.0,
+    "careful": 40.2,
+    "thorough": 100.0,
+    "largest_hint": "The vaults retired at the reviews were the ones failing fastest (rescues 2 of 8)"
   },
   "runs": {
     "run1": null,
@@ -51,7 +51,7 @@
     "history": []
   },
   "returned": [],
-  "resume": "stage 2 into 3: the generator is written and calibrated on seed 9011 (params, world, pack, docs, record, analysis, figures): fleet about 2,060 replacements for 2026-Q4 to 2027-Q3, DC-3 461 (375 aged from the inventory), hot batch 607 (480 at its recent rate), surviving OM-6 242 (281 pooled over every vault), back-test coverage 0.72 against 0.56 for Poisson, migrate pays in 97% of draws. Next: nine results (DC-3, the hot batch's current rate and count, OM-6, the fleet path, the interval with its width, the back-test coverage, the spare orders, the migrate call), effort_passes with the careful pass as one curve per family, Poisson counts and an exponential ramp; then the design note to precut, golden.py (workbook and chart), writeup, checks, verify, build.py, two builds, gates, stage 4, READY.",
+  "resume": "stage 4 returned SEND_BACK on the migration call (R8): the cost convention, the decision unit, the batch vaults' levels and a plateau reading of the batch's path are open, and the judge found the bad build window at once, so R2 is earned and the honest cited pair is near 58 to 65. Repairing determinism alone (pin the costs in the YAML, per-vault wording in the prompt, vault levels from every drive, a capped ramp in the model average, a seed with a clean ramp) does not bring the difficulty to the bar. The author decides: redesign Concept 1 around new lessons (for example a defective sub-population that depletes, so the pooled rising trend overstates the batch's path), build Concept 2 or 3 instead, or retire the slot. Every free gate passed on the seed 9017 build before the judge (precut 0 FAIL, effort cited pair 40.2 on the firmware-story careful route, figures, containers, heart, surface; leak REVIEW only).",
   "approved": null,
   "submitted": null,
   "portal": {
@@ -70,6 +70,15 @@
     {
       "date": "2026-11-11",
       "event": "generator written and calibrated; paused after a worker restart"
+    },
+    {
+      "date": "2026-11-11",
+      "event": "built on seed 9017: the batch found by build-week scan, the per-vault migration call, the survivors' own levels; stage 4 launched"
+    },
+    {
+      "date": "2026-11-11",
+      "event": "stage 4: leak reader clean; determinism judge NOT_DETERMINISTIC, SEND_BACK on the migration call; paused for the author's decision"
     }
-  ]
+  ],
+  "seed": 9017
 }

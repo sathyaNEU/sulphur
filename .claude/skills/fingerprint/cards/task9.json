@@ -1,679 +1,692 @@
 {
-  "task": "task9",
-  "project": "sulfur",
-  "architecture": "v1",
-  "drawn": "2026-11-11",
-  "slot_note": "slot cleared by the author on 2026-11-11 (architectures 1 to 10, quantitative finance, kept in lineage); new build from the author's Concept 1",
-  "domain": "general-statistics-data-science",
-  "subdomain": "bayesian-modeling-posterior-inference",
-  "client_domain": "general-statistics-data-science",
-  "client_subdomain": "Bayesian modeling & posterior inference",
-  "niche": "a cloud backup provider's posterior predictive forecast of quarterly drive replacements across three data centres, one acquired mid-life with its early failures unrecorded and its worst old vaults already retired",
-  "objective": "forecasting",
-  "shape": "02",
-  "decision_type": "quantity_figure",
-  "answer_unit": "count",
-  "answer": "",
-  "answer_source": "",
-  "gap": [
+ "task": "task9",
+ "project": "sulfur",
+ "architecture": "v1",
+ "drawn": "2026-11-11",
+ "slot_note": "slot cleared by the author on 2026-11-11 (architectures 1 to 10, quantitative finance, kept in lineage); new build from the author's Concept 1",
+ "domain": "general-statistics-data-science",
+ "subdomain": "bayesian-modeling-posterior-inference",
+ "client_domain": "general-statistics-data-science",
+ "client_subdomain": "Bayesian modeling & posterior inference",
+ "niche": "a cloud backup provider's posterior predictive forecast of quarterly drive replacements across three data centres, one acquired mid-life with its early failures unrecorded and its worst old vaults already retired",
+ "objective": "forecasting",
+ "shape": "02",
+ "decision_type": "quantity_figure",
+ "answer_unit": "count",
+ "answer": "Plan on about 2,483 drive replacements from October 2026 to September 2027 (80 per cent interval 2,266 to 2,713), rising from 553 in the fourth quarter to 701 in the third quarter of 2027, and migrate vaults B16, B17, B18 and B19 this quarter, leaving B15 to run: the HX-8 drives built in 2024 week 16 to 2024 week 30 are failing at an accelerating rate and fill those vaults, while B15 holds only 387 of them and its own replacements over 24 months (146) fall short of the 240 a migration needs; migration stays the cheaper choice unless the batch's rate doubles more slowly than every 24.1 months. Rejected: the close-out's rates carried forward (about 1,861 replacements and no migration), blaming the HX8.2.0 firmware (which takes in 988 drives that are not failing, migrates all five vaults and moves the flip point to 18.1 months), and migrating every vault on the batch's average.",
+ "answer_source": "task9/submission.md, Final Recommendation (generator/writeup.py from figures.json)",
+ "gap": [
+  "population",
+  "time"
+ ],
+ "pattern": [
+  "E"
+ ],
+ "generators": [
+  "G9",
+  "G14",
+  "G16"
+ ],
+ "gate_g": "forecasting",
+ "calibration_form": "existing_book_actuals",
+ "stump_strategy": "forecast_method_backtest",
+ "decisive_rule_filed": false,
+ "official_decoy": false,
+ "validated_decoy": false,
+ "context_artifact": "close_out_summary",
+ "stump_class": "analytical",
+ "analyst_test": "The careful but hurried review rebuilds DC-3's ages, fits a censored age curve per family with a ramp for the elevated HX-8 drives and bootstraps its bands, but takes the HX8.2.0 firmware as the batch, pools each family over every vault and migrates every vault holding the batch on the batch's average share: it counts a thousand normal drives into the batch at a diluted rate, prices the surviving OM-6 vaults about a fifth high, under-covers the back-test, and migrates B15, which holds a third of the batch and does not pay.",
+ "domain_test": "Forecasting replacements as a posterior predictive count from a hierarchical hazard model (age, batch and vault effects pooled partially, lifetimes truncated at an acquisition and thinned by selective retirement, a defect batch's accelerating hazard, shocks shared within a chassis) is the reliability statistician's own work; swap in patients or subscribers and the vaults, chassis shocks, health-pull policy and spare lead time stop making sense.",
+ "layer2_family": "forecast_uncertainty",
+ "layer2_pattern": "own:truncated-thinned-fleet-forecast",
+ "layer1": [
+  "acquired-site install dates set at migration",
+  "model-string aliases",
+  "mixed date formats",
+  "duplicate rows",
+  "RMA returns to service",
+  "blank removal reasons recovered from ticket text",
+  "boot SSDs and a QA vault in the inventory",
+  "agent outage gaps",
+  "serials in two formats across the handover"
+ ],
+ "stakeholder_role": "the fleet reliability lead (not named in the prompt)",
+ "role_family": "capacity_planner",
+ "scoring_unit": "per active unit per period",
+ "spine": {
+  "file": "drive_quarter_stats.csv",
+  "rows": 979011,
+  "entity": "one drive in one quarter",
+  "grain": "drive x quarter",
+  "source": "synthetic, simulated from a drive fleet's daily failure, health-pull and decommissioning process"
+ },
+ "forum": "operations_desk",
+ "forcing_event": "cutover_or_migration",
+ "org_family": "software_or_platform",
+ "world": {
+  "geography": "United States (three data centres)",
+  "currency": "USD",
+  "org_type": "cloud backup provider",
+  "invented_names": [
+   "Halden Vault",
+   "Brightstore",
+   "Meridian",
+   "Tamsin",
+   "Kestrel",
+   "Borealis"
+  ],
+  "people": [
+   "Amanda Higgins",
+   "Sandra Collins",
+   "Emily Salas",
+   "Heidi Turner"
+  ]
+ },
+ "deliverables": [
+  "halden_replacement_forecast_2026Q4_2027Q3.xlsx",
+  "halden_replacement_path_2026Q4_2027Q3.png"
+ ],
+ "opening_move": "question-first",
+ "question_form": "how-many",
+ "driver": "The decisive quantities are next year's event counts in a fleet whose worst groups were retired first and whose rising hazard sits in one production window that shares an attribute with normal units, with a per-group action priced on each group's own expected events; read by the shared attribute, a pooled curve and the average group, the shortcuts misplace the window, over-price the survivors and act on a group that does not pay.",
+ "driver_concrete": "Halden Vault plans drive replacements for 2026-Q4 to 2027-Q3: the HX-8 drives built in 2024 weeks 16 to 30 carry an accelerating hazard while the HX8.2.0 firmware they share also ran on normal builds of weeks 10 to 15; the OM-6 vaults left after five reviews are those that failed least; DC-3's drives were installed years before the 2024 migration that dates them; and of the five DC-2 vaults holding the batch, B15 holds a third of it and does not pay for its migration.",
+ "stump": "The careful but hurried review blames the HX8.2.0 firmware, fits one curve per family over every vault and migrates every vault holding the batch on its average share, so it counts about a thousand normal drives into the batch at a diluted rate, prices the surviving OM-6 vaults a fifth high, under-covers the back-test and migrates B15 too, with a flip point about ten months short.",
+ "answer_shape": "forecast-bands-drivers",
+ "weight": "validation",
+ "chain_signature": [
+  "missingness-measurement",
+  "investigation-loops",
+  "forecasting",
+  "modeling",
+  "forecasting",
+  "validation",
+  "synthesis",
+  "synthesis"
+ ],
+ "results": "R1 DC-3's replacements over the four quarters (ages rebuilt from the handover, power-on hours and serials); R2 the bad-build batch (HX-8 builds of 2024 weeks 16 to 30, not the HX8.2.0 firmware) with its drives in service and July to September 2026 rate; R3 its four-quarter replacements; R4 the surviving OM-6 vaults' four-quarter replacements; R5 the fleet's quarterly path with its 80% interval; R6 the coverage of intervals built the same way at 30 September 2025; R7 the Q4 spare order per family; R8 the vaults to migrate (each on its own 24-month replacements) and the doubling time at which migration stops paying",
+ "doctrine": "throughout",
+ "mechanism_source": "the author's Concept 1 (2026-11-10), with the client's strategy 8 (spares for failures never seen start) as the nearest client direction",
+ "differentiation": {
+  "client strategy 8": "an allocation of a fixed spare order across models from truncated hazards; here a forecast path with honest bands back-tested on clustered failures, a ramping defect batch and survivors thinned by selective retirement carry the weight, and the truncation step is one result of eight",
+  "mark124": "mark124 infers each unexamined unit's kind from its group's surviving records under samples drawn toward flagged groups; here each drive family's forward hazard is estimated from lifetimes truncated at an acquisition and thinned by selective retirement, with a ramping defect batch and chassis-clustered shocks carried into back-tested bands",
+  "task9": "the same architecture's card brought up to its built chain at stage 3 (the batch found by build week inside its firmware release, the per-vault migration, the survivors priced on their own levels), not a re-root of the slot"
+ },
+ "lineage": [
+  {
+   "domain": "urban-regional-science",
+   "subdomain": "regional-input-output-economic-impact",
+   "objective": "opportunity-sizing-decision",
+   "shape": "07",
+   "decision_type": "pick_one_of_n",
+   "answer_unit": "currency",
+   "gap": [
+    "objective",
+    "population"
+   ],
+   "pattern": [
+    "none"
+   ],
+   "generators": [
+    "G5",
+    "G14"
+   ],
+   "gate_g": "decomposition_attribution",
+   "driver": "The decisive quantity is the part of a candidate's second-round effect that stays inside the area, when that round runs through the incomes the candidate pays and a published multiplier carries the area's average share of those incomes spent at home; one candidate's earners mostly live outside the area, which only its operator's roster joined to a location lookup shows, so the multiplier credits it with spending that happens elsewhere and ranks it first.",
+   "stump_strategy": "composition_mix",
+   "forum": "committee_or_panel",
+   "forcing_event": "vote_or_meeting",
+   "org_family": "government_agency",
+   "role_family": "programme_officer",
+   "architecture": "v2 (re-root: a development corporation's 2027 inward investment fund award between two projects, the regional GVA each adds once its induced round is read where its staff live)",
+   "drawn": "2026-10-31",
+   "fate": "spent 2026-10-31 at stage 2, before any data was cut: the survivor anatomy's Actor test failed on paper, since the deciding property (where the distribution centre's staff live) is one join from a column (the roster's postcode against the postcode directory's local authority) and any shipped residence datum is a column or a sentence, so the decisive rung would be readable; re-rooted into actuarial reinsurance capital"
+  },
+  {
+   "domain": "energy-systems-utilities",
+   "subdomain": "asset-condition-maintenance",
+   "objective": "opportunity-sizing-decision",
+   "shape": "other",
+   "decision_type": "allocation_to_total",
+   "answer_unit": "count",
+   "gap": [
     "population",
     "time"
-  ],
-  "pattern": [
-    "E"
-  ],
-  "generators": [
-    "G9",
-    "G14",
-    "G16"
-  ],
-  "gate_g": "forecasting",
-  "calibration_form": "existing_book_actuals",
-  "stump_strategy": "forecast_method_backtest",
-  "decisive_rule_filed": false,
-  "official_decoy": false,
-  "validated_decoy": false,
-  "context_artifact": "close_out_summary",
-  "stump_class": "analytical",
-  "analyst_test": "The careful but hurried review fits each drive family's age-hazard on every vault's history, dates the acquired centre's drives from their migration, reads the ramping batch as its family's trailing rate and puts Poisson bands around the sum, so it under-forecasts the acquired centre and the hot batch, over-forecasts the surviving old vaults, and gives bands that would have covered about four quarters in ten.",
-  "domain_test": "Forecasting replacements as a posterior predictive count from a hierarchical hazard model (age, batch and vault effects pooled partially, lifetimes truncated at an acquisition and thinned by selective retirement, a defect batch's accelerating hazard, shocks shared within a chassis) is the reliability statistician's own work; swap in patients or subscribers and the vaults, chassis shocks, health-pull policy and spare lead time stop making sense.",
-  "layer2_family": "forecast_uncertainty",
-  "layer2_pattern": "own:truncated-thinned-fleet-forecast",
-  "layer1": [
-    "acquired-site install dates set at migration",
-    "model-string aliases",
-    "mixed date formats",
-    "duplicate rows",
-    "RMA returns to service",
-    "blank removal reasons recovered from ticket text",
-    "boot SSDs and a QA vault in the inventory",
-    "agent outage gaps",
-    "serials in two formats across the handover"
-  ],
-  "stakeholder_role": "the fleet reliability lead (not named in the prompt)",
-  "role_family": "capacity_planner",
-  "scoring_unit": "per active unit per period",
-  "spine": {
-    "file": "drive_quarter_stats.csv",
-    "rows": 0,
-    "entity": "one drive in one quarter",
-    "grain": "drive x quarter",
-    "source": "synthetic, simulated from a drive fleet's daily failure, health-pull and decommissioning process"
+   ],
+   "pattern": [
+    "none"
+   ],
+   "generators": [
+    "G13",
+    "G6",
+    "G12"
+   ],
+   "gate_g": "forecasting",
+   "driver": "The decisive quantity is next year's failures in an asset base that keeps taking in old units the current roll does not hold yet: a forecast summed over today's roll leaves out the units still to arrive, which arrive past their cover and fail in their first months, so one segment's demand runs a fifth short and its share of a fixed capacity goes to the segments the roll overstates.",
+   "stump_strategy": "maturity_censoring",
+   "forum": "line_manager_or_team",
+   "forcing_event": "purchase_order_or_contract",
+   "org_family": "manufacturer",
+   "role_family": "capacity_planner",
+   "architecture": "v1 (Voltwerk's 2027 EV pack refurbishment slots across five platforms, the used imports still to arrive)",
+   "drawn": "2026-10-24",
+   "fate": "spent 2026-10-31 at the batch 1 triage: shipped 10-24, determinism repair reshipped 10-26; its isolated cold reader landed the call (all five slots and the 3,800 total), and the design note named the decisive step reflex reachable (conditioning a survival curve on survival to the as-of date); re-rooted in a new world"
   },
-  "forum": "operations_desk",
-  "forcing_event": "cutover_or_migration",
-  "org_family": "software_or_platform",
-  "world": {
-    "geography": "United States (three data centres)",
-    "currency": "USD",
-    "org_type": "cloud backup provider",
+  {
+   "domain": "actuarial-science-insurance",
+   "subdomain": "reinsurance-capital",
+   "objective": "opportunity-sizing-decision",
+   "shape": "07",
+   "decision_type": "go_hold_or_stop",
+   "answer_unit": "currency",
+   "gap": [
+    "objective",
+    "population"
+   ],
+   "pattern": [
+    "none"
+   ],
+   "generators": [
+    "G6",
+    "G16"
+   ],
+   "gate_g": "forecasting",
+   "driver": "The decisive quantity is the tail of a forward loss distribution built from simulated years of events and calibrated to the organisation's own recorded losses, when an event that strikes within weeks of the event before it costs more per unit of modelled loss than an event on a quiet spell, a class no column marks and only the order of the record's events rebuilds; one pooled calibration across all events undercosts the later events of a run, which are the only ones a cover on second and later events pays on, and values that cover below its cost.",
+   "stump_strategy": "composition_mix",
+   "forum": "board_of_directors",
+   "forcing_event": "vote_or_meeting",
+   "org_family": "cooperative_or_member_body",
+   "role_family": "procurement_lead",
+   "world": {
+    "geography": "United Kingdom (South West England)",
+    "currency": "GBP",
+    "org_type": "a county farm and rural home mutual insurer",
     "invented_names": [
-      "Halden Vault",
-      "Brightstore",
-      "Meridian",
-      "Tamsin",
-      "Kestrel",
-      "Borealis"
+     "Hartcombe Mutual",
+     "Seaborne Risk",
+     "Penwarden Reinsurance Brokers",
+     "Penhallow Loss Adjusters"
     ],
     "people": [
-      "Amanda Higgins",
-      "Sandra Collins",
-      "Emily Salas",
-      "Heidi Turner"
+     "Mandy George",
+     "Arthur Begum",
+     "Elizabeth Farmer"
     ]
+   },
+   "deliverables": [
+    "windstorm_programme_board_paper_2027.pdf",
+    "windstorm_programme_2027.xlsx"
+   ],
+   "architecture": "v3 (re-root at stage 2: a county farm-and-home mutual's 2027 windstorm reinsurance, whether to add the second-event cover the broker quoted, valued by the 1-in-200 capital it releases once each simulated storm is costed at what the mutual's claims show for storms like it)",
+   "spent": "2026-10-31 at stage 4: the FIX_NOW failed its second pass (pass 2 found the 2026 storms asks open on reopened claim lines' damage day, a rule filed nowhere); the main call held throughout"
   },
-  "deliverables": [
-    "halden_replacement_forecast_2026Q4_2027Q3.xlsx",
-    "halden_replacement_path_2026Q4_2027Q3.png"
-  ],
-  "opening_move": "question-first",
-  "question_form": "how-many",
-  "driver": "The decisive quantities are next year's failures in a fleet whose records start mid-life at one acquired site and whose worst units were retired first, a manufacturing batch whose hazard is accelerating, and intervals that carry the units' shared shocks; read with ages from first sight, a family's pooled history and independent counts, the forecast runs low where the units are older than recorded and where the batch ramps, high where the bad units have left, and its bands cover a fraction of what they claim.",
-  "driver_concrete": "Halden Vault orders spare drives a quarter ahead: DC-3's Kestrel drives were installed years before the 2024 migration that sets their recorded install date and have no power-on hours, so their ages come from the serial's manufacture week; one HX-8 batch on old firmware has a hazard doubling every few months; operations retired the worst OM-6 vaults first, so the survivors are better than the family's pooled history; and chassis power and cooling events cluster failures, so Poisson bands are far too narrow.",
-  "stump": "The careful but hurried review dates the acquired centre's drives from migration, reads the ramping batch at its family's trailing rate, pools the old family's history across the vaults operations retired first and puts Poisson bands on the sum, so its fleet total runs low by about a fifth inside bands a few per cent wide that would have covered about four quarters in ten, its spare order runs short and it keeps the hot-batch vaults in service (figures from the build).",
-  "answer_shape": "forecast-bands-drivers",
-  "weight": "validation",
-  "chain_signature": [
-    "missingness-measurement",
-    "exploration-triage",
-    "forecasting",
+  {
+   "domain": "quantitative-finance",
+   "subdomain": "portfolio-construction-risk",
+   "objective": "opportunity-sizing-decision",
+   "shape": "other",
+   "decision_type": "pick_one_of_n",
+   "answer_unit": "currency",
+   "gap": [
+    "objective",
+    "population"
+   ],
+   "pattern": [
+    "E"
+   ],
+   "generators": [
+    "G14",
+    "G16"
+   ],
+   "gate_g": "binding_constraint",
+   "driver": "The decisive quantity is what a candidate's measured edge keeps once its own activity is priced at the scale it is being given, when the cost of that activity rises with its size relative to what the market around it absorbs each day and the organisation's cost record was paid at a fraction of that scale; carrying the recorded average cost to the new scale leaves the candidate whose activity is largest against its market looking best.",
+   "stump_strategy": "binding_constraint",
+   "forum": "committee_or_panel",
+   "forcing_event": "launch_or_rollout",
+   "org_family": "financial_institution",
+   "role_family": "portfolio_manager",
+   "world": {
+    "geography": "United Kingdom (London)",
+    "currency": "GBP",
+    "org_type": "a London asset manager's systematic equity desk",
+    "invented_names": [
+     "Wealdmoor Investment Management",
+     "Orchard Lane Securities",
+     "Calder Row Brokers",
+     "Brightwater Execution",
+     "Hythe Street Markets"
+    ],
+    "people": [
+     "Carole Shaw",
+     "Howard Simpson",
+     "Sarah Ford"
+    ]
+   },
+   "deliverables": [
+    "capital_allocation_2027.pptx",
+    "strategy_capacity_2027.xlsx"
+   ],
+   "architecture": "v4 (re-root at stage 4: a London systematic equity desk's 2027 allocation of GBP 400 million of new capital to one of three backtested UK strategies, each strategy's gross alpha netted of the market impact its rebalances would pay at that size, priced on the desk's own executions)",
+   "drawn": "2026-10-31",
+   "stump": "A competent solver nets each strategy's backtest gross alpha of its 2026 turnover priced at what the desk's own orders paid for stocks of that size and gives the GBP 400 million to small-cap momentum; the step that lands it there is pricing the trades at the cost of the desk's far smaller orders, when impact grows with each trade's share of the stock's daily traded value and at GBP 400 million momentum's trades take several per cent of its small caps' volume.",
+   "driver_concrete": "At GBP 400 million the small-cap momentum strategy's month-end rebalances would trade several per cent of each small cap's daily traded value, and the desk's own orders show impact rising with the square root of that share, so its 4.8 per cent gross alpha keeps about 1.3 per cent, under the mid-cap value strategy's 2.0 and the large-cap quality strategy's 1.5, while the desk's average realised cost leaves momentum first.",
+   "fate": "spent 2026-11-07 on its first portal round, FAILED_TO_STUMP: both responses filed the golden (UK Mid Cap Value 8, UK Large Cap Quality 6, momentum 5, gap 2) by the field's own textbook, a per-band fit of shortfall on volatility times the square root of participation validated on a holdout against flat band costs, so the data revealed the right method by fit; both also took all 24 ask figures, whose devices were filed. The market-impact world, the capacity driver and its shell are spent."
+  },
+  {
+   "domain": "pharmacology-pharmacoepidemiology-safety",
+   "subdomain": "benefit-risk-assessment",
+   "objective": "opportunity-sizing-decision",
+   "shape": "other",
+   "decision_type": "pick_one_of_n",
+   "answer_unit": "count",
+   "gap": [
+    "population",
+    "objective"
+   ],
+   "pattern": [
+    "none"
+   ],
+   "generators": [
+    "G5",
+    "G14",
+    "G6"
+   ],
+   "gate_g": "forecasting",
+   "driver": "The decisive quantity is how many units a programme would move once it runs across a whole population, when its measured success rate depends on where each unit's current arrangement came from, a provenance no field records and only another body's correspondence shows; the pilot ran where nearly every arrangement came from the more movable source, so carrying its average rate to a population whose arrangements mostly came from the other source ranks first the candidate that would move least.",
+   "stump": "The default path carries each review's pilot take-off rate to the federation's patients in scope and funds the antipsychotic review at about 24 harms a year; the step that lands it there is carrying the pilot's average rate to every patient, when practice pharmacists almost never stopped a medicine a specialist service had started (4 of 96 in the pilot), the pilot's antipsychotic patients were mostly practice-started (136 of 160) and a specialist service started 86 per cent of the antipsychotic patients in scope, so the antipsychotic review would avoid about 6 harms a year against the benzodiazepine review's 12.",
+   "fate": "spent 2026-11-08: the platform's determinism check returned the golden (the pooled pilot rate carried under the filed specification with the close-out's subgroup table files review A at 24 harms; the split by who started the medicine read as a method nothing in the pack forces); both runs filed review A; the slot's domain is quantitative finance",
+   "architecture": 5
+  },
+  {
+   "architecture": "v6",
+   "domain": "quantitative-finance",
+   "client_domain": "quantitative-finance",
+   "subdomain": "volatility-derivatives-pricing",
+   "objective": "forecasting",
+   "shape": "02",
+   "decision_type": "pick_one_of_n",
+   "gap": [
+    "objective",
+    "population"
+   ],
+   "pattern": [
+    "none"
+   ],
+   "generators": [
+    "G17",
+    "G16",
+    "G13"
+   ],
+   "gate_g": "forecasting",
+   "calibration_form": "other",
+   "stump_strategy": "other",
+   "context_artifact": "filed_standard",
+   "driver": "The decisive quantity is the chance that losses on a pool of units exceed a cushion, set by how far the units' failures arrive together: beyond the shared conditions and sectors every model carries, units held at the same time by vehicles of the same managing owner fail in the same periods, a dependence no field records and only the buyer named on a separate transaction record reveals, so a model whose dependence comes from conditions and sectors alone, which back-tests cleanly on the broad record, ranks safest the pool concentrated in a few owners.",
+   "stump": "The default path buys Kestrel Lane's note at a 0.14 per cent chance of loss against Ostvale's 0.44 per cent, the field's copula (one factor fitted to the yearly default rates, then the agencies' industry factor) back-tested on the record; the step that lands it there is linking defaults only through the economy and the sector, when the companies held by one sponsor house's funds default in the same years (0.503 of the residual variance), and Kestrel Lane's 95 loans sit with five houses, so its note's chance is 1.33 per cent, over the bar, against Ostvale's 0.54.",
+   "forum": "trustees_or_governors",
+   "forcing_event": "purchase_order_or_contract",
+   "org_family": "financial_institution",
+   "role_family": "portfolio_manager",
+   "deliverables": [
+    "ic_note_senior_notes_2027.docx",
+    "senior_note_loss_by_year.csv"
+   ],
+   "question_form": "which",
+   "shell": {
+    "question form": "what",
+    "second-sentence opener": "in",
+    "rounding opener": "chances",
+    "deliverable set": "csv+docx"
+   },
+   "fate": "spent 2026-11-08 on the platform: the author reports not stumped; both runs reconstructed sponsor ownership from Dealtrail, fitted a sponsor factor and bought Ostvale (run 1 Kestrel 1.47, Ostvale 0.58; run 2 Kestrel 0.94, Ostvale 0.55); neither tied recovery to the year or the sponsor house"
+  },
+  {
+   "domain": "quantitative-finance",
+   "subdomain": "volatility-derivatives-pricing",
+   "objective": "forecasting",
+   "shape": "02",
+   "decision_type": "go_hold_or_stop",
+   "answer_unit": "named_option",
+   "gap": [
+    "objective",
+    "population"
+   ],
+   "pattern": [
+    "none"
+   ],
+   "generators": [
+    "G2",
+    "G17",
+    "G13"
+   ],
+   "gate_g": "forecasting",
+   "stump_strategy": "other",
+   "driver": "The decisive quantity is a tail probability of a sum of losses, each a default times a severity, where the severity falls in the very states that cluster the defaults, through the same latent shock of the shared owner, a state of the owner's whole book; a severity averaged over the record prices the tail at the average state, one tied to the economy alone misses the owner's shock, one read off the co-defaults inside the portfolio prices a thin slice of an owner as isolated failures, and only the severity conditioned on each owner-year's shock, inferred from that owner-year's default experience across its book, carries the tail.",
+   "stump": "A competent solver rebuilds each loan's sponsor house, fits the house-year dependence and one censoring-corrected recovery for every default and buys Kestrel Lane's note at 0.7 per cent; one who finds that clustered defaults recover less (74.9 per cent alone against 44.1) and counts each default's co-defaults among the note's own loans buys Ostvale's at 0.1, because the record's counts run over whole books (a median of 13 companies) and Ostvale holds 2 of each house's; with recovery tied to the house-year's inferred shock Kestrel Lane's chance is 3.9 per cent and Ostvale's 7.8, and the fund buys neither.",
+   "fate": "superseded before upload at the author's word on 2026-11-10: read as level 4 on the client's depth scale (one investigation, the sponsor house's year, carrying the call; three of its four shortcuts landing on one wrong call; Ostvale failing on almost every route) and cut under the retired single-deep-step design; the results chain keeps its recovery strand and adds an independent one"
+  },
+  {
+   "architecture": "v7 as a results chain (2026-11-10): a Dutch pension fund's senior rated notes of two direct-lending managers, nine results, two strands (recovery on the sponsor house's year, each sector's loading on the economy's year)",
+   "drawn": "2026-11-08",
+   "domain": "quantitative-finance",
+   "client_domain": "quantitative-finance",
+   "subdomain": "volatility-derivatives-pricing",
+   "objective": "forecasting",
+   "shape": "10",
+   "decision_type": "go_hold_or_stop",
+   "answer_unit": "named_option",
+   "gap": [
+    "objective",
+    "population"
+   ],
+   "pattern": [
+    "none"
+   ],
+   "generators": [
+    "G2",
+    "G5",
+    "G17",
+    "G13"
+   ],
+   "gate_g": "forecasting",
+   "calibration_form": "other",
+   "stump_strategy": "other",
+   "context_artifact": "register",
+   "forum": "trustees_or_governors",
+   "forcing_event": "budget_or_appropriation",
+   "org_family": "financial_institution",
+   "role_family": "portfolio_manager",
+   "answer_shape": "distribution-cut",
+   "weight": "hard-to-measure",
+   "chain_signature": [
     "modeling",
+    "exploration-triage",
+    "investigation-loops",
+    "forecasting",
+    "forecasting",
+    "synthesis",
+    "uncertainty",
+    "forecasting",
+    "forecasting"
+   ],
+   "world": {
+    "geography": "Netherlands (Rotterdam)",
+    "currency": "EUR",
+    "org_type": "a sector pension fund buying senior rated notes of private-credit funds for its matching portfolio through its fiduciary manager",
+    "invented_names": [
+     "Stichting Pensioenfonds Havenbedrijf en Logistiek",
+     "Kadeweg Fiduciair Beheer",
+     "Kestrel Lane Credit Partners",
+     "Ostvale Capital",
+     "Lenderbase",
+     "Dealtrail"
+    ],
+    "people": [
+     "Ilse Lips",
+     "Damian Schenkel",
+     "Liza Dekker"
+    ]
+   },
+   "deliverables": [
+    "ic_note_senior_notes_2027.docx"
+   ],
+   "question_form": "whether",
+   "shell": {
+    "question form": "whether",
+    "second-sentence opener": "a",
+    "rounding opener": "chances",
+    "deliverable set": "docx"
+   },
+   "driver": "The decisive quantity is a tail probability of a sum of losses on two pools, each concentrated on a different shared shock: one on a few owners whose bad years both cluster the failures and cut their severity, a state of each owner's whole book, the other on the classes of unit that load hardest on the common condition, whose failures arrive together and come with ordinary severities because their owners are having ordinary years; one average severity passes the first pool, one pooled loading passes the second, and only both together put each pool past its cushion",
+   "stump": "Every shortcut buys a note: the agencies' copula Kestrel Lane, the house's year with one recovery Ostvale, the sector loadings with one recovery Kestrel Lane, recovery on the house-year's shock with one pooled loading Ostvale, the co-defaults among a note's own loans Ostvale; with both strands carried into the simulation both notes fail and the fund buys neither",
+   "fate": "spent 2026-11-10 at stage 4, before any upload: the determinism judge sent the chain back on Gate C (the recovery sample unfiled, Ostvale's margin), the repair filed both, and the bar then failed on Gate H: one sentence naming both constructed strands rescued 4 of 9 results, and the margin window on Ostvale's subordination was about one point of par; a constructed world resting on two built-in structures, re-rooted on real market records"
+  },
+  {
+   "domain": "quantitative-finance",
+   "subdomain": "volatility-derivatives-pricing",
+   "objective": "forecasting",
+   "shape": "04",
+   "decision_type": "quantity_figure",
+   "answer_unit": "currency",
+   "gap": [
+    "population",
+    "time"
+   ],
+   "pattern": [
+    "none"
+   ],
+   "generators": [
+    "G12",
+    "G14",
+    "G13"
+   ],
+   "gate_g": "forecasting",
+   "driver": "The decisive quantity is how large a new recurring commitment can run beside an existing one inside two limits measured on a long published record, when the file of the price series the new commitment is struck on begins after the record's worst episode: its missing early levels are rebuilt from the neighbouring series on both sides, because its relation to the nearer one reverses in stress and a one-series stand-in passes a check on the whole overlap; the room on the binding day comes from valuing every open commitment at the quoted level for its remaining life; next year's receipts from the commitments already open are their expectation on the record's realised outcomes against quoted ones, which the day's valuation understates; and because commitments made a month apart share most of their life, an average's range and the year's range have to keep neighbouring ones together",
+   "stump_strategy": "other",
+   "forum": "line_manager_or_team",
+   "forcing_event": "launch_or_rollout",
+   "org_family": "foundation_or_funder",
+   "role_family": "finance_controller",
+   "architecture": "v8 (2026-11-10, re-root on real market records): a foundation's volatility-premium sleeve, the size of a new 3-month S&P 500 variance-swap ladder beside its 12-month one inside two policy limits measured on the record since 2007, and the sleeve's 2027 cash plan with its range",
+   "drawn": "2026-11-10",
+   "answer_shape": "schedule-capacity",
+   "weight": "allocation",
+   "chain_signature": [
+    "missingness-measurement",
+    "validation",
+    "modeling",
+    "synthesis",
+    "modeling",
+    "uncertainty",
+    "uncertainty",
     "forecasting",
     "uncertainty",
-    "validation",
+    "forecasting",
     "synthesis"
-  ],
-  "results": "R1 DC-3's replacements over the four quarters (ages rebuilt from serials); R2 the hot batch named with its current annualized rate; R3 the hot batch's four-quarter replacements with its doubling time; R4 the surviving OM-6 vaults' forward rate and count; R5 the fleet's quarterly path; R6 its 80% bands; R7 the back-test coverage of intervals built the same way over the four quarters to 30 September 2026; R8 the Q4 spare order per family and the migrate call with its flip point",
-  "doctrine": "throughout",
-  "mechanism_source": "the author's Concept 1 (2026-11-10), with the client's strategy 8 (spares for failures never seen start) as the nearest client direction",
-  "differentiation": {
-    "client strategy 8": "an allocation of a fixed spare order across models from truncated hazards; here a forecast path with honest bands back-tested on clustered failures, a ramping defect batch and survivors thinned by selective retirement carry the weight, and the truncation step is one result of eight",
-    "mark124": "mark124 infers each unexamined unit's kind from its group's surviving records under samples drawn toward flagged groups; here each drive family's forward hazard is estimated from lifetimes truncated at an acquisition and thinned by selective retirement, with a ramping defect batch and chassis-clustered shocks carried into back-tested bands"
+   ],
+   "stump": "A competent solver stands the 30-day index in for the missing 3-month strikes by a regression that explains 0.94 of the index where both are published, plans the open swaps at their value and resamples settlements one at a time, filing about USD 124,500 a point, a plan of 5.56m and ranges of 228,000 to 400,000 for the 12-month average; one who leaves the early sale dates out files 136,600; swaps valued at their own index give 144,400, the new ladder sized on its own 184,100, no cap in the valuation 38,900, a forecast made in volatility and squared a plan of 6.25m, against USD 114,400 a point and 5.73m with a range of minus 4.2m to 12.2m",
+   "fate": "spent 2026-11-11 on the platform (author's upload of cut 4a76ff2f): both runs landed the call and every headline figure (3-month size 111,500 and 111,000 bound by collateral on 20 November 2008; 6-month 57,500 and 57,300; open swaps 2,618,000 and 2,487,000), losing only defensible alternatives on the early-strike rebuild and the predictive ranges' forecast basis; the holistic audit found a careful competent build reaches the headline answers; measured, a stressed dealer basis tied to the skew index moves the size to about 104,000 with the day unchanged and a proportional markup lands on it, so the world is spent"
   },
-  "lineage": [
-    {
-      "domain": "urban-regional-science",
-      "subdomain": "regional-input-output-economic-impact",
-      "objective": "opportunity-sizing-decision",
-      "shape": "07",
-      "decision_type": "pick_one_of_n",
-      "answer_unit": "currency",
-      "gap": [
-        "objective",
-        "population"
-      ],
-      "pattern": [
-        "none"
-      ],
-      "generators": [
-        "G5",
-        "G14"
-      ],
-      "gate_g": "decomposition_attribution",
-      "driver": "The decisive quantity is the part of a candidate's second-round effect that stays inside the area, when that round runs through the incomes the candidate pays and a published multiplier carries the area's average share of those incomes spent at home; one candidate's earners mostly live outside the area, which only its operator's roster joined to a location lookup shows, so the multiplier credits it with spending that happens elsewhere and ranks it first.",
-      "stump_strategy": "composition_mix",
-      "forum": "committee_or_panel",
-      "forcing_event": "vote_or_meeting",
-      "org_family": "government_agency",
-      "role_family": "programme_officer",
-      "architecture": "v2 (re-root: a development corporation's 2027 inward investment fund award between two projects, the regional GVA each adds once its induced round is read where its staff live)",
-      "drawn": "2026-10-31",
-      "fate": "spent 2026-10-31 at stage 2, before any data was cut: the survivor anatomy's Actor test failed on paper, since the deciding property (where the distribution centre's staff live) is one join from a column (the roster's postcode against the postcode directory's local authority) and any shipped residence datum is a column or a sentence, so the decisive rung would be readable; re-rooted into actuarial reinsurance capital"
-    },
-    {
-      "domain": "energy-systems-utilities",
-      "subdomain": "asset-condition-maintenance",
-      "objective": "opportunity-sizing-decision",
-      "shape": "other",
-      "decision_type": "allocation_to_total",
-      "answer_unit": "count",
-      "gap": [
-        "population",
-        "time"
-      ],
-      "pattern": [
-        "none"
-      ],
-      "generators": [
-        "G13",
-        "G6",
-        "G12"
-      ],
-      "gate_g": "forecasting",
-      "driver": "The decisive quantity is next year's failures in an asset base that keeps taking in old units the current roll does not hold yet: a forecast summed over today's roll leaves out the units still to arrive, which arrive past their cover and fail in their first months, so one segment's demand runs a fifth short and its share of a fixed capacity goes to the segments the roll overstates.",
-      "stump_strategy": "maturity_censoring",
-      "forum": "line_manager_or_team",
-      "forcing_event": "purchase_order_or_contract",
-      "org_family": "manufacturer",
-      "role_family": "capacity_planner",
-      "architecture": "v1 (Voltwerk's 2027 EV pack refurbishment slots across five platforms, the used imports still to arrive)",
-      "drawn": "2026-10-24",
-      "fate": "spent 2026-10-31 at the batch 1 triage: shipped 10-24, determinism repair reshipped 10-26; its isolated cold reader landed the call (all five slots and the 3,800 total), and the design note named the decisive step reflex reachable (conditioning a survival curve on survival to the as-of date); re-rooted in a new world"
-    },
-    {
-      "domain": "actuarial-science-insurance",
-      "subdomain": "reinsurance-capital",
-      "objective": "opportunity-sizing-decision",
-      "shape": "07",
-      "decision_type": "go_hold_or_stop",
-      "answer_unit": "currency",
-      "gap": [
-        "objective",
-        "population"
-      ],
-      "pattern": [
-        "none"
-      ],
-      "generators": [
-        "G6",
-        "G16"
-      ],
-      "gate_g": "forecasting",
-      "driver": "The decisive quantity is the tail of a forward loss distribution built from simulated years of events and calibrated to the organisation's own recorded losses, when an event that strikes within weeks of the event before it costs more per unit of modelled loss than an event on a quiet spell, a class no column marks and only the order of the record's events rebuilds; one pooled calibration across all events undercosts the later events of a run, which are the only ones a cover on second and later events pays on, and values that cover below its cost.",
-      "stump_strategy": "composition_mix",
-      "forum": "board_of_directors",
-      "forcing_event": "vote_or_meeting",
-      "org_family": "cooperative_or_member_body",
-      "role_family": "procurement_lead",
-      "world": {
-        "geography": "United Kingdom (South West England)",
-        "currency": "GBP",
-        "org_type": "a county farm and rural home mutual insurer",
-        "invented_names": [
-          "Hartcombe Mutual",
-          "Seaborne Risk",
-          "Penwarden Reinsurance Brokers",
-          "Penhallow Loss Adjusters"
-        ],
-        "people": [
-          "Mandy George",
-          "Arthur Begum",
-          "Elizabeth Farmer"
-        ]
-      },
-      "deliverables": [
-        "windstorm_programme_board_paper_2027.pdf",
-        "windstorm_programme_2027.xlsx"
-      ],
-      "architecture": "v3 (re-root at stage 2: a county farm-and-home mutual's 2027 windstorm reinsurance, whether to add the second-event cover the broker quoted, valued by the 1-in-200 capital it releases once each simulated storm is costed at what the mutual's claims show for storms like it)",
-      "spent": "2026-10-31 at stage 4: the FIX_NOW failed its second pass (pass 2 found the 2026 storms asks open on reopened claim lines' damage day, a rule filed nowhere); the main call held throughout"
-    },
-    {
-      "domain": "quantitative-finance",
-      "subdomain": "portfolio-construction-risk",
-      "objective": "opportunity-sizing-decision",
-      "shape": "other",
-      "decision_type": "pick_one_of_n",
-      "answer_unit": "currency",
-      "gap": [
-        "objective",
-        "population"
-      ],
-      "pattern": [
-        "E"
-      ],
-      "generators": [
-        "G14",
-        "G16"
-      ],
-      "gate_g": "binding_constraint",
-      "driver": "The decisive quantity is what a candidate's measured edge keeps once its own activity is priced at the scale it is being given, when the cost of that activity rises with its size relative to what the market around it absorbs each day and the organisation's cost record was paid at a fraction of that scale; carrying the recorded average cost to the new scale leaves the candidate whose activity is largest against its market looking best.",
-      "stump_strategy": "binding_constraint",
-      "forum": "committee_or_panel",
-      "forcing_event": "launch_or_rollout",
-      "org_family": "financial_institution",
-      "role_family": "portfolio_manager",
-      "world": {
-        "geography": "United Kingdom (London)",
-        "currency": "GBP",
-        "org_type": "a London asset manager's systematic equity desk",
-        "invented_names": [
-          "Wealdmoor Investment Management",
-          "Orchard Lane Securities",
-          "Calder Row Brokers",
-          "Brightwater Execution",
-          "Hythe Street Markets"
-        ],
-        "people": [
-          "Carole Shaw",
-          "Howard Simpson",
-          "Sarah Ford"
-        ]
-      },
-      "deliverables": [
-        "capital_allocation_2027.pptx",
-        "strategy_capacity_2027.xlsx"
-      ],
-      "architecture": "v4 (re-root at stage 4: a London systematic equity desk's 2027 allocation of GBP 400 million of new capital to one of three backtested UK strategies, each strategy's gross alpha netted of the market impact its rebalances would pay at that size, priced on the desk's own executions)",
-      "drawn": "2026-10-31",
-      "stump": "A competent solver nets each strategy's backtest gross alpha of its 2026 turnover priced at what the desk's own orders paid for stocks of that size and gives the GBP 400 million to small-cap momentum; the step that lands it there is pricing the trades at the cost of the desk's far smaller orders, when impact grows with each trade's share of the stock's daily traded value and at GBP 400 million momentum's trades take several per cent of its small caps' volume.",
-      "driver_concrete": "At GBP 400 million the small-cap momentum strategy's month-end rebalances would trade several per cent of each small cap's daily traded value, and the desk's own orders show impact rising with the square root of that share, so its 4.8 per cent gross alpha keeps about 1.3 per cent, under the mid-cap value strategy's 2.0 and the large-cap quality strategy's 1.5, while the desk's average realised cost leaves momentum first.",
-      "fate": "spent 2026-11-07 on its first portal round, FAILED_TO_STUMP: both responses filed the golden (UK Mid Cap Value 8, UK Large Cap Quality 6, momentum 5, gap 2) by the field's own textbook, a per-band fit of shortfall on volatility times the square root of participation validated on a holdout against flat band costs, so the data revealed the right method by fit; both also took all 24 ask figures, whose devices were filed. The market-impact world, the capacity driver and its shell are spent."
-    },
-    {
-      "domain": "pharmacology-pharmacoepidemiology-safety",
-      "subdomain": "benefit-risk-assessment",
-      "objective": "opportunity-sizing-decision",
-      "shape": "other",
-      "decision_type": "pick_one_of_n",
-      "answer_unit": "count",
-      "gap": [
-        "population",
-        "objective"
-      ],
-      "pattern": [
-        "none"
-      ],
-      "generators": [
-        "G5",
-        "G14",
-        "G6"
-      ],
-      "gate_g": "forecasting",
-      "driver": "The decisive quantity is how many units a programme would move once it runs across a whole population, when its measured success rate depends on where each unit's current arrangement came from, a provenance no field records and only another body's correspondence shows; the pilot ran where nearly every arrangement came from the more movable source, so carrying its average rate to a population whose arrangements mostly came from the other source ranks first the candidate that would move least.",
-      "stump": "The default path carries each review's pilot take-off rate to the federation's patients in scope and funds the antipsychotic review at about 24 harms a year; the step that lands it there is carrying the pilot's average rate to every patient, when practice pharmacists almost never stopped a medicine a specialist service had started (4 of 96 in the pilot), the pilot's antipsychotic patients were mostly practice-started (136 of 160) and a specialist service started 86 per cent of the antipsychotic patients in scope, so the antipsychotic review would avoid about 6 harms a year against the benzodiazepine review's 12.",
-      "fate": "spent 2026-11-08: the platform's determinism check returned the golden (the pooled pilot rate carried under the filed specification with the close-out's subgroup table files review A at 24 harms; the split by who started the medicine read as a method nothing in the pack forces); both runs filed review A; the slot's domain is quantitative finance",
-      "architecture": 5
-    },
-    {
-      "architecture": "v6",
-      "domain": "quantitative-finance",
-      "client_domain": "quantitative-finance",
-      "subdomain": "volatility-derivatives-pricing",
-      "objective": "forecasting",
-      "shape": "02",
-      "decision_type": "pick_one_of_n",
-      "gap": [
-        "objective",
-        "population"
-      ],
-      "pattern": [
-        "none"
-      ],
-      "generators": [
-        "G17",
-        "G16",
-        "G13"
-      ],
-      "gate_g": "forecasting",
-      "calibration_form": "other",
-      "stump_strategy": "other",
-      "context_artifact": "filed_standard",
-      "driver": "The decisive quantity is the chance that losses on a pool of units exceed a cushion, set by how far the units' failures arrive together: beyond the shared conditions and sectors every model carries, units held at the same time by vehicles of the same managing owner fail in the same periods, a dependence no field records and only the buyer named on a separate transaction record reveals, so a model whose dependence comes from conditions and sectors alone, which back-tests cleanly on the broad record, ranks safest the pool concentrated in a few owners.",
-      "stump": "The default path buys Kestrel Lane's note at a 0.14 per cent chance of loss against Ostvale's 0.44 per cent, the field's copula (one factor fitted to the yearly default rates, then the agencies' industry factor) back-tested on the record; the step that lands it there is linking defaults only through the economy and the sector, when the companies held by one sponsor house's funds default in the same years (0.503 of the residual variance), and Kestrel Lane's 95 loans sit with five houses, so its note's chance is 1.33 per cent, over the bar, against Ostvale's 0.54.",
-      "forum": "trustees_or_governors",
-      "forcing_event": "purchase_order_or_contract",
-      "org_family": "financial_institution",
-      "role_family": "portfolio_manager",
-      "deliverables": [
-        "ic_note_senior_notes_2027.docx",
-        "senior_note_loss_by_year.csv"
-      ],
-      "question_form": "which",
-      "shell": {
-        "question form": "what",
-        "second-sentence opener": "in",
-        "rounding opener": "chances",
-        "deliverable set": "csv+docx"
-      },
-      "fate": "spent 2026-11-08 on the platform: the author reports not stumped; both runs reconstructed sponsor ownership from Dealtrail, fitted a sponsor factor and bought Ostvale (run 1 Kestrel 1.47, Ostvale 0.58; run 2 Kestrel 0.94, Ostvale 0.55); neither tied recovery to the year or the sponsor house"
-    },
-    {
-      "domain": "quantitative-finance",
-      "subdomain": "volatility-derivatives-pricing",
-      "objective": "forecasting",
-      "shape": "02",
-      "decision_type": "go_hold_or_stop",
-      "answer_unit": "named_option",
-      "gap": [
-        "objective",
-        "population"
-      ],
-      "pattern": [
-        "none"
-      ],
-      "generators": [
-        "G2",
-        "G17",
-        "G13"
-      ],
-      "gate_g": "forecasting",
-      "stump_strategy": "other",
-      "driver": "The decisive quantity is a tail probability of a sum of losses, each a default times a severity, where the severity falls in the very states that cluster the defaults, through the same latent shock of the shared owner, a state of the owner's whole book; a severity averaged over the record prices the tail at the average state, one tied to the economy alone misses the owner's shock, one read off the co-defaults inside the portfolio prices a thin slice of an owner as isolated failures, and only the severity conditioned on each owner-year's shock, inferred from that owner-year's default experience across its book, carries the tail.",
-      "stump": "A competent solver rebuilds each loan's sponsor house, fits the house-year dependence and one censoring-corrected recovery for every default and buys Kestrel Lane's note at 0.7 per cent; one who finds that clustered defaults recover less (74.9 per cent alone against 44.1) and counts each default's co-defaults among the note's own loans buys Ostvale's at 0.1, because the record's counts run over whole books (a median of 13 companies) and Ostvale holds 2 of each house's; with recovery tied to the house-year's inferred shock Kestrel Lane's chance is 3.9 per cent and Ostvale's 7.8, and the fund buys neither.",
-      "fate": "superseded before upload at the author's word on 2026-11-10: read as level 4 on the client's depth scale (one investigation, the sponsor house's year, carrying the call; three of its four shortcuts landing on one wrong call; Ostvale failing on almost every route) and cut under the retired single-deep-step design; the results chain keeps its recovery strand and adds an independent one"
-    },
-    {
-      "architecture": "v7 as a results chain (2026-11-10): a Dutch pension fund's senior rated notes of two direct-lending managers, nine results, two strands (recovery on the sponsor house's year, each sector's loading on the economy's year)",
-      "drawn": "2026-11-08",
-      "domain": "quantitative-finance",
-      "client_domain": "quantitative-finance",
-      "subdomain": "volatility-derivatives-pricing",
-      "objective": "forecasting",
-      "shape": "10",
-      "decision_type": "go_hold_or_stop",
-      "answer_unit": "named_option",
-      "gap": [
-        "objective",
-        "population"
-      ],
-      "pattern": [
-        "none"
-      ],
-      "generators": [
-        "G2",
-        "G5",
-        "G17",
-        "G13"
-      ],
-      "gate_g": "forecasting",
-      "calibration_form": "other",
-      "stump_strategy": "other",
-      "context_artifact": "register",
-      "forum": "trustees_or_governors",
-      "forcing_event": "budget_or_appropriation",
-      "org_family": "financial_institution",
-      "role_family": "portfolio_manager",
-      "answer_shape": "distribution-cut",
-      "weight": "hard-to-measure",
-      "chain_signature": [
-        "modeling",
-        "exploration-triage",
-        "investigation-loops",
-        "forecasting",
-        "forecasting",
-        "synthesis",
-        "uncertainty",
-        "forecasting",
-        "forecasting"
-      ],
-      "world": {
-        "geography": "Netherlands (Rotterdam)",
-        "currency": "EUR",
-        "org_type": "a sector pension fund buying senior rated notes of private-credit funds for its matching portfolio through its fiduciary manager",
-        "invented_names": [
-          "Stichting Pensioenfonds Havenbedrijf en Logistiek",
-          "Kadeweg Fiduciair Beheer",
-          "Kestrel Lane Credit Partners",
-          "Ostvale Capital",
-          "Lenderbase",
-          "Dealtrail"
-        ],
-        "people": [
-          "Ilse Lips",
-          "Damian Schenkel",
-          "Liza Dekker"
-        ]
-      },
-      "deliverables": [
-        "ic_note_senior_notes_2027.docx"
-      ],
-      "question_form": "whether",
-      "shell": {
-        "question form": "whether",
-        "second-sentence opener": "a",
-        "rounding opener": "chances",
-        "deliverable set": "docx"
-      },
-      "driver": "The decisive quantity is a tail probability of a sum of losses on two pools, each concentrated on a different shared shock: one on a few owners whose bad years both cluster the failures and cut their severity, a state of each owner's whole book, the other on the classes of unit that load hardest on the common condition, whose failures arrive together and come with ordinary severities because their owners are having ordinary years; one average severity passes the first pool, one pooled loading passes the second, and only both together put each pool past its cushion",
-      "stump": "Every shortcut buys a note: the agencies' copula Kestrel Lane, the house's year with one recovery Ostvale, the sector loadings with one recovery Kestrel Lane, recovery on the house-year's shock with one pooled loading Ostvale, the co-defaults among a note's own loans Ostvale; with both strands carried into the simulation both notes fail and the fund buys neither",
-      "fate": "spent 2026-11-10 at stage 4, before any upload: the determinism judge sent the chain back on Gate C (the recovery sample unfiled, Ostvale's margin), the repair filed both, and the bar then failed on Gate H: one sentence naming both constructed strands rescued 4 of 9 results, and the margin window on Ostvale's subordination was about one point of par; a constructed world resting on two built-in structures, re-rooted on real market records"
-    },
-    {
-      "domain": "quantitative-finance",
-      "subdomain": "volatility-derivatives-pricing",
-      "objective": "forecasting",
-      "shape": "04",
-      "decision_type": "quantity_figure",
-      "answer_unit": "currency",
-      "gap": [
-        "population",
-        "time"
-      ],
-      "pattern": [
-        "none"
-      ],
-      "generators": [
-        "G12",
-        "G14",
-        "G13"
-      ],
-      "gate_g": "forecasting",
-      "driver": "The decisive quantity is how large a new recurring commitment can run beside an existing one inside two limits measured on a long published record, when the file of the price series the new commitment is struck on begins after the record's worst episode: its missing early levels are rebuilt from the neighbouring series on both sides, because its relation to the nearer one reverses in stress and a one-series stand-in passes a check on the whole overlap; the room on the binding day comes from valuing every open commitment at the quoted level for its remaining life; next year's receipts from the commitments already open are their expectation on the record's realised outcomes against quoted ones, which the day's valuation understates; and because commitments made a month apart share most of their life, an average's range and the year's range have to keep neighbouring ones together",
-      "stump_strategy": "other",
-      "forum": "line_manager_or_team",
-      "forcing_event": "launch_or_rollout",
-      "org_family": "foundation_or_funder",
-      "role_family": "finance_controller",
-      "architecture": "v8 (2026-11-10, re-root on real market records): a foundation's volatility-premium sleeve, the size of a new 3-month S&P 500 variance-swap ladder beside its 12-month one inside two policy limits measured on the record since 2007, and the sleeve's 2027 cash plan with its range",
-      "drawn": "2026-11-10",
-      "answer_shape": "schedule-capacity",
-      "weight": "allocation",
-      "chain_signature": [
-        "missingness-measurement",
-        "validation",
-        "modeling",
-        "synthesis",
-        "modeling",
-        "uncertainty",
-        "uncertainty",
-        "forecasting",
-        "uncertainty",
-        "forecasting",
-        "synthesis"
-      ],
-      "stump": "A competent solver stands the 30-day index in for the missing 3-month strikes by a regression that explains 0.94 of the index where both are published, plans the open swaps at their value and resamples settlements one at a time, filing about USD 124,500 a point, a plan of 5.56m and ranges of 228,000 to 400,000 for the 12-month average; one who leaves the early sale dates out files 136,600; swaps valued at their own index give 144,400, the new ladder sized on its own 184,100, no cap in the valuation 38,900, a forecast made in volatility and squared a plan of 6.25m, against USD 114,400 a point and 5.73m with a range of minus 4.2m to 12.2m",
-      "fate": "spent 2026-11-11 on the platform (author's upload of cut 4a76ff2f): both runs landed the call and every headline figure (3-month size 111,500 and 111,000 bound by collateral on 20 November 2008; 6-month 57,500 and 57,300; open swaps 2,618,000 and 2,487,000), losing only defensible alternatives on the early-strike rebuild and the predictive ranges' forecast basis; the holistic audit found a careful competent build reaches the headline answers; measured, a stressed dealer basis tied to the skew index moves the size to about 104,000 with the day unchanged and a proportional markup lands on it, so the world is spent"
-    },
-    {
-      "domain": "quantitative-finance",
-      "subdomain": "strategy-backtesting-evaluation",
-      "objective": "forecasting",
-      "shape": "other",
-      "decision_type": "allocation_to_total",
-      "answer_unit": "currency",
-      "gap": [
-        "objective",
-        "time"
-      ],
-      "pattern": [
-        "none"
-      ],
-      "generators": [
-        "G16",
-        "G13",
-        "G1"
-      ],
-      "gate_g": "method_or_model_selection",
-      "driver": "The decisive quantities are each unit's own return once the shared flows and the carry its record rides on are taken out, the coming year's spread at the year's own horizon from daily records whose serial dependence differs by flow, and what an added unit of resource earns when the return per unit falls with the resource, against a bar on the added unit; read off the raw record or the unit's own average return, the plan runs high and narrow and the bar passes units whose added resource earns below it.",
-      "stump_strategy": "other",
-      "forum": "committee_or_panel",
-      "forcing_event": "vote_or_meeting",
-      "org_family": "financial_institution",
-      "role_family": "portfolio_manager",
-      "architecture": "v9 (2026-11-11, re-root into another world at the author's word: a multi-manager hedge fund platform's 2027 capital plan across its portfolio-manager pods, on real factor returns from FRED and Cboe)",
-      "drawn": "2026-11-11",
-      "answer_shape": "allocation-sensitivity",
-      "weight": "allocation",
-      "chain_signature": [
-        "decomposition-attribution",
-        "causal-reasoning",
-        "forecasting",
-        "uncertainty",
-        "synthesis",
-        "synthesis"
-      ],
-      "stump": "The careful but hurried review reads alpha on the risk model's factors, builds the year from days drawn one at a time and judges each increase on the pod's return at its new size, so it plans 2027 at USD 712 million against USD 594 million, puts the 10th percentile at USD 244 million against 37 million and passes every increase, where eight credit and currency increases add less than the hurdle on the capital they add.",
-      "fate": "spent 2026-11-11 at stage 4 on the one re-judge (cut 5378a624): NOT_DETERMINISTIC, SEND_BACK, Gate H failing with carry as the one thing (data semantics). The judge's own run, written before it saw the blocks, assembled the record, fitted capacity within pods (24.2 per cent a doubling), shrank each record toward its group, ran the drawdown rules and payouts, and judged each increase on the added dollar by a paired simulation, all unprompted; it read alpha on the risk model's price-only factors (credit 6.38 per cent, net 2027 P&L about USD 729 million, HC1107 and HC1132 failing) and drew the year a day at a time. Measured on figures.json: with the added dollar taken as the reflex that run showed (section 9 files the hurdle on the capital an increase adds), the carry sentence alone moves R1, R3, R5 and R6 to right, 4 of 6, so the note's pricing of the added dollar as a miss was wrong and the chain hinged on carry; the policy's alpha definition did not force carry against the filed price-only methodology, and the foreign interbank series only the carry basket used pointed at it. Its other within-pod capacity fits ran 19 to 21 per cent against a 21.6 to 26.5 band; the year's horizon (blocks against independent days) was the one priced move it missed on its own."
-    },
-    {
-      "domain": "quantitative-finance",
-      "subdomain": "strategy-backtesting-evaluation",
-      "objective": "forecasting",
-      "shape": "03",
-      "decision_type": "quantity_figure",
-      "answer_unit": "currency",
-      "gap": [
-        "population",
-        "objective"
-      ],
-      "pattern": [
-        "D"
-      ],
-      "generators": [
-        "G6",
-        "G13",
-        "G16"
-      ],
-      "gate_g": "forecasting",
-      "driver": "The decisive quantities are what each kind of win costs after the trade once marks that lag in thin markets have caught up, how often a tighter offer wins beyond any offer made before when rivals' winning levels show only in a public record kept at another grain, and what the newly won requests cost when they are not the requests won now; on the record's own next-day marks, a fit on past offers and today's wins standing in for the new ones, the plan is mispriced in both directions across segments and the segments that lose money are misnamed.",
-      "stump_strategy": "causal_design",
-      "forum": "committee_or_panel",
-      "forcing_event": "vote_or_meeting",
-      "org_family": "financial_institution",
-      "role_family": "portfolio_manager",
-      "architecture": "v10",
-      "drawn": "2026-11-11",
-      "answer_shape": "bridge",
-      "weight": "attribution",
-      "chain_signature": [
-        "missingness-measurement",
-        "modeling",
-        "causal-reasoning",
-        "forecasting",
-        "forecasting",
-        "uncertainty",
-        "decomposition-attribution",
-        "synthesis"
-      ],
-      "stump": "The careful but hurried review reads each segment's cost after the trade a week on, fits the win rate on the desk's past quotes and prices the new wins like today's, so it plans USD 6.54 million against 10.30 million and drops five changes where four lose money (thin investment-grade asset managers pays); on the tape's levels with a week's marks it plans USD 14.67 million and drops two.",
-      "fate": "held at stage 4 on 2026-11-11: deterministic (judge pass 1 FIX_NOW fixed, pass 2 APPROVE) but, priced on the re-judge's blind first pass, the completion horizon alone rescued 6 of 8 results; the author then cleared the slot for a new build in another domain"
-    }
-  ],
-  "lineage_shells": [
-    {
-      "question form": "whether",
-      "second-sentence opener": "i",
-      "rounding opener": "the",
-      "deliverable set": "png+xlsx"
-    },
-    {
-      "question form": "how-much",
-      "second-sentence opener": "my",
-      "rounding opener": "capital",
-      "deliverable set": "pdf+xlsx"
-    },
-    {
-      "question form": "which",
-      "second-sentence opener": "my",
-      "rounding opener": "capital",
-      "deliverable set": "pdf+xlsx"
-    },
-    {
-      "question form": "what",
-      "second-sentence opener": "the",
-      "rounding opener": "alpha",
-      "deliverable set": "pptx+xlsx"
-    },
-    {
-      "question form": "how-much",
-      "second-sentence opener": "a",
-      "rounding opener": "patients",
-      "deliverable set": "csv+pdf"
-    },
-    {
-      "question form": "what",
-      "second-sentence opener": "in",
-      "rounding opener": "chances",
-      "deliverable set": "csv+docx"
-    },
-    {
-      "question form": "whether",
-      "second-sentence opener": "the",
-      "rounding opener": "chances",
-      "deliverable set": "csv+docx"
-    },
-    {
-      "question form": "whether",
-      "second-sentence opener": "a",
-      "rounding opener": "chances",
-      "deliverable set": "docx"
-    },
-    {
-      "question form": "whether",
-      "second-sentence opener": "before",
-      "rounding opener": "dollars",
-      "deliverable set": "csv+docx+xlsx"
-    },
-    {
-      "question form": "how-much",
-      "second-sentence opener": "everything",
-      "deliverable set": "pptx+xlsx"
-    },
-    {
-      "question form": "how-much",
-      "second-sentence opener": "everything",
-      "deliverable set": "pptx+xlsx"
-    },
-    {
-      "question form": "which",
-      "second-sentence opener": "please",
-      "deliverable set": "xlsx"
-    }
-  ],
-  "notes": "",
-  "registered": "2026-11-11T14:36:12Z",
-  "skeleton": {
-    "decision_form": "forecast_figure_with_range",
-    "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
-    "lessons": [
-      "left_truncated_ages",
-      "survivor_selected_sample",
-      "vintage_or_cohort_drift",
-      "serial_or_common_shock_dependence"
-    ],
-    "mechanisms": [
-      "install_date_reset_by_migration",
-      "worst_vaults_retired_first",
-      "firmware_batch_hazard_doubling",
-      "chassis_events_cluster_failures"
-    ],
-    "detection": [
-      "second_source_at_other_grain",
-      "residual_by_subgroup"
-    ],
-    "moves": [
-      "censored_survival_model",
-      "per_cohort_curves",
-      "cluster_resample_shared_unit"
-    ],
-    "file_roles": [
-      "primary_record",
-      "reference_register",
-      "crosswalk_or_migration_map",
-      "event_timeline",
-      "governing_standard",
-      "unused_distractor"
-    ]
+  {
+   "domain": "quantitative-finance",
+   "subdomain": "strategy-backtesting-evaluation",
+   "objective": "forecasting",
+   "shape": "other",
+   "decision_type": "allocation_to_total",
+   "answer_unit": "currency",
+   "gap": [
+    "objective",
+    "time"
+   ],
+   "pattern": [
+    "none"
+   ],
+   "generators": [
+    "G16",
+    "G13",
+    "G1"
+   ],
+   "gate_g": "method_or_model_selection",
+   "driver": "The decisive quantities are each unit's own return once the shared flows and the carry its record rides on are taken out, the coming year's spread at the year's own horizon from daily records whose serial dependence differs by flow, and what an added unit of resource earns when the return per unit falls with the resource, against a bar on the added unit; read off the raw record or the unit's own average return, the plan runs high and narrow and the bar passes units whose added resource earns below it.",
+   "stump_strategy": "other",
+   "forum": "committee_or_panel",
+   "forcing_event": "vote_or_meeting",
+   "org_family": "financial_institution",
+   "role_family": "portfolio_manager",
+   "architecture": "v9 (2026-11-11, re-root into another world at the author's word: a multi-manager hedge fund platform's 2027 capital plan across its portfolio-manager pods, on real factor returns from FRED and Cboe)",
+   "drawn": "2026-11-11",
+   "answer_shape": "allocation-sensitivity",
+   "weight": "allocation",
+   "chain_signature": [
+    "decomposition-attribution",
+    "causal-reasoning",
+    "forecasting",
+    "uncertainty",
+    "synthesis",
+    "synthesis"
+   ],
+   "stump": "The careful but hurried review reads alpha on the risk model's factors, builds the year from days drawn one at a time and judges each increase on the pod's return at its new size, so it plans 2027 at USD 712 million against USD 594 million, puts the 10th percentile at USD 244 million against 37 million and passes every increase, where eight credit and currency increases add less than the hurdle on the capital they add.",
+   "fate": "spent 2026-11-11 at stage 4 on the one re-judge (cut 5378a624): NOT_DETERMINISTIC, SEND_BACK, Gate H failing with carry as the one thing (data semantics). The judge's own run, written before it saw the blocks, assembled the record, fitted capacity within pods (24.2 per cent a doubling), shrank each record toward its group, ran the drawdown rules and payouts, and judged each increase on the added dollar by a paired simulation, all unprompted; it read alpha on the risk model's price-only factors (credit 6.38 per cent, net 2027 P&L about USD 729 million, HC1107 and HC1132 failing) and drew the year a day at a time. Measured on figures.json: with the added dollar taken as the reflex that run showed (section 9 files the hurdle on the capital an increase adds), the carry sentence alone moves R1, R3, R5 and R6 to right, 4 of 6, so the note's pricing of the added dollar as a miss was wrong and the chain hinged on carry; the policy's alpha definition did not force carry against the filed price-only methodology, and the foreign interbank series only the carry basket used pointed at it. Its other within-pod capacity fits ran 19 to 21 per cent against a 21.6 to 26.5 band; the year's horizon (blocks against independent days) was the one priced move it missed on its own."
+  },
+  {
+   "domain": "quantitative-finance",
+   "subdomain": "strategy-backtesting-evaluation",
+   "objective": "forecasting",
+   "shape": "03",
+   "decision_type": "quantity_figure",
+   "answer_unit": "currency",
+   "gap": [
+    "population",
+    "objective"
+   ],
+   "pattern": [
+    "D"
+   ],
+   "generators": [
+    "G6",
+    "G13",
+    "G16"
+   ],
+   "gate_g": "forecasting",
+   "driver": "The decisive quantities are what each kind of win costs after the trade once marks that lag in thin markets have caught up, how often a tighter offer wins beyond any offer made before when rivals' winning levels show only in a public record kept at another grain, and what the newly won requests cost when they are not the requests won now; on the record's own next-day marks, a fit on past offers and today's wins standing in for the new ones, the plan is mispriced in both directions across segments and the segments that lose money are misnamed.",
+   "stump_strategy": "causal_design",
+   "forum": "committee_or_panel",
+   "forcing_event": "vote_or_meeting",
+   "org_family": "financial_institution",
+   "role_family": "portfolio_manager",
+   "architecture": "v10",
+   "drawn": "2026-11-11",
+   "answer_shape": "bridge",
+   "weight": "attribution",
+   "chain_signature": [
+    "missingness-measurement",
+    "modeling",
+    "causal-reasoning",
+    "forecasting",
+    "forecasting",
+    "uncertainty",
+    "decomposition-attribution",
+    "synthesis"
+   ],
+   "stump": "The careful but hurried review reads each segment's cost after the trade a week on, fits the win rate on the desk's past quotes and prices the new wins like today's, so it plans USD 6.54 million against 10.30 million and drops five changes where four lose money (thin investment-grade asset managers pays); on the tape's levels with a week's marks it plans USD 14.67 million and drops two.",
+   "fate": "held at stage 4 on 2026-11-11: deterministic (judge pass 1 FIX_NOW fixed, pass 2 APPROVE) but, priced on the re-judge's blind first pass, the completion horizon alone rescued 6 of 8 results; the author then cleared the slot for a new build in another domain"
   }
+ ],
+ "lineage_shells": [
+  {
+   "question form": "whether",
+   "second-sentence opener": "i",
+   "rounding opener": "the",
+   "deliverable set": "png+xlsx"
+  },
+  {
+   "question form": "how-much",
+   "second-sentence opener": "my",
+   "rounding opener": "capital",
+   "deliverable set": "pdf+xlsx"
+  },
+  {
+   "question form": "which",
+   "second-sentence opener": "my",
+   "rounding opener": "capital",
+   "deliverable set": "pdf+xlsx"
+  },
+  {
+   "question form": "what",
+   "second-sentence opener": "the",
+   "rounding opener": "alpha",
+   "deliverable set": "pptx+xlsx"
+  },
+  {
+   "question form": "how-much",
+   "second-sentence opener": "a",
+   "rounding opener": "patients",
+   "deliverable set": "csv+pdf"
+  },
+  {
+   "question form": "what",
+   "second-sentence opener": "in",
+   "rounding opener": "chances",
+   "deliverable set": "csv+docx"
+  },
+  {
+   "question form": "whether",
+   "second-sentence opener": "the",
+   "rounding opener": "chances",
+   "deliverable set": "csv+docx"
+  },
+  {
+   "question form": "whether",
+   "second-sentence opener": "a",
+   "rounding opener": "chances",
+   "deliverable set": "docx"
+  },
+  {
+   "question form": "whether",
+   "second-sentence opener": "before",
+   "rounding opener": "dollars",
+   "deliverable set": "csv+docx+xlsx"
+  },
+  {
+   "question form": "how-much",
+   "second-sentence opener": "everything",
+   "deliverable set": "pptx+xlsx"
+  },
+  {
+   "question form": "how-much",
+   "second-sentence opener": "everything",
+   "deliverable set": "pptx+xlsx"
+  },
+  {
+   "question form": "which",
+   "second-sentence opener": "please",
+   "deliverable set": "xlsx"
+  }
+ ],
+ "notes": "",
+ "registered": "2026-11-11T17:27:07Z",
+ "skeleton": {
+  "decision_form": "forecast_figure_with_range",
+  "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
+  "lessons": [
+   "vintage_or_cohort_drift",
+   "survivor_selected_sample",
+   "marginal_not_average",
+   "left_truncated_ages",
+   "variance_beyond_sampling_noise"
+  ],
+  "mechanisms": [
+   "bad_build_window_inside_a_firmware_release",
+   "worst_vaults_retired_first",
+   "batch_held_unevenly_across_vaults",
+   "install_date_reset_by_migration"
+  ],
+  "detection": [
+   "second_source_at_other_grain",
+   "residual_by_subgroup",
+   "selection_rule_in_the_record"
+  ],
+  "moves": [
+   "changepoint_on_own_metric",
+   "shrinkage_or_credibility_weighting",
+   "per_unit_model_then_rank",
+   "censored_survival_model",
+   "simulate_with_fitted_inputs"
+  ],
+  "file_roles": [
+   "primary_record",
+   "second_grain_source",
+   "reference_register",
+   "crosswalk_or_migration_map",
+   "event_timeline",
+   "governing_standard",
+   "quotes_or_costs",
+   "schedule_or_plan",
+   "unused_distractor"
+  ]
+ },
+ "shell": {
+  "question form": "how-many",
+  "second-sentence opener": "count",
+  "deliverable set": "xlsx"
+ }
 }
