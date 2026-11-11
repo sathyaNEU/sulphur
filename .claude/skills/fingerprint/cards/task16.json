@@ -1,158 +1,157 @@
 {
-  "task": "task16",
-  "project": "sulfur",
-  "architecture": "v2",
-  "drawn": "2026-11-11",
-  "slot_note": "",
-  "domain": "general-statistics-data-science",
-  "subdomain": "data-integration-record-linkage-entity-resolution",
-  "niche": "an Austrian parcel carrier's customer contact division deciding which enquiry types its chat assistant keeps taking first through the peak season: each reason family's resolution rate (no further contact about the same consignment through any channel within seven days) rebuilt for the assistant's third version by linking assistant, live chat, telephone and written-case records on the tracking number, with the follow-ups the linked record cannot see estimated, then carried to the conversations the season plan's parcels and service levels will generate",
-  "objective": "etl",
-  "shape": "07",
-  "decision_type": "designation_set",
-  "answer_unit": "set_of_items",
-  "answer": "to be filled when the pack is cut: the reason families the assistant keeps first through peak and those handed to advisers first, each with its expected resolution rate",
-  "answer_source": "task16/generator/figures.json (call)",
-  "gap": [
-    "population",
-    "time"
+ "task": "task16",
+ "project": "sulfur",
+ "architecture": "v2",
+ "drawn": "2026-11-11",
+ "slot_note": "",
+ "domain": "general-statistics-data-science",
+ "subdomain": "data-integration-record-linkage-entity-resolution",
+ "niche": "an Austrian parcel carrier's customer contact division deciding which enquiry types its chat assistant keeps taking first through the peak season: each reason family's resolution rate (no further contact about the same consignment through any channel within seven days) rebuilt for the assistant's third version by linking assistant, live chat, telephone and written-case records on the tracking number, with the follow-ups the linked record cannot see estimated, then carried to the conversations the season plan's parcels and service levels will generate",
+ "objective": "etl",
+ "shape": "07",
+ "decision_type": "designation_set",
+ "answer_unit": "set_of_items",
+ "answer": "assistant first for Delivery day and time, Redirect and address, Pickup point and collection, Returns and labels, Charges and refunds (78.0, 83.4, 89.1, 93.7, 82.0 per cent expected); adviser first for Track and trace, Missed delivery and redelivery, Customs and import charges, Damaged parcel, Missing parcel (70.7, 70.4, 68.6, 70.6, 54.9); all ten families 75.5 per cent (90 per cent range 74.3 to 76.7)",
+ "answer_source": "task16/generator/figures.json (call)",
+ "gap": [
+  "population",
+  "time"
+ ],
+ "pattern": [
+  "none"
+ ],
+ "generators": [
+  "G12",
+  "G3",
+  "G6",
+  "G14",
+  "G17"
+ ],
+ "gate_g": "method_or_model_selection",
+ "calibration_form": "gold_standard_subsample",
+ "stump_strategy": "other",
+ "decisive_rule_filed": true,
+ "official_decoy": false,
+ "validated_decoy": false,
+ "context_artifact": "capacity_report",
+ "stump_class": "analytical",
+ "analyst_test": "A careful but hurried analyst cleans the four contact logs, links every assistant conversation to later contacts on the tracking number and reads version 3's resolution rate off the linked record; it restores telephone follow-ups that carry no tracking number at a pooled capture share and counts open written cases where the status shows them, then carries the weeks observed into the season as they stand or reweights them by the plan's parcel service levels as if parcels were conversations, leaves the delay alerts' effect on who contacts unmeasured, and ranges the result by resampling conversations; it keeps families the assistant should hand back, and each shortcut keeps a different set.",
+ "domain_test": "Every result is a record-linkage and missing-data quantity: a linked contact record reconciled to control totals, events the link cannot see restored by the inverse of a capture probability that moves with load, open cases completed from a count at another grain, a rate standardised to a target population whose mix is exposure times a class-specific contact rate, an intervention's effect on that rate measured from a staggered roll-out, and a range that carries day-level dependence; swap in hospital or energy nouns and the tracking-number key, the IVR capture, the case backlog and parcels generating conversations by delivery outcome all stop meaning anything.",
+ "layer2_family": "estimation_fit",
+ "layer2_pattern": "own:follow-ups-the-linked-record-cannot-see-carried-to-a-season",
+ "layer1": [
+  "one row per leg of a transferred telephone call, and the advisers' callbacks, in the call export",
+  "tracking numbers typed with spaces, lower case and a missing prefix; the IVR's digits-only form",
+  "one log in UTC across the end of daylight saving time, the others in local time",
+  "three code lists (assistant intents, adviser wrap-up codes, case categories) mapped to one set of reason families",
+  "written cases opened by advisers beside those customers raised",
+  "conversations, chats and cases that concern no consignment",
+  "consignments still in transit at the cut"
+ ],
+ "stakeholder_role": "the carrier's head of customer contact, who fixes which reason families the assistant takes first through peak",
+ "role_family": "operations_director",
+ "scoring_unit": "per resolved case",
+ "spine": {
+  "file": "acd_call_legs_2026-08-03_2026-11-08.csv",
+  "rows": 81459,
+  "entity": "one leg of a telephone call",
+  "grain": "call x leg",
+  "source": "synthetic"
+ },
+ "forum": "operations_desk",
+ "forcing_event": "season_or_peak",
+ "org_family": "logistics_or_3pl",
+ "world": {
+  "geography": "Austria (a national parcel carrier with ten depots)",
+  "currency": "EUR",
+  "org_type": "the customer contact division of a parcel carrier",
+  "invented_names": [
+   "Quellstein Paket",
+   "Hub Traunfeld"
   ],
-  "pattern": [
+  "people": [
+   "Helena Neumann",
+   "Simon Pertl",
+   "Theresa Jovanovic",
+   "Alena Blümel"
+  ]
+ },
+ "deliverables": [
+  "peak_assistant_scope.xlsx",
+  "peak_assistant_scope_memo.docx"
+ ],
+ "opening_move": "question-first",
+ "question_form": "how-much",
+ "driver": "The share of first-line handlings that needed no further contact is read by linking each handling to later contacts on the same item across four channel records, and the linked record misses follow-ups in two unrelated ways that each have to be estimated (one channel takes the item's key only when its line is quiet, so the keyed share falls exactly when follow-ups surge; one channel's cases are counted in the link only once finished, while the open ones sit in a weekly count by age); the season to be planned then draws its handlings from items in a worse state mix than the weeks observed, in proportions set by how often items in each state generate a handling at all, less an intervention that cuts that rate and has to be measured from a staggered roll-out; each estimate moves different categories across the line and none alone lands the set.",
+ "driver_concrete": "Each reason family's resolution rate for Quellstein's assistant is rebuilt for version 3 by linking conversations to later assistant, live chat, telephone and written contacts on the tracking number within seven days; telephone follow-ups whose tracking number the IVR never captured are restored by weighting each keyed call's conversation by the inverse of the capture share at its own queue and wait, written follow-ups still open at the extract are added from the weekly backlog count by queue and age at the follow-up share of the closed cases raised the same week, and the peak rate is each family's rate by delivery outcome weighted by the conversations the season plan's parcels will generate at each outcome's own contact rate, late parcels' contact rate cut by the delay alerts' measured effect at the pilot depots; families at 75 per cent or more stay with the assistant.",
+ "stump": "A careful but hurried analyst links the four logs, restores the unkeyed calls and the open cases the standard says the records lack, then carries October's rates into the season unchanged (Track and trace 76.5 per cent, kept) and ranges them by resampling conversations (plus or minus 0.34); built from the plan's parcels at each delivery outcome's contact rate with the alerts' 41 per cent cut, Track and trace comes to 70.7 and is handed back, and the range is plus or minus 1.2.",
+ "answer_shape": "reconciled-table",
+ "weight": "assembly",
+ "chain_signature": [
+  "assembly-reconciliation",
+  "missingness-measurement",
+  "missingness-measurement",
+  "synthesis",
+  "causal-reasoning",
+  "forecasting",
+  "forecasting",
+  "uncertainty",
+  "synthesis"
+ ],
+ "results": "R1 the linked record of version 3 conversations and their follow-ups, reconciled to the telephony and case totals; R2 the telephone follow-ups that carry no tracking number; R3 the written follow-ups still open at the cut; R4 the resolution rate achieved under version 3; R5 the delay alerts' effect on conversations per late parcel; R6 the season's conversations a week and the share from late or exception parcels; R7 each family's expected rate over the season; R8 its 90 per cent range; R9 the families kept and handed back",
+ "one_fact_test": "the plan turns the delay alerts on at every depot, so measure what they did to contacts at the pilot depots: rescues R5 alone (1 of 9, effort.py on the built pack); the season-mix sentence rescues nothing whole because the alerts are still unmeasured",
+ "strategy_label": "WORKS IN FORM",
+ "mechanism_source": "design_note",
+ "differentiation": {
+  "mark196": "there a hidden total came from the overlap of two capture channels, one of them produced by the unit's own follow-up; here no overlap estimate is made: a capture probability that moves with load is read call by call and inverted, and it is one of five estimates (open cases counted at another grain, a season mix that is exposure times a contact rate, an intervention measured from a staggered roll-out, a day-level range) that the set needs together",
+  "task6": "there a record kept by collectors who choose where to sample was set against a fixed probability sample of the same stock; here every log is a census of its own channel, the gaps are in what a channel keys under load and what it has finished, and the answer is a season's rate for a population the plan's parcels generate"
+ },
+ "architecture_spent": false,
+ "lineage": [
+  {
+   "architecture": "v1",
+   "drawn": "2026-11-10",
+   "fate": "spent 2026-11-11 on the platform: one run earned every graded result in 28 minutes (two candidate calibrations compared by leave-one-out error, the slowdown read in matched cells, a response surface with a fitted breakpoint validated on held-out configurations, configurations and calibration pairs resampled separately); six results sat on one runs-by-settings table that one flexible fit absorbs, the asks named the intermediate quantities, and bands wide enough for every sound method graded nothing (REDESIGN, re-rooted to another world)",
+   "domain": "general-statistics-data-science",
+   "subdomain": "scaling-laws",
+   "objective": "forecasting",
+   "shape": "other",
+   "decision_type": "pick_one_of_n",
+   "gap": [
+    "objective",
+    "population"
+   ],
+   "pattern": [
     "none"
-  ],
-  "generators": [
-    "G12",
-    "G3",
-    "G6",
+   ],
+   "generators": [
+    "G1",
     "G14",
-    "G17"
-  ],
-  "gate_g": "method_or_model_selection",
-  "calibration_form": "gold_standard_subsample",
-  "stump_strategy": "other",
-  "decisive_rule_filed": true,
-  "official_decoy": false,
-  "validated_decoy": false,
-  "context_artifact": "capacity_report",
-  "stump_class": "analytical",
-  "analyst_test": "A careful but hurried analyst cleans the four contact logs, links every assistant conversation to later contacts on the tracking number and reads version 3's resolution rate off the linked record; it restores telephone follow-ups that carry no tracking number at a pooled capture share and counts open written cases where the status shows them, then carries the weeks observed into the season as they stand or reweights them by the plan's parcel service levels as if parcels were conversations, leaves the delay alerts' effect on who contacts unmeasured, and ranges the result by resampling conversations; it keeps families the assistant should hand back, and each shortcut keeps a different set.",
-  "domain_test": "Every result is a record-linkage and missing-data quantity: a linked contact record reconciled to control totals, events the link cannot see restored by the inverse of a capture probability that moves with load, open cases completed from a count at another grain, a rate standardised to a target population whose mix is exposure times a class-specific contact rate, an intervention's effect on that rate measured from a staggered roll-out, and a range that carries day-level dependence; swap in hospital or energy nouns and the tracking-number key, the IVR capture, the case backlog and parcels generating conversations by delivery outcome all stop meaning anything.",
-  "layer2_family": "estimation_fit",
-  "layer2_pattern": "own:follow-ups-the-linked-record-cannot-see-carried-to-a-season",
-  "layer1": [
-    "telephone legs repeated for transferred calls, outbound calls and a test queue in the call export",
-    "tracking numbers typed with spaces, lower case and a missing prefix",
-    "assistant exports that overlap by a week and carry tester sessions",
-    "one log in UTC across the end of daylight saving time, the others in local time",
-    "three code lists (assistant intents, adviser wrap-up codes, case categories) mapped to one set of reason families",
-    "written cases opened by advisers beside those customers raised",
-    "consignments still in transit at the extract"
-  ],
-  "stakeholder_role": "the carrier's head of customer contact, who fixes which reason families the assistant takes first through peak",
-  "role_family": "operations_director",
-  "scoring_unit": "per resolved case",
-  "spine": {
-    "file": "to be filled when the pack is cut",
-    "rows": 0,
-    "entity": "one handled inbound telephone leg",
-    "grain": "call x leg",
-    "source": "synthetic"
-  },
-  "forum": "operations_desk",
-  "forcing_event": "season_or_peak",
-  "org_family": "logistics_or_3pl",
-  "world": {
-    "geography": "Austria (a national parcel carrier with ten depots)",
-    "currency": "EUR",
-    "org_type": "the customer contact division of a parcel carrier",
-    "invented_names": [
-      "Quellstein Paket",
-      "Hub Traunfeld"
-    ],
-    "people": [
-      "Helena Neumann",
-      "Simon Pertl",
-      "Theresa Jovanovic",
-      "Alena Blümel"
-    ]
-  },
-  "deliverables": [
-    "peak_assistant_scope.xlsx",
-    "peak_assistant_scope_note.docx"
-  ],
-  "opening_move": "question-first",
-  "question_form": "what",
-  "driver": "The share of first-line handlings that needed no further contact is read by linking each handling to later contacts on the same item across four channel records, and the linked record misses follow-ups in two unrelated ways that each have to be estimated (one channel takes the item's key only when its line is quiet, so the keyed share falls exactly when follow-ups surge; one channel's cases are counted in the link only once finished, while the open ones sit in a weekly count by age); the season to be planned then draws its handlings from items in a worse state mix than the weeks observed, in proportions set by how often items in each state generate a handling at all, less an intervention that cuts that rate and has to be measured from a staggered roll-out; each estimate moves different categories across the line and none alone lands the set.",
-  "driver_concrete": "Each reason family's resolution rate for Quellstein's assistant is rebuilt for version 3 by linking conversations to later assistant, live chat, telephone and written contacts on the tracking number within seven days; telephone follow-ups whose tracking number the IVR never captured are restored by weighting each keyed call's conversation by the inverse of the capture share at its own queue and wait, written follow-ups still open at the extract are added from the weekly backlog count by queue and age at the follow-up share of the closed cases raised the same week, and the peak rate is each family's rate by delivery outcome weighted by the conversations the season plan's parcels will generate at each outcome's own contact rate, late parcels' contact rate cut by the delay alerts' measured effect at the pilot depots; families at 75 per cent or more stay with the assistant.",
-  "stump": "A careful but hurried analyst links the four logs on the tracking number and reads version 3's rate off the linked record with pooled or no repair for unkeyed calls and open cases, then carries the observed weeks into the season as they stand (or weights by the plan's parcel service levels as if parcels were conversations) with the delay alerts unmeasured, and keeps families whose expected rate falls under 75 per cent once the season's own conversations are counted.",
-  "answer_shape": "reconciled-table",
-  "weight": "assembly",
-  "chain_signature": [
-    "assembly-reconciliation",
+    "G16",
+    "G6"
+   ],
+   "gate_g": "forecasting",
+   "stump_strategy": "other",
+   "answer_shape": "ranked-list-cap",
+   "weight": "investigation",
+   "chain_signature": [
     "missingness-measurement",
-    "missingness-measurement",
-    "synthesis",
-    "causal-reasoning",
-    "causal-reasoning",
-    "forecasting",
+    "investigation-loops",
+    "modeling",
     "forecasting",
     "uncertainty",
     "synthesis"
-  ],
-  "results": "R1 the linked record of version 3 conversations and their follow-ups by channel, reconciled to the telephony and case totals; R2 the telephone follow-ups, with those the tracking number never captured; R3 the written follow-ups still open at the extract; R4 each family's resolution rate achieved under version 3; R5 what version 3 changed against version 2 on the conversations it handled; R6 the delay alerts' effect on conversations per late parcel; R7 the assistant conversations a week the season plan will generate and the share from late or exception parcels; R8 each family's expected peak resolution rate; R9 its 90 per cent range; R10 the families to keep and to hand back",
-  "one_fact_test": "the season's conversations come from its parcels at each delivery outcome's own contact rate, so weight the plan by those rates: rescues R7 in part and no composite, because the alerts' effect (R6) is still unmeasured; counted on the built pack by effort.py",
-  "strategy_label": "WORKS IN FORM",
-  "mechanism_source": "design_note",
-  "differentiation": {
-    "mark196": "there a hidden total came from the overlap of two capture channels, one of them produced by the unit's own follow-up; here no overlap estimate is made: a capture probability that moves with load is read call by call and inverted, and it is one of five estimates (open cases counted at another grain, a season mix that is exposure times a contact rate, an intervention measured from a staggered roll-out, a day-level range) that the set needs together",
-    "task6": "there a record kept by collectors who choose where to sample was set against a fixed probability sample of the same stock; here every log is a census of its own channel, the gaps are in what a channel keys under load and what it has finished, and the answer is a season's rate for a population the plan's parcels generate"
-  },
-  "architecture_spent": false,
-  "lineage": [
-    {
-      "architecture": "v1",
-      "drawn": "2026-11-10",
-      "fate": "spent 2026-11-11 on the platform: one run earned every graded result in 28 minutes (two candidate calibrations compared by leave-one-out error, the slowdown read in matched cells, a response surface with a fitted breakpoint validated on held-out configurations, configurations and calibration pairs resampled separately); six results sat on one runs-by-settings table that one flexible fit absorbs, the asks named the intermediate quantities, and bands wide enough for every sound method graded nothing (REDESIGN, re-rooted to another world)",
-      "domain": "general-statistics-data-science",
-      "subdomain": "scaling-laws",
-      "objective": "forecasting",
-      "shape": "other",
-      "decision_type": "pick_one_of_n",
-      "gap": [
-        "objective",
-        "population"
-      ],
-      "pattern": [
-        "none"
-      ],
-      "generators": [
-        "G1",
-        "G14",
-        "G16",
-        "G6"
-      ],
-      "gate_g": "forecasting",
-      "stump_strategy": "other",
-      "answer_shape": "ranked-list-cap",
-      "weight": "investigation",
-      "chain_signature": [
-        "missingness-measurement",
-        "investigation-loops",
-        "modeling",
-        "forecasting",
-        "uncertainty",
-        "synthesis"
-      ],
-      "driver": "A forward level for configurations larger than any yet run is read from a staged pilot in which the return per added unit was measured only on the trusted source, while the configurations to be chosen among add units from cheaper sources whose yield differs: the target yardstick never scored a run that used them, the logged score is taken on a split that includes those sources' own labels and so rewards fitting their errors, their trials ran at other settings than the ladder they are compared with, and the return to more units bends just past the range the trusted source covers, so each source's yield has to be rebuilt on the trusted yardstick at matched settings and carried forward by a form that holds when the largest runs are held out.",
-      "stump": "A careful but hurried analyst fits one scaling curve through every pilot run on the right yardstick, so the curve, which the expert-label ladder dominates, absorbs into the label routes' costs what is a return to more examples that bends just past the expert pool; it then carries that curve to a training set two and a half times the largest trial and names the all-labels configuration, whose forecast falls short of what such a run scores by more than its lead."
-    }
-  ],
-  "lineage_shells": [],
-  "notes": "strategy other: no one family carries the set (events a link cannot see under a load-dependent capture, open cases at another grain, a target mix that is exposure times a contact rate, an intervention measured from a staggered roll-out, day-level dependence in the range); calibration organ: the keyed calls, where the link and the capture are both seen; context artifact: the season plan and the weekly backlog report.",
-  "registered": "2026-11-11T03:35:38Z",
-  "shell": {
-    "question form": "whether",
-    "second-sentence opener": "in",
-    "deliverable set": "xlsx"
+   ],
+   "driver": "A forward level for configurations larger than any yet run is read from a staged pilot in which the return per added unit was measured only on the trusted source, while the configurations to be chosen among add units from cheaper sources whose yield differs: the target yardstick never scored a run that used them, the logged score is taken on a split that includes those sources' own labels and so rewards fitting their errors, their trials ran at other settings than the ladder they are compared with, and the return to more units bends just past the range the trusted source covers, so each source's yield has to be rebuilt on the trusted yardstick at matched settings and carried forward by a form that holds when the largest runs are held out.",
+   "stump": "A careful but hurried analyst fits one scaling curve through every pilot run on the right yardstick, so the curve, which the expert-label ladder dominates, absorbs into the label routes' costs what is a return to more examples that bends just past the expert pool; it then carries that curve to a training set two and a half times the largest trial and names the all-labels configuration, whose forecast falls short of what such a run scores by more than its lead."
   }
+ ],
+ "lineage_shells": [],
+ "notes": "strategy other: no one family carries the set (events a link cannot see under a load-dependent capture, open cases at another grain, a target mix that is exposure times a contact rate, an intervention measured from a staggered roll-out, day-level dependence in the range); calibration organ: the keyed calls, where the link and the capture are both seen; context artifact: the season plan and the weekly backlog report.",
+ "registered": "2026-11-11T03:35:38Z",
+ "shell": {
+  "question form": "whether",
+  "second-sentence opener": "in",
+  "deliverable set": "xlsx"
+ }
 }

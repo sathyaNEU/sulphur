@@ -1,41 +1,42 @@
 {
  "task": "task16",
- "status": "DESIGN",
+ "status": "PAUSED",
  "domain": "general-statistics-data-science",
  "subdomain": "data-integration-record-linkage-entity-resolution",
  "objective": "etl",
- "stage": 2,
- "stage_name": "design",
+ "stage": 4,
+ "stage_name": "check",
  "updated": "2026-11-11",
  "doctrine": "throughout",
- "call": "to be filled when the pack is cut: the reason families Quellstein's assistant keeps first through the 2026 peak season and those handed to advisers first, each with its expected resolution rate against the 75 per cent rule",
- "chain": "R1 the linked record reconciled to the telephony and case totals; R2 the telephone follow-ups with those never keyed; R3 the written follow-ups still open; R4 each family's resolution rate under version 3; R5 what version 3 changed on like conversations; R6 the delay alerts' effect on conversations per late parcel; R7 the season's conversations a week and their late share; R8 each family's expected peak rate; R9 its 90 per cent range; R10 the families to keep and to hand back",
+ "call": "offer the assistant first through the 2026 peak season for Delivery day and time, Redirect and address, Pickup point and collection, Returns and labels, Charges and refunds and an adviser first for Track and trace, Missed delivery and redelivery, Customs and import charges, Damaged parcel, Missing parcel (expected 70.7, 70.4, 68.6, 70.6, 54.9 per cent, all under 75); the assistant resolves 75.5 per cent across all ten families (90 per cent range 74.3 to 76.7); not Track and trace kept on October's 76.5 per cent, which comes to 70.7 on the season's conversations",
+ "chain": "R1 the linked record (30,745 conversations, 83.9 per cent on the record alone); R2 telephone follow-ups with no tracking number (40.7 per cent); R3 written follow-ups still open (235); R4 the rate achieved under version 3 (80.4); R5 the delay alerts' effect (41 per cent fewer conversations per late parcel); R6 the season's conversations (56.4 per cent from late and exception parcels, about 10700 a week); R7 each family's expected rate; R8 its 90 per cent range (plus or minus 1.2 for all families); R9 the five families kept and the five handed back",
  "architecture": 2,
  "loops": 0,
  "precut": {
-  "exit": null,
-  "date": ""
+  "exit": 0,
+  "date": "2026-11-11"
  },
  "leak": {
-  "leak_py": "",
-  "reader": ""
+  "leak_py": "REVIEW (no LEAK), 2026-11-11, --asof 2026-11-09",
+  "reader": "first read 2026-11-11 on the cut adc5ecaf: no method sentence, no ranking file, no helping file, no answer figure, question 6 no one thing; three things read as planted or generated (a telephony test queue, the zero-filled backlog grid, a date inside a depot text field) and were taken out of the generator with the tester sessions and the repeated week; second read on the cut 3b7dfb87 in flight"
  },
  "duplicate_check": {
-  "heart": "",
-  "nearest": "guard.py check WARN 2026-11-11 (overuse.gate_g, repeat.decision, both answered in the note); nearest driver task2 and mark196 at 0.06"
+  "heart": "WARN 2026-11-11 (repeat.gate_g against task9, overuse.gate_g: answered in the note); nearest stump 0.05 (task15, task17)",
+  "surface": "exit 0"
  },
  "judge": {
   "verdict": "",
   "disposition": "",
   "gate_h": "",
-  "report": ""
+  "report": "",
+  "note": "pass 1 thread spawned 2026-11-11 on target.zip 3b7dfb87 (brief prepared by the determinism-judge agent); no verdict yet"
  },
- "paper_pair": null,
+ "paper_pair": 46.7,
  "effort": {
-  "quick": null,
-  "careful": null,
-  "thorough": null,
-  "largest_hint": ""
+  "quick": 32.3,
+  "careful": 46.7,
+  "thorough": 100.0,
+  "largest_hint": "the plan turns the delay alerts on at every depot: measure what they did to contacts at the pilot depots; rescues 1 of 9 (R5)"
  },
  "runs": {
   "run1": null,
@@ -91,7 +92,7 @@
   ]
  },
  "returned": [],
- "resume": "DESIGN, architecture 2 (re-rooted 2026-11-11 after the platform run on architecture 1, runs/arch1_triage.md): write the generator for the Quellstein world, run the rivals, complete the design note to precut.py exit 0, then build",
+ "resume": "PAUSED at stage 4 (check), architecture 2: the generator, pack, goldens, answer blocks and prompt are built (117 checks, verify 19 of 19, gates.py 0 FAIL) and the determinism judge's pass 1 and the second leak read were in flight on target.zip 3b7dfb87 when the session stopped. To resume: python3 task16/generator/make.py (rebuilds target/, golden/ and both zips byte for byte), gates.py task16, then spawn the leak reader and the determinism judge afresh on that cut, fix every finding in the generator in one pass, read the judge's own first pass against the careful column, write the pre-ship check and commit READY with both zips and golden/ force-added",
  "approved": null,
  "submitted": null,
  "portal": {

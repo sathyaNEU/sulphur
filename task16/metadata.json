@@ -1,0 +1,164 @@
+{
+ "task": "task16",
+ "title": "Quellstein Paket: which reason families the assistant keeps first through the 2026 peak season, and the resolution rate to expect",
+ "domain": "Machine Learning Research, General Statistics & Data Science",
+ "task_type": "data integration, record linkage and entity resolution",
+ "objective": "Data Extraction & Conformation (ETL / Pipeline Build)",
+ "as_of": "2026-11-09",
+ "deliverables": [
+  "peak_assistant_scope.xlsx",
+  "peak_assistant_scope_memo.docx"
+ ],
+ "distractor_files": [
+  "csat_responses_2026w32_w45.csv",
+  "adviser_roster.csv"
+ ],
+ "stated_inputs": [
+  "75"
+ ],
+ "input_gates": {
+  "files": 17,
+  "formats": [
+   "csv",
+   "docx",
+   "xlsx"
+  ],
+  "categories": [
+   "spreadsheet",
+   "text"
+  ],
+  "largest_file": "consignments_referenced.csv",
+  "largest_file_rows": 163052,
+  "long_file": "acd_call_legs_2026-08-03_2026-11-08.csv",
+  "long_file_rows": 81459
+ },
+ "sources": [
+  {
+   "files": "all files under target/",
+   "origin": "generated for this task by simulating the process that makes the files: parcels running on time or late by depot and day, recipients contacting the carrier by how the parcel ran, unhelped customers coming back through the assistant, live chat, the telephone line or a written case, the telephone line's IVR and queue, and the case team's closing times. The carrier, its depots' figures, the standard and the people are invented.",
+   "date": "2026-11-11",
+   "license": "CC BY 4.0 (original work)"
+  }
+ ],
+ "files": [
+  {
+   "path": "KS-07_contact_service_standard.docx",
+   "format": "docx",
+   "bytes": 11230,
+   "covers": "KS-07, the contact service standard: contacts, resolution, the assistant-first rule",
+   "made": "written by task16/generator/make.py from the simulated process (deterministic)"
+  },
+  {
+   "path": "acd_call_legs_2026-08-03_2026-11-08.csv",
+   "format": "csv",
+   "bytes": 6404965,
+   "covers": "the telephony platform's call legs, 3 August to 8 November 2026, in UTC",
+   "made": "written by task16/generator/make.py from the simulated process (deterministic)"
+  },
+  {
+   "path": "acd_weekly_summary.xlsx",
+   "format": "xlsx",
+   "bytes": 7656,
+   "covers": "telephony's weekly summary of handled calls by queue",
+   "made": "written by task16/generator/make.py from the simulated process (deterministic)"
+  },
+  {
+   "path": "adviser_roster.csv",
+   "format": "csv",
+   "bytes": 5088,
+   "covers": "the adviser roster",
+   "made": "written by task16/generator/make.py from the simulated process (deterministic)"
+  },
+  {
+   "path": "assistant_conversations_2026w32_w45.csv",
+   "format": "csv",
+   "bytes": 8814240,
+   "covers": "the assistant platform's conversation export, 3 August to 8 November 2026 (weekly files stitched)",
+   "made": "written by task16/generator/make.py from the simulated process (deterministic)"
+  },
+  {
+   "path": "assistant_intents.csv",
+   "format": "csv",
+   "bytes": 1327,
+   "covers": "the assistant's intents and the reason family of each",
+   "made": "written by task16/generator/make.py from the simulated process (deterministic)"
+  },
+  {
+   "path": "assistant_release_3_0.docx",
+   "format": "docx",
+   "bytes": 10312,
+   "covers": "the release note of assistant version 3.0",
+   "made": "written by task16/generator/make.py from the simulated process (deterministic)"
+  },
+  {
+   "path": "case_backlog_weekly.xlsx",
+   "format": "xlsx",
+   "bytes": 73036,
+   "covers": "the case team's weekly backlog report: open cases by queue, who raised them and days open at each Monday, and the weekly flow",
+   "made": "written by task16/generator/make.py from the simulated process (deterministic)"
+  },
+  {
+   "path": "case_categories.csv",
+   "format": "csv",
+   "bytes": 530,
+   "covers": "the case system's categories, queues and reason families",
+   "made": "written by task16/generator/make.py from the simulated process (deterministic)"
+  },
+  {
+   "path": "case_resolutions_to_2026-11-08.csv",
+   "format": "csv",
+   "bytes": 3667508,
+   "covers": "the case system's resolution extract: cases closed by 8 November 2026",
+   "made": "written by task16/generator/make.py from the simulated process (deterministic)"
+  },
+  {
+   "path": "consignments_referenced.csv",
+   "format": "csv",
+   "bytes": 9900908,
+   "covers": "the network system's record of every consignment a contact referred to: depot, promised date, delivery, outcome class",
+   "made": "written by task16/generator/make.py from the simulated process (deterministic)"
+  },
+  {
+   "path": "csat_responses_2026w32_w45.csv",
+   "format": "csv",
+   "bytes": 730098,
+   "covers": "responses to the post-contact survey, 3 August to 8 November 2026",
+   "made": "written by task16/generator/make.py from the simulated process (deterministic)"
+  },
+  {
+   "path": "depots.csv",
+   "format": "csv",
+   "bytes": 466,
+   "covers": "the depot list",
+   "made": "written by task16/generator/make.py from the simulated process (deterministic)"
+  },
+  {
+   "path": "livechat_sessions_2026w32_w45.csv",
+   "format": "csv",
+   "bytes": 1843823,
+   "covers": "the live chat tool's sessions, 3 August to 8 November 2026",
+   "made": "written by task16/generator/make.py from the simulated process (deterministic)"
+  },
+  {
+   "path": "network_performance_daily.csv",
+   "format": "csv",
+   "bytes": 31600,
+   "covers": "the network's daily service record by depot: parcels due and how they ran",
+   "made": "written by task16/generator/make.py from the simulated process (deterministic)"
+  },
+  {
+   "path": "season_plan_w47_w53.xlsx",
+   "format": "xlsx",
+   "bytes": 10302,
+   "covers": "workforce planning's season plan for 16 November 2026 to 3 January 2027: parcels, service levels, notification roll-out, adviser rota",
+   "made": "written by task16/generator/make.py from the simulated process (deterministic)"
+  },
+  {
+   "path": "wrapup_codes.csv",
+   "format": "csv",
+   "bytes": 512,
+   "covers": "advisers' wrap-up codes and the reason family of each",
+   "made": "written by task16/generator/make.py from the simulated process (deterministic)"
+  }
+ ]
+}

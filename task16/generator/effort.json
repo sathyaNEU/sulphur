@@ -1,0 +1,556 @@
+{
+ "results": [
+  {
+   "id": "R1",
+   "name": "the linked record",
+   "graded_as": "Ask 4",
+   "figure": "linked",
+   "depends": [],
+   "independent": "",
+   "golden": {
+    "conversations": 30745,
+    "linked_rate": 83.9
+   },
+   "bands": {
+    "conversations": [
+     30591,
+     30899
+    ],
+    "linked_rate": [
+     83.5,
+     84.3
+    ]
+   },
+   "passes": {
+    "quick": {
+     "conversations": 30745,
+     "linked_rate": 83.9
+    },
+    "careful": {
+     "conversations": 30745,
+     "linked_rate": 83.9
+    },
+    "thorough": {
+     "conversations": 30745,
+     "linked_rate": 83.9
+    }
+   }
+  },
+  {
+   "id": "R2",
+   "name": "telephone follow-ups with no tracking number",
+   "graded_as": "Component 1",
+   "figure": "phone_unkeyed_share",
+   "depends": [],
+   "independent": "",
+   "golden": 40.7,
+   "band": [
+    36.0,
+    46.0
+   ],
+   "passes": {
+    "quick": 0.0,
+    "careful": 43.3,
+    "thorough": 40.7
+   }
+  },
+  {
+   "id": "R3",
+   "name": "written follow-ups still open",
+   "graded_as": "Component 2",
+   "figure": "written_open",
+   "depends": [],
+   "independent": "",
+   "golden": 235,
+   "band": [
+    188,
+    282
+   ],
+   "passes": {
+    "quick": 0,
+    "careful": 248,
+    "thorough": 235
+   }
+  },
+  {
+   "id": "R4",
+   "name": "the resolution rate achieved under version 3",
+   "graded_as": "Component 3",
+   "figure": "achieved_all",
+   "depends": [
+    "R2",
+    "R3"
+   ],
+   "independent": "",
+   "golden": 80.4,
+   "band": [
+    79.6,
+    81.2
+   ],
+   "passes": {
+    "quick": 83.9,
+    "careful": 79.9,
+    "thorough": 80.4
+   }
+  },
+  {
+   "id": "R5",
+   "name": "the delay alerts' effect",
+   "graded_as": "Component 4",
+   "figure": "alert_effect",
+   "depends": [],
+   "independent": "",
+   "golden": 41.0,
+   "band": [
+    35.0,
+    48.0
+   ],
+   "passes": {
+    "quick": {
+     "value": null,
+     "grade": "missed",
+     "why": "this pass carries the observed weeks forward and never measures the alerts"
+    },
+    "careful": {
+     "value": null,
+     "grade": "missed",
+     "why": "this pass carries the observed weeks forward and never measures the alerts"
+    },
+    "thorough": 41.0
+   }
+  },
+  {
+   "id": "R6",
+   "name": "the season's conversations",
+   "graded_as": "Component 5",
+   "figure": "season",
+   "depends": [
+    "R5"
+   ],
+   "independent": "",
+   "golden": {
+    "late_share": 56.4,
+    "per_week": 10700
+   },
+   "bands": {
+    "late_share": [
+     53.4,
+     59.4
+    ],
+    "per_week": [
+     10000,
+     11400
+    ]
+   },
+   "passes": {
+    "quick": {
+     "value": null,
+     "grade": "missed",
+     "why": "this pass never builds the season's conversations from the plan's parcels"
+    },
+    "careful": {
+     "value": null,
+     "grade": "missed",
+     "why": "this pass never builds the season's conversations from the plan's parcels"
+    },
+    "thorough": {
+     "late_share": 56.4,
+     "per_week": 10700
+    }
+   }
+  },
+  {
+   "id": "R7",
+   "name": "each family's expected rate",
+   "graded_as": "Ask 2",
+   "figure": "expected_table",
+   "depends": [
+    "R2",
+    "R3",
+    "R6"
+   ],
+   "independent": "",
+   "golden": {
+    "TRK": 70.7,
+    "DLV": 78.0,
+    "RDR": 83.4,
+    "RDL": 70.4,
+    "PUP": 89.1,
+    "CUS": 68.6,
+    "DMG": 70.6,
+    "LST": 54.9,
+    "RET": 93.7,
+    "PAY": 82.0,
+    "ALL": 75.5
+   },
+   "bands": {
+    "TRK": [
+     69.3,
+     72.1
+    ],
+    "DLV": [
+     76.8,
+     79.2
+    ],
+    "RDR": [
+     81.8,
+     85.0
+    ],
+    "RDL": [
+     68.0,
+     72.8
+    ],
+    "PUP": [
+     87.9,
+     90.3
+    ],
+    "CUS": [
+     67.2,
+     70.0
+    ],
+    "DMG": [
+     68.8,
+     72.4
+    ],
+    "LST": [
+     52.3,
+     57.5
+    ],
+    "RET": [
+     92.7,
+     94.7
+    ],
+    "PAY": [
+     80.4,
+     83.6
+    ],
+    "ALL": [
+     74.6,
+     76.4
+    ]
+   },
+   "passes": {
+    "quick": {
+     "TRK": 80.1,
+     "DLV": 85.9,
+     "RDR": 88.7,
+     "RDL": 79.9,
+     "PUP": 91.8,
+     "CUS": 75.6,
+     "DMG": 81.4,
+     "LST": 63.0,
+     "RET": 95.3,
+     "PAY": 88.3,
+     "ALL": 83.9
+    },
+    "careful": {
+     "TRK": 75.7,
+     "DLV": 82.7,
+     "RDR": 85.1,
+     "RDL": 72.9,
+     "PUP": 89.9,
+     "CUS": 70.1,
+     "DMG": 72.5,
+     "LST": 57.1,
+     "RET": 94.1,
+     "PAY": 85.9,
+     "ALL": 79.9
+    },
+    "thorough": {
+     "TRK": 70.7,
+     "DLV": 78.0,
+     "RDR": 83.4,
+     "RDL": 70.4,
+     "PUP": 89.1,
+     "CUS": 68.6,
+     "DMG": 70.6,
+     "LST": 54.9,
+     "RET": 93.7,
+     "PAY": 82.0,
+     "ALL": 75.5
+    }
+   }
+  },
+  {
+   "id": "R8",
+   "name": "the 90 per cent range",
+   "graded_as": "Ask 3",
+   "figure": "half_table",
+   "depends": [],
+   "independent": "graded on the range's width, which the resampling sets whatever the rate it surrounds",
+   "golden": {
+    "TRK": 1.73,
+    "DLV": 1.77,
+    "RDR": 1.55,
+    "RDL": 2.85,
+    "PUP": 1.77,
+    "CUS": 3.07,
+    "DMG": 3.34,
+    "LST": 3.95,
+    "RET": 1.27,
+    "PAY": 2.41,
+    "ALL": 1.2
+   },
+   "bands": {
+    "TRK": [
+     1.12,
+     2.77
+    ],
+    "DLV": [
+     1.15,
+     2.83
+    ],
+    "RDR": [
+     1.01,
+     2.48
+    ],
+    "RDL": [
+     1.85,
+     4.56
+    ],
+    "PUP": [
+     1.15,
+     2.83
+    ],
+    "CUS": [
+     2.0,
+     4.91
+    ],
+    "DMG": [
+     2.17,
+     5.34
+    ],
+    "LST": [
+     2.57,
+     6.32
+    ],
+    "RET": [
+     0.83,
+     2.03
+    ],
+    "PAY": [
+     1.57,
+     3.86
+    ],
+    "ALL": [
+     0.78,
+     1.92
+    ]
+   },
+   "passes": {
+    "quick": {
+     "TRK": 0.65,
+     "DLV": 0.73,
+     "RDR": 0.92,
+     "RDL": 1.28,
+     "PUP": 0.78,
+     "CUS": 1.78,
+     "DMG": 1.71,
+     "LST": 2.49,
+     "RET": 0.72,
+     "PAY": 1.35,
+     "ALL": 0.33
+    },
+    "careful": {
+     "TRK": 0.7,
+     "DLV": 0.78,
+     "RDR": 1.05,
+     "RDL": 1.43,
+     "PUP": 0.88,
+     "CUS": 2.02,
+     "DMG": 1.87,
+     "LST": 2.44,
+     "RET": 0.85,
+     "PAY": 1.43,
+     "ALL": 0.34
+    },
+    "thorough": {
+     "TRK": 1.73,
+     "DLV": 1.77,
+     "RDR": 1.55,
+     "RDL": 2.85,
+     "PUP": 1.77,
+     "CUS": 3.07,
+     "DMG": 3.34,
+     "LST": 3.95,
+     "RET": 1.27,
+     "PAY": 2.41,
+     "ALL": 1.2
+    }
+   }
+  },
+  {
+   "id": "R9",
+   "name": "the families kept and handed back",
+   "graded_as": "Recommendation",
+   "figure": "keep",
+   "depends": [
+    "R7"
+   ],
+   "independent": "",
+   "golden": [
+    "DLV",
+    "RDR",
+    "PUP",
+    "RET",
+    "PAY"
+   ],
+   "passes": {
+    "quick": [
+     "TRK",
+     "DLV",
+     "RDR",
+     "RDL",
+     "PUP",
+     "CUS",
+     "DMG",
+     "RET",
+     "PAY"
+    ],
+    "careful": [
+     "TRK",
+     "DLV",
+     "RDR",
+     "PUP",
+     "RET",
+     "PAY"
+    ],
+    "thorough": [
+     "DLV",
+     "RDR",
+     "PUP",
+     "RET",
+     "PAY"
+    ]
+   }
+  }
+ ],
+ "hints": [
+  {
+   "sentence": "the season's conversations come from its parcels, at each delivery outcome's own contact rate",
+   "rescues": []
+  },
+  {
+   "sentence": "the plan turns the delay alerts on at every depot: measure what they did to contacts at the pilot depots",
+   "rescues": [
+    "R5"
+   ]
+  },
+  {
+   "sentence": "resample whole days, because a good or bad day moves every family together",
+   "rescues": []
+  },
+  {
+   "sentence": "a call with no tracking number can follow a conversation too",
+   "rescues": []
+  },
+  {
+   "sentence": "the case export holds resolved cases only; the backlog report counts the open ones",
+   "rescues": []
+  }
+ ],
+ "routes": [
+  {
+   "name": "the golden",
+   "answer": [
+    "DLV",
+    "RDR",
+    "PUP",
+    "RET",
+    "PAY"
+   ],
+   "golden": true
+  },
+  {
+   "name": "the linked record as it stands, carried into the season unchanged",
+   "answer": [
+    "TRK",
+    "DLV",
+    "RDR",
+    "RDL",
+    "PUP",
+    "CUS",
+    "DMG",
+    "RET",
+    "PAY"
+   ]
+  },
+  {
+   "name": "unkeyed calls restored at the week's capture share and open cases added from the backlog count, the weeks observed carried into the season unchanged",
+   "answer": [
+    "TRK",
+    "DLV",
+    "RDR",
+    "PUP",
+    "RET",
+    "PAY"
+   ]
+  },
+  {
+   "name": "open cases added, calls with no tracking number left out, the season's conversations weighted properly",
+   "answer": [
+    "DLV",
+    "RDR",
+    "RDL",
+    "PUP",
+    "RET",
+    "PAY"
+   ]
+  },
+  {
+   "name": "unkeyed calls restored, the resolved-case export taken as the written channel",
+   "answer": [
+    "DLV",
+    "RDR",
+    "PUP",
+    "DMG",
+    "RET",
+    "PAY"
+   ]
+  },
+  {
+   "name": "open cases completed on the closing times of the summer",
+   "answer": [
+    "DLV",
+    "RDR",
+    "PUP",
+    "RET",
+    "PAY"
+   ]
+  },
+  {
+   "name": "each family's rates by delivery outcome weighted by the plan's parcel service levels",
+   "answer": [
+    "TRK",
+    "DLV",
+    "RDR",
+    "RDL",
+    "PUP",
+    "CUS",
+    "DMG",
+    "RET",
+    "PAY"
+   ]
+  },
+  {
+   "name": "the season's conversations weighted by each outcome's contact rate, the delay alerts left out",
+   "answer": [
+    "RDR",
+    "PUP",
+    "RET",
+    "PAY"
+   ]
+  },
+  {
+   "name": "every follow-up restored, the weeks observed carried into the season unchanged",
+   "answer": [
+    "TRK",
+    "DLV",
+    "RDR",
+    "PUP",
+    "RET",
+    "PAY"
+   ]
+  }
+ ]
+}
