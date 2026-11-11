@@ -178,8 +178,8 @@ one of those tasks is in `fingerprint/corpus/client_skeletons.json`, and the gua
    the run's own reflexive back-test exposes is landed: write both checks down for every priced result.
 
 **The levers are where runs lose, and most are already taught.** The client's own accepted tasks carry them: the
-split carried to the decision on five, interference on four, the interval unit on four, selection on a peak, a
-measured response and the marginal unit on two each (`skeleton.py lessons --min 2`). So a lever enters the chain as a
+split carried to the decision on five, interference on four, the interval unit on four, selection on a peak and the
+marginal unit on two each, a measured response on one (`skeleton.py lessons`). So a lever enters the chain as a
 supporting judgment beside a deciding lesson no task on file teaches, or as the deciding lesson only inside a chain
 of four or more whose other lessons are untaught; the guard refuses a chain of one or two lessons that turns on a
 taught one, and any chain more than half taught.
