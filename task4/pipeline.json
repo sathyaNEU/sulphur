@@ -24,8 +24,8 @@
   "reader": "loop 1 reader (2026-11-10, on 133243bf): no process sentence for any graded result, no helper file, no one thing; not re-run for the Domains Fit reword, on the author's call (wording only, the pack unchanged)"
  },
  "duplicate_check": {
-  "heart": "WARN (2026-11-10, loop 1; overuse.weight, repeat.deliverables, repeat.question_form, answered in the note)",
-  "nearest": "see guard.py heart"
+  "heart": "BLOCK on 2026-11-11 (test.same_puzzle against mark175, which entered the window when task9 and task16 were re-drawn after task4); recorded in the note's Template check, the author's call on a redraw",
+  "nearest": "mark175 (differentiated on the card)"
  },
  "judge": {
   "verdict": "DETERMINISTIC (pass 11, 2026-11-10, target.zip 8bb29ac7570199f9, order kept)",
