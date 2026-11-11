@@ -101,6 +101,15 @@ is designed is moved into the skill it governs in a `SKILLS:` commit, and its li
   offset), restored the overwritten and unread months by exposure, and took the seasons a later inspection found
   sound as the baseline unprompted. Three data repairs with the field's standard remedies were three reflexes, and an
   event a device schedules is placed on that device's clock. Repriced at about 73, back to stage 2.
+  On task13 arch 3 (2026-11-11: the same world with each zone's own sound level learned from inspection-confirmed
+  seasons, seven results, pair 47.2 on paper) the pass missed the level, the restoration and the set, but landed
+  the two results priced on a reading: the refit's value, because the terms filed "the faults its zones ran in the
+  last lightning season" and that sentence named the reading, and the rule's own sound referrals, because no run
+  quotes a budget's ceiling as a rule's rate when the ask is what the rule will do. Repriced at about 56 to 65, back
+  to stage 2: the terms now file the state at the end of 2026 and leave the reading to the data, and the next
+  pass valued the refit on the record since inspection averaged (66 against 116). A level estimated per unit and
+  then taken as known is its own wrong answer (17 zones against 11, 1.2 sound referrals a season against a budget
+  of 0.2): carrying the estimate's uncertainty into the tail is a second judgment, not part of the first.
 - **One table that one flexible fit absorbs is one result, however many figures are read off it** (task16 arch 1,
   task10 arch 6, task4 arch 9). Six, eleven and five graded results sat on runs-by-covariates or days-by-covariates
   tables; each run fitted one response surface or one availability model with a breakpoint or a ceiling, chose its
