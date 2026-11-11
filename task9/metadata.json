@@ -67,7 +67,7 @@
   {
    "path": "cost_inputs.yaml",
    "format": "yaml",
-   "bytes": 1096,
+   "bytes": 1075,
    "covers": "finance's cost inputs: parts, labour, downtime, single changes and the full PM all in, volume, die values",
    "made": "written by task9/generator (world.py, pack.py, docs.py) from the simulated fab (deterministic)"
   },
@@ -109,7 +109,7 @@
   {
    "path": "pm_spec_history.md",
    "format": "md",
-   "bytes": 1775,
+   "bytes": 1936,
    "covers": "the ILD-CMP PM specification's revision history, waiver EW-118 and the Rev G draft",
    "made": "written by task9/generator (world.py, pack.py, docs.py) from the simulated fab (deterministic)"
   },

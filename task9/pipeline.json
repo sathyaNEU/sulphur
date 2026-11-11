@@ -17,8 +17,8 @@
     "date": "2026-11-11"
   },
   "leak": {
-    "leak_py": "REVIEW (4 lines ruled in the note's Pre-ship check)",
-    "reader": "running"
+    "leak_py": "REVIEW (4 lines ruled in the note's pre-ship check)",
+    "reader": "run 2026-11-11: no method or answer handed over; two realism tells fixed; re-run owed after the judge's fixes"
   },
   "duplicate_check": {
     "heart": "WARN (repeat.gate_g, repeat.decision, repeat.question_form)",
@@ -51,7 +51,7 @@
     "history": []
   },
   "returned": [],
-  "resume": "stage 4: the leak reader and the determinism judge were launched on the final build (gates.py --full 0 FAIL); read both reports, fix every finding in the generator in one pass, re-run gates.py --full, re-judge once on FIX_NOW, read the judge thread's first-pass figures against the careful column, then READY with both zips",
+  "resume": "stage 4: the leak reader ran (nothing hands over a method or an answer; its two realism tells, the cost file's costing paragraph and the Rev G draft's wording, are rewritten and re-gated, gates.py --full 0 FAIL). The determinism judge's wrapper had no Agent tool, so its isolated thread was spawned from /tmp/determinism-check-task9-210105/judge_brief.md and is deriving. Next: re-invoke the wrapper with that folder's verdict.md and own_derivation.md to write determinism_check_report.md; fix every finding in one generator pass; re-run the reader once (two documents changed); read the thread's first-pass figures against the careful column; then READY with both zips",
   "approved": null,
   "submitted": null,
   "portal": {

@@ -83,7 +83,7 @@ Estimand: the prompt fixes the loss's window (wafers sorted 1 April to 31 August
   yield, good die by product), the dose's unit (wafers of the part's own use; points of the outermost zone's fail rate per
   1,000 wafers), the bridge's order (what the 2,000-wafer rule would have cost anyway, what Rev F added, what EW-118
   added), the count's lever (the part out of the full PM, Rev G's draft in the spec) and the saving's comparison (Rev F as
-  it stands); the cost inputs' spec_changes note files the costing.
+  it stands); the cost inputs' Rev G costing note files the costing.
 No decoy: nothing is written to carry a wrong answer; the excursion ticket reports the classifier's rising EDGE_RING
   share, which is true and answers a shallower question, and the die-map review set is the yield team's working sample,
   labelled by requester; no document ranks a cause or proposes a count.
@@ -114,7 +114,7 @@ Lesson: a loss whose cause resets with its rivals is measured against the fresh 
 | R3 | Each candidate's share: the disk's wear 96.5 per cent, the pad's life on top of it 3.5, the retaining ring, DEP-3, SC-4 and the RF hours each within 1 per cent of none | investigation loops | the maintenance log's decoupled entries; the disk lives as the units that vary; the six ring-only swaps | disk 92 to 100, pad 0 to 8, the retaining ring within 2.5, each rival within 2 | method shortcut: one joint fit read wafer by wafer gives the retaining ring 4.6 per cent (t of 10 to 14 on the wafers, under 2 on the disk lives) | - | Ask 2 |
 | R4 | Each unit's onset and slope: PU-1 and PU-2 at 1,300 wafers and 17.0 points per 1,000; PU-3 and PU-4 at 910 and 21.2 | modeling | the counters rebuilt from the log; the hinge fit by downforce pair | onset and slope each within 15 per cent | method shortcut: one fit over the fleet (1,090 wafers, 18.5 points), or the polish record's own pad counter | - | Component 2 |
 | R5 | The shares of the loss: 23 per cent the 2,000-wafer rule would have cost anyway, 34 per cent Rev F's move to 2,800 added, 43 per cent the EW-118 retained disks added | causal reasoning | the prompt's order; the spec's rules and dates; each rule run on each unit's own wafers from 5 January | each within 0.03 | stopped at the first story: the loss sliced at 2,000 and 2,800 wafers of disk use, 18, 40 and 42 per cent | R4 | Component 3 |
-| R6 | Each unit's count for the disk under Rev G: PU-1 and PU-2 at 1,570 wafers, PU-3 and PU-4 at 1,200 | synthesis | the spec's Rev G draft; the cost inputs' disk change and spec_changes note; R4's fits at the summer's mix | each within 8 per cent | method shortcut: one fleet count of 1,370, or a dose from zero at 1,100 and 870 | R4 | Recommendation |
+| R6 | Each unit's count for the disk under Rev G: PU-1 and PU-2 at 1,570 wafers, PU-3 and PU-4 at 1,200 | synthesis | the spec's Rev G draft; the cost inputs' disk change and Rev G costing note; R4's fits at the summer's mix | each within 8 per cent | method shortcut: one fleet count of 1,370, or a dose from zero at 1,100 and 870 | R4 | Recommendation |
 | R7 | The yearly saving against Rev F as it stands: USD 288,000 | forecasting | the prompt's comparison; the cost inputs' volume and costing; R6's counts on R4's curves | 265,000 to 311,000 | dismissed own evidence: the summer's own loss rate carried forward as Rev F's though the waiver behind it has ended, 781,000 | R4, R6 | Ask 3 |
 
 Carry-forward: R1, R3 and R4 are graded on their own work; R2 falls only with R1's baseline; R5 and R6 rest on R4's
@@ -210,7 +210,7 @@ Noun swap: nearest mark115 (a deal mechanic for a franchise), task21 (a rate cha
 | SF6 | the bridge's order | Shapley; the prompt's sequence | the 2,000-wafer rule first, then Rev F, then the waiver | the prompt's "would have cost anyway, ... added, ... added" |
 | SF7 | the bridge's counterfactual | the loss sliced by usage; each rule run on each unit's wafers | each rule run on each unit's own sequence, the unscheduled swaps as they happened | the spec: unscheduled changes do not restart the full PM count |
 | SF8 | the count's lever | the part inside the full PM; on its own count | on its own count, out of the full PM | the spec's Rev G draft and the prompt |
-| SF9 | the count's costing | the full PM's all-in; the part's own change | the disk change's all-in each time, the full PM less the disk's price | the cost inputs' spec_changes note |
+| SF9 | the count's costing | the full PM's all-in; the part's own change | the disk change's all-in each time, the full PM less the disk's price | the cost inputs' Rev G costing note |
 | SF10 | the die value at risk | the record's mix; the summer's | the summer's mix (sorted from 1 June) | same call: the window's mix moves every count by under 0.5 per cent |
 | SF11 | Rev F as it stands | the summer's observed rate; Rev F's own cycle | Rev F's own 2,800-wafer cycle on the fitted curves, the waiver ended | the spec's waiver window and the prompt's "as it stands" |
 | SF12 | a unit's year | 58,500 split evenly; split by the units' shares | split by each unit's share of the wafers polished since 1 June | same call: the window's shares move the saving by under 0.2 per cent |

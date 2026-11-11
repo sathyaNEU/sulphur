@@ -22,9 +22,14 @@ in the unit's maintenance log; they do not restart the full PM count.
 
 ## Rev G (draft for the September module review)
 
-The part found responsible for the edge ring under YE-2026-031 comes out of the full PM scope and is changed on its own
-count of wafers polished since it was last replaced, the count set for each unit from the excursion review. The full PM
-keeps its 2,800-wafer interval and its scope for the other parts, and pads stay at every 600 wafers +/- 50.
+Status: draft; bracketed items stay open until YE-2026-031 closes.
+
+| Rev | Effective | Full PM interval | Full PM scope | Pad change | Own count |
+|---|---|---|---|---|---|
+| G (draft) | [after review] | 2,800 wafers | as Rev D less [part] | every 600 wafers +/- 50 | [part]: every [N] wafers since it was last replaced, [N] set per unit |
+
+The part responsible for the edge ring comes out of the full PM scope and is changed on its own count; the excursion
+review names the part and sets each unit's count.
 
 ## Engineering waiver EW-118
 
@@ -108,9 +113,8 @@ def costs_yaml():
          "  disk_change: %d" % disk_all,
          "  ring_change: %d" % ring_all,
          "  full_pm: %d                      # pad, disk and ring together" % full_all,
-         "spec_changes: >",
-         "  A part moved out of the full PM onto its own count is costed at its own change's all-in each time it is",
-         "  changed, and the full PM then costs its all-in less that part's price.",
+         "# Rev G review: a part taken off the full PM is charged its own change's all_in each time it is changed, and the",
+         "# full PM is then charged at full_pm less that part's price.",
          "volume:",
          "  wafers_per_year_ild_cmp: %d" % c["wafers_per_year"],
          "die:"]

@@ -101,7 +101,7 @@ def main():
     spec = open(os.path.join(TGT, PK.F["spec"])).read()
     check("SF8 the spec's Rev G draft takes the part out of the full PM", "comes out of the full PM scope" in spec)
     costs = open(os.path.join(TGT, PK.F["costs"])).read()
-    check("SF9 the cost inputs file the costing of a part moved out of the full PM", "spec_changes" in costs and "less that part's price" in costs)
+    check("SF9 the cost inputs file the costing of a part moved out of the full PM", "Rev G review" in costs and "less that part's price" in costs)
     check("SF10 the window's mix keeps every count inside its band", all(inside(F["rivals"]["R6"]["the April to August mix"][u], B["R6_counts"][u])
                                                                        for u in AN.UNITS))
     check("SF11 the summer's own rate as Rev F's lands outside the saving's band", not inside(R["R7_summer_rate"], B["R7_saving"]),
