@@ -1,282 +1,220 @@
-"""task8 architecture 18: assertions on the clean truth and the cut pack. The input gates, the Sulfur block (R1 to
-R6), every semantic fork row (SF1 to SF11), the bins, mess neutrality and the realism sweep. run(w, r, target)
-is called by make.py; run alone it rebuilds the world from the seed."""
-import collections
+"""task8: the generator's assertions on the cut pack (python3 checks.py): the input gates, the assembly against the
+simulator's record, every semantic fork row, the bar block (rivals, hurried figures outside their bands, the
+level-5 mark, the one-fact test), the forcing line, the hidden factors' footprints, realism, the distractor
+deletion test and agreement with the simulator's clean truth. Exit 1 on any failure."""
 import csv
+import json
 import os
 import re
+import shutil
+import subprocess
 import sys
-import zipfile
+import tempfile
 
 import numpy as np
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
-import core as C    # noqa: E402
-import golden as G  # noqa: E402
-import pack as PK   # noqa: E402
+import golden as GD  # noqa: E402
+import load  # noqa: E402
+import pack as PK  # noqa: E402
 import params as P  # noqa: E402
-import rasch as RA  # noqa: E402
-import world as W   # noqa: E402
+import results as R  # noqa: E402
+import routes as RT  # noqa: E402
+import world  # noqa: E402
 
-RESULTS = []
-
-
-def ok(label, cond, detail=""):
-    RESULTS.append((label, bool(cond), detail))
-
-
-def edge(v, unit):
-    return unit / 2 - abs(v - round(v / unit) * unit)
+TASK = os.path.dirname(HERE)
+TARGET = os.path.join(TASK, "target")
+OUT = []
 
 
-def _rows(target, key):
-    with open(os.path.join(target, PK.FILES[key]), newline="", encoding="utf-8") as f:
-        return list(csv.DictReader(f))
+def check(label, ok, detail=""):
+    OUT.append((label, bool(ok), str(detail)))
 
 
-def input_gates(target):
-    files = sorted(os.listdir(target))
-    ok("G1 ten or more usable files", len(files) >= 10, "%d files" % len(files))
-    cats = {"spreadsheet": {".csv", ".xlsx"}, "text": {".pdf", ".eml"}}
-    seen = {k for k, ext in cats.items() if any(os.path.splitext(f)[1] in ext for f in files)}
-    ok("G2 two or more file categories", len(seen) >= 2, str(sorted(seen)))
-    nres = sum(1 for _ in open(os.path.join(target, PK.FILES["responses"]))) - 1
-    nreg = sum(1 for _ in open(os.path.join(target, PK.FILES["register"]))) - 1
-    ok("G3 a large messy CSV of 20,000 rows or more", nres >= 20000, "%d response rows" % nres)
-    ok("G4 a second large messy CSV of ten or more printed pages", nreg >= 1000, "%d register rows" % nreg)
-    ok("G5 two distractors, never named as such", all(PK.FILES[k] in files for k in PK.DISTRACTORS)
-       and not any("distract" in f.lower() for f in files), str([PK.FILES[k] for k in PK.DISTRACTORS]))
-    bad = [f for f in files if re.search(r"readme|dictionary|notes|manifest|codebook", f, re.I)]
-    sheets = []
-    for f in files:
-        if f.endswith(".xlsx"):
-            z = zipfile.ZipFile(os.path.join(target, f))
-            sheets += re.findall(r'<sheet[^>]*name="([^"]+)"', z.read("xl/workbook.xml").decode())
-    bad += [s for s in sheets if re.search(r"readme|notes|dictionary|about", s, re.I)]
-    ok("G6 no file or sheet describes the data", not bad, str(bad))
-    return nres, nreg
+def pdf_text(path):
+    return " ".join(subprocess.run(["pdftotext", "-layout", path, "-"], capture_output=True, text=True).stdout.split())
 
 
-def sulfur_block(w, r):
-    g, d = r["gold"], r["default"]
-    lv = r["lv"]
-    # R1: the raw material ships, and nothing ships the deciding quantity
-    ok("R1a the response export carries every scored response", int((~np.isnan(w["X"])).sum()) > 300000)
-    ok("R1b the bank file holds one difficulty per item per run, nothing per level",
-       True, "columns: item, pool, strand, context, stem_words, first_paper, run, difficulty_logits, se, fit")
-    # R3a: the analyst test
-    ok("R3a the bank's own values file another pass mark", d["pass_mark"] != g["pass_mark"],
-       "bank %.2f (%d) against %.2f (%d)" % (d["expected"], d["pass_mark"], g["expected"], g["pass_mark"]))
-    # R3b: each lower rung's single correction leaves a wrong answer; the decisive step alone files the golden
-    for nm, x in (("screen", r["screen"]), ("context only", r["ctx"]), ("reading only", r["read"])):
-        ok("R3b the %s route files another pass mark" % nm, x["pass_mark"] != g["pass_mark"],
-           "%.2f (%d)" % (x["expected"], x["pass_mark"]))
-    # R4: the chain, each link skipped
-    raw_carried = P.STANDARD_RAW
-    ok("R4a skipping the equating (the 2022 mark carried) files another pass mark", raw_carried != g["pass_mark"],
-       "%d" % raw_carried)
-    ok("R4b skipping the cancellation (context alone) is wrong", r["ctx"]["pass_mark"] != g["pass_mark"])
-    ok("R4c skipping the joint model (length alone) is wrong", r["read"]["pass_mark"] != g["pass_mark"])
-    ok("R4d skipping the shift altogether (the bank) is wrong", d["pass_mark"] != g["pass_mark"])
-    # R5: the one-fact test, the hint that Level 1 candidates lose on long stems, executed alone
-    ok("R5 the reading hint alone (a length term with no context term) files another pass mark",
-       r["read"]["pass_mark"] != g["pass_mark"], "%.2f" % r["read"]["expected"])
-    # R6: the golden family
-    for nm, v in r["variants"].items():
-        ok("R6 the %s form of the two-cause model files the golden pass mark" % nm, int(round(v)) == g["pass_mark"],
-           "%.2f" % v)
-    if "mml" in r:
-        ok("R6 marginal maximum likelihood calibrations file the golden pass mark",
-           int(round(r["mml"])) == g["pass_mark"], "%.2f" % r["mml"])
-    ok("R6 the golden is within half a mark of the generating truth", abs(g["expected"] - r["truth"]["expected"]) < 0.5,
-       "%.2f against %.2f" % (g["expected"], r["truth"]["expected"]))
-    # the rivals are ruled out by named data: the short everyday items' advantage and the long everyday items' null
-    tab = g["tab"]
-    s = w["it"]["sets"]
-    sp = tab["d"][np.isin(tab["items"], s["sp"])].mean()
-    sa = tab["d"][np.isin(tab["items"], s["sa"])].mean()
-    lp = tab["d"][np.isin(tab["items"], s["lp"])].mean()
-    ok("R6 the short everyday items sit well below the short mathematical ones (context alone is visible)",
-       sa - sp > 0.45, "%.2f" % (sa - sp))
-    ok("R6 the long everyday items sit near the short mathematical ones (the two causes cancel)", abs(lp - sa) < 0.3,
-       "%.2f" % (lp - sa))
-    resid = {nm: np.abs(x["model"]["resid"]).mean() for nm, x in (("joint", g), ("context", r["ctx"]), ("reading", r["read"]))}
-    ok("R6 the joint model fits the shared items better than either single cause",
-       resid["joint"] < 0.7 * min(resid["context"], resid["reading"]), str({k: round(v, 3) for k, v in resid.items()}))
-
-
-def forks(w, r):
-    g = r["gold"]
-    fam = [g["expected"]] + list(r["variants"].values()) + ([r["mml"]] if "mml" in r else [])
-    ok("SF1 the expected mark rounds to one whole mark over the golden family, a fifth of a mark inside its bin",
-       len({int(round(x)) for x in fam}) == 1 and min(edge(x, 1.0) for x in fam) >= 0.2,
-       "family %s" % [round(x, 2) for x in fam])
-    # SF2: a candidate who just meets the standard, read from the bank's 2022 values or the Level 1 calibration
-    b_bank = r["default"]["b"]
-    th_bank = C.standard_theta(b_bank, w["papers"])
-    b_mix = g["b"].copy()
-    ref = w["papers"]["L1-2022"]
-    shift = np.mean(b_bank[ref] - g["b"][ref])
-    b_mix[ref] = b_bank[ref] - shift
-    th2 = C.standard_theta(b_mix, w["papers"])
-    e2 = C.expected(g["b"], w["papers"]["L1-2027"], th2)
-    ok("SF2 the standard read on the bank's 2022 values or the Level 1 calibration files the same pass mark",
-       int(round(e2)) == g["pass_mark"], "%.2f" % e2)
-    # SF3: expected mark against the most likely mark of a candidate at the standard
-    p = W.sig(g["theta"] - g["b"][w["papers"]["L1-2027"]])
-    dist = np.array([1.0])
-    for q in p:
-        dist = np.convolve(dist, [1 - q, q])
-    mode = int(np.argmax(dist))
-    ok("SF3 the most likely mark of a candidate at the standard is the same whole mark", mode == g["pass_mark"],
-       "mode %d" % mode)
-    # SF7: no chance sits near the band's edges
-    ch = np.array(list(r["chances"].values()))
-    near = float(np.min(np.minimum(np.abs(ch - P.BAND[0]), np.abs(ch - P.BAND[1]))))
-    ok("SF7 every item's chance sits at least 0.02 from the band's edges", near >= 0.02, "%.3f" % near)
-    p27 = w["papers"]["L1-2027"]
-    verdicts = []
-    for form, wt in (("linear", True), ("log", True), ("step", True), ("linear", False)):
-        gf = C.golden(w, r["lv"], form=form, weighted=wt)
-        pv = W.sig(gf["theta"] - gf["b"][p27])
-        verdicts.append(tuple((pv < P.BAND[0]).astype(int) - (pv > P.BAND[1]).astype(int)))
-    ok("SF7 every item's band verdict is the same under every form of the split", len(set(verdicts)) == 1,
-       "%d below, %d above" % (verdicts[0].count(1), verdicts[0].count(-1)))
-    # SF9: regional means
-    rg = r["reg_golden"]
-    fam = [rg] + list(r["reg_family"].values())
-    same = all(len({int(round(f[k][0])) for f in fam}) == 1 for k in rg)
-    marg = min(edge(f[k][0], 1.0) for f in fam for k in rg)
-    ok("SF9 every regional mean rounds to one whole mark under the ability estimator and scale family, inside its bin",
-       same and marg >= 0.01, "%.3f; %s" % (marg, {k: [round(f[k][0], 2) for f in fam] for k in rg}))
-    if "reg_avgcand" in r:
-        same = all(round(r["reg_avgcand"][k], 1) == round(rg[k][0], 1) for k in rg)
-        ok("SF9 the expected mark of the region's average candidate rounds differently or the same (recorded)", True,
-           "same" if same else "differs: %s" % {k: round(v, 2) for k, v in r["reg_avgcand"].items()})
-
-
-def regional_conventions(w, r):
-    """SF12 and SF13: how the regions' everyday deviations are centred, and whether they reach the 2027 paper."""
-    lv, m = r["lv"], r["regm"]
-    reg1 = C.region_index(w, lv["r1"])
-    n_resp = (~np.isnan(w["X"][lv["r1"]])).sum(1)
-    share = np.bincount(reg1, weights=n_resp, minlength=len(P.REGIONS)) / n_resp.sum()
-    ok("SF12 the golden centres the regional everyday deviations on their mean weighted by each region's Level 1 "
-       "responses", abs(float((share * m["delta"]).sum())) < 1e-9 and len(set(n_resp.tolist())) == 1,
-       "weighted mean %.1e; every Level 1 sitting carries %d responses" % (float((share * m["delta"]).sum()), n_resp[0]))
-    mu = C.regional_model(w, lv, weighted=False)
-    ru = C.region_means(w, mu["b"], C.region_pr(w, lv, mu), mu["delta"])
-    gap = max(abs(ru[k][0] - r["reg_golden"][k][0]) for k in ru)
-    ok("SF12 centred on their plain mean, with the difficulties re-estimated, the regional means do not move",
-       gap < 0.005 and all(int(round(ru[k][0])) == int(round(r["reg_golden"][k][0])) for k in ru), "largest move %.4f" % gap)
-    d2 = m["delta"] - m["delta"].mean()
-    drop = C.l1_loglik(w, lv, m["b"], m["delta"]) - C.l1_loglik(w, lv, m["b"], d2)
-    ok("SF12 re-centring the deviations without re-estimating the difficulties is not a fit to the Level 1 responses",
-       drop > 10, "log-likelihood lower by %.1f" % drop)
-    bt = C.region_backtest(w, m["b"], C.region_pr(w, lv, m), m["delta"])
-    with_dev = max(abs(v["with_dev"] - v["observed"]) for v in bt.values())
-    without = {k: abs(v["without_dev"] - v["observed"]) for k, v in bt.items()}
-    ok("SF13 dropping the regional deviation on a paper's everyday items misses the 2026 regions' observed mean marks "
-       "(the deviation reproduces them)", with_dev <= 0.1 and max(without.values()) >= 1.0,
-       "with %.2f; without %s" % (with_dev, {k: round(v, 2) for k, v in without.items()}))
-
-
-def population(w, r, target):
-    """SF8 and SF11 on the cut pack: the region of a sitting and the 2026 population."""
-    rows = C.rows_of(w["sittings"], "L1", year=2026)
-    reg_of = {x["centre"].strip().upper(): x["region_name"]
-              for x in csv.DictReader(open(os.path.join(target, PK.FILES["centres"]), encoding="utf-8"))}
-    moved, split = 0, 0
-    for row in csv.DictReader(open(os.path.join(target, PK.FILES["register"]), encoding="utf-8")):
-        if row["status"] != "Sat" or row["paper_year"] != "2026" or row["level"].strip().lower() not in ("level 1", "l1"):
+def main():
+    F = json.load(open(os.path.join(HERE, "figures.json")))
+    E = json.load(open(os.path.join(HERE, "effort.json")))
+    files = sorted(f for f in os.listdir(TARGET) if not f.startswith("."))
+    # ---------------------------------------------------------------- input gates
+    check("gate: ten or more usable files", len(files) >= 10, "%d files" % len(files))
+    check("gate: two or more file categories", {"csv", "xlsx", "pdf"} <= {f.rsplit(".", 1)[1] for f in files})
+    rows = {f: sum(1 for _ in open(os.path.join(TARGET, f), encoding="utf-8")) - 1 for f in files if f.endswith(".csv")}
+    check("gate: a CSV of 20,000 rows or more (the Quill session log)", rows[PK.FILES["quilllog"]] >= 20000,
+          rows[PK.FILES["quilllog"]])
+    check("gate: a messy CSV of ten printed pages or more (KS2, codes and repeated rows)", rows[PK.FILES["ks2"]] >= 500,
+          rows[PK.FILES["ks2"]])
+    check("gate: two or more distractors, unlabelled", len(PK.DISTRACTORS) >= 2 and not any(
+        re.search(r"distract|unused|decoy", f, re.I) for f in files))
+    check("gate: no file describes the data", not any(re.search(r"readme|dictionary|manifest|field.?notes|schema|notes",
+                                                                f, re.I) for f in files))
+    check("gate: no file named after a mechanism", not any(re.search(r"gain|practice|order|dip|transition|norm|equat",
+                                                                     f, re.I) for f in files))
+    # ---------------------------------------------------------------- assembly against the simulator's record
+    W = world.build()
+    D = load.load(TARGET)
+    on_roll = [s for s in W["students"] if not s["left"]]
+    check("R1 assembly: every student on roll at the census is in the census extract", len(on_roll) == len(D["students"]),
+          "%d against %d" % (len(on_roll), len(D["students"])))
+    by_upn = {s["upn"]: s for s in D["students"]}
+    miss, wrong = 0, 0
+    for s in on_roll:
+        d = by_upn[s["upn"]]
+        true_first = None
+        for x in sorted([x for x in W["sittings"] if x["student"] is s], key=lambda x: (x["date"], x["test"])):
+            if x["status"] == "Complete" and (x["test"] != "QUILL" or x["items"] >= P.QUILL_MIN_ITEMS) and x["date"] <= P.CENSUS:
+                true_first = x
+                break
+        f = R.first_valid(d)
+        if (true_first is None) != (f is None):
+            miss += 1
+        elif f is not None and (f["test"] != true_first["test"] or f["sas"] != true_first["sas"] or
+                                f["date"] != true_first["date"]):
+            wrong += 1
+    check("R1 assembly: the first valid sitting the golden reads is the record's for every student on roll",
+          miss == 0 and wrong == 0, "%d missed, %d wrong" % (miss, wrong))
+    left_rows = D["unmatched"]
+    check("R1 assembly: the export rows that match no one on roll are the students who left before the census",
+          sum(left_rows.values()) <= sum(1 for s in W["students"] if s["left"]) * 2, str(left_rows))
+    # ---------------------------------------------------------------- the golden and its rivals
+    G = GD.compute(TARGET)
+    g = G["golden"]
+    check("golden equals figures.json: programme by academy", all(int(g["R6"][a]) == F["programme"][a] for a in g["R6"]))
+    check("golden equals figures.json: total and cost", g["R6_total"] == F["programme_total"] and
+          int(round(g["R8_cost"])) == F["cost_total"])
+    riv = G["rivals"]
+    spread = {a: max(abs(riv[n]["R6"][a] - g["R6"][a]) for n in riv) for a in g["R6"]}
+    check("R7 rivals: every rival within a few students of the golden at every academy (whole score groups)",
+          max(spread.values()) <= 8 and sum(spread.values()) <= 24,
+          "widest %d, total %d" % (max(spread.values()), sum(spread.values())))
+    check("R7 rivals: every rival's trust total inside the total's band",
+          all(G["bands"]["R6_total"][0] <= riv[n]["R6_total"] <= G["bands"]["R6_total"][1] for n in riv))
+    # the hurried figures outside their bands
+    car = G["routes"]["careful"]
+    b = G["bands"]
+    check("R3 hurried: the trial's pairs as they stand file a gain of 0 outside R2's band", not (b["R2"][0] <= car["R2"] <= b["R2"][1]))
+    check("R3 hurried: the July sittings as they stand file a level of 0 outside R5's band", not (b["R5"][0] <= car["R5"] <= b["R5"][1]))
+    out3 = [x for x in R.POINTS if not (b["R3"][x][0] <= car["R3"][x] <= b["R3"][x][1])]
+    check("R3 hurried: the uncorrected trial link lands outside R3's band at most points", len(out3) >= 4, out3)
+    nom = G["routes"]["the other tests' standardised scores read as Lexis scores"]
+    out4 = [x for x in R.POINTS if not (b["R4"][x][0] <= nom["R4"][x] <= b["R4"][x][1])]
+    check("R3 hurried: reading Quill as Lexis lands outside R4's band at every point above the scales' shared floor",
+          len(out4) >= len(R.POINTS) - 1 and all(x in out4 for x in R.POINTS[1:]), out4)
+    out4c = [x for x in R.POINTS if not (b["R4"][x][0] <= car["R4"][x] <= b["R4"][x][1])]
+    check("R3 hurried: the careful pass's Quill link (KS2 to Lexis on every Lexis sitting) outside R4's band at most points",
+          len(out4c) >= 4, out4c)
+    bad = [a for a in g["R6"] if b["R6"][a][0] <= car["R6"][a] <= b["R6"][a][1]]
+    share = {}
+    for p in g["placements"]:
+        a = p["s"]["academy"]
+        share.setdefault(a, [0, 0])
+        share[a][0] += p["basis"] in ("brightway", "july")
+        share[a][1] += 1
+    moved = {a for a, (k, n) in share.items() if k > 0.5 * n}
+    check("R3 hurried: the careful pass misses the count at most Brightway and July academies",
+          sum(1 for a in moved if a not in bad) >= len(moved) - 1, "inside at %s" % ", ".join(sorted(set(bad) & moved)))
+    check("R3 hurried: the careful total sits outside the total's band", not (b["R6_total"][0] <= car["R6_total"] <= b["R6_total"][1]),
+          "%d against %s" % (car["R6_total"], b["R6_total"]))
+    for nm in RT.SINGLE:
+        r = G["routes"][nm]
+        check("R3 hurried: '%s' total outside the band" % nm, not (b["R6_total"][0] <= r["R6_total"] <= b["R6_total"][1]),
+              r["R6_total"])
+    # level 5: different shortcuts, different wrong answers
+    answers = {json.dumps(r["R6"], sort_keys=True) for nm, r in G["routes"].items()}
+    check("level 5: the shortcuts place students in four or more different ways", len(answers) >= 4, len(answers))
+    worst = max(len(h["rescues"]) for h in E["hints"])
+    check("one-fact test: no hint rescues more than a third of the results", worst <= 3, "%d of 9" % worst)
+    check("one-fact test: no hint rescues the tutor time", not any("R8" in h["rescues"] for h in E["hints"]))
+    # forcing: the provisional budget between the shortcuts and the golden family
+    line = P.PROVISIONAL_BUDGET
+    check("forcing: every rival's cost above the provisional budget", all(r["R8_cost"] > line for r in riv.values()))
+    check("forcing: every shortcut's cost at or below the provisional budget",
+          all(G["routes"][nm]["R8_cost"] <= line for nm in ["careful"] + list(RT.SINGLE)
+              if nm != "Brightway through KS2 rather than the trial"),
+          {nm: round(G["routes"][nm]["R8_cost"]) for nm in ["careful"] + list(RT.SINGLE)})
+    check("forcing: every fitted input moved by its spread keeps the cost above the budget",
+          all(p["value"] > line for p in G["perturbations"]), [p["students"] for p in G["perturbations"]])
+    check("forcing: the provisional budget is last October's numbers at this year's rate",
+          abs(P.LAST_OCTOBER * P.HOURS_PER_STUDENT * P.WEEKS * P.RATE - line) < 50)
+    # ---------------------------------------------------------------- the factors run across the data
+    gains = [x["student"]["gain"] for x in W["sittings"] if x["kind"] in ("trial_second", "second")]
+    check("footprint: the second-sitting gain is on every second sitting, both tests, every Brightway academy",
+          len({x["academy"] for x in W["sittings"] if x["kind"] in ("trial_second", "second")}) == 5 and
+          any(x["kind"] == "second" for x in W["sittings"]))
+    check("footprint: the July level is on every student's Year 6 reading (KS2 carries it too)",
+          abs(np.mean([s["july"] for s in W["students"]]) - P.JULY_LEVEL) < 0.02)
+    check("footprint: the Quill norm sample sits under every Quill result, at all seven Quill academies",
+          len({a["name"] for a in W["academies"] if a["test"] == "QUILL"}) == 7)
+    check("realism: the effects carry noise (no clean step)", np.std(gains) > 0.05)
+    # ---------------------------------------------------------------- semantic forks
+    pol = pdf_text(os.path.join(TARGET, PK.FILES["policy"]))
+    for sf, phrase in [("SF1 on roll", "on roll at an academy of the trust at the October census"),
+                       ("SF2 the Lexis basis", "on the Lexis 2019 standardisation"),
+                       ("SF3 a whole score", "as a whole standardised score"),
+                       ("SF4 first valid sitting", "first valid sitting of an entry reading test after the May 2026 KS2"),
+                       ("SF5 Quill validity", "answered at least 24 questions"),
+                       ("SF6 equal reading", "result counts at the whole Lexis score of equal reading at the start of Year 7"),
+                       ("SF7 KS2 placement", "placed from their KS2 reading scaled"),
+                       ("SF8 below 85", "entry reading is below 85"),
+                       ("SF9 tutor time", "0.4 tutor hours a week for each Reading Forward student"),
+                       ("SF10 the budget", "is £339,500"),
+                       ("SF13 the Brightway link", "to put Brightway results on the Lexis basis")]:
+        check("%s: filed once in the policy" % sf, pol.count(phrase) == 1, phrase)
+    check("SF11 a moved student counts at the census academy on the first sitting",
+          all(p["s"]["academy"] in D["academies"] for p in g["placements"]))
+    late = [s for s in D["students"] if any(x["valid"] and x["date"] > P.CENSUS for x in s["sittings"])
+            and not any(x["valid"] and x["date"] <= P.CENSUS for x in s["sittings"])]
+    check("SF12 a sitting after the census is not by the census (placed on KS2)", all(
+        R.entry(s, g["links"])[1] in ("ks2", "none") for s in late), "%d students" % len(late))
+    # ---------------------------------------------------------------- truth
+    truth = {}
+    for s in on_roll:
+        d = by_upn[s["upn"]]
+        if R.first_valid(d) is None and d["ks2"] is None:
             continue
-        h, s = row["home_centre"].strip().upper(), row["sat_at"].strip().upper()
-        if h != s:
-            moved += 1
-            split += reg_of.get(h) != reg_of.get(s)
-    ok("SF8 the home centre and the centre sat at lie in one region for every 2026 Level 1 sitting (the readings "
-       "converge)", moved > 0 and split == 0, "%d sittings away from their home centre, %d outside its region" % (moved, split))
-    seen = set()
-    for row in csv.DictReader(open(os.path.join(target, PK.FILES["register"]), encoding="utf-8")):
-        lv = row["level"].strip().lower()
-        if row["status"] == "Sat" and row["candidate_id"] and lv in ("level 1", "l1") and row["paper_year"] == "2026":
-            seen.add(row["candidate_id"].strip().upper())
-    n_gold = sum(v[1] for v in r["reg_golden"].values())
-    ok("SF11 the 2026 population: one per candidate who sat, the register's repeats and absences aside, equals the "
-       "sittings the golden averages", len(seen) == n_gold == len(rows), "%d register, %d golden" % (len(seen), n_gold))
-
-
-def bins_and_asks(w, r):
-    g = r["gold"]
-    pr = w["it"]["sets"]["pr"]
-    below = [k for k, v in r["chances"].items() if v < P.BAND[0]]
-    ok("A1 the golden puts four or more items below the band", len(below) >= 4, str(len(below)))
-    bank_below = [i for i in pr if W.sig(r["default"]["theta"] - r["default"]["b"][i]) < P.BAND[0]]
-    ok("A2 the bank's values put fewer items below the band", len(bank_below) < len(below), str(len(bank_below)))
-    diff = [int(round(r["reg_golden"][k][0])) != int(round(r["reg_bank"][k][0])) for k in r["reg_golden"]]
-    ok("A3 the bank's route misses every regional whole mark", all(diff), "%d of %d" % (sum(diff), len(diff)))
-    pooled = [int(round(r["reg_golden"][k][0])) != int(round(r["reg_pooled"][k][0])) for k in r["reg_golden"]]
-    ok("A4 the pooled route (no regional everyday deviation) misses some regional means", sum(pooled) >= 3,
-       "%d of %d" % (sum(pooled), len(pooled)))
-
-
-def realism(target, w):
-    res = _rows(target, "responses")
-    sids = sorted({x["sitting_id"] for x in res})
-    steps = np.diff([int(s[1:]) for s in sids])
-    ok("H1 sitting ids advance by uneven steps", len(set(steps.tolist())) > 1)
-    reg = _rows(target, "register")
-    regs = np.diff(sorted(int(x["registration_no"][1:]) for x in reg))
-    ok("H1 registration numbers advance by uneven steps", len(set(regs.tolist())) > 1)
-    codes = sorted(int(c.split("-")[1]) for c in w["it"]["code"] if c.startswith("N1"))
-    ok("H1 bank codes advance by uneven steps", len(set(np.diff(codes).tolist())) > 1)
-    shapes = collections.Counter(re.sub(r"[A-Z][a-z]+", "W", c["name"]).split(" ")[-1] for c in w["centres"])
-    ok("H3 centre names take more than two shapes", len(shapes) > 2, str(dict(shapes)))
-    yr = collections.Counter((s["level"], s["year"]) for s in w["sittings"])
-    ok("H4 no two years carry the same number of sittings", len(set(yr.values())) == len(yr))
-    dup = [x for x in res if x["item"]]
-    keys = collections.Counter((x["sitting_id"], x["item"]) for x in dup)
-    ok("M1 some items answered twice after a reconnect (both rows kept)", 0 < sum(1 for v in keys.values() if v > 1) <
-       0.002 * len(keys))
-    pos = [x for x in res if x["item"].startswith("Q")]
-    ok("M2 the 2022 and 2023 sittings are keyed by paper position", pos and all(x["paper"][-4:] in ("2022", "2023")
-                                                                          for x in pos))
-    st = collections.Counter(x["status"] for x in reg)
-    ok("M3 the register carries withdrawn and absent registrations", st["Withdrawn"] > 0 and st["Absent"] > 0, str(dict(st)))
-    cand = collections.Counter((x["candidate_id"], x["paper_year"], x["level"][-1]) for x in reg if x["status"] == "Sat")
-    ok("M4 some candidates are recorded twice for one sitting", 0 < sum(1 for v in cand.values() if v > 1) < 0.05 * len(cand))
-    bank = _rows(target, "bank")
-    ok("M5 the bank file carries the preliminary and the final run", {x["run"] for x in bank} ==
-       {"2026-06 preliminary", "2026-10 final"})
-
-
-def mess_neutral(w, r):
-    """Reconnect rows: keeping the first answer of a re-answered item instead of the last moves nothing graded."""
-    ok("R2a reconnects touch about one sitting in a hundred", True, "rate %.3f" % P.RECONNECT_RATE)
-    ok("R2b the preliminary run files a wrong pass mark too",
-       int(round(C.expected(r["bank"]["prelim"]["b"], w["papers"]["L1-2027"],
-                            C.standard_theta(r["bank"]["prelim"]["b"], w["papers"])))) != r["gold"]["pass_mark"])
-
-
-def run(w, r, target):
-    RESULTS.clear()
-    input_gates(target)
-    sulfur_block(w, r)
-    forks(w, r)
-    regional_conventions(w, r)
-    population(w, r, target)
-    bins_and_asks(w, r)
-    realism(target, w)
-    mess_neutral(w, r)
-    bad = [x for x in RESULTS if not x[1]]
-    for lab, good, det in RESULTS:
-        print("%s %-100s %s" % ("ok  " if good else "FAIL", lab[:100], det))
-    print("checks: %d assertions, %d failures" % (len(RESULTS), len(bad)))
+        t = s["test"]
+        truth[t] = truth.get(t, 0) + s["p_below"]
+    gold_t = {}
+    for p in g["placements"]:
+        gold_t[p["s"]["test"]] = gold_t.get(p["s"]["test"], 0) + int(p["placed"])
+    for t, v in truth.items():
+        k = {"LEXIS": "Lexis", "QUILL": "Quill", "BRIGHTWAY": "Brightway"}[t]
+        check("truth: the %s academies' count within 6 per cent of the simulator's expectation" % k,
+              abs(gold_t[k] - v) <= 0.06 * v + 6, "%d against %.1f" % (gold_t[k], v))
+    check("truth: the trust total within 4 per cent of the simulator's expectation",
+          abs(g["R6_total"] - sum(truth.values())) <= 0.04 * sum(truth.values()), "%d against %.1f" % (
+              g["R6_total"], sum(truth.values())))
+    check("truth: the gain and the July level near the process's own", abs(g["R2"] - 15 * P.SECOND_SITTING_GAIN) < 1.2
+          and abs(g["R5"] - 15 * P.JULY_LEVEL) < 1.2, "%.2f, %.2f" % (g["R2"], g["R5"]))
+    # ---------------------------------------------------------------- realism
+    cen = list(csv.DictReader(open(os.path.join(TARGET, PK.FILES["census"]), encoding="utf-8")))
+    adm = sorted(int(r["admission_no"]) for r in cen)
+    check("realism: admission numbers are not a sequence", len(set(np.diff(adm))) > 3)
+    check("realism: no sitting after the exports", all(x["date"] <= P.EXPORTED + __import__("datetime").timedelta(days=6)
+                                                         for s in D["students"] for x in s["sittings"]))
+    check("realism: academies differ in size", len({len([1 for r in cen if r["academy"] == a]) for a in D["academies"]}) > 15)
+    check("realism: the cost is not a round figure", F["cost_total"] % 1000 != 0)
+    # distractors: deleting each changes nothing the golden reads
+    tmp = tempfile.mkdtemp()
+    try:
+        for f in files:
+            if f not in [PK.FILES[k] for k in PK.DISTRACTORS]:
+                shutil.copy(os.path.join(TARGET, f), tmp)
+        D2 = load.load(tmp)
+        g2 = R.all_results(D2, R.GOLD)
+        check("distractors: the golden is the same with every distractor deleted", g2["R6"] == g["R6"])
+    finally:
+        shutil.rmtree(tmp, ignore_errors=True)
+    bad = [o for o in OUT if not o[1]]
+    for label, ok, detail in OUT:
+        print("%s  %-96s %s" % ("PASS" if ok else "FAIL", label[:96], detail[:70]))
+    print("%d checks, %d FAIL" % (len(OUT), len(bad)))
     return 1 if bad else 0
 
 
 if __name__ == "__main__":
-    w = W.build()
-    r = C.compute(w)
-    sys.exit(run(w, r, os.path.join(os.path.dirname(HERE), "target")))
+    sys.exit(main())

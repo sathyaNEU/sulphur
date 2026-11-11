@@ -1,197 +1,177 @@
-"""task8 architecture 18: the Board's documents, written in Writer and exported (officepdf): the Level 1 Numeracy
-specification, the 2022 standard-setting record and the Awards Committee's September 2026 minute; and the chair's
-email asking for the recommendation."""
+"""task8: the pack's documents and workbooks. The trust's Reading Forward policy (version 3) and the three test
+publishers' technical summaries are Word documents exported to PDF by LibreOffice Writer through the house writer;
+the Brightway results workbook (typed by each academy's staff) passes through the house workbook writer."""
 import datetime as dt
+import os
+import sys
 
+from openpyxl import Workbook
+from openpyxl.styles import Font
 from reportlab.lib import colors
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
-from reportlab.lib.units import mm
 from reportlab.platypus import Paragraph, Spacer, Table, TableStyle
 
-import officepdf as O
-import params as P
+HERE = os.path.dirname(os.path.abspath(__file__))
+WRITERS = os.path.join(os.path.dirname(os.path.dirname(HERE)), ".claude", "skills", "reduce-house-fixes", "scripts",
+                       "writers")
+sys.path.insert(0, WRITERS)
+import officepdf as O  # noqa: E402
+import postprocess  # noqa: E402
+import params as P  # noqa: E402
 
-CST = dt.timezone(dt.timedelta(hours=-6))
-CDT = dt.timezone(dt.timedelta(hours=-5))
-SS = getSampleStyleSheet()
-BODY = ParagraphStyle("b", parent=SS["Normal"], fontName="Helvetica", fontSize=9.2, leading=12.4, spaceAfter=5)
-H1 = ParagraphStyle("h1", parent=SS["Heading1"], fontName="Helvetica-Bold", fontSize=13.5, leading=17, spaceAfter=6)
-H2 = ParagraphStyle("h2", parent=SS["Heading2"], fontName="Helvetica-Bold", fontSize=10.4, leading=13.5,
-                    spaceBefore=6, spaceAfter=3)
-SMALL = ParagraphStyle("s", parent=BODY, fontSize=7.8, leading=10, textColor=colors.HexColor("#444444"))
-CELL = ParagraphStyle("c", parent=BODY, fontSize=7.6, leading=9.4, spaceAfter=0)
-CELLB = ParagraphStyle("cb", parent=CELL, fontName="Helvetica-Bold")
-
-PEOPLE = {"manager": "Yvette Clark", "chair": "Shawn Simpson", "psychometrician": "Andrew Adams"}
+BST = dt.timezone(dt.timedelta(hours=1))
+GMT = dt.timezone(dt.timedelta(hours=0))
 
 
-def _esc(x):
-    return str(x).replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;")
+def styles():
+    ss = getSampleStyleSheet()
+    body = ParagraphStyle("body", parent=ss["Normal"], fontName="Helvetica", fontSize=9.6, leading=13.2, spaceAfter=5)
+    h1 = ParagraphStyle("h1", parent=ss["Heading1"], fontName="Helvetica-Bold", fontSize=13.5, leading=17, spaceAfter=4)
+    h2 = ParagraphStyle("h2", parent=ss["Heading2"], fontName="Helvetica-Bold", fontSize=10.5, leading=14,
+                        spaceBefore=8, spaceAfter=4, keepWithNext=1)
+    small = ParagraphStyle("small", parent=body, fontSize=8.2, leading=10.8, textColor=colors.HexColor("#444444"))
+    cell = ParagraphStyle("cell", fontName="Helvetica", fontSize=8.4, leading=10.2)
+    return body, h1, h2, small, cell
 
 
-def _p(t, st=BODY):
-    return Paragraph(_esc(t), st)
-
-
-def _table(rows, widths):
-    data = [[Paragraph(_esc(c), CELLB if i == 0 else CELL) for c in r] for i, r in enumerate(rows)]
-    t = Table(data, colWidths=[w * mm for w in widths], hAlign="LEFT")
-    t.setStyle(TableStyle([("LINEBELOW", (0, 0), (-1, 0), 0.6, colors.HexColor("#333333"))]))
+def grid(rows, widths, cell):
+    t = Table([[Paragraph(str(c), cell) for c in r] for r in rows], colWidths=widths, repeatRows=1)
+    t.setStyle(TableStyle([("GRID", (0, 0), (-1, -1), 0.4, colors.HexColor("#9AA0AB")),
+                           ("VALIGN", (0, 0), (-1, -1), "TOP")]))
     return t
 
 
-SPEC_SENTENCES = {
-    "pass": ("The pass mark on each Level 1 paper is the mark that a candidate who just meets the Level 1 standard "
-             "can be expected to score on that paper, rounded to the nearest whole mark."),
-    "band": ("Each item on a Level 1 paper should be one that a candidate who just meets the Level 1 standard "
-             "answers correctly with a chance of at least 0.20 and at most 0.90."),
+POLICY = [
+    ("1. Purpose and scope", [
+        "Reading Forward supports Year 7 students whose reading at the start of secondary school is below the level "
+        "the Key Stage 3 curriculum assumes. This policy sets who joins the programme in each academy and the tutor "
+        "time each academy is given for it. It covers every Year 7 student on roll at an academy of the trust at the "
+        "October census (1 October 2026 for the 2026-27 year)."]),
+    ("2. Entry reading", [
+        "2.1 A student's entry reading is their reading at the start of Year 7, on the Lexis 2019 standardisation (the "
+        "Lexis basis), as a whole standardised score.",
+        "2.2 It is taken from the student's first valid sitting of an entry reading test after the May 2026 KS2 "
+        "tests. A sitting is valid when the test was completed; a Quill session is valid when the student answered "
+        "at least 24 questions.",
+        "2.3 Each result counts at the whole Lexis score of equal reading at the start of Year 7.",
+        "2.4 A student on roll who has no valid sitting by the census is placed from their KS2 reading scaled "
+        "score, at the whole Lexis score of equal reading at the start of Year 7. A student with neither is "
+        "assessed on arrival and is not in the October numbers."]),
+    ("3. Who joins", [
+        "A Year 7 student joins Reading Forward when their entry reading is below 85. Places are confirmed to "
+        "families by each academy after the October census."]),
+    ("4. Tutor time", [
+        "Each academy is given 0.4 tutor hours a week for each Reading Forward student, for the 36 teaching weeks of "
+        "the year. Tutor time is costed at the trust's reading tutor rate, £27.80 an hour for 2026-27 including "
+        "on-costs. The provisional 2026-27 budget, approved with this policy on last October's 848 Reading Forward "
+        "students, is £339,500; the trust board approves the final budget at its October meeting on the October "
+        "census numbers."]),
+    ("5. Review in the year", [
+        "Reading Forward students are re-assessed in January and in June. A student leaves the programme at a "
+        "re-assessment when their reading reaches 85; the tutor time set in October is not reduced in-year."]),
+    ("6. Changes", [
+        "Version 3 (July 2026) places every academy's students on the Lexis basis ahead of the trust's move to Lexis "
+        "in all academies from September 2027. Year 7 at the Brightway academies also sit Lexis in September 2026, "
+        "to put Brightway results on the Lexis basis. Version 2 (September 2024) placed students on their own "
+        "academy's test, on a standardised score below 85."]),
+]
+
+
+def policy(path):
+    body, h1, h2, small, cell = styles()
+    s = [Paragraph("%s · Education" % P.TRUST, small),
+         Paragraph("Reading Forward: Year 7 entry reading", h1),
+         Paragraph("Trust policy, version 3. Approved by the trust board on 9 July 2026. Owner: Rosemary Collier, "
+                   "director of education.", small), Spacer(1, 4)]
+    for head, paras in POLICY:
+        s.append(Paragraph(head, h2))
+        for p in paras:
+            s.append(Paragraph(p, body))
+    O.build(path, s, "Reading Forward: Year 7 entry reading", "Rosemary Collier", "Trust policy",
+            "%s · Reading Forward policy v3" % P.TRUST, dt.datetime(2026, 7, 9, 15, 12, tzinfo=BST),
+            dt.datetime(2026, 7, 10, 8, 44, tzinfo=BST), page_of=True, producer="LibreOffice 25.8")
+
+
+TECH = {
+    "LEXIS": ("Lexis Assessment", "Lexis 11-14 Reading: technical summary", [
+        ("The test", "Lexis 11-14 is an online test of reading comprehension for students aged 11 to 14. Form A has "
+                     "48 questions on six passages (fiction, non-fiction and a poem) and is taken in one sitting of 40 "
+                     "minutes, with a further 10 minutes for students with extra time. Questions are marked by the "
+                     "platform; results are available to the school the next day."),
+        ("Standardisation", "Standard age scores were set in 2019 on 4,212 students in 168 maintained schools and "
+                            "academies in England and Wales, sampled by region, school type and attainment, each "
+                            "taking the test for the first time between September and November. Scores are "
+                            "standardised by age in months, with a mean of 100 and a standard deviation of 15."),
+        ("Reporting", "The standard age score runs from 69 to 141; 69 is shown for scores below 70 and 141 for scores "
+                      "above 140. A stanine and a reading age are reported alongside."),
+        ("Reliability", "Internal consistency (Cronbach's alpha) 0.93 in the standardisation sample; standard error of "
+                        "measurement 4.0 standard age score points.")]),
+    "QUILL": ("Quill Learning", "Quill Reading: technical summary (UK edition)", [
+        ("The assessment", "Quill Reading is an adaptive online reading assessment for Years 3 to 11. Each question is "
+                           "chosen from the bank by the student's answers so far; a full session is 24 to 34 "
+                           "questions and usually takes 20 to 35 minutes."),
+        ("Scales", "The Quill scaled score (0 to 1400) runs across all year groups. The standardised score compares a "
+                   "student with others of the same age in months, mean 100 and standard deviation 15, from 69 to "
+                   "141."),
+        ("Standardisation", "The UK standardised scores were set in a 2024 restandardisation on 6,840 students in "
+                            "Years 6 to 9 in 214 schools in England, weighted to the national school population by "
+                            "region and free school meals."),
+        ("Reliability", "Marginal reliability 0.91; the session report gives each student's standard error.")]),
+    "BRIGHTWAY": ("Brightway Education", "Brightway Reading Check: technical summary", [
+        ("The test", "The Brightway Reading Check is a paper test of reading for Years 6 to 8: 50 questions in 45 "
+                     "minutes, marked by the school with the mark scheme and converted to a standardised score "
+                     "with the norm tables in the teacher's guide."),
+        ("Standardisation", "The norm tables were set in 2016 on 2,390 pupils in Years 6 to 8 in 61 schools in the "
+                            "North of England and the Midlands. Scores are standardised by age in months, with a mean "
+                            "of 100 and a standard deviation of 15."),
+        ("Reporting", "The norm tables give standardised scores from 70 to 130; scores below the tables are reported "
+                      "as &lt;70 and above them as &gt;130."),
+        ("Reliability", "KR-20 0.87; standard error of measurement 5.4 points.")]),
 }
 
 
-def specification(path):
-    s = [_p("Level 1 Numeracy: qualification specification", H1),
-         _p("%s. Version 2026.1, approved by the Board on 12 March 2026 for papers set from 2027; replaces version "
-            "2021.2." % P.ORG, SMALL),
-         Spacer(1, 4),
-         _p("1. Purpose", H2),
-         _p("Level 1 Numeracy recognises that an adult can work with whole numbers, simple fractions and decimals, "
-            "money, measures, simple data and number patterns at the level set out in the Board's Level 1 performance "
-            "descriptors, in the settings of daily life, training and work. It is offered through registered "
-            "community learning centres in Manitoba and Saskatchewan and is recognised by the provinces' adult "
-            "learning programmes as the numeracy entry point to Level 2 and to apprenticeship preparation."),
-         _p("2. The paper", H2),
-         _p("Candidates sit one paper online at a registered learning centre, under the centre's invigilation, on a "
-            "day the centre arranges between 1 February and 30 October. The paper has 40 items worth one mark each "
-            "and candidates have 75 minutes. Answers are typed: a number, a value with its unit, or a short word or "
-            "phrase. On-screen calculators are available for every item. A new paper is set for each calendar "
-            "year, and a candidate sits a given year's paper once; a candidate who does not pass may register for "
-            "the next year's paper."),
-         _p("3. Content", H2),
-         _p("From 2027 the paper covers five strands. The 2026 revision adds the patterns and relationships strand "
-            "(sequences, rules written in words, simple formulas and proportional reasoning) and reduces money and "
-            "measures accordingly."),
-         _table([["Strand", "Items from 2027", "Items to 2026"], ["Number", "10", "11"],
-                 ["Money and measures", "8", "14"], ["Data", "5", "8"], ["Shape and space", "5", "7"],
-                 ["Patterns and relationships", "12", "none"]], [62, 32, 32]),
-         _p("Items are set in everyday contexts (money and shopping, the home, travel, the workplace) or in "
-            "mathematical contexts."),
-         _p("4. The standard and the pass mark", H2),
-         _p("4.1 The Level 1 standard is the one the Board's standard-setting panel fixed on the 2022 Level 1 paper "
-            "and the Board adopted on 9 May 2022 (record LN1-SS-2022)."),
-         _p("4.2 " + SPEC_SENTENCES["pass"] + " A candidate whose mark reaches the pass mark is awarded Level 1 "
-            "Numeracy."),
-         _p("4.3 The Awards Committee sets each paper's pass mark before the paper opens, on the recommendation of "
-            "the assessment manager. A pass mark is not changed once its paper has opened."),
-         _p("5. Item quality", H2),
-         _p("5.1 " + SPEC_SENTENCES["band"] + " Items outside that range are reported to the Item Review Group, "
-            "which decides whether they are kept for later papers; they stay on the paper for which they were set."),
-         _p("5.2 Every item is reviewed for bias and accessibility before first use, and its record in the item bank "
-            "is reviewed each year after the papers close."),
-         _p("6. Access arrangements", H2),
-         _p("Centres may give a candidate up to 25 minutes' extra time, a reader for the instructions (not the "
-            "items) or a separate room, as recorded on the candidate's registration. No other change to the paper "
-            "is made."),
-         Spacer(1, 6),
-         _p("Document control: version 2026.1; owner, Assessment Manager; next review March 2028.", SMALL)]
-    O.build(path, s, "Level 1 Numeracy: qualification specification", P.ORG, "Level 1 Numeracy specification, "
-            "version 2026.1", P.ORG + " | LN1 specification 2026.1",
-            dt.datetime(2026, 3, 12, 15, 40, tzinfo=CST), dt.datetime(2026, 3, 13, 9, 12, tzinfo=CST))
+def technical(path, test):
+    body, h1, h2, small, cell = styles()
+    org, title, parts = TECH[test]
+    s = [Paragraph(org, small), Paragraph(title, h1), Spacer(1, 4)]
+    for head, text in parts:
+        s.append(Paragraph(head, h2))
+        s.append(Paragraph(text, body))
+    created = {"LEXIS": dt.datetime(2023, 3, 2, 10, 5, tzinfo=GMT), "QUILL": dt.datetime(2024, 11, 18, 14, 40, tzinfo=GMT),
+               "BRIGHTWAY": dt.datetime(2017, 1, 23, 9, 30, tzinfo=GMT)}[test]
+    producer = {"LEXIS": "LibreOffice 7.4", "QUILL": "LibreOffice 24.8", "BRIGHTWAY": "LibreOffice 5.2"}[test]
+    O.build(path, s, title, org, "Technical summary", org, created, created + dt.timedelta(minutes=37),
+            producer=producer)
 
 
-def standard_record(path):
-    rounds = [["Round", "Panellists", "Median of panellists' totals", "Range of totals", "Board's note"],
-              ["1 (item ratings, before discussion)", "12", "25.4", "21.9 to 29.6", "item data not yet shown"],
-              ["2 (after discussion of the ratings)", "12", "26.0", "23.8 to 28.1", "item facility shown"],
-              ["3 (final ratings)", "12", "26.2", "24.6 to 27.5", "adopted, rounded to 26"]]
-    s = [_p("Level 1 Numeracy: standard-setting record", H1),
-         _p("%s. Record LN1-SS-2022. Panel met 26 and 27 April 2022, Winnipeg; adopted by the Board 9 May 2022." % P.ORG,
-            SMALL),
-         Spacer(1, 4),
-         _p("1. Panel", H2),
-         _p("Twelve panellists: seven adult numeracy tutors from community learning centres in both provinces, two "
-            "apprenticeship preparation instructors, two of the Board's markers and one employer representative. "
-            "Each had taught or assessed Level 1 learners within the last two years. The Board's assessment staff "
-            "facilitated and did not rate."),
-         _p("2. Method", H2),
-         _p("The panel worked from the Level 1 performance descriptors and the 2022 Level 1 paper. Panellists first "
-            "agreed a description of a candidate who just meets the Level 1 standard, then rated each of the paper's "
-            "40 items: the chance, out of 100, that such a candidate answers it correctly. A panellist's total is the "
-            "sum of their ratings over the 40 items, read as the mark such a candidate can be expected to score. "
-            "Ratings were made three times; between rounds the panel discussed the items with the widest spread of "
-            "ratings and, before the second round, saw each item's facility from the 2022 sittings to date."),
-         _table(rounds, [44, 18, 34, 28, 40]),
-         _p("3. Outcome", H2),
-         _p("The panel recommended, and the Board adopted on 9 May 2022, the Level 1 standard as the performance of a "
-            "candidate who just meets the Level 1 descriptors: such a candidate can be expected to score 26 of the 40 "
-            "marks on the 2022 Level 1 paper. The 2022 pass mark was set at 26."),
-         _p("4. Evaluation", H2),
-         _p("All twelve panellists rated the training and the process as clear or very clear; eleven were confident "
-            "or very confident in the final recommendation and one was neutral. The facilitators' notes record no "
-            "procedural concerns."),
-         Spacer(1, 6),
-         _p("Facilitated by the Board's assessment staff; record prepared by the Assessment Manager, 20 May 2022.",
-            SMALL)]
-    O.build(path, s, "Level 1 Numeracy: standard-setting record", P.ORG, "Standard-setting record LN1-SS-2022",
-            P.ORG + " | LN1-SS-2022", dt.datetime(2022, 5, 20, 14, 5, tzinfo=CDT),
-            dt.datetime(2022, 5, 20, 16, 48, tzinfo=CDT))
-
-
-def minute(path, l1_2026, l2_2026):
-    s = [_p("Awards Committee: minute of the meeting of 17 September 2026", H1),
-         _p("%s. Held by video call, 10:00 to 11:35 Central. Unconfirmed: to be confirmed at the next meeting of the "
-            "Committee." % P.ORG,
-            SMALL),
-         Spacer(1, 4),
-         _p("Present: %s (chair), %s (Assessment Manager), %s (psychometrician), two centre representatives (Westman, "
-            "Regina and South), the Level 2 lead marker. Apologies: the Saskatoon and Central centre representative."
-            % (PEOPLE["chair"], PEOPLE["manager"], PEOPLE["psychometrician"])),
-         _p("1. 2026 sittings", H2),
-         _p("The Assessment Manager reported %d Level 1 and %d Level 2 sittings to 31 August. Both 2026 papers close "
-            "on 30 October as usual; the item bank's annual run will follow once marking and appeals are complete."
-            % (l1_2026, l2_2026)),
-         _p("2. Papers for 2027", H2),
-         _p("The Committee approved the 2027 Level 1 and Level 2 papers as assembled by the Item Review Group against "
-            "version 2026.1 of the specifications. The 2027 Level 1 paper is the first under the revised strand "
-            "structure. Both papers will be loaded to the platform in January 2027 and open on 1 February."),
-         _p("3. Pass marks for 2027", H2),
-         _p("The pass marks for the 2027 papers will be set at the meeting of 3 December 2026. The Assessment "
-            "Manager will bring the recommendation for Level 1 with its working, the item table the Committee "
-            "asked for last year and the regional figures the regional coordinators requested."),
-         _p("4. Centre matters", H2),
-         _p("The computer suite audit of the centres is complete and the report will go to the operations group. "
-            "The learner confidence survey closed on 30 June; the Board's research officer will report in the new "
-            "year. Two Winnipeg centres merged on 1 July 2025 under the North End code; their earlier records stay "
-            "under their own codes."),
-         _p("5. Next meeting", H2),
-         _p("3 December 2026, 10:00 Central."),
-         Spacer(1, 6),
-         _p("Minute taken by the Board's committee secretary.", SMALL)]
-    O.build(path, s, "Awards Committee minute, 17 September 2026", P.ORG, "Awards Committee minute 2026-09-17",
-            P.ORG + " | Awards Committee 2026-09-17", dt.datetime(2026, 9, 21, 11, 20, tzinfo=CDT),
-            dt.datetime(2026, 9, 21, 11, 54, tzinfo=CDT))
-
-
-def email(path):
-    body = (
-        "Yvette,\n\n"
-        "Ahead of 3 December, could you bring the Committee your recommended pass mark for the 2027 Level 1 "
-        "Numeracy paper, with your working. The October sittings are all in now and Andrew tells me the bank's "
-        "annual run is done.\n\n"
-        "Two things the Committee will want beside it. First, the item table we asked for last year: each item on "
-        "the paper with how a candidate right at the standard is likely to do on it, and whether it sits inside "
-        "the band in section 5 of the specification. Second, the regional coordinators want to know how the "
-        "learners who sat the 2026 paper at their centres would be expected to do on the 2027 one, as a mark for "
-        "each region, so they can plan tutor time for the new strand.\n\n"
-        "The papers go to the platform in January, so whatever we set on the 3rd is what the year runs on.\n\n"
-        "Thanks,\n\n"
-        "Shawn Simpson\nChair, Awards Committee\n%s\n" % P.ORG)
-    hdr = ("Message-ID: <20261109094112.5f2c1e@pacb-adult-credentials.ca>\r\n"
-           "Date: Mon, 9 Nov 2026 09:41:12 -0600\r\n"
-           "From: Shawn Simpson <s.simpson@pacb-adult-credentials.ca>\r\n"
-           "To: Yvette Clark <y.clark@pacb-adult-credentials.ca>\r\n"
-           "Cc: Andrew Adams <a.adams@pacb-adult-credentials.ca>\r\n"
-           "Subject: 2027 Level 1 pass mark for 3 December\r\n"
-           "MIME-Version: 1.0\r\n"
-           "Content-Type: text/plain; charset=utf-8\r\n"
-           "Content-Transfer-Encoding: 8bit\r\n\r\n")
-    open(path, "wb").write((hdr + body.replace("\n", "\r\n")).encode("utf-8"))
+def brightway_workbook(path, sheets):
+    wb = Workbook()
+    wb.remove(wb.active)
+    for name, rows in sheets.items():
+        ws = wb.create_sheet(name.replace(" Academy", "")[:30])
+        ws["A1"] = "Brightway Reading Check results, Year 7, September 2026"
+        ws["A1"].font = Font(bold=True)
+        ws["A2"] = name
+        start = 4 if name != "Parkgate Academy" else 5
+        if start == 5:
+            ws["A3"] = "Marked by the English department; standardised scores from the teacher's guide tables"
+        ws.cell(start, 1, "Name")
+        ws.cell(start, 2, "Form")
+        ws.cell(start, 3, "DOB")
+        ws.cell(start, 4, "Raw /50")
+        ws.cell(start, 5, "Standardised score")
+        ws.cell(start, 6, "Date tested")
+        for c in range(1, 7):
+            ws.cell(start, c).font = Font(bold=True)
+        for k, r in enumerate(rows):
+            for c, v in enumerate(r, 1):
+                cell = ws.cell(start + 1 + k, c, v)
+                if c == 6 and v is not None:
+                    cell.number_format = "dd/mm/yyyy"
+        ws.column_dimensions["A"].width = 28
+        ws.column_dimensions["C"].width = 13
+        ws.column_dimensions["E"].width = 18
+        ws.column_dimensions["F"].width = 12
+    wb.save(path)
+    postprocess.normalize_ooxml(path, "Beverley Barnett", "Abbie Lee", "2026-09-04T07:58:00Z", "2026-09-29T15:21:00Z",
+                                excel=True, company=P.TRUST)

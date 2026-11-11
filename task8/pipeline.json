@@ -1,34 +1,35 @@
 {
  "task": "task8",
- "status": "DESIGN",
+ "status": "READY",
  "domain": "education-learning-sciences",
  "objective": "etl",
- "stage": 2,
- "stage_name": "design",
+ "stage": 5,
+ "stage_name": "ready",
  "updated": "2026-11-11",
- "call": "",
+ "call": "fund 874 Reading Forward places, 349.6 tutor hours a week, GBP 349,880 for 2026-27 (range 843 to 915 students), by academy as listed, against the provisional GBP 339,500",
  "stump": "The default path pre-equates the 2027 Level 1 paper on the Board's concurrent Rasch bank and files 22 (careful variants 21), because the Level 2 items earlier Level 1 papers carried looked unshifted for Level 1 candidates when an everyday-context advantage and a reading cost cancelled on the long everyday ones; the 2027 paper's twelve long mathematical Level 2 items carry the cost alone, and only both causes and the scale constant fitted together price them (19).",
  "architecture": 19,
  "loops": 0,
  "precut": {
-  "exit": null,
-  "date": ""
+  "exit": 0,
+  "date": "2026-11-11"
  },
  "leak": {
-  "leak_py": "",
-  "reader": ""
+  "leak_py": "REVIEW (exit 1), every line ruled in the note's pre-ship check",
+  "reader": "no leak and no one thing; a post-census fork that moves no placement (SF12 same call) and the workbook's Excel zip stamps, both ruled harmless"
  },
  "duplicate_check": {
-  "heart": "",
-  "nearest": ""
+  "heart": "WARN",
+  "nearest": "task5 v4, severity none (skeleton.py check)"
  },
  "judge": {
-  "verdict": "",
-  "disposition": "",
-  "gate_h": "",
-  "report": ""
+  "verdict": "DETERMINISTIC",
+  "disposition": "APPROVE",
+  "gate_h": "domain pass, layers pass, one_thing none, one_fact about 1 of 6 graded blocks",
+  "report": "task8/determinism_check_report.md",
+  "first_pass": "not a cold read: the thread opened the graded blocks before the data; it re-derived the gain (3.7, band 3.1 to 3.8) and the July level (4.01, band 3.6 to 4.4) from the raw files and did not rebuild the per-academy counts or the conversion tables"
  },
- "paper_pair": null,
+ "paper_pair": 16.2,
  "runs": {
   "run1": null,
   "run2": null,
@@ -62,7 +63,7 @@
    "commit": "DRAWN (task8), architecture 17, 2026-11-07"
   }
  ],
- "resume": "DESIGN: write the architecture 19 results chain, hidden factor record, frontier check and fork tables; build the generator (stage 3)",
+ "resume": "READY: the author rewrites prompt.txt for voice (voice-check.py task8 --rewrite, then leak.py), uploads it with target.zip, and pastes both runs and the rubric for /triage-runs task8",
  "approved": null,
  "submitted": null,
  "portal": null,
@@ -83,6 +84,10 @@
   {
    "date": "2026-11-11",
    "event": "architecture 18 spent before upload (retired single-deep-step design); DRAWN architecture 19: Hollinbrook Academies Trust's Year 7 entry reading put on one Lexis basis across three tests, a fixed-order trial and July sittings, to set Reading Forward's tutor time"
+  },
+  {
+   "date": "2026-11-11",
+   "event": "READY architecture 19: 874 places, 349.6 hours a week, GBP 349,880 (843 to 915 students); careful pass 16.2 (variants 37.3 and 51.1); judge DETERMINISTIC APPROVE (first pass not cold); reader no leak"
   }
  ],
  "migrated_from": {
@@ -339,9 +344,9 @@
  "subdomain": "item-response-theory-test-equating",
  "chain": "R1 valid entry results by academy reconciled to the census; R2 the Lexis trial's second-sitting gain; R3 the Lexis score of Brightway results; R4 the Lexis score of Quill results; R5 the July transition-day dip; R6 Reading Forward students by academy; R7 the change from each academy's own-test list, by test; R8 the trust's hours and cost with a range; R9 tutor hours by academy",
  "effort": {
-  "quick": null,
-  "careful": null,
-  "thorough": null,
-  "largest_hint": ""
+  "quick": 0,
+  "careful": 1,
+  "thorough": 9,
+  "largest_hint": "four Lexis academies tested their intake at the July transition day (2 of 9); careful plus that hint scores 51.1, plus the trial's order 37.3"
  }
 }

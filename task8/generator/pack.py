@@ -1,296 +1,247 @@
-"""task8 architecture 18: writes target/ the way the Board's systems export it. The response platform's export
-(item references by paper position before the 2024 platform change, by bank code after; times in UTC; an item
-answered again after a reconnect keeps both rows), the candidate register (centre uploads and regional office
-entries, some people registered twice), the bank file (the preliminary and final 2026 runs), the paper layouts,
-the learning centres list, the specification, the 2022 standard-setting record, the September minute, the chair's
-email, and two files the analysis never needs (the learner confidence survey and the computer suite audit)."""
+"""task8: the pack's data files, each as the system that holds it would export it.
+
+  census_year7_2026-10-01.csv        the trust's MIS census extract (one row per Year 7 student on roll)
+  ks2_results_2026.csv               KS2 results from the common transfer files (scaled scores and codes)
+  lexis_results_autumn2026.csv       the Lexis platform's results export, every sitting (incl. the trial)
+  quill_results_2026.csv             Quill's results export (US dates, Quill student numbers)
+  quill_roster_map.csv               Quill's rostering sync: Quill student number to admission number
+  quill_session_log_2026.csv         Quill's question-level session log (the large file)
+  brightway_results_2026.xlsx        the Brightway academies' results, typed by each academy's staff
+  academies.csv                      the trust's academy list
+  + the distractors (distractors.py)"""
 import csv
+import math
 import datetime as dt
-import io
 import os
 
 import numpy as np
-import openpyxl
-from faker import Faker
 
-import docs as D
 import params as P
-import postprocess as PP
-import world as W
 
 FILES = {
-    "responses": "pacb_numeracy_responses_2022_2026.csv",
-    "register": "pacb_candidate_register_2022_2026.csv",
-    "bank": "pacb_item_bank_2026.csv",
-    "layouts": "pacb_paper_layouts_2022_2027.xlsx",
-    "centres": "pacb_learning_centres.csv",
-    "spec": "level1_numeracy_specification_2026.pdf",
-    "standard": "ln1_standard_setting_record_2022.pdf",
-    "minute": "awards_committee_minute_2026-09-17.pdf",
-    "email": "2027_level1_pass_mark_request.eml",
-    "survey": "learner_confidence_survey_2026.csv",
-    "audit": "centre_computer_suite_audit_2026.xlsx",
+    "census": "census_year7_2026-10-01.csv",
+    "ks2": "ks2_results_2026.csv",
+    "lexis": "lexis_results_autumn2026.csv",
+    "quill": "quill_results_2026.csv",
+    "quillmap": "quill_roster_map.csv",
+    "quilllog": "quill_session_log_2026.csv",
+    "brightway": "brightway_results_2026.xlsx",
+    "academies": "academies.csv",
+    "policy": "reading_forward_policy_2026.pdf",
+    "lexis_tech": "lexis_technical_summary.pdf",
+    "quill_tech": "quill_technical_summary.pdf",
+    "brightway_tech": "brightway_technical_summary.pdf",
+    "cpt": "cognitive_profile_tests_2026.csv",
+    "attendance": "attendance_y7_autumn2026.csv",
+    "survey": "y7_settling_in_survey_2026.csv",
+    "tutorlog": "reading_forward_sessions_2025-26.csv",
 }
-DISTRACTORS = ("survey", "audit")
+DISTRACTORS = ["cpt", "attendance", "survey", "tutorlog"]
+
+PREFERRED = {"Thomas": "Tom", "William": "Will", "Alexander": "Alex", "Samuel": "Sam", "Joshua": "Josh",
+             "Benjamin": "Ben", "Daniel": "Dan", "Matthew": "Matt", "Rebecca": "Becky", "Elizabeth": "Lizzie",
+             "Jessica": "Jess", "Katherine": "Kate", "Charlotte": "Lottie", "Nicholas": "Nick", "Jacob": "Jake",
+             "Christopher": "Chris", "Michael": "Mike", "Jonathan": "Jon", "Abigail": "Abi", "Samantha": "Sam"}
 
 
-def paper_name(level, year):
-    return "%s-%d" % (level, year)
+def iso(d):
+    return d.isoformat() if d else ""
 
 
-def export_paper_code(level, year):
-    return "LN%s-%d" % (level[1], year)
-
-
-def _dst(d):
-    """Manitoba keeps Central daylight time from the second Sunday in March to the first Sunday in November."""
-    m = dt.date(d.year, 3, 8)
-    start = m + dt.timedelta(days=(6 - m.weekday()) % 7)
-    n = dt.date(d.year, 11, 1)
-    end = n + dt.timedelta(days=(6 - n.weekday()) % 7)
-    return start <= d < end
-
-
-def _w(path, header, rows):
+def write_csv(path, header, rows, delimiter=","):
     with open(path, "w", newline="", encoding="utf-8") as f:
-        wr = csv.writer(f, lineterminator="\r\n")
-        wr.writerow(header)
-        wr.writerows(rows)
-
-
-def sitting_ids(w):
-    rng = np.random.default_rng(P.SEED + 11)
-    n = len(w["sittings"])
-    order = sorted(range(n), key=lambda j: (w["sittings"][j]["date"], j))
-    ids = [None] * n
-    k = 4100000 + int(rng.integers(0, 900))
-    for j in order:
-        k += int(rng.integers(1, 4))
-        ids[j] = "S%07d" % k
-    return ids
-
-
-def responses(path, w, sids):
-    """One row per answered item; a reconnect re-answers some items and both rows stay."""
-    rng = np.random.default_rng(P.SEED + 12)
-    X, papers, it = w["X"], w["papers"], w["it"]
-    cen = {c["code"]: c for c in w["centres"]}
-    rows = []
-    for j, s in enumerate(w["sittings"]):
-        idx = papers[paper_name(s["level"], s["year"])]
-        prov = cen[s["centre"]]["prov"]
-        local_off = 5 if (prov == "MB" and _dst(s["date"])) else 6
-        start = dt.datetime(s["date"].year, s["date"].month, s["date"].day, int(rng.integers(9, 15)),
-                            int(rng.integers(0, 60))) + dt.timedelta(hours=local_off)
-        t = start
-        order = list(range(40))
-        recon = rng.random() < P.RECONNECT_RATE
-        cut = int(rng.integers(8, 33)) if recon else None
-        redo = set(rng.choice(range(max(0, (cut or 1) - 4), cut or 1), size=min(3, cut or 1), replace=False).tolist()) \
-            if recon else set()
-        for pos in order:
-            i = int(idx[pos])
-            t = t + dt.timedelta(seconds=int(rng.integers(35, 190)))
-            ref = ("Q%02d" % (pos + 1)) if s["year"] <= 2023 else it["code"][i]
-            final = int(X[j, i])
-            if pos in redo:
-                first = final if rng.random() < 0.7 else 1 - final
-                rows.append([sids[j], s["cand"], export_paper_code(s["level"], s["year"]), ref, first,
-                             (t - dt.timedelta(seconds=int(rng.integers(400, 900)))).strftime("%Y-%m-%dT%H:%M:%SZ")])
-            if recon and pos == cut:
-                t = t + dt.timedelta(seconds=int(rng.integers(240, 700)))
-            rows.append([sids[j], s["cand"], export_paper_code(s["level"], s["year"]), ref, final,
-                         t.strftime("%Y-%m-%dT%H:%M:%SZ")])
-    _w(path, ["sitting_id", "candidate_id", "paper", "item", "score", "answered_utc"], rows)
+        w = csv.writer(f, delimiter=delimiter, lineterminator="\r\n" if path.endswith(("census_year7_2026-10-01.csv",
+                                                                                       "academies.csv")) else "\n")
+        w.writerow(header)
+        w.writerows(rows)
     return len(rows)
 
 
-def assign_people(w):
-    """Candidate ids, names, dates of birth, home centres (where registered) and host centres (where sat)."""
-    rng = np.random.default_rng(P.SEED + 13)
-    fk = Faker("en_CA")
-    fk.seed_instance(P.SEED)
-    people = {}
-    by_region = {}
-    for c in w["centres"]:
-        by_region.setdefault(c["region"], []).append(c["code"])
-    for s in w["sittings"]:
-        p = s["person"]
-        if p not in people:
-            yob = int(rng.integers(1958, 2007)) if s["level"] == "L1" else int(rng.integers(1972, 2008))
-            people[p] = dict(cand="PA%06d" % (p % 1000000), family=fk.last_name(), given=fk.first_name(),
-                             dob=dt.date(yob, int(rng.integers(1, 13)), int(rng.integers(1, 29))))
-        s["cand"] = people[p]["cand"]
-        # most sit where they registered; some sit at another centre in the same region
-        s["home_centre"] = s["centre"]
-        if rng.random() < 0.045:
-            others = [c for c in by_region[s["region"]] if c != s["centre"]]
-            s["home_centre"] = str(rng.choice(others))
-    return people
+class Pack:
+    def __init__(self, W, seed):
+        self.W = W
+        self.rng = np.random.default_rng(seed)
+        self.acad = {a["name"]: a for a in W["academies"]}
+        S = W["students"]
+        # admission numbers per academy, and Quill student numbers
+        # the trust's MIS numbers admissions trust-wide
+        self.adm = {}
+        a_no = 260000 + int(self.rng.integers(0, 900))
+        for s in sorted(S, key=lambda s: (s["academy"], s["last"], s["first"])):
+            a_no += int(self.rng.integers(1, 6))
+            self.adm[id(s)] = a_no
+        self.quill_no = {}
+        q = 400000 + int(self.rng.integers(0, 90000))
+        for s in S:
+            q += int(self.rng.integers(1, 40))
+            self.quill_no[id(s)] = q
+
+    # ------------------------------------------------------------------ the trust's MIS
+    def census(self):
+        rows = []
+        for s in self.W["students"]:
+            if s["left"]:
+                continue
+            a = self.acad[s["academy"]]
+            pref = PREFERRED.get(s["first"], "") if self.rng.random() < 0.6 else ""
+            rows.append([s["upn"], self.adm[id(s)], a["urn"], a["name"], s["last"], s["first"], pref,
+                         iso(s["dob"]), s["gender"], "Y" if s["fsm"] else "N", "Y" if s["eal"] else "N",
+                         "K" if s["sen"] else "N", s["tutor_group"]])
+        rows.sort(key=lambda r: (r[3], r[4], r[5]))
+        return rows
+
+    def ks2(self):
+        rows = []
+        for s in self.W["students"]:
+            if s["ks2_code"] == "NONE":
+                continue
+            score = "" if s["ks2"] is None else str(s["ks2"])
+            maths = "" if s["ks2"] is None else str(int(np.clip(round(s["ks2"] + self.rng.normal(0, 5.5)), 80, 120)))
+            gps = "" if s["ks2"] is None else str(int(np.clip(round(s["ks2"] + self.rng.normal(1, 4.8)), 80, 120)))
+            rows.append([s["upn"], 2026, score, s["ks2_code"], maths, gps,
+                         "%03d%04d" % (int(s["upn"][1:4]), int(s["upn"][4:8]))])
+        # a re-sent transfer file appended a few records twice
+        dup = [rows[i] for i in self.rng.choice(len(rows), size=int(len(rows) * 0.012), replace=False)]
+        rows += dup
+        rows.sort(key=lambda r: r[0])
+        return rows
+
+    # ------------------------------------------------------------------ the test platforms
+    def lexis(self):
+        rows = []
+        k = 0
+        for x in self.W["sittings"]:
+            if x["test"] != "LEXIS":
+                continue
+            s = x["student"]
+            a = self.acad[x["academy"]]
+            k += 1
+            sid = "LX26-%06d" % (318000 + 7 * k + int(self.rng.integers(0, 6)))
+            up = s["upn"] if self.rng.random() > 0.025 else ""
+            complete = x["status"] == "Complete"
+            raw = int(np.clip(round(30 + 9.5 * (x["z"] + 0.15) + self.rng.normal(0, 0.8)), 0, 48)) if complete else \
+                int(np.clip(round(12 + 4 * (x["z"] + 0.5)), 0, 20))
+            sas = str(x["sas"]) if complete else ""
+            stan = "" if not complete else str(int(np.clip(np.digitize(x["sas"], [74, 81, 89, 96, 104, 111, 119, 126]) + 1, 1, 9)))
+            rows.append([sid, a["urn"], a["name"], up, s["last"], s["first"], iso(s["dob"]), iso(x["date"]),
+                         "Lexis 11-14 Form A", raw, sas, stan, "Complete" if complete else "Incomplete"])
+        # the export is run per academy and two academies' runs were appended twice
+        twice = [r for r in rows if r[2] in ("Kelham Bridge Academy", "Swinton Moor Academy")][:37]
+        rows += twice
+        rows.sort(key=lambda r: (r[2], r[7], r[0]))
+        return rows
+
+    def quill(self):
+        rows = []
+        self.sessions = []
+        for x in self.W["sittings"]:
+            if x["test"] != "QUILL":
+                continue
+            s = x["student"]
+            a = self.acad[x["academy"]]
+            sess = "Q-%07d" % (5100000 + len(self.sessions) * 13 + int(self.rng.integers(0, 9)))
+            self.sessions.append((sess, x))
+            ss = int(round(700 + 92 * (x["z"] + 0.22) / 1.04 + self.rng.normal(0, 6)))
+            ds = x["date"].strftime("%m/%d/%Y")
+            mins = int(np.clip(round(18 + 0.6 * (x["items"] or 20) + self.rng.normal(0, 4)), 6, 45))
+            pr = int(np.clip(round(50 * (1 + math.erf((x["sas"] - 100) / 15 / math.sqrt(2)))), 1, 99))
+            rows.append([self.quill_no[id(s)], a["quill_site"], "%s, %s" % (s["last"], s["first"]), "Year 7",
+                         ds, sess, x["sas"], pr, mins, "Completed"])
+        rows.sort(key=lambda r: (r[1], r[4], r[0]))
+        return rows
+
+    def quill_map(self):
+        rows = []
+        for s in self.W["students"]:
+            if s["test"] != "QUILL" and not any(x["test"] == "QUILL" and x["student"] is s for x in self.W["sittings"]):
+                continue
+            if self.rng.random() < P.QUILL_UNMAPPED:
+                continue
+            a = self.acad[s.get("moved_from") or s["academy"]] if s.get("moved_from") and \
+                self.acad[s["moved_from"]]["test"] == "QUILL" else self.acad[s["academy"]]
+            rows.append([self.quill_no[id(s)], a["quill_site"], self.adm[id(s)], s["first"], s["last"],
+                         s["dob"].strftime("%m/%d/%Y")])
+        rows.sort(key=lambda r: r[0])
+        return rows
+
+    def quill_log(self):
+        rows = []
+        for sess, x in self.sessions:
+            n = x["items"]
+            th = x["z"]
+            t0 = dt.datetime.combine(x["date"], dt.time(9, 5)) + dt.timedelta(minutes=int(self.rng.integers(0, 300)))
+            b = 0.0
+            for j in range(n):
+                p = 1 / (1 + np.exp(-(th - b)))
+                c = int(self.rng.random() < p)
+                b = b + (0.5 if c else -0.5) * (0.8 ** (j / 4))
+                secs = int(np.clip(self.rng.lognormal(3.6, 0.45), 6, 240))
+                t0 = t0 + dt.timedelta(seconds=secs)
+                rows.append([sess, j + 1, "RQ%05d" % int(self.rng.integers(10000, 99999)), c, secs,
+                             t0.strftime("%Y-%m-%dT%H:%M:%S")])
+        return rows
+
+    def academies(self):
+        rows = []
+        for a in self.W["academies"]:
+            test = {"LEXIS": "Lexis", "QUILL": "Quill", "BRIGHTWAY": "Brightway"}[a["test"]]
+            rows.append([a["urn"], a["name"], a["la"], "%03d/%04d" % (a["la_code"], a["estab"]), test,
+                         a["quill_site"]])
+        return rows
+
+    # ------------------------------------------------------------------ the Brightway workbook (typed by staff)
+    def brightway_sheets(self):
+        sheets = {}
+        for a in self.W["academies"]:
+            if a["test"] != "BRIGHTWAY":
+                continue
+            out = []
+            for x in self.W["sittings"]:
+                if x["test"] != "BRIGHTWAY" or x["academy"] != a["name"]:
+                    continue
+                s = x["student"]
+                first = s["first"]
+                if self.rng.random() < 0.35 and first in PREFERRED:
+                    first = PREFERRED[first]
+                style = int(self.rng.integers(0, 3))
+                dob = s["dob"].strftime("%d/%m/%Y") if style == 0 else (s["dob"].strftime("%d.%m.%y") if style == 1
+                                                                       else s["dob"].strftime("%-d %b %Y"))
+                sas = x["sas"]
+                shown = "<70" if sas <= 69 else (">130" if sas >= 131 else sas)
+                raw = int(np.clip(round(26 + 8.0 * (x["z"] + 0.35)), 0, 50))
+                out.append(["%s, %s" % (s["last"], first), s["tutor_group"], dob, raw, shown, x["date"]])
+            # absentees appear on the class lists with a blank result
+            for s in self.W["students"]:
+                if s["academy"] == a["name"] and not s["left"] and not any(
+                        x["student"] is s and x["test"] == "BRIGHTWAY" for x in self.W["sittings"]):
+                    if self.rng.random() < 0.7:
+                        out.append(["%s, %s" % (s["last"], s["first"]), s["tutor_group"], s["dob"].strftime("%d/%m/%Y"),
+                                    None, "abs", None])
+            out.sort(key=lambda r: (r[1], r[0]))
+            sheets[a["name"]] = out
+        return sheets
 
 
-def register(path, w, people):
-    rng = np.random.default_rng(P.SEED + 14)
-    rows = []
-    k = 610000 + int(rng.integers(0, 500))
-    regoff = {r[0]: "RO-" + r[0] for r in P.REGIONS}
-    cen = {c["code"]: c for c in w["centres"]}
-
-    def dob_fmt(d, by_office):
-        return d.isoformat() if by_office else d.strftime("%d/%m/%Y")
-    entries = []
-    for s in w["sittings"]:
-        pp = people[s["person"]]
-        entries.append((s["date"] - dt.timedelta(days=int(rng.integers(12, 70))), s, pp, "Sat"))
-    # withdrawn and absent registrations: people who registered and never sat
-    n_extra = int(len(entries) * P.WITHDRAWN)
-    fk = Faker("en_CA")
-    fk.seed_instance(P.SEED + 1)
-    for _ in range(n_extra):
-        s0 = w["sittings"][int(rng.integers(0, len(w["sittings"])))]
-        ghost = dict(cand="PA%06d" % int(rng.integers(400000, 999999)), family=fk.last_name(), given=fk.first_name(),
-                     dob=dt.date(int(rng.integers(1960, 2007)), int(rng.integers(1, 13)), int(rng.integers(1, 29))))
-        st = "Withdrawn" if rng.random() < 0.6 else "Absent"
-        entries.append((s0["date"] - dt.timedelta(days=int(rng.integers(12, 70))),
-                        dict(level=s0["level"], year=s0["year"], centre=s0["centre"], home_centre=s0["home_centre"],
-                             region=s0["region"], date=s0["date"]), ghost, st))
-    entries.sort(key=lambda e: (e[0], e[2]["cand"]))
-    for when, s, pp, st in entries:
-        k += int(rng.integers(1, 5))
-        by_office = rng.random() < 0.22
-        lvl = ("Level %s" % s["level"][1]) if rng.random() < 0.8 else s["level"]
-        acc = "" if rng.random() > 0.06 else str(rng.choice(["extra time", "separate room", "reader (instructions)"]))
-        sat_at = s["centre"] if st == "Sat" else ""
-        sdate = s["date"].isoformat() if st == "Sat" else ""
-        reg_by = regoff[s["region"]] if by_office else s["home_centre"]
-        rows.append(["R%06d" % k, pp["cand"], pp["family"], pp["given"], dob_fmt(pp["dob"], by_office), lvl, s["year"],
-                     s["home_centre"], reg_by, sat_at, sdate, st, acc])
-        # some people were also entered by their regional office; the platform matched the second entry to the same
-        # candidate and both rows record the sitting
-        if st == "Sat" and rng.random() < P.DUP_REGISTRATION:
-            k += int(rng.integers(1, 5))
-            fam = pp["family"].upper() if rng.random() < 0.5 else pp["family"].replace("Mc", "Mc ")
-            rows.append(["R%06d" % k, pp["cand"], fam, pp["given"], pp["dob"].isoformat(), lvl, s["year"],
-                         s["home_centre"], regoff[s["region"]], sat_at, sdate, "Sat", ""])
-    _w(path, ["registration_no", "candidate_id", "family_name", "given_name", "date_of_birth", "level", "paper_year",
-              "home_centre", "entered_by", "sat_at", "sitting_date", "status", "access_arrangement"], rows)
-    return len(rows)
-
-
-def bank_file(path, w, r):
-    it = w["it"]
-    bank = r["bank"]
-    first = {}
-    for name in sorted(w["papers"]):
-        y = int(name.split("-")[1])
-        for i in w["papers"][name]:
-            first.setdefault(int(i), y)
-            first[int(i)] = min(first[int(i)], y)
-    n_resp = (~np.isnan(w["X"])).sum(0)
-    keep_pre = r["bank"]["prelim_rows"]
-    n_pre = (~np.isnan(w["X"][keep_pre])).sum(0)
-    rows = []
-    infit, outfit = bank["infit"], bank["outfit"]
-    for i in np.argsort(it["code"]):
-        if np.isnan(bank["final"]["b"][i]):
-            continue
-        base = [it["code"][i], "Level %s" % it["pool"][i][1], W.STRAND_NAME[it["strand"][i]],
-                "everyday" if it["everyday"][i] else "mathematical", int(it["words"][i]), first.get(int(i), "")]
-        if not np.isnan(bank["prelim"]["b"][i]):
-            rows.append(base + ["2026-06 preliminary", "%.3f" % bank["prelim"]["b"][i], "%.3f" % bank["prelim"]["se"][i],
-                                "", "", int(n_pre[i])])
-        rows.append(base + ["2026-10 final", "%.3f" % bank["final"]["b"][i], "%.3f" % bank["final"]["se"][i],
-                            "%.2f" % infit[i], "%.2f" % outfit[i], int(n_resp[i])])
-    _w(path, ["item", "pool", "strand", "context", "stem_words", "first_paper", "run", "difficulty_logits", "se",
-              "infit_ms", "outfit_ms", "responses"], rows)
-    return len(rows)
-
-
-def layouts(path, w):
-    it = w["it"]
-    wb = openpyxl.Workbook()
-    wb.remove(wb.active)
-    for name in sorted(w["papers"], key=lambda n: (n.split("-")[1], n)):
-        lvl, y = name.split("-")
-        ws = wb.create_sheet("LN%s %s" % (lvl[1], y))
-        ws.append(["Position", "Item", "Strand", "Marks"])
-        for pos, i in enumerate(w["papers"][name]):
-            ws.append(["Q%02d" % (pos + 1), it["code"][i], W.STRAND_NAME[it["strand"][i]], 1])
-        ws.column_dimensions["A"].width = 10
-        ws.column_dimensions["B"].width = 12
-        ws.column_dimensions["C"].width = 28
-    wb.save(path)
-    PP.normalize_ooxml(path, D.PEOPLE["psychometrician"], D.PEOPLE["psychometrician"], "2026-09-08T15:20:00Z",
-                       "2026-11-04T17:42:00Z", excel=True)
-
-
-def centres_file(path, w):
-    rng = np.random.default_rng(P.SEED + 15)
-    regname = {r[0]: r[1] for r in P.REGIONS}
-    rows = []
-    for c in sorted(w["centres"], key=lambda c: c["code"]):
-        town = W.CENTRE_TOWNS[c["name"]]
-        opened = 1998 + int(rng.integers(0, 22))
-        rows.append([c["code"], c["name"], c["region"], regname[c["region"]], c["prov"], town, opened, "open", ""])
-    _w(path, ["centre", "centre_name", "region", "region_name", "province", "town", "registered_since", "status",
-              "merged_into"], rows)
-    return len(rows)
-
-
-def survey(path, w):
-    rng = np.random.default_rng(P.SEED + 16)
-    rows = []
-    codes = [c["code"] for c in w["centres"]]
-    for k in range(1873):
-        c = str(rng.choice(codes))
-        lvl = "Level 1" if rng.random() < 0.44 else "Level 2"
-        age = str(rng.choice(["18-24", "25-34", "35-44", "45-54", "55-64", "65+"], p=[0.24, 0.24, 0.19, 0.16, 0.12, 0.05]))
-        qs = [int(np.clip(round(rng.normal(3.3 if lvl == "Level 2" else 2.9, 1.0)), 1, 5)) for _ in range(10)]
-        rows.append(["LS26-%05d" % (k * 3 + int(rng.integers(0, 3))), c, lvl, age] + qs +
-                    [str(rng.choice(["online", "paper"], p=[0.83, 0.17]))])
-    _w(path, ["response_id", "centre", "level", "age_band"] + ["q%02d" % q for q in range(1, 11)] + ["mode"], rows)
-
-
-def audit(path, w):
-    rng = np.random.default_rng(P.SEED + 17)
-    wb = openpyxl.Workbook()
-    ws = wb.active
-    ws.title = "Suites"
-    ws.append(["Centre", "Centre name", "Workstations", "Laptops on loan", "Screen size (in)", "Operating system",
-               "Broadband (Mbps)", "Headsets", "Audited", "Auditor's note"])
-    notes = [None, None, None, "two machines awaiting repair", "suite shared with the library", None,
-             "new router fitted", None, "power bars replaced", None]
-    for c in sorted(w["centres"], key=lambda c: c["name"]):
-        ws.append([c["code"], c["name"], int(rng.integers(6, 25)), int(rng.integers(0, 9)),
-                   str(rng.choice(["19", "21.5", "23.8", "15.6 (laptops)"])), str(rng.choice(["Windows 11", "Windows 10",
-                                                                                         "ChromeOS"])),
-                   int(rng.integers(25, 500)), int(rng.integers(0, 20)),
-                   (dt.date(2026, 5, 4) + dt.timedelta(days=int(rng.integers(0, 70)))).isoformat(),
-                   notes[int(rng.integers(0, len(notes)))]])
-    wb.save(path)
-    PP.normalize_ooxml(path, "Operations group", "Operations group", "2026-07-20T14:00:00Z", "2026-08-28T16:31:00Z",
-                       excel=True, company=P.ORG)
-
-
-def write(target, w, r):
-    os.makedirs(target, exist_ok=True)
-    for f in os.listdir(target):
-        os.remove(os.path.join(target, f))
-    people = assign_people(w)
-    sids = sitting_ids(w)
-    w["sids"] = sids
+def write_all(W, target):
+    pk = Pack(W, P.SEED + 101)
+    F = {k: os.path.join(target, v) for k, v in FILES.items()}
     n = {}
-    n["responses"] = responses(os.path.join(target, FILES["responses"]), w, sids)
-    n["register"] = register(os.path.join(target, FILES["register"]), w, people)
-    n["bank"] = bank_file(os.path.join(target, FILES["bank"]), w, r)
-    layouts(os.path.join(target, FILES["layouts"]), w)
-    n["centres"] = centres_file(os.path.join(target, FILES["centres"]), w)
-    D.specification(os.path.join(target, FILES["spec"]))
-    D.standard_record(os.path.join(target, FILES["standard"]))
-    l1 = sum(1 for s in w["sittings"] if s["level"] == "L1" and s["year"] == 2026 and s["date"] <= dt.date(2026, 8, 31))
-    l2 = sum(1 for s in w["sittings"] if s["level"] == "L2" and s["year"] == 2026 and s["date"] <= dt.date(2026, 8, 31))
-    D.minute(os.path.join(target, FILES["minute"]), l1, l2)
-    D.email(os.path.join(target, FILES["email"]))
-    survey(os.path.join(target, FILES["survey"]), w)
-    audit(os.path.join(target, FILES["audit"]), w)
-    return n
+    n["census"] = write_csv(F["census"], ["upn", "admission_no", "urn", "academy", "legal_surname", "legal_forename",
+                                          "preferred_forename", "date_of_birth", "gender", "fsm_eligible", "eal",
+                                          "sen_status", "tutor_group"], pk.census())
+    n["ks2"] = write_csv(F["ks2"], ["upn", "ks2_year", "reading_scaled_score", "reading_code", "maths_scaled_score",
+                                    "gps_scaled_score", "primary_laestab"], pk.ks2())
+    n["lexis"] = write_csv(F["lexis"], ["session_id", "urn", "school_name", "upn", "surname", "forename", "dob",
+                                        "test_date", "test", "raw_score", "standard_age_score", "stanine", "status"],
+                           pk.lexis())
+    n["quill"] = write_csv(F["quill"], ["Student ID", "Site Code", "Student Name", "Year Group", "Test Date",
+                                        "Session ID", "Standardised Score", "National Percentile", "Minutes", "Status"],
+                           pk.quill())
+    n["quillmap"] = write_csv(F["quillmap"], ["quill_student_id", "site_code", "sis_id", "first_name", "last_name",
+                                              "birth_date"], pk.quill_map())
+    n["quilllog"] = write_csv(F["quilllog"], ["session_id", "item_seq", "item_id", "correct", "seconds", "answered_at"],
+                              pk.quill_log())
+    n["academies"] = write_csv(F["academies"], ["urn", "academy", "local_authority", "laestab", "entry_reading_test",
+                                                "quill_site_code"], pk.academies())
+    n["brightway_sheets"] = pk.brightway_sheets()
+    return pk, n

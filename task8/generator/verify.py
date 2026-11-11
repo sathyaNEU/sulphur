@@ -1,235 +1,192 @@
-"""task8 architecture 18: the independent verifier. Reads only target/ (no generator state), conforms the files on
-its own code path and recomputes every graded figure, then compares them with figures.json at the precision the
-prompt asks for. Exit 0 when everything reproduces."""
-import csv
+"""task8: the independent verifier (python3 verify.py <target>). It reads only the bundle, on its own parsing path
+(pandas), builds its own student table and its own matching, recomputes R1, the second-sitting gain and the order
+gaps by its own arithmetic, then runs the golden's conversions on its own table for R3 to R9, and reads every
+document a figure leans on back through pdftotext with a positive control. Exit 1 on any mismatch."""
 import datetime as dt
 import json
 import os
-import sys
-import zipfile
 import re
+import subprocess
+import sys
 
 import numpy as np
+import pandas as pd
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-TASK = os.path.dirname(HERE)
-TARGET = sys.argv[1] if len(sys.argv) > 1 else os.path.join(TASK, "target")
-FIG = sys.argv[2] if len(sys.argv) > 2 else os.path.join(HERE, "figures.json")
+sys.path.insert(0, HERE)
 
-S = lambda x: 1.0 / (1.0 + np.exp(-x))
+OK = []
 
 
-def read_csv(name):
-    with open(os.path.join(TARGET, name), newline="", encoding="utf-8") as f:
-        return list(csv.DictReader(f))
+def chk(label, ok, detail=""):
+    OK.append((label, bool(ok), str(detail)))
 
 
-def read_layouts(name):
-    """Paper layouts from the workbook's own XML (no generator helper): sheet name -> list of item codes."""
-    z = zipfile.ZipFile(os.path.join(TARGET, name))
-    wb = z.read("xl/workbook.xml").decode()
-    rels = z.read("xl/_rels/workbook.xml.rels").decode()
-    sst = re.findall(r"<si>(?:<t[^>]*>)(.*?)</t></si>", z.read("xl/sharedStrings.xml").decode())
-    rid = dict(re.findall(r'<Relationship[^>]*?Id="(rId\d+)"[^>]*?Target="([^"]+)"', rels))
-    rid.update({a: b for b, a in re.findall(r'<Relationship[^>]*?Target="([^"]+)"[^>]*?Id="(rId\d+)"', rels)})
-    out = {}
-    for nm, r in re.findall(r'<sheet[^>]*?name="([^"]+)"[^>]*?r:id="(rId\d+)"', wb):
-        xml = z.read("xl/" + rid[r].lstrip("/").replace("xl/", "")).decode()
-        cells = re.findall(r'<c r="([A-Z]+)(\d+)"[^>]*?(?: t="(\w+)")?[^>]*?>(?:<v>([^<]*)</v>)?', xml)
-        rows = {}
-        for col, rn, t, v in cells:
-            val = sst[int(v)] if t == "s" else v
-            rows.setdefault(int(rn), {})[col] = val
-        out[nm] = [rows[k]["B"] for k in sorted(rows) if k > 1]
-    return out
+def nrm(x):
+    x = str(x or "").strip().lower().replace("’", "'")
+    return re.sub(r"[^a-z'\- ]", "", x)
 
 
-def conform():
-    lay = read_layouts("pacb_paper_layouts_2022_2027.xlsx")
-    papers = {}
-    for nm, codes in lay.items():
-        lv, y = nm.split()
-        papers["%s-%s" % (lv, y)] = codes
-    bank = {}
-    for r in read_csv("pacb_item_bank_2026.csv"):
-        if r["run"] == "2026-10 final":
-            bank[r["item"]] = dict(pool=r["pool"], context=r["context"], words=int(r["stem_words"]),
-                                   b=float(r["difficulty_logits"]))
-    latest = {}
-    meta = {}
-    for r in read_csv("pacb_numeracy_responses_2022_2026.csv"):
-        paper = r["paper"]
-        item = r["item"]
-        if item.startswith("Q"):
-            item = papers[paper][int(item[1:]) - 1]
-        key = (r["sitting_id"], item)
-        t = r["answered_utc"]
-        if key not in latest or t > latest[key][0]:
-            latest[key] = (t, int(r["score"]))
-        meta[r["sitting_id"]] = (r["candidate_id"], paper)
-    return papers, bank, latest, meta
+def dob_any(v):
+    if isinstance(v, (pd.Timestamp, dt.datetime)):
+        return v.date()
+    if isinstance(v, dt.date):
+        return v
+    s = str(v).strip()
+    for f in ("%d/%m/%Y", "%d.%m.%y", "%d %b %Y"):
+        try:
+            return dt.datetime.strptime(s, f).date()
+        except ValueError:
+            continue
+    return None
 
 
-def matrix(sids, items, latest):
-    si = {s: k for k, s in enumerate(sids)}
-    ii = {c: k for k, c in enumerate(items)}
-    X = np.full((len(sids), len(items)), np.nan)
-    for (s, c), (_, v) in latest.items():
-        if s in si and c in ii:
-            X[si[s], ii[c]] = v
-    return X
+def table(T):
+    import pack as PK
+    ac = pd.read_csv(os.path.join(T, PK.FILES["academies"]), dtype=str, keep_default_na=False)
+    test_of = dict(zip(ac.academy, ac.entry_reading_test))
+    site = {r.quill_site_code: r.academy for r in ac.itertuples() if r.quill_site_code}
+    ce = pd.read_csv(os.path.join(T, PK.FILES["census"]), dtype=str, keep_default_na=False)
+    S = {}
+    key = {}
+    sdob = {}
+    for r in ce.itertuples():
+        s = dict(upn=r.upn, adm=int(r.admission_no), academy=r.academy, test=test_of[r.academy], sittings=[],
+                 ks2=None, ks2_code="NONE", surname=r.legal_surname, forename=r.legal_forename,
+                 dob=dt.date.fromisoformat(r.date_of_birth))
+        S[r.upn] = s
+        for fn in {r.legal_forename, r.preferred_forename} - {""}:
+            key.setdefault((nrm(r.legal_surname), nrm(fn), s["dob"]), []).append(s)
+        sdob.setdefault((nrm(r.legal_surname), s["dob"]), []).append(s)
+    by_adm = {s["adm"]: s for s in S.values()}
+    k2 = pd.read_csv(os.path.join(T, PK.FILES["ks2"]), dtype=str, keep_default_na=False).drop_duplicates()
+    for r in k2.itertuples():
+        if r.upn in S:
+            S[r.upn]["ks2"] = int(r.reading_scaled_score) if r.reading_scaled_score else None
+            S[r.upn]["ks2_code"] = r.reading_code
+    lx = pd.read_csv(os.path.join(T, PK.FILES["lexis"]), dtype=str, keep_default_na=False).drop_duplicates()
+    for r in lx.itertuples():
+        s = S.get(r.upn) if r.upn else None
+        if s is None:
+            d0 = dt.date.fromisoformat(r.dob)
+            c = key.get((nrm(r.surname), nrm(r.forename), d0), []) or [x for x in sdob.get((nrm(r.surname), d0), [])
+                                                                        if x["academy"] == r.school_name]
+            s = c[0] if len(c) == 1 else None
+        if s is None:
+            continue
+        s["sittings"].append(dict(test="LEXIS", date=dt.date.fromisoformat(r.test_date),
+                                  sas=int(r.standard_age_score) if r.standard_age_score else None,
+                                  valid=r.status == "Complete", academy=r.school_name))
+    log = pd.read_csv(os.path.join(T, PK.FILES["quilllog"]), usecols=["session_id"])
+    answered = log.groupby("session_id").size().to_dict()
+    qm = pd.read_csv(os.path.join(T, PK.FILES["quillmap"]), dtype=str, keep_default_na=False)
+    qmap = dict(zip(qm.quill_student_id, qm.sis_id.astype(int)))
+    qr = pd.read_csv(os.path.join(T, PK.FILES["quill"]), dtype=str, keep_default_na=False)
+    for r in qr.itertuples():
+        sid = getattr(r, "_1")
+        s = by_adm.get(qmap.get(sid, -1))
+        if s is None:
+            last, first = [x.strip() for x in getattr(r, "_3").split(",", 1)]
+            acad = site.get(getattr(r, "_2"))
+            c = {id(x): x for k, v in key.items() for x in v if k[0] == nrm(last) and k[1] == nrm(first)}
+            here = [x for x in c.values() if x["academy"] == acad]
+            away = [x for x in c.values() if x["test"] != "Quill"]
+            s = here[0] if len(here) == 1 else (away[0] if not here and len(away) == 1 else None)
+        if s is None:
+            continue
+        sess = getattr(r, "_6")
+        s["sittings"].append(dict(test="QUILL", date=dt.datetime.strptime(getattr(r, "_5"), "%m/%d/%Y").date(),
+                                  sas=int(getattr(r, "_7")), valid=answered.get(sess, 0) >= 24,
+                                  academy=site.get(getattr(r, "_2"))))
+    xl = pd.read_excel(os.path.join(T, PK.FILES["brightway"]), sheet_name=None, header=None)
+    names = {n.replace(" Academy", "")[:30]: n for n in test_of}
+    for sheet, df in xl.items():
+        acad = names.get(sheet, sheet)
+        h = [i for i in range(len(df)) if str(df.iat[i, 0]) == "Name"][0]
+        for i in range(h + 1, len(df)):
+            name, score = df.iat[i, 0], df.iat[i, 4]
+            if pd.isna(name) or pd.isna(score) or str(score) == "abs":
+                continue
+            last, first = [x.strip() for x in str(name).split(",", 1)]
+            d0 = dob_any(df.iat[i, 2])
+            c = key.get((nrm(last), nrm(first), d0), []) or [x for x in sdob.get((nrm(last), d0), [])
+                                                             if x["academy"] == acad]
+            if len(c) != 1:
+                continue
+            sc = str(score).strip()
+            sas = 69 if sc == "<70" else (131 if sc == ">130" else int(float(sc)))
+            d = df.iat[i, 5]
+            c[0]["sittings"].append(dict(test="BRIGHTWAY", date=pd.Timestamp(d).date(), sas=sas, valid=True,
+                                         academy=acad))
+    for s in S.values():
+        s["sittings"].sort(key=lambda x: (x["date"], x["test"]))
+    return {"students": list(S.values()), "academies": {a: {"entry_reading_test": t} for a, t in test_of.items()}}
 
 
-def jml(X, anchor_cols, anchor_mean, off=None, iters=400, b0=None):
-    M = (~np.isnan(X)).astype(float)
-    Z = np.nan_to_num(X)
-    off = np.zeros(X.shape) if off is None else off
-    raw, cnt = (Z * M).sum(1), M.sum(1)
-    keep = (raw > 0) & (raw < cnt)
-    Zk, Mk, Ok = Z[keep], M[keep], off[keep]
-    b = np.zeros(X.shape[1]) if b0 is None else b0.copy()
-    th = np.zeros(Zk.shape[0])
-    for _ in range(iters):
-        p = S(th[:, None] - b[None, :] - Ok)
-        th2 = np.clip(th + ((Zk - p) * Mk).sum(1) / np.maximum((p * (1 - p) * Mk).sum(1), 1e-9), -6, 6)
-        p = S(th2[:, None] - b[None, :] - Ok)
-        b2 = np.clip(b - ((Zk - p) * Mk).sum(0) / np.maximum((p * (1 - p) * Mk).sum(0), 1e-9), -6, 6)
-        sh = b2[anchor_cols].mean() - anchor_mean
-        b2, th2 = b2 - sh, th2 - sh
-        d = max(abs(b2 - b).max(), abs(th2 - th).max())
-        b, th = b2, th2
-        if d < 1e-7:
-            break
-    p = S(th[:, None] - b[None, :] - Ok)
-    se = 1 / np.sqrt(np.maximum((p * (1 - p) * Mk).sum(0), 1e-9))
-    full = np.full(X.shape[0], np.nan)
-    full[keep] = th
-    return b, se, full
-
-
-def wle(X, b, off):
-    M = (~np.isnan(X)).astype(float)
-    Z = np.nan_to_num(X)
-    th = np.zeros(X.shape[0])
-    for _ in range(60):
-        p = S(th[:, None] - b[None, :] - off)
-        q = p * (1 - p) * M
-        inf = q.sum(1)
-        g = ((Z - p) * M).sum(1) + (q * (1 - 2 * p)).sum(1) / np.maximum(2 * inf, 1e-9)
-        th = np.clip(th + g / np.maximum(inf, 1e-9), -6, 6)
-    return th
-
-
-def solve(bs, target):
-    lo, hi = -8.0, 8.0
-    for _ in range(80):
-        m = 0.5 * (lo + hi)
-        if S(m - bs).sum() < target:
-            lo = m
-        else:
-            hi = m
-    return 0.5 * (lo + hi)
-
-
-def main():
-    fig = json.load(open(FIG))
-    papers, bank, latest, meta = conform()
-    s1 = sorted(s for s, (c, p) in meta.items() if p.startswith("LN1"))
-    s2 = sorted(s for s, (c, p) in meta.items() if p.startswith("LN2"))
-    i1 = sorted({c for nm, cs in papers.items() if nm.startswith("LN1") and not nm.endswith("2027") for c in cs})
-    i2 = sorted({c for nm, cs in papers.items() if nm.startswith("LN2") for c in cs})
-    X1, X2 = matrix(s1, i1, latest), matrix(s2, i2, latest)
-    ref = [i1.index(c) for c in papers["LN1-2022"]]
-    b1, se1, _ = jml(X1, ref, -0.96)
-    b2, se2, _ = jml(X2, [i2.index(c) for c in papers["LN2-2022"]], 0.50)
-    shared = [c for c in i1 if bank[c]["pool"] == "Level 2"]
-    d = np.array([b1[i1.index(c)] - b2[i2.index(c)] for c in shared])
-    se = np.array([np.hypot(se1[i1.index(c)], se2[i2.index(c)]) for c in shared])
-    words = np.array([bank[c]["words"] for c in shared], float)
-    ev = np.array([bank[c]["context"] == "everyday" for c in shared], float)
-    A = np.column_stack([np.ones_like(d), words / 100.0, -ev])
-    wgt = np.sqrt(1 / se ** 2)
-    coef = np.linalg.lstsq(A * wgt[:, None], d * wgt, rcond=None)[0]
-    p27 = papers["LN1-2027"]
-    b27 = []
-    for c in p27:
-        if c in i1:
-            b27.append(b1[i1.index(c)])
-        else:
-            b27.append(b2[i2.index(c)] + coef[0] + coef[1] * bank[c]["words"] / 100.0 - coef[2] * (bank[c]["context"] == "everyday"))
-    b27 = np.array(b27)
-    th = solve(np.array([b1[k] for k in ref]), 26)
-    e = float(S(th - b27).sum())
-    # the bank's own route
-    bb = np.array([bank[c]["b"] for c in papers["LN1-2022"]])
-    thb = solve(bb, 26)
-    eb = float(S(thb - np.array([bank[c]["b"] for c in p27])).sum())
-    ok = []
-
-    def chk(name, got, want, tol):
-        good = abs(got - want) <= tol
-        ok.append(good)
-        print("%-34s %-10s figures %-10s %s" % (name, ("%.3f" % got), str(want), "ok" if good else "MISMATCH"))
-    chk("pass mark", int(round(e)), fig["pass_mark"], 0)
-    chk("expected mark (golden)", e, fig["expected_golden"], 0.005)
-    chk("expected mark (bank)", eb, fig["expected_bank"], 0.005)
-    chk("pass mark (bank)", int(round(eb)), fig["pass_mark_bank"], 0)
-    chk("reading cost per 100 words", coef[1], fig["reading_cost_per_100_words"], 0.005)
-    chk("everyday advantage", coef[2], fig["everyday_advantage"], 0.005)
-    ch = {("Q%02d" % (k + 1)): float(S(th - b27[k])) for k in range(len(p27))}
-    for q, v in fig["chances"].items():
-        chk("chance " + q, round(ch[q], 2), v, 0.0)
-    below = [q for q, v in ch.items() if v < 0.20]
-    above = [q for q, v in ch.items() if v > 0.90]
-    ok.append(below == fig["items_below_band"] and above == fig["items_above_band"])
-    print("band: below %s above %s %s" % (below, above, "ok" if ok[-1] else "MISMATCH"))
-    # regions: the register's sitting centre for each 2026 Level 1 sitting, the centre's region
-    reg_of = {r["centre"]: r["region_name"] for r in read_csv("pacb_learning_centres.csv")}
-    sat = {}
-    for r in read_csv("pacb_candidate_register_2022_2026.csv"):
-        if r["status"] == "Sat" and r["candidate_id"]:
-            lv = "LN1" if r["level"] in ("Level 1", "L1") else "LN2"
-            sat[(r["candidate_id"], "%s-%s" % (lv, r["paper_year"]))] = r["sat_at"]
-    region = {s: reg_of[sat[(c, p)]] for s, (c, p) in meta.items()}
-    regs = sorted(set(reg_of.values()))
-    rj = np.array([regs.index(region[s]) for s in s1])
-    evi = np.array([bank[c]["context"] == "everyday" for c in i1], float)
-    share = np.bincount(rj, minlength=len(regs)) / len(rj)
-    delta = np.zeros(len(regs))
-    br = b1.copy()
-    for _ in range(12):
-        off = -delta[rj][:, None] * evi[None, :]
-        br, _, thr = jml(X1, ref, -0.96, off=off, iters=200, b0=br)
-        M = (~np.isnan(X1)).astype(float)
-        Z = np.nan_to_num(X1)
-        okp = ~np.isnan(thr)
-        p = S(np.nan_to_num(thr)[:, None] - br[None, :] - off)
-        g = (Z - p) * M * evi[None, :]
-        h = p * (1 - p) * M * evi[None, :]
-        for k in range(len(regs)):
-            sel = okp & (rj == k)
-            delta[k] += g[sel].sum() / max(h[sel].sum(), 1e-9)
-        delta -= (share * delta).sum()
-    dr = np.array([br[i1.index(c)] - b2[i2.index(c)] for c in shared])
-    cr = np.linalg.lstsq(A * wgt[:, None], dr * wgt, rcond=None)[0]
-    b27r = np.array([br[i1.index(c)] if c in i1 else b2[i2.index(c)] + cr[0] + cr[1] * bank[c]["words"] / 100.0
-                     for c in p27])
-    ev27 = np.array([bank[c]["context"] == "everyday" for c in p27], float)
-    s26 = [s for s in s1 if meta[s][1] == "LN1-2026"]
-    p26 = papers["LN1-2026"]
-    X26 = np.full((len(s26), len(i1)), np.nan)
-    for k, s in enumerate(s26):
-        for c in p26:
-            X26[k, i1.index(c)] = latest[(s, c)][1]
-    r26 = np.array([regs.index(region[s]) for s in s26])
-    th26 = wle(X26, br, -delta[r26][:, None] * evi[None, :])
-    e26 = np.array([S(th26[k] - b27r + delta[r26[k]] * ev27).sum() for k in range(len(s26))])
-    for k, nm in enumerate(regs):
-        if nm in fig["regions"]:
-            chk("region " + nm, int(round(float(e26[r26 == k].mean()))), fig["regions"][nm], 0.0)
-    print("verify: %d of %d reproduce" % (sum(ok), len(ok)))
-    return 0 if all(ok) else 1
+def main(T):
+    import params as P
+    import results as R
+    import pack as PK
+    F = json.load(open(os.path.join(HERE, "figures.json")))
+    D = table(T)
+    chk("own parse: the census has the golden's students", len(D["students"]) == F["on_roll"], len(D["students"]))
+    # R1 by its own count
+    cnt = {}
+    for s in D["students"]:
+        if any(x["valid"] and x["sas"] is not None and x["date"] <= P.CENSUS for x in s["sittings"]):
+            cnt[s["academy"]] = cnt.get(s["academy"], 0) + 1
+    chk("R1 students with a valid entry sitting by the census, by academy (own count)",
+        all(cnt.get(a, 0) == v for a, v in F["valid_by_academy"].items()), str(sum(cnt.values())))
+    # R2 by its own arithmetic: the order gaps at the switch academies
+    gaps = {"second": [], "first": []}
+    per = {}
+    for s in D["students"]:
+        if s["test"] != "Brightway":
+            continue
+        b = [x for x in s["sittings"] if x["test"] == "BRIGHTWAY" and x["academy"] == s["academy"]]
+        l = [x for x in s["sittings"] if x["test"] == "LEXIS" and x["valid"] and x["academy"] == s["academy"]]
+        if b and l:
+            k = "second" if l[0]["date"] > b[0]["date"] else "first"
+            per.setdefault(s["academy"], {"second": [], "first": []})[k].append(l[0]["sas"] - b[0]["sas"])
+    num, den = 0.0, 0
+    for a, v in sorted(per.items()):
+        if len(v["second"]) >= 20 and len(v["first"]) >= 20:
+            w = len(v["second"]) + len(v["first"])
+            num += w * (np.mean(v["second"]) - np.mean(v["first"])) / 2
+            den += w
+            gaps["second"] += v["second"]
+            gaps["first"] += v["first"]
+    gain = num / den
+    chk("R2 the second-sitting gain (own arithmetic)", abs(round(gain, 1) - F["second_sitting_gain"]) < 0.051,
+        "%.2f" % gain)
+    chk("R2 the order gaps (own arithmetic)", abs(round(np.mean(gaps["second"]), 1) - F["evidence"]["gap_lexis_second"])
+        < 0.051 and abs(round(np.mean(gaps["first"]), 1) - F["evidence"]["gap_lexis_first"]) < 0.051)
+    # R3 to R9 with the golden's conversions on the verifier's own table
+    g = R.all_results(D, R.GOLD)
+    chk("R3 Brightway to Lexis on its own table", all(abs(round(g["R3"][x], 1) - F["brightway_lexis"][str(x)]) < 0.051
+                                                       for x in R.POINTS))
+    chk("R4 Quill to Lexis on its own table", all(abs(round(g["R4"][x], 1) - F["quill_lexis"][str(x)]) < 0.051
+                                                  for x in R.POINTS))
+    chk("R5 the July level on its own table", abs(round(g["R5"], 1) - F["july_level"]) < 0.051, "%.2f" % g["R5"])
+    chk("R6 Reading Forward students by academy on its own table", all(g["R6"][a] == F["programme"][a] for a in g["R6"]),
+        g["R6_total"])
+    chk("R7 the change from each academy's own test", all(g["R7"][a] == F["change"][a] for a in g["R7"]))
+    chk("R8 tutor hours and cost", abs(g["R8_hours"] - F["hours_total"]) < 0.051 and
+        abs(round(g["R8_cost"]) - F["cost_total"]) <= 1)
+    chk("R9 tutor hours by academy", all(abs(g["R9"][a] - F["hours"][a]) < 0.051 for a in g["R9"]))
+    # the documents
+    for f, control, needle in [(PK.FILES["policy"], "version 3", "below 85"),
+                               (PK.FILES["lexis_tech"], "2019", "first time"),
+                               (PK.FILES["quill_tech"], "2024 restandardisation", "24 to 34 questions"),
+                               (PK.FILES["brightway_tech"], "2016", "<70")]:
+        t = " ".join(subprocess.run(["pdftotext", os.path.join(T, f), "-"], capture_output=True, text=True).stdout.split())
+        chk("document read back: %s (control '%s')" % (f, control), control in t and needle in t, "%d chars" % len(t))
+    bad = [o for o in OK if not o[1]]
+    for label, ok, detail in OK:
+        print("%s  %-80s %s" % ("PASS" if ok else "FAIL", label[:80], detail[:60]))
+    print("verify: %d checks, %d failed" % (len(OK), len(bad)))
+    return 1 if bad else 0
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    sys.exit(main(sys.argv[1] if len(sys.argv) > 1 else os.path.join(os.path.dirname(HERE), "target")))

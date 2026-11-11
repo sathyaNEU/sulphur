@@ -1,100 +1,191 @@
 {
  "task": "task8",
- "architecture": 18,
- "setting": "2026-11-09",
- "organisation": "Prairie Adult Credentials Board (fictional), Manitoba and Saskatchewan, Canada",
- "decision": "the pass mark of the 2027 Level 1 Numeracy paper",
+ "architecture": 19,
+ "title": "How much Reading Forward tutor time each academy of a multi-academy trust needs for its Year 7 intake",
+ "domain": "Education & Learning Sciences",
+ "subdomain": "Psychometrics (scale validation, item response theory, test equating)",
+ "objective": "Data Extraction & Conformation (ETL / Pipeline Build)",
+ "as_of": "2026-10-12",
  "deliverables": [
-  "pass_mark_2027.docx",
-  "l1_2027_items.xlsx"
+  "reading_forward_entry_2026.xlsx",
+  "reading_forward_tutor_time_2026.pdf"
  ],
  "distractor_files": [
-  "learner_confidence_survey_2026.csv",
-  "centre_computer_suite_audit_2026.xlsx"
+  "cognitive_profile_tests_2026.csv",
+  "attendance_y7_autumn2026.csv",
+  "y7_settling_in_survey_2026.csv",
+  "reading_forward_sessions_2025-26.csv"
  ],
- "rows": {
-  "responses": 400052,
-  "register": 10550,
-  "bank": 568,
-  "centres": 36
- },
+ "stated_inputs": [
+  "339,500",
+  "339500",
+  "27.80",
+  "0.4",
+  "848",
+  "36",
+  "85"
+ ],
  "files": [
   {
-   "name": "2027_level1_pass_mark_request.eml",
-   "role": "context",
-   "source": "synthetic: the committee chair's email to the assessment manager",
-   "date": "2026-11-09",
-   "license": "CC0 1.0 (synthetic, authored for this task)"
+   "path": "census_year7_2026-10-01.csv",
+   "format": "csv",
+   "bytes": 368276,
+   "rows": 4292,
+   "covers": "the trust's MIS: Year 7 students on roll at the 1 October 2026 census",
+   "source": "Constructed (seeded generator, task8/generator)",
+   "pull_date": "2026-10-12",
+   "license": "CC0-1.0 (original work)"
   },
   {
-   "name": "awards_committee_minute_2026-09-17.pdf",
-   "role": "context",
-   "source": "synthetic: the Awards Committee's minute of 17 September 2026",
-   "date": "2026-09-21",
-   "license": "CC0 1.0 (synthetic, authored for this task)"
+   "path": "ks2_results_2026.csv",
+   "format": "csv",
+   "bytes": 165908,
+   "rows": 4247,
+   "covers": "KS2 2026 results from the common transfer files: reading, maths and GPS scaled scores and codes",
+   "source": "Constructed (seeded generator, task8/generator)",
+   "pull_date": "2026-10-12",
+   "license": "CC0-1.0 (original work)"
   },
   {
-   "name": "centre_computer_suite_audit_2026.xlsx",
-   "role": "distractor",
-   "source": "synthetic: the operations group's 2026 audit of centres' computer suites",
-   "date": "2026-08-28",
-   "license": "CC0 1.0 (synthetic, authored for this task)"
+   "path": "lexis_results_autumn2026.csv",
+   "format": "csv",
+   "bytes": 351566,
+   "rows": 2830,
+   "covers": "the Lexis platform's results export, every sitting this year",
+   "source": "Constructed (seeded generator, task8/generator)",
+   "pull_date": "2026-10-12",
+   "license": "CC0-1.0 (original work)"
   },
   {
-   "name": "learner_confidence_survey_2026.csv",
-   "role": "distractor",
-   "source": "synthetic: the Board's 2026 learner confidence survey",
-   "date": "2026-07-02",
-   "license": "CC0 1.0 (synthetic, authored for this task)"
+   "path": "quill_results_2026.csv",
+   "format": "csv",
+   "bytes": 111239,
+   "rows": 1437,
+   "covers": "Quill's results export for the trust's Quill academies",
+   "source": "Constructed (seeded generator, task8/generator)",
+   "pull_date": "2026-10-12",
+   "license": "CC0-1.0 (original work)"
   },
   {
-   "name": "level1_numeracy_specification_2026.pdf",
-   "role": "governing",
-   "source": "synthetic: the Level 1 Numeracy specification, version 2026.1",
-   "date": "2026-03-12",
-   "license": "CC0 1.0 (synthetic, authored for this task)"
+   "path": "quill_roster_map.csv",
+   "format": "csv",
+   "bytes": 61242,
+   "rows": 1363,
+   "covers": "Quill's rostering sync: Quill student numbers to the trust's admission numbers",
+   "source": "Constructed (seeded generator, task8/generator)",
+   "pull_date": "2026-10-12",
+   "license": "CC0-1.0 (original work)"
   },
   {
-   "name": "ln1_standard_setting_record_2022.pdf",
-   "role": "governing",
-   "source": "synthetic: the 2022 standard-setting record for Level 1 Numeracy",
-   "date": "2022-05-20",
-   "license": "CC0 1.0 (synthetic, authored for this task)"
+   "path": "quill_session_log_2026.csv",
+   "format": "csv",
+   "bytes": 1910211,
+   "rows": 41797,
+   "covers": "Quill's question-level session log",
+   "source": "Constructed (seeded generator, task8/generator)",
+   "pull_date": "2026-10-12",
+   "license": "CC0-1.0 (original work)"
   },
   {
-   "name": "pacb_candidate_register_2022_2026.csv",
-   "role": "evidence",
-   "source": "synthetic: the Board's candidate register, centre uploads and regional office entries, 2022 to 2026",
-   "date": "2026-11-06",
-   "license": "CC0 1.0 (synthetic, authored for this task)"
+   "path": "brightway_results_2026.xlsx",
+   "format": "xlsx",
+   "bytes": 49017,
+   "rows": null,
+   "covers": "the Brightway academies' results, typed by each academy's staff",
+   "source": "Constructed (seeded generator, task8/generator)",
+   "pull_date": "2026-10-12",
+   "license": "CC0-1.0 (original work)"
   },
   {
-   "name": "pacb_item_bank_2026.csv",
-   "role": "evidence",
-   "source": "synthetic: the Board's item bank file with the preliminary and final 2026 calibration runs",
-   "date": "2026-11-04",
-   "license": "CC0 1.0 (synthetic, authored for this task)"
+   "path": "academies.csv",
+   "format": "csv",
+   "bytes": 1282,
+   "rows": 21,
+   "covers": "the trust's academy list with each academy's entry reading test",
+   "source": "Constructed (seeded generator, task8/generator)",
+   "pull_date": "2026-10-12",
+   "license": "CC0-1.0 (original work)"
   },
   {
-   "name": "pacb_learning_centres.csv",
-   "role": "evidence",
-   "source": "synthetic: the Board's registered learning centres",
-   "date": "2026-11-02",
-   "license": "CC0 1.0 (synthetic, authored for this task)"
+   "path": "reading_forward_policy_2026.pdf",
+   "format": "pdf",
+   "bytes": 60267,
+   "rows": null,
+   "covers": "the trust's Reading Forward policy, version 3 (July 2026)",
+   "source": "Constructed (seeded generator, task8/generator)",
+   "pull_date": "2026-10-12",
+   "license": "CC0-1.0 (original work)"
   },
   {
-   "name": "pacb_numeracy_responses_2022_2026.csv",
-   "role": "evidence",
-   "source": "synthetic: the response platform's export of every scored item response at the Board's Level 1 and Level 2 online sittings, 2022 to 2026",
-   "date": "2026-11-06",
-   "license": "CC0 1.0 (synthetic, authored for this task)"
+   "path": "lexis_technical_summary.pdf",
+   "format": "pdf",
+   "bytes": 47537,
+   "rows": null,
+   "covers": "Lexis 11-14 Reading technical summary (publisher)",
+   "source": "Constructed (seeded generator, task8/generator)",
+   "pull_date": "2026-10-12",
+   "license": "CC0-1.0 (original work)"
   },
   {
-   "name": "pacb_paper_layouts_2022_2027.xlsx",
-   "role": "evidence",
-   "source": "synthetic: the Board's paper layouts, 2022 to 2027",
-   "date": "2026-11-04",
-   "license": "CC0 1.0 (synthetic, authored for this task)"
+   "path": "quill_technical_summary.pdf",
+   "format": "pdf",
+   "bytes": 45898,
+   "rows": null,
+   "covers": "Quill Reading technical summary, UK edition (publisher)",
+   "source": "Constructed (seeded generator, task8/generator)",
+   "pull_date": "2026-10-12",
+   "license": "CC0-1.0 (original work)"
+  },
+  {
+   "path": "brightway_technical_summary.pdf",
+   "format": "pdf",
+   "bytes": 48888,
+   "rows": null,
+   "covers": "Brightway Reading Check technical summary (publisher)",
+   "source": "Constructed (seeded generator, task8/generator)",
+   "pull_date": "2026-10-12",
+   "license": "CC0-1.0 (original work)"
+  },
+  {
+   "path": "cognitive_profile_tests_2026.csv",
+   "format": "csv",
+   "bytes": 138629,
+   "rows": 2158,
+   "covers": "cognitive profile test results at some academies",
+   "source": "Constructed (seeded generator, task8/generator)",
+   "pull_date": "2026-10-12",
+   "license": "CC0-1.0 (original work)"
+  },
+  {
+   "path": "attendance_y7_autumn2026.csv",
+   "format": "csv",
+   "bytes": 1077446,
+   "rows": 21460,
+   "covers": "Year 7 attendance by week, autumn 2026",
+   "source": "Constructed (seeded generator, task8/generator)",
+   "pull_date": "2026-10-12",
+   "license": "CC0-1.0 (original work)"
+  },
+  {
+   "path": "y7_settling_in_survey_2026.csv",
+   "format": "csv",
+   "bytes": 128766,
+   "rows": 2693,
+   "covers": "Year 7 settling-in survey responses",
+   "source": "Constructed (seeded generator, task8/generator)",
+   "pull_date": "2026-10-12",
+   "license": "CC0-1.0 (original work)"
+  },
+  {
+   "path": "reading_forward_sessions_2025-26.csv",
+   "format": "csv",
+   "bytes": 531766,
+   "rows": 11930,
+   "covers": "Reading Forward tutor session log, 2025-26",
+   "source": "Constructed (seeded generator, task8/generator)",
+   "pull_date": "2026-10-12",
+   "license": "CC0-1.0 (original work)"
   }
- ]
+ ],
+ "provenance": "Every file is constructed by the seeded generator in task8/generator from a simulated trust (students' reading, KS2, three entry tests and their sittings, the trust's MIS and the vendors' exports); the trust, academies, tests, people and figures are invented."
 }

@@ -1,331 +1,265 @@
-"""task8 architecture 18: the clean truth. Items (pool, strand, context, stem length, difficulty on the Level 2
-reference), papers 2022 to 2027, centres, candidates, sittings and every scored response, drawn from one seed
-with a separate stream per component so that a change in one leaves the others where they were."""
+"""task8 architecture 19: the simulated trust. Students carry a reading level at the start of Year 7 (z on the Lexis
+2019 basis); every record is generated from it by the process that makes that record:
+
+  KS2 (May 2026)       the national reading test, four months before the start of Year 7, from the reading the pupil
+                       had in Year 6 (above the start-of-Year-7 level by the summer and the move), with its own error,
+                       a not-age-standardised age effect, a compressed top and codes below the test
+  Lexis                the trust's test, standardised on a 2019 sample: the Lexis basis itself plus its error
+  Quill                an adaptive test standardised on a softer 2024 sample (the same reader scores higher)
+  Brightway            a paper test standardised in 2016, harder at the bottom and topping out early
+  sittings             a July transition-day sitting reads the pre-transfer level; a second sitting within three
+                       weeks carries a gain (familiarity with the test and two weeks of teaching), whichever test is
+                       second
+
+Nothing is placed where it decides: the second-sitting gain is on every second sitting (the trial, the switch
+academy's Brightway re-sit, re-sits after failed online sessions), the July level on every pupil before the move,
+the norm samples on every result of their test."""
 import datetime as dt
+import math
 
 import numpy as np
 
 import params as P
 
-STRANDS_L1 = ("N", "MM", "D", "SS")
-STRAND_NAME = {"N": "Number", "MM": "Money and measures", "D": "Data", "SS": "Shape and space",
-               "PR": "Patterns and relationships"}
+LETTERS = "ABCDEFGHJKLMNPQRTUVWXYZ"
 
 
-def sig(x):
-    return 1.0 / (1.0 + np.exp(-x))
+def upn(la, estab, year, serial):
+    digits = "%03d%04d%02d%03d" % (la, estab, year, serial)
+    tot = sum(int(d) * w for d, w in zip(digits, range(2, 14)))
+    return LETTERS[tot % 23] + digits
 
 
-def streams(seed):
-    ss = np.random.SeedSequence(seed)
-    names = ("items", "papers", "centres", "people", "theta", "resp", "dates", "mess", "ids", "survey", "audit")
-    return {n: np.random.default_rng(s) for n, s in zip(names, ss.spawn(len(names)))}
+def sas_lexis(z):
+    return np.clip(np.round(100 + 15 * z), *P.SAS_RANGE["LEXIS"])
 
 
-def _codes(rng, n, prefix, start):
-    """Bank codes advance by uneven steps, the way a bank numbers items as writers submit them."""
-    steps = rng.integers(1, 9, size=n)
-    nums = start + np.cumsum(steps)
-    return ["%s-%04d" % (prefix, k) for k in nums]
+def sas_quill(z):
+    mu, sd = P.NORM["QUILL"]
+    return np.clip(np.round(100 + 15 * (z - mu) / sd), *P.SAS_RANGE["QUILL"])
 
 
-def draw_items(rng):
-    """Two pools on one reference scale (what a Level 2 candidate finds). Returns a dict of arrays."""
-    n1, n2 = 236, 204
-    strand1 = rng.choice(STRANDS_L1, size=n1, p=[0.30, 0.30, 0.20, 0.20])
-    strand2 = rng.choice(STRANDS_L1 + ("PR",), size=n2, p=[0.25, 0.24, 0.17, 0.16, 0.18])
-    strand = np.concatenate([strand1, strand2])
-    p_every = {"N": 0.18, "MM": 0.90, "D": 0.58, "SS": 0.38, "PR": 0.08}
-    everyday = np.array([rng.random() < p_every[s] for s in strand])
-    p_long = {"N": 0.10, "MM": 0.34, "D": 0.40, "SS": 0.20, "PR": 0.62}
-    long_ = np.array([rng.random() < p_long[s] for s in strand])
-    words = np.where(long_, rng.integers(82, 151, size=n1 + n2), rng.integers(14, 49, size=n1 + n2))
-    b = np.concatenate([np.clip(rng.normal(-1.20, 0.82, n1), -3.3, 0.9), np.clip(rng.normal(0.55, 0.74, n2), -1.2, 2.3)])
-    pool = np.array(["L1"] * n1 + ["L2"] * n2)
-    resid = rng.normal(0.0, P.RESID_DIF, n1 + n2)
-    codes = _codes(rng, n1, "N1", 1000) + _codes(rng, n2, "N2", 2000)
-    it = dict(code=np.array(codes), pool=pool, strand=strand, everyday=everyday, words=words.astype(int), b=b,
-              resid=resid)
-    I2 = np.arange(n1, n1 + n2)
-
-    def take(cond, k, used):
-        cand = [i for i in I2 if cond(i) and i not in used]
-        rng.shuffle(cand)
-        out = cand[:k]
-        used.update(out)
-        return np.array(out)
-    used = set()
-    acc = lambda i: -0.75 <= b[i] <= 0.85
-    sp = take(lambda i: acc(i) and strand[i] == "MM", 8, used)
-    sa = take(lambda i: acc(i) and strand[i] == "N", 12, used)
-    lp = take(lambda i: acc(i) and strand[i] in ("MM", "D"), 16, used)
-    # patterns and relationships items the Item Review Group may draw on for the 2027 Level 1 paper
-    pr = take(lambda i: -0.95 <= b[i] <= 0.75 and strand[i] == "PR", 24, used)
-    if len(pr) < 18:
-        more = sorted((i for i in I2 if strand[i] == "PR" and i not in used), key=lambda i: abs(b[i] + 0.1))
-        pr = np.concatenate([pr, np.array(more[:18 - len(pr)], dtype=int)]).astype(int)
-        used.update(pr.tolist())
-    everyday[sp] = True
-    words[sp] = rng.integers(17, 42, size=len(sp))
-    everyday[sa] = False
-    words[sa] = rng.integers(15, 44, size=len(sa))
-    everyday[lp] = True
-    # long everyday items: their reading cost sits about where their everyday advantage does
-    words[lp] = np.clip(np.round(100.0 * P.BETA / P.LAMBDA + rng.normal(0, 15, size=len(lp))), 90, 142).astype(int)
-    everyday[pr] = False
-    words[pr] = rng.integers(98, 141, size=len(pr))
-    it["everyday"], it["words"] = everyday, words.astype(int)
-    it["sets"] = dict(sp=sp, sa=sa, lp=lp, pr_pool=pr)
-    return it
+def sas_brightway_raw(z):
+    """Brightway's standardised score before rounding and the reporting range (numpy, unclipped)."""
+    mu, sd = P.NORM["BRIGHTWAY"]
+    s = 100 + 15 * (z - mu) / sd
+    k = P.BRIGHTWAY_KNEE
+    return np.where(s > k, k + 14.0 * (1 - np.exp(-(s - k) / 14.0)), s)
 
 
-def mix_chance(it, idx, th):
-    """Chance that a Level 1 candidate at ability th (reference scale) answers each item, over the regions."""
-    shares = np.array([r[3] for r in P.REGIONS])
-    shares = shares / shares.sum()
-    out = np.zeros(len(idx))
-    for reg, sh in zip(P.REGIONS, shares):
-        out += sh * sig(th - it["b"][idx] - l1_shift(it, idx, reg[5]))
+def sas_brightway(z):
+    s = np.round(sas_brightway_raw(z))
+    return np.clip(s, 69, 131)          # 69 is reported "<70", 131 ">130"
+
+
+def ks2_score(latent, age_c):
+    """KS2 reading scaled score from the pupil's Year 6 reading (z), age centred in years (-0.5 youngest .. +0.5)."""
+    x = P.KS2_MEAN + P.KS2_SD * (latent - P.JULY_LEVEL) / 1.12 + 2 * P.KS2_AGE * age_c
+    top = 113.0
+    x = np.where(x > top, top + 7.0 * (1 - np.exp(-(x - top) / 7.0)), x)
+    return x
+
+
+def dates_between(rng, a, b, n):
+    span = (b - a).days
+    days = rng.integers(0, span + 1, size=n)
+    out = []
+    for d in days:
+        x = a + dt.timedelta(days=int(d))
+        while x.weekday() >= 5:
+            x = x - dt.timedelta(days=1) if x - dt.timedelta(days=1) >= a else x + dt.timedelta(days=2)
+        out.append(x)
     return out
 
 
-def true_standard(it, ref):
-    lo, hi = -8.0, 8.0
-    for _ in range(80):
-        m = 0.5 * (lo + hi)
-        if mix_chance(it, ref, m).sum() < P.STANDARD_RAW:
-            lo = m
-        else:
-            hi = m
-    return 0.5 * (lo + hi)
-
-
-def l1_shift(it, idx, delta_r=0.0):
-    """How much harder item idx is for a Level 1 candidate than for a Level 2 candidate (logits)."""
-    return (P.LAMBDA * it["words"][idx] / 100.0 - (P.BETA + delta_r) * it["everyday"][idx].astype(float)
-            + it["resid"][idx])
-
-
-def draw_papers(rng, it):
-    n1 = int((it["pool"] == "L1").sum())
-    I1 = np.arange(n1)
-    I2 = np.arange(n1, len(it["b"]))
-    s = it["sets"]
-    bridging = set(np.concatenate([s["sp"], s["sa"], s["lp"], s["pr_pool"]]).tolist())
-    b, ev = it["b"], it["everyday"]
-    papers = {}
-    # the 2022 reference paper: forty Level 1 items, sixteen in everyday contexts
-    order = rng.permutation(I1)
-    evs = [i for i in order if ev[i] and -2.7 <= b[i] <= 0.2]
-    mts = [i for i in order if not ev[i] and -2.7 <= b[i] <= 0.2]
-    ref = np.array(evs[:16] + mts[:24])
-    used = set(ref.tolist())
-    papers["L1-2022"] = ref
-    prev = list(ref)
-    for k, y in enumerate(P.YEARS[1:]):
-        reuse = list(rng.choice(prev, size=10, replace=False))
-        fresh_ev = [i for i in order if ev[i] and i not in used][:11]
-        fresh_mt = [i for i in order if not ev[i] and i not in used][:10]
-        used.update(fresh_ev + fresh_mt)
-        br = list(s["sp"][2 * k:2 * k + 2]) + list(s["sa"][3 * k:3 * k + 3]) + list(s["lp"][4 * k:4 * k + 4])
-        papers["L1-%d" % y] = np.array(reuse + fresh_ev + fresh_mt + br)
-        prev = list(set(prev) | set(fresh_ev) | set(fresh_mt))
-    # the 2027 paper: twenty-eight Level 1 items already sat (eight everyday, twenty mathematical) and the twelve
-    # patterns and relationships items from the Level 2 pool
-    th_std = true_standard(it, ref)
-    clear = lambda i: not (0.14 <= mix_chance(it, np.array([i]), th_std)[0] <= 0.27 or
-                           0.84 <= mix_chance(it, np.array([i]), th_std)[0] <= 0.95)
-    sat0 = [i for i in rng.permutation(sorted(set(np.concatenate([papers["L1-%d" % y] for y in P.YEARS])) - bridging))]
-    sat = [i for i in sat0 if clear(i)]
-    e27 = [i for i in sat if ev[i] and -2.4 <= b[i] <= 0.1][:8]
-    e27 += [i for i in sat + sat0 if ev[i] and i not in e27][:8 - len(e27)]
-    m27 = [i for i in sat if not ev[i] and -2.4 <= b[i] <= 0.3][:20]
-    m27 += [i for i in sat + sat0 if not ev[i] and i not in m27][:20 - len(m27)]
-    pool = [i for i in rng.permutation(s["pr_pool"]) if clear(i)]
-    low = [i for i in pool if mix_chance(it, np.array([i]), th_std)[0] < 0.14]
-    high = [i for i in pool if mix_chance(it, np.array([i]), th_std)[0] > 0.27]
-    k_low = min(len(low), 6)
-    pr = np.array(low[:k_low] + high[:12 - k_low], dtype=int)
-    if len(pr) < 12:
-        rest = [i for i in list(pool) + list(s["pr_pool"]) if i not in set(pr.tolist())]
-        rest = list(dict.fromkeys(rest))
-        pr = np.concatenate([pr, np.array(rest[:12 - len(pr)], dtype=int)])
-    s["pr"] = pr
-    bridging |= set(pr.tolist())
-    papers["L1-2027"] = np.array(e27 + m27 + list(s["pr"]))
-    # Level 2 papers: forty Level 2 items each, ten carried from earlier papers; every bridging item and every
-    # patterns item the 2027 paper borrows sits on at least one of them
-    o2 = [i for i in rng.permutation(I2) if i not in bridging]
-    prev2, pos = [], 0
-    br_all = list(s["sp"]) + list(s["sa"]) + list(s["lp"])
-    rng.shuffle(br_all)
-    for k, y in enumerate(P.YEARS):
-        reuse = list(rng.choice(prev2, size=10, replace=False)) if prev2 else []
-        br = br_all[k * 7:(k + 1) * 7] + ([br_all[35]] if k == 0 else [])
-        prs = list(s["pr"][4 * (k - 2):4 * (k - 2) + 4]) if k >= 2 else []
-        n_new = 40 - len(reuse) - len(br) - len(prs)
-        fresh = o2[pos:pos + n_new]
-        pos += n_new
-        papers["L2-%d" % y] = np.array(reuse + fresh + br + prs)
-        prev2 = list(set(prev2) | set(fresh))
-    for name, arr in papers.items():
-        assert len(arr) == 40 and len(set(arr.tolist())) == 40, name
-    return papers
-
-
-REGION_CENTRES = {
-    "WPG": ["North End Adult Learning Centre", "Point Douglas Community Learning", "St. Vital Adult Education",
-            "Westwood Literacy Program", "Elmwood Learning Hub", "Sargent Avenue Adult Centre (Suite 210)",
-            "Downtown Skills Centre", "Transcona Adult Ed."],
-    "WST": ["Brandon Adult Learning Centre", "Virden Community Learning", "Souris Valley Adult Ed.",
-            "Neepawa Literacy Council", "Killarney Learning Place"],
-    "INT": ["Selkirk Adult Learning Centre", "Gimli Community Learning", "Steinbach Adult Education",
-            "Beausejour Learning Centre", "Arborg Literacy Program", "Stonewall Adult Ed. (Library annex)"],
-    "PKN": ["Dauphin Adult Education", "Swan River Learning Centre", "The Pas Community Learning",
-            "Flin Flon Adult Ed.", "Thompson Learning Hub"],
-    "SKC": ["Saskatoon Westside Learning Centre", "Riverside Adult Education", "Humboldt Community Learning",
-            "North Battleford Adult Learning", "Warman Literacy Program", "Prince Albert Learning Centre"],
-    "RGS": ["Regina North Central Learning", "Heritage Adult Education (Regina)", "Moose Jaw Adult Learning",
-            "Weyburn Community Learning", "Swift Current Literacy Council", "Estevan Learning Place"],
-}
-
-
-CENTRE_TOWNS = {
-    "Brandon Adult Learning Centre": "Brandon", "Virden Community Learning": "Virden",
-    "Souris Valley Adult Ed.": "Souris", "Neepawa Literacy Council": "Neepawa", "Killarney Learning Place": "Killarney",
-    "Selkirk Adult Learning Centre": "Selkirk", "Gimli Community Learning": "Gimli",
-    "Steinbach Adult Education": "Steinbach", "Beausejour Learning Centre": "Beausejour",
-    "Arborg Literacy Program": "Arborg", "Stonewall Adult Ed. (Library annex)": "Stonewall",
-    "Dauphin Adult Education": "Dauphin", "Swan River Learning Centre": "Swan River",
-    "The Pas Community Learning": "The Pas", "Flin Flon Adult Ed.": "Flin Flon", "Thompson Learning Hub": "Thompson",
-    "Saskatoon Westside Learning Centre": "Saskatoon", "Riverside Adult Education": "Saskatoon",
-    "Humboldt Community Learning": "Humboldt", "North Battleford Adult Learning": "North Battleford",
-    "Warman Literacy Program": "Warman", "Prince Albert Learning Centre": "Prince Albert",
-    "Regina North Central Learning": "Regina", "Heritage Adult Education (Regina)": "Regina",
-    "Moose Jaw Adult Learning": "Moose Jaw", "Weyburn Community Learning": "Weyburn",
-    "Swift Current Literacy Council": "Swift Current", "Estevan Learning Place": "Estevan",
-}
-CENTRE_TOWNS.update({nm: "Winnipeg" for nm in REGION_CENTRES["WPG"]})
-assert set(CENTRE_TOWNS) == {nm for v in REGION_CENTRES.values() for nm in v}
-
-
-def draw_centres(rng):
-    rows = []
-    codes = _codes(rng, sum(len(v) for v in REGION_CENTRES.values()), "LC", 100)
-    order = rng.permutation(len(codes))
+def school_days_after(d, n):
+    x = d
     k = 0
-    for reg in P.REGIONS:
-        rc = reg[0]
-        names = REGION_CENTRES[rc]
-        w = rng.dirichlet(np.ones(len(names)) * 2.5)
-        for nm, wt in zip(names, w):
-            rows.append(dict(code=codes[order[k]], name=nm, region=rc, prov=reg[2], weight=float(wt)))
+    while k < n:
+        x = x + dt.timedelta(days=1)
+        if x.weekday() < 5:
             k += 1
-    return rows
+    return x
 
 
-def _date(rng, year):
-    a = dt.date(year, *P.SITTING_START)
-    z = dt.date(year, *P.SITTING_END)
-    span = (z - a).days
-    # sittings bunch at the ends of the centres' course blocks (late April to June, October)
-    u = rng.random()
-    if u < 0.42:
-        d = a + dt.timedelta(days=int(rng.integers(75, 140)))
-    elif u < 0.70:
-        d = a + dt.timedelta(days=int(rng.integers(220, span + 1)))
-    else:
-        d = a + dt.timedelta(days=int(rng.integers(0, span + 1)))
-    while d.weekday() >= 5:
-        d -= dt.timedelta(days=1)
-    return max(a, min(z, d))
-
-
-def draw_people(R, centres):
-    """Every sitting 2022 to 2026: level, year, person, centre sat at, region, true ability. Some Level 1
-    candidates sit again the next year, and some go on to Level 2."""
-    rng, rt, rd = R["people"], R["theta"], R["dates"]
-    by_region = {}
-    for c in centres:
-        by_region.setdefault(c["region"], []).append(c)
-    shares = np.array([r[3] for r in P.REGIONS])
-    shares = shares / shares.sum()
+def build(seed=P.SEED):
+    rng = np.random.default_rng(seed)
+    from faker import Faker
+    fk = Faker("en_GB")
+    fk.seed_instance(seed)
+    acad = []
+    for k, (name, la, test, n, mean, timing) in enumerate(P.ACADEMIES):
+        la_code = {"Sheffield": 373, "Rotherham": 372, "Barnsley": 370, "Derbyshire": 830, "Nottinghamshire": 891,
+                   "Nottingham": 892}[la]
+        estab = 4000 + 37 * k + int(rng.integers(0, 30))
+        urn = 136000 + 911 * k + int(rng.integers(0, 400))
+        acad.append(dict(name=name, la=la, la_code=la_code, estab=estab, urn=urn, test=test, n=n, mean=mean,
+                         timing=timing, quill_site="QS%03d" % (101 + 13 * k) if test == "QUILL" else ""))
+    S = []
+    serial = {}
+    for a in acad:
+        n = a["n"]
+        fsm_p = np.clip(0.22 - 0.35 * a["mean"], 0.08, 0.55)
+        for i in range(n):
+            g = "F" if rng.random() < 0.49 else "M"
+            first = fk.first_name_female() if g == "F" else fk.first_name_male()
+            last = fk.last_name()
+            if rng.random() < 0.03:
+                last = last + "-" + fk.last_name()
+            dob = dt.date(2014, 9, 1) + dt.timedelta(days=int(rng.integers(0, 365)))
+            age_c = 0.5 - ((dob - dt.date(2014, 9, 1)).days / 364.0)
+            fsm = rng.random() < fsm_p
+            sen = rng.random() < 0.13
+            eal = rng.random() < (0.12 if a["la"] not in ("Nottingham", "Sheffield") else 0.21)
+            newcomer = eal and rng.random() < 0.16
+            theta = (a["mean"] + rng.normal(0, P.WITHIN_SD) - 0.55 * sen - 0.12 * fsm + 0.0 * eal
+                     - 0.45 * newcomer)
+            primary_la = a["la_code"] if rng.random() < 0.9 else int(rng.choice([370, 372, 373, 830, 891, 892]))
+            pr = 2000 + int(rng.integers(0, 600))
+            key = (primary_la, pr)
+            serial[key] = serial.get(key, 0) + 1
+            S.append(dict(academy=a["name"], test=a["test"], timing=a["timing"], first=first, last=last, gender=g,
+                          dob=dob, age_c=age_c, fsm=fsm, sen=sen, eal=eal, newcomer=newcomer, theta=theta,
+                          upn=upn(primary_la, pr, 15, serial[key] + int(rng.integers(0, 50)) * 7)))
+    n = len(S)
+    th = np.array([s["theta"] for s in S])
+    # the Year 6 level (KS2 in May, the July transition day) stands above the start of Year 7
+    july = P.JULY_LEVEL + rng.normal(0, P.JULY_SD, n)
+    gain = P.SECOND_SITTING_GAIN + rng.normal(0, P.GAIN_SD, n)
+    change = rng.normal(0, P.KS2_CHANGE_SD, n)
+    ks2_lat = th + july + change + rng.normal(0, P.KS2_ERR_SD, n)
+    ks2_x = ks2_score(ks2_lat, np.array([s["age_c"] for s in S]))
+    for i, s in enumerate(S):
+        s["july"] = float(july[i])
+        s["gain"] = float(gain[i])
+        if s["newcomer"] and rng.random() < 0.75:
+            s["ks2"] = None
+            s["ks2_code"] = "NONE"
+        elif rng.random() < P.KS2_MISSING_ARRIVED * 0.45:
+            s["ks2"] = None
+            s["ks2_code"] = "NONE"
+        elif rng.random() < P.KS2_ABSENT:
+            s["ks2"] = None
+            s["ks2_code"] = "A"
+        elif ks2_x[i] < P.KS2_B_CUT:
+            s["ks2"] = None
+            s["ks2_code"] = "B"
+        else:
+            s["ks2"] = int(min(P.KS2_TOP, max(80, round(float(ks2_x[i])))))
+            s["ks2_code"] = ""
+    # census and the sittings
+    for a in acad:
+        rows = [s for s in S if s["academy"] == a["name"]]
+        tg = rng.integers(0, P.TUTOR_GROUPS, size=len(rows))
+        for s, g in zip(rows, tg):
+            s["tutor_group"] = "7" + "ABCDEFGH"[int(g)]
     sittings = []
-    pid = [int(rng.integers(300000, 310000))]
 
-    def new_pid():
-        pid[0] += int(rng.integers(1, 6))
-        return pid[0]
-    carry_l1, carry_l2 = [], []
-    for y in P.YEARS:
-        # Level 1
-        n = P.L1_SITTINGS[y]
-        resit = carry_l1
-        carry_l1 = []
-        for k in range(n):
-            if k < len(resit):
-                person, reg, theta0 = resit[k]
-                theta = theta0 + rt.normal(0.18, 0.12)
+    def sit(s, test, date, z, kind, status="Complete", items=None, academy=None):
+        sittings.append(dict(student=s, test=test, date=date, z=float(z), kind=kind, status=status, items=items,
+                             academy=academy or s["academy"]))
+
+    for a in acad:
+        rows = [s for s in S if s["academy"] == a["name"]]
+        group_date = {}
+        for g in "ABCDEFGH":
+            if a["test"] == "LEXIS" and a["timing"] == "SEPT":
+                group_date[g] = dates_between(rng, *P.LEXIS_SEPT, 1)[0]
+            elif a["test"] == "LEXIS":
+                group_date[g] = dates_between(rng, *P.LEXIS_JULY, 1)[0]
+            elif a["test"] == "QUILL":
+                group_date[g] = dates_between(rng, *P.QUILL_SEPT, 1)[0]
             else:
-                person = new_pid()
-                reg = P.REGIONS[int(rng.choice(len(P.REGIONS), p=shares))][0]
-                off = [r[4] for r in P.REGIONS if r[0] == reg][0]
-                theta = rt.normal(P.L1_MU + off, P.L1_SD)
-            cs = by_region[reg]
-            cw = np.array([c["weight"] for c in cs])
-            cen = cs[int(rng.choice(len(cs), p=cw / cw.sum()))]
-            sittings.append(dict(level="L1", year=y, person=person, region=reg, centre=cen["code"], theta=float(theta),
-                                 date=_date(rd, y)))
-        # Level 2
-        n = P.L2_SITTINGS[y]
-        prog = carry_l2
-        carry_l2 = []
-        for k in range(n):
-            if k < len(prog):
-                person, reg, theta0 = prog[k]
-                theta = theta0 + rt.normal(0.55, 0.15)
+                group_date[g] = dates_between(rng, *P.BRIGHTWAY_FIRST, 1)[0]
+        trial_gap = {g: int(rng.integers(P.TRIAL_GAP[0], P.TRIAL_GAP[1] + 1)) for g in "ABCDEFGH"}
+        for s in rows:
+            g = s["tutor_group"][1]
+            th_i = s["theta"]
+            r = rng.random()
+            s["late"] = r < P.ARRIVE_LATE
+            s["no_sitting"] = (not s["late"]) and r < P.ARRIVE_LATE + P.MISS_FIRST
+            s["left"] = rng.random() < P.LEFT_BEFORE_CENSUS
+            if s["late"] or s["no_sitting"]:
+                continue
+            if a["test"] == "LEXIS":
+                if a["timing"] == "JULY" and rng.random() >= P.JULY_ABSENT:
+                    d = group_date[g]
+                    z = th_i + s["july"] + rng.normal(0, P.TEST_SD["LEXIS"])
+                    sit(s, "LEXIS", d, z, "july")
+                else:
+                    d = dates_between(rng, *P.LEXIS_SEPT, 1)[0] if a["timing"] == "JULY" else group_date[g]
+                    if rng.random() < P.FAILED_ONLINE:
+                        part = th_i + rng.normal(0, 0.6)
+                        sit(s, "LEXIS", d, part, "failed", status="Incomplete")
+                        d2 = school_days_after(d, int(rng.integers(2, 7)))
+                        z = th_i + 0.3 * s["gain"] + rng.normal(0, P.TEST_SD["LEXIS"])
+                        sit(s, "LEXIS", d2, z, "resit")
+                    else:
+                        z = th_i + rng.normal(0, P.TEST_SD["LEXIS"])
+                        sit(s, "LEXIS", d, z, "first")
+            elif a["test"] == "QUILL":
+                d = group_date[g]
+                if rng.random() < P.QUILL_SHORT:
+                    items = int(rng.integers(9, P.QUILL_MIN_ITEMS))
+                    z = th_i + rng.normal(0, P.TEST_SD["QUILL"] * 1.9)
+                    sit(s, "QUILL", d, z, "short", items=items)
+                    if rng.random() < 0.72:
+                        d2 = school_days_after(d, int(rng.integers(2, 4)))
+                        z2 = th_i + 0.3 * s["gain"] + rng.normal(0, P.TEST_SD["QUILL"])
+                        sit(s, "QUILL", d2, z2, "resit", items=int(rng.integers(26, 34)))
+                else:
+                    z = th_i + rng.normal(0, P.TEST_SD["QUILL"])
+                    sit(s, "QUILL", d, z, "first", items=int(rng.integers(25, 35)))
             else:
-                person = new_pid()
-                reg = P.REGIONS[int(rng.choice(len(P.REGIONS), p=shares))][0]
-                theta = rt.normal(P.L2_MU, P.L2_SD)
-            cs = by_region[reg]
-            cw = np.array([c["weight"] for c in cs])
-            cen = cs[int(rng.choice(len(cs), p=cw / cw.sum()))]
-            sittings.append(dict(level="L2", year=y, person=person, region=reg, centre=cen["code"], theta=float(theta),
-                                 date=_date(rd, y)))
-        # who comes back: a tenth of this year's Level 1 sitters below the middle sit Level 1 again, and a seventh of
-        # those above go on to Level 2 the next year
-        this = [s for s in sittings if s["year"] == y and s["level"] == "L1"]
-        for s in this:
-            if s["theta"] < P.L1_MU - 0.1 and rng.random() < 0.20:
-                carry_l1.append((s["person"], s["region"], s["theta"]))
-            elif s["theta"] > P.L1_MU + 0.6 and rng.random() < 0.30:
-                carry_l2.append((s["person"], s["region"], s["theta"]))
-    return sittings
-
-
-def respond(R, it, papers, sittings):
-    """Scored responses of every sitting: an (n_sittings x n_items) matrix with NaN where not presented."""
-    rng = R["resp"]
-    n = len(sittings)
-    I = len(it["b"])
-    X = np.full((n, I), np.nan)
-    delta = {r[0]: r[5] for r in P.REGIONS}
-    for j, s in enumerate(sittings):
-        idx = papers["%s-%d" % (s["level"], s["year"])]
-        d = it["b"][idx].copy()
-        if s["level"] == "L1":
-            d = d + l1_shift(it, idx, delta[s["region"]])
-        p = sig(s["theta"] - d)
-        X[j, idx] = (rng.random(len(idx)) < p).astype(float)
-    return X
-
-
-def build():
-    R = streams(P.SEED)
-    it = draw_items(R["items"])
-    papers = draw_papers(R["papers"], it)
-    centres = draw_centres(R["centres"])
-    sittings = draw_people(R, centres)
-    X = respond(R, it, papers, sittings)
-    return dict(R=R, it=it, papers=papers, centres=centres, sittings=sittings, X=X)
+                switch = a["name"] in P.SWITCH_ACADEMIES and g in "ABCD"
+                miss_b = rng.random() < P.MISS_BRIGHTWAY
+                miss_l = rng.random() < P.MISS_TRIAL
+                if switch:
+                    d_l = dates_between(rng, dt.date(2026, 9, 7), dt.date(2026, 9, 9), 1)[0]
+                    d_b = school_days_after(d_l, int(rng.integers(6, 9)))
+                    if not miss_l:
+                        sit(s, "LEXIS", d_l, th_i + rng.normal(0, P.TEST_SD["LEXIS"]), "trial_first")
+                    if not miss_b:
+                        g2 = s["gain"] if not miss_l else 0.0
+                        sit(s, "BRIGHTWAY", d_b, th_i + g2 + rng.normal(0, P.TEST_SD["BRIGHTWAY"]),
+                            "second" if not miss_l else "first")
+                else:
+                    d_b = group_date[g]
+                    d_l = school_days_after(d_b, int(round(trial_gap[g] * 5 / 7)))
+                    if not miss_b:
+                        sit(s, "BRIGHTWAY", d_b, th_i + rng.normal(0, P.TEST_SD["BRIGHTWAY"]), "first")
+                    if not miss_l:
+                        g2 = s["gain"] if not miss_b else 0.0
+                        sit(s, "LEXIS", d_l, th_i + g2 + rng.normal(0, P.TEST_SD["LEXIS"]),
+                            "trial_second" if not miss_b else "trial_only")
+    # a few students moved between trust academies after their first sitting, and sat the new academy's test too
+    movers = [s for s in S if not s["late"] and not s["no_sitting"] and not s["left"] and rng.random() < P.MOVED_WITHIN]
+    by_test = {}
+    for a in acad:
+        by_test.setdefault(a["test"], []).append(a)
+    for s in movers:
+        dest = acad[int(rng.integers(0, len(acad)))]
+        if dest["name"] == s["academy"]:
+            continue
+        s["moved_from"] = s["academy"]
+        s["academy"] = dest["name"]
+        s["test"] = dest["test"]
+        s["timing"] = dest["timing"]
+        own = [x for x in sittings if x["student"] is s]
+        last = max(x["date"] for x in own) if own else dt.date(2026, 9, 20)
+        d = school_days_after(max(last, dt.date(2026, 9, 21)), int(rng.integers(3, 8)))
+        z = s["theta"] + s["gain"] + rng.normal(0, P.TEST_SD[dest["test"]])
+        sit(s, dest["test"], d, z, "after_move", items=int(rng.integers(25, 33)) if dest["test"] == "QUILL" else None,
+            academy=dest["name"])
+    for x in sittings:
+        if x["test"] == "LEXIS":
+            x["sas"] = int(sas_lexis(x["z"]))
+        elif x["test"] == "QUILL":
+            x["sas"] = int(sas_quill(x["z"]))
+        else:
+            x["sas"] = int(sas_brightway(x["z"]))
+    # the truth: each student's reading as a first September sitting of Lexis would show it
+    for s in S:
+        p = 0.5 * (1 + math.erf(((84.5 - 100) / 15 - s["theta"]) / (P.TEST_SD["LEXIS"] * math.sqrt(2))))
+        s["p_below"] = p
+    return {"academies": acad, "students": S, "sittings": sittings, "rng": rng}

@@ -1,84 +1,124 @@
-"""task8 architecture 18: builds the pack, the goldens, submission.md, metadata.json and figures.json twice (the
-second time from the seed again, in a scratch folder), requires the two builds byte-identical, cuts target.zip and
-golden.zip deterministically and runs checks.py, verify.py and ceiling.py on the cut pack."""
+"""Build the pack, compute every owed figure from it, write the goldens, figures.json, effort.json, submission.md and
+metadata.json, run the checks and the independent verifier, rebuild into a scratch folder and require byte-identical
+output, then cut target.zip and the golden ZIP.
+
+    python3 task8/generator/make.py            (full)
+    python3 task8/generator/make.py --once     (one build and the goldens, no checks, no zips)
+"""
 import hashlib
+import json
 import os
 import shutil
 import subprocess
 import sys
 import tempfile
-import zipfile
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
-import checks as CK   # noqa: E402
-import core as C      # noqa: E402
-import deliver as DL  # noqa: E402
-import golden as G    # noqa: E402
-import pack as PK     # noqa: E402
-import world as W     # noqa: E402
+import build as BD  # noqa: E402
+import deliver  # noqa: E402
+import effort_passes as EP  # noqa: E402
+import golden as GD  # noqa: E402
 import writeup as WU  # noqa: E402
 
 TASK = os.path.dirname(HERE)
 TARGET = os.path.join(TASK, "target")
 GOLDEN = os.path.join(TASK, "golden")
-STAMPS = {PK.FILES["responses"]: (2026, 11, 6, 7, 42, 18), PK.FILES["register"]: (2026, 11, 6, 8, 3, 51),
-          PK.FILES["bank"]: (2026, 11, 4, 16, 21, 9), PK.FILES["layouts"]: (2026, 11, 4, 11, 42, 0),
-          PK.FILES["centres"]: (2026, 11, 2, 10, 15, 37), PK.FILES["spec"]: (2026, 3, 13, 9, 12, 0),
-          PK.FILES["standard"]: (2022, 5, 20, 16, 48, 0), PK.FILES["minute"]: (2026, 9, 21, 11, 54, 0),
-          PK.FILES["email"]: (2026, 11, 9, 9, 41, 12), PK.FILES["survey"]: (2026, 7, 2, 13, 30, 44),
-          PK.FILES["audit"]: (2026, 8, 28, 10, 31, 0)}
-GOLD_STAMPS = {"pass_mark_2027.docx": (2026, 11, 27, 15, 42, 0), "l1_2027_items.xlsx": (2026, 11, 27, 14, 58, 0)}
+
+ABOUT = {
+    "census": "the trust's MIS: Year 7 students on roll at the 1 October 2026 census",
+    "ks2": "KS2 2026 results from the common transfer files: reading, maths and GPS scaled scores and codes",
+    "lexis": "the Lexis platform's results export, every sitting this year",
+    "quill": "Quill's results export for the trust's Quill academies",
+    "quillmap": "Quill's rostering sync: Quill student numbers to the trust's admission numbers",
+    "quilllog": "Quill's question-level session log",
+    "brightway": "the Brightway academies' results, typed by each academy's staff",
+    "academies": "the trust's academy list with each academy's entry reading test",
+    "policy": "the trust's Reading Forward policy, version 3 (July 2026)",
+    "lexis_tech": "Lexis 11-14 Reading technical summary (publisher)",
+    "quill_tech": "Quill Reading technical summary, UK edition (publisher)",
+    "brightway_tech": "Brightway Reading Check technical summary (publisher)",
+    "cpt": "cognitive profile test results at some academies",
+    "attendance": "Year 7 attendance by week, autumn 2026",
+    "survey": "Year 7 settling-in survey responses",
+    "tutorlog": "Reading Forward tutor session log, 2025-26",
+}
 
 
 def digest(folder):
     h = hashlib.sha256()
-    for root, _, files in sorted(os.walk(folder)):
-        for f in sorted(files):
-            p = os.path.join(root, f)
-            h.update(os.path.relpath(p, folder).encode())
-            h.update(open(p, "rb").read())
+    for f in sorted(os.listdir(folder)):
+        h.update(f.encode())
+        h.update(open(os.path.join(folder, f), "rb").read())
     return h.hexdigest()
 
 
-def one(target, golden, extra, figs):
-    w = W.build()
-    r = C.compute(w)
-    n = PK.write(target, w, r)
-    f = G.write_figures(w, r, figs)
-    DL.write_all(w, r, f, golden)
-    WU.submission(f, os.path.join(extra, "submission.md"))
-    WU.metadata(os.path.join(extra, "metadata.json"), n)
-    return (w, r), (digest(target), digest(golden), open(os.path.join(extra, "submission.md"), "rb").read(),
-                    open(figs, "rb").read())
+def metadata(target):
+    files = []
+    for k, f in BD.FILES.items():
+        p = os.path.join(target, f)
+        rows = sum(1 for _ in open(p, encoding="utf-8")) - 1 if f.endswith(".csv") else None
+        files.append({"path": f, "format": f.rsplit(".", 1)[1], "bytes": os.path.getsize(p), "rows": rows,
+                      "covers": ABOUT[k], "source": "Constructed (seeded generator, task8/generator)",
+                      "pull_date": "2026-10-12", "license": "CC0-1.0 (original work)"})
+    return {
+        "task": "task8", "architecture": 19,
+        "title": "How much Reading Forward tutor time each academy of a multi-academy trust needs for its Year 7 intake",
+        "domain": "Education & Learning Sciences",
+        "subdomain": "Psychometrics (scale validation, item response theory, test equating)",
+        "objective": "Data Extraction & Conformation (ETL / Pipeline Build)",
+        "as_of": "2026-10-12", "deliverables": [deliver.XLSX, deliver.PDF],
+        "distractor_files": [BD.FILES[k] for k in BD.DISTRACTORS],
+        "stated_inputs": ["339,500", "339500", "27.80", "0.4", "848", "36", "85"],
+        "files": files,
+        "provenance": "Every file is constructed by the seeded generator in task8/generator from a simulated trust "
+                      "(students' reading, KS2, three entry tests and their sittings, the trust's MIS and the "
+                      "vendors' exports); the trust, academies, tests, people and figures are invented.",
+    }
 
 
-def cut(folder, stamps, path):
-    with zipfile.ZipFile(path, "w", zipfile.ZIP_DEFLATED) as z:
-        for f in sorted(os.listdir(folder)):
-            zi = zipfile.ZipInfo(f, date_time=stamps[f])
-            zi.compress_type = zipfile.ZIP_DEFLATED
-            zi.external_attr = 0o644 << 16
-            z.writestr(zi, open(os.path.join(folder, f), "rb").read())
-    return hashlib.sha256(open(path, "rb").read()).hexdigest()
+def one(target, gold, full=True):
+    if os.path.exists(target):
+        shutil.rmtree(target)
+    BD.run(target)
+    G = GD.compute(target, with_rivals=True, with_routes=True, with_boot=full)
+    return G
 
 
 def main():
-    (w, r), t1 = one(TARGET, GOLDEN, TASK, os.path.join(HERE, "figures.json"))
-    with tempfile.TemporaryDirectory() as tmp:
-        _, t2 = one(os.path.join(tmp, "target"), os.path.join(tmp, "golden"), tmp, os.path.join(tmp, "figures.json"))
-    same = [a == b for a, b in zip(t1, t2)]
-    print("byte-identical rebuild: target %s, golden %s, submission %s, figures %s" % tuple(same))
-    if not all(same):
-        return 1
-    assert sorted(STAMPS) == sorted(os.listdir(TARGET)), sorted(set(STAMPS) ^ set(os.listdir(TARGET)))
-    print("target.zip sha256", cut(TARGET, STAMPS, os.path.join(TASK, "target.zip")))
-    print("golden.zip sha256", cut(GOLDEN, GOLD_STAMPS, os.path.join(TASK, "golden.zip")))
-    rc = CK.run(w, r, TARGET)
-    for s in ("verify.py", "ceiling.py"):
-        rc |= subprocess.call([sys.executable, os.path.join(HERE, s)])
-    return rc
+    once = "--once" in sys.argv
+    G = one(TARGET, GOLDEN, full=True)
+    F = WU.write(G, os.path.join(HERE, "figures.json"), os.path.join(TASK, "submission.md"))
+    deliver.write(GOLDEN, G)
+    EP.build(G, F, os.path.join(HERE, "effort.json"))
+    json.dump(metadata(TARGET), open(os.path.join(TASK, "metadata.json"), "w"), indent=1, ensure_ascii=False)
+    print("programme", F["programme_total"], "hours", F["hours_total"], "cost", F["cost_total"],
+          "careful", F["careful"]["programme_total"], "range", F.get("range_students"))
+    if once:
+        return
+    r = subprocess.run([sys.executable, os.path.join(HERE, "checks.py")], capture_output=True, text=True)
+    print(r.stdout[-4000:])
+    assert r.returncode == 0, "checks failed"
+    r = subprocess.run([sys.executable, os.path.join(HERE, "verify.py"), TARGET], capture_output=True, text=True)
+    print(r.stdout[-2500:])
+    assert r.returncode == 0, "verify failed"
+    scratch = tempfile.mkdtemp(prefix="task8-rebuild-")
+    try:
+        BD.run(os.path.join(scratch, "target"))
+        a, b = digest(TARGET), digest(os.path.join(scratch, "target"))
+        print("rebuild", "byte-identical" if a == b else "DIFFERENT", a[:16])
+        assert a == b, "the rebuild is not byte-identical"
+    finally:
+        shutil.rmtree(scratch, ignore_errors=True)
+    WRITERS = os.path.join(os.path.dirname(TASK), ".claude", "skills", "reduce-house-fixes", "scripts", "writers")
+    sys.path.insert(0, WRITERS)
+    import postprocess
+    for folder, out in [(TARGET, os.path.join(TASK, "target.zip")), (GOLDEN, os.path.join(TASK, "golden.zip"))]:
+        if os.path.exists(out):
+            os.remove(out)
+        postprocess.zip_folder(folder, out, zone="Europe/London")
+    print("zips cut")
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    main()

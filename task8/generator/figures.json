@@ -1,101 +1,525 @@
 {
- "band_high": 0.9,
- "band_low": 0.2,
- "chances": {
-  "Q01": 0.8,
-  "Q02": 0.85,
-  "Q03": 0.39,
-  "Q04": 0.6,
-  "Q05": 0.62,
-  "Q06": 0.45,
-  "Q07": 0.81,
-  "Q08": 0.55,
-  "Q09": 0.47,
-  "Q10": 0.51,
-  "Q11": 0.62,
-  "Q12": 0.3,
-  "Q13": 0.79,
-  "Q14": 0.84,
-  "Q15": 0.56,
-  "Q16": 0.78,
-  "Q17": 0.55,
-  "Q18": 0.33,
-  "Q19": 0.36,
-  "Q20": 0.82,
-  "Q21": 0.56,
-  "Q22": 0.41,
-  "Q23": 0.63,
-  "Q24": 0.32,
-  "Q25": 0.71,
-  "Q26": 0.57,
-  "Q27": 0.45,
-  "Q28": 0.65,
-  "Q29": 0.11,
-  "Q30": 0.11,
-  "Q31": 0.14,
-  "Q32": 0.14,
-  "Q33": 0.13,
-  "Q34": 0.37,
-  "Q35": 0.35,
-  "Q36": 0.4,
-  "Q37": 0.3,
-  "Q38": 0.27,
-  "Q39": 0.25,
-  "Q40": 0.26
+ "bands": {
+  "R2": [
+   3.1,
+   3.8
+  ],
+  "R3": {
+   "70": [
+    70.6,
+    74.0
+   ],
+   "75": [
+    78.5,
+    79.9
+   ],
+   "80": [
+    82.7,
+    83.6
+   ],
+   "85": [
+    86.8,
+    87.7
+   ],
+   "90": [
+    91.2,
+    92.1
+   ],
+   "95": [
+    95.5,
+    96.4
+   ]
+  },
+  "R4": {
+   "70": [
+    69.4,
+    70.3
+   ],
+   "75": [
+    71.1,
+    72.5
+   ],
+   "80": [
+    74.4,
+    75.8
+   ],
+   "85": [
+    79.3,
+    80.5
+   ],
+   "90": [
+    85.4,
+    86.7
+   ],
+   "95": [
+    91.4,
+    92.5
+   ]
+  },
+  "R5": [
+   3.6,
+   4.4
+  ],
+  "R6": {
+   "Ashdene Academy": [
+    30,
+    34
+   ],
+   "Bestwood Academy": [
+    42,
+    46
+   ],
+   "Carrbrook School": [
+    33,
+    37
+   ],
+   "Clifton Grange School": [
+    25,
+    29
+   ],
+   "Crookes Academy": [
+    38,
+    42
+   ],
+   "Dore Moor School": [
+    25,
+    29
+   ],
+   "Eastwood Hall Academy": [
+    43,
+    47
+   ],
+   "Goldthorpe Academy": [
+    71,
+    80
+   ],
+   "Hollinbrook Park Academy": [
+    28,
+    32
+   ],
+   "Kelham Bridge Academy": [
+    27,
+    31
+   ],
+   "Kirkby Fields Academy": [
+    43,
+    47
+   ],
+   "Long Eaton Academy": [
+    36,
+    40
+   ],
+   "Maltby Academy": [
+    63,
+    67
+   ],
+   "Mansfield Woodhouse Academy": [
+    45,
+    49
+   ],
+   "Mortlake Lane School": [
+    24,
+    28
+   ],
+   "Parkgate Academy": [
+    62,
+    67
+   ],
+   "Ruddington Academy": [
+    20,
+    24
+   ],
+   "Swinton Moor Academy": [
+    46,
+    51
+   ],
+   "Thurnscoe Vale Academy": [
+    32,
+    36
+   ],
+   "Wingerworth Academy": [
+    29,
+    33
+   ],
+   "Wombwell Academy": [
+    63,
+    67
+   ]
+  },
+  "R6_total": [
+   858,
+   886
+  ],
+  "R7_test": {
+   "Brightway": [
+    -62,
+    -42
+   ],
+   "Lexis": [
+    33,
+    41
+   ],
+   "Quill": [
+    95,
+    103
+   ]
+  },
+  "R8_hours": [
+   343.2,
+   354.4
+  ],
+  "R9": {
+   "Ashdene Academy": [
+    12.0,
+    13.6
+   ],
+   "Bestwood Academy": [
+    16.8,
+    18.4
+   ],
+   "Carrbrook School": [
+    13.2,
+    14.8
+   ],
+   "Clifton Grange School": [
+    10.0,
+    11.6
+   ],
+   "Crookes Academy": [
+    15.2,
+    16.8
+   ],
+   "Dore Moor School": [
+    10.0,
+    11.6
+   ],
+   "Eastwood Hall Academy": [
+    17.2,
+    18.8
+   ],
+   "Goldthorpe Academy": [
+    28.4,
+    32.0
+   ],
+   "Hollinbrook Park Academy": [
+    11.2,
+    12.8
+   ],
+   "Kelham Bridge Academy": [
+    10.8,
+    12.4
+   ],
+   "Kirkby Fields Academy": [
+    17.2,
+    18.8
+   ],
+   "Long Eaton Academy": [
+    14.4,
+    16.0
+   ],
+   "Maltby Academy": [
+    25.2,
+    26.8
+   ],
+   "Mansfield Woodhouse Academy": [
+    18.0,
+    19.6
+   ],
+   "Mortlake Lane School": [
+    9.6,
+    11.2
+   ],
+   "Parkgate Academy": [
+    24.8,
+    26.8
+   ],
+   "Ruddington Academy": [
+    8.0,
+    9.6
+   ],
+   "Swinton Moor Academy": [
+    18.4,
+    20.4
+   ],
+   "Thurnscoe Vale Academy": [
+    12.8,
+    14.4
+   ],
+   "Wingerworth Academy": [
+    11.6,
+    13.2
+   ],
+   "Wombwell Academy": [
+    25.2,
+    26.8
+   ]
+  }
  },
- "everyday_advantage": 0.87,
- "expected_bank": 21.57,
- "expected_golden": 19.09,
- "items_above_band": [],
- "items_below_band": [
-  "Q29",
-  "Q30",
-  "Q31",
-  "Q32",
-  "Q33"
+ "boot_reps": 200,
+ "brightway_lexis": {
+  "70": 71.7,
+  "75": 79.3,
+  "80": 83.2,
+  "85": 87.3,
+  "90": 91.7,
+  "95": 95.9
+ },
+ "careful": {
+  "brightway_lexis": {
+   "70": 73.7,
+   "75": 81.6,
+   "80": 85.1,
+   "85": 89.0,
+   "90": 93.4,
+   "95": 97.8
+  },
+  "cost_total": 307045,
+  "hours_total": 306.8,
+  "july_level": 0.0,
+  "programme_total": 767,
+  "second_sitting_gain": 0.0
+ },
+ "change": {
+  "Ashdene Academy": 0,
+  "Bestwood Academy": 24,
+  "Carrbrook School": 0,
+  "Clifton Grange School": 9,
+  "Crookes Academy": 12,
+  "Dore Moor School": 8,
+  "Eastwood Hall Academy": 14,
+  "Goldthorpe Academy": -11,
+  "Hollinbrook Park Academy": 0,
+  "Kelham Bridge Academy": 0,
+  "Kirkby Fields Academy": 16,
+  "Long Eaton Academy": 9,
+  "Maltby Academy": -8,
+  "Mansfield Woodhouse Academy": 18,
+  "Mortlake Lane School": 7,
+  "Parkgate Academy": -16,
+  "Ruddington Academy": 9,
+  "Swinton Moor Academy": -9,
+  "Thurnscoe Vale Academy": 0,
+  "Wingerworth Academy": 10,
+  "Wombwell Academy": -2
+ },
+ "change_by_test": {
+  "Brightway": -46,
+  "Lexis": 37,
+  "Quill": 99
+ },
+ "change_total": 90,
+ "cost_total": 349880,
+ "evidence": {
+  "gap_lexis_first": -2.2,
+  "gap_lexis_first_below": 2.2,
+  "gap_lexis_second": 5.0,
+  "ks2_mean": {
+   "Brightway": 101.1,
+   "Lexis": 104.8,
+   "Quill": 104.3
+  },
+  "n_lexis_first": 254,
+  "n_lexis_second": 288,
+  "sas_mean": {
+   "Brightway": 90.0,
+   "Lexis": 100.1,
+   "Quill": 101.8
+  },
+  "switch_lexis_first_ks2_pred": 94.2,
+  "switch_lexis_first_obs": 93.6
+ },
+ "extra_over_budget": 10380,
+ "family_range": [
+  858,
+  875
  ],
- "items_on_paper": 40,
- "lp_mean_shift_rel": -0.2,
- "n_bridging": 36,
- "pass_mark": 19,
- "pass_mark_bank": 22,
- "pr_expected_bank": 5.29,
- "pr_expected_golden": 2.82,
- "pr_items": 12,
- "pr_mean_shift": 1.24,
- "reading_cost_per_100_words": 0.77,
- "region_counts": {
-  "Interlake-Eastman": 134,
-  "Parkland and North": 106,
-  "Regina and South": 132,
-  "Saskatoon and Central": 191,
-  "Westman": 102,
-  "Winnipeg": 269
+ "hours": {
+  "Ashdene Academy": 12.8,
+  "Bestwood Academy": 17.6,
+  "Carrbrook School": 14.0,
+  "Clifton Grange School": 10.8,
+  "Crookes Academy": 16.0,
+  "Dore Moor School": 10.8,
+  "Eastwood Hall Academy": 18.0,
+  "Goldthorpe Academy": 31.2,
+  "Hollinbrook Park Academy": 12.0,
+  "Kelham Bridge Academy": 11.6,
+  "Kirkby Fields Academy": 18.0,
+  "Long Eaton Academy": 15.2,
+  "Maltby Academy": 26.0,
+  "Mansfield Woodhouse Academy": 18.8,
+  "Mortlake Lane School": 10.4,
+  "Parkgate Academy": 26.0,
+  "Ruddington Academy": 8.8,
+  "Swinton Moor Academy": 19.6,
+  "Thurnscoe Vale Academy": 13.6,
+  "Wingerworth Academy": 12.4,
+  "Wombwell Academy": 26.0
  },
- "regions": {
-  "Interlake-Eastman": 17,
-  "Parkland and North": 16,
-  "Regina and South": 17,
-  "Saskatoon and Central": 17,
-  "Westman": 16,
-  "Winnipeg": 15
+ "hours_per_student": 0.4,
+ "hours_total": 349.6,
+ "july_level": 4.0,
+ "ks2_placed": 138,
+ "last_october": 848,
+ "n_july_academies": 4,
+ "n_switch_academies": 3,
+ "no_result": 9,
+ "on_roll": 4292,
+ "on_roll_by_academy": {
+  "Ashdene Academy": 238,
+  "Bestwood Academy": 217,
+  "Carrbrook School": 195,
+  "Clifton Grange School": 175,
+  "Crookes Academy": 221,
+  "Dore Moor School": 195,
+  "Eastwood Hall Academy": 242,
+  "Goldthorpe Academy": 213,
+  "Hollinbrook Park Academy": 260,
+  "Kelham Bridge Academy": 210,
+  "Kirkby Fields Academy": 203,
+  "Long Eaton Academy": 225,
+  "Maltby Academy": 219,
+  "Mansfield Woodhouse Academy": 189,
+  "Mortlake Lane School": 184,
+  "Parkgate Academy": 185,
+  "Ruddington Academy": 168,
+  "Swinton Moor Academy": 203,
+  "Thurnscoe Vale Academy": 169,
+  "Wingerworth Academy": 187,
+  "Wombwell Academy": 194
  },
- "regions_unrounded": {
-  "Interlake-Eastman": 16.98,
-  "Parkland and North": 16.23,
-  "Regina and South": 17.03,
-  "Saskatoon and Central": 16.58,
-  "Westman": 15.51,
-  "Winnipeg": 14.8
+ "own": {
+  "Ashdene Academy": 32,
+  "Bestwood Academy": 20,
+  "Carrbrook School": 35,
+  "Clifton Grange School": 18,
+  "Crookes Academy": 28,
+  "Dore Moor School": 19,
+  "Eastwood Hall Academy": 31,
+  "Goldthorpe Academy": 89,
+  "Hollinbrook Park Academy": 30,
+  "Kelham Bridge Academy": 29,
+  "Kirkby Fields Academy": 29,
+  "Long Eaton Academy": 29,
+  "Maltby Academy": 73,
+  "Mansfield Woodhouse Academy": 29,
+  "Mortlake Lane School": 19,
+  "Parkgate Academy": 81,
+  "Ruddington Academy": 13,
+  "Swinton Moor Academy": 58,
+  "Thurnscoe Vale Academy": 34,
+  "Wingerworth Academy": 21,
+  "Wombwell Academy": 67
  },
- "rival_context": 20.81,
- "rival_reading": 21.35,
- "rival_screen": 21.12,
- "shift_lp": 0.3,
- "shift_sa": 0.5,
- "shift_sp": -0.33,
- "sp_mean_shift_rel": -0.83,
- "standard_raw": 26,
- "stem_words_per_cost_unit": 100,
- "theta_standard": -0.19
+ "own_total": 784,
+ "programme": {
+  "Ashdene Academy": 32,
+  "Bestwood Academy": 44,
+  "Carrbrook School": 35,
+  "Clifton Grange School": 27,
+  "Crookes Academy": 40,
+  "Dore Moor School": 27,
+  "Eastwood Hall Academy": 45,
+  "Goldthorpe Academy": 78,
+  "Hollinbrook Park Academy": 30,
+  "Kelham Bridge Academy": 29,
+  "Kirkby Fields Academy": 45,
+  "Long Eaton Academy": 38,
+  "Maltby Academy": 65,
+  "Mansfield Woodhouse Academy": 47,
+  "Mortlake Lane School": 26,
+  "Parkgate Academy": 65,
+  "Ruddington Academy": 22,
+  "Swinton Moor Academy": 49,
+  "Thurnscoe Vale Academy": 34,
+  "Wingerworth Academy": 31,
+  "Wombwell Academy": 65
+ },
+ "programme_total": 874,
+ "provisional_budget": 339500,
+ "quill_lexis": {
+  "70": 69.8,
+  "75": 72.1,
+  "80": 74.9,
+  "85": 79.8,
+  "90": 85.8,
+  "95": 91.9
+ },
+ "range_cost": [
+  337470,
+  366293
+ ],
+ "range_hours": [
+  337.2,
+  366.0
+ ],
+ "range_students": [
+  843,
+  915
+ ],
+ "rate": 27.8,
+ "rivals_total": {
+  "Quill by frequency estimation": 874,
+  "no presmoothing": 858,
+  "presmoothing to eight moments": 874,
+  "presmoothing to four moments": 874,
+  "re-sits after a failed or short session taken down by the gain": 875,
+  "the July level from a regression on KS2": 874,
+  "the July level from the median residual": 874,
+  "the gain from the median gaps": 874,
+  "the trial link from the fixed-order academies alone": 874
+ },
+ "routes_cost": {
+  "Quill predicted from KS2 by regression": 288230,
+  "careful": 307045,
+  "careful, Quill by regression instead": 254604,
+  "careful, the July sittings brought to September": 335468,
+  "careful, the trial's second sitting corrected": 321457,
+  "the July sittings as entry reading": 321457,
+  "the other tests' standardised scores read as Lexis scores": 328262,
+  "the trial's pairs as they stand": 335468
+ },
+ "routes_total": {
+  "Quill predicted from KS2 by regression": 720,
+  "careful": 767,
+  "careful, Quill by regression instead": 636,
+  "careful, the July sittings brought to September": 838,
+  "careful, the trial's second sitting corrected": 803,
+  "the July sittings as entry reading": 803,
+  "the other tests' standardised scores read as Lexis scores": 820,
+  "the trial's pairs as they stand": 838
+ },
+ "ruled_out_total": {
+  "Brightway through KS2 rather than the trial": 874,
+  "every test standardised within the trust": 719,
+  "presmoothing to two moments": 843,
+  "the trial linked linearly": 891
+ },
+ "second_sitting_gain": 3.6,
+ "threshold": 85,
+ "valid_by_academy": {
+  "Ashdene Academy": 234,
+  "Bestwood Academy": 211,
+  "Carrbrook School": 191,
+  "Clifton Grange School": 170,
+  "Crookes Academy": 217,
+  "Dore Moor School": 189,
+  "Eastwood Hall Academy": 227,
+  "Goldthorpe Academy": 208,
+  "Hollinbrook Park Academy": 248,
+  "Kelham Bridge Academy": 205,
+  "Kirkby Fields Academy": 197,
+  "Long Eaton Academy": 216,
+  "Maltby Academy": 212,
+  "Mansfield Woodhouse Academy": 180,
+  "Mortlake Lane School": 178,
+  "Parkgate Academy": 183,
+  "Ruddington Academy": 160,
+  "Swinton Moor Academy": 191,
+  "Thurnscoe Vale Academy": 160,
+  "Wingerworth Academy": 181,
+  "Wombwell Academy": 187
+ },
+ "valid_total": 4145,
+ "weeks": 36
 }
