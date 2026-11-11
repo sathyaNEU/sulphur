@@ -1,41 +1,41 @@
 {
  "task": "task19",
- "status": "DESIGN",
+ "status": "PAUSED",
  "domain": "survey-research-official-statistics",
  "subdomain": "nonresponse-calibration-measurement-error-adjustment",
  "objective": "descriptive-distribution",
- "stage": 2,
- "stage_name": "design",
+ "stage": 4,
+ "stage_name": "check",
  "updated": "2026-11-11",
  "doctrine": "throughout",
- "call": "",
+ "call": "Port Ardain, Ballinrea, Drumcastle and Tullaghvane qualify; Newbrook is too close to call (chance of 25,000 or more 0.57, half rate); the other seven do not; Kilvarra 319,260 (90 per cent interval 315,700 to 322,800) against the rolled-forward 325,624 (pre-fix build; re-derived on the rebuild)",
  "chain": "R1 the share of usual residents held on their own district's list, net of missed and false links; R2 the register's erroneous entries by district; R3 residents listed in another district; R4 the dependence factor for men aged 18 to 44 from the sex-ratio benchmark; R5 the twelve district estimates and the national total; R6 their 90 per cent intervals; R7 the qualifying districts, the close ones and their probabilities; R8 each register count bridged to its estimate; R9 the rolled-forward national estimate bridged to the estimate",
  "architecture": 1,
  "loops": 0,
  "precut": {
-  "exit": null,
-  "date": ""
+  "exit": 0,
+  "date": "2026-11-11"
  },
  "leak": {
-  "leak_py": "",
-  "reader": ""
+  "leak_py": "REVIEW (3 lines: paragraph 3.2's number, the estimand's own words in the circular, the docx+xlsx shell quota)",
+  "reader": "clean on questions 1 to 6 (no method sentence, no ranking file, no helper file, no answer figure, the filed sentences pin the estimand and the grant rule only, no one thing); realism notes taken into the generator"
  },
  "duplicate_check": {
-  "heart": "",
-  "nearest": ""
+  "heart": "not BLOCK at stage 3",
+  "nearest": "see guard.py heart on the final cut"
  },
  "judge": {
   "verdict": "",
   "disposition": "",
   "gate_h": "",
-  "report": ""
+  "report": "pending: the agent's runtime could not spawn its thread, so the main session spawned it on the pre-fix pack; re-invoke the judge with the thread's verdict.md, or re-run it on the rebuilt pack if the scratch folder is gone"
  },
- "paper_pair": null,
+ "paper_pair": 27.6,
  "effort": {
-  "quick": null,
-  "careful": null,
-  "thorough": null,
-  "largest_hint": ""
+  "quick": 7.0,
+  "careful": 27.6,
+  "thorough": 100.0,
+  "largest_hint": "the common-emigration sentence (or any one of four) rescues one result of nine"
  },
  "runs": {
   "run1": null,
@@ -51,7 +51,7 @@
   "history": []
  },
  "returned": [],
- "resume": "stage 2: write the design note in full (results chain, bands from rivals on the clean truth, effort test, frontier check, fork and closure tables) and the prompt; the world simulation (world.py, sample.py) is drafted and calibrating",
+ "resume": "stage 4, one generator pass: (1) the realism fixes from the leak reader are in the generator but not yet built: a smooth Heligman-Pollard mortality schedule in world.mortality (the old step at men's 17 to 35 made qx jump at 17 and fall at 35), names drawn from each person's citizenship country (names.TRANS_BY and COUNTRY_LOCALES, TR replaced by SD), and the survey's citizenship taken from the person's own (records.py); the world realization changes with them, so rebuild (build.py --out to scratch first), confirm the call shape (four qualify, Newbrook close, Clonmore below, the careful call different), the margins and the eight perturbations, and re-select the survey draw (T19_SAMPLE) only if they moved, then hard-code SAMPLE_SEED; (2) fold the determinism judge's findings into the same pass; (3) gates.py task19 --full with two byte-identical builds; (4) decide the docx+xlsx shell-quota REVIEW (deliverable set at 33 per cent of recent prompts, cap 20); then stage 5",
  "approved": null,
  "submitted": null,
  "portal": {

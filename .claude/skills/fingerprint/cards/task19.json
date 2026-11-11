@@ -13,8 +13,8 @@
   "shape": "10",
   "decision_type": "designation_set",
   "answer_unit": "count",
-  "answer": "",
-  "answer_source": "",
+  "answer": "Port Ardain, Ballinrea, Drumcastle, Tullaghvane qualify for the 2027/28 urban-services supplement; Newbrook too close to call (chance of 25,000 or more 0.57, half rate); the rest do not; Kilvarra 319,260 usual residents on 30 June 2026 (90 per cent interval 315,700 to 322,800); the rolled-forward 325,624 sits 6,360 above, 6,920 of it emigrants since mid-2021 still listed and never recorded",
+  "answer_source": "task19/submission.md block 1; generator/figures.json",
   "gap": [
     "population",
     "objective"
@@ -57,7 +57,7 @@
   "scoring_unit": "per covered member",
   "spine": {
     "file": "health_register_extract_20260630.csv",
-    "rows": 0,
+    "rows": 334789,
     "entity": "one record on the national health register's patient list on 30 June 2026",
     "grain": "register record",
     "source": "synthetic (simulated population, migration, practices' registration and list maintenance)"
@@ -93,13 +93,13 @@
   },
   "deliverables": [
     "kilvarra_district_population_mid2026.xlsx",
-    "district_estimates_note_mid2026.docx"
+    "memo_district_estimates_mid2026.docx"
   ],
   "opening_move": "question-first",
   "question_form": "how-many",
   "driver": "A population no list holds is rebuilt from a list and an independent sample linked without a shared key: the list's erroneous entries come from a follow-up of a sample of its entries, the sample's link rate becomes a coverage rate only once the linkage's own misses measured on a verified subsample are divided out, both sources miss the same hard-to-reach group so the two-source estimate is pulled down until a ratio from a third source at another grain restores it, and the incumbent figure agrees with the uncorrected estimate because it shares one of the list's errors.",
   "driver_concrete": "Kilvarra's mid-2026 district populations are each district's correct register entries (the field follow-up's outcomes, unresolved records imputed from their activity) divided by the share of coverage-survey residents held on that district's list, that share corrected for the links the matcher misses on the clerical sample, with young men raised to the sex ratio that births and survival give; the rolled-forward national estimate carries the register's unrecorded emigration and so sits near the uncorrected figure.",
-  "stump": "The careful pass files its linked share as coverage and assumes independence, so its estimates sit about 2 per cent above the golden and close to the rolled-forward estimate (read as confirmation), Carnmoyle reads too close to call and Newbrook qualifies, and its block bootstrap gives a national interval about a third of the honest width.",
+  "stump": "The careful pass files its linked share as coverage (92.2 and 71.8 per cent against 95.0 and 84.7) and assumes independence, so its estimates sit 9,140 above the golden's 319,260, Newbrook reads as qualifying and Carnmoyle as too close on a survey-only interval of plus or minus 0.6 per cent against 1.1; each correction alone leaves other results outside their bands.",
   "answer_shape": "reconciled-table",
   "weight": "hard-to-measure",
   "chain_signature": [
@@ -114,7 +114,7 @@
     "investigation-loops"
   ],
   "results": "R1 the share of usual residents held on their own district's list, by nationality, net of the linkage's missed and false links; R2 the register's erroneous entries by district (people who left, died or live elsewhere, and duplicates); R3 the residents each district's list misses because they are listed elsewhere; R4 the dependence factor for men aged 18 to 44 from the sex-ratio benchmark; R5 the twelve district estimates and the national total; R6 their 90 per cent intervals; R7 the qualifying districts, the ones too close to call and each close one's probability; R8 each district's register count bridged to its estimate in parts that add up; R9 the national rolled-forward estimate bridged to the estimate, unrecorded emigration sized from the border and follow-up records",
-  "one_fact_test": "",
+  "one_fact_test": "the sex-ratio sentence rescues R4 alone; the missed-links sentence R1 alone; the shared-errors sentence R6 alone; the common-emigration sentence R9 alone; one of nine at most",
   "strategy_label": "UNTESTED (an admin-based population estimate: dual-system estimation on a register with linkage error, correlation bias and a benchmark that shares the register's error; no Sulfur round has run one)",
   "mechanism_source": "design_note",
   "differentiation": {},

@@ -1,0 +1,156 @@
+{
+ "task": "task19",
+ "title": "Kilvarra Statistics Office: usual residents of each district on 30 June 2026 for the 2027/28 grant determination",
+ "domain": "Other, Survey Research & Official Statistics",
+ "task_type": "nonresponse, calibration and measurement-error adjustment",
+ "objective": "Descriptive & Distribution Analysis",
+ "as_of": "2026-11-11",
+ "deliverables": [
+  "kilvarra_district_population_mid2026.xlsx",
+  "memo_district_estimates_mid2026.docx"
+ ],
+ "distractor_files": [
+  "KSO_census2021_usual_residents.xlsx",
+  "KHS_census2021_link_study.csv",
+  "KHS_list_size_quarterly_2021-2026.csv",
+  "HEA_enrolments_2025-26.csv"
+ ],
+ "input_gates": {
+  "files": 16,
+  "formats": [
+   "csv",
+   "pdf",
+   "xlsx"
+  ],
+  "categories": [
+   "spreadsheet",
+   "text"
+  ],
+  "largest_file": "KHS_register_extract_2026-06-30.csv",
+  "largest_file_rows": 334789,
+  "long_file": "CS26_register_followup.csv",
+  "long_file_rows": 23486
+ },
+ "sources": [
+  {
+   "files": "all files under target/",
+   "origin": "generated for this task by simulating the processes that make the files: Kilvarra's people from mid-2021 to mid-2026 (births, deaths, emigration and immigration, moves between districts, students, the Defence Forces), the Health Service's register (registration, deregistration, re-registration, list maintenance), the Statistics Office's 2026 coverage survey, its follow-up and clerical review, the border, civil registration and education returns. Kilvarra, its agencies, places and people are invented.",
+   "date": "2026-11-11",
+   "license": "CC BY 4.0 (original work)"
+  }
+ ],
+ "files": [
+  {
+   "path": "CS26_blocks.csv",
+   "format": "csv",
+   "bytes": 206497,
+   "covers": "the 2026 coverage survey's enumeration blocks: dwellings listed, the blocks selected and their selection probability",
+   "made": "written by task19/generator/make.py from the simulated processes (deterministic)"
+  },
+  {
+   "path": "CS26_clerical_review.csv",
+   "format": "csv",
+   "bytes": 43093,
+   "covers": "the clerical review of a subsample of the survey's people against the register",
+   "made": "written by task19/generator/make.py from the simulated processes (deterministic)"
+  },
+  {
+   "path": "CS26_persons.csv",
+   "format": "csv",
+   "bytes": 1934574,
+   "covers": "the 2026 coverage survey: every person enumerated at the selected blocks' dwellings",
+   "made": "written by task19/generator/make.py from the simulated processes (deterministic)"
+  },
+  {
+   "path": "CS26_register_followup.csv",
+   "format": "csv",
+   "bytes": 1532891,
+   "covers": "the 2026 coverage survey's field follow-up of the register records listed at the selected blocks' addresses",
+   "made": "written by task19/generator/make.py from the simulated processes (deterministic)"
+  },
+  {
+   "path": "DF_personnel_by_location_2026-06-30.csv",
+   "format": "csv",
+   "bytes": 541,
+   "covers": "serving Defence Forces personnel by location, sex and age band on 30 June 2026",
+   "made": "written by task19/generator/make.py from the simulated processes (deterministic)"
+  },
+  {
+   "path": "HEA_enrolments_2025-26.csv",
+   "format": "csv",
+   "bytes": 547747,
+   "covers": "the Higher Education Authority's enrolment return for 2025/26",
+   "made": "written by task19/generator/make.py from the simulated processes (deterministic)"
+  },
+  {
+   "path": "KBA_permit_holder_movements_2021-07_to_2026-06.csv",
+   "format": "csv",
+   "bytes": 2510134,
+   "covers": "the Border Agency's arrivals and recorded departures of non-national permit holders, July 2021 to June 2026",
+   "made": "written by task19/generator/make.py from the simulated processes (deterministic)"
+  },
+  {
+   "path": "KHS_census2021_link_study.csv",
+   "format": "csv",
+   "bytes": 7148790,
+   "covers": "the Health Service's 2023 study linking a sample of its 2021 register records to the 2021 Census",
+   "made": "written by task19/generator/make.py from the simulated processes (deterministic)"
+  },
+  {
+   "path": "KHS_list_size_quarterly_2021-2026.csv",
+   "format": "csv",
+   "bytes": 54341,
+   "covers": "patients registered by district, broad age group and sex at each quarter end from September 2021",
+   "made": "written by task19/generator/make.py from the simulated processes (deterministic)"
+  },
+  {
+   "path": "KHS_practices_2026-06.csv",
+   "format": "csv",
+   "bytes": 1768,
+   "covers": "the Health Service's general practices with their postcodes and districts",
+   "made": "written by task19/generator/make.py from the simulated processes (deterministic)"
+  },
+  {
+   "path": "KHS_register_extract_2026-06-30.csv",
+   "format": "csv",
+   "bytes": 31672903,
+   "covers": "the Kilvarra Health Service's patient register: every record on a practice's list on 30 June 2026, extracted on 3 July 2026",
+   "made": "written by task19/generator/make.py from the simulated processes (deterministic)"
+  },
+  {
+   "path": "KSO_census2021_usual_residents.xlsx",
+   "format": "xlsx",
+   "bytes": 12213,
+   "covers": "2021 Census usual residents by district, five-year age group and sex",
+   "made": "written by task19/generator/make.py from the simulated processes (deterministic)"
+  },
+  {
+   "path": "KSO_population_accounts_2021-2026.xlsx",
+   "format": "xlsx",
+   "bytes": 6771,
+   "covers": "the Statistics Office's population accounts: the national population rolled forward from the 2021 Census with its components, to 30 June 2026",
+   "made": "written by task19/generator/make.py from the simulated processes (deterministic)"
+  },
+  {
+   "path": "KSO_postcode_directory_2026-06.csv",
+   "format": "csv",
+   "bytes": 499131,
+   "covers": "the Statistics Office's postcode directory, June 2026, with codes retired in the 2024 recoding",
+   "made": "written by task19/generator/make.py from the simulated processes (deterministic)"
+  },
+  {
+   "path": "KSO_vital_statistics_2026.xlsx",
+   "format": "xlsx",
+   "bytes": 15671,
+   "covers": "births registered by sex since 1955, deaths registered by sex and age in the years to 30 June 2022 to 2026, and the national life table 2019-2021",
+   "made": "written by task19/generator/make.py from the simulated processes (deterministic)"
+  },
+  {
+   "path": "LGGC_2026-14_grant_determination_population_basis.pdf",
+   "format": "pdf",
+   "bytes": 37101,
+   "covers": "Local Government Grants Commission circular 2026/14: the population basis of the 2027/28 grant determination",
+   "made": "written by task19/generator/make.py from the simulated processes (deterministic)"
+  }
+ ]
+}

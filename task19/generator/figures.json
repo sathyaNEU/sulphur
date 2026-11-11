@@ -1,0 +1,362 @@
+{
+ "national_estimate": 319260,
+ "district_estimates": {
+  "D01": 55480,
+  "D02": 40000,
+  "D03": 32830,
+  "D04": 22540,
+  "D05": 26000,
+  "D06": 24200,
+  "D07": 25050,
+  "D08": 18800,
+  "D09": 16860,
+  "D10": 21910,
+  "D11": 14670,
+  "D12": 20910
+ },
+ "national_interval": [
+  315700,
+  322800
+ ],
+ "national_halfwidth_pct": 1.1,
+ "district_intervals": {
+  "D01": [
+   54560,
+   56390
+  ],
+  "D02": [
+   39220,
+   40770
+  ],
+  "D03": [
+   32150,
+   33510
+  ],
+  "D04": [
+   22130,
+   22940
+  ],
+  "D05": [
+   25280,
+   26720
+  ],
+  "D06": [
+   23760,
+   24640
+  ],
+  "D07": [
+   24560,
+   25550
+  ],
+  "D08": [
+   18370,
+   19240
+  ],
+  "D09": [
+   16550,
+   17160
+  ],
+  "D10": [
+   21340,
+   22480
+  ],
+  "D11": [
+   14380,
+   14960
+  ],
+  "D12": [
+   20440,
+   21380
+  ]
+ },
+ "p_line": {
+  "D01": 1.0,
+  "D02": 1.0,
+  "D03": 1.0,
+  "D04": 0.0,
+  "D05": 0.99,
+  "D06": 0.0,
+  "D07": 0.57,
+  "D08": 0.0,
+  "D09": 0.0,
+  "D10": 0.0,
+  "D11": 0.0,
+  "D12": 0.0
+ },
+ "call": {
+  "qualifies": [
+   "D01",
+   "D02",
+   "D03",
+   "D05"
+  ],
+  "too close to call": [
+   "D07"
+  ]
+ },
+ "coverage_pct": {
+  "nationals": 95.0,
+  "others": 84.7
+ },
+ "linked_pct": {
+  "nationals": 92.2,
+  "others": 71.8
+ },
+ "recall_pct": {
+  "nationals": 97.0,
+  "others": 83.0
+ },
+ "raising_factor": {
+  "18-29": 1.086,
+  "30-44": 1.116
+ },
+ "da_ratio": {
+  "18-29": 1.0694,
+  "30-44": 1.0407
+ },
+ "register_counts": {
+  "D01": 60393,
+  "D02": 42672,
+  "D03": 33714,
+  "D04": 22581,
+  "D05": 26770,
+  "D06": 25952,
+  "D07": 25796,
+  "D08": 19971,
+  "D09": 17383,
+  "D10": 22615,
+  "D11": 15360,
+  "D12": 21582
+ },
+ "register_not_correct": {
+  "D01": 9150,
+  "D02": 5640,
+  "D03": 4330,
+  "D04": 2380,
+  "D05": 3660,
+  "D06": 3440,
+  "D07": 3070,
+  "D08": 2340,
+  "D09": 1560,
+  "D10": 2420,
+  "D11": 1620,
+  "D12": 2350
+ },
+ "register_not_correct_parts": {
+  "D01": {
+   "left Kilvarra or died": 5550,
+   "duplicate registrations": 1400,
+   "living elsewhere in Kilvarra": 2200
+  },
+  "D02": {
+   "left Kilvarra or died": 3140,
+   "duplicate registrations": 990,
+   "living elsewhere in Kilvarra": 1510
+  },
+  "D03": {
+   "left Kilvarra or died": 2130,
+   "duplicate registrations": 910,
+   "living elsewhere in Kilvarra": 1280
+  },
+  "D04": {
+   "left Kilvarra or died": 1070,
+   "duplicate registrations": 600,
+   "living elsewhere in Kilvarra": 710
+  },
+  "D05": {
+   "left Kilvarra or died": 1750,
+   "duplicate registrations": 660,
+   "living elsewhere in Kilvarra": 1250
+  },
+  "D06": {
+   "left Kilvarra or died": 2210,
+   "duplicate registrations": 550,
+   "living elsewhere in Kilvarra": 680
+  },
+  "D07": {
+   "left Kilvarra or died": 1610,
+   "duplicate registrations": 430,
+   "living elsewhere in Kilvarra": 1030
+  },
+  "D08": {
+   "left Kilvarra or died": 1170,
+   "duplicate registrations": 510,
+   "living elsewhere in Kilvarra": 660
+  },
+  "D09": {
+   "left Kilvarra or died": 470,
+   "duplicate registrations": 740,
+   "living elsewhere in Kilvarra": 360
+  },
+  "D10": {
+   "left Kilvarra or died": 1060,
+   "duplicate registrations": 720,
+   "living elsewhere in Kilvarra": 640
+  },
+  "D11": {
+   "left Kilvarra or died": 670,
+   "duplicate registrations": 360,
+   "living elsewhere in Kilvarra": 590
+  },
+  "D12": {
+   "left Kilvarra or died": 1080,
+   "duplicate registrations": 610,
+   "living elsewhere in Kilvarra": 660
+  }
+ },
+ "listed_elsewhere": {
+  "D01": 1470,
+  "D02": 1150,
+  "D03": 1950,
+  "D04": 670,
+  "D05": 1810,
+  "D06": 690,
+  "D07": 1230,
+  "D08": 540,
+  "D09": 550,
+  "D10": 980,
+  "D11": 460,
+  "D12": 850
+ },
+ "on_no_list": {
+  "D01": 2770,
+  "D02": 1810,
+  "D03": 1500,
+  "D04": 840,
+  "D05": 1080,
+  "D06": 1000,
+  "D07": 1090,
+  "D08": 630,
+  "D09": 480,
+  "D10": 740,
+  "D11": 480,
+  "D12": 830
+ },
+ "official_2026": 325624,
+ "official_gap": 6360,
+ "unrecorded_emigration": 6920,
+ "immigration_not_in_accounts": 608,
+ "official_remainder": 50,
+ "careful_national": 328400,
+ "careful_districts": {
+  "D01": 57380,
+  "D02": 41440,
+  "D03": 33790,
+  "D04": 23030,
+  "D05": 26830,
+  "D06": 24900,
+  "D07": 25890,
+  "D08": 19240,
+  "D09": 17060,
+  "D10": 22310,
+  "D11": 14960,
+  "D12": 21560
+ },
+ "careful_call": {
+  "qualifies": [
+   "D01",
+   "D02",
+   "D03",
+   "D05",
+   "D07"
+  ],
+  "too close to call": [
+   "D06"
+  ]
+ },
+ "careful_halfwidth_pct": 0.6,
+ "careful_gap": -2780,
+ "register_national": 334790,
+ "district_names": {
+  "D01": "Port Ardain",
+  "D02": "Ballinrea",
+  "D03": "Drumcastle",
+  "D04": "Fort Larrick",
+  "D05": "Tullaghvane",
+  "D06": "Carnmoyle",
+  "D07": "Newbrook",
+  "D08": "Rossmullan",
+  "D09": "Glenarra",
+  "D10": "Loughmeen",
+  "D11": "Ardvale",
+  "D12": "Fennabeg"
+ },
+ "constants": {
+  "line": 25000,
+  "interval_pct": 90,
+  "band_district_pct": 1.0,
+  "band_national_pct": 0.6,
+  "band_cov_nat": 0.6,
+  "band_cov_oth": 2.5,
+  "band_over_pct": 8,
+  "band_else_pct": 25,
+  "band_people": 40,
+  "band_k": 0.04,
+  "band_half": [
+   0.75,
+   1.45
+  ],
+  "band_p": 0.16,
+  "band_emig_pct": 15,
+  "band_gap_pct": 0.6,
+  "ages": [
+   18,
+   29,
+   30,
+   44
+  ],
+  "circular_paragraphs": [
+   "2.1",
+   "2.2",
+   "2.3",
+   "3.1",
+   "3.2"
+  ],
+  "circular": "2026/14",
+  "supplement_pct_of_pool": 1.2
+ },
+ "linked_share_effect_pct": [
+  2.3,
+  4.9
+ ],
+ "independence_effect_pct": [
+  -2.1,
+  -1.5
+ ],
+ "independence_gap": 5900,
+ "linked_share_gap": 13450,
+ "official_bridge": {
+  "gap": 6360,
+  "unrecorded_emigration": 6920,
+  "remainder": 50
+ },
+ "call_and_chances": {
+  "call": {
+   "qualifies": [
+    "D01",
+    "D02",
+    "D03",
+    "D05"
+   ],
+   "too close to call": [
+    "D07"
+   ]
+  },
+  "p_D07": 0.57
+ },
+ "estimates_with_national": {
+  "D01": 55480,
+  "D02": 40000,
+  "D03": 32830,
+  "D04": 22540,
+  "D05": 26000,
+  "D06": 24200,
+  "D07": 25050,
+  "D08": 18800,
+  "D09": 16860,
+  "D10": 21910,
+  "D11": 14670,
+  "D12": 20910,
+  "national": 319260
+ }
+}
