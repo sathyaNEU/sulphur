@@ -1,20 +1,20 @@
 {
   "task": "task9",
-  "status": "DESIGN",
+  "status": "PAUSED",
   "domain": "general-statistics-data-science",
   "subdomain": "interpretability",
   "objective": "root-cause",
-  "stage": 2,
-  "stage_name": "design",
+  "stage": 3,
+  "stage_name": "build",
   "updated": "2026-11-11",
   "doctrine": "throughout",
-  "call": null,
-  "chain": "R1 the ring's loss 1 April to 31 August in points of mean sort yield; R2 the loss in good die by product; R3 the causes ranked with their shares; R4 the onset in conditioner-disk usage and the slope; R5 the retaining ring's and the pad's terms; R6 the edge removal-rate check's onset; R7 the loss split between Rev F's extension, the EW-118 reused disks and the old rule's own exposure; R8 the disk-only change interval for each unit group and its annual saving",
+  "call": "take the conditioner disk out of the full PM and change it at about 1,570 wafers on PU-1 and PU-2 and 1,200 on PU-3 and PU-4, saving about USD 288,000 a year against Rev F",
+  "chain": "R1 the ring's loss on wafers sorted 1 April to 31 August (1.31 points of mean sort yield); R2 the same in good die by product; R3 each candidate cause's share (the disk 96 per cent, the pad 4, the retaining ring, DEP-3, SC-4 and RF hours at none); R4 each unit's onset and slope; R5 the shares the 2,000-wafer rule, Rev F and EW-118 account for (22, 34, 43 per cent); R6 each unit's count under Rev G (the call); R7 the yearly saving against Rev F",
   "architecture": 2,
   "loops": 0,
   "precut": {
-    "exit": null,
-    "date": ""
+    "exit": 0,
+    "date": "2026-11-11"
   },
   "leak": {
     "leak_py": "",
@@ -30,12 +30,12 @@
     "gate_h": "",
     "report": ""
   },
-  "paper_pair": null,
+  "paper_pair": 38.2,
   "effort": {
-    "quick": null,
-    "careful": null,
-    "thorough": null,
-    "largest_hint": ""
+    "quick": 7.0,
+    "careful": 38.2,
+    "thorough": 100.0,
+    "largest_hint": "the ring already costing yield before April (rescues R1, R2: 2 of 7)"
   },
   "runs": {
     "run1": null,
@@ -51,7 +51,7 @@
     "history": []
   },
   "returned": [],
-  "resume": "stage 2: write the Fab 2 simulator (dispatch, clustered random defects, edge roll-off, the conditioner-disk ring with per-unit wear, the pad term, the PM timeline with decoupled episodes, metrology, the classifier, the selected die-map sample), the golden analysis and the hurried routes, run the rivals on the clean truth, then the note to precut",
+  "resume": "stage 3, mid-build. Done: build.py deterministic (two builds under different hash seeds byte-identical after the chamber-step set-order fix), checks.py 66 of 66, precut 0 FAIL, effort.py --check-note 0 FAIL (pair 38.2). Next: refresh the design note's stated figures from generator/figures.json (the world changed with the set-order fix and the 4 per cent alias share; the grades and pair are unchanged); write verify.py (an independent recompute of R1 to R7 by other code paths, landing inside every band); render the deck and run golden-realism; then gates.py task9 --full (figures_check, leak.py, audit_containers, guard surface and heart) and stage 4 (the leak reader and the determinism judge together).",
   "approved": null,
   "submitted": null,
   "portal": {
@@ -82,6 +82,14 @@
     {
       "date": "2026-11-11",
       "event": "re-rooted to the author's Concept 2 (Fab 2's wafer edge-ring) at the author's word after Concept 1's SEND_BACK; card registered"
+    },
+    {
+      "date": "2026-11-11",
+      "event": "stage 2 closed: simulator with downtime-aware dispatch and disk-to-disk spread, analysis and routes, effort passes (pair 38.2), prompt and note; precut exit 0"
+    },
+    {
+      "date": "2026-11-11",
+      "event": "stage 3: golden deck, writeup, checks (66 of 66) and build written; a set-iteration order bug in the simulator found and fixed (builds now byte-identical); paused at the author's interruption"
     }
   ]
 }
