@@ -12,6 +12,39 @@ Response 2's nine-days-in-ten levels and shares cell for cell (27.1, 26.9, 20.5,
 20.4, 35.8, 23.1; 2, 54, 24, 47, 0 per cent against its 5, 53, 22, 45, 0). The fiction's dates sit before the day the build
 ships (exports of 1 to 4 November 2026, the award notice of 21 October 2026).
 
+## Retired
+
+Retired on 2026-11-11 on the author's word ("deprecate task 10, did not work"), after the levelled-up architecture 7
+came back not stumped. Seven architectures in five worlds, and none stumped the runs for long enough to submit. Every
+card and lineage entry is kept, so no later draw rebuilds any of them. Each architecture and what killed it:
+
+| Arch | World and decisive move | What killed it | The runs' move that did it |
+|---|---|---|---|
+| 1 (loops 1 to 3) | Millrind's paid moderation pool behind a closing volunteer tier; each site's pool carried at its own lapse rate | FAILED_TO_STUMP on the portal, 2026-10-27: both responses filed 35 FTE (the golden) | capacity built against the inbox at the saturated pace, each pool at its own lapse rate: the field's default framing |
+| 2 | PS03 wastewater overflows replayed on each day's own water table | FAILED_TO_STUMP, 2026-11-07: both landed the hold call | any full-record replay already broke the consent (48 against 40 allowed), so the decisive step was never needed |
+| 3 | a union branch's ballot turnout, each member's vote lifted where a workplace delegate is active | FAILED_TO_STUMP, 2026-11-07: both landed the 11 councils | delegate coverage put in the member-level turnout model from the start: a recorded covariate one join away |
+| 4 | Irish rapid chargers whose controller hang clock a neighbour's service visit resets | both runs on the golden 12 hubs, 2026-11-08 | the hang ages read off the first histogram, then a censored Weibull on time since the evidenced reset (R08) |
+| 5 (two rounds) | Halverton zones, each provider's reduction net of load moved across an open point on event days | returned by the holistic audit, 2026-11-10: "spotting the plant, not analysis" | round 1 run 1 netted it by paired totals; the neighbour's flat 1.4, 1.4 and 0.8 MW step was one built-in factor, one subtraction once told |
+| 6 | the same world as an eleven-result chain (the available share, the come-back, the spread, a held-out winter) | both runs on every figure, 2026-11-10 (about 97 measured against a paper pair of 38.4) | a capped availability ceiling, the come-back over all 48 half-hours, a predictive nine-in-ten level, a chronological hold-out (R03 to R06) |
+| 7 | the same world: the cold evening, the customers' build-up, commissioning by class, the come-back | returned by the holistic audit, 2026-11-10: an independent rebuild reached the same commit and hold split; the shares loosely pinned (Ashcombe Road 54 against 91) | the cold evening from unaffected half-hours (R21), the register's customers matured by type (R22), commissioning by competing risks with censoring (R07), the come-back replayed |
+| 7 levelled up | three decisions added beside the same call (a further contract, a best schedule, a data hall); the share's draws filed | not stumped on the author's report, 2026-11-11 (runs not pasted) | not known; the decisions sat in the scaffold the runs had already landed |
+
+What carries forward (recorded in `stumping/references/sulfur-record.md`, `sulfur-strategies.md` "Measured in
+Sulfur" and `precedents.json` R21 and R22):
+- **Each structural correction here was one recognition followed by a routine fit.** These include the cold end read
+  where the service never ran, a young register matured by type, commissioning by class with censoring and a ceiling
+  capped at the call. Frontier runs make each of them unprompted once they read the files, so stacking four of them
+  is four reflexes, not depth.
+- **A concurrent action with a discrete signature in the record is a plant**, however analytical the netting
+  (architecture 5).
+- **A level-up that adds decisions beside a landed call, in the same world and chain, is the same scaffold**
+  (architectures 5 to 7 in one world). The client calls a re-pointed scaffold templated.
+- **A share of simulated design days over a threshold is pinned only when it sits far from its line.** Near firm
+  capacity it swings by tens of points between reasonable methods (Charlecote Way 45 to 72 per cent).
+- **The slot's last card spent four lessons**: confounded history of use, extrapolation beyond the observed range, the
+  rebound after a window, and completion of young cohorts. Its decision form, a set over a threshold at a design
+  condition, is spent in energy load forecasting too.
+
 ## Draw
 
 Subdomain: Energy Systems & Utilities
@@ -392,6 +425,9 @@ On the levelled-up final cut (gates.py task10 --full, 2026-11-10: 11 gates, 0 FA
 
 ## Tried and rejected
 
+- Architecture 7 levelled up (2026-11-10, three decisions added beside the commit list, the share's draws and sources
+  filed in guideline 7): not stumped on the author's report of 2026-11-11, so the slot was retired. Decisions added
+  inside a scaffold the runs had already landed are the same scaffold.
 - Architecture 6, nine-days-in-ten bands set by the variants with 0.1 MW either side: judge r3 (2026-11-10), from its
   own baseline and the share's scatter as measured, put Fenwick Street at 31.6 and Hartwell Common at 21.0, at and above
   the bands' tops. The share's own scatter joined the family (22 variants) and those bands reach 0.3 MW above it.

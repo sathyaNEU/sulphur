@@ -1,12 +1,12 @@
 {
  "task": "task10",
- "status": "READY",
+ "status": "RETIRED",
  "domain": "energy-systems-utilities/load-forecasting (client domain energy-systems-utilities; world: an English distribution network operator, Wealdmoor Power Networks, committing for winter 2027/28 the reinforcement of the Halverton zone primaries whose design-day peak, with the flexibility contracted for that winter instructed in full, would exceed firm capacity on more than one design day in ten)",
  "subdomain": "load-forecasting",
  "objective": "forecasting",
  "stage": 5,
- "stage_name": "ready",
- "updated": "2026-11-10",
+ "stage_name": "retired",
+ "updated": "2026-11-11",
  "call": "Commit reinforcement at Ashcombe Road, Charlecote Way, Dunmore Street and Fenwick Street for winter 2027/28 and hold Hartwell Common (nine days in ten under 29.5, 27.0, 21.1, 36.2 and 23.4 MW against 27.5, 25.6, 20.0, 35.0 and 24.4); more flexibility is no substitute at Ashcombe Road, Charlecote Way or Dunmore Street, Fenwick Street would need 7.8 MW more on its 2027/28 award's terms, Ashcombe Road's best schedule (5.0 MW, 28.5 MW nine days in ten) is still over firm, and Hartwell Common holds a 4,000 kVA data hall energised on 2 August 2027 (adds 0.4 MW, 23.8 against 24.4)",
  "architecture": 7,
  "loops": 1,
@@ -77,6 +77,15 @@
     "verdict": "REDESIGN",
     "recorded": "2026-11-10",
     "note": "both runs on the golden call and every stated figure (0 of 11 results lost; about 97 estimated against a paper pair of 38.4); no score or rubric supplied; runs/arch6_run1.md, arch6_run2.md and arch6_triage.md"
+   },
+   {
+    "architecture": 7,
+    "round": "levelled up",
+    "run1": null,
+    "run2": null,
+    "verdict": "not stumped (the author's report)",
+    "recorded": "2026-11-11",
+    "note": "the levelled-up cut (RESHIPPED 62a4d29: three decisions added beside the commit list, the share's draws and sources filed in guideline 7) came back not stumped on the author's report; neither run nor a score was pasted, so which of its priced losses (the come-back carried to the design day's delivery, the cold end's curve) the runs earned is not known"
    }
   ]
  },
@@ -120,9 +129,9 @@
  "approved": null,
  "submitted": null,
  "portal": {
-  "status": "RETURNED",
-  "date": "2026-11-10",
-  "note": "holistic audit of architecture 7, runs/arch7_review_2026-11-10.md: a strong solver's independent attempt reached the same commit and hold split on the five zone primaries; the shares loosely pinned (Ashcombe Road 54 against 91); add a decision the trap does not settle and pin how the share is estimated"
+  "status": "RETIRED",
+  "date": "2026-11-11",
+  "note": "retired on the author's word after the levelled-up architecture 7 came back not stumped; seven architectures across five worlds, every one landed or returned (DESIGN_NOTE.md ## Retired)"
  },
  "history": [
   {
@@ -412,6 +421,10 @@
     "target": "d84ca1b2a318159c9bc0ab15d4d15a7d01ddf9474e8ae6fd473d2b2d00f78fb6",
     "golden": "525b765ba918e6832a4e422dfddf378a12324651b8e93481f4598703f04b6b48"
    }
+  },
+  {
+   "date": "2026-11-11",
+   "event": "RETIRED on the author's word ('deprecate task 10, did not work'); every card and lineage entry kept; what failed recorded in the note's ## Retired section, stumping/references/sulfur-record.md and sulfur-strategies.md (Measured in Sulfur)"
   }
  ],
  "doctrine": "throughout",
