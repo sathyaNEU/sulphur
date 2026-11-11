@@ -1,28 +1,28 @@
 {
  "task": "task20",
- "status": "DRAWING",
+ "status": "PAUSED",
  "domain": "quantitative-finance",
  "subdomain": "strategy-backtesting-evaluation",
  "objective": "forecasting",
- "stage": 1,
- "stage_name": "draw",
+ "stage": 4,
+ "stage_name": "check",
  "updated": "2026-11-11",
  "doctrine": "throughout",
- "call": "to be set at stage 2: Brindle & Moss's Q4 FY2025 revenue with an 80 per cent range against the street's figure",
- "chain": "R1 panel spend for the reporting entity on the fiscal calendar; R2 completion of the immature weeks; R3 growth on comparable cards; R4 growth at the company's regional mix; R5 the card-visible share's drift; R6 the backtest scorecard; R7 the forecast with its range; R8 each adjustment's worth; R9 the call",
+ "call": "short Brindle & Moss into the 26 February 2026 release: Q4 FY2025 net sales USD 1,412.5 million (+1.30%), 80% range USD 1,400.0 to 1,425.0 million, wholly below the street's USD 1,450.0 million",
+ "chain": "R1 the licensed shops' and cafes' share of the brand id (14.71%); R2 the immature weeks completed (+1.27%); R3 the panel's own steps to like-for-like growth (10.84%); R4 card-visible growth at the company's regional mix (6.71%); R5 the private-label share carried (17.00%) and the bank-card reach (+5.07%); R6 the record (RMSE 0.70 points over 15 quarters); R7 net sales and range (USD 1,412.5 million, 1,400.0 to 1,425.0); R8 the company steps (mix -4.13, bank-card share -5.41 points); R9 the call (short)",
  "architecture": 2,
  "loops": 0,
  "precut": {
-  "exit": null,
-  "date": ""
+  "exit": 0,
+  "date": "2026-11-11"
  },
  "leak": {
-  "leak_py": "",
-  "reader": ""
+  "leak_py": "REVIEW (0 LEAK after the bulletin's rename and the fields written as observables)",
+  "reader": "no ranking file, no answer figure, no one thing; three REVIEW items harmless; realism: street file enriched"
  },
  "duplicate_check": {
-  "heart": "WARN (skeleton.lesson_taught heterogeneity_carried_to_decision, a supporting step here; house_lesson forward_window_structure_change and heterogeneity_carried_to_decision)",
-  "nearest": "task18 by chain; task4 0.04 on driver text"
+  "heart": "WARN (house lessons validation_cannot_see_condition and reporting_lag_nowcast each on 2 live builds; skeleton clear)",
+  "nearest": "task5 v4 (severity none); task18 by chain"
  },
  "judge": {
   "verdict": "",
@@ -30,12 +30,12 @@
   "gate_h": "",
   "report": ""
  },
- "paper_pair": null,
+ "paper_pair": 32.8,
  "effort": {
-  "quick": null,
-  "careful": null,
-  "thorough": null,
-  "largest_hint": ""
+  "quick": 14.0,
+  "careful": 32.8,
+  "thorough": 100.0,
+  "largest_hint": "the private-label card's faster fall and the panel's coverage: rescues R5 (1 of 9)"
  },
  "runs": {
   "run1": null,
@@ -58,7 +58,7 @@
    "commit": "e483b2e"
   }
  ],
- "resume": "stage 2: simulate Brindle & Moss on the Census furniture-store series, the Kestrel panel (issuers, card cohorts, tenure decay, attrition, posting lags) and the tender drift; measure each result and its shortcut; design note, prompt, precut",
+ "resume": "stage 4: the judge's isolated thread (brief at /tmp/determinism-check-task20-220603/) is running; collect verdict.md, price its own_derivation against the careful column (over 50: back to stage 2), fix findings in one generator pass, re-run gates.py task20 --full, then stage 5 READY on main",
  "approved": null,
  "submitted": null,
  "portal": {

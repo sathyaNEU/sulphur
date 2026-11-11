@@ -1,200 +1,200 @@
 {
-  "task": "task20",
-  "project": "sulfur",
-  "architecture": "v2",
-  "drawn": "2026-11-11",
-  "slot_note": "Re-root of task20 (architecture 1, the VaR exception classification, spent 2026-11-11: the determinism judge's isolated first pass landed nearly every result) onto the author's Concept 3 from the same concept note: a card-transaction panel's nowcast of a retailer's quarterly revenue before it reports. A new world, dataset and shell; the Quantitative Finance claim moves to Forecasting & Predictive Modeling.",
-  "domain": "quantitative-finance",
-  "subdomain": "strategy-backtesting-evaluation",
-  "client_domain": "quantitative-finance",
-  "niche": "Alpha research (finding and validating return-predictive signals): a card-transaction panel nowcast of a home-furnishings retailer's holiday-quarter revenue three weeks before it reports, with a range that has held on past quarters",
-  "objective": "forecasting",
-  "shape": "single-figure",
-  "decision_type": "go_hold_or_stop",
-  "answer_unit": "currency",
-  "answer": "",
-  "answer_source": "",
-  "gap": [
-    "time",
-    "population"
+ "task": "task20",
+ "project": "sulfur",
+ "architecture": "v2",
+ "drawn": "2026-11-11",
+ "slot_note": "Re-root of task20 (architecture 1, the VaR exception classification, spent 2026-11-11: the determinism judge's isolated first pass landed nearly every result) onto the author's Concept 3 from the same concept note: a card-transaction panel's nowcast of a retailer's quarterly revenue before it reports. A new world, dataset and shell; the Quantitative Finance claim moves to Forecasting & Predictive Modeling.",
+ "domain": "quantitative-finance",
+ "subdomain": "strategy-backtesting-evaluation",
+ "client_domain": "quantitative-finance",
+ "niche": "Alpha research (finding and validating return-predictive signals): a card-transaction panel nowcast of a home-furnishings retailer's holiday-quarter revenue three weeks before it reports, with a range that has held on past quarters",
+ "objective": "forecasting",
+ "shape": "single-figure",
+ "decision_type": "go_hold_or_stop",
+ "answer_unit": "currency",
+ "answer": "short: USD 1,412.5 million (1,400.0 to 1,425.0) against the street's 1,450.0",
+ "answer_source": "generator/figures.json",
+ "gap": [
+  "time",
+  "population"
+ ],
+ "pattern": [
+  "none"
+ ],
+ "generators": [
+  "G6",
+  "G16",
+  "G17"
+ ],
+ "gate_g": "forecasting",
+ "calibration_form": "censored_or_lagged_release",
+ "stump_strategy": "forecast_method_backtest",
+ "decisive_rule_filed": false,
+ "official_decoy": false,
+ "validated_decoy": false,
+ "context_artifact": "published_series",
+ "stump_class": "analytical",
+ "analyst_test": "The careful but hurried pass takes the licensed shops and cafes out of the brand id, completes the latest weeks from the delivery history, keeps the issuers present in both years and compares cards of the same age, then regresses reported growth on that like-for-like growth over past quarters and back-tests it on rolling origins (1.50 points); it files USD 1,481.6 million and a long call, because the regression carries the panel's own regional mix and the private-label card's slow fall of past years, and none of its quarters held an issuer's exit or the fall's quickening.",
+ "domain_test": "Nowcasting a company's reported revenue from a consumer card panel before the release, with the panel's churn, ageing cards, immature weeks and its coverage of the company's tender rebuilt so the growth index tracks revenue, and the range earned on rolling origins, is what an alternative-data research desk does to size a position into an earnings release.",
+ "layer2_family": "forecast_uncertainty",
+ "layer2_pattern": "own:card-panel-revenue-nowcast",
+ "layer1": [
+  "weekly panel deliveries restating their latest weeks",
+  "issuer onboarding and offboarding inside the record",
+  "merchant descriptors mixing company stores, the web, licensed shop-in-shops and an acquired banner",
+  "a 4-5-4 fiscal calendar with a 53-week year",
+  "re-sent delivery rows",
+  "card cohorts keyed by open quarter"
+ ],
+ "stakeholder_role": "a consumer-sector analyst on a long-short fund's research desk, whose investment committee sizes positions into earnings releases only when the whole range clears the street's figure (not named in the prompt)",
+ "role_family": "research_desk",
+ "scoring_unit": "per episode",
+ "spine": {
+  "file": "kestrel_bmh_panel_weekly_delivery_2026-02-02.csv",
+  "rows": 110040,
+  "entity": "one row is one week's settled spend at one merchant id by one issuer's cardholders of one billing region and one card-open year",
+  "grain": "week x issuer x billing region x card-open year x merchant id",
+  "source": "simulated by task20/generator (a seeded retailer, card panel and its deliveries); no public series"
+ },
+ "forum": "committee_or_panel",
+ "forcing_event": "period_close",
+ "org_family": "financial_institution",
+ "world": {
+  "geography": "United States",
+  "currency": "USD",
+  "org_type": "long-short equity fund's research desk; the subject a listed home-furnishings retailer",
+  "invented_names": [
+   "Brindle & Moss",
+   "Kestrel Spend Panel",
+   "Larkhill Partners"
   ],
-  "pattern": [
-    "none"
-  ],
-  "generators": [
-    "G6",
-    "G16",
-    "G17"
-  ],
-  "gate_g": "forecasting",
-  "calibration_form": "censored_or_lagged_release",
-  "stump_strategy": "forecast_method_backtest",
-  "decisive_rule_filed": false,
-  "official_decoy": false,
-  "validated_decoy": false,
-  "context_artifact": "published_series",
-  "stump_class": "analytical",
-  "analyst_test": "The careful but hurried pass classifies the descriptors, aligns the panel to the fiscal calendar, completes the immature weeks from the delivery vintages, keeps the issuers present in both years and compares the same cards year on year, fits revenue to the panel over the reported quarters and backtests on rolling origins; it carries the panel's own regional mix, holds the card-visible share of revenue at its trailing level, and its same-card index passes its backtest because no past origin held an issuer leaving the panel.",
-  "domain_test": "Nowcasting a company's reported revenue from a consumer card panel before the release, with the panel's churn, ageing cards, immature weeks and its coverage of the company's tender rebuilt so the growth index tracks revenue, and the range earned on rolling origins, is what an alternative-data research desk does to size a position into an earnings release.",
-  "layer2_family": "forecast_uncertainty",
-  "layer2_pattern": "own:card-panel-revenue-nowcast",
-  "layer1": [
-    "weekly panel deliveries restating their latest weeks",
-    "issuer onboarding and offboarding inside the record",
-    "merchant descriptors mixing company stores, the web, licensed shop-in-shops and an acquired banner",
-    "a 4-5-4 fiscal calendar with a 53-week year",
-    "re-sent delivery rows",
-    "card cohorts keyed by open quarter"
-  ],
-  "stakeholder_role": "a consumer-sector analyst on a long-short fund's research desk, whose investment committee sizes positions into earnings releases only when the whole range clears the street's figure (not named in the prompt)",
-  "role_family": "research_desk",
-  "scoring_unit": "per episode",
-  "spine": {
-    "file": "panel_weekly_latest.csv",
-    "rows": 0,
-    "entity": "one row is one week's spend at one descriptor group by one issuer's cards of one opening cohort in one region",
-    "grain": "week x issuer x region x card cohort x descriptor group",
-    "source": "synthetic, on the published Census Bureau monthly retail sales for furniture and home furnishings stores"
-  },
-  "forum": "committee_or_panel",
-  "forcing_event": "period_close",
-  "org_family": "financial_institution",
-  "world": {
-    "geography": "United States",
-    "currency": "USD",
-    "org_type": "long-short equity fund's research desk; the subject a listed home-furnishings retailer",
-    "invented_names": [
-      "Brindle & Moss",
-      "Kestrel Spend Panel",
-      "Larkhill Partners"
-    ],
-    "people": [
-      "Audrey Hanson",
-      "Robert Campbell"
-    ]
-  },
-  "deliverables": [
-    "bmh_q4fy25_revenue_nowcast.xlsx",
-    "bmh_q4fy25_nowcast_note.docx"
-  ],
-  "opening_move": "question-first",
-  "question_form": "whether",
-  "driver": "The decisive quantity is a revenue the record does not yet hold, estimated from a sample whose membership, age and coverage of the target all move, so the growth index has to be rebuilt on comparable units and its link to the target allowed to drift, and the range has to be earned on past origins that include the kind of membership change the target period carries.",
-  "driver_concrete": "Same-tenure card cohorts compared year on year within issuers present in both years and within region, recombined at the company's regional revenue mix; the immature last weeks completed from the delivery vintages; the card-visible share of revenue carried forward with its drift from the filed own-card share; the range from rolling-origin errors that include an issuer's exit.",
-  "stump": "A careful solver files the same-card or per-active-card growth on the panel's own regional mix with a fixed card-visible share, and a range that held in its backtest, because it never sees that ageing cards and a falling own-card share offset each other in every past origin while the target quarter loses an issuer.",
-  "answer_shape": "forecast-bands-drivers",
-  "weight": "validation",
-  "chain_signature": [
-    "assembly-reconciliation",
-    "missingness-measurement",
-    "missingness-measurement",
-    "modeling",
-    "modeling",
-    "validation",
-    "forecasting",
-    "decomposition-attribution",
-    "synthesis"
-  ],
-  "results": "R1 panel spend for the reporting entity on the fiscal calendar; R2 completion of the immature weeks; R3 growth on comparable cards; R4 growth at the company's regional mix; R5 the card-visible share's drift; R6 the backtest scorecard; R7 the forecast with its range; R8 each adjustment's worth; R9 the call",
-  "one_fact_test": "to be measured at stage 2",
-  "strategy_label": "WORKS IN FORM",
-  "mechanism_source": "design_note",
-  "differentiation": {},
-  "lineage": [
-    {
-      "architecture": "v1",
-      "status": "spent",
-      "date": "2026-11-11",
-      "why": "the determinism judge's isolated first pass (medium effort, before the answer blocks) replicated the engine, found the extracts' cutoff by reconciling product control's hypothetical P&L and executed the add-on path from the standard; the careful column priced near 95",
-      "driver": "The decisive quantities are the outcomes the forecast was actually about, rebuilt from the prior holdings rather than the booked totals, and each miss's survival under counterfactual forecasts that each restore one thing production lacked (the inputs it should have read, the components it left out, a scale that follows the recent spread), with the misses charged in a fixed order so the classes add back to the whole population of misses.",
-      "skeleton": {
-        "decision_form": "per_unit_diagnosis",
-        "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
-        "lessons": [
-          "unmetered_component",
-          "record_as_of_its_date",
-          "forward_window_structure_change",
-          "heterogeneity_carried_to_decision"
-        ],
-        "mechanisms": [
-          "proxy_beta_mapping_drops_names_own_risk",
-          "nightly_snapshot_misses_late_booked_allocations",
-          "snapshot_outage_reuses_an_older_book",
-          "booked_pnl_carries_same_day_trading_and_income",
-          "two_year_window_lags_a_volatility_rise",
-          "planned_growth_sits_in_proxied_names",
-          "store_500_day_rule_moves_names_off_proxies"
-        ],
-        "detection": [
-          "second_source_at_other_grain",
-          "residual_by_subgroup",
-          "record_time_against_event_time"
-        ],
-        "moves": [
-          "replay_event_by_event",
-          "bridge_by_contribution",
-          "stratify_by_mix_and_reweight_to_target"
-        ],
-        "file_roles": [
-          "governing_standard",
-          "incumbent_figure_or_method",
-          "primary_record",
-          "second_grain_source",
-          "reference_register",
-          "event_timeline",
-          "schedule_or_plan",
-          "unused_distractor"
-        ]
-      }
-    }
-  ],
-  "notes": "Concept 3 of the author's note of 2026-11-11, chosen at the re-root because its answer is an estimate no record holds (the release comes after the call), the anatomy of the two approved builds; the call is the quarter's revenue with a range and a backtest, beside the street's figure.",
-  "skeleton": {
-    "decision_form": "act_if_interval_clears_line",
+  "people": [
+   "Audrey Hanson",
+   "Robert Campbell"
+  ]
+ },
+ "deliverables": [
+  "bmh_q4fy25_revenue_nowcast.xlsx",
+  "bmh_q4fy25_nowcast_note.docx"
+ ],
+ "opening_move": "question-first",
+ "question_form": "whether",
+ "driver": "The decisive quantity is a revenue the record does not yet hold, estimated from a sample whose membership, age and coverage of the target all move, so the growth index has to be rebuilt on comparable units and its link to the target allowed to drift, and the range has to be earned on past origins that include the kind of membership change the target period carries.",
+ "driver_concrete": "Cards of the same age compared year on year within the issuers present in both quarters and within billing region, recombined at the company's prior-year regional net sales; the immature last weeks completed from the delivery history; net sales per bank-card dollar carried from the private-label card's share at fiscal 2025's pace; the range from a record built at each past quarter on what was known then.",
+ "stump": "A careful solver files the regression on the panel's like-for-like growth at its own mix (USD 1,481.6 million, long) because it never re-weights the comparable panel to the company's regions after the Midwest issuer leaves (79 per cent Southeast and West) and leaves the private-label card's faster fall in fiscal 2025 to the regression's history; either correction alone leaves the range across the street.",
+ "answer_shape": "forecast-bands-drivers",
+ "weight": "validation",
+ "chain_signature": [
+  "assembly-reconciliation",
+  "missingness-measurement",
+  "missingness-measurement",
+  "modeling",
+  "modeling",
+  "validation",
+  "forecasting",
+  "decomposition-attribution",
+  "synthesis"
+ ],
+ "results": "R1 the licensed shops' and cafes' share of the brand id (14.71%); R2 the immature weeks completed (+1.27%); R3 the panel's own steps to like-for-like growth (10.84%); R4 card-visible growth at the company's mix (6.71%); R5 the private-label share carried (17.00%) and net sales per bank-card dollar (-5.07%); R6 the record (0.70 points over 15 quarters); R7 net sales and range (USD 1,412.5 million, 1,400.0 to 1,425.0); R8 the company steps (-4.13, -5.41 points); R9 short",
+ "one_fact_test": "largest single hint (the private-label card's faster fall and the panel's coverage) rescues R5, 1 of 9",
+ "strategy_label": "WORKS IN FORM",
+ "mechanism_source": "design_note",
+ "differentiation": {},
+ "lineage": [
+  {
+   "architecture": "v1",
+   "status": "spent",
+   "date": "2026-11-11",
+   "why": "the determinism judge's isolated first pass (medium effort, before the answer blocks) replicated the engine, found the extracts' cutoff by reconciling product control's hypothetical P&L and executed the add-on path from the standard; the careful column priced near 95",
+   "driver": "The decisive quantities are the outcomes the forecast was actually about, rebuilt from the prior holdings rather than the booked totals, and each miss's survival under counterfactual forecasts that each restore one thing production lacked (the inputs it should have read, the components it left out, a scale that follows the recent spread), with the misses charged in a fixed order so the classes add back to the whole population of misses.",
+   "skeleton": {
+    "decision_form": "per_unit_diagnosis",
     "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
     "lessons": [
-      "unmetered_component",
-      "survivor_selected_sample",
-      "validation_cannot_see_condition",
-      "reporting_lag_nowcast"
+     "unmetered_component",
+     "record_as_of_its_date",
+     "forward_window_structure_change",
+     "heterogeneity_carried_to_decision"
     ],
     "mechanisms": [
-      "card_spend_decays_with_tenure",
-      "issuer_entry_and_exit_break_panel",
-      "posting_lag_leaves_latest_weeks_short",
-      "own_brand_card_share_falls",
-      "panel_regional_mix_differs_from_company",
-      "licensed_and_acquired_descriptors",
-      "fiscal_53rd_week_base_quarter"
+     "proxy_beta_mapping_drops_names_own_risk",
+     "nightly_snapshot_misses_late_booked_allocations",
+     "snapshot_outage_reuses_an_older_book",
+     "booked_pnl_carries_same_day_trading_and_income",
+     "two_year_window_lags_a_volatility_rise",
+     "planned_growth_sits_in_proxied_names",
+     "store_500_day_rule_moves_names_off_proxies"
     ],
     "detection": [
-      "back_test_on_held_out_period",
-      "second_source_at_other_grain",
-      "record_time_against_event_time",
-      "residual_by_subgroup"
+     "second_source_at_other_grain",
+     "residual_by_subgroup",
+     "record_time_against_event_time"
     ],
     "moves": [
-      "per_cohort_curves",
-      "nowcast_from_same_point_prior_years",
-      "stratify_by_mix_and_reweight_to_target",
-      "back_test_select_estimator",
-      "bridge_by_contribution"
+     "replay_event_by_event",
+     "bridge_by_contribution",
+     "stratify_by_mix_and_reweight_to_target"
     ],
     "file_roles": [
-      "primary_record",
-      "panel_or_survey_sample",
-      "second_grain_source",
-      "changeover_note",
-      "reference_register",
-      "calendar_or_closures",
-      "incumbent_figure_or_method",
-      "unused_distractor"
+     "governing_standard",
+     "incumbent_figure_or_method",
+     "primary_record",
+     "second_grain_source",
+     "reference_register",
+     "event_timeline",
+     "schedule_or_plan",
+     "unused_distractor"
     ]
-  },
-  "registered": "2026-11-11T21:06:01Z",
-  "shell": {
-    "question form": "how-many",
-    "second-sentence opener": "we",
-    "deliverable set": "xlsx"
+   }
   }
+ ],
+ "notes": "Concept 3 of the author's note of 2026-11-11, chosen at the re-root because its answer is an estimate no record holds (the release comes after the call), the anatomy of the two approved builds; the call is the quarter's revenue with a range and a backtest, beside the street's figure.",
+ "skeleton": {
+  "decision_form": "act_if_interval_clears_line",
+  "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
+  "lessons": [
+   "unmetered_component",
+   "survivor_selected_sample",
+   "validation_cannot_see_condition",
+   "reporting_lag_nowcast"
+  ],
+  "mechanisms": [
+   "card_spend_decays_with_tenure",
+   "issuer_entry_and_exit_break_panel",
+   "posting_lag_leaves_latest_weeks_short",
+   "own_brand_card_share_falls",
+   "panel_regional_mix_differs_from_company",
+   "licensed_and_acquired_descriptors",
+   "fiscal_53rd_week_base_quarter"
+  ],
+  "detection": [
+   "back_test_on_held_out_period",
+   "second_source_at_other_grain",
+   "record_time_against_event_time",
+   "residual_by_subgroup"
+  ],
+  "moves": [
+   "per_cohort_curves",
+   "nowcast_from_same_point_prior_years",
+   "stratify_by_mix_and_reweight_to_target",
+   "back_test_select_estimator",
+   "bridge_by_contribution"
+  ],
+  "file_roles": [
+   "primary_record",
+   "panel_or_survey_sample",
+   "second_grain_source",
+   "changeover_note",
+   "reference_register",
+   "calendar_or_closures",
+   "incumbent_figure_or_method",
+   "unused_distractor"
+  ]
+ },
+ "registered": "2026-11-11T21:06:01Z",
+ "shell": {
+  "question form": "how-many",
+  "second-sentence opener": "we",
+  "deliverable set": "xlsx"
+ }
 }

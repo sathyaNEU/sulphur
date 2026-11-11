@@ -1,0 +1,110 @@
+{
+ "task": "task20",
+ "architecture": 2,
+ "as_of": "2026-02-05",
+ "decision": "whether Brindle & Moss's fourth-quarter fiscal 2025 net sales land above or below the sell-side consensus, and the position to take into the print",
+ "deliverables": [
+  "bmh_q4fy25_revenue_nowcast.xlsx",
+  "bmh_q4fy25_nowcast_note.docx"
+ ],
+ "distractors": [
+  "appmetric_bmh_app_daily.csv",
+  "kestrel_web_visits_bmh_weekly.csv"
+ ],
+ "distractor_notes": {
+  "kestrel_web_visits_bmh_weekly.csv": "the panel vendor's weekly site visits to brindlemoss.com: it looks like a second read on the quarter's demand but counts visits, which held up through the holiday quarter while purchases per visit fell",
+  "appmetric_bmh_app_daily.csv": "a third-party estimate of the Brindle & Moss app's daily category rank and downloads: it looks like a read on customer engagement and bears on no result"
+ },
+ "stated_inputs": [
+  "80",
+  "12",
+  "67",
+  "21",
+  "13",
+  "14",
+  "53",
+  "52",
+  "31"
+ ],
+ "field_terms": [
+  "net sales",
+  "penetration",
+  "panel",
+  "issuer",
+  "descriptor",
+  "comparable",
+  "consensus"
+ ],
+ "rows": {
+  "kestrel_bmh_panel_weekly_delivery_2026-02-02.csv": 110040,
+  "kestrel_bmh_delivery_history_2025-08-04_2026-02-02.csv": 909,
+  "kestrel_bmh_descriptor_detail_monthly.csv": 2820,
+  "bmh_quarterly_results_fy2021q1_fy2025q3.csv": 20,
+  "bmh_q4fy25_street_estimates.csv": 11,
+  "kestrel_web_visits_bmh_weekly.csv": 261,
+  "appmetric_bmh_app_daily.csv": 1068,
+  "larkhill_bmh_card_model_q3fy25.xlsx": 14
+ },
+ "files": {
+  "appmetric_bmh_app_daily.csv": {
+   "source": "Simulated daily app category rank and download estimates",
+   "role": "distractor",
+   "pull_date": "2026-02-03",
+   "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
+  },
+  "bmh_10k_fy2024_10q_q3_fy2025_excerpts.pdf": {
+   "source": "Brindle & Moss 10-K and 10-Q excerpts compiled by the desk (written for this task, figures simulated)",
+   "role": "evidence",
+   "pull_date": "2025-12-11",
+   "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
+  },
+  "bmh_q4fy25_street_estimates.csv": {
+   "source": "Simulated sell-side estimates of fourth-quarter fiscal 2025 net sales",
+   "role": "evidence",
+   "pull_date": "2026-02-04",
+   "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
+  },
+  "bmh_quarterly_results_fy2021q1_fy2025q3.csv": {
+   "source": "Simulated Brindle & Moss quarterly net sales, fiscal 2021 Q1 to fiscal 2025 Q3",
+   "role": "evidence",
+   "pull_date": "2025-12-11",
+   "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
+  },
+  "kestrel_bmh_delivery_history_2025-08-04_2026-02-02.csv": {
+   "source": "Simulated Kestrel delivery history: the trailing weeks of each weekly delivery as first delivered",
+   "role": "evidence",
+   "pull_date": "2026-02-02",
+   "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
+  },
+  "kestrel_bmh_descriptor_detail_monthly.csv": {
+   "source": "Simulated Kestrel monthly spend by raw merchant descriptor",
+   "role": "evidence",
+   "pull_date": "2026-02-02",
+   "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
+  },
+  "kestrel_bmh_panel_weekly_delivery_2026-02-02.csv": {
+   "source": "Simulated Kestrel Spend Panel weekly delivery of 2 February 2026 for the Brindle & Moss merchant ids",
+   "role": "evidence",
+   "pull_date": "2026-02-02",
+   "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
+  },
+  "kestrel_client_bulletin_bmh_2025-11-10.txt": {
+   "source": "Kestrel Spend Panel client bulletin for the merchant coverage file (written for this task)",
+   "role": "governing",
+   "pull_date": "2025-11-10",
+   "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
+  },
+  "kestrel_web_visits_bmh_weekly.csv": {
+   "source": "Simulated weekly site visit estimates for brindlemoss.com",
+   "role": "distractor",
+   "pull_date": "2026-02-02",
+   "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
+  },
+  "larkhill_bmh_card_model_q3fy25.xlsx": {
+   "source": "The desk's third-quarter card model (simulated, reproducible from the panel and the results)",
+   "role": "incumbent",
+   "pull_date": "2025-12-11",
+   "license": "generated for this task by task20/generator (a seeded simulation of the retailer, the card panel, its issuers and deliveries, and the desk's documents), CC BY 4.0"
+  }
+ }
+}

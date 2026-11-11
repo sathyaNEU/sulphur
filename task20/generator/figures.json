@@ -1,0 +1,322 @@
+{
+ "as_of": "2026-02-05",
+ "band_pp": 0.9,
+ "bands": {
+  "bridge_pp": {
+   "issuers in both years, cards of the same age": [
+    24.79,
+    26.04
+   ],
+   "the bank-card share of net sales": [
+    -6.02,
+    -4.22
+   ],
+   "the company's regional mix": [
+    -4.96,
+    -3.29
+   ],
+   "the delivered panel, every issuer": [
+    -14.97,
+    -14.37
+   ],
+   "the latest weeks completed": [
+    0.77,
+    1.39
+   ],
+   "the licensed shops and cafes taken out": [
+    -1.62,
+    -1.0
+   ]
+  },
+  "completion_pct": [
+   0.97,
+   1.57
+  ],
+  "drift_pct": [
+   -5.64,
+   -3.96
+  ],
+  "excluded_share_pct": [
+   14.21,
+   15.21
+  ],
+  "forecast_m": [
+   1402.5,
+   1427.6
+  ],
+  "golden_rmse_pp": [
+   0.54,
+   1.07
+  ],
+  "pl_target_pct": [
+   16.6,
+   17.8
+  ],
+  "q3_error_pp": [
+   0.47,
+   1.95
+  ],
+  "range_high_m": [
+   1417.1,
+   1442.7
+  ],
+  "range_low_m": [
+   1387.9,
+   1412.4
+  ],
+  "visible_growth_pct": [
+   5.88,
+   7.55
+  ]
+ },
+ "bank_q4fy24_pct": 67.4,
+ "bank_target_pct": 71.0,
+ "base_net_sales_m": 1394.4,
+ "bridge_pp": [
+  [
+   "the delivered panel, every issuer",
+   -14.67
+  ],
+  [
+   "the latest weeks completed",
+   1.09
+  ],
+  [
+   "the licensed shops and cafes taken out",
+   -1.32
+  ],
+  [
+   "issuers in both years, cards of the same age",
+   25.74
+  ],
+  [
+   "the company's regional mix",
+   -4.13
+  ],
+  [
+   "the bank-card share of net sales",
+   -5.41
+  ]
+ ],
+ "call": "short",
+ "careful_q3_error_pp": 3.31,
+ "cf_last_week_pct": {
+  "KS-01": 80.96,
+  "KS-02": 79.2,
+  "KS-03": 78.08,
+  "KS-04": 83.24,
+  "KS-05": 87.12,
+  "KS-06": 87.73
+ },
+ "company_weights_pct": {
+  "Midwest": 23.81,
+  "Northeast": 25.47,
+  "Southeast": 26.19,
+  "West": 24.52
+ },
+ "completion_pct": 1.27,
+ "constants": {
+  "fy2024_tender": "67, 21 and 12",
+  "other_tender_pct": 12,
+  "range_pct": 80,
+  "section_refs": "1 2 3 4 5 6 7 8 9",
+  "weeks": 13,
+  "z80": 1.2816
+ },
+ "coverage_in": 11,
+ "drift_less_pct": 5.07,
+ "drift_pct": -5.07,
+ "errors_pp": {
+  "FY2022 Q1": 0.06,
+  "FY2022 Q2": 0.62,
+  "FY2022 Q3": 0.83,
+  "FY2022 Q4": 0.27,
+  "FY2023 Q1": -0.41,
+  "FY2023 Q2": -0.41,
+  "FY2023 Q3": -1.22,
+  "FY2023 Q4": -1.2,
+  "FY2024 Q1": -0.26,
+  "FY2024 Q2": 0.28,
+  "FY2024 Q3": 0.47,
+  "FY2024 Q4": -0.02,
+  "FY2025 Q1": 0.92,
+  "FY2025 Q2": 0.53,
+  "FY2025 Q3": 1.22
+ },
+ "excluded_share_pct": 14.71,
+ "family_high_m": {
+  "fiscal 2024's regional mix rolled forward a year": 1434.5,
+  "private-label share carried at the third quarter's own change": 1420.8,
+  "private-label share carried by the third quarter's year-on-year change": 1439.7,
+  "private-label share on a straight line through fiscal 2025's three quarters": 1422.3,
+  "the chain calibrated by regression on past quarters": 1437.9,
+  "the golden route": 1425.0,
+  "the record from fiscal 2023 only": 1426.0,
+  "the regional mix of fiscal 2023": 1420.1
+ },
+ "family_m": {
+  "fiscal 2024's regional mix rolled forward a year": 1419.6,
+  "private-label share carried at the third quarter's own change": 1408.5,
+  "private-label share carried by the third quarter's year-on-year change": 1424.6,
+  "private-label share on a straight line through fiscal 2025's three quarters": 1409.9,
+  "the chain calibrated by regression on past quarters": 1421.4,
+  "the golden route": 1412.5,
+  "the record from fiscal 2023 only": 1412.5,
+  "the regional mix of fiscal 2023": 1405.5
+ },
+ "first_origin": "FY2022 Q1",
+ "forecast_m": 1412.5,
+ "golden_rmse_pp": 0.7,
+ "growth_pct": 1.3,
+ "incumbent": {
+  "intercept_pp": 1.95,
+  "q3_actual_m": 1310.3,
+  "q3_forecast_m": 1342.9,
+  "q3_growth_pct": 6.76,
+  "q3_x_pct": 11.83,
+  "rmse_pp": 1.53,
+  "slope": 0.407
+ },
+ "last_origin": "FY2025 Q3",
+ "organic_pct": {
+  "FY2022 Q1": 6.03,
+  "FY2022 Q2": 5.21,
+  "FY2022 Q3": 5.32,
+  "FY2022 Q4": 6.23,
+  "FY2023 Q1": 8.37,
+  "FY2023 Q2": 5.83,
+  "FY2023 Q3": 5.85,
+  "FY2023 Q4": 5.08,
+  "FY2024 Q1": 4.63,
+  "FY2024 Q2": 3.51,
+  "FY2024 Q3": 5.65,
+  "FY2024 Q4": 4.97,
+  "FY2025 Q1": 4.16,
+  "FY2025 Q2": 5.51,
+  "FY2025 Q3": 4.17
+ },
+ "origins": 15,
+ "panel_weights_pct": {
+  "Midwest": 9.77,
+  "Northeast": 11.03,
+  "Southeast": 41.86,
+  "West": 37.34
+ },
+ "perturb_m": {
+  "other tenders at 10 per cent of net sales": 1427.5,
+  "other tenders at 14 per cent of net sales": 1422.5,
+  "the last week's completeness +3 per cent": 1422.7,
+  "the last week's completeness -3 per cent": 1427.5,
+  "the licensed shops' and cafes' share +20 per cent": 1420.2,
+  "the licensed shops' and cafes' share -20 per cent": 1431.6,
+  "the range from the record's 10th and 90th percentile errors": 1424.8
+ },
+ "pl_q1fy25_pct": 20.0,
+ "pl_q2fy25_pct": 19.0,
+ "pl_q3fy24_pct": 20.9,
+ "pl_q3fy25_pct": 17.9,
+ "pl_q4fy24_pct": 20.6,
+ "pl_target_pct": 17.0,
+ "pooled_growth_pct": 10.84,
+ "q3_error_pp": 1.22,
+ "r1_entity": 14.71,
+ "r2_completion": 1.27,
+ "r3_panel": {
+  "issuers in both years, cards of the same age": 25.74,
+  "the delivered panel, every issuer": -14.67,
+  "the latest weeks completed": 1.09,
+  "the licensed shops and cafes taken out": -1.32
+ },
+ "r4_visible": 6.71,
+ "r5_tender": {
+  "drift_pct": -5.07,
+  "pl_target_pct": 17.0
+ },
+ "r6_record": {
+  "golden_rmse_pp": 0.7,
+  "q3_error_pp": 1.22
+ },
+ "r7_forecast": {
+  "forecast_m": 1412.5,
+  "range_high_m": 1425.0,
+  "range_low_m": 1400.0
+ },
+ "r8_bridge": {
+  "the bank-card share of net sales": -5.41,
+  "the company's regional mix": -4.13
+ },
+ "r9_call": {
+  "call": "short",
+  "range_high_m": 1425.0
+ },
+ "range_gap_m": 25.0,
+ "range_high_m": 1425.0,
+ "range_low_m": 1400.0,
+ "regional_pct": {
+  "Midwest": 0.44,
+  "Northeast": -1.45,
+  "Southeast": 16.98,
+  "West": 10.3
+ },
+ "release": "26 February 2026",
+ "shortcut_call": {
+  "careful": "long",
+  "desk_model": "no position",
+  "drift_only": "no position",
+  "drift_regressed": "no position",
+  "mix_only": "no position",
+  "quick": "short",
+  "raw_regressed": "long",
+  "trend": "long"
+ },
+ "shortcut_high_m": {
+  "careful": 1508.5,
+  "desk_model": 1503.9,
+  "drift_only": 1493.1,
+  "drift_regressed": 1465.5,
+  "mix_only": 1491.0,
+  "raw_regressed": 1485.2
+ },
+ "shortcut_low_m": {
+  "careful": 1454.8,
+  "desk_model": 1443.8,
+  "drift_only": 1441.2,
+  "drift_regressed": 1433.3,
+  "mix_only": 1440.2,
+  "raw_regressed": 1457.1
+ },
+ "shortcut_m": {
+  "careful": 1481.6,
+  "desk_model": 1473.9,
+  "drift_only": 1467.2,
+  "drift_regressed": 1449.4,
+  "mix_only": 1465.6,
+  "quick": 1189.8,
+  "raw_regressed": 1471.2,
+  "trend": 1458.7
+ },
+ "shortcut_pct": {
+  "careful": 6.26,
+  "desk_model": 5.7,
+  "drift_only": 5.22,
+  "drift_regressed": 3.94,
+  "mix_only": 5.11,
+  "quick": -14.67,
+  "raw_regressed": 5.51,
+  "trend": 4.61
+ },
+ "shortcut_rmse_pp": {
+  "careful": 1.5,
+  "desk_model": 1.68,
+  "drift_only": 1.45,
+  "drift_regressed": 0.9,
+  "mix_only": 1.42,
+  "raw_regressed": 0.79
+ },
+ "street_growth_pct": 3.99,
+ "street_m": 1450.0,
+ "street_median_m": 1448.4,
+ "street_n": 11,
+ "target_quarter": "FY2025 Q4",
+ "visible_growth_pct": 6.71
+}

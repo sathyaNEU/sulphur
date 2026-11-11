@@ -1,0 +1,509 @@
+{
+ "results": [
+  {
+   "id": "R1",
+   "name": "the reporting entity: the licensed shops' and cafes' share of the brand id's quarter",
+   "graded_as": "Component 1",
+   "figure": "r1_entity",
+   "depends": [],
+   "independent": "the descriptor detail and the filing",
+   "golden": 14.71,
+   "band": [
+    14.21,
+    15.21
+   ],
+   "passes": {
+    "quick": 0.0,
+    "careful": 14.71,
+    "thorough": 14.71
+   }
+  },
+  {
+   "id": "R2",
+   "name": "the quarter's latest weeks completed from the delivery history",
+   "graded_as": "Component 2",
+   "figure": "r2_completion",
+   "depends": [],
+   "independent": "the delivery history",
+   "golden": 1.27,
+   "band": [
+    0.97,
+    1.57
+   ],
+   "passes": {
+    "quick": 0.0,
+    "careful": 1.27,
+    "thorough": 1.27
+   }
+  },
+  {
+   "id": "R3",
+   "name": "the panel's own adjustments and its like-for-like growth",
+   "graded_as": "Ask 3 (panel steps)",
+   "figure": "r3_panel",
+   "depends": [
+    "R1",
+    "R2"
+   ],
+   "independent": "",
+   "golden": {
+    "the delivered panel, every issuer": -14.67,
+    "the latest weeks completed": 1.09,
+    "the licensed shops and cafes taken out": -1.32,
+    "issuers in both years, cards of the same age": 25.74
+   },
+   "bands": {
+    "the delivered panel, every issuer": [
+     -14.97,
+     -14.37
+    ],
+    "the latest weeks completed": [
+     0.77,
+     1.39
+    ],
+    "the licensed shops and cafes taken out": [
+     -1.62,
+     -1.0
+    ],
+    "issuers in both years, cards of the same age": [
+     24.79,
+     26.04
+    ]
+   },
+   "passes": {
+    "quick": {
+     "the delivered panel, every issuer": -14.67,
+     "the latest weeks completed": 0.0,
+     "the licensed shops and cafes taken out": 0.0,
+     "issuers in both years, cards of the same age": 0.0
+    },
+    "careful": {
+     "the delivered panel, every issuer": -14.67,
+     "the latest weeks completed": 1.09,
+     "the licensed shops and cafes taken out": -1.32,
+     "issuers in both years, cards of the same age": 25.74
+    },
+    "thorough": {
+     "the delivered panel, every issuer": -14.67,
+     "the latest weeks completed": 1.09,
+     "the licensed shops and cafes taken out": -1.32,
+     "issuers in both years, cards of the same age": 25.74
+    }
+   }
+  },
+  {
+   "id": "R4",
+   "name": "card-visible growth at the company's regional mix",
+   "graded_as": "Component 3",
+   "figure": "r4_visible",
+   "depends": [
+    "R3"
+   ],
+   "independent": "",
+   "golden": 6.71,
+   "band": [
+    5.88,
+    7.55
+   ],
+   "passes": {
+    "quick": -14.67,
+    "careful": 10.84,
+    "thorough": 6.71
+   },
+   "precedent": [
+    "L11",
+    "L25"
+   ]
+  },
+  {
+   "id": "R5",
+   "name": "the private-label card's fourth-quarter share and the bank-card share's change",
+   "graded_as": "Component 4",
+   "figure": "r5_tender",
+   "depends": [],
+   "independent": "the filing excerpts and the panel's coverage",
+   "golden": {
+    "pl_target_pct": 17.0,
+    "drift_pct": -5.07
+   },
+   "bands": {
+    "pl_target_pct": [
+     16.6,
+     17.8
+    ],
+    "drift_pct": [
+     -5.64,
+     -3.96
+    ]
+   },
+   "passes": {
+    "quick": null,
+    "careful": {
+     "pl_target_pct": 17.9,
+     "drift_pct": 0.0
+    },
+    "thorough": {
+     "pl_target_pct": 17.0,
+     "drift_pct": -5.07
+    }
+   },
+   "precedent": [
+    "N02",
+    "N06"
+   ]
+  },
+  {
+   "id": "R6",
+   "name": "the range's record: rolling-origin error and the third quarter's miss",
+   "graded_as": "Ask 2",
+   "figure": "r6_record",
+   "depends": [
+    "R4",
+    "R5"
+   ],
+   "independent": "",
+   "golden": {
+    "golden_rmse_pp": 0.7,
+    "q3_error_pp": 1.22
+   },
+   "bands": {
+    "golden_rmse_pp": [
+     0.54,
+     1.07
+    ],
+    "q3_error_pp": [
+     0.47,
+     1.95
+    ]
+   },
+   "passes": {
+    "quick": null,
+    "careful": {
+     "golden_rmse_pp": 1.5,
+     "q3_error_pp": 3.31
+    },
+    "thorough": {
+     "golden_rmse_pp": 0.7,
+     "q3_error_pp": 1.22
+    }
+   },
+   "precedent": [
+    "L28"
+   ]
+  },
+  {
+   "id": "R7",
+   "name": "the quarter's net sales with its 80 per cent range",
+   "graded_as": "Ask 1",
+   "figure": "r7_forecast",
+   "depends": [
+    "R4",
+    "R5",
+    "R6"
+   ],
+   "independent": "",
+   "golden": {
+    "forecast_m": 1412.5,
+    "range_low_m": 1400.0,
+    "range_high_m": 1425.0
+   },
+   "bands": {
+    "forecast_m": [
+     1402.5,
+     1427.6
+    ],
+    "range_low_m": [
+     1387.9,
+     1412.4
+    ],
+    "range_high_m": [
+     1417.1,
+     1442.7
+    ]
+   },
+   "passes": {
+    "quick": {
+     "forecast_m": 1189.8,
+     "range_low_m": null,
+     "range_high_m": null
+    },
+    "careful": {
+     "forecast_m": 1481.6,
+     "range_low_m": 1454.8,
+     "range_high_m": 1508.5
+    },
+    "thorough": {
+     "forecast_m": 1412.5,
+     "range_low_m": 1400.0,
+     "range_high_m": 1425.0
+    }
+   },
+   "precedent": [
+    "L28",
+    "N02"
+   ]
+  },
+  {
+   "id": "R8",
+   "name": "what the regional mix and the bank-card share are worth",
+   "graded_as": "Ask 3 (company steps)",
+   "figure": "r8_bridge",
+   "depends": [
+    "R4",
+    "R5"
+   ],
+   "independent": "",
+   "golden": {
+    "the company's regional mix": -4.13,
+    "the bank-card share of net sales": -5.41
+   },
+   "bands": {
+    "the company's regional mix": [
+     -4.96,
+     -3.29
+    ],
+    "the bank-card share of net sales": [
+     -6.02,
+     -4.22
+    ]
+   },
+   "passes": {
+    "quick": null,
+    "careful": {
+     "the company's regional mix": 0.0,
+     "the bank-card share of net sales": 0.0
+    },
+    "thorough": {
+     "the company's regional mix": -4.13,
+     "the bank-card share of net sales": -5.41
+    }
+   },
+   "precedent": [
+    "L11",
+    "N06"
+   ]
+  },
+  {
+   "id": "R9",
+   "name": "the call against the street",
+   "graded_as": "Recommendation",
+   "figure": "r9_call",
+   "depends": [
+    "R7"
+   ],
+   "independent": "",
+   "golden": {
+    "call": "short",
+    "range_high_m": 1425.0
+   },
+   "bands": {
+    "range_high_m": [
+     1417.1,
+     1442.7
+    ]
+   },
+   "passes": {
+    "quick": {
+     "call": "short",
+     "range_high_m": null
+    },
+    "careful": {
+     "call": "long",
+     "range_high_m": 1508.5
+    },
+    "thorough": {
+     "call": "short",
+     "range_high_m": 1425.0
+    }
+   },
+   "precedent": [
+    "L28",
+    "N02"
+   ]
+  }
+ ],
+ "hints": [
+  {
+   "sentence": "the private-label card's share of net sales has fallen faster in fiscal 2025 than before, and the panel holds no private-label cards",
+   "rescues": [
+    "R5"
+   ]
+  },
+  {
+   "sentence": "the panel's cardholders sit in different regions from the company's sales",
+   "rescues": [
+    "R4"
+   ]
+  },
+  {
+   "sentence": "the back-test's quarters never held an issuer leaving the panel",
+   "rescues": []
+  }
+ ],
+ "routes": [
+  {
+   "name": "golden",
+   "golden": true,
+   "answer": [
+    1412.5,
+    "short"
+   ]
+  },
+  {
+   "name": "issuers in both years and cards of the same age at the panel's mix, reported growth regressed on it over past quarters (careful but hurried)",
+   "answer": [
+    1481.6,
+    "long"
+   ]
+  },
+  {
+   "name": "the company's regional mix, regressed on past quarters, no bank-card share",
+   "answer": [
+    1465.6,
+    "no position"
+   ]
+  },
+  {
+   "name": "the bank-card share carried at the panel's own mix",
+   "answer": [
+    1467.2,
+    "no position"
+   ]
+  },
+  {
+   "name": "the bank-card share carried at the panel's mix, regressed on past quarters",
+   "answer": [
+    1449.4,
+    "no position"
+   ]
+  },
+  {
+   "name": "issuers in both years, total spend, regressed on past quarters",
+   "answer": [
+    1471.2,
+    "long"
+   ]
+  },
+  {
+   "name": "the desk's third-quarter model carried to the fourth quarter",
+   "answer": [
+    1473.9,
+    "no position"
+   ]
+  },
+  {
+   "name": "fiscal 2025's reported growth carried into the fourth quarter",
+   "answer": [
+    1458.7,
+    "long"
+   ]
+  },
+  {
+   "name": "the delivered panel's change on last year's quarter (quick)",
+   "answer": [
+    1189.8,
+    "short"
+   ]
+  }
+ ],
+ "forcing": {
+  "kind": "numeric",
+  "line": 1450.0,
+  "golden_side": "below",
+  "golden_family": [
+   {
+    "name": "the golden route",
+    "value": 1425.0
+   },
+   {
+    "name": "private-label share carried by the third quarter's year-on-year change",
+    "value": 1439.7
+   },
+   {
+    "name": "private-label share on a straight line through fiscal 2025's three quarters",
+    "value": 1422.3
+   },
+   {
+    "name": "private-label share carried at the third quarter's own change",
+    "value": 1420.8
+   },
+   {
+    "name": "the regional mix of fiscal 2023",
+    "value": 1420.1
+   },
+   {
+    "name": "fiscal 2024's regional mix rolled forward a year",
+    "value": 1434.5
+   },
+   {
+    "name": "the chain calibrated by regression on past quarters",
+    "value": 1437.9
+   },
+   {
+    "name": "the record from fiscal 2023 only",
+    "value": 1426.0
+   }
+  ],
+  "shortcuts": [
+   {
+    "name": "issuers in both years and cards of the same age at the panel's mix, reported growth regressed on it over past quarters (careful but hurried)",
+    "value": 1508.5
+   },
+   {
+    "name": "the company's regional mix, regressed on past quarters, no bank-card share",
+    "value": 1491.0
+   },
+   {
+    "name": "the bank-card share carried at the panel's own mix",
+    "value": 1493.1
+   },
+   {
+    "name": "the bank-card share carried at the panel's mix, regressed on past quarters",
+    "value": 1465.5
+   },
+   {
+    "name": "issuers in both years, total spend, regressed on past quarters",
+    "value": 1485.2
+   },
+   {
+    "name": "the desk's third-quarter model carried to the fourth quarter",
+    "value": 1503.9
+   },
+   {
+    "name": "fiscal 2025's reported growth carried into the fourth quarter",
+    "value": 1458.7
+   }
+  ],
+  "perturbations": [
+   {
+    "input": "other tenders at 10 per cent of net sales",
+    "value": 1427.5
+   },
+   {
+    "input": "other tenders at 14 per cent of net sales",
+    "value": 1422.5
+   },
+   {
+    "input": "the last week's completeness -3 per cent",
+    "value": 1427.5
+   },
+   {
+    "input": "the last week's completeness +3 per cent",
+    "value": 1422.7
+   },
+   {
+    "input": "the licensed shops' and cafes' share -20 per cent",
+    "value": 1431.6
+   },
+   {
+    "input": "the licensed shops' and cafes' share +20 per cent",
+    "value": 1420.2
+   },
+   {
+    "input": "the range from the record's 10th and 90th percentile errors",
+    "value": 1424.8
+   }
+  ],
+  "notes": "Values are the top of each route's 80 per cent range (the call is short only while the whole range sits below the street's figure); the trend route has no range and is its point. The quick route (1189.8) lands short for the wrong reason, the issuer that left, and is graded at R1 to R8."
+ }
+}
