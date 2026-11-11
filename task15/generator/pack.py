@@ -365,7 +365,7 @@ def write_stores(target, w, stamp):
         lo, hi = AREA[st[2]]
         area = int(lo + (hi - lo) * min(1.0, max(0.0, (st[5] - {"Super": 1.9, "Kvarter": 0.8, "To Go": 0.25}[st[2]]) /
                                                 {"Super": 1.1, "Kvarter": 0.55, "To Go": 0.5}[st[2]])) + rng.integers(-40, 40))
-        hours = "Alle dage %02d-%02d" % (st[7], st[8]) if st[7] != 8 else "Man-lør 08-21, søn 10-18"
+        hours = "Alle dage %02d-%02d" % (st[7], st[8])
         ad, pc = ADDRESS[st[0]]
         ws.append([st[0], st[1].replace("Fjordkob", "Fjordkøb"), st[2], ad, pc, st[3], hours, area, OPENED[s]])
     for col, wd in zip("ABCDEFGHI", [9, 34, 9, 30, 8, 12, 22, 12, 7]):

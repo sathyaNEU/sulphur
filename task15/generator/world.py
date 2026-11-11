@@ -195,7 +195,7 @@ OPENINGS = [
 # of the pair when it is there; a store's shelf choice decides it
 RECAPTURE = {"Super": 0.0, "Kvarter": 0.0, "To Go": 0.0}
 # Kornblomst's 2027 licence per store a year by store format (its price list), DKK
-LICENCE = {"Super": 27000, "Kvarter": 20000, "To Go": 9000}
+LICENCE = {"Super": 34000, "Kvarter": 20000, "To Go": 12000}
 # the ERP's service factor on the safety stock; the pilot stores ran Kornblomst's recommended setting
 Z_L, Z_N = 1.05, 0.75
 # the range each store carries: the To Go stores do not sell raw meat

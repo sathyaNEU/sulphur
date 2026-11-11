@@ -8,10 +8,10 @@
  "stage_name": "check",
  "updated": "2026-11-11",
  "doctrine": "throughout",
- "call": "Switch the Super and Kvarter stores to Kornblomst's fresh forecast for 2027 and keep To Go on AutoOrdre: Super 40,200, Kvarter 28,000, To Go 2,400 DKK a store and year against licences of 27,000, 20,000 and 9,000; the careful but hurried reading (each format off its own pilot stores, every sale counted) switches Super and To Go",
+ "call": "Switch the Super and Kvarter stores to Kornblomst's fresh forecast for 2027 and keep To Go on AutoOrdre: Super 40,200, Kvarter 28,000, To Go 2,400 DKK a store and year against licences of 34,000, 20,000 and 12,000; the careful but hurried reading (each format off its own pilot stores, every sale counted) switches To Go alone, and each of the two key judgments alone files another wrong set",
  "chain": "R1 the two headline gaps from the reconciled record; R2 the units the pilot stores' empty shelves turned away; R3 that estimate checked on in-stock days; R4 the discounter openings off the ambient trade; R5 the sales gap split; R6 the waste gap split; R7 what the saving depends on (the trading week); R8 each format's expected yearly saving per store; R9 its 80 per cent range; R10 the formats to switch",
  "architecture": 2,
- "loops": 0,
+ "loops": 1,
  "precut": {
   "exit": 0,
   "date": "2026-11-11"
@@ -25,17 +25,17 @@
   "nearest": "guard.py check WARN 2026-11-11 on the registered card after the rebase (overuse.forum, answered in the note); test.same_puzzle and test.same_driver BLOCKs on two drafts cleared by redrawing the gap and the decision type, and ban.pattern against task14 v3 cleared by moving the decisive generator to G6; nearest driver task13 at 0.06"
  },
  "judge": {
-  "verdict": "pass 1 DETERMINISTIC",
-  "disposition": "FIX_NOW (applied 2026-11-11: conventions named, the format-by-format recorded-margin route ruled out by named data, gaps stated as differences of rates, shadow ratios ranged); one re-judge pending",
-  "gate_h": "domain pass; layers pass; results 9 graded across 6 areas; one_thing none; effort quick 2, careful 4, thorough 8 of 9 before the fix; one_fact about 3 of 9",
-  "report": "task15/determinism_check_report.md"
+  "verdict": "pass 1 DETERMINISTIC FIX_NOW (applied); pass 2 DETERMINISTIC SEND_BACK on Gate H (the trading week carried the call)",
+  "disposition": "back to the decision layer 2026-11-11: Super licence 34,000 and To Go 12,000 so the call needs the estimator and the trading week together, the recorded-margin route ruled out by named data, matched comparison stores in the rival family, the register's hours fixed; a fresh stage 4 (leak read and judge) on the new cut is running",
+  "gate_h": "pass 2: one_thing shallow_hidden_factor, one_fact 5 of 12; the redesign's own measure: each hint alone leaves the call wrong, largest hint 2 of 10",
+  "report": "task15/determinism_check_report.md, task15/determinism_check_report_pass2.md"
  },
  "paper_pair": 46.0,
  "effort": {
   "quick": 18.0,
   "careful": 46.0,
   "thorough": 100.0,
-  "largest_hint": "the plain turned-away estimate overstates small counts (2 of 10); the trading-week sentence rescues 2 and half of R9"
+  "largest_hint": "2 of 10 (the plain turned-away estimate); the trading-week sentence rescues R7 and half of R9, and the call needs both"
  },
  "runs": {
   "run1": null,
@@ -51,7 +51,7 @@
   "history": []
  },
  "returned": [],
- "resume": "stage 4: the one re-judge after pass 1's FIX_NOW; the determinism-judge agent prepares a fresh run folder from the current bundle, the main session spawns its thread and re-invokes the agent with verdict.md; then gates.py task15 --full and READY with target.zip, golden.zip and golden/ force-added.",
+ "resume": "stage 4 on the redesigned cut: a second isolated leak read (scratchpad leak2-task15) and a fresh judge brief from the determinism-judge agent are in progress; spawn the judge thread from the agent's new run folder, re-invoke the agent with its verdict.md for determinism_check_report_pass3.md, fix findings in one pass, gates.py task15 --full, then READY.",
  "approved": null,
  "submitted": null,
  "portal": {

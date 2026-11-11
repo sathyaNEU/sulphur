@@ -157,9 +157,9 @@
   "To Go_hi": 8300
  },
  "licence": {
-  "Super": 27000,
+  "Super": 34000,
   "Kvarter": 20000,
-  "To Go": 9000
+  "To Go": 12000
  },
  "switch": [
   "Super",
@@ -169,9 +169,9 @@
   "To Go"
  ],
  "margin_over_licence": {
-  "Super": 13200,
+  "Super": 6200,
   "Kvarter": 8000,
-  "To Go": -6600
+  "To Go": -9600
  },
  "routes": {
   "by_format": {
@@ -193,7 +193,6 @@
     "To Go": 800
    },
    "switch": [
-    "Super",
     "Kvarter"
    ]
   },
@@ -245,6 +244,16 @@
     "Super": -10800,
     "Kvarter": 45100,
     "To Go": 7900
+   },
+   "switch": [
+    "Kvarter"
+   ]
+  },
+  "recorded_type": {
+   "saving": {
+    "Super": 30500,
+    "Kvarter": 28500,
+    "To Go": 5400
    },
    "switch": [
     "Kvarter"
@@ -394,22 +403,33 @@
     "Kvarter"
    ]
   },
-  "recorded_type": {
+  "unc_type_noadj": {
    "saving": {
-    "Super": 30500,
-    "Kvarter": 28500,
-    "To Go": 5400
+    "Super": 43700,
+    "Kvarter": 29800,
+    "To Go": 2700
    },
    "switch": [
     "Super",
     "Kvarter"
    ]
   },
-  "unc_type_noadj": {
+  "unc_type_cmp_fxt": {
    "saving": {
-    "Super": 43700,
-    "Kvarter": 29800,
-    "To Go": 2700
+    "Super": 44800,
+    "Kvarter": 34400,
+    "To Go": 9600
+   },
+   "switch": [
+    "Super",
+    "Kvarter"
+   ]
+  },
+  "unc_type_cmp_type": {
+   "saving": {
+    "Super": 38000,
+    "Kvarter": 30400,
+    "To Go": 7500
    },
    "switch": [
     "Super",
@@ -424,7 +444,6 @@
    "To Go": 23800
   },
   "switch": [
-   "Super",
    "To Go"
   ],
   "range": {
@@ -581,30 +600,30 @@
  },
  "saving_band": {
   "Super": [
-   28300,
+   35800,
    47000
   ],
   "Kvarter": [
-   24300,
-   31900
+   24100,
+   36100
   ],
   "To Go": [
    -6300,
-   6400
+   10600
   ]
  },
  "saving_rival_span": {
   "Super": [
-   30500,
+   38000,
    44800
   ],
   "Kvarter": [
    25800,
-   30300
+   34400
   ],
   "To Go": [
    -5300,
-   5400
+   9600
   ]
  },
  "range_band": {
@@ -797,21 +816,21 @@
    ],
    "commuter": [
     -4.5,
-    2.0
+    5.0
    ]
   },
   "saving": {
    "Super": [
-    28300,
+    35800,
     47000
    ],
    "Kvarter": [
-    24300,
-    31900
+    24100,
+    36100
    ],
    "To Go": [
     -6300,
-    6400
+    10600
    ]
   },
   "range": {

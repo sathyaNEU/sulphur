@@ -15,9 +15,9 @@
   "personaletimer_frisk_2026.csv"
  ],
  "stated_inputs": [
-  "27,000",
+  "34,000",
   "20,000",
-  "9,000"
+  "12,000"
  ],
  "input_gates": {
   "files": 13,
@@ -55,7 +55,7 @@
   {
    "path": "butiksregister.xlsx",
    "format": "xlsx",
-   "bytes": 9097,
+   "bytes": 9080,
    "covers": "the store register: format, address, opening hours, sales area",
    "made": "written by task15/generator/build.py from the simulated process (deterministic)"
   },
@@ -116,7 +116,7 @@
   {
    "path": "pilotaftale_kornblomst_2026.pdf",
    "format": "pdf",
-   "bytes": 58371,
+   "bytes": 58369,
    "covers": "the pilot agreement with Kornblomst Analytics, with the 2027 price list",
    "made": "written by task15/generator/build.py from the simulated process (deterministic)"
   },

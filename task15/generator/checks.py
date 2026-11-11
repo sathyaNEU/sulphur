@@ -148,6 +148,11 @@ def run(w, R, F, E, target):
         ok("R8 rival %s inside every band and on the golden call" % nm,
            all(inside(r["format_saving"][f], bands["saving"][f]) for f in W.FORMATS) and r["switch"] == G["switch"],
            str({f: round(r["format_saving"][f]) for f in W.FORMATS}))
+    for nm in ("unc_type_cmp_fxt", "unc_type_cmp_type"):
+        ok("SF17 comparison stores matched on trading week (%s) keep the call and every band" % nm,
+           R["rivals"][nm]["switch"] == G["switch"] and all(inside(100 * v, bands["waste_rate"][t_])
+                                                             for t_, v in R["rivals"][nm]["rates"]["waste"].items()),
+           str({f_: round(v) for f_, v in R["rivals"][nm]["format_saving"].items()}))
     for nm in ("clip_type", "unc_type_mean", "clip_type_mean"):
         rr = R["rivals"][nm]["rates"]["waste"]
         ok("R7 rival %s's rates inside their bands" % nm, all(inside(100 * rr[ty], bands["waste_rate"][ty]) for ty in rr))
@@ -160,9 +165,14 @@ def run(w, R, F, E, target):
        and not inside(F["routes"]["by_format"]["saving"]["To Go"], bands["saving"]["To Go"]))
     ok("R8 by trading week with every sale counted lies outside Kvarter's band",
        not inside(F["routes"]["plain_type"]["saving"]["Kvarter"], bands["saving"]["Kvarter"]))
-    ok("SF15 the recorded margin read format by format is too noisy to place Super against its licence",
+    ok("SF15 the recorded margin is too noisy to place Super against its licence (three times the turned-away route's noise, above Super's margin)",
        F["super_margin_noise_per_year"]["recorded"] > F["margin_over_licence"]["Super"]
-       and F["super_margin_noise_per_year"]["turned_away"] < F["margin_over_licence"]["Super"], str(F["super_margin_noise_per_year"]))
+       and F["super_margin_noise_per_year"]["recorded"] > 3 * F["super_margin_noise_per_year"]["turned_away"], str(F["super_margin_noise_per_year"]))
+    ok("SF15 the recorded margin's Super figure swings by more than 30,000 between two groupings of the same stores",
+       abs(F["routes"]["recorded_type"]["saving"]["Super"] - F["routes"]["recorded_fxt"]["saving"]["Super"]) > 30000,
+       "%s and %s" % (F["routes"]["recorded_type"]["saving"]["Super"], F["routes"]["recorded_fxt"]["saving"]["Super"]))
+    ok("the call needs both judgments: by trading week with every sale counted keeps Super off, by format with the right estimator switches To Go",
+       F["routes"]["plain_type"]["switch"] != G["switch"] and F["routes"]["by_format"]["switch"] != G["switch"])
     ok("SF15 the recorded margin books to the forecast what a store's shelves did not lose (store 2158)",
        F["store_2158_margin_change"]["recorded"] < F["store_2158_margin_change"]["turned_away"] - 40000, str(F["store_2158_margin_change"]))
     ok("SF14 the pilot stores' rates taken format by format within the trading week stay inside every band",

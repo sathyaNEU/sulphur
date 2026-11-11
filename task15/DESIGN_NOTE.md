@@ -112,14 +112,17 @@ Layer 1: the daily extract changed layout at the ERP upgrade on 1 January 2026 (
   write-offs the next morning and book them on the next day; business intelligence renamed its category codes at the
   2026 range review; the last-sale time is blank on a day with no sale. Each is cleaned the same way by every careful
   run and moves no graded figure between careful runs (asserted)
-Not one thing: the strongest single piece is the trading week (R7); a run that nails it still has to rebuild the
-  turned-away units in a form that survives the in-stock check (R2, R3: the plain form puts Kvarter at 23,400,
-  outside its band), read the openings off the ambient trade (R4), split both gaps (R5, R6) and range the savings
-  (R9); a run that nails the estimator and reads by format switches all three formats
+Not one thing: the call needs two independent judgments. The trading week (R7) decides To Go: read by format, To Go
+  switches whatever the estimator. The turned-away estimator (R2, R3) decides Super: counting every sale puts Super at
+  28,800 under the trading-week transport, under its 34,000 licence. A run that nails either alone files a wrong set
+  ({Kvarter} or all three); it still has to read the openings off the ambient trade (R4), split both gaps (R5, R6)
+  and range the savings (R9)
 One-fact test: "the plain turned-away estimate overstates small counts, as the days the shelf did not run out show"
   rescues R2 and R3, 2 of 10; "the new forecast reads every store's week like a big weekend store's" rescues R7 and
-  R10 and half of R9, 2.5 of 10 (R8 still misses Kvarter's band with every sale counted, 23,400 against 24,300 and
-  up); the openings sentence rescues nothing the careful pass has not already earned
+  half of R9, 1.5 of 10: with every sale still counted the trading-week transport keeps Super off (28,800 against its
+  34,000 licence) and misses Kvarter's band (23,400 against 24,100 and up); with the estimator right and the formats
+  read off their own pilot stores To Go switches (30,700 against 12,000). The call needs both; the openings sentence
+  rescues nothing the careful pass has not already earned
 Not semantics: every field, unit and clause read correctly still leaves the turned-away units counted with every sale
   (125,000), each format read off its own pilot stores (To Go 23,800 a store) and the range resampled by format; no
   reading of the agreement, the dashboard or a column moves any of them
@@ -139,13 +142,14 @@ No decoy: nothing is written to carry a wrong answer: the dashboard answers its 
 No replay: no result re-derives a published figure; the dashboard's two headline changes are R1's inputs, not its
   graded content, and every graded figure is estimated
 Pinned: R2's two forms (clipped at zero or not) and the simulation's truth inside its bands, the plain form outside;
-  the margin part read off the recorded gross margin format by format ruled out by named data (SF15);
+  the margin part read off the recorded gross margin ruled out by named data (SF15); comparison stores matched on
+  trading week inside every band (SF17);
   R4 under ramps of 2 to 6 weeks and both comparison sets; R5's residual reading (-1.0) and the truth (-0.85) inside;
   R7 under ratio and mean weighting; R8 under fourteen rivals (estimator form, grouping by trading week or by format
   within it, the margin part on sales, units or the 2025 turned-away margin, ratio or mean weights, a line in the
-  weekend share, the recorded-margin route, the openings left in), all on the golden call, and the whole saving
-  carried on fresh sales or on waste ruled out by the pilot's own record; R9 under three resampling variants;
-  asserted in `checks.py` (115 assertions)
+  weekend share, the openings left in, comparison stores matched on trading week), all on the golden call, and the
+  whole saving carried on fresh sales or on waste ruled out by the pilot's own record; R9 under three resampling
+  variants; asserted in `checks.py` (125 assertions)
 Run forecast: R2 (method shortcut: every sale counted, or no turned-away units at all), R3 (self-confirming check: the
   estimate never read back on in-stock days), R7 (narrow look: each format read off its own pilot stores), R8
   (method shortcut and narrow look together), R9 (unfinished chain: resampled by format, To Go's range above its
@@ -156,8 +160,8 @@ Strategy label: WORKS IN FORM (heterogeneity that pooling hides, carried to the 
   cannot touch); the client's strategy 4 for this group (ranking fairly) is direction only
 Depth level: 5: four independent judgments each needing estimation (the turned-away units' form, its check on
   in-stock days, the openings off the ambient trade, the trading-week transport with the saving's two parts on
-  their own scales), two splits that need them, and eight shortcuts landing on three different wrong calls (Super and
-  To Go; all three; Super alone)
+  their own scales), two splits that need them, a call that needs two of them at once, and eleven shortcuts landing on
+  four different wrong calls (To Go alone; all three; Kvarter alone; Super alone)
 Lesson: a pilot's measured effect is a property of the units it ran in: when the outcome is capped by the treatment's
   own choices, rebuild what the cap hid in a form you have checked where the answer is known, and carry the effect to
   the units the decision is about by what governs it in each unit, not by the label the decision is taken on; no
@@ -173,10 +177,10 @@ Lesson: a pilot's measured effect is a property of the units it ran in: when the
 | R4 | each discounter opening's effect on its store's trade: 2131 -7.0, 3031 -4.7, 3012 -1.6, 3114 -6.6, 4224 -4.3, 2146 -0.5 per cent | causal reasoning | the ambient weekly sales, 2026 against the same week of 2025 against the format's stores with no opening, the step across the opening date; each within 1.4 of the simulation's depth | each plus or minus 2.0 (ramps of 2 to 6 weeks; both comparison sets) | first story: the fresh record, where the forecast and the opening move together, read as the forecast's (the careful pass is graded Right here) | independent: the ambient weekly history | Component 4 |
 | R5 | the sales gap split: forecast at its recommended setting -0.7, format mix -0.6, openings -0.4, not explained -0.3 | decomposition and attribution | the formats' own growth from their clean AutoOrdre stores; the turned-away sales against each pilot store's expected level; R4's shares; the residual reading (-1.0) and the simulation's -0.85 inside | forecast -1.05 to -0.55; mix -0.8 to -0.4; openings -0.6 to -0.2 | stopped at the first story: the whole gap is the forecast (-2.0) | R1, R4 | Ask 1 |
 | R6 | the waste gap split: forecast at its recommended setting -15.7, format mix -1.2, openings -0.3, not explained -0.3 | decomposition and attribution | the formats' own waste change from their clean AutoOrdre stores; R4's shares on each store's waste; the residual reading (-16.0) inside | forecast -16.5 to -14.9; mix -1.6 to -0.8; openings -0.5 to -0.1 | stopped at the first story: the dashboard's whole gap is the forecast's saving (-17.5) | R1, R4 | Ask 2 |
-| R7 | what the saving depends on: the trading week; weekend-trading pilot stores avoided 19.7 per cent of their 2025 waste, commuter-week pilot stores -1.3; the shadow forecasts' weekend ratio 2.42 against 0.91 | investigation | each store's 2025 weekend share of fresh units (no store between 0.205 and 0.253); the pilot stores' own savings; the shadow forecasts; the pilot stores' true rates (23.6 and -2.1) inside | 16.0 to 24.0; -4.5 to 2.0 | narrow look: each format's saving read off its own pilot stores (To Go 32.3 per cent of waste), never asking why the stores differ | independent: the stores' own weeks and the shadow forecasts | Component 3 |
-| R8 | each format's expected saving per store and year: Super 40,200, Kvarter 28,000, To Go 2,400 DKK | modeling | agreement 4.2 and 4.3; the waste part on each store's 2025 waste and the margin part on its 2025 fresh sales at its trading week's rates; fourteen rivals inside every band; the whole saving on sales or on waste ruled out by the pilot's record | Super 28,300 to 47,000; Kvarter 24,300 to 31,900; To Go -6,300 to 6,400 | method shortcut and narrow look: by format with every sale counted, 33,100, 16,800 and 23,800 | R2, R4, R7 | Ask 3 |
+| R7 | what the saving depends on: the trading week; weekend-trading pilot stores avoided 19.7 per cent of their 2025 waste, commuter-week pilot stores -1.3; the shadow forecasts' weekend ratio 2.42 against 0.91 (2.0 to 2.6 and 0.85 to 1.0 however the stores are pooled) | investigation | each store's 2025 weekend share of fresh units (no store between 0.205 and 0.253); the pilot stores' own savings; the shadow forecasts; the pilot stores' true rates (23.6 and -2.1) and the comparison stores matched on trading week (4.2 and 3.2) inside | 16.0 to 24.0; -4.5 to 5.0 | narrow look: each format's saving read off its own pilot stores (To Go 32.3 per cent of waste), never asking why the stores differ | independent: the stores' own weeks and the shadow forecasts | Component 3 |
+| R8 | each format's expected saving per store and year: Super 40,200, Kvarter 28,000, To Go 2,400 DKK | modeling | agreement 4.2 and 4.3; the waste part on each store's 2025 waste and the margin part on its 2025 fresh sales at its trading week's rates; fifteen rivals inside every band (two of them comparison stores matched on trading week); the whole saving on sales or on waste, and the margin read off the recorded gross margin, ruled out by the pilot's record | Super 35,800 to 47,000; Kvarter 24,100 to 36,100; To Go -6,300 to 10,600 | method shortcut and narrow look: by format with every sale counted, 33,100, 16,800 and 23,800 | R2, R4, R7 | Ask 3 |
 | R9 | the 80 per cent range: Super 22,200 to 55,800; Kvarter 17,800 to 37,700; To Go -4,000 to 8,300 | uncertainty | 400 resamples of the stores (pilot stores within trading week, the others within format), every step redone; three variants inside | Super 17,200 to 27,500 and 50,100 to 60,800; Kvarter 12,800 to 22,800 and 32,700 to 42,700; To Go -9,000 to 1,000 and 3,300 to 13,300 | unfinished chain: resampled by format, To Go's range (19,700 to 27,700) sits wholly above its licence | R8 | Ask 3 |
-| R10 | switch Super and Kvarter, keep To Go on AutoOrdre | synthesis | agreement 4.1 on R8; every rival on the golden's side of each licence by 3,500 or more | exact | unfinished chain: switches Super and To Go | R8 | Recommendation |
+| R10 | switch Super and Kvarter, keep To Go on AutoOrdre | synthesis | agreement 4.1 on R8; every rival on the golden's side of each licence by 2,400 or more | exact | unfinished chain: switches To Go alone (Super 33,100 under its licence, Kvarter 16,800) | R8 | Recommendation |
 
 Carry-forward: R2, R3, R4 and R7 each read an input of their own (the daily record with the hourly profile, the
 in-stock days, the ambient history, the stores' own weeks with the shadow forecasts), so a run that slips on one
@@ -214,14 +218,15 @@ where it decides nothing (Kvarter's commuter stores) and the call with the openi
 | Roughly | 1 of 10 | 4 of 10 | 10 of 10 |
 
 Measured by: .claude/skills/stumping/effort.py on generator/effort.json
-Largest single hint: "the plain turned-away estimate overstates small counts, as the days the shelf did not run out show"; rescues 2 of 10 results (the trading-week sentence rescues 2 and half of R9)
+Largest single hint: "the plain turned-away estimate overstates small counts, as the days the shelf did not run out show"; rescues 2 of 10 results (the trading-week sentence rescues R7 and half of R9)
 Pair estimate: 46.0
 
 The careful pass is graded up on purpose: it conforms both extracts, reads the openings off the ambient trade, splits
 both gaps against the formats' own growth and puts a range on its savings, because the Sulfur run record has runs
 doing each of those unprompted. It then counts every sale before the last-sale time, never checks that form on
 in-stock days, and reads each format's saving off that format's own pilot stores. Were it also to find the trading
-week (the second hint), it would earn R7 and the call, half of R9, and still miss R2, R3 and R8's Kvarter cell.
+week (the second hint), it would earn R7 and half of R9 and still miss R2, R3, R8 and the call (it keeps Super off at
+28,800 against 34,000).
 
 ## Data provenance
 
@@ -267,13 +272,14 @@ Nearest build: task12 (heterogeneity that pooling hides, carried to a buyer base
 | SF6 | gross margin | sales excluding VAT less the cost of the units; with VAT | excluding VAT | agreement 4.2; every price and sales column is labelled excluding VAT |
 | SF7 | "the average over every store of that format" | all the register's stores of the format (8, 18, 16); the pilot stores only | all of them | agreement 4.3 (pilot stores and other stores alike); the pilot stores' own average puts To Go at 21,500 (asserted) |
 | SF8 | a year | twice the 26 pilot weeks; a seasonal extrapolation | twice the 26 weeks | agreement 4.3 |
-| SF9 | "greater than the format's licence price" | the expected saving against Annex 2's price per store and year | as written | agreement 4.1 and Annex 2; every rival 3,500 or more from a licence |
+| SF9 | "greater than the format's licence price" | the expected saving against Annex 2's price per store and year | as written | agreement 4.1 and Annex 2; every rival 2,400 or more from a licence (Super 4,000, Kvarter 5,800, To Go 2,400) |
 | SF10 | write-offs scanned the next morning | as booked; moved back a day | as booked | same call: they move the window totals by under 1 per cent at the edges (asserted) |
 | SF11 | comparison stores for the savings | stores with an opening in the record left out; every store on the openings log left out | the former | same call: the latter stays inside every band (asserted) |
 | SF12 | the trading-week cut | anywhere between the two groups' weekend shares | the widest gap (0.23) | same call: no store has a weekend share between 0.205 and 0.253 (asserted) |
 | SF13 | "an 80% range" | the 10th and 90th percentiles of a resampling of the stores with every step redone | as stated | the prompt; three resampling variants inside every end's band (asserted) |
 | SF14 | how the pilot stores' rates are grouped | pooled by trading week across formats; format by format within the trading week | pooled by trading week | same call: format by format gives Super 39,700, Kvarter 26,200, To Go 3,500, inside every band (asserted); the blocks name both |
-| SF15 | where the margin part of the saving is read from | the units the empty shelves turned away; the recorded gross margin | the turned-away units | named data: the forecast moves a store's sales only on days its shelf empties, and store 2158's recorded margin fell 63,000 against its format while its turned-away units account for 3,700; on the stores that kept AutoOrdre the recorded route spreads 20,600 a Super store against 5,800, about 20,600 a store-year of noise on four Super pilot stores against Super's 13,200 over its licence (asserted); pooled by trading week the recorded route stays inside every band (30,500) |
+| SF15 | where the margin part of the saving is read from | the units the empty shelves turned away; the recorded gross margin | the turned-away units | named data: the forecast moves a store's sales only on days its shelf empties, and store 2158's recorded margin ran 63,000 below its format's while its turned-away units account for 3,700; on the stores that kept AutoOrdre the recorded route spreads 20,600 a Super store against 5,800, about 20,600 a store-year of noise on four Super pilot stores, and its Super figure swings from -10,800 to 30,500 between two groupings of the same stores (asserted) |
+| SF17 | which stores a pilot store's expected level comes from | its format's stores that kept AutoOrdre and had no opening; those of its format and trading week; those of its trading week across formats | its format's | same call: matched on trading week within the format (one Kvarter and one To Go comparison store) gives Super 44,800, Kvarter 34,400, To Go 9,600, across formats 38,000, 30,400, 7,500, all inside the bands and on the golden's set (asserted) |
 | SF16 | "a gap in percentage points" | the difference of the two groups' growth rates; the change in waste as a share of sales | the difference of the rates | the prompt's "grew less" and "fell further than the other stores'"; the blocks state it in asks 1 and 2 |
 
 ## Closure table
@@ -289,7 +295,7 @@ Nearest build: task12 (heterogeneity that pooling hides, carried to a buyer base
 | 7 | Weighting: the format's average over its stores, unweighted (4.3); the pilot rates as totals over totals, the mean of store rates inside every band (asserted) |
 | 8 | Window length: 26 weeks, a year twice that (4.3) |
 | 9 | Boundary inclusivity: whole ISO weeks; the late-booked write-offs at the edges move under 1 per cent (asserted) |
-| 10 | Rounding path: savings stated to the nearest 100 DKK from unrounded values; every saving 3,500 or more from its licence under every rival |
+| 10 | Rounding path: savings stated to the nearest 100 DKK from unrounded values; every saving 2,400 or more from its licence under every rival |
 | 11 | Tie-break: none needed; no format sits near its licence |
 | 12 | Maturity and censoring: sales are capped by stock; the turned-away units are estimated (R2), their form checked (R3) |
 | 13 | Order of operations: dedup and conform, then the units turned away, then each pilot store's saving, then the transport; the margin part read before or after the transport gives the same figure (linear) |
@@ -333,8 +339,8 @@ Ruled in the main thread on `leak.py`'s REVIEW lines (2026-11-11, the stage 4 cu
 - The licence prices in the agreement's Annex 2 are stated inputs (`metadata.json` `stated_inputs`), the line the
   call is read against, not an answer.
 - Clause numbers 4.2 and 4.3 and the agreement number FK-2026-014 are the governing document's own references.
-- Two 2026 daily rows match range figures across a last-sale time and the next column (a time ending :33 or :50
-  followed by 100 units received): artefacts of the comma-separated layout, not figures.
+- Four 2026 daily rows match graded figures across a last-sale time and the next column (a time ending :33, :50,
+  :24 or :36 followed by 100 units received): artefacts of the comma-separated layout, not figures.
 - The agreement carries the formats' and systems' names and the stump paragraph's ordinary words (result, margin,
   decision, licence, Kvarter, agreement) because it is the contract the decision is taken under; it names no method,
   grouping or comparison, and the reader's question 1 asks the same thing cold.
@@ -518,3 +524,14 @@ Ruled in the main thread on `leak.py`'s REVIEW lines (2026-11-11, the stage 4 cu
   ruled out by store 2158's record and the route's noise on four stores (asserted), the gaps are stated as
   differences of growth rates (SF16), and the shadow forecasts' weekend ratios are given with the range poolings span
   (2.0 to 2.6, 0.85 to 1.0) where the thread had 0.97 against the stated 0.91. No band moved and the pack is unchanged.
+- The one re-judge (pass 2, `determinism_check_report_pass2.md`): DETERMINISTIC, SEND_BACK on Gate H. Its thread read
+  the trading week as a shallow hidden factor the call turned on: one sentence about it rescued the call, the savings
+  of Kvarter and To Go, the ranges and the component (about 5 of 12 graded results), and the register's Sunday hours
+  marked the high-street To Go stores. Back to the decision layer: with the recorded-margin route ruled out by named
+  data (SF15), Super's licence moved to 34,000 so that counting every sale keeps Super off even with the trading-week
+  transport (28,800), while every defensible route clears it by 4,000 or more; the call now needs both the estimator
+  and the trading week. The thread's matched comparison stores (one store each for Kvarter's commuter pilots and To
+  Go's high-street ones) put To Go at 9,600, so To Go's licence moved to 12,000 and both matched readings joined the
+  rival family (SF17); the commuter rate's band widened to 5.0. The register now gives every store the hours it
+  trades every day. The thread's other suggestion, a commuter-week To Go store in the pilot, is not taken: it would
+  print the answer for To Go in the pilot's own record. Pass 1's conventions stay named in the blocks.

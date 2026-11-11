@@ -113,7 +113,7 @@ def metadata(target):
         "as_of": "2026-09-07",
         "deliverables": [D.WORKBOOK, D.NOTE],
         "distractor_files": list(PK.DISTRACTORS),
-        "stated_inputs": ["27,000", "20,000", "9,000"],
+        "stated_inputs": ["{:,}".format(int(W.LICENCE[f])) for f in W.FORMATS],
         "input_gates": {"files": len(files), "formats": sorted({os.path.splitext(f)[1][1:] for f in files}),
                         "categories": ["spreadsheet", "text"],
                         "largest_file": PK.F_D25, "largest_file_rows": rows[PK.F_D25],

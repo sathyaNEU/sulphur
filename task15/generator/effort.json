@@ -281,7 +281,7 @@
     ],
     "commuter": [
      -4.5,
-     2.0
+     5.0
     ]
    },
    "passes": {
@@ -319,16 +319,16 @@
    },
    "bands": {
     "Super": [
-     28300,
+     35800,
      47000
     ],
     "Kvarter": [
-     24300,
-     31900
+     24100,
+     36100
     ],
     "To Go": [
      -6300,
-     6400
+     10600
     ]
    },
    "partly_share": 0.6,
@@ -443,7 +443,6 @@
     },
     "careful": {
      "value": [
-      "Super",
       "To Go"
      ],
      "grade": "missed",
@@ -467,8 +466,7 @@
   {
    "sentence": "the new forecast reads every store's week like a big weekend store's, so its saving follows a store's trading week, not its format",
    "rescues": [
-    "R7",
-    "R10"
+    "R7"
    ]
   },
   {
@@ -488,7 +486,6 @@
   {
    "name": "careful but hurried",
    "answer": [
-    "Super",
     "To Go"
    ]
   },
@@ -511,7 +508,6 @@
   {
    "name": "plain_type",
    "answer": [
-    "Super",
     "Kvarter"
    ]
   },
@@ -544,6 +540,12 @@
   },
   {
    "name": "recorded_fxt",
+   "answer": [
+    "Kvarter"
+   ]
+  },
+  {
+   "name": "recorded_type",
    "answer": [
     "Kvarter"
    ]

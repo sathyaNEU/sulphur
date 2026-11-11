@@ -353,7 +353,8 @@ def write_deck(path, F, png):
         "To Go %s against %s" % (k(sv["To Go"]), k(lic["To Go"])),
         "80%% ranges: Super %s to %s, Kvarter %s to %s, To Go %s to %s." % (
             k(rg["Super"][0]), k(rg["Super"][1]), k(rg["Kvarter"][0]), k(rg["Kvarter"][1]), k(rg["To Go"][0]), k(rg["To Go"][1])),
-        "Reading each format off its own pilot stores would switch To Go (%s a store) and not Kvarter (%s)." % (k(c["To Go"]), k(c["Kvarter"]))],
+        "Reading each format off its own pilot stores, every sale counted, switches %s (To Go %s a store, Kvarter %s, Super %s)."
+        % (" and ".join(F["careful"]["switch"]) or "nothing", k(c["To Go"]), k(c["Kvarter"]), k(c["Super"]))],
         size=15, bold_first=True)
     _foot(s1, 1, total)
     # 2: the trading week

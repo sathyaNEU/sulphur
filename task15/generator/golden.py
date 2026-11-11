@@ -12,7 +12,7 @@ import pandas as pd
 HERE = os.path.dirname(os.path.abspath(__file__))
 TARGET = os.path.join(os.path.dirname(HERE), "target")
 FORMATS = ["Super", "Kvarter", "To Go"]
-LICENCE = {"Super": 27000.0, "Kvarter": 20000.0, "To Go": 9000.0}
+LICENCE = {"Super": 34000.0, "Kvarter": 20000.0, "To Go": 12000.0}
 
 
 # ------------------------------------------------------------------------------------------------------------ loading
@@ -328,7 +328,7 @@ def decompose(T, sp, eff, lost_value="lost_sales", comp_adjust=True):
     return out
 
 
-def store_savings(T, sp, eff, lost_value="lost_margin", recorded=False, comp_adjust=True):
+def store_savings(T, sp, eff, lost_value="lost_margin", recorded=False, comp_adjust=True, comparator="format"):
     """Each pilot store's saving over the 26 pilot weeks against the same store on AutoOrdre: the waste at cost its
     format's stores without the forecast (and without an opening) would have let it write off, less what it wrote
     off; plus the margin on the units its empty shelves turned away beyond what the same weeks of 2025 carried by its
@@ -338,6 +338,10 @@ def store_savings(T, sp, eff, lost_value="lost_margin", recorded=False, comp_adj
     ctrl = sp[(~sp["pilot"]) & (~sp.index.isin(hit))]
     rw = ctrl.groupby("format")["waste_pilot"].sum() / ctrl.groupby("format")["waste_base"].sum()
     P = sp[sp["pilot"]].copy()
+    if comparator != "format":
+        # each pilot store's comparison stores matched on its trading week as well (within its format, falling back to
+        # the format where none trade that week), or on its trading week alone across formats
+        return _store_savings_matched(T, sp, eff, P, ctrl, comparator, lost_value, recorded, comp_adjust)
     # a pilot store a discounter opened near trades less in the pilot weeks whichever forecast it orders on: what it
     # would have written off and turned away on AutoOrdre is carried by the share of trade the opening took
     shares = opening_share(T, eff)
@@ -351,6 +355,30 @@ def store_savings(T, sp, eff, lost_value="lost_margin", recorded=False, comp_adj
     else:
         rl = ctrl.groupby("format")[lost_value + "_pilot"].sum() / ctrl.groupby("format")[lost_value + "_base"].sum()
         P["margin_change"] = -(P[lost_value + "_pilot"] - P[lost_value + "_base"] * P["format"].map(rl) * adj)
+    P["saving"] = P["waste_saving"] + P["margin_change"]
+    return P
+
+
+def _store_savings_matched(T, sp, eff, P, ctrl, comparator, lost_value, recorded, comp_adjust):
+    shares = opening_share(T, eff)
+    ws, mc = [], []
+    for s in P.index:
+        f, t = P.loc[s, "format"], P.loc[s, "type"]
+        if comparator == "fxt":
+            c = ctrl[(ctrl["format"] == f) & (ctrl["type"] == t)]
+            if not len(c):
+                c = ctrl[ctrl["format"] == f]
+        else:
+            c = ctrl[ctrl["type"] == t]
+        adj = (1 - shares.get((s, "pilot"), 0.0)) / (1 - shares.get((s, "base"), 0.0)) if comp_adjust else 1.0
+        ws.append(P.loc[s, "waste_base"] * c["waste_pilot"].sum() / c["waste_base"].sum() * adj - P.loc[s, "waste_pilot"])
+        if recorded:
+            mc.append(P.loc[s, "gm_pilot"] - P.loc[s, "gm_base"] * c["gm_pilot"].sum() / c["gm_base"].sum() * adj)
+        else:
+            mc.append(-(P.loc[s, lost_value + "_pilot"] - P.loc[s, lost_value + "_base"]
+                        * c[lost_value + "_pilot"].sum() / c[lost_value + "_base"].sum() * adj))
+    P["waste_saving"] = ws
+    P["margin_change"] = mc
     P["saving"] = P["waste_saving"] + P["margin_change"]
     return P
 
@@ -503,7 +531,7 @@ def lost_for(T, how):
 
 
 def analyse(T, lost="unc", transport="type", competitors=True, money="full", mscale="sales_base", wmode="ratio",
-            cut=None, reps=0, cache=None, scheme="golden", comp_adjust=True):
+            cut=None, reps=0, cache=None, scheme="golden", comp_adjust=True, comparator="format"):
     cache = {} if cache is None else cache
     lk = "unc" if lost == "recorded" else lost
     if lk not in cache:
@@ -513,7 +541,7 @@ def analyse(T, lost="unc", transport="type", competitors=True, money="full", msc
     eff = competitor_effect(T) if competitors else {}
     typ, cut_ = trading_type(sp, cut)
     sp["type"] = typ
-    P = store_savings(T, sp, eff, recorded=(lost == "recorded"), comp_adjust=comp_adjust)
+    P = store_savings(T, sp, eff, recorded=(lost == "recorded"), comp_adjust=comp_adjust, comparator=comparator)
     if money == "waste_only":
         P["margin_change"] = 0.0
         P["saving"] = P["waste_saving"]
@@ -597,8 +625,9 @@ RIVALS = {
     "unc_type_mean": dict(lost="unc", transport="type", wmode="mean"),
     "clip_type_mean": dict(lost="os", transport="type", wmode="mean"),
     "unc_linear": dict(lost="unc", transport="linear"),
-    "recorded_type": dict(lost="recorded", transport="type"),
     "unc_type_noadj": dict(lost="unc", transport="type", comp_adjust=False),
+    "unc_type_cmp_fxt": dict(lost="unc", transport="type", comparator="fxt"),
+    "unc_type_cmp_type": dict(lost="unc", transport="type", comparator="type"),
 }
 ROUTES = {
     # the shortcuts: each a complete pipeline a hurried pass files
@@ -609,6 +638,7 @@ ROUTES = {
     "single_sales_type": dict(lost="unc", transport="single_sales"),
     "single_waste_type": dict(lost="unc", transport="single_waste"),
     "recorded_fxt": dict(lost="recorded", transport="fxt"),
+    "recorded_type": dict(lost="recorded", transport="type"),
     "pooled_sales": dict(lost="unc", transport="pooled_sales"),
 }
 

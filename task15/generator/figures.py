@@ -183,7 +183,7 @@ def build(R):
         "waste_split": {"forecast": [r1(ws["forecast"] - 0.8), r1(ws["forecast"] + 0.8)],
                         "competitors": [r1(ws["competitors"] - 0.2), r1(ws["competitors"] + 0.2)],
                         "format_mix": [r1(ws["format_mix"] - 0.4), r1(ws["format_mix"] + 0.4)]},
-        "waste_rate": {"weekend": [16.0, 24.0], "commuter": [-4.5, 2.0]},
+        "waste_rate": {"weekend": [16.0, 24.0], "commuter": [-4.5, 5.0]},
         "saving": b8,
         "range": R["range_bands"],
     }
@@ -265,7 +265,7 @@ def effort(R, F):
         {"sentence": "the plain turned-away estimate overstates small counts, as the days the shelf did not run out show",
          "rescues": ["R2", "R3"]},
         {"sentence": "the new forecast reads every store's week like a big weekend store's, so its saving follows a store's trading week, not its format",
-         "rescues": ["R7", "R10"]},
+         "rescues": ["R7"]},
         {"sentence": "two discounters opened near pilot stores during the pilot", "rescues": []},
     ]
     routes = [{"name": "the golden", "answer": sorted(G["switch"], key=ORDER.get), "golden": True},
