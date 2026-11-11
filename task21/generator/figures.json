@@ -1,0 +1,189 @@
+{
+ "calls": [
+  "under 25: rise of 27 per cent",
+  "25 to 64: rise of 7 per cent",
+  "65 and over: hold, no cut"
+ ],
+ "careful_cl_mid_rise": 26,
+ "careful_cl_u25_rise": 22,
+ "careful_mid_rise": 26,
+ "careful_u25_lr_at_proposal": 74.4,
+ "careful_u25_rise": 21,
+ "completed_mid_rise": 6,
+ "completed_u25_rise": 20,
+ "constants": {
+  "band_policies_pct": 8,
+  "band_profit_m": 0.4,
+  "band_range_pts": 1.5,
+  "cap": 100000,
+  "cut": -3,
+  "cut_size": 3,
+  "draws": 1500,
+  "extract_weight": 50,
+  "inflation": 5.5,
+  "market": 2,
+  "proposal_u25": 21,
+  "sections": {
+   "CMP-RP-04 renewal cap": 3.1,
+   "PLN-2027-03 claims cap": 2.1,
+   "PLN-2027-03 ranges": 5.2
+  },
+  "servicing": 34,
+  "target": 75
+ },
+ "cut_nb0_m": 2.07,
+ "cut_nb1_m": 2.69,
+ "cut_nb_m": 0.62,
+ "cut_nb_only_m": 0.62,
+ "cut_net_loss_m": 1.37,
+ "cut_net_m": -1.37,
+ "cut_ren_loss_m": 1.99,
+ "cut_ren_m": -1.99,
+ "cut_rp0_m": 31.2,
+ "cut_rp1_m": 29.21,
+ "forcing_lines": {
+  "mid": [
+   3,
+   17
+  ],
+  "u25": 24
+ },
+ "hint_u25_lr15": 79.6,
+ "hint_u25_rise": 28,
+ "lr_at_rise_band": [
+  74.0,
+  75.0
+ ],
+ "mid_2026_conversion": 6.95,
+ "mid_2026_quotes": 1187066,
+ "mid_2026_sales": 82466,
+ "mid_base_lr": 74.8,
+ "mid_family_hi": 11,
+ "mid_family_lo": 5,
+ "mid_lr_at_rise": 74.9,
+ "mid_policies_at_rise": 48440,
+ "mid_policies_band": [
+  28570,
+  62040
+ ],
+ "mid_premium_at_rise_m": 29.3,
+ "mid_premium_band_m": [
+  17.8,
+  36.9
+ ],
+ "mid_range_hi": 77.1,
+ "mid_range_lo": 72.9,
+ "mid_replay_latest12_rise": 27,
+ "mid_replay_pooled_rise": 25,
+ "mid_rise": 7,
+ "mid_slope": -0.51,
+ "mid_windows": [
+  [
+   "Priced by HPM v7 (since 1 February 2026), a full year of seasons",
+   0.7475,
+   7
+  ],
+  [
+   "Priced by HPM v7, to 31 October as it stands",
+   0.7066,
+   0
+  ],
+  [
+   "Latest twelve months earned, every policy",
+   0.891,
+   27
+  ],
+  [
+   "2025 and 2026 written, pooled, a full year of seasons",
+   0.866,
+   25
+  ]
+ ],
+ "o65_2026_conversion": 4.63,
+ "o65_2026_quotes": 307846,
+ "o65_2026_sales": 14246,
+ "o65_base_lr": 66.4,
+ "o65_policies_at_cut": 32270,
+ "o65_policies_at_hold": 21840,
+ "pooled_mid_rise": 23,
+ "pooled_u25_rise": 18,
+ "r1": {
+  "mid conversion": 0.0695,
+  "mid quotes": 1187066,
+  "mid sales": 82466,
+  "o65 conversion": 0.0463,
+  "o65 quotes": 307846,
+  "o65 sales": 14246,
+  "u25 conversion": 0.0395,
+  "u25 quotes": 552152,
+  "u25 sales": 21802
+ },
+ "r1_rows": {
+  "mid": [
+   1187066,
+   82466,
+   6.95
+  ],
+  "o65": [
+   307846,
+   14246,
+   4.63
+  ],
+  "u25": [
+   552152,
+   21802,
+   3.95
+  ]
+ },
+ "r2_table": {
+  "o65 at -3": 32270,
+  "u25 at +21": 3650
+ },
+ "r4_table": {
+  "policies": 2050,
+  "premium_m": 2.8,
+  "rise": 27
+ },
+ "r5_table": {
+  "policies": 48440,
+  "premium_m": 29.3,
+  "rise": 7
+ },
+ "r7_range": {
+  "hi": 77.1,
+  "lo": 72.9
+ },
+ "s_jan": 1.24,
+ "s_jun": 0.89,
+ "todate_mid_rise": 0,
+ "todate_u25_rise": 13,
+ "u25_2026_conversion": 3.95,
+ "u25_2026_quotes": 552152,
+ "u25_2026_sales": 21802,
+ "u25_ae_deepest": 1.44,
+ "u25_ae_shallowest": 1.13,
+ "u25_base_lr": 84.7,
+ "u25_conv_1": 34.35,
+ "u25_conv_2": 1.11,
+ "u25_conv_3": 0.41,
+ "u25_conv_4": 0.09,
+ "u25_family_hi": 30,
+ "u25_family_lo": 26,
+ "u25_lr15_hi": 83.2,
+ "u25_lr15_lo": 78.3,
+ "u25_lr_at_proposal": 79.0,
+ "u25_lr_at_rise": 74.5,
+ "u25_policies_at_proposal": 3650,
+ "u25_policies_at_rise": 2050,
+ "u25_policies_band": [
+  1620,
+  2340
+ ],
+ "u25_premium_at_rise_m": 2.8,
+ "u25_premium_band_m": [
+  2.3,
+  3.2
+ ],
+ "u25_rise": 27,
+ "u25_slope": -0.76
+}

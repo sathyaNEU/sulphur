@@ -1,0 +1,1032 @@
+{
+ "results": [
+  {
+   "id": "R1",
+   "name": "2026 quotes, sales and conversion by segment",
+   "graded_as": "Ask 6",
+   "figure": "r1",
+   "depends": [],
+   "independent": "the four feeds",
+   "golden": {
+    "u25 quotes": 552152,
+    "u25 sales": 21802,
+    "u25 conversion": 0.0395,
+    "mid quotes": 1187066,
+    "mid sales": 82466,
+    "mid conversion": 0.0695,
+    "o65 quotes": 307846,
+    "o65 sales": 14246,
+    "o65 conversion": 0.0463
+   },
+   "bands": {
+    "u25 quotes": [
+     549391.24,
+     554912.7599999999
+    ],
+    "u25 sales": [
+     21800,
+     21804
+    ],
+    "u25 conversion": [
+     0.0385,
+     0.0405
+    ],
+    "mid quotes": [
+     1181130.67,
+     1193001.3299999998
+    ],
+    "mid sales": [
+     82464,
+     82468
+    ],
+    "mid conversion": [
+     0.0685,
+     0.07050000000000001
+    ],
+    "o65 quotes": [
+     306306.77,
+     309385.23
+    ],
+    "o65 sales": [
+     14244,
+     14248
+    ],
+    "o65 conversion": [
+     0.0453,
+     0.0473
+    ]
+   },
+   "partly_share": 0.5,
+   "passes": {
+    "quick": {
+     "u25 quotes": 32409,
+     "u25 sales": 21802,
+     "u25 conversion": 0.6727,
+     "mid quotes": 104558,
+     "mid sales": 82466,
+     "mid conversion": 0.7887,
+     "o65 quotes": 20118,
+     "o65 sales": 14246,
+     "o65 conversion": 0.7081
+    },
+    "careful": {
+     "u25 quotes": 552152,
+     "u25 sales": 21802,
+     "u25 conversion": 0.0395,
+     "mid quotes": 1187066,
+     "mid sales": 82466,
+     "mid conversion": 0.0695,
+     "o65 quotes": 307846,
+     "o65 sales": 14246,
+     "o65 conversion": 0.0463
+    },
+    "thorough": {
+     "u25 quotes": 552152,
+     "u25 sales": 21802,
+     "u25 conversion": 0.0395,
+     "mid quotes": 1187066,
+     "mid sales": 82466,
+     "mid conversion": 0.0695,
+     "o65 quotes": 307846,
+     "o65 sales": 14246,
+     "o65 conversion": 0.0463
+    }
+   }
+  },
+  {
+   "id": "R2",
+   "name": "2027 policies the team's two proposals would write",
+   "graded_as": "Ask 4",
+   "figure": "r2_table",
+   "depends": [],
+   "independent": "the feeds and the planning paper",
+   "golden": {
+    "u25 at +21": 3650,
+    "o65 at -3": 32270
+   },
+   "bands": {
+    "u25 at +21": [
+     3358.0,
+     3942.0000000000005
+    ],
+    "o65 at -3": [
+     29688.4,
+     34851.600000000006
+    ]
+   },
+   "passes": {
+    "quick": {
+     "u25 at +21": 26160,
+     "o65 at -3": 17100
+    },
+    "careful": {
+     "u25 at +21": 3650,
+     "o65 at -3": 32270
+    },
+    "thorough": {
+     "u25 at +21": 3650,
+     "o65 at -3": 32270
+    }
+   }
+  },
+  {
+   "id": "R3",
+   "name": "the under-25 2027 loss ratio at the team's rise",
+   "graded_as": "Component 1",
+   "figure": "u25_lr_at_proposal",
+   "depends": [
+    "R1"
+   ],
+   "independent": "",
+   "golden": 79.0,
+   "band": [
+    78.3,
+    83.2
+   ],
+   "partly": [
+    76.8,
+    84.7
+   ],
+   "precedent": [
+    "L29",
+    "L22",
+    "L23"
+   ],
+   "passes": {
+    "quick": 69.8,
+    "careful": 74.4,
+    "thorough": 79.0
+   }
+  },
+  {
+   "id": "R4",
+   "name": "the smallest under-25 rise and the policies and premium at it",
+   "graded_as": "Ask 1",
+   "figure": "r4_table",
+   "depends": [
+    "R3"
+   ],
+   "independent": "",
+   "golden": {
+    "rise": 27,
+    "policies": 2050,
+    "premium_m": 2.8
+   },
+   "bands": {
+    "rise": [
+     26,
+     30
+    ],
+    "policies": [
+     1620,
+     2340
+    ],
+    "premium_m": [
+     2.3,
+     3.2
+    ]
+   },
+   "partly_share": 0.67,
+   "precedent": [
+    "L22",
+    "L23"
+   ],
+   "passes": {
+    "quick": {
+     "rise": 13,
+     "policies": 8010,
+     "premium_m": 9.5
+    },
+    "careful": {
+     "rise": 21,
+     "policies": 3650,
+     "premium_m": 4.6
+    },
+    "thorough": {
+     "rise": 27,
+     "policies": 2050,
+     "premium_m": 2.8
+    }
+   }
+  },
+  {
+   "id": "R5",
+   "name": "the smallest 25-to-64 rise and the policies and premium at it",
+   "graded_as": "Component 2",
+   "figure": "r5_table",
+   "depends": [],
+   "independent": "the claims and the model log",
+   "golden": {
+    "rise": 7,
+    "policies": 48440,
+    "premium_m": 29.3
+   },
+   "bands": {
+    "rise": [
+     5,
+     11
+    ],
+    "policies": [
+     28570,
+     62040
+    ],
+    "premium_m": [
+     17.8,
+     36.9
+    ]
+   },
+   "partly_share": 0.67,
+   "precedent": [
+    "L12",
+    "L34"
+   ],
+   "passes": {
+    "quick": {
+     "rise": 0,
+     "policies": 108120,
+     "premium_m": 61.4
+    },
+    "careful": {
+     "rise": 26,
+     "policies": 3530,
+     "premium_m": 2.5
+    },
+    "thorough": {
+     "rise": 7,
+     "policies": 48440,
+     "premium_m": 29.3
+    }
+   }
+  },
+  {
+   "id": "R6",
+   "name": "what the over-65 cut does to 2027 underwriting profit, \u00a3 million",
+   "graded_as": "Component 3",
+   "figure": "cut_net_m",
+   "depends": [],
+   "independent": "the renewal schedule",
+   "golden": -1.37,
+   "band": [
+    -1.77,
+    -0.9700000000000001
+   ],
+   "partly": [
+    -2.5700000000000003,
+    -0.17000000000000015
+   ],
+   "precedent": [
+    "L16"
+   ],
+   "passes": {
+    "quick": 0.62,
+    "careful": {
+     "value": 0.62,
+     "grade": "partly",
+     "why": "a careful run reads the renewal pricing policy and the renewal schedule, so about half net the renewal book the lower cap reaches and half price the cut on new business alone (L16); priced as the half"
+    },
+    "thorough": -1.37
+   }
+  },
+  {
+   "id": "R7",
+   "name": "the 80 per cent range of the 25-to-64 2027 loss ratio at the recommended rise",
+   "graded_as": "Ask 2",
+   "figure": "r7_range",
+   "depends": [
+    "R5"
+   ],
+   "independent": "",
+   "golden": {
+    "lo": 72.9,
+    "hi": 77.1
+   },
+   "bands": {
+    "lo": [
+     71.4,
+     74.4
+    ],
+    "hi": [
+     75.6,
+     78.6
+    ]
+   },
+   "precedent": [
+    "L34",
+    "L12"
+   ],
+   "passes": {
+    "quick": {
+     "lo": 0.0,
+     "hi": 0.0
+    },
+    "careful": {
+     "lo": 66.7,
+     "hi": 82.7
+    },
+    "thorough": {
+     "lo": 72.9,
+     "hi": 77.1
+    }
+   }
+  },
+  {
+   "id": "R8",
+   "name": "the three calls",
+   "graded_as": "Recommendation",
+   "figure": "calls",
+   "depends": [
+    "R4",
+    "R5",
+    "R6"
+   ],
+   "independent": "",
+   "golden": [
+    "under 25: rise of 27 per cent",
+    "25 to 64: rise of 7 per cent",
+    "65 and over: hold, no cut"
+   ],
+   "ordered": true,
+   "precedent": [
+    "L11"
+   ],
+   "passes": {
+    "quick": [
+     "under 25: rise of 13 per cent",
+     "25 to 64: rise of 0 per cent",
+     "65 and over: the 3 per cent cut"
+    ],
+    "careful": [
+     "under 25: rise of 21 per cent",
+     "25 to 64: rise of 26 per cent",
+     "65 and over: the 3 per cent cut"
+    ],
+    "thorough": [
+     "under 25: rise of 27 per cent",
+     "25 to 64: rise of 7 per cent",
+     "65 and over: hold, no cut"
+    ]
+   }
+  }
+ ],
+ "hints": [
+  {
+   "sentence": "the business a higher comparison-site price wins is the business the rating model under-priced most",
+   "rescues": [
+    "R3",
+    "R4"
+   ]
+  },
+  {
+   "sentence": "only the business HPM v7 has priced since 1 February 2026 represents the 25-to-64s, over a full year of its seasons",
+   "rescues": [
+    "R5",
+    "R7"
+   ]
+  },
+  {
+   "sentence": "a new-business cut lowers the cap on every renewal of a customer first sold through the sites",
+   "rescues": [
+    "R6"
+   ]
+  }
+ ],
+ "routes": [
+  {
+   "name": "the golden",
+   "answer": [
+    "under 25: rise of 27 per cent",
+    "25 to 64: rise of 7 per cent",
+    "65 and over: hold, no cut"
+   ],
+   "golden": true
+  },
+  {
+   "name": "the loss-ratio method on the latest twelve months",
+   "answer": [
+    "under 25: rise of 21 per cent",
+    "25 to 64: rise of 26 per cent",
+    "65 and over: the 3 per cent cut"
+   ]
+  },
+  {
+   "name": "the 2026 policy year to date",
+   "answer": [
+    "under 25: rise of 13 per cent",
+    "25 to 64: rise of 0 per cent",
+    "65 and over: the 3 per cent cut"
+   ]
+  },
+  {
+   "name": "the loss-ratio method on the latest twelve months, the triangles' chain ladder",
+   "answer": [
+    "under 25: rise of 22 per cent",
+    "25 to 64: rise of 26 per cent",
+    "65 and over: the 3 per cent cut"
+   ]
+  },
+  {
+   "name": "the current book completed, no selection",
+   "answer": [
+    "under 25: rise of 20 per cent",
+    "25 to 64: rise of 6 per cent",
+    "65 and over: hold, no cut"
+   ]
+  },
+  {
+   "name": "experience pooled across the refit",
+   "answer": [
+    "under 25: rise of 18 per cent",
+    "25 to 64: rise of 23 per cent",
+    "65 and over: the 3 per cent cut"
+   ]
+  }
+ ],
+ "forcing": {
+  "kind": "set",
+  "golden_answer": [
+   "under 25: 24 or more",
+   "25 to 64: 3 to 17",
+   "65 and over: hold"
+  ],
+  "golden_family": [
+   {
+    "name": "under 25 current/cost/extract/loglinear",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "name": "under 25 current/cost/extract/poisson",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "name": "under 25 current/cost/extract/loglinear_2026",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "name": "under 25 current/cost/extract/deciles",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "name": "under 25 current/count/extract/loglinear",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "name": "under 25 current/count/extract/poisson",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "name": "under 25 current/count/extract/loglinear_2026",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "name": "under 25 current/count/extract/deciles",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "name": "under 25 current/cost2025/extract/loglinear",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "name": "under 25 current/cost2025/extract/poisson",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "name": "under 25 current/cost2025/extract/loglinear_2026",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "name": "under 25 current/cost2025/extract/deciles",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "name": "under 25 current/smooth/extract/loglinear",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "name": "under 25 current/smooth/extract/poisson",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "name": "under 25 current/smooth/extract/loglinear_2026",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "name": "under 25 current/smooth/extract/deciles",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "name": "under 25 latest12/extract/loglinear",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "name": "under 25 latest12/extract/poisson",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "name": "under 25 latest12/extract/loglinear_2026",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "name": "under 25 latest12/extract/deciles",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "name": "under 25 current/cost/chainladder/loglinear",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "name": "under 25 current/cost/chainladder/poisson",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "name": "under 25 current/cost/chainladder/loglinear_2026",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "name": "under 25 current/cost/chainladder/deciles",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "name": "under 25 current/count/chainladder/loglinear",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "name": "under 25 current/count/chainladder/poisson",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "name": "under 25 current/count/chainladder/loglinear_2026",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "name": "under 25 current/count/chainladder/deciles",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "name": "under 25 current/cost2025/chainladder/loglinear",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "name": "under 25 current/cost2025/chainladder/poisson",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "name": "under 25 current/cost2025/chainladder/loglinear_2026",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "name": "under 25 current/cost2025/chainladder/deciles",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "name": "under 25 current/smooth/chainladder/loglinear",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "name": "under 25 current/smooth/chainladder/poisson",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "name": "under 25 current/smooth/chainladder/loglinear_2026",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "name": "under 25 current/smooth/chainladder/deciles",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "name": "under 25 latest12/chainladder/loglinear",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "name": "under 25 latest12/chainladder/poisson",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "name": "under 25 latest12/chainladder/loglinear_2026",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "name": "under 25 latest12/chainladder/deciles",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "name": "25 to 64 current/cost/extract/loglinear",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "name": "25 to 64 current/cost/extract/poisson",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "name": "25 to 64 current/count/extract/loglinear",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "name": "25 to 64 current/count/extract/poisson",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "name": "25 to 64 current/cost2025/extract/loglinear",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "name": "25 to 64 current/cost2025/extract/poisson",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "name": "25 to 64 current/smooth/extract/loglinear",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "name": "25 to 64 current/smooth/extract/poisson",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "name": "25 to 64 current/cost/chainladder/loglinear",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "name": "25 to 64 current/cost/chainladder/poisson",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "name": "25 to 64 current/count/chainladder/loglinear",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "name": "25 to 64 current/count/chainladder/poisson",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "name": "25 to 64 current/cost2025/chainladder/loglinear",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "name": "25 to 64 current/cost2025/chainladder/poisson",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "name": "25 to 64 current/smooth/chainladder/loglinear",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "name": "25 to 64 current/smooth/chainladder/poisson",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   }
+  ],
+  "perturbations": [
+   {
+    "input": "gap-curve slope -20%",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "input": "gap-curve slope +20%",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "input": "conversion at rank 2 and below -20%",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "input": "conversion at rank 2 and below +20%",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "input": "seasonal amplitude -20%",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "input": "seasonal amplitude +20%",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "input": "renewal retention slope -20%",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "input": "renewal retention slope +20%",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "input": "over-65 new-business conversion -20%",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "input": "over-65 new-business conversion +20%",
+    "answer": [
+     "under 25: 24 or more",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   }
+  ],
+  "shortcuts": [
+   {
+    "name": "the loss-ratio method on the latest twelve months",
+    "answer": [
+     "under 25: under 24",
+     "25 to 64: outside 3 to 17",
+     "65 and over: cut"
+    ]
+   },
+   {
+    "name": "the 2026 policy year to date",
+    "answer": [
+     "under 25: under 24",
+     "25 to 64: outside 3 to 17",
+     "65 and over: cut"
+    ]
+   },
+   {
+    "name": "the loss-ratio method on the latest twelve months, the triangles' chain ladder",
+    "answer": [
+     "under 25: under 24",
+     "25 to 64: outside 3 to 17",
+     "65 and over: cut"
+    ]
+   },
+   {
+    "name": "the current book completed, no selection",
+    "answer": [
+     "under 25: under 24",
+     "25 to 64: 3 to 17",
+     "65 and over: hold"
+    ]
+   },
+   {
+    "name": "experience pooled across the refit",
+    "answer": [
+     "under 25: under 24",
+     "25 to 64: outside 3 to 17",
+     "65 and over: cut"
+    ]
+   }
+  ]
+ },
+ "weights": {
+  "recommendation": 14,
+  "components": 24,
+  "asks": 55,
+  "instruction": 7
+ }
+}

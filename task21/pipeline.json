@@ -1,42 +1,43 @@
 {
  "task": "task21",
- "status": "DESIGN",
+ "status": "READY",
  "domain": "actuarial-science-insurance",
  "subdomain": "pricing-ratemaking-credibility",
  "objective": "opportunity-sizing-decision",
- "stage": 2,
- "stage_name": "design",
+ "stage": 5,
+ "stage_name": "ready",
  "updated": "2026-11-11",
  "doctrine": "throughout",
- "call": "",
- "chain": "R1 quotes, sales and conversion by site and segment conformed; R2 ultimate loss ratios by policy year and segment; R3 the 2027 loss ratio of the under-25 business the plan's rise would win; R4 the under-25 rise reaching 75 per cent; R5 the 25-to-64 change reaching 75 per cent; R6 the over-65 renewal book's retention with the cut; R7 the cut's effect on 2027 underwriting profit; R8 2027 policies and premium per segment; R9 the under-25 loss ratio's 80 per cent range; R10 the three calls",
+ "call": "under 25 +27 per cent (the team's +21 leaves 79.0 per cent), 25 to 64 +7 per cent, hold the over-65 cut (-\u00a31.37 million: +\u00a30.62 million new business, -\u00a31.99 million renewals)",
+ "chain": "R1 2026 quotes, sales and conversion by segment, the four feeds conformed; R2 2027 policies the team's two proposals write; R3 the under-25 2027 loss ratio at the team's +21; R4 the smallest under-25 rise with its policies and premium; R5 the smallest 25-to-64 rise with its policies and premium; R6 the over-65 cut's effect on 2027 underwriting profit; R7 the 25-to-64 loss ratio's 80 per cent range; R8 the three calls",
  "architecture": 1,
  "loops": 0,
  "precut": {
-  "exit": null,
-  "date": ""
+  "exit": 0,
+  "date": "2026-11-11",
+  "checks": "93 checks, 0 FAIL, 1 WARN"
  },
  "leak": {
-  "leak_py": "",
-  "reader": ""
+  "leak_py": "REVIEW 2026-11-11 --asof 2026-11-04, every line ruled in the design note",
+  "reader": "two isolated readers 2026-11-11: no step handed over beyond the planning paper's WHAT, nothing ranks the options, no one thing settles the asks; their realism notes fixed in the generator"
  },
  "duplicate_check": {
   "guard_check": "WARN 2026-11-11 on the registered card (repeat.gate_g, skeleton.house_lesson, skeleton.house_shell), answered in the Draw",
-  "heart": "",
+  "heart": "BLOCK 2026-11-11 after the READY pull: ban.weight vs task4 arch 11 (modeling), ban.forum and ban.org_family vs task13 v3 (executive_team, cooperative_or_member_body); both drawn before task21 and outside its window at the draw (WARN then); the window moved when task20 re-drew as v2 at 21:06:01Z, after task21; recorded per H27, the author's ruling owed (forum and organisation family redrawable, the weight not)",
   "nearest": "task9 architecture 10 (driver 0.16, lineage, differentiated on the card)"
  },
  "judge": {
-  "verdict": "",
-  "disposition": "",
-  "gate_h": "",
-  "report": ""
+  "verdict": "DETERMINISTIC",
+  "disposition": "APPROVE",
+  "gate_h": "domain pass, layers pass, results 8 across 6 areas, one_thing none, one_fact 2 of 8",
+  "report": "determinism_check_report.md (re-judge after the FIX_NOW; the first pass was NOT_DETERMINISTIC on the prompt's 15 against 21 per cent slip alone)"
  },
- "paper_pair": null,
+ "paper_pair": 38.5,
  "effort": {
-  "quick": null,
-  "careful": null,
-  "thorough": null,
-  "largest_hint": ""
+  "quick": 7.0,
+  "careful": 38.5,
+  "thorough": 100.0,
+  "largest_hint": "the business a higher comparison-site price wins is the business the rating model under-priced most (rescues 2 of 8)"
  },
  "runs": {
   "run1": null,
@@ -68,6 +69,38 @@
   {
    "date": "2026-11-11",
    "event": "renumbered from task19 before any push: two other sessions' draws took task19 (17:12Z) and task20 on origin first"
+  },
+  {
+   "date": "2026-11-11",
+   "event": "BUILD done: world, pack, goldens, figures, effort, checks and verify; stage 3 reworks recorded in the note's Tried and rejected (HPM v7 moved to 1 February 2026, unreported claims at their type's mean cost, the \u00a3100,000 cap, seed 210122 chosen from a scan of eleven); stage 4 next: the leak reader and the determinism judge"
+  },
+  {
+   "date": "2026-11-11",
+   "event": "READY: stage 4 leak reader (twice) and determinism judge (re-judged DETERMINISTIC, APPROVE); the prompt's stale 15 per cent fixed, the deployment log's comparability sentence dropped, renewal ages at renewal, each site's own quote counter, renewal premiums named ex IPT, extracts carry nothing dated after 31 October; owed: the author's prompt rewrite through voice-check --rewrite, then upload"
   }
+ ],
+ "gates": {
+  "date": "2026-11-11",
+  "summary": "gates.py --full on the final cut: 11 gates, 0 FAIL, 4 WARN (precut nearest chains, voice roll call and shell quota, leak REVIEW, heart WARNs answered in the Draw)",
+  "checks": "60 assertions, 0 failures",
+  "verify": "31 figures recomputed independently, 0 failures",
+  "rebuild": "byte-identical"
+ },
+ "bundle": {
+  "target_zip_md5": "31bab4c0600bae50400ca5af195a332e",
+  "golden_zip_md5": "1c8de1f316f50336b43d46715ad637c1",
+  "target_zip_bytes": 30922156,
+  "golden_zip_bytes": 68624,
+  "target_files": 17,
+  "golden_files": [
+   "pcw_rate_review_2027.xlsx",
+   "pricing_committee_2027_rates.pptx"
+  ]
+ },
+ "prompt_rewritten": false,
+ "owed": [
+  "the author's prompt rewrite through voice-check --rewrite, then leak.py",
+  "the author's ruling on the heart BLOCK after the pull (redraw forum and organisation family, or accept as the window shift)",
+  "upload of prompt.txt and target.zip"
  ]
 }
