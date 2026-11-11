@@ -41,15 +41,27 @@ Stump terms swept: deposits, wholesale, record, revenue, delivery, payments, mis
 
 ## Solver's-eye read
 
-One isolated reader (general-purpose, sonnet, medium) on fresh copies of prompt.txt and target/, 2026-11-11.
+One isolated reader (general-purpose, sonnet, medium) on fresh copies of prompt.txt and target/ of the hardened build,
+2026-11-11.
 
-1. Method: the desk's third-quarter workbook's Fit notes (spend per open card on the issuers in both quarters, the brand ids as delivered, reported growth regressed on it, back-tested from the seventh quarter) were named as the clearest method on file; the bulletin's restatement and delivery-history lines and the filing's licensed-operations, acquisition and private-label paragraphs as pointers to adjustments. Main thread: the workbook is the incumbent, reproducible by its own stated method and landing on the hurried route (USD 1,473.9 million carried to the fourth quarter), named in the design note's No decoy line; the bulletin and filing lines describe coverage and disclosures, not steps.
-2. Ranking file: none (the street's estimates are the line; the workbook's third-quarter sheet is a past quarter).
-3. Helper-only file: the desk's workbook (ruled above: the incumbent, not a helper); the two distractors seen as distractors.
-4. Answer-like figure: none states the quarter; context named: the street's spread, the workbook's third-quarter estimate against reported, its back-test.
-5. Literal fixes: the quarter's own sales blank; issuers in both quarters exclude KS-06; licensee sales not net sales; the panel holds no private-label or prepaid cards; bank cards 67 per cent in fiscal 2024. Each executes to the golden's population. The reader's "final week absent" misreads week_start 2026-01-25 (the week to 31 January, the quarter's thirteenth); the bulletin states weeks run Sunday to Saturday.
-6. One thing: none settles most of it; the closest (the workbook's method) gives a baseline route only. By part: the estimate and range, the record and the private-label and revision adjustments are analysis; the entity and issuer items are reading plus checks; the call follows the prompt's rule once the range exists.
+1. Method: none in the prompt beyond the call rule; "each step from the card data to net sales" read as telling the
+   solver a bridge exists (the estimand of Ask 3, not a step). The desk's third-quarter workbook's Fit notes named as a
+   prior method (the incumbent, reproducible by its own stated method, landing on a hurried route; the design note's No
+   decoy line). The bulletin's restatement lines point at the immature weeks (R1, priced Right).
+2. Ranking file: none.
+3. Helper-only file: the desk's workbook (ruled above); the two distractors seen as distractors.
+4. Answer-like figure: none; the workbook's fit and its third-quarter overshoot read as context.
+5. Literal fixes: the panel's coverage (no private-label or prepaid cards), the matching by trade name (licensee
+   descriptors rolled into the brand id), the restatement, the issuer changes, revenue on delivery with customer deposits,
+   wholesale invoiced on delivery, the 14-week fiscal 2023 Q4, Fernhollow from 2 June 2024. Each executes to the golden's
+   population. The reader's grouping of the outlet descriptors with the licensees misreads the filing, which names the
+   licensed operations as the Hollister's shop-in-shops and the cafes.
+6. One thing: none rescues all. The reader notes that the filed disclosures name every difference between the card data
+   and net sales; that is the WHAT the estimand needs (determinism), while each step's size (the deposits at a quarter
+   end no record holds, wholesale's run rate, the regional weights, the private-label share) is estimated.
 
-Rulings: (a) the bulletin: harmless, a vendor's client notice; (b) the filing excerpts: harmless, company disclosure; (c) the prompt: harmless on method, a light composed tone for the author's voice rewrite.
+Rulings: (a) the bulletin: harmless, the vendor's notice; (b) the filing excerpts: harmless, company disclosure; (c) the
+prompt: harmless on method, plain enough, a light pointer to a rolling record (the estimand of Ask 2).
 
-Realism notes taken: the street file was bare (now each broker's rating and prior estimate, moving no figure). Left: the workbook holds pasted values rather than formulas (a pasted-values model is a common desk export); the excerpt PDF's footer.
+Realism notes, left as they are: the workbook holds pasted values (a common desk export); the street's spread is tight
+(eleven estimates within about 1.7 per cent of each other, typical of a well-covered quarter three weeks out).
