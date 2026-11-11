@@ -1,0 +1,644 @@
+{
+ "results": [
+  {
+   "id": "R1",
+   "name": "every exception of the period on either P&L",
+   "graded_as": "Component 1",
+   "figure": "r1_exceptions",
+   "depends": [],
+   "independent": "product control's P&L and the run log",
+   "golden": {
+    "exceptions": 19,
+    "hypothetical_only": 4,
+    "booked_only": 1
+   },
+   "passes": {
+    "quick": {
+     "exceptions": 15,
+     "hypothetical_only": 0,
+     "booked_only": 15
+    },
+    "careful": {
+     "exceptions": 19,
+     "hypothetical_only": 4,
+     "booked_only": 1
+    },
+    "thorough": {
+     "exceptions": 19,
+     "hypothetical_only": 4,
+     "booked_only": 1
+    }
+   }
+  },
+  {
+   "id": "R2",
+   "name": "the runs that read an older extract",
+   "graded_as": "Component 2",
+   "figure": "outage_runs",
+   "depends": [],
+   "independent": "the run log and the extracts",
+   "golden": 27,
+   "passes": {
+    "quick": null,
+    "careful": 27,
+    "thorough": 27
+   }
+  },
+  {
+   "id": "R3",
+   "name": "the exceptions the engine's inputs caused, and those the reused extracts caused",
+   "graded_as": "Ask 2",
+   "figure": "r3_inputs",
+   "depends": [
+    "R1"
+   ],
+   "independent": "the blotter, the extracts and the run log",
+   "golden": {
+    "inputs_dates": [
+     "2024-08-02",
+     "2024-08-05",
+     "2024-10-23",
+     "2025-03-04"
+    ],
+    "reused_extracts_caused": 0
+   },
+   "passes": {
+    "quick": null,
+    "careful": {
+     "inputs_dates": [
+      "2024-11-04",
+      "2025-02-05"
+     ],
+     "reused_extracts_caused": 2
+    },
+    "thorough": {
+     "inputs_dates": [
+      "2024-08-02",
+      "2024-08-05",
+      "2024-10-23",
+      "2025-03-04"
+     ],
+     "reused_extracts_caused": 0
+    }
+   },
+   "precedent": [
+    "L26",
+    "L28"
+   ]
+  },
+  {
+   "id": "R4",
+   "name": "the exceptions the model's omitted risks answer for",
+   "graded_as": "Component 3",
+   "figure": "omitted_dates",
+   "depends": [
+    "R1",
+    "R3"
+   ],
+   "independent": "",
+   "golden": [
+    "2024-09-06",
+    "2024-09-25",
+    "2024-11-04",
+    "2025-01-22",
+    "2025-01-24",
+    "2025-01-27",
+    "2025-02-05",
+    "2025-02-10",
+    "2025-04-02",
+    "2025-04-04",
+    "2025-06-02"
+   ],
+   "passes": {
+    "quick": null,
+    "careful": [
+     "2024-08-02",
+     "2024-08-05",
+     "2024-09-25",
+     "2024-10-23",
+     "2025-01-22",
+     "2025-01-24",
+     "2025-01-27",
+     "2025-02-10",
+     "2025-02-14",
+     "2025-03-04",
+     "2025-04-02",
+     "2025-06-02"
+    ],
+    "thorough": [
+     "2024-09-06",
+     "2024-09-25",
+     "2024-11-04",
+     "2025-01-22",
+     "2025-01-24",
+     "2025-01-27",
+     "2025-02-05",
+     "2025-02-10",
+     "2025-04-02",
+     "2025-04-04",
+     "2025-06-02"
+    ]
+   },
+   "precedent": [
+    "L26",
+    "L28"
+   ]
+  },
+  {
+   "id": "R5",
+   "name": "the volatility heading's count, the sound model's count and the zone",
+   "graded_as": "Ask 3",
+   "figure": "r5_sound",
+   "depends": [
+    "R1"
+   ],
+   "independent": "the book held and the own-history scenarios",
+   "golden": {
+    "volatility": 2,
+    "sound_count": 2,
+    "zone": "Green"
+   },
+   "bands": {
+    "volatility": [
+     2,
+     3
+    ],
+    "sound_count": [
+     0,
+     2
+    ]
+   },
+   "passes": {
+    "quick": {
+     "volatility": 0,
+     "sound_count": 15,
+     "zone": "Red"
+    },
+    "careful": {
+     "volatility": 2,
+     "sound_count": 2,
+     "zone": "Green"
+    },
+    "thorough": {
+     "volatility": 2,
+     "sound_count": 2,
+     "zone": "Green"
+    }
+   }
+  },
+  {
+   "id": "R6",
+   "name": "every exception dated under one heading",
+   "graded_as": "Ask 1",
+   "figure": "r6_headings",
+   "depends": [
+    "R1",
+    "R2",
+    "R3",
+    "R4",
+    "R5"
+   ],
+   "independent": "",
+   "golden": {
+    "2024-08-02": 2,
+    "2024-08-05": 2,
+    "2024-09-06": 3,
+    "2024-09-25": 3,
+    "2024-10-23": 2,
+    "2024-11-04": 3,
+    "2025-01-22": 3,
+    "2025-01-24": 3,
+    "2025-01-27": 3,
+    "2025-02-05": 3,
+    "2025-02-10": 3,
+    "2025-02-14": 5,
+    "2025-03-04": 2,
+    "2025-03-28": 4,
+    "2025-04-02": 3,
+    "2025-04-03": 1,
+    "2025-04-04": 3,
+    "2025-05-06": 4,
+    "2025-06-02": 3
+   },
+   "bands": {
+    "2025-02-14": [
+     4,
+     5
+    ],
+    "2025-03-28": [
+     4,
+     5
+    ]
+   },
+   "passes": {
+    "quick": {
+     "2024-08-02": 5,
+     "2024-08-05": 5,
+     "2024-09-06": 5,
+     "2024-11-04": 5,
+     "2025-01-22": 5,
+     "2025-01-24": 5,
+     "2025-01-27": 5,
+     "2025-02-05": 5,
+     "2025-02-14": 5,
+     "2025-03-04": 5,
+     "2025-03-28": 5,
+     "2025-04-03": 5,
+     "2025-04-04": 5,
+     "2025-05-06": 5,
+     "2025-06-02": 5
+    },
+    "careful": {
+     "2024-08-02": 3,
+     "2024-08-05": 3,
+     "2024-09-06": 5,
+     "2024-09-25": 3,
+     "2024-10-23": 3,
+     "2024-11-04": 2,
+     "2025-01-22": 3,
+     "2025-01-24": 3,
+     "2025-01-27": 3,
+     "2025-02-05": 2,
+     "2025-02-10": 3,
+     "2025-02-14": 3,
+     "2025-03-04": 3,
+     "2025-03-28": 5,
+     "2025-04-02": 3,
+     "2025-04-03": 1,
+     "2025-04-04": 4,
+     "2025-05-06": 4,
+     "2025-06-02": 3
+    },
+    "thorough": {
+     "2024-08-02": 2,
+     "2024-08-05": 2,
+     "2024-09-06": 3,
+     "2024-09-25": 3,
+     "2024-10-23": 2,
+     "2024-11-04": 3,
+     "2025-01-22": 3,
+     "2025-01-24": 3,
+     "2025-01-27": 3,
+     "2025-02-05": 3,
+     "2025-02-10": 3,
+     "2025-02-14": 5,
+     "2025-03-04": 2,
+     "2025-03-28": 4,
+     "2025-04-02": 3,
+     "2025-04-03": 1,
+     "2025-04-04": 3,
+     "2025-05-06": 4,
+     "2025-06-02": 3
+    }
+   },
+   "precedent": [
+    "L26",
+    "L28"
+   ]
+  },
+  {
+   "id": "R7",
+   "name": "the add-on for July 2025 on the planned book",
+   "graded_as": "Component 4",
+   "figure": "addon_jul_m",
+   "depends": [],
+   "independent": "the plan, the engine's 30 June run and the mapping",
+   "golden": 0.32,
+   "band": [
+    0.24,
+    0.34
+   ],
+   "passes": {
+    "quick": 0.18,
+    "careful": 0.32,
+    "thorough": 0.32
+   }
+  },
+  {
+   "id": "R8",
+   "name": "the add-on for each month from August to December 2025",
+   "graded_as": "Ask 4",
+   "figure": "r8_addon",
+   "depends": [
+    "R7"
+   ],
+   "independent": "the plan's months, the store's start dates and the 500-return rule",
+   "golden": {
+    "2025-08": 0.27,
+    "2025-09": 0.11,
+    "2025-10": 0.08,
+    "2025-11": 0.03,
+    "2025-12": 0.0
+   },
+   "bands": {
+    "2025-08": [
+     0.25,
+     0.31
+    ],
+    "2025-09": [
+     0.09,
+     0.13
+    ],
+    "2025-10": [
+     0.06,
+     0.1
+    ],
+    "2025-11": [
+     0.01,
+     0.05
+    ],
+    "2025-12": [
+     0.0,
+     0.02
+    ]
+   },
+   "passes": {
+    "quick": {
+     "2025-08": 0.18,
+     "2025-09": 0.18,
+     "2025-10": 0.18,
+     "2025-11": 0.18,
+     "2025-12": 0.18
+    },
+    "careful": {
+     "2025-08": 0.28,
+     "2025-09": 0.25,
+     "2025-10": 0.3,
+     "2025-11": 0.4,
+     "2025-12": 0.4
+    },
+    "thorough": {
+     "2025-08": 0.27,
+     "2025-09": 0.11,
+     "2025-10": 0.08,
+     "2025-11": 0.03,
+     "2025-12": 0.0
+    }
+   },
+   "precedent": [
+    "L26",
+    "L11",
+    "N06"
+   ]
+  },
+  {
+   "id": "R9",
+   "name": "the call",
+   "graded_as": "Recommendation",
+   "figure": "r9_call",
+   "depends": [
+    "R3",
+    "R4",
+    "R5",
+    "R8"
+   ],
+   "independent": "",
+   "golden": {
+    "against_model": 14,
+    "inputs": 4,
+    "reused_extracts_caused": 0,
+    "zone": "Green",
+    "addon_jul": 0.32,
+    "addon_dec": 0.0
+   },
+   "bands": {
+    "addon_jul": [
+     0.24,
+     0.34
+    ],
+    "addon_dec": [
+     0.0,
+     0.02
+    ]
+   },
+   "passes": {
+    "quick": {
+     "against_model": 15,
+     "inputs": 0,
+     "zone": "Red",
+     "addon_jul": 0.18,
+     "addon_dec": 0.18
+    },
+    "careful": {
+     "against_model": 16,
+     "inputs": 2,
+     "reused_extracts_caused": 2,
+     "zone": "Green",
+     "addon_jul": 0.32,
+     "addon_dec": 0.4
+    },
+    "thorough": {
+     "against_model": 14,
+     "inputs": 4,
+     "reused_extracts_caused": 0,
+     "zone": "Green",
+     "addon_jul": 0.32,
+     "addon_dec": 0.0
+    }
+   },
+   "precedent": [
+    "L26",
+    "N06"
+   ]
+  }
+ ],
+ "hints": [
+  {
+   "sentence": "ERE's position extracts are cut as each run starts, before the middle office books the day's closing-auction allocations",
+   "rescues": [
+    "R3",
+    "R4",
+    "R6"
+   ]
+  },
+  {
+   "sentence": "the engine moves names onto their own history through the half as the store reaches 500 returns",
+   "rescues": [
+    "R8"
+   ]
+  },
+  {
+   "sentence": "the planned book's growth sits in names the engine still proxies",
+   "rescues": []
+  }
+ ],
+ "routes": [
+  {
+   "name": "golden",
+   "golden": true,
+   "answer": [
+    14,
+    4,
+    0,
+    "Green",
+    [
+     0.32,
+     0.27,
+     0.11,
+     0.08,
+     0.03,
+     0.0
+    ]
+   ]
+  },
+  {
+   "name": "the official file (quick)",
+   "answer": [
+    15,
+    0,
+    null,
+    "Red",
+    [
+     0.18,
+     0.18,
+     0.18,
+     0.18,
+     0.18,
+     0.18
+    ]
+   ]
+  },
+  {
+   "name": "the extract book with the reused days re-run (careful but hurried)",
+   "answer": [
+    16,
+    2,
+    2,
+    "Green",
+    [
+     0.32,
+     0.28,
+     0.25,
+     0.3,
+     0.4,
+     0.4
+    ]
+   ]
+  },
+  {
+   "name": "the book held, the proxies kept",
+   "answer": [
+    null,
+    4,
+    0,
+    "Red",
+    null
+   ]
+  },
+  {
+   "name": "the plan's months with the 30 June mapping held",
+   "answer": [
+    null,
+    null,
+    null,
+    null,
+    [
+     0.32,
+     0.28,
+     0.25,
+     0.3,
+     0.4,
+     0.4
+    ]
+   ]
+  },
+  {
+   "name": "the full plan from July with the store's graduations",
+   "answer": [
+    null,
+    null,
+    null,
+    null,
+    [
+     0.4,
+     0.34,
+     0.19,
+     0.16,
+     0.03,
+     0.0
+    ]
+   ]
+  },
+  {
+   "name": "the 30 June add-on scaled with the plan's gross",
+   "answer": [
+    null,
+    null,
+    null,
+    null,
+    [
+     0.19,
+     0.19,
+     0.2,
+     0.21,
+     0.22,
+     0.22
+    ]
+   ]
+  }
+ ],
+ "forcing": {
+  "kind": "numeric",
+  "line": 4.5,
+  "golden_side": "below",
+  "golden_family": [
+   {
+    "name": "decay 0.94, portfolio",
+    "value": 2
+   },
+   {
+    "name": "decay 0.94, series",
+    "value": 0
+   },
+   {
+    "name": "decay 0.95, portfolio",
+    "value": 1
+   },
+   {
+    "name": "decay 0.95, series",
+    "value": 0
+   },
+   {
+    "name": "decay 0.96, portfolio",
+    "value": 1
+   },
+   {
+    "name": "decay 0.96, series",
+    "value": 0
+   },
+   {
+    "name": "decay 0.97, portfolio",
+    "value": 2
+   },
+   {
+    "name": "decay 0.97, series",
+    "value": 1
+   }
+  ],
+  "shortcuts": [
+   {
+    "name": "the booked P&L on the reported VaR (the official file)",
+    "value": 15
+   },
+   {
+    "name": "the book held, the proxies kept, volatility-scaled",
+    "value": 13
+   }
+  ],
+  "perturbations": [
+   {
+    "input": "quantile interpolated between the fifth and sixth losses",
+    "value": 2
+   },
+   {
+    "input": "decay 0.99",
+    "value": 3
+   },
+   {
+    "input": "scenario window 250 days",
+    "value": 1
+   }
+  ],
+  "notes": "Two routes land on the golden's side of the zone and are graded elsewhere: no volatility response (3, the volatility heading then empty) and the extract book (2, the inputs heading then the reused days)."
+ }
+}

@@ -1,0 +1,43 @@
+{
+ "source": "Cboe Global Markets index history downloads and the Federal Reserve Bank of St. Louis (FRED)",
+ "pulled": "2026-11-11",
+ "note": "Kept byte for byte as downloaded (copied from the repository record pulled the same day); the build reads every index value from these files.",
+ "files": [
+  {
+   "file": "SPX_History.csv",
+   "series": "S&P 500 Index daily closing levels (Cboe index history download)",
+   "url": "https://cdn.cboe.com/api/global/us_indices/daily_prices/SPX_History.csv",
+   "pulled": "2026-11-11",
+   "sha256": "dd918ea0049f029ff10c684904e3e539f25aedd9fe3fd7e4c7f64b04114a899c",
+   "bytes": 293631,
+   "rows": 13074,
+   "header": "DATE,SPX",
+   "first": "01/02/1975",
+   "last": "11/10/2026"
+  },
+  {
+   "file": "VIX_History.csv",
+   "series": "Cboe Volatility Index daily open, high, low and close (Cboe index history download)",
+   "url": "https://cdn.cboe.com/api/global/us_indices/daily_prices/VIX_History.csv",
+   "pulled": "2026-11-11",
+   "sha256": "61c9c1cbfbdafab080bbfebe70549636c8d046ccdf10062ece9f5b037c526545",
+   "bytes": 474706,
+   "rows": 9313,
+   "header": "DATE,OPEN,HIGH,LOW,CLOSE",
+   "first": "01/02/1990",
+   "last": "11/10/2026"
+  },
+  {
+   "file": "NASDAQ100.csv",
+   "series": "NASDAQ-100 Index, daily close (Nasdaq, via FRED)",
+   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=NASDAQ100",
+   "pulled": "2026-11-11",
+   "sha256": "3759a7171692329b5b44507abaa52c26fd25a6824ec3454ec9e23080ac37157a",
+   "bytes": 208839,
+   "rows": 10657,
+   "header": "observation_date,NASDAQ100",
+   "first": "1986-01-02",
+   "last": "2026-11-09"
+  }
+ ]
+}

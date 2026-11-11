@@ -1,28 +1,64 @@
 {
  "task": "task20",
- "status": "DRAWING",
+ "status": "PAUSED",
  "domain": "quantitative-finance",
  "subdomain": "factor-return-attribution",
  "objective": "root-cause",
- "stage": 1,
- "stage_name": "draw",
+ "stage": 4,
+ "stage_name": "check",
  "updated": "2026-11-11",
  "doctrine": "throughout",
- "call": "to be filled when the pack is cut: how many of the desk's VaR breaches in the 250 days to 30 June 2025 the model answers for, each breach dated under one heading, and the count and zone a sound model shows",
- "chain": "R1 official count and zone; R2 breaches of the hypothetical P&L with masked and dropped days; R3 engine runs on the wrong book (outages, late-booked blocks) and the breaches each caused; R4 reported VaR as a share of full own-name VaR; R5 breaches the proxies answer for; R6 breaches the volatility response answers for; R7 every breach under one heading, the sound count and zone; R8 the ten names to move first by their net contribution; R9 the add-on for the planned H2 2025 book",
+ "call": "19 exceptions in the 250 days to 30 June 2025, 14 against the model (11 risks not in the model, 2 volatility, 1 model accuracy), 4 the inputs' (closing allocations booked after ERE's extract; the 27 reused-extract runs caused none), 1 other income; a sound model shows 2 (green, 0 to 2); add-on USD 0.32m in July falling to nil by December",
+ "chain": "R1 exceptions on either P&L (19); R2 runs on an older extract (27); R3 inputs exceptions (4, all post-cut allocations; reused none); R4 risks not in the model (11 dated); R5 volatility heading, sound count and zone (2, 2, green); R6 every exception under one heading; R7 July add-on on the planned book (0.32m); R8 add-on August to December (0.27, 0.11, 0.08, 0.03, 0.00); R9 the call",
  "architecture": 1,
  "loops": 0,
- "precut": {"exit": null, "date": ""},
- "leak": {"leak_py": "", "reader": ""},
- "duplicate_check": {"heart": "", "nearest": "task4 0.04 (driver text); template.chain_near cleared by the timeline shape"},
- "judge": {"verdict": "", "disposition": "", "gate_h": "", "report": ""},
- "paper_pair": null,
- "effort": {"quick": null, "careful": null, "thorough": null, "largest_hint": ""},
- "runs": {"run1": null, "run2": null, "average": null, "counterfactual_average": null, "first_wrong_step": {"run1": "", "run2": ""}, "triage": "", "recorded": "", "history": []},
+ "precut": {
+  "exit": 0,
+  "date": "2026-11-11",
+  "checks": "93 checks, 0 FAIL"
+ },
+ "leak": {
+  "leak_py": "REVIEW (author vocabulary and design-note vocabulary in the two governing documents; forward dates in the plan calendar and contract expiries; the prompt's shell quota)",
+  "reader": "round 1 (sonnet, medium): question 1 quoted only the standard's and note's estimands and the plan's basis, nothing on the extracts' cut or the allocations; question 6 named the standard's nested counterfactuals (the estimand) and read the add-on as close to rule application; every REVIEW line harmless; realism tells fixed in the generator (blotter and ledger text, vendor volumes, the plan's basis wording, the documents' governance sections)"
+ },
+ "duplicate_check": {
+  "heart": "WARN (skeleton.lesson_taught heterogeneity_carried_to_decision, a supporting step here; house_lesson forward_window_structure_change and heterogeneity_carried_to_decision)",
+  "nearest": "task18 by chain; task4 0.04 on driver text"
+ },
+ "judge": {
+  "verdict": "",
+  "disposition": "",
+  "gate_h": "",
+  "report": ""
+ },
+ "paper_pair": 45.6,
+ "effort": {
+  "quick": 7.0,
+  "careful": 45.6,
+  "thorough": 100.0,
+  "largest_hint": "ERE's position extracts are cut as each run starts, before the middle office books the day's closing-auction allocations; rescues 3 of 9 (R3, R4, R6)"
+ },
+ "runs": {
+  "run1": null,
+  "run2": null,
+  "average": null,
+  "counterfactual_average": null,
+  "first_wrong_step": {
+   "run1": "",
+   "run2": ""
+  },
+  "triage": "",
+  "recorded": "",
+  "history": []
+ },
  "returned": [],
- "resume": "stage 2: calibrate the desk on the real S&P 500, Nasdaq-100 and VIX tape (books, flow, cutoff, outages, proxies), run every result's rivals on the clean truth, write the full design note and prompt, precut.py to exit 0",
+ "resume": "stage 4: the determinism judge's isolated thread is running from /tmp/determinism-check-task20-r1/judge_brief.md (the judge agent could not spawn it); when it returns, re-invoke the determinism-judge agent with its verdict.md and own_derivation.md to write determinism_check_report.md; price the thread's first-pass figures against the careful column (the month-by-month add-on R8 is the result at risk); then re-run the leak reader once (MRS-4, the ERE note and the plan changed after its read), fix every finding in the generator, gates.py task20 --full, stage 5 READY. If /tmp is gone, rebuild with python3 task20/generator/build.py and spawn the judge afresh.",
  "approved": null,
  "submitted": null,
- "portal": {"status": "", "date": "", "note": ""},
+ "portal": {
+  "status": "",
+  "date": "",
+  "note": ""
+ },
  "source_concept": "Quant_Finance_Deep_Reasoning_Concepts.md, Concept 1 (author's note of 2026-11-11)"
 }
