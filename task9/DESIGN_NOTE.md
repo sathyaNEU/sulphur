@@ -1,302 +1,76 @@
-# task9: how much net P&L Harbourne Capital should plan for 2027 at its draft capital plan, and which increases fail the hurdle (architecture 9)
+# task9: what P&L Brindlemoor Securities' credit desk should plan for 2027 if it moves to the proposed quoting schedule, and which of the schedule's changes lose money (architecture 10)
 
 ## Draw
 
-Subdomain: Quantitative Finance (Quantitative Finance and Trading)
-Analysis type: Forecasting & Predictive Modeling (assigned), task type strategy-backtesting-evaluation (the client's
-  backtesting and alpha research types: a strategy's return net of the factor exposures that are not alpha, its
-  capacity before more capital is committed, and the year it will deliver).
-Answer shape: an allocation plus its sensitivity (the draft 2027 capital plan, the increases it should drop, and how
-  the plan's expected net P&L and its range move with each judgment behind them).
-Weight: allocation under constraints (each pod's added capital held to a hurdle on what the added dollar earns, with
-  the platform's year planned at the capital it ends up with); the last two live builds sat on investigation and
-  modeling.
-Data-native sentence: every pod's P&L rides on real market and carry returns the risk model only partly carries,
-  capital at this platform has always followed results so a pod's capacity is invisible across pods, the plan year's
-  spread has to be built at the year's horizon from daily records whose serial dependence differs by market, and the
-  hurdle asks what the added dollar earns, which falls short of the pod's own return once alpha per dollar falls with
-  size.
-People: Christine Owen (chief investment officer), Nicholas Riddle (chief risk officer), Kathryn Roberts (chief
-  financial officer), from guard.py names --geo US --seed 909.
+Subdomain: Quantitative Finance, strategy backtesting and evaluation (the client's task type: Backtesting, historical
+  strategy simulation with transaction costs and attribution): a dealer's auto-quoting schedule backtested on its own
+  request-for-quote history to plan the next year's market-making P&L in USD corporate bonds.
+Analysis type: Forecasting & Predictive Modeling
+Answer shape: a bridge that reconciles two totals: the desk's 2027 P&L under the current schedule carried to its P&L
+  under the proposed one, one item per segment the schedule changes, with the proposed schedule's 80 per cent range,
+  the changed segments that lose money and the plan on top.
+Weight: attribution. Most of the work is splitting the change between the two schedules across the segments, each
+  segment's item needing its own replay of the requests a tighter quote would win and its own reading of what those
+  trades would cost; the last three builds sat on metric or rule design (task13), measurement (task14) and synthesis
+  (task15), and no live card carries attribution.
+Data-native sentence: a dealer's request history records its own quotes and its wins, but what it would win at a
+  tighter quote is set by rivals' levels it sees only as anonymous prints on a public tape kept at another grain, and
+  what those trades would cost is read on evaluated prices that lag for weeks in thin bonds, so each segment's piece
+  of the change is rebuilt from three systems that each see a different part of the same trade.
+People: Yolanda Cobb (head of credit trading, owner of the quoting policy), James Flowers (the desk's strategist, who
+  keeps the auto-quoter's schedule); drawn with guard.py names --geo us --seed 1010.
 
-1. World: Harbourne Capital, a New York multi-manager platform running about a hundred portfolio-manager pods across
-   equity long/short, quantitative equity, rates, currencies, credit, commodities and volatility since January 2017
-   (sixty at launch, credit about a third of its capital); each December an allocation committee sets every pod's
-   capital for the coming year.
-2. Data: real market series used as is (FRED: Treasury yields and the bill rate, Moody's Baa and Aaa, the broad dollar,
-   Brent, the Nasdaq-100, nine G10 noon buying rates and the OECD 3-month rates; Cboe: the S&P 500 and the VIX), pulled
-   2026-11-11 and cut at the record's last day. The pods' books, the risk system's records, the administrator's
-   statements, the capital history, the plans and the policy are authored; every pod's P&L is its exposures times what
-   a passive holding of those markets earned (carry included) plus its own edge, which falls with its capital, and
-   noise.
-3. Decision: the 2027 net P&L the platform plans at the draft capital plan, with its 80 per cent range, and which of
-   the draft's increases fail the 1.5 per cent hurdle on the added capital; forward facing (the plan year is not yet
-   open).
-4. Results: six, across five areas (decomposition and attribution, causal reasoning, forecasting, uncertainty,
-   synthesis).
-5. Card: shape other, gap objective then time, generators G16, G13, G1, Gate G method_or_model_selection,
-   calibration form the administrator's month-end close, context artifact the risk model, forum the allocation
-   committee, forcing event its December meeting, organisation a financial institution, role portfolio management.
-6. Guard: WARN only. overuse.gate_g (method_or_model_selection in 6 of the last 12): kept, because the deciding
-   pieces are choices of method on the record (carry as part of what the markets paid, a year's horizon against daily
-   scaling, the added dollar against the pod's return), which is what the label means. repeat.question_form (how much,
-   as task18): the call is an amount of P&L to plan, so the form is the decision's own. shell.lineage and
-   ban.forcing_event cleared at the check by redrawing the prompt's shell (a deck and a workbook, a how-much question)
-   and the forcing event (the committee's meeting).
-7. Lineage: architectures 1 to 8 are spent (the card's lineage holds each fate); architecture 8 landed on the
-   platform (runs/arch8_triage.md), which is why this draw leaves the variance-swap world, its data and its shell.
+1. Fit: the client's quantitative-finance depth line (validating a strategy out of sample, factor exposures are not
+   alpha, sizing realistic costs before committing capital) on the run record's live ground: selected units (the
+   requests a tighter quote would add are not the requests the desk wins now), what a recorded value measures (an
+   evaluated price that lags in thin bonds), and evidence at another grain (rivals' winning levels on the tape).
+2. Data: FRED (Treasury constant-maturity yields, Moody's Baa and Aaa, SOFR) and Cboe (VIX, S&P 500) as published,
+   cut at the record's last day (6 November 2026); the desk's systems (the platform's request export in two
+   generations, the trading blotter, the public trade tape, Ashcote's evaluated prices, the security master, the client
+   list, the quoting schedule's versions, the desk's month-end P&L summaries, the policy) simulated from the
+   request-for-quote process those series drive.
+3. Decision: the electronic trading committee's December meeting approves the auto-quoter's 2027 schedule and the
+   desk's 2027 P&L plan; forward facing (a P&L for a year not yet traded).
+4. Shell: question form what (an amount to plan, with the changes that lose money), the second sentence led by the
+   deliverables, a spreadsheet and a one-page note; architecture 9's shell (how much, everything, a deck and a
+   workbook) redrawn with the world.
+5. Card: shape 03, gap population then objective, pattern D (the request export and the public tape, two grains both
+   flawless), generators G6, G13, G16, Gate G forecasting, calibration form existing_book_actuals (the July 2024
+   tightening's own months), context artifact close_out_summary (the desk's month-end P&L summary with its next-day
+   markouts), forum committee_or_panel, forcing event vote_or_meeting, organisation financial_institution, role
+   portfolio_manager, strategy causal_design.
+6. Guard: registered 2026-11-11T07:02:39Z, WARN only. repeat.question_form (what, as task13): the call is an amount
+   to plan, so the form is the decision's own. test.same_puzzle_older against mark126 answered in the card's
+   differentiation. ban.artifact, ban.forum and ban.forcing_event cleared at the check by redrawing to the honest
+   alternatives (the month-end summary is a close-out summary; the committee approves the schedule at its meeting),
+   shell.lineage by the new prompt.
+7. Lineage: architectures 1 to 9 are spent (the card's lineage holds each fate); architecture 9 died at its re-judge
+   on Gate H (carry carried four of six results once the added dollar was earned), which is why this draw leaves the
+   pod platform, its factor data and its shell.
 
 ## Deep reasoning
 
-Task type: strategy-backtesting-evaluation: each pod is a strategy whose record is read net of the market and carry
-  returns it rode, whose capacity is read before more capital goes in, and whose next year is forecast from that.
-Domain test: the results are the field's own quantities (alpha net of factor and carry returns, decreasing returns to
-  scale read within a manager, risk at the decision's horizon, the incentive payout as an option on each pod's year,
-  the marginal return on added capital against a hurdle); a multi-manager's capital committee decides on exactly them.
-Swap: put hospital wards for pods and beds for capital and "carry" has no meaning (no passive holding earns a bed a
-  yield), a ward's outcome per bed does not come with a payout cut of its positive years, and a drawdown rule that
-  halves a ward's beds mid-year is not a thing; the call stops making sense.
-Where the weight sits: R5 and R6, the allocation: each increase run at its 2026 and 2027 capital on the same simulated
-  years, with the pod's edge net of carry, its capacity, the drawdown rules, funding and its own payout, so the added
-  dollar's net return is a difference of two whole simulated years; long work, not one clever step.
-Layer 1: the 2023 risk system migration changes the export's layout and units (USD thousands and millions); the 2022
-  reorganisation re-issued every pod code (a map ships); the legacy feed delivered 12 March 2021 twice and missed three
-  days whose P&L sits in the next day's row; month-end P&L is provisional and trued up the next trading day, so the
-  risk system's months differ from the administrator's until the true-ups are moved back; none decides a result.
-Not one thing: the strongest single piece is carry (a credit pod's spread is what a passive holding earns): a run
-  that nets it still files the year with days drawn one at a time (a 10th percentile too high), still judges
-  increases on the pod's return at its new size (HC1054, HC1058, HC1062, HC1082, HC1098 and HC1135 of the eight failing increases pass).
-One-fact test: the most useful sentence ("a passive holding earns its carry as well as its price moves") rescues R1
-  and R3, 2 of 6 (agrees with the Effort test's Largest single hint); R4 still needs the year's horizon, R5 and R6
-  the added dollar.
-Not semantics: every field, unit and clause read correctly (the policy's alpha, its hurdle on the added capital, its
-  conventions) still leaves the risk model's factors as the obvious market return, days resampled one at a time as
-  the obvious year, and the pod's return at its new size as the obvious test; each is wrong by the data, not by a
-  reading.
-Not rule application: no filed procedure computes alpha, capacity, a year's risk, the year's distribution or an
-  increase's marginal return; the policy files what each quantity is (the WHAT), and the drawdown rules, funding and
-  payouts it files are executed by every pass alike.
-Estimand: policy section 7 (alpha net of a passive holding, a per cent of capital a year), 8a to 8e (markets at zero,
-  every pod the whole year under the drawdown rules, net of funding at the review-date bill rate, payouts and
-  platform costs, the 10th to 90th percentile, capacity as one share per doubling), section 9 (the hurdle on the
-  capital an increase adds); the prompt files the window (since 2017) and the units.
-No decoy: nothing is written to carry a wrong answer: the draft carries capital and costs only, the past plans answer
-  their own years, and the risk model's document says what its factors are for (risk limits and the daily report).
-No replay: no result re-derives a published figure; the past plans' expected P&L is the house's own forecast of past
-  years and no graded figure restates it.
-Pinned: each result's rivals are run on the shipped record and land inside its band (generator/figures.json:
-  R1_rivals, R3_rivals, R4_rivals, R5_rivals, the either-way increases in R6_either), asserted in checks.py R7.
-Run forecast: R1 lost to a method shortcut (the risk model's price-only factors used as what the markets paid); R3
-  and R4 to the same carry shortcut and to a first story on the year (days drawn one at a time); R5 and R6 to an
-  unfinished chain (the pod's return at its new size, not what the added dollar earns) on top of the carry; R2 is
-  earned (the within-pod fit is the field's textbook).
-Strategy label: Variance beyond sampling noise (references/sulfur-strategies.md), in the form the record supports:
-  shrinkage is the reflex and is the golden's too; the hard moves are carry, the year's horizon and the added dollar.
-Depth level: 5: four independent judgments (carry in what the markets paid, capacity within pods, the year's horizon,
-  the added dollar), and the shortcuts land on different wrong answers (USD 1213 million priced the house's way; 712
-  million and no increase failing careful but hurried; 722 million with three of the eight on the risk model's
-  factors; 1026 million and none failing across pods; two of the eight on the pod's return at its new size).
-Lesson: a capital plan for a multi-manager is the field's whole toolkit at once, and a model that gets every result
-  right has learned that a pod's return is not its alpha, its average return is not its marginal one, and a day's
-  risk is not a year's; no build on file teaches the added dollar against a hurdle under capacity.
+Task type: strategy-backtesting-evaluation, serving Forecasting & Predictive Modeling.
+Not one thing (sketch at the draw): the strongest single piece is the replay on rivals' levels recovered from the
+  tape; a run that has it still has to read what the added trades cost on marks that lag (thin segments), compare the
+  July 2024 change against untouched segments, and draw the year's range from P&L whose days are not independent.
+One-fact test (sketch at the draw): "the level a rival won a request at is on the public tape" rescues the win shares
+  (R2) and leaves the plan, the bridge and the set wrong wherever the marks lag; counted by effort.py at stage 3.
 
 ## Results chain
 
-| ID | Result (checkable) | Area | Pinned by | Band | Hurried analyst | Depends on | Graded as |
-|---|---|---|---|---|---|---|---|
-| R1 | Each strategy group's alpha a year since January 2017, % of capital (credit 3.64%) | decomposition and attribution | policy section 7 (the holding sized to the pod's exposures over its whole record); the record and the published series | each group's span of six rivals plus 0.15 points (credit 3.48% to 4.14%) | method shortcut: the risk model's price-only factors used as what the markets paid, so credit's spread stays in alpha (6.39%) | - | Ask 2 |
-| R2 | The share of alpha per dollar a pod gives up when its capital doubles (25.5%) | causal reasoning | policy 8e (one share per doubling); the record within pods | 21.6% to 26.5% (six within-pod estimators, the onboarding steps among them) | narrow look: capital follows records, so across pods size and skill rise together and the fall reads 2.7% (the careful pass reads within pods and earns it) | - | Component 3 |
-| R3 | The expected 2027 net P&L at the draft plan (USD 594 million) | forecasting | policy 8a to 8c and 8f; the record, the draft and the 2027 budget | USD 549 million to 649 million (capacity at both ends of R2, three priors, two edge estimators, three block lengths) | method shortcut: carry left in each pod's alpha (USD 722 million), with a first story on the year (days drawn one at a time) on top | R1, R2 | Component 1 |
-| R4 | Its 80 per cent range (USD 37 million to 1077 million) | uncertainty | policy 8d | 10th percentile USD -8 million to 89 million; 90th USD 1016 million to 1161 million | first story: the year built from days drawn one at a time, which loses credit's weeks-long runs (10th percentile USD 115 million) | R3 | Ask 1 |
-| R5 | The increases below the 1.5% hurdle (HC1054, HC1058, HC1062, HC1082, HC1098, HC1107, HC1132 and HC1135; HC1039 and HC1125 either way) | synthesis | policy section 9 (the capital it adds) | every failing increase flagged, no clear pass flagged | unfinished chain: each increase judged on the pod's net return at its new size, which flags only HC1107 and HC1132 | R1, R2 | Component 2 |
-| R6 | The recommendation: plan USD 594 million and drop the failing increases | synthesis | the prompt's question and policy section 9 | R3's band and R5's set | unfinished chain: the careful pass plans USD 712 million and drops nothing | R3, R5 | Recommendation |
+Sketch at the draw; pins, bands and the carry-forward line are written at stage 2.
 
-Carry-forward: R1 and R2 are graded on the record alone; R3 and R5 each rest on R1 and R2 together, so a slip on
-  carry or capacity costs them, and R5 also on the added dollar; R4 rests on R3 and on the year's horizon; R6 on R3
-  and R5. A run that misses only the horizon loses R4; one that misses only the added dollar loses R5 and R6.
-
-## Hidden factor record
-
-| Factor | Real or constructed | Only in deciding units | Found by | Fix depth | Verdict |
-|---|---|---|---|---|---|
-| Carry in credit and currency returns | real: the Baa spread and the G10 interest differentials as published | no: every credit and currency pod rides it, across ten years | modelling: building what a passive holding earned from yields and rates | modelling (holding returns as factors) | keep |
-| Capacity masked across pods by allocation | constructed: each pod's edge per dollar falls with capital, and the committee's process (policy section 2) gives capital to records | no: every pod in every group, every year | modelling: a fit within pods (a panel with a level per pod) | modelling | keep (the careful pass earns it) |
-| Serial dependence of the markets at a year's horizon | real: Moody's Baa spread trends for weeks, the VIX reverts within days | no: every pod with credit or volatility exposure, every year | modelling: the year resampled in blocks long enough to keep the runs | modelling | keep |
-| Records part luck, rewarded by the draft | constructed: pods' records are noisy and the review moves capital with the three-year Sharpe ratio | no: every reviewed pod since 2018 | modelling: a prior per group fitted to the pods' spread beyond noise | modelling (empirical Bayes) | keep (the careful pass shrinks by reflex) |
-| The added dollar under capacity | constructed: the hurdle is on the capital added while alpha per dollar falls with size | no: all 26 increases, every group | modelling: each increase run at both capitals on the same years | modelling | keep |
-
-## Effort test
-
-| Result | Quick pass | Careful but hurried | Thorough |
+| ID | Result (checkable) | Area | Hurried analyst |
 |---|---|---|---|
-| R1 each group's alpha a year since 2017 | Partly | Partly | Right |
-| R2 alpha per dollar given up per doubling | Missed | Right | Right |
-| R3 the expected 2027 net P&L at the draft | Missed | Missed | Right |
-| R4 its 80 per cent range | Missed | Missed | Right |
-| R5 the increases below the hurdle | Missed | Missed | Right |
-| R6 the recommendation: plan and increases dropped | Missed | Missed | Right |
-| Roughly | 0.5 of 6 | 1.5 of 6 | 6 of 6 |
-
-Measured by: .claude/skills/stumping/effort.py on generator/effort.json (the passes are figures.py's routes on the cut
-  pack: quick prices the draft the way past plans were; careful but hurried reads alpha on the risk model's factors,
-  fits capacity within pods, shrinks each record toward its group, runs the drawdown rules, draws the year a day at a
-  time and judges each increase on the pod's return at its new size).
-Largest single hint: "a passive holding earns its carry as well as its price moves"; rescues 2 of 6 results (R1, and
-  R3 whose carry-netted figure lands inside its band with days still drawn one at a time); the horizon hint rescues
-  nothing alone, nor does the added-dollar hint.
-Pair estimate: 28.8 (the careful but hurried pass's rubric score on effort.py's weights).
-
-## Data provenance
-
-Source: generated by task9/generator from a simulated platform (world.py) on real public market series used as is
-  (FRED and Cboe, pulled 2026-11-11, https://fred.stlouisfed.org and https://cdn.cboe.com), cut at the record's last
-  day.
-Behaves like the real thing: a multi-manager's books run day by day: pods hired each quarter at a size that follows the
-  record they bring, onboarded at a quarter, half and then all of their capital, reviewed each December on their
-  three-year Sharpe ratio with the committee's own judgment, halved and closed by the drawdown rules, losing a PM team
-  at a steady rate, funded daily at the published bill rate and paid 18 per cent of their positive years; every
-  market return is the published series' own.
-Genuine patterns: (1) each pod's edge per dollar falls with its capital, in every group; (2) carry earned by every
-  credit and currency position, at the published spreads and rate differentials; (3) the markets' own serial
-  dependence, credit trending and the VIX reverting; (4) capital chasing three-year records at every review, and new
-  pods sized to their records; (5) drawdown halvings and closures in every year, more in credit's bad years; (6)
-  steady PM departures, about one pod in eight a year; (7) payouts that cut each pod's good years and not its bad
-  ones.
-Problems by process: the 2023 risk system migration (units and layout), the 2022 book-code re-issue, a re-sent legacy
-  day, three days the legacy feed missed, month-end provisional P&L trued up next day, the administrator's months
-  closed a day apart from the risk system's.
-License: FRED series public domain or reproducible with attribution as each source's terms state; Cboe downloads
-  published for public use; the platform's records CC BY 4.0 (original work).
-Used as is: each public file ships as published, cut at 6 November 2026 (rows after the as-of date dropped), which
-  changes no value.
-Breadth: 41 files; 223 pods over 2,473 trading days in two risk system exports, administrator pod-months, capital
-  changes, nine past plans, 31 public series; choosing which series, pods and
-  years bear on each result is work.
-
-## Template check
-
-Chain signature: decomposition-attribution, causal-reasoning, forecasting, uncertainty, synthesis, synthesis.
-Question form: how much (the plan's net P&L) and which (the increases below the hurdle).
-Nearest build: task4 (a fleet order under a charging constraint, ranked list under a cap, allocation weight): different
-  answer shape (allocation with its sensitivity here), different chain (attribution, capacity and the added dollar
-  here, no assembly result) and a different field. precut's nearest-chain line names task17 (a Monte Carlo of what a
-  system delivers at a service level): it shares the simulated year and the uncertainty result, not the answer shape
-  (a distribution and its cut there) or the weight (modelling there, allocation here).
-
-## Semantic fork table
-
-| ID | Term or convention | Readings | Golden | Ruled out by |
-|---|---|---|---|---|
-| SF1 | alpha | net of the risk model's factors; net of a passive holding with its carry | a passive holding with its carry | policy section 7 |
-| SF2 | the markets in the plan | the record's average returns carried forward; zero | zero | policy 8a |
-| SF3 | which pods run 2027 | departures and hires anticipated; every draft pod the whole year under the drawdown rules | every draft pod, whole year, drawdown rules | policy 8b |
-| SF4 | net P&L | gross; after payouts; after funding, payouts and platform costs | after funding, payouts and platform costs | policy 8c |
-| SF5 | 80 per cent range | of the mean; of the year's net P&L | 10th to 90th percentile of the year's net P&L | policy 8d |
-| SF6 | capacity's form | a fall in alpha points; one share per doubling | one share per doubling | policy 8e |
-| SF7 | the hurdle | the pod's return at its new size; net P&L added on the capital added | added on the capital added | policy section 9 |
-| SF8 | payouts | on the platform's total; pod by pod on positive years | pod by pod | policy section 6 |
-| SF9 | drawdown measure | on the halved capital; on the capital before any halving | before any halving | policy section 4 |
-| SF10 | funding | on all capital; on 20 per cent at the bill rate plus 0.35 per cent | 20 per cent at bill plus 0.35 | policy section 5 |
-| SF11 | onboarding pods in 2027 | at their target; on their schedule | on their schedule | policy section 3 and 8b |
-| SF12 | an increase | any pod whose capital rises; the draft's own Increase rows | the draft's Increase rows | the draft's Change column |
-| SF13 | the window | since a pod started; since 2017 | since 2017 (the record's start) | the prompt |
-| SF15 | each pod's expected alpha | its own record alone; its last years; its whole record beside its group's | its whole record beside its group's | policy 8f |
-| SF14 | the P&L alpha is read on | the administrator's net (after funding and payouts); the record's gross trading P&L | the record's gross trading P&L | policy section 10 (the risk system's daily P&L is the record); section 6 says "after its funding charge" where it means it |
-
-## Closure table
-
-| Axis | Closure |
-|---|---|
-| 1 population | every pod the platform ran since January 2017 for R1 to R3 (the register); the draft's pods for R4 to R7 |
-| 2 outcome | alpha on capital (R1), alpha per dollar (R2), net P&L (R3, R4, R6), net P&L added per dollar added (R5) |
-| 3 window | January 2017 to 6 November 2026 for the record; calendar 2027 for the plan |
-| 4 unit | per cent of capital a year; USD millions |
-| 5 comparison | each increase against the 1.5 per cent hurdle (policy section 9) |
-| 6 aggregation | a group's alpha is its pods' alpha P&L over their capital-years (as a per cent of capital) |
-| 7 timing | the plan year's trading days on the 2027 exchange calendar; capital effective on 4 January 2027 |
-| 8 currency | US dollars throughout |
-| 9 rounding | per cent to two decimals (R1), one decimal (R2); USD to the nearest million (R3, R4, R6) |
-| 10 missing days | the legacy feed's missed days carried in the next day's row, the market returns summed over the same span |
-| 11 duplicates | the re-sent day taken once |
-| 12 identifiers | the 2022 book-code map applied |
-| 13 units | the 2023 export's USD thousands and millions converted |
-| 14 market basis | holdings built from the published series the pack ships, carry at the previous day's level |
-| 15 markets in the plan | zero (policy 8a) |
-| 16 funding rate | the bill rate on the review date (the last published, 6 November 2026) |
-| 17 payouts | pod by pod, positive calendar-year P&L after funding |
-| 18 drawdown rules | applied day by day in the plan year, measured on the pre-halving capital |
-| 19 onboarding | each new pod on its schedule by trading days since its first day |
-| 20 range | the 10th and 90th percentiles of the simulated year |
-| 21 borderline increases | an increase whose margin over the hurdle sits inside what sound methods differ by is either way, listed |
-| 22 platform costs | the 2027 budget's USD 218.4 million |
-
-## Literal reader
-
-A literal reader of policy section 7 builds holdings that earn their carry, sized to each pod's exposures over its
-whole record, and finds credit at 3.64%; of 8e fits one share per doubling; of 8f reads each pod's expected alpha from
-its whole record beside its group's; of 8a to 8d simulates the draft's year with the markets at zero, the drawdown
-rules, funding at 4.01%, payouts pod by pod and costs of USD 218.4 million, USD 594 million; of section 9 divides
-each increase's added net P&L by the capital it adds and flags HC1054, HC1058, HC1062, HC1082, HC1098, HC1107, HC1132 and HC1135. No sentence names a method: each fixes what a
-quantity is.
-
-## Prompt contract
-
-May not drop or change: the question (how much net P&L to plan for 2027 at the draft, and which increases do not earn
-the 1.5% hurdle on the money they add); the expected 2027 net P&L after PM payouts and its 80% range; the pods whose
-increases fall short; each strategy group's alpha a year since 2017 as a per cent of capital; the per cent a pod's
-alpha per dollar falls when its capital doubles; a few slides and a
-spreadsheet. Must never add: a rounding instruction, a method (carry, a factor model, within pods, shrinkage, blocks,
-marginal), a warning, an attached file's name, a role, or a count the data hold (pods, increases, groups).
-
-## Leak rulings
-
-leak.py --asof 2026-11-09 on the final cut (target.zip 5378a624, golden.zip 98459fa5): REVIEW, no LEAK. The first run's LEAKs were fixed in the generator: the
-risk model's document was named Factor_Definitions_v3 (a describing name and a working-copy suffix; now
-Risk_Model_Methodology_2023.pdf), its PDF carried a producer released after its 2023 date (now the release the risk team
-ran then), and the public series carried the real pull's file time, after the review date (now the review morning's
-pull for the pack; the real pull date stays in metadata.json). Each REVIEW line is ruled below.
-
-- The committed call's words in the policy (plan, net P&L, draft, capital): the policy's own subject; it names no
-  figure, no pod and no increase, and states the hurdle the prompt states.
-- Design-note vocabulary in the policy (million, record, result, closed, policy, review, platform, capacity, holding,
-  section): the committee's process in its own words; it says capital moves toward the strongest records (a fact about
-  the process), names capacity and the passive holding as the estimands they are (8e, section 7), and nowhere says how
-  alpha, capacity, the year or an increase's return is to be read.
-- Reader (2026-11-11, cut 9a328d82), questions 2 to 4: no file ranks the pods, nothing reads as the answer, no
-  helper file but the 2022 code map, which is the reorganisation's own record. Question 1 and 5: it quotes the policy's
-  conventions (funding, payouts, the drawdown rules, alpha's definition, 8a to 8e, the hurdle) and the risk model's
-  factor list, and executes each literally to the golden's estimand (the hurdle as net P&L added over capital added,
-  payouts pod by pod, the range as the 10th to 90th percentile, every draft pod the whole year); none names how alpha,
-  capacity, the year or an increase's return is read. Question 6: no single thing settles most of it; it calls the
-  administrator's statements a possible decoy because section 10 names the risk system as the record: they are the books
-  of account, the month-end true-ups reconcile them to the record, and the past plans' back-test reads them (SF14
-  closes alpha on the record's gross P&L).
-- Design-note vocabulary in the risk model's document (carried, return, method): "carried forward" is its fill rule,
-  "return" its factor returns, "method" its title; it lists price-move factors and says what they are for, and names no
-  carry, no horizon and no capacity.
-- Reader 2 (2026-11-11, cut 5378a624, the final cut after the judge's first-pass repair), questions 1 and 5: the same
-  conventions as reader 1 plus 8(f), each executed literally to the golden's estimand (payouts pod by pod and "not 18% of
-  the aggregate", the hurdle as net P&L added over capital added, every draft pod the whole year). 8(f) was filed at
-  the first judge pass to close the fork on how a pod's expected alpha is read (Tried and rejected): it names the
-  estimand's weighting between the pod's record and its group's, the step the careful column takes by reflex and was
-  priced Right on since the design, so it moves no priced result (effort.py on this cut: quick 0.5, careful 1.5,
-  thorough 6 of 6, unchanged). 8(e) fixes capacity's form (one share per doubling), which is the estimand's name; where
-  the share is measured, across pods or within them, stays open.
-- Reader 2, question 3: both PDFs are the platform's governing documents in their own genre (the committee's policy, the
-  risk team's model description), the register and the capital changes are the platform's operational records and the
-  code map the reorganisation's; none describes a column or the pack. It reads the risk model as the recipe for the
-  alpha benchmark, which is the careful but hurried reading R1 prices: the model's factors are daily returns "built from
-  published closing levels" and what they leave is "the pod's specific P&L", while section 7 nets "a passive holding of
-  the markets it trades", which earns its carry as well as its price moves; neither document says which factors alpha
-  nets, so the choice is the run's own analysis. The series outside the risk model are what the carry needs (the bill,
-  the Baa yield, the G10 interbank rates) beside the two unused distractors.
-- Reader 2, question 6: "rule application heavy" on the net P&L is the filed estimand (population, outcome, window,
-  unit, the conventions) that the determinism spec requires; the careful column applies every one of them and still
-  files R1 and R3 to R6 wrong. What decides is unfiled: the holding alpha nets, where capacity is measured, how a year of
-  markets is drawn and what the added dollar earns. It finds no single hidden factor and nothing planted.
-- prompt.txt, the shell quota (deliverable set pptx and xlsx at 25 per cent of 16 prompts, a corpus WARN): the
-  committee reads slides and the plan is a workbook, so the set is the reader's; the author's voice rewrite may move
-  it, and no leak rule turns on it.
+| R1 | For every segment, what the price moves after the desk's wins cost it, USD per million traded, on the desk's own attribution of each position to the trades that opened it | missingness-measurement | earned: the careful pass attributes the record |
+| R2 | For each changed segment, the share of requests the proposed quote wins | modeling | method shortcut: a fit on the desk's own past quotes (or on the covers it saw when it won) carried below any quote it has shown, where axed rivals print inside the new level |
+| R3 | What the July 2024 tightening added a month in the segments it touched | causal-reasoning | first story: the touched segments' months before and after, while the market rallied and volumes grew for every segment |
+| R4 | The desk's 2027 P&L under the current schedule | forecasting | earned |
+| R5 | Its 2027 P&L under the proposed schedule | forecasting | unfinished chain: the added trades priced like today's wins on next-day marks |
+| R6 | The proposed schedule's 80 per cent range | uncertainty | method shortcut: days drawn one at a time from P&L marked on lagging prices |
+| R7 | The difference between the two, item by changed segment | decomposition-attribution | the replay's and the marks' errors land segment by segment, in both directions |
+| R8 | The changed segments that lose money, and the recommendation | synthesis | different shortcuts name different sets |
 
 ## Tried and rejected
 
@@ -581,3 +355,9 @@ pull for the pack; the real pull date stays in metadata.json). Each REVIEW line 
 - 2026-11-11, the plan read at each strategy group's alpha per dollar at a pod's capital (no pod-level estimate): the
   plan swung 14 per cent across the capacity band and the failing set doubled; rejected, pod-level reads beside the
   group's kept.
+- 2026-11-11, architecture 9 (Harbourne Capital's 2027 capital plan) died at its one re-judge on Gate H: the judge's
+  own run did capacity within pods, shrinkage, the drawdown rules and the added dollar unprompted (section 9 files the
+  hurdle on the capital an increase adds, so the added dollar priced as a miss was a reflex), read alpha on the risk
+  model's price-only factors and drew the year a day at a time; with the added dollar earned, the carry sentence alone
+  rescues R1, R3, R5 and R6, and carry was a reading of section 7 rather than analysis the pack forced. A move the
+  filed text states is earned, and a series only the hidden step uses points at it.

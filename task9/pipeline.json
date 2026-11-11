@@ -1,21 +1,21 @@
 {
  "task": "task9",
- "status": "PAUSED",
+ "status": "DESIGN",
  "domain": "quantitative-finance",
- "subdomain": "strategy-backtesting-evaluation (client task types: backtesting and alpha research; a multi-manager platform capital plan across its portfolio-manager pods, each pod read net of factor and carry returns, its capacity, the year risk and the 2027 net P&L after payouts)",
+ "subdomain": "strategy-backtesting-evaluation (client task type: Backtesting, historical strategy simulation with transaction costs and attribution; a US dealer's corporate bond desk backtests a proposed 2027 auto-quoting schedule on its own request-for-quote history to plan its 2027 market-making P&L)",
  "objective": "forecasting",
- "stage": 4,
- "stage_name": "check",
+ "stage": 2,
+ "stage_name": "design",
  "updated": "2026-11-11",
- "call": "plan USD 594 million of 2027 net P&L at the draft (80% range USD 37 million to 1,077 million) and drop the increases for HC1054, HC1058, HC1062, HC1082, HC1098, HC1107, HC1132 and HC1135 (HC1039 and HC1125 either way)",
- "stump": "results chain of six on real market and carry returns: R1 each group's alpha net of what a passive holding earned (carry), R2 alpha per dollar given up per doubling (within pods), R3 the expected 2027 net P&L at the draft plan, R4 its 80 per cent range (the year's horizon), R5 the increases whose added dollar earns below the 1.5 per cent hurdle, R6 the recommendation",
- "architecture": 9,
+ "call": null,
+ "stump": "results chain of eight: R1 each segment's cost after the desk's wins, R2 the proposed quote's win share in each changed segment (rivals' levels from the tape), R3 what the July 2024 tightening added a month (against untouched segments), R4 the 2027 P&L at the current schedule, R5 at the proposed schedule, R6 its 80 per cent range, R7 the bridge by changed segment, R8 the changed segments that lose money",
+ "architecture": 10,
  "loops": 0,
  "precut": null,
- "leak": "leak.py --asof 2026-11-09 REVIEW, no LEAK (2026-11-11, cut 5378a624); two readers (cuts 9a328d82 and 5378a624): no ranking file, nothing reads as the answer, no single thing settles most of it; rulings in the note",
- "duplicate_check": "guard.py heart WARN only (overuse.gate_g, repeat.question_form), answered in the note; surface exit 0",
- "judge": "pass 1 (2026-11-11): NOT_DETERMINISTIC on a narrow fork with G and H passing, read as a Gate C repair (policy 8f filed, carry-bearing credit book, wider bands, count-driven golden text; determinism_check_report_arch9_pass1.md); pass 2, the one re-judge, running on cut 5378a624",
- "paper_pair": 28.8,
+ "leak": null,
+ "duplicate_check": null,
+ "judge": null,
+ "paper_pair": null,
  "runs": {
   "run1": null,
   "run2": null,
@@ -61,7 +61,7 @@
    "commit": ""
   }
  ],
- "resume": "stage 4: the re-judge thread (the one allowed after pass 1's repair) is running on /tmp/determinism-check-task9-062652/judge_brief.md; on its verdict.md, re-invoke the wrapper for the spec gates and Gate G/H and determinism_check_report.md, re-price the careful column on its own_derivation.md (over 50 goes back to stage 2), fix any finding in the generator in one pass with no further re-judge, write the note's Pre-ship check, gates on the final cut, audit_containers last, then READY",
+ "resume": "stage 2: design note sections (pins, bands, hidden factor record, effort on paper, provenance, forks, closure, literal reader, prompt contract), then precut.py; then the generator",
  "approved": null,
  "submitted": null,
  "portal": {
@@ -365,9 +365,17 @@
   {
    "date": "2026-11-10",
    "event": "architecture 8 built through stage 3 and hardened on the coordinator's measurements: the frame pinned as a population (D.5(b)), the careful column priced on a one-index stand-in, the range of each average and a joint 2027 plan added, the two mechanical asks dropped; paused before stage 4"
+  },
+  {
+   "date": "2026-11-11",
+   "event": "architecture 9 spent at stage 4: the one re-judge (cut 5378a624) returned NOT_DETERMINISTIC and SEND_BACK with Gate H failing on carry as the one thing; measured on the build's own routes, the careful column had priced the added dollar as a miss that section 9's literal text hands over, and with it earned the carry sentence rescues 4 of 6; re-rooting to architecture 10"
+  },
+  {
+   "date": "2026-11-11",
+   "event": "architecture 10 drawn: Brindlemoor Securities' credit desk, its 2027 P&L under a proposed auto-quoting schedule on the Tidewell request-for-quote platform, backtested on its own request history over real FRED and Cboe series; card registered WARN only"
   }
  ],
- "build": "cut 5378a624 (golden.zip 98459fa5): two builds byte-identical, gates.py 0 FAIL 3 WARN, checks 76 of 76, verify 13 of 13, figures_check PASS, containers PASS",
+ "build": null,
  "lineage_v6": {
   "stump": "The default path buys Kestrel Lane's note at a 0.14 per cent chance of loss against Ostvale's 0.44 per cent (the field's copula, one factor fitted to the yearly default rates plus the agencies' industry factor, back-tested on the record); the step that lands it there is linking defaults only through the economy and the sector, when the companies held by one sponsor house's funds default in the same years (0.503 of the residual variance), and Kestrel Lane's 95 loans sit with five houses, so its note's chance is 1.33 per cent, over the bar, against Ostvale's 0.54.",
   "architecture": 6,
@@ -488,7 +496,7 @@
   }
  },
  "doctrine": "throughout",
- "effort": "effort.py on cut 5378a624: quick 0.5, careful 1.5, thorough 6 of 6; pair 28.8; largest hint 2 of 6; 8 distinct wrong answers",
+ "effort": null,
  "lineage_v7_results_chain": {
   "call": "buy neither note: Kestrel Lane 3.7 per cent at 15.0 per cent subordination, Ostvale 2.8 at 16.5 (the repair's cut), against MP-RN-2's 1 per cent test",
   "stump": "results chain of nine: R1 the house-year's share, R2 each sector's loading on the year (Ostvale's five sectors), R3 recovery on the house-year's shock at the whole-book grain on the closed cohorts, R4 and R5 each note's five-year chance, R6 the call, R7 the subordination for 1 and 0.5 per cent, R8 the chance by year end, R9 each portfolio's expected credit loss; every shortcut buys a note (Kestrel Lane or Ostvale), only both strands file neither",
@@ -624,5 +632,17 @@
   },
   "cross_check": "FRED VXVCLS (the 3-month index from 4 December 2007) held in generator/raw_check, outside the pack; every band holds the answers on the published earlier closes (3-month average 286,000, 2008 at 16,166,000, sizes 100,300 to 112,600)",
   "fate": "returned 2026-11-11 at the platform holistic audit; both runs landed the call; re-rooted at the author word (runs/arch8_triage.md)"
+ },
+ "lineage_v9_capital_plan": {
+  "subdomain": "strategy-backtesting-evaluation (client task types: backtesting and alpha research; a multi-manager platform capital plan across its portfolio-manager pods, each pod read net of factor and carry returns, its capacity, the year risk and the 2027 net P&L after payouts)",
+  "call": "plan USD 594 million of 2027 net P&L at the draft (80% range USD 37 million to 1,077 million) and drop the increases for HC1054, HC1058, HC1062, HC1082, HC1098, HC1107, HC1132 and HC1135 (HC1039 and HC1125 either way)",
+  "stump": "results chain of six on real market and carry returns: R1 each group's alpha net of what a passive holding earned (carry), R2 alpha per dollar given up per doubling (within pods), R3 the expected 2027 net P&L at the draft plan, R4 its 80 per cent range (the year's horizon), R5 the increases whose added dollar earns below the 1.5 per cent hurdle, R6 the recommendation",
+  "architecture": 9,
+  "precut": "exit 0 on 2026-11-11",
+  "leak": "leak.py --asof 2026-11-09 REVIEW, no LEAK (2026-11-11, cut 5378a624); two readers (cuts 9a328d82 and 5378a624): no ranking file, nothing reads as the answer, no single thing settles most of it; rulings in the note",
+  "judge": "pass 1 NOT_DETERMINISTIC narrow, repaired as Gate C (determinism_check_report_arch9_pass1.md); pass 2 on cut 5378a624 NOT_DETERMINISTIC, SEND_BACK, underspecified_objective, Gate H one_thing data_semantics (carry), H5 failing (determinism_check_report_arch9.md)",
+  "effort": "effort.py on cut 5378a624: quick 0.5, careful 1.5, thorough 6 of 6; pair 28.8; largest hint 2 of 6; 8 distinct wrong answers",
+  "build": "cut 5378a624 (golden.zip 98459fa5): two builds byte-identical, gates.py 0 FAIL 3 WARN, checks 76 of 76, verify 13 of 13, figures_check PASS, containers PASS",
+  "fate": "spent 2026-11-11 at stage 4 on Gate H: the judge's own run took capacity within pods, shrinkage, the drawdown rules and the added dollar by reflex and missed carry (and the year's horizon on the range); with the added dollar taken as earned, the carry sentence alone moves R1, R3, R5 and R6 to right (figures.json routes), so one reading carried most of the chain; never uploaded"
  }
 }
