@@ -864,12 +864,7 @@ def own_mtimes(folder, fallback):
     import datetime as dt
     import os
     out = {}
-    names = []
-    for root, dirs, files in os.walk(folder):
-        dirs.sort()
-        for fn in files:
-            names.append(os.path.relpath(os.path.join(root, fn), folder).replace(os.sep, "/"))
-    for name in sorted(names):
+    for name in sorted(os.listdir(folder)):
         p = os.path.join(folder, name)
         stamp = None
         if name.endswith((".xlsx", ".docx", ".pptx")):
@@ -888,12 +883,6 @@ def own_mtimes(folder, fallback):
         out[name] = stamp
     stamps = list(out.values())
     assert len(set(stamps)) == len(stamps), "two files share a save time"
-    # a delivery folder carries the time its last file was saved
-    for root, dirs, files in os.walk(folder):
-        if root != folder:
-            rel = [os.path.relpath(os.path.join(root, fn), folder).replace(os.sep, "/") for fn in files]
-            t = max(out[r] for r in rel if r in out)
-            os.utime(root, (t.timestamp(), t.timestamp()))
     return out
 
 
@@ -904,12 +893,8 @@ def zip_folder(folder, out, prefix="", zone="Europe/London"):
     import os
     from zoneinfo import ZoneInfo
     tz = ZoneInfo(zone)
-    names = []
-    for root, dirs, files in os.walk(folder):
-        for fn in files:
-            names.append(os.path.relpath(os.path.join(root, fn), folder).replace(os.sep, "/"))
     with zipfile.ZipFile(out, "w") as z:
-        for name in sorted(names):
+        for name in sorted(os.listdir(folder)):
             p = os.path.join(folder, name)
             t = dt.datetime.fromtimestamp(os.path.getmtime(p), dt.timezone.utc).astimezone(tz)
             zi = zipfile.ZipInfo(prefix + name, date_time=(t.year, t.month, t.day, t.hour, t.minute, t.second))

@@ -1,43 +1,65 @@
+# task13 answer blocks
+
 ## Tags
 
-**Domain:** Energy Systems & Utilities, Grid reliability & outage analysis (vegetation management on an 11 kV distribution network: tree-caused interruptions read against storm exposure and corridor regrowth).
+**Domain:** Engineering and Physical Sciences, Energy Systems & Utilities (grid reliability & outage analysis).
 **Analytical objective:** Anomaly Detection & Diagnostics.
 
 ## Final Recommendation
 
-**Put PBY-10, HRK-03, HRK-05, WTK-02, PBY-11 and PBY-03, the six northern coastal feeders left longest since a cycle trim, into the 2027 vegetation catch-up: together they avoid about 12,984 sustained vegetation customer interruptions in 2027-28, 0.33 of network SAIFI.** This rejects the six feeders with the most vegetation customer interruptions in the three years to October 2026 (TOT-02, TIT-04, MKR-01, KWH-01, TIT-01 and TIT-03), whose counts carry the southern hills' stormiest three years in the record and, on the plantation feeders, a dense corridor a catch-up leaves in place: they would avoid 5,770.
+**Refit these 15 zones before the 2027 lightning season: BGS-F3-R2, BGS-F5-R2, BTG-F1-R3, CBR-F2-R2, CLB-F5-R1, DLP-F2-R2, DLP-F4, LRD-F1-R1, LRD-F2, LRD-F2-R1, LRD-F3-R3, MPD-F2-R1, PGP-F1-R2, PGP-F2-R3 and SNJ-F1; and after every season refer each zone whose lightning faults since its last cyclic inspection (each fault's first trip matched to a stroke within 400 m of its lines on the recloser's own clock, with the events a recloser's memory lost or nobody has read restored) exceed what sound protection gives under that lightning, learned only from seasons a later inspection confirmed sound, by more than those seasons' scatter allows, at a chance below 1 in 855 a zone a season.** Taking the reclosers' logs as recorded and fitting the sound rate on every season no inspection has yet found failed refers only BTG-F1-R3 and PGP-F1-R2: the radio-less zones' clocks and lost months are left as they are, and the failing zones sit inside the baseline that should judge them.
 
 ## Supplementary Questions
 
-### vegetation_catchup_2027_feeders.csv
+### lightning_referrals_2027.csv
 
-1. One row for each of the 48 feeders, ranked by customer interruptions avoided, highest first, with columns rank, feeder, weather station, last cycle trim (the crew-finished date), tree-caused sustained interruptions expected in 2027-28 left as it is (one decimal), customers per tree-caused interruption, tree-caused customer interruptions expected left as it is and after the catch-up, the difference (customer interruptions avoided, whole numbers), and whether the feeder is in the catch-up.
-2. The six at the top, each on Paua Bay's station record: PBY-10 59.3 interruptions left as is, 4,161 customer interruptions left as is, 1,419 after the catch-up, 2,741 avoided; HRK-03 48.0, 3,628, 1,291, 2,337; HRK-05 56.1, 3,553, 1,274, 2,279; WTK-02 48.5, 2,949, 1,032, 1,916; PBY-11 47.5, 2,891, 1,001, 1,890; PBY-03 55.0, 2,894, 1,073, 1,821.
-3. Rank 7 is the plantation feeder TOT-02, the highest expected customer interruptions on the network left as it is (6,220) but 4,951 after a catch-up, so 1,268 avoided; the other plantation feeders sit lower (TIT-04 rank 11, 1,000 avoided; TIT-01 rank 17, 851; MKR-01 rank 18, 790; KWH-01 rank 19, 754).
+1. One row for each of the 171 zones in the protection zones register, in the register's order: zone, feeder, substation, whether its recloser has a radio link, the date its last cyclic inspection finished, then the zone's lightning faults in each season from 2022 to 2026 (1 April to 31 October, one decimal), each fault counted once on the zone whose lines it was on, with the events a radio-less recloser's memory overwrote or that are still unread restored at the zone's own rate. The season columns total **892, 682, 924, 747 and 1,075** (each within 4 per cent), and the 46 zones whose reclosers are read on site total **259** in 2026 (243 to 275), of which their memories kept 163.
+2. The record since each zone's last cyclic inspection: the seasons it covers, the zone's lightning faults in them, what sound protection would have given it under the strokes within 400 m of its lines, the ratio of the two, and the chance of that many faults or more with sound protection. The chance is judged on the faults the records hold against the expectation for the same recorded months; the restored counts are reported, not tested. For the referred zones (faults within 10 per cent, expectation within 20 per cent, since the sound model's specification moves it):
+   - BGS-F3-R2: 20 faults against 5.2 (ratio 3.82).
+   - BGS-F5-R2: 55.6 against 9.0 (6.18).
+   - BTG-F1-R3: 76 against 13.8 (5.50).
+   - CBR-F2-R2: 16.5 against 2.8 (5.97).
+   - CLB-F5-R1: 27 against 6.8 (3.95).
+   - DLP-F2-R2: 36 against 12.7 (2.84).
+   - DLP-F4: 33 against 7.9 (4.18).
+   - LRD-F1-R1: 23.8 against 5.0 (4.74).
+   - LRD-F2: 62 against 7.0 (8.85).
+   - LRD-F2-R1: 32 against 12.2 (2.63).
+   - LRD-F3-R3: 52 against 13.6 (3.81).
+   - MPD-F2-R1: 32 against 12.6 (2.55).
+   - PGP-F1-R2: 22 against 2.6 (8.33).
+   - PGP-F2-R3: 32.8 against 13.1 (2.51).
+   - SNJ-F1: 46 against 11.7 (3.93).
+3. Referred: yes for the 15 zones of the recommendation, no for the other 156.
 
-### vegetation_catchup_2027_board_note.docx
+### lightning_refit_2027_note.docx
 
-4. Names the six and states that together they avoid 12,984 customer interruptions in 2027-28, 0.33 of network SAIFI on the 39,943 ICPs connected at 31 October 2026, against 1,268 for the next-best feeder, TOT-02.
-5. The split across the regulatory year's quarters: 2,753 in April to June 2027, 5,466 in July to September, 3,102 in October to December and 1,663 in January to March 2028.
-6. A 90 per cent range of 6,000 to 19,000 customer interruptions avoided, the spread of the six's saving across the weather of every complete regulatory year in the station record, the 20 from 2006-07 to 2025-26.
-7. One chart of the customer interruptions avoided on every feeder, the 48 bars ranked, the six highlighted and labelled, with the next feeder labelled beside them.
+4. The rule as the recommendation states it, and the 15 zones it refers for the 2027 refit (another sound scatter model the confirmed seasons allow refers 13 to 17; the list is the negative binomial's).
+5. Zones the rule would have referred after each season: **11** after 2022, **10** after 2023, **12** after 2024, **10** after 2025 and **15** after 2026 (each within one).
+6. Zones with sound protection among a season's referrals: the rule's own expected rate, about **0.13** a season (0.11 to 0.15), one in about eight seasons; the terms' one in five (0.2) is the ceiling it stays under, not its rate.
+7. Against the next cyclic inspections: the rounds of 2022-23 to 2025-26 inspected **15** zones the rule had referred after the season before (14 to 17) and confirmed all **15** (14 to 16); they found failed protection on **26** zones it had not referred (25 to 27).
+8. The network's lightning faults: **892** in 2022, **682** in 2023, **924** in 2024, **747** in 2025 and **1,075** in 2026 (each within 4 per cent).
+9. 2026's lightning faults caused by failed protection: **279** (237 to 321), the season's 1,075 against **796** with every zone's protection sound.
+10. Lightning faults the refit should avoid in a season of average lightning: **107** (91 to 123).
+11. The chart plots each zone's lightning faults since its last inspection against what sound protection would have given it, with the line where the two are equal and the 15 referred zones marked and named; under it, a table of the referred zones (faults, expectation, ratio) and one of what simpler versions of the rule would refer and report.
 
 ## Critical Components
 
-1. In the three years to October 2026 Paua Bay recorded **38** hours a year of gusts of 60 km/h or more against its 2007-2023 normal of **106**, and Titi Saddle **312** against **133**, while mean wind moved only **-3.4** and **5.7** per cent: the recent vegetation record is the storm track, so each feeder is read per unit of its own station's gust load.
-2. On that scale a corridor's vegetation interruptions rise **15.5** per cent for each year since its last cycle trim, fitted across the 48 feeders from April 2022; a catch-up removes only that growth.
-3. The six avoid **12,984** customer interruptions (**0.33** SAIFI); the plantation feeder TOT-02, highest left as it is at **6,220**, keeps **4,951** after a catch-up and avoids **1,268**.
-4. The six with the most recent vegetation customer interruptions would avoid **5,770**.
+1. The network's lightning faults in 2022 to 2026 are **892, 682, 924, 747 and 1,075**, with each radio-less recloser's clock fitted read by read and the events its memory lost or nobody has read restored.
+2. Failed protection caused **279** of 2026's **1,075** lightning faults: the season would have had **796** with every zone sound, on a sound rate fitted only on the **193** zone-seasons a later cyclic inspection confirmed sound.
+3. Run after each season, the rule refers **11, 10, 12, 10 and 15** zones (2022 to 2026).
+4. Against the cyclic inspections of 2022-23 to 2025-26: **15** referred zones inspected, **15** confirmed, **26** misses (bands 14 to 17, 14 to 16 and 25 to 27 across the sound scatter models the confirmed seasons allow).
 
 ## Step-by-Step
 
-1. Cleaned oms_interruptions_2022-04_2026-10.csv by reliability_reporting_standard.docx: dropped the 479 call-centre records of operations SCADA or the field crew logged, kept unplanned interruptions of 1 minute or longer, took vegetation as VEG to 30 September 2023 and TREE after, and mapped Rangiora Street's former RGS codes through feeder_register_2026.xlsx: 3,994 vegetation interruptions.
-2. Marked major event days with the DPP3 and DPP4 SAIDI and SAIFI boundary values on daily indices over each regulatory year's mean month-end ICPs (icp_counts_by_feeder_2022-04_2026-10.csv): 5 days, all snow on the southern hills, none with a vegetation interruption.
-3. The reasonable but insufficient analysis: ranked the feeders on vegetation customer interruptions in the three years to October 2026, the worst-performing-feeder list, giving TOT-02, TIT-04, MKR-01, KWH-01, TIT-01 and TIT-03 (31,591 to 9,009).
-4. Linked each feeder to the station nearest its zone substation (feeder register coordinates against pou_aws_station_register.csv) and read the four hourly records (Titi Saddle's knots converted before July 2013, missing and suspect hours dropped): Paua Bay had 38 hours a year of gusts of 60 km/h or more against 106, Kowhai Ridge 260 against 122, Titi Saddle 312 against 133, with mean wind within 6 per cent, so the recent counts overstate the south and understate the north.
-5. Took each station's monthly gust load (each hour's gust above 40 km/h, squared, summed), which fits the vegetation record best of the exposure measures tried; hour counts from 50 km/h leave months with vegetation interruptions and no exposure.
-6. Fitted each feeder's monthly vegetation interruptions from April 2022 as Poisson counts on its station's gust load: a corridor rate for each feeder times a growth of 15.5 per cent a year since its last crew-finished cycle trim in vegetation_cycle_log_2014-2026.xlsx.
-7. Projected 2027-28 month by month at each station's 2006 to 2025 mean gust load, with the growth running on and with it restarted on 31 March 2027, and turned each into customer interruptions at the feeder's own customers per vegetation interruption.
-8. Ranked by the difference: PBY-10 2,741, HRK-03 2,337, HRK-05 2,279, WTK-02 1,916, PBY-11 1,890 and PBY-03 1,821, then TOT-02 1,268; the six total 12,984, 0.33 SAIFI on 39,943 ICPs, split 2,753, 5,466, 3,102 and 1,663 by quarter; across the weather of the station record's 20 complete regulatory years the total runs 6,000 to 19,000 at the 5th and 95th percentiles, against 11,000 to 16,000 from the fit's own uncertainty alone.
+1. Collapsed each fault's trips and recloses in `scada_event_history_2021-12_2026-10.csv` and `recloser_event_downloads_2021-2026.csv` (each re-read event kept once, upstream breakers' sympathetic trips dropped) to its first trip, and matched that trip to a ground stroke in `kidlat_strokes_2021-11_2026-10.csv` within 400 m of the zone's lines in `overhead_line_routes_2026.geojson`, the strokes moved from UTC to Philippine time.
+2. On the 125 zones with synchronised clocks the first trips sit within a second of a stroke; the 46 reclosers read on site keep their own clocks, whose lag to nearby strokes grows in a straight line between site visits and resets at each read, so each controller's drift and offset were fitted per read from its own trips. A ten-minute window around their own stamps instead counts storm trips as lightning (1,028 network faults in 2026 with nothing restored), and one fixed offset per controller finds 19 of their 259.
+3. The downloads' event numbers jump where a memory overwrote events between reads (58 of 710 reads, 1,154 events, 22 zones), and every radio-less memory is unread since its last visit; those months' faults were restored at the zone's own faults per stroke in its observed months, giving 259 on the radio-less zones in 2026 against 163 kept, and 892, 682, 924, 747 and 1,075 across the network.
+4. Fitted a Poisson regression of each zone-season's faults on the strokes within 400 m, with the zone's construction, area and arrester shares and transformers per km from `protection_zones_register_2026.xlsx`, only on the 193 zone-seasons a later inspection in `cyclic_line_inspections_2016-2026.xlsx` found sound: a season since a zone's last inspection is unverified (the book shows 32 zones inspected clean and found failed at the next round), and a rate fitted on every season not yet found failed absorbs the failing zones and leaves 126 of 2026's faults to failed protection, against 279 (1,075 against 796, terms 2(f)).
+5. The confirmed seasons scatter more than Poisson allows (2 dlogL 4.95 for a negative binomial of size 22.8); a Poisson chance refers 17 zones.
+6. Compared each zone's faults since its last inspection (terms 2(e)) with the expectation over the same recorded months and referred it when the negative binomial chance fell below 1 in 855 (terms 3(b): one sound zone in five seasons across 171 zones): 15 zones, the weakest referred at 0.00029 and the strongest left out at 0.004. The chance is judged on what the records hold, because a restored count is an estimate; judged on restored counts as if counted, SRQ-F4-R3 (7 faults recorded against 2.1 expected) would be added. The whole record instead of the record since inspection refers 25, and the logs as recorded with the unverified rate refer 2.
+7. Ran the same rule after each season: 11, 10, 12, 10 and 15 referrals; summing each zone's chance at the smallest count it would be referred at gives 0.13 sound zones a season, the rule's own rate under the budget's ceiling of 0.2.
+8. Checked each inspection of 2022-23 to 2025-26 against the rule after the season before it (terms 5): 15 referred zones inspected, all 15 confirmed, 26 misses, failures too recent to have run up enough faults; the 2-zone rule checks 8 and misses 33.
+9. Summed each referred zone's ratio since inspection less one, times its 2022 to 2026 mean sound expectation (terms 4(c)): 107 faults avoided in a season of average lightning, where 2026's own lightning would give 133.
 
-No other conclusion survives. Ranking on the recent counts carries the southern storms and funds the plantation feeders; normalising for wind but counting every expected interruption as removable still funds them, because their corridor rate stays after a trim (TOT-02 keeps 4,951 of 6,220); fitting the growth on counts alone, or projecting at the three stormy years or the outage record's own weather, funds the southern late-cycle feeders; funding the most overdue feeders funds the open plains and small feeders with few trees. Every exposure measure tried (hours of 45 to 70 km/h, gust excess over 35 to 45 km/h, straight or squared), every base period, a lag or whole-year bins in the growth, a negative binomial fit, blended stations, job-closed trim dates, UTC months and every cleaning choice give the same six, with totals from 12,247 to 15,757.
+No other referral set survives the files. The logs as recorded leave the radio-less clocks drifting and their lost months empty, which moves every season's count and changes 6 of the referrals; a sound rate learned from unverified seasons carries the failing zones in its own baseline and scatter and refers 2 to 4 zones; a Poisson chance ignores a scatter the confirmed seasons show and refers 17; the whole record counts faults that inspections have since repaired and refers 25; and the budget's 0.2 is the ceiling the rule's tails stay under, not its rate.

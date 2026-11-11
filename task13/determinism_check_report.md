@@ -1,62 +1,91 @@
-# determinism-check report, task13, 2026-11-09
+# determinism-check report, task13, pass 2, 2026-11-11
 
 ## Verdict
-DETERMINISTIC
-**Disposition:** APPROVE
-**Stumping type:** mechanism: forecasting (with a method_or_model_selection layer for the exposure-metric and growth-fit choice), stumping_family: analytical_non_defect, surface_read_dependency: no, sole_data_defect: no
+DETERMINISTIC on the main call (SOLUTION_WRONG on a few answer-block lines, see Findings)
+**Disposition:** FIX_NOW (repair in the answer blocks; prompt and pack stay byte-identical)
+**Stumping type:** mechanism: statistical_rigor / method_or_model_selection, stumping_family: analytical_non_defect, surface_read_dependency: no, sole_data_defect: no
+
+Thread: one isolated sonnet/medium thread; it reports keeping the order (own_derivation.md written before graded_blocks.md was opened). Scratch: /tmp/determinism-check-task13-p2/ (verdict.md, own_derivation.md).
 
 ## Why
-The isolated judge thread, seeing only a fresh unzip of `target.zip` and the four extracted solution blocks (never `submission.md`, `DESIGN_NOTE.md`, `metadata.json`, `generator/`, or any prior report), independently rebuilt the chain from raw files and reproduced every load-bearing figure it attempted: the 479-row call-centre dedup (verified all 479 as true duplicates of a SCADA/field-crew record), the 3,994 sustained vegetation interruptions after the momentary filter, the 5 major event days (all WEATHER-coded, zero vegetation interruptions on any of them), the feeder-to-station nearest-neighbour mapping, the gust-exposure contrast (38.0 vs ~105 hours/yr at Paua Bay, 312.0 vs 134 at Titi Saddle, mean wind -3.3%/+5.6%, matching the claimed 38/106, 312/133, -3.4%/+5.7% almost exactly), the 39,943-ICP SAIFI denominator and 0.33 SAIFI arithmetic, and the quarterly split summing exactly to 12,984. It did not independently re-fit the full per-feeder Poisson growth/exposure regression or resample the 19-year uncertainty range (flagged as traced, not recomputed, given time cost), but found no basis to doubt them given everything else reproduced to stated precision. Gates A-E pass: the main recommendation and all seven supplementary asks are forced by a reproducible, non-defect chain, and the sixth-vs-seventh-feeder margin (1,821 vs 1,268, about 44%) is a clean, non-thin gap.
+The thread's independent build reproduced the 15-zone referral set exactly (weakest referred p 1e-4, next left out 0.0016, PGP-F3-R3), and most figures land in band. Three things are not closed by the filed text and blocks:
+1. Supplementary 7 / Critical Component 4 state "each count exact" (15 inspected-and-confirmed, 26 misses). The thread got 16 confirmed / 25 misses under Poisson and 14 / 27 with dispersion 1.2. Not determinate across reasonable scatter models.
+2. Supplementary 6 (sound referrals per season): the thread's first pass wrote the 0.2 budget; the rule's own rate (0.126) is inside the band only once the reading is pinned.
+3. The CSV's faults-since-inspection column is restored counts, but the referral test uses recorded faults against the expectation over observed months. A literal reader applying the rule to the CSV figures gets another set (the blocks themselves say SRQ-F4-R3 would be added). The pack's gaps (event numbers, read dates) show the unobserved months, so the thread rates it closed by data, but it is not written in the blocks.
 
 ## Recomputation ledger
 | Figure | Claimed | Judge recomputed | Reproduced |
 |---|---|---|---|
-| Call-centre duplicate rows dropped | 479 | 479, all confirmed true duplicates | Yes |
-| Sustained vegetation interruptions (cleaned) | 3,994 | 3,994 | Yes |
-| Major event days | 5, all southern snow, none vegetation | 5, all WEATHER-coded, zero vegetation | Yes |
-| Paua Bay gust hours, recent vs normal | 38 vs 106 | 38.0 vs 104.8 | Yes (within rounding) |
-| Titi Saddle gust hours, recent vs normal | 312 vs 133 | 312.0 vs 134.0 | Yes (within rounding) |
-| Mean wind change, Paua Bay / Titi Saddle | -3.4% / +5.7% | -3.3% / +5.6% | Yes (within rounding) |
-| SAIFI denominator (ICPs, 2026-10) | 39,943 | 39,943 (icp_counts file); feeder_register's own ICP column totals 39,933 | Yes, with a noted 10-ICP cross-file discrepancy that does not affect the committed answer |
-| Network SAIFI | 0.33 | 12,984/39,943 = 0.3251 to 0.33 | Yes |
-| Quarterly split sums to total | 2,752+5,466+3,102+1,664 | = 12,984 exactly | Yes |
-| Customers-per-interruption (PBY-10) | implied 70.2 | 70.14 | Yes (close) |
-| Poisson growth fit (15.5%/yr) and 19-year 90% range (10,000-19,000) | claimed | traced to the method, not independently re-fit | Not recomputed (flagged, not doubted) |
+| Referral set after 2026 | 15 named zones | same 15 | yes |
+| Season faults 2022-2026 | 892, 682, 924, 747, 1,075 (3%) | 876, 668, 914, 723, 1,055 (exposure-adjusted) | yes except 2025 (-3.2%) |
+| Radio-less zones 2026 | 259 (163 kept) | 248 (155 kept) | yes (band 243-275) |
+| Sound-confirmed zone-seasons | 193 | 193 | yes |
+| Referrals after each season | 11, 10, 12, 10, 15 | 11, 11, 13, 11, 15 | yes (each within one) |
+| Sound referrals per season | 0.13 | 0.126 (rule's own); 0.2 (budget) | yes on the rule's own reading |
+| Inspections check | 15 confirmed, 26 misses, exact | 16 / 25 Poisson; 14 / 27 dispersion 1.2 | no (not exact) |
+| 2026 caused by failed protection | 279 (237-321) | 254 adjusted, 224 raw | yes adjusted, no raw |
+| Avoided faults, average season | 107 (91-123) | 103 | yes |
+| Per-zone figures | within 10% | BGS-F3-R2 20/5.4, PGP-F1-R2 20/2.6, BTG-F1-R3 73/12.5, LRD-F2 61/8.4 (golden 62/7.0) | LRD-F2 expectation 20% off, BTG borderline |
+
+## First-pass figures against the stated bands (the thread's own_derivation.md)
+| Result | Thread's first-pass figure | Stated band | Inside? |
+|---|---|---|---|
+| S1/S8 2022 faults | 876 | 892 +/-3% (865-919) | inside |
+| 2023 | 668 | 682 +/-3% (662-702) | inside |
+| 2024 | 914 | 924 +/-3% | inside |
+| 2025 | 723 | 747 +/-3% (725-769) | outside (-3.2%) |
+| 2026 | 1,055 | 1,075 +/-3% (1,043-1,107) | inside |
+| S1 radio-less 2026 faults | 248 | 243 to 275 | inside |
+| S1 radio-less kept | 155 | 163 (no band) | differs |
+| S2 per-zone (4 checked) | 20/5.4, 20/2.6, 73/12.5, 61/8.4 | within 10% | yes, yes, borderline, no |
+| S3 / Recommendation set | 15, identical list | exact set | inside |
+| S5 after 2022..2026 | 11, 11, 13, 11, 15 | 11, 10, 12, 10, 15 each within one | inside, all |
+| S6 sound referrals per season | 0.2 (budget reading, first pass); 0.126 in checking | 0.11 to 0.15 | outside as first written; inside on the rule's own rate |
+| S7/CC4 vs inspections | 39/33/23/31 inspected by season; 17 referred-inspected, 16 confirmed, 25 misses (Poisson) | 15 confirmed, 26 misses, exact | outside (exact) |
+| S9/CC2 2026 caused | 254 adjusted (224 raw) | 279 (237 to 321) | inside adjusted, outside raw |
+| S10 avoided | 103 | 91 to 123 | inside |
+
+Pricing note: the first pass of a single medium thread, with no hint, got the 15-zone set, the five referral counts, the 2026 caused figure and the avoided faults inside the stated bands, and it found the sound-baseline time-order reading unprompted (zones taken sound in seasons before a later clean inspection, 193 zone-seasons). Only the exact-count inspections result, the sound-referral reading and one season total (by 0.2 point) fell outside.
 
 ## Competing answers that survived
-None. The thread stress-tested the naive "worst recent performer" ranking (TOT-02, TIT-04, MKR-01, KWH-01, TIT-01, TIT-03), the wind-normalised-but-all-removable reading, and the "most overdue by cycle" reading; each produces a different and, on the thread's own recomputation, wrong answer, consistent with the design note's ladder (none of the 18 rung constructions reach more than 3 of the golden six). No fork survived for the main recommendation or for any of the seven supplementary asks.
+- Inspections check: 15/26 (golden) vs 16/25 (Poisson) vs 14/27 (dispersion 1.2). Closing rule: none filed; needs bands or a pinned scatter model.
+- Sound referrals per season: 0.13 (rule's own rate) vs 0.2 (the programme budget). Terms 3(b) is a ceiling; the ask does not say which is wanted.
+- Referral test on recorded versus restored faults: golden set (15) vs set with SRQ-F4-R3 (16) on restored counts. Closed by the like-for-like (observed months) reading, not written in the blocks.
+- Scatter treatment: golden says Poisson refers 17; the thread's Poisson refers 15 (thread's referral-count rival band 13 to 17).
 
 ## Spec gates
 | Gate | Required | Actual | Pass |
 |---|---|---|---|
-| File count | 10 or more usable files | 14 files in `target/` | Pass |
-| File categories | 2 or more | xlsx (3), csv (7), docx (4), so 3 categories | Pass |
-| Large messy CSV, 20,000+ rows | 1 or more | four `pou_aws_*_hourly` files, 182,616 data rows each, with knots-to-km/h unit change, missing/suspect hours and quality flags | Pass |
-| Large messy CSV, 10-20 printed pages | 1 or more | `protection_assets_2026-10.csv` (656 data rows, roughly 13 printed pages) and/or `oms_interruptions` (11,396 rows); either satisfies the floor | Pass |
-| metadata.json names 2+ distractors | required | **metadata.json has no `distractors` field at all** (keys: task, decision, deliverables, pull_date, as_of, files, real_world_references, names) | **Fail** |
-| Nothing inside the ZIP labels a distractor | required | confirmed by judge thread, no file name or content flags itself as a distractor | Pass |
-| Each distractor unused but relevant | required | design note names `ridgeline_2027_schedule_of_rates.docx` and `tree_notices_register_2024-2026.xlsx`; judge thread independently identified the same two files as the unlabelled distractors, unused by the solution | Pass (content-level; metadata.json omission is the only gap) |
-| 1-3 deliverables, all present in golden, no forced format | required | 2 deliverables (`vegetation_catchup_2027_feeders.csv`, `vegetation_catchup_2027_board_note.docx`), both present in `golden/` | Pass |
-| Asks multi-dimensional with unit/rounding stated | required | prompt states interruptions to one decimal, customer interruptions whole, range to nearest 1,000, SAIFI to two decimals, inside the asking sentence | Pass |
-| Identifiable answer shape, every cell downstream of the deep step | required | ranked list under a cap (shape 01 per card); ask-sheet in the design note shows every cell riding the deep step | Pass |
-| Golden ZIP holds exactly the requested files | required | `golden/` holds exactly the two deliverables named in the prompt | Pass |
-| Nothing LLM-generated, every golden reads as real | required | judge thread flagged no LLM-authored tells; realistic mess (cause-code recode, feeder rename, unit change, duplicate logging, job-closed vs crew-finished dates) | Pass |
+| Usable files | 10 or more | 12 | yes |
+| File categories | 2 or more | csv, xlsx, docx, pdf, geojson (spreadsheet, text, code/data) | yes |
+| Large messy CSVs | 20,000 rows; a 10-20 page one | strokes 149,410 rows (11.2 MB); recloser downloads 72,858 rows (5.8 MB); SCADA 38,782 rows | yes |
+| Distractors in metadata.json only | 2 or more, none labelled in the zip | 3 (rain gauge, materials quotation, transformer replacements) | yes |
+| Distractors unused yet weighable | yes | rain gauge, quotation, replacements decide nothing; OMS remarks mention thunderstorm but do not answer a graded quantity | yes (thread: no exclusion finding) |
+| Deliverables | 1 to 3, all in golden | 2 (CSV, docx); golden.zip holds exactly those two | yes |
+| Asks multi-dimensional, unit and rounding | yes | per-zone seasons, record since inspection, referral, rule, per-season counts, validation, caused, avoided; units in the blocks | yes |
+| Answer shape | one of fourteen, 4 or more checkable results | flagged set with false-alarm rate; 9 graded results | yes |
+| Realism | nothing LLM-looking, no builder trace | thread found no README or authoring language; mixed date formats and clock noise present; terms dated 26 Oct before the season's end (minor) | yes (not independently audited by me) |
 
 ## Gate G reconciliation
-Thread: `mechanism: forecasting` (plus a `method_or_model_selection` layer for the exposure-metric and growth-fit choice), `stumping_family: analytical_non_defect`, `surface_read_dependency: no`, `sole_data_defect: no`.
-Design note / card: `stump_class` / guard answer files this as `decomposition_attribution` (the Gate G mechanism is "the assignment of a correctly recorded rise to its drivers: wind against corridor growth against corridor density"), `analyst_test` names the same naive ranking (TOT-02 etc., avoiding 5,770) the thread reproduced, `domain_test` names the same deciding quantity (vegetation SAIFI by feeder, modelled from tree-contact rates against storm exposure and the vegetation cycle).
-
-This is a label mismatch, not a direction mismatch: the thread named `forecasting`/`method_or_model_selection` where the design note names `decomposition_attribution`, but both labels sit in the client's FINE-numbers, non-banned family, and both agree `surface_read_dependency: no` / the recent counts are genuine, correctly recorded history, never a defect to catch. The thread did not name the declared distractors (the schedule of rates, the tree notices register) as load-bearing or as the surface read carrying the task; it independently identified the same two files as unused distractors that the design note names, which is the healthy outcome (the distractor is not carrying the stump). The one substantive thing the thread under-covered relative to the design note is the second analytical judgment, the corridor-rate-vs-growth decomposition (SF-level: "a catch-up removes only the growth since trim") being load-bearing in its own right, not just a byproduct of the exposure-normalisation forecast; it folded this into "method selection" rather than treating it as its own decomposition step. This does not change the determinism or Gate G verdict (both readings land in `analytical_non_defect`, `surface_read_dependency: no`), so it is a reporting nuance, not a finding that predicts a send-back.
-
-Gate H: thread's line, `domain: pass`, `layers: pass`, `decisive_step: analytical`, `chain: 6+ inferences, judgment: exposure-covariate selection and forward projection under a verified weather-regime difference`, `one_fact: none`, matches the design note's H1-H5 argument closely: same domain test, same two layers (cause-code recode / unit change / dedup as Layer 1; exposure-normalised Poisson fit with climatological-normal projection as Layer 2), same decisive-step classification (`analytical`), same chain length (design note counts 5 dependent inferences plus 2 modelling judgments; thread counts 6+ with judgment named), and the same one-fact test answer (no single sentence rescues it). No Gate H mismatch.
+Thread: mechanism statistical_rigor / method_or_model_selection; stumping_family analytical_non_defect; surface_read_dependency no; sole_data_defect no. Gate G classification: pass, no shipped number overturned, the work is estimation and rule design. Note's Hidden factor record: clock drift, memory overwrite, contaminated baseline, extra-Poisson scatter, all `not only in deciding units`, fix depth modelling. The thread agrees these are process features across the 46 radio-less zones and every zone, not planted in the deciding units. No conflict with the note. The thread did not name a distractor as carrying a result.
 
 ## Stump power (Gate F)
-The thread assesses this as a genuine, non-trivial stump: a capable analyst who cleans the OMS log correctly, applies every counting rule, and ranks on recent tree-caused customer interruptions produces a clean, self-consistent, wrong answer, because nothing in the filed documents announces that the three recent years are a regional weather anomaly; discovering this requires pulling four independent ~20-year hourly weather records and testing an exposure metric against the vegetation record, which a strong model can plausibly skip since the obvious high-signal variable (already cause-coded) looks sufficient and passes its own internal checks. This matches the design note's own stump-power argument (the "reflex" and "back-test" sections of the Survivor anatomy: the easy route validates on its own terms, and the field's major-event-day treatment, which only removes the snow days, offers no warning). The design note's ladder additionally documents that the decisive construction is robust across 26 valid-looking rival constructions and 18 skip-a-step rungs, none of which reach more than 3 of the golden six, which is independent (author-side) evidence for the same stump-power conclusion the isolated thread reached blind.
+Thread's likely hurried losses: radio-less clocks (a ten-minute window counts storm trips; one fixed offset finds 19 of 259), lost and unread months (about 90 faults of 2026), and the pooled baseline (about 126 to 150 caused instead of 279; 2 referrals). A solid run still diverges on scatter (15 vs 17), the exact inspection counts and the sound-referral reading, so part of the loss sits on forks, not analysis, until the bands are stated. The thread reached the referral set, R3 and R8 on a first pass without the note's hard steps being supplied, which bears on the note's careful column.
+
+## Gate H
+Thread line: domain pass; layers pass; results 9 graded across 6 areas; one_thing none; effort quick 2, careful 5, thorough 8 of 9; one_fact: "learn the sound rate only from seasons a later inspection confirmed sound" rescues about 3 of 9 (referral set, 2026 caused, avoided faults); the clock/restoration sentence also about 3 of 9.
+Note: 8 results, quick 0, careful 0.5, thorough 8; Largest single hint (radio-less clocks and last events) rescues 2 of 8.
+Reconciliation:
+- The thread's careful pass (5 of 9) is well above the note's 0.5 of 8 and above a third. This is the findings pattern that predicts a send-back: the note's careful column assumes the careful run misses the baseline time-order step ("a clean inspection proves the seasons before it"), and the thread made it unprompted. The thread's `one_fact` hint (the baseline sentence) rescues 3 of 9, against the note's hint naming the clocks at 2 of 8; the larger single sentence is the baseline, not the one the note lists. Both are at or just above a third (3/9 = one third, exactly at the limit).
+- No single hidden thing (`one_thing` none), and no factor only in the deciding units.
+- Bands: LRD-F2 (7.0 vs 8.4) and the 2025 total sit just outside their bands; R6 and R7 need the pinning described above. No band found too wide to grade.
 
 ## Findings, ranked
-1. (Spec gate, FIX_NOW-level, metadata hygiene only) `metadata.json` names no distractors at all; it has no `distractors` field, though the ZIP-level content (confirmed independently by both the design note and the isolated judge thread) does carry two usable, unlabelled, unused distractors (`ridgeline_2027_schedule_of_rates.docx`, `tree_notices_register_2024-2026.xlsx`). This is an omission in the authoring record, not a change to what solvers see; it does not affect the analytic surface and can be closed by adding a `distractors` field to `metadata.json` outside the ZIP.
-2. (Reporting nuance, no action required) The judge thread's Gate G mechanism label (`forecasting` / `method_or_model_selection`) differs from the design note's declared mechanism (`decomposition_attribution`), but both are non-banned, `surface_read_dependency: no` classifications and agree on every substantive fact (the naive six, the correct six, the totals, the margin). No send-back implication.
-3. (Noted, non-decisive) `feeder_register_2026.xlsx`'s own ICP column totals 39,933 against the `icp_counts_by_feeder` file's 39,943 used for the SAIFI denominator; the programme terms (section 5) pin the ICPs at the latest month-end, which is the `icp_counts` file, so this is harmless cross-file mess that does not affect any committed answer. No action required.
+1. R7 "each count exact" is not determinate across scatter models (16/25 and 14/27 against 15/26): FIX_NOW in Supplementary 7 and Critical Component 4 (bands, or pin the scatter model).
+2. R6 reading: state the rule's own expected rate, not the ceiling.
+3. Referral test over observed months against the restored CSV column: state in the blocks (and note beside the CSV column) that restored counts are reported, recorded counts are tested; give the referral-count band for rivals.
+4. Thin per-zone and per-season bands: LRD-F2 expectation (7.0 vs 8.4), 2025 total (-3.2%).
+5. Effort test: the thread's careful column (5 of 9) exceeds the note's 0.5 of 8 because the baseline time-order step was made unprompted; the main thread should weigh this against the note's effort test and the price of the task.
 
 ## Next action for the author
-Add a `distractors` field to `task13/metadata.json` naming `ridgeline_2027_schedule_of_rates.docx` and `tree_notices_register_2024-2026.xlsx` (outside the ZIP, as the spec requires); no other change is needed, and no re-judge or model rerun is required since nothing solvers see changes.
+Edit the answer blocks only: replace the "exact" counts in Supplementary 7 and Critical Component 4 with bands (confirmed 14 to 16, misses 25 to 27) or the pinned scatter model, add the sound-referral reading to Supplementary 6, add the recorded-versus-restored line to the referral description, widen the two thin bands; then re-judge once under `/fix-determinism`, and weigh the careful-column finding against the note's effort test.

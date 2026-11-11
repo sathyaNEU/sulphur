@@ -1,142 +1,141 @@
 {
  "task": "task13",
- "decision": "the six 11 kV feeders for Kotuku Networks' 2027 vegetation catch-up, judged on the sustained vegetation customer interruptions it avoids in the 2027-28 regulatory year outside major event days",
+ "architecture": "v2",
+ "decision": "the referral rule Kalumpang Valley Electric Cooperative runs after each lightning season to refer the protection zones whose lightning protection has failed, and the zones it refers for the 2027 dry-season refit",
  "deliverables": [
-  "vegetation_catchup_2027_feeders.csv",
-  "vegetation_catchup_2027_board_note.docx"
+  "lightning_referrals_2027.csv",
+  "lightning_refit_2027_note.docx"
  ],
- "pull_date": "2026-11-03",
- "as_of": "2026-11-03",
+ "pull_date": "2026-11-04",
+ "as_of": "2026-11-04",
  "files": [
   {
-   "path": "target/oms_interruptions_2022-04_2026-10.csv",
-   "source": "Kotuku Networks outage management system interruption export (constructed operating layer)",
-   "covers": "one row per recorded interruption, April 2022 to October 2026: source, feeder, the protection that operated, local start and restore times, duration, customers interrupted, class and cause code",
-   "origin": "made by task13/generator from a seeded world (network, weather, corridors, interruptions); no LLM-written data",
-   "pulled_on": "2026-11-03",
+   "path": "target/kidlat_strokes_2021-11_2026-10.csv",
+   "source": "Kidlat Data Services Inc. lightning location extract for the KALVECO franchise and a margin around it (constructed)",
+   "covers": "one row per located discharge, November 2021 to October 2026: UTC time to the microsecond, latitude, longitude, peak current, type, sensors and the location error ellipse; 149410 rows",
+   "origin": "made by task13/generator from a seeded simulation of the cooperative (network, thunderstorms, flashovers, protection, controllers, inspections); no LLM-written data",
+   "pulled_on": "2026-11-04",
    "license": "constructed for this task; CC BY 4.0"
   },
   {
-   "path": "target/pou_aws_hourly/pou_aws_PBA_hourly_2006-2026.csv",
-   "source": "Pou Weather Services automatic weather station hourly record, Paua Bay (constructed operating layer)",
-   "covers": "hourly mean wind, maximum gust, direction, unit and quality flag, January 2006 to October 2026, UTC",
-   "origin": "made by task13/generator from a seeded world (network, weather, corridors, interruptions); no LLM-written data",
-   "pulled_on": "2026-11-03",
+   "path": "target/scada_event_history_2021-12_2026-10.csv",
+   "source": "KALVECO SCADA historian event export (constructed)",
+   "covers": "one row per event the substation breakers and radio-linked reclosers reported, December 2021 to October 2026, Philippine time; 38782 rows",
+   "origin": "made by task13/generator from a seeded simulation of the cooperative (network, thunderstorms, flashovers, protection, controllers, inspections); no LLM-written data",
+   "pulled_on": "2026-11-04",
    "license": "constructed for this task; CC BY 4.0"
   },
   {
-   "path": "target/pou_aws_hourly/pou_aws_MTF_hourly_2006-2026.csv",
-   "source": "Pou Weather Services automatic weather station hourly record, Mataroa Flats (constructed operating layer)",
-   "covers": "hourly mean wind, maximum gust, direction, unit and quality flag, January 2006 to October 2026, UTC",
-   "origin": "made by task13/generator from a seeded world (network, weather, corridors, interruptions); no LLM-written data",
-   "pulled_on": "2026-11-03",
+   "path": "target/recloser_event_downloads_2021-2026.csv",
+   "source": "KALVECO recloser controller event memory downloads, read on site (constructed)",
+   "covers": "one row per event in each memory read at a site visit, 2021 to 2026, on the controller's own clock, with the read time and event number; 72858 rows",
+   "origin": "made by task13/generator from a seeded simulation of the cooperative (network, thunderstorms, flashovers, protection, controllers, inspections); no LLM-written data",
+   "pulled_on": "2026-11-04",
    "license": "constructed for this task; CC BY 4.0"
   },
   {
-   "path": "target/pou_aws_hourly/pou_aws_KWR_hourly_2006-2026.csv",
-   "source": "Pou Weather Services automatic weather station hourly record, Kowhai Ridge (constructed operating layer)",
-   "covers": "hourly mean wind, maximum gust, direction, unit and quality flag, January 2006 to October 2026, UTC",
-   "origin": "made by task13/generator from a seeded world (network, weather, corridors, interruptions); no LLM-written data",
-   "pulled_on": "2026-11-03",
+   "path": "target/oms_outages_2021-12_2026-10.csv",
+   "source": "KALVECO outage management system export (constructed)",
+   "covers": "one row per sustained outage, December 2021 to October 2026: breaker, recloser or transformer, times, consumers, dispatcher cause code, crew remark and weather; 2925 rows",
+   "origin": "made by task13/generator from a seeded simulation of the cooperative (network, thunderstorms, flashovers, protection, controllers, inspections); no LLM-written data",
+   "pulled_on": "2026-11-04",
    "license": "constructed for this task; CC BY 4.0"
   },
   {
-   "path": "target/pou_aws_hourly/pou_aws_TSD_hourly_2006-2026.csv",
-   "source": "Pou Weather Services automatic weather station hourly record, Titi Saddle (constructed operating layer)",
-   "covers": "hourly mean wind, maximum gust, direction, unit and quality flag, January 2006 to October 2026, UTC; knots before July 2013",
-   "origin": "made by task13/generator from a seeded world (network, weather, corridors, interruptions); no LLM-written data",
-   "pulled_on": "2026-11-03",
+   "path": "target/distribution_transformer_replacements_2021-2026.xlsx",
+   "source": "KALVECO Stores and Materials distribution transformer replacement book (constructed)",
+   "covers": "one row per transformer issued to replace one in service, 2021 to 2026, with the reason recorded",
+   "origin": "made by task13/generator from a seeded simulation of the cooperative (network, thunderstorms, flashovers, protection, controllers, inspections); no LLM-written data",
+   "pulled_on": "2026-11-04",
    "license": "constructed for this task; CC BY 4.0"
   },
   {
-   "path": "target/pou_aws_station_register.csv",
-   "source": "Pou Weather Services station register (constructed operating layer)",
-   "covers": "the four stations with coordinates, elevation, anemometer height, opening date and instrument notes",
-   "origin": "made by task13/generator from a seeded world (network, weather, corridors, interruptions); no LLM-written data",
-   "pulled_on": "2026-11-03",
+   "path": "target/protection_zones_register_2026.xlsx",
+   "source": "KALVECO protection zones register (constructed)",
+   "covers": "one row per protection zone: feeder, substation, the breaker or recloser upstream, telemetry, line km by construction and area, line arresters, transformers, member-consumers",
+   "origin": "made by task13/generator from a seeded simulation of the cooperative (network, thunderstorms, flashovers, protection, controllers, inspections); no LLM-written data",
+   "pulled_on": "2026-11-04",
    "license": "constructed for this task; CC BY 4.0"
   },
   {
-   "path": "target/feeder_register_2026.xlsx",
-   "source": "Kotuku Networks 11 kV feeder register (constructed operating layer)",
-   "covers": "the 48 feeders with former codes, zone substation, district, overhead and underground km, ICPs, commissioning year and vegetation cycle; the zone substations with coordinates",
-   "origin": "made by task13/generator from a seeded world (network, weather, corridors, interruptions); no LLM-written data",
-   "pulled_on": "2026-11-03",
+   "path": "target/overhead_line_routes_2026.geojson",
+   "source": "KALVECO GIS overhead line routes (constructed)",
+   "covers": "one LineString per overhead route section with its zone, feeder, phases, construction and area",
+   "origin": "made by task13/generator from a seeded simulation of the cooperative (network, thunderstorms, flashovers, protection, controllers, inspections); no LLM-written data",
+   "pulled_on": "2026-11-04",
    "license": "constructed for this task; CC BY 4.0"
   },
   {
-   "path": "target/protection_assets_2026-10.csv",
-   "source": "Kotuku Networks protection asset register (constructed operating layer)",
-   "covers": "every breaker, recloser and fuse with its feeder and the ICPs downstream of it",
-   "origin": "made by task13/generator from a seeded world (network, weather, corridors, interruptions); no LLM-written data",
-   "pulled_on": "2026-11-03",
+   "path": "target/cyclic_line_inspections_2016-2026.xlsx",
+   "source": "KALVECO cyclic line inspection book (constructed)",
+   "covers": "one row per zone per inspection round, 2016 to 2026: dates, team, structures, findings by kind, repairs",
+   "origin": "made by task13/generator from a seeded simulation of the cooperative (network, thunderstorms, flashovers, protection, controllers, inspections); no LLM-written data",
+   "pulled_on": "2026-11-04",
    "license": "constructed for this task; CC BY 4.0"
   },
   {
-   "path": "target/icp_counts_by_feeder_2022-04_2026-10.csv",
-   "source": "ICP registry month-end counts by feeder (constructed operating layer)",
-   "covers": "ICPs connected on each feeder at each month-end, April 2022 to October 2026",
-   "origin": "made by task13/generator from a seeded world (network, weather, corridors, interruptions); no LLM-written data",
-   "pulled_on": "2026-11-03",
+   "path": "target/lightning_protection_refit_2027_programme_terms.docx",
+   "source": "KALVECO 2027 Lightning Protection Refit programme terms (constructed)",
+   "covers": "the refit's purpose, terms, the referral rule's WHAT, the refit's scope and the check against inspections",
+   "origin": "made by task13/generator from a seeded simulation of the cooperative (network, thunderstorms, flashovers, protection, controllers, inspections); no LLM-written data",
+   "pulled_on": "2026-11-04",
    "license": "constructed for this task; CC BY 4.0"
   },
   {
-   "path": "target/vegetation_cycle_log_2014-2026.xlsx",
-   "source": "Kotuku Networks vegetation cycle log (constructed operating layer)",
-   "covers": "every cycle trim job since 2014: feeder, crew started, crew finished, job closed, spans and km",
-   "origin": "made by task13/generator from a seeded world (network, weather, corridors, interruptions); no LLM-written data",
-   "pulled_on": "2026-11-03",
+   "path": "target/line_inspection_procedure_rev4.pdf",
+   "source": "KALVECO line inspection procedure, revision 4 (constructed)",
+   "covers": "scope, what the team checks, how findings are recorded",
+   "origin": "made by task13/generator from a seeded simulation of the cooperative (network, thunderstorms, flashovers, protection, controllers, inspections); no LLM-written data",
+   "pulled_on": "2026-11-04",
    "license": "constructed for this task; CC BY 4.0"
   },
   {
-   "path": "target/reliability_reporting_standard.docx",
-   "source": "Kotuku Networks Reliability Reporting Standard, version 4 (constructed governing document)",
-   "covers": "definitions, counting rules, cause codes and the DPP3 and DPP4 major event day boundary values",
-   "origin": "made by task13/generator from a seeded world (network, weather, corridors, interruptions); no LLM-written data",
-   "pulled_on": "2026-11-03",
+   "path": "target/substation_raingauge_daily_2022-2026.csv",
+   "source": "KALVECO substation rain gauge daily totals (constructed)",
+   "covers": "one row per gauge per day, 2022 to 2026; 5295 rows",
+   "origin": "made by task13/generator from a seeded simulation of the cooperative (network, thunderstorms, flashovers, protection, controllers, inspections); no LLM-written data",
+   "pulled_on": "2026-11-04",
    "license": "constructed for this task; CC BY 4.0"
   },
   {
-   "path": "target/vegetation_catchup_2027_programme_terms.docx",
-   "source": "Kotuku Networks 2027 Vegetation Catch-up: Programme Terms (constructed governing document)",
-   "covers": "the work, how the catch-up is judged, the comparison, eligibility and reporting",
-   "origin": "made by task13/generator from a seeded world (network, weather, corridors, interruptions); no LLM-written data",
-   "pulled_on": "2026-11-03",
-   "license": "constructed for this task; CC BY 4.0"
-  },
-  {
-   "path": "target/tree_notices_register_2024-2026.xlsx",
-   "source": "Kotuku Networks tree notices register (constructed operating layer)",
-   "covers": "notices issued to tree owners under the Electricity (Hazards from Trees) Regulations 2003, January 2024 to October 2026",
-   "origin": "made by task13/generator from a seeded world (network, weather, corridors, interruptions); no LLM-written data",
-   "pulled_on": "2026-11-03",
-   "license": "constructed for this task; CC BY 4.0"
-  },
-  {
-   "path": "target/ridgeline_2027_schedule_of_rates.docx",
-   "source": "Ridgeline Arborists 2027 schedule of rates (constructed commercial document)",
-   "covers": "per-span trimming rates by terrain class and rates for extras, valid for 2027",
-   "origin": "made by task13/generator from a seeded world (network, weather, corridors, interruptions); no LLM-written data",
-   "pulled_on": "2026-11-03",
+   "path": "target/refit_materials_quotation_2027.xlsx",
+   "source": "Silangan Electrical Trading Corp. quotation for refit materials (constructed)",
+   "covers": "unit prices for ground wire, rods, arresters and insulators for 2027",
+   "origin": "made by task13/generator from a seeded simulation of the cooperative (network, thunderstorms, flashovers, protection, controllers, inspections); no LLM-written data",
+   "pulled_on": "2026-11-04",
    "license": "constructed for this task; CC BY 4.0"
   }
  ],
  "real_world_references": [
-  "Electricity (Hazards from Trees) Regulations 2003 (New Zealand), named in the tree notices register",
-  "Commerce Commission default price-quality paths (DPP3, DPP4), named in the reliability reporting standard as the source of the boundary values"
+  "lightning location networks report stroke times in UTC with a location error ellipse and a detection efficiency that falls for weak currents; nothing in the pack names a real network",
+  "electric cooperatives in the Philippines run 13.2 kV overhead distribution under the National Electrification Administration; KALVECO and its franchise are fictional"
  ],
- "names": "organisations, places, stations and people are fictional; personas drawn with guard.py names --geo \"New Zealand\" --seed 1301",
+ "names": "organisations, places, substations and people are fictional; personas drawn with guard.py names --geo Philippines at seeds 1302, 1307 and 1311",
  "distractors": [
   {
-   "path": "target/tree_notices_register_2024-2026.xlsx",
-   "why_it_looks_relevant": "vegetation hazard notices by feeder, the same corridors the catch-up trims",
-   "why_unused": "notices to tree owners say nothing about the interruptions a corridor trim avoids; no golden step reads it"
+   "path": "target/substation_raingauge_daily_2022-2026.csv",
+   "why_it_looks_relevant": "rain falls with the thunderstorms that bring lightning, by substation and day",
+   "why_unused": "rain says nothing a located stroke does not say better about the lightning near a line; the answer reads none of it"
   },
   {
-   "path": "target/ridgeline_2027_schedule_of_rates.docx",
-   "why_it_looks_relevant": "the vegetation contractor's 2027 rates for the work the catch-up buys",
-   "why_unused": "the programme terms judge the catch-up on interruptions avoided, not cost; no golden step reads it"
+   "path": "target/refit_materials_quotation_2027.xlsx",
+   "why_it_looks_relevant": "the refit's materials and their prices",
+   "why_unused": "the questions are which zones to refer and what the rule does, not what the refit costs; the answer reads none of it"
+  },
+  {
+   "path": "target/distribution_transformer_replacements_2021-2026.xlsx",
+   "why_it_looks_relevant": "transformers burnt by lightning are more common where ground leads are gone, zone by zone",
+   "why_unused": "the rule refers on lightning faults; burnt transformers are too few a zone to refer on and the answer reads none of it"
   }
  ],
- "labelled_in_pack": false
+ "labelled_in_pack": false,
+ "context_artifact": {
+  "path": "target/oms_outages_2021-12_2026-10.csv",
+  "answers": "the dispatcher-coded cause of each sustained outage, correctly for that question",
+  "why_not_the_lightning_record": "it holds sustained outages only, and the cause code is the dispatcher's word, not a match to a located stroke; the answer reads none of it"
+ },
+ "stated_inputs": [
+  "400",
+  "171"
+ ]
 }

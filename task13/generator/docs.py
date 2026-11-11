@@ -1,8 +1,8 @@
-"""The pack's office files in their issuers' genres: the network's feeder register, the vegetation cycle log, the
-reliability reporting standard, the 2027 catch-up's programme terms, the tree notices register and the vegetation
-contractor's 2027 schedule of rates. Workbooks are written and then saved in Excel's own form
-(postprocess.normalize_ooxml); documents are laid out by the house writer's Word stage (officepdf) and saved in
-Word's own form (postprocess.normalize_docx)."""
+"""The pack's office files in their issuers' genres: the protection zones register, the cyclic line inspection log, the
+stores' transformer replacement register, the 2027 refit's programme terms, the line inspection procedure (a PDF the
+technical services department exported from Word) and a supplier's materials quotation. Workbooks are written and then
+saved in Excel's own form (postprocess.normalize_ooxml); documents are laid out by the house writer's Word stage
+(officepdf) and saved in Word's own form (postprocess.normalize_docx)."""
 import hashlib
 
 import numpy as np
@@ -14,9 +14,7 @@ from reportlab.lib.styles import ParagraphStyle
 from reportlab.platypus import Paragraph, Spacer, Table, TableStyle
 
 import common as C
-import pack as P
 import postprocess as PP
-import world as W
 
 BODY = ParagraphStyle('body', fontName='Helvetica', fontSize=10, leading=13.2, spaceAfter=6)
 SMALL = ParagraphStyle('small', parent=BODY, fontSize=8.6, leading=11, spaceAfter=3)
@@ -25,17 +23,23 @@ TITLE = ParagraphStyle('title', parent=BODY, fontName='Helvetica-Bold', fontSize
 CELL = ParagraphStyle('cell', fontName='Helvetica', fontSize=8.8, leading=10.8)
 CELLB = ParagraphStyle('cellb', parent=CELL, fontName='Helvetica-Bold')
 
-DISTRICT = {'PBY': 'Paua Bay', 'WTK': 'Waitaki Road', 'HRK': 'Harakeke', 'MTR': 'Mataroa', 'RNG': 'Mataroa',
-            'OKR': 'Okere', 'KWH': 'Kowhai', 'TOT': 'Totara Gully', 'TIT': 'Titi', 'MKR': 'Makora'}
-
 
 def _stamps(key):
     a, b = C.STAMP[key]
     return C.utc_z(a), C.utc_z(b)
 
 
+def _col(j):
+    s = ''
+    j += 1
+    while j:
+        j, r = divmod(j - 1, 26)
+        s = chr(65 + r) + s
+    return s
+
+
 def _xlsx(path, sheets, key, title, author, company):
-    """sheets: list of (name, header lines, rows, column widths, number formats by column letter)."""
+    """sheets: list of (name, header lines, rows, column widths, number formats by column index)."""
     wb = Workbook()
     wb.remove(wb.active)
     for name, heads, rows, widths, fmts in sheets:
@@ -55,12 +59,12 @@ def _xlsx(path, sheets, key, title, author, company):
                     c.fill = PatternFill('solid', fgColor='DCE6F0')
                     c.alignment = Alignment(wrap_text=True, vertical='top')
                 else:
-                    f = fmts.get(chr(65 + j))
+                    f = fmts.get(j)
                     if f:
                         c.number_format = f
             r += 1
         for j, wdt in enumerate(widths):
-            ws.column_dimensions[chr(65 + j)].width = wdt
+            ws.column_dimensions[_col(j)].width = wdt
         ws.freeze_panes = ws.cell(row=top + 1, column=1)
     wb.save(path)
     cr, md = _stamps(key)
@@ -68,7 +72,6 @@ def _xlsx(path, sheets, key, title, author, company):
 
 
 def _docx(path, story, key, title, author, company, footer):
-    """the issuer's document as its word processor saves it (the house writer's Word stage, then Word's own form)"""
     from docx import Document
     from docx.enum.text import WD_BREAK
     from docx.shared import Mm, Pt, RGBColor
@@ -120,263 +123,204 @@ def _tbl(rows, widths):
     return t
 
 
-# ------------------------------------------------------------------ the feeder register
-def write_feeders(S, path, icps):
-    """icps: each feeder's ICPs at 31 October 2026 as the registry counts them"""
-    F = S['F'].sort_values('feeder')
-    rng = np.random.default_rng(W.SEED + 720)
-    cust = icps
-    rows = [['Feeder', 'Former code', 'Zone substation', 'District', 'Voltage (kV)', 'Overhead (km)', 'Underground (km)',
-             'ICPs (31 Oct 2026)', 'Commissioned', 'Vegetation cycle (years)', 'Notes']]
-    for _, r in F.iterrows():
-        fc = P.old_feeder_code(r['feeder'])
-        note = ''
-        if r['feeder'].startswith('RNG-'):
-            note = 'Renamed at the Rangiora Street rebuild, August 2023'
-        rows.append([r['feeder'], fc if fc != r['feeder'] else '', r['zone'], DISTRICT[r['zone']], 11, float(r['km']),
-                     float(r['ug_km']), int(cust[r['feeder']]), int(r['age']), int(r['cycle']), note])
-    zrows = [['Code', 'Zone substation', 'Latitude', 'Longitude', 'Commissioned', 'Transformers (MVA)']]
-    for z in W.ZONES:
-        zrows.append([z[0], z[1], z[2], z[3], int(rng.integers(1958, 1990)) if z[0] != 'RNG' else 2023,
-                      ['2 x 5', '2 x 7.5', '1 x 10', '2 x 10'][int(rng.integers(0, 4))]])
-    heads = ['Kotuku Networks: 11 kV feeder register', 'Network Planning. Kept current to 28 July 2026; ICPs from the '
-             'registry at 31 October 2026. Coordinates WGS84.']
-    _xlsx(path, [('Feeders', heads, rows, [10, 12, 15, 15, 11, 12, 14, 15, 13, 14, 44],
-                  {'F': '0.0', 'G': '0.0', 'H': '#,##0'}),
-                 ('Zone substations', ['Zone substations'], zrows, [8, 18, 11, 11, 13, 17], {'C': '0.000', 'D': '0.000'})],
-          'feeders', '11 kV feeder register', 'Network Planning', C.ORG)
+# ------------------------------------------------------------------ the protection zones register
+def write_zones(w, path):
+    Z = w['Z'].sort_values(['sub', 'feeder_ix', 'order'])
+    model = {'relay': 'Feeder protection relay', 'new': 'Recloser control NX-20', 'old': 'Recloser control NX-10'}
+    rows = [['Zone (protective device)', 'Feeder', 'Substation', 'Equipment', 'Control', 'Telemetry', 'In service',
+             'Upstream device', 'Overhead line km, three-phase', 'Overhead line km, single-phase',
+             'km wood crossarm', 'km steel crossarm', 'km pole-top bracket', 'km bracket on concrete pole',
+             'km open field', 'km tree-lined', 'km town', 'km hill',
+             'km fitted with line arresters (2017-18 programme)', 'Line arresters', 'Distribution transformers',
+             'Member-consumers']]
+    subname = dict(C.SUBSTATIONS)
+    for z in Z.itertuples():
+        rows.append([z.zone, z.feeder, subname[z.sub_code], 'Feeder breaker' if z.kind == 'breaker' else 'Line recloser',
+                     model[z.controller], 'SCADA (radio)' if (z.telemetry == 'SCADA' and z.controller != 'relay') else
+                     ('SCADA (substation RTU)' if z.controller == 'relay' else 'None, read on site'),
+                     int(z.commissioned), z.parent or '', round(z.km3, 2), round(z.km1, 2),
+                     round(z.km_wood_xarm, 2), round(z.km_steel_xarm, 2), round(z.km_bracket, 2), round(z.km_concrete_bracket, 2),
+                     round(z.km_open, 2), round(z.km_treed, 2), round(z.km_town, 2), round(z.km_hill, 2),
+                     round(z.km_prot, 2), int(z.n_la), int(z.n_tx), int(z.members)])
+    subs = [['Code', 'Substation', 'Transformer', 'Feeders']]
+    mva = {0: '10 MVA', 1: '10 MVA', 2: '15 MVA', 3: '5 MVA', 4: '10 MVA', 5: '10 MVA', 6: '5 MVA', 7: '10 MVA',
+           8: '15 MVA', 9: '10 MVA', 10: '5 MVA', 11: '10 MVA'}
+    for i, (code, name) in enumerate(C.SUBSTATIONS):
+        subs.append([code, name, '69/13.2 kV, ' + mva[i], int(w['Z'][w['Z'].sub_code == code].feeder.nunique())])
+    heads = ['%s: protection zones register' % C.ORG, 'Technical Services Department. One row per breaker or line '
+             'recloser: the overhead line it clears up to the next recloser downstream. Revised 17 September 2026.']
+    fm = {j: '0.00' for j in range(8, 19)}
+    _xlsx(path, [('Zones', heads, rows, [16, 10, 13, 15, 22, 18, 9, 14] + [11] * 11 + [12, 12, 12], fm),
+                 ('Substations', [], subs, [8, 16, 18, 9], {})],
+          'zones', 'Protection zones register', C.PEOPLE['tsd_manager'], C.ORG)
     return len(rows) - 1
 
 
-# ------------------------------------------------------------------ the vegetation cycle log
-def cycle_jobs(S):
-    rng = np.random.default_rng(W.SEED + 730)
-    jobs = []
-    for f in sorted(S['F']['feeder']):
-        for d in S['trims'][f]:
-            d = pd.Timestamp(d)
-            if d < pd.Timestamp('2014-01-01'):
-                continue
-            jobs.append((d, f))
-    jobs.sort()
-    km = dict(zip(S['F']['feeder'], S['F']['km']))
-    tau = dict(zip(S['F']['feeder'], S['F']['tau']))
-    out = []
-    count = {}
-    for d, f in jobs:
-        y = d.year
-        count[y] = count.get(y, 0) + 1
-        start = d - pd.Timedelta(days=int(rng.integers(18, 60)))
-        closed = d + pd.Timedelta(days=int(rng.integers(12, 75)))
-        if closed > pd.Timestamp('2026-10-30'):
-            closed = None
-        spans = int(round(km[f] * rng.uniform(11.5, 13.5)))
-        cut = int(round(spans * min(0.95, 0.18 + 0.12 * tau[f] * rng.uniform(0.85, 1.15))))
-        contractor = 'Ridgeline Arborists' if d >= pd.Timestamp('2018-07-01') else 'Totara Tree Services'
-        out.append(dict(job='VM-%d-%03d' % (y, count[y]), feeder=f, start=start, finish=d, closed=closed, spans=spans,
-                        cut=cut, km=round(km[f] * rng.uniform(0.92, 1.0), 1), contractor=contractor))
-    return out
-
-
-def write_vegcycle(S, path):
-    rows = [['Job', 'Feeder', 'Crew started', 'Crew finished', 'Job closed', 'Spans inspected', 'Spans cut',
-             'Corridor km', 'Contractor', 'Comments']]
-    rng = np.random.default_rng(W.SEED + 731)
-    comments = ['', '', '', 'Access by landowner arrangement', 'Traffic management on state highway spans',
-                'Hazard trees outside corridor referred for notice', 'Two spans deferred to landowner works',
-                'Wet weather delays', '']
-    for j in cycle_jobs(S):
-        rows.append([j['job'], j['feeder'], j['start'].to_pydatetime(), j['finish'].to_pydatetime(),
-                     j['closed'].to_pydatetime() if j['closed'] is not None else None, j['spans'], j['cut'], j['km'],
-                     j['contractor'], comments[int(rng.integers(0, len(comments)))]])
-    heads = ['Vegetation management: cycle trim jobs', 'Kept by %s, Vegetation Manager. A job is closed once the '
-             'audit of the finished spans is signed off.' % C.PEOPLE['veg_manager']]
-    _xlsx(path, [('Cycle jobs', heads, rows, [13, 9, 13, 13, 13, 9, 9, 10, 20, 44],
-                  {'C': 'dd/mm/yyyy', 'D': 'dd/mm/yyyy', 'E': 'dd/mm/yyyy', 'H': '0.0'})],
-          'vegcycle', 'Vegetation cycle log', C.PEOPLE['veg_manager'], C.ORG)
+# ------------------------------------------------------------------ the cyclic line inspection log
+def write_inspections(w, path):
+    I = w['I'].copy()
+    Fi = w['Fi'].copy()
+    Z = w['Z'].set_index('zone_ix')
+    rng = np.random.default_rng(C.SEED + 501)
+    F = Fi.set_index(['zone_ix', 'round'])
+    rows = [['Round', 'Zone', 'Inspection start', 'Inspection end', 'Team', 'Transformer structures',
+             'Line arrester structures', 'Ground leads missing or cut', 'Arresters failed', 'Pin insulators cracked',
+             'Leaning poles', 'Spans with vegetation', 'Repairs completed', 'Remarks']]
+    teams = ['Team %d' % k for k in range(1, 5)]
+    for r in I.sort_values(['round', 'start', 'zone_ix']).itertuples():
+        z = Z.loc[r.zone_ix]
+        f = F.loc[(r.zone_ix, r.round)] if (r.zone_ix, r.round) in F.index else None
+        gm = int(f.grounds_missing) if f is not None else 0
+        af = int(f.arresters_failed) if f is not None else 0
+        ic = int(f.insulators_cracked) if f is not None else 0
+        lean = int(rng.poisson(0.05 * z.km))
+        veg = int(rng.poisson(0.18 * z.km * (0.5 + min(z.veg, 3))))
+        rem = []
+        if gm:
+            rem.append('ground leads replaced')
+        if af:
+            rem.append('arresters replaced')
+        if ic:
+            rem.append('pin insulators replaced')
+        if lean:
+            rem.append('poles straightened')
+        rep = (r.end + pd.Timedelta(days=int(rng.integers(0, 3)))).strftime('%Y-%m-%d')
+        rows.append(['%d-%02d' % (r.round, (r.round + 1) % 100), z.zone, r.start.strftime('%Y-%m-%d'),
+                     r.end.strftime('%Y-%m-%d'), rng.choice(teams), int(z.n_tx), int(z.n_la), gm, af, ic, lean, veg, rep,
+                     '; '.join(rem).capitalize() if rem else 'No defects requiring work'])
+    heads = ['Cyclic line inspection log', 'Line Inspection Section, %s Kept by %s.' % (C.ORG, C.PEOPLE['inspection'])]
+    _xlsx(path, [('Inspections', heads, rows, [9, 15, 12, 12, 8, 12, 12, 12, 10, 11, 9, 10, 12, 40], {})],
+          'inspections', 'Cyclic line inspection log', C.PEOPLE['inspection'], C.ORG)
     return len(rows) - 1
 
 
-# ------------------------------------------------------------------ the tree notices register
-def write_notices(S, path):
-    rng = np.random.default_rng(W.SEED + 740)
-    F = S['F']
-    weight = (F['km'] * np.sqrt(F['tau'])).values
-    weight = weight / weight.sum()
-    types = ['Hazard warning notice', 'Cut or trim notice', 'Cut or trim notice', 'No-interest notice']
-    resp = ['Owner to trim', 'Owner declared no interest', 'Network to trim at owner cost', 'Disputed', 'Owner to trim']
-    rows = [['Notice', 'Feeder', 'Pole or span', 'Notice type', 'Issued', 'Owner response', 'Works due', 'Status', 'Closed']]
-    n = 0
-    for d in pd.date_range('2024-01-08', '2026-10-16', freq='D'):
-        if d.dayofweek >= 5:
-            continue
-        for _ in range(int(rng.poisson(0.42))):
-            n += 1
-            f = F['feeder'].iloc[int(rng.choice(len(F), p=weight))]
-            due = d + pd.Timedelta(days=int(rng.choice([20, 40, 60])))
-            closed = due + pd.Timedelta(days=int(rng.integers(-15, 90)))
-            open_ = closed > pd.Timestamp('2026-10-21') or rng.random() < 0.06
-            rows.append(['THN-%05d' % (4100 + n), f, 'P%04d' % int(rng.integers(1, 3800)), types[int(rng.integers(0, 4))],
-                         d.to_pydatetime(), resp[int(rng.integers(0, len(resp)))], due.to_pydatetime(),
-                         'Open' if open_ else 'Closed', None if open_ else closed.to_pydatetime()])
-    heads = ['Electricity (Hazards from Trees) Regulations 2003: notices issued', 'Vegetation team register, '
-             'January 2024 to October 2026']
-    _xlsx(path, [('Notices', heads, rows, [12, 9, 11, 22, 12, 28, 12, 9, 12],
-                  {'E': 'dd/mm/yyyy', 'G': 'dd/mm/yyyy', 'I': 'dd/mm/yyyy'})],
-          'notices', 'Tree notices register', C.PEOPLE['veg_manager'], C.ORG)
+# ------------------------------------------------------------------ the stores' transformer replacement register
+def write_transformers(w, path):
+    B = w['B']
+    Z = w['Z'].set_index('zone_ix')
+    rng = np.random.default_rng(C.SEED + 502)
+    rows = [['W.O. No.', 'Date replaced', 'Feeder', 'Zone', 'DT No.', 'kVA', 'Reason recorded']]
+    reason = {'lightning': ['Burnt', 'Burnt', 'Burnt (lightning)'], 'overload': ['Overloaded', 'Burnt'],
+              'age': ['Old/defective', 'Burnt'], 'oil': ['Leaking']}
+    for k, b in enumerate(B.sort_values('t').itertuples()):
+        d = b.t + pd.Timedelta(days=float(rng.uniform(0.3, 3.5)))
+        rows.append(['WO-%d-%04d' % (d.year, 1000 + k), d.strftime('%Y-%m-%d'), Z.feeder[b.zone_ix], Z.zone[b.zone_ix],
+                     'DT-%05d' % rng.integers(10000, 99999), int(rng.choice([10, 15, 25, 37.5, 50], p=[0.2, 0.3, 0.3, 0.1, 0.1]) if True else 0),
+                     rng.choice(reason[b.reason])])
+    heads = ['Distribution transformer replacements', 'Stores and Materials. One row per transformer issued to replace one in '
+             'service.']
+    _xlsx(path, [('Replacements', heads, rows, [14, 12, 9, 15, 10, 6, 18], {})], 'transformers',
+          'Distribution transformer replacements', C.PEOPLE['materials'], C.ORG)
     return len(rows) - 1
 
 
-# ------------------------------------------------------------------ the reliability reporting standard
-def boundary_table(S, E):
-    bounds, _ = W.boundary_values(E, S['F'])
-    return {k: (round(v[0], 2), round(v[1], 4)) for k, v in bounds.items()}
-
-
-def write_standard(path, B):
-    st = [Paragraph('Reliability Reporting Standard', TITLE),
-          Paragraph('Kotuku Networks Limited  |  Regulatory  |  Version 4, approved 8 April 2026', SMALL),
-          Paragraph('Owner: %s, Regulatory Manager' % C.PEOPLE['regulatory_mgr'], SMALL), Spacer(1, 6)]
-    sections = [
-        ('1. Purpose and scope', [
-            'This standard sets how Kotuku Networks records, counts and reports interruptions to supply on its '
-            'distribution network, for its information disclosures, its reporting against the default price-quality '
-            'path, and its internal reporting by feeder. It applies to every interruption recorded in the outage '
-            'management system (OMS).']),
-        ('2. Definitions', [
-            '(a) An interruption is a loss of supply to one or more ICPs caused by the operation of a protective device '
-            'or by switching on the network.',
-            '(b) A sustained interruption lasts 1 minute or longer. A shorter interruption is momentary and is not '
-            'counted in SAIDI or SAIFI.',
-            '(c) A planned interruption is one notified to the affected customers at least four working days ahead. '
-            'Every other interruption is unplanned.',
-            '(d) The customers interrupted by an interruption are the ICPs downstream of the device that operated, as '
-            'the OMS records them. Customer interruptions are the sum of customers interrupted; customer minutes are '
-            'customers interrupted times the duration of the interruption.',
-            '(e) The regulatory year runs from 1 April to 31 March. Days are New Zealand calendar days in local time, '
-            'and the OMS records times in local time.',
-            '(f) SAIDI and SAIFI for a period are the customer minutes and the customer interruptions of the period '
-            'divided by the average number of ICPs connected over the regulatory year, taken as the mean of the '
-            'month-end ICP counts. For a regulatory year not yet complete, the latest month-end count is used.']),
-        ('3. Counting', [
-            '(a) An interruption is counted once for each operation of a protective device.',
-            '(b) The OMS takes records from SCADA, from the field crew and from the call centre. Where one operation has '
-            'been recorded from more than one source, it is one interruption, and the SCADA or field crew record gives '
-            'its times and its customers interrupted.']),
-        ('4. Causes', [
-            'Each unplanned interruption carries one cause. The OMS cause codes changed on 1 October 2023; both sets '
-            'are shown.']),
-        ('5. Major event days', [
-            '(a) A major event day is a day on which the unplanned SAIDI for the day, or the unplanned SAIFI for the '
-            'day, exceeds the boundary value of the price-quality path in force on that day. Daily SAIDI and SAIFI '
-            'count sustained unplanned interruptions starting on the day.',
-            '(b) The boundary values are those set for Kotuku Networks by the Commerce Commission:']),
-        ('6. Reporting by feeder', [
-            'Reliability is reported for each feeder, and for each cause, with the interruptions starting on major '
-            'event days excluded. Feeder figures use the same counting and the same customers interrupted as the '
-            'network figures.']),
-    ]
-    for head, paras in sections:
-        st.append(Paragraph(head, HEAD))
-        for p in paras:
-            st.append(Paragraph(p, BODY))
-        if head.startswith('4.'):
-            st.append(_tbl([['Cause', 'Code to 30 September 2023', 'Code from 1 October 2023', 'Covers'],
-                            ['Vegetation', 'VEG', 'TREE', 'Trees and other vegetation contacting or falling onto lines'],
-                            ['Defective equipment', 'EQP', 'EQUIP', 'Failure of network equipment'],
-                            ['Wildlife', 'ANI', 'ANIMAL', 'Birds, possums and other animals'],
-                            ['Third party', 'VEH', 'THIRD-PARTY', 'Vehicles, excavation and other third-party damage'],
-                            ['Adverse weather', 'WTH', 'WEATHER', 'Wind, snow and debris other than vegetation'],
-                            ['Lightning', 'LGT', 'LIGHTNING', 'Lightning strikes'],
-                            ['Unknown', 'UNK', 'UNKNOWN', 'No cause found after patrol'],
-                            ['Planned', 'PLN', 'PLANNED', 'Planned interruptions']], [90, 85, 85, 200]))
-            st.append(Spacer(1, 4))
-        if head.startswith('5.'):
-            st.append(_tbl([['Path', 'In force', 'SAIDI boundary value (minutes)', 'SAIFI boundary value (interruptions)'],
-                            ['DPP3', '1 April 2020 to 31 March 2025', '%.2f' % B['DPP3'][0], '%.4f' % B['DPP3'][1]],
-                            ['DPP4', 'From 1 April 2025', '%.2f' % B['DPP4'][0], '%.4f' % B['DPP4'][1]]],
-                           [45, 140, 130, 145]))
-            st.append(Spacer(1, 4))
-    st.append(Spacer(1, 6))
-    st.append(Paragraph('Version history: version 1 issued March 2023; version 2 August 2023, the October 2023 cause '
-                        'codes; version 3 May 2025, DPP4 boundary values; version 4 April 2026, the counting rules '
-                        'for call centre records.', SMALL))
-    _docx(path, st, 'standard', 'Reliability Reporting Standard', C.PEOPLE['regulatory_mgr'], C.ORG,
-          'Kotuku Networks Reliability Reporting Standard v4. Internal.   Page ')
-
-
-# ------------------------------------------------------------------ the 2027 catch-up's programme terms
-PROGRAMME = [
+# ------------------------------------------------------------------ the 2027 refit's programme terms
+TERMS = [
     ('1. Purpose', [
-        'The 2027 vegetation catch-up is one season of corridor work on six 11 kV feeders, on top of the cycle '
-        'programme. It is carried in the asset management plan Kotuku Networks discloses before 1 April 2027, and the '
-        'board approves the six feeders at its November 2026 meeting.']),
-    ('2. The work', [
-        '(a) On each of the six feeders, Ridgeline Arborists’ crews trim the corridor of every overhead span back to '
-        'the clearance a cycle trim leaves, to the cycle programme’s specification.',
-        '(b) Every span on the six feeders is finished by 31 March 2027.',
-        '(c) A feeder’s next cycle trim falls due from the date the catch-up finished on it.',
-        '(d) Ridgeline’s crews carry the catch-up from November 2026, and the cycle programme resumes on 1 April 2028. '
-        'No feeder has a cycle trim between the end of October 2026 and 31 March 2028 other than the catch-up.']),
-    ('3. What the catch-up is judged on', [
-        '(a) The catch-up is judged on the sustained customer interruptions caused by vegetation that it avoids in the '
-        '2027-28 regulatory year, 1 April 2027 to 31 March 2028.',
-        '(b) Interruptions are counted as the Reliability Reporting Standard counts them: sustained, unplanned and '
-        'caused by vegetation, with the customers interrupted that the OMS records at the device that operated, on days '
-        'that are not major event days.',
-        '(c) The interruptions the catch-up avoids on a feeder are the difference between the vegetation customer '
-        'interruptions the feeder can be expected to have in 2027-28 with its corridor left as it stands, and those it '
-        'can be expected to have with its corridor as the catch-up leaves it.',
-        '(d) The six feeders are the six on which the catch-up avoids the most.']),
-    ('4. Eligibility', [
-        'Every 11 kV feeder Kotuku Networks operates is eligible. A feeder is in the catch-up or out of it as a whole.']),
-    ('5. Reporting', [
-        'The asset management plan names the six feeders and states the customer interruptions the catch-up is expected '
-        'to avoid on each, in total, and as network SAIFI on the ICPs connected at the latest month-end.']),
+        'The 2027 Lightning Protection Refit restores the lightning protection of the overhead protection zones where '
+        'it has failed, in the 2026-27 dry season, before the 2027 lightning season. The zones are those named by the '
+        'referral rule in section 3, which the Technical Services Department will also run after every lightning season '
+        'from 2027 on.']),
+    ('2. Terms used', [
+        '(a) A protection zone is the overhead line a feeder breaker or line recloser clears, up to the next line recloser '
+        'downstream, as listed in the protection zones register.',
+        '(b) The lightning season runs from 1 April to 31 October of each year.',
+        '(c) A lightning fault is a fault started by a lightning flash on a zone\'s lines. It is counted once, against the '
+        'zone whose lines it was on, however many times breakers or reclosers trip and reclose on it.',
+        '(d) A zone\'s lightning protection is sound when its ground leads, its line and transformer arresters and its pin '
+        'insulators are as the Cooperative\'s construction standard has them. Failed protection is any departure from that: '
+        'a missing or cut ground lead, a failed arrester, a cracked or punctured pin insulator.',
+        '(e) A zone\'s record since its last cyclic inspection runs from the day after the inspection\'s repairs were '
+        'completed to the end of the lightning season the rule is run after.',
+        '(f) The lightning faults failed protection caused in a season are the network\'s lightning faults in that season '
+        'less the lightning faults its lines would have had in it with every zone\'s protection sound.',
+        '(g) The lightning near a zone\'s lines is the ground strokes the lightning location service placed within 400 m '
+        'of them.']),
+    ('3. The referral rule', [
+        '(a) After each lightning season the rule refers every zone whose lightning faults since its last cyclic '
+        'inspection are more than its lines would have had with sound protection, under the lightning that fell near '
+        'them, by more than chance explains.',
+        '(b) Across the network, the rule may refer a zone whose protection is sound no more than once in five lightning '
+        'seasons on average.']),
+    ('4. The 2027 refit', [
+        '(a) The refit covers every zone the rule refers after the 2026 lightning season.',
+        '(b) On each zone it covers, the refit restores every ground lead, arrester and pin insulator to the construction '
+        'standard.',
+        '(c) The lightning faults the refit avoids are the faults its zones run above what sound protection would give '
+        'them, taken in a season with the lightning of an average of the 2022 to 2026 lightning seasons.']),
+    ('5. Checking the rule', [
+        'Each cyclic inspection checks the rule on the zone it inspects, against the rule as run after the lightning '
+        'season before the inspection. The inspection confirms a referral when the rule referred the zone and the '
+        'inspection records failed protection on it. It records a miss when it finds failed protection on a zone the rule '
+        'did not refer.']),
 ]
 
 
-def write_programme(path):
-    st = [Paragraph('2027 Vegetation Catch-up: Programme Terms', TITLE),
-          Paragraph('Kotuku Networks Limited  |  Network Operations  |  14 October 2026', SMALL),
-          Paragraph('Approved by %s, General Manager Network. Prepared with %s, Vegetation Manager.'
-                    % (C.PEOPLE['network_gm'], C.PEOPLE['veg_manager']), SMALL), Spacer(1, 6)]
-    for head, paras in PROGRAMME:
+def write_terms(path):
+    st = [Paragraph('2027 Lightning Protection Refit: Programme Terms', TITLE),
+          Paragraph('%s  |  Technical Services Department  |  26 October 2026' % C.ORG, SMALL),
+          Paragraph('Approved by %s, General Manager. Prepared by %s, Technical Services Department Manager.'
+                    % (C.PEOPLE['gm'], C.PEOPLE['tsd_manager']), SMALL), Spacer(1, 6)]
+    for head, paras in TERMS:
         st.append(Paragraph(head, HEAD))
         for p in paras:
             st.append(Paragraph(p, BODY))
-    _docx(path, st, 'programme', '2027 Vegetation Catch-up: Programme Terms', C.PEOPLE['network_gm'], C.ORG,
-          'Kotuku Networks. 2027 vegetation catch-up programme terms. Board in confidence.   Page ')
-    return [p for _, ps in PROGRAMME for p in ps]
+    _docx(path, st, 'terms', '2027 Lightning Protection Refit: Programme Terms', C.PEOPLE['tsd_manager'], C.ORG,
+          'KALVECO. 2027 Lightning Protection Refit: programme terms. For the Management Committee.   Page ')
+    return [p for _, ps in TERMS for p in ps]
 
 
-# ------------------------------------------------------------------ the contractor's 2027 schedule of rates
-def write_rates(path):
-    st = [Paragraph('Schedule of Rates 2027: Vegetation Management', TITLE),
-          Paragraph('%s for Kotuku Networks Limited  |  Rates valid 1 January to 31 December 2027' % C.CONTRACTOR, SMALL),
-          Paragraph('Prepared by %s, Contracts Supervisor, 30 September 2026' % C.PEOPLE['contractor'], SMALL),
-          Spacer(1, 6),
-          Paragraph('1. Corridor trimming', HEAD),
-          Paragraph('Rates are per overhead span inspected and trimmed to the cycle specification, including cut and '
-                    'chip, and are set by the terrain class of the span.', BODY),
-          _tbl([['Terrain class', 'Rate per span (NZD, excl. GST)', 'Typical spans per crew day'],
-                ['Urban and township', '182.00', '14'], ['Rural flat', '96.50', '26'],
-                ['Rural hill', '148.00', '17'], ['Plantation edge', '211.00', '11'],
-                ['Bush and scrub', '173.50', '13']], [150, 160, 150]),
-          Spacer(1, 4),
-          Paragraph('2. Hazard trees and extras', HEAD),
-          _tbl([['Item', 'Unit', 'Rate (NZD, excl. GST)'],
-                ['Hazard tree felling, trees outside the corridor (by notice)', 'per tree', '640.00'],
-                ['Elevated work platform', 'per hour', '165.00'],
-                ['Traffic management, level 1 road', 'per day', '890.00'],
-                ['Traffic management, state highway', 'per day', '1,940.00'],
-                ['Emergency call-out (storm response), crew of three', 'per hour', '412.00'],
-                ['Chipping and removal of cut material', 'per load', '95.00']], [260, 80, 120]),
-          Spacer(1, 4),
-          Paragraph('3. Terms', HEAD),
-          Paragraph('Rates are fixed for work ordered and completed in 2027. Work carried into 2028 is charged at the '
-                    '2028 schedule. Storm response is charged at the call-out rate from the time the crew is mobilised. '
-                    'Spans the crew cannot reach because of landowner access are recorded and charged at the inspection '
-                    'rate of 38.00 per span.', BODY)]
-    _docx(path, st, 'rates', 'Schedule of Rates 2027: Vegetation Management', C.PEOPLE['contractor'], C.CONTRACTOR,
-          'Ridgeline Arborists Limited. Schedule of rates 2027. Commercial in confidence.   Page ')
+# ------------------------------------------------------------------ the line inspection procedure (PDF)
+PROC = [
+    ('1. Scope', ['This procedure covers the cyclic inspection of the Cooperative\'s 13.2 kV overhead lines. Every '
+                  'protection zone is inspected once in five dry seasons. The zones of each substation are inspected in '
+                  'the same dry season, feeder by feeder, between December and March.']),
+    ('2. What the team checks', [
+        'At every transformer structure and every line arrester structure: the ground lead from the arrester and the '
+        'neutral to the ground rod is in place, unbroken and bonded; the arrester\'s disconnector has not operated and the '
+        'housing is not cracked or tracked.',
+        'Along every span: pin insulators for cracks, punctures and flashover marks; crossarms, braces and poles for rot, '
+        'lean and damage; tie wires and connectors; vegetation within the clearance zone.']),
+    ('3. Recording', [
+        'The team leader records, for each zone, the number of transformer and line arrester structures inspected, the '
+        'number of ground leads missing or cut, arresters failed and pin insulators cracked, the poles found leaning and '
+        'the spans with vegetation, and the date the repairs were completed. The log is kept by the Line Inspection Section.']),
+    ('4. Repairs', [
+        'Missing or cut ground leads are replaced, failed arresters and cracked pin insulators are changed, before the zone '
+        'is closed out. Work that needs an outage is scheduled with the dispatcher within the same dry season.']),
+    ('5. Safety', ['Ground leads are checked and replaced with the line energized only by a crew qualified for live-line '
+                   'work. Inspections stop during thunderstorms.']),
+]
+
+
+def write_procedure(path):
+    import officepdf as OP
+    st = [Paragraph('Cyclic Line Inspection Procedure', TITLE),
+          Paragraph('%s  |  Technical Services Department  |  Procedure TSD-LI-04, revision 4, 11 August 2022' % C.ORG, SMALL),
+          Spacer(1, 6)]
+    for head, paras in PROC:
+        st.append(Paragraph(head, HEAD))
+        for p in paras:
+            st.append(Paragraph(p, BODY))
+    a, b = C.STAMP['procedure']
+    OP.build(path, st, 'Cyclic Line Inspection Procedure', C.PEOPLE['inspection'], 'Procedure TSD-LI-04',
+             'KALVECO TSD-LI-04 rev 4. Page ', C.local(a), C.local(b), producer='LibreOffice 7.3')
+    return [p for _, ps in PROC for p in ps]
+
+
+# ------------------------------------------------------------------ a supplier's materials quotation (distractor)
+def write_quotation(path):
+    items = [('Copper ground wire, #4 AWG soft-drawn', 'm', 5200, 186.50), ('Ground rod, 16 mm x 2.4 m, copper-bonded', 'pc', 420, 742.00),
+             ('Ground rod clamp', 'pc', 460, 88.75), ('Surge arrester, 10 kV, polymer, with disconnector', 'pc', 610, 3140.00),
+             ('Pin insulator, 15 kV, porcelain (ANSI 55-5)', 'pc', 900, 412.25), ('Pin insulator, 15 kV, polymer', 'pc', 650, 538.00),
+             ('Steel insulator pin, 1 in thread', 'pc', 1500, 96.40), ('Parallel groove connector, Al-Cu', 'pc', 1200, 61.20),
+             ('Ground wire molding, PVC, 2.4 m', 'pc', 450, 118.00), ('Anti-theft ground lead cover, galvanized', 'pc', 380, 655.00)]
+    rows = [['Item', 'Description', 'Unit', 'Quantity', 'Unit price (PHP)', 'Amount (PHP)']]
+    for k, (d, u, q, p) in enumerate(items):
+        rows.append([k + 1, d, u, q, p, round(q * p, 2)])
+    rows.append(['', 'Total, VAT exclusive', '', '', '', round(sum(q * p for _, _, q, p in items), 2)])
+    heads = ['%s: quotation Q-2026-1187' % C.SUPPLIER, 'To: %s, attention %s. Prices valid 60 days, delivery 3 to 5 '
+             'weeks from order.' % (C.ORG, C.PEOPLE['materials'])]
+    _xlsx(path, [('Quotation', heads, rows, [6, 46, 6, 9, 15, 15], {4: '#,##0.00', 5: '#,##0.00'})], 'quotation',
+          'Quotation Q-2026-1187', 'Silangan Sales', C.SUPPLIER)
+    return len(rows) - 2

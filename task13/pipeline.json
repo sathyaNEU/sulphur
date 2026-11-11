@@ -1,35 +1,35 @@
 {
  "task": "task13",
- "status": "DESIGN",
+ "status": "PAUSED",
  "domain": "energy-systems-utilities",
  "subdomain": "grid-reliability-outage-analysis",
  "objective": "anomaly-detection",
  "stage": 2,
  "stage_name": "design",
  "updated": "2026-11-11",
- "call": "to be filled when the pack is cut: the zones the referral rule names for the 2027 lightning protection refit",
- "stump": "",
+ "call": "BGS-F3-R2, BGS-F5-R2, BTG-F1-R3, CBR-F2-R2, CLB-F5-R1, DLP-F2-R2, DLP-F4, LRD-F1-R1, LRD-F2, LRD-F2-R1, LRD-F3-R3, MPD-F2-R1, PGP-F1-R2, PGP-F2-R3 and SNJ-F1 for the 2027 refit, on a rule that refers a zone when its lightning faults since its last cyclic inspection exceed the inspection-confirmed sound expectation by more than their scatter allows at 1 in 855 a zone a season; rejects BTG-F1-R3 and PGP-F1-R2 alone",
+ "stump": "three independent judgments carry the chain: each radio-less controller's drifting clock (fitted read by read), each memory's lost and unread months (restored at the zone's own rate), and which seasons can teach a sound rate (only those a later inspection confirmed); a careful run that matches the radio-less trips on a wide window, counts the logged events and fits every season not yet found failed refers 2 zones against 15",
  "architecture": 2,
- "loops": 0,
+ "loops": 1,
  "precut": {
-  "exit": null,
-  "date": ""
+  "exit": 0,
+  "date": "2026-11-11"
  },
  "leak": {
-  "leak_py": "",
-  "reader": ""
+  "leak_py": "REVIEW (2026-11-11, --asof 2026-11-04): no LEAK; REVIEW lines ruled in the design note",
+  "reader": "clean (2026-11-11): Q1 and Q5 quote the terms' WHAT definitions, each executing to the golden; Q2 to Q4 none; Q6 none; one realism nit (a double period in the inspection log header) fixed in docs.py"
  },
  "duplicate_check": {
   "heart": "",
   "nearest": "mark253 0.07, task6 lineage 0.06 (drivers)"
  },
  "judge": {
-  "verdict": "",
-  "disposition": "",
-  "gate_h": "",
-  "report": ""
+  "verdict": "DETERMINISTIC",
+  "disposition": "FIX_NOW (blocks; applied 2026-11-11)",
+  "gate_h": "pass: 9 results over 6 areas, one_thing none, one_fact 3 of 9; first pass landed R2, R3, R4, R5, R8 and part of R1 (careful column repriced at about 73)",
+  "report": "task13/determinism_check_report.md"
  },
- "paper_pair": null,
+ "paper_pair": 16.2,
  "runs": {
   "run1": null,
   "run2": null,
@@ -75,7 +75,7 @@
    "commit": ""
   }
  ],
- "resume": "stage 2: write the design note's results chain, hidden factor record, effort test, forks and closure from the generator's measured passes; build the generator (simulated co-op, lightning extract, recloser logs) under task13/generator",
+ "resume": "PAUSED at stage 2 (design), architecture 2: built, gates.py --full 0 FAIL (157 checks, verify, byte-identical rebuild), leak.py REVIEW only, the leak reader clean, the judge DETERMINISTIC with FIX_NOW block repairs (applied), but the judge thread's own first pass landed the 15 zones, the season-by-season referrals, the radio-less 2026 faults, the failed-protection faults and the avoided faults inside their bands in about seven minutes, which reprices the careful column at about 73 against 16.2 on paper and sends the build back to design (determinism_check_report.md). Each of the three difficulties was a property the files show plus the field's standard remedy: the weekly battery tests fire at 03:00 true time and so leak every radio-less controller's clock offset (a generator flaw to fix: a controller runs its self-test on its own clock), event-number gaps announce the overwritten months, and the inspection book's time order names the confirmed-sound seasons. Next: the author's call between (a) uploading this cut to measure it on the platform (python3 task13/generator/build.py rebuilds target.zip and golden.zip; prompt and blocks current; the judge's pass predicts a score above the bar), and (b) a redesign in the same world whose results rest on modelling a careful run does not do by reflex: fix the self-test oracle and audit every scheduled event for clock leaks; give sound zones a persistent level beyond the register's covariates so the referral must compare each zone with its own confirmed-sound seasons (a two-level scatter, empirical Bayes per zone; a pooled fit refers always-high sound zones and misses always-low failed ones); file the avoided faults at each zone's current failed state, so they need the failure's onset within the window (the judge's own fork, 103 on the window against 130 to 170 since onset); keep the rule's realised false-referral rate (the first pass wrote the 0.2 ceiling); then re-scan seeds, rebuild, re-price and re-judge. Nothing here is READY.",
  "approved": null,
  "submitted": null,
  "portal": {
@@ -83,13 +83,13 @@
   "date": "",
   "note": ""
  },
- "notes": "post-judge fixes on 2026-11-09 (no re-judge owed: the judge approved and traced the range): metadata distractors; feeder register ICPs from the registry; station records in pou_aws_hourly/; exports stamped in New Zealand time; the range over every complete regulatory year (6,000 to 19,000); quarters by largest remainder; verifier extended to the quarters and the range",
+ "notes": "architecture 2: the likely-failed-part result (R7 in the draw) was dropped at the build as an open fork (signatures within noise on 8 of 15 zones); terms 3(c) removed, 2(f) and 5 added or rewritten to pin R3 and the inspection check; arch-1 scripts ceiling.py, deliver.py and rivals.py removed, tells.py kept as the authoring-tell sweep; stage 4 on 2026-11-11: block repairs applied per the judge (bands on the inspection check and the season totals, the false-referral reading, the observed-months test), terms 2(g) filed the lightning near a zone, OMS and register columns renamed from device to equipment",
  "doctrine": "throughout",
- "chain": "R1 lightning faults per season on each device's own clock; R2 the radio-less zones' 2026 faults with lost memory and unread months filled; R3 the 2026 season with every zone sound and the faults failed protection caused; R4 the zones referred now; R5 false referrals a season and referrals after each season since 2022; R6 referrals against the following cyclic inspections; R7 the likely failure at each referred zone; R8 faults the refit avoids in an average season",
+ "chain": "R1 the network's lightning faults per season on each device's own clock; R2 the radio-less zones' 2026 faults with lost and unread months restored; R3 2026's faults failed protection caused; R4 the zones referred for the 2027 refit; R5 referrals after each season since 2022; R6 the sound zones referred in a season; R7 referrals against the following cyclic inspections; R8 faults the refit avoids in a season of average lightning",
  "effort": {
-  "quick": null,
-  "careful": null,
-  "thorough": null,
-  "largest_hint": ""
+  "quick": 7.0,
+  "careful": 16.2,
+  "thorough": 100.0,
+  "largest_hint": "the reclosers with no radio link keep their own drifting clocks and only their last events between site visits: 2 of 8 (R1, R2)"
  }
 }

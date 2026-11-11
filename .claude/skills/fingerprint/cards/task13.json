@@ -1,149 +1,149 @@
 {
-  "task": "task13",
-  "project": "sulfur",
-  "architecture": "v2",
-  "drawn": "2026-11-11",
-  "slot_note": "author-requested re-root (2026-11-11): a much stronger stump than architecture 1, at least three major analytical failure points, new areas, not a template of task6",
-  "domain": "energy-systems-utilities",
-  "subdomain": "grid-reliability-outage-analysis",
-  "client_domain": "energy-systems-utilities",
-  "niche": "a Philippine electric cooperative's referral rule for the overhead protection zones whose lightning protection (arrester ground leads, line arresters, pin insulators) has failed, built from recloser event logs on their own clocks and a lightning location extract, ahead of the 2027 dry-season refit",
-  "objective": "anomaly-detection",
-  "shape": "08",
-  "decision_type": "designation_set",
-  "answer_unit": "set_of_items",
-  "answer": "",
-  "answer_source": "",
-  "gap": [
-    "population",
+ "task": "task13",
+ "project": "sulfur",
+ "architecture": "v2",
+ "drawn": "2026-11-11",
+ "slot_note": "author-requested re-root (2026-11-11): a much stronger stump than architecture 1, at least three major analytical failure points, new areas, not a template of task6",
+ "domain": "energy-systems-utilities",
+ "subdomain": "grid-reliability-outage-analysis",
+ "client_domain": "energy-systems-utilities",
+ "niche": "a Philippine electric cooperative's referral rule for the overhead protection zones whose lightning protection (arrester ground leads, line arresters, pin insulators) has failed, built from recloser event logs on their own clocks and a lightning location extract, ahead of the 2027 dry-season refit",
+ "objective": "anomaly-detection",
+ "shape": "08",
+ "decision_type": "designation_set",
+ "answer_unit": "set_of_items",
+ "answer": "refer BGS-F3-R2, BGS-F5-R2, BTG-F1-R3, CBR-F2-R2, CLB-F5-R1, DLP-F2-R2, DLP-F4, LRD-F1-R1, LRD-F2, LRD-F2-R1, LRD-F3-R3, MPD-F2-R1, PGP-F1-R2, PGP-F2-R3 and SNJ-F1 for the 2027 refit (15 zones); the rule refers a zone when its lightning faults since its last cyclic inspection exceed the inspection-confirmed sound expectation by more than their scatter allows, at 1 in 855 a zone a season",
+ "answer_source": "task13/generator/figures.json: referred_zones, alerts, false_per_season, validation_core, season_totals, excess_2026, avoided_average_season",
+ "gap": [
+  "population",
+  "time"
+ ],
+ "pattern": [
+  "none"
+ ],
+ "generators": [
+  "G7",
+  "G12",
+  "G17"
+ ],
+ "gate_g": "decomposition_attribution",
+ "calibration_form": "physical_verification",
+ "stump_strategy": "informative_censoring",
+ "decisive_rule_filed": false,
+ "official_decoy": false,
+ "validated_decoy": false,
+ "context_artifact": "operations_log",
+ "stump_class": "analytical",
+ "analyst_test": "A careful run that cleans every export, drops the re-read events, matches on a tight window where clocks are synchronised and a wide one around the radio-less controllers' own stamps, counts the logged events, fits a negative binomial sound rate on every season not yet found failed and reads the terms' window and budget right files 2 referred zones, the season totals 4 to 7 per cent off, 212 radio-less faults against 259, 42 failed-protection faults against 279 and 19 avoided against 107.",
+ "domain_test": "The field's own lightning performance analysis decides it: faults attributed to lightning by coincidence with located strokes on each protective device's own clock, a zone's flashover rate per nearby stroke against what its construction, shielding and arrester cover give when sound, and the spread of sound zones around that expectation; with a hospital's nouns the strokes, reclosers, clocks, arresters and flashovers have no meaning.",
+ "layer2_family": "estimation_fit",
+ "layer2_pattern": "own:events-on-drifting-device-clocks-and-overwritten-memories-against-a-baseline-verified-by-inspection",
+ "layer1": [
+  "lightning location times in UTC against controller times in Philippine local time",
+  "cloud pulses and small positive discharges in the stroke extract",
+  "each fault logged as several trips and recloses",
+  "upstream breakers tripping on downstream faults",
+  "controller memories re-read at each visit so events repeat across downloads",
+  "outage cause codes assigned by dispatchers",
+  "transformer replacements recorded days after the burnout",
+  "register line lengths summed by setting and construction"
+ ],
+ "stakeholder_role": "the co-op's technical services manager, who takes the 2027 lightning protection refit to the management committee",
+ "role_family": "field_unit_lead",
+ "scoring_unit": "per episode",
+ "spine": {
+  "file": "recloser and breaker event exports with the lightning stroke extract",
+  "rows": 0,
+  "entity": "one event a protective device recorded",
+  "grain": "device x event",
+  "source": "synthetic (a fictional Philippine electric cooperative's SCADA historian export and controller memory downloads, December 2021 to October 2026, with a lightning location extract; seeded world in task13/generator)"
+ },
+ "forum": "executive_team",
+ "forcing_event": "budget_or_appropriation",
+ "org_family": "cooperative_or_member_body",
+ "world": {
+  "geography": "Philippines (Central Luzon: a fictional electric cooperative's franchise across rice plains, tree-lined roads, towns and the western foothills)",
+  "currency": "PHP",
+  "org_type": "a member-owned electric cooperative running 13.2 kV overhead lines from twelve substations",
+  "invented_names": [
+   "Kalumpang Valley Electric Cooperative"
+  ],
+  "people": [
+   "Lucas Ramirez",
+   "Donna Rodriguez",
+   "Laurie Diaz",
+   "Elizabeth Hernandez",
+   "John Fuentes",
+   "Michelle Garcia"
+  ]
+ },
+ "deliverables": [
+  "lightning_referrals_2027.csv",
+  "lightning_refit_2027_note.docx"
+ ],
+ "opening_move": "question-first",
+ "question_form": "what",
+ "driver": "Events counted per unit are recorded by instruments that keep their own drifting time and only their last few hundred records, read on an observer's schedule, so the units with the most events lose the most and line up the worst with the independent record that classifies them; the expected count each unit should have is learned only from unit-periods that a later physical check confirmed sound, and the alarm threshold carries the spread those confirmed units show beyond chance.",
+ "driver_concrete": "Each zone's lightning faults are its reclosers' trips matched to located strokes on each controller's own clock (the radio-less controllers drift minutes between site visits and keep only their last 64 or 100 events, so a failing zone's busiest months are overwritten); the faults a zone would have with sound protection come from seasons the next cyclic inspection found sound, and the referral threshold carries the scatter of those confirmed-sound zones at no more than one sound zone referred a season.",
+ "stump": "A careful run that matches the radio-less controllers' trips to strokes on a wide window around their own stamps, counts only the events their memories kept and fits the sound-protection rate on every season no inspection has yet found failed refers 2 zones against 15: the baseline holds the failing zones it should judge, the wide window counts storm trips as lightning and the lost and unread months are missing, so the season totals, the radio-less faults, the failed-protection faults, the alert load, the inspection check and the avoided faults are all off, each by a different route.",
+ "answer_shape": "monitoring-rule",
+ "weight": "metric-or-rule-design",
+ "chain_signature": [
+  "assembly-reconciliation",
+  "missingness-measurement",
+  "modeling",
+  "exploration-triage",
+  "validation",
+  "uncertainty",
+  "validation",
+  "forecasting"
+ ],
+ "results": "R1 the network's lightning faults per season, reconstructed on every protective device's own clock; R2 the radio-less zones' 2026 lightning faults with what their memories lost and their unread months filled; R3 2026's lightning faults failed protection caused (the season against every zone sound); R4 the zones the rule refers for the 2027 refit; R5 its referrals after each season since 2022; R6 the sound zones it should refer in a season; R7 its referrals against the following cyclic inspections (referred, confirmed, missed); R8 the lightning faults the refit avoids in a season of average lightning",
+ "one_fact_test": "'the reclosers with no radio link keep their own drifting clocks and only their last events between site visits' rescues R1 and R2; 'a season counts as sound only when the next cyclic inspection found nothing' rescues R6 and R8 (2 of 8 each)",
+ "strategy_label": "WORKS IN FORM",
+ "lineage": [
+  {
+   "domain": "energy-systems-utilities",
+   "subdomain": "grid-reliability-outage-analysis",
+   "objective": "anomaly-detection",
+   "shape": "01",
+   "decision_type": "ranked_slate_under_cap",
+   "answer_unit": "set_of_items",
+   "gap": [
+    "objective",
     "time"
-  ],
-  "pattern": [
-    "none"
-  ],
-  "generators": [
-    "G7",
-    "G12",
+   ],
+   "pattern": [
+    "A"
+   ],
+   "generators": [
+    "G14",
+    "G13",
     "G17"
-  ],
-  "gate_g": "decomposition_attribution",
-  "calibration_form": "physical_verification",
-  "stump_strategy": "informative_censoring",
-  "decisive_rule_filed": false,
-  "official_decoy": false,
-  "validated_decoy": false,
-  "context_artifact": "operations_log",
-  "stump_class": "analytical",
-  "analyst_test": "A careful run that cleans every export, reads lightning faults off the reclosers' logged times with a fixed window, counts only the events the controllers' memories kept, fits the sound-protection rate on every zone-season and refers on a Poisson or pooled threshold files a referral set that drops the radio-less zones and the failures the contaminated baseline absorbs, adds sound zones whose spread a Poisson null cannot carry, and misstates the alert load, the inspection check and the avoided faults.",
-  "domain_test": "The field's own lightning performance analysis decides it: faults attributed to lightning by coincidence with located strokes on each protective device's own clock, a zone's flashover rate per nearby stroke against what its construction, shielding and arrester cover give when sound, and the spread of sound zones around that expectation; with a hospital's nouns the strokes, reclosers, clocks, arresters and flashovers have no meaning.",
-  "layer2_family": "estimation_fit",
-  "layer2_pattern": "own:events-on-drifting-device-clocks-and-overwritten-memories-against-a-baseline-verified-by-inspection",
-  "layer1": [
-    "lightning location times in UTC against controller times in Philippine local time",
-    "cloud pulses and small positive discharges in the stroke extract",
-    "each fault logged as several trips and recloses",
-    "upstream breakers tripping on downstream faults",
-    "controller memories re-read at each visit so events repeat across downloads",
-    "outage cause codes assigned by dispatchers",
-    "transformer replacements recorded days after the burnout",
-    "register line lengths summed by setting and construction"
-  ],
-  "stakeholder_role": "the co-op's technical services manager, who takes the 2027 lightning protection refit to the management committee",
-  "role_family": "field_unit_lead",
-  "scoring_unit": "per episode",
-  "spine": {
-    "file": "recloser and breaker event exports with the lightning stroke extract",
-    "rows": 0,
-    "entity": "one event a protective device recorded",
-    "grain": "device x event",
-    "source": "synthetic (a fictional Philippine electric cooperative's SCADA historian export and controller memory downloads, December 2021 to October 2026, with a lightning location extract; seeded world in task13/generator)"
-  },
-  "forum": "executive_team",
-  "forcing_event": "budget_or_appropriation",
-  "org_family": "cooperative_or_member_body",
-  "world": {
-    "geography": "Philippines (Central Luzon: a fictional electric cooperative's franchise across rice plains, tree-lined roads, towns and the western foothills)",
-    "currency": "PHP",
-    "org_type": "a member-owned electric cooperative running 13.2 kV overhead lines from twelve substations",
-    "invented_names": [
-      "Kalumpang Valley Electric Cooperative"
-    ],
-    "people": [
-      "Lucas Ramirez",
-      "Donna Rodriguez",
-      "Laurie Diaz",
-      "Elizabeth Hernandez",
-      "John Fuentes",
-      "Michelle Garcia"
-    ]
-  },
-  "deliverables": [
-    "lightning_referrals_2027.csv",
-    "lightning_refit_2027_note.docx"
-  ],
-  "opening_move": "question-first",
-  "question_form": "what",
-  "driver": "Events counted per unit are recorded by instruments that keep their own drifting time and only their last few hundred records, read on an observer's schedule, so the units with the most events lose the most and line up the worst with the independent record that classifies them; the expected count each unit should have is learned only from unit-periods that a later physical check confirmed sound, and the alarm threshold carries the spread those confirmed units show beyond chance.",
-  "driver_concrete": "Each zone's lightning faults are its reclosers' trips matched to located strokes on each controller's own clock (the radio-less controllers drift minutes between site visits and keep only their last 64 or 100 events, so a failing zone's busiest months are overwritten); the faults a zone would have with sound protection come from seasons the next cyclic inspection found sound, and the referral threshold carries the scatter of those confirmed-sound zones at no more than one sound zone referred a season.",
-  "stump": "A careful run that reads lightning faults off every recloser's logged times with a fixed window, counts only the events the radio-less controllers' memories kept, fits the sound-protection rate on every zone-season and refers on a Poisson threshold refers sound zones whose spread the Poisson null cannot carry and misses the radio-less zones and the failures the contaminated baseline absorbs, so its referral set, alert load, inspection check and avoided faults are all off.",
-  "answer_shape": "monitoring-rule",
-  "weight": "metric-or-rule-design",
-  "chain_signature": [
-    "assembly-reconciliation",
-    "missingness-measurement",
-    "modeling",
-    "exploration-triage",
-    "uncertainty",
-    "validation",
-    "investigation-loops",
-    "forecasting"
-  ],
-  "results": "R1 lightning faults per season reconstructed on every protective device's own clock; R2 the radio-less zones' 2026 lightning faults with what their memories lost and their unread months filled; R3 the 2026 season with every zone's protection sound and the faults failed protection caused; R4 the zones the rule refers now; R5 its false referrals a season and its referrals after each season since 2022; R6 its referrals checked against the following cyclic inspections; R7 the likely failure at each referred zone; R8 the lightning faults the refit avoids in an average season",
-  "one_fact_test": "the reclosers with no radio link keep their own drifting clocks: rescues R1 and part of R2 (2 of 8)",
-  "strategy_label": "WORKS IN FORM",
-  "lineage": [
-    {
-      "domain": "energy-systems-utilities",
-      "subdomain": "grid-reliability-outage-analysis",
-      "objective": "anomaly-detection",
-      "shape": "01",
-      "decision_type": "ranked_slate_under_cap",
-      "answer_unit": "set_of_items",
-      "gap": [
-        "objective",
-        "time"
-      ],
-      "pattern": [
-        "A"
-      ],
-      "generators": [
-        "G14",
-        "G13",
-        "G17"
-      ],
-      "gate_g": "decomposition_attribution",
-      "stump_strategy": "decomposition_attribution",
-      "role_family": "operations_director",
-      "forum": "board_of_directors",
-      "forcing_event": "statutory_or_regulatory_filing",
-      "org_family": "cooperative_or_member_body",
-      "driver": "The decisive quantity is what restoring a unit's condition removes from its next-period event count, which is only the part of its event rate that has grown since the condition was last restored, per unit of an exposure that drives every event; the latest counts mix that growth with each unit's own base and with an exposure that moved in opposite directions across areas, so the units that look worst were selected on a high-exposure year or on a high base the restoration cannot touch, and the units with the most to gain look ordinary.",
-      "architecture": "v1 (Kotuku Networks, the 2027 vegetation catch-up on six 11 kV feeders, one Poisson fit of tree interruptions on station gust load with growth since trim)",
-      "drawn": "2026-11-09",
-      "shell": null,
-      "fate": "spent 2026-11-11 before upload: cut under the retired single-deep-step design (READY 2026-11-09, never run on the platform); re-rooted at the author's word for a stronger chain with at least three independent analytical failure points. Its record: the storm-track swing between stations was thin (one plot of gust hours by station shows it), the plantation feeders' dense corridor sat only in the deciding units with one filter as the fix (a send-back), and every graded figure came out of one Poisson fit (one thing under another name)."
-    }
-  ],
-  "differentiation": {
-    "task13": "v2 is a new world (a Philippine cooperative's lightning protection, not a New Zealand lines company's vegetation), a new answer shape (a monitoring rule with its alert load, not a ranked list) and a chain of eight results; nothing of v1's gust-load fit or trim-growth split survives",
-    "mark196": "mark196 recovers how many events a partly captured record misses from the overlap of two capture channels; here the events are recovered from one device's own record (a sequence gap and an unread tail) and its drifting clock against a lightning extract, and the decisive call is a referral threshold carried on the spread of inspection-confirmed sound units",
-    "task6": "task6 weights spans by a sampling share set where each trace starts and dates incident causes by onset; here no sample is drawn: events are aligned to an independent record across drifting device clocks, an overwritten memory is filled, and units are referred against a baseline confirmed by physical inspection"
-  },
-  "shell": {
-    "question form": "where",
-    "second-sentence opener": "rank",
-    "deliverable set": "csv+docx"
-  },
-  "notes": "Redrawn at stage 1 after syncing with origin/main on 2026-11-11, when task14 v3, task15 v2 and task16 v2 entered the window: forum board_of_directors to executive_team (the management committee approves the dry-season work programme inside the board's budget, the honester label for a refit list), decisive pattern G12 to G7 (each recloser's record holds only the operating window between its memory's oldest kept event and its last read), Gate G to decomposition_attribution (each zone's faults assigned to lightning on the device's own clock, and its excess to failed protection rather than the spread sound zones show).",
-  "registered": "2026-11-11T05:06:18Z"
+   ],
+   "gate_g": "decomposition_attribution",
+   "stump_strategy": "decomposition_attribution",
+   "role_family": "operations_director",
+   "forum": "board_of_directors",
+   "forcing_event": "statutory_or_regulatory_filing",
+   "org_family": "cooperative_or_member_body",
+   "driver": "The decisive quantity is what restoring a unit's condition removes from its next-period event count, which is only the part of its event rate that has grown since the condition was last restored, per unit of an exposure that drives every event; the latest counts mix that growth with each unit's own base and with an exposure that moved in opposite directions across areas, so the units that look worst were selected on a high-exposure year or on a high base the restoration cannot touch, and the units with the most to gain look ordinary.",
+   "architecture": "v1 (Kotuku Networks, the 2027 vegetation catch-up on six 11 kV feeders, one Poisson fit of tree interruptions on station gust load with growth since trim)",
+   "drawn": "2026-11-09",
+   "shell": null,
+   "fate": "spent 2026-11-11 before upload: cut under the retired single-deep-step design (READY 2026-11-09, never run on the platform); re-rooted at the author's word for a stronger chain with at least three independent analytical failure points. Its record: the storm-track swing between stations was thin (one plot of gust hours by station shows it), the plantation feeders' dense corridor sat only in the deciding units with one filter as the fix (a send-back), and every graded figure came out of one Poisson fit (one thing under another name)."
+  }
+ ],
+ "differentiation": {
+  "task13": "v2 is a new world (a Philippine cooperative's lightning protection, not a New Zealand lines company's vegetation), a new answer shape (a monitoring rule with its alert load, not a ranked list) and a chain of eight results; nothing of v1's gust-load fit or trim-growth split survives",
+  "mark196": "mark196 recovers how many events a partly captured record misses from the overlap of two capture channels; here the events are recovered from one device's own record (a sequence gap and an unread tail) and its drifting clock against a lightning extract, and the decisive call is a referral threshold carried on the spread of inspection-confirmed sound units",
+  "task6": "task6 weights spans by a sampling share set where each trace starts and dates incident causes by onset; here no sample is drawn: events are aligned to an independent record across drifting device clocks, an overwritten memory is filled, and units are referred against a baseline confirmed by physical inspection"
+ },
+ "shell": {
+  "question form": "what",
+  "second-sentence opener": "for",
+  "deliverable set": "csv+docx"
+ },
+ "notes": "Redrawn at stage 1 after syncing with origin/main on 2026-11-11, when task14 v3, task15 v2 and task16 v2 entered the window: forum board_of_directors to executive_team (the management committee approves the dry-season work programme inside the board's budget, the honester label for a refit list), decisive pattern G12 to G7 (each recloser's record holds only the operating window between its memory's oldest kept event and its last read), Gate G to decomposition_attribution (each zone's faults assigned to lightning on the device's own clock, and its excess to failed protection rather than the spread sound zones show).",
+ "registered": "2026-11-11T05:06:18Z"
 }
