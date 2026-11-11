@@ -1,12 +1,12 @@
 {
  "task": "task1",
- "status": "READY",
+ "status": "RETURNED",
  "domain": "product-analytics",
  "subdomain": "retention-cohort-lifetime-value-modeling",
  "objective": "forecasting",
  "stage": 5,
  "stage_name": "ready",
- "updated": "2026-11-10",
+ "updated": "2026-11-11",
  "doctrine": "throughout",
  "call": "fund 8 of the plan's 18 lines (APP-BHR, PART-GAZ, SEA-BHR, SEA-ELN, SEA-GAZ, SEA-KBO, TEL-BHR, TEL-KBO) for EUR 84,308, each at least 3.5 times its planned cost per start in expected 36-month net revenue; not the 14 lines for EUR 141,575 the careful but hurried reading funds",
  "chain": "R1 paying subscribers by title at 31 Oct 2026; R2 realised 36-month value of the Jul-Sep 2023 starts by channel with household returns; R3 end-of-intro exit share per 2027 offer at 2026 prices; R4 points the April 2027 prices add; R5 three-year survival of the Nov 2025-Apr 2026 starts by channel; R6 extra cancellations from the April 2027 rise among the Oct 2026 base by title; R7 expected 36-month net revenue per start per line; R8 the funded lines and budget; R9 the plan's 2027 starts paying on 31 Dec 2027 by channel",
@@ -53,6 +53,10 @@
    {
     "date": "2026-11-09",
     "event": "one platform run on the uploaded cut (summary in runs/arch2/run1.md): commit 9.2 against the golden's 9.9, no score; the holistic audit failed the task on determinism before grading"
+   },
+   {
+    "date": "2026-11-11",
+    "event": "one platform run on the architecture 3 upload (runs/arch3/run1.md): funded the careful set exactly (14 lines for EUR 141,575), excluding the reading log as uneven in coverage and leaky; no score; the holistic audit (runs/arch3/holistic_audit.md) returned the task on determinism"
    }
   ]
  },
@@ -70,9 +74,16 @@
    "repair": "determinism and design",
    "commit": "",
    "note": "the platform's holistic audit failed the uploaded cut on determinism (runs/arch2/holistic_audit.md): the commitment not forced by the rounding, the band's contents pinned by no file, two note figures stated as ranges, the draft failing a naive trailing view too; repaired in the generator (policy v5 section 5.2 and 5.3, the commitment as the largest 0.1 million step met in 80 per cent of outcomes, the January 2026 calendar, flat deal creation, a calendar index on Team cancellations, utilisation drifting at signing, estimation draws in the band, the world re-seeded)"
+  },
+  {
+   "date": "2026-11-11",
+   "source": "review",
+   "repair": "determinism",
+   "commit": "",
+   "note": "the platform's holistic audit of architecture 3 (runs/arch3/holistic_audit.md): R9 counted the telemarketing free quarter as paying; nine lines 5 to 7 per cent from the 3.5 bar and J12 never run on telemarketing or cashback, so the bands did not show the call forced"
   }
  ],
- "resume": "READY: the author rewrites prompt.txt in their own words (voice-check.py task1 --rewrite), uploads it with target.zip, generates the two runs, then /triage-runs task1",
+ "resume": "RETURNED: repair in the generator (R9 without free months; call forcing), rebuild, gates, one re-judge, RESHIPPED",
  "approved": null,
  "submitted": null,
  "portal": {
@@ -108,6 +119,10 @@
   {
    "date": "2026-11-10",
    "event": "architecture 3 built and checked: fund 8 of 18 lines for EUR 84,308; careful but hurried pass 34.6 (14 lines for EUR 141,575), six distinct wrong sets over eleven shortcuts; judge DETERMINISTIC APPROVE twice; READY"
+  },
+  {
+   "date": "2026-11-11",
+   "event": "RETURNED by the platform's holistic audit on determinism (R9's free months; margins 5 to 7 per cent; J12 transported to telemarketing and cashback)"
   }
  ]
 }
