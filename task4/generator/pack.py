@@ -143,6 +143,8 @@ def write_fuel(w, path, rng):
                      "odometer_km": typed, "vehicle_entered": entered, "receipt_no": "%d-%d" % (sid, receipt[sid])})
     df = pd.DataFrame(rows)
     df = df.sort_values(["transaction_time", "statement_line"]).reset_index(drop=True)
+    # the provider's statement closes at the end of October: a fill after midnight on the last night falls in November's
+    df = df[df["transaction_time"] <= "2026-10-31 23:59"].reset_index(drop=True)
     df.to_csv(path, index=False)
     return len(df)
 
@@ -203,7 +205,7 @@ def write_sessions(w, path, rng):
     for s in w["sessions"]:
         d = s["date"]
         start = s["start"]
-        hours_needed = s["kwh"] / (P.CHARGER_KW * 0.97)
+        hours_needed = s["recharge_kwh"] / (P.CHARGER_KW * 0.97)
         end = min(start + int(hours_needed * 60) + int(rng.integers(5, 40)), s["plug_out"] - 2)
         rows.append({"session_id": "S%07d" % sess_no(s["sid"]), "outlet": s["outlet"], "vehicle": s["fleet_no"],
                      "plug_in_utc": to_utc(d, s["plug_in"]).strftime("%Y-%m-%dT%H:%M:%SZ"),
@@ -362,8 +364,9 @@ def write_plan(w, path):
     _head(ws2, 1)
     for r in (["Outlets, 150 kW, cabinets C1 to C3", "6 in use since 2/2025", "pilot buses 1201 to 1206"],
               ["Outlets, 150 kW, cabinets C4 to C16", "ordered, in use by 8/2027", "26 further outlets, the 2027 to 2029 rollout"],
+              ["Workshop outlets, 22 kW AC", "2, bay 3", "buses under repair"],
               ["Connection capacity", "per the 2025 connection agreement", "reinforcement applied for, earliest 2028"],
-              ["Depot layout", "charging lane B, 26 bays", ""]):
+              ["Depot layout", "charging lane B, 32 bays", ""]):
         ws2.append(r)
     _widths(ws2, [36, 32, 44])
     ws3 = wb.create_sheet("Timetable 2027")
@@ -371,7 +374,8 @@ def write_plan(w, path):
     _head(ws3, 1)
     for r in (["Winter timetable 2027", "2027-01-11", "weekday blocks as the 2026 autumn timetable"],
               ["Summer timetable 2027", "2027-06-07", "to be planned in spring"],
-              ["Line 8 to Satama hourly", "2027-01-11", "within block kilometres as listed"]):
+              ["Line 8 to Satama hourly", "2027-01-11", "within block kilometres as listed"],
+              ["Buses 1201 to 1206 move to Kauppala depot", "2027-01-11", "for Kauppala's regional and school lines; the city's 2027 terms exclude fuel-fired heaters"]):
         ws3.append(r)
     _widths(ws3, [30, 12, 44])
     wb.save(path)

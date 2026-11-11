@@ -73,9 +73,9 @@ def one(target, gold):
     w, n = B.run(target)
     pk, g, figs = GD.write(target, gold)
     postprocess.normalize_ooxml(os.path.join(gold, GD.XLSX), "Simo Virta", "Simo Virta", "2026-11-09T07:40:00Z",
-                                "2026-11-12T15:21:00Z", excel=True, company=P.ORG)
-    postprocess.normalize_pptx(os.path.join(gold, GD.PPTX), "Simo Virta", "Simo Virta", "2026-11-11T13:05:00Z",
-                               "2026-11-12T16:02:00Z", "Niittylä 2027: battery-electric buses", P.ORG)
+                                "2026-11-10T14:21:00Z", excel=True, company=P.ORG)
+    postprocess.normalize_pptx(os.path.join(gold, GD.PPTX), "Simo Virta", "Simo Virta", "2026-11-10T09:05:00Z",
+                               "2026-11-10T15:02:00Z", "Niittylä 2027: battery-electric buses", P.ORG)
     postprocess.own_mtimes(gold, {})
     return pk, g, figs, n
 

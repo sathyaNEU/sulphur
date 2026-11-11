@@ -57,14 +57,17 @@ def standard(path):
             "share of usable energy a traction battery permanently loses in its first twelve months in service. That share "
             "is taken from the company's own battery-electric buses.",
             "2.4 The design day is a January working day with a daily mean air temperature of minus 15 degrees Celsius at "
-            "the town's airport weather station (Vehkasalo lentoasema)."]),
+            "the town's airport weather station (Vehkasalo lentoasema). The design night is the night that follows it, at "
+            "the same daily mean temperature."]),
         ("3. Planning figures", [
             "3.1 Energy figures for planning are estimated from the company's own operating records. Manufacturers' range "
             "and consumption figures are not used for planning.",
-            "3.2 A battery-electric bus is charged at its depot only, between its block's return and its next departure. "
-            "No charging on the road or at termini is planned. The depot's chargers deliver up to 150 kW to a bus, and the "
-            "charging installation draws no more than the capacity the distribution company's connection agreement "
-            "gives it, in the periods the agreement gives it.",
+            "3.2 A battery-electric bus is charged at its depot only, on the charging lane's chargers, between its block's "
+            "return and its next departure. No charging on the road or at termini is planned, and the workshop's outlets "
+            "are for buses under repair. The depot's chargers deliver up to 150 kW to a bus, and the charging installation "
+            "draws no more than the capacity the distribution company's connection agreement gives it, in the periods the "
+            "agreement gives it. The installation's draw is what its chargers take from the connection point, as the "
+            "charging system records it session by session.",
             "3.3 Fuel use is reported per block as litres of diesel per 100 scheduled kilometres over the twelve months "
             "to the end of the last full month before the assessment, from the fuel-card statements and the dispatch "
             "log, for the business case of each block's electrification."]),
@@ -98,7 +101,8 @@ def agreement(path):
             ["Connection point", "Niittylä depot, Varikkotie 8, metering point 643 102 11 (meter VLO-NIITTYLA-1)"],
             ["Installation", "Battery-electric bus charging installation, charging lane B, 150 kW DC chargers"],
             ["Capacity, charging installation", "%d kW from 21:00 to 07:00 (the night period). Outside the night period the "
-             "installation is held off by the load-control relay, except for the workshop's two outlets at 22 kW." % int(P.SUPPLY_KW)],
+             "installation is held off by the load-control relay. The workshop's two 22 kW outlets (vehicles under repair) "
+             "are not on the relay." % int(P.SUPPLY_KW)],
             ["Capacity, depot otherwise", "The depot's other consumption remains within the main fuse rating of the connection "
              "(1,250 kVA transformer at Niittylä; the charging capacity above is its remaining share)"],
             ["Validity", "From 1 January 2026 until the connection is reinforced. A reinforcement application was received "
@@ -136,7 +140,8 @@ def quotation(path):
             ["Heating and cooling", "Fully electric: roof-mounted heat pump (heating mode to minus 10 degrees C) with "
              "two 12 kW resistive booster heaters below that; electric driver's heater. No fuel-fired heater, as required by "
              "the city's clean fleet terms for the 2027 contract"],
-            ["Preconditioning", "Cabin and battery preconditioning from the charger before departure (not from the traction battery)"],
+            ["Battery thermal management", "From the charger while the bus is plugged in (not from the traction battery); "
+             "the same system as on your 2025 buses"],
             ["Warranty", "Battery 8 years or 500,000 km, to 70 per cent of usable capacity"],
             ["Price", "EUR 548,000 per bus excluding VAT, delivered Niittylä; charger cabinets quoted separately"],
             ["Delivery", "August to September 2027 for orders placed by 15 January 2027; four to thirty buses"]]

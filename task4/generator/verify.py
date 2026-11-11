@@ -147,8 +147,9 @@ def main(target):
     eb = eb.dropna(subset=["code"])
     ws = pd.read_csv(os.path.join(target, "workshop_orders_2024-01_2026-10.csv"))
     bad = set()
-    for _, f in ws[ws["description"].str.contains("heater does not start", case=False)].iterrows():
-        rep = ws[(ws["vehicle"] == f["vehicle"]) & ws["description"].str.contains("heater repaired", case=False) & (pd.to_datetime(ws["opened"]) > pd.to_datetime(f["opened"]))]
+    hv_txt = ws["description"].str.lower()
+    for _, f in ws[hv_txt.str.contains("heater") & hv_txt.str.contains("f12")].iterrows():
+        rep = ws[(ws["vehicle"] == f["vehicle"]) & hv_txt.str.contains("heater") & hv_txt.str.contains("repaired") & (pd.to_datetime(ws["opened"]) > pd.to_datetime(f["opened"]))]
         a, b = pd.to_datetime(f["opened"]).date(), pd.to_datetime(rep.iloc[0]["opened"]).date()
         d = a
         while d < b:
@@ -209,36 +210,74 @@ def main(target):
     X = np.column_stack([B, np.sqrt(age), cold])
     bb, *_ = np.linalg.lstsq(X, cap, rcond=None)
     loss = -bb[B.shape[1]] / np.mean(bb[:B.shape[1]])
-    ok("R6: a square-root age form lands inside the loss band", figs["conventions"]["loss_band"][0] <= 100 * loss <= figs["conventions"]["loss_band"][1], "%.2f" % (100 * loss))
+    ok("R5: a square-root age form lands inside the loss band", figs["conventions"]["loss_band"][0] <= 100 * loss <= figs["conventions"]["loss_band"][1], "%.2f" % (100 * loss))
     lim = share * usable * (1 - figs["loss_pct"] / 100.0)
     ok("limit within 1 kWh", abs(lim - figs["limit_kwh"]) <= 1.0)
     verdict = {c: "yes" if E[c] <= lim else "no" for c in weekday}
-    ok("R5: every verdict agrees", verdict == figs["verdict"], str([c for c in weekday if verdict[c] != figs["verdict"][c]]))
-    # the charging efficiency from the sessions and the night by the least-slack schedule
+    ok("R6: every verdict agrees", verdict == figs["verdict"], str([c for c in weekday if verdict[c] != figs["verdict"][c]]))
+    # the charging split from the sessions, on its own clock rule (EU summer time) and a whole-degree knot grid
     se = pd.read_csv(os.path.join(target, "depot_charging_sessions_2025-03_2026-10.csv"))
-    se["date"] = pd.to_datetime(se["plug_in_utc"]).dt.date
+
+    def last_sun(y, mth):
+        x = dt.datetime(y, mth, 31, 1, 0)
+        while x.weekday() != 6:
+            x -= dt.timedelta(days=1)
+        return x
+
+    def local(u):
+        u = pd.Timestamp(u).tz_localize(None).to_pydatetime() if pd.Timestamp(u).tzinfo else pd.Timestamp(u).to_pydatetime()
+        return u + dt.timedelta(hours=3 if last_sun(u.year, 3) <= u < last_sun(u.year, 10) else 2)
+
+    pin = [local(pd.Timestamp(x.replace("Z", ""))) for x in se["plug_in_utc"]]
+    pout = [local(pd.Timestamp(x.replace("Z", ""))) for x in se["plug_out_utc"]]
     day = {(int(r.vehicle), r.date): (r.energy_used_kwh, r.soc_start_pct - r.soc_end_pct) for r in eb.itertuples()}
-    num = den = 0.0
-    for v, dd, si, so, kwh in zip(se["vehicle"], se["date"], se["soc_in_pct"], se["soc_out_pct"], se["energy_kwh"]):
-        r = day.get((int(v), dd)) or day.get((int(v), dd - dt.timedelta(days=1)))
-        if r and r[1] >= 30 and so - si >= 30:
-            num += (so - si) / 100.0 * r[0] / (r[1] / 100.0)
-            den += kwh
-    eta = num / den
-    ok("eta within 0.01", abs(eta - figs["eta"]) <= 0.01, "%.3f" % eta)
+    G, H, T, Y = [], [], [], []
+    for v, a_, z_, si, so, kwh in zip(se["vehicle"], pin, pout, se["soc_in_pct"], se["soc_out_pct"], se["energy_kwh"]):
+        ev = (a_ - dt.timedelta(hours=12)).date()
+        r = day.get((int(v), ev))
+        t1, t2 = st.get(ev), st.get(ev + dt.timedelta(days=1))
+        if not r or r[1] < 30 or so - si < 30 or t1 is None or t2 is None or np.isnan(t1) or np.isnan(t2):
+            continue
+        n0 = dt.datetime(ev.year, ev.month, ev.day, 21, 0)
+        n1 = n0 + dt.timedelta(hours=10)
+        H.append(max(0.0, (min(z_, n1) - max(a_, n0)).total_seconds() / 3600.0))
+        G.append((so - si) / 100.0 * r[0] / (r[1] / 100.0))
+        T.append(0.5 * (t1 + t2))
+        Y.append(kwh)
+    G, H, T, Y = map(np.array, (G, H, T, Y))
+    best = None
+    for T0 in range(-3, 11):
+        X = np.column_stack([G, H, H * np.maximum(0, T0 - T)])
+        bb2 = np.linalg.solve(X.T @ X, X.T @ Y)
+        sse = float(np.sum((Y - X @ bb2) ** 2))
+        if best is None or sse < best[0]:
+            best = (sse, bb2, T0)
+    _, bb2, T0 = best
+    eta = 1.0 / bb2[0]
+    cond = bb2[1] + bb2[2] * max(0, T0 - design_t)
+    ok("eta within 0.005", abs(eta - figs["eta"]) <= 0.005, "%.4f" % eta)
+    cb = figs["conventions"]["cond_band"]
+    ok("R7: the conditioning at the design night inside the band", cb[0] <= cond <= cb[1], "%.2f" % cond)
+    pooled = float(np.sum(G) / np.sum(Y))
+    ok("the pooled ratio as stated", abs(pooled - figs["ratio_pooled"]) <= 0.005, "%.4f" % pooled)
+    # the night by the least-slack schedule, each bus's steady draw held over its window
     q = [c for c in sorted(weekday, key=lambda c: prio[c]) if E[c] <= lim]
+
+    def win(x):
+        return max(blocks[x]["ret"], 21 * 60), min(blocks[x]["dep"] + 1440, 7 * 60 + 1440)
+
     taken = []
     for c in q:
-        jobs = [(x, E[x] / eta, max(blocks[x]["ret"], 21 * 60), min(blocks[x]["dep"] + 1440, 7 * 60 + 1440)) for x in taken + [c]]
+        jobs = [(x, E[x] / eta, *win(x)) for x in taken + [c]]
         rem = {x: e for x, e, _, _ in jobs}
         mnt = min(j[2] for j in jobs)
         end = max(j[3] for j in jobs)
         while mnt < end:
-            avail = supply * 5 / 60.0
-            live = sorted([j for j in jobs if j[2] <= mnt and mnt + 5 <= j[3] and rem[j[0]] > 1e-9],
-                          key=lambda j: (j[3] - mnt) - rem[j[0]] / charger * 60.0)
-            for x, e, a, b in live:
-                take = min(rem[x], charger * 5 / 60.0, avail)
+            here = [j for j in jobs if j[2] <= mnt and mnt + 5 <= j[3]]
+            avail = (supply - cond * len(here)) * 5 / 60.0
+            live = sorted([j for j in here if rem[j[0]] > 1e-9], key=lambda j: (j[3] - mnt) - rem[j[0]] / (charger - cond) * 60.0)
+            for x, e, a2, b2 in live:
+                take = min(rem[x], (charger - cond) * 5 / 60.0, avail)
                 rem[x] -= take
                 avail -= take
                 if avail <= 1e-9:
@@ -247,15 +286,18 @@ def main(target):
         if sum(rem.values()) > 1.0:
             break
         taken.append(c)
-    ok("R8: the order by the least-slack schedule equals the golden", sorted(taken) == figs["call_set"], str(sorted(taken)))
-    ok("R7: the night's energy for the order within 0.2 MWh", abs(sum(E[c] / eta for c in taken) / 1000 - figs["night_mwh"]) <= 0.2)
-    ok("R7: the qualifying blocks' night demand within 0.3 MWh", abs(sum(E[c] / eta for c in q) / 1000 - figs["demand_mwh"]) <= 0.3)
+    ok("R9: the order by the least-slack schedule equals the golden", sorted(taken) == figs["call_set"], str(sorted(taken)))
+    draw = lambda codes: sum(E[x] / eta + cond * (win(x)[1] - win(x)[0]) / 60.0 for x in codes)
+    ok("the night's draw for the order within 0.2 MWh", abs(draw(taken) / 1000 - figs["night_mwh"]) <= 0.2)
+    ok("R8: the draw with every qualifying block on charge within 0.2 MWh", abs(draw(q) / 1000 - figs["demand_mwh"]) <= 0.2,
+       "%.2f vs %.2f" % (draw(q) / 1000, figs["demand_mwh"]))
     # the goldens
     gold = os.path.join(task, "golden")
     wb = load_workbook(os.path.join(gold, "niittyla_ebus_order_2027.xlsx"), read_only=True)
     rows = {r[0]: r[1] for r in wb["Order"].iter_rows(values_only=True) if r and r[0]}
     ok("golden workbook: the count", rows.get("Buses to order") == figs["call_count"])
-    ok("golden workbook: the night energy", rows.get("Design night: energy at the connection point for the buses ordered, MWh") == figs["night_mwh"])
+    ok("golden workbook: the night draw", rows.get("Design night: draw at the connection point for the buses ordered, MWh") == figs["night_mwh"])
+    ok("golden workbook: the conditioning", rows.get("Conditioning draw on charge at -15 C, kW per bus") == figs["cond_kw"])
     with zipfile.ZipFile(os.path.join(gold, "niittyla_ebus_order_2027.pptx")) as z:
         names = z.namelist()
         s1 = z.read("ppt/slides/slide1.xml").decode("utf-8")

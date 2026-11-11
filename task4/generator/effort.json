@@ -1,30 +1,32 @@
 {
  "careful_dismissed": {
-  "the electric buses' HVO fills": "read as fuel purchases, not as cabin heat",
-  "the fuel-card file for the forecast": "diesel litres do not measure battery energy"
+  "the fuel-card file for the forecast": "diesel litres do not measure battery energy",
+  "the sessions' cold nights": "averaged into one charging efficiency"
  },
  "careful_variants": {
-  "careful without the night's supply": 38
+  "careful without the night's supply": 29
  },
  "hints": [
   {
-   "count": 20,
+   "count": 18,
    "rescues": [
-    "R2"
+    "R2",
+    "R4",
+    "R6"
    ],
    "sentence": "the pilot blocks were chosen for their low diesel use, and the diesel figures carry the difficulty the timetable's kilometres, climb and speed miss"
   },
   {
-   "count": 18,
+   "count": 17,
    "rescues": [
-    "R3"
+    "R7"
    ],
-   "sentence": "the pilot buses heated the cabin with fuel below about -4 C, and the quoted buses take that heat from the battery"
+   "sentence": "on a cold night a bus on charge also takes power through its charger to keep its battery warm, which the sessions' average ratio spreads over a year of mild nights"
   },
   {
-   "count": 21,
+   "count": 18,
    "rescues": [],
-   "sentence": "the night period's capacity caps the order below the blocks that pass the limit"
+   "sentence": "the pilot buses heated the cabin with fuel below about -4 C, and the night period's capacity caps the order below the blocks that pass the limit"
   }
  ],
  "results": [
@@ -429,11 +431,7 @@
     5.3
    ],
    "passes": {
-    "careful": {
-     "grade": "missed",
-     "value": null,
-     "why": "the pass reads the pilot's own HVAC record at -15 C and files no figure for the heat the fuel heaters supplied: the electric buses' HVO fills are not read as cabin heat"
-    },
+    "careful": 4.3,
     "quick": null,
     "thorough": 4.3
    }
@@ -695,54 +693,54 @@
    "partly_share": 0.6,
    "passes": {
     "careful": {
-     "M101": 280,
-     "M102": 420,
-     "M103": 320,
-     "M104": 390,
-     "M105": 340,
-     "M106": 320,
-     "M107": 300,
-     "M108": 250,
-     "M109": 480,
-     "M110": 450,
-     "M111": 320,
-     "M112": 350,
-     "M113": 280,
-     "M114": 350,
-     "M115": 340,
-     "M116": 280,
-     "M117": 380,
-     "M118": 330,
-     "M119": 280,
-     "M120": 380,
-     "M121": 400,
-     "M122": 280,
-     "M123": 260,
-     "M124": 310,
-     "M125": 330,
-     "M126": 360,
-     "M127": 390,
-     "M128": 340,
-     "M129": 320,
-     "M130": 420,
-     "M131": 330,
-     "M132": 310,
-     "M133": 450,
-     "M134": 270,
-     "M135": 300,
-     "M136": 420,
-     "M137": 300,
-     "M138": 390,
-     "M139": 330,
-     "M140": 260,
-     "M141": 350,
-     "M142": 270,
-     "M143": 460,
-     "M144": 350,
-     "M145": 300,
-     "M146": 290,
-     "M147": 410,
-     "M148": 270
+     "M101": 330,
+     "M102": 470,
+     "M103": 360,
+     "M104": 430,
+     "M105": 380,
+     "M106": 380,
+     "M107": 360,
+     "M108": 300,
+     "M109": 530,
+     "M110": 510,
+     "M111": 370,
+     "M112": 410,
+     "M113": 330,
+     "M114": 390,
+     "M115": 380,
+     "M116": 330,
+     "M117": 430,
+     "M118": 360,
+     "M119": 330,
+     "M120": 430,
+     "M121": 450,
+     "M122": 330,
+     "M123": 300,
+     "M124": 370,
+     "M125": 370,
+     "M126": 400,
+     "M127": 440,
+     "M128": 390,
+     "M129": 370,
+     "M130": 480,
+     "M131": 370,
+     "M132": 360,
+     "M133": 500,
+     "M134": 320,
+     "M135": 350,
+     "M136": 470,
+     "M137": 350,
+     "M138": 430,
+     "M139": 360,
+     "M140": 310,
+     "M141": 400,
+     "M142": 310,
+     "M143": 510,
+     "M144": 380,
+     "M145": 340,
+     "M146": 340,
+     "M147": 450,
+     "M148": 320
     },
     "quick": {
      "M101": 230,
@@ -848,7 +846,7 @@
   },
   {
    "band": [
-    3.8,
+    2.7,
     5.0
    ],
    "depends": [],
@@ -859,7 +857,7 @@
    "independent": "",
    "name": "first-winter loss of usable battery, per cent",
    "partly": [
-    3.1999999999999997,
+    2.1,
     5.6
    ],
    "passes": {
@@ -935,7 +933,7 @@
      "M101": "yes",
      "M102": "no",
      "M103": "yes",
-     "M104": "yes",
+     "M104": "no",
      "M105": "yes",
      "M106": "yes",
      "M107": "yes",
@@ -943,23 +941,23 @@
      "M109": "no",
      "M110": "no",
      "M111": "yes",
-     "M112": "yes",
+     "M112": "no",
      "M113": "yes",
-     "M114": "yes",
+     "M114": "no",
      "M115": "yes",
      "M116": "yes",
-     "M117": "yes",
+     "M117": "no",
      "M118": "yes",
      "M119": "yes",
-     "M120": "yes",
+     "M120": "no",
      "M121": "no",
      "M122": "yes",
      "M123": "yes",
      "M124": "yes",
      "M125": "yes",
-     "M126": "yes",
-     "M127": "yes",
-     "M128": "yes",
+     "M126": "no",
+     "M127": "no",
+     "M128": "no",
      "M129": "yes",
      "M130": "no",
      "M131": "yes",
@@ -972,7 +970,7 @@
      "M138": "no",
      "M139": "yes",
      "M140": "yes",
-     "M141": "yes",
+     "M141": "no",
      "M142": "yes",
      "M143": "no",
      "M144": "yes",
@@ -1085,33 +1083,61 @@
   },
   {
    "band": [
-    8.399999999999999,
-    9.0
+    2.8,
+    4.2
+   ],
+   "depends": [],
+   "figure": "cond_kw",
+   "golden": 3.5,
+   "graded_as": "Component 3",
+   "id": "R7",
+   "independent": "",
+   "name": "the conditioning draw on charge at -15 C, kW",
+   "partly": [
+    2.1999999999999997,
+    4.8
+   ],
+   "passes": {
+    "careful": {
+     "grade": "missed",
+     "value": null,
+     "why": "the pass takes the charging losses as the sessions' pooled ratio of the battery's gain to the metered energy and files no draw beside the recharge: a year of mostly mild nights averages the battery's conditioning into one efficiency, read as if every night were the same"
+    },
+    "quick": null,
+    "thorough": 3.5
+   }
+  },
+  {
+   "band": [
+    8.8,
+    9.4
    ],
    "depends": [
     "R4",
-    "R6"
+    "R6",
+    "R7"
    ],
    "figure": "demand_mwh",
-   "golden": 8.7,
+   "golden": 9.1,
    "graded_as": "Ask 5",
-   "id": "R7",
+   "id": "R8",
    "independent": "",
-   "name": "the design night's demand of every qualifying block at the connection point, MWh",
+   "name": "the design night's draw with every qualifying block on charge, MWh",
    "partly": [
-    8.1,
-    9.299999999999999
+    8.5,
+    9.7
    ],
    "passes": {
-    "careful": 13.0,
+    "careful": 10.9,
     "quick": 9.5,
-    "thorough": 8.7
+    "thorough": 9.1
    }
   },
   {
    "depends": [
     "R4",
-    "R5"
+    "R5",
+    "R7"
    ],
    "figure": "call_set",
    "golden": [
@@ -1130,12 +1156,11 @@
     "M137",
     "M140",
     "M142",
-    "M145",
     "M146",
     "M148"
    ],
    "graded_as": "Recommendation",
-   "id": "R8",
+   "id": "R9",
    "independent": "",
    "name": "the order: the count and the blocks",
    "passes": {
@@ -1145,11 +1170,9 @@
      "M107",
      "M108",
      "M111",
-     "M112",
      "M113",
      "M116",
      "M119",
-     "M120",
      "M122",
      "M123",
      "M129",
@@ -1157,7 +1180,6 @@
      "M134",
      "M137",
      "M140",
-     "M141",
      "M142",
      "M146",
      "M148"
@@ -1213,7 +1235,6 @@
      "M137",
      "M140",
      "M142",
-     "M145",
      "M146",
      "M148"
     ]
@@ -1228,11 +1249,9 @@
     "M107",
     "M108",
     "M111",
-    "M112",
     "M113",
     "M116",
     "M119",
-    "M120",
     "M122",
     "M123",
     "M129",
@@ -1240,7 +1259,6 @@
     "M134",
     "M137",
     "M140",
-    "M141",
     "M142",
     "M146",
     "M148"
@@ -1265,7 +1283,6 @@
     "M137",
     "M140",
     "M142",
-    "M145",
     "M146",
     "M148"
    ],
@@ -1315,28 +1332,20 @@
    "answer": [
     "M101",
     "M103",
-    "M104",
     "M105",
     "M106",
     "M107",
     "M108",
     "M111",
-    "M112",
     "M113",
-    "M114",
     "M115",
     "M116",
-    "M117",
     "M118",
     "M119",
-    "M120",
     "M122",
     "M123",
     "M124",
     "M125",
-    "M126",
-    "M127",
-    "M128",
     "M129",
     "M131",
     "M132",
@@ -1345,7 +1354,6 @@
     "M137",
     "M139",
     "M140",
-    "M141",
     "M142",
     "M144",
     "M145",
@@ -1378,7 +1386,7 @@
     "M148"
    ],
    "golden": false,
-   "name": "the night scheduled on battery energy (charging losses ignored)"
+   "name": "the night scheduled on battery energy (charging losses and conditioning ignored)"
   },
   {
    "answer": [
@@ -1416,7 +1424,6 @@
     "M107",
     "M108",
     "M111",
-    "M112",
     "M113",
     "M116",
     "M119",
@@ -1447,7 +1454,6 @@
     "M119",
     "M122",
     "M123",
-    "M129",
     "M132",
     "M134",
     "M137",
@@ -1458,6 +1464,57 @@
    ],
    "golden": false,
    "name": "the pilot's fit carried on kilometres, climb and speed (the diesel bridge left out)"
+  },
+  {
+   "answer": [
+    "M101",
+    "M106",
+    "M107",
+    "M108",
+    "M111",
+    "M112",
+    "M113",
+    "M116",
+    "M119",
+    "M120",
+    "M122",
+    "M123",
+    "M129",
+    "M132",
+    "M134",
+    "M137",
+    "M140",
+    "M141",
+    "M142",
+    "M146",
+    "M148"
+   ],
+   "golden": false,
+   "name": "the pilot's own record carried as it stands (no bridge, no heaters' share, the pooled ratio)"
+  },
+  {
+   "answer": [
+    "M101",
+    "M107",
+    "M108",
+    "M113",
+    "M116",
+    "M119",
+    "M122",
+    "M123",
+    "M125",
+    "M129",
+    "M134",
+    "M135",
+    "M137",
+    "M140",
+    "M142",
+    "M145",
+    "M146",
+    "M148"
+   ],
+   "golden": false,
+   "name": "the sessions' pooled ratio for the night (the battery's conditioning left out)"
   }
  ]
 }

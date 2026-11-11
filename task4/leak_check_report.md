@@ -1,18 +1,18 @@
 # leak check, task4
 
-**Verdict: REVIEW.** 14 files read, 72 golden figures and 0 candidate names taken from submission.md, 25 stump terms taken from the design note.
+**Verdict: REVIEW.** 14 files read, 73 golden figures and 0 candidate names taken from submission.md, 25 stump terms taken from the design note.
 
 LEAK stops the ship. REVIEW is a reader's call and the /leak-check command's solver's-eye pass reads every REVIEW line. INFO is a sweep that ran and found nothing or was skipped.
 
-Stump terms swept: asserted, record, heaters, careful, quotation, architecture, capacity, bridge, register, winter, verdicts, missed, carried, second, heating, station, golden, summed, heater, energies, dispatch, graded, connection, intervals, forecast
+Stump terms swept: asserted, record, heaters, careful, inside, carried, recharge, quotation, session, conditioning, temperature, architecture, bridge, graded, capacity, sessions, pooled, energies, register, station, winter, second, steady, verdicts, chargers
 
 ## 3 answer figures in the pack (REVIEW 2)
 - **REVIEW** `depot_electrification_standard_DES-1.pdf`: golden figure 4.3 appears: ...tay on diesel until the connection is reinforced. 4.3 The order put to the board is one bus for each bl...
 - **REVIEW** `depot_electrification_standard_DES-1.pdf`: golden figure 4.1 appears: ...each block's electrification. 4. Assigning blocks 4.1 A weekday block qualifies for a battery-electric...
 
 ## 4 design-note vocabulary (REVIEW 2)
-- **REVIEW** `depot_electrification_standard_DES-1.pdf`: 6 of 25 stump-paragraph terms appear (record, capacity, register, station, dispatch, connection); read whether the document names the move
-- **REVIEW** `ebus_quotation_2027.pdf`: 5 of 25 stump-paragraph terms appear (heaters, quotation, capacity, heating, heater); read whether the document names the move
+- **REVIEW** `depot_electrification_standard_DES-1.pdf`: 8 of 25 stump-paragraph terms appear (record, recharge, session, temperature, capacity, register); read whether the document names the move
+- **REVIEW** `ebus_quotation_2027.pdf`: 3 of 25 stump-paragraph terms appear (heaters, quotation, capacity); read whether the document names the move
 
 ## 9 dates after the setting (INFO 1)
 - **INFO** `-`: no --asof given, sweep skipped (pass the fiction's as-of date)
@@ -82,7 +82,7 @@ No single sentence or file collapses this into a lookup; nothing here reads as a
 
 **7. Realism checks.**
 
-All four workbooks have distinct, plausible `docProps/core.xml` authorship and dates (Inger Norman, Georg Pålsson, Ekonomi; created 2020–2022, modified through late 2026), not a single uniform stamp. Both PDFs are produced by LibreOffice Writer with distinct creation timestamps, authors and page counts consistent with their content (fleet standard dated 22 Sep 2025; quotation dated 2 Oct 2026), nothing FPDF/ReportLab-flavoured.
+All four workbooks have distinct, plausible `docProps/core.xml` authorship and dates (Inger Norman, Georg Pålsson, Ekonomi; created 2020 to 2022, modified through late 2026), not a single uniform stamp. Both PDFs are produced by LibreOffice Writer with distinct creation timestamps, authors and page counts consistent with their content (fleet standard dated 22 Sep 2025; quotation dated 2 Oct 2026), nothing FPDF/ReportLab-flavoured.
 
 Quotation `quotation_bev_tractors_2027.pdf` specification table: read line by line (Tractor, Battery, Charging, Drive, Unladen weight, Power take-off, Warranty, Price, Delivery), every line reads as an ordinary dealer quotation line (model configuration, capacity numbers, charging standard, warranty terms, price and delivery conditions). None of the lines is phrased as guidance to the analyst; nothing says "use this figure for planning" or similar. (Note, for cross-reference only, not as a leak: the "Power take-off: Electric PTO, 400 V AC, up to 40 kW, for body and trailer equipment" line is an ordinary spec item that happens to be thematically consistent with the "TRU SR-60e ePTO" reefer trailers seen in the fleet register's Trailers sheet, a real-world detail, not a planted pointer.)
 
@@ -201,3 +201,201 @@ An isolated Sonnet reader, cold, on a fresh unzip and the prompt only.
 6. One thing: none; the closest (the pilot buses run a fixed set of nine weekday blocks) settles only that those blocks have electric records. The reader noticed the pilot buses' fuel-fired heaters against the 2027 model's all-electric heating on a read, so R3's notice is a careful-pass move; its figure still needs the HVO fills tank to tank against hours and temperatures.
 Sweep lines: the DES-1 clause numbers coinciding with figures, harmless (section numbering); the fleet plan's 2027 dates, harmless (the plan's own timetable).
 Realism: nothing reads as generated; fills to two decimals, prices spread, no duplicate rows in 41,790 dispatch rows, charging starts shifting with summer time; the tyre and brake report reads as a genuine unused maintenance report.
+
+## Solver's-eye read, architecture 10 loop 1 (read on target.zip 133243bf4849fb55, 2026-11-10)
+
+# Leak read: task4 scratch pack (Niittylä depot battery-electric bus order)
+
+Scope read in full: prompt.txt and all 14 files under target/ (block_register_2026.xlsx,
+charging_connection_agreement_2025.pdf, depot_charging_sessions_2025-03_2026-10.csv,
+depot_dispatch_log_2024-01_2026-10.csv, depot_electricity_invoices_2025-01_2026-10.csv,
+depot_electrification_standard_DES-1.pdf, ebus_quotation_2027.pdf,
+ebus_telematics_daily_2025-03_2026-10.csv, fleet_plan_2027.xlsx,
+fuel_card_transactions_2024-01_2026-10.csv, tyre_and_brake_costs_2025.xlsx,
+vehicle_register_2026.xlsx, weather_vehkasalo_daily_2016_2026.csv,
+workshop_orders_2024-01_2026-10.csv). No figure computed, no score given.
+
+## 1. Which sentence or file tells you how any part of the analysis should be done?
+
+`depot_electrification_standard_DES-1.pdf` is the one document that states method/process
+sentences (as opposed to pure data). Verbatim:
+
+- "2.3 The usable battery of a bus model is the usable energy its manufacturer states for it
+  when new, less the share of usable energy a traction battery permanently loses in its first
+  twelve months in service. That share is taken from the company's own battery-electric buses."
+- "2.4 The design day is a January working day with a daily mean air temperature of minus 15
+  degrees Celsius at the town's airport weather station (Vehkasalo lentoasema). The design night
+  is the night that follows it, at the same daily mean temperature."
+- "3.1 Energy figures for planning are estimated from the company's own operating records.
+  Manufacturers' range and consumption figures are not used for planning."
+- "3.2 A battery-electric bus is charged at its depot only, on the charging lane's chargers,
+  between its block's return and its next departure... The depot's chargers deliver up to 150 kW
+  to a bus, and the charging installation draws no more than the capacity the distribution
+  company's connection agreement gives it, in the periods the agreement gives it."
+- "3.3 Fuel use is reported per block as litres of diesel per 100 scheduled kilometres over the
+  twelve months to the end of the last full month before the assessment, from the fuel-card
+  statements and the dispatch log, for the business case of each block's electrification."
+- "4.1 A weekday block qualifies for a battery-electric bus when its energy on the design day is
+  no more than 85 per cent of the usable battery of the bus model being ordered."
+- "4.2 Qualifying blocks are assigned in the order of the fleet plan's priority list. The list is
+  cut at the first block the depot cannot recharge, together with every block above it on the
+  list, between the blocks' returns and their departures under 3.2."
+
+These fix the WHAT (population, window, unit, comparison) for each figure; none of them supplies
+the number itself.
+
+## 2. Which file already ranks or scores the candidates on the prompt's question?
+
+`fleet_plan_2027.xlsx`, sheet "Weekday blocks 2027", column "Priority": every one of the 48
+Mon-Fri blocks (M101-M148) is given a rank from 1 to 48.
+
+```
+('Priority', 'Block', 'Lines', 'Scheduled km', 'Depot departure', 'Depot return', 'Zone', 'Note')
+(1, 'M108', '9', 112.7, '05:31', '15:56', 1, 'centre lines, low-emission zone from 2027')
+(2, 'M107', '9', 134.9, '05:48', '19:07', 1, None)
+(3, 'M148', '3', 114.9, '07:01', '19:19', 1, None)
+```
+
+This is not incidental: DES-1 4.2 ("Qualifying blocks are assigned in the order of the fleet
+plan's priority list") names this exact column as the ordering input for "which blocks."
+
+## 3. Which file exists only to help the analyst?
+
+None. All 14 files read as first-party business records (operating logs, registers, invoices, a
+signed utility letter, a vendor quotation letter, an internal standard with its own version and
+approval history), each tied to a named staff member consistent across files (Simo Virta appears
+as DES-1's document author and as the addressee of the bus quotation; Eveliina Pajunen owns the
+vehicle/tyre-brake registers and is addressed as "Ms Pajunen" in the connection-agreement letter).
+No glossary, methodology note, or crib sheet is present.
+
+## 4. Which figure or name reads as the answer rather than context?
+
+No figure or name is presented as a finished result. The nearest thing is the "Priority" column
+in fleet_plan_2027.xlsx (question 2) and, within it, block M108 at Priority 1, the only row
+carrying a Note ("centre lines, low-emission zone from 2027"), which could read as a pointer to
+"start here." But Priority ranks all 48 blocks, not a filtered qualifying set, and DES-1 4.1/4.2
+still require the energy-vs-85%-threshold test and the recharge-feasibility cut before any block,
+count, or MWh figure is settled. Nothing states the bus count, a block's qualification, the
+degradation share, or the MWh draw outright.
+
+## 5. Which filed sentence, read literally, fixes how any graded figure is computed or over which population?
+
+Primary: DES-1 "4.1 A weekday block qualifies for a battery-electric bus when its energy on the
+design day is no more than 85 per cent of the usable battery of the bus model being ordered."
+Literal result in words: this fixes the yes/no figure as a single threshold comparison (qualify =
+yes exactly when modelled design-day energy <= 85% of the 2027 model's usable battery net of
+first-year loss, no otherwise). It fixes the comparison, not either input value.
+
+Also fixing a population/window/source (not a number) for other graded figures:
+- DES-1 2.3 fixes the first-year-loss figure's population to "the company's own battery-electric
+  buses" (the six pilots) and its window to each one's own first twelve months in service, ruling
+  out the quotation's unrelated warranty benchmark.
+- DES-1 3.3 fixes the diesel-use figure's unit (L/100 scheduled km), window (trailing 12 months to
+  the last full month before assessment) and sources (fuel-card statements, dispatch log).
+- DES-1 4.2 fixes the ordering input (fleet_plan's Priority column) and the stopping rule (cut at
+  the first non-rechargeable block) for "which blocks" / "how many buses."
+
+## 6. Is there one thing that would make most of the prompt routine? Per-ask breakdown.
+
+No single file, sentence, column or data pattern does this. The closest candidate is the DES-1
+standard taken as a whole: it settles which comparison decides yes/no (4.1), which file's column
+decides assignment order (4.2), and what "block," "block energy," "design day/night," and the
+diesel window mean. What it does not settle, for any block: the design-day energy figure itself
+(no document or telematics row is keyed to "design day," and the six pilot buses never ran a
+numbered block at all per the dispatch log, so a consumption model has to be transferred from
+their telematics to each block's own duty profile), the first-year loss share (must be measured
+from the pilots' own history), the trailing-12-month diesel rate (must be assembled from four
+fuel stations, two diesel spellings, time-bounded card reassignments, and HVO/AdBlue exclusions),
+or the installation's MWh draw (must be modelled against the 690 kW night cap and the charger
+rollout timing, complicated by the pilots relocating to another depot on 2027-01-11). So DES-1
+fixes the rules, not the results.
+
+Per ask:
+- "How many battery-electric buses should we order", analysis (sums the per-block results),
+  combined under a stated counting rule (4.3) once those results exist.
+- "which weekday blocks should they take", analysis (the per-block qualification test) combined
+  with a stated ordering/cut procedure (4.2) that names fleet_plan's priority list.
+- "diesel use ... litres per 100 scheduled kilometres" per block, analysis: reconciling ~20,800
+  fuel-card rows (two diesel spellings, one depot + three retail stations, re-keyed cards, HVO/
+  AdBlue to exclude) to vehicles to blocks via the dispatch log.
+- "battery energy in kWh ... on the standard's design day" per block, analysis: the pilots never
+  ran these blocks (confirmed against the dispatch log), so a temperature/HVAC consumption model
+  built from their telematics must be transferred to each block's own distance/duty profile, and
+  the 2027 model's fully-electric heating (vs. the pilots' partly fuel-fired heating) has to be
+  accounted for rather than copied.
+- "a yes or no on whether it qualifies" per block, follows a stated rule (4.1) once the two
+  figures above exist; the rule is given, the inputs are not.
+- "share of usable battery ... lose for good in their first year", analysis: measured from the
+  six pilots' own first-12-months charging/telematics history; the quotation's unrelated
+  70%-at-8-years warranty figure is a plausible wrong number to reach for instead.
+- "energy in MWh the charging installation would draw ... design night ... every qualifying block
+  on charge", analysis: modelling simultaneous overnight demand against the connection
+  agreement's stated 690 kW cap and the depot's charger count/timing.
+
+No ask turns on catching one planted defect. The only "catch" items found (card reassignments,
+two diesel spellings, HVO sitting only on the pilots' cards, AdBlue-only vehicle entry) are
+ordinary fleet-data hygiene, not a single hidden fact that flips a result.
+
+## A. depot_electrification_standard_DES-1.pdf, two number matches
+
+Numeric tokens in the document, with counts: 1 (x5, from "1. Scope", "version 1", and the two
+"DES-1"/"Page 1" header/footer occurrences), 2 (x3, "Version 2", "2. Terms", "2.4"'s "2"), 15
+(x2, "85 per cent"'s complement and "minus 15 degrees"), 100, 150, 18, 85, 2024, 2026, plus the
+section/subsection labels 2.1-2.4, 3.1-3.3, 4.1-4.4, 5.1. These are overwhelmingly (a) section/
+subsection numbering, (b) the document's own version/approval dates, or (c) the standard's rule
+constants (85 and 15 as the qualifying split, 150 as the per-charger kW cap, 100 as the diesel
+rate's per-km basis). The document never states a bus count, a block's energy or diesel rate, a
+degradation share, or an MWh figure anywhere, only rule text and administrative metadata.
+Whichever two numbers the sweep matched, they are generic low-cardinality labels or constants
+colliding by chance with unrelated computed figures; none of them reads, in context, as a stated
+answer.
+
+**Ruling: harmless.** No number in this document is presented as a result; the matches are
+coincidental overlaps of section labels/rule constants with unrelated figures.
+
+## B. fleet_plan_2027.xlsx, 4 ISO dates after 2026-11-06
+
+All four are in sheet "Timetable 2027":
+```
+('Winter timetable 2027', '2027-01-11', 'weekday blocks as the 2026 autumn timetable')
+('Summer timetable 2027', '2027-06-07', 'to be planned in spring')
+('Line 8 to Satama hourly', '2027-01-11', 'within block kilometres as listed')
+('Buses 1201 to 1206 to Kauppala depot', '2027-01-11', "regional and school lines; the city's 2027 terms exclude fuel-fired heaters")
+```
+Three cells read 2027-01-11 and one reads 2027-06-07, matching the sweep's count exactly.
+
+**Ruling: harmless.** These are the planned future effective dates of timetable/depot changes,
+exactly the forward content DES-1 4.4 says belongs in this annual planning cycle ("Blocks are
+assessed each autumn for the following year's timetable, before any order is placed"). The
+prompt itself is forward-facing (ordering buses for the 2027 timetable), so a fleet-planning
+workbook carrying 2027 dates is in-world, not a generation artifact. None of the four dates is a
+graded figure. The one substantive fact among them, the pilot buses' relocation to another depot
+on 2027-01-11, is operational context relevant to the charging-capacity analysis, not an answer
+hand-over.
+
+## Realism tells
+
+- One fuel-card row (ADBLUE, vehicle 1110) is timestamped 2026-11-01, one day past the filename's
+  stated "...2026-10" span; a minor extraction-boundary artifact, not an error.
+- Several vehicles' fuel cards were re-keyed mid-register (e.g. fleet nos. 1105, 1118, 1121, 1133,
+  1134, 1136, 1144, 1150: an old card retired and a new one issued with adjoining validity dates).
+  Authentic "latest version" hygiene, not a cross-file disagreement.
+- The same diesel fuel is spelled two ways by station: "DIESEL" at the home depot pump (station
+  9001) vs. "Diesel B7" at the three external retail stations (1123, 1187, 1409).
+- `vehicle_entered` in the fuel-card file is populated only for ADBLUE rows (1,767 of 1,767) and
+  never for DIESEL/Diesel B7/HVO (0 of ~19,000), a believable point-of-sale quirk.
+- HVO purchases sit on exactly the six pilot e-buses' own fuel cards (confirmed by card number)
+  and never on a diesel-fleet card, consistent with their fuel-fired cabin heater; this pattern is
+  not written down anywhere and only shows via a cross-tab.
+- The dispatch log (2024-01 to 2026-10, 41,790 rows) never once shows any of the six pilot e-bus
+  plates against a numbered block, consistent with the fleet plan's own note that they currently
+  run "regional and school lines," not the numbered blocks.
+- Two workshop orders carry identical templated fault text for two different vehicles ("Fuel
+  heater does not start, fault F12 (no flame). Glow pin and metering pump on order." for both 1202
+  and 1205, and the matching repair note for both), plausible shared fault-code phrasing, but
+  slightly too-clean.
+- The quotation's 8-year/500,000 km, 70%-of-usable-capacity warranty line sits one paragraph from
+  the battery spec and could be mistaken for the "first year" loss figure the prompt asks about;
+  it is a different, later-life measure.
+
+Main thread's rulings (2026-11-10): questions 1 to 6 find no process sentence for any graded result, no helper file, no answer figure and no one thing; the priority column is the city's zone order the standard's 4.2 walks (Gate G, filed as a fact); every literal reading quoted under question 5 executes to the golden. Lines A and B harmless as the reader rules. Realism lines fixed in the generator on target.zip 8a51114e25f18f18: the statement now closes at 31 October 23:59 (the one AdBlue row of 1 November 00:29 belongs to November's statement); the two heater-fault work orders are written up in two mechanics' words; the fleet plan's row reads "Buses 1201 to 1206 move to Kauppala depot" from 11 January 2027 (the reader took the earlier wording for the buses' present work; the dispatch log carries them by fleet number on the nine pilot blocks from March 2025). The other lines (re-keyed cards, two diesel spellings, the typed vehicle on the spare cards' AdBlue rows, HVO only on the electric buses' cards, the warranty line) are the process's own texture. No graded figure moved (the golden folder's digest is unchanged).

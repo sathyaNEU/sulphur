@@ -2,12 +2,13 @@
 author's implementation of a named method, run end to end on the shipped files; nothing reads the prompt.
 
   quick      the pilot's mean energy per km on days at or below -5 C times each block's kilometres, against 85 per cent
-             of the quoted usable battery, the per-block verdicts summed; no diesel work, no night
-  careful    the union of what the six recorded Fryele runs did, on this pack: every file cleaned and joined, the diesel
-             use per block tank to tank by least squares for the fuel ask, the pilot's energy per km by block, a
-             piecewise-linear cold response fitted on the pilot's own HVAC record and read at -15 C, the pilot's fit
-             carried to the blocks it never ran on climb and hours per km, the first-winter loss on a curved age form,
-             the charging efficiency from the sessions, the night scheduled under the agreement's capacity
+             of the quoted usable battery, the per-block verdicts summed; the night as battery energy; no diesel work
+  careful    what a frontier run does unprompted, on this pack: every file cleaned and joined, the diesel use per block
+             tank to tank by least squares for the fuel ask, the pilot's energy per km by block, the fuel heaters' share
+             read from the HVO fills once the register's heater line and the quotation's heating row are read side by
+             side (graded up: a leak reader noticed the heaters on a read), the pilot's fit carried to the blocks it never
+             ran on climb and hours per km, the first-winter loss on a curved age form, the charging losses as the
+             sessions' pooled ratio, the night scheduled exactly on those figures
   thorough   the golden
 
 Each hint is executed literally: the careful pass with that one step done right, graded like the passes; a hint
@@ -38,22 +39,27 @@ def main(target):
         import numpy as np
         return round(float(np.mean([rates[c] for c in others]) - np.mean([rates[c] for c in pilot])), 1)
 
-    def pack(E, rates, lim, taken, grid, loss, heater, gapv):
+    def pack(E, rates, lim, taken, dem, loss, heater, gapv, cond):
         return {"R1": {c: round(rates[c], 1) for c in pk.weekday} if rates else None,
                 "R2": gapv, "R3": heater,
                 "R4": {c: r10(E[c]) for c in pk.weekday},
+                "R5": loss,
                 "R6": {c: "yes" if E[c] <= lim else "no" for c in pk.weekday},
-                "R5": loss, "R7": round(grid / 1000.0, 1), "R8": sorted(taken)}
+                "R7": cond, "R8": round(dem / 1000.0, 1), "R9": sorted(taken)}
 
-    gold = pack(g["E"], g["rates"], g["limit"], g["taken"], g["demand_kwh"], figs["loss_pct"], figs["heater_kw"], figs["pilot_gap"])
-    careful = pack(car["E"], car["rates"], car["limit"], car["taken"], car["demand_kwh"], round(100 * car["loss"], 1), None, None)
+    gold = pack(g["E"], g["rates"], g["limit"], g["taken"], g["demand_kwh"], figs["loss_pct"], figs["heater_kw"], figs["pilot_gap"],
+                figs["cond_kw"])
+    careful = pack(car["E"], car["rates"], car["limit"], car["taken"], car["demand_kwh"], round(100 * car["loss"], 1),
+                   round(car["parts"]["heater_lph"] * A.HEATER_KWH_PER_L, 1), None, None)
     careful["R2"] = {"value": None, "grade": "missed", "why": "the pass computes every block's diesel figure for the fuel ask and never "
                      "sets the pilot blocks against the rest: the fuel-card file is dismissed for the forecast because litres do not measure "
                      "battery energy, so the selection is never stated"}
-    careful["R3"] = {"value": None, "grade": "missed", "why": "the pass reads the pilot's own HVAC record at -15 C and files no figure for "
-                     "the heat the fuel heaters supplied: the electric buses' HVO fills are not read as cabin heat"}
-    quick = pack(qk["E"], None, qk["limit"], qk["taken"], qk["demand_kwh"], None, None, None)
+    careful["R7"] = {"value": None, "grade": "missed", "why": "the pass takes the charging losses as the sessions' pooled ratio of the "
+                     "battery's gain to the metered energy and files no draw beside the recharge: a year of mostly mild nights averages the "
+                     "battery's conditioning into one efficiency, read as if every night were the same"}
+    quick = pack(qk["E"], None, qk["limit"], qk["taken"], qk["demand_kwh"], None, None, None, None)
     bands = {c: [v - WU.E_TOL, v + WU.E_TOL] for c, v in figs["energy"].items()}
+    cb = figs["conventions"]["cond_band"]
     res = [
         {"id": "R1", "name": "diesel l/100 km per weekday block (48 cells)", "graded_as": "Ask 1", "figure": "diesel",
          "depends": [], "independent": "", "golden": figs["diesel"],
@@ -73,46 +79,49 @@ def main(target):
          "depends": ["R4", "R5"], "independent": "", "golden": figs["verdict"], "partly_share": 0.8,
          "partly_share_why": "a constant answer (every block electric) already gets %d of 48 verdicts, so partial credit starts "
                              "at four fifths of the blocks" % figs["qualifying_count"]},
-        {"id": "R7", "name": "the design night's demand of every qualifying block at the connection point, MWh", "graded_as": "Ask 5",
-         "figure": "demand_mwh", "depends": ["R4", "R6"], "independent": "", "golden": figs["demand_mwh"],
-         "band": [figs["demand_mwh"] - WU.NIGHT_TOL, figs["demand_mwh"] + WU.NIGHT_TOL],
-         "partly": [figs["demand_mwh"] - 0.6, figs["demand_mwh"] + 0.6]},
-        {"id": "R8", "name": "the order: the count and the blocks", "graded_as": "Recommendation", "figure": "call_set",
-         "depends": ["R4", "R5"], "independent": "", "golden": figs["call_set"]},
+        {"id": "R7", "name": "the conditioning draw on charge at -15 C, kW", "graded_as": "Component 3", "figure": "cond_kw",
+         "depends": [], "independent": "", "golden": figs["cond_kw"], "band": list(cb), "partly": [cb[0] - 0.6, cb[1] + 0.6]},
+        {"id": "R8", "name": "the design night's draw with every qualifying block on charge, MWh", "graded_as": "Ask 5",
+         "figure": "demand_mwh", "depends": ["R4", "R6", "R7"], "independent": "", "golden": figs["demand_mwh"],
+         "band": [round(figs["demand_mwh"] - WU.NIGHT_TOL, 2), round(figs["demand_mwh"] + WU.NIGHT_TOL, 2)],
+         "partly": [round(figs["demand_mwh"] - 0.6, 2), round(figs["demand_mwh"] + 0.6, 2)]},
+        {"id": "R9", "name": "the order: the count and the blocks", "graded_as": "Recommendation", "figure": "call_set",
+         "depends": ["R4", "R5", "R7"], "independent": "", "golden": figs["call_set"]},
     ]
     for r in res:
         r["passes"] = {"quick": quick[r["id"]], "careful": careful[r["id"]], "thorough": gold[r["id"]]}
     sys.path.insert(0, os.path.join(os.path.dirname(os.path.dirname(HERE)), ".claude", "skills", "stumping"))
     import effort as EF
     # the hints: the careful pass with one step put right
-    E1, _ = A.design_energies(pk, "j2_wrong", g["rates"])        # the bridge right, the heaters still missing
-    t1 = A.night_cut(pk, E1, car["limit"], car["eta"])
-    h1 = pack(E1, car["rates"], car["limit"], t1[0], sum(E1[c] / car["eta"] for c in t1[4]), round(100 * car["loss"], 1), None, figs["pilot_gap"])
-    E2, _ = A.design_energies(pk, "j1_wrong", g["rates"])        # the heaters right, the bridge still missing
-    t2 = A.night_cut(pk, E2, car["limit"], car["eta"])
-    h2 = pack(E2, car["rates"], car["limit"], t2[0], sum(E2[c] / car["eta"] for c in t2[4]), round(100 * car["loss"], 1), figs["heater_kw"], None)
-    h3 = dict(careful)                                           # the night's cap is already applied by the careful pass
+    hb = A.careful(pk, "golden")                       # the bridge put right (the heaters already read from the fills)
+    h1 = pack(hb["E"], hb["rates"], hb["limit"], hb["taken"], hb["demand_kwh"], round(100 * hb["loss"], 1),
+              round(hb["parts"]["heater_lph"] * A.HEATER_KWH_PER_L, 1), gap(hb["rates"]), None)
+    hc = A.careful(pk, "j1_wrong", True)               # the conditioning put right, the bridge still missing
+    h2 = pack(hc["E"], hc["rates"], hc["limit"], hc["taken"], hc["demand_kwh"], round(100 * hc["loss"], 1),
+              round(hc["parts"]["heater_lph"] * A.HEATER_KWH_PER_L, 1), None, round(hc["cond_kw"], 1))
+    h3 = dict(careful)                                 # the heaters are already read and the night already capped
     hints = []
     for sent, h in (("the pilot blocks were chosen for their low diesel use, and the diesel figures carry the difficulty the "
                      "timetable's kilometres, climb and speed miss", h1),
-                    ("the pilot buses heated the cabin with fuel below about -4 C, and the quoted buses take that heat from the "
-                     "battery", h2),
-                    ("the night period's capacity caps the order below the blocks that pass the limit", h3)):
+                    ("on a cold night a bus on charge also takes power through its charger to keep its battery warm, which "
+                     "the sessions' average ratio spreads over a year of mild nights", h2),
+                    ("the pilot buses heated the cabin with fuel below about -4 C, and the night period's capacity caps the "
+                     "order below the blocks that pass the limit", h3)):
         rescued = []
         for r in res:
             gc = EF.grade(careful[r["id"]], r)[0]
             gh = EF.grade(h[r["id"]], r)[0]
             if gh == "right" and gc != "right":
                 rescued.append(r["id"])
-        hints.append({"sentence": sent, "rescues": rescued, "count": len(h["R8"])})
+        hints.append({"sentence": sent, "rescues": rescued, "count": len(h["R9"])})
     routes = [{"name": k, "answer": v, "golden": k == "golden"} for k, v in figs["route_sets"].items()]
     out = {"results": res, "hints": hints, "routes": routes,
            "careful_dismissed": {"the fuel-card file for the forecast": "diesel litres do not measure battery energy",
-                                 "the electric buses' HVO fills": "read as fuel purchases, not as cabin heat"},
+                                 "the sessions' cold nights": "averaged into one charging efficiency"},
            "careful_variants": {"careful without the night's supply": figs["routes"]["the careful pass without the night's supply"]}}
     json.dump(out, open(os.path.join(HERE, "effort.json"), "w"), indent=1, ensure_ascii=False, sort_keys=True)
     print("effort.json: careful order %d, quick %d, golden %d; hints rescue %s" %
-          (len(careful["R8"]), len(quick["R8"]), len(gold["R8"]), [h["rescues"] for h in hints]))
+          (len(careful["R9"]), len(quick["R9"]), len(gold["R9"]), [h["rescues"] for h in hints]))
 
 
 if __name__ == "__main__":

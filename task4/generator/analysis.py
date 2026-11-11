@@ -426,25 +426,92 @@ def capacity_loss(pk, form="curved", min_dsoc=30):
     return float(loss), float(np.sqrt(np.mean(resid ** 2))), lvl
 
 
-def charging_efficiency(pk, usable_new=420.0, min_dsoc=30):
-    """energy into the battery over energy through the charger meter, on the sessions"""
-    se = pk.sessions
+def session_frame(pk, min_dsoc=30):
+    """the charging sessions on the solver's side: local times (the export is in UTC), the evening each session
+    belongs to, the hours it was plugged in while the relay released the chargers (21:00 to 07:00), the night's
+    temperature (the evening's and the next morning's daily means at the airport station), and the energy that went
+    into the battery (the state-of-charge points times the capacity the bus's own day shows, energy over its drop)"""
+    se = pk.sessions.copy()
+    for col in ("plug_in_utc", "plug_out_utc"):
+        se[col.replace("_utc", "_loc")] = (pd.to_datetime(se[col], utc=True).dt.tz_convert("Europe/Helsinki")
+                                           .dt.tz_localize(None))
+    se["evening"] = (se["plug_in_loc"] - pd.Timedelta(hours=12)).dt.date
+    ev = pd.to_datetime(se["evening"])
+    night_from = ev + pd.Timedelta(minutes=NIGHT_FROM)
+    night_to = ev + pd.Timedelta(minutes=NIGHT_TO + 1440)
+    a = np.maximum(se["plug_in_loc"].values, night_from.values)
+    b = np.minimum(se["plug_out_loc"].values, night_to.values)
+    se["rel_h"] = np.maximum(0.0, (b - a) / np.timedelta64(1, "m") / 60.0)
+    se["plug_h"] = (se["plug_out_loc"] - se["plug_in_loc"]).dt.total_seconds() / 3600.0
+    t_ev = np.array([pk.temp.get(d, np.nan) for d in se["evening"]])
+    t_mo = np.array([pk.temp.get(d + dt.timedelta(days=1), np.nan) for d in se["evening"]])
+    se["t_evening"], se["t_morning"] = t_ev, t_mo
+    se["t_night"] = 0.5 * (t_ev + t_mo)
     eb = pk.ebus
-    loss_curve = capacity_loss(pk)[0]
-    d = (se["soc_out_pct"] - se["soc_in_pct"]).values.astype(float)
-    m = d >= min_dsoc
-    # the capacity each bus shows at the session's date: from the day's own record (energy over soc drop)
     day = {(int(r.vehicle), r.date): r for r in eb.itertuples()}
-    num, den = 0.0, 0.0
-    for v, t, dd, kwh in zip(se["vehicle"].values[m], se["plug_in_utc"].values[m], d[m], se["energy_kwh"].values[m]):
-        date = pd.to_datetime(t).date()
-        r = day.get((int(v), date)) or day.get((int(v), date - dt.timedelta(days=1)))
-        if r is None or (r.soc_start_pct - r.soc_end_pct) < min_dsoc:
+    gain, sensor = [], []
+    for v, d, si, so in zip(se["vehicle"], se["evening"], se["soc_in_pct"], se["soc_out_pct"]):
+        r = day.get((int(v), d))
+        if r is None or (r.soc_start_pct - r.soc_end_pct) < min_dsoc or (so - si) < min_dsoc:
+            gain.append(np.nan)
+            sensor.append(np.nan)
             continue
         cap = r.energy_used_kwh / ((r.soc_start_pct - r.soc_end_pct) / 100.0)
-        num += dd / 100.0 * cap
-        den += kwh
-    return num / den
+        gain.append((so - si) / 100.0 * cap)
+        sensor.append(r.t)
+    se["gain"] = gain
+    se["t_sensor"] = sensor
+    se = se.dropna(subset=["gain", "t_night"]).reset_index(drop=True)
+    return se
+
+
+def charging_ratio(pk, min_dsoc=30):
+    """the hurried read: energy into the battery over the energy through the charger meter, pooled over the sessions"""
+    se = session_frame(pk, min_dsoc)
+    return float(se["gain"].sum() / se["energy_kwh"].sum())
+
+
+def charging_model(pk, tcol="t_night", hcol="rel_h", T0=None, base=True, se=None):
+    """the session's metered energy split into the recharge over the charger's efficiency and a steady draw while
+    plugged in and released that rises below a temperature: kWh = gain / eta + hours x (c0 + c1 x max(0, T0 - T)),
+    T0 profiled on a half-degree grid unless given. Returns (eta, c0, c1, T0, the draw at the design night in kW)."""
+    se = session_frame(pk) if se is None else se
+    y = se["energy_kwh"].values
+    g = se["gain"].values
+    h = se[hcol].values
+    t = se[tcol].values
+    best = None
+    for t0 in ([T0] if T0 is not None else np.arange(-4.0, 12.01, 0.5)):
+        cols = [g] + ([h] if base else []) + [h * np.maximum(0.0, t0 - t)]
+        X = np.column_stack(cols)
+        beta, *_ = np.linalg.lstsq(X, y, rcond=None)
+        sse = float(np.sum((y - X @ beta) ** 2))
+        if best is None or sse < best[0]:
+            best = (sse, beta, t0)
+    sse, beta, t0 = best
+    eta = 1.0 / beta[0]
+    c0 = float(beta[1]) if base else 0.0
+    c1 = float(beta[-1])
+    return float(eta), c0, c1, float(t0), c0 + c1 * max(0.0, t0 - DESIGN_T), float(np.sqrt(sse / len(y)))
+
+
+def charging_ratio_by_cold(pk, se=None):
+    """a rival a careful run fits once it sees winter sessions take more per kWh: the meter's energy per kWh into the
+    battery as a line in the night's cold, read at the design night (a multiplicative loss, no hours term)"""
+    se = session_frame(pk) if se is None else se
+    y = (se["energy_kwh"] / se["gain"]).values
+    best = None
+    for t0 in np.arange(-4.0, 12.01, 0.5):
+        X = np.column_stack([np.ones(len(y)), np.maximum(0.0, t0 - se["t_night"].values)])
+        beta, *_ = np.linalg.lstsq(X, y, rcond=None)
+        sse = float(np.sum((y - X @ beta) ** 2))
+        if best is None or sse < best[0]:
+            best = (sse, beta, t0)
+    _, beta, t0 = best
+    k15 = float(beta[0] + beta[1] * max(0.0, t0 - DESIGN_T))
+    # the fit's error on the metered energy itself, comparable with the split's
+    pred = se["gain"].values * (beta[0] + beta[1] * np.maximum(0.0, t0 - se["t_night"].values))
+    return 1.0 / k15, float(np.sqrt(np.mean((se["energy_kwh"].values - pred) ** 2)))
 
 
 # ----------------------------------------------------------------------------------------------- R4: the energies
@@ -528,71 +595,105 @@ def limit(pk, loss):
     return SHARE * pk.usable_2027 * (1 - loss)
 
 
-def windows(pk, codes, energies, eta, pad=0):
-    """each block's charging job: energy at the connection point, from its return to its next departure inside the
-    night period (the standard's 3.2 and 4.2, read literally: pad 0); pad minutes at each end are a rival reading"""
-    return [(c, energies[c] / eta, max(pk.blocks[c]["ret"] + pad, NIGHT_FROM), min(pk.blocks[c]["dep"] + 1440 - pad, NIGHT_TO + 1440))
-            for c in codes]
+def window(pk, c, pad=0):
+    """block c's charging window on the design night: its return to its next departure inside the night period (the
+    standard's 3.2 and 4.2 read literally: pad 0); pad minutes at each end are a rival reading"""
+    return max(pk.blocks[c]["ret"] + pad, NIGHT_FROM), min(pk.blocks[c]["dep"] + 1440 - pad, NIGHT_TO + 1440)
 
 
-def night_cut(pk, energies, lim, eta, supply=None, pad=0):
+def windows(pk, codes, energies, eta, cond_kw=0.0, pad=0):
+    """each block's charging job: the recharge at the connection point (battery energy over the charger's efficiency)
+    and the steady draw beside it over the whole window"""
+    out = []
+    for c in codes:
+        a, b = window(pk, c, pad)
+        out.append((c, energies[c] / eta, a, b, cond_kw))
+    return out
+
+
+def night_draw(pk, codes, energies, eta, cond_kw=0.0, pad=0):
+    """what the installation takes at the connection point on the design night for these blocks' buses, kWh"""
+    return sum(j[1] + j[4] * (j[3] - j[2]) / 60.0 for j in windows(pk, codes, energies, eta, cond_kw, pad))
+
+
+def night_cut(pk, energies, lim, eta, cond_kw=0.0, supply=None, pad=0):
     """the standard's 4.2: qualifying blocks in priority order, cut at the first the night cannot recharge with those
-    above it; returns (taken codes, refused code, shortfall kWh, the taken set's energy at the connection point)"""
+    above it; returns (taken codes, refused code, shortfall kWh, the taken set's draw at the connection point, the
+    qualifying codes)"""
     supply = pk.supply if supply is None else supply
     q = [c for c in sorted(pk.weekday, key=lambda c: pk.priority[c]) if energies[c] <= lim]
-    cands = windows(pk, q, energies, eta, pad)
+    cands = windows(pk, q, energies, eta, cond_kw, pad)
     taken, refused, short = night.cut_by_priority(cands, CHARGER_KW, supply)
-    grid = sum(energies[c] / eta for c in taken)
+    grid = night_draw(pk, taken, energies, eta, cond_kw, pad)
     return taken, refused, short, grid, q
+
+
+def capacity_for(pk, codes, energies, eta, cond_kw=0.0, pad=0):
+    """the least night-period capacity at the connection point at which these blocks can all be recharged, kW"""
+    return night.least_supply(windows(pk, codes, energies, eta, cond_kw, pad), CHARGER_KW)
 
 
 def golden(pk):
     rates = diesel_rates(pk)
     loss, rmse, lvl = capacity_loss(pk)
-    eta = charging_efficiency(pk)
+    eta, c0, c1, t0, cond, cm_rmse = charging_model(pk)
     E, parts = design_energies(pk, "golden", rates)
     lim = limit(pk, loss)
-    taken, refused, short, grid, q = night_cut(pk, E, lim, eta)
+    taken, refused, short, grid, q = night_cut(pk, E, lim, eta, cond)
     verdict = {c: E[c] <= lim for c in pk.weekday}
     faults = heater_from_faults(pk)
-    return {"rates": rates, "loss": loss, "eta": eta, "E": E, "limit": lim, "taken": taken, "refused": refused, "short": short,
-            "grid_kwh": grid, "qualifying": q, "demand_kwh": sum(E[c] / eta for c in q), "verdict": verdict, "parts": parts,
-            "faults": faults, "cap_rmse": rmse, "heater_kw": parts["heater_lph"] * HEATER_KWH_PER_L}
+    return {"rates": rates, "loss": loss, "eta": eta, "cond_kw": cond, "cond_fit": (c0, c1, t0, cm_rmse), "E": E, "limit": lim,
+            "taken": taken, "refused": refused, "short": short, "grid_kwh": grid, "qualifying": q,
+            "demand_kwh": night_draw(pk, q, E, eta, cond), "capacity_kw": capacity_for(pk, q, E, eta, cond),
+            "verdict": verdict, "parts": parts, "faults": faults, "cap_rmse": rmse, "heater_kw": parts["heater_lph"] * HEATER_KWH_PER_L,
+            "ratio_pooled": charging_ratio(pk)}
 
 
-def careful(pk):
-    """the careful but hurried pass: the union of the recorded runs' methods"""
+def careful(pk, energies="j1_wrong", conditioning=False):
+    """the careful but hurried pass: every file cleaned and joined, the diesel figures tank to tank, the pilot's heaters
+    read from the HVO fills, the pilot's fit carried to the blocks it never ran on climb and hours per km, the loss on a
+    curved age form, the charging losses as the sessions' pooled ratio, the night scheduled exactly on those figures"""
     rates = diesel_rates(pk)
     loss, _, _ = capacity_loss(pk)
-    eta = charging_efficiency(pk)
-    E, parts = design_energies(pk, "careful", rates)
+    if conditioning:
+        eta, _, _, _, cond, _ = charging_model(pk)
+    else:
+        eta, cond = charging_ratio(pk), 0.0
+    E, parts = design_energies(pk, energies, rates)
     lim = limit(pk, loss)
-    taken, refused, short, grid, q = night_cut(pk, E, lim, eta)
-    return {"rates": rates, "loss": loss, "eta": eta, "E": E, "limit": lim, "taken": taken, "grid_kwh": grid, "qualifying": q,
-            "demand_kwh": sum(E[c] / eta for c in q), "verdict": {c: E[c] <= lim for c in pk.weekday}, "parts": parts}
+    taken, refused, short, grid, q = night_cut(pk, E, lim, eta, cond)
+    return {"rates": rates, "loss": loss, "eta": eta, "cond_kw": cond, "E": E, "limit": lim, "taken": taken, "grid_kwh": grid,
+            "qualifying": q, "demand_kwh": night_draw(pk, q, E, eta, cond), "capacity_kw": capacity_for(pk, q, E, eta, cond),
+            "verdict": {c: E[c] <= lim for c in pk.weekday}, "parts": parts}
 
 
 def quick(pk):
+    """ten minutes: the pilot's cold-day energy per km times each block's kilometres against 85 per cent of the quoted
+    battery, every block that passes ordered, the night's draw as the battery energy and its capacity as that energy
+    over the night period's ten hours"""
     E, rate = quick_energies(pk)
     lim = SHARE * pk.usable_2027
     q = [c for c in sorted(pk.weekday, key=lambda c: pk.priority[c]) if E[c] <= lim]
+    dem = sum(E[c] for c in q)
     return {"E": E, "limit": lim, "taken": q, "rate": rate, "verdict": {c: E[c] <= lim for c in pk.weekday},
-            "grid_kwh": sum(E[c] for c in q), "demand_kwh": sum(E[c] for c in q)}
+            "grid_kwh": dem, "demand_kwh": dem, "capacity_kw": dem / 10.0}
 
 
 def routes(pk, g=None):
-    """every route's count and set: the golden, the two passes, and each shortcut alone on the golden's path"""
+    """every route's count and set: the golden, the two passes, and each estimate left out on the golden's path"""
     g = g or golden(pk)
     out = {}
     out["golden"] = g["taken"]
     out["careful but hurried"] = careful(pk)["taken"]
     out["quick"] = quick(pk)["taken"]
     E1, _ = design_energies(pk, "j1_wrong", g["rates"])
-    out["the pilot's fit carried on kilometres, climb and speed (the diesel bridge left out)"] = night_cut(pk, E1, g["limit"], g["eta"])[0]
+    out["the pilot's fit carried on kilometres, climb and speed (the diesel bridge left out)"] = night_cut(pk, E1, g["limit"], g["eta"], g["cond_kw"])[0]
     E2, _ = design_energies(pk, "j2_wrong", g["rates"])
-    out["the pilot's cold response read as the new buses' (the fuel heaters' share left out)"] = night_cut(pk, E2, g["limit"], g["eta"])[0]
-    out["the per-block verdicts summed, the night's supply ignored"] = [c for c in sorted(pk.weekday, key=lambda c: pk.priority[c]) if g["E"][c] <= g["limit"]]
-    out["the night scheduled on battery energy (charging losses ignored)"] = night_cut(pk, g["E"], g["limit"], 1.0)[0]
+    out["the pilot's cold response read as the new buses' (the fuel heaters' share left out)"] = night_cut(pk, E2, g["limit"], g["eta"], g["cond_kw"])[0]
+    out["the sessions' pooled ratio for the night (the battery's conditioning left out)"] = night_cut(pk, g["E"], g["limit"], g["ratio_pooled"])[0]
     Ec, _ = design_energies(pk, "careful", g["rates"])
-    out["the careful pass without the night's supply"] = [c for c in sorted(pk.weekday, key=lambda c: pk.priority[c]) if Ec[c] <= g["limit"]]
+    out["the pilot's own record carried as it stands (no bridge, no heaters' share, the pooled ratio)"] = night_cut(pk, Ec, g["limit"], g["ratio_pooled"])[0]
+    out["the per-block verdicts summed, the night's supply ignored"] = [c for c in sorted(pk.weekday, key=lambda c: pk.priority[c]) if g["E"][c] <= g["limit"]]
+    out["the night scheduled on battery energy (charging losses and conditioning ignored)"] = night_cut(pk, g["E"], g["limit"], 1.0)[0]
+    out["the careful pass without the night's supply"] = [c for c in sorted(pk.weekday, key=lambda c: pk.priority[c]) if E1[c] <= g["limit"]]
     return out

@@ -192,8 +192,26 @@ def fade(age_days):
 
 
 def cold_capacity(t):
-    """reversible: the usable capacity the battery system shows on a cold day"""
-    return 1.0 - 0.0016 * max(0.0, 10.0 - t)
+    """reversible: the usable capacity the battery system shows on a cold day (small: the thermal management keeps the
+    pack near its working temperature)"""
+    return 1.0 - 0.0004 * max(0.0, 10.0 - t)
+
+
+def conditioning_kw(t_night):
+    """what a plugged-in bus takes through its charger beside the recharge, while the charger is released: the 24 V
+    system, the BMS and the outlet's standby, and the traction battery held at its charging temperature on a cold night"""
+    return P.COND_BASE + P.COND_SLOPE * max(0.0, P.COND_T0 - t_night)
+
+
+def night_temp(temps, d):
+    """the night after day d: between the evening's daily mean and the next morning's"""
+    nxt = temps.get(d + dt.timedelta(days=1), temps[d])
+    return 0.5 * (temps[d]["truth"] + nxt["truth"])
+
+
+def released(a, b):
+    """minutes of [a, b] (minutes from the evening's midnight) inside the night period, when the relay releases the chargers"""
+    return max(0, min(b, P.NIGHT_TO + 1440) - max(a, P.NIGHT_FROM))
 
 
 # ----------------------------------------------------------------------------------------------- fleet
@@ -270,6 +288,7 @@ def card_for(cards, fleet_no, d):
 # ----------------------------------------------------------------------------------------------- the days
 def world(seed=P.SEED):
     rng = np.random.default_rng(seed)
+    crng = np.random.default_rng(seed + 9)     # the conditioning's own variation, apart from the day's stream
     temps = temperatures(np.random.default_rng(seed + 1))
     blocks = make_blocks(np.random.default_rng(seed + 2))
     buses = make_fleet(np.random.default_rng(seed + 3))
@@ -326,13 +345,18 @@ def world(seed=P.SEED):
                              "category": cat, "hours": round(float(rng.uniform(1.5, 14)), 1), "note": ""})
     # the fuel heater faults on two electric buses in the winter of 2025/26 (the parts took weeks)
     heater_out = {1202: (dt.date(2026, 1, 12), dt.date(2026, 2, 8)), 1205: (dt.date(2026, 2, 2), dt.date(2026, 2, 24))}
+    # two mechanics, two ways of writing the same fault up
+    notes = {1202: ("Fuel heater does not start, fault F12 (no flame). Glow pin and metering pump on order.",
+                    "Fuel heater repaired (glow pin, metering pump), test run OK."),
+             1205: ("Heater fails to start after two restarts, code F12 no flame. Glow pin + dosing pump ordered from Eberspacher.",
+                    "Heater repaired: new glow pin and dosing pump fitted, 30 min test run OK.")}
     for fn, (a, b_) in heater_out.items():
         wo += int(rng.integers(1, 9))
         workshop.append({"wo": "WO-%d" % wo, "fleet_no": fn, "opened": a, "closed": a, "category": "hvac",
-                         "hours": 2.5, "note": "Fuel heater does not start, fault F12 (no flame). Glow pin and metering pump on order."})
+                         "hours": 2.5, "note": notes[fn][0]})
         wo += int(rng.integers(1, 9))
         workshop.append({"wo": "WO-%d" % wo, "fleet_no": fn, "opened": b_, "closed": b_, "category": "hvac",
-                         "hours": 3.0, "note": "Fuel heater repaired (glow pin, metering pump), test run OK."})
+                         "hours": 3.0, "note": notes[fn][1]})
 
     # the depot pump out of service for a week (every fill at the street station)
     pump_out = (dt.date(2025, 8, 18), dt.date(2025, 8, 24))
@@ -449,16 +473,19 @@ def world(seed=P.SEED):
                     fills.append({"date": d, "fleet_no": fn, "litres": lit, "where": "depot", "product": "HVO",
                                   "minute": int(rng.uniform(21 * 60 + 10, 25 * 60))})
                     htank[fn] += lit
-                # the night's charge: plugged in after the return, unplugged before the next departure
+                # the night's charge: plugged in after the return, unplugged before the next departure; the charger
+                # meters the recharge over its efficiency and, while the relay releases it, what the bus takes beside it
                 sid += 1
                 target = 100 if rng.uniform() < 0.9 else int(rng.integers(90, 100))
                 gain = max(0.0, target - soc1) / 100.0 * cap
-                delivered = gain / 0.92 * (1 + rng.normal(0, 0.012))
+                meter_noise = rng.normal(0, 0.012)
                 plug_in = b["ret"] + int(rng.integers(4, 28))
                 plug_out = 24 * 60 + b["dep"] - int(rng.integers(8, 45))
                 start = max(plug_in, P.NIGHT_FROM) + int(rng.integers(0, 4))
+                cond = conditioning_kw(night_temp(temps, d)) * released(plug_in, plug_out) / 60.0 * (1 + crng.normal(0, 0.07))
+                delivered = gain / P.ETA_CHARGE * (1 + meter_noise) + cond
                 sessions.append({"sid": sid, "date": d, "fleet_no": fn, "plug_in": plug_in, "plug_out": plug_out, "start": start,
-                                 "kwh": delivered, "soc_in": soc1, "soc_out": target,
+                                 "kwh": delivered, "recharge_kwh": delivered - cond, "cond_kwh": cond, "soc_in": soc1, "soc_out": target,
                                  "outlet": "C%d-%s" % ((fn - 1201) // 2 + 1, "AB"[(fn - 1201) % 2])})
                 soc_end_prev[fn] = target
     return {"temps": temps, "blocks": blocks, "buses": buses, "cards": cards, "roster": roster, "diesel_days": diesel_days,
@@ -469,6 +496,17 @@ def world(seed=P.SEED):
 def design_energy(b, t=P.DESIGN_T):
     """the truth: a 2027 bus's battery energy on block b on a day of mean temperature t"""
     return b["km"] * traction_kwh_per_km(b) + b["hours"] * (P.P_AUX + new_bus_heating(t))
+
+
+def design_window(b):
+    """the block's charging window on the design night: its return to its next departure, inside the night period"""
+    return max(b["ret"], P.NIGHT_FROM), min(b["dep"] + 1440, P.NIGHT_TO + 1440)
+
+
+def design_night_draw(b, t=P.DESIGN_T):
+    """the truth: what the installation takes at the connection point for block b's bus on the design night"""
+    a, z = design_window(b)
+    return design_energy(b, t) / P.ETA_CHARGE + conditioning_kw(t) * max(0, z - a) / 60.0
 
 
 if __name__ == "__main__":

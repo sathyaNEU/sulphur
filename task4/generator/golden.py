@@ -68,16 +68,19 @@ def write_xlsx(path, pk, g, figs):
             ("Usable battery after the first winter, kWh", round(figs["usable_y1"])),
             ("Limit, 85 per cent, kWh", round(g["limit"])),
             ("First-winter loss, per cent of usable", figs["loss_pct"]),
-            ("Design night: energy at the connection point for the buses ordered, MWh", figs["night_mwh"]),
-            ("Design night: energy at the connection point for every qualifying block, MWh", figs["demand_mwh"]),
-            ("Design night: at most deliverable in the night period, MWh", figs["night_capacity_mwh"]),
+            ("Design night: draw at the connection point for the buses ordered, MWh", figs["night_mwh"]),
+            ("Design night: draw at the connection point with every qualifying block on charge, MWh", figs["demand_mwh"]),
+            ("   of which recharge, MWh", figs["demand_recharge_mwh"]),
+            ("   of which battery conditioning while on charge, MWh", figs["demand_cond_mwh"]),
+            ("Design night: at most in the night period, MWh", figs["night_capacity_mwh"]),
             ("Design night: capacity in the night period, kW (agreement 2025-ND-117)", int(pk.supply)),
-            ("Charging efficiency, battery over meter", round(g["eta"], 3))]
+            ("Charger efficiency into the battery", figs["eta"]),
+            ("Conditioning draw on charge at -15 C, kW per bus", figs["cond_kw"])]
     for k, v in rows:
         ws.append([k, v])
         ws.cell(ws.max_row, 1).font = Font(bold=True)
     ws.append([])
-    ws.append(["Prepared 12 November 2026 for the board meeting of 21 January 2027; records to 31 October 2026; DES-1 version 2."])
+    ws.append(["Prepared 10 November 2026 for the board meeting of 21 January 2027; records to 31 October 2026; DES-1 version 2."])
     _widths(ws, [72, 60])
 
     ws2 = wb.create_sheet("Blocks")
@@ -103,27 +106,37 @@ def write_xlsx(path, pk, g, figs):
     ws2.print_title_rows = "1:1"
 
     ws3 = wb.create_sheet("Night")
-    ws3.append(["Block", "Depot return", "Depot departure", "Charging from", "Charging until", "Battery energy kWh",
-                "At the connection point kWh", "Delivered in the greedy schedule kWh"])
+    ws3.append(["Priority", "Block", "Depot return", "Depot departure", "On charge from", "On charge until", "Hours on charge",
+                "Battery energy kWh", "Recharge at the connection point kWh", "Conditioning kWh", "Night draw kWh", "Assigned 2027"])
     _head(ws3, 1)
-    cands = A.windows(pk, g["taken"], g["E"], g["eta"])
-    rem = night.greedy(cands, A.CHARGER_KW, pk.supply)
-    for c, kwh, a, b in cands:
-        ws3.append([c, hhmm(pk.blocks[c]["ret"]), hhmm(pk.blocks[c]["dep"]), hhmm(a), hhmm(b), round(g["E"][c], 1), round(kwh, 1),
-                    round(kwh - rem[c], 1)])
+    for c in g["qualifying"]:
+        a, b = A.window(pk, c)
+        hrs = (b - a) / 60.0
+        rech = g["E"][c] / g["eta"]
+        ws3.append([pk.priority[c], c, hhmm(pk.blocks[c]["ret"]), hhmm(pk.blocks[c]["dep"]), hhmm(a), hhmm(b), round(hrs, 2),
+                    round(g["E"][c], 1), round(rech, 1), round(g["cond_kw"] * hrs, 1), round(rech + g["cond_kw"] * hrs, 1),
+                    "yes" if c in taken else "no"])
     ws3.append([])
-    ws3.append(["Total", "", "", "", "", round(sum(g["E"][c] for c in g["taken"]), 1), round(g["grid_kwh"], 1), ""])
-    ws3.cell(ws3.max_row, 1).font = Font(bold=True)
+    ws3.append(["", "Qualifying blocks", "", "", "", "", "", round(sum(g["E"][c] for c in g["qualifying"]), 1), "", "",
+                round(g["demand_kwh"], 1), ""])
+    ws3.append(["", "Assigned blocks", "", "", "", "", "", round(sum(g["E"][c] for c in g["taken"]), 1), "", "",
+                round(g["grid_kwh"], 1), ""])
+    for r in (ws3.max_row - 1, ws3.max_row):
+        ws3.cell(r, 2).font = Font(bold=True)
     if g["refused"]:
-        ws3.append(["Next on the list: %s, %s kWh at the connection point; with the blocks above it the night's maximum flow "
-                    "(returns to departures, 21:00 to 07:00) falls about %s kWh short of it" %
-                    (g["refused"], round(g["E"][g["refused"]] / g["eta"]), figs["refused_short_kwh"])])
-    ws3.append(["Night period 21:00 to 07:00 at %d kW (connection agreement 2025-ND-117); chargers 150 kW; charging efficiency %.2f "
-                "from the depot's sessions. Blocks in the fleet plan's priority order." % (int(pk.supply), g["eta"])])
+        ws3.append(["", "Next on the list: %s; with the %d blocks above it the night's maximum flow (returns to departures, "
+                    "21:00 to 07:00, %d kW, 150 kW a charger) falls about %s kWh short" %
+                    (g["refused"], len(g["taken"]), int(pk.supply), figs["refused_short_kwh"])])
+    ws3.append(["", "Night period 21:00 to 07:00 at %d kW (connection agreement 2025-ND-117). Recharge = battery energy / %.3f; "
+                "conditioning %.1f kW a bus for every hour on charge in the night period (the sessions, -15 C night)." %
+                (int(pk.supply), g["eta"], g["cond_kw"])])
     for row in ws3.iter_rows(min_row=2, max_row=ws3.max_row):
-        for c in row[5:8]:
+        if isinstance(row[6].value, float):
+            row[6].number_format = "0.00"
+        for c in row[7:11]:
             c.number_format = "#,##0.0"
-    _widths(ws3, [8, 12, 14, 13, 13, 14, 16, 18])
+    _widths(ws3, [8, 10, 11, 13, 13, 13, 10, 12, 16, 13, 12, 11])
+    ws3.freeze_panes = "C2"
 
     ws4 = wb.create_sheet("Model")
     ws4.append(["Pilot energy per km outside heating and cooling, by block (electric bus-days)"])
@@ -141,7 +154,16 @@ def write_xlsx(path, pk, g, figs):
                  ("Fuel heater at -15 C, litres per hour out", round(g["parts"]["heater_lph"], 3)),
                  ("Fuel heater at -15 C, kW of heat (35 kW at 3.9 l/h)", figs["heater_kw"]),
                  ("Heating on the 2027 model at -15 C, kW (boosters below -10 C)", round(g["parts"]["heat_new"], 2)),
-                 ("Design-day energy = km x (kWh per km) + hours out x heating kW", "")):
+                 ("Design-day energy = km x (kWh per km) + hours out x heating kW", ""),
+                 ("", ""),
+                 ("Charging sessions: metered kWh = gain / efficiency + hours on charge x (c0 + c1 x max(0, T0 - night mean))", ""),
+                 ("Efficiency into the battery", figs["eta"]),
+                 ("c0, kW", figs["cond_base_kw"]),
+                 ("c1, kW per degree", figs["cond_slope_kw"]),
+                 ("T0, C", figs["cond_t0"]),
+                 ("Conditioning at a -15 C night, kW", figs["cond_kw"]),
+                 ("Residual, kWh a session", figs["cond_rmse"]),
+                 ("Pooled ratio, battery gain over metered energy (all sessions)", figs["ratio_pooled"])):
         ws4.append([k, v])
     _widths(ws4, [60, 16, 30, 14, 9])
     wb.save(path)
@@ -222,7 +244,7 @@ def write_pptx(path, pk, g, figs):
         "The pilot buses' fuel heaters supplied about %.1f kW of cabin heat at -15 C; the 2027 model heats electrically, so its design-day energy carries it (%.1f kW of heating in all)." %
         (figs["heater_kw"], g["parts"]["heat_new"]),
         "First-winter loss of usable battery on our own buses: %.1f per cent; usable battery for planning %d kWh." % (figs["loss_pct"], round(figs["usable_y1"])),
-        "Design night: %.1f MWh at the connection point for the %d buses (%.1f MWh for all %d qualifying blocks against %.2f MWh the night period can deliver); charging efficiency %.2f." % (figs["night_mwh"], figs["call_count"], figs["demand_mwh"], figs["qualifying_count"], figs["night_capacity_mwh"], g["eta"]),
+        "Design night: %.1f MWh at the connection point for the %d buses (%.1f MWh with all %d qualifying blocks on charge, against %.2f MWh in the night period); on a -15 C night each bus also takes about %.1f kW on charge to keep its battery warm." % (figs["night_mwh"], figs["call_count"], figs["demand_mwh"], figs["qualifying_count"], figs["night_capacity_mwh"], figs["cond_kw"]),
         "Business case: the %d blocks burn about %s litres of diesel a year." % (figs["call_count"], format(figs["diesel_litres_assigned"], ",d")),
     ], 16)
     footer(s3, 3)
