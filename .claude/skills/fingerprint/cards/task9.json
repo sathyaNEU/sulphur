@@ -1,111 +1,114 @@
 {
   "task": "task9",
   "project": "sulfur",
-  "architecture": "v10 (2026-11-11, re-root into another world after architecture 9 died on Gate H at its re-judge: a US dealer's corporate bond desk, its 2027 market-making P&L under a proposed auto-quoting schedule on a multi-dealer request-for-quote platform, backtested on its own request history over real Treasury, Moody's, SOFR and Cboe series)",
+  "architecture": "v1",
   "drawn": "2026-11-11",
-  "slot_note": "architecture 9 (Harbourne's pod capital plan) died at its re-judge on Gate H: carry was a reading of the policy and carried four of six results once the added dollar was the reflex the judge's run showed; the run record's live ground (selected units, what a recorded value measures, the window's edge, pooled readings) set the new world; market series real from FRED and Cboe, the desk's records simulated from the request-for-quote process on them",
-  "domain": "quantitative-finance",
-  "subdomain": "strategy-backtesting-evaluation",
-  "client_domain": "quantitative-finance",
-  "client_subdomain": "strategy-backtesting-evaluation",
-  "niche": "backtesting a dealer's auto-quoting schedule on its own request-for-quote history to plan the next year's market-making P&L in USD corporate bonds (Sulfur task type: Backtesting, historical strategy simulation with transaction costs and attribution): the cost after each trade read on evaluated prices that lag in thin bonds, the win rate beyond the desk's past quotes from rivals' winning levels on the public tape, the selection of the requests a tighter quote would newly win, a past schedule change read against untouched segments, and the year's range on inventory whose marked daily P&L is autocorrelated",
+  "slot_note": "slot cleared by the author on 2026-11-11 (architectures 1 to 10, quantitative finance, kept in lineage); new build from the author's Concept 1",
+  "domain": "general-statistics-data-science",
+  "subdomain": "bayesian-modeling-posterior-inference",
+  "client_domain": "general-statistics-data-science",
+  "client_subdomain": "Bayesian modeling & posterior inference",
+  "niche": "a cloud backup provider's posterior predictive forecast of quarterly drive replacements across three data centres, one acquired mid-life with its early failures unrecorded and its worst old vaults already retired",
   "objective": "forecasting",
-  "shape": "03",
+  "shape": "02",
   "decision_type": "quantity_figure",
-  "answer_unit": "currency",
-  "answer": "Plan USD 10.30 million of desk P&L for 2027 on the draft schedule (80% range USD 5.71 million to 15.01 million) against USD 5.24 million on the schedule in force, and approve the draft without its changes for liquid and medium investment-grade bonds for asset managers and medium and thin investment-grade bonds for hedge funds, which plans USD 13.20 million.",
-  "answer_source": "task9/submission.md, Final Recommendation (generator/figures.json)",
+  "answer_unit": "count",
+  "answer": "",
+  "answer_source": "",
   "gap": [
     "population",
-    "objective"
+    "time"
   ],
   "pattern": [
-    "D"
+    "E"
   ],
   "generators": [
-    "G6",
-    "G13",
+    "G9",
+    "G14",
     "G16"
   ],
   "gate_g": "forecasting",
   "calibration_form": "existing_book_actuals",
-  "stump_strategy": "causal_design",
+  "stump_strategy": "forecast_method_backtest",
   "decisive_rule_filed": false,
   "official_decoy": false,
   "validated_decoy": false,
   "context_artifact": "close_out_summary",
   "stump_class": "analytical",
-  "analyst_test": "The careful but hurried review reads each segment's cost after the trade a week on, before Ashcote's month-end review holds the move in medium and thin bonds, fits the win rate on the desk's own past quotes, which widen when the rivals' do, and prices the requests a tighter quote would win like the ones it wins now, so its plan is about a third short and it drops a change that pays; reading a week's marks on the tape's levels instead plans 40 per cent too much and keeps two changes that lose.",
-  "domain_test": "Deciding means separating a dealer's edge at execution from the information in the flow it wins (adverse selection read on marks that lag the market), recovering rivals' quotes from the trades they printed and pricing the winner's curse on the requests a tighter quote adds, which is market-making economics; put a hospital or a utility in and there is no quote, no cover, no evaluated price and no winner's curse.",
-  "layer2_family": "estimand_identification",
-  "layer2_pattern": "own:marginal-fill-adverse-selection-on-lagging-evaluations-with-rival-levels-from-the-tape",
+  "analyst_test": "The careful but hurried review fits each drive family's age-hazard on every vault's history, dates the acquired centre's drives from their migration, reads the ramping batch as its family's trailing rate and puts Poisson bands around the sum, so it under-forecasts the acquired centre and the hot batch, over-forecasts the surviving old vaults, and gives bands that would have covered about four quarters in ten.",
+  "domain_test": "Forecasting replacements as a posterior predictive count from a hierarchical hazard model (age, batch and vault effects pooled partially, lifetimes truncated at an acquisition and thinned by selective retirement, a defect batch's accelerating hazard, shocks shared within a chassis) is the reliability statistician's own work; swap in patients or subscribers and the vaults, chassis shocks, health-pull policy and spare lead time stop making sense.",
+  "layer2_family": "forecast_uncertainty",
+  "layer2_pattern": "own:truncated-thinned-fleet-forecast",
   "layer1": [
-    "the platform's request export in two generations: the 2025 migration renamed columns, moved timestamps from New York time to UTC and stated quantities in thousands",
-    "re-sent request messages and amended requests carried as versions of one request id",
-    "trade reports with cancels, corrections, late as-of reports, dissemination delays and capped sizes (5MM+ investment grade, 1MM+ high yield)",
-    "144A bonds exchanged for registered bonds under new identifiers, with the dated map",
-    "bond-market holidays and early closes against the Treasury and Cboe calendars",
-    "liquidity buckets reassigned each quarter in the security master"
+    "acquired-site install dates set at migration",
+    "model-string aliases",
+    "mixed date formats",
+    "duplicate rows",
+    "RMA returns to service",
+    "blank removal reasons recovered from ticket text",
+    "boot SSDs and a QA vault in the inventory",
+    "agent outage gaps",
+    "serials in two formats across the handover"
   ],
-  "stakeholder_role": "the head of credit trading (not named in the prompt)",
-  "role_family": "portfolio_manager",
-  "scoring_unit": "take-rate on flow",
+  "stakeholder_role": "the fleet reliability lead (not named in the prompt)",
+  "role_family": "capacity_planner",
+  "scoring_unit": "per active unit per period",
   "spine": {
-    "file": "the platform's request export (two generations)",
-    "rows": 281204,
-    "entity": "one request for quote the desk received",
-    "grain": "request",
-    "source": "synthetic, simulated from a request-for-quote market on real FRED and Cboe series"
+    "file": "drive_quarter_stats.csv",
+    "rows": 0,
+    "entity": "one drive in one quarter",
+    "grain": "drive x quarter",
+    "source": "synthetic, simulated from a drive fleet's daily failure, health-pull and decommissioning process"
   },
-  "forum": "committee_or_panel",
-  "forcing_event": "vote_or_meeting",
-  "org_family": "financial_institution",
+  "forum": "operations_desk",
+  "forcing_event": "cutover_or_migration",
+  "org_family": "software_or_platform",
   "world": {
-    "geography": "United States (New York)",
+    "geography": "United States (three data centres)",
     "currency": "USD",
-    "org_type": "broker-dealer credit trading desk",
+    "org_type": "cloud backup provider",
     "invented_names": [
-      "Brindlemoor Securities",
-      "Tidewell Credit Network",
-      "Ashcote Evaluations"
+      "Halden Vault",
+      "Brightstore",
+      "Meridian",
+      "Tamsin",
+      "Kestrel",
+      "Borealis"
     ],
     "people": [
-      "Yolanda Cobb",
-      "James Flowers",
-      "Steven Phillips"
+      "Amanda Higgins",
+      "Sandra Collins",
+      "Emily Salas",
+      "Heidi Turner"
     ]
   },
   "deliverables": [
-    "Brindlemoor_2027_quoting_plan.xlsx",
-    "Brindlemoor_2027_quoting_memo.docx"
+    "halden_replacement_forecast_2026Q4_2027Q3.xlsx",
+    "halden_replacement_path_2026Q4_2027Q3.png"
   ],
   "opening_move": "question-first",
-  "question_form": "how-much",
-  "driver": "The decisive quantities are what each kind of win costs after the trade once marks that lag in thin markets have caught up, how often a tighter offer wins beyond any offer made before when rivals' winning levels show only in a public record kept at another grain, and what the newly won requests cost when they are not the requests won now; on the record's own next-day marks, a fit on past offers and today's wins standing in for the new ones, the plan is mispriced in both directions across segments and the segments that lose money are misnamed.",
-  "driver_concrete": "Brindlemoor's credit desk proposes tighter auto-quotes for 2027 in twelve segments; a week's markouts on Ashcote's evaluated prices understate what medium and thin bonds' trades cost because the evaluations take a bond's own move in mostly at the month-end review; a logistic fit on its own past quotes misstates the wins a tighter quote would take (too few in eleven of twelve segments) where the rivals' winning levels sit on the public tape; and the requests a tighter quote would newly win cost less than today's wins where rivals with flow information quote the benign requests tight, and more in thin high-yield bonds where stale marks are picked off, so the plan and the segments to keep at today's quotes come out wrong in both directions.",
-  "stump": "The careful but hurried review reads each segment's cost after the trade a week on, fits the win rate on the desk's past quotes and prices the new wins like today's, so it plans USD 6.54 million against 10.30 million and drops five changes where four lose money (thin investment-grade asset managers pays); on the tape's levels with a week's marks it plans USD 14.67 million and drops two.",
-  "answer_shape": "bridge",
-  "weight": "attribution",
+  "question_form": "how-many",
+  "driver": "The decisive quantities are next year's failures in a fleet whose records start mid-life at one acquired site and whose worst units were retired first, a manufacturing batch whose hazard is accelerating, and intervals that carry the units' shared shocks; read with ages from first sight, a family's pooled history and independent counts, the forecast runs low where the units are older than recorded and where the batch ramps, high where the bad units have left, and its bands cover a fraction of what they claim.",
+  "driver_concrete": "Halden Vault orders spare drives a quarter ahead: DC-3's Kestrel drives were installed years before the 2024 migration that sets their recorded install date and have no power-on hours, so their ages come from the serial's manufacture week; one HX-8 batch on old firmware has a hazard doubling every few months; operations retired the worst OM-6 vaults first, so the survivors are better than the family's pooled history; and chassis power and cooling events cluster failures, so Poisson bands are far too narrow.",
+  "stump": "The careful but hurried review dates the acquired centre's drives from migration, reads the ramping batch at its family's trailing rate, pools the old family's history across the vaults operations retired first and puts Poisson bands on the sum, so its fleet total runs low by about a fifth inside bands a few per cent wide that would have covered about four quarters in ten, its spare order runs short and it keeps the hot-batch vaults in service (figures from the build).",
+  "answer_shape": "forecast-bands-drivers",
+  "weight": "validation",
   "chain_signature": [
     "missingness-measurement",
-    "modeling",
-    "causal-reasoning",
+    "exploration-triage",
     "forecasting",
+    "modeling",
     "forecasting",
     "uncertainty",
-    "decomposition-attribution",
+    "validation",
     "synthesis"
   ],
-  "results": "R1 each changed segment's cost after the trades the current schedule wins, USD a million, read as soon as the move is complete; R2 each changed segment's share of requests won at the draft's quote, from rivals' levels; R3 the cost after the trades the draft's quote would add; R4 the 2027 P&L at the current schedule; R5 at the draft; R6 the draft's 80 per cent range; R7 the difference by changed segment; R8 the changed segments that lose money, with the plan",
-  "one_fact_test": "to be counted by effort.py on the generator's passes",
-  "strategy_label": "WORKS IN FORM",
-  "depth_level": "5 by structure (independent judgments on the marks, rivals' levels, the new wins' selection, a past change's comparison and the year's horizon; different shortcuts land on different segment sets)",
+  "results": "R1 DC-3's replacements over the four quarters (ages rebuilt from serials); R2 the hot batch named with its current annualized rate; R3 the hot batch's four-quarter replacements with its doubling time; R4 the surviving OM-6 vaults' forward rate and count; R5 the fleet's quarterly path; R6 its 80% bands; R7 the back-test coverage of intervals built the same way over the four quarters to 30 September 2026; R8 the Q4 spare order per family and the migrate call with its flip point",
   "doctrine": "throughout",
-  "mechanism_source": "design_note",
+  "mechanism_source": "the author's Concept 1 (2026-11-10), with the client's strategy 8 (spares for failures never seen start) as the nearest client direction",
   "differentiation": {
-    "task9-arch4": "architecture 4 netted a backtested strategy's alpha of the impact its rebalances would pay at a new size; here no strategy is sized: a dealer's quoting rule is backtested on its request history, and the deciding pieces are adverse selection read on lagging marks, rivals' levels recovered from the tape and the selection of the requests a tighter quote would win",
-    "task9-arch9": "architecture 9 read pods' alpha net of carry and capacity within pods for a capital plan; here there is no capital plan, no carry and no capacity: the units are request segments of one desk and the pieces are measurement, censored rivals' levels, selection and a past change's comparison",
-    "mark126": "mark126 measured a published duration whose unit is a chain of work records joined through a succession table; here nothing is chained or joined into units: a dealer's quoting rule is backtested, and the two grains (requests and public trade reports) give rivals' winning levels and the cost after the trades a tighter quote would add"
+    "client strategy 8": "an allocation of a fixed spare order across models from truncated hazards; here a forecast path with honest bands back-tested on clustered failures, a ramping defect batch and survivors thinned by selective retirement carry the weight, and the truncation step is one result of eight",
+    "mark124": "mark124 infers each unexamined unit's kind from its group's surviving records under samples drawn toward flagged groups; here each drive family's forward hazard is estimated from lifetimes truncated at an acquisition and thinned by selective retirement, with a ramping defect batch and chassis-clustered shocks carried into back-tested bands"
   },
   "lineage": [
     {
@@ -522,6 +525,49 @@
       ],
       "stump": "The careful but hurried review reads alpha on the risk model's factors, builds the year from days drawn one at a time and judges each increase on the pod's return at its new size, so it plans 2027 at USD 712 million against USD 594 million, puts the 10th percentile at USD 244 million against 37 million and passes every increase, where eight credit and currency increases add less than the hurdle on the capital they add.",
       "fate": "spent 2026-11-11 at stage 4 on the one re-judge (cut 5378a624): NOT_DETERMINISTIC, SEND_BACK, Gate H failing with carry as the one thing (data semantics). The judge's own run, written before it saw the blocks, assembled the record, fitted capacity within pods (24.2 per cent a doubling), shrank each record toward its group, ran the drawdown rules and payouts, and judged each increase on the added dollar by a paired simulation, all unprompted; it read alpha on the risk model's price-only factors (credit 6.38 per cent, net 2027 P&L about USD 729 million, HC1107 and HC1132 failing) and drew the year a day at a time. Measured on figures.json: with the added dollar taken as the reflex that run showed (section 9 files the hurdle on the capital an increase adds), the carry sentence alone moves R1, R3, R5 and R6 to right, 4 of 6, so the note's pricing of the added dollar as a miss was wrong and the chain hinged on carry; the policy's alpha definition did not force carry against the filed price-only methodology, and the foreign interbank series only the carry basket used pointed at it. Its other within-pod capacity fits ran 19 to 21 per cent against a 21.6 to 26.5 band; the year's horizon (blocks against independent days) was the one priced move it missed on its own."
+    },
+    {
+      "domain": "quantitative-finance",
+      "subdomain": "strategy-backtesting-evaluation",
+      "objective": "forecasting",
+      "shape": "03",
+      "decision_type": "quantity_figure",
+      "answer_unit": "currency",
+      "gap": [
+        "population",
+        "objective"
+      ],
+      "pattern": [
+        "D"
+      ],
+      "generators": [
+        "G6",
+        "G13",
+        "G16"
+      ],
+      "gate_g": "forecasting",
+      "driver": "The decisive quantities are what each kind of win costs after the trade once marks that lag in thin markets have caught up, how often a tighter offer wins beyond any offer made before when rivals' winning levels show only in a public record kept at another grain, and what the newly won requests cost when they are not the requests won now; on the record's own next-day marks, a fit on past offers and today's wins standing in for the new ones, the plan is mispriced in both directions across segments and the segments that lose money are misnamed.",
+      "stump_strategy": "causal_design",
+      "forum": "committee_or_panel",
+      "forcing_event": "vote_or_meeting",
+      "org_family": "financial_institution",
+      "role_family": "portfolio_manager",
+      "architecture": "v10",
+      "drawn": "2026-11-11",
+      "answer_shape": "bridge",
+      "weight": "attribution",
+      "chain_signature": [
+        "missingness-measurement",
+        "modeling",
+        "causal-reasoning",
+        "forecasting",
+        "forecasting",
+        "uncertainty",
+        "decomposition-attribution",
+        "synthesis"
+      ],
+      "stump": "The careful but hurried review reads each segment's cost after the trade a week on, fits the win rate on the desk's past quotes and prices the new wins like today's, so it plans USD 6.54 million against 10.30 million and drops five changes where four lose money (thin investment-grade asset managers pays); on the tape's levels with a week's marks it plans USD 14.67 million and drops two.",
+      "fate": "held at stage 4 on 2026-11-11: deterministic (judge pass 1 FIX_NOW fixed, pass 2 APPROVE) but, priced on the re-judge's blind first pass, the completion horizon alone rescued 6 of 8 results; the author then cleared the slot for a new build in another domain"
     }
   ],
   "lineage_shells": [
@@ -588,14 +634,13 @@
       "question form": "how-much",
       "second-sentence opener": "everything",
       "deliverable set": "pptx+xlsx"
+    },
+    {
+      "question form": "which",
+      "second-sentence opener": "please",
+      "deliverable set": "xlsx"
     }
   ],
-  "notes": "re-root after architecture 9 died on Gate H at its re-judge; this world's priced moves are each a correction the data in hand cannot flag (what the mark measures, rivals seen only at another grain, whether the requests in hand are the ones the answer is about), each feeding its own result, with the plan, the bridge and the set needing several at once",
-  "architecture_spent": false,
-  "shell": {
-    "question form": "which",
-    "second-sentence opener": "please",
-    "deliverable set": "xlsx"
-  },
-  "registered": "2026-11-11T07:02:39Z"
+  "notes": "",
+  "registered": "2026-11-11T14:36:12Z"
 }
