@@ -260,5 +260,36 @@
     "question form": "other",
     "second-sentence opener": "a",
     "deliverable set": "docx+xlsx"
+  },
+  "skeleton": {
+    "decision_form": "dial_or_cap_setting",
+    "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
+    "lessons": [
+      "transport_effect_modifiers",
+      "self_selection_into_treatment",
+      "composition_versus_behaviour"
+    ],
+    "mechanisms": [
+      "site_acoustic_effect_read_through_movers",
+      "volunteers_already_at_destination",
+      "four_month_switch_over"
+    ],
+    "detection": [
+      "natural_experiment_in_record",
+      "residual_by_subgroup"
+    ],
+    "moves": [
+      "transport_by_effect_modifiers",
+      "stratify_by_mix_and_reweight_to_target",
+      "impute_by_model_at_own_drivers"
+    ],
+    "file_roles": [
+      "primary_record",
+      "reference_register",
+      "schedule_or_plan",
+      "governing_standard",
+      "changeover_note",
+      "unused_distractor"
+    ]
   }
 }

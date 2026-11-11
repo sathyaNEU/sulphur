@@ -73,5 +73,26 @@
   "mechanism_source": "design_note",
   "differentiation": {},
   "lineage": [],
-  "notes": "Domain declared by the author at /build (Marketing & Consumer Research, new; vocab key marketing-consumer-research and its subdomains added 2026-10-08). Decisive rung from the measured catalogue: #13 validates on one population, applies to another (Delahunt's own deal curve fits every one of its shallow closed deals and is carried to mechanics that cross own label), with #14 coarsens the segment (the crossing tested against the chain-average own-label price) and #25 assumes an effect the log could measure (the switch is measured from other brands' deals in the scan data) behind it. Patterns A, B and C unavailable (task114, task109, task116). Calibration organ: Delahunt's own closed deal events (existing_book_actuals), structurally blind to the crossing because none of them went below own label in any store. Context artifact: the group's 2026 deal-event recap (close_out_summary), correct uplifts for the lines and events it lists. Decision is pick_one_of_n because the group's menu mixes percentage and money-off mechanics; the prompt licenses sitting the event out. Open at checkpoint A: the portal's label for this domain may be 'Marketing & Sales' (client Batch 14 exemplar)."
+  "notes": "Domain declared by the author at /build (Marketing & Consumer Research, new; vocab key marketing-consumer-research and its subdomains added 2026-10-08). Decisive rung from the measured catalogue: #13 validates on one population, applies to another (Delahunt's own deal curve fits every one of its shallow closed deals and is carried to mechanics that cross own label), with #14 coarsens the segment (the crossing tested against the chain-average own-label price) and #25 assumes an effect the log could measure (the switch is measured from other brands' deals in the scan data) behind it. Patterns A, B and C unavailable (task114, task109, task116). Calibration organ: Delahunt's own closed deal events (existing_book_actuals), structurally blind to the crossing because none of them went below own label in any store. Context artifact: the group's 2026 deal-event recap (close_out_summary), correct uplifts for the lines and events it lists. Decision is pick_one_of_n because the group's menu mixes percentage and money-off mechanics; the prompt licenses sitting the event out. Open at checkpoint A: the portal's label for this domain may be 'Marketing & Sales' (client Batch 14 exemplar).",
+  "skeleton": {
+    "decision_form": "rank_n_name_one",
+    "answer_pattern": "naive_leader_drops_winner_climbs",
+    "lessons": [
+      "response_at_crossing_point"
+    ],
+    "mechanisms": [
+      "promo_level_below_rival_level"
+    ],
+    "detection": [
+      "residual_by_subgroup"
+    ],
+    "moves": [
+      "measure_response_shape_from_events"
+    ],
+    "file_roles": [
+      "governing_standard",
+      "primary_record",
+      "quotes_or_costs"
+    ]
+  }
 }

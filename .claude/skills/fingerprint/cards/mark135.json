@@ -145,5 +145,25 @@
     "REIT distributions paid in two components, a property income distribution and an ordinary dividend, under two event references on one ex-dividend date",
     "grant instalments whose due date is a progress-report date for conditional payments, with currency and withdrawal status held in a separate grant header table and UK-format dates beside the finance system's ISO dates",
     "UK and US daylight-saving changes on different dates shifting the gap between valuation points"
-  ]
+  ],
+  "skeleton": {
+    "decision_form": "dial_or_cap_setting",
+    "answer_pattern": "figure_crosses_bar",
+    "lessons": [
+      "asynchronous_measurement_covariance"
+    ],
+    "mechanisms": [
+      "components_struck_at_different_times"
+    ],
+    "detection": [
+      "naive_depends_on_what_it_should_not"
+    ],
+    "moves": [
+      "variance_components"
+    ],
+    "file_roles": [
+      "governing_standard",
+      "primary_record"
+    ]
+  }
 }

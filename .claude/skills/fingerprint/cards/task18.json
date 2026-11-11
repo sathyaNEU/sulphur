@@ -102,5 +102,32 @@
   },
   "lineage": [],
   "notes": "org_family government_agency and role compliance_or_audit because the analysis is the regulator's own investigation (the transmission operator is in task10's window as utility_or_infrastructure, and the regulator is the honest owner of the 2027 direction); context artifact operations_log (the event records and dispatch log) rather than monitoring_export, which task2 holds in the window.",
-  "registered": "2026-11-10T22:01:04Z"
+  "registered": "2026-11-10T22:01:04Z",
+  "skeleton": {
+    "decision_form": "dial_or_cap_setting",
+    "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
+    "lessons": [
+      "unmetered_component",
+      "latent_structure_estimation",
+      "simulation_with_fitted_inputs"
+    ],
+    "mechanisms": [
+      "loss_of_mains_trip_embedded_solar",
+      "centre_of_inertia_rocof"
+    ],
+    "detection": [
+      "second_source_at_other_grain"
+    ],
+    "moves": [
+      "simulate_with_fitted_inputs",
+      "bridge_by_contribution"
+    ],
+    "file_roles": [
+      "primary_record",
+      "second_grain_source",
+      "governing_standard",
+      "reference_register",
+      "event_timeline"
+    ]
+  }
 }

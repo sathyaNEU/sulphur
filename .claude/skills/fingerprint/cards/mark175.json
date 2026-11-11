@@ -92,5 +92,28 @@
   },
   "lineage": [],
   "notes": "Reopened 2026-10-23 for a from-scratch rebuild (the number retired 2026-10-19 with no card). Coding: decisive gap population (the lots the forecast covers sit at the empty end of the street build-out the history spread over), time second (a service arrival the 2027 areas have not had); pattern none with G14 decisive (a permit chance conditioned on the street's build-out, carried to a forward population at one end) and G6 second. Layer 2 family estimand_identification: card land-use-spatial-development-modeling/3 translated, service went where building already was; the card's shortcut (treated areas before and after, or the area average) is the default path, and the comparison the data force is lot by lot on the street each lot faces.",
-  "registered": "2026-10-23T04:26:40Z"
+  "registered": "2026-10-23T04:26:40Z",
+  "skeleton": {
+    "decision_form": "forecast_figure_with_range",
+    "answer_pattern": "figure_crosses_bar",
+    "lessons": [
+      "pilot_unrepresentative_selection",
+      "transport_effect_modifiers"
+    ],
+    "mechanisms": [
+      "take_up_rises_with_neighbours_taken",
+      "access_first_where_runs_filled"
+    ],
+    "detection": [
+      "selection_rule_in_the_record"
+    ],
+    "moves": [
+      "transport_by_effect_modifiers"
+    ],
+    "file_roles": [
+      "governing_standard",
+      "primary_record",
+      "schedule_or_plan"
+    ]
+  }
 }

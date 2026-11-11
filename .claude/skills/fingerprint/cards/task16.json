@@ -153,5 +153,36 @@
   "question form": "whether",
   "second-sentence opener": "in",
   "deliverable set": "xlsx"
+ },
+ "skeleton": {
+  "decision_form": "set_over_threshold",
+  "answer_pattern": "naive_set_swaps_members",
+  "lessons": [
+   "linkage_missing_not_at_random",
+   "observation_window_coverage",
+   "heterogeneity_carried_to_decision"
+  ],
+  "mechanisms": [
+   "ivr_key_captured_when_line_quiet",
+   "open_written_cases_in_weekly_backlog",
+   "season_late_parcel_mix"
+  ],
+  "detection": [
+   "control_total_gap"
+  ],
+  "moves": [
+   "inverse_inclusion_weights",
+   "impute_by_model_at_own_drivers",
+   "link_records_by_parsed_key",
+   "stratify_by_mix_and_reweight_to_target"
+  ],
+  "file_roles": [
+   "primary_record",
+   "second_grain_source",
+   "reference_register",
+   "governing_standard",
+   "schedule_or_plan",
+   "unused_distractor"
+  ]
  }
 }

@@ -41,6 +41,27 @@ it equals the golden (as a set, or in order with "ordered": true), Partly when t
 least `partly_share` of them are (default a half); a string must match. A pass may carry its own grade with a `why`. Weights default to the measured Mark split (the call and
 the components 38, the asks 55, instruction-following 7 earned by every pass).
 
+Precedents (references/precedents.json). A result the careful but hurried pass grades Missed or Partly carries
+`"precedent": ["L09", ...]`: the ids of the places where a frontier run actually lost that kind of move (kind loss)
+or named it and waved it through (kind named_assumption), from the Sulfur runs or the client's pages, at least one of
+them in the deep class the result's Hurried analyst cell names in the design note's Results chain. An uncited
+cell is graded Right for the cited pair estimate, because every Sulfur paper estimate without a run behind it came
+back 40 to 60 points high; a reflex id on a lost cell is refused (the runs make that move unprompted).
+
+Forcing (both sides). `"forcing"` records the call's line and its two sides: the golden family (three or more
+defensible rival methods run on the cut pack) all on the golden's side, the shortcuts on the other side, and each
+fitted input perturbed by its defensible spread still on the golden's side (the holistic audit's test on task1
+architecture 3: plus or minus 20 per cent on exit rates moved the call from 7 lines to 15):
+
+  "forcing": {"kind": "numeric", "line": 4.0, "golden_side": "above",
+              "golden_family": [{"name": "...", "value": 4.42}, ...],
+              "shortcuts": [{"name": "...", "value": 3.70}, ...],
+              "perturbations": [{"input": "new-account ratios -20%", "value": 4.21}, ...]}
+  or {"kind": "set", "golden_family": [{"name": "...", "answer": [...]}], "perturbations": [{"input": "...", "answer": [...]}]}
+
+Builds whose card was registered before skeleton.RULE_FROM meet both as WARN; every later build meets them as FAIL.
+`--precedents` prints the catalogue.
+
 Exit status: 0 the effort test holds, 1 a FAIL, 2 no effort.json.
 """
 import json
@@ -54,6 +75,55 @@ PASSES = ("quick", "careful", "thorough")
 SCORE = {"right": 1.0, "partly": 0.5, "missed": 0.0}
 DEFAULT_WEIGHTS = {"recommendation": 14.0, "components": 24.0, "asks": 55.0, "instruction": 7.0}
 PAIR_TARGET, BAR = 50.0, 60.0
+PRECEDENTS = os.path.join(HERE, "references", "precedents.json")
+FINGERPRINT = os.path.join(REPO, ".claude", "skills", "fingerprint")
+sys.path.insert(0, FINGERPRINT)
+try:
+    import skeleton as _skeleton  # noqa: E402  (RULE_FROM, the one cut-over date for the next-level contract)
+    RULE_FROM = _skeleton.RULE_FROM
+except Exception:
+    RULE_FROM = "2026-11-11T15:58:00Z"
+
+
+def load_precedents():
+    try:
+        return {p["id"]: p for p in json.load(open(PRECEDENTS))["precedents"]}
+    except Exception:
+        return {}
+
+
+def note_classes(task_dir):
+    """{result id: the deep classes its Hurried analyst cell names} from the note's Results chain."""
+    sys.path.insert(0, HERE)
+    import precut as P
+    note = os.path.join(task_dir, "DESIGN_NOTE.md")
+    if not os.path.exists(note):
+        return {}
+    secs = P.sections(open(note, encoding="utf-8", errors="replace").read())
+    rows, _ = P.results_chain(P.section(secs, "Results chain") or "")
+    out = {}
+    for r in rows:
+        m = re.match(r"([A-Z]{1,2}\d{1,2}[a-z]?)\b", r["id"])
+        if m:
+            out[m.group(1)] = {k for k, rx in P.DEEP_CLASSES.items() if re.search(rx, r["hurried"], re.I)}
+    return out
+
+
+def precedent_classes(p):
+    sys.path.insert(0, HERE)
+    import precut as P
+    return {k for k, rx in P.DEEP_CLASSES.items() if re.search(rx, p.get("class", ""), re.I)}
+
+
+def next_level(task_dir):
+    """True when the build meets the next-level contract in full: its card was registered from RULE_FROM on, or it
+    has no registered card yet."""
+    card = os.path.join(FINGERPRINT, "cards", os.path.basename(task_dir) + ".json")
+    try:
+        reg = json.load(open(card)).get("registered") or ""
+    except Exception:
+        return True
+    return not reg or reg >= RULE_FROM
 
 
 def resolve(arg):
@@ -156,6 +226,7 @@ def measure(task_dir):
         table.append(line)
     # Blocks with no result carry no rubric weight here: the asks or components a build never asked for.
     missing = sum(W[b] for b in ("recommendation", "components", "asks") if b not in counts)
+    scale = 1.0
     if missing:
         scale = 100.0 / (100.0 - missing)
         score = {p: s * scale for p, s in score.items()}
@@ -196,7 +267,7 @@ def measure(task_dir):
             if line and line["careful"][0] != "right":
                 n += 1
         rescued.append((n, h.get("sentence", "")))
-    return table, score, done, rescued, len(res), problems, hand
+    return table, score, done, rescued, len(res), problems, hand, scale
 
 
 def note_table(task_dir):
@@ -227,7 +298,15 @@ def main(argv):
     if not os.path.exists(os.path.join(task_dir, "generator", "effort.json")):
         print("no generator/effort.json in %s" % task_dir)
         return 2
-    table, score, done, rescued, n, problems, hand = measure(task_dir)
+    if "--precedents" in argv:
+        P = load_precedents()
+        for kind in ("loss", "named_assumption", "reflex"):
+            print("== %s" % kind)
+            for p in P.values():
+                if p["kind"] == kind:
+                    print("  %-4s %-26s %s\n       %s" % (p["id"], p["class"], p["move"], p["source"]))
+        return 0
+    table, score, done, rescued, n, problems, hand, scale = measure(task_dir)
     if "--markdown" in argv:
         print("| Result | Quick pass | Careful but hurried | Thorough |")
         print("|---|---|---|---|")
@@ -275,6 +354,83 @@ def main(argv):
         row("different shortcuts land on different wrong answers", len(wrong) >= 2,
             "%d distinct wrong answers over %d shortcuts (the depth scale's level-5 mark)" % (len(wrong), len(routes) - 1),
             warn=True)
+    nl = next_level(task_dir)
+    P = load_precedents()
+    classes = note_classes(task_dir)
+    uncited, reflexed, unknown, mismatched = [], [], [], []
+    for r in E["results"]:
+        t = next(x for x in table if x["id"] == r["id"])
+        g = t["careful"][0]
+        if g not in ("missed", "partly"):
+            continue
+        ids = r.get("precedent") or []
+        unknown += ["%s:%s" % (r["id"], i) for i in ids if i not in P]
+        reflexed += ["%s:%s" % (r["id"], i) for i in ids if i in P and P[i]["kind"] == "reflex"]
+        losses = [i for i in ids if i in P and P[i]["kind"] in ("loss", "named_assumption")]
+        want = classes.get(r["id"], set())
+        matched = [i for i in losses if precedent_classes(P[i]) & want]
+        if losses and not matched:
+            mismatched.append("%s (note: %s; cited: %s)" % (r["id"], ", ".join(sorted(want)) or "no deep class",
+                                                           ", ".join(sorted({c for i in losses for c in precedent_classes(P[i])}))))
+        if not matched:
+            uncited.append((r["id"], t["weight"], g))
+    cited = score["careful"] + scale * sum(w * (1.0 - SCORE[g]) for _, w, g in uncited)
+    row("careful losses cite a frontier precedent", not uncited and not unknown,
+        "every Missed or Partly cell cites a run or client page" if not uncited and not unknown else
+        "uncited: %s%s%s (references/precedents.json; a precedent counts only when its class is the result's hurried "
+        "class in the Results chain; add a run's own line, never a design's)" % (
+            ", ".join(x[0] for x in uncited) or "none", ("; unknown ids " + ", ".join(unknown)) if unknown else "",
+            ("; class unmatched " + "; ".join(mismatched)) if mismatched else ""),
+        warn=not nl)
+    if reflexed:
+        row("no reflex priced as a loss", False, "a reflex id on a lost cell, the runs make that move unprompted: %s"
+            % ", ".join(reflexed), warn=not nl)
+    row("pair estimate with uncited losses graded Right", cited <= PAIR_TARGET,
+        "%.1f (measured %.1f; %d uncited cell%s regraded Right)" % (cited, score["careful"], len(uncited),
+                                                                   "" if len(uncited) == 1 else "s"), warn=not nl)
+    F = E.get("forcing")
+    if not F:
+        row("forcing recorded on both sides", False, "no `forcing` block: the golden family, the shortcuts and each "
+            "fitted input's perturbation, each placed against the call's line", warn=not nl)
+    else:
+        fam, sc, pert = F.get("golden_family") or [], F.get("shortcuts") or [], F.get("perturbations") or []
+        row("golden family run (three or more rivals)", len(fam) >= 3, "%d rival methods recorded" % len(fam), warn=not nl)
+        if (F.get("kind") or "numeric") == "numeric":
+            line, side = F.get("line"), (F.get("golden_side") or "").lower()
+            if not isinstance(line, (int, float)) or side not in ("above", "below"):
+                row("forcing line and side", False, "a numeric forcing block needs `line` and `golden_side` above or below")
+            else:
+                on = (lambda v: v > line) if side == "above" else (lambda v: v < line)
+                fam_off = [x.get("name") for x in fam if not on(x.get("value"))]
+                m = min((abs(x["value"] - line) for x in fam), default=None)
+                row("every golden-family variant on the golden's side", not fam_off,
+                    ("nearest variant %.4g from the line at %.4g" % (m, line)) if not fam_off and m is not None else
+                    "across the line: %s" % ", ".join(map(str, fam_off)), warn=not nl)
+                sc_on = [x.get("name") for x in sc if on(x.get("value"))]
+                row("the shortcuts land across the line", bool(sc) and not sc_on,
+                    ("%d shortcuts, nearest %.4g from the line" % (len(sc), min(abs(x["value"] - line) for x in sc)))
+                    if sc and not sc_on else ("no shortcuts recorded" if not sc else
+                                              "on the golden's side, so they land the call: %s" % ", ".join(map(str, sc_on))),
+                    warn=not nl)
+                p_off = [x.get("input") for x in pert if not on(x.get("value"))]
+                row("the call survives each fitted input's perturbation", bool(pert) and not p_off,
+                    ("%d perturbations hold" % len(pert)) if pert and not p_off else
+                    ("none recorded" if not pert else "the call moves under: %s" % ", ".join(map(str, p_off))),
+                    warn=not nl)
+        else:
+            gold = F.get("golden_answer")
+            if gold is None:
+                g_route = next((r for r in (E.get("routes") or []) if r.get("golden")), None)
+                gold = g_route["answer"] if g_route else None
+            key = lambda a: json.dumps(sorted(a) if isinstance(a, list) else a, sort_keys=True)
+            fam_off = [x.get("name") for x in fam if gold is None or key(x.get("answer")) != key(gold)]
+            row("every golden-family variant files the golden answer", bool(fam) and not fam_off,
+                "%d variants agree" % len(fam) if fam and not fam_off else "differ: %s" % ", ".join(map(str, fam_off)),
+                warn=not nl)
+            p_off = [x.get("input") for x in pert if gold is None or key(x.get("answer")) != key(gold)]
+            row("the call survives each fitted input's perturbation", bool(pert) and not p_off,
+                ("%d perturbations hold" % len(pert)) if pert and not p_off else
+                ("none recorded" if not pert else "the call moves under: %s" % ", ".join(map(str, p_off))), warn=not nl)
     if "--check-note" in argv:
         paper, pe = note_table(task_dir)
         if paper is None:

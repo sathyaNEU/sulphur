@@ -109,7 +109,10 @@ Write it last, against the golden. Context, question, files, in one paragraph. *
 6. **One continuous paragraph**, list items joined by commas and semicolons, no "Then" or "Last".
 7. **Merge and shorten;** no rounding rule anywhere; precision belongs to the answer blocks.
 8. **Ask, do not specify:** "what is", "put it in", "also give me", never "X is the file, one row per".
-9. **Drop claims made only to be rejected.** An opinion arguing the wrong answer is cut.
+9. **Drop claims made only to be rejected.** An opinion arguing the wrong answer, or a memo whose number is simply
+   wrong, is cut. An incumbent figure that is the right computation of a shallower quantity (the contractor's rate,
+   the draft's fall, the manager's plan) may stay as the stakeholder's position when an ask prices it on the same
+   footing as the golden (`stumping` Part 1b).
 10. **Run the bar check last:** does the answer ask for several results that each need their own analysis, or does
     it turn on a stated procedure, a field read correctly, a planted row, a built-in factor or one fact? If the
     latter, the build is not ready, whatever the prompt says.
@@ -122,6 +125,21 @@ each deliverable by its type, as a person asks for it ("a spreadsheet with a bef
 for the review"), with its content as a person states it; a file name only where the person would really give one;
 the standard the call runs on only where the pack lacks it; a generic threat to validity ("participation was
 voluntary").
+
+**The first clause carries the domain fit: say why the answer has to be estimated, never how.** The platform's
+domain-fit check reads the prompt's framing before any run. task14's docket (Mark's task457) came back on
+2026-11-10 as "compliance lookups, counts, and certified figures under a stated rule, no estimation" under a prompt
+that opened "Who goes on the ... docket under our policy, judged on 2026 remuneration ... before open payments
+publishes 2026?" The same docket was approved (the author's report of 2026-11-11) under a prompt that opens on the
+reason the call rests on an estimate: "Open Payments won't publish 2026 until after the Conflict of Interest
+Committee's February 2027 docket, so the docket has to rest on estimates of each faculty member's 2026 remuneration
+from a single manufacturer, built from what they self-reported. Who should go on it?" So the opening clause names
+what is not yet observed or cannot be observed and that the call rests on an estimate of it (the register publishes
+after the decision; the quarter has not closed; the sample no longer covers the month); it never names the source of
+the correction, the method or the comparison. "Under our policy", a deadline's exact clock (when the files hold it)
+and any rounding sentence are cut. That prompt names its two deliverables' file names, which the gate passes with a
+WARN; it opens one sentence with "Then", which the draft gate refuses and the rewrite gate only warns on: the
+author's rewrite keeps that call.
 
 **Never says:**
 - **a method, comparison, model or adjustment** (Sulfur: never name the method, the trap, the comparison group, the

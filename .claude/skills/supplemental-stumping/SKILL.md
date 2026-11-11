@@ -50,6 +50,12 @@ What that means for the design:
 5. **The answer's shape supplies the criteria.** A ranked list under a cap, a bridge, a timeline, a forecast path
    with bands, a flagged set with its false-alarm rate: the shape's cells are many gradable criteria, and the
    results that price the task sit in different cells.
+6. **The asks make the completed work be used, not read.** The client's level 5 tasks ask follow-ups that only the
+   corrected intermediate answers (b9efebd1: the expected charge-offs among the loans still open, the older vintages
+   on the same footing, the 2027 plan by funding month), and price the incumbent's option on the same footing as the
+   golden (279e74f2: "Corinne's mid-October plan needs the same figure"). Each such ask is a result of its own, and a
+   run that kept the pooled or uncorrected figure loses it as well as the call. Never name the intermediate the
+   correction produces: an ask that names it hands over the decomposition (`stumping/references/sulfur-record.md`).
 
 ## Part 2. What Mark measured, which still binds
 

@@ -53,6 +53,7 @@ VOICE = REPO / ".claude" / "skills" / "guide-to-prompt" / "references" / "voice-
 PEOPLE_CACHE = SKILL_DIR / ".cache" / "people.json"
 sys.path.insert(0, str(SKILL_DIR))
 import business  # noqa: E402  (people and business furniture)
+import skeleton  # noqa: E402  (the client's skeleton test: decision form, lessons, detection, moves, file roles, answer)
 
 # How far back the bans reach. RECENT is "your last build" widened to three, because builds are
 # often drawn two or three at a time and a reviewer reads them as one batch. WINDOW is the batch a
@@ -953,6 +954,13 @@ def check(cand, cards, vocab, status=None):
         s = tfn.sim(cand.get("niche") or "", c.get("niche") or "")
         if s >= NICHE_SIM:
             add("WARN", "repeat.niche", "niche reads close (similarity %.2f): %r" % (s, c.get("niche")), [label(c)])
+    # The client's own duplicate test (fingerprint Part 1b): skeleton against every card, every lineage entry and
+    # every task the client has shown us, with no window and no differentiation.
+    try:
+        for f in skeleton.findings(cand, cards):
+            add(f["level"], f["rule"], f["msg"], f["against"], f["fix"])
+    except Exception as e:
+        add("WARN", "skeleton.error", "the skeleton screen did not run: %s" % e, fix="python3 skeleton.py validate")
     return findings, sims[:5]
 
 
@@ -1261,6 +1269,8 @@ def cmd_new(args):
         "analyst_test": "<ONE sentence: what the careful but hurried pass files on the results it loses, and why>",
         "domain_test": "<ONE sentence: the field's own analysis that decides the answer, and why swapping the nouns into another field breaks the task>",
         "mechanism_source": "design_note", "differentiation": {}, "lineage": [], "notes": "",
+        "skeleton": {"decision_form": "", "answer_pattern": "", "lessons": [], "mechanisms": [], "detection": [],
+                     "moves": [], "file_roles": []},
     }
     print(json.dumps(card, indent=2, ensure_ascii=False))
     return 0
@@ -1312,8 +1322,16 @@ def cmd_validate(args):
     if args.tasks:
         cards = [c for c in cards if c.get("task") in args.tasks]
     bad = 0
+    sv = skeleton.load_vocab()
     for c in cards:
         errs, warns = validate_card(c, vocab)
+        sk = c.get("skeleton")
+        if sk:
+            errs += skeleton.validate(sk, sv)
+        elif not skeleton.grandfathered(c):
+            errs.append("no skeleton (fingerprint Part 1b)")
+        else:
+            warns.append("no skeleton (registered before the skeleton rule)")
         if errs:
             bad += 1
             print("%s: %s" % (c.get("task"), "; ".join(errs)))

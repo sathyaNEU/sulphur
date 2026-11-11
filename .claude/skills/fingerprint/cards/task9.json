@@ -642,5 +642,38 @@
     }
   ],
   "notes": "",
-  "registered": "2026-11-11T14:36:12Z"
+  "registered": "2026-11-11T14:36:12Z",
+  "skeleton": {
+    "decision_form": "forecast_figure_with_range",
+    "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
+    "lessons": [
+      "left_truncated_ages",
+      "survivor_selected_sample",
+      "vintage_or_cohort_drift",
+      "serial_or_common_shock_dependence"
+    ],
+    "mechanisms": [
+      "install_date_reset_by_migration",
+      "worst_vaults_retired_first",
+      "firmware_batch_hazard_doubling",
+      "chassis_events_cluster_failures"
+    ],
+    "detection": [
+      "second_source_at_other_grain",
+      "residual_by_subgroup"
+    ],
+    "moves": [
+      "censored_survival_model",
+      "per_cohort_curves",
+      "cluster_resample_shared_unit"
+    ],
+    "file_roles": [
+      "primary_record",
+      "reference_register",
+      "crosswalk_or_migration_map",
+      "event_timeline",
+      "governing_standard",
+      "unused_distractor"
+    ]
+  }
 }

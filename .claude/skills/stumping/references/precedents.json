@@ -1,0 +1,509 @@
+{
+ "_about": "Where frontier runs have actually lost (kind loss), named an assumption and waved it through (kind named_assumption), or made a move unprompted (kind reflex). effort.py reads it: every result the careful but hurried pass grades Missed or Partly cites at least one loss or named_assumption id whose class matches the kind of move the result prices; an uncited cell is graded Right, because a paper estimate with no run behind it came back 40 to 60 points high in every Sulfur round (38.4 measured about 97, 46.5 about 95, 16.2 about 73, 46.7 about 70). A reflex is priced Right in the careful column whatever the design says. Sources are the Sulfur run record (stumping/references/sulfur-record.md and each task's runs/), the client's depth scale with its task detail (guidelines/client/depth-scale-2026-11-09-detail.md) and the example library (guidelines/client/examples/). A new id is added only from a run or a client page, never from a design.",
+ "precedents": [
+  {
+   "id": "L01",
+   "kind": "loss",
+   "class": "dismissed own evidence",
+   "move": "measured the decisive quantity, then set it aside because it did not prove itself alone",
+   "source": "task10/runs/arch5_round1_run2.md (Assumptions and judgment calls)",
+   "quote": "show event-associated increases of 1.271, 0.997 and 1.680 MW at the design temperature. They were excluded as controls. These associations do not prove physical transfers."
+  },
+  {
+   "id": "L02",
+   "kind": "loss",
+   "class": "dismissed own evidence",
+   "move": "its own output showed the mechanism, then it filed the mixed-body answer",
+   "source": "task11/runs/triage.md (run 2, 54)",
+   "quote": "its own output showed the intake drawing one layer and Fennick's water"
+  },
+  {
+   "id": "L03",
+   "kind": "loss",
+   "class": "dismissed own evidence",
+   "move": "set aside a second log at another grain as possible leakage and uneven coverage",
+   "source": "task1/runs/arch3/run1.md (platform run 1 on architecture 3, pasted by the author 2026-11-11)",
+   "quote": "Login and reading files were inspected but excluded from forecasting because coverage differs across cohorts and post-start engagement could leak information about subsequent outcomes."
+  },
+  {
+   "id": "L04",
+   "kind": "loss",
+   "class": "dismissed own evidence",
+   "move": "flagged the caveat and stopped at the recorded outcome",
+   "source": "guidelines/client/depth-scale-2026-11-09-detail.md (b34ffd70)",
+   "quote": "Both runs flagged the caveats and stopped at recorded re-arrest."
+  },
+  {
+   "id": "L05",
+   "kind": "loss",
+   "class": "dismissed own evidence",
+   "move": "found the anomalous unit and asked only whether it was a data bug",
+   "source": "guidelines/client/examples/15.txt",
+   "quote": "asked only \"is this a data bug?\", and kept the cohort as plain evidence about the school's long-run level"
+  },
+  {
+   "id": "L06",
+   "kind": "loss",
+   "class": "dismissed own evidence",
+   "move": "did one correction and declined the second, independent one",
+   "source": "guidelines/client/depth-scale-2026-11-09-detail.md (bd4981a5)",
+   "quote": "The run did the weighting and then declined to add the new employers."
+  },
+  {
+   "id": "L07",
+   "kind": "loss",
+   "class": "dismissed own evidence",
+   "move": "flagged a measurement change as a risk and never tested it",
+   "source": "guidelines/client/depth-scale-2026-11-09-detail.md (41389985)",
+   "quote": "The one run flagged the instrument change as a risk but never tested it and reported the raw 20.8% as a no-go."
+  },
+  {
+   "id": "L08",
+   "kind": "loss",
+   "class": "method shortcut",
+   "move": "weighted the sample by the unit's own strata, not by the inclusion probability another unit set",
+   "source": "stumping/references/sulfur-record.md (task6 a6, run 1, 73)",
+   "quote": "each service's own spans post-stratified by its own hour, partner-gateway 1.4, four services"
+  },
+  {
+   "id": "L09",
+   "kind": "loss",
+   "class": "method shortcut",
+   "move": "decided on the pooled figure after seeing the split (heterogeneity not carried to the decision)",
+   "source": "guidelines/client/examples/7.txt",
+   "quote": "runs that saw that big systems respond more still made the call on the pooled figure, so the loss sits in carrying heterogeneity through to the decision, not in spotting a fact"
+  },
+  {
+   "id": "L10",
+   "kind": "loss",
+   "class": "method shortcut",
+   "move": "one pooled trend for a mix whose parts move in opposite directions",
+   "source": "guidelines/client/depth-scale-2026-11-09-detail.md (4e9c0a39)",
+   "quote": "A single pooled crime trend, the shortcut both runs took, turns half renewal into stop."
+  },
+  {
+   "id": "L11",
+   "kind": "loss",
+   "class": "unfinished chain",
+   "move": "built the split for the first step and dropped it for the next",
+   "source": "guidelines/client/depth-scale-2026-11-09-detail.md (5a6e4e0c)",
+   "quote": "Both runs built the buyer split for trial and then dropped it for volume."
+  },
+  {
+   "id": "L12",
+   "kind": "loss",
+   "class": "method shortcut",
+   "move": "pooled cohorts whose rates drift, the late ages read off the old cohorts",
+   "source": "guidelines/client/depth-scale-2026-11-09-detail.md (b9efebd1)",
+   "quote": "Both runs got the competing-risk estimator right but pooled all five years, read about 6.2% and launched at all sizes, naming vintage drift only as an untested assumption."
+  },
+  {
+   "id": "L13",
+   "kind": "loss",
+   "class": "method shortcut",
+   "move": "applied population rates to a subset selected by a risk score",
+   "source": "guidelines/client/depth-scale-2026-11-09-detail.md (17adb5ca)",
+   "quote": "Both runs did most of the chain and applied network rates to the high-risk picks as an untested assumption."
+  },
+  {
+   "id": "L14",
+   "kind": "loss",
+   "class": "method shortcut",
+   "move": "priced selected survivors on population tables",
+   "source": "guidelines/client/depth-scale-2026-11-09-detail.md (a5a5efb1)",
+   "quote": "Both runs priced on population mortality and walked; one built a small comparison group, but most of its claims were the scheduled survivors themselves"
+  },
+  {
+   "id": "L15",
+   "kind": "loss",
+   "class": "method shortcut",
+   "move": "assumed a behavioural response instead of measuring its shape",
+   "source": "guidelines/client/depth-scale-2026-11-09-detail.md (279e74f2)",
+   "quote": "Both runs assumed a diversion response instead of measuring it and booked October 16 to 29"
+  },
+  {
+   "id": "L16",
+   "kind": "loss",
+   "class": "method shortcut",
+   "move": "priced the unit alone where the system nets it against the units it affects",
+   "source": "guidelines/client/depth-scale-2026-11-09-detail.md (8ec45b05)",
+   "quote": "Both runs priced turbine 3 alone."
+  },
+  {
+   "id": "L17",
+   "kind": "loss",
+   "class": "method shortcut",
+   "move": "took the average unit where the decision buys the marginal one",
+   "source": "guidelines/client/depth-scale-2026-11-09-detail.md (35842bf8)",
+   "quote": "The run assumed marginal cases look like the average and said yes."
+  },
+  {
+   "id": "L18",
+   "kind": "loss",
+   "class": "method shortcut",
+   "move": "took every not-yet-treated unit as untreated",
+   "source": "guidelines/client/examples/4.txt",
+   "quote": "A run that framed the task as a standard difference in differences took every not-yet-live state-month as untreated."
+  },
+  {
+   "id": "L19",
+   "kind": "loss",
+   "class": "method shortcut",
+   "move": "default standard errors although it had read the allocation unit",
+   "source": "guidelines/client/examples/14.txt",
+   "quote": "used the regression's default standard errors, treating 1,840 pupils as independent even though it had read the allocation register school by school"
+  },
+  {
+   "id": "L20",
+   "kind": "loss",
+   "class": "method shortcut",
+   "move": "a regression on a noisy share with no attenuation correction",
+   "source": "guidelines/client/examples/11.txt",
+   "quote": "Both graded runs took the raw-share slopes and picked the DREAM Act"
+  },
+  {
+   "id": "L21",
+   "kind": "loss",
+   "class": "method shortcut",
+   "move": "fitted only the answered cases where the unanswered ones are censored",
+   "source": "guidelines/client/examples/10.txt",
+   "quote": "The shallow path fits only the answered questions."
+  },
+  {
+   "id": "L22",
+   "kind": "loss",
+   "class": "method shortcut",
+   "move": "the published formula whose generating assumption the data contradict",
+   "source": "guidelines/client/examples/9.txt",
+   "quote": "The shallow path is the published formula, a reasonable choice that flags 45.6%"
+  },
+  {
+   "id": "L23",
+   "kind": "loss",
+   "class": "method shortcut",
+   "move": "compared outcomes among the observed when the treatment changed who is observed",
+   "source": "guidelines/client/examples/12.txt",
+   "quote": "the difference in mean wage among working claimants, +$1.92 (95% +$1.37 to +$2.47), which passes the test"
+  },
+  {
+   "id": "L24",
+   "kind": "loss",
+   "class": "method shortcut",
+   "move": "a shared coefficient where units respond in opposite directions; stopped at the first back-test improvement",
+   "source": "guidelines/client/examples/5.txt",
+   "quote": "A run improved its backtest from 276 to 222 hours MAE with a vintage aggregate market adjustment and stopped well short of the 153 that customer-specific responses reach."
+  },
+  {
+   "id": "L25",
+   "kind": "loss",
+   "class": "method shortcut",
+   "move": "pooled the comparison areas instead of matching by band, reported the trial's own mix",
+   "source": "guidelines/client/examples/6.txt",
+   "quote": "pooled the three usual-practice areas into one rate instead of matching by size band and reported the trial areas' own mix as the Service lift"
+  },
+  {
+   "id": "L26",
+   "kind": "loss",
+   "class": "stopped at the first story",
+   "move": "a plausible shallower explanation that passes its own segment checks",
+   "source": "guidelines/client/examples/1.txt",
+   "quote": "The runs chose a plausible but shallower explanation, and the one run with the right action shows that fixing one link does not repair the chain."
+  },
+  {
+   "id": "L27",
+   "kind": "loss",
+   "class": "stopped at the first story",
+   "move": "preferred the dramatic aggregate over a like-for-like cohort comparison",
+   "source": "guidelines/client/examples/13.txt",
+   "quote": "The runs understood the question and lost by preferring a dramatic aggregate over a like-for-like comparison."
+  },
+  {
+   "id": "L28",
+   "kind": "loss",
+   "class": "self-confirming check",
+   "move": "certified the estimator with checks that cannot see the problem",
+   "source": "stumping/references/sulfur-record.md (task10 arch 5 round 2, run 2)",
+   "quote": "the same estimator certified by placebo intervals and untreated-primary controls"
+  },
+  {
+   "id": "L29",
+   "kind": "loss",
+   "class": "self-confirming check",
+   "move": "took the small gaps of an incumbent pack as confirmation",
+   "source": "guidelines/client/examples/4.txt",
+   "quote": "A run reproduced the MIS pack's live versus not-live gaps and treated their small size as confirmation"
+  },
+  {
+   "id": "L30",
+   "kind": "loss",
+   "class": "self-confirming check",
+   "move": "spent its checking on presentation and never tested like for like",
+   "source": "guidelines/client/examples/6.txt",
+   "quote": "spent its checking effort on presentation details (patient counts, wording, chart labels) and never tested whether its comparison was like for like"
+  },
+  {
+   "id": "L31",
+   "kind": "loss",
+   "class": "self-confirming check",
+   "move": "a band carrying an assumed common factor, a recent fall read as permanent",
+   "source": "stumping/references/sulfur-record.md (task1 arch 2)",
+   "quote": "the run's band carried an assumed 0.25 common factor and read the post-March fall in deal creation as permanent"
+  },
+  {
+   "id": "L32",
+   "kind": "loss",
+   "class": "unfinished chain",
+   "move": "left the residual episode the fitted model under-predicted unattributed",
+   "source": "stumping/references/sulfur-record.md (task11 arch 1, run 1, 78)",
+   "quote": "the 29 and 30 May pulse a fitted transport model under-predicted left unattributed"
+  },
+  {
+   "id": "L33",
+   "kind": "loss",
+   "class": "unfinished chain",
+   "move": "never checked whether units vary more than sampling error allows",
+   "source": "guidelines/client/examples/15.txt",
+   "quote": "A run whose slopes and reliabilities matched the reference never checked whether cohort effects varied more than sampling error allows."
+  },
+  {
+   "id": "L34",
+   "kind": "loss",
+   "class": "method shortcut",
+   "move": "found the uncovered window and filled it by a same-hour match, not at the level its own load gives; weighted by its own strata",
+   "source": "task6 architecture 7 levelled up, a run pasted by the author on 2026-11-09 (audited the same day; not saved under task6/runs)",
+   "quote": "lost only on R3: own service-hour weights and the dropped 11 days filled by a same-hour-of-day match"
+  },
+  {
+   "id": "L35",
+   "kind": "loss",
+   "class": "method shortcut",
+   "move": "an independence binomial where units share shocks",
+   "source": "guidelines/client/depth-scale-2026-11-09-detail.md (23bec3ac, 0f7f50e0)",
+   "quote": "The run named the dependence risk and still used the binomial."
+  },
+  {
+   "id": "L36",
+   "kind": "loss",
+   "class": "method shortcut",
+   "move": "a transfer fitted on the pilot's range carried to faster duties (lost by 1 to 3 kWh, a margin too thin to force)",
+   "source": "stumping/references/sulfur-record.md (task4 arch 7, both runs)",
+   "quote": "squared routing-tool speed fitted on the pilot (the year's ratio), V14 at 444.4 against 442"
+  },
+  {
+   "id": "N01",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "an enlarged contract or fleet assumed to scale in proportion",
+   "source": "task10/runs/arch6_run1.md, arch6_run2.md, arch5_round2_run2.md",
+   "quote": "Portfolio scaling: Availability and mean service shape are assumed to scale with contracted capacity"
+  },
+  {
+   "id": "N02",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "history assumed informative of the forward window",
+   "source": "task10/runs/arch4_run2.md",
+   "quote": "Historical repair response, DSO patterns and reset effectiveness are assumed to remain informative."
+  },
+  {
+   "id": "N03",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "scheduled works and dates assumed to happen as planned",
+   "source": "task10/runs/arch4_run1.md",
+   "quote": "Renewal execution: approved works are assumed to finish on their scheduled dates."
+  },
+  {
+   "id": "N04",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "a model's transfer to a new range named and left untested",
+   "source": "task4/runs/README.md (arch6 run 1)",
+   "quote": "Energy scales linearly with route distance ... so this remains a transfer assumption."
+  },
+  {
+   "id": "N05",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "the fitted surface, normal errors and stable calibration assumed for the range",
+   "source": "task16/runs/arch1_run1.md",
+   "quote": "The 80% range is conditional. It assumes the fitted response surface, approximately normal predictive errors and stable benchmark calibration."
+  },
+  {
+   "id": "N06",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "long-run behaviour of a system assumed unchanged over the horizon",
+   "source": "task3/runs/run1.md",
+   "quote": "Long-term aquifer behavior: The model assumes sustained leakage and effective aquifer properties throughout the term."
+  },
+  {
+   "id": "N07",
+   "kind": "named_assumption",
+   "class": "dismissed own evidence",
+   "move": "an ordering or pairing in the record assumed without a crosswalk",
+   "source": "task11/runs/run2.md",
+   "quote": "Storm bottle ordering follows successful sampler positions. Exact carousel-size matches support this assumption, but an explicit bottle-position crosswalk was not supplied."
+  },
+  {
+   "id": "R01",
+   "kind": "reflex",
+   "class": "hygiene",
+   "move": "duplicates, superseded versions, quality flags, time zones, re-keyed identifiers, unit conversions",
+   "source": "every Sulfur round (task10 arch 5 and 6 runs, task11 runs, task8 triage)",
+   "quote": "Removed 310 older versions from 13,372 records"
+  },
+  {
+   "id": "R02",
+   "kind": "reflex",
+   "class": "breadth",
+   "move": "reads every file and sets the distractors aside with reasons",
+   "source": "task10/runs/arch6_triage.md",
+   "quote": "the distractors were inspected and set aside with reasons"
+  },
+  {
+   "id": "R03",
+   "kind": "reflex",
+   "class": "validation",
+   "move": "chronological hold-out, leave-one-out or held-out groups to choose the model family",
+   "source": "task10/runs/arch6_triage.md; sulfur-record.md (task16 arch 1, task3 arch 6)",
+   "quote": "the model family chosen by chronological validation and the tail's coverage checked on held-out days"
+  },
+  {
+   "id": "R04",
+   "kind": "reflex",
+   "class": "uncertainty",
+   "move": "joint, block or circular bootstrap; predictive rather than confidence intervals",
+   "source": "task10/runs/arch6_triage.md; sulfur-record.md (task9 arch 8)",
+   "quote": "The P90 is the predictive percentile of daily maxima, not a confidence limit for mean demand"
+  },
+  {
+   "id": "R05",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "a capped availability ceiling, min of the call and what is available",
+   "source": "task10/runs/arch6_triage.md",
+   "quote": "Fitted a temperature-dependent available-capacity ceiling, capped by scheduled MW"
+  },
+  {
+   "id": "R06",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "the rebound after a window, the day's maximum over every interval",
+   "source": "task10/runs/arch6_triage.md",
+   "quote": "Applied the estimated service shape and post-window rebound, then found the maximum across all 48 half-hours"
+  },
+  {
+   "id": "R07",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "competing risks with censoring",
+   "source": "task10/runs/arch7_review_2026-11-10.md; depth-scale detail (b9efebd1)",
+   "quote": "forecast commissioning with competing risks and censoring"
+  },
+  {
+   "id": "R08",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "a censored survival fit on time since the clock's own reset",
+   "source": "sulfur-record.md (task10 arch 4)",
+   "quote": "a censored Weibull on time since evidenced reset, validated on 2026"
+  },
+  {
+   "id": "R09",
+   "kind": "reflex",
+   "class": "measurement",
+   "move": "a declared covariate corrected by its measured error variance",
+   "source": "task4/runs/README.md (arch6)",
+   "quote": "It corrected the declared weights by their measured error variance"
+  },
+  {
+   "id": "R10",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "a regime split found from the residual error",
+   "source": "sulfur-record.md (task4 arch 9, run 2)",
+   "quote": "a declaration regime split at 17 August 2026 found from the error"
+  },
+  {
+   "id": "R11",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "one flexible response surface with a fitted breakpoint over a runs-by-covariates table",
+   "source": "sulfur-record.md (task16 arch 1, task10 arch 6, task4 arch 9)",
+   "quote": "a response surface with a fitted breakpoint validated on held-out configurations"
+  },
+  {
+   "id": "R12",
+   "kind": "reflex",
+   "class": "causal",
+   "move": "a lottery instrumented on completion and its effect carried to the applications by effect modifiers",
+   "source": "sulfur-record.md (task7 arch 7)",
+   "quote": "the lottery instrumented on completion, each use's saving carried to the applications"
+  },
+  {
+   "id": "R13",
+   "kind": "reflex",
+   "class": "assembly",
+   "move": "record linkage by fingerprint and normalised address",
+   "source": "task1/runs/arch3/run1.md (platform run 1 on architecture 3, pasted by the author 2026-11-11)",
+   "quote": "R2 by household (fingerprint and normalised address)"
+  },
+  {
+   "id": "R14",
+   "kind": "reflex",
+   "class": "modeling",
+   "move": "a model of any mechanism one plot or one group-by of one file shows",
+   "source": "sulfur-record.md (task2 arch 3, task3 arch 2 and 3, task5 arch 2, task7 arch 4 round 2, task8 arch 17)",
+   "quote": "built the physical mechanism the data showed ... as their first model, then validated it on held-out rows"
+  },
+  {
+   "id": "R15",
+   "kind": "reflex",
+   "class": "measurement",
+   "move": "device clock drift read off scheduled self-tests; overwritten months restored by exposure; an inspection-confirmed baseline",
+   "source": "sulfur-record.md (task13 arch 2, judge's first pass)",
+   "quote": "Three data repairs with the field's standard remedies were three reflexes"
+  },
+  {
+   "id": "R16",
+   "kind": "reflex",
+   "class": "uncertainty",
+   "move": "a plus or minus 20 per cent stress test on a key fitted rate",
+   "source": "task1/runs/arch3/run1.md (platform run 1 on architecture 3, pasted by the author 2026-11-11)",
+   "quote": "exit probabilities 20 per cent higher fund 7 lines, 20 per cent lower 15"
+  },
+  {
+   "id": "R17",
+   "kind": "reflex",
+   "class": "causal",
+   "move": "a selection-year baseline and displacement next door",
+   "source": "guidelines/client/depth-scale-2026-11-09-detail.md (4e9c0a39)",
+   "quote": "The runs handled the baseline and displacement well and lost on the offence mix."
+  },
+  {
+   "id": "R18",
+   "kind": "reflex",
+   "class": "framing",
+   "move": "the incumbent's figure reproduced exactly from its own stated method",
+   "source": "guidelines/client/depth-scale-2026-11-09-detail.md (bd4981a5, b34ffd70); examples/4.txt",
+   "quote": "The contractor's 3.00% reproduces from its own weights"
+  },
+  {
+   "id": "R19",
+   "kind": "reflex",
+   "class": "hygiene",
+   "move": "the planted defect or broken extract caught",
+   "source": "guidelines/client/examples/13.txt, 14.txt, 1.txt",
+   "quote": "Every run used Dallas as the comparison and caught the broken March scrape, so the loss is not in setup."
+  },
+  {
+   "id": "R20",
+   "kind": "reflex",
+   "class": "causal",
+   "move": "the textbook instrument or estimator for the question",
+   "source": "guidelines/client/examples/7.txt; depth-scale detail (b9efebd1)",
+   "quote": "every run chose the right instrument (state operating-aid cuts) and still called it wrong"
+  }
+ ]
+}

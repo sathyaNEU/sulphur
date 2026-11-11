@@ -140,5 +140,25 @@
    "domain_test": "The call turns on a transport modeller's closure analysis, re-solving a user-equilibrium assignment with volume-delay curves for each crossing removed (link criticality measured with congestion), the field's own method; with another field's nouns and no assignment principle or volume-delay curves there is nothing to re-solve, and the task stops reading the same."
   }
  ],
- "notes": "stump_strategy uncertainty_hold (signal against noise; not a hold here): the decisive move separates each school's underlying average from student and year-group noise and counts schools by probability. G11 first because the programme's eligibility predicate is a latent quantity (is this school in the eligible set?), G17 under it (the rigor that decides the count). gap population first (the file's cohort averages are not the schools' underlying averages), objective second. decisive_rule_filed true: the floor, the definition of the underlying average and the analysis standard's model (three levels, REML) are filed; nothing filed says how the number of schools below the floor is counted. calibration_form none: no prior programme's confirmed list, no published school estimates."
+ "notes": "stump_strategy uncertainty_hold (signal against noise; not a hold here): the decisive move separates each school's underlying average from student and year-group noise and counts schools by probability. G11 first because the programme's eligibility predicate is a latent quantity (is this school in the eligible set?), G17 under it (the rigor that decides the count). gap population first (the file's cohort averages are not the schools' underlying averages), objective second. decisive_rule_filed true: the floor, the definition of the underlying average and the analysis standard's model (three levels, REML) are filed; nothing filed says how the number of schools below the floor is counted. calibration_form none: no prior programme's confirmed list, no published school estimates.",
+ "skeleton": {
+  "decision_form": "forecast_figure_with_range",
+  "answer_pattern": "figure_crosses_bar",
+  "lessons": [
+   "shrinkage_small_samples"
+  ],
+  "mechanisms": [
+   "small_unequal_cohorts_below_floor"
+  ],
+  "detection": [
+   "split_half_replication"
+  ],
+  "moves": [
+   "shrinkage_or_credibility_weighting"
+  ],
+  "file_roles": [
+   "governing_standard",
+   "primary_record"
+  ]
+ }
 }

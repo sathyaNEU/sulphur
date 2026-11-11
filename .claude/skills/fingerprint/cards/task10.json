@@ -153,7 +153,37 @@
    "driver_concrete": "Each Halverton zone primary's design-day peak for winter 2027/28 with its flexibility contract scheduled in full: the megawatts delivered at 17:30 to 18:00 are the share of the contracted megawatts the provider has available at minus 3 C (0.39 Corvane Flex, 0.54 Quillon, read from the cold days on which nearly every call outran it, the same at both of a provider's zones and through three winters of growing contracts), not the megawatts delivered per megawatt scheduled that the part calls at Ashcombe Road and Charlecote Way show; the day is rebuilt half-hour by half-hour with the load that comes back after the window, which moves Ashcombe Road's peak to the half-hour ending 20:00 (25.9 MW against 22.0 at 18:00 and firm 23.0); the day-to-day spread of what is available is carried in proportion to the 2027/28 megawatts to the nine-days-in-ten level, which puts Fenwick Street over firm; the approach is back-tested on winter 2025/26 from the two winters before, a test megawatts per megawatt scheduled also passes.",
    "stump": "The careful but hurried pass (megawatts delivered per megawatt scheduled regressed on temperature zone by zone, the minus 3 C rate applied to the megawatts contracted, the credit taken off the 17:30 to 18:00 peak, the megawatts of scatter its fit leaves carried unchanged, or the fit's own range) reinforces Hartwell Common alone; the same rate with the scatter carried in proportion reinforces Fenwick Street and Hartwell Common, as does the available share right with the credit off the 17:30 to 18:00 peak and megawatts of scatter unchanged; the megawatts contracted at face value reinforce nothing; the megawatts the 2025/26 contracts made available carried unchanged reinforce all four; the available share right with the expected day set against firm capacity reinforces Ashcombe Road and Hartwell Common; only every result of the chain reinforces Ashcombe Road, Fenwick Street and Hartwell Common.",
    "answer": "Commit reinforcement at Ashcombe Road, Fenwick Street and Hartwell Common for winter 2027/28; Charlecote Way stays within firm capacity on nine design days in ten",
-   "fate": "landed on the platform 2026-11-10: both runs committed the golden list (Ashcombe Road, Fenwick Street and Hartwell Common, not Charlecote Way) with every headline figure, 0 of 11 results lost against a paper pair of 38.4. Unprompted, each run capped what a provider had available at the instruction, replayed the load that comes back over all 48 half-hours, took a predictive nine-in-ten level by joint resampling and back-tested on a held-out winter with the model chosen on the winter before; the chain's four judgments were all reflexes of a careful run, so the driver is spent. What the runs named as assumptions and never tested (a straight line carried eight degrees below the days it was fitted on, availability scaling with the megawatts contracted, connections applied in full) is where architecture 7 sits"
+   "fate": "landed on the platform 2026-11-10: both runs committed the golden list (Ashcombe Road, Fenwick Street and Hartwell Common, not Charlecote Way) with every headline figure, 0 of 11 results lost against a paper pair of 38.4. Unprompted, each run capped what a provider had available at the instruction, replayed the load that comes back over all 48 half-hours, took a predictive nine-in-ten level by joint resampling and back-tested on a held-out winter with the model chosen on the winter before; the chain's four judgments were all reflexes of a careful run, so the driver is spent. What the runs named as assumptions and never tested (a straight line carried eight degrees below the days it was fitted on, availability scaling with the megawatts contracted, connections applied in full) is where architecture 7 sits",
+   "skeleton": {
+    "decision_form": "set_over_threshold",
+    "answer_pattern": "naive_set_swaps_members",
+    "lessons": [
+     "censored_or_capped_observation",
+     "rebound_after_window",
+     "extrapolation_beyond_observed_range"
+    ],
+    "mechanisms": [
+     "instruction_caps_delivery",
+     "come_back_after_window",
+     "enlarged_portfolio_award"
+    ],
+    "detection": [
+     "back_test_on_held_out_period"
+    ],
+    "moves": [
+     "capped_ceiling_model",
+     "replay_event_by_event",
+     "cluster_resample_shared_unit"
+    ],
+    "file_roles": [
+     "primary_record",
+     "reference_register",
+     "schedule_or_plan",
+     "governing_standard",
+     "event_timeline",
+     "unused_distractor"
+    ]
+   }
   },
   {
    "architecture": "v5 (the same world: each provider's reduction net of the load the control room moved to the primary across an open point, read at minus 3.0 C)",
@@ -171,7 +201,32 @@
    "decision_type": "designation_set",
    "driver": "The decisive quantity is what a contracted intervention removes from a constrained unit's demand under a design condition, but on every occasion the record measured it the operator also moved part of the unit's load onto a neighbouring unit for the same hours, so the unit's measured reduction is the intervention plus the move and the neighbour, the natural comparison, rose by what was moved; only the intervention's own reduction, read where the move cancels, is credited under the design condition, when the neighbour has no room to take it.",
    "stump": "Measuring each flexibility event's fall at its zone primary against a weather-adjusted baseline, validated on held-out non-event weekdays and stable across both winters, and crediting the 2027/28 contracts at the 0.9, 0.6, 0.9 and 0.9 per megawatt scheduled the event records show commits no primary; the step that lands it there is reading the primary's fall as the provider's delivery, when at Ashcombe Road, Fenwick Street and Hartwell Common the control room moved a feeder section across an open point to Tollbrook Lane, Wexley Hill and Kestwick Fields for each event window, so the providers' own reduction, net of the neighbour's rise and read at the design day's minus 3.0 C, is 0.4 and 0.5 per megawatt and Ashcombe Road and Hartwell Common must be reinforced.",
-   "fate": "spent 2026-11-10 on the platform's holistic audit: both round 2 runs lost at the deciding step (Ashcombe Road alone) and the audit still read the neighbour's flat step on event days as one built-in factor, one subtraction once told, a plant; round 1 had one run on the golden through paired totals"
+   "fate": "spent 2026-11-10 on the platform's holistic audit: both round 2 runs lost at the deciding step (Ashcombe Road alone) and the audit still read the neighbour's flat step on event days as one built-in factor, one subtraction once told, a plant; round 1 had one run on the golden through paired totals",
+   "skeleton": {
+    "decision_form": "set_over_threshold",
+    "answer_pattern": "naive_set_swaps_members",
+    "lessons": [
+     "interference_spillover"
+    ],
+    "mechanisms": [
+     "open_point_transfer_on_event_days"
+    ],
+    "detection": [
+     "untreated_neighbours_shift_with_exposure"
+    ],
+    "moves": [
+     "exclude_contaminated_comparison",
+     "net_displacement"
+    ],
+    "file_roles": [
+     "primary_record",
+     "reference_register",
+     "schedule_or_plan",
+     "governing_standard",
+     "event_timeline",
+     "unused_distractor"
+    ]
+   }
   },
   {
    "architecture": "v3 (re-root in batch 1: a Victorian local government union branch choosing the councils at which it applies for protected action ballot orders for ballots opening 1 March 2027, a ballot counting only if half the roll votes, each member's vote carried from the branch's own online votes and lifted where an elected workplace delegate is active at the member's worksite)",
@@ -359,6 +414,29 @@
     "second-sentence opener": "return",
     "rounding opener": "charges",
     "deliverable set": "csv+pdf"
+   },
+   "skeleton": {
+    "decision_form": "set_over_threshold",
+    "answer_pattern": "naive_set_swaps_members",
+    "lessons": [
+     "renewal_resets_hazard"
+    ],
+    "mechanisms": [
+     "service_visit_resets_controller_clock"
+    ],
+    "detection": [
+     "record_time_against_event_time"
+    ],
+    "moves": [
+     "censored_survival_model"
+    ],
+    "file_roles": [
+     "primary_record",
+     "reference_register",
+     "event_timeline",
+     "governing_standard",
+     "schedule_or_plan"
+    ]
    }
   }
  ],
@@ -435,5 +513,43 @@
   "second-sentence opener": "on",
   "rounding opener": "mw",
   "deliverable set": "pptx+xlsx"
+ },
+ "skeleton": {
+  "decision_form": "set_over_threshold",
+  "answer_pattern": "naive_set_swaps_members",
+  "lessons": [
+   "confounded_history_of_use",
+   "extrapolation_beyond_observed_range",
+   "rebound_after_window",
+   "completion_of_young_cohorts"
+  ],
+  "mechanisms": [
+   "service_called_on_severe_days",
+   "heating_steepens_below_freezing",
+   "register_customers_build_up",
+   "commissioning_lateness_by_class",
+   "come_back_after_window"
+  ],
+  "detection": [
+   "natural_experiment_in_record",
+   "residual_by_subgroup"
+  ],
+  "moves": [
+   "impute_by_model_at_own_drivers",
+   "extrapolate_form_chosen_at_edge",
+   "complete_cohorts_from_later_rates",
+   "competing_risks_estimator",
+   "capped_ceiling_model",
+   "replay_event_by_event"
+  ],
+  "file_roles": [
+   "primary_record",
+   "reference_register",
+   "schedule_or_plan",
+   "governing_standard",
+   "second_grain_source",
+   "exogenous_long_record",
+   "unused_distractor"
+  ]
  }
 }

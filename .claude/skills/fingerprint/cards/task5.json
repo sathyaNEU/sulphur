@@ -238,5 +238,38 @@
     "second-sentence opener": "the",
     "rounding opener": "county",
     "deliverable set": "csv+docx"
+  },
+  "skeleton": {
+    "decision_form": "set_over_threshold",
+    "answer_pattern": "naive_set_swaps_members",
+    "lessons": [
+      "reporting_lag_nowcast",
+      "frame_population_mismatch",
+      "inherited_attribute_from_other_unit"
+    ],
+    "mechanisms": [
+      "payroll_agent_late_year_end_batches",
+      "missing_alone_keep_a_third",
+      "housing_downturn_construction",
+      "liable_employers_without_account",
+      "seasonal_worksite_split"
+    ],
+    "detection": [
+      "record_time_against_event_time",
+      "second_source_at_other_grain"
+    ],
+    "moves": [
+      "nowcast_from_same_point_prior_years",
+      "impute_by_model_at_own_drivers",
+      "frame_reconciliation_with_register"
+    ],
+    "file_roles": [
+      "primary_record",
+      "reference_register",
+      "governing_standard",
+      "frame_or_roster",
+      "second_grain_source",
+      "unused_distractor"
+    ]
   }
 }

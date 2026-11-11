@@ -238,7 +238,36 @@
   },
   {
    "architecture": "v6",
-   "spent": "2026-11-09 platform run 1 landed every graded result by three reflexes (measured error-variance correction, a temperature quadratic, a temperature-controlled capacity regression), naming the distance transfer as an untested assumption"
+   "spent": "2026-11-09 platform run 1 landed every graded result by three reflexes (measured error-variance correction, a temperature quadratic, a temperature-controlled capacity regression), naming the distance transfer as an untested assumption",
+   "skeleton": {
+    "decision_form": "count_to_standard",
+    "answer_pattern": "count_off_by_a_few",
+    "lessons": [
+     "errors_in_covariate",
+     "extrapolation_beyond_observed_range",
+     "degradation_form"
+    ],
+    "mechanisms": [
+     "shipper_declaration_error",
+     "sub_zero_cold_form",
+     "first_year_battery_loss"
+    ],
+    "detection": [
+     "back_test_on_held_out_period"
+    ],
+    "moves": [
+     "errors_in_variables_correction",
+     "extrapolate_form_chosen_at_edge",
+     "degradation_curve_fit"
+    ],
+    "file_roles": [
+     "primary_record",
+     "reference_register",
+     "exogenous_long_record",
+     "governing_standard",
+     "schedule_or_plan"
+    ]
+   }
   },
   {
    "architecture": "v7",
@@ -254,7 +283,36 @@
    ],
    "weight": "measurement",
    "answer_shape": "allocation-sensitivity",
-   "fate": "spent 2026-11-09 on the platform: both runs earned the payload term (1.98, 1.97), the loss (3.75) and the cold curve, fitted squared routing-tool speed (the year's ratio absorbed) and ordered 5, V14 excluded at 444.4 and 443.0 kWh against a 442 kWh limit (golden 435.4); one duty, one judgment, a knife-edge margin, and the 10 kWh band held both verdicts. Re-rooted in the same world as architecture 8."
+   "fate": "spent 2026-11-09 on the platform: both runs earned the payload term (1.98, 1.97), the loss (3.75) and the cold curve, fitted squared routing-tool speed (the year's ratio absorbed) and ordered 5, V14 excluded at 444.4 and 443.0 kWh against a 442 kWh limit (golden 435.4); one duty, one judgment, a knife-edge margin, and the 10 kWh band held both verdicts. Re-rooted in the same world as architecture 8.",
+   "skeleton": {
+    "decision_form": "count_to_standard",
+    "answer_pattern": "count_off_by_a_few",
+    "lessons": [
+     "extrapolation_beyond_observed_range",
+     "errors_in_covariate",
+     "degradation_form"
+    ],
+    "mechanisms": [
+     "faster_runs_speed_term",
+     "shipper_declaration_error",
+     "first_year_battery_loss"
+    ],
+    "detection": [
+     "back_test_on_held_out_period"
+    ],
+    "moves": [
+     "extrapolate_form_chosen_at_edge",
+     "errors_in_variables_correction",
+     "degradation_curve_fit"
+    ],
+    "file_roles": [
+     "primary_record",
+     "reference_register",
+     "exogenous_long_record",
+     "governing_standard",
+     "schedule_or_plan"
+    ]
+   }
   },
   {
    "architecture": "v8",
@@ -280,6 +338,34 @@
     "second-sentence opener": "for",
     "rounding opener": "energies",
     "deliverable set": "docx+xlsx"
+   },
+   "skeleton": {
+    "decision_form": "count_to_standard",
+    "answer_pattern": "count_off_by_a_few",
+    "lessons": [
+     "inherited_attribute_from_other_unit",
+     "extrapolation_beyond_observed_range"
+    ],
+    "mechanisms": [
+     "trailer_tare_each_leg",
+     "drops_per_leg",
+     "epto_fridge_unit",
+     "winter_speed"
+    ],
+    "detection": [
+     "second_source_at_other_grain"
+    ],
+    "moves": [
+     "link_records_by_parsed_key",
+     "extrapolate_form_chosen_at_edge"
+    ],
+    "file_roles": [
+     "primary_record",
+     "reference_register",
+     "exogenous_long_record",
+     "governing_standard",
+     "schedule_or_plan"
+    ]
    }
   },
   {
@@ -303,7 +389,36 @@
     "rounding opener": "energies",
     "deliverable set": "docx+xlsx"
    },
-   "fate": "spent 2026-11-10 on the platform: both runs landed the golden (order 8: V02 V03 V05 V09 V11 V14 V16 V18; run 1 payload 2.00, loss 5.08 by a square-root-age model, a separate winter driving-time model, unloading by pallet share, per-shipper calibration, 400 weekly bootstraps; run 2 payload 1.92, loss 4.51, a routing-hours-to-January-driving-hours model, a declaration regime split at 17 August 2026 found from the error, 600 bootstraps). Every estimate the design priced as a step the runs named and did not take was taken: the calibration's transfer to the pilot's part loads, the early-life loss and the winter speed were each a mechanism one file's plot or one join carried. The world is left after architectures 5 to 9."
+   "fate": "spent 2026-11-10 on the platform: both runs landed the golden (order 8: V02 V03 V05 V09 V11 V14 V16 V18; run 1 payload 2.00, loss 5.08 by a square-root-age model, a separate winter driving-time model, unloading by pallet share, per-shipper calibration, 400 weekly bootstraps; run 2 payload 1.92, loss 4.51, a routing-hours-to-January-driving-hours model, a declaration regime split at 17 August 2026 found from the error, 600 bootstraps). Every estimate the design priced as a step the runs named and did not take was taken: the calibration's transfer to the pilot's part loads, the early-life loss and the winter speed were each a mechanism one file's plot or one join carried. The world is left after architectures 5 to 9.",
+   "skeleton": {
+    "decision_form": "count_to_standard",
+    "answer_pattern": "count_off_by_a_few",
+    "lessons": [
+     "errors_in_covariate",
+     "degradation_form",
+     "extrapolation_beyond_observed_range"
+    ],
+    "mechanisms": [
+     "terminal_declaration_error",
+     "early_life_battery_loss",
+     "winter_speed"
+    ],
+    "detection": [
+     "back_test_on_held_out_period"
+    ],
+    "moves": [
+     "errors_in_variables_correction",
+     "degradation_curve_fit",
+     "extrapolate_form_chosen_at_edge"
+    ],
+    "file_roles": [
+     "primary_record",
+     "reference_register",
+     "exogenous_long_record",
+     "governing_standard",
+     "schedule_or_plan"
+    ]
+   }
   }
  ],
  "notes": "stump_strategy other: errors-in-variables with a source-specific error structure (classical, Berkson, exact) identified from a gold-standard record of the same sources | 2026-11-09 architecture 8: re-rooted in the same world on the client's instruction to keep the data package (architecture 5's review); four SME judgments added (combination mass, drops, ePTO fridge units, the winter speed kept), the knife-edge closed (no duty within 13 kWh). | 2026-11-10 architecture 9: re-rooted in the same world after both architecture 8 runs landed; the difficulty moved into what the runs named and did not test (the calibration's transfer to the pilot's part loads, the battery loss's form behind self-confirming checks, the winter speed); the hourly ePTO term, the Electric PTO quotation line and the ePTO units removed. | 2026-11-10 architecture 10: re-rooted in a new world after both architecture 9 runs landed; a Finnish municipal bus operator's depot electrification, the pilot's blocks selected on the diesel record, the heater's share, the night supply. 2026-11-10 heart: test.same_driver BLOCKed (objective, G6, forecasting) against task9 v3's lineage; redrawn to the honest labels: the decisive gap is the population (the pilot ran the blocks the planner picked from the fuel figures) and Gate G is binding_constraint, the determinism judge's own classification (the night's charging capacity under the connection agreement cuts the 23 qualifying blocks to 18, so the limit itself changes the naive pick). | 2026-11-10 architecture 10 loop 1: the platform's holistic audit found the order count unforced (the workshop's 22 kW outlets, 19 for 18) and three asks reading two ways; the forks closed by WHAT pins, and the charging side's conditioning added as a third independent judgment (component 3), the order 17. | 2026-11-10 loop 1, Domains Fit: the prompt names each result as an estimate or a forecast from the company's own operating records and states the forecast's population (most blocks never run by an electric bus); no figure moved.",
@@ -351,5 +466,40 @@
   "deliverable set": "pptx+xlsx"
  },
  "architecture_spent": false,
- "registered": "2026-11-10T04:39:46Z"
+ "registered": "2026-11-10T04:39:46Z",
+ "skeleton": {
+  "decision_form": "count_to_standard",
+  "answer_pattern": "count_off_by_a_few",
+  "lessons": [
+   "pilot_unrepresentative_selection",
+   "unmetered_component",
+   "degradation_form",
+   "extrapolation_beyond_observed_range"
+  ],
+  "mechanisms": [
+   "planner_picked_thrifty_blocks",
+   "fuel_heater_cabin_heat",
+   "first_winter_capacity_loss",
+   "battery_conditioning_on_charge"
+  ],
+  "detection": [
+   "second_source_at_other_grain",
+   "selection_rule_in_the_record"
+  ],
+  "moves": [
+   "transport_by_effect_modifiers",
+   "impute_by_model_at_own_drivers",
+   "degradation_curve_fit",
+   "extrapolate_form_chosen_at_edge"
+  ],
+  "file_roles": [
+   "primary_record",
+   "second_grain_source",
+   "governing_standard",
+   "schedule_or_plan",
+   "reference_register",
+   "exogenous_long_record",
+   "unused_distractor"
+  ]
+ }
 }

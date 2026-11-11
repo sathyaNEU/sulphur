@@ -107,5 +107,26 @@
       "fate": "redrawn at the draw on 2026-10-10, never built or registered: the charter's 'application', the CX end code glossed as continued examination and the schema-visible continuity table hand the chaining to a plain solver (pilot lessons: a charter definition and a join whose keys line up are executed), and the move repeats task90's chaining of work records into the customer's unit; it survives as rung 3, now certified by the corpus"
     }
   ],
-  "notes": "Realises analytical_tasks note DA02 (analytical_tasks/03_descriptive_distribution/DA02_pendency-median-docket-versus-application-grain.md), first realisation; drafted at stage 1 on 2026-10-10 and not registered (the coordinator registers the batch in task-number order). The note's decisive rung (chaining dockets into applications along CX edges) is kept as rung 3 and certified by the corpus; the decisive rung is redrawn (lineage v0 carries the reason). Decisive generator G3 record versus operation, read the way the generator list files it under gap 2: the CX edge is correct at its stated meaning (the examination file moved to a new docket) and the decision needs the legal unit behind it; no A to E pattern carries it, so pattern reads none first, with D behind it for rung 3. Measured trap #13 (validates on one population, applies to another), with #12 and #5 behind it. Subdomain public-administration: a public patent office's examination pendency is a public-service outcome read from its own administrative records (task119, the last policy-education/public-administration card, sits outside the three-build window once task124 and task125 are filed). Geography is a fictional country because a national patent office is unique to its country and a real one would carry fabricated records; personas drawn with guard.py names --geo 'fictional country (Republic of Morvane)' --seed 126 (locale en_US), the first six in draw order with Connie Davis (people.first WARN against task100) replaced by the next drawn name, Cristina Turner. Currency none: the asks report shares and counts. Context artifact published_series: last year's annual performance report's pendency table, examiner docket pendency, the licensed wrong basis; the production system's monthly report (monitoring_export) is banned against task121. Calibration organ: the partner office's acknowledgement file, redesigned from the note so programme applications can be re-examined (CX) but never continued on the transferred file, so it certifies chaining on every case and is blind to the split. Decisive evidence: the examiner production ledger's credit class on each docket's first action; every ask is kept off that ledger at stage 2."
+  "notes": "Realises analytical_tasks note DA02 (analytical_tasks/03_descriptive_distribution/DA02_pendency-median-docket-versus-application-grain.md), first realisation; drafted at stage 1 on 2026-10-10 and not registered (the coordinator registers the batch in task-number order). The note's decisive rung (chaining dockets into applications along CX edges) is kept as rung 3 and certified by the corpus; the decisive rung is redrawn (lineage v0 carries the reason). Decisive generator G3 record versus operation, read the way the generator list files it under gap 2: the CX edge is correct at its stated meaning (the examination file moved to a new docket) and the decision needs the legal unit behind it; no A to E pattern carries it, so pattern reads none first, with D behind it for rung 3. Measured trap #13 (validates on one population, applies to another), with #12 and #5 behind it. Subdomain public-administration: a public patent office's examination pendency is a public-service outcome read from its own administrative records (task119, the last policy-education/public-administration card, sits outside the three-build window once task124 and task125 are filed). Geography is a fictional country because a national patent office is unique to its country and a real one would carry fabricated records; personas drawn with guard.py names --geo 'fictional country (Republic of Morvane)' --seed 126 (locale en_US), the first six in draw order with Connie Davis (people.first WARN against task100) replaced by the next drawn name, Cristina Turner. Currency none: the asks report shares and counts. Context artifact published_series: last year's annual performance report's pendency table, examiner docket pendency, the licensed wrong basis; the production system's monthly report (monitoring_export) is banned against task121. Calibration organ: the partner office's acknowledgement file, redesigned from the note so programme applications can be re-examined (CX) but never continued on the transferred file, so it certifies chaining on every case and is blind to the split. Decisive evidence: the examiner production ledger's credit class on each docket's first action; every ask is kept off that ledger at stage 2.",
+  "skeleton": {
+    "decision_form": "forecast_figure_with_range",
+    "answer_pattern": "figure_crosses_bar",
+    "lessons": [
+      "unit_identity_across_systems"
+    ],
+    "mechanisms": [
+      "succession_link_opens_new_unit"
+    ],
+    "detection": [
+      "record_time_against_event_time"
+    ],
+    "moves": [
+      "link_records_by_parsed_key"
+    ],
+    "file_roles": [
+      "governing_standard",
+      "primary_record",
+      "crosswalk_or_migration_map"
+    ]
+  }
 }

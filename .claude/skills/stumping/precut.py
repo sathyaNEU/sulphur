@@ -30,6 +30,14 @@ The contract a build in design or repair meets (DRAWING, DESIGN, BUILD, PAUSED, 
   ## Template check        `Chain signature:`, `Question form:`, `Nearest build:`; refused when another build on
                            file has the same chain of areas in the same order and the same answer shape
   ## Semantic fork table, ## Closure table (22 axes), ## Literal reader, ## Prompt contract, ## Tried and rejected
+  ## Frontier check        the next-level contract (stumping Part 1b), required in full for a build whose card was
+                           registered from skeleton.RULE_FROM on: `Precedents:` (each result the careful pass loses,
+                           with the precedents.json ids behind it), `Shallow path checks:` (the checks the hurried
+                           route passes and the check of another kind that refutes it), `Assumption made false:`
+                           (the assumption a run lists and waves through, false here, and the file that tests it),
+                           `Forcing:` (the golden family, the shortcuts and the perturbations against the line),
+                           `Noun swap:` (the nearest task on file or in the client's library, nouns swapped, and the
+                           elements that carry across); and the card's skeleton screen (fingerprint Part 1b) clear
 
 A build already READY, in runs or shipped under the retired single-deep-step design meets its old contract and a
 WARN naming the retirement: it is not re-shipped until it is re-rooted to the results chain.
@@ -66,6 +74,8 @@ DEEP_LABELS = ("Task type", "Domain test", "Swap", "Where the weight sits", "Lay
                "One-fact test", "Not semantics", "Not rule application", "Estimand", "No decoy", "No replay",
                "Pinned", "Run forecast", "Strategy label", "Lesson")
 TEMPLATE_LABELS = ("Chain signature", "Question form", "Nearest build")
+FRONTIER_LABELS = ("Precedents", "Shallow path checks", "Assumption made false", "Forcing", "Noun swap")
+FINGERPRINT = os.path.join(REPO, ".claude", "skills", "fingerprint")
 MIN_RESULTS, MIN_AREAS = 4, 3
 PAIR_TARGET = 50.0
 
@@ -1019,6 +1029,8 @@ def check_throughout(task_dir, note_text, secs, dupes):
             row("nearest chains", False, "shares the chain, or the shape and the weight, with %s: vary where the "
                 "weight sits" % ", ".join(near), warn=True)
 
+    # The next-level contract: frontier precedents, the shallow path's own checks, forcing, the skeleton screen.
+    rows += frontier_rows(task_dir, secs)
     # Kept from the earlier contract: forks asserted, the closure table, the literal reader.
     rows += forks_closure_literal(task_dir, secs)
     return rows
@@ -1086,6 +1098,64 @@ def effort_gate(task_dir):
     if r.returncode == 0:
         return ("effort measured on the cut pack", "PASS", "effort.py exit 0" + ("; " + "; ".join(tail) if tail else ""))
     return ("effort measured on the cut pack", "FAIL", "effort.py exit %d: " % r.returncode + "; ".join(tail)[:400])
+
+
+def next_level(task_dir):
+    """True when the card was registered from skeleton.RULE_FROM on, or no card is registered yet."""
+    sys.path.insert(0, FINGERPRINT)
+    import skeleton as SK
+    try:
+        reg = json.load(open(os.path.join(CARDS, os.path.basename(task_dir) + ".json"))).get("registered") or ""
+    except Exception:
+        return True
+    return not reg or reg >= SK.RULE_FROM
+
+
+def frontier_rows(task_dir, secs):
+    """The next-level contract: the Frontier check section and the card's skeleton screen."""
+    rows = []
+    nl = next_level(task_dir)
+
+    def row(check, ok, detail):
+        rows.append((check, "PASS" if ok else ("FAIL" if nl else "WARN"), detail))
+
+    fc = section(secs, "Frontier check")
+    row("section Frontier check", fc is not None, "## Frontier check present" if fc is not None else
+        "## Frontier check missing (stumping Part 1b)%s" % ("" if nl else ", registered before the next-level rule"))
+    for label in FRONTIER_LABELS:
+        v = labelled(fc or "", label)
+        row("frontier check: %s" % label, bool(v) and len(v) >= 20, (v or "missing")[:110])
+    pv = labelled(fc or "", "Precedents") or ""
+    if pv:
+        ids = set(re.findall(r"\b([LNR]\d{2})\b", pv))
+        try:
+            known = {p["id"]: p for p in json.load(open(os.path.join(HERE, "references", "precedents.json")))["precedents"]}
+        except Exception:
+            known = {}
+        bad = sorted(i for i in ids if i not in known)
+        refl = sorted(i for i in ids if i in known and known[i]["kind"] == "reflex")
+        row("precedent ids resolve", ids and not bad and not refl,
+            "%d ids, every one a loss or named assumption" % len(ids) if ids and not bad and not refl else
+            "unknown %s, reflexes cited as losses %s" % (bad or "none", refl or "none") if ids else
+            "no precedents.json id named")
+    sys.path.insert(0, FINGERPRINT)
+    try:
+        import skeleton as SK
+        cards = SK.load_cards()
+        task = os.path.basename(task_dir)
+        card = next((c for c in cards if c.get("task") == task), None)
+        if card is None:
+            row("skeleton screen", False, "no card under fingerprint/cards/")
+        else:
+            fs = SK.findings(card, cards)
+            blocks = [f for f in fs if f["level"] == "BLOCK"]
+            warns = [f for f in fs if f["level"] == "WARN"]
+            row("skeleton screen (the client's duplicate test)", not blocks,
+                ("clear, %d WARN" % len(warns)) if not blocks else "; ".join("%s: %s" % (f["rule"], f["msg"][:120])
+                                                                            for f in blocks[:3]))
+    except Exception as e:
+        row("skeleton screen", False, "did not run: %s" % e)
+    return rows
 
 
 def doctrine(task_dir, secs):

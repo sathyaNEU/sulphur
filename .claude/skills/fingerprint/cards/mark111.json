@@ -105,5 +105,26 @@
       "fate": "solved on the portal (author's report 2026-10-06): both responses filed the golden, Rota & cover, 449 of 1,288; the decisive rung (the rest after an evening call-out, reached through the payroll crosswalk) was conceded by the punctuality family's 'within the engineer's own control' clause, and the graded quantity was an argmax over a filed family list; re-rooted at stage 1 onto the forward window"
     }
   ],
-  "notes": "Domain declared by the author at /build (Business & Operations Analytics, new). role_family field_unit_lead: the requester runs one region of a national field operation. org_family other: residential home services (heating repair and boiler cover plans), which no org family names. Calibration organ is the quality team's verified sample of first-half missed appointments (gold_standard_subsample); it is structurally blind to rest-forced log-ons because the standby pool was at full complement until May. Opening move is symptom-first (opens on what moved), which the vocabulary files under other. v2 re-root: the decisive rung is G5 (provision elsewhere: the winter contractor panel takes the evening overflow that generates Rota & cover in summer) across a G13 horizon mismatch (Q3 evidence, January to March decision); pattern A is the frame only. Gate G forecasting because the committed call is about an open window; the objective tag stays Root-Cause Analysis (the work is attributing misses to causes, the call names the cause to fix)."
+  "notes": "Domain declared by the author at /build (Business & Operations Analytics, new). role_family field_unit_lead: the requester runs one region of a national field operation. org_family other: residential home services (heating repair and boiler cover plans), which no org family names. Calibration organ is the quality team's verified sample of first-half missed appointments (gold_standard_subsample); it is structurally blind to rest-forced log-ons because the standby pool was at full complement until May. Opening move is symptom-first (opens on what moved), which the vocabulary files under other. v2 re-root: the decisive rung is G5 (provision elsewhere: the winter contractor panel takes the evening overflow that generates Rota & cover in summer) across a G13 horizon mismatch (Q3 evidence, January to March decision); pattern A is the frame only. Gate G forecasting because the committed call is about an open window; the objective tag stays Root-Cause Analysis (the work is attributing misses to causes, the call names the cause to fix).",
+  "skeleton": {
+    "decision_form": "rank_n_name_one",
+    "answer_pattern": "naive_leader_drops_winner_climbs",
+    "lessons": [
+      "forward_window_structure_change"
+    ],
+    "mechanisms": [
+      "overflow_to_second_provider_layer"
+    ],
+    "detection": [
+      "residual_by_subgroup"
+    ],
+    "moves": [
+      "replay_event_by_event"
+    ],
+    "file_roles": [
+      "governing_standard",
+      "primary_record",
+      "schedule_or_plan"
+    ]
+  }
 }

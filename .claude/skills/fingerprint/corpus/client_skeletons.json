@@ -1,0 +1,1393 @@
+{
+ "_about": "Every task the client has shown us, as a skeleton in skeleton_vocab.json's keys, so guard.py check can refuse a draw that reskins one and can count how often the client's dataset already teaches a lesson. Sources: the Templated Task Examples page (Project Mark task review, five send-backs, each a pair from one fellow; read 2026-11-11), the Sulfur Depth Scale page with its task detail (guidelines/client/depth-scale-2026-11-09.md and depth-scale-2026-11-09-detail.md) and the example library (guidelines/client/examples/1.txt to 15.txt). status: accepted (in the client's dataset, counts as teaching its lessons), judgment_call (depth level 3, kept about half the time, counted), sent_back (returned; never counts as teaching, but a reskin of it is still refused). The first lesson in each list is the one the call turns on.",
+ "entries": [
+  {
+   "id": "html:grocer-bays",
+   "status": "accepted",
+   "source": "Templated Task Examples, example 1 (existing task)",
+   "title": "Co-op grocer: which of 16 Wave 7 food stores get a Local Lines bay",
+   "skeleton": {
+    "decision_form": "set_over_threshold",
+    "answer_pattern": "k_of_n_pass_budget_slack",
+    "lessons": [
+     "interference_spillover"
+    ],
+    "mechanisms": [
+     "trade_diverted_within_trading_area"
+    ],
+    "detection": [
+     "untreated_neighbours_shift_with_exposure"
+    ],
+    "moves": [
+     "exposure_share_regression_unit_time_effects"
+    ],
+    "file_roles": [
+     "governing_standard",
+     "primary_record",
+     "reference_register",
+     "crosswalk_or_migration_map",
+     "changeover_note",
+     "calendar_or_closures",
+     "quotes_or_costs",
+     "early_readout_decoy",
+     "unused_distractor"
+    ]
+   }
+  },
+  {
+   "id": "html:wholesale-connectors",
+   "status": "sent_back",
+   "source": "Templated Task Examples, example 1 (submitted task, near copy)",
+   "title": "Wholesale exchange: which of 16 final-round suppliers get the Standing Orders connector",
+   "skeleton": {
+    "decision_form": "set_over_threshold",
+    "answer_pattern": "k_of_n_pass_budget_slack",
+    "lessons": [
+     "interference_spillover"
+    ],
+    "mechanisms": [
+     "trade_diverted_within_trading_area"
+    ],
+    "detection": [
+     "untreated_neighbours_shift_with_exposure"
+    ],
+    "moves": [
+     "exposure_share_regression_unit_time_effects"
+    ],
+    "file_roles": [
+     "governing_standard",
+     "primary_record",
+     "reference_register",
+     "crosswalk_or_migration_map",
+     "changeover_note",
+     "calendar_or_closures",
+     "quotes_or_costs",
+     "early_readout_decoy",
+     "unused_distractor"
+    ]
+   }
+  },
+  {
+   "id": "html:coach-corridors",
+   "status": "sent_back",
+   "source": "Templated Task Examples, example 1 (same drop)",
+   "title": "Coach routes with corridors, six of sixteen passing",
+   "skeleton": {
+    "decision_form": "set_over_threshold",
+    "answer_pattern": "k_of_n_pass_budget_slack",
+    "lessons": [
+     "interference_spillover"
+    ],
+    "mechanisms": [
+     "trade_diverted_within_trading_area"
+    ],
+    "detection": [
+     "untreated_neighbours_shift_with_exposure"
+    ],
+    "moves": [
+     "exposure_share_regression_unit_time_effects"
+    ],
+    "file_roles": [
+     "governing_standard",
+     "primary_record",
+     "reference_register",
+     "changeover_note",
+     "quotes_or_costs",
+     "early_readout_decoy",
+     "unused_distractor"
+    ]
+   }
+  },
+  {
+   "id": "html:subscription-verticals",
+   "status": "sent_back",
+   "source": "Templated Task Examples, example 1 (same drop)",
+   "title": "Subscription plans with store verticals, six of sixteen passing",
+   "skeleton": {
+    "decision_form": "set_over_threshold",
+    "answer_pattern": "k_of_n_pass_budget_slack",
+    "lessons": [
+     "interference_spillover"
+    ],
+    "mechanisms": [
+     "trade_diverted_within_trading_area"
+    ],
+    "detection": [
+     "untreated_neighbours_shift_with_exposure"
+    ],
+    "moves": [
+     "exposure_share_regression_unit_time_effects"
+    ],
+    "file_roles": [
+     "governing_standard",
+     "primary_record",
+     "reference_register",
+     "changeover_note",
+     "quotes_or_costs",
+     "early_readout_decoy",
+     "unused_distractor"
+    ]
+   }
+  },
+  {
+   "id": "html:valve-failure-on-demand",
+   "status": "accepted",
+   "source": "Templated Task Examples, example 2 (existing task)",
+   "title": "Gas plant: refit the one of six shortlisted shutdown valve models with the highest failure on demand",
+   "skeleton": {
+    "decision_form": "rank_n_name_one",
+    "answer_pattern": "naive_leader_drops_winner_climbs",
+    "lessons": [
+     "fixed_nuisance_component"
+    ],
+    "mechanisms": [
+     "share_failing_on_operation"
+    ],
+    "detection": [
+     "naive_ignores_what_it_should_depend_on"
+    ],
+    "moves": [
+     "fixed_plus_covariate_fit",
+     "back_test_select_estimator"
+    ],
+    "file_roles": [
+     "decision_minute",
+     "governing_standard",
+     "shortlist_or_candidates",
+     "notes_file_or_email",
+     "test_or_trial_register",
+     "unused_distractor"
+    ]
+   }
+  },
+  {
+   "id": "html:shrub-root-stiffness",
+   "status": "sent_back",
+   "source": "Templated Task Examples, example 2 (submitted task, templated)",
+   "title": "Riverbank scheme: plant the one of six shrub species with the stiffest roots",
+   "skeleton": {
+    "decision_form": "rank_n_name_one",
+    "answer_pattern": "naive_leader_drops_winner_climbs",
+    "lessons": [
+     "fixed_nuisance_component"
+    ],
+    "mechanisms": [
+     "test_rig_clamp_compliance"
+    ],
+    "detection": [
+     "naive_depends_on_what_it_should_not"
+    ],
+    "moves": [
+     "fixed_plus_covariate_fit",
+     "back_test_select_estimator"
+    ],
+    "file_roles": [
+     "decision_minute",
+     "governing_standard",
+     "shortlist_or_candidates",
+     "notes_file_or_email",
+     "test_or_trial_register",
+     "unused_distractor"
+    ]
+   }
+  },
+  {
+   "id": "html:nursing-home-citations",
+   "status": "accepted",
+   "source": "Templated Task Examples, example 3 (existing task)",
+   "title": "Nursing-home chain: send a readiness team only if the whole 95% interval for a citation ratio sits above 1.9",
+   "skeleton": {
+    "decision_form": "act_if_interval_clears_line",
+    "answer_pattern": "point_says_act_interval_says_no",
+    "lessons": [
+     "uncertainty_at_shared_unit"
+    ],
+    "mechanisms": [
+     "citations_cluster_in_inspections"
+    ],
+    "detection": [
+     "units_move_together"
+    ],
+    "moves": [
+     "cluster_resample_shared_unit",
+     "variant_sweep_holds_call"
+    ],
+    "file_roles": [
+     "primary_record",
+     "field_legend_or_dictionary",
+     "unused_distractor"
+    ]
+   }
+  },
+  {
+   "id": "html:county-pairs-network",
+   "status": "accepted",
+   "source": "Templated Task Examples, example 3 (the lesson's second carrier)",
+   "title": "County pairs in a social-network dataset, an interval that treats pairs as independent",
+   "skeleton": {
+    "decision_form": "act_if_interval_clears_line",
+    "answer_pattern": "point_says_act_interval_says_no",
+    "lessons": [
+     "uncertainty_at_shared_unit"
+    ],
+    "mechanisms": [
+     "pairs_share_counties"
+    ],
+    "detection": [
+     "units_move_together"
+    ],
+    "moves": [
+     "cluster_resample_shared_unit"
+    ],
+    "file_roles": [
+     "primary_record",
+     "reference_register"
+    ]
+   }
+  },
+  {
+   "id": "html:snowpack-trend",
+   "status": "sent_back",
+   "source": "Templated Task Examples, example 3 (submitted task, templated lesson)",
+   "title": "Water district: lower the snowpack baseline only if the 95% interval for the trend lies wholly below zero",
+   "skeleton": {
+    "decision_form": "act_if_interval_clears_line",
+    "answer_pattern": "point_says_act_interval_says_no",
+    "lessons": [
+     "uncertainty_at_shared_unit"
+    ],
+    "mechanisms": [
+     "stations_move_together_by_winter"
+    ],
+    "detection": [
+     "units_move_together"
+    ],
+    "moves": [
+     "cluster_resample_shared_unit",
+     "variant_sweep_holds_call"
+    ],
+    "file_roles": [
+     "primary_record",
+     "reference_register"
+    ]
+   }
+  },
+  {
+   "id": "html:recipe-app-home-card",
+   "status": "accepted",
+   "source": "Templated Task Examples, example 4 (existing task)",
+   "title": "Recipe app: which three of 12 tools go on the weekly Home card, by largest retention effect",
+   "skeleton": {
+    "decision_form": "top_k_with_screen_runner_up",
+    "answer_pattern": "bigger_unit_misses_out_runner_up",
+    "lessons": [
+     "uncertainty_at_shared_unit",
+     "self_selection_into_treatment"
+    ],
+    "mechanisms": [
+     "family_plan_members_leave_together"
+    ],
+    "detection": [
+     "units_move_together"
+    ],
+    "moves": [
+     "cluster_resample_shared_unit",
+     "refit_comparison_on_unaffected"
+    ],
+    "file_roles": [
+     "governing_standard",
+     "changeover_note",
+     "primary_record",
+     "reference_register",
+     "unused_distractor"
+    ]
+   }
+  },
+  {
+   "id": "html:fuel-pass-through",
+   "status": "sent_back",
+   "source": "Templated Task Examples, example 4 (submitted task, variant skeleton)",
+   "title": "Fuel duty cut: which of 12 retail chains get an information request, at most three, by largest pass-through shortfall",
+   "skeleton": {
+    "decision_form": "top_k_with_screen_runner_up",
+    "answer_pattern": "bigger_unit_misses_out_runner_up",
+    "lessons": [
+     "asymmetric_response",
+     "uncertainty_at_shared_unit"
+    ],
+    "mechanisms": [
+     "asymmetric_rise_and_fall_pass_through",
+     "chain_prices_move_together"
+    ],
+    "detection": [
+     "units_move_together"
+    ],
+    "moves": [
+     "cluster_resample_shared_unit",
+     "stratify_by_mix_and_reweight_to_target"
+    ],
+    "file_roles": [
+     "governing_standard",
+     "changeover_note",
+     "primary_record",
+     "reference_register",
+     "unused_distractor"
+    ]
+   }
+  },
+  {
+   "id": "html:b2b-experiment-sizing",
+   "status": "accepted",
+   "source": "Templated Task Examples, example 5 (existing task)",
+   "title": "Sizing a B2B product experiment under a house standard at 80% power",
+   "skeleton": {
+    "decision_form": "count_to_standard",
+    "answer_pattern": "count_off_by_a_few",
+    "lessons": [
+     "planned_design_noise"
+    ],
+    "mechanisms": [
+     "between_within_variance_of_reviews"
+    ],
+    "detection": [
+     "document_defines_estimand"
+    ],
+    "moves": [
+     "variance_components"
+    ],
+    "file_roles": [
+     "governing_standard",
+     "notes_file_or_email",
+     "primary_record",
+     "schedule_or_plan"
+    ]
+   }
+  },
+  {
+   "id": "html:fieldwork-trial-sizing",
+   "status": "accepted",
+   "source": "Templated Task Examples, example 5 (the lesson's second carrier)",
+   "title": "Sizing a fieldwork trial under a house standard at 80% power",
+   "skeleton": {
+    "decision_form": "count_to_standard",
+    "answer_pattern": "count_off_by_a_few",
+    "lessons": [
+     "planned_design_noise"
+    ],
+    "mechanisms": [
+     "partner_waves_of_eight"
+    ],
+    "detection": [
+     "document_defines_estimand"
+    ],
+    "moves": [
+     "variance_components"
+    ],
+    "file_roles": [
+     "governing_standard",
+     "notes_file_or_email",
+     "primary_record",
+     "schedule_or_plan"
+    ]
+   }
+  },
+  {
+   "id": "html:switchback-sizing",
+   "status": "sent_back",
+   "source": "Templated Task Examples, example 5 (submitted task, variant lesson)",
+   "title": "Website switchback test: is the proposed test long enough, or how many blocks",
+   "skeleton": {
+    "decision_form": "count_to_standard",
+    "answer_pattern": "count_off_by_a_few",
+    "lessons": [
+     "planned_design_noise"
+    ],
+    "mechanisms": [
+     "weekday_paired_switchback_blocks"
+    ],
+    "detection": [
+     "document_defines_estimand"
+    ],
+    "moves": [
+     "paired_differences_of_planned_design"
+    ],
+    "file_roles": [
+     "governing_standard",
+     "notes_file_or_email",
+     "primary_record",
+     "schedule_or_plan"
+    ]
+   }
+  },
+  {
+   "id": "depth:251ff00c",
+   "status": "sent_back",
+   "source": "Depth scale level 1",
+   "title": "Is the fund's liquidity status Red?",
+   "skeleton": {
+    "decision_form": "certify_figure_against_line",
+    "answer_pattern": "figure_crosses_bar",
+    "lessons": [
+     "inherited_attribute_from_other_unit"
+    ],
+    "mechanisms": [
+     "sale_rate_defined_by_policy"
+    ],
+    "detection": [
+     "document_defines_estimand"
+    ],
+    "moves": [
+     "link_records_by_parsed_key"
+    ],
+    "file_roles": [
+     "governing_standard",
+     "primary_record",
+     "reference_register"
+    ]
+   }
+  },
+  {
+   "id": "depth:ce649e2c",
+   "status": "sent_back",
+   "source": "Depth scale level 1",
+   "title": "Did the 30-day answered share really fall 7.6 points?",
+   "skeleton": {
+    "decision_form": "go_hold_stop_on_figure",
+    "answer_pattern": "figure_crosses_bar",
+    "lessons": [
+     "observation_window_coverage"
+    ],
+    "mechanisms": [
+     "unanswered_deleted_after_365_days"
+    ],
+    "detection": [
+     "document_defines_estimand"
+    ],
+    "moves": [
+     "impute_by_model_at_own_drivers"
+    ],
+    "file_roles": [
+     "primary_record",
+     "governing_standard"
+    ]
+   }
+  },
+  {
+   "id": "depth:db3a6bc0",
+   "status": "sent_back",
+   "source": "Depth scale level 2",
+   "title": "Site the new birth-registration office in Carrow or Dunmore?",
+   "skeleton": {
+    "decision_form": "pick_one_of_few_options",
+    "answer_pattern": "naive_leader_drops_winner_climbs",
+    "lessons": [
+     "measurement_basis_break"
+    ],
+    "mechanisms": [
+     "mobile_registration_drives_ended"
+    ],
+    "detection": [
+     "residual_by_subgroup"
+    ],
+    "moves": [
+     "stratify_by_mix_and_reweight_to_target"
+    ],
+    "file_roles": [
+     "primary_record",
+     "governing_standard",
+     "reference_register"
+    ]
+   }
+  },
+  {
+   "id": "depth:c3c4e2ab",
+   "status": "sent_back",
+   "source": "Depth scale level 2",
+   "title": "Approve the vegetation trimming cycle?",
+   "skeleton": {
+    "decision_form": "go_hold_stop_on_figure",
+    "answer_pattern": "figure_crosses_bar",
+    "lessons": [
+     "interference_spillover"
+    ],
+    "mechanisms": [
+     "crew_yards_shared_with_cycle"
+    ],
+    "detection": [
+     "residual_by_subgroup"
+    ],
+    "moves": [
+     "exclude_contaminated_comparison"
+    ],
+    "file_roles": [
+     "primary_record",
+     "reference_register"
+    ]
+   }
+  },
+  {
+   "id": "depth:35842bf8",
+   "status": "judgment_call",
+   "source": "Depth scale level 3",
+   "title": "Will extra court sitting hours close the trial backlog?",
+   "skeleton": {
+    "decision_form": "go_hold_stop_on_figure",
+    "answer_pattern": "figure_crosses_bar",
+    "lessons": [
+     "marginal_not_average"
+    ],
+    "mechanisms": [
+     "early_pleas_use_no_hearing_time"
+    ],
+    "detection": [
+     "natural_experiment_in_record"
+    ],
+    "moves": [
+     "instrument_outside_shock"
+    ],
+    "file_roles": [
+     "primary_record",
+     "exogenous_long_record"
+    ]
+   }
+  },
+  {
+   "id": "depth:0f7f50e0",
+   "status": "judgment_call",
+   "source": "Depth scale level 3",
+   "title": "Keep the overflow staffing agency on retainer?",
+   "skeleton": {
+    "decision_form": "go_hold_stop_on_figure",
+    "answer_pattern": "figure_crosses_bar",
+    "lessons": [
+     "serial_or_common_shock_dependence"
+    ],
+    "mechanisms": [
+     "overflow_weeks_cluster"
+    ],
+    "detection": [
+     "units_move_together"
+    ],
+    "moves": [
+     "cluster_resample_shared_unit"
+    ],
+    "file_roles": [
+     "primary_record",
+     "reference_register"
+    ]
+   }
+  },
+  {
+   "id": "depth:23bec3ac",
+   "status": "judgment_call",
+   "source": "Depth scale level 3",
+   "title": "Keep the backup collections retainer?",
+   "skeleton": {
+    "decision_form": "go_hold_stop_on_figure",
+    "answer_pattern": "figure_crosses_bar",
+    "lessons": [
+     "serial_or_common_shock_dependence"
+    ],
+    "mechanisms": [
+     "loans_share_institution_shocks"
+    ],
+    "detection": [
+     "units_move_together"
+    ],
+    "moves": [
+     "cluster_resample_shared_unit"
+    ],
+    "file_roles": [
+     "primary_record",
+     "reference_register"
+    ]
+   }
+  },
+  {
+   "id": "depth:8ec45b05",
+   "status": "accepted",
+   "source": "Depth scale level 4",
+   "title": "Repair turbine 3's night-stop fault?",
+   "skeleton": {
+    "decision_form": "go_hold_stop_on_figure",
+    "answer_pattern": "figure_crosses_bar",
+    "lessons": [
+     "downstream_offset",
+     "normal_period_correction"
+    ],
+    "mechanisms": [
+     "wake_recovered_downwind"
+    ],
+    "detection": [
+     "layout_or_physics",
+     "natural_experiment_in_record"
+    ],
+    "moves": [
+     "reference_unit_unaffected",
+     "replay_event_by_event",
+     "long_record_normalisation",
+     "variant_sweep_holds_call"
+    ],
+    "file_roles": [
+     "primary_record",
+     "event_timeline",
+     "reference_register",
+     "field_legend_or_dictionary",
+     "exogenous_long_record",
+     "governing_standard"
+    ]
+   }
+  },
+  {
+   "id": "depth:b34ffd70",
+   "status": "accepted",
+   "source": "Depth scale level 4",
+   "title": "Has re-offending after a first arrest fallen by at least 10%?",
+   "skeleton": {
+    "decision_form": "act_if_interval_clears_line",
+    "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
+    "lessons": [
+     "detection_rate_changes_outcome",
+     "look_back_equalisation"
+    ],
+    "mechanisms": [
+     "clearance_rate_fell"
+    ],
+    "detection": [
+     "second_source_at_other_grain"
+    ],
+    "moves": [
+     "equalise_look_back",
+     "deflate_by_detection_rate",
+     "cluster_resample_shared_unit"
+    ],
+    "file_roles": [
+     "primary_record",
+     "reference_register",
+     "second_grain_source",
+     "field_legend_or_dictionary",
+     "early_readout_decoy",
+     "unused_distractor"
+    ]
+   }
+  },
+  {
+   "id": "depth:5a6e4e0c",
+   "status": "accepted",
+   "source": "Depth scale level 4",
+   "title": "Launch the new refrigerated product line?",
+   "skeleton": {
+    "decision_form": "go_hold_stop_on_figure",
+    "answer_pattern": "each_correction_alone_flips",
+    "lessons": [
+     "heterogeneity_carried_to_decision",
+     "cannibalisation_with_pretrend",
+     "analog_event_calibration"
+    ],
+    "mechanisms": [
+     "new_to_type_buyers_buy_one_unit"
+    ],
+    "detection": [
+     "back_test_on_held_out_period"
+    ],
+    "moves": [
+     "analog_calibration_loo",
+     "stratify_by_mix_and_reweight_to_target",
+     "trend_adjusted_comparison"
+    ],
+    "file_roles": [
+     "primary_record",
+     "reference_register",
+     "calendar_or_closures",
+     "panel_or_survey_sample",
+     "incumbent_figure_or_method",
+     "schedule_or_plan",
+     "quotes_or_costs",
+     "field_legend_or_dictionary",
+     "unused_distractor"
+    ]
+   }
+  },
+  {
+   "id": "depth:41389985",
+   "status": "accepted",
+   "source": "Depth scale level 4",
+   "title": "Fund the De Bilt telescope dome?",
+   "skeleton": {
+    "decision_form": "go_hold_stop_on_figure",
+    "answer_pattern": "figure_crosses_bar",
+    "lessons": [
+     "measurement_basis_break"
+    ],
+    "mechanisms": [
+     "cloud_observation_automated"
+    ],
+    "detection": [
+     "unchanged_signal_diverges"
+    ],
+    "moves": [
+     "rebuild_on_unchanged_signals",
+     "variant_sweep_holds_call"
+    ],
+    "file_roles": [
+     "primary_record",
+     "field_legend_or_dictionary",
+     "notes_file_or_email"
+    ]
+   }
+  },
+  {
+   "id": "depth:a5a5efb1",
+   "status": "accepted",
+   "source": "Depth scale level 4",
+   "title": "Bind the Bluebonnet legacy medical deal at 110 million?",
+   "skeleton": {
+    "decision_form": "go_hold_stop_on_figure",
+    "answer_pattern": "figure_crosses_bar",
+    "lessons": [
+     "survivor_selected_sample"
+    ],
+    "mechanisms": [
+     "claims_selected_while_still_paying"
+    ],
+    "detection": [
+     "selection_rule_in_the_record"
+    ],
+    "moves": [
+     "comparison_group_same_selection",
+     "excess_hazard_on_base_table",
+     "variant_sweep_holds_call"
+    ],
+    "file_roles": [
+     "shortlist_or_candidates",
+     "governing_standard",
+     "incumbent_figure_or_method",
+     "primary_record",
+     "field_legend_or_dictionary",
+     "exogenous_long_record",
+     "unused_distractor"
+    ]
+   }
+  },
+  {
+   "id": "depth:bd4981a5",
+   "status": "accepted",
+   "source": "Depth scale level 5",
+   "title": "Does the state's job-openings rate clear 4.0?",
+   "skeleton": {
+    "decision_form": "certify_figure_against_line",
+    "answer_pattern": "no_single_correction_clears",
+    "lessons": [
+     "design_weights",
+     "frame_population_mismatch",
+     "impute_by_resembling_units"
+    ],
+    "mechanisms": [
+     "nonresponse_follow_up_subsample",
+     "accounts_joined_after_frame"
+    ],
+    "detection": [
+     "second_source_at_other_grain"
+    ],
+    "moves": [
+     "two_phase_weights",
+     "frame_reconciliation_with_register",
+     "impute_by_model_at_own_drivers",
+     "cluster_resample_shared_unit"
+    ],
+    "file_roles": [
+     "panel_or_survey_sample",
+     "sampling_dispositions",
+     "frame_or_roster",
+     "second_grain_source",
+     "incumbent_figure_or_method",
+     "governing_standard",
+     "unused_distractor"
+    ]
+   }
+  },
+  {
+   "id": "depth:4e9c0a39",
+   "status": "accepted",
+   "source": "Depth scale level 5",
+   "title": "Renew the street patrols in full, by half, or stop?",
+   "skeleton": {
+    "decision_form": "banded_call_on_figure",
+    "answer_pattern": "pooled_figure_flips_call",
+    "lessons": [
+     "heterogeneity_carried_to_decision",
+     "selection_on_peak_baseline",
+     "interference_spillover",
+     "displacement_netting"
+    ],
+    "mechanisms": [
+     "segments_picked_on_peak_year",
+     "robbery_surge_against_assault_fall"
+    ],
+    "detection": [
+     "selection_rule_in_the_record",
+     "residual_by_subgroup"
+    ],
+    "moves": [
+     "pre_peak_baseline",
+     "exclude_contaminated_comparison",
+     "stratify_by_mix_and_reweight_to_target",
+     "net_displacement",
+     "variant_sweep_holds_call"
+    ],
+    "file_roles": [
+     "primary_record",
+     "reference_register",
+     "shortlist_or_candidates",
+     "selection_note",
+     "second_grain_source",
+     "incumbent_figure_or_method",
+     "unused_distractor"
+    ]
+   }
+  },
+  {
+   "id": "depth:17adb5ca",
+   "status": "accepted",
+   "source": "Depth scale level 5",
+   "title": "Which territory gets the January win-back vouchers?",
+   "skeleton": {
+    "decision_form": "rank_n_name_one",
+    "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
+    "lessons": [
+     "target_subset_selected_by_score",
+     "transport_effect_modifiers",
+     "effect_fade_with_time",
+     "seasonal_shift_calibration"
+    ],
+    "mechanisms": [
+     "riskiest_picks_stay_unordered",
+     "kiosk_effect_fades_with_lapse"
+    ],
+    "detection": [
+     "residual_by_subgroup"
+    ],
+    "moves": [
+     "transport_by_effect_modifiers",
+     "age_to_send_date",
+     "survival_model_with_score",
+     "calibrate_season_on_target_list",
+     "variant_sweep_holds_call"
+    ],
+    "file_roles": [
+     "shortlist_or_candidates",
+     "test_or_trial_register",
+     "primary_record",
+     "reference_register",
+     "quotes_or_costs",
+     "governing_standard",
+     "early_readout_decoy",
+     "calendar_or_closures"
+    ]
+   }
+  },
+  {
+   "id": "depth:b9efebd1",
+   "status": "accepted",
+   "source": "Depth scale level 5",
+   "title": "Launch the short-term SBA loan, and at what sizes?",
+   "skeleton": {
+    "decision_form": "pick_one_of_few_options",
+    "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
+    "lessons": [
+     "vintage_or_cohort_drift",
+     "completion_of_young_cohorts",
+     "competing_risks"
+    ],
+    "mechanisms": [
+     "newer_vintages_charge_off_faster",
+     "late_age_time_from_old_vintages"
+    ],
+    "detection": [
+     "residual_by_subgroup"
+    ],
+    "moves": [
+     "competing_risks_estimator",
+     "per_cohort_curves",
+     "complete_cohorts_from_later_rates",
+     "variant_sweep_holds_call"
+    ],
+    "file_roles": [
+     "primary_record",
+     "second_grain_source",
+     "field_legend_or_dictionary",
+     "governing_standard",
+     "notes_file_or_email",
+     "schedule_or_plan",
+     "unused_distractor"
+    ]
+   }
+  },
+  {
+   "id": "depth:279e74f2",
+   "status": "accepted",
+   "source": "Depth scale level 5",
+   "title": "Which fourteen days should the borrowed Pit 2 crew work?",
+   "skeleton": {
+    "decision_form": "timing_or_schedule_choice",
+    "answer_pattern": "naive_choice_wrong_window",
+    "lessons": [
+     "behavioural_response_measured",
+     "confounded_history_of_use",
+     "queue_or_capacity_replay",
+     "marginal_not_average"
+    ],
+    "mechanisms": [
+     "diversion_step_at_an_hour"
+    ],
+    "detection": [
+     "natural_experiment_in_record"
+    ],
+    "moves": [
+     "measure_response_shape_from_events",
+     "replay_event_by_event",
+     "variant_sweep_holds_call"
+    ],
+    "file_roles": [
+     "primary_record",
+     "second_grain_source",
+     "event_timeline",
+     "reference_register",
+     "governing_standard",
+     "decision_minute",
+     "quotes_or_costs",
+     "unused_distractor"
+    ]
+   }
+  },
+  {
+   "id": "example:1",
+   "status": "accepted",
+   "source": "guidelines/client/examples/1.txt",
+   "title": "Switch Try First off in Germany and the Netherlands (CM2 fall from repeat use)",
+   "skeleton": {
+    "decision_form": "go_hold_stop_on_figure",
+    "answer_pattern": "figure_crosses_bar",
+    "lessons": [
+     "composition_versus_behaviour",
+     "reporting_lag_nowcast",
+     "unit_identity_across_systems"
+    ],
+    "mechanisms": [
+     "habitual_users_mix_shift"
+    ],
+    "detection": [
+     "residual_by_subgroup"
+    ],
+    "moves": [
+     "stratify_by_mix_and_reweight_to_target",
+     "nowcast_from_same_point_prior_years",
+     "link_records_by_parsed_key",
+     "replay_event_by_event"
+    ],
+    "file_roles": [
+     "primary_record",
+     "crosswalk_or_migration_map",
+     "incumbent_figure_or_method",
+     "early_readout_decoy"
+    ]
+   }
+  },
+  {
+   "id": "example:2",
+   "status": "accepted",
+   "source": "guidelines/client/examples/2.txt",
+   "title": "Approve the Meadowfield offer chain-wide (offer build also broke push delivery)",
+   "skeleton": {
+    "decision_form": "go_hold_stop_on_figure",
+    "answer_pattern": "figure_crosses_bar",
+    "lessons": [
+     "concurrent_change_in_comparison"
+    ],
+    "mechanisms": [
+     "offer_build_broke_push_delivery"
+    ],
+    "detection": [
+     "second_source_at_other_grain"
+    ],
+    "moves": [
+     "refit_comparison_on_unaffected"
+    ],
+    "file_roles": [
+     "governing_standard",
+     "primary_record",
+     "reference_register",
+     "changeover_note"
+    ]
+   }
+  },
+  {
+   "id": "example:3",
+   "status": "accepted",
+   "source": "guidelines/client/examples/3.txt",
+   "title": "Keep burst flighting, do not fund always-on media (search spend follows demand)",
+   "skeleton": {
+    "decision_form": "go_hold_stop_on_figure",
+    "answer_pattern": "figure_crosses_bar",
+    "lessons": [
+     "confounded_history_of_use"
+    ],
+    "mechanisms": [
+     "search_spend_follows_demand"
+    ],
+    "detection": [
+     "natural_experiment_in_record"
+    ],
+    "moves": [
+     "cluster_resample_shared_unit",
+     "refit_comparison_on_unaffected"
+    ],
+    "file_roles": [
+     "primary_record",
+     "incumbent_figure_or_method",
+     "panel_or_survey_sample",
+     "schedule_or_plan"
+    ]
+   }
+  },
+  {
+   "id": "example:4",
+   "status": "accepted",
+   "source": "guidelines/client/examples/4.txt",
+   "title": "Renew the text-to-pay contract (freed collector time reached the waiting states)",
+   "skeleton": {
+    "decision_form": "go_hold_stop_on_figure",
+    "answer_pattern": "figure_crosses_bar",
+    "lessons": [
+     "interference_spillover",
+     "concurrent_change_in_comparison"
+    ],
+    "mechanisms": [
+     "shared_floor_time_moved_to_waiting_states"
+    ],
+    "detection": [
+     "untreated_neighbours_shift_with_exposure"
+    ],
+    "moves": [
+     "refit_comparison_on_unaffected"
+    ],
+    "file_roles": [
+     "governing_standard",
+     "primary_record",
+     "second_grain_source",
+     "early_readout_decoy"
+    ]
+   }
+  },
+  {
+   "id": "example:5",
+   "status": "accepted",
+   "source": "guidelines/client/examples/5.txt",
+   "title": "Reserve the optional December block (customer-specific market responses)",
+   "skeleton": {
+    "decision_form": "go_hold_stop_on_figure",
+    "answer_pattern": "figure_crosses_bar",
+    "lessons": [
+     "customer_specific_response",
+     "heterogeneity_carried_to_decision"
+    ],
+    "mechanisms": [
+     "customers_respond_to_own_industry"
+    ],
+    "detection": [
+     "back_test_on_held_out_period"
+    ],
+    "moves": [
+     "per_unit_model_then_rank",
+     "back_test_select_estimator"
+    ],
+    "file_roles": [
+     "primary_record",
+     "exogenous_long_record",
+     "governing_standard",
+     "schedule_or_plan"
+    ]
+   }
+  },
+  {
+   "id": "example:6",
+   "status": "accepted",
+   "source": "guidelines/client/examples/6.txt",
+   "title": "Roll out the additional rapid response car (worst-first staggered starts)",
+   "skeleton": {
+    "decision_form": "rank_n_name_one",
+    "answer_pattern": "naive_leader_drops_winner_climbs",
+    "lessons": [
+     "selection_on_peak_baseline",
+     "heterogeneity_carried_to_decision"
+    ],
+    "mechanisms": [
+     "worst_area_started_first"
+    ],
+    "detection": [
+     "selection_rule_in_the_record"
+    ],
+    "moves": [
+     "refit_comparison_on_unaffected",
+     "stratify_by_mix_and_reweight_to_target"
+    ],
+    "file_roles": [
+     "primary_record",
+     "selection_note",
+     "quotes_or_costs",
+     "governing_standard"
+    ]
+   }
+  },
+  {
+   "id": "example:7",
+   "status": "accepted",
+   "source": "guidelines/client/examples/7.txt",
+   "title": "Back the bus service recovery fund (rider-weighted elasticity)",
+   "skeleton": {
+    "decision_form": "go_hold_stop_on_figure",
+    "answer_pattern": "pooled_figure_flips_call",
+    "lessons": [
+     "heterogeneity_carried_to_decision",
+     "endogenous_supply_instrument"
+    ],
+    "mechanisms": [
+     "large_systems_respond_more"
+    ],
+    "detection": [
+     "residual_by_subgroup"
+    ],
+    "moves": [
+     "instrument_outside_shock",
+     "stratify_by_mix_and_reweight_to_target"
+    ],
+    "file_roles": [
+     "primary_record",
+     "exogenous_long_record",
+     "governing_standard"
+    ]
+   }
+  },
+  {
+   "id": "example:8",
+   "status": "accepted",
+   "source": "guidelines/client/examples/8.txt",
+   "title": "Designate the 80 heating-oil depots whose price moves others follow",
+   "skeleton": {
+    "decision_form": "ranked_list_under_cap",
+    "answer_pattern": "naive_set_swaps_members",
+    "lessons": [
+     "leader_follower_spillover",
+     "interference_spillover"
+    ],
+    "mechanisms": [
+     "regional_followers_copy_leader_lagged"
+    ],
+    "detection": [
+     "untreated_neighbours_shift_with_exposure"
+    ],
+    "moves": [
+     "lagged_pair_detection",
+     "exclude_contaminated_comparison"
+    ],
+    "file_roles": [
+     "governing_standard",
+     "primary_record",
+     "reference_register"
+    ]
+   }
+  },
+  {
+   "id": "example:9",
+   "status": "accepted",
+   "source": "guidelines/client/examples/9.txt",
+   "title": "Keep the decreasing win condition (boards estimated from the data)",
+   "skeleton": {
+    "decision_form": "go_hold_stop_on_figure",
+    "answer_pattern": "figure_crosses_bar",
+    "lessons": [
+     "unknown_generating_process"
+    ],
+    "mechanisms": [
+     "boards_not_dealt_half_per_box"
+    ],
+    "detection": [
+     "split_half_replication"
+    ],
+    "moves": [
+     "em_latent_fit"
+    ],
+    "file_roles": [
+     "primary_record",
+     "governing_standard"
+    ]
+   }
+  },
+  {
+   "id": "example:10",
+   "status": "accepted",
+   "source": "guidelines/client/examples/10.txt",
+   "title": "Enroll the year 3 children whose answer times grow with each number they count",
+   "skeleton": {
+    "decision_form": "set_over_threshold",
+    "answer_pattern": "naive_set_swaps_members",
+    "lessons": [
+     "censored_or_capped_observation"
+    ],
+    "mechanisms": [
+     "quick_round_timeouts_censor_counting"
+    ],
+    "detection": [
+     "naive_ignores_what_it_should_depend_on"
+    ],
+    "moves": [
+     "censored_regression",
+     "per_unit_model_then_rank"
+    ],
+    "file_roles": [
+     "primary_record",
+     "field_legend_or_dictionary",
+     "reference_register"
+    ]
+   }
+  },
+  {
+   "id": "example:11",
+   "status": "accepted",
+   "source": "guidelines/client/examples/11.txt",
+   "title": "Study equal pay, not the DREAM Act (district sampling noise removed)",
+   "skeleton": {
+    "decision_form": "rank_n_name_one",
+    "answer_pattern": "naive_leader_drops_winner_climbs",
+    "lessons": [
+     "measurement_error_attenuation"
+    ],
+    "mechanisms": [
+     "near_universal_support_mostly_noise"
+    ],
+    "detection": [
+     "split_half_replication"
+    ],
+    "moves": [
+     "errors_in_variables_correction"
+    ],
+    "file_roles": [
+     "panel_or_survey_sample",
+     "primary_record"
+    ]
+   }
+  },
+  {
+   "id": "example:12",
+   "status": "accepted",
+   "source": "guidelines/client/examples/12.txt",
+   "title": "Do not recommend the training voucher (the offer changed who has a wage)",
+   "skeleton": {
+    "decision_form": "act_if_interval_clears_line",
+    "answer_pattern": "point_says_act_interval_says_no",
+    "lessons": [
+     "treatment_changes_who_is_observed"
+    ],
+    "mechanisms": [
+     "voucher_lowered_reemployment"
+    ],
+    "detection": [
+     "second_source_at_other_grain"
+    ],
+    "moves": [
+     "lee_bounds_or_trimming"
+    ],
+    "file_roles": [
+     "governing_standard",
+     "primary_record",
+     "test_or_trial_register"
+    ]
+   }
+  },
+  {
+   "id": "example:13",
+   "status": "accepted",
+   "source": "guidelines/client/examples/13.txt",
+   "title": "Hold the Dallas units (Austin's rule on its own removed 2.4% of supply)",
+   "skeleton": {
+    "decision_form": "go_hold_stop_on_figure",
+    "answer_pattern": "figure_crosses_bar",
+    "lessons": [
+     "non_parallel_pre_trend"
+    ],
+    "mechanisms": [
+     "cities_already_diverging"
+    ],
+    "detection": [
+     "pre_period_divergence"
+    ],
+    "moves": [
+     "cohort_follow_up"
+    ],
+    "file_roles": [
+     "primary_record",
+     "governing_standard"
+    ]
+   }
+  },
+  {
+   "id": "example:14",
+   "status": "accepted",
+   "source": "guidelines/client/examples/14.txt",
+   "title": "Approve three tutoring models (school-clustered intervals)",
+   "skeleton": {
+    "decision_form": "top_k_with_screen_runner_up",
+    "answer_pattern": "bigger_unit_misses_out_runner_up",
+    "lessons": [
+     "uncertainty_at_shared_unit"
+    ],
+    "mechanisms": [
+     "schools_allocated_not_pupils"
+    ],
+    "detection": [
+     "units_move_together"
+    ],
+    "moves": [
+     "cluster_resample_shared_unit"
+    ],
+    "file_roles": [
+     "governing_standard",
+     "test_or_trial_register",
+     "primary_record",
+     "quotes_or_costs"
+    ]
+   }
+  },
+  {
+   "id": "example:15",
+   "status": "accepted",
+   "source": "guidelines/client/examples/15.txt",
+   "title": "Give the four reading partnership places (cohort variance beyond sampling noise)",
+   "skeleton": {
+    "decision_form": "ranked_list_under_cap",
+    "answer_pattern": "naive_set_swaps_members",
+    "lessons": [
+     "variance_beyond_sampling_noise",
+     "shrinkage_small_samples",
+     "measurement_error_attenuation"
+    ],
+    "mechanisms": [
+     "cohort_shift_within_school"
+    ],
+    "detection": [
+     "residual_by_subgroup"
+    ],
+    "moves": [
+     "variance_components",
+     "shrinkage_or_credibility_weighting",
+     "errors_in_variables_correction"
+    ],
+    "file_roles": [
+     "governing_standard",
+     "primary_record",
+     "reference_register"
+    ]
+   }
+  }
+ ]
+}

@@ -33,6 +33,14 @@ row of the design note's `## Results chain`, not only to the recommendation:
   that grades nothing.
 - **`generator/effort.json`** carries each result's golden, band and figures.json key; `effort.py` refuses a golden
   that differs from the answer blocks' figure.
+- **The call is forced on both sides, and the audit's perturbation is run before the platform runs it.** Six returns
+  on determinism or forcing (task1 arch 2 and 3, task4 arch 7 and 10, task9 arch 8, task10 arch 7) share one shape:
+  a call a few per cent from its line, or a share loosely pinned. The holistic audit's own test on task1 arch 3 moved
+  the exit rates 20 per cent and watched the call go from 7 lines to 15. So `effort.json` carries `forcing`: the
+  golden family (three or more defensible rivals run on the cut pack) all on the golden's side of the line; the
+  shortcuts all across it; each fitted input moved by its defensible spread (20 per cent when none is known) with the
+  call holding. `effort.py` checks each side and prints the nearest distance; the judge reads the same block. A margin
+  the rivals cannot cross but a 20 per cent move in one fitted input can is not forced.
 
 In the sections below, "the stump" and "the decisive step" read as any result's difficulty: the WHAT is still filed,
 the HOW still stays open, and a result whose difficulty a filing hands over is a fork or a rule, never a result.

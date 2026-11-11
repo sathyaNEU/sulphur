@@ -144,5 +144,26 @@
       "stump": "A competent solver sums the TY2025 household floors as the TY2026 schedule, missing the joint-return netting of limited losses across spouses."
     }
   ],
-  "notes": "Re-root of the retired DA01 slot on 2026-10-12. stump_strategy other: a mass balance (the use a system served is its inflow less what its storage gained), none of the listed families; not population, grain or time: every row is read at its own grain and date, and the error is taking a correct production record for the quantity the decision is scored on. subdomain generation-capacity-planning: the client's Energy Systems & Utilities capacity-planning task type, here source (well) capacity against peak demand in a water utility. Gap objective: production is correct and is not what the capacity check is scored on. G5 provision elsewhere: the peak-day need was met partly from storage, which the production record cannot see; G3 record versus operation under it. Shape other (2026-10-12 design): the criteria come from the call and its three components, a twelve-month water-loss series with its year, share and bars, and four building groups' year (28); shape 10 was the draw's first key. Gate G relabelled decomposition_attribution on 2026-10-12, the determinism judge's key for the decisive step (the day's production split into the water used and the water the tanks kept); fingerprint Part 4: where two keys fit, the reviewer's."
+  "notes": "Re-root of the retired DA01 slot on 2026-10-12. stump_strategy other: a mass balance (the use a system served is its inflow less what its storage gained), none of the listed families; not population, grain or time: every row is read at its own grain and date, and the error is taking a correct production record for the quantity the decision is scored on. subdomain generation-capacity-planning: the client's Energy Systems & Utilities capacity-planning task type, here source (well) capacity against peak demand in a water utility. Gap objective: production is correct and is not what the capacity check is scored on. G5 provision elsewhere: the peak-day need was met partly from storage, which the production record cannot see; G3 record versus operation under it. Shape other (2026-10-12 design): the criteria come from the call and its three components, a twelve-month water-loss series with its year, share and bars, and four building groups' year (28); shape 10 was the draw's first key. Gate G relabelled decomposition_attribution on 2026-10-12, the determinism judge's key for the decisive step (the day's production split into the water used and the water the tanks kept); fingerprint Part 4: where two keys fit, the reviewer's.",
+  "skeleton": {
+    "decision_form": "forecast_figure_with_range",
+    "answer_pattern": "figure_crosses_bar",
+    "lessons": [
+      "stock_flow_accounting"
+    ],
+    "mechanisms": [
+      "reserve_drawn_down_at_peak"
+    ],
+    "detection": [
+      "naive_ignores_what_it_should_depend_on"
+    ],
+    "moves": [
+      "impute_by_model_at_own_drivers"
+    ],
+    "file_roles": [
+      "governing_standard",
+      "primary_record",
+      "exogenous_long_record"
+    ]
+  }
 }

@@ -145,5 +145,34 @@
   "deliverable set": "csv+docx"
  },
  "notes": "Redrawn at stage 1 after syncing with origin/main on 2026-11-11, when task14 v3, task15 v2 and task16 v2 entered the window: forum board_of_directors to executive_team (the management committee approves the dry-season work programme inside the board's budget, the honester label for a refit list), decisive pattern G12 to G7 (each recloser's record holds only the operating window between its memory's oldest kept event and its last read), Gate G to decomposition_attribution (each zone's faults assigned to lightning on the device's own clock, and its excess to failed protection rather than the spread sound zones show).",
- "registered": "2026-11-11T05:06:18Z"
+ "registered": "2026-11-11T05:06:18Z",
+ "skeleton": {
+  "decision_form": "monitoring_rule_with_alerts",
+  "answer_pattern": "naive_set_swaps_members",
+  "lessons": [
+   "device_clock_drift",
+   "observation_window_coverage",
+   "variance_beyond_sampling_noise"
+  ],
+  "mechanisms": [
+   "radio_less_controller_clock_drift",
+   "event_memory_overwritten",
+   "inspection_confirmed_sound_seasons"
+  ],
+  "detection": [
+   "record_time_against_event_time"
+  ],
+  "moves": [
+   "impute_by_model_at_own_drivers",
+   "variance_components"
+  ],
+  "file_roles": [
+   "primary_record",
+   "second_grain_source",
+   "event_timeline",
+   "reference_register",
+   "governing_standard",
+   "unused_distractor"
+  ]
+ }
 }

@@ -138,5 +138,37 @@
   }
  ],
  "notes": "Re-rooted on 2026-11-11 at the author's word: architecture 1 (Banyena barley nominations) was READY and not yet run; the author asked for a much stronger stump with at least three major analytical failure points in new areas, never task6's strategy. New world (Denmark, a grocery chain), new dataset (a simulated fresh-ordering field trial) and new shell. The task type moved from multiple-testing-selective-inference to benchmarking-and-ablations (controlled evaluation of a system, isolating its effect from everything else in the comparison); the analysis type stays Comparative Analysis & Explanation. Redrawn on 2026-11-11 after the rebase onto main: task14 architecture 3 registered with decisive pattern G3 and entered this card's window (ban.pattern), so the decisive generator moved to G6 composition shift, the honest first label for the call (the To Go format turns on the pilot's stores not being the format's stores), with G3 record against operation second.",
- "registered": "2026-11-11T04:47:38Z"
+ "registered": "2026-11-11T04:47:38Z",
+ "skeleton": {
+  "decision_form": "set_over_threshold",
+  "answer_pattern": "naive_set_swaps_members",
+  "lessons": [
+   "censored_or_capped_observation",
+   "concurrent_change_in_comparison",
+   "composition_versus_behaviour",
+   "transport_effect_modifiers"
+  ],
+  "mechanisms": [
+   "lean_forecast_empties_shelves",
+   "discounter_openings_near_pilot",
+   "to_go_light_weight_in_pilot"
+  ],
+  "detection": [
+   "second_source_at_other_grain"
+  ],
+  "moves": [
+   "impute_by_model_at_own_drivers",
+   "refit_comparison_on_unaffected",
+   "stratify_by_mix_and_reweight_to_target",
+   "transport_by_effect_modifiers"
+  ],
+  "file_roles": [
+   "primary_record",
+   "second_grain_source",
+   "reference_register",
+   "governing_standard",
+   "quotes_or_costs",
+   "unused_distractor"
+  ]
+ }
 }

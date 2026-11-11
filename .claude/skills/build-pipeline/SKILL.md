@@ -188,7 +188,12 @@ Layer 2 and never plants; if only a plant would hold, the architecture is spent.
 old card's lineage saying spent and why, one line in `## Tried and rejected`, committed `DRAWN`. **One architecture
 per world:** once a world's chain is spent the next draw moves to another world, another dataset and another
 shell (Mark: 251, 249 and 269 each spent two architectures in one world where one would have; 118, 305 and 273 kept
-one prompt shell across every re-root and `guard.py check` now blocks it). **No same-day serial re-roots without new
+one prompt shell across every re-root and `guard.py check` now blocks it). **A landed scaffold is never
+re-pointed:** a re-root, or a level-up a reviewer asks for in the same world, changes the deciding lessons and the
+decision form, never one more correction in the same chain. task4 ran ten architectures and task10 seven, most adding
+one correction to the same order or commit chain, and both runs landed every one that ran; the client's templating
+page sends that pattern back at severity 2. The new card's `skeleton` is screened against the slot's own lineage
+(`fingerprint` Part 1b), and a severity 1 or 2 match there BLOCKs. **No same-day serial re-roots without new
 evidence**: a re-root needs the runs, the judge or the leak reader to have killed the version it replaces. A build is
 **retired** only on the author's word: a `## Retired` section in the design note, `status` `RETIRED`, every card kept,
 committed `RETIRED`.

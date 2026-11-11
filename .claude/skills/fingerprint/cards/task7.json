@@ -325,5 +325,37 @@
   "rounding opener": "",
   "deliverable set": "xlsx"
  },
- "registered": "2026-11-10T00:50:26Z"
+ "registered": "2026-11-10T00:50:26Z",
+ "skeleton": {
+  "decision_form": "allocation_under_budget",
+  "answer_pattern": "naive_set_swaps_members",
+  "lessons": [
+   "transport_effect_modifiers",
+   "self_selection_into_treatment",
+   "instrument_noncompliance",
+   "queue_or_capacity_replay"
+  ],
+  "mechanisms": [
+   "controls_saving_with_empty_share_of_week",
+   "insulation_saving_with_roof_per_floor",
+   "roofers_pace_limits_completion"
+  ],
+  "detection": [
+   "second_source_at_other_grain"
+  ],
+  "moves": [
+   "instrument_on_assignment",
+   "transport_by_effect_modifiers",
+   "replay_event_by_event"
+  ],
+  "file_roles": [
+   "test_or_trial_register",
+   "primary_record",
+   "second_grain_source",
+   "governing_standard",
+   "quotes_or_costs",
+   "schedule_or_plan",
+   "unused_distractor"
+  ]
+ }
 }

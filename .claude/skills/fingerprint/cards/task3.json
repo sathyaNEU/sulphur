@@ -425,5 +425,36 @@
   "second-sentence opener": "they",
   "rounding opener": "expected",
   "deliverable set": "docx+xlsx"
+ },
+ "skeleton": {
+  "decision_form": "ranked_list_under_cap",
+  "answer_pattern": "naive_set_swaps_members",
+  "lessons": [
+   "extrapolation_beyond_observed_range",
+   "observation_window_coverage",
+   "normal_period_correction"
+  ],
+  "mechanisms": [
+   "overmarsh_transfer_bends",
+   "flow_dependent_high_water_wet_spring_campaign",
+   "street_sensor_outage_winter"
+  ],
+  "detection": [
+   "naive_depends_on_what_it_should_not",
+   "residual_by_subgroup"
+  ],
+  "moves": [
+   "per_unit_model_then_rank",
+   "extrapolate_form_chosen_at_edge",
+   "long_record_normalisation"
+  ],
+  "file_roles": [
+   "exogenous_long_record",
+   "primary_record",
+   "second_grain_source",
+   "reference_register",
+   "governing_standard",
+   "unused_distractor"
+  ]
  }
 }

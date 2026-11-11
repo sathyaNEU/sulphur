@@ -122,5 +122,26 @@
       "driver": "The decisive quantity is how many requests it takes to spend a binding resource whose budget is stated for the whole period, because each request draws only on the capacity of the one interval it is booked into; a plan that values every use correctly but files one request against the period's whole budget reaches one interval's share, so the constrained candidates need one request per interval and the unconstrained candidates give up that many places under the cap."
     }
   ],
-  "notes": "Re-root drawn 2026-10-12, architecture 3. A first architecture-3 draw (a Swedish pet insurer's older-dog renewal increases, composition_mix, shape 10) was withdrawn before registration: guard BLOCK against task125 v2, registered ahead of it in draw order. This draw: Banking, Credit & Financial Risk / collections-recovery (the client task type serving Opportunity Sizing). stump_strategy causal_design: the decisive move is the comparison the design implies (the over-capacity overflow), not a filed rule. Gate signal_vs_noise_or_hold: the call is a hold forced by a computed blocking quantity (the best centre's rolls prevented a year, London 495, against the funding rule's 694). Personas drawn with guard.py names --geo Canada --seed 128."
+  "notes": "Re-root drawn 2026-10-12, architecture 3. A first architecture-3 draw (a Swedish pet insurer's older-dog renewal increases, composition_mix, shape 10) was withdrawn before registration: guard BLOCK against task125 v2, registered ahead of it in draw order. This draw: Banking, Credit & Financial Risk / collections-recovery (the client task type serving Opportunity Sizing). stump_strategy causal_design: the decisive move is the comparison the design implies (the over-capacity overflow), not a filed rule. Gate signal_vs_noise_or_hold: the call is a hold forced by a computed blocking quantity (the best centre's rolls prevented a year, London 495, against the funding rule's 694). Personas drawn with guard.py names --geo Canada --seed 128.",
+  "skeleton": {
+    "decision_form": "rank_n_name_one",
+    "answer_pattern": "naive_leader_drops_winner_climbs",
+    "lessons": [
+      "treatment_changes_who_is_observed"
+    ],
+    "mechanisms": [
+      "uncontactable_marked_only_when_reached"
+    ],
+    "detection": [
+      "natural_experiment_in_record"
+    ],
+    "moves": [
+      "refit_comparison_on_unaffected"
+    ],
+    "file_roles": [
+      "governing_standard",
+      "primary_record",
+      "event_timeline"
+    ]
+  }
 }

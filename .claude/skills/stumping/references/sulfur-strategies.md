@@ -208,6 +208,26 @@ From `strategies.md` Part 6 and `../SKILL.md` Part 9, in one place. Each is a fo
 - **A planted defect deciding**: a copied block, test rows, a shifted clock, a hidden extract. Sulfur's examples 1,
   4, 13 and 14 carry planted-looking defects that decided nothing, which is the only legal use.
 
+## Measured in Sulfur (the run record to 2026-11-11)
+
+Two `sulfur-record.md` rows move a label; the forms below were landed by both runs in two rounds or more, so each is a
+reflex in the careful column whatever its label above (`precedents.json` R01 to R20 carry the runs' own words):
+
+| Form | Sulfur rows | Now |
+|---|---|---|
+| A forecast form chosen by a hold-out the run builds itself (two calibrations by leave-one-out, a family by a chronological winter, a breakpoint on held-out configurations) | task16 arch 1, task10 arch 6, task4 arch 9 | DOES NOT WORK as a result's difficulty; it lives only where the record's hold-out cannot see the condition the forecast window has (`validation_cannot_see_condition`) |
+| A mechanism one plot or one group-by of one file shows | task2 arch 3, task3 arch 2 and 3, task5 arch 2, task7 arch 4 round 2, task8 arch 17 | DOES NOT WORK |
+| A capped availability ceiling, the rebound after a window, a predictive tail, commissioning by competing risks | task10 arch 6, task10 arch 7 | DOES NOT WORK (R05 to R07) |
+| A trial's effect carried to the target along a modifier one join or one second file away | task7 arch 7, task16 arch 2 (the judge's first pass) | DOES NOT WORK alone; `transport_effect_modifiers` is on five of our live builds and one accepted client task (`skeleton.py check` warns on it) |
+| One more correction inside a scaffold the runs already landed | task4 arch 6 to 10, task10 arch 4 to 7 | DOES NOT WORK; the skeleton guard blocks it on the slot's lineage |
+
+**Live, from the client's level 4 and 5 tasks** (where frontier runs lost; `../SKILL.md` Part 1b): the split carried
+to the decision (L09 to L12), the assumption a run names and waves through made false (N01 to N07, L06, L07), units
+selected by the outcome's own history (L13, L14), a measured response and the marginal unit (L15, L17), the system's
+net against the unit's own (L16), a shallow path that passes its own checks (L26 to L31). Each is a kind of
+judgment: the client's tasks themselves are in `../../fingerprint/corpus/client_skeletons.json` and may not be
+reskinned. The first Sulfur build on each moves its label with its rows.
+
 ## Keeping this file current
 
 The index is regenerated from the export whenever the client re-exports it. A Sulfur run or review that lands a

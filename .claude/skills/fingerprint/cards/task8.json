@@ -640,5 +640,31 @@
     "second-sentence opener": "i",
     "rounding opener": "pass",
     "deliverable set": "docx+xlsx"
+  },
+  "skeleton": {
+    "decision_form": "dial_or_cap_setting",
+    "answer_pattern": "figure_crosses_bar",
+    "lessons": [
+      "cancellation_of_offsetting_effects",
+      "transport_effect_modifiers"
+    ],
+    "mechanisms": [
+      "reading_cost_with_stem_length",
+      "everyday_context_advantage"
+    ],
+    "detection": [
+      "residual_by_subgroup"
+    ],
+    "moves": [
+      "transport_by_effect_modifiers",
+      "fixed_plus_covariate_fit"
+    ],
+    "file_roles": [
+      "reference_register",
+      "primary_record",
+      "governing_standard",
+      "test_or_trial_register",
+      "unused_distractor"
+    ]
   }
 }

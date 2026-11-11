@@ -79,7 +79,8 @@ answer):
 levels 1 and 2 are sent back, level 3 (one real method step) is a judgment call kept about half the time, levels 4
 (two or three connected judgments) and 5 (many independent judgments, different shortcuts landing on different wrong
 answers) are the target. Every build names its level in the note and aims at 4 or 5. Learn from the examples, never
-template them.
+template them. Each level 4 and 5 task's prompt, inputs, reference solution and review notes are in
+`guidelines/client/depth-scale-2026-11-09-detail.md`: the bar to beat, never a skeleton to copy.
 
 **Thinner, not banned.** A legitimate method choice that carries most of the score, with nothing planted, is a
 valid task but a thin one; the client asks for the results around that step. We build the results around it.
@@ -117,6 +118,27 @@ Each was paid for by a landed or returned build (`stumping/references/evidence.m
   group-by of one file shows it, so the careful column earns it.
 - **Devices whose discovery is their remedy are work orders**: the hygiene battery (duplicates, clocks, re-keyed
   records, latest-version rules) is run by reflex and prices nothing.
+
+## What Sulfur measured, binding on every draw
+
+Thirty platform rounds to 2026-11-11 (`stumping/references/sulfur-record.md`):
+
+- **No round has yet come back under 60 with losses spread across the results**, and the paper pair estimates were
+  40 to 60 points high (38.4 measured about 97; 46.5 about 95). So a careful-column loss counts only where a frontier
+  run has been seen to lose that kind of move (`stumping/references/precedents.json`, from our runs and the client's
+  pages); `effort.py` grades every uncited cell Right and holds the cited pair estimate to 50.
+- **The runs lose in six places** (`stumping` Part 1b): the split they see and then drop before the decision; the
+  assumption they name and wave through, made false by the world's process and testable from another file; units
+  selected by the outcome's own history; a response they assume instead of measuring, and the marginal unit; the
+  system's net against the unit's own; a shallow path that passes its own checks. Build there.
+- **The two approved builds** (task6 v7 and task457, shipped as task14 architecture 1) share an anatomy, never a
+  skeleton: the answer is a quantity the primary record does not hold, rebuilt from the relation between two records
+  at different grains or times, every factor across the data, the shortcuts on different wrong answers, the margin
+  held against every variant; task457 was approved once its prompt opened on why the answer has to be an estimate.
+- **A landed scaffold is never re-pointed** (task4 architectures 6 to 10, task10 architectures 4 to 7, all landed): a
+  re-root changes the deciding lessons and the decision form, and the skeleton guard checks the slot's lineage.
+- **Forcing has two sides** (six returns on determinism or forcing): every defensible rival on the golden's side, the
+  shortcuts across the line, and the call holding when each fitted input moves by its spread (`effort.json` forcing).
 
 ## Skill routing (binding)
 
@@ -182,7 +204,12 @@ gate in one pass and prints one summary; run it instead of the scripts one by on
 Mark cards under `fingerprint/cards/` (filed as `markNN.json`, Mark's taskNN: 110, 111, 114, 115, 117, 119, 120, 124,
 126, 128, 132, 135, 162, 169, 175, 179, 182, 196, 253 and 258) and their shipped-ledger rows are the
 already-submitted baseline: a Sulfur build that repeats a Mark build's driver, shell or data structure is a duplicate.
-Personas come from `guard.py names`, never typed.
+Personas come from `guard.py names`, never typed. **Every card carries the client's skeleton** (decision form,
+deciding lessons, detection, resolving moves, file roles, answer pattern): `fingerprint/skeleton.py`, run inside
+`guard.py check`, refuses a near copy, a templated build or a variant of anything on file, of the slot's own lineage
+or of any task the client has shown us (`fingerprint/corpus/client_skeletons.json`: the templating page's pairs, the
+17 depth-scale tasks, the 15 examples), and a deciding lesson the dataset already teaches twice; the client swaps the
+nouns and counts, so a new setting never clears it.
 
 **Determinism is a construction, not an inspection**: invoke `determinism-check` while the results chain and the
 generator are written. Its judge is spawned at stage 4, by `/fix-determinism`, or when the author asks.
@@ -264,6 +291,11 @@ band or is ruled out by named data. Every term and convention has a row in the d
 a sentence or `same call`, asserted in `checks.py`; `precut.py` refuses an open one. The grader compares every
 figure to the golden, so a later result built on a wrong earlier figure is wrong unless the result names an input
 of its own; the chain is designed so one slip costs only the results that depend on it.
+
+**The next-level contract** (every card registered from `skeleton.RULE_FROM`, 2026-11-11; a WARN for builds filed
+before it): the card's skeleton clears `skeleton.py check`; the design note carries `## Frontier check` (`Precedents:`,
+`Shallow path checks:`, `Assumption made false:`, `Forcing:`, `Noun swap:`); `effort.json` cites a precedent for every
+careful-column loss and records `forcing` on both sides; `precut.py` and `effort.py` refuse any of them missing.
 
 **Every chain is bespoke.** The results come from the dataset's own structure, and the design note says why in one
 data-native sentence. The client's examples, strategies and worked illustration are direction, never templates:

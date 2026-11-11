@@ -127,5 +127,26 @@
  ],
  "notes": "Task type: energy-systems-utilities / asset-condition-maintenance serves Forecasting; a water network's leakage is the condition of its mains and service pipes, and pressure management is the intervention whose effect the field forecasts by FAVAD. Strategy label: other (an intervention's effect replayed at the hour a device acts, on recorded upstream values, rather than carried from the hour it acts hardest); binding_constraint was the first label and task177 v4 holds it in the window, and the step is not a limit deciding feasibility, so other is the honester key. Generators: G7 decisive (when can the valve physically lower the pressure), G13 beside it (the 2027-28 assessment year against the night the design report quotes). WARN repeat.gate_g and overuse.gate_g answered: forecasting is the mechanism that carries the stump here (a forward assessment of an intervention not yet installed), and the fine mechanism differs from task281's (a driver population read past its follow-up) and from every forecasting card on file (nearest driver 0.07). Org family professional_services (the company's delivery partner), not utility_or_infrastructure, which task281 holds in the window, and that is the honest seat: the partner carries the contracted reduction. Redrawn at stage 2 after the window moved (task304 and task177 v4 filed after this card): role operations_director to field_unit_lead (the partner's Northern zone delivery lead, who runs the find-and-fix gangs the call sizes, the honest seat), context artifact monitoring_export to close_out_summary (Lynmere's 2025-26 district leakage assessment is the closed year's assessment, issued after the year end). Shape 02 to 07: the call's monthly figures sit on its own population and are not graded; the criteria come from the Phase 4 candidates' grid and the zone balance. Forcing event redrawn at stage 2 from launch_or_rollout (task304 holds it) to purchase_order_or_contract (the contract's 2027-28 delivery plan instructs the gangs; task179 has left the window).",
  "client_domain": "energy-systems-utilities",
- "registered": "2026-10-28T04:48:39Z"
+ "registered": "2026-10-28T04:48:39Z",
+ "skeleton": {
+  "decision_form": "go_hold_stop_on_figure",
+  "answer_pattern": "figure_crosses_bar",
+  "lessons": [
+   "device_setting_replay"
+  ],
+  "mechanisms": [
+   "fixed_outlet_prv_caps_pressure"
+  ],
+  "detection": [
+   "layout_or_physics"
+  ],
+  "moves": [
+   "replay_event_by_event"
+  ],
+  "file_roles": [
+   "governing_standard",
+   "primary_record",
+   "exogenous_long_record"
+  ]
+ }
 }

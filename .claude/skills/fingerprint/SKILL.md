@@ -1,6 +1,6 @@
 ---
 name: fingerprint
-description: The anti-repeat system for task builds. Every build has a fingerprint card under cards/ (domain, subdomain, niche, objective, prompt shape, decision type, gap, pattern, generators, Gate G mechanism, calibration form, context artifact, stakeholder role, spine, world, deliverables, opening move, and a driver sentence with the domain nouns stripped), and guard.py checks a proposed draw against every card before the ladder is written, so the same kind of project is never drawn twice. Use at the start of every new build and every re-root (guard.py recent, coverage, suggest), when the draw is fixed and before any data is cut (guard.py check, then register), after the pack is cut (guard.py surface), and whenever the author asks whether a build repeats an earlier one. Mandatory, mechanical and free, it spawns nothing; a promoted pair is read side by side by the author. The 20 Project Mark cards kept (110, 111, 114, 115, 117, 119, 120, 124, 126, 128, 132, 135, 162, 169, 175, 179, 182, 196, 253 and 258), filed as markNN.json (Mark's taskNN), with their shipped-ledger rows, are the already-submitted baseline every Sulfur draw is checked against.
+description: The anti-repeat system for task builds. Every build has a fingerprint card under cards/ (domain, subdomain, niche, objective, prompt shape, decision type, gap, pattern, generators, Gate G mechanism, calibration form, context artifact, stakeholder role, spine, world, deliverables, opening move, and a driver sentence with the domain nouns stripped), and guard.py checks a proposed draw against every card before the ladder is written, so the same kind of project is never drawn twice. Every card also carries the client's own skeleton (decision form, deciding lessons, detection, resolving moves, file roles, answer pattern), and skeleton.py compares it element by element with every card, every lineage entry and every task the client has shown us (corpus/client_skeletons.json: the Templated Task Examples pairs, the 17 depth-scale tasks, the 15 examples) at the client's three severities (near copy, templated, variant), counts how often each lesson is already taught, and refuses a reskin, a re-pointed scaffold or a lesson taught twice, never cleared by differentiation. Use at the start of every new build and every re-root (guard.py recent, coverage, suggest), when the draw is fixed and before any data is cut (guard.py check, then register), after the pack is cut (guard.py surface), and whenever the author asks whether a build repeats an earlier one. Mandatory, mechanical and free, it spawns nothing; a promoted pair is read side by side by the author. The 20 Project Mark cards kept (110, 111, 114, 115, 117, 119, 120, 124, 126, 128, 132, 135, 162, 169, 175, 179, 182, 196, 253 and 258), filed as markNN.json (Mark's taskNN), with their shipped-ledger rows, are the already-submitted baseline every Sulfur draw is checked against.
 ---
 
 # Fingerprint
@@ -58,6 +58,83 @@ weak    The analysis has to account for an important constraint in the data.
 strong  The decisive quantity is a per-unit floor recovered from a closed corpus of past
         determinations, and applying it removes the largest naive candidates from the total.
 ```
+
+## Part 1b. The skeleton: the client's own duplicate test
+
+The client compares two tasks on their skeleton, not their setting (its Templated Task Examples page, read
+2026-11-11): five send-backs, each a pair from one fellow, laid side by side element by element. "The reviewer reads
+both tasks in full, swaps the nouns of one into the other (stores become suppliers, valves become shrubs), and counts
+how many parts of the analysis carry across unchanged. A change of domain does not reset the count." And a second
+question: "does the dataset already teach this lesson? If two accepted tasks already turn on the same deciding step,
+a third copy teaches a model very little, even when it is built from scratch." Its three severities are all sent
+back: **near copy** (the same trap, method and file roles), **templated** (the same deciding lesson inside the same
+scaffold with one part re-pointed: new physics, a different estimator), **variant** (real new work, but the step that
+decides the answer, or the decision skeleton around it, is already in the dataset).
+
+So every card carries `skeleton`, in `skeleton_vocab.json` keys:
+
+| Element | Holds |
+|---|---|
+| `decision_form` | what is chosen and how (rank and name one; the k largest over a screen with a runner-up; act only if an interval clears a line; a set over a filed line; a count to a standard ...) |
+| `answer_pattern` | the result's shape (the winner climbs from far down; k of n pass with budget slack; the point says act and the interval says no ...); generic patterns identify nothing |
+| `lessons` | the deciding lessons, **the one the call turns on first** (83 keys at the grain the client's page uses: "a naive interval that treats correlated units as independent", "the noise of the planned design, not the raw spread") |
+| `mechanisms` | the build's own physics as free slugs, so a near copy that keeps the mechanism is told from a templated build that re-points it |
+| `detection` | how the solver notices each |
+| `moves` | the resolving moves |
+| `file_roles` | which file plays which part |
+
+Lineage entries carry theirs, so a re-root meets its own dead architectures. `skeleton.py` (imported by `guard.py
+check`, so register, heart and `/approve` all run it) compares the draw with every card, every lineage entry and
+everything the client has shown us (`corpus/client_skeletons.json`: the five pairs and their sent-back siblings, the
+17 depth-scale tasks, the 15 examples), with no window and no differentiation:
+
+- **severity 1** when every deciding lesson, its resolving move, the mechanism, half the specific file roles and a
+  specific decision form or answer pattern carry across; **severity 2** when every deciding lesson and a resolving
+  move carry into the same specific decision form or answer pattern; **severity 3** when the lesson the call turns on
+  is decided inside the same specific decision form, or a shared lesson sits inside the same specific form and
+  pattern, or the specific form and pattern, the resolving move and the file roles carry with new lessons. Common forms
+  (go or hold on a figure, a forecast with its range, a set over a line, rank and name one, one of a few options, a
+  dial) and common patterns (the naive figure across the bar, shortcuts on distinct wrong answers) identify nothing on
+  their own; the client's pages name specific ones ("rank six, name one" with its minute, "twelve units, at most
+  three, a runner-up", "act only if the whole interval clears"). Severity 1 and 2 BLOCK; severity 3 BLOCKs against a
+  task that teaches when the chain has two lessons or fewer or the pair shares two; on the slot's own lineage
+  severity 1 and 2 BLOCK.
+- **The lesson count** counts the tasks that teach: the client's accepted and level 3 tasks and our approved builds
+  (`corpus/approved.json`; a card records identity, never outcome). The deciding lesson taught by two or more BLOCKs a
+  chain of one or two lessons; more than half the chain's lessons taught twice BLOCKs any chain; otherwise each taught
+  lesson is a WARN (it may be one step among several, as task6 v7's design weights sit beside two judgments no task
+  teaches). A lesson on two or more of our own live builds is a WARN (`skeleton.house_lesson`): once they are
+  accepted, a third reads as a re-set.
+- **The house shell:** a specific decision form with a specific answer pattern already on two live builds BLOCKs (the
+  client's "a third task with the ... shell reads as a house template"); a form on four live builds WARNs.
+- A card registered before `skeleton.RULE_FROM` meets every skeleton rule as WARN, so no build already past design
+  flips; every later card and every unfiled draft meets it in full, and a card with no skeleton BLOCKs.
+
+```
+python3 .claude/skills/fingerprint/skeleton.py check <taskNN or scratch card>   # the element-by-element read
+python3 .claude/skills/fingerprint/skeleton.py lessons --min 2                  # lessons already taught twice
+python3 .claude/skills/fingerprint/skeleton.py matrix                           # every pair on file at 1 to 3
+python3 .claude/skills/fingerprint/skeleton.py selftest                         # the calibration below
+```
+
+**The calibration it is held to** (`selftest`): the client's five pairs come back at 1, 2, 2, 3 and 3, its own
+reading; task4 architecture 7 against architecture 6 is flagged (one term added to the same chain); the two builds
+the client approved (task6 v7 and task457, shipped as task14 architecture 1) stay apart and each passes as a new
+draw; every accepted client task at level 4 or 5 and every example passes as a new draw against the rest, except the
+overlaps the client's corpus itself holds (example 14 is the recipe app's interval-unit lesson in its k-of-n shell;
+three or four accepted tasks already turn on interference, the interval unit and the split carried to the decision,
+so a new draw on one of them is the third copy); and a plain forecast with untaught lessons passes. Change a rule
+only with the selftest passing. **What the matrix showed on 2026-11-11:** no build of ours is one of the client's five
+examples (both Mark copies and every Sulfur pack were screened for the page's proper nouns: two village names appear
+only inside public registers and a place-name list). The exposure is our own: task4's lineage at severity 1
+(architecture 7 against 6), 2 (9 against 6 and 7) and 3 (10 against all four before it); task10 architecture 5, the
+returned planted-factor cut, refused as a new draw (its one lesson, interference, is taught by four accepted client
+tasks); task12 at severity 3 against the client's patrols task; and house lessons on our live builds
+(`extrapolation_beyond_observed_range` on four, `transport_effect_modifiers` on five).
+
+**Label honestly.** A skeleton is written from the design note and the results chain, never to pass: when two keys
+fit, take the one a reviewer holding both tasks would use, and add a vocabulary key only when none is honest (reason
+in the card's `notes`).
 
 ## Part 2. The procedure
 
@@ -123,7 +200,8 @@ python3 .claude/skills/fingerprint/guard.py register <scratch>/task98_card.json
 ```
 
 The registered card is committed at once with `pipeline.json` and the design note (`DRAWN (taskNN)`), so every
-other session's guard sees the draw.
+other session's guard sees the draw. The draft's `skeleton` is filled before `check` (Part 1b); run
+`skeleton.py check <scratch card>` first, because its element-by-element table names what to redraw.
 
 Clear every BLOCK by redrawing its axis; answer each WARN in one design-note line. `register` refuses a
 BLOCK; `--force` is the author's override, reason in `notes`.
@@ -184,6 +262,12 @@ BLOCK if any rule blocks, else WARN, else PASS; exit 1 on BLOCK.
 | `driver.text` / `driver.near` | BLOCK unless differentiated / WARN | driver similarity 0.30 and up / 0.12 to 0.30, every driver on file |
 | `shell.template` | BLOCK, never cleared by differentiation | the prompt's shell (question form, second-sentence opener, deliverable set) and the structural driver (gap, pattern, Gate G) both repeat an approved or delivered build, anywhere on file: the combination the portal's Duplicate finding named (task179 v3 against task175) |
 | `shell.repeat` | WARN | the prompt's shell alone repeats an approved or delivered build; reword at the role level, never the verb |
+| `skeleton.near_copy`, `skeleton.templated` | BLOCK, never cleared by differentiation | severity 1 or 2 against any card, lineage entry or client task (Part 1b) |
+| `skeleton.variant` | BLOCK, else WARN | severity 3 against a task that teaches, when the chain has two lessons or fewer or the pair shares two |
+| `skeleton.own_lineage` | BLOCK at 1 and 2, WARN at 3 | the slot's own earlier architectures: a landed scaffold re-pointed |
+| `skeleton.lesson_taught`, `skeleton.lesson_once` | BLOCK, else WARN | the deciding lesson taught twice on a thin chain, or more than half the chain taught; once is a WARN |
+| `skeleton.house_shell` | BLOCK at four live builds, WARN at three | the decision form's use across live builds |
+| `skeleton.missing`, `skeleton.vocab` | BLOCK | no skeleton, or a key not in `skeleton_vocab.json` (WARN for a card registered before `skeleton.RULE_FROM`) |
 | `shell.lineage` | BLOCK | a re-root keeps a dead architecture's shell (task118 kept one across four worlds) |
 | `tell.names` | BLOCK | a shared multi-word invented name |
 | `people.full`, `people.inside` | BLOCK | a full name reused anywhere; two personas in one build sharing a first name or surname |

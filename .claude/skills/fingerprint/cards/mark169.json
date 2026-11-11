@@ -197,5 +197,26 @@
     }
   ],
   "notes": "redrawn axes at the probe: context_artifact register (blocked against task249) to capacity_report; org_family government_agency (blocked against task273) to research_or_statistics_office, the commission that owns the projection; forum committee_or_panel (blocked against task249) to council_or_assembly",
-  "registered": "2026-10-22T18:42:06Z"
+  "registered": "2026-10-22T18:42:06Z",
+  "skeleton": {
+    "decision_form": "forecast_figure_with_range",
+    "answer_pattern": "figure_crosses_bar",
+    "lessons": [
+      "route_pre_emption"
+    ],
+    "mechanisms": [
+      "revocation_pre_empted_court_route"
+    ],
+    "detection": [
+      "record_time_against_event_time"
+    ],
+    "moves": [
+      "replay_event_by_event"
+    ],
+    "file_roles": [
+      "governing_standard",
+      "primary_record",
+      "second_grain_source"
+    ]
+  }
 }

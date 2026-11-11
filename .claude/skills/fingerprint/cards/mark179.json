@@ -117,5 +117,26 @@
     }
   ],
   "notes": "Architecture 5, re-root 2026-10-28. Probes retired by CLAUDE.md; stump power argued on paper against the nine survivor properties (design note ## Draw).",
-  "registered": "2026-10-28T00:52:11Z"
+  "registered": "2026-10-28T00:52:11Z",
+  "skeleton": {
+    "decision_form": "forecast_figure_with_range",
+    "answer_pattern": "figure_crosses_bar",
+    "lessons": [
+      "exposure_seen_only_in_linked_record"
+    ],
+    "mechanisms": [
+      "victimisation_raises_risk_two_years"
+    ],
+    "detection": [
+      "second_source_at_other_grain"
+    ],
+    "moves": [
+      "link_records_by_parsed_key"
+    ],
+    "file_roles": [
+      "governing_standard",
+      "primary_record",
+      "second_grain_source"
+    ]
+  }
 }

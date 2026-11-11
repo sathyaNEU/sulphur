@@ -141,5 +141,40 @@
     "question form": "how-much",
     "second-sentence opener": "i",
     "deliverable set": "xlsx"
+  },
+  "skeleton": {
+    "decision_form": "allocation_under_budget",
+    "answer_pattern": "naive_set_overfunds",
+    "lessons": [
+      "vintage_or_cohort_drift",
+      "unit_identity_across_systems",
+      "analog_event_calibration",
+      "completion_of_young_cohorts"
+    ],
+    "mechanisms": [
+      "intro_offer_step_up_exit",
+      "reading_log_usage_decline_newest_starts",
+      "price_rise_excess_cancellation",
+      "household_returns_under_new_numbers"
+    ],
+    "detection": [
+      "second_source_at_other_grain",
+      "natural_experiment_in_record"
+    ],
+    "moves": [
+      "per_cohort_curves",
+      "link_records_by_parsed_key",
+      "analog_calibration_loo",
+      "complete_cohorts_from_later_rates"
+    ],
+    "file_roles": [
+      "governing_standard",
+      "primary_record",
+      "second_grain_source",
+      "schedule_or_plan",
+      "quotes_or_costs",
+      "crosswalk_or_migration_map",
+      "unused_distractor"
+    ]
   }
 }

@@ -113,5 +113,37 @@
     "second-sentence opener": "i",
     "rounding opener": "hours",
     "deliverable set": "xlsx"
+  },
+  "skeleton": {
+    "decision_form": "dial_or_cap_setting",
+    "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
+    "lessons": [
+      "simulation_with_fitted_inputs",
+      "extrapolation_beyond_observed_range",
+      "serial_or_common_shock_dependence",
+      "censored_or_capped_observation"
+    ],
+    "mechanisms": [
+      "grant_use_bursts",
+      "duration_tail_censored_at_limit",
+      "rack_level_outages",
+      "rework_after_node_failure"
+    ],
+    "detection": [
+      "back_test_on_held_out_period"
+    ],
+    "moves": [
+      "simulate_with_fitted_inputs",
+      "censored_survival_model",
+      "extrapolate_form_chosen_at_edge"
+    ],
+    "file_roles": [
+      "primary_record",
+      "reference_register",
+      "governing_standard",
+      "schedule_or_plan",
+      "event_timeline",
+      "unused_distractor"
+    ]
   }
 }

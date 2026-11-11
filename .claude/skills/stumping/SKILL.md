@@ -1,6 +1,6 @@
 ---
 name: stumping
-description: Design where a task is hard, to the client's bar of 2026-11-09 (difficulty throughout the analysis, never one hidden or planted thing that flips the answer). Builds the results chain (four or more checkable results across three or more of the fourteen areas, each pinned with a band and the hurried analyst's failure), screens every hidden factor against the client's three conditions, prices the effort test (quick, careful but hurried, thorough) with effort.py on the generator's own passes, and draws a chain, answer shape and weight no build on file repeats. Mark's measured record of what models execute is kept as cautions on every result. references/design-note-template.md is the note precut.py reads; references/sulfur-strategies.md indexes the client's per-domain strategies; references/sulfur-record.md holds what the Sulfur runs and reviews measured. Use when drawing, designing, hardening or re-rooting a build.
+description: Design where a task is hard, to the client's bar of 2026-11-09 (difficulty throughout the analysis, never one hidden or planted thing that flips the answer) and at the next level the Sulfur run record demands: results priced lost only where a frontier run has been seen to lose (references/precedents.json, twenty reflexes and forty-three losses and waved-through assumptions from our runs and the client's pages), built on the six places runs lose (the split carried to the decision, the assumption a run names and waves through made false, selected units, a measured response, the system's net, a shallow path that passes its own checks), forced on both sides, and never a reskin of a client task or our own lineage (fingerprint skeleton guard). Builds the results chain (four or more checkable results across three or more of the fourteen areas, each pinned with a band and the hurried analyst's failure), screens every hidden factor against the client's three conditions, prices the effort test with effort.py on the generator's own passes (the cited pair estimate), and writes the note's Frontier check. references/design-note-template.md is the note precut.py reads; references/sulfur-strategies.md indexes the client's per-domain strategies; references/sulfur-record.md holds what the Sulfur runs and reviews measured. Use when drawing, designing, hardening or re-rooting a build.
 ---
 
 # Stumping
@@ -10,6 +10,8 @@ description: Design where a task is hard, to the client's bar of 2026-11-09 (dif
 > once caught, flips the whole answer." (`guidelines/client/deep-reasoning.md`)
 
 This skill decides where a task is hard. Work Part 7 first (the draw), then Parts 1 to 6. Read before designing:
+`guidelines/client/depth-scale-2026-11-09-detail.md` (the client's level 4 and 5 tasks in full, the bar to beat and
+never a skeleton to copy), `references/precedents.json` (where the runs lose and what they do by reflex),
 `guidelines/client/project-lead-review-2026-11-09.md` (why tasks that passed every check here came back),
 `guidelines/client/deep-reasoning.md` (the standard, the fourteen areas, the effort test, the shallow hidden
 factor), the strategies for the assigned domain group in `guidelines/client/learning-modules/stumping-strategies.md`
@@ -30,12 +32,40 @@ in several places; the reviewer reading the design finds no one thing that flips
 runs agree on what a frontier run does unprompted: it reads every file and every document and executes any sentence
 that names a step; it runs the hygiene battery (duplicates, clocks, re-keyed records, latest versions); it runs the
 field's textbook method for each quantity by reflex; it models any pattern that one plot or one group-by of one file
-shows (`sulfur-record.md`, five rounds: "noticing was the whole stump"); it holds out, back-tests and bootstraps
-(task7 arch 5's run held out 122 pairs and bootstrapped unasked). What it does in a hurry, by the client's table
-and our runs: stops at the first account that reconciles, never tests the rival explanation, looks at a handful of
-series where the question needs all of them, estimates a quantity and never carries it into the decision, reports
-pieces that do not add back to the total, and checks robustness only by varying nearby choices. **Every result that
-prices the task lives in that second list.**
+shows (`sulfur-record.md`, five rounds: "noticing was the whole stump"); it holds out, back-tests, bootstraps and
+stress-tests a fitted rate by 20 per cent (task7 arch 5's run held out 122 pairs and bootstrapped unasked). What it
+does in a hurry, by the client's table and our runs: stops at the first account that reconciles, never tests the
+rival explanation, looks at a handful of series where the question needs all of them, estimates a quantity and never
+carries it into the decision, reports pieces that do not add back to the total, and checks robustness only by
+varying nearby choices. **Every result that prices the task lives in that second list**, and only where a run has
+been seen to lose there: `references/precedents.json` holds twenty reflexes the runs made unprompted and forty-three
+places they lost or waved an assumption through, each with its run or client page.
+
+**Thirty Sulfur rounds, measured.** No Sulfur round has yet come back under 60 with analytical losses spread across
+the results. In most rounds both runs landed every graded figure, and the paper pair estimates were 40 to 60 points
+high: task10 arch 6 at 38.4 on paper came back at about 97, task16 arch 1 at 46.5 at about 95, and the stage 4
+judges' own first passes priced task16 arch 2 (46.7 on paper) at about 70 and task13 arch 2 (16.2) at about 73. The
+levelled-up task10 arch 7 and task4 arch 10 went the same way (the author's report of 2026-11-11). So a careful
+column cell is priced lost only when a precedent shows a frontier run losing that kind of move (`effort.py`, Part
+3.2), and the next draw is built where Part 1b says the runs lose.
+
+**What the two approved builds share** (the author's report of 2026-11-11: task6 v7, the latency error budgets, and
+task457, the conflict-of-interest docket shipped as task14 architecture 1). Their skeletons share nothing (the
+selftest in `fingerprint/skeleton.py` holds them apart), so this is an anatomy, not a template:
+- the answer is a quantity the primary record does not hold: a sample whose inclusion another unit set, a store that
+  no longer covers the month, a self-report that saw only the payments made before the day it was filed;
+- the correction comes from the relation between two records at different grains or times (each kept span's root
+  against the balancer's hourly counts; each disclosure's submission day against the register's payment dates),
+  never from a column, a document or one cross-tab;
+- every factor runs across the data the way the process makes it (a third of the faculty file in December by habit;
+  every internal service inherits several edge services' keep shares);
+- the shortcuts file different wrong answers (five wrong lists on task6; every rung of task457's ladder a different
+  docket), and the margin holds against every defensible variant (task457: every construction within 10 per cent of
+  the golden files the golden docket, the fifteenth at 1.44 times the sixteenth);
+- task457 was first returned on domain fit (2026-11-10, "compliance lookups ... under a stated rule") and approved
+  after a prompt that opens on why the answer must be an estimate: "Open Payments won't publish 2026 until after the
+  Conflict of Interest Committee's February 2027 docket, so the docket has to rest on estimates of each faculty
+  member's 2026 remuneration from a single manufacturer, built from what they self-reported" (`guide-to-prompt`).
 
 **What changed on 2026-11-09.** The project lead returned the pattern this harness built for fourteen builds: one
 deep step, hidden in a constructed world, with a ladder of rungs below it and asks coupled to it. Those builds passed
@@ -109,6 +139,86 @@ is one thing under another name. So:
 Where the decision needs a call, it rests on several results, and the Final Recommendation names what the careful
 but hurried pass would recommend and why it fails. A call that one result decides on its own puts the task back on
 one thing: the call is one graded result among the chain, never the whole price.
+
+## Part 1b. The next level: build where frontier runs actually lose
+
+The client's ten level 4 and 5 tasks (`guidelines/client/depth-scale-2026-11-09-detail.md`, each with its prompt,
+inputs, reference solution and review notes), its fifteen examples and our thirty rounds put the runs' losses in six
+recurring places. Each is a kind of judgment to build from this world's own process, never a skeleton to copy: every
+one of those tasks is in `fingerprint/corpus/client_skeletons.json`, and the guard refuses a draw that reskins one
+(`fingerprint` Part 1b). Ids in brackets are `references/precedents.json`.
+
+1. **The split carried through to the decision** (L09 to L12, L24, L25). The client's words on example 7: "runs that
+   saw that big systems respond more still made the call on the pooled figure, so the loss sits in carrying
+   heterogeneity through to the decision, not in spotting a fact." The runs see the subgroup difference and decide on
+   the pooled figure, or carry the split into one step and drop it in the next (the buyer split kept for trial and
+   dropped for volume; the competing-risk curve right and the vintages pooled; one crime trend for a robbery surge and
+   an assault fall). Price the later step the split has to reach, where the target's mix differs from the estimation
+   sample's; the split on its own is a reflex.
+2. **The assumption the run names and waves through** (N01 to N07, L04, L06, L07, L13, L35). Every frontier run writes
+   an "Assumptions and judgment calls" list: the contract scales in proportion, history stays informative, the works
+   finish on schedule, the network rate applies to the picks, the response is smooth. In our worlds those were true
+   (task10 arch 6's triage: "each thing the runs named as an untested assumption ... was true in the world"), so
+   naming them cost nothing. Make one false through the world's own process, testable from a second file at another
+   grain, and large enough to force the call; the run that names it and moves on loses the result.
+3. **The units in hand were selected** (L13, L14; the client's a5a5efb1, 17adb5ca, 4e9c0a39, example 6). Claims picked
+   because they still pay, the riskiest shops on the list, segments picked on their peak year, an option opened on the
+   busy days: the run prices them at population rates or reads their own history. The correction needs a comparison
+   built from the wider record by the same selection rule.
+4. **The response measured, and the marginal unit** (L15, L17; 279e74f2, 35842bf8). A response with its own shape (a
+   step at an hour, a threshold a queue crosses) decides where added capacity pays; the run assumes a smooth response
+   and spends the capacity where the problem looks largest.
+5. **The system's net, not the unit's own** (L16; 8ec45b05). An action's gain at one unit is partly undone at the
+   units it touches (a wake recovered downwind, incidents displaced next door, a launch's take from its own lines); the
+   run prices the unit alone.
+6. **The shallow path passes its own checks** (L26 to L31; every strong client example carries the section). The
+   hurried route reproduces an incumbent figure exactly, fits the model the standard prescribes, and its back-test,
+   placebo or nearby variants confirm it; only a check of another kind (a like-for-like cohort, a split-half
+   replication, a workload calculation, a comparison on units the change could not reach) refutes it. A hurried route
+   the run's own reflexive back-test exposes is landed: write both checks down for every priced result.
+
+**The levers are where runs lose, and most are already taught.** The client's own accepted tasks carry them: the
+split carried to the decision on five, interference on four, the interval unit on four, selection on a peak, a
+measured response and the marginal unit on two each (`skeleton.py lessons --min 2`). So a lever enters the chain as a
+supporting judgment beside a deciding lesson no task on file teaches, or as the deciding lesson only inside a chain
+of four or more whose other lessons are untaught; the guard refuses a chain of one or two lessons that turns on a
+taught one, and any chain more than half taught.
+
+**The AND, with distinct wrong answers.** At level 5 the corrections are independent and no single one crosses the
+line (bd4981a5: the weights alone 3.70, the new accounts alone 3.88, both 4.42 against 4.0), and different shortcuts
+name different answers (17adb5ca: four shortcuts, four territories). `effort.json` routes record each shortcut's
+answer, and `forcing` records where each lands against the line (Part 3.2).
+
+**The incumbent's figure, reproduced and superseded.** Several of the client's best tasks open on a figure someone
+already holds: the contractor's 3.0 per cent, the draft's 27.7 per cent fall, the board's year-on-year third, the
+cedant's life-table value, the manager's mid-October plan. The runs reproduce it exactly (R18), and the chain
+supersedes it for reasons the data prove. That is not a decoy: a decoy's number is simply wrong or a document argues
+the wrong answer, while an incumbent figure is the right computation of a shallower quantity. It may sit in the prompt
+as the stakeholder's position, with an ask that prices it on the same footing as the golden ("Corinne's mid-October
+plan needs the same figure"); Gate G still refuses a shipped artifact that ranks the candidates.
+
+**Measured dead in Sulfur** (each landed by both runs, or returned at review, at least twice; `sulfur-record.md`):
+- one more correction re-pointed inside a scaffold the runs already landed (task4 architectures 6 to 10, task10
+  architectures 4 to 7, the client's severity 2 "templated" pattern): the skeleton guard refuses it on the slot's own
+  lineage;
+- a mechanism one plot or one group-by of one file shows; a textbook method on a clean series; one table that one
+  flexible fit absorbs; the field's standard data repairs (R01 to R20);
+- a factor placed where it decides (task10 arch 5, task7 arch 6, task6 arch 6, task5 arch 3, returned as one thing);
+- a call a few per cent from its line, or bands loosely pinned (task1 arch 2 and 3, task4 arch 7 and 10, task9 arch 8,
+  task10 arch 7, returned on determinism or forcing).
+
+**The frontier check**, the note's `## Frontier check`, required in full for every card registered from the rule's
+date on (`precut.py`; a WARN for builds filed before it):
+- `Precedents:` each result the careful pass loses, with its `precedents.json` ids (the same ids sit on the result in
+  `effort.json`);
+- `Shallow path checks:` for each priced result, the checks the hurried route passes and the check of another kind
+  that refutes it, with the second file at another grain it needs;
+- `Assumption made false:` the assumption a run would list and wave through, why the world's process makes it false,
+  and where the pack tests it;
+- `Forcing:` the golden family's spread and its nearest distance to the line, the shortcuts' distances on the other
+  side, and each fitted input moved by its defensible spread (20 per cent when none is known) with the call holding;
+- `Noun swap:` the nearest task on file or in the client's library (`skeleton.py check taskNN`), its nouns swapped
+  into this one, and the elements that carry across unchanged; any severity 1 to 3 is a redraw.
 
 ## Part 2. The one-thing screen
 
@@ -194,8 +304,20 @@ components 38, the asks 55, instruction-following 7) and prints the Effort test 
 design note whose table or pair estimate disagrees with the measurement. A hand grade carries its reason, and a
 pass that misses a dependency cannot be hand-graded Right downstream of it.
 
-**The paper is optimistic.** Mark measured paper ceilings of 35 and 39 that came back at 83, and the Sulfur runs
-modelled every mechanism a plot showed. So when unsure, grade the careful column up, not down.
+**The paper is optimistic, so every loss cites a run.** Mark measured paper ceilings of 35 and 39 that came back at
+83, and the Sulfur paper estimates came back 40 to 60 points high (Part 0). So a result the careful pass grades
+Missed or Partly carries `"precedent"` ids in `effort.json`: the places in `references/precedents.json` where a
+frontier run lost that kind of move (kind `loss`) or named it and waved it through (`named_assumption`). `effort.py`
+grades every uncited cell Right for the **cited pair estimate**, refuses a reflex id on a lost cell, and holds the
+cited estimate to 50. A precedent is added to the file only from a run's own text or a client page, never from a
+design.
+
+**Forcing has two sides.** The holistic audits returned task1 arch 3 because a 20 per cent move in the exit rates
+took the call from 7 lines to 15, and task10 arch 7 because its shares were loosely pinned. So `effort.json` carries
+`forcing`: the line the call is read against; the golden family (three or more defensible rival methods run on the
+cut pack), every one on the golden's side; the shortcuts, every one across the line; and each fitted input moved by
+its defensible spread, the call holding. A shortcut that lands on the golden's side is a result the runs earn; a
+rival across the line is an open fork (`determinism-check`).
 
 ## Part 3b. The depth scale
 
@@ -298,6 +420,15 @@ type), `answer_shape`, `weight` and `chain_signature` (the areas of the results 
 chain and answer shape repeated anywhere on file, the weight of either of the last two builds and the answer shape
 of the last one, then `register`. Personas from `guard.py names`.
 
+**The skeleton before the chain.** `python3 .claude/skills/fingerprint/skeleton.py lessons --min 2` lists every
+lesson the client's dataset and our builds already teach twice; the lesson the call turns on is never one of them,
+and no more than half of the chain's lessons may be. Write the card's `skeleton` (decision form, lessons with the
+deciding one first, mechanisms, detection, moves, file roles, answer pattern) and run `skeleton.py check` on the draft:
+any severity 1 to 3 against a build on file, a client task or this slot's own lineage is a redraw of the element it
+names, and a new setting never clears it (the client swaps the nouns and counts what carries across). The decision
+form is drawn from the decision's own unit; a form already on four live builds (the house's set over a line is on
+several) is refused.
+
 **Where a chain comes from.** Read the client's strategies for the domain group (`references/sulfur-strategies.md`
 points into the export): each names its analysis type, answer shape, where the weight sits, the chain of hard
 results, the public data where that work already lives, and its own shallow twin. Copy the lesson, never the shape:
@@ -330,7 +461,11 @@ run's losses result by result:
 
 **Re-root rules.** One architecture per world: once a world's chain is spent, the next draw moves to another world,
 another dataset and another shell. No same-day serial re-roots without new evidence. One mechanism per repair, the
-dead end written in `## Tried and rejected` when it dies.
+dead end written in `## Tried and rejected` when it dies. **A landed scaffold is never re-pointed**: when both runs
+land an architecture, the next one changes the deciding lessons and the decision form, not one correction inside the
+same chain (task4 architectures 6 to 10 each added one term to the same order-the-vehicles chain and all five were
+landed or returned; the skeleton guard now blocks it on the slot's lineage). A reviewer's "fix this task" is answered
+the same way, in the same world if the reviewer asks for it.
 
 ## Part 9. What is dead
 
@@ -346,6 +481,10 @@ measurements.
 
 - [ ] Card registered with analysis type, answer shape, weight and chain signature; `guard.py mechanisms` and `slots`
       read; the abstraction sentence written and not writable against a build on file
+- [ ] The card's skeleton clear in `skeleton.py check` (no severity 1 to 3 against a build on file, a client task or
+      the slot's lineage; the deciding lesson not taught twice already); the `## Frontier check` written (precedents
+      for every careful-column loss, the shallow path's own checks, the assumption made false, forcing on both sides,
+      the noun swap); the cited pair estimate 50 or under
 - [ ] The process behind the files written before any result; the weight named and rotated
 - [ ] Four or more results across three or more areas, each pinned, banded, graded, with a hurried failure the runs
       make; no analytical result carrying more than half the others; the carry-forward line

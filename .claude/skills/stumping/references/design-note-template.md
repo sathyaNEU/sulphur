@@ -35,7 +35,9 @@ Not semantics: <why every field, unit and clause read correctly still leaves eac
 Not rule application: <which results no filed procedure performs, and what is left to judge once every filed rule
   is applied>
 Estimand: <the filed sentences fixing each result's population, outcome, window, unit and comparison, and where>
-No decoy: <nothing written to carry a wrong answer: no memo, draft, stakeholder figure or copied block>
+No decoy: <nothing written to carry a wrong answer: no memo or draft whose number is simply wrong, no document
+  arguing the wrong answer, no copied block; an incumbent figure that reproduces exactly by its own stated method and
+  answers a shallower quantity is named here with the ask that prices it on the golden's footing (stumping Part 1b)>
 No replay: <no result re-derives a published figure; no stated number is simply wrong>
 Pinned: <each result's rivals, run on the clean truth, landing inside its band or ruled out by named data>
 Run forecast: <where each run is expected to lose points: the result ids and the class at each (method shortcut,
@@ -89,6 +91,21 @@ Chain signature: <the areas of the results chain in order>
 Question form: <how the prompt asks: what, which, how much, when, why ...>
 Nearest build: <the build on file nearest in chain, shape and weight, and what differs>
 
+## Frontier check
+
+Precedents: <each result the careful but hurried pass loses, with the references/precedents.json ids (loss or
+  named_assumption) behind it; the same ids sit on the result in generator/effort.json; a result with none is Right>
+Shallow path checks: <for each priced result, the checks the hurried route passes (its back-test, placebo, nearby
+  variants, the incumbent figure it reproduces) and the check of another kind that refutes it, with the second file
+  at another grain that check needs>
+Assumption made false: <the assumption a run lists and waves through (scaling, persistence, schedules, a pooled rate
+  on a selected subset, a smooth response), why this world's process makes it false, and the file that tests it>
+Forcing: <the line; the golden family's spread and its nearest distance to the line; the shortcuts' distances on the
+  other side; each fitted input moved by its defensible spread (20 per cent when none is known) with the call holding>
+Noun swap: <the nearest task on file or in the client's library by skeleton.py check, its nouns swapped into this
+  one, and the elements that carry across unchanged (decision form, lessons, detection, moves, file roles, answer
+  pattern); severity none>
+
 ## Semantic fork table
 
 | ID | Term or convention | Readings | Golden | Ruled out by |
@@ -126,3 +143,10 @@ Nearest build: <the build on file nearest in chain, shape and weight, and what d
   estimate is over 50. Once `generator/effort.json` exists the table must agree with `effort.py`.
 - Generated data that does not say how it behaves like the real thing, or names fewer than three genuine patterns.
 - The same chain of areas in the same order with the same answer shape as a build on file.
+- For a card registered from `skeleton.RULE_FROM` on (a WARN before it): a missing `## Frontier check` label, a
+  precedent id that is unknown or a reflex, or a skeleton BLOCK (severity 1 to 3 against a build on file, a client
+  task or the slot's own lineage; the deciding lesson already taught twice; more than half the chain's lessons taught;
+  a decision form on four live builds).
+- In `effort.py`: a careful-column loss with no precedent (graded Right), a cited pair estimate over 50, a forcing
+  block missing, a golden-family variant across the line, a shortcut on the golden's side, or a perturbation that
+  moves the call.

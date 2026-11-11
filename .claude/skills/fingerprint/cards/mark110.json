@@ -76,5 +76,26 @@
     "task110": "same architecture refined before any data was cut: scope narrowed from three practices to Hunter alone and the lure fixed at the filed five-year rate; the decisive rung (an upgrade's horizon taken from its host through a side register, gated by an exact replay) is unchanged"
   },
   "lineage": [],
-  "notes": "decisive rung from _measured.md trap 2 (the depreciable unit is the scanner with its upgrades, not the register row), gated by traps 1 and 3 (a migration standard making exact replay of the parallel-run postings the load condition); re-checked 2026-10-06 after the re-scope; shape moved back to 03 because task109 took 07 the same day; harden loop 3 (2026-10-10, after two responses landed the loop-2 pack inside the grader's 1.5 per cent tolerance): the upgrade invoices are netted so the replay and both trial balance runs certify the five-year path exactly, and the refusal moves to note 9's 2024 comparative, a prior-period close-out; the card keeps parallel_run_overlap as the primary corpus because it still governs FIN-STD-014 section 4"
+  "notes": "decisive rung from _measured.md trap 2 (the depreciable unit is the scanner with its upgrades, not the register row), gated by traps 1 and 3 (a migration standard making exact replay of the parallel-run postings the load condition); re-checked 2026-10-06 after the re-scope; shape moved back to 03 because task109 took 07 the same day; harden loop 3 (2026-10-10, after two responses landed the loop-2 pack inside the grader's 1.5 per cent tolerance): the upgrade invoices are netted so the replay and both trial balance runs certify the five-year path exactly, and the refusal moves to note 9's 2024 comparative, a prior-period close-out; the card keeps parallel_run_overlap as the primary corpus because it still governs FIN-STD-014 section 4",
+  "skeleton": {
+    "decision_form": "reconciled_record_or_table",
+    "answer_pattern": "figure_crosses_bar",
+    "lessons": [
+      "inherited_attribute_from_other_unit"
+    ],
+    "mechanisms": [
+      "enhancement_spread_over_parent_remaining_life"
+    ],
+    "detection": [
+      "control_total_gap"
+    ],
+    "moves": [
+      "link_records_by_parsed_key"
+    ],
+    "file_roles": [
+      "governing_standard",
+      "primary_record",
+      "reference_register"
+    ]
+  }
 }

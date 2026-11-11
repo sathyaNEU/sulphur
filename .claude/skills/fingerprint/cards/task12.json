@@ -100,5 +100,33 @@
   },
   "lineage": [],
   "notes": "Subdomain is the house key new-product-innovation; the closest client task type serving forecasting is conjoint-choice-willingness-to-pay-analysis (revealed choice behaviour and segment response to price), named in the design note's Task type line. Axes against the last three live cards (task10, task7, task2): the decisive pattern is G17 (the Loyal Grocer wave's level borrowed by kind because its own fade is not identified from its weeks) with G6 (composition) and G13 (the wave observed over a shorter horizon than its fade) behind it; the context artifact is the trade calendar and media flighting, the operations log the golden reads for its unpromoted weeks; the forcing event is the 23 November portfolio review meeting the standard sets; strategy population_selection rather than composition_mix (overused) or maturity_censoring (task5), honest because both judgments are about who the buyers of each wave are and when they were caught.",
-  "registered": "2026-11-09T00:03:37Z"
+  "registered": "2026-11-09T00:03:37Z",
+  "skeleton": {
+    "decision_form": "banded_call_on_figure",
+    "answer_pattern": "pooled_figure_flips_call",
+    "lessons": [
+      "effect_fade_with_time",
+      "completion_of_young_cohorts",
+      "heterogeneity_carried_to_decision"
+    ],
+    "mechanisms": [
+      "repeat_fades_to_price_tier_floor",
+      "late_wave_mainstream_mix"
+    ],
+    "detection": [
+      "residual_by_subgroup"
+    ],
+    "moves": [
+      "per_cohort_curves",
+      "complete_cohorts_from_later_rates",
+      "stratify_by_mix_and_reweight_to_target"
+    ],
+    "file_roles": [
+      "panel_or_survey_sample",
+      "primary_record",
+      "reference_register",
+      "governing_standard",
+      "unused_distractor"
+    ]
+  }
 }

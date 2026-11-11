@@ -120,7 +120,35 @@
    "architecture": "v1 (shipped under the retired single-deep-step design; uploaded 2026-11-10)",
    "fate": "returned by the platform on 2026-11-10 before any run: the domain fit read the docket of fifteen under a stated threshold, the count of filers and the two tabulations as compliance lookups with no estimation, and the prompt test read the slices as method spelled out (runs/review_2026-11-10.md)",
    "driver": "Each unit's amount in the latest period is seen only through its own report, which covers only what had happened by the day the report was made, while the closed periods' records date every event in the full period; the unit's reporting error must be measured with each earlier report compared against the events up to its own date, and the latest report grossed up for the part of the period it could not yet see, so units that reported early look like under-reporters and units that reported early this time look small to the natural full-period comparison.",
-   "stump": "A strong analyst builds each faculty member's matched-line ratio weighted toward the faculty's, compares every disclosure with the register's whole program year, finds it closest to 2025 among the whole-year corrections and sends five faculty whose earlier December disclosures made them look like under-reporters in place of five who submitted their 2026 disclosures in early December, before their retainers' December installments."
+   "stump": "A strong analyst builds each faculty member's matched-line ratio weighted toward the faculty's, compares every disclosure with the register's whole program year, finds it closest to 2025 among the whole-year corrections and sends five faculty whose earlier December disclosures made them look like under-reporters in place of five who submitted their 2026 disclosures in early December, before their retainers' December installments.",
+   "skeleton": {
+    "decision_form": "ranked_list_under_cap",
+    "answer_pattern": "naive_set_swaps_members",
+    "lessons": [
+     "record_as_of_its_date",
+     "record_check_reporter_error",
+     "shrinkage_small_samples"
+    ],
+    "mechanisms": [
+     "december_filers_before_installments"
+    ],
+    "detection": [
+     "record_time_against_event_time"
+    ],
+    "moves": [
+     "align_to_record_date_and_gross_up",
+     "shrinkage_or_credibility_weighting",
+     "back_test_select_estimator"
+    ],
+    "file_roles": [
+     "governing_standard",
+     "primary_record",
+     "second_grain_source",
+     "reference_register",
+     "frame_or_roster",
+     "unused_distractor"
+    ]
+   }
   },
   {
    "architecture": "v2 (Marrowfield University Health's 2025 coverage statement, drawn 2026-11-10)",
@@ -145,5 +173,39 @@
   "question form": "whether",
   "second-sentence opener": "i",
   "deliverable set": "pptx+xlsx"
+ },
+ "skeleton": {
+  "decision_form": "forecast_figure_with_range",
+  "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
+  "lessons": [
+   "optional_record_unlogged_changes",
+   "reporting_lag_nowcast",
+   "unit_identity_across_systems",
+   "frame_population_mismatch"
+  ],
+  "mechanisms": [
+   "small_landlords_lodge_few_rises",
+   "operator_review_after_extract",
+   "migration_without_property_id",
+   "panel_predates_operator_blocks"
+  ],
+  "detection": [
+   "second_source_at_other_grain",
+   "record_time_against_event_time"
+  ],
+  "moves": [
+   "impute_by_model_at_own_drivers",
+   "nowcast_from_same_point_prior_years",
+   "link_records_by_parsed_key",
+   "bridge_by_contribution"
+  ],
+  "file_roles": [
+   "primary_record",
+   "panel_or_survey_sample",
+   "crosswalk_or_migration_map",
+   "reference_register",
+   "governing_standard",
+   "unused_distractor"
+  ]
  }
 }

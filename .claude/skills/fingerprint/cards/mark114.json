@@ -77,5 +77,26 @@
     "task33": "task33 truncates a measured elevation at a filed future intervention and picks one of eleven series by forward yield; task114 adds demand a two-site layout never put on the resource and reads a capacity dial off a replay of the closed year, so no series is projected and nothing is truncated."
   },
   "lineage": [],
-  "notes": "WARN repeat.gate_g answered in the design note (task109 selects between compilation rules a control set arbitrates; here two replay bases no control set can arbitrate). Pattern A is the off-chain form: how a site layout treats a meeting decides whether it takes a room."
+  "notes": "WARN repeat.gate_g answered in the design note (task109 selects between compilation rules a control set arbitrates; here two replay bases no control set can arbitrate). Pattern A is the off-chain form: how a site layout treats a meeting decides whether it takes a room.",
+  "skeleton": {
+    "decision_form": "dial_or_cap_setting",
+    "answer_pattern": "figure_crosses_bar",
+    "lessons": [
+      "non_additive_aggregation"
+    ],
+    "mechanisms": [
+      "parties_together_same_site_day"
+    ],
+    "detection": [
+      "naive_depends_on_what_it_should_not"
+    ],
+    "moves": [
+      "replay_event_by_event"
+    ],
+    "file_roles": [
+      "governing_standard",
+      "primary_record",
+      "reference_register"
+    ]
+  }
 }

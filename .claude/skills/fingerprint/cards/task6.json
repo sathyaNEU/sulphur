@@ -289,5 +289,40 @@
     "second-sentence opener": "each",
     "rounding opener": "slis",
     "deliverable set": "csv+docx"
+  },
+  "skeleton": {
+    "decision_form": "set_over_threshold",
+    "answer_pattern": "naive_set_swaps_members",
+    "lessons": [
+      "design_weights",
+      "observation_window_coverage",
+      "dated_cause_by_own_metric",
+      "propagation_source_vs_victim"
+    ],
+    "mechanisms": [
+      "edge_head_sampling_keep_share",
+      "trace_store_31_day_retention",
+      "fault_in_own_handling_reaches_callers"
+    ],
+    "detection": [
+      "second_source_at_other_grain",
+      "onset_order_against_own_norm",
+      "record_time_against_event_time"
+    ],
+    "moves": [
+      "inverse_inclusion_weights",
+      "impute_by_model_at_own_drivers",
+      "changepoint_on_own_metric",
+      "cluster_resample_shared_unit"
+    ],
+    "file_roles": [
+      "governing_standard",
+      "primary_record",
+      "second_grain_source",
+      "event_timeline",
+      "reference_register",
+      "changeover_note",
+      "unused_distractor"
+    ]
   }
 }
