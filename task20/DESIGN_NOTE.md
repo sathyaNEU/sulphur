@@ -304,8 +304,9 @@ wholesale, the custom event, the licensed shops, the posting lags, a count of is
 
 ## Pre-ship check
 
-- Stage 4 runs again on the hardened build: the leak reader (the filing, the descriptor detail and the prompt changed)
-  and the determinism judge with its isolated first pass, priced against the careful column before READY.
+- Stage 4 on the hardened build: the leak reader found no ranking file, no answer figure and no one thing; the judge's
+  isolated first pass landed the estimate and the call (USD 1,430.8 million, short), which reprices the careful column
+  at 57 to 63, so the build returned to stage 2 (see the last line of the tried-and-rejected section).
 
 ## Tried and rejected
 
@@ -335,3 +336,4 @@ wholesale, the custom event, the licensed shops, the posting lags, a count of is
 - 2026-11-11, architecture 2 at stage 4 (the regional mix and the private-label card's faster fall as the two deep steps, the KS-06 exit, the demand turn in the holiday quarter): the determinism judge's isolated first pass, written before it opened the answer blocks, re-weighted the comparable panel to the 10-K's regions (step -4.1 points) and carried the private-label share (16.9) with the panel's coverage, landing the estimate inside its band (about USD 1,425 million); it lost only the record (a fitted regression, 1.15 to 1.5 points), the top of the range and a committed call. Priced on that pass the careful column reads about 72, so the chain went back to stage 2: in this field both corrections are the textbook moves a medium-effort run makes unprompted.
 - 2026-11-11, hardening, lead times: a 2021 backlog and its 2022 unwind put misses of up to 11 points in every carried deposit rule's record (RMSE 4.1); a lengthening spread through fiscal 2025 showed in reported growth's slide from 3.9 to 1.5 per cent, so a trend extrapolation found the answer; a one-time lengthening early in fiscal 2025 left the quarter at +3.1 to +3.3 per cent, at the street; a backlog delivered in the base quarter put a 4.6-point unforeseeable miss in the record. Lead times now stay at eight weeks throughout.
 - 2026-11-11, hardening, deposits alone (the December made-to-order event in deposits, everything else as before): one sentence about the deposits would have rescued R4 to R9 for a careful pass that already makes the textbook moves (one thing); wholesale contracts, invoiced and never on a card, were added as the second, independent deep step, so the call needs both.
+- 2026-11-11, architecture 2 hardened (revenue on delivery with the December custom event in deposits; wholesale at its run rate): the determinism judge's isolated first pass, written before it opened the answer blocks, inferred the made-to-order lag from deposits against the descriptor detail's made-to-order share (8.5 weeks), set wholesale at its run rate (USD 18.2 million), made the regional and private-label corrections and landed USD 1,430.8 million inside the estimate's band with the short call; it lost the record, the top of the range and one bridge step. Priced on that pass the careful column reads 57 to 63, so the chain returns to stage 2 a second time. Every fact the estimand needs is filed, and a medium-effort run executes each one; a further hardening in this world would have to plant.

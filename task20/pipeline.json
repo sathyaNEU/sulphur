@@ -1,11 +1,11 @@
 {
  "task": "task20",
- "status": "BUILD",
+ "status": "PAUSED",
  "domain": "quantitative-finance",
  "subdomain": "strategy-backtesting-evaluation",
  "objective": "forecasting",
- "stage": 3,
- "stage_name": "build",
+ "stage": 2,
+ "stage_name": "design",
  "updated": "2026-11-11",
  "doctrine": "throughout",
  "call": "short Brindle & Moss into the 26 February 2026 release: Q4 FY2025 net sales USD 1,439.5 million (-0.63%), 80% range USD 1,418.6 to 1,460.3 million, wholly below the street's USD 1,484.0 million",
@@ -25,10 +25,10 @@
   "nearest": "task5 v4 (severity none); task18 by chain"
  },
  "judge": {
-  "verdict": "DETERMINISTIC (pre-hardening build)",
-  "disposition": "FIX_NOW: the bridge order and the regression-calibrated range; both closed (order bands, SF14)",
-  "gate_h": "pass on the pre-hardening build; its first pass landed the textbook steps, so the chain was hardened",
-  "report": "determinism_check_report.md (pre-hardening)"
+  "verdict": "DETERMINISTIC (hardened build), FIX_NOW (the bridge's order, the record's coverage count)",
+  "disposition": "back to stage 2 under the house rule: its first pass landed the estimate and the call",
+  "gate_h": "narrow pass (the event and the base contract flagged as constructed, neither alone flips the call)",
+  "report": "determinism_check_report.md"
  },
  "paper_pair": 46.5,
  "effort": {
@@ -62,9 +62,15 @@
    "source": "judge first pass",
    "repair": "design",
    "commit": "the judge thread's own derivation priced the careful column near 72; hardened with revenue on delivery and wholesale"
+  },
+  {
+   "date": "2026-11-11",
+   "source": "judge first pass",
+   "repair": "design",
+   "commit": "the hardened chain landed by the judge thread's own derivation (USD 1,430.8 million, short); careful column 57 to 63"
   }
  ],
- "resume": "stage 3 to 4: gates.py task20 --full green, then the leak reader and the judge on the hardened build; price the judge's first pass against the careful column before READY",
+ "resume": "stage 2, the author's call: architecture 2's world has now been landed twice by the judge's first pass (every filed fact is executed); the recommended next step is a re-root to architecture 3 in another world whose deciding results sit in validation and uncertainty (what both judge passes lost), or the author takes the hardened build to the platform for measurement over the house rule",
  "approved": null,
  "submitted": null,
  "portal": {
