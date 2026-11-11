@@ -34,7 +34,8 @@ class Analysis:
         self.n_base = {tuple(k.split("|")): v for k, v in n_base.items()}
         self._costs = {}
 
-    # ---- each rating's own spread move, from the evaluations of every bond the issuer ratings history gives that rating
+    # ---- the market's spread move for each bond: the median daily move in the evaluated spreads of other issuers' bonds of
+    # its rating (policy 5b), cumulated
     def _band_moves(self):
         rec = self.rec
         S = rec.spread
@@ -44,14 +45,18 @@ class Analysis:
             idx = np.searchsorted(g.effective_date.values, rec.days.values, side="right") - 1
             rat[:, b] = g.rating.values[np.maximum(idx, 0)]
         self.rating_of = rat
+        names = sorted(set(rec.issuer))
+        self.iss_ix = np.array([names.index(x) for x in rec.issuer])
         dS = np.diff(S, axis=0)
         cum = {}
         for rr in P.RATINGS:
-            x = np.where(rat[1:] == rr, dS, np.nan)
-            with np.errstate(all="ignore"):
-                med = np.nanmedian(x, axis=1)
-            med = np.where(np.isnan(med), 0.0, med)
-            cum[rr] = np.r_[0.0, np.cumsum(med)]
+            inr = rat[1:] == rr
+            for i in range(len(names)):
+                m = inr & (self.iss_ix[None, :] != i)
+                x = np.where(m, dS, np.nan)
+                with np.errstate(all="ignore"):
+                    med = np.nanmedian(x, axis=1)
+                cum[(rr, i)] = np.r_[0.0, np.cumsum(np.where(np.isnan(med), 0.0, med))]
         self.band_cum = cum
 
     # ---- the best rival level for each traded request: the cover on a win, the winner's print on a loss
@@ -79,6 +84,9 @@ class Analysis:
         m = m.sort_values(["msg_seq", "dt"]).drop_duplicates("msg_seq")
         idx = lost.index.values[m.i.values]
         r[R.index.get_indexer(idx)] = R.side.values[R.index.get_indexer(idx)] * (m.price.values - R.ref.values[R.index.get_indexer(idx)]) * 100.0
+        # a loss whose matched print is worse for the client than the desk's own quote cannot be the winner's print
+        bad = R.status.isin(["COVER", "TRADED_AWAY"]).values & np.isfinite(r) & (r > np.nan_to_num(R.d_old.values, nan=np.inf) + 1e-9)
+        r[bad] = np.nan
         R["r"] = r
         self.match_rate = float(np.isfinite(r[R.status.isin(["COVER", "TRADED_AWAY"]).values]).mean())
 
@@ -100,10 +108,12 @@ class Analysis:
             e1[j] = col[ok[-1]] if len(ok) else R.ref.values[j]
             t1[j] = t0[j] + (ok[-1] if len(ok) else 0)
         rr = self.rating_of[t0, b]
+        ii = self.iss_ix[b]
         bc = np.zeros(len(R))
         for x in P.RATINGS:
-            m = rr == x
-            bc[m] = self.band_cum[x][t1[m]] - self.band_cum[x][t0[m]]
+            for i in np.unique(ii[rr == x]):
+                m = (rr == x) & (ii == i)
+                bc[m] = self.band_cum[(x, i)][t1[m]] - self.band_cum[(x, i)][t0[m]]
         cpn, mat0 = rec.coupon[b], rec.mat[t0, b]
         s0 = rec.spread[t0, b]
         s0 = np.where(np.isnan(s0), np.nanmedian(rec.spread[t0], axis=1), s0)
@@ -147,8 +157,9 @@ class Analysis:
             sc = self.scale[s]
             if win == "exact":
                 known = np.isfinite(r) & traded & m
-                wc = known & (d_cur < r)
-                wp = known & (d_prop < r)
+                # a quote level with the best rival's keeps the request's recorded outcome (the export rounds prices)
+                wc = known & ((d_cur < r) | (won & (d_cur <= r + 1e-9)))
+                wp = known & ((d_prop < r) | (won & (d_prop <= r + 1e-9)))
                 if unmatched == "share":
                     # an unmatched loss is taken to fall to the new quote at the matched losses' rate
                     lostm = m & traded & ~won & np.isfinite(r)
@@ -179,8 +190,11 @@ class Analysis:
                 add_cost = np.average(ca[m], weights=(gain * q)[m]) if (gain * q)[m].sum() > 0 else np.nan
             np.add.at(daily_cur, tt[m], pc[m] * sc * self.T / P.PLAN_DAYS)
             np.add.at(daily_prop, tt[m], pp[m] * sc * self.T / P.PLAN_DAYS)
-            won_cost = np.average(c[m & won], weights=q[m & won]) if (m & won).any() else np.nan
-            out[s] = dict(cur=float(pc[m].sum() * sc), prop=float(pp[m].sum() * sc), share=float(share),
+            # the trades the current schedule wins: replayed under the exact route, the desk's own wins under a model
+            wmask = (m & wc) if win == "exact" else (m & won)
+            won_cost = np.average(c[wmask], weights=q[wmask]) if wmask.any() else np.nan
+            cur_share = (wc[m].sum() / m.sum()) if win == "exact" else (p_c[m].sum() / m.sum())
+            out[s] = dict(cur=float(pc[m].sum() * sc), prop=float(pp[m].sum() * sc), share=float(share), cur_share=float(cur_share),
                           add_cost=float(add_cost) * 100 if add_cost == add_cost else None,
                           won_cost=float(won_cost) * 100 if won_cost == won_cost else None)
         return out, daily_cur, daily_prop

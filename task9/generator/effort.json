@@ -1,324 +1,674 @@
 {
  "compounds": [
   {
-   "moves": "carry netted, a year's horizon and the added dollar",
+   "moves": "complete moves and the added trades' own cost",
    "rescues": [
     "R1",
     "R3",
     "R4",
     "R5",
-    "R6"
+    "R7",
+    "R8"
    ]
   },
   {
-   "moves": "carry netted and the added dollar",
+   "moves": "complete moves and the year in blocks",
    "rescues": [
     "R1",
-    "R3",
-    "R5",
-    "R6"
-   ]
-  },
-  {
-   "moves": "carry netted and a year's horizon",
-   "rescues": [
-    "R1",
-    "R3",
     "R4"
+   ]
+  },
+  {
+   "moves": "complete moves, the added trades' own cost and the year in blocks",
+   "rescues": [
+    "R1",
+    "R3",
+    "R4",
+    "R5",
+    "R6",
+    "R7",
+    "R8"
    ]
   }
  ],
  "hints": [
   {
+   "rescues": [],
+   "sentence": "The level a rival won a request at is on the public tape, a minute after the request"
+  },
+  {
    "rescues": [
     "R1",
-    "R3"
+    "R4"
    ],
-   "sentence": "A passive holding earns its carry as well as its price moves: the Baa spread, the interest differential, the term spread"
+   "sentence": "Ashcote's evaluations of thinner bonds catch up with the market only at the month-end review"
   },
   {
    "rescues": [],
-   "sentence": "A year's markets are not a year of independent days when spreads trend for weeks"
+   "sentence": "The requests a tighter quote adds are not the requests the desk wins today"
   },
   {
    "rescues": [],
-   "sentence": "An increase is judged on what the added dollar earns, not on the pod's return at its new size"
-  },
-  {
-   "rescues": [],
-   "sentence": "A pod's record over a few years is part luck, and the draft raised the pods with the luckiest records"
-  },
-  {
-   "rescues": [],
-   "sentence": "Capital has followed records, so capacity shows only within pods"
+   "sentence": "A year of this desk's P&L is not a year of independent days"
   }
  ],
  "results": [
   {
    "bands": {
-    "Commodities": [
-     7.84,
-     12.86
+    "HY|liquid|AM": [
+     329.2490244401953,
+     462.6969695287848
     ],
-    "Credit": [
-     3.48,
-     4.14
+    "HY|liquid|HF": [
+     620.0740734560533,
+     735.7494169620192
     ],
-    "Currencies": [
-     5.06,
-     6.3
+    "HY|medium|AM": [
+     165.77564138866225,
+     335.84078337474995
     ],
-    "Equity long/short": [
-     8.58,
-     9.49
+    "HY|medium|HF": [
+     584.3652641816577,
+     950.2024341306561
     ],
-    "Quantitative equity": [
-     7.96,
-     9.12
+    "HY|thin|AM": [
+     98.3598417382941,
+     477.3099930653565
     ],
-    "Rates": [
-     7.42,
-     8.31
+    "HY|thin|HF": [
+     1051.8328433612785,
+     1623.2505622429326
     ],
-    "Volatility": [
-     7.72,
-     8.91
+    "IG|liquid|AM": [
+     260.5912662993243,
+     343.4083122953621
+    ],
+    "IG|medium|AM": [
+     468.4875003315794,
+     606.625525291938
+    ],
+    "IG|medium|HF": [
+     960.5445006416279,
+     1133.8701922430814
+    ],
+    "IG|thin|AM": [
+     417.5506082759955,
+     629.6949165060184
+    ],
+    "IG|thin|HF": [
+     875.8914374527054,
+     1098.1251283397864
+    ],
+    "IG|thin|INS": [
+     170.4451951904829,
+     264.43507002759685
     ]
    },
    "depends": [],
-   "figure": "R1_alpha",
+   "figure": "won_cost",
    "golden": {
-    "Commodities": 11.41,
-    "Credit": 3.64,
-    "Currencies": 5.48,
-    "Equity long/short": 8.88,
-    "Quantitative equity": 8.67,
-    "Rates": 8.03,
-    "Volatility": 7.87
+    "HY|liquid|AM": 383.5185662121648,
+    "HY|liquid|HF": 681.1148545876752,
+    "HY|medium|AM": 291.0005687682795,
+    "HY|medium|HF": 858.3253472270769,
+    "HY|thin|AM": 441.9536972827375,
+    "HY|thin|HF": 1503.0097798545671,
+    "IG|liquid|AM": 290.9952450984165,
+    "IG|medium|AM": 561.6903011962388,
+    "IG|medium|HF": 1049.8798076324829,
+    "IG|thin|AM": 475.4992193106415,
+    "IG|thin|HF": 979.0860196435252,
+    "IG|thin|INS": 195.4451951904829
    },
-   "graded_as": "Ask 2",
+   "graded_as": "Ask 4",
    "id": "R1",
-   "independent": "the daily record and the market series",
-   "name": "each group's alpha a year since 2017",
+   "independent": "the record replayed at the current schedule and the evaluations",
+   "name": "each changed segment's cost after the trades the current schedule wins, USD a million",
    "passes": {
     "careful": {
-     "Commodities": 11.31,
-     "Credit": 6.39,
-     "Currencies": 6.28,
-     "Equity long/short": 8.95,
-     "Quantitative equity": 8.67,
-     "Rates": 7.93,
-     "Volatility": 7.88
+     "HY|liquid|AM": 392.6141564028162,
+     "HY|liquid|HF": 486.2324288407459,
+     "HY|medium|AM": 211.61783431118474,
+     "HY|medium|HF": 428.75151142309545,
+     "HY|thin|AM": 203.42714759407207,
+     "HY|thin|HF": 370.134972674698,
+     "IG|liquid|AM": 287.71414531169546,
+     "IG|medium|AM": 411.7760418255277,
+     "IG|medium|HF": 772.7110915174447,
+     "IG|thin|AM": 298.947492073746,
+     "IG|thin|HF": 677.5661096769495,
+     "IG|thin|INS": 161.93600630874602
     },
     "quick": {
-     "Commodities": 11.15,
-     "Credit": 6.77,
-     "Currencies": 7.47,
-     "Equity long/short": 9.75,
-     "Quantitative equity": 8.91,
-     "Rates": 8.12,
-     "Volatility": 8.03
+     "HY|liquid|AM": 232.8986981285598,
+     "HY|liquid|HF": 106.23168178646198,
+     "HY|medium|AM": 591.8004012036109,
+     "HY|medium|HF": 149.01542563321271,
+     "HY|thin|AM": 652.4269377382466,
+     "HY|thin|HF": 746.2768496420048,
+     "IG|liquid|AM": 170.21538035719487,
+     "IG|medium|AM": 212.24255797853928,
+     "IG|medium|HF": 21.122757613683774,
+     "IG|thin|AM": 330.8331868518193,
+     "IG|thin|HF": 93.55047240179016,
+     "IG|thin|INS": -11.316931982633864
     },
     "thorough": {
-     "Commodities": 11.41,
-     "Credit": 3.64,
-     "Currencies": 5.48,
-     "Equity long/short": 8.88,
-     "Quantitative equity": 8.67,
-     "Rates": 8.03,
-     "Volatility": 7.87
+     "HY|liquid|AM": 383.5185662121648,
+     "HY|liquid|HF": 681.1148545876752,
+     "HY|medium|AM": 291.0005687682795,
+     "HY|medium|HF": 858.3253472270769,
+     "HY|thin|AM": 441.9536972827375,
+     "HY|thin|HF": 1503.0097798545671,
+     "IG|liquid|AM": 290.9952450984165,
+     "IG|medium|AM": 561.6903011962388,
+     "IG|medium|HF": 1049.8798076324829,
+     "IG|thin|AM": 475.4992193106415,
+     "IG|thin|HF": 979.0860196435252,
+     "IG|thin|INS": 195.4451951904829
+    }
+   }
+  },
+  {
+   "bands": {
+    "HY|liquid|AM": [
+     0.11175749616984022,
+     0.15199436968694657
+    ],
+    "HY|liquid|HF": [
+     0.24280223186608804,
+     0.2831623821648269
+    ],
+    "HY|medium|AM": [
+     0.18137355898945304,
+     0.2215813652522648
+    ],
+    "HY|medium|HF": [
+     0.3226460839094611,
+     0.36279972108514486
+    ],
+    "HY|thin|AM": [
+     0.226801872074883,
+     0.2671958188672374
+    ],
+    "HY|thin|HF": [
+     0.1429185407296352,
+     0.18294180410620045
+    ],
+    "IG|liquid|AM": [
+     0.3434431898670888,
+     0.3834577717624046
+    ],
+    "IG|medium|AM": [
+     0.3055595848443166,
+     0.3455670337644891
+    ],
+    "IG|medium|HF": [
+     0.42312648270695463,
+     0.46312648270695467
+    ],
+    "IG|thin|AM": [
+     0.33277642474427666,
+     0.3728070772460156
+    ],
+    "IG|thin|HF": [
+     0.4663834422657952,
+     0.5064864769606433
+    ],
+    "IG|thin|INS": [
+     0.35393909136295554,
+     0.3940684246803521
+    ]
+   },
+   "depends": [],
+   "figure": "share",
+   "golden": {
+    "HY|liquid|AM": 0.13175749616984023,
+    "HY|liquid|HF": 0.26280223186608803,
+    "HY|medium|AM": 0.20137355898945303,
+    "HY|medium|HF": 0.3426460839094611,
+    "HY|thin|AM": 0.246801872074883,
+    "HY|thin|HF": 0.1629185407296352,
+    "IG|liquid|AM": 0.36344318986708885,
+    "IG|medium|AM": 0.32555958484431663,
+    "IG|medium|HF": 0.44312648270695465,
+    "IG|thin|AM": 0.3527764247442767,
+    "IG|thin|HF": 0.4863834422657952,
+    "IG|thin|INS": 0.37393909136295556
+   },
+   "graded_as": "Ask 3",
+   "id": "R2",
+   "independent": "the requests, the covers and the tape",
+   "name": "each changed segment's share of requests won at the draft's quote",
+   "passes": {
+    "careful": {
+     "HY|liquid|AM": 0.13175749616984023,
+     "HY|liquid|HF": 0.26280223186608803,
+     "HY|medium|AM": 0.20137355898945303,
+     "HY|medium|HF": 0.3426460839094611,
+     "HY|thin|AM": 0.246801872074883,
+     "HY|thin|HF": 0.1629185407296352,
+     "IG|liquid|AM": 0.36344318986708885,
+     "IG|medium|AM": 0.32555958484431663,
+     "IG|medium|HF": 0.44312648270695465,
+     "IG|thin|AM": 0.3527764247442767,
+     "IG|thin|HF": 0.4863834422657952,
+     "IG|thin|INS": 0.37393909136295556
+    },
+    "quick": {
+     "HY|liquid|AM": 0.04910033546813053,
+     "HY|liquid|HF": 0.12164013011470638,
+     "HY|medium|AM": 0.06995581737849779,
+     "HY|medium|HF": 0.15611111111111112,
+     "HY|thin|AM": 0.10023866348448687,
+     "HY|thin|HF": 0.07468879668049792,
+     "IG|liquid|AM": 0.2876153300212917,
+     "IG|medium|AM": 0.13175885643256682,
+     "IG|medium|HF": 0.23595793793280329,
+     "IG|thin|AM": 0.15828571428571428,
+     "IG|thin|HF": 0.28317373461012313,
+     "IG|thin|INS": 0.15261958997722094
+    },
+    "thorough": {
+     "HY|liquid|AM": 0.13175749616984023,
+     "HY|liquid|HF": 0.26280223186608803,
+     "HY|medium|AM": 0.20137355898945303,
+     "HY|medium|HF": 0.3426460839094611,
+     "HY|thin|AM": 0.246801872074883,
+     "HY|thin|HF": 0.1629185407296352,
+     "IG|liquid|AM": 0.36344318986708885,
+     "IG|medium|AM": 0.32555958484431663,
+     "IG|medium|HF": 0.44312648270695465,
+     "IG|thin|AM": 0.3527764247442767,
+     "IG|thin|HF": 0.4863834422657952,
+     "IG|thin|INS": 0.37393909136295556
+    }
+   }
+  },
+  {
+   "bands": {
+    "HY|liquid|AM": [
+     142.53863695617918,
+     303.8373272789841
+    ],
+    "HY|liquid|HF": [
+     335.4817440984283,
+     463.8468548271161
+    ],
+    "HY|medium|AM": [
+     153.7682056224368,
+     261.7570567184364
+    ],
+    "HY|medium|HF": [
+     404.8936889161158,
+     571.2367883897834
+    ],
+    "HY|thin|AM": [
+     1001.9632320049813,
+     1564.345620132393
+    ],
+    "HY|thin|HF": [
+     663.728303208486,
+     935.6095930457012
+    ],
+    "IG|liquid|AM": [
+     70.25896916727984,
+     137.88861885291502
+    ],
+    "IG|medium|AM": [
+     360.39246723303785,
+     446.4286708085049
+    ],
+    "IG|medium|HF": [
+     705.3905102049797,
+     850.3198139122824
+    ],
+    "IG|thin|AM": [
+     213.66744223642073,
+     290.9898352309453
+    ],
+    "IG|thin|HF": [
+     821.5352733946065,
+     1010.2862676260933
+    ],
+    "IG|thin|INS": [
+     -45.60649923471402,
+     13.515546720721773
+    ]
+   },
+   "depends": [
+    "R2"
+   ],
+   "figure": "add_cost",
+   "golden": {
+    "HY|liquid|AM": 278.8373272789841,
+    "HY|liquid|HF": 409.1648856805419,
+    "HY|medium|AM": 214.24479597621388,
+    "HY|medium|HF": 502.4400695354853,
+    "HY|thin|AM": 1213.99308103888,
+    "HY|thin|HF": 721.4438078353108,
+    "IG|liquid|AM": 109.91773767665553,
+    "IG|medium|AM": 413.35988037824524,
+    "IG|medium|HF": 775.13069393841,
+    "IG|thin|AM": 265.9898352309453,
+    "IG|thin|HF": 892.9731232550071,
+    "IG|thin|INS": -11.64432600980623
+   },
+   "graded_as": "Component 2",
+   "id": "R3",
+   "independent": "",
+   "name": "the cost after the trades the draft's quote would add, USD a million",
+   "passes": {
+    "careful": {
+     "HY|liquid|AM": 392.6141564028162,
+     "HY|liquid|HF": 486.2324288407459,
+     "HY|medium|AM": 208.42963714224484,
+     "HY|medium|HF": 428.75151142309545,
+     "HY|thin|AM": 203.42714759407207,
+     "HY|thin|HF": 211.44456877862524,
+     "IG|liquid|AM": 294.3611672797723,
+     "IG|medium|AM": 411.7760418255277,
+     "IG|medium|HF": 772.7110915174447,
+     "IG|thin|AM": 298.947492073746,
+     "IG|thin|HF": 677.5661096769495,
+     "IG|thin|INS": 161.93600630874602
+    },
+    "quick": {
+     "HY|liquid|AM": 232.8986981285598,
+     "HY|liquid|HF": 106.23168178646198,
+     "HY|medium|AM": 591.8004012036109,
+     "HY|medium|HF": 149.01542563321271,
+     "HY|thin|AM": 652.4269377382466,
+     "HY|thin|HF": 746.2768496420048,
+     "IG|liquid|AM": 170.21538035719487,
+     "IG|medium|AM": 212.24255797853928,
+     "IG|medium|HF": 21.122757613683774,
+     "IG|thin|AM": 330.8331868518193,
+     "IG|thin|HF": 93.55047240179016,
+     "IG|thin|INS": -11.316931982633864
+    },
+    "thorough": {
+     "HY|liquid|AM": 278.8373272789841,
+     "HY|liquid|HF": 409.1648856805419,
+     "HY|medium|AM": 214.24479597621388,
+     "HY|medium|HF": 502.4400695354853,
+     "HY|thin|AM": 1213.99308103888,
+     "HY|thin|HF": 721.4438078353108,
+     "IG|liquid|AM": 109.91773767665553,
+     "IG|medium|AM": 413.35988037824524,
+     "IG|medium|HF": 775.13069393841,
+     "IG|thin|AM": 265.9898352309453,
+     "IG|thin|HF": 892.9731232550071,
+     "IG|thin|INS": -11.64432600980623
     }
    }
   },
   {
    "band": [
-    21.6,
-    26.5
+    4699086.862216929,
+    5666288.817117316
    ],
    "depends": [],
-   "figure": "R3_fall",
-   "golden": 25.5,
+   "figure": "current",
+   "golden": 5236633.600176125,
    "graded_as": "Component 3",
-   "id": "R2",
-   "independent": "the daily record and the capital history",
-   "name": "alpha per dollar given up per doubling",
+   "id": "R4",
+   "independent": "the record replayed at the current schedule",
+   "name": "the 2027 P&L at the current schedule",
    "partly": [
-    18.6,
-    29.5
+    3913591.82219051,
+    6451783.857143735
    ],
    "passes": {
-    "careful": 25.5,
-    "quick": 2.7,
-    "thorough": 25.5
+    "careful": 7848960.425305946,
+    "quick": 20630614.0,
+    "thorough": 5236633.600176125
    }
   },
   {
    "band": [
-    548.8,
-    648.6
+    9871960.8581542,
+    11062938.782995956
    ],
    "depends": [
-    "R1",
-    "R2"
+    "R2",
+    "R3",
+    "R4"
    ],
-   "figure": "R4_net",
-   "golden": 594.4,
+   "figure": "proposed",
+   "golden": 10297458.503654044,
    "graded_as": "Component 1",
-   "id": "R3",
+   "id": "R5",
    "independent": "",
-   "name": "the expected 2027 net P&L at the draft",
+   "name": "the 2027 P&L at the draft schedule",
    "partly": [
-    519.1,
-    678.3
+    8327342.082606094,
+    12607557.558544062
    ],
    "passes": {
-    "careful": 711.7,
-    "quick": 1213.2,
-    "thorough": 594.4
+    "careful": 11802578.87870398,
+    "quick": 16532304.0,
+    "thorough": 10297458.503654044
    }
   },
   {
    "bands": {
     "P10": [
-     -8.0,
-     89.1
+     4978621.1677606795,
+     6687639.69652172
     ],
     "P90": [
-     1016.0,
-     1161.2
+     13697446.357299896,
+     16410274.820928063
     ]
    },
    "depends": [
-    "R3"
+    "R5"
    ],
-   "figure": "R5_range",
+   "figure": "range",
    "golden": {
-    "P10": 36.7,
-    "P90": 1076.8
+    "P10": 5714345.719981939,
+    "P90": 15007232.93771566
    },
-   "graded_as": "Ask 1 (range)",
-   "id": "R4",
+   "graded_as": "Ask 1",
+   "id": "R6",
    "independent": "",
-   "name": "its 80 per cent range",
+   "name": "the draft's 80 per cent range",
    "passes": {
     "careful": {
-     "P10": 243.8,
-     "P90": 1179.6
+     "P10": 10682554.48613066,
+     "P90": 12929637.427204413
     },
     "quick": null,
     "thorough": {
-     "P10": 36.7,
-     "P90": 1076.8
+     "P10": 5714345.719981939,
+     "P90": 15007232.93771566
     }
    }
   },
   {
+   "bands": {
+    "HY|liquid|AM": [
+     1445928.961781376,
+     2010537.45839983
+    ],
+    "HY|liquid|HF": [
+     3039295.485838262,
+     3964794.0777722877
+    ],
+    "HY|medium|AM": [
+     597027.6971952851,
+     760573.053133545
+    ],
+    "HY|medium|HF": [
+     1085354.0785523797,
+     1395983.2851695772
+    ],
+    "HY|thin|AM": [
+     139261.7767829267,
+     246943.88947569986
+    ],
+    "HY|thin|HF": [
+     339778.0300605492,
+     432758.5154857666
+    ],
+    "IG|liquid|AM": [
+     -1972597.707159186,
+     -1537439.669498197
+    ],
+    "IG|medium|AM": [
+     -494273.95197873015,
+     -319649.1063406852
+    ],
+    "IG|medium|HF": [
+     -690146.3693816881,
+     -530708.7439103549
+    ],
+    "IG|thin|AM": [
+     185227.62281719595,
+     258561.78487132385
+    ],
+    "IG|thin|HF": [
+     -107834.91365262594,
+     -38958.033796136806
+    ],
+    "IG|thin|INS": [
+     150159.2158619619,
+     204195.98260784533
+    ]
+   },
    "depends": [
-    "R1",
-    "R2"
+    "R2",
+    "R3"
    ],
-   "figure": "R6_fail",
-   "golden": [
-    "HC1054",
-    "HC1058",
-    "HC1062",
-    "HC1082",
-    "HC1098",
-    "HC1107",
-    "HC1132",
-    "HC1135"
-   ],
-   "graded_as": "Component 2",
-   "id": "R5",
+   "figure": "bridge",
+   "golden": {
+    "HY|liquid|AM": 1606587.7353126402,
+    "HY|liquid|HF": 3466986.877580639,
+    "HY|medium|AM": 675623.4288296325,
+    "HY|medium|HF": 1229855.171425027,
+    "HY|thin|AM": 203939.29377693761,
+    "HY|thin|HF": 393325.6295431003,
+    "IG|liquid|AM": -1781180.0628806974,
+    "IG|medium|AM": -449057.6002907788,
+    "IG|medium|HF": -605430.1520281973,
+    "IG|thin|AM": 210227.62281719595,
+    "IG|thin|HF": -65283.00473427534,
+    "IG|thin|INS": 175229.9641266957
+   },
+   "graded_as": "Ask 2",
+   "id": "R7",
    "independent": "",
-   "name": "the increases below the hurdle",
+   "name": "the difference by changed segment",
    "passes": {
     "careful": {
-     "grade": "missed",
-     "value": [],
-     "why": "0 of the 8 failing increases flagged, 0 clear passes flagged"
+     "HY|liquid|AM": 1357879.7521843996,
+     "HY|liquid|HF": 3182601.6317644464,
+     "HY|medium|AM": 678473.4716929814,
+     "HY|medium|HF": 1285287.6143295662,
+     "HY|thin|AM": 362278.57947019156,
+     "HY|thin|HF": 439664.04316258634,
+     "IG|liquid|AM": -2606871.397503973,
+     "IG|medium|AM": -442331.57257964497,
+     "IG|medium|HF": -600991.9527987456,
+     "IG|thin|AM": 182080.7725084264,
+     "IG|thin|HF": 17131.81838615879,
+     "IG|thin|INS": 98415.69278163998
     },
     "quick": {
-     "grade": "missed",
-     "value": [
-      "HC1107"
-     ],
-     "why": "1 of the 8 failing increases flagged, 0 clear passes flagged"
+     "HY|liquid|AM": -245800.0,
+     "HY|liquid|HF": -1003100.0,
+     "HY|medium|AM": -79760.0,
+     "HY|medium|HF": -262550.0,
+     "HY|thin|AM": -47220.0,
+     "HY|thin|HF": -67040.0,
+     "IG|liquid|AM": -1372920.0,
+     "IG|medium|AM": -346680.0,
+     "IG|medium|HF": -383520.0,
+     "IG|thin|AM": -113780.0,
+     "IG|thin|HF": -120660.0,
+     "IG|thin|INS": -55280.0
     },
     "thorough": {
-     "grade": "right",
-     "value": [
-      "HC1054",
-      "HC1058",
-      "HC1062",
-      "HC1082",
-      "HC1098",
-      "HC1107",
-      "HC1132",
-      "HC1135"
-     ],
-     "why": "flags all 8 failing increases and no clear pass"
+     "HY|liquid|AM": 1606587.7353126402,
+     "HY|liquid|HF": 3466986.877580639,
+     "HY|medium|AM": 675623.4288296325,
+     "HY|medium|HF": 1229855.171425027,
+     "HY|thin|AM": 203939.29377693761,
+     "HY|thin|HF": 393325.6295431003,
+     "IG|liquid|AM": -1781180.0628806974,
+     "IG|medium|AM": -449057.6002907788,
+     "IG|medium|HF": -605430.1520281973,
+     "IG|thin|AM": 210227.62281719595,
+     "IG|thin|HF": -65283.00473427534,
+     "IG|thin|INS": 175229.9641266957
     }
    }
   },
   {
    "depends": [
-    "R3",
-    "R5"
+    "R7"
    ],
-   "figure": "REC",
+   "figure": "rec",
    "golden": {
     "drop": [
-     "HC1054",
-     "HC1058",
-     "HC1062",
-     "HC1082",
-     "HC1098",
-     "HC1107",
-     "HC1132",
-     "HC1135"
+     "IG|liquid|AM",
+     "IG|medium|AM",
+     "IG|medium|HF",
+     "IG|thin|HF"
     ],
-    "plan": 594.4
+    "plan": 13198409.323587993
    },
    "graded_as": "Recommendation",
-   "id": "R6",
+   "id": "R8",
    "independent": "",
-   "name": "the recommendation: plan and increases dropped",
+   "name": "the changed segments that lose money, and the plan",
    "passes": {
     "careful": {
      "grade": "missed",
      "value": {
-      "drop": [],
-      "plan": 711.7
+      "drop": [
+       "IG|liquid|AM",
+       "IG|medium|AM",
+       "IG|medium|HF"
+      ],
+      "plan": 15452773.801586343
      },
-     "why": "plan outside the band; 0 of the 8 failing increases flagged, 0 clear passes flagged"
+     "why": "plan outside the band; 3 of the 4 losing segments named, 0 paying segments named"
     },
     "quick": {
      "grade": "missed",
      "value": {
       "drop": [
-       "HC1107"
+       "HY|liquid|AM",
+       "HY|liquid|HF",
+       "HY|medium|AM",
+       "HY|medium|HF",
+       "HY|thin|AM",
+       "HY|thin|HF",
+       "IG|liquid|AM",
+       "IG|medium|AM",
+       "IG|medium|HF",
+       "IG|thin|AM",
+       "IG|thin|HF",
+       "IG|thin|INS"
       ],
-      "plan": 1213.2
+      "plan": 20630614.0
      },
-     "why": "plan outside the band; 1 of the 8 failing increases flagged, 0 clear passes flagged"
+     "why": "plan outside the band; 4 of the 4 losing segments named, 8 paying segments named"
     },
     "thorough": {
      "grade": "right",
      "value": {
       "drop": [
-       "HC1054",
-       "HC1058",
-       "HC1062",
-       "HC1082",
-       "HC1098",
-       "HC1107",
-       "HC1132",
-       "HC1135"
+       "IG|liquid|AM",
+       "IG|medium|AM",
+       "IG|medium|HF",
+       "IG|thin|HF"
       ],
-      "plan": 594.4
+      "plan": 13198409.323587993
      },
-     "why": "plan inside the band; flags all 8 failing increases and no clear pass"
+     "why": "plan inside the band; names every changed segment that loses money (4) and none that pays"
     }
    }
   }
@@ -327,16 +677,12 @@
   {
    "answer": {
     "drop": [
-     "HC1054",
-     "HC1058",
-     "HC1062",
-     "HC1082",
-     "HC1098",
-     "HC1107",
-     "HC1132",
-     "HC1135"
+     "IG|liquid|AM",
+     "IG|medium|AM",
+     "IG|medium|HF",
+     "IG|thin|HF"
     ],
-    "plan": 594.4
+    "plan": 13200000.0
    },
    "golden": true,
    "name": "the golden"
@@ -344,97 +690,160 @@
   {
    "answer": {
     "drop": [
-     "HC1107"
+     "HY|liquid|AM",
+     "HY|liquid|HF",
+     "HY|medium|AM",
+     "HY|medium|HF",
+     "HY|thin|AM",
+     "HY|thin|HF",
+     "IG|liquid|AM",
+     "IG|medium|AM",
+     "IG|medium|HF",
+     "IG|thin|AM",
+     "IG|thin|HF",
+     "IG|thin|INS"
     ],
-    "plan": 1213.2
+    "plan": 20630000.0
    },
-   "name": "priced the way past plans were"
+   "name": "the desk's month-end summaries"
   },
   {
    "answer": {
-    "drop": [],
-    "plan": 711.7
+    "drop": [
+     "IG|liquid|AM",
+     "IG|medium|AM",
+     "IG|medium|HF",
+     "IG|thin|AM",
+     "IG|thin|HF"
+    ],
+    "plan": 10880000.0
    },
    "name": "careful but hurried"
   },
   {
    "answer": {
     "drop": [
-     "HC1098",
-     "HC1107",
-     "HC1132"
+     "IG|liquid|AM",
+     "IG|medium|HF"
     ],
-    "plan": 721.9
+    "plan": 16920000.0
    },
-   "name": "risk model's factors"
+   "name": "the tape's levels, a week's marks"
   },
   {
    "answer": {
     "drop": [
-     "HC1039",
-     "HC1054",
-     "HC1058",
-     "HC1062",
-     "HC1082",
-     "HC1107",
-     "HC1132",
-     "HC1135"
+     "IG|liquid|AM",
+     "IG|medium|AM",
+     "IG|medium|HF",
+     "IG|thin|AM",
+     "IG|thin|HF"
     ],
-    "plan": 728.4
+    "plan": 7290000.0
    },
-   "name": "each pod's own record"
-  },
-  {
-   "answer": {
-    "drop": [],
-    "plan": 1025.5
-   },
-   "name": "capacity across pods"
+   "name": "complete moves, a fit on the desk's quotes"
   },
   {
    "answer": {
     "drop": [
-     "HC1054",
-     "HC1058",
-     "HC1062",
-     "HC1082",
-     "HC1098",
-     "HC1107",
-     "HC1125",
-     "HC1132",
-     "HC1135"
+     "IG|liquid|AM",
+     "IG|medium|AM",
+     "IG|medium|HF",
+     "IG|thin|HF"
     ],
-    "plan": 647.1
+    "plan": 19880000.0
    },
-   "name": "no drawdown rules"
+   "name": "a fit on the desk's quotes, each request's own cost"
   },
   {
    "answer": {
     "drop": [
-     "HC1107",
-     "HC1132"
+     "IG|liquid|AM"
     ],
-    "plan": 594.4
+    "plan": 23810000.0
    },
-   "name": "average return at the new size"
+   "name": "the desk's next-day view"
   },
   {
    "answer": {
     "drop": [
-     "HC1039",
-     "HC1054",
-     "HC1058",
-     "HC1062",
-     "HC1082",
-     "HC1098",
-     "HC1107",
-     "HC1125",
-     "HC1132",
-     "HC1135"
+     "IG|liquid|AM",
+     "IG|medium|AM",
+     "IG|medium|HF",
+     "IG|thin|HF"
     ],
-    "plan": 580.5
+    "plan": 11480000.0
    },
-   "name": "daily resampling"
+   "name": "the tape's levels, today's wins' cost for the added trades"
+  },
+  {
+   "answer": {
+    "drop": [
+     "IG|liquid|AM",
+     "IG|medium|AM",
+     "IG|medium|HF",
+     "IG|thin|HF"
+    ],
+    "plan": 13200000.0
+   },
+   "name": "the golden's figures, days drawn one at a time"
+  },
+  {
+   "answer": {
+    "drop": [
+     "IG|liquid|AM",
+     "IG|medium|AM",
+     "IG|medium|HF",
+     "IG|thin|AM",
+     "IG|thin|HF"
+    ],
+    "plan": 10880000.0
+   },
+   "name": "careful, the year in blocks"
+  },
+  {
+   "answer": {
+    "drop": [
+     "IG|liquid|AM",
+     "IG|medium|HF"
+    ],
+    "plan": 16920000.0
+   },
+   "name": "the tape's levels, a week's marks, the year in blocks"
+  },
+  {
+   "answer": {
+    "drop": [
+     "IG|liquid|AM",
+     "IG|medium|AM",
+     "IG|medium|HF"
+    ],
+    "plan": 15450000.0
+   },
+   "name": "the tape's levels, a week's marks, today's wins' cost for the added trades"
+  },
+  {
+   "answer": {
+    "drop": [
+     "IG|liquid|AM",
+     "IG|medium|AM",
+     "IG|medium|HF",
+     "IG|thin|HF"
+    ],
+    "plan": 11480000.0
+   },
+   "name": "the tape's levels, complete moves, today's wins' cost for the added trades, days one at a time"
+  },
+  {
+   "answer": {
+    "drop": [
+     "IG|liquid|AM",
+     "IG|medium|AM",
+     "IG|medium|HF"
+    ],
+    "plan": 15450000.0
+   },
+   "name": "the tape's levels, a week's marks, today's wins' cost for the added trades, the year in blocks"
   }
  ]
 }

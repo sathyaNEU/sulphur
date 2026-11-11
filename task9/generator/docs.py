@@ -30,11 +30,11 @@ INVENTORY = ("The desk hedges each day's interest rate risk with Treasuries and 
              "ledger and are not part of the desk's P&amp;L.")
 PNL = ("For planning, the desk counts a trade's P&amp;L as (a) its edge at execution, the distance between the trade price "
        "and the reference mid on the face traded; less (b) the move in the bond's value against the desk after the trade, "
-       "net of the move of the Treasury curve and of its rating's spreads, read once that move is complete; less (c) "
+       "net of the move of the Treasury curve and of the median move in the evaluated spreads of other issuers' bonds of its rating, read as soon as that move is complete; less (c) "
        "the offload charge for the bond's bucket, in cents per 100 face: investment grade liquid 1.2, medium 2.4, thin "
        "4.8; high yield liquid 4.2, medium 8.4, thin 15.6.")
-PLAN_A = ("A schedule is priced by what the desk's requests since 3 January 2023 would have made at that schedule's "
-          "quotes. Each request keeps everything but the desk's half-spread: its size, time, VIX and inventory terms and "
+PLAN_A = ("A schedule is priced by what the desk's requests since it began quoting on Tidewell on 3 January 2023 would "
+          "have made at that schedule's quotes. Each request keeps everything but the desk's half-spread: its size, time, VIX and inventory terms and "
           "its jitter, the other dealers' prices and whether its client traded; a request its client did not trade, or "
           "the desk passed, stays as it was.")
 PLAN_B = "Each segment is carried at the number of requests it received in the twelve months to 31 October 2026."

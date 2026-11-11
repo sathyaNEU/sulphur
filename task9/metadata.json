@@ -1,33 +1,23 @@
 {
  "task": "task9",
- "title": "Harbourne Capital: the 2027 net P&L to plan at the draft capital plan, with its range, and the increases that do not earn the hurdle",
+ "title": "Brindlemoor Securities' credit desk: the 2027 P&L to plan on the draft quoting schedule, with its range, and the changes that lose money",
  "domain": "Quantitative Finance and Trading, Quantitative Finance",
- "task_type": "strategy backtesting and evaluation (a multi-manager platform's capital plan across its pods)",
+ "task_type": "strategy backtesting and evaluation (a dealer's auto-quoting schedule backtested on its request-for-quote history)",
  "objective": "Forecasting & Predictive Modeling",
  "as_of": "2026-11-11",
  "deliverables": [
-  "Harbourne_2027_plan_review.pptx",
-  "Harbourne_2027_plan_workbook.xlsx"
+  "Brindlemoor_2027_quoting_plan.xlsx",
+  "Brindlemoor_2027_quoting_memo.docx"
  ],
  "distractor_files": [
   "DAAA.csv",
-  "IR3TIB01USM156N.csv"
- ],
- "stated_inputs": [
-  "0.35",
-  "1.5",
-  "18",
-  "20",
-  "5",
-  "7.5",
-  "218.4",
-  "126",
-  "252",
-  "40",
-  "1.4"
+  "DBAA.csv",
+  "SOFR.csv",
+  "SPX_History.csv",
+  "tidewell_dealer_league_tables_2026.xlsx"
  ],
  "input_gates": {
-  "files": 41,
+  "files": 27,
   "formats": [
    "csv",
    "pdf",
@@ -37,18 +27,18 @@
    "spreadsheet",
    "text"
   ],
-  "largest_file": "risk_pnl_daily_legacy_20170103_20230630.csv",
-  "largest_file_rows": 114983,
-  "long_file": "risk_pnl_daily_20230703_20261106.csv",
-  "long_file_rows": 77544
+  "largest_file": "public_trade_tape_corporates_2023_2026.csv",
+  "largest_file_rows": 497437,
+  "long_file": "tidewell_rfq_audit_brindlemoor_20250407_20261106.csv",
+  "long_file_rows": 131838
  },
  "sources": [
   {
-   "files": "the 29 FRED series (NASDAQ100.csv to IR3TIB01USM156N.csv)",
-   "origin": "Federal Reserve Bank of St. Louis, FRED; each series as its graph download serves it (the OECD rates are FRED's copies of the OECD Main Economic Indicators).",
+   "files": "the 11 FRED series (DGS1 to DGS30, DBAA, DAAA, SOFR)",
+   "origin": "Federal Reserve Bank of St. Louis, FRED; each series as its graph download serves it.",
    "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=<series>",
    "date": "2026-11-11",
-   "license": "Public domain or reproducible with attribution as FRED's terms state for each source series (Treasury, Federal Reserve, Moody's via FRED, ICE Benchmark Administration and EIA, OECD); values reproduced unaltered with the source and pull date recorded."
+   "license": "Public domain or reproducible with attribution as FRED's terms state for each source series (Board of Governors, Moody's via FRED, Federal Reserve Bank of New York); values reproduced unaltered with the source and pull date recorded."
   },
   {
    "files": "SPX_History.csv, VIX_History.csv",
@@ -59,18 +49,18 @@
   },
   {
    "files": "every other file",
-   "origin": "written for this task. Harbourne Capital, its pods, people, systems, administrator and paperwork are invented; every pod's P&L is its loadings on returns computed from the published series above plus its own simulated edge and noise.",
+   "origin": "written for this task. Brindlemoor Securities, Tidewell Credit Network, Ashcote Evaluations, the issuers, bonds, clients, dealers and paperwork are invented; every bond's value is the published Treasury curve and Moody's spreads plus its issuer's own simulated information, and every request, quote and trade is simulated from the request-for-quote process on them.",
    "date": "2026-11-11",
    "license": "CC BY 4.0 (original work)"
   }
  ],
  "files": [
   {
-   "path": "Capital_Review_Policy_2026.pdf",
+   "path": "Credit_Electronic_Quoting_Policy_2026.pdf",
    "format": "pdf",
-   "bytes": 36349,
-   "covers": "the capital review policy (2026 edition)",
-   "made": "written by task9/generator (pack.py, docs.py) from the simulated books and the published series (deterministic)"
+   "bytes": 34475,
+   "covers": "the desk's electronic quoting policy (2026 edition)",
+   "made": "written by task9/generator (pack.py, docs.py) from the simulated market on the published series (deterministic)"
   },
   {
    "path": "DAAA.csv",
@@ -80,7 +70,6 @@
    "made": "downloaded and shipped as published, cut at 6 November 2026 (the record's last day)",
    "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DAAA",
    "pulled": "2026-11-11",
-   "sha256_as_pulled": "fe293d84fb5d0ed933986a1033dc1b79303777b47e5f49d57f8c0b70ae3e1253",
    "rows": 11440
   },
   {
@@ -91,118 +80,17 @@
    "made": "downloaded and shipped as published, cut at 6 November 2026 (the record's last day)",
    "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DBAA",
    "pulled": "2026-11-11",
-   "sha256_as_pulled": "a48e5e4e266dd405bd4139fa557f7cc4f0167a19f9f1acf8cbeab42046b697ff",
    "rows": 10657
   },
   {
-   "path": "DCOILBRENTEU.csv",
+   "path": "DGS1.csv",
    "format": "csv",
-   "bytes": 170363,
-   "covers": "Brent crude oil spot price, daily, as FRED publishes it",
+   "bytes": 268953,
+   "covers": "1-year Treasury constant-maturity yield, daily, as FRED publishes it",
    "made": "downloaded and shipped as published, cut at 6 November 2026 (the record's last day)",
-   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DCOILBRENTEU",
+   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS1",
    "pulled": "2026-11-11",
-   "sha256_as_pulled": "b30cdc14ddae1f72df40bb942f6926acc9df627cb3c68844d6e18ea65b5cf6f0",
-   "rows": 10295
-  },
-  {
-   "path": "DEXCAUS.csv",
-   "format": "csv",
-   "bytes": 258931,
-   "covers": "Canadian dollars per US dollar, noon buying rate, as FRED publishes it",
-   "made": "downloaded and shipped as published, cut at 6 November 2026 (the record's last day)",
-   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXCAUS",
-   "pulled": "2026-11-11",
-   "sha256_as_pulled": "e2fb2368b337c34fbd2f70f99d02535c10336d6c564190f14d8a24659d9ddfe5",
-   "rows": 14570
-  },
-  {
-   "path": "DEXJPUS.csv",
-   "format": "csv",
-   "bytes": 257345,
-   "covers": "Japanese yen per US dollar, noon buying rate, as FRED publishes it",
-   "made": "downloaded and shipped as published, cut at 6 November 2026 (the record's last day)",
-   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXJPUS",
-   "pulled": "2026-11-11",
-   "sha256_as_pulled": "981ecae92d8bf73940b09f817787f190e98269f382abb050bbb84daa8786468e",
-   "rows": 14570
-  },
-  {
-   "path": "DEXNOUS.csv",
-   "format": "csv",
-   "bytes": 259717,
-   "covers": "Norwegian kroner per US dollar, noon buying rate, as FRED publishes it",
-   "made": "downloaded and shipped as published, cut at 6 November 2026 (the record's last day)",
-   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXNOUS",
-   "pulled": "2026-11-11",
-   "sha256_as_pulled": "4141827293462706ae2ab7d636213ab459425bc0395a9a1182d9aeb85fdf4bd0",
-   "rows": 14570
-  },
-  {
-   "path": "DEXSDUS.csv",
-   "format": "csv",
-   "bytes": 259951,
-   "covers": "Swedish kronor per US dollar, noon buying rate, as FRED publishes it",
-   "made": "downloaded and shipped as published, cut at 6 November 2026 (the record's last day)",
-   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXSDUS",
-   "pulled": "2026-11-11",
-   "sha256_as_pulled": "dca666a9d721c348a5dbb69c8efb836821263931223c57c9f19bc890262983ae",
-   "rows": 14570
-  },
-  {
-   "path": "DEXSZUS.csv",
-   "format": "csv",
-   "bytes": 258895,
-   "covers": "Swiss francs per US dollar, noon buying rate, as FRED publishes it",
-   "made": "downloaded and shipped as published, cut at 6 November 2026 (the record's last day)",
-   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXSZUS",
-   "pulled": "2026-11-11",
-   "sha256_as_pulled": "2a32d909031076d4559c43306794b9c10a1ff64be8a8884635ada0fbda75917e",
-   "rows": 14570
-  },
-  {
-   "path": "DEXUSAL.csv",
-   "format": "csv",
-   "bytes": 258853,
-   "covers": "US dollars per Australian dollar, noon buying rate, as FRED publishes it",
-   "made": "downloaded and shipped as published, cut at 6 November 2026 (the record's last day)",
-   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXUSAL",
-   "pulled": "2026-11-11",
-   "sha256_as_pulled": "cd663f7a4eef6e12df31f650ffb755913c676df2996b99158d7aa12ac80f28e9",
-   "rows": 14570
-  },
-  {
-   "path": "DEXUSEU.csv",
-   "format": "csv",
-   "bytes": 129109,
-   "covers": "US dollars per euro, noon buying rate, as FRED publishes it",
-   "made": "downloaded and shipped as published, cut at 6 November 2026 (the record's last day)",
-   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXUSEU",
-   "pulled": "2026-11-11",
-   "sha256_as_pulled": "2374b98f07cdfc5c0f3b5147325bfe5ddc15fc9d6cc5eb71b2c320d19c5438d3",
-   "rows": 7265
-  },
-  {
-   "path": "DEXUSNZ.csv",
-   "format": "csv",
-   "bytes": 258799,
-   "covers": "US dollars per New Zealand dollar, noon buying rate, as FRED publishes it",
-   "made": "downloaded and shipped as published, cut at 6 November 2026 (the record's last day)",
-   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXUSNZ",
-   "pulled": "2026-11-11",
-   "sha256_as_pulled": "7be2f9f8a6b379625fe2f4ce50d46b988ef5ffbe4c37e4bc38f53e07f6e26b07",
-   "rows": 14570
-  },
-  {
-   "path": "DEXUSUK.csv",
-   "format": "csv",
-   "bytes": 258895,
-   "covers": "US dollars per pound sterling, noon buying rate, as FRED publishes it",
-   "made": "downloaded and shipped as published, cut at 6 November 2026 (the record's last day)",
-   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DEXUSUK",
-   "pulled": "2026-11-11",
-   "sha256_as_pulled": "e5e496466383ef8c7fa406acc930e361150d5c8a413330793335ff37f9c22c20",
-   "rows": 14570
+   "rows": 16919
   },
   {
    "path": "DGS10.csv",
@@ -212,7 +100,6 @@
    "made": "downloaded and shipped as published, cut at 6 November 2026 (the record's last day)",
    "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS10",
    "pulled": "2026-11-11",
-   "sha256_as_pulled": "0a19145416475025a3db81f1d24cddde626211cc098ccba2c22c4baf426c5bb4",
    "rows": 16919
   },
   {
@@ -223,180 +110,67 @@
    "made": "downloaded and shipped as published, cut at 6 November 2026 (the record's last day)",
    "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS2",
    "pulled": "2026-11-11",
-   "sha256_as_pulled": "4d4ee579aa22639298cb3667a693b402b1c3e6e13869d9de9bbf3f71cf937128",
    "rows": 13159
   },
   {
-   "path": "DTB3.csv",
+   "path": "DGS20.csv",
    "format": "csv",
-   "bytes": 301617,
-   "covers": "3-month Treasury bill secondary-market rate, daily, as FRED publishes it",
+   "bytes": 262600,
+   "covers": "20-year Treasury constant-maturity yield, daily, as FRED publishes it",
    "made": "downloaded and shipped as published, cut at 6 November 2026 (the record's last day)",
-   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DTB3",
+   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS20",
    "pulled": "2026-11-11",
-   "sha256_as_pulled": "f524d6761c4728f2288fd6d8bc0dedb7b95ca0eb7836b9a73c7d6449c508640d",
-   "rows": 19005
+   "rows": 16919
   },
   {
-   "path": "DTWEXBGS.csv",
+   "path": "DGS3.csv",
    "format": "csv",
-   "bytes": 105029,
-   "covers": "nominal broad US dollar index, daily, as FRED publishes it",
+   "bytes": 269052,
+   "covers": "3-year Treasury constant-maturity yield, daily, as FRED publishes it",
    "made": "downloaded and shipped as published, cut at 6 November 2026 (the record's last day)",
-   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DTWEXBGS",
+   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS3",
    "pulled": "2026-11-11",
-   "sha256_as_pulled": "448522e5b4b78d787e08edd86028dfe67a92c4aeab1aded9266304d6c71f19bc",
-   "rows": 5440
+   "rows": 16919
   },
   {
-   "path": "IR3TIB01AUM156N.csv",
+   "path": "DGS30.csv",
    "format": "csv",
-   "bytes": 19912,
-   "covers": "Australia 3-month interbank rate, monthly (OECD), as FRED publishes it",
+   "bytes": 206925,
+   "covers": "30-year Treasury constant-maturity yield, daily, as FRED publishes it",
    "made": "downloaded and shipped as published, cut at 6 November 2026 (the record's last day)",
-   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=IR3TIB01AUM156N",
+   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS30",
    "pulled": "2026-11-11",
-   "sha256_as_pulled": "cc5a480e77a97ad2a10e93bab4631f577a43ef896853069beb2538b9539ae13f",
-   "rows": 704
+   "rows": 12974
   },
   {
-   "path": "IR3TIB01CAM156N.csv",
+   "path": "DGS5.csv",
    "format": "csv",
-   "bytes": 19664,
-   "covers": "Canada 3-month interbank rate, monthly (OECD), as FRED publishes it",
+   "bytes": 269157,
+   "covers": "5-year Treasury constant-maturity yield, daily, as FRED publishes it",
    "made": "downloaded and shipped as published, cut at 6 November 2026 (the record's last day)",
-   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=IR3TIB01CAM156N",
+   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS5",
    "pulled": "2026-11-11",
-   "sha256_as_pulled": "74d6cbbb2cf93db71b23c463222164ec371085e1337dec4e391678df538a9d95",
-   "rows": 849
+   "rows": 16919
   },
   {
-   "path": "IR3TIB01CHM156N.csv",
+   "path": "DGS7.csv",
    "format": "csv",
-   "bytes": 9978,
-   "covers": "Switzerland 3-month interbank rate, monthly (OECD), as FRED publishes it",
+   "bytes": 238351,
+   "covers": "7-year Treasury constant-maturity yield, daily, as FRED publishes it",
    "made": "downloaded and shipped as published, cut at 6 November 2026 (the record's last day)",
-   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=IR3TIB01CHM156N",
+   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=DGS7",
    "pulled": "2026-11-11",
-   "sha256_as_pulled": "5edd57c52a5e513c8e2dbc4b705eefdc0d97e17ce6e815dc876dcf322d6ba6b2",
-   "rows": 327
+   "rows": 14964
   },
   {
-   "path": "IR3TIB01DEM156N.csv",
+   "path": "SOFR.csv",
    "format": "csv",
-   "bytes": 24179,
-   "covers": "Germany 3-month interbank rate, monthly (OECD), as FRED publishes it",
+   "bytes": 35542,
+   "covers": "Secured Overnight Financing Rate, daily, as FRED publishes it",
    "made": "downloaded and shipped as published, cut at 6 November 2026 (the record's last day)",
-   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=IR3TIB01DEM156N",
+   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=SOFR",
    "pulled": "2026-11-11",
-   "sha256_as_pulled": "36c3e58d4faa1f8e1c1fd42b02063d2af89052a9b702e4d945724edfc737b0e9",
-   "rows": 801
-  },
-  {
-   "path": "IR3TIB01EZM156N.csv",
-   "format": "csv",
-   "bytes": 11669,
-   "covers": "euro area 3-month interbank rate, monthly (OECD), as FRED publishes it",
-   "made": "downloaded and shipped as published, cut at 6 November 2026 (the record's last day)",
-   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=IR3TIB01EZM156N",
-   "pulled": "2026-11-11",
-   "sha256_as_pulled": "bda18d6a61bc490560965e6acd9fc21e213f026ca68ac4670d3c9ec835043ce5",
-   "rows": 385
-  },
-  {
-   "path": "IR3TIB01GBM156N.csv",
-   "format": "csv",
-   "bytes": 15956,
-   "covers": "United Kingdom 3-month interbank rate, monthly (OECD), as FRED publishes it",
-   "made": "downloaded and shipped as published, cut at 6 November 2026 (the record's last day)",
-   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=IR3TIB01GBM156N",
-   "pulled": "2026-11-11",
-   "sha256_as_pulled": "40c23cc654a1380ed278a2b0be691f368d5cc1648493cadbbf1a2a2f654d33d4",
-   "rows": 829
-  },
-  {
-   "path": "IR3TIB01JPM156N.csv",
-   "format": "csv",
-   "bytes": 5640,
-   "covers": "Japan 3-month interbank rate, monthly (OECD), as FRED publishes it",
-   "made": "downloaded and shipped as published, cut at 6 November 2026 (the record's last day)",
-   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=IR3TIB01JPM156N",
-   "pulled": "2026-11-11",
-   "sha256_as_pulled": "7d7336c147e74b18a02b6cb8628918d339bd53126c89e5f712609e04d95f6d11",
-   "rows": 293
-  },
-  {
-   "path": "IR3TIB01NOM156N.csv",
-   "format": "csv",
-   "bytes": 13374,
-   "covers": "Norway 3-month interbank rate, monthly (OECD), as FRED publishes it",
-   "made": "downloaded and shipped as published, cut at 6 November 2026 (the record's last day)",
-   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=IR3TIB01NOM156N",
-   "pulled": "2026-11-11",
-   "sha256_as_pulled": "93ed548691739a1b11f6e37e1538818e8b19874e7950d6f32922c04f1379f5bf",
-   "rows": 573
-  },
-  {
-   "path": "IR3TIB01NZM156N.csv",
-   "format": "csv",
-   "bytes": 10360,
-   "covers": "New Zealand 3-month interbank rate, monthly (OECD), as FRED publishes it",
-   "made": "downloaded and shipped as published, cut at 6 November 2026 (the record's last day)",
-   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=IR3TIB01NZM156N",
-   "pulled": "2026-11-11",
-   "sha256_as_pulled": "3303a69593f6972de63ca1bec39a3f190ff808d2daaa90dfb5e69ff304b8b070",
-   "rows": 634
-  },
-  {
-   "path": "IR3TIB01SEM156N.csv",
-   "format": "csv",
-   "bytes": 10971,
-   "covers": "Sweden 3-month interbank rate, monthly (OECD), as FRED publishes it",
-   "made": "downloaded and shipped as published, cut at 6 November 2026 (the record's last day)",
-   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=IR3TIB01SEM156N",
-   "pulled": "2026-11-11",
-   "sha256_as_pulled": "0c9aadaef12653aa8a9f49b56d7eb20450e49a95819b76a12ebde61645b50739",
-   "rows": 537
-  },
-  {
-   "path": "IR3TIB01USM156N.csv",
-   "format": "csv",
-   "bytes": 12056,
-   "covers": "United States 3-month interbank rate, monthly (OECD), as FRED publishes it",
-   "made": "downloaded and shipped as published, cut at 6 November 2026 (the record's last day)",
-   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=IR3TIB01USM156N",
-   "pulled": "2026-11-11",
-   "sha256_as_pulled": "db60ae4e3842775fb47aee207b55ab35f80b3a83c23baf21d3647f5f99288991",
-   "rows": 748
-  },
-  {
-   "path": "IRSTCI01GBM156N.csv",
-   "format": "csv",
-   "bytes": 10693,
-   "covers": "United Kingdom call money rate, monthly (OECD), as FRED publishes it",
-   "made": "downloaded and shipped as published, cut at 6 November 2026 (the record's last day)",
-   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=IRSTCI01GBM156N",
-   "pulled": "2026-11-11",
-   "sha256_as_pulled": "3c3b5aa161e2c78e18e9d42e770c0e048aebd01477a8cfb7f05fe3a98fdcabb9",
-   "rows": 585
-  },
-  {
-   "path": "NASDAQ100.csv",
-   "format": "csv",
-   "bytes": 208818,
-   "covers": "NASDAQ-100 index, daily close, as FRED publishes it",
-   "made": "downloaded and shipped as published, cut at 6 November 2026 (the record's last day)",
-   "url": "https://fred.stlouisfed.org/graph/fredgraph.csv?id=NASDAQ100",
-   "pulled": "2026-11-11",
-   "sha256_as_pulled": "3759a7171692329b5b44507abaa52c26fd25a6824ec3454ec9e23080ac37157a",
-   "rows": 10656
-  },
-  {
-   "path": "Risk_Model_Methodology_2023.pdf",
-   "format": "pdf",
-   "bytes": 45326,
-   "covers": "the risk model's factor definitions, version 3",
-   "made": "written by task9/generator (pack.py, docs.py) from the simulated books and the published series (deterministic)"
+   "rows": 2244
   },
   {
    "path": "SPX_History.csv",
@@ -406,7 +180,6 @@
    "made": "downloaded and shipped as published, cut at 6 November 2026 (the record's last day)",
    "url": "https://cdn.cboe.com/api/global/us_indices/daily_prices/SPX_History.csv",
    "pulled": "2026-11-11",
-   "sha256_as_pulled": "dd918ea0049f029ff10c684904e3e539f25aedd9fe3fd7e4c7f64b04114a899c",
    "rows": 13072
   },
   {
@@ -417,64 +190,98 @@
    "made": "downloaded and shipped as published, cut at 6 November 2026 (the record's last day)",
    "url": "https://cdn.cboe.com/api/global/us_indices/daily_prices/VIX_History.csv",
    "pulled": "2026-11-11",
-   "sha256_as_pulled": "61c9c1cbfbdafab080bbfebe70549636c8d046ccdf10062ece9f5b037c526545",
    "rows": 9311
   },
   {
-   "path": "allocation_plans_2018_2026.xlsx",
+   "path": "ashcote_evaluated_prices_2023_2026.csv",
+   "format": "csv",
+   "bytes": 7286605,
+   "covers": "Ashcote's daily evaluated bid, mid and ask for each bond",
+   "made": "written by task9/generator (pack.py, docs.py) from the simulated market on the published series (deterministic)"
+  },
+  {
+   "path": "auto_quoter_schedule_2027_proposed.xlsx",
    "format": "xlsx",
-   "bytes": 35238,
-   "covers": "the allocation plans the committee approved for 2018 to 2026",
-   "made": "written by task9/generator (pack.py, docs.py) from the simulated books and the published series (deterministic)"
+   "bytes": 7188,
+   "covers": "the draft 2027 schedule",
+   "made": "written by task9/generator (pack.py, docs.py) from the simulated market on the published series (deterministic)"
   },
   {
-   "path": "book_code_map_20220401.csv",
-   "format": "csv",
-   "bytes": 2016,
-   "covers": "the map from the old pod codes to the book ids issued on 1 April 2022",
-   "made": "written by task9/generator (pack.py, docs.py) from the simulated books and the published series (deterministic)"
-  },
-  {
-   "path": "capital_changes_20170103_20261106.csv",
-   "format": "csv",
-   "bytes": 69807,
-   "covers": "every change to a pod's capital, with its effective date and reason",
-   "made": "written by task9/generator (pack.py, docs.py) from the simulated books and the published series (deterministic)"
-  },
-  {
-   "path": "draft_allocation_plan_2027.xlsx",
+   "path": "auto_quoter_schedule_versions.xlsx",
    "format": "xlsx",
-   "bytes": 10225,
-   "covers": "the draft allocation plan for 2027 and the 2027 platform budget",
-   "made": "written by task9/generator (pack.py, docs.py) from the simulated books and the published series (deterministic)"
+   "bytes": 9837,
+   "covers": "the auto-quoter's schedule, versions 1 to 3, with its multiples and formula",
+   "made": "written by task9/generator (pack.py, docs.py) from the simulated market on the published series (deterministic)"
   },
   {
-   "path": "kestrel_month_end_statements_201701_202610.csv",
+   "path": "brindlemoor_credit_blotter_2023_2026.csv",
    "format": "csv",
-   "bytes": 596644,
-   "covers": "the administrator's month-end statements by sleeve, January 2017 to October 2026",
-   "made": "written by task9/generator (pack.py, docs.py) from the simulated books and the published series (deterministic)"
+   "bytes": 5617810,
+   "covers": "the desk's trades: client trades on Tidewell and trades with other dealers",
+   "made": "written by task9/generator (pack.py, docs.py) from the simulated market on the published series (deterministic)"
   },
   {
-   "path": "pod_register_20261106.csv",
-   "format": "csv",
-   "bytes": 16732,
-   "covers": "every pod the platform has run, its strategy group, first and last trading day and status",
-   "made": "written by task9/generator (pack.py, docs.py) from the simulated books and the published series (deterministic)"
+   "path": "credit_desk_month_end_summaries.xlsx",
+   "format": "xlsx",
+   "bytes": 98599,
+   "covers": "the desk's month-end summaries by segment, January 2023 to October 2026",
+   "made": "written by task9/generator (pack.py, docs.py) from the simulated market on the published series (deterministic)"
   },
   {
-   "path": "risk_pnl_daily_20230703_20261106.csv",
+   "path": "issuer_ratings_history.csv",
    "format": "csv",
-   "bytes": 2401363,
-   "covers": "the new risk system's daily P&L and allocated capital by book, July 2023 to 6 November 2026",
-   "made": "written by task9/generator (pack.py, docs.py) from the simulated books and the published series (deterministic)"
+   "bytes": 3123,
+   "covers": "issuer ratings and the dates they changed",
+   "made": "written by task9/generator (pack.py, docs.py) from the simulated market on the published series (deterministic)"
   },
   {
-   "path": "risk_pnl_daily_legacy_20170103_20230630.csv",
+   "path": "public_trade_tape_corporates_2023_2026.csv",
    "format": "csv",
-   "bytes": 4392227,
-   "covers": "the risk system's daily P&L and capital by pod, January 2017 to the June 2023 migration",
-   "made": "written by task9/generator (pack.py, docs.py) from the simulated books and the published series (deterministic)"
+   "bytes": 40523454,
+   "covers": "the public trade tape for the bonds the desk quotes, with dissemination times, capped sizes, cancels and corrections",
+   "made": "written by task9/generator (pack.py, docs.py) from the simulated market on the published series (deterministic)"
+  },
+  {
+   "path": "security_master_20261106.csv",
+   "format": "csv",
+   "bytes": 19247,
+   "covers": "the security master: issuer, sector, coupon, maturity, size, 144A status and registered successor",
+   "made": "written by task9/generator (pack.py, docs.py) from the simulated market on the published series (deterministic)"
+  },
+  {
+   "path": "security_master_liquidity_buckets.csv",
+   "format": "csv",
+   "bytes": 70031,
+   "covers": "the security master's liquidity bucket for each bond and quarter",
+   "made": "written by task9/generator (pack.py, docs.py) from the simulated market on the published series (deterministic)"
+  },
+  {
+   "path": "tidewell_client_list_20261106.csv",
+   "format": "csv",
+   "bytes": 9005,
+   "covers": "the Tidewell client list: each client code's type and onboarding date",
+   "made": "written by task9/generator (pack.py, docs.py) from the simulated market on the published series (deterministic)"
+  },
+  {
+   "path": "tidewell_dealer_league_tables_2026.xlsx",
+   "format": "xlsx",
+   "bytes": 14158,
+   "covers": "Tidewell's monthly dealer league tables for 2026",
+   "made": "written by task9/generator (pack.py, docs.py) from the simulated market on the published series (deterministic)"
+  },
+  {
+   "path": "tidewell_rfq_audit_brindlemoor_20230103_20250404.csv",
+   "format": "csv",
+   "bytes": 13793567,
+   "covers": "Tidewell's audit of the requests for quote the desk received, 3 January 2023 to 4 April 2025 (first export generation)",
+   "made": "written by task9/generator (pack.py, docs.py) from the simulated market on the published series (deterministic)"
+  },
+  {
+   "path": "tidewell_rfq_audit_brindlemoor_20250407_20261106.csv",
+   "format": "csv",
+   "bytes": 11123081,
+   "covers": "the same audit from 7 April 2025 to 6 November 2026 (second export generation)",
+   "made": "written by task9/generator (pack.py, docs.py) from the simulated market on the published series (deterministic)"
   }
  ]
 }

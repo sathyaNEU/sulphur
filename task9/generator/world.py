@@ -224,7 +224,8 @@ class World:
             for _ in range(n):
                 k += 1
                 inf = rng.random() < P.INFORMED_SHARE[t]
-                rows.append(dict(client=k, ctype=t, weight=float(np.exp(rng.normal(0, 0.8))),
+                pick = rng.random() < P.PICKER_SHARE[t]
+                rows.append(dict(client=k, ctype=t, weight=float(np.exp(rng.normal(0, 0.8))), picker=pick,
                                  include=float(np.clip(rng.beta(6, 2.2) if t != "RET" else rng.beta(12, 1.5), 0.2, 0.99)),
                                  informed=inf, hy_pref=float(np.clip(P.HY_PREF[t] + rng.normal(0, 0.12), 0.02, 0.95)),
                                  onboard=self.mk.days[0] - pd.Timedelta(days=int(rng.integers(30, 2500)))
@@ -242,6 +243,13 @@ class World:
             else:
                 cover.append(set())
         C["covers"] = cover
+        pk = []
+        for _, c in C.iterrows():
+            if c["picker"]:
+                pk.append(set(rng.choice(np.arange(P.N_ISSUERS), int(rng.integers(20, 45)), replace=False)))
+            else:
+                pk.append(set())
+        C["watches"] = pk
         self.C = C
 
     def _news_flow(self):
@@ -301,11 +309,15 @@ class World:
         cinc = dict(zip(C.client, C.include))
         cw = {t: C[C.ctype == t] for t in P.CLIENT_TYPES}
         inf_by_t = {t: g for t, g in self.inf_req.groupby("t")} if len(self.inf_req) else {}
+        pickers = [dict(client=int(c.client), ctype=c.ctype, onboard=c.onboard) for c in C.itertuples() if c.picker]
+        watch_bonds = {int(c.client): np.where(np.isin(B.issuer.values, list(c.watches)))[0] for c in C.itertuples() if c.picker}
         outage = set(rng.choice(np.arange(20, T - 20), 3, replace=False).tolist())
         early = set(i for i, d in enumerate(mk.days) if (d.month == 11 and d.dayofweek == 4 and 22 <= d.day <= 28) or
                     (d.month == 12 and d.day == 24) or (d.month == 7 and d.day == 3))
         years = (mk.days - mk.days[0]).days.values / 365.25
         quarter = mk.days.to_period("Q")
+        mp = mk.days.to_period("M")
+        month_end = np.r_[mp[1:] != mp[:-1], True]
         for t in range(T):
             d = mk.days[t]
             if t > 0 and quarter[t] != quarter[t - 1]:
@@ -350,6 +362,20 @@ class World:
                     ww = B.lam.values[cand] ** P.REQ_LAM_POW
                     b = int(rng.choice(cand, p=ww / ww.sum()))
                     reqs.append(dict(client=int(c), bond=b, side=int(rng.choice([-1, 1])), informed=False, mult=1.0))
+            for c in pickers:
+                if c["onboard"] > d:
+                    continue
+                cand = watch_bonds[c["client"]]
+                cand = cand[alive[cand]]
+                if len(cand) == 0:
+                    continue
+                g = gap[cand] * 100.0                               # cents: the evaluation above (+) the market
+                band_ = np.where(seg_ig[cand], "IG", "HY")
+                thr = np.array([P.SCHEDULE_V1[(bd, bucket[x])][c["ctype"]] for bd, x in zip(band_, cand)]) * P.PICK_THRESHOLD * stress
+                hit = cand[(np.abs(g) > thr) & (rng.random(len(cand)) < P.PICK_DAILY)]
+                for b in hit:
+                    reqs.append(dict(client=int(c["client"]), bond=int(b), side=(1 if gap[b] < 0 else -1), informed=False,
+                                     picker=True, mult=float(rng.uniform(0.8, 1.5)), to_desk=rng.random() < cinc[int(c["client"])]))
             for _, r in inf_by_t.get(t, pd.DataFrame()).iterrows():
                 if not alive[int(r["bond"])]:
                     continue
@@ -417,7 +443,10 @@ class World:
                 quotes.sort(key=lambda x: s * x[0])            # best first: lowest offer, highest bid
                 best_p, best_d = quotes[0]
                 dist_true = s * (best_p - V[b]) * 100
-                trades = r["informed"] or dist_true <= 3.5 * h_mkt + 1.0
+                if r.get("picker"):
+                    trades = dist_true < 0
+                else:
+                    trades = r["informed"] or dist_true <= 3.5 * h_mkt + 1.0
                 cover_p = quotes[1][0] if len(quotes) > 1 else None
                 if desk_in:
                     rid += 1
@@ -436,7 +465,7 @@ class World:
                                          status=status, quote=None if passed else our, ref_mid=mark[b],
                                          done_price=best_p if status == "DONE" else None,
                                          cover=cover_p if status == "DONE" else None, ty=ty, band=band, bucket=bk,
-                                         informed=r["informed"], best_rival=best_rival, V=V[b],
+                                         informed=r["informed"], picker=bool(r.get("picker", False)), best_rival=best_rival, V=V[b],
                                          h_sched=self.schedule_h(t, seg), stress=stress))
                 if trades:
                     ex_h = r["hour"] + rng.uniform(15, 75) / 3600.0
@@ -494,10 +523,15 @@ class World:
             # its own prints
             tradeable = np.isin(bucket, ["liquid", "medium"])
             iss_prints = np.bincount(bi, weights=day_prints * tradeable, minlength=P.N_ISSUERS)
-            kI = 1 - (1 - P.EVAL_PRINT_PULL) ** iss_prints * (1 - P.EVAL_ISSUER_DAILY)
-            Ihat = Ihat + kI * (self.I[t] - Ihat)
             own = (B.beta.values - 1.0) * self.I[t, bi] + self.e[t]
-            kb = 1 - (1 - P.EVAL_PRINT_PULL) ** day_prints * (1 - np.array([P.EVAL_OWN_DAILY[x] for x in bucket]))
+            if month_end[t]:
+                # the month-end review re-marks every bond to where the market has traded it
+                kI = np.full(P.N_ISSUERS, P.EVAL_MONTH_END)
+                kb = np.full(nb, P.EVAL_MONTH_END)
+            else:
+                kI = 1 - (1 - P.EVAL_ISSUER_PULL) ** iss_prints * (1 - P.EVAL_ISSUER_DAILY)
+                kb = 1 - (1 - P.EVAL_PRINT_PULL) ** day_prints * (1 - np.array([P.EVAL_OWN_DAILY[x] for x in bucket]))
+            Ihat = Ihat + kI * (self.I[t] - Ihat)
             ehat = ehat + kb * (own - ehat)
             esp = self.mkt_spread[t] + Ihat[bi] + ehat
             noise = rng.normal(0, 1, nb) * np.where(seg_ig, P.EVAL_NOISE["IG"], P.EVAL_NOISE["HY"]) / 100.0

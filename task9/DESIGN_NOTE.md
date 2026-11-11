@@ -18,7 +18,8 @@ Data-native sentence: a dealer's request history records its own quotes and its 
   what those trades would cost is read on evaluated prices that lag for weeks in thin bonds, so each segment's piece
   of the change is rebuilt from three systems that each see a different part of the same trade.
 People: Yolanda Cobb (head of credit trading, owner of the quoting policy), James Flowers (the desk's strategist, who
-  keeps the auto-quoter's schedule); drawn with guard.py names --geo us --seed 1010.
+  keeps the auto-quoter's schedule), drawn with guard.py names --geo us --seed 1010; Steven Phillips (credit product
+  control, owner of the month-end summaries), drawn with --seed 1011.
 
 1. Fit: the client's quantitative-finance depth line (validating a strategy out of sample, factor exposures are not
    alpha, sizing realistic costs before committing capital) on the run record's live ground: selected units (the
@@ -27,50 +28,277 @@ People: Yolanda Cobb (head of credit trading, owner of the quoting policy), Jame
 2. Data: FRED (Treasury constant-maturity yields, Moody's Baa and Aaa, SOFR) and Cboe (VIX, S&P 500) as published,
    cut at the record's last day (6 November 2026); the desk's systems (the platform's request export in two
    generations, the trading blotter, the public trade tape, Ashcote's evaluated prices, the security master, the client
-   list, the quoting schedule's versions, the desk's month-end P&L summaries, the policy) simulated from the
-   request-for-quote process those series drive.
+   list, the quoting schedule's versions, the 2027 draft, the desk's month-end P&L summaries, the platform's league
+   tables, the policy) simulated from the request-for-quote process those series drive.
 3. Decision: the electronic trading committee's December meeting approves the auto-quoter's 2027 schedule and the
    desk's 2027 P&L plan; forward facing (a P&L for a year not yet traded).
-4. Shell: question form what (an amount to plan, with the changes that lose money), the second sentence led by the
-   deliverables, a spreadsheet and a one-page note; architecture 9's shell (how much, everything, a deck and a
+4. Shell: question form how much (an amount to plan, with the changes that lose money), the second sentence led by
+   the deliverables, a spreadsheet and a one-page memo; architecture 9's shell (how much, everything, a deck and a
    workbook) redrawn with the world.
 5. Card: shape 03, gap population then objective, pattern D (the request export and the public tape, two grains both
-   flawless), generators G6, G13, G16, Gate G forecasting, calibration form existing_book_actuals (the July 2024
-   tightening's own months), context artifact close_out_summary (the desk's month-end P&L summary with its next-day
-   markouts), forum committee_or_panel, forcing event vote_or_meeting, organisation financial_institution, role
-   portfolio_manager, strategy causal_design.
-6. Guard: registered 2026-11-11T07:02:39Z, WARN only. repeat.question_form (what, as task13): the call is an amount
-   to plan, so the form is the decision's own. test.same_puzzle_older against mark126 answered in the card's
-   differentiation. ban.artifact, ban.forum and ban.forcing_event cleared at the check by redrawing to the honest
-   alternatives (the month-end summary is a close-out summary; the committee approves the schedule at its meeting),
-   shell.lineage by the new prompt.
+   flawless), generators G6, G13, G16, Gate G forecasting, calibration form existing_book_actuals (the desk's own
+   record replayed at the schedule in force), context artifact close_out_summary (the desk's month-end P&L summary
+   with its next-day markouts), forum committee_or_panel, forcing event vote_or_meeting, organisation
+   financial_institution, role portfolio_manager, strategy causal_design.
+6. Guard: registered 2026-11-11T07:02:39Z, PASS with one NOTE on the registered card (test.same_puzzle_older against
+   mark126, answered in the card's differentiation); ban.artifact, ban.forum and ban.forcing_event cleared at the
+   draw by redrawing to the honest alternatives (the month-end summary is a close-out summary; the committee approves
+   the schedule at its meeting), shell.lineage by the new prompt.
 7. Lineage: architectures 1 to 9 are spent (the card's lineage holds each fate); architecture 9 died at its re-judge
    on Gate H (carry carried four of six results once the added dollar was earned), which is why this draw leaves the
    pod platform, its factor data and its shell.
 
 ## Deep reasoning
 
-Task type: strategy-backtesting-evaluation, serving Forecasting & Predictive Modeling.
-Not one thing (sketch at the draw): the strongest single piece is the replay on rivals' levels recovered from the
-  tape; a run that has it still has to read what the added trades cost on marks that lag (thin segments), compare the
-  July 2024 change against untouched segments, and draw the year's range from P&L whose days are not independent.
-One-fact test (sketch at the draw): "the level a rival won a request at is on the public tape" rescues the win shares
-  (R2) and leaves the plan, the bridge and the set wrong wherever the marks lag; counted by effort.py at stage 3.
+Task type: strategy-backtesting-evaluation, serving Forecasting & Predictive Modeling (the client's backtesting task
+  type: historical strategy simulation with transaction costs and attribution).
+Domain test: every result is a market maker's own quantity: the share of requests a quote wins against rivals'
+  levels, the adverse selection a dealer pays after its fills (its markout) read on marks that may be stale, the edge
+  net of that move and of the offload cost, and a P&L plan with its range; the field's analyst backtests the quoting
+  schedule on its request history, recovers rivals' levels from trade reports, measures markouts until the
+  information is in the price, and attributes the change segment by segment.
+Swap: "a clinic's appointment price list backtested on its booking history" keeps the nouns' grammar and loses every
+  result: rivals' winning levels on an anonymous public tape, a markout read on evaluated prices that lag for illiquid
+  bonds, an offload charge per liquidity bucket and the adverse selection of the flow a tighter quote attracts have
+  no counterpart, so nothing in the chain can be computed.
+Where the weight sits: attribution: each changed segment's item needs its own replay on rivals' levels (the cover on
+  wins, the winner's print on losses matched across the tape's grain), its own cost on the trades it keeps and on the
+  trades it adds, read once the evaluations hold the move, so twelve items each take the whole chain, and the four
+  that lose money come out of the balance of edge given up against trades gained.
+Layer 1: the request audit in two export generations (New York time with face quantities to 4 April 2025, UTC with
+  quantities in thousands and coded outcomes from 7 April), re-sent messages and amended versions, 144A bonds
+  exchanged into registered bonds under new identifiers, buckets reassigned each quarter from the prior quarter's
+  prints, ratings migrating, prices rounded so that some wins tie the cover; the tape's cancels, corrections, as-of
+  reports, capped sizes and dealer trades reported from both sides; produced by Tidewell's export migration, the
+  tape's dissemination rules and the security master's quarterly run; none decides a result.
+Not one thing: the replay on rivals' levels from the tape is earned (the determinism judge's blind first pass
+  recovered them on its own, every draft share within 0.1 point), and a run that has it still plans USD 11.80 million
+  and keeps the losing change for thin investment-grade hedge funds when it reads costs a week on and costs the added
+  trades like the trades it wins now; with complete costs but the added trades like today's wins it plans USD 6.55
+  million; with each added trade on its own record but a week's marks it plans 14.67 million and drops two; the range
+  needs the year drawn in runs of days on top of all of it.
+One-fact test: from the careful pass re-priced on the judge's first pass, "Ashcote's evaluations of thinner
+  bonds catch up with the market only at the month-end review" rescues R1 and R4, 2 of 8; the added-trades sentence and
+  the runs-of-days sentence rescue none on their own; the month-end and added-trades sentences together rescue six, the
+  AND the depth scale marks as good.
+Not semantics: every field read correctly (both export generations, the tape's codes, the buckets by quarter, the
+  ratings by date, the 144A map) still leaves the win model's shares, the week's costs and the added trades costed
+  like today's wins wrong, because each is a method choice the data settle, not a reading of a field.
+Not rule application: no filed procedure says where rivals' levels on lost requests come from, when the move after a
+  trade is complete, what the trades a tighter quote adds cost, or how the year's days are drawn; once policy
+  sections 2 to 6 are applied literally, each of those is still a judgment the data settle.
+Estimand: policy section 5 (a trade's P&L: edge at execution less the move after the trade net of the Treasury curve
+  and of the median spread move of other issuers' bonds of its rating, read as soon as that move is complete, less
+  the bucket's offload charge), 6(a) (the replay of the requests since 3 January 2023, each keeping everything but
+  the desk's half-spread), 6(b) (each segment carried at its requests of the twelve months to 31 October 2026), 6(c)
+  (the range, the 10th to the 90th percentile of the year's P&L of 251 days drawn from the record's own days),
+  section 2 (segments), section 4 (carry and funding outside the P&L); the prompt fixes the schedules, the changed
+  segments, the window since January 2023, the trades the current schedule wins and USD.
+No decoy: the month-end summaries answer another question correctly (each month's booked P&L with the desk's
+  next-day markouts); no file states a plan figure, a share, a cost or a change's verdict; the draft carries
+  half-spreads only, and the league tables rank dealers by volume, not the schedule.
+No replay: every result is computed from the record; nothing re-derives a published figure and no stated number is
+  wrong.
+Pinned: prints matched within 2, 3 or 5 minutes, costs read 25 to 45 trading days on, unmatched losses taken as lost
+  or won at the matched losses' rate, and the year drawn in runs of 10 to 63 days land every result inside its band;
+  the next-day, five-day and ten-day markouts are ruled out by policy 5(b) (the markout curve is still rising), the
+  60-day reading by its "as soon as", the win model on the desk's own quotes by the tape's prints on the lost
+  requests, and the added trades costed like today's wins by each added request's own record.
+Run forecast: R2 earned (the tape's levels, as the judge's first pass found them); R1 and R4 lost to an
+  unfinished chain (costs read a week on, before Ashcote's month-end review holds the move in medium and thin bonds), R3
+  to the first story (the added trades costed like the trades won now), R5, R7 and R8 to both on different segments,
+  R6 to a method shortcut (days drawn one at a time).
+Strategy label: Quantitative Finance and Trading 5, "Bond trade reports conformed into one record per trade" (trade
+  reports read across the tape's grain to recover a quantity the desk's own data hide), carried into a forecasting
+  backtest with attribution weight.
+Depth level: 5: four judgments (rivals' levels from the tape, earned by a careful run; the move read once
+  complete; the added trades' own cost; the year drawn in runs), three of them still lost by a careful run, each moving
+  the margin with a checkable figure of its own; thirteen shortcuts land on eight distinct wrong answers (one change
+  dropped, two, three, five, twelve, and the right four with a wrong plan).
+Lesson: a quote's backtest prices the trades it would win on rivals' levels rather than on a win curve fitted to its
+  own quotes, and costs them on marks that have caught up and on the added trades' own record; no build on file
+  backtests a dealer's quoting on rivals' prints and lagging evaluations.
 
 ## Results chain
 
-Sketch at the draw; pins, bands and the carry-forward line are written at stage 2.
+| ID | Result (checkable) | Area | Pinned by | Band | Hurried analyst | Depends on | Graded as |
+|---|---|---|---|---|---|---|---|
+| R1 | For each changed segment, what the price moves after the trades the current schedule wins cost per million traded since January 2023, USD | missingness and measurement | policy 5(b) (the move as soon as it is complete, net of the Treasury curve and the median spread move of other issuers' bonds of its rating) on Ashcote's evaluations; the replay at version 3 (6a) | the 25- and 45-day readings and the match rules, widened by USD 25 a million (liquid investment-grade asset managers USD 291, USD 261 to 343) | unfinished chain: each trade's cost read a week on, before Ashcote's month-end review holds the move in medium and thin bonds (medium investment-grade hedge funds USD 773 against 1,050; thin high-yield hedge funds 370 against 1,503) | independent: the record replayed at the current schedule and the evaluations | Ask 4 |
+| R2 | For each changed segment, the share of its requests since January 2023 the draft's quote would win | modeling | policy 6(a) (each request keeps the other dealers' prices and whether its client traded) with the cover on wins and the winner's print on the tape on losses | the match windows and the unmatched rule, widened by 2 points (medium investment-grade hedge funds 44.3 per cent, 42.3 to 46.3) | method shortcut, taken by a quicker run: a win model fitted on the desk's own quotes, whose quotes widen when the rivals' do, misses eleven of twelve shares (medium investment-grade hedge funds 33.3 per cent against 44.3); a careful run earns it, as the judge's blind first pass did on the tape's levels | independent: the requests, the covers and the tape | Ask 3 |
+| R3 | For each changed segment, what the price moves after the trades the draft's quote would add cost per million traded, USD | causal reasoning | 6(a) and 5(b): the added trades are the lost requests the draft's quote wins, each costed on its own evaluated move | the same rivals widened by USD 25 a million (thin high-yield asset managers USD 1,214, 1,074 to 1,492) | first story: the added trades costed like the trades the desk wins now, the account the blotter already reconciles to, never tested on the added requests' own record (thin high-yield asset managers USD 203 a week on against 1,214; liquid investment-grade asset managers 294 against 110) | R2 | Component 2 |
+| R4 | The 2027 P&L at the current schedule, USD | forecasting | sections 5 and 6(a) to 6(b) | USD 4.70 million to 5.67 million (the horizon and match rivals, widened by 4 per cent) | unfinished chain: the record's trades carried at a week's costs (USD 7.85 million on the tape's levels); the desk's next-day view books 12.91 million | independent: the record replayed at the current schedule | Component 3 |
+| R5 | The 2027 P&L at the draft schedule, USD | forecasting | sections 5 and 6(a) to 6(b) | USD 9.87 million to 11.06 million | unfinished chain: the tape's levels with a week's costs and the added trades costed like today's wins (USD 11.80 million); each added trade on its own record a week on gives 14.67 million, complete costs with the added trades like today's wins 6.55 million, the next-day view 22.15 million | R2, R3, R4 | Component 1 |
+| R6 | The draft's 80 per cent range for 2027, USD | uncertainty | 6(c) (251 days drawn from the record's own days at the plan's counts) | 10th percentile USD 4.98 million to 6.69 million, 90th 13.70 million to 16.41 million (runs of 10 to 63 days) | method shortcut: days drawn one at a time though informed flow, pick-offs and stress cluster (first-order autocorrelation 0.19 against a noise bound of 0.06), 7.68 to 13.02 million on the golden's own days; the careful pass's 10.68 to 12.93 million | R5 | Ask 1 |
+| R7 | The difference between the two schedules split across the changed segments, USD | decomposition and attribution | 6(a) and 6(b), each segment's item the draft's P&L less the current schedule's | each item within its rivals widened by the larger of USD 25,000 and 10 per cent (liquid investment-grade asset managers USD -1,781,000, -1,973,000 to -1,537,000) | unfinished chain: items carried from a week's costs and the added trades costed like today's wins miss in both directions (liquid investment-grade asset managers USD -2,607,000 against -1,781,000; thin investment-grade hedge funds +17,000 against -65,000; thin high-yield asset managers +362,000 against +204,000) | R2, R3 | Ask 2 |
+| R8 | The changed segments that lose money, and the plan without them, USD | synthesis | the bridge's signs; policy 6 | the set exact (every item clears zero by more than its band); the plan USD 12.66 million to 13.99 million | first story: the careful pass's bridge drops three changes, keeping the losing change for thin investment-grade hedge funds, and plans USD 15.45 million; each added trade on its own record a week on drops two; the win model drops five; the next-day view drops one | R7 | Recommendation |
 
-| ID | Result (checkable) | Area | Hurried analyst |
+Carry-forward: R1, R2 and R4 are graded on inputs of their own (the record replayed at the current schedule with the
+evaluations; the requests, the covers and the tape); R3 falls with R2's levels; R5 with R2, R3 and R4; R6 with R5's
+daily P&L; R7 with R2 and R3; R8 with R7. A slip on the horizon costs every result but R2; a slip on rivals' levels
+costs R2, R3, R4, R5, R7 and R8 and leaves R1 short of one segment (thin high-yield hedge funds, whose schedule changed
+in March 2025); a slip on the added trades' cost costs R3, R5, R6, R7 and the plan in R8 and leaves R1, R2, R4 and the
+set; a slip on the days' draw costs R6 alone.
+
+## Hidden factor record
+
+| Factor | Real or constructed | Only in deciding units | Found by | Fix depth | Verdict |
+|---|---|---|---|---|---|
+| Ashcote's evaluations of medium and thin bonds take a bond's own move in mostly at the month-end review | constructed by the evaluator's simulated process (a daily pull toward tradeable prints, a small pull toward the bond's own prints, a month-end re-mark) | no: every medium and thin bond in both bands, changed segments or not; the week's markout understates costs in unchanged segments (medium investment-grade and high-yield retail) and in seven of the eight changes that pay | modelling: net-of-market markouts by bucket at several horizons, the market part built from evaluated yields (the Treasury move at the bond's maturity and the leave-out rating median spread move), read where each curve stops rising | modelling judgment: the horizon where each bucket's move is complete, held against the bands (15 days lands the totals, 25 the costs per million; 60 adds later news) | keep: one of four judgments; alone it rescues R1 and R4 from the careful pass |
+| Hedge funds ahead of issuer moves, and requests that pick off stale evaluations | constructed by the simulated clients (a share of hedge funds see a five-day lead move; pickers trade only when the mark is off-market and the price favours them) | no: every segment with hedge-fund or asset-manager flow, changed or not | modelling: the cost of the requests a tighter quote adds against the trades already won, segment by segment | modelling: each added request costed on its own record | keep: it moves the added trades' cost both ways (cheaper in most segments, dearer in thin high-yield asset managers) |
+| Rivals' winning levels sit on the public tape, not in the desk's records | constructed by the simulated platform and tape (the winner's print reported within minutes, sizes capped, cancels and corrections) | no: the lost requests of every segment, 99.9 per cent matched | a targeted query across grains (bond, side, size and time against the tape's customer prints) | modelling: the replay on rivals' levels in place of a win curve | keep: a method choice, earned by a careful run (the judge's blind first pass made it) |
+| P&L days that cluster (stress, issuer news, informed flow) | constructed by the simulated market on the real VIX and spreads | no: every segment and both schedules | modelling: the daily P&L's serial dependence | modelling: the year drawn in runs of days | keep |
+
+## Effort test
+
+| Result | Quick pass | Careful but hurried | Thorough |
 |---|---|---|---|
-| R1 | For every segment, what the price moves after the desk's wins cost it, USD per million traded, on the desk's own attribution of each position to the trades that opened it | missingness-measurement | earned: the careful pass attributes the record |
-| R2 | For each changed segment, the share of requests the proposed quote wins | modeling | method shortcut: a fit on the desk's own past quotes (or on the covers it saw when it won) carried below any quote it has shown, where axed rivals print inside the new level |
-| R3 | What the July 2024 tightening added a month in the segments it touched | causal-reasoning | first story: the touched segments' months before and after, while the market rallied and volumes grew for every segment |
-| R4 | The desk's 2027 P&L under the current schedule | forecasting | earned |
-| R5 | Its 2027 P&L under the proposed schedule | forecasting | unfinished chain: the added trades priced like today's wins on next-day marks |
-| R6 | The proposed schedule's 80 per cent range | uncertainty | method shortcut: days drawn one at a time from P&L marked on lagging prices |
-| R7 | The difference between the two, item by changed segment | decomposition-attribution | the replay's and the marks' errors land segment by segment, in both directions |
-| R8 | The changed segments that lose money, and the recommendation | synthesis | different shortcuts name different sets |
+| R1 each changed segment's cost after the trades the current schedule wins, USD a million | Missed | Missed | Right |
+| R2 each changed segment's share of requests won at the draft's quote | Missed | Right | Right |
+| R3 the cost after the trades the draft's quote would add, USD a million | Missed | Missed | Right |
+| R4 the 2027 P&L at the current schedule | Missed | Missed | Right |
+| R5 the 2027 P&L at the draft schedule | Missed | Partly | Right |
+| R6 the draft's 80 per cent range | Missed | Missed | Right |
+| R7 the difference by changed segment | Missed | Missed | Right |
+| R8 the changed segments that lose money, and the plan | Missed | Missed | Right |
+| Roughly | 0 of 8 | 1.5 of 8 | 8 of 8 |
+
+Measured by: .claude/skills/stumping/effort.py on generator/effort.json (the passes computed end to end on the cut
+  pack by analysis.py's routes; the careful pass re-priced on the determinism judge's blind first pass, which recovered
+  rivals' levels from the tape on its own: the tape's levels, a week's marks, the added trades costed like today's
+  wins, days one at a time; three of 24 cells hand-graded, each with its reason in effort.json)
+Largest single hint: "Ashcote's evaluations of thinner bonds catch up with the market only at the month-end review";
+  rescues 2 of 8 results (R1 and R4); the added-trades and runs-of-days sentences rescue none alone, and the month-end
+  and added-trades sentences together rescue six (an AND, not one thing)
+Pair estimate: 24.8 (the careful but hurried pass's rubric score; the paper is optimistic, so the platform's two
+  runs are the measurement)
+
+Held at stage 4 (2026-11-11): the one re-judge's blind first pass (written before it opened the blocks) recovered
+  rivals' levels from the tape, costed each added trade on its own record (USD 339 a million against 446 for the
+  current schedule's wins, pooled) and read costs only to 15 days ("no flat point found"), planning at 10 days (USD 6.45
+  million and 12.46 million, both outside their bands). Priced on that pass (the tape's levels, each added trade's own
+  cost, a 10-day read, days one at a time; measured with effort.py on a scratch copy of the routes), the careful pass
+  earns R2 and part of R4, R5, R7 and R8: pair estimate 49.5, and the month-end sentence rescues 6 of 8 results, which
+  fails the one-fact test. Both judge passes put the sentence over a third (3 of 7, 4 of 8) while passing Gate H as a
+  legitimate method choice. The completion horizon carries the chain once a careful run does what the re-judge did
+  unprompted, so the build does not go to READY: it is redesigned so the horizon alone rescues a third or fewer, or
+  the slot re-roots.
+
+## Data provenance
+
+Source: generated by task9/generator from a simulated request-for-quote process (the desk's auto-quoter, nine rival
+  dealers, four client types, Ashcote's evaluator and the public tape) driven by public FRED and Cboe series (the
+  Treasury constant-maturity curve, Moody's Baa and Aaa yields, VIX), which ship as published with their license.
+Behaves like the real thing: electronic corporate bond market making as it is reported: hit ratios of a few per cent
+  in high yield to a third in liquid investment grade, rising as quotes tighten and flattening where large dealers
+  detect informed flow; trade reports disseminated within minutes with capped sizes, cancels, corrections and late
+  reports; evaluated prices that lag in illiquid bonds and are re-marked at month-end; markouts that keep rising for
+  weeks in thin bonds; P&L clustering in stress (the 2023 bank stress and the 2025 tariff shock on the real VIX).
+Genuine patterns: (1) request volume growing about 11 per cent a year with day-of-week, month-end and VIX-driven
+  swings; (2) yields and spreads following the real Treasury and Baa series, high yield also trading on VIX; (3) hit
+  ratios falling with distance and with the number of dealers asked, axed rivals printing inside the desk's level;
+  (4) markouts rising with horizon and with illiquidity, informed hedge-fund flow ahead of issuer news; (5) issuer news
+  jumps and rating migrations clustering by sector; (6) inventory skew tightening the side that reduces a position.
+Problems by process: Tidewell's export migration on 7 April 2025 (renamed columns, UTC, quantities in thousands,
+  coded outcomes); re-sent messages and amended versions; 144A bonds exchanged for registered bonds under new
+  identifiers; quarterly liquidity bucket reassignments from the prior quarter's prints; the tape's cancels,
+  corrections, as-of reports, capped sizes and dealer trades reported by both sides; month-end re-marks in Ashcote's
+  evaluations; wins tied with the cover at the export's rounded prices.
+License: the FRED and Cboe series as each source's terms state (recorded per file in metadata.json); the rest is
+  generated.
+Used as is: the FRED and Cboe series ship unaltered as their downloads serve them, cut at 6 November 2026, with the
+  pull date and hash in metadata.json; SOFR and the S&P 500 ship unused.
+Breadth: 27 files; 279,249 request messages over 963 trading days on 236 bonds of 96 issuers from 281 clients, 497,437
+  tape reports and 167,349 evaluations; 24 segments of which the draft changes 12, so deciding which requests, which
+  prints and which marks carry each segment's item is the work.
+
+## Template check
+
+Chain signature: missingness-measurement, modeling, causal-reasoning, forecasting, forecasting, uncertainty,
+  decomposition-attribution, synthesis
+Question form: how much (an amount to plan, with the changes that lose money)
+Nearest build: task3 (a ranked list under a cap on tidal flood days) shares forecasting, uncertainty and
+  decomposition in its chain; it differs in answer shape (a ranked list against a bridge), weight (a hard-to-measure
+  quantity against attribution) and order, and no build on file carries a bridge or attribution weight.
+
+## Semantic fork table
+
+| ID | Term or convention | Readings | Golden | Ruled out by |
+|---|---|---|---|---|
+| SF1 | the current schedule | version 3 (in force since 3 March 2025); the schedule each request was quoted at | version 3 | the schedule versions workbook's effective dates and the prompt |
+| SF2 | the trades the current schedule wins | the desk's actual wins since January 2023; the record replayed at version 3 | replayed at version 3 | the prompt and policy 6(a) |
+| SF3 | a quote level with the best rival's price at the export's rounding | a loss; the recorded outcome | the recorded outcome | 6(a) (a request keeps everything but the desk's half-spread) |
+| SF4 | the move after the trade | the next-day markout (the summaries); a week; read as soon as it is complete | as soon as complete (25 to 45 trading days hold every band) | policy 5(b) |
+| SF5 | the market's part of the move | the Treasury curve alone; with the rating's mean or median spread move; with or without the bond's own issuer | the Treasury curve and the median spread move of other issuers' bonds of its rating | policy 5(b) |
+| SF6 | the offload charge | none; the bucket's charge per 100 face on each trade won | the bucket's charge | policy 5(c) |
+| SF7 | carry and funding of inventory | in the desk's P&L; outside it | outside | policy section 4 |
+| SF8 | a request its client did not trade, or the desk passed | won at a tighter quote; stays as it was | stays | policy 6(a) |
+| SF9 | the other dealers at another quote | they react; their prices are kept | kept | policy 6(a) |
+| SF10 | the plan's volume | the record's average; growth projected; the requests of the twelve months to October 2026 | the twelve months to 31 October 2026, segment by segment | policy 6(b) |
+| SF11 | the 80 per cent range | of the mean; of the year's P&L | the 10th to 90th percentile of the year's P&L | policy 6(c) |
+| SF12 | a request's segment | its bond's current bucket and rating; those on the request's date and quarter | on the request's date and quarter | policy section 2 |
+| SF13 | a 144A bond and its registered successor | two bonds; one bond | one bond | the security master's registered identifier |
+| SF14 | the record | the newer export alone; both generations, each request once at its latest version | both, latest version, once | policy section 7 and 6(a) |
+| SF15 | the segments the schedule changes | every segment the draft lists; those whose half-spread differs from version 3 | the twelve that differ | the draft against version 3 |
+| SF16 | per million traded | of face; of market value | of face | policy 5 (edge and charges on the face traded) |
+| SF17 | the currency | USD | USD | the prompt |
+| SF18 | the year's 251 days drawn from the record's own days | one day at a time; in runs of consecutive days | in runs of 21 days (runs of 10 to 63 land inside the bands) | named data: the draft's daily P&L has a first-order autocorrelation of 0.19 against a noise bound of 0.06, and its 21-day sums vary 3.0 times what independent days would |
+
+## Closure table
+
+| Axis | Closure |
+|---|---|
+| 1 population | every request to the desk on Tidewell since 3 January 2023 in USD investment-grade and high-yield corporates, by changed segment (R1 to R3); the plan year's requests at the base-year counts (R4 to R8) |
+| 2 outcome | cost per million face after the trade (R1, R3), share of requests won (R2), P&L as policy 5 counts it (R4 to R8) |
+| 3 window | 3 January 2023 to 6 November 2026 for the record; calendar 2027 for the plan, 251 trading days |
+| 4 unit | USD; USD per million face; a share of the segment's requests |
+| 5 comparison | the draft against version 3, segment by segment (6) |
+| 6 aggregation | a cost per million is face-weighted over the segment's trades; a share is over all its requests, traded or not |
+| 7 timing | request times on one clock after the second generation's UTC is converted; evaluation days on Ashcote's calendar |
+| 8 currency | USD throughout |
+| 9 rounding | P&L to USD 0.01 million, bridge items to USD 1,000, costs to the dollar a million, shares to 0.1 point (the answer blocks) |
+| 10 missing days | the FRED series' holiday gaps take the prior value; a horizon counts the evaluator's own days |
+| 11 duplicates | re-sent messages counted once; amended requests at their latest version; customer prints matched, dealer reports left out |
+| 12 identifiers | 144A identifiers mapped to their registered successors through the security master |
+| 13 units | the second generation's thousands converted to face; prices per 100 |
+| 14 market basis | the Treasury curve at the bond's maturity, interpolated; evaluated spreads from evaluated yields; the median of other issuers' bonds of the same rating |
+| 15 the replay | the distance shown times the ratio of the half-spreads, every other term kept (6a and the schedule workbook) |
+| 16 ties | a quote level with the best rival's keeps the request's recorded outcome |
+| 17 unmatched losses | lost at any quote (0.1 per cent of losses; the rival taking them at the matched losses' rate lands inside every band) |
+| 18 offload | the bucket's charge per 100 face on each trade won (5c) |
+| 19 volume | each segment at its requests in the twelve months to 31 October 2026 (6b) |
+| 20 range | the 10th and 90th percentiles of 4,000 simulated years of 251 days drawn in runs of 21 days (runs of 10 to 63 days land inside the bands) |
+| 21 borderline segments | none: every changed segment's item clears zero by more than its band |
+| 22 horizon | 30 trading days (25 to 45 land inside every band; 5(b) reads the move as soon as it is complete) |
+
+## Literal reader
+
+A literal reader of policy 6(a) replays each request at a schedule's distance (the distance shown times the ratio of
+the half-spreads, everything else kept) against the other dealers' prices, which on the requests the desk lost sit only
+on the public tape; of 5(b) reads each trade's evaluated move net of the Treasury curve and of the median spread move of
+other issuers' bonds of its rating as soon as that move is complete, which the markout curve puts after Ashcote's
+month-end review (30 trading days); of 5(c) charges the bucket's offload; of 6(b) carries each segment at its base-year
+requests; of 6(c) draws the year from the record's own days. It finds USD 5.24 million at version 3, USD 10.30 million at
+the draft (80 per cent range USD 5.71 million to 15.01 million), and four changes that lose money: liquid and medium
+investment-grade bonds for asset managers, and medium and thin investment-grade bonds for hedge funds. No sentence names
+a method: each fixes what a quantity is.
+
+Leak read (stage 4, one reader): its question 1 sentences (policy 6a to 6c, 5, 2, 4, the quoter's formula) are the
+estimand pins, harmless by the test of whether each would exist without a trap; its question 3 (the policy as a
+helper) is harmless, the governing document in the desk's genre; its question 6 (the policy as the one thing) is not
+a banned finding, since it leaves rivals' levels, the horizon and the assembly as analysis and the careful pass that
+executes the policy loses 7.5 of 8; its question 5 reading of 6(c) as days drawn one at a time is closed as SF18 by the
+daily P&L's measured dependence; the 4.8 match is a policy parameter and the shared words are the subject's nouns.
+
+## Prompt contract
+
+A voice rewrite keeps: the question (how much P&L to plan for 2027 on the proposed schedule, and which of its changes
+lose money); the 2027 P&L under the current and under the proposed schedule; the 80% range for the proposed one; the
+difference split across the changed segments; the changed segments that lose money; for each changed segment, the
+share of its requests since January 2023 the proposed quote would win, and what the price moves after the trades cost
+per million traded, for the trades the current schedule wins and for the trades the proposed quote would add; all in
+USD; a spreadsheet and a one-page memo. It never adds a rounding instruction, a method (the tape, a horizon, a model,
+a draw in runs of days), a warning, an attached file's name, a role or a count the data hold (twelve changes, 24
+segments).
 
 ## Tried and rejected
 
@@ -361,3 +589,29 @@ Sketch at the draw; pins, bands and the carry-forward line are written at stage 
   model's price-only factors and drew the year a day at a time; with the added dollar earned, the carry sentence alone
   rescues R1, R3, R5 and R6, and carry was a reading of section 7 rather than analysis the pack forced. A move the
   filed text states is earned, and a series only the hidden step uses points at it.
+- 2026-11-11, architecture 10's R3 as the July 2024 tightening's measured effect against the untouched segments: its
+  replays disagreed and the monthly P&L was too noisy to settle it, so it could not be graded as a clean result; the
+  cost of the trades the draft's quote would add took its place.
+- 2026-11-11, an evaluator that took each bond's own move in day by day: a week's markout already held most of the
+  move, the horizon decided nothing and the next-day view landed the plan; the evaluator now takes medium and thin
+  bonds' own moves mostly at its month-end review, as evaluators of illiquid bonds do, with the stale-quote pickers
+  and the five-day lead of informed hedge funds that make the lag cost money.
+- 2026-11-11, the market's part of a trade's move as the rating's mean spread move: the totals moved 13 to 18 per cent
+  between the mean and the median and with or without the bond's own issuer, an open fork; policy 5(b) now files the
+  median move of other issuers' bonds of its rating.
+- 2026-11-11, the cost population "the trades we win today": the desk's actual wins since January 2023 and the record
+  replayed at the current schedule differ in the segments versions 2 and 3 changed, an open fork; the prompt now asks
+  for the trades the current schedule wins.
+- 2026-11-11, a quote level with the cover at the export's rounded prices replayed as a loss: 750 of the desk's 39,192
+  wins fell out of the replay at the current schedule in segments whose schedule never changed; a tie now keeps its
+  recorded outcome, a loss matched to a print worse than the desk's own quote is no match, and checks.py asserts the
+  replay reproduces every recorded outcome where the schedule never changed.
+- 2026-11-11, policy 5(b) as "read once that move is complete": a 60-day reading moved the draft to USD 11.58 million,
+  outside its band, on later issuer news that is not the trade's; the policy now reads the move as soon as it is
+  complete, and 25 to 45 days hold every band.
+- 2026-11-11, the careful column priced on a win model fitted on the desk's own quotes: the determinism judge's blind
+  first pass recovered rivals' levels from the tape on its own (every draft share within 0.1 point of the golden), so
+  the careful pass is re-priced with the tape's levels earned (a week's marks, the added trades costed like today's
+  wins, days one at a time); measured on it, the month-end sentence rescues R1 and R4 (2 of 8), where costing the added
+  trades on their own record with it would rescue six, so the build stands on the AND of the complete move and the
+  added trades' own cost.

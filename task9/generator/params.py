@@ -11,6 +11,7 @@ PLATFORM = "Tidewell Credit Network"
 PRICER = "Ashcote Evaluations"
 HEAD = "Yolanda Cobb"            # head of credit trading, owner of the quoting policy
 STRAT = "James Flowers"          # the desk's strategist, keeps the auto-quoter's schedule
+CONTROL = "Steven Phillips"      # credit product control, owner of the month-end P&L summaries
 
 START = "2023-01-03"             # first day of the record
 END = "2026-11-06"               # its last day (the requests export and the tape are cut here)
@@ -38,9 +39,11 @@ IDIO_SD = {"AA": 0.25, "A": 0.3, "BBB": 0.4, "BB": 0.8, "B": 1.2, "CCC": 2.0}   
 # ---- evaluated prices (Ashcote) --------------------------------------------------------------------------------
 # the curve and the rating-sector spread move are taken in daily; the issuer's own move is taken in toward the
 # market's level by each print the bond shows and by a slow daily review otherwise
-EVAL_PRINT_PULL = 0.40
-EVAL_ISSUER_DAILY = 0.04                     # the evaluator's daily review of an issuer's news, with no print
-EVAL_OWN_DAILY = {"liquid": 0.12, "medium": 0.05, "thin": 0.025}   # a bond's own share, with no print of its own
+EVAL_PRINT_PULL = 0.05                       # a bond's own print pulls its own share this far toward the market
+EVAL_ISSUER_PULL = 0.05                      # a print in one of the issuer's tradeable bonds, for the issuer's move
+EVAL_ISSUER_DAILY = 0.01                     # the evaluator's daily review of an issuer, with no print
+EVAL_OWN_DAILY = {"liquid": 0.03, "medium": 0.005, "thin": 0.003}   # a bond's own share, with no print of its own
+EVAL_MONTH_END = 0.92                        # the month-end review re-marks every bond this far toward the market
 EVAL_NOISE = {"IG": 0.6, "HY": 2.0}          # cents, the evaluator's own error on a day
 
 # ---- clients ---------------------------------------------------------------------------------------------------
@@ -48,6 +51,9 @@ CLIENT_TYPES = ["AM", "INS", "HF", "RET"]
 CLIENT_NAMES = {"AM": "asset manager", "INS": "insurer", "HF": "hedge fund", "RET": "wealth platform"}
 N_CLIENTS = {"AM": 118, "INS": 38, "HF": 72, "RET": 54}
 INFORMED_SHARE = {"AM": 0.08, "INS": 0.0, "HF": 0.38, "RET": 0.0}   # clients who see issuer news early
+PICKER_SHARE = {"AM": 0.06, "INS": 0.0, "HF": 0.32, "RET": 0.0}    # clients who trade on stale evaluations
+PICK_THRESHOLD = 0.8                         # they ask when a bond's evaluation stands this many half-spreads off the market
+PICK_DAILY = 0.25                            # chance a day they ask, while it does
 INFORMED_HORIZON = 5                         # an informed client sees the issuer's move this many days ahead
 INFORMED_THRESHOLD = {"IG": 2.0, "HY": 4.5}  # bp: the coming move it acts on
 INFORMED_DAILY = {"AM": 0.04, "HF": 0.30}    # chance a day it sends a request while the coming move is that large
@@ -94,7 +100,9 @@ PROPOSED = {                                 # the draft 2027 schedule's changes
     ("IG", "liquid", "AM"): 1.5,
     ("IG", "medium", "AM"): 5.5,
     ("IG", "medium", "HF"): 8.0,
+    ("IG", "thin", "AM"): 10.0,
     ("IG", "thin", "INS"): 8.0,
+    ("IG", "thin", "HF"): 13.0,
     ("HY", "liquid", "AM"): 12.5,
     ("HY", "liquid", "HF"): 16.5,
     ("HY", "medium", "AM"): 21.0,

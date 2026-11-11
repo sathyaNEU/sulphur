@@ -36,13 +36,13 @@ F = {
     "ratings": "issuer_ratings_history.csv",
     "clients": "tidewell_client_list_20261106.csv",
     "schedule": "auto_quoter_schedule_versions.xlsx",
-    "draft": "auto_quoter_schedule_2027_draft.xlsx",
+    "draft": "auto_quoter_schedule_2027_proposed.xlsx",
     "summaries": "credit_desk_month_end_summaries.xlsx",
     "league": "tidewell_dealer_league_tables_2026.xlsx",
     "policy": "Credit_Electronic_Quoting_Policy_2026.pdf",
 }
 MARKET = [k + ".csv" for k in MK.FRED_IDS] + [k + "_History.csv" for k in MK.CBOE_IDS]
-DISTRACTORS = ["SOFR.csv", "SPX_History.csv", F["league"]]
+DISTRACTORS = ["DAAA.csv", "DBAA.csv", "SOFR.csv", "SPX_History.csv", F["league"]]   # shipped, read by nothing in the golden
 STATUS1 = {"DONE": "Done", "COVER": "Covered", "TRADED_AWAY": "Traded Away", "DNT": "Done Not Traded", "PASSED": "Passed"}
 STATUS2 = {"DONE": "D", "COVER": "C", "TRADED_AWAY": "TA", "DNT": "DNT", "PASSED": "P"}
 TYPE_NAME = {"AM": "Asset manager", "INS": "Insurer", "HF": "Hedge fund", "RET": "Wealth platform"}
@@ -369,7 +369,7 @@ def summaries(B, tgt):
             ws.column_dimensions[col].width = w
     path = os.path.join(tgt, F["summaries"])
     wb.save(path)
-    PP.normalize_ooxml(path, P.STRAT, P.STRAT, dt.datetime(2023, 2, 1, 23, 14, 5, tzinfo=UTC).strftime(ISO),
+    PP.normalize_ooxml(path, P.CONTROL, P.CONTROL, dt.datetime(2023, 2, 1, 23, 14, 5, tzinfo=UTC).strftime(ISO),
                        dt.datetime(2026, 11, 3, 22, 41, 37, tzinfo=UTC).strftime(ISO), excel=True, company=P.FIRM)
 
 

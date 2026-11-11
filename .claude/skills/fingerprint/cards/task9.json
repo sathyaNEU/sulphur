@@ -13,8 +13,8 @@
   "shape": "03",
   "decision_type": "quantity_figure",
   "answer_unit": "currency",
-  "answer": "",
-  "answer_source": "",
+  "answer": "Plan USD 10.30 million of desk P&L for 2027 on the draft schedule (80% range USD 5.71 million to 15.01 million) against USD 5.24 million on the schedule in force, and approve the draft without its changes for liquid and medium investment-grade bonds for asset managers and medium and thin investment-grade bonds for hedge funds, which plans USD 13.20 million.",
+  "answer_source": "task9/submission.md, Final Recommendation (generator/figures.json)",
   "gap": [
     "population",
     "objective"
@@ -35,7 +35,7 @@
   "validated_decoy": false,
   "context_artifact": "close_out_summary",
   "stump_class": "analytical",
-  "analyst_test": "The careful but hurried review reads each segment's cost after the trade from the desk's next-day marks, fits the win rate on the desk's own past quotes and prices the requests a tighter quote would win like the ones it wins now, so it keeps the tightening where marks lag and axed rivals already print inside the new quote, and drops it where the desk's present wins are the toxic ones and the new wins are not.",
+  "analyst_test": "The careful but hurried review reads each segment's cost after the trade a week on, before Ashcote's month-end review holds the move in medium and thin bonds, fits the win rate on the desk's own past quotes, which widen when the rivals' do, and prices the requests a tighter quote would win like the ones it wins now, so its plan is about a third short and it drops a change that pays; reading a week's marks on the tape's levels instead plans 40 per cent too much and keeps two changes that lose.",
   "domain_test": "Deciding means separating a dealer's edge at execution from the information in the flow it wins (adverse selection read on marks that lag the market), recovering rivals' quotes from the trades they printed and pricing the winner's curse on the requests a tighter quote adds, which is market-making economics; put a hospital or a utility in and there is no quote, no cover, no evaluated price and no winner's curse.",
   "layer2_family": "estimand_identification",
   "layer2_pattern": "own:marginal-fill-adverse-selection-on-lagging-evaluations-with-rival-levels-from-the-tape",
@@ -52,7 +52,7 @@
   "scoring_unit": "take-rate on flow",
   "spine": {
     "file": "the platform's request export (two generations)",
-    "rows": 0,
+    "rows": 281204,
     "entity": "one request for quote the desk received",
     "grain": "request",
     "source": "synthetic, simulated from a request-for-quote market on real FRED and Cboe series"
@@ -71,31 +71,32 @@
     ],
     "people": [
       "Yolanda Cobb",
-      "James Flowers"
+      "James Flowers",
+      "Steven Phillips"
     ]
   },
   "deliverables": [
     "Brindlemoor_2027_quoting_plan.xlsx",
-    "Brindlemoor_2027_quoting_note.docx"
+    "Brindlemoor_2027_quoting_memo.docx"
   ],
   "opening_move": "question-first",
-  "question_form": "what",
+  "question_form": "how-much",
   "driver": "The decisive quantities are what each kind of win costs after the trade once marks that lag in thin markets have caught up, how often a tighter offer wins beyond any offer made before when rivals' winning levels show only in a public record kept at another grain, and what the newly won requests cost when they are not the requests won now; on the record's own next-day marks, a fit on past offers and today's wins standing in for the new ones, the plan is mispriced in both directions across segments and the segments that lose money are misnamed.",
-  "driver_concrete": "Brindlemoor's credit desk proposes tighter auto-quotes for 2027 in several segments; its next-day markouts on Ashcote's evaluated prices understate what high-yield and thin-bond trades cost because the evaluations catch up over weeks; a logistic fit on its own past quotes overstates the wins a quote tighter than any it has shown would take where axed rivals already print inside it on the tape; and the requests a tighter quote would newly win cost less than today's wins where rivals with flow information quote the benign requests tight, and more in thin bonds where the desk's own stale marks give value away, so the plan and the segments to keep at today's quotes come out wrong in both directions.",
-  "stump": "The careful but hurried review reads each segment's cost after the trade from the desk's next-day marks, fits the win rate on the desk's past quotes and prices the new wins like today's, so its 2027 plan is off and its list of segments that lose money keeps some that lose and drops some that pay (figures from the build).",
+  "driver_concrete": "Brindlemoor's credit desk proposes tighter auto-quotes for 2027 in twelve segments; a week's markouts on Ashcote's evaluated prices understate what medium and thin bonds' trades cost because the evaluations take a bond's own move in mostly at the month-end review; a logistic fit on its own past quotes misstates the wins a tighter quote would take (too few in eleven of twelve segments) where the rivals' winning levels sit on the public tape; and the requests a tighter quote would newly win cost less than today's wins where rivals with flow information quote the benign requests tight, and more in thin high-yield bonds where stale marks are picked off, so the plan and the segments to keep at today's quotes come out wrong in both directions.",
+  "stump": "The careful but hurried review reads each segment's cost after the trade a week on, fits the win rate on the desk's past quotes and prices the new wins like today's, so it plans USD 6.54 million against 10.30 million and drops five changes where four lose money (thin investment-grade asset managers pays); on the tape's levels with a week's marks it plans USD 14.67 million and drops two.",
   "answer_shape": "bridge",
   "weight": "attribution",
   "chain_signature": [
     "missingness-measurement",
     "modeling",
     "causal-reasoning",
-    "validation",
+    "forecasting",
     "forecasting",
     "uncertainty",
     "decomposition-attribution",
     "synthesis"
   ],
-  "results": "R1 each segment's cost after the trade on the desk's own wins, per million face, once the marks have caught up; R2 the share of requests the proposed quote wins in each tightened segment, from rivals' winning levels; R3 the cost after the trade of the requests the tighter quote would newly win; R4 what the 2024 tightening added a month in the segments it touched; R5 the 2027 P&L under the current and the proposed schedule; R6 the proposed schedule's 80 per cent range; R7 the bridge between them by segment; R8 the tightened segments that lose money, with the recommendation",
+  "results": "R1 each changed segment's cost after the trades the current schedule wins, USD a million, read as soon as the move is complete; R2 each changed segment's share of requests won at the draft's quote, from rivals' levels; R3 the cost after the trades the draft's quote would add; R4 the 2027 P&L at the current schedule; R5 at the draft; R6 the draft's 80 per cent range; R7 the difference by changed segment; R8 the changed segments that lose money, with the plan",
   "one_fact_test": "to be counted by effort.py on the generator's passes",
   "strategy_label": "WORKS IN FORM",
   "depth_level": "5 by structure (independent judgments on the marks, rivals' levels, the new wins' selection, a past change's comparison and the year's horizon; different shortcuts land on different segment sets)",
