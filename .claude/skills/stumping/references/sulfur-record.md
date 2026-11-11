@@ -84,7 +84,11 @@ is designed is moved into the skill it governs in a `SKILLS:` commit, and its li
   type from the monthly file, and lost one lateness record pooled across asset classes where the award's mix
   differs, one share pooled across providers, and the load that comes back after the window. Moved into
   `../../build-pipeline/SKILL.md` (Running the stages): the first pass is read against the careful column before
-  READY.
+  READY. On task16 arch 2 (2026-11-11: a contact record linked across four channel logs and carried to a season plan,
+  nine results, pair 46.7 on paper) the pass landed all eleven rates and the set in about four minutes: it found
+  both measurement gaps from the files, read the outcome by a labelled class column and weighted the plan's parcels
+  by each class's contact rate. Five estimates, each from its own files, were still a join and a ratio over
+  ingredients some file labels; only the resampled range was left undone. Repriced at about 70, back to stage 2.
 - **One table that one flexible fit absorbs is one result, however many figures are read off it** (task16 arch 1,
   task10 arch 6, task4 arch 9). Six, eleven and five graded results sat on runs-by-covariates or days-by-covariates
   tables; each run fitted one response surface or one availability model with a breakpoint or a ceiling, chose its

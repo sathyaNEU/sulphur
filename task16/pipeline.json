@@ -4,8 +4,8 @@
  "domain": "general-statistics-data-science",
  "subdomain": "data-integration-record-linkage-entity-resolution",
  "objective": "etl",
- "stage": 4,
- "stage_name": "check",
+ "stage": 2,
+ "stage_name": "design",
  "updated": "2026-11-11",
  "doctrine": "throughout",
  "call": "offer the assistant first through the 2026 peak season for Delivery day and time, Redirect and address, Pickup point and collection, Returns and labels, Charges and refunds and an adviser first for Track and trace, Missed delivery and redelivery, Customs and import charges, Damaged parcel, Missing parcel (expected 70.7, 70.4, 68.6, 70.6, 54.9 per cent, all under 75); the assistant resolves 75.5 per cent across all ten families (90 per cent range 74.3 to 76.7); not Track and trace kept on October's 76.5 per cent, which comes to 70.7 on the season's conversations",
@@ -18,25 +18,28 @@
  },
  "leak": {
   "leak_py": "REVIEW (no LEAK), 2026-11-11, --asof 2026-11-09",
-  "reader": "first read 2026-11-11 on the cut adc5ecaf: no method sentence, no ranking file, no helping file, no answer figure, question 6 no one thing; three things read as planted or generated (a telephony test queue, the zero-filled backlog grid, a date inside a depot text field) and were taken out of the generator with the tester sessions and the repeated week; second read on the cut 3b7dfb87 in flight"
+  "reader": "two reads 2026-11-11 (cuts adc5ecaf and 3b7dfb87): no method sentence, no ranking file, no helping file, no answer figure, question 6 no one thing; realism findings fixed in the generator with no graded figure moved (cut 197dacab)"
  },
  "duplicate_check": {
   "heart": "WARN 2026-11-11 (repeat.gate_g against task9, overuse.gate_g: answered in the note); nearest stump 0.05 (task15, task17)",
   "surface": "exit 0"
  },
  "judge": {
-  "verdict": "",
-  "disposition": "",
-  "gate_h": "",
-  "report": "",
-  "note": "pass 1 thread spawned 2026-11-11 on target.zip 3b7dfb87 (brief prepared by the determinism-judge agent); no verdict yet"
+  "verdict": "DETERMINISTIC",
+  "disposition": "APPROVE on the gates; back to stage 2 on the first-pass reading",
+  "gate_g": "mechanism forecasting, analytical_non_defect, surface_read_dependency no, sole_data_defect no",
+  "gate_h": "domain pass, layers pass, one_thing none, effort quick 2, careful 6, thorough 11 of 11",
+  "report": "task16/determinism_check_report.md",
+  "first_pass": "the thread's own derivation (medium effort, about four minutes, before the blocks were opened) landed all ten family rates, the all-families rate, the set, the linked record, the rate achieved and the season's conversations inside the bands; it ran no resampling and did not reproduce the unkeyed share or the open-case count as figures",
+  "judged_cut": "target.zip 3b7dfb87 (figures and answer blocks byte-identical to the cut on disk, 197dacab)"
  },
  "paper_pair": 46.7,
  "effort": {
   "quick": 32.3,
   "careful": 46.7,
   "thorough": 100.0,
-  "largest_hint": "the plan turns the delay alerts on at every depot: measure what they did to contacts at the pilot depots; rescues 1 of 9 (R5)"
+  "largest_hint": "the plan turns the delay alerts on at every depot: measure what they did to contacts at the pilot depots; rescues 1 of 9 (R5)",
+  "first_pass_repriced": "about 70 with the careful column priced on the judge thread's own first pass (R1, R4, R6, R7, R9 Right, R5 Partly, R2, R3, R8 Missed): over 50, back to stage 2"
  },
  "runs": {
   "run1": null,
@@ -92,7 +95,7 @@
   ]
  },
  "returned": [],
- "resume": "PAUSED at stage 4 (check), architecture 2: the generator, pack, goldens, answer blocks and prompt are built (117 checks, verify 19 of 19, gates.py 0 FAIL) and the determinism judge's pass 1 and the second leak read were in flight on target.zip 3b7dfb87 when the session stopped. To resume: python3 task16/generator/make.py (rebuilds target/, golden/ and both zips byte for byte), gates.py task16, then spawn the leak reader and the determinism judge afresh on that cut, fix every finding in the generator in one pass, read the judge's own first pass against the careful column, write the pre-ship check and commit READY with both zips and golden/ force-added",
+ "resume": "PAUSED at stage 2 (design), architecture 2: built, gates.py 0 FAIL, two leak reads clean, judge DETERMINISTIC APPROVE, but the judge thread's own first pass landed every family rate and the set inside the bands in about four minutes, which reprices the careful column at about 70 and sends the build back to design (determinism_check_report.md). The chain's five estimates were each a join and a ratio over labelled ingredients (KS-07 5.1 and 5.2, the outcome class column, the plan's service-level and alert sheets). Next: the author's call between (a) uploading this cut as it stands to measure it on the platform (python3 task16/generator/make.py rebuilds target.zip 197dacab and the golden zip byte for byte; the prompt and blocks are current), and (b) a redesign whose results rest on what no file labels and no hold-out confirms. Nothing here is READY.",
  "approved": null,
  "submitted": null,
  "portal": {

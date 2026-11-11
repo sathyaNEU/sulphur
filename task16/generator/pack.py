@@ -120,6 +120,11 @@ def write_all(W, target):
         os.remove(os.path.join(target, f))
     F = {k: os.path.join(target, v) for k, v in FILES.items()}
     rng = np.random.default_rng(P.SEED + 2)
+    rsub = np.random.default_rng((P.SEED, 9))            # which of a family's codes a conversation or adviser picks
+
+    def pick(xs):
+        w = np.array([1.0 / (1.6 ** i) for i in range(len(xs))]); u = rsub.random() * w.sum()
+        return xs[int(np.searchsorted(np.cumsum(w), u, side="right").clip(0, len(xs) - 1))]
     cons, contacts, phone, prev = W["cons"], W["contacts"], W["phone"], W["prev"]
     trk = tracking(len(cons))
     n = {}
@@ -136,7 +141,7 @@ def write_all(W, target):
         day = int(start // 24)
         build = "2.9.3" if day < 20 else "2.9.4" if day < P.V3_DAY else "3.0.0" if day < 73 else "3.0.1"
         rows.append(["A%07d" % ids[k], fmt_local(start), fmt_local(end), "app" if rng.random() < 0.63 else "web", build,
-                     INTENTS[P.FAM[fam]][int(rng.integers(0, len(INTENTS[P.FAM[fam]])))], typed(rng, trk[idx]), int(2 + rng.poisson(3.2)),
+                     (pick(INTENTS[P.FAM[fam]]), rng.integers(0, len(INTENTS[P.FAM[fam]])))[0], typed(rng, trk[idx]), int(2 + rng.poisson(3.2)),
                      "Y" if hand else "N", "de" if rng.random() < 0.88 else "en"])
         k += 1
     n_scope = len(rows)
@@ -145,7 +150,7 @@ def write_all(W, target):
         day = int(h // 24)
         build = "2.9.3" if day < 20 else "2.9.4" if day < P.V3_DAY else "3.0.0" if day < 73 else "3.0.1"
         rows.append(["A%07d" % ids[k], fmt_local(h), fmt_local(h + rng.gamma(2.0, 1.2) / 60), "app" if rng.random() < 0.5 else "web", build,
-                     str(rng.choice(GENERAL_INTENTS)), "", int(1 + rng.poisson(2.0)), "N", "de" if rng.random() < 0.88 else "en"])
+                     (pick(GENERAL_INTENTS), rng.choice(GENERAL_INTENTS))[0], "", int(1 + rng.poisson(2.0)), "N", "de" if rng.random() < 0.88 else "en"])
         k += 1
     rows.sort(key=lambda x: x[1])
     n["assistant"] = _write(F["assistant"], ["conversation_id", "started_at", "ended_at", "entry", "build", "intent", "tracking_no",
@@ -158,7 +163,8 @@ def write_all(W, target):
     weekly = {}
 
     def wrap(fam):
-        return WRAP[fam][int(rng.integers(0, len(WRAP[fam])))][0]
+        rng.integers(0, len(WRAP[fam]))
+        return pick(WRAP[fam])[0]
     for j, r in enumerate(contacts):
         if r[2] != "P":
             continue
@@ -199,7 +205,7 @@ def write_all(W, target):
         wk = int(h // 24) // 7
         weekly.setdefault((wk, "GENERAL"), [0, 0, 0]); weekly[(wk, "GENERAL")][0] += 1
         rows.append(["C%08d" % cid[k], 1, "IN", fmt_utc(h), "GENERAL", path, "", int(round(wait)), int(rng.gamma(2.5, 80)),
-                     WRAP_OTHER[int(rng.integers(0, 3))][0], "", advisers[int(rng.integers(0, 148))]])
+                     (pick(WRAP_OTHER)[0], rng.integers(0, 3))[0], "", advisers[int(rng.integers(0, 148))]])
         k += 1
     rows.sort(key=lambda x: (x[3], x[0], x[1]))
     n["calls"] = _write(F["calls"], ["call_id", "leg", "direction", "start_utc", "queue", "ivr_path", "tracking_keyed", "queue_wait_s",
@@ -221,7 +227,7 @@ def write_all(W, target):
         h = _next_open(rng.uniform(0, P.DAYS) * 24, lo=8.0)
         if h >= P.DAYS * 24:
             continue
-        rows.append(["S%07d" % sid[k], fmt_local(h), fmt_local(h + rng.gamma(3, 2.5) / 60), "web", "", WRAP_OTHER[int(rng.integers(0, 3))][0], advisers[int(rng.integers(0, 148))]])
+        rows.append(["S%07d" % sid[k], fmt_local(h), fmt_local(h + rng.gamma(3, 2.5) / 60), "web", "", (pick(WRAP_OTHER)[0], rng.integers(0, 3))[0], advisers[int(rng.integers(0, 148))]])
         k += 1
     rows.sort(key=lambda x: x[1])
     n["chat"] = _write(F["chat"], ["session_id", "started_at", "ended_at", "source", "tracking_no", "wrapup_code", "adviser_id"], rows)
@@ -293,7 +299,7 @@ def write_all(W, target):
         elif c == "L1":
             oc = "LATE_1" if due + 1 < P.DAYS else "IN_TRANSIT"
         else:
-            oc = "LATE_2PLUS" if due + 2 <= P.DAYS else "IN_TRANSIT"
+            oc = "LATE_2PLUS" if due + 2 < P.DAYS else "IN_TRANSIT"
         rows.append([trk[idx], P.DEPOTS[dep][0], "IMP" if exc == "CUSTOMS_HOLD" or rng.random() < 0.05 else "DOM",
                      promised.isoformat(), delivered, oc, exc])
     order = rng.permutation(len(rows))
@@ -309,7 +315,7 @@ def write_all(W, target):
             pend = 0
             if t + 1 >= P.DAYS:
                 pend += a[1]; a[1] = 0
-            if t + 2 > P.DAYS:
+            if t + 2 >= P.DAYS:
                 pend += a[2]; a[2] = 0
             rows.append([(P.START + dt.timedelta(days=t)).isoformat(), code, sum(a) + pend, a[0], a[1], a[2], a[3], pend])
     n["network"] = _write(F["network"], ["due_date", "depot", "parcels_due", "on_time", "late_1", "late_2plus", "exception", "in_transit"], rows)
@@ -320,8 +326,9 @@ def write_all(W, target):
     ws.append(["Week starting"] + [d[0] for d in P.DEPOTS] + ["All depots"])
     wsum = sum(d[2] for d in P.DEPOTS)
     tilt = {"WIN": 1.06, "WIS": 1.05, "GRZ": 1.02, "BRE": 0.9, "KLU": 0.93}
+    rplan = np.random.default_rng((P.SEED, 10))
     for wk, tot in zip(P.PEAK_WEEKS, P.PEAK_PARCELS):
-        raw = [d[2] * tilt.get(d[0], 1.0) for d in P.DEPOTS]
+        raw = [d[2] * tilt.get(d[0], 1.0) * float(np.exp(rplan.normal(0, 0.035))) for d in P.DEPOTS]
         vals = [int(round(tot * 1000 * x / sum(raw) / 100.0)) * 100 for x in raw]
         vals[0] += tot * 1000 - sum(vals)
         ws.append([wk] + vals + [tot * 1000])
@@ -396,8 +403,10 @@ def write_all(W, target):
         came_back = bool(W["follow"].get(j)) if ch == "A" else rng.random() < 0.18
         if rng.random() < (0.11 if came_back else 0.055):
             score = int(np.clip(round(rng.normal(2.1 if came_back else 4.1, 1.1)), 1, 5))
-            rows.append(["R%07d" % sid2[j], fmt_local(end + rng.exponential(9.0) + 0.3), {"A": "assistant", "P": "telephone", "C": "live chat", "W": "written"}[ch],
+            when = end + rng.exponential(9.0) + 0.3
+            rows.append(["R%07d" % sid2[j], fmt_local(when), {"A": "assistant", "P": "telephone", "C": "live chat", "W": "written"}[ch],
                          typed(rng, trk[idx]) if rng.random() < 0.8 else "", score, "yes" if score >= 4 or (score == 3 and rng.random() < 0.4) else "no"])
+    rows = [x for x in rows if x[1] < fmt_local(ext)]
     rows.sort(key=lambda x: x[1])
     n["csat"] = _write(F["csat"], ["response_id", "answered_at", "channel", "tracking_no", "score_1_to_5", "question_answered"], rows)
     docs(F)
@@ -503,5 +512,4 @@ def docs(F):
                 "the English flows and no change to the answers. Version 3.0 stays in service through the peak season; the next "
                 "feature release is planned for February 2027."),
           ("h", "Reporting"),
-          ("p", "The conversation export carries the build of every conversation. Intents are unchanged from 2.9 apart from "
-                "three new ones listed in the intent table.")], "release")
+          ("p", "The conversation export carries the build of every conversation. The intent table is unchanged from 2.9.")], "release")

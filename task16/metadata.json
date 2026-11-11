@@ -72,7 +72,7 @@
   {
    "path": "assistant_conversations_2026w32_w45.csv",
    "format": "csv",
-   "bytes": 8814240,
+   "bytes": 8784056,
    "covers": "the assistant platform's conversation export, 3 August to 8 November 2026 (weekly files stitched)",
    "made": "written by task16/generator/make.py from the simulated process (deterministic)"
   },
@@ -86,7 +86,7 @@
   {
    "path": "assistant_release_3_0.docx",
    "format": "docx",
-   "bytes": 10312,
+   "bytes": 10288,
    "covers": "the release note of assistant version 3.0",
    "made": "written by task16/generator/make.py from the simulated process (deterministic)"
   },
@@ -121,7 +121,7 @@
   {
    "path": "csat_responses_2026w32_w45.csv",
    "format": "csv",
-   "bytes": 730098,
+   "bytes": 730039,
    "covers": "responses to the post-contact survey, 3 August to 8 November 2026",
    "made": "written by task16/generator/make.py from the simulated process (deterministic)"
   },
@@ -149,7 +149,7 @@
   {
    "path": "season_plan_w47_w53.xlsx",
    "format": "xlsx",
-   "bytes": 10302,
+   "bytes": 10309,
    "covers": "workforce planning's season plan for 16 November 2026 to 3 January 2027: parcels, service levels, notification roll-out, adviser rota",
    "made": "written by task16/generator/make.py from the simulated process (deterministic)"
   },
