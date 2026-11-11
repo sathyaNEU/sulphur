@@ -256,6 +256,7 @@ def question_form(text):
 TYPED = [
     ("xlsx", r"spreadsheets?|workbooks?|excel (?:file|workbook|sheet)s?"),
     ("pptx", r"slide decks?|slides?|decks?|presentations?|powerpoints?"),
+    ("pdf", r"pdf (?:notes?|reports?|briefs?|briefings?|documents?|summar(?:y|ies))|pdfs?"),
     ("docx", r"briefing notes?|memos?|write-?ups?|reports?|word (?:files?|documents?)"),
     ("csv", r"csv(?: files?)?"),
     ("ipynb", r"notebooks?"),
