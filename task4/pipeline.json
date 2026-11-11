@@ -1,48 +1,45 @@
 {
   "task": "task4",
-  "status": "READY",
+  "status": "DESIGN",
   "domain": "supply-chain-logistics",
   "subdomain": "regression-classification-model-diagnostics",
   "client_domain": "general-statistics-data-science",
   "objective": "forecasting",
-  "stage": 5,
-  "stage_name": "ready",
+  "stage": 2,
+  "stage_name": "design",
   "updated": "2026-11-11",
   "doctrine": "throughout",
-  "architecture": 11,
+  "architecture": 12,
   "loops": 0,
-  "call": "Agree the evening shift in weeks 47 to 50 in both small-parts zones (P1 and P2) and book 8,390 agency picker hours over the 2027 peak (760, 1,910, 1,930, 1,760, 2,030 in weeks 46 to 50); week 46 runs on day shifts alone",
-  "chain": "R1 the 2025 peak's picker hours by zone (P1 3,384, P2 3,104, B1 2,280); R2 the pooled year-ahead peak overstatement 10.0 per cent against the order lines placed; R3 congestion 0.46 minutes a line at 1.8 pickers an aisle with the mix held fixed; R4 a Huippu Sport line 0.13 minutes longer than a Kotikaari line; R5 the 2027 budget's expected overstatement 3.7 per cent (Kotikaari small parts, plan +7); R6 week 47 carries 21.4 per cent of the peak (budget 14.0); R7 each zone's hours weeks 46 to 50; R8 their 80 per cent ranges; R9 evening weeks 47 to 50 in P1 and P2; R10 the agency hours 760, 1,910, 1,930, 1,760, 2,030 (8,390)",
-  "stump": "the careful pass measures the pooled overstatement right and applies it week by week to the client's week-numbered 2027 forecast (a week late after the 53-week 2026, its large planned growth priced at the pooled rate), fits time per line on the mix without the aisle density the peak's lighter lines hide, and reads Huippu Sport's lines off the polybag pilot",
+  "call": "pending build: which rotable part numbers are short of spares for 2027 and which over-stocked, the spares each should hold, and the watch-list serials worth scrapping",
+  "chain": "R1 the 2026 unscheduled removals by part number reconciled to the October reliability report; R2 the parts whose removals follow landings or engine starts and the 2027 schedule's cycles and hours; R3 the watch-list serials that are genuinely rogue and the 2027 removals scrapping the whole list would save; R4 the propeller control's 2027 removals through the bulletin's unit-by-unit embodiment; R5 every part number's 2027 unscheduled removals; R6 the Bodø shop's turnaround at the 2027 load; R7 the 80 per cent ranges; R8 the spares each line needs for the 95 per cent fill rate and the lines to change; R9 what moves each changed line",
+  "stump": "the careful pass projects each part on its twelve-month removals per flight hour, sizes spares by Palm's formula on the 2026 average turnaround, reads the propeller control at its 2026 rate and scraps every watch-list serial",
   "precut": {
-    "exit": 0,
-    "date": "2026-11-11",
-    "checks": "93 of 93, 1 WARN (task10's chain, retired)"
+    "exit": null,
+    "date": ""
   },
   "leak": {
-    "leak_py": "REVIEW, no LEAK (2026-11-11, as-of 2026-11-06)",
-    "reader": "stage 4 reader (2026-11-11, target.zip 7dde0b05): no leak, no one thing; two defects fixed (the staffing sheet's rate divided by 60 twice, the budget's total row as values); not re-run after those two arithmetic fixes, on the author's standing preference (no background pass for a change that adds no text)"
+    "leak_py": "",
+    "reader": ""
   },
   "duplicate_check": {
-    "heart": "not run (architecture 11 drawn 2026-11-11)",
-    "guard_check": "WARN only (overuse.gate_g; skeleton.house_lesson composition_versus_behaviour on task2 v6 and task15 v2)",
-    "skeleton": "severity none against every build, lineage entry and client task"
+    "heart": "",
+    "guard_check": "WARN only (registered 2026-11-11T22:27:56Z)",
+    "skeleton": "severity none against every card, lineage entry and client task"
   },
   "judge": {
-    "verdict": "DETERMINISTIC (stage 4 pass 1, 2026-11-11, partial verification: components 1 and 4 and ask 4 recomputed in band, the calendar mechanism reproduced; asks 1 to 3 and 5 and component 2 traced to their files, nothing contradicting)",
-    "disposition": "APPROVE",
-    "gate_g": "mixed (forecasting, decomposition, binding constraint); analytical_non_defect; no surface read; no sole defect",
-    "gate_h": "pass: one_thing none",
-    "report": "task4/determinism_check_report.md",
-    "fixed_after": "ask 4's two readings (lines picked against orders placed, 14.8 against 10.0) pinned to the order lines placed in the ask and the calibration moved to that basis; every figure re-verified by verify.py (10 of 10)"
+    "verdict": "",
+    "disposition": "",
+    "gate_g": "",
+    "gate_h": "",
+    "report": ""
   },
-  "paper_pair": 24.0,
+  "paper_pair": null,
   "effort": {
-    "quick": 13.0,
-    "careful": 24.0,
-    "thorough": 100.0,
-    "largest_hint": "time a line rises with the pickers logged in an aisle once the mix is held fixed; rescues R3 only",
-    "column": "cited (every careful loss cites a precedent)"
+    "quick": null,
+    "careful": null,
+    "thorough": null,
+    "largest_hint": ""
   },
   "returned": [
     {
@@ -81,9 +78,16 @@
       "source": "platform runs (the author's paste, target.zip of 0c3b7fc)",
       "repair": "redesign",
       "portal": "architecture 10: both runs landed the order (17, the same blocks, M145 refused, 23 qualifying) and every graded figure inside its band; runs/arch10/triage.md, REDESIGN"
+    },
+    {
+      "date": "2026-11-11",
+      "source": "platform runs (the author's paste)",
+      "repair": "design",
+      "portal": "architecture 11: the run landed the call and three of the four judgments (congestion on a logged density, the acquired brand at its own mix, the 53-week re-key), losing only the growth-conditioned overstatement and the agency hours",
+      "moves": "re-rooted in a new world as architecture 12: Havørn Regional's 2027 rotable spares, each line diagnosed; every priced judgment a relation between records at different grains that a correct reading of each file does not reveal"
     }
   ],
-  "resume": "READY: the author rewrites prompt.txt in their own voice, keeping every item of the note's Prompt contract (weeks 46 to 50; each zone's picker hours with an 80 per cent range; the agency hours on top of our own pickers; the evening-shift verdict per small-parts zone; the share by which Kotikaari's year-ahead forecasts of its peak weeks overstated the order lines it placed in those weeks; how many more minutes a Huippu Sport line will take than a Kotikaari one in those weeks; a workbook and a one-page memo), runs voice-check.py task4 --rewrite and leak.py, uploads it with target.zip, pastes the four blocks of submission.md, then /triage-runs task4 once both runs are in",
+  "resume": "stage 2: write the design note's results chain, hidden factor record, effort test, frontier check, fork and closure tables for architecture 12 and pass precut.py; then stage 3 (the generator simulating the fleet, the legs, the removals, the shop and the pool)",
   "approved": null,
   "delivered": null,
   "portal": null,
@@ -138,6 +142,10 @@
     {
       "date": "2026-11-11",
       "event": "architecture 11 built and checked: Saarnela's 2027 peak plan (evening shifts weeks 47 to 50 in P1 and P2, 8,390 agency hours); judge DETERMINISTIC APPROVE; leak reader no leak; ask 4 pinned to the order lines placed after the judge found two readings"
+    },
+    {
+      "date": "2026-11-11",
+      "event": "architecture 11 landed on the platform (runs/arch11/run1.md, REDESIGN); architecture 12 drawn in a new world (Norway, Havørn Regional AS, 30 twin turboprops, the Bodø component shop, the Helgeland routes from April 2027): which rotables will be short of spares in 2027 and which over-stocked, card registered with skeleton keys exposure_basis_decoupled, staggered_conversion_at_renewal and rate_on_driver_exposure added"
     }
   ],
   "runs": {
@@ -201,22 +209,19 @@
         "verdict": "not stumped: both runs on the golden call (order 17) and every graded figure in band",
         "texts": "runs/arch10/run1.md, runs/arch10/run2.md",
         "triage": "runs/arch10/triage.md"
+      },
+      {
+        "architecture": 11,
+        "date": "2026-11-11",
+        "graded": false,
+        "verdict": "not stumped (the author's report): the pasted run on the golden call (evening shift weeks 47 to 50 in P1 and P2), agency 7,744 against 8,390 hours, the pooled overstatement 9.97 per cent against 3.7 (its one analytical loss); the second run not supplied",
+        "texts": "runs/arch11/run1.md"
       }
     ]
   },
-  "gates": {
-    "checks": "125 assertions, 0 failed",
-    "verify": "10 of 10 on its own code path",
-    "byte_identical": "two builds in one run, and a third under another hash seed",
-    "effort": "quick 13.0, careful 24.0, thorough 100.0",
-    "figures_check": "exit 0",
-    "voice_check": "PASS, 1 WARN (deliverable set quota)",
-    "containers": "PASS",
-    "surface": "PASS",
-    "heart": "WARN only"
-  },
-  "zip_sha256_16": "2a65f595f7577ba4",
-  "golden_zip_sha256_16": "a7ff9ef02c12230b",
+  "gates": {},
+  "zip_sha256_16": "",
+  "golden_zip_sha256_16": "",
   "migrated_from": {
     "project": "Mark",
     "task": "task250",

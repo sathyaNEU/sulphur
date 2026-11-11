@@ -21,3 +21,8 @@
   2026-11-10 from the author's account. Both landed the golden exactly (order 8; payload 2.00 and 1.92 against 1.9,
   loss 5.08 and 4.51 against 4.6, the winter speed modelled by both). Route: REDESIGN in a new world (architecture
   10, a Finnish bus depot's electric order).
+- `arch11/run1.md`: architecture 11 (Saarnela fulfilment centre's 2027 peak plan, target.zip 2a65f595f7577ba4), one
+  platform run pasted by the author on 2026-11-11 with the comparison against the golden at its head. On the golden's
+  call (evening shift weeks 47 to 50 in P1 and P2); the aisle density, the acquired brand's full mix and the 53-week
+  re-key taken unprompted; lost the growth-conditioned overstatement (pooled 9.97 against 3.7 per cent) and the agency
+  hours (7,744 against 8,390). Run 2 and the rubric not supplied. Route: REDESIGN in a new world (architecture 12).

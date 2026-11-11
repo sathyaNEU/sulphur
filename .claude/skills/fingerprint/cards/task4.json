@@ -1,18 +1,18 @@
 {
   "task": "task4",
   "project": "sulfur",
-  "architecture": 11,
+  "architecture": 12,
   "drawn": "2026-11-11",
-  "slot_note": "re-root of task4 after architecture 10 was landed by both platform runs (2026-11-11): new world (Finland, a third-party logistics provider's e-commerce fulfilment centre at Saarnela taking its client's acquired brand into the same pick zones), new dataset (a WMS zone-hour labour log, two payroll exports of timesheets, the client's weekly forecast vintages, a pilot's pick lines, the new brand's order history from its old warehouse), new decision form (a schedule of evening shifts by zone and week with the weekly agency booking), new shell (which | week | docx+xlsx)",
+  "slot_note": "re-root of task4 after architecture 11 was landed on the platform (2026-11-11, runs/arch11/): new world (Norway, a regional airline's 30 twin turboprops and its rotable spares pool, with the Bodø component shop), new dataset (the maintenance system's component-change export, every flight leg 2023 to November 2026, the shop and vendor repair orders with their findings, the fleet register, the 2027 flying programme with the Helgeland route package from April, the October reliability report with its watch list), new decision form (each line of the rotable spares plan diagnosed: short, over or right, why and by how much), new shell (which | the | docx+xlsx)",
   "domain": "supply-chain-logistics",
   "client_domain": "general-statistics-data-science",
-  "subdomain": "fulfillment-warehousing",
-  "niche": "peak-season picker-hour planning at an e-commerce fulfilment centre taking a second brand into its small-parts zones: each 2027 peak week's paid picker hours by zone from the client's year-ahead weekly forecast, corrected for an optimism that grows with the growth it plans and re-keyed from its week-numbered profile to the dates that drive the peak, through a time per line by handling class with an aisle-congestion term the peak's lighter lines hide, the new brand at its full assortment's mix rather than its pilot's, and the zone limit deciding which weeks need the evening shift",
+  "subdomain": "inventory-demand-planning",
+  "niche": "rotable spares planning at a regional airline: each repairable part number's 2027 unscheduled removals under a flying programme whose new short-sector route package raises landings and engine starts while flight hours fall, the spares each needs for a 95 per cent fill rate through a component shop whose turnaround every in-house line shares, the propeller control's service bulletin embodied unit by unit at shop visits, winter removals clustered in cold snaps, and an engineering watch list built from serials' own removal counts",
   "objective": "forecasting",
-  "shape": "06",
-  "decision_type": "schedule_or_sequence",
-  "answer_unit": "date_or_period",
-  "answer": "Agree the evening shift in weeks 47 to 50 in both small-parts zones (P1 and P2) and book 8,390 agency picker hours over the 2027 peak (760, 1,910, 1,930, 1,760, 2,030 in weeks 46 to 50); week 46 runs on day shifts alone",
+  "shape": "10",
+  "decision_type": "designation_set",
+  "answer_unit": "set_of_items",
+  "answer": "pending build",
   "answer_source": "submission.md (Final Recommendation) and generator/figures.json",
   "gap": [
     "time",
@@ -22,78 +22,72 @@
     "none"
   ],
   "generators": [
+    "G2",
     "G16",
-    "G6",
-    "G13"
+    "G17"
   ],
-  "gate_g": "method_or_model_selection",
-  "calibration_form": "retry_or_revision_log",
-  "stump_strategy": "binding_constraint",
+  "gate_g": "forecasting",
+  "calibration_form": "existing_book_actuals",
+  "stump_strategy": "composition_mix",
   "decisive_rule_filed": false,
   "official_decoy": false,
   "validated_decoy": false,
   "context_artifact": "filed_model",
   "stump_class": "analytical",
-  "analyst_test": "a careful but hurried run measures the client's pooled year-ahead overstatement correctly and applies it week by week to the 2027 forecast, keeping its week-numbered profile (a week late after the 53-week 2026) and pricing its large planned growth at the pooled rate; fits time per line on the handling-class mix at the weekly or shift grain, where the peak's lighter lines hide the congestion, so the 2025 peak's rate carries to 2027's denser floor and the site manager's draft back-test confirms it; and reads the new brand's time per line off the pilot, whose polybag assortment picks quicker than the client's own lines: it books too few agency hours in the busiest weeks and opens the evening shift in the wrong weeks",
-  "domain_test": "the deciding work is regression and model diagnostics: an omitted density term masked by a correlated mix and identified only at the finer grain, a model chosen on a back-test that can see the forward condition rather than one that confirms it, a covariate-shift correction from a selected pilot to the target population, a forecaster's calibration conditioned on its own claim and measured at the lead the plan is made at, and a seasonal regressor re-keyed from a calendar grid to the events; swap the warehouse for a clinic and the aisle density, the handling classes, the forecast vintages, the ISO week grid and the zone limit stop making sense",
-  "layer2_family": "estimation_fit",
-  "layer2_pattern": "own:congestion-past-a-density-masked-by-the-peak-mix",
+  "analyst_test": "a careful but hurried run cleans the component-change export, reads every finding and document, projects each part on its twelve-month unscheduled removals per flight hour as the reliability report does (naming and waving through that removals scale with hours), sizes spares by Palm's formula on the 2026 average turnaround, reads the propeller control at its 2026 rate and takes the watch list's serials at their listed removals: it buys too few starter-generators, brakes, bleed valves and batteries, too many propeller controls and avionics units, and scraps serials whose removals were an aircraft's fault or chance",
+  "domain_test": "every result is a regression or model-diagnostic object: an event rate's exposure basis that the record's collinear hours and landings cannot separate in aggregate but the bases' different sector lengths can, a count that inherits its host's fault, a list selected on noisy counts that regresses, a modification embodied through the population's own removals, a queue's turnaround as a nonlinear response to the load every line shares, and overdispersion from shared cold shocks; swap the aircraft parts for clinic equipment and the landings, engine starts, sector lengths, no-fault-found bench tests and shop visits stop making sense",
+  "layer2_family": "field_method",
+  "layer2_pattern": "own:rotable-removals-on-their-driving-exposure-through-a-shared-shop",
   "layer1": [
-    "two payroll exports with different layouts (the system changed in January 2024)",
-    "floating pickers' timesheet hours split across zones only by their WMS log",
-    "agency badges re-issued in April 2025, the crosswalk kept in the roster",
-    "zone-hour rows exported twice where the WMS re-ran its nightly job",
-    "forecast vintages re-issued mid-month with revised rows",
-    "pilot pick lines confirmed twice by the scanner",
-    "the old warehouse's order history keyed on Huippu's own article numbers, crosswalked in the item master"
+    "the maintenance system re-sends a corrected component change as a new row (both kept)",
+    "removal reason codes in two vocabularies (the 2024 system upgrade renamed U/S/C to UNSCH/SCHED/CONV)",
+    "robbery removals between aircraft recorded as two changes",
+    "serial numbers typed with and without the manufacturer's prefix",
+    "flight legs with block times across midnight UTC and local time in the station column",
+    "vendor repair orders in EUR and USD with the exchange rate of the invoice date",
+    "shop findings free-text with a coded finding added only from March 2024",
+    "units still in repair at the export with no finding yet"
   ],
-  "stakeholder_role": "the 3PL's operations director, who signs the 2027 peak labour plan, the agency booking and the evening-shift agreement in December",
+  "stakeholder_role": "the airline's technical director, who signs the 2027 rotable spares plan, its purchase orders and the watch-list scrapping in December",
   "role_family": "operations_director",
   "scoring_unit": "other",
   "spine": {
-    "file": "wms_zone_hours_2022-01_2026-10.csv",
-    "rows": 34077,
-    "entity": "one pick zone's hour in the WMS labour log (pickers logged, task and idle minutes, lines by handling class, units)",
-    "grain": "zone x hour",
+    "file": "flight_legs_2023-01_2026-11.csv",
+    "rows": 0,
+    "entity": "one flight leg flown by one aircraft",
+    "grain": "leg",
     "source": "synthetic"
   },
-  "forum": "customer_or_counterparty",
-  "forcing_event": "season_or_peak",
-  "org_family": "logistics_or_3pl",
+  "forum": "executive_team",
+  "forcing_event": "launch_or_rollout",
+  "org_family": "other",
   "world": {
-    "geography": "Finland (Saarnela, an invented logistics park town in Uusimaa)",
-    "currency": "EUR",
-    "org_type": "a third-party logistics provider running an e-commerce fulfilment centre for one online retailer, which is moving the brand it acquired into the same centre",
+    "geography": "Norway (Nordland, Troms, Vestland and Trøndelag)",
+    "currency": "NOK",
+    "org_type": "a regional airline flying 30 twin turboprops on short coastal routes, with a component shop at its Bodø base",
     "invented_names": [
-      "Telkkä Logistics Oy",
-      "Saarnela fulfilment centre",
-      "Kotikaari Oy",
-      "Huippu Sport",
-      "Työpiste Henkilöstö Oy"
+      "Havørn Regional AS"
     ],
     "people": [
-      "Helena Korhonen",
-      "Tapio Nieminen",
-      "Tarja Huhtala",
-      "Marko Autio",
-      "Anja Kanerva",
-      "Marika Sutinen",
-      "Juho Kivinen",
-      "the roster's 31 own pickers (guard.py names --geo FI --seed 1104)"
+      "Britt Berge",
+      "Sigurd Fredriksen",
+      "Ruth Johannessen",
+      "Sondre Edvardsen",
+      "Siri Johansen"
     ]
   },
   "deliverables": [
-    "saarnela_peak_plan_2027.xlsx",
-    "saarnela_peak_plan_2027.docx"
+    "havorn_rotable_spares_2027.xlsx",
+    "havorn_rotable_spares_2027.pptx"
   ],
   "opening_move": "question-first",
   "question_form": "which",
-  "driver": "A forward workload is forecast through a per-unit rate that rises once more workers share a fixed space, a rise the coarse record hides because the busy periods carry lighter units, so a proportional scaling its own back-test confirms plans the busy periods short; the forward volume comes from a forecaster whose overstatement grows with the growth it plans and whose period profile is keyed to a calendar grid that a long year moves a whole step against the events driving demand, and a new stream's per-unit work is measured on a pilot whose units were drawn from its lightest class, so which periods need a second shift and how many extra hours to book come out only when every correction is carried together.",
-  "driver_concrete": "Saarnela's 2027 peak plan forecasts each small-parts zone's paid picker hours from Kotikaari Oy's year-ahead weekly forecast, which overstates by a share that grows with the growth it plans and copies 2025's week numbers into a calendar shifted a week by 2026's 53 ISO weeks (Black Friday falls in week 47 of 2027), through a time per line by handling class and units with an aisle-congestion term that the peak's lighter lines hide in the weekly record, and with Huippu Sport's lines at its full peak assortment (footwear boxes, multi-unit lines) where the September pilot stocked only polybag apparel; the day shift's capacity at each zone's limit of pickers on the floor decides the evening-shift weeks and the remainder sets the agency booking; on the cut pack the golden opens the evening shift in weeks 47 to 50 in both zones (week 46 at 0.84 and 0.87 of the day shifts' capacity, weeks 47 to 50 at 1.17 to 1.30), the draft's route in week 48 only.",
-  "stump": "The careful pass measures the pooled overstatement (right) and applies it to every week of the client's 2027 forecast, keeping the forecast's week-numbered profile (Black Friday a week late) and pricing its planned growth at the pooled rate; it fits time per line on the handling-class mix at the weekly or shift grain, where the peak's lighter lines hide the aisle congestion, so the 2025 peak's rate carries to 2027's denser floor and the draft's back-test confirms it; and it reads Huippu Sport's time per line off the pilot, whose polybag assortment picks quicker than Kotikaari's lines: it books too few agency hours in the busiest weeks and opens the evening shift in the wrong weeks.",
+  "driver": "Each unit's forward demand is the sum of event streams that follow different exposures, and the record's exposures moved together, so every in-sample check passes on the conventional one while the forward plan decouples them; part of the stream is repeated swaps driven by a fault in the host rather than the item, so the items flagged by their own counts are mostly the host's victims or chance and regress; a fix converts the population item by item at each item's own visit; every line's turnaround runs through one shared queue that lengthens nonlinearly as the forward load rises; and demand clusters in shared shocks, so the stock each line needs is set by the clustered, queue-lengthened pipeline, never by its average.",
+  "driver_concrete": "Each rotable's 2027 spares need is its unscheduled removals under the 2027 programme (the landing- and start-driven parts on cycles, which the Helgeland short sectors raise by about a third while flight hours fall, not on flight hours as the reliability report projects), with the no-fault-found swaps each aircraft's intermittent faults drove read as the aircraft's and not the serial's (so the watch list is mostly victims and chance, and scrapping it saves a fraction of what the list implies), the propeller control's service bulletin embodied unit by unit at each shop visit, and the Bodø shop's turnaround at the 2027 summer load that every in-house line shares, sized for the cold-snap clustering of winter removals.",
+  "stump": "A careful but hurried analyst projects each part on its twelve-month removals per flight hour, sizes spares by Palm's formula on the 2026 average turnaround, reads the propeller control at its 2026 rate and scraps every watch-list serial: it buys too few starter-generators, brakes, bleed valves and batteries, too many propeller controls and avionics units, and replaces serials whose removals were their aircraft's fault or chance.",
   "deep_chain": "(1) the 2025 peak's paid picker hours by zone from the timesheets, floaters split by their WMS log, against the WMS task minutes; (2) the pooled overstatement of the client's year-ahead peak forecasts, vintage by vintage at the October lead; (3) the aisle-congestion term in time per line at the zone-hour grain with the handling-class mix held fixed; (4) the new brand's extra time per line at its full peak assortment's mix; (5) the 2027 forecasts' expected overstatement from the growth each plans; (6) the 2027 weekly profile re-keyed from week numbers to the dates of Black Friday and the Christmas cut-offs; (7) each zone's paid picker hours for weeks 46 to 50; (8) the 80 per cent ranges; (9) the evening-shift weeks by small-parts zone; (10) the agency hours to book each week",
   "judgment": "a congestion term found only at the zone-hour grain with the mix held fixed and carried to a denser floor than any past week's average; a pilot's selected assortment reweighted to the brand's full peak mix; a forecaster's optimism calibrated by vintage against the growth it plans; a week-numbered profile re-keyed to event dates after a 53-week year",
-  "one_fact_test": "the strongest sentence (time per line rises with pickers per aisle once the handling-class mix is held fixed) rescues the congestion result and none of the weekly hours, agency hours or evening-shift cells, which still carry the pilot's mix, the pooled overstatement and the late profile: 1 of 10",
+  "one_fact_test": "the strongest sentence (the starter-generators, brakes and bleed valves wear by landings and starts, which the 2027 programme raises while hours fall) rescues R2 and none of the watch list, the bulletin, the shop's turnaround, the ranges or the spares lines, which still carry the watch list's counts, the 2026 rate, the average turnaround and Poisson demand: 1 of 9",
   "strategy_label": "own",
   "mechanism_source": "design_note",
   "lineage": [
@@ -465,9 +459,112 @@
       ],
       "decision_type": "quantity_figure",
       "gate_g": "binding_constraint"
+    },
+    {
+      "architecture": "v11",
+      "fate": "landed on the platform on 2026-11-11 (the author's paste, runs/arch11/run1.md): the run opened the evening shift in weeks 47 to 50 in both small-parts zones exactly as the golden, modelled the aisle congestion with a logged density term, re-keyed the 53-week calendar and read Huippu Sport at comparable zone and density (+0.129 against 0.13); it lost only the overstatement conditioned on the budget's planned growth (pooled 9.97 per cent, confirmed by its own held-out WAPE) and the agency hours (7,744 against 8,390); three of four judgments were one recognition and a routine fit",
+      "driver": "A forward workload is forecast through a per-unit rate that rises once more workers share a fixed space, a rise the coarse record hides because the busy periods carry lighter units, so a proportional scaling its own back-test confirms plans the busy periods short; the forward volume comes from a forecaster whose overstatement grows with the growth it plans and whose period profile is keyed to a calendar grid that a long year moves a whole step against the events driving demand, and a new stream's per-unit work is measured on a pilot whose units were drawn from its lightest class, so which periods need a second shift and how many extra hours to book come out only when every correction is carried together.",
+      "driver_concrete": "Saarnela's 2027 peak plan forecasts each small-parts zone's paid picker hours from Kotikaari Oy's year-ahead weekly forecast, which overstates by a share that grows with the growth it plans and copies 2025's week numbers into a calendar shifted a week by 2026's 53 ISO weeks (Black Friday falls in week 47 of 2027), through a time per line by handling class and units with an aisle-congestion term that the peak's lighter lines hide in the weekly record, and with Huippu Sport's lines at its full peak assortment (footwear boxes, multi-unit lines) where the September pilot stocked only polybag apparel; the day shift's capacity at each zone's limit of pickers on the floor decides the evening-shift weeks and the remainder sets the agency booking; on the cut pack the golden opens the evening shift in weeks 47 to 50 in both zones (week 46 at 0.84 and 0.87 of the day shifts' capacity, weeks 47 to 50 at 1.17 to 1.30), the draft's route in week 48 only.",
+      "stump": "The careful pass measures the pooled overstatement (right) and applies it to every week of the client's 2027 forecast, keeping the forecast's week-numbered profile (Black Friday a week late) and pricing its planned growth at the pooled rate; it fits time per line on the handling-class mix at the weekly or shift grain, where the peak's lighter lines hide the aisle congestion, so the 2025 peak's rate carries to 2027's denser floor and the draft's back-test confirms it; and it reads Huippu Sport's time per line off the pilot, whose polybag assortment picks quicker than Kotikaari's lines: it books too few agency hours in the busiest weeks and opens the evening shift in the wrong weeks.",
+      "skeleton": {
+        "decision_form": "timing_or_schedule_choice",
+        "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
+        "lessons": [
+          "scaling_diminishing_returns",
+          "pilot_unrepresentative_selection",
+          "calendar_grid_shift",
+          "record_check_reporter_error",
+          "validation_cannot_see_condition",
+          "composition_versus_behaviour",
+          "forward_window_structure_change"
+        ],
+        "mechanisms": [
+          "aisle_congestion_in_shared_pick_zones",
+          "peak_mix_masks_congestion",
+          "pilot_assortment_polybag_only",
+          "forecast_optimism_grows_with_planned_growth",
+          "week_number_profile_after_53_week_year",
+          "zone_picker_limit_sets_evening_shift"
+        ],
+        "detection": [
+          "second_source_at_other_grain",
+          "naive_ignores_what_it_should_depend_on",
+          "back_test_on_held_out_period",
+          "record_time_against_event_time"
+        ],
+        "moves": [
+          "fixed_plus_covariate_fit",
+          "stratify_by_mix_and_reweight_to_target",
+          "analog_calibration_loo",
+          "rekey_profile_to_event_dates",
+          "back_test_select_estimator",
+          "variant_sweep_holds_call"
+        ],
+        "file_roles": [
+          "primary_record",
+          "second_grain_source",
+          "reference_register",
+          "schedule_or_plan",
+          "governing_standard",
+          "incumbent_figure_or_method",
+          "quotes_or_costs",
+          "unused_distractor"
+        ]
+      },
+      "gap": [
+        "time",
+        "population"
+      ],
+      "pattern": [
+        "none"
+      ],
+      "generators": [
+        "G16",
+        "G6",
+        "G13"
+      ],
+      "decision_type": "schedule_or_sequence",
+      "gate_g": "method_or_model_selection",
+      "answer_shape": "schedule-capacity",
+      "weight": "modeling",
+      "chain_signature": [
+        "assembly-reconciliation",
+        "missingness-measurement",
+        "modeling",
+        "modeling",
+        "validation",
+        "forecasting",
+        "forecasting",
+        "uncertainty",
+        "synthesis",
+        "synthesis"
+      ],
+      "world": {
+        "geography": "Finland (Saarnela, an invented logistics park town in Uusimaa)",
+        "currency": "EUR",
+        "org_type": "a third-party logistics provider running an e-commerce fulfilment centre for one online retailer, which is moving the brand it acquired into the same centre",
+        "invented_names": [
+          "Telkkä Logistics Oy",
+          "Saarnela fulfilment centre",
+          "Kotikaari Oy",
+          "Huippu Sport",
+          "Työpiste Henkilöstö Oy"
+        ],
+        "people": [
+          "Helena Korhonen",
+          "Tapio Nieminen",
+          "Tarja Huhtala",
+          "Marko Autio",
+          "Anja Kanerva",
+          "Marika Sutinen",
+          "Juho Kivinen",
+          "the roster's 31 own pickers (guard.py names --geo FI --seed 1104)"
+        ]
+      },
+      "niche": "peak-season picker-hour planning at an e-commerce fulfilment centre taking a second brand into its small-parts zones: each 2027 peak week's paid picker hours by zone from the client's year-ahead weekly forecast, corrected for an optimism that grows with the growth it plans and re-keyed from its week-numbered profile to the dates that drive the peak, through a time per line by handling class with an aisle-congestion term the peak's lighter lines hide, the new brand at its full assortment's mix rather than its pilot's, and the zone limit deciding which weeks need the evening shift"
     }
   ],
-  "notes": "architecture 11 (2026-11-11): skeleton keys calendar_grid_shift and rekey_profile_to_event_dates added to skeleton_vocab.json because no key named a profile keyed to a calendar grid's numbering against date-anchored events (seasonal_shift_calibration carries a rate between seasons, forward_window_structure_change is the filed move of the new brand) | stump_strategy other: errors-in-variables with a source-specific error structure (classical, Berkson, exact) identified from a gold-standard record of the same sources | 2026-11-09 architecture 8: re-rooted in the same world on the client's instruction to keep the data package (architecture 5's review); four SME judgments added (combination mass, drops, ePTO fridge units, the winter speed kept), the knife-edge closed (no duty within 13 kWh). | 2026-11-10 architecture 9: re-rooted in the same world after both architecture 8 runs landed; the difficulty moved into what the runs named and did not test (the calibration's transfer to the pilot's part loads, the battery loss's form behind self-confirming checks, the winter speed); the hourly ePTO term, the Electric PTO quotation line and the ePTO units removed. | 2026-11-10 architecture 10: re-rooted in a new world after both architecture 9 runs landed; a Finnish municipal bus operator's depot electrification, the pilot's blocks selected on the diesel record, the heater's share, the night supply. 2026-11-10 heart: test.same_driver BLOCKed (objective, G6, forecasting) against task9 v3's lineage; redrawn to the honest labels: the decisive gap is the population (the pilot ran the blocks the planner picked from the fuel figures) and Gate G is binding_constraint, the determinism judge's own classification (the night's charging capacity under the connection agreement cuts the 23 qualifying blocks to 18, so the limit itself changes the naive pick). | 2026-11-10 architecture 10 loop 1: the platform's holistic audit found the order count unforced (the workshop's 22 kW outlets, 19 for 18) and three asks reading two ways; the forks closed by WHAT pins, and the charging side's conditioning added as a third independent judgment (component 3), the order 17. | 2026-11-10 loop 1, Domains Fit: the prompt names each result as an estimate or a forecast from the company's own operating records and states the forecast's population (most blocks never run by an electric bus); no figure moved. | 2026-11-11 architecture 11: re-rooted into a new world (a 3PL's fulfilment centre taking on a second brand) after both platform runs landed architecture 10; new deciding lessons (congestion past a density, a forecaster's lead-time optimism, a new stream's mix, a back-test that can see the peak) and a new decision form (which peak weeks need the evening shift).",
+  "notes": "architecture 12 (2026-11-11): skeleton keys exposure_basis_decoupled and staggered_conversion_at_renewal (lessons) and rate_on_driver_exposure (move) added to skeleton_vocab.json because no key named an event rate carried on an exposure that moved with the true driver in the record and is decoupled from it by the forward plan (transport_effect_modifiers carries a treatment effect between populations by its modifiers), or a fix embodied unit by unit at each unit's own shop visit so the population converts at the pace of its own removals (renewal_resets_hazard restarts one item's hazard) | org_family other: an airline (passenger air transport) has no org_family key; logistics_or_3pl would be untrue | forum executive_team: the 2027 rotable spares plan is capital spend signed by the technical director at the management team's December budget meeting; overuse answered in the note",
   "lineage_shells": [
     {
       "question form": "which",
@@ -492,60 +589,68 @@
       "second-sentence opener": "for",
       "rounding opener": "diesel",
       "deliverable set": "pptx+xlsx"
+    },
+    {
+      "question form": "how-many",
+      "second-sentence opener": "week",
+      "deliverable set": "docx+xlsx"
     }
   ],
-  "answer_shape": "schedule-capacity",
-  "weight": "modeling",
+  "answer_shape": "flagged-set",
+  "weight": "triage",
   "chain_signature": [
     "assembly-reconciliation",
-    "missingness-measurement",
     "modeling",
-    "modeling",
-    "validation",
+    "investigation-loops",
     "forecasting",
     "forecasting",
+    "modeling",
     "uncertainty",
     "synthesis",
-    "synthesis"
+    "decomposition-attribution"
   ],
   "depth_level": 5,
   "doctrine": "throughout",
   "client_subdomain": "regression-classification-model-diagnostics",
-  "results": "R1 the 2025 peak's paid picker hours by zone from the timesheets with floaters split by their WMS log; R2 the pooled overstatement of Kotikaari's year-ahead peak forecasts; R3 the aisle-congestion term at the zone-hour grain with the mix held fixed; R4 Huippu Sport's extra minutes a line at its full peak mix; R5 the 2027 forecasts' expected overstatement from the growth each plans; R6 the 2027 weekly profile re-keyed to Black Friday and the Christmas cut-offs; R7 each zone's paid picker hours for weeks 46 to 50; R8 their 80 per cent ranges; R9 the evening-shift weeks by small-parts zone; R10 the agency hours to book each week",
+  "results": "R1 the 2026 unscheduled removals by part number reconciled to the reliability report; R2 the parts whose removals follow landings or engine starts and the 2027 programme's cycles and hours; R3 the watch-list serials that are genuinely rogue and the 2027 removals scrapping the whole list would avoid; R4 the propeller control's 2027 removals through the bulletin's unit-by-unit embodiment; R5 every part number's 2027 unscheduled removals; R6 the Bodø shop's summer 2027 turnaround; R7 the 80 per cent ranges; R8 the spares each line needs for the 95 per cent fill rate and the lines to change; R9 the bridge from the report's projection to the forecast by cause",
   "architecture_spent": false,
   "skeleton": {
-    "decision_form": "timing_or_schedule_choice",
+    "decision_form": "per_unit_diagnosis",
     "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
     "lessons": [
-      "scaling_diminishing_returns",
-      "pilot_unrepresentative_selection",
-      "calendar_grid_shift",
-      "record_check_reporter_error",
-      "validation_cannot_see_condition",
-      "composition_versus_behaviour",
-      "forward_window_structure_change"
+      "exposure_basis_decoupled",
+      "inherited_attribute_from_other_unit",
+      "selection_on_noisy_means",
+      "staggered_conversion_at_renewal",
+      "queue_or_capacity_replay",
+      "serial_or_common_shock_dependence",
+      "heterogeneity_carried_to_decision"
     ],
     "mechanisms": [
-      "aisle_congestion_in_shared_pick_zones",
-      "peak_mix_masks_congestion",
-      "pilot_assortment_polybag_only",
-      "forecast_optimism_grows_with_planned_growth",
-      "week_number_profile_after_53_week_year",
-      "zone_picker_limit_sets_evening_shift"
+      "landing_and_start_driven_wear_under_hour_based_mtbur",
+      "helgeland_short_sectors_from_april_2027",
+      "nff_swaps_on_intermittent_aircraft_faults",
+      "watch_list_by_serial_removal_count",
+      "bulletin_embodied_at_shop_visit",
+      "bodo_shop_queue_shared_by_in_house_lines",
+      "cold_snap_clustered_removals",
+      "outstation_swap_practice"
     ],
     "detection": [
+      "natural_experiment_in_record",
       "second_source_at_other_grain",
-      "naive_ignores_what_it_should_depend_on",
-      "back_test_on_held_out_period",
-      "record_time_against_event_time"
+      "selection_rule_in_the_record",
+      "units_move_together",
+      "naive_ignores_what_it_should_depend_on"
     ],
     "moves": [
-      "fixed_plus_covariate_fit",
-      "stratify_by_mix_and_reweight_to_target",
-      "analog_calibration_loo",
-      "rekey_profile_to_event_dates",
-      "back_test_select_estimator",
-      "variant_sweep_holds_call"
+      "rate_on_driver_exposure",
+      "comparison_group_same_selection",
+      "shrinkage_or_credibility_weighting",
+      "replay_event_by_event",
+      "simulate_with_fitted_inputs",
+      "cluster_resample_shared_unit",
+      "stratify_by_mix_and_reweight_to_target"
     ],
     "file_roles": [
       "primary_record",
@@ -554,15 +659,16 @@
       "schedule_or_plan",
       "governing_standard",
       "incumbent_figure_or_method",
+      "exogenous_long_record",
       "quotes_or_costs",
       "unused_distractor"
     ]
   },
   "differentiation": {},
+  "registered": "2026-11-11T22:27:56Z",
   "shell": {
     "question form": "how-many",
-    "second-sentence opener": "week",
-    "deliverable set": "docx+xlsx"
-  },
-  "registered": "2026-11-11T17:10:39Z"
+    "second-sentence opener": "which",
+    "deliverable set": "pptx+xlsx"
+  }
 }
