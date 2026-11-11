@@ -564,3 +564,19 @@ Ruled in the main thread on `leak.py`'s REVIEW lines (2026-11-11, the stage 4 cu
   sales, the fresh units customers would have bought after a shelf had run empty, valued at their gross margin, so
   the recorded margin's other movements are not the saving's literal reading; reading it off the recorded margin
   stays a named wrong route (Super 30,500 or -10,800, {Kvarter}), one of four that each file a wrong set alone.
+- The judge's pass 4 on the 4.2 cut (`determinism_check_report_pass4.md`): NOT_DETERMINISTIC, SEND_BACK. Its thread
+  derived first and filed the careful but hurried set itself (To Go alone, from every sale counted and a by-format
+  comparison). Its fork, whether the expected turned-away units of the three pilot stores a discounter opened near
+  carry the opening, did not reproduce on the golden's code: over the four ways of carrying the opening on the two
+  parts Super runs 40,200 to 43,700 pooled by trading week (39,700 to 43,500 format by format within it), all inside
+  the band and clear of 34,000; the thread's 33,900 came from its own approximate estimator. Its exclusion rival did
+  reproduce: dropping the three stores from the evidence gives Super 50,400 pooled and 57,800 format by format,
+  outside the saving band, and moves Super's range to 29,600 to 65,500 and Kvarter's to 24,500 to 43,200, outside
+  their range bands, with the call unchanged. The simulation's truth (Super 43,200, Kvarter 31,200, To Go -100) puts
+  two of the three stores' 26-week savings at 12,600 and 20,300 against the golden's -4,700 and 3,900, about three
+  times the other pilot stores' typical error of 5,000: an opening disrupts ordering on either forecast, which the
+  comparison stores do not carry and the trade-share adjustment does not undo, so dropping the stores is a licensed
+  reading the bands must hold. Its Gate H count (the trading-week sentence rescuing 5 of 11) contradicts the measured
+  routes and its own stump-power line: with every sale counted the trading-week reading keeps Super off at 28,800 and
+  files {Kvarter}. The next step waits on the author's call.
+

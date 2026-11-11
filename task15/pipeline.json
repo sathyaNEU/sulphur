@@ -25,10 +25,10 @@
   "nearest": "guard.py check WARN 2026-11-11 on the registered card after the rebase (overuse.forum, answered in the note); test.same_puzzle and test.same_driver BLOCKs on two drafts cleared by redrawing the gap and the decision type, and ban.pattern against task14 v3 cleared by moving the decisive generator to G6; nearest driver task13 at 0.06"
  },
  "judge": {
-  "verdict": "pass 1 DETERMINISTIC FIX_NOW (applied); pass 2 DETERMINISTIC SEND_BACK on Gate H (redesigned); pass 3 on the redesigned cut NOT_DETERMINISTIC SEND_BACK (Gate H passes; the margin route fork on Super)",
-  "disposition": "option (a) taken 2026-11-11 at the author's word: agreement 4.2's margin part pinned as the change in out-of-stock sales at gross margin; four separate wrong routes each land on a wrong set alone, by 2,000 DKK or more on the format each flips (asserted, 133 checks); the judge's pass 4 on the new cut is running",
-  "gate_h": "pass 2: one_thing shallow_hidden_factor, one_fact 5 of 12; the redesign's own measure: each hint alone leaves the call wrong, largest hint 2 of 10",
-  "report": "task15/determinism_check_report.md, _pass2.md, _pass3.md"
+  "verdict": "pass 1 DETERMINISTIC FIX_NOW (applied); pass 2 DETERMINISTIC SEND_BACK on Gate H (redesigned); pass 3 NOT_DETERMINISTIC SEND_BACK (the margin route fork on Super, closed by the 4.2 pin); pass 4 on the 4.2 cut NOT_DETERMINISTIC SEND_BACK (the Super margin; the opening convention fork does not reproduce, the opening-excluded rival does, outside Super's saving band and the Super and Kvarter range bands)",
+  "disposition": "pass 4 ruled 2026-11-11: the opening convention is inert on the golden's code (Super 40,200 to 43,700 over the four ways), the exclusion rival is licensed and lands outside the bands (Super 50,400 pooled, 57,800 format by format), the Gate H count contradicts the measured routes; the repair waits on the author's call",
+  "gate_h": "pass 4: one_thing shallow_hidden_factor, one_fact 5 of 11 (disputed: every sale counted with the trading week files {Kvarter}); the build's own measure: four separate wrong routes each file a wrong set alone, largest hint 2 of 10",
+  "report": "task15/determinism_check_report.md, _pass2.md, _pass3.md, _pass4.md"
  },
  "paper_pair": 46.0,
  "effort": {
@@ -51,7 +51,7 @@
   "history": []
  },
  "returned": [],
- "resume": "stage 4 on the 4.2 cut: the third leak read is filed (clean; the uniform 2026 price list to fix in the generator); the judge's pass 4 thread is running in /tmp/determinism-check-task15-408067 (re-invoke the judge agent with its verdict.md for determinism_check_report_pass4.md). Then one generator pass for every finding (the price list and any judge finding), rebuild, gates.py task15 --full, a fourth leak read if a document changed, a re-judge once on a FIX_NOW, then READY. On a send-back: bring it to the author. Nothing is READY.",
+ "resume": "the author's call after pass 4: (a) hold the opening-excluded rival in the bands (Super's saving band and the Super and Kvarter range bands widened to it, the four opening conventions asserted inert), with the price-list realism fix, rebuild, a fourth leak read and one re-judge; or (b) rework the openings in the world so dropping and adjusting the opening-hit stores agree, recalibrate, rebuild, leak read and re-judge; or another direction. Nothing is READY.",
  "approved": null,
  "submitted": null,
  "portal": {
