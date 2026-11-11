@@ -1,19 +1,19 @@
 {
  "task": "task13",
  "project": "sulfur",
- "architecture": "v2",
+ "architecture": "v3",
  "drawn": "2026-11-11",
  "slot_note": "author-requested re-root (2026-11-11): a much stronger stump than architecture 1, at least three major analytical failure points, new areas, not a template of task6",
  "domain": "energy-systems-utilities",
  "subdomain": "grid-reliability-outage-analysis",
  "client_domain": "energy-systems-utilities",
- "niche": "a Philippine electric cooperative's referral rule for the overhead protection zones whose lightning protection (arrester ground leads, line arresters, pin insulators) has failed, built from recloser event logs on their own clocks and a lightning location extract, ahead of the 2027 dry-season refit",
+ "niche": "a Philippine electric cooperative's referral rule for the overhead protection zones whose lightning protection has failed, judged on ten years of recloser event logs on their own clocks and a lightning location extract, with every zone's own sound level learned from the seasons a later cyclic inspection confirmed sound, ahead of the 2027 dry-season refit",
  "objective": "anomaly-detection",
  "shape": "08",
  "decision_type": "designation_set",
  "answer_unit": "set_of_items",
- "answer": "refer BGS-F3-R2, BGS-F5-R2, BTG-F1-R3, CBR-F2-R2, CLB-F5-R1, DLP-F2-R2, DLP-F4, LRD-F1-R1, LRD-F2, LRD-F2-R1, LRD-F3-R3, MPD-F2-R1, PGP-F1-R2, PGP-F2-R3 and SNJ-F1 for the 2027 refit (15 zones); the rule refers a zone when its lightning faults since its last cyclic inspection exceed the inspection-confirmed sound expectation by more than their scatter allows, at 1 in 855 a zone a season",
- "answer_source": "task13/generator/figures.json: referred_zones, alerts, false_per_season, validation_core, season_totals, excess_2026, avoided_average_season",
+ "answer": "refer BGS-F3-R1, CLB-F1, CLB-F2, CLB-F2-R1, LRD-F1-R2, MLN-F2, MLN-F4, MLN-F4-R2, PGP-F2, PGP-F4-R3 and TGP-F3-R1 for the 2027 refit (11 zones); the rule refers a zone when its lightning faults since its last cyclic inspection exceed its lines' sound expectation at its own level, learned from its confirmed-sound seasons, beyond the predictive tail at 1 in 715 a zone a season",
+ "answer_source": "task13/generator/figures.json: referred_zones, alert_load, validation_core, season_totals, radioless_2026, excess_2026, avoided_average_season",
  "gap": [
   "population",
   "time"
@@ -34,10 +34,10 @@
  "validated_decoy": false,
  "context_artifact": "operations_log",
  "stump_class": "analytical",
- "analyst_test": "A careful run that cleans every export, drops the re-read events, matches on a tight window where clocks are synchronised and a wide one around the radio-less controllers' own stamps, counts the logged events, fits a negative binomial sound rate on every season not yet found failed and reads the terms' window and budget right files 2 referred zones, the season totals 4 to 7 per cent off, 212 radio-less faults against 259, 42 failed-protection faults against 279 and 19 avoided against 107.",
+ "analyst_test": "A careful run that cleans every export, aligns the radio-less clocks, restores the lost and unread months, fits the sound rate on the confirmed-sound seasons with every register feature, reads the window and budget right and computes the rule's own sound referrals, but treats each season's scatter as independent and values the refit on the record since inspection averaged, scores 35.2 on the rubric split: R1 right, R2, R3 and R5 partly, R4, R6 and R7 lost",
  "domain_test": "The field's own lightning performance analysis decides it: faults attributed to lightning by coincidence with located strokes on each protective device's own clock, a zone's flashover rate per nearby stroke against what its construction, shielding and arrester cover give when sound, and the spread of sound zones around that expectation; with a hospital's nouns the strokes, reclosers, clocks, arresters and flashovers have no meaning.",
  "layer2_family": "estimation_fit",
- "layer2_pattern": "own:events-on-drifting-device-clocks-and-overwritten-memories-against-a-baseline-verified-by-inspection",
+ "layer2_pattern": "own:a-level-per-unit-learned-from-its-independently-verified-periods-in-a-two-level-null",
  "layer1": [
   "lightning location times in UTC against controller times in Philippine local time",
   "cloud pulses and small positive discharges in the stroke extract",
@@ -83,23 +83,22 @@
  ],
  "opening_move": "question-first",
  "question_form": "what",
- "driver": "Events counted per unit are recorded by instruments that keep their own drifting time and only their last few hundred records, read on an observer's schedule, so the units with the most events lose the most and line up the worst with the independent record that classifies them; the expected count each unit should have is learned only from unit-periods that a later physical check confirmed sound, and the alarm threshold carries the spread those confirmed units show beyond chance.",
- "driver_concrete": "Each zone's lightning faults are its reclosers' trips matched to located strokes on each controller's own clock (the radio-less controllers drift minutes between site visits and keep only their last 64 or 100 events, so a failing zone's busiest months are overwritten); the faults a zone would have with sound protection come from seasons the next cyclic inspection found sound, and the referral threshold carries the scatter of those confirmed-sound zones at no more than one sound zone referred a season.",
- "stump": "A careful run that matches the radio-less controllers' trips to strokes on a wide window around their own stamps, counts only the events their memories kept and fits the sound-protection rate on every season no inspection has yet found failed refers 2 zones against 15: the baseline holds the failing zones it should judge, the wide window counts storm trips as lightning and the lost and unread months are missing, so the season totals, the radio-less faults, the failed-protection faults, the alert load, the inspection check and the avoided faults are all off, each by a different route.",
+ "driver": "Events counted per unit are judged against what each unit gives when sound, and units differ persistently beyond any recorded feature, so the null must carry a level per unit learned from that unit's independently verified periods outside the record being judged, and carry that level's uncertainty into the tail; a scatter taken period by period passes the units that always run high as failures and hides the low ones that fail, a level taken as known breaks the false-alarm budget, and the value of acting is the state each failure has reached, not the record's average",
+ "driver_concrete": "Each zone's lightning faults are its reclosers' trips matched to located strokes on each controller's own clock with the overwritten and unread months restored; what its lines would have had with sound protection is the register-feature rate times its own level (soil, hardware, route), learned from the seasons a later inspection confirmed it sound; the referral is the predictive tail of its record since inspection at one sound zone in five seasons across the network; the refit is valued on the 2026 state",
+ "stump": "A careful run that rebuilds the record and learns from inspection-confirmed seasons but takes the scatter season by season refers 13 zones against 11 (it adds two that run high whenever sound, and a third, and drops a failed zone that runs low), replays 2, 5, 4, 10 and 13 referrals against 2, 2, 4, 8 and 11, checks 8 referrals at inspection with one found sound, and values the refit on each zone's record since inspection averaged (83 against 116); one that finds each zone's level but takes it as known refers 17 and would refer a sound zone 1.2 times a season against the terms' 0.2",
  "answer_shape": "monitoring-rule",
  "weight": "metric-or-rule-design",
  "chain_signature": [
   "assembly-reconciliation",
-  "missingness-measurement",
+  "decomposition-attribution",
   "modeling",
   "exploration-triage",
-  "validation",
   "uncertainty",
   "validation",
   "forecasting"
  ],
- "results": "R1 the network's lightning faults per season, reconstructed on every protective device's own clock; R2 the radio-less zones' 2026 lightning faults with what their memories lost and their unread months filled; R3 2026's lightning faults failed protection caused (the season against every zone sound); R4 the zones the rule refers for the 2027 refit; R5 its referrals after each season since 2022; R6 the sound zones it should refer in a season; R7 its referrals against the following cyclic inspections (referred, confirmed, missed); R8 the lightning faults the refit avoids in a season of average lightning",
- "one_fact_test": "'the reclosers with no radio link keep their own drifting clocks and only their last events between site visits' rescues R1 and R2; 'a season counts as sound only when the next cyclic inspection found nothing' rescues R6 and R8 (2 of 8 each)",
+ "results": "R1 the network's lightning faults per season, reconstructed on every protective device's own clock, with the radio-less zones' lost and unread months restored; R2 2026's lightning faults failed protection caused (the season against every zone sound at its own level); R3 the zones the rule refers for the 2027 refit; R4 the referred zones' record since inspection against sound protection at their own levels; R5 its alert load (referrals after each season since 2022 and the sound zones a season's referrals should hold); R6 its referrals against the following cyclic inspections; R7 the lightning faults the refit avoids, at the state each failure had reached by the end of 2026",
+ "one_fact_test": "'a zone that runs high when its protection is sound runs high every season: judge each zone against its own confirmed-sound seasons', executed as a run acts on it (each level taken as known), rescues R2 and R4 (2 of 7) and refers 17; the level-uncertainty sentence rescues nothing alone; the failures-began-partway sentence rescues R7; the clocks-and-memories sentence rescues nothing from the careful pass, which already rebuilds the record",
  "strategy_label": "WORKS IN FORM",
  "lineage": [
   {
@@ -132,6 +131,30 @@
    "drawn": "2026-11-09",
    "shell": null,
    "fate": "spent 2026-11-11 before upload: cut under the retired single-deep-step design (READY 2026-11-09, never run on the platform); re-rooted at the author's word for a stronger chain with at least three independent analytical failure points. Its record: the storm-track swing between stations was thin (one plot of gust hours by station shows it), the plantation feeders' dense corridor sat only in the deciding units with one filter as the fix (a send-back), and every graded figure came out of one Poisson fit (one thing under another name)."
+  },
+  {
+   "architecture": "v2",
+   "niche": "a Philippine electric cooperative's referral rule for the overhead protection zones whose lightning protection (arrester ground leads, line arresters, pin insulators) has failed, built from recloser event logs on their own clocks and a lightning location extract, ahead of the 2027 dry-season refit",
+   "driver": "Events counted per unit are recorded by instruments that keep their own drifting time and only their last few hundred records, read on an observer's schedule, so the units with the most events lose the most and line up the worst with the independent record that classifies them; the expected count each unit should have is learned only from unit-periods that a later physical check confirmed sound, and the alarm threshold carries the spread those confirmed units show beyond chance.",
+   "stump": "A careful run that matches the radio-less controllers' trips to strokes on a wide window around their own stamps, counts only the events their memories kept and fits the sound-protection rate on every season no inspection has yet found failed refers 2 zones against 15: the baseline holds the failing zones it should judge, the wide window counts storm trips as lightning and the lost and unread months are missing, so the season totals, the radio-less faults, the failed-protection faults, the alert load, the inspection check and the avoided faults are all off, each by a different route.",
+   "chain_signature": [
+    "assembly-reconciliation",
+    "missingness-measurement",
+    "modeling",
+    "exploration-triage",
+    "validation",
+    "uncertainty",
+    "validation",
+    "forecasting"
+   ],
+   "answer": "refer BGS-F3-R2, BGS-F5-R2, BTG-F1-R3, CBR-F2-R2, CLB-F5-R1, DLP-F2-R2, DLP-F4, LRD-F1-R1, LRD-F2, LRD-F2-R1, LRD-F3-R3, MPD-F2-R1, PGP-F1-R2, PGP-F2-R3 and SNJ-F1 for the 2027 refit (15 zones); the rule refers a zone when its lightning faults since its last cyclic inspection exceed the inspection-confirmed sound expectation by more than their scatter allows, at 1 in 855 a zone a season",
+   "layer2_pattern": "own:events-on-drifting-device-clocks-and-overwritten-memories-against-a-baseline-verified-by-inspection",
+   "fate": "re-rooted 2026-11-11 at stage 4: the judge thread's own first pass landed the set and five of eight results (the radio-less clocks leaked through weekly self-tests fired at true time; restoring the lost months and learning from inspection-confirmed seasons were reflexes)"
+  },
+  {
+   "version": "v3 revision 2",
+   "date": "2026-11-11",
+   "fate": "revision 1 judged DETERMINISTIC and APPROVE; its judge's first pass landed the avoided faults (terms 4(c) filed the method) and the rule's sound referrals, repriced at about 56 to 65: back to stage 2; 4(c) now files the state, the level's uncertainty priced as its own judgment"
   }
  ],
  "differentiation": {
@@ -150,21 +173,24 @@
   "decision_form": "monitoring_rule_with_alerts",
   "answer_pattern": "naive_set_swaps_members",
   "lessons": [
+   "variance_beyond_sampling_noise",
    "device_clock_drift",
-   "observation_window_coverage",
-   "variance_beyond_sampling_noise"
+   "observation_window_coverage"
   ],
   "mechanisms": [
    "radio_less_controller_clock_drift",
    "event_memory_overwritten",
-   "inspection_confirmed_sound_seasons"
+   "inspection_confirmed_sound_seasons",
+   "site_level_constant_per_zone",
+   "protection_failure_dated_inside_record"
   ],
   "detection": [
    "record_time_against_event_time"
   ],
   "moves": [
    "impute_by_model_at_own_drivers",
-   "variance_components"
+   "variance_components",
+   "changepoint_on_own_metric"
   ],
   "file_roles": [
    "primary_record",

@@ -4,178 +4,231 @@
 
 Subdomain: Energy Systems & Utilities, task type grid reliability and outage analysis (`grid-reliability-outage-analysis`, the only energy task type serving the assigned analysis type)
 Analysis type: Anomaly Detection & Diagnostics
-Answer shape: a monitoring rule with its expected alert count (the rule, the zones it refers now, its false referrals a season and its referrals after each season since 2022, checked against the cyclic inspections), with the refit on top
-Weight: metric or rule design: most of the work is building the referral signal itself (lightning faults reconstructed on each device's own clock and memory, an expectation learned only from inspection-confirmed sound seasons, a threshold carried on their spread); the last three builds sat on assembly (task14), a hard-to-measure quantity (task3) and validation (task10)
-Data-native sentence: a lightning fault exists only as a coincidence between two clocks (a recloser's own record of a trip and a lightning network's record of a stroke near the line), and the reclosers with no radio link keep their own drifting time and only their last 64 or 100 events between site visits, so the zones whose protection has failed, which trip most, are the zones whose records lose the most and line up the worst; what a sound zone should do is visible only in seasons a later cyclic inspection confirmed sound.
+Answer shape: a monitoring rule with its expected alert count (the rule, the zones it refers now, its referrals after each season since 2022 and the sound zones a season's referrals should hold, checked against the cyclic inspections), with the refit on top
+Weight: metric or rule design: most of the work is building the referral signal itself (lightning faults reconstructed on each device's own clock and memory, an expectation in which every zone keeps a level of its own learned only from inspection-confirmed seasons, a threshold carried on that two-level scatter); the last three builds sat on assembly (task14), a hard-to-measure quantity (task3) and validation (task10)
+Data-native sentence: a lightning fault exists only as a coincidence between two clocks (a recloser's own record of a trip and a lightning network's record of a stroke near the line), and what a zone's lines give with sound protection is partly the zone's own (the soil its grounds are driven into, its hardware and route), so the referral must judge each zone against the seasons a later inspection confirmed it sound, and a scatter taken season by season refers the zones that always run high.
 People: Lucas Ramirez (technical services manager, takes the refit to the management committee), Donna Rodriguez (reliability and protection engineer, the golden's author), Laurie Diaz (line inspection supervisor), Elizabeth Hernandez (general manager, issues the programme terms), John Fuentes (SCADA supervisor), Michelle Garcia (materials and warehouse); drawn with `guard.py names --geo Philippines` at seeds 1302, 1307 and 1311
 
 **The decision.** Kalumpang Valley Electric Cooperative, a member-owned distribution co-op in Central Luzon, runs 13.2 kV
-overhead lines from twelve substations, cut into protection zones by substation breakers and line reclosers. Lightning
-is its largest cause of trips. Its 2017-2018 line arrester programme fitted arresters along the exposed lines; since
-then ground leads have been stolen for their copper, a contract lot of line arresters has started failing and a batch
-of porcelain pin insulators has been cracking. A cyclic line inspection reaches every zone once in five dry seasons. The
-board's 2027 budget funds a dry-season refit (grounds, arresters and insulators restored) on the zones a referral rule
-names before the 2027 lightning season, and the co-op will run the same rule after every season from now on.
+overhead lines from its substations, cut into protection zones by substation breakers and line reclosers. Lightning is
+its largest cause of trips. Its 2015-2016 line arrester programme fitted arresters along the exposed lines; since then
+ground leads have been stolen for their copper, a contract lot of line arresters has started failing and a batch of
+porcelain pin insulators has been cracking. A cyclic line inspection reaches every zone once in five dry seasons, and
+the co-op keeps ten years of SCADA history, recloser downloads and lightning records. The board's 2027 budget funds a
+dry-season refit (grounds, arresters and insulators restored) on the zones a referral rule names before the 2027
+lightning season, and the co-op will run the same rule after every season from now on.
 
-**Card.** `.claude/skills/fingerprint/cards/task13.json`, architecture v2, registered 2026-11-11, guard verdict WARN.
+**Card.** `.claude/skills/fingerprint/cards/task13.json`, architecture v3, re-registered 2026-11-11, guard verdict WARN.
 Answered: `overuse.forum` (the management committee approves the dry-season work programme inside the board's budget,
 the honest forum for a refit list); `repeat.gate_g` against task15 (there a growth gap split across drivers; here each
-zone's faults assigned to lightning on its device's own clock and its excess to failed protection rather than to the
-spread sound zones show); `repeat.question_form` (the decision is a rule, so the question asks what it is). Redrawn after
-syncing with origin/main, when task14 v3, task15 v2 and task16 v2 entered the window: forum, decisive pattern (G7, the
-operating window a recloser's record holds) and Gate G (card `notes`). The v1 card's identity moved into `lineage`.
+zone's excess assigned to failed protection only beyond the level the zone keeps when sound); `repeat.question_form`
+(the decision is a rule, so the question asks what it is); `repeat.decision` against task15 (there a set of drivers
+named once; here a set of zones named by a rule the co-op reruns after every season, so the rule's alert load and its
+check are graded beside the set). Architecture 3 keeps architecture 2's world and replaces its
+three difficulties after the stage 4 judge's first pass landed them; its revision of 2026-11-11 replaces the two that
+architecture 3's own judge landed (the refit's valuation filed as a method, the budget read as the rule's rate) with the
+state each failure had reached and the uncertainty of each zone's level (`## Tried and rejected`).
 
 ## Deep reasoning
 
 Task type: Grid reliability & outage analysis (the energy subdomain's task type that serves Anomaly Detection &
   Diagnostics: a referral rule over a network's protection zones, with its alert load and its check)
 Domain test: every result is a quantity a distribution reliability engineer computes from protection and lightning
-  records: lightning faults attributed by coincidence between a protective device's operations and the strokes a
-  lightning location network placed near its lines, each device on its own clock; faults per season against the
-  lightning a zone's lines received; what a line with sound grounds, arresters and insulators gives under that
-  lightning, and how widely sound zones scatter around it; a threshold carried on that scatter at a stated budget of
-  sound zones referred; the alert load a season, the check against cyclic line inspections, and the faults a
-  protection refit removes. The field's analyst builds the fault record, learns the sound line's rate, sets the alarm
-  and proves it against the line crews' findings.
+  records: lightning faults attributed by coincidence between a protective device's operations and the strokes the
+  lightning location network placed near its lines, each device on its own clock; what a line with sound grounds,
+  arresters and insulators gives under that lightning, which depends on the line's construction and also on its own
+  site (earth resistance, hardware, route), a level learned from the seasons an inspection confirmed sound; a threshold
+  carried on that two-level scatter at a stated budget of sound zones referred; the alert load, the check against
+  cyclic line inspections, and the faults a protection refit removes. The field's analyst builds the fault record,
+  learns each line's sound performance, sets the alarm and proves it against the line crews' findings.
 Swap: "what rule refers the units whose protection has failed" still parses with a hospital's or a fleet's nouns,
   but trips lined up with located strokes on each controller's drifting clock, memories that overwrite their oldest
-  events, the lightning that fell within reach of a line and a line inspection that verifies the seasons before it
-  all stop meaning anything: the results are this protection system's, not a rate looked up in any field.
-Where the weight sits: designing the referral signal itself. The fault record each zone's rule reads (R1, R2) is
-  rebuilt from two clocks and from memories that overwrite, and the expectation (R3) and its spread are learned only
-  from seasons a later inspection proved sound; the threshold, its alert load (R5, R6) and its check (R7) follow from
-  that design. The work is long, not clever: 46 controllers' drifts fitted read by read, 710 reads walked for lost
-  events, 855 zone-seasons sorted by what the inspection book can and cannot say about them.
+  events, the lightning that fell within reach of a line, a line's own earth and route and a line inspection that
+  verifies the seasons before it all stop meaning anything: the results are this protection system's.
+Where the weight sits: designing the referral signal itself. The fault record (R1) is rebuilt from two clocks and
+  from memories that overwrite; the sound expectation carries every zone's own level, learned from its 779
+  inspection-confirmed zone-seasons, which spread with a coefficient of variation of 0.42 while a zone moves from
+  season to season hardly beyond Poisson (R4, R2); the threshold carries that level's uncertainty, not its estimate
+  (R3), and the alert load (R5) and the inspection check (R6) follow from the two-level design; the refit's value (R7)
+  rests on the state each failure had reached by the end of 2026, which the record since inspection does not show
+  when averaged.
 Layer 1: the SCADA history carries the breakers and the radio reclosers with upstream breakers tripping on downstream
-  faults and comms-fail gaps; the downloads re-read each whole memory at every visit (the same event numbers on several
-  downloads) on the controller's own clock in day-first format; the lightning extract is in UTC with cloud pulses and
-  weak positive discharges mixed in while every co-op system keeps Philippine time; the OMS codes each outage's cause by
-  the dispatcher's word; the register names zones in two shapes and three telemetry labels; the inspection book counts
-  findings per zone and round; the transformer book counts replacements. None decides a result: checks.py moves no
-  referral when the re-reads are counted twice or the weak discharges left out.
-Not one thing: the strongest single piece is the radio-less reconstruction (each drift fitted per read, the lost and
-  unread months filled), and a run that nails it earns R1 and R2 and still loses R3 to R8 to a sound rate fitted on
-  seasons nobody verified (40.5 on the rubric split, 0 to 4 zones referred). A run that fits the confirmed-sound
-  seasons but matches the radio-less trips on a wide window and counts what was logged still refers 17 zones, six of
-  them differently, and misses R1, R2, R3, R5 and R7 (50.7). Only both together, with the spread, the window and the
-  budget, reach the golden.
-One-fact test: "a season counts as sound only when the next cyclic inspection found nothing" rescues R6, R7 and R8
-  (3 of 8, at the third) on the measured careful pass; "the reclosers with no radio link keep their own drifting
-  clocks and only their last events between site visits" rescues R1 and R2 (2 of 8); no single sentence rescues R3,
-  R4 or R5. The stage 4 judge thread needed neither sentence (Effort test, first-pass reading).
+  faults and comms-fail gaps; the downloads re-read each whole memory at every visit on the controller's own clock in
+  day-first format, the weekly battery test logged at 03:00 by that clock; the lightning extract is in UTC with cloud
+  pulses and weak positive discharges mixed in while every co-op system keeps Philippine time; the OMS codes each
+  outage's cause by the dispatcher's word; the register names zones in two shapes and three telemetry labels; the
+  inspection book counts findings per zone and round; the transformer book counts replacements. None decides a result:
+  checks.py moves no referral when the re-reads are counted twice or the weak discharges left out.
+Not one thing: four judgments carry the chain beyond the reconstruction, each in different results, each with its
+  own wrong answer: each zone's own sound level (R4 and R2; without it a scatter taken season by season refers 13),
+  that level carried with its uncertainty into the tail (R3, R5, R6; taken as known it refers 17 and would refer a
+  sound zone 1.2 times a season against the budget's 0.2), the state each failure had reached by the end of 2026 (R7;
+  the record since inspection averaged gives 72 against 116, because in the first season after inspection 9 of the 11
+  referred zones ran at under half the multiple of their own sound level they reached in 2026), and the reconstruction
+  itself (R1), which the stage 4 judge of
+  architecture 2 made unprompted and is priced as earned even though architecture 3's judge did not restore it.
+One-fact test: "a zone that runs high when its protection is sound runs high every season: judge each zone against
+  its own confirmed-sound seasons", executed the way a run acts on it (each zone's level estimated from its confirmed
+  seasons and taken as known), rescues R2 and R4 (2 of 7) and refers 17 zones; "a zone's own level is only as certain
+  as its few confirmed seasons make it" rescues nothing on its own; "most referred zones failed partway through their
+  record since inspection" rescues R7 (1 of 7); the clocks-and-memories sentence rescues nothing from the measured
+  careful pass, which already rebuilds the record. The sentence that names the whole method (each zone's own level,
+  carried uncertain into a predictive tail) would also rescue R3, R5 and R6: that is the method itself, a legitimate
+  choice the data force (2 dlogL 165.6 for the levels, terms 3(b) for their uncertainty), not a hidden fact
+  (`stumping` 2.3), and the chain is built around it: R1, R7 and R2 stand on other judgments.
 Not semantics: every column and clause read correctly (the controller time is the device's own, the register says
-  which reclosers are read on site, the terms define the season, the record since the last inspection, the budget
-  and the faults failed protection caused) still leaves a run to estimate each drift from the trips themselves, to
-  estimate what each memory lost, and to choose which seasons can teach a sound rate and how widely sound zones
-  scatter; a wrong choice at each is an estimate made wrongly, not a field misread.
-Not rule application: the terms file what is referred (faults since the last cyclic inspection against what sound
-  protection would have given under the lightning near the lines, beyond chance, at no more than one sound zone in
+  which reclosers are read on site, the terms define the season, the record since the last inspection, the budget, the
+  faults failed protection caused and the state the refit is valued at) still leaves a run to estimate each drift,
+  each memory's losses, a level for every zone from its own confirmed seasons, the tail of a record under that level's
+  uncertainty, and the state each failure had reached; a wrong choice at each is an estimate made wrongly.
+Not rule application: the terms file what is referred (faults since the last cyclic inspection against what its lines
+  would have had with sound protection under the lightning near them, beyond chance, at no more than one sound zone in
   five seasons across the network), never how: no shipped sentence matches faults to strokes, fits a drift, fills a
-  memory, picks the seasons a sound rate is fitted on, chooses a spread or computes the false referrals.
+  memory, names a zone level, a scatter structure, a level's uncertainty or the seasons a level is learned from, or
+  says which seasons show the state the refit removes.
 Estimand: programme terms 2(b) the season (1 April to 31 October), 2(c) a lightning fault counted once against the
-  zone whose lines it was on, 2(d) sound and failed protection, 2(e) the record since the last cyclic inspection,
-  2(f) the faults failed protection caused (the network's lightning faults less those its lines would have had with
-  every zone sound), 2(g) the lightning near a zone (ground strokes within 400 m), 3(a) the comparison, 3(b) the budget (one sound zone in five seasons across the network: 1/(5 x
-  171) a zone a season), 4(c) the avoided faults in a season with the 2022 to 2026 average lightning, 5 the check per
-  inspection; the prompt fixes the seasons 2022 to 2026 and the 2027 refit.
+  zone whose lines it was on, 2(d) sound and failed protection, 2(e) the record since the last cyclic inspection, 2(f)
+  the faults failed protection caused (the network's lightning faults less those its lines would have had with every
+  zone sound), 2(g) the lightning near a zone (ground strokes within 400 m), 3(a) the comparison ("more than its lines
+  would have had with sound protection"), 3(b) the budget (one sound zone in five seasons across the network: 1/(5 x
+  143) a zone a season), 4(c) the avoided faults (what its zones would run with their protection as it stood at the
+  end of the 2026 season, above what their lines would have with sound protection, at the 2022 to 2026 average
+  lightning: the state is filed, not how to read it), 5 the check per inspection; the prompt fixes the seasons 2022 to
+  2026 and the 2027 refit.
 No decoy: no memo, draft, ranking or scorecard of zones ships; the OMS cause code answers its own question (the
-  dispatcher's cause of a sustained outage) correctly; the rain gauge file and the materials quotation answer their own
-  questions and decide nothing; nothing is written to carry a wrong answer.
+  dispatcher's cause of a sustained outage) correctly; the rain gauges, the materials quotation and the transformer
+  book answer their own questions and decide nothing; nothing is written to carry a wrong answer.
 No replay: no result re-derives a published figure and no shipped number is wrong; every graded figure is a quantity
   no file states.
-Pinned: the golden family (the spread's size by moments, match windows of -0.4 to 0.5 s and -1.0 to 1.2 s, strokes
-  within 300 or 500 m, no transformer term, weak positive discharges left out) refers the same 15 zones and lands every
-  graded figure inside its band (checks.py R7 rows); every covariate set within 4 AIC of the best refers the same 15
-  (SF16); a fault matched over anything from 300 m to 1 km refers the same 15 (SF2); a Poisson spread is ruled out by the confirmed-sound
-  seasons (2 dlogL 4.95 for the negative binomial's one parameter, Poisson chi-square 1.23 a degree of freedom), and
-  every wider fit set by the inspection book itself (a clean inspection verifies the seasons before it, and the book
-  shows zones inspected clean and found failed at the next round).
-Run forecast: R1 and R2 lost to a wide or fixed-offset match on the radio-less controllers and to counting the logged
-  events (method shortcut; narrow look at broad data, the 125 synchronised zones matched well and the 46 radio-less
-  taken as they come); R3, R4, R5, R7 and R8 lost to a sound rate fitted on every season no inspection has yet found
-  failed or on every season (self-confirming check: the zones to be found sit inside the baseline that judges them);
-  R6 lost to quoting the budget, 0.2, as the rule's false referrals (self-confirming check); R4 also lost to a Poisson
-  spread (17 zones, method shortcut) or to the whole record instead of the record since inspection (25 zones,
-  unfinished chain).
+Pinned: the golden family (match windows of -0.4 to 0.5 s and -1.0 to 1.2 s, faults matched within 300 or 500 m, no
+  transformer term, weak positive discharges left out, each level from every confirmed season, the level shape at both
+  ends of its 95 per cent interval, a stroke-level sound model from each stroke's current and distance, the replay with
+  only the inspections completed by then, unread months restored at the zone's rate since inspection, the refit valued
+  on the seasons since each failure began) refers the same 11 zones and lands every graded figure inside its band
+  (checks.py R7 rows); every covariate set within 2 AIC of the best refers the same 11 (SF16); the confirmed seasons
+  reject a pooled season scatter for a level per zone (2 dlogL 165.6) and Poisson for the pooled scatter (79.2); terms
+  3(b) rejects the level taken as known (SF19); the independent verifier, on its own clocks, grouping, Simpson grid and
+  exact convolution of the seasons, refers the same 11.
+Run forecast: R1 earned by a careful run (the record rebuilt); R2 within reach of it (204 against a band of 170 to
+  200: the levels move the network's sound expectation by 4 per cent); R4, R3, R5 and R6 lost to a scatter taken season
+  by season (quasi-Poisson or one negative binomial a season: method shortcut), which refers 13 zones, 4 of them
+  differently, and checks 8 referrals at inspection with one found sound; a run that finds the levels and takes them as
+  known (unfinished chain: the level estimated, its uncertainty never carried into the tail) earns R4 and R2 but refers
+  17, replays 7, 4, 5, 11 and 17 and claims 0.13 sound referrals a season for a rule that makes 1.2 (self-confirming
+  check); R7 lost to valuing the refit on each zone's record since its inspection, averaged (72, or 83 on the
+  season-by-season set: unfinished chain); a run that ignores zone levels entirely refers 8.
 Strategy label: Engineering and Physical Sciences 2, "Finding the breaks in a station network before trusting its
   trend" (an instrument network repaired before anything is flagged), read with Product Analytics 5's alarm against a
   baseline that swings by itself; neither's chain is used
-Depth level: 5: three independent judgments carry most of the score (each controller's drift, each memory's losses,
-  which seasons verify a sound rate) and three smaller ones sit beside them (the spread, the record since inspection,
-  the budget per zone); 10 distinct wrong referral sets over 11 shortcuts, from 1 zone to 25
-Lesson: a monitoring rule is only as good as the record it reads and the baseline it learns from; the units an alarm
-  must catch are the ones whose records lose most (they trip most) and the ones that contaminate a baseline fitted on
-  unverified periods, so the rule is designed against both and its false-alarm rate is measured, not quoted. No build
-  on file teaches it: task6 rebuilt events a store dropped at a known keep rate, task2 cut a drifting process at a
-  limit, and neither learned an alarm's baseline from periods an independent check verified.
+Depth level: 5: four analytical judgments (each zone's own level, its uncertainty in the tail, the state each failure
+  had reached, the reconstruction's drift and losses), each landing its own results; 9 distinct wrong referral sets
+  over 12 shortcuts, from 7 zones to 22, the known-level rule's 17 and the season scatter's 13 among them
+Lesson: an alarm over many units is only as good as the null it judges each unit against; when units differ
+  persistently, a scatter fitted season by season passes the units that always run high as failures and hides the
+  low ones that fail, and only each unit's own verified history separates the two, while the value of acting is the
+  state now, not the record's average. No build on file teaches it: task6 rebuilt events a store dropped at a known keep
+  rate, task2 cut a drifting process at a limit, and neither judged units against their own verified history.
 
 ## Results chain
 
 | ID | Result (checkable) | Area | Pinned by | Band | Hurried analyst | Depends on | Graded as |
 |---|---|---|---|---|---|---|---|
-| R1 | the network's lightning faults each season: 892, 682, 924, 747 and 1,075 (2022 to 2026) | assembly and reconciliation | terms 2(b), 2(c); faults matched to strokes within 400 m on each device's clock; the golden family | 4 per cent each season | method shortcut: a ten-minute window around the radio-less stamps counts storm trips as lightning and nothing lost is restored (937, 727, 980, 791, 1,028); a fixed offset per controller finds a fourteenth of their faults (686 to 835) | - | Component 1 |
-| R2 | the 46 radio-less zones' 2026 lightning faults: 259 (163 logged) | missingness and measurement | the downloads' event numbers and read times; each zone's own rate over its observed months carried to the months its memory lost or nobody has read | 243 to 275 | narrow look at broad data: the logged events taken as every fault (163 on the drift-fitted clocks, 212 on a wide window) | R1 | Ask 1 |
-| R3 | 2026's lightning faults failed protection caused: 279 (1,075 against 796 with every zone sound) | modeling | terms 2(d), 2(f), 3(a); the expectation fitted on the 193 zone-seasons a later inspection confirmed sound | 237 to 321 | self-confirming check: the rate fitted on every season not yet found failed absorbs the failing zones (42) | R1, R2 | Component 2 |
-| R4 | the 15 zones referred for the 2027 refit | exploration and triage | terms 3(a), 3(b); each zone's faults since inspection against a negative binomial tail at 1/(5 x 171) | exact set | self-confirming check: the careful pass refers 2 (BTG-F1-R3, PGP-F1-R2); method shortcut: a Poisson spread refers 17; unfinished chain: the whole record 25 | R1, R2, R3 | Recommendation |
-| R5 | zones referred after each season: 11, 10, 12, 10, 15 | validation | the same rule replayed after each season on the record since each zone's inspection at the time | 1 each season | self-confirming check: the contaminated baseline's spread refers 6, 5, 3, 1, 2 | R3, R4 | Component 3 |
-| R6 | the sound zones the rule refers in a season: 0.13 | uncertainty | terms 3(b); each zone's tail at the smallest count the rule refers it at, summed over zones and averaged over seasons | 0.11 to 0.15 | self-confirming check: the budget, 0.2, quoted as the rule's own rate; on the contaminated spread 0.16 | independent: each zone's expectation and the spread | Ask 2 |
-| R7 | against the inspections of 2022-23 to 2025-26: 15 referred zones inspected, 15 confirmed, 26 misses | validation | terms 5 (each inspection against the rule after the season before it); the inspection book | 14 to 17, 14 to 16 and 25 to 27 | dismissed own evidence: a rule that refers 2 zones checks 8 referrals and 33 misses, and a run reads 100 per cent confirmed as success without the misses | R4, R5 | Component 4 |
-| R8 | the lightning faults the refit avoids in a season of average lightning: 107 | forecasting | terms 4(c); each referred zone's ratio since inspection less one, times its 2022 to 2026 mean sound expectation | 91 to 123 | unfinished chain: 2026's own lightning (133), or the contaminated set and ratios (19) | R3, R4 | Ask 3 |
+| R1 | the network's lightning faults each season: 561, 413, 593, 620 and 655 (2022 to 2026), 130 of 2026's on the 32 radio-less zones (87 kept by their memories) | assembly and reconciliation | terms 2(b), 2(c); faults matched to strokes on each device's clock; each zone's own rate over its observed months carried to the months its memory lost or nobody has read | 4 per cent each season; 120 to 138 | method shortcut: a ten-minute window around the radio-less stamps counts storm trips as lightning and nothing lost is restored (630 in 2026); narrow look at broad data: the logged events taken as every fault (87) | - | Component 1 |
+| R2 | 2026's lightning faults failed protection caused: 186 (655 against 469 with every zone sound at its own level) | decomposition and attribution | terms 2(d), 2(f); the rate and the zone levels learned from the 779 confirmed-sound zone-seasons | 170 to 200 | method shortcut: no level of its own (204); a sound rate fitted on unverified seasons leaves 165; the referred zones' excess alone 120 | R1 | Component 3 |
+| R3 | the 11 zones referred for the 2027 refit | modeling | terms 3(a), 3(b); each zone's record against the predictive tail of its own level at 1/(5 x 143) | exact set | method shortcut: a scatter taken season by season refers 13 (4 different); unfinished chain: each level taken as known refers 17 (6 more); no level of its own 8; Poisson 22; the whole record 7 | R1 | Recommendation |
+| R4 | the referred zones' record since inspection against what sound protection would have given them, zone by zone (BGS-F3-R1 31.6 against 9.4 to TGP-F3-R1 39 against 8.9) | exploration and triage | terms 2(e), 3(a); each zone's own level from its confirmed seasons times the register-feature rate times the strokes within 400 m | 20 per cent each zone | method shortcut: every zone at the network rate (7 of the 11 expectations off by more than a fifth) | R1 | Ask (record since inspection) |
+| R5 | the alert load: 2, 2, 4, 8 and 11 zones referred after 2022 to 2026, and 0.14 sound zones a season's referrals should hold | uncertainty | the same rule replayed after each season, each level learned outside the record judged; each zone's predictive tail at the smallest count it is referred at | 1 to 3, 1 to 3, 3 to 5, 7 to 10, 10 to 12; 0.12 to 0.16 | method shortcut: the season-by-season scatter refers 2, 5, 4, 10 and 13; self-confirming check: the known-level rule replays 7, 4, 5, 11 and 17 and claims 0.13 sound referrals a season for a rule that makes 1.2 | R3 | Ask (alert load) |
+| R6 | against the inspections of 2022-23 to 2025-26: 5 referred zones inspected, 5 confirmed, 21 misses | validation | terms 5 (each inspection against the rule after the season before it); the inspection book | 3 to 6, 3 to 6 and 20 to 23 | self-confirming check: the season-by-season and known-level rules check 8 referrals, 7 confirmed, and 19 misses, and a run reads the near-perfect confirmation as its rule validated, though any rule confirms the failed zones it refers and only the sound zones it refers separate the rules | R3, R5 | Ask (inspection check) |
+| R7 | the lightning faults the refit avoids in a season of average lightning: 116 | forecasting | terms 4(c) (the state at the end of 2026); each referred zone's seasons since its inspection against its own sound level show the failure beginning partway; its 2026 season above that level, at its 2022 to 2026 mean lightning | 104 to 128 | method shortcut: the record since each inspection pooled though its seasons ran at different rates before and after the failure began (72; 83 on the season-by-season set), the run naming that record as informative of the coming season and moving on | R1, R3 | Component 2 |
 
-Carry-forward: R6 stands on each zone's expectation and spread alone, and R7's misses and R1's SCADA-zone faults are
-largely independent of the radio-less work; R2 falls with R1's match, R3 with R1 and the fit set, R5, R7 and R8 with
-R4's rule. A run that slips on the radio-less records loses R1 and R2 and keeps the rest if its baseline is right,
-and the reverse holds for a slip on the baseline: neither slip costs the whole chain.
+Carry-forward: R1 stands on the reconstruction alone; R2 and R4 add the confirmed-sound expectation with each zone's
+level; R3, R5 and R6 fall with the level's uncertainty as well as the level; R7 falls with the state each failure had
+reached, and only loosely with the set (the season-by-season set valued on the 2026 state gives 117, inside the band).
+A run that slips on the levels keeps R1 and R7's method; one that takes the levels as known keeps R1, R2 and R4; one
+that slips on the state keeps everything but R7.
 
 ## Hidden factor record
 
 | Factor | Real or constructed | Only in deciding units | Found by | Fix depth | Verdict |
 |---|---|---|---|---|---|
-| The radio-less controllers' clocks drift between site visits and are set at each read (drift 1.7 s a day across controllers, read every 113 days at the median) | constructed by the simulated controllers and visit rounds | no: all 46 radio-less controllers drift; 4 of the 15 referred zones are radio-less, 42 radio-less zones decide nothing | modelling: each controller's trip-to-stroke lags against time show a line per read among coincidences | modelling: a drift and an offset per read, fitted from the trips | keep |
-| The controllers' memories overwrite their oldest events (64 or 100 events, four with 1,024) and the months since each last read are unread | constructed by the simulated memories, weekly battery tests and visit rounds | no: 58 of 710 reads lost 1,154 events on 22 zones, most not referred; every radio-less zone has an unread tail (last reads from May to October 2026) | a targeted query (event-number jumps, read dates) then modelling | modelling: each zone's own rate over its observed months carried to the lost ones | keep |
-| Failed protection sits inside the seasons since each zone's last inspection, so the zones to find sit in any baseline fitted on unverified seasons | constructed by the simulated theft (near towns), the failing arrester lot (Weibull ageing from 2017-18) and the cracking insulator batch, across every substation | no: 7.5 per cent of the not-yet-found-failed zone-seasons and 11.7 per cent of all carry failed protection; 19 zones carry it in 2026, 15 are referred, and the inspections found 26 failed zones the rule had not referred | modelling: which seasons can teach a sound rate, and the spread each fit set gives (size 22.8 on the confirmed seasons, 1.2 to 4.4 on wider sets) | modelling | keep |
-| Sound zones scatter more than Poisson (each zone's susceptibility and each season's shocks) | constructed by the simulated susceptibility (sd 0.20) and season shocks (sd 0.12) on every zone | no: every zone | modelling (the field's negative binomial once the scatter is measured) | modelling, thin | keep as one of several; the careful pass earns it |
+| Each zone keeps its own sound level (earth resistance, hardware, route), lognormal across zones, beyond the register's features | constructed by the simulated site factor on every zone (coefficient of variation 0.42 as fitted) | no: all 143 zones; 4 of the season-by-season rule's 13 referrals differ from the golden's 11, and most high-level zones decide nothing | modelling: the confirmed seasons' residuals stay with the zone from season to season (2 dlogL 165.6 for the zone level) | modelling: a two-level model, each level learned from the zone's own confirmed seasons outside the record judged, the tail under the level's uncertainty | keep |
+| The radio-less controllers' clocks drift between site visits and are set at each read | constructed by the simulated controllers and visit rounds | no: all 32 radio-less controllers drift; 3 of the 11 referred zones are radio-less | modelling: each controller's trip-to-stroke lags against time, or its loss-of-supply events against upstream lockouts | modelling, earned by a careful run | keep |
+| The controllers' memories overwrite their oldest events and the months since each last read are unread | constructed by the simulated memories, weekly battery tests and visit rounds | no: 63 of 947 reads lost 1,346 events on 18 zones, most not referred; every radio-less zone has an unread tail | a targeted query (event-number jumps, read dates) then modelling | modelling, earned by a careful run | keep |
+| Failures begin partway through each zone's record since inspection (thefts on their own dates, the arrester lot ageing, the insulator batch cracking) | constructed by the simulated theft, Weibull arrester ageing and cracking hazard across every substation | no: failures begin and grow across the network; in the first season after inspection 9 of the 11 referred zones ran at under half the multiple of their own sound level they reached in 2026, and the 21 failures the inspections found unreferred are mostly the same pattern caught early | modelling: each zone's seasons since inspection against its own sound level | modelling: the state at the end of 2026 read from the seasons since the failure began, carried into the avoided faults (terms 4(c) files the state, not the reading) | keep |
 
 ## Effort test
 
 | Result | Quick pass | Careful but hurried | Thorough |
 |---|---|---|---|
-| R1 lightning faults per season | Missed | Missed | Right |
-| R2 radio-less zones, 2026 faults | Missed | Missed | Right |
-| R3 2026 faults failed protection caused | Missed | Missed | Right |
-| R4 zones referred for the 2027 refit | Missed | Missed | Right |
-| R5 referrals after each season since 2022 | Missed | Missed | Right |
-| R6 sound zones referred in a season | Missed | Partly | Right |
-| R7 referrals against the following inspections | Missed | Missed | Right |
-| R8 faults the refit avoids, average season | Missed | Missed | Right |
-| Roughly | 0 of 8 | 0.5 of 8 | 8 of 8 |
+| R1 lightning faults per season, the radio-less zones' 2026 | Missed | Right | Right |
+| R2 2026 faults failed protection caused | Missed | Partly | Right |
+| R3 zones referred for the 2027 refit | Missed | Partly | Right |
+| R4 the referred zones against sound protection | Missed | Missed | Right |
+| R5 the alert load: referrals each season, sound ones | Missed | Partly | Right |
+| R6 referrals against the following inspections | Missed | Missed | Right |
+| R7 faults the refit avoids, average season | Missed | Missed | Right |
+| Roughly | 0 of 7 | 2.5 of 7 | 7 of 7 |
 
 Measured by: .claude/skills/stumping/effort.py on generator/effort.json
-Largest single hint: "a season counts as sound only when the next cyclic inspection found nothing"; rescues 3 of 8 results
-Pair estimate: 16.2
+Largest single hint: "a zone that runs high when its protection is sound runs high every season: judge each zone against its own confirmed-sound seasons"; rescues 2 of 7 results
+Pair estimate: 35.2
 
-The quick pass reads the OMS LIGHTNING code as the lightning record. The careful pass does everything the run record
-says a frontier run does unprompted: it cleans every export, drops the re-read events, converts the lightning
-extract's UTC, matches on a tight window where clocks are synchronised and on a ten-minute window around the
-radio-less controllers' own stamps, counts the logged events, fits a negative binomial sound rate with every covariate
-on every season no inspection has yet found failed, and reads the window, the budget and the false-referral sum
-right. It is not graded up on the baseline: the confirmed-sound reading needs the time-order judgment (a clean
-inspection proves the seasons before it, not after), and that move is the build's third difficulty. The risk the
-build carries is a run that makes it without the reconstruction: priced on the same split, a wide window on the
-confirmed seasons scores 50.7, a drift fit on them without the fill 53.5, a fixed offset on them 41.5; a run that
-reconstructs the record and fits every unverified season scores 40.5. A run reaches the 80s only with both the
-reconstruction and the confirmed seasons (81.0 with a Poisson spread, 100 with the golden's).
+The quick pass reads the OMS LIGHTNING code as the lightning record. The careful pass is calibrated to both stage 4
+judges' own first passes and graded up wherever either went further: it rebuilds the radio-less clocks and restores
+the lost and unread months (architecture 2's pass did; architecture 3's did not, and is not priced), learns the sound
+rate only from seasons a later inspection confirmed sound, fits the register's features, reads the window and the
+budget right and computes the rule's own sound referrals (architecture 3's pass did, 0.13 to 0.15, so R5's sound cell
+is priced Right); it takes the scatter season by season (quasi-Poisson, as architecture 2's pass did) and values the
+refit on each zone's record since its inspection, averaged. Each hint is executed the way a run acts on it: told that a
+zone keeps its own level, the pass estimates each level from the zone's confirmed seasons and takes it as known, which
+mends the expectations (R4) and the network's sound count (R2) and refers 17 zones. Priced on the same split (generator
+runs): the careful pass with the levels taken as known scores 48.3, with the 2026 state alone 43.2, with the levels
+carried uncertain 92.0, and with that and the state 100; a pass that drifts the clocks but restores nothing scores 31.2,
+and one that also keeps one clock for every device 11.0, which is where architecture 3's judge sat. The build's risk is
+a run that carries each zone's level uncertain into a predictive tail: the levels alone (a random effect per zone,
+read off as each zone's estimate) leave it at 48.3, and only the predictive tail lifts it past the bar.
 
-First-pass reading, 2026-11-11 (`determinism_check_report_pass2.md`): the stage 4 judge thread's own derivation, a
-medium-effort run written before it opened the blocks, landed the 15 zones, the referrals after each season (11, 11,
-13, 11, 15), the radio-less zones' 2026 faults (248), the faults failed protection caused in 2026 (254) and the
-avoided faults (103) inside their bands, and four of the five season totals, in about seven minutes. It aligned the
-radio-less clocks from the weekly battery tests, which the generator fires at 03:00 true time, so every test's stamp
-gives its controller's offset away (a real controller runs its self-test at 03:00 on its own clock); it restored the
-unread and overwritten months by exposure as a matter of course; and it took the seasons a later inspection found
-sound as the baseline unprompted. Priced on that pass the careful column earns R2, R3, R4, R5 and R8 and part of R1,
-about 73, so the 16.2 above does not stand and the build is back at stage 2. It lost only R6 (it wrote the 0.2
-ceiling) and R7 (its scatter gave other counts).
+## Frontier check
+
+Precedents: R2 L09 (the pooled figure decided on after the split was seen); R3 L35 (an independence binomial where
+  units share shocks: a zone's seasons share its level), L09, L33 (units never checked for varying beyond sampling
+  error); R4 L09, L33; R5 L35, L28 (the known-level rule certified by its own tails, a check that cannot see the
+  problem); R6 L28, L29 (a rule's near-perfect confirmation taken as its validation); R7 L12 (cohorts pooled though
+  their rates drift), N02 (history assumed informative of the forward window). R1 is priced Right: its repairs are
+  the field's standard ones, which the run record counts as reflexes, though architecture 3's judges restored nothing
+  on either pass.
+Shallow path checks: the season-by-season scatter (R3, R5, R6) passes its own checks: its dispersion is fitted on the
+  same zone-seasons (quasi-Poisson 1.6) and its referrals run 7 of 8 confirmed at the next inspection; a check of
+  another kind refutes it, a split-half replication of each zone's ratio over
+  its confirmed-sound seasons (odd against even seasons correlate 0.45 to 0.59, both stage 4 judges), which needs the
+  inspection book's rounds (zone by round) beside the fault record (zone by season). The known-level rule (R5) passes
+  its own check, 0.13 sound referrals a season computed on its own tails; a check of another kind, the same rule's
+  tails under each level's uncertainty from its few confirmed seasons, finds 1.2. The averaged record (R7) passes its
+  own check, every referred zone above its sound level since inspection; a check of another kind, each zone's seasons
+  against its own sound level in time order, dated from the inspection book's repair completions (zone by round),
+  shows 9 of the 11 below half their 2026 multiple in the first season after inspection.
+Assumption made false: a run lists "a zone's seasons are exchangeable once its features and lightning are counted" and
+  "the record since inspection is informative of the zone's state" and moves on. The world's process makes both false:
+  each zone keeps its own site (earth resistance, hardware, route), constant through time and lognormal across zones,
+  and protection fails on its own date (a theft, an arrester ageing, a crack) inside the record. The pack tests the
+  first on the inspection-confirmed seasons and the second on each referred zone's seasons since its repairs.
+Forcing: the call is a set. The golden family (ten rival methods: the match windows, the match radii, no transformer
+  term, weak discharges left out, each level from every confirmed season, a stroke-level sound model, the as-of replay,
+  the unread months at the zone's rate since inspection) files the same 11; every fitted input moved by its defensible
+  spread files the same 11 (the sound rate 10 per cent either way, about five standard errors of its 2,692 confirmed
+  faults; the level shape at both ends of its 95 per cent interval, 4.05 and 8.16; the seasons' scatter size 20 per cent
+  either way); the weakest referral sits at 9.4e-5 and the strongest left out at 3.6e-3 against 1.4e-3; the shortcuts
+  file 9 other sets, from 7 zones to 22.
+Noun swap: the nearest on file is task6 v7 (a ticketing marketplace's latency SLIs from a trace store) at severity
+  none: decision form new (a monitoring rule with its alerts against a set over a threshold), answer pattern shared
+  but generic (the naive set swaps members, which the guard does not count), one lesson shared (observation_window_coverage, supporting here), detection the same
+  (record time against event time), moves partly shared (impute_by_model_at_own_drivers), file roles 0.75; swapped
+  into task13 its nouns leave the zone's own level learned from inspection-confirmed seasons, the level's uncertainty in
+  the tail and the state each failure had reached unmatched. The guard's two WARNs: observation_window_coverage sits on
+  task16 v2 and task3 v7, and here it is a supporting repair, not the deciding lesson; variance_beyond_sampling_noise is
+  taught once, by the client's example 15 (a cohort term for reading partnership places, the cut of a ranked list),
+  and here it is learned per zone from inspection-confirmed seasons and carried uncertain into an alarm's tail, beside
+  the state valuation and the reconstruction.
 
 ## Data provenance
 
@@ -183,100 +236,109 @@ Source: generated by `task13/generator` from a simulated process
 Behaves like the real thing: thunderstorm cells drift across the franchise and drop flashes of several strokes with
   lognormal peak currents; the lightning network detects each stroke with an efficiency that falls below about 4 kA
   and places it with an error ellipse, reporting cloud pulses beside ground strokes; each stroke near a line flashes
-  it over by induction or by a direct hit at a rate set by the span's construction, the arrester cover and the state
-  of its ground leads, arresters and pin insulators (losing grounds or arresters lifts a zone's lightning faults 2.5 to
-  4.5 times, as line arrester studies find); breakers and reclosers run their trip, reclose and lockout sequences;
-  radio-less controllers keep their own clocks and fixed-size memories, read and reset at site visits on a round of
-  about four months; dispatchers log sustained outages with their own cause codes; crews inspect each zone once in
-  five dry seasons and find about nine failures in ten; ground leads are stolen near towns, one arrester lot ages out
-  from 2023 and one insulator batch cracks from 2020.
+  it over by induction or by a direct hit at a rate set by the span's construction, the arrester cover, the state of
+  its ground leads, arresters and pin insulators, and the zone's own site (earth resistance, hardware and route,
+  lognormal across zones and constant through time); breakers and reclosers run their trip, reclose and lockout
+  sequences; radio-less controllers keep their own clocks and fixed-size memories, run their weekly battery test at
+  03:00 on their own clock, and are read and reset at site visits on a round of about four months; dispatchers log
+  sustained outages with their own cause codes; crews inspect each zone once in five dry seasons over two cycles and
+  find about nine failures in ten; ground leads are stolen near towns, one arrester lot ages out from 2023 and one
+  insulator batch cracks from 2020.
 Genuine patterns: (1) the lightning season and the dry season (storms April to October, typhoons, inspections and
   most site visits December to May); (2) spatial structure (storm tracks, hills and towns, tree cover, construction
-  types and the 2017-18 arrester programme); (3) overdispersion (each zone's susceptibility and each season's shocks);
-  (4) stroke multiplicity and the current distribution; (5) the arrester lot's ageing and the insulator batch's
-  cracking hazard; (6) theft falling off with distance from town
+  types and the 2017-18 arrester programme); (3) a persistent level per zone and a season-to-season swing; (4) stroke
+  multiplicity and the current distribution; (5) the arrester lot's ageing and the insulator batch's cracking hazard;
+  (6) theft falling off with distance from town; (7) year-to-year storm activity over ten seasons
 Problems by process: controllers' clocks drift and are reset when a technician reads them; fixed memories overwrite
   their oldest events under weekly battery tests and busy seasons; the months since a controller's last read are
   unread at the pull; every download re-exports the whole memory; the lightning extract runs in UTC with cloud pulses
   included; upstream breakers trip sympathetically on downstream faults; the SCADA history drops events during comms
   failures; dispatchers code causes by judgment; inspections miss about one failure in ten
-Breadth: 12 files; 171 zones on 1,312 overhead routes, 46 of them on controllers read on site; 149,410 located strokes,
-  38,782 SCADA events, 72,858 downloaded events from 710 reads, 2,925 outages, 342 inspections over two five-year
-  cycles; every zone is reconstructed and scored every season, and which devices and which seasons to trust is work
+Breadth: 12 files; 143 zones on 1,177 overhead routes, 32 of them on controllers read on site; ten seasons (2017 to
+  2026) of 250,565 located strokes, 63,558 SCADA events, 133,973 downloaded events from 947 reads, 4,537 outages and
+  286 inspections over two cycles; every zone is reconstructed and scored every season, and which devices, which
+  seasons and which levels to trust is work
 
 ## Template check
 
-Chain signature: assembly-reconciliation, missingness-measurement, modeling, exploration-triage, validation,
-  uncertainty, validation, forecasting
+Chain signature: assembly-reconciliation, missingness-measurement, modeling, exploration-triage, uncertainty,
+  validation, forecasting
 Question form: what (the rule and the zones it refers)
 Nearest build: task6 (events a store dropped, restored before a flagged set): there whole traces were kept at a known
-  hourly rate and the weight sat on a hard-to-measure quantity; here the losses are each controller's own (an
-  unknown drift, a memory that overwrites under load, months nobody read) and the weight sits on designing an alarm
-  whose baseline only an independent check can verify, with the alert load, the false-alarm rate and the inspection
-  check graded. Against mark119 (excess failures over expected per unit) there was one expectation and no record to
-  repair; against task13 v1 nothing survives (a gust-load fit and a trim split on six feeders).
+  hourly rate and the weight sat on a hard-to-measure quantity; here the losses are each controller's own and the
+  weight sits on designing an alarm whose null carries a level per unit learned from that unit's independently
+  verified history, with the alert load, the false-alarm rate and the inspection check graded. Against mark119 (excess
+  failures over expected per unit) there was one expectation shared by every unit and no record to repair; against
+  task13's earlier architectures nothing of the scatter structure or the last-season valuation survives.
 
 ## Semantic fork table
 
 | ID | Term or convention | Readings | Golden | Ruled out by |
 |---|---|---|---|---|
-| SF1 | "lightning fault" | every trip; every fault start on the zone's device; faults the OMS codes LIGHTNING | each fault start whose first trip lines up with a stroke near the zone's lines, counted once against that zone | terms 2(c) (started by a flash on the zone's lines, counted once however many trips); the OMS records sustained outages only |
-| SF2 | "near" (the lightning that fell near the lines) and the radius a fault is matched over | exposure within 400 m, 800 m or 1 km; matching within 300 m to 1 km | exposure within 400 m; matching within 400 m | terms 2(g) files the exposure (within 800 m or 1 km the set moves by 2 to 4); the matching radius is same call from 300 m to 1 km (checks.py SF2) |
+| SF1 | "lightning fault" | every trip; every fault start on the zone's device; faults the OMS codes LIGHTNING | each fault start whose first trip lines up with a stroke near the zone's lines, counted once against that zone | terms 2(c); the OMS records sustained outages only |
+| SF2 | "near" and the radius a fault is matched over | exposure within 400 m, 800 m or 1 km; matching within 300 m to 1 km | exposure within 400 m; matching within 400 m | terms 2(g) files the exposure; the matching radius is same call from 300 m to 1 km (checks.py SF2) |
 | SF3 | "lightning season" | the calendar year; 1 April to 31 October | 1 April to 31 October | terms 2(b) |
-| SF4 | "since its last cyclic inspection" | from the inspection's start; from the day after its repairs; the whole record | the day after the repairs were completed to the season's end | terms 2(e); the whole record refers 25 |
-| SF5 | the seasons a sound rate is learned from | seasons a later inspection found sound; every season not yet found failed; every season | seasons a later inspection found sound | terms 2(d) makes soundness a state of the protection; only a later inspection records that state for a past season, and the book shows zones inspected clean and found failed at the next round |
-| SF6 | "more than chance explains" | a Poisson tail; the sound zones' own scatter | the sound zones' own scatter (negative binomial, size 22.8) | the confirmed seasons reject Poisson (2 dlogL 4.95); Poisson refers 17 |
-| SF7 | "no more than once in five lightning seasons on average" across the network | 0.2 a zone a season; 0.2 a season across the network | 0.2 a season across the network, 1/(5 x 171) a zone | terms 3(b) "Across the network" |
-| SF8 | "how many of a season's referrals should be zones with sound protection" | the budget (0.2); the rule's own expected count | the rule's own (0.13) | the budget is a ceiling ("no more than", 3(b)); the ask is what the rule will do |
-| SF9 | "the network's lightning faults in each season" | the faults the logs kept; every fault the season had | every fault, the lost and unread restored | terms 2(c) defines a fault by the flash, not by the record; the downloads' event numbers show events the memories lost |
-| SF10 | "how many of 2026's were caused by failed protection" | the network less every zone sound; the referred zones' excess; each zone's positive excess summed | the network less every zone sound (279) | terms 2(f); the referred zones' excess (199) leaves out failed zones not yet referred, the positive parts (415) count chance on sound zones |
-| SF11 | "how its referrals compare with what the next cyclic inspections found" | per referral (a zone-season); per inspection | per inspection, against the rule after the season before | terms 5 |
-| SF12 | "a season of average lightning" | each zone's 2022 to 2026 mean; 2026's lightning scaled to the network mean; 2026 as it fell | each zone's 2022 to 2026 mean sound expectation (107) | terms 4(c); 2026 scaled to the network mean gives 109, same call; 2026 as it fell (133) is not an average season |
-| SF13 | the CSV's "faults since its last cyclic inspection against what sound protection would have given it" | logged faults against the full-season expectation; restored faults against the full expectation; logged against the observed months' expectation | restored faults against the full expectation, which carries the same ratio as logged against the observed months | same call on the ratio and the referral by construction; logged against full understates the radio-less zones (SF9) |
-| SF14 | which zones | the register's 171; the zones with SCADA | the register's 171 | terms 2(a) |
-| SF15 | the count the chance is judged on | the faults the records hold against the expectation for the same months; the restored count against the full season | the records' own count | a restored count is an estimate (the zone's rate carried to months nobody recorded); a chance computed on it as if counted overstates the evidence, and it alone adds SRQ-F4-R3 (7 faults recorded against 2.1 expected in its recorded months) |
-| SF16 | which of a zone's features the sound rate carries | any subset of the register's construction, area, arrester and transformer shares | the full set | the data: every subset within 4 AIC of the best on the confirmed seasons refers the same 15; every subset that refers otherwise sits 5 or more AIC worse (checks.py SF16) |
+| SF4 | "since its last cyclic inspection" | from the inspection's start; from the day after its repairs; the whole record | the day after the repairs were completed to the season's end | terms 2(e); the whole record refers 7 |
+| SF5 | the seasons a sound rate is learned from | seasons a later inspection found sound; every season not yet found failed; every season | seasons a later inspection found sound | terms 2(d) makes soundness a state only a later inspection records; the book shows zones inspected clean and found failed at the next round |
+| SF6 | "more than its lines would have had ... by more than chance explains" | a scatter taken season by season (Poisson, quasi-Poisson, one negative binomial a season); each zone's own level and a season scatter | each zone's own level (gamma, shape 5.74) and a season scatter | 3(a) says "its lines"; the confirmed seasons carry a level per zone beyond any season-by-season scatter (2 dlogL 165.6) and reject Poisson (79.2) |
+| SF7 | "no more than once in five lightning seasons on average" across the network | 0.2 a zone a season; 0.2 a season across the network; 0.2 a season spread over the sound zones only | 0.2 a season across the network, 1/(5 x 143) a zone | terms 3(b) "Across the network"; spread over the sound zones only (any count from 60 to 143) the threshold stays between the weakest referral and the strongest non-referral, same call (checks.py SF7) |
+| SF8 | "how many of a season's referrals should be zones with sound protection" | the budget (0.2); the rule's own expected count | the rule's own (0.14), each zone's tail under its level's uncertainty | the budget is a ceiling ("no more than", 3(b)); the ask is what the rule will do |
+| SF9 | "the network's lightning faults in each season" | the faults the logs kept; every fault the season had | every fault, the lost and unread restored | terms 2(c) defines a fault by the flash; the downloads' event numbers show events the memories lost |
+| SF10 | "how many of 2026's were caused by failed protection" | the network less every zone sound; the referred zones' excess; each zone's positive excess summed | the network less every zone sound (186) | terms 2(f); the referred zones' excess (120) leaves out failed zones not yet referred, the positive parts (298) count chance on sound zones |
+| SF11 | "how its referrals compare with what the next cyclic inspections found" | per referral; per inspection | per inspection, against the rule after the season before | terms 5 |
+| SF12 | "a season of average lightning" | each zone's 2022 to 2026 mean; 2026 scaled to the network mean | each zone's 2022 to 2026 mean | terms 4(c); 2026 scaled to the network mean lands inside the band, same call |
+| SF13 | the CSV's "faults since its last cyclic inspection against what sound protection would have given it" | logged against the full-season expectation; restored against the full expectation; logged against the observed months' expectation | restored against the full expectation at the zone's own level, the same ratio as logged against the observed months | same call on the ratio and the referral by construction |
+| SF14 | which zones | the register's 143; the zones with SCADA | the register's 143 | terms 2(a) |
+| SF15 | the count the chance is judged on | the faults the records hold against the expectation for the same months; the restored count against the full season | the records' own count | a restored count is an estimate; judged as if counted it adds LRD-F2-R2 (16 recorded against 5.4 expected) |
+| SF16 | which of a zone's features the sound rate carries | any subset of the register's construction, area, arrester and transformer shares | the full set | every subset within 2 AIC of the best refers the same 11 under the zone levels (checks.py SF16) |
+| SF17 | the seasons a zone's level is learned from | every confirmed season; those outside the record being judged | those outside the record being judged | same call on the set and within one on every season's referrals (checks.py SF17); a level learned from the seasons judged would judge them by themselves |
+| SF18 | "with their protection as it stood at the end of the 2026 lightning season" | each zone's 2026 season above its own sound level; the seasons since its failure began; its record since inspection averaged | the 2026 season (116); the seasons since the failure began (115) land in the band, same call | terms 4(c) files the state; the referred zones' own seasons show the failures beginning partway (in the first season after inspection 9 of 11 under half the multiple of their sound level they reached in 2026; all 11 above twice it in 2026), so the average (72) values states they have left (checks.py SF18) |
+| SF19 | "by more than chance explains" for a zone whose own level is estimated | the level taken as known; the level as uncertain as its confirmed seasons leave it | the level carried uncertain into the tail | terms 3(b) budgets the sound zones the rule refers: with each level taken as known the rule refers 17 and, under the levels' own uncertainty, would refer a sound zone 1.2 times a season against 0.2 (checks.py SF19) |
+| SF20 | "what its lines would have had with sound protection, under the lightning that fell near them" | a rate times the strokes within 400 m; each stroke's chance from its current and its distance to the lines | the rate times the strokes | same call: the stroke-level model refers the same 11 and lands every graded figure in its band (checks.py SF20, R7 rows) |
+| SF21 | the rate a zone's lost and unread months are restored at | the same season's observed months; the zone's record since inspection; its sound level | the same season's observed months | same call on the record since inspection (every season inside its band, the same 11); the sound level undercounts a failed zone's months and is ruled out by the zone's own observed rate (checks.py SF21) |
 
 ## Closure table
 
 | Axis | Closure |
 |---|---|
-| 1 | Population: the register's 171 zones (terms 2(a)); every zone scored after every season, none excluded |
+| 1 | Population: the register's 143 zones (terms 2(a)); every zone scored after every season, none excluded |
 | 2 | Unit of account: the protection zone; a fault counted once against the zone whose lines it was on (2(c)), an upstream breaker's sympathetic trip is not its zone's fault |
 | 3 | Attribution window: a fault belongs to the season of its first trip (2(b)); the matched stroke and trip sit within a second, so no fault straddles a season's edge (C1) |
 | 4 | As-of dating: the rule after the 2026 season, on the inspection book as it stands (rounds through 2025-26) and the register of September 2026 |
 | 5 | Version basis: one register, one inspection book, no revised extracts; C1 |
-| 6 | Denominator: the expectation is a rate times the strokes within 400 m in the zone's observed months (3(a)); the CSV's ratio divides by the sound expectation since inspection |
-| 7 | Weighting: none; each zone-season enters the fit as a count with its exposure; the false referrals are summed over zones (3(b)) |
-| 8 | Window length: the record since the last cyclic inspection (2(e)); the fit uses every confirmed-sound season of 2022 to 2026 |
-| 9 | Boundary inclusivity: strict ("more than"); no zone sits near the threshold (weakest referred chance 2.9e-4, strongest unreferred 4.0e-3, threshold 1.17e-3; C1) |
+| 6 | Denominator: the expectation is a rate times the strokes within 400 m in the zone's observed months, times the zone's own level (3(a)); the CSV's ratio divides by that expectation since inspection |
+| 7 | Weighting: none; each confirmed zone-season enters the fits as a count with its exposure; the false referrals are summed over zones (3(b)) |
+| 8 | Window length: the record since the last cyclic inspection (2(e)); the rate and the levels use every confirmed-sound season of 2017 to 2026 |
+| 9 | Boundary inclusivity: strict ("more than"); no 2026 zone sits near the threshold (weakest referred chance 9.4e-5, strongest unreferred 3.6e-3, threshold 1.40e-3; C1); the earlier replays' borderline zones are carried in R5's and R6's bands |
 | 10 | Rounding path: counts whole, the CSV to one decimal, each graded figure rounded once at the end at the precision the answer blocks state |
 | 11 | Tie-break: none needed; no two zones tie at the threshold (C1) |
-| 12 | Maturity and censoring: the radio-less controllers' unread months and overwritten events restored at each zone's own rate (R2); every SCADA zone's 2026 season is complete |
-| 13 | Order of operations: match, then collapse each fault, then season, then fit, then threshold; the referral compares logged faults with the observed months' expectation, which carries the same ratio as the restored faults against the full season (C1) |
+| 12 | Maturity and censoring: the radio-less controllers' unread months and overwritten events restored at each zone's own rate (R1); every SCADA zone's 2026 season is complete |
+| 13 | Order of operations: match, then collapse each fault, then season, then the rate and the levels, then the tail; the referral compares logged faults with the observed months' expectation, the same ratio as the restored faults against the full season (C1) |
 | 14 | Row order: no result depends on file order (every match sorts by device and time; C1) |
 | 15 | Duplicate resolution: a re-read event (same controller, same event number) kept once; counting repeats moves no referral (checks.py R2) |
-| 16 | Identity normalisation: every system keys the zone by its register name or its device point ("ZONE CB", "ZONE ACR", the recloser id), which map one to one |
-| 17 | Netting against gross: R3 nets by definition (2(f)); a sound zone's shortfall offsets another's chance excess |
+| 16 | Identity normalisation: every system keys the zone by its register name or its device point, which map one to one |
+| 17 | Netting against gross: R2 nets by definition (2(f)); a sound zone's shortfall offsets another's chance excess |
 | 18 | Dimensional units: counts of faults and of strokes only |
 | 19 | Code and status semantics: the register's telemetry label says which controllers are read on site; the OMS cause codes are not read by the golden |
 | 20 | Integerisation: none in any computation; graded counts rounded at the end |
-| 21 | Clause scope: 3(b)'s budget holds in every season the rule is run after, across the network; 4(c)'s average is each zone's 2022 to 2026 lightning |
-| 22 | Forward window contents: 2027 is not observed; R8's season of average lightning is the 2022 to 2026 mean each terms 4(c) names, so no forecast of 2027's storms is needed |
+| 21 | Clause scope: 3(b)'s budget holds in every season the rule is run after, across the network, on the sound zones the rule refers whatever its own estimates; 4(c)'s state is each refitted zone's protection at the end of the 2026 season and its average lightning each zone's 2022 to 2026 mean |
+| 22 | Forward window contents: 2027 is not observed; R7's season of average lightning is the 2022 to 2026 mean terms 4(c) names, so no forecast of 2027's storms is needed |
 
 ## Literal reader
 
 Terms 2(c) executed word for word on the device histories gives each zone's lightning faults only once each fault's
-first trip is placed on the same clock as the lightning extract, which for the 46 controllers read on site means
-fitting each one's clock from its own trips; 2(c) defines the fault by the flash, so the events their memories
-overwrote and the months nobody has read are faults the season had (R1, R2). 3(a) asks for what the lines would have
-had with sound protection under the lightning near them, and 2(d) makes soundness a state only a later inspection
-records, so the expectation and its scatter come from the confirmed seasons (R3); 3(b) sets the threshold across the
-network (R4, R5) and its own false referrals follow from the same tails (R6); 5 checks each inspection against the
-rule after the season before it (R7); 2(f) and 4(c) define R3's and R8's quantities. Every literal reading gives the
-golden's quantities; the hurried figures come from easier methods on the same estimands (a wide window, the logged
-events, an unverified baseline, the budget quoted), never from another reading. No shipped sentence names a method, a
-clock, a memory, a spread or the seasons a rate is fitted on.
+first trip is placed on the same clock as the lightning extract, which for the 32 controllers read on site means
+fitting each one's clock; 2(c) defines the fault by the flash, so the events their memories overwrote and the months
+nobody has read are faults the season had (R1). 3(a) asks for what "its lines" would have had with sound protection,
+and 2(d) makes soundness a state only a later inspection records, so the expectation is learned from the confirmed
+seasons, and since those seasons show every zone keeping a level of its own, its lines' expectation carries that level
+(R4, R2); 3(b) budgets the sound zones the rule refers across the network, which a rule holds only when the chance it
+judges by carries each level's uncertainty (R3, R5); 5 checks each inspection against the rule after the season before
+it (R6); 2(f) defines R2's quantity, and 4(c) files R7's as the zones' state at the end of 2026, which their own
+seasons since inspection show. Every literal reading gives the golden's quantities; the hurried figures come from
+easier methods on the same estimands (a scatter taken season by season, a level taken as known, the record since
+inspection averaged), never from another reading. No shipped sentence names a method, a clock, a memory, a level, a
+level's uncertainty, a scatter, the seasons a level is learned from or the seasons that show a failed zone's state.
 
 ## Prompt contract
 
@@ -288,21 +350,61 @@ refers, how many zones it would have referred after each season since 2022, how 
 be zones with sound protection, how its referrals compare with what the next cyclic inspections found, the network's
 lightning faults in each season, how many of 2026's were caused by failed protection, and the faults the refit should
 avoid in a season of average lightning. It must never add: a rounding instruction, a method or a comparison (clocks,
-drift, memories, filling, the seasons a rate is fitted on, a spread, a window), a warning, an attached file's name, a
-role, a count the data hold (171 zones, 46 radio-less reclosers, twelve substations), or a fact the files carry.
+drift, memories, filling, levels, a scatter, the seasons a rate is fitted on, a window), a warning, an attached file's
+name, a role, a count the data hold (143 zones, 32 radio-less reclosers), or a fact the files carry.
 
 ## Leak rulings
 
 - leak.py 4 (design-note vocabulary) on the programme terms (record, seasons, referral, strokes): harmless; the terms
-  define the season, the record since an inspection, what the rule refers and the lightning near a zone in the
-  co-op's own words, and no sentence names a clock, a memory, the seasons a rate is learned from or a spread.
-- leak.py 3 (400 in the terms): the exposure definition of terms 2(g), filed as a stated input in metadata.json, not a
-  result.
-- leak.py 11 (shell quota): a corpus count of other prompts' question form; this prompt asks what.
+  define the season, the record since an inspection, what the rule refers and the lightning near a zone's lines in the
+  co-op's own words, and no sentence names a clock, a memory, a level or its uncertainty, a scatter, the seasons a rate
+  is learned from or which seasons show a failed zone's state.
+- leak.py 11 (shell quota): a corpus count of other prompts' question form; this prompt asks what rule, the form its
+  decision takes.
+- The isolated reader (full read of architecture 3, re-read of the two files the revision changed): Q1 and Q5 the terms'
+  definitions, each the filed WHAT (the revised 4(c) "fixes the estimand ... not the method"); Q2 to Q4 none; Q6 none
+  ("No single sentence or file does"). Rulings in leak_check_report.md.
 
 ## Pre-ship check
 
-Written at stage 5 against the built pack.
+On the final cut (gates.py task13 --full, 2026-11-11: 11 gates, 0 FAIL, 3 WARN; checks.py 200 of 200, verify.py PASS,
+two builds byte-identical, figures_check and the container gate PASS):
+
+- Hidden factor record against the cut data (checks.py R5, SF6, SF18): every zone keeps its own sound level (gamma
+  shape 5.74, coefficient of variation 0.42 across the 779 confirmed-sound zone-seasons, 2 dlogL 165.6 over a
+  season-by-season scatter), and the season-by-season rule's 13 differ from the golden's 11 in 4 zones; all 32
+  radio-less controllers drift, 3 of them on referred zones; 63 of 947 reads lost 1,346 events on 18 zones, most not
+  referred; in the first season after inspection 9 of the 11 referred zones ran at under half the multiple of their
+  own sound level they reached in 2026, and all 11 above twice it in 2026, while the 21 failures the inspections found
+  unreferred sit on 21 zones under 8 of the 12 substations. No factor sits only where it decides.
+- Effort test against effort.py on the final cut: quick 7.0, careful but hurried 35.2, thorough 100; the largest
+  single hint (the zone's own level, executed as a run acts on it) rescues 2 of 7 and refers 17; the level's
+  uncertainty alone rescues nothing; the failures-began-partway sentence rescues 1; 12 shortcuts give 9 different
+  wrong referral sets; every lost cell cites a frontier precedent of its class (the cited pair 35.2), and the forcing
+  record has 10 rival methods and 6 fitted-input perturbations all filing the same 11. The careful pass with the
+  levels carried uncertain scores 92.0 and is the build's risk.
+- Rivals (checks.py R7 rows, SF7, SF16 to SF21, verify.py): 13 members of the golden family (the match windows, the
+  match radii, no transformer term, weak discharges left out, levels from every confirmed season, the level shape at
+  both ends of its interval, a stroke-level sound model, the as-of replay, the unread months at the zone's rate since
+  inspection, the refit valued since each failure began) refer the same 11 and land every graded figure in its band;
+  every covariate set within 2 AIC refers the same 11; the budget spread over the sound zones only keeps the set; the
+  independent verifier refers the same 11 with its back-test at 3, 3 and 23, inside the band.
+- Leak reader (full read of architecture 3, re-read of the revised terms and register on the final cut): no ranking
+  file, no answer figure, nothing planted; Q1 and Q5 the filed WHAT ("fixes the estimand ... not the method"), Q6 none.
+- Judge (p4, on the final pack and blocks, its thread's own derivation written before it opened the blocks):
+  DETERMINISTIC, APPROVE. Gate G: method_or_model_selection, analytical_non_defect, no surface read, no sole data
+  defect. Gate H: domain pass, layers pass, 10 results across 6 areas, one thing none (borderline). Its first pass,
+  read against the careful column: the 2022 to 2025 totals inside (555, 408, 574, 610, unrestored), 2026 out (607),
+  the failed-protection count out (135), the set out (10 zones, BGS-F3 in, BGS-F3-R1 and CLB-F2 out), the alert load
+  inside after 2024 to 2026 only, and the refit valued on the record since each inspection averaged (66, out): nothing
+  it landed sits where the careful column prices less than Right, so the pair stays 35.2. Its best single sentence (the
+  clocks and memories) rescues about 4 of 10 against its own pass, which restored nothing; the careful column restores,
+  so it rescues none there. p3, on revision 1, is recorded in `## Tried and rejected` and determinism_check_report.md.
+- Duplicate check: guard.py heart WARN, no BLOCK (overuse.forum, repeat.gate_g and repeat.decision answered in Draw);
+  surface exit 0.
+- Dates: the pack pulled 4 November 2026; the golden's files and its note dated 9 and 10 November 2026, before the
+  upload.
+
 
 ## Tried and rejected
 
@@ -363,3 +465,23 @@ Written at stage 5 against the built pack.
   each difficulty was noticing a property the files show plus the field's standard remedy (a scheduled self-test that
   leaks the clock offset, event-number gaps that announce the losses, an inspection book whose time order names the
   confirmed seasons), which a careful run does by reflex.
+- Architecture 3 at the design, each zone's own level on the 2022 to 2026 record alone: with at most four confirmed
+  seasons a zone, the worlds where the levels moved the set (4 to 14 zones against a pooled scatter) were the ones whose
+  golden moved under its own rivals (the level shape at 0.7 and 1.4 times its estimate, the match radius), and the
+  robust worlds were the ones where the levels decided nothing; the record now runs from December 2016, two inspection
+  cycles confirm 779 zone-seasons, and every rival refers the same set.
+- Architecture 3 at the design, the hurried route as one negative binomial over the whole record: it behaves as a level
+  per zone by accident and lands within a zone of the golden; the routes a run takes treat the seasons as independent
+  (quasi-Poisson, as the stage 4 judge did, or a negative binomial each season), and those refer 13 zones to the
+  golden's 11 and check sound zones at inspection.
+- Architecture 3 at the build, the alert counts and the rule's sound referrals graded as two results: the prompt asks
+  them in one sentence as the rule's alert load, and as two the levels sentence rescued three of eight; one result of
+  six cells, and the chain is seven.
+- Architecture 3 revision 1 (as judged at stage 4 on 2026-11-11, DETERMINISTIC and APPROVE): its judge thread's own
+  first pass missed the set, the season totals and the failed-protection count but landed two results the note priced
+  as lost, the refit's avoided faults (terms 4(c) filed "the faults its zones ran in the last lightning season", a
+  method, and the pass executed it: 102 to 121 against 116) and the rule's sound referrals (the pass computed the
+  rule's own rate, 0.13 to 0.15; quoting the budget's 0.2 was never a run's reading). Repriced on that pass the careful
+  column came to about 56, 65 with the replay's cells, over 50, so the build went back to stage 2: terms 4(c) now files
+  the state at the end of 2026 and leaves how to read it to the data, the level's uncertainty is priced as its own
+  judgment (the known-level rule refers 17), and every band is the rival family's span.

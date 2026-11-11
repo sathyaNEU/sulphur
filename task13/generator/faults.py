@@ -1,4 +1,4 @@
-"""Every fault on every zone, December 2021 to October 2026, with the truth of what caused it."""
+"""Every fault on every zone, December 2016 to October 2026, with the truth of what caused it."""
 import numpy as np
 import pandas as pd
 from scipy.stats import norm
@@ -8,6 +8,9 @@ import phys as PH
 import world as W
 
 TYPHOONS = [  # (name, landfall-ish time over the network, hours of strong wind, intensity)
+    ('Maring', '2017-09-12 20:00', 8, 0.7), ('Ompong', '2018-09-15 02:00', 14, 1.5), ('Rosita', '2018-10-30 06:00', 11, 1.0),
+    ('Ineng', '2019-08-24 10:00', 9, 0.6), ('Quinta', '2020-10-26 04:00', 10, 0.9), ('Ulysses', '2020-11-11 22:00', 16, 1.2),
+    ('Jolina', '2021-09-08 03:00', 9, 0.8), ('Maring', '2021-10-11 18:00', 10, 0.7),
     ('Florita', '2022-08-23 03:00', 16, 1.0), ('Karding', '2022-09-25 17:00', 9, 1.6),
     ('Egay', '2023-07-26 06:00', 14, 0.8), ('Jenny', '2023-10-04 20:00', 10, 0.6),
     ('Carina', '2024-07-24 01:00', 18, 0.9), ('Kristine', '2024-10-23 22:00', 20, 1.4), ('Pepito', '2024-11-17 05:00', 12, 1.1),
@@ -75,7 +78,7 @@ def lightning_faults(N, Z, P, Stt, rng):
     yr = pd.to_datetime(P.t.values).year.values
     ss = np.array(Z.sort_values('zone_ix').susc_season.tolist())
     pos = np.searchsorted(Z.zone_ix.sort_values().values, P.zone_ix.values)
-    sm = ss[pos, np.clip(yr - 2021, 0, 5)]
+    sm = ss[pos, np.clip(yr - 2016, 0, 10)]
     mult = zm * sm
     p = np.clip(((1 - cfac) * p_ok + cfac * p_cr) * mult, 0, 0.97)
     p_snd, _ = prob(cov_sound, 1.0)

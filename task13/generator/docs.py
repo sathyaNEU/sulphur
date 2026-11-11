@@ -131,7 +131,7 @@ def write_zones(w, path):
              'Upstream device', 'Overhead line km, three-phase', 'Overhead line km, single-phase',
              'km wood crossarm', 'km steel crossarm', 'km pole-top bracket', 'km bracket on concrete pole',
              'km open field', 'km tree-lined', 'km town', 'km hill',
-             'km fitted with line arresters (2017-18 programme)', 'Line arresters', 'Distribution transformers',
+             'km fitted with line arresters (2015-16 programme)', 'Line arresters', 'Distribution transformers',
              'Member-consumers']]
     subname = dict(C.SUBSTATIONS)
     for z in Z.itertuples():
@@ -246,8 +246,9 @@ TERMS = [
         '(a) The refit covers every zone the rule refers after the 2026 lightning season.',
         '(b) On each zone it covers, the refit restores every ground lead, arrester and pin insulator to the construction '
         'standard.',
-        '(c) The lightning faults the refit avoids are the faults its zones run above what sound protection would give '
-        'them, taken in a season with the lightning of an average of the 2022 to 2026 lightning seasons.']),
+        '(c) The lightning faults the refit avoids are the lightning faults its zones would run in a lightning season, '
+        'with their protection as it stood at the end of the 2026 lightning season, above what their lines would have '
+        'with sound protection, in a season with the lightning of an average of the 2022 to 2026 lightning seasons.']),
     ('5. Checking the rule', [
         'Each cyclic inspection checks the rule on the zone it inspects, against the rule as run after the lightning '
         'season before the inspection. The inspection confirms a referral when the rule referred the zone and the '

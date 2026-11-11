@@ -11,7 +11,7 @@ import phys as PH
 import storms as ST
 
 SEED = 1302
-T0 = pd.Timestamp('2021-12-01')
+T0 = pd.Timestamp('2016-12-01')
 T1 = pd.Timestamp('2026-11-01')
 DAY = pd.Timedelta(days=1)
 
@@ -40,7 +40,7 @@ def zones(N, rng):
     tx = g.apply(lambda d: (d.km * d.tx_per_km).sum()).reindex(Z.zone_ix).values
     Z['n_tx'] = rng.poisson(tx)
     Z['members'] = (Z.n_tx * rng.lognormal(np.log(27), 0.25, len(Z))).round().astype(int)
-    # the 2017-2018 line arrester programme on the exposed zones: arresters about every 300 m on open and hill line
+    # the 2015-2016 line arrester programme on the exposed zones: arresters about every 300 m on open and hill line
     exposed = (Z.km_open + Z.km_hill + 0.5 * Z.km_treed) / Z.km
     Z['la_prog'] = rng.random(len(Z)) < np.clip(0.15 + 0.9 * exposed, 0, 0.92)
     prog_km = (Z.km_open + Z.km_hill + Z.km_treed) * Z.la_prog
@@ -58,8 +58,10 @@ def zones(N, rng):
     # a batch of porcelain pin insulators on the 2019 post-typhoon rebuilds
     Z['pin_batch'] = (Z.km_steel_xarm > 2) & (rng.random(len(Z)) < 0.08)
     # what no register holds: each zone's own susceptibility to a flashover, and its season-to-season swing
-    Z['susc'] = rng.lognormal(-0.5 * 0.20 ** 2, 0.20, len(Z))
-    Z['susc_season'] = [list(rng.lognormal(-0.5 * 0.12 ** 2, 0.12, 6)) for _ in range(len(Z))]
+    # (the soil each zone's arrester grounds are driven into and the hardware and route the register does not
+    # describe: a level that stays with the zone whatever its protection's state, and a season-to-season swing)
+    Z['susc'] = rng.lognormal(-0.5 * 0.45 ** 2, 0.45, len(Z))
+    Z['susc_season'] = [list(rng.lognormal(-0.5 * 0.10 ** 2, 0.10, 11)) for _ in range(len(Z))]
     # protection device and controller
     kind = Z.kind.values
     model = np.where(kind == 'breaker', 'relay', np.where(rng.random(len(Z)) < 0.46, 'old', 'new'))
@@ -80,8 +82,8 @@ def zones(N, rng):
     Z['zone'] = [fd if o == 0 else '%s-R%d' % (fd, o) for fd, o in zip(Z.feeder, Z.order)]
     zname = dict(zip(Z.zone_ix, Z.zone))
     Z['parent'] = [zname.get(p, '') for p in Z.parent_ix]
-    yrs = np.where(Z.controller == 'old', rng.integers(2008, 2014, len(Z)), np.where(Z.controller == 'new',
-                   rng.integers(2018, 2024, len(Z)), rng.integers(2012, 2022, len(Z))))
+    yrs = np.where(Z.controller == 'old', rng.integers(2003, 2010, len(Z)), np.where(Z.controller == 'new',
+                   rng.integers(2013, 2017, len(Z)), rng.integers(2008, 2016, len(Z))))
     Z['commissioned'] = yrs
     return Z
 
@@ -125,10 +127,10 @@ def defects(Z, I, rng):
                 break
             ev.append((z.zone_ix, t.normalize() + pd.Timedelta(hours=float(rng.uniform(0, 5))), 'theft',
                        float(rng.beta(14.0, 1.2))))
-        # lot B line arresters: Weibull ageing from installation in 2017-2018
+        # lot B line arresters: Weibull ageing from installation in 2015-2016
         if z.la_lot_b and z.n_la > 0:
-            inst = pd.Timestamp('2017-06-01') + pd.Timedelta(days=float(rng.uniform(0, 420)))
-            life = (rng.uniform(6.2, 9.5) + rng.normal(0, 0.35, z.n_la))
+            inst = pd.Timestamp('2015-06-01 12:00') + pd.Timedelta(days=float(rng.uniform(0, 420)))
+            life = (rng.uniform(8.2, 11.5) + rng.normal(0, 0.35, z.n_la))
             for L in life:
                 tf = inst + pd.Timedelta(days=float(L * 365.25))
                 if tf < T1:

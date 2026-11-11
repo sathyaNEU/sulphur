@@ -1,7 +1,9 @@
 """The independent verifier: reads only the shipped bundle (target/ and golden/), never the generator's world or its
 analysis module, and recomputes every graded figure on its own code path (equirectangular distances from degrees,
 its own trip grouping, a per-device drift found by voting over lag bins, a Poisson GLM by iteratively reweighted least
-squares, the negative binomial size by a grid on the profile likelihood). Exit 0 when every figure agrees.
+squares, the zones' own levels and the season scatter by marginal likelihood on its own Simpson grid, and each
+record's chance under sound protection by exact convolution of its seasons rather than a moment-matched sum).
+Exit 0 when every figure agrees.
 
     python3 task13/generator/verify.py [task folder]"""
 import json
@@ -15,6 +17,8 @@ from scipy import special
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 SEASONS = [2022, 2023, 2024, 2025, 2026]
+ALLS = list(range(2017, 2027))
+REP = [ALLS.index(x) for x in SEASONS]
 
 
 def files(folder):
@@ -219,10 +223,11 @@ def main(task):
         m = starts.zone.values == z
         starts.loc[m, 'obs'] = observed(z, starts.ts.values[m], 400)
     nz = len(zones)
-    Y = np.zeros((nz, 5))
-    X = np.zeros((nz, 5))
-    Xo = np.zeros((nz, 5))
-    for i, s in enumerate(SEASONS):
+    ns = len(ALLS)
+    Y = np.zeros((nz, ns))
+    X = np.zeros((nz, ns))
+    Xo = np.zeros((nz, ns))
+    for i, s in enumerate(ALLS):
         a = starts[starts.light & starts.obs & (starts.season == s)].groupby('zone').size()
         Y[a.index.values.astype(int), i] = a.values
         b = NS[NS.season == s].groupby('zone').size()
@@ -232,25 +237,25 @@ def main(task):
     km = zr['Overhead line km, three-phase'] + zr['Overhead line km, single-phase']
     cov = np.column_stack([np.ones(nz)] + [zr[c] / km for c in ['km tree-lined', 'km town', 'km hill', 'km steel crossarm',
                                                                  'km pole-top bracket', 'km bracket on concrete pole',
-                                                                 'km fitted with line arresters (2017-18 programme)',
+                                                                 'km fitted with line arresters (2015-16 programme)',
                                                                  'Distribution transformers']])
     ins = pd.read_excel(find(T, 'cyclic_line'), header=3)
     ins['zone'] = ins.Zone.map(zi)
     ins['start'] = pd.to_datetime(ins['Inspection start'])
     ins['done'] = pd.to_datetime(ins['Repairs completed'])
     ins['failed'] = ins[['Ground leads missing or cut', 'Arresters failed', 'Pin insulators cracked']].sum(axis=1) > 0
-    ver = np.zeros((nz, 5), bool)
+    ver = np.zeros((nz, ns), bool)
     for z, g in ins.sort_values('start').groupby('zone'):
         g = g.reset_index(drop=True)
         for i in range(len(g)):
             prev = g.done[i - 1] if i else pd.Timestamp('2016-01-01')
             if g.failed[i]:
                 continue
-            for j, s in enumerate(SEASONS):
+            for j, s in enumerate(ALLS):
                 if pd.Timestamp('%d-10-31' % s) < g.start[i] and pd.Timestamp('%d-04-01' % s) > prev:
                     ver[int(z), j] = True
     # Poisson GLM by IRLS on the verified zone-seasons
-    rows = [(z, j) for z in range(nz) for j in range(5) if ver[z, j] and Xo[z, j] > 0]
+    rows = [(z, j) for z in range(nz) for j in range(ns) if ver[z, j] and Xo[z, j] > 0]
     A_ = np.array([cov[z] for z, j in rows])
     yv = np.array([Y[z, j] for z, j in rows])
     ofs = np.log(np.array([Xo[z, j] for z, j in rows]))
@@ -260,8 +265,7 @@ def main(task):
         eta = A_ @ beta + ofs
         mu = np.exp(eta)
         zt = eta - ofs + (yv - mu) / mu
-        Wt = mu
-        nb = np.linalg.solve(A_.T @ (A_ * Wt[:, None]), A_.T @ (Wt * zt))
+        nb = np.linalg.solve(A_.T @ (A_ * mu[:, None]), A_.T @ (mu * zt))
         if np.max(np.abs(nb - beta)) < 1e-10:
             beta = nb
             break
@@ -269,18 +273,31 @@ def main(task):
     rate = np.exp(cov @ beta)
     E = rate[:, None] * Xo
     Ef = rate[:, None] * X
-    mu = np.array([E[z, j] for z, j in rows])
-    grid = np.exp(np.linspace(math.log(0.5), math.log(1e5), 4001))
-    ll = [nb_logpmf(yv, mu, kk).sum() for kk in grid]
-    i0 = int(np.argmax(ll))
-    lo, hi = grid[max(0, i0 - 1)], grid[min(len(grid) - 1, i0 + 1)]
-    for _ in range(80):
-        m1, m2 = lo + (hi - lo) / 3, hi - (hi - lo) / 3
-        if nb_logpmf(yv, mu, m1).sum() < nb_logpmf(yv, mu, m2).sum():
-            lo = m1
-        else:
-            hi = m2
-    k = (lo + hi) / 2
+    # the zones' own levels: gamma(a, a), season scatter NB(k), by marginal likelihood on a log grid (Simpson)
+    ug = np.exp(np.linspace(math.log(0.01), math.log(15.0), 2001))
+    h = (math.log(15.0) - math.log(0.01)) / 2000
+    simp = np.ones(2001)
+    simp[1:-1:2] = 4
+    simp[2:-1:2] = 2
+    lsw = np.log(simp * h / 3 * ug)          # Simpson weights in log u, times the Jacobian du = u dlog u
+    grp = [(Y[z, ver[z] & (Xo[z] > 0)], E[z, ver[z] & (Xo[z] > 0)]) for z in range(nz) if (ver[z] & (Xo[z] > 0)).any()]
+
+    def glog(a):
+        return a * math.log(a) - special.gammaln(a) + (a - 1) * np.log(ug) - a * ug
+
+    def mll(th):
+        a, kk = math.exp(th[0]), math.exp(th[1])
+        lp0 = glog(a) + lsw
+        tot = 0.0
+        for y, e in grp:
+            lp = nb_logpmf(y[:, None], e[:, None] * ug[None, :], kk).sum(0) + lp0
+            m = lp.max()
+            tot += m + math.log(np.exp(lp - m).sum())
+        return -tot
+    from scipy import optimize
+    r = optimize.minimize(mll, [math.log(5.0), math.log(30.0)], method='L-BFGS-B',
+                          bounds=[(math.log(0.2), math.log(500.0)), (math.log(0.5), math.log(8000.0))])
+    a_lv, k_lv = math.exp(r.x[0]), math.exp(r.x[1])
     alpha = 1.0 / (nz * 5)
     done = {z: np.sort(g.done.values) for z, g in ins.groupby('zone')}
 
@@ -288,9 +305,42 @@ def main(task):
         d = done.get(z, np.array([], dtype='datetime64[ns]'))
         d = d[d < np.datetime64('%d-04-01' % s)]
         last = d.max() if len(d) else np.datetime64('2016-01-01')
-        return [j for j, x in enumerate(SEASONS) if x <= s and np.datetime64('%d-04-01' % x) > last]
+        return [j for j, x in enumerate(ALLS) if x <= s and np.datetime64('%d-04-01' % x) > last]
+
+    def post(z, W):
+        js = [j for j in range(ns) if ver[z, j] and Xo[z, j] > 0 and j not in W]
+        lp = glog(a_lv) + lsw
+        if js:
+            lp = lp + nb_logpmf(Y[z, js][:, None], E[z, js][:, None] * ug[None, :], k_lv).sum(0)
+        w = np.exp(lp - lp.max())
+        return w / w.sum()
+
+    def sum_pmf(es, u, ymax):
+        """the exact pmf of a sum of independent season NBs given the level u, by convolution"""
+        pm = np.zeros(ymax + 1)
+        pm[0] = 1.0
+        ys = np.arange(ymax + 1)
+        for e in es:
+            q = np.exp(nb_logpmf(ys, max(e * u, 1e-12), k_lv))
+            pm = np.convolve(pm, q)[:ymax + 1]
+        return pm
+
+    ucoarse = np.exp(np.linspace(math.log(0.01), math.log(15.0), 241))
+
+    def pred_pmf(z, W, ymax):
+        w = post(z, W)
+        # the posterior on the coarse grid (mass gathered to the nearest coarse node)
+        idx = np.clip(np.searchsorted(ucoarse, ug), 0, len(ucoarse) - 1)
+        wc = np.bincount(idx, weights=w, minlength=len(ucoarse))
+        es = [E[z, j] for j in W]
+        out = np.zeros(ymax + 1)
+        keep = wc > 1e-10
+        for uu, ww in zip(ucoarse[keep], wc[keep] / wc[keep].sum()):
+            out += ww * sum_pmf(es, uu, ymax)
+        return out
 
     hist = {}
+    tails = {}
     for s in SEASONS:
         ref = []
         for z in range(nz):
@@ -298,20 +348,30 @@ def main(task):
             e = E[z, W].sum()
             if not W or e <= 0:
                 continue
-            if nb_sf(int(Y[z, W].sum()), e, k) < alpha:
+            yobs = int(Y[z, W].sum())
+            ymax = int(min(max(yobs + 25, 8 * e + 60), 3000))
+            pm = pred_pmf(z, W, ymax)
+            sf = 1 - np.concatenate([[0.0], np.cumsum(pm)[:-1]])
+            tails[(s, z)] = sf
+            if sf[yobs] < alpha:
                 ref.append(z)
         hist[s] = ref
     out = {'referred_zones': sorted(zones[z] for z in hist[2026]), 'alerts': {str(s): len(hist[s]) for s in SEASONS}}
+    out['hist'] = {str(s): sorted(zones[z] for z in hist[s]) for s in SEASONS}
+    out['hist_p'] = {str(s): {zones[z]: float(tails[(s, z)][int(Y[z, window(z, s)].sum())]) for (ss, z) in tails if ss == s}
+                     for s in SEASONS}
     Yf = np.where(E > 0, Y * Ef / np.where(E > 0, E, 1), Y)
-    out['season_totals'] = {str(s): int(round(Yf[:, j].sum())) for j, s in enumerate(SEASONS)}
-    out['radioless_2026'] = int(round(sum(Yf[z, 4] for z in radioless)))
-    out['faults_2026'] = int(round(Yf[:, 4].sum()))
-    out['sound_2026'] = int(round(Ef[:, 4].sum()))
-    out['excess_2026'] = int(round(Yf[:, 4].sum() - Ef[:, 4].sum()))
+    out['season_totals'] = {str(s): int(round(Yf[:, ALLS.index(s)].sum())) for s in SEASONS}
+    j26 = ALLS.index(2026)
+    out['radioless_2026'] = int(round(sum(Yf[z, j26] for z in radioless)))
+    out['faults_2026'] = int(round(Yf[:, j26].sum()))
+    eu = np.array([float((post(z, []) * ug).sum()) for z in range(nz)])
+    out['sound_2026'] = int(round((eu * Ef[:, j26]).sum()))
+    out['excess_2026'] = int(round(Yf[:, j26].sum() - (eu * Ef[:, j26]).sum()))
     av = 0.0
     for z in hist[2026]:
-        W = window(z, 2026)
-        av += (Y[z, W].sum() / E[z, W].sum() - 1) * Ef[z, :].mean()
+        xb = X[z, REP].mean()
+        av += (Yf[z, j26] - eu[z] * Ef[z, j26]) * (xb / X[z, j26] if X[z, j26] > 0 else 0.0)
     out['avoided_average_season'] = int(round(av))
     vr = vc = vf = 0
     for r in ins[(ins.start >= '2022-11-01') & (ins.start < '2026-06-01')].itertuples():
@@ -325,17 +385,11 @@ def main(task):
     fp = []
     for s in SEASONS:
         tot = 0.0
-        for z in range(nz):
-            W = window(z, s)
-            e = E[z, W].sum()
-            if not W or e <= 0:
+        for (ss, z), sf in tails.items():
+            if ss != s:
                 continue
-            c = int(e)
-            while nb_sf(c, e, k) >= alpha:
-                c += 1
-            while c > 0 and nb_sf(c - 1, e, k) < alpha:
-                c -= 1
-            tot += nb_sf(c, e, k)
+            ok = np.nonzero(sf < alpha)[0]
+            tot += float(sf[ok[0]]) if len(ok) else 0.0
         fp.append(tot)
     out['false_per_season'] = float(np.mean(fp))
     # the golden CSV agrees with the recomputation
@@ -353,8 +407,13 @@ if __name__ == '__main__':
     for key in ('referred_zones', 'alerts', 'validation_core', 'radioless_2026', 'faults_2026', 'sound_2026',
                 'excess_2026', 'avoided_average_season', 'false_per_season'):
         a, b = got[key], F[key]
+        bd = F.get('bands', {}).get(key)
         if key == 'false_per_season':
             ok = abs(a - b) <= 0.01
+        elif isinstance(bd, dict) and isinstance(a, dict):
+            ok = all(bd[x][0] <= a[x] <= bd[x][1] for x in bd)
+        elif key == 'alerts':
+            ok = all(abs(a[x] - b[x]) <= 1 for x in b)
         elif isinstance(a, (int, float)):
             ok = abs(a - b) <= max(2, 0.01 * abs(b))
         elif isinstance(a, dict):

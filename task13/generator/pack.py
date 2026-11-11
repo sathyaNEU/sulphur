@@ -26,7 +26,7 @@ DL_EVENT = {'TRIP': 'Trip', 'RECLOSE': 'Reclose', 'LOCKOUT': 'Lockout', 'CLOSE':
 def write_strokes(w, path, rmax=0.4):
     """the provider's extract: every ground stroke and cloud pulse it located within 400 m of a line, in UTC"""
     R = w['R']
-    R = R[R.rt >= pd.Timestamp('2021-11-01')]
+    R = R[R.rt >= pd.Timestamp('2016-11-01')]
     idx = GEO.SegIndex(w['S'], 1.0)
     p, s, d = idx.near(R.rx.values, R.ry.values, rmax)
     keep = np.unique(p)
@@ -53,13 +53,13 @@ def write_scada(w, path):
     Z = w['Z'].set_index('zone_ix')
     Ev = w['Ev']
     E = Ev[Ev.zone_ix.map(Z.telemetry).eq('SCADA') & Ev.event.isin(list(SC_EVENT))].copy()
-    E = E[(E.ts >= pd.Timestamp('2021-12-01')) & (E.ts < pd.Timestamp('2026-11-01'))]
+    E = E[(E.ts >= pd.Timestamp('2016-12-01')) & (E.ts < pd.Timestamp('2026-11-01'))]
     rng = np.random.default_rng(C.SEED + 402)
     # radio links drop now and then: the historian logs the alarm and the return
     al = []
     for z in Z.index[(Z.telemetry == 'SCADA') & (Z.controller != 'relay')]:
-        n = rng.poisson(9)
-        for t in pd.Timestamp('2021-12-01') + pd.to_timedelta(rng.uniform(0, 1795, n), unit='D'):
+        n = rng.poisson(18)
+        for t in pd.Timestamp('2016-12-01') + pd.to_timedelta(rng.uniform(0, 3622, n), unit='D'):
             al.append((z, t, 'COMMS FAIL'))
             al.append((z, t + pd.Timedelta(minutes=float(rng.lognormal(np.log(40), 0.9))), 'COMMS RESTORED'))
     A = pd.DataFrame(al, columns=['zone_ix', 'ts', 'event'])

@@ -102,7 +102,7 @@ def visits(Z, rng):
     """site visits to the reclosers with no radio link: the technician reads the event memory and sets the clock"""
     rows = []
     for z in Z[Z.telemetry == 'none'].itertuples():
-        t = pd.Timestamp('2021-10-15') + pd.Timedelta(days=float(rng.uniform(0, 70)))
+        t = pd.Timestamp('2016-10-15') + pd.Timedelta(days=float(rng.uniform(0, 70)))
         while t < pd.Timestamp('2026-10-29'):
             hr = rng.uniform(8.5, 15.5)
             rows.append((z.zone_ix, t.normalize() + pd.Timedelta(hours=hr)))
@@ -132,8 +132,8 @@ def device_events(Z, ops, routine, locks, down, V, rng, t0, t1):
     rows.append(pd.DataFrame(bt, columns=ops.columns))
     vv = []
     for v in V.itertuples():
+        # the cabinet door switch, and the clock set once the memory has been read (this controller logs no read)
         vv.append((v.zone_ix, v.t - pd.Timedelta(minutes=float(rng.uniform(1.5, 4))), 'DOOR OPEN', '', 0))
-        vv.append((v.zone_ix, v.t, 'EVENT LOG READ', '', 0))
         vv.append((v.zone_ix, v.t + pd.Timedelta(seconds=float(rng.uniform(40, 90))), 'CLOCK SET', '', 0))
     rows.append(pd.DataFrame(vv, columns=ops.columns))
     E = pd.concat(rows, ignore_index=True).sort_values(['zone_ix', 't']).reset_index(drop=True)
@@ -149,6 +149,7 @@ def stamp(Z, E, V, rng):
     zz = Z.set_index('zone_ix')
     out = np.empty(len(E), dtype='datetime64[ns]')
     tvals = E.t.values
+    newt = tvals.copy()
     for z, idx in E.groupby('zone_ix').groups.items():
         idx = np.asarray(list(idx))
         tt = tvals[idx]
@@ -169,8 +170,20 @@ def stamp(Z, E, V, rng):
             days = (tt - sets[k]).astype('timedelta64[ns]').astype(np.int64) / 86400e9
             off = c[k] + zz.drift[z] * days + rng.normal(0, 0.004, len(idx))
         out[idx] = tt + (off * 1e9).astype('timedelta64[ns]')
+        if zz.telemetry[z] != 'SCADA':
+            # the weekly battery test runs at 03:00 on the controller's own clock: its stamp is the schedule, and it
+            # happened that much earlier or later in true time
+            bt = (E.event.values[idx] == 'BATTERY TEST')
+            if bt.any():
+                sched = tt[bt]
+                newt[idx[bt]] = sched - (off[bt] * 1e9).astype('timedelta64[ns]')
+                out[idx[bt]] = sched
     E = E.copy()
+    E['t'] = pd.to_datetime(newt)
     E['ts'] = pd.to_datetime(out)
+    # the controller numbers its events in the order it logs them
+    E = E.sort_values(['zone_ix', 't'], kind='mergesort').reset_index(drop=True)
+    E['seq'] = E.groupby('zone_ix').seq.transform('min').values + E.groupby('zone_ix').cumcount().values
     E['clock_offset'] = (E.ts - E.t).dt.total_seconds()
     return E
 

@@ -1,91 +1,83 @@
-# determinism-check report, task13, pass 2, 2026-11-11
+# determinism-check report, task13, 2026-11-11 (pass p4, architecture 3)
+
+History: p3's first pass (architecture 2, report kept in git history at 0c259a0) was DETERMINISTIC, APPROVE, but its first pass landed the avoided faults (102 to 121) and the sound-referral rate (0.13 to 0.15), so the build went back to stage 2 on that pricing. This pass judges the rebuilt design. One thread, run p4, scratch /tmp/determinism-check-task13-p4/. Order kept: the thread wrote own_derivation.md before opening graded_blocks.md.
 
 ## Verdict
-DETERMINISTIC on the main call (SOLUTION_WRONG on a few answer-block lines, see Findings)
-**Disposition:** FIX_NOW (repair in the answer blocks; prompt and pack stay byte-identical)
-**Stumping type:** mechanism: statistical_rigor / method_or_model_selection, stumping_family: analytical_non_defect, surface_read_dependency: no, sole_data_defect: no
-
-Thread: one isolated sonnet/medium thread; it reports keeping the order (own_derivation.md written before graded_blocks.md was opened). Scratch: /tmp/determinism-check-task13-p2/ (verdict.md, own_derivation.md).
+DETERMINISTIC
+**Disposition:** APPROVE (the judge's; the Gate H caveat under Findings goes to the main thread)
+**Stumping type:** mechanism: method_or_model_selection (with decomposition_attribution and forecasting-style valuation), stumping_family: analytical_non_defect, surface_read_dependency: no, sole_data_defect: no
 
 ## Why
-The thread's independent build reproduced the 15-zone referral set exactly (weakest referred p 1e-4, next left out 0.0016, PGP-F3-R3), and most figures land in band. Three things are not closed by the filed text and blocks:
-1. Supplementary 7 / Critical Component 4 state "each count exact" (15 inspected-and-confirmed, 26 misses). The thread got 16 confirmed / 25 misses under Poisson and 14 / 27 with dispersion 1.2. Not determinate across reasonable scatter models.
-2. Supplementary 6 (sound referrals per season): the thread's first pass wrote the 0.2 budget; the rule's own rate (0.126) is inside the band only once the reading is pinned.
-3. The CSV's faults-since-inspection column is restored counts, but the referral test uses recorded faults against the expectation over observed months. A literal reader applying the rule to the CSV figures gets another set (the blocks themselves say SRQ-F4-R3 would be added). The pack's gaps (event numbers, read dates) show the unobserved months, so the thread rates it closed by data, but it is not written in the blocks.
+Every decisive fact sits in the shipped files: strokes in UTC against local SCADA stamps, per-controller clock drift visible only against strokes, event-number jumps (63 jumps, 1,346 events, 18 zones, reproduced exactly) and read dates showing the unread tail, the inspection book for confirmed-sound seasons, and the terms' false-referral budget. The data support the zone-level model: in sound seasons per-zone observed/expected ratios persist (odd/even-season correlation 0.45; MPD-F2-R2 about 2.4, CLB-F2 about 0.46). A season-by-season rule therefore refers sound high zones and misses low failed ones, as the golden argues. The thread's first pass reached 4 of the 5 seasonal totals and the 2026 sound expectation, and failed where the restoration and the zone level are needed.
 
 ## Recomputation ledger
 | Figure | Claimed | Judge recomputed | Reproduced |
 |---|---|---|---|
-| Referral set after 2026 | 15 named zones | same 15 | yes |
-| Season faults 2022-2026 | 892, 682, 924, 747, 1,075 (3%) | 876, 668, 914, 723, 1,055 (exposure-adjusted) | yes except 2025 (-3.2%) |
-| Radio-less zones 2026 | 259 (163 kept) | 248 (155 kept) | yes (band 243-275) |
-| Sound-confirmed zone-seasons | 193 | 193 | yes |
-| Referrals after each season | 11, 10, 12, 10, 15 | 11, 11, 13, 11, 15 | yes (each within one) |
-| Sound referrals per season | 0.13 | 0.126 (rule's own); 0.2 (budget) | yes on the rule's own reading |
-| Inspections check | 15 confirmed, 26 misses, exact | 16 / 25 Poisson; 14 / 27 dispersion 1.2 | no (not exact) |
-| 2026 caused by failed protection | 279 (237-321) | 254 adjusted, 224 raw | yes adjusted, no raw |
-| Avoided faults, average season | 107 (91-123) | 103 | yes |
-| Per-zone figures | within 10% | BGS-F3-R2 20/5.4, PGP-F1-R2 20/2.6, BTG-F1-R3 73/12.5, LRD-F2 61/8.4 (golden 62/7.0) | LRD-F2 expectation 20% off, BTG borderline |
+| Event-number jumps (memory loss) | 63 reads, 1,346 events, 18 zones | same | yes |
+| SCADA first trip to stroke, UTC+8h, 400 m | within about a second | about 0.03 s lag, sd 0.08 s | yes |
+| Radio-less clock drift per read | fitted per recloser | 38% of recloser faults matched after a per-recloser fit | structure yes, size approximate |
+| Network faults 2022 to 2025 | 561, 413, 593, 620 | 555, 408, 574, 610 (no restoration) | yes, inside 4 per cent |
+| Network faults 2026 | 655 | 607 (no restoration) | no (the unread tail) |
+| Sound-expected 2026 | 469 | 472 | yes |
+| Failed-protection faults 2026 | 186 | 135 (unrestored) | no (the gap is the restored faults) |
+| Referral set | 11 zones | 10 zones (plain regression), 9 on equivalent zones, BGS-F3 instead of BGS-F3-R1 and CLB-F2 | no (the golden's own rival, ruled out by the persistence test) |
+| Weakest referred / strongest left out vs 1/715 | 0.000094 / 0.0036 | threshold margin 2.6x each side | yes |
+| Avoided faults | 116 | 66 (record-since average; golden's rival 72), about 92 (2026 state, unrestored) | no as 66, in family as 92 |
+| Restoration size, 32 radio-less zones 2026 | 130 | not pinned independently | not run |
 
-## First-pass figures against the stated bands (the thread's own_derivation.md)
-| Result | Thread's first-pass figure | Stated band | Inside? |
+## First-pass vs bands
+Figures are the thread's from own_derivation.md, written before the blocks were opened.
+
+| Graded result | First-pass figure | Stated band | In/out |
 |---|---|---|---|
-| S1/S8 2022 faults | 876 | 892 +/-3% (865-919) | inside |
-| 2023 | 668 | 682 +/-3% (662-702) | inside |
-| 2024 | 914 | 924 +/-3% | inside |
-| 2025 | 723 | 747 +/-3% (725-769) | outside (-3.2%) |
-| 2026 | 1,055 | 1,075 +/-3% (1,043-1,107) | inside |
-| S1 radio-less 2026 faults | 248 | 243 to 275 | inside |
-| S1 radio-less kept | 155 | 163 (no band) | differs |
-| S2 per-zone (4 checked) | 20/5.4, 20/2.6, 73/12.5, 61/8.4 | within 10% | yes, yes, borderline, no |
-| S3 / Recommendation set | 15, identical list | exact set | inside |
-| S5 after 2022..2026 | 11, 11, 13, 11, 15 | 11, 10, 12, 10, 15 each within one | inside, all |
-| S6 sound referrals per season | 0.2 (budget reading, first pass); 0.126 in checking | 0.11 to 0.15 | outside as first written; inside on the rule's own rate |
-| S7/CC4 vs inspections | 39/33/23/31 inspected by season; 17 referred-inspected, 16 confirmed, 25 misses (Poisson) | 15 confirmed, 26 misses, exact | outside (exact) |
-| S9/CC2 2026 caused | 254 adjusted (224 raw) | 279 (237 to 321) | inside adjusted, outside raw |
-| S10 avoided | 103 | 91 to 123 | inside |
+| Network faults 2022 | 555 | 561, 4% (539 to 583) | in |
+| 2023 | 408 | 413 (397 to 430) | in |
+| 2024 | 574 | 593 (569 to 617) | in |
+| 2025 | 610 | 620 (595 to 645) | in |
+| 2026 | 607 | 655 (629 to 681) | out (no restoration) |
+| Radio-less zones' 2026 faults | not computed (no restoration) | 130 (120 to 138) | out |
+| 2026 failed-protection faults | 135 | 186 (170 to 200, same in the note and the blocks) | out |
+| Sound-expected 2026 | 472 | 469 | in |
+| Referrals after 2022 / 23 / 24 / 25 / 26 | 4 / 4 / 4 / 9 / 10 | 1-3 / 1-3 / 3-5 / 7-10 / 10-12 | out / out / in / in / in |
+| 2026 referred set | 10 zones incl. BGS-F3, lacking BGS-F3-R1 and CLB-F2 | exact 11 zones | out |
+| Sound zones per season | not computed | 0.14 (0.12 to 0.16) | not run |
+| Inspection check (5 / 5 / 21) | partial, 2-3 of 4 confirmed a year, not on the 4-round window | 3-6 / 3-6 / 20-23 | not comparable |
+| Avoided faults, average season | 66 (about 92 on the 2026 state, unrestored) | 116 (104 to 128, same in the note and the blocks) | out as 66 |
 
-Pricing note: the first pass of a single medium thread, with no hint, got the 15-zone set, the five referral counts, the 2026 caused figure and the avoided faults inside the stated bands, and it found the sound-baseline time-order reading unprompted (zones taken sound in seasons before a later clean inspection, 193 zone-seasons). Only the exact-count inspections result, the sound-referral reading and one season total (by 0.2 point) fell outside.
+By graded result, the first pass landed about 3 of 10 inside the bands (the 2022 to 2025 totals, the sound expectation and the 2024 to 2026 alert counts as partial credit); the rest fell outside or were not run. Contrast with p3, whose first pass landed the avoided faults and the sound rate.
 
 ## Competing answers that survived
-- Inspections check: 15/26 (golden) vs 16/25 (Poisson) vs 14/27 (dispersion 1.2). Closing rule: none filed; needs bands or a pinned scatter model.
-- Sound referrals per season: 0.13 (rule's own rate) vs 0.2 (the programme budget). Terms 3(b) is a ceiling; the ask does not say which is wanted.
-- Referral test on recorded versus restored faults: golden set (15) vs set with SRQ-F4-R3 (16) on restored counts. Closed by the like-for-like (observed months) reading, not written in the blocks.
-- Scatter treatment: golden says Poisson refers 17; the thread's Poisson refers 15 (thread's referral-count rival band 13 to 17).
+Reported by the thread, none flips the main call:
+- Alpha: 0.2 sound zones a season over 143 zones is 1/715, the literal terms 3(b) reading. Reading the budget over only the sound zones gives about 1/500 and the same 11 zones. The main session has since asserted this in checks.py (SF7, 200 checks, 0 FAIL): any sound-zone count from 60 to 143 leaves the same 11, because the threshold stays between 9.4e-5 and 3.6e-3. No input file and no graded figure changed.
+- Restoration method for lost months (zone, feeder or network rate): the thread judged the alternatives inside the 4% and 120 to 138 bands but did not run them to completion.
+- Fault grouping window and stroke window (the thread used 30 s and -0.5/+0.2 s): any window from 0.3 to 2 s gives the same matches.
+- The referral list carries no band, so it is an exact set; its robustness is the 2.6x margin each side and the zone-level evidence.
 
 ## Spec gates
 | Gate | Required | Actual | Pass |
 |---|---|---|---|
 | Usable files | 10 or more | 12 | yes |
-| File categories | 2 or more | csv, xlsx, docx, pdf, geojson (spreadsheet, text, code/data) | yes |
-| Large messy CSVs | 20,000 rows; a 10-20 page one | strokes 149,410 rows (11.2 MB); recloser downloads 72,858 rows (5.8 MB); SCADA 38,782 rows | yes |
-| Distractors in metadata.json only | 2 or more, none labelled in the zip | 3 (rain gauge, materials quotation, transformer replacements) | yes |
-| Distractors unused yet weighable | yes | rain gauge, quotation, replacements decide nothing; OMS remarks mention thunderstorm but do not answer a graded quantity | yes (thread: no exclusion finding) |
-| Deliverables | 1 to 3, all in golden | 2 (CSV, docx); golden.zip holds exactly those two | yes |
-| Asks multi-dimensional, unit and rounding | yes | per-zone seasons, record since inspection, referral, rule, per-season counts, validation, caused, avoided; units in the blocks | yes |
-| Answer shape | one of fourteen, 4 or more checkable results | flagged set with false-alarm rate; 9 graded results | yes |
-| Realism | nothing LLM-looking, no builder trace | thread found no README or authoring language; mixed date formats and clock noise present; terms dated 26 Oct before the season's end (minor) | yes (not independently audited by me) |
+| File categories | 2 or more | spreadsheet (4 xlsx), text (5 csv, pdf, docx), code/spatial (geojson) | yes |
+| Large messy CSVs | one of 20,000 rows or more, one of 10 to 20 printed pages | strokes 250,565 rows; recloser downloads 133,973 and SCADA 63,558 rows; OMS 4,537 rows (about 90 pages) | yes |
+| Distractors in metadata.json | 2 or more, none labelled in the ZIP | 3 (raingauge, materials quotation, transformer replacements), `labelled_in_pack` recorded outside the ZIP | yes |
+| Distractors unused yet weighable | each | the thread did not use any as a result carrier; the three are relevant on their face and the metadata gives a shipped reason for each | yes |
+| Deliverables | 1 to 3, all in the golden | 2 (CSV and docx), golden.zip holds exactly those two | yes |
+| Asks multi-dimensional, units stated, no rounding dictated | yes | the prompt dictates no rounding; asks span 143 zones, five seasons and four quantities | yes |
+| Answer shape | one of the fourteen, 4 or more checkable results | monitoring rule with its alert count (with a flagged set and its false-alarm rate); 10 graded results | yes |
+| Reads as real work, not LLM generated | yes | thread found no authoring leakage and no temporal incoherence; the golden file stamps (2026-11-16 and 17) sat after the report date; the generator is moving them and the note's printed date to 9 and 10 November 2026 (after the 4 November pull, before today), which rebuilds golden.zip only, with target.zip and every figure unchanged | yes, with that check |
 
 ## Gate G reconciliation
-Thread: mechanism statistical_rigor / method_or_model_selection; stumping_family analytical_non_defect; surface_read_dependency no; sole_data_defect no. Gate G classification: pass, no shipped number overturned, the work is estimation and rule design. Note's Hidden factor record: clock drift, memory overwrite, contaminated baseline, extra-Poisson scatter, all `not only in deciding units`, fix depth modelling. The thread agrees these are process features across the 46 radio-less zones and every zone, not planted in the deciding units. No conflict with the note. The thread did not name a distractor as carrying a result.
+Thread: mechanism method_or_model_selection, stumping_family analytical_non_defect, surface_read_dependency no, sole_data_defect no. The note's `## Hidden factor record` lists four factors (zone level on all 143 zones, radio-less clock drift on 32, memory overwrite on 18 and unread tails on all 32, failures beginning partway across the network), each marked as spread across the network and as modelling. These agree: nothing planted sits only in the deciding units, and the thread found no sole defect. The thread's borderline note that the clock/memory sentence touches several results agrees with the note's R1, R2, R4, R7 dependencies on R1.
 
 ## Stump power (Gate F)
-Thread's likely hurried losses: radio-less clocks (a ten-minute window counts storm trips; one fixed offset finds 19 of 259), lost and unread months (about 90 faults of 2026), and the pooled baseline (about 126 to 150 caused instead of 279; 2 referrals). A solid run still diverges on scatter (15 vs 17), the exact inspection counts and the sound-referral reading, so part of the loss sits on forks, not analysis, until the bands are stated. The thread reached the referral set, R3 and R8 on a first pass without the note's hard steps being supplied, which bears on the note's careful column.
-
-## Gate H
-Thread line: domain pass; layers pass; results 9 graded across 6 areas; one_thing none; effort quick 2, careful 5, thorough 8 of 9; one_fact: "learn the sound rate only from seasons a later inspection confirmed sound" rescues about 3 of 9 (referral set, 2026 caused, avoided faults); the clock/restoration sentence also about 3 of 9.
-Note: 8 results, quick 0, careful 0.5, thorough 8; Largest single hint (radio-less clocks and last events) rescues 2 of 8.
-Reconciliation:
-- The thread's careful pass (5 of 9) is well above the note's 0.5 of 8 and above a third. This is the findings pattern that predicts a send-back: the note's careful column assumes the careful run misses the baseline time-order step ("a clean inspection proves the seasons before it"), and the thread made it unprompted. The thread's `one_fact` hint (the baseline sentence) rescues 3 of 9, against the note's hint naming the clocks at 2 of 8; the larger single sentence is the baseline, not the one the note lists. Both are at or just above a third (3/9 = one third, exactly at the limit).
-- No single hidden thing (`one_thing` none), and no factor only in the deciding units.
-- Bands: LRD-F2 (7.0 vs 8.4) and the 2025 total sit just outside their bands; R6 and R7 need the pinning described above. No band found too wide to grade.
+The thread's grades: quick 2 of 10, careful 5 of 10, thorough 10 of 10. A quick pass (naive matching, no clock fix, plain regression) gets the 2022 to 2025 totals and the sound expectation. A hurried careful run likely loses the 2026 total (about 607 against 655), the failed-protection count (about 135 against 186) and the referral set (10 to 13 zones including BGS-F3). The thread reached 2022 to 2025 by the field's standard method with no judgment the data had to settle; those totals are results the runs will earn.
 
 ## Findings, ranked
-1. R7 "each count exact" is not determinate across scatter models (16/25 and 14/27 against 15/26): FIX_NOW in Supplementary 7 and Critical Component 4 (bands, or pin the scatter model).
-2. R6 reading: state the rule's own expected rate, not the ceiling.
-3. Referral test over observed months against the restored CSV column: state in the blocks (and note beside the CSV column) that restored counts are reported, recorded counts are tested; give the referral-count band for rivals.
-4. Thin per-zone and per-season bands: LRD-F2 expectation (7.0 vs 8.4), 2025 total (-3.2%).
-5. Effort test: the thread's careful column (5 of 9) exceeds the note's 0.5 of 8 because the baseline time-order step was made unprompted; the main thread should weigh this against the note's effort test and the price of the task.
+1. Gate H effort pricing. The thread's careful column is 5 of 10 where the note's table prices it at 2.5 of 7 (about 36 per cent) and its quick pass at 0. A careful level at half the results is above a third and is the finding most likely to be sent back; the main thread should weigh it against the note's effort test, remembering the thread's own first pass did not restore lost months or learn a zone level and still landed about 3 of 10.
+2. Gate H one_fact. The thread's best single sentence ("the read-on-site recloser clocks drift between visits and their memories lost or have not yet been read months") rescues about 4 of 10 (network faults, failed-protection count, avoided faults, CSV season columns), against the note's `Largest single hint` of 2 of 7 (29 per cent) for the zone-level sentence. Above a third by the thread's count, though the model-work results (list, budget, zone level, back-test) stay unrescued. The thread also called `one_thing: none`, borderline.
+3. Band consistency: the bands agree across the note and the blocks (failed-protection count 186, 170 to 200; avoided faults 116, 104 to 128). The earlier 158 to 214 and 99 to 133 were architecture 3 revision 1's p3 bands and are not in these blocks. The bands separate the hurried figures (135 and 66 to 92) from the golden.
+4. The referral set has no band; open fork (4) above. The 2.6x margin and the thread's persistence test close it.
+5. The restoration size was not pinned independently by the thread; its reproduction is the open item behind the 2026 totals.
 
 ## Next action for the author
-Edit the answer blocks only: replace the "exact" counts in Supplementary 7 and Critical Component 4 with bands (confirmed 14 to 16, misses 25 to 27) or the pinned scatter model, add the sound-referral reading to Supplementary 6, add the recorded-versus-restored line to the referral description, widen the two thin bands; then re-judge once under `/fix-determinism`, and weigh the careful-column finding against the note's effort test.
+Weigh Gate H findings 1 and 2 against the effort test (careful column at 5 of 10 and one_fact at about 4 of 10 by the thread's count), then proceed to stage 5 if the main thread judges the estimate pessimistic given the thread's unrestored first pass; no input file needs changing for determinism.

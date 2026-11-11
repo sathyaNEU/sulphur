@@ -8,8 +8,8 @@ TARGET = os.path.join(TASK, 'target')
 GOLDEN = os.path.join(TASK, 'golden')
 ZONE = 'Asia/Manila'
 
-SEED = 3203          # the network, the zones, their equipment, defects and inspections, faults and device logs
-STORM_SEED = 3204    # thunderstorm cells, flashes and strokes; the lightning network's records use STORM_SEED + 1
+SEED = 3421          # the network, the zones, their equipment, defects and inspections, faults and device logs
+STORM_SEED = 3422    # thunderstorm cells, flashes and strokes; the lightning network's records use STORM_SEED + 1
 
 ORG = 'Kalumpang Valley Electric Cooperative, Inc.'
 ORG_SHORT = 'KALVECO'
@@ -30,11 +30,11 @@ SUBSTATIONS = [('BTG', 'Bantug'), ('MLN', 'Malinao'), ('SRQ', 'San Roque'), ('DL
                ('CBR', 'Cabaruan'), ('BGS', 'Bagong Sikat')]
 
 FILES = {
-    'strokes': 'kidlat_strokes_2021-11_2026-10.csv',
-    'scada': 'scada_event_history_2021-12_2026-10.csv',
-    'downloads': 'recloser_event_downloads_2021-2026.csv',
-    'oms': 'oms_outages_2021-12_2026-10.csv',
-    'transformers': 'distribution_transformer_replacements_2021-2026.xlsx',
+    'strokes': 'kidlat_strokes_2016-11_2026-10.csv',
+    'scada': 'scada_event_history_2016-12_2026-10.csv',
+    'downloads': 'recloser_event_downloads_2016-2026.csv',
+    'oms': 'oms_outages_2016-12_2026-10.csv',
+    'transformers': 'distribution_transformer_replacements_2016-2026.xlsx',
     'zones': 'protection_zones_register_2026.xlsx',
     'routes': 'overhead_line_routes_2026.geojson',
     'inspections': 'cyclic_line_inspections_2016-2026.xlsx',
@@ -62,8 +62,8 @@ STAMP = {
     'quotation': (dt.datetime(2026, 10, 19, 13, 47, 0), dt.datetime(2026, 10, 21, 10, 9, 0)),
 }
 GOLD_STAMP = {
-    'csv': (dt.datetime(2026, 11, 16, 16, 3, 0), dt.datetime(2026, 11, 16, 16, 3, 0)),
-    'note': (dt.datetime(2026, 11, 16, 9, 41, 0), dt.datetime(2026, 11, 17, 11, 26, 0)),
+    'csv': (dt.datetime(2026, 11, 9, 16, 3, 0), dt.datetime(2026, 11, 9, 16, 3, 0)),
+    'note': (dt.datetime(2026, 11, 9, 9, 41, 0), dt.datetime(2026, 11, 10, 11, 26, 0)),
 }
 
 LAT0, LON0 = 15.25, 120.60

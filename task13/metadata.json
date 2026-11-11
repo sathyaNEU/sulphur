@@ -1,6 +1,6 @@
 {
  "task": "task13",
- "architecture": "v2",
+ "architecture": "v3",
  "decision": "the referral rule Kalumpang Valley Electric Cooperative runs after each lightning season to refer the protection zones whose lightning protection has failed, and the zones it refers for the 2027 dry-season refit",
  "deliverables": [
   "lightning_referrals_2027.csv",
@@ -10,41 +10,41 @@
  "as_of": "2026-11-04",
  "files": [
   {
-   "path": "target/kidlat_strokes_2021-11_2026-10.csv",
+   "path": "target/kidlat_strokes_2016-11_2026-10.csv",
    "source": "Kidlat Data Services Inc. lightning location extract for the KALVECO franchise and a margin around it (constructed)",
-   "covers": "one row per located discharge, November 2021 to October 2026: UTC time to the microsecond, latitude, longitude, peak current, type, sensors and the location error ellipse; 149410 rows",
+   "covers": "one row per located discharge, November 2016 to October 2026: UTC time to the microsecond, latitude, longitude, peak current, type, sensors and the location error ellipse; 250565 rows",
    "origin": "made by task13/generator from a seeded simulation of the cooperative (network, thunderstorms, flashovers, protection, controllers, inspections); no LLM-written data",
    "pulled_on": "2026-11-04",
    "license": "constructed for this task; CC BY 4.0"
   },
   {
-   "path": "target/scada_event_history_2021-12_2026-10.csv",
+   "path": "target/scada_event_history_2016-12_2026-10.csv",
    "source": "KALVECO SCADA historian event export (constructed)",
-   "covers": "one row per event the substation breakers and radio-linked reclosers reported, December 2021 to October 2026, Philippine time; 38782 rows",
+   "covers": "one row per event the substation breakers and radio-linked reclosers reported, December 2016 to October 2026, Philippine time; 63558 rows",
    "origin": "made by task13/generator from a seeded simulation of the cooperative (network, thunderstorms, flashovers, protection, controllers, inspections); no LLM-written data",
    "pulled_on": "2026-11-04",
    "license": "constructed for this task; CC BY 4.0"
   },
   {
-   "path": "target/recloser_event_downloads_2021-2026.csv",
+   "path": "target/recloser_event_downloads_2016-2026.csv",
    "source": "KALVECO recloser controller event memory downloads, read on site (constructed)",
-   "covers": "one row per event in each memory read at a site visit, 2021 to 2026, on the controller's own clock, with the read time and event number; 72858 rows",
+   "covers": "one row per event in each memory read at a site visit, 2016 to 2026, on the controller's own clock, with the read time and event number; 133973 rows",
    "origin": "made by task13/generator from a seeded simulation of the cooperative (network, thunderstorms, flashovers, protection, controllers, inspections); no LLM-written data",
    "pulled_on": "2026-11-04",
    "license": "constructed for this task; CC BY 4.0"
   },
   {
-   "path": "target/oms_outages_2021-12_2026-10.csv",
+   "path": "target/oms_outages_2016-12_2026-10.csv",
    "source": "KALVECO outage management system export (constructed)",
-   "covers": "one row per sustained outage, December 2021 to October 2026: breaker, recloser or transformer, times, consumers, dispatcher cause code, crew remark and weather; 2925 rows",
+   "covers": "one row per sustained outage, December 2016 to October 2026: breaker, recloser or transformer, times, consumers, dispatcher cause code, crew remark and weather; 4537 rows",
    "origin": "made by task13/generator from a seeded simulation of the cooperative (network, thunderstorms, flashovers, protection, controllers, inspections); no LLM-written data",
    "pulled_on": "2026-11-04",
    "license": "constructed for this task; CC BY 4.0"
   },
   {
-   "path": "target/distribution_transformer_replacements_2021-2026.xlsx",
+   "path": "target/distribution_transformer_replacements_2016-2026.xlsx",
    "source": "KALVECO Stores and Materials distribution transformer replacement book (constructed)",
-   "covers": "one row per transformer issued to replace one in service, 2021 to 2026, with the reason recorded",
+   "covers": "one row per transformer issued to replace one in service, 2016 to 2026, with the reason recorded",
    "origin": "made by task13/generator from a seeded simulation of the cooperative (network, thunderstorms, flashovers, protection, controllers, inspections); no LLM-written data",
    "pulled_on": "2026-11-04",
    "license": "constructed for this task; CC BY 4.0"
@@ -123,19 +123,19 @@
    "why_unused": "the questions are which zones to refer and what the rule does, not what the refit costs; the answer reads none of it"
   },
   {
-   "path": "target/distribution_transformer_replacements_2021-2026.xlsx",
+   "path": "target/distribution_transformer_replacements_2016-2026.xlsx",
    "why_it_looks_relevant": "transformers burnt by lightning are more common where ground leads are gone, zone by zone",
    "why_unused": "the rule refers on lightning faults; burnt transformers are too few a zone to refer on and the answer reads none of it"
   }
  ],
  "labelled_in_pack": false,
  "context_artifact": {
-  "path": "target/oms_outages_2021-12_2026-10.csv",
+  "path": "target/oms_outages_2016-12_2026-10.csv",
   "answers": "the dispatcher-coded cause of each sustained outage, correctly for that question",
   "why_not_the_lightning_record": "it holds sustained outages only, and the cause code is the dispatcher's word, not a match to a located stroke; the answer reads none of it"
  },
  "stated_inputs": [
   "400",
-  "171"
+  "143"
  ]
 }

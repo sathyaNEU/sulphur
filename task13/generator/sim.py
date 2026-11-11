@@ -143,7 +143,7 @@ def simulate():
     I = W.inspection_plan(N, Z, rng)
     E = W.defects(Z, I, rng)
     Stt, Fi = W.state_timeline(Z, I, E, rng)
-    Cc, Fl, St = ST.simulate(N, C.STORM_SEED, start='2021-11-01', annual=40000)
+    Cc, Fl, St = ST.simulate(N, C.STORM_SEED, start='2016-11-01', annual=40000)
     P = PH.pairs(N, St, 0.6)
     F, P2 = FA.lightning_faults(N, Z, P, Stt, rng)
     wind = OT.storm_wind(N, Z, Fl, rng)

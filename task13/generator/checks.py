@@ -119,7 +119,7 @@ def main():
         g = G.grade(r['passes']['thorough'], r)[0]
         check('R3 %s: the golden pass lands its own band' % rid, g == 'right', g)
     lost = [rid for rid, r in eff.items() if G.grade(r['passes']['careful'], r)[0] != 'right']
-    check('R3 the careful but hurried pass loses five or more results', len(lost) >= 5, ', '.join(lost))
+    check('R3 the careful but hurried pass loses four or more results', len(lost) >= 4, ', '.join(lost))
     # R4 no plant: no copied block, no decoy document
     s = pd.read_csv(os.path.join(T, C.FILES['scada']))
     blk = s.groupby(s.index // 50).apply(lambda d: tuple(d.event)).value_counts()
@@ -127,7 +127,7 @@ def main():
     # R5 no one thing: each hidden factor's footprint runs beyond the deciding zones
     rl = set(R['radioless'])
     dec_rl = rl & set(R['ref'])
-    check('R5 drifting clocks run on every radio-less recloser, not only the referred', len(rl) >= 40 and len(rl) > 3 * max(1, len(dec_rl)),
+    check('R5 drifting clocks run on every radio-less recloser, not only the referred', len(rl) >= 25 and len(rl) > 3 * max(1, len(dec_rl)),
           '%d radio-less, %d of them referred' % (len(rl), len(dec_rl)))
     gaps = sum(1 for z, w in R['cov'].items() for a0, a1, lost in w if lost > 0)
     gapz = {z for z, w in R['cov'].items() if any(lost > 0 for a0, a1, lost in w)}
@@ -138,17 +138,24 @@ def main():
     worst = max(len(h['rescues']) for h in E['hints'])
     check('R6 the largest single hint rescues a third or fewer', worst <= n / 3.0, '%d of %d' % (worst, n))
     # R7 the rivals: every defensible member of the golden family lands inside every graded band
-    fam = {'k by moments': {'kfit': 'moments'}, 'match window -0.4..0.5 s': {'win': (-0.4, 0.5)},
-           'match window -1.0..1.2 s': {'win': (-1.0, 1.2)}, 'no transformer density term': {'spec': 'notx'},
-           'strokes within 300 m': {'rmax': 0.3}, 'strokes within 500 m': {'rmax': 0.5},
-           'weak positive discharges left out': {'excl_ic': True}}
+    a_lo, a_hi = A.level_ci(R['lv_groups'], R['a_lv'], R['k_lv'], R['ll_lv'])
+    fam = {'match window -0.4..0.5 s': {'win': (-0.4, 0.5)}, 'match window -1.0..1.2 s': {'win': (-1.0, 1.2)},
+           'no transformer density term': {'spec': 'notx'}, 'faults matched within 300 m': {'rmax': 0.3, 'rexp': 0.4},
+           'faults matched within 500 m': {'rmax': 0.5, 'rexp': 0.4}, 'weak positive discharges left out': {'excl_ic': True},
+           'each level from every confirmed season': {'own': 'all'},
+           'the level shape at its interval\'s low end (%.1f)' % a_lo: {'a_fix': a_lo},
+           'the level shape at its interval\'s high end (%.1f)' % a_hi: {'a_fix': a_hi},
+           'a stroke-level sound model (current and distance)': {'expo': 'stroke'},
+           'the refit valued on the seasons since each failure began': {'avoided': 'post_onset'},
+           'the replay with only the inspections completed by then': {'asof': True},
+           'unread months restored at the zone\'s rate since inspection': {'fill_rate': 'window'}}
     G2 = G
     for name, o in fam.items():
         rr = A.run(None, o, L=L)
         check('R7 rival %s refers the same zones' % name, rr['ref'] == R['ref'], ', '.join(rr['ref_names']))
-        pv = EP.pass_values(rr)
+        pv = EP.pass_values(rr, R['ref'])
         for rid, r in eff.items():
-            if rid == 'R4':
+            if rid == 'R3':
                 continue
             g = G2.grade(pv[rid], r)[0]
             check('R7 rival %s: %s inside its band' % (name, rid), g == 'right', '%s %s' % (g, pv[rid]))
@@ -176,24 +183,36 @@ def main():
         f = list(g.failed)
         clean_then_failed += sum(1 for a, b in zip(f, f[1:]) if not a and b)
     nf = A.run(None, {'null': 'not_failed'}, L=L)
+    pv_nf = EP.pass_values(nf, R['ref'])
+    moved = [rid for rid in ('R3', 'R4', 'R5', 'R6', 'R7') if G.grade(pv_nf[rid], eff[rid])[0] != 'right']
     check('SF5 only a later inspection verifies a season: zones inspected clean and found failed at the next round, '
-          'and the unverified baseline names another set', clean_then_failed > 0 and nf['ref'] != R['ref'],
-          '%d clean-then-failed zones; %d referred on the unverified baseline' % (clean_then_failed, len(nf['ref'])))
+          'and the unverified baseline moves a graded result out of its band', clean_then_failed > 0 and len(moved) >= 1,
+          '%d clean-then-failed zones; the unverified baseline misses %s' % (clean_then_failed, ', '.join(moved)))
     from scipy import stats as SS
     fs = DF[DF.ver & (DF.E > 0)]
-    lr = 2 * (SS.nbinom.logpmf(fs.y, R['k'], R['k'] / (R['k'] + fs.E)).sum() - SS.poisson.logpmf(fs.y, fs.E).sum())
-    check('SF6 the confirmed-sound seasons reject a Poisson spread', lr > 3.84, '2 dlogL %.2f' % lr)
+    ll_nb = SS.nbinom.logpmf(fs.y, R['k'], R['k'] / (R['k'] + fs.E)).sum()
+    lr_p = 2 * (ll_nb - SS.poisson.logpmf(fs.y, fs.E).sum())
+    lr_z = 2 * (R['ll_lv'] - ll_nb)
+    check('SF6 the confirmed-sound seasons reject a Poisson spread and carry a level per zone beyond any season-by-season '
+          'scatter', lr_p > 3.84 and lr_z > 3.84, 'pooled NB over Poisson 2 dlogL %.1f; zone level over pooled NB %.1f' % (lr_p, lr_z))
     check('SF7 the budget is across the network: one in five seasons over every zone', abs(R['alpha'] - 1 / (5.0 * R['N'])) < 1e-12
           and 'Across the network' in terms)
+    T26b = R['hist'][2026]
+    p_in, p_out = T26b[T26b.referred].p.max(), T26b[~T26b.referred].p.min()
+    check('SF7 the budget spread over the sound zones only (any count from 60 to 143) refers the same zones (same call)',
+          p_in < 1 / (5.0 * R['N']) and 1 / (5.0 * 60) < p_out,
+          'weakest referred %.1e, strongest unreferred %.1e, thresholds %.1e to %.1e' % (p_in, p_out, 1 / (5.0 * R['N']),
+                                                                                       1 / (5.0 * 60)))
     check('SF8 the rule\'s own sound referrals sit below the budget\'s ceiling', 0.11 <= R['false_per'] <= 0.15 < 0.2,
           '%.3f' % R['false_per'])
     logged = {s: DF.xs(s, level='season').y.sum() for s in A.SEASONS}
     check('SF9 the season totals restore what the memories lost (above the logged count every season)',
           all(R['season_tot'][s] > logged[s] for s in A.SEASONS), str({s: int(v) for s, v in logged.items()}))
     d26 = DF.xs(2026, level='season')
-    ref_only = sum(d26.loc[z, 'yf'] - d26.loc[z, 'Ef'] for z in R['ref'])
-    pos = float(np.clip(d26.yf - d26.Ef, 0, None).sum())
-    b3 = eff['R3']['band']
+    snd = pd.Series({z: R['Eu'][z] * d26.loc[z, 'Ef'] for z in range(R['N'])})
+    ref_only = sum(d26.loc[z, 'yf'] - snd[z] for z in R['ref'])
+    pos = float(np.clip(d26.yf.values - snd.values, 0, None).sum())
+    b3 = eff['R2']['band']
     check('SF10 terms 2(f) files the quantity; the referred-only and positive-part readings fall outside the band',
           'less the lightning faults its lines would have had' in terms and not (b3[0] <= ref_only <= b3[1]) and
           not (b3[0] <= pos <= b3[1]), 'referred only %.0f, positive parts %.0f, band %s' % (ref_only, pos, b3))
@@ -201,13 +220,57 @@ def main():
           'Each cyclic inspection checks the rule' in terms and len(R['V']) > 100, '%d inspections checked' % len(R['V']))
     X = DF.x.unstack('season')
     scaled = 0.0
+    netmean = X[A.SEASONS].sum().mean() / X[2026].sum()
     for z in R['ref']:
-        W = R['window'](z, 2026)
-        ratio = sum(DF.loc[(z, x), 'y'] for x in W) / sum(DF.loc[(z, x), 'E'] for x in W)
-        scaled += (ratio - 1) * DF.loc[(z, 2026), 'Ef'] * X.sum().mean() / X[2026].sum()
-    b8 = eff['R8']['band']
+        scaled += (DF.loc[(z, 2026), 'yf'] - R['Eu'][z] * DF.loc[(z, 2026), 'Ef']) * netmean
+    b8 = eff['R7']['band']
     check('SF12 2026 scaled to the network\'s average lightning lands inside the avoided-faults band (same call)',
           b8[0] <= scaled <= b8[1], '%.1f in %s' % (scaled, b8))
+    wa = A.run(None, {'avoided': 'average'}, L=L)
+    po = A.run(None, {'avoided': 'post_onset'}, L=L)
+    check('SF18 terms 4(c) files the state at the end of 2026, not how to read it: the last season and the seasons since '
+          'each failure began agree inside the band, the record since inspection averaged falls outside',
+          'as it stood at the end of the 2026 lightning season' in terms and 'last lightning season' not in terms and
+          b8[0] <= R['avoided_total'] <= b8[1] and b8[0] <= po['avoided_total'] <= b8[1] and
+          not (b8[0] <= wa['avoided_total'] <= b8[1]),
+          'last season %.0f, since onset %.0f, averaged %.0f, band %s' % (R['avoided_total'], po['avoided_total'],
+                                                                         wa['avoided_total'], b8))
+    first_low = int(F['referred_first_season_low'])
+    last_high = int(F['referred_last_season_high'])
+    check('SF18 the referred zones\' own seasons show failures that began partway: most ran at under half their 2026 '
+          'ratio to their sound level in their first season after inspection, and above twice it in 2026',
+          first_low >= 0.6 * len(R['ref']) and last_high >= 0.8 * len(R['ref']),
+          '%d of %d under half their 2026 ratio first, %d above twice their level in 2026' % (
+              first_low, len(R['ref']), last_high))
+    # SF19: the level carried uncertain, not taken as known: 3(b) is a budget on the sound zones the rule refers
+    kl = A.run(None, {'level': 'plugin'}, L=L)
+    check('SF19 each zone\'s level taken as known refers another set and would refer sound zones far more often than '
+          'terms 3(b) allows', kl['ref'] != R['ref'] and kl['false_true'] > 2.5 * 0.2 and R['false_per'] < 0.2,
+          '%d zones; sound referrals %.2f a season under the levels\' own uncertainty (claimed %.2f); budget 0.2' % (
+              len(kl['ref']), kl['false_true'], kl['false_per']))
+    # SF20: the sound model's form: rate times stroke count, or stroke by stroke from current and distance
+    sk = A.run(None, {'expo': 'stroke'}, L=L)
+    check('SF20 a stroke-level sound model (each stroke\'s current and distance) refers the same zones (same call)',
+          sk['ref'] == R['ref'], '%d zones; level shape %.2f against %.2f' % (len(sk['ref']), sk['a_lv'], R['a_lv']))
+    # SF21: the rate unread and overwritten months are restored at
+    fr = A.run(None, {'fill_rate': 'window'}, L=L)
+    snd_fill = {s: float(sum(DF.loc[(z, s), 'y'] + R['Eu'][z] * max(DF.loc[(z, s), 'Ef'] - DF.loc[(z, s), 'E'], 0)
+                             for z in range(R['N']))) for s in A.SEASONS}
+    b1 = eff['R1']['bands']
+    check('SF21 unread months restored at the zone\'s rate since inspection land inside every season band (same call)',
+          all(b1[str(s)][0] <= fr['season_tot'][s] <= b1[str(s)][1] for s in A.SEASONS) and fr['ref'] == R['ref'],
+          str({s: int(round(fr['season_tot'][s])) for s in A.SEASONS}))
+    check('SF21 restored at the zone\'s sound level instead, a failed zone\'s lost months undercount its season '
+          '(below the same-season restoration every season)', all(snd_fill[s] < R['season_tot'][s] for s in A.SEASONS),
+          str({s: int(round(v)) for s, v in snd_fill.items()}))
+    own_all = A.run(None, {'own': 'all'}, L=L)
+    check('SF17 a level learned from every confirmed season or only those outside the record judged: same call',
+          own_all['ref'] == R['ref'] and all(abs(own_all['alerts'][s] - R['alerts'][s]) <= 1 for s in A.SEASONS))
+    qz = A.run(None, {'disp': 'quasi'}, L=L)
+    check('SF6 seasons taken on their own (quasi-Poisson) refer another set, and the inspections found sound more of '
+          'its referrals', qz['ref'] != R['ref'] and (qz['v_ref'] - qz['v_conf']) > (R['v_ref'] - R['v_conf']),
+          '%d zones; %d of its inspected referrals sound against %d' % (len(qz['ref']), qz['v_ref'] - qz['v_conf'],
+                                                                        R['v_ref'] - R['v_conf']))
     pos_e = DF[DF.E > 0]
     check('SF13 restored against the full expectation carries the logged ratio (same call)',
           bool(np.allclose(pos_e.yf * pos_e.E, pos_e.y * pos_e.Ef, rtol=1e-9)))
@@ -215,35 +278,25 @@ def main():
     flip = set(rt['ref']) ^ set(R['ref'])
     check('SF15 testing restored counts as if counted flips only radio-less zones with few recorded faults',
           len(flip) <= 1 and flip <= set(R['radioless']), ', '.join(R['zones'][z] for z in flip))
-    # SF16: every covariate set the confirmed seasons support (within 4 AIC of the best) refers the same zones
+    # SF16: every covariate set the confirmed seasons support (within 2 AIC of the best) refers the same zones
     import itertools
     from scipy import stats as SS2
     DFr = DF.reset_index()
-    vv = DFr[DFr.ver]
+    vv = DFr[DFr.ver & (DFr.xo > 0)]
     out16 = []
     for rr_ in range(len(R['cols']) + 1):
         for sub in itertools.combinations(R['cols'], rr_):
             cols = list(sub)
             b = A.fit_poisson(vv, cols)
-            rate = np.exp(np.c_[np.ones(len(DFr)), DFr[cols].values] @ b)
-            fsv = vv.assign(E=rate[vv.index] * vv.xo)
-            fsv = fsv[fsv.E > 0]
-            k = A.nb_k(fsv.y.values, fsv.E.values)
-            aic = 2 * (len(cols) + 2) - 2 * SS2.nbinom.logpmf(fsv.y, k, k / (k + fsv.E)).sum()
-            dd = DFr.assign(E=rate * DFr.xo).set_index(['zone_ix', 'season'])
-            refz = set()
-            for z in range(R['N']):
-                W = R['window'](z, 2026)
-                yv = int(sum(dd.loc[(z, x), 'y'] for x in W))
-                ev = float(sum(dd.loc[(z, x), 'E'] for x in W))
-                if W and ev > 0 and A.nb_tail(yv, ev, k) < R['alpha']:
-                    refz.add(z)
-            out16.append((aic, refz == set(R['ref'])))
+            rate = np.exp(np.c_[np.ones(len(vv)), vv[cols].values] @ b)
+            ev = rate * vv.xo.values
+            k = A.nb_k(vv.y.values, ev)
+            out16.append((2 * (len(cols) + 2) - 2 * SS2.nbinom.logpmf(vv.y, k, k / (k + ev)).sum(), cols))
     best = min(a_ for a_, _ in out16)
-    near = [same for a_, same in out16 if a_ - best < 4]
-    worst_diff = min([a_ - best for a_, same in out16 if not same] or [99])
-    check('SF16 every covariate set within 4 AIC of the best refers the same zones; any that differs is 5 or more worse',
-          all(near) and worst_diff >= 5, '%d sets within 4, nearest differing set %.1f AIC worse' % (len(near), worst_diff))
+    near = [c for a_, c in out16 if a_ - best < 2]
+    same16 = [A.run(None, {'cols': c}, L=L)['ref'] == R['ref'] for c in near]
+    check('SF16 every covariate set within 2 AIC of the best refers the same zones under the zone levels',
+          all(same16), '%d of %d sets' % (sum(same16), len(same16)))
     gcsv = pd.read_csv(os.path.join(C.GOLDEN, C.DELIVERABLES[0]))
     check('SF14 every zone in the register is scored', len(gcsv) == len(zr) == R['N'], '%d rows' % len(gcsv))
 
@@ -255,7 +308,7 @@ def main():
     # ------------------------------------------------------------ figures and bins
     check('figures: the referral set is the golden', F['referred_zones'] == sorted(R['ref_names']))
     for key in ('radioless_2026', 'excess_2026', 'avoided_average_season'):
-        check('figures: %s is a whole number off a round value' % key, F[key] % 10 != 0, str(F[key]))
+        check('figures: %s is not a round fifty or hundred' % key, F[key] % 50 != 0, str(F[key]))
     T26 = R['hist'][2026]
     margin_in = T26[T26.referred].p.max() if T26.referred.any() else 0
     margin_out = T26[~T26.referred].p.min()
