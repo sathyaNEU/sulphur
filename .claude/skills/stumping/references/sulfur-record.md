@@ -89,6 +89,13 @@ is designed is moved into the skill it governs in a `SKILLS:` commit, and its li
   both measurement gaps from the files, read the outcome by a labelled class column and weighted the plan's parcels
   by each class's contact rate. Five estimates, each from its own files, were still a join and a ratio over
   ingredients some file labels; only the resampled range was left undone. Repriced at about 70, back to stage 2.
+  On task13 arch 2 (2026-11-11: a referral rule over 171 protection zones from lightning faults rebuilt on drifting
+  recloser clocks and overwritten memories, eight results, pair 16.2 on paper) the pass landed the set and five of
+  the eight results in about seven minutes: it read each radio-less controller's drift off the weekly self-tests,
+  which the generator fired at true time (a real controller runs them on its own clock, so their stamps carry no
+  offset), restored the overwritten and unread months by exposure, and took the seasons a later inspection found
+  sound as the baseline unprompted. Three data repairs with the field's standard remedies were three reflexes, and an
+  event a device schedules is placed on that device's clock. Repriced at about 73, back to stage 2.
 - **One table that one flexible fit absorbs is one result, however many figures are read off it** (task16 arch 1,
   task10 arch 6, task4 arch 9). Six, eleven and five graded results sat on runs-by-covariates or days-by-covariates
   tables; each run fitted one response surface or one availability model with a breakpoint or a ceiling, chose its
