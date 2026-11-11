@@ -1,11 +1,13 @@
-"""task9: the record as the golden reads it, rebuilt from the cut pack alone.
+"""task9 (architecture 10): the record as a solver rebuilds it from the pack alone (no World).
 
-The two generations of the risk system's daily export are put on one footing (USD P&L and USD capital, the
-2022 book-code map applied so each pod keeps one code, the re-sent day taken once); a day the legacy feed missed is
-a day with no rows, and the next day's row carries both days, so the market's returns are summed over the same span.
-The register gives each pod's strategy group and first trading day; the draft gives each pod's 2026 and 2027 capital.
+Requests from both generations of Tidewell's audit on one footing (New York dates, client side +1 buys / -1 sells,
+face in units, the latest version of each request, re-sent duplicates dropped, 144A identifiers mapped to their
+registered successors' original key); each request's segment (rating band on its date, the security master's bucket
+for its quarter, the client's type); the schedule in force; the tape cleaned (cancelled reports dropped, corrected
+reports in place of their originals); Ashcote's evaluated mids by bond and day; the Treasury curve and VIX.
 """
 import os
+from zoneinfo import ZoneInfo
 
 import numpy as np
 import pandas as pd
@@ -15,66 +17,157 @@ import market as MK
 import pack as PK
 import params as P
 
-GROUP_KEY = {v["name"]: k for k, v in P.GROUPS.items()}
-
-
-def nyse_days(a, b):
-    """US exchange trading days from a to b inclusive (the late-2026 and 2027 closures listed)."""
-    hol = {"2026-11-26", "2026-12-25", "2027-01-01", "2027-01-18", "2027-02-15", "2027-03-26", "2027-05-31", "2027-06-18",
-           "2027-07-05", "2027-09-06", "2027-11-25", "2027-12-24"}
-    return pd.DatetimeIndex([t for t in pd.bdate_range(a, b) if t.strftime("%Y-%m-%d") not in hol])
+NY = ZoneInfo(P.ZONE)
+S1 = {v: k for k, v in PK.STATUS1.items()}
+S2 = {v: k for k, v in PK.STATUS2.items()}
+TYPE_CODE = {v: k for k, v in PK.TYPE_NAME.items()}
+OFFLOAD_CHARGE = {("IG", "liquid"): 1.2, ("IG", "medium"): 2.4, ("IG", "thin"): 4.8,
+                  ("HY", "liquid"): 4.2, ("HY", "medium"): 8.4, ("HY", "thin"): 15.6}     # policy 5(c), cents per 100
 
 
 class Record:
     def __init__(self, tgt):
-        old = pd.read_csv(os.path.join(tgt, PK.F["legacy"]), dtype={"pod_code": str})
-        new = pd.read_csv(os.path.join(tgt, PK.F["current"]), dtype={"book_id": str})
-        cmap = pd.read_csv(os.path.join(tgt, PK.F["codes"]), dtype=str)
-        reg = pd.read_csv(os.path.join(tgt, PK.F["register"]), dtype=str)
-        self.n_dupes = int(old.duplicated().sum())
-        old = old.drop_duplicates()
-        to_new = dict(zip(cmap.old_pod_code, cmap.new_book_id))
-        a = pd.DataFrame(dict(date=pd.to_datetime(old.cob_date), code=old.pod_code.map(lambda c: to_new.get(c, c)),
-                              pnl=old.gross_pnl_usd.astype(float), capital=old.capital_usd.astype(float)))
-        b = pd.DataFrame(dict(date=pd.to_datetime(new.trade_date, format="%m/%d/%Y"), code=new.book_id,
-                              pnl=new.pnl_usd_000.astype(float) * 1e3, capital=new.alloc_capital_usd_mm.astype(float) * 1e6))
-        rec = pd.concat([a, b], ignore_index=True)
-        reg["g"] = reg.strategy_group.map(GROUP_KEY)
-        reg["first"] = pd.to_datetime(reg.first_trading_day)
-        reg = reg.sort_values(["first", "pod"]).reset_index(drop=True)
-        self.code = dict(enumerate(reg.pod))
-        ids = {c: i for i, c in self.code.items()}
-        rec["n"] = rec.code.map(ids)
-        assert rec.n.notna().all(), "a code the register does not hold"
-        rec["n"] = rec.n.astype(int)
-        self.days = pd.DatetimeIndex(sorted(rec.date.unique()))
-        self.panel = rec[["date", "n", "capital", "pnl"]].sort_values(["n", "date"]).reset_index(drop=True)
-        self.groups = dict(zip(range(len(reg)), reg.g))
-        self.status = dict(zip(range(len(reg)), reg.status))
-        mk = MK.Market(src=tgt)
-        self.mk = mk
-        # each record day's market return is the sum of the trading days since the record's previous day
-        allday = mk.hold.index[(mk.hold.index >= self.days[0]) & (mk.hold.index <= self.days[-1])]
-        pos = np.searchsorted(self.days, allday)
-        self.hold = mk.hold.loc[allday].groupby(self.days[pos]).sum()
-        self.riskf = mk.risk.loc[allday].groupby(self.days[pos]).sum()
-        self.hold_alt = {k: v.loc[allday].groupby(self.days[pos]).sum() for k, v in mk.hold_alt.items()}
-        self.level = mk.level
-        tday = mk.hold.index[(mk.hold.index >= P.LAUNCH) & (mk.hold.index <= P.LAST_DAY)]
-        self.start_i = {i: int(np.searchsorted(tday, reg["first"].iloc[i])) for i in range(len(reg))}
-        self.T = len(tday)
-        self.lead = len(nyse_days(P.LAST_DAY + pd.Timedelta(days=1), "2026-12-31"))
-        self.plan_days = nyse_days("2027-01-01", "2027-12-31")
-        self.draft = self._draft(tgt, ids)
+        self.tgt = tgt
+        self.mk = MK.Market(src=tgt)
+        self.days = self.mk.days
+        self.dindex = {d: i for i, d in enumerate(self.days)}
+        self._bonds()
+        self._requests()
+        self._schedules()
+        self._evals()
+        self._tape()
 
-    def _draft(self, tgt, ids):
-        ws = load_workbook(os.path.join(tgt, PK.F["draft"]), data_only=True)["Draft 2027"]
-        out = {}
-        for row in ws.iter_rows(min_row=4, values_only=True):
-            if not row[0] or row[0] == "Total":
-                continue
-            n = ids[row[0]]
-            chg = {"Increase": "increase", "Decrease": "decrease", "No change": "unchanged", "Onboarding": "onboarding"}[row[4]]
-            age = self.T - self.start_i[n] + self.lead          # trading days on the platform at the plan year's first day
-            out[n] = dict(k2026=float(row[2]) * 1e6, k2027=float(row[3]) * 1e6, change=chg, age=age, target=float(row[3]) * 1e6)
-        return out
+    # ---- bonds: the security master, the 144A map, buckets by quarter, ratings by date
+    def _bonds(self):
+        m = pd.read_csv(os.path.join(self.tgt, PK.F["master"]))
+        self.master = m
+        self.key = {c: c for c in m.cusip}
+        for _, r in m.iterrows():
+            if isinstance(r["registered_cusip"], str) and r["registered_cusip"]:
+                self.key[r["registered_cusip"]] = r["cusip"]
+        self.bix = {c: i for i, c in enumerate(m.cusip)}
+        self.coupon = m.coupon_pct.values / 100.0
+        self.maturity = pd.to_datetime(m.maturity).values
+        self.issuer = m.issuer.values
+        bk = pd.read_csv(os.path.join(self.tgt, PK.F["buckets"]))
+        bk["k"] = bk.cusip.map(self.key)
+        self.bucket = {(q, k): b for q, k, b in zip(bk.quarter, bk.k, bk.liquidity_bucket)}
+        rt = pd.read_csv(os.path.join(self.tgt, PK.F["ratings"]))
+        rt["effective_date"] = pd.to_datetime(rt.effective_date)
+        self.ratings = {i: g.sort_values("effective_date") for i, g in rt.groupby("issuer")}
+        cl = pd.read_csv(os.path.join(self.tgt, PK.F["clients"]))
+        self.ctype = dict(zip(cl.client_code, cl.client_type.map(TYPE_CODE)))
+
+    def band(self, issuer, day):
+        g = self.ratings[issuer]
+        r = g.rating.values[np.searchsorted(g.effective_date.values, np.datetime64(day), side="right") - 1]
+        return "IG" if r in P.IG else "HY"
+
+    # ---- requests
+    def _requests(self):
+        g1 = pd.read_csv(os.path.join(self.tgt, PK.F["rfq1"]))
+        g2 = pd.read_csv(os.path.join(self.tgt, PK.F["rfq2"]))
+        a = pd.DataFrame({"rfq": g1.RFQ_ID, "version": g1.MSG_VERSION,
+                          "ts": pd.to_datetime(g1.RECEIVED_ET).dt.tz_localize(NY), "cusip": g1.CUSIP, "client": g1.CLIENT_CODE,
+                          "side": np.where(g1.CLIENT_SIDE == "BUY", 1, -1), "q": g1.QTY.astype(float), "n": g1.DEALERS_IN_COMP,
+                          "quote": g1.DESK_RESPONSE_PX, "ref": g1.DESK_REF_MID, "status": g1.STATUS.map(S1),
+                          "done": g1.DONE_PX, "cover": g1.COVER_PX})
+        b = pd.DataFrame({"rfq": g2.rfq_ref, "version": g2.msg_version,
+                          "ts": pd.to_datetime(g2.received_utc, utc=True).dt.tz_convert(NY), "cusip": g2.security_id,
+                          "client": g2.client, "side": np.where(g2.dir == "CB", 1, -1), "q": g2.quantity_000 * 1000.0,
+                          "n": g2.n_dealers, "quote": g2.response_price, "ref": g2.ref_mid, "status": g2.outcome.map(S2),
+                          "done": g2.executed_price, "cover": g2.cover_price})
+        R = pd.concat([a, b], ignore_index=True)
+        R = R.drop_duplicates()
+        R = R.sort_values(["rfq", "version"]).drop_duplicates("rfq", keep="last").sort_values(["ts", "rfq"]).reset_index(drop=True)
+        R["k"] = R.cusip.map(self.key)
+        R["b"] = R.k.map(self.bix)
+        R["day"] = R.ts.dt.tz_localize(None).dt.normalize()
+        R["t"] = R.day.map(self.dindex)
+        R["sec"] = (R.ts.dt.hour * 3600 + R.ts.dt.minute * 60 + R.ts.dt.second).astype(int)
+        R["ty"] = R.client.map(self.ctype)
+        R["quarter"] = R.day.dt.to_period("Q").astype(str)
+        R["bucket"] = [self.bucket.get((q, k)) for q, k in zip(R.quarter, R.k)]
+        R["band"] = [self.band(self.issuer[b], d) for b, d in zip(R.b, R.day)]
+        R["traded"] = R.status.isin(["DONE", "COVER", "TRADED_AWAY"])
+        R["won"] = R.status == "DONE"
+        R["d_old"] = R.side * (R.quote - R.ref) * 100.0             # cents per 100 face from the reference mid
+        self.R = R
+
+    # ---- the schedule in force for each request, and the draft
+    def _schedules(self):
+        def read(path, sheet):
+            ws = load_workbook(path, read_only=True)[sheet]
+            out, eff = {}, None
+            for row in ws.iter_rows(values_only=True):
+                if row[0] and isinstance(row[0], str) and row[0].startswith("Effective from"):
+                    eff = row[0]
+                if row and row[0] in ("IG", "HY") and row[1] in P.BUCKETS:
+                    out[(row[0], row[1], TYPE_CODE[row[2]])] = float(row[3])
+            return out
+        p = os.path.join(self.tgt, PK.F["schedule"])
+        self.versions = [(pd.Timestamp("2023-01-03"), read(p, "v1")), (pd.Timestamp("2024-07-01"), read(p, "v2")),
+                         (pd.Timestamp("2025-03-03"), read(p, "v3"))]
+        self.current = self.versions[-1][1]
+        self.proposed = read(os.path.join(self.tgt, PK.F["draft"]), "Draft 2027")
+        R = self.R
+        h = np.zeros(len(R))
+        for (start, sched) in self.versions:
+            m = (R.day >= start).values
+            h[m] = [sched[(bd, bk, ty)] for bd, bk, ty in zip(R.band[m], R.bucket[m], R.ty[m])]
+        R["h_actual"] = h
+        R["h_cur"] = [self.current[(bd, bk, ty)] for bd, bk, ty in zip(R.band, R.bucket, R.ty)]
+        R["h_prop"] = [self.proposed[(bd, bk, ty)] for bd, bk, ty in zip(R.band, R.bucket, R.ty)]
+        self.changed = sorted([k for k in self.proposed if self.proposed[k] != self.current[k]],
+                              key=lambda s: (s[0] != "IG", P.BUCKETS.index(s[1]), P.CLIENT_TYPES.index(s[2])))
+
+    # ---- Ashcote's evaluated mids by bond and day
+    def _evals(self):
+        e = pd.read_csv(os.path.join(self.tgt, PK.F["eval"]))
+        e["k"] = e.cusip.map(self.key)
+        e["b"] = e.k.map(self.bix)
+        e["t"] = pd.to_datetime(e.eval_date).map(self.dindex)
+        M = np.full((len(self.days), len(self.master)), np.nan)
+        M[e.t.values, e.b.values] = e.eval_mid.values
+        self.eval = M
+        # evaluated spread over the Treasury at each bond's maturity, and each band's median daily spread change
+        mat = (self.maturity[None, :] - self.days.values[:, None]) / np.timedelta64(1, "D") / 365.25
+        self.mat = np.maximum(mat, 1.0 / 365)
+        tsy = np.array([self.mk.treasury(t, self.mat[t]) for t in range(len(self.days))])
+        self.tsy = tsy
+        yld = np.full_like(M, np.nan)
+        for t in range(len(self.days)):
+            ok = ~np.isnan(M[t])
+            yld[t, ok] = _yield(M[t, ok], self.coupon[ok], self.mat[t, ok])
+        self.spread = yld - tsy
+
+    def market_move(self, t0, t1, b, band_spread_change):
+        """The price change the Treasury curve and the band's spreads alone would give the bond from close t0 to t1."""
+        c, m = self.coupon[b], self.mat[t0, b]
+        s = self.spread[t0, b]
+        p0 = MK.price(self.tsy[t0, b] + s, c, m)
+        p1 = MK.price(self.tsy[t1, b] + s + band_spread_change, c, m)
+        return p1 - p0
+
+    # ---- the tape, cleaned
+    def _tape(self):
+        tp = pd.read_csv(os.path.join(self.tgt, PK.F["tape"]), dtype={"qty": str})
+        cancelled = set(tp.orig_seq[tp.msg_type == "X"].dropna().astype(int))
+        corrected = set(tp.orig_seq[tp.msg_type == "C"].dropna().astype(int))
+        tp = tp[(tp.msg_type != "X") & ~tp.msg_seq.isin(cancelled) & ~tp.msg_seq.isin(corrected)].copy()
+        tp["k"] = tp.cusip.map(self.key)
+        tp["day"] = pd.to_datetime(tp.exec_date)
+        hh = tp.exec_time.str.split(":", expand=True).astype(int)
+        tp["sec"] = hh[0] * 3600 + hh[1] * 60 + hh[2]
+        self.tape = tp
+
+
+def _yield(price, coupon, mat, iters=40):
+    """Yield of a clean price, by Newton steps on the house pricing formula."""
+    y = coupon.copy() + 0.0
+    for _ in range(iters):
+        p = MK.price(y, coupon, mat)
+        h = 1e-5
+        dp = (MK.price(y + h, coupon, mat) - p) / h
+        y = y - (p - price) / np.where(np.abs(dp) > 1e-9, dp, -1e-9)
+    return y

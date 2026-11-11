@@ -1,6 +1,6 @@
 {
  "task": "task9",
- "status": "DESIGN",
+ "status": "PAUSED",
  "domain": "quantitative-finance",
  "subdomain": "strategy-backtesting-evaluation (client task type: Backtesting, historical strategy simulation with transaction costs and attribution; a US dealer's corporate bond desk backtests a proposed 2027 auto-quoting schedule on its own request-for-quote history to plan its 2027 market-making P&L)",
  "objective": "forecasting",
@@ -61,7 +61,7 @@
    "commit": ""
   }
  ],
- "resume": "stage 2: design note sections (pins, bands, hidden factor record, effort on paper, provenance, forks, closure, literal reader, prompt contract), then precut.py; then the generator",
+ "resume": "stage 2 into 3: the architecture 10 generator is rewritten (params, market on raw10/, world, pack, docs, record, analysis); calibrating the world before the note's pinned sections: a desk winning 10 to 30 per cent of its segments, segment verdicts whose sign holds across every defensible cost horizon (golden 30 trading days, rivals 20 and 45) with margins of two cluster standard errors, the marks' lag (T+5 against complete) flipping at least one changed segment and moving the totals by 10 per cent or more, the win model on the desk's own quotes flipping another, and the draft's gain moderate; then figures, effort passes, golden deck or note and workbook, writeup, checks, verify, build, the note's sections, precut",
  "approved": null,
  "submitted": null,
  "portal": {

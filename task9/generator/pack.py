@@ -1,13 +1,16 @@
-"""task9: writes the pack under target/ the way each of Harbourne's systems hands its records over.
+"""task9 (architecture 10): the pack under target/, written from the World as each system would export it.
 
-The market series ship as FRED and Cboe published them (cut at the record's last day). The rest is the platform's own
-paperwork: the risk system's daily P&L in its two generations (the 2023 migration changed the export's units and
-layout), the book-code map from the 2022 reorganisation, the administrator's month-end statements, the pod register,
-every capital change, the plans the committee approved since 2018, the draft for 2027 and the two documents the
-committee works under."""
+  the platform's request audit for the desk, in two generations (the April 2025 migration renamed columns, moved
+  timestamps from New York time to UTC and stated quantities in thousands; re-sent and amended messages carried);
+  the desk's blotter; the public trade tape (dissemination delays, capped sizes, cancels, corrections, late reports,
+  dealer-to-dealer trades from both sides); Ashcote's evaluated prices; the security master with its quarterly
+  liquidity buckets and the 144A exchange map; issuer ratings; the client list; the auto-quoter's schedule versions
+  and the 2027 draft; the desk's month-end summaries; the platform's league tables; the quoting policy; the public
+  market series as published.
+"""
 import datetime as dt
 import os
-import shutil
+from zoneinfo import ZoneInfo
 
 import numpy as np
 import pandas as pd
@@ -20,339 +23,390 @@ import params as P
 import postprocess as PP
 
 UTC = dt.timezone.utc
+NY = ZoneInfo(P.ZONE)
 ISO = "%Y-%m-%dT%H:%M:%SZ"
-F = dict(
-    legacy="risk_pnl_daily_legacy_20170103_20230630.csv", current="risk_pnl_daily_20230703_20261106.csv",
-    codes="book_code_map_20220401.csv", admin="kestrel_month_end_statements_201701_202610.csv",
-    register="pod_register_20261106.csv", changes="capital_changes_20170103_20261106.csv",
-    plans="allocation_plans_2018_2026.xlsx", draft="draft_allocation_plan_2027.xlsx",
-    policy="Capital_Review_Policy_2026.pdf", riskmodel="Risk_Model_Methodology_2023.pdf",
-)
-MARKET = [f["file"] for f in MK.manifest()["files"]]
-DISTRACTORS = ["DAAA.csv", "IR3TIB01USM156N.csv"]
-PREFIX = {"EQLS": "EQ", "QEQ": "QE", "RATES": "RT", "FX": "FX", "CREDIT": "CR", "COMDTY": "CM", "VOLARB": "VL"}
-SUB = {"EQLS": ["TMT", "Healthcare", "Industrials", "Consumer", "Financials", "Energy and materials", "Generalist"],
-       "QEQ": ["Statistical arbitrage", "Systematic factor", "Systematic event"],
-       "RATES": ["US rates relative value", "Global rates", "Swap spreads and basis"],
-       "FX": ["G10 currencies", "G10 relative value"],
-       "CREDIT": ["Investment grade relative value", "High yield and capital structure", "Credit long/short"],
-       "COMDTY": ["Oil and products", "Power and gas", "Metals"],
-       "VOLARB": ["Index volatility", "Dispersion", "Volatility relative value"]}
-OUTAGES = [pd.Timestamp("2018-08-07"), pd.Timestamp("2020-02-19"), pd.Timestamp("2021-09-08")]   # legacy feed down; caught up next day
-EXPORT_TIMES = {F["legacy"]: dt.datetime(2023, 7, 5, 21, 14, 37, tzinfo=UTC), F["current"]: dt.datetime(2026, 11, 9, 11, 42, 8, tzinfo=UTC),
-                F["codes"]: dt.datetime(2022, 4, 4, 14, 6, 51, tzinfo=UTC), F["admin"]: dt.datetime(2026, 11, 6, 16, 27, 19, tzinfo=UTC),
-                F["register"]: dt.datetime(2026, 11, 9, 11, 44, 30, tzinfo=UTC), F["changes"]: dt.datetime(2026, 11, 9, 11, 45, 2, tzinfo=UTC)}
-for k, name in enumerate(MARKET):   # the review morning's pull for the pack, a few seconds apart
-    EXPORT_TIMES[name] = dt.datetime(2026, 11, 9, 12, 2, 0, tzinfo=UTC) + dt.timedelta(seconds=7 * k + 3)
+F = {
+    "rfq1": "tidewell_rfq_audit_brindlemoor_20230103_20250404.csv",
+    "rfq2": "tidewell_rfq_audit_brindlemoor_20250407_20261106.csv",
+    "blotter": "brindlemoor_credit_blotter_2023_2026.csv",
+    "tape": "public_trade_tape_corporates_2023_2026.csv",
+    "eval": "ashcote_evaluated_prices_2023_2026.csv",
+    "master": "security_master_20261106.csv",
+    "buckets": "security_master_liquidity_buckets.csv",
+    "ratings": "issuer_ratings_history.csv",
+    "clients": "tidewell_client_list_20261106.csv",
+    "schedule": "auto_quoter_schedule_versions.xlsx",
+    "draft": "auto_quoter_schedule_2027_draft.xlsx",
+    "summaries": "credit_desk_month_end_summaries.xlsx",
+    "league": "tidewell_dealer_league_tables_2026.xlsx",
+    "policy": "Credit_Electronic_Quoting_Policy_2026.pdf",
+}
+MARKET = [k + ".csv" for k in MK.FRED_IDS] + [k + "_History.csv" for k in MK.CBOE_IDS]
+DISTRACTORS = ["SOFR.csv", "SPX_History.csv", F["league"]]
+STATUS1 = {"DONE": "Done", "COVER": "Covered", "TRADED_AWAY": "Traded Away", "DNT": "Done Not Traded", "PASSED": "Passed"}
+STATUS2 = {"DONE": "D", "COVER": "C", "TRADED_AWAY": "TA", "DNT": "DNT", "PASSED": "P"}
+TYPE_NAME = {"AM": "Asset manager", "INS": "Insurer", "HF": "Hedge fund", "RET": "Wealth platform"}
+EVAL_HALF = {("IG", "liquid"): 0.02, ("IG", "medium"): 0.04, ("IG", "thin"): 0.07,
+             ("HY", "liquid"): 0.06, ("HY", "medium"): 0.12, ("HY", "thin"): 0.22}
+EXPORT_TIMES = {
+    F["rfq1"]: dt.datetime(2025, 4, 7, 6, 12, 44, tzinfo=UTC), F["rfq2"]: dt.datetime(2026, 11, 9, 11, 31, 5, tzinfo=UTC),
+    F["blotter"]: dt.datetime(2026, 11, 9, 11, 36, 52, tzinfo=UTC), F["tape"]: dt.datetime(2026, 11, 9, 11, 48, 20, tzinfo=UTC),
+    F["eval"]: dt.datetime(2026, 11, 9, 11, 52, 9, tzinfo=UTC), F["master"]: dt.datetime(2026, 11, 9, 11, 39, 41, tzinfo=UTC),
+    F["buckets"]: dt.datetime(2026, 10, 1, 13, 4, 17, tzinfo=UTC), F["ratings"]: dt.datetime(2026, 11, 9, 11, 40, 3, tzinfo=UTC),
+    F["clients"]: dt.datetime(2026, 11, 9, 11, 33, 58, tzinfo=UTC),
+}
+for _k, _name in enumerate(MARKET):   # the review morning's pull, a few seconds apart
+    EXPORT_TIMES[_name] = dt.datetime(2026, 11, 9, 12, 2, 0, tzinfo=UTC) + dt.timedelta(seconds=7 * _k + 3)
 
 
 def _csv(df, path):
     df.to_csv(path, index=False, lineterminator="\r\n")
 
 
+def _stamp(day, hour):
+    """A New York wall-clock time on a record day, as an aware datetime."""
+    secs = int(round(hour * 3600))
+    return dt.datetime(day.year, day.month, day.day, tzinfo=NY) + dt.timedelta(seconds=secs)
+
+
 class Books:
-    """The platform's records derived from the World: codes, the funding charge, payouts, the true-ups."""
+    """Identifiers for the pack, from the World."""
 
     def __init__(self, W):
         self.W = W
-        d = W.days
-        self.days = d
-        bill = W.mk.level.DTB3.reindex(d).ffill().values / 100.0
-        gap = np.r_[1.0, (d[1:] - d[:-1]).days].astype(float)
-        self.fund = np.where(np.isnan(W.cap), np.nan, W.cap * P.FIN_SHARE * (bill + P.FIN_SPREAD) * gap / 365.0)
-        reorg = int(np.searchsorted(d, P.REORG))
-        self.reorg = reorg
-        seq = 1001
-        self.old, self.new = {}, {}
-        for p in W.pods:
-            self.old[p["n"]] = "%s%03d" % (PREFIX[p["g"]], p["serial"])
-        alive = sorted((p for p in W.pods if p["start"] < reorg and (p["end"] is None or p["end"] > reorg)),
-                       key=lambda p: (P.GROUP_ORDER.index(p["g"]), p["serial"]))
-        for p in alive:
-            self.new[p["n"]] = "HC%d" % seq
-            seq += 1
-        for p in sorted((p for p in W.pods if p["start"] >= reorg), key=lambda p: (p["start"], P.GROUP_ORDER.index(p["g"]), p["serial"])):
-            self.new[p["n"]] = "HC%d" % seq
-            seq += 1
-        rng = np.random.default_rng(P.SEED + 5)
-        self.sub = {p["n"]: SUB[p["g"]][int(rng.integers(0, len(SUB[p["g"]])))] for p in W.pods}
-        # the risk system's P&L for a month's last trading day is provisional; the next trading day carries the true-up
-        last = np.r_[d.month[1:] != d.month[:-1], True]
-        self.risk = W.pnl.copy()
-        for n in range(len(W.pods)):
-            for i in np.where(last & ~np.isnan(W.pnl[n]))[0]:
-                if i + 1 >= len(d) or np.isnan(W.pnl[n, i + 1]):
-                    continue
-                e = float(rng.normal(0.0, 0.04)) * abs(W.pnl[n, i]) + float(rng.normal(0.0, 1500.0))
-                self.risk[n, i] += e
-                self.risk[n, i + 1] -= e
+        self.days = W.mk.days
+        B = W.B
+        self.cusip0 = B.cusip.values
+        self.cusip_reg = B.cusip_reg.values
+        self.exch = [None if pd.isna(e) else pd.Timestamp(e) for e in B.exchange_date.values]
 
-    def code(self, n, i):
-        if n in self.new and (i >= self.reorg or n not in self.old or self.W.pods[n]["start"] >= self.reorg):
-            return self.new[n]
-        return self.old[n]
-
-    def last_code(self, n):
-        return self.new.get(n, self.old[n])
-
-    def years(self):
-        """Each pod's calendar-year P&L after funding, and its payout, booked in the month it is paid."""
-        W, d = self.W, self.days
-        out = []
-        for p in W.pods:
-            n = p["n"]
-            ok = ~np.isnan(W.pnl[n])
-            for y in sorted(set(d.year[ok])):
-                m = ok & (d.year == y)
-                g, f = float(np.nansum(W.pnl[n][m])), float(np.nansum(self.fund[n][m]))
-                i_last = int(np.where(m)[0][-1])
-                ended = p["end"] is not None and p["end"] - 1 == i_last
-                if y == d[-1].year and not ended:
-                    continue                                  # the year is not over
-                out.append(dict(n=n, year=int(y), gross=g, fund=f, payout=P.PAYOUT * max(g - f, 0.0), paid=d[i_last]))
-        return pd.DataFrame(out)
+    def cusip(self, b, t):
+        e = self.exch[b]
+        if e is not None and self.days[t] >= e:
+            return self.cusip_reg[b]
+        return self.cusip0[b]
 
 
-def risk_files(B, tgt):
-    W, d = B.W, B.days
-    rows_old, rows_new = [], []
-    mig = int(np.searchsorted(d, P.MIGRATION))
-    outage = {int(np.searchsorted(d, x)) for x in OUTAGES}
-    for i in range(len(d)):
-        for p in W.active(i):
-            n = p["n"]
-            x, k = B.risk[n, i], W.cap[n, i]
-            if np.isnan(x):
-                continue
-            if i < mig:
-                if i in outage:
-                    continue
-                if i - 1 in outage and not np.isnan(B.risk[n, i - 1]):
-                    x += B.risk[n, i - 1]
-                rows_old.append((d[i].strftime("%Y-%m-%d"), B.code(n, i), "%.2f" % x, "%d" % round(k)))
-                if d[i] == P.RESENT:
-                    rows_old.append(rows_old[-1])
-            else:
-                rows_new.append((d[i].strftime("%m/%d/%Y"), B.code(n, i), "%.1f" % (x / 1e3), "%.1f" % (k / 1e6)))
-    old = pd.DataFrame(rows_old, columns=["cob_date", "pod_code", "gross_pnl_usd", "capital_usd"])
-    new = pd.DataFrame(rows_new, columns=["trade_date", "book_id", "pnl_usd_000", "alloc_capital_usd_mm"])
-    _csv(old, os.path.join(tgt, F["legacy"]))
-    _csv(new, os.path.join(tgt, F["current"]))
-    return len(old), len(new)
+def _num(x, nd=3):
+    return None if x is None or (isinstance(x, float) and np.isnan(x)) else round(float(x), nd)
 
 
-def code_map(B, tgt):
-    rows = [(B.old[n], B.new[n]) for n in sorted(B.new, key=lambda n: B.new[n]) if n in B.old and B.W.pods[n]["start"] < B.reorg]
-    df = pd.DataFrame(rows, columns=["old_pod_code", "new_book_id"])
-    df.insert(2, "effective_date", P.REORG.strftime("%Y-%m-%d"))
-    _csv(df, os.path.join(tgt, F["codes"]))
-    return len(df)
-
-
-def admin(B, tgt):
-    """The administrator's month-end statement per sleeve: gross trading P&L, the funding charge, the PM incentive
-    accrued for the year (in December, or in the month a pod closed), net P&L and month-end allocated capital."""
-    W, d = B.W, B.days
-    yrs = B.years()
-    pay = {(int(r.n), r.paid.year, r.paid.month): r.payout for r in yrs.itertuples()}
-    month = d.to_period("M")
-    rows = []
-    last_month = pd.Period(P.LAST_DAY, "M") - 1                 # October 2026 is the last closed month
-    for p in W.pods:
-        n = p["n"]
-        ok = ~np.isnan(W.pnl[n])
-        for m in sorted(set(month[ok])):
-            if m > last_month:
-                continue
-            idx = np.where(ok & (month == m))[0]
-            g, f = float(W.pnl[n][idx].sum()), float(B.fund[n][idx].sum())
-            inc = pay.get((n, m.year, m.month), 0.0)
-            i_last = int(idx[-1])
-            closed = p["end"] is not None and p["end"] - 1 == i_last
-            cap = 0.0 if closed else float(W.cap[n, i_last])
-            rows.append((m.to_timestamp(how="end").strftime("%Y-%m-%d"), B.code(n, i_last), "%.2f" % g, "%.2f" % f, "%.2f" % inc,
-                         "%.2f" % (g - f - inc), "%.0f" % cap))
-    df = pd.DataFrame(rows, columns=["period_end", "sleeve", "gross_trading_pnl", "financing_charge", "incentive_accrual", "net_pnl",
-                                     "month_end_capital"])
-    df = df.sort_values(["period_end", "sleeve"], kind="stable")
-    _csv(df, os.path.join(tgt, F["admin"]))
-    return len(df)
-
-
-def register(B, tgt):
-    W, d = B.W, B.days
-    rows = []
-    for p in sorted(W.pods, key=lambda p: (p["start"], B.last_code(p["n"]))):
-        end = "" if p["end"] is None else d[p["end"] - 1].strftime("%Y-%m-%d")
-        why = {"stopped": "Closed at the drawdown limit", "left": "PM team left the platform", None: "Active"}[p["why_end"]]
-        rows.append((B.last_code(p["n"]), P.GROUPS[p["g"]]["name"], B.sub[p["n"]], d[p["start"]].strftime("%Y-%m-%d"), end, why))
-    df = pd.DataFrame(rows, columns=["pod", "strategy_group", "sub_strategy", "first_trading_day", "last_trading_day", "status"])
-    _csv(df, os.path.join(tgt, F["register"]))
-    return len(df)
-
-
-def changes(B, tgt):
-    W, d = B.W, B.days
-    pos = {t: i for i, t in enumerate(d)}
-    rows = []
-    for n, when, old, new, why in W.reviews:
-        i = pos[when]
-        eff = d[i + 1] if why.startswith(("halved", "closed", "PM team")) and i + 1 < len(d) else when
-        rows.append((eff.strftime("%Y-%m-%d"), B.code(n, pos[eff] if eff in pos else i), "%.0f" % old, "%.0f" % new, why[0].upper() + why[1:]))
-    df = pd.DataFrame(rows, columns=["effective_date", "pod", "capital_before_usd", "capital_after_usd", "reason"])
-    df = df.sort_values(["effective_date", "pod"], kind="stable")
-    _csv(df, os.path.join(tgt, F["changes"]))
-    return len(df)
-
-
-def plan_tables(B):
-    """Each plan the committee approved, priced the way it always priced them: each pod's return on its capital over
-    the three years to the end of November (or since it started), times its planned capital; a pod with less than six
-    months of record takes its group's return over the same years."""
-    W, d = B.W, B.days
-    bill = W.mk.level.DTB3.reindex(d).ffill() / 100.0
-    out = {}
-    for y in P.PLAN_YEARS:
-        plan = W.plans[y]
-        cut = pd.Timestamp(y - 1, 11, 30)
-        lo = cut - pd.DateOffset(years=3)
-        m = (d > lo) & (d <= cut)
-        groc = {}
-        for g in P.GROUP_ORDER:
-            rows = [p["n"] for p in W.pods if p["g"] == g]
-            tot, cap = np.nansum(W.pnl[rows][:, m]), np.nansum(W.cap[rows][:, m])
-            groc[g] = tot / cap * 252.0 if cap > 0 else 0.0
-        b = float(bill[d <= cut].iloc[-1])
-        rows = []
-        for n in plan["pods"]:
-            ok = m & ~np.isnan(W.pnl[n])
-            g = W.pods[n]["g"]
-            roc = np.nansum(W.pnl[n][ok]) / np.nansum(W.cap[n][ok]) * 252.0 if ok.sum() >= 126 else groc[g]
-            k = plan["capital"][n]
-            exp = roc * k
-            rows.append(dict(n=n, code=B.code(n, plan["day"]), g=g, k=k, roc=roc, exp=exp, fund=P.FIN_SHARE * (b + P.FIN_SPREAD) * k,
-                             onboarding=n not in plan["reviewed"] and W.pods[n]["start"] > 0))
-        t = pd.DataFrame(rows).sort_values("code")
-        pay = P.PAYOUT * float(np.maximum(t.exp - t.fund, 0.0).sum())
-        out[y] = dict(table=t, bill=b, payouts=pay, funding=float(t.fund.sum()), costs=P.PLATFORM_COST[y],
-                      net=float(t.exp.sum() - t.fund.sum()) - pay - P.PLATFORM_COST[y], approved=committee_date(y - 1))
-    return out
-
-
-def committee_date(year):
-    """The allocation committee's December meeting: the second Tuesday of December."""
-    t = pd.Timestamp(year, 12, 1)
-    while t.weekday() != 1:
-        t += pd.Timedelta(days=1)
-    return t + pd.Timedelta(days=7)
-
-
-def plans_workbook(B, tgt, tables):
-    wb = Workbook()
-    first = True
-    for y in P.PLAN_YEARS:
-        T = tables[y]
-        ws = wb.active if first else wb.create_sheet()
-        first = False
-        ws.title = "Plan %d" % y
-        ws.append(["Harbourne Capital: allocation plan for %d, approved by the allocation committee on %s" % (y, T["approved"].strftime("%-d %B %Y"))])
-        ws.append([])
-        ws.append(["Pod", "Strategy group", "Capital (USD m)", "Return on capital, record (%)", "Expected P&L (USD m)", "Note"])
-        for r in T["table"].itertuples():
-            ws.append([r.code, P.GROUPS[r.g]["name"], round(r.k / 1e6, 1), round(r.roc * 100, 2), round(r.exp / 1e6, 2),
-                       "On onboarding schedule" if r.onboarding else None])
-        ws.append([])
-        ws.append(["Expected P&L, pods", None, round(T["table"].k.sum() / 1e6, 1), None, round(T["table"].exp.sum() / 1e6, 2)])
-        ws.append(["Funding charge (bill rate %.2f%% at the end of November, plus 0.35%%, on 20%% of capital)" % (T["bill"] * 100), None, None, None, round(-T["funding"] / 1e6, 2)])
-        ws.append(["PM payouts at 18%", None, None, None, round(-T["payouts"] / 1e6, 2)])
-        ws.append(["Platform costs", None, None, None, round(-T["costs"] / 1e6, 2)])
-        ws.append(["Expected net P&L", None, None, None, round(T["net"] / 1e6, 2)])
-        ws["A1"].font = Font(bold=True)
-        for c in ws[3]:
-            c.font = Font(bold=True)
-            c.alignment = Alignment(wrap_text=True, vertical="top")
-        for row in ws.iter_rows(min_row=ws.max_row - 4, max_row=ws.max_row):
-            row[0].font = Font(bold=row[0].row == ws.max_row)
-        for col, w in zip("ABCDEF", (12, 22, 15, 16, 16, 24)):
-            ws.column_dimensions[col].width = w
-        ws.freeze_panes = "A4"
-    path = os.path.join(tgt, F["plans"])
-    wb.save(path)
-    PP.normalize_ooxml(path, P.CFO, P.CFO, dt.datetime(2017, 12, 4, 15, 20, 41, tzinfo=UTC).strftime(ISO),
-                       dt.datetime(2025, 12, 10, 17, 3, 12, tzinfo=UTC).strftime(ISO), excel=True, company=P.PLATFORM_LEGAL)
-    return {y: len(tables[y]["table"]) for y in P.PLAN_YEARS}
-
-
-def trading_days_2027():
-    hol = ["2027-01-01", "2027-01-18", "2027-02-15", "2027-03-26", "2027-05-31", "2027-06-18", "2027-07-05", "2027-09-06",
-           "2027-11-25", "2027-12-24"]
-    return pd.DatetimeIndex([t for t in pd.bdate_range("2027-01-01", "2027-12-31") if t.strftime("%Y-%m-%d") not in hol])
-
-
-def draft_workbook(B, tgt, draft):
+def rfq_files(B, tgt, rng):
     W = B.W
-    days27 = trading_days_2027()
+    R = W.req
+    days = B.days
+    rows = []
+    for r in R.itertuples(index=False):
+        ts = _stamp(days[r.t], r.hour)
+        ex = ts + dt.timedelta(seconds=int(rng.integers(15, 75))) if r.status == "DONE" else None
+        rows.append(dict(rfq=int(r.rfq), ts=ts, cusip=B.cusip(int(r.bond), int(r.t)), client=W.C.code.values[int(r.client) - 1],
+                         side="BUY" if r.side > 0 else "SELL", q=float(r.q), n=int(r.n), quote=_num(r.quote),
+                         ref=round(float(r.ref_mid), 3), status=r.status, done=_num(r.done_price), cover=_num(r.cover),
+                         ex=ex, version=1))
+    df = pd.DataFrame(rows)
+    # re-sent messages (identical rows) and amended requests (an earlier version of the request, another size)
+    dup = df.sample(frac=0.004, random_state=int(rng.integers(1e9)))
+    amd = df.sample(frac=0.003, random_state=int(rng.integers(1e9))).copy()
+    df.loc[amd.index, "version"] = 2
+    amd["q"] = (amd["q"] * rng.choice([0.5, 2.0], len(amd))).round(-3)
+    amd["version"] = 1
+    amd["quote"], amd["status"], amd["done"], amd["cover"], amd["ex"] = None, "PASSED", None, None, None
+    df = pd.concat([df, dup, amd]).sort_values(["ts", "rfq", "version"], kind="mergesort").reset_index(drop=True)
+    cut = pd.Timestamp(P.MIGRATION).tz_localize(NY)
+    g1 = df[df.ts < cut]
+    g2 = df[df.ts >= cut]
+
+    def et(x):
+        return x.strftime("%Y-%m-%d %H:%M:%S") if x is not None and not pd.isna(x) else None
+
+    def ut(x):
+        return x.astimezone(UTC).strftime(ISO) if x is not None and not pd.isna(x) else None
+    out1 = pd.DataFrame({
+        "RFQ_ID": g1.rfq, "MSG_VERSION": g1.version, "RECEIVED_ET": g1.ts.map(et), "CUSIP": g1.cusip,
+        "CLIENT_CODE": g1.client, "CLIENT_SIDE": g1.side, "QTY": g1.q.round(0).astype(int), "DEALERS_IN_COMP": g1.n,
+        "DESK_RESPONSE_PX": g1.quote, "DESK_REF_MID": g1.ref, "STATUS": g1.status.map(STATUS1), "DONE_PX": g1.done,
+        "COVER_PX": g1.cover, "TRADE_TIME_ET": g1.ex.map(et)})
+    out2 = pd.DataFrame({
+        "rfq_ref": g2.rfq, "msg_version": g2.version, "received_utc": g2.ts.map(ut), "security_id": g2.cusip,
+        "client": g2.client, "dir": g2.side.map({"BUY": "CB", "SELL": "CS"}), "quantity_000": (g2.q / 1000.0).round(3),
+        "n_dealers": g2.n, "response_price": g2.quote, "ref_mid": g2.ref, "outcome": g2.status.map(STATUS2),
+        "executed_price": g2.done, "cover_price": g2.cover, "executed_utc": g2.ex.map(ut)})
+    _csv(out1, os.path.join(tgt, F["rfq1"]))
+    _csv(out2, os.path.join(tgt, F["rfq2"]))
+    return len(out1), len(out2)
+
+
+def blotter(B, tgt, rng):
+    W = B.W
+    days = B.days
+    rows = []
+    for r in W.trades.itertuples(index=False):
+        ts = _stamp(days[r.t], r.hour)
+        rows.append(dict(trade_id="BC%07d" % int(r.trade), trade_date=days[r.t].strftime("%Y-%m-%d"),
+                         exec_time_et=ts.strftime("%H:%M:%S"), cusip=B.cusip(int(r.bond), int(r.t)),
+                         desk_side="BUY" if r.side > 0 else "SELL", quantity=int(round(r.q)), price=round(float(r.price), 3),
+                         counterparty=("CLIENT" if r.cpty == "client" else "DEALER"),
+                         venue=("TIDEWELL" if r.cpty == "client" else "D2D"),
+                         rfq_id=(int(r.rfq) if r.rfq is not None and not pd.isna(r.rfq) else None), status="LIVE"))
+    df = pd.DataFrame(rows)
+    # a few bookings corrected the same day: the first entry cancelled and booked again
+    fix = df.sample(frac=0.002, random_state=int(rng.integers(1e9))).copy()
+    df.loc[fix.index, "status"] = "CANCELLED"
+    fix["trade_id"] = [t + "R" for t in fix.trade_id]
+    df = pd.concat([df, fix]).sort_values(["trade_date", "exec_time_et", "trade_id"], kind="mergesort").reset_index(drop=True)
+    df["rfq_id"] = df["rfq_id"].astype("Int64")
+    _csv(df, os.path.join(tgt, F["blotter"]))
+    return len(df)
+
+
+def tape(B, tgt, rng):
+    W = B.W
+    days = B.days
+    Pr = W.prints.sort_values(["t", "hour"], kind="mergesort")
+    ig = W.ig
+    msgs = []
+    seq = 7_000_000
+    for r in Pr.itertuples(index=False):
+        b, t = int(r.bond), int(r.t)
+        band = "IG" if ig[t, b] else "HY"
+        ex = _stamp(days[t], r.hour)
+        qty = ("5MM+" if band == "IG" else "1MM+") if r.q > P.CAP[band] else str(int(round(r.q)))
+        sides = ["B" if r.dealer_side > 0 else "S"] if r.kind == "C" else ["B", "S"]
+        for sd in sides:
+            seq += int(rng.integers(1, 4))
+            delay = rng.exponential(25) if rng.random() < 0.93 else rng.uniform(60, 900)
+            asof = rng.random() < P.ASOF_P
+            dis = ex + dt.timedelta(seconds=float(delay)) + (dt.timedelta(days=int(rng.integers(1, 4))) if asof else dt.timedelta(0))
+            px = round(float(r.price), 3)
+            m = dict(msg_seq=seq, cusip=B.cusip(b, t), exec_date=ex.strftime("%Y-%m-%d"), exec_time=ex.strftime("%H:%M:%S"),
+                     dissem_ts=dis.strftime("%Y-%m-%d %H:%M:%S"), price=px, qty=qty, rpt_side=sd,
+                     contra=("C" if r.kind == "C" else "D"), asof=("A" if asof else ""), msg_type="T", orig_seq=None)
+            u = rng.random()
+            if u < P.CORRECT_P:
+                wrong = dict(m)
+                wrong["price"] = round(px + rng.choice([-1, 1]) * rng.choice([0.1, 0.5, 1.0, 10.0]), 3)
+                msgs.append(wrong)
+                seq += int(rng.integers(5, 400))
+                fixm = dict(m)
+                fixm.update(msg_seq=seq, msg_type="C", orig_seq=wrong["msg_seq"],
+                            dissem_ts=(dis + dt.timedelta(minutes=int(rng.integers(5, 240)))).strftime("%Y-%m-%d %H:%M:%S"))
+                msgs.append(fixm)
+            elif u < P.CORRECT_P + P.CANCEL_P:
+                msgs.append(m)
+                bad = dict(m)
+                seq += int(rng.integers(1, 3))
+                bad.update(msg_seq=seq, price=round(px + rng.normal(0, 0.4), 3))
+                msgs.append(bad)                            # a duplicate report, cancelled later
+                seq += int(rng.integers(5, 400))
+                x = dict(bad)
+                x.update(msg_seq=seq, msg_type="X", orig_seq=bad["msg_seq"],
+                         dissem_ts=(dis + dt.timedelta(minutes=int(rng.integers(5, 300)))).strftime("%Y-%m-%d %H:%M:%S"))
+                msgs.append(x)
+            else:
+                msgs.append(m)
+    df = pd.DataFrame(msgs)
+    df["orig_seq"] = df["orig_seq"].astype("Int64")
+    df = df.sort_values(["dissem_ts", "msg_seq"], kind="mergesort").reset_index(drop=True)
+    _csv(df, os.path.join(tgt, F["tape"]))
+    return len(df)
+
+
+def evaluations(B, tgt):
+    W = B.W
+    rows = []
+    for t, d in enumerate(B.days):
+        ds = d.strftime("%Y-%m-%d")
+        bk = W.bucket_hist[t][1]
+        for b in np.where(W.alive[t])[0]:
+            band = "IG" if W.ig[t, b] else "HY"
+            mid = float(W.eval_mid[t, b])
+            h = EVAL_HALF[(band, bk[b])]
+            rows.append((ds, B.cusip(b, t), round(mid - h, 3), round(mid, 3), round(mid + h, 3)))
+    df = pd.DataFrame(rows, columns=["eval_date", "cusip", "eval_bid", "eval_mid", "eval_ask"])
+    _csv(df, os.path.join(tgt, F["eval"]))
+    return len(df)
+
+
+def master(B, tgt):
+    W = B.W
+    Bd = W.B
+    iss = W.issuers
+    rows = []
+    for _, b in Bd.iterrows():
+        rows.append(dict(cusip=b["cusip"], issuer=iss.name[b["issuer"]], sector=iss.sector[b["issuer"]],
+                         coupon_pct=round(b["coupon"] * 100, 3), maturity=b["maturity"].strftime("%Y-%m-%d"),
+                         issue_date=b["issue"].strftime("%Y-%m-%d"), amount_outstanding=int(b["amount"]),
+                         rule_144a=("Y" if b["is144a"] else "N"), registered_cusip=(b["cusip_reg"] or None),
+                         exchange_date=(b["exchange_date"].strftime("%Y-%m-%d") if not pd.isna(b["exchange_date"]) else None)))
+    _csv(pd.DataFrame(rows), os.path.join(tgt, F["master"]))
+    # the quarterly buckets the security master assigns, from the quarter before's prints
+    brows = []
+    seen = set()
+    for t, (q, bk) in enumerate(W.bucket_hist):
+        if q in seen:
+            continue
+        seen.add(q)
+        qdays = np.where(B.days.to_period("Q") == q)[0]
+        live = W.alive[qdays].any(axis=0)
+        for b in np.where(live)[0]:
+            tb = qdays[np.argmax(W.alive[qdays, b])]
+            brows.append(dict(quarter=str(q), cusip=B.cusip(b, tb), liquidity_bucket=bk[b]))
+    _csv(pd.DataFrame(brows), os.path.join(tgt, F["buckets"]))
+    # issuer ratings as they changed
+    rrows = []
+    for i in range(P.N_ISSUERS):
+        last = None
+        for t in range(W.T):
+            r = W.rating[t, i]
+            if r != last:
+                rrows.append(dict(issuer=iss.name[i], effective_date=B.days[t].strftime("%Y-%m-%d") if last else "2022-12-30",
+                                  rating=r))
+                last = r
+    _csv(pd.DataFrame(rrows), os.path.join(tgt, F["ratings"]))
+    return len(rows), len(brows), len(rrows)
+
+
+def clients(B, tgt):
+    C = B.W.C
+    df = pd.DataFrame({"client_code": C.code, "client_type": C.ctype.map(TYPE_NAME),
+                       "onboarded": C.onboard.dt.strftime("%Y-%m-%d")}).sort_values("client_code")
+    _csv(df, os.path.join(tgt, F["clients"]))
+    return len(df)
+
+
+def schedule_tables():
+    v1 = {(b, l, t): P.SCHEDULE_V1[(b, l)][t] for b, l, t in P.SEGMENTS}
+    v2 = {**v1, **P.V2_CHANGES}
+    v3 = {**v2, **P.V3_CHANGES}
+    v4 = {**v3, **P.PROPOSED}
+    return v1, v2, v3, v4
+
+
+def _schedule_sheet(ws, title, sched, effective):
+    ws.append([title])
+    ws.append(["Effective from %s" % effective])
+    ws.append([])
+    ws.append(["Rating band", "Liquidity bucket", "Client type", "Half-spread (cents per 100 face)"])
+    for band, bk, ty in P.SEGMENTS:
+        ws.append([band, bk, TYPE_NAME[ty], sched[(band, bk, ty)]])
+    ws.append([])
+    ws.append(["Multiples"])
+    ws.append(["Investment grade over 5,000,000 face", 1.30])
+    ws.append(["High yield over 1,000,000 face", 1.20])
+    ws.append(["Any request under 100,000 face", 1.50])
+    ws.append(["VIX at the prior close under 20", 1.0])
+    ws.append(["VIX at the prior close from 20 to under 30", 1.3])
+    ws.append(["VIX at the prior close of 30 or more", 1.7])
+    ws.append([])
+    ws.append(["Distance = half-spread x size multiple x VIX multiple x (1 + jitter) x (1 - 0.35 x position / limit x "
+               "direction), in cents per 100 face from the reference mid"])
+    ws.append(["Jitter: normal, standard deviation 6 per cent, held within 2.5 standard deviations"])
+    ws.append(["Direction: +1 when the client buys, -1 when the client sells; position limit 25,000,000 face investment "
+               "grade, 10,000,000 high yield; at the limit the desk passes"])
+    ws["A1"].font = Font(bold=True)
+    for c in ws[4]:
+        c.font = Font(bold=True)
+        c.alignment = Alignment(wrap_text=True, vertical="top")
+    for col, w in zip("ABCD", (30, 16, 18, 18)):
+        ws.column_dimensions[col].width = w
+
+
+def schedule_workbooks(tgt):
+    v1, v2, v3, v4 = schedule_tables()
+    wb = Workbook()
+    ws = wb.active
+    ws.title = "v1"
+    _schedule_sheet(ws, "Auto-quoter schedule, version 1", v1, "3 January 2023")
+    _schedule_sheet(wb.create_sheet("v2"), "Auto-quoter schedule, version 2", v2, "1 July 2024")
+    _schedule_sheet(wb.create_sheet("v3"), "Auto-quoter schedule, version 3", v3, "3 March 2025")
+    path = os.path.join(tgt, F["schedule"])
+    wb.save(path)
+    PP.normalize_ooxml(path, P.STRAT, P.STRAT, dt.datetime(2022, 12, 19, 15, 2, 33, tzinfo=UTC).strftime(ISO),
+                       dt.datetime(2025, 2, 27, 21, 18, 6, tzinfo=UTC).strftime(ISO), excel=True, company=P.FIRM)
     wb = Workbook()
     ws = wb.active
     ws.title = "Draft 2027"
-    ws.append(["Harbourne Capital: draft allocation plan for 2027, for the allocation committee (as of %s)" % P.REVIEW.strftime("%-d %B %Y")])
-    ws.append([])
-    ws.append(["Pod", "Strategy group", "Capital 2026 (USD m)", "Capital 2027, draft (USD m)", "Change", "Onboarding steps in 2027"])
-    rows = []
-    for n, r in draft.items():
-        steps = ""
-        if r["change"] == "onboarding":
-            parts = []
-            for lo, frac in P.RAMP[1:]:
-                k = lo - r["age"]
-                if 0 <= k < len(days27):
-                    parts.append("%d%% of target from %s" % (round(frac * 100), days27[k].strftime("%-d %B")))
-            steps = "; ".join(parts)
-        label = {"increase": "Increase", "decrease": "Decrease", "unchanged": "No change", "onboarding": "Onboarding"}[r["change"]]
-        rows.append((B.last_code(n), P.GROUPS[W.pods[n]["g"]]["name"], round(r["k2026"] / 1e6, 1), round(r["k2027"] / 1e6, 1), label, steps or None))
-    for row in sorted(rows):
-        ws.append(list(row))
-    ws.append([])
-    ws.append(["Total", None, round(sum(r["k2026"] for r in draft.values()) / 1e6, 1), round(sum(r["k2027"] for r in draft.values()) / 1e6, 1)])
-    ws["A1"].font = Font(bold=True)
-    for c in ws[3]:
-        c.font = Font(bold=True)
-        c.alignment = Alignment(wrap_text=True, vertical="top")
-    ws.cell(row=ws.max_row, column=1).font = Font(bold=True)
-    for col, w in zip("ABCDEF", (10, 22, 14, 16, 12, 52)):
-        ws.column_dimensions[col].width = w
-    ws.freeze_panes = "A4"
-    wc = wb.create_sheet("Platform costs 2027")
-    wc.append(["Platform costs in the 2027 budget"])
-    wc.append([])
-    wc.append(["Line", "USD m"])
-    for name, v in P.COST_LINES_2027:
-        wc.append([name, round(v / 1e6, 1)])
-    wc.append(["Total", round(P.PLATFORM_COST_2027 / 1e6, 1)])
-    wc["A1"].font = Font(bold=True)
-    for c in wc[3]:
-        c.font = Font(bold=True)
-    wc.cell(row=wc.max_row, column=1).font = Font(bold=True)
-    wc.column_dimensions["A"].width = 34
-    wc.column_dimensions["B"].width = 10
+    _schedule_sheet(ws, "Auto-quoter schedule, draft for 2027", v4, "4 January 2027, if the committee approves it")
     path = os.path.join(tgt, F["draft"])
     wb.save(path)
-    PP.normalize_ooxml(path, P.CIO, P.CFO, dt.datetime(2026, 10, 26, 13, 51, 9, tzinfo=UTC).strftime(ISO),
-                       dt.datetime(2026, 11, 9, 14, 37, 55, tzinfo=UTC).strftime(ISO), excel=True, company=P.PLATFORM_LEGAL)
-    return len(rows)
+    PP.normalize_ooxml(path, P.STRAT, P.HEAD, dt.datetime(2026, 10, 28, 14, 40, 12, tzinfo=UTC).strftime(ISO),
+                       dt.datetime(2026, 11, 6, 22, 5, 49, tzinfo=UTC).strftime(ISO), excel=True, company=P.FIRM)
+
+
+def summaries(B, tgt):
+    """The desk's month-end summaries by segment: its own next-day view."""
+    W = B.W
+    R = W.req.copy()
+    R["month"] = B.days[R.t.values].to_period("M")
+    D = R[R.status == "DONE"].copy()
+    t1 = np.minimum(D.t.values + 1, W.T - 1)
+    D["edge"] = D.side * (D.done_price - D.ref_mid) * D.q / 100.0
+    # the desk's side is the opposite of the client's: its markout is desk_side x (later mid - reference mid)
+    D["mk1"] = (-D.side) * (W.eval_mid[t1, D.bond.values] - D.ref_mid) * D.q / 100.0
+    wb = Workbook()
+    first = True
+    for m in sorted(R.month.unique()):
+        ws = wb.active if first else wb.create_sheet()
+        first = False
+        ws.title = m.strftime("%Y-%m")
+        ws.append(["%s: month-end summary, %s" % (P.DESK, m.strftime("%B %Y"))])
+        ws.append(["Next-day markout: the evaluated mid at the next close against the reference mid, on the desk's side"])
+        ws.append([])
+        ws.append(["Rating band", "Liquidity bucket", "Client type", "Requests", "Done", "Face done (USD m)",
+                   "Edge at execution (USD)", "Next-day markout (USD)", "Net, next-day view (USD)"])
+        rm = R[R.month == m]
+        dm = D[D.month == m]
+        for band, bk, ty in P.SEGMENTS:
+            a = rm[(rm.band == band) & (rm.bucket == bk) & (rm.ty == ty)]
+            d = dm[(dm.band == band) & (dm.bucket == bk) & (dm.ty == ty)]
+            ws.append([band, bk, TYPE_NAME[ty], len(a), len(d), round(d.q.sum() / 1e6, 2), round(d.edge.sum(), 0),
+                       round(d.mk1.sum(), 0), round(d.edge.sum() + d.mk1.sum(), 0)])
+        for c in ws[4]:
+            c.font = Font(bold=True)
+            c.alignment = Alignment(wrap_text=True, vertical="top")
+        ws["A1"].font = Font(bold=True)
+        for col, w in zip("ABCDEFGHI", (12, 14, 16, 10, 8, 14, 16, 16, 16)):
+            ws.column_dimensions[col].width = w
+    path = os.path.join(tgt, F["summaries"])
+    wb.save(path)
+    PP.normalize_ooxml(path, P.STRAT, P.STRAT, dt.datetime(2023, 2, 1, 23, 14, 5, tzinfo=UTC).strftime(ISO),
+                       dt.datetime(2026, 11, 3, 22, 41, 37, tzinfo=UTC).strftime(ISO), excel=True, company=P.FIRM)
+
+
+def league(B, tgt, rng):
+    """Tidewell's monthly dealer league tables for 2026 (shares of the platform's executed face)."""
+    wb = Workbook()
+    first = True
+    base = np.array(P.DEALER_WEIGHT) * 0.86
+    for m in pd.period_range("2026-01", "2026-10", freq="M"):
+        ws = wb.active if first else wb.create_sheet()
+        first = False
+        ws.title = m.strftime("%Y-%m")
+        sh = np.r_[base, 0.105] * np.exp(rng.normal(0, 0.06, len(base) + 1))
+        sh = sh / sh.sum() * 100
+        names = ["Dealer %s" % d for d in P.DEALERS] + [P.FIRM]
+        ws.append(["Tidewell Credit Network: dealer league table, %s (share of executed face, all protocols)" % m.strftime("%B %Y")])
+        ws.append([])
+        ws.append(["Rank", "Dealer", "Share (%)"])
+        for k, j in enumerate(np.argsort(-sh)):
+            ws.append([k + 1, names[j], round(float(sh[j]), 1)])
+        ws["A1"].font = Font(bold=True)
+    path = os.path.join(tgt, F["league"])
+    wb.save(path)
+    PP.normalize_ooxml(path, "Tidewell Reporting", "Tidewell Reporting", dt.datetime(2026, 2, 3, 9, 0, 12, tzinfo=UTC).strftime(ISO),
+                       dt.datetime(2026, 11, 4, 9, 0, 41, tzinfo=UTC).strftime(ISO), excel=True, company=P.PLATFORM)
 
 
 def market_files(tgt):
-    """Each public series as published, cut at the record's last day."""
     out = {}
+    last = pd.Timestamp(P.END)
     for name in MARKET:
-        src = os.path.join(MK.RAW, name)
-        lines = open(src, newline="").read().splitlines(keepends=True)
+        lines = open(os.path.join(MK.RAW, name), newline="").read().splitlines(keepends=True)
         keep = [lines[0]]
         for ln in lines[1:]:
             day = ln.split(",", 1)[0]
             t = pd.Timestamp(dt.datetime.strptime(day, "%m/%d/%Y") if "/" in day else day)
-            if t <= P.LAST_DAY:
+            if t <= last:
                 keep.append(ln)
         open(os.path.join(tgt, name), "w", newline="").write("".join(keep))
         out[name] = len(keep) - 1
@@ -360,19 +414,19 @@ def market_files(tgt):
 
 
 def write(W, tgt):
+    rng = np.random.default_rng(P.SEED + 7)
     B = Books(W)
     info = {}
-    info["legacy_rows"], info["current_rows"] = risk_files(B, tgt)
-    info["code_map_rows"] = code_map(B, tgt)
-    info["admin_rows"] = admin(B, tgt)
-    info["register_rows"] = register(B, tgt)
-    info["change_rows"] = changes(B, tgt)
-    tables = plan_tables(B)
-    info["plan_rows"] = plans_workbook(B, tgt, tables)
-    draft = W.draft(P.BUDGET_PLAN, P.LEAD)
-    info["draft_rows"] = draft_workbook(B, tgt, draft)
+    info["rfq_rows"] = rfq_files(B, tgt, rng)
+    info["blotter_rows"] = blotter(B, tgt, rng)
+    info["tape_rows"] = tape(B, tgt, rng)
+    info["eval_rows"] = evaluations(B, tgt)
+    info["master_rows"] = master(B, tgt)
+    info["client_rows"] = clients(B, tgt)
+    schedule_workbooks(tgt)
+    summaries(B, tgt)
+    league(B, tgt, rng)
     DC.policy(os.path.join(tgt, F["policy"]))
-    DC.risk_model(os.path.join(tgt, F["riskmodel"]))
     info["market_rows"] = market_files(tgt)
     PP.own_mtimes(tgt, EXPORT_TIMES)
-    return info, B, tables, draft
+    return info, B
