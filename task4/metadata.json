@@ -1,154 +1,182 @@
 {
  "task": "task4",
- "architecture": 10,
- "title": "How many battery-electric buses a municipal bus operator should order for its Niittylä depot's weekday blocks for 2027, and which blocks they take, under its depot electrification standard",
+ "architecture": 11,
+ "title": "Which weeks of the 2027 peak a fulfilment centre's two small-parts zones need the evening shift, and how many agency picker hours to book each peak week, once a second brand's orders share the zones",
  "domain": "Supply Chain & Logistics (house domain) in General Statistics & Data Science",
- "subdomain": "regression, classification & model diagnostics (depot electrification: which weekday blocks battery-electric buses can run on one overnight charge)",
+ "subdomain": "regression, classification & model diagnostics (an e-commerce fulfilment centre's peak labour plan)",
  "objective": "Forecasting & Predictive Modeling",
  "as_of": "2026-11-06",
  "deliverables": [
-  "niittyla_ebus_order_2027.xlsx",
-  "niittyla_ebus_order_2027.pptx"
+  "saarnela_peak_plan_2027.xlsx",
+  "saarnela_peak_plan_2027.docx"
  ],
  "distractor_files": [
-  "tyre_and_brake_costs_2025.xlsx",
-  "depot_electricity_invoices_2025-01_2026-10.csv"
- ],
- "stated_inputs": [
-  85,
-  150,
-  480,
-  690,
-  35,
-  3.9
+  "saarnela_packing_benches_2026-01_2026-10.csv",
+  "kotikaari_returns_received_2024-01_2026-10.csv"
  ],
  "files": [
   {
-   "path": "fuel_card_transactions_2024-01_2026-10.csv",
+   "path": "wms_zone_hours_2022-01_2026-10.csv",
    "format": "csv",
-   "bytes": 2382169,
-   "rows": 20803,
+   "bytes": 2262652,
+   "rows": 34077,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-11-06",
    "license": "CC0-1.0 (original work)"
   },
   {
-   "path": "depot_dispatch_log_2024-01_2026-10.csv",
+   "path": "palkka_tuntikirjaukset_2022-2023.csv",
    "format": "csv",
-   "bytes": 1910110,
-   "rows": 41790,
+   "bytes": 1080145,
+   "rows": 16583,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-11-06",
    "license": "CC0-1.0 (original work)"
   },
   {
-   "path": "block_register_2026.xlsx",
+   "path": "timesheets_2024-01_2026-10.csv",
+   "format": "csv",
+   "bytes": 2230255,
+   "rows": 27405,
+   "source": "Constructed (seeded generator, task4/generator)",
+   "pull_date": "2026-11-06",
+   "license": "CC0-1.0 (original work)"
+  },
+  {
+   "path": "kotikaari_forecast_archive_2021-10_2026-10.csv",
+   "format": "csv",
+   "bytes": 134904,
+   "rows": 2238,
+   "source": "Constructed (seeded generator, task4/generator)",
+   "pull_date": "2026-11-06",
+   "license": "CC0-1.0 (original work)"
+  },
+  {
+   "path": "kotikaari_budget_2027.xlsx",
    "format": "xlsx",
-   "bytes": 14875,
+   "bytes": 10518,
    "rows": null,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-11-06",
    "license": "CC0-1.0 (original work)"
   },
   {
-   "path": "vehicle_register_2026.xlsx",
+   "path": "wms_order_import_kotikaari_2022-01_2026-10.csv",
+   "format": "csv",
+   "bytes": 117898,
+   "rows": 3532,
+   "source": "Constructed (seeded generator, task4/generator)",
+   "pull_date": "2026-11-06",
+   "license": "CC0-1.0 (original work)"
+  },
+  {
+   "path": "huippu_orders_daily_2024-01_2026-10.csv",
+   "format": "csv",
+   "bytes": 71048,
+   "rows": 2070,
+   "source": "Constructed (seeded generator, task4/generator)",
+   "pull_date": "2026-11-06",
+   "license": "CC0-1.0 (original work)"
+  },
+  {
+   "path": "huippu_article_lines_2024-11_2026-10.csv",
+   "format": "csv",
+   "bytes": 2157299,
+   "rows": 93579,
+   "source": "Constructed (seeded generator, task4/generator)",
+   "pull_date": "2026-11-06",
+   "license": "CC0-1.0 (original work)"
+  },
+  {
+   "path": "wms_item_master_2026-11-02.xlsx",
    "format": "xlsx",
-   "bytes": 12975,
+   "bytes": 665468,
    "rows": null,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-11-06",
    "license": "CC0-1.0 (original work)"
   },
   {
-   "path": "ebus_telematics_daily_2025-03_2026-10.csv",
-   "format": "csv",
-   "bytes": 189368,
-   "rows": 3315,
+   "path": "huippu_slotting_2027.xlsx",
+   "format": "xlsx",
+   "bytes": 150710,
+   "rows": null,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-11-06",
    "license": "CC0-1.0 (original work)"
   },
   {
-   "path": "depot_charging_sessions_2025-03_2026-10.csv",
+   "path": "wms_pick_confirmations_HUI_2026w37-w44.csv",
    "format": "csv",
-   "bytes": 381545,
-   "rows": 3291,
+   "bytes": 1947046,
+   "rows": 26671,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-11-06",
    "license": "CC0-1.0 (original work)"
   },
   {
-   "path": "weather_vehkasalo_daily_2016_2026.csv",
-   "format": "csv",
-   "bytes": 135270,
-   "rows": 3957,
+   "path": "saarnela_own_pickers_2027.xlsx",
+   "format": "xlsx",
+   "bytes": 7694,
+   "rows": null,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-11-06",
    "license": "CC0-1.0 (original work)"
   },
   {
-   "path": "workshop_orders_2024-01_2026-10.csv",
-   "format": "csv",
-   "bytes": 54766,
-   "rows": 841,
+   "path": "saarnela_peak_2027_staffing.xlsx",
+   "format": "xlsx",
+   "bytes": 9865,
+   "rows": null,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-11-06",
    "license": "CC0-1.0 (original work)"
   },
   {
-   "path": "depot_electrification_standard_DES-1.pdf",
+   "path": "saarnela_labour_planning_standard_issue4.pdf",
    "format": "pdf",
-   "bytes": 59930,
+   "bytes": 84982,
    "rows": null,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-11-06",
    "license": "CC0-1.0 (original work)"
   },
   {
-   "path": "charging_connection_agreement_2025.pdf",
+   "path": "tyopiste_framework_agreement_2025.pdf",
    "format": "pdf",
-   "bytes": 57256,
+   "bytes": 56641,
    "rows": null,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-11-06",
    "license": "CC0-1.0 (original work)"
   },
   {
-   "path": "ebus_quotation_2027.pdf",
-   "format": "pdf",
-   "bytes": 61136,
+   "path": "huippu_pilot_review_2026-11.docx",
+   "format": "docx",
+   "bytes": 9730,
    "rows": null,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-11-06",
    "license": "CC0-1.0 (original work)"
   },
   {
-   "path": "fleet_plan_2027.xlsx",
-   "format": "xlsx",
-   "bytes": 10726,
-   "rows": null,
-   "source": "Constructed (seeded generator, task4/generator)",
-   "pull_date": "2026-11-06",
-   "license": "CC0-1.0 (original work)"
-  },
-  {
-   "path": "tyre_and_brake_costs_2025.xlsx",
-   "format": "xlsx",
-   "bytes": 8429,
-   "rows": null,
-   "source": "Constructed (seeded generator, task4/generator)",
-   "pull_date": "2026-11-06",
-   "license": "CC0-1.0 (original work)"
-  },
-  {
-   "path": "depot_electricity_invoices_2025-01_2026-10.csv",
+   "path": "saarnela_packing_benches_2026-01_2026-10.csv",
    "format": "csv",
-   "bytes": 1138,
-   "rows": 22,
+   "bytes": 131957,
+   "rows": 3780,
+   "source": "Constructed (seeded generator, task4/generator)",
+   "pull_date": "2026-11-06",
+   "license": "CC0-1.0 (original work)"
+  },
+  {
+   "path": "kotikaari_returns_received_2024-01_2026-10.csv",
+   "format": "csv",
+   "bytes": 86092,
+   "rows": 2852,
    "source": "Constructed (seeded generator, task4/generator)",
    "pull_date": "2026-11-06",
    "license": "CC0-1.0 (original work)"
   }
  ],
- "provenance": "Every file is constructed by the seeded generator in task4/generator; the town, the company, the distribution company, the dealer, the people, the vehicles, the blocks, the transactions, the telematics and the weather are invented (Finnish names from a name generator, Finnish bus-industry vocabulary). No real organisation's records are used."
+ "provenance": "Every file is constructed by the seeded generator in task4/generator; the logistics provider, the retailer, its brands, the agency, the people, the articles and every record are invented (Finnish names from a name generator, Finnish warehouse and payroll vocabulary). No real organisation's records are used."
 }

@@ -1,46 +1,85 @@
-"""The golden deliverables: niittyla_ebus_order_2027.xlsx (the order, every weekday block's diesel use, design-day
-energy and verdict, the night's schedule, the model behind it) and niittyla_ebus_order_2027.pptx (three slides for
-the board), both from analysis.py's figures on the shipped pack, written by the house writers."""
-import datetime as dt
+"""The golden deliverables: saarnela_peak_plan_2027.xlsx (the plan by week and zone, the volumes, the forecast record,
+the time a line and the routes) and saarnela_peak_plan_2027.docx (the one-page memo for the management team), both
+from analysis.py's figures on the shipped pack, written by the house writers."""
 import io
 import os
 import sys
 
 import matplotlib
 matplotlib.use("Agg")
-import matplotlib.pyplot as plt
-from openpyxl import Workbook
-from openpyxl.styles import Alignment, Font, PatternFill
-from openpyxl.utils import get_column_letter
-from pptx import Presentation
-from pptx.util import Emu, Inches, Pt
+import matplotlib.pyplot as plt  # noqa: E402
+import numpy as np  # noqa: E402
+from docx import Document  # noqa: E402
+from docx.enum.text import WD_ALIGN_PARAGRAPH  # noqa: E402
+from docx.shared import Mm, Pt  # noqa: E402
+from openpyxl import Workbook  # noqa: E402
+from openpyxl.styles import Alignment, Font, PatternFill  # noqa: E402
+from openpyxl.utils import get_column_letter  # noqa: E402
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 WRITERS = os.path.join(os.path.dirname(os.path.dirname(HERE)), ".claude", "skills", "reduce-house-fixes", "scripts", "writers")
 sys.path.insert(0, WRITERS)
-import postprocess  # noqa: E402
 
 import analysis as A  # noqa: E402
-import night  # noqa: E402
 import params as P  # noqa: E402
 
-XLSX = "niittyla_ebus_order_2027.xlsx"
-PPTX = "niittyla_ebus_order_2027.pptx"
+XLSX = "saarnela_peak_plan_2027.xlsx"
+DOCX = "saarnela_peak_plan_2027.docx"
+WEEKS = list(P.PEAK_WEEKS)
+FIXES = ("calendar", "calibration", "congestion", "huippu")
+FIX_NAME = {"calendar": "the 2027 weeks re-keyed to their dates", "calibration": "the overstatement read from the plan's growth",
+            "congestion": "the time a line at the zone limit", "huippu": "Huippu Sport at its full assortment"}
 
 
 def r10(x):
     return int(round(x / 10.0) * 10)
 
 
-def hhmm(m):
-    m = int(m) % 1440
-    return "%02d:%02d" % (m // 60, m % 60)
+def pct(x, nd=1):
+    return round(100.0 * x, nd)
 
 
 def compute(target):
-    pk = A.load(target)
-    g = A.golden(pk)
-    return pk, g
+    f = A.load(target)
+    G = A.golden(f)
+    z = A.zone_hours(f)
+    rg, sd = A.ranges(f, z, G)
+    H = A.hurried(f)
+    routes = {fx: A.hurried(f, (fx,)) for fx in FIXES}
+    figs = {
+        "evening": {zz: [w for w in WEEKS if G["evening"][(zz, w)]] for zz in A.Z_SMALL},
+        "day_only": {zz: [w for w in WEEKS if not G["evening"][(zz, w)]] for zz in A.Z_SMALL},
+        "r1": {zz: int(round(G["r1"][zz])) for zz in P.ZONES},
+        "logged_share": round(G["logged_share"], 3),
+        "r2": pct(G["r2"]),
+        "r3": round(G["r3"], 2),
+        "r4": round(G["r4"], 2),
+        "t_hui": round(G["t_hui"], 2), "t_kot": round(G["t_kot"], 2),
+        "r5": {k: pct(v) for k, v in G["r5"].items()},
+        "plan_growth": {"K": [pct(v, 0) for v in A.plans_2027(f)[0]], "H": [pct(v, 0) for v in A.plans_2027(f)[1]]},
+        "r6": pct(G["r6"]), "r6_budget": pct(G["r6_budget"]),
+        "hours": {zz: {w: r10(G["plan"][(zz, w)]["hours"]) for w in WEEKS} for zz in P.ZONES},
+        "range": {zz: {w: [r10(rg[(zz, w)][0]), r10(rg[(zz, w)][1])] for w in WEEKS} for zz in P.ZONES},
+        "ratio": {zz: {w: round(G["plan"][(zz, w)]["ratio"], 2) for w in WEEKS} for zz in A.Z_SMALL},
+        "lines": {zz: {w: r10(G["plan"][(zz, w)]["lines"]) for w in WEEKS} for zz in P.ZONES},
+        "lines_split": {zz: {w: [round(G["plan"][(zz, w)]["lines_k"]), round(G["plan"][(zz, w)]["lines_h"])]
+                             for w in WEEKS} for zz in A.Z_SMALL},
+        "agency": {w: r10(G["agency"][w]) for w in WEEKS},
+        "agency_total": r10(sum(G["agency"].values())),
+        "own": {w: {zz: r10(G["own"][w][zz]) for zz in P.ZONES} for w in WEEKS},
+        "sd": {k: round(v, 4) for k, v in sd.items()},
+        "fit": {"knot": G["fit"]["knot"], "power": G["fit"]["power"],
+                "coef": {k: round(float(v), 4) for k, v in G["fit"]["coef"].items()}},
+        "hurried": {"evening": {zz: [w for w in WEEKS if H["evening"][(zz, w)]] for zz in A.Z_SMALL},
+                    "agency": {w: r10(H["agency"][w]) for w in WEEKS}, "agency_total": r10(sum(H["agency"].values())),
+                    "r4": round(H["r4"], 2), "pilot_t": round(H["pilot_t"], 2), "p2_t": round(H["p2_t"], 2),
+                    "r2_applied": pct(H["r2"]),
+                    "hours": {zz: {w: r10(H["plan"][(zz, w)]["hours"]) for w in WEEKS} for zz in P.ZONES},
+                    "rate": {zz: round(H["rate"][zz], 3) for zz in P.ZONES}},
+        "routes": {fx: {"evening": {zz: [w for w in WEEKS if R["evening"][(zz, w)]] for zz in A.Z_SMALL},
+                        "agency_total": r10(sum(R["agency"].values()))} for fx, R in routes.items()},
+    }
+    return f, G, figs, rg
 
 
 def _head(ws, row, fill="D9E1EA"):
@@ -55,207 +94,274 @@ def _widths(ws, widths):
         ws.column_dimensions[get_column_letter(i)].width = wd
 
 
-def write_xlsx(path, pk, g, figs):
+def weeks_text(ws_):
+    if not ws_:
+        return "none"
+    if len(ws_) > 2 and ws_ == list(range(ws_[0], ws_[-1] + 1)):
+        return "%d to %d" % (ws_[0], ws_[-1])
+    if len(ws_) == 2:
+        return "%d and %d" % tuple(ws_)
+    return ", ".join(str(w) for w in ws_)
+
+
+def wk_phrase(ws_):
+    if not ws_:
+        return "in no week"
+    return ("week %s" if len(ws_) == 1 else "weeks %s") % weeks_text(ws_)
+
+
+def write_xlsx(path, f, G, figs):
     wb = Workbook()
     ws = wb.active
-    ws.title = "Order"
-    ws["A1"] = "Niittylä 2027: battery-electric buses for the weekday blocks (DES-1)"
+    ws.title = "Plan"
+    ws.append(["Saarnela peak 2027: picker hours by zone and week, the evening shifts and the agency booking"])
     ws["A1"].font = Font(bold=True, size=12)
-    rows = [("Buses to order", figs["call_count"]),
-            ("Blocks assigned", ", ".join(figs["call_set"])),
-            ("Blocks qualifying on the design day (DES-1 4.1)", len(g["qualifying"])),
-            ("First block the night cannot recharge with those above it", g["refused"] or "none"),
-            ("Usable battery after the first winter, kWh", round(figs["usable_y1"])),
-            ("Limit, 85 per cent, kWh", round(g["limit"])),
-            ("First-winter loss, per cent of usable", figs["loss_pct"]),
-            ("Design night: draw at the connection point for the buses ordered, MWh", figs["night_mwh"]),
-            ("Design night: draw at the connection point with every qualifying block on charge, MWh", figs["demand_mwh"]),
-            ("   of which recharge, MWh", figs["demand_recharge_mwh"]),
-            ("   of which battery conditioning while on charge, MWh", figs["demand_cond_mwh"]),
-            ("Design night: at most in the night period, MWh", figs["night_capacity_mwh"]),
-            ("Design night: capacity in the night period, kW (agreement 2025-ND-117)", int(pk.supply)),
-            ("Charger efficiency into the battery", figs["eta"]),
-            ("Conditioning draw on charge at -15 C, kW per bus", figs["cond_kw"])]
-    for k, v in rows:
-        ws.append([k, v])
-        ws.cell(ws.max_row, 1).font = Font(bold=True)
+    ws.append(["Evening shift: P1 weeks %s; P2 weeks %s. Agency hours over the peak: %s." % (
+        weeks_text(figs["evening"]["P1"]), weeks_text(figs["evening"]["P2"]), "{:,}".format(figs["agency_total"]).replace(",", " "))])
     ws.append([])
-    ws.append(["Prepared 10 November 2026 for the board meeting of 21 January 2027; records to 31 October 2026; DES-1 version 2."])
-    _widths(ws, [72, 60])
+    ws.append(["ISO week 2027", "Zone", "Lines", "Day-shift capacity at the limit (lines)", "Evening shift",
+               "Picker hours", "80% range, low", "80% range, high", "Own picker hours", "Agency hours"])
+    _head(ws, 4)
+    for w in WEEKS:
+        for zz in P.ZONES:
+            p = G["plan"][(zz, w)]
+            cap = r10(p["cap"]) if zz != "B1" else None
+            ev = ("yes" if p["evening"] else "no") if zz != "B1" else "n/a"
+            ag = max(0.0, p["hours"] - G["own"][w][zz])
+            ws.append([w, zz, figs["lines"][zz][w], cap, ev, figs["hours"][zz][w], figs["range"][zz][w][0],
+                       figs["range"][zz][w][1], figs["own"][w][zz], r10(ag)])
+    ws.append([])
+    ws.append(["ISO week 2027", "Agency hours to book"])
+    _head(ws, ws.max_row)
+    for w in WEEKS:
+        ws.append([w, figs["agency"][w]])
+    ws.append(["Peak", figs["agency_total"]])
+    ws.freeze_panes = "A5"
+    _widths(ws, [13, 7, 11, 22, 13, 13, 14, 14, 16, 13])
+    for row in ws.iter_rows(min_row=5):
+        for c in row:
+            if isinstance(c.value, (int, float)) and c.column > 2:
+                c.number_format = "#,##0"
 
-    ws2 = wb.create_sheet("Blocks")
-    ws2.append(["Priority", "Block", "Lines", "Zone", "Scheduled km", "Hours out", "Diesel l/100 km (11/2025 to 10/2026)",
-                "Design-day energy kWh", "Qualifies (85 per cent)", "Assigned 2027", "Pilot block"])
-    _head(ws2, 1)
-    taken = set(g["taken"])
-    for c in sorted(pk.weekday, key=lambda c: pk.priority[c]):
-        b = pk.blocks[c]
-        ws2.append([pk.priority[c], c, b["lines"], b["zone"], b["km"], b["hours"], figs["diesel"][c], figs["energy"][c],
-                    "yes" if g["verdict"][c] else "no", "yes" if c in taken else "no", "yes" if c in figs["pilot_blocks"] else ""])
-    for row in ws2.iter_rows(min_row=2, max_row=ws2.max_row):
-        row[4].number_format = "0.0"
-        row[5].number_format = "0.00"
-        row[6].number_format = "0.0"
-        row[7].number_format = "#,##0"
-    ws2.append([])
-    ws2.append(["Diesel: fuel-card statement 11/2025 to 10/2026 over the dispatch log, litres per 100 scheduled km (DES-1 3.3). Energy: "
-                "2027 model, -15 C design day (DES-1 2.4), pilot records carried by diesel use. Limit %d kWh (DES-1 4.1)." % round(g["limit"])])
-    _widths(ws2, [8, 8, 9, 6, 11, 9, 16, 14, 12, 11, 9])
-    ws2.freeze_panes = "C2"
-    ws2.auto_filter.ref = "A1:K49"
-    ws2.print_title_rows = "1:1"
+    ws = wb.create_sheet("Volumes")
+    ws.append(["Order lines by week: the 2027 budget as issued, and the lines expected once its week numbers are moved "
+               "onto 2027's dates and its overstatement taken out"])
+    ws["A1"].font = Font(bold=True)
+    ws.append(["Brand", "Group", "ISO week 2027", "Budget as issued", "Expected lines"])
+    _head(ws, 2)
+    for (brand, grp), v in G["vol"].items():
+        bud = A.budget_totals(f, brand, grp, 2027)
+        for w in WEEKS:
+            ws.append([brand, grp, w, int(bud[w]), r10(v[w])])
+    ws.append([])
+    ws.append(["Week 47 (Black Friday 26.11.2027) share of the peak's Kotikaari small-parts lines: expected %.1f %%, "
+               "budget %.1f %%" % (figs["r6"], figs["r6_budget"])])
+    _widths(ws, [14, 12, 13, 17, 15])
+    for row in ws.iter_rows(min_row=3, min_col=4, max_col=5):
+        for c in row:
+            c.number_format = "#,##0"
 
-    ws3 = wb.create_sheet("Night")
-    ws3.append(["Priority", "Block", "Depot return", "Depot departure", "On charge from", "On charge until", "Hours on charge",
-                "Battery energy kWh", "Recharge at the connection point kWh", "Conditioning kWh", "Night draw kWh", "Assigned 2027"])
-    _head(ws3, 1)
-    for c in g["qualifying"]:
-        a, b = A.window(pk, c)
-        hrs = (b - a) / 60.0
-        rech = g["E"][c] / g["eta"]
-        ws3.append([pk.priority[c], c, hhmm(pk.blocks[c]["ret"]), hhmm(pk.blocks[c]["dep"]), hhmm(a), hhmm(b), round(hrs, 2),
-                    round(g["E"][c], 1), round(rech, 1), round(g["cond_kw"] * hrs, 1), round(rech + g["cond_kw"] * hrs, 1),
-                    "yes" if c in taken else "no"])
-    ws3.append([])
-    ws3.append(["", "Qualifying blocks", "", "", "", "", "", round(sum(g["E"][c] for c in g["qualifying"]), 1), "", "",
-                round(g["demand_kwh"], 1), ""])
-    ws3.append(["", "Assigned blocks", "", "", "", "", "", round(sum(g["E"][c] for c in g["taken"]), 1), "", "",
-                round(g["grid_kwh"], 1), ""])
-    for r in (ws3.max_row - 1, ws3.max_row):
-        ws3.cell(r, 2).font = Font(bold=True)
-    if g["refused"]:
-        ws3.append(["", "Next on the list: %s; with the %d blocks above it the night's maximum flow (returns to departures, "
-                    "21:00 to 07:00, %d kW, 150 kW a charger) falls about %s kWh short" %
-                    (g["refused"], len(g["taken"]), int(pk.supply), figs["refused_short_kwh"])])
-    ws3.append(["", "Night period 21:00 to 07:00 at %d kW (connection agreement 2025-ND-117). Recharge = battery energy / %.3f; "
-                "conditioning %.1f kW a bus for every hour on charge in the night period (the sessions, -15 C night)." %
-                (int(pk.supply), g["eta"], g["cond_kw"])])
-    for row in ws3.iter_rows(min_row=2, max_row=ws3.max_row):
-        if isinstance(row[6].value, float):
-            row[6].number_format = "0.00"
-        for c in row[7:11]:
-            c.number_format = "#,##0.0"
-    _widths(ws3, [8, 10, 11, 13, 13, 13, 10, 12, 16, 13, 12, 11])
-    ws3.freeze_panes = "C2"
+    ws = wb.create_sheet("Forecast record")
+    ws.append(["Kotikaari's year-ahead budgets against the order lines it placed (the WMS order import)"])
+    ws["A1"].font = Font(bold=True)
+    ws.append(["Budget year", "Group", "Commercial plan growth %", "Budget lines (year)", "Order lines placed (year)",
+               "Overstatement %"])
+    _head(ws, 2)
+    for r in G["cal"]["table"].itertuples(index=False):
+        ws.append([int(r.year), r.group, pct(r.plan, 0), int(r.forecast), int(r.placed), pct(r.over)])
+    ws.append([])
+    ws.append(["Peak weeks 46 to 50 of 2022 to 2025, all lines: overstatement %.1f %%" % figs["r2"]])
+    ws.append(["Expected overstatement of the 2027 budget: Kotikaari small parts %.1f %%, bulky %.1f %%; Huippu Sport "
+               "small parts %.1f %%, bulky %.1f %%" % (figs["r5"]["K_sp"], figs["r5"]["K_bu"], figs["r5"]["H_sp"],
+                                                        figs["r5"]["H_bu"])])
+    _widths(ws, [12, 13, 22, 18, 18, 15])
+    for row in ws.iter_rows(min_row=3, max_row=10):
+        for c in row[3:5]:
+            c.number_format = "#,##0"
+        for c in (row[2], row[5]):
+            c.number_format = "0.0"
 
-    ws4 = wb.create_sheet("Model")
-    ws4.append(["Pilot energy per km outside heating and cooling, by block (electric bus-days)"])
-    ws4["A1"].font = Font(bold=True)
-    ws4.append(["Block", "Electric bus-days", "kWh per km (traction and auxiliaries)", "Diesel l/100 km", "Weekday"])
-    _head(ws4, 2)
-    e_block, days = g["parts"]["e_block"], g["parts"]["days"]
-    for c in sorted(e_block, key=lambda c: -days[c]):
-        ws4.append([c, days[c], round(e_block[c], 3), round(g["rates"].get(c, float("nan")), 1), "yes" if c in pk.weekday else "no"])
-    ws4.append([])
-    bb, rmse, n = A.bridge(pk, e_block, days, g["rates"])
-    for k, v in (("Bridge: kWh per km = a + b x diesel l/100 km, over %d blocks weighted by days" % n, ""),
-                 ("a", round(float(bb[0]), 4)), ("b", round(float(bb[1]), 5)), ("RMSE kWh per km", round(rmse, 3)),
-                 ("Pilot HVAC draw at -15 C, kW per hour out", round(g["parts"]["h_pilot"], 2)),
-                 ("Fuel heater at -15 C, litres per hour out", round(g["parts"]["heater_lph"], 3)),
-                 ("Fuel heater at -15 C, kW of heat (35 kW at 3.9 l/h)", figs["heater_kw"]),
-                 ("Heating on the 2027 model at -15 C, kW (boosters below -10 C)", round(g["parts"]["heat_new"], 2)),
-                 ("Design-day energy = km x (kWh per km) + hours out x heating kW", ""),
-                 ("", ""),
-                 ("Charging sessions: metered kWh = gain / efficiency + hours on charge x (c0 + c1 x max(0, T0 - night mean))", ""),
-                 ("Efficiency into the battery", figs["eta"]),
-                 ("c0, kW", figs["cond_base_kw"]),
-                 ("c1, kW per degree", figs["cond_slope_kw"]),
-                 ("T0, C", figs["cond_t0"]),
-                 ("Conditioning at a -15 C night, kW", figs["cond_kw"]),
-                 ("Residual, kWh a session", figs["cond_rmse"]),
-                 ("Pooled ratio, battery gain over metered energy (all sessions)", figs["ratio_pooled"])):
-        ws4.append([k, v])
-    _widths(ws4, [60, 16, 30, 14, 9])
+    ws = wb.create_sheet("Time a line")
+    ws.append(["Task minutes a line in the small-parts zones, fitted on the WMS zone hours 2022 to 2026"])
+    ws["A1"].font = Font(bold=True)
+    ws.append(["Term", "Minutes"])
+    _head(ws, 2)
+    for k in ("A", "B", "C", "D", "F"):
+        ws.append(["handling class %s, a line" % k, round(float(G["fit"]["coef"][k]), 3)])
+    ws.append(["each unit after the first", round(float(G["fit"]["coef"]["unit"]), 3)])
+    ws.append(["a line in P1", round(float(G["fit"]["coef"]["P1"]), 3)])
+    ws.append(["a Huippu Sport line", round(float(G["fit"]["coef"]["HUI"]), 3)])
+    ws.append([])
+    ws.append(["Pickers logged in an aisle", "Congestion, minutes a line"])
+    _head(ws, ws.max_row)
+    for d in (0.6, 0.8, 1.0, 1.2, 1.4, 1.6, 1.8, 2.0):
+        ws.append([d, round(A.cong(G["fit"], d), 3)])
+    ws.append([])
+    ws.append(["A Huippu Sport line in the 2027 peak, small-parts zones", figs["t_hui"]])
+    ws.append(["A Kotikaari line in the peak, small-parts zones", figs["t_kot"]])
+    ws.append(["Difference", figs["r4"]])
+    _widths(ws, [52, 24])
+
+    ws = wb.create_sheet("Routes")
+    ws.append(["What each shorter route gives"])
+    ws["A1"].font = Font(bold=True)
+    ws.append(["Route", "Evening shift, P1", "Evening shift, P2", "Agency hours, peak"])
+    _head(ws, 2)
+    ws.append(["This plan", weeks_text(figs["evening"]["P1"]), weeks_text(figs["evening"]["P2"]), figs["agency_total"]])
+    ws.append(["The draft's method: the budget as issued over the pooled overstatement, the 2025 rate, the pilot's "
+               "time a line", weeks_text(figs["hurried"]["evening"]["P1"]), weeks_text(figs["hurried"]["evening"]["P2"]),
+               figs["hurried"]["agency_total"]])
+    for fx in FIXES:
+        r = figs["routes"][fx]
+        ws.append(["The draft's method with %s only" % FIX_NAME[fx], weeks_text(r["evening"]["P1"]),
+                   weeks_text(r["evening"]["P2"]), r["agency_total"]])
+    _widths(ws, [80, 18, 18, 18])
+    for row in ws.iter_rows(min_row=3, min_col=4, max_col=4):
+        for c in row:
+            c.number_format = "#,##0"
+    ws = wb.create_sheet("Notes")
+    notes = [
+        ("As of", "WMS, payroll and order extracts to 1 November 2026; Kotikaari Oy budget 2027 of 15 October 2026"),
+        ("Picker hours", "paid hours worked in a pick zone as the payroll books them (planning standard 2.2); packing "
+                         "and absence excluded; to the nearest 10"),
+        ("Lines", "order lines picked, as the WMS counts them (2.3); 2027 lines are expected lines, to the nearest 10"),
+        ("Evening shift", "opened for a small-parts zone in a peak week when the day shifts at the zone's limit (P1 24, "
+                          "P2 22 pickers on the floor) cannot pick the week's lines (3.4)"),
+        ("Range", "80 per cent: the budget's year-ahead error after its overstatement is taken out, the weekly profile's "
+                  "error and the time model's error (3.5)"),
+        ("Own pickers", "the roster's own pickers on the day shift of every working weekday less their zone's sickness "
+                        "absence in weeks 46 to 50 of 2025 (4.1)"),
+        ("Calendar", "week 49 of 2027 has five day shifts (Independence Day, Monday 6 December); Black Friday is "
+                     "26 November 2027, in week 47"),
+        ("Sources", "WMS zone hours 2022 to 2026, payroll exports 2022 to 2026, WMS order import, Kotikaari Oy forecast "
+                    "archive and budget 2027, Huippu Sport order exports, WMS item master, slotting run of 30.10.2026, "
+                    "HR roster 2027, pilot confirmations weeks 37 to 44 of 2026"),
+    ]
+    ws.append(["Notes"])
+    ws["A1"].font = Font(bold=True)
+    for k, v in notes:
+        ws.append([k, v])
+    _widths(ws, [16, 110])
     wb.save(path)
 
 
-def chart_png(pk, g, figs):
-    order = sorted(pk.weekday, key=lambda c: pk.priority[c])
-    vals = [g["E"][c] for c in order]
-    cols = ["#2E6F9E" if c in set(g["taken"]) else ("#8FB3CC" if g["verdict"][c] else "#C9CED6") for c in order]
-    fig, ax = plt.subplots(figsize=(11, 4.2), dpi=150)
-    ax.bar(range(len(order)), vals, color=cols, width=0.8)
-    ax.axhline(g["limit"], color="#B03A2E", lw=1.2)
-    ax.text(len(order) - 0.5, g["limit"] + 6, "limit %d kWh" % round(g["limit"]), ha="right", va="bottom", fontsize=8, color="#B03A2E")
-    ax.set_xticks(range(len(order)))
-    ax.set_xticklabels(order, rotation=90, fontsize=6.5)
-    ax.set_ylabel("design-day energy, kWh")
-    ax.set_xlabel("weekday blocks in the fleet plan's priority order")
-    ax.spines["top"].set_visible(False)
-    ax.spines["right"].set_visible(False)
-    ax.set_ylim(0, max(vals) * 1.08)
+def chart(figs, G):
+    fig, axes = plt.subplots(1, 2, figsize=(7.2, 2.7), sharey=True)
+    for ax, zz in zip(axes, A.Z_SMALL):
+        lines = [G["plan"][(zz, w)]["lines"] / 1000 for w in WEEKS]
+        caps = [G["plan"][(zz, w)]["cap"] / 1000 for w in WEEKS]
+        x = np.arange(len(WEEKS))
+        ax.bar(x, lines, color=["#c0504d" if G["plan"][(zz, w)]["evening"] else "#7f9fbf" for w in WEEKS], width=0.6)
+        ax.plot(x, caps, color="#333333", marker="_", markersize=18, linestyle="none")
+        ax.set_xticks(x)
+        ax.set_xticklabels(["wk %d" % w for w in WEEKS], fontsize=8)
+        ax.set_title("%s (limit %d pickers)" % (zz, P.LIMIT[zz]), fontsize=8.5)
+        ax.tick_params(axis="y", labelsize=8)
+        ax.spines["top"].set_visible(False)
+        ax.spines["right"].set_visible(False)
+    axes[0].set_ylabel("thousand lines a week", fontsize=8)
+    from matplotlib.lines import Line2D
+    from matplotlib.patches import Patch
+    axes[0].legend(handles=[Patch(color="#c0504d", label="evening shift needed"), Patch(color="#7f9fbf", label="day shifts only"),
+                            Line2D([0], [0], color="#333333", marker="_", markersize=12, linestyle="none",
+                                   label="day shifts' capacity at the limit")], fontsize=6.5, frameon=False, loc="upper left")
+    fig.suptitle("Weeks 47 to 50 carry more lines than the day shifts can pick at the zone limit", fontsize=9)
     fig.tight_layout()
     buf = io.BytesIO()
-    fig.savefig(buf, format="png", metadata={"Software": None})
+    fig.savefig(buf, format="png", dpi=150, metadata={"Software": None})
     plt.close(fig)
-    buf.seek(0)
-    return buf
+    return buf.getvalue()
 
 
-def write_pptx(path, pk, g, figs):
-    prs = Presentation()
-    prs.slide_width, prs.slide_height = Inches(13.333), Inches(7.5)
-    blank = prs.slide_layouts[6]
-
-    def footer(slide, n):
-        tb = slide.shapes.add_textbox(Inches(0.6), Inches(7.0), Inches(12.1), Inches(0.35))
-        p = tb.text_frame.paragraphs[0]
-        p.text = "%s | Niittylä 2027 order | board 21 January 2027 | %d/3" % (P.ORG, n)
-        p.font.size = Pt(10)
-
-    def text(slide, left, top, width, height, lines, size=16, bold_first=False):
-        tb = slide.shapes.add_textbox(Inches(left), Inches(top), Inches(width), Inches(height))
-        tf = tb.text_frame
-        tf.word_wrap = True
-        for i, ln in enumerate(lines):
-            p = tf.paragraphs[0] if i == 0 else tf.add_paragraph()
-            p.text = ln
-            p.font.size = Pt(size)
-            if bold_first and i == 0:
-                p.font.bold = True
-        return tb
-
-    s1 = prs.slides.add_slide(blank)
-    text(s1, 0.6, 0.4, 12, 1.0, ["Niittylä: %d battery-electric buses for 2027, the night supply sets the number" % figs["call_count"]], 28, True)
-    text(s1, 0.6, 1.4, 12, 5.5, [
-        "Order %d %s %s buses for the weekday blocks %s." % (figs["call_count"], P.EMAKE, P.EMODEL, ", ".join(figs["call_set"])),
-        "%d of the 48 weekday blocks stay within the design-day limit of %d kWh (85 per cent of %d kWh usable after the first winter); "
-        "the night period's %d kW recharges %d of them, in the plan's priority order; %s, next on the list, does not fit with them." %
-        (len(g["qualifying"]), round(g["limit"]), round(figs["usable_y1"]), int(pk.supply), figs["call_count"], g["refused"]),
-        "The remaining blocks stay on diesel until the connection is reinforced (earliest Q4 2028).",
-        "Order by 15 January 2027 for delivery in August to September 2027 (quotation 26-0931).",
-    ], 18)
-    footer(s1, 1)
-
-    s2 = prs.slides.add_slide(blank)
-    text(s2, 0.6, 0.3, 12, 0.8, ["%d of 48 weekday blocks stay under the design-day limit; the night recharges %d" % (len(g["qualifying"]), figs["call_count"])], 24, True)
-    png = chart_png(pk, g, figs)
-    s2.shapes.add_picture(png, Inches(0.6), Inches(1.2), width=Inches(12.1))
-    text(s2, 0.6, 6.3, 12, 1.0, ["Dark: assigned. Light blue: within the limit but beyond the night's capacity. Grey: over the limit. "
-                                 "Energies from the pilot's own records carried to every block by its diesel use, with the heating the "
-                                 "2027 model takes from the battery."], 12)
-    footer(s2, 2)
-
-    s3 = prs.slides.add_slide(blank)
-    text(s3, 0.6, 0.3, 12, 0.8, ["What the figures rest on"], 24, True)
-    text(s3, 0.6, 1.2, 12, 5.5, [
-        "Diesel use per block, tank to tank over the dispatch log, 11/2025 to 10/2026: %.1f to %.1f l/100 km; the nine pilot blocks average %.1f against %.1f for the other 39." %
-        (figs["diesel_min"], figs["diesel_max"], figs["pilot_diesel_mean"], figs["others_diesel_mean"]),
-        "The pilot buses' fuel heaters supplied about %.1f kW of cabin heat at -15 C; the 2027 model heats electrically, so its design-day energy carries it (%.1f kW of heating in all)." %
-        (figs["heater_kw"], g["parts"]["heat_new"]),
-        "First-winter loss of usable battery on our own buses: %.1f per cent; usable battery for planning %d kWh." % (figs["loss_pct"], round(figs["usable_y1"])),
-        "Design night: %.1f MWh at the connection point for the %d buses (%.1f MWh with all %d qualifying blocks on charge, against %.2f MWh in the night period); on a -15 C night each bus also takes about %.1f kW on charge to keep its battery warm." % (figs["night_mwh"], figs["call_count"], figs["demand_mwh"], figs["qualifying_count"], figs["night_capacity_mwh"], figs["cond_kw"]),
-        "Business case: the %d blocks burn about %s litres of diesel a year." % (figs["call_count"], format(figs["diesel_litres_assigned"], ",d")),
-    ], 16)
-    footer(s3, 3)
-    prs.save(path)
+def write_docx(path, figs, G):
+    doc = Document()
+    sec = doc.sections[0]
+    sec.page_width, sec.page_height = Mm(210), Mm(297)
+    sec.left_margin = sec.right_margin = Mm(18)
+    sec.top_margin = sec.bottom_margin = Mm(15)
+    st = doc.styles["Normal"]
+    st.font.name = "Calibri"
+    st.font.size = Pt(9.5)
+    doc.add_heading("Peak 2027: evening shifts in weeks %s, %s agency hours" % (
+        weeks_text(figs["evening"]["P1"]) if figs["evening"]["P1"] == figs["evening"]["P2"] else "by zone",
+        "{:,}".format(figs["agency_total"]).replace(",", " ")), level=1)
+    blk = doc.add_paragraph()
+    blk.add_run("To: ").bold = True
+    blk.add_run("the management team, %s\n" % P.ORG)
+    blk.add_run("From: ").bold = True
+    blk.add_run("%s, operations director\n" % P.PEOPLE["director"])
+    blk.add_run("Date: ").bold = True
+    blk.add_run("10 November 2026\n")
+    blk.add_run("Subject: ").bold = True
+    blk.add_run("Saarnela peak plan 2027, evening-shift agreement and agency booking")
+    p = doc.add_paragraph()
+    p.add_run("Recommendation. ").bold = True
+    same = figs["evening"]["P1"] == figs["evening"]["P2"]
+    where = ("weeks %s in both small-parts zones, P1 and P2" % weeks_text(figs["evening"]["P1"])) if same else \
+        ("weeks %s in P1 and weeks %s in P2" % (weeks_text(figs["evening"]["P1"]), weeks_text(figs["evening"]["P2"])))
+    p.add_run("Agree the evening shift in %s, and book %s agency picker hours over the "
+              "peak (%s). Week 46 runs on day shifts only." % (
+                  where,
+                  "{:,}".format(figs["agency_total"]).replace(",", " "),
+                  "; ".join("week %d %s" % (w, "{:,}".format(figs["agency"][w]).replace(",", " ")) for w in WEEKS)))
+    t = doc.add_table(rows=1, cols=7)
+    t.style = "Table Grid"
+    for i, h in enumerate(["Week", "P1 hours (80% range)", "P2 hours (80% range)", "B1 hours (80% range)",
+                           "Evening P1", "Evening P2", "Agency hours"]):
+        t.rows[0].cells[i].text = h
+    for w in WEEKS:
+        c = t.add_row().cells
+        c[0].text = str(w)
+        for j, zz in enumerate(P.ZONES):
+            c[1 + j].text = "%s (%s to %s)" % tuple("{:,}".format(v).replace(",", " ") for v in
+                                                   (figs["hours"][zz][w], figs["range"][zz][w][0], figs["range"][zz][w][1]))
+        c[4].text = "yes" if w in figs["evening"]["P1"] else "no"
+        c[5].text = "yes" if w in figs["evening"]["P2"] else "no"
+        c[6].text = "{:,}".format(figs["agency"][w]).replace(",", " ")
+    for row in t.rows:
+        for c in row.cells:
+            for par in c.paragraphs:
+                for r in par.runs:
+                    r.font.size = Pt(8.5)
+    src = doc.add_paragraph("Picker hours are paid hours to the nearest 10 (planning standard 2.2); ranges at 80 per cent "
+                            "(3.5). Week 49 has five day shifts (Independence Day, Monday 6 December).")
+    for r in src.runs:
+        r.font.size = Pt(8)
+        r.italic = True
+    doc.add_picture(io.BytesIO(chart(figs, G)), width=Mm(172))
+    pts = [
+        ("The zones slow as they fill.",
+         "With the mix of lines held fixed, a line takes %s minutes longer at 1.8 pickers logged in an aisle than on "
+         "an empty floor; the 2025 peak ran its day shifts well below the limit, so its hours a line do not carry to "
+         "2027's day shifts at 24 and 22 pickers." % ("%.2f" % figs["r3"])),
+        ("Huippu Sport's lines are heavier than the pilot's.",
+         "The pilot carried polybag apparel only; at the full assortment's peak mix (footwear boxes, boots, multi-unit "
+         "lines) a Huippu Sport line takes %.2f minutes longer than a Kotikaari line." % figs["r4"]),
+        ("The budgets overstate by more when they plan more.",
+         "Kotikaari's budgets have overstated the peak's lines by %.1f per cent on average (2022 to 2025); the 2027 "
+         "budget's %d per cent plan for Kotikaari small parts points to %.1f per cent, its %d per cent plan for Huippu "
+         "Sport to %.1f." % (figs["r2"], figs["plan_growth"]["K"][0], figs["r5"]["K_sp"], figs["plan_growth"]["H"][0],
+                             figs["r5"]["H_sp"])),
+        ("Black Friday is in week 47.",
+         "The budget phases 2027 by 2025's week numbers and 2026 has 53 ISO weeks; week 47 of 2027 carries %.1f per "
+         "cent of the peak's Kotikaari small-parts lines, not the budget's %.1f." % (figs["r6"], figs["r6_budget"])),
+        ("The draft's route.",
+         "The budget as issued, the 2025 hours a line and the pilot's time a line open the evening shift in P1 %s "
+         "and P2 %s and book %s agency hours." % (
+             wk_phrase(figs["hurried"]["evening"]["P1"]), wk_phrase(figs["hurried"]["evening"]["P2"]),
+             "{:,}".format(figs["hurried"]["agency_total"]).replace(",", " "))),
+    ]
+    for lead, rest in pts:
+        par = doc.add_paragraph()
+        par.add_run(lead + " ").bold = True
+        par.add_run(rest)
+        par.paragraph_format.space_after = Pt(3)
+    doc.save(path)
 
 
 def write(target, gold):
-    import writeup as WU
     os.makedirs(gold, exist_ok=True)
-    pk, g = compute(target)
-    figs = WU.figures(pk, g)
-    write_xlsx(os.path.join(gold, XLSX), pk, g, figs)
-    write_pptx(os.path.join(gold, PPTX), pk, g, figs)
-    return pk, g, figs
+    f, G, figs, rg = compute(target)
+    write_xlsx(os.path.join(gold, XLSX), f, G, figs)
+    write_docx(os.path.join(gold, DOCX), figs, G)
+    return f, G, figs

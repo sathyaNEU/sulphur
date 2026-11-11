@@ -1,312 +1,271 @@
-"""The independent verifier: reads only the shipped bundle (target/ and the goldens), on its own code path (different
-interval construction, normal equations, a square-root age form, the least-slack schedule, pypdf for the documents),
-and recomputes every graded figure against figures.json. Exit 1 on any disagreement."""
+"""The independent verifier: reads only the shipped bundle (csv module and openpyxl, no generator module but the
+calendar of public holidays it re-derives itself), recomputes every graded result on its own code path and holds
+it to figures.json. Exit 1 on any miss."""
+import csv
 import datetime as dt
 import json
+import math
 import os
-import re
 import sys
-import zipfile
+from collections import defaultdict
 
 import numpy as np
-import pandas as pd
 from openpyxl import load_workbook
-from pypdf import PdfReader
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-FAIL = []
+TASK = os.path.dirname(HERE)
+T = os.path.join(TASK, "target")
+FIG = json.load(open(os.path.join(HERE, "figures.json")))
+OUT = []
 
 
-def ok(name, cond, detail=""):
-    if not cond:
-        FAIL.append("%s %s" % (name, detail))
+def ok(label, cond, detail=""):
+    OUT.append((label, bool(cond), detail))
 
 
-def mins(s):
-    h, m = s.split(":")
-    return int(h) * 60 + int(m)
+def rows(name, delim=","):
+    with open(os.path.join(T, name), encoding="utf-8") as fh:
+        return list(csv.DictReader(fh, delimiter=delim))
 
 
-def text(path):
-    return re.sub(r"\s+", " ", "\n".join((p.extract_text() or "") for p in PdfReader(path).pages))
+def easter(y):
+    a, b, c = y % 19, y // 100, y % 100
+    d, e = divmod(b, 4)
+    g = (8 * b + 13) // 25
+    h = (19 * a + b - d - g + 15) % 30
+    i, k = divmod(c, 4)
+    l_ = (32 + 2 * e + 2 * i - h - k) % 7
+    m = (a + 11 * h + 19 * l_) // 433
+    month = (h + l_ - 7 * m + 90) // 25
+    return dt.date(y, month, (h + l_ - 7 * m + 33 * month + 19) % 32)
 
 
-def main(target):
-    figs = json.load(open(os.path.join(HERE, "figures.json")))
-    task = os.path.dirname(target)
-    # ---- the documents' filed figures
-    std = text(os.path.join(target, "depot_electrification_standard_DES-1.pdf"))
-    agr = text(os.path.join(target, "charging_connection_agreement_2025.pdf"))
-    quo = text(os.path.join(target, "ebus_quotation_2027.pdf"))
-    share = int(re.search(r"no more than\s+(\d+) per cent", std).group(1)) / 100.0
-    design_t = -float(re.search(r"minus (\d+) degrees", std).group(1))
-    supply = float(re.search(r"(\d{3}) kW from 21:00 to 07:00", agr).group(1))
-    usable = float(re.search(r"usable capacity (\d+) kWh", quo).group(1))
-    charger = float(re.search(r"up to (\d+) kW to a bus", std).group(1))
-    ok("standard: 85 per cent", share == 0.85)
-    ok("standard: minus 15", design_t == -15.0)
-    ok("agreement: the night capacity equals the build's", supply == figs["supply_kw"])
-    ok("quotation: 480 kWh usable", usable == 480.0)
-    # ---- registers
-    wb = load_workbook(os.path.join(target, "block_register_2026.xlsx"), read_only=True)
-    blocks, old2new = {}, {}
-    for r in list(wb["Blocks"].iter_rows(values_only=True))[1:]:
-        if not r or r[0] is None:
+def closed(d):
+    y = d.year
+    e = easter(y)
+    fixed = {(1, 1), (1, 6), (5, 1), (12, 6), (12, 24), (12, 25), (12, 26)}
+    if (d.month, d.day) in fixed or d in (e - dt.timedelta(days=2), e + dt.timedelta(days=1), e + dt.timedelta(days=39)):
+        return True
+    if d.month == 6 and ((d.weekday() == 4 and 19 <= d.day <= 25) or (d.weekday() == 5 and 20 <= d.day <= 26)):
+        return True
+    if d.weekday() == 5 and (d.month == 10 and d.day == 31 or d.month == 11 and d.day <= 6):
+        return True
+    return False
+
+
+def working(d):
+    if closed(d):
+        return False
+    return d.weekday() < 5 or (d.weekday() == 5 and 46 <= d.isocalendar()[1] <= 50)
+
+
+def nextwork(d):
+    x = d
+    while not working(x):
+        x += dt.timedelta(days=1)
+    return x
+
+
+def main():
+    # V1 the 2025 peak's picker hours
+    seen = set()
+    hrs = defaultdict(float)
+    for r in rows("timesheets_2024-01_2026-10.csv"):
+        key = (r["work_date"], r["person_id"], r["cost_centre"], r["shift"], r["paid_hours"], r["absence_code"])
+        if key in seen:
             continue
-        ret = mins(r[8])
-        if ret <= mins(r[7]):
-            ret += 1440
-        blocks[r[0]] = {"dtype": r[2], "km": float(r[5]), "dep": mins(r[7]), "ret": ret, "hours": float(r[9]), "climb": float(r[10])}
-        old2new[str(r[1])] = r[0]
-    weekday = sorted(c for c, b in blocks.items() if b["dtype"] == "Mon-Fri")
-    wb = load_workbook(os.path.join(target, "fleet_plan_2027.xlsx"), read_only=True)
-    prio = {r[1]: int(r[0]) for r in list(wb["Weekday blocks 2027"].iter_rows(values_only=True))[1:] if r and r[1]}
-    wb = load_workbook(os.path.join(target, "vehicle_register_2026.xlsx"), read_only=True)
-    veh, reg2fn, cards = {}, {}, []
-    for r in list(wb["Vehicles"].iter_rows(values_only=True))[1:]:
-        if r and r[0] is not None:
-            veh[int(r[0])] = {"drive": r[3], "since": r[10].date() if hasattr(r[10], "date") else r[10], "heater": r[9]}
-            reg2fn[r[1]] = int(r[0])
-    for r in list(wb["Fuel cards"].iter_rows(values_only=True))[1:]:
-        if r and r[0] is not None:
-            cards.append((r[0], int(r[1]) if r[1] is not None else None, r[2].date() if hasattr(r[2], "date") else r[2],
-                          r[3].date() if hasattr(r[3], "date") else r[3]))
-    rating = re.search(r"(\d+) kW fuel-fired \(HVO, ([\d.]+) l/h", veh[1201]["heater"])
-    kwh_per_l = float(rating.group(1)) / float(rating.group(2))
-    # ---- the dispatch log and the fuel statement: tank to tank, mapped by the fill's timestamp
-    dl = pd.read_csv(os.path.join(target, "depot_dispatch_log_2024-01_2026-10.csv"), dtype={"block": str, "vehicle": str})
-    dl["date"] = pd.to_datetime(dl["operating_date"]).dt.date
-    dl["code"] = [old2new.get(c, c) for c in dl["block"]]
-    dl["fn"] = [int(v) if v.isdigit() else reg2fn.get(v) for v in dl["vehicle"]]
-    dl["dep_dt"] = [pd.Timestamp(d) + pd.Timedelta(minutes=mins(t)) for d, t in zip(dl["date"], dl["depot_departure"])]
-    fu = pd.read_csv(os.path.join(target, "fuel_card_transactions_2024-01_2026-10.csv"), dtype={"card_no": str, "vehicle_entered": str})
-    fu["time"] = pd.to_datetime(fu["transaction_time"])
-    fu["date"] = fu["time"].dt.date
-    bycard = {}
-    for c in cards:
-        bycard.setdefault(c[0], []).append(c)
-    fn_col = []
-    for card, d, ent in zip(fu["card_no"], fu["date"], fu["vehicle_entered"].fillna("")):
-        f = None
-        for _, vfn, a, b in bycard.get(card, []):
-            if vfn is not None and a <= d and (b is None or d <= b):
-                f = vfn
-        if f is None and ent.strip().isdigit() and int(ent) in veh:
-            f = int(ent)
-        fn_col.append(f)
-    fu["fn"] = fn_col
-    up = fu["product"].str.upper()
-    fu["kind"] = np.where(up.str.contains("HVO"), "hvo", np.where(up.str.contains("DIESEL"), "diesel", "adblue"))
-    ref0, ref1 = dt.date(2025, 11, 1), dt.date(2026, 10, 31)
-    rows_A, rows_y, codes = [], [], {}
-    for fn, g in fu[(fu["kind"] == "diesel") & fu["fn"].notna()].groupby("fn"):
-        fn = int(fn)
-        if veh[fn]["drive"] != "diesel":
+        seen.add(key)
+        d = dt.date.fromisoformat(r["work_date"])
+        y, w, _ = d.isocalendar()
+        if y == 2025 and 46 <= w <= 50 and not r["absence_code"]:
+            hrs[r["cost_centre"].replace("SAA-", "")] += float(r["paid_hours"])
+    for z in ("P1", "P2", "B1"):
+        ok("V1 %s 2025 peak picker hours %.0f against %s" % (z, hrs[z], FIG["r1"][z]), abs(hrs[z] - FIG["r1"][z]) <= 1)
+
+    # the zone hours, once each
+    zh, seen = [], set()
+    for r in rows("wms_zone_hours_2022-01_2026-10.csv"):
+        k = tuple(r.values())
+        if k in seen:
             continue
-        g = g.sort_values("time")
-        fills = []
-        for t, l in zip(g["time"], g["litres"]):
-            if fills and (t - fills[-1][0]) <= pd.Timedelta(minutes=10):
-                fills[-1][1] += l
-            else:
-                fills.append([t, l])
-        days = dl[dl["fn"] == fn].sort_values("dep_dt")
-        for (t0, _), (t1, l) in zip(fills[:-1], fills[1:]):
-            sub = days[(days["dep_dt"] > t0) & (days["dep_dt"] <= t1)]
-            if len(sub) == 0 or not (ref0 <= t1.date() <= ref1) or sub["date"].min() < ref0:
-                continue
-            kms = sub.groupby("code")["planned_km"].sum().to_dict()
-            for c in kms:
-                codes.setdefault(c, len(codes))
-            rows_A.append(kms)
-            rows_y.append(l)
-    A = np.zeros((len(rows_A), len(codes)))
-    for i, kms in enumerate(rows_A):
-        for c, k in kms.items():
-            A[i, codes[c]] = k / 100.0
-    y = np.array(rows_y)
-    beta = np.linalg.solve(A.T @ A, A.T @ y)
-    rates = {c: float(beta[i]) for c, i in codes.items()}
-    dmax = max(abs(rates[c] - figs["diesel"][c]) for c in weekday)
-    ok("R1: every weekday block's diesel figure within 0.7 of the golden", dmax <= 0.7, "%.2f" % dmax)
-    # ---- the pilot: energy per km outside HVAC by block, HVAC per hour by temperature, the heater fuel
-    eb = pd.read_csv(os.path.join(target, "ebus_telematics_daily_2025-03_2026-10.csv")).drop_duplicates()
-    eb["date"] = pd.to_datetime(eb["date"]).dt.date
-    wx = pd.read_csv(os.path.join(target, "weather_vehkasalo_daily_2016_2026.csv"))
-    wx["date"] = pd.to_datetime(wx["date"]).dt.date
-    both = wx.dropna(subset=["t_mean_airport_c", "t_mean_keskusta_c"])
-    off = float((both["t_mean_keskusta_c"] - both["t_mean_airport_c"]).mean())
-    st = dict(zip(wx["date"], wx["t_mean_airport_c"].where(wx["t_mean_airport_c"].notna(), wx["t_mean_keskusta_c"] - off)))
-    amb = eb["ambient_mean_c"].astype(float).values
-    s_ = np.array([st.get(d, np.nan) for d in eb["date"]])
-    offb = float(np.nanmean(amb - s_))
-    eb["t"] = np.where(np.isnan(amb), s_ + offb, amb)
-    eb["hours"] = eb["moving_h"] + eb["idle_h"]
-    key = {(int(r.fn), r.date): r.code for r in dl.itertuples()}
-    eb["code"] = [key.get((int(v), d)) for v, d in zip(eb["vehicle"], eb["date"])]
-    eb = eb.dropna(subset=["code"])
-    ws = pd.read_csv(os.path.join(target, "workshop_orders_2024-01_2026-10.csv"))
-    bad = set()
-    hv_txt = ws["description"].str.lower()
-    for _, f in ws[hv_txt.str.contains("heater") & hv_txt.str.contains("f12")].iterrows():
-        rep = ws[(ws["vehicle"] == f["vehicle"]) & hv_txt.str.contains("heater") & hv_txt.str.contains("repaired") & (pd.to_datetime(ws["opened"]) > pd.to_datetime(f["opened"]))]
-        a, b = pd.to_datetime(f["opened"]).date(), pd.to_datetime(rep.iloc[0]["opened"]).date()
-        d = a
-        while d < b:
-            bad.add((int(f["vehicle"]), d))
-            d += dt.timedelta(days=1)
-    keep = np.array([(int(v), d) not in bad for v, d in zip(eb["vehicle"], eb["date"])])
-    e_block = ((eb["energy_used_kwh"] - eb["hvac_kwh"]).groupby(eb["code"]).sum() / eb["distance_km"].groupby(eb["code"]).sum()).to_dict()
-    days = eb["code"].value_counts().to_dict()
-    ebh = eb[keep]
-    near = ebh[np.abs(ebh["t"] - design_t) <= 2.0]
-    h_pilot = float((near["hvac_kwh"] / near["hours"]).mean())
-    # heater fuel: HVO fills tank to tank on the electric buses
-    hv = fu[(fu["kind"] == "hvo") & fu["fn"].notna()]
-    iv = []
-    for fn, g in hv.groupby("fn"):
-        fn = int(fn)
-        if veh[fn]["drive"] != "electric":
+        seen.add(k)
+        zh.append(r)
+    picked = defaultdict(float)
+    for r in zh:
+        d = dt.date.fromisoformat(r["date"])
+        y, w, _ = d.isocalendar()
+        picked[(y, w, r["zone"])] += float(r["lines"]) - float(r["lines_hui"])
+
+    # V2 the pooled overstatement
+    bud = {}
+    for r in rows("kotikaari_forecast_archive_2021-10_2026-10.csv"):
+        if not r["round"].startswith("budget"):
             continue
-        g = g.sort_values("time")
-        fl = list(zip(g["time"], g["litres"]))
-        dd = eb[eb["vehicle"] == fn]
-        for (t0, _), (t1, l) in zip(fl[:-1], fl[1:]):
-            sub = dd[(dd["date"] > t0.date()) & (dd["date"] <= t1.date())]
-            if len(sub):
-                hrs = np.array([0.0 if (fn, d) in bad else h for h, d in zip(sub["hours"], sub["date"])])
-                iv.append((l, hrs, sub["t"].values))
+        k = (r["round"], r["group"], int(r["iso_year"]), int(r["iso_week"]))
+        if k not in bud or r["issued"] >= bud[k][0]:
+            bud[k] = (r["issued"], float(r["order_lines"]))
+    placed = defaultdict(float)
+    for r in rows("wms_order_import_kotikaari_2022-01_2026-10.csv"):
+        d = dt.date.fromisoformat(r["received"])
+        y, w, _ = d.isocalendar()
+        placed[(y, w, r["group"])] += float(r["web_lines"]) + float(r["store_lines"])
+    num = sum(v[1] for k, v in bud.items() if 2022 <= k[2] <= 2025 and 46 <= k[3] <= 50)
+    den = sum(v for k, v in placed.items() if 2022 <= k[0] <= 2025 and 46 <= k[1] <= 50)
+    r2 = 100.0 * (num / den - 1.0)
+    ok("V2 pooled overstatement %.2f against %s" % (r2, FIG["r2"]), abs(r2 - FIG["r2"]) <= 0.15)
+
+    # V3 congestion, on its own grid and weights
+    small = [r for r in zh if r["zone"] in ("P1", "P2") and int(r["lines"]) >= 30]
+    n = np.array([float(r["lines"]) for r in small])
+    d_ = np.array([dt.date.fromisoformat(r["date"]) >= dt.date(2024, 1, 8) for r in small])
+    ais = np.where(d_, np.where([r["zone"] == "P1" for r in small], 12, 11), np.where([r["zone"] == "P1" for r in small], 8, 7))
+    dpa = np.array([float(r["pickers_logged"]) for r in small]) / ais
+    y = np.array([float(r["task_min"]) for r in small]) / n
+    X0 = np.column_stack([np.array([float(r["lines_cls_" + c]) for r in small]) / n for c in "abcdf"] +
+                         [(np.array([float(r["units"]) for r in small]) - n) / n,
+                          np.array([r["zone"] == "P1" for r in small], float),
+                          np.array([float(r["lines_hui"]) for r in small]) / n])
     best = None
-    for T0 in np.arange(-12, 2.01, 0.5):
-        x = np.array([float(np.sum(h * np.maximum(0, T0 - t))) for _, h, t in iv])
-        yv = np.array([l for l, _, _ in iv])
-        k = float(x @ yv / (x @ x))
-        sse = float(np.sum((yv - k * x) ** 2))
-        if best is None or sse < best[0]:
-            best = (sse, k, T0)
-    lph = best[1] * max(0.0, best[2] - design_t)
-    heater_kw = lph * kwh_per_l
-    ok("R3: the heaters' heat within 0.3 kW of the golden", abs(heater_kw - figs["heater_kw"]) <= 0.3, "%.2f vs %.2f" % (heater_kw, figs["heater_kw"]))
-    heat_new = h_pilot + heater_kw
-    # the bridge by weighted polyfit over the blocks an electric bus ran
-    xs = np.array([rates[c] for c in e_block if c in rates])
-    ys = np.array([e_block[c] for c in e_block if c in rates])
-    wts = np.array([days[c] for c in e_block if c in rates], float)
-    b1, b0 = np.polyfit(xs, ys, 1, w=np.sqrt(wts))
-    E = {}
-    for c in weekday:
-        e = e_block[c] if days.get(c, 0) >= 30 else b0 + b1 * rates[c]
-        E[c] = blocks[c]["km"] * e + blocks[c]["hours"] * heat_new
-    emax = max(abs(E[c] - figs["energy"][c]) for c in weekday)
-    ok("R4: every design-day energy within 10 kWh of the golden", emax <= 10, "%.1f" % emax)
-    # the loss: a square-root age form with a cold term and bus levels
-    d = (eb["soc_start_pct"] - eb["soc_end_pct"]).values.astype(float)
-    m = d >= 30
-    cap = eb["energy_used_kwh"].values[m] / (d[m] / 100.0)
-    age = np.array([(dd - veh[int(v)]["since"]).days for v, dd in zip(eb["vehicle"], eb["date"])])[m] / 365.25
-    cold = np.maximum(0, 10 - eb["t"].values[m])
-    bus = eb["vehicle"].values[m]
-    B = np.column_stack([(bus == b).astype(float) for b in sorted(set(bus))])
-    X = np.column_stack([B, np.sqrt(age), cold])
-    bb, *_ = np.linalg.lstsq(X, cap, rcond=None)
-    loss = -bb[B.shape[1]] / np.mean(bb[:B.shape[1]])
-    ok("R5: a square-root age form lands inside the loss band", figs["conventions"]["loss_band"][0] <= 100 * loss <= figs["conventions"]["loss_band"][1], "%.2f" % (100 * loss))
-    lim = share * usable * (1 - figs["loss_pct"] / 100.0)
-    ok("limit within 1 kWh", abs(lim - figs["limit_kwh"]) <= 1.0)
-    verdict = {c: "yes" if E[c] <= lim else "no" for c in weekday}
-    ok("R6: every verdict agrees", verdict == figs["verdict"], str([c for c in weekday if verdict[c] != figs["verdict"][c]]))
-    # the charging split from the sessions, on its own clock rule (EU summer time) and a whole-degree knot grid
-    se = pd.read_csv(os.path.join(target, "depot_charging_sessions_2025-03_2026-10.csv"))
+    for kn in np.arange(0.40, 1.21, 0.05):
+        for pw in np.arange(1.4, 2.61, 0.1):
+            X = np.column_stack([X0, np.maximum(0.0, dpa - kn) ** pw])
+            sw = np.sqrt(n)
+            c, *_ = np.linalg.lstsq(X * sw[:, None], y * sw, rcond=None)
+            sse = float(((y - X @ c) ** 2 * n).sum())
+            if best is None or sse < best[0]:
+                best = (sse, kn, pw, c)
+    _, kn, pw, c = best
+    r3 = c[8] * max(0.0, 1.8 - kn) ** pw
+    ok("V3 congestion at 1.8 an aisle %.3f against %s" % (r3, FIG["r3"]), abs(r3 - FIG["r3"]) <= 0.03)
 
-    def last_sun(y, mth):
-        x = dt.datetime(y, mth, 31, 1, 0)
-        while x.weekday() != 6:
-            x -= dt.timedelta(days=1)
-        return x
-
-    def local(u):
-        u = pd.Timestamp(u).tz_localize(None).to_pydatetime() if pd.Timestamp(u).tzinfo else pd.Timestamp(u).to_pydatetime()
-        return u + dt.timedelta(hours=3 if last_sun(u.year, 3) <= u < last_sun(u.year, 10) else 2)
-
-    pin = [local(pd.Timestamp(x.replace("Z", ""))) for x in se["plug_in_utc"]]
-    pout = [local(pd.Timestamp(x.replace("Z", ""))) for x in se["plug_out_utc"]]
-    day = {(int(r.vehicle), r.date): (r.energy_used_kwh, r.soc_start_pct - r.soc_end_pct) for r in eb.itertuples()}
-    G, H, T, Y = [], [], [], []
-    for v, a_, z_, si, so, kwh in zip(se["vehicle"], pin, pout, se["soc_in_pct"], se["soc_out_pct"], se["energy_kwh"]):
-        ev = (a_ - dt.timedelta(hours=12)).date()
-        r = day.get((int(v), ev))
-        t1, t2 = st.get(ev), st.get(ev + dt.timedelta(days=1))
-        if not r or r[1] < 30 or so - si < 30 or t1 is None or t2 is None or np.isnan(t1) or np.isnan(t2):
+    # V4 Huippu Sport's extra minutes
+    wb = load_workbook(os.path.join(T, "wms_item_master_2026-11-02.xlsx"), read_only=True)
+    cls = {}
+    for r in wb.active.iter_rows(min_row=2, values_only=True):
+        if r[1] == "HUI":
+            cls[str(r[2])] = r[5]
+    wb = load_workbook(os.path.join(T, "huippu_slotting_2027.xlsx"), read_only=True)
+    zone = {str(r[0]): r[2] for r in wb.active.iter_rows(min_row=4, values_only=True) if r[0]}
+    agg = {z: [np.zeros(5), 0.0, 0.0] for z in ("P1", "P2")}
+    for r in rows("huippu_article_lines_2024-11_2026-10.csv"):
+        if r["month"] not in ("2025-11", "2025-12"):
             continue
-        n0 = dt.datetime(ev.year, ev.month, ev.day, 21, 0)
-        n1 = n0 + dt.timedelta(hours=10)
-        H.append(max(0.0, (min(z_, n1) - max(a_, n0)).total_seconds() / 3600.0))
-        G.append((so - si) / 100.0 * r[0] / (r[1] / 100.0))
-        T.append(0.5 * (t1 + t2))
-        Y.append(kwh)
-    G, H, T, Y = map(np.array, (G, H, T, Y))
-    best = None
-    for T0 in range(-3, 11):
-        X = np.column_stack([G, H, H * np.maximum(0, T0 - T)])
-        bb2 = np.linalg.solve(X.T @ X, X.T @ Y)
-        sse = float(np.sum((Y - X @ bb2) ** 2))
-        if best is None or sse < best[0]:
-            best = (sse, bb2, T0)
-    _, bb2, T0 = best
-    eta = 1.0 / bb2[0]
-    cond = bb2[1] + bb2[2] * max(0, T0 - design_t)
-    ok("eta within 0.005", abs(eta - figs["eta"]) <= 0.005, "%.4f" % eta)
-    cb = figs["conventions"]["cond_band"]
-    ok("R7: the conditioning at the design night inside the band", cb[0] <= cond <= cb[1], "%.2f" % cond)
-    pooled = float(np.sum(G) / np.sum(Y))
-    ok("the pooled ratio as stated", abs(pooled - figs["ratio_pooled"]) <= 0.005, "%.4f" % pooled)
-    # the night by the least-slack schedule, each bus's steady draw held over its window
-    q = [c for c in sorted(weekday, key=lambda c: prio[c]) if E[c] <= lim]
+        z = zone.get(r["article_no"])
+        if z not in agg:
+            continue
+        agg[z][0]["ABCDF".index(cls[r["article_no"]])] += float(r["order_lines"])
+        agg[z][1] += float(r["units"])
+        agg[z][2] += float(r["order_lines"])
+    th = 0.0
+    tot = agg["P1"][2] + agg["P2"][2]
+    for z, (cc, u, l_) in agg.items():
+        t_ = float(cc / l_ @ c[:5] + c[5] * (u / l_ - 1.0) + c[6] * (z == "P1") + c[7])
+        th += t_ * l_ / tot
+    tk = 0.0
+    kp = {z: [np.zeros(5), 0.0, 0.0] for z in ("P1", "P2")}
+    for r in zh:
+        d = dt.date.fromisoformat(r["date"])
+        yy, ww, _ = d.isocalendar()
+        if yy == 2025 and 46 <= ww <= 50 and r["zone"] in kp:
+            kp[r["zone"]][0] += np.array([float(r["lines_cls_" + x]) for x in "abcdf"])
+            kp[r["zone"]][1] += float(r["units"])
+            kp[r["zone"]][2] += float(r["lines"])
+    kt = kp["P1"][2] + kp["P2"][2]
+    for z, (cc, u, l_) in kp.items():
+        tk += float(cc / l_ @ c[:5] + c[5] * (u / l_ - 1.0) + c[6] * (z == "P1")) * l_ / kt
+    r4 = th - tk
+    ok("V4 Huippu Sport's extra minutes %.3f against %s" % (r4, FIG["r4"]), abs(r4 - FIG["r4"]) <= 0.03)
 
-    def win(x):
-        return max(blocks[x]["ret"], 21 * 60), min(blocks[x]["dep"] + 1440, 7 * 60 + 1440)
+    # V5 the calibration
+    pts = []
+    plans = {}
+    for r in rows("kotikaari_forecast_archive_2021-10_2026-10.csv"):
+        if r["note"].startswith("Budget"):
+            yy = int(r["note"].split()[1].rstrip(":"))
+            nums = [float(x) for x in __import__("re").findall(r"\+(\d+) %", r["note"])]
+            plans[yy] = (nums[0] / 100, nums[1] / 100)
+    for yy in range(2022, 2026):
+        for g, zones in (("small parts", ("P1", "P2")), ("bulky", ("B1",))):
+            fb = sum(v[1] for k, v in bud.items() if k[1] == g and k[2] == yy)
+            pk = sum(v for k, v in placed.items() if k[0] == yy and k[2] == g)
+            pts.append((math.log1p(plans[yy][0 if g == "small parts" else 1]), math.log(fb / pk)))
+    A_ = np.array([[1.0, p[0]] for p in pts])
+    cf, *_ = np.linalg.lstsq(A_, np.array([p[1] for p in pts]), rcond=None)
+    k27 = 100.0 * math.expm1(cf[0] + cf[1] * math.log1p(plans[2027][0]))
+    ok("V5 the 2027 overstatement, Kotikaari small parts %.2f against %s" % (k27, FIG["r5"]["K_sp"]),
+       abs(k27 - FIG["r5"]["K_sp"]) <= 0.3)
 
-    taken = []
-    for c in q:
-        jobs = [(x, E[x] / eta, *win(x)) for x in taken + [c]]
-        rem = {x: e for x, e, _, _ in jobs}
-        mnt = min(j[2] for j in jobs)
-        end = max(j[3] for j in jobs)
-        while mnt < end:
-            here = [j for j in jobs if j[2] <= mnt and mnt + 5 <= j[3]]
-            avail = (supply - cond * len(here)) * 5 / 60.0
-            live = sorted([j for j in here if rem[j[0]] > 1e-9], key=lambda j: (j[3] - mnt) - rem[j[0]] / (charger - cond) * 60.0)
-            for x, e, a2, b2 in live:
-                take = min(rem[x], (charger - cond) * 5 / 60.0, avail)
-                rem[x] -= take
-                avail -= take
-                if avail <= 1e-9:
-                    break
-            mnt += 5
-        if sum(rem.values()) > 1.0:
-            break
-        taken.append(c)
-    ok("R9: the order by the least-slack schedule equals the golden", sorted(taken) == figs["call_set"], str(sorted(taken)))
-    draw = lambda codes: sum(E[x] / eta + cond * (win(x)[1] - win(x)[0]) / 60.0 for x in codes)
-    ok("the night's draw for the order within 0.2 MWh", abs(draw(taken) / 1000 - figs["night_mwh"]) <= 0.2)
-    ok("R8: the draw with every qualifying block on charge within 0.2 MWh", abs(draw(q) / 1000 - figs["demand_mwh"]) <= 0.2,
-       "%.2f vs %.2f" % (draw(q) / 1000, figs["demand_mwh"]))
-    # the goldens
-    gold = os.path.join(task, "golden")
-    wb = load_workbook(os.path.join(gold, "niittyla_ebus_order_2027.xlsx"), read_only=True)
-    rows = {r[0]: r[1] for r in wb["Order"].iter_rows(values_only=True) if r and r[0]}
-    ok("golden workbook: the count", rows.get("Buses to order") == figs["call_count"])
-    ok("golden workbook: the night draw", rows.get("Design night: draw at the connection point for the buses ordered, MWh") == figs["night_mwh"])
-    ok("golden workbook: the conditioning", rows.get("Conditioning draw on charge at -15 C, kW per bus") == figs["cond_kw"])
-    with zipfile.ZipFile(os.path.join(gold, "niittyla_ebus_order_2027.pptx")) as z:
-        names = z.namelist()
-        s1 = z.read("ppt/slides/slide1.xml").decode("utf-8")
-    ok("golden deck: three slides with the count on the first", sum(1 for n_ in names if re.match(r"ppt/slides/slide\d+\.xml$", n_)) == 3 and ("Order %d " % figs["call_count"]) in s1)
-    print("verify: %s" % ("PASS" if not FAIL else "FAIL"))
-    for f in FAIL:
-        print("FAIL", f)
-    return 1 if FAIL else 0
+    # V6 week 47's share once 2025's orders move to 2027's days
+    picks = defaultdict(float)
+    for r in rows("wms_order_import_kotikaari_2022-01_2026-10.csv"):
+        if r["group"] != "small parts":
+            continue
+        d = dt.date.fromisoformat(r["received"])
+        if d.year not in (2025,):
+            continue
+        nd = d + dt.timedelta(days=728)
+        picks[nextwork(nd + dt.timedelta(days=1))] += float(r["web_lines"])
+        if float(r["store_lines"]) and d.weekday() < 5:
+            q = nd
+            while not (working(q) and q.weekday() < 5):
+                q += dt.timedelta(days=1)
+            picks[q] += float(r["store_lines"])
+    wk = defaultdict(float)
+    for p, v in picks.items():
+        yy, ww, _ = p.isocalendar()
+        if yy == 2027 and 46 <= ww <= 50:
+            wk[ww] += v
+    r6 = 100.0 * wk[47] / sum(wk.values())
+    ok("V6 week 47's share %.2f against %s" % (r6, FIG["r6"]), abs(r6 - FIG["r6"]) <= 0.3)
+
+    # V7 the evening cells, on this verifier's own capacity at each zone's limit
+    crew = defaultdict(int)
+    seen2 = set()
+    for r in rows("timesheets_2024-01_2026-10.csv"):
+        key = (r["work_date"], r["person_id"], r["cost_centre"], r["shift"])
+        if key in seen2 or r["absence_code"]:
+            continue
+        seen2.add(key)
+        d = dt.date.fromisoformat(r["work_date"])
+        if 46 <= d.isocalendar()[1] <= 50 and r["cost_centre"] in ("SAA-P1", "SAA-P2"):
+            crew[(r["work_date"], r["cost_centre"][4:], r["shift"])] += 1
+    logged, heads = defaultdict(float), defaultdict(float)
+    for r in zh:
+        d = dt.date.fromisoformat(r["date"])
+        if d.year not in (2024, 2025) or not 46 <= d.isocalendar()[1] <= 50 or r["zone"] not in ("P1", "P2"):
+            continue
+        if crew.get((r["date"], r["zone"], "EVE")):
+            continue
+        h = int(r["hour"])
+        logged[h] += float(r["pickers_logged"])
+        heads[h] += crew.get((r["date"], r["zone"], "DAY"), 0)
+    ls = {h: logged[h] / heads[h] for h in range(6, 15) if heads[h]}
+    limit = {"P1": 24, "P2": 22}
+    aisles = {"P1": 12, "P2": 11}
+    tz = {}
+    for z in ("P1", "P2"):
+        cc, u, l_ = kp[z]
+        tz[(z, "k")] = float(cc / l_ @ c[:5] + c[5] * (u / l_ - 1.0) + c[6] * (z == "P1"))
+        cc, u, l_ = agg[z]
+        tz[(z, "h")] = float(cc / l_ @ c[:5] + c[5] * (u / l_ - 1.0) + c[6] * (z == "P1") + c[7])
+    for z in ("P1", "P2"):
+        ev = []
+        for w in range(46, 51):
+            days = sum(1 for k in range(1, 8) if working(dt.date.fromisocalendar(2027, w, k)))
+            lk, lh = FIG["lines_split"][z][str(w)]
+            t_ = (lk * tz[(z, "k")] + lh * tz[(z, "h")]) / (lk + lh)
+            cap = days * sum(limit[z] * 60.0 * v / (t_ + c[8] * max(0.0, limit[z] * v / aisles[z] - kn) ** pw)
+                             for v in ls.values())
+            if lk + lh > cap:
+                ev.append(w)
+        ok("V7 %s evening weeks %s against %s" % (z, ev, FIG["evening"][z]), ev == FIG["evening"][z])
+
+    bad = [x for x in OUT if not x[1]]
+    for label, good, d in OUT:
+        print(("PASS  " if good else "FAIL  ") + label)
+    print("verify: %d of %d" % (len(OUT) - len(bad), len(OUT)))
+    sys.exit(1 if bad else 0)
 
 
 if __name__ == "__main__":
-    sys.exit(main(sys.argv[1] if len(sys.argv) > 1 else os.path.join(os.path.dirname(HERE), "target")))
+    main()

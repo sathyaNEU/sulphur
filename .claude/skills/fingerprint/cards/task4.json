@@ -12,8 +12,8 @@
   "shape": "06",
   "decision_type": "schedule_or_sequence",
   "answer_unit": "date_or_period",
-  "answer": "",
-  "answer_source": "submission.md (pending)",
+  "answer": "Agree the evening shift in weeks 47 to 50 in both small-parts zones (P1 and P2) and book 8,390 agency picker hours over the 2027 peak (760, 1,910, 1,930, 1,760, 2,030 in weeks 46 to 50); week 46 runs on day shifts alone",
+  "answer_source": "submission.md (Final Recommendation) and generator/figures.json",
   "gap": [
     "time",
     "population"
@@ -52,7 +52,7 @@
   "scoring_unit": "other",
   "spine": {
     "file": "wms_zone_hours_2022-01_2026-10.csv",
-    "rows": 0,
+    "rows": 34077,
     "entity": "one pick zone's hour in the WMS labour log (pickers logged, task and idle minutes, lines by handling class, units)",
     "grain": "zone x hour",
     "source": "synthetic"
@@ -75,7 +75,11 @@
       "Helena Korhonen",
       "Tapio Nieminen",
       "Tarja Huhtala",
-      "Marko Autio"
+      "Marko Autio",
+      "Anja Kanerva",
+      "Marika Sutinen",
+      "Juho Kivinen",
+      "the roster's 31 own pickers (guard.py names --geo FI --seed 1104)"
     ]
   },
   "deliverables": [
@@ -85,9 +89,9 @@
   "opening_move": "question-first",
   "question_form": "which",
   "driver": "A forward workload is forecast through a per-unit rate that rises once more workers share a fixed space, a rise the coarse record hides because the busy periods carry lighter units, so a proportional scaling its own back-test confirms plans the busy periods short; the forward volume comes from a forecaster whose overstatement grows with the growth it plans and whose period profile is keyed to a calendar grid that a long year moves a whole step against the events driving demand, and a new stream's per-unit work is measured on a pilot whose units were drawn from its lightest class, so which periods need a second shift and how many extra hours to book come out only when every correction is carried together.",
-  "driver_concrete": "Saarnela's 2027 peak plan forecasts each small-parts zone's paid picker hours from Kotikaari Oy's year-ahead weekly forecast, which overstates by a share that grows with the growth it plans and copies 2025's week numbers into a calendar shifted a week by 2026's 53 ISO weeks (Black Friday falls in week 47 of 2027), through a time per line by handling class and units with an aisle-congestion term that the peak's lighter lines hide in the weekly record, and with Huippu Sport's lines at its full peak assortment (footwear boxes, multi-unit lines) where the September pilot stocked only polybag apparel; the day shift's capacity at each zone's limit of pickers on the floor decides the evening-shift weeks and the remainder sets the agency booking.",
+  "driver_concrete": "Saarnela's 2027 peak plan forecasts each small-parts zone's paid picker hours from Kotikaari Oy's year-ahead weekly forecast, which overstates by a share that grows with the growth it plans and copies 2025's week numbers into a calendar shifted a week by 2026's 53 ISO weeks (Black Friday falls in week 47 of 2027), through a time per line by handling class and units with an aisle-congestion term that the peak's lighter lines hide in the weekly record, and with Huippu Sport's lines at its full peak assortment (footwear boxes, multi-unit lines) where the September pilot stocked only polybag apparel; the day shift's capacity at each zone's limit of pickers on the floor decides the evening-shift weeks and the remainder sets the agency booking; on the cut pack the golden opens the evening shift in weeks 47 to 50 in both zones (week 46 at 0.84 and 0.87 of the day shifts' capacity, weeks 47 to 50 at 1.17 to 1.30), the draft's route in week 48 only.",
   "stump": "The careful pass measures the pooled overstatement (right) and applies it to every week of the client's 2027 forecast, keeping the forecast's week-numbered profile (Black Friday a week late) and pricing its planned growth at the pooled rate; it fits time per line on the handling-class mix at the weekly or shift grain, where the peak's lighter lines hide the aisle congestion, so the 2025 peak's rate carries to 2027's denser floor and the draft's back-test confirms it; and it reads Huippu Sport's time per line off the pilot, whose polybag assortment picks quicker than Kotikaari's lines: it books too few agency hours in the busiest weeks and opens the evening shift in the wrong weeks.",
-  "deep_chain": "(1) the 2025 peak's paid picker hours by zone from the timesheets, floaters split by their WMS log, against the WMS task minutes; (2) the pooled overstatement of the client's year-ahead peak forecasts, vintage by vintage at the October lead; (3) the aisle-congestion term in time per line at the zone-hour grain with the handling-class mix held fixed; (4) the new brand's extra time per line at its full peak assortment's mix; (5) the 2027 forecasts' expected overstatement from the growth each plans; (6) the 2027 weekly profile re-keyed from week numbers to the dates of Black Friday and the Christmas cut-offs; (7) each zone's paid picker hours for weeks 46 to 51; (8) the 80 per cent ranges; (9) the evening-shift weeks by small-parts zone; (10) the agency hours to book each week",
+  "deep_chain": "(1) the 2025 peak's paid picker hours by zone from the timesheets, floaters split by their WMS log, against the WMS task minutes; (2) the pooled overstatement of the client's year-ahead peak forecasts, vintage by vintage at the October lead; (3) the aisle-congestion term in time per line at the zone-hour grain with the handling-class mix held fixed; (4) the new brand's extra time per line at its full peak assortment's mix; (5) the 2027 forecasts' expected overstatement from the growth each plans; (6) the 2027 weekly profile re-keyed from week numbers to the dates of Black Friday and the Christmas cut-offs; (7) each zone's paid picker hours for weeks 46 to 50; (8) the 80 per cent ranges; (9) the evening-shift weeks by small-parts zone; (10) the agency hours to book each week",
   "judgment": "a congestion term found only at the zone-hour grain with the mix held fixed and carried to a denser floor than any past week's average; a pilot's selected assortment reweighted to the brand's full peak mix; a forecaster's optimism calibrated by vintage against the growth it plans; a week-numbered profile re-keyed to event dates after a 53-week year",
   "one_fact_test": "the strongest sentence (time per line rises with pickers per aisle once the handling-class mix is held fixed) rescues the congestion result and none of the weekly hours, agency hours or evening-shift cells, which still carry the pilot's mix, the pooled overstatement and the late profile: 1 of 10",
   "strategy_label": "own",
@@ -507,7 +511,7 @@
   "depth_level": 5,
   "doctrine": "throughout",
   "client_subdomain": "regression-classification-model-diagnostics",
-  "results": "R1 the 2025 peak's paid picker hours by zone from the timesheets with floaters split by their WMS log; R2 the pooled overstatement of Kotikaari's year-ahead peak forecasts; R3 the aisle-congestion term at the zone-hour grain with the mix held fixed; R4 Huippu Sport's extra minutes a line at its full peak mix; R5 the 2027 forecasts' expected overstatement from the growth each plans; R6 the 2027 weekly profile re-keyed to Black Friday and the Christmas cut-offs; R7 each zone's paid picker hours for weeks 46 to 51; R8 their 80 per cent ranges; R9 the evening-shift weeks by small-parts zone; R10 the agency hours to book each week",
+  "results": "R1 the 2025 peak's paid picker hours by zone from the timesheets with floaters split by their WMS log; R2 the pooled overstatement of Kotikaari's year-ahead peak forecasts; R3 the aisle-congestion term at the zone-hour grain with the mix held fixed; R4 Huippu Sport's extra minutes a line at its full peak mix; R5 the 2027 forecasts' expected overstatement from the growth each plans; R6 the 2027 weekly profile re-keyed to Black Friday and the Christmas cut-offs; R7 each zone's paid picker hours for weeks 46 to 50; R8 their 80 per cent ranges; R9 the evening-shift weeks by small-parts zone; R10 the agency hours to book each week",
   "architecture_spent": false,
   "skeleton": {
     "decision_form": "timing_or_schedule_choice",

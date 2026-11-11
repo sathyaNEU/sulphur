@@ -1,699 +1,767 @@
-"""Everything computed from the shipped pack, on the solver's side of the files: the pack loaded and cleaned, each
-block's diesel use tank to tank over the dispatch log (R1), the pilot blocks' rank (R2), the pilot's battery energy
-model and the heat its fuel heaters supplied (R3), the diesel bridge and the 48 design-day energies (R4), the
-verdicts (R5), the first-winter capacity loss (R6), the night under the connection agreement (R7) and the order
-(R8); beside the golden, the hurried passes (quick; careful but hurried, the union of the recorded runs) and the
-rivals on every result. Nothing here reads the generator's truth."""
+"""Every owed figure computed from the shipped files (frames read from target/, or the same frames built in memory for
+calibration): the golden route, the careful but hurried route and the quick route, and the rivals each result's band
+is measured on."""
 import datetime as dt
 import math
-import os
-import re
-import sys
 
 import numpy as np
 import pandas as pd
-from openpyxl import load_workbook
 
-HERE = os.path.dirname(os.path.abspath(__file__))
-sys.path.insert(0, HERE)
-import night  # noqa: E402
+import cal
+import params as P
 
-FILES = {
-    "fuel": "fuel_card_transactions_2024-01_2026-10.csv", "dispatch": "depot_dispatch_log_2024-01_2026-10.csv",
-    "blocks": "block_register_2026.xlsx", "vehicles": "vehicle_register_2026.xlsx",
-    "ebus": "ebus_telematics_daily_2025-03_2026-10.csv", "sessions": "depot_charging_sessions_2025-03_2026-10.csv",
-    "weather": "weather_vehkasalo_daily_2016_2026.csv", "workshop": "workshop_orders_2024-01_2026-10.csv",
-    "plan": "fleet_plan_2027.xlsx"}
-# the standard's and the agreement's filed figures (read back from the PDFs by verify.py; constants here)
-SHARE, DESIGN_T, CHARGER_KW = 0.85, -15.0, 150.0
-NIGHT_FROM, NIGHT_TO = 21 * 60, 7 * 60
-REF = (dt.date(2025, 11, 1), dt.date(2026, 10, 31))
-NEW_CODES = dt.date(2025, 8, 11)
-HEATER_KWH_PER_L = 35.0 / 3.9          # the register's heater: 35 kW at 3.9 l/h
-HP_FLOOR_T = -10.0                      # the quotation: heat pump to -10 C, boosters below
+CL = list(P.CLASSES)
+Z_SMALL = ["P1", "P2"]
+LS_KEYS_DAY = list(range(6, 15))
+LS_KEYS_EVE = list(range(14, 23))
 
 
-class Pack:
-    pass
+# ----------------------------------------------------------------------------------------------------- assembly
+def aisles_on(zone, dates):
+    """The standard's zone table: the small-parts zones' aisles before and after the January 2024 extension."""
+    new = pd.Series(dates).ge(pd.Timestamp(P.EXTENSION)).to_numpy()
+    return np.where(new, P.AISLES[zone], P.AISLES_OLD[zone])
 
 
-def _mins(s):
-    h, m = s.split(":")
-    return int(h) * 60 + int(m)
+def zone_hours(f):
+    z = f["zone_hours"].drop_duplicates().copy()
+    z["date"] = pd.to_datetime(z["date"])
+    iso = z["date"].dt.isocalendar()
+    z["iy"], z["iw"] = iso["year"].astype(int), iso["week"].astype(int)
+    z["ais"] = 0
+    for zz in P.ZONES:
+        m = z["zone"] == zz
+        z.loc[m, "ais"] = aisles_on(zz, z.loc[m, "date"])
+    z["dpa"] = z["pickers_logged"] / z["ais"]
+    z["extra"] = z["units"] - z["lines"]
+    z["kot"] = z["lines"] - z["lines_hui"]
+    return z
 
 
-def load(target, supply_kw=690.0, usable_2027=480.0):
-    pk = Pack()
-    pk.supply = supply_kw
-    pk.usable_2027 = usable_2027
-    # blocks
-    wb = load_workbook(os.path.join(target, FILES["blocks"]), read_only=True)
-    rows = list(wb["Blocks"].iter_rows(values_only=True))[1:]
-    pk.blocks = {}
-    pk.old2new = {}
-    for r in rows:
-        if not r or r[0] is None:
-            continue
-        code, old, dtype, lines, trips, km, km_old, dep, ret, hours, climb, zone = r
-        dtp = {"Mon-Fri": "M", "Sat": "L", "Sun/holiday": "S"}[dtype]
-        pk.blocks[code] = {"code": code, "old": str(old), "daytype": dtp, "lines": str(lines), "trips": trips, "km": float(km),
-                           "km_old": float(km_old), "dep": _mins(dep), "ret": _mins(ret) if _mins(ret) > _mins(dep) else _mins(ret) + 1440,
-                           "hours": float(hours), "climb": float(climb), "zone": int(zone)}
-        if pk.blocks[code]["ret"] < pk.blocks[code]["dep"]:
-            pk.blocks[code]["ret"] += 1440
-        pk.old2new[str(old)] = code
-    pk.weekday = sorted(c for c, b in pk.blocks.items() if b["daytype"] == "M")
-    # the plan's priority
-    wb = load_workbook(os.path.join(target, FILES["plan"]), read_only=True)
-    pk.priority = {}
-    for r in list(wb["Weekday blocks 2027"].iter_rows(values_only=True))[1:]:
-        if r and r[1]:
-            pk.priority[r[1]] = int(r[0])
-    # vehicles and cards
-    wb = load_workbook(os.path.join(target, FILES["vehicles"]), read_only=True)
-    pk.vehicles = {}
-    pk.reg2fn = {}
-    for r in list(wb["Vehicles"].iter_rows(values_only=True))[1:]:
-        if not r or r[0] is None:
-            continue
-        fn = int(r[0])
-        pk.vehicles[fn] = {"fn": fn, "reg": r[1], "model": r[2], "drive": r[3], "year": r[4], "tank": r[7], "battery": r[8],
-                           "heater": r[9], "since": r[10].date() if hasattr(r[10], "date") else r[10],
-                           "retired": r[11].date() if hasattr(r[11], "date") else r[11]}
-        pk.reg2fn[r[1]] = fn
-    pk.cards = []
-    for r in list(wb["Fuel cards"].iter_rows(values_only=True))[1:]:
-        if not r or r[0] is None:
-            continue
-        vf = r[2].date() if hasattr(r[2], "date") else r[2]
-        vt = r[3].date() if hasattr(r[3], "date") else r[3]
-        pk.cards.append({"card": r[0], "fn": int(r[1]) if r[1] is not None else None, "from": vf, "to": vt, "type": r[4]})
-    pk.ebuses = sorted(fn for fn, v in pk.vehicles.items() if v["drive"] == "electric")
-    # weather: the airport series, its gap filled from the town station less the mean offset
-    wx = pd.read_csv(os.path.join(target, FILES["weather"]))
-    wx["date"] = pd.to_datetime(wx["date"]).dt.date
-    both = wx.dropna(subset=["t_mean_airport_c", "t_mean_keskusta_c"])
-    off = float((both["t_mean_keskusta_c"] - both["t_mean_airport_c"]).mean())
-    t = wx["t_mean_airport_c"].where(wx["t_mean_airport_c"].notna(), wx["t_mean_keskusta_c"] - off)
-    pk.temp = dict(zip(wx["date"], t.astype(float)))
-    pk.temp_offset = off
-    # dispatch log: codes to the current register, vehicles to fleet numbers
-    dl = pd.read_csv(os.path.join(target, FILES["dispatch"]), dtype={"block": str, "vehicle": str})
-    dl["date"] = pd.to_datetime(dl["operating_date"]).dt.date
-    dl["code"] = [pk.old2new.get(c, c) for c in dl["block"]]
-    dl["fn"] = [pk.reg2fn.get(v, None) if not str(v).isdigit() else int(v) for v in dl["vehicle"]]
-    dl = dl.dropna(subset=["fn"])
-    dl["fn"] = dl["fn"].astype(int)
-    dl["dep_min"] = [_mins(x) for x in dl["depot_departure"]]
-    dl["dep_dt"] = [dt.datetime(d.year, d.month, d.day) + dt.timedelta(minutes=int(m)) for d, m in zip(dl["date"], dl["dep_min"])]
-    pk.dispatch = dl[["date", "code", "fn", "planned_km", "dep_dt"]].reset_index(drop=True)
-    # fuel transactions: card to vehicle by validity, spare cards by the typed fleet number
-    fu = pd.read_csv(os.path.join(target, FILES["fuel"]), dtype={"card_no": str, "odometer_km": str, "vehicle_entered": str})
-    fu["time"] = pd.to_datetime(fu["transaction_time"])
-    fu["date"] = fu["time"].dt.date
-    cards_by_no = {}
-    for c in pk.cards:
-        cards_by_no.setdefault(c["card"], []).append(c)
-    fns = []
-    for card, d, ent in zip(fu["card_no"], fu["date"], fu["vehicle_entered"].fillna("")):
-        fn = None
-        for c in cards_by_no.get(card, []):
-            if c["fn"] is not None and c["from"] <= d and (c["to"] is None or d <= c["to"]):
-                fn = c["fn"]
-        if fn is None and ent.strip().isdigit() and int(ent) in pk.vehicles:
-            fn = int(ent)
-        fns.append(fn)
-    fu["fn"] = fns
-    prod = fu["product"].str.upper()
-    fu["kind"] = np.where(prod.str.contains("HVO"), "hvo", np.where(prod.str.contains("DIESEL"), "diesel", "adblue"))
-    pk.fuel = fu
-    # telematics: exact duplicates dropped, ambient from the station where the sensor was blank
-    eb = pd.read_csv(os.path.join(target, FILES["ebus"]))
-    eb = eb.drop_duplicates().reset_index(drop=True)
-    eb["date"] = pd.to_datetime(eb["date"]).dt.date
-    eb["hours"] = eb["moving_h"] + eb["idle_h"]
-    st = np.array([pk.temp.get(d, np.nan) for d in eb["date"]])
-    amb = eb["ambient_mean_c"].astype(float).values
-    ok = ~np.isnan(amb)
-    off_bus = float(np.nanmean(amb[ok] - st[ok]))
-    eb["t"] = np.where(ok, amb, st + off_bus)
-    eb["t_station"] = st
-    pk.ebus_offset = off_bus
-    # the block each electric bus-day ran, from the dispatch log
-    key = {(r.fn, r.date): r.code for r in pk.dispatch.itertuples()}
-    eb["code"] = [key.get((int(v), d)) for v, d in zip(eb["vehicle"], eb["date"])]
-    eb = eb.dropna(subset=["code"]).reset_index(drop=True)
-    eb["age"] = [(d - pk.vehicles[int(v)]["since"]).days for v, d in zip(eb["vehicle"], eb["date"])]
-    pk.ebus = eb
-    se = pd.read_csv(os.path.join(target, FILES["sessions"]))
-    pk.sessions = se
-    pk.workshop = pd.read_csv(os.path.join(target, FILES["workshop"]))
-    return pk
+def timesheet(f):
+    t = f["timesheets"].copy()
+    t["date"] = pd.to_datetime(t["date"])
+    t = t.drop_duplicates(subset=["date", "person", "zone", "shift", "paid", "absence"])
+    iso = t["date"].dt.isocalendar()
+    t["iy"], t["iw"] = iso["year"].astype(int), iso["week"].astype(int)
+    return t
 
 
-# ----------------------------------------------------------------------------------------------- R1: diesel per block
-def fuel_intervals(pk, merge_minutes=12, include_street=True, by_timestamp=True, window=REF):
-    """tank to tank per diesel bus: consecutive diesel fills, the bus-days between them from the dispatch log.
-    Returns a list of (litres, {code: km}) over intervals that start and end inside the window."""
-    fu = pk.fuel[(pk.fuel["kind"] == "diesel") & pk.fuel["fn"].notna()].copy()
-    fu["fn"] = fu["fn"].astype(int)
-    if not include_street:
-        fu = fu[fu["station_id"] == 9001]
+def budgets(f):
+    b = f["forecasts"]
+    b = b[b["round"].str.startswith("budget")].copy()
+    b["issued"] = pd.to_datetime(b["issued"])
+    b = b.sort_values("issued").groupby(["round", "brand", "group", "iso_year", "iso_week"], as_index=False).tail(1)
+    return b
+
+
+# ----------------------------------------------------------------------------------------------------- R1
+def r1_paid_hours(t, year=2025):
+    w = t[(t["iy"] == year) & t["iw"].isin(P.PEAK_WEEKS) & (t["absence"] == "")]
+    return w.groupby("zone")["paid"].sum().round(0).to_dict()
+
+
+def logged_pattern(z, t, years=(2024, 2025)):
+    """Minutes of each paid hour a picker is logged in to the zone, by hour of the day shift and of the evening
+    shift, read from peak days: the WMS's pickers logged against the day's crew on the timesheets."""
+    w = t[(t["absence"] == "") & t["iy"].isin(years) & t["iw"].isin(P.PEAK_WEEKS)]
+    crew = w.groupby(["date", "zone", "shift"]).size().unstack("shift", fill_value=0).reset_index()
+    if "EVE" not in crew:
+        crew["EVE"] = 0
+    zz = z[z["iy"].isin(years) & z["iw"].isin(P.PEAK_WEEKS) & z["zone"].isin(Z_SMALL)]
+    m = zz.merge(crew, on=["date", "zone"])
+    day = {}
+    for h in LS_KEYS_DAY:
+        r = m[(m["hour"] == h) & (m["EVE"] == 0)]
+        day[h] = float(r["pickers_logged"].sum() / r["DAY"].sum()) if len(r) else 0.0
+    eve = {}
+    me = m[m["EVE"] > 0]
+    for h in LS_KEYS_EVE:
+        r = me[me["hour"] == h]
+        if h == 14:
+            eve[h] = float((r["pickers_logged"].sum() - day[14] * r["DAY"].sum()) / r["EVE"].sum())
+        else:
+            eve[h] = float(r["pickers_logged"].sum() / r["EVE"].sum()) if len(r) else 0.0
+    return day, eve
+
+
+# ----------------------------------------------------------------------------------------------------- R2
+def picked_by_week(z):
+    k = z.groupby(["iy", "iw", "zone"])[["kot", "lines_hui"]].sum().reset_index()
+    return k
+
+
+def placed_by_week(f):
+    """Kotikaari's order lines by the ISO week they were placed (the WMS's order import: web and showroom lines),
+    the quantity the budgets forecast."""
+    k = f["k_orders"].copy()
+    d = pd.to_datetime(k["received"])
+    iso = d.dt.isocalendar()
+    k["iy"], k["iw"] = iso["year"].astype(int), iso["week"].astype(int)
+    k["lines"] = k["web_lines"] + k["store_lines"]
+    return k.groupby(["iy", "iw", "group"])["lines"].sum().reset_index()
+
+
+def r2_overstatement(z, f, years=range(2022, 2026), basis="placed"):
+    b = budgets(f)
+    b = b[(b["brand"] == P.BRAND_K) & b["iso_year"].isin(list(years)) & b["iso_week"].isin(P.PEAK_WEEKS)]
+    if basis == "picked":
+        k = picked_by_week(z)
+        k = k[k["iy"].isin(list(years)) & k["iw"].isin(P.PEAK_WEEKS)]
+        return float(b["order_lines"].sum() / k["kot"].sum() - 1.0)
+    k = placed_by_week(f)
+    k = k[k["iy"].isin(list(years)) & k["iw"].isin(P.PEAK_WEEKS)]
+    return float(b["order_lines"].sum() / k["lines"].sum() - 1.0)
+
+
+def overstatement_by_year(z, f, years=range(2022, 2026), weeks=None):
+    b = budgets(f)
+    b = b[b["brand"] == P.BRAND_K]
+    k = placed_by_week(f)
     out = []
-    disp = pk.dispatch
-    for fn, g in fu.groupby("fn"):
-        if pk.vehicles[fn]["drive"] != "diesel":
-            continue
-        g = g.sort_values("time")
-        fills = []
-        for t, lit in zip(g["time"], g["litres"]):
-            if fills and (t - fills[-1][0]).total_seconds() <= merge_minutes * 60:
-                fills[-1] = (fills[-1][0], fills[-1][1] + lit)
-            else:
-                fills.append((t, lit))
-        days = disp[disp["fn"] == fn].sort_values("dep_dt")
-        dts = days["dep_dt"].values
-        dates = days["date"].values
-        for (t0, _), (t1, lit) in zip(fills[:-1], fills[1:]):
-            if by_timestamp:
-                m = (dts > np.datetime64(t0)) & (dts <= np.datetime64(t1))
-            else:
-                d0, d1 = t0.date(), t1.date()
-                m = (dates > d0) & (dates <= d1)
-            sub = days[m]
-            if len(sub) == 0 or t1.date() < window[0] or t1.date() > window[1]:
-                continue
-            if sub["date"].min() < window[0]:
-                continue
-            kms = {}
-            for c, km in zip(sub["code"], sub["planned_km"]):
-                kms[c] = kms.get(c, 0.0) + float(km)
-            out.append((float(lit), kms))
-    return out
+    for y in years:
+        for grp in ("small parts", "bulky"):
+            fb = b[(b["iso_year"] == y) & (b["group"] == grp)]
+            kk = k[(k["iy"] == y) & (k["group"] == grp)]
+            if weeks is not None:
+                fb = fb[fb["iso_week"].isin(weeks)]
+                kk = kk[kk["iw"].isin(weeks)]
+            out.append({"year": y, "group": grp, "forecast": fb["order_lines"].sum(), "placed": kk["lines"].sum()})
+    o = pd.DataFrame(out)
+    o["over"] = o["forecast"] / o["placed"] - 1.0
+    return o
 
 
-def diesel_rates(pk, intervals=None, bus_effects=False, **kw):
-    """litres per 100 scheduled km per block by least squares over the fill intervals (R1)"""
-    iv = intervals if intervals is not None else fuel_intervals(pk, **kw)
-    codes = sorted({c for _, kms in iv for c in kms})
-    idx = {c: i for i, c in enumerate(codes)}
-    A = np.zeros((len(iv), len(codes)))
-    y = np.zeros(len(iv))
-    for i, (lit, kms) in enumerate(iv):
-        for c, km in kms.items():
-            A[i, idx[c]] = km / 100.0
-        y[i] = lit
-    beta, *_ = np.linalg.lstsq(A, y, rcond=None)
-    return {c: float(beta[idx[c]]) for c in codes}
-
-
-def diesel_rates_fill_day(pk, window=REF):
-    """the hurried read: each fill's litres charged to the block the bus ran on the day of the fill"""
-    fu = pk.fuel[(pk.fuel["kind"] == "diesel") & pk.fuel["fn"].notna()].copy()
-    fu["fn"] = fu["fn"].astype(int)
-    fu = fu[(fu["date"] >= window[0]) & (fu["date"] <= window[1])]
-    key = {(r.fn, r.date): (r.code, r.planned_km) for r in pk.dispatch.itertuples()}
-    lit, km = {}, {}
-    for fn, d, l in zip(fu["fn"], fu["date"], fu["litres"]):
-        if pk.vehicles[fn]["drive"] != "diesel":
-            continue
-        k = key.get((fn, d)) or key.get((fn, d - dt.timedelta(days=1)))
-        if not k:
-            continue
-        lit[k[0]] = lit.get(k[0], 0.0) + l
-    disp = pk.dispatch[(pk.dispatch["date"] >= window[0]) & (pk.dispatch["date"] <= window[1])]
-    for c, g in disp.groupby("code"):
-        kmv = float(g["planned_km"].sum())
-        km[c] = kmv
-    return {c: lit.get(c, 0.0) / km[c] * 100.0 for c in km if km[c] > 0}
-
-
-def diesel_rates_per_bus(pk, window=REF):
-    """the other hurried read: a rate per bus over the year, each block given its commonest bus's rate"""
-    fu = pk.fuel[(pk.fuel["kind"] == "diesel") & pk.fuel["fn"].notna()].copy()
-    fu["fn"] = fu["fn"].astype(int)
-    fu = fu[(fu["date"] >= window[0]) & (fu["date"] <= window[1])]
-    lit = fu.groupby("fn")["litres"].sum().to_dict()
-    disp = pk.dispatch[(pk.dispatch["date"] >= window[0]) & (pk.dispatch["date"] <= window[1])]
-    km = disp.groupby("fn")["planned_km"].sum().to_dict()
-    rate = {fn: lit.get(fn, 0.0) / km[fn] * 100 for fn in km if km[fn] > 0 and pk.vehicles[fn]["drive"] == "diesel"}
+def plan_growth(f):
+    """The commercial plan's growth each budget states (the note on its first row)."""
+    b = f["forecasts"]
     out = {}
-    for c, g in disp.groupby("code"):
-        g = g[g["fn"].isin(rate.keys())]
-        if len(g) == 0:
+    for _, r in b[b["note"].fillna("") != ""].iterrows():
+        txt = r["note"]
+        if not txt.startswith("Budget"):
             continue
-        top = g["fn"].value_counts().index[0]
-        out[c] = rate[top]
+        y = int(txt.split()[1].rstrip(":"))
+        brand = r["brand"]
+        nums = [float(x.replace(",", ".")) for x in __import__("re").findall(r"\+(\d+(?:[.,]\d+)?) ?%", txt)]
+        out[(brand, y)] = (nums[0] / 100.0, nums[1] / 100.0)
     return out
 
 
-# ----------------------------------------------------------------------------------------------- the pilot's model
-def heater_fault_days(pk):
-    """(vehicle, date) pairs between a fuel heater's logged failure and its logged repair, from the workshop orders"""
-    ws = pk.workshop
-    faults = ws[ws["description"].str.contains("heater", case=False) & ws["description"].str.contains("not start|does not start|fails", case=False)]
-    repairs = ws[ws["description"].str.contains("heater repaired", case=False)]
-    out = set()
-    for _, f in faults.iterrows():
-        fn = int(f["vehicle"])
-        a = pd.to_datetime(f["opened"]).date()
-        rr = repairs[(repairs["vehicle"] == fn) & (pd.to_datetime(repairs["opened"]).dt.date > a)]
-        if len(rr) == 0:
-            continue
-        b = pd.to_datetime(rr.iloc[0]["opened"]).date()
-        d = a
-        while d < b:
-            out.add((fn, d))
-            d += dt.timedelta(days=1)
-    return out
-
-
-def ebus_model(pk, exclude_faults=True):
-    """per block, the battery energy per kilometre outside the cabin's heating and cooling (traction and the
-    auxiliaries), over the days an electric bus ran it, weighted by kilometres; the HVAC draw per hour by ambient
-    temperature in 1-degree bins, the days a fuel heater was logged out left out of the table (the golden) or kept
-    (the hurried read). Returns (e_block, days per block, h(T) table)."""
-    eb = pk.ebus
-    if exclude_faults:
-        bad = heater_fault_days(pk)
-        keep = np.array([(int(v), d) not in bad for v, d in zip(eb["vehicle"], eb["date"])])
-        eb_h = eb[keep]
+# ----------------------------------------------------------------------------------------------------- R5
+def calibration(z, f, form="loglog", weeks=None, intercept=True):
+    o = overstatement_by_year(z, f, weeks=weeks)
+    g = plan_growth(f)
+    o["plan"] = [g[(P.BRAND_K, y)][0 if grp == "small parts" else 1] for y, grp in zip(o["year"], o["group"])]
+    x = np.log1p(o["plan"].to_numpy()) if form == "loglog" else o["plan"].to_numpy()
+    yv = np.log1p(o["over"].to_numpy()) if form == "loglog" else o["over"].to_numpy()
+    if intercept:
+        A = np.c_[np.ones_like(x), x]
     else:
-        eb_h = eb
-    num = (eb["energy_used_kwh"] - eb["hvac_kwh"]).groupby(eb["code"]).sum()
-    den = eb["distance_km"].groupby(eb["code"]).sum()
-    e = {c: float(num[c] / den[c]) for c in num.index}
-    days = eb["code"].value_counts().to_dict()
-    tb = np.floor(eb_h["t"].values).astype(int)
-    hv = (eb_h["hvac_kwh"] / eb_h["hours"]).values
-    table = {}
-    for b in range(int(tb.min()), int(tb.max()) + 1):
-        m = tb == b
-        if m.sum() >= 3:
-            table[b] = (float(hv[m].mean()), int(m.sum()))
-    return e, days, table
+        A = x[:, None]
+    coef, *_ = np.linalg.lstsq(A, yv, rcond=None)
+    res = yv - A @ coef
+
+    def pred(plan):
+        xx = math.log1p(plan) if form == "loglog" else plan
+        v = (coef[0] + coef[1] * xx) if intercept else coef[0] * xx
+        return math.expm1(v) if form == "loglog" else v
+
+    sd = float(np.sqrt((res ** 2).sum() / max(1, len(res) - A.shape[1])))
+    return {"coef": coef.tolist(), "pred": pred, "sd": sd, "table": o}
 
 
-def hvac_at(table, t, width=2):
-    """the pilot's HVAC draw per hour at ambient t: the mean of the bins within width degrees"""
-    vals, n = [], 0
-    for b, (v, k) in table.items():
-        if abs(b + 0.5 - t) <= width:
-            vals.append(v * k)
-            n += k
-    return sum(vals) / n if n else float("nan")
+# ----------------------------------------------------------------------------------------------------- R3 and R4
+def design(zz, with_density=True, knot=0.8, power=2.0):
+    n = zz["lines"].to_numpy(float)
+    X = [zz["lines_cls_%s" % c.lower()].to_numpy(float) for c in CL]
+    X.append(zz["extra"].to_numpy(float))
+    X.append(np.where(zz["zone"] == "P1", n, 0.0))
+    X.append(zz["lines_hui"].to_numpy(float))
+    names = ["A", "B", "C", "D", "F", "unit", "P1", "HUI"]
+    if with_density:
+        X.append(n * np.maximum(0.0, zz["dpa"].to_numpy() - knot) ** power)
+        names.append("gamma")
+    return np.column_stack(X), names
 
 
-def hvac_fit(pk):
-    """a smooth form a careful run fits to the pilot's HVAC draw: piecewise linear in temperature with knots, used to
-    read the draw at the design day from the pilot's own record (the hurried read of the cold response)"""
-    eb = pk.ebus
-    t = eb["t"].values
-    hv = (eb["hvac_kwh"] / eb["hours"]).values
-    knots = [-20, -10, -5, 0, 5, 10, 15, 20, 25]
-    X = np.column_stack([np.ones_like(t)] + [np.maximum(0, t - k) for k in knots])
-    beta, *_ = np.linalg.lstsq(X, hv, rcond=None)
+def fit_time(z, years=None, with_density=True, knot=None, power=None, min_lines=30, grid=True):
+    """Task minutes of each small-parts zone-hour on its lines by handling class, the extra units, the zone, the
+    pilot's Huippu lines and the aisle congestion gamma * max(0, d - knot) ** power at d pickers logged an aisle,
+    by least squares on per-line times weighted by lines; knot and power by grid on the residual sum of squares."""
+    zz = z[z["zone"].isin(Z_SMALL) & (z["lines"] >= min_lines)]
+    if years is not None:
+        zz = zz[zz["iy"].isin(list(years))]
+    y = zz["task_min"].to_numpy(float)
+    n = zz["lines"].to_numpy(float)
+    w = 1.0 / n
 
-    def f(tt):
-        x = np.array([1.0] + [max(0.0, tt - k) for k in knots])
-        return float(x @ beta)
+    def one(k, p):
+        X, names = design(zz, with_density, k, p)
+        sw = np.sqrt(w)
+        coef, *_ = np.linalg.lstsq(X * sw[:, None], y * sw, rcond=None)
+        r = (y - X @ coef) * sw
+        return float(r @ r), dict(zip(names, coef))
+
+    if not with_density:
+        s, c = one(0.0, 1.0)
+        return {"coef": c, "knot": None, "power": None, "sse": s, "n": len(zz)}
+    if knot is not None and power is not None and not grid:
+        s, c = one(knot, power)
+        return {"coef": c, "knot": knot, "power": power, "sse": s, "n": len(zz)}
+    best = None
+    for k in np.arange(0.40, 1.41, 0.05):
+        for p in np.arange(1.0, 3.01, 0.1):
+            s, c = one(float(k), float(p))
+            if best is None or s < best[0]:
+                best = (s, c, float(k), float(p))
+    return {"coef": best[1], "knot": round(best[2], 2), "power": round(best[3], 1), "sse": best[0], "n": len(zz)}
+
+
+def cong(fit, d):
+    if fit.get("knot") is None:
+        return 0.0
+    return float(fit["coef"]["gamma"] * max(0.0, d - fit["knot"]) ** fit["power"])
+
+
+def t_line(fit, shares, upl, p1, hui):
+    c = fit["coef"]
+    return float(sum(shares[k] * c[k] for k in CL) + c["unit"] * (upl - 1.0) + c["P1"] * p1 + c["HUI"] * hui)
+
+
+def kot_mix(z, zone, year=2025):
+    """Kotikaari's lines in a zone over the peak weeks of a year: class shares and units a line."""
+    r = z[(z["zone"] == zone) & (z["iy"] == year) & z["iw"].isin(P.PEAK_WEEKS)]
+    c = np.array([r["lines_cls_%s" % k.lower()].sum() for k in CL], float)
+    c[0] -= r["lines_hui"].sum()
+    upl = (r["units"].sum() - r["lines_hui"].sum() * 1.0) / max(1.0, r["kot"].sum())
+    return dict(zip(CL, c / c.sum())), float(upl)
+
+
+def hui_mix(f, months=("2025-11", "2025-12")):
+    """Huippu Sport's small-parts lines in the peak months by their 2027 zone: class shares, units a line, share."""
+    a = f["h_monthly"]
+    a = a[a["month"].isin(list(months))]
+    im = f["item_master"]
+    im = im[im["owner"] == "HUI"][["owner_article", "handling_class"]]
+    sl = f["slotting"][["owner_article", "zone"]]
+    m = a.merge(im, left_on="article_no", right_on="owner_article").merge(sl, on="owner_article")
+    out = {}
+    tot = m[m["zone"].isin(Z_SMALL)]["order_lines"].sum()
+    for zz in P.ZONES:
+        r = m[m["zone"] == zz]
+        c = r.groupby("handling_class")["order_lines"].sum().reindex(CL, fill_value=0).to_numpy(float)
+        out[zz] = {"shares": dict(zip(CL, c / c.sum())), "upl": float(r["units"].sum() / r["order_lines"].sum()),
+                   "share": float(r["order_lines"].sum() / tot) if zz in Z_SMALL else 1.0}
+    return out
+
+
+def r4_extra_minutes(fit, z, f, months=("2025-11", "2025-12"), year=2025):
+    hm = hui_mix(f, months)
+    th = sum(hm[zz]["share"] * t_line(fit, hm[zz]["shares"], hm[zz]["upl"], 1.0 if zz == "P1" else 0.0, 1.0)
+             for zz in Z_SMALL)
+    kz = picked_by_week(z)
+    kz = kz[(kz["iy"] == year) & kz["iw"].isin(P.PEAK_WEEKS)]
+    kp1 = float(kz[kz["zone"] == "P1"]["kot"].sum() / kz[kz["zone"].isin(Z_SMALL)]["kot"].sum())
+    tk = 0.0
+    for zz, sh in (("P1", kp1), ("P2", 1.0 - kp1)):
+        s, u = kot_mix(z, zz, year)
+        tk += sh * t_line(fit, s, u, 1.0 if zz == "P1" else 0.0, 0.0)
+    return float(th - tk), th, tk
+
+
+# ----------------------------------------------------------------------------------------------------- R6
+def kot_daily_picks(z, zones):
+    d = z[z["zone"].isin(zones)].groupby("date")["kot"].sum()
+    d.index = pd.to_datetime(d.index)
+    return d
+
+
+def week_days(y, w):
+    return [dt.date.fromisocalendar(y, w, k) for k in range(1, 8)]
+
+
+def rekeyed_weeks(daily, shift_days=728, src_year=2025, target_year=2027, how="weekday"):
+    """Lines a working-day series puts into each target-year peak week once the source year's days are moved onto
+    the target year's: by the same weekday two years on (728 days, Black Friday onto Black Friday), or by date.
+    A source day's lines landing on a closed target day go to the next working day of the same week."""
+    out = {}
+    s = daily.to_dict()
+    for w in P.PEAK_WEEKS:
+        tot = 0.0
+        for d in week_days(target_year, w):
+            if how == "weekday":
+                src = d - dt.timedelta(days=shift_days)
+            else:
+                src = dt.date(src_year, d.month, d.day)
+            tot += float(s.get(pd.Timestamp(src), 0.0))
+        out[w] = tot
+    return out
+
+
+def copied_weeks(daily, src_year=2025):
+    out = {}
+    s = daily.to_dict()
+    for w in P.PEAK_WEEKS:
+        out[w] = sum(float(s.get(pd.Timestamp(d), 0.0)) for d in week_days(src_year, w))
+    return out
+
+
+def huippu_daily_series(f, grp="small parts"):
+    h = f["h_daily"]
+    h = h[h["group"] == grp].copy()
+    s = pd.Series(h["order_lines"].to_numpy(float), index=pd.to_datetime(h["order_date"]))
+    return s
+
+
+def to_pickdays(s):
+    """Orders onto pick days by the site's release (before noon the same working day, the rest the next)."""
+    out = {}
+    for d, v in s.items():
+        dd = d.date()
+        same = cal.next_working(dd)
+        nxt = cal.next_working(dd + dt.timedelta(days=1))
+        out[same] = out.get(same, 0.0) + 0.38 * v
+        out[nxt] = out.get(nxt, 0.0) + 0.62 * v
+    return pd.Series(out).sort_index().rename(lambda x: pd.Timestamp(x))
+
+
+def budget_totals(f, brand, grp, year):
+    b = budgets(f)
+    b = b[(b["brand"] == brand) & (b["group"] == grp) & (b["iso_year"] == year)]
+    return b.set_index("iso_week")["order_lines"].to_dict()
+
+
+# ----------------------------------------------------------------------------------------------------- the plan
+def capacity(zone, n, t, fit, ls, days):
+    return days * sum(n * 60.0 * v / (t + cong(fit, n * v / P.AISLES[zone])) for v in ls.values())
+
+
+def crew(zone, lines, t, fit, ls, days, top):
+    if lines <= 0:
+        return 0.0
+    lo, hi = 0.0, float(top)
+    for _ in range(60):
+        n = (lo + hi) / 2
+        lo, hi = (n, hi) if capacity(zone, n, t, fit, ls, days) < lines else (lo, n)
+    return hi
+
+
+def week_plan(zone, lines, t, fit, ls_day, ls_eve, days, evenings, limit=None):
+    """The standard's rule: the day shifts at the zone's limit pick what they can; if lines remain, the evening shift
+    of every working weekday picks them; paid hours are the crews times eight paid hours."""
+    lim = limit or P.LIMIT[zone]
+    cap = capacity(zone, lim, t, fit, ls_day, days)
+    if lines > cap:
+        ne = crew(zone, lines - cap, t, fit, ls_eve, evenings, lim)
+        return {"evening": True, "cap": cap, "hours": (lim * days + ne * evenings) * P.SHIFT_PAID, "n_day": lim,
+                "n_eve": ne, "ratio": lines / cap}
+    nd = crew(zone, lines, t, fit, ls_day, days, lim)
+    return {"evening": False, "cap": cap, "hours": nd * days * P.SHIFT_PAID, "n_day": nd, "n_eve": 0.0,
+            "ratio": lines / cap}
+
+
+def days_2027(w):
+    ds = week_days(2027, w)
+    wd = [d for d in ds if cal.working(d)]
+    return len(wd), len([d for d in wd if d.weekday() < 5])
+
+
+def own_hours(f, t, week):
+    """The standard 4.1: own pickers on the day shift of every working weekday in their home zone, less the zone's
+    sickness absence in the same weeks of the last peak (2025)."""
+    ro = f["roster"]
+    a, b = dt.date.fromisocalendar(2027, week, 1), dt.date.fromisocalendar(2027, week, 7)
+    wk = [d for d in week_days(2027, week) if cal.working(d) and d.weekday() < 5]
+    out = {}
+    for zz in P.ZONES:
+        r = ro[ro["home_zone"] == zz]
+        n = 0
+        for _, x in r.iterrows():
+            st = pd.Timestamp(x["employment_start"]).date()
+            en = pd.Timestamp(x["leave_until"]).date() if isinstance(x.get("leave_until"), str) and x["leave_until"] else None
+            on = sum(1 for d in wk if d >= st and not (en and d <= en))
+            n += on
+        sick = sickness(t, zz)
+        out[zz] = n * P.SHIFT_PAID * (1.0 - sick)
+    return out
+
+
+def sickness(t, zone, year=2025):
+    w = t[(t["iy"] == year) & t["iw"].isin(P.PEAK_WEEKS) & (t["zone"] == zone) & (t["employer"] == P.ORG)
+          & (t["date"].dt.weekday < 5)]
+    s = (w["absence"] == "SICK").sum()
+    worked = (w["absence"] == "").sum()
+    return float(s / (s + worked))
+
+
+# ----------------------------------------------------------------------------------------------------- the routes
+def plans_2027(f):
+    g = plan_growth(f)
+    return g[(P.BRAND_K, 2027)], g[(P.BRAND_H, 2027)]
+
+
+def b1_rate(z, year=2025):
+    r = z[(z["zone"] == "B1") & (z["iy"] == year) & z["iw"].isin(P.PEAK_WEEKS) & (z["lines"] > 0)]
+    X = np.c_[r["lines"].to_numpy(float), r["extra"].to_numpy(float)]
+    coef, *_ = np.linalg.lstsq(X, r["task_min"].to_numpy(float), rcond=None)
+    return float(coef[0]), float(coef[1])
+
+
+def to_pickdays(s):
+    """Web orders onto the day the WMS releases them: 06:00 on the next working day of the 2027 calendar."""
+    out = {}
+    for d, v in s.items():
+        p = cal.next_working(d.date() + dt.timedelta(days=1))
+        out[p] = out.get(p, 0.0) + v
+    return out
+
+
+def order_series(f, brand, grp):
+    if brand == P.BRAND_K:
+        k = f["k_orders"]
+        k = k[k["group"] == grp]
+        return pd.Series(k["web_lines"].to_numpy(float), index=pd.to_datetime(k["received"])), \
+            pd.Series(k["store_lines"].to_numpy(float), index=pd.to_datetime(k["received"]))
+    h = f["h_daily"]
+    h = h[h["group"] == grp]
+    return pd.Series(h["order_lines"].to_numpy(float), index=pd.to_datetime(h["order_date"])), None
+
+
+def volumes(z, f, over_k, over_h, how="weekday", shift=728, src=2025):
+    """Each 2027 peak week's lines by brand and group: the source year's orders moved onto 2027's days (the same
+    weekday two years on, which puts Black Friday on Black Friday), released by 2027's calendar, grown by the growth
+    the 2027 budget carries over the source year and divided by the overstatement it is expected to carry."""
+    out = {}
+    for brand, grp in ((P.BRAND_K, "small parts"), (P.BRAND_K, "bulky"), (P.BRAND_H, "small parts"),
+                       (P.BRAND_H, "bulky")):
+        bud = budget_totals(f, brand, grp, 2027)
+        web, store = order_series(f, brand, grp)
+        iso = web.index.isocalendar()
+        base = float(web[(iso["year"] == src).to_numpy()].sum())
+        if store is not None:
+            base += float(store[(store.index.isocalendar()["year"] == src).to_numpy()].sum())
+        growth = sum(bud.values()) / base
+        ov = (over_k if brand == P.BRAND_K else over_h)[0 if grp == "small parts" else 1]
+        if how == "copy":
+            out[(brand, grp)] = {w: bud[w] / (1.0 + ov) for w in P.PEAK_WEEKS}
+            continue
+        moved = {}
+        for d, v in web.items():
+            if d.year < src - 1 or d.year > src + 1:
+                continue
+            nd = d + pd.Timedelta(days=shift) if how == "weekday" else pd.Timestamp(d.year + 2, d.month, d.day) \
+                if not (d.month == 2 and d.day == 29) else None
+            if nd is None:
+                continue
+            moved[nd] = moved.get(nd, 0.0) + v
+        picks = to_pickdays(pd.Series(moved))
+        if store is not None:
+            for d, v in store.items():
+                if d.year != src:
+                    continue
+                nd = (d + pd.Timedelta(days=shift)).date() if how == "weekday" else dt.date(d.year + 2, d.month, d.day)
+                if cal.working(nd) and nd.weekday() < 5:
+                    picks[nd] = picks.get(nd, 0.0) + v
+                elif v:
+                    q = cal.next_working(nd)
+                    while q.weekday() >= 5:
+                        q = cal.next_working(q + dt.timedelta(days=1))
+                    picks[q] = picks.get(q, 0.0) + v
+        wk = {}
+        for p_, v in picks.items():
+            if cal.isoyear(p_) == 2027 and cal.isoweek(p_) in P.PEAK_WEEKS:
+                wk[cal.isoweek(p_)] = wk.get(cal.isoweek(p_), 0.0) + v
+        out[(brand, grp)] = {w: wk.get(w, 0.0) * growth / (1.0 + ov) for w in P.PEAK_WEEKS}
+    return out
+
+
+def golden(f, opts=None):
+    o = {"how": "weekday", "fit_years": None, "months": ("2025-11", "2025-12"), "form": "loglog", "cal_weeks": None,
+         "intercept": True, "ls": "measured", "src": 2025, "shift": 728}
+    o.update(opts or {})
+    z = zone_hours(f)
+    t = timesheet(f)
+    R = {}
+    R["r1"] = {k: v for k, v in r1_paid_hours(t).items() if k in P.ZONES}
+    ls_day, ls_eve = logged_pattern(z, t)
+    if o["ls"] == "flat":
+        m = sum(ls_day.values()) / len(ls_day)
+        ls_day = {h: m for h in ls_day}
+        me = sum(ls_eve.values()) / len(ls_eve)
+        ls_eve = {h: me for h in ls_eve}
+    R["ls_day"], R["ls_eve"] = ls_day, ls_eve
+    R["logged_share"] = sum(ls_day.values()) / P.SHIFT_PAID
+    if o.get("cong") == "quad":
+        best = None
+        for k in np.arange(0.40, 1.41, 0.05):
+            c = fit_time(z, years=o["fit_years"], knot=float(k), power=2.0, grid=False)
+            if best is None or c["sse"] < best["sse"]:
+                best = c
+        fit = best
+    elif o.get("cong") == "linear":
+        best = None
+        for k in np.arange(0.40, 1.41, 0.05):
+            c = fit_time(z, years=o["fit_years"], knot=float(k), power=1.0, grid=False)
+            if best is None or c["sse"] < best["sse"]:
+                best = c
+        fit = best
+    else:
+        fit = fit_time(z, years=o["fit_years"])
+    if o.get("gamma_mult"):
+        fit = dict(fit, coef=dict(fit["coef"], gamma=fit["coef"]["gamma"] * o["gamma_mult"]))
+    R["fit"] = fit
+    R["r3"] = cong(fit, 1.8)
+    R["r4"], R["t_hui"], R["t_kot"] = r4_extra_minutes(fit, z, f, o["months"])
+    R["r2"] = r2_overstatement(z, f)
+    cl = calibration(z, f, o["form"], o["cal_weeks"], o["intercept"])
+    pk, ph = plans_2027(f)
+    om = o.get("over_mult", 1.0)
+    over_k = (cl["pred"](pk[0]) * om, cl["pred"](pk[1]) * om)
+    over_h = (cl["pred"](ph[0]) * om, cl["pred"](ph[1]) * om)
+    R["r5"] = {"K_sp": over_k[0], "K_bu": over_k[1], "H_sp": over_h[0], "H_bu": over_h[1]}
+    R["cal"] = cl
+    if o["src"] == "avg":
+        V25 = volumes(z, f, over_k, over_h, o["how"], 728, 2025)
+        V24 = volumes(z, f, over_k, over_h, o["how"], 1092, 2024)
+        V = {k: {w: 0.5 * (V25[k][w] + V24[k][w]) for w in V25[k]} for k in V25}
+    else:
+        V = volumes(z, f, over_k, over_h, o["how"], o["shift"], o["src"])
+    R["vol"] = V
+    ks = V[(P.BRAND_K, "small parts")]
+    bud = budget_totals(f, P.BRAND_K, "small parts", 2027)
+    R["r6"] = ks[47] / sum(ks.values())
+    R["r6_budget"] = bud[47] / sum(bud[w] for w in P.PEAK_WEEKS)
+    kz = picked_by_week(z)
+    kz = kz[(kz["iy"] == 2025) & kz["iw"].isin(P.PEAK_WEEKS)]
+    kp1 = float(kz[kz["zone"] == "P1"]["kot"].sum() / kz[kz["zone"].isin(Z_SMALL)]["kot"].sum())
+    hm = hui_mix(f, o["months"])
+    b1a, b1u = b1_rate(z)
+    plan = {}
+    for w in P.PEAK_WEEKS:
+        days, eves = days_2027(w)
+        for zz in P.ZONES:
+            if zz == "B1":
+                L = V[(P.BRAND_K, "bulky")][w] + V[(P.BRAND_H, "bulky")][w]
+                tk = b1a + b1u * 0.10
+                th = b1a + b1u * (hm["B1"]["upl"] - 1.0)
+                t_ = (V[(P.BRAND_K, "bulky")][w] * tk + V[(P.BRAND_H, "bulky")][w] * th) / L
+                hrs = L * t_ / 60.0 / (sum(ls_day.values()) / P.SHIFT_PAID)
+                plan[(zz, w)] = {"lines": L, "t": t_, "hours": hrs, "evening": False, "ratio": None}
+                continue
+            sh_k = kp1 if zz == "P1" else 1.0 - kp1
+            lk = V[(P.BRAND_K, "small parts")][w] * sh_k
+            lh = V[(P.BRAND_H, "small parts")][w] * hm[zz]["share"]
+            s, u = kot_mix(z, zz)
+            tk = t_line(fit, s, u, 1.0 if zz == "P1" else 0.0, 0.0)
+            th = t_line(fit, hm[zz]["shares"], hm[zz]["upl"], 1.0 if zz == "P1" else 0.0, 1.0)
+            if o.get("hui_mult"):
+                th = tk + (th - tk) * o["hui_mult"]
+            L = lk + lh
+            t_ = (lk * tk + lh * th) / L
+            wp = week_plan(zz, L, t_, fit, ls_day, ls_eve, days, eves)
+            wp.update({"lines": L, "t": t_, "lines_k": lk, "lines_h": lh})
+            plan[(zz, w)] = wp
+    R["plan"] = plan
+    own = {w: own_hours(f, t, w) for w in P.PEAK_WEEKS}
+    R["own"] = own
+    R["agency"] = {w: sum(max(0.0, plan[(zz, w)]["hours"] - own[w][zz]) for zz in P.ZONES) for w in P.PEAK_WEEKS}
+    R["evening"] = {(zz, w): plan[(zz, w)]["evening"] for zz in Z_SMALL for w in P.PEAK_WEEKS}
+    return R
+
+
+def pilot_times(f):
+    """The pilot's Huippu lines: minutes from one pick confirmation to the next by the same picker in the same hour
+    (the draft's and the pilot review's reading), and P2's other lines in the same weeks from the labour log."""
+    c = f["pilot_conf"].copy()
+    c["t"] = pd.to_datetime(c["confirmed_at"])
+    c = c.drop_duplicates(subset=["task_id"]).sort_values(["picker_id", "t"])
+    g = c.groupby("picker_id")["t"].diff().dt.total_seconds() / 60.0
+    g = g[(g > 0) & (g < 5)]
+    return float(g.mean())
+
+
+def paid_per_line(z, t, year, weeks, zone):
+    tt = t[(t["iy"] == year) & t["iw"].isin(weeks) & (t["zone"] == zone) & (t["absence"] == "")]
+    zz = z[(z["iy"] == year) & z["iw"].isin(weeks) & (z["zone"] == zone)]
+    return float(tt["paid"].sum() / zz["lines"].sum())
+
+
+def hurried(f, fix=()):
+    """The careful but hurried route (the site manager's draft method with the pooled overstatement): the 2027
+    budget's weeks as issued over the pooled overstatement of past budgets, the 2025 peak's paid hours a line by
+    zone, Huippu Sport's lines at the pilot's time a line against P2's; `fix` puts one or more judgments right."""
+    z = zone_hours(f)
+    t = timesheet(f)
+    R = {}
+    R["r2"] = r2_overstatement(z, f)
+    g = golden(f) if fix else None
+    ov = (R["r2"], R["r2"])
+    over_k, over_h = (ov, ov)
+    if "calibration" in fix:
+        over_k = (g["r5"]["K_sp"], g["r5"]["K_bu"])
+        over_h = (g["r5"]["H_sp"], g["r5"]["H_bu"])
+    V = volumes(z, f, over_k, over_h, how="weekday" if "calendar" in fix else "copy")
+    R["vol"] = V
+    rate = {zz: paid_per_line(z, t, 2025, P.PEAK_WEEKS, zz) for zz in P.ZONES}
+    R["rate"] = rate
+    zp = z[(z["zone"] == "P2") & (z["date"] >= pd.Timestamp(P.PILOT[0])) & (z["date"] <= pd.Timestamp(P.PILOT[1]))]
+    tp = pilot_times(f)
+    kot_t = float((zp["task_min"].sum() - tp * zp["lines_hui"].sum()) / zp["kot"].sum())
+    R["pilot_t"], R["p2_t"] = tp, kot_t
+    R["r4"] = tp - kot_t
+    kz = picked_by_week(z)
+    kz = kz[(kz["iy"] == 2025) & kz["iw"].isin(P.PEAK_WEEKS)]
+    kp1 = float(kz[kz["zone"] == "P1"]["kot"].sum() / kz[kz["zone"].isin(Z_SMALL)]["kot"].sum())
+    hm = hui_mix(f)
+    plan = {}
+    for w in P.PEAK_WEEKS:
+        days, eves = days_2027(w)
+        for zz in P.ZONES:
+            if zz == "B1":
+                L = V[(P.BRAND_K, "bulky")][w] + V[(P.BRAND_H, "bulky")][w]
+                plan[(zz, w)] = {"lines": L, "hours": L * rate["B1"], "evening": False}
+                continue
+            lk = V[(P.BRAND_K, "small parts")][w] * (kp1 if zz == "P1" else 1.0 - kp1)
+            lh = V[(P.BRAND_H, "small parts")][w] * hm[zz]["share"]
+            hpl_k = rate[zz]
+            hpl_h = rate[zz] * tp / kot_t
+            if "huippu" in fix:
+                hpl_h = rate[zz] * g["t_hui"] / g["t_kot"]
+            L = lk + lh
+            hours = lk * hpl_k + lh * hpl_h
+            cap_hours = P.LIMIT[zz] * days * P.SHIFT_PAID
+            if "congestion" in fix:
+                s_, u_ = kot_mix(z, zz)
+                tk = t_line(g["fit"], s_, u_, 1.0 if zz == "P1" else 0.0, 0.0)
+                th = t_line(g["fit"], hm[zz]["shares"], hm[zz]["upl"], 1.0 if zz == "P1" else 0.0, 1.0) \
+                    if "huippu" in fix else tk * tp / kot_t
+                t_ = (lk * tk + lh * th) / L
+                wp = week_plan(zz, L, t_, g["fit"], g["ls_day"], g["ls_eve"], days, eves)
+                plan[(zz, w)] = {"lines": L, "hours": wp["hours"], "evening": wp["evening"], "ratio": wp["ratio"]}
+                continue
+            plan[(zz, w)] = {"lines": L, "hours": hours, "evening": hours > cap_hours, "ratio": hours / cap_hours}
+    R["plan"] = plan
+    own = {w: own_hours(f, t, w) for w in P.PEAK_WEEKS}
+    R["agency"] = {w: sum(max(0.0, plan[(zz, w)]["hours"] - own[w][zz]) for zz in P.ZONES) for w in P.PEAK_WEEKS}
+    R["evening"] = {(zz, w): plan[(zz, w)]["evening"] for zz in Z_SMALL for w in P.PEAK_WEEKS}
+    return R
+
+
+# ----------------------------------------------------------------------------------------------------- reading the pack
+OLD_CC = {"4111": "P1", "4112": "P2", "4113": "B1", "4150": "PACK"}
+
+
+def load(target):
+    """The shipped files read as they are and conformed: the two payroll layouts onto one, the archive's budgets with
+    the 2027 workbook's Huippu Sport sheet, Huippu's own day-first dates."""
+    import os
+    import pack
+    F = {k: os.path.join(target, v) for k, v in pack.FILES.items()}
+    f = {}
+    f["zone_hours"] = pd.read_csv(F["zone_hours"])
+    o = pd.read_csv(F["pay_old"], sep=";", dtype=str, keep_default_na=False)
+    old = pd.DataFrame({"date": pd.to_datetime(o["pvm"], format="%d.%m.%Y").dt.date, "person": o["henkilonumero"],
+                        "employer": o["tyonantaja"], "zone": o["kustannuspaikka"].map(OLD_CC),
+                        "shift": o["vuoro"].map({"A": "DAY", "I": "EVE"}), "start": o["alkoi"], "end": o["paattyi"],
+                        "paid": o["tunnit"].str.replace(",", ".").astype(float),
+                        "absence": o["poissaolo"].map({"S": "SICK", "L": "VAC", "": ""}),
+                        "absence_hours": pd.to_numeric(o["poissaolotunnit"].str.replace(",", "."), errors="coerce").fillna(0.0)})
+    n = pd.read_csv(F["pay_new"], dtype=str, keep_default_na=False)
+    new = pd.DataFrame({"date": pd.to_datetime(n["work_date"]).dt.date, "person": n["person_id"],
+                        "employer": n["employer"], "zone": n["cost_centre"].str.replace("SAA-", "", regex=False),
+                        "shift": n["shift"], "start": n["start"], "end": n["end"], "paid": n["paid_hours"].astype(float),
+                        "absence": n["absence_code"],
+                        "absence_hours": pd.to_numeric(n["absence_hours"], errors="coerce").fillna(0.0)})
+    f["timesheets"] = pd.concat([old, new], ignore_index=True)
+    a = pd.read_csv(F["archive"], keep_default_na=False)
+    a["issued"] = pd.to_datetime(a["issued"]).dt.date
+    from openpyxl import load_workbook
+    wb = load_workbook(F["budget27"], data_only=False)
+    extra = []
+    for sheet, brand in (("Huippu Sport", P.BRAND_H),):
+        ws = wb[sheet]
+        for row in ws.iter_rows(min_row=2, values_only=True):
+            if isinstance(row[0], int):
+                extra.append((dt.date(2026, 10, 15), "budget 2027", brand, "small parts", 2027, row[0], row[1], ""))
+                extra.append((dt.date(2026, 10, 15), "budget 2027", brand, "bulky", 2027, row[0], row[2], ""))
+    cov = {r[0]: r[1] for r in wb["Cover"].iter_rows(values_only=True) if r[0]}
+    hp = cov["Commercial plan 2027, Huippu Sport"]
+    extra[0] = extra[0][:-1] + ("Budget 2027: commercial plan %s" % hp,)
+    a = pd.concat([a, pd.DataFrame(extra, columns=a.columns)], ignore_index=True)
+    f["forecasts"] = a
+    f["k_orders"] = pd.read_csv(F["k_orders"])
+    h = pd.read_csv(F["h_daily"])
+    h["order_date"] = pd.to_datetime(h["order_date"], format="%d/%m/%Y").dt.date
+    f["h_daily"] = h.rename(columns={"product_line": "group"})
+    f["h_monthly"] = pd.read_csv(F["h_monthly"], dtype={"month": str})
+    f["item_master"] = pd.read_excel(F["item_master"], dtype={"owner_article": str})
+    f["slotting"] = pd.read_excel(F["slotting"], header=2, dtype={"owner_article": str})
+    f["pilot_conf"] = pd.read_csv(F["pilot"], dtype={"picker_id": str})
+    f["roster"] = pd.read_excel(F["roster"], dtype={"leave_until": str}).fillna({"leave_until": ""})
     return f
 
 
-# ----------------------------------------------------------------------------------------------- R3: the fuel heaters
-def heater_fuel(pk):
-    """the electric buses' HVO fills tank to tank against the days between, fitted as l/h = k x max(0, T0 - T) with T0
-    profiled; returns (k, T0, l/h at the design day, the intervals)"""
-    fu = pk.fuel[(pk.fuel["kind"] == "hvo") & pk.fuel["fn"].notna()].copy()
-    fu["fn"] = fu["fn"].astype(int)
-    fu = fu[[pk.vehicles[f]["drive"] == "electric" for f in fu["fn"]]]
-    eb = pk.ebus
-    bad = heater_fault_days(pk)          # the days a heater was logged out burnt no fuel
-    iv = []
-    for fn, g in fu.groupby("fn"):
-        g = g.sort_values("time")
-        fills = list(zip(g["time"], g["litres"]))
-        days = eb[eb["vehicle"] == fn]
-        for (t0, _), (t1, lit) in zip(fills[:-1], fills[1:]):
-            sub = days[(days["date"] > t0.date()) & (days["date"] <= t1.date())]
-            if len(sub) == 0:
-                continue
-            hrs = np.array([0.0 if (int(fn), d) in bad else h for h, d in zip(sub["hours"], sub["date"])])
-            iv.append((float(lit), hrs, sub["t"].values, fn, t0.date(), t1.date()))
-    best = None
-    for T0 in np.arange(-12.0, 2.01, 0.5):
-        x = np.array([float(np.sum(h * np.maximum(0.0, T0 - t))) for _, h, t, *_ in iv])
-        y = np.array([l for l, *_ in iv])
-        if x.sum() <= 0:
-            continue
-        k = float(x @ y / (x @ x))
-        sse = float(np.sum((y - k * x) ** 2))
-        if best is None or sse < best[0]:
-            best = (sse, k, T0)
-    _, k, T0 = best
-    return k, T0, k * max(0.0, T0 - DESIGN_T), iv
+# ----------------------------------------------------------------------------------------------------- R8
+def profile_error(f, z):
+    """How far a re-keyed profile misses a peak's weeks: 2024's orders moved onto 2025's days by the Black Friday
+    step (364 days), grown to 2025's year, against 2025's own peak weeks, as log errors."""
+    errs = []
+    for brand, grp in ((P.BRAND_K, "small parts"), (P.BRAND_K, "bulky")):
+        web, store = order_series(f, brand, grp)
+        tot = {}
+        for y in (2024, 2025):
+            sel = web[web.index.year == y].sum() + (store[store.index.year == y].sum() if store is not None else 0.0)
+            tot[y] = float(sel)
+        g = tot[2025] / tot[2024]
+        moved = {}
+        for d, v in web.items():
+            if d.year == 2024:
+                nd = d + pd.Timedelta(days=364)
+                moved[nd] = moved.get(nd, 0.0) + v
+        picks = {}
+        for d, v in moved.items():
+            p = cal.next_working(d.date() + dt.timedelta(days=1))
+            picks[p] = picks.get(p, 0.0) + v
+        act = {}
+        for d, v in web.items():
+            if d.year in (2025,):
+                p = cal.next_working(d.date() + dt.timedelta(days=1))
+                act[p] = act.get(p, 0.0) + v
+        for w in P.PEAK_WEEKS:
+            ds = week_days(2025, w)
+            pr = sum(picks.get(d, 0.0) for d in ds) * g
+            ac = sum(act.get(d, 0.0) for d in ds)
+            errs.append(math.log(ac / pr))
+    e = np.array(errs)
+    return float(np.sqrt(((e - e.mean()) ** 2).mean()))
 
 
-def heater_from_faults(pk):
-    """the conversion checked on the two buses whose heater was out: the extra HVAC draw per hour on fault days against
-    like days, divided by the heater fuel those days would have taken"""
-    ws = pk.workshop
-    faults = ws[ws["description"].str.contains("heater", case=False) & ws["description"].str.contains("not start|does not start|fails", case=False)]
-    repairs = ws[ws["description"].str.contains("heater repaired", case=False)]
-    k, T0, _, _ = heater_fuel(pk)
-    eb = pk.ebus
-    out = []
-    for _, f in faults.iterrows():
-        fn = int(f["vehicle"])
-        a = pd.to_datetime(f["opened"]).date()
-        rr = repairs[repairs["vehicle"] == fn]
-        rr = rr[pd.to_datetime(rr["opened"]).dt.date > a]
-        if len(rr) == 0:
-            continue
-        b = pd.to_datetime(rr.iloc[0]["opened"]).date()
-        on = eb[(eb["vehicle"] == fn) & (eb["date"] >= a) & (eb["date"] < b) & (eb["t"] < T0 - 2)]
-        if len(on) < 5:
-            continue
-        others = eb[(eb["vehicle"] != fn) & (eb["date"] >= a - dt.timedelta(days=45)) & (eb["date"] <= b + dt.timedelta(days=45))]
-        excess, fuel = [], []
-        for h, t, hv in zip(on["hours"], on["t"], on["hvac_kwh"]):
-            ref = others[np.abs(others["t"] - t) <= 1.5]
-            if len(ref) < 3:
-                continue
-            excess.append(hv / h - float((ref["hvac_kwh"] / ref["hours"]).mean()))
-            fuel.append(k * max(0.0, T0 - t))
-        if fuel and sum(fuel) > 0:
-            out.append((fn, a, b, len(excess), float(np.sum(excess) / np.sum(fuel))))
-    return out
+def model_error(z, fit):
+    """The time model's error on whole peak zone-weeks of 2024 and 2025, as log errors of task minutes."""
+    zz = z[z["zone"].isin(Z_SMALL) & z["iy"].isin([2024, 2025]) & z["iw"].isin(P.PEAK_WEEKS) & (z["lines"] > 0)]
+    X, names = design(zz, True, fit["knot"], fit["power"])
+    pred = X @ np.array([fit["coef"][k] for k in names])
+    g = pd.DataFrame({"k": list(zip(zz["iy"], zz["iw"], zz["zone"])), "a": zz["task_min"].to_numpy(), "p": pred})
+    s = g.groupby("k")[["a", "p"]].sum()
+    e = np.log(s["a"] / s["p"]).to_numpy()
+    return float(np.sqrt((e ** 2).mean()))
 
 
-# ----------------------------------------------------------------------------------------------- R6: the first winter
-def capacity_loss(pk, form="curved", min_dsoc=30):
-    """the share of usable capacity lost in the first twelve months: each bus-day's energy over its state-of-charge
-    drop as the capacity shown, on age with a cold term, per bus levels; the form in age chosen by fit"""
-    eb = pk.ebus
-    d = (eb["soc_start_pct"] - eb["soc_end_pct"]).values.astype(float)
-    m = d >= min_dsoc
-    cap = eb["energy_used_kwh"].values[m] / (d[m] / 100.0)
-    age = eb["age"].values[m] / 365.25
-    t = eb["t"].values[m]
-    cold = np.maximum(0.0, 10.0 - t)
-    bus = eb["vehicle"].values[m]
-    buses = sorted(set(bus))
-    B = np.column_stack([(bus == b).astype(float) for b in buses])
-    if form == "linear":
-        F = np.column_stack([age])
-    elif form == "sqrt":
-        F = np.column_stack([np.sqrt(age)])
-    elif form == "log":
-        F = np.column_stack([np.log1p(age * 12)])
-    else:
-        F = np.column_stack([1 - np.exp(-age * 12 / 4.0), age])
-    X = np.column_stack([B, F, cold])
-    beta, *_ = np.linalg.lstsq(X, cap, rcond=None)
-    nb = len(buses)
-    lvl = float(np.mean(beta[:nb]))
-    def at(a):
-        if form == "linear":
-            return a * beta[nb]
-        if form == "sqrt":
-            return math.sqrt(a) * beta[nb]
-        if form == "log":
-            return math.log1p(a * 12) * beta[nb]
-        return (1 - math.exp(-a * 12 / 4.0)) * beta[nb] + a * beta[nb + 1]
-    loss = -(at(1.0) - at(0.0)) / lvl
-    resid = cap - X @ beta
-    return float(loss), float(np.sqrt(np.mean(resid ** 2))), lvl
-
-
-def session_frame(pk, min_dsoc=30):
-    """the charging sessions on the solver's side: local times (the export is in UTC), the evening each session
-    belongs to, the hours it was plugged in while the relay released the chargers (21:00 to 07:00), the night's
-    temperature (the evening's and the next morning's daily means at the airport station), and the energy that went
-    into the battery (the state-of-charge points times the capacity the bus's own day shows, energy over its drop)"""
-    se = pk.sessions.copy()
-    for col in ("plug_in_utc", "plug_out_utc"):
-        se[col.replace("_utc", "_loc")] = (pd.to_datetime(se[col], utc=True).dt.tz_convert("Europe/Helsinki")
-                                           .dt.tz_localize(None))
-    se["evening"] = (se["plug_in_loc"] - pd.Timedelta(hours=12)).dt.date
-    ev = pd.to_datetime(se["evening"])
-    night_from = ev + pd.Timedelta(minutes=NIGHT_FROM)
-    night_to = ev + pd.Timedelta(minutes=NIGHT_TO + 1440)
-    a = np.maximum(se["plug_in_loc"].values, night_from.values)
-    b = np.minimum(se["plug_out_loc"].values, night_to.values)
-    se["rel_h"] = np.maximum(0.0, (b - a) / np.timedelta64(1, "m") / 60.0)
-    se["plug_h"] = (se["plug_out_loc"] - se["plug_in_loc"]).dt.total_seconds() / 3600.0
-    t_ev = np.array([pk.temp.get(d, np.nan) for d in se["evening"]])
-    t_mo = np.array([pk.temp.get(d + dt.timedelta(days=1), np.nan) for d in se["evening"]])
-    se["t_evening"], se["t_morning"] = t_ev, t_mo
-    se["t_night"] = 0.5 * (t_ev + t_mo)
-    eb = pk.ebus
-    day = {(int(r.vehicle), r.date): r for r in eb.itertuples()}
-    gain, sensor = [], []
-    for v, d, si, so in zip(se["vehicle"], se["evening"], se["soc_in_pct"], se["soc_out_pct"]):
-        r = day.get((int(v), d))
-        if r is None or (r.soc_start_pct - r.soc_end_pct) < min_dsoc or (so - si) < min_dsoc:
-            gain.append(np.nan)
-            sensor.append(np.nan)
-            continue
-        cap = r.energy_used_kwh / ((r.soc_start_pct - r.soc_end_pct) / 100.0)
-        gain.append((so - si) / 100.0 * cap)
-        sensor.append(r.t)
-    se["gain"] = gain
-    se["t_sensor"] = sensor
-    se = se.dropna(subset=["gain", "t_night"]).reset_index(drop=True)
-    return se
-
-
-def charging_ratio(pk, min_dsoc=30):
-    """the hurried read: energy into the battery over the energy through the charger meter, pooled over the sessions"""
-    se = session_frame(pk, min_dsoc)
-    return float(se["gain"].sum() / se["energy_kwh"].sum())
-
-
-def charging_model(pk, tcol="t_night", hcol="rel_h", T0=None, base=True, se=None):
-    """the session's metered energy split into the recharge over the charger's efficiency and a steady draw while
-    plugged in and released that rises below a temperature: kWh = gain / eta + hours x (c0 + c1 x max(0, T0 - T)),
-    T0 profiled on a half-degree grid unless given. Returns (eta, c0, c1, T0, the draw at the design night in kW)."""
-    se = session_frame(pk) if se is None else se
-    y = se["energy_kwh"].values
-    g = se["gain"].values
-    h = se[hcol].values
-    t = se[tcol].values
-    best = None
-    for t0 in ([T0] if T0 is not None else np.arange(-4.0, 12.01, 0.5)):
-        cols = [g] + ([h] if base else []) + [h * np.maximum(0.0, t0 - t)]
-        X = np.column_stack(cols)
-        beta, *_ = np.linalg.lstsq(X, y, rcond=None)
-        sse = float(np.sum((y - X @ beta) ** 2))
-        if best is None or sse < best[0]:
-            best = (sse, beta, t0)
-    sse, beta, t0 = best
-    eta = 1.0 / beta[0]
-    c0 = float(beta[1]) if base else 0.0
-    c1 = float(beta[-1])
-    return float(eta), c0, c1, float(t0), c0 + c1 * max(0.0, t0 - DESIGN_T), float(np.sqrt(sse / len(y)))
-
-
-def charging_ratio_by_cold(pk, se=None):
-    """a rival a careful run fits once it sees winter sessions take more per kWh: the meter's energy per kWh into the
-    battery as a line in the night's cold, read at the design night (a multiplicative loss, no hours term)"""
-    se = session_frame(pk) if se is None else se
-    y = (se["energy_kwh"] / se["gain"]).values
-    best = None
-    for t0 in np.arange(-4.0, 12.01, 0.5):
-        X = np.column_stack([np.ones(len(y)), np.maximum(0.0, t0 - se["t_night"].values)])
-        beta, *_ = np.linalg.lstsq(X, y, rcond=None)
-        sse = float(np.sum((y - X @ beta) ** 2))
-        if best is None or sse < best[0]:
-            best = (sse, beta, t0)
-    _, beta, t0 = best
-    k15 = float(beta[0] + beta[1] * max(0.0, t0 - DESIGN_T))
-    # the fit's error on the metered energy itself, comparable with the split's
-    pred = se["gain"].values * (beta[0] + beta[1] * np.maximum(0.0, t0 - se["t_night"].values))
-    return 1.0 / k15, float(np.sqrt(np.mean((se["energy_kwh"].values - pred) ** 2)))
-
-
-# ----------------------------------------------------------------------------------------------- R4: the energies
-def bridge(pk, e_block, days, rates, min_days=1, with_climb=False, with_hours=False):
-    """block energy per km outside HVAC on diesel litres per 100 km over the blocks an electric bus ran, weighted by
-    days; rivals add the climb or the hours per km"""
-    xs, ys, ws, cl, hk = [], [], [], [], []
-    for c, e in e_block.items():
-        if c in rates and days.get(c, 0) >= min_days:
-            xs.append(rates[c])
-            ys.append(e)
-            ws.append(days[c])
-            cl.append(pk.blocks[c]["climb"])
-            hk.append(pk.blocks[c]["hours"] / pk.blocks[c]["km"])
-    xs, ys, ws, cl, hk = map(np.array, (xs, ys, ws, cl, hk))
-    W = np.sqrt(ws)
-    cols = [np.ones_like(xs), xs] + ([cl] if with_climb else []) + ([hk] if with_hours else [])
-    X = np.column_stack(cols)
-    beta, *_ = np.linalg.lstsq(X * W[:, None], ys * W, rcond=None)
-    pred = X @ beta
-    rmse = float(np.sqrt(np.average((ys - pred) ** 2, weights=ws)))
-    return beta, rmse, len(xs)
-
-
-def covariate_model(pk, e_block, days):
-    """the hurried transfer: block rate on climb and hours per kilometre (the timetable's speed) over the blocks an
-    electric bus ran, weighted by days"""
-    xs, ys, ws = [], [], []
-    for c, e in e_block.items():
-        b = pk.blocks[c]
-        xs.append([1.0, b["climb"], b["hours"] / b["km"]])
-        ys.append(e)
-        ws.append(days[c])
-    xs, ys, ws = np.array(xs), np.array(ys), np.array(ws, float)
-    W = np.sqrt(ws)
-    beta, *_ = np.linalg.lstsq(xs * W[:, None], ys * W, rcond=None)
-    return beta
-
-
-def design_energies(pk, how="golden", rates=None, own_min_days=30, bridge_hours=False):
-    """the 48 weekday blocks' battery energy on the design day for the 2027 model, kWh, by the named route"""
-    e_block, days, table = ebus_model(pk)
-    if rates is None:
-        rates = diesel_rates(pk)
-    h_pilot = hvac_at(table, DESIGN_T)
-    k, T0, lph, _ = heater_fuel(pk)
-    heat_new = h_pilot + lph * HEATER_KWH_PER_L / 1.0        # below the heat pump's range the boosters supply it 1:1
-    if how in ("golden", "j2_wrong"):
-        beta, _, _ = bridge(pk, e_block, days, rates, with_hours=bridge_hours)
-        def e_of(b):
-            c = b["code"]
-            if days.get(c, 0) >= own_min_days:
-                return e_block[c]
-            x = [1.0, rates[c]] + ([b["hours"] / b["km"]] if bridge_hours else [])
-            return float(np.array(x) @ beta)
-    else:
-        cb = covariate_model(pk, e_block, days)
-        def e_of(b):
-            c = b["code"]
-            if c in e_block:
-                return e_block[c]
-            return float(cb[0] + cb[1] * b["climb"] + cb[2] * b["hours"] / b["km"])
-    heat = heat_new if how in ("golden", "j1_wrong") else (hvac_fit(pk)(DESIGN_T) if how == "careful" else h_pilot)
+def ranges(f, z, R, q=1.2815515655446004):
+    sl = R["cal"]["sd"]
+    sw = profile_error(f, z)
+    sm = model_error(z, R["fit"])
+    sL = math.sqrt(sl ** 2 + sw ** 2)
     out = {}
-    for c in pk.weekday:
-        b = pk.blocks[c]
-        out[c] = b["km"] * e_of(b) + b["hours"] * heat
-    return out, {"e_block": e_block, "days": days, "h_pilot": h_pilot, "heater_lph": lph, "heater_k": k,
-                 "heater_T0": T0, "heat_new": heat_new, "heat_used": heat}
-
-
-def quick_energies(pk):
-    eb = pk.ebus
-    cold = eb[eb["t"] <= -5]
-    rate = float(cold["energy_used_kwh"].sum() / cold["distance_km"].sum())
-    return {c: pk.blocks[c]["km"] * rate for c in pk.weekday}, rate
-
-
-# ----------------------------------------------------------------------------------------------- R5 to R8
-def limit(pk, loss):
-    return SHARE * pk.usable_2027 * (1 - loss)
-
-
-def window(pk, c, pad=0):
-    """block c's charging window on the design night: its return to its next departure inside the night period (the
-    standard's 3.2 and 4.2 read literally: pad 0); pad minutes at each end are a rival reading"""
-    return max(pk.blocks[c]["ret"] + pad, NIGHT_FROM), min(pk.blocks[c]["dep"] + 1440 - pad, NIGHT_TO + 1440)
-
-
-def windows(pk, codes, energies, eta, cond_kw=0.0, pad=0):
-    """each block's charging job: the recharge at the connection point (battery energy over the charger's efficiency)
-    and the steady draw beside it over the whole window"""
-    out = []
-    for c in codes:
-        a, b = window(pk, c, pad)
-        out.append((c, energies[c] / eta, a, b, cond_kw))
-    return out
-
-
-def night_draw(pk, codes, energies, eta, cond_kw=0.0, pad=0):
-    """what the installation takes at the connection point on the design night for these blocks' buses, kWh"""
-    return sum(j[1] + j[4] * (j[3] - j[2]) / 60.0 for j in windows(pk, codes, energies, eta, cond_kw, pad))
-
-
-def night_cut(pk, energies, lim, eta, cond_kw=0.0, supply=None, pad=0):
-    """the standard's 4.2: qualifying blocks in priority order, cut at the first the night cannot recharge with those
-    above it; returns (taken codes, refused code, shortfall kWh, the taken set's draw at the connection point, the
-    qualifying codes)"""
-    supply = pk.supply if supply is None else supply
-    q = [c for c in sorted(pk.weekday, key=lambda c: pk.priority[c]) if energies[c] <= lim]
-    cands = windows(pk, q, energies, eta, cond_kw, pad)
-    taken, refused, short = night.cut_by_priority(cands, CHARGER_KW, supply)
-    grid = night_draw(pk, taken, energies, eta, cond_kw, pad)
-    return taken, refused, short, grid, q
-
-
-def capacity_for(pk, codes, energies, eta, cond_kw=0.0, pad=0):
-    """the least night-period capacity at the connection point at which these blocks can all be recharged, kW"""
-    return night.least_supply(windows(pk, codes, energies, eta, cond_kw, pad), CHARGER_KW)
-
-
-def golden(pk):
-    rates = diesel_rates(pk)
-    loss, rmse, lvl = capacity_loss(pk)
-    eta, c0, c1, t0, cond, cm_rmse = charging_model(pk)
-    E, parts = design_energies(pk, "golden", rates)
-    lim = limit(pk, loss)
-    taken, refused, short, grid, q = night_cut(pk, E, lim, eta, cond)
-    verdict = {c: E[c] <= lim for c in pk.weekday}
-    faults = heater_from_faults(pk)
-    return {"rates": rates, "loss": loss, "eta": eta, "cond_kw": cond, "cond_fit": (c0, c1, t0, cm_rmse), "E": E, "limit": lim,
-            "taken": taken, "refused": refused, "short": short, "grid_kwh": grid, "qualifying": q,
-            "demand_kwh": night_draw(pk, q, E, eta, cond), "capacity_kw": capacity_for(pk, q, E, eta, cond),
-            "verdict": verdict, "parts": parts, "faults": faults, "cap_rmse": rmse, "heater_kw": parts["heater_lph"] * HEATER_KWH_PER_L,
-            "ratio_pooled": charging_ratio(pk)}
-
-
-def careful(pk, energies="j1_wrong", conditioning=False):
-    """the careful but hurried pass: every file cleaned and joined, the diesel figures tank to tank, the pilot's heaters
-    read from the HVO fills, the pilot's fit carried to the blocks it never ran on climb and hours per km, the loss on a
-    curved age form, the charging losses as the sessions' pooled ratio, the night scheduled exactly on those figures"""
-    rates = diesel_rates(pk)
-    loss, _, _ = capacity_loss(pk)
-    if conditioning:
-        eta, _, _, _, cond, _ = charging_model(pk)
-    else:
-        eta, cond = charging_ratio(pk), 0.0
-    E, parts = design_energies(pk, energies, rates)
-    lim = limit(pk, loss)
-    taken, refused, short, grid, q = night_cut(pk, E, lim, eta, cond)
-    return {"rates": rates, "loss": loss, "eta": eta, "cond_kw": cond, "E": E, "limit": lim, "taken": taken, "grid_kwh": grid,
-            "qualifying": q, "demand_kwh": night_draw(pk, q, E, eta, cond), "capacity_kw": capacity_for(pk, q, E, eta, cond),
-            "verdict": {c: E[c] <= lim for c in pk.weekday}, "parts": parts}
-
-
-def quick(pk):
-    """ten minutes: the pilot's cold-day energy per km times each block's kilometres against 85 per cent of the quoted
-    battery, every block that passes ordered, the night's draw as the battery energy and its capacity as that energy
-    over the night period's ten hours"""
-    E, rate = quick_energies(pk)
-    lim = SHARE * pk.usable_2027
-    q = [c for c in sorted(pk.weekday, key=lambda c: pk.priority[c]) if E[c] <= lim]
-    dem = sum(E[c] for c in q)
-    return {"E": E, "limit": lim, "taken": q, "rate": rate, "verdict": {c: E[c] <= lim for c in pk.weekday},
-            "grid_kwh": dem, "demand_kwh": dem, "capacity_kw": dem / 10.0}
-
-
-def routes(pk, g=None):
-    """every route's count and set: the golden, the two passes, and each estimate left out on the golden's path"""
-    g = g or golden(pk)
-    out = {}
-    out["golden"] = g["taken"]
-    out["careful but hurried"] = careful(pk)["taken"]
-    out["quick"] = quick(pk)["taken"]
-    E1, _ = design_energies(pk, "j1_wrong", g["rates"])
-    out["the pilot's fit carried on kilometres, climb and speed (the diesel bridge left out)"] = night_cut(pk, E1, g["limit"], g["eta"], g["cond_kw"])[0]
-    E2, _ = design_energies(pk, "j2_wrong", g["rates"])
-    out["the pilot's cold response read as the new buses' (the fuel heaters' share left out)"] = night_cut(pk, E2, g["limit"], g["eta"], g["cond_kw"])[0]
-    out["the sessions' pooled ratio for the night (the battery's conditioning left out)"] = night_cut(pk, g["E"], g["limit"], g["ratio_pooled"])[0]
-    Ec, _ = design_energies(pk, "careful", g["rates"])
-    out["the pilot's own record carried as it stands (no bridge, no heaters' share, the pooled ratio)"] = night_cut(pk, Ec, g["limit"], g["ratio_pooled"])[0]
-    out["the per-block verdicts summed, the night's supply ignored"] = [c for c in sorted(pk.weekday, key=lambda c: pk.priority[c]) if g["E"][c] <= g["limit"]]
-    out["the night scheduled on battery energy (charging losses and conditioning ignored)"] = night_cut(pk, g["E"], g["limit"], 1.0)[0]
-    out["the careful pass without the night's supply"] = [c for c in sorted(pk.weekday, key=lambda c: pk.priority[c]) if E1[c] <= g["limit"]]
-    return out
+    for (zz, w), p in R["plan"].items():
+        days, eves = days_2027(w)
+        h = p["hours"]
+        if zz == "B1":
+            lo, hi = h * math.exp(-q * sL), h * math.exp(q * sL)
+        else:
+            lo = week_plan(zz, p["lines"] * math.exp(-q * sL), p["t"], R["fit"], R["ls_day"], R["ls_eve"], days, eves)["hours"]
+            hi = week_plan(zz, p["lines"] * math.exp(q * sL), p["t"], R["fit"], R["ls_day"], R["ls_eve"], days, eves)["hours"]
+        dl = math.sqrt(math.log(h / lo) ** 2 + (q * sm) ** 2)
+        du = math.sqrt(math.log(hi / h) ** 2 + (q * sm) ** 2)
+        out[(zz, w)] = (h * math.exp(-dl), h * math.exp(du))
+    return out, {"level": sl, "week": sw, "model": sm, "lines": sL}

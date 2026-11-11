@@ -1,29 +1,49 @@
 {
   "task": "task4",
-  "status": "DESIGN",
+  "status": "READY",
   "domain": "supply-chain-logistics",
   "subdomain": "regression-classification-model-diagnostics",
   "client_domain": "general-statistics-data-science",
   "objective": "forecasting",
-  "stage": 2,
-  "stage_name": "design",
+  "stage": 5,
+  "stage_name": "ready",
   "updated": "2026-11-11",
   "doctrine": "throughout",
   "architecture": 11,
   "loops": 0,
-  "call": "",
-  "chain": "R1 the 2025 peak's paid picker hours by zone; R2 Kotikaari's pooled year-ahead peak overstatement 2022 to 2025; R3 the aisle-congestion term at the zone-hour grain, the mix held fixed; R4 Huippu Sport's extra minutes a line at its full peak mix; R5 the 2027 forecasts' overstatement from the growth each plans; R6 the 2027 profile re-keyed to Black Friday and the Christmas cut-offs; R7 each zone's paid picker hours for weeks 46 to 51 of 2027; R8 their 80 per cent ranges; R9 the evening-shift weeks by small-parts zone; R10 the agency hours each week",
+  "call": "Agree the evening shift in weeks 47 to 50 in both small-parts zones (P1 and P2) and book 8,390 agency picker hours over the 2027 peak (760, 1,910, 1,930, 1,760, 2,030 in weeks 46 to 50); week 46 runs on day shifts alone",
+  "chain": "R1 the 2025 peak's picker hours by zone (P1 3,384, P2 3,104, B1 2,280); R2 the pooled year-ahead peak overstatement 10.0 per cent against the order lines placed; R3 congestion 0.46 minutes a line at 1.8 pickers an aisle with the mix held fixed; R4 a Huippu Sport line 0.13 minutes longer than a Kotikaari line; R5 the 2027 budget's expected overstatement 3.7 per cent (Kotikaari small parts, plan +7); R6 week 47 carries 21.4 per cent of the peak (budget 14.0); R7 each zone's hours weeks 46 to 50; R8 their 80 per cent ranges; R9 evening weeks 47 to 50 in P1 and P2; R10 the agency hours 760, 1,910, 1,930, 1,760, 2,030 (8,390)",
   "stump": "the careful pass measures the pooled overstatement right and applies it week by week to the client's week-numbered 2027 forecast (a week late after the 53-week 2026, its large planned growth priced at the pooled rate), fits time per line on the mix without the aisle density the peak's lighter lines hide, and reads Huippu Sport's lines off the polybag pilot",
-  "precut": null,
-  "leak": null,
+  "precut": {
+    "exit": 0,
+    "date": "2026-11-11",
+    "checks": "93 of 93, 1 WARN (task10's chain, retired)"
+  },
+  "leak": {
+    "leak_py": "REVIEW, no LEAK (2026-11-11, as-of 2026-11-06)",
+    "reader": "stage 4 reader (2026-11-11, target.zip 7dde0b05): no leak, no one thing; two defects fixed (the staffing sheet's rate divided by 60 twice, the budget's total row as values); not re-run after those two arithmetic fixes, on the author's standing preference (no background pass for a change that adds no text)"
+  },
   "duplicate_check": {
     "heart": "not run (architecture 11 drawn 2026-11-11)",
     "guard_check": "WARN only (overuse.gate_g; skeleton.house_lesson composition_versus_behaviour on task2 v6 and task15 v2)",
     "skeleton": "severity none against every build, lineage entry and client task"
   },
-  "judge": null,
-  "paper_pair": null,
-  "effort": null,
+  "judge": {
+    "verdict": "DETERMINISTIC (stage 4 pass 1, 2026-11-11, partial verification: components 1 and 4 and ask 4 recomputed in band, the calendar mechanism reproduced; asks 1 to 3 and 5 and component 2 traced to their files, nothing contradicting)",
+    "disposition": "APPROVE",
+    "gate_g": "mixed (forecasting, decomposition, binding constraint); analytical_non_defect; no surface read; no sole defect",
+    "gate_h": "pass: one_thing none",
+    "report": "task4/determinism_check_report.md",
+    "fixed_after": "ask 4's two readings (lines picked against orders placed, 14.8 against 10.0) pinned to the order lines placed in the ask and the calibration moved to that basis; every figure re-verified by verify.py (10 of 10)"
+  },
+  "paper_pair": 24.0,
+  "effort": {
+    "quick": 13.0,
+    "careful": 24.0,
+    "thorough": 100.0,
+    "largest_hint": "time a line rises with the pickers logged in an aisle once the mix is held fixed; rescues R3 only",
+    "column": "cited (every careful loss cites a precedent)"
+  },
   "returned": [
     {
       "date": "2026-11-10",
@@ -63,7 +83,7 @@
       "portal": "architecture 10: both runs landed the order (17, the same blocks, M145 refused, 23 qualifying) and every graded figure inside its band; runs/arch10/triage.md, REDESIGN"
     }
   ],
-  "resume": "stage 2 to 3: write the architecture 11 generator (sim, pack, docs, analysis, golden, writeup, effort_passes, checks, verify, make) for the Saarnela world in the note's Draw and Results chain; calibrate so the four judgments each move the evening-shift cells, every golden cell sits clear of the line under the golden family, and the shortcuts land on different weeks; then the full note (Hidden factor record, Effort test, Frontier check, fork and closure tables, Literal reader, Prompt contract), precut.py, gates.py",
+  "resume": "READY: the author rewrites prompt.txt in their own voice, keeping every item of the note's Prompt contract (weeks 46 to 50; each zone's picker hours with an 80 per cent range; the agency hours on top of our own pickers; the evening-shift verdict per small-parts zone; the share by which Kotikaari's year-ahead forecasts of its peak weeks overstated the order lines it placed in those weeks; how many more minutes a Huippu Sport line will take than a Kotikaari one in those weeks; a workbook and a one-page memo), runs voice-check.py task4 --rewrite and leak.py, uploads it with target.zip, pastes the four blocks of submission.md, then /triage-runs task4 once both runs are in",
   "approved": null,
   "delivered": null,
   "portal": null,
@@ -114,6 +134,10 @@
     {
       "date": "2026-11-11",
       "event": "architecture 10 landed by both platform runs (runs/arch10/, REDESIGN); the world and its scaffold left; architecture 11 drawn: Saarnela fulfilment centre's 2027 peak plan (Telkkä Logistics Oy, Kotikaari Oy and its acquired brand Huippu Sport), card registered, skeleton keys calendar_grid_shift and rekey_profile_to_event_dates added"
+    },
+    {
+      "date": "2026-11-11",
+      "event": "architecture 11 built and checked: Saarnela's 2027 peak plan (evening shifts weeks 47 to 50 in P1 and P2, 8,390 agency hours); judge DETERMINISTIC APPROVE; leak reader no leak; ask 4 pinned to the order lines placed after the judge found two readings"
     }
   ],
   "runs": {
@@ -180,9 +204,19 @@
       }
     ]
   },
-  "gates": null,
-  "zip_sha256_16": null,
-  "golden_zip_sha256_16": null,
+  "gates": {
+    "checks": "125 assertions, 0 failed",
+    "verify": "10 of 10 on its own code path",
+    "byte_identical": "two builds in one run, and a third under another hash seed",
+    "effort": "quick 13.0, careful 24.0, thorough 100.0",
+    "figures_check": "exit 0",
+    "voice_check": "PASS, 1 WARN (deliverable set quota)",
+    "containers": "PASS",
+    "surface": "PASS",
+    "heart": "WARN only"
+  },
+  "zip_sha256_16": "2a65f595f7577ba4",
+  "golden_zip_sha256_16": "a7ff9ef02c12230b",
   "migrated_from": {
     "project": "Mark",
     "task": "task250",

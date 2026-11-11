@@ -1,523 +1,915 @@
-"""The clean truth: Vehkasalon Liikenne's Niittylä depot simulated day by day from January 2024 to October 2026.
+"""The clean truth of the Saarnela world: the process that makes every file.
 
-Blocks (a bus's day of trips on one or two lines) with their kilometres, hours, climb and a difficulty the
-timetable does not record (stops, dwell with the doors open, passenger load, the drivers who take them); a fleet
-of diesel buses rotating over the blocks under the dispatcher's hand, each burning fuel by the block's physics and
-the day's cold, filled at the depot pump when low; six battery-electric buses from March and June 2025 on the nine
-blocks the planner picked from the 2024 fuel figures, with electric heating up to their small heat pump's capacity
-and a fuel-fired cabin heater below that; the depot chargers each night; the batteries fading fastest in their
-first months. Nothing here is placed for a result: every figure the task needs falls out of this process."""
+Kotikaari Oy's customers order on the web and its showrooms order replenishment; the WMS releases each working day's
+pick pool at 06:00 and 10:00 (the stores' wave at 11:00); the site staffs each zone's day shift from the pool it sees
+at its own planning rate, opens an evening shift for a week when its plan says the day cannot clear the week, and
+since the 2023 safety review never puts more pickers on a small-parts zone's floor than the zone's limit. Every line
+takes the task time its handling class and units give, plus the time pickers lose to each other in the aisles, which
+grows with the pickers logged in per aisle. The client's planners issue a year-ahead budget each October, keyed to the
+week numbers of the last full year they hold, and a rolling forecast every month. Huippu Sport, bought in 2025, ships
+from another provider's warehouse; a pilot of its fastest polybag articles ran in P2 in weeks 37 to 44 of 2026 and the
+whole brand moves in from March 2027."""
 import datetime as dt
 import math
 
 import numpy as np
 
+import cal
 import params as P
 
-FI_HOLIDAYS = {dt.date(2024, 1, 1), dt.date(2024, 1, 6), dt.date(2024, 3, 29), dt.date(2024, 4, 1), dt.date(2024, 5, 1),
-               dt.date(2024, 5, 9), dt.date(2024, 6, 21), dt.date(2024, 6, 22), dt.date(2024, 11, 2), dt.date(2024, 12, 6),
-               dt.date(2024, 12, 24), dt.date(2024, 12, 25), dt.date(2024, 12, 26),
-               dt.date(2025, 1, 1), dt.date(2025, 1, 6), dt.date(2025, 4, 18), dt.date(2025, 4, 21), dt.date(2025, 5, 1),
-               dt.date(2025, 5, 29), dt.date(2025, 6, 20), dt.date(2025, 6, 21), dt.date(2025, 11, 1), dt.date(2025, 12, 6),
-               dt.date(2025, 12, 24), dt.date(2025, 12, 25), dt.date(2025, 12, 26),
-               dt.date(2026, 1, 1), dt.date(2026, 1, 6), dt.date(2026, 4, 3), dt.date(2026, 4, 6), dt.date(2026, 5, 1),
-               dt.date(2026, 5, 14), dt.date(2026, 6, 19), dt.date(2026, 6, 20)}
+KC = len(P.CLASSES)
 
 
-def daytype(d):
-    if d in FI_HOLIDAYS or d.weekday() == 6:
-        return "S"
-    return "L" if d.weekday() == 5 else "M"
+def delta(d):
+    """Minutes a line pickers lose to each other in the aisles at d pickers logged in an aisle."""
+    x = np.maximum(0.0, np.asarray(d, float) - P.CONG_KNOT)
+    return P.CONG_GAMMA * x ** P.CONG_POW
 
 
-def daterange(a, b):
-    d = a
-    while d <= b:
-        yield d
-        d += dt.timedelta(days=1)
+# ----------------------------------------------------------------------------------------------------- demand
+def _season_k(doy, bulky=False):
+    if bulky:
+        s = 0.10 * np.cos(2 * np.pi * (doy - 300) / 365.25) + 0.07 * np.cos(4 * np.pi * (doy - 110) / 365.25)
+    else:
+        s = 0.11 * np.cos(2 * np.pi * (doy - 330) / 365.25) + 0.045 * np.cos(4 * np.pi * (doy - 25) / 365.25)
+    summer = 1.0 - 0.10 * np.exp(-((doy - 200) / 18.0) ** 2)
+    return np.exp(s) * summer
 
 
-# ----------------------------------------------------------------------------------------------- weather
-def temperatures(rng):
-    """Daily mean temperature at two stations in the town, 2016 to October 2026: a lake-district climate with
-    persistence, the airport station with a three-week outage in April 2023."""
-    days = list(daterange(P.TEMP_START, P.END))
-    n = len(days)
-    doy = np.array([d.timetuple().tm_yday for d in days])
-    clim = 4.2 - 13.0 * np.cos(2 * math.pi * (doy - 20) / 365.25)
-    anom = np.zeros(n)
-    e = rng.normal(0, 2.4, n)
-    for i in range(1, n):
-        anom[i] = 0.80 * anom[i - 1] + e[i]
-    winter = np.where(np.cos(2 * math.pi * (doy - 20) / 365.25) > 0.3, 1.6, 1.0)
-    t_air = clim + anom * winter + rng.normal(0, 0.5, n)
-    t_city = t_air + 0.9 + rng.normal(0, 0.45, n)
-    out = {}
-    gap = (dt.date(2023, 4, 2), dt.date(2023, 4, 19))
+def _season_h(doy, bulky=False):
+    if bulky:
+        s = 0.16 * np.cos(2 * np.pi * (doy - 345) / 365.25) + 0.05 * np.cos(4 * np.pi * (doy - 120) / 365.25)
+    else:
+        s = 0.09 * np.cos(2 * np.pi * (doy - 318) / 365.25) + 0.07 * np.cos(4 * np.pi * (doy - 105) / 365.25)
+    summer = 1.0 - 0.07 * np.exp(-((doy - 205) / 16.0) ** 2)
+    return np.exp(s) * summer
+
+
+DOW_K = (1.12, 1.04, 1.00, 0.97, 0.92, 0.85, 1.08)
+DOW_H = (1.10, 1.03, 1.00, 0.98, 0.93, 0.86, 1.10)
+
+
+def _events(y, rng, brand):
+    """Date-anchored multipliers on the web orders of one year (each year's sizes jittered)."""
+    j = lambda: float(np.exp(rng.normal(0.0, 0.05)))  # noqa: E731
+    e = {}
+
+    def put(d, m):
+        e[d] = max(e.get(d, 1.0), m)
+
+    bf = cal.black_friday(y)
+    if brand == "K":
+        for k in range(14):
+            put(dt.date(y, 1, 1) + dt.timedelta(days=k), 1.0 + 0.36 * j() * math.exp(-k / 5.0))
+        m1 = dt.date(y, 3, 1)
+        thu = m1 + dt.timedelta(days=(3 - m1.weekday()) % 7 + 7)
+        for k, m in enumerate((1.25, 1.22, 1.15, 1.10)):
+            put(thu + dt.timedelta(days=k), 1.0 + (m - 1.0) * j())
+        mon41 = dt.date.fromisocalendar(y, 41, 1)
+        for k, m in enumerate((1.10, 1.12, 1.18, 1.32, 1.22, 1.12, 1.08)):
+            put(mon41 + dt.timedelta(days=k), 1.0 + (m - 1.0) * j())
+        put(dt.date(y, 11, 11), 1.0 + 0.30 * j())
+        bw = P.BW_K
+        after = P.BF_K
+        dec_top, dec_lo = 1.90, 1.22
+    else:
+        for k in range(10):
+            put(dt.date(y, 1, 2) + dt.timedelta(days=k), 1.0 + 0.22 * j() * math.exp(-k / 4.0))
+        m1 = dt.date(y, 3, 1)
+        wed = m1 + dt.timedelta(days=(2 - m1.weekday()) % 7 + 7)
+        for k, m in enumerate((1.30, 1.38, 1.34, 1.22, 1.12)):
+            put(wed + dt.timedelta(days=k), 1.0 + (m - 1.0) * j())
+        mon40 = dt.date.fromisocalendar(y, 40, 1)
+        for k, m in enumerate((1.08, 1.10, 1.14, 1.20, 1.12, 1.06, 1.04)):
+            put(mon40 + dt.timedelta(days=k), 1.0 + (m - 1.0) * j())
+        bw = (1.26, 1.30, 1.36, 1.45)
+        after = (2.55, 1.85, 1.70, 1.90, 1.35, 1.18, 1.08)
+        dec_top, dec_lo = 1.62, 1.20
+    for k, m in enumerate(bw):
+        put(bf - dt.timedelta(days=4 - k), 1.0 + (m - 1.0) * j())
+    for k, m in enumerate(after):
+        put(bf + dt.timedelta(days=k), 1.0 + (m - 1.0) * j())
+    top = dec_top * j()
+    centre = 15.0 + float(rng.normal(0.0, 0.6))
+    for dd in range(1, 23):
+        put(dt.date(y, 12, dd), dec_lo + (top - dec_lo) * math.exp(-((dd - centre) / 6.5) ** 2))
+    tail = {23: 0.70, 24: 0.18, 25: 0.15, 26: 0.42, 27: 1.30, 28: 1.28, 29: 1.24, 30: 1.18, 31: 0.85}
+    for dd, m in tail.items():
+        e[dt.date(y, 12, dd)] = m
+    for dd in range(18, 27):
+        d = dt.date(y, 6, dd)
+        e[d] = min(e.get(d, 1.0), 0.86)
+    return e
+
+
+def _levels(days, anchors):
+    """Daily level from yearly levels {year: lines a day}: each year's level holds through the year and the step
+    from one year to the next is spread over the four weeks either side of New Year."""
+    ys = sorted(anchors)
+    out = np.empty(len(days))
     for i, d in enumerate(days):
-        ta = None if gap[0] <= d <= gap[1] else round(float(t_air[i]), 1)
-        out[d] = {"airport": ta, "city": round(float(t_city[i]), 1), "truth": float(t_air[i])}
+        y = min(max(d.year, ys[0]), ys[-1])
+        lv = math.log(anchors[y])
+        jan1 = dt.date(d.year, 1, 1)
+        nxt = dt.date(d.year + 1, 1, 1)
+        if (d - jan1).days < 28 and y - 1 in anchors:
+            f = 0.5 + 0.5 * (d - jan1).days / 28.0
+            lv = (1 - f) * math.log(anchors[y - 1]) + f * lv
+        elif (nxt - d).days <= 28 and y + 1 in anchors:
+            f = 0.5 - 0.5 * (nxt - d).days / 28.0
+            lv = (1 - f) * lv + f * math.log(anchors[y + 1])
+        out[i] = math.exp(lv)
     return out
 
 
-# ----------------------------------------------------------------------------------------------- blocks
-LINES_URBAN = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-LINES_SUBURB = [14, 15, 16, 17, 18, 19, 21, 22]
-LINES_REGION = [31, 32, 33, 34, 35, 36, 37, 38]
-ZONE = {"urban": 1, "suburban": 2, "regional": 3}
+def _noise(rng, n, sd_day, sd_week, rho=0.6):
+    wk = np.zeros(n // 7 + 2)
+    for i in range(1, len(wk)):
+        wk[i] = rho * wk[i - 1] + rng.normal(0.0, sd_week)
+    return np.exp(rng.normal(0.0, sd_day, n) + np.repeat(wk, 7)[:n])
 
 
-def make_blocks(rng):
-    """48 weekday blocks, 28 Saturday blocks, 20 Sunday blocks, each with the timetable's attributes and the
-    difficulty the timetable does not carry."""
-    blocks = []
+def demand(rng):
+    days = cal.days(P.SIM_START, P.TRUTH_END)
+    n = len(days)
+    doy = np.array([d.timetuple().tm_yday for d in days], float)
+    dow = np.array([d.weekday() for d in days])
+    r_k = {}
+    for y, (gs, gb) in P.PLAN_K.items():
+        r_k[y] = (P.PLAN_SLOPE * gs + rng.normal(0.0, 0.004), P.PLAN_SLOPE * gb + rng.normal(0.0, 0.004))
+    anc_s, anc_b = {2020: P.VOL_K[0]}, {2020: P.VOL_K[1]}     # yearly levels, growth r_y from y - 1 to y
+    for y in range(2021, 2028):
+        anc_s[y] = anc_s[y - 1] * (1.0 + r_k[y][0])
+        anc_b[y] = anc_b[y - 1] * (1.0 + r_k[y][1])
+    lev_s, lev_b = _levels(days, anc_s), _levels(days, anc_b)
+    r_h = {2024: (0.07, 0.05), 2025: (0.06, 0.04)}
+    for y, (gs, gb) in P.PLAN_H.items():
+        r_h[y] = (P.PLAN_SLOPE * gs + rng.normal(0.0, 0.007), P.PLAN_SLOPE * gb + rng.normal(0.0, 0.007))
+    anc_hs, anc_hb = {2023: P.VOL_H[0]}, {2023: P.VOL_H[1]}
+    for y in range(2024, 2028):
+        anc_hs[y] = anc_hs[y - 1] * (1.0 + r_h[y][0])
+        anc_hb[y] = anc_hb[y - 1] * (1.0 + r_h[y][1])
+    lev_hs, lev_hb = _levels(days, anc_hs), _levels(days, anc_hb)
 
-    def one(code, old, dtype, kind, i):
-        if kind == "urban":
-            km = rng.uniform(112, 172)
-            span = rng.uniform(9.6, 14.2)
-            d = rng.uniform(0.45, 1.0)
-            climb = rng.uniform(2.5, 7.0)
-            lines = sorted(rng.choice(LINES_URBAN, size=rng.choice([1, 2]), replace=False).tolist())
-        elif kind == "suburban":
-            km = rng.uniform(165, 235)
-            span = rng.uniform(9.0, 13.8)
-            d = rng.uniform(0.28, 0.66)
-            climb = rng.uniform(3.0, 9.0)
-            lines = sorted(rng.choice(LINES_SUBURB, size=rng.choice([1, 2]), replace=False).tolist())
-        else:
-            km = rng.uniform(205, 312)
-            span = rng.uniform(8.6, 14.0)
-            d = rng.uniform(0.04, 0.34)
-            climb = rng.uniform(4.0, 12.0)
-            lines = sorted(rng.choice(LINES_REGION, size=rng.choice([1, 2]), replace=False).tolist())
-        if dtype != "M":
-            d = max(0.02, d - rng.uniform(0.08, 0.22))
-            km *= rng.uniform(0.85, 1.0)
-        # the span sets the speed; the difficulty slows the block a little on top (stops and dwell)
-        span = span * (1 + 0.04 * (d - 0.4))
-        dep = int(rng.uniform(4 * 60 + 40, 7 * 60 + 35))
-        if rng.uniform() < 0.18 and span < 11:
-            dep = int(rng.uniform(11 * 60, 14 * 60 + 30))          # an afternoon-and-evening block
-        ret = dep + int(span * 60)
-        if ret > 23 * 60 + 45:
-            ret = 23 * 60 + 45
-            span = (ret - dep) / 60.0
-        km2 = km * rng.uniform(0.975, 1.035)   # the autumn 2025 timetable moved a few kilometres on most blocks
-        blocks.append({"code": code, "old_code": old, "daytype": dtype, "kind": kind, "zone": ZONE[kind],
-                       "lines": lines, "km_old": round(km, 1), "km": round(km2, 1), "hours": round(span, 2),
-                       "dep": dep, "ret": ret, "climb": round(climb, 1), "d": round(d, 3),
-                       "trips": int(round(km2 / rng.uniform(9, 16)))})
+    ev_k, ev_h = {}, {}
+    for y in range(P.SIM_START.year, P.TRUTH_END.year + 1):
+        ev_k.update(_events(y, rng, "K"))
+        ev_h.update(_events(y, rng, "H"))
+    e_k = np.array([ev_k.get(d, 1.0) for d in days])
+    e_h = np.array([ev_h.get(d, 1.0) for d in days])
+    e_kb = 1.0 + 0.62 * (e_k - 1.0)
+    e_hb = 1.0 + 0.55 * (e_h - 1.0)
+    dk = np.array([DOW_K[i] for i in dow])
+    dh = np.array([DOW_H[i] for i in dow])
+    web_s = lev_s * _season_k(doy) * e_k * dk * _noise(rng, n, 0.045, 0.020)
+    web_b = lev_b * _season_k(doy, True) * e_kb * dk * _noise(rng, n, 0.05, 0.012)
+    h_s = lev_hs * _season_h(doy) * e_h * dh * _noise(rng, n, 0.05, 0.022)
+    h_b = lev_hb * _season_h(doy, True) * e_hb * dh * _noise(rng, n, 0.06, 0.015)
+    st_season = (1.0 + 0.34 * np.exp(-((doy - 316) / 11.0) ** 2) - 0.15 * np.exp(-((doy - 333) / 5.0) ** 2)
+                 + 0.12 * np.exp(-((doy - 346) / 6.0) ** 2) - 0.12 * np.exp(-((doy - 200) / 16.0) ** 2))
+    store_s = 0.135 * lev_s * st_season * np.exp(rng.normal(0.0, 0.08, n))
+    store_b = 0.10 * lev_b * st_season * np.exp(rng.normal(0.0, 0.06, n))
+    promo = np.clip((e_k - 1.0) / 1.6, 0.0, 1.0)
+    promo_h = np.clip((e_h - 1.0) / 1.5, 0.0, 1.0)
+    return {"days": days, "index": {d: i for i, d in enumerate(days)}, "web_s": np.round(web_s),
+            "web_b": np.round(web_b), "store_s": np.round(store_s), "store_b": np.round(store_b),
+            "h_s": np.round(h_s), "h_b": np.round(h_b), "promo": promo, "promo_h": promo_h, "r_k": r_k, "r_h": r_h,
+            "e_k": e_k, "e_h": e_h}
 
-    kinds_m = ["urban"] * 18 + ["suburban"] * 16 + ["regional"] * 14
-    rng.shuffle(kinds_m)
-    for i, k in enumerate(kinds_m):
-        one("M%03d" % (101 + i), "%d" % (101 + i), "M", k, i)
-    kinds_l = ["urban"] * 11 + ["suburban"] * 10 + ["regional"] * 7
-    rng.shuffle(kinds_l)
-    for i, k in enumerate(kinds_l):
-        one("L%03d" % (201 + i), "%d" % (201 + i), "L", k, i)
-    kinds_s = ["urban"] * 8 + ["suburban"] * 7 + ["regional"] * 5
-    rng.shuffle(kinds_s)
-    for i, k in enumerate(kinds_s):
-        one("S%03d" % (301 + i), "%d" % (301 + i), "S", k, i)
-    # the timetable's own kilometres are drawn; a weekday block whose design-day energy would sit within 9 kWh of the
-    # standard's limit is redrawn a few kilometres away from it (the world is drawn, never trimmed to a result: this
-    # keeps every verdict clear of the limit by more than the honest family's spread, which the checks assert)
-    lim = P.SHARE * P.E_USABLE_2027 * (1 - fade(365))
-    for b in blocks:
-        if b["daytype"] != "M":
+
+# ----------------------------------------------------------------------------------------------------- mixes
+MIX_WEB = {"P1": ((0.18, 0.37, 0.30, 0.05, 0.10), (0.40, 0.42, 0.13, 0.01, 0.04)),
+           "P2": ((0.50, 0.33, 0.11, 0.04, 0.02), (0.78, 0.19, 0.02, 0.005, 0.005))}
+MIX_STORE = {"P1": (0.08, 0.36, 0.38, 0.08, 0.10), "P2": (0.30, 0.44, 0.20, 0.04, 0.02)}
+UPL_WEB, UPL_PROMO = 1.27, 1.06
+UPL_STORE = {"P1": 5.4, "P2": 4.8}
+
+
+def web_mix(zone, w, year):
+    b, p = (np.array(x) for x in MIX_WEB[zone])
+    m = (1.0 - w) * b + w * p
+    if zone == "P2" and year >= 2024:           # the textiles range launched in 2024 sits in P2
+        m = m + np.array([0.03, -0.02, -0.01, 0.0, 0.0])
+    return m / m.sum()
+
+
+def p1_share(w, year):
+    return 0.50 - 0.05 * w - (0.012 if year >= 2024 else 0.0)
+
+
+# ----------------------------------------------------------------------------------------------------- Huippu
+H_GROUPS = [
+    # name, class, articles, zone 2027, units a line, seasonal amplitude (winter +), spring weight
+    ("Paidat ja t-paidat", "A", 700, "P2", 1.24, 0.00, 0.10),
+    ("Housut ja trikoot", "A", 520, "P2", 1.18, 0.02, 0.08),
+    ("Sukat ja alusvaatteet", "A", 300, "P2", 1.85, 0.06, 0.00),
+    ("Takit", "C", 380, "P2", 1.04, 0.42, -0.10),
+    ("Pipot, käsineet ja huivit", "A", 260, "P2", 1.30, 0.70, -0.30),
+    ("Juoksukengät", "C", 420, "P1", 1.05, -0.10, 0.35),
+    ("Talvikengät ja saappaat", "D", 240, "P1", 1.03, 0.80, -0.40),
+    ("Sandaalit", "B", 110, "P1", 1.08, -0.60, 0.40),
+    ("Laukut ja reput", "C", 180, "P1", 1.04, 0.10, 0.05),
+    ("Juomapullot ja pienvarusteet", "B", 260, "P1", 1.55, 0.00, 0.15),
+    ("Kypärät ja suojat", "D", 120, "P1", 1.04, 0.20, 0.10),
+    ("Lasit ja kellot", "F", 90, "P1", 1.03, 0.05, 0.10),
+    ("Pallot ja välineet", "C", 160, "P1", 1.15, -0.05, 0.10),
+    ("Sukset ja sauvat", "D", 140, "B1", 1.02, 1.20, -0.50),
+    ("Pyöräily", "D", 90, "B1", 1.03, -0.40, 0.45),
+    ("Kuntoilulaitteet", "D", 80, "B1", 1.05, 0.30, 0.05),
+]
+
+
+def h_group_season(month):
+    """Each group's relative pull by month: a winter term peaking in December, a spring term peaking in April."""
+    w = math.cos(2 * math.pi * (month - 12) / 12.0)
+    s = math.cos(2 * math.pi * (month - 4) / 12.0)
+    return np.array([math.exp(g[5] * 0.5 * w + g[6] * s) for g in H_GROUPS])
+
+
+def catalogue(rng):
+    arts = []
+    no = 118400
+    for gi, g in enumerate(H_GROUPS):
+        for k in range(g[2]):
+            no += int(rng.integers(1, 9))
+            vel = float(np.exp(rng.normal(0.0, 1.05)))
+            arts.append({"article": "HS%06d" % no, "group": gi, "cls": g[1], "zone27": g[3], "vel": vel,
+                         "upl": max(1.0, g[4] + rng.normal(0.0, 0.08))})
+    return arts
+
+
+def pilot_articles(arts):
+    a = [x for x in arts if x["cls"] == "A" and H_GROUPS[x["group"]][3] == "P2"]
+    sep = h_group_season(9)
+    a.sort(key=lambda x: -x["vel"] * sep[x["group"]])
+    return [x["article"] for x in a[:280]]
+
+
+def huippu_mix(arts, month, small=True, zone=None):
+    """The class shares and units a line of Huippu's lines in a month (expected, by velocity and season)."""
+    s = h_group_season(month)
+    tot = np.zeros(KC)
+    units = 0.0
+    for x in arts:
+        z = H_GROUPS[x["group"]][3]
+        if small and z == "B1":
             continue
-        for _ in range(12):
-            e = design_energy(b)
-            if abs(e - lim) >= 26.0:
-                break
-            f = 1.035 if e >= lim else 0.965
-            b["km"] = round(b["km"] * f, 1)
-            b["km_old"] = round(b["km_old"] * f, 1)
-            b["trips"] = max(6, int(round(b["trips"] * f)))
-    # the city's electrification priority over the weekday blocks: centre lines first, then suburban, then regional,
-    # with the planner's own ordering inside each group (not by any energy figure)
-    weekday = [b for b in blocks if b["daytype"] == "M"]
-    prng = np.random.default_rng(P.PRIORITY_SEED)
-    order = sorted(weekday, key=lambda b: (b["zone"], prng.uniform()))
-    for p, b in enumerate(order, 1):
-        b["priority"] = p
-    return blocks
+        if zone and z != zone:
+            continue
+        w = x["vel"] * s[x["group"]]
+        tot[P.CLASSES.index(x["cls"])] += w
+        units += w * x["upl"]
+    return tot / tot.sum(), units / tot.sum()
 
 
-# ----------------------------------------------------------------------------------------------- physics
-def cop(t):
-    """the pilot buses' heat pump: 2.4 at +10 and above, falling to 1.0 at -10 and below"""
-    return float(np.clip(1.0 + 1.4 * (t - P.HP_FLOOR_T) / 20.0, 1.0, 2.4))
+# ----------------------------------------------------------------------------------------------------- picking
+SITE_RATE = {"P1": (0.97, 0.93), "P2": (0.80, 0.77), "B1": (2.55, 2.50)}   # the site's planning rate, off-peak and peak
 
 
-def heat_demand(t):
-    return max(0.0, P.UA * (P.T_IN - t))
+class Pool:
+    """Lines waiting to be picked in one zone: counts by class and the extra units they carry."""
 
+    def __init__(self):
+        self.c = np.zeros(KC, np.int64)
+        self.x = 0.0
 
-def pilot_heating(t):
-    """(electric kW drawn from the battery, thermal kW supplied by the fuel heater) on a pilot bus at ambient t"""
-    d = heat_demand(t)
-    el_th = min(d, P.P_CAP_PILOT)
-    fuel_th = max(0.0, d - P.P_CAP_PILOT) if t < P.FUEL_HEATER_ON else 0.0
-    if t >= P.FUEL_HEATER_ON:
-        el_th = d        # above the heater's enable point the electric system carries the whole (small) demand
-    return el_th / cop(t), fuel_th
+    def n(self):
+        return int(self.c.sum())
 
+    def add(self, counts, extra):
+        self.c += counts
+        self.x += extra
 
-def new_bus_heating(t):
-    """the 2027 model: all-electric heating, the heat pump to -10 C and resistive boosters below it"""
-    return heat_demand(t) / cop(t)
+    def mean_t(self, zone, dl, brand=0.0):
+        n = self.n()
+        if n == 0:
+            return 1.0
+        sh = self.c / n
+        if zone == "B1":
+            return P.BULKY_BASE + P.BULKY_PER_UNIT * self.x / n
+        return float(sh @ np.array([P.BASE[k] for k in P.CLASSES]) + P.PER_UNIT * self.x / n
+                     + P.ZONE_EXTRA[zone] + dl + brand)
 
-
-def diesel_heating_l_per_h(t):
-    """the diesel buses' fuel-fired cabin heater runs when the engine's waste heat does not cover the demand"""
-    d = max(0.0, P.UA_DIESEL * (P.T_IN - t))
-    return max(0.0, d - P.ENGINE_HEAT) / (P.FUEL_KWH_PER_L * P.BURNER_EFF)
-
-
-def traction_kwh_per_km(b):
-    return P.E0 + P.E_CLIMB * b["climb"] + P.E_DIFF * b["d"]
-
-
-def diesel_l_per_100km(b):
-    return P.R0 + P.R_CLIMB * b["climb"] + P.R_DIFF * b["d"]
-
-
-def fade(age_days):
-    """share of usable capacity permanently lost by an age in service: fast in the first months, then steady"""
-    m = age_days / 30.4375
-    return 0.030 * (1 - math.exp(-m / 4.0)) + 0.0012 * m
-
-
-def cold_capacity(t):
-    """reversible: the usable capacity the battery system shows on a cold day (small: the thermal management keeps the
-    pack near its working temperature)"""
-    return 1.0 - 0.0004 * max(0.0, 10.0 - t)
-
-
-def conditioning_kw(t_night):
-    """what a plugged-in bus takes through its charger beside the recharge, while the charger is released: the 24 V
-    system, the BMS and the outlet's standby, and the traction battery held at its charging temperature on a cold night"""
-    return P.COND_BASE + P.COND_SLOPE * max(0.0, P.COND_T0 - t_night)
-
-
-def night_temp(temps, d):
-    """the night after day d: between the evening's daily mean and the next morning's"""
-    nxt = temps.get(d + dt.timedelta(days=1), temps[d])
-    return 0.5 * (temps[d]["truth"] + nxt["truth"])
-
-
-def released(a, b):
-    """minutes of [a, b] (minutes from the evening's midnight) inside the night period, when the relay releases the chargers"""
-    return max(0, min(b, P.NIGHT_TO + 1440) - max(a, P.NIGHT_FROM))
-
-
-# ----------------------------------------------------------------------------------------------- fleet
-MODELS = ["Volvo 8900LE", "Scania Citywide LE", "VDL Citea LLE"]
-
-
-def make_fleet(rng):
-    buses = []
-    letters = "ABCDEFGHJKLMNPRSTUVXYZ"
-    used = set()
-
-    def reg():
-        while True:
-            r = "%s%s%s-%03d" % (rng.choice(list(letters)), rng.choice(list(letters)), rng.choice(list(letters)),
-                                 rng.integers(100, 999))
-            if r not in used:
-                used.add(r)
-                return r
-
-    for i in range(54):
-        fn = 1101 + i
-        model = MODELS[0] if i < 24 else (MODELS[1] if i < 44 else MODELS[2])
-        year = int(rng.choice([2014, 2015, 2016, 2017, 2018, 2019, 2020, 2021], p=[.06, .1, .14, .16, .16, .14, .14, .10]))
-        buses.append({"fleet_no": fn, "reg": reg(), "make_model": model, "drive": "diesel", "year": year,
-                      "length_m": 12.0 if model != "VDL Citea LLE" else 12.9, "seats": int(rng.integers(37, 46)),
-                      "tank_l": P.TANK_L[model], "heater": "Webasto Thermo 300 (fuel-fired, 30 kW)",
-                      "eff": float(rng.normal(1.0, 0.010)), "in_service_from": dt.date(year, int(rng.integers(3, 11)), 1),
-                      "retired": None, "battery_kwh": None})
-    # six retired in the summer after the second electric batch (the oldest)
-    oldest = sorted([b for b in buses], key=lambda b: (b["year"], b["fleet_no"]))[:6]
-    for b in oldest:
-        b["retired"] = dt.date(2025, 6, 30)
-    for fn, since in P.EBUS_BATCH.items():
-        buses.append({"fleet_no": fn, "reg": reg(), "make_model": "%s %s" % (P.EMAKE, P.EMODEL), "drive": "electric",
-                      "year": 2025, "length_m": 12.2, "seats": 39, "tank_l": None,
-                      "heater": "Eberspächer Hydronic L-II 35 kW fuel-fired (HVO, 3.9 l/h at full output, 30 l tank); heat pump 8 kW thermal",
-                      "eff": float(rng.normal(1.0, 0.015)), "in_service_from": since, "retired": None,
-                      "battery_kwh": P.E_USABLE_PILOT})
-    return buses
-
-
-def make_cards(rng, buses):
-    """one fuel card per vehicle, eight reissued during the period, three spare cards held by the night staff"""
-    cards = []
-    n = 0
-
-    def no():
-        nonlocal n
-        n += 1
-        return "7054 %04d %04d" % (int(rng.integers(1000, 9999)), 2100 + n * 7 + int(rng.integers(0, 6)))
-
-    reissue = set(rng.choice([b["fleet_no"] for b in buses if b["drive"] == "diesel"], 8, replace=False).tolist())
-    for b in buses:
-        start = max(P.START - dt.timedelta(days=400), b["in_service_from"] - dt.timedelta(days=3))
-        if b["fleet_no"] in reissue:
-            cut = P.START + dt.timedelta(days=int(rng.integers(120, 900)))
-            cards.append({"card": no(), "fleet_no": b["fleet_no"], "valid_from": start, "valid_to": cut, "kind": "vehicle"})
-            cards.append({"card": no(), "fleet_no": b["fleet_no"], "valid_from": cut + dt.timedelta(days=1), "valid_to": None,
-                          "kind": "vehicle"})
+    def take(self, k, rng):
+        n = self.n()
+        k = min(int(k), n)
+        if k <= 0:
+            return np.zeros(KC, np.int64), 0.0
+        if k == n:
+            got, ex = self.c.copy(), self.x
         else:
-            cards.append({"card": no(), "fleet_no": b["fleet_no"], "valid_from": start, "valid_to": None, "kind": "vehicle"})
-    for k in range(3):
-        cards.append({"card": no(), "fleet_no": None, "valid_from": dt.date(2022, 5, 2), "valid_to": None, "kind": "spare %d" % (k + 1)})
-    return cards
+            got = rng.multivariate_hypergeometric(self.c, k)
+            ex = self.x * k / n
+        self.c -= got
+        self.x -= ex
+        return got, ex
 
 
-def card_for(cards, fleet_no, d):
-    for c in cards:
-        if c["fleet_no"] == fleet_no and c["valid_from"] <= d and (c["valid_to"] is None or d <= c["valid_to"]):
-            return c["card"]
+def draw_lines(rng, n, mix, upl):
+    n = int(max(0, n))
+    if n == 0:
+        return np.zeros(KC, np.int64), 0.0
+    c = rng.multinomial(n, mix)
+    extra = float(rng.gamma(4.0, max(1e-6, (upl - 1.0) * n) / 4.0)) if upl > 1.0 else 0.0
+    return c, extra
+
+
+def task_minutes(zone, counts, extra, dl, n_h, rng, shock):
+    if zone == "B1":
+        base = P.BULKY_BASE * counts.sum() + P.BULKY_PER_UNIT * extra
+    else:
+        base = float(counts @ np.array([P.BASE[k] for k in P.CLASSES])) + P.PER_UNIT * extra \
+               + (P.ZONE_EXTRA[zone] + dl) * counts.sum() + P.BRAND_EXTRA * n_h
+    return base * shock
+
+
+def release_day(d):
+    """The WMS releases the web orders it received on a day at 06:00 on the next working day."""
+    return cal.next_working(d + dt.timedelta(days=1))
+
+
+def releases(D, Hsub=None):
+    """Web lines released to picking on each working day (the showrooms' replenishment is released on its own day)."""
+    out = {}
+    for i, d in enumerate(D["days"]):
+        if d < dt.date(2021, 12, 20):
+            continue
+        for p, share in ((release_day(d), 1.0),):
+            r = out.setdefault(p, {"web_s": 0.0, "web_b": 0.0, "h_s": 0.0, "h_b": 0.0, "pw": 0.0, "ph": 0.0})
+            r["web_s"] += share * D["web_s"][i]
+            r["web_b"] += share * D["web_b"][i]
+            r["h_s"] += share * D["h_s"][i]
+            r["h_b"] += share * D["h_b"][i]
+            r["pw"] += share * D["web_s"][i] * D["promo"][i]
+            r["ph"] += share * D["h_s"][i] * D["promo_h"][i]
+    for p, r in out.items():
+        r["promo"] = r["pw"] / max(1.0, r["web_s"])
+        r["promo_h"] = r["ph"] / max(1.0, r["h_s"])
+    return out
+
+
+# ----------------------------------------------------------------------------------------------------- people
+def own_staff(rng):
+    """Telkkä's own pickers by home zone, with start and end dates (hires as volumes grew, a few leavers)."""
+    plan = {"P1": [(dt.date(2019, 3, 1), 10), (dt.date(2023, 2, 6), 1), (dt.date(2024, 3, 4), 2), (dt.date(2025, 8, 18), 1)],
+            "P2": [(dt.date(2019, 3, 1), 8), (dt.date(2023, 8, 14), 1), (dt.date(2024, 2, 5), 1), (dt.date(2025, 3, 3), 1)],
+            "B1": [(dt.date(2019, 3, 1), 4), (dt.date(2024, 9, 2), 1)]}
+    staff = []
+    no = 104100
+    for z, waves in plan.items():
+        for start, k in waves:
+            for _ in range(k):
+                no += int(rng.integers(3, 29))
+                s0 = start - dt.timedelta(days=int(rng.integers(0, 900))) if start.year == 2019 else start
+                staff.append({"emp": no, "zone": z, "start": s0, "end": None})
+    # three leavers replaced in the same zone
+    for z, (leave, rep) in {"P1": (dt.date(2023, 5, 31), dt.date(2023, 6, 12)), "P2": (dt.date(2024, 10, 31), dt.date(2024, 11, 4)),
+                            "B1": (dt.date(2025, 4, 30), dt.date(2025, 5, 19))}.items():
+        cand = [x for x in staff if x["zone"] == z and x["end"] is None and x["start"] < leave]
+        cand[int(rng.integers(0, len(cand)))]["end"] = leave
+        no += int(rng.integers(3, 29))
+        staff.append({"emp": no, "zone": z, "start": rep, "end": None})
+    for x in staff:
+        x["summer"] = int(rng.integers(25, 31))          # first ISO week of four weeks' summer leave
+        x["winter"] = int(rng.choice([1, 2, 8, 9, 10, 52]))
+        x["sick"] = float(np.exp(rng.normal(np.log(0.045), 0.35)))
+    return staff
+
+
+def absent(x, d, rng):
+    w = cal.isoweek(d)
+    if w in P.PEAK_WEEKS:
+        pass
+    elif x["summer"] <= w < x["summer"] + 4 or w == x["winter"]:
+        return "VAC"
+    winter = 1.0 + 0.45 * math.cos(2 * math.pi * (d.timetuple().tm_yday - 15) / 365.25)
+    peak_extra = 1.25 if w in P.PEAK_WEEKS else 1.0
+    if rng.random() < x["sick"] * winter * peak_extra:
+        return "SICK"
     return None
 
 
-# ----------------------------------------------------------------------------------------------- the days
+# ----------------------------------------------------------------------------------------------------- the floor
+SITE_RATE = {"P1": 1.10, "P2": 0.88, "B1": 2.55}    # the site's planning rate, task minutes a line
+PER_PICKER = P.SHIFT_PAID * 60 * 0.92                # task minutes a picker's shift gives at the site's planning share
+
+
+def era(d):
+    return "A" if d < P.LIMIT_FROM else "B"
+
+
+def day_cap(z, d):
+    if z == "B1":
+        return 14
+    return P.LIMIT[z] if era(d) == "B" else round(2.6 * P.aisles(z, d))
+
+
+def zone_share(z, r, d):
+    s1 = p1_share(r["promo"], d.year)
+    return s1 if z == "P1" else 1.0 - s1
+
+
+def plan_week(D, rel, rng, wk, ds, eve, rate):
+    """The site's evening-shift decision for a peak week. Before the 2023 safety review the evening shift ran in the
+    Black Friday week only; from 2024 (planning standard issue 3) a small-parts zone opens the evening shift for a
+    peak week when its planned day crew would pass 1.35 pickers an aisle, and the evening takes the rest."""
+    evs = [d for d in ds if d.weekday() < 5]
+    for z in P.SMALL:
+        exp_min = 0.0
+        for d in ds:
+            r = rel.get(d)
+            if r is None:
+                continue
+            store = D["store_s"][D["index"][d]] * (0.56 if z == "P1" else 0.44) if d.weekday() < 5 else 0.0
+            exp_min += (zone_share(z, r, d) * r["web_s"] + store) * rate(z, True, d.year)
+        exp_min *= float(np.exp(rng.normal(0.0, 0.05)))
+        if era(ds[0]) == "A":
+            bf = cal.black_friday(wk[0])
+            if cal.isoweek(bf) == wk[1] and evs:
+                eve[(wk, z)] = max(2, int(round(0.22 * exp_min / len(ds) / PER_PICKER)))
+        else:
+            cap = 1.35 * P.aisles(z, ds[0]) * len(ds) * PER_PICKER
+            if exp_min > cap and evs:
+                eve[(wk, z)] = int(math.ceil((exp_min - cap) / (len(evs) * PER_PICKER)))
+
+
+def simulate_floor(D, rel, arts, staff, rng):
+    pilot = set(pilot_articles(arts))
+    sep = h_group_season(9)
+    sp_w = sum(x["vel"] * sep[x["group"]] for x in arts if H_GROUPS[x["group"]][3] != "B1")
+    pil = [x for x in arts if x["article"] in pilot]
+    pil_w = np.array([x["vel"] * sep[x["group"]] for x in pil])
+    pilot_share = float(pil_w.sum() / sp_w)
+    pil_p = pil_w / pil_w.sum()
+    rows, conf, shifts = [], [], []
+    carry = {z: Pool() for z in P.ZONES}
+    hcarry = Pool()
+    work = [d for d in cal.days(dt.date(2021, 12, 27), P.DATA_END) if cal.working(d)]
+    weeks = {}
+    for d in work:
+        weeks.setdefault((cal.isoyear(d), cal.isoweek(d)), []).append(d)
+    eve = {}
+    done = set()
+    real = {}
+    week_need = {}
+
+    def rate(z, peak, year):
+        """The site plans on the time a line its zones took in the same season of the year before."""
+        k = (z, peak, year - 1)
+        if k in real and real[k][1] > 0:
+            return real[k][0] / real[k][1]
+        return SITE_RATE[z] * (0.92 if peak else 1.0)
+
+    for d in work:
+        i = D["index"][d]
+        r = rel.get(d, {"web_s": 0, "web_b": 0, "promo": 0.0, "h_s": 0.0, "promo_h": 0.0})
+        peak = cal.peak(d)
+        wk = (cal.isoyear(d), cal.isoweek(d))
+        weekday = d.weekday() < 5
+        day_shock = float(np.exp(rng.normal(0.0, 0.02)))
+        in_pilot = P.PILOT[0] <= d <= P.PILOT[1]
+        if wk not in done:
+            done.add(wk)
+            if wk[1] in P.PEAK_WEEKS:
+                plan_week(D, rel, rng, wk, weeks[wk], eve, rate)
+        for z in P.ZONES:
+            pools = {"carry": carry[z], "web": Pool(), "store": Pool()}
+            if z == "B1":
+                c, x = draw_lines(rng, r["web_b"], np.array([0, 0, 0.15, 0.85, 0.0]), 1.06)
+                pools["web"].add(c, x)
+                if weekday:
+                    c, x = draw_lines(rng, D["store_b"][i], np.array([0, 0, 0.30, 0.70, 0.0]), 2.2)
+                    pools["store"].add(c, x)
+            else:
+                w = r["promo"]
+                upl = UPL_WEB + (UPL_PROMO - UPL_WEB) * w
+                c, x = draw_lines(rng, zone_share(z, r, d) * r["web_s"], web_mix(z, w, d.year), upl)
+                pools["web"].add(c, x)
+                if weekday:
+                    c, x = draw_lines(rng, D["store_s"][i] * (0.56 if z == "P1" else 0.44), np.array(MIX_STORE[z]),
+                                      UPL_STORE[z])
+                    pools["store"].add(c, x)
+                if z == "P2" and in_pilot:
+                    hc = np.zeros(KC, np.int64)
+                    hc[0] = int(round(pilot_share * r["h_s"]))
+                    hcarry.add(hc, 0.0)
+            own = [x for x in staff if x["zone"] == z and x["start"] <= d and (x["end"] is None or d <= x["end"])]
+            present, absn = [], []
+            for x in own:
+                if not weekday:
+                    if peak and rng.random() < 0.30:
+                        present.append(x["emp"])
+                    continue
+                a = absent(x, d, rng)
+                (absn.append((x["emp"], a)) if a else present.append(x["emp"]))
+            n_pool = sum(p.n() for p in pools.values()) + (hcarry.n() if z == "P2" else 0)
+            exp_min = n_pool * rate(z, peak, d.year) * float(np.exp(rng.normal(0.0, 0.025)))
+            n_e = eve.get((wk, z), 0) if weekday else 0
+            cap = day_cap(z, d)
+            need = max(0.0, exp_min - n_e * PER_PICKER) / PER_PICKER
+            n_d = int(round(need + 0.3))
+            if not peak:
+                wkey = (wk, z)
+                if wkey not in week_need:
+                    tot = 0.0
+                    for dd in weeks[wk]:
+                        rr = rel.get(dd)
+                        if rr is None:
+                            continue
+                        if z == "B1":
+                            tot += rr["web_b"] + (D["store_b"][D["index"][dd]] if dd.weekday() < 5 else 0.0)
+                        else:
+                            tot += zone_share(z, rr, dd) * rr["web_s"] + (
+                                D["store_s"][D["index"][dd]] * (0.56 if z == "P1" else 0.44) if dd.weekday() < 5 else 0.0)
+                    week_need[wkey] = tot * rate(z, False, d.year) / len(weeks[wk]) / PER_PICKER
+                n_d = min(n_d, int(math.ceil(1.12 * week_need[wkey])))
+            if peak and era(d) == "B" and z in P.SMALL and n_e:
+                n_d = min(n_d, int(math.ceil(1.35 * P.aisles(z, d))) + int(rng.integers(0, 2)))
+            n_d = max(2, min(cap, n_d))
+            if len(present) > n_d + 1 and weekday:
+                keep, pack = present[:n_d], present[n_d:]
+            else:
+                keep, pack = present, []
+                n_d = max(n_d, len(present))
+            shifts.append({"date": d, "zone": z, "n_day": n_d, "n_eve": n_e, "own": keep, "absent": absn,
+                           "pack": pack})
+            hours = sorted(set(P.LS_DAY) | (set(P.LS_EVE) if n_e else set()))
+            for h in hours:
+                nd = n_d if h in P.LS_DAY else 0
+                if nd and not peak and h >= 11:
+                    rem = sum(p.n() for p in pools.values()) * rate(z, peak, d.year)
+                    room = 60.0 * sum(v for hh, v in P.LS_DAY.items() if hh >= h)
+                    nd = min(n_d, int(math.ceil(rem / max(1.0, room))) + 1)
+                n_h = nd * P.LS_DAY.get(h, 0.0) + (n_e * P.LS_EVE[h] if n_e and h in P.LS_EVE else 0.0)
+                logged = n_h * 60.0 * float(np.exp(rng.normal(0.0, 0.012)))
+                if logged <= 0:
+                    continue
+                dpa = logged / 60.0 / P.aisles(z, d)
+                dl = 0.0 if z == "B1" else float(delta(dpa))
+                shock = day_shock * float(np.exp(rng.normal(0.0, 0.03)))
+                left = logged
+                tot = np.zeros(KC, np.int64)
+                ext = 0.0
+                task = 0.0
+                n_store = 0
+                n_hl = 0
+                if z == "P2" and hcarry.n() > 0:
+                    t_h = P.BASE["A"] + P.PER_UNIT * 0.08 + P.BRAND_EXTRA + dl
+                    m = left * min(0.35, hcarry.n() / max(1, n_pool))
+                    k = min(hcarry.n(), int(m / t_h))
+                    if k > 0:
+                        hcarry.take(k, rng)
+                        idx = rng.choice(len(pil), size=k, p=pil_p)
+                        t0 = dt.datetime.combine(d, dt.time(h, 0))
+                        span = 60.0 * (P.LS_DAY.get(h, 0.9) if h in P.LS_DAY else 0.9)
+                        picker, clock = 0, float(rng.integers(0, 4))
+                        used = 0.0
+                        for j in range(k):
+                            a = pil[int(idx[j])]
+                            u = 1 + int(rng.poisson(max(0.0, a["upl"] - 1.0)))
+                            tt = (P.BASE["A"] + P.PER_UNIT * (u - 1) + P.BRAND_EXTRA + dl) * float(rng.gamma(4.0, 0.25))
+                            if clock + tt > span:
+                                picker += 1
+                                clock = float(rng.integers(0, 4))
+                            clock += tt
+                            used += tt
+                            conf.append((t0 + dt.timedelta(seconds=clock * 60.0), d, h, a["article"], u, picker))
+                            ext += u - 1
+                        tot[0] += k
+                        n_hl = k
+                        task += used
+                        left -= used
+                order = []
+                if h >= 11 and pools["store"].n() > 0:
+                    order.append(("store", 0.5))
+                order += [("carry", 1.0), ("web", 1.0), ("store", 1.0)]
+                for name, frac in order:
+                    p = pools[name]
+                    if p.n() == 0 or left <= 0.5:
+                        continue
+                    t = p.mean_t(z, dl)
+                    k = min(p.n(), int(left * frac / t))
+                    if k <= 0:
+                        continue
+                    got, ex = p.take(k, rng)
+                    tm_ = task_minutes(z, got, ex, dl, 0, rng, shock)
+                    tot += got
+                    ext += ex
+                    task += tm_
+                    left -= tm_
+                    if name == "store":
+                        n_store += int(got.sum())
+                if task > logged:
+                    task = logged * 0.997
+                lines = int(tot.sum())
+                acc = real.setdefault((z, peak, d.year), [0.0, 0])
+                acc[0] += task
+                acc[1] += lines
+                rows.append((d, h, z, round(logged / 60.0, 2), round(logged, 1), round(task, 1),
+                             round(max(0.0, logged - task), 1), lines, int(round(lines + ext)), *[int(v) for v in tot],
+                             n_store, n_hl))
+            nc = Pool()
+            for name in ("carry", "web", "store"):
+                nc.add(pools[name].c, pools[name].x)
+            carry[z] = nc
+    return rows, conf, shifts, eve, pilot, pilot_share
+
+
+# ----------------------------------------------------------------------------------------------------- the planners
+def weekly_orders(D, key):
+    """The client's own order lines by ISO week of the order date (what its planners see)."""
+    out = {}
+    for i, d in enumerate(D["days"]):
+        k = (cal.isoyear(d), cal.isoweek(d))
+        v = D[key][i]
+        if key == "web_s":
+            v = v + (D["store_s"][i] if d.weekday() < 5 and cal.working(d) else 0.0)
+        if key == "web_b":
+            v = v + (D["store_b"][i] if d.weekday() < 5 and cal.working(d) else 0.0)
+        out[k] = out.get(k, 0.0) + v
+    return out
+
+
+def n_weeks(y):
+    return dt.date(y, 12, 28).isocalendar()[1]
+
+
+def budget(wo, y, g, rng):
+    """The year-ahead budget for year y issued in October of y - 1: each week number of y takes the same week number
+    of y - 2 (the last full year the planners hold), brought forward by the year-to-date trend of y - 1 (weeks 1 to
+    39) and grown by the commercial plan's growth g."""
+    ytd = sum(wo[(y - 1, w)] for w in range(1, 40)) / sum(wo[(y - 2, w)] for w in range(1, 40)) - 1.0
+    out = {}
+    for w in range(1, n_weeks(y) + 1):
+        b = wo.get((y - 2, w)) or wo[(y - 2, 52)]
+        out[w] = b * (1.0 + ytd) * (1.0 + g) * float(np.exp(rng.normal(0.0, 0.012)))
+    return out, ytd
+
+
+def rolling(wo, issue, rng):
+    """A rolling forecast issued on a mid-month day: the next 13 ISO weeks from the mean of the last four complete
+    weeks, phased by the same week numbers a year earlier."""
+    y0, w0, _ = issue.isocalendar()
+    last = []
+    d = issue - dt.timedelta(days=issue.weekday() + 7)
+    for k in range(4):
+        dd = d - dt.timedelta(days=7 * k)
+        last.append((cal.isoyear(dd), cal.isoweek(dd)))
+    lvl = np.mean([wo[k] for k in last])
+    ref = np.mean([wo.get((y - 1, w), wo.get((y - 1, 52))) for (y, w) in last])
+    out = {}
+    start = issue + dt.timedelta(days=7 - issue.weekday())
+    for k in range(13):
+        dd = start + dt.timedelta(days=7 * k)
+        key = (cal.isoyear(dd), cal.isoweek(dd))
+        prev = wo.get((key[0] - 1, key[1])) or wo.get((key[0] - 1, 52))
+        out[key] = lvl * prev / ref * float(np.exp(rng.normal(0.0, 0.025)))
+    return out
+
+
+def planners(D, rng):
+    wk_s, wk_b = weekly_orders(D, "web_s"), weekly_orders(D, "web_b")
+    hk_s, hk_b = weekly_orders(D, "h_s"), weekly_orders(D, "h_b")
+    issues = {2022: dt.date(2021, 10, 15), 2023: dt.date(2022, 10, 14), 2024: dt.date(2023, 10, 13),
+              2025: dt.date(2024, 10, 15), 2026: dt.date(2025, 10, 15), 2027: dt.date(2026, 10, 15)}
+    rows = []
+    meta = {}
+    for y, iss in issues.items():
+        gs, gb = P.PLAN_K[y]
+        bs, ytd_s = budget(wk_s, y, gs, rng)
+        bb, ytd_b = budget(wk_b, y, gb, rng)
+        meta[(P.BRAND_K, y)] = {"issue": iss, "g": (gs, gb), "ytd": (ytd_s, ytd_b)}
+        for w in bs:
+            rows.append((iss, "budget %d" % y, P.BRAND_K, "small parts", y, w, bs[w]))
+            rows.append((iss, "budget %d" % y, P.BRAND_K, "bulky", y, w, bb[w]))
+        if y == 2024:     # the bulky rows re-issued after the furniture range review
+            re = dt.date(2023, 10, 27)
+            for w in bb:
+                rows.append((re, "budget %d" % y, P.BRAND_K, "bulky", y, w, bb[w] * 0.97 * float(np.exp(rng.normal(0, 0.004)))))
+            meta[(P.BRAND_K, y)]["reissue"] = re
+    gs, gb = P.PLAN_H[2027]
+    hs, hy_s = budget(hk_s, 2027, gs, rng)
+    hb, hy_b = budget(hk_b, 2027, gb, rng)
+    meta[(P.BRAND_H, 2027)] = {"issue": issues[2027], "g": (gs, gb), "ytd": (hy_s, hy_b)}
+    for w in hs:
+        rows.append((issues[2027], "budget 2027", P.BRAND_H, "small parts", 2027, w, hs[w]))
+        rows.append((issues[2027], "budget 2027", P.BRAND_H, "bulky", 2027, w, hb[w]))
+    m = dt.date(2021, 11, 15)
+    while m <= dt.date(2026, 10, 15):
+        iss = m if m.weekday() < 5 else m + dt.timedelta(days=7 - m.weekday())
+        for grp, wo in (("small parts", wk_s), ("bulky", wk_b)):
+            for (yy, ww), v in rolling(wo, iss, rng).items():
+                rows.append((iss, "rolling %s" % iss.strftime("%Y-%m"), P.BRAND_K, grp, yy, ww, v))
+        m = dt.date(m.year + (m.month == 12), m.month % 12 + 1, 15)
+    return rows, meta, {"K_s": wk_s, "K_b": wk_b, "H_s": hk_s, "H_b": hk_b}
+
+
+# ----------------------------------------------------------------------------------------------------- the 2027 truth
+def lines_by_pickday(D, a, b):
+    """Kotikaari and Huippu lines released to picking on each working day in [a, b] (the release rule)."""
+    out = {}
+    for i, d in enumerate(D["days"]):
+        if d < a - dt.timedelta(days=10) or d > b:
+            continue
+        for p, sh in ((release_day(d), 1.0),):
+            if not (a <= p <= b):
+                continue
+            r = out.setdefault(p, {"web_s": 0.0, "web_b": 0.0, "h_s": 0.0, "h_b": 0.0, "pw": 0.0})
+            for k in ("web_s", "web_b", "h_s", "h_b"):
+                r[k] += sh * D[k][i]
+            r["pw"] += sh * D["web_s"][i] * D["promo"][i]
+    for p, r in out.items():
+        r["promo"] = r["pw"] / max(1.0, r["web_s"])
+        i = D["index"][p]
+        r["store_s"] = D["store_s"][i] if p.weekday() < 5 else 0.0
+        r["store_b"] = D["store_b"][i] if p.weekday() < 5 else 0.0
+    return out
+
+
+def huippu_zone_split(arts, month):
+    """Huippu Sport's small-parts lines in a month by 2027 zone and the class mix and units a line in each."""
+    s = h_group_season(month)
+    out = {}
+    for z in ("P1", "P2", "B1"):
+        tot = np.zeros(KC)
+        u = 0.0
+        for x in arts:
+            if H_GROUPS[x["group"]][3] != z:
+                continue
+            w = x["vel"] * s[x["group"]]
+            tot[P.CLASSES.index(x["cls"])] += w
+            u += w * x["upl"]
+        out[z] = (tot.sum(), tot / tot.sum(), u / tot.sum())
+    sp = out["P1"][0] + out["P2"][0]
+    return {"P1": out["P1"][0] / sp, "P2": out["P2"][0] / sp}, {z: (out[z][1], out[z][2]) for z in out}
+
+
+def t_mix(zone, mix, upl, brand=0.0):
+    if zone == "B1":
+        return P.BULKY_BASE + P.BULKY_PER_UNIT * (upl - 1.0)
+    return float(np.asarray(mix) @ np.array([P.BASE[k] for k in P.CLASSES]) + P.PER_UNIT * (upl - 1.0)
+                 + P.ZONE_EXTRA[zone] + brand)
+
+
+def capacity_day(zone, n, t):
+    """Lines the day shifts of one day pick with n pickers on the floor at a mean uncongested time t a line."""
+    return sum(n * 60.0 * ls / (t + float(delta(n * ls / P.AISLES[zone]))) for ls in P.LS_DAY.values())
+
+
+def crew_for(zone, lines, t, ls_map, days, top=None):
+    """Pickers on the floor a shift needs to pick lines over its days at time t a line (the congestion included),
+    searched up to the zone's limit, past which the floor's throughput turns over."""
+    if lines <= 0:
+        return 0.0
+    lo, hi = 0.0, float(top or P.LIMIT.get(zone, 40))
+    for _ in range(60):
+        n = (lo + hi) / 2
+        cap = days * sum(n * 60.0 * ls / (t + float(delta(n * ls / P.AISLES[zone]))) for ls in ls_map.values())
+        lo, hi = (n, hi) if cap < lines else (lo, n)
+    return hi
+
+
+def truth_2027(D, arts):
+    a, b = dt.date.fromisocalendar(2027, 46, 1), dt.date.fromisocalendar(2027, 51, 7)
+    rel = lines_by_pickday(D, a, b)
+    hsplit, hmix = huippu_zone_split(arts, 12)
+    hsplit11, hmix11 = huippu_zone_split(arts, 11)
+    out = {}
+    for w in P.PEAK_WEEKS:
+        ds = [dt.date.fromisocalendar(2027, w, k) for k in range(1, 8)]
+        wd = [d for d in ds if cal.working(d)]
+        ev = [d for d in wd if d.weekday() < 5]
+        acc = {z: {"lines": 0.0, "tmin": 0.0} for z in P.ZONES}
+        for d in wd:
+            r = rel[d]
+            m = 11 if d.month == 11 else 12
+            hs, hm = (hsplit11, hmix11) if m == 11 else (hsplit, hmix)
+            for z in P.SMALL:
+                kw = zone_share(z, r, d) * r["web_s"]
+                upl = UPL_WEB + (UPL_PROMO - UPL_WEB) * r["promo"]
+                ks = r["store_s"] * (0.56 if z == "P1" else 0.44)
+                hl = hs[z] * r["h_s"]
+                tm = kw * t_mix(z, web_mix(z, r["promo"], 2027), upl) + ks * t_mix(z, MIX_STORE[z], UPL_STORE[z]) \
+                    + hl * t_mix(z, hm[z][0], hm[z][1], P.BRAND_EXTRA)
+                acc[z]["lines"] += kw + ks + hl
+                acc[z]["tmin"] += tm
+            bl = r["web_b"] + r["store_b"] + r["h_b"]
+            acc["B1"]["lines"] += bl
+            acc["B1"]["tmin"] += r["web_b"] * t_mix("B1", None, 1.06) + r["store_b"] * t_mix("B1", None, 2.2) \
+                + r["h_b"] * t_mix("B1", None, hmix["B1"][1])
+        for z in P.ZONES:
+            L = acc[z]["lines"]
+            t = acc[z]["tmin"] / L
+            res = {"lines": L, "t": t, "days": len(wd), "evenings": len(ev)}
+            if z == "B1":
+                res["hours"] = L * t / 60.0 / (sum(P.LS_DAY.values()) / P.SHIFT_PAID)
+                res["evening"] = False
+            else:
+                cap = len(wd) * capacity_day(z, P.LIMIT[z], t)
+                res["cap"] = cap
+                res["evening"] = L > cap
+                if L > cap:
+                    n_e = crew_for(z, L - cap, t, P.LS_EVE, len(ev))
+                    res["hours"] = (P.LIMIT[z] * len(wd) + n_e * len(ev)) * P.SHIFT_PAID
+                else:
+                    n_d = crew_for(z, L, t, P.LS_DAY, len(wd))
+                    res["hours"] = n_d * len(wd) * P.SHIFT_PAID
+            out[(z, w)] = res
+    return out
+
+
+# ----------------------------------------------------------------------------------------------------- the records
+def timesheets(shifts, rng):
+    """One row per person and working day: own pickers on their home zone's day shift (absences with their code),
+    the agency's pickers for the rest of the day crew and for every evening shift. The agency's pickers return
+    season to season in part; it re-issued its badges on 1 April 2025 (TP-numbers before, 70-numbers after)."""
+    rows = []
+    pool = []
+    nxt = [3100]
+    seen = set()
+    by_day = {}
+    for s in shifts:
+        by_day.setdefault(s["date"], []).append(s)
+    for d in sorted(by_day):
+        key = (cal.isoyear(d), cal.isoweek(d) >= 44)
+        need = sum(max(0, s["n_day"] - len(s["own"])) + s["n_eve"] for s in by_day[d])
+        if key not in seen:
+            keep = [x for x in pool if rng.random() < 0.45]
+            pool[:] = keep
+            seen.add(key)
+        while len(pool) < need + 6:
+            nxt[0] += int(rng.integers(1, 6))
+            pool.append(nxt[0])
+        ids = list(rng.permutation(pool)[:need]) if need else []
+
+        def badge(i):
+            return "TP-%04d" % i if d < dt.date(2025, 4, 1) else "70%06d" % (i * 7 + 1043)
+
+        j = 0
+        for s in by_day[d]:
+            z = s["zone"]
+            for emp in s["own"]:
+                rows.append((d, str(emp), P.ORG, z, "DAY", "06:00", "14:30", 8.0, "", 0.0))
+            for emp, code in s["absent"]:
+                rows.append((d, str(emp), P.ORG, z, "DAY", "", "", 0.0, code, 8.0))
+            for emp in s.get("pack", []):
+                rows.append((d, str(emp), P.ORG, "PACK", "DAY", "06:00", "14:30", 8.0, "", 0.0))
+            for _ in range(max(0, s["n_day"] - len(s["own"]))):
+                rows.append((d, badge(int(ids[j])), P.AGENCY, z, "DAY", "06:00", "14:30", 8.0, "", 0.0))
+                j += 1
+            for _ in range(s["n_eve"]):
+                rows.append((d, badge(int(ids[j])), P.AGENCY, z, "EVE", "14:30", "23:00", 8.0, "", 0.0))
+                j += 1
+    return rows
+
+
+def huippu_daily(D, arts, rng):
+    out = []
+    for i, d in enumerate(D["days"]):
+        if d < dt.date(2024, 1, 1) or d > dt.date(2026, 10, 31):
+            continue
+        for grp, key, lpo in (("small parts", "h_s", 1.62), ("bulky", "h_b", 1.08)):
+            lines = int(D[key][i])
+            _, upl = huippu_mix(arts, d.month, small=(grp == "small parts")) if grp == "small parts" else (None, 1.05)
+            orders = int(round(lines / (lpo * float(np.exp(rng.normal(0.0, 0.03))))))
+            units = int(round(lines * upl * float(np.exp(rng.normal(0.0, 0.02)))))
+            out.append((d, grp, orders, lines, units))
+    return out
+
+
+def huippu_articles_monthly(D, arts, rng):
+    out = []
+    m = dt.date(2024, 11, 1)
+    while m <= dt.date(2026, 10, 1):
+        nm = dt.date(m.year + (m.month == 12), m.month % 12 + 1, 1)
+        idx = [i for i, d in enumerate(D["days"]) if m <= d < nm]
+        s = h_group_season(m.month)
+        for small in (True, False):
+            sel = [x for x in arts if (H_GROUPS[x["group"]][3] != "B1") == small]
+            tot = int(sum(D["h_s" if small else "h_b"][i] for i in idx))
+            w = np.array([x["vel"] * s[x["group"]] for x in sel])
+            n = rng.multinomial(tot, w / w.sum())
+            for x, k in zip(sel, n):
+                if k == 0:
+                    continue
+                u = k + int(rng.poisson(max(0.0, (x["upl"] - 1.0) * k)))
+                out.append((m.strftime("%Y-%m"), x["article"], int(k), u))
+        m = nm
+    return out
+
+
 def world(seed=P.SEED):
     rng = np.random.default_rng(seed)
-    crng = np.random.default_rng(seed + 9)     # the conditioning's own variation, apart from the day's stream
-    temps = temperatures(np.random.default_rng(seed + 1))
-    blocks = make_blocks(np.random.default_rng(seed + 2))
-    buses = make_fleet(np.random.default_rng(seed + 3))
-    cards = make_cards(np.random.default_rng(seed + 4), buses)
-    by_code = {b["code"]: b for b in blocks}
-    bus_by = {b["fleet_no"]: b for b in buses}
-    dates = list(daterange(P.START, P.END))
-
-    # the pilot blocks: the planner's nine, the lowest 2024 fuel figures among weekday blocks of 225 km or less,
-    # read from the 2024 fuel accounting (the simulated truth plus the accounting's own noise)
-    def fits_pilot(b):
-        # the planner's own range check for the pilot buses: the block's kilometres at its rate, the auxiliaries and
-        # the electric heating at its capacity over the hours out, inside 88 per cent of the usable battery
-        return b["km_old"] * traction_kwh_per_km(b) * 1.04 + b["hours"] * (P.P_AUX + P.P_CAP_PILOT + 0.4) <= 0.80 * P.E_USABLE_PILOT
-
-    cand = [b for b in blocks if b["daytype"] == "M" and b["km_old"] <= 225 and fits_pilot(b)]
-    days24 = [d for d in dates if d.year == 2024 and daytype(d) == "M"]
-
-    def rate24(b):
-        lit = 0.0
-        for d in days24:
-            t = temps[d]["truth"]
-            lit += b["km_old"] * diesel_l_per_100km(b) / 100.0 * (1 + 0.0025 * max(0.0, 5.0 - t)) \
-                + b["hours"] * (P.H_IDLE + diesel_heating_l_per_h(t))
-        return lit / (b["km_old"] * len(days24)) * 100.0
-    r24 = {b["code"]: rate24(b) * (1 + rng.normal(0, 0.006)) for b in cand}
-    pilot = sorted(cand, key=lambda b: r24[b["code"]])[:9]
-    pilot_codes = [b["code"] for b in pilot]
-    for b in blocks:
-        b["pilot"] = b["code"] in pilot_codes
-    # the three weekday blocks the planner approved as stand-ins for an electric bus when the dispatcher is short of
-    # a diesel one: the next three on the planner's own list after the nine
-    fallback = [b["code"] for b in sorted(cand, key=lambda b: r24[b["code"]])[9:12]]
-
-    # workshop days (a bus out of service for a day or several)
-    out = {}       # fleet_no -> set of dates
-    workshop = []
-    wo = 24100
-    for b in buses:
-        out[b["fleet_no"]] = set()
-    for b in buses:
-        life = [d for d in dates if d >= b["in_service_from"] and (b["retired"] is None or d <= b["retired"])]
-        k = int(rng.poisson(len(life) / 365.0 * (5.5 if b["drive"] == "diesel" else 4.0)))
-        for _ in range(k):
-            d0 = life[int(rng.integers(0, len(life)))]
-            n = int(rng.choice([1, 1, 1, 2, 2, 3, 4, 6]))
-            cat = str(rng.choice(["brakes", "tyres", "doors", "electrical", "body", "engine", "exhaust", "hvac", "service"]
-                                 if b["drive"] == "diesel" else
-                                 ["brakes", "tyres", "doors", "electrical", "body", "hv-battery check", "hvac", "service"]))
-            wo += int(rng.integers(1, 9))
-            for j in range(n):
-                out[b["fleet_no"]].add(d0 + dt.timedelta(days=j))
-            workshop.append({"wo": "WO-%d" % wo, "fleet_no": b["fleet_no"], "opened": d0, "closed": d0 + dt.timedelta(days=n - 1),
-                             "category": cat, "hours": round(float(rng.uniform(1.5, 14)), 1), "note": ""})
-    # the fuel heater faults on two electric buses in the winter of 2025/26 (the parts took weeks)
-    heater_out = {1202: (dt.date(2026, 1, 12), dt.date(2026, 2, 8)), 1205: (dt.date(2026, 2, 2), dt.date(2026, 2, 24))}
-    # two mechanics, two ways of writing the same fault up
-    notes = {1202: ("Fuel heater does not start, fault F12 (no flame). Glow pin and metering pump on order.",
-                    "Fuel heater repaired (glow pin, metering pump), test run OK."),
-             1205: ("Heater fails to start after two restarts, code F12 no flame. Glow pin + dosing pump ordered from Eberspacher.",
-                    "Heater repaired: new glow pin and dosing pump fitted, 30 min test run OK.")}
-    for fn, (a, b_) in heater_out.items():
-        wo += int(rng.integers(1, 9))
-        workshop.append({"wo": "WO-%d" % wo, "fleet_no": fn, "opened": a, "closed": a, "category": "hvac",
-                         "hours": 2.5, "note": notes[fn][0]})
-        wo += int(rng.integers(1, 9))
-        workshop.append({"wo": "WO-%d" % wo, "fleet_no": fn, "opened": b_, "closed": b_, "category": "hvac",
-                         "hours": 3.0, "note": notes[fn][1]})
-
-    # the depot pump out of service for a week (every fill at the street station)
-    pump_out = (dt.date(2025, 8, 18), dt.date(2025, 8, 24))
-
-    # ---- day by day: assignments
-    roster = []       # one row per bus-day in service
-    prev = {}         # block code -> bus yesterday (persistence)
-    e_rot = 0
-    diesel_days = []  # (date, fleet_no, block, litres, km, hours)
-    ebus_days = []
-    level = {b["fleet_no"]: rng.uniform(0.45, 0.95) * b["tank_l"] for b in buses if b["drive"] == "diesel"}
-    htank = {fn: rng.uniform(8, 28) for fn in P.EBUS_BATCH}     # the electric buses' heater fuel tanks (30 l)
-    fills = []
-    sessions = []
-    soc_end_prev = {fn: 100 for fn in P.EBUS_BATCH}
-    sid = 0
-    last_fill_day = {b["fleet_no"]: P.START - dt.timedelta(days=2) for b in buses}
-    for d in dates:
-        t_true = temps[d]["truth"]
-        dtp = daytype(d)
-        todays = [b for b in blocks if b["daytype"] == dtp]
-        avail_d = [b["fleet_no"] for b in buses if b["drive"] == "diesel" and b["in_service_from"] <= d and
-                   (b["retired"] is None or d <= b["retired"]) and d not in out[b["fleet_no"]]]
-        avail_e = [fn for fn, since in P.EBUS_BATCH.items() if since <= d and d not in out[fn]]
-        rng.shuffle(avail_d)
-        assign = {}
-        # electric buses first: the pilot blocks on weekdays (rotating), weekend blocks of 220 km or less, and on
-        # some weekdays one bus stands in on another block the dispatcher is short on
-        if avail_e:
-            if dtp == "M":
-                pool = [b["code"] for b in pilot]
-                k = len(avail_e)
-                chosen = [pool[(e_rot + i) % len(pool)] for i in range(k)]
-                e_rot += 1 + (e_rot % 2)
-                if rng.uniform() < 0.085 and k >= 3:
-                    chosen[-1] = str(rng.choice(fallback))
-            else:
-                pool = [b["code"] for b in todays if b["km"] <= 220 and fits_pilot(b)]
-                chosen = rng.choice(pool, size=min(len(avail_e), len(pool)), replace=False).tolist()
-            for fn, code in zip(avail_e, chosen):
-                assign[code] = fn
-        for b in todays:
-            if b["code"] in assign:
-                continue
-            pb = prev.get(b["code"])
-            if pb in avail_d and rng.uniform() < 0.55:
-                assign[b["code"]] = pb
-                avail_d.remove(pb)
-            else:
-                if not avail_d:
-                    break
-                assign[b["code"]] = avail_d.pop()
-        prev = dict(assign)
-        for code, fn in assign.items():
-            b = by_code[code]
-            bus = bus_by[fn]
-            km = b["km_old"] if d < P.NEW_CODES_FROM else b["km"]
-            hours = b["hours"]
-            roster.append({"date": d, "code": code, "fleet_no": fn, "km": km, "hours": hours})
-            if bus["drive"] == "diesel":
-                cold_eng = 1 + 0.0025 * max(0.0, 5.0 - t_true)
-                litres = (km * diesel_l_per_100km(b) / 100.0 * cold_eng + hours * (P.H_IDLE + diesel_heating_l_per_h(t_true))) \
-                    * bus["eff"] * (1 + rng.normal(0, 0.045))
-                diesel_days.append({"date": d, "fleet_no": fn, "code": code, "litres": litres, "km": km, "hours": hours})
-                level[fn] -= litres
-                # the depot pump at the end of the day: fill when under 45 per cent, or after three days
-                tank = bus["tank_l"]
-                if level[fn] < 0.50 * tank or (d - last_fill_day[fn]).days >= 3 or level[fn] < 60:
-                    need = tank - level[fn]
-                    if pump_out[0] <= d <= pump_out[1] or rng.uniform() < 0.03:
-                        # a street station, often not to full, during the day or in the evening
-                        lit = min(need, rng.uniform(100, 230)) if rng.uniform() < 0.6 else need
-                        fills.append({"date": d, "fleet_no": fn, "litres": lit, "where": "street", "product": "DIESEL",
-                                      "minute": int(rng.uniform(9 * 60, 21 * 60))})
-                        level[fn] += lit
-                    else:
-                        # the night staff fuel between the returns and midnight; a bus back after midnight is fuelled
-                        # within the hour of its return
-                        minute = int(rng.uniform(max(20 * 60 + 40, b["ret"] + 8), min(23 * 60 + 58, max(23 * 60 + 40, b["ret"] + 40))))
-                        first = min(need, 250.0)
-                        fills.append({"date": d, "fleet_no": fn, "litres": first, "where": "depot", "product": "DIESEL", "minute": minute})
-                        rest = need - first
-                        if rest > 8 and rng.uniform() < 0.72:
-                            fills.append({"date": d, "fleet_no": fn, "litres": rest, "where": "depot", "product": "DIESEL",
-                                          "minute": minute + int(rng.integers(2, 6))})
-                            first += rest
-                        level[fn] += first
-                    last_fill_day[fn] = d
-                # AdBlue now and then
-                if rng.uniform() < 0.045:
-                    fills.append({"date": d, "fleet_no": fn, "litres": float(rng.uniform(18, 42)), "where": "depot",
-                                  "product": "ADBLUE", "minute": int(rng.uniform(21 * 60, 25 * 60))})
-            else:
-                age = (d - bus["in_service_from"]).days
-                el_kw, fuel_th = pilot_heating(t_true)
-                heater_dead = fn in heater_out and heater_out[fn][0] <= d < heater_out[fn][1]
-                if heater_dead:
-                    # with the fuel heater out the controller lets the boosters carry the demand up to their 12 kW
-                    el_kw, fuel_th = min(heat_demand(t_true), 12.0) / cop(t_true), 0.0
-                trac = km * traction_kwh_per_km(b) * bus["eff"] * (1 + rng.normal(0, 0.035))
-                hvac = hours * el_kw * (1 + rng.normal(0, 0.05)) + hours * 0.35 * (1 if t_true > 22 else 0.3)
-                aux = hours * P.P_AUX * (1 + rng.normal(0, 0.03))
-                energy = trac + hvac + aux
-                cap = P.E_USABLE_PILOT * (1 - fade(age)) * cold_capacity(t_true)
-                soc0 = int(round(min(100, soc_end_prev[fn])))
-                soc1 = soc0 - energy / cap * 100.0
-                hf_l = hours * fuel_th / (P.FUEL_KWH_PER_L * P.BURNER_EFF) * (1 + rng.normal(0, 0.08))
-                htank[fn] -= hf_l
-                ebus_days.append({"date": d, "fleet_no": fn, "code": code, "km": km, "hours": hours, "energy": energy,
-                                  "hvac": hvac, "trac": trac, "aux": aux, "soc0": soc0, "soc1": soc1, "t": t_true,
-                                  "cap": cap, "heater_l": hf_l, "age": age})
-                if hf_l > 0 and htank[fn] < 8:
-                    lit = 30.0 - htank[fn]
-                    fills.append({"date": d, "fleet_no": fn, "litres": lit, "where": "depot", "product": "HVO",
-                                  "minute": int(rng.uniform(21 * 60 + 10, 25 * 60))})
-                    htank[fn] += lit
-                # the night's charge: plugged in after the return, unplugged before the next departure; the charger
-                # meters the recharge over its efficiency and, while the relay releases it, what the bus takes beside it
-                sid += 1
-                target = 100 if rng.uniform() < 0.9 else int(rng.integers(90, 100))
-                gain = max(0.0, target - soc1) / 100.0 * cap
-                meter_noise = rng.normal(0, 0.012)
-                plug_in = b["ret"] + int(rng.integers(4, 28))
-                plug_out = 24 * 60 + b["dep"] - int(rng.integers(8, 45))
-                start = max(plug_in, P.NIGHT_FROM) + int(rng.integers(0, 4))
-                cond = conditioning_kw(night_temp(temps, d)) * released(plug_in, plug_out) / 60.0 * (1 + crng.normal(0, 0.07))
-                delivered = gain / P.ETA_CHARGE * (1 + meter_noise) + cond
-                sessions.append({"sid": sid, "date": d, "fleet_no": fn, "plug_in": plug_in, "plug_out": plug_out, "start": start,
-                                 "kwh": delivered, "recharge_kwh": delivered - cond, "cond_kwh": cond, "soc_in": soc1, "soc_out": target,
-                                 "outlet": "C%d-%s" % ((fn - 1201) // 2 + 1, "AB"[(fn - 1201) % 2])})
-                soc_end_prev[fn] = target
-    return {"temps": temps, "blocks": blocks, "buses": buses, "cards": cards, "roster": roster, "diesel_days": diesel_days,
-            "ebus_days": ebus_days, "fills": fills, "sessions": sessions, "workshop": workshop, "pilot": pilot_codes,
-            "heater_out": heater_out, "pump_out": pump_out, "dates": dates, "fallback": fallback}
-
-
-def design_energy(b, t=P.DESIGN_T):
-    """the truth: a 2027 bus's battery energy on block b on a day of mean temperature t"""
-    return b["km"] * traction_kwh_per_km(b) + b["hours"] * (P.P_AUX + new_bus_heating(t))
-
-
-def design_window(b):
-    """the block's charging window on the design night: its return to its next departure, inside the night period"""
-    return max(b["ret"], P.NIGHT_FROM), min(b["dep"] + 1440, P.NIGHT_TO + 1440)
-
-
-def design_night_draw(b, t=P.DESIGN_T):
-    """the truth: what the installation takes at the connection point for block b's bus on the design night"""
-    a, z = design_window(b)
-    return design_energy(b, t) / P.ETA_CHARGE + conditioning_kw(t) * max(0, z - a) / 60.0
-
-
-if __name__ == "__main__":
-    w = world()
-    print(len(w["roster"]), "bus-days;", len(w["fills"]), "fills;", len(w["ebus_days"]), "electric bus-days;",
-          len(w["sessions"]), "sessions;", len(w["workshop"]), "work orders")
-    print("pilot:", w["pilot"])
-    lim = P.SHARE * P.E_USABLE_2027 * (1 - fade(365))
-    es = sorted((design_energy(b), b["code"], b["kind"], b["pilot"]) for b in w["blocks"] if b["daytype"] == "M")
-    print("limit %.1f" % lim)
-    for e, c, k, p in es:
-        print("%s %-9s %6.1f %s" % (c, k, e, "pilot" if p else ""))
-    print("qualify:", sum(1 for e, *_ in es if e <= lim))
-    print("lowest soc end: %.1f" % min(r["soc1"] for r in w["ebus_days"]))
+    D = demand(rng)
+    rel = releases(D)
+    arts = catalogue(rng)
+    staff = own_staff(rng)
+    rows, conf, shifts, eve, pilot, pilot_share = simulate_floor(D, rel, arts, staff, rng)
+    fc, meta, wo = planners(D, rng)
+    ts = timesheets(shifts, rng)
+    hd = huippu_daily(D, arts, rng)
+    ham = huippu_articles_monthly(D, arts, rng)
+    truth = truth_2027(D, arts)
+    return {"D": D, "arts": arts, "staff": staff, "zone_hours": rows, "pilot_conf": conf, "shifts": shifts,
+            "eve": eve, "pilot": pilot, "pilot_share": pilot_share, "forecasts": fc, "fmeta": meta, "orders_wk": wo,
+            "timesheets": ts, "h_daily": hd, "h_monthly": ham, "truth": truth, "rng": rng}

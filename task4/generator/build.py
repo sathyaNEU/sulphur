@@ -1,5 +1,6 @@
-"""Build the pack under target/: the clean truth (sim.py), the data files (pack.py), the three documents (docs.py),
-every office container laid out as Office saves it and scrubbed of the library that wrote it (the house writers)."""
+"""Build the pack under target/: the clean truth (sim.py), the data files (pack.py), the documents (docs.py), the site
+manager's draft read off the shipped files, every office container laid out as Office saves it (the house writers),
+each file's own save time."""
 import datetime as dt
 import os
 import sys
@@ -9,6 +10,7 @@ WRITERS = os.path.join(os.path.dirname(os.path.dirname(HERE)), ".claude", "skill
 sys.path.insert(0, WRITERS)
 import postprocess  # noqa: E402
 
+import analysis as A  # noqa: E402
 import docs  # noqa: E402
 import pack  # noqa: E402
 import params as P  # noqa: E402
@@ -17,18 +19,23 @@ import sim  # noqa: E402
 FILES = pack.FILES
 PACK = list(FILES)
 DISTRACTORS = pack.DISTRACTORS
-OFFICE = {"blocks": ("2021-09-06T07:40:00Z", "2026-08-24T11:17:00Z", "Simo Virta"),
-          "vehicles": ("2019-02-11T12:05:00Z", "2026-10-02T08:33:00Z", "Eveliina Pajunen"),
-          "plan": ("2026-09-14T09:21:00Z", "2026-10-27T15:48:00Z", "Simo Virta"),
-          "tyres": ("2026-01-19T13:02:00Z", "2026-02-03T10:14:00Z", "Eveliina Pajunen")}
-FI = dt.timezone(dt.timedelta(hours=2))
-EXPORTED = {"fuel": dt.datetime(2026, 11, 3, 9, 41, 12, tzinfo=FI),
-            "dispatch": dt.datetime(2026, 11, 2, 14, 7, 55, tzinfo=FI),
-            "ebus": dt.datetime(2026, 11, 2, 7, 22, 31, tzinfo=FI),
-            "sessions": dt.datetime(2026, 11, 2, 7, 26, 4, tzinfo=FI),
-            "weather": dt.datetime(2026, 11, 3, 11, 58, 40, tzinfo=FI),
-            "workshop": dt.datetime(2026, 11, 4, 15, 36, 9, tzinfo=FI),
-            "power": dt.datetime(2026, 11, 4, 16, 2, 47, tzinfo=FI)}
+FI_W = dt.timezone(dt.timedelta(hours=2))
+FI_S = dt.timezone(dt.timedelta(hours=3))
+OFFICE = {"budget27": ("2026-10-08T07:12:00Z", "2026-10-15T10:31:00Z", P.PEOPLE["planning"], P.CLIENT),
+          "item_master": ("2026-11-02T04:57:00Z", "2026-11-02T04:58:00Z", P.PEOPLE["slotting"], P.ORG),
+          "slotting": ("2026-10-27T12:40:00Z", "2026-10-30T13:26:00Z", P.PEOPLE["slotting"], P.ORG),
+          "roster": ("2026-10-28T08:05:00Z", "2026-10-28T08:44:00Z", P.PEOPLE["hr"], P.ORG),
+          "draft": ("2026-10-29T13:18:00Z", "2026-11-02T14:51:00Z", P.PEOPLE["site"], P.ORG)}
+EXPORTED = {"zone_hours": dt.datetime(2026, 11, 2, 7, 14, 26, tzinfo=FI_W),
+            "pay_old": dt.datetime(2024, 1, 15, 9, 31, 12, tzinfo=FI_W),
+            "pay_new": dt.datetime(2026, 11, 3, 10, 2, 47, tzinfo=FI_W),
+            "archive": dt.datetime(2026, 11, 2, 15, 48, 3, tzinfo=FI_W),
+            "k_orders": dt.datetime(2026, 11, 2, 7, 21, 55, tzinfo=FI_W),
+            "h_daily": dt.datetime(2026, 11, 1, 9, 12, 40, tzinfo=FI_W),
+            "h_monthly": dt.datetime(2026, 11, 1, 9, 15, 2, tzinfo=FI_W),
+            "pilot": dt.datetime(2026, 11, 2, 8, 3, 19, tzinfo=FI_W),
+            "benches": dt.datetime(2026, 11, 2, 11, 20, 45, tzinfo=FI_W),
+            "returns": dt.datetime(2026, 11, 3, 13, 5, 30, tzinfo=FI_W)}
 
 
 def run(target):
@@ -38,14 +45,19 @@ def run(target):
     n = pack.write_tables(w, target)
     docs.standard(F["standard"])
     docs.agreement(F["agreement"])
-    docs.quotation(F["quote"])
-    for k, (created, modified, who) in OFFICE.items():
-        postprocess.normalize_ooxml(F[k], who, who, created, modified, excel=True, company=P.ORG)
+    f = A.load(target)
+    d = pack.draft(w, f, F["draft"])
+    tp = A.pilot_times(f)
+    z = A.zone_hours(f)
+    import pandas as pd
+    zp = z[(z["zone"] == "P2") & (z["date"] >= pd.Timestamp(P.PILOT[0])) & (z["date"] <= pd.Timestamp(P.PILOT[1]))]
+    p2 = float((zp["task_min"].sum() - tp * zp["lines_hui"].sum()) / zp["kot"].sum())
+    days = zp[zp["lines_hui"] > 0]["date"].nunique()
+    docs.review(F["review"], {"articles": len(w["pilot"]), "lines": int(zp["lines_hui"].sum()),
+                              "per_day": int(round(zp["lines_hui"].sum() / days)), "pilot_t": tp, "p2_t": p2})
+    for k, (c, m, who, comp) in OFFICE.items():
+        postprocess.normalize_ooxml(F[k], who, who, c, m, excel=True, company=comp)
+    postprocess.normalize_docx(F["review"], P.PEOPLE["ci"], P.PEOPLE["ci"], "2026-11-02T12:48:00Z", "2026-11-03T08:16:00Z",
+                               revision=4, total_time=63, seed="task4-review", company=P.ORG)
     postprocess.own_mtimes(target, {FILES[k]: v for k, v in EXPORTED.items()})
     return w, n
-
-
-if __name__ == "__main__":
-    t = sys.argv[1] if len(sys.argv) > 1 else os.path.join(os.path.dirname(HERE), "target")
-    w, n = run(t)
-    print(n)

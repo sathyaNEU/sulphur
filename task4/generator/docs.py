@@ -1,10 +1,11 @@
-"""The three documents: the company's depot electrification standard DES-1, the distribution company's connection
-agreement for the charging installation, and the dealer's quotation for the 2027 buses. Each is a Word document
-exported to PDF by LibreOffice Writer through the house writer, with the issuing office's own stamps."""
+"""The documents: Saarnela's labour planning standard (issue 4) and the agency's framework agreement, each a Word
+document exported to PDF by LibreOffice Writer through the house writer, and the pilot review, a Word document."""
 import datetime as dt
 import os
 import sys
 
+from docx import Document
+from docx.shared import Mm, Pt
 from reportlab.lib import colors
 from reportlab.lib.styles import ParagraphStyle, getSampleStyleSheet
 from reportlab.platypus import Paragraph, Spacer, Table, TableStyle
@@ -21,12 +22,12 @@ FI_S = dt.timezone(dt.timedelta(hours=3))
 
 def _styles():
     ss = getSampleStyleSheet()
-    body = ParagraphStyle("body", parent=ss["Normal"], fontName="Helvetica", fontSize=9.8, leading=13.6, spaceAfter=6)
+    body = ParagraphStyle("body", parent=ss["Normal"], fontName="Helvetica", fontSize=9.6, leading=13.4, spaceAfter=6)
     h1 = ParagraphStyle("h1", parent=ss["Heading1"], fontName="Helvetica-Bold", fontSize=13.5, leading=17, spaceAfter=4)
-    h2 = ParagraphStyle("h2", parent=ss["Heading2"], fontName="Helvetica-Bold", fontSize=10.5, leading=14,
+    h2 = ParagraphStyle("h2", parent=ss["Heading2"], fontName="Helvetica-Bold", fontSize=10.4, leading=14,
                         spaceBefore=8, spaceAfter=4, keepWithNext=1)
     small = ParagraphStyle("small", parent=body, fontSize=8.2, leading=10.8, textColor=colors.HexColor("#444444"))
-    cell = ParagraphStyle("cell", fontName="Helvetica", fontSize=8.4, leading=10.2)
+    cell = ParagraphStyle("cell", fontName="Helvetica", fontSize=8.6, leading=10.4)
     return body, h1, h2, small, cell
 
 
@@ -36,131 +37,130 @@ def _grid(rows, widths, cell):
     return t
 
 
+STANDARD = [
+    ("1. Scope", [
+        "This standard sets how the Saarnela fulfilment centre plans its pickers for the peak and how the peak plan "
+        "put to the operations director is stated. It applies to the pick zones P1, P2 and B1 and to every client "
+        "the centre picks for."]),
+    ("2. Terms", [
+        "2.1 The peak is ISO weeks 46 to 50 of a year.",
+        "2.2 Picker hours are the paid hours of pickers working in a pick zone, as the payroll records them against "
+        "the zone's cost centre. Absence is not picker hours, and hours booked to the packing cost centre are not "
+        "picker hours of any zone.",
+        "2.3 Lines are the order lines a zone picks, as the WMS counts them. The time a line takes to pick is the WMS "
+        "task time of the pick.",
+        "2.4 The WMS releases the web orders it receives on a day for picking at 06:00 on the next working day. The "
+        "showrooms' replenishment orders are released and picked on the weekday they are placed."]),
+    ("3. Zones and shifts", [
+        "3.1 The pick zones are those in the table below.",
+        "TABLE",
+        "3.2 A small-parts zone never has more pickers on its floor in a shift than its limit.",
+        "3.3 The day shift runs 06:00 to 14:30 with eight paid hours and an unpaid half hour, Monday to Saturday in "
+        "the peak and Monday to Friday outside it. The evening shift runs 14:30 to 23:00 with eight paid hours, Monday "
+        "to Friday. The centre is closed on public holidays.",
+        "3.4 A small-parts zone works the evening shift in a peak week when the lines it is expected to pick that week "
+        "cannot be picked on that week's day shifts with the zone's limit of pickers on the floor. The day shifts are "
+        "then worked at the limit and the evening shifts of the week's working weekdays pick the rest.",
+        "3.5 The peak plan states each zone's picker hours for each peak week with a range the planner would put 80 "
+        "per cent on. The range covers both how the client's volumes turn out and the zone's time a line."]),
+    ("4. Staffing", [
+        "4.1 Own pickers are planned on the day shift of every working weekday in their home zone, less the zone's "
+        "sickness absence over the same weeks of the last peak.",
+        "4.2 Every other picker hour is booked from the agency under the framework agreement, week by week."]),
+    ("5. Volumes", [
+        "5.1 The plan is made on the lines the centre expects to pick. A client's forecasts are an input to that "
+        "expectation."]),
+]
+
+
 def standard(path):
     body, h1, h2, small, cell = _styles()
-    s = [Paragraph("%s, Planning and fleet" % P.ORG, small),
-         Paragraph("DES-1 Depot electrification standard: assigning blocks to battery-electric buses", h1),
-         Paragraph("Version 2, approved by the management team 18 August 2026. Replaces version 1 (November 2024). "
-                   "Owner: the electrification programme manager.", small), Spacer(1, 4)]
-    sec = [
-        ("1. Scope", [
-            "This standard governs which of the depot's blocks are run with battery-electric buses and how an order of "
-            "battery-electric buses put to the board is sized. It applies to every depot of the company."]),
-        ("2. Terms", [
-            "2.1 A block is one bus's day of work as the dispatch log and the block register record it: the run from the "
-            "depot to the first trip, every trip and layover of the day, and the run back to the depot. A block's "
-            "kilometres are its scheduled kilometres in the block register.",
-            "2.2 A block's energy is the energy the bus draws from its traction battery over the block, depot out to depot "
-            "in, in kWh, as the bus's own battery system reports it. Energy taken from the mains while the bus stands at "
-            "the depot is not block energy.",
-            "2.3 The usable battery of a bus model is the usable energy its manufacturer states for it when new, less the "
-            "share of usable energy a traction battery permanently loses in its first twelve months in service. That share "
-            "is taken from the company's own battery-electric buses.",
-            "2.4 The design day is a January working day with a daily mean air temperature of minus 15 degrees Celsius at "
-            "the town's airport weather station (Vehkasalo lentoasema). The design night is the night that follows it, at "
-            "the same daily mean temperature."]),
-        ("3. Planning figures", [
-            "3.1 Energy figures for planning are estimated from the company's own operating records. Manufacturers' range "
-            "and consumption figures are not used for planning.",
-            "3.2 A battery-electric bus is charged at its depot only, on the charging lane's chargers, between its block's "
-            "return and its next departure. No charging on the road or at termini is planned, and the workshop's outlets "
-            "are for buses under repair. The depot's chargers deliver up to 150 kW to a bus, and the charging installation "
-            "draws no more than the capacity the distribution company's connection agreement gives it, in the periods the "
-            "agreement gives it. The installation's draw is what its chargers take from the connection point, as the "
-            "charging system records it session by session.",
-            "3.3 Fuel use is reported per block as litres of diesel per 100 scheduled kilometres over the twelve months "
-            "to the end of the last full month before the assessment, from the fuel-card statements and the dispatch "
-            "log, for the business case of each block's electrification."]),
-        ("4. Assigning blocks", [
-            "4.1 A weekday block qualifies for a battery-electric bus when its energy on the design day is no more than "
-            "85 per cent of the usable battery of the bus model being ordered. The other 15 per cent is the reserve for "
-            "diversions, traffic and the unexpected. Each block assigned takes one bus.",
-            "4.2 Qualifying blocks are assigned in the order of the fleet plan's priority list. The list is cut at the first "
-            "block the depot cannot recharge, together with every block above it on the list, between the blocks' returns "
-            "and their departures under 3.2. Blocks below the cut stay on diesel until the connection is reinforced.",
-            "4.3 The order put to the board is one bus for each block assigned under 4.1 and 4.2, with the blocks named.",
-            "4.4 Blocks are assessed each autumn for the following year's timetable, before any order is placed, and "
-            "reported to the board block by block with the energy each needs on the design day."]),
-        ("5. Review", [
-            "5.1 This standard is reviewed every two years or when a new bus model is ordered. Comments to the "
-            "electrification programme manager."]),
-    ]
-    for head, paras in sec:
+    s = [Paragraph("%s, %s fulfilment centre" % (P.ORG, P.SITE), small),
+         Paragraph("Labour planning standard", h1),
+         Paragraph("Issue 4, approved by the operations director 21 September 2026. Replaces issue 3 (January 2024). "
+                   "Owner: the site manager.", small), Spacer(1, 4)]
+    for head, paras in STANDARD:
         s.append(Paragraph(head, h2))
-        for p in paras:
-            s.append(Paragraph(p, body))
-    O.build(path, s, "DES-1 Depot electrification standard", "Simo Virta",
-            "Assigning blocks to battery-electric buses", "%s | DES-1 version 2" % P.ORG,
-            dt.datetime(2026, 8, 18, 15, 12, tzinfo=FI_S), dt.datetime(2026, 8, 19, 9, 4, tzinfo=FI_S),
-            producer="LibreOffice 25.2.4.3")
+        for t in paras:
+            if t == "TABLE":
+                s.append(_grid([["Zone", "Use", "Aisles", "Limit of pickers on the floor"],
+                                ["P1", "small parts", "12 (8 before 8 January 2024)", "24"],
+                                ["P2", "small parts", "11 (7 before 8 January 2024)", "22"],
+                                ["B1", "bulky, reach trucks", "6", "none set"]], [18 * 2.835, 42 * 2.835, 60 * 2.835, 52 * 2.835], cell))
+                s.append(Spacer(1, 6))
+                continue
+            s.append(Paragraph(t, body))
+    s.append(Paragraph("Revisions", h2))
+    s.append(_grid([["Issue", "Date", "Change"],
+                    ["1", "March 2021", "first issue, at the start of operations for Kotikaari Oy"],
+                    ["2", "August 2022", "2.2 the packing cost centre; 4.1 the absence allowance"],
+                    ["3", "January 2024", "3.1 the zones after the mezzanine extension; 3.2 the zone limits after the 2023 safety review"],
+                    ["4", "September 2026", "2.1 and 2.4 restated; 3.4 revised; 3.5 and 5.1 added"]],
+                   [16 * 2.835, 30 * 2.835, 126 * 2.835], cell))
+    O.build(path, s, "Labour planning standard, issue 4", P.PEOPLE["site"], "Saarnela fulfilment centre",
+            "%s, Saarnela. Labour planning standard, issue 4." % P.ORG,
+            dt.datetime(2026, 9, 21, 13, 42, tzinfo=FI_S), dt.datetime(2026, 9, 21, 14, 5, tzinfo=FI_S), producer="LibreOffice 7.6")
 
 
 def agreement(path):
     body, h1, h2, small, cell = _styles()
-    rows = [["Item", "Terms"],
-            ["Connection point", "Niittylä depot, Varikkotie 8, metering point 643 102 11 (meter VLO-NIITTYLA-1)"],
-            ["Installation", "Battery-electric bus charging installation, charging lane B, 150 kW DC chargers"],
-            ["Capacity, charging installation", "%d kW from 21:00 to 07:00 (the night period). Outside the night period the "
-             "installation is held off by the load-control relay. The workshop's two 22 kW outlets (vehicles under repair) "
-             "are not on the relay." % int(P.SUPPLY_KW)],
-            ["Capacity, depot otherwise", "The depot's other consumption remains within the main fuse rating of the connection "
-             "(1,250 kVA transformer at Niittylä; the charging capacity above is its remaining share)"],
-            ["Validity", "From 1 January 2026 until the connection is reinforced. A reinforcement application was received "
-             "on 3 June 2026; the earliest completion is the fourth quarter of 2028."],
-            ["Tariff", "Power tariff T4, night period 21:00 to 07:00 as above"]]
-    s = [Paragraph("%s, Network services" % P.DSO, small),
-         Paragraph("Sähkötie 2, 44100 %s | network@vsv.fi" % P.TOWN, small), Spacer(1, 10),
-         Paragraph("12 November 2025", body),
-         Paragraph("%s, Niittylä depot, Varikkotie 8, 44120 %s" % (P.ORG, P.TOWN), body), Spacer(1, 4),
-         Paragraph("Connection agreement 2025-ND-117: charging installation at Niittylä depot", h1),
-         Paragraph("Dear Ms Pajunen,", body),
-         Paragraph("Following the commissioning inspection of 4 November 2025, we confirm the terms on which the "
-                   "charging installation at Niittylä depot is connected to our network from 1 January 2026.", body),
-         _grid(rows, [130, 340], cell), Spacer(1, 6),
-         Paragraph("The capacity in the night period is the installation's draw at the connection point, measured on the "
-                   "same meter as the rest of the depot. The load-control relay releases the chargers at 21:00 and holds "
-                   "them off at 07:00; the chargers' own management system is responsible for staying within the capacity "
-                   "while released.", body),
-         Paragraph("Please confirm receipt. The reinforcement application is being handled separately and we will write to "
-                   "you with a schedule once the substation works are planned.", body),
-         Paragraph("Yours sincerely,", body), Spacer(1, 6), Paragraph(P.PEOPLE["dso"], body),
-         Paragraph("Connection engineer, %s" % P.DSO, small)]
-    O.build(path, s, "Connection agreement 2025-ND-117", P.PEOPLE["dso"], "Charging installation at Niittylä depot",
-            "%s | 2025-ND-117" % P.DSO, dt.datetime(2025, 11, 12, 10, 36, tzinfo=FI_W),
-            dt.datetime(2025, 11, 12, 10, 51, tzinfo=FI_W), producer="LibreOffice 24.8.2.1")
+    s = [Paragraph("%s and %s" % (P.AGENCY, P.ORG), small),
+         Paragraph("Framework agreement for agency pickers, Saarnela fulfilment centre", h1),
+         Paragraph("Signed 12 February 2025, in force 1 March 2025 to 28 February 2028.", small), Spacer(1, 4)]
+    sec = [
+        ("1. Services", ["%s supplies trained warehouse pickers to the Saarnela fulfilment centre of %s for its pick "
+                         "zones, on the day and evening shifts the centre runs." % (P.AGENCY, P.ORG)]),
+        ("2. Booking", ["2.1 The centre books agency picker hours by week and pick zone, by the Thursday two weeks "
+                        "before the week. Bookings for the peak weeks are confirmed by 15 October of the year.",
+                        "2.2 A booked shift is eight paid hours. A booking may be cut by up to 10 per cent of the "
+                        "week's hours until 72 hours before the shift; later cuts are invoiced.",
+                        "2.3 The agency's pickers wear the agency's badge. The badges were re-issued on 1 April 2025 "
+                        "with new numbers; the agency keeps the register of old and new numbers."]),
+        ("3. Prices", ["3.1 The hourly price is EUR 31.40 on the day shift and EUR 37.05 on the evening shift, Monday "
+                       "to Friday; Saturday hours are priced at EUR 39.25. Prices are indexed on 1 March each year to "
+                       "the collective agreement for the logistics sector.",
+                       "3.2 A picker's first shift at the centre includes a two-hour induction, priced as picker hours."]),
+        ("4. Quality", ["4.1 The agency replaces a picker the centre asks it to replace within two working days.",
+                        "4.2 Pick accuracy and safety incidents are reviewed by the parties each quarter."]),
+        ("5. Contacts", ["For %s: %s, account manager. For %s: %s, site manager." % (
+            P.AGENCY, P.PEOPLE["agency"], P.ORG, P.PEOPLE["site"])]),
+    ]
+    for head, paras in sec:
+        s.append(Paragraph(head, h2))
+        for t in paras:
+            s.append(Paragraph(t, body))
+    O.build(path, s, "Framework agreement, agency pickers", P.PEOPLE["agency"], "Saarnela fulfilment centre",
+            "%s / %s, framework agreement 2025" % (P.AGENCY, P.ORG),
+            dt.datetime(2025, 2, 12, 10, 18, tzinfo=FI_W), dt.datetime(2025, 2, 12, 11, 2, tzinfo=FI_W), producer="LibreOffice 7.6")
 
 
-def quotation(path):
-    body, h1, h2, small, cell = _styles()
-    rows = [["Item", "Specification"],
-            ["Bus", "%s %s, 12.2 m low-floor city bus, three doors, 38 seats" % (P.EMAKE, P.EMODEL)],
-            ["Traction battery", "Installed 560 kWh (LFP); usable capacity %d kWh when new" % int(P.E_USABLE_2027)],
-            ["Charging", "CCS2, up to 150 kW DC at the depot; on-board 22 kW AC"],
-            ["Drive", "Central electric motor, continuous 180 kW, peak 260 kW"],
-            ["Heating and cooling", "Fully electric: roof-mounted heat pump (heating mode to minus 10 degrees C) with "
-             "two 12 kW resistive booster heaters below that; electric driver's heater. No fuel-fired heater, as required by "
-             "the city's clean fleet terms for the 2027 contract"],
-            ["Battery thermal management", "From the charger while the bus is plugged in (not from the traction battery); "
-             "the same system as on your 2025 buses"],
-            ["Warranty", "Battery 8 years or 500,000 km, to 70 per cent of usable capacity"],
-            ["Price", "EUR 548,000 per bus excluding VAT, delivered Niittylä; charger cabinets quoted separately"],
-            ["Delivery", "August to September 2027 for orders placed by 15 January 2027; four to thirty buses"]]
-    s = [Paragraph("%s, Teollisuuskatu 9, 90400 Oulu" % P.DEALER, small),
-         Paragraph("Tel. 020 7421 300 | sales@pohjanmaanbussihuolto.fi", small), Spacer(1, 10),
-         Paragraph("6 October 2026", body),
-         Paragraph("%s, %s, Varikkotie 8, 44120 %s" % (P.PEOPLE["planner"], P.ORG, P.TOWN), body), Spacer(1, 4),
-         Paragraph("Quotation 26-0931: %s %s battery-electric buses for delivery in 2027" % (P.EMAKE, P.EMODEL), h1),
-         Paragraph("Dear Mr Virta,", body),
-         Paragraph("Thank you for the visit to Niittylä on 29 September. As agreed, we quote below for the 2027 model "
-                   "year %s %s for your Niittylä depot. The specification follows the city's clean fleet terms, which "
-                   "differ from your 2025 pilot buses in the heating system." % (P.EMAKE, P.EMODEL), body),
-         _grid(rows, [100, 370], cell), Spacer(1, 6),
-         Paragraph("The buses report their daily summaries to the same telematics portal as your 2025 buses. Service and "
-                   "battery monitoring for the first three years are included under our standard agreement, from your own "
-                   "workshop with our support.", body),
-         Paragraph("We would need your order by 15 January 2027 to hold the August and September 2027 build slots.", body),
-         Paragraph("Kind regards,", body), Spacer(1, 6), Paragraph(P.PEOPLE["dealer"], body),
-         Paragraph("Key account manager, %s" % P.DEALER, small)]
-    O.build(path, s, "Quotation 26-0931", P.PEOPLE["dealer"], "Battery-electric buses for delivery in 2027",
-            "%s | Quotation 26-0931" % P.DEALER, dt.datetime(2026, 10, 6, 13, 48, tzinfo=FI_S),
-            dt.datetime(2026, 10, 6, 14, 2, tzinfo=FI_S), producer="LibreOffice 25.8.1.1")
+def review(path, figs):
+    doc = Document()
+    sec = doc.sections[0]
+    sec.page_width, sec.page_height = Mm(210), Mm(297)
+    sec.left_margin = sec.right_margin = Mm(22)
+    st = doc.styles["Normal"]
+    st.font.name = "Calibri"
+    st.font.size = Pt(10.5)
+    doc.add_heading("Huippu Sport pilot at Saarnela, weeks 37 to 44: review", level=1)
+    doc.add_paragraph("%s, continuous improvement, 3 November 2026" % P.PEOPLE["ci"])
+    doc.add_heading("Scope", level=2)
+    doc.add_paragraph("From 7 September to 1 November 2026 Saarnela picked Huippu Sport's web orders for %d of its "
+                      "fastest-moving articles, stocked in P2 aisles 1 to 4. The lines were picked in Huippu tours by "
+                      "six trained P2 pickers and packed on two benches; the other articles stayed at the current "
+                      "warehouse." % figs["articles"])
+    doc.add_heading("Volumes", level=2)
+    doc.add_paragraph("%s Huippu Sport lines were picked over the eight weeks, %s a working day on average." % (
+        "{:,}".format(figs["lines"]).replace(",", " "), "{:,}".format(figs["per_day"]).replace(",", " ")))
+    doc.add_heading("Pick time", level=2)
+    doc.add_paragraph("A Huippu Sport line took %s minutes, scanner confirmation to confirmation in the tours. P2's "
+                      "other lines took %s minutes a line in the same weeks (the WMS zone report, task time over "
+                      "lines)." % (("%.2f" % figs["pilot_t"]).replace(".", ","), ("%.2f" % figs["p2_t"]).replace(".", ",")))
+    doc.add_heading("Accuracy and damages", level=2)
+    doc.add_paragraph("Pick accuracy was 99.6 per cent against 99.7 for P2 as a whole. Two lines were damaged in "
+                      "picking. Size and colour labels on the polybags were checked at every pick, as agreed with "
+                      "Huippu Sport's customer service.")
+    doc.add_heading("Next", level=2)
+    doc.add_paragraph("The slotting run of 30 October 2026 places the whole assortment for the move on 1 March 2027. "
+                      "Bench layout for the Huippu Sport packaging to be agreed by January.")
+    doc.save(path)
