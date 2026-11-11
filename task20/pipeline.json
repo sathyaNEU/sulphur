@@ -4,8 +4,8 @@
  "domain": "quantitative-finance",
  "subdomain": "factor-return-attribution",
  "objective": "root-cause",
- "stage": 4,
- "stage_name": "check",
+ "stage": 2,
+ "stage_name": "design",
  "updated": "2026-11-11",
  "doctrine": "throughout",
  "call": "19 exceptions in the 250 days to 30 June 2025, 14 against the model (11 risks not in the model, 2 volatility, 1 model accuracy), 4 the inputs' (closing allocations booked after ERE's extract; the 27 reused-extract runs caused none), 1 other income; a sound model shows 2 (green, 0 to 2); add-on USD 0.32m in July falling to nil by December",
@@ -26,17 +26,19 @@
   "nearest": "task18 by chain; task4 0.04 on driver text"
  },
  "judge": {
-  "verdict": "",
-  "disposition": "",
-  "gate_h": "",
-  "report": ""
+  "verdict": "NOT_DETERMINISTIC (competing_defensible_answer: the 4(d) EWMA timing convention)",
+  "disposition": "FIX_NOW in the judge's terms; overtaken by the careful-column repricing",
+  "gate_h": "pass in the judge's terms (9 results, 6 areas, one thing none, best sentence 3 of 9)",
+  "report": "determinism_check_report.md",
+  "first_pass": "before opening the answer blocks the thread replicated ERE to the dollar, found the extracts' cutoff through product control's hypothetical P&L, classified (a) 1, (b) 4, (c) 11 on the golden's dates and computed the add-on path 0.324, 0.273, 0.114, 0.076, 0.035, 0; priced on it the careful column is near 95"
  },
  "paper_pair": 45.6,
  "effort": {
   "quick": 7.0,
   "careful": 45.6,
   "thorough": 100.0,
-  "largest_hint": "ERE's position extracts are cut as each run starts, before the middle office books the day's closing-auction allocations; rescues 3 of 9 (R3, R4, R6)"
+  "largest_hint": "ERE's position extracts are cut as each run starts, before the middle office books the day's closing-auction allocations; rescues 3 of 9 (R3, R4, R6)",
+  "careful_repriced_on_judge_pass": "about 95 (R1 to R4 and R6 to R9 landed; R5 inside a band widened for the EWMA timing)"
  },
  "runs": {
   "run1": null,
@@ -52,7 +54,7 @@
   "history": []
  },
  "returned": [],
- "resume": "stage 4: the determinism judge's isolated thread is running from /tmp/determinism-check-task20-r1/judge_brief.md (the judge agent could not spawn it); when it returns, re-invoke the determinism-judge agent with its verdict.md and own_derivation.md to write determinism_check_report.md; price the thread's first-pass figures against the careful column (the month-by-month add-on R8 is the result at risk); then re-run the leak reader once (MRS-4, the ERE note and the plan changed after its read), fix every finding in the generator, gates.py task20 --full, stage 5 READY. If /tmp is gone, rebuild with python3 task20/generator/build.py and spawn the judge afresh.",
+ "resume": "stage 2 (back from stage 4 on the careful-column repricing): the determinism judge's isolated thread, at medium effort and before opening the answer blocks, landed R1 to R4 and R6 to R9 (it found the extracts' cutoff by reconciling product control's hypothetical P&L with the extracts, and read the month-by-month add-on straight off MRS-4 6), so the careful column prices near 95. Redesign so the deciding judgments are estimates no record holds and no filed rule executes (the approved builds' anatomy), either a new question on this desk world (for example the zone and add-on through the 31 December review, with the volatility persistence, the planned mix and the mapping's graduations as banded judgments) or a re-root inside Risk modeling; carry the judge's five determinism findings (DESIGN_NOTE.md, Tried and rejected, last line). The generator, pack writer and checks are reusable. File the judge's report (determinism_check_report.md) with the next commit.",
  "approved": null,
  "submitted": null,
  "portal": {
