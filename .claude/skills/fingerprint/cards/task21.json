@@ -1,0 +1,159 @@
+{
+  "task": "task21",
+  "project": "sulfur",
+  "architecture": "v1",
+  "drawn": "2026-11-11",
+  "slot_note": "new build after task10 was retired; domain and analysis type drawn from coverage (no Sulfur build on Opportunity Sizing, none in Actuarial Science & Insurance)",
+  "domain": "actuarial-science-insurance",
+  "subdomain": "pricing-ratemaking-credibility",
+  "client_domain": "actuarial-science-insurance",
+  "niche": "setting a GB private-motor insurer's 2027 new-business rate changes on four price comparison sites for three driver-age segments against a loss-ratio target, when the business a price wins is the business the rating model under-priced, a June 2025 model refit changed which experience represents 2027, and a new-business cut lowers the cap on renewal prices",
+  "objective": "opportunity-sizing-decision",
+  "shape": "13",
+  "decision_type": "dial_setting",
+  "answer_unit": "rate_or_share",
+  "answer": "",
+  "answer_source": "",
+  "gap": [
+    "objective",
+    "population"
+  ],
+  "pattern": [
+    "none"
+  ],
+  "generators": [
+    "G9",
+    "G14",
+    "G6"
+  ],
+  "gate_g": "forecasting",
+  "calibration_form": "realised_outcome_roster",
+  "stump_strategy": "composition_mix",
+  "decisive_rule_filed": false,
+  "official_decoy": false,
+  "validated_decoy": false,
+  "context_artifact": "planning_thread",
+  "stump_class": "analytical",
+  "analyst_test": "The careful but hurried pass applies the loss-ratio method to the latest experience, which holds the won book's claims per unit of predicted cost fixed as the price rises, pools experience across the June 2025 model refit, and fits one retention elasticity through renewal price rises and falls, so it files the under-25 rise about six points short, the 25-to-64 rise high and the over-65 cut as paying.",
+  "domain_test": "Each answer is a pricing actuary's quantity (experience developed to ultimate, the won book's selection on a comparison site, the experience period a rating-model change leaves valid, renewal prices capped at the equivalent new-business price); swapped into another field (stores, wards, depots) no comparison-site panel, rating model or renewal cap exists and none of the results can be stated.",
+  "layer2_family": "estimand_identification",
+  "layer2_pattern": "own:winners-curse-on-comparison-sites",
+  "layer1": [
+    "four comparison-site feeds with their own layouts (ISO dates, epoch milliseconds, day-first dates with prices in pence, a mid-2025 reference format change)",
+    "a feed day re-sent",
+    "the sites' health-check test quotes",
+    "registration plates with and without spaces",
+    "cooling-off cancellations and mid-term adjustments",
+    "claims reopened, nil claims and reversed payments",
+    "sales extract carrying every sale with a stated one-in-twenty sample of lost quotes"
+  ],
+  "stakeholder_role": "the executive pricing team",
+  "role_family": "portfolio_manager",
+  "scoring_unit": "per active unit per period",
+  "spine": {
+    "file": "comparison-site quote extracts (four feeds)",
+    "rows": 290000,
+    "entity": "one row is one comparison-site quote returned with Halvergate's price",
+    "grain": "quote",
+    "source": "synthetic"
+  },
+  "forum": "executive_team",
+  "forcing_event": "vote_or_meeting",
+  "org_family": "cooperative_or_member_body",
+  "world": {
+    "geography": "Great Britain",
+    "currency": "GBP",
+    "org_type": "mutual private motor insurer",
+    "invented_names": [
+      "Halvergate Mutual",
+      "Kitecompare",
+      "Covertide",
+      "Brightquote",
+      "Pricelark"
+    ],
+    "people": [
+      "Christopher Smith",
+      "Roy Osborne",
+      "Frances Green",
+      "Jeremy Sanders"
+    ]
+  },
+  "deliverables": [
+    "pcw_rate_review_2027.xlsx",
+    "pricing_committee_2027_rates.pptx"
+  ],
+  "opening_move": "question-first",
+  "question_form": "what",
+  "driver": "The decisive quantity is the cost of the units a changed offer would win, which is not the cost of the units the current offer won, because winning selects the units the offerer most underestimated and a higher offer keeps only the most underestimated of them; holding the current units' ratio of realised to predicted cost fixed makes the needed change too small.",
+  "driver_concrete": "The under-25 business a higher comparison-site price wins in 2027 is the business the rating model under-priced by more than the rise, so its loss ratio falls less than the loss-ratio method says; replaying the 2026 sales at the new price with their own claims sets the rise, while the 25-to-64 base comes only from business the refitted model priced and the over-65 cut is judged with the renewal book its lower equivalent price caps.",
+  "stump": "The loss-ratio method on the 2026 under-25 experience files a rise of about 16 per cent, taking the 2027 loss ratio to 75, where the business that price would win runs near 80 and needs about 22.",
+  "answer_shape": "scenarios-flip",
+  "weight": "modeling",
+  "chain_signature": [
+    "assembly-reconciliation",
+    "missingness-measurement",
+    "causal-reasoning",
+    "forecasting",
+    "missingness-measurement",
+    "forecasting",
+    "modeling",
+    "decomposition-attribution",
+    "forecasting",
+    "uncertainty",
+    "synthesis"
+  ],
+  "results": "R1 the 2026 comparison-site quotes, sales and conversion by site and segment conformed across four feeds; R2 the 2026 policy year's ultimate loss ratio by segment; R3 the 2027 loss ratio of the under-25 business the plan's rise would win; R4 the smallest under-25 rise that reaches 75 per cent; R5 the 25-to-64 base on the refitted model's business; R6 the smallest 25-to-64 change; R7 the over-65 renewal book's 2027 retention at its capped prices; R8 the over-65 cut's effect on 2027 underwriting profit across new business and renewals; R9 2027 policies and written premium per segment; R10 the under-25 loss ratio's 80 per cent range; R11 the three calls",
+  "one_fact_test": "'the under-25 business a higher price wins is the business the model under-priced most' rescues R3, R4 and R10: 3 of 11",
+  "strategy_label": "UNTESTED",
+  "mechanism_source": "design_note",
+  "differentiation": {
+    "task9": "task9 architecture 10 (a credit desk's request-for-quote schedule, held at stage 4 on 2026-11-11 and never shipped) costed the trades a tighter quote adds on their own markouts, beside a completion horizon that rescued six of its eight results; here the cost is an insurer's claims on comparison-site business, a higher price keeps the wins the rating model under-priced most, read from the sites' rival prices joined to developed claims, and beside it sit a rating-model refit that changes which experience represents 2027 and a renewal book whose prices the new-business cut caps"
+  },
+  "lineage": [],
+  "notes": "Gap 3 first: the 2026 comparison-site loss ratio is read correctly and is not what the 2027 decision is scored on, the loss ratio of the business a changed price would win; G9 first because the claims measured are those of the quotes that were kept (sold), G14 because the cost observed is conditioned on our price having won. Calibration form realised_outcome_roster (the won book's claims), redrawn from existing_book_actuals, which task9 holds in the ban window. dial_or_cap_setting answered in the note: a price change is the form the committee's decision takes. Axes redrawn at filing as task21 after other sessions' task19 and task20 entered the window: weight hard-to-measure to modeling (the work is rebuilding the cost of a counterfactual book and a response shape), context artifact filed_standard to planning_thread (the 2027 planning paper), stump strategy population_selection to composition_mix (the won book's mix of under-priced risks shifts with the price), forum committee_or_panel to executive_team, org family financial_institution to cooperative_or_member_body (Halvergate is a mutual).",
+  "depth_level": 5,
+  "doctrine": "throughout",
+  "client_subdomain": "Pricing, rating & credibility",
+  "skeleton": {
+    "decision_form": "dial_or_cap_setting",
+    "answer_pattern": "shortcuts_land_on_distinct_wrong_answers",
+    "lessons": [
+      "selection_on_noisy_means",
+      "asymmetric_response",
+      "vintage_or_cohort_drift",
+      "downstream_offset"
+    ],
+    "mechanisms": [
+      "won_quotes_underpriced_by_model_error",
+      "higher_price_keeps_deeper_wins",
+      "model_refit_narrows_error_for_mainstream_drivers",
+      "renewal_price_capped_at_equivalent_new_business_price",
+      "retention_reacts_to_increases_not_decreases",
+      "claims_reported_and_paid_with_delay"
+    ],
+    "detection": [
+      "naive_ignores_what_it_should_depend_on",
+      "second_source_at_other_grain",
+      "residual_by_subgroup",
+      "natural_experiment_in_record"
+    ],
+    "moves": [
+      "replay_event_by_event",
+      "per_cohort_curves",
+      "measure_response_shape_from_events",
+      "complete_cohorts_from_later_rates",
+      "bridge_by_contribution"
+    ],
+    "file_roles": [
+      "primary_record",
+      "second_grain_source",
+      "reference_register",
+      "governing_standard",
+      "schedule_or_plan",
+      "changeover_note",
+      "exogenous_long_record",
+      "unused_distractor"
+    ]
+  },
+  "registered": "2026-11-11T17:47:38Z"
+}

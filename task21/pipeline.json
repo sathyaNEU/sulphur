@@ -1,0 +1,73 @@
+{
+ "task": "task21",
+ "status": "DESIGN",
+ "domain": "actuarial-science-insurance",
+ "subdomain": "pricing-ratemaking-credibility",
+ "objective": "opportunity-sizing-decision",
+ "stage": 2,
+ "stage_name": "design",
+ "updated": "2026-11-11",
+ "doctrine": "throughout",
+ "call": "",
+ "chain": "R1 quotes, sales and conversion by site and segment conformed; R2 ultimate loss ratios by policy year and segment; R3 the 2027 loss ratio of the under-25 business the plan's rise would win; R4 the under-25 rise reaching 75 per cent; R5 the 25-to-64 change reaching 75 per cent; R6 the over-65 renewal book's retention with the cut; R7 the cut's effect on 2027 underwriting profit; R8 2027 policies and premium per segment; R9 the under-25 loss ratio's 80 per cent range; R10 the three calls",
+ "architecture": 1,
+ "loops": 0,
+ "precut": {
+  "exit": null,
+  "date": ""
+ },
+ "leak": {
+  "leak_py": "",
+  "reader": ""
+ },
+ "duplicate_check": {
+  "guard_check": "WARN 2026-11-11 on the registered card (repeat.gate_g, skeleton.house_lesson, skeleton.house_shell), answered in the Draw",
+  "heart": "",
+  "nearest": "task9 architecture 10 (driver 0.16, lineage, differentiated on the card)"
+ },
+ "judge": {
+  "verdict": "",
+  "disposition": "",
+  "gate_h": "",
+  "report": ""
+ },
+ "paper_pair": null,
+ "effort": {
+  "quick": null,
+  "careful": null,
+  "thorough": null,
+  "largest_hint": ""
+ },
+ "runs": {
+  "run1": null,
+  "run2": null,
+  "average": null,
+  "counterfactual_average": null,
+  "first_wrong_step": {
+   "run1": "",
+   "run2": ""
+  },
+  "triage": "",
+  "recorded": "",
+  "history": []
+ },
+ "returned": [],
+ "resume": "stage 2 design: write the full results chain with bands, the hidden factor record, the effort test on paper, the frontier check, the fork and closure tables and the prompt; prototype each segment's separation on the clean truth before any pack is cut",
+ "approved": null,
+ "submitted": null,
+ "portal": {
+  "status": "",
+  "date": "",
+  "note": ""
+ },
+ "history": [
+  {
+   "date": "2026-11-11",
+   "event": "drawn as a new build after task10 was retired on the author's word; domain and analysis type not assigned by the author, so drawn from coverage: Opportunity Sizing & Decision Support has no Sulfur build and Actuarial Science & Insurance none at all"
+  },
+  {
+   "date": "2026-11-11",
+   "event": "renumbered from task19 before any push: two other sessions' draws took task19 (17:12Z) and task20 on origin first"
+  }
+ ]
+}
