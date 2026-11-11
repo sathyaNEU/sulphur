@@ -74,7 +74,7 @@ Not one thing: the strongest single piece is the disk as the cause, read off its
 One-fact test: "the edge ring was already costing yield before April, on the high-downforce pair under the 2,000-wafer
   rule" rescues R1 and R2, two of seven; no sentence rescues more (effort.json hints).
 Not semantics: every field read correctly (the zones, the counters, the waiver text, the cost inputs) still leaves the
-  careful pass at 1.06 points, a 4.7 per cent ring share, an 18, 40 and 42 per cent split and a USD 782,000 saving,
+  careful pass at 1.06 points, a 4.6 per cent ring share, an 18, 40 and 42 per cent split and a USD 781,000 saving,
   because each is an estimation choice, not a reading.
 Not rule application: no filed procedure measures the loss, attributes it, fits the dose, re-runs a rule or sets the
   count; the spec files only the rules' intervals and the waiver's scope, the cost inputs file only the prices and the
@@ -88,10 +88,10 @@ No decoy: nothing is written to carry a wrong answer; the excursion ticket repor
   share, which is true and answers a shallower question, and the die-map review set is the yield team's working sample,
   labelled by requester; no document ranks a cause or proposes a count.
 No replay: no result re-derives a published figure and no stated number in the pack is wrong.
-Pinned: the rivals were run on the cut pack: five fallout baselines put R1 at 1.316 to 1.321 against a band of 1.22 to
-  1.40; per-unit, unweighted, ring-term and below-2,800 fits keep every onset and slope inside 12 per cent and every
-  count inside 8 per cent; four bridge variants stay within 0.03 of 0.22, 0.34 and 0.43; four saving variants run 277,000
-  to 294,000 against 263,000 to 309,000.
+Pinned: the rivals were run on the cut pack: five fallout baselines put R1 at 1.321 to 1.329 against a band of 1.23 to
+  1.41; per-unit, unweighted, ring-term and below-2,800 fits keep every onset and slope inside 15 per cent and every
+  count inside 8 per cent; four bridge variants stay within 0.03 of 0.23, 0.34 and 0.43; four saving variants run 278,000
+  to 295,000 against 265,000 to 311,000.
 Run forecast: R1 and R2 first story (the band's level before April), R3 method shortcut (the joint fit's ring share read
   wafer by wafer), R5 first story (the loss sliced at 2,000 and 2,800 wafers), R7 dismissed own evidence (the summer's
   rate carried forward); R4 and R6 earned.
@@ -99,8 +99,8 @@ Strategy label: WORKS IN FORM: separating two explanations for one pattern (the 
   disk's wear present before it, separated only by the like-for-like fallout at a fresh disk), and variance beyond
   sampling noise (the disk lives' own wear rates, the variance component the wafer-level fit omits).
 Depth level: 5: five independent judgments (the fallout baseline, the unit of variation for the ring, the rules re-run,
-  the pair split, Rev F's steady state), and the shortcuts land on eight different wrong answers (1.06, 1.12, 1.54, 1.55
-  and 2.06 points; one fleet count of 1,375; 1,100 and 870 from zero; 2,040 and 1,780 on the full PM; the pad's 830).
+  the pair split, Rev F's steady state), and the shortcuts land on eight different wrong answers (1.06, 1.13, 1.56, 1.59
+  and 2.08 points; one fleet count of 1,370; 1,100 and 870 from zero; 2,030 and 1,780 on the full PM; the pad's 840).
 Lesson: a loss whose cause resets with its rivals is measured against the fresh part's fallout, attributed with the
   part's own lives as the units that vary, and split across rules by running each rule on the units' own sequences;
   no build on file teaches the policy re-run or the ring's share at the disk-life grain.
@@ -109,13 +109,13 @@ Lesson: a loss whose cause resets with its rivals is measured against the fresh 
 
 | ID | Result (checkable) | Area | Pinned by | Band | Hurried analyst | Depends on | Graded as |
 |---|---|---|---|---|---|---|---|
-| R1 | The ring's loss on wafers sorted 1 April to 31 August: 1.31 points of mean wafer sort yield | missingness and measurement | the prompt's window and unit; the sort record's zone counts on every wafer; the fallout at a fresh disk from the dose fit | 1.22 to 1.40 | stopped at the first story: measured against the band's level before April as if the ring started then, 1.06 | independent: the sort record's zone counts and the outermost zone's fallout at a fresh disk | Component 1 |
-| R2 | The same loss in good die: P-A 207,000, P-B 21,000, P-C 315,000 | decomposition and attribution | the prompt; R1's per-wafer loss summed by product | each within 8 per cent | stopped at the first story: the same pre-April baseline, 166,000, 17,000 and 253,000 | R1 | Ask 1 |
-| R3 | Each candidate's share: the disk's wear 96.1 per cent, the pad's life on top of it 3.9, the retaining ring, DEP-3, SC-4 and the RF hours each within 1 per cent of none | investigation loops | the maintenance log's decoupled entries; the disk lives as the units that vary; the six ring-only swaps | disk 92 to 100, pad 0 to 8, the retaining ring within 2.5, each rival within 2 | method shortcut: one joint fit read wafer by wafer gives the retaining ring 4.7 per cent (t of 12 on the wafers, under 2 on the disk lives) | - | Ask 2 |
-| R4 | Each unit's onset and slope: PU-1 and PU-2 at 1,310 wafers and 16.9 points per 1,000; PU-3 and PU-4 at 920 and 21.2 | modeling | the counters rebuilt from the log; the hinge fit by downforce pair | onset and slope each within 12 per cent | method shortcut: one fit over the fleet (1,100 wafers, 18.5 points), or the polish record's own pad counter | - | Component 2 |
-| R5 | The shares of the loss: 22 per cent the 2,000-wafer rule would have cost anyway, 34 per cent Rev F's move to 2,800 added, 43 per cent the EW-118 retained disks added | causal reasoning | the prompt's order; the spec's rules and dates; each rule run on each unit's own wafers from 5 January | each within 0.03 | stopped at the first story: the loss sliced at 2,000 and 2,800 wafers of disk use, 18, 40 and 42 per cent | R4 | Component 3 |
-| R6 | Each unit's count for the disk under Rev G: PU-1 and PU-2 at 1,580 wafers, PU-3 and PU-4 at 1,210 | synthesis | the spec's Rev G draft; the cost inputs' disk change and spec_changes note; R4's fits at the summer's mix | each within 8 per cent | method shortcut: one fleet count of 1,375, or a dose from zero at 1,100 and 870 | R4 | Recommendation |
-| R7 | The yearly saving against Rev F as it stands: USD 286,000 | forecasting | the prompt's comparison; the cost inputs' volume and costing; R6's counts on R4's curves | 263,000 to 309,000 | dismissed own evidence: the summer's own loss rate carried forward as Rev F's though the waiver behind it has ended, 782,000 | R4, R6 | Ask 3 |
+| R1 | The ring's loss on wafers sorted 1 April to 31 August: 1.32 points of mean wafer sort yield | missingness and measurement | the prompt's window and unit; the sort record's zone counts on every wafer; the fallout at a fresh disk from the dose fit | 1.23 to 1.41 | stopped at the first story: measured against the band's level before April as if the ring started then, 1.06 | independent: the sort record's zone counts and the outermost zone's fallout at a fresh disk | Component 1 |
+| R2 | The same loss in good die: P-A 209,000, P-B 21,000, P-C 316,000 | decomposition and attribution | the prompt; R1's per-wafer loss summed by product | each within 8 per cent | stopped at the first story: the same pre-April baseline, 167,000, 17,000 and 251,000 | R1 | Ask 1 |
+| R3 | Each candidate's share: the disk's wear 96.5 per cent, the pad's life on top of it 3.5, the retaining ring, DEP-3, SC-4 and the RF hours each within 1 per cent of none | investigation loops | the maintenance log's decoupled entries; the disk lives as the units that vary; the six ring-only swaps | disk 92 to 100, pad 0 to 8, the retaining ring within 2.5, each rival within 2 | method shortcut: one joint fit read wafer by wafer gives the retaining ring 4.6 per cent (t of 10 to 14 on the wafers, under 2 on the disk lives) | - | Ask 2 |
+| R4 | Each unit's onset and slope: PU-1 and PU-2 at 1,300 wafers and 17.0 points per 1,000; PU-3 and PU-4 at 910 and 21.2 | modeling | the counters rebuilt from the log; the hinge fit by downforce pair | onset and slope each within 15 per cent | method shortcut: one fit over the fleet (1,090 wafers, 18.5 points), or the polish record's own pad counter | - | Component 2 |
+| R5 | The shares of the loss: 23 per cent the 2,000-wafer rule would have cost anyway, 34 per cent Rev F's move to 2,800 added, 43 per cent the EW-118 retained disks added | causal reasoning | the prompt's order; the spec's rules and dates; each rule run on each unit's own wafers from 5 January | each within 0.03 | stopped at the first story: the loss sliced at 2,000 and 2,800 wafers of disk use, 18, 40 and 42 per cent | R4 | Component 3 |
+| R6 | Each unit's count for the disk under Rev G: PU-1 and PU-2 at 1,570 wafers, PU-3 and PU-4 at 1,200 | synthesis | the spec's Rev G draft; the cost inputs' disk change and spec_changes note; R4's fits at the summer's mix | each within 8 per cent | method shortcut: one fleet count of 1,370, or a dose from zero at 1,100 and 870 | R4 | Recommendation |
+| R7 | The yearly saving against Rev F as it stands: USD 288,000 | forecasting | the prompt's comparison; the cost inputs' volume and costing; R6's counts on R4's curves | 265,000 to 311,000 | dismissed own evidence: the summer's own loss rate carried forward as Rev F's though the waiver behind it has ended, 781,000 | R4, R6 | Ask 3 |
 
 Carry-forward: R1, R3 and R4 are graded on their own work; R2 falls only with R1's baseline; R5 and R6 rest on R4's
   fits, and each needs a move of its own (the rules run on each unit's wafers, the cost optimum per pair), so a fleet fit
@@ -165,8 +165,8 @@ Genuine patterns: (1) a weekly drift in defect density and a fab-wide particle w
 Problems by process: retests from probe-card recontacts, product aliases from the tester's program names, litho rework
   rows, blank and back-entered maintenance counters from technicians entering after the shift, free-text parts lists,
   FDC sensor dropouts, scrap before sort, and wafers not yet sorted at the pull.
-Breadth: 14 files and 12 review-deck images; 37,977 sort records over 37,591 wafers, 277,052 MES rows over 40 steps and
-  about 110 tools, 408 maintenance entries over four units, 37,591 polish records, 7,067 die maps, so choosing which
+Breadth: 14 files and 12 review-deck images; 37,971 sort records over 37,591 wafers, 277,077 MES rows over 40 steps and
+  about 110 tools, 408 maintenance entries over four units, 37,591 polish records, 7,177 die maps, so choosing which
   tools, counters and episodes to read is work.
 
 ## Template check
@@ -184,15 +184,15 @@ Precedents: R1 and R2 cite L27 (the dramatic before-and-after preferred over a l
   its own checks); R7 cites N02 (history assumed informative of the forward window); R4 and R6 are Right in the careful column (a fitted breakpoint and a mechanism one plot shows are reflexes).
 Shallow path checks: R1's pre-April baseline passes the ticket's own framing and a before-and-after of the band, and is
   refuted by the fallout at a fresh disk in January to March (the dose fit on the sort record and the maintenance log);
-  R3's 4.7 per cent passes a t of 12 on the wafers and is refuted by the six ring-only swaps (steps of -0.003 to +0.008)
+  R3's 4.6 per cent passes a t of 10 to 14 on the wafers and is refuted by the six ring-only swaps (steps of -0.005 to +0.005)
   and a t under 2 on the disk lives; R5's slices pass their sum check and are refuted by the 2,000-wafer rule run on each
   unit's own polish sequence (the FDC's platen counter and the log); R7's rate passes the summer's own ledger and is
   refuted by Rev F's steady state on the fitted curves.
 Assumption made false: a run lists "the summer's loss rate continues under the current spec" and waves it through; the
   waiver's end on 14 August and the four retained disks the log records make it false, and the spec and the log test it.
 Forcing: the call is each pair's count inside its band (the golden less and more 8 per cent): six sound methods (each
-  unit's own fit, the window's mix, the ring term, unweighted, below 2,800) all inside, nearest 2.5 per cent from an edge;
-  the fleet's 1,375, a dose from zero, the full PM moved and the pad all outside; slopes 20 per cent either way, onsets 5
+  unit's own fit, the window's mix, the ring term, unweighted, below 2,800) all inside, nearest 2.6 per cent from an edge;
+  the fleet's 1,370, a dose from zero, the full PM moved and the pad all outside; slopes 20 per cent either way, onsets 5
   per cent, the die value and the disk change 10 per cent, the pad's term doubled or removed all keep both pairs inside.
 Noun swap: nearest mark115 (a deal mechanic for a franchise), task21 (a rate change), task5 (a county estimate), the
   client's b34ffd70 (re-offending) and mark132 (last-time buys); swapping their nouns in carries no decision form,
@@ -202,7 +202,7 @@ Noun swap: nearest mark115 (a deal mechanic for a franchise), task21 (a rate cha
 
 | ID | Term or convention | Readings | Golden | Ruled out by |
 |---|---|---|---|---|
-| SF1 | the ring's loss | every outermost-zone fail above the interior; above the band's level before April; above the fallout at a fresh disk | above the wafer's own interior rate plus the fallout at a fresh disk | the prompt's "what has it cost", and the January to March wafers on worn disks, which carry 0.27 points of ring |
+| SF1 | the ring's loss | every outermost-zone fail above the interior; above the band's level before April; above the fallout at a fresh disk | above the wafer's own interior rate plus the fallout at a fresh disk | the prompt's "what has it cost", and the January to March wafers on worn disks, which carry 0.28 points of ring |
 | SF2 | a wafer's sort record | the first record; the latest | the latest (a retest supersedes) | the sort record's retest_flag |
 | SF3 | the window | by polish date; by sort date | wafers sorted 1 April to 31 August | the prompt's "wafers sorted" |
 | SF4 | each unit's onset and slope | each unit's own fit; its downforce pair's | the pair's fit, reported for each unit | same call: each unit's own fit lands inside every band |
@@ -214,7 +214,7 @@ Noun swap: nearest mark115 (a deal mechanic for a franchise), task21 (a rate cha
 | SF10 | the die value at risk | the record's mix; the summer's | the summer's mix (sorted from 1 June) | same call: the window's mix moves every count by under 0.5 per cent |
 | SF11 | Rev F as it stands | the summer's observed rate; Rev F's own cycle | Rev F's own 2,800-wafer cycle on the fitted curves, the waiver ended | the spec's waiver window and the prompt's "as it stands" |
 | SF12 | a unit's year | 58,500 split evenly; split by the units' shares | split by each unit's share of the wafers polished since 1 June | same call: the window's shares move the saving by under 0.2 per cent |
-| SF13 | a cause's share with the pad's interaction | Shapley; the pad's increment over a fresh pad | the pad's increment, the disk's share the rest | same call: Shapley halves the pad's 3.9 per cent, inside its band |
+| SF13 | a cause's share with the pad's interaction | Shapley; the pad's increment over a fresh pad | the pad's increment, the disk's share the rest | same call: Shapley halves the pad's 3.5 per cent, inside its band |
 
 ## Closure table
 
@@ -262,6 +262,28 @@ starts and the climb after it in points of the outermost sort zone's fail rate p
 order; each unit's change count and the yearly saving in dollars against Rev F as it stands; a short deck. It must never
 add a rounding instruction, a method (a hinge, a regression, clustering, a counterfactual, a bootstrap), a warning, an
 attached file's name, a role or a count the data hold.
+
+## Pre-ship check
+
+Leak sweep (leak.py at the pull, 2026-08-31): REVIEW, four lines, each ruled here.
+- die_geometry.py: the yield database's own die-position helper (die centres, radius, zone by radius); its docstring
+  documents its functions and no longer describes the sort file's columns; it constructs no result.
+- excursion_ticket_YE-2026-031.txt: the yield team's own ticket (symptom, request, three dated notes); it states no figure
+  and names no suspect, and its "since April" is the classifier's rising share, true and shallower than the loss.
+- pm_spec_history.md: the module's own spec history with waiver EW-118 and the Rev G draft; it files the rules, dates and
+  the lever (the WHAT), never a method.
+- pm_spec_history.md, the stump-vocabulary line (record, maintenance, retaining, changes): the words of a PM spec's own
+  genre ("retaining" is the part's name); no sentence names a move.
+Realism: the deck rendered and read at speed; findings as titles, the charts as the slides, counts to ten wafers,
+  dollars to the hundred or the thousand, shares to a tenth, tables styled, slide numbers, source strips with the
+  rounding stated; the waiver's four-disk limit noted from the spec.
+Containers: audit_containers exit 0 (the pack's exports to 31 August, the deck stamped 8 to 10 September 2026).
+Figures: figures_check exit 0; checks.py 66 of 66; verify.py 23 of 23 inside their bands by other code paths; two
+  builds under different hash seeds byte-identical.
+Caution on the paper: the cited pair is 38.2, and paper estimates have come back 40 to 60 points high; R1 and R2 (the
+  fallout baseline), R5 (the rules re-run) and R7 (Rev F's steady state) are each a judgment a careful run can make, so
+  two of them earned puts the pair near 60. The judge thread's own first pass is read against the careful column below
+  before READY.
 
 ## Tried and rejected
 

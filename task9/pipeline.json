@@ -4,8 +4,8 @@
   "domain": "general-statistics-data-science",
   "subdomain": "interpretability",
   "objective": "root-cause",
-  "stage": 3,
-  "stage_name": "build",
+  "stage": 4,
+  "stage_name": "check",
   "updated": "2026-11-11",
   "doctrine": "throughout",
   "call": "take the conditioner disk out of the full PM and change it at about 1,570 wafers on PU-1 and PU-2 and 1,200 on PU-3 and PU-4, saving about USD 288,000 a year against Rev F",
@@ -17,12 +17,12 @@
     "date": "2026-11-11"
   },
   "leak": {
-    "leak_py": "",
-    "reader": ""
+    "leak_py": "REVIEW (4 lines ruled in the note's Pre-ship check)",
+    "reader": "running"
   },
   "duplicate_check": {
-    "heart": "",
-    "nearest": ""
+    "heart": "WARN (repeat.gate_g, repeat.decision, repeat.question_form)",
+    "nearest": "task15 (shape), mark115 skeleton (severity none)"
   },
   "judge": {
     "verdict": "",
@@ -51,7 +51,7 @@
     "history": []
   },
   "returned": [],
-  "resume": "stage 3, mid-build. Done: build.py deterministic (two builds under different hash seeds byte-identical after the chamber-step set-order fix), checks.py 66 of 66, precut 0 FAIL, effort.py --check-note 0 FAIL (pair 38.2). Next: refresh the design note's stated figures from generator/figures.json (the world changed with the set-order fix and the 4 per cent alias share; the grades and pair are unchanged); write verify.py (an independent recompute of R1 to R7 by other code paths, landing inside every band); render the deck and run golden-realism; then gates.py task9 --full (figures_check, leak.py, audit_containers, guard surface and heart) and stage 4 (the leak reader and the determinism judge together).",
+  "resume": "stage 4: the leak reader and the determinism judge were launched on the final build (gates.py --full 0 FAIL); read both reports, fix every finding in the generator in one pass, re-run gates.py --full, re-judge once on FIX_NOW, read the judge thread's first-pass figures against the careful column, then READY with both zips",
   "approved": null,
   "submitted": null,
   "portal": {
@@ -90,6 +90,10 @@
     {
       "date": "2026-11-11",
       "event": "stage 3: golden deck, writeup, checks (66 of 66) and build written; a set-iteration order bug in the simulator found and fixed (builds now byte-identical); paused at the author's interruption"
+    },
+    {
+      "date": "2026-11-11",
+      "event": "stage 3 closed: verify.py 23 of 23, golden-realism pass on the deck, gates.py --full 0 FAIL; stage 4 launched"
     }
   ]
 }

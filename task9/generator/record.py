@@ -65,7 +65,7 @@ class Record:
         s["sort_yield"] = s.good_die / s.gross_die
         self.sort = s[["wafer_id", "lot_id", "product", "sort_ts", "gross_die", "good_die", "f_in", "f_band", "tested_band", "gross",
                        "sort_yield", "adc_label"]]
-        self.retests = int((pd.read_csv(os.path.join(self.tgt, PK.F["sort"]), usecols=["retest_flag"]).retest_flag == "Y").sum())
+        self.retests = int((pd.read_csv(os.path.join(self.tgt, PK.F["sort"]), usecols=["retest"]).retest == "Y").sum())
 
     def _fdc(self):
         f = pd.read_csv(os.path.join(self.tgt, PK.F["fdc"]))
@@ -76,12 +76,12 @@ class Record:
 
     def _mes(self):
         m = pd.read_csv(os.path.join(self.tgt, PK.F["mes"]), usecols=["lot_id", "wafer_id", "step_name", "tool_id", "chamber_id", "track_in_ts",
-                                                                       "rework_flag"], dtype=str, keep_default_na=False)
+                                                                       "rework"], dtype=str, keep_default_na=False)
         dep = m[m.step_name == "ILD-DEP"][["wafer_id", "chamber_id", "track_in_ts"]].rename(columns={"chamber_id": "dep",
                                                                                                     "track_in_ts": "dep_ts"})
         dep["dep_day"] = dep.dep_ts.str[:10]
         dep = dep.drop(columns=["dep_ts"])
-        lit = m[(m.step_name == "M1-LITHO") & (m.rework_flag == "N")][["lot_id", "tool_id"]].drop_duplicates("lot_id").rename(
+        lit = m[(m.step_name == "M1-LITHO") & (m.rework == "N")][["lot_id", "tool_id"]].drop_duplicates("lot_id").rename(
             columns={"tool_id": "m1_scanner"})
         lots = m[m.wafer_id != ""][["lot_id", "wafer_id"]].drop_duplicates("wafer_id")
         self.mes = dep.merge(lots, on="wafer_id", how="left").merge(lit, on="lot_id", how="left").drop(columns=["lot_id"])

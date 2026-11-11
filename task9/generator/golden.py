@@ -24,6 +24,7 @@ AUTHOR = "Fab 2 Yield Engineering"
 STAMPS = {DECK: ("2026-09-08T15:12:00Z", "2026-09-10T18:41:00Z")}
 INK, INK2 = RGBColor(0x1A, 0x1A, 0x1A), RGBColor(0x55, 0x55, 0x55)
 BLUE, ORANGE, GRAY = RGBColor(0x2A, 0x6F, 0xB8), RGBColor(0xD9, 0x6A, 0x1E), RGBColor(0x9A, 0x9A, 0x9A)
+HEAD, TOTAL, WHITE = RGBColor(0x33, 0x40, 0x52), RGBColor(0xEE, 0xF0, 0xF3), RGBColor(0xFF, 0xFF, 0xFF)
 W16, H9 = Emu(12192000), Emu(6858000)
 LABEL = {"disk": "Conditioner disk wear", "pad": "Pad life (on top of the disk's wear)", "ring": "Retaining ring wear",
          "dep3": "Deposition chamber DEP-3", "sc4": "Scanner SC-4 at M1", "rf": "Deposition chambers' RF hours"}
@@ -74,16 +75,19 @@ def _source(slide, text):
 def _table(slide, x, y, w, rows, widths, size=12, header=True):
     shp = slide.shapes.add_table(len(rows), len(rows[0]), x, y, w, Inches(0.32) * len(rows))
     tb = shp.table
+    tb.horz_banding = False
     for j, wd in enumerate(widths):
         tb.columns[j].width = wd
     for i, r in enumerate(rows):
         for j, v in enumerate(r):
             c = tb.cell(i, j)
             c.text = str(v)
+            c.fill.solid()
+            c.fill.fore_color.rgb = HEAD if (header and i == 0) else (TOTAL if str(r[0]).startswith(("All ", "Four ")) else WHITE)
             for p in c.text_frame.paragraphs:
                 p.font.size = Pt(size)
-                p.font.bold = header and i == 0
-                p.font.color.rgb = INK
+                p.font.bold = (header and i == 0) or str(r[0]).startswith(("All ", "Four "))
+                p.font.color.rgb = WHITE if (header and i == 0) else INK
                 if j > 0:
                     p.alignment = PP_ALIGN.RIGHT
     return tb
@@ -126,8 +130,8 @@ def write_deck(path, F):
         "what the EW-118 retained disks added." % (pct(S["R5_bridge"]["old_rule"]), pct(S["R5_bridge"]["rev_f"]),
                                                    pct(S["R5_bridge"]["ew118"])),
         "With the disk out of the full PM at these counts, the module saves about %s a year against Rev F as it stands. One count "
-        "for all four units would give back %s of that, and going back to Rev E would cost %s a year more than Rev G." % (
-            usd(S["R7_saving"]), usd(F["fleet_vs_g"]), usd(F["rev_e_vs_g"])),
+        "for all four units would give back about %s of that, and going back to Rev E would cost about %s a year more than "
+        "Rev G." % (usd(S["R7_saving"]), usd(round(F["fleet_vs_g"], -3)), usd(round(F["rev_e_vs_g"], -3))),
     ], size=17)
     _source(s, "Sort, MES, FDC and PM records 5 January to 31 August 2026; cost inputs of 28 August 2026; YE-2026-031.")
 
@@ -221,8 +225,13 @@ def write_deck(path, F):
         ser.marker.format.line.color.rgb = RGBColor(0xFF, 0xFF, 0xFF)
         ser.smooth = False
     ch.has_title = True
-    ch.chart_title.text_frame.text = "Outermost zone's excess over the interior, points, by wafers of disk use"
+    ch.chart_title.text_frame.text = "Outermost zone's excess over the interior, by wafers of disk use"
     ch.chart_title.text_frame.paragraphs[0].font.size = Pt(12)
+    for ax, label in ((ch.category_axis, "Wafers since the disk was changed"), (ch.value_axis, "Excess fail rate, points")):
+        ax.has_title = True
+        ax.axis_title.text_frame.text = label
+        ax.axis_title.text_frame.paragraphs[0].font.size = Pt(11)
+        ax.axis_title.text_frame.paragraphs[0].font.bold = False
     rows = [["Unit", "Onset (wafers)", "Climb after it"]]
     for u in lo + hi:
         rows.append([u, n(dose["%s onset" % u]), "%.1f" % dose["%s slope" % u]])
@@ -267,6 +276,7 @@ def write_deck(path, F):
         "Rev F's 2,800 from 2 April, then the four PMs that kept their disk under EW-118, with the unscheduled swaps where they "
         "happened and pads every 600 wafers.",
         "The ring each sequence gives is read off the pair's fitted curve, so the three shares add to the loss.",
+        "EW-118 allowed at most four retained disks; the log marks one full PM on each unit that kept its disk.",
         "Splitting the observed loss by the disk's use at 2,000 and 2,800 wafers instead gives %s, %s and %s: it misses that "
         "the old rule's disks would have been at other points in their lives on the same wafers." % (
             pct(F["routes"]["R5_slice"]["old_rule"]), pct(F["routes"]["R5_slice"]["rev_f"]), pct(F["routes"]["R5_slice"]["ew118"])),
@@ -279,8 +289,9 @@ def write_deck(path, F):
     rows = [["Unit", "Count (wafers)", "Rev F, USD per wafer", "Rev G, USD per wafer", "Saving a year"]]
     for u in lo + hi:
         cpw = F["cost_per_wafer"][A.pair_of[u]]
-        rows.append([u, n(c[u]), "%.2f" % cpw["Rev F as it stands"], "%.2f" % cpw["Rev G at the pair's count"], usd(G["R7_unit"][u])])
-    rows.append(["Four units", "", "", "", usd(S["R7_saving"])])
+        rows.append([u, n(c[u]), "%.2f" % cpw["Rev F as it stands"], "%.2f" % cpw["Rev G at the pair's count"],
+                     usd(round(G["R7_unit"][u], -2))])
+    rows.append(["Four units", "", "", "", usd(sum(round(G["R7_unit"][u], -2) for u in lo + hi))])
     _table(s, Inches(0.6), Inches(1.6), Inches(12.1), rows, [Inches(1.6), Inches(2.2), Inches(2.9), Inches(2.9), Inches(2.5)], size=13)
     pert = F["perturbations"]
     lo_rng = (min(v[lo[0]] for v in pert.values()), max(v[lo[0]] for v in pert.values()))
@@ -290,12 +301,15 @@ def write_deck(path, F):
         "change at its all-in of %s) and the good die the ring takes at the summer's product mix." % usd(A.allin["disk_change"]),
         "The count is where a disk's yearly cost of changes and ring loss is lowest. It stays between %s and %s on %s and %s and "
         "between %s and %s on %s and %s with every slope 20 per cent either way, every onset 5 per cent, the die value or the "
-        "disk change 10 per cent, or the pad's term doubled or removed." % (n(lo_rng[0]), n(lo_rng[1]), lo[0], lo[1], n(hi_rng[0]),
-                                                                             n(hi_rng[1]), hi[0], hi[1]),
-        "One count of %s for all four units costs %s a year more than the pair counts; going back to Rev E costs %s a year more "
-        "than Rev G." % (n(F["routes"]["R6_fleet"][lo[0]]), usd(F["fleet_vs_g"]), usd(F["rev_e_vs_g"])),
+        "disk change 10 per cent, or the pad's term doubled or removed." % (n(round(lo_rng[0], -1)), n(round(lo_rng[1], -1)), lo[0],
+                                                                             lo[1], n(round(hi_rng[0], -1)), n(round(hi_rng[1], -1)),
+                                                                             hi[0], hi[1]),
+        "One count of about %s for all four units costs about %s a year more than the pair counts; going back to Rev E costs "
+        "about %s a year more than Rev G." % (n(round(F["routes"]["R6_fleet"][lo[0]], -1)), usd(round(F["fleet_vs_g"], -3)),
+                                               usd(round(F["rev_e_vs_g"], -3))),
     ], size=13)
-    _source(s, "A year of %s wafers through ILD-CMP, split by each unit's share since 1 June; cost inputs of 28 August 2026." % n(F["wpy"]))
+    _source(s, "A year of %s wafers through ILD-CMP, split by each unit's share since 1 June; cost inputs of 28 August 2026. Counts "
+               "rounded to 10 wafers, unit savings to USD 100." % n(F["wpy"]))
 
     # 7. notes
     s = pr.slides.add_slide(layout)
@@ -314,6 +328,8 @@ def write_deck(path, F):
         "Count and saving: the count minimises the disk's cost per wafer on the pair's curve; the saving is against Rev F's own "
         "2,800-wafer cycle with the waiver ended.",
     ], size=13, space=10)
+    for k, sl in enumerate(pr.slides, 1):
+        _text(sl, Inches(12.2), Inches(6.9), Inches(0.6), Inches(0.4), [str(k)], size=10, color=INK2)
     pr.save(path)
     PP.normalize_pptx(path, AUTHOR, AUTHOR, STAMPS[DECK][0], STAMPS[DECK][1], "Fab 2 edge ring: cause, cost and the Rev G disk count",
                       P.FIRM)

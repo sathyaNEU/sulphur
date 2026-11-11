@@ -82,8 +82,8 @@ def main():
     check("SF1 the ring was already costing yield before April", A.R1_q1 > 0.15, "January to March %.3f points" % A.R1_q1)
     check("SF1 the fallout at a fresh disk is the band's no-ring level", abs(np.average(d[d.disk < 400].y, weights=d[d.disk < 400].tested_band)
                                                                      - np.mean(list(A.r0.values()))) < 0.006)
-    raw = pd.read_csv(os.path.join(TGT, PK.F["sort"]), usecols=["wafer_id", "retest_flag"])
-    check("SF2 retests supersede the first pass", (raw.retest_flag == "Y").sum() > 300 and raw.wafer_id.duplicated().sum() == (raw.retest_flag == "Y").sum())
+    raw = pd.read_csv(os.path.join(TGT, PK.F["sort"]), usecols=["wafer_id", "retest"])
+    check("SF2 retests supersede the first pass", (raw.retest == "Y").sum() > 300 and raw.wafer_id.duplicated().sum() == (raw.retest == "Y").sum())
     pol = d[(d.polish_ts >= "2026-04-01") & (d.polish_ts < "2026-09-01")]
     check("SF3 the window is by sort date, and polish dates would select other wafers", abs(len(pol) - A.n_win) > 500,
           "%d sorted against %d polished" % (A.n_win, len(pol)))

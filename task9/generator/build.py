@@ -49,8 +49,8 @@ EXPORT_TIMES = {
 COVERS = {
     PK.F["sort"]: "the sort database's wafer records: zone fail and tested counts, bins, the classifier's label, retests",
     PK.F["mes"]: "the MES: lot-level steps and the six chamber-per-wafer steps with their tools and times",
-    PK.F["pm"]: "the ILD-CMP units' maintenance log: part changes in free text, counters, the waiver, routine checks",
-    PK.F["fdc"]: "the polish record per wafer: unit, time, platen counter, pad counter, downforce, temperature, endpoint, removal rates",
+    PK.F["pm"]: "the ILD-CMP units' PM log, one row per entry as the technicians made it",
+    PK.F["fdc"]: "the polish record per wafer from the units' fault-detection system",
     PK.F["diemaps"]: "the yield database's die maps for the wafers pulled into the review set, with the die geometry",
     PK.F["geometry"]: "the yield database's die position helpers (zones by radius)",
     PK.F["examples"]: "twelve wafer maps from the yield review deck",
@@ -124,7 +124,8 @@ def metadata(tgt, info):
         "task_type": "Interpretability: a sort-yield loss attributed across dependent process features to the part whose "
                      "wear carries it, its dose-response, and its split across the maintenance rules",
         "objective": "Root-Cause Analysis",
-        "as_of": AS_OF,
+        "as_of": str(P.PULL),
+        "built": AS_OF,
         "setting_date": str(P.PULL),
         "deliverables": list(GD.FILES),
         "distractor_files": PK.DISTRACTORS,

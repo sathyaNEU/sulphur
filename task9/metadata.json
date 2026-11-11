@@ -4,7 +4,8 @@
  "domain": "Machine Learning Research, General Statistics & Data Science (Interpretability: feature attribution, probing, mechanistic analysis)",
  "task_type": "Interpretability: a sort-yield loss attributed across dependent process features to the part whose wear carries it, its dose-response, and its split across the maintenance rules",
  "objective": "Root-Cause Analysis",
- "as_of": "2026-11-11",
+ "as_of": "2026-08-31",
+ "built": "2026-11-11",
  "setting_date": "2026-08-31",
  "deliverables": [
   "tessaline_fab2_edge_ring_review.pptx"
@@ -53,14 +54,14 @@
    "path": "cmp_unit_pm_log.xlsx",
    "format": "xlsx",
    "bytes": 18659,
-   "covers": "the ILD-CMP units' maintenance log: part changes in free text, counters, the waiver, routine checks",
+   "covers": "the ILD-CMP units' PM log, one row per entry as the technicians made it",
    "made": "written by task9/generator (world.py, pack.py, docs.py) from the simulated fab (deterministic)"
   },
   {
    "path": "cmp_wafer_fdc.csv",
    "format": "csv",
-   "bytes": 2505809,
-   "covers": "the polish record per wafer: unit, time, platen counter, pad counter, downforce, temperature, endpoint, removal rates",
+   "bytes": 2505816,
+   "covers": "the polish record per wafer from the units' fault-detection system",
    "made": "written by task9/generator (world.py, pack.py, docs.py) from the simulated fab (deterministic)"
   },
   {
@@ -115,7 +116,7 @@
   {
    "path": "process_history.csv",
    "format": "csv",
-   "bytes": 26189051,
+   "bytes": 26189046,
    "covers": "the MES: lot-level steps and the six chamber-per-wafer steps with their tools and times",
    "made": "written by task9/generator (world.py, pack.py, docs.py) from the simulated fab (deterministic)"
   },
@@ -220,7 +221,7 @@
   {
    "path": "wafer_sort_zones.csv",
    "format": "csv",
-   "bytes": 5326984,
+   "bytes": 5326979,
    "covers": "the sort database's wafer records: zone fail and tested counts, bins, the classifier's label, retests",
    "made": "written by task9/generator (world.py, pack.py, docs.py) from the simulated fab (deterministic)"
   }

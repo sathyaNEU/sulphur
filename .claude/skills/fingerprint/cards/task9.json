@@ -13,7 +13,7 @@
  "shape": "04",
  "decision_type": "dial_setting",
  "answer_unit": "count",
- "answer": "",
+ "answer": "take the conditioner disk out of the full PM under Rev G and change it after 1,570 wafers of its own use on PU-1 and PU-2 and 1,200 on PU-3 and PU-4, saving about USD 288,000 a year against Rev F",
  "answer_source": "",
  "gap": [
   "objective",
@@ -84,7 +84,7 @@
  "question_form": "what",
  "driver": "The decisive quantities are a loss measured on every wafer against the fallout a fresh part leaves, its split across correlated candidates whose association comes from routing, timing and parts that reset together, read with the part's own lives as the units that vary, a dose-response on the one part's own usage carried to a replacement count for each pair of units that wear it differently, and a policy bridge built by running each rule on each unit's own sequence; read against the record's level before the rise, from a fit that takes the wafers as independent, by slicing the loss at the rules' thresholds and from the summer's own run rate, the loss is under-measured, a rival part gets a share, the policies are mis-split and the saving is overstated.",
  "driver_concrete": "Tessaline's Fab 2 edge-ring: the sort-yield loss since April measured on each wafer's outer band against its own interior defect level with clustering, ranked across the flow's tools where DEP-3's association comes from its routing to the CMP2 units and the new scanner's from its April start, and traced to the CMP conditioner disk's own usage, which resets with the pad and retaining ring at full PMs and alone at disk-only swaps and the EW-118 reused disks, so the disk-only change interval is set at the onset's cost optimum.",
- "stump": "The careful but hurried review measures the ring against the band's level before April (1.06 points against 1.31), keeps the retaining ring's share from a fit read wafer by wafer (4.7 per cent against none), slices the loss at 2,000 and 2,800 wafers of disk use (18, 40 and 42 per cent against 22, 34 and 43) and prices Rev F at the summer's own loss rate (a saving of USD 782,000 a year against 286,000), while its per-unit dose fits and counts land inside their bands.",
+ "stump": "The careful but hurried review measures the ring against the band's level before April (1.06 points against 1.32), keeps the retaining ring's share from a fit read wafer by wafer (4.6 per cent against none), slices the loss at 2,000 and 2,800 wafers of disk use (18, 40 and 42 per cent against 23, 34 and 43) and prices Rev F at the summer's own loss rate (a saving of USD 781,000 a year against 288,000), while its per-unit dose fits and counts land inside their bands.",
  "answer_shape": "ranked-causes",
  "weight": "attribution",
  "chain_signature": [

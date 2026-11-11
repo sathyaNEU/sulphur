@@ -112,7 +112,7 @@ class Pack:
             wr = csv.writer(fh)
             wr.writerow(["lot_id", "wafer_id", "product", "sort_end_ts", "tester", "probe_card", "test_prog_rev", "gross_die", "good_die"]
                         + ["fail_z%d" % k for k in range(1, 9)] + ["tested_z%d" % k for k in range(1, 9)]
-                        + ["bin_open_short", "bin_func", "bin_iddq", "bin_param", "adc_label", "retest_flag"])
+                        + ["bin_open_short", "bin_func", "bin_iddq", "bin_param", "adc_label", "retest"])
             wr.writerows(rows)
         return len(rows)
 
@@ -152,7 +152,7 @@ class Pack:
         with open(path, "w", newline="") as fh:
             wr = csv.writer(fh)
             wr.writerow(["lot_id", "wafer_id", "step_seq", "step_name", "tool_id", "chamber_id", "track_in_ts", "track_out_ts", "recipe",
-                         "rework_flag"])
+                         "rework"])
             wr.writerows(rows)
         return len(rows)
 
@@ -236,7 +236,7 @@ class Pack:
         rows.sort(key=lambda r: (r[2], r[1]))
         with open(path, "w", newline="") as fh:
             wr = csv.writer(fh)
-            wr.writerow(["wafer_id", "unit_id", "polish_start_ts", "platen_wafer_count", "pad_life_ctr", "downforce_psi", "platen_temp_c",
+            wr.writerow(["wafer_id", "unit_id", "polish_start_ts", "platen_wafer_count", "pad_life_ctr", "downforce_psi", "platen_temperature_c",
                          "endpoint_s", "rr_center_nm_min", "rr_edge_nm_min"])
             wr.writerows(rows)
         return len(rows)

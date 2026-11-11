@@ -55,12 +55,12 @@ def build(F):
     a("Take the conditioner disk out of the full PM under Rev G and change it after %s wafers of its own use on %s and %s "
       "and after %s on %s and %s, which saves about %s a year against Rev F as it stands: the disk's own wear carries %s of the "
       "edge ring's loss of %s points of mean sort yield since April, and the high-downforce pair's disks reach the ring's "
-      "onset at %s wafers against %s. Rejected: one count for all four units (%s wafers, %s a year worse), a return to Rev E "
-      "(%s a year worse), and any change to the pad or the retaining ring, which carry none of the loss beyond the pad's "
+      "onset at %s wafers against %s. Rejected: one count for all four units (about %s wafers, about %s a year worse), a "
+      "return to Rev E (about %s a year worse), and any change to the pad or the retaining ring, which carry none of the loss beyond the pad's "
       "%s on top of the disk's." % (
           n(c[lo[0]]), lo[0], lo[1], n(c[hi[0]]), hi[0], hi[1], usd(S["R7_saving"]), pct(sh["disk"], 1), dec(S["R1_points"]),
-          n(dose["%s onset" % hi[0]]), n(dose["%s onset" % lo[0]]), n(R["R6_fleet"][lo[0]]), usd(F["fleet_vs_g"]),
-          usd(F["rev_e_vs_g"]), pct(sh["pad"], 1)))
+          n(dose["%s onset" % hi[0]]), n(dose["%s onset" % lo[0]]), n(round(R["R6_fleet"][lo[0]], -1)), usd(round(F["fleet_vs_g"], -3)),
+          usd(round(F["rev_e_vs_g"], -3)), pct(sh["pad"], 1)))
     a("")
 
     # ---- 2. Supplementary Questions
@@ -103,8 +103,8 @@ def build(F):
                                               hi[0], hi[1], n(c[hi[0]]), n(B["R6_counts"][hi[0]][0]), n(B["R6_counts"][hi[0]][1])))
     a("7. The yearly saving against Rev F as it stands: %s (band %s to %s), %s on %s and %s and %s on %s and %s, at %s wafers "
       "a year split by each unit's share since 1 June, beside each unit's cost per wafer under both specs." % (
-          usd(S["R7_saving"]), usd(B["R7_saving"][0]), usd(B["R7_saving"][1]), usd(G["R7_unit"][lo[0]] + G["R7_unit"][lo[1]]),
-          lo[0], lo[1], usd(G["R7_unit"][hi[0]] + G["R7_unit"][hi[1]]), hi[0], hi[1], n(F["wpy"])))
+          usd(S["R7_saving"]), usd(B["R7_saving"][0]), usd(B["R7_saving"][1]), usd(round(G["R7_unit"][lo[0]] + G["R7_unit"][lo[1]], -3)),
+          lo[0], lo[1], usd(round(G["R7_unit"][hi[0]] + G["R7_unit"][hi[1]], -3)), hi[0], hi[1], n(F["wpy"])))
     a("")
 
     # ---- 3. Critical Components
@@ -145,10 +145,10 @@ def build(F):
           pct(R["R5_slice"]["ew118"])))
     a("6. Set each pair's count where the disk's cost per wafer (its %s change and the good die the ring takes at the "
       "summer's mix) is lowest: %s and %s wafers. A dose from zero gives %s and %s; moving the full PM instead gives %s and %s." % (
-          usd(A.allin["disk_change"]), n(c[lo[0]]), n(c[hi[0]]), n(R["R6_linear"][lo[0]]), n(R["R6_linear"][hi[0]]),
-          n(R["R6_full_pm_lever"][lo[0]]), n(R["R6_full_pm_lever"][hi[0]])))
+          usd(A.allin["disk_change"]), n(c[lo[0]]), n(c[hi[0]]), n(round(R["R6_linear"][lo[0]], -1)), n(round(R["R6_linear"][hi[0]], -1)),
+          n(round(R["R6_full_pm_lever"][lo[0]], -1)), n(round(R["R6_full_pm_lever"][hi[0]], -1))))
     a("7. Price the saving against Rev F's own 2,800-wafer cycle with the waiver ended: %s a year. The summer's own loss rate "
-      "taken as Rev F's gives %s, because it carries the retained disks." % (usd(S["R7_saving"]), usd(R["R7_summer_rate"])))
+      "taken as Rev F's gives about %s, because it carries the retained disks." % (usd(S["R7_saving"]), usd(round(R["R7_summer_rate"], -3))))
     a("")
     a("No other conclusion survives: every sound reading of the fallout, the pairs, the weights and the mix keeps the loss "
       "between %s and %s points, the counts inside 8 per cent and the saving between %s and %s, while each shortcut lands "
