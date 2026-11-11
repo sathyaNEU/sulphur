@@ -1,99 +1,149 @@
 {
   "task": "task13",
   "project": "sulfur",
-  "architecture": "v1",
-  "drawn": "2026-11-09",
-  "slot_note": "author-requested Energy Systems & Utilities build: highly unique, multi-layered deep reasoning interlocked with the domain, hard for frontier models; the reviewer's prompt rules (no method, no input file names, minimal context, no persona)",
+  "architecture": "v2",
+  "drawn": "2026-11-11",
+  "slot_note": "author-requested re-root (2026-11-11): a much stronger stump than architecture 1, at least three major analytical failure points, new areas, not a template of task6",
   "domain": "energy-systems-utilities",
   "subdomain": "grid-reliability-outage-analysis",
   "client_domain": "energy-systems-utilities",
-  "niche": "a New Zealand consumer-trust-owned lines company choosing the 11 kV feeders its 2027 vegetation catch-up goes to, judged on the sustained customer interruptions the catch-up avoids outside major event days in the 2027-28 regulatory year",
+  "niche": "a Philippine electric cooperative's referral rule for the overhead protection zones whose lightning protection (arrester ground leads, line arresters, pin insulators) has failed, built from recloser event logs on their own clocks and a lightning location extract, ahead of the 2027 dry-season refit",
   "objective": "anomaly-detection",
-  "shape": "01",
-  "decision_type": "ranked_slate_under_cap",
+  "shape": "08",
+  "decision_type": "designation_set",
   "answer_unit": "set_of_items",
-  "answer": "PBY-10, HRK-03, HRK-05, WTK-02, PBY-11 and PBY-03 (the six northern coastal feeders left longest since a cycle trim), avoiding about 12,984 vegetation customer interruptions in 2027-28, 0.33 of network SAIFI",
-  "answer_source": "task13/submission.md Final Recommendation; generator/figures.json",
+  "answer": "",
+  "answer_source": "",
   "gap": [
-    "objective",
+    "population",
     "time"
   ],
   "pattern": [
-    "A"
+    "none"
   ],
   "generators": [
-    "G14",
-    "G13",
+    "G7",
+    "G12",
     "G17"
   ],
   "gate_g": "decomposition_attribution",
-  "calibration_form": "none",
-  "stump_strategy": "decomposition_attribution",
+  "calibration_form": "physical_verification",
+  "stump_strategy": "informative_censoring",
   "decisive_rule_filed": false,
   "official_decoy": false,
   "validated_decoy": false,
-  "context_artifact": "published_series",
+  "context_artifact": "operations_log",
   "stump_class": "analytical",
-  "analyst_test": "A strong analyst who cleans the outage export (call-centre records of logged operations, planned and momentary interruptions, the October 2023 cause recode, local times, Rangiora Street's renamed feeders), removes the major event days with the standard's boundary values and ranks the 11 kV feeders on vegetation customer interruptions over the three years to October 2026, with the cycle log's dates beside them, funds TOT-02, TIT-04, MKR-01, KWH-01, TIT-01 and TIT-03, the plantation feeders and a southern late-cycle feeder, which avoid 5,770 against the golden six's 12,984.",
-  "domain_test": "The deciding quantity is the sustained customer interruptions a vegetation catch-up avoids on each 11 kV feeder in the 2027-28 regulatory year outside major event days, which needs each feeder's tree-caused interruption rate per unit of wind exposure (gust-hours at its weather station) split into the corridor base a feeder keeps straight after a cycle trim and the growth since its last trim that a catch-up removes; with another field's nouns the gust-hours, trim cycles, protective devices and major event days stop making sense.",
-  "layer2_family": "estimand_identification",
-  "layer2_pattern": "own:worst-feeders-selected-on-a-windy-year-and-a-dense-corridor-base",
+  "analyst_test": "A careful run that cleans every export, reads lightning faults off the reclosers' logged times with a fixed window, counts only the events the controllers' memories kept, fits the sound-protection rate on every zone-season and refers on a Poisson or pooled threshold files a referral set that drops the radio-less zones and the failures the contaminated baseline absorbs, adds sound zones whose spread a Poisson null cannot carry, and misstates the alert load, the inspection check and the avoided faults.",
+  "domain_test": "The field's own lightning performance analysis decides it: faults attributed to lightning by coincidence with located strokes on each protective device's own clock, a zone's flashover rate per nearby stroke against what its construction, shielding and arrester cover give when sound, and the spread of sound zones around that expectation; with a hospital's nouns the strokes, reclosers, clocks, arresters and flashovers have no meaning.",
+  "layer2_family": "estimation_fit",
+  "layer2_pattern": "own:events-on-drifting-device-clocks-and-overwritten-memories-against-a-baseline-verified-by-inspection",
   "layer1": [
-    "outage records entered twice by the call centre and the field crew",
-    "planned outages in the same register as faults",
-    "cause codes in three spellings across a coding change",
-    "interruption times in NZST and NZDT with no offset recorded",
-    "customers interrupted counted at the protective device",
-    "weather station hours missing, one station reporting gusts in knots",
-    "vegetation jobs closed in the log weeks after the crew finished",
-    "feeders renamed at a zone substation rebuild"
+    "lightning location times in UTC against controller times in Philippine local time",
+    "cloud pulses and small positive discharges in the stroke extract",
+    "each fault logged as several trips and recloses",
+    "upstream breakers tripping on downstream faults",
+    "controller memories re-read at each visit so events repeat across downloads",
+    "outage cause codes assigned by dispatchers",
+    "transformer replacements recorded days after the burnout",
+    "register line lengths summed by setting and construction"
   ],
-  "stakeholder_role": "the lines company's network general manager, who takes the 2027 vegetation catch-up to the board",
-  "role_family": "operations_director",
-  "scoring_unit": "other",
+  "stakeholder_role": "the co-op's technical services manager, who takes the 2027 lightning protection refit to the management committee",
+  "role_family": "field_unit_lead",
+  "scoring_unit": "per episode",
   "spine": {
-    "file": "oms_interruptions_2022-04_2026-10.csv",
-    "rows": 11396,
-    "entity": "one interruption at one protective device",
-    "grain": "interruption x device",
-    "source": "constructed (a fictional New Zealand lines company's outage management system export, April 2022 to October 2026; seeded world in task13/generator)"
+    "file": "recloser and breaker event exports with the lightning stroke extract",
+    "rows": 0,
+    "entity": "one event a protective device recorded",
+    "grain": "device x event",
+    "source": "synthetic (a fictional Philippine electric cooperative's SCADA historian export and controller memory downloads, December 2021 to October 2026, with a lightning location extract; seeded world in task13/generator)"
   },
-  "forum": "board_of_directors",
-  "forcing_event": "statutory_or_regulatory_filing",
+  "forum": "executive_team",
+  "forcing_event": "budget_or_appropriation",
   "org_family": "cooperative_or_member_body",
   "world": {
-    "geography": "New Zealand (lower North Island: a fictional lines company's coast, river plains and hill country)",
-    "currency": "NZD",
-    "org_type": "a consumer-trust-owned electricity distribution business (lines company) running 48 11 kV feeders",
+    "geography": "Philippines (Central Luzon: a fictional electric cooperative's franchise across rice plains, tree-lined roads, towns and the western foothills)",
+    "currency": "PHP",
+    "org_type": "a member-owned electric cooperative running 13.2 kV overhead lines from twelve substations",
     "invented_names": [
-      "Kotuku Networks",
-      "Kotuku Electricity Consumer Trust"
+      "Kalumpang Valley Electric Cooperative"
     ],
     "people": [
-      "Tania Foley",
-      "Wayne Ward",
-      "Hoani Marshall",
-      "Kathryn Carter",
-      "Sean Chapman",
-      "Maria Hodson"
+      "Lucas Ramirez",
+      "Donna Rodriguez",
+      "Laurie Diaz",
+      "Elizabeth Hernandez",
+      "John Fuentes",
+      "Michelle Garcia"
     ]
   },
   "deliverables": [
-    "vegetation_catchup_2027_feeders.csv",
-    "vegetation_catchup_2027_board_note.docx"
+    "lightning_referrals_2027.csv",
+    "lightning_refit_2027_note.docx"
   ],
   "opening_move": "question-first",
-  "question_form": "where",
-  "driver": "The decisive quantity is what restoring a unit's condition removes from its next-period event count, which is only the part of its event rate that has grown since the condition was last restored, per unit of an exposure that drives every event; the latest counts mix that growth with each unit's own base and with an exposure that moved in opposite directions across areas, so the units that look worst were selected on a high-exposure year or on a high base the restoration cannot touch, and the units with the most to gain look ordinary.",
-  "driver_concrete": "Each Kotuku feeder's vegetation interruptions scale with the gust load at its nearest weather station and with the growth of its corridor since its last cycle trim; in the three years to October 2026 the storm track sat south (a third of the usual damaging gusts on the northern coast, more than twice them in the southern hills, mean wind within 6 per cent), so ranking on recent interruptions funds the southern plantation and late-cycle feeders, and the plantation feeders cut in late 2025 keep most of their expected interruptions after any trim, while the catch-up's saving lies on the northern feeders left longest untrimmed.",
-  "stump": "A competent analyst who removes the major event days and ranks the feeders on vegetation customer interruptions since November 2023 funds TOT-02, TIT-04, MKR-01, KWH-01, TIT-01 and TIT-03 (avoiding 5,770); normalising for wind still funds the plantation feeders, whose expected interruptions are a dense corridor a catch-up leaves in place, and splitting the rate into corridor and growth without the wind funds the southern late-cycle feeders; the saving is on PBY-10, HRK-03, HRK-05, WTK-02, PBY-11 and PBY-03 (12,984).",
-  "deep_chain": "(1) the recent north-south swing in vegetation interruptions is the storm track, visible in damaging-gust hours and not in mean wind, so counts are read per unit of each feeder's station gust load; (2) on that scale a feeder's rate is its corridor's rate straight after a trim times a growth since the trim (15.5 per cent a year), fitted across feeders and months; (3) 2027-28 is projected at the station record's 2006-2025 gust load, not the recent years' or the outage record's own; (4) the saving is the growth the catch-up removes, in customer interruptions at each feeder's own customers per interruption; (5) the six largest.",
-  "judgment": "two statistical judgments: an exposure judgment (counts normalised by each station's gust-hours, not by storm counts or calendar years, because the year's wind differed by area) and a decomposition judgment (each feeder's normalised rate split into a corridor base and a growth since its last trim, fitted across feeders and years, because only the growth is avoidable); the asks add the projection to 2027-28 and each feeder's customers per tree interruption.",
-  "one_fact_test": "The likeliest hint, 'normalise the tree interruptions for wind', leaves the run ranking on wind-normalised expected interruptions, which funds the plantation feeders whose corridor rate stays after a trim (1 of 6); 'the catch-up removes only the growth since the last trim', without the wind, reads that growth off counts the calm north holds down and funds the southern late-cycle feeders (0 to 1 of 6); no single sentence does both, and either still leaves the projection weather to choose.",
+  "question_form": "what",
+  "driver": "Events counted per unit are recorded by instruments that keep their own drifting time and only their last few hundred records, read on an observer's schedule, so the units with the most events lose the most and line up the worst with the independent record that classifies them; the expected count each unit should have is learned only from unit-periods that a later physical check confirmed sound, and the alarm threshold carries the spread those confirmed units show beyond chance.",
+  "driver_concrete": "Each zone's lightning faults are its reclosers' trips matched to located strokes on each controller's own clock (the radio-less controllers drift minutes between site visits and keep only their last 64 or 100 events, so a failing zone's busiest months are overwritten); the faults a zone would have with sound protection come from seasons the next cyclic inspection found sound, and the referral threshold carries the scatter of those confirmed-sound zones at no more than one sound zone referred a season.",
+  "stump": "A careful run that reads lightning faults off every recloser's logged times with a fixed window, counts only the events the radio-less controllers' memories kept, fits the sound-protection rate on every zone-season and refers on a Poisson threshold refers sound zones whose spread the Poisson null cannot carry and misses the radio-less zones and the failures the contaminated baseline absorbs, so its referral set, alert load, inspection check and avoided faults are all off.",
+  "answer_shape": "monitoring-rule",
+  "weight": "metric-or-rule-design",
+  "chain_signature": [
+    "assembly-reconciliation",
+    "missingness-measurement",
+    "modeling",
+    "exploration-triage",
+    "uncertainty",
+    "validation",
+    "investigation-loops",
+    "forecasting"
+  ],
+  "results": "R1 lightning faults per season reconstructed on every protective device's own clock; R2 the radio-less zones' 2026 lightning faults with what their memories lost and their unread months filled; R3 the 2026 season with every zone's protection sound and the faults failed protection caused; R4 the zones the rule refers now; R5 its false referrals a season and its referrals after each season since 2022; R6 its referrals checked against the following cyclic inspections; R7 the likely failure at each referred zone; R8 the lightning faults the refit avoids in an average season",
+  "one_fact_test": "the reclosers with no radio link keep their own drifting clocks: rescues R1 and part of R2 (2 of 8)",
   "strategy_label": "WORKS IN FORM",
-  "mechanism_source": "design_note",
-  "differentiation": {},
-  "lineage": [],
-  "notes": "Grid reliability is the one energy task type never drawn, and anomaly detection is one of the two objectives it serves. Axes against the last three live cards (task7, task2, task12): strategy decomposition_attribution (causal_design, composition_mix and population_selection are theirs), context artifact published_series (the met service station record the golden reads for exposure), forum board_of_directors, forcing event statutory_or_regulatory_filing (the 2027 asset management plan a New Zealand lines company must disclose before 1 April, which carries the vegetation programme; budget_or_appropriation was task7's), org family cooperative_or_member_body (a consumer-trust-owned lines company, which is what most New Zealand lines companies are). Deliverables csv and docx, away from the docx and xlsx set the last build used.",
-  "registered": "2026-11-09T05:10:25Z"
+  "lineage": [
+    {
+      "domain": "energy-systems-utilities",
+      "subdomain": "grid-reliability-outage-analysis",
+      "objective": "anomaly-detection",
+      "shape": "01",
+      "decision_type": "ranked_slate_under_cap",
+      "answer_unit": "set_of_items",
+      "gap": [
+        "objective",
+        "time"
+      ],
+      "pattern": [
+        "A"
+      ],
+      "generators": [
+        "G14",
+        "G13",
+        "G17"
+      ],
+      "gate_g": "decomposition_attribution",
+      "stump_strategy": "decomposition_attribution",
+      "role_family": "operations_director",
+      "forum": "board_of_directors",
+      "forcing_event": "statutory_or_regulatory_filing",
+      "org_family": "cooperative_or_member_body",
+      "driver": "The decisive quantity is what restoring a unit's condition removes from its next-period event count, which is only the part of its event rate that has grown since the condition was last restored, per unit of an exposure that drives every event; the latest counts mix that growth with each unit's own base and with an exposure that moved in opposite directions across areas, so the units that look worst were selected on a high-exposure year or on a high base the restoration cannot touch, and the units with the most to gain look ordinary.",
+      "architecture": "v1 (Kotuku Networks, the 2027 vegetation catch-up on six 11 kV feeders, one Poisson fit of tree interruptions on station gust load with growth since trim)",
+      "drawn": "2026-11-09",
+      "shell": null,
+      "fate": "spent 2026-11-11 before upload: cut under the retired single-deep-step design (READY 2026-11-09, never run on the platform); re-rooted at the author's word for a stronger chain with at least three independent analytical failure points. Its record: the storm-track swing between stations was thin (one plot of gust hours by station shows it), the plantation feeders' dense corridor sat only in the deciding units with one filter as the fix (a send-back), and every graded figure came out of one Poisson fit (one thing under another name)."
+    }
+  ],
+  "differentiation": {
+    "task13": "v2 is a new world (a Philippine cooperative's lightning protection, not a New Zealand lines company's vegetation), a new answer shape (a monitoring rule with its alert load, not a ranked list) and a chain of eight results; nothing of v1's gust-load fit or trim-growth split survives",
+    "mark196": "mark196 recovers how many events a partly captured record misses from the overlap of two capture channels; here the events are recovered from one device's own record (a sequence gap and an unread tail) and its drifting clock against a lightning extract, and the decisive call is a referral threshold carried on the spread of inspection-confirmed sound units",
+    "task6": "task6 weights spans by a sampling share set where each trace starts and dates incident causes by onset; here no sample is drawn: events are aligned to an independent record across drifting device clocks, an overwritten memory is filled, and units are referred against a baseline confirmed by physical inspection"
+  },
+  "shell": {
+    "question form": "where",
+    "second-sentence opener": "rank",
+    "deliverable set": "csv+docx"
+  },
+  "notes": "Redrawn at stage 1 after syncing with origin/main on 2026-11-11, when task14 v3, task15 v2 and task16 v2 entered the window: forum board_of_directors to executive_team (the management committee approves the dry-season work programme inside the board's budget, the honester label for a refit list), decisive pattern G12 to G7 (each recloser's record holds only the operating window between its memory's oldest kept event and its last read), Gate G to decomposition_attribution (each zone's faults assigned to lightning on the device's own clock, and its excess to failed protection rather than the spread sound zones show).",
+  "registered": "2026-11-11T05:06:18Z"
 }

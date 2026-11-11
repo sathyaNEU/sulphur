@@ -1,56 +1,95 @@
 {
-  "task": "task13",
-  "status": "READY",
-  "domain": "energy-systems-utilities",
-  "subdomain": "grid-reliability-outage-analysis",
-  "objective": "anomaly-detection",
-  "stage": 5,
-  "stage_name": "ready",
-  "updated": "2026-11-09",
-  "call": "PBY-10, HRK-03, HRK-05, WTK-02, PBY-11 and PBY-03 into the 2027 vegetation catch-up: 12,984 vegetation customer interruptions avoided in 2027-28 (0.33 SAIFI); rejects TOT-02, TIT-04, MKR-01, KWH-01, TIT-01 and TIT-03 (5,770)",
-  "stump": "A competent analyst who removes the major event days and ranks the feeders on vegetation customer interruptions since November 2023 funds TOT-02, TIT-04, MKR-01, KWH-01, TIT-01 and TIT-03 (5,770 avoided); normalising for wind still funds the plantation feeders (a dense corridor a catch-up leaves in place) and splitting corridor from growth without the wind funds the southern late-cycle feeders; the saving is on PBY-10, HRK-03, HRK-05, WTK-02, PBY-11 and PBY-03 (12,984).",
-  "architecture": 1,
-  "loops": 0,
-  "precut": {
-    "exit": 0,
-    "date": "2026-11-09"
+ "task": "task13",
+ "status": "DESIGN",
+ "domain": "energy-systems-utilities",
+ "subdomain": "grid-reliability-outage-analysis",
+ "objective": "anomaly-detection",
+ "stage": 2,
+ "stage_name": "design",
+ "updated": "2026-11-11",
+ "call": "to be filled when the pack is cut: the zones the referral rule names for the 2027 lightning protection refit",
+ "stump": "",
+ "architecture": 2,
+ "loops": 0,
+ "precut": {
+  "exit": null,
+  "date": ""
+ },
+ "leak": {
+  "leak_py": "",
+  "reader": ""
+ },
+ "duplicate_check": {
+  "heart": "",
+  "nearest": "mark253 0.07, task6 lineage 0.06 (drivers)"
+ },
+ "judge": {
+  "verdict": "",
+  "disposition": "",
+  "gate_h": "",
+  "report": ""
+ },
+ "paper_pair": null,
+ "runs": {
+  "run1": null,
+  "run2": null,
+  "average": null,
+  "counterfactual_average": null,
+  "first_wrong_step": {
+   "run1": "",
+   "run2": ""
   },
-  "leak": {
-    "leak_py": "REVIEW (2026-11-09, --asof 2026-11-03): no LEAK; REVIEW lines ruled in the design note",
-    "reader": "clean (2026-11-09): Q1 to Q4 none, Q5 programme terms 3(c) executes to the golden, Q6 analytical choice; sweep lines a to c harmless"
-  },
-  "duplicate_check": {
-    "heart": "WARN (repeat.gate_g vs task2, answered)",
-    "nearest": "mark196 / mark124 0.06 (drivers); surface: none promoted"
-  },
-  "judge": {
-    "verdict": "DETERMINISTIC",
-    "disposition": "APPROVE",
-    "gate_h": "pass: decisive step analytical, 6+ inferences, no one-fact rescue",
-    "report": "task13/determinism_check_report.md"
-  },
-  "paper_pair": 38.5,
-  "runs": {
-    "run1": null,
-    "run2": null,
-    "average": null,
-    "counterfactual_average": null,
-    "first_wrong_step": {
-      "run1": "",
-      "run2": ""
+  "triage": "",
+  "recorded": "",
+  "history": []
+ },
+ "returned": [
+  {
+   "date": "2026-11-11",
+   "source": "author",
+   "repair": "design (re-root to a results chain: architecture 2, new world)",
+   "what": "architecture 1 (READY 2026-11-09, never uploaded) re-rooted at the author's word for a stronger stump with at least three analytical failure points, not templated on task6",
+   "arch1": {
+    "call": "PBY-10, HRK-03, HRK-05, WTK-02, PBY-11 and PBY-03 into the 2027 vegetation catch-up: 12,984 vegetation customer interruptions avoided in 2027-28 (0.33 SAIFI); rejects TOT-02, TIT-04, MKR-01, KWH-01, TIT-01 and TIT-03 (5,770)",
+    "stump": "A competent analyst who removes the major event days and ranks the feeders on vegetation customer interruptions since November 2023 funds TOT-02, TIT-04, MKR-01, KWH-01, TIT-01 and TIT-03 (5,770 avoided); normalising for wind still funds the plantation feeders (a dense corridor a catch-up leaves in place) and splitting corridor from growth without the wind funds the southern late-cycle feeders; the saving is on PBY-10, HRK-03, HRK-05, WTK-02, PBY-11 and PBY-03 (12,984).",
+    "paper_pair": 38.5,
+    "judge": {
+     "verdict": "DETERMINISTIC",
+     "disposition": "APPROVE",
+     "gate_h": "pass: decisive step analytical, 6+ inferences, no one-fact rescue",
+     "report": "task13/determinism_check_report.md"
     },
-    "triage": "",
-    "recorded": "",
-    "history": []
-  },
-  "returned": [],
-  "resume": "stage 6: the author uploads prompt.txt and target.zip, generates the two runs, then /triage-runs task13",
-  "approved": null,
-  "submitted": null,
-  "portal": {
-    "status": "",
-    "date": "",
-    "note": ""
-  },
-  "notes": "post-judge fixes on 2026-11-09 (no re-judge owed: the judge approved and traced the range): metadata distractors; feeder register ICPs from the registry; station records in pou_aws_hourly/; exports stamped in New Zealand time; the range over every complete regulatory year (6,000 to 19,000); quarters by largest remainder; verifier extended to the quarters and the range"
+    "leak": {
+     "leak_py": "REVIEW (2026-11-09, --asof 2026-11-03): no LEAK; REVIEW lines ruled in the design note",
+     "reader": "clean (2026-11-09): Q1 to Q4 none, Q5 programme terms 3(c) executes to the golden, Q6 analytical choice; sweep lines a to c harmless"
+    },
+    "precut": {
+     "exit": 0,
+     "date": "2026-11-09"
+    },
+    "duplicate_check": {
+     "heart": "WARN (repeat.gate_g vs task2, answered)",
+     "nearest": "mark196 / mark124 0.06 (drivers); surface: none promoted"
+    }
+   },
+   "commit": ""
+  }
+ ],
+ "resume": "stage 2: write the design note's results chain, hidden factor record, effort test, forks and closure from the generator's measured passes; build the generator (simulated co-op, lightning extract, recloser logs) under task13/generator",
+ "approved": null,
+ "submitted": null,
+ "portal": {
+  "status": "",
+  "date": "",
+  "note": ""
+ },
+ "notes": "post-judge fixes on 2026-11-09 (no re-judge owed: the judge approved and traced the range): metadata distractors; feeder register ICPs from the registry; station records in pou_aws_hourly/; exports stamped in New Zealand time; the range over every complete regulatory year (6,000 to 19,000); quarters by largest remainder; verifier extended to the quarters and the range",
+ "doctrine": "throughout",
+ "chain": "R1 lightning faults per season on each device's own clock; R2 the radio-less zones' 2026 faults with lost memory and unread months filled; R3 the 2026 season with every zone sound and the faults failed protection caused; R4 the zones referred now; R5 false referrals a season and referrals after each season since 2022; R6 referrals against the following cyclic inspections; R7 the likely failure at each referred zone; R8 faults the refit avoids in an average season",
+ "effort": {
+  "quick": null,
+  "careful": null,
+  "thorough": null,
+  "largest_hint": ""
+ }
 }
