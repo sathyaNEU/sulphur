@@ -1,11 +1,11 @@
 {
   "task": "task9",
-  "status": "DRAWING",
+  "status": "PAUSED",
   "domain": "general-statistics-data-science",
   "subdomain": "bayesian-modeling-posterior-inference",
   "objective": "forecasting",
-  "stage": 1,
-  "stage_name": "draw",
+  "stage": 2,
+  "stage_name": "design",
   "updated": "2026-11-11",
   "doctrine": "throughout",
   "call": null,
@@ -51,7 +51,7 @@
     "history": []
   },
   "returned": [],
-  "resume": "stage 1 into 2: the draw is registered; next the design note's chain, rivals and effort on paper to precut",
+  "resume": "stage 2 into 3: the generator is written and calibrated on seed 9011 (params, world, pack, docs, record, analysis, figures): fleet about 2,060 replacements for 2026-Q4 to 2027-Q3, DC-3 461 (375 aged from the inventory), hot batch 607 (480 at its recent rate), surviving OM-6 242 (281 pooled over every vault), back-test coverage 0.72 against 0.56 for Poisson, migrate pays in 97% of draws. Next: nine results (DC-3, the hot batch's current rate and count, OM-6, the fleet path, the interval with its width, the back-test coverage, the spare orders, the migrate call), effort_passes with the careful pass as one curve per family, Poisson counts and an exponential ramp; then the design note to precut, golden.py (workbook and chart), writeup, checks, verify, build.py, two builds, gates, stage 4, READY.",
   "approved": null,
   "submitted": null,
   "portal": {
@@ -66,6 +66,10 @@
     {
       "date": "2026-11-11",
       "event": "slot cleared by the author; new draw from Concept 1 registered"
+    },
+    {
+      "date": "2026-11-11",
+      "event": "generator written and calibrated; paused after a worker restart"
     }
   ]
 }
